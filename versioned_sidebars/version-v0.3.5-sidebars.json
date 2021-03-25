@@ -1,5 +1,5 @@
 {
-  "version-0.3.5/docs": [
+  "version-v0.3.5/docs": [
     {
       "collapsed": true,
       "type": "category",
@@ -7,11 +7,11 @@
       "items": [
         {
           "type": "doc",
-          "id": "version-0.3.5/overview/introduction"
+          "id": "version-v0.3.5/overview/introduction"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/overview/concepts"
+          "id": "version-v0.3.5/overview/concepts"
         }
       ]
     },
@@ -22,11 +22,11 @@
       "items": [
         {
           "type": "doc",
-          "id": "version-0.3.5/getting-started/install"
+          "id": "version-v0.3.5/getting-started/install"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/getting-started/quick-start"
+          "id": "version-v0.3.5/getting-started/quick-start"
         }
       ]
     },
@@ -42,15 +42,15 @@
           "items": [
             {
               "type": "doc",
-              "id": "version-0.3.5/platform-builder-guide/design-abstraction/overview"
+              "id": "version-v0.3.5/platform-builder-guide/design-abstraction/overview"
             },
             {
               "type": "doc",
-              "id": "version-0.3.5/platform-builder-guide/design-abstraction/application"
+              "id": "version-v0.3.5/platform-builder-guide/design-abstraction/application"
             },
             {
               "type": "doc",
-              "id": "version-0.3.5/platform-builder-guide/design-abstraction/definition-and-templates"
+              "id": "version-v0.3.5/platform-builder-guide/design-abstraction/definition-and-templates"
             }
           ]
         },
@@ -61,23 +61,23 @@
           "items": [
             {
               "type": "doc",
-              "id": "version-0.3.5/platform-builder-guide/using-cue/basic"
+              "id": "version-v0.3.5/platform-builder-guide/using-cue/basic"
             },
             {
               "type": "doc",
-              "id": "version-0.3.5/platform-builder-guide/using-cue/workload-type"
+              "id": "version-v0.3.5/platform-builder-guide/using-cue/workload-type"
             },
             {
               "type": "doc",
-              "id": "version-0.3.5/platform-builder-guide/using-cue/trait"
+              "id": "version-v0.3.5/platform-builder-guide/using-cue/trait"
             },
             {
               "type": "doc",
-              "id": "version-0.3.5/platform-builder-guide/using-cue/status"
+              "id": "version-v0.3.5/platform-builder-guide/using-cue/status"
             },
             {
               "type": "doc",
-              "id": "version-0.3.5/platform-builder-guide/using-cue/openapi-v3-json-schema"
+              "id": "version-v0.3.5/platform-builder-guide/using-cue/openapi-v3-json-schema"
             }
           ]
         },
@@ -88,15 +88,15 @@
           "items": [
             {
               "type": "doc",
-              "id": "version-0.3.5/platform-builder-guide/using-helm/component"
+              "id": "version-v0.3.5/platform-builder-guide/using-helm/component"
             },
             {
               "type": "doc",
-              "id": "version-0.3.5/platform-builder-guide/using-helm/trait"
+              "id": "version-v0.3.5/platform-builder-guide/using-helm/trait"
             },
             {
               "type": "doc",
-              "id": "version-0.3.5/platform-builder-guide/using-helm/known-issues"
+              "id": "version-v0.3.5/platform-builder-guide/using-helm/known-issues"
             }
           ]
         }
@@ -114,11 +114,11 @@
           "items": [
             {
               "type": "doc",
-              "id": "version-0.3.5/developer-experience-guide/appfile/quick-start-appfile"
+              "id": "version-v0.3.5/developer-experience-guide/appfile/quick-start-appfile"
             },
             {
               "type": "doc",
-              "id": "version-0.3.5/developer-experience-guide/appfile/learn-appfile"
+              "id": "version-v0.3.5/developer-experience-guide/appfile/learn-appfile"
             }
           ]
         },
@@ -129,27 +129,27 @@
           "items": [
             {
               "type": "doc",
-              "id": "version-0.3.5/developer-experience-guide/cli/port-forward"
+              "id": "version-v0.3.5/developer-experience-guide/cli/port-forward"
             },
             {
               "type": "doc",
-              "id": "version-0.3.5/developer-experience-guide/cli/check-logs"
+              "id": "version-v0.3.5/developer-experience-guide/cli/check-logs"
             },
             {
               "type": "doc",
-              "id": "version-0.3.5/developer-experience-guide/cli/exec-cmd"
+              "id": "version-v0.3.5/developer-experience-guide/cli/exec-cmd"
             },
             {
               "type": "doc",
-              "id": "version-0.3.5/developer-experience-guide/cli/cap-center"
+              "id": "version-v0.3.5/developer-experience-guide/cli/cap-center"
             },
             {
               "type": "doc",
-              "id": "version-0.3.5/developer-experience-guide/cli/config-enviroments"
+              "id": "version-v0.3.5/developer-experience-guide/cli/config-enviroments"
             },
             {
               "type": "doc",
-              "id": "version-0.3.5/developer-experience-guide/cli/config-app"
+              "id": "version-v0.3.5/developer-experience-guide/cli/config-app"
             }
           ]
         }
@@ -162,67 +162,67 @@
       "items": [
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_config"
+          "id": "version-v0.3.5/cli-references/vela_config"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_env"
+          "id": "version-v0.3.5/cli-references/vela_env"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_init"
+          "id": "version-v0.3.5/cli-references/vela_init"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_up"
+          "id": "version-v0.3.5/cli-references/vela_up"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_version"
+          "id": "version-v0.3.5/cli-references/vela_version"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_exec"
+          "id": "version-v0.3.5/cli-references/vela_exec"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_logs"
+          "id": "version-v0.3.5/cli-references/vela_logs"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_ls"
+          "id": "version-v0.3.5/cli-references/vela_ls"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_port-forward"
+          "id": "version-v0.3.5/cli-references/vela_port-forward"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_show"
+          "id": "version-v0.3.5/cli-references/vela_show"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_status"
+          "id": "version-v0.3.5/cli-references/vela_status"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_workloads"
+          "id": "version-v0.3.5/cli-references/vela_workloads"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_traits"
+          "id": "version-v0.3.5/cli-references/vela_traits"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_system"
+          "id": "version-v0.3.5/cli-references/vela_system"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_template"
+          "id": "version-v0.3.5/cli-references/vela_template"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/cli-references/vela_cap"
+          "id": "version-v0.3.5/cli-references/vela_cap"
         }
       ]
     },
@@ -233,35 +233,35 @@
       "items": [
         {
           "type": "doc",
-          "id": "version-0.3.5/capability-references/overview"
+          "id": "version-v0.3.5/capability-references/overview"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/capability-references/webservice"
+          "id": "version-v0.3.5/capability-references/webservice"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/capability-references/task"
+          "id": "version-v0.3.5/capability-references/task"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/capability-references/worker"
+          "id": "version-v0.3.5/capability-references/worker"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/capability-references/route"
+          "id": "version-v0.3.5/capability-references/route"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/capability-references/metrics"
+          "id": "version-v0.3.5/capability-references/metrics"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/capability-references/scaler"
+          "id": "version-v0.3.5/capability-references/scaler"
         },
         {
           "type": "doc",
-          "id": "version-0.3.5/capability-references/rest"
+          "id": "version-v0.3.5/capability-references/rest"
         }
       ]
     },
@@ -272,13 +272,13 @@
       "items": [
         {
           "type": "doc",
-          "id": "version-0.3.5/roadmap/roadmap"
+          "id": "version-v0.3.5/roadmap/roadmap"
         }
       ]
     },
     {
       "type": "doc",
-      "id": "version-0.3.5/faq"
+      "id": "version-v0.3.5/faq"
     }
   ]
 }
