@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="230px" height="230px" viewBox="0 0 230 230" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>环境配置DFaaS</title>
+    <defs>
+        <linearGradient x1="100%" y1="49.2871464%" x2="-54.4559175%" y2="51.2625857%" id="linearGradient-1">
+            <stop stop-color="#FFC856" offset="0%"></stop>
+            <stop stop-color="#FFC856" offset="4.50957673%"></stop>
+            <stop stop-color="#E23737" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="75.7583522%" y1="41.8690081%" x2="0%" y2="69.22%" id="linearGradient-2">
+            <stop stop-color="#B7BDE9" offset="0%"></stop>
+            <stop stop-color="#8891D9" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="85.7541436%" y1="49.6382912%" x2="-74.5966504%" y2="51.2716623%" id="linearGradient-3">
+            <stop stop-color="#8C94EC" offset="0%"></stop>
+            <stop stop-color="#0D1677" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="118.602542%" y1="23.6156295%" x2="19.4602962%" y2="56.353477%" id="linearGradient-4">
+            <stop stop-color="#3797E2" offset="0%"></stop>
+            <stop stop-color="#7DD2FB" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="70.5459046%" y1="100%" x2="29.0433943%" y2="12.1455151%" id="linearGradient-5">
+            <stop stop-color="#3797E2" offset="0%"></stop>
+            <stop stop-color="#7DD2FB" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="环境配置DFaaS" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-117" transform="translate(49.000000, 60.000000)">
+            <g id="编组-101" transform="translate(65.000000, 87.000000)" fill="url(#linearGradient-1)">
+                <path d="M67,0 L67,8 L59,8 L59,0 L67,0 Z M55,0 L55,8 L0,8 L0,0 L55,0 Z" id="形状结合" transform="translate(33.500000, 4.000000) scale(-1, 1) translate(-33.500000, -4.000000) "></path>
+            </g>
+            <path d="M116,50.455 L116,66 L116,66 L40.0005268,66 L40.0005268,66 L40,57.558 L41.712,57.555 L41.7121331,64.2944748 L114.287133,64.2944748 L114.287,50.457 L116,50.455 Z M116,0 L116,23.008 L114.287,23.011 L114.287133,1.70511199 L41.7121331,1.70511199 L41.712,23.108 L40,23.111 L40.0005268,0 L116,0 Z" id="形状结合" fill="#6771DE" fill-rule="nonzero" opacity="0.600000024" transform="translate(78.000000, 33.000000) scale(-1, -1) translate(-78.000000, -33.000000) "></path>
+            <g id="编组-98" transform="translate(6.000000, 19.000000)">
+                <polygon id="矩形" fill="url(#linearGradient-2)" points="0 0 100 0 100 62 0 62"></polygon>
+                <polygon id="矩形" fill="url(#linearGradient-3)" points="0 0 100 0 100 10 0 10"></polygon>
+            </g>
+            <polygon id="矩形" fill="#FFFFFF" points="19 36 50.8 36 50.8 38 19 38"></polygon>
+            <polygon id="矩形备份-50" fill="#FFFFFF" points="19 42 40.8 42 40.8 44 19 44"></polygon>
+            <rect id="矩形备份-51" stroke="#FFFFFF" stroke-width="2" x="83" y="60" width="12" height="12"></rect>
+            <g id="编组-100" transform="translate(74.000000, 11.500000)">
+                <polygon id="Rectangle-31-Copy备份" fill="url(#linearGradient-4)" points="9.99990186e-15 0 49 1.10165518e-14 49 28 1.94027947e-15 28"></polygon>
+                <polyline id="路径-55" stroke="#FFFFFF" stroke-width="3" points="16 8.5 11 14 16 19.5"></polyline>
+                <polyline id="路径-55备份" stroke="#FFFFFF" stroke-width="3" transform="translate(35.500000, 14.000000) scale(-1, 1) translate(-35.500000, -14.000000) " points="38 8.5 33 14 38 19.5"></polyline>
+                <line x1="20.5" y1="19" x2="28.5" y2="8" id="路径-56" stroke="#FFFFFF" stroke-width="3"></line>
+            </g>
+            <g id="编组-99" transform="translate(0.000000, 53.000000)">
+                <rect id="矩形" fill="#FFFFFF" x="13.872" y="15.096" width="26.928" height="26.928"></rect>
+                <path d="M34.1268422,0.741567472 L42.3734882,4.07342875 L41.4282358,8.30346794 C43.6083641,9.79944346 45.5746125,11.6867051 47.2174729,13.9479085 C47.2547357,13.9991963 47.2917642,14.050583 47.3285585,14.1020672 L51.5549541,13.0792483 L55.0302318,21.2664893 L51.3699981,23.5903001 C51.8789883,26.3366632 51.8962075,29.1379713 51.4426616,31.8615984 L55.1544325,34.1268422 L51.8225712,42.3734882 L47.5926262,41.4280986 C46.0966357,43.6082816 44.2093424,45.574578 41.9480915,47.2174729 C41.8968037,47.2547357 41.845417,47.2917642 41.7939328,47.3285585 L42.8167517,51.5549541 L34.6295107,55.0302318 L32.3056999,51.3699981 C29.5470868,51.8812586 26.7330376,51.8963513 23.9979608,51.4365645 L21.7372275,55.1415318 L13.4905814,51.8096706 L14.4315802,47.5676536 C12.2658778,46.0756515 10.3122936,44.1967782 8.67852711,41.9480915 C8.63404461,41.8868666 8.5898961,41.825501 8.54608123,41.7639967 L4.32758988,42.7850514 L0.852312237,34.5978104 L4.51823606,32.2635854 C4.01459298,29.5184125 4.00198787,26.7190416 4.45945492,23.9978455 L0.754468161,21.7372275 L4.08632944,13.4905814 L8.32844356,14.4314392 C9.82043,12.265793 11.6992706,10.3122582 13.9479085,8.67852711 L14.1320033,8.54608123 L14.1320033,8.54608123 L13.1109486,4.32758988 L21.2981896,0.852312237 L23.6324146,4.51823606 C26.3653671,4.01683499 29.1520362,4.00210982 31.8618089,4.4533735 L34.1268422,0.741567472 Z M21.6922048,20.4862036 C17.3687965,23.6273436 16.4103786,29.6785557 19.5515187,34.0019641 C22.6926587,38.3253725 28.7438708,39.2837903 33.0672792,36.1426503 C37.3906876,33.0015102 38.3491054,26.9502981 35.2079654,22.6268897 C32.0668253,18.3034814 26.0156132,17.3450635 21.6922048,20.4862036 Z M27.336,23.46 C30.1526522,23.46 32.436,25.7433478 32.436,28.56 C32.436,31.3766522 30.1526522,33.66 27.336,33.66 C24.5193478,33.66 22.236,31.3766522 22.236,28.56 C22.236,25.7433478 24.5193478,23.46 27.336,23.46 Z" id="形状结合" fill="url(#linearGradient-5)"></path>
+            </g>
+            <rect id="矩形" fill="#FFFFFF" x="11" y="23" width="2" height="2"></rect>
+            <rect id="矩形备份-40" fill="#FFFFFF" x="15" y="23" width="2" height="2"></rect>
+            <rect id="矩形备份-45" fill="#FFFFFF" x="19" y="23" width="2" height="2"></rect>
+        </g>
+    </g>
+</svg>

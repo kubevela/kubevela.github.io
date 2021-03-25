@@ -1,0 +1,54 @@
+{
+  "version.label": {
+    "message": "0.3.5",
+    "description": "The label for version 0.3.5"
+  },
+  "sidebar.docs.category.Overview": {
+    "message": "Overview",
+    "description": "The label for category Overview in sidebar docs"
+  },
+  "sidebar.docs.category.Getting Started": {
+    "message": "Getting Started",
+    "description": "The label for category Getting Started in sidebar docs"
+  },
+  "sidebar.docs.category.Platform Builder Guide": {
+    "message": "Platform Builder Guide",
+    "description": "The label for category Platform Builder Guide in sidebar docs"
+  },
+  "sidebar.docs.category.Design Abstraction": {
+    "message": "Design Abstraction",
+    "description": "The label for category Design Abstraction in sidebar docs"
+  },
+  "sidebar.docs.category.Using CUE": {
+    "message": "Using CUE",
+    "description": "The label for category Using CUE in sidebar docs"
+  },
+  "sidebar.docs.category.Using Helm": {
+    "message": "Using Helm",
+    "description": "The label for category Using Helm in sidebar docs"
+  },
+  "sidebar.docs.category.Developer Experience Guide": {
+    "message": "Developer Experience Guide",
+    "description": "The label for category Developer Experience Guide in sidebar docs"
+  },
+  "sidebar.docs.category.Appfile": {
+    "message": "Appfile",
+    "description": "The label for category Appfile in sidebar docs"
+  },
+  "sidebar.docs.category.Command Line Tool (CLI)": {
+    "message": "Command Line Tool (CLI)",
+    "description": "The label for category Command Line Tool (CLI) in sidebar docs"
+  },
+  "sidebar.docs.category.CLI References": {
+    "message": "CLI References",
+    "description": "The label for category CLI References in sidebar docs"
+  },
+  "sidebar.docs.category.Capability References": {
+    "message": "Capability References",
+    "description": "The label for category Capability References in sidebar docs"
+  },
+  "sidebar.docs.category.Roadmap": {
+    "message": "Roadmap",
+    "description": "The label for category Roadmap in sidebar docs"
+  }
+}
