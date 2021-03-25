@@ -3,7 +3,7 @@ module.exports = {
   title: 'KubeVela',
   tagline: 'Make shipping applications more enjoyable.',
   url: 'https://kubevela.io',
-  baseUrl: '/',
+  baseUrl: '/kubevela.io/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
