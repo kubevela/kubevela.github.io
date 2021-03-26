@@ -94,13 +94,11 @@ const WhatIs = () => (
           <h1><Translate>What is KubeVela?</Translate></h1>
           <p className="hero__subtitle">
             <small>
-              <strong><Translate>For platform builders</Translate></strong>: 
-              <Translate>
+              <strong><Translate>For platform builders</Translate></strong>: <Translate>
                 KubeVela serves as a framework that empowers them to create user friendly yet highly extensible platforms at ease
               </Translate>
               <br />
-              <strong><Translate>For developers</Translate></strong>: 
-              <Translate>
+              <strong><Translate>For developers</Translate></strong>: <Translate>
                 such Application abstraction built with KubeVela will enable them to design and ship their applications to Kubernetes with minimal effort.
               </Translate>
               </small>

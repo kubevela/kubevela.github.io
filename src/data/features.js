@@ -12,7 +12,7 @@ const features = [
             KubeVela enforces an Application abstraction as its main API and ALL KubeVela's
             capabilities serve for the applications' needs only. This is achieved by adopting
           the </Translate><a href="https://github.com/oam-dev/spec">Open Application Model</a> 
-           <Translate>as the core API for KubeVela.</Translate>
+           <Translate> as the core API for KubeVela.</Translate>
         </p>
       </>
     ),
@@ -27,8 +27,7 @@ const features = [
             The Application abstraction is composed of modularized building blocks named components and traits.
             Any capability provided by Kubernetes ecosystem can be added to KubeVela as new component or trait
           through simple 
-          </Translate>
-          <code>kubectl apply -f</code>.
+          </Translate> <code>kubectl apply -f</code>.
         </p>
       </>
     ),
@@ -43,8 +42,7 @@ const features = [
           <Translate>
             The Application abstraction is implemented with server-side encapsulation controller
           (supports </Translate><a href="https://github.com/cuelang/cue">CUELang</a> <Translate>and </Translate>
-           <a href="https://helm.sh/">Helm</a> 
-           <Translate>
+           <a href="https://helm.sh/">Helm</a> <Translate> 
            as templating engine) to abstract user-facing primitives from Kubernetes API resources.
            Changes to existing capability templates (or new templates added) take effect at runtime,
            neither recompilation nor redeployment of KubeVela is required.
