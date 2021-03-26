@@ -142,3 +142,8 @@
     height: 64px;
   }
 }
+
+.heroButtons {
+  display: flex;
+  justify-content: center
+}

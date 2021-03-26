@@ -1,10 +1,12 @@
 import React from 'react';
 import clsx from 'clsx';
 import Layout from '@theme/Layout';
+import Link from '@docusaurus/Link';
 import features from '../data/features'
 import Translate, { translate } from '@docusaurus/Translate';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import GitHubButton from 'react-github-btn';
 import styles from './styles.module.css';
 
 function Feature({ imgUrl, title, description, reverse }) {
@@ -25,6 +27,17 @@ function Feature({ imgUrl, title, description, reverse }) {
   )
 }
 
+const Button = ({ children, href }) => {
+  return (
+    <div className="col col--2 margin-horiz--sm">
+      <Link
+        className="button button--outline button--primary button--lg"
+        to={href}>
+        {children}
+      </Link>
+    </div>
+  );
+};
 
 export default function Home() {
   const context = useDocusaurusContext();
@@ -32,14 +45,26 @@ export default function Home() {
 
   return (
     <Layout title={siteConfig.tagline} description={siteConfig.tagline}>
-
       <header className={clsx('hero', styles.hero)}>
         <div className="container text--center">
           <div className={styles.heroLogoWrapper}>
             <img className={styles.heroLogo} src={useBaseUrl('img/logo.svg')} alt="Kubevela Logo" />
           </div>
           <h2 className={clsx('hero__title', styles.heroTitle)}>{siteConfig.title}</h2>
+          <GitHubButton
+            href="https://github.com/oam-dev/kubevela"
+            data-icon="octicon-star"
+            data-size="large"
+            data-show-count="true"
+            aria-label="Star facebook/metro on GitHub">
+            Star
+         </GitHubButton>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
+          <div
+            className={clsx(styles.heroButtons, 'name', 'margin-vert--md')}>
+            <Button href={useBaseUrl('docs/getting-started/install')}>Get Started</Button>
+            <Button href={useBaseUrl('docs/')}>Learn More</Button>
+          </div>
         </div>
       </header>
 

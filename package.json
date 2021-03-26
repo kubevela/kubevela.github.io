@@ -26,7 +26,8 @@
     "clsx": "^1.1.1",
     "nodejieba": "^2.5.1",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-github-btn": "^1.2.0"
   },
   "browserslist": {
     "production": [

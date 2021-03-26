@@ -136,15 +136,23 @@ module.exports = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+            'https://github.com/oam-dev/kubevela.io/',
+          showLastUpdateAuthor: true,
+          showLastUpdateTime: true,
+          includeCurrentVersion: true,
+          lastVersion: 'current',
+          // versions: {
+          //   current: {
+          //     label: 'master',
+          //     path: '/',
+          //   },
+          // },
         },
         blog: {
           showReadingTime: true,
-          // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
+            'https://github.com/oam-dev/kubevela.io/tree/main/blog',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
