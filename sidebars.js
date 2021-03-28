@@ -4,16 +4,16 @@ module.exports = {
       type: 'category',
       label: 'Overview',
       items: [
-        'overview/introduction',
-        'overview/concepts',
+        'introduction',
+        'concepts',
       ],
     },
     {
       type: 'category',
       label: 'Getting Started',
       items: [
-        'getting-started/install',
-        'getting-started/quick-start',
+        'install',
+        'quick-start',
       ],
     },
     {
@@ -22,27 +22,55 @@ module.exports = {
       items: [
         {
           'Design Abstraction': [
-            'platform-builder-guide/design-abstraction/overview',
-            'platform-builder-guide/design-abstraction/application',
-            'platform-builder-guide/design-abstraction/definition-and-templates',
+            'platform-engineers/overview',
+            'application',
+            'platform-engineers/definition-and-templates',
           ]
         },
         {
-          'Using CUE': [
-            'platform-builder-guide/using-cue/basic',
-            'platform-builder-guide/using-cue/workload-type',
-            'platform-builder-guide/using-cue/trait',
-            'platform-builder-guide/using-cue/status',
-            'platform-builder-guide/using-cue/openapi-v3-json-schema',
+          'Visualization': [
+            'platform-engineers/openapi-v3-json-schema'
           ]
         },
         {
-          'Using Helm': [
-            'platform-builder-guide/using-helm/component',
-            'platform-builder-guide/using-helm/trait',
-            'platform-builder-guide/using-helm/known-issues',
+          type: 'category',
+          label: 'Defining Components',
+          items: [
+            {
+              'CUE': [
+                'cue/component',
+                'cue/basic',
+              ]
+            },
+            {
+              'Helm': [
+                  'helm/component',
+                  'helm/trait',
+                  'helm/known-issues'
+              ]
+            },
+            {
+              'Raw Template': [
+                  'kube/component',
+                  'kube/trait',
+              ]
+            },
+            {
+              'Defining Traits': [
+                  'cue/trait',
+                  'cue/patch-trait',
+                  'cue/status',
+                  'cue/advanced',
+              ]
+            },
+            {
+              'Hands-on Lab': [
+                  'platform-engineers/debug-test-cue',
+                  'platform-engineers/keda'
+              ]
+            }
           ]
-        }
+        },
       ],
     },
     {
@@ -51,18 +79,18 @@ module.exports = {
       items: [
         {
           'Appfile': [
-            'developer-experience-guide/appfile/quick-start-appfile',
-            'developer-experience-guide/appfile/learn-appfile',
+            'quick-start-appfile',
+            'developers/learn-appfile',
           ]
         },
         {
           'Command Line Tool (CLI)': [
-            'developer-experience-guide/cli/port-forward',
-            'developer-experience-guide/cli/check-logs',
-            'developer-experience-guide/cli/exec-cmd',
-            'developer-experience-guide/cli/cap-center',
-            'developer-experience-guide/cli/config-enviroments',
-            'developer-experience-guide/cli/config-app',
+            'developers/port-forward',
+            'developers/check-logs',
+            'developers/exec-cmd',
+            'developers/cap-center',
+            'developers/config-enviroments',
+            'developers/config-app',
           ]
         },
       ],
@@ -71,48 +99,48 @@ module.exports = {
       type: 'category',
       label: 'CLI References',
       items: [
-        'cli-references/vela_config',
-        'cli-references/vela_env',
-        'cli-references/vela_init',
-        'cli-references/vela_up',
-        'cli-references/vela_version',
-        'cli-references/vela_exec',
-        'cli-references/vela_logs',
-        'cli-references/vela_ls',
-        'cli-references/vela_port-forward',
-        'cli-references/vela_show',
-        'cli-references/vela_status',
-        'cli-references/vela_workloads',
-        'cli-references/vela_traits',
-        'cli-references/vela_system',
-        'cli-references/vela_template',
-        'cli-references/vela_cap',
+        'cli/vela_config',
+        'cli/vela_env',
+        'cli/vela_init',
+        'cli/vela_up',
+        'cli/vela_version',
+        'cli/vela_exec',
+        'cli/vela_logs',
+        'cli/vela_ls',
+        'cli/vela_port-forward',
+        'cli/vela_show',
+        'cli/vela_status',
+        'cli/vela_workloads',
+        'cli/vela_traits',
+        'cli/vela_system',
+        'cli/vela_template',
+        'cli/vela_cap',
       ],
     },
     {
       type: 'category',
       label: 'Capability References',
       items: [
-        'capability-references/overview',
-        'capability-references/webservice',
-        'capability-references/task',
-        'capability-references/worker',
-        'capability-references/route',
-        'capability-references/metrics',
-        'capability-references/scaler',
-        'capability-references/rest',
+        'developers/references/README',
+        'developers/references/workload-types/webservice',
+        'developers/references/workload-types/task',
+        'developers/references/workload-types/worker',
+        'developers/references/traits/route',
+        'developers/references/traits/metrics',
+        'developers/references/traits/scaler',
+        'developers/references/restful-api/rest',
       ],
     },
     {
       type: 'category',
       label: 'Roadmap',
       items: [
-        'roadmap/roadmap',
+        'roadmap',
       ],
     },
     {
       type: 'doc',
-      id: 'faq'
+      id: 'developers/references/devex/faq'
     },
   ],
 };
