@@ -63,15 +63,15 @@ module.exports = {
           items: [
             {
               label: 'Getting Started',
-              to: 'https://kubevela.io/docs/getting-started/install',
+              to: '/docs/install',
             },
             {
               label: 'Platform Builder Guide',
-              to: 'https://kubevela.io/docs/platform-builder-guide/design-abstraction/overview',
+              to: '/docs/platform-engineers/overview',
             },
             {
               label: 'Developer Experience Guide',
-              to: 'https://kubevela.io/docs/developer-experience-guide/appfile/quick-start-appfile',
+              to: '/docs/quick-start-appfile',
             },
           ],
         },

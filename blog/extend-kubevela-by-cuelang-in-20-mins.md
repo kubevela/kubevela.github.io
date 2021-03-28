@@ -1,14 +1,4 @@
----
-title: 如何在 20 分钟内给你的 K8s PaaS 上线一个新功能
-author: wonderflow
-author_title: OAM/KubeVela maintainer
-author_url: https://github.com/wonderflow
-author_image_url: https://avatars.githubusercontent.com/u/2173670?s=200&v=4
-tags: [ kubevela ]
-description: 如何在 20 分钟内给你的 K8s PaaS 上线一个新功能
-image: https://tva1.sinaimg.cn/large/ad5fbf65gy1glgj5q8inej208g049aa6.jpg
-hide_table_of_contents: false
----
+# 如何在 20 分钟内给你的 K8s PaaS 上线一个新功能
 
 >2020年12月14日 19:33, by @wonderflow
 
