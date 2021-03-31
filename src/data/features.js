@@ -10,7 +10,7 @@ const features = [
         <p>
           <Translate>
             KubeVela abstracts away the infrastructure level primitives by introducing the </Translate>
-            <i>Application</i> <Translate>aconcept as main API, and then building operational 
+            <i>Application</i> <Translate>concept as main API, and then building operational 
             features around the applications' needs only.
           </Translate>
         </p>
