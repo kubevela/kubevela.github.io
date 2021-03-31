@@ -9,45 +9,44 @@ const features = [
       <>
         <p>
           <Translate>
-            KubeVela abstracts away the infrastructure level primitives by introducing the </Translate>
-            <i>Application</i> <Translate>concept as main API, and then building operational 
-            features around the applications' needs only.
+            KubeVela introduces the </Translate>
+            <i>Application</i> <Translate>concept as main API to abstract a deployment of microservices, and then builds operational features around the applications' needs only (e.g. progressive rollout, 
+            and multi-cluster app deployment etc.). No infrastructure concerns, simply deploy.
           </Translate>
         </p>
       </>
     ),
   },
   {
-    title: <>Extending Natively</>,
+    title: <>Natively Extensible</>,
     imgUrl: 'img/extending-natively.svg',
     description: (
       <>
         <p>
           <Translate>
-            The</Translate> <i>Application</i> <Translate>abstraction is composed of modularized building blocks 
-            that support </Translate><a href="https://github.com/cuelang/cue">CUELang</a> <Translate>and </Translate>
-           <a href="https://helm.sh/">Helm</a> <Translate> as template engines. This enables you to
-            abstract Kubernetes capabilities in LEGO-style and ship them to end users via plain
-          </Translate> <code>kubectl apply -f</code>.
+            The</Translate> <i>Application</i> <Translate> is composed of modularized building blocks 
+            that leverages </Translate><a href="https://github.com/cuelang/cue">CUELang</a> <Translate>and </Translate>
+           <a href="https://helm.sh/">Helm</a> <Translate> as templates. This enables you to
+            abstract any Kubernetes capabilities the application needs with a consistent approach,
+             and ship them to end users in LEGO-style. No restrictions, no abstraction leak.
+          </Translate>
         </p>
       </>
     ),
     reverse: true,
   },
   {
-    title: <>Simple yet Reliable Abstractions Mechanism</>,
+    title: <>Simple yet Reliable Abstraction Mechanism</>,
     imgUrl: 'img/simple-yet-extensible-abstraction-mechanism.svg',
     description: (
       <>
         <p>
           <Translate>
-            Unlike most IaC (Infrastructure-as-Code) solutions, the abstractions in KubeVela is built with 
+            The abstractions in KubeVela are defined by CUE or Helm, but maintained with 
             </Translate><a href="https://kubernetes.io/docs/concepts/architecture/controller/"> Kubernetes 
             Control Loop</a> <Translate> so they will never leave </Translate> <i>Configuration Drift</i> <Translate>in 
-            your cluster. As a </Translate><a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">
-             Kubernetes Custom Resource</a> <Translate>, KubeVela works with any CI/CD or GitOps tools seamlessly, 
-            no integration effort needed.
-           </Translate>
+            your cluster. Also, as </Translate><a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">
+             Kubernetes Custom Resources</a><Translate>, your abstractions now seamlessly work with any CI/CD or GitOps tools, no integration burden, no extra tool</Translate>.
         </p>
       </>
     ),
