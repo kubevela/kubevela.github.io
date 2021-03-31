@@ -95,11 +95,15 @@ const WhatIs = () => (
           <p className="hero__subtitle">
             <small>
               <strong><Translate>For platform builders</Translate></strong>: <Translate>
-                KubeVela serves as a framework that empowers them to create user friendly yet highly extensible platforms at ease
+                KubeVela is a platform engine that empowers you to create developer-centric experience in robust, repeatable
+                 and extensible approach. Think about a plug-in that turns your Kubernetes cluster into a </Translate>
+            <i>Heroku</i> <Translate> via 
+                 abstractions designed by yourself.
               </Translate>
               <br />
+              <br />
               <strong><Translate>For developers</Translate></strong>: <Translate>
-                such Application abstraction built with KubeVela will enable them to design and ship their applications to Kubernetes with minimal effort.
+                enjoy the abstractions built by platform team and manage applications with minimal effort.
               </Translate>
               </small>
           </p>
