@@ -26,7 +26,7 @@ const features = [
           <Translate>
             The</Translate> <i>Application</i> <Translate>abstraction is composed of modularized building blocks 
             that support </Translate><a href="https://github.com/cuelang/cue">CUELang</a> <Translate>and </Translate>
-           <a href="https://helm.sh/">Helm</a> <Translate> as template engines. This enable you to
+           <a href="https://helm.sh/">Helm</a> <Translate> as template engines. This enables you to
             abstract Kubernetes capabilities in LEGO-style and ship them to end users via plain
           </Translate> <code>kubectl apply -f</code>.
         </p>
