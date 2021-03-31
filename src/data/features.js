@@ -3,16 +3,16 @@ import Translate, { translate } from '@docusaurus/Translate';
 
 const features = [
   {
-    title: <>Application Centric</>,
+    title: <>Developer Centric</>,
     imgUrl: 'img/application-centric.svg',
     description: (
       <>
         <p>
           <Translate>
-            KubeVela enforces an Application abstraction as its main API and ALL KubeVela's
-            capabilities serve for the applications' needs only. This is achieved by adopting
-          the </Translate><a href="https://github.com/oam-dev/spec">Open Application Model</a> 
-           <Translate> as the core API for KubeVela.</Translate>
+            KubeVela abstracts away the infrastructure level primitives by introducing the </Translate>
+            <i>Application</i> <Translate>concept as main API, and then building operational 
+            features around the applications' needs only.
+          </Translate>
         </p>
       </>
     ),
@@ -24,9 +24,10 @@ const features = [
       <>
         <p>
           <Translate>
-            The Application abstraction is composed of modularized building blocks named components and traits.
-            Any capability provided by Kubernetes ecosystem can be added to KubeVela as new component or trait
-          through simple 
+            The</Translate> <i>Application</i> <Translate>abstraction is composed of modularized building blocks 
+            that support </Translate><a href="https://github.com/cuelang/cue">CUELang</a> <Translate>and </Translate>
+           <a href="https://helm.sh/">Helm</a> <Translate> as template engines. This enables you to
+            abstract Kubernetes capabilities in LEGO-style and ship them to end users via plain
           </Translate> <code>kubectl apply -f</code>.
         </p>
       </>
@@ -34,18 +35,18 @@ const features = [
     reverse: true,
   },
   {
-    title: <>Simple yet Extensible Abstraction Mechanism</>,
+    title: <>Simple yet Reliable Abstractions Mechanism</>,
     imgUrl: 'img/simple-yet-extensible-abstraction-mechanism.svg',
     description: (
       <>
         <p>
           <Translate>
-            The Application abstraction is implemented with server-side encapsulation controller
-          (supports </Translate><a href="https://github.com/cuelang/cue">CUELang</a> <Translate>and </Translate>
-           <a href="https://helm.sh/">Helm</a> <Translate> 
-           as templating engine) to abstract user-facing primitives from Kubernetes API resources.
-           Changes to existing capability templates (or new templates added) take effect at runtime,
-           neither recompilation nor redeployment of KubeVela is required.
+            Unlike most IaC (Infrastructure-as-Code) solutions, the abstractions in KubeVela is built with 
+            </Translate><a href="https://kubernetes.io/docs/concepts/architecture/controller/"> Kubernetes 
+            Control Loop</a> <Translate> so they will never leave </Translate> <i>Configuration Drift</i> <Translate>in 
+            your cluster. As a </Translate><a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">
+             Kubernetes Custom Resource</a> <Translate>, KubeVela works with any CI/CD or GitOps tools seamlessly, 
+            no integration effort needed.
            </Translate>
         </p>
       </>
