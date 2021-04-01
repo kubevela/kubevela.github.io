@@ -5,6 +5,7 @@ module.exports = {
       label: 'Overview',
       items: [
         'introduction',
+        'concepts',
       ],
     },
     {
@@ -13,20 +14,11 @@ module.exports = {
       items: [
         'install',
         'quick-start',
-        'concepts',
       ],
     },
     {
       type: 'category',
-      label: 'Define Application',
-      items:[
-        'platform-engineers/overview',
-        'application',
-      ]
-    },
-    {
-      type: 'category',
-      label: 'Rollout Application',
+      label: 'Rollout Features',
       items:[
         "rollout/rollout",
         'rollout/appdeploy'
@@ -36,7 +28,13 @@ module.exports = {
       type: 'category',
       label: 'Platform Builder Guide',
       items: [
-        'platform-engineers/definition-and-templates',
+        {
+          'Design Abstraction': [
+            'platform-engineers/overview',
+            'application',
+            'platform-engineers/definition-and-templates',
+          ]
+        },
         {
           'Visualization': [
             'platform-engineers/openapi-v3-json-schema'
