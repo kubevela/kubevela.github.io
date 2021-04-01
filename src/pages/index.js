@@ -95,13 +95,12 @@ const WhatIs = () => (
           <p className="hero__subtitle">
               <small>
               <Translate>
-                  KubeVela is a modern way to create </Translate><i>Developer Centric</i> <Translate> 
-                  experience on Kubernetes, in a robust, repeatable and modularized approach.</Translate>
+                  KubeVela is a modern application delivery system. It brings </Translate><i>Developer Centric</i> <Translate> 
+                  experience to Kubernetes based application deployment, in a robust, repeatable and modularized approach.</Translate>
                   <br />
                   <br />
-                  <Translate>KubeVela is for</Translate> <strong>platform team</strong>. <Translate>Think about a plug-in
-                    that turns your Kubernetes cluster into a </Translate><i>Heroku</i> <Translate> via abstractions designed by you.
-              </Translate>
+                  <Translate>KubeVela is for</Translate> <strong>platform team</strong>. <Translate>Think about a framework
+                    that turns your Kubernetes cluster into a </Translate><i>Heroku</i> <Translate> via abstractions designed by you.</Translate>
               </small>
           </p>
         </div>

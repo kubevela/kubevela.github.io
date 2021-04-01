@@ -79,7 +79,7 @@ module.exports = {
           title: 'Community',
           items: [
             {
-              label: 'Slack ( #kubevela channel )',
+              label: 'CNCF Slack ( #kubevela channel )',
               href: 'https://slack.cncf.io/'
             },
             {
