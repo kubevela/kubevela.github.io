@@ -4,7 +4,7 @@ This repo contains the source code of [Kubevela website](http://kubevela.io/), a
 It's built by [Docusaurus 2](https://v2.docusaurus.io/), a modern static website generator.
 
 > ⚠️ Note! The `sidebar.js` and the files in `/docs` are synchronized from the repo [kubevela](https://github.com/oam-dev/kubevela/tree/master/docs). 
-> Please submit your Pull Requst [there](https://github.com/oam-dev/kubevela) if you want to modify these two kinds of files.
+> Please submit your Pull Request [there](https://github.com/oam-dev/kubevela) if you want to modify these two kinds of files.
 > The code will automatically sync here after merge.
 
 ## Installation
