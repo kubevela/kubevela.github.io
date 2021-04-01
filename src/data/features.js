@@ -9,9 +9,10 @@ const features = [
       <>
         <p>
           <Translate>
-            KubeVela introduces the </Translate>
-            <i>Application</i> <Translate>concept as main API to abstract a deployment of microservices, and then builds operational features around the applications' needs only (e.g. progressive rollout, 
-            and multi-cluster app deployment etc.). No infrastructure concerns, simply deploy.
+            KubeVela introduces the multi-components </Translate>
+            <i>Application</i> <Translate>abstraction to capture a full deployment of microservices, and 
+            builds operational features around the application needs only. Progressive rollout 
+            and multi-cluster deployment are provided out-of-box. No infrastructure level concerns, simply deploy.
           </Translate>
         </p>
       </>
@@ -24,11 +25,11 @@ const features = [
       <>
         <p>
           <Translate>
-            The</Translate> <i>Application</i> <Translate> is composed of modularized building blocks 
-            that leverages </Translate><a href="https://github.com/cuelang/cue">CUELang</a> <Translate>and </Translate>
-           <a href="https://helm.sh/">Helm</a> <Translate> as templates. This enables you to
-            abstract any Kubernetes capabilities the application needs with a consistent approach,
-             and ship them to end users in LEGO-style. No restrictions, no abstraction leak.
+            The </Translate><i>Application</i><Translate> abstraction is LEGO-style. It is composed of building blocks that leverages
+            </Translate><a href="https://github.com/cuelang/cue"> CUELang</a> <Translate>and </Translate>
+           <a href="https://helm.sh/">Helm</a> <Translate> as templating engine. This enables you to model 
+           any infrastructure capabilities per needs of the application and ship them as easy-to-use abstraction modules to end users.
+           No restrictions, no abstraction leak.
           </Translate>
         </p>
       </>
@@ -42,9 +43,9 @@ const features = [
       <>
         <p>
           <Translate>
-            The abstractions in KubeVela are defined by CUE or Helm, but maintained with 
+            Those CUE and Helm based abstractions in KubeVela are maintained with 
             </Translate><a href="https://kubernetes.io/docs/concepts/architecture/controller/"> Kubernetes 
-            Control Loop</a> <Translate> so they will never leave </Translate> <i>Configuration Drift</i> <Translate>in 
+            Control Loop</a> <Translate>, so they will never leave </Translate> <i>Configuration Drift</i> <Translate>in 
             your cluster. Also, as </Translate><a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">
              Kubernetes Custom Resources</a><Translate>, your abstractions now seamlessly work with any CI/CD or GitOps tools, no integration burden, no extra tool</Translate>.
         </p>
