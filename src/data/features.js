@@ -19,17 +19,18 @@ const features = [
     ),
   },
   {
-    title: <>Templates Based Self-Service</>,
+    title: <>A Self-Service Platform</>,
     imgUrl: 'img/extending-natively.svg',
     description: (
       <>
         <p>
           <Translate>
-           In KubeVela, all deployable workloads, cloud services and operational features are abstracted as LEGO-sytle templates via
-             </Translate><a href="https://github.com/cuelang/cue"> CUE</a> <Translate>and/or </Translate>
-           <a href="https://helm.sh/">Helm</a><Translate>. This enables the end-users to declare
-            an application deployment by picking and assembling templates per their own need. No restrictions, natively extensible.
-          </Translate>
+           In KubeVela, any capability an application deployment needs (e.g. workloads, operational features, and cloud services etc)
+            are abstracted as reusable modules. This creates a self-service workflow where platform
+             team abstracts and maintains capabilities via </Translate><a href="https://github.com/cuelang/cue">
+              CUE</a> <Translate>and/or </Translate> <a href="https://helm.sh/">Helm</a><Translate>, 
+              and end-users ship code by picking and assembling these modules into an application deployment. 
+              No restrictions, fully extensible.</Translate>
         </p>
       </>
     ),
@@ -42,7 +43,7 @@ const features = [
       <>
         <p>
           <Translate>
-            Defined by CUE and Helm, abstractions in KubeVela are essentially maintained with 
+            All these self-service capability modules are actually maintained with 
             </Translate><a href="https://kubernetes.io/docs/concepts/architecture/controller/"> Kubernetes 
             Control Loop</a> <Translate> so they will never leave </Translate> <i>Configuration Drift</i> <Translate>in 
             your cluster. Also, as a set of </Translate><a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">
