@@ -19,17 +19,17 @@ const features = [
     ),
   },
   {
-    title: <>A Self-Service Platform</>,
+    title: <>Platform-as-Code</>,
     imgUrl: 'img/extending-natively.svg',
     description: (
       <>
         <p>
           <Translate>
            In KubeVela, any capability an application deployment needs (e.g. workloads, operational features, and cloud services etc)
-            are abstracted as reusable modules. This creates a self-service workflow where platform
-             team abstracts and maintains capabilities via </Translate><a href="https://github.com/cuelang/cue">
+            are defined via reusable Infrastructure-as-Code (IaC) components. This creates a self-service workflow where platform
+             team design and maintains capabilities via </Translate><a href="https://github.com/cuelang/cue">
               CUE</a> <Translate>and/or </Translate> <a href="https://helm.sh/">Helm</a><Translate>, 
-              and end-users ship code by picking and assembling these modules into an application deployment. 
+              and end-users ship code by assembling these components into an application deployment. 
               No restrictions, fully extensible.</Translate>
         </p>
       </>
@@ -43,9 +43,9 @@ const features = [
       <>
         <p>
           <Translate>
-            All these self-service capability modules are actually maintained with 
+            All these capability modules are actually maintained with 
             </Translate><a href="https://kubernetes.io/docs/concepts/architecture/controller/"> Kubernetes 
-            Control Loop</a> <Translate> so they will never leave </Translate> <i>Configuration Drift</i> <Translate>in 
+            Control Loop</a> <Translate> so they will never leave </Translate> <i>configuration drift</i> <Translate>in 
             your cluster. Also, as a set of </Translate><a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">
              Kubernetes Custom Resources</a><Translate>, KubeVela seamlessly work with any CI/CD or GitOps tools, no integration burden, no extra tool</Translate>.
         </p>
