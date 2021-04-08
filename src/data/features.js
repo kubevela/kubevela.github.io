@@ -25,12 +25,11 @@ const features = [
       <>
         <p>
           <Translate>
-           In KubeVela, any capability an application deployment needs (e.g. workloads, operational features, and cloud services etc)
-            are defined via reusable Infrastructure-as-Code (IaC) components. This creates a self-service workflow where platform
-             team design and maintains capabilities via </Translate><a href="https://github.com/cuelang/cue">
-              CUE</a> <Translate>and/or </Translate> <a href="https://helm.sh/">Helm</a><Translate>, 
-              and end-users ship code by assembling these components into an application deployment. 
-              No restrictions, fully extensible.</Translate>
+           In KubeVela, all its application deployment features such as workloads, operational behaviors, and cloud services
+            are defined via reusable </Translate><a href="https://github.com/cuelang/cue">
+              CUE</a> <Translate>and/or </Translate> <a href="https://helm.sh/">Helm</a><Translate> components. 
+              This creates a application deployment system whose capabilities are maintained as programmable packages, 
+              when your needs grow, your platform capabilities expand. Zero-restriction and fully flexible.</Translate>
         </p>
       </>
     ),
@@ -43,11 +42,11 @@ const features = [
       <>
         <p>
           <Translate>
-            All these capability modules are actually maintained with 
+            Though perfect in flexibility and best in developer experience, X-as-Code may leads to </Translate> <i>configuration drift</i> <Translate>. 
+            That's why KubeVela is built with Kubernetes, i.e. all its abstractions and capabilities are code but executed via battle tested 
             </Translate><a href="https://kubernetes.io/docs/concepts/architecture/controller/"> Kubernetes 
-            Control Loop</a> <Translate> so they will never leave </Translate> <i>configuration drift</i> <Translate>in 
-            your cluster. Also, as a set of </Translate><a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">
-             Kubernetes Custom Resources</a><Translate>, KubeVela seamlessly work with any CI/CD or GitOps tools, no integration burden, no extra tool</Translate>.
+            Control Loop</a><Translate>, convergence and determinism are guaranteed. Also, as a set of </Translate><a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">
+             Custom Resources</a><Translate>, KubeVela seamlessly work with any CI/CD or GitOps tools, no integration burden.</Translate>
         </p>
       </>
     ),
