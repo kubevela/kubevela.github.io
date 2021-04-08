@@ -105,19 +105,10 @@ module.exports = {
             },
           ],
         },
-        {
-          title: 'Others',
-          items: [
-            {
-              html:
-                '<a href="https://www.netlify.com"><img src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" alt="Deploys by Netlify" /></a>',
-            },
-          ],
-        },
       ],
       copyright: `
         <br />
-        <strong>© KubeVela Authors ${new Date().getFullYear()} | Documentation Distributed under <a herf="https://creativecommons.org/licenses/by/4.0">CC-BY-4.0</a> </strong>
+        <strong>© KubeVela Authors ${new Date().getFullYear()} | Documentation Distributed under <a herf="https://creativecommons.org/licenses/by/4.0">CC-BY-4.0</a> </strong> <strong>| Powered by <a href="https://www.netlify.com">Netlify</a></strong>
         <br />
       `,
     },
