@@ -95,13 +95,13 @@ const WhatIs = () => (
           <p className="hero__subtitle">
               <small>
               <Translate>
-                  KubeVela is a modern application engine that 
-                  </Translate><i>adapts to your application's needs</i> <Translate>, 
+                  KubeVela is a modern application engine that
+                  </Translate> <i>adapts to your application's needs</i><Translate>, 
                   not the other way around.</Translate>
                   <br />
                   <br />
                   <Translate>Think of it as a </Translate><i>Heroku</i> <Translate> 
-                  which is fully programmable to serve your needs as you grow and expand.</Translate>
+                  but is fully programmable to serve your needs as you grow.</Translate>
               </small>
           </p>
         </div>
