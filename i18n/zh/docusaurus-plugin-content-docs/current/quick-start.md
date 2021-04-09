@@ -1,21 +1,21 @@
 ---
-title:  Quick Start
+title:  快速开始
 ---
 
-Welcome to KubeVela! In this guide, we'll walk you through how to install KubeVela, and deploy your first simple application.
+欢迎来到KubeVela! 在本向导中, 我们会向您介绍如何安装KubeVela并且部署您的第一个简单的应用。 
 
-## Step 1: Install
+## Step 1: 安装
 
-Make sure you have finished and verified the installation following [this guide](./install).
+确定您在上一篇文档中已经完成并且验证了[安装](./install).
 
-## Step 2: Deploy Your First Application
+## Step 2: 部署您的第一个应用
 
 ```bash
 $ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
 application.core.oam.dev/first-vela-app created
 ```
 
-Check the status until we see `status` is `running` and services are `healthy`:
+检查状态：直到看到`status` 是 `running`，并且`services`是`healthy`
 
 ```bash
 $  kubectl get application first-vela-app -o yaml
@@ -51,7 +51,7 @@ status:
   status: running
 ```
 
-Under the neath, the K8s resources was created:
+在底层, K8s资源被创建了出来:
 
 ```bash
 $ kubectl get deployment
@@ -66,7 +66,7 @@ NAME             CLASS    HOSTS                 ADDRESS          PORTS   AGE
 express-server   <none>   testsvc.example.com   <your ip address>   80      7m47s
 ```
 
-If your cluster has a working ingress, you can visit the service.
+如果你的集群有一个工作中的ingress，您可以查看这个service。
 
 ```
 $ curl -H "Host:testsvc.example.com" http://<your ip address>/
@@ -84,14 +84,14 @@ Hello World
                              `'--.._\..--''
 </xmp>
 ```
-**Voila!** You are all set to go.
+**耶耶!** 成功了。
 
-## What's Next
+## 接下来干什么？
 
-Here are some recommended next steps:
+以下是一些推荐的后续步骤:
 
-- Learn KubeVela starting from its [core concepts](./concepts)
-- Learn more details about [`Application`](./application) and understand how it works.
-- Join `#kubevela` channel in CNCF [Slack](https://cloud-native.slack.com) and/or [Gitter](https://gitter.im/oam-dev/community)
+- 从[核心概念](./concepts)开始学习KubeVela
+- 了解更多 [`Application`](./application)的细节并且理解其是如何工作。
+- 加入CNCF [Slack](https://cloud-native.slack.com) 中的`#kubevela` channel 和 [Gitter](https://gitter.im/oam-dev/community)
 
 Welcome onboard and sail Vela!
