@@ -1,6 +1,48 @@
 {
+  "What is KubeVela?": {
+    "message": "What is KubeVela?"
+  },
+  "KubeVela is a modern application engine that": {
+    "message": "KubeVela is a modern application engine that"
+  },
+  ", not the other way around.": {
+    "message": ", not the other way around."
+  },
+  "Think of it as a": {
+    "message": "Think of it as a"
+  },
+  "which is fully programmable to serve your needs as you grow and expand.": {
+    "message": "which is fully programmable to serve your needs as you grow and expand."
+  },
+  "KubeVela introduces the": {
+    "message": "KubeVela introduces the"
+  },
+  "as the main API to capture a full deployment of microservices, and builds features around the application needs only. Progressive rollout and multi-cluster deployment are provided out-of-box. No infrastructure level concerns, simply deploy.": {
+    "message": "as the main API to capture a full deployment of microservices, and builds features around the application needs only. Progressive rollout and multi-cluster deployment are provided out-of-box. No infrastructure level concerns, simply deploy."
+  },
+  "In KubeVela, any capability an application deployment needs (e.g. workloads, operational features, and cloud services etc) are defined via reusable Infrastructure-as-Code (IaC) components. This creates a self-service workflow where platform team design and maintains capabilities via": {
+    "message": "In KubeVela, any capability an application deployment needs (e.g. workloads, operational features, and cloud services etc) are defined via reusable Infrastructure-as-Code (IaC) components. This creates a self-service workflow where platform team design and maintains capabilities via"
+  },
+  "and/or": {
+    "message": "and/or"
+  },
+  ", and end-users ship code by assembling these components into an application deployment. No restrictions, fully extensible.": {
+    "message": ", and end-users ship code by assembling these components into an application deployment. No restrictions, fully extensible."
+  },
+  "All these capability modules are actually maintained with": {
+    "message": "All these capability modules are actually maintained with"
+  },
+  "so they will never leave": {
+    "message": "so they will never leave"
+  },
+  "in your cluster. Also, as a set of": {
+    "message": "in your cluster. Also, as a set of"
+  },
+  ", KubeVela seamlessly work with any CI/CD or GitOps tools, no integration burden, no extra tool": {
+    "message": ", KubeVela seamlessly work with any CI/CD or GitOps tools, no integration burden, no extra tool"
+  },
   "theme.NotFound.title": {
-    "message": "没有找到该页",
+    "message": "Page Not Found",
     "description": "The title of the 404 page"
   },
   "theme.NotFound.p1": {
@@ -10,10 +52,6 @@
   "theme.NotFound.p2": {
     "message": "Please contact the owner of the site that linked you to the original URL and let them know their link is broken.",
     "description": "The 2nd paragraph of the 404 page"
-  },
-  "theme.AnnouncementBar.closeButtonAriaLabel": {
-    "message": "Close",
-    "description": "The ARIA label for close button of announcement bar"
   },
   "theme.blog.paginator.navAriaLabel": {
     "message": "Blog list page navigation",
@@ -27,17 +65,9 @@
     "message": "Older Entries",
     "description": "The label used to navigate to the older blog posts page (next page)"
   },
-  "theme.blog.post.readingTime.plurals": {
-    "message": "One min read|{readingTime} min read",
-    "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
-  },
-  "theme.tags.tagsListLabel": {
-    "message": "Tags:",
-    "description": "The label alongside a tag list"
-  },
-  "theme.blog.post.readMore": {
-    "message": "Read More",
-    "description": "The label used in blog post item excerpts to link to full blog posts"
+  "theme.AnnouncementBar.closeButtonAriaLabel": {
+    "message": "Close",
+    "description": "The ARIA label for close button of announcement bar"
   },
   "theme.blog.post.paginator.navAriaLabel": {
     "message": "Blog post page navigation",
@@ -50,6 +80,18 @@
   "theme.blog.post.paginator.olderPost": {
     "message": "Older Post",
     "description": "The blog post button label to navigate to the older/next post"
+  },
+  "theme.blog.post.readingTime.plurals": {
+    "message": "One min read|{readingTime} min read",
+    "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.tags.tagsListLabel": {
+    "message": "Tags:",
+    "description": "The label alongside a tag list"
+  },
+  "theme.blog.post.readMore": {
+    "message": "Read More",
+    "description": "The label used in blog post item excerpts to link to full blog posts"
   },
   "theme.tags.tagsPageTitle": {
     "message": "Tags",
@@ -92,11 +134,11 @@
     "description": "The ARIA label for the docs pagination"
   },
   "theme.docs.paginator.previous": {
-    "message": "上一页",
+    "message": "Previous",
     "description": "The label used to navigate to the previous doc"
   },
   "theme.docs.paginator.next": {
-    "message": "下一页",
+    "message": "Next",
     "description": "The label used to navigate to the next doc"
   },
   "theme.docs.sidebar.responsiveCloseButtonLabel": {
@@ -132,7 +174,7 @@
     "description": "The label used for the latest version suggestion link label"
   },
   "theme.common.editThisPage": {
-    "message": "编辑本页",
+    "message": "Edit this page",
     "description": "The link label to edit the current page"
   },
   "theme.common.headingLinkTitle": {
@@ -154,38 +196,5 @@
   "theme.common.skipToMainContent": {
     "message": "Skip to main content",
     "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
-  },
-  "as the core API for KubeVela.": {
-    "message": "as the core API for KubeVela."
-  },
-  "as templating engine) to abstract user-facing primitives from Kubernetes API resources. Changes to existing capability templates (or new templates added) take effect at runtime, neither recompilation nor redeployment of KubeVela is required.": {
-    "message": "as templating engine) to abstract user-facing primitives from Kubernetes API resources. Changes to existing capability templates (or new templates added) take effect at runtime, neither recompilation nor redeployment of KubeVela is required."
-  },
-  "What is KubeVela?": {
-    "message": "What is KubeVela?"
-  },
-  "KubeVela enforces an Application abstraction as its main API and ALL KubeVela's capabilities serve for the applications' needs only. This is achieved by adopting the": {
-    "message": "KubeVela enforces an Application abstraction as its main API and ALL KubeVela's capabilities serve for the applications' needs only. This is achieved by adopting the"
-  },
-  "The Application abstraction is implemented with server-side encapsulation controller (supports": {
-    "message": "The Application abstraction is implemented with server-side encapsulation controller (supports"
-  },
-  "and": {
-    "message": "and"
-  },
-  "For platform builders": {
-    "message": "For platform builders"
-  },
-  "KubeVela serves as a framework that empowers them to create user friendly yet highly extensible platforms at ease": {
-    "message": "KubeVela serves as a framework that empowers them to create user friendly yet highly extensible platforms at ease"
-  },
-  "For developers": {
-    "message": "For developers"
-  },
-  "such Application abstraction built with KubeVela will enable them to design and ship their applications to Kubernetes with minimal effort.": {
-    "message": "such Application abstraction built with KubeVela will enable them to design and ship their applications to Kubernetes with minimal effort."
-  },
-  "The Application abstraction is composed of modularized building blocks named components and traits. Any capability provided by Kubernetes ecosystem can be added to KubeVela as new component or trait through simple": {
-    "message": "The Application abstraction is composed of modularized building blocks named components and traits. Any capability provided by Kubernetes ecosystem can be added to KubeVela as new component or trait through simple"
   }
 }

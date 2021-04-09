@@ -1,39 +1,31 @@
 {
-  "copyright": {
-    "message": "\n        <br />\n        <strong>© Kubectl Pod Lens Authors 2021 | Documentation Distributed under CC-BY-4.0 </strong>\n        <br />\n      ",
-    "description": "The footer copyright"
-  },
   "link.title.Documentation": {
-    "message": "Documentation",
+    "message": "文档",
     "description": "The title of the footer links column with title=Documentation in the footer"
   },
   "link.title.Community": {
-    "message": "Community",
+    "message": "社区",
     "description": "The title of the footer links column with title=Community in the footer"
   },
   "link.title.More": {
-    "message": "More",
+    "message": "更多",
     "description": "The title of the footer links column with title=More in the footer"
   },
   "link.item.label.Getting Started": {
-    "message": "Getting Started",
-    "description": "The label of footer link with label=Getting Started linking to https://kubevela.io/docs/getting-started/install"
+    "message": "快速开始",
+    "description": "The label of footer link with label=Getting Started linking to /docs/install"
   },
   "link.item.label.Platform Builder Guide": {
     "message": "Platform Builder Guide",
-    "description": "The label of footer link with label=Platform Builder Guide linking to https://kubevela.io/docs/platform-builder-guide/design-abstraction/overview"
+    "description": "The label of footer link with label=Platform Builder Guide linking to /docs/platform-engineers/overview"
   },
   "link.item.label.Developer Experience Guide": {
     "message": "Developer Experience Guide",
-    "description": "The label of footer link with label=Developer Experience Guide linking to https://kubevela.io/docs/developer-experience-guide/appfile/quick-start-appfile"
+    "description": "The label of footer link with label=Developer Experience Guide linking to /docs/quick-start-appfile"
   },
-  "link.item.label.Slack ( #kubevela channel )": {
-    "message": "Slack ( #kubevela channel )",
-    "description": "The label of footer link with label=Slack ( #kubevela channel ) linking to https://slack.cncf.io/"
-  },
-  "link.item.label.WeChat": {
-    "message": "WeChat",
-    "description": "The label of footer link with label=WeChat linking to https://wj.qq.com/s2/7438465/6bd6"
+  "link.item.label.CNCF Slack ( #kubevela channel )": {
+    "message": "CNCF Slack ( #kubevela channel )",
+    "description": "The label of footer link with label=CNCF Slack ( #kubevela channel ) linking to https://slack.cncf.io/"
   },
   "link.item.label.Gitter": {
     "message": "Gitter",
@@ -50,5 +42,9 @@
   "link.item.label.Blog": {
     "message": "Blog",
     "description": "The label of footer link with label=Blog linking to blog"
+  },
+  "copyright": {
+    "message": "\n        <br />\n        <strong>© KubeVela Authors 2021 | Documentation Distributed under <a herf=\"https://creativecommons.org/licenses/by/4.0\">CC-BY-4.0</a> </strong> <strong>| Powered by <a href=\"https://www.netlify.com\">Netlify</a></strong>\n        <br />\n      ",
+    "description": "The footer copyright"
   }
 }
