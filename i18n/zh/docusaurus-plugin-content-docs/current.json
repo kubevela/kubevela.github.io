@@ -1,0 +1,82 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.docs.category.Overview": {
+    "message": "概述",
+    "description": "The label for category Overview in sidebar docs"
+  },
+  "sidebar.docs.category.Getting Started": {
+    "message": "快速开始",
+    "description": "The label for category Getting Started in sidebar docs"
+  },
+  "sidebar.docs.category.Define Application": {
+    "message": "Define Application",
+    "description": "The label for category Define Application in sidebar docs"
+  },
+  "sidebar.docs.category.Rollout Application": {
+    "message": "Rollout Application",
+    "description": "The label for category Rollout Application in sidebar docs"
+  },
+  "sidebar.docs.category.Platform Builder Guide": {
+    "message": "Platform Builder Guide",
+    "description": "The label for category Platform Builder Guide in sidebar docs"
+  },
+  "sidebar.docs.category.Visualization": {
+    "message": "Visualization",
+    "description": "The label for category Visualization in sidebar docs"
+  },
+  "sidebar.docs.category.Defining Components": {
+    "message": "Defining Components",
+    "description": "The label for category Defining Components in sidebar docs"
+  },
+  "sidebar.docs.category.CUE": {
+    "message": "CUE",
+    "description": "The label for category CUE in sidebar docs"
+  },
+  "sidebar.docs.category.Helm": {
+    "message": "Helm",
+    "description": "The label for category Helm in sidebar docs"
+  },
+  "sidebar.docs.category.Raw Template": {
+    "message": "Raw Template",
+    "description": "The label for category Raw Template in sidebar docs"
+  },
+  "sidebar.docs.category.Defining Traits": {
+    "message": "Defining Traits",
+    "description": "The label for category Defining Traits in sidebar docs"
+  },
+  "sidebar.docs.category.Defining Cloud Service": {
+    "message": "Defining Cloud Service",
+    "description": "The label for category Defining Cloud Service in sidebar docs"
+  },
+  "sidebar.docs.category.Hands-on Lab": {
+    "message": "Hands-on Lab",
+    "description": "The label for category Hands-on Lab in sidebar docs"
+  },
+  "sidebar.docs.category.Developer Experience Guide": {
+    "message": "Developer Experience Guide",
+    "description": "The label for category Developer Experience Guide in sidebar docs"
+  },
+  "sidebar.docs.category.Appfile": {
+    "message": "Appfile",
+    "description": "The label for category Appfile in sidebar docs"
+  },
+  "sidebar.docs.category.Command Line Tool (CLI)": {
+    "message": "Command Line Tool (CLI)",
+    "description": "The label for category Command Line Tool (CLI) in sidebar docs"
+  },
+  "sidebar.docs.category.CLI References": {
+    "message": "CLI References",
+    "description": "The label for category CLI References in sidebar docs"
+  },
+  "sidebar.docs.category.Capability References": {
+    "message": "Capability References",
+    "description": "The label for category Capability References in sidebar docs"
+  },
+  "sidebar.docs.category.Roadmap": {
+    "message": "Roadmap",
+    "description": "The label for category Roadmap in sidebar docs"
+  }
+}
