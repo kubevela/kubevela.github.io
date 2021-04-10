@@ -1,16 +1,17 @@
 ---
-title: Multi-Cluster Application Deployment
+title: 多集群应用部署
 ---
 
-# Introduction
+## 简介
 
-Modern application infrastructure involves multiple clusters to ensure high availability and maximize service throughput. In this section, we will introduce how to use KubeVela to achieve application deployment across multiple clusters with following features supported:
-- Rolling Upgrade: To continuously deploy apps requires to rollout in a safe manner which usually involves step by step rollout batches and analysis.
-- Traffic shifting: When rolling upgrade an app, it needs to split the traffic onto both the old and new revisions to verify the new version while preserving service availability.
+为确保高可用并最大化服务吞吐量，现代应用基础设施会涉及多个群集。在本部分中，我们将介绍如何使用KubeVela在支持以下功能的情况下实现跨多个集群应用程序部署：
+
+- Rolling Upgrade：为满足持续部署应用的要求，需要以安全的方式进行rollout，这通常涉及分步进行批量部署和分析
+- Traffic shifting：滚动升级应用时，它需要将流量分为旧revision和新revision，以达成验证新版本，同时保留服务可用的目的。
 
 ## AppDeployment CRD
 
-The `AppDeployment` CRD has been provided to satisfy such requirements. Here's an overview of the API:
+`AppDeployment` CRD 是被设计用来满足上述需求的。下面是API的简单介绍:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -74,7 +75,7 @@ spec:
 
 ## Cluster CRD
 
-The clusters selected in the `placement` part from above is defined in Cluster CRD. Here's what it looks like:
+在上述示例里，`placement`部分中被选择的群集是在群集CRD中被定义的。如下所示：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -88,7 +89,7 @@ spec:
     name: kubeconfig-cluster-1 # the secret name
 ```
 
-The secret must contain the kubeconfig credentials in `config` field:
+secret必须在`config`字段中包含kubeconfig credentials：
 
 ```yaml
 apiVersion: v1
@@ -99,12 +100,12 @@ data:
   config: ... # kubeconfig data
 ```
 
-# Quickstart
+## 快速开始
 
-Here's a step-by-step tutorial for you to try out. All of the yaml files are from [`docs/examples/appdeployment/`](https://github.com/oam-dev/kubevela/tree/master/docs/examples/appdeployment).
-You must run all commands in that directory.
+下面是一个您可以自己动手尝试的示例。 所有的yaml文件都在 [`docs/examples/appdeployment/`](https://github.com/oam-dev/kubevela/tree/master/docs/examples/appdeployment)中。
+您必须运行那个目录下所有的command。
 
-1. Create an Application
+1. 创建应用
 
    ```bash
    $ cat <<EOF | kubectl apply -f -
@@ -125,7 +126,7 @@ You must run all commands in that directory.
    EOF
    ```
 
-   This will create `example-app-v1` AppRevision. Check it:
+   这会创建 `example-app-v1` AppRevision. 查看一下：
 
    ```bash
    $ kubectl get applicationrevisions.core.oam.dev
@@ -133,17 +134,17 @@ You must run all commands in that directory.
    example-app-v1   116s
    ```
 
-   > Note: with `app.oam.dev/revision-only: "true"` annotation, above `Application` resource won't create any pod instances and leave the real deployment process to `AppDeployment`.
+   > 注意: 通过 `app.oam.dev/revision-only: "true"` 注释, 上面的 `Application` 资源不会创建任何pod实例并会把真正的部署进程留给`AppDeployment`。
 
-1. Then use the above AppRevision to create an AppDeployment.
+2. 之后使用上面的AppRevision来创建AppDeployment。
 
    ```bash
    $ kubectl apply -f appdeployment-1.yaml
    ```
 
-   > Note: in order to AppDeployment to work, your workload object must have a `spec.replicas` field for scaling.
+   > 注意: 为了使AppDeployment能正常工作，您的工作负载对象必须有一个`spec.replicas`字段以进行扩展。
 
-1. Now you can check that there will 1 deployment and 2 pod instances deployed
+3. 现在您可以查看到有1个deployment和2个pod示例已经被部署了。
 
    ```bash
    $ kubectl get deploy
@@ -151,7 +152,7 @@ You must run all commands in that directory.
    testsvc-v1   2/2     2            0           27s
    ```
 
-1. Update Application properties:
+4. 更新应用特性:
 
    ```bash
    $ cat <<EOF | kubectl apply -f -
@@ -172,7 +173,7 @@ You must run all commands in that directory.
    EOF
    ```
 
-   This will create a new `example-app-v2` AppRevision. Check it:
+   这会创建一个新的 `example-app-v2` AppRevision。看一下:
 
    ```bash
    $ kubectl get applicationrevisions.core.oam.dev
@@ -181,13 +182,13 @@ You must run all commands in that directory.
    example-app-v2
    ```
 
-1. Then use the two AppRevisions to update the AppDeployment:
+5. 之后用两个AppRevisions来更新AppDeployment:
 
    ```bash
    $ kubectl apply -f appdeployment-2.yaml
    ```
 
-   (Optional) If you have Istio installed, you can apply the AppDeployment with traffic split:
+   （可选）如果您已安装Istio，您可以将AppDeployment与traffic split一起应用:
 
    ```bash
    # set up gateway if not yet
@@ -196,14 +197,14 @@ You must run all commands in that directory.
    $ kubectl apply -f appdeployment-2-traffic.yaml
    ```
 
-   Note that for traffic split to work, your must set the following pod labels in workload cue templates (see [webservice.cue](https://github.com/oam-dev/kubevela/blob/master/hack/vela-templates/cue/webservice.cue)):
+   注意：为了使traffic split能正常工作，您必须在工作负载的cue templates中设置下面所示的pod label(详见 [webservice.cue](https://github.com/oam-dev/kubevela/blob/master/hack/vela-templates/cue/webservice.cue)):
 
    ```shell
    "app.oam.dev/component": context.name
    "app.oam.dev/appRevision": context.appRevision
    ```
 
-1. Now you can check that there will 1 deployment and 1 pod per revision.
+6. 现在你可以查看到每一个revision有一个deployment和一个pod。
 
    ```bash
    $ kubectl get deploy
@@ -212,7 +213,7 @@ You must run all commands in that directory.
    testsvc-v2   1/1     1            1           8s
    ```
 
-   (Optional) To verify traffic split:
+   （可选）来验证下traffic split:
 
    ```bash
    # run this in another terminal
@@ -224,7 +225,7 @@ You must run all commands in that directory.
    $ curl -H "Host: example-app.example.com" http://localhost:8080/
    ```
 
-1. Cleanup:
+7. Cleanup:
 
    ```bash
    kubectl delete appdeployments.core.oam.dev  --all
