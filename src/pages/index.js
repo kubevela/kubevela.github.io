@@ -101,7 +101,7 @@ const WhatIs = () => (
                   <br />
                   <br />
                   <Translate>Think of it as a </Translate><i>Heroku</i> <Translate> 
-                  but is fully programmable to serve your needs as you grow.</Translate>
+                  that is fully programmable to serve your needs as you grow.</Translate>
               </small>
           </p>
         </div>
