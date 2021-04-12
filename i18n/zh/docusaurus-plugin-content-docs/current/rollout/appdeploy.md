@@ -204,7 +204,7 @@ data:
    "app.oam.dev/appRevision": context.appRevision
    ```
 
-6. 现在你可以查看到每一个 revision 有1个 deployment 和1个pod。
+6. 现在你可以查看到每一个 revision 有 1 个 deployment 和 1 个 pod。
 
    ```bash
    $ kubectl get deploy
