@@ -2,13 +2,13 @@
 title:  Application CRD
 ---
 
-本部分将逐步介绍如何以声明方式使用`Application`来定义具有相应操作行为的应用。
+本部分将逐步介绍如何使用 `Application` 对象来定义你的应用，并以声明式的方式进行相应的操作。
 
 ## 示例
 
-下面的示例应用声明了一个具有 *Worker* 工作负载类型的 `backend` 组件和具有 *Web Service* 工作负载类型的`frontend`组件。
+下面的示例应用声明了一个具有 *Worker* 工作负载类型的 `backend` 组件和具有 *Web Service* 工作负载类型的 `frontend` 组件。
 
-此外，`frontend`组件声明了具有 `sidecar` 和 `autoscaler` 的`trait`运维能力，这意味着工作负载将自动注入 `fluentd` 的sidecar，并可以根据CPU使用情况触发1-10个副本进行扩展。
+此外，`frontend`组件声明了具有 `sidecar` 和 `autoscaler` 的 `trait` 运维能力，这意味着工作负载将自动注入 `fluentd` 的sidecar，并可以根据CPU使用情况触发1-10个副本进行扩展。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -42,7 +42,7 @@ spec:
 
 ### 部署应用
 
-Apply上述的 application yaml文件, 然后应用启动
+部署上述的 application yaml文件, 然后应用启动
 
 ```shell
 $ kubectl get application -o yaml
@@ -64,7 +64,7 @@ status:
 
 ```
 
-你可以看到一个命名为`frontend`的deployment，其中被注入的容器`fluentd`正在运行。
+你可以看到一个命名为 `frontend` 并带有被注入的容器 `fluentd` 的 Deployment 正在运行。
 
 ```shell
 $ kubectl get deploy frontend
@@ -72,7 +72,7 @@ NAME       READY   UP-TO-DATE   AVAILABLE   AGE
 frontend   1/1     1            1           100m
 ```
 
-另一个命名为`backend`的deployment也在运行。
+另一个命名为 `backend` 的 Deployment 也在运行。
 
 ```shell
 $ kubectl get deploy backend
@@ -80,7 +80,7 @@ NAME      READY   UP-TO-DATE   AVAILABLE   AGE
 backend   1/1     1            1           100m
 ```
 
-一个HPA也被`autoscaler` 运维能力创建了出来。
+同样被 `autoscaler` trait 创建出来的还有一个 HPA 。
 
 ```shell
 $ kubectl get HorizontalPodAutoscaler frontend
@@ -89,9 +89,9 @@ frontend   Deployment/frontend   <unknown>/50%   1         10        1          
 ```
 
 
-## 底层
+## 背后的原理
 
-在上面的示例中, `type: worker` 指的是该组件的规范（在后面的 `properties` 部分中声明）将由名为 `worker` 的 `ComponentDefinition` 对象执行，如下所示：
+在上面的示例中, `type: worker` 指的是该组件的字段内容（即下面的 `properties` 字段中的内容）将遵从名为 `worker` 的 `ComponentDefinition` 对象中的规范定义，如下所示：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -138,10 +138,10 @@ spec:
         }
 ```
 
-因此，`backend` 的 `properties` 部分仅支持两个参数：`image` 和 `cmd`。这是由定义的 `.spec.template` 字段的 `parameter` 列表执行的。
+因此，`backend` 的 `properties` 部分仅支持两个参数：`image` 和 `cmd`。这是由定义的 `.spec.template` 字段中的 `parameter` 列表执行的。
 
-类似的可扩展抽象机制也同样适用于运维能力trait。
-例如，`frontend` 中的 `type：autoscaler` 指的是其运维能力规范（比如 `properties` 部分）
+类似的可扩展抽象机制也同样适用于 traits(运维能力)。
+例如，`frontend` 中的 `type：autoscaler` 指的是组件对应的 trait 的字段规范（即 trait 的 `properties` 部分）
 将由名为 `autoscaler` 的 `TraitDefinition` 对象执行，如下所示：
 
 ```yaml
@@ -216,13 +216,13 @@ spec:
         }
 ```
 
-所有定义对象都被期望由平台团队声明和安装，与此同时业务用户将仅专注于`Application`资源。
+在业务用户使用之前，我们认为所有用于定义的对象（Definition Object）都已经由平台团队声明并安装完毕了。所以，业务用户将需要专注于应用（`Application`）本身。
 
-请注意，KubeVela的业务用户不需要了解定义对象，他们可以学习如何使用具有可视化形式（或者参数的JSON schema）的给定功能。请[从定义生成表格部分](/docs/platform-engineers/openapi-v3-json-schema)，了解如何实现此目的。
+请注意，KubeVela 的终端用户（业务研发）不需要了解定义对象，他们只需要学习如何使用平台已经安装的能力，这些能力通常还可以被可视化的表单展示出来（或者通过 JSON schema 对接其他方式）。请从[由定义生成前端表单](/docs/platform-engineers/openapi-v3-json-schema)部分的文档了解如何实现。
 
-### 约定 和 "标准合约"
+### 惯例和"标准协议"
 
-在将`Application`资源应用于Kubernetes集群后，KubeVela运行时将遵循以下“标准合约”和约定来生成和管理底层资源实例。
+在应用（`Application` 资源）部署到 Kubernetes 集群后，KubeVela 运行时将遵循以下 “标准协议”和惯例来生成和管理底层资源实例。
 
 
 | Label  | 描述 |
