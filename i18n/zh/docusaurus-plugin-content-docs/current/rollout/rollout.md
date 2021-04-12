@@ -2,24 +2,24 @@
 title: Progressive Rollout
 ---
 
-在任何应用中，`Rollout`或`Upgrade`是最重要的day 2 operation之一。KubeVela作为以应用为中心的平台，旨在提供定制的解决方案来减轻应用运营商的负担。
+在任何应用中，灰度发布、或者说应用升级，都是应用部署完成以后最主要的运维事项之一。KubeVela 作为“以应用为中心”的平台，旨在提供定制的解决方案来减轻应用运维人员的负担。
 
 ## 概述
 
-在云原生社区中，有几种尝试解决Progressive Rollout问题的尝试。但是没有一种提供了真正的滚动式升级。例如，flagger支持Blue/Green，Canary 和 A/B testing。因此，我们决定添加对基于批处理的滚动升级的支持，作为我们在KubeVela中支持的第一种样式。
+在云原生社区中，有几种尝试解决Progressive Rollout问题的尝试。但是没有一种提供了真正的滚动式升级。例如，flagger支持 Blue/Green，Canary 和 A/B testing。因此，我们决定添加对基于批处理的滚动升级的支持，作为我们在KubeVela中支持的第一种样式。
 
 ### 设计原则和目标
 
-我们在设计KubeVela的rollout解决方案时会牢记以下原则：
+我们在设计 KubeVela 的 rollout 解决方案时会牢记以下原则：
 
-- 第一，我们希望所有类型的rollout controllers共享相同的核心rollout相关的逻辑。运维能力和与应用相关的逻辑可以轻松地封装到其自己的    package里。
-- 第二，与核心rollout相关的逻辑易于扩展以支持不同类型的工作负载，比如Deployment，CloneSet，Statefulset，DaemonSet，或甚至是自定义的工作负载。
-- 第三，与核心rollout相关的逻辑具有文档齐全的状态机。此状态机可以明确地进行状态转换。
-- 第四，controllers可以支持在生产环境中运行的应用所需的所有rollout/upgrade需求，包括Blue/Green, Canary and A/B testing。
+- 第一，我们希望所有类型的 rollout controllers 共享相同的核心 rollout 相关的逻辑。运维能力和与应用相关的逻辑可以轻松地封装到其自己的    package里。
+- 第二，与核心 rollout 相关的逻辑易于扩展以支持不同类型的工作负载，比如 Deployment，CloneSet，Statefulset，DaemonSet，或甚至是自定义的工作负载。
+- 第三，与核心 rollout 相关的逻辑具有文档齐全的状态机。此状态机可以明确地进行状态转换。
+- 第四，controllers 可以支持在生产环境中运行的应用所需的所有 rollout/upgrade 需求，包括 Blue/Green, Canary and A/B testing。
 
 ## AppRollout 示例
 
-这里是一个简易的、用三个batch把一个应用从v1升级到v2的`AppRollout`。第一个batch只包括1个pod而其他两个分其他剩下的。
+这里是一个简易的、用三个batch把一个应用从v1升级到v2的 `AppRollout` 。第一个 batch 只包括 1 个 pod 而其他两个分其他剩下的。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -186,7 +186,7 @@ spec:
         replicas: 5
 ```
 
-3. 使用下面的rollout来升级应用到v1
+3. 使用下面的 rollout 来升级应用到v1
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -206,7 +206,7 @@ spec:
       - replicas: 50%
 ```
 
-用户可以查看ApplicationRollout的状态并等待rollout完成。
+用户可以查看 ApplicationRollout 的状态并等待 rollout 完成。
 
 4. 用户可以继续修改应用镜像tag并apply
 
@@ -232,7 +232,7 @@ spec:
         replicas: 5
 ```
 
-5. 使用应用rollout把应用从v1升级到v2
+5. 使用应用 rollout 把应用从v1升级到v2
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -253,7 +253,7 @@ spec:
       - replicas: 2
 ```
 
-用户可以检查ApplicationRollout的状态并看到rollout完成。此时ApplicationRollout的“Rolling State”变成了`rolloutSucceed`。
+用户可以检查 ApplicationRollout 的状态并看到 rollout 完成了。此时 ApplicationRollout 的 `Rolling State` 变成了`rolloutSucceed`。
 
 ## 状态转移
 

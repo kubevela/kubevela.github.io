@@ -102,7 +102,7 @@ data:
 
 ## 快速开始
 
-下面是一个你可以自己动手尝试的示例。 所有的yaml文件都在 [`docs/examples/appdeployment/`](https://github.com/oam-dev/kubevela/tree/master/docs/examples/appdeployment)中。
+下面是一个你可以自己动手尝试的示例。 所有的 yaml 文件都在 [`docs/examples/appdeployment/`](https://github.com/oam-dev/kubevela/tree/master/docs/examples/appdeployment)中。
 你必须运行那个目录下所有的 command。
 
 1. 创建应用
@@ -188,7 +188,7 @@ data:
    $ kubectl apply -f appdeployment-2.yaml
    ```
 
-   （可选）如果你已安装Istio，你可以将 AppDeployment 与 traffic split 一起应用:
+   （可选）如果你已安装了 Istio，你可以将 AppDeployment 结合流量切分的功能一起使用:
 
    ```bash
    # set up gateway if not yet
@@ -197,14 +197,14 @@ data:
    $ kubectl apply -f appdeployment-2-traffic.yaml
    ```
 
-   注意：为了使 traffic split 能正常工作，你必须在工作负载的 cue templates 中设置下面所示的pod label(详见 [webservice.cue](https://github.com/oam-dev/kubevela/blob/master/hack/vela-templates/cue/webservice.cue)):
+   注意：为了使流量切分能正常工作，你必须在工作负载的 cue templates 中设置下面所示的pod label(详见 [webservice.cue](https://github.com/oam-dev/kubevela/blob/master/hack/vela-templates/cue/webservice.cue)):
 
    ```shell
    "app.oam.dev/component": context.name
    "app.oam.dev/appRevision": context.appRevision
    ```
 
-6. 现在你可以查看到每一个 revision 有 1 个 deployment 和 1 个 pod。
+6. 现在你可以查看到每一个版本有 1 个 deployment 和 1 个 pod。
 
    ```bash
    $ kubectl get deploy
@@ -213,7 +213,7 @@ data:
    testsvc-v2   1/1     1            1           8s
    ```
 
-   （可选）来验证下traffic split:
+   （可选）来验证下流量切分:
 
    ```bash
    # run this in another terminal
