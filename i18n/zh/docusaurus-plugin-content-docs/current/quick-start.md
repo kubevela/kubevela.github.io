@@ -2,20 +2,20 @@
 title:  快速开始
 ---
 
-欢迎来到KubeVela! 在本向导中, 我们会向您介绍如何安装KubeVela并且部署您的第一个简单的应用。 
+欢迎来到 KubeVela! 在本向导中, 我们会向你介绍如何安装 KubeVela 并且部署你的第一个简单的应用。 
 
 ## Step 1: 安装
 
-确定您在上一篇文档中已经完成并且验证了[安装](./install).
+在此之前，请确保你已经完成了安装步骤并且验证了安装成功，参考[安装文档](./install).
 
-## Step 2: 部署您的第一个应用
+## Step 2: 部署你的第一个应用
 
 ```bash
 $ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
 application.core.oam.dev/first-vela-app created
 ```
 
-检查状态：直到看到`status` 是 `running`，并且`services`是`healthy`
+检查状态：直到看到 `status` 是 `running`，并且`services` 是 `healthy`
 
 ```bash
 $  kubectl get application first-vela-app -o yaml
@@ -66,7 +66,7 @@ NAME             CLASS    HOSTS                 ADDRESS          PORTS   AGE
 express-server   <none>   testsvc.example.com   <your ip address>   80      7m47s
 ```
 
-如果你的集群有一个工作中的ingress，您可以查看这个service。
+如果你的集群有一个工作中的 ingress，你可以查看这个 service。
 
 ```
 $ curl -H "Host:testsvc.example.com" http://<your ip address>/
@@ -84,14 +84,15 @@ Hello World
                              `'--.._\..--''
 </xmp>
 ```
-**耶耶!** 成功了。
+**太棒了!** 你已经全都部署成功了。
 
-## 接下来干什么？
+## 下一步？
 
 以下是一些推荐的后续步骤:
 
-- 从[核心概念](./concepts)开始学习KubeVela
-- 了解更多 [`Application`](./application)的细节并且理解其是如何工作。
+- 从[核心概念](./concepts)开始学习 KubeVela
+- 了解更多[`Application`](./application)的细节并且理解其是如何工作的。
 - 加入CNCF [Slack](https://cloud-native.slack.com) 中的`#kubevela` channel 和 [Gitter](https://gitter.im/oam-dev/community)
+- 加入 KubeVela 中文社区钉钉群。钉钉群号：23310022。
 
 Welcome onboard and sail Vela!
