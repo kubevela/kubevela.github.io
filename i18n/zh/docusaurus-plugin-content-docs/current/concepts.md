@@ -2,9 +2,9 @@
 title:  核心概念
 ---
 
-*"KubeVela是一个面向平台构建者的、简单易用但又高度可拓展的基于Kubernetes的云原生平台构建引擎。"*
+*"KubeVela 是一个面向平台构建者基于 Kubernetes 构建易用可拓展的云原生应用平台的引擎。"*
 
-在本部分中，我们会对KubeVela的核心思想进行详细解释，并进一步阐清一些在本项目中被广泛使用的技术术语。
+在本部分中，我们会对 KubeVela 的核心思想进行详细解释，并进一步阐清一些在本项目中被广泛使用的技术术语。
 
 ## 综述
 
@@ -18,16 +18,17 @@ title:  核心概念
 
 ![alt](resources/how-it-works.png)
 
-这种基于模板的工作流，通过使用一系列的 Kubernetes 的 CRD ，使平台团队能够执行最佳的实践和 deployment confidence 成为现实，并且可以很自然地为业务用户提供平台即服务的体验（比如：app-centric， higher level abstractions， self-service operations）。
+这种基于模板的工作流使得平台团队能够在一系列的 Kubernetes CRD 之上，引导用户遵守他们构建的最佳实践和 部署经验，并且可以很自然地为业务用户提供 PaaS 级别的体验（比如：“以应用为中心”，“高层次的抽象”，“自助式运维操作”等等）。
 
 ![alt](resources/what-is-kubevela.png)
 
 下面开始介绍 KubeVela 的核心概念
 
 ## `Application`
-*Application*，应用，是 KubeVela 的核心API。它允许开发者通过一个单一的 artifact 来使用简化的 primitives 来描述完整的应用部署。
 
-在应用交付平台，为了简化运维任务，并且作为避免操作过程中产生配置漂移的固定点，*Application*这个概念尤为重要。同时，此概念为将 Kubernetes的能力引入应用交付过程提供了一个更简单的，不用依赖底层细节的途径。 举个例子，开发者能够不需要每次都定义一个详细的 Kubernetes Deployment + Service 的组合来建模一个 web service ，或者不用依靠底层的 KEDA ScaleObject 来获取自动扩容的需求。
+应用（*Application*），是 KubeVela 的核心 API。它使得业务开发者只需要基于一个单一的制品和一些简单的原语就可以构建完整的应用。
+
+在应用交付平台中，有一个 *Application* 的概念尤为重要，因为这可以很大程度上简化运维任务，并且作为一个锚点避免操作过程中产生配置漂移的问题。同时，它也帮助应用交付过程中引入 Kubernetes的能力提供了一个更简单的、且不用依赖底层细节的途径。 举个例子，开发者能够不需要每次都定义一个详细的 Kubernetes Deployment + Service 的组合来建模一个 web service ，或者不用依靠底层的 KEDA ScaleObject 来获取自动扩容的需求。
 
 ### 举例
 
@@ -64,7 +65,7 @@ spec:
 
 ## 构建抽象
 
-不像大多数的 higher level abstractions，KubeVela 中的 `Application` 资源是一种积木风格的对象，而且它甚至没有固定的 schema。相反，它由构建模块，比如app components（应用组件）和traits（运维能力）等，构成。这种构建模块允许开发者通过自己定义的抽象来集成平台的能力到此应用定义。
+不像大多数的高层次的抽象，KubeVela 中的 `Application` 资源是一种积木风格的对象，而且它甚至没有固定的 schema。相反，它由构建模块，比如app components（应用组件）和traits（运维能力）等，构成。这种构建模块允许开发者通过自己定义的抽象来集成平台的能力到此应用定义。
 
 定义抽象和建模平台能力的构建模块是 `ComponentDefinition` 和 `TraitDefinition` 。
 
