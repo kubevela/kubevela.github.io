@@ -6,20 +6,20 @@ title: Progressive Rollout
 
 ## 概述
 
-在云原生社区中，有几种尝试解决Progressive Rollout问题的尝试。但是没有一种提供了真正的滚动式升级。例如，flagger支持 Blue/Green，Canary 和 A/B testing。因此，我们决定添加对基于批处理的滚动升级的支持，作为我们在KubeVela中支持的第一种样式。
+在云原生社区中，有几种尝试解决渐进式灰度发布问题的尝试。但是没有一种提供了真正的滚动式升级。例如，flagger 只支持蓝绿发布，金丝雀发布 和 A/B 测试等模式。因此，我们决定把对基于批处理的滚动升级功能作为我们在KubeVela 中支持的第一种模式。
 
 ### 设计原则和目标
 
-我们在设计 KubeVela 的 rollout 解决方案时会牢记以下原则：
+我们在设计 KubeVela 的 rollout 解决方案时会始终保证以下原则：
 
 - 第一，我们希望所有类型的 rollout controllers 共享相同的核心 rollout 相关的逻辑。运维能力和与应用相关的逻辑可以轻松地封装到其自己的    package里。
-- 第二，与核心 rollout 相关的逻辑易于扩展以支持不同类型的工作负载，比如 Deployment，CloneSet，Statefulset，DaemonSet，或甚至是自定义的工作负载。
+- 第二，rollout 的核心逻辑应该能够通过非常简单的扩展就能做到支持不同类型的工作负载，比如 Deployment，CloneSet，Statefulset，DaemonSet，或甚至是自定义的工作负载。
 - 第三，与核心 rollout 相关的逻辑具有文档齐全的状态机。此状态机可以明确地进行状态转换。
-- 第四，controllers 可以支持在生产环境中运行的应用所需的所有 rollout/upgrade 需求，包括 Blue/Green, Canary and A/B testing。
+- 第四，这些 rollout controllers 可以支持应用在生产环境灰度发布/升级所需的所有场景，包括蓝绿发布，金丝雀发布 和 A/B 测试等模式。
 
 ## AppRollout 示例
 
-这里是一个简易的、用三个batch把一个应用从v1升级到v2的 `AppRollout` 。第一个 batch 只包括 1 个 pod 而其他两个分其他剩下的。
+这里是一个简单的 `AppRollout` 的示例，它分三个批次（batch）把一个应用从 v1 升级到 v2。第一个批次只升级 1 个 pod，然后剩下的批次平分剩下的实例。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -186,7 +186,7 @@ spec:
         replicas: 5
 ```
 
-3. 使用下面的 rollout 来升级应用到v1
+3. 使用下面的 rollout 来升级应用到 v1
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -208,7 +208,7 @@ spec:
 
 用户可以查看 ApplicationRollout 的状态并等待 rollout 完成。
 
-4. 用户可以继续修改应用镜像tag并apply
+4. 用户可以继续修改应用镜像标签并部署。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -232,7 +232,7 @@ spec:
         replicas: 5
 ```
 
-5. 使用应用 rollout 把应用从v1升级到v2
+5. 使用应用 rollout 把应用从 v1 升级到 v2
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -257,7 +257,7 @@ spec:
 
 ## 状态转移
 
-下图是high level的状态转移图
+下图是更高层面的状态转移图
 
 ![](../resources/approllout-status-transition.jpg)
 

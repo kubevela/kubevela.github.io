@@ -182,7 +182,7 @@ data:
    example-app-v2
    ```
 
-5. 加下来我们用两个应用来更新 AppDeployment 对象::
+5. 接下来我们更新 AppDeployment 对象，尝试部署 2 个不同的应用版本:
 
    ```bash
    $ kubectl apply -f appdeployment-2.yaml
