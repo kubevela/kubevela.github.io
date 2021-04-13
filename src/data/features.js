@@ -45,7 +45,7 @@ const features = [
             Perfect in flexibility though, X-as-Code may lead to configuration drift (i.e. the running instances are not in line with 
               the expected configuration). KubeVela solves this by modeling its capabilities as code but enforce them via
             </Translate><a href="https://kubernetes.io/docs/concepts/architecture/controller/"> Kubernetes 
-            Reconcile Loops</a><Translate> which will never leave inconsistency in your clusters. This also makes KubeVela
+            control loop</a><Translate> which will never leave inconsistency in your clusters. This also makes KubeVela
             work with any CI/CD or GitOps tools via declarative API without integration burden.</Translate>
         </p>
       </>
