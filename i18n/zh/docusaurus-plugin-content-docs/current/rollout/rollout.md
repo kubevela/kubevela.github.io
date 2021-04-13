@@ -12,9 +12,9 @@ title: Progressive Rollout
 
 我们在设计 KubeVela 的 rollout 解决方案时会始终保证以下原则：
 
-- 第一，我们希望所有类型的 rollout controllers 共享相同的核心 rollout 相关的逻辑。运维能力和与应用相关的逻辑可以轻松地封装到其自己的    package里。
+- 第一，我们希望所有类型的 rollout controllers 共享相同的核心 rollout 相关逻辑。Trait 和 应用相关的逻辑可以很轻松地把它们封装到其自己的代码包里。
 - 第二，rollout 的核心逻辑应该能够通过非常简单的扩展就能做到支持不同类型的工作负载，比如 Deployment，CloneSet，Statefulset，DaemonSet，或甚至是自定义的工作负载。
-- 第三，与核心 rollout 相关的逻辑具有文档齐全的状态机。此状态机可以明确地进行状态转换。
+- 第三，rollout 的核心逻辑应当包含一个具有完备文档的状态机，其中的每一步状态转换都应当是明确的。
 - 第四，这些 rollout controllers 可以支持应用在生产环境灰度发布/升级所需的所有场景，包括蓝绿发布，金丝雀发布 和 A/B 测试等模式。
 
 ## AppRollout 示例
