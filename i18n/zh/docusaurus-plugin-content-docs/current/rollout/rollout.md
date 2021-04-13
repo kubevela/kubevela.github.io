@@ -2,32 +2,24 @@
 title: Progressive Rollout
 ---
 
-`Rollout` or `Upgrade` is one of the most essential "day 2" operation on any application
-. KubeVela, as an application centric platform, definitely needs to provide a customized solution
-to alleviate the burden on the application operators.
+在任何应用中，灰度发布、或者说应用升级，都是应用部署完成以后最主要的运维事项之一。KubeVela 作为“以应用为中心”的平台，旨在提供定制的解决方案来减轻应用运维人员的负担。
 
-## Overview 
-There are several attempts at solving this problem in the cloud native community. However, none 
-of them provide a true rolling style upgrade. For example, flagger supports Blue/Green, Canary 
-and A/B testing. Therefore, we decide to add support for batch based rolling upgrade as 
-our first style to support in KubeVela.
+## 概述
 
-### Design Principles and Goals
-We design KubeVela rollout solutions with the following principles in mind
-- First, we want all flavors of rollout controllers share the same core rollout
-  related logic. The trait and application related logic can be easily encapsulated into its own
-  package.
-- Second, the core rollout related logic is easily extensible to support different type of
-  workloads, i.e. Deployment, CloneSet, Statefulset, DaemonSet or even customized workloads.
-- Thirdly, the core rollout related logic has a well documented state machine that
-  does state transition explicitly.
-- Finally, the controllers can support all the rollout/upgrade needs of an application running
-  in a production environment including Blue/Green, Canary and A/B testing.
+在云原生社区中，有几种尝试解决渐进式灰度发布问题的尝试。但是没有一种提供了真正的滚动式升级。例如，flagger 只支持蓝绿发布，金丝雀发布 和 A/B 测试等模式。因此，我们决定把对基于批处理的滚动升级功能作为我们在KubeVela 中支持的第一种模式。
 
+### 设计原则和目标
 
-## AppRollout Example
-Here is a simple `AppRollout` that upgrade an application from v1 to v2 in three batches. The 
-first batch contains only 1 pod while the rest of the batches split the rest.
+我们在设计 KubeVela 的 rollout 解决方案时会始终保证以下原则：
+
+- 第一，我们希望所有类型的 rollout controllers 共享相同的核心 rollout 相关逻辑。Trait 和 应用相关的逻辑可以很轻松地把它们封装到其自己的代码包里。
+- 第二，rollout 的核心逻辑应该能够通过非常简单的扩展就能做到支持不同类型的工作负载，比如 Deployment，CloneSet，Statefulset，DaemonSet，或甚至是自定义的工作负载。
+- 第三，rollout 的核心逻辑应当包含一个具有完备文档的状态机，其中的每一步状态转换都应当是明确的。
+- 第四，这些 rollout controllers 可以支持应用在生产环境灰度发布/升级所需的所有场景，包括蓝绿发布，金丝雀发布 和 A/B 测试等模式。
+
+## AppRollout 示例
+
+这里是一个简单的 `AppRollout` 的示例，它分三个批次（batch）把一个应用从 v1 升级到 v2。第一个批次只升级 1 个 pod，然后剩下的批次平分剩下的实例。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -48,14 +40,16 @@ spec:
     batchPartition: 1
 ```
 
-## User Experience Workflow
-Here is the end to end user experience based on [CloneSet](https://openkruise.io/en-us/docs/cloneset.html)
+## 用户体验工作流
 
-1. Install CloneSet and create a `ComponentDefinition` for it.
+这里是一个基于 [CloneSet](https://openkruise.io/en-us/docs/cloneset.html) 的端到端的用户体验
+
+1. 安装 CloneSet 并为其创建一个 `ComponentDefinition`。
+
 ```shell
 helm install kruise https://github.com/openkruise/kruise/releases/download/v0.7.0/kruise-chart.tgz
 ```
-   
+
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: ComponentDefinition
@@ -168,7 +162,8 @@ spec:
         }
   ```
 
-2. Apply an application to the cluster
+2. 部署一个应用到集群
+
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -191,7 +186,8 @@ spec:
         replicas: 5
 ```
 
-3. Apply the following rollout to upgrade the application to v1
+3. 使用下面的 rollout 来升级应用到 v1
+
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: AppRollout
@@ -209,9 +205,11 @@ spec:
       - replicas: 40%
       - replicas: 50%
 ```
-Use can check the status of the ApplicationRollout and wait for the rollout to complete.
 
-4. User can continue to modify the application image tag and apply
+用户可以查看 ApplicationRollout 的状态并等待 rollout 完成。
+
+4. 用户可以继续修改应用镜像标签并部署。
+
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -234,7 +232,8 @@ spec:
         replicas: 5
 ```
 
-5. Apply the application rollout that upgrade the application from v1 to v2
+5. 使用应用 rollout 把应用从 v1 升级到 v2
+
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: AppRollout
@@ -253,11 +252,12 @@ spec:
       - replicas: 2
       - replicas: 2
 ```
-User can check the status of the ApplicationRollout and see the rollout completes, and the
-ApplicationRollout's "Rolling State" becomes `rolloutSucceed`
 
-## State Transition
-Here is the high level state transition graph
+用户可以检查 ApplicationRollout 的状态并看到 rollout 完成了。此时 ApplicationRollout 的 `Rolling State` 变成了`rolloutSucceed`。
+
+## 状态转移
+
+下图是更高层面的状态转移图
 
 ![](../resources/approllout-status-transition.jpg)
 
