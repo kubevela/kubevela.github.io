@@ -42,13 +42,11 @@ const features = [
       <>
         <p>
           <Translate>
-            Perfect in flexibility, X-as-Code tends to lead to configuration drift (i.e. the running instances are not in line with 
-              the expected configuration). That's why KubeVela is fully built with Kubernetes (instead of a client-side tool), 
-            i.e. all its abstractions and capabilities are modeled as code but enforced via battle tested 
+            Perfect in flexibility though, X-as-Code may lead to configuration drift (i.e. the running instances are not in line with 
+              the expected configuration). KubeVela solves this by modeling its capabilities as code but enforce them via
             </Translate><a href="https://kubernetes.io/docs/concepts/architecture/controller/"> Kubernetes 
-            Control Loop</a><Translate> which will never leave configuration drift in your clusters. Also, as a set of 
-            </Translate><a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">
-             Custom Resources</a><Translate>, KubeVela seamlessly work with any CI/CD or GitOps tools, no integration burden.</Translate>
+            Reconcile Loops</a><Translate> which will never leave inconsistency in your clusters. This also makes KubeVela
+            work with any CI/CD or GitOps tools via declarative API without integration burden.</Translate>
         </p>
       </>
     ),
