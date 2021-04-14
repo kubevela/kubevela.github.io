@@ -5,17 +5,17 @@ title:  安装
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-如果您之前已经安装了 KubeVela 的 helm chart 安装包，请直接阅读 [升级](#upgrade) 步骤。
+如果你之前已经安装了 KubeVela chart，请直接阅读[升级](#upgrade)步骤。
 
-## 1. 设置Kubernetes集群
+## 1. 设置 Kubernetes 集群
 
 要求:
 - Kubernetes 集群版本 >= v1.15.0
 - 安装并配置 kubectl
 
-如果您没有来自云提供商的K8s集群，您可以选择Minikube或KinD作为本地集群测试选项。
+KubeVela是一个简单的自定义控制器，可以安装在任何 Kubernetes 集群上，包括托管产品或您自己的集群。唯一的要求是请确保已安装并启用了 [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/)。
 
-> 注意: 如果您不使用minikube或kind，请确保自己安装或启用 [安装 或 启用 ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/)  。
+> 注意:如果您没有使用 minikube 或 kind，请确保[安装或启用 ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/)。
 
 <Tabs
 className="unique-tabs"
@@ -26,10 +26,9 @@ values={[
 ]}>
 <TabItem value="minikube">
 
-遵循minikube[安装指南](https://minikube.sigs.k8s.io/docs/start/)。
+遵循 minikube [安装指南](https://minikube.sigs.k8s.io/docs/start/)。
 
-
-安装完minikube后，创建一个集群:
+安装 minikube 后，创建一个集群:
 
 ```shell script
 minikube start
@@ -44,9 +43,9 @@ minikube addons enable ingress
   </TabItem>
   <TabItem value="kind">
 
-Follow [this guide](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) to install kind.
+请按照本[指南](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)进行安装。
 
-Then spins up a kind cluster:
+然后拉起一个 kind 集群:
 
 ```shell script
 cat <<EOF | kind create cluster --image=kindest/node:v1.18.15 --config=-
@@ -70,7 +69,7 @@ nodes:
 EOF
 ```
 
-Then install [ingress for kind](https://kind.sigs.k8s.io/docs/user/ingress/#ingress-nginx):
+然后安装 [ingress for kind](https://kind.sigs.k8s.io/docs/user/ingress/#ingress-nginx):
 ```shell script
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 ```
@@ -79,11 +78,11 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 </Tabs>
 
 
-## 2. 安装KubeVela控制器
+## 2. 安装 KubeVela 控制器
 
-这些步骤将安装KubeVela控制器及其依赖项。
+这些步骤将安装 KubeVela 控制器及其依赖项。
 
-1. 添加 KubeVela helm chart仓库
+1. 添加 KubeVela helm chart 仓库
 ```shell script
 helm repo add kubevela https://kubevelacharts.oss-cn-hangzhou.aliyuncs.com/core
 ```
@@ -97,10 +96,10 @@ helm repo update
 ```shell script
 helm install --create-namespace -n vela-system kubevela kubevela/vela-core
 ```
-默认情况下，它将使用自签名证书来启用webhook [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen)
+默认情况下，它将使用自签名证书来启用 webhook [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen)
 
-如果您想尝试最新的master分支, 在命令 ` helm search` 中添加标志 ` --devel` 以选择预发布版本
-格式为 `<下个版本号>-rc-master` 的版本, 表示这是建立在`master`分支上的下一个候选发行版应,
+如果你想尝试最新的 master 分支, 在命令 ` helm search` 中添加标志 ` --devel` 以选择预发布版本
+格式为 `<下个版本号>-rc-master` 的版本, 表示这是建立在 `master` 分支上的下一个候选发行版应,
 例如 `0.4.0-rc-master`。
    
 ```shell script
@@ -128,11 +127,11 @@ NOTES:
 Welcome to use the KubeVela! Enjoy your shipping application journey!
 ```
 
-4. （可选）使用cert-manager安装Kubevela
+4. (可选)使用 cert-manager 安装 Kubevela
 
-如果已经安装了cert-manager，则可以使用它来生成证书。
+如果已经安装了 cert-manager，则可以使用它来生成证书。
 
-您需要在kubevela图表之前安装cert-manager。
+你需要在 KubeVela 图表之前安装 cert-manager。
 
 ```shell script
 helm repo add jetstack https://charts.jetstack.io
@@ -140,16 +139,16 @@ helm repo update
 helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.2.0 --create-namespace --set installCRDs=true
 ```
 
-安装kubevela，启用certmanager:
+安装 KubeVela，启用 certmanager:
 ```shell script
 helm install --create-namespace -n vela-system --set admissionWebhooks.certManager.enabled=true kubevela kubevela/vela-core
 ```
 
-## 3. (可选)安装flux2
+## 3. (可选)安装 flux2
 
-这个安装步骤是可选的，如果您想将  [Helm Chart](https://helm.sh/)  注册为KubeVela功能，这是必需的。
+这个安装步骤是可选的，如果你想将 [Helm Chart](https://helm.sh/)  注册为 KubeVela 功能，这是必需的。
 
-KubeVela依赖于 [fluxcd/flux2](https://github.com/fluxcd/flux2) 的几个crd和控制器。
+KubeVela 依赖于 [fluxcd/flux2](https://github.com/fluxcd/flux2) 的几个 crd 和控制器。
 
 | CRD      | Controller Image |
 | ----------- | ----------- |
@@ -159,15 +158,15 @@ KubeVela依赖于 [fluxcd/flux2](https://github.com/fluxcd/flux2) 的几个crd�
 | gitrepositories.source.toolkit.fluxcd.io   | - |
 | helmreleases.helm.toolkit.fluxcd.io | fluxcd/helm-controller:v0.8.0 |
 
-您可以从其 [官方网站](https://github.com/fluxcd/flux2) 上安装整个flux2，也可以安装由KubeVela提供的最少零件的图表：
+你可以从其[官方网站](https://github.com/fluxcd/flux2)上安装整个 flux2，也可以安装由 KubeVela 提供的最少零件的图表：
 
 ```shell
 $ helm install --create-namespace -n flux-system helm-flux http://oam.dev/catalog/helm-flux2-0.1.0.tgz
 ```
 
-## 4. (可选)安装KubeVela CLI 命令行工具
+## 4. (可选)安装 KubeVela CLI 命令行工具
 
-这里有三种获取KubeVela Cli的方法:
+这里有三种获取 KubeVela Cli 的方法:
 
 <Tabs
     className="unique-tabs"
@@ -195,11 +194,11 @@ powershell -Command "iwr -useb https://kubevela.io/script/install.ps1 | iex"
 
 **macOS/Linux**
 
-首先更新您的 brew。
+首先更新你的 brew。
 ```shell script
 brew update
 ```
-安装 kubevela 客户端.
+安装 KubeVela 客户端.
 
 ```shell script
 brew install kubevela
@@ -207,26 +206,25 @@ brew install kubevela
 </TabItem>
 <TabItem value="download">
 
-- 从 [版本发布页面](https://github.com/oam-dev/kubevela/releases) 下载最新的 `vela` 二进制版本.
-- 解压缩vela二进制文件并将其添加到 `$PATH` 开始使用.
+- 从[版本发布页面](https://github.com/oam-dev/kubevela/releases)下载最新的 `vela` 二进制版本.
+- 解压缩 vela 二进制文件并将其添加到 `$PATH` 开始使用.
+
 ```shell script
 sudo mv ./vela /usr/local/bin/vela
 ```
 
 > 已知问题(https://github.com/oam-dev/kubevela/issues/625):
-> 如果你使用mac，它会报告“vela”无法打开，因为开发者无法验证。
+> 如果你使用 mac，它会报告 “vela” 无法打开，因为开发者无法验证。
 >
-> 新版MacOS在运行你下载的没有使用苹果开发者密钥的软件方面更加严格。我们还没有支持KubeVela。
->
+> 新版 MacOS 在运行你下载的没有使用苹果开发者密钥的软件方面更加严格。我们还没有支持 KubeVela。
 > 你可以打开你的'系统首选项' -> '安全与隐私' ->一般，点击'允许无论如何'暂时修复它。
-
 
 </TabItem>
 </Tabs>
 
-## 5. （可选）从群集同步功能
+## 5. (可选)从群集同步功能
 
-如果要从vela cli运行应用程序，则应首先同步功能，如下所示：
+如果要从 `vela` cli 运行应用程序，则应首先同步功能，如下所示：
 
 ```shell script
 vela components
@@ -242,7 +240,7 @@ worker    	vela-system	deployments.apps	Describes long-running, scalable, contai
           	           	                	to receive external network traffic.
 ```
 
-## 6. （可选）清理
+## 6. (可选)清理
 
 <details>
 运行:
@@ -252,10 +250,10 @@ helm uninstall -n vela-system kubevela
 rm -r ~/.vela
 ```
 
-这将卸载KubeVela服务器组件及其依赖组件。
-这也会清理本地CLI缓存。
+这将卸载 KubeVela 服务器组件及其依赖组件。
+这也会清理本地 CLI 缓存。
 
-然后清除CRDs (CRDs默认不会通过helm移除):
+然后清除 CRDs (CRDs 默认不会通过 helm 移除):
 
 ```shell script
  kubectl delete crd \
@@ -280,7 +278,7 @@ rm -r ~/.vela
 
 # 升级
 
-如果您已经安装了KubeVela，并希望升级到新版本，可以按照以下说明进行操作。
+如果你已经安装了 KubeVela，并希望升级到新版本，可以按照以下说明进行操作。
 
 ## 步骤 1. 更新 helm 仓库
 
@@ -288,7 +286,7 @@ rm -r ~/.vela
 helm repo update
 ```
 
-您可以通过运行以下命令获取新版本的kubevela图表：
+你可以通过运行以下命令获取新版本的 KubeVela 图表：
 
 ```shell
 helm search repo kubevela/vela-core -l
@@ -308,7 +306,8 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/chart
 kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_applicationcontexts.yaml
 ```
 
-> Tips: 如果你碰到类似 `* is invalid: spec.scope: Invalid value: "Namespaced": filed is immutable`问题. 请删除带有错误的crd。并重新应用kubevela crds。
+> Tips: 如果你碰到类似 `* is invalid: spec.scope: Invalid value: "Namespaced": filed is immutable`问题. 请删除带有错误的 crd
+并重新应用 KubeVela crds。
 
 ```shell
  kubectl delete crd \
