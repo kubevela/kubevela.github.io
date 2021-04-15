@@ -20,7 +20,7 @@ default	       	default
 demo   	*      	default  	my@email.com
 ```
 
-默认情况下, 创建出来的环境将会使用 K8s 下默认的命名空间 `default`。
+默认情况下, 将会在 K8s 默认的命名空间 `default` 下面创建环境。
 
 ## 配置变更
 
