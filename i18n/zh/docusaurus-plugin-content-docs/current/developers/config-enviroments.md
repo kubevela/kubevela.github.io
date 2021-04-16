@@ -52,7 +52,7 @@ NAME                         TYPE           CLUSTER-IP      EXTERNAL-IP     PORT
 nginx-ingress-lb             LoadBalancer   172.21.2.174    123.57.10.233   80:32740/TCP,443:32086/TCP   41d
 ```
 
-命令响应结果 `EXTERNAL-IP` 列的值：123.57.10.233 就是公网 IP。 为你的域名添加一条 `A` 记录吧：
+命令响应结果 `EXTERNAL-IP` 列的值：123.57.10.233 就是公网 IP。 在 DNS 中添加一条 `A` 记录吧：
 
 ```
 *.your.domain => 123.57.10.233
