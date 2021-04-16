@@ -158,7 +158,7 @@ KubeVela 依赖于 [fluxcd/flux2](https://github.com/fluxcd/flux2) 的几个 crd
 | gitrepositories.source.toolkit.fluxcd.io   | - |
 | helmreleases.helm.toolkit.fluxcd.io | fluxcd/helm-controller:v0.8.0 |
 
-你可以从其[官方网站](https://github.com/fluxcd/flux2)上安装整个 flux2，也可以安装由 KubeVela 提供的最少零件的图表：
+你可以从其[官方网站](https://github.com/fluxcd/flux2)上安装整个 flux2，也可以安装由 KubeVela 提供的近包含最小集的 helm chart：
 
 ```shell
 $ helm install --create-namespace -n flux-system helm-flux http://oam.dev/catalog/helm-flux2-0.1.0.tgz
