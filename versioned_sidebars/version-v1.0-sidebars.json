@@ -1,7 +1,7 @@
 {
   "version-v1.0/docs": [
     {
-      "collapsed": true,
+      "collapsed": false,
       "type": "category",
       "label": "Overview",
       "items": [
@@ -12,7 +12,7 @@
       ]
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "type": "category",
       "label": "Getting Started",
       "items": [
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "type": "category",
       "label": "Application Deployment",
       "items": [
@@ -46,11 +46,58 @@
         {
           "type": "doc",
           "id": "version-v1.0/rollout/appdeploy"
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "More Operations",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/kubectlplugin"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/explore"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/diagnose"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/expose"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/scale"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/labels"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/sidecar"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/cloud-resources"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/volumes"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/monitoring"
+            }
+          ]
         }
       ]
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "type": "category",
       "label": "Platform Operation Guide",
       "items": [
@@ -355,6 +402,17 @@
         {
           "type": "doc",
           "id": "version-v1.0/roadmap"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Appendix",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.0/advanced-install"
         }
       ]
     },
