@@ -1,8 +1,8 @@
 ---
-title:  Learning Appfile
+title:  学习使用 Appfile
 ---
 
-A sample `Appfile` is as below:
+`appfile` 的示例如下:
 
 ```yaml
 name: testapp
@@ -31,12 +31,11 @@ services:
     cmd: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
 ```
 
-Under the hood, `Appfile` will build the image from source code, and then generate `Application` resource with the image name.
+在底层，`Appfile` 会从源码构建镜像，然后用镜像名称创建 `application` 资源
 
 ## Schema
 
-> Before learning about Appfile's detailed schema, we recommend you to get familiar with [core concepts](../concepts) in KubeVela.
-
+> 在深入学习 Appfile 的详细 schema 之前，我们建议你先熟悉 KubeVela 的[核心概念](../concepts)
 
 ```yaml
 name: _app-name_
@@ -72,40 +71,41 @@ services:
   
 ```
 
-> To learn about how to set the properties of specific workload type or trait, please check the [reference documentation guide](./check-ref-doc).
+> 想了解怎样设置特定类型的 workload 或者 trait ，请阅读[参考文档手册](./check-ref-doc)
 
-## Example Workflow
+## 示例流程
 
-In the following workflow, we will build and deploy an example NodeJS app under [examples/testapp/](https://github.com/oam-dev/kubevela/tree/master/docs/examples/testapp).
+在以下的流程中，我们会构建并部署一个 NodeJs 的示例 app 。该 app 的源文件在[这里](https://github.com/oam-dev/kubevela/tree/master/docs/examples/testapp)。
 
-### Prerequisites
+### 环境要求
 
-- [Docker](https://docs.docker.com/get-docker/) installed on the host
-- [KubeVela](../install) installed and configured
+- [Docker](https://docs.docker.com/get-docker/) 需要在主机上安装 docker
+- [KubeVela](../install) 需要安装 KubeVela 并配置
 
-### 1. Download test app code
+### 1. 下载测试的 app 的源码
 
-git clone and go to the testapp directory:
+git clone 然后进入 testapp 目录:
 
 ```bash
 $ git clone https://github.com/oam-dev/kubevela.git
 $ cd kubevela/docs/examples/testapp
 ```
 
-The example contains NodeJS app code, Dockerfile to build the app.
+这个示例包含 NodeJs app 的源码和用于构建 app 镜像的Dockerfile
 
-### 2. Deploy app in one command
+### 2. 命令部署 app
 
-In the directory there is a [vela.yaml](https://github.com/oam-dev/kubevela/tree/master/docs/examples/testapp/vela.yaml) which follows Appfile format supported by Vela.
-We are going to use it to build and deploy the app.
+在目录中，有一个符合 Appfile 格式的被 Vela 使用的 [vela.yaml](https://github.com/oam-dev/kubevela/tree/master/docs/examples/testapp/vela.yaml) 文件
 
-> NOTE: please change `oamdev` to your own registry account so you can push. Or, you could try the alternative approach in `Local testing without pushing image remotely` section.
+我们将会使用这个文件来构建和部署 app
+
+> 注意：为了你可以推送镜像，请修改 `oamdev` 成你自己注册的账号。或者你可以尝试 `无需推送镜像到远程仓库的本地测试方式` 章节中的方式。
 
 ```yaml
     image: oamdev/testapp:v1 # change this to your image
 ```
 
-Run the following command:
+执行如下命令：
 
 ```bash
 $ vela up
@@ -136,7 +136,7 @@ App has not been deployed, creating a new deployment...
 ```
 
 
-Check the status of the service:
+检查服务状态：
 
 ```bash
 $ vela status testapp
@@ -159,11 +159,11 @@ $ vela status testapp
 
 ```
 
-#### Alternative: Local testing without pushing image remotely
+#### 无需推送镜像到远程仓库的本地测试方式
 
-If you have local [kind](../install) cluster running, you may try the local push option. No remote container registry is needed in this case.
+如果你本地有运行的 [kind](../install) 集群，你可以尝试推送到本地。这种方法可以免去注册远程容器仓库。
 
-Add local option to `build`:
+在 `build` 中添加 local 的选项值：
 
 ```yaml
     build:
@@ -176,15 +176,15 @@ Add local option to `build`:
         context: .
 ```
 
-Then deploy the app to kind:
+然后部署到 kind：
 
 ```bash
 $ vela up
 ```
 
-<details><summary>(Advanced) Check rendered manifests</summary>
+<details><summary>(进阶) 检查渲染后的 manifests 文件</summary>
 
-By default, Vela renders the final manifests in `.vela/deploy.yaml`:
+默认情况下，Vela 通过 `./vela/deploy.yaml` 渲染最后的 manifests 文件：
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha2
@@ -219,9 +219,9 @@ spec:
 ```
 </details>
 
-### [Optional] Configure another workload type
+### [可选] 配置其他类型的 workload
 
-By now we have deployed a *[Web Service](references/component-types/webservice)*, which is the default workload type in KubeVela. We can also add another service of *[Task](references/component-types/task)* type in the same app:
+至此，我们成功地部署一个默认类型的 workload 的 *[web 服务](references/component-types/webservice)*。我们也可以添加 *[Task](references/component-types/task)* 类型的服务到同一个 app 中。
 
 ```yaml
 services:
@@ -234,15 +234,15 @@ services:
     ...
 ```
 
-Then deploy Appfile again to update the application:
+然后再次部署 Applfile 来升级应用：
 
 ```bash
 $ vela up
 ```
 
-Congratulations! You have just deployed an app using `Appfile`.
+恭喜！你已经学会了使用 `Appfile` 来部署应用了。
 
-## What's Next?
+## 下一步?
 
 Play more with your app:
 - [Check Application Logs](./check-logs)
