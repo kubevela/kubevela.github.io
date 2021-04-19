@@ -71,11 +71,11 @@ services:
   
 ```
 
-> 想了解怎样设置特定类型的 workload 或者 trait ，请阅读[参考文档手册](./check-ref-doc)
+> 想了解怎样设置特定类型的 workload 或者 trait，请阅读[参考文档手册](./check-ref-doc)
 
 ## 示例流程
 
-在以下的流程中，我们会构建并部署一个 NodeJs 的示例 app 。该 app 的源文件在[这里](https://github.com/oam-dev/kubevela/tree/master/docs/examples/testapp)。
+在以下的流程中，我们会构建并部署一个 NodeJs 的示例 app。该 app 的源文件在[这里](https://github.com/oam-dev/kubevela/tree/master/docs/examples/testapp)。
 
 ### 环境要求
 
@@ -93,13 +93,11 @@ $ cd kubevela/docs/examples/testapp
 
 这个示例包含 NodeJs app 的源码和用于构建 app 镜像的Dockerfile
 
-### 2. 命令部署 app
+### 2. 使用命令部署 app
 
-在目录中，有一个符合 Appfile 格式的被 Vela 使用的 [vela.yaml](https://github.com/oam-dev/kubevela/tree/master/docs/examples/testapp/vela.yaml) 文件
+我们将会使用目录中的 [vela.yaml](https://github.com/oam-dev/kubevela/tree/master/docs/examples/testapp/vela.yaml) 文件来构建和部署 app
 
-我们将会使用这个文件来构建和部署 app
-
-> 注意：为了你可以推送镜像，请修改 `oamdev` 成你自己注册的账号。或者你可以尝试 `无需推送镜像到远程仓库的本地测试方式` 章节中的方式。
+> 注意：请修改 `oamdev` 为你自己注册的账号。或者你可以尝试 `本地测试方式`。
 
 ```yaml
     image: oamdev/testapp:v1 # change this to your image
@@ -159,9 +157,9 @@ $ vela status testapp
 
 ```
 
-#### 无需推送镜像到远程仓库的本地测试方式
+#### 本地测试方式
 
-如果你本地有运行的 [kind](../install) 集群，你可以尝试推送到本地。这种方法可以免去注册远程容器仓库。
+如果你本地有运行的 [kind](../install) 集群，你可以尝试推送到本地。这种方法无需注册远程容器仓库。
 
 在 `build` 中添加 local 的选项值：
 
@@ -244,7 +242,7 @@ $ vela up
 
 ## 下一步?
 
-Play more with your app:
+更多关于 app 的操作：
 - [Check Application Logs](./check-logs)
 - [Execute Commands in Application Container](./exec-cmd)
 - [Access Application via Route](./port-forward)
