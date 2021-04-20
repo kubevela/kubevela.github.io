@@ -1,11 +1,12 @@
 ---
-title:  Attach Traits
+标题:  添加特性
 ---
 
-Traits in KubeVela can be attached to Helm based component seamlessly.
+KubeVela中的特性可以从基于Helm的组件无缝添加.
 
-In this sample application below, we add two traits, [scaler](https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml)
-and [virtualgroup](https://github.com/oam-dev/kubevela/blob/master/docs/examples/helm-module/virtual-group-td.yaml) to a Helm based component.
+在以下应用实例中，我们将基于Helm组件添加两个特性[scaler]和[virtualgroup.
+(https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml)
+(https://github.com/oam-dev/kubevela/blob/master/docs/examples/helm-module/virtual-group-td.yaml)
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -30,7 +31,7 @@ spec:
             type: "cluster"
 ```
 
-> Note: when use traits with Helm based component, please *make sure the target workload in your Helm chart strictly follows the qualified-full-name convention in Helm.* [For example in this chart](https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/deployment.yaml#L4), the workload name is composed of [release name and chart name](https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/_helpers.tpl#L13).
+> 注意: when use traits with Helm based component, please *make sure the target workload in your Helm chart strictly follows the qualified-full-name convention in Helm.* [For example in this chart](https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/deployment.yaml#L4), the workload name is composed of [release name and chart name](https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/_helpers.tpl#L13).
 
 > This is because KubeVela relies on the name to discovery the workload, otherwise it cannot apply traits to the workload. KubeVela will generate a release name based on your `Application` name and component name automatically, so you need to make sure never override the full name template in your Helm chart.
 
@@ -118,9 +119,9 @@ $ kubectl get deployment myapp-demo-podinfo -o json | jq .spec.template.metadata
 }
 ```
 
-## Detach Trait
+## 去除特性
 
-Let's have a try detach a trait from the application.
+让我们试试从应用中去除特性.
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha2
