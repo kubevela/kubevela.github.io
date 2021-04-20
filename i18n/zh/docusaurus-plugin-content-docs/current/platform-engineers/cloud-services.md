@@ -1,37 +1,36 @@
 ---
-title:  Define and Consume Cloud Resource
+title:  声明和使用云资源
 ---
 
-KubeVela provides unified abstraction even for cloud services.
+KubeVela 为云服务提供了统一的抽象。
 
-## Should a Cloud Service be a Component or Trait?
+## 云服务是 Component 还是 Trait?
 
-The following practice could be considered:
-- Use `ComponentDefinition` if:
-  - you want to allow your end users explicitly claim a "instance" of the cloud service and consume it, and release the "instance" when deleting the application.
-- Use `TraitDefinition` if:
-  - you don't want to give your end users any control/workflow of claiming or releasing the cloud service, you only want to give them a way to consume a cloud service which could even be managed by some other system. A `Service Binding` trait is widely used in this case.
+可以考虑以下做法:
+- 使用 `ComponentDefinition` 的场景:
+  - 你想要允许最终用户明确声明云服务的实例并使用它，并在删除应用程序时释放该实例。
+- 使用 `TraitDefinition` 的场景:
+  - 你不想让最终用户拥有声明或发布云服务的任何控制权，而只想给他们消费云服务，甚至可以由其他系统管理的云服务的方式。在这种情况下，会广泛使用 `Service Binding` 特性。
 	
-In this documentation, we will define an Alibaba Cloud's RDS (Relational Database Service), and an Alibaba Cloud's OSS (Object Storage System) as example. This mechanism works the same with other cloud providers.
-In a single application, they are in form of Traits, and in multiple applications, they are in form of Components.
+在本文档中，我们将以阿里云的 RDS（关系数据库服务）和阿里云的 OSS（对象存储服务）为例。在单个应用程序中，它们是 Traits，在多个应用程序中，它们是 Components。此机制与其他云提供商相同。
 
-## Install and Configure Crossplane
+## 安装和配置 Crossplane
 
-KubeVela uses [Crossplane](https://crossplane.io/) as the cloud service operator. Please Refer to [Installation](https://github.com/crossplane/provider-alibaba/releases/tag/v0.5.0) 
-to install Crossplane Alibaba provider v0.5.0.
+KubeVela 使用 [Crossplane](https://crossplane.io/) 作为云服务提供商。请参阅 [Installation](https://github.com/crossplane/provider-alibaba/releases/tag/v0.5.0) 
+安装 Crossplane Alibaba provider v0.5.0。
 
-If you'd like to configure any other Crossplane providers, please refer to [Crossplane Select a Getting Started Configuration](https://crossplane.io/docs/v1.1/getting-started/install-configure.html#select-a-getting-started-configuration).
+如果你想配置任何其他 Crossplane providers，请参阅 [Crossplane Select a Getting Started Configuration](https://crossplane.io/docs/v1.1/getting-started/install-configure.html#select-a-getting-started-configuration).
 
 ```
 $ kubectl crossplane install provider crossplane/provider-alibaba:v0.5.0
 
-# Note the xxx and yyy here is your own AccessKey and SecretKey to the cloud resources.
+# 注意这里的 xxx 和 yyy 是你自己云资源的 AccessKey 和 SecretKey。
 $ kubectl create secret generic alibaba-account-creds -n crossplane-system --from-literal=accessKeyId=xxx --from-literal=accessKeySecret=yyy
 
 $ kubectl apply -f provider.yaml
 ```
 
-`provider.yaml` is as below.
+`provider.yaml` 如下。
 
 ```yaml
 apiVersion: v1
@@ -54,14 +53,13 @@ spec:
   region: cn-beijing
 ```
 
-Note: We currently just use Crossplane Alibaba provider. But we are about to use [Crossplane](https://crossplane.io/) as the
-cloud resource operator for Kubernetes in the near future.
+注意：我们目前仅使用阿里提供的 Crossplane。 但是在不久的将来，我们将使用 [Crossplane](https://crossplane.io/) 作为 Kubernetes 的云资源供应商。
 
-## Provisioning and consuming cloud resource in a single application v1 (one cloud resource)
+## 在单个应用程序 v1 中配置和使用云资源（单个云资源）
 
-### Step 1: Register ComponentDefinition `alibaba-rds` as RDS cloud resource producer
+### 步骤 1: 注册 ComponentDefinition `alibaba-rds` 为 RDS 云资源生产者
 
-First, register the `alibaba-rds` workload type to KubeVela.
+首先, 将工作负载类型 `alibaba-rds` 注册到KubeVela。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -111,10 +109,9 @@ spec:
 
 ```
 
-### Step 2: Prepare TraitDefinition `service-binding` to do env-secret mapping
+### 步骤 2: 准备 TraitDefinition `service-binding` 作为 env-secret mapping
 
-As for data binding in Application, KubeVela recommends defining a trait to finish the job. We have prepared a common
-trait for convenience. This trait works well for binding resources' info into pod spec Env.
+至于应用程序中的数据绑定，KubeVela 建议定义一个 trait 以完成工作。我们已经准备了一个共同方便的 trait。此 trait 非常适合将资源的信息绑定到 pod spec 的环境变量中.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -161,7 +158,7 @@ spec:
         }
 ```
 
-With the help of this `service-binding` trait, developers can explicitly set parameter `envMappings` to mapping all environment names with secret key. Here is an example.
+借助这种 `service-binding` trait，开发人员可以显式设置参数 `envMappings`， 以映射所有环境变量。例子如下。
 
 ```yaml
 ...
@@ -184,9 +181,9 @@ With the help of this `service-binding` trait, developers can explicitly set par
 ...
 ```
 
-### Step 3: Create an application to provision and consume cloud resource
+### 步骤 3: 创建一个应用程序使用云资源
 
-Create an application with a cloud resource provisioning component and a consuming component as below.
+创建具有云资源生产组件和消费组件的应用程序，如下所示。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -225,7 +222,7 @@ spec:
 
 ```
 
-Apply it and verify the application.
+应用并验证应用程序。
 
 ```shell
 $ kubectl get application
@@ -241,10 +238,9 @@ Handling connection for 80
 
 ![](../resources/crossplane-visit-application.jpg)
 
-## Provisioning and consuming cloud resource in a single application v2 (two cloud resources)
+## 在单个应用程序 v2 中配置和使用云资源（两个云资源）
 
-Based on the section `Provisioning and consuming cloud resource in a single application v1 (one cloud resource)`, register
-one more cloud resource workload type `alibaba-oss` to KubeVela.
+基于 `在单个应用程序 v1 中配置和使用云资源（单个云资源）` 部分, 注册 KubeVela 的另一种云资源工作负载类型为 `alibaba-oss`。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -289,7 +285,7 @@ spec:
         }
 ```
 
-Update the application to also consume cloud resource OSS.
+更新应用程序以使用 OSS。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -337,7 +333,7 @@ spec:
         secretName: oss-conn
 ```
 
-Apply it and verify the application.
+应用并验证应用程序。
 
 ```shell
 $ kubectl port-forward deployment/express-server 80:80
@@ -349,16 +345,15 @@ Handling connection for 80
 
 ![](../resources/crossplane-visit-application-v2.jpg)
 
-## Provisioning and consuming cloud resource in different applications
+## 在不同的应用程序中生产和使用云资源
 
-In this section, cloud resource will be provisioned in one application and consumed in another application.
+在本节中，将在一个应用程序中生产云资源，并在另一个应用程序中使用云资源。
 
-### Provision Cloud Resource
+### 生产云资源
 
-Instantiate RDS component with `alibaba-rds` workload type in an [Application](../application.md) to provide cloud resources.
+在 [Application]（../ application.md）中使用工作负载类型 `alibaba-rds` 实例化 RDS 组件以生产云资源。
 
-As we have claimed an RDS instance with ComponentDefinition name `alibaba-rds`. 
-The component in the application should refer to this type.
+正如我们声明的 ComponentDefinition 名称为 `alibaba-rds` 的RDS 实例一样。应用程序中的组件应引用此类型。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -378,9 +373,9 @@ spec:
         secretName: db-conn
 ```
 
-Apply the application to Kubernetes and a RDS instance will be automatically provisioned (may take some time, ~2 mins).
+将应用程序部署到 Kubernetes 中，将自动配置 RDS 实例（可能需要一些时间，约2分钟）。
 
-A secret `db-conn` will also be created in the same namespace as that of the application.
+同时将在与应用程序相同的命名空间中创建一个 secret `db-conn`。
 
 ```shell
 $ kubectl get application
@@ -405,14 +400,13 @@ data:
 kind: Secret
 ```
 
-### Consuming the Cloud Resource
+### 使用云资源
 
-In this section, we will show how another component consumes the RDS instance.
+在本节中，我们将展示在另一个组件如何使用 RDS 实例。
 
-> Note: we recommend defining the cloud resource claiming to an independent application if that cloud resource has 
-> standalone lifecycle.
+注意：如果该云资源具有独立的生命周期，我们建议声明云资源为独立的应用程序。
 
-#### Step 1: Define a ComponentDefinition with Secret Reference
+#### 步骤 1: 使用 Secret 定义 ComponentDefinition
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -514,13 +508,14 @@ spec:
 
 ```
 
-The key point is the annotation `//+insertSecretTo=dbConn`, KubeVela will know the parameter is a K8s secret, it will parse
-the secret and bind the data into the CUE struct `dbConn`.
+关键词是 annotation `// + insertSecretTo = dbConn`，KubeVela 将知道该参数是 K8s 的秘钥，它将解析该秘钥并将数据绑定到 CUE 接口 `dbConn` 中。
 
 Then the `output` can reference the `dbConn` struct for the data value. The name `dbConn` can be any name. 
 It's just an example in this case. The `+insertSecretTo` is keyword, it defines the data binding mechanism.
+`output` 可以引用` dbConn` 获取数据。 名称 `dbConn` 可以是任何名称。
+ 关键字是 `+insertSecretTo`，它定义了数据绑定机制。这种情况只是一个例子。
 
-Now create the Application to consume the data.
+现在创建应用程序以使用数据。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -550,6 +545,6 @@ express-server-v1   1/1     1            1           9h
 $ kubectl port-forward deployment/express-server 80:80
 ```
 
-We can see the cloud resource is successfully consumed by the application.
+我们可以看到云资源已被应用程序成功使用。
 
 ![](../resources/crossplane-visit-application.jpg)
