@@ -25,11 +25,12 @@ const features = [
       <>
         <p>
           <Translate>
-           KubeVela enables you to define platform features (such as workloads, operational behaviors, and cloud services)
+           KubeVela models platform features (such as workloads, operational behaviors, and cloud services)
             as reusable </Translate><a href="https://github.com/cuelang/cue">
               CUE</a> <Translate>and/or </Translate> <a href="https://helm.sh/">Helm</a><Translate> components, 
-              per needs of your application deployment. 
-              And when your needs grow, your platform capabilities expand naturally in a programmable approach.</Translate>
+              per needs of your application. 
+              And when your needs grow, these capabilities can expand naturally in a programmable approach. 
+              No restriction, fully extensible.</Translate>
         </p>
       </>
     ),
@@ -42,11 +43,10 @@ const features = [
       <>
         <p>
           <Translate>
-            Perfect in flexibility though, X-as-Code may lead to configuration drift (i.e. the running instances are not in line with 
-              the expected configuration). KubeVela solves this by modeling its capabilities as code but enforce them via
+            KubeVela enforces those programmable components with
             </Translate><a href="https://kubernetes.io/docs/concepts/architecture/controller/"> Kubernetes 
-            control loop</a><Translate> which will never leave inconsistency in your clusters. This also makes KubeVela
-            work with any CI/CD or GitOps tools via declarative API without integration burden.</Translate>
+            Control Loop</a><Translate> so they will never leave configuration drift in your clusters. Also, this makes KubeVela
+            work with any CI/CD or GitOps tools via declarative API without any integration burden.</Translate>
         </p>
       </>
     ),
