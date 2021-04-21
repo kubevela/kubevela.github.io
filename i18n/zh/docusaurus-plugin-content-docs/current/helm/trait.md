@@ -4,7 +4,7 @@
 
 KubeVela中的特性可以从基于Helm的组件无缝添加.
 
-在以下应用实例中，我们将基于Helm组件添加两个特性[scaler]和[virtualgroup.
+在以下应用实例中，我们将基于Helm组件添加两个特性[scaler]和[virtualgroup].
 (https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml)
 (https://github.com/oam-dev/kubevela/blob/master/docs/examples/helm-module/virtual-group-td.yaml)
 
@@ -31,15 +31,15 @@ spec:
             type: "cluster"
 ```
 
-> 注意: when use traits with Helm based component, please *make sure the target workload in your Helm chart strictly follows the qualified-full-name convention in Helm.* [For example in this chart](https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/deployment.yaml#L4), the workload name is composed of [release name and chart name](https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/_helpers.tpl#L13).
+> 注意: 当我们使用基于Helm的特性时, please *请确认在你Helm图标中的目标负载严格按照qualified-full-name convention in Helm的命名方式.* [以此表为例](https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/deployment.yaml#L4), 负载名由[版本名和图表名]组成(https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/_helpers.tpl#L13).
 
-> This is because KubeVela relies on the name to discovery the workload, otherwise it cannot apply traits to the workload. KubeVela will generate a release name based on your `Application` name and component name automatically, so you need to make sure never override the full name template in your Helm chart.
+> 这是因为KubeVela依赖命名去发现负载,否则将不能把特性赋予负载. KubeVela 将会基于你的应用和组件自动生成版本名, 所以你需要保证不能超出你的Helm图表中命名模版格式.
 
-## Verify traits work correctly
+## 验证特性工作正确
 
-> You may need to wait a few seconds to check the trait attached because of reconciliation interval.
+> 因为应用内部的调整生效需要几秒钟时间.
 
-Check the `scaler` trait takes effect.
+检查缩放组 `scaler` 特性生效.
 ```shell
 $ kubectl get manualscalertrait
 NAME                            AGE
@@ -50,7 +50,7 @@ $ kubectl get deployment myapp-demo-podinfo -o json | jq .spec.replicas
 4
 ```
 
-Check the `virtualgroup` trait.
+检查虚拟组`virtualgroup`特性.
 ```shell
 $ kubectl get deployment myapp-demo-podinfo -o json | jq .spec.template.metadata.labels
 {
@@ -59,13 +59,12 @@ $ kubectl get deployment myapp-demo-podinfo -o json | jq .spec.template.metadata
 }
 ```
 
-## Update Application
+## 更新应用
 
-After the application is deployed and workloads/traits are created successfully,
-you can update the application, and corresponding changes will be applied to the
-workload instances.
+当应用已被部署且负载/特性都被顺利建立时,
+你可以更新应用, 变化会被负载实例所响应。
 
-Let's make several changes on the configuration of the sample application.
+让我们对实例应用的配置做几个改动。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -90,27 +89,27 @@ spec:
             type: "cluster"
 ```
 
-Apply the new configuration and check the results after several minutes.
+在几分钟后应用新配置并检查效果。
 
-Check the new values (`image.tag = 5.1.3`) from application's `properties` are assigned to the chart.
+检查从应用属性`properties`的新值(`image.tag = 5.1.3`) 已被赋予图表.
 ```shell
 $ kubectl get deployment myapp-demo-podinfo -o json | jq '.spec.template.spec.containers[0].image'
 "ghcr.io/stefanprodan/podinfo:5.1.3"
 ```
-Under the hood, Helm makes an upgrade to the release (revision 1 => 2).
+实际上, Helm更新了版本号 (revision 1 => 2).
 ```shell
 $ helm ls -A
 NAME              	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART        	APP VERSION
 myapp-demo-podinfo	default  	2       	2021-03-15 08:52:00.037690148 +0000 UTC	deployed	podinfo-5.1.4	5.1.4
 ```
 
-Check the `scaler` trait.
+检查`scaler`的特性.
 ```shell
 $ kubectl get deployment myapp-demo-podinfo -o json | jq .spec.replicas
 2
 ```
 
-Check the `virtualgroup` trait.
+检查 `virtualgroup` 的特性.
 ```shell
 $ kubectl get deployment myapp-demo-podinfo -o json | jq .spec.template.metadata.labels
 {
@@ -146,7 +145,7 @@ spec:
             type: "cluster"
 ```
 
-Apply the application and check `manualscalertrait` has been deleted.
+更新应用实例并检查`manualscalertrait`已被删除。
 ```shell
 $ kubectl get manualscalertrait
 No resources found
