@@ -46,6 +46,7 @@ demo   	*      	demo     	my@email.com
 
 例如, 你可以使用下面的命令方式获得 ingress service 的公网 IP：  
 
+
 ```bash
 $ kubectl get svc -A | grep LoadBalancer
 NAME                         TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
@@ -60,14 +61,12 @@ nginx-ingress-lb             LoadBalancer   172.21.2.174    123.57.10.233   80:3
 
 如果没有自定义域名，那么你可以使用如 `123.57.10.233.xip.io` 作为域名，其中 `xip.io` 将会自动路由到前面的 IP `123.57.10.233`。
 
-
 ```bash
 $ vela env init demo --domain 123.57.10.233.xip.io
 environment demo updated, Namespace: demo, Email: my@email.com
 ```
 
 ### 在 Appfile 中使用域名
-
 
 由于在部署环境中已经配置了全局域名, 就不需要在 route 配置中特别指定域名了。
 

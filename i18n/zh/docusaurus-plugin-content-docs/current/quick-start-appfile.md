@@ -1,18 +1,18 @@
 ---
-title:  Overview
+title:  概述
 ---
 
-To achieve best user experience for your platform, we recommend platform builders to create simple and user friendly UI for end users instead of exposing full platform level details to them. Some common practices include building GUI console, adopting DSL, or creating a user friendly command line tool.
+为了你的平台获得最佳用户体验，我们建议各位平台构建者们为最终用户提供简单并且友好的 UI，而不是仅仅简单展示全部平台层面的信息。一些常用的做法包括构建 GUI 控制台，使用 DSL，或者创建用户友好的命令行工具。
 
-As an proof-of-concept of building developer experience with KubeVela, we developed a client-side tool named `Appfile` as well. This tool enables developers to deploy any application with a single file and a single command: `vela up`.
+为了证明在 KubeVela 中提供了良好的构建开发体验，我们开发了一个叫 `Appfile` 的客户端工具。这个工具使得开发者通过一个文件和一个简单的命令：`vela up` 就可以部署任何应用。 
 
-Now let's walk through its experience.
+现在，让我们来体验一下它是如何使用的。
 
-## Step 1: Install
+## Step 1: 安装
 
-Make sure you have finished and verified the installation following [this guide](./install).
+确保你已经参照 [安装指南](./install) 完成了所有的安装验证工作。
 
-## Step 2: Deploy Your First Application
+## Step 2: 部署你的第一个应用
 
 ```bash
 $ vela up -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela.yaml
@@ -33,7 +33,7 @@ App has not been deployed, creating a new deployment...
   Service status: vela status first-vela-app --svc testsvc
 ```
 
-Check the status until we see `Routes` are ready:
+检查状态直到看到 `Routes` 为就绪状态:
 ```bash
 $ vela status first-vela-app
 About:
@@ -55,7 +55,7 @@ Services:
       - ✅ ingress: Visiting URL: testsvc.example.com, IP: <your IP address>
 ```
 
-**In [kind cluster setup](./install#kind)**, you can visit the service via localhost. In other setups, replace localhost with ingress address accordingly.
+**在 [kind cluster 配置章节](./install#kind)**, 你可以通过 localhost 访问 service。 在其他配置中, 使用相应的 ingress 地址来替换 localhost。
 
 ```
 $ curl -H "Host:testsvc.example.com" http://localhost/
@@ -73,8 +73,8 @@ Hello World
                              `'--.._\..--''
 </xmp>
 ```
-**Voila!** You are all set to go.
+**瞧!** 你已经基本掌握了它。
 
-## What's Next
+## 下一步
 
-- Learn details about [`Appfile`](./developers/learn-appfile) and know how it works.
+- 详细学习 [`Appfile`](./developers/learn-appfile) 并且了解它是如何工作的。
