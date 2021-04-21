@@ -52,13 +52,11 @@ Welcome to use the KubeVela! Enjoy your shipping application journey!
 
 ### Step 1. Update Helm repo
 
+
+You can explore the newly released chart versions of KubeVela by run:
+
 ```shell
 helm repo update
-```
-
-you can get the new version kubevela chart by run:
-
-```shell
 helm search repo kubevela/vela-core -l
 ```
 
@@ -110,7 +108,6 @@ Then clean up CRDs (CRDs are not removed via helm by default):
   appdeployments.core.oam.dev \
   applicationconfigurations.core.oam.dev \
   applicationcontexts.core.oam.dev \
-  applicationdeployments.core.oam.dev \
   applicationrevisions.core.oam.dev \
   applications.core.oam.dev \
   approllouts.core.oam.dev \
