@@ -108,7 +108,7 @@ const WhatIs = () => (
         <div className="col">
           <img
             className="image"
-            src={useBaseUrl("docs/resources/what-is-kubevela.png")}
+            src={useBaseUrl("img/what-is-kubevela.png")}
             align="right"
             alt="what is kubevela"
           />
