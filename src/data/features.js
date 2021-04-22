@@ -19,7 +19,7 @@ const features = [
     ),
   },
   {
-    title: <>Platform-as-Code</>,
+    title: <>Self-Service</>,
     imgUrl: 'img/extending-natively.svg',
     description: (
       <>
@@ -28,9 +28,9 @@ const features = [
            KubeVela models platform features (such as workloads, operational behaviors, and cloud services)
             as reusable </Translate><a href="https://github.com/cuelang/cue">
               CUE</a> <Translate>and/or </Translate> <a href="https://helm.sh/">Helm</a><Translate> components, 
-              per needs of your application. 
-              And when your needs grow, these capabilities can expand naturally in a programmable approach. 
-              No restriction, fully extensible.</Translate>
+              and expose them to end users as self-service building blocks. 
+              When your needs grow, these capabilities can extend naturally in a programmable approach. 
+              No restriction, fully flexible.</Translate>
         </p>
       </>
     ),
@@ -43,10 +43,9 @@ const features = [
       <>
         <p>
           <Translate>
-            KubeVela enforces those programmable components with
-            </Translate><a href="https://kubernetes.io/docs/concepts/architecture/controller/"> Kubernetes 
-            Control Loop</a><Translate> so they will never leave configuration drift in your clusters. Also, this makes KubeVela
-            work with any CI/CD or GitOps tools via declarative API without any integration burden.</Translate>
+            KubeVela is built with Kubernetes as control plane so unlike traditional X-as-Code solutions, 
+            it never leaves configuration drift in your clusters. Also, this makes KubeVela work with any 
+            CI/CD or GitOps tools via declarative API without any integration burden.</Translate>
         </p>
       </>
     ),
