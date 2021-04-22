@@ -1,16 +1,16 @@
 ---
-title:  Advanced Features
+title:  高级功能
 ---
 
-As a Data Configuration Language, CUE allows you to do some advanced templating magic in definition objects.
+作为数据配置语言，CUE 对于自定义结构体支持一些黑魔法。
 
-## Render Multiple Resources With a Loop
+## 循环渲染多个资源
 
-You can define the for-loop inside the `outputs`.
+你可以在 `outputs` 定义 for 循环。
 
-> Note that in this case the type of `parameter` field used in the for-loop must be a map. 
+> ⚠️注意，本示例中 `parameter` 必须是字典类型。
 
-Below is an example that will render multiple Kubernetes Services in one trait:
+如下所示，该示例将展示如何在 trait 中渲染多个 Kubernetes Services：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -43,7 +43,7 @@ spec:
         }
 ```
 
-The usage of this trait could be:
+上面 trait 对象可以在以下 Application 被使用：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -64,17 +64,17 @@ spec:
               myservice2: 8081
 ```
 
-## Execute HTTP Request in Trait Definition
+## Trait Definition 中请求 HTTP 接口
 
-The trait definition can send a HTTP request and capture the response to help you rendering the resource with keyword `processing`.
+Trait Definition 中可以发送 HTTP 请求并借助字段 `processing` 将响应结果用于渲染资源。
 
-You can define HTTP request `method`, `url`, `body`, `header` and `trailer` in the `processing.http` section, and the returned data will be stored in `processing.output`.
+你可以在 `processing.http` 字段下定义 HTTP 请求所需的字段，包括：`method`， `url`， `body`， `header` 和 `trailer` ，响应将会被存储在 `processing.output` 字段中。
 
-> Please ensure the target HTTP server returns a **JSON data**.  `output`.
+> 此处需要确认目标 HTTP 服务返回数据格式为 **JSON**。
 
-Then you can reference the returned data from `processing.output` in `patch` or `output/outputs`.
+随后你可以在 `patch` 或者 `output/outputs` 字段中引用 `processing.output` 自动中的返回数据。
 
-Below is an example:
+如下所示：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -110,17 +110,18 @@ spec:
         }
 ```
 
-In above example, this trait definition will send request to get the `token` data, and then patch the data to given component instance.
+以上示例，该 Trait Definition 将发送请求获取 `token` 信息，并将数据插入到给定到 component 实例中。
 
-## Data Passing
+## 数据传递
 
-A trait definition can read the generated API resources (rendered from `output` and `outputs`) of given component definition.
+TraitDefinition 可以从给定的 ComponentDefinition 中读取已经被生成的 API 资源（从 `output` and `outputs` 中被渲染）。
 
->  KubeVela will ensure the component definitions are always rendered before traits definitions.
+>  KubeVela 会确保 ComponentDefinition 会先于 TraitDefinition 被渲染出来。
 
-Specifically, the `context.output` contains the rendered workload API resource (whose GVK is indicated by `spec.workload`in component definition), and use `context.outputs.<xx>` to contain all the other rendered API resources.
+具体来说，`context.output` 字段中会包含已经被渲染的 workload API 资源（特指 GVK 已经在 ComponentDefinition 中 `spec.workload` 字段定义的资源），同时 `context.outputs.<xx>` 
+字段中会包含其他已经被渲染的非 workload API 资源。
 
-Below is an example for data passing:
+下面是数据传递的示例：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -238,8 +239,8 @@ spec:
         }
 ```
 
-In detail, during rendering `worker` `ComponentDefinition`:
-1. the rendered Kubernetes Deployment resource will be stored in the `context.output`,
-2. all other rendered resources will be stored in `context.outputs.<xx>`, with `<xx>` is the unique name in every `template.outputs`.
+关于 `worker` `ComponentDefinition` 渲染期间的一些细节：
+1. workload，渲染完成的 Kubernetes Deployment 资源将存储在 `context.output` 字段中。
+2. 非 workload，其他渲染完成的资源将存储在 `context.outputs.<xx>` 字段中，其中 `<xx>` 在每个 `template.outputs` 字段中名字都是唯一的。
 
-Thus, in `TraitDefinition`, it can read the rendered API resources (e.g. `context.outputs.gameconfig.data.enemies`) from the `context`.
+综上，`TraitDefinition` 可以从 `context` 字段读取完成渲染的 API 资源（比如：`context.outputs.gameconfig.data.enemies`）。
