@@ -96,12 +96,12 @@ const WhatIs = () => (
               <small>
               <Translate>
                   KubeVela is a modern application platform that
-                  </Translate> <i>adapts to your application's needs</i><Translate>, 
-                  not the other way around.</Translate>
+                  </Translate> <i> is fully self-service </i><Translate>, 
+                  and adapts to your needs when you grow.</Translate>
                   <br />
                   <br />
-                  <Translate>Think of it as a </Translate><i>Heroku</i> <Translate> 
-                  that is fully extensible.</Translate>
+                  <Translate>Think about a </Translate><i>Heroku</i> <Translate> 
+                  that is highly extensible.</Translate>
               </small>
           </p>
         </div>
