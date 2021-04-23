@@ -1,25 +1,25 @@
 ---
-title:  Defining KEDA as Autoscaling Trait
+title:  KEDA 作为自动伸缩 Trait
 ---
 
-> Before continue, make sure you have learned about the concepts of [Definition Objects](definition-and-templates) and [Defining Traits with CUE](/docs/cue/trait) section.
+> 在继续之前，请确保你已了解 [Definition Objects](definition-and-templates) 和 [Defining Traits with CUE](/docs/cue/trait) 的概念。
 
-In the following tutorial, you will learn to add [KEDA](https://keda.sh/) as a new autoscaling trait to your KubeVela based platform.
+在下面的教程中，你将学习将 [KEDA](https://keda.sh/) 作为新的自动伸缩 trait 添加到基于 KubeVela 的平台中。
 
-> KEDA is a Kubernetes-based Event Driven Autoscaler. With KEDA, you can drive the scaling of any container based on resource metrics or the number of events needing to be processed.
+> KEDA 是基于 Kubernetes 事件驱动的自动伸缩工具。使用 KEDA，你可以根据资源指标或需要处理的事件数来驱动任何容器的伸缩。
 
-## Step 1: Install KEDA controller
+## 步骤 1: 安装 KEDA controller
 
-[Install the KEDA controller](https://keda.sh/docs/2.2/deploy/) into your K8s system.
+[安装 KEDA controller](https://keda.sh/docs/2.2/deploy/) 到 K8s 中。
 
-## Step 2: Create Trait Definition
+## 步骤 2: 创建 Trait Definition
 
-To register KEDA as a new capability (i.e. trait) in KubeVela, the only thing needed is to create an `TraitDefinition` object for it.
+要在 KubeVela 中将 KEDA 注册为一项新功能（即 trait)，唯一需要做的就是为其创建一个 `TraitDefinition` 对象。
 
-A full example can be found in this [keda.yaml](https://github.com/oam-dev/catalog/blob/master/registry/keda-scaler.yaml).
-Several highlights are list below.
+完整的示例可以在 [keda.yaml](https://github.com/oam-dev/catalog/blob/master/registry/keda-scaler.yaml) 中找到。
+下面列出了几个要点。
 
-### 1. Describe The Trait
+### 1. 描述 Trait
 
 ```yaml
 ...
@@ -29,10 +29,9 @@ annotations:
 ...
 ```
 
-We use label `definition.oam.dev/description` to add one line description for this trait.
-It will be shown in helper commands such as `$ vela traits`.
+我们使用标签 `definition.oam.dev/description` 为该 trait 添加一行描述。它将显示在帮助命令中，比如 `$ vela traits`。
 
-### 2. Register API Resource
+### 2. 注册 API 资源
 
 ```yaml
 ...
@@ -42,13 +41,13 @@ spec:
 ...
 ```
 
-This is how you claim and register KEDA `ScaledObject`'s API resource (`scaledobjects.keda.sh`) as a trait definition.
+这就是将 KEDA `ScaledObject` 的 API 资源声明和注册为 trait 的方式。
 
-### 3. Define `appliesToWorkloads`
+### 3. 定义 `appliesToWorkloads`
 
-A trait can be attached to specified workload types or all (i.e. `"*"` means your trait can work with any workload type).
+trait 可以附加到指定或全部的工作负载类型（`"*"` 表示你的 trait 可以与任何工作负载类型一起使用）。
 
-For the case of KEAD, we will only allow user to attach it to Kubernetes workload type. So we claim it as below:
+对于 KEAD，我们仅允许用户将其附加到 Kubernetes 工作负载类型。 因此，我们声明如下：
 
 ```yaml
 ...
@@ -59,9 +58,9 @@ spec:
 ...
 ``` 
 
-### 4. Define Schematic
+### 4. 定义 Schematic
 
-In this step, we will define the schematic of KEDA based autoscaling trait, i.e. we will create abstraction for KEDA `ScaledObject` with simplified primitives, so end users of this platform don't really need to know what is KEDA at all. 
+在这一步中，我们将定义基于 KEDA 自动伸缩 trait 的 schematic，也就是说，我们将使用简化的原语为 KEDA `ScaledObject` 创建抽象，因此平台的最终用户根本不需要知道什么是 KEDA 。
 
 
 ```yaml
@@ -96,17 +95,17 @@ schematic:
       }
  ```
 
-This is a CUE based template which only exposes `type` and `value` as trait properties for user to set.
+这是一个基于 CUE 的模板，仅开放 `type` 和 `value` 作为 trait 的属性供用户设置。
 
-> Please check the [Defining Trait with CUE](../cue/trait) section for more details regarding to CUE templating.
+> 请查看 [Defining Trait with CUE](../cue/trait) 部分，以获取有关 CUE 模板的更多详细信息。
 
-## Step 2: Register New Trait to KubeVela
+## 步骤 2: 向 KubeVela 注册新的 Trait  
 
-As long as the definition file is ready, you just need to apply it to Kubernetes.
+定义文件准备就绪后，你只需将其部署到 Kubernetes 中。
 
 ```bash
 $ kubectl apply -f https://raw.githubusercontent.com/oam-dev/catalog/master/registry/keda-scaler.yaml
 ```
 
-And the new trait will immediately become available for end users to use in `Application` resource.
+用户就可以在 `Application` 中立即使用新 trait。
 
