@@ -2,9 +2,9 @@
 标题:  添加特性
 ---
 
-KubeVela中的特性可以从基于Helm的组件无缝添加.
+KubeVela 中的特性可以从基于Helm的组件无缝添加.
 
-在以下应用实例中，我们将基于Helm组件添加两个特性[scaler]和[virtualgroup].
+在以下应用实例中，我们将基于 Helm 组件添加两个特性 [scaler] 和 [virtualgroup].
 (https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml)
 (https://github.com/oam-dev/kubevela/blob/master/docs/examples/helm-module/virtual-group-td.yaml)
 
@@ -31,9 +31,9 @@ spec:
             type: "cluster"
 ```
 
-> 注意: 当我们使用基于Helm的特性时, please *请确认在你Helm图标中的目标负载严格按照qualified-full-name convention in Helm的命名方式.* [以此表为例](https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/deployment.yaml#L4), 负载名由[版本名和图表名]组成(https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/_helpers.tpl#L13).
+> 注意: 当我们使用基于 Helm 的特性时, please *请确认在你 Helm 图标中的目标负载严格按照 qualified-full-name convention in Helm 的命名方式.* [以此表为例](https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/deployment.yaml#L4), 负载名由[版本名和图表名]组成(https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/_helpers.tpl#L13).
 
-> 这是因为KubeVela依赖命名去发现负载,否则将不能把特性赋予负载. KubeVela 将会基于你的应用和组件自动生成版本名, 所以你需要保证不能超出你的Helm图表中命名模版格式.
+> 这是因为 KubeVela 依赖命名去发现负载,否则将不能把特性赋予负载. KubeVela 将会基于你的应用和组件自动生成版本名, 所以你需要保证不能超出你的 Helm 图表中命名模版格式.
 
 ## 验证特性工作正确
 
@@ -50,7 +50,7 @@ $ kubectl get deployment myapp-demo-podinfo -o json | jq .spec.replicas
 4
 ```
 
-检查虚拟组`virtualgroup`特性.
+检查虚拟组 `virtualgroup` 特性.
 ```shell
 $ kubectl get deployment myapp-demo-podinfo -o json | jq .spec.template.metadata.labels
 {
@@ -62,9 +62,9 @@ $ kubectl get deployment myapp-demo-podinfo -o json | jq .spec.template.metadata
 ## 更新应用
 
 当应用已被部署且负载/特性都被顺利建立时,
-你可以更新应用, 变化会被负载实例所响应。
+你可以更新应用, 变化会被负载实例所响应.
 
-让我们对实例应用的配置做几个改动。
+让我们对实例应用的配置做几个改动.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -89,21 +89,21 @@ spec:
             type: "cluster"
 ```
 
-在几分钟后应用新配置并检查效果。
+在几分钟后应用新配置并检查效果.
 
-检查从应用属性`properties`的新值(`image.tag = 5.1.3`) 已被赋予图表.
+检查从应用属性 `properties` 的新值 (`image.tag = 5.1.3`) 已被赋予图表.
 ```shell
 $ kubectl get deployment myapp-demo-podinfo -o json | jq '.spec.template.spec.containers[0].image'
 "ghcr.io/stefanprodan/podinfo:5.1.3"
 ```
-实际上, Helm更新了版本号 (revision 1 => 2).
+实际上, Helm 更新了版本号 (revision 1 => 2).
 ```shell
 $ helm ls -A
 NAME              	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART        	APP VERSION
 myapp-demo-podinfo	default  	2       	2021-03-15 08:52:00.037690148 +0000 UTC	deployed	podinfo-5.1.4	5.1.4
 ```
 
-检查`scaler`的特性.
+检查 `scaler` 的特性.
 ```shell
 $ kubectl get deployment myapp-demo-podinfo -o json | jq .spec.replicas
 2
@@ -145,7 +145,7 @@ spec:
             type: "cluster"
 ```
 
-更新应用实例并检查`manualscalertrait`已被删除。
+更新应用实例并检查 `manualscalertrait` 已被删除.
 ```shell
 $ kubectl get manualscalertrait
 No resources found
