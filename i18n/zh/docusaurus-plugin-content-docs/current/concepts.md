@@ -65,17 +65,17 @@ spec:
 
 ## 构建抽象
 
-不像大多数的高层次的抽象，KubeVela 中的 `Application` 资源是一种积木风格的对象，而且它甚至没有固定的 schema。相反，它由构建模块，比如app components（应用组件）和traits（运维能力）等，构成。这种构建模块允许开发者通过自己定义的抽象来集成平台的能力到此应用定义。
+不像大多数的高层次的抽象，KubeVela 中的 `Application` 资源是一种积木风格的对象，而且它甚至没有固定的 schema。相反，它由构建模块，比如app components（应用组件）和 traits（运维能力）等，构成。这种构建模块允许开发者通过自己定义的抽象来集成平台的能力到此应用定义。
 
 定义抽象和建模平台能力的构建模块是 `ComponentDefinition` 和 `TraitDefinition` 。
 
 ### ComponentDefinition
 
-`ComponentDefinition`，组件定义，是一个预先定义好的，用于可部署的工作负载的*模板*。它包括了模板，参数化的和工作负载特性的信息作为一种声明式API资源。
+`ComponentDefinition` ，组件定义，是一个预先定义好的，用于可部署的工作负载的*模板*。它包括了模板，参数化的和工作负载特性的信息作为一种声明式API资源。
 
-因此，`Application` 抽象本质上定义了在目标集群中，用户想要如何来**实例化**给定component definition。特别地，`.type` 字段引用安装了的 `ComponentDefinition` 的名字; `.properties` 字段是用户设置的用来实例化它的值。
+因此，`Application` 抽象本质上定义了在目标集群中，用户想要如何来**实例化**给定 component definition。特别地，`.type` 字段引用安装了的 `ComponentDefinition` 的名字; `.properties` 字段是用户设置的用来实例化它的值。
 
-一些主要的 component definition 有：长期运行的 web service、一次性的 task 和Redis数据库。所有的 component definition 均应在平台提前安装，或由组件提供商，比如第三方软件供应商，来提供。
+一些主要的 component definition 有：长期运行的 web service、一次性的 task 和 Redis数据库。所有的 component definition 均应在平台提前安装，或由组件提供商，比如第三方软件供应商，来提供。
 
 ### TraitDefinition
 
@@ -83,7 +83,7 @@ spec:
 
 *Trait*，运维能力，是由平台提供的操作性质的特性。为了给组件实例附加运维能力，用户需要声明 `.type` 字段来引用特定的 `TraitDefinition` 和 `.properties` ，以此来设置给定运维能力的属性值。相似的，`TraitDefiniton` 同样允许用户来给这些操作特性定义*模板*。
 
-在KubeVela中，我们还将component definition和trait definitions定义称为*“capability definitions”*。
+在 KubeVela 中，我们还将 component definition 和 trait definitions 定义称为 *“capability definitions”* 。
 
 ## Environment
 在将应用发布到生产环境之前，在 testing/staging workspace 中测试代码很重要。在 KubeVela，我们将这些 workspace 描述为 “deployment environments”，部署环境，或者简称为 “environments”，环境。每一个环境都有属于自己的配置（比如说，domain，Kubernetes集群，命名空间，配置数据和访问控制策略等）来允许用户创建不同的部署环境，比如 “test”，和 “production”。
@@ -102,4 +102,4 @@ KubeVela的整体架构由下图所示：
 
 ![alt](resources/arch.png)
 
-特别的，application controller 负责应用的抽象和封装（比如负责 `Application` 和 `Definition` 的 controller）。Rollout contoller 负责以整个应用为单位处理渐进式 rollout 策略。多集群部署引擎，在流量切分和 rollout 特性的支持下，负责跨多集群和环境部署应用。
+特别的，application controller 负责应用的抽象和封装（比如负责 `Application` 和 `Definition` 的 controller ）。Rollout contoller 负责以整个应用为单位处理渐进式 rollout 策略。多集群部署引擎，在流量切分和 rollout 特性的支持下，负责跨多集群和环境部署应用。
