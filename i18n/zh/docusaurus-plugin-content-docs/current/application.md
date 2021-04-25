@@ -218,7 +218,7 @@ spec:
 
 在业务用户使用之前，我们认为所有用于定义的对象（Definition Object）都已经由平台团队声明并安装完毕了。所以，业务用户将需要专注于应用（`Application`）本身。
 
-请注意，KubeVela 的终端用户（业务研发）不需要了解定义对象，他们只需要学习如何使用平台已经安装的能力，这些能力通常还可以被可视化的表单展示出来（或者通过 JSON schema 对接其他方式）。请从[由定义生成前端表单](/docs/platform-engineers/openapi-v3-json-schema)部分的文档了解如何实现。
+请注意，KubeVela 的终端用户（业务研发）不需要了解定义对象，他们只需要学习如何使用平台已经安装的能力，这些能力通常还可以被可视化的表单展示出来（或者通过 JSON schema 对接其他方式）。请从[由定义生成前端表单](/docs/platform-engineers/openapi-v3-json-schema.md)部分的文档了解如何实现。
 
 ### 惯例和"标准协议"
 

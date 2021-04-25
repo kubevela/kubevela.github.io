@@ -98,7 +98,7 @@ schematic:
 
 This is a CUE based template which only exposes `type` and `value` as trait properties for user to set.
 
-> Please check the [Defining Trait with CUE](../cue/trait) section for more details regarding to CUE templating.
+> Please check the [Defining Trait with CUE](../cue/trait.md) section for more details regarding to CUE templating.
 
 ## Step 2: Register New Trait to KubeVela
 

@@ -6,7 +6,7 @@ In this documentation, we will show how to define health probe for application
 
 ## Set Health Check Rule
 
-Basically you can set application `spec.status.healthPolicy` field to specifying health check rule for application. [reference](../cue/status)
+Basically you can set application `spec.status.healthPolicy` field to specifying health check rule for application. [reference](../cue/status.md)
 
 ## Advanced Health Probe
 

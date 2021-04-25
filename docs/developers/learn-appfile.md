@@ -35,7 +35,7 @@ Under the hood, `Appfile` will build the image from source code, and then genera
 
 ## Schema
 
-> Before learning about Appfile's detailed schema, we recommend you to get familiar with [core concepts](../concepts) in KubeVela.
+> Before learning about Appfile's detailed schema, we recommend you to get familiar with [core concepts](../concepts.md) in KubeVela.
 
 
 ```yaml
@@ -72,7 +72,7 @@ services:
   
 ```
 
-> To learn about how to set the properties of specific workload type or trait, please check the [reference documentation guide](./check-ref-doc).
+> To learn about how to set the properties of specific workload type or trait, please check the [reference documentation guide](./check-ref-doc.md).
 
 ## Example Workflow
 
@@ -81,7 +81,7 @@ In the following workflow, we will build and deploy an example NodeJS app under 
 ### Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) installed on the host
-- [KubeVela](../install) installed and configured
+- [KubeVela](../install.md) installed and configured
 
 ### 1. Download test app code
 
@@ -161,7 +161,7 @@ $ vela status testapp
 
 #### Alternative: Local testing without pushing image remotely
 
-If you have local [kind](../install) cluster running, you may try the local push option. No remote container registry is needed in this case.
+If you have local [kind](../install.md) cluster running, you may try the local push option. No remote container registry is needed in this case.
 
 Add local option to `build`:
 
@@ -221,7 +221,7 @@ spec:
 
 ### [Optional] Configure another workload type
 
-By now we have deployed a *[Web Service](references/component-types/webservice)*, which is the default workload type in KubeVela. We can also add another service of *[Task](references/component-types/task)* type in the same app:
+By now we have deployed a *[Web Service](references/component-types/webservice.md)*, which is the default workload type in KubeVela. We can also add another service of *[Task](references/component-types/task.md)* type in the same app:
 
 ```yaml
 services:
@@ -245,7 +245,7 @@ Congratulations! You have just deployed an app using `Appfile`.
 ## What's Next?
 
 Play more with your app:
-- [Check Application Logs](./check-logs)
-- [Execute Commands in Application Container](./exec-cmd)
-- [Access Application via Route](./port-forward)
+- [Check Application Logs](./check-logs.md)
+- [Execute Commands in Application Container](./exec-cmd.md)
+- [Access Application via Route](./port-forward.md)
 

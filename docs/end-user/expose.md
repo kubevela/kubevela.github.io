@@ -6,7 +6,7 @@ title: Expose Application
 
 To expose your application publicly, you just need to add an `ingress` trait.
 
-View ingress schema by [vela kubectl plugin](./kubectlplugin).
+View ingress schema by [vela kubectl plugin](./kubectlplugin.md).
 
 ```shell
 $ kubectl vela show ingress

@@ -35,7 +35,7 @@ services:
 
 ## Schema
 
-> 在深入学习 Appfile 的详细 schema 之前，我们建议你先熟悉 KubeVela 的[核心概念](../concepts)
+> 在深入学习 Appfile 的详细 schema 之前，我们建议你先熟悉 KubeVela 的[核心概念](../concepts.md)
 
 ```yaml
 name: _app-name_
@@ -71,7 +71,7 @@ services:
   
 ```
 
-> 想了解怎样设置特定类型的 workload 或者 trait，请阅读[参考文档手册](./check-ref-doc)
+> 想了解怎样设置特定类型的 workload 或者 trait，请阅读[参考文档手册](./check-ref-doc.md)
 
 ## 示例流程
 
@@ -80,7 +80,7 @@ services:
 ### 环境要求
 
 - [Docker](https://docs.docker.com/get-docker/) 需要在主机上安装 docker
-- [KubeVela](../install) 需要安装 KubeVela 并配置
+- [KubeVela](../install.md) 需要安装 KubeVela 并配置
 
 ### 1. 下载测试的 app 的源码
 
@@ -159,7 +159,7 @@ $ vela status testapp
 
 #### 本地测试方式
 
-如果你本地有运行的 [kind](../install) 集群，你可以尝试推送到本地。这种方法无需注册远程容器仓库。
+如果你本地有运行的 [kind](../install.md) 集群，你可以尝试推送到本地。这种方法无需注册远程容器仓库。
 
 在 `build` 中添加 local 的选项值：
 
@@ -219,7 +219,7 @@ spec:
 
 ### [可选] 配置其他类型的 workload
 
-至此，我们成功地部署一个默认类型的 workload 的 *[web 服务](references/component-types/webservice)*。我们也可以添加 *[Task](references/component-types/task)* 类型的服务到同一个 app 中。
+至此，我们成功地部署一个默认类型的 workload 的 *[web 服务](references/component-types/webservice.md)*。我们也可以添加 *[Task](references/component-types/task.md)* 类型的服务到同一个 app 中。
 
 ```yaml
 services:
@@ -243,7 +243,7 @@ $ vela up
 ## 下一步?
 
 更多关于 app 的操作：
-- [Check Application Logs](./check-logs)
-- [Execute Commands in Application Container](./exec-cmd)
-- [Access Application via Route](./port-forward)
+- [Check Application Logs](./check-logs.md)
+- [Execute Commands in Application Container](./exec-cmd.md)
+- [Access Application via Route](./port-forward.md)
 

@@ -25,7 +25,7 @@ Install metrics trait controller with helm
     helm install --create-namespace -n vela-system metricstrait oam.catalog/metricstrait
 
 
-> Note: metrics is one of the extension capabilities [installed from cap center](../cap-center),
+> Note: metrics is one of the extension capabilities [installed from cap center](../cap-center.md),
 > please install it if you can't find it in `vela traits`.
 
 ## Setting metrics policy
@@ -55,7 +55,7 @@ The app will emit random latencies as metrics.
     EOF
   ```
 
-> The full specification of `metrics` could show up by `$ vela show metrics` or be found on [its reference documentation](../references/traits/metrics)
+> The full specification of `metrics` could show up by `$ vela show metrics` or be found on [its reference documentation](../references/traits/metrics.md)
 
 2. Deploy the application:
 

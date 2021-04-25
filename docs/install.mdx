@@ -5,7 +5,7 @@ title:  Installation
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-> For upgrading existing KubeVela, please read the [upgrade guide](./advanced-install#upgrade).
+> For upgrading existing KubeVela, please read the [upgrade guide](./advanced-install.md#upgrade).
 
 ## 1. Choose Kubernetes Cluster
 
@@ -95,7 +95,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
     helm install --create-namespace -n vela-system kubevela kubevela/vela-core
     ```
     By default, it will enable the webhook with a self-signed certificate provided by [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen).
-    You can also [install it with `cert-manager`](./advanced-install#install-kubevela-with-cert-manager).
+    You can also [install it with `cert-manager`](./advanced-install.md#install-kubevela-with-cert-manager).
 
 4. Verify chart installed successfully
     ```shell script
@@ -224,4 +224,4 @@ These capabilities are built-in so they are ready to use if showed up. KubeVela 
 
 Also, whenever new capabilities are added in the platform, you will immediately see them in above output.
 
-> See the [advanced installation guide](./advanced-install) to learn more about installation details.
+> See the [advanced installation guide](./advanced-install.md) to learn more about installation details.

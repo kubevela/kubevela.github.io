@@ -2,7 +2,7 @@
 title: Debug and Test
 ---
 
-You can make further debug and test for your application by using [vela kubectl plugin](./kubectlplugin).
+You can make further debug and test for your application by using [vela kubectl plugin](./kubectlplugin.md).
 
 ## Dry-Run the `Application`
 

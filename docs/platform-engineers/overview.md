@@ -177,7 +177,7 @@ spec:
         }
 ```
 
-Please note that the end users of KubeVela do NOT need to know about definition objects, they learn how to use a given capability with visualized forms (or the JSON schema of parameters if they prefer). Please check the [Generate Forms from Definitions](/docs/platform-engineers/openapi-v3-json-schema) section about how this is achieved.
+Please note that the end users of KubeVela do NOT need to know about definition objects, they learn how to use a given capability with visualized forms (or the JSON schema of parameters if they prefer). Please check the [Generate Forms from Definitions](/docs/platform-engineers/openapi-v3-json-schema.md) section about how this is achieved.
 
 ## Standard Contract Behind The Abstractions
 

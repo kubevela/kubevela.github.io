@@ -2,7 +2,7 @@
 title: Scale
 ---
 
-In the [Deploy Application](../application) section, we use `cpuscaler` trait as an auto-scaler for the sample application. 
+In the [Deploy Application](../application.md) section, we use `cpuscaler` trait as an auto-scaler for the sample application. 
 
 ## Manuel Scale
 

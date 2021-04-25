@@ -102,12 +102,12 @@ Note that for all the built-in capabilities, we already published their referenc
 
 
 - Workload Types
-	- [webservice](component-types/webservice)
-	- [task](component-types/task)
-	- [worker](component-types/worker)
+	- [webservice](component-types/webservice.md)
+	- [task](component-types/task.md)
+	- [worker](component-types/worker.md)
 - Traits
-	- [route](traits/route)
-	- [autoscale](traits/autoscale)
-	- [rollout](traits/rollout)
-	- [metrics](traits/metrics)
-	- [scaler](traits/scaler)
+	- [route](traits/route.md)
+	- [autoscale](traits/autoscale.md)
+	- [rollout](traits/rollout.md)
+	- [metrics](traits/metrics.md)
+	- [scaler](traits/scaler.md)

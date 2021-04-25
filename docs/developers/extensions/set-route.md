@@ -24,7 +24,7 @@ Install route trait controller with helm
     helm install --create-namespace -n vela-system routetrait oam.catalog/routetrait
 
 
-> Note: route is one of the extension capabilities [installed from cap center](../cap-center),
+> Note: route is one of the extension capabilities [installed from cap center](../cap-center.md),
 > please install it if you can't find it in `vela traits`.
    
 ## Setting route policy
@@ -42,7 +42,7 @@ services:
           rewriteTarget: /
 ```
 
-> The full specification of `route` could show up by `$ vela show route` or be found on [its reference documentation](../references/traits/route)
+> The full specification of `route` could show up by `$ vela show route` or be found on [its reference documentation](../references/traits/route.md)
 
 Apply again:
 
@@ -72,7 +72,7 @@ Services:
       - route: 	Visiting URL: http://example.com	IP: <ingress-IP-address>
 ```
 
-**In [kind cluster setup](../../install#kind)**, you can visit the service via localhost:
+**In [kind cluster setup](../../install.md#kind)**, you can visit the service via localhost:
 
 > If not in kind cluster, replace 'localhost' with ingress address
 

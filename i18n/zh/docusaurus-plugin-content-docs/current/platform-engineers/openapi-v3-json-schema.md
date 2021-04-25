@@ -2,7 +2,7 @@
 title:  Generate Forms from Definitions
 ---
 
-For any capabilities installed via [Definition Objects](./definition-and-templates),
+For any capabilities installed via [Definition Objects](./definition-and-templates.md),
 KubeVela will automatically generate OpenAPI v3 JSON schema based on its parameter list, and store it in a `ConfigMap` in the same `namespace` with the definition object. 
 
 > The default KubeVela system `namespace` is `vela-system`, the built-in capabilities and schemas are laid there.
@@ -51,8 +51,8 @@ data:
 
 Specifically, this schema is generated based on `parameter` section in capability definition:
 
-* For CUE based definition: the [`parameter`](../cue/component#Write-ComponentDefinition) is a keyword in CUE template.
-* For Helm based definition: the [`parameter`](../helm/component#Write-ComponentDefinition) is generated from `values.yaml` in Helm chart.
+* For CUE based definition: the [`parameter`](../cue/component.md#Write-ComponentDefinition) is a keyword in CUE template.
+* For Helm based definition: the [`parameter`](../helm/component.md#Write-ComponentDefinition) is generated from `values.yaml` in Helm chart.
 
 ## Render Form
 

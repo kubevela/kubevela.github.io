@@ -24,7 +24,7 @@ Install route trait controller with helm
     helm install --create-namespace -n vela-system routetrait oam.catalog/routetrait
 
 
-> Note: route is one of the extension capabilities [installed from cap center](../cap-center),
+> Note: route is one of the extension capabilities [installed from cap center](../cap-center.md),
 > please install it if you can't find it in `vela traits`.
    
 ## Setting route policy
@@ -42,7 +42,7 @@ services:
           rewriteTarget: /
 ```
 
-> The full specification of `route` could show up by `$ vela show route` or be found on [its reference documentation](../references/traits/route)
+> The full specification of `route` could show up by `$ vela show route` or be found on [its reference documentation](../references/traits/route.md)
 
 Apply again:
 

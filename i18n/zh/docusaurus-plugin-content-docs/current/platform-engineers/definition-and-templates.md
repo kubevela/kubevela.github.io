@@ -235,4 +235,4 @@ spec:
 
 The specification of `schematic` is explained in following CUE and Helm specific documentations.
 
-Also, the `schematic` filed enables you to render UI forms directly based on them, please check the [Generate Forms from Definitions](/docs/platform-engineers/openapi-v3-json-schema) section about how to.
+Also, the `schematic` filed enables you to render UI forms directly based on them, please check the [Generate Forms from Definitions](/docs/platform-engineers/openapi-v3-json-schema.md) section about how to.
