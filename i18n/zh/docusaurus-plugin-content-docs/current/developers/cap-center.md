@@ -1,14 +1,14 @@
 ---
-title:  Managing Capabilities
+title:  能力管理
 ---
 
-In KubeVela, developers can install more capabilities (i.e. new component types and traits) from any GitHub repo that contains OAM definition files. We call these GitHub repos as _Capability Centers_. 
+在 KubeVela 中，开发者可以从任何包含 OAM 抽象文件的 GitHub 仓库中安装更多的能力（例如：新 component 类型或者 traits ）。我们将这些 GitHub 仓库称为 _Capability Centers_ 。
 
-KubeVela is able to discover OAM definition files in this repo automatically and sync them to your own KubeVela platform.
+KubeVela 可以从这些仓库中自动发现 OAM 抽象文件，并且同步这些能力到我们的 KubeVela 平台中。
 
-## Add a capability center
+## 添加能力中心
 
-Add and sync a capability center in KubeVela:
+新增且同步能力中心到 KubeVela：
 
 ```bash
 $ vela cap center config my-center https://github.com/oam-dev/catalog/tree/master/registry
@@ -20,11 +20,11 @@ successfully sync 1/1 from my-center remote center
 sync finished
 ```
 
-Now, this capability center `my-center` is ready to use.
+现在，该能力中心 `my-center` 已经可以使用。
 
-## List capability centers
+## 列出能力中心
 
-You are allowed to add more capability centers and list them.
+你可以列出或者添加更多能力中心。
 
 ```bash
 $ vela cap center ls
@@ -32,17 +32,17 @@ NAME     	ADDRESS
 my-center	https://github.com/oam-dev/catalog/tree/master/registry
 ```
 
-## [Optional] Remove a capability center
+## [可选] 删除能力中心
 
-Or, remove one.
+删除一个
 
 ```bash
 $ vela cap center remove my-center
 ```
 
-## List all available capabilities in capability center
+## 列出所有可用的能力中心
 
-Or, list all available capabilities in certain center.
+列出某个中心所有可用的能力。
 
 ```bash
 $ vela cap ls my-center
@@ -50,17 +50,17 @@ NAME               	CENTER   	TYPE               	DEFINITION                    
 clonesetservice    	my-center	componentDefinition	clonesets.apps.kruise.io      	uninstalled	[]
 ```
 
-## Install a capability from capability center
+## 从能力中心安装能力
 
-Now let's try to install the new component named `clonesetservice` from `my-center` to your own KubeVela platform.
+我们开始从 `my-center` 安装新 component `clonesetservice` 到你的 KubeVela 平台。
 
-You need to install OpenKruise first.
+你可以先安装 OpenKruise 。
 
 ```shell
 helm install kruise https://github.com/openkruise/kruise/releases/download/v0.7.0/kruise-chart.tgz
 ```
 
-Install `clonesetservice` component from `my-center`.
+从 `my-center` 中安装 `clonesetservice` component 。
 
 ```bash
 $ vela cap install my-center/clonesetservice
@@ -68,9 +68,9 @@ Installing component capability clonesetservice
 Successfully installed capability clonesetservice from my-center
 ```
 
-## Use the newly installed capability
+## 使用新安装的能力
 
-Let's check the `clonesetservice` appears in your platform firstly:
+我们先检查 `clonesetservice` component 是否已经被安装到平台：
 
 ```bash
 $ vela components
@@ -82,7 +82,7 @@ clonesetservice	vela-system	clonesets.apps.kruise.io	Describes long-running, sca
                	           	                        	`webservice` type.
 ```
 
-Great! Now let's deploy an app via Appfile.
+很棒！现在我们部署使用 Appfile 部署一个应用。
 
 ```bash
 $ cat << EOF > vela.yaml
@@ -115,7 +115,7 @@ Updating:  core.oam.dev/v1alpha2, Kind=HealthScope in default
   Service status: vela status testapp --svc testsvc
 ```
 
-then you can Get a cloneset in your environment.
+随后，该 cloneset 已经被部署到你的环境。
 
 ```shell
 $ kubectl get clonesets.apps.kruise.io
@@ -123,9 +123,9 @@ NAME      DESIRED   UPDATED   UPDATED_READY   READY   TOTAL   AGE
 testsvc   1         1         1               1       1       46s
 ```
 
-## Uninstall a capability
+## 删除能力
 
-> NOTE: make sure no apps are using the capability before uninstalling.
+> 注意，删除能力前请先确认没有被应用引用。
 
 ```bash
 $ vela cap uninstall my-center/clonesetservice
