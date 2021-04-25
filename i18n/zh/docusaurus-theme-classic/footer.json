@@ -32,7 +32,7 @@
     "description": "The label of footer link with label=Gitter linking to https://gitter.im/oam-dev/community"
   },
   "link.item.label.DingTalk (23310022)": {
-    "message": "DingTalk (23310022)",
+    "message": "钉钉 (23310022)",
     "description": "The label of footer link with label=DingTalk (23310022) linking to ."
   },
   "link.item.label.GitHub": {
@@ -40,7 +40,7 @@
     "description": "The label of footer link with label=GitHub linking to https://github.com/oam-dev/kubevela"
   },
   "link.item.label.Blog": {
-    "message": "Blog",
+    "message": "博客",
     "description": "The label of footer link with label=Blog linking to blog"
   },
   "copyright": {
