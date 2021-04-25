@@ -1,21 +1,21 @@
 ---
-title:  Debug, Test and Dry-run
+title:  调试， 测试 以及 Dry-run
 ---
 
-With flexibility in defining abstractions, it's important to be able to debug, test and dry-run the CUE based definitions. This tutorial will show this step by step.
+基于具有强大灵活抽象能力的 CUE 定义的模版来说，调试、测试以及 dry-run 非常重要。本教程将逐步介绍如何进行调试。
 
-## Prerequisites
+## 前提
 
-Please make sure below CLIs are present in your environment:
+请确保你的环境已经安装以下 CLI ：
 * [`cue` >=v0.2.2](https://cuelang.org/docs/install/)
 * [`vela` (>v1.0.0)](../install#4-optional-get-kubevela-cli)
 
 
-## Define Definition and Template
+## 定义 Definition 和 Template
 
-We recommend to define the `Definition Object` in two separate parts: the CRD part and the CUE template. This enable us to debug, test and dry-run the CUE template.
+我们建议将 `Definition Object` 定义拆分为两个部分：CRD 部分和 CUE 模版部分。前面的拆分会帮忙我们对 CUE 模版进行调试、测试以及 dry-run 操作。
 
-Let's name the CRD part as `def.yaml`.
+我们将 CRD 部分保存到 `def.yaml` 文件。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -34,7 +34,7 @@ spec:
       template: |
 ```
 
-And the CUE template part as `def.cue`, then we can use CUE commands such as `cue fmt` / `cue vet`  to format and validate the CUE file.
+同时将 CUE 模版部分保存到 `def.cue` 文件，随后我们可以使用 CUE 命令行（`cue fmt` / `cue vet`）格式化和校验 CUE 文件。
 
 ```
 output: {
@@ -132,15 +132,15 @@ parameter: {
 }
 ```
 
-After everything is done, there's a script [`hack/vela-templates/mergedef.sh`](https://github.com/oam-dev/kubevela/blob/master/hack/vela-templates/mergedef.sh) to merge the `def.yaml` and `def.cue` into a completed Definition Object.
+以上操作完成之后，使用该脚本 [`hack/vela-templates/mergedef.sh`](https://github.com/oam-dev/kubevela/blob/master/hack/vela-templates/mergedef.sh) 将 `def.yaml` 和 `def.cue` 合并到完整的 Definition 对象中。
 
 ```shell
 $ ./hack/vela-templates/mergedef.sh def.yaml def.cue > microservice-def.yaml
 ```
 
-## Debug CUE template
+## 调试 CUE 模版
 
-### Use `cue vet` to Validate
+### 使用 `cue vet` 进行校验
 
 ```shell
 $ cue vet def.cue
@@ -160,9 +160,9 @@ outputs.service.spec.selector.app: reference "context" not found:
     ./def.cue:70:11
 ```
 
-The `reference "context" not found` is a common error in this step as [`context`](/docs/cue/component?id=cue-context) is a runtime information that only exist in KubeVela controllers. In order to validate the CUE template end-to-end, we can add a mock `context` in `def.cue`.
+常见错误 `reference "context" not found` 主要发生在 [`context`](/docs/cue/component?id=cue-context)，该部分是仅在 KubeVela 控制器中存在的运行时信息。我们可以在 `def.cue` 中模拟 `context` ，从而对 CUE 模版进行 end-to-end 的校验操作。
 
-> Note that you need to remove all mock data when you finished the validation.
+> 注意，完成校验测试之后需要清除所有模拟数据。
 
 ```CUE
 ... // existing template data
@@ -171,14 +171,14 @@ context: {
 }
 ```
 
-Then execute the command:
+随后执行命令：
 
 ```shell
 $ cue vet def.cue
 some instances are incomplete; use the -c flag to show errors or suppress this message
 ```
 
-The `reference "context" not found` error is gone, but  `cue vet` only validates the data type which is not enough to ensure the login in template is correct. Hence we need to use `cue vet -c` for complete validation:
+该错误 `reference "context" not found` 已经被解决，但是 `cue vet` 仅对数据类型进行校验，这还不能证明模版逻辑是准确对。因此，我们需要使用 `cue vet -c` 完成最终校验：
 
 ```shell
 $ cue vet def.cue -c
@@ -198,7 +198,7 @@ parameter.image: incomplete value string
 parameter.servicePort: incomplete value int
 ```
 
-It now complains some runtime data is incomplete (because `context` and `parameter` do not have value), let's now fill in more mock data in the `def.cue` file:
+此时，命令行抛出运行时数据不完整的异常（主要因为 `context` 和 `parameter` 字段字段中还有设置值），现在我们填充更多的模拟数据到 `def.cue` 文件：
 
 ```CUE
 context: {
@@ -215,15 +215,15 @@ parameter: {
 }
 ```
 
-It won't complain now which means validation is passed:
+此时，执行以下命令行没有抛出异常，说明逻辑校验通过：
 
 ```shell
 cue vet def.cue -c
 ```
 
-#### Use `cue export` to Check the Rendered Resources
+#### 使用 `cue export` 校验已渲染的资源
 
-The `cue export` can export rendered result in YAMl foramt:
+该命令行 `cue export` 将会渲染结果以 YAML 格式导出：
 
 ```shell
 $ cue export -e output def.cue --out yaml
@@ -263,14 +263,14 @@ spec:
   type: ClusterIP
 ```
 
-### Test CUE Template with `Kube` package
+### 测试使用 `Kube` 包的 CUE 模版
 
-KubeVela automatically generates internal CUE packages for all built-in Kubernetes API resources including CRDs.
-You can import them in CUE template to simplify your templates and help you do the validation.
+KubeVela 将所有内置 Kubernetes API 资源以及 CRD 自动生成为内部 CUE 包。
+你可以将它们导入CUE模板中，以简化模板以及帮助你进行验证。
 
-There are two kinds of ways to import internal `kube` packages.
+目前有两种方式来导入内部 `kube` 包。
 
-1. Import them with fixed style: `kube/<apiVersion>` and using it by `Kind`.
+1. 以固定方式导入： `kube/<apiVersion>` ，这样我们就可以直接引用 `Kind` 对应的结构体。
     ```cue
     import (
      apps "kube/apps/v1"
@@ -280,11 +280,12 @@ There are two kinds of ways to import internal `kube` packages.
     output: apps.#Deployment
     outputs: service: corev1.#Service
    ```
-   This way is very easy to remember and use because it aligns with the K8s Object usage, only need to add a prefix `kube/` before `apiVersion`.
-   While this way only supported in KubeVela, so you can only debug and test it with [`vela system dry-run`](#dry-run-the-application).
+   这是比较好记易用的方式，主要因为它与 Kubernetes Object 的用法一致，只需要在 `apiVersion` 之前添加前缀 `kube/`。
+   当然，这个方式仅在 KubeVela 中被支持，所以你只能通过该方法 [`vela system dry-run`](#dry-run-the-application) 进行调试和测试。
    
-2. Import them with third-party packages style. You can run `vela system cue-packages` to list all build-in `kube` packages
-   to know the `third-party packages` supported currently.
+2. 以第三方包的方式导入。 
+	你可以运行 `vela system cue-packages` 获取所有内置 `kube` 包，通过这个方式可以了解当前支持的 `third-party packages`。
+
     ```shell
     $ vela system cue-packages
     DEFINITION-NAME                	IMPORT-PATH                         	 USAGE
@@ -296,15 +297,15 @@ There are two kinds of ways to import internal `kube` packages.
     #Endpoints                     	k8s.io/core/v1                      	Kube Object for v1.Endpoints
     #Pod                           	k8s.io/core/v1                      	Kube Object for v1.Pod
     ```
-   In fact, they are all built-in packages, but you can import them with the `import-path` like the `third-party packages`.
-   In this way, you could debug with `cue` cli client.
+   其实，这些都是内置包，只是你可以像 `third-party packages` 一样使用 `import-path` 导入这些包。
+   当前方式你可以使用 `cue` 命令行进行调试。
    
 
-#### A workflow to debug with `kube` packages
+#### 使用 `Kube` 包的 CUE 模版调试流程
 
-Here's a workflow that you can debug and test the CUE template with `cue` CLI and use **exactly the same CUE template** in KubeVela.
+此部分主要介绍使用 `cue` 命令行对  CUE 模版调试和测试的流程，并且可以在 KubeVela中使用 **完全相同的 CUE 模版**。
 
-1. Create a test directory, Init CUE modules.
+1. 创建目录，初始化 CUE 模块
 
 ```shell
 mkdir cue-debug && cd cue-debug/
@@ -313,19 +314,19 @@ go mod init oam.dev
 touch def.cue
 ```
 
-2. Download the `third-party packages` by using `cue` CLI.
+2. 使用 `cue` 命令行下载 `third-party packages`
 
-In KubeVela, we don't need to download these packages as they're automatically generated from K8s API.
-But for local test, we need to use `cue get go` to fetch Go packages and convert them to CUE format files.
+其实在 KubeVela 中并不需要下载这些包，因为它们已经被从 Kubernetes API 自动生成。
+但是在本地测试环境，我们需要使用 `cue get go`  来获取 Go 包并将其转换为 CUE 格式的文件。
 
-So, by using K8s `Deployment` and `Serivice`, we need download and convert to CUE definitions for the `core` and `apps` Kubernetes modules like below:
+所以，为了能够使用 Kubernetes 中 `Deployment` 和 `Serivice` 资源，我们需要下载并转换为 `core` 和 `apps` Kubernetes 模块的 CUE 定义，如下所示：
 
 ```shell
 cue get go k8s.io/api/core/v1
 cue get go k8s.io/api/apps/v1
 ```
 
-After that, the module directory will show the following contents:
+随后，该模块目录下可以看到如下结构：
 
 ```shell
 ├── cue.mod
@@ -344,7 +345,7 @@ After that, the module directory will show the following contents:
 └── go.sum
 ```
 
-The package import path in CUE template should be:
+该包在 CUE 模版中被导入的路径应该是：
 
 ```cue
 import (
@@ -353,20 +354,20 @@ import (
 )
 ```
 
-3. Refactor directory hierarchy.
+3. 重构目录结构
 
-Our goal is to test template locally and use the same template in KubeVela.
-So we need to refactor our local CUE module directories a bit to align with the import path provided by KubeVela,
+我们的目标是本地测试模版并在 KubeVela 中使用相同模版。
+所以我们需要对我们本地 CUE 模块目录进行一些重构，并将目录与 KubeVela 提供的导入路径保持一致。
 
-Copy the `apps` and `core` from `cue.mod/gen/k8s.io/api` to `cue.mod/gen/k8s.io`.
-(Note we should keep the source directory `apps` and `core` in `gen/k8s.io/api` to avoid package dependency issues).
+我们将 `apps` 和 `core` 目录从 `cue.mod/gen/k8s.io/api` 复制到 `cue.mod/gen/k8s.io`。
+请注意，我们应将源目录 `apps` 和 `core` 保留在 `gen/k8s.io/api` 中，以避免出现包依赖性问题。
 
 ```bash
 cp -r cue.mod/gen/k8s.io/api/apps cue.mod/gen/k8s.io
 cp -r cue.mod/gen/k8s.io/api/core cue.mod/gen/k8s.io
 ```
 
-The modified module directory should like:
+合并过之后到目录结构如下：
 
 ```shell
 ├── cue.mod
@@ -387,7 +388,7 @@ The modified module directory should like:
 └── go.sum
 ```
 
-So, you can import the package use the following path that aligns with KubeVela:
+因此，您可以使用与 KubeVela 对齐的路径导入包：
 
 ```cue
 import (
@@ -396,9 +397,9 @@ import (
 )
 ```
 
-4. Test and Run.
+4. 运行测试
 
-Finally, we can test CUE Template which use the `Kube` package.
+最终，我们可以使用 `Kube` 包测试 CUE 模版。
 
 ```cue
 import (
@@ -517,7 +518,7 @@ parameter: {
 }
 ```
 
-Use `cue export` to see the export result.
+使用 `cue export` 导出渲染结果。
 
 ```shell
 $ cue export def.cue --out yaml
@@ -569,17 +570,17 @@ context:
   name: test
 ```
 
-## Dry-Run the `Application`
+## Dry-Run `Application`
 
-When CUE template is good, we can use `vela system dry-run` to dry run and check the rendered resources in real Kubernetes cluster. This command will exactly execute the same render logic in KubeVela's `Application` Controller adn output the result for you.
+当 CUE 模版就绪，我们就可以使用 `vela system dry-run` 执行 dry-run 并检查在真实 Kubernetes 集群中被渲染的资源。该命令行背后的执行逻辑与 KubeVela 中 `Application` 控制器的逻辑是一致的。
 
-First, we need use `mergedef.sh` to merge the definition and cue files.
+首先，我们需要使用 `mergedef.sh` 合并 Definition 和 CUE 文件。
 
 ```shell
 $ mergedef.sh def.yaml def.cue > componentdef.yaml
 ```
 
-Then, let's create an Application named `test-app.yaml`.
+随后，我们创建 `test-app.yaml` Application。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -601,7 +602,7 @@ spec:
         memory: "64Mi"
 ```
 
-Dry run the application by using `vela system dry-run`.
+针对上面 Application 使用 `vela system dry-run` 命令执行 dry-run 操作。
 
 ```shell
 $ vela system dry-run -f test-app.yaml -d componentdef.yaml

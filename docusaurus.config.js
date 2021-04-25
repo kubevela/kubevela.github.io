@@ -22,6 +22,11 @@ module.exports = {
     },
   },
   themeConfig: {
+    announcementBar: {
+      id: 'start',
+      content:
+        '⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/oam-dev/kubevela">GitHub</a>! ⭐️',
+    },
     navbar: {
       title: 'KubeVela',
       logo: {

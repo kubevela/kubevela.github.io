@@ -1,12 +1,12 @@
 ---
-title:  How-to
+title:  如何定义
 ---
 
-In this section we will introduce how to define a trait.
+在本节中，我们将介绍如何定义 Trait。
 
-## Simple Trait
+## 简单 Trait
 
-A trait in KubeVela can be defined by simply reference a existing Kubernetes API resource.
+可以通过简单地参考现有的 Kubernetes API 资源来定义 KubeVela 中的 Trait。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -17,7 +17,7 @@ spec:
   definitionRef:
     name: ingresses.networking.k8s.io
 ```
-Let's attach this trait to a component instance in `Application`:
+让我们将此 Trait 附加到 `Application` 中的 Component 实例：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -49,18 +49,18 @@ spec:
                         number: 80
 ```
 
-Note that in this case, all fields in the referenced resource's `spec` will be exposed to end user and no metadata (e.g. `annotations` etc) are allowed to be set trait properties. Hence this approach is normally used when you want to bring your own CRD and controller as a trait, and it dose not rely on `annotations` etc as tuning knobs.
+注意在这个例子中，所引用资源的 `spec` 中的所有字段都将向最终用户公开，并且不允许将任何元数据（例如 `annotations` 等）设置为 Trait 的属性。 因此，当你希望将自己的 CRD 和控制器作为 Trait 时，通常使用此方法，并且它不依赖 `annotations` 等作为调整手段。
 
-## Using CUE as Trait Schematic
+## 使用 CUE 来构建 Trait
 
-The recommended approach is defining a CUE based schematic for trait as well. In this case, it comes with abstraction and you have full flexibility to templating any resources and fields as you want. Note that KubeVela requires all traits MUST be defined in `outputs` section (not `output`) in CUE template with format as below:
+也推荐使用 CUE 的方式来定义 Trait。在这个例子中，它带有抽象，你可以完全灵活地根据需要来模板化任何资源和字段。请注意，KubeVela 要求所有 Trait 必须在 CUE 模板的 `outputs` 部分（而非 `output` ）中定义，格式如下： 
 
 ```cue
 outputs: <unique-name>: 
   <full template data>
 ```
 
-Below is an example for `ingress` trait.
+以下是 `ingress` 的 Trait 示例。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -117,7 +117,7 @@ spec:
         }
 ```
 
-Let's attach this trait to a component instance in `Application`:
+让我们将此 Trait 附加到`Application`中的 Component 实例中：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -142,4 +142,4 @@ spec:
               "/api": 8080
 ```
 
-CUE based trait definitions can also enable many other advanced scenarios such as patching and data passing. They will be explained in detail in the following documentations.
+基于 CUE 的 Trait 定义还可以支持许多其他高级方案，例如修补和数据传递。 在接下来的文档中将对它们进行详细说明。

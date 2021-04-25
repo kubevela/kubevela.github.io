@@ -1,32 +1,30 @@
 ---
-title:  Learning CUE
+title:  CUE 入门
 ---
 
-This document will explain more about how to use CUE to encapsulate and abstract a given capability in Kubernetes in detail.
+本章节将详细介绍关于如何使用 CUE 封装和抽象 Kubernetes 中已有的能力。
 
-> Please make sure you have already learned about `Application` custom resource before reading the following guide. 
+> 开始阅读本章节前，请确保已经了解 `Application` 资源。
 
-## Overview
+## 概述
 
-The reasons for KubeVela supports CUE as a first-class solution to design abstraction can be concluded as below:
+KubeVela 将 CUE 作为抽象最优方案的主要原因如下：
 
-- **CUE is designed for large scale configuration.** CUE has the ability to understand a
- configuration worked on by engineers across a whole company and to safely change a value that modifies thousands of objects in a configuration. This aligns very well with KubeVela's original goal to define and ship production level applications at web scale.
-- **CUE supports first-class code generation and automation.** CUE can integrate with existing tools and workflows naturally while other tools would have to build complex custom solutions. For example, generate OpenAPI schemas wigh Go code. This is how KubeVela build developer tools and GUI interfaces based on the CUE templates.
-- **CUE integrates very well with Go.**
- KubeVela is built with GO just like most projects in Kubernetes system. CUE is also implemented in and exposes a rich API in Go. KubeVela integrates with CUE as its core library and works as a Kubernetes controller. With the help of CUE, KubeVela can easily handle data constraint problems.
+- **CUE 本身就是为大规模配置而设计。** CUE 能够感知非常复杂的配置文件，并且能够安全地更改可修改配置中成千上万个对象的值。这非常符合 KubeVela 的最初目标，即以 web-scale 方式定义和交付生产级别的应用程序（web-scale，是一种软件设计方法，主要包含可扩展性、一致性、容忍度和版本控制等）。
+-  **CUE 支持一流的代码生成和自动化。** CUE 原生支持与现有工具以及工作流进行集成，反观其他工具则需要自定义复杂的方案才能实现。例如，需要手动使用 Go 代码生成 OpenAPI 模式。KubeVela 也是依赖 CUE 该特性进行构建开发工具和GUI界面。
+- **CUE与Go完美集成。** KubeVela 像 Kubernetes 系统中的大多数项目一样使用 GO 进行开发。CUE 已经在 Go 中实现并提供了丰富的 API 。 KubeVela 以 CUE 为核心实现 Kubernetes 控制器。 借助 CUE KubeVela 可以轻松处理数据约束问题。
 
-> Pleas also check [The Configuration Complexity Curse](https://blog.cedriccharly.com/post/20191109-the-configuration-complexity-curse/) and [The Logic of CUE](https://cuelang.org/docs/concepts/logic/) for more details.
+> 更多细节请查看 [The Configuration Complexity Curse](https://blog.cedriccharly.com/post/20191109-the-configuration-complexity-curse/) 以及 [The Logic of CUE](https://cuelang.org/docs/concepts/logic/)。
 
-## Prerequisites
+## 前提
 
-Please make sure below CLIs are present in your environment:
+请确保你的环境中已经安装如下命令行：
 * [`cue` >=v0.2.2](https://cuelang.org/docs/install/)
 * [`vela` (>v1.0.0)](../install#4-optional-get-kubevela-cli)
 
-## CUE CLI Basic
+## CUE 命令行基础
 
-Below is the basic CUE data, you can define both schema and value in the same file with the almost same format:
+我们可以使用几乎相同的格式在同一个文件中定义模型和数据，以下为 CUE 基础数据类型：
 
 ```
 a: 1.5
@@ -40,31 +38,31 @@ g: {
 e: string
 ```
 
-CUE is a superset of JSON, we can use it like json with following convenience:
+CUE 是 JSON 的超集， 我们可以像使用 json 一样使用 CUE，同时具备以下便利性：
 
-* C style comments,
-* quotes may be omitted from field names without special characters,
-* commas at the end of fields are optional,
-* comma after last element in list is allowed,
-* outer curly braces are optional.
+* C 样式的注释，
+* 字段名称可以省略引号且不带特殊字符，
+* 字段末尾逗号可选，
+* 允许列表中最后一个元素末尾带逗号，
+* 外花括号可选。
 
-CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` and try. 
+CUE 拥有强大的命令行。请将数据保存到 `first.cue` 文件并尝试使用命令行。
 
-* Format the CUE file. If you're using Goland or similar JetBrains IDE,
-  you can [configure save on format](https://wonderflow.info/posts/2020-11-02-goland-cuelang-format/) instead.
-  This command will not only format the CUE, but also point out the wrong schema. That's very useful.
+* 格式化 CUE 文件。如果你使用 Goland 或者类似 JetBrains IDE，
+  可以参考该文章配置自动格式化插件 [使用 Goland 设置 cuelang 的自动格式化](https://wonderflow.info/posts/2020-11-02-goland-cuelang-format/)。
+  该命令不仅可以格式化 CUE 文件，还能指出错误的模型，相当好用的命令。
     ```shell
     cue fmt first.cue
     ```
 
-* Schema Check, besides `cue fmt`, you can also use `vue vet` to check schema.
+* 模型校验。 除了 `cue fmt`，你还可以使用 `vue vet` 来校验模型.
     ```shell
     cue vet first.cue
     ```
 
-* Calculate/Render the result. `cue eval` will calculate the CUE file and render out the result.
-  You can see the results don't contain `a: float` and `b: int`, because these two variables are calculated.
-  While the `e: string` doesn't have definitive results, so it keeps as it is.
+* 计算/渲染结果。 `cue eval` 可以计算 CUE 文件并且渲染出最终结果。
+  我们看到最终结果中并不包含 `a: float` 和 `b: int`，这是因为这两个变量已经被计算填充。
+  其中 `e: string` 没有被明确的赋值, 故保持不变.
     ```shell
    $ cue eval first.cue
     a: 1.5
@@ -76,23 +74,23 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
     e: string
     ```
 
-* Render for specified result. For example, we want only know the result of `b` in the file, then we can specify the parameter `-e`.
+* 渲染指定结果。例如，我们仅想知道文件中 `b` 的渲染结果，则可以使用该参数 `-e`。
     ```shell
     $ cue eval -e b first.cue
     1
     ```
 
-* Export the result. `cue export` will export the result with final value. It will report an error if some variables are not definitive.
+* 导出渲染结果。 `cue export` 可以导出最终渲染结果。如果一些变量没有被定义执行该命令将会报错。
     ```shell
     $ cue export first.cue
     e: cannot convert incomplete value "string" to JSON:
         ./first.cue:9:4
     ```
-  We can complete the value by giving a value to `e`, for example:
+  我们可以通过给 `e` 赋值来完成赋值，例如：
     ```shell
     echo "e: \"abc\"" >> first.cue
     ```
-  Then, the command will work. By default, the result will be rendered in json format.
+  然后，该命令就可以正常工作。默认情况下, 渲染结果会被格式化为 json 格式。
     ```shell
     $ cue export first.cue
     {
@@ -110,7 +108,7 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
     }
     ```
 
-* Export the result in YAML format.
+* 导出 YAML 格式渲染结果。
     ```shell
     $ cue export first.cue --out yaml
     a: 1.5
@@ -124,7 +122,7 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
     e: abc
     ```
 
-* Export the result for specified variable.
+* 导出指定变量的结果。
     ```shell
     $ cue export -e g first.cue
     {
@@ -132,11 +130,11 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
     }
     ```
 
-For now, you have learned all useful CUE cli operations.
+至此, 你已经学习完所有常用 CUE 命令行参数。
 
-## CUE Language Basic
+## CUE 语言基础
 
-* Data structure: Below is the basic data structure of CUE.
+* 数据类型： 以下为 CUE 的基础数据类型。
 
 ```shell
 // float
@@ -168,20 +166,20 @@ f: {
 j: null
 ```
 
-* Define a custom CUE type. You can use a `#` symbol to specify some variable represents a CUE type.
+* 自定义 CUE 类型。你可以使用 `#` 符号来指定一些表示 CUE 类型的变量。
 
 ```
 #abc: string
 ```
 
-Let's name it `second.cue`. Then the `cue export` won't complain as the `#abc` is a type not incomplete value.
+我们将上述内容保存到 `second.cue` 文件。 执行 `cue export` 不会报 `#abc` 是一个类型不完整的值。
 
 ```shell
 $ cue export second.cue
 {}
 ```
 
-You can also define a more complex custom struct, such as:
+你还可以定义更复杂的自定义结构，比如：
 
 ```
 #abc: {
@@ -194,13 +192,13 @@ You can also define a more complex custom struct, such as:
 }
 ```
 
-It's widely used in KubeVela to define templates and do validation.
+自定义结构在 KubeVela 中被广泛用于定义模板和进行验证。
 
-## CUE Templating and References
+## CUE 模板和引用
 
-Let's try to define a CUE template with the knowledge just learned.
+我们开始尝试利用刚刚学习知识来定义 CUE 模版。
 
-1. Define a struct variable `parameter`.
+1. 定义结构体变量 `parameter`.
 
 ```shell
 parameter: {
@@ -209,9 +207,9 @@ parameter: {
 }
 ```
 
-Let's save it in a file called `deployment.cue`.
+保存上述变量到文件 `deployment.cue`.
 
-2. Define a more complex struct variable `template` and reference the variable `parameter`.
+2. 定义更复杂的结构变量 `template` 同时引用变量 `parameter`.
 
 ```
 template: {
@@ -234,12 +232,11 @@ template: {
 }
 ```
 
-People who are familiar with Kubernetes may have understood that is a template of K8s Deployment. The `parameter` part
-is the parameters of the template.
+熟悉 Kubernetes 的人可能已经知道，这是 Kubernetes Deployment 的模板。 `parameter` 为模版的参数部分。
 
-Add it into the `deployment.cue`.
+添加上述内容到文件 `deployment.cue`.
 
-4. Then, let's add the value by adding following code block:
+4. 随后, 我们通过添加以下内容来完成变量赋值:
 
 ```
 parameter:{
@@ -248,7 +245,7 @@ parameter:{
 }
 ```
 
-5. Finally, let's export it in yaml:
+5. 最后, 导出渲染结果为 yaml 格式:
 
 ```shell
 $ cue export deployment.cue -e template --out yaml
@@ -268,13 +265,12 @@ spec:
       app.oam.dev/component: mytest
 ```
 
-## Advanced CUE Schematic
+## 高级 CUE 设计
 
-* Open struct and list. Using `...` in a list or struct means the object is open.
-
-   -  A list like `[...string]` means it can hold multiple string elements.
-      If we don't add `...`, then `[string]` means the list can only have one `string` element in it.
-   -  A struct like below means the struct can contain unknown fields. 
+* 开放的结构体和列表。在列表或者结构体中使用 `...` 说明该对象为开放的。
+   -  列表对象 `[...string]` ，说明该对象可以容纳多个字符串元素。
+      如果不添加 `...`, 该对象 `[string]` 说明列表只能容纳一个类型为 `string` 的元素。
+   -  如下所示的结构体说明可以包含未知字段。
       ```
       {
         abc: string   
@@ -282,21 +278,21 @@ spec:
       }
       ```
 
-* Operator  `|`, it represents a value could be both case. Below is an example that the variable `a` could be in string or int type.
+* 运算符  `|`, 它可以表示两种类型的值。如下所示，变量 `a` 表示类型可以是字符串或者整数类型。
 
 ```shell
 a: string | int
 ```
 
-* Default Value, we can use `*` symbol to represent a default value for variable. That's usually used with `|`,
-  which represents a default value for some type. Below is an example that variable `a` is `int` and it's default value is `1`.
+* 默认值， 我们可以使用符号 `*` 定义变量的默认值。通常与符号 `|` 配合使用，
+  代表某种类型的默认值。如下所示，变量 `a` 类型为 `int`，默认值为 `1`。
 
 ```shell
 a: *1 | int
 ```
 
-* Optional Variable. In some cases, a variable could not be used, they're optional variables, we can use `?:` to define it.
-  In the below example, `a` is an optional variable, `x` and `z` in `#my` is optional while `y` is a required variable.
+* 选填变量。 某些情况下，一些变量不一定被使用，这些变量就是可选变量，我们可以使用 `?:` 定义此类变量。
+  如下所示, `a` 是可选变量, 自定义 `#my` 对象中 `x` 和 `z` 为可选变量， 而 `y` 为必填字段。
 
 ```
 a ?: int
@@ -308,8 +304,8 @@ z ?:float
 }
 ```
 
-Optional variables can be skipped, that usually works together with conditional logic.
-Specifically, if some field does not exit, the CUE grammar is `if _variable_ != _|_`, the example is like below:
+选填变量可以被跳过，这经常和条件判断逻辑一起使用。
+具体来说，如果某些字段不存在，则 CUE 语法为 `if _variable_！= _ | _` ，如下所示：
 
 ```
 parameter: {
@@ -332,7 +328,7 @@ output: {
 }
 ```
 
-* Operator  `&`, it used to calculate two variables.
+* 运算符  `&`，该运算符用来运算两个变量。
 
 ```shell
 a: *1 | int
@@ -340,9 +336,9 @@ b: 3
 c: a & b
 ```
 
-Saving it in `third.cue` file.
+保存上述内容到 `third.cue` 文件。
 
-You can evaluate the result by using `cue eval`:
+你可以使用 `cue eval` 来验证结果：
 
 ```shell
 $ cue eval third.cue
@@ -351,8 +347,8 @@ b: 3
 c: 3
 ```
 
-* Conditional statement, it's really useful when you have some cascade operations that different value affects different results.
-  So you can do `if..else` logic in the template.
+* 条件判断。 当你执行一些级联操作时，不同的值会影响不同的结果，条件判断就非常有用。
+  因此，你可以在模版中执行 `if..else` 的逻辑。
 
 ```shell
 price: number
@@ -364,9 +360,9 @@ if price > 100 {
 price: 200
 ```
 
-Saving it in `fourth.cue` file.
+保存上述内容到 `fourth.cue` 文件。
 
-You can evaluate the result by using `cue eval`:
+你可以使用 `cue eval` 来验证结果：
 
 ```shell
 $ cue eval fourth.cue
@@ -374,7 +370,7 @@ price: 200
 feel:  "bad"
 ```
 
-Another example is to use bool type as prameter.
+另一个示例是将布尔类型作为参数。
 
 ```
 parameter: {
@@ -398,8 +394,8 @@ output: {
 ```
 
 
-* For Loop: if you want to avoid duplicate, you may want to use for loop.
-  - Loop for Map
+* For循环。 我们为了避免重复可以使用 for 循环。
+  - Map 循环
     ```cue
     parameter: {
         name:  string
@@ -421,7 +417,7 @@ output: {
         }
     }
     ```
-  - Loop for type
+  - 类型循环
     ```
     #a: {
         "hello": "Barcelona"
@@ -435,7 +431,7 @@ output: {
         }
     }
     ```
-  -  Loop for Slice
+  - 切片循环
     ```cue
     parameter: {
         name:  string
@@ -459,13 +455,13 @@ output: {
     }
     ```
 
-Note that we use `"\( _my-statement_ )"` for inner calculation in string.
+备注， 可以使用 `"\( _my-statement_ )"` 进行字符串内部计算，比如上面类型循环示例中，获取值的长度等等操作。
 
-## Import CUE Internal Packages
+## 导入 CUE 内部包
 
-CUE has many [internal packages](https://pkg.go.dev/cuelang.org/go@v0.2.2/pkg) which also can be used in KubeVela.
+CUE 有很多 [internal packages](https://pkg.go.dev/cuelang.org/go@v0.2.2/pkg) 可以被 KubeVela 使用。
 
-Below is an example that use `strings.Join` to `concat` string list to one string. 
+如下所示，使用 `strings.Join` 方法将字符串列表拼接成字符串。
 
 ```cue
 import ("strings")
@@ -485,15 +481,13 @@ output: {
 }
 ```
 
-## Import Kube Package
+## 导入 Kubernetes 包
 
-KubeVela automatically generates all K8s resources as internal packages by reading K8s openapi from the
-installed K8s cluster.
+KubeVela 会从 Kubernetes 集群中读取 OpenApi，并将 Kubernetes 所有资源自动构建为内部包。
 
-You can use these packages with the format `kube/<apiVersion>` in CUE Template of KubeVela just like the same way
-with the CUE internal packages.
+你可以在 KubeVela 的 CUE 模版中通过 `kube/<apiVersion>` 导入这些包，就像使用 CUE 内部包一样。
 
-For example, `Deployment` can be used as:
+比如，`Deployment` 可以这样使用：
 
 ```cue
 import (
@@ -510,7 +504,7 @@ output: {
 }
 ```
 
-Service can be used as (import package with an alias is not necessary):
+`Service` 可以这样使用（无需使用别名导入软件包）：
 
 ```cue
 import ("kube/v1")
@@ -528,7 +522,7 @@ parameter: {
 }
 ```
 
-Even the installed CRD works:
+甚至已经安装的 CRD 也可以正常使用：
 
 ```
 import (
