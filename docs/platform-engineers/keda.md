@@ -2,7 +2,7 @@
 title:  KEDA as Autoscaling Trait
 ---
 
-> Before continue, make sure you have learned about the concepts of [Definition Objects](definition-and-templates) and [Defining Traits with CUE](/docs/cue/trait) section.
+> Before continue, make sure you have learned about the concepts of [Definition Objects](definition-and-templates.md) and [Defining Traits with CUE](/docs/cue/trait.md) section.
 
 In the following tutorial, you will learn to add [KEDA](https://keda.sh/) as a new autoscaling trait to your KubeVela based platform.
 
