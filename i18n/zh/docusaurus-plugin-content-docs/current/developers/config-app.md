@@ -1,8 +1,8 @@
 ---
-title:  Configuring data/env in Application
+title: 在应用程序中配置数据或环境
 ---
 
-`vela` provides a `config` command to manage config data.
+`vela` 提供 `config` 命令用于管理配置数据。
 
 ## `vela config set`
 
@@ -39,15 +39,15 @@ test
 test2
 ```
 
-## Configure env in application
+## 在应用程序中配置环境变量
 
-The config data can be set as the env in applications.
+可以在应用程序中将配置数据设置为环境变量。
 
 ```bash
 $ vela config set demo DEMO_HELLO=helloworld
 ```
 
-Save the following to `vela.yaml` in current directory:
+将以下内容保存为 `vela.yaml` 到当前目录中： 
 
 ```yaml
 name: testapp
@@ -57,7 +57,7 @@ services:
     config: demo
 ```
 
-Then run:
+然后运行：
 ```bash
 $ vela up
 Parsing vela.yaml ...
@@ -77,7 +77,7 @@ App has not been deployed, creating a new deployment...
   Service status: vela status testapp --svc env-config-demo
 ```
 
-Check env var:
+检查环境变量：
 
 ```
 $ vela exec testapp -- printenv | grep DEMO_HELLO
