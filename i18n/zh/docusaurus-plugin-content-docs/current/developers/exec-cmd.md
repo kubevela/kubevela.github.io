@@ -1,10 +1,10 @@
 ---
-title:  Execute Commands in Container
+title:  在容器中运行命令
 ---
 
-Run: 
+运行如下命令: 
 ```
 $ vela exec testapp -- /bin/sh
 ```
 
-This open a shell within the container of testapp.
+这将打开一个 shell 访问 testapp 容器。
