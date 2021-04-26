@@ -8,7 +8,7 @@ title:  Task
 
 ## 规范
 
-列出 `Task` 类型 workload 支持的所有配置项。
+列出 `Task` 类型 workload 的所有配置项。
 
 ```yaml
 name: my-app-name
