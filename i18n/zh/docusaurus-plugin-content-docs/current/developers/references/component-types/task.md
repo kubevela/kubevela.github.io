@@ -25,7 +25,7 @@ services:
 
 名称 | 描述 | 类型 | 是否必须 | 默认值 
 ------------ | ------------- | ------------- | ------------- | ------------- 
- cmd | 容器中运行的命令 | []string | 否 |  
- count | 指定并行运行的 task 数量 | int | 是 | 1 
- restart | 定义作业重启策略，值只能为 Never 或 OnFailure。 | string | 是 | Never 
- image | 你的服务使用的镜像 | string | 是 |  
+ cmd | 容器中运行的命令 | []string | false |  
+ count | 指定并行运行的 task 数量 | int | true | 1 
+ restart | 定义作业重启策略，值只能为 Never 或 OnFailure。 | string | true | Never 
+ image | 你的服务使用的镜像 | string | true |  
