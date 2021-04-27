@@ -28,16 +28,16 @@ services:
 
 名称 | 描述 | 类型 | 是否必须 | 默认值 
 ------------ | ------------- | ------------- | ------------- | ------------- 
- domain |  域名名称 | string | 是 | empty 
- issuer |  | string | 是 | empty 
- rules |  | [[]rules](#rules) | 否 |  
- provider |  | string | 否 |
- ingressClass |  | string | 否 |  
+ domain |  域名名称 | string | true | empty 
+ issuer |  | string | true | empty 
+ rules |  | [[]rules](#rules) | false |  
+ provider |  | string | false |
+ ingressClass |  | string | false |  
 
 
 ### 规则
 
 名称 | 描述 | 类型 | 是否必须 | 默认值 
 ------------ | ------------- | ------------- | ------------- | ------------- 
- path |  | string | 是 |  
- rewriteTarget |  | string | 是 | empty 
+ path |  | string | true |  
+ rewriteTarget |  | string | true | empty 
