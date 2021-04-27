@@ -2,13 +2,13 @@
 title:  Task
 ---
 
-## Description
+## 描述
 
-Describes jobs that run code or a script to completion.
+描述运行完成代码或脚本的作业。
 
-## Specification
+## 规范
 
-List of all configuration options for a `Task` workload type.
+列出 `Task` 类型 workload 的所有配置项。
 
 ```yaml
 name: my-app-name
@@ -21,11 +21,11 @@ services:
     cmd: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
 ```
 
-## Properties
+## 属性
 
-Name | Description | Type | Required | Default 
+名称 | 描述 | 类型 | 是否必须 | 默认值 
 ------------ | ------------- | ------------- | ------------- | ------------- 
- cmd | Commands to run in the container | []string | false |  
- count | specify number of tasks to run in parallel | int | true | 1 
- restart | Define the job restart policy, the value can only be Never or OnFailure. By default, it's Never. | string | true | Never 
- image | Which image would you like to use for your service | string | true |  
+ cmd | 容器中运行的命令 | []string | false |  
+ count | 指定并行运行的 task 数量 | int | true | 1 
+ restart | 定义作业重启策略，值只能为 Never 或 OnFailure。 | string | true | Never 
+ image | 你的服务使用的镜像 | string | true |  
