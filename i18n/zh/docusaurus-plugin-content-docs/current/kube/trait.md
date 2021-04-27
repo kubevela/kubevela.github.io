@@ -1,13 +1,10 @@
 ---
-title:  Attach Traits
+title:  添加 Traits
 ---
 
-All traits in the KubeVela system works well with the Raw K8s Object Template based Component. 
+通过 Component，KubeVela 中的所有 traits 都可以兼容原生的 K8s 对象模板。
 
-In this sample, we will attach two traits,
-[scaler](https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml)
-and
-[virtualgroup](https://github.com/oam-dev/kubevela/blob/master/docs/examples/kube-module/virtual-group-td.yaml) to a component
+在这个例子中，我们会添加两个 traits 到 component 中。分别是：[scaler](https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml) 和 [virtualgroup](https://github.com/oam-dev/kubevela/blob/master/docs/examples/kube-module/virtual-group-td.yaml)
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -31,11 +28,12 @@ spec:
             type: "cluster"
 ```
 
-## Verify
+## 验证
 
-Deploy the application and verify traits work.
+部署应用，验证 traits 正常运行
 
-Check the `scaler` trait.
+检查 `scaler` trait。
+
 ```shell
 $ kubectl get manualscalertrait
 NAME                            AGE
@@ -46,7 +44,8 @@ $ kubectl get deployment mycomp -o json | jq .spec.replicas
 2
 ```
 
-Check the `virtualgroup` trait.
+检查 `virtualgroup` trait。
+
 ```shell
 $ kubectl get deployment mycomp -o json | jq .spec.template.metadata.labels
 {
@@ -55,13 +54,11 @@ $ kubectl get deployment mycomp -o json | jq .spec.template.metadata.labels
 }
 ```
 
-## Update an Application
+## 更新应用
 
-After the application is deployed and workloads/traits are created successfully,
-you can update the application, and corresponding changes will be applied to the
-workload.
+在应用部署完后（同时 workloads/trait 成功地创建），你可以执行更新应用的操作，并且更新的内容会被应用到 workload 上。
 
-Let's make several changes on the configuration of the sample application.
+下面来演示修改上面部署的应用的几个配置
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -85,23 +82,26 @@ spec:
             type: "cluster"
 ```
 
-Apply the new configuration and check the results after several seconds.
+应用上面的配置，几秒后检查配置。
 
-> After updating, the workload instance name will be updated from `mycomp-v1` to `mycomp-v2`.
+> 更新配置后，workload 实例的名称会被修改成 `mycomp-v2`
 
-Check the new property value.
+检查新的属性值
+
 ```shell
 $ kubectl get deployment mycomp -o json | jq '.spec.template.spec.containers[0].image'
 "nginx:1.14.1"
 ```
 
-Check the `scaler` trait.
+检查 `scaler` trait。
+
 ```shell
 $ kubectl get deployment mycomp -o json | jq .spec.replicas
 4
 ```
 
-Check the `virtualgroup` trait.
+检查 `virtualgroup` trait
+
 ```shell
 $ kubectl get deployment mycomp -o json | jq .spec.template.metadata.labels
 {
