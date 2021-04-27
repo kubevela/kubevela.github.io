@@ -2,13 +2,13 @@
 title:  Route
 ---
 
-## Description
+## 描述
 
-Configures external access to your service.
+配置到你服务的外部入口。
 
 ## Specification
 
-List of all configuration options for a `Route` trait.
+列出 `Route` trait 的所有配置项。
 
 ```yaml
 name: my-app-name
@@ -24,20 +24,20 @@ services:
           rewriteTarget: /
 ```
 
-## Properties
+## 属性
 
-Name | Description | Type | Required | Default 
+名称 | 描述 | 类型 | 是否必须 | 默认值 
 ------------ | ------------- | ------------- | ------------- | ------------- 
- domain |  Domain name | string | true | empty 
+ domain |  域名名称 | string | true | empty 
  issuer |  | string | true | empty 
  rules |  | [[]rules](#rules) | false |  
  provider |  | string | false |
  ingressClass |  | string | false |  
 
 
-### rules
+### 规则
 
-Name | Description | Type | Required | Default 
+名称 | 描述 | 类型 | 是否必须 | 默认值 
 ------------ | ------------- | ------------- | ------------- | ------------- 
  path |  | string | true |  
  rewriteTarget |  | string | true | empty 
