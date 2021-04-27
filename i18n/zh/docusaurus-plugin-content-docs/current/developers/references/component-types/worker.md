@@ -2,13 +2,13 @@
 title:  Worker
 ---
 
-## Description
+## 描述
 
-Describes long-running, scalable, containerized services that running at backend. They do NOT have network endpoint to receive external network traffic.
+描述在后台长期运行，可拓展的容器化服务。它们不需要网络端点来接收外部流量。
 
-## Specification
+## 规格
 
-List of all configuration options for a `Worker` workload type.
+列出 `Worker` 类型 workload 的所有配置项。
 
 ```yaml
 name: my-app-name
@@ -20,9 +20,9 @@ services:
     cmd: ["node", "server.js"]
 ```
 
-## Properties
+## 属性
 
-Name | Description | Type | Required | Default 
+名称 | 描述 | 类型 | 是否必须 | 默认值 
 ------------ | ------------- | ------------- | ------------- | ------------- 
- cmd | Commands to run in the container | []string | false |  
- image | Which image would you like to use for your service | string | true |  
+ cmd | 容器中运行的命令 | []string | false |  
+ image | 你的服务使用的镜像 | string | true |  
