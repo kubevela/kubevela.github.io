@@ -2,13 +2,13 @@
 title:  Metrics
 ---
 
-## Description
+## 描述
 
-Configures monitoring metrics for your service.
+配置你服务的监控指标。
 
-## Specification
+## 规范
 
-List of all configuration options for a `Metrics` trait.
+列出 `Metrics` trait 的所有配置项。
 
 ```yaml
 name: my-app-name
@@ -24,13 +24,13 @@ services:
       enabled: true
 ```
 
-## Properties
+## 属性
 
-Name | Description | Type | Required | Default 
+名称 | 描述 | 类型 | 是否必须 | 默认值 
 ------------ | ------------- | ------------- | ------------- | ------------- 
- path | The metrics path of the service | string | true | /metrics 
- format | Format of the metrics, default as prometheus | string | true | prometheus 
- scheme | The way to retrieve data which can take the values `http` or `https` | string | true | http 
+ path | 服务的指标路径 | string | true | /metrics 
+ format | 指标的格式，默认为 prometheus | string | true | prometheus 
+ scheme | 检索数据的方式，支持 `http` 和 `https` | string | true | http 
  enabled |  | bool | true | true 
- port | The port for metrics, will discovery automatically by default | int | true | 0 
- selector | The label selector for the pods, will discovery automatically by default | map[string]string | false |  
+ port | 指标的端口，默认自动暴露 | int | true | 0 
+ selector | Pods 的 label selector，默认自动暴露 | map[string]string | false |  
