@@ -2,13 +2,13 @@
 title:  Scaler
 ---
 
-## Description
+## 描述
 
-Configures replicas for your service.
+配置你服务的副本数。
 
-## Specification
+## 规范
 
-List of all configuration options for a `Scaler` trait.
+列出 `Scaler` trait 的所有配置项。
 
 ```yaml
 name: my-app-name
@@ -20,8 +20,8 @@ services:
       replicas: 100
 ```
 
-## Properties
+## 属性
 
-Name | Description | Type | Required | Default 
+名称 | 描述 | 类型 | 是否必须 | 默认值 
 ------------ | ------------- | ------------- | ------------- | ------------- 
- replicas | Replicas of the workload | int | true | 1 
+ replicas | Workload 的副本数 | int | true | 1 
