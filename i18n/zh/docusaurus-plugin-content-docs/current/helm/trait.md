@@ -5,7 +5,9 @@
 KubeVela 中的 Trait 特性可以从基于Helm的组件无缝添加.
 
 在以下应用实例中，我们将基于 Helm 组件添加两个 Trait 特性 [scaler] 和 [virtualgroup].
+
 (https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml)
+
 (https://github.com/oam-dev/kubevela/blob/master/docs/examples/helm-module/virtual-group-td.yaml)
 
 ```yaml
@@ -31,7 +33,7 @@ spec:
             type: "cluster"
 ```
 
-> 注意: 当我们使用基于 Helm 的 Trait 特性时, please *请确认在你 Helm 图标中的目标负载严格按照 qualified-full-name convention in Helm 的命名方式.* [以此表为例](https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/deployment.yaml#L4), 负载名由[版本名和图表名]组成(https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/_helpers.tpl#L13).
+> 注意: 当我们使用基于 Helm 的 Trait 特性时, *请确认在你 Helm 图标中的目标负载严格按照 qualified-full-name convention in Helm 的命名方式.* [以此表为例] (https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/deployment.yaml#L4), 负载名由[版本名和图表名]组成(https://github.com/captainroy-hy/podinfo/blob/c2b9603036f1f033ec2534ca0edee8eff8f5b335/charts/podinfo/templates/_helpers.tpl#L13).
 
 > 这是因为 KubeVela 依赖命名去发现负载,否则将不能把 Trait 特性赋予负载. KubeVela 将会基于你的应用和组件自动生成版本名, 所以你需要保证不能超出你的 Helm 图表中命名模版格式.
 
