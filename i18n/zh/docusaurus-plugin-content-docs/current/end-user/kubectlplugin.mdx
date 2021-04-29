@@ -1,22 +1,49 @@
 ---
-title: Install kubectl plugin
+title: 安装 kubectl 插件
 ---
 
-Install vela kubectl plugin can help you to ship applications more easily!
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-## Installation
+安装 vela kubectl 插件可以帮助你更简单的交付云原生应用！
 
-You can install kubectl plugin `kubectl vela` by:
+## 安装
+
+你可以通过以下方式安装 `kubectl vela`：
+
+<Tabs
+    className="unique-tabs"
+    defaultValue="krew"
+    values={[
+        {label: 'Krew', value: 'krew'},
+        {label: 'Script', value: 'script'},
+    ]}>
+<TabItem value="krew">
+
+1. 安装并且设置 [krew](https://krew.sigs.k8s.io/docs/user-guide/setup/install/)
+2. 更新 kubectl 插件列表：
+  ```shell
+  kubectl krew update
+  ```
+3. 安装 kubectl vela：
+  ```shell script
+  kubectl krew install vela
+  ```
+
+</TabItem>
+<TabItem value="script">
 
 **macOS/Linux**
 ```shell script
 curl -fsSl https://kubevela.io/script/install-kubectl-vela.sh | bash
 ```
 
-You can also download the binary from [release pages ( >= v1.0.3)](https://github.com/oam-dev/kubevela/releases) manually.
-Kubectl will discover it from your system path automatically.
+你也可以在 [release 页面（>= v1.0.3）](https://github.com/oam-dev/kubevela/releases)手动下载二进制可执行文件，Kubectl 会自动从你的系统路径中找到它。
+</TabItem>
+</Tabs>
 
-## Usage
+
+## 使用
 
 ```shell
 $ kubectl vela -h
