@@ -2,13 +2,13 @@
 title:  Webservice
 ---
 
-## Description
+## 描述
 
-Describes long-running, scalable, containerized services that have a stable network endpoint to receive external network traffic from customers. If workload type is skipped for any service defined in Appfile, it will be defaulted to `webservice` type.
+描述长期运行的，可伸缩的，容器化的服务，这些服务具有稳定的网络接口，可以接收来自客户的外部网络流量。 如果对于 Appfile 中定义的任何服务，workload type 都被跳过，则默认使用“ webservice”类型。
 
-## Specification
+## 规范
 
-List of all configuration options for a `Webservice` workload type.
+列出 `Webservice` workload 类型的所有配置项。
 
 ```yaml
 name: my-app-name
@@ -30,36 +30,37 @@ services:
             key: bar
 ```
 
-## Properties
+## 属性
 
-Name | Description | Type | Required | Default 
+名称 | 描述 | 类型 | 是否必须 | 默认值 
 ------------ | ------------- | ------------- | ------------- | ------------- 
- cmd | Commands to run in the container | []string | false |  
- env | Define arguments by using environment variables | [[]env](#env) | false |  
- image | Which image would you like to use for your service | string | true |  
- port | Which port do you want customer traffic sent to | int | true | 80 
- cpu | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core) | string | false |  
+ cmd | 容器中运行的命令	 | []string | false |  
+ env | 使用环境变量定义参数 | [[]env](#env) | false |  
+ image | 你的服务所使用到的镜像 | string | true |  
+ port | 你要将用户流浪发送到哪个端口 | int | true | 80 
+ cpu | 用于服务的CPU单元数，例如0.5（0.5 CPU内核），1（1 CPU内核） | string | false |  
 
 
 ### env
 
-Name | Description | Type | Required | Default 
+名称 | 描述 | 类型 | 是否必须 | 默认值 
 ------------ | ------------- | ------------- | ------------- | ------------- 
- name | Environment variable name | string | true |  
- value | The value of the environment variable | string | false |  
- valueFrom | Specifies a source the value of this var should come from | [valueFrom](#valueFrom) | false |  
+ name | 环境变量名 | string | true |  
+ value | 环境变量值 | string | false |  
+ valueFrom | 指定此变量值的源 | [valueFrom](#valueFrom) | false |  
 
 
 #### valueFrom
 
-Name | Description | Type | Required | Default 
+名称 | 描述 | 类型 | 是否必须 | 默认值 
 ------------ | ------------- | ------------- | ------------- | ------------- 
- secretKeyRef | Selects a key of a secret in the pod's namespace | [secretKeyRef](#secretKeyRef) | true |  
+ secretKeyRef | 选择一个 pod 命名空间中的 secret 键 | [secretKeyRef](#secretKeyRef) | true |  
 
 
 ##### secretKeyRef
 
-Name | Description | Type | Required | Default 
+名称 | 描述 | 类型 | 是否必须 | 默认值 
 ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The name of the secret in the pod's namespace to select from | string | true |  
- key | The key of the secret to select from. Must be a valid secret key | string | true |  
+ name | 要从 pod 的命名空间中选择的 secret 的名字 | string | true |  
+ key | 选择的 secret 键。 必须是有效的 secret 键 | string | true |  
+
