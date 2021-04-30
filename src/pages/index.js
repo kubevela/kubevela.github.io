@@ -62,8 +62,8 @@ export default function Home() {
           <p className="hero__subtitle">{siteConfig.tagline}</p>
           <div
             className={clsx(styles.heroButtons, 'name', 'margin-vert--md')}>
-            <Button href={useBaseUrl('docs/quick-start')}>Get Started</Button>
-            <Button href={useBaseUrl('docs/')}>Learn More</Button>
+            <Button href={useBaseUrl('docs/quick-start')}><Translate>Get Started</Translate></Button>
+            <Button href={useBaseUrl('docs/')}><Translate>Learn More</Translate></Button>
           </div>
         </div>
       </header>
@@ -95,12 +95,12 @@ const WhatIs = () => (
           <p className="hero__subtitle">
               <small>
               <Translate>
-                  KubeVela is a modern application platform that
-                  </Translate> <i> is fully self-service </i><Translate>, 
+                KubeVela is a modern application platform that
+                  </Translate> <i> <Translate>is fully self-service</Translate> </i><Translate>,
                   and adapts to your needs when you grow.</Translate>
                   <br />
                   <br />
-                  <Translate>Think about a </Translate><i>Heroku</i> <Translate> 
+                  <Translate>Think about a</Translate> <i>Heroku</i> <Translate> 
                   that is highly extensible.</Translate>
               </small>
           </p>

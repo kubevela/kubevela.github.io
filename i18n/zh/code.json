@@ -1,46 +1,4 @@
 {
-  "What is KubeVela?": {
-    "message": "What is KubeVela?"
-  },
-  "KubeVela is a modern application engine that": {
-    "message": "KubeVela is a modern application engine that"
-  },
-  ", not the other way around.": {
-    "message": ", not the other way around."
-  },
-  "Think of it as a": {
-    "message": "Think of it as a"
-  },
-  "which is fully programmable to serve your needs as you grow and expand.": {
-    "message": "which is fully programmable to serve your needs as you grow and expand."
-  },
-  "KubeVela introduces the": {
-    "message": "KubeVela introduces the"
-  },
-  "as the main API to capture a full deployment of microservices, and builds features around the application needs only. Progressive rollout and multi-cluster deployment are provided out-of-box. No infrastructure level concerns, simply deploy.": {
-    "message": "as the main API to capture a full deployment of microservices, and builds features around the application needs only. Progressive rollout and multi-cluster deployment are provided out-of-box. No infrastructure level concerns, simply deploy."
-  },
-  "In KubeVela, any capability an application deployment needs (e.g. workloads, operational features, and cloud services etc) are defined via reusable Infrastructure-as-Code (IaC) components. This creates a self-service workflow where platform team design and maintains capabilities via": {
-    "message": "In KubeVela, any capability an application deployment needs (e.g. workloads, operational features, and cloud services etc) are defined via reusable Infrastructure-as-Code (IaC) components. This creates a self-service workflow where platform team design and maintains capabilities via"
-  },
-  "and/or": {
-    "message": "and/or"
-  },
-  ", and end-users ship code by assembling these components into an application deployment. No restrictions, fully extensible.": {
-    "message": ", and end-users ship code by assembling these components into an application deployment. No restrictions, fully extensible."
-  },
-  "All these capability modules are actually maintained with": {
-    "message": "All these capability modules are actually maintained with"
-  },
-  "so they will never leave": {
-    "message": "so they will never leave"
-  },
-  "in your cluster. Also, as a set of": {
-    "message": "in your cluster. Also, as a set of"
-  },
-  ", KubeVela seamlessly work with any CI/CD or GitOps tools, no integration burden, no extra tool": {
-    "message": ", KubeVela seamlessly work with any CI/CD or GitOps tools, no integration burden, no extra tool"
-  },
   "theme.NotFound.title": {
     "message": "Page Not Found",
     "description": "The title of the 404 page"
@@ -82,7 +40,7 @@
     "description": "The blog post button label to navigate to the older/next post"
   },
   "theme.blog.post.readingTime.plurals": {
-    "message": "One min read|{readingTime} min read",
+    "message": "阅读需要 1 分钟|阅读需要 {readingTime} 分钟",
     "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
   },
   "theme.tags.tagsListLabel": {
@@ -90,7 +48,7 @@
     "description": "The label alongside a tag list"
   },
   "theme.blog.post.readMore": {
-    "message": "Read More",
+    "message": "更多",
     "description": "The label used in blog post item excerpts to link to full blog posts"
   },
   "theme.tags.tagsPageTitle": {
@@ -134,11 +92,11 @@
     "description": "The ARIA label for the docs pagination"
   },
   "theme.docs.paginator.previous": {
-    "message": "Previous",
+    "message": "上一篇",
     "description": "The label used to navigate to the previous doc"
   },
   "theme.docs.paginator.next": {
-    "message": "Next",
+    "message": "下一篇",
     "description": "The label used to navigate to the next doc"
   },
   "theme.docs.sidebar.responsiveCloseButtonLabel": {
@@ -170,11 +128,11 @@
     "description": "The label userd to tell the user that he's browsing an unmaintained doc version"
   },
   "theme.docs.versions.latestVersionLinkLabel": {
-    "message": "latest version",
+    "message": "最新版本",
     "description": "The label used for the latest version suggestion link label"
   },
   "theme.common.editThisPage": {
-    "message": "Edit this page",
+    "message": "编辑本页",
     "description": "The link label to edit the current page"
   },
   "theme.common.headingLinkTitle": {
@@ -196,5 +154,56 @@
   "theme.common.skipToMainContent": {
     "message": "Skip to main content",
     "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
+  },
+  "KubeVela models platform features (such as workloads, operational behaviors, and cloud services) as reusable": {
+    "message": "KubeVela 将平台功能（如工作负载、运维操作行为和云服务）抽象建模为可重用的"
+  },
+  "components, and expose them to end users as self-service building blocks. When your needs grow, these capabilities can extend naturally in a programmable approach. No restriction, fully flexible.": {
+    "message": "组件，并将其作为自助式的服务构建块暴露给终端用户。当你的需求增加时，这些功能可以通过编程的方式自然扩展，没有限制且十分灵活。"
+  },
+  "KubeVela is built with Kubernetes as control plane so unlike traditional X-as-Code solutions, it never leaves configuration drift in your clusters. Also, this makes KubeVela work with any CI/CD or GitOps tools via declarative API without any integration burden.": {
+    "message": "KubeVela 是以 Kubernetes 为控制平面而构建的，因此与传统的 X-as-Code 解决方案不同，它绝不会在你的集群中发生配置漂移。此外，这使得 KubeVela 可以通过声明式 API 与任何 CI/CD 或 GitOps 工具整合，没有任何集成负担。"
+  },
+  "KubeVela is a modern application platform that": {
+    "message": "KubeVela 是一个现代的应用平台"
+  },
+  ", and adapts to your needs when you grow.": {
+    "message": "，并可以在需求增加时适应你的需求。"
+  },
+  "Think about a": {
+    "message": "类似"
+  },
+  "that is highly extensible.": {
+    "message": "那样的高拓展性。"
+  },
+  "Developer Centric": {
+    "message": "以开发者为中心"
+  },
+  "Self-Service": {
+    "message": "自助式服务"
+  },
+  "Simple yet Reliable": {
+    "message": "简单而可靠"
+  },
+  "is fully self-service": {
+    "message": "是完全自助式的服务"
+  },
+  "Get Started": {
+    "message": "快速开始"
+  },
+  "Learn More": {
+    "message": "了解更多"
+  },
+  "What is KubeVela?": {
+    "message": "KubeVela 是什么？"
+  },
+  "KubeVela introduces the": {
+    "message": "KubeVela 引入了"
+  },
+  "as the main API to capture a full deployment of microservices, and builds features around the application needs only. Progressive rollout and multi-cluster deployment are provided out-of-box. No infrastructure level concerns, simply deploy.": {
+    "message": "作为主要的 API，以声明全部的微服务，并只围绕应用程序的需求建立功能。开箱即用的灰度发布和多集群部署功能。无需关心基础设施层面的问题，只要部署即可。"
+  },
+  "and/or": {
+    "message": "和/或"
   }
 }
