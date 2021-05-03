@@ -1,12 +1,12 @@
 ---
-title: Provision and Consume Cloud Resources
+title: 调配和使用云资源
 ---
 
-> ⚠️ This section requires your platform builder has already installed the [cloud resources related capabilities](../platform-engineers/cloud-services).
+> ⚠️ 本章节前置要求你的平台运维人员已经安装了 [cloud resources related capabilities](../platform-engineers/cloud-services)。
 
-## Provision and consume cloud resource in a single application v1 (one cloud resource)
+## 单一应用（单一云资源）调配和使用云资源
 
-Check the parameters of cloud resource component:
+检查云资源组件的参数：
 
 ```shell
 $ kubectl vela show alibaba-rds
@@ -23,9 +23,9 @@ $ kubectl vela show alibaba-rds
 +---------------+------------------------------------------------+--------+----------+--------------------+
 ```
 
-Use the service binding trait to bind cloud resources into workload as ENV.
+以 ENV 的方式，使用服务绑定 trait 把云资源绑定到 workload 上。
 
-Create an application with a cloud resource provisioning component and a consuming component as below.
+如下示例，创建了一个包含云资源调配组件和使用组件的应用：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -64,7 +64,7 @@ spec:
 
 ```
 
-Apply it and verify the application.
+安装并验证应用
 
 ```shell
 $ kubectl get application
@@ -80,11 +80,11 @@ Handling connection for 80
 
 ![](../resources/crossplane-visit-application.jpg)
 
-## Provision and consume cloud resource in a single application v2 (two cloud resources)
+## 单一应用（两个云资源）调配和使用云资源
 
-Based on the section `Provisioning and consuming cloud resource in a single application v1 (one cloud resource)`, 
+基于上面的小节 `单一应用（单一云资源）调配和使用云资源`
 
-Update the application to also consume cloud resource OSS.
+更新应用，让应用同时使用 OSS 云资源
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -132,7 +132,7 @@ spec:
         secretName: oss-conn
 ```
 
-Apply it and verify the application.
+安装并验证应用
 
 ```shell
 $ kubectl port-forward deployment/express-server 80:80
@@ -144,16 +144,15 @@ Handling connection for 80
 
 ![](../resources/crossplane-visit-application-v2.jpg)
 
-## Provision and consume cloud resource in different applications
+## 在不同的应用中调配和使用云资源
 
-In this section, cloud resource will be provisioned in one application and consumed in another application.
+在此小节中，一个应用调配云资源，另外一个应用使用云资源
 
-### Provision Cloud Resource
+### 调配云资源
 
-Instantiate RDS component with `alibaba-rds` workload type in an [Application](../application) to provide cloud resources.
+创建[应用](../application)，实例化 `alibaba-rds` 类型 workload 的 RDS 组件来提供云资源
 
-As we have claimed an RDS instance with ComponentDefinition name `alibaba-rds`.
-The component in the application should refer to this type.
+因为我们已经使用 ComponentDefinition 声明了 RDS 实例组件，并命名为 `alibaba-rds`，所以应用中定义的组件应该使用此类型。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -173,9 +172,7 @@ spec:
         secretName: db-conn
 ```
 
-Apply the application to Kubernetes and a RDS instance will be automatically provisioned (may take some time, ~2 mins).
-
-A secret `db-conn` will also be created in the same namespace as that of the application.
+安装应用，RDS 实例就会自动地被调配（可能需要一段时间才能正常起来，大概2分钟）。同时，和应用相同的命名空间下会创建名为 `db-conn` 的 secret。
 
 ```shell
 $ kubectl get application
@@ -200,14 +197,13 @@ data:
 kind: Secret
 ```
 
-### Consume the Cloud Resource
+### 使用云资源
 
-In this section, we will show how another component consumes the RDS instance.
+在此小节，我们会演示另外一个组件怎样使用 RDS 实例。
 
-> Note: we recommend defining the cloud resource claiming to an independent application if that cloud resource has
-> standalone lifecycle.
+> 注意：如果该云资源有独立的生命周期，我们建议将云资源定义为一个独立的应用。
 
-Now create the Application to consume the data.
+创建应用来使用云资源
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -237,6 +233,6 @@ express-server-v1   1/1     1            1           9h
 $ kubectl port-forward deployment/express-server 80:80
 ```
 
-We can see the cloud resource is successfully consumed by the application.
+我们看到云资源已经正常地被应用使用了
 
 ![](../resources/crossplane-visit-application.jpg)
