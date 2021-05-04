@@ -95,13 +95,14 @@ const WhatIs = () => (
           <p className="hero__subtitle">
               <small>
               <Translate>
-                KubeVela is a modern application platform that
-                  </Translate> <i> <Translate>is fully self-service</Translate> </i><Translate>,
-                  and adapts to your needs when you grow.</Translate>
+                KubeVela is a modern application platform that makes deploying and managing applications
+                 across today's hybrid, multi-cloud environments
+                  </Translate> <i> <Translate>easier and faster.</Translate> </i>
                   <br />
                   <br />
-                  <Translate>Think about a</Translate> <i>Heroku</i> <Translate> 
-                  that is highly extensible.</Translate>
+                  <Translate>KubeVela is runtime agnostic,
+                  natively extensible, yet most importantly, 
+                  it's fully </Translate><i> application-centric </i><Translate>.</Translate> 
               </small>
           </p>
         </div>
