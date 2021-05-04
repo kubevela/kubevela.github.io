@@ -77,12 +77,12 @@ module.exports = {
               to: '/docs/install',
             },
             {
-              label: 'Platform Builder Guide',
+              label: 'Platform Team Guide',
               to: '/docs/platform-engineers/overview',
             },
             {
-              label: 'Developer Experience Guide',
-              to: '/docs/quick-start-appfile',
+              label: 'Application Team Guide',
+              to: '/docs/application',
             },
           ],
         },
