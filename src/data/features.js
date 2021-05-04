@@ -3,33 +3,33 @@ import Translate, { translate } from '@docusaurus/Translate';
 
 const features = [
   {
-    title: <><Translate>Developer Centric</Translate></>,
+    title: <><Translate>Application Centric</Translate></>,
     imgUrl: 'img/application-centric.svg',
     description: (
       <>
         <p>
           <Translate>
-            KubeVela introduces the</Translate>
-            <i>Application</i> <Translate>as the main API to capture a full deployment of microservices, and builds features
-             around the application needs only. Progressive rollout 
-            and multi-cluster deployment are provided out-of-box. No infrastructure level concerns, simply deploy.
+            Leveraging Open Application Model (OAM), KubeVela introduces consistent yet higher level API to capture a full deployment of microservices 
+            on top of hybrid environments. Placement strategy, traffic shifting 
+            and rolling update are declared at application level. No infrastructure level concern, simply deploy. 
           </Translate>
         </p>
       </>
     ),
   },
   {
-    title: <><Translate>Self-Service</Translate></>,
+    title: <><Translate>Natively Extensible</Translate></>,
     imgUrl: 'img/extending-natively.svg',
     description: (
       <>
         <p>
           <Translate>
-           KubeVela models platform features (such as workloads, operational behaviors, and cloud services)
+           Unlike traditional PaaS systems, application management capabilities 
+            in KubeVela (e.g. workload types, operational behaviors, and cloud services) are built
             as reusable</Translate> <a href="https://github.com/cuelang/cue">
-              CUE</a> <Translate>and/or</Translate> <a href="https://helm.sh/">Helm</a> <Translate>components, 
-              and expose them to end users as self-service building blocks. 
-              When your needs grow, these capabilities can extend naturally in a programmable approach. 
+              CUE</a> <Translate>and/or</Translate> <a href="https://helm.sh/">Helm</a> <Translate>components
+               and exposed to users as self-service API. When users' needs grow, 
+              these capabilities can naturally expand in programmable approach. 
               No restriction, fully flexible.</Translate>
         </p>
       </>
@@ -37,15 +37,17 @@ const features = [
     reverse: true,
   },
   {
-    title: <><Translate>Simple yet Reliable</Translate></>,
+    title: <><Translate>Runtime Agnostic</Translate></>,
     imgUrl: 'img/simple-yet-extensible-abstraction-mechanism.svg',
     description: (
       <>
         <p>
           <Translate>
-            KubeVela is built with Kubernetes as control plane so unlike traditional X-as-Code solutions, 
-            it never leaves configuration drift in your clusters. Also, this makes KubeVela work with any 
-            CI/CD or GitOps tools via declarative API without any integration burden.</Translate>
+            KubeVela has no requirement for runtime. It uses Kubernetes as control plane to deploy (and manage) 
+            diverse workload types such as container, cloud functions, databases,
+             or even EC2 instances across hybrid environments. 
+             Also, this makes KubeVela seamlessly work with any Kubernetes compatible
+            CI/CD or GitOps tools via declarative API.</Translate>
         </p>
       </>
     ),
