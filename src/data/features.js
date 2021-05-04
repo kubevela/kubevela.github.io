@@ -43,10 +43,11 @@ const features = [
       <>
         <p>
           <Translate>
-            KubeVela has no requirement for runtime. It uses Kubernetes as control plane to deploy (and manage) 
+            KubeVela is built with Kubernetes as control plane but adaptable to any runtime as data-plane.
+            It can deploy (and manage) 
             diverse workload types such as container, cloud functions, databases,
              or even EC2 instances across hybrid environments. 
-             Also, this makes KubeVela seamlessly work with any Kubernetes compatible
+             Also, this means KubeVela seamlessly works with any Kubernetes compatible
             CI/CD or GitOps tools via declarative API.</Translate>
         </p>
       </>
