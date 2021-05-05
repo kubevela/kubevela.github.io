@@ -1,16 +1,15 @@
 ---
-title: Dry-Run and Live-Diff
+title: Dry-Run / Live-Diff
 ---
 
-KubeVela allows you to dry-run and live-diff your application.
+KubeVela 支持两种方式调试 application：dry-run 和 live-diff。
 
-## Dry-Run the `Application`
 
-Dry run will help you to understand what are the real resources which will to be expanded and deployed
-to the Kubernetes cluster. In other words, it will mock to run the same logic as KubeVela's controller 
-and output the results locally.
+## Dry-Run `Application`
 
-For example, let's dry-run the following application:
+Dry-run 将帮助我们了解哪些资源将被处理并部署到 Kubernetes 集群。另外，该命令支持模拟运行与KubeVela的控制器相同的逻辑并在本地输出结果。
+
+比如，我们 dry-run 下面 application：
 
 ```yaml
 # app.yaml
@@ -104,24 +103,21 @@ spec:
 ---
 ```
 
-In this example, the definitions(`webservice` and `ingress`) which `vela-app` depends on is the built-in 
-components and traits of KubeVela. You can also use `-d `or `--definitions` to specify your local definition files.
+当前示例中，application `vela-app` 依赖 KubeVela 内置的 component（`webservice`） 和 trait（`ingress`）。我们也可以通过参数 `-d ` 或者 `--definitions` 指定本地 definition 文件。
 
-`-d `or `--definitions` permitting user to provide capability definitions used in the application from local files.
-`dry-run` cmd will prioritize the provided capabilities than the living ones in the cluster.
+参数 `-d ` 或者 `--definitions` 允许用户从本地文件导入指定的 definitions 以供 application 使用。
+参数 `dry-run` 会将优先使用用户指定的 capabilities 。
 
-## Live-Diff the `Application`
+## Live-Diff `Application`
 
-Live-diff helps you to have a preview of what would change if you're going to upgrade an application without making any changes
-to the living cluster.
-This feature is extremely useful for serious production deployment, and make the upgrade under control
+Live-diff 将帮助我们预览本次升级 application 会有哪些变更，同时不会对现有集群产生影响。
+本功能对于生产环境变更非常有用，同时还能保证升级可控。
 
-It basically generates a diff between the specific revision of running instance and the local candidate application.
-The result shows the changes (added/modified/removed/no_change) of the application as well as its sub-resources, 
-such as components and traits.
+本功能会在线上正在运行的版本与本地待升级版本之间生成差异信息。
+最终差异结果将展示 application 以及子资源（比如 components 以及 traits）的变更信息（added/modified/removed/no_change）。
 
-Assume you have just deployed the application in dry-run section.
-Then you can list the revisions of the Application.
+假设我们在 dry-run 环节已经部署 application 。
+随后，我们列出上面 application 的 revisions 信息。
 
 ```shell
 $ kubectl get apprev -l app.oam.dev/name=vela-app
@@ -129,7 +125,7 @@ NAME          AGE
 vela-app-v1   50s
 ```
 
-Assume we're going to upgrade the application like below.
+假设我们将更新该 application ：
 
 ```yaml
 # new-app.yaml
@@ -158,19 +154,17 @@ spec:
               "/": 8080 # change port
 ```
 
-Run live-diff like this:
+执行 live-diff ：
 
 ```shell
 kubectl vela live-diff -f new-app.yaml -r vela-app-v1
 ```
 
-`-r` or `--revision` is a flag that specifies the name of a living ApplicationRevision with which you want to compare the updated application.
+参数 `-r` 或者 `--revision` 用于指定正在运行中的 ApplicationRevision 名称，该版本将用于与更新版本进行比较。
 
-`-c` or `--context` is a flag that specifies the number of lines shown around a change. The unchanged lines 
-which are out of the context of a change will be omitted. It's useful if the diff result contains a lot of unchanged content 
-while you just want to focus on the changed ones.
+参数 `-c` or `--context` 用于指定显示变更上下文行数，超出上线行数的未变更行将被省略。该功能对于如下场景非常有用：差异结果包含很多未更改的内容，而我们只想关注已更改的内容。
 
-<details><summary> Click to view the details of diff result </summary>
+<details><summary> diff </summary>
 
 ```bash
 ---
