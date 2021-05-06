@@ -1,10 +1,11 @@
 ---
-title: Attach Sidecar
+title: 使用 Sidecar
 ---
 
-In this section, we will show you how to use `sidecar` trait to collect logs.
+在本章节中，我们会展示如何使用 `sidecar` trait 来收集日志。
 
-## Show the Usage of Sidecar
+
+## 查看 Sidecar 的使用手册
 
 ```shell
 $ kubectl vela show sidecar
@@ -28,10 +29,9 @@ $ kubectl vela show sidecar
 +-----------+-------------+--------+----------+---------+
 ```
 
-## Apply the Application
+## 安装应用
 
-In this Application, component `log-gen-worker` and sidecar share the data volume that saves the logs.
-The sidebar will re-output the log to stdout.
+应用的组件 `log-gen-worker` 和 sidecar 共享相同的日志数据目录。sidecar 会重新输出日志到标准输出中。
 
 ```yaml
 # app.yaml
@@ -71,13 +71,13 @@ spec:
                 path: /var/log
 ```
 
-Apply this Application.
+安装这个应用
 
 ```shell
 kubectl apply -f app.yaml
 ```
 
-Check the workload generate by Application.
+检查应用生成的 workload
 
 ```shell
 $ kubectl get pod
@@ -85,7 +85,7 @@ NAME                              READY   STATUS    RESTARTS   AGE
 log-gen-worker-76945f458b-k7n9k   2/2     Running   0          90s
 ```
 
-Check the output of sidecar. 
+查看 sidecar 的输出
 
 ```shell
 $ kubectl logs -f log-gen-worker-76945f458b-k7n9k count-log
