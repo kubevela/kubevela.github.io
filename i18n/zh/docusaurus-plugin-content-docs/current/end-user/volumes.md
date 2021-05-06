@@ -1,16 +1,13 @@
 ---
-title: Attach Volumes
+title: 使用 Volumes
 ---
 
-We will introduce how to attach basic volumes as well as extended custom
-volume types for applications.
+我们将会介绍如何在应用中使用基本和定制化的 volumes。
 
-## Attach Basic Volume
 
-`worker` and `webservice` both are capable of attaching multiple common types of
-volumes, including `persistenVolumeClaim`, `configMap`, `secret`, and `emptyDir`. 
-You should indicate the name of volume type in components properties. 
-(we use `pvc` instead of `persistenVolumeClaim` for brevity)
+## 使用基本的 Volume
+
+`worker` 和 `webservice` 都可以使用多个通用的 volumes，包括： `persistenVolumeClaim`, `configMap`, `secret`, and `emptyDir`。你应该使用名称属性来区分不同类型的 volumes。（为了简洁，我们使用 `pvc` 代替 `persistenVolumeClaim`）
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -49,15 +46,13 @@ spec:
             type: "emptyDir"    # emptyDir type volume
             mountPath: "/var/www/html4"
 ```
+你需要确保使用的 volume 资源在集群中是可用的。
 
-You should make sure the attached volume sources are prepared in your cluster.
+## 使用自定义类型的 volume
 
-## Extend custom volume types and attach
-
-It's also allowed to extend custom volume types, such as AWS ElasticBlockStore,
-Azure disk, Alibaba Cloud OSS, etc.
-To enable attaching extended volume types, we should install specific Trait
-capability first.
+使用者可以自己扩展定制化类型的 volume，例如 AWS ElasticBlockStore，
+Azure disk， Alibaba Cloud OSS。  
+为了可以使用定制化类型的 volume，我们需要先安装特定的 Trait。
 
 ```shell
 $ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/app-with-volumes/td-awsEBS.yaml
@@ -77,7 +72,8 @@ $ kubectl vela show aws-ebs-volume
 +-----------+----------------------------------------------------------------+--------+----------+---------+
 ```
 
-Then we can define an Application using aws-ebs volumes.
+然后我们可以在应用的定义中使用 aws-ebs volumes。
+
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
