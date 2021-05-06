@@ -4,11 +4,11 @@ title:  How-to
 
 In this section, it will introduce how to declare Helm charts as app components via `ComponentDefinition`.
 
-> Before reading this part, please make sure you've learned [the definition and template concepts](../platform-engineers/definition-and-templates).
+> Before reading this part, please make sure you've learned [the definition and template concepts](../definition-and-templates).
 
 ## Prerequisite
 
-* [fluxcd/flux2](../install#3-optional-install-flux2), make sure you have installed the flux2 in the [installation guide](/docs/install).
+* [fluxcd/flux2](../../install#3-optional-install-flux2), make sure you have installed the flux2 in the [installation guide](/docs/install).
 
 ## Declare `ComponentDefinition`
 

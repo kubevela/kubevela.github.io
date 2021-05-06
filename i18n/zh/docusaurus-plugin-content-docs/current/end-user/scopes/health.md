@@ -4,15 +4,8 @@ title: Define Application Health Probe
 
 In this documentation, we will show how to define health probe for application
 
-## Set Health Check Rule
+1.Create health scope instance.
 
-Basically you can set application `spec.status.healthPolicy` field to specifying health check rule for application. [reference](../cue/status)
-
-## Advanced Health Probe
-
-By using HealthyScope you can check all pods of workload weather are healthy.
-
-1.Create health scope by apply this yaml
 ```yaml
 apiVersion: core.oam.dev/v1alpha2
 kind: HealthScope

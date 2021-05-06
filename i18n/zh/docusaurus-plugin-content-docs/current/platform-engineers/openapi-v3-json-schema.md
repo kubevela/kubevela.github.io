@@ -48,8 +48,8 @@ data:
 
 具体来说，该 schema 是根据capability 定义中的 `parameter` 部分生成的：
 
-* 对于基于 CUE 的定义：[`parameter`](../cue/component#Write-ComponentDefinition) CUE 模板中的关键词。
-* 对于基于 Helm 的定义：[`parameter`](../helm/component#Write-ComponentDefinition) 是从在 Helm Chart 中的 `values.yaml` 生成的。
+* 对于基于 CUE 的定义：`parameter` CUE 模板中的关键词。
+* 对于基于 Helm 的定义：`parameter` 是从在 Helm Chart 中的 `values.yaml` 生成的。
 
 ## 渲染表单
 

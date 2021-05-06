@@ -8,8 +8,6 @@ title:  调试， 测试 以及 Dry-run
 
 请确保你的环境已经安装以下 CLI ：
 * [`cue` >=v0.2.2](https://cuelang.org/docs/install/)
-* [`vela` (>v1.0.0)](../install#4-optional-get-kubevela-cli)
-
 
 ## 定义 Definition 和 Template
 

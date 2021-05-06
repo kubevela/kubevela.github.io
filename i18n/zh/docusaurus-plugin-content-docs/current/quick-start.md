@@ -91,7 +91,7 @@ Hello World
 以下是一些推荐的后续步骤:
 
 - 从[核心概念](./concepts)开始学习 KubeVela
-- 了解更多[`Application`](./application)的细节并且理解其是如何工作的。
+- 了解更多[`Application`](end-user/application)的细节并且理解其是如何工作的。
 - 加入CNCF [Slack](https://cloud-native.slack.com) 中的`#kubevela` channel 和 [Gitter](https://gitter.im/oam-dev/community)
 - 加入 KubeVela 中文社区钉钉群。钉钉群号：23310022。
 
