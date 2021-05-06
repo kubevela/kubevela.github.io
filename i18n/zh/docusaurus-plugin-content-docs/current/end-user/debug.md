@@ -1,8 +1,8 @@
 ---
-title: Debug and Test
+title: Dry-Run and Live-Diff
 ---
 
-You can make further debug and test for your application by using [vela kubectl plugin](./kubectlplugin).
+KubeVela allows you to dry-run and live-diff your application.
 
 ## Dry-Run the `Application`
 

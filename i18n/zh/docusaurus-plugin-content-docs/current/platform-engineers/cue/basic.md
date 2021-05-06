@@ -20,7 +20,6 @@ KubeVela 将 CUE 作为抽象最优方案的主要原因如下：
 
 请确保你的环境中已经安装如下命令行：
 * [`cue` >=v0.2.2](https://cuelang.org/docs/install/)
-* [`vela` (>v1.0.0)](../install#4-optional-get-kubevela-cli)
 
 ## CUE 命令行基础
 
