@@ -1,10 +1,10 @@
 ---
-title: Explore Applications
+title: 检索 Applications
 ---
 
-We will introduce how to explore application related resources in this section.
+本章节我们将介绍如何检索 application 相关的资源。
 
-## List Application
+## 获取 Application 列表
 
 ```shell
 $ kubectl get application
@@ -13,9 +13,9 @@ app-basic   app-basic   webservice   running   true               12d
 website     frontend    webservice   running   true               4m54s
 ```
 
-You can also use the short name `kubectl get app`.
+我们可以使用 application 缩写 `kubectl get app` 。
 
-### View Application Details
+### 查看 Application 详情
 
 ```shell
 $ kubectl get app website -o yaml
@@ -67,15 +67,15 @@ status:
   status: running
 ```
 
-Here are some highlight information that you need to know:
+以下是需要我们了解的一些重要信息：
 
-1. `status.latestRevision` declares current revision of this application.
-2. `status.services` declares the component created by this application and the healthy state.
-3. `status.status` declares the global state of this application. 
+1. `status.latestRevision` 用于显示 application 当前运行的版本。
+2. `status.services` 用于显示 application 中 component 的健康状态。
+3. `status.status` 用于显示 application 的全局状态。
 
-### List Application Revisions
+### 获取 Application 版本
 
-When we update an application, if there's any difference on spec, KubeVela will create a new revision.
+KubeVela 会对 application 对每次 spec 变更生成新版本。
 
 ```shell
 $ kubectl get apprev -l app.oam.dev/name=website
@@ -83,9 +83,9 @@ NAME           AGE
 website-v1     35m
 ```
 
-## Explore Components
+## 检索 Components
 
-You can explore what kinds of component definitions supported in your system.
+我们可以检索出当前 KubeVela 中支持的 ComponentDefinition 列表。
 
 ```shell
 kubectl get comp -n vela-system
@@ -95,8 +95,7 @@ webservice        Deployment      Describes long-running, scalable, containerize
 worker            Deployment      Describes long-running, scalable, containerized services that running at backend. They do NOT have network endpoint to receive external network traffic.
 ```
 
-The component definition objects are namespace isolated align with application, while the `vela-system` is a common system namespace of KubeVela,
-definitions laid here can be used by every application. 
+正常情况下 ComponentDefinition 只能被同 namespace 下 application 引用，但是 `vela-system` namespace 下可以被所有 application 引用。
 
 
 ```shell
@@ -152,9 +151,9 @@ $ kubectl vela show webservice
 +------+------------------------------------------------------------------+--------+----------+---------+
 ```
 
-## Explore Traits
+## 检索 Traits
 
-You can explore what kinds of trait definitions supported in your system.
+我们可以检索出当前 KubeVela 中支持对 TraitDefinitions 。
 
 ```shell
 $ kubectl get trait -n vela-system
@@ -165,10 +164,9 @@ scaler                                     [webservice worker]   Configures repl
 sidecar                                    [webservice worker]   inject a sidecar container into your app
 ```
 
-The trait definition objects are namespace isolated align with application, while the `vela-system` is a common system namespace of KubeVela,
-definitions laid here can be used by every application. 
+正常情况下 TraitDefinition 只能被同 namespace 下的 application 引用，但是 `vela-system` namespace 下的可以被所有 application 引用。
 
-You can use `kubectl vela show` to see the usage of specific trait definition.
+我们可以用命令 `kubectl vela show` 查看指定 TraitDefinition 暴露的参数。
 
 ```shell
 $ kubectl vela show sidecar
