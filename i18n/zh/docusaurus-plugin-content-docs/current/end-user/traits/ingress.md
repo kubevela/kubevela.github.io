@@ -2,10 +2,11 @@
 title: Expose Application
 ---
 
-> ⚠️ This section requires your cluster has a working ingress.
+> ⚠️ 本章节要求当前集群已经安装 ingress 。
 
-To expose your application publicly, you just need to add an `ingress` trait.
+如果我们需要将 application 中的服务暴露对外，只需要在该 application 中添加 `ingress` 的 trait。
 
+我们使用 kubectl 查看 ingress 数据结构。
 
 ```shell
 $ kubectl vela show ingress
@@ -18,7 +19,7 @@ $ kubectl vela show ingress
 +--------+------------------------------------------------------------------------------+----------------+----------+---------+
 ```
 
-Then modify and deploy this application.
+随后，修改且部署下面 application ：
 
 ```yaml
 # vela-app.yaml
@@ -46,7 +47,7 @@ $ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/doc
 application.core.oam.dev/first-vela-app created
 ```
 
-Check the status until we see `status` is `running` and services are `healthy`:
+当状态 `PHASE` 为 `running` 且 `HEALTHY` 为 `true`，说明 application 已经被正确部署：
 
 ```bash
 $ kubectl get application first-vela-app -w
@@ -55,7 +56,7 @@ first-vela-app   express-server   webservice   healthChecking                   
 first-vela-app   express-server   webservice   running          true               42s
 ```
 
-You can also see the trait detail for the visiting url:
+同时，我们可以通过下面命令行查看 trait 的详情：
 
 ```shell
 $ kubectl get application first-vela-app -o yaml
@@ -77,7 +78,7 @@ spec:
 ...
 ```
 
-Then you will be able to visit this service.
+最后，我们可以通过以下方式访问部署的服务。
 
 ```
 $ curl -H "Host:testsvc.example.com" http://<your ip address>/
