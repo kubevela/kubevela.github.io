@@ -6,14 +6,14 @@ title:  FAQ
   * [KubeVela 和 Helm 的区别?](#kubevela-和-helm-有什么区别)
 
 - [问题](#问题)
-  - [错误：无法在 cert-manager namespace 中创建新的内容，因为它正处于终止状态](#错误：无法在-cert-manager-namespace-中创建新的内容，因为它正处于终止状态)
-  - [错误：ScopeDefinition 已经存在](#错误：scopedefinition-已经存在)
-  - [你已经打达了拉取速度上限](#你已经达到了拉取速度上线)
-  - [警告：cert-manager-namespace-已经存在](#警告：cert-manager-namespace-已经存在)
-  - [如何修复问题：mutatingwebhookconfiguration-mutating-webhook-configuration-已存在？](#如何修复问题：mutatingwebhookconfiguration-mutating-webhook-configuration-已存在？)
+  - [Error: unable to create new content in namespace cert-manager because it is being terminated](#error-unable-to-create-new-content-in-namespace-cert-manager-because-it-is-being-terminated)
+  - [Error: ScopeDefinition exists](#error-scopedefinition-exists)
+  - [You have reached your pull rate limit](#you-have-reached-your-pull-rate-limit)
+  - [Warning: Namespace cert-manager exists](#warning-namespace-cert-manager-exists)
+  - [如何修复问题: MutatingWebhookConfiguration mutating-webhook-configuration exists?](#如何修复问题：mutatingwebhookconfiguration-mutating-webhook-configuration-exists)
 
 - [运维](#运维)
-  * [Autoscale：如何在多个-kubernetes-集群上开启-metrics-server？](#autoscale-如何在多个-kubernetes-集群上开启-metrics-服务器？)
+  * [Autoscale：如何在多个 Kkubernetes 集群上开启 metrics server？](#autoscale-如何在多个-kubernetes-集群上开启-metrics-server-？)
   
 ## 对比 X
 
@@ -25,7 +25,7 @@ KubeVela 是一个平台构建工具，用于创建基于 Kubernete 的易使用
 
 ## 问题
 
-### 错误：无法在 cert-manager namespace 中创建新的内容，因为它正处于终止状态
+### Error: unable to create new content in namespace cert-manager because it is being terminated
 
 你可能偶尔会碰到如下问题。它发生在上一个 KubeVele 版本没有删除完成时。
 
@@ -94,7 +94,7 @@ webservice	Long-running scalable service with stable endpoint to receive externa
 worker    	Long-running scalable backend worker without network endpoint
 ```
 
-### 错误：ScopeDefinition 已经存在
+### Error: ScopeDefinition exists
 
 你可能偶尔会碰到如下问题。它发生在存在一个老的 OAM Kubernetes Runtime 发行版时，或者你之前已经部署过 `ScopeDefinition` 。 
 
@@ -136,7 +136,7 @@ TYPE       	CATEGORY	DESCRIPTION
 - Finished successfully.
 ```
 
-### 你已经达到了拉取速度上限
+### You have reached your pull rate limit
 
 当你查看 Pod kubevela-vela-core 的日志并发现如下问题时。
 
@@ -155,7 +155,7 @@ kubevela-vela-core-f8b987775-wjg25   0/1     -         0          35m
 $ docker pull ghcr.io/oam-dev/kubevela/vela-core:latest
 ```
 
-### 警告：cert-manager namespace 已经存在
+### Warning: Namespace cert-manager exists
 
 如果碰到以下问题，则可能存在一个 `cert-manager` 发行版，其 namespace 及 RBAC 相关资源与 KubeVela 存在冲突。
 
@@ -203,7 +203,7 @@ scaler    	trait   	Manually scale the app
 - Finished successfully.
 ```
 
-### 如何修复问题：MutatingWebhookConfiguration mutating-webhook-configuration 已存在？
+### 如何修复问题：MutatingWebhookConfiguration mutating-webhook-configuration exists?
 
 如果你部署的其他服务会安装 MutatingWebhookConfiguration mutating-webhook-configuration，则安装 KubeVela 时会碰到如下问题。
 
