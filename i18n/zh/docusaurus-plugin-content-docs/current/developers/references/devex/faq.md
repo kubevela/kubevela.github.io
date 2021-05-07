@@ -2,36 +2,32 @@
 title:  FAQ
 ---
 
-- [Compare to X](#Compare-to-X)
-  * [What is the difference between KubeVela and Helm?](#What-is-the-difference-between-KubeVela-and-Helm?)
+- [对比 X](#对比-x)
+  * [KubeVela 和 Helm 的区别?](#kubevela-和-helm-有什么区别)
 
-- [Compare to X](#compare-to-x)
-  - [What is the difference between KubeVela and Helm?](#what-is-the-difference-between-kubevela-and-helm)
-- [Issues](#issues)
+- [问题](#问题)
   - [Error: unable to create new content in namespace cert-manager because it is being terminated](#error-unable-to-create-new-content-in-namespace-cert-manager-because-it-is-being-terminated)
   - [Error: ScopeDefinition exists](#error-scopedefinition-exists)
   - [You have reached your pull rate limit](#you-have-reached-your-pull-rate-limit)
   - [Warning: Namespace cert-manager exists](#warning-namespace-cert-manager-exists)
-  - [How to fix issue: MutatingWebhookConfiguration mutating-webhook-configuration exists?](#how-to-fix-issue-mutatingwebhookconfiguration-mutating-webhook-configuration-exists)
-- [Operating](#operating)
-  - [Autoscale: how to enable metrics server in various Kubernetes clusters?](#autoscale-how-to-enable-metrics-server-in-various-kubernetes-clusters)
+  - [如何修复问题: MutatingWebhookConfiguration mutating-webhook-configuration exists?](#如何修复问题：mutatingwebhookconfiguration-mutating-webhook-configuration-exists)
+
+- [运维](#运维)
+  * [Autoscale：如何在多个 Kkubernetes 集群上开启 metrics server？](#autoscale-如何在多个-kubernetes-集群上开启-metrics-server-？)
   
-- [Operating](#operating)
-  * [Autoscale: how to enable metrics server in various Kubernetes clusters?](#autoscale-how-to-enable-metrics-server-in-various-kubernetes-clusters)
+## 对比 X
 
-## Compare to X
+### KubeVela 和 Helm 有什么区别?
 
-### What is the difference between KubeVela and Helm?
+KubeVela 是一个平台构建工具，用于创建基于 Kubernete 的易使用、可拓展的应用交付/管理系统。KubeVela 将 Helm 作为模板引擎和应用包的标准。但是 Helm 不是 KubeVela 唯一支持的模板模块。另一个同样最优先支持的是 CUE。
 
-KubeVela is a platform builder tool to create easy-to-use yet extensible app delivery/management systems with Kubernetes. KubeVela relies on Helm as templating engine and package format for apps. But Helm is not the only templating module that KubeVela supports. Another first-class supported approach is CUE. 
+同时，KubeVale 被设计为 Kubernetes 的一个控制器（即工作在服务端）,即使是其 Helm 部分，也会安装一个 Helm Operator。 
 
-Also, KubeVela is by design a Kubernetes controller (i.e. works on server side), even for its Helm part, a Helm operator will be installed.
-
-## Issues
+## 问题
 
 ### Error: unable to create new content in namespace cert-manager because it is being terminated
 
-Occasionally you might hit the issue as below. It happens when the last KubeVela release deletion hasn't completed.
+你可能偶尔会碰到如下问题。它发生在上一个 KubeVele 版本没有删除完成时。
 
 ```
 $ vela install
@@ -45,7 +41,7 @@ helm.sh/helm/v3/pkg/kube.(*Client).Update.func1
 Error: failed to create resource: serviceaccounts "cert-manager-cainjector" is forbidden: unable to create new content in namespace cert-manager because it is being terminated
 ```
 
-Take a break and try again in a few seconds.
+稍事休息，然后在几秒内重试。
 
 ```
 $ vela install
@@ -66,7 +62,7 @@ TYPE       	CATEGORY	DESCRIPTION
 - Finished successfully.
 ```
 
-And manually apply all WorkloadDefinition and TraitDefinition manifests to have all capabilities back.
+手动应用所有 WorkloadDefinition 和 TraitDefinition manifests 以恢复所有功能。
 
 ```
 $ kubectl apply -f charts/vela-core/templates/defwithtemplate
@@ -100,7 +96,7 @@ worker    	Long-running scalable backend worker without network endpoint
 
 ### Error: ScopeDefinition exists
 
-Occasionally you might hit the issue as below. It happens when there is an old OAM Kubernetes Runtime release, or you applied `ScopeDefinition` before.
+你可能偶尔会碰到如下问题。它发生在存在一个老的 OAM Kubernetes Runtime 发行版时，或者你之前已经部署过 `ScopeDefinition` 。 
 
 ```
 $ vela install
@@ -114,7 +110,7 @@ $ vela install
   Error: rendered manifests contain a resource that already exists. Unable to continue with install: ScopeDefinition "healthscopes.core.oam.dev" in namespace "" exists and cannot be imported into the current release: invalid ownership metadata; annotation validation error: key "meta.helm.sh/release-name" must equal "kubevela": current value is "oam"; annotation validation error: key "meta.helm.sh/release-namespace" must equal "vela-system": current value is "oam-system"
 ```
 
-Delete `ScopeDefinition` "healthscopes.core.oam.dev" and try again.
+删除 `ScopeDefinition` "healthscopes.core.oam.dev" 然后重试.
 
 ```
 $ kubectl delete ScopeDefinition "healthscopes.core.oam.dev"
@@ -142,7 +138,7 @@ TYPE       	CATEGORY	DESCRIPTION
 
 ### You have reached your pull rate limit
 
-When you look into the logs of Pod kubevela-vela-core and found the issue as below.
+当你查看 Pod kubevela-vela-core 的日志并发现如下问题时。
 
 ```
 $ kubectl get pod -n vela-system -l app.kubernetes.io/name=vela-core
@@ -153,7 +149,7 @@ kubevela-vela-core-f8b987775-wjg25   0/1     -         0          35m
 >Error response from daemon: toomanyrequests: You have reached your pull rate limit. You may increase the limit by 
 >authenticating and upgrading: https://www.docker.com/increase-rate-limit
  
-You can use github container registry instead.
+你可以换成 github 的镜像仓库。
 
 ```
 $ docker pull ghcr.io/oam-dev/kubevela/vela-core:latest
@@ -161,8 +157,7 @@ $ docker pull ghcr.io/oam-dev/kubevela/vela-core:latest
 
 ### Warning: Namespace cert-manager exists
 
-If you hit the issue as below, an `cert-manager` release might exist whose namespace and RBAC related resource conflict
-with KubeVela.
+如果碰到以下问题，则可能存在一个 `cert-manager` 发行版，其 namespace 及 RBAC 相关资源与 KubeVela 存在冲突。
 
 ```
 $ vela install
@@ -177,11 +172,11 @@ helm.sh/helm/v3/pkg/action.(*Install).Run
 Error: rendered manifests contain a resource that already exists. Unable to continue with install: Namespace "cert-manager" in namespace "" exists and cannot be imported into the current release: invalid ownership metadata; label validation error: missing key "app.kubernetes.io/managed-by": must be set to "Helm"; annotation validation error: missing key "meta.helm.sh/release-name": must be set to "kubevela"; annotation validation error: missing key "meta.helm.sh/release-namespace": must be set to "vela-system"
 ```
 
-Try these steps to fix the problem.
+尝试如下步骤修复这个问题。
 
-- Delete release `cert-manager`
-- Delete namespace `cert-manager`
-- Install KubeVela again
+- 删除 `cert-manager` 发行版
+- 删除 `cert-manager` namespace 
+- 重装 KubeVela
 
 ```
 $ helm delete cert-manager -n cert-manager
@@ -208,10 +203,9 @@ scaler    	trait   	Manually scale the app
 - Finished successfully.
 ```
 
-### How to fix issue: MutatingWebhookConfiguration mutating-webhook-configuration exists?
+### 如何修复问题：MutatingWebhookConfiguration mutating-webhook-configuration exists?
 
-If you deploy some other services which will apply MutatingWebhookConfiguration mutating-webhook-configuration, installing
-KubeVela will hit the issue as below.
+如果你部署的其他服务会安装 MutatingWebhookConfiguration mutating-webhook-configuration，则安装 KubeVela 时会碰到如下问题。
 
 ```shell
 - Installing Vela Core Chart:
@@ -241,16 +235,15 @@ runtime.goexit
 Error: rendered manifests contain a resource that already exists. Unable to continue with install: MutatingWebhookConfiguration "mutating-webhook-configuration" in namespace "" exists and cannot be imported into the current release: invalid ownership metadata; label validation error: missing key "app.kubernetes.io/managed-by": must be set to "Helm"; annotation validation error: missing key "meta.helm.sh/release-name": must be set to "kubevela"; annotation validation error: missing key "meta.helm.sh/release-namespace": must be set to "vela-system"
 ```
 
-To fix this issue, please upgrade KubeVela Cli `vela` version to be higher than `v0.2.2` from [KubeVela releases](https://github.com/oam-dev/kubevela/releases).
+要解决这个问题，请从 [KubeVela releases](https://github.com/oam-dev/kubevela/releases) 将 KubeVela Cli `vela` 版本升级到 `v0.2.2` 以上。
 
-## Operating
+## 运维
 
-### Autoscale: how to enable metrics server in various Kubernetes clusters?
+### Autoscale: 如何在多个 Kubernetes 集群上开启 metrics server ？
 
-Operating Autoscale depends on metrics server, so it has to be enabled in various clusters. Please check whether metrics server
-is enabled with command `kubectl top nodes` or `kubectl top pods`.
+运维 Autoscale 依赖 metrics server，所以它在许多集群中都是开启的。请通过命令 `kubectl top nodes` 或 `kubectl top pods` 检查 metrics server 是否开启。
 
-If the output is similar as below, the metrics is enabled.
+如果输出如下相似内容，那么 metrics 已经开启。
 
 ```shell
 $ kubectl top nodes
@@ -264,31 +257,31 @@ php-apache-65f444bf84-cjbs5   0m           1Mi
 wordpress-55c59ccdd5-lf59d    1m           66Mi
 ```
 
-Or you have to manually enable metrics server in your Kubernetes cluster.
+或者需要在你的 kubernetes 集群中手动开启 metrics 。
 
 - ACK (Alibaba Cloud Container Service for Kubernetes)
 
-Metrics server is already enabled.
+Metrics server 已经开启。
 
 - ASK (Alibaba Cloud Serverless Kubernetes)
 
-Metrics server has to be enabled in `Operations/Add-ons` section of [Alibaba Cloud console](https://cs.console.aliyun.com/) as below.
+Metrics server 已经在如下 [Alibaba Cloud console](https://cs.console.aliyun.com/) `Operations/Add-ons` 部分开启。
 
 ![](../../../resources/install-metrics-server-in-ASK.jpg)
 
-Please refer to [metrics server debug guide](https://help.aliyun.com/document_detail/176515.html) if you hit more issue.
+如果你有更多问题，请访问 [metrics server 排错指导](https://help.aliyun.com/document_detail/176515.html) 。
 
 - Kind
 
-Install metrics server as below, or you can install the [latest version](https://github.com/kubernetes-sigs/metrics-server#installation).
+使用如下命令安装 metrics server，或者可以安装 [最新版本](https://github.com/kubernetes-sigs/metrics-server#installation)。
 
 ```shell
 $ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.7/components.yaml
 ```
 
-Also add the following part under `.spec.template.spec.containers` in the yaml file loaded by `kubectl edit deploy -n kube-system metrics-server`.
+并且在通过 `kubectl edit deploy -n kube-system metrics-server` 加载的 yaml 文件中 `.spec.template.spec.containers` 下增加如下部分。
 
-Noted: This is just a walk-around, not for production-level use.
+注意：这里只是一个示例，而不是用于生产级别的使用。
 
 ```
 command:
@@ -298,11 +291,11 @@ command:
 
 - MiniKube
 
-Enable it with following command.
+使用如下命令开启。
 
 ```shell
 $ minikube addons enable metrics-server
 ```
 
 
-Have fun to [set autoscale](../../extensions/set-autoscale) on your application.
+享受在你的应用中 [设置 autoscale](../../extensions/set-autoscale)。
