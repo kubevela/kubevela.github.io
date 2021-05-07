@@ -63,15 +63,16 @@ if ($releases.Count -eq 0) {
 
 # Filter windows binary and download archive
 $os_arch = "windows-amd64"
+$vela_cli_filename="vela"
 if (!$Version) {
-    $windowsAsset = $releases | Where-Object { $_.tag_name -notlike "*rc*" } | Select-Object -First 1 | Select-Object -ExpandProperty assets | Where-Object { $_.name -Like "*${os_arch}.zip" }
+    $windowsAsset = $releases | Where-Object { $_.tag_name -notlike "*rc*" } | Select-Object -First 1 | Select-Object -ExpandProperty assets | Where-Object { $_.name -Like "${vela_cli_filename}-*${os_arch}.zip" }
     if (!$windowsAsset) {
         throw "Cannot find the windows KubeVela CLI binary"
     }
     $zipFileUrl = $windowsAsset.url
     $assetName = $windowsAsset.name
 } else {
-    $assetName = "vela-${Version}-${os_arch}.zip"
+    $assetName = "${vela_cli_filename}-${Version}-${os_arch}.zip"
     $zipFileUrl = "https://github.com/${GitHubOrg}/${GitHubRepo}/releases/download/${Version}/${assetName}"
 }
 
