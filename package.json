@@ -1,6 +1,6 @@
 {
-  "name": "pod-lens-github-io",
-  "version": "0.0.0",
+  "name": "kubevela-io",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -14,12 +14,12 @@
     "write-heading-ids": "docusaurus write-heading-ids"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.72",
-    "@docusaurus/plugin-content-blog": "^2.0.0-alpha.72",
-    "@docusaurus/plugin-content-docs": "^2.0.0-alpha.72",
-    "@docusaurus/plugin-content-pages": "^2.0.0-alpha.72",
-    "@docusaurus/plugin-sitemap": "^2.0.0-alpha.72",
-    "@docusaurus/preset-classic": "2.0.0-alpha.72",
+    "@docusaurus/core": "2.0.0-alpha.75",
+    "@docusaurus/plugin-content-blog": "^2.0.0-alpha.75",
+    "@docusaurus/plugin-content-docs": "^2.0.0-alpha.75",
+    "@docusaurus/plugin-content-pages": "^2.0.0-alpha.75",
+    "@docusaurus/plugin-sitemap": "^2.0.0-alpha.75",
+    "@docusaurus/preset-classic": "2.0.0-alpha.75",
     "@easyops-cn/docusaurus-search-local": "^0.15.0",
     "@mdx-js/react": "^1.6.21",
     "asciinema-player": "^2.6.1",
