@@ -62,7 +62,7 @@ Helm 是 Kubernetes 的一个包管理器，为 Kubernetes 提供打包、安装
 
 ### KubeVela vs. Kubernetes
 
-KubeVela 是一个 Kubernetes 插件，用于构建更高级别的抽象。它利用 [Open Application Model](https://github.com/oam-dev/spec) 和本地 Kubernetes 的可扩展性来解决一个困难的问题 —让在 Kubernetes 上发布应用程序变得愉快。
+KubeVela 是一个 Kubernetes 插件，用于构建更高级别的抽象。它利用 [Open Application Model](https://github.com/oam-dev/spec) 和本地 Kubernetes 的可扩展性来解决一个困难的问题 -- 让在 Kubernetes 上发布应用程序变得愉快。
 
 ## 入门
 
