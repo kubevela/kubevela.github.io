@@ -26,7 +26,7 @@ slug: /
 
 - 本地扩展。* Application * 由模块化的构建块组成，这些构建模块支持 [CUELang](https://github.com/cuelang/cue) 和 [Helm](https://helm.sh) 作为模板引擎。这使你能够以乐高风格抽象 Kubernetes 的功能，并通过简单的 `kubectl apply -f` 将它们发布给最终用户。对抽象模板所做的更改将在运行时生效，无需重新编译或重新部署 KubeVela。
 
-- 简单而可靠的抽象机制。与大多数 IaC(基础设施即代码)解决方案不同，KubeVela 中的抽象是用 [Kubernetes Control Loop](https://kubernetes.io/docs/concepts/architecture/controller/) 构建的，所以它们永远不会在集群中留下配置漂移。作为 [Kubernetes 自定义资源](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)，KubeVela可以与任何 CI/CD 或 giops 工具无缝协作，不需要进行集成工作。
+- 简单而可靠的抽象机制。与大多数 IaC(基础设施即代码)解决方案不同，KubeVela 中的抽象是用 [Kubernetes Control Loop](https://kubernetes.io/docs/concepts/architecture/controller/) 构建的，所以它们永远不会在集群中留下配置漂移。作为 [Kubernetes 自定义资源](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)，KubeVela可以与任何 CI/CD 或 GitOps 工具无缝协作，不需要进行集成工作。
 
 有了 KubeVela，平台构建者终于有了工具支持，可以设计易于使用的抽象，并以高信心和低周转时间将它们交付给终端用户。
 
