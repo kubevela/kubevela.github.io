@@ -24,13 +24,10 @@ const features = [
       <>
         <p>
           <Translate>
-           Unlike traditional PaaS systems, application management capabilities 
-            in KubeVela (e.g. workload types, operational behaviors, and cloud services) are built
-            as reusable</Translate> <a href="https://github.com/cuelang/cue">
-              CUE</a> <Translate>and/or</Translate> <a href="https://helm.sh/">Helm</a> <Translate>components
-               and exposed to users as self-service API. When users' needs grow, 
-              these capabilities can naturally expand in programmable approach. 
-              No restriction, fully flexible.</Translate>
+           KubeVela uses</Translate> <a href="https://github.com/cuelang/cue">
+              CUE</a> <Translate> to glue capabilities (e.g. workload types, operational behaviors, and cloud services)
+               provided by runtime infrastructure and expose them to users via self-service API. When users' needs grow, 
+               these API can naturally expand in programmable approach. No restriction, fully flexible.</Translate>
         </p>
       </>
     ),
