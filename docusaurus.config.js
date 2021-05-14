@@ -130,6 +130,10 @@ module.exports = {
     prism: {
       theme: require('prism-react-renderer/themes/dracula'),
     },
+    gtag: {
+      trackingID: 'G-5GLR1Y52M7',
+      anonymizeIP: false,
+    },
   },
   presets: [
     [
