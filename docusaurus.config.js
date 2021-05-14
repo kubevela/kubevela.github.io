@@ -27,6 +27,10 @@ module.exports = {
       content:
         '⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/oam-dev/kubevela">GitHub</a>! ⭐️',
     },
+    algolia: {
+      apiKey: 'f19c90b8ffe16ed118dae930cd070507',
+      indexName: 'kubevela',
+    },
     navbar: {
       title: 'KubeVela',
       logo: {
@@ -127,16 +131,6 @@ module.exports = {
       theme: require('prism-react-renderer/themes/dracula'),
     },
   },
-  plugins: [
-    [
-      require.resolve("@easyops-cn/docusaurus-search-local"),
-      {
-        hashed: true,
-        language: ["en", "zh"],
-        indexBlog: true,
-      },
-    ],
-  ],
   presets: [
     [
       '@docusaurus/preset-classic',
