@@ -20,7 +20,6 @@
     "@docusaurus/plugin-content-pages": "^2.0.0-alpha.75",
     "@docusaurus/plugin-sitemap": "^2.0.0-alpha.75",
     "@docusaurus/preset-classic": "2.0.0-alpha.75",
-    "@easyops-cn/docusaurus-search-local": "^0.15.0",
     "@mdx-js/react": "^1.6.21",
     "asciinema-player": "^2.6.1",
     "clsx": "^1.1.1",
