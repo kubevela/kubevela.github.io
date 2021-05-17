@@ -10,19 +10,15 @@ Make sure you have finished and verified the installation following [this guide]
 
 ## Step 2: Deploy Your First Application
 
-```bash script
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
-```
-```console
+```bash
+$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
 application.core.oam.dev/first-vela-app created
 ```
 
 Check the status until we see `status` is `running` and services are `healthy`:
 
-```bash script
-kubectl get application first-vela-app -o yaml
-```
-```console
+```bash
+$  kubectl get application first-vela-app -o yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 ...
@@ -40,10 +36,8 @@ status:
 
 If your cluster has a working ingress, you can visit the service.
 
-```bash script
-curl -H "Host:testsvc.example.com" http://<your ip address>/
 ```
-```console
+$ curl -H "Host:testsvc.example.com" http://<your ip address>/
 <xmp>
 Hello World
 
