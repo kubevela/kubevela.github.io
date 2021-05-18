@@ -151,17 +151,11 @@ module.exports = {
           showLastUpdateTime: true,
           includeCurrentVersion: true,
           lastVersion: 'v1.0',
-          // versions: {
-          //   current: {
-          //     label: 'master',
-          //     path: '/',
-          //   },
-          // },
         },
         blog: {
           showReadingTime: true,
           editUrl:
-            'https://github.com/oam-dev/kubevela.io/tree/main/blog',
+            'https://github.com/oam-dev/kubevela.io/tree/main/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
