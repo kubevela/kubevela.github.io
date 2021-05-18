@@ -4,7 +4,7 @@ title:  How-to
 
 In this section, it will introduce how to declare Helm charts as components via `ComponentDefinition`.
 
-> Before reading this part, please make sure you've learned [the definition and template concepts](../definition-and-templates.md).
+> Before reading this part, please make sure you've learned [the definition and template concepts](../definition-and-templates).
 
 ## Prerequisite
 
@@ -38,7 +38,7 @@ spec:
 ```
 
 In detail:
-- `.spec.workload` is required to indicate the workload type of this Helm based component. Please also check for [known limitations](./known-issues#workload-type-indicator) if you have multiple workloads packaged in one chart.
+- `.spec.workload` is required to indicate the workload type of this Helm based component. Please also check for [known limitations](known-issues?id=workload-type-indicator) if you have multiple workloads packaged in one chart.
 - `.spec.schematic.helm` contains information of Helm `release` and `repository` which leverages `fluxcd/flux2`.
   - i.e. the spec of `release` aligns with [`HelmReleaseSpec`](https://github.com/fluxcd/helm-controller/blob/main/docs/api/helmrelease.md) and spec of `repository` aligns with [`HelmRepositorySpec`](https://github.com/fluxcd/source-controller/blob/main/docs/api/source.md#source.toolkit.fluxcd.io/v1beta1.HelmRepository).
 
