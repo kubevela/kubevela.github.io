@@ -150,7 +150,7 @@ module.exports = {
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           includeCurrentVersion: true,
-          lastVersion: 'current',
+          lastVersion: 'v1.0',
         },
         blog: {
           showReadingTime: true,
