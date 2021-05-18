@@ -7,13 +7,13 @@ import TabItem from '@theme/TabItem';
 
 > For upgrading existing KubeVela, please read the [upgrade guide](./advanced-install#upgrade).
 
-## 1. Choose Kubernetes Cluster
+## 1. Choose Control Plane Cluster
 
 Requirements:
 - Kubernetes cluster >= v1.15.0
 - `kubectl` installed and configured
 
-KubeVela is a simple custom controller that can be installed on any Kubernetes cluster including managed offerings or your own clusters. The only requirement is please ensure [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/) is installed and enabled.
+KubeVela relies on Kubernetes as control plane. The control plane could be any managed Kubernetes offering or your own cluster. The only requirement is please ensure [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/) is installed and enabled.
 
 For for local deployment and test, you could use `minikube` or `kind`.
 
@@ -78,7 +78,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 </Tabs>
 
 
-## 2. Install KubeVela Controller
+## 2. Install KubeVela
 
 1. Add helm chart repo for KubeVela
     ```shell script
@@ -130,9 +130,9 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 
 ## 3. Get KubeVela CLI
 
-Using KubeVela CLI gives you a simplified workflow with optimized output comparing to using `kubectl`. It is not mandatory though.
+KubeVela CLI gives you a simplified workflow to manage applications with optimized output. It is not mandatory though.
 
-Here are three ways to get KubeVela Cli:
+KubeVela CLI could be [installed as kubectl plugin](./kubectl-plugin.mdx), or install as standalone binary.
 
 <Tabs
     className="unique-tabs"
@@ -187,7 +187,6 @@ sudo mv ./vela /usr/local/bin/vela
 
 </TabItem>
 </Tabs>
-
 
 ## 4. Enable Helm Support
 
