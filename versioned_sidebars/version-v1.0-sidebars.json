@@ -33,76 +33,101 @@
     {
       "collapsed": false,
       "type": "category",
-      "label": "Application Deployment",
+      "label": "Application Team Guide",
       "items": [
         {
           "type": "doc",
-          "id": "version-v1.0/application"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.0/rollout/rollout"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.0/rollout/appdeploy"
+          "id": "version-v1.0/end-user/application"
         },
         {
           "collapsed": true,
           "type": "category",
-          "label": "More Operations",
+          "label": "Components",
           "items": [
             {
               "type": "doc",
-              "id": "version-v1.0/end-user/kubectlplugin"
+              "id": "version-v1.0/end-user/components/webservice"
             },
             {
               "type": "doc",
-              "id": "version-v1.0/end-user/explore"
+              "id": "version-v1.0/end-user/components/task"
             },
             {
               "type": "doc",
-              "id": "version-v1.0/end-user/diagnose"
+              "id": "version-v1.0/end-user/components/worker"
             },
             {
               "type": "doc",
-              "id": "version-v1.0/end-user/expose"
+              "id": "version-v1.0/end-user/components/cloud-services"
             },
             {
               "type": "doc",
-              "id": "version-v1.0/end-user/scale"
+              "id": "version-v1.0/end-user/components/more"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Traits",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/traits/ingress"
             },
             {
               "type": "doc",
-              "id": "version-v1.0/end-user/labels"
+              "id": "version-v1.0/end-user/traits/scaler"
             },
             {
               "type": "doc",
-              "id": "version-v1.0/end-user/sidecar"
+              "id": "version-v1.0/end-user/traits/annotations-and-labels"
             },
             {
               "type": "doc",
-              "id": "version-v1.0/end-user/cloud-resources"
+              "id": "version-v1.0/end-user/traits/sidecar"
             },
             {
               "type": "doc",
-              "id": "version-v1.0/end-user/terraform"
+              "id": "version-v1.0/end-user/traits/volumes"
             },
             {
               "type": "doc",
-              "id": "version-v1.0/end-user/volumes"
+              "id": "version-v1.0/end-user/traits/service-binding"
             },
             {
               "type": "doc",
-              "id": "version-v1.0/end-user/monitoring"
-            },
+              "id": "version-v1.0/end-user/traits/more"
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.0/end-user/scopes/appdeploy"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.0/end-user/scopes/rollout-plan"
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Observability",
+          "items": [
             {
               "type": "doc",
-              "id": "version-v1.0/end-user/health"
-            },
+              "id": "version-v1.0/end-user/scopes/health"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Debugging",
+          "items": [
             {
               "type": "doc",
-              "id": "version-v1.0/end-user/rollout-app"
+              "id": "version-v1.0/end-user/debug"
             }
           ]
         }
@@ -111,7 +136,7 @@
     {
       "collapsed": false,
       "type": "category",
-      "label": "Platform Operation Guide",
+      "label": "Platform Team Guide",
       "items": [
         {
           "type": "doc",
@@ -137,11 +162,11 @@
               "items": [
                 {
                   "type": "doc",
-                  "id": "version-v1.0/cue/component"
+                  "id": "version-v1.0/platform-engineers/cue/component"
                 },
                 {
                   "type": "doc",
-                  "id": "version-v1.0/cue/basic"
+                  "id": "version-v1.0/platform-engineers/cue/basic"
                 }
               ]
             },
@@ -152,37 +177,37 @@
               "items": [
                 {
                   "type": "doc",
-                  "id": "version-v1.0/helm/component"
+                  "id": "version-v1.0/platform-engineers/helm/component"
                 },
                 {
                   "type": "doc",
-                  "id": "version-v1.0/helm/trait"
+                  "id": "version-v1.0/platform-engineers/helm/trait"
                 },
                 {
                   "type": "doc",
-                  "id": "version-v1.0/helm/known-issues"
+                  "id": "version-v1.0/platform-engineers/helm/known-issues"
                 }
               ]
             },
             {
               "collapsed": true,
               "type": "category",
-              "label": "Raw Template",
+              "label": "Simple Template",
               "items": [
                 {
                   "type": "doc",
-                  "id": "version-v1.0/kube/component"
+                  "id": "version-v1.0/platform-engineers/kube/component"
                 },
                 {
                   "type": "doc",
-                  "id": "version-v1.0/kube/trait"
+                  "id": "version-v1.0/platform-engineers/kube/trait"
                 }
               ]
             },
             {
               "collapsed": true,
               "type": "category",
-              "label": "Defining Cloud Service",
+              "label": "Cloud Services",
               "items": [
                 {
                   "type": "doc",
@@ -191,6 +216,10 @@
                 {
                   "type": "doc",
                   "id": "version-v1.0/platform-engineers/terraform"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.0/platform-engineers/crossplane"
                 }
               ]
             }
@@ -203,19 +232,19 @@
           "items": [
             {
               "type": "doc",
-              "id": "version-v1.0/cue/trait"
+              "id": "version-v1.0/platform-engineers/cue/trait"
             },
             {
               "type": "doc",
-              "id": "version-v1.0/cue/patch-trait"
+              "id": "version-v1.0/platform-engineers/cue/patch-trait"
             },
             {
               "type": "doc",
-              "id": "version-v1.0/cue/status"
+              "id": "version-v1.0/platform-engineers/cue/status"
             },
             {
               "type": "doc",
-              "id": "version-v1.0/cue/advanced"
+              "id": "version-v1.0/platform-engineers/cue/advanced"
             }
           ]
         },
@@ -370,43 +399,8 @@
           ]
         },
         {
-          "collapsed": true,
-          "type": "category",
-          "label": "Capabilities",
-          "items": [
-            {
-              "type": "doc",
-              "id": "version-v1.0/developers/references/README"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.0/developers/references/component-types/webservice"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.0/developers/references/component-types/task"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.0/developers/references/component-types/worker"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.0/developers/references/traits/route"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.0/developers/references/traits/metrics"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.0/developers/references/traits/scaler"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.0/developers/references/restful-api/rest"
-            }
-          ]
+          "type": "doc",
+          "id": "version-v1.0/developers/references/restful-api/rest"
         }
       ]
     },
