@@ -86,7 +86,7 @@ module.exports = {
             },
             {
               label: 'Application Team Guide',
-              to: '/docs/application',
+              to: '/docs/end-user/application',
             },
           ],
         },
