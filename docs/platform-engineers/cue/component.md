@@ -221,7 +221,7 @@ output: {
 
 It's common that a component definition is composed by multiple API resources, for example, a `webserver` component that is composed by a Deployment and a Service. CUE is a great solution to achieve this in simplified primitives.
 
-> Another approach to do composition in KubeVela of course is [using Helm](../helm/component.md).
+> Another approach to do composition in KubeVela of course is [using Helm](../helm/component).
 
 ## How-to
 
