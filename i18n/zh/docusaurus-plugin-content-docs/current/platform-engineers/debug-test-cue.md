@@ -158,7 +158,7 @@ outputs.service.spec.selector.app: reference "context" not found:
     ./def.cue:70:11
 ```
 
-常见错误 `reference "context" not found` 主要发生在 [`context`](/docs/cue/component?id=cue-context)，该部分是仅在 KubeVela 控制器中存在的运行时信息。我们可以在 `def.cue` 中模拟 `context` ，从而对 CUE 模版进行 end-to-end 的校验操作。
+常见错误 `reference "context" not found` 主要发生在 [`context`](./cue/component#cue-context)，该部分是仅在 KubeVela 控制器中存在的运行时信息。我们可以在 `def.cue` 中模拟 `context` ，从而对 CUE 模版进行 end-to-end 的校验操作。
 
 > 注意，完成校验测试之后需要清除所有模拟数据。
 
