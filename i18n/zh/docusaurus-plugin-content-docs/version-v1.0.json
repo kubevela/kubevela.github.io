@@ -4,11 +4,11 @@
     "description": "The label for version v1.0"
   },
   "sidebar.docs.category.Overview": {
-    "message": "Overview",
+    "message": "概述",
     "description": "The label for category Overview in sidebar docs"
   },
   "sidebar.docs.category.Getting Started": {
-    "message": "Getting Started",
+    "message": "快速开始",
     "description": "The label for category Getting Started in sidebar docs"
   },
   "sidebar.docs.category.Application Deployment": {
@@ -16,7 +16,7 @@
     "description": "The label for category Application Deployment in sidebar docs"
   },
   "sidebar.docs.category.More Operations": {
-    "message": "More Operations",
+    "message": "更多操作",
     "description": "The label for category More Operations in sidebar docs"
   },
   "sidebar.docs.category.Platform Operation Guide": {
@@ -24,7 +24,7 @@
     "description": "The label for category Platform Operation Guide in sidebar docs"
   },
   "sidebar.docs.category.Defining Components": {
-    "message": "Defining Components",
+    "message": "定义 Components",
     "description": "The label for category Defining Components in sidebar docs"
   },
   "sidebar.docs.category.CUE": {
@@ -40,11 +40,11 @@
     "description": "The label for category Raw Template in sidebar docs"
   },
   "sidebar.docs.category.Defining Cloud Service": {
-    "message": "Defining Cloud Service",
+    "message": "定义 Cloud Service",
     "description": "The label for category Defining Cloud Service in sidebar docs"
   },
   "sidebar.docs.category.Defining Traits": {
-    "message": "Defining Traits",
+    "message": "定义 Traits",
     "description": "The label for category Defining Traits in sidebar docs"
   },
   "sidebar.docs.category.Hands-on Lab": {
@@ -52,7 +52,7 @@
     "description": "The label for category Hands-on Lab in sidebar docs"
   },
   "sidebar.docs.category.Using KubeVela CLI": {
-    "message": "Using KubeVela CLI",
+    "message": "使用 KubeVela CLI",
     "description": "The label for category Using KubeVela CLI in sidebar docs"
   },
   "sidebar.docs.category.Appfile": {
@@ -60,11 +60,11 @@
     "description": "The label for category Appfile in sidebar docs"
   },
   "sidebar.docs.category.Managing Applications": {
-    "message": "Managing Applications",
+    "message": "管理 Applications",
     "description": "The label for category Managing Applications in sidebar docs"
   },
   "sidebar.docs.category.References": {
-    "message": "References",
+    "message": "参考",
     "description": "The label for category References in sidebar docs"
   },
   "sidebar.docs.category.CLI": {
