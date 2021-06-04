@@ -1,18 +1,18 @@
 ---
-title:  How-to
+title:  怎么用 helm
 ---
 
-In this section, it will introduce how to declare Helm charts as app components via `ComponentDefinition`.
+在本节中，将介绍如何通过 `ComponentDefinition` 将 Helm charts 声明为应用程序组件。
 
-> Before reading this part, please make sure you've learned [the definition and template concepts](../definition-and-templates).
+> 在阅读本部分之前，请确保您已经了解了[定义和模板概念](../definition-and-templates)。
 
-## Prerequisite
+## 先决条件
 
-* [fluxcd/flux2](../../install#3-optional-install-flux2), make sure you have installed the flux2 in the [installation guide](/docs/install).
+* [fluxcd/flux2](../../install#3-optional-install-flux2)，请确保您已经在[安装指南](/docs/install)中安装了 flux2。
 
-## Declare `ComponentDefinition`
+## 声明 `ComponentDefinition`
 
-Here is an example `ComponentDefinition` about how to use Helm as schematic module.
+这是一个关于如何使用 Helm 作为原理图模块的示例 `ComponentDefinition`。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -37,14 +37,14 @@ spec:
         url: "http://oam.dev/catalog/"
 ```
 
-In detail:
-- `.spec.workload` is required to indicate the workload type of this Helm based component. Please also check for [Known Limitations](./known-issues#=workload-type-indicator) if you have multiple workloads packaged in one chart.
-- `.spec.schematic.helm` contains information of Helm `release` and `repository` which leverages `fluxcd/flux2`.
-  - i.e. the pec of `release` aligns with [`HelmReleaseSpec`](https://github.com/fluxcd/helm-controller/blob/main/docs/api/helmrelease.md) and spec of `repository` aligns with [`HelmRepositorySpec`](https://github.com/fluxcd/source-controller/blob/main/docs/api/source.md#source.toolkit.fluxcd.io/v1beta1.HelmRepository).
+详细：
+- 需要`.spec.workload` 来指示这个基于 Helm 的组件的工作负载类型。 如果您将多个工作负载打包在一张图表中，请同时检查 [已知限制](./known-issues#=workload-type-indicator)。
+- `.spec.schematic.helm` 包含 Helm `release` 和利用 `fluxcd/flux2` 的 `repository` 的信息。
+   - 即`release`的pec与[`HelmReleaseSpec`]（https://github.com/fluxcd/helm-controller/blob/main/docs/api/helmrelease.md）和`repository`的规范对齐 [`HelmRepositorySpec`](https://github.com/fluxcd/source-controller/blob/main/docs/api/source.md#source.toolkit.fluxcd.io/v1beta1.HelmRepository)。
 
-## Declare an `Application`
+## 声明一个`Application`
 
-Here is an example `Application`.
+这是一个示例 `Application`。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -61,29 +61,29 @@ spec:
           tag: "5.1.2"
 ```
 
-The component `properties` is exactly the [overlay values](https://github.com/captainroy-hy/podinfo/blob/master/charts/podinfo/values.yaml) of the Helm chart.
+组件 `properties` 正是 Helm 图表的 [overlay values](https://github.com/captainroy-hy/podinfo/blob/master/charts/podinfo/values.yaml)。
 
-Deploy the application and after several minutes (it may take time to fetch Helm chart), you can check the Helm release is installed.
+部署应用程序，几分钟后（获取 Helm 图表可能需要一些时间），您可以检查 Helm 版本是否已安装。
 ```shell
 $ helm ls -A
 myapp-demo-podinfo  default   1   2021-03-05 02:02:18.692317102 +0000 UTC deployed  podinfo-5.1.4     5.1.4
 ```
-Check the workload defined in the chart has been created successfully.
+检查图表中定义的工作负载是否已成功创建。
 ```shell
 $ kubectl get deploy
 NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
 myapp-demo-podinfo   1/1     1            1           66m
 ```
 
-Check the values (`image.tag = 5.1.2`) from application's `properties` are assigned to the chart.
+检查应用程序的 `properties` 中的值（“image.tag = 5.1.2”）是否已分配给图表。
 ```shell
 $ kubectl get deployment myapp-demo-podinfo -o json | jq '.spec.template.spec.containers[0].image'
 "ghcr.io/stefanprodan/podinfo:5.1.2"
 ```
 
 
-### Generate Form from Helm Based Components
+### 从基于 Helm 的组件生成表单
 
-KubeVela will automatically generate OpenAPI v3 JSON schema based on [`values.schema.json`](https://helm.sh/docs/topics/charts/#schema-files) in the Helm chart, and store it in a `ConfigMap` in the same `namespace` with the definition object. Furthermore, if `values.schema.json` is not provided by the chart author, KubeVela will generate OpenAPI v3 JSON schema based on its `values.yaml` file automatically. 
+KubeVela 会根据 Helm 图表中的 [`values.schema.json`](https://helm.sh/docs/topics/charts/#schema-files) 自动生成 OpenAPI v3 JSON schema，并将其存储在一个 ` ConfigMap 在与定义对象相同的“命名空间”中。 此外，如果图表作者未提供 `values.schema.json`，KubeVela 将根据其 `values.yaml` 文件自动生成 OpenAPI v3 JSON 模式。
 
-Please check the [Generate Forms from Definitions](/docs/platform-engineers/openapi-v3-json-schema) guide for more detail of using this schema to render GUI forms. 
+请查看 [Generate Forms from Definitions](/docs/platform-engineers/openapi-v3-json-schema) 指南，了解有关使用此架构呈现 GUI 表单的更多详细信息。
