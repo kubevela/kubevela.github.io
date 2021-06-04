@@ -40,7 +40,7 @@ spec:
 详细：
 - 需要`.spec.workload` 来指示这个基于 Helm 的组件的工作负载类型。 如果您将多个工作负载打包在一张图表中，请同时检查 [已知限制](./known-issues#=workload-type-indicator)。
 - `.spec.schematic.helm` 包含 Helm `release` 和利用 `fluxcd/flux2` 的 `repository` 的信息。
-   - 即`release`的pec与[`HelmReleaseSpec`]（https://github.com/fluxcd/helm-controller/blob/main/docs/api/helmrelease.md）和`repository`的规范对齐 [`HelmRepositorySpec`](https://github.com/fluxcd/source-controller/blob/main/docs/api/source.md#source.toolkit.fluxcd.io/v1beta1.HelmRepository)。
+   - 即`release`的pec与[`HelmReleaseSpec`](https://github.com/fluxcd/helm-controller/blob/main/docs/api/helmrelease.md) 对齐，`repository`的 spec 和[`HelmRepositorySpec`](https://github.com/fluxcd/source-controller/blob/main/docs/api/source.md#source.toolkit.fluxcd.io/v1beta1.HelmRepository)对齐。
 
 ## 声明一个`Application`
 
@@ -75,7 +75,7 @@ NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
 myapp-demo-podinfo   1/1     1            1           66m
 ```
 
-检查应用程序的 `properties` 中的值（“image.tag = 5.1.2”）是否已分配给图表。
+检查应用程序的 `properties` 中的值（`image.tag = 5.1.2`）是否已分配给图表。
 ```shell
 $ kubectl get deployment myapp-demo-podinfo -o json | jq '.spec.template.spec.containers[0].image'
 "ghcr.io/stefanprodan/podinfo:5.1.2"
@@ -84,6 +84,6 @@ $ kubectl get deployment myapp-demo-podinfo -o json | jq '.spec.template.spec.co
 
 ### 从基于 Helm 的组件生成表单
 
-KubeVela 会根据 Helm 图表中的 [`values.schema.json`](https://helm.sh/docs/topics/charts/#schema-files) 自动生成 OpenAPI v3 JSON schema，并将其存储在一个 ` ConfigMap 在与定义对象相同的“命名空间”中。 此外，如果图表作者未提供 `values.schema.json`，KubeVela 将根据其 `values.yaml` 文件自动生成 OpenAPI v3 JSON 模式。
+KubeVela 会根据 Helm 图表中的 [`values.schema.json`](https://helm.sh/docs/topics/charts/#schema-files) 自动生成 OpenAPI v3 JSON schema，并将其存储在一个 ` ConfigMap` 在与定义对象相同的 `namespace` 中。 此外，如果图表作者未提供 `values.schema.json`，KubeVela 将根据其 `values.yaml` 文件自动生成 OpenAPI v3 JSON 模式。
 
 请查看 [Generate Forms from Definitions](/docs/platform-engineers/openapi-v3-json-schema) 指南，了解有关使用此架构呈现 GUI 表单的更多详细信息。
