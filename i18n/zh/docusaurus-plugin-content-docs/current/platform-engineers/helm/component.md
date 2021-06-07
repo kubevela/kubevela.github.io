@@ -68,7 +68,7 @@ spec:
 $ helm ls -A
 myapp-demo-podinfo  default   1   2021-03-05 02:02:18.692317102 +0000 UTC deployed  podinfo-5.1.4     5.1.4
 ```
-检查图表中定义的工作负载是否已成功创建。
+检查 Chart 中定义的工作负载是否已成功创建。
 ```shell
 $ kubectl get deploy
 NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
