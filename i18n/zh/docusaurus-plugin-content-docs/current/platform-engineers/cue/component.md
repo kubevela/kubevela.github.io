@@ -52,7 +52,7 @@ spec:
 - 需要 `.spec.workload` 来指示该组件的工作负载类型。
 - `.spec.schematic.cue.template` 是一个 CUE 模板，具体来说：
      * `output` 字段定义了抽象模板。
-     * `parameter` 字段定义了模板参数，即在 `Application` 抽象中公开的可配置属性（并且 JSON 模式将基于它们自动生成）。
+     * `parameter` 字段定义了模板参数，即在 `Application` 抽象中公开的可配置属性（KubeVela 将基于parameter字段自动生成Json schema）。
 
 让我们声明另一个名为 `task` 的组件，即  run-to-completion 负载的抽象。
 
