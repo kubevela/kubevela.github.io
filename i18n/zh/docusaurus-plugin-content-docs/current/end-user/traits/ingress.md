@@ -1,15 +1,15 @@
 ---
-title: Expose Application
+title: 使用 Ingress
 ---
 
-> ⚠️ 本章节要求当前集群已经安装 ingress 。
+> ⚠️ 本节要求您的运行时集群有一个有效的 ingress 控制器。
 
-如果我们需要将 application 中的服务暴露对外，只需要在该 application 中添加 `ingress` 的 trait。
-
-我们使用 kubectl 查看 ingress 数据结构。
+`ingress` trait 通过有效域将组件暴露给公共 Internet。
 
 ```shell
-$ kubectl vela show ingress
+kubectl vela show ingress
+```
+```console
 # Properties
 +--------+------------------------------------------------------------------------------+----------------+----------+---------+
 |  NAME  |                                 DESCRIPTION                                  |      TYPE      | REQUIRED | DEFAULT |
@@ -19,7 +19,7 @@ $ kubectl vela show ingress
 +--------+------------------------------------------------------------------------------+----------------+----------+---------+
 ```
 
-随后，修改且部署下面 application ：
+将 `ingress` trait 附加到要公开和部署的组件。
 
 ```yaml
 # vela-app.yaml
@@ -43,23 +43,29 @@ spec:
 ```
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
+```
+```console
 application.core.oam.dev/first-vela-app created
 ```
 
-当状态 `PHASE` 为 `running` 且 `HEALTHY` 为 `true`，说明 application 已经被正确部署：
+检查状态，直到我们看到 `status` 为 `running` 并且服务为 `healthy`：
 
 ```bash
-$ kubectl get application first-vela-app -w
+kubectl get application first-vela-app -w
+```
+```console
 NAME             COMPONENT        TYPE         PHASE            HEALTHY   STATUS   AGE
 first-vela-app   express-server   webservice   healthChecking                      14s
 first-vela-app   express-server   webservice   running          true               42s
 ```
 
-同时，我们可以通过下面命令行查看 trait 的详情：
+检查其访问网址的 trait 详细信息：
 
 ```shell
-$ kubectl get application first-vela-app -o yaml
+kubectl get application first-vela-app -o yaml
+```
+```console
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -78,10 +84,12 @@ spec:
 ...
 ```
 
-最后，我们可以通过以下方式访问部署的服务。
+然后您将能够通过其域访问该应用程序。
 
 ```
-$ curl -H "Host:testsvc.example.com" http://<your ip address>/
+curl -H "Host:testsvc.example.com" http://<your ip address>/
+```
+```console
 <xmp>
 Hello World
 
