@@ -75,7 +75,7 @@ NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
 myapp-demo-podinfo   1/1     1            1           66m
 ```
 
-检查应用程序的 `properties` 中的值（`image.tag = 5.1.2`）是否已分配给图表。
+检查应用程序的 `properties` 中的值（`image.tag = 5.1.2`）是否已分配给 Chart 。
 ```shell
 $ kubectl get deployment myapp-demo-podinfo -o json | jq '.spec.template.spec.containers[0].image'
 "ghcr.io/stefanprodan/podinfo:5.1.2"
