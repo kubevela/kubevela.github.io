@@ -38,7 +38,7 @@ spec:
 ```
 
 详细：
-- 需要`.spec.workload` 来指示这个基于 Helm 的组件的工作负载类型。 如果您将多个工作负载打包在一张图表中，请同时检查 [已知限制](./known-issues#=workload-type-indicator)。
+- 需要`.spec.workload` 来指示这个基于 Helm 的组件的工作负载类型。 如果您将多个工作负载打包在一个 chart 中，请同时检查 [已知限制](./known-issues#=workload-type-indicator)。
 - `.spec.schematic.helm` 包含 Helm `release` 和利用 `fluxcd/flux2` 的 `repository` 的信息。
    - 即`release`的pec与[`HelmReleaseSpec`](https://github.com/fluxcd/helm-controller/blob/main/docs/api/helmrelease.md) 对齐，`repository`的 spec 和[`HelmRepositorySpec`](https://github.com/fluxcd/source-controller/blob/main/docs/api/source.md#source.toolkit.fluxcd.io/v1beta1.HelmRepository)对齐。
 
