@@ -12,7 +12,7 @@ title:  怎么用 helm
 
 ## 声明 `ComponentDefinition`
 
-这是一个关于如何使用 Helm 作为原理图模块的示例 `ComponentDefinition`。
+这是一个关于如何使用 Helm 作为 schematic 模块的示例 `ComponentDefinition`。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
