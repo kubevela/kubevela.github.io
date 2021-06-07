@@ -84,6 +84,6 @@ $ kubectl get deployment myapp-demo-podinfo -o json | jq '.spec.template.spec.co
 
 ### 从基于 Helm 的组件生成表单
 
-KubeVela 会根据 Helm 图表中的 [`values.schema.json`](https://helm.sh/docs/topics/charts/#schema-files) 自动生成 OpenAPI v3 JSON schema，并将其存储在一个 ` ConfigMap` 在与定义对象相同的 `namespace` 中。 此外，如果图表作者未提供 `values.schema.json`，KubeVela 将根据其 `values.yaml` 文件自动生成 OpenAPI v3 JSON 模式。
+KubeVela 会根据 Helm Chart 中的 [`values.schema.json`](https://helm.sh/docs/topics/charts/#schema-files) 自动生成 OpenAPI v3 JSON schema，并将其存储在一个 ` ConfigMap` 在与定义对象相同的 `namespace` 中。 此外，如果 Chart 作者未提供 `values.schema.json`，KubeVela 将根据其 `values.yaml` 文件自动生成 OpenAPI v3 JSON 模式。
 
 请查看 [Generate Forms from Definitions](/docs/platform-engineers/openapi-v3-json-schema) 指南，了解有关使用此架构呈现 GUI 表单的更多详细信息。
