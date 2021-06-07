@@ -63,7 +63,7 @@ spec:
 
 组件 `properties` 正是 Helm Chart 的 [overlay values](https://github.com/captainroy-hy/podinfo/blob/master/charts/podinfo/values.yaml)。
 
-部署应用程序，几分钟后（获取 Helm 图表可能需要一些时间），您可以检查 Helm 版本是否已安装。
+部署应用程序，几分钟后（获取 Helm Chart 可能需要一些时间），您可以检查 Helm 版本是否已安装。
 ```shell
 $ helm ls -A
 myapp-demo-podinfo  default   1   2021-03-05 02:02:18.692317102 +0000 UTC deployed  podinfo-5.1.4     5.1.4
