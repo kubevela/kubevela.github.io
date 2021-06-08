@@ -397,10 +397,6 @@
               "id": "version-v1.0/cli/vela_cap"
             }
           ]
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.0/developers/references/restful-api/rest"
         }
       ]
     },

@@ -15,9 +15,7 @@ Make sure you have finished and verified the installation following [this guide]
 ## Step 2: Deploy Your First Application
 
 ```bash
-vela up -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela.yaml
-```
-```console
+$ vela up -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela.yaml
 Parsing vela.yaml ...
 Loading templates ...
 
@@ -37,9 +35,7 @@ App has not been deployed, creating a new deployment...
 
 Check the status until we see `Routes` are ready:
 ```bash
-vela status first-vela-app
-```
-```console
+$ vela status first-vela-app
 About:
 
   Name:       first-vela-app
@@ -62,9 +58,7 @@ Services:
 **In [kind cluster setup](./install#kind)**, you can visit the service via localhost. In other setups, replace localhost with ingress address accordingly.
 
 ```
-curl -H "Host:testsvc.example.com" http://localhost/
-```
-```console
+$ curl -H "Host:testsvc.example.com" http://localhost/
 <xmp>
 Hello World
 

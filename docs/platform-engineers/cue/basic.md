@@ -66,9 +66,7 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
   You can see the results don't contain `a: float` and `b: int`, because these two variables are calculated.
   While the `e: string` doesn't have definitive results, so it keeps as it is.
     ```shell
-    cue eval first.cue
-    ```
-    ```console
+   $ cue eval first.cue
     a: 1.5
     b: 1
     d: [1, 2, 3]
@@ -80,17 +78,13 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
 
 * Render for specified result. For example, we want only know the result of `b` in the file, then we can specify the parameter `-e`.
     ```shell
-    cue eval -e b first.cue
-    ```
-    ```console
+    $ cue eval -e b first.cue
     1
     ```
 
 * Export the result. `cue export` will export the result with final value. It will report an error if some variables are not definitive.
     ```shell
-    cue export first.cue
-    ```
-    ```console
+    $ cue export first.cue
     e: cannot convert incomplete value "string" to JSON:
         ./first.cue:9:4
     ```
@@ -100,9 +94,7 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
     ```
   Then, the command will work. By default, the result will be rendered in json format.
     ```shell
-    cue export first.cue
-    ```
-    ```console
+    $ cue export first.cue
     {
         "a": 1.5,
         "b": 1,
@@ -120,9 +112,7 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
 
 * Export the result in YAML format.
     ```shell
-    cue export first.cue --out yaml
-    ```
-    ```console
+    $ cue export first.cue --out yaml
     a: 1.5
     b: 1
     d:
@@ -136,9 +126,7 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
 
 * Export the result for specified variable.
     ```shell
-    cue export -e g first.cue
-    ```
-    ```console
+    $ cue export -e g first.cue
     {
         "h": "abc"
     }
@@ -189,9 +177,7 @@ j: null
 Let's name it `second.cue`. Then the `cue export` won't complain as the `#abc` is a type not incomplete value.
 
 ```shell
-cue export second.cue
-```
-```console
+$ cue export second.cue
 {}
 ```
 
@@ -265,9 +251,7 @@ parameter:{
 5. Finally, let's export it in yaml:
 
 ```shell
-cue export deployment.cue -e template --out yaml
-```
-```console
+$ cue export deployment.cue -e template --out yaml
 apiVersion: apps/v1
 kind: Deployment
 spec:
@@ -361,9 +345,7 @@ Saving it in `third.cue` file.
 You can evaluate the result by using `cue eval`:
 
 ```shell
-cue eval third.cue
-```
-```console
+$ cue eval third.cue
 a: 1
 b: 3
 c: 3
@@ -387,9 +369,7 @@ Saving it in `fourth.cue` file.
 You can evaluate the result by using `cue eval`:
 
 ```shell
-cue eval fourth.cue
-```
-```console
+$ cue eval fourth.cue
 price: 200
 feel:  "bad"
 ```
