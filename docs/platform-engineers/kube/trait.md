@@ -37,24 +37,18 @@ Deploy the application and verify traits work.
 
 Check the `scaler` trait.
 ```shell
-kubectl get manualscalertrait
-```
-```console
+$ kubectl get manualscalertrait
 NAME                            AGE
 demo-podinfo-scaler-3x1sfcd34   2m
 ```
 ```shell
-kubectl get deployment mycomp -o json | jq .spec.replicas
-```
-```console
+$ kubectl get deployment mycomp -o json | jq .spec.replicas
 2
 ```
 
 Check the `virtualgroup` trait.
 ```shell
-kubectl get deployment mycomp -o json | jq .spec.template.metadata.labels
-```
-```console
+$ kubectl get deployment mycomp -o json | jq .spec.template.metadata.labels
 {
   "app.cluster.virtual.group": "my-group1",
   "app.kubernetes.io/name": "myapp"
@@ -97,25 +91,19 @@ Apply the new configuration and check the results after several seconds.
 
 Check the new property value.
 ```shell
-kubectl get deployment mycomp -o json | jq '.spec.template.spec.containers[0].image'
-```
-```console
+$ kubectl get deployment mycomp -o json | jq '.spec.template.spec.containers[0].image'
 "nginx:1.14.1"
 ```
 
 Check the `scaler` trait.
 ```shell
-kubectl get deployment mycomp -o json | jq .spec.replicas
-```
-```console
+$ kubectl get deployment mycomp -o json | jq .spec.replicas
 4
 ```
 
 Check the `virtualgroup` trait.
 ```shell
-kubectl get deployment mycomp -o json | jq .spec.template.metadata.labels
-```
-```console
+$ kubectl get deployment mycomp -o json | jq .spec.template.metadata.labels
 {
   "app.cluster.virtual.group": "my-group2",
   "app.kubernetes.io/name": "myapp"
