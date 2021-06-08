@@ -169,13 +169,14 @@ module.exports = {
             'cli/vela_cap',
           ],
         },
+        'developers/references/kubectl-plugin'
       ],
     },
     {
       type: 'category',
       label: 'Roadmap',
       items: [
-        'roadmap',
+        'roadmap/README',
       ],
     },
     {

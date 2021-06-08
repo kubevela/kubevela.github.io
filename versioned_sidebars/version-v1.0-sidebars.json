@@ -397,6 +397,10 @@
               "id": "version-v1.0/cli/vela_cap"
             }
           ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.0/developers/references/kubectl-plugin"
         }
       ]
     },
@@ -407,7 +411,7 @@
       "items": [
         {
           "type": "doc",
-          "id": "version-v1.0/roadmap"
+          "id": "version-v1.0/roadmap/README"
         }
       ]
     },
