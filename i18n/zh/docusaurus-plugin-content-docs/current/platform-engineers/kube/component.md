@@ -1,14 +1,14 @@
 ---
-title:  How-to
+title:  怎么用
 ---
 
-In this section, it will introduce how to use raw K8s Object to declare app components via `ComponentDefinition`.
+在本节中，将介绍如何使用 raw K8s Object 通过 `ComponentDefinition` 来声明应用程序组件。
 
-> Before reading this part, please make sure you've learned [the definition and template concepts](../definition-and-templates).
+> 在阅读本部分之前，请确保您已经了解了[定义和模板概念](../definition-and-templates)。
 
-## Declare `ComponentDefinition`
+## 声明`ComponentDefinition`
 
-Here is a raw template based `ComponentDefinition` example which provides a abstraction for worker workload type:
+这是一个基于“ComponentDefinition”的原始模板示例，它提供了对工作负载类型的抽象：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -47,18 +47,18 @@ spec:
         - "spec.template.spec.containers[0].image"
 ```
 
-In detail, the `.spec.schematic.kube` contains template of a workload resource and
-configurable parameters.
-- `.spec.schematic.kube.template` is the raw template in YAML format.
-- `.spec.schematic.kube.parameters` contains a set of configurable parameters. The `name`, `type`, and `fieldPaths` are required fields, `description` and `required` are optional fields.
-  - The parameter `name` must be unique in a `ComponentDefinition`.
-  - `type` indicates the data type of value set to the field. This is a required field which will help KubeVela to generate a OpenAPI JSON schema for the parameters automatically. In raw template, only basic data types are allowed, including `string`, `number`, and `boolean`, while `array` and `object` are not.
-  - `fieldPaths` in the parameter specifies an array of fields within the template that will be overwritten by the value of this parameter. Fields are specified as JSON field paths without a leading dot, for example
-`spec.replicas`, `spec.containers[0].image`.
+详细地说，`.spec.schematic.kube` 包含工作负载资源的模板和
+可配置的参数。
+- `.spec.schematic.kube.template` 是 YAML 格式的原始模板。
+- `.spec.schematic.kube.parameters` 包含一组可配置的参数。 `name`、`type` 和 `fieldPaths` 是必填字段，`description` 和 `required` 是可选字段。
+  - 参数`name` 在`ComponentDefinition` 中必须是唯一的。
+  - `type` 表示设置到字段的值的数据类型。这是一个必填字段，它将帮助 KubeVela 自动为参数生成 OpenAPI JSON 模式。在原始模板中，只允许使用基本数据类型，包括 `string`、`number` 和 `boolean`，而不允许使用 `array` 和 `object`。
+  - 参数中的`fieldPaths` 指定模板中的字段数组，这些字段将被该参​​数的值覆盖。字段被指定为没有前导点的 JSON 字段路径，例如
+`spec.replicas`、`spec.containers[0].image`。
 
-## Declare an `Application`
+## 声明一个 `Application`
 
-Here is an example `Application`.
+这是一个示例 `Application`。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -74,16 +74,16 @@ spec:
         image: nginx:1.14.0
 ```
 
-Since parameters only support basic data type, values in `properties` should be simple key-value, `<parameterName>: <parameterValue>`.
+由于参数只支持基本数据类型，`properties` 中的值应该是简单的键值，`<parameterName>: <parameterValue>`。
 
-Deploy the `Application` and verify the running workload instance.
+部署“应用程序”并验证正在运行的工作负载实例。
 
 ```shell
 $ kubectl get deploy
 NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
 mycomp                   1/1     1            1           66m
 ```
-And check the parameter works.
+并检查参数是否有效。
 ```shell
 $ kubectl get deployment mycomp -o json | jq '.spec.template.spec.containers[0].image'
 "nginx:1.14.0"
