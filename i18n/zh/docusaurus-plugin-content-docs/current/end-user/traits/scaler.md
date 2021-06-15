@@ -1,15 +1,13 @@
 ---
-title: Scale
+title: 手动扩缩容
 ---
 
-In the [Deploy Application](../application) section, we use `cpuscaler` trait as an auto-scaler for the sample application. 
-
-## Manuel Scale
-
-You can use scale your application manually by using `scaler` trait.
+`scaler` trait 允许你手动扩缩容你的组件实例。
 
 ```shell
-$ kubectl vela show scaler 
+kubectl vela show scaler 
+```
+```console
 # Properties
 +----------+--------------------------------+------+----------+---------+
 |   NAME   |          DESCRIPTION           | TYPE | REQUIRED | DEFAULT |
@@ -18,7 +16,7 @@ $ kubectl vela show scaler
 +----------+--------------------------------+------+----------+---------+
 ```
 
-Deploy the application.
+声明一个具有缩放 trait 的 application。
 
 ```yaml
 # sample-manual.yaml
@@ -49,20 +47,24 @@ spec:
           - '1000'
 ```
 
-Change and Apply the sample application:
+应用示例 application：
 
 ```shell
-$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/enduser/sample-manual.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/enduser/sample-manual.yaml
+```
+```console
 application.core.oam.dev/website configured
 ```
 
-After a while, you can see the underlying deployment of `frontend` component has two replicas now.
+在运行时集群中，你可以看到 `frontend` 组件的底层部署现在有2个副本。
 
 ```shell
-$ kubectl get deploy -l app.oam.dev/name=website
+kubectl get deploy -l app.oam.dev/name=website
+```
+```console
 NAME       READY   UP-TO-DATE   AVAILABLE   AGE
 backend    1/1     1            1           19h
 frontend   2/2     2            2           19h
 ```
 
-To scale up or scale down, you can just modify the `replicas` field of `scaler` trait and apply the application again.
+要扩容或缩容，您只需要修改`scaler` trait 的`replicas` 字段并重新应用YAML。

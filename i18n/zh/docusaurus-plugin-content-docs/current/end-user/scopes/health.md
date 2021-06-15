@@ -1,11 +1,10 @@
 ---
-title: Define Application Health Probe
+title: 聚合健康探针
 ---
 
-In this documentation, we will show how to define health probe for application
+`HealthyScope` 允许您为同一应用程序中的所有组件定义一个聚合的健康探测器。
 
-1.Create health scope instance.
-
+1. 创建健康范围实例。
 ```yaml
 apiVersion: core.oam.dev/v1alpha2
 kind: HealthScope
@@ -19,7 +18,7 @@ spec:
     kind: Deployment
     name: express-server
 ```
-2. Create an application with the health scope
+2. 创建落入此运行状况范围内的应用程序。
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -36,9 +35,9 @@ spec:
       scopes:
         healthscopes.core.oam.dev: health-check
 ```
-3. Check app status, will see health scope in `status.service.scopes`
+3. 检查聚合健康探针的引用（`status.service.scopes`）。
 ```shell
-$ kubectl get app vela-app -o yaml
+kubectl get app vela-app -o yaml
 ```
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -56,9 +55,9 @@ status:
          kind: HealthScope
          name: health-check
 ```
-4.Check health scope status
+4. 检查健康范围详细信息。
 ```shell
-$ kubectl get healthscope health-check -o yaml
+kubectl get healthscope health-check -o yaml
 ```
 ```yaml
 apiVersion: core.oam.dev/v1alpha2
@@ -86,3 +85,5 @@ status:
     healthyWorkloads: 1
     total: 1
 ```
+
+它显示了此应用程序中所有组件的汇总运行状况。
