@@ -104,7 +104,7 @@ spec:
 
 ## Crossplane
 
-> ⚠️ 本节假设你的平台已经安装了【Crossplane 相关功能】(../../platform-engineers/crossplane)。
+> ⚠️ 本节假设你的平台已经安装了[Crossplane 相关功能](../../platform-engineers/crossplane)。
 
 ### 阿里云RDS和OSS
 
