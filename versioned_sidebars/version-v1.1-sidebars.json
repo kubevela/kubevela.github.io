@@ -93,6 +93,10 @@
             },
             {
               "type": "doc",
+              "id": "version-v1.1/end-user/traits/service-binding"
+            },
+            {
+              "type": "doc",
               "id": "version-v1.1/end-user/traits/more"
             }
           ]
@@ -396,7 +400,7 @@
         },
         {
           "type": "doc",
-          "id": "version-v1.1/developers/references/restful-api/rest"
+          "id": "version-v1.1/developers/references/kubectl-plugin"
         }
       ]
     },
@@ -407,7 +411,7 @@
       "items": [
         {
           "type": "doc",
-          "id": "version-v1.1/roadmap"
+          "id": "version-v1.1/roadmap/README"
         }
       ]
     },
