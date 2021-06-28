@@ -1,0 +1,94 @@
+{
+  "version.label": {
+    "message": "v1.1",
+    "description": "The label for version v1.1"
+  },
+  "sidebar.docs.category.Overview": {
+    "message": "Overview",
+    "description": "The label for category Overview in sidebar docs"
+  },
+  "sidebar.docs.category.Getting Started": {
+    "message": "Getting Started",
+    "description": "The label for category Getting Started in sidebar docs"
+  },
+  "sidebar.docs.category.Application Team Guide": {
+    "message": "Application Team Guide",
+    "description": "The label for category Application Team Guide in sidebar docs"
+  },
+  "sidebar.docs.category.Components": {
+    "message": "Components",
+    "description": "The label for category Components in sidebar docs"
+  },
+  "sidebar.docs.category.Traits": {
+    "message": "Traits",
+    "description": "The label for category Traits in sidebar docs"
+  },
+  "sidebar.docs.category.Observability": {
+    "message": "Observability",
+    "description": "The label for category Observability in sidebar docs"
+  },
+  "sidebar.docs.category.Debugging": {
+    "message": "Debugging",
+    "description": "The label for category Debugging in sidebar docs"
+  },
+  "sidebar.docs.category.Platform Team Guide": {
+    "message": "Platform Team Guide",
+    "description": "The label for category Platform Team Guide in sidebar docs"
+  },
+  "sidebar.docs.category.Defining Components": {
+    "message": "Defining Components",
+    "description": "The label for category Defining Components in sidebar docs"
+  },
+  "sidebar.docs.category.CUE": {
+    "message": "CUE",
+    "description": "The label for category CUE in sidebar docs"
+  },
+  "sidebar.docs.category.Helm": {
+    "message": "Helm",
+    "description": "The label for category Helm in sidebar docs"
+  },
+  "sidebar.docs.category.Simple Template": {
+    "message": "Simple Template",
+    "description": "The label for category Simple Template in sidebar docs"
+  },
+  "sidebar.docs.category.Cloud Services": {
+    "message": "Cloud Services",
+    "description": "The label for category Cloud Services in sidebar docs"
+  },
+  "sidebar.docs.category.Defining Traits": {
+    "message": "Defining Traits",
+    "description": "The label for category Defining Traits in sidebar docs"
+  },
+  "sidebar.docs.category.Hands-on Lab": {
+    "message": "Hands-on Lab",
+    "description": "The label for category Hands-on Lab in sidebar docs"
+  },
+  "sidebar.docs.category.Using KubeVela CLI": {
+    "message": "Using KubeVela CLI",
+    "description": "The label for category Using KubeVela CLI in sidebar docs"
+  },
+  "sidebar.docs.category.Appfile": {
+    "message": "Appfile",
+    "description": "The label for category Appfile in sidebar docs"
+  },
+  "sidebar.docs.category.Managing Applications": {
+    "message": "Managing Applications",
+    "description": "The label for category Managing Applications in sidebar docs"
+  },
+  "sidebar.docs.category.References": {
+    "message": "References",
+    "description": "The label for category References in sidebar docs"
+  },
+  "sidebar.docs.category.CLI": {
+    "message": "CLI",
+    "description": "The label for category CLI in sidebar docs"
+  },
+  "sidebar.docs.category.Roadmap": {
+    "message": "Roadmap",
+    "description": "The label for category Roadmap in sidebar docs"
+  },
+  "sidebar.docs.category.Appendix": {
+    "message": "Appendix",
+    "description": "The label for category Appendix in sidebar docs"
+  }
+}
