@@ -205,5 +205,80 @@
   },
   "and/or": {
     "message": "和/或"
+  },
+  "Application Centric": {
+    "message": "Application Centric"
+  },
+  "Leveraging Open Application Model (OAM), KubeVela introduces consistent yet higher level API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy.": {
+    "message": "Leveraging Open Application Model (OAM), KubeVela introduces consistent yet higher level API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy."
+  },
+  "Natively Extensible": {
+    "message": "Natively Extensible"
+  },
+  "KubeVela uses": {
+    "message": "KubeVela uses"
+  },
+  "to glue capabilities (e.g. workload types, operational behaviors, and cloud services) provided by runtime infrastructure and expose them to users via self-service API. When users' needs grow, these API can naturally expand in programmable approach. No restriction, fully flexible.": {
+    "message": "to glue capabilities (e.g. workload types, operational behaviors, and cloud services) provided by runtime infrastructure and expose them to users via self-service API. When users' needs grow, these API can naturally expand in programmable approach. No restriction, fully flexible."
+  },
+  "Runtime Agnostic": {
+    "message": "Runtime Agnostic"
+  },
+  "KubeVela is built with Kubernetes as control plane but adaptable to any runtime as data-plane. It can deploy (and manage) diverse workload types such as container, cloud functions, databases, or even EC2 instances across hybrid environments. Also, this means KubeVela seamlessly works with any Kubernetes compatible CI/CD or GitOps tools via declarative API.": {
+    "message": "KubeVela is built with Kubernetes as control plane but adaptable to any runtime as data-plane. It can deploy (and manage) diverse workload types such as container, cloud functions, databases, or even EC2 instances across hybrid environments. Also, this means KubeVela seamlessly works with any Kubernetes compatible CI/CD or GitOps tools via declarative API."
+  },
+  "KubeVela is a": {
+    "message": "KubeVela 是"
+  },
+  "sandbox project": {
+    "message": "sandbox 项目"
+  },
+  "KubeVela is a modern application platform that makes deploying and managing applications across today's hybrid, multi-cloud environments": {
+    "message": "KubeVela is a modern application platform that makes deploying and managing applications across today's hybrid, multi-cloud environments"
+  },
+  "easier and faster.": {
+    "message": "easier and faster."
+  },
+  "KubeVela is runtime agnostic, natively extensible, yet most importantly,": {
+    "message": "KubeVela is runtime agnostic, natively extensible, yet most importantly,"
+  },
+  ".": {
+    "message": "."
+  },
+  "theme.SearchPage.documentsFound.plurals": {
+    "message": "One document found|{count} documents found",
+    "description": "Pluralized label for \"{count} documents found\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.SearchPage.existingResultsTitle": {
+    "message": "Search results for \"{query}\"",
+    "description": "The search page title for non-empty query"
+  },
+  "theme.SearchPage.emptyResultsTitle": {
+    "message": "Search the documentation",
+    "description": "The search page title for empty query"
+  },
+  "theme.SearchPage.inputPlaceholder": {
+    "message": "Type your search here",
+    "description": "The placeholder for search page input"
+  },
+  "theme.SearchPage.inputLabel": {
+    "message": "Search",
+    "description": "The ARIA label for search page input"
+  },
+  "theme.SearchPage.algoliaLabel": {
+    "message": "Search by Algolia",
+    "description": "The ARIA label for Algolia mention"
+  },
+  "theme.SearchPage.noResultsText": {
+    "message": "No results were found",
+    "description": "The paragraph for empty search result"
+  },
+  "theme.SearchPage.fetchingNewResults": {
+    "message": "Fetching new results...",
+    "description": "The paragraph for fetching new search results"
+  },
+  "theme.SearchBar.label": {
+    "message": "Search",
+    "description": "The ARIA label and placeholder for search button"
   }
 }
