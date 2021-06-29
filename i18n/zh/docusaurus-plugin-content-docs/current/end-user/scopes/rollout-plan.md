@@ -61,9 +61,6 @@ spec:
 
 用户可以检查应用程序的状态并看到部署完成，以及应用程序的 `status.rollout.rollingState` 变为 `rolloutSucceed`。
 
-## 高级用法
-
-如果您想控制和推出特定的应用程序修订，或进行还原，请参阅[高级用法](advanced-rollout)了解更多详细信息。
 
 
 
