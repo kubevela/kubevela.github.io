@@ -82,5 +82,37 @@
   "sidebar.docs.category.Defining Components": {
     "message": "定义 Components",
     "description": "The label for category Defining Components in sidebar docs"
+  },
+  "sidebar.docs.category.Application Team Guide": {
+    "message": "Application Team Guide",
+    "description": "The label for category Application Team Guide in sidebar docs"
+  },
+  "sidebar.docs.category.Components": {
+    "message": "Components",
+    "description": "The label for category Components in sidebar docs"
+  },
+  "sidebar.docs.category.Traits": {
+    "message": "Traits",
+    "description": "The label for category Traits in sidebar docs"
+  },
+  "sidebar.docs.category.Observability": {
+    "message": "Observability",
+    "description": "The label for category Observability in sidebar docs"
+  },
+  "sidebar.docs.category.Debugging": {
+    "message": "Debugging",
+    "description": "The label for category Debugging in sidebar docs"
+  },
+  "sidebar.docs.category.Platform Team Guide": {
+    "message": "Platform Team Guide",
+    "description": "The label for category Platform Team Guide in sidebar docs"
+  },
+  "sidebar.docs.category.Simple Template": {
+    "message": "Simple Template",
+    "description": "The label for category Simple Template in sidebar docs"
+  },
+  "sidebar.docs.category.Cloud Services": {
+    "message": "Cloud Services",
+    "description": "The label for category Cloud Services in sidebar docs"
   }
 }

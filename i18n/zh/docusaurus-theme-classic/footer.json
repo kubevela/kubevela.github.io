@@ -17,11 +17,11 @@
   },
   "link.item.label.Platform Team Guide": {
     "message": "Platform Team Guide",
-    "description": "The label of footer link with label=Platform Builder Guide linking to /docs/platform-engineers/overview"
+    "description": "The label of footer link with label=Platform Team Guide linking to /docs/platform-engineers/overview"
   },
   "link.item.label.Application Team Guide": {
     "message": "Application Team Guide",
-    "description": "The label of footer link with label=Developer Experience Guide linking to /docs/end-user/application"
+    "description": "The label of footer link with label=Application Team Guide linking to /docs/end-user/application"
   },
   "link.item.label.CNCF Slack ( #kubevela channel )": {
     "message": "CNCF Slack ( #kubevela channel )",

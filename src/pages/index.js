@@ -81,7 +81,14 @@ export default function Home() {
           </section>
         </div>
       </main>
-
+      <div className={clsx('hero', styles.hero)}>
+            <div className="container text--center">
+            <h3 className="hero__subtitle">
+            <Translate>KubeVela is a</Translate> <a href="https://cncf.io/">Cloud Native Computing Foundation</a> <Translate>sandbox project</Translate>
+            </h3>
+            <div className={clsx('cncf-logo', styles.cncfLogo)} />
+            </div>
+        </div>
     </Layout>
   );
 }
