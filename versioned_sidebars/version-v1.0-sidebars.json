@@ -103,10 +103,6 @@
         },
         {
           "type": "doc",
-          "id": "version-v1.0/end-user/scopes/appdeploy"
-        },
-        {
-          "type": "doc",
           "id": "version-v1.0/end-user/scopes/rollout-plan"
         },
         {
