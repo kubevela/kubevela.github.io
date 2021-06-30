@@ -9,7 +9,7 @@ KubeVela 中的组件旨在由用户带来。
 KubeVela 允许您探索由平台团队维护的功能。
 kubectl vela 插件中有两个命令：`comp` 和 `trait`。
 
-如果您尚未安装 kubectl vela 插件：请参阅 [这里](../../developers/references/kubectl-plugin#install-kubectl-vela-plugin)。
+<!-- 如果您尚未安装 kubectl vela 插件：请参阅 [这里](../../developers/references/kubectl-plugin#install-kubectl-vela-plugin)。 -->
 
 ### 1. 列表
 
