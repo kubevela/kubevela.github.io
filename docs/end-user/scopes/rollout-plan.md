@@ -64,4 +64,3 @@ application's `status.rollout.rollingState` becomes `rolloutSucceed`.
 
 
 
-

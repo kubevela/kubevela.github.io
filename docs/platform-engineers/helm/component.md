@@ -65,24 +65,18 @@ The component `properties` is exactly the [overlay values](https://github.com/ca
 
 Deploy the application and after several minutes (it may take time to fetch Helm chart), you can check the Helm release is installed.
 ```shell
-helm ls -A
-```
-```console
+$ helm ls -A
 myapp-demo-podinfo  default   1   2021-03-05 02:02:18.692317102 +0000 UTC deployed  podinfo-5.1.4     5.1.4
 ```
 Check the workload defined in the chart has been created successfully.
 ```shell
-kubectl get deploy
-```
-```console
+$ kubectl get deploy
 NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
 myapp-demo-podinfo   1/1     1            1           66m
 ```
 
 Check the values (`image.tag = 5.1.2`) from application's `properties` are assigned to the chart.
 ```shell
-kubectl get deployment myapp-demo-podinfo -o json | jq '.spec.template.spec.containers[0].image'
-```
-```console
+$ kubectl get deployment myapp-demo-podinfo -o json | jq '.spec.template.spec.containers[0].image'
 "ghcr.io/stefanprodan/podinfo:5.1.2"
 ```
