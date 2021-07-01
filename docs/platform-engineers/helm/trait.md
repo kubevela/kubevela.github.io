@@ -4,7 +4,7 @@ title:  Attach Traits
 
 Traits in KubeVela can be attached to Helm based component seamlessly.
 
-In this sample application below, we add two traits, [scaler](https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/scaler.yaml)
+In this sample application below, we add two traits, [scaler](https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml)
 and [virtualgroup](https://github.com/oam-dev/kubevela/blob/master/docs/examples/helm-module/virtual-group-td.yaml) to a Helm based component.
 
 ```yaml
@@ -40,24 +40,18 @@ spec:
 
 Check the `scaler` trait takes effect.
 ```shell
-kubectl get manualscalertrait
-```
-```console
+$ kubectl get manualscalertrait
 NAME                            AGE
 demo-podinfo-scaler-d8f78c6fc   13m
 ```
 ```shell
-kubectl get deployment myapp-demo-podinfo -o json | jq .spec.replicas
-```
-```console
+$ kubectl get deployment myapp-demo-podinfo -o json | jq .spec.replicas
 4
 ```
 
 Check the `virtualgroup` trait.
 ```shell
-kubectl get deployment myapp-demo-podinfo -o json | jq .spec.template.metadata.labels
-```
-```console
+$ kubectl get deployment myapp-demo-podinfo -o json | jq .spec.template.metadata.labels
 {
   "app.cluster.virtual.group": "my-group1",
   "app.kubernetes.io/name": "myapp-demo-podinfo"
@@ -99,33 +93,25 @@ Apply the new configuration and check the results after several minutes.
 
 Check the new values (`image.tag = 5.1.3`) from application's `properties` are assigned to the chart.
 ```shell
-kubectl get deployment myapp-demo-podinfo -o json | jq '.spec.template.spec.containers[0].image'
-```
-```console
+$ kubectl get deployment myapp-demo-podinfo -o json | jq '.spec.template.spec.containers[0].image'
 "ghcr.io/stefanprodan/podinfo:5.1.3"
 ```
 Under the hood, Helm makes an upgrade to the release (revision 1 => 2).
 ```shell
-helm ls -A
-```
-```console
+$ helm ls -A
 NAME              	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART        	APP VERSION
 myapp-demo-podinfo	default  	2       	2021-03-15 08:52:00.037690148 +0000 UTC	deployed	podinfo-5.1.4	5.1.4
 ```
 
 Check the `scaler` trait.
 ```shell
-kubectl get deployment myapp-demo-podinfo -o json | jq .spec.replicas
-```
-```console
+$ kubectl get deployment myapp-demo-podinfo -o json | jq .spec.replicas
 2
 ```
 
 Check the `virtualgroup` trait.
 ```shell
-kubectl get deployment myapp-demo-podinfo -o json | jq .spec.template.metadata.labels
-```
-```console
+$ kubectl get deployment myapp-demo-podinfo -o json | jq .spec.template.metadata.labels
 {
   "app.cluster.virtual.group": "my-group2",
   "app.kubernetes.io/name": "myapp-demo-podinfo"
@@ -161,9 +147,7 @@ spec:
 
 Apply the application and check `manualscalertrait` has been deleted.
 ```shell
-kubectl get manualscalertrait
-```
-```console
+$ kubectl get manualscalertrait
 No resources found
 ```
 

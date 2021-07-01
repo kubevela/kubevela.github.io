@@ -5,9 +5,7 @@ title: Manual Scaling
 The `scaler` trait allows you to scale your component instance manually.
 
 ```shell
-kubectl vela show scaler 
-```
-```console
+$ kubectl vela show scaler 
 # Properties
 +----------+--------------------------------+------+----------+---------+
 |   NAME   |          DESCRIPTION           | TYPE | REQUIRED | DEFAULT |
@@ -50,18 +48,14 @@ spec:
 Apply the sample application:
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/enduser/sample-manual.yaml
-```
-```console
+$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/enduser/sample-manual.yaml
 application.core.oam.dev/website configured
 ```
 
 In runtime cluster, you can see the underlying deployment of `frontend` component has 2 replicas now.
 
 ```shell
-kubectl get deploy -l app.oam.dev/name=website
-```
-```console
+$ kubectl get deploy -l app.oam.dev/name=website
 NAME       READY   UP-TO-DATE   AVAILABLE   AGE
 backend    1/1     1            1           19h
 frontend   2/2     2            2           19h

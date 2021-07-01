@@ -14,8 +14,6 @@ Let's check the available components in fresh new KubeVela.
 
 ```shell
 kubectl get comp -n vela-system
-```
-```console
 NAME              WORKLOAD-KIND   DESCRIPTION                        
 task              Job             Describes jobs that run code or a script to completion.                                                                                          
 webservice        Deployment      Describes long-running, scalable, containerized services that have a stable network endpoint to receive external network traffic from customers. 
@@ -25,9 +23,7 @@ worker            Deployment      Describes long-running, scalable, containerize
 To show the specification for given component, you could use `vela show`. 
 
 ```shell
-kubectl vela show webservice
-```
-```console
+$ kubectl vela show webservice
 # Properties
 +------------------+----------------------------------------------------------------------------------+-----------------------+----------+---------+
 |       NAME       |                                   DESCRIPTION                                    |         TYPE          | REQUIRED | DEFAULT |
@@ -77,9 +73,7 @@ spec:
 Traits are platform provided features that could *overlay* a given component with extra operational behaviors.
 
 ```shell
-kubectl get trait -n vela-system
-```
-```console
+$ kubectl get trait -n vela-system
 NAME                                       APPLIES-TO            DESCRIPTION                                     
 cpuscaler                                  [webservice worker]   Automatically scale the component based on CPU usage.
 ingress                                    [webservice worker]   Enable public web traffic for the component.
@@ -90,9 +84,7 @@ sidecar                                    [webservice worker]   Inject a sideca
 Let's check the specification of `sidecar` trait.
 
 ```shell
-kubectl vela show sidecar
-```
-```console
+$ kubectl vela show sidecar
 # Properties
 +---------+-----------------------------------------+----------+----------+---------+
 |  NAME   |               DESCRIPTION               |   TYPE   | REQUIRED | DEFAULT |
@@ -145,18 +137,14 @@ spec:
 ## Step 4: Deploy the Application
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/enduser/sample.yaml
-```
-```console
+$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/enduser/sample.yaml
 application.core.oam.dev/website created
 ```
 
 You'll get the application becomes `running`.
 
 ```shell
-kubectl get application
-```
-```console
+$ kubectl get application
 NAME        COMPONENT   TYPE         PHASE     HEALTHY   STATUS   AGE
 website     frontend    webservice   running   true               4m54s
 ```
@@ -164,9 +152,7 @@ website     frontend    webservice   running   true               4m54s
 Check the details of the application.
 
 ```shell
-kubectl get app website -o yaml
-```
-```console
+$ kubectl get app website -o yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -226,9 +212,7 @@ Specifically:
 When updating an application entity, KubeVela will create a new revision for this change.
 
 ```shell
-kubectl get apprev -l app.oam.dev/name=website
-```
-```console
+$ kubectl get apprev -l app.oam.dev/name=website
 NAME           AGE
 website-v1     35m
 ```
