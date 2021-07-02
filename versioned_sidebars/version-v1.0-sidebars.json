@@ -103,10 +103,6 @@
         },
         {
           "type": "doc",
-          "id": "version-v1.0/end-user/scopes/appdeploy"
-        },
-        {
-          "type": "doc",
           "id": "version-v1.0/end-user/scopes/rollout-plan"
         },
         {
@@ -397,10 +393,6 @@
               "id": "version-v1.0/cli/vela_cap"
             }
           ]
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.0/developers/references/kubectl-plugin"
         }
       ]
     },
@@ -411,7 +403,7 @@
       "items": [
         {
           "type": "doc",
-          "id": "version-v1.0/roadmap/README"
+          "id": "version-v1.0/roadmap"
         }
       ]
     },

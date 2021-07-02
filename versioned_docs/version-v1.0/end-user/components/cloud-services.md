@@ -15,9 +15,7 @@ The cloud services will be consumed by the application via [Service Binding Trai
 Check the parameters of cloud resource components and trait.
 
 ```shell
-kubectl vela show alibaba-rds
-```
-```console
+$ kubectl vela show alibaba-rds
 # Properties
 +----------------------------+-------------------------------------------------------------------------+-----------------------------------------------------------+----------+---------+
 |            NAME            |                               DESCRIPTION                               |                           TYPE                            | REQUIRED | DEFAULT |
@@ -36,11 +34,8 @@ kubectl vela show alibaba-rds
 | namespace | The secret namespace which the cloud resource connection will be written to | string | false    |         |
 +-----------+-----------------------------------------------------------------------------+--------+----------+---------+
 
-```
-```shell
-kubectl vela show service-binding
-```
-```console
+
+$ kubectl vela show service-binding
 # Properties
 +-------------+------------------------------------------------+------------------+----------+---------+
 |    NAME     |                  DESCRIPTION                   |       TYPE       | REQUIRED | DEFAULT |
@@ -111,9 +106,8 @@ spec:
 Check the parameters of cloud service component:
 
 ```shell
-kubectl vela show alibaba-rds
-```
-```console
+$ kubectl vela show alibaba-rds
+
 # Properties
 +---------------+------------------------------------------------+--------+----------+--------------------+
 |     NAME      |                  DESCRIPTION                   |  TYPE  | REQUIRED |      DEFAULT       |
@@ -178,16 +172,11 @@ spec:
 Deploy and verify the application (by either provider is OK).
 
 ```shell
-kubectl get application
-```
-```console
+$ kubectl get application
 NAME     AGE
 webapp   46m
-```
-```shell
-kubectl port-forward deployment/express-server 80:80
-```
-```console
+
+$ kubectl port-forward deployment/express-server 80:80
 Forwarding from 127.0.0.1:80 -> 80
 Forwarding from [::1]:80 -> 80
 Handling connection for 80

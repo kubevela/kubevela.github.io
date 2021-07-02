@@ -79,17 +79,13 @@ Since parameters only support basic data type, values in `properties` should be 
 Deploy the `Application` and verify the running workload instance.
 
 ```shell
-kubectl get deploy
-```
-```console
+$ kubectl get deploy
 NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
 mycomp                   1/1     1            1           66m
 ```
 And check the parameter works.
 ```shell
-kubectl get deployment mycomp -o json | jq '.spec.template.spec.containers[0].image'
-```
-```console
+$ kubectl get deployment mycomp -o json | jq '.spec.template.spec.containers[0].image'
 "nginx:1.14.0"
 ```
 
