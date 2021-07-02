@@ -10,8 +10,10 @@ Make sure you have finished and verified the installation following [this guide]
 
 ## Step 2: Deploy Your First Application
 
-```bash
-$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
+```bash script
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
+```
+```console
 application.core.oam.dev/first-vela-app created
 ```
 
@@ -19,8 +21,10 @@ Above command will apply an application to KubeVela and let it distribute the ap
 
 Check the status until we see `status` is `running` and services are `healthy`:
 
-```bash
-$  kubectl get application first-vela-app -o yaml
+```bash script
+kubectl get application first-vela-app -o yaml
+```
+```console
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 ...
@@ -38,8 +42,10 @@ status:
 
 You can now directly visit the application (regardless of where it is running).
 
+```bash script
+curl -H "Host:testsvc.example.com" http://<your ip address>/
 ```
-$ curl -H "Host:testsvc.example.com" http://<your ip address>/
+```console
 <xmp>
 Hello World
 
