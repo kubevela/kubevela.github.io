@@ -2,7 +2,7 @@
 title:  Patch Traits
 ---
 
-**Patch** is a very common pattern of trait definitions, i.e. the app operators can amend/path attributes to the component instance (normally the workload) to enable certain operational features such as sidecar or node affinity rules (and this should be done **before** the resources applied to target cluster).
+**Patch** is a very common pattern of trait definitions, i.e. the app operators can amend/patch attributes to the component instance (normally the workload) to enable certain operational features such as sidecar or node affinity rules (and this should be done **before** the resources applied to target cluster).
 
 This pattern is extremely useful when the component definition is provided by third-party component provider (e.g. software distributor) so app operators do not have privilege to change its template.
 
@@ -19,8 +19,7 @@ metadata:
   name: node-affinity
 spec:
   appliesToWorkloads:
-    - webservice
-    - worker
+    - deployments.apps
   podDisruptive: true
   schematic:
     cue:
@@ -97,15 +96,17 @@ By default, patch trait in KubeVela leverages the CUE `merge` operation. It has 
 
 ### Strategy Patch
 
-The `strategy patch` is useful for patching array list.
+Strategy Patch is effective by adding annotation, and supports the following two ways
 
 > Note that this is not a standard CUE feature, KubeVela enhanced CUE in this case.
 
-With `//+patchKey=<key_name>` annotation, merging logic of two array lists will not follow the CUE behavior. Instead, it will treat the list as object and use a strategy merge approach:
+#### 1. With `+patchKey=<key_name>` annotation
+
+This is useful for patching array list, merging logic of two array lists will not follow the CUE behavior. Instead, it will treat the list as object and use a strategy merge approach:
  - if a duplicated key is found, the patch data will be merge with the existing values; 
  - if no duplication found, the patch will append into the array list.
 
-The example of strategy patch trait will like below:
+The example of strategy patch trait with 'patchKey' will like below:
  
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -116,8 +117,7 @@ metadata:
   name: sidecar
 spec:
   appliesToWorkloads:
-    - webservice
-    - worker
+    - deployments.apps
   podDisruptive: true
   schematic:
     cue:
@@ -146,8 +146,7 @@ metadata:
   name: expose
 spec:
   appliesToWorkloads:
-    - webservice
-    - worker
+    - deployments.apps
   podDisruptive: true
   schematic:
     cue:
@@ -174,6 +173,76 @@ spec:
 
 So the above trait which attaches a Service to given component instance will patch an corresponding label to the workload first and then render the Service resource based on template in `outputs`.
 
+#### 2. With `+patchStrategy=retainkeys` annotation
+
+Similar to strategy [retainkeys](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-strategic-merge-patch-to-update-a-deployment-using-the-retainkeys-strategy) in K8s strategic merge patch
+
+In some scenarios that the entire object needs to be replaced, retainkeys strategy is the best choice. the example as follows:
+
+Assume the Deployment is the base resource
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: retainkeys-demo
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  strategy:
+    type: rollingUpdate
+    rollingUpdate:
+      maxSurge: 30%
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: retainkeys-demo-ctr
+        image: nginx
+```
+Now want to replace rollingUpdate strategy with a new strategy, you can write the patch trait like below
+
+```yaml
+apiVersion: core.oam.dev/v1alpha2
+kind: TraitDefinition
+metadata:
+  name: recreate
+spec:
+  appliesToWorkloads:
+    - deployments.apps
+  extension:
+    template: |-
+      patch: {
+         spec: {
+              // +patchStrategy=retainKeys
+              strategy: type: "Recreate"
+           }
+      }        
+```
+Then the base resource becomes as follows
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: retainkeys-demo
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: retainkeys-demo-ctr
+        image: nginx
+```
 ## More Use Cases of Patch Trait
 
 Patch trait is in general pretty useful to separate operational concerns from the component definition, here are some more examples.
@@ -191,8 +260,7 @@ metadata:
   name: virtualgroup
 spec:
   appliesToWorkloads:
-    - webservice
-    - worker
+    - deployments.apps
   podDisruptive: true
   schematic:
     cue:
@@ -242,8 +310,7 @@ metadata:
   name: kautoscale
 spec:
   appliesToWorkloads:
-    - webservice
-    - worker
+    - deployments.apps
   podDisruptive: false
   schematic:
     cue:
@@ -279,8 +346,7 @@ metadata:
   name: env
 spec:
   appliesToWorkloads:
-    - webservice
-    - worker
+    - deployments.apps
   podDisruptive: true
   schematic:
     cue:
@@ -321,8 +387,7 @@ metadata:
   name: service-account
 spec:
   appliesToWorkloads:
-    - webservice
-    - worker
+    - deployments.apps
   podDisruptive: true
   schematic:
     cue:
@@ -368,8 +433,7 @@ metadata:
   name: init-container
 spec:
   appliesToWorkloads:
-    - webservice
-    - worker
+    - deployments.apps
   podDisruptive: true
   schematic:
     cue:

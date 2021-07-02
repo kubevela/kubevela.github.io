@@ -70,7 +70,6 @@ metadata:
 spec:
   appliesToWorkloads: 
     - deployments.apps
-    - webservice
   conflictsWith: 
     - service
   workloadRefPath: spec.wrokloadRef
@@ -85,16 +84,15 @@ This field defines the constraints that what kinds of workloads this trait is al
 - It accepts an array of string as value.
 - Each item in the array refers to one or a group of workload types to which this trait is allowded to apply.
 
-There are four approaches to denote one or a group of workload types.
+There are three approaches to denote one or a group of workload types.
 
-- `ComponentDefinition` name, e.g., `webservice`, `worker`
 - `ComponentDefinition` definition reference (CRD name), e.g., `deployments.apps`
 - Resource group of `ComponentDefinition` definition reference prefixed with `*.`, e.g., `*.apps`, `*.oam.dev`. This means the trait is allowded to apply to any workloads in this group.
 - `*` means this trait is allowded to apply to any workloads
 
 If this field is omitted, it means this trait is allowded to apply to any workload types.
 
-KubeVela will raise an error if a trait is applied to a workload which is NOT included in the `appliesToWorkloads`.
+KubeVela will raise an error if a trait is applied to a workload type which is NOT included in the `appliesToWorkloads`.
 
 
 ##### `.spec.conflictsWith` 
@@ -118,7 +116,7 @@ This field defines the field path of the trait which is used to store the refere
 
 If this field is set, KubeVela core will automatically fill the workload reference into target field of the trait. Then the trait controller can get the workload reference from the trait latter. So this field usually accompanies with the traits whose controllers relying on the workload reference at runtime. 
 
-Please check [scaler](https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml) trait as a demonstration of how to set this field.
+Please check [scaler](https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/scaler.yaml) trait as a demonstration of how to set this field.
 
 ##### `.spec.podDisruptive`
 
@@ -242,7 +240,9 @@ In KubeVela, definition entities are mutable. Each time a `ComponentDefinition` 
 For example, we can design a new parameter named `args` for the `webservice` component definition by applying a new definition with same name as below.
 
 ```shell
-$ kubectl vela show webservice
+kubectl vela show webservice
+```
+```console
 # Properties
 +-------+----------------------------------------------------+----------+----------+---------+
 | NAME  |                    DESCRIPTION                     |   TYPE   | REQUIRED | DEFAULT |
@@ -258,7 +258,9 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/
 The change will take effect immediately.
 
 ```shell
-$ kubectl vela show webservice
+kubectl vela show webservice
+```
+```console
 # Properties
 +-------+----------------------------------------------------+----------+----------+---------+
 | NAME  |                    DESCRIPTION                     |   TYPE   | REQUIRED | DEFAULT |
@@ -271,7 +273,9 @@ $ kubectl vela show webservice
 We will see a new definition revision will be automatically generated, `v2` is the latest version, `v1` is the previous one.
 
 ```shell
-$  kubectl get definitionrevision -l="componentdefinition.oam.dev/name=webservice" -n vela-system
+kubectl get definitionrevision -l="componentdefinition.oam.dev/name=webservice" -n vela-system
+```
+```console
 NAME            REVISION   HASH               TYPE
 webservice-v1   1          3f6886d9832021ba   Component
 webservice-v2   2          b3b9978e7164d973   Component
