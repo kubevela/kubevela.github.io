@@ -1,7 +1,5 @@
 欢迎加入中文翻译 SIG 钉群：
 
-https://raw.githubusercontent.com/oam-dev/kubevela.io/82aaf0133fa5c614f68a977dc86463e135807a1e/static/img/zh-CN-dingding-group.png
-
 https://github.com/oam-dev/kubevela.io/blob/main/static/img/zh-CN-dingding-group.png?raw=true
 
 
