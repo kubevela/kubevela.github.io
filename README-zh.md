@@ -3,14 +3,15 @@
 https://github.com/oam-dev/kubevela.io/blob/main/static/img/zh-CN-dingding-group.png?raw=true
 
 
-![翻译流程](https://tvax1.sinaimg.cn/large/ad5fbf65gy1gpdbriuraij20k20l6dhm.jpg)
-
 参与翻译活动的基本流程如下：
 - 任务领取：在 [KubeVela 官方文档翻译登记](https://shimo.im/sheets/QrCwcDqh8xkRWKPC/MODOC) 登记并认领任务；
 - 提交：参与人员提交 PR 等待 review；
 - 审阅：maintainer 审阅 PR；
 - 终审： 对 review 后的内容进行最后确认；
 - 合并：merge 到 master 分支，任务结束。
+
+![翻译流程](https://tvax1.sinaimg.cn/large/ad5fbf65gy1gpdbriuraij20k20l6dhm.jpg)
+
 
 ### 参与指南
 
