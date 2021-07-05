@@ -3,11 +3,11 @@
 This repo contains the source code of [Kubevela website](http://kubevela.io/) and all of the docs for KubeVela.
 It's built by [Docusaurus 2](https://v2.docusaurus.io/), a modern static website generator.
 
-Welcome to join 
+Welcome to join us and you are more than appreciated to contribute!
 
-# Contributing to KubeVela Docs
+## Contributing to KubeVela EN Docs
 
-Here is the source documentation of [Kubevela website](http://kubevela.io/).
+First, we have the source documentation of [Kubevela website](http://kubevela.io/) and it's written in English. Follow [Localization README](https://github.com/oam-dev/kubevela.io#localization-readme) for contributing to other languages.
 Any files modifid here will trigger the `check-docs` Github action to run and validate the docs could be build successfully into the website.
 Any changes on these files(`docs/en/*`, `docs/en/resource/*`, `sidebars.js`) will be submitted to the corresponding locations of the repo 
 [kubevela.io](https://github.com/oam-dev/kubevela.io). The Github-Action there will parse the document and publish it to the Kubevela Website automatically.
@@ -59,4 +59,46 @@ When you add or modify the docs, these three files(`docs/en/`, `docs/en/resource
        },
    ```
 
-[comment]: <> "TODO: ADD how to translate into Chinese or other language here."
+
+
+
+## Localization README
+
+| Language                |
+| ----------------------- |
+| [Chinese](README-zh.md) |
+
+
+
+# Website Preview
+
+
+## Installation
+
+```console
+yarn install
+```
+
+## Local Development
+
+```console
+yarn start
+```
+
+This command starts a local development server and open up a browser window. Most changes are reflected live without having to restart the server.
+
+## Build
+
+```console
+yarn build
+```
+
+This command generates static content into the `build` directory and can be served using any static contents hosting service.
+
+## Deployment
+
+```console
+GIT_USER=<Your GitHub username> USE_SSH=true yarn deploy
+```
+
+If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
