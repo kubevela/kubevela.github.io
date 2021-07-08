@@ -9,25 +9,28 @@ const features = [
       <>
         <p>
           <Translate>
-            Leveraging Open Application Model (OAM), KubeVela introduces consistent yet higher level API to capture a full deployment of microservices 
+            KubeVela introduces Open Application Model (OAM) as the consistent 
+            yet higher level API to capture a full deployment of microservices 
             on top of hybrid environments. Placement strategy, traffic shifting 
-            and rolling update are declared at application level. No infrastructure level concern, simply deploy. 
+            and rolling update are declared at application level. 
+            No infrastructure level concern, simply deploy. 
           </Translate>
         </p>
       </>
     ),
   },
   {
-    title: <><Translate>Natively Extensible</Translate></>,
+    title: <><Translate>Deployment Workflow</Translate></>,
     imgUrl: 'img/extending-natively.svg',
     description: (
       <>
         <p>
           <Translate>
-           KubeVela uses</Translate> <a href="https://github.com/cuelang/cue">
-              CUE</a> <Translate> to glue capabilities (e.g. workload types, operational behaviors, and cloud services)
-               provided by runtime infrastructure and expose them to users via self-service API. When users' needs grow, 
-               these API can naturally expand in programmable approach. No restriction, fully flexible.</Translate>
+           KubeVela backend is implemented with </Translate> 
+            <a href="https://github.com/cuelang/cue">CUE</a>. <Translate> 
+            It allows you to define an application deployment
+              workflow as DAG with all application's needs glued together in programmable approach.  
+              No restrictions, natively extensible.</Translate>
         </p>
       </>
     ),
@@ -40,12 +43,12 @@ const features = [
       <>
         <p>
           <Translate>
-            KubeVela is built with Kubernetes as control plane but adaptable to any runtime as data-plane.
-            It can deploy (and manage) 
-            diverse workload types such as container, cloud functions, databases,
-             or even EC2 instances across hybrid environments. 
-             Also, this means KubeVela seamlessly works with any Kubernetes compatible
-            CI/CD or GitOps tools via declarative API.</Translate>
+            KubeVela works as an application 
+            delivery control plane that is fully runtime agnostic. It can 
+            deploy and operate any 
+            application components including container, cloud functions, databases, 
+            or even EC2 instances across hybrid environments, following the 
+            workflow you defined.</Translate>
         </p>
       </>
     ),
