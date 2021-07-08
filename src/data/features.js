@@ -20,16 +20,16 @@ const features = [
     ),
   },
   {
-    title: <><Translate>Deployment Workflow</Translate></>,
+    title: <><Translate>Programmable Workflow</Translate></>,
     imgUrl: 'img/extending-natively.svg',
     description: (
       <>
         <p>
           <Translate>
-           KubeVela backend is implemented with </Translate> 
-            <a href="https://github.com/cuelang/cue">CUE</a>. <Translate> 
-            It allows you to define an application deployment
-              workflow as DAG with all application's needs glued together in programmable approach.  
+           KubeVela leverages </Translate> 
+            <a href="https://github.com/cuelang/cue">CUE</a> <Translate> to
+            implement its model layer. This allows you to define an application deployment
+              workflow as DAG, with all steps and application's needs glued together in programmable approach.  
               No restrictions, natively extensible.</Translate>
         </p>
       </>
@@ -46,7 +46,7 @@ const features = [
             KubeVela works as an application 
             delivery control plane that is fully runtime agnostic. It can 
             deploy and operate any 
-            application components including container, cloud functions, databases, 
+            application components including containers, cloud functions, databases, 
             or even EC2 instances across hybrid environments, following the 
             workflow you defined.</Translate>
         </p>
