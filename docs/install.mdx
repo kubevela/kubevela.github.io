@@ -192,10 +192,10 @@ sudo mv ./vela /usr/local/bin/vela
 
 KubeVela leverages Helm controller from [Flux v2](https://github.com/fluxcd/flux2) to deploy [Helm](https://helm.sh/) based components.
 
-You can enable this feature by installing a minimal Flux v2 chart as below:
+You can enable this feature by enabling fluxcd addon
 
 ```shell
-helm install --create-namespace -n flux-system helm-flux http://oam.dev/catalog/helm-flux2-0.1.0.tgz
+vela addon enable fluxcd
 ```
 
 Or you could install full Flux v2 following its own guide of course.
