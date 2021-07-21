@@ -2,20 +2,22 @@ module.exports = {
   docs: [
     {
       type: 'category',
-      label: 'Overview',
+      label: 'Getting Started',
       collapsed: false,
       items: [
-        'introduction',
+        'getting-started/introduction',
+        'getting-started/install',
+        'getting-started/quick-start',
       ],
     },
     {
       type: 'category',
-      label: 'Getting Started',
+      label: 'Core Concepts',
       collapsed: false,
       items: [
-        'install',
-        'quick-start',
-        'concepts',
+        'core-concepts/application',
+        'core-concepts/components',
+        'core-concepts/traits',
       ],
     },
     {
