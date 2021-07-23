@@ -7,7 +7,7 @@ title: Rollout Plan
 
 默认情况下，当我们更新应用程序的属性时，KubeVela 会直接更新底层实例。 应用程序的可用性将通过 rollout trait（如果有）来保证。
 
-虽然 KubeVela 也提供了滚动样式更新机制，但您可以在应用程序中指定`spec.rolloutPlan` 来实现。
+虽然 KubeVela 也提供了滚动样式更新机制，但你可以在应用程序中指定`spec.rolloutPlan` 来实现。
 
 ## 例子
 

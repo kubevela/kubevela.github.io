@@ -4,7 +4,7 @@ title:  怎么用 CUE
 
 本节将介绍如何使用 [CUE](https://cuelang.org/) 通过 `ComponentDefinition` 来声明 app 组件。
 
-> 在阅读本部分之前，请确保您已经学习了 KubeVela 中的 [Definition CRD](../definition-and-templates)。
+> 在阅读本部分之前，请确保你已经学习了 KubeVela 中的 [Definition CRD](../definition-and-templates)。
 
 ## 声明 `ComponentDefinition`
 
@@ -173,7 +173,7 @@ spec:
 
 ## CUE `Context`
 
-KubeVela 允许您通过 `context` 关键字引用应用程序的运行时信息。
+KubeVela 允许你通过 `context` 关键字引用应用程序的运行时信息。
 
 最广泛使用的上下文是应用程序名称(`context.appName`) 组件名称(`context.name`)。
 
@@ -184,7 +184,7 @@ context: {
 }
 ```
 
-例如，假设您要使用用户填写的组件名称作为工作负载实例中的容器名称：
+例如，假设你要使用用户填写的组件名称作为工作负载实例中的容器名称：
 
 ```cue
 parameter: {
@@ -224,7 +224,7 @@ output: {
 
 ## 怎么做
 
-KubeVela 要求您在 `output` 部分定义工作负载类型的模板，并在 `outputs` 部分保留所有其他资源模板，格式如下：
+KubeVela 要求你在 `output` 部分定义工作负载类型的模板，并在 `outputs` 部分保留所有其他资源模板，格式如下：
 
 ```cue
 outputs: <unique-name>: 

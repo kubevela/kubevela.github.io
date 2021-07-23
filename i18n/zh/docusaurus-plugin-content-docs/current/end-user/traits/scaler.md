@@ -67,4 +67,4 @@ backend    1/1     1            1           19h
 frontend   2/2     2            2           19h
 ```
 
-要扩容或缩容，您只需要修改`scaler` trait 的`replicas` 字段并重新应用YAML。
+要扩容或缩容，你只需要修改`scaler` trait 的`replicas` 字段并重新应用YAML。

@@ -1,21 +1,21 @@
 ---
-title:  快速开始
+title:  第一个 Demo
 ---
 
-欢迎来到 KubeVela! 在本向导中, 我们会向你介绍如何安装 KubeVela 并且部署你的第一个简单的应用。 
+欢迎来到 KubeVela! 在本小节中，我们会向你介绍如何完成第一个 Demo。
 
-## Step 1: 安装
+先来实际感受 KubeVela 到底是如何工作的。
 
-在此之前，请确保你已经完成了安装步骤并且验证了安装成功，参考[安装文档](./install).
+## 部署你的第一个应用
 
-## Step 2: 部署你的第一个应用
+首先，在你的集群上，我们使用一个提前准备好的 YMAL 文件。
 
 ```bash
 $ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
 application.core.oam.dev/first-vela-app created
 ```
 
-检查状态：直到看到 `status` 是 `running`，并且`services` 是 `healthy`
+检查状态：直到看到 `status` 是 `running`，并且 `services` 是 `healthy`。
 
 ```bash
 $  kubectl get application first-vela-app -o yaml
@@ -50,8 +50,13 @@ status:
       type: ingress
   status: running
 ```
+可以看到，这个 YAML 的类型是一个 `Application`，由 `core.oam.dev/v1beta1` 来定义，即 KubeVela 的 API Specification。
 
-在底层, K8s资源被创建了出来:
+在 `Sepc` 字段里，我们也看到比如 `components` 和 `traits` 这样陌生的字段。
+
+在下一章节中，我们将带你进一步深入它们背后 KubeVlea 的核心概念：应用程序、组件系统和特征系统。
+
+同时，在底层的 K8s 资源也被创建了出来:
 
 ```bash
 $ kubectl get deployment
@@ -86,13 +91,12 @@ Hello World
 ```
 **太棒了!** 你已经全都部署成功了。
 
-## 下一步？
+也就是说 KubeVlea 的应用交付，围绕 Application、Components 和 Traits 这三个核心概念展开。
 
-以下是一些推荐的后续步骤:
+## 下一步
 
-<!-- - 从[核心概念](core-concepts)开始学习 KubeVela -->
-- 了解更多[`Application`](core-concepts/application.md)的细节并且理解其是如何工作的。
-- 加入CNCF [Slack](https://cloud-native.slack.com) 中的`#kubevela` channel 和 [Gitter](https://gitter.im/oam-dev/community)
-- 加入 KubeVela 中文社区钉钉群。钉钉群号：23310022。
+后续步骤:
 
-Welcome onboard and sail Vela!
+- 加入 KubeVela 中文社区钉钉群，群号：23310022。
+- 查看 KubeVela 的[`核心概念`](../core-concepts/application.md)，进一步理解其是如何工作的。
+<!-- - 直接使用 [`应用开发者手册`](../core-concepts/application.md) 或者 [`平台开发者手册`](../core-concepts/application.md) 开始实际开发。 -->

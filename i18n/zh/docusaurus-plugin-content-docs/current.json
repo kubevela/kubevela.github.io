@@ -3,13 +3,13 @@
     "message": "Next",
     "description": "The label for version current"
   },
-  "sidebar.docs.category.Overview": {
-    "message": "概述",
-    "description": "The label for category Overview in sidebar docs"
-  },
   "sidebar.docs.category.Getting Started": {
     "message": "快速开始",
     "description": "The label for category Getting Started in sidebar docs"
+  },
+  "sidebar.docs.category.Core Concepts": {
+    "message": "核心概念",
+    "description": "The label for Core Concepts in sidebar docs"
   },
   "sidebar.docs.category.CUE": {
     "message": "CUE",
@@ -68,7 +68,7 @@
     "description": "The label for category References in sidebar docs"
   },
   "sidebar.docs.category.CLI": {
-    "message": "CLI",
+    "message": "CLI 命令行工具",
     "description": "The label for category CLI in sidebar docs"
   },
   "sidebar.docs.category.Capabilities": {
@@ -84,27 +84,27 @@
     "description": "The label for category Defining Components in sidebar docs"
   },
   "sidebar.docs.category.Application Team Guide": {
-    "message": "Application Team Guide",
+    "message": "应用开发者手册",
     "description": "The label for category Application Team Guide in sidebar docs"
   },
   "sidebar.docs.category.Components": {
-    "message": "Components",
+    "message": "组件系统",
     "description": "The label for category Components in sidebar docs"
   },
   "sidebar.docs.category.Traits": {
-    "message": "Traits",
+    "message": "特征系统",
     "description": "The label for category Traits in sidebar docs"
   },
   "sidebar.docs.category.Observability": {
-    "message": "Observability",
+    "message": "可观测性",
     "description": "The label for category Observability in sidebar docs"
   },
   "sidebar.docs.category.Debugging": {
-    "message": "Debugging",
+    "message": "如何调试",
     "description": "The label for category Debugging in sidebar docs"
   },
   "sidebar.docs.category.Platform Team Guide": {
-    "message": "Platform Team Guide",
+    "message": "平台开发者手册",
     "description": "The label for category Platform Team Guide in sidebar docs"
   },
   "sidebar.docs.category.Simple Template": {
@@ -112,7 +112,7 @@
     "description": "The label for category Simple Template in sidebar docs"
   },
   "sidebar.docs.category.Cloud Services": {
-    "message": "Cloud Services",
+    "message": "云服务",
     "description": "The label for category Cloud Services in sidebar docs"
   }
 }

@@ -1,69 +1,76 @@
 ---
-title: 简介
+title: KubeVela 简介
 slug: /
 
 ---
 
 
-## 动机
+## 背景
 
-XXX
+云原生技术的趋势，一直在朝着标准、统一和跨云的应用交付迈进。作为通用底座的 Kubernetes，尽管在抽象底层基础架构细节方面表现出色，但并未引入抽象来模拟混合环境之上的软件部署。我们已经频繁看到，由于缺乏此类应用程序级的上下文控制，用户体验受影响、生产力降低，甚至导致生产中出现错误配置。
 
-aaa
-象 Kubernetes 来满足开发人员的需求是一个非常依赖经验判断的过程，只有在决策者是平台构建者的情况下，最终的抽象才有意义。不幸的是，当今的平台构建者面临以下难题：
+与此同时，今天微服务应用程序的部署建模，是一个高度碎片化的过程。因此，大多数旨在解决上述问题的解决方案（尽管使用 Kubernetes 构建）本质上是受限制的系统，几乎不可扩展。随着我们应用程序需求的增长，它们几乎肯定会超出此类系统所能支持的上限。
 
-*没有工具或框架可让他们轻松构建用户友好且高度可扩展的抽象*
-
-因此，尽管 Kubernetes 具有可扩展性，但许多平台至今基本上都是使用内部附加机制进行的受限抽象。这种方式几乎无法满足开发人员的需求，且无法将其扩展到更广泛的场景，更不用说充分利用丰富的 Kubernetes 生态系统。
-
-最终结果是，开发人员抱怨这些平台过于僵化，响应功能要求或改进速度太慢。平台建设者确实希望提供帮助，但是工程上的努力却是艰巨的：平台中任何简单的 API 更改都可能很容易成为围绕经验主义进行抽象设计的马拉松式谈判。
+应用开发团队，面临着业务不断高速变化所带来的迭代压力，希望平台开发团队可以随时满足需求。而平台团队虽然确实想提供帮助，但即使是平台中任何简单的 API 更改，都受限于底层设计而无法对应的跟上。
 
 ## 什么是 KubeVela？
 
-对于平台开发人员而言，KubeVela 作为框架，通过执行以下操作来减轻构建以开发人员为中心的平台的烦恼：
+KubeVela 是一个应用程序平台，旨在通过执行以下操作，使跨混合、多云环境的应用程序部署和管理变得更容易和更快：
 
-- 以开发人员为中心。KubeVela 通过引入 * Application * 的概念来抽象基础架构级别的原语，从而捕获微服务的完整部署，然后根据应用程序的需求构建操作功能。
+- 以应用程序为中心 - KubeVela 引入了开放应用程序模型（OAM）来作为更高级别的 API，通过高度一致的工作流，来捕获面向混合环境的微服务交付的所有信息。包括多集群分发策略、流量调配和滚动更新等运维特征，都声明在应用级别。用户无需关心任何基础设施细节，只需要定义和部署应用即可。
+- 可编程式交付工作流 - KubeVela 的模型层是利用 CUE 来实现的。它使得你可以轻松地将应用交付工作流声明为一个 DAG，并将所有步骤和应用部署需求以可编程的方式粘合在一起。这里没有任何限制，原生可扩展。
+- 运行时无关 - KubeVela 是一个完全与运行时无关的应用交付与管理控制平面。它可以按照你定义的工作流与策略，面向混合环境交付和管理任何应用组件：包括容器、云函数、数据库甚至 AWS EC2 实例。
 
-- 本地扩展。* Application * 由模块化的构建块组成，这些构建模块支持 [CUELang](https://github.com/cuelang/cue) 和 [Helm](https://helm.sh) 作为模板引擎。这使你能够以乐高风格抽象 Kubernetes 的功能，并通过简单的 `kubectl apply -f` 将它们发布给最终用户。对抽象模板所做的更改将在运行时生效，无需重新编译或重新部署 KubeVela。
+## 架构图
 
-- 简单而可靠的抽象机制。与大多数 IaC(基础设施即代码)解决方案不同，KubeVela 中的抽象是用 [Kubernetes Control Loop](https://kubernetes.io/docs/concepts/architecture/controller/) 构建的，所以它们永远不会在集群中留下配置漂移。作为 [Kubernetes 自定义资源](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/)，KubeVela可以与任何 CI/CD 或 GitOps 工具无缝协作，不需要进行集成工作。
+KubeVela 的整体架构如下图所示：
 
-有了 KubeVela，平台构建者终于有了工具支持，可以设计易于使用的抽象，并以高信心和低周转时间将它们交付给终端用户。
+![alt](../resources/arch.png)
 
-对于终端用户(例如应用程序开发人员)来说，这种用 KubeVela 构建的抽象将使他们能够以最少的努力设计并向 Kubernetes 发布应用程序 —他们要做的只是定义一个简单的应用程序，可以轻松地与任何 CI/CD 集成，而不需要管理一些基础设施细节。
+### 控制平面 
 
-## 比较
+正如 KubeVela 的 Kube 所暗示，KubeVela 作为控制平面在设计上是依赖 Kubernetes 而成立。这是 KubeVela 如何为大规模应用程序交付，带来自动化和确定性的关键。用户将通过以应用程序为中心的 API 与 KubeVela 交互，对应用程序部署进行建模，然后 KubeVela 将根据用户声明的策略和规则，将其分发到目标运行时所在的 Kubernetes 基础设施。
+
+### 运行时基础设施
+
+运行时基础设施是应用程序实际运行的地方。 KubeVela 允许你将应用程序建模并部署到任何基于 Kubernetes 的基础设施（本地、托管产品或 IoT/边缘基础设施）或公共云平台。
+
+## 产品形态对比
 
 ### KubeVela vs. 平台即服务 (PaaS) 
 
-典型的例子是 Heroku 和 Cloud Foundry。它们提供完整的应用程序管理功能旨在提高开发人员的体验和效率。在这种情况下，KubeVela 可以提供类似的体验。
+典型的例子是 Heroku 和 Cloud Foundry。 它们提供完整的应用程序部署和管理功能，旨在提高开发人员的体验和效率。在这种情况下，KubeVela 也有着相同的目标。
 
-最大的区别在于**灵活性**。
+不过，KubeVela 和它们最大的区别在于其灵活性。
 
-KubeVela 是一个 Kubernetes 插件，它允许您通过定义自己的抽象来简单地为最终用户服务，这是通过将 Kubernetes API 资源模板化为集群中以应用程序为中心的抽象来实现的。与这种机制相比，现有的大多数 PaaS 系统受到严格限制不够灵活，也就是说，他们必须对所支持的应用程序和功能的类型实施约束，并且随着应用程序需求的增长，它们总是超出 PaaS 系统的能力 - 这在 KubeVela 中永远不会发生。
+KubeVela 使你能够为最终用户，提供完全灵活且可随时扩展的可编程模块（基于 CUE）。与这种机制相比，传统的 PaaS 系统受到高度限制，即它们必须对支持的应用程序类型和能力进行约束，并且随着应用程序需求的增长，总是会超出 PaaS 系统的能力——而这在 KubeVela 平台中永远不会发生 .
 
-### KubeVela vs. Serverless 
+因此如果将 KubeVela 视为 Heroku，但当你的需求增长时，它也是完全可扩展的。
 
-无服务器平台(如 AWS Lambda)为部署无服务器应用程序提供了非凡的用户体验和灵活性。然而，这些平台在可扩展性方面施加了更多的限制。它们可以说是“硬编码”的 PaaS。
+### KubeVela vs. Serverless
 
-Kubernetes 基于无服务器的平台，如 Knative,OpenFaaS 通过将它们自己注册为新的 workload 和 traits 可以很容易与 KubeVela 集成。即使是 AWS Lambda，也有一个通过 Crossplane 开发的工具将其与 KubeVela 集成的成功案例。
+AWS Lambda 等无服务器计算平台，可提供非凡的用户体验和部署无服务器应用程序的敏捷性。然而，这些平台在可扩展性方面施加了更多限制。它们可以说是“硬编码”的 PaaS。
 
-### KubeVela vs. 平台无关的开发人员工具
+KubeVela 可以轻松部署基于 Kubernetes 的无服务器工作负载（例如 Knative/OpenFaaS）或云功能（例如 AWS Lambda）。只需将要部署的内容注册为“组件”即可。
 
-典型的例子是 Hashicorp Waypoint。Waypoint 是一个面向开发人员的工具，它引入了一致的工作流(即构建、部署、发布)在不同平台上发布应用程序。
+### KubeVela vs. 平台不限的开发人员工具
 
-KubeVela 可以作为一个受支持的平台集成到 Waypoint 中。在这种情况下，开发人员可以使用 Waypoint 工作流来管理应用程序，利用 KubeVela 构建的抽象(例如 application、rollout、ingress、autoscaling 等)。
+典型的例子是 Hashicorp 的 Waypoint。 Waypoint 是一个面向开发人员的工具，它引入了一致的工作流程（即构建、部署、发布）以在不同平台上发布应用程序。
 
-### KubeVela vs. Helm 
+KubeVela 可以与此类工具无缝集成。在这种情况下，开发人员将使用 Waypoint 工作流作为 UI，通过 KubeVela 的抽象（例如应用程序、组件、特征等）跨混合环境部署和管理应用程序。
 
-Helm 是 Kubernetes 的一个包管理器，为 Kubernetes 提供打包、安装和升级一组 YAML 文件。KubeVela 充分利用 Helm 来打包功能依赖，而且 Helm 也是*应用程序*抽象背后的核心模板引擎之一。
+### KubeVela vs. Helm
 
-尽管 KubeVela 本身不是一个包管理器，但它是平台构建者的核心引擎，用于以简单和可重复的方式创建上层平台。
+Helm 是 Kubernetes 的包管理器，它以 Kubernetes 为一个单元，提供打包、安装和升级的一组 YAML 文件。
+
+KubeVela 作为现代部署系统，可以自然地跨混合环境部署 Helm chart。 例如，你可以轻松地使用 KubeVela 来声明和部署由 WordPress Helm chart 和 Terraform 定义的 AWS RDS 实例组成的应用程序，或者将 Helm chart 分发到多个集群。
+
+KubeVela 还利用 Helm 来管理运行时集群中的功能插件。
 
 ### KubeVela vs. Kubernetes
 
-KubeVela 是一个 Kubernetes 插件，用于构建更高级别的抽象。它利用 [Open Application Model](https://github.com/oam-dev/spec) 和本地 Kubernetes 的可扩展性来解决一个困难的问题 -- 让在 Kubernetes 上发布应用程序变得愉快。
+KubeVela 是一个 Kubernetes 插件，用于构建以开发人员为中心的部署系统。它利用开放应用程序模型（Open Application Model）和原生 Kubernetes 可扩展性，来解决一个难题——使在 Kubernetes 上打包、交付应用程序变得更加轻松。
 
-## 入门
+## 下一步
 
-现在，让我们[开始](./quick-start.md)使用 KubeVela！
+现在，让我们开始[安装](./install.mdx)使用 KubeVela！

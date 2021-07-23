@@ -25,7 +25,6 @@ module.exports = {
       label: 'Application Team Guide',
       collapsed: false,
       items:[
-        'end-user/application',
         {
           'Components': [
             'end-user/components/webservice',
