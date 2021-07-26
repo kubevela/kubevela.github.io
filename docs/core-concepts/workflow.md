@@ -1,5 +1,5 @@
 ---
-title:  Components 组件系统
+title:  Workflow 工作流
 ---
 
 *"KubeVela 是一个面向平台构建者基于 Kubernetes 构建易用可拓展的云原生应用平台的引擎。"*
@@ -93,6 +93,7 @@ spec:
 ### 总结
 
 KubeVela的主要概念由下图所示：
+
 
 
 ## 架构

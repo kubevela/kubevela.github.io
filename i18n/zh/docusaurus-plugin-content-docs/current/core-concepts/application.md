@@ -1,5 +1,5 @@
 ---
-title: Application
+title: Application 应用部署计划
 ---
 
 本文档将介绍如何使用 KubeVela 设计一个没有定义任何策略或放置规则的简单 Application。
@@ -45,7 +45,7 @@ kubectl vela show webservice
 
 > 提示：`vela show xxx --web` 将在你的默认浏览器中打开其功能参考文档。
 
-你可以随时向平台[添加更多组件](components/more)。
+你可以随时向平台[添加更多组件]。
 
 ## 步骤 2：声明一个 Application
 
@@ -234,4 +234,4 @@ NAME           AGE
 website-v1     35m
 ```
 
-此外，系统将根据附加的 [rollout plan](scopes/rollout-plan) 决定如何/是否部署应用程序。
+此外，系统将根据附加的 rollout plan 决定如何/是否部署应用程序。

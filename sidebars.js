@@ -18,6 +18,7 @@ module.exports = {
         'core-concepts/application',
         'core-concepts/components',
         'core-concepts/traits',
+        'core-concepts/workflow',
       ],
     },
     {
@@ -25,6 +26,8 @@ module.exports = {
       label: 'Application Team Guide',
       collapsed: false,
       items:[
+          'end-user/overview-end-user',
+          'end-user/initializer-end-user',
         {
           'Components': [
             'end-user/components/webservice',
@@ -45,6 +48,7 @@ module.exports = {
             'end-user/traits/more',
           ]
         },
+        'end-user/workflow-end-user',
         'end-user/scopes/rollout-plan',
         {
           'Observability': [
@@ -64,8 +68,9 @@ module.exports = {
       collapsed: false,
       items: [
         'platform-engineers/overview',
-        'platform-engineers/definition-and-templates',
-        'platform-engineers/openapi-v3-json-schema',
+        // 'platform-engineers/definition-and-templates',
+        // 'platform-engineers/openapi-v3-json-schema',
+        'platform-engineers/initializer-platform-eng',
         {
           type: 'category',
           label: 'Defining Components',
@@ -110,14 +115,15 @@ module.exports = {
             'platform-engineers/cue/advanced',
           ]
         },
-        {
-          type: 'category',
-          label: 'Hands-on Lab',
-          items: [
-            'platform-engineers/debug-test-cue',
-            'platform-engineers/keda'
-          ]
-        },
+        // {
+        //   type: 'category',
+        //   label: 'Hands-on Lab',
+        //   items: [
+        //     'platform-engineers/debug-test-cue',
+        //     'platform-engineers/keda'
+        //   ]
+        // },
+        'platform-engineers/workflow-platform-eng',
       ],
     },
     {

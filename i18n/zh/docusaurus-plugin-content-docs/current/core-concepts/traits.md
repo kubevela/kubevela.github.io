@@ -1,5 +1,5 @@
 ---
-title:  核心概念
+title:  Traits 运维特征
 ---
 
 *"KubeVela 是一个面向平台构建者基于 Kubernetes 构建易用可拓展的云原生应用平台的引擎。"*
