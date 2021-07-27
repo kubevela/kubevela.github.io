@@ -6,8 +6,8 @@ module.exports = {
       collapsed: false,
       items: [
         'getting-started/introduction',
-        'getting-started/install',
-        'getting-started/quick-start',
+        'getting-started/quick-install',
+        'getting-started/first-application',
       ],
     },
     {
@@ -16,17 +16,16 @@ module.exports = {
       collapsed: false,
       items: [
         'core-concepts/application',
-        'core-concepts/components',
-        'core-concepts/traits',
         'core-concepts/workflow',
+        'core-concepts/infrastructure',
       ],
     },
     {
       type: 'category',
-      label: 'Application Team Guide',
+      label: 'End User Guide',
       collapsed: false,
       items:[
-          'end-user/overview-end-user',
+          // 'end-user/overview-end-user',
           'end-user/initializer-end-user',
         {
           'Components': [
@@ -40,67 +39,83 @@ module.exports = {
         {
           'Traits': [
             'end-user/traits/ingress',
-            'end-user/traits/scaler',
-            'end-user/traits/annotations-and-labels',
-            'end-user/traits/sidecar',
+            {
+              'Scaler': [
+              'end-user/traits/manual-scaler',
+              'end-user/traits/autoscaler',
+              ]
+            },       
             'end-user/traits/volumes',
             'end-user/traits/service-binding',
-            'end-user/traits/more',
+            'end-user/traits/annotations-and-labels',
+            'end-user/traits/sidecar',
+            'end-user/traits/metrics',
           ]
         },
-        'end-user/workflow-end-user',
-        'end-user/scopes/rollout-plan',
+        // 'end-user/workflow-end-user',
+        // 'end-user/scopes/rollout-plan',
+        // {
+        //   'Observability': [
+        //     'end-user/scopes/health',
+        //   ]
+        // },
+
         {
-          'Observability': [
-            'end-user/scopes/health',
+          'Workflow End User': [
+            'end-user/workflow/multi-env',
+            'end-user/workflow/canary',
+            'end-user/workflow/component-topo',
           ]
         },
         {
           'Debugging': [
-            'end-user/debug',
+            'end-user/debug/dry-run',
+            'end-user/debug/live-diff',
+            'end-user/debug/health',
+            'end-user/debug/monitoring',
           ]
         },
       ]
     },
     {
       type: 'category',
-      label: 'Platform Team Guide',
+      label: 'Administrator Guide',
       collapsed: false,
       items: [
-        'platform-engineers/overview',
-        // 'platform-engineers/definition-and-templates',
-        // 'platform-engineers/openapi-v3-json-schema',
-        'platform-engineers/initializer-platform-eng',
+        'administrator/advanced-install',
+        // 'administrator/definition-and-templates',
+        // 'administrator/openapi-v3-json-schema',
+        'administrator/initializer-platform-eng',
         {
           type: 'category',
           label: 'Defining Components',
           items: [
             {
               'CUE': [
-                'platform-engineers/cue/component',
-                'platform-engineers/cue/basic',
+                // 'administrator/cue/component',
+                // 'administrator/cue/basic',
               ]
             },
             {
               'Helm': [
-                  'platform-engineers/helm/component',
-                  'platform-engineers/helm/trait',
-                  'platform-engineers/helm/known-issues'
+                  // 'administrator/helm/component',
+                  'administrator/helm/trait',
+                  'administrator/helm/known-issues'
               ]
             },
             {
               'Simple Template': [
-                  'platform-engineers/kube/component',
-                  'platform-engineers/kube/trait',
+                  'administrator/kube/component',
+                  'administrator/kube/trait',
               ]
             },
             {
               type: 'category',
               label: 'Cloud Services',
               items: [
-                'platform-engineers/cloud-services',
-                'platform-engineers/terraform',
-                'platform-engineers/crossplane',
+                'administrator/cloud-services',
+                'administrator/terraform',
+                'administrator/crossplane',
               ]
             },
           ]
@@ -109,21 +124,21 @@ module.exports = {
           type: 'category',
           label: 'Defining Traits',
           items: [
-            'platform-engineers/cue/trait',
-            'platform-engineers/cue/patch-trait',
-            'platform-engineers/cue/status',
-            'platform-engineers/cue/advanced',
+            'administrator/cue/trait',
+            'administrator/cue/patch-trait',
+            'administrator/cue/status',
+            'administrator/cue/advanced',
           ]
         },
         // {
         //   type: 'category',
         //   label: 'Hands-on Lab',
         //   items: [
-        //     'platform-engineers/debug-test-cue',
-        //     'platform-engineers/keda'
+        //     'administrator/debug-test-cue',
+        //     'administrator/keda'
         //   ]
         // },
-        'platform-engineers/workflow-platform-eng',
+        'administrator/workflow-platform-eng',
       ],
     },
     {
@@ -185,11 +200,11 @@ module.exports = {
         'roadmap/README',
       ],
     },
-    {
-      'Appendix': [
-        'advanced-install',
-      ]
-    },
+    // {
+    //   'Appendix': [
+    //     'advanced-install',
+    //   ]
+    // },
     {
       type: 'doc',
       id: 'developers/references/devex/faq'

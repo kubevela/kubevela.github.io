@@ -23,12 +23,12 @@ We also reference components and traits as *"capabilities"* in KubeVela.
 ## Workflow
 
 To ensure simple yet consistent user experience across hybrid environments. KubeVela introduces a workflow with separate of concerns as below:
-- **Platform Team**
+- **Administrator**
   - Model and manage platform capabilities as components or traits, together with target environments specifications.
-- **Application Team**
+- **End User**
   - Choose a environment, assemble the application with components and traits per needs, and deploy it to target environment.
 
-> Note that either platform team or application team application will only talk to the control plane cluster. KubeVela is designed to hide the details of runtime infrastructures except for debugging or verifying purpose.
+> Note that either Administrator or End User application will only talk to the control plane cluster. KubeVela is designed to hide the details of runtime infrastructures except for debugging or verifying purpose.
 
 Below is how this workflow looks like:
 

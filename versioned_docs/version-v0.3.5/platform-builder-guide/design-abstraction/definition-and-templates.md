@@ -6,7 +6,7 @@ title: Definition CRD
 
 This documentation explains how to register and manage available *components* and *traits* in your platform with `WorkloadDefinition` and `TraitDefinition`, so your end users could "assemble" them into a `Application` resource.
 
-> All definition objects are expected to be maintained and installed by platform team, think them as *capability providers* in your platform.
+> All definition objects are expected to be maintained and installed by Administrator, think them as *capability providers* in your platform.
 
 ## Overview
 

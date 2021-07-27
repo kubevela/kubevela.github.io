@@ -67,6 +67,14 @@
     "message": "参考",
     "description": "The label for category References in sidebar docs"
   },
+  "sidebar.docs.category.Workflow End User": {
+    "message": "交付工作流",
+    "description": "The label for category Workflow End User in sidebar docs"
+  },
+  "sidebar.docs.category.Workflow Administrator": {
+    "message": "工作流系统",
+    "description": "The label for category Workflow Administrator in sidebar docs"
+  },
   "sidebar.docs.category.CLI": {
     "message": "CLI 命令行工具",
     "description": "The label for category CLI in sidebar docs"
@@ -83,29 +91,33 @@
     "message": "自定义组件系统",
     "description": "The label for category Defining Components in sidebar docs"
   },
-  "sidebar.docs.category.Application Team Guide": {
-    "message": "应用开发者手册",
-    "description": "The label for category Application Team Guide in sidebar docs"
+  "sidebar.docs.category.End User Guide": {
+    "message": "用户手册",
+    "description": "The label for category End User Guide in sidebar docs"
   },
   "sidebar.docs.category.Components": {
-    "message": "使用组件系统",
+    "message": "组件类型",
     "description": "The label for category Components in sidebar docs"
   },
   "sidebar.docs.category.Traits": {
-    "message": "添加运维特征",
+    "message": "运维特征",
     "description": "The label for category Traits in sidebar docs"
   },
   "sidebar.docs.category.Observability": {
     "message": "新增可观测性",
     "description": "The label for category Observability in sidebar docs"
   },
+  "sidebar.docs.category.Scaler": {
+    "message": "扩缩容",
+    "description": "The label for category Scaler in sidebar docs"
+  },
   "sidebar.docs.category.Debugging": {
     "message": "调试指南",
     "description": "The label for category Debugging in sidebar docs"
   },
-  "sidebar.docs.category.Platform Team Guide": {
-    "message": "平台开发者手册",
-    "description": "The label for category Platform Team Guide in sidebar docs"
+  "sidebar.docs.category.Administrator Guide": {
+    "message": "管理员手册",
+    "description": "The label for category Administrator Guide in sidebar docs"
   },
   "sidebar.docs.category.Simple Template": {
     "message": "Simple Template",

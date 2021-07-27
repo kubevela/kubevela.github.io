@@ -1,5 +1,5 @@
 ---
-title: 使用 Cloud Volumes
+title: 数据持久化
 ---
 
 本节介绍如何将 Cloud Volumes 附加到组件。 例如，AWS ElasticBlockStore、

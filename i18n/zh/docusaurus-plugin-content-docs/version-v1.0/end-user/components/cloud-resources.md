@@ -2,7 +2,7 @@
 title: 调配和使用云资源
 ---
 
-> ⚠️ 本章节前置要求你的平台运维人员已经安装了 [cloud resources related capabilities](../platform-engineers/cloud-services)。
+> ⚠️ 本章节前置要求你的平台运维人员已经安装了 [cloud resources related capabilities](../administrator/cloud-services)。
 
 ## 单一应用（单一云资源）调配和使用云资源
 

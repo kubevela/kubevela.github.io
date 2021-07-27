@@ -29,10 +29,10 @@ When you add or modify the docs, these three files(`docs/en/`, `docs/en/resource
     ```
 
    When you want to add a link refer to any `.md` files inside the docs(`docs/en`), you need to use relative path and remove the `.md` suffix.
-   For example, the `en/helm/component.md` has a link refer to `en/platform-engineers/definition-and-templates.md`. Then the format should like:
+   For example, the `en/helm/component.md` has a link refer to `en/administrator/definition-and-templates.md`. Then the format should like:
 
     ```markdown
-   [the definition and template concepts](../platform-engineers/definition-and-templates)
+   [the definition and template concepts](../administrator/definition-and-templates)
     ```
 
 2. `docs/en/resource/`, image files are located in this folder. When you want to use link any image in documentation, 

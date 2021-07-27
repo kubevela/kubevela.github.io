@@ -1,5 +1,5 @@
 ---
-title:  使用 Service Binding
+title:  云资源绑定
 ---
 
 ## 定义

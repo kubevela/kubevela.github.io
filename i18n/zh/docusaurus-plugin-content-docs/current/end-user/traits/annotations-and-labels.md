@@ -1,5 +1,5 @@
 ---
-title: 使用 Labels and Annotations
+title: 组件标签
 ---
 
 

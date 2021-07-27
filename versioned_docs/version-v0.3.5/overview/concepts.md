@@ -9,7 +9,7 @@ In this documentation, we will explain the core idea of KubeVela and clarify som
 ## Overview
 
 First of all, KubeVela introduces a workflow with separate of concerns as below:
-- **Platform Team**
+- **Administrator**
   - Defining templates for deployment environments and reusable capability modules to compose an application, and registering them into the cluster.
 - **End Users**
   - Choose a deployment environment, model and assemble the app with available modules, and deploy the app to target environment.
@@ -18,7 +18,7 @@ Below is how this workflow looks like:
 
 ![alt](../resources/how-it-works.png)
 
-This template based workflow make it possible for platform team enforce best practices and deployment confidence with a set of Kubernetes CRDs, and give end users a *PaaS-like* experience (*i.e. app-centric, higher level abstractions, self-service operations etc*) by natural.
+This template based workflow make it possible for Administrator enforce best practices and deployment confidence with a set of Kubernetes CRDs, and give end users a *PaaS-like* experience (*i.e. app-centric, higher level abstractions, self-service operations etc*) by natural.
 
 ![alt](../resources/what-is-kubevela.png)
 
@@ -76,7 +76,7 @@ We also reference component types and traits as *"capabilities"* in KubeVela.
 
 ## Definitions
 
-Both the schemas of workload settings and trait properties in `Application` are enforced by a set of definition objects. The platform teams or component providers are responsible for registering and managing definition objects in target cluster following [workload definition](https://github.com/oam-dev/spec/blob/master/4.workload_types.md) and [trait definition](https://github.com/oam-dev/spec/blob/master/6.traits.md) specifications in Open Application Model (OAM). 
+Both the schemas of workload settings and trait properties in `Application` are enforced by a set of definition objects. The Administrators or component providers are responsible for registering and managing definition objects in target cluster following [workload definition](https://github.com/oam-dev/spec/blob/master/4.workload_types.md) and [trait definition](https://github.com/oam-dev/spec/blob/master/6.traits.md) specifications in Open Application Model (OAM). 
 
 Specifically, definition object carries the templating information of this capability. Currently, KubeVela supports [Helm](http://helm.sh/) charts and [CUE](https://github.com/cuelang/cue) modules as definitions which means you could use KubeVela to deploy Helm charts and CUE modules as application components, or claim them as traits. More capability types support such as [Terraform](https://www.terraform.io/) is also work in progress.
 

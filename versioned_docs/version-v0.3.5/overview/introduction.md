@@ -39,7 +39,7 @@ The typical examples are Heroku and Cloud Foundry. They provides full applicatio
 
 Though the biggest difference lies KubeVela positions itself as the engine to build "PaaS-like" systems, not a PaaS offering.
 
-KubeVela is designed as a core engine whose primary goal is to enable platform team to create "PaaS-like" experience by simply registering Kubernetes API resources and defining templates. Comparing to this experience, most existing PaaS systems are either inextensible or have their own addon systems. Hence it's common for them to enforce constraints in the type of supported applications and the supported capabilities which will not happen in KubeVela based experience. 
+KubeVela is designed as a core engine whose primary goal is to enable Administrator to create "PaaS-like" experience by simply registering Kubernetes API resources and defining templates. Comparing to this experience, most existing PaaS systems are either inextensible or have their own addon systems. Hence it's common for them to enforce constraints in the type of supported applications and the supported capabilities which will not happen in KubeVela based experience. 
 
 ### Serverless platforms  
 

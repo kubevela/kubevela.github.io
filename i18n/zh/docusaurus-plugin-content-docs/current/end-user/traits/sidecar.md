@@ -1,5 +1,5 @@
 ---
-title: 使用 Sidecar
+title: 容器注入
 ---
 
 在本章节中，我们会展示如何使用 `sidecar` trait 来收集日志。

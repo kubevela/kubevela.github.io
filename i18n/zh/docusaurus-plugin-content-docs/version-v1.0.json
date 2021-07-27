@@ -83,9 +83,9 @@
     "message": "Appendix",
     "description": "The label for category Appendix in sidebar docs"
   },
-  "sidebar.docs.category.Application Team Guide": {
-    "message": "Application Team Guide",
-    "description": "The label for category Application Team Guide in sidebar docs"
+  "sidebar.docs.category.End User Guide": {
+    "message": "End User Guide",
+    "description": "The label for category End User Guide in sidebar docs"
   },
   "sidebar.docs.category.Components": {
     "message": "Components",
@@ -103,9 +103,9 @@
     "message": "Debugging",
     "description": "The label for category Debugging in sidebar docs"
   },
-  "sidebar.docs.category.Platform Team Guide": {
-    "message": "Platform Team Guide",
-    "description": "The label for category Platform Team Guide in sidebar docs"
+  "sidebar.docs.category.Administrator Guide": {
+    "message": "Administrator Guide",
+    "description": "The label for category Administrator Guide in sidebar docs"
   },
   "sidebar.docs.category.Simple Template": {
     "message": "Simple Template",

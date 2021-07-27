@@ -1,3 +1,3 @@
 ---
-title:  应用环境初始化
+title:  Initializer
 ---

@@ -1,5 +1,5 @@
 ---
-title: 使用 Ingress
+title: 配置网关
 ---
 
 > ⚠️ 本节要求你的运行时集群有一个有效的 ingress 控制器。

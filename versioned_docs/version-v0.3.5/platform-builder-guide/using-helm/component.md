@@ -82,7 +82,7 @@ values](https://helm.sh/docs/topics/charts/#schema-files) in a chart's
 values.yaml file with JSON schemas.  
 Vela will try to fetch the `values.schema.json` file from the Chart archive and
 [save the schema into a
-ConfigMap](https://kubevela.io/#/en/platform-engineers/openapi-v3-json-schema.md)
+ConfigMap](https://kubevela.io/#/en/administrator/openapi-v3-json-schema.md)
 which can be consumed latter through UI or CLI.  
 If `values.schema.json` is not provided by the Chart author, Vela will generate a
 OpenAPI-v3 JSON schema based on the `values.yaml` file automatically.  

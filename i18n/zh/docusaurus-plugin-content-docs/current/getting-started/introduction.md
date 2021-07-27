@@ -73,4 +73,4 @@ KubeVela 是一个 Kubernetes 插件，用于构建以开发人员为中心的�
 
 ## 下一步
 
-现在，让我们开始[安装](./install.mdx)使用 KubeVela！
+现在，让我们开始安装使用 KubeVela！

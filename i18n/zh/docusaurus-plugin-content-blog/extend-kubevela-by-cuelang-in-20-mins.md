@@ -26,9 +26,9 @@ KubeVela 的基本架构如图所示：
 
 简单来说，KubeVela 通过添加 **Workload Type** 和 **Trait** 来为用户扩展能力，平台的服务提供方通过 Definition 文件注册和扩展，向上通过 Appfile 透出扩展的功能。官方文档中也分别给出了基本的编写流程，其中2个是Workload的扩展例子，一个是Trait的扩展例子：
 
-- [OpenFaaS 为例的 Workload Type 扩展](https://kubevela.io/#/en/platform-engineers/workload-type)
-- [云资源 RDS 为例的 Workload Type 扩展](https://kubevela.io/#/en/platform-engineers/cloud-services)
-- [KubeWatch 为例的 Trait 扩展](https://kubevela.io/#/en/platform-engineers/trait)
+- [OpenFaaS 为例的 Workload Type 扩展](https://kubevela.io/#/en/administrator/workload-type)
+- [云资源 RDS 为例的 Workload Type 扩展](https://kubevela.io/#/en/administrator/cloud-services)
+- [KubeWatch 为例的 Trait 扩展](https://kubevela.io/#/en/administrator/trait)
 
 我们以一个内置的 WorkloadDefinition 为例来介绍一下 Definition 文件的基本结构：
 
