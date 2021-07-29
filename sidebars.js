@@ -104,14 +104,9 @@ module.exports = {
           type: 'category',
           label: 'Defining Components',
           items: [
-            'platform-engineers/components/component-customize',
-            {
-              'Customize Components': [
-                'platform-engineers/components/component-terraform',
-                'platform-engineers/components/component-cue',
-              ]
-            },
-
+            'platform-engineers/components/component-default',
+            'platform-engineers/components/component-cue',
+            'platform-engineers/components/component-terraform',
           ]
         },
         {

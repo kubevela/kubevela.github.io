@@ -1,16 +1,16 @@
 ---
-title: Terraform
+title:  Terraform 组件
 ---
 
-在本文档中，我们将使用阿里云的 RDS（关系数据库服务）和阿里云的 OSS（对象存储系统）作为示例，展示如何在应用程序部署中启用云服务。
+In this documentation, we will use Alibaba Cloud's RDS (Relational Database Service), and Alibaba Cloud's OSS (Object Storage System) as examples to show how to enable cloud services as part of the application deployment.
 
-这些云服务由 Terraform 提供。
+These cloud services are provided by Terraform.
 
-## 准备 Terraform 控制器
+## Prepare Terraform Controller
 
 <details>
 
-从最新的 [发布列表](https://github.com/oam-dev/terraform-controller/releases) 下载最新的图表，如 `terraform-controller-chart-0.1.8.tgz` 并安装它。
+Download the latest chart, like `terraform-controller-chart-0.1.8.tgz`, from the latest [releases list](https://github.com/oam-dev/terraform-controller/releases) and install it.
 
 ```shell
 $ helm install terraform-controller terraform-controller-0.1.8.tgz
@@ -22,17 +22,17 @@ REVISION: 1
 TEST SUITE: None
 ```
 
-### 应用提供商凭据
+### Apply Provider Credentials
 
-通过应用 Terraform Provider 凭据，可以对 Terraform 控制器进行身份验证以部署和管理云资源。
+By applying Terraform Provider credentials, Terraform controller can be authenticated to deploy and manage cloud resources.
 
-如何申请阿里云或 AWS 的 Provider 请参考[Terraform控制器入门](https://github.com/oam-dev/terraform-controller/blob/master/getting-started.md)。
+Please refer to [Terraform controller getting started](https://github.com/oam-dev/terraform-controller/blob/master/getting-started.md) on how to apply Provider for Alibaba Cloud or AWS.
 
 </details>
 
-### 注册`alibaba-rds`组件
+### Register `alibaba-rds` Component
 
-注册 [alibaba-rds](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/ComponentDefinition-alibaba-rds.yaml) 到 KubeVela。
+Register [alibaba-rds](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/ComponentDefinition-alibaba-rds.yaml) to KubeVela.
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha2
@@ -97,9 +97,10 @@ spec:
 
 ```
 
-### 注册`alibaba-oss`组件
+### Register `alibaba-oss` Component
 
-注册 [alibaba-oss](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/ComponentDefinition-alibaba-oss.yaml) 到 KubeVela。
+Register [alibaba-oss](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/ComponentDefinition-alibaba-oss.yaml) to KubeVela.
+
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha2

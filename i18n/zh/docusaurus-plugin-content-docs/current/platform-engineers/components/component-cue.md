@@ -1,14 +1,14 @@
 ---
-title:  怎么用 CUE
+title:  自定义组件
 ---
 
-本节将介绍如何使用 [CUE](https://cuelang.org/) 通过 `ComponentDefinition` 来声明 app 组件。
+In this section, it will introduce how to use [CUE](https://cuelang.org/) to declare app components via `ComponentDefinition`.
 
-> 在阅读本部分之前，请确保你已经学习了 KubeVela 中的 [Definition CRD](../definition-and-templates)。
+> Before reading this part, please make sure you've learned the [Definition CRD](../definition-and-templates) in KubeVela.
 
-## 声明 `ComponentDefinition`
+## Declare `ComponentDefinition`
 
-这是一个基于 CUE 的 `ComponentDefinition` 示例，它提供了无状态工作负载类型的抽象：
+Here is a CUE based `ComponentDefinition` example which provides a abstraction for stateless workload type:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -24,37 +24,37 @@ spec:
     cue:
       template: |
         parameter: {
-          name:  string
-          image: string
+        	name:  string
+        	image: string
         }
         output: {
-          apiVersion: "apps/v1"
-          kind:       "Deployment"
-          spec: {
-            selector: matchLabels: {
-              "app.oam.dev/component": parameter.name
-            }
-            template: {
-              metadata: labels: {
-                "app.oam.dev/component": parameter.name
-              }
-              spec: {
-                containers: [{
-                  name:  parameter.name
-                  image: parameter.image
-                }]
-              }
-            }
-          }
+        	apiVersion: "apps/v1"
+        	kind:       "Deployment"
+        	spec: {
+        		selector: matchLabels: {
+        			"app.oam.dev/component": parameter.name
+        		}
+        		template: {
+        			metadata: labels: {
+        				"app.oam.dev/component": parameter.name
+        			}
+        			spec: {
+        				containers: [{
+        					name:  parameter.name
+        					image: parameter.image
+        				}]
+        			}
+        		}
+        	}
         }
 ```
-详细来说：
-- 需要 `.spec.workload` 来指示该组件的工作负载类型。
-- `.spec.schematic.cue.template` 是一个 CUE 模板，具体来说：
-     * `output` 字段定义了抽象模板。
-     * `parameter` 字段定义了模板参数，即在 `Application` 抽象中公开的可配置属性（KubeVela 将基于parameter字段自动生成Json schema）。
+In detail:
+- `.spec.workload` is required to indicate the workload type of this component.
+- `.spec.schematic.cue.template` is a CUE template, specifically:
+    * The `output` filed defines the template for the abstraction.
+    * The `parameter` filed defines the template parameters, i.e. the configurable properties exposed in the `Application`abstraction (and JSON schema will be automatically generated based on them).
 
-让我们声明另一个名为 `task` 的组件，即  run-to-completion 负载的抽象。
+Let's declare another component named `task`, i.e. an abstraction for run-to-completion workload.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -96,11 +96,11 @@ spec:
         }
 ```
 
-将上面的 `ComponentDefintion` 对象保存到文件中，并通过 `$ kubectl apply -f stateless-def.yaml task-def.yaml` 将它们安装到你的 Kubernetes 集群。
+Save above `ComponentDefintion` objects to files and install them to your Kubernetes cluster by `$ kubectl apply -f stateless-def.yaml task-def.yaml`
 
-## 声明一个 `Application`
+## Declare an `Application`
 
-`ComponentDefinition` 可以在 `Application` 抽象中实例化，如下所示：
+The `ComponentDefinition` can be instantiated in `Application` abstraction as below:
 
   ```yaml
   apiVersion: core.oam.dev/v1alpha2
@@ -124,10 +124,10 @@ spec:
             - "for i in 9 8 7 6 5 4 3 2 1 ; do echo $i ; done"
   ```
 
-### 背后含义
+### Under The Hood
 <details>
 
-上述应用程序资源将根据 CUE 模板中的 `output` 和 `Application` 属性中的用户输入生成和管理目标集群中的以下 Kubernetes 资源。
+Above application resource will generate and manage following Kubernetes resources in your target cluster based on the `output` in CUE template and user input in `Application` properties.
 
 ```yaml
 apiVersion: apps/v1
@@ -173,9 +173,9 @@ spec:
 
 ## CUE `Context`
 
-KubeVela 允许你通过 `context` 关键字引用应用程序的运行时信息。
+KubeVela allows you to reference the runtime information of your application via `conext` keyword.
 
-最广泛使用的上下文是应用程序名称(`context.appName`) 组件名称(`context.name`)。
+The most widely used context is application name(`context.appName`) component name(`context.name`).
 
 ```cue
 context: {
@@ -184,7 +184,7 @@ context: {
 }
 ```
 
-例如，假设你要使用用户填写的组件名称作为工作负载实例中的容器名称：
+For example, let's say you want to use the component name filled in by users as the container name in the workload instance:
 
 ```cue
 parameter: {
@@ -202,13 +202,14 @@ output: {
 }
 ```
 
-> 请注意，在将资源应用于目标集群之前，会自动注入 `context` 信息。
+> Note that `context` information are auto-injected before resources are applied to target cluster.
 
-### CUE `context` 包含的所有信息
+### Full available information in CUE `context`
 
 | Context Variable  | Description |
 | :--: | :---------: |
 | `context.appRevision` | The revision of the application |
+| `context.appRevisionNum` | The revision number(`int` type) of the application, e.g., `context.appRevisionNum` will be `1` if `context.appRevision` is `app-v1`|
 | `context.appName` | The name of the application |
 | `context.name` | The name of the component of the application |
 | `context.namespace` | The namespace of the application |
@@ -216,24 +217,24 @@ output: {
 | `context.outputs.<resourceName>` | The rendered trait API resource of the component, this usually used in trait |
 
 
-## 构造
+## Composition
 
-一个组件定义通常由多个 API 资源组成，例如，一个由 Deployment 和 Service 组成的 `webserver` 组件。 CUE 是一个很好的解决方案，可以在简化的原语中实现这一点。
+It's common that a component definition is composed by multiple API resources, for example, a `webserver` component that is composed by a Deployment and a Service. CUE is a great solution to achieve this in simplified primitives.
 
-> 当然，另一种在 KubeVela 中进行组合的方法是 [使用 Helm](../helm/component)。
+> Another approach to do composition in KubeVela of course is [using Helm](../helm/component).
 
-## 怎么做
+## How-to
 
-KubeVela 要求你在 `output` 部分定义工作负载类型的模板，并在 `outputs` 部分保留所有其他资源模板，格式如下：
+KubeVela requires you to define the template of workload type in `output` section, and leave all the other resource templates in `outputs` section with format as below:
 
 ```cue
 outputs: <unique-name>: 
   <full template data>
 ```
 
-> 此要求的原因是 KubeVela 需要知道它当前正在渲染工作负载，因此它可以执行一些“魔术”，例如在此期间修补注释/标签或其他数据。
+> The reason for this requirement is KubeVela needs to know it is currently rendering a workload so it could do some "magic" like patching annotations/labels or other data during it.
 
-下面是 `webserver` 定义的例子：
+Below is the example for `webserver` definition: 
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -329,7 +330,7 @@ spec:
         }
 ```
 
-用户现在可以用它声明一个 `Application`：
+The user could now declare an `Application` with it:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -350,18 +351,24 @@ spec:
         cpu: "100m"
 ```
 
-它将在目标集群中生成和管理以下 API 资源：
+It will generate and manage below API resources in target cluster:
 
 ```shell
-$ kubectl get deployment
+kubectl get deployment
+```
+```console
 NAME             READY   UP-TO-DATE   AVAILABLE   AGE
 hello-world-v1   1/1     1            1           15s
+```
 
-$ kubectl get svc
+```shell
+kubectl get svc
+```
+```console
 NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
 hello-world-trait-7bdcff98f7   ClusterIP   <your ip>       <none>        8000/TCP   32s
 ```
 
-## 下一步是什么
+## What's Next
 
-请查看 [Learning CUE](../cue/basic) 文档，了解我们为什么支持 CUE 作为一流的模板解决方案，以及有关有效使用 CUE 的更多详细信息。
+Please check the [Learning CUE](../cue/basic) documentation about why we support CUE as first-class templating solution and more details about using CUE efficiently.
