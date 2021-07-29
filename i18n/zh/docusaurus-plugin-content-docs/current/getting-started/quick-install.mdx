@@ -5,7 +5,7 @@ title:  快速安装
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-> 如果是要升级现有的 KubeVela，请直接阅读[升级指南](../advanced-install/#upgrade).
+> 如果是要升级现有的 KubeVela，请直接阅读[升级指南](../platform-engineers/advanced-install/#upgrade).
 
 ## 1. 选择放置控制平面的集群
 
@@ -96,7 +96,7 @@ helm repo update
 ```shell script
 helm install --create-namespace -n vela-system kubevela kubevela/vela-core
 ```
-默认情况下，它将使用 [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen) 提供的自签名证书启用 webhook。你也可以用 [`cert-manager`](../advanced-install#install-kubevela-with-cert-manager) 安装。
+默认情况下，它将使用 [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen) 提供的自签名证书启用 webhook。你也可以用 [`cert-manager`](../platform-engineers/advanced-install#install-kubevela-with-cert-manager) 安装。
 
 4. 验证 chart 安装是否成功
     ```shell script
@@ -133,7 +133,7 @@ helm install --create-namespace -n vela-system kubevela kubevela/vela-core
 
 KubeVela CLI 可以让你更便捷地来管理应用交付。不过，它不是必须使用的。
 
-KubeVela CLI 也可以通过 [kubectl plugin](../advanced-install#install-kubectl-vela-plugin) 的方式来安装，或者通过二进制文件.
+KubeVela CLI 也可以通过 [kubectl plugin](../platform-engineers/advanced-install#install-kubectl-vela-plugin) 的方式来安装，或者通过二进制文件.
 
 <Tabs
     className="unique-tabs"

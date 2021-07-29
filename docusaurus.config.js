@@ -81,8 +81,8 @@ module.exports = {
               to: '/docs/install',
             },
             {
-              label: 'Administrator Guide',
-              to: '/docs/administrator/overview',
+              label: 'platform-engineers Guide',
+              to: '/docs/platform-engineers/overview',
             },
             {
               label: 'End User Guide',

@@ -56,7 +56,7 @@ kubewatch	my-center	trait	kubewatches.labs.bitnami.com	uninstalled	[]
 
 Now let's try to install the new trait named `kubewatch` from `my-center` to your own KubeVela platform.
 
-> [KubeWatch](https://github.com/bitnami-labs/kubewatch) is a Kubernetes plugin that watches events and publishes notifications to Slack channel etc. We can use it as a trait to watch important changes of your app and notify the platform administrators via Slack.
+> [KubeWatch](https://github.com/bitnami-labs/kubewatch) is a Kubernetes plugin that watches events and publishes notifications to Slack channel etc. We can use it as a trait to watch important changes of your app and notify the platform platform-engineerss via Slack.
 
 Install `kubewatch` trait from `my-center`.
 
@@ -113,7 +113,7 @@ $ cat << EOF >> vela.yaml
 EOF
 ```
 
-> The `https://hooks.slack.com/<your-token>` is the Slack channel that your platform administrators are keeping an eye on.
+> The `https://hooks.slack.com/<your-token>` is the Slack channel that your platform platform-engineerss are keeping an eye on.
 
 Update the deployment:
 
@@ -121,7 +121,7 @@ Update the deployment:
 $ vela up
 ```
 
-Now, your platform administrators should receive notifications whenever important changes happen to your app. For example, a fresh new deployment.
+Now, your platform platform-engineerss should receive notifications whenever important changes happen to your app. For example, a fresh new deployment.
 
 ![Image of Kubewatch](../../resources/kubewatch-notif.jpg)
 

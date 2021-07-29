@@ -136,19 +136,19 @@
     {
       "collapsed": false,
       "type": "category",
-      "label": "Administrator Guide",
+      "label": "platform-engineers Guide",
       "items": [
         {
           "type": "doc",
-          "id": "version-v1.1/administrator/overview"
+          "id": "version-v1.1/platform-engineers/overview"
         },
         {
           "type": "doc",
-          "id": "version-v1.1/administrator/definition-and-templates"
+          "id": "version-v1.1/platform-engineers/definition-and-templates"
         },
         {
           "type": "doc",
-          "id": "version-v1.1/administrator/openapi-v3-json-schema"
+          "id": "version-v1.1/platform-engineers/openapi-v3-json-schema"
         },
         {
           "collapsed": true,
@@ -162,11 +162,11 @@
               "items": [
                 {
                   "type": "doc",
-                  "id": "version-v1.1/administrator/cue/component"
+                  "id": "version-v1.1/platform-engineers/cue/component"
                 },
                 {
                   "type": "doc",
-                  "id": "version-v1.1/administrator/cue/basic"
+                  "id": "version-v1.1/platform-engineers/cue/basic"
                 }
               ]
             },
@@ -177,15 +177,15 @@
               "items": [
                 {
                   "type": "doc",
-                  "id": "version-v1.1/administrator/helm/component"
+                  "id": "version-v1.1/platform-engineers/helm/component"
                 },
                 {
                   "type": "doc",
-                  "id": "version-v1.1/administrator/helm/trait"
+                  "id": "version-v1.1/platform-engineers/helm/trait"
                 },
                 {
                   "type": "doc",
-                  "id": "version-v1.1/administrator/helm/known-issues"
+                  "id": "version-v1.1/platform-engineers/helm/known-issues"
                 }
               ]
             },
@@ -196,11 +196,11 @@
               "items": [
                 {
                   "type": "doc",
-                  "id": "version-v1.1/administrator/kube/component"
+                  "id": "version-v1.1/platform-engineers/kube/component"
                 },
                 {
                   "type": "doc",
-                  "id": "version-v1.1/administrator/kube/trait"
+                  "id": "version-v1.1/platform-engineers/kube/trait"
                 }
               ]
             },
@@ -211,15 +211,15 @@
               "items": [
                 {
                   "type": "doc",
-                  "id": "version-v1.1/administrator/cloud-services"
+                  "id": "version-v1.1/platform-engineers/cloud-services"
                 },
                 {
                   "type": "doc",
-                  "id": "version-v1.1/administrator/terraform"
+                  "id": "version-v1.1/platform-engineers/terraform"
                 },
                 {
                   "type": "doc",
-                  "id": "version-v1.1/administrator/crossplane"
+                  "id": "version-v1.1/platform-engineers/crossplane"
                 }
               ]
             }
@@ -232,19 +232,19 @@
           "items": [
             {
               "type": "doc",
-              "id": "version-v1.1/administrator/cue/trait"
+              "id": "version-v1.1/platform-engineers/cue/trait"
             },
             {
               "type": "doc",
-              "id": "version-v1.1/administrator/cue/patch-trait"
+              "id": "version-v1.1/platform-engineers/cue/patch-trait"
             },
             {
               "type": "doc",
-              "id": "version-v1.1/administrator/cue/status"
+              "id": "version-v1.1/platform-engineers/cue/status"
             },
             {
               "type": "doc",
-              "id": "version-v1.1/administrator/cue/advanced"
+              "id": "version-v1.1/platform-engineers/cue/advanced"
             }
           ]
         },
@@ -255,11 +255,11 @@
           "items": [
             {
               "type": "doc",
-              "id": "version-v1.1/administrator/debug-test-cue"
+              "id": "version-v1.1/platform-engineers/debug-test-cue"
             },
             {
               "type": "doc",
-              "id": "version-v1.1/administrator/keda"
+              "id": "version-v1.1/platform-engineers/keda"
             }
           ]
         }

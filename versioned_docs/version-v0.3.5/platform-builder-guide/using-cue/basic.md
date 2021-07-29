@@ -63,7 +63,7 @@ The `template` field in this definition is a CUE module, it defines two keywords
 
 ## CUE Template Step by Step
 
-Let's say as the Administrator, we only want to allow end user configure `image` and `name` fields in the `Application` abstraction, and automatically generate all rest of the fields. How can we use CUE to achieve this?
+Let's say as the platform-engineers, we only want to allow end user configure `image` and `name` fields in the `Application` abstraction, and automatically generate all rest of the fields. How can we use CUE to achieve this?
 
 We can start from the final resource we envision the platform will generate based on user inputs, for example:
 

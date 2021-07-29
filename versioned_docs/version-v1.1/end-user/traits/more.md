@@ -6,7 +6,7 @@ Traits in KubeVela are designed as modularized building blocks, they are fully c
 
 ## 1. Get from capability canter
 
-KubeVela allows you to explore capabilities maintained by Administrator. There are two commands in kubectl vela
+KubeVela allows you to explore capabilities maintained by platform-engineers. There are two commands in kubectl vela
 plugin: `comp` and `trait`.
 
 In case you haven't installed kubectl vela plugin: see [this](../../developers/references/kubectl-plugin#install-kubectl-vela-plugin).
@@ -55,5 +55,5 @@ from [repo](https://registry.kubevela.net) maintained by KubeVela.
 
 ## 2. Designed by yourself
 
-Check [this documentation](../../administrator/cue/trait) about how to design and enable your own traits in
+Check [this documentation](../../platform-engineers/cue/trait) about how to design and enable your own traits in
 KubeVela platform.

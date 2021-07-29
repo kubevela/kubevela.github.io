@@ -31,9 +31,9 @@
     "message": "Debugging",
     "description": "The label for category Debugging in sidebar docs"
   },
-  "sidebar.docs.category.Administrator Guide": {
-    "message": "Administrator Guide",
-    "description": "The label for category Administrator Guide in sidebar docs"
+  "sidebar.docs.category.platform-engineers Guide": {
+    "message": "platform-engineers Guide",
+    "description": "The label for category platform-engineers Guide in sidebar docs"
   },
   "sidebar.docs.category.Defining Components": {
     "message": "Defining Components",

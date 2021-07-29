@@ -12,6 +12,14 @@ KubeVela is a modern application platform that makes deploying and managing appl
 - Gitter: [Discussion](https://gitter.im/oam-dev/community)
 - Bi-weekly Community Call: [Meeting Notes](https://docs.google.com/document/d/1nqdFEyULekyksFHtFvgvFAYE-0AMHKoS3RMnaKsarjs)
 
+## Installation
+
+Installation guide is available on [this section](getting-started/quick-install).
+
+## Quick Start
+
+Quick start is available on [this section](getting-started/first-application).
+
 ## Contributing
 Check out [CONTRIBUTING](https://github.com/oam-dev/kubevela/blob/master/CONTRIBUTING.md) to see how to develop with KubeVela.
 

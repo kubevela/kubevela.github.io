@@ -184,7 +184,7 @@ KubeVela 项目是 OAM 社区的官方项目，旨在取代原先的 Rudr 项目
 
 - 前往学习 [KubeVela Quick Start（新手教程）](https://kubevela.io/#/en/quick-start)，一步步了解 KubeVela 的使用方法。
 - 前往 OAM 社区深入交流和反馈。中文：钉钉群 23310022，英文：[Gitter](https://gitter.im/oam-dev/community) 和 [CNCF Slack](https://cloud-native.slack.com/archives/C01BLQ3HTJA)。
-- 尝试为 [KubeVela 添加来自开源社区的插件能力](https://kubevela.io/#/en/administrator/trait)。此外，如果你有任何关于扩展 KubeVela 的奇妙想法，比如，基于 KubeVela 开发一个自己的云原生数据库 PaaS 或者 AI PaaS，欢迎前往 OAM 社区通过 Issue 来进行讨论。
+- 尝试为 [KubeVela 添加来自开源社区的插件能力](https://kubevela.io/#/en/platform-engineers/trait)。此外，如果你有任何关于扩展 KubeVela 的奇妙想法，比如，基于 KubeVela 开发一个自己的云原生数据库 PaaS 或者 AI PaaS，欢迎前往 OAM 社区通过 Issue 来进行讨论。
 - 为 KubeVela 贡献代码. KubeVela 项目是一个诞生自云原生社区的开源项目（感谢来自 8 家不同公司的[初始贡献者](https://github.com/oam-dev/kubevela/blob/bbb2c527d96d3e1a0694e2f49b3d1d1168e72c53/OWNERS_ALIASES#L35)，并特别鸣谢 KubeVela 网站的发起者 [guoxudong](https://github.com/sunny0826)）。 
 
 **KubeVela 项目的维护者会在项目稳定后，即将整个项目所有权捐赠给中立开源基金会。**

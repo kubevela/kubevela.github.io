@@ -92,7 +92,7 @@ The similar extensible abstraction mechanism also applies to traits. For example
 
 > TBD: a autoscaler TraitDefinition (HPA)
 
-All the definition objects are expected to be defined and installed by Administrator. The end users will only focus on `Application` resource (either render it by tools or author it manually).
+All the definition objects are expected to be defined and installed by platform-engineers. The end users will only focus on `Application` resource (either render it by tools or author it manually).
 
 ## Conventions and "Standard Contract"
 

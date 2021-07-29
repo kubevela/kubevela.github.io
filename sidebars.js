@@ -24,16 +24,29 @@ module.exports = {
       type: 'category',
       label: 'End User Guide',
       collapsed: false,
-      items:[
-          // 'end-user/overview-end-user',
-          'end-user/initializer-end-user',
+      items: [
+        'end-user/initializer-end-user',
         {
           'Components': [
-            'end-user/components/webservice',
-            'end-user/components/task',
-            'end-user/components/worker',
-            'end-user/components/cloud-services',
-            'end-user/components/more',
+            'end-user/components/default',
+            'end-user/components/helm',
+            'end-user/components/kustomize',
+            {
+              'Cloud Services': [
+                {
+                'Terraform': [
+                  'end-user/components/cloud-services/terraform/sls',
+                  'end-user/components/cloud-services/terraform/rds',
+                ]
+              },
+              'end-user/components/cloud-services/alibaba-ros',
+              ]
+            },
+          ]
+        },
+        {
+          'Workflow End User': [
+            'end-user/workflow/multi-env',
           ]
         },
         {
@@ -41,30 +54,15 @@ module.exports = {
             'end-user/traits/ingress',
             {
               'Scaler': [
-              'end-user/traits/manual-scaler',
-              'end-user/traits/autoscaler',
+                'end-user/traits/manual-scaler',
+                'end-user/traits/autoscaler',
               ]
-            },       
+            },
             'end-user/traits/volumes',
             'end-user/traits/service-binding',
             'end-user/traits/annotations-and-labels',
             'end-user/traits/sidecar',
             'end-user/traits/metrics',
-          ]
-        },
-        // 'end-user/workflow-end-user',
-        // 'end-user/scopes/rollout-plan',
-        // {
-        //   'Observability': [
-        //     'end-user/scopes/health',
-        //   ]
-        // },
-
-        {
-          'Workflow End User': [
-            'end-user/workflow/multi-env',
-            'end-user/workflow/canary',
-            'end-user/workflow/component-topo',
           ]
         },
         {
@@ -79,66 +77,64 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'Administrator Guide',
+      label: 'platform-engineers Guide',
       collapsed: false,
       items: [
-        'administrator/advanced-install',
-        // 'administrator/definition-and-templates',
-        // 'administrator/openapi-v3-json-schema',
-        'administrator/initializer-platform-eng',
+        'platform-engineers/advanced-install',
+        {
+          'OAM': [
+            'platform-engineers/oam/oam-model',
+            'platform-engineers/oam/x-definition',
+          ]
+        },
+        {
+          'CUE': [
+            'platform-engineers/cue/basic',
+            'platform-engineers/cue/advanced',
+          ]
+        },
+        {
+          'Initializer Platform Eng': [
+            'platform-engineers/initializer/basic-initializer',
+            'platform-engineers/initializer/advanced-initializer',
+          ]
+        },
+
         {
           type: 'category',
           label: 'Defining Components',
           items: [
+            'platform-engineers/components/component-customize',
             {
-              'CUE': [
-                // 'administrator/cue/component',
-                // 'administrator/cue/basic',
+              'Customize Components': [
+                'platform-engineers/components/component-terraform',
+                'platform-engineers/components/component-cue',
               ]
             },
-            {
-              'Helm': [
-                  // 'administrator/helm/component',
-                  'administrator/helm/trait',
-                  'administrator/helm/known-issues'
-              ]
-            },
-            {
-              'Simple Template': [
-                  'administrator/kube/component',
-                  'administrator/kube/trait',
-              ]
-            },
-            {
-              type: 'category',
-              label: 'Cloud Services',
-              items: [
-                'administrator/cloud-services',
-                'administrator/terraform',
-                'administrator/crossplane',
-              ]
-            },
+
+          ]
+        },
+        {
+          'Workflow Platform Engineers': [
+            'platform-engineers/workflow/basic-workflow',
+            'platform-engineers/workflow/advanced-workflow',
           ]
         },
         {
           type: 'category',
           label: 'Defining Traits',
           items: [
-            'administrator/cue/trait',
-            'administrator/cue/patch-trait',
-            'administrator/cue/status',
-            'administrator/cue/advanced',
+            'platform-engineers/traits/trait',
+            {
+              'Customize Traits': [
+                'platform-engineers/traits/patch-trait',
+                'platform-engineers/traits/status',
+                'platform-engineers/traits/advanced',
+              ]
+            }
+
           ]
         },
-        // {
-        //   type: 'category',
-        //   label: 'Hands-on Lab',
-        //   items: [
-        //     'administrator/debug-test-cue',
-        //     'administrator/keda'
-        //   ]
-        // },
-        'administrator/workflow-platform-eng',
       ],
     },
     {
@@ -200,11 +196,6 @@ module.exports = {
         'roadmap/README',
       ],
     },
-    // {
-    //   'Appendix': [
-    //     'advanced-install',
-    //   ]
-    // },
     {
       type: 'doc',
       id: 'developers/references/devex/faq'

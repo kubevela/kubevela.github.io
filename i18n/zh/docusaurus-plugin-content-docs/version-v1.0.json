@@ -84,7 +84,7 @@
     "description": "The label for category Appendix in sidebar docs"
   },
   "sidebar.docs.category.End User Guide": {
-    "message": "End User Guide",
+    "message": "用户手册",
     "description": "The label for category End User Guide in sidebar docs"
   },
   "sidebar.docs.category.Components": {
@@ -103,9 +103,9 @@
     "message": "Debugging",
     "description": "The label for category Debugging in sidebar docs"
   },
-  "sidebar.docs.category.Administrator Guide": {
-    "message": "Administrator Guide",
-    "description": "The label for category Administrator Guide in sidebar docs"
+  "sidebar.docs.category.Platform Engineers Guide": {
+    "message": "管理员手册",
+    "description": "The label for category Platform Engineers Guide in sidebar docs"
   },
   "sidebar.docs.category.Simple Template": {
     "message": "Simple Template",

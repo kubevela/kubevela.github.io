@@ -12,7 +12,7 @@
     "description": "The label for Core Concepts in sidebar docs"
   },
   "sidebar.docs.category.CUE": {
-    "message": "CUE",
+    "message": "CUE 语言",
     "description": "The label for category CUE in sidebar docs"
   },
   "sidebar.docs.category.Helm": {
@@ -24,7 +24,7 @@
     "description": "The label for category Raw Template in sidebar docs"
   },
   "sidebar.docs.category.Defining Traits": {
-    "message": "自定义运维特征",
+    "message": "运维特征系统",
     "description": "The label for category Defining Traits in sidebar docs"
   },
   "sidebar.docs.category.Defining Cloud Service": {
@@ -67,14 +67,30 @@
     "message": "参考",
     "description": "The label for category References in sidebar docs"
   },
+  "sidebar.docs.category.OAM": {
+    "message": "开放应用模型",
+    "description": "The label for category OAM in sidebar docs"
+  },
+  "sidebar.docs.category.Initializer Platform Eng": {
+    "message": "交付环境系统",
+    "description": "The label for category Initializer Platform Eng in sidebar docs"
+  },
   "sidebar.docs.category.Workflow End User": {
-    "message": "交付工作流",
+    "message": "定义交付工作流",
     "description": "The label for category Workflow End User in sidebar docs"
   },
-  "sidebar.docs.category.Workflow Administrator": {
+  "sidebar.docs.category.Workflow Platform Engineers": {
     "message": "工作流系统",
-    "description": "The label for category Workflow Administrator in sidebar docs"
+    "description": "The label for category Workflow Platform Engineers in sidebar docs"
   },
+  "sidebar.docs.category.Customize Traits": {
+    "message": "自定义运维特征",
+    "description": "The label for category Customize Traits in sidebar docs"
+  },
+  "sidebar.docs.category.Customize Components": {
+    "message": "自定义组件",
+    "description": "The label for category Customize Traits in sidebar docs"
+  },  
   "sidebar.docs.category.CLI": {
     "message": "CLI 命令行工具",
     "description": "The label for category CLI in sidebar docs"
@@ -88,7 +104,7 @@
     "description": "The label for category Appendix in sidebar docs"
   },
   "sidebar.docs.category.Defining Components": {
-    "message": "自定义组件系统",
+    "message": "组件系统",
     "description": "The label for category Defining Components in sidebar docs"
   },
   "sidebar.docs.category.End User Guide": {
@@ -96,11 +112,11 @@
     "description": "The label for category End User Guide in sidebar docs"
   },
   "sidebar.docs.category.Components": {
-    "message": "组件类型",
+    "message": "选择待交付组件",
     "description": "The label for category Components in sidebar docs"
   },
   "sidebar.docs.category.Traits": {
-    "message": "运维特征",
+    "message": "挂载运维特征",
     "description": "The label for category Traits in sidebar docs"
   },
   "sidebar.docs.category.Observability": {
@@ -115,9 +131,9 @@
     "message": "调试指南",
     "description": "The label for category Debugging in sidebar docs"
   },
-  "sidebar.docs.category.Administrator Guide": {
+  "sidebar.docs.category.platform-engineers Guide": {
     "message": "管理员手册",
-    "description": "The label for category Administrator Guide in sidebar docs"
+    "description": "The label for category platform-engineers Guide in sidebar docs"
   },
   "sidebar.docs.category.Simple Template": {
     "message": "Simple Template",

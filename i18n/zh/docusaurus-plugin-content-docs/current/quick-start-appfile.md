@@ -10,7 +10,7 @@ title:  概述
 
 ## Step 1: 安装
 
-确保你已经参照 [安装指南](./install) 完成了所有的安装验证工作。
+确保你已经参照 [安装指南](getting-started/quick-install) 完成了所有的安装验证工作。
 
 ## Step 2: 部署你的第一个应用
 
@@ -55,7 +55,7 @@ Services:
       - ✅ ingress: Visiting URL: testsvc.example.com, IP: <your IP address>
 ```
 
-**在 [kind cluster 配置章节](./install#kind)**, 你可以通过 localhost 访问 service。 在其他配置中, 使用相应的 ingress 地址来替换 localhost。
+**在 [kind cluster 配置章节](getting-started/quick-install#kind)**, 你可以通过 localhost 访问 service。 在其他配置中, 使用相应的 ingress 地址来替换 localhost。
 
 ```
 $ curl -H "Host:testsvc.example.com" http://localhost/
