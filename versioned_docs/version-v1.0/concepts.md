@@ -28,7 +28,7 @@ To ensure simple yet consistent user experience across hybrid environments. Kube
 - **Application Team**
   - Choose a environment, assemble the application with components and traits per needs, and deploy it to target environment.
 
-> Note that either platform team or application team application will only talk to the control plane cluster. KubeVela is designed to hide the details of runtime infrastructures except for debugging or verifying purpose.
+> Note that either platform-engineers or End User application will only talk to the control plane cluster. KubeVela is designed to hide the details of runtime infrastructures except for debugging or verifying purpose.
 
 Below is how this workflow looks like:
 

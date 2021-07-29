@@ -6,9 +6,9 @@ KubeVela 中的 Traits 被设计为模块化的构建块，它们是完全可定
 
 ## 1. 从能力中心获取
 
-KubeVela 允许您探索由平台团队维护的功能。 kubectl vela 中有两个命令插件：`comp` 和`trait`。
+KubeVela 允许你探索由平台团队维护的功能。 kubectl vela 中有两个命令插件：`comp` 和`trait`。
 
-<!-- 如果您尚未安装 kubectl vela 插件：请参阅 [这里](../../developers/references/kubectl-plugin#install-kubectl-vela-plugin)。 -->
+<!-- 如果你尚未安装 kubectl vela 插件：请参阅 [这里](../../developers/references/kubectl-plugin#install-kubectl-vela-plugin)。 -->
 
 ### 1. 列表
 
@@ -53,5 +53,5 @@ init-container   ["webservice","worker"]   add an init container with a shared v
 
 ## 2. 自己设计
 
-查看 [本文档](../../platform-engineers/cue/trait) 了解如何在
+查看 [本文档](../../platform-engineers/traits/trait) 了解如何在
 KubeVela 平台。

@@ -2,119 +2,132 @@ module.exports = {
   docs: [
     {
       type: 'category',
-      label: 'Overview',
-      collapsed: false,
-      items: [
-        'introduction',
-      ],
-    },
-    {
-      type: 'category',
       label: 'Getting Started',
       collapsed: false,
       items: [
-        'install',
-        'quick-start',
-        'concepts',
+        'getting-started/introduction',
+        'getting-started/quick-install',
+        'getting-started/first-application',
       ],
     },
     {
       type: 'category',
-      label: 'Application Team Guide',
+      label: 'Core Concepts',
       collapsed: false,
-      items:[
-        'end-user/application',
+      items: [
+        'core-concepts/application',
+        'core-concepts/workflow',
+        'core-concepts/infrastructure',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'End User Guide',
+      collapsed: false,
+      items: [
+        'end-user/initializer-end-user',
         {
           'Components': [
-            'end-user/components/webservice',
-            'end-user/components/task',
-            'end-user/components/worker',
-            'end-user/components/cloud-services',
-            'end-user/components/more',
+            'end-user/components/default',
+            'end-user/components/helm',
+            'end-user/components/kustomize',
+            {
+              'Cloud Services': [
+                {
+                'Terraform': [
+                  'end-user/components/cloud-services/terraform/sls',
+                  'end-user/components/cloud-services/terraform/rds',
+                ]
+              },
+              'end-user/components/cloud-services/alibaba-ros',
+              ]
+            },
+          ]
+        },
+        {
+          'Workflow End User': [
+            'end-user/workflow/multi-env',
           ]
         },
         {
           'Traits': [
             'end-user/traits/ingress',
-            'end-user/traits/scaler',
-            'end-user/traits/annotations-and-labels',
-            'end-user/traits/sidecar',
+            {
+              'Scaler': [
+                'end-user/traits/manual-scaler',
+                'end-user/traits/autoscaler',
+              ]
+            },
             'end-user/traits/volumes',
             'end-user/traits/service-binding',
-            'end-user/traits/more',
-          ]
-        },
-        'end-user/scopes/rollout-plan',
-        {
-          'Observability': [
-            'end-user/scopes/health',
+            'end-user/traits/annotations-and-labels',
+            'end-user/traits/sidecar',
+            'end-user/traits/metrics',
           ]
         },
         {
           'Debugging': [
-            'end-user/debug',
+            'end-user/debug/dry-run',
+            'end-user/debug/live-diff',
+            'end-user/debug/health',
+            'end-user/debug/monitoring',
           ]
         },
       ]
     },
     {
       type: 'category',
-      label: 'Platform Team Guide',
+      label: 'platform-engineers Guide',
       collapsed: false,
       items: [
-        'platform-engineers/overview',
-        'platform-engineers/definition-and-templates',
-        'platform-engineers/openapi-v3-json-schema',
+        'platform-engineers/advanced-install',
+        {
+          'OAM': [
+            'platform-engineers/oam/oam-model',
+            'platform-engineers/oam/x-definition',
+          ]
+        },
+        {
+          'CUE': [
+            'platform-engineers/cue/basic',
+            'platform-engineers/cue/advanced',
+          ]
+        },
+        {
+          'Initializer Platform Eng': [
+            'platform-engineers/initializer/basic-initializer',
+            'platform-engineers/initializer/advanced-initializer',
+          ]
+        },
+
         {
           type: 'category',
           label: 'Defining Components',
           items: [
-            {
-              'CUE': [
-                'platform-engineers/cue/component',
-                'platform-engineers/cue/basic',
-              ]
-            },
-            {
-              'Helm': [
-                  'platform-engineers/helm/component',
-                  'platform-engineers/helm/trait',
-                  'platform-engineers/helm/known-issues'
-              ]
-            },
-            {
-              'Simple Template': [
-                  'platform-engineers/kube/component',
-                  'platform-engineers/kube/trait',
-              ]
-            },
-            {
-              type: 'category',
-              label: 'Cloud Services',
-              items: [
-                'platform-engineers/cloud-services',
-                'platform-engineers/terraform',
-                'platform-engineers/crossplane',
-              ]
-            },
+            'platform-engineers/components/component-default',
+            'platform-engineers/components/component-cue',
+            'platform-engineers/components/component-terraform',
+          ]
+        },
+        {
+          'Workflow Platform Engineers': [
+            'platform-engineers/workflow/basic-workflow',
+            'platform-engineers/workflow/advanced-workflow',
           ]
         },
         {
           type: 'category',
           label: 'Defining Traits',
           items: [
-            'platform-engineers/cue/trait',
-            'platform-engineers/cue/patch-trait',
-            'platform-engineers/cue/status',
-            'platform-engineers/cue/advanced',
-          ]
-        },
-        {
-          type: 'category',
-          label: 'Hands-on Lab',
-          items: [
-            'platform-engineers/debug-test-cue',
-            'platform-engineers/keda'
+            'platform-engineers/traits/trait',
+            {
+              'Customize Traits': [
+                'platform-engineers/traits/patch-trait',
+                'platform-engineers/traits/status',
+                'platform-engineers/traits/advanced',
+              ]
+            }
+
           ]
         },
       ],
@@ -177,11 +190,6 @@ module.exports = {
       items: [
         'roadmap/README',
       ],
-    },
-    {
-      'Appendix': [
-        'advanced-install',
-      ]
     },
     {
       type: 'doc',

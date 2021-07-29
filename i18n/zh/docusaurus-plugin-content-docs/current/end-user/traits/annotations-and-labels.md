@@ -1,11 +1,11 @@
 ---
-title: 使用 Labels and Annotations
+title: 组件标签
 ---
 
 
 ## 列出 trait
 
-`label` 和 `annotations` trait 允许您将标签和注释附加到组件。
+`label` 和 `annotations` trait 允许你将标签和注释附加到组件。
 
 ```shell
 # myapp.yaml

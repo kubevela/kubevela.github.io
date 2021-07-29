@@ -81,11 +81,11 @@ module.exports = {
               to: '/docs/install',
             },
             {
-              label: 'Platform Team Guide',
+              label: 'platform-engineers Guide',
               to: '/docs/platform-engineers/overview',
             },
             {
-              label: 'Application Team Guide',
+              label: 'End User Guide',
               to: '/docs/end-user/application',
             },
           ],

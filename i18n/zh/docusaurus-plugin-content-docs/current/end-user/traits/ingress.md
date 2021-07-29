@@ -1,8 +1,8 @@
 ---
-title: 使用 Ingress
+title: 配置网关
 ---
 
-> ⚠️ 本节要求您的运行时集群有一个有效的 ingress 控制器。
+> ⚠️ 本节要求你的运行时集群有一个有效的 ingress 控制器。
 
 `ingress` trait 通过有效域将组件暴露给公共 Internet。
 
@@ -84,7 +84,7 @@ spec:
 ...
 ```
 
-然后您将能够通过其域访问该应用程序。
+然后你将能够通过其域访问该应用程序。
 
 ```
 curl -H "Host:testsvc.example.com" http://<your ip address>/

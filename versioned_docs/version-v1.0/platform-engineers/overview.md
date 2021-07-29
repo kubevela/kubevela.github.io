@@ -6,9 +6,9 @@ This documentation will explain the core resource model of KubeVela which is ful
 
 ## Application
 
-The *Application* is the core API of KubeVela. It allows application team to work with a single artifact to capture the complete application deployment with simplified primitives. 
+The *Application* is the core API of KubeVela. It allows End User to work with a single artifact to capture the complete application deployment with simplified primitives. 
 
-This provides a simpler path for on-boarding application team to the platform without leaking low level details in runtime infrastructure. For example, they will be able to declare a "web service" without defining a detailed Kubernetes Deployment + Service combo each time, or claim the auto-scaling requirements without referring to the underlying KEDA ScaleObject. They can also declare a cloud database with same API if they want.
+This provides a simpler path for on-boarding End User to the platform without leaking low level details in runtime infrastructure. For example, they will be able to declare a "web service" without defining a detailed Kubernetes Deployment + Service combo each time, or claim the auto-scaling requirements without referring to the underlying KEDA ScaleObject. They can also declare a cloud database with same API if they want.
 
 Every application is composed by multiple components with attachable operational behaviors (traits). For example:
 
@@ -39,18 +39,18 @@ spec:
       bucket: "my-bucket"
 ```
 
-The `Application` resource in KubeVela is a LEGO-style entity and does not even have fixed schema. Instead, it is assembled by below building block entities that are maintained by the platform team.
+The `Application` resource in KubeVela is a LEGO-style entity and does not even have fixed schema. Instead, it is assembled by below building block entities that are maintained by the platform-engineers.
 Though the application object doesn't have fixed schema, it is a composition object assembled by several *programmable building blocks* as shown below.
 
 ## Component
 
-The component model (`ComponentDefinition` API) is designed to allow *component providers* to encapsulate deployable/provisionable entities with a wide range of tools, and hence give a easier path to application team to deploy complicated microservices across hybrid environments at ease. A component normally carries its workload type description (i.e. `WorkloadDefinition`), a encapsulation module with a parameter list.
+The component model (`ComponentDefinition` API) is designed to allow *component providers* to encapsulate deployable/provisionable entities with a wide range of tools, and hence give a easier path to End User to deploy complicated microservices across hybrid environments at ease. A component normally carries its workload type description (i.e. `WorkloadDefinition`), a encapsulation module with a parameter list.
 
 > Hence, a components provider could be anyone who packages software components in form of Helm chart of CUE modules. Think about 3rd-party software distributor, DevOps team, or even your CI pipeline.
 
-Components are shareable and reusable. For example, by referencing the same *Alibaba Cloud RDS* component and setting different parameter values, application team could easily provision Alibaba Cloud RDS instances of different sizes in different availability zones.
+Components are shareable and reusable. For example, by referencing the same *Alibaba Cloud RDS* component and setting different parameter values, End User could easily provision Alibaba Cloud RDS instances of different sizes in different availability zones.
 
-Application team will use the `Application` entity to declare how they want to instantiate and deploy a group of certain components. In above example, it describes an application composed with Kubernetes stateless workload (component `foo`) and a Alibaba Cloud OSS bucket (component `bar`) alongside.
+End User will use the `Application` entity to declare how they want to instantiate and deploy a group of certain components. In above example, it describes an application composed with Kubernetes stateless workload (component `foo`) and a Alibaba Cloud OSS bucket (component `bar`) alongside.
 
 ### How it Works?
 
@@ -184,7 +184,7 @@ spec:
         }
 ```
 
-Please note that the application team do NOT need to know about definition objects, they learn how to use a given capability with visualized forms (or the JSON schema of parameters if they prefer). Please check the [Generate Forms from Definitions](openapi-v3-json-schema) section about how this is achieved.
+Please note that the End User do NOT need to know about definition objects, they learn how to use a given capability with visualized forms (or the JSON schema of parameters if they prefer). Please check the [Generate Forms from Definitions](openapi-v3-json-schema) section about how this is achieved.
 
 ## Standard Contract Behind The Abstractions
 

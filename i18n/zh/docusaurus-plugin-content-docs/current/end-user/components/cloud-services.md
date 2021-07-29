@@ -2,15 +2,15 @@
 title: 云服务
 ---
 
-KubeVela 允许您在一致的 API 中声明您的应用程序所需的云服务。 目前，我们同时支持 Terraform 和 Crossplane。
+KubeVela 允许你在一致的 API 中声明你的应用程序所需的云服务。 目前，我们同时支持 Terraform 和 Crossplane。
 
-> 如果您对 KubeVela 中如何维护这些功能感兴趣，请查看 [云服务平台团队指南](../../platform-engineers/cloud-services)。
+> 如果你对 KubeVela 中如何维护这些功能感兴趣，请查看 [云服务平台团队指南](../../platform-engineers/cloud-services)。
 
 应用程序将通过 [Service Binding Trait](../traits/service-binding) 使用云服务。
 
 ## Terraform
 
-> ⚠️ 本节假设 [Terraform 相关功能](../../platform-engineers/terraform) 已安装在您的平台中。
+> ⚠️ 本节假设 [Terraform 相关功能](../../platform-engineers/components/component-terraform) 已安装在你的平台中。
 
 检查云资源 component 和 trait 的参数。
 

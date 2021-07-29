@@ -6,7 +6,7 @@ Components in KubeVela are designed to be brought by users.
 
 ## 1. Get from capability center
 
-KubeVela allows you to explore capabilities maintained by platform team.
+KubeVela allows you to explore capabilities maintained by platform-engineers.
 There are two commands in kubectl vela plugin: `comp` and `trait`.
 
 In case you haven't installed kubectl vela plugin: see [this](../../developers/references/kubectl-plugin#install-kubectl-vela-plugin).
