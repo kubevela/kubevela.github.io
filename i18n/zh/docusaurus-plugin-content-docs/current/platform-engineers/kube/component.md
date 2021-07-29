@@ -4,7 +4,7 @@ title:  怎么用
 
 在本节中，将介绍如何使用 raw K8s Object 通过 `ComponentDefinition` 来声明应用程序组件。
 
-> 在阅读本部分之前，请确保您已经了解了[定义和模板概念](../definition-and-templates)。
+> 在阅读本部分之前，请确保你已经了解了[定义和模板概念](../definition-and-templates)。
 
 ## 声明`ComponentDefinition`
 

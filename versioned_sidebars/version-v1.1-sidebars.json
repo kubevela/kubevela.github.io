@@ -33,7 +33,7 @@
     {
       "collapsed": false,
       "type": "category",
-      "label": "Application Team Guide",
+      "label": "End User Guide",
       "items": [
         {
           "type": "doc",
@@ -136,7 +136,7 @@
     {
       "collapsed": false,
       "type": "category",
-      "label": "Platform Team Guide",
+      "label": "platform-engineers Guide",
       "items": [
         {
           "type": "doc",

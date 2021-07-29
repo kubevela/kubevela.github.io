@@ -4,11 +4,11 @@ title:  怎么用 helm
 
 在本节中，将介绍如何通过 `ComponentDefinition` 将 Helm charts 声明为应用程序组件。
 
-> 在阅读本部分之前，请确保您已经了解了[定义和模板概念](../definition-and-templates)。
+> 在阅读本部分之前，请确保你已经了解了[定义和模板概念](../definition-and-templates)。
 
 ## 先决条件
 
-* [fluxcd/flux2](../../install#3-optional-install-flux2)，请确保您已经在[安装指南](/docs/install)中安装了 flux2。
+* [fluxcd/flux2](../../getting-started/quick-install#3-optional-install-flux2)，请确保你已经在[安装指南](/docs/install)中安装了 flux2。
 
 ## 声明 `ComponentDefinition`
 
@@ -38,7 +38,7 @@ spec:
 ```
 
 详细：
-- 需要`.spec.workload` 来指示这个基于 Helm 的组件的工作负载类型。 如果您将多个工作负载打包在一个 chart 中，请同时检查 [已知限制](./known-issues#=workload-type-indicator)。
+- 需要`.spec.workload` 来指示这个基于 Helm 的组件的工作负载类型。 如果你将多个工作负载打包在一个 chart 中，请同时检查 [已知限制](./known-issues#=workload-type-indicator)。
 - `.spec.schematic.helm` 包含 Helm `release` 和利用 `fluxcd/flux2` 的 `repository` 的信息。
    - 即`release`的pec与[`HelmReleaseSpec`](https://github.com/fluxcd/helm-controller/blob/main/docs/api/helmrelease.md) 对齐，`repository`的 spec 和[`HelmRepositorySpec`](https://github.com/fluxcd/source-controller/blob/main/docs/api/source.md#source.toolkit.fluxcd.io/v1beta1.HelmRepository)对齐。
 
@@ -63,7 +63,7 @@ spec:
 
 组件 `properties` 正是 Helm Chart 的 [overlay values](https://github.com/captainroy-hy/podinfo/blob/master/charts/podinfo/values.yaml)。
 
-部署应用程序，几分钟后（获取 Helm Chart 可能需要一些时间），您可以检查 Helm 版本是否已安装。
+部署应用程序，几分钟后（获取 Helm Chart 可能需要一些时间），你可以检查 Helm 版本是否已安装。
 ```shell
 $ helm ls -A
 myapp-demo-podinfo  default   1   2021-03-05 02:02:18.692317102 +0000 UTC deployed  podinfo-5.1.4     5.1.4

@@ -8,7 +8,7 @@ title:  已知限制
 
 ### 工作负载类型指示器
 
-遵循微服务的最佳实践，KubeVela 建议在一个 Helm 图表中只存在一种工作负载资源。 请将您的“超级”Helm 图表拆分为多个图表（即组件）。 本质上，KubeVela 依赖于组件定义中的`workload`来指示它需要注意的工作负载类型，例如：
+遵循微服务的最佳实践，KubeVela 建议在一个 Helm 图表中只存在一种工作负载资源。 请将你的“超级”Helm 图表拆分为多个图表（即组件）。 本质上，KubeVela 依赖于组件定义中的`workload`来指示它需要注意的工作负载类型，例如：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -37,7 +37,7 @@ spec:
 
 ### 控制应用程序升级
 
-对组件`properties` 所做的更改将触发 Helm 版本升级。此过程由 Flux v2 Helm 控制器处理，因此您可以定义基于 [Helm Release 文档](https://github.com/fluxcd/helm-controller/blob/main/docs/api/helmrelease.md#upgraderemediation) 和 [规范](https://toolkit.fluxcd.io/components/helm/helmreleases/#configuring-failure-remediation)的修复，以防在此升级过程中发生故障。
+对组件`properties` 所做的更改将触发 Helm 版本升级。此过程由 Flux v2 Helm 控制器处理，因此你可以定义基于 [Helm Release 文档](https://github.com/fluxcd/helm-controller/blob/main/docs/api/helmrelease.md#upgraderemediation) 和 [规范](https://toolkit.fluxcd.io/components/helm/helmreleases/#configuring-failure-remediation)的修复，以防在此升级过程中发生故障。
 
 例如：
 ```yaml

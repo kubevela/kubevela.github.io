@@ -386,7 +386,7 @@ cp -r cue.mod/gen/k8s.io/api/core cue.mod/gen/k8s.io
 └── go.sum
 ```
 
-因此，您可以使用与 KubeVela 对齐的路径导入包：
+因此，你可以使用与 KubeVela 对齐的路径导入包：
 
 ```cue
 import (

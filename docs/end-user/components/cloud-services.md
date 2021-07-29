@@ -4,13 +4,13 @@ title: Cloud Services
 
 KubeVela allows you to declare cloud services your application needs in consistent API. Currently, we support both Terraform and Crossplane.
 
-> Please check [the platform team guide for cloud services](../../platform-engineers/cloud-services) if you are interested in how these capabilities are maintained in KubeVela.
+> Please check [the platform-engineers guide for cloud services](../../platform-engineers/cloud-services) if you are interested in how these capabilities are maintained in KubeVela.
 
 The cloud services will be consumed by the application via [Service Binding Trait](../traits/service-binding).
 
 ## Terraform
 
-> ⚠️ This section assumes [Terraform related capabilities](../../platform-engineers/terraform) have been installed in your platform.
+> ⚠️ This section assumes [Terraform related capabilities](../../platform-engineers/components/component-terraform) have been installed in your platform.
 
 Check the parameters of cloud resource components and trait.
 

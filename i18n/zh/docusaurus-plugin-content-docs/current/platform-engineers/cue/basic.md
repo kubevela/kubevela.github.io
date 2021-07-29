@@ -1,5 +1,5 @@
 ---
-title:  CUE 入门
+title:  基础
 ---
 
 本章节将详细介绍关于如何使用 CUE 封装和抽象 Kubernetes 中已有的能力。

@@ -4,7 +4,7 @@ title:  The Reference Documentation Guide of Capabilities
 
 In this documentation, we will show how to check the detailed schema of a given capability (i.e. workload type or trait). 
 
-This may sound challenging because every capability is a "plug-in" in KubeVela (even for the built-in ones), also, it's by design that KubeVela allows platform administrators to modify the capability templates at any time. In this case, do we need to manually write documentation for every newly installed capability? And how can we ensure those documentations for the system is up-to-date?
+This may sound challenging because every capability is a "plug-in" in KubeVela (even for the built-in ones), also, it's by design that KubeVela allows platform engineers to modify the capability templates at any time. In this case, do we need to manually write documentation for every newly installed capability? And how can we ensure those documentations for the system is up-to-date?
 
 ## Using Browser
 
