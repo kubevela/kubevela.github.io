@@ -82,15 +82,15 @@ Let's explain them in detail.
 
 This field defines the constraints that what kinds of workloads this trait is allowed to apply to.
 - It accepts an array of string as value.
-- Each item in the array refers to one or a group of workload types to which this trait is allowded to apply.
+- Each item in the array refers to one or a group of workload types to which this trait is allowed to apply.
 
 There are three approaches to denote one or a group of workload types.
 
 - `ComponentDefinition` definition reference (CRD name), e.g., `deployments.apps`
-- Resource group of `ComponentDefinition` definition reference prefixed with `*.`, e.g., `*.apps`, `*.oam.dev`. This means the trait is allowded to apply to any workloads in this group.
-- `*` means this trait is allowded to apply to any workloads
+- Resource group of `ComponentDefinition` definition reference prefixed with `*.`, e.g., `*.apps`, `*.oam.dev`. This means the trait is allowed to apply to any workloads in this group.
+- `*` means this trait is allowed to apply to any workloads
 
-If this field is omitted, it means this trait is allowded to apply to any workload types.
+If this field is omitted, it means this trait is allowed to apply to any workload types.
 
 KubeVela will raise an error if a trait is applied to a workload type which is NOT included in the `appliesToWorkloads`.
 

@@ -11,7 +11,7 @@ Configures Canary deployment strategy for your application.
 List of all configuration options for a `Rollout` trait.
 
 ```yaml
-servcies:
+services:
   express-server:
     ...
 
