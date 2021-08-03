@@ -27,7 +27,7 @@ context:{
 }
 ```
 
-Trait 并不包含 `context.ouput` 字段，其他字段都是相同。
+Trait 并不包含 `context.output` 字段，其他字段都是相同。
 
 以下为健康检查的示例：
 
@@ -110,7 +110,7 @@ context:{
 }
 ```
 
-Trait 并不包含 `context.ouput` 字段，其他字段都是相同。
+Trait 并不包含 `context.output` 字段，其他字段都是相同。
 
 Component 健康检查示例请参考 [这篇文章](https://github.com/oam-dev/kubevela/blob/master/docs/examples/app-with-status/template.yaml) 。
 

@@ -96,7 +96,7 @@ spec:
         }
 ```
 
-Save above `ComponentDefintion` objects to files and install them to your Kubernetes cluster by `$ kubectl apply -f stateless-def.yaml task-def.yaml`
+Save above `ComponentDefinition` objects to files and install them to your Kubernetes cluster by `$ kubectl apply -f stateless-def.yaml task-def.yaml`
 
 ## Declare an `Application`
 
@@ -173,7 +173,7 @@ spec:
 
 ## CUE `Context`
 
-KubeVela allows you to reference the runtime information of your application via `conext` keyword.
+KubeVela allows you to reference the runtime information of your application via `context` keyword.
 
 The most widely used context is application name(`context.appName`) component name(`context.name`).
 

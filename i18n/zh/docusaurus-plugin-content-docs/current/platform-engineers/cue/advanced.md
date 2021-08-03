@@ -96,7 +96,7 @@ spec:
         }
 ```
 
-将上面的 `ComponentDefintion` 对象保存到文件中，并通过 `$ kubectl apply -f stateless-def.yaml task-def.yaml` 将它们安装到你的 Kubernetes 集群。
+将上面的 `ComponentDefinition` 对象保存到文件中，并通过 `$ kubectl apply -f stateless-def.yaml task-def.yaml` 将它们安装到你的 Kubernetes 集群。
 
 ## 声明一个 `Application`
 
