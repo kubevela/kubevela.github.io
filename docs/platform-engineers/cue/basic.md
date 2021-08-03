@@ -394,7 +394,7 @@ price: 200
 feel:  "bad"
 ```
 
-Another example is to use bool type as prameter.
+Another example is to use bool type as parameter.
 
 ```
 parameter: {

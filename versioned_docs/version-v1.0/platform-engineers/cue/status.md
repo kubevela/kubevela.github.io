@@ -27,7 +27,7 @@ context:{
 }
 ```
 
-Trait will not have the `context.ouput`, other fields are the same.
+Trait will not have the `context.output`, other fields are the same.
 
 The example of health check likes below:
 
@@ -111,7 +111,7 @@ context:{
 }
 ```
 
-Trait will not have the `context.ouput`, other fields are the same.
+Trait will not have the `context.output`, other fields are the same.
 
 
 Please refer to [this doc](https://github.com/oam-dev/kubevela/blob/master/docs/examples/app-with-status/template.yaml) for the complete example.

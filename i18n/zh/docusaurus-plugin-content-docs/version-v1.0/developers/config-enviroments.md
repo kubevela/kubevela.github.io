@@ -72,7 +72,7 @@ environment demo updated, Namespace: demo, Email: my@email.com
 
 ```yaml
 # in demo environment
-servcies:
+services:
   express-server:
     ...
 

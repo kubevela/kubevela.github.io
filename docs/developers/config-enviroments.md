@@ -88,7 +88,7 @@ Since you now have domain configured globally in deployment environment, you don
 
 ```yaml
 # in demo environment
-servcies:
+services:
   express-server:
     ...
 

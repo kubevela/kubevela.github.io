@@ -7,7 +7,7 @@ In this section, we will introduce how to use cue template create resources (wor
 By default, the `metadata.namespace` of K8s resource in CuE template is automatically filled with the same namespace of the applicaiton.
 
 If you want to create K8s resources running in a specific namespace witch is different with the application, you can set the `metadata.namespace` field.
-KubeVela will create the resources in the specified namespace, and create a resourceTracker object as owener of those resources.
+KubeVela will create the resources in the specified namespace, and create a resourceTracker object as owner of those resources.
 
 
 ## Usage
