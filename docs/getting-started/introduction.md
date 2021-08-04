@@ -11,7 +11,7 @@ The trend of cloud-native technology is moving towards pursuing consistent appli
 
 ## What is KubeVela?
 
-KubeVela is a modern application platform that makes deploying and managing applications across today's hybrid, multi-cloud environments easier and faster, while at meantime, naturally adapts to your needs when they grow. This is achieved by doing the following:
+KubeVela is a modern application platform that makes deploying and managing applications across today's hybrid, multi-cloud environments easier and faster, while at meantime, naturally adapts to your needs as they grow. This is achieved by doing the following:
 
 **Application Centric** - KubeVela introduces [Open Application Model (OAM)](https://oam.dev/) as the consistent yet higher level API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy.
 
