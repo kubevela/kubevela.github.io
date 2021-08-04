@@ -9,11 +9,9 @@ slug: /
 
 The trend of cloud-native technology is moving towards pursuing consistent application delivery across clouds and on-premises infrastructures using Kubernetes as the common layer. Kubernetes, although excellent in abstracting low-level infrastructure details, does not introduce abstractions to model software deployment on top of today's hybrid and distributed environments. We’ve seen the lack of application level context have impacted user experiences, slowed down productivity, led to unexpected errors or misconfigurations in production.
 
-On the other hand, modeling the deployment and operation of microservice application across hybrid environments is a complicated and fragmented process. Many CD or PaaS systems today are either over complex or highly restrictive (which means your needs are almost certain to outgrow the capabilities of such systems today or tomorrow). End Users complain those platforms are  rigid and slow in response to features requests and improvements. platform-engineerss do want to help but the engineering effort to build such a cross-environments, flexible and consistent application delivery system seems daunting.
-
 ## What is KubeVela?
 
-KubeVela is a modern application platform that makes deploying and managing applications across today's hybrid, multi-cloud environments easier and faster, while at meantime, provides high level of flexibility when your needs grow. This is achieved by doing the following:
+KubeVela is a modern application platform that makes deploying and managing applications across today's hybrid, multi-cloud environments easier and faster, while at meantime, naturally adapts to your needs as they grow. This is achieved by doing the following:
 
 **Application Centric** - KubeVela introduces [Open Application Model (OAM)](https://oam.dev/) as the consistent yet higher level API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy.
 
