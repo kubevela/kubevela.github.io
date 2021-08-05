@@ -1,5 +1,5 @@
 ---
-title:  Helm Components
+title:  Kustomize
 ---
 
 TBD

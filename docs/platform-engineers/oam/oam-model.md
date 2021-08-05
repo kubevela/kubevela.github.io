@@ -1,5 +1,5 @@
 ---
-title: OAM Model
+title: Introduction
 ---
 
 This documentation will explain the core resource model of KubeVela which is fully powered by Open Application Model (OAM).

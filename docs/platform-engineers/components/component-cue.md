@@ -1,5 +1,5 @@
 ---
-title:  How-to
+title:  CUE Component
 ---
 
 In this section, it will introduce how to use [CUE](https://cuelang.org/) to declare app components via `ComponentDefinition`.
