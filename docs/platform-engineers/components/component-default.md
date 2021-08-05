@@ -1,4 +1,4 @@
 ---
-title: Component Defualt
+title: Built-in Component
 ---
 
