@@ -2,7 +2,6 @@
 title:  系统架构
 ---
 
-# 系统组件
 
 KubeVela 的系统在默认安装的模式下，是一个只包含“控制平面”的架构，通过插件机制与各种运行时系统进行紧密配合。其中 KubeVela 核心控制器工作在管控 Kubernetes 集群。
 如下图所示，自上而下看，用户只与 KubeVela 所在的控制面 Kubernetes 集群发生交互。
@@ -67,19 +66,19 @@ OCM（Open Cluster Management）是 KubeVela 默认的多集群管理引擎，�
 KubeVela 通过 FluxCD 控制器来实现 Pull 模式的应用组件交付。
 
 
-# 系统数据流
+## 系统数据流
 
 KubeVela 的系统数据流如下图所示，其中黄色的实线和虚线为用户数据流向；紫色实线为控制面的数据流向。
 
 ![data-flow](../resources/data-flow.png)
 
-## 控制面
+### 控制面
 
 KubeVela 多集群模式下，控制面的数据流动是由运行时集群主动拉取管控集群数据的。所以 Kubernetes 多集群网络连通性方面，只需要保证控制面集群的 Kubernetes 可被运行时集群单向访问即可。
 
 云资源是由管控集群的控制器主动调用云的 API 完成。
 
-## 数据面
+### 数据面
 
 KubeVela 的用户数据面数据流动采用 Pull 模式（订阅模式），KubeVela 会主动监听应用元数据变化来驱动后续的应用交付与管理流程。
 

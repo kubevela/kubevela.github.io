@@ -17,7 +17,7 @@ module.exports = {
       items: [
         'core-concepts/application',
         'core-concepts/workflow',
-        'core-concepts/infrastructure',
+        'core-concepts/architecture',
       ],
     },
     {
