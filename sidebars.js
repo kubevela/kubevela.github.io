@@ -22,30 +22,36 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'End User Guide',
+      label: 'User Guide',
       collapsed: false,
       items: [
         'end-user/initializer-end-user',
         {
           'Components': [
-            'end-user/components/default',
             'end-user/components/helm',
             'end-user/components/kustomize',
             {
+              'CUE': [
+                'end-user/components/cue/webservice',
+                'end-user/components/cue/task',
+                'end-user/components/cue/worker',
+              ]
+            },
+            {
               'Cloud Services': [
                 {
-                'Terraform': [
-                  'end-user/components/cloud-services/terraform/sls',
-                  'end-user/components/cloud-services/terraform/rds',
-                ]
-              },
-              'end-user/components/cloud-services/alibaba-ros',
+                  'Terraform': [
+                    'end-user/components/cloud-services/terraform/sls',
+                    'end-user/components/cloud-services/terraform/rds',
+                  ]
+                },
+                'end-user/components/cloud-services/alibaba-ros',
               ]
             },
           ]
         },
         {
-          'Workflow End User': [
+          'Workflow': [
             'end-user/workflow/multi-env',
           ]
         },
@@ -53,7 +59,7 @@ module.exports = {
           'Traits': [
             'end-user/traits/ingress',
             {
-              'Scaler': [
+              'Scaling': [
                 'end-user/traits/manual-scaler',
                 'end-user/traits/autoscaler',
               ]
@@ -77,24 +83,23 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'platform-engineers Guide',
+      label: 'Platform Admin Guide',
       collapsed: false,
       items: [
-        'platform-engineers/advanced-install',
         {
-          'OAM': [
+          'Learning OAM': [
             'platform-engineers/oam/oam-model',
             'platform-engineers/oam/x-definition',
           ]
         },
         {
-          'CUE': [
+          'Learning CUE': [
             'platform-engineers/cue/basic',
             'platform-engineers/cue/advanced',
           ]
         },
         {
-          'Initializer Platform Eng': [
+          'Environment System': [
             'platform-engineers/initializer/basic-initializer',
             'platform-engineers/initializer/advanced-initializer',
           ]
@@ -102,7 +107,7 @@ module.exports = {
 
         {
           type: 'category',
-          label: 'Defining Components',
+          label: 'Component System',
           items: [
             'platform-engineers/components/component-default',
             'platform-engineers/components/component-cue',
@@ -110,27 +115,23 @@ module.exports = {
           ]
         },
         {
-          'Workflow Platform Engineers': [
+          'Worfklow System': [
             'platform-engineers/workflow/basic-workflow',
             'platform-engineers/workflow/advanced-workflow',
           ]
         },
         {
           type: 'category',
-          label: 'Defining Traits',
+          label: 'Traits System',
           items: [
             'platform-engineers/traits/trait',
-            {
-              'Customize Traits': [
-                'platform-engineers/traits/patch-trait',
-                'platform-engineers/traits/status',
-                'platform-engineers/traits/advanced',
-              ]
-            }
-
+            'platform-engineers/traits/patch-trait',
+            'platform-engineers/traits/status',
+            'platform-engineers/traits/advanced',
           ]
         },
-      ],
+        'platform-engineers/advanced-install',
+      ]
     },
     {
       type: 'category',

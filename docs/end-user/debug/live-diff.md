@@ -1,5 +1,5 @@
 ---
-title: Live-Diff
+title: Live Diff
 ---
 
 KubeVela allows you to dry-run and live-diff your application.
