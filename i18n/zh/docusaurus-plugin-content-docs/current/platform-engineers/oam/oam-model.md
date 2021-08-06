@@ -2,206 +2,87 @@
 title: 模型简介
 ---
 
-This documentation will explain the core resource model of KubeVela which is fully powered by Open Application Model (OAM).
+KubeVela 的交付模型是 OAM（Open Application Model）。OAM 模型主要的优势是原生可扩展，它把应用交付的各个组件和能力原子被抽象成原子化、可被复用的“乐高模块”：
 
-## Application
+* 每一个单个乐高模块都是高度内聚的，用户可以很容易知道应该如何使用这个模块。
+* 乐高模块之间的衔接有固定的凹槽和标准。意味着抽象后的模块化能力有标准化的衔接方式，如固定的输入、输出参数和类型；是否适配和冲突有明确的标识。
+* 近似功能的乐高模块有不同尺寸和插槽可以选择。意味着同样功能的模块化能力可以提供不同使用和组装方式。
+* 用户通过一个叫做应用部署计划（Application）的声明式对象来进行选择和组装这些模块。
 
-The *Application* is the core API of KubeVela. It allows End User to work with a single artifact to capture the complete application deployment with simplified primitives. 
+![oam-model](../../resources/oam-model.png)
 
-This provides a simpler path for on-boarding End User to the platform without leaking low level details in runtime infrastructure. For example, they will be able to declare a "web service" without defining a detailed Kubernetes Deployment + Service combo each time, or claim the auto-scaling requirements without referring to the underlying KEDA ScaleObject. They can also declare a cloud database with same API if they want.
+## 应用部署计划（Application）
 
-Every application is composed by multiple components with attachable operational behaviors (traits). For example:
+**Application** 对象是 KubeVela 的核心 API，它表达了一个应用的完整部署计划。最终用户只需要描述这样一个 Application 文件，就可以涵盖应用交付的所有组件和部署策略。
+
+OAM 模型将一次应用部署计划（Application）拆解为“待部署组件（Component）”、“运维能力（Trait）”、“应用的执行策略（Policy）”，以及“部署执行方式工作流（Workflow）”这四部分概念组成。每个概念里面都可以包含可插拔和扩展的多个模块，就像乐高积木一样可以自由组合，从而满足不同的场景和诉求。
+
+对于最终用户而言，学习和使用 Application 就是他们需要了解 OAM 的全部内容，不再需要了解其他基础设施层的细节。以图中描述的组件为例，用户要部署一个带有公网流量访问的常驻进程服务，可以通过申明使用“webservice”这个组件类型来实现，不再需要了解底层的 Kubernetes 细节是由什么资源构成的。同样的，云资源也可以用类似的方式描述和部署。
+
+具体而言，一个应用部署计划的整体结构如下所示：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: application-sample
+  name: <应用名称>
 spec:
   components:
-    - name: foo
-      type: webservice
+    - name: <组件名称1>
+      type: <组件类型1>
       properties:
-        image: crccheck/hello-world
-        port: 8000
+        <组件参数>
       traits:
-        - type: ingress
+        - type: <运维特征类型1>
           properties:
-            domain: testsvc.example.com
-            http:
-              "/": 8000
-        - type: sidecar
+            <运维特征类型>
+        - type: <运维特征类型2>
           properties:
-            name: "logging"
-            image: "fluentd"
-    - name: bar
-      type: aliyun-oss # cloud service
-      bucket: "my-bucket"
+            <运维特征类型>
+    - name: <组件名称2>
+      type: <组件类型2>
+      properties:
+        <组件参数>
+  policies:
+  - name: <应用策略名称>
+    type: <应用策略类型>
+    properties:
+      <应用策略参数>
+  workflow:
+    - name: <工作流节点名称>
+      type: <工作流节点类型>
+      properties:
+        <工作流节点参数>   
 ```
 
-The `Application` resource in KubeVela is a LEGO-style entity and does not even have fixed schema. Instead, it is assembled by below building block entities that are maintained by the platform-engineers.
-Though the application object doesn't have fixed schema, it is a composition object assembled by several *programmable building blocks* as shown below.
+其中组件类型、运维特征类型、应用策略类型、以及工作流节点类型，都是平台预先定义好、并且可以扩展的，这些统称为 [模块定义（X-Definition）](./x-definition)。所有的参数的字段数量和类型均是由具体的模块定义决定的，也就是说一个应用交付的参数类型是由实际选择了具体的类型以后确定的。所以整个 Application 对象并没有固定的字段格式，它是由多个“可编程模块”组合而成的。
 
-## Component
+## 组件（Component）
 
-The component model (`ComponentDefinition` API) is designed to allow *component providers* to encapsulate deployable/provisionable entities with a wide range of tools, and hence give a easier path to End User to deploy complicated microservices across hybrid environments at ease. A component normally carries its workload type description (i.e. `WorkloadDefinition`), a encapsulation module with a parameter list.
+待部署组件（Component）是构成完整应用的微服务单元，比如一个 WordPress 应用包含 WordPress 程序主体以及 MySQL 数据库两个组件。
 
-> Hence, a components provider could be anyone who packages software components in form of Helm chart of CUE modules. Think about 3rd-party software distributor, DevOps team, or even your CI pipeline.
+KubeVela 默认会安装一些可以开箱即用的组件类型，如微服务组件、短时任务组件等。除此之外，平台管理员可以非常方便的扩展和自定义组件类别。这里的组件类别可以是无状态服务、有状态中间件、各类云服务、一次性任务等等；组件的制品形态可以是 Helm Chart、容器镜像、各类 IaC 格式配置文件等。KubeVela 的交付能力基本涵盖了所有云原生组件的部署需求。
 
-Components are shareable and reusable. For example, by referencing the same *Alibaba Cloud RDS* component and setting different parameter values, End User could easily provision Alibaba Cloud RDS instances of different sizes in different availability zones.
+## 运维特征（Trait）
 
-End User will use the `Application` entity to declare how they want to instantiate and deploy a group of certain components. In above example, it describes an application composed with Kubernetes stateless workload (component `foo`) and a Alibaba Cloud OSS bucket (component `bar`) alongside.
+运维特征（Trait）是组件部署完成以后对组件持续生命周期管理的运维能力，包括服务发布、访问、治理、弹性、可观测性、灰度发布等运维策略。
 
-### How it Works?
+KubeVela 默认会安装一些可以开箱即用的运维特征，如灰度发布、标签管理、配置管理、弹性扩缩容等。除此之外，平台管理员可以非常方便的扩展和自定义运维类别。这里的运维特征可以是应用生命周期涉及到的所有方面，比如流量管理、安全扫描、日志监控、暂停重启等等。KubeVela 可以灵活的扩展和对接所有云原生的运维特征。
 
-In above example, `type: worker` means the specification of this component (claimed in following `properties` section) will be enforced by a `ComponentDefinition` object named `worker` as below:
+## 应用的执行策略（Policy）
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: ComponentDefinition
-metadata:
-  name: worker
-  annotations:
-    definition.oam.dev/description: "Describes long-running, scalable, containerized services that running at backend. They do NOT have network endpoint to receive external network traffic."
-spec:
-  workload:
-    definition:
-      apiVersion: apps/v1
-      kind: Deployment
-  schematic:
-    cue:
-      template: |
-        output: {
-          apiVersion: "apps/v1"
-          kind:       "Deployment"
-          spec: {
-            selector: matchLabels: {
-              "app.oam.dev/component": context.name
-            }
-            template: {
-              metadata: labels: {
-                "app.oam.dev/component": context.name
-              }
-              spec: {
-                containers: [{
-                  name:  context.name
-                  image: parameter.image
+应用的执行策略（Policy）是应用整体性的特征，包括健康检查、安全组、防火墙、SLO、检验等模块。
 
-                  if parameter["cmd"] != _|_ {
-                    command: parameter.cmd
-                  }
-                }]
-              }
-            }
-          }
-        }
-        parameter: {
-          image: string
-          cmd?: [...string]
-        }
-```
+应用执行策略的扩展性和功能与运维特征类似，可以灵活的扩展和对接所有云原生应用生命周期管理的能力。相对于运维特征而言，应用执行策略偏向于一个应用的整体，而运维特征偏向于应用中的某个组件。
 
+## 部署执行工作流（Workflow）
 
-Hence, the `properties` section of `backend` only exposes two parameters to fill: `image` and `cmd`, this is enforced by the `parameter` list of the `.spec.template` field of the definition.
+部署执行工作流是达到应用终态的路径，允许用户自定义应用部署的执行方式，如多环境、多集群部署，自定义组件依赖和部署顺序，运行时数据传递等等。默认情况下用户不需要自定义工作流，会自动按照组件和运维特征数组的顺序依次部署到当前集群。
 
-## Traits
+默认情况下 KubeVela 包含了诸如创建资源、条件判断、数据输入输出等工作流节点，除此之外用户也可以自定义工作流节点的功能，组装衔接出一些复杂场景，诸如集群创建、应用部署、状态通知、多环境部署等流程。
 
-Traits (`TraitDefinition` API) are operational features provided by the platform. A trait augments the component instance with operational behaviors such as load balancing policy, network ingress routing, auto-scaling policies, or upgrade strategies, etc.
+## 配置一致性
 
-To attach a trait to component instance, the user will declare `.type` field to reference the specific `TraitDefinition`, and `.properties` field to set property values of the given trait. Similarly, `TraitDefinition` also allows you to define *template* for operational features.
+KubeVela 通过类似 IaC (Infrastructure-as-Code) 的理念来保证组件的高效、可扩展，但是通常 IaC 工具会引入应用配置状态不一致的问题，比如配置中心的配置和生产环境实际状态不一致等，这个问题就是所谓的“配置漂移”（Infrastructure/Configuration Drift）。
 
-In the above example, `type: autoscaler` in `frontend` means the specification (i.e. `properties` section) of this trait will be enforced by a `TraitDefinition` object named `autoscaler` as below:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "configure k8s HPA for Deployment"
-  name: hpa
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  schematic:
-    cue:
-      template: |
-        outputs: hpa: {
-          apiVersion: "autoscaling/v2beta2"
-          kind:       "HorizontalPodAutoscaler"
-          metadata: name: context.name
-          spec: {
-            scaleTargetRef: {
-              apiVersion: "apps/v1"
-              kind:       "Deployment"
-              name:       context.name
-            }
-            minReplicas: parameter.min
-            maxReplicas: parameter.max
-            metrics: [{
-              type: "Resource"
-              resource: {
-                name: "cpu"
-                target: {
-                  type:               "Utilization"
-                  averageUtilization: parameter.cpuUtil
-                }
-              }
-            }]
-          }
-        }
-        parameter: {
-          min:     *1 | int
-          max:     *10 | int
-          cpuUtil: *50 | int
-        }
-```
-
-The application also have a `sidecar` trait.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "add sidecar to the app"
-  name: sidecar
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  schematic:
-    cue:
-      template: |-
-        patch: {
-           // +patchKey=name
-           spec: template: spec: containers: [parameter]
-        }
-        parameter: {
-           name: string
-           image: string
-           command?: [...string]
-        }
-```
-
-Please note that the End User do NOT need to know about definition objects, they learn how to use a given capability with visualized forms (or the JSON schema of parameters if they prefer). Please check the [Generate Forms from Definitions](../openapi-v3-json-schema) section about how this is achieved.
-
-## Standard Contract Behind The Abstractions
-
-Once the application is deployed, KubeVela will index and manage the underlying instances with name, revisions, labels and selector etc in automatic approach. These metadata are shown as below.
-
-| Label  | Description |
-| :--: | :---------: | 
-|`workload.oam.dev/type=<component definition name>` | The name of its corresponding `ComponentDefinition` |
-|`trait.oam.dev/type=<trait definition name>` | The name of its corresponding `TraitDefinition` | 
-|`app.oam.dev/name=<app name>` | The name of the application it belongs to |
-|`app.oam.dev/component=<component name>` | The name of the component it belongs to |
-|`trait.oam.dev/resource=<name of trait resource instance>` | The name of trait resource instance |
-|`app.oam.dev/appRevision=<name of app revision>` | The name of the application revision it belongs to |
-
-
-Consider these metadata as a standard contract for any "day 2" operation controller such as rollout controller to work on KubeVela deployed applications. This is the key to ensure the interoperability for KubeVela based platform as well.
-
-## No Configuration Drift
-
-Despite the efficiency and extensibility in abstracting application deployment, IaC (Infrastructure-as-Code) tools may lead to an issue called *Infrastructure/Configuration Drift*, i.e. the generated component instances are not in line with the expected configuration. This could be caused by incomplete coverage, less-than-perfect processes or emergency changes. This makes them can be barely used as a platform level building block.
-
-Hence, KubeVela is designed to maintain all these programmable capabilities with [Kubernetes Control Loop](https://kubernetes.io/docs/concepts/architecture/controller/) and leverage Kubernetes control plane to eliminate the issue of configuration drifting, while still keeps the flexibly and velocity enabled by IaC.
+所以 KubeVela 在管理这些可编程模块的过程中，引入了 [Kubernetes 控制循环](https://kubernetes.io/docs/concepts/architecture/controller/) 的机制，通过 Kubernetes 的控制循环，保证配置和终态的一致，以此防止配置漂移的发生，同时依旧保证了模块的灵活性和可扩展能力。
