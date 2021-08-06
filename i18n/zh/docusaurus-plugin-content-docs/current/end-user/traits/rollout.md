@@ -26,6 +26,9 @@ replicas|该批次的副本个数|int|是|无
 
 
 ## 如何使用
+
+### Deployment 类型的工作负载
+
 1. 应用下面的 YAML 来创建一个应用部署计划，该应用包含了一个使用了 rollout 运维特征的组件。
 
 ```yaml
@@ -219,3 +222,5 @@ $ kubectl get deploy express-server-v1 -l app.oam.dev/component=express-server
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   3/3     3            3           5m
 ```
+
+### CloneSet 类型的工作负载
