@@ -57,7 +57,7 @@ $ kubectl get app rollout-trait-test
 NAME                 COMPONENT        TYPE         PHASE     HEALTHY   STATUS   AGE
 rollout-trait-test   express-server   webservice   running   true               2d20h
 
-$ kubectl get controllerRevision express-server-v1
+$ kubectl get controllerRevision  -l controller.oam.dev/component=express-server
 NAME                CONTROLLER                                    REVISION   AGE
 express-server-v1   application.core.oam.dev/rollout-trait-test   1          2d22h
 
@@ -65,7 +65,7 @@ $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 express-server   5        5          5       batchReady    rolloutSucceed   2d20h
 
-$ kubectl get deploy express-server-v1
+$ kubectl get deploy -l app.oam.dev/component=express-server
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   5/5     5            5           2d20h
 ```
@@ -97,15 +97,16 @@ spec:
 查看资源状态
 
 ```shell
-$ kubectl get controllerRevision express-server-v2
+$ kubectl get controllerRevision -l controller.oam.dev/component=express-server
 NAME                CONTROLLER                                    REVISION   AGE
-express-server-v2   application.core.oam.dev/rollout-trait-test   1          1m
+express-server-v1   application.core.oam.dev/rollout-trait-test   1          2d22h
+express-server-v2   application.core.oam.dev/rollout-trait-test   2          1m
 
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 express-server   5        5          5       batchReady    rolloutSucceed   2d20h
 
-$ kubectl get deploy express-server-v2
+$ kubectl get deploy -l app.oam.dev/component=express-server
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v2   5/5     5            5           1m
 ```
@@ -140,7 +141,7 @@ $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 express-server   5        5          5       batchReady    rolloutSucceed   2d20h
 
-$ kubectl get deploy express-server-v1
+$ kubectl get deploy -l app.oam.dev/component=express-server
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   5/5     5            5           15s
 ```
@@ -177,7 +178,44 @@ $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 express-server   7        7          7       batchReady    rolloutSucceed   2d20h
 
-$ kubectl get deploy express-server-v1
+$ kubectl get deploy express-server-v1 -l app.oam.dev/component=express-server
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   7/7     7            7           2m
+```
+
+5. 应用下面的 YAML 将副本个数由之前的7个缩减至3个
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: rollout-trait-test
+spec:
+  components:
+    - name: express-server
+      type: webservice
+      properties:
+        image: stefanprodan/podinfo:5.0.2
+      traits:
+        - type: rollout
+          properties:
+            targetRevision: express-server-v1
+            targetSize: 3
+            rolloutBatches:
+              - replicas: 1
+              - replicas: 3
+```
+
+这个 rollout 运维特征的表示，从之前的7个副本个数缩容至目标的3个副本，第一个批次缩容1个，第二个批次缩容3个。
+
+扩容成功之后，查看资源状态。
+
+```shell
+$ kubectl get rollout express-server
+NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
+express-server   3        3          3       batchReady    rolloutSucceed   2d20h
+
+$ kubectl get deploy express-server-v1 -l app.oam.dev/component=express-server
+NAME                READY   UP-TO-DATE   AVAILABLE   AGE
+express-server-v1   3/3     3            3           5m
 ```
