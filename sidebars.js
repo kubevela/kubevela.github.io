@@ -28,6 +28,7 @@ module.exports = {
         'end-user/initializer-end-user',
         {
           'Components': [
+            'end-user/components/cue',
             'end-user/components/helm',
             'end-user/components/kustomize',
             {
@@ -69,6 +70,7 @@ module.exports = {
             'end-user/traits/annotations-and-labels',
             'end-user/traits/sidecar',
             'end-user/traits/metrics',
+            'end-user/traits/rollout',
           ]
         },
         {
