@@ -150,7 +150,6 @@ module.exports = {
             'developers/check-logs',
             'developers/exec-cmd',
             'developers/cap-center',
-            'developers/x-def',
             'developers/config-app',
           ]
         },
