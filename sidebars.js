@@ -27,6 +27,15 @@ module.exports = {
       items: [
         'end-user/initializer-end-user',
         {
+          'Workflow': [
+            'end-user/workflow/apply-component',
+            'end-user/workflow/apply-remaining',
+            'end-user/workflow/patch',
+            'end-user/workflow/data-flow',
+            'end-user/workflow/multi-env',
+          ]
+        },
+        {
           'Components': [
             'end-user/components/helm',
             'end-user/components/kustomize',
@@ -48,11 +57,6 @@ module.exports = {
                 'end-user/components/cloud-services/alibaba-ros',
               ]
             },
-          ]
-        },
-        {
-          'Workflow': [
-            'end-user/workflow/multi-env',
           ]
         },
         {
@@ -116,7 +120,13 @@ module.exports = {
             'platform-engineers/initializer/advanced-initializer',
           ]
         },
-
+        {
+          'Worfklow System': [
+            'platform-engineers/workflow/steps',
+            'platform-engineers/workflow/input-output',
+            'platform-engineers/workflow/cue-actions',
+          ]
+        },
         {
           type: 'category',
           label: 'Component System',
@@ -124,12 +134,6 @@ module.exports = {
             'platform-engineers/components/component-default',
             'platform-engineers/components/component-cue',
             'platform-engineers/components/component-terraform',
-          ]
-        },
-        {
-          'Worfklow System': [
-            'platform-engineers/workflow/basic-workflow',
-            'platform-engineers/workflow/advanced-workflow',
           ]
         },
         {
