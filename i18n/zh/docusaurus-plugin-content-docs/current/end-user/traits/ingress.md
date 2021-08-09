@@ -1,13 +1,20 @@
 ---
 title: 配置网关
 ---
+本小节会介绍，如何为应用部署计划的一个组件，进行网关配置。我们使用运维特征里的 `ingress`，将组件暴露出去，可供公网访问。
 
-> ⚠️ 本节要求你的运行时集群有一个有效的 ingress 控制器。
+### 开始之前
 
-`ingress` trait 通过有效域将组件暴露给公共 Internet。
+> ⚠️ 需要你的集群已安装 [Ingress 控制器](https://kubernetes.github.io/ingress-nginx/deploy/)。
+
+> ⚠️ 请已安装 [KubeVela CLI 命令行工具](../../getting-started/quick-install.mdx##3)
+
+### 如何使用
+
+先熟悉 `ingress` 运维特征的相关信息：
 
 ```shell
-kubectl vela show ingress
+vela show ingress
 ```
 ```console
 # Properties
@@ -19,7 +26,7 @@ kubectl vela show ingress
 +--------+------------------------------------------------------------------------------+----------------+----------+---------+
 ```
 
-将 `ingress` trait 附加到要公开和部署的组件。
+使用时，我们将 `ingress` 运维特征，添加到待交付的组件中去：
 
 ```yaml
 # vela-app.yaml
@@ -42,14 +49,16 @@ spec:
               "/": 8000
 ```
 
+修改完毕，在 YAML 文件所在路径下，使用命令进行部署：
+
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
+kubectl apply -f vela-app.yaml
 ```
 ```console
 application.core.oam.dev/first-vela-app created
 ```
 
-检查状态，直到我们看到 `status` 为 `running` 并且服务为 `healthy`：
+当我们看到 `status` 为 `running` 并且服务为 `healthy`，表示应用部署计划完全生效：
 
 ```bash
 kubectl get application first-vela-app -w
@@ -60,7 +69,7 @@ first-vela-app   express-server   webservice   healthChecking                   
 first-vela-app   express-server   webservice   running          true               42s
 ```
 
-检查其访问网址的 trait 详细信息：
+这时候，让我们查看网关提供的公网 IP：
 
 ```shell
 kubectl get application first-vela-app -o yaml
@@ -84,7 +93,7 @@ spec:
 ...
 ```
 
-然后你将能够通过其域访问该应用程序。
+然后你的用户就能够通过这个 IP，来访问该应用程序了。
 
 ```
 curl -H "Host:testsvc.example.com" http://<your ip address>/

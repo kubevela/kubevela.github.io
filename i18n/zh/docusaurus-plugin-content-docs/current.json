@@ -11,9 +11,9 @@
     "message": "核心概念",
     "description": "The label for Core Concepts in sidebar docs"
   },
-  "sidebar.docs.category.CUE": {
+  "sidebar.docs.category.Learning CUE": {
     "message": "CUE 语言",
-    "description": "The label for category CUE in sidebar docs"
+    "description": "The label for category Learning CUE in sidebar docs"
   },
   "sidebar.docs.category.Helm": {
     "message": "Helm",
@@ -23,9 +23,9 @@
     "message": "Raw Template",
     "description": "The label for category Raw Template in sidebar docs"
   },
-  "sidebar.docs.category.Defining Traits": {
+  "sidebar.docs.category.Traits System": {
     "message": "运维特征系统",
-    "description": "The label for category Defining Traits in sidebar docs"
+    "description": "The label for category Traits System in sidebar docs"
   },
   "sidebar.docs.category.Defining Cloud Service": {
     "message": "定义 Cloud Service",
@@ -67,21 +67,21 @@
     "message": "参考",
     "description": "The label for category References in sidebar docs"
   },
-  "sidebar.docs.category.OAM": {
+  "sidebar.docs.category.Learning OAM": {
     "message": "开放应用模型",
-    "description": "The label for category OAM in sidebar docs"
+    "description": "The label for category Learning OAM in sidebar docs"
   },
-  "sidebar.docs.category.Initializer Platform Eng": {
+  "sidebar.docs.category.Environment System": {
     "message": "交付环境系统",
-    "description": "The label for category Initializer Platform Eng in sidebar docs"
+    "description": "The label for category Environment System in sidebar docs"
   },
-  "sidebar.docs.category.Workflow End User": {
+  "sidebar.docs.category.Workflow": {
     "message": "定义交付工作流",
     "description": "The label for category Workflow End User in sidebar docs"
   },
-  "sidebar.docs.category.Workflow Platform Engineers": {
+  "sidebar.docs.category.Worfklow System": {
     "message": "工作流系统",
-    "description": "The label for category Workflow Platform Engineers in sidebar docs"
+    "description": "The label for category Worfklow System in sidebar docs"
   },
   "sidebar.docs.category.Customize Traits": {
     "message": "自定义运维特征",
@@ -103,13 +103,13 @@
     "message": "附录",
     "description": "The label for category Appendix in sidebar docs"
   },
-  "sidebar.docs.category.Defining Components": {
+  "sidebar.docs.category.Component System": {
     "message": "组件系统",
-    "description": "The label for category Defining Components in sidebar docs"
+    "description": "The label for category Component System in sidebar docs"
   },
-  "sidebar.docs.category.End User Guide": {
+  "sidebar.docs.category.User Guide": {
     "message": "用户手册",
-    "description": "The label for category End User Guide in sidebar docs"
+    "description": "The label for category User Guide in sidebar docs"
   },
   "sidebar.docs.category.Components": {
     "message": "选择待交付组件",
@@ -119,11 +119,15 @@
     "message": "挂载运维特征",
     "description": "The label for category Traits in sidebar docs"
   },
+  "sidebar.docs.category.Practical Case": {
+    "message": "实践案例",
+    "description": "The label for category Practical case in sidebar docs"
+  },
   "sidebar.docs.category.Observability": {
     "message": "新增可观测性",
     "description": "The label for category Observability in sidebar docs"
   },
-  "sidebar.docs.category.Scaler": {
+  "sidebar.docs.category.Scaling": {
     "message": "扩缩容",
     "description": "The label for category Scaler in sidebar docs"
   },

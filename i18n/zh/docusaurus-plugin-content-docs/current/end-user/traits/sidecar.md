@@ -1,14 +1,19 @@
 ---
 title: 容器注入
 ---
+本小节会介绍，如何为应用部署计划的一个组件，添加 `sidecar` 运维特征来收集日志。
 
-在本章节中，我们会展示如何使用 `sidecar` trait 来收集日志。
+### 开始之前
 
+> ⚠️ 请安装 [KubeVela CLI 命令行工具](../../getting-started/quick-install.mdx##3)
 
-## 查看 Sidecar 的使用手册
+### 如何使用
+
+先熟悉 `ingress` 运维特征的相关信息：
 
 ```shell
-$ kubectl vela show sidecar
+$ vela show sidecar
+
 # Properties
 +---------+-----------------------------------------+-----------------------+----------+---------+
 |  NAME   |               DESCRIPTION               |         TYPE          | REQUIRED | DEFAULT |
@@ -29,9 +34,8 @@ $ kubectl vela show sidecar
 +-----------+-------------+--------+----------+---------+
 ```
 
-## 安装应用
-
-应用的组件 `log-gen-worker` 和 sidecar 共享相同的日志数据目录。sidecar 会重新输出日志到标准输出中。
+接下来，让我们来编写一个应用部署计划里的组件 `log-gen-worker`。
+同时，我们将 `sidecar` 所记录的日志数据目录和组件，指向同一个数据源 `varlog`。
 
 ```yaml
 # app.yaml
@@ -71,13 +75,13 @@ spec:
                 path: /var/log
 ```
 
-安装这个应用
+编写完毕，在 YAML 文件所在路径下，部署这个应用：
 
 ```shell
 kubectl apply -f app.yaml
 ```
 
-检查应用生成的 workload
+成功后，先检查应用生成的工作负载情况：
 
 ```shell
 $ kubectl get pod
@@ -85,7 +89,7 @@ NAME                              READY   STATUS    RESTARTS   AGE
 log-gen-worker-76945f458b-k7n9k   2/2     Running   0          90s
 ```
 
-查看 sidecar 的输出
+然后，查看 `sidecar` 的输出，日志显示正常。
 
 ```shell
 $ kubectl logs -f log-gen-worker-76945f458b-k7n9k count-log
