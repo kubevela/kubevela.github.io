@@ -1,5 +1,5 @@
 ---
-title:  Multi-Enviroment
+title:  Multi Environment
 ---
 
 
