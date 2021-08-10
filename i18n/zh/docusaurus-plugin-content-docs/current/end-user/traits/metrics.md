@@ -2,11 +2,12 @@
 title:  日志监控
 ---
 
-## 描述
+### 开始之前
 
-配置你服务的监控指标。
+> ⚠️ 请已安装 [KubeVela CLI 命令行工具](../../getting-started/quick-install.mdx##3)
 
-## 规范
+### 如何使用
+
 
 列出 `Metrics` trait 的所有配置项。
 

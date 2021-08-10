@@ -65,11 +65,13 @@ module.exports = {
                 'end-user/traits/autoscaler',
               ]
             },
-            'end-user/traits/volumes',
-            'end-user/traits/service-binding',
+            // 云资源绑定和数据持久化，都需要通过写 Definition 来引入，要单开一个小节去讲
+            // 'end-user/traits/volumes',
+            // 'end-user/traits/service-binding',
             'end-user/traits/annotations-and-labels',
             'end-user/traits/sidecar',
-            'end-user/traits/metrics',
+            // 'end-user/traits/metrics',
+            // 并入可观测性，不再用一个 trait 来实现
             'end-user/traits/rollout',
           ]
         },
@@ -82,6 +84,15 @@ module.exports = {
           ]
         },
       ]
+    },
+    {
+      type: 'category',
+      label: 'Practical Case',
+      collapsed: false,
+      items: [
+        'practical-case/pc1',
+        'practical-case/pc2',
+      ],
     },
     {
       type: 'category',
