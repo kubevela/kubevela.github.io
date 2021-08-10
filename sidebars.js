@@ -28,6 +28,7 @@ module.exports = {
         'end-user/initializer-end-user',
         {
           'Components': [
+            'end-user/components/cue',
             'end-user/components/helm',
             'end-user/components/kustomize',
             {
@@ -71,6 +72,7 @@ module.exports = {
             'end-user/traits/sidecar',
             // 'end-user/traits/metrics',
             // 并入可观测性，不再用一个 trait 来实现
+            'end-user/traits/rollout',
           ]
         },
         {
