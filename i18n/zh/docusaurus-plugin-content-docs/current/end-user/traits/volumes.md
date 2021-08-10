@@ -2,10 +2,14 @@
 title: 数据持久化
 ---
 
-本节介绍如何将 Cloud Volumes 附加到组件。 例如，AWS ElasticBlockStore、
-Azure Disk、阿里云OSS等。
+本节介绍如何将 `Cloud Volumes` 添加到待交付的组件，来实现数据持久化的功能。 例如，我们会用到 AWS ElasticBlockStore、Azure Disk、阿里云 OSS 等。
 
-云卷不是 KubeVela 中的内置功能，因此你需要先启用这些特性。 让我们以 AWS EBS 为例。
+### 开始之前
+可以用来实现数据持久化的运维特征，并不是 KubeVela 中的内置功能。所以为了实现它，你需要用到 XXX。
+
+### 如何使用
+
+让我们以 AWS EBS 为例。
 
 安装并检查 AWS EBS volume 特征的 `TraitDefinition`。
 

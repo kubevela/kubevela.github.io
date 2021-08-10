@@ -2,6 +2,8 @@
 title:  云资源绑定
 ---
 
+// 云资源绑定和数据持久化，都需要通过写 Definition 来引入，要单开一个小节去讲
+
 ## 定义
 服务绑定 trait 将数据从 Kubernetes `Secret` 绑定到应用程序容器的 ENV。
 
