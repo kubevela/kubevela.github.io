@@ -188,14 +188,14 @@ Please note that the End User do NOT need to know about definition objects, they
 
 Once the application is deployed, KubeVela will index and manage the underlying instances with name, revisions, labels and selector etc in automatic approach. These metadata are shown as below.
 
-| Label  | Description |
-| :--: | :---------: | 
-|`workload.oam.dev/type=<component definition name>` | The name of its corresponding `ComponentDefinition` |
-|`trait.oam.dev/type=<trait definition name>` | The name of its corresponding `TraitDefinition` | 
-|`app.oam.dev/name=<app name>` | The name of the application it belongs to |
-|`app.oam.dev/component=<component name>` | The name of the component it belongs to |
-|`trait.oam.dev/resource=<name of trait resource instance>` | The name of trait resource instance |
-|`app.oam.dev/appRevision=<name of app revision>` | The name of the application revision it belongs to |
+|                           Label                            |                     Description                     |
+| :--------------------------------------------------------: | :-------------------------------------------------: |
+|    `workload.oam.dev/type=<component definition name>`     | The name of its corresponding `ComponentDefinition` |
+|        `trait.oam.dev/type=<trait definition name>`        |   The name of its corresponding `TraitDefinition`   |
+|               `app.oam.dev/name=<app name>`                |      The name of the application it belongs to      |
+|          `app.oam.dev/component=<component name>`          |       The name of the component it belongs to       |
+| `trait.oam.dev/resource=<name of trait resource instance>` |         The name of trait resource instance         |
+|      `app.oam.dev/appRevision=<name of app revision>`      | The name of the application revision it belongs to  |
 
 
 Consider these metadata as a standard contract for any "day 2" operation controller such as rollout controller to work on KubeVela deployed applications. This is the key to ensure the interoperability for KubeVela based platform as well.
