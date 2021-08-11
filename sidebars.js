@@ -99,6 +99,7 @@ module.exports = {
       label: 'Platform Admin Guide',
       collapsed: false,
       items: [
+        'platform-engineers/addon',
         {
           'Learning OAM': [
             'platform-engineers/oam/oam-model',
@@ -117,7 +118,6 @@ module.exports = {
             'platform-engineers/initializer/advanced-initializer',
           ]
         },
-
         {
           type: 'category',
           label: 'Component System',
