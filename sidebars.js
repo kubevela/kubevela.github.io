@@ -15,20 +15,19 @@ module.exports = {
       label: 'Core Concepts',
       collapsed: false,
       items: [
+        'core-concepts/architecture',
         'core-concepts/application',
         'core-concepts/workflow',
-        'core-concepts/architecture',
       ],
     },
     {
       type: 'category',
-      label: 'User Guide',
+      label: 'End User Guide',
       collapsed: false,
       items: [
         'end-user/initializer-end-user',
         {
           'Components': [
-            'end-user/components/cue',
             'end-user/components/helm',
             'end-user/components/kustomize',
             {
@@ -87,11 +86,11 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'Practical Case',
+      label: 'Case Studies',
       collapsed: false,
       items: [
-        'practical-case/pc1',
-        'practical-case/pc2',
+        'case-studies/pc1', // 待完成
+        // 'case-studies/pc2',
       ],
     },
     {
