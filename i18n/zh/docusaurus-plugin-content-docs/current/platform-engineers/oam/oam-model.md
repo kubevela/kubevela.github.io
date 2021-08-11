@@ -87,7 +87,7 @@ KubeVela 内置即支持多种类型的组件交付，包括 Helm Chart、容器
 
 KubeVela 当前内置的工作流步骤节点包括了创建资源、条件判断、数据输入输出等。同组件等系统类似，KubeVela 所支持的工作流节点也允许平台管理员自行定义和扩展。
 
-## 配置一致性
+## 避免配置漂移
 
 KubeVela 通过类似 IaC (Infrastructure-as-Code) 的理念来保证组件的高效、可扩展，但是通常 IaC 工具会引入应用配置状态不一致的问题，比如配置中心的配置和生产环境实际状态不一致等，这个问题就是所谓的“配置漂移”（Infrastructure/Configuration Drift）。
 
