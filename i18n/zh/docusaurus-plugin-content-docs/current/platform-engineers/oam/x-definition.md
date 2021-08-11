@@ -217,7 +217,7 @@ metadata:
   annotations:
     definition.oam.dev/description: <功能描述说明>
 spec:
-  schematic:  # 抽象方式
+  schematic:  # 策略描述
     cue: 
       template: <CUE 格式模板>
 ```
