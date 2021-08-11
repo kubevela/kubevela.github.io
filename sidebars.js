@@ -123,8 +123,8 @@ module.exports = {
         {
           'Worfklow System': [
             'platform-engineers/workflow/steps',
-            'platform-engineers/workflow/input-output',
             'platform-engineers/workflow/context',
+            'platform-engineers/workflow/input-output',
             'platform-engineers/workflow/cue-actions',
           ]
         },

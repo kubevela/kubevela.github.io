@@ -1,3 +1,3 @@
 ---
-title:  Workflow Steps
+title:  Steps
 ---

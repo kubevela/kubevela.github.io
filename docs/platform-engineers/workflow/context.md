@@ -1,3 +1,3 @@
 ---
-title:  Workflow Context
+title:  Context
 ---
