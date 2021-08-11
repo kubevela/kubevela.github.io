@@ -274,7 +274,7 @@ spec:
         }
 ```
 
-主要介绍其中的抽象部分，基于 CUE 格式，输出一个 `EnvBinding` 对象，其参数就是 engine 和 envs 两个，其中 envs 是一个结构体数组，具体的结构体类型和其中的参数由 `#Env` 指定，这里面的 CUE 语法与[组件定义的 CUE 语法](../cue/basic.md)一致。
+主要介绍其中的策略描述部分，基于 CUE 格式，输出一个 `EnvBinding` 对象，其参数就是 engine 和 envs 两个，其中 envs 是一个结构体数组，具体的结构体类型和其中的参数由 `#Env` 指定，这里面的 CUE 语法与[组件定义的 CUE 语法](../cue/basic.md)一致。
 
 
 ## 工作流节点定义（WorkflowStepDefinition）
