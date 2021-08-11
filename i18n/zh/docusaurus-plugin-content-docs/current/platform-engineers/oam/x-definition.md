@@ -4,7 +4,7 @@ title: 模块定义（X-Definitions）
 
 最终用户使用的 OAM 模型 [应用部署计划 Application](./oam-model) 中，有很多声明“类型的字段”，如组件类型、运维特征类型、应用策略类型、工作流节点类型等，这些类型实际上就是 OAM 模型的模块定义（X-Definition）。
 
-模块定义（X-Definition）是所有模块化能力的代称，目前主要包括组件定义（ComponentDefinition），运维特征定义（TraitDefinition）、应用策略定义（PolicyDefinition），工作流节点定义（WorkflowStepDefinition）等，随着系统演进，OAM 模型未来可以根据场景需要增加模块化定义概念。
+当前 OAM 模型支持的模块定义（X-Definition）包括组件定义（ComponentDefinition），运维特征定义（TraitDefinition）、应用策略定义（PolicyDefinition），工作流节点定义（WorkflowStepDefinition）等，随着系统演进，OAM 模型未来可能会根据场景需要进一步增加新的模块定义。
 
 模块化定义的实例，是具体的各种功能类型，KubeVela 内置的组件类型，如 webservice 就是组件定义的一种模块化定义实例。KubeVela 的系统管理员，也就是平台工程师或 DevOps 工程师，可以非常容易的通过编写和注册模块化定义的实例，来扩展 KubeVela 系统支持的功能类型。
 
