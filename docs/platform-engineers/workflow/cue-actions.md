@@ -28,7 +28,7 @@ stepName: op.#Apply & {
   }
 }
 ```
-## ConditionalWait
+## #ConditionalWait
 Step will be blocked until the condition is met.
 ### Action Parameter
 - continue: Step will be blocked until the value becomes `true`.
@@ -47,7 +47,7 @@ wait: op.#ConditionalWait: {
   continue: apply.value.status.phase=="running"
 }
 ```
-## Load
+## #Load
 Get component from application by component name.
 ### Action Parameter
 - component: the component name.
@@ -69,7 +69,7 @@ load: op.#Load & {
   component: "componet-name"
 }
 ```
-## Read
+## #Read
 Get resource in kubernetes cluster. 
 ### Action Parameter
 - value: the resource metadata to be get. And after successful execution, `value` will be updated with resource definition in cluster.
@@ -94,7 +94,7 @@ configmap: op.#Read & {
    }
 }
 ```
-## ApplyComponent
+## #ApplyComponent
 Create or update resources corresponding to the component in kubernetes cluster.
 ### Action Parameter
 - component: the component name.
