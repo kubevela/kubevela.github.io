@@ -91,4 +91,4 @@ KubeVela 当前内置的工作流步骤节点包括了创建资源、条件判�
 
 KubeVela 通过类似 IaC (Infrastructure-as-Code) 的理念来保证组件的高效、可扩展，但是通常 IaC 工具会引入应用配置状态不一致的问题，比如配置中心的配置和生产环境实际状态不一致等，这个问题就是所谓的“配置漂移”（Infrastructure/Configuration Drift）。
 
-所以 KubeVela 在管理这些可编程模块的过程中，引入了 [Kubernetes 控制循环](https://kubernetes.io/docs/concepts/architecture/controller/) 的机制，通过 Kubernetes 的控制循环，保证配置和终态的一致，以此防止配置漂移的发生，同时依旧保证了模块的灵活性和可扩展能力。
+所以 KubeVela 在采用 IaC 技术实现的同时，还同时通过 [Kubernetes 控制循环](https://kubernetes.io/docs/concepts/architecture/controller/) 来管控整个 IaC 模型的渲染和执行，从而以完全自动化的方式保证了应用配置和终态的一致性，同时在模块定义、封装、扩展过程中保留了完整的 IaC 的使用体验。简介明了的 CUE 模板语法是平台管理员自行扩展 KubeVela 时唯一需要学习的一项技术。
