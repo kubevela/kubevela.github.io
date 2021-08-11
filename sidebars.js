@@ -116,7 +116,6 @@ module.exports = {
         {
           'Environment System': [
             'platform-engineers/initializer/basic-initializer',
-            'platform-engineers/initializer/advanced-initializer',
           ]
         },
         {

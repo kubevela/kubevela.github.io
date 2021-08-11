@@ -1,207 +1,226 @@
 ---
-title: 交付环境原理
+title: 自定义环境初始化
 ---
 
-This documentation will explain the core resource model of KubeVela which is fully powered by Open Application Model (OAM).
+本章节介绍环境的概念以及如何使用环境初始化（Initializer）初始化一个环境。
 
-## Application
+## 什么是环境？
 
-The *Application* is the core API of KubeVela. It allows End User to work with a single artifact to capture the complete application deployment with simplified primitives. 
+一个应用开发团队通常需要初始化一些共享环境供用户部署他们的应用部署计划（Application）。环境是一个逻辑概念，他表示一组应用部署计划（Application）依赖的公共资源。
+例如，一个团队想要初始化2个环境： 一个开发环境用于测试用户的应用部署计划（Application），一个生产环境部署用于用户的应用部署计划（Application）并提供对外服务。
+管理员可以针对不同的环境配置不同的资源。
 
-This provides a simpler path for on-boarding End User to the platform without leaking low level details in runtime infrastructure. For example, they will be able to declare a "web service" without defining a detailed Kubernetes Deployment + Service combo each time, or claim the auto-scaling requirements without referring to the underlying KEDA ScaleObject. They can also declare a cloud database with same API if they want.
+当你创建一个环境时，你可能想要初始化下面几类资源到你的环境：
 
-Every application is composed by multiple components with attachable operational behaviors (traits). For example:
+1. Kubernetes 集群，不同的环境可能需要不同规模和不同版本的 Kubernetes 集群。例如，开发环境需要一个规模较小的 v1.20 版本的 Kubernetes 集群，
+而生产环境需要一个规模较大的 v1.18 版本的 Kubernetes 集群。
+
+2. 控制器和CRDs，一个环境会拥有很多种不同的控制器和CRD来提供系统能力。一个环境往往会包含提供流量管理、日志监控、自动扩缩容能力的控制器。
+
+3. 共享资源，一个环境会为不同的应用部署计划（Application）提供系统级别的服务。这些共享资源可以是一个数据库、缓存、负载均衡、API网关等等。
+
+4. 管理策略，生产环境需要为部署在该环境的应用部署计划（Application）设置一个全局的策略。例如：混沌测试、安全扫描、错误配置检测、SLO指标。
+
+## 环境初始化（Initializer）
+
+环境初始化（Initializer）允许你自定义组合不同的资源来初始化环境。环境初始化（Initializer）利用了应用部署计划（Application）的能力来创建一个环境所需的资源，
+你甚至可以利用应用部署计划（Application）中的 “应用的执行策略（Policy）" 和 “部署工作流（Workflow）” 来流程化、配置化地创建环境。需要注意的是，多个环境初始化（Initializer）
+之间可能会存在依赖关系，一个环境初始化（Initializer）会依赖其他 Initializer 提供的能力。
+
+一个 Initializer 的整体结构如下：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
-kind: Application
+kind: Initializer
 metadata:
-  name: application-sample
+  name: <Initializer 名称>
 spec:
-  components:
-    - name: foo
-      type: webservice
-      properties:
-        image: crccheck/hello-world
-        port: 8000
-      traits:
-        - type: ingress
+  # 我们利用 Application 来部署一个环境需要的资源
+  appTemplate:
+    spec:
+      components:
+      - name: <环境组件名称>
+        type: <环境组件类型>
+        properties:
+          <环境组件参数>
+      policies:
+      - name: <应用策略名称>
+        type: <应用策略类型>
+        properties:
+          <应用策略参数>
+      workflow:
+        - name: <工作流节点名称>
+          type: <工作流节点类型>
+  # dependsOn 表示依赖的 Initializer
+  dependsOn:
+  - ref:
+      apiVersion: core.oam.dev/v1beta1
+      kind: Initializer
+      name: <依赖的 Initializer 的名称>
+      namespace: <依赖的 Initializer 所在的命名空间>
+```
+
+Initializer 定义的核心在 `.spec` 下面的两部分，一部分是应用部署计划（Application）的模板，另一部分是环境初始化（Initializer）所依赖的 Initializer。
+
+- 应用部署计划（Application）模板（对应`.spec.appTemplate`字段），环境初始化（Initializer）利用应用部署计划（Application）来创建环境需要的资源，
+你可以按照编写一个应用部署计划（Initializer）的模式填写该字段。
+  
+- 环境初始化依赖（对应`.spec.dependsOn`字段），一个 Initializer A 可能会依赖其他 Initializer 的能力，只有当依赖的 Initializer 
+正常运行在环境中，才会创建 Initializer A 包含的资源。
+  
+## 如何使用
+
+### 利用 Helm 组件初始化环境
+
+我们以环境初始化（Initializer）kruise 为例：
+
+```shell
+cat <<EOF | kubectl apply -f -
+apiVersion: core.oam.dev/v1beta1
+kind: Initializer
+metadata:
+  name: kruise
+  namespace: vela-system
+spec:
+  appTemplate:
+    spec:
+      components:
+      - name: kruise
+        type: helm
+        properties:
+          branch: master
+          chart: ./charts/kruise/v0.9.0
+          version: "*"
+          repoType: git
+          repoUrl: https://github.com/openkruise/kruise
+  dependsOn:
+  - ref:
+      apiVersion: core.oam.dev/v1beta1
+      kind: Initializer
+      name: fluxcd
+      namespace: vela-system
+EOF
+```
+
+环境初始化（Initializer）kruise 能帮你在集群中部署一个 [kruise](https://github.com/openkruise/kruise) 的控制器，给集群提供 kruise 的各种能力。
+`dependsOn` 字段表示环境初始化（Initializer）kruise 依赖 Initializer fluxcd 提供的能力。 其中，环境初始化（Initializer）fluxcd 是 
+KubeVela 内置的 Initializer, 当安装环境初始化（Initializer）kruise 时，KubeVela 会自动帮你安装 Initializer fluxcd。
+
+```shell
+$ kubectl get initializers.core.oam.dev -n vela-system
+NAMESPACE     NAME             PHASE     AGE
+vela-system   fluxcd           success   33s
+vela-system   kruise           success   33s
+```
+
+环境初始化（Initializer）fluxcd 会为环境安装 [fluxcd](https://github.com/fluxcd/flux2) 中的控制器和CRDs，
+同时也会安装多个依赖 fluxcd 能力的组件定义（ComponentDefinition）。
+
+```shell
+$ kubectl get componentdefinitions.core.oam.dev -n vela-system
+NAMESPACE     NAME         WORKLOAD-KIND   DESCRIPTION
+vela-system   helm                         helm release is a group of K8s resources from either git repository or helm repo
+vela-system   kustomize                    kustomize can fetching, building, updating and applying Kustomize manifests from git repo.
+```
+当你想要创建一个以 Helm Chart 方式打包的控制器时，可以直接在 `.spec.appTemplate` 中使用 `helm` 组件定义，
+环境初始化（Initializer）kruise 就是利用了组件定义 `helm` 来创建 [kruise](https://github.com/openkruise/kruise) 的控制器和CRDs。
+
+```shell
+$ kubectl  get pod -n kruise-system
+NAME                                         READY   STATUS    RESTARTS   AGE
+kruise-controller-manager-7f77ddc667-htp2f   1/1     Running   0          28m
+kruise-controller-manager-7f77ddc667-kzws8   1/1     Running   0          28m
+kruise-daemon-5jrq6                          1/1     Running   0          28m
+```
+
+### 在 Initializer 中直接填写 Kubernetes 原生资源
+
+KubeVela 为你提供了一个内置的组件定义 `raw`，你可以直接在组件的 `properties` 字段中填写创建到环境中的原生 Kubernetes 资源。
+这种在 Initializer 中直接填写 Kubernetes 原生资源的方式，可以避免编写多余的组件定义（ComponentDefinition）。
+
+以内置的 Initializer fluxcd 为例，你可以把任意的 Kubernetes 原生资源填写在 `properties` 字段中。
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Initializer
+metadata:
+  annotations:
+    addons.oam.dev/description: Flux is a set of continuous and progressive delivery
+      solutions for Kubernetes
+  name: fluxcd
+  namespace: vela-system
+spec:
+  appTemplate:
+    spec:
+      components:
+      - name: alerts.notification.toolkit.fluxcd.io
+        type: raw
+        properties:
+          apiVersion: apiextensions.k8s.io/v1
+          kind: CustomResourceDefinition
+          metadata:
+            annotations:
+              controller-gen.kubebuilder.io/version: v0.5.0
+            labels:
+              app.kubernetes.io/instance: flux-system
+            name: alerts.notification.toolkit.fluxcd.io
+          spec:
+            group: notification.toolkit.fluxcd.io
+            names:
+              kind: Alert
+              listKind: AlertList
+              plural: alerts
+              singular: alert
+            scope: Namespaced
+          ....
+```
+
+### 使用 workflow 来流程化初始化环境
+
+你可以利用应用部署计划（Application）中的部署工作流（workflow）来流程化初始化环境。我们以实践案例 **多环境部署** 中的 Initializer managed-cluster 为例：
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Initializer
+metadata:
+  name: managed-cluster
+  namespace: vela-system
+spec:
+  appTemplate:
+    spec:
+      components:
+        - name: ack-worker
+          type: alibaba-ack
           properties:
-            domain: testsvc.example.com
-            http:
-              "/": 8000
-        - type: sidecar
-          properties:
-            name: "logging"
-            image: "fluentd"
-    - name: bar
-      type: aliyun-oss # cloud service
-      bucket: "my-bucket"
+            writeConnectionSecretToRef:
+              name: ack-conn
+              namespace: vela-system
+      workflow:
+        steps:
+          - name: terraform-ack
+            type: create-ack
+            properties:
+              component: ack-worker
+            outputs:
+              - name: connInfo
+                exportKey: connInfo
+
+          - name: register-ack
+            type: register-cluster
+            inputs:
+              - from: connInfo
+                parameterKey: connInfo
+  dependsOn:
+    - ref:
+        apiVersion: core.oam.dev/v1beta1
+        kind: Initializer
+        name: terraform-alibaba
+        namespace: vela-system
 ```
 
-The `Application` resource in KubeVela is a LEGO-style entity and does not even have fixed schema. Instead, it is assembled by below building block entities that are maintained by the platform-engineers.
-Though the application object doesn't have fixed schema, it is a composition object assembled by several *programmable building blocks* as shown below.
+环境初始化（Initializer）managed-cluster 会为环境创建一个 ACK 集群，并利用 OCM 将新创建的集群注册到管控集群上。
+在 `AppTemplate` 的 `workflow` 字段中描述了环境初始化的流程:
 
-## Component
-
-The component model (`ComponentDefinition` API) is designed to allow *component providers* to encapsulate deployable/provisionable entities with a wide range of tools, and hence give a easier path to End User to deploy complicated microservices across hybrid environments at ease. A component normally carries its workload type description (i.e. `WorkloadDefinition`), a encapsulation module with a parameter list.
-
-> Hence, a components provider could be anyone who packages software components in form of Helm chart of CUE modules. Think about 3rd-party software distributor, DevOps team, or even your CI pipeline.
-
-Components are shareable and reusable. For example, by referencing the same *Alibaba Cloud RDS* component and setting different parameter values, End User could easily provision Alibaba Cloud RDS instances of different sizes in different availability zones.
-
-End User will use the `Application` entity to declare how they want to instantiate and deploy a group of certain components. In above example, it describes an application composed with Kubernetes stateless workload (component `foo`) and a Alibaba Cloud OSS bucket (component `bar`) alongside.
-
-### How it Works?
-
-In above example, `type: worker` means the specification of this component (claimed in following `properties` section) will be enforced by a `ComponentDefinition` object named `worker` as below:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: ComponentDefinition
-metadata:
-  name: worker
-  annotations:
-    definition.oam.dev/description: "Describes long-running, scalable, containerized services that running at backend. They do NOT have network endpoint to receive external network traffic."
-spec:
-  workload:
-    definition:
-      apiVersion: apps/v1
-      kind: Deployment
-  schematic:
-    cue:
-      template: |
-        output: {
-          apiVersion: "apps/v1"
-          kind:       "Deployment"
-          spec: {
-            selector: matchLabels: {
-              "app.oam.dev/component": context.name
-            }
-            template: {
-              metadata: labels: {
-                "app.oam.dev/component": context.name
-              }
-              spec: {
-                containers: [{
-                  name:  context.name
-                  image: parameter.image
-
-                  if parameter["cmd"] != _|_ {
-                    command: parameter.cmd
-                  }
-                }]
-              }
-            }
-          }
-        }
-        parameter: {
-          image: string
-          cmd?: [...string]
-        }
-```
-
-
-Hence, the `properties` section of `backend` only exposes two parameters to fill: `image` and `cmd`, this is enforced by the `parameter` list of the `.spec.template` field of the definition.
-
-## Traits
-
-Traits (`TraitDefinition` API) are operational features provided by the platform. A trait augments the component instance with operational behaviors such as load balancing policy, network ingress routing, auto-scaling policies, or upgrade strategies, etc.
-
-To attach a trait to component instance, the user will declare `.type` field to reference the specific `TraitDefinition`, and `.properties` field to set property values of the given trait. Similarly, `TraitDefinition` also allows you to define *template* for operational features.
-
-In the above example, `type: autoscaler` in `frontend` means the specification (i.e. `properties` section) of this trait will be enforced by a `TraitDefinition` object named `autoscaler` as below:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "configure k8s HPA for Deployment"
-  name: hpa
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  schematic:
-    cue:
-      template: |
-        outputs: hpa: {
-          apiVersion: "autoscaling/v2beta2"
-          kind:       "HorizontalPodAutoscaler"
-          metadata: name: context.name
-          spec: {
-            scaleTargetRef: {
-              apiVersion: "apps/v1"
-              kind:       "Deployment"
-              name:       context.name
-            }
-            minReplicas: parameter.min
-            maxReplicas: parameter.max
-            metrics: [{
-              type: "Resource"
-              resource: {
-                name: "cpu"
-                target: {
-                  type:               "Utilization"
-                  averageUtilization: parameter.cpuUtil
-                }
-              }
-            }]
-          }
-        }
-        parameter: {
-          min:     *1 | int
-          max:     *10 | int
-          cpuUtil: *50 | int
-        }
-```
-
-The application also have a `sidecar` trait.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "add sidecar to the app"
-  name: sidecar
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  schematic:
-    cue:
-      template: |-
-        patch: {
-           // +patchKey=name
-           spec: template: spec: containers: [parameter]
-        }
-        parameter: {
-           name: string
-           image: string
-           command?: [...string]
-        }
-```
-
-Please note that the End User do NOT need to know about definition objects, they learn how to use a given capability with visualized forms (or the JSON schema of parameters if they prefer). Please check the [Generate Forms from Definitions](../openapi-v3-json-schema) section about how this is achieved.
-
-## Standard Contract Behind The Abstractions
-
-Once the application is deployed, KubeVela will index and manage the underlying instances with name, revisions, labels and selector etc in automatic approach. These metadata are shown as below.
-
-| Label  | Description |
-| :--: | :---------: | 
-|`workload.oam.dev/type=<component definition name>` | The name of its corresponding `ComponentDefinition` |
-|`trait.oam.dev/type=<trait definition name>` | The name of its corresponding `TraitDefinition` | 
-|`app.oam.dev/name=<app name>` | The name of the application it belongs to |
-|`app.oam.dev/component=<component name>` | The name of the component it belongs to |
-|`trait.oam.dev/resource=<name of trait resource instance>` | The name of trait resource instance |
-|`app.oam.dev/appRevision=<name of app revision>` | The name of the application revision it belongs to |
-
-
-Consider these metadata as a standard contract for any "day 2" operation controller such as rollout controller to work on KubeVela deployed applications. This is the key to ensure the interoperability for KubeVela based platform as well.
-
-## No Configuration Drift
-
-Despite the efficiency and extensibility in abstracting application deployment, IaC (Infrastructure-as-Code) tools may lead to an issue called *Infrastructure/Configuration Drift*, i.e. the generated component instances are not in line with the expected configuration. This could be caused by incomplete coverage, less-than-perfect processes or emergency changes. This makes them can be barely used as a platform level building block.
-
-Hence, KubeVela is designed to maintain all these programmable capabilities with [Kubernetes Control Loop](https://kubernetes.io/docs/concepts/architecture/controller/) and leverage Kubernetes control plane to eliminate the issue of configuration drifting, while still keeps the flexibly and velocity enabled by IaC.
+1. 利用 terraform-controller 的能力创建一个 ACK 集群，等待 ACK 创建成功。
+   
+2. 将新创建的 ACK 集群注册到管控集群。
