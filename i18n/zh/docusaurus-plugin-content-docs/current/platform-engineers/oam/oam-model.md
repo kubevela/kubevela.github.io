@@ -11,7 +11,7 @@ KubeVela 背后的应用交付模型是 OAM（Open Application Model），即：
 * 近似功能的乐高模块有不同尺寸和插槽可以选择。意味着同样功能的模块化能力可以提供不同使用和组装方式。
 * 用户通过一个叫做应用部署计划（Application）的声明式对象来进行选择和组装这些模块。
 
-![oam-model](../../resources/oam-model.png)
+![oam-model](../../resources/oam-model.jpg)
 
 ## 应用部署计划（Application）
 
