@@ -40,7 +40,7 @@ spec:
 
 除了基本的“组件定义名称”和“功能描述说明”以外，组件定义的核心是 `.spec` 下面的两部分，一部分是工作负载类型；另一部分是组件描述。
 
-* 工作负载类型（对应`.spec.workload`）字段为系统指明了一个组件背后对应的工作负载类型。它有两种定义方式，一种如例子中显示的，填写 `.spec.workload.definition` 的具体资源组和资源类型名称。另一种方法则是填写一个工作负载类型的名称。
+* 工作负载类型（对应`.spec.workload`）字段为系统指明了一个组件背后对应的工作负载类型。它有两种定义方式，一种如例子中显示的，填写 `.spec.workload.definition` 的具体资源组和资源类型名称。另一种方法则是填写一个工作负载类型的名称。对于背后的工作负载类型不明确的组件定义，可以填写一个特殊的工作负载类型 `autodetects.core.oam.dev`，表示让 KubeVela 自动发现背后的工作负载。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -62,52 +62,108 @@ spec:
 apiVersion: core.oam.dev/v1beta1
 kind: ComponentDefinition
 metadata:
-  name: worker-demo
+  name: helm
+  namespace: vela-system
   annotations:
-    definition.oam.dev/description: "描述一个常驻进程、可以进行扩缩容，并以容器化的形式运行在后台。"
+    definition.oam.dev/description: "helm release is a group of K8s resources from either git repository or helm repo"
 spec:
   workload:
-    definition:
-      apiVersion: apps/v1
-      kind: Deployment
+    type: autodetects.core.oam.dev
   schematic:
     cue:
       template: |
         output: {
-          apiVersion: "apps/v1"
-          kind:       "Deployment"
-          spec: {
-            selector: matchLabels: {
-              "app.oam.dev/component": context.name
-            }
-            template: {
-              metadata: labels: {
-                "app.oam.dev/component": context.name
-              }
-              spec: {
-                containers: [{
-                  name:  context.name
-                  image: parameter.image
-
-                  if parameter["cmd"] != _|_ {
-                    command: parameter.cmd
-                  }
-                }]
-              }
-            }
-          }
+        	apiVersion: "source.toolkit.fluxcd.io/v1beta1"
+        	metadata: {
+        		name: context.name
+        	}
+        	if parameter.repoType == "git" {
+        		kind: "GitRepository"
+        		spec: {
+        			url: parameter.repoUrl
+        			ref:
+        				branch: parameter.branch
+        			interval: parameter.pullInterval
+        		}
+        	}
+        	if parameter.repoType == "helm" {
+        		kind: "HelmRepository"
+        		spec: {
+        			interval: parameter.pullInterval
+        			url:      parameter.repoUrl
+        			if parameter.secretRef != _|_ {
+        				secretRef: {
+        					name: parameter.secretRef
+        				}
+        			}
+        		}
+        	}
         }
+
+        outputs: release: {
+        	apiVersion: "helm.toolkit.fluxcd.io/v2beta1"
+        	kind:       "HelmRelease"
+        	metadata: {
+        		name: context.name
+        	}
+        	spec: {
+        		interval: parameter.pullInterval
+        		chart: {
+        			spec: {
+        				chart:   parameter.chart
+        				version: parameter.version
+        				sourceRef: {
+        					if parameter.repoType == "git" {
+        						kind: "GitRepository"
+        					}
+        					if parameter.repoType == "helm" {
+        						kind: "HelmRepository"
+        					}
+        					name:      context.name
+        					namespace: context.namespace
+        				}
+        				interval: parameter.pullInterval
+        			}
+        		}
+        		if parameter.targetNamespace != _|_ {
+        			targetNamespace: parameter.targetNamespace
+        		}
+        		if parameter.values != _|_ {
+        			values: parameter.values
+        		}
+        	}
+        }
+
         parameter: {
-          image: string
-          cmd?: [...string]
+        	repoType: "git" | "helm"
+        	// +usage=The Git or Helm repository URL, accept HTTP/S or SSH address as git url.
+        	repoUrl: string
+        	// +usage=The interval at which to check for repository and relese updates.
+        	pullInterval: *"5m" | string
+        	// +usage=1.The relative path to helm chart for git source. 2. chart name for helm resource
+        	chart: string
+        	// +usage=Chart version
+        	version?: string
+        	// +usage=The Git reference to checkout and monitor for changes, defaults to master branch.
+        	branch: *"master" | string
+        	// +usage=The name of the secret containing authentication credentials for the Helm repository.
+        	secretRef?: string
+        	// +usage=The namespace for helm chart
+        	targetNamespace?: string
+        	// +usage=Chart version
+        	value?: #nestedmap
+        }
+
+        #nestedmap: {
+        	...
         }
 ```
 
-如上所示，这个组件定义的名字叫 `worker-demo`，一经注册，最终用户在 Application 的组件类型（`components[*].type`）字段就可以填写这个类型。
+如上所示，这个组件定义的名字叫 `helm`，一经注册，最终用户在 Application 的组件类型（`components[*].type`）字段就可以填写这个类型。
 
-* 其中 `definition.oam.dev/description` 对应的字段就描述了这个组件类型的功能是作为一个后台常驻进程使用。
-*  `.spec.workload` 字段，描述了这个组件定义背后的工作负载是 Kubernetes Deployment。
-*  `.spec.schematic.cue.template`字段描述了基于 CUE 的抽象模板，定义了输出是一个 Kubernetes 的 Deployment 结构，模板中的 parameter 定义了用户可以使用的参数，一个是镜像，一个是启动命令。
+* 其中 `definition.oam.dev/description` 对应的字段就描述了这个组件类型的功能是启动一个 helm chart。
+*  `.spec.workload` 字段，填写的是`autodetects.core.oam.dev`表示让用户自动发现这个 helm chart 组件背后的工作负载。
+*  `.spec.schematic.cue.template`字段描述了基于 CUE 的抽象模板，输出包含2个对象，其中一个输出是根据 helm repo 托管的制品形态决定的，如果是用的helm官方的模式托管的则是生成 `HelmRepository` 对象，git模式推广的就是生成`GitRepository` 对象，另一个输出的对象是 `HelmRelease` 包含了这个 helm 的具体参数。 其中 `parameter` 列表则是暴露给用户填写的全部参数。
 
 
 ## 运维特征定义（TraitDefinition）
