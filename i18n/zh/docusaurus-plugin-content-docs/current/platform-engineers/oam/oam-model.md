@@ -15,7 +15,7 @@ KubeVela 背后的应用交付模型是 OAM（Open Application Model），即：
 
 ## 应用部署计划（Application）
 
-**Application** 对象是 KubeVela 的核心 API，它表达了一个应用的完整部署计划。最终用户只需要描述这样一个 Application 文件，就可以涵盖应用交付的所有组件和部署策略。
+**Application** 对象是用户唯一需要了解的 API，它表达了一个微服务应用的部署计划。
 
 OAM 模型将一次应用部署计划（Application）拆解为“待部署组件（Component）”、“运维能力（Trait）”、“应用的执行策略（Policy）”，以及“部署执行方式工作流（Workflow）”这四部分概念组成。每个概念里面都可以包含可插拔和扩展的多个模块，就像乐高积木一样可以自由组合，从而满足不同的场景和诉求。
 
