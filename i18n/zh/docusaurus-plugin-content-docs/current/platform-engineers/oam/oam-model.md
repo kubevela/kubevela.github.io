@@ -63,7 +63,7 @@ spec:
 
 ## 组件（Component）
 
-待部署组件（Component）是构成完整应用的微服务单元，比如一个 WordPress 应用包含 WordPress 程序主体以及 MySQL 数据库两个组件。
+组件（Component）是构成微服务应用的基本单元，比如一个 [Bookinfo](https://istio.io/latest/docs/examples/bookinfo/) 应用可以包含 Ratings、Reviews、Details 等多个组件。
 
 KubeVela 内置即支持多种类型的组件交付，包括 Helm Chart、容器镜像、CUE 模块、Terraform 模块等等。同时，KubeVela 也允许平台管理员以 CUE 语言的形式增加其它任意类型的组件。
 
