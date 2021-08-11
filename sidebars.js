@@ -71,14 +71,12 @@ module.exports = {
             'end-user/traits/annotations-and-labels',
             'end-user/traits/sidecar',
             // 'end-user/traits/metrics',
-            // 并入可观测性，不再用一个 trait 来实现
+            // 并入可观测性，不再用一个 trait 来实现，本文档留作参考
             'end-user/traits/rollout',
           ]
         },
         {
           'Debugging': [
-            'end-user/debug/dry-run',
-            'end-user/debug/live-diff',
             'end-user/debug/health',
             'end-user/debug/monitoring',
           ]
@@ -90,8 +88,8 @@ module.exports = {
       label: 'Practical Case',
       collapsed: false,
       items: [
-        'practical-case/pc1',
-        'practical-case/pc2',
+        'practical-case/workflow-edge-computing',
+        'practical-case/workflow-lixiang-auto',
       ],
     },
     {
@@ -144,6 +142,12 @@ module.exports = {
           ]
         },
         'platform-engineers/advanced-install',
+        {
+          'Debugging': [
+            'platform-engineers/debug/dry-run',
+            'platform-engineers/debug/live-diff',
+          ]
+        },
       ]
     },
     {

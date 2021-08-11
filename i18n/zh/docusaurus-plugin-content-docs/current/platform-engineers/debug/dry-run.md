@@ -2,7 +2,7 @@
 title: 本地试运行
 ---
 
-为了保证一个应用部署计划在 Kubernetes 运行时集群的表现符合期望，在开发调试阶段，我们会希望可以提前确认这个行为背后的逻辑是否正确。
+如果你是一个 DevOps 用户或者运维管理员，并且对 Kubernetes 有所了解，为了保证一个应用部署计划在 Kubernetes 运行时集群的表现符合期望，在开发调试阶段，你也可以通过下面的试运行功能提前确认这个部署计划背后的逻辑是否正确。
 
 KubeVela 提供了本地试运行（Dry-run）的功能，来满足你的这个需求。
 
@@ -115,6 +115,21 @@ spec:
 1. Kubernetes 集群内部 Service 和我们期望的 `kind: Deployment` 部署，在相关的镜像地址、域名端口上，是否能匹配。
 2. 最终对外的 Ingress 网关，与 Kubernetes 集群内部的 `Service`，在相关的镜像地址、域名端口上，是否能匹配。
 
-同时，你可以通过 `kubectl vela dry-run -h` 来查看更多可用的本地试运行模式。
-
 在完成上述信息确认之后，我们就能进行后续的开发调试步骤了。
+
+最后，你还可以通过 `kubectl vela dry-run -h` 来查看更多可用的本地试运行模式：
+
+```
+Usage:
+  vela dry-run
+
+Examples:
+kubectl vela dry-run
+
+Flags:
+  -d, --definition string   specify a definition file or directory, it will only be used in dry-run rather than applied to K8s cluster
+  -f, --file string         application file name (default "./app.yaml")
+  -h, --help                help for dry-run
+  -n, --namespace string    specify namespace of the definition file, by default is default namespace (default "default")
+```
+
