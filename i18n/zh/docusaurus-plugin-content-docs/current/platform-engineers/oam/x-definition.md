@@ -30,7 +30,7 @@ metadata:
   annotations:
     definition.oam.dev/description: <功能描述说明>
 spec:
-  workload: # 工作负载类型
+  workload: # 工作负载描述
     definition:
       apiVersion: <Kubernetes 工作负载的资源组>
       kind: <Kubernetes 工作负载类型>
