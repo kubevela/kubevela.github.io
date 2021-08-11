@@ -2,7 +2,7 @@
 title:  Workflow
 ---
 
-Workflow in KubeVela empowers users to automates the delivery of applications to hybrid environments by integrating any kind of operational tasks.
+Workflow in KubeVela empowers users to glue any operational tasks to automate the delivery of applications to hybrid environments.
 It is designed to customize the control logic -- not just blindly apply all resources, but provide more procedural flexiblity.
 Here is an example:
 
