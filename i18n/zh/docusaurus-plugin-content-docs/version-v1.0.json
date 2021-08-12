@@ -52,7 +52,7 @@
     "description": "The label for category Hands-on Lab in sidebar docs"
   },
   "sidebar.docs.category.Using KubeVela CLI": {
-    "message": "使用 KubeVela CLI",
+    "message": "使用命令行工具",
     "description": "The label for category Using KubeVela CLI in sidebar docs"
   },
   "sidebar.docs.category.Appfile": {
@@ -60,7 +60,7 @@
     "description": "The label for category Appfile in sidebar docs"
   },
   "sidebar.docs.category.Managing Applications": {
-    "message": "管理 Applications",
+    "message": "管理应用",
     "description": "The label for category Managing Applications in sidebar docs"
   },
   "sidebar.docs.category.References": {
