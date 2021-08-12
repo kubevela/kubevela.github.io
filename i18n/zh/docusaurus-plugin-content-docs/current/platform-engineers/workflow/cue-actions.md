@@ -8,9 +8,14 @@ title:  CUE 操作
 在kubernetes集群中创建或者更新资源
 ### 操作参数
 - value: 被操作的对象结构. 操作成功执行后，会用集群中资源的状态重新渲染`value`
+- patch: 对应的内容支持策略性合并,比如可以通过注释 `// +patchKey`实现数组的按主键合并
 ```
 #Apply: {
-  value: {}
+  value: {...}
+  patch: {
+    //patchKey=$key
+    ...
+  }
 }
 ```
 ### 用法示例
@@ -25,6 +30,12 @@ stepName: op.#Apply & {
       replicas: 2
       ...
     }
+  }
+  patch: {
+   spec: template: spec: {
+      //patchKey=name
+      containers: [{name: "sidecar"}]
+   }
   }
 }
 ```
