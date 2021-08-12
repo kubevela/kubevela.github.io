@@ -2,9 +2,13 @@
 title:  Multi Environments
 ---
 
-This documentation introduces how to use multi environments in workflow.
+## Overview
 
-Assume that our Application, which was originally applied in the test environment, needs to be migrated to the production environment, and the image version also needs to be updated. We can write an Application like this:
+If we have applied our application in the test environment and need to migrate it to the production environment, in which some configuration also needs to be updated, KubeVela provides the `ApplyEnvBindComponent` workflow step to manage multi environments.
+
+In this guide, you will learn how to manage multi environments via `ApplyEnvBindComponent` in WorkflowStepDefinition.
+
+## Apply Base Definitions
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -46,11 +50,8 @@ spec:
           component: nginx-server
           policy:    patch
           env:       prod
-```
 
-As you can see, in `policies`, there is some configuration that needs to be updated. In the `properties` of `workflow`, the related 'component', 'policy', and 'env' names are specified, which we can then use in `ApplyEnvBindComponent`:
-
-```yaml
+---
 apiVersion: core.oam.dev/v1beta1
 kind: WorkflowStepDefinition
 metadata:
@@ -76,5 +77,9 @@ spec:
         	namespace: context.namespace
         }
 ```
+
+## Expected outcome
+
+We can see that the component have been applied to the cluster with the latest configuration.
 
 With `ApplyEnvBindComponent`, we can easily manage applications in multiple environments.

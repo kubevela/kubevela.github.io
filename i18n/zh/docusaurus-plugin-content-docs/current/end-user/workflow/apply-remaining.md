@@ -2,11 +2,12 @@
 title:  部署剩余资源
 ---
 
-本节将介绍如何在 `WorkflowStepDefinition` 部署剩余资源。
+## 总览
 
 在一些情况下，我们并不需要部署所有的资源，但跳过不想部署的，再一个个指定部署又太过繁琐。KubeVela 提供了一个 `ApplyRemaining` 操作符，可以使用户方便的一键过滤不想要的资源，并部署剩余组件。
+本节将介绍如何在 `WorkflowStepDefinition` 通过 `ApplyRemaining` 部署剩余资源。
 
-假设现在我们拥有这样一个应用部署计划：
+## 部署基础定义
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -38,11 +39,8 @@ spec:
               skipAllTraits: false
               skipApplyTraits:
                 - ingress
-```
 
-可以看到，在 `properties` 中，我们指定了一个 `exceptions` 参数，其键名为对应的组件名 `express-server`，值为一个对象，对象中有一些用于 `ApplyRemaining` 的内置参数。参数的详细说明详见下面的例子：
-
-```yaml
+---
 apiVersion: core.oam.dev/v1beta1
 kind: WorkflowStepDefinition
 metadata:
@@ -71,4 +69,10 @@ spec:
         }
 ```
 
-可以看到，通过填写 `ApplyRemaining` 中提供的参数，可以方便的过滤部署资源。
+可以看到，在 `properties` 中，我们指定了一个 `exceptions` 参数，其键名为对应的组件名 `express-server`，值为一个对象，对象中有一些用于 `ApplyRemaining` 的内置参数。参数的详细说明详见下面的例子：
+
+## 期望结果
+
+可以看到，组件已经被成功部署到了集群中，但是名为 ingress 的运维特征被跳过了部署。
+
+通过填写 `ApplyRemaining` 中提供的参数，可以使用户方便的过滤部署资源。
