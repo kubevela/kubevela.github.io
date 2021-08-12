@@ -116,10 +116,10 @@ apply: op.#ApplyComponent & {
 ## #ApplyRemaining
 在kubernets集群中创建或者更新application所有组件对应的资源
 ### 操作参数
-exceptions: 指明操作排除掉的组件
-skipApplyWorkload: 是否跳过该组件workload资源的同步
-skipAllTraits: 是否跳过该组件所有trait资源的同步
-skipApplyTraits: 需要跳过的该组件trait资源对应的名称(定义中outputs涉及到名字)
+- exceptions: 指明操作排除掉的组件
+- skipApplyWorkload: 是否跳过该组件workload资源的同步
+- skipAllTraits: 是否跳过该组件所有trait资源的同步
+- skipApplyTraits: 需要跳过的该组件trait资源对应的名称(定义中outputs涉及到名字)
 ```
 #ApplyRemaining: {
  exceptions?: [componentName=string]: {
@@ -144,7 +144,7 @@ apply: op.#ApplyRemaining & {
 ## #Steps
 用来封装一组操作
 ### 操作参数
-steps里面需要通过tag的方式指定执行顺序,数字越小执行越靠前
+- steps里面需要通过tag的方式指定执行顺序,数字越小执行越靠前
 ### 用法示例
 ```
 app: op.#Steps & {
