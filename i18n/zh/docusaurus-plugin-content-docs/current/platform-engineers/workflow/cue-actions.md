@@ -154,5 +154,5 @@ app: op.#Steps & {
   apply: op.#Apply & {
     value: load.workload
   } @step(2)
-}
+} 
 ```
