@@ -1,14 +1,14 @@
 ---
-title:  Apply Components and Traits
+title:  部署组件和运维特征
 ---
 
-This documentation introduces how to apply components and traits in `WorkflowStepDefinition`.
+本节将介绍如何在 `WorkflowStepDefinition` 部署组件和运维特征。
 
-> Make sure you have learned about [Workflow](../../core-concepts/workflow.md) before reading this section.
+> 在阅读本部分之前，请确保你已经了解了 KubeVela 中 [Workflow](../../core-concepts/workflow.md) 的核心概念。
 
-## Apply components and traits in one operation
+## 一键部署组件和运维特征
 
-Suppose we have such an Application:
+假设现在我们拥有这样一个 Application:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -37,9 +37,8 @@ spec:
           name: express-server
 ```
 
-As you can see, we have a `step` with `type` of `apply-express` in `workflow`, and pass a parameter called `name` with the value of the name of the component in the application.
-
-Next, we can write `WorkflowStepDefinition`. KubeVela provides an integrated operator, `ApplyComponent`, through which components and traits can be easily applied.
+可以看到，在 `workflow` 中，定义了一个 `type` 为 `apply-express` 的 `step`，并且传递了一个 `name` 参数，参数值为应用中组件的名称。
+接下来，我们来编写 `WorkflowStepDefinition`。KubeVela 提供了一个集成的操作符 `ApplyComponent`，通过这个操作符，可以简单的一键部署组件和运维特征。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -55,22 +54,22 @@ spec:
         	"vela/op"
         )
 
-        // get the passed parameter
+        // 获取传递的参数
         parameter: {
           name: string
         }
 
-        // apply component and traits
+        // 一键部署组件和运维特征
         apply: op.#ApplyComponent & {
           component: parameter.name
         }
 ```
 
-Actually, `ApplyComponent` is a collection of operators, then we'll show how to apply components and traits separately.
+`ApplyComponent` 实际上是一系列操作符的集合，接下来我们来介绍如何分开操作并部署组件和运维特征。
 
-## Apply components and traits separately
+## 分开部署组件和运维特征
 
-The `ApplyComponent` have integrated the `Load` and `Apply` actions. In the following, we will apply components and traits separately.
+在 `ApplyComponent` 操作符中，集成了 `Load` 以及 `Apply` 的逻辑。此外，组件和运维特征需要分开部署。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -86,24 +85,24 @@ spec:
         	"vela/op"
         )
 
-        // get the passed parameter
+        // 获取传递的参数
         parameter: {
           name: string
         }
 
-        // load the component
+        // 加载组件
         load: op.#Load & {
         	component: parameter.name
         }
 
-        // apply the component, `.value.workload` means the actual component
+        // 部署组件，value 表明取值，workload 表明为组件
         apply: op.#Apply & {
         	value: {
         		load.value.workload
         	}
         }
 
-        // apply the trait, `.value.auxiliaries[0]` means the actual trait since we have only one trait here
+        // 部署运维特征，value 表明取值，auxiliaries 表明附属的资源，这是一个数组，由于在例子中只有一个运维特征，可以简单使用下标 0 来指定
         apply: op.#Apply & {
           value: {
             load.value.auxiliaries[0]
@@ -111,7 +110,7 @@ spec:
         }
 ```
 
-If we have multiple traits, we can also apply one by one in a loop:
+如果拥有多个运维特征，也可以通过循环写法来完成部署
 
 ```yaml
 spec:
@@ -122,17 +121,17 @@ spec:
         	"vela/op"
         )
 
-        // get the passed parameter
+        // 获取传递的参数
         parameter: {
           name: string
         }
 
-        // load the component
+        // 加载组件
         load: op.#Load & {
         	component: parameter.name
         }
 
-        // apply all the items in auxiliaries array and apply
+        // 遍历 auxiliaries 数组并部署
         step: op.#Steps & {
           for index, aux in load.value.auxiliaries {
             "aux-\(index)": op.#Apply & {
