@@ -8,9 +8,14 @@ This doc will illustrate the CUE actions provided in `vela/op` stdlib package.
 Create or update resource in kubernetes cluster.
 ### Action Parameter
 - value: the resource structure to be created or updated. And after successful execution, `value` will be updated with resource status.
+- patch: the content support `Strategic Merge Patch`,let you can define the strategy of list merge through comments.
 ```
 #Apply: {
-  value: {}
+  value: {...}
+  patch: {
+    //patchKey=$key
+    ...
+  }
 }
 ```
 ### Usage
@@ -25,6 +30,12 @@ stepName: op.#Apply & {
       replicas: 2
       ...
     }
+  }
+  patch: {
+   spec: template: spec: {
+      //patchKey=name
+      containers: [{name: "sidecar"}]
+   }
   }
 }
 ```
