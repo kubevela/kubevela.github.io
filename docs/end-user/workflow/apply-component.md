@@ -70,7 +70,7 @@ Actually, `ApplyComponent` is a collection of operators, then we'll show how to 
 
 ## Apply components and traits separately
 
-The 'ApplyComponent' have integrated the `Load` and `Apply` operator. In addition, components and traits need to be applied separately.
+The `ApplyComponent` have integrated the `Load` and `Apply` actions. In the following, we will apply components and traits separately.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -111,8 +111,7 @@ spec:
         }
 ```
 
-If we have multiple traits, we can also loop to apply.
-
+If we have multiple traits, we can also apply one by one in a loop:
 
 ```yaml
 spec:
