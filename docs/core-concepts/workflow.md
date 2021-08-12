@@ -97,7 +97,7 @@ spec:
               }
             }
 
-            // wait until resource object satisfy given condition. If not, it will reconcile again
+            // wait until resource object satisfy given condition. If not, it will reconcile again later
             "wait-\(index)": op.#ConditionalWait & {
               if step["resource-\(index)"].workload.status.ready == "true" {
                 continue: true
@@ -115,6 +115,6 @@ You can create your own module with a powerful declarative language and cloud na
 
 Next step, you can:
 
-- [Try out workflow with hands-on scenarios](../end-user/workflow/apply-component).
+- [Try out hands-on workflow scenarios](../end-user/workflow/apply-component).
 - [Read how to create your own Definition module](../platform-engineers/workflow/steps). 
 - [Learn the design behind the workflow system](https://github.com/oam-dev/kubevela/blob/master/design/vela-core/workflow_policy.md).
