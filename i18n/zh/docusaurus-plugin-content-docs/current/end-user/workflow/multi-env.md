@@ -2,9 +2,15 @@
 title:  多环境交付
 ---
 
+## 总览
+
 本节将介绍如何在 `WorkflowStepDefinition` 使用多环境功能。
 
-假设我们原本部署在测试环境的应用，需要迁移到生产环境上，并且需要更新镜像版本，此时我们可以先编写这样一个应用部署计划：
+在一些情况下，原本部署在测试环境的应用，需要迁移到生产环境上，并且其配置参数需要被更新。KubeVela 提供了一个 `ApplyEnvBindComponent` 操作符，可以帮助用户方便的管理多环境配置。
+
+本节将介绍如何在 `WorkflowStepDefinition` 使用 `ApplyEnvBindComponent` 来管理多环境。
+
+## 部署基础定义
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -46,12 +52,8 @@ spec:
           component: nginx-server
           policy:    patch
           env:       prod
-```
 
-可以看到，在 `policies` 中，是一些需要被更新的配置信息。而在 `workflow` 的 `properties` 中，分别指定了 `component`、`policy` 以及 `env` 名。
-接下来，可以在 `ApplyEnvBindComponent` 中使用这几个参数。
-
-```yaml
+---
 apiVersion: core.oam.dev/v1beta1
 kind: WorkflowStepDefinition
 metadata:
@@ -78,4 +80,8 @@ spec:
         }
 ```
 
-通过 `ApplyEnvBindComponent`，可以便捷地多环境管理应用。
+## 期望结果
+
+我们可以看到，使用最新配置的组件已经被成功地部署到了的集群中。
+
+通过 `ApplyEnvBindComponent`，我们可以轻松地在多个环境中管理应用。

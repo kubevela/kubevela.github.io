@@ -2,13 +2,13 @@
 title:  Apply Components and Traits
 ---
 
-This documentation introduces how to apply components and traits in `WorkflowStepDefinition`.
+## Overview
 
-> Make sure you have learned about [Workflow](../../core-concepts/workflow.md) before reading this section.
+In this guide, you will learn how to apply components and traits in `WorkflowStepDefinition`.
 
 ## Apply components and traits in one operation
 
-Suppose we have such an Application:
+Apply the following `Application` and `WorkflowStepDefinition`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -34,14 +34,10 @@ spec:
       - name: express-server
         type: apply-express
         properties:
+          // pass the component name as a parameter
           name: express-server
-```
 
-As you can see, we have a `step` with `type` of `apply-express` in `workflow`, and pass a parameter called `name` with the value of the name of the component in the application.
-
-Next, we can write `WorkflowStepDefinition`. KubeVela provides an integrated operator, `ApplyComponent`, through which components and traits can be easily applied.
-
-```yaml
+---
 apiVersion: core.oam.dev/v1beta1
 kind: WorkflowStepDefinition
 metadata:
@@ -66,11 +62,9 @@ spec:
         }
 ```
 
-Actually, `ApplyComponent` is a collection of operators, then we'll show how to apply components and traits separately.
-
 ## Apply components and traits separately
 
-The `ApplyComponent` have integrated the `Load` and `Apply` actions. In the following, we will apply components and traits separately.
+The `ApplyComponent` have integrated the `Load` and `Apply` actions. We can also apply components and traits separately by applying the following `WorkflowStepDefinition`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -114,6 +108,11 @@ spec:
 If we have multiple traits, we can also apply one by one in a loop:
 
 ```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: WorkflowStepDefinition
+metadata:
+  name: apply-express
+  namespace: default
 spec:
   schematic:
     cue:
@@ -132,6 +131,13 @@ spec:
         	component: parameter.name
         }
 
+        // apply the component, `.value.workload` means the actual component
+        apply: op.#Apply & {
+        	value: {
+        		load.value.workload
+        	}
+        }
+
         // apply all the items in auxiliaries array and apply
         step: op.#Steps & {
           for index, aux in load.value.auxiliaries {
@@ -141,3 +147,7 @@ spec:
           }
         }
 ```
+
+## Expected outcome
+
+We can see that all the components and traits have been applied to the cluster.
