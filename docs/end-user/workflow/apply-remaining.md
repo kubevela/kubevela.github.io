@@ -2,7 +2,7 @@
 title:  Apply Remaining
 ---
 
-This documentation introduces how to apply remaining in `WorkflowStepDefinition`.
+This documentation introduces how to apply remaining resources via `ApplyRemaining` WorkflowStepDefinition.
 
 In some cases, we don't need to apply all the resources, but it's too tedious to skip the needless ones and specify them one by one. KubeVela provides the `ApplyRemaining` action, which allows users to filter out needless resources and apply remaining.
 
