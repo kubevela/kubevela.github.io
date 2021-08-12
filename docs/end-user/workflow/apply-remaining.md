@@ -2,11 +2,13 @@
 title:  Apply Remaining
 ---
 
-This documentation introduces how to apply remaining resources via `ApplyRemaining` WorkflowStepDefinition.
+## Overview
 
 If we have applied some resources and do not want to specify the rest one by one, KubeVela provides the `ApplyRemaining` workflow step to filter out selected resources and apply remaining.
 
-Suppose we have the following Application:
+In this guide, you will learn how to apply remaining resources via `ApplyRemaining` in WorkflowStepDefinition.
+
+## Apply Base Definitions
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -38,11 +40,8 @@ spec:
               skipAllTraits: false
               skipApplyTraits:
                 - ingress
-```
 
-As you can see, in `properties`, we specify an `exceptions` parameter with the component name `express-server` as the key, the value is an object with some built-in parameters for `ApplyRemaining`. The parameters will be explained in the following example:
-
-```yaml
+---
 apiVersion: core.oam.dev/v1beta1
 kind: WorkflowStepDefinition
 metadata:
@@ -70,5 +69,9 @@ spec:
           parameter
         }
 ```
+
+## Expected outcome
+
+We can see that the component have been applied to the cluster, but the trait named ingress has been skipped.
 
 With `ApplyRemaining`, we can easily filter and apply resources by filling in the built-in parameters.
