@@ -30,9 +30,9 @@ module.exports = {
           'Workflow': [
             'end-user/workflow/apply-component',
             'end-user/workflow/apply-remaining',
-            'end-user/workflow/patch',
             'end-user/workflow/data-flow',
             'end-user/workflow/multi-env',
+            'end-user/workflow/patch',
           ]
         },
         {
