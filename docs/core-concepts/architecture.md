@@ -1,5 +1,5 @@
 ---
-title: System Architecture
+title: Architecture
 ---
 
 TBD

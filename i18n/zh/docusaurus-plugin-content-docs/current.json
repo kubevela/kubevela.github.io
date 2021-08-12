@@ -56,11 +56,11 @@
     "description": "The label for category Platform Operation Guide in sidebar docs"
   },
   "sidebar.docs.category.Using KubeVela CLI": {
-    "message": "使用 KubeVela CLI",
+    "message": "使用命令行工具",
     "description": "The label for category Using KubeVela CLI in sidebar docs"
   },
   "sidebar.docs.category.Managing Applications": {
-    "message": "管理 Applications",
+    "message": "管理应用",
     "description": "The label for category Managing Applications in sidebar docs"
   },
   "sidebar.docs.category.References": {
@@ -107,7 +107,7 @@
     "message": "组件系统",
     "description": "The label for category Component System in sidebar docs"
   },
-  "sidebar.docs.category.User Guide": {
+  "sidebar.docs.category.End User Guide": {
     "message": "用户手册",
     "description": "The label for category User Guide in sidebar docs"
   },
@@ -116,12 +116,12 @@
     "description": "The label for category Components in sidebar docs"
   },
   "sidebar.docs.category.Traits": {
-    "message": "挂载运维特征",
+    "message": "绑定运维特征",
     "description": "The label for category Traits in sidebar docs"
   },
-  "sidebar.docs.category.Practical Case": {
+  "sidebar.docs.category.Case Studies": {
     "message": "实践案例",
-    "description": "The label for category Practical case in sidebar docs"
+    "description": "The label for category case studies in sidebar docs"
   },
   "sidebar.docs.category.Observability": {
     "message": "新增可观测性",
