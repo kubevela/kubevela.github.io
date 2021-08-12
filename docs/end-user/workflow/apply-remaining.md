@@ -6,7 +6,7 @@ This documentation introduces how to apply remaining resources via `ApplyRemaini
 
 If we have applied some resources and do not want to specify the rest one by one, KubeVela provides the `ApplyRemaining` workflow step to filter out selected resources and apply remaining.
 
-Suppose we have such an Application:
+Suppose we have the following Application:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
