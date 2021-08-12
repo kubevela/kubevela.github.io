@@ -217,14 +217,13 @@ spec:
 
 ## Under the hood
 
-We can see that the data flow is done via the inputs/outputs config.
 Here is how the example works:
-- As it is run, `apply-base-service` step will apply `base-service` and wait for the `clusterIP` in the last step.
-- The `outputs` field contains `baseIP` exported from `clusterIP` which is an exported key.
-  Note that the outputs can be any keys from the CUE template of the corresponding Definition.
+- The `apply-base-service` step will apply `base-service` component and wait for the `clusterIP` in the last step.
+  Once `clusterIP` has value, its value will be exported as an output with the name `baseIP`.
+  Note that the outputs can be any keys from the CUE template 
 - Then the second step `apply-proxy-service` runs, and its `inputs` field contains `baseIP` which matches the output from previous step.
   The value of `baseIP` will be used to fill the `backendIP` parameter in `apply-proxy` CUE template.
 - After the input value is filled, the `apply-proxy-service` step will run and apply the Component with filled value.
-
-Now we can see that how the `clusterIP` is passed in the data flow.
+- Finally, both the first and the second services are running successfully.
+  It has demonstrated how the data flow runs from the first step to the second step.
 

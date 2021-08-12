@@ -32,7 +32,6 @@ module.exports = {
             'end-user/workflow/apply-remaining',
             'end-user/workflow/data-flow',
             'end-user/workflow/multi-env',
-            'end-user/workflow/patch',
           ]
         },
         {
