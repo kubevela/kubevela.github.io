@@ -99,9 +99,10 @@ spec:
         }
 ```
 
-## Apply WorkflowStep Definitions
 
-Apply the following WorkflowStep Definitions:
+## Apply Workflow Definitions
+
+Apply the following Workflow Step Definitions:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -148,7 +149,6 @@ spec:
         // patch the component with the passed IP and then apply it
         apply: op.#ApplyComponent & {
            component: parameter.component
-
            workload: patch: spec: template: spec: {
              containers: [{
                 // patchKey=name
@@ -194,6 +194,8 @@ spec:
             domain: proxy-service.dev.example.com
             http:
               "/": 11002
+
+  # The output clusterIP from first step will be input to fill the parameters of the second step
   workflow:
     steps:
       - name: apply-base-service
@@ -216,7 +218,7 @@ spec:
 ## Under the hood
 
 We can see that the data flow is done via the inputs/outputs config.
-Here is how the example work:
+Here is how the example works:
 - As it is run, `apply-base-service` step will apply `base-service` and wait for the `clusterIP` in the last step.
 - The `outputs` field contains `baseIP` exported from `clusterIP` which is an exported key.
   Note that the outputs can be any keys from the CUE template of the corresponding Definition.
