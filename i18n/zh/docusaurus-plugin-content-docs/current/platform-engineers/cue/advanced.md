@@ -604,6 +604,3 @@ ComponentDefinition my-comp: My component.
 ComponentDefinition my-comp in namespace my-namespace deleted.
 ```
 
-## 下一步是什么
-
-请查看 [Learning CUE](./basic) 文档，了解我们为什么支持 CUE 作为一流的模板解决方案，以及有关有效使用 CUE 的更多详细信息。
