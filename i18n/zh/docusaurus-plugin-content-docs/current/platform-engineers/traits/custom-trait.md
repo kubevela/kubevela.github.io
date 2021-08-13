@@ -1,5 +1,5 @@
 ---
-title:  内置运维特征
+title:  自定义运维特征
 ---
 
 In this section we will introduce how to define a trait.

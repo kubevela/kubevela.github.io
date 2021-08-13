@@ -477,7 +477,7 @@ output: {
 
 ## 导入 CUE 内部包
 
-CUE 有很多 [internal packages](https://pkg.go.dev/cuelang.org/go@v0.2.2/pkg) 可以被 KubeVela 使用，这样可以满足更多的开发需求
+CUE 有很多 [internal packages](https://pkg.go.dev/cuelang.org/go@v0.2.2/pkg) 可以被 KubeVela 使用，这样可以满足更多的开发需求。
 
 比如，使用 `strings.Join` 方法将字符串数组拼接成字符串。
 
