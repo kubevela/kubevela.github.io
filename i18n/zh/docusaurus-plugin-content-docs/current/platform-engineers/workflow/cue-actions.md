@@ -1,19 +1,24 @@
 ---
-title:  CUE Actions
+title:  CUE 操作
 ---
 
-This doc will illustrate the CUE actions provided in `vela/op` stdlib package.
+这个文档介绍step定义过程中,可以使用cue操作类型.这些操作均由`vela/op`包提供
 
 ## #Apply
-Create or update resource in kubernetes cluster.
-### Action Parameter
-- value: the resource structure to be created or updated. And after successful execution, `value` will be updated with resource status.
+在kubernetes集群中创建或者更新资源
+### 操作参数
+- value: 被操作的对象结构. 操作成功执行后，会用集群中资源的状态重新渲染`value`
+- patch: 对应的内容支持策略性合并,比如可以通过注释 `// +patchKey`实现数组的按主键合并
 ```
 #Apply: {
-  value: {}
+  value: {...}
+  patch: {
+    //patchKey=$key
+    ...
+  }
 }
 ```
-### Usage
+### 用法示例
 ```
 import "vela/op"
 stepName: op.#Apply & {
@@ -26,18 +31,24 @@ stepName: op.#Apply & {
       ...
     }
   }
+  patch: {
+   spec: template: spec: {
+      //patchKey=name
+      containers: [{name: "sidecar"}]
+   }
+  }
 }
 ```
 ## #ConditionalWait
-Step will be blocked until the condition is met.
-### Action Parameter
-- continue: Step will be blocked until the value becomes `true`.
+会让workflow step处于等待状态，直到条件被满足
+### 操作参数
+- continue: 当该字段为true时，workflow step才会恢复继续执行
 ```
 #ConditionalWait: {
   continue: bool
 }
 ```
-### Usage
+### 用法示例
 ```
 import "vela/op"
 
@@ -48,11 +59,11 @@ wait: op.#ConditionalWait: {
 }
 ```
 ## #Load
-Get component from application by component name.
+通过组件名称从application中获取组件对应的资源数据
 ### Action Parameter
-- component: the component name.
-- workload: the workload resource of the componnet.
-- traits: the trait resources of the componnet.
+- component: 指定资源名称.
+- workload: 获取到的组件的workload资源.
+- traits: 获取到的组件的traits资源(key为trait定义里面outputs对应的资源名).
 ```
 #Load: {
   component: string
@@ -60,29 +71,29 @@ Get component from application by component name.
   traits: [string]: {...}
 }
 ```
-### Usage
+### 用法示例
 ```
 import "vela/op"
 
-// You can use load.workload & load.traits after this action.
+// 该操作完成后,你就可以使用通过load.workload以及load.traits使用获取到的组件资源数据.
 load: op.#Load & {
   component: "componet-name"
 }
 ```
 ## #Read
-Get resource in kubernetes cluster. 
-### Action Parameter
-- value: the resource metadata to be get. And after successful execution, `value` will be updated with resource definition in cluster.
-- err: if an error occurs, the `err` will contain the error message.
+读取kubernetes集群中的资源
+### 操作参数
+- value: 需要用户描述读取资源的元数据，比如kind、name等，操作完成后，集群中资源的数据会被填充到`value`上
+- err: 如果读取操作发生错误，这里会以字符串的方式指示错误信息.
 ```
 #Read: {
   value: {}
   err?: string
 }
 ```
-### Usage
+### 用法示例
 ```
-// You can use configmap.data after this action.
+// 操作完成后，你可以通过configmap.value.data使用读取到的configmap数据
 configmap: op.#Read & {
    value: {
       kind: "ConfigMap"
@@ -95,11 +106,11 @@ configmap: op.#Read & {
 }
 ```
 ## #ApplyComponent
-Create or update resources corresponding to the component in kubernetes cluster.
-### Action Parameter
-- component: the component name.
-- workload: the workload resource of the componnet. Value will be filled  after successful execution.
-- traits: the trait resources of the componnet. Value will be filled after successful execution.
+在kubernetes集群中创建或者更新组件对应的所有资源
+### 操作参数
+- component: 指定组建名称.
+- workload: 操作完成后,kubernetes集群中组件对应的workload的资源状态数据.
+- traits: 操作完成后,kubernetes集群中组件对应的traits的资源状态数据.
 ```
 #ApplyComponent: {
    componnet: string
@@ -107,12 +118,52 @@ Create or update resources corresponding to the component in kubernetes cluster.
    traits: [string]: {...}
 }
 ```
-### Usage
+### 用法示例
 ```
 apply: op.#ApplyComponent & {
-  component: "componet-name"
+  component: "component-name"
 }
 ```
-## ApplyRemaining
-## ApplyEnvBindComponent
-## Steps
+## #ApplyRemaining
+在kubernets集群中创建或者更新application所有组件对应的资源
+### 操作参数
+- exceptions: 指明操作排除掉的组件
+- skipApplyWorkload: 是否跳过该组件workload资源的同步
+- skipAllTraits: 是否跳过该组件所有trait资源的同步
+- skipApplyTraits: 需要跳过的该组件trait资源对应的名称(定义中outputs涉及到名字)
+```
+#ApplyRemaining: {
+ exceptions?: [componentName=string]: {
+      // skipApplyWorkload indicates whether to skip apply the workload resource
+      skipApplyWorkload: *true | bool
+      
+      // skipAllTraits indicates to skip apply all resources of the traits.
+      // If this is true, skipApplyTraits will be ignored
+      skipAllTraits: *true| bool
+
+      // skipApplyTraits specifies the names of the traits to skip apply
+      skipApplyTraits: [...string]
+  }
+}  
+```
+### 用法示例
+```
+apply: op.#ApplyRemaining & {
+  exceptions: {"applied-component-name": {}}
+}
+```
+## #Steps
+用来封装一组操作
+### 操作参数
+- steps里面需要通过tag的方式指定执行顺序,数字越小执行越靠前
+### 用法示例
+```
+app: op.#Steps & {
+  load: op.#Load & {
+    component: "component-name"
+  } @step(1)
+  apply: op.#Apply & {
+    value: load.workload
+  } @step(2)
+} 
+```
