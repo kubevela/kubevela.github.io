@@ -1,5 +1,5 @@
 ---
-title:  Data Input/Output
+title: Data Input/Output
 ---
 
 This doc will explain how to specify data inputs and outputs to orchestrate data flow.
