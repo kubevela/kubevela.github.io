@@ -75,6 +75,13 @@ module.exports = {
           ]
         },
         {
+          type: 'category',
+          label: 'Add-ons',
+          items: [
+            'end-user/addons/observability',
+          ]
+        },
+        {
           'Debugging': [
             'end-user/debug/dry-run',
             'end-user/debug/live-diff',
