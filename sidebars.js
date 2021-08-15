@@ -78,7 +78,14 @@ module.exports = {
         },
         {
           'Policies': [
-              'end-user/policies/envbinding'
+              'end-user/policies/envbinding',
+          ]
+        },
+        {
+          type: 'category',
+          label: 'Add-ons',
+          items: [
+            'end-user/addons/observability',
           ]
         },
         {
