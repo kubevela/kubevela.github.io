@@ -125,5 +125,44 @@ apply: op.#ApplyComponent & {
 }
 ```
 ## ApplyRemaining
-## ApplyEnvBindComponent
+Create or update the resources corresponding to all components of the application without exceptional components in the kubernetes cluster
+### Action Parameter
+- exceptions: indicates the name of the exceptional component.
+- skipApplyWorkload:  indicates whether to skip apply the workload resource.
+- skipAllTraits: indicates to skip apply all resources of the traits.
+- skipApplyTraits: specifies the names of the traits to skip apply.
+```
+#ApplyRemaining: {
+ exceptions?: [componentName=string]: {
+      // skipApplyWorkload indicates whether to skip apply the workload resource
+      skipApplyWorkload: *true | bool
+      
+      // skipAllTraits indicates to skip apply all resources of the traits.
+      // If this is true, skipApplyTraits will be ignored
+      skipAllTraits: *true| bool
+
+      // skipApplyTraits specifies the names of the traits to skip apply
+      skipApplyTraits: [...string]
+  }
+}  
+```
+### Usage
+```
+apply: op.#ApplyRemaining & {
+  exceptions: {"applied-component-name": {}}
+}
+```
 ## Steps
+Used to encapsulate a set of operations
+- In steps, you need to specify the execution order by tag.
+### Usage
+```
+app: op.#Steps & {
+  load: op.#Load & {
+    component: "component-name"
+  } @step(1)
+  apply: op.#Apply & {
+    value: load.value.workload
+  } @step(2)
+} 
+```

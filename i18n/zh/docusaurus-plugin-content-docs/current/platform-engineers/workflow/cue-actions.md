@@ -125,7 +125,7 @@ apply: op.#ApplyComponent & {
 }
 ```
 ## #ApplyRemaining
-在kubernets集群中创建或者更新application所有组件对应的资源
+在kubernets集群中创建或者更新application除排除的组件以外所有组件对应的资源
 ### 操作参数
 - exceptions: 指明操作排除掉的组件
 - skipApplyWorkload: 是否跳过该组件workload资源的同步
@@ -153,7 +153,7 @@ apply: op.#ApplyRemaining & {
 }
 ```
 ## #Steps
-用来封装一组操作
+Used to encapsulate a set of operations
 ### 操作参数
 - steps里面需要通过tag的方式指定执行顺序,数字越小执行越靠前
 ### 用法示例
@@ -163,7 +163,7 @@ app: op.#Steps & {
     component: "component-name"
   } @step(1)
   apply: op.#Apply & {
-    value: load.workload
+    value: load.value.workload
   } @step(2)
 } 
 ```
