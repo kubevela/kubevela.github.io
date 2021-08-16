@@ -15,14 +15,14 @@ module.exports = {
       label: 'Core Concepts',
       collapsed: false,
       items: [
+        'core-concepts/architecture',
         'core-concepts/application',
         'core-concepts/workflow',
-        'core-concepts/architecture',
       ],
     },
     {
       type: 'category',
-      label: 'User Guide',
+      label: 'End User Guide',
       collapsed: false,
       items: [
         'end-user/initializer-end-user',
@@ -37,7 +37,6 @@ module.exports = {
         },
         {
           'Components': [
-            'end-user/components/cue',
             'end-user/components/helm',
             'end-user/components/kustomize',
             {
@@ -75,27 +74,26 @@ module.exports = {
             'end-user/traits/annotations-and-labels',
             'end-user/traits/sidecar',
             // 'end-user/traits/metrics',
-            // 并入可观测性，不再用一个 trait 来实现
+            // 并入可观测性，不再用一个 trait 来实现，本文档留作参考
             'end-user/traits/rollout',
           ]
         },
         {
           'Debugging': [
-            'end-user/debug/dry-run',
-            'end-user/debug/live-diff',
             'end-user/debug/health',
             'end-user/debug/monitoring',
+            'end-user/debug/live-diff',
           ]
         },
       ]
     },
     {
       type: 'category',
-      label: 'Practical Case',
+      label: 'Case Studies',
       collapsed: false,
       items: [
-        'practical-case/pc1',
-        'practical-case/pc2',
+        'case-studies/workflow-edge-computing', // 待完成
+        'case-studies/workflow-lixiang-auto',
       ],
     },
     {
@@ -103,6 +101,7 @@ module.exports = {
       label: 'Platform Admin Guide',
       collapsed: false,
       items: [
+        'platform-engineers/addon',
         {
           'Learning OAM': [
             'platform-engineers/oam/oam-model',
@@ -119,14 +118,6 @@ module.exports = {
           'Environment System': [
             'platform-engineers/initializer/basic-initializer',
             'platform-engineers/initializer/advanced-initializer',
-          ]
-        },
-        {
-          'Worfklow System': [
-            'platform-engineers/workflow/steps',
-            'platform-engineers/workflow/context',
-            'platform-engineers/workflow/input-output',
-            'platform-engineers/workflow/cue-actions',
           ]
         },
         {
@@ -149,6 +140,11 @@ module.exports = {
           ]
         },
         'platform-engineers/advanced-install',
+        {
+          'Debugging': [
+            'platform-engineers/debug/dry-run',
+          ]
+        },
       ]
     },
     {
