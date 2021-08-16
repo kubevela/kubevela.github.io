@@ -1,11 +1,12 @@
 # 插件：可观测性 Observability
 
-可观测性插件（Observability addon）基于 metrics、logging、tracing 数据，可以为 KubeVela Core 提供系统级别的监控，也可以为应用提供业务级别的监控。
-下面详细介绍如何启用可观测性插件，并且查看各种监控数据。
+可观测性插件（Observability addon）基于 metrics、logging、tracing 数据，可以为 KubeVela core 提供系统级别的监控，也可以为应用提供业务级别的监控。
+
+下面详细介绍可观测能力，以及如何启用可观测性插件，并查看各种监控数据。
 
 ## 可观测能力介绍
 
-KubeVela 可观测能力是通过 [Grafana](https://grafana.com/) 展示的，提议提供系统级别和应用级别的数据。
+KubeVela 可观测能力是通过 [Grafana](https://grafana.com/) 展示的，提供系统级别和应用级别的数据监控。
 
 ### KubeVela Core 系统级别可观测性
 
@@ -37,9 +38,9 @@ KubeVela 可观测能力是通过 [Grafana](https://grafana.com/) 展示的，�
 
 ![](../../resources/observability-system-level-logging-search.png)
 
-## 安装
+## 安装插件
 
-可观测性插件是通过 `vela addon` 命令安装的，`vela addon` 的使用请参考 xxx 了解。因为本插件依赖了 Prometheus，Prometheus 依赖 StorageClass，
+可观测性插件是通过 `vela addon` 命令安装的。因为本插件依赖了 Prometheus，Prometheus 依赖 StorageClass，
 不同 Kubernetes 发行版，StorageClass 会有一定的差异，所以，在不同的 Kubernetes 发行版， 安装命令也有一些差异。
 
 ### 本地 Kubernetes 集群
@@ -47,16 +48,74 @@ KubeVela 可观测能力是通过 [Grafana](https://grafana.com/) 展示的，�
 如果您的 Kubernetes 集群是运行在本地，如 Kind 集群，执行如下命令安装可观测性插件。
 
 ```shell
-$ vela addon enable observability
+$ vela addon enable observability alertmanager-pvc-enabled=false server-pvc-enabled=false grafana-domain=example.com
 ```
 
-### 阿里云等 ACK Kubernetes 集群
+### 阿里云等云服务商提供的 Kubernetes 集群
 
+以阿里云 ACK 为例介绍。
 
 ```shell
-$ vela addon enable observability -xxx=xxx
+$ vela addon enable observability alertmanager-pvc-class=alicloud-disk-available alertmanager-pvc-size=20Gi server-pvc-class=alicloud-disk-available server-pvc-size=20Gi grafana-domain=grafana.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com
 ```
 
-其中，各个参数代表：
+其中，各个参数含义如下：
 
-...
+- alertmanager-pvc-class
+
+Prometheus alert manager 需要的 pvc 的类型，也就是 StorageClass，在阿里云上，可选的 StorageClass 有：
+
+```shell
+$ kubectl get storageclass
+NAME                       PROVISIONER     RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+alicloud-disk-available    alicloud/disk   Delete          Immediate           true                   6d
+alicloud-disk-efficiency   alicloud/disk   Delete          Immediate           true                   6d
+alicloud-disk-essd         alicloud/disk   Delete          Immediate           true                   6d
+alicloud-disk-ssd          alicloud/disk   Delete          Immediate           true                   6d
+```
+
+此处取值 `alicloud-disk-available`。
+
+- alertmanager-pvc-size
+
+Prometheus alert manager 需要的 pvc 的大小，在阿里云上，最小的 PV 是 20GB，所以，此处取值 20Gi。
+
+- server-pvc-class
+
+Prometheus server 需要的 pvc 的类型，同 `alertmanager-pvc-class`。
+
+- server-pvc-size
+
+Prometheus server 需要的 pvc 的大小，同 `alertmanager-pvc-size`。
+
+- grafana-domain
+
+Grafana 的域名，可以使用您自定义的域名，也可以使用提供的集群级别的泛域名，`*.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com`，
+如本处取值 `grafana.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com`。
+
+对于其他云服务商提供的，请参考上面示例配置。
+
+## 查看监控数据
+
+### 本地 Kubernetes 集群
+
+如果您的 Kubernetes 集群是运行在本地，如 Kind 集群，执行如下命令安装可观测性插件。
+
+```shell
+$ kubectl get svc grafana -n observability
+NAME      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+grafana   ClusterIP   192.168.42.243   <none>        80/TCP    177m
+
+$ sudo k port-forward service/grafana -n observability 80:80
+Password:
+Forwarding from 127.0.0.1:80 -> 3000
+Forwarding from [::1]:80 -> 3000
+```
+
+通过浏览器访问 `http://127.0.0.1/dashboards`，点击相应的 Dashboard 前面介绍的各种监控数据。
+
+![](../../resources/observability-system-level-dashboards.png)
+
+### 阿里云等云服务商提供的 Kubernetes 集群
+
+直接访问上面设置的 grafana-domain [http://grafana.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com/](http://grafana.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com/) 。
