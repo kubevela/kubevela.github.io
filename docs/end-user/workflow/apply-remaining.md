@@ -4,11 +4,13 @@ title:  Apply Remaining
 
 ## Overview
 
-If we have applied some resources and do not want to specify the rest one by one, KubeVela provides the `ApplyRemaining` workflow step to filter out selected resources and apply remaining.
+If we have applied some resources and do not want to specify the rest one by one, KubeVela provides the `apply-remaining` workflow step to filter out selected resources and apply remaining.
 
-In this guide, you will learn how to apply remaining resources via `ApplyRemaining` in WorkflowStepDefinition.
+In this guide, you will learn how to apply remaining resources via `apply-remaining` in `Workflow`.
 
-## Apply Base Definitions
+## Apply Application
+
+Apply the following `Application` with workflow step type of `apply-remaining`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -32,46 +34,24 @@ spec:
   workflow:
     steps:
       - name: express-server
+        // specify the workflow step type
         type: apply-remaining
         properties:
           exceptions:
+            // specify the configuration of the component
             express-server:
+              // skipApplyWorkload indicates whether to skip apply the workload resource
               skipApplyWorkload: false
+              // skipAllTraits indicates to skip apply all resources of the traits
+              // if this is true, skipApplyTraits will be ignored
               skipAllTraits: false
+              // skipApplyTraits specifies the names of the traits to skip apply
               skipApplyTraits:
                 - ingress
-
----
-apiVersion: core.oam.dev/v1beta1
-kind: WorkflowStepDefinition
-metadata:
-  name: apply-remaining
-spec:
-  schematic:
-    cue:
-      template: |
-        import ("vela/op")
-        parameter: {
-            exceptions?: [componentName=string]: {
-              // skipApplyWorkload indicates whether to skip apply the workload resource
-              skipApplyWorkload: *true | bool
-
-              // skipAllTraits indicates to skip apply all resources of the traits.
-              // If this is true, skipApplyTraits will be ignored
-              skipAllTraits: *true| bool
-
-              // skipApplyTraits specifies the names of the traits to skip apply
-              skipApplyTraits: [...string]
-           }
-        }
-
-        apply: op.#ApplyRemaining & {
-          parameter
-        }
 ```
 
 ## Expected outcome
 
 We can see that the component have been applied to the cluster, but the trait named ingress has been skipped.
 
-With `ApplyRemaining`, we can easily filter and apply resources by filling in the built-in parameters.
+With `apply-remaining`, we can easily filter and apply resources by filling in the built-in parameters.

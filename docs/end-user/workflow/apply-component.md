@@ -4,11 +4,11 @@ title:  Apply Components and Traits
 
 ## Overview
 
-In this guide, you will learn how to apply components and traits in `WorkflowStepDefinition`.
+In this guide, you will learn how to apply components and traits in `Workflow`.
 
-## Apply components and traits in one operation
+## Apply Application
 
-Apply the following `Application` and `WorkflowStepDefinition`:
+Apply the following `Application` with workflow step type of `apply-component`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -32,120 +32,11 @@ spec:
   workflow:
     steps:
       - name: express-server
-        type: apply-express
+        // specify the workflow step type
+        type: apply-component
         properties:
-          // pass the component name as a parameter
-          name: express-server
-
----
-apiVersion: core.oam.dev/v1beta1
-kind: WorkflowStepDefinition
-metadata:
-  name: apply-express
-  namespace: default
-spec:
-  schematic:
-    cue:
-      template: |
-        import (
-        	"vela/op"
-        )
-
-        // get the passed parameter
-        parameter: {
-          name: string
-        }
-
-        // apply component and traits
-        apply: op.#ApplyComponent & {
-          component: parameter.name
-        }
-```
-
-## Apply components and traits separately
-
-The `ApplyComponent` have integrated the `Load` and `Apply` actions. We can also apply components and traits separately by applying the following `WorkflowStepDefinition`:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: WorkflowStepDefinition
-metadata:
-  name: apply-express
-  namespace: default
-spec:
-  schematic:
-    cue:
-      template: |
-        import (
-        	"vela/op"
-        )
-
-        // get the passed parameter
-        parameter: {
-          name: string
-        }
-
-        // load the component
-        load: op.#Load & {
-        	component: parameter.name
-        }
-
-        // apply the component, `.value.workload` means the actual component
-        apply: op.#Apply & {
-        	value: {
-        		load.value.workload
-        	}
-        }
-
-        // apply the trait, `.value.auxiliaries[0]` means the actual trait since we have only one trait here
-        apply: op.#Apply & {
-          value: {
-            load.value.auxiliaries[0]
-          }
-        }
-```
-
-If we have multiple traits, we can also apply one by one in a loop:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: WorkflowStepDefinition
-metadata:
-  name: apply-express
-  namespace: default
-spec:
-  schematic:
-    cue:
-      template: |
-        import (
-        	"vela/op"
-        )
-
-        // get the passed parameter
-        parameter: {
-          name: string
-        }
-
-        // load the component
-        load: op.#Load & {
-        	component: parameter.name
-        }
-
-        // apply the component, `.value.workload` means the actual component
-        apply: op.#Apply & {
-        	value: {
-        		load.value.workload
-        	}
-        }
-
-        // apply all the items in auxiliaries array and apply
-        step: op.#Steps & {
-          for index, aux in load.value.auxiliaries {
-            "aux-\(index)": op.#Apply & {
-              value: aux
-            }
-          }
-        }
+          // specify the component name
+          component: express-server
 ```
 
 ## Expected outcome

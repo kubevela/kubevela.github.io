@@ -4,11 +4,14 @@ title:  Multi Environments
 
 ## Overview
 
-If we have applied our application in the test environment and need to migrate it to the production environment, in which some configuration also needs to be updated, KubeVela provides the `ApplyEnvBindComponent` workflow step to manage multi environments.
+If we have applied our application in the test environment and need to migrate it to the production environment, in which some configuration also needs to be updated, KubeVela provides the `multi-env` workflow step to manage multi environments.
 
-In this guide, you will learn how to manage multi environments via `ApplyEnvBindComponent` in WorkflowStepDefinition.
+In this guide, you will learn how to manage multi environments via `multi-env` in `Workflow`.
 
-## Apply Base Definitions
+## Apply Application
+
+Apply the following `Application` with workflow step type of `multi-env`:
+
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -45,41 +48,19 @@ spec:
   workflow:
     steps:
       - name: deploy-server
-        type: deploy2cluster
+        // specify the workflow step type
+        type: multi-env
         properties:
+          // specify the component name
           component: nginx-server
-          policy:    patch
-          env:       prod
-
----
-apiVersion: core.oam.dev/v1beta1
-kind: WorkflowStepDefinition
-metadata:
-  name: deploy2cluster
-  namespace: vela-system
-spec:
-  schematic:
-    cue:
-      template: |
-        import ("vela/op")
-
-        parameter: {
-        	env:       string
-        	policy:    string
-        	component: string
-        }
-
-        component: op.#ApplyEnvBindComponent & {
-        	env:       parameter.env
-        	policy:    parameter.policy
-        	component: parameter.component
-          // context.namespace indicates the namespace of the app
-        	namespace: context.namespace
-        }
+          // specify the policy name
+          policy: patch
+          // specify the env name in policy
+          env: prod
 ```
 
 ## Expected outcome
 
 We can see that the component have been applied to the cluster with the latest configuration.
 
-With `ApplyEnvBindComponent`, we can easily manage applications in multiple environments.
+With `multi-env`, we can easily manage applications in multiple environments.
