@@ -5,7 +5,7 @@ title: Steps
 ## What's a Step
 
 A Workflow Step instantiates from a Definition and runs the instance.
-The Workflow step finds the corresponding Definition by the `type` field:
+It corresponds to find a Definition by the `type` field:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -68,5 +68,4 @@ Besides properties, we also support data flow to input parameter values from out
 ## CUE Actions
 
 The rest of CUE keys are actions that will be executed in order by KubeVela.
-To learn about how to compose such actions, keep reading the [CUE Actions Reference](./cue-actions).
-
+To learn about how to compose such actions, read [CUE Actions Reference](./cue-actions)
