@@ -83,26 +83,28 @@ spec:
 然后运行 `版本对比` 功能，使用如下命令：
 
 ```shell
-kubectl vela live-diff -f new-app.yaml -r vela-app-v1
+vela system live-diff -f new-app.yaml -r vela-app-v1
 ```
 
 通过 `-r` or `--revision` 这个字段，你可以指定去比较任意过去的应用版本。
 
-同时通过 `kubectl vela live-diff -h` 查看更多你需要指定去比较的信息，比如 `-c, --context` 告诉你，有哪些部分进行了变更等等：
+同时通过 `vela system live-diff live-diff -h` 查看更多你需要指定去比较的信息，比如 `-c, --context` 告诉你，有哪些部分进行了变更等等：
 
 ```
 Usage:
-  vela live-diff
+  vela system live-diff
 
 Examples:
-kubectl vela live-diff -f app-v2.yaml -r app-v1 --context 10
+vela live-diff -f app-v2.yaml -r app-v1 --context 10
 
 Flags:
+  -r, --Revision string     specify an application Revision name, by default, it will compare with the latest Revision
   -c, --context int         output number lines of context around changes, by default show all unchanged lines (default -1)
   -d, --definition string   specify a file or directory containing capability definitions, they will only be used in dry-run rather than applied to K8s cluster
   -f, --file string         application file name (default "./app.yaml")
   -h, --help                help for live-diff
-  -n, --namespace string    specify namespace of the application to be compared, by default is default namespace (default "default")
-  -r, --revision string     specify an application revision name, by default, it will compare with the latest revision
+
+Global Flags:
+  -e, --env string   specify environment name for application
 ```
 

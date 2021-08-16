@@ -79,6 +79,7 @@ module.exports = {
           'Debugging': [
             'end-user/debug/health',
             'end-user/debug/monitoring',
+            'end-user/debug/live-diff',
           ]
         },
       ]
@@ -145,7 +146,6 @@ module.exports = {
         {
           'Debugging': [
             'platform-engineers/debug/dry-run',
-            'platform-engineers/debug/live-diff',
           ]
         },
       ]
