@@ -70,16 +70,15 @@ module.exports = {
             'end-user/traits/annotations-and-labels',
             'end-user/traits/sidecar',
             // 'end-user/traits/metrics',
-            // 并入可观测性，不再用一个 trait 来实现
+            // 并入可观测性，不再用一个 trait 来实现，本文档留作参考
             'end-user/traits/rollout',
           ]
         },
         {
           'Debugging': [
-            'end-user/debug/dry-run',
-            'end-user/debug/live-diff',
             'end-user/debug/health',
             'end-user/debug/monitoring',
+            'end-user/debug/live-diff',
           ]
         },
       ]
@@ -89,8 +88,8 @@ module.exports = {
       label: 'Case Studies',
       collapsed: false,
       items: [
-        'case-studies/pc1', // 待完成
-        // 'case-studies/pc2',
+        'case-studies/workflow-edge-computing', // 待完成
+        'case-studies/workflow-lixiang-auto',
       ],
     },
     {
@@ -98,6 +97,7 @@ module.exports = {
       label: 'Platform Admin Guide',
       collapsed: false,
       items: [
+        'platform-engineers/addon',
         {
           'Learning OAM': [
             'platform-engineers/oam/oam-model',
@@ -116,7 +116,6 @@ module.exports = {
             'platform-engineers/initializer/advanced-initializer',
           ]
         },
-
         {
           type: 'category',
           label: 'Component System',
@@ -143,6 +142,11 @@ module.exports = {
           ]
         },
         'platform-engineers/advanced-install',
+        {
+          'Debugging': [
+            'platform-engineers/debug/dry-run',
+          ]
+        },
       ]
     },
     {
