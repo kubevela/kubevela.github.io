@@ -7,6 +7,7 @@ This doc will illustrate the CUE actions provided in `vela/op` stdlib package.
 > To learn the syntax of CUE, read [CUE Basic](../cue/basic.md)
 
 ## #Apply
+---
 Create or update resource in kubernetes cluster.
 ### Action Parameter
 - value: the resource structure to be created or updated. And after successful execution, `value` will be updated with resource status.
@@ -41,7 +42,9 @@ stepName: op.#Apply & {
   }
 }
 ```
+
 ## #ConditionalWait
+---
 Step will be blocked until the condition is met.
 ### Action Parameter
 - continue: Step will be blocked until the value becomes `true`.
@@ -60,7 +63,9 @@ wait: op.#ConditionalWait: {
   continue: apply.value.status.phase=="running"
 }
 ```
+
 ## #Load
+---
 Get component from application by component name.
 ### Action Parameter
 - component: the component name.
@@ -82,7 +87,9 @@ load: op.#Load & {
   component: "componet-name"
 }
 ```
+
 ## #Read
+---
 Get resource in kubernetes cluster. 
 ### Action Parameter
 - value: the resource metadata to be get. And after successful execution, `value` will be updated with resource definition in cluster.
@@ -107,7 +114,9 @@ configmap: op.#Read & {
    }
 }
 ```
+
 ## #ApplyComponent
+---
 Create or update resources corresponding to the component in kubernetes cluster.
 ### Action Parameter
 - component: the component name.
@@ -126,7 +135,9 @@ apply: op.#ApplyComponent & {
   component: "componet-name"
 }
 ```
+
 ## ApplyRemaining
+---
 Create or update the resources corresponding to all components in the application in the kubernetes cluster, and specify which components do not need to apply through `exceptions`, or skip some resources of the exceptional component
 ### Action Parameter
 - exceptions: indicates the name of the exceptional component.
@@ -154,7 +165,9 @@ apply: op.#ApplyRemaining & {
 nent-name": {}}
 }
 ```
+
 ## Steps
+---
 Used to encapsulate a set of operations
 - In steps, you need to specify the execution order by tag.
 ### Usage

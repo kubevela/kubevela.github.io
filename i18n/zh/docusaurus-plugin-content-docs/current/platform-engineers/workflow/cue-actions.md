@@ -7,6 +7,7 @@ title:  CUE 操作
 > 可以阅读[CUE 基础文档](../cue/basic.md)来学习 CUE 基础语法
 
 ## #Apply
+---
 在kubernetes集群中创建或者更新资源
 ### 操作参数
 - value: 被操作的对象结构. 操作成功执行后，会用集群中资源的状态重新渲染`value`
@@ -41,7 +42,9 @@ stepName: op.#Apply & {
   }
 }
 ```
+
 ## #ConditionalWait
+---
 会让workflow step处于等待状态，直到条件被满足
 ### 操作参数
 - continue: 当该字段为true时，workflow step才会恢复继续执行
@@ -60,9 +63,11 @@ wait: op.#ConditionalWait: {
   continue: apply.value.status.phase=="running"
 }
 ```
+
 ## #Load
+---
 通过组件名称从application中获取组件对应的资源数据
-### Action Parameter
+### 操作参数
 - component: 指定资源名称.
 - workload: 获取到的组件的workload资源.
 - traits: 获取到的组件的traits资源(key为trait定义里面outputs对应的资源名).
@@ -82,7 +87,9 @@ load: op.#Load & {
   component: "componet-name"
 }
 ```
+
 ## #Read
+---
 读取kubernetes集群中的资源
 ### 操作参数
 - value: 需要用户描述读取资源的元数据，比如kind、name等，操作完成后，集群中资源的数据会被填充到`value`上
@@ -107,7 +114,9 @@ configmap: op.#Read & {
    }
 }
 ```
+
 ## #ApplyComponent
+---
 在kubernetes集群中创建或者更新组件对应的所有资源
 ### 操作参数
 - component: 指定组建名称.
@@ -126,7 +135,9 @@ apply: op.#ApplyComponent & {
   component: "component-name"
 }
 ```
+
 ## #ApplyRemaining
+---
 在kubernetes集群中创建或者更新application中所有组件对应的资源,并可以通过`exceptions`指明哪些组件不用apply,或者跳过该组件的某些资源
 ### 操作参数
 - exceptions: 指明该操作需要排除掉的组件
@@ -154,7 +165,9 @@ apply: op.#ApplyRemaining & {
   exceptions: {"applied-component-name": {}}
 }
 ```
+
 ## #Steps
+---
 用来封装一组操作
 ### 操作参数
 - steps里面需要通过tag的方式指定执行顺序,数字越小执行越靠前
