@@ -52,10 +52,3 @@ init-container   ["webservice","worker"]   add an init container with a shared v
 
 By default, the two commands will retrieve capabilities
 from [repo](https://registry.kubevela.net) maintained by KubeVela.
-
-## 2. Designed by yourself
-
-
-Check [this documentation](../../platform-engineers/traits/trait) about how to design and enable your own traits in
-
-KubeVela platform.
