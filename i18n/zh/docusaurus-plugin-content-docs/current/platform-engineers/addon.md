@@ -2,7 +2,7 @@
 title:  系统插件
 ---
 
-本节会介绍：如何使用 KubeVela 的 addon（插件）能力
+本节会介绍如何使用 KubeVela 的默认系统插件（Addon）
 
 ## 背景
 
