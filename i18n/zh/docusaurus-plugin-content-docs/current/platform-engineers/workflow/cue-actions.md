@@ -125,9 +125,9 @@ apply: op.#ApplyComponent & {
 }
 ```
 ## #ApplyRemaining
-在kubernets集群中创建或者更新application所有组件对应的资源
+在kubernetes集群中创建或者更新application中所有组件对应的资源,并可以通过`exceptions`指明哪些组件不用apply,或者跳过该组件的某些资源
 ### 操作参数
-- exceptions: 指明操作排除掉的组件
+- exceptions: 指明该操作需要排除掉的组件
 - skipApplyWorkload: 是否跳过该组件workload资源的同步
 - skipAllTraits: 是否跳过该组件所有trait资源的同步
 - skipApplyTraits: 需要跳过的该组件trait资源对应的名称(定义中outputs涉及到名字)
@@ -163,7 +163,7 @@ app: op.#Steps & {
     component: "component-name"
   } @step(1)
   apply: op.#Apply & {
-    value: load.workload
+    value: load.value.workload
   } @step(2)
 } 
 ```
