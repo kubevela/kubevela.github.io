@@ -32,10 +32,10 @@ spec:
   workflow:
     steps:
       - name: express-server
-        // specify the workflow step type
+        # specify the workflow step type
         type: apply-component
         properties:
-          // specify the component name
+          # specify the component name
           component: express-server
 ```
 
