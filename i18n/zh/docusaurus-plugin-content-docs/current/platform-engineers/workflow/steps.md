@@ -1,11 +1,11 @@
 ---
-title: Steps
+title: 工作流步骤
 ---
 
-## What's a Step
+## 工作流步骤是什么
 
-A Workflow Step instantiates from a Definition and runs the instance.
-The Workflow step finds the corresponding Definition by the `type` field:
+一个工作流步骤 (Step) 从一个定义 (Definition) 的模板出发来实例化出一个对象，并运行它。
+工作流步骤是通过 `type` 字段来找到对应的定义：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -22,12 +22,13 @@ spec:
           ...
 ```
 
-## How to define a Step
+## 如何定义一个步骤？
 
-The platform admin prepares the WorkflowStep Definitions for developers to use.
-Basically the Definition provides the templated process to automate operation tasks.
-This hides the complexities and exposes only high-level parameters to simplify user experience.
-Here's an exmaple of a Definition:
+一般平台管理员会预先设置好工作流步骤的定义 (WorkflowStepDefinition) 来给开发者使用。
+这些定义包含了写好模板的自动化流程去执行过程式任务。
+这样一来，那些复杂的底层信息会被屏蔽掉，而暴露给用户的都是简单易用的参数。
+
+下面是一个定义的例子：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -59,14 +60,13 @@ spec:
         myIP: apply.workload.status.podIP
 ```
 
-## User Parameters
+## 用户参数
 
-Inside the CUE template, the parameters exposed to users are defined in the `parameters` key.
-The workflow step properties will be used to fill the parameters.
-Besides properties, we also support data flow to input parameter values from outputs of other steps.
+在 CUE 模板里面，暴露给用户的参数将被定义在 `parameters` 字段中。
+在 Application 中的工作流步骤的属性值将被用来给这些参数填值。
+此外，我们还支持了使用数据流的方式用其他步骤的输出来为一个步骤的参数填值。
 
-## CUE Actions
+## CUE 动作指令
 
-The rest of CUE keys are actions that will be executed in order by KubeVela.
-To learn about how to compose such actions, keep reading the [CUE Actions Reference](./cue-actions).
-
+剩下的 CUE 字段将作为动作指令被逐步执行。
+如需知晓更多关于如何编写这些 CUE 动作指令的细节，敬请阅读[CUE 操作文档](./cue-actions).

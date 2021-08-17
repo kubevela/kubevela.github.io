@@ -24,7 +24,7 @@ spec:
 
 ## How to define a Step
 
-The platform admin prepares the WorkflowStep Definitions for developers to use.
+The platform admin prepares the WorkflowStepDefinitions for developers to use.
 Basically the Definition provides the templated process to automate operation tasks.
 This hides the complexities and exposes only high-level parameters to simplify user experience.
 Here's an exmaple of a Definition:
@@ -62,7 +62,7 @@ spec:
 ## User Parameters
 
 Inside the CUE template, the parameters exposed to users are defined in the `parameters` key.
-The workflow step properties will be used to fill the parameters.
+The workflow step properties from the Application will be used to fill the parameters.
 Besides properties, we also support data flow to input parameter values from outputs of other steps.
 
 ## CUE Actions
