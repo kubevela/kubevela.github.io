@@ -2,7 +2,9 @@
 title:  CUE 操作
 ---
 
-这个文档介绍step定义过程中,可以使用cue操作类型.这些操作均由`vela/op`包提供
+这个文档介绍step定义过程中，可以使用cue操作类型。这些操作均由`vela/op`包提供。
+
+> 可以阅读[CUE 基础文档](../cue/basic.md)来学习 CUE 基础语法
 
 ## #Apply
 在kubernetes集群中创建或者更新资源
