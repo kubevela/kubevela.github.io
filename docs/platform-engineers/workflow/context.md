@@ -1,15 +1,26 @@
 ---
-title:  Context
+title: Workflow Context
 ---
 
-When defining the CUE template of the WorkflowStep Definition,
-you can use the `context` to get context data of the application.
+When defining the CUE template of the WorkflowStepDefinition,
+you can use the `context` to get metadata of the Application.
+For example:
 
-Here are the full list of available information within `context`:
-
-|Name|Description|
-|---|---|
-|name|The name of the Component for current workload|
-|namespace|The name of the Application|
-|labels["$key"]|The value for the key in the labels of the Application|
-|context.creationTimestamp|The timestamp of the creation of the Application|
+```yaml
+cue:
+  template: |
+    import ("vela/op")
+    parameter: {
+        component: string
+    }
+    // apply workload to kubernetes cluster
+    apply: op.#ApplyComponent & {
+        component: parameter.component
+        workload: patch: {
+          metadata: {
+            labels: app: context.name
+            labels: version: context.labels["version"]
+          }
+        }
+    }
+```
