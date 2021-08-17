@@ -67,7 +67,7 @@ wait: op.#ConditionalWait: {
 ## #Load
 ---
 通过组件名称从application中获取组件对应的资源数据
-### Action Parameter
+### 操作参数
 - component: 指定资源名称.
 - workload: 获取到的组件的workload资源.
 - traits: 获取到的组件的traits资源(key为trait定义里面outputs对应的资源名).
