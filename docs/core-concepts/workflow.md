@@ -4,7 +4,11 @@ title:  Workflow
 
 Workflow in KubeVela empowers users to glue any operational tasks to automate the delivery of applications to hybrid environments.
 It is designed to customize the control logic -- not just blindly apply all resources, but provide more procedural flexiblity.
-This provides us solutions to build more complex operations, e.g. workflow suspend, approval gate, data flow, multi-stage rollout, A/B testing.
+This provides solutions to build more complex operations, e.g. workflow suspend, approval gate, data flow, multi-stage rollout, A/B testing.
+
+Workflow is modular by design.
+Each module is defined by a Definition CRD and exposed via K8s API.
+Under the hood, it uses a powerful declarative language -- CUE as the superglue for your favourite tools and processes.
 
 Here is an example:
 
@@ -37,7 +41,7 @@ spec:
         type: apply-and-wait
         outputs:
           - name: db-conn
-            exportKey: dbConn
+            exportKey: outConn
         properties:
           component: database
           resourceType: StatefulSet
@@ -49,7 +53,7 @@ spec:
         type: apply-and-wait
         inputs:
           - from: db-conn # input comes from the output from `deploy-database` step
-            parameterKey: mysqlConn
+            parameterKey: dbConn
         properties:
           component: web
           resourceType: Deployment
@@ -61,8 +65,7 @@ spec:
 apiVersion: core.oam.dev/v1beta1
 kind: WorkflowStepDefinition
 metadata:
-  name: step-def
-  namespace: default
+  name: apply-and-wait
 spec:
   schematic:
     cue:
@@ -70,23 +73,23 @@ spec:
         import (
         	"vela/op"
         )
-
         parameter: {
           component: string
           names: [...string]
           resourceType: string
           resourceAPIVersion: string
+          dbConn?: string
         }
-
         // apply the component
         apply: op.#ApplyComponent & {
           component: parameter.component
+          if dbConn != _|_ {
+            spec: containers: [{env: [{name: "DB_CONN",value: parameter.dbConn}]}]
+          }
         }
-
         // iterate through given resource names and wait for them
         step: op.#Steps & {
           for index, resource in parameter.names {
-            
             // read resource object
             "resource-\(index)": op.#Read & {
               value: {
@@ -98,8 +101,7 @@ spec:
                 }
               }
             }
-
-            // wait until resource object satisfy given condition. If not, it will reconcile again later
+            // wait until resource object satisfy given condition.
             "wait-\(index)": op.#ConditionalWait & {
               if step["resource-\(index)"].workload.status.ready == "true" {
                 continue: true
@@ -107,15 +109,30 @@ spec:
             }
           }
         }
-
+        outConn: apply.status.address.ip
 ```
 
-Workflow is modular by design.
-Each module is define in a Definition CRD and exposed in K8s API.
-It acts as the superglue to quick integrate your favourite tools and processes via CUE language.
-You can create your own module with a powerful declarative language and cloud native API.
+Here are more detailed explanation of the above example:
 
-Next step, you can:
+- There is a WorkflowStepDefinition that defines the templated operation process:
+  - It applies the specified component.
+    It uses the `op.#ApplyComponent` action which applies all resources of a component.
+  - It then waits all resources of given names to be ready.
+    It uses `op.#Read` action which reads a resource into specified key,
+    and then uses `op#ConditionalWait` which waits until the `continue` field becomes true.
+- There is an Application that uses the predefined Definition to initiate delivery of two service components:
+  - It first does `apply-and-wait` on `database` component.
+    This will invoke the templated process as defined above with given properties.
+  - Once the first step is finished, it outputs the value of the `outConn` key to output named `db-conn`,
+    which basically means any steps can use the output `db-conn` as input later.
+  - The second step that takes an input `db-conn` from previous output will
+    get the value of `db-conn` and fill it into the parameter key `dbConn`.
+  - It then does `apply-and-wait` on `web` component.
+    This will invoke the same templated process as before except that this time the `dbConn` field will have value.
+    This basically means the container env field will be rendered as well.
+  - Once the second step is finished, the workflow will run to completion and stop.
+
+So far we have introduced the basic concept of KubeVela Workflow. For next steps, you can:
 
 - [Try out hands-on workflow scenarios](../end-user/workflow/apply-component).
 - [Read how to create your own Definition module](../platform-engineers/workflow/steps). 
