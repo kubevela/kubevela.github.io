@@ -34,18 +34,18 @@ spec:
   workflow:
     steps:
       - name: express-server
-        // specify the workflow step type
+        # specify the workflow step type
         type: apply-remaining
         properties:
           exceptions:
-            // specify the configuration of the component
+            # specify the configuration of the component
             express-server:
-              // skipApplyWorkload indicates whether to skip apply the workload resource
+              # skipApplyWorkload indicates whether to skip apply the workload resource
               skipApplyWorkload: false
-              // skipAllTraits indicates to skip apply all resources of the traits
-              // if this is true, skipApplyTraits will be ignored
+              # skipAllTraits indicates to skip apply all resources of the traits
+              # if this is true, skipApplyTraits will be ignored
               skipAllTraits: false
-              // skipApplyTraits specifies the names of the traits to skip apply
+              # skipApplyTraits specifies the names of the traits to skip apply
               skipApplyTraits:
                 - ingress
 ```

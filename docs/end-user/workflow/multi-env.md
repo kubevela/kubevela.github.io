@@ -48,14 +48,14 @@ spec:
   workflow:
     steps:
       - name: deploy-server
-        // specify the workflow step type
+        # specify the workflow step type
         type: multi-env
         properties:
-          // specify the component name
+          # specify the component name
           component: nginx-server
-          // specify the policy name
+          # specify the policy name
           policy: patch
-          // specify the env name in policy
+          # specify the env name in policy
           env: prod
 ```
 
