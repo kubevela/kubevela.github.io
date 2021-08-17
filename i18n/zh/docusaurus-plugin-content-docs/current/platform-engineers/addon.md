@@ -16,7 +16,7 @@ KubeVela 可以利用 CUE 的强大能力集成 Kubernetes 生态中的其他组
 
 1. 需求
 
-作为一个平台开发者，假设此时你的用户想以 helm chart 形式作为应用交付计划的组件，你需要满足这个需求。经过一番查阅，你发现 KubeVela 提供的名为 Fluxcd 的插件已经满足了你的需求。
+作为一个平台管理员，假设此时你的用户想以 helm chart 形式作为应用部署计划的组件，你需要满足这个需求。经过一番查阅，你发现 KubeVela 提供的名为 Fluxcd 的插件已经满足了你的需求。
 
 这个插件已经将调协集群中的 helm chart 的能力整理好，准备了相关的组件定义，可以一键启用。
 
@@ -44,7 +44,7 @@ prometheus         	Prometheus is an open-source systems monitoring and alerting
 terraform          	Terraform Controller is a Kubernetes Controller for Terraform.               	uninstalled	vela-system 
 ```
 
-3. 启用 Fluxcd, CLI 将会持续检查 Fluxcd 插件的状态，直至其成功安装。
+3. 启用 Fluxcd， CLI 将会持续检查 Fluxcd 插件的状态，直至其成功安装。
 
 ```shell
 vela addon enable fluxcd
@@ -60,7 +60,7 @@ Successfully enable addon:fluxcd
 
 3. 使用 Fluxcd 插件内置的组件定义：
 
-至此，你作为平台开发者的所有工作都已经就绪。接下来你只需要告诉与你合作的应用开发者：可以使用 helm 类型的组件了。
+至此，你作为平台管理员的所有工作都已经就绪。接下来你只需要告诉与你合作的应用开发者：可以使用 helm 类型的组件了。
 
 Fluxcd 中已经附带了一个帮助交付 helm chart 类型的[组件定义](https://github.com/oam-dev/kubevela/blob/master/vela-templates/addons/fluxcd/definitions/helm-release.yaml) helm。
 
@@ -117,7 +117,7 @@ parameter: {
 }
 ```
 
-下面我们在一个应用交付计划中使用 helm 类型的组件。在其中我们交付了一个 Redis 的 helm chart。我们指定了这个 chart 来自一个 Helm 仓库，仓库的 URL、要安装的 chart 的名字和版本。
+下面我们在一个应用部署计划中使用 helm 类型的组件。在其中我们交付了一个 Redis 的 helm chart。我们指定了这个 chart 来自一个 Helm 仓库，仓库的 URL、要安装的 chart 的名字和版本。
 
 ```shell
 cat << EOF > app.yaml
@@ -172,9 +172,9 @@ redis           default         1               2021-08-17 04:12:49.3966701 +000
 
 2. 禁用插件
 
-你可以使用 `vela addon disable fluxcd` 来禁用该插件。 请注意在禁用插件之前清理相关应用。注意如果直接禁用插件，带有 helm 类型的交付组件将无法被正确的删除。
+你可以使用 `vela addon disable fluxcd` 来禁用该插件。 请注意在禁用插件之前清理相关应用。注意如果直接禁用插件，带有 helm 类型的交付组件将无法被正确地删除。
 
-另外，要完全清理 fluxcd 插件，最后你还需要执行 `vela addon disable ns-flux-system`,这是 fluxcd 的辅助插件,需要手动禁用。
+另外，要完全清理 fluxcd 插件，最后你还需要执行 `vela addon disable ns-flux-system`，这是 fluxcd 的辅助插件，需要手动禁用。
 
 ## 插件背后
 
