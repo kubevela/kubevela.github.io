@@ -90,16 +90,16 @@ Prometheus server 需要的 pvc 的大小，同 `alertmanager-pvc-size`。
 
 - grafana-domain
 
-Grafana 的域名，可以使用您自定义的域名，也可以使用提供的集群级别的泛域名，`*.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com`，
+Grafana 的域名，可以使用您自定义的域名，也可以使用 ACK 提供的集群级别的泛域名，`*.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com`，
 如本处取值 `grafana.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com`。
 
 对于其他云服务商提供的，请参考上面示例配置。
 
 ## 查看监控数据
 
-### 本地 Kubernetes 集群
+### 自建/常规集群
 
-如果您的 Kubernetes 集群是运行在本地，如 Kind 集群，执行如下命令安装可观测性插件。
+执行如下命令安装可观测性插件，KinD 等测试集群的安装步骤同理。
 
 ```shell
 $ kubectl get svc grafana -n observability
@@ -112,10 +112,10 @@ Forwarding from 127.0.0.1:80 -> 3000
 Forwarding from [::1]:80 -> 3000
 ```
 
-通过浏览器访问 `http://127.0.0.1/dashboards`，点击相应的 Dashboard 前面介绍的各种监控数据。
+通过浏览器访问 [http://127.0.0.1/dashboards](http://127.0.0.1/dashboards)，点击相应的 Dashboard ，查看前面介绍的各种监控数据。
 
 ![](../../resources/observability-system-level-dashboards.png)
 
-### 阿里云等云服务商提供的 Kubernetes 集群
+### 云服务商提供的 Kubernetes 集群
 
-直接访问上面设置的 grafana-domain [http://grafana.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com/](http://grafana.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com/) 。
+直接访问上面设置的 grafana domain，如 [http://grafana.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com/](http://grafana.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com/) ，查看前面介绍的各种监控数据。
