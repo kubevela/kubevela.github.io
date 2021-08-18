@@ -54,7 +54,7 @@ terraform          	Terraform Controller is a Kubernetes Controller for Terrafor
 
 
 
-## 使用案例
+## 使用示例
 
 1. 需求
 
@@ -97,81 +97,6 @@ helm            vela-system     autodetects.core.oam.dev        helm release is 
 ...
 ```
 
-下面节选一段 helm 的 componentDefinition 的参数部分，以说明其用法：你可以选择来自 Git 仓库 / helm 仓库 / OSS bucket 的某个 chart 作为交付内容。你可以选择 chart 的版本、目标名字空间、需要覆写的 values 字段等。
-
-```cue
-parameter: {
-    // +usage=The type of source of chart. Enum of git/helm/bucket
-    repoType: "git" | "helm" | "bucket"
-    // +usage=The Git or Helm repository URL, accept HTTP/S or SSH address as git url
-    repoUrl: string
-    // +usage=The interval at which to check for repository/bucket and relese updates
-    pullInterval: *"5m" | string
-    // +usage=The bucket's name, required if repoType is bucket
-    bucketName?: string
-    // +usage="generic" for Minio, Amazon S3, Google Cloud Storage, Alibaba Cloud OSS, "aws" for retrieve credentials from the EC2 service when credentials not specified, default "generic"
-    provider: *"generic" | "aws"
-    // +usage=Bucket endpoint address, required if repoType is bucket
-    endpoint?: string
-    // +usage=The bucket region, optional
-    region?: string
-    // +usage=The timeout for download operations
-    timeout?: string
-    // +usage=1.The relative path to helm chart for git/bucket source. 2. chart name for helm resource 3. relative path for chart package(e.g. ./charts/podinfo-1.2.3.tgz)
-    chart: string
-    // +usage=Chart version
-    version: *"*" | string
-    // +usage=The Git reference to checkout and monitor for changes, defaults to master branch
-    branch: *"master" | string
-    // +usage=The name of the secret containing authentication credentials for Helm repository or bucket
-    secretRef?: string
-    // +usage=The namespace for helm chart
-    targetNamespace?: string
-    // +usage=Chart value
-    value?: #nestedmap
-}
-```
-
-下面我们在一个应用部署计划中使用 helm 类型的组件。在其中我们交付了一个 Redis 的 helm chart。我们指定了这个 chart 来自一个 Helm 仓库，仓库的 URL、要安装的 chart 的名字和版本。
-
-```shell
-cat << EOF > app.yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: app-delivering-chart
-spec:
-  components:
-    - name: redis
-      type: helm
-      properties:
-        chart: redis-cluster
-        version: 6.2.7
-        repoUrl: https://charts.bitnami.com/bitnami
-        repoType: helm
-EOF
-```
-
-```shell
-kubectl apply -f app.yaml
-application.core.oam.dev/app-delivering-chart created
-```
-
-过一段时间检查应用状态：
-
-```shell
-kubectl get application app-delivering-chart
-NAME                   COMPONENT   TYPE   PHASE     HEALTHY   STATUS   AGE
-app-delivering-chart   redis       helm   running   true               2m12s
-```
-
-由于我们这次交付的是一个 helm chart，也可以使用 helm 命令行来查询 chart 的状态：
-
-```shell
-helm list
-NAME 	NAMESPACE	REVISION	UPDATED                              	STATUS  	CHART              	APP VERSION
-redis	default  	1       	2021-08-17 09:40:49.1775023 +0000 UTC	deployed	redis-cluster-6.2.7	6.2.5
-```
 
 ## 禁用插件
 
