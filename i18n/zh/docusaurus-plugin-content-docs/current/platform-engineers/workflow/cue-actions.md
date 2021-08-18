@@ -2,16 +2,16 @@
 title:  CUE 操作
 ---
 
-这个文档介绍step定义过程中，可以使用cue操作类型。这些操作均由`vela/op`包提供。
+这个文档介绍step定义过程中，可以使用的cue操作类型。这些操作均由 `vela/op` 包提供。
 
 > 可以阅读[CUE 基础文档](../cue/basic.md)来学习 CUE 基础语法
 
-## #Apply
----
+## Apply
+--------
 在kubernetes集群中创建或者更新资源
 ### 操作参数
-- value: 被操作的对象结构. 操作成功执行后，会用集群中资源的状态重新渲染`value`
-- patch: 对应的内容支持策略性合并,比如可以通过注释 `// +patchKey`实现数组的按主键合并
+- value: 将被 apply 的资源的定义。操作成功执行后，会用集群中资源的状态重新渲染`value`
+- patch: 对 `value` 的内容打补丁，支持策略性合并，比如可以通过注释 `// +patchKey` 实现数组的按主键合并
 ```
 #Apply: {
   value: {...}
@@ -43,11 +43,11 @@ stepName: op.#Apply & {
 }
 ```
 
-## #ConditionalWait
+## ConditionalWait
 ---
-会让workflow step处于等待状态，直到条件被满足
+会让 workflow step 处于等待状态，直到条件被满足
 ### 操作参数
-- continue: 当该字段为true时，workflow step才会恢复继续执行
+- continue: 当该字段为 true 时，workflow step 才会恢复继续执行
 ```
 #ConditionalWait: {
   continue: bool
@@ -64,35 +64,37 @@ wait: op.#ConditionalWait: {
 }
 ```
 
-## #Load
+## Load
 ---
-通过组件名称从application中获取组件对应的资源数据
+通过组件名称从 application 中获取组件对应的资源数据
 ### 操作参数
 - component: 指定资源名称.
-- workload: 获取到的组件的workload资源.
-- traits: 获取到的组件的traits资源(key为trait定义里面outputs对应的资源名).
+- workload: 获取到的组件的 workload 资源定义.
+- auxiliaries: 获取到的组件的辅助资源定义( key 为定义里面 outputs 对应的资源名).
 ```
 #Load: {
   component: string
-  workload: {...}
-  traits: [string]: {...}
+  value: {
+     workload: {...}
+     auxiliaries: [string]: {...}
+  }   
 }
 ```
 ### 用法示例
 ```
 import "vela/op"
 
-// 该操作完成后,你就可以使用通过load.workload以及load.traits使用获取到的组件资源数据.
+// 该操作完成后,你就可以使用通过load.value.workload以及load.value.traits使用获取到组件相应的资源数据.
 load: op.#Load & {
-  component: "componet-name"
+  component: "component-name"
 }
 ```
 
-## #Read
+## Read
 ---
-读取kubernetes集群中的资源
+读取 kubernetes 集群中的资源
 ### 操作参数
-- value: 需要用户描述读取资源的元数据，比如kind、name等，操作完成后，集群中资源的数据会被填充到`value`上
+- value: 需要用户描述读取资源的元数据，比如 kind、name 等，操作完成后，集群中资源的数据会被填充到 `value` 上
 - err: 如果读取操作发生错误，这里会以字符串的方式指示错误信息.
 ```
 #Read: {
@@ -102,7 +104,7 @@ load: op.#Load & {
 ```
 ### 用法示例
 ```
-// 操作完成后，你可以通过configmap.value.data使用读取到的configmap数据
+// 操作完成后，你可以通过 configmap.value.data 使用configmap里面的数据
 configmap: op.#Read & {
    value: {
       kind: "ConfigMap"
@@ -115,13 +117,13 @@ configmap: op.#Read & {
 }
 ```
 
-## #ApplyComponent
+## ApplyComponent
 ---
-在kubernetes集群中创建或者更新组件对应的所有资源
+在 kubernetes 集群中创建或者更新组件对应的所有资源
 ### 操作参数
-- component: 指定组建名称.
-- workload: 操作完成后,kubernetes集群中组件对应的workload的资源状态数据.
-- traits: 操作完成后,kubernetes集群中组件对应的traits的资源状态数据.
+- component: 指定需要 apply 的组件名称
+- workload: 操作完成后，从 kubernetes 集群中获取到的组件对应的 workload 资源的状态数据
+- traits: 操作完成后，从 kubernetes 集群中获取到的组件对应的辅助资源的状态数据。数据结构为 map 类型, 索引为定义中 outputs 涉及到的名称
 ```
 #ApplyComponent: {
    componnet: string
@@ -136,14 +138,14 @@ apply: op.#ApplyComponent & {
 }
 ```
 
-## #ApplyRemaining
+## ApplyRemaining
 ---
-在kubernetes集群中创建或者更新application中所有组件对应的资源,并可以通过`exceptions`指明哪些组件不用apply,或者跳过该组件的某些资源
+在 kubernetes 集群中创建或者更新 application 中所有组件对应的资源,并可以通过 `exceptions` 指明哪些组件或者组件中的某些资源跳过创建和更新
 ### 操作参数
 - exceptions: 指明该操作需要排除掉的组件
-- skipApplyWorkload: 是否跳过该组件workload资源的同步
-- skipAllTraits: 是否跳过该组件所有trait资源的同步
-- skipApplyTraits: 需要跳过的该组件trait资源对应的名称(定义中outputs涉及到名字)
+- skipApplyWorkload: 是否跳过该组件 workload 资源的同步
+- skipAllTraits: 是否跳过该组件所有辅助资源的同步
+- skipApplyTraits: 数组类型，包含需要跳过的该组件中辅助资源对应的名称(定义中 outputs 涉及的到名字)
 ```
 #ApplyRemaining: {
  exceptions?: [componentName=string]: {
@@ -166,11 +168,11 @@ apply: op.#ApplyRemaining & {
 }
 ```
 
-## #Steps
+## Steps
 ---
 用来封装一组操作
 ### 操作参数
-- steps里面需要通过tag的方式指定执行顺序,数字越小执行越靠前
+- steps里面需要通过 tag 的方式指定执行顺序,数字越小执行越靠前
 ### 用法示例
 ```
 app: op.#Steps & {

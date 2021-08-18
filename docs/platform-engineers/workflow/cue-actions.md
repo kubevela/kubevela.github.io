@@ -6,7 +6,7 @@ This doc will illustrate the CUE actions provided in `vela/op` stdlib package.
 
 > To learn the syntax of CUE, read [CUE Basic](../cue/basic.md)
 
-## #Apply
+## Apply
 ---
 Create or update resource in kubernetes cluster.
 ### Action Parameter
@@ -43,7 +43,7 @@ stepName: op.#Apply & {
 }
 ```
 
-## #ConditionalWait
+## ConditionalWait
 ---
 Step will be blocked until the condition is met.
 ### Action Parameter
@@ -64,18 +64,20 @@ wait: op.#ConditionalWait: {
 }
 ```
 
-## #Load
+## Load
 ---
 Get component from application by component name.
 ### Action Parameter
 - component: the component name.
 - workload: the workload resource of the componnet.
-- traits: the trait resources of the componnet.
+- auxiliaries: the auxiliary resources of the componnet.
 ```
 #Load: {
   component: string
-  workload: {...}
-  traits: [string]: {...}
+  value: {
+     workload: {...}
+     auxiliaries: [string]: {...}
+  }   
 }
 ```
 ### Usage
@@ -84,11 +86,11 @@ import "vela/op"
 
 // You can use load.workload & load.traits after this action.
 load: op.#Load & {
-  component: "componet-name"
+  component: "component-name"
 }
 ```
 
-## #Read
+## Read
 ---
 Get resource in kubernetes cluster. 
 ### Action Parameter
@@ -102,7 +104,7 @@ Get resource in kubernetes cluster.
 ```
 ### Usage
 ```
-// You can use configmap.data after this action.
+// You can use configmap.value.data after this action.
 configmap: op.#Read & {
    value: {
       kind: "ConfigMap"
@@ -115,7 +117,7 @@ configmap: op.#Read & {
 }
 ```
 
-## #ApplyComponent
+## ApplyComponent
 ---
 Create or update resources corresponding to the component in kubernetes cluster.
 ### Action Parameter
