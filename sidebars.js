@@ -91,7 +91,7 @@ module.exports = {
       collapsed: false,
       items: [
         'case-studies/workflow-edge-computing', // 待完成
-        'case-studies/workflow-lixiang-auto',
+        'case-studies/li-auto-inc',
       ],
     },
     {

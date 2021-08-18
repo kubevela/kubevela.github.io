@@ -6,7 +6,7 @@ This doc will illustrate the CUE actions provided in `vela/op` stdlib package.
 
 > To learn the syntax of CUE, read [CUE Basic](../cue/basic.md)
 
-## #Apply
+## Apply
 ---
 Create or update resource in kubernetes cluster.
 ### Action Parameter
@@ -43,7 +43,7 @@ stepName: op.#Apply & {
 }
 ```
 
-## #ConditionalWait
+## ConditionalWait
 ---
 Step will be blocked until the condition is met.
 ### Action Parameter
@@ -64,7 +64,7 @@ wait: op.#ConditionalWait: {
 }
 ```
 
-## #Load
+## Load
 ---
 Get component from application by component name.
 ### Action Parameter
@@ -88,7 +88,7 @@ load: op.#Load & {
 }
 ```
 
-## #Read
+## Read
 ---
 Get resource in kubernetes cluster. 
 ### Action Parameter
@@ -115,7 +115,7 @@ configmap: op.#Read & {
 }
 ```
 
-## #ApplyComponent
+## ApplyComponent
 ---
 Create or update resources corresponding to the component in kubernetes cluster.
 ### Action Parameter

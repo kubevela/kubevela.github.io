@@ -6,8 +6,8 @@ title:  CUE 操作
 
 > 可以阅读[CUE 基础文档](../cue/basic.md)来学习 CUE 基础语法
 
-## #Apply
----
+## Apply
+--------
 在kubernetes集群中创建或者更新资源
 ### 操作参数
 - value: 被操作的对象结构. 操作成功执行后，会用集群中资源的状态重新渲染`value`
@@ -43,7 +43,7 @@ stepName: op.#Apply & {
 }
 ```
 
-## #ConditionalWait
+## ConditionalWait
 ---
 会让workflow step处于等待状态，直到条件被满足
 ### 操作参数
@@ -64,7 +64,7 @@ wait: op.#ConditionalWait: {
 }
 ```
 
-## #Load
+## Load
 ---
 通过组件名称从application中获取组件对应的资源数据
 ### 操作参数
@@ -88,7 +88,7 @@ load: op.#Load & {
 }
 ```
 
-## #Read
+## Read
 ---
 读取kubernetes集群中的资源
 ### 操作参数
@@ -115,7 +115,7 @@ configmap: op.#Read & {
 }
 ```
 
-## #ApplyComponent
+## ApplyComponent
 ---
 在kubernetes集群中创建或者更新组件对应的所有资源
 ### 操作参数
@@ -136,7 +136,7 @@ apply: op.#ApplyComponent & {
 }
 ```
 
-## #ApplyRemaining
+## ApplyRemaining
 ---
 在kubernetes集群中创建或者更新application中所有组件对应的资源,并可以通过`exceptions`指明哪些组件不用apply,或者跳过该组件的某些资源
 ### 操作参数
@@ -166,7 +166,7 @@ apply: op.#ApplyRemaining & {
 }
 ```
 
-## #Steps
+## Steps
 ---
 用来封装一组操作
 ### 操作参数
