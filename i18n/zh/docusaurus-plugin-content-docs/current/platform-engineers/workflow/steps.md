@@ -15,7 +15,7 @@ spec:
   workflow:
     steps:
       - name: deploy-server1
-        # This is the name of the Definition to actually create an executable instance
+        # type 名与对应的 WorkflowStepDefinition 名称相同
         type: apply-component
         properties:
           component: server1
@@ -44,19 +44,19 @@ spec:
            component: string
            prefixIP?: string
         }
-        // load component from application
+        // 加载组件
         component: op.#Load & {
            component: parameter.component
         }
-        // apply workload to kubernetes cluster
+        // 将组件部署到集群中
         apply: op.#ApplyComponent & {
            component: parameter.component
         }
-        // wait until workload.status equal "Running"
+        // 等待直至 workload.status 变成 "Running"
         wait: op.#ConditionalWait & {
            continue: apply.workload.status.phase =="Running"
         }
-        // export podIP
+        // 输出 podIP
         myIP: apply.workload.status.podIP
 ```
 
@@ -69,4 +69,4 @@ spec:
 ## CUE 动作指令
 
 剩下的 CUE 字段将作为动作指令被逐步执行。
-如需知晓更多关于如何编写这些 CUE 动作指令的细节，敬请阅读[CUE 操作文档](./cue-actions).
+如需知晓更多关于如何编写这些 CUE 动作指令的细节，敬请阅读[CUE 操作文档](./cue-actions)。

@@ -6,7 +6,7 @@ title: 数据流
 
 KubeVela 里的数据流是用来赋能用户在不同的工作流步骤里传递数据的手段。
 用户使用数据流的方式是通过编写声明式的字段：即每一个步骤的输入输出 (inputs/outputs)。
-这篇文档将阐述如何去编写这些字段来使用数据流功能。
+这篇文档将阐述如何通过编写这些字段来使用数据流功能。
 
 > 完整版例子请参考这个链接: https://github.com/oam-dev/kubevela/blob/master/docs/examples/workflow
 
@@ -30,11 +30,11 @@ spec:
           component: "server1"
         outputs:
           - name: server1IP
-            # Any key can be exported from the CUE template of the Definition
+            # 任何键值都可以从定义的 CUE 模板导出
             exportKey: "myIP"
 ```
 
-与上面对应，使用一个 CUE 模版提供输出字段是这样的：
+与上面对应，使用一个 CUE 模版提供输出字段如下：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -49,26 +49,24 @@ spec:
         parameter: {
           component: string
         }
-        // load component from application
+        // 从 Application 中加载组件
         component: op.#Load & {
           component: parameter.component
         }
-        // apply workload to kubernetes cluster
+        // 将组件部署到集群中
         apply: op.#ApplyComponent & {
           component: parameter.component
         }
-        // export podIP
+        // 输出 podIP
         myIP: apply.workload.status.podIP
 ```
 
-可以看到，当我们在 WorkflowStepDefinition 的 CUE 模板里定义 `myIP` 字段，并且当 Application 里 outputs 的 exportKey 也指定了 `myIP` 字段时，它的值将被输出出去。我们将在下面看到输出的值可以如何使用。
-
+可以看到，当我们在 WorkflowStepDefinition 的 CUE 模板里定义 `myIP` 字段，并且当 Application 里 outputs 的 exportKey 也指定了 `myIP` 字段时，它的值将被输出出去。我们将在下面看到输出值该如何使用。
 
 ## 输入字段 (Inputs)
 
 输入字段可以对应前面输出的值，然后将输出的值用于填值该步骤的 CUE 模板的指定参数。
 参数会在工作流步骤运行前先被填值。
-
 
 下面是一个如何在 Application 中编写输入字段 (Outputs) 的例子：
 
@@ -105,30 +103,30 @@ spec:
         import ("vela/op")
         parameter: {
           component: string
-          // the input value will be used to fill this parameter
+          // 输入值将用于填充该参数
           serverIP?: string
         }
-        // load component from application
+        // 加载组件
         component: op.#Load & {
           component: parameter.component
           value: {}
         }
-        // apply workload to kubernetes cluster
+        // 将组件部署到集群中
         apply: op.#Apply & {
           value: {
             component.value.workload
             metadata: name: parameter.component
             if parameter.serverIP!=_|_{
-              // this data will override the env fields of the workload container
+              // 该字段将覆盖工作负载容器的 env 字段
               spec: containers: [{env: [{name: "PrefixIP",value: parameter.serverIP}]}]
             }
           }
         }
-        // wait until workload.status equal "Running"
+        // 等待直至 workload.status 变成 "Running"
         wait: op.#ConditionalWait & {
           continue: apply.value.status.phase =="Running"
         }
 ```
 
 可以看到，这个步骤渲染的对象是需要拿到 `serverIP`，也就是之前部署的服务的 IP 来作为环境变量传入。
-到这里，我们看到了一个完整的数据流传递的故事。
+至此，我们完成了一个完整的数据流传递的例子。

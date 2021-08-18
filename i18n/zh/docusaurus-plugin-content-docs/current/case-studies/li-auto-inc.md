@@ -2,43 +2,50 @@
 title:  实践案例-理想汽车
 ---
 ## 背景
-理想汽车后台服务采用的是微服务架构，虽然借助 kubernetes 进行部署，但运维工作依然很复杂。并具有以下特点
-- 一个应用能运行起来并对外提供服务，正常情况下都需要配套的db实例以及redis集群支撑
-- 应用之间存在依赖关系，对于部署顺序有比较强的诉求
-- 应用部署流程中需要和外围系统(比如配置中心)交互
 
-下面以一个理想汽车的经典场景为例，介绍如何借助 KubeVela 实现以上诉求
+理想汽车后台服务采用的是微服务架构，虽然借助 Kubernetes 进行部署，但运维工作依然很复杂。并具有以下特点：
+
+- 一个应用能运行起来并对外提供服务，正常情况下都需要配套的db实例以及 redis 集群支撑。
+- 应用之间存在依赖关系，对于部署顺序有比较强的诉求。
+- 应用部署流程中需要和外围系统（如：配置中心）交互。
+
+下面以一个理想汽车的经典场景为例，介绍如何借助 KubeVela 实现以上诉求。
 
 ## 典型场景介绍
 
 ![场景架构](../resources/li-auto-inc.jpg)
 
-这里面包含两个应用分别是base-server和proxy-server, 整体应用部署需要满足以下条件
-- base-server 成功启动（状态 ready）后需要往配置中心（apollo）注册信息
-- base-server 需要绑定到 service 和 ingress 进行负载均衡
-- proxy-server 需要在 base-server 成功运行后启动，并需要获取到 base-server 对应的 service 的 clusterIP
-- proxy-server 依赖 redis 中间件，需要在redis成功运行后启动
-- proxy-server 需要从配置中心（apollo）读取 base-server 的相关注册信息
+这里面包含两个应用，分别是 `base-server` 和 `proxy-server`, 整体应用部署需要满足以下条件：
 
-可见整个部署过程，如果人为操作，会变得异常困难以及容易出错，借助 KubeVela 可以轻松实现场景的自动化和一键式运维
+- base-server 成功启动（状态 ready）后需要往配置中心（apollo）注册信息。
+- base-server 需要绑定到 service 和 ingress 进行负载均衡。
+- proxy-server 需要在 base-server 成功运行后启动，并需要获取到 base-server 对应的 service 的 clusterIP。
+- proxy-server 依赖 redis 中间件，需要在 redis 成功运行后启动。
+- proxy-server 需要从配置中心（apollo）读取 base-server 的相关注册信息。
+
+可见整个部署过程，如果人为操作，会变得异常困难以及容易出错。在借助 KubeVela 后，可以轻松实现场景的自动化和一键式运维。
 
 ## 解决方案
 
-在 KubeVela 上，以上诉求可以拆解为以下 KubeVela 的模型
+在 KubeVela 上，以上诉求可以拆解为以下 KubeVela 的模型：
 
-- 组件部分: 包含三个分别是 base-server 、redis 、proxy-server
-- 运维特征: ingress (包括 service) 作为一个通用的负载均衡运维特征
-- 工作流: 实现组件按照依赖进行部署，并实现和配置中心的交互
-- 应用部署计划: 理想汽车的开发者可以通过 KubeVela 的应用部署计划完成应用发布
+- 组件部分: 包含三个分别是 base-server 、redis 、proxy-server。
+- 运维特征: ingress (包括 service) 作为一个通用的负载均衡运维特征。
+- 工作流: 实现组件按照依赖进行部署，并实现和配置中心的交互。
+- 应用部署计划: 理想汽车的开发者可以通过 KubeVela 的应用部署计划完成应用发布。
 
 详细过程如下:
 
 ## 平台的功能定制
-理想汽车的平台工程师通过以下步骤完成方案中所涉及的能力,并向开发者用户透出(都是通过编写 definition 的方式实现)。
+
+理想汽车的平台工程师通过以下步骤完成方案中所涉及的能力，并向开发者用户透出（通过编写 definition 的方式实现）。
+
 ### 1.定义组件
 
-- 编写 base-service 的组件定义，使用 `deployment` 作为工作负载，并向终端用户透出参数 `image` 和 `cluster`（如下），也就是说终端用户以后在发布时只需要关注镜像以及部署在哪个集群
-- 编写 proxy-service 的组件定义，使用 `argo rollout` 作为工作负载，并同样向终端用户透出参数 `image` 和 `cluster` (如下)
+- 编写 base-service 的组件定义，使用 `Deployment` 作为工作负载，并向终端用户透出参数 `image` 和 `cluster`。对于终端用户来说，之后在发布时只需要关注镜像以及部署的集群名称。
+- 编写 proxy-service 的组件定义，使用 `argo rollout` 作为工作负载，同样向终端用户透出参数 `image` 和 `cluster`。
+
+如下所示：
 
 ```
 apiVersion: core.oam.dev/v1beta1
@@ -327,10 +334,11 @@ spec:
 
 ### 2.定义运维特征
 
-编写用于负载均衡的运维特征的定义(如下)，其通过生成 kubernetes 中的原生资源 `service` 和 `ingress` 实现负载均衡。
+编写用于负载均衡的运维特征的定义，其通过生成 Kubernetes 中的原生资源 `Service` 和 `Ingress` 实现负载均衡。
 
+向终端用户透出的参数包括 domain 和 http ，其中 domain 可以指定域名，http 用来设定路由，具体将部署服务的端口映射为不同的 url path。
 
-向终端用户透出的参数包括 domain 和 http ，其中 domain 可以指定域名，http 用来设定路由，具体将部署服务的端口映射为不同的url path
+如下所示：
 
 ```
 apiVersion: core.oam.dev/v1beta1
@@ -386,9 +394,12 @@ spec:
 
 ### 3.定义工作流的步骤
 
-- 定义 apply-base 工作流步骤: 完成部署 base-server，等待组件成功启动后，往注册中心注册信息。透出参数为 component ，也就是终端用户在流水线中使用步骤 apply-base 时只需要指定组件名称
-- 定义 apply-helm 工作流步骤: 完成部署 redis helm chart，并等待redis成功启动。透出参数为 component ，也就是终端用户在流水线中使用步骤 apply-helm 时只需要指定组件名称
-- 定义 apply-proxy 工作流步骤: 完成部署 proxy-server，并等待组件成功启动。透出参数为 component 和 backendIP，其中 component 为组件名称，backendIP 为 proxy-server服务依赖组件的IP
+- 定义 apply-base 工作流步骤: 完成部署 base-server，等待组件成功启动后，往注册中心注册信息。透出参数为 component，终端用户在流水线中使用步骤 apply-base 时只需要指定组件名称。
+- 定义 apply-helm 工作流步骤: 完成部署 redis helm chart，并等待 redis 成功启动。透出参数为 component，终端用户在流水线中使用步骤 apply-helm 时只需要指定组件名称。
+- 定义 apply-proxy 工作流步骤: 完成部署 proxy-server，并等待组件成功启动。透出参数为 component 和 backendIP，其中 component 为组件名称，backendIP 为 proxy-server 服务依赖组件的 IP。
+
+如下所示：
+
 ```
 apiVersion: core.oam.dev/v1beta1
 kind: WorkflowStepDefinition
@@ -407,7 +418,7 @@ spec:
            component: parameter.component
         }
 
-        // wait until deployment ready
+        // 等待 deployment 可用
         wait: op.#ConditionalWait & {
            continue: apply.workload.status.readyReplicas == apply.workload.status.replicas && apply.workload.status.observedGeneration == apply.workload.metadata.generation
         }
@@ -419,7 +430,7 @@ spec:
            request: body: json.Marshal(message)
         }
 
-        // export service ClusterIP
+        // 暴露 service 的 ClusterIP
         clusterIP: apply.traits["service"].value.spec.clusterIP
 ---
 apiVersion: core.oam.dev/v1beta1
@@ -441,11 +452,11 @@ spec:
 
         chart: op.#Read & {
            value: {
-                // the metadata of redis resource
+                // redis 的元数据
                 ...
            }
         }
-        // wait redis ready
+        // 等待 redis 可用
         wait: op.#ConditionalWait & {
            // todo
            continue: chart.value.status.phase=="ready"
@@ -483,7 +494,7 @@ spec:
            }
         }
 
-        // wait until argo.rollout ready
+        // 等待 argo.rollout 可用
         wait: op.#ConditionalWait & {
            continue: apply.workload.status.readyReplicas == apply.workload.status.replicas && apply.workload.status.observedGeneration == apply.workload.metadata.generation
         }      
@@ -491,11 +502,13 @@ spec:
 
 
 ### 用户使用
-理想汽车的开发工程师接下来就可以使用 application 完成应用的发布
+
+理想汽车的开发工程师接下来就可以使用 Application 完成应用的发布。
 
 
-开发工程师可以直接使用上面平台工程师在 KubeVela 上定制的通用能力，轻松完成应用部署计划的编写
-> 在下面例子中通过workflow的数据传递机制 input/output ,完成 base-server 的 clusterIP 传递给 proxy-server。
+开发工程师可以直接使用如上平台工程师在 KubeVela 上定制的通用能力，轻松完成应用部署计划的编写。
+
+> 在下面例子中通过 workflow 的数据传递机制 input/output，将 base-server 的 clusterIP 传递给 proxy-server。
 
 ```
 apiVersion: core.oam.dev/v1beta1
