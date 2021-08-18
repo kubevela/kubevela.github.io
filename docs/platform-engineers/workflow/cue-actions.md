@@ -70,12 +70,14 @@ Get component from application by component name.
 ### Action Parameter
 - component: the component name.
 - workload: the workload resource of the componnet.
-- traits: the trait resources of the componnet.
+- auxiliaries: the auxiliary resources of the componnet.
 ```
 #Load: {
   component: string
-  workload: {...}
-  traits: [string]: {...}
+  value: {
+     workload: {...}
+     auxiliaries: [string]: {...}
+  }   
 }
 ```
 ### Usage
@@ -84,7 +86,7 @@ import "vela/op"
 
 // You can use load.workload & load.traits after this action.
 load: op.#Load & {
-  component: "componet-name"
+  component: "component-name"
 }
 ```
 
@@ -102,7 +104,7 @@ Get resource in kubernetes cluster.
 ```
 ### Usage
 ```
-// You can use configmap.data after this action.
+// You can use configmap.value.data after this action.
 configmap: op.#Read & {
    value: {
       kind: "ConfigMap"
