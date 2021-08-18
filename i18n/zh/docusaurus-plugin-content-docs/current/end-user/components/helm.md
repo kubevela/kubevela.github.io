@@ -6,6 +6,10 @@ title:  Helm 组件
 
 描述一个 helm chart ，来自 Helm 仓库、Git 仓库、OSS bucket。
 
+## 开始之前
+
+helm 类型组件开启 [fluxcd](../../reference/addon/fluxcd.md) 插件即可使用。
+
 ## 示例
 
 1. chart 来源是 helm 仓库
