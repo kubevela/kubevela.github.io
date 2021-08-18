@@ -53,7 +53,7 @@ spec:
         component: op.#Load & {
           component: parameter.component
         }
-        // apply workload to kubernetes cluster
+        // apply workload to Kubernetes cluster
         apply: op.#ApplyComponent & {
           component: parameter.component
         }
@@ -108,7 +108,7 @@ spec:
           component: parameter.component
           value: {}
         }
-        // apply workload to kubernetes cluster
+        // apply workload to Kubernetes cluster
         apply: op.#Apply & {
           value: {
             component.value.workload
