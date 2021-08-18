@@ -23,16 +23,21 @@ title:  实践案例-多集群部署
 
 
 - 本实践案例将以阿里云的 ACK 集群作为例子，创建阿里云资源需要使用相应的鉴权，需要保存你阿里云账号的 AK/SK 到管控集群的 Secret 中。
-  
+
   ```shell
-  kubectl create secret generic alibaba-account-creds -n vela-system --from-literal=accessKeyID={ALICLOUD_ACCESS_KEY} --from-literal=accessKeySecret={ALICLOUD_SECRET_KEY}
+  export ALICLOUD_ACCESS_KEY=xxx; export ALICLOUD_SECRET_KEY=yyy
+  ```
+
+  ```shell
+  # 如果你想使用阿里云安全令牌服务，还要导出环境变量 ALICLOUD_SECURITY_TOKEN 。
+  export ALICLOUD_SECURITY_TOKEN=zzz  
+  ```
+
+  ```shell
+  # prepare-alibaba-credentials.sh 脚本会读取环境变量并创建 secret 到当前集群。
+  sh hack/prepare-alibaba-credentials.sh
   ```
   
-  ```shell
-  # 如果你希望使用阿里云安全令牌服务 还需要指定 securityToken 
-  kubectl create secret generic alibaba-account-creds -n vela-system --from-literal=accessKeyID={ALICLOUD_ACCESS_KEY} --from-literal=accessKeySecret={ALICLOUD_SECRET_KEY} --from-literal=securityToken={ALICLOUD_SECURITY_TOKEN}
-  ```
- 
   ```shell
   $ kubectl get secret -n vela-system
   NAME                                         TYPE                                  DATA   AGE
@@ -165,7 +170,7 @@ ACK 集群，注册 ACK 集群到当前管控集群。
 
 除此之外，为了让创建好的集群可以被管控集群所使用，我们还需要将创建的集群注册到管控集群。我们通过定义一个工作流节点来传递新创建集群的证书信息，再定义一个工作流节点来完成集群注册。
 
-**工作流节点定义 `create-ack`**
+**自定义执行集群创建的工作流节点，命名为 `create-ack`**
 
 ```yaml
 # definitions/create-ack.yaml
@@ -226,7 +231,7 @@ spec:
 > 因为 Secret 中的数据会以 `base64` 的编码方式被存储，传递到下一个工作节点的时候，需要利用 `cue` 的内置包 `"encoding/base64"` 对数据进行解码。
 
 
-**工作流节点定义 `register-cluster`**
+**自定义集群注册的工作流节点，命名为 `register-cluster`**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -332,13 +337,35 @@ spec:
 2. 根据 OCM 的 [Placement 规则](https://open-cluster-management.io/concepts/placement/) ，允许用户在 `parameter.initNameSpace`
    指定的命名空间下可以使用 `parameter.patchLabels` 中设定的标签来筛选注册的 ACK 集群。
 
-### 创建环境初始化 `managed-cluster`   
+### 创建环境初始化  
+
+1. 安装工作流节点定义 `create-ack` 和 `register-cluster`。
 
 ```shell
 kubectl apply -f definitions/create-ack.yaml.yaml
 kubectl apply -f definitions/register-cluster.yaml
+```
 
-# 创建环境初始化 managed-cluster 之前 需要修改 hubAPIServer 参数为管控集群的 APIServer 的公网地址
+2. 修改工作流节点 `register-ack` 的 hubAPIServer 的参数为管控集群的 APIServer 的公网地址。
+
+```yaml
+  - name: register-ack
+    type: register-cluster
+    inputs:
+      - from: connInfo
+        parameterKey: connInfo
+    properties:
+      # 用户需要填写管控集群的 APIServer 的公网地址
+      hubAPIServer: {{ public network address of APIServer }}
+      env: prod
+      initNameSpace: default
+      patchLabels:
+        purpose: test
+```
+
+3. 创建环境初始化 `managed-cluster`。
+
+```
 kubectl apply -f initializers/init-managed-cluster.yaml
 ```
 
