@@ -82,9 +82,7 @@ module.exports = {
           ]
         },
         {
-          type: 'category',
-          label: 'Add-ons',
-          items: [
+          'Addons': [
             'end-user/addons/observability',
           ]
         },

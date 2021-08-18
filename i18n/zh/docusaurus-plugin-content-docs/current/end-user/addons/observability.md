@@ -1,4 +1,6 @@
-# 插件：可观测性 Observability
+---
+title: 可观测性 Observability
+---
 
 可观测性插件（Observability addon）基于 metrics、logging、tracing 数据，可以为 KubeVela core 提供系统级别的监控，也可以为应用提供业务级别的监控。
 

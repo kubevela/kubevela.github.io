@@ -150,5 +150,9 @@
   "sidebar.docs.category.Cloud Services": {
     "message": "云服务",
     "description": "The label for category Cloud Services in sidebar docs"
+  },
+  "sidebar.docs.category.Addons": {
+    "message": "插件系统",
+    "description": "The extended add-ons"
   }
 }
