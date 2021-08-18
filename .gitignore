@@ -21,3 +21,5 @@ yarn-error.log*
 
 # editor and IDE paraphernalia
 .idea
+
+_tmp/
