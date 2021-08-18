@@ -34,11 +34,11 @@ title:  实践案例-理想汽车
 详细过程如下:
 
 ## 平台的功能定制
-理想汽车的平台工程师通过以下步骤完成方案中所涉及的能力,以向终端用户透出(都是通过编写 definition 的方式实现)。
+理想汽车的平台工程师通过以下步骤完成方案中所涉及的能力,并向开发者用户透出(都是通过编写 definition 的方式实现)。
 ### 1.定义组件
 
-- 编写 base-service 的组件定义使用 `deployment` 作为工作负载,并向终端用户透出 `image` 和 `cluster` 字段(如下)
-- 编写 proxy-service 的组件定义使用 `argo rollout` 作为工作负载，并同样向终端用户透出 `image` 和 `cluster` 字段(如下)
+- 编写 base-service 的组件定义，使用 `deployment` 作为工作负载，并向终端用户透出参数 `image` 和 `cluster`（如下），也就是说终端用户以后在发布时只需要关注镜像以及部署在哪个集群
+- 编写 proxy-service 的组件定义，使用 `argo rollout` 作为工作负载，并同样向终端用户透出参数 `image` 和 `cluster` (如下)
 
 ```
 apiVersion: core.oam.dev/v1beta1
@@ -329,6 +329,9 @@ spec:
 
 编写用于负载均衡的运维特征的定义(如下)，其通过生成 kubernetes 中的原生资源 `service` 和 `ingress` 实现负载均衡。
 
+
+向终端用户透出的参数包括 domain 和 http ，其中 domain 可以指定域名，http 用来设定路由，具体将部署服务的端口映射为不同的url path
+
 ```
 apiVersion: core.oam.dev/v1beta1
 kind: TraitDefinition
@@ -383,9 +386,9 @@ spec:
 
 ### 3.定义工作流的步骤
 
-- 定义 apply-base 工作流步骤: 完成部署 base-server，等待组件成功启动后，往注册中心注册信息
-- 定义 apply-helm 工作流步骤: 完成部署 redis helm chart，并等待redis成功启动
-- 定义 apply-proxy 工作流步骤: 完成部署 proxy-server，并等待组件成功启动
+- 定义 apply-base 工作流步骤: 完成部署 base-server，等待组件成功启动后，往注册中心注册信息。透出参数为 component ，也就是终端用户在流水线中使用步骤 apply-base 时只需要指定组件名称
+- 定义 apply-helm 工作流步骤: 完成部署 redis helm chart，并等待redis成功启动。透出参数为 component ，也就是终端用户在流水线中使用步骤 apply-helm 时只需要指定组件名称
+- 定义 apply-proxy 工作流步骤: 完成部署 proxy-server，并等待组件成功启动。透出参数为 component 和 backendIP，其中 component 为组件名称，backendIP 为 proxy-server服务依赖组件的IP
 ```
 apiVersion: core.oam.dev/v1beta1
 kind: WorkflowStepDefinition
@@ -488,10 +491,11 @@ spec:
 
 
 ### 用户使用
-理想汽车的开发工程师接下来就可以使用 application 完成应用的发布(例子如下):
+理想汽车的开发工程师接下来就可以使用 application 完成应用的发布
 
 
-开发工程师直接使用平台工程师在 KubeVela 上定制的通用能力，简单完成应用部署计划的编写。并通过workflow的数据传递机制 input/output ,完成 base-server 的 clusterIP 传递给 proxy-server。
+开发工程师可以直接使用上面平台工程师在 KubeVela 上定制的通用能力，轻松完成应用部署计划的编写
+> 在下面例子中通过workflow的数据传递机制 input/output ,完成 base-server 的 clusterIP 传递给 proxy-server。
 
 ```
 apiVersion: core.oam.dev/v1beta1
