@@ -4,6 +4,7 @@ title: Workflow Context
 
 When defining the CUE template of the WorkflowStepDefinition,
 you can use the `context` to get metadata of the Application.
+
 For example:
 
 ```yaml
@@ -25,7 +26,6 @@ cue:
         }
     }
 ```
-
 
 When defining the CUE template of the WorkflowStepDefinition,
 you can use the `context` to get metadata of the Application.

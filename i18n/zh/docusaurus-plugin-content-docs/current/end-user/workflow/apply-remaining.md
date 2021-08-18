@@ -45,7 +45,7 @@ spec:
               # skipApplyWorkload 表明是否需要跳过组件的部署
               skipApplyWorkload: false
               # skipAllTraits 表明是否需要跳过所有运维特征的部署
-              # 如果这个参数值为 True，将会忽略 
+              # 如果这个参数值为 True，将会忽略 skipApplyTraits
               skipAllTraits: false
               # skipApplyTraits 指定了需要跳过部署的运维特征
               skipApplyTraits:

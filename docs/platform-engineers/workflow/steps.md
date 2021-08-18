@@ -27,7 +27,7 @@ spec:
 The platform admin prepares the WorkflowStepDefinitions for developers to use.
 Basically the Definition provides the templated process to automate operation tasks.
 This hides the complexities and exposes only high-level parameters to simplify user experience.
-Here's an exmaple of a Definition:
+Here's an example of a Definition:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -47,7 +47,7 @@ spec:
         component: op.#Load & {
            component: parameter.component
         }
-        // apply workload to kubernetes cluster
+        // apply workload to Kubernetes cluster
         apply: op.#ApplyComponent & {
            component: parameter.component
         }

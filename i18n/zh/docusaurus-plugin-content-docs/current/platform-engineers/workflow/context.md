@@ -30,7 +30,7 @@ spec:
       }
 ```
 
-当我们部署下面 Application:
+当我们部署如下的 Application 时:
 
 ```yaml
 kind: Application
