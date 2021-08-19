@@ -116,7 +116,7 @@ spec:
 
 `TraitDefinition` 对象可以读取特定 `ComponentDefinition` 对象生成的 API 资源（渲染自 `output` 和 `outputs`）。
 
->  KubVela 保证了 `ComponentDefinition` 一定会在 `TraitDefinition` 之前渲染
+>  KubeVela 保证了 `ComponentDefinition` 一定会在 `TraitDefinition` 之前渲染
 
 具体来说，`context.output` 字段包含了所有渲染后的工作负载 API 资源，然后 `context.outputs.<xx>` 则包含渲染后的其它类型 API 资源。
 
