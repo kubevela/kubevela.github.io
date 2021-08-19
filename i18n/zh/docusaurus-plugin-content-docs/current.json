@@ -119,6 +119,10 @@
     "message": "绑定运维特征",
     "description": "The label for category Traits in sidebar docs"
   },
+  "sidebar.docs.category.Policies": {
+    "message": "设定应用策略",
+    "description": "The label for category Policies in sidebar docs"
+  },
   "sidebar.docs.category.Case Studies": {
     "message": "实践案例",
     "description": "The label for category case studies in sidebar docs"

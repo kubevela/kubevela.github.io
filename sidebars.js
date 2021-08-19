@@ -77,6 +77,11 @@ module.exports = {
           ]
         },
         {
+          'Policies': [
+              'end-user/policies/envbinding'
+          ]
+        },
+        {
           'Debugging': [
             'end-user/debug/health',
             'end-user/debug/monitoring',
