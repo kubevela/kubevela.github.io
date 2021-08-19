@@ -491,7 +491,7 @@ template: {
                 apiVersion: "v1"
                 kind:       "Service"
         }
-        parameters: {}
+        parameter: {}
 
 }
 ```
@@ -560,7 +560,7 @@ spec:
                 apiVersion: "v1"
                 kind:       "Service"
         }
-        parameters: {}
+        parameter: {}
   workload:
     definition:
       apiVersion: apps/v1
