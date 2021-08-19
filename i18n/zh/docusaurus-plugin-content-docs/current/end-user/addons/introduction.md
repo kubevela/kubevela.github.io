@@ -1,5 +1,5 @@
 ---
-title:  系统插件
+title:  插件系统介绍
 ---
 
 本节会介绍如何使用 KubeVela 的默认系统插件（Addon）
