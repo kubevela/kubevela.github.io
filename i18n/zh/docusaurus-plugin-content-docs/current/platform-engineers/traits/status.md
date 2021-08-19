@@ -2,34 +2,31 @@
 title:  状态回写
 ---
 
-This documentation will explain how to achieve status write back by using CUE templates in definition objects.
+本文档将为你讲解，如何通过 CUE 模版在定义对象时实现状态回写。
 
-## Health Check
+## 健康检查
 
-The spec of health check is `spec.status.healthPolicy`, they are the same for both Workload Type and Trait.
+不管是组件定义中，还是运维特征定义中，健康检查对应的配置项都是 `spec.status.healthPolicy`。如果没有定义，它的值默认是 `true`。
 
-If not defined, the health result will always be `true`.
+在 CUE 里的关键词是 `isHealth`，CUE 表达式结果必须是 `bool` 类型。
+KubeVela 运行时会一直检查 CUE 表达式，直至其状态显示为健康。每次控制器都会获取所有的 Kubernetes 资源，并将他们填充到 context 字段中。
 
-The keyword in CUE is `isHealth`, the result of CUE expression must be `bool` type.
-KubeVela runtime will evaluate the CUE expression periodically until it becomes healthy. Every time the controller will get all the Kubernetes resources and fill them into the context field.
-
-So the context will contain following information:
+所以 context 字段会包含如下信息:
 
 ```cue
 context:{
   name: <component name>
   appName: <app name>
-  output: <K8s workload resource>
+  output: <Kubernetes workload resource>
   outputs: {
-    <resource1>: <K8s trait resource1>
-    <resource2>: <K8s trait resource2>
+    <resource1>: <Kubernetes trait resource1>
+    <resource2>: <Kubernetes trait resource2>
   }
 }
 ```
+`Trait` 对象，没有 `context.output` 这个字段，其它字段相同。
 
-Trait will not have the `context.output`, other fields are the same.
-
-The example of health check likes below:
+我们看看健康检查的例子：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -51,9 +48,7 @@ spec:
    ...
 ```
 
-> Please refer to [this doc](https://github.com/oam-dev/kubevela/blob/master/docs/examples/app-with-status/template.yaml) for the complete example.
-
-The health check result will be recorded into the `Application` resource.
+健康检查的结果将会记录到 `Application` 对象中。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -88,33 +83,31 @@ status:
   status: running
 ```
 
-## Custom Status
+## 自定义状态
 
-The spec of custom status is `spec.status.customStatus`, they are the same for both Workload Type and Trait.
+不管是组件定义中，还是运维特征定义中，自定义状态对应的配置项都是 `spec.status.customStatus`。
 
-The keyword in CUE is `message`, the result of CUE expression must be `string` type.
+在 CUE 中的关键词是 `message`。同时，CUE 表达式的结果必须是 `string` 类型。
 
-The custom status has the same mechanism with health check.
-Application CRD controller will evaluate the CUE expression after the health check succeed.
+自定义状态和健康检查的原理一致。`Application` 对象的 CRD 控制器都会检查 CUE 表达式，直至显示健康通过。
 
-The context will contain following information:
+context 字段包含如下信息:
 
 ```cue
 context:{
   name: <component name>
   appName: <app name>
-  output: <K8s workload resource>
+  output: <Kubernetes workload resource>
   outputs: {
-    <resource1>: <K8s trait resource1>
-    <resource2>: <K8s trait resource2>
+    <resource1>: <Kubernetes trait resource1>
+    <resource2>: <Kubernetes trait resource2>
   }
 }
 ```
 
-Trait will not have the `context.output`, other fields are the same.
+`Trait` 对象不会有 `context.output` 这个字段, 其它字段一致.
 
-
-Please refer to [this doc](https://github.com/oam-dev/kubevela/blob/master/docs/examples/app-with-status/template.yaml) for the complete example.
+查看示例：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
