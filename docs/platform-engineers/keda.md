@@ -2,8 +2,6 @@
 title:  KEDA as Autoscaling Trait
 ---
 
-// This doc is deprecated.
-
 > Before continue, make sure you have learned about the concepts of [Definition Objects](definition-and-templates) and [Defining Traits with CUE]((./traits/customize-trait) section.
 
 In the following tutorial, you will learn to add [KEDA](https://keda.sh/) as a new autoscaling trait to your KubeVela based platform.
@@ -100,7 +98,7 @@ schematic:
 
 This is a CUE based template which only exposes `type` and `value` as trait properties for user to set.
 
-<!-- > Please check the [Defining Trait with CUE](traits/trait) section for more details regarding to CUE templating. -->
+> Please check the [Defining Trait with CUE](./traits/customize-trait) section for more details regarding to CUE templating.
 
 ## Step 2: Register New Trait to KubeVela
 
