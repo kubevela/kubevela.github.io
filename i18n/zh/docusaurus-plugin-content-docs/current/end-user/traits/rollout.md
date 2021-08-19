@@ -155,7 +155,7 @@ spec:
             rolloutBatches:
               - replicas: 2
               - replicas: 3
-EOF              
+EOF
 ```
 
 查看灰度发布运维特征，可见已经升级成功。
@@ -238,7 +238,7 @@ spec:
             rolloutBatches:
               - replicas: 1
               - replicas: 1
-EOF              
+EOF
 ```
 这个灰度发布运维特征的表示，从刚才的5个副本个数扩容至目标的7个副本，第一个批次扩容1个，第二个批次再扩容1个。
 
@@ -294,9 +294,9 @@ express-server-v1   3/3     3            3           5m
 
 ### cloneset-service 的滚动升级
 
-启用 kruise 的扩展插件。
+启用 kruise 的[扩展插件](../../platform-engineers/addon)。
 ```shell
-$ kubectl addon enable kruise
+$ vela addon enable kruise
 ```
 
 查看组件类型
@@ -365,7 +365,7 @@ cat <<EOF | kubectl apply -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: rollout-trait-test
+  name: rollout-trait-test-cloneset
 spec:
   components:
     - name: cloneset-server
