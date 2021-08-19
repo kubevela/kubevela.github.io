@@ -2,9 +2,9 @@
 title:  Terraform 组件
 ---
 
-在自定义组件时，集成云资源往往是最频繁使用的一类需求。不管你要集成阿里云、AWS 还是 GCP 甚至 VMWare，我们推荐你使用开源工具 Terraform 来完成集成操作。
+对云资源的集成需求往往是最频繁出现，比如你可能希望数据库、中间件等服务使用阿里云、AWS 等云厂商的，以获得生产级别的可用性并免去运维的麻烦。Terraform 是目前业内支持云资源最广泛也最受欢迎的组件，KubeVela 对 Terraform 进行了额外的支持，使得用户可以通过 Kubernetes CRD 的方式配合 Terraform 使用任意的云资源。
 
-本章节，将专门为你介绍这类需求如何开发。我们以阿里云的对象存储(OSS)，作为例子来进行讲解。
+本章节，将专门为你介绍如何通过 KubeVela 以及 Terraform 来实现自定义的云资源组件。我们以阿里云的对象存储(OSS)，作为例子来进行讲解。
 
 它的大致流程如下：
 1. 熟悉各云服务商的鉴权机制，准备相关的 `secret` 和 `token` 等必要信息。
@@ -150,7 +150,7 @@ Bucket Number is: 1
 ### 自定义 OSS 云资源组件
 当前面的步骤全部完成之后，最后我们只需要继续使用组件定义，将这个 `alibaba-oss` 引入，作为后续应用部署计划的内置能力即可。
 
-```
+```yaml
 apiVersion: core.oam.dev/v1alpha2
 kind: ComponentDefinition
 metadata:

@@ -2,11 +2,11 @@
 title:  基础
 ---
 
-本章节将详细介绍 CUE 的基础知识，帮助你更好地使用 KubeVela。
+CUE 是 KubeVela 的核心依赖，也是用户实现自定义扩展的主要方式。本章节将详细介绍 CUE 的基础知识，帮助你更好地使用 KubeVela。
 
 ## 概述
 
-KubeVela 将 CUE 作为抽象层的主要工具的原因如下：
+KubeVela 将 CUE 作为应用交付核心依赖和扩展方式的原因如下：：
 
 - **CUE 本身就是为大规模配置而设计。** CUE 能够感知非常复杂的配置文件，并且能够安全地更改可修改配置中成千上万个对象的值。这非常符合 KubeVela 的目标，即以可编程的方式，去定义和交付生产级别的应用程序。
 -  **CUE 支持一流的代码生成和自动化。** CUE 原生支持与现有工具以及工作流进行集成，反观其他工具则需要自定义复杂的方案才能实现。例如，需要手动使用 Go 代码生成 OpenAPI 模式。KubeVela 也是依赖 CUE 该特性进行构建开发工具和 GUI 界面的。
@@ -18,7 +18,7 @@ KubeVela 将 CUE 作为抽象层的主要工具的原因如下：
 
 请确保你的环境中已经安装如下命令行：
 * [`cue` >=v0.2.2](https://cuelang.org/docs/install/)
-* [`vela` >v1.0.0](../../getting-started/quick-install#3-get-kubevela-cli)
+* [`vela` >v1.0.0](../../getting-started/quick-install#3-get-kubevela-cli) 目前 KubeVela 暂时只支持 CUE v0.2.2 版本，将在后续迭代中升级支持新的 CUE 版本。
 
 ## 学习 CUE 命令行
 
@@ -51,7 +51,7 @@ e: string
   
   该命令不仅可以格式化 CUE 文件，还能提示错误的模型，相当好用的命令。
     ```shell
-    $ cue fmt first.cue
+    cue fmt first.cue
     ```
 
 * 如何校验模型。除了 `cue fmt`，你还可以使用 `cue vet` 来校验模型。

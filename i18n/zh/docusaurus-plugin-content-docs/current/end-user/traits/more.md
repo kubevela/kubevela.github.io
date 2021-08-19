@@ -50,3 +50,8 @@ init-container   ["webservice","worker"]   add an init container with a shared v
 ```
 
 默认情况下，这两个命令将检索功能来自 KubeVela 维护的 [repo](https://registry.kubevela.net)。
+
+## 2. 自己设计
+
+查看 [本文档](../../platform-engineers/traits/custom-trait) 了解如何在
+KubeVela 平台。
