@@ -88,8 +88,8 @@ module.exports = {
         },
         {
           'Debugging': [
-            'end-user/debug/health',
-            'end-user/debug/monitoring',
+            // 'end-user/debug/health',
+            // 'end-user/debug/monitoring', 这部分要和可观测合并
             'end-user/debug/live-diff',
           ]
         },
@@ -123,7 +123,7 @@ module.exports = {
         {
           'Learning CUE': [
             'platform-engineers/cue/basic',
-            'platform-engineers/cue/advanced',
+            // 'platform-engineers/cue/advanced', 暂时隐藏，来不及随 1.1 发布，随后补充
           ]
         },
         {

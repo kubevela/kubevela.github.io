@@ -348,3 +348,48 @@ $ kubectl get svc
 NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
 hello-world-trait-7bdcff98f7   ClusterIP   <your ip>       <none>        8000/TCP   32s
 ```
+
+## 使用 CUE `Context`
+
+KubeVela 让你可以在运行时，通过 `context` 关键字来引用一些信息。
+
+最常用的就是应用部署计划的名称 `context.appName` 和组件的名称 `context.name`。
+
+```cue
+context: {
+  appName: string
+  name: string
+}
+```
+
+举例来说，假设你在实现一个组件定义，希望将容器的名称填充为组件的名称。那么这样做：
+
+```cue
+parameter: {
+    image: string
+}
+output: {
+  ...
+    spec: {
+        containers: [{
+            name:  context.name
+            image: parameter.image
+        }]
+    }
+  ...
+}
+```
+
+> 注意，`context` 的信息会在资源部署到目标集群之前就自动注入了
+
+### CUE `context` 的配置项
+
+| Context 变量名  | 说明 |
+| :--: | :---------: |
+| `context.appRevision` | 应用部署计划的版本 |
+| `context.appRevisionNum` | 应用部署计划的版本号(`int` 类型), 比如说如果 `context.appRevision` 是 `app-v1` 的话，`context.appRevisionNum` 会是 `1` |
+| `context.appName` | 应用部署计划的名称 |
+| `context.name` | 组件的名称 |
+| `context.namespace` | 应用部署计划的命名空间 |
+| `context.output` | 组件中渲染的工作负载 API 资源，这通常用在运维特征里 |
+| `context.outputs.<resourceName>` | 组件中渲染的运维特征 API 资源，这通常用在运维特征里 |
