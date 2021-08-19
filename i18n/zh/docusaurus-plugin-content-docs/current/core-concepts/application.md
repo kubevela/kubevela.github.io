@@ -75,7 +75,7 @@ worker     	vela-system	deployments.apps                     	Describes long-run
 
 作为用户的你，可以继续使用 [CUE 组件](../end-user/components/cue)、[Helm 组件](../end-user/components/helm)、[Kustomize 组件](../end-user/components/kustomize)和[云服务组件](../end-user/components/cloud-services/terraform/rds)来实现你需要的任何组件类型。
 
-同时作为管理员的你，也可以使用 [自定义组件](../platform-engineers/components/component-cue)、[Terraform 组件](../platform-engineers/components/component-terraform) 来自定义你的用户所需要的任何组件类型。
+同时作为管理员的你，也可以使用 [自定义组件](../platform-engineers/components/custom-component)、[Terraform 组件](../platform-engineers/components/component-terraform) 来自定义你的用户所需要的任何组件类型。
 
 ### Traits 运维特征
 
