@@ -1,6 +1,6 @@
 ---
-
 title:  How-to
+---
 
 In this section we will introduce how to define a trait.
 
