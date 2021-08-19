@@ -97,7 +97,7 @@ schematic:
 
 这是一个基于 CUE 的模板，仅开放 `type` 和 `value` 作为 trait 的属性供用户设置。
 
-> 请查看 [Defining Trait with CUE](./traits/custom-trait) 部分，以获取有关 CUE 模板的更多详细信息。
+> 请查看 [Defining Trait with CUE](./traits/customize-trait) 部分，以获取有关 CUE 模板的更多详细信息。
 
 ## 步骤 2: 向 KubeVela 注册新的 Trait  
 
