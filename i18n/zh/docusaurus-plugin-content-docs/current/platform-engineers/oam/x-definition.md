@@ -203,7 +203,7 @@ spec:
 
 * 运维特征能够适配的工作负载名称列表（`.spec.appliesToWorkloads`）,可缺省字段，字符串数组类型，申明这个运维特征可以用于的工作负载类型，填写的是工作负载的 CRD 名称，格式为 `<resources>.<api-group>`
 * 与该运维特征冲突的其他运维特征名称列表（`.spec.conflictsWith`）,可缺省字段，字符串数组类型，申明这个运维特征与哪些运维特征冲突，填写的是运维特征名称的列表。
-* 特征描述（对应`.spec.schematic`）字段定义了具体的运维动作。目前主要通过 [`CUE`](../traits/trait) 来实现，同时也包含一系列诸如[`patch-trait`](../traits/advanced.md)这样的高级用法。
+* 特征描述（对应`.spec.schematic`）字段定义了具体的运维动作。目前主要通过 [`CUE`](../traits/customize-trait) 来实现，同时也包含一系列诸如[`patch-trait`](../traits/advanced.md)这样的高级用法。
 * 运维特征对应的 Kubernetes 资源定义（`.spec.definition`字段），可缺省字段，如果运维能力通过 Kubernetes 的 CRD 方式提供可以填写，其中 `apiVersion` 和 `kind` 分别描述了背后对应的 Kubernetes 资源组和资源类型。
 * 运维能力中对于工作负载对象的引用字段路径（`.spec.workloadRefPath`字段），可缺省字段，运维能力中如果涉及到工作负载的引用，可以填写这样一个路径地址（如操作弹性扩缩容的 [HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/)对象，就可以填写`spec.scaleTargetRef`），然后 KubeVela 会自动将工作负载的实例化引用注入到运维能力的实例对象中。
 * 运维能力的参数更新会不会引起底层资源（pod）重启（`.spec.podDisruptive`字段），可缺省字段，bool 类型，主要用于向用户标识 trait 的更新会不会导致底层资源（pod）的重启。这个标识通常可以提醒用户，改动这样一个trait可能应该再结合一个灰度发布，以免大量资源重启引入服务不可用和其他风险。

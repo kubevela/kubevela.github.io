@@ -96,7 +96,7 @@ sidecar    	vela-system	deployments.apps 	              	true          	Inject a
 
 作为用户的你，可以继续阅读用户手册里的 [绑定运维特征](../end-user/traits/ingress) ，具体查看如何完成各种运维特征的开发。
 
-同时作为管理员的你，也可以继续使用 [自定义运维特征](../platform-engineers/traits/trait) 为你的用户，自定义任何需要的运维特征类型。
+同时作为管理员的你，也可以继续使用 [自定义运维特征](../platform-engineers/traits/customize-trait) 为你的用户，自定义任何需要的运维特征类型。
 
 ## 下一步
 
