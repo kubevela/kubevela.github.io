@@ -10,7 +10,7 @@ title: 可观测性 Observability
 
 KubeVela 可观测能力是通过 [Grafana](https://grafana.com/) 展示的，提供系统级别和应用级别的数据监控。
 
-### KubeVela Core 系统级别可观测性
+### 第一种用法：KubeVela Core 系统级别可观测性
 
 - KubeVela Core 资源使用情况监控
 
@@ -22,7 +22,7 @@ KubeVela 可观测能力是通过 [Grafana](https://grafana.com/) 展示的，�
 
 ![](../../resources/observability-system-level-summary-of-source-usages-chart.png)
 
-- KubeVela Core 日志监控
+- 第二种用法：KubeVela Core 日志监控
 
 1）日志统计
 
