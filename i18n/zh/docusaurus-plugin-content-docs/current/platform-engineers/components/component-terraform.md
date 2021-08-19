@@ -128,7 +128,7 @@ status:
   state: provisioned
 ```
 
-可以看到 OSS bucket 已经被分配出来。
+利用 [ossutil](https://help.aliyun.com/document_detail/50452.html) 可以看到 OSS bucket 已经被创建出来。
 
 ```
 $ ossutil ls oss://
