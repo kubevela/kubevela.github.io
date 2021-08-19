@@ -92,6 +92,7 @@ module.exports = {
       items: [
         'case-studies/workflow-edge-computing', // 待完成
         'case-studies/li-auto-inc',
+        'case-studies/workflow-with-ocm',
       ],
     },
     {
