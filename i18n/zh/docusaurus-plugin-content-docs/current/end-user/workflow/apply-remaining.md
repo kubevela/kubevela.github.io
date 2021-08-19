@@ -2,7 +2,7 @@
 title:  部署剩余资源
 ---
 
-在一些情况下，我们希望一键部署一组资源，但跳过不想部署的，再一个个指定部署又太过繁琐。KubeVela 提供了一个 `apply-remaining` 类型的工作流步骤，可以使用户方便的一键过滤不想要的资源，并部署剩余组件。
+在一些情况下，我们希望先部署一个组件，等待其成功运行后，再一键部署剩余组件。KubeVela 提供了一个 `apply-remaining` 类型的工作流步骤，可以使用户方便的一键过滤不想要的资源，并部署剩余组件。
 本节将介绍如何在工作流中通过 `apply-remaining` 部署剩余资源。
 
 ## 如何使用
@@ -45,6 +45,13 @@ spec:
       port: 8000
   workflow:
     steps:
+      - name: first-server
+        type: apply-component
+        properties:
+          component: express-server
+      - name: manual-approval
+        # 工作流内置 suspend 类型的任务，用于暂停工作流
+        type: suspend
       - name: remaining-server
         # 指定步骤类型
         type: apply-remaining
@@ -61,21 +68,38 @@ spec:
 
 ## 期望结果
 
-查看集群中组件的状态：
+查看集群中组件的状态，当组件运行成功后，再继续工作流：
+
+```shell
+$ kubectl get deployment
+
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+express-server   0/1     1            0           5s
+
+$ kubectl get ingress
+
+NAME             CLASS    HOSTS                 ADDRESS   PORTS   AGE
+express-server   <none>   testsvc.example.com             80      47s
+```
+
+继续该工作流：
+
+```
+vela workflow resume first-vela-workflow
+```
+
+重新查看集群中组件的状态：
 
 ```shell
 $ kubectl get deployment
 
 NAME              READY   UP-TO-DATE   AVAILABLE   AGE
-express-server2   1/1     1            1           5s
-express-server3   1/1     1            1           5s
-express-server4   1/1     1            1           4s
-
-$ kubectl get ingress
-
-No resources found in default namespace.
+express-server    1/1     1            1           110s
+express-server2   1/1     1            1           6s
+express-server3   1/1     1            1           6s
+express-server4   1/1     1            1           6s
 ```
 
-可以看到，第一个组件 `express-server` 及其运维特征 `ingress` 都被跳过了部署，而其他三个组件都被部署到了集群中。
+可以看到，所有的组件都被部署到了集群中，且没有被重复部署。
 
 通过填写 `apply-remaining` 中提供的参数，可以使用户方便的过滤部署资源。
