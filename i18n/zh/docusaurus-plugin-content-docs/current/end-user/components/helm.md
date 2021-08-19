@@ -8,7 +8,7 @@ title:  Helm 组件
 
 ## 开始之前
 
-helm 类型组件开启 [fluxcd](../../reference/addon/fluxcd.md) 插件即可使用。
+helm 类型组件开启 [fluxcd](../../reference/addon/fluxcd) 插件即可使用。
 
 ## 示例
 

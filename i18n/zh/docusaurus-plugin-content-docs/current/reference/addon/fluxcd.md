@@ -4,7 +4,7 @@ title:  系统插件：fluxcd
 
 ## 开始之前
 
-确保你已经了解过什么是[系统插件](../../platform-engineers/addon.md)（Addon）
+确保你已经了解过什么是[系统插件](../../platform-engineers/addon)（Addon）
 
 ## 插件概览
 
@@ -16,8 +16,8 @@ title:  系统插件：fluxcd
 
 2. 随插件安装的将有如下两个组件定义，其各自的使用方法详见其各自的文档，更多 Flux 能力即将成为 KubeVela 的模块定义。
 
-    1. [helm](../../end-user/components/helm.md)：帮助交付 helm chart 类型的组件
-    2. [kustomize](../../end-user/components/kustomize.md)：帮助交付 kustomize 类型的组件
+    1. [helm](../../end-user/components/helm)：帮助交付 helm chart 类型的组件
+    2. [kustomize](../../end-user/components/kustomize)：帮助交付 kustomize 类型的组件
 
 ## 依赖
 

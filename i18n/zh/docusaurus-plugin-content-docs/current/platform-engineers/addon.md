@@ -14,7 +14,7 @@ KubeVela 默认是一个应用管理和交付的控制平面，同时它也支�
 
 ## 开始之前
 
-系统插件可以通过 KubeVela 的命令行工具一键安装，请确保你已经安装了 [vela CLI](../getting-started/quick-install.mdx)。
+系统插件可以通过 KubeVela 的命令行工具一键安装，请确保你已经安装了 [vela CLI](../getting-started/quick-install)。
 
 ## 查看默认的系统插件
 

@@ -4,7 +4,7 @@ title:  系统插件：observability
 
 ## 开始之前
 
-确保你已经了解过什么是[系统插件](../../platform-engineers/addon.md)（Addon）
+确保你已经了解过什么是[系统插件](../../platform-engineers/addon)（Addon）
 
 ## 插件概览
 
@@ -12,7 +12,7 @@ observability 是一套监控解决方案。为 KubeVela core 提供系统级别
 
 ## 插件内容及使用方法
 
-详见[可观测性](../../end-user/addons/observability.md)
+详见可观测性
 
 ## 依赖
 
