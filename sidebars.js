@@ -140,7 +140,7 @@ module.exports = {
           type: 'category',
           label: 'Traits System',
           items: [
-            'platform-engineers/traits/trait',
+            'platform-engineers/traits/customize-trait',
             'platform-engineers/traits/patch-trait',
             'platform-engineers/traits/status',
             'platform-engineers/traits/advanced',

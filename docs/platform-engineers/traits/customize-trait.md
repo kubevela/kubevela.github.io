@@ -1,5 +1,5 @@
 ---
-title:  How-to
+title:  自定义运维特征
 ---
 
 In this section we will introduce how to define a trait.
@@ -17,6 +17,8 @@ spec:
   definitionRef:
     name: ingresses.networking.k8s.io
 ```
+
+
 Let's attach this trait to a component instance in `Application`:
 
 ```yaml

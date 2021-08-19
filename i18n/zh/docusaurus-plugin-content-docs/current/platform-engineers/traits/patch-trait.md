@@ -2,13 +2,15 @@
 title:  补丁型特征
 ---
 
-**Patch** is a very common pattern of trait definitions, i.e. the app operators can amend/patch attributes to the component instance (normally the workload) to enable certain operational features such as sidecar or node affinity rules (and this should be done **before** the resources applied to target cluster).
+在自定义运维特征中，使用补丁型特征是一种比较常用的形式。
 
-This pattern is extremely useful when the component definition is provided by third-party component provider (e.g. software distributor) so app operators do not have privilege to change its template.
+它让我们可以修改、补丁某些属性给组件对象（一般是工作负载）来完成特定操作，比如更新 `sidecar` 和节点亲和性（node affinity）的规则（并且，这个操作一定是在资源往集群部署前就已经生效）。
 
-> Note that even patch trait itself is defined by CUE, it can patch any component regardless how its schematic is defined (i.e. CUE, Helm, and any other supported schematic approaches).
+当我们的组件是从第三方提供并自定义而来的时候，由于它们的模版往往是固定不可变的，所以能使用补丁型特征就显得尤为有用了。
 
-Below is an example for `node-affinity` trait:
+> 尽管运维特征是由 CUE 来定义，它能打补丁的组件类型并不限，不管是来自 CUE、Helm 还是其余支持的模版格式
+
+下面，我们通过一个节点亲和性（node affinity）的例子，讲解如何使用补丁型特征：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -54,15 +56,11 @@ spec:
         }
 ```
 
-The patch trait above assumes the target component instance have `spec.template.spec.affinity` field.
-Hence, we need to use `appliesToWorkloads` to enforce the trait only applies to those workload types have this field.
+具体来说，我们上面的这个补丁型特征，假定了使用它的组件对象将会使用 `spec.template.spec.affinity` 这个字段。因此，我们需要用 `appliesToWorkloads` 来指明，让当前运维特征被应用到拥有这个字段的对应工作负载实例上。
 
-Another important field is `podDisruptive`, this patch trait will patch to the pod template field,
-so changes on any field of this trait will cause the pod to restart, We should add `podDisruptive` and make it to be true
-to tell users that applying this trait will cause the pod to restart.
+另一个重要的字段是 `podDisruptive`，这个补丁型特征将修改 Pod 模板字段，因此对该运维特征的任何字段进行更改，都会导致 Pod 重启。我们应该增加 `podDisruptive` 并且设置它的值为 true，以此告诉用户这个运维特征生效后将导致 Pod 重新启动。
 
-
-Now the users could declare they want to add node affinity rules to the component instance as below:
+现在用户只需要，声明他们希望增加一个节点亲和性的规则到组件实例当中：
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha2
@@ -86,27 +84,27 @@ spec:
               server-owner: "old-owner"
 ```
 
-### Known Limitations
+### 待解决的短板
 
-By default, patch trait in KubeVela leverages the CUE `merge` operation. It has following known constraints though:
+默认来说，补丁型特征是通过 CUE 的 `merge` 操作来实现的。它有以下限制：
 
-- Can not handle conflicts.
-  - For example, if a component instance already been set with value `replicas=5`, then any patch trait to patch `replicas` field will fail, a.k.a you should not expose `replicas` field in its component definition schematic.
-- Array list in the patch will be merged following the order of index. It can not handle the duplication of the array list members. This could be fixed by another feature below.
+- 不能处理有冲突的字段名
+  - 比方说，在一个组件实例中已经设置过这样的值 `replicas=5`，那一旦有运维特征实例，尝试给 `replicas` 字段的值打补丁就会失败。所以我们建议你提前规划好，不要在组件和运维特征之间使用重复的字段名。
+- 数组列表被补丁时，会按索引顺序进行合并。如果数组里出现了重复的值，将导致问题。为了规避这个风险，请查询后面的解决方案。
 
-### Strategy Patch
+### 策略补丁
 
-Strategy Patch is effective by adding annotation, and supports the following two ways
+策略补丁，通过增加注解（annotation）而生效，并支持如下两种模式。
 
-> Note that this is not a standard CUE feature, KubeVela enhanced CUE in this case.
+> 请注意，这里开始并不是 CUE 官方提供的功能, 而是 KubeVela 扩展开发而来
 
-#### 1. With `+patchKey=<key_name>` annotation
+#### 1. 使用 `+patchKey=<key_name>` 注解
 
-This is useful for patching array list, merging logic of two array lists will not follow the CUE behavior. Instead, it will treat the list as object and use a strategy merge approach:
- - if a duplicated key is found, the patch data will be merge with the existing values; 
- - if no duplication found, the patch will append into the array list.
+这个注解，是给数组列表打补丁用的。它的执行方式也不遵循 CUE 官方的方式，而是将每一个数组列表视作对象，并执行如下的策略：
+ - 如果发现重复的键名，补丁数据会直接替换掉它的值
+ - 如果没有重复键名，补丁则会自动附加这些数据
 
-The example of strategy patch trait with 'patchKey' will like below:
+下面来看看，一个使用 'patchKey' 的策略补丁：
  
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -132,10 +130,9 @@ spec:
         	command?: [...string]
         }
 ```
+在上述的这个例子中，我们定义了要 `patchKey` 的字段 `name`，是来自容器的参数键名。如果工作负载中并没有同名的容器，那么一个 sidecar 容器就会被加到 `spec.template.spec.containers` 数组列表中。如果工作负载中有重名的 `sidecar` 运维特征，则会执行 merge 操作而不是附加。
 
-In above example we defined `patchKey` is `name` which is the parameter key of container name. In this case, if the workload don't have the container with same name, it will be a sidecar container append into the `spec.template.spec.containers` array list. If the workload already has a container with the same name of this `sidecar` trait, then merge operation will happen instead of append (which leads to duplicated containers).
-
-If `patch` and `outputs` both exist in one trait definition, the `patch` operation will be handled first and then render the `outputs`. 
+如果 `patch` 和 `outputs` 同时存在于一个运维特征定义中，`patch` 会率先被执行然后再渲染 `outputs`。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -170,16 +167,15 @@ spec:
         	http: [string]: int
         }
 ```
+在上面这个运维特征定义中，我们将会把一个 `Service` 添加到给定的组件实例上。同时会先去给工作负载类型打上补丁数据，然后基于模版里的 `outputs` 渲染余下的资源。
 
-So the above trait which attaches a Service to given component instance will patch an corresponding label to the workload first and then render the Service resource based on template in `outputs`.
+#### 2. 使用 `+patchStrategy=retainkeys` 注解
 
-#### 2. With `+patchStrategy=retainkeys` annotation
+这个注解的策略，与 Kubernetes 官方的 [retainkeys](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-strategic-merge-patch-to-update-a-deployment-using-the-retainkeys-strategy) 策略类似。
 
-Similar to strategy [retainkeys](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-strategic-merge-patch-to-update-a-deployment-using-the-retainkeys-strategy) in K8s strategic merge patch
+在一些场景下，整个对象需要被一起替换掉，使用 `retainkeys` 就是最适合的办法。
 
-In some scenarios that the entire object needs to be replaced, retainkeys strategy is the best choice. the example as follows:
-
-Assume the Deployment is the base resource
+假定一个 `Deployment` 对象是这样编写的：
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -202,7 +198,8 @@ spec:
       - name: retainkeys-demo-ctr
         image: nginx
 ```
-Now want to replace rollingUpdate strategy with a new strategy, you can write the patch trait like below
+
+现在如果我们想替换掉 `rollingUpdate` 策略，你可以这样写：
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha2
@@ -221,7 +218,8 @@ spec:
            }
       }        
 ```
-Then the base resource becomes as follows
+
+这个 YAML 资源将变更为：
 
 ```yaml
 apiVersion: apps/v1
@@ -243,13 +241,13 @@ spec:
       - name: retainkeys-demo-ctr
         image: nginx
 ```
-## More Use Cases of Patch Trait
+## 更多补丁型特征的使用场景
 
-Patch trait is in general pretty useful to separate operational concerns from the component definition, here are some more examples.
+补丁型特征，针对组件层面做些整体操作时，非常有用。我们看看还可以满足哪些需求：
 
-### Add Labels
+### 增加标签
 
-For example, patch common label (virtual group) to the component instance.
+比如说，我们要给组件实例打上 `virtualgroup` 的通用标签。
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha2
@@ -283,7 +281,7 @@ spec:
         }
 ```
 
-Then it could be used like:
+然后这样用就可以了:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -297,9 +295,9 @@ spec:
           scope: "cluster"
 ```
 
-### Add Annotations
+### 增加注解
 
-Similar to common labels, you could also patch the component instance with annotations. The annotation value should be a JSON string.
+与通用标签类似，你也可以给组件实例打补丁，增加一些注解。注解的格式，必须是 JSON。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -331,11 +329,11 @@ spec:
         }
 ```
 
-### Add Pod Environments
+### 增加 Pod 环境变量
 
-Inject system environments into Pod is also very common use case.
+给 Pod 去注入环境变量也是非常常见的操作。
 
-> This case relies on strategy merge patch, so don't forget add `+patchKey=name` as below:
+> 这种使用方式依赖策略补丁而生效, 所以记得加上 `+patchKey=name`
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -372,11 +370,11 @@ spec:
         }
 ```
 
-### Inject `ServiceAccount` Based on External Auth Service
+### 基于外部鉴权服务注入 `ServiceAccount`
 
-In this example, the service account was dynamically requested from an authentication service and patched into the service.
+在这个场景下，service-account 是从一个鉴权服务中动态获取、再通过打补丁给到应用的。
 
-This example put UID token in HTTP header but you can also use request body if you prefer.
+我们这里展示的是，将 UID token 放进 `HTTP header` 的例子。你也可以用 `HTTP body` 来完成需求。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -416,13 +414,11 @@ spec:
         }
 ```
 
-The `processing.http` section is an advanced feature that allow trait definition to send a HTTP request during rendering the resource. Please refer to [Execute HTTP Request in Trait Definition](#Processing-Trait) section for more details.
+### 增加 `InitContainer`
 
-### Add `InitContainer`
+[`InitContainer`](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-initialization/#create-a-pod-that-has-an-init-container) 常用于预定义镜像内的操作，并且在承载应用的容器运行前就跑起来。
 
-[`InitContainer`](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-initialization/#create-a-pod-that-has-an-init-container) is useful to pre-define operations in an image and run it before app container.
-
-Below is an example:
+看看示例:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -480,7 +476,7 @@ spec:
         }
 ```
 
-The usage could be:
+用法像这样:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
