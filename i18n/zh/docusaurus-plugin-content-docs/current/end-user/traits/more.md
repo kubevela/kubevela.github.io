@@ -53,5 +53,5 @@ init-container   ["webservice","worker"]   add an init container with a shared v
 
 ## 2. 自己设计
 
-查看 [本文档](../../platform-engineers/traits/custom-trait) 了解如何在
+查看 [本文档](../../platform-engineers/traits/customize-trait) 了解如何在
 KubeVela 平台。
