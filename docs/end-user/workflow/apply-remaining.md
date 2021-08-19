@@ -2,7 +2,7 @@
 title:  Apply Remaining
 ---
 
-If we have applied some resources and do not want to specify the rest one by one, KubeVela provides the `apply-remaining` workflow step to filter out selected resources and apply remaining.
+If we want to apply one component first and then apply the rest of the components after the first one is running, KubeVela provides the `apply-remaining` workflow step to filter out selected resources and apply remaining.
 
 In this guide, you will learn how to apply remaining resources via `apply-remaining` in `Workflow`.
 
@@ -34,48 +34,73 @@ spec:
     properties:
       image: crccheck/hello-world
       port: 8000
+  - name: express-server3
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+  - name: express-server4
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
   workflow:
     steps:
-      - name: express-server
+      - name: first-server
+        type: apply-component
+        properties:
+          component: express-server
+      - name: manual-approval
+        # suspend is a built-in task of workflow used to suspend the workflow
+        type: suspend
+      - name: remaining-server
         # specify the workflow step type
         type: apply-remaining
         properties:
+          # specify the component that needs to be skipped
           exceptions:
             # specify the configuration of the component
             express-server:
               # skipApplyWorkload indicates whether to skip apply the workload resource
-              skipApplyWorkload: false
-              # skipAllTraits indicates to skip apply all resources of the traits
-              # if this is true, skipApplyTraits will be ignored
-              skipAllTraits: false
-              # skipApplyTraits specifies the names of the traits to skip apply
-              skipApplyTraits:
-                - ingress
-      - name: express-server2
-        type: apply-remaining
-        properties:
-          exceptions:
-            express-server:
               skipApplyWorkload: true
+              # skipAllTraits indicates to skip apply all resources of the traits
+              skipAllTraits: true
 ```
 
 ## Expected outcome
 
-Check the component status in cluster:
+Check the component status in cluster and resume the workflow after the component is running:
 
 ```shell
 $ kubectl get deployment
 
 NAME             READY   UP-TO-DATE   AVAILABLE   AGE
-express-server   1/1     1            1           3m28s
+express-server   0/1     1            0           5s
 
 $ kubectl get ingress
 
-No resources found in default namespace.
+NAME             CLASS    HOSTS                 ADDRESS   PORTS   AGE
+express-server   <none>   testsvc.example.com             80      47s
 ```
 
-We can see that the first component `express-server` has been applied to the cluster, but the trait named ingress has been skipped.
+Resume the workflow:
 
-But the second component `express-server2` hasn't been applied to cluster since it has been skipped. 
+```
+vela workflow resume first-vela-workflow
+```
+
+Recheck the component status:
+
+```shell
+$ kubectl get deployment
+
+NAME              READY   UP-TO-DATE   AVAILABLE   AGE
+express-server    1/1     1            1           110s
+express-server2   1/1     1            1           6s
+express-server3   1/1     1            1           6s
+express-server4   1/1     1            1           6s
+```
+
+We can see that all of the components has been applied to the cluster successfully. Besides, the first component `express-server` is not applied repeatedly.
 
 With `apply-remaining`, we can easily filter and apply resources by filling in the built-in parameters.

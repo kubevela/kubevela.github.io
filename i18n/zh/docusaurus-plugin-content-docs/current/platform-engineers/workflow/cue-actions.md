@@ -185,7 +185,6 @@ apply: op.#ApplyComponent & {
 - exceptions: 指明该操作需要排除掉的组件。
 - skipApplyWorkload: 是否跳过该组件 workload 资源的同步。
 - skipAllTraits: 是否跳过该组件所有辅助资源的同步。
-- skipApplyTraits: 数组类型，包含需要跳过的该组件中辅助资源对应的名称（定义中 outputs 涉及的到名字）。
 
 
 ```
@@ -195,11 +194,7 @@ apply: op.#ApplyComponent & {
       skipApplyWorkload: *true | bool
       
       // skipAllTraits 表明是否需要跳过所有运维特征的部署
-      // 如果这个参数值为 True，将会忽略 skipApplyTraits
       skipAllTraits: *true| bool
-
-      // skipApplyTraits 指定了需要跳过部署的运维特征
-      skipApplyTraits: [...string]
   }
 }  
 ```
