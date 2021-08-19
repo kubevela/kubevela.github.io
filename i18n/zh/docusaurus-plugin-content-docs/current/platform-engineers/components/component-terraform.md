@@ -12,19 +12,9 @@ title:  Terraform 组件
 3. KubeVela 通过 Terraform 控制器来拉起对应的云资源。
 
 
-### 安装 Terraform 控制器
+### 开启 Terraform 控制器
 
-从最新的 [发布列表](https://github.com/oam-dev/terraform-controller/releases) 里下载并安装，比如 `terraform-controller-chart-0.1.8.tgz`。
-
-```shell
-$ helm install terraform-controller terraform-controller-0.1.8.tgz
-NAME: terraform-controller
-LAST DEPLOYED: Mon Apr 26 15:55:35 2021
-NAMESPACE: default
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-```
+推荐你直接通过[系统插件（addon）](../addon)来开启 Terraform 控制器。
 
 ### 配置阿里云鉴权
 以下是阿里云的鉴权相关步骤，其它云服务商同理：
@@ -117,7 +107,9 @@ kind: Configuration
 metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"terraform.core.oam.dev/v1beta1","kind":"Configuration","metadata":{"annotations":{},"name":"alibaba-oss","namespace":"default"},"spec":{"JSON":"{\n  \"resource\": {\n    \"alicloud_oss_bucket\": {\n      \"bucket-acl\": {\n        \"bucket\": \"${var.bucket}\",\n        \"acl\": \"${var.acl}\"\n      }\n    }\n  },\n  \"output\": {\n    \"BUCKET_NAME\": {\n      \"value\": \"${alicloud_oss_bucket.bucket-acl.bucket}.${alicloud_oss_bucket.bucket-acl.extranet_endpoint}\"\n    }\n  },\n  \"variable\": {\n    \"bucket\": {\n      \"default\": \"poc\"\n    },\n    \"acl\": {\n      \"default\": \"private\"\n    }\n  }\n}\n","variable":{"acl":"private","bucket":"vela-website"},"writeConnectionSecretToRef":{"name":"oss-conn","namespace":"default"}}}
+      {"apiVersion":"terraform.core.oam.dev/v1beta1","kind":"Configuration","metadata":{"annotations":{},"name":"alibaba-oss","namespace":"default"},"spec":
+      ...
+       \"private\"\n    }\n  }\n}\n","variable":{"acl":"private","bucket":"vela-website"},"writeConnectionSecretToRef":{"name":"oss-conn","namespace":"default"}}}
   creationTimestamp: "2021-04-02T08:17:08Z"
   generation: 2
 spec:
