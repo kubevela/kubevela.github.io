@@ -14,7 +14,7 @@ KubeVela 默认是一个应用管理和交付的控制平面，同时它也支�
 
 ## 开始之前
 
-系统插件可以通过 KubeVela 的命令行工具一键安装，请确保你已经安装了 [vela CLI](../getting-started/quick-install)。
+系统插件可以通过 KubeVela 的命令行工具一键安装，请确保你已经安装了 [vela CLI](../../getting-started/quick-install#quick-install/#3-安装-kubevela-cli)。
 
 ## 查看默认的系统插件
 
@@ -42,7 +42,7 @@ terraform          	Terraform Controller is a Kubernetes Controller for Terrafor
 
 | 插件                | 参考地址                                                     | 简介                                                         | 已内置Definition |
 | ------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------- |
-| fluxcd              | https://fluxcd.io/                                           | 提供 GitOps，持续部署的相关能力                              | Kustomize、helm  |
+| fluxcd              | https://fluxcd.io/                                           | 提供 GitOps，持续部署的相关能力                              | kustomize、helm  |
 | ns-flux-system      | -                                                            | 目前为 fluxcd 插件提供 namespace 使用，后续优化方向为使之对所有用户不可见 | -                |
 | kruise              | https://openkruise.io/                                       | 提供比 Kubernetes 原生更强大的工作负载套件                   | cloneset-service |
 | prometheus          | https://prometheus.io/                                       | 提供监控能力                                                 | -                |
