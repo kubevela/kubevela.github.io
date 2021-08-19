@@ -186,7 +186,6 @@ Create or update the resources corresponding to all components in the applicatio
 - exceptions: indicates the name of the exceptional component.
 - skipApplyWorkload:  indicates whether to skip apply the workload resource.
 - skipAllTraits: indicates to skip apply all resources of the traits.
-- skipApplyTraits: specifies the names of the traits to skip apply.
 
 
 ```
@@ -194,10 +193,7 @@ Create or update the resources corresponding to all components in the applicatio
  exceptions?: [componentName=string]: {
       skipApplyWorkload: *true | bool
       
-      // If this is true, skipApplyTraits will be ignored
       skipAllTraits: *true| bool
-
-      skipApplyTraits: [...string]
   }
 }  
 ```
