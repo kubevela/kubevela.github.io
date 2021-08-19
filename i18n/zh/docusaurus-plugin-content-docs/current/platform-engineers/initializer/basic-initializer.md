@@ -74,6 +74,12 @@ spec:
 
 ### 利用 Helm 组件初始化环境
 
+在使用 Helm 组件之前，你需要开启 `fluxcd` 这个[系统插件](../addon)。开启 `fluxcd` 系统插件后，会自动帮你安装 helm 组件。
+
+```shell
+vela addon enable fluxcd
+```
+
 我们以环境初始化 kruise 为例：
 
 ```shell
@@ -105,8 +111,8 @@ EOF
 ```
 
 环境初始化 kruise 能帮你在集群中部署一个 [kruise](https://github.com/openkruise/kruise) 的控制器，给集群提供 kruise 的各种能力。
-`dependsOn` 字段表示环境初始化 kruise 依赖环境初始化 fluxcd 提供的能力。 其中，环境初始化 fluxcd 是 
-KubeVela 内置的环境初始化, 当安装环境初始化 kruise 时，KubeVela 会自动帮你安装内置的环境初始化 fluxcd。
+`dependsOn` 字段表示环境初始化 kruise 依赖环境初始化 fluxcd 提供的能力。 其中，环境初始化 fluxcd 是 KubeVela 内置的环境初始化, 
+当集群中没有 `fluxcd` 这个环境初始化时，KubeVela 会自动帮你安装。
 
 ```shell
 $ kubectl get initializers.core.oam.dev -n vela-system
@@ -115,7 +121,7 @@ vela-system   fluxcd           success   33s
 vela-system   kruise           success   33s
 ```
 
-环境初始化的 PHASE 字段为 success 表示成功初始化了环境，我们可以看到 kruise 的控制器也成功运行在当前环境。未来环境初始化会支持用户自定义判断
+环境初始化的 PHASE 字段为 success 表示成功初始化了环境，我们可以看到 kruise 的控制器也成功运行在集群。未来环境初始化会支持用户自定义判断
 初始化环境是否成功的能力。
 
 ```shell
@@ -182,46 +188,8 @@ spec:
 
 ### 使用部署工作流来流程化初始化环境
 
-你可以利用应用部署计划中的部署工作流（Workflow）来流程化初始化环境。我们以实践案例 **多集群部署** 中的环境初始化 managed-cluster 为例：
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Initializer
-metadata:
-  name: managed-cluster
-  namespace: vela-system
-spec:
-  appTemplate:
-    spec:
-      components:
-        - name: ack-worker
-          type: alibaba-ack
-          properties:
-            writeConnectionSecretToRef:
-              name: ack-conn
-              namespace: vela-system
-      workflow:
-        steps:
-          - name: terraform-ack
-            type: create-ack
-            properties:
-              component: ack-worker
-            outputs:
-              - name: connInfo
-                exportKey: connInfo
-
-          - name: register-ack
-            type: register-cluster
-            inputs:
-              - from: connInfo
-                parameterKey: connInfo
-  dependsOn:
-    - ref:
-        apiVersion: core.oam.dev/v1beta1
-        kind: Initializer
-        name: terraform-alibaba
-        namespace: vela-system
-```
+你可以利用应用部署计划中的部署工作流（Workflow）来流程化初始化环境。我们以实践案例 **[多集群部署](../../case-studies/workflow-with-ocm)** 
+中的环境初始化 [managed-cluster](../../case-studies/workflow-with-ocm#初始化多集群调度功能) 为例：
 
 环境初始化 managed-cluster 会为环境创建一个 ACK 集群，并利用 OCM 将新创建的集群注册到管控集群上。
 在 `AppTemplate` 的 `workflow` 字段中描述了环境初始化的流程:
