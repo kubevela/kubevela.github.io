@@ -398,11 +398,15 @@ metadata:
   namespace: default
 spec:
   components:
-    - name: nginx-server
+    - name: podinfo-server
       type: webservice
       properties:
-        image: nginx:1.21
-        port: 80
+        image: stefanprodan/podinfo:5.2.1
+        port: 9898
+      traits:
+        - type: expose
+          properties:
+            port: [9898]
 
   policies:
     - name: patch
@@ -414,11 +418,16 @@ spec:
           - name: prod
             patch:
               components:
-                - name: nginx-server
+                - name: podinfo-server
                   type: webservice
                   properties:
-                    image: nginx:1.20
-                    port: 80
+                    image: stefanprodan/podinfo:6.0.0
+                    port: 9898
+                  traits:
+                    - type: expose
+                      properties:
+                        port: [9898]
+                        type: LoadBalancer
             placement:
               clusterSelector:
                 labels:
@@ -431,28 +440,39 @@ spec:
         properties:
           env:       prod
           policy:    patch
-          component: nginx-server
+          component: podinfo-server
 ```
-
-应用部署计划 `workflow-demo` 中使用了内置的应用策略 `env-binding` 对应用部署计划进行差异化配置，并调度资源到指定的集群。
-交付工作流也使用了内置的 `multi-env` 交付工作流定义，指定需要创建到集群的资源。
 
 ```shell
 kubectl apply -f app.yaml
 ```
 
-检查应用部署计划 `workflow-demo` 成功创建。
+检查应用部署计划 `workflow-demo` 是否成功创建。
 
 ```shell
 $ kubectl get app workflow-demo
-NAME            COMPONENT      TYPE         PHASE     HEALTHY   STATUS   AGE
-workflow-demo   nginx-server   webservice   running   true               7s
+NAME            COMPONENT        TYPE         PHASE     HEALTHY   STATUS   AGE
+workflow-demo   podinfo-server   webservice   running   true               7s
 ```
 
-你可以切换到新创建的 ACK 集群上，查看资源是否被成功的部署。
+你可以切换到新创建的 ACK 集群上，查看资源是否被成功地部署。
 
 ```shell
 $ kubectl get deployments
-NAME           READY   UP-TO-DATE   AVAILABLE   AGE
-nginx-server   1/1     1            1           40s
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+podinfo-server   1/1     1            1           40s
 ```
+
+```shell
+$ kubectl get service
+NAME             TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+podinfo-server   LoadBalancer   10.96.229.126   <EIP>         9898:31361/TCP   51s
+```
+
+Service `podinfo-server` 绑定了一个 EXTERNAL-IP，允许用户通过公网访问应用，用户可以在浏览器中输入 `http://<EIP>:9898` 来访问刚刚创建的应用。
+
+![workflow-with-ocm-demo](../resources/workflow-with-ocm-demo.png)
+
+上述应用部署计划 `workflow-demo` 中使用了内置的应用策略 `env-binding` 对应用部署计划进行差异化配置，修改了组件 `podinfo-server` 的镜像，
+以及运维特征 `expose` 的类型以允许集群外部的请求访问，同时应用策略 `env-binding` 指定了资源调度策略，将资源部署到新注册的 ACK 集群内。
+应用部署计划的交付工作流也使用了内置的 [`multi-env`](../end-user/workflow/multi-env) 交付工作流定义，指定具体哪一个配置后的组件部署到集群中。
