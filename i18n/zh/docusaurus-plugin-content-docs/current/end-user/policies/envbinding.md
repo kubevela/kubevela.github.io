@@ -56,6 +56,8 @@ name |命名空间的名称| string |否|无
 
 ## 如何使用
 
+部署如下应用部署计划：
+
 ```yaml
 # app.yaml
 apiVersion: core.oam.dev/v1beta1
@@ -72,7 +74,7 @@ spec:
         port: 80
 
   policies:
-    - name: patch
+    - name: demo-policy
       type: env-binding
       properties:
         engine: local
@@ -90,7 +92,7 @@ spec:
                 name: test
 ```
 
-假设用户所在的环境为单集群环境，用户希望将应用部署计划 `workflow-demo` 部署到测试环境的命名空间 `test` 中，并对组件 `nginx-server` 中的部分参数做修改以适配测试环境。
+用户希望将应用部署计划 `workflow-demo` 部署到当前集群的测试环境的命名空间 `test` 中，并对组件 `nginx-server` 中的部分参数做修改以适配测试环境。
 用户需要在应用部署计划的 `policies` 字段指定使用应用策略定义（PolicyDefinition） `env-binding` 。
 
 同时，你需要给应用策略提供几个关键的参数，`patch` 和 `placement` 。
@@ -101,14 +103,16 @@ spec:
 
 - `placement` 参数用来指定将应用部署计划部署到目标环境中的哪一个集群或者命名空间中。`placement` 有 2 种选择器：`clusterSelector` 和 `namespaceSelector`，
    分别面向集群和命名空间的选择。
-  
-  
+
+接下来我们创建示例中的应用部署计划。
+
+> 创建应用部署计划之前需要当前集群中有名为 `test` 的命名空间，你可以通过执行 `kubectl create ns test` 来创建。
+
 ```shell
-kubectl create namespace test
 kubectl apply -f app.yaml
 ```
 
-应用部署计划创建之后，在 test 命名空间下会创建一个配置化的应用部署计划。
+应用部署计划创建之后，在 `test` 命名空间下会创建一个配置化的应用部署计划。
 
 ```shell
 $ kubectl get app -n test
@@ -116,4 +120,4 @@ NAME                       COMPONENT      TYPE         PHASE     HEALTHY   STATU
 patch-test-workflow-demo   nginx-server   webservice   running   true               22s
 ```
 
-[comment]: <> (TODO, 添加一个链接到多集群部署的例子)
+如果你想使用 `env-binding` 在多集群环境下创建应用部署计划，请参考实践案例中的 **[多集群部署](../../case-studies/workflow-with-ocm)** 。

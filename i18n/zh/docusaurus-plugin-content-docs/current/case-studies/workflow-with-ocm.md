@@ -409,7 +409,7 @@ spec:
             port: [9898]
 
   policies:
-    - name: patch
+    - name: prod-env
       type: env-binding
       properties:
         engine: ocm
@@ -439,7 +439,7 @@ spec:
         type: multi-env
         properties:
           env:       prod
-          policy:    patch
+          policy:    prod-env
           component: podinfo-server
 ```
 
@@ -465,8 +465,8 @@ podinfo-server   1/1     1            1           40s
 
 ```shell
 $ kubectl get service
-NAME             TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
-podinfo-server   LoadBalancer   10.96.229.126   <EIP>         9898:31361/TCP   51s
+NAME                                          TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)          AGE
+podinfo-server-auxiliaryworkload-85d7b756f9   LoadBalancer   192.168.57.21   < EIP >         9898:31132/TCP   50s
 ```
 
 Service `podinfo-server` 绑定了一个 EXTERNAL-IP，允许用户通过公网访问应用，用户可以在浏览器中输入 `http://<EIP>:9898` 来访问刚刚创建的应用。
