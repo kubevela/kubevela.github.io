@@ -107,7 +107,10 @@ module.exports = {
       items: [
         'platform-engineers/addon',
         {
-          'Learning OAM': [
+          type: 'category',
+          label: 'Learning OAM',
+          collapsed: false,
+           items:[
             'platform-engineers/oam/oam-model',
             'platform-engineers/oam/x-definition',
           ]
@@ -135,8 +138,7 @@ module.exports = {
           type: 'category',
           label: 'Component System',
           items: [
-            'platform-engineers/components/component-default',
-            'platform-engineers/components/component-cue',
+            'platform-engineers/components/custom-component',
             'platform-engineers/components/component-terraform',
           ]
         },

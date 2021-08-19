@@ -2,13 +2,15 @@
 title:  自定义组件
 ---
 
-In this section, it will introduce how to use [CUE](https://cuelang.org/) to declare app components via `ComponentDefinition`.
+> 在阅读本部分之前，请确保你已经学习了 KubeVela 中的[组件定义（ComponentDefinition）](../oam/x-definition.md##组件定义（ComponentDefinition）) 原理
 
-> Before reading this part, please make sure you've learned the [Definition CRD](../definition-and-templates) in KubeVela.
+> 学习掌握了 [CUE 的基本知识](../cue/basic)
 
-## Declare `ComponentDefinition`
+本节将以组件定义的例子展开说明，介绍如何使用 [CUE](https://cuelang.org/) 通过组件定义 `ComponentDefinition` 来自定义应用部署计划的组件。
 
-Here is a CUE based `ComponentDefinition` example which provides a abstraction for stateless workload type:
+### 交付一个简单的自定义组件
+
+我们先编写一个基于 CUE 的组件定义，它想提供的是一个无状态工作负载类型的抽象：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -24,37 +26,37 @@ spec:
     cue:
       template: |
         parameter: {
-        	name:  string
-        	image: string
+          name:  string
+          image: string
         }
         output: {
-        	apiVersion: "apps/v1"
-        	kind:       "Deployment"
-        	spec: {
-        		selector: matchLabels: {
-        			"app.oam.dev/component": parameter.name
-        		}
-        		template: {
-        			metadata: labels: {
-        				"app.oam.dev/component": parameter.name
-        			}
-        			spec: {
-        				containers: [{
-        					name:  parameter.name
-        					image: parameter.image
-        				}]
-        			}
-        		}
-        	}
+          apiVersion: "apps/v1"
+          kind:       "Deployment"
+          spec: {
+            selector: matchLabels: {
+              "app.oam.dev/component": parameter.name
+            }
+            template: {
+              metadata: labels: {
+                "app.oam.dev/component": parameter.name
+              }
+              spec: {
+                containers: [{
+                  name:  parameter.name
+                  image: parameter.image
+                }]
+              }
+            }
+          }
         }
 ```
-In detail:
-- `.spec.workload` is required to indicate the workload type of this component.
-- `.spec.schematic.cue.template` is a CUE template, specifically:
-    * The `output` filed defines the template for the abstraction.
-    * The `parameter` filed defines the template parameters, i.e. the configurable properties exposed in the `Application`abstraction (and JSON schema will be automatically generated based on them).
+详细来说：
+- 需要 `.spec.workload` 来指示该组件的工作负载类型。
+- `.spec.schematic.cue.template` 是一个 CUE 模板：
+     * `output` 字段定义了 CUE 要输出的抽象模板。
+     * `parameter` 字段定义了模板参数，即在应用部署计划（Application）中公开的可配置属性（KubeVela 将基于 `parameter` 字段自动生成 Json schema）。
 
-Let's declare another component named `task`, i.e. an abstraction for run-to-completion workload.
+接着，让我们声明另一个名为 `task` 的组件。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -96,11 +98,18 @@ spec:
         }
 ```
 
-Save above `ComponentDefinition` objects to files and install them to your Kubernetes cluster by `$ kubectl apply -f stateless-def.yaml task-def.yaml`
+将上面的组件定义对象保存到 YAML 文件中，并通过 `$ kubectl apply -f stateless-def.yaml task-def.yaml` 将它们部署到你的 Kubernetes 集群。
 
-## Declare an `Application`
+```
+$  kubectl apply -f stateless-def.yaml              
+componentdefinition.core.oam.dev/stateless created
+$  kubectl apply -f task-def.yaml 
+componentdefinition.core.oam.dev/task created
+```
 
-The `ComponentDefinition` can be instantiated in `Application` abstraction as below:
+这两个已经定义好的组件，最终会在应用部署计划中实例化，我们引用自定义的组件类型 `stateless`，命名为 `hello`。同样，我们也引用了自定义的第二个组件类型 `task`，并命令为 `countdown`。
+
+然后把它们编写到应用部署计划中，如下所示：
 
   ```yaml
   apiVersion: core.oam.dev/v1alpha2
@@ -124,17 +133,17 @@ The `ComponentDefinition` can be instantiated in `Application` abstraction as be
             - "for i in 9 8 7 6 5 4 3 2 1 ; do echo $i ; done"
   ```
 
-### Under The Hood
-<details>
+以上，我们就完成了一个自定义应用组件的应用交付全过程。值得注意的是，作为管理员的我们，可以通过 CUE 提供用户所需要的任何自定义组件类型，同时也为用户提供了模板参数 `parameter` 来灵活地指定对 Kubernetes 相关资源的要求。
 
-Above application resource will generate and manage following Kubernetes resources in your target cluster based on the `output` in CUE template and user input in `Application` properties.
+#### 查看 Kubernetes 最终资源信息
+<details>
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
-  ... # skip tons of metadata info
+  ... # 隐藏一些与本小节讲解无关的信息
 spec:
   template:
     spec:
@@ -152,7 +161,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: countdown
-  ... # skip tons of metadata info
+  ... # 隐藏一些与本小节讲解无关的信息
 spec:
   parallelism: 1
   completions: 1
@@ -171,70 +180,19 @@ spec:
 ```  
 </details>
 
-## CUE `Context`
 
-KubeVela allows you to reference the runtime information of your application via `context` keyword.
+### 交付一个复合的自定义组件
 
-The most widely used context is application name(`context.appName`) component name(`context.name`).
+除了上面这个例子外，一个组件的定义通常也会由多个 Kubernetes API 资源组成。例如，一个由 `Deployment` 和 `Service` 组成的 `webserver` 组件。CUE 同样能很好的满足这种自定义复合组件的需求。
 
-```cue
-context: {
-  appName: string
-  name: string
-}
-```
-
-For example, let's say you want to use the component name filled in by users as the container name in the workload instance:
-
-```cue
-parameter: {
-    image: string
-}
-output: {
-  ...
-    spec: {
-        containers: [{
-            name:  context.name
-            image: parameter.image
-        }]
-    }
-  ...
-}
-```
-
-> Note that `context` information are auto-injected before resources are applied to target cluster.
-
-### Full available information in CUE `context`
-
-| Context Variable  | Description |
-| :--: | :---------: |
-| `context.appRevision` | The revision of the application |
-| `context.appRevisionNum` | The revision number(`int` type) of the application, e.g., `context.appRevisionNum` will be `1` if `context.appRevision` is `app-v1`|
-| `context.appName` | The name of the application |
-| `context.name` | The name of the component of the application |
-| `context.namespace` | The namespace of the application |
-| `context.output` | The rendered workload API resource of the component, this usually used in trait |
-| `context.outputs.<resourceName>` | The rendered trait API resource of the component, this usually used in trait |
-
-
-## Composition
-
-It's common that a component definition is composed by multiple API resources, for example, a `webserver` component that is composed by a Deployment and a Service. CUE is a great solution to achieve this in simplified primitives.
-
-> Another approach to do composition in KubeVela of course is [using Helm](../helm/component).
-
-## How-to
-
-KubeVela requires you to define the template of workload type in `output` section, and leave all the other resource templates in `outputs` section with format as below:
+我们会使用 `output` 这个字段来定义工作负载类型的模板，而其他剩下的资源模板，都在 `outputs` 这个字段里进行声明，格式如下：
 
 ```cue
 outputs: <unique-name>: 
   <full template data>
 ```
 
-> The reason for this requirement is KubeVela needs to know it is currently rendering a workload so it could do some "magic" like patching annotations/labels or other data during it.
-
-Below is the example for `webserver` definition: 
+回到 `webserver` 这个复合自定义组件上，它的 YAML 文件编写如下：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -330,7 +288,31 @@ spec:
         }
 ```
 
-The user could now declare an `Application` with it:
+可以看到：
+1. 最核心的工作负载，我们按需要在 `output` 字段里，定义了一个要交付的 `Deployment` 类型的 Kubernetes 资源。
+2. `Service` 类型的资源，则放到 `outputs` 里定义。以此类推，如果你要复合第三个资源，只需要继续在后面以键值对的方式添加：
+
+```
+outputs: service: {
+            apiVersion: "v1"
+            kind:       "Service"
+            spec: {
+...
+outputs: third-resource: {
+            apiVersion: "v1"
+            kind:       "Service"
+            spec: {   
+...                     
+```
+
+在理解这些之后，将上面的组件定义对象保存到 YAML 文件中，并通过 `$ kubectl apply -f webserver-def.yaml` 部署到你的 Kubernetes 集群。
+
+```
+$ kubectl apply -f webserver-def.yaml
+componentdefinition.core.oam.dev/webserver created
+```
+
+然后，我们使用它们，来编写一个应用部署计划：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -351,24 +333,18 @@ spec:
         cpu: "100m"
 ```
 
-It will generate and manage below API resources in target cluster:
+进行部署：
+```
+$ kubectl apply -f webserver.yaml
+```
+最后，它将在运行时集群生成相关 Kubernetes 资源如下：
 
 ```shell
-kubectl get deployment
-```
-```console
+$ kubectl get deployment
 NAME             READY   UP-TO-DATE   AVAILABLE   AGE
 hello-world-v1   1/1     1            1           15s
-```
 
-```shell
-kubectl get svc
-```
-```console
+$ kubectl get svc
 NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
 hello-world-trait-7bdcff98f7   ClusterIP   <your ip>       <none>        8000/TCP   32s
 ```
-
-## What's Next
-
-Please check the [Learning CUE](../cue/basic) documentation about why we support CUE as first-class templating solution and more details about using CUE efficiently.

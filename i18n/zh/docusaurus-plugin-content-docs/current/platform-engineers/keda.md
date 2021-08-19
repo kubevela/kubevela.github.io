@@ -4,6 +4,7 @@ title:  KEDA 作为自动伸缩 Trait
 
 > 在继续之前，请确保你已了解 [Definition Objects](definition-and-templates) 和 [Defining Traits with CUE](./traits/customize-trait) 的概念。
 
+
 在下面的教程中，你将学习将 [KEDA](https://keda.sh/) 作为新的自动伸缩 trait 添加到基于 KubeVela 的平台中。
 
 > KEDA 是基于 Kubernetes 事件驱动的自动伸缩工具。使用 KEDA，你可以根据资源指标或需要处理的事件数来驱动任何容器的伸缩。

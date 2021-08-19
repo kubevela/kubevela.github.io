@@ -2,6 +2,7 @@
 title:  自定义运维特征
 ---
 
+
 本节，我们将为作为平台管理员的你，介绍如何自定义运维特征，为用户的组件增添任何需要的运维特征能力。
 
 ### 开始之前
@@ -11,6 +12,7 @@ title:  自定义运维特征
 ### 如何使用
 
 我们首先为你展示一个简单的示例，比如直接引用已有的 Kubernetes API 资源 Ingress。来编写一个下面这样的 YAML 文件：
+
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -53,6 +55,7 @@ volumes          	vela-system	deployments.apps 	              	true          	Ad
 
 最后用户只需要把这个自定义的运维特征，放入一个与之匹配的组件中进行使用即可：
 
+
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -93,12 +96,14 @@ spec:
 
 在用法上，你需要把所有的运维特征定义在 `outputs` 里(注意，不是 `output`)，格式如下：
 
+
 ```cue
 outputs: <unique-name>: 
   <full template data>
 ```
 
 我们下面同样使用一个 `ingress` 和 `Service` 的示例进行讲解：
+
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -133,6 +138,7 @@ spec:
         				targetPort: v
         			},
         		]
+
             type: "LoadBalancer"
         	}
         }
@@ -188,6 +194,7 @@ volumes        	vela-system	deployments.apps 	              	true          	Add 
 ```
 
 最后用户将这个运维特征放入对应组件，通过应用部署计划完成交付:
+
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
