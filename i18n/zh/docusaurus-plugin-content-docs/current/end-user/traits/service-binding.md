@@ -2,12 +2,27 @@
 title:  云资源绑定
 ---
 
-// 云资源绑定和数据持久化，都需要通过写 Definition 来引入，要单开一个小节去讲
+本节将介绍 `service-binding` 运维特征的用法，它能将数据从 Kubernetes `Secret` 绑定到应用程序所在容器的 `ENV` 上。
 
-## 定义
-服务绑定 trait 将数据从 Kubernetes `Secret` 绑定到应用程序容器的 ENV。
+### 开始之前
 
-## 示例
+> ⚠️ 请安装 [KubeVela CLI 命令行工具](../../getting-started/quick-install.mdx##3)
+
+### 如何使用
+
+先熟悉 `service-binding` 运维特征的相关信息：
+
+```
+$ vela show service-binding
+# Properties
++-------------+------------------------------------------------+------------------+----------+---------+
+|    NAME     |                  DESCRIPTION                   |       TYPE       | REQUIRED | DEFAULT |
++-------------+------------------------------------------------+------------------+----------+---------+
+| envMappings | The mapping of environment variables to secret | map[string]{...} | true     |         |
++-------------+------------------------------------------------+------------------+----------+---------+
+```
+
+然后编写一个名为 `webapp` 的应用部署计划来讲解：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -28,9 +43,9 @@ spec:
               # environments refer to db-conn secret
               DB_PASSWORD:
                 secret: db-conn
-                key: password                                     # 1) If the env name is different from secret key, secret key has to be set.
+                key: password            # 1) 如果 ENV 和 Secret 不一致，则 Secret 必须被设置
               endpoint:
-                secret: db-conn                                   # 2) If the env name is the same as the secret key, secret key can be omitted.
+                secret: db-conn          # 2) 如果 ENV 和 Secret 一致，则 Secret 可以缺省不写
               username:
                 secret: db-conn
 
@@ -43,18 +58,12 @@ spec:
         instanceClass: rds.mysql.c1.large
         username: oamtest
         secretName: db-conn
+```
+部署这个 YAML：
 
 ```
-
-更详细的示例请参考【云资源】(../components/cloud-services)
-
-## 属性说明
-
-```console
-# Properties
-+-------------+------------------------------------------------+------------------+----------+---------+
-|    NAME     |                  DESCRIPTION                   |       TYPE       | REQUIRED | DEFAULT |
-+-------------+------------------------------------------------+------------------+----------+---------+
-| envMappings | The mapping of environment variables to secret | map[string]{...} | true     |         |
-+-------------+------------------------------------------------+------------------+----------+---------+
+$ kubectl apply -f webapp.yaml 
+application.core.oam.dev/webapp created
 ```
+
+我们在 alibaba-rds 获取的 `secretName: db-conn` 将会由 `service-binding` 对象进行转发，并注入 express-server 的这个组件的环境变量 ENV 中。

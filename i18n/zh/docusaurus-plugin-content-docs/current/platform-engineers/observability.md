@@ -1,5 +1,5 @@
 ---
-title: 可观测性 Observability
+title: 系统可观测性
 ---
 
 可观测性插件（Observability addon）基于 metrics、logging、tracing 数据，可以为 KubeVela core 提供系统级别的监控，也可以为应用提供业务级别的监控。
@@ -16,29 +16,29 @@ KubeVela 可观测能力是通过 [Grafana](https://grafana.com/) 展示的，�
 
 1）CPU、内存等使用量和使用率数据
 
-![](../../resources/observability-system-level-summary-of-source-usages.png)
+![](../resources/observability-system-level-summary-of-source-usages.png)
 
 2）CPU、内存随着时间变化（如过去三小时）的使用量和使用率、已经每秒网络带宽的图形化展示
 
-![](../../resources/observability-system-level-summary-of-source-usages-chart.png)
+![](../resources/observability-system-level-summary-of-source-usages-chart.png)
 
-- 第二种用法：KubeVela Core 日志监控
+### 第二种用法：KubeVela Core 日志监控
 
 1）日志统计
 
 可观测页面会显示KubeVela Core 日志总量，已经默认情况下，`error` 出现的数量、频率、出现的所有日志概览和详情。
 
-![](../../resources/observability-system-level-logging-statistics.png)
+![](../resources/observability-system-level-logging-statistics.png)
 
 还会展示随着时间变化，`error` 日志出现的总量、频率等。
 
-![](../../resources/observability-system-level-logging-statistics2.png)
+![](../resources/observability-system-level-logging-statistics2.png)
 
 2）日志过滤
 
 在最上方填写关键词，还可以过滤日志。
 
-![](../../resources/observability-system-level-logging-search.png)
+![](../resources/observability-system-level-logging-search.png)
 
 ## 安装插件
 
@@ -114,7 +114,7 @@ Forwarding from [::1]:80 -> 3000
 
 通过浏览器访问 [http://127.0.0.1/dashboards](http://127.0.0.1/dashboards)，点击相应的 Dashboard ，查看前面介绍的各种监控数据。
 
-![](../../resources/observability-system-level-dashboards.png)
+![](../resources/observability-system-level-dashboards.png)
 
 ### 云服务商提供的 Kubernetes 集群
 

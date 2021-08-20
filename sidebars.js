@@ -17,7 +17,6 @@ module.exports = {
       items: [
         'core-concepts/architecture',
         'core-concepts/application',
-        'core-concepts/workflow',
       ],
     },
     {
@@ -59,6 +58,7 @@ module.exports = {
             // 'end-user/traits/service-binding',
             'end-user/traits/annotations-and-labels',
             'end-user/traits/sidecar',
+            'end-user/traits/service-binding',
             // 'end-user/traits/metrics',
             // 并入可观测性，不再用一个 trait 来实现，本文档留作参考
             'end-user/traits/rollout',
@@ -79,7 +79,7 @@ module.exports = {
         {
           'Addons': [
             'end-user/addons/introduction',
-            'end-user/addons/observability',
+            'end-user/addons/fluxcd',
           ]
         },
         {
@@ -90,16 +90,6 @@ module.exports = {
           ]
         },
       ]
-    },
-    {
-      type: 'category',
-      label: 'Case Studies',
-      collapsed: false,
-      items: [
-        // 'case-studies/workflow-edge-computing', // 待完成
-        'case-studies/li-auto-inc',
-        'case-studies/workflow-with-ocm',
-      ],
     },
     {
       type: 'category',
@@ -152,12 +142,23 @@ module.exports = {
             'platform-engineers/workflow/cue-actions',
           ]
         },
+        'platform-engineers/observability',
         {
           'Debugging': [
             'platform-engineers/debug/dry-run',
           ]
         },
       ]
+    },
+    {
+      type: 'category',
+      label: 'Case Studies',
+      collapsed: false,
+      items: [
+        // 'case-studies/workflow-edge-computing', // 待完成
+        'case-studies/li-auto-inc',
+        'case-studies/workflow-with-ocm',
+      ],
     },
     {
       type: 'category',
