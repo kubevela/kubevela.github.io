@@ -6,6 +6,8 @@ If we have multiple clusters, we want to apply our application in the test clust
 
 In this guide, you will learn how to manage multi environments via `multi-env` in `Workflow`.
 
+> Before reading this section, please make sure you have learned about the [Env Binding](../policies/envbinding) in KubeVela.
+
 ## How to use
 
 Apply the following `Application` with workflow step type of `multi-env`:

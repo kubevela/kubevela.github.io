@@ -64,6 +64,8 @@ first-vela-workflow   express-server   webservice   workflowSuspending          
 
 可以通过 `vela workflow resume` 命令来使工作流继续执行。
 
+> 有关于 `vela workflow` 命令的介绍，可以详见 [vela cli](../../cli/vela_workflow)。
+
 ```shell
 $ vela workflow resume first-vela-workflow
 

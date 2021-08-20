@@ -8,6 +8,8 @@ title:  多环境交付
 
 本节将介绍如何在工作流使用 `multi-env` 来管理多环境。
 
+> 在阅读本部分之前，请确保你已经学习了 KubeVela 中的 [Env Binding](../policies/envbinding)。
+
 ## 如何使用
 
 部署如下应用部署计划，其工作流中的步骤类型为 `multi-env`：
