@@ -83,6 +83,7 @@ module.exports = {
         },
         {
           'Addons': [
+            'end-user/addons/introduction',
             'end-user/addons/observability',
           ]
         },
@@ -110,7 +111,6 @@ module.exports = {
       label: 'Platform Admin Guide',
       collapsed: false,
       items: [
-        'platform-engineers/addon',
         {
           type: 'category',
           label: 'Learning OAM',

@@ -74,7 +74,7 @@ spec:
 
 ### 利用 Helm 组件初始化环境
 
-在使用 Helm 组件之前，你需要开启 `fluxcd` 这个[系统插件](../addon)。开启 `fluxcd` 系统插件后，会自动帮你安装 helm 组件。
+在使用 Helm 组件之前，你需要开启 `fluxcd` 这个[系统插件](../../end-user/addons/introduction)。开启 `fluxcd` 系统插件后，会自动帮你安装 helm 组件。
 
 ```shell
 vela addon enable fluxcd

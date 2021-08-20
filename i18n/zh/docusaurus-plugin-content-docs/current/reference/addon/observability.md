@@ -4,7 +4,7 @@ title:  系统插件：observability
 
 ## 开始之前
 
-确保你已经了解过什么是[系统插件](../../platform-engineers/addon)（Addon）
+确保你已经了解过什么是[系统插件](../../end-user/addons/introduction)（Addon）
 
 ## 插件概览
 
