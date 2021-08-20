@@ -88,7 +88,34 @@ spec:
 
 ## Expected outcome
 
-First, check the component status in `test` cluster:
+Check the `Application` status:
+
+```shell
+kubectl get application multi-env-demo -o yaml
+```
+
+We can see that the workflow is suspended at `manual-approval`:
+
+```yaml
+...
+  status:
+    workflow:
+      ...
+      stepIndex: 2
+      steps:
+      - name: deploy-test-server
+        phase: succeeded
+        resourceRef: {}
+        type: multi-env
+      - name: manual-approval
+        phase: succeeded
+        resourceRef: {}
+        type: suspend
+      suspend: true
+      terminated: false
+```
+
+Switch to `test` cluster and check the component status:
 
 ```shell
 $ kubectl get deployment
@@ -100,10 +127,40 @@ nginx-server     1/1     1            1           1m10s
 Use `resume` command after everything is ok in test cluster:
 
 ```shell
-$ kubectl get deployment
+$ vela workflow resume multi-env-demo
 
-NAME             READY   UP-TO-DATE   AVAILABLE   AGE
-nginx-server     1/1     1            1           1m10s
+Successfully resume workflow: multi-env-demo
+```
+
+Recheck the `Application` status:
+
+```shell
+kubectl get application multi-env-demo -o yaml
+```
+
+All the step status in workflow is succeeded:
+
+```yaml
+...
+  status:
+    workflow:
+      ...
+      stepIndex: 3
+      steps:
+      - name: deploy-test-server
+        phase: succeeded
+        resourceRef: {}
+        type: multi-env
+      - name: manual-approval
+        phase: succeeded
+        resourceRef: {}
+        type: suspend
+      - name: deploy-prod-server
+        phase: succeeded
+        resourceRef: {}
+        type: multi-env
+      suspend: false
+      terminated: true
 ```
 
 Then, check the component status in `prod` cluster:
