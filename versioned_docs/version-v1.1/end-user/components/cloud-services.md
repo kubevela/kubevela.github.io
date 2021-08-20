@@ -10,7 +10,7 @@ The cloud services will be consumed by the application via [Service Binding Trai
 
 ## Terraform
 
-> ⚠️ This section assumes [Terraform related capabilities](../../platform-engineers/terraform) have been installed in your platform.
+> ⚠️ This section assumes [Terraform related capabilities](../../platform-engineers/components/component-terraform) have been installed in your platform.
 
 Check the parameters of cloud resource components and trait.
 

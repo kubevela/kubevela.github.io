@@ -14,11 +14,11 @@ KubeVela is a modern application platform that makes deploying and managing appl
 
 ## Installation
 
-Installation guide is available on [this section](./install).
+Installation guide is available on [this section](getting-started/quick-install).
 
 ## Quick Start
 
-Quick start is available on [this section](./quick-start).
+Quick start is available on [this section](getting-started/first-application).
 
 ## Contributing
 Check out [CONTRIBUTING](https://github.com/oam-dev/kubevela/blob/master/CONTRIBUTING.md) to see how to develop with KubeVela.

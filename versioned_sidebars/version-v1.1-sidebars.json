@@ -3,30 +3,34 @@
     {
       "collapsed": false,
       "type": "category",
-      "label": "Overview",
+      "label": "Getting Started",
       "items": [
         {
           "type": "doc",
-          "id": "version-v1.1/introduction"
+          "id": "version-v1.1/getting-started/introduction"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.1/getting-started/quick-install"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.1/getting-started/first-application"
         }
       ]
     },
     {
       "collapsed": false,
       "type": "category",
-      "label": "Getting Started",
+      "label": "Core Concepts",
       "items": [
         {
           "type": "doc",
-          "id": "version-v1.1/install"
+          "id": "version-v1.1/core-concepts/architecture"
         },
         {
           "type": "doc",
-          "id": "version-v1.1/quick-start"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.1/concepts"
+          "id": "version-v1.1/core-concepts/application"
         }
       ]
     },
@@ -36,33 +40,25 @@
       "label": "End User Guide",
       "items": [
         {
-          "type": "doc",
-          "id": "version-v1.1/end-user/application"
-        },
-        {
           "collapsed": true,
           "type": "category",
           "label": "Components",
           "items": [
             {
               "type": "doc",
-              "id": "version-v1.1/end-user/components/webservice"
+              "id": "version-v1.1/end-user/components/helm"
             },
             {
               "type": "doc",
-              "id": "version-v1.1/end-user/components/task"
+              "id": "version-v1.1/end-user/components/kustomize"
             },
             {
               "type": "doc",
-              "id": "version-v1.1/end-user/components/worker"
+              "id": "version-v1.1/end-user/components/cue"
             },
             {
               "type": "doc",
               "id": "version-v1.1/end-user/components/cloud-services"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.1/end-user/components/more"
             }
           ]
         },
@@ -76,8 +72,19 @@
               "id": "version-v1.1/end-user/traits/ingress"
             },
             {
-              "type": "doc",
-              "id": "version-v1.1/end-user/traits/scaler"
+              "collapsed": true,
+              "type": "category",
+              "label": "Scaling",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.1/end-user/traits/manual-scaler"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.1/end-user/traits/autoscaler"
+                }
+              ]
             },
             {
               "type": "doc",
@@ -89,34 +96,56 @@
             },
             {
               "type": "doc",
-              "id": "version-v1.1/end-user/traits/volumes"
-            },
-            {
-              "type": "doc",
               "id": "version-v1.1/end-user/traits/service-binding"
             },
             {
               "type": "doc",
-              "id": "version-v1.1/end-user/traits/more"
+              "id": "version-v1.1/end-user/traits/rollout"
             }
           ]
         },
         {
-          "type": "doc",
-          "id": "version-v1.1/end-user/scopes/appdeploy"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.1/end-user/scopes/rollout-plan"
+          "collapsed": true,
+          "type": "category",
+          "label": "Policies",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/policies/envbinding"
+            }
+          ]
         },
         {
           "collapsed": true,
           "type": "category",
-          "label": "Observability",
+          "label": "Workflow",
           "items": [
             {
               "type": "doc",
-              "id": "version-v1.1/end-user/scopes/health"
+              "id": "version-v1.1/end-user/workflow/apply-component"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/workflow/apply-remaining"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/workflow/multi-env"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Addons",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/addons/introduction"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/addons/fluxcd"
             }
           ]
         },
@@ -127,7 +156,7 @@
           "items": [
             {
               "type": "doc",
-              "id": "version-v1.1/end-user/debug"
+              "id": "version-v1.1/end-user/debug/live-diff"
             }
           ]
         }
@@ -139,129 +168,132 @@
       "label": "Platform Admin Guide",
       "items": [
         {
-          "type": "doc",
-          "id": "version-v1.1/platform-engineers/overview"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.1/platform-engineers/definition-and-templates"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.1/platform-engineers/openapi-v3-json-schema"
-        },
-        {
-          "collapsed": true,
+          "collapsed": false,
           "type": "category",
-          "label": "Defining Components",
+          "label": "Learning OAM",
           "items": [
             {
-              "collapsed": true,
-              "type": "category",
-              "label": "CUE",
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "version-v1.1/platform-engineers/cue/component"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.1/platform-engineers/cue/basic"
-                }
-              ]
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/oam/oam-model"
             },
             {
-              "collapsed": true,
-              "type": "category",
-              "label": "Helm",
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "version-v1.1/platform-engineers/helm/component"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.1/platform-engineers/helm/trait"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.1/platform-engineers/helm/known-issues"
-                }
-              ]
-            },
-            {
-              "collapsed": true,
-              "type": "category",
-              "label": "Simple Template",
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "version-v1.1/platform-engineers/kube/component"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.1/platform-engineers/kube/trait"
-                }
-              ]
-            },
-            {
-              "collapsed": true,
-              "type": "category",
-              "label": "Cloud Services",
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "version-v1.1/platform-engineers/cloud-services"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.1/platform-engineers/terraform"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.1/platform-engineers/crossplane"
-                }
-              ]
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/oam/x-definition"
             }
           ]
         },
         {
           "collapsed": true,
           "type": "category",
-          "label": "Defining Traits",
+          "label": "Learning CUE",
           "items": [
             {
               "type": "doc",
-              "id": "version-v1.1/platform-engineers/cue/trait"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.1/platform-engineers/cue/patch-trait"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.1/platform-engineers/cue/status"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.1/platform-engineers/cue/advanced"
+              "id": "version-v1.1/platform-engineers/cue/basic"
             }
           ]
         },
         {
           "collapsed": true,
           "type": "category",
-          "label": "Hands-on Lab",
+          "label": "Environment System",
           "items": [
             {
               "type": "doc",
-              "id": "version-v1.1/platform-engineers/debug-test-cue"
+              "id": "version-v1.1/platform-engineers/initializer/basic-initializer"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Component System",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/components/custom-component"
             },
             {
               "type": "doc",
-              "id": "version-v1.1/platform-engineers/keda"
+              "id": "version-v1.1/platform-engineers/components/component-terraform"
             }
           ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Traits System",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/traits/customize-trait"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/traits/patch-trait"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/traits/status"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/traits/advanced"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Worfklow System",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/workflow/steps"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/workflow/context"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/workflow/data-flow"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/workflow/cue-actions"
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.1/platform-engineers/observability"
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Debugging",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/debug/dry-run"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Case Studies",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.1/case-studies/li-auto-inc"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.1/case-studies/workflow-with-ocm"
         }
       ]
     },
@@ -323,6 +355,10 @@
       "type": "category",
       "label": "References",
       "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.1/platform-engineers/advanced-install"
+        },
         {
           "collapsed": true,
           "type": "category",
@@ -412,17 +448,6 @@
         {
           "type": "doc",
           "id": "version-v1.1/roadmap/README"
-        }
-      ]
-    },
-    {
-      "collapsed": true,
-      "type": "category",
-      "label": "Appendix",
-      "items": [
-        {
-          "type": "doc",
-          "id": "version-v1.1/advanced-install"
         }
       ]
     },

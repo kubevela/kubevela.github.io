@@ -58,11 +58,11 @@ export default function Home() {
             data-show-count="true"
             aria-label="Star facebook/metro on GitHub">
             Star
-         </GitHubButton>
+          </GitHubButton>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
           <div
             className={clsx(styles.heroButtons, 'name', 'margin-vert--md')}>
-            <Button href={useBaseUrl('docs/quick-start')}><Translate>Get Started</Translate></Button>
+            <Button href={useBaseUrl('docs/getting-started/quick-install')}><Translate>Get Started</Translate></Button>
             <Button href={useBaseUrl('docs/')}><Translate>Learn More</Translate></Button>
           </div>
         </div>
@@ -82,13 +82,13 @@ export default function Home() {
         </div>
       </main>
       <div className={clsx('hero', styles.hero)}>
-            <div className="container text--center">
-            <h3 className="hero__subtitle">
+        <div className="container text--center">
+          <h3 className="hero__subtitle">
             <Translate>KubeVela is a</Translate> <a href="https://cncf.io/">Cloud Native Computing Foundation</a> <Translate>sandbox project</Translate>
-            </h3>
-            <div className={clsx('cncf-logo', styles.cncfLogo)} />
-            </div>
+          </h3>
+          <div className={clsx('cncf-logo', styles.cncfLogo)} />
         </div>
+      </div>
     </Layout>
   );
 }
@@ -100,16 +100,16 @@ const WhatIs = () => (
         <div className="col col--6">
           <h1><Translate>What is KubeVela?</Translate></h1>
           <p className="hero__subtitle">
-              <small>
+            <small>
               <Translate>
                 KubeVela is a modern application platform that makes deploying and managing applications
-                 across today's hybrid, multi-cloud environments
-                  </Translate> <i> <Translate>easier and faster.</Translate> </i>
-                  <br />
-                  <br />
-                  <Translate>KubeVela is runtime agnostic,
-                  natively extensible, yet most importantly, </Translate><i> application-centric </i><Translate>.</Translate> 
-              </small>
+                across today's hybrid, multi-cloud environments
+              </Translate> <i> <Translate>easier and faster.</Translate> </i>
+              <br />
+              <br />
+              <Translate>KubeVela is runtime agnostic,
+                natively extensible, yet most importantly, </Translate><i> application-centric </i><Translate>.</Translate>
+            </small>
           </p>
         </div>
         <div className="col">

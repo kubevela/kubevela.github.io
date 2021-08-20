@@ -1,245 +1,248 @@
 ---
-title:  Advanced Features
+title: CUE Advanced
 ---
 
-As a Data Configuration Language, CUE allows you to do some advanced templating magic in definition objects.
+TBD
 
-## Render Multiple Resources With a Loop
+## Using CLI to manage definitions
 
-You can define the for-loop inside the `outputs`.
+In Vela CLI (>v1.1), `vela def` command group provides a series of convenient definition writing tools. With these commands, users only need to write CUE files to generate and edit definitions, instead of composing Kubernetes YAML object with mixed CUE string.
 
-> Note that in this case the type of `parameter` field used in the for-loop must be a map. 
+### init
 
-Below is an example that will render multiple Kubernetes Services in one trait:
+`vela def init` is a command that helps users bootstrap new definitions. To create an empty trait definition, run `vela def init my-trait -t trait --desc "My trait description."`
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  name: expose
-spec:
-  schematic:
-    cue:
-      template: |
-        parameter: {
-          http: [string]: int
+```json
+"my-trait": {
+        annotations: {}
+        attributes: {
+                appliesToWorkloads: []
+                conflictsWith: []
+                definitionRef:   ""
+                podDisruptive:   false
+                workloadRefPath: ""
         }
-
-        outputs: {
-          for k, v in parameter.http {
-            "\(k)": {
-              apiVersion: "v1"
-              kind:       "Service"
-              spec: {
-                selector:
-                  app: context.name
-                ports: [{
-                  port:       v
-                  targetPort: v
-                }]
-              }
-            }
-          }
-        }
+        description: "My trait description."
+        labels: {}
+        type: "trait"
+}
+template: patch: {}
 ```
 
-The usage of this trait could be:
+Or you can use `vela def init my-comp --interactive` to initiate definitions interactively.
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: testapp
-spec:
-  components:
-    - name: express-server
-      type: webservice
-      properties:
-        ...
-      traits:
-        - type: expose
-          properties:
-            http:
-              myservice1: 8080
-              myservice2: 8081
+```bash
+$ vela def init my-comp --interactive
+Please choose one definition type from the following values: component, trait, policy, workload, scope, workflow-step
+> Definition type: component
+> Definition description: My component definition.
+Please enter the location the template YAML file to build definition. Leave it empty to generate default template.
+> Definition template filename: 
+Please enter the output location of the generated definition. Leave it empty to print definition to stdout.
+> Definition output filename: my-component.cue
+Definition written to my-component.cue
 ```
 
-## Execute HTTP Request in Trait Definition
-
-The trait definition can send a HTTP request and capture the response to help you rendering the resource with keyword `processing`.
-
-You can define HTTP request `method`, `url`, `body`, `header` and `trailer` in the `processing.http` section, and the returned data will be stored in `processing.output`.
-
-> Please ensure the target HTTP server returns a **JSON data**.  `output`.
-
-Then you can reference the returned data from `processing.output` in `patch` or `output/outputs`.
-
-Below is an example:
+In addition, users can create definitions from existing YAML files. For example, if a user want to create a ComponentDefinition which is designed to generate a deployment, and this deployment has already been created elsewhere, he/she can use the `--template-yaml` flag to complete the transformation. The YAML file is as below
 
 ```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: auth-service
+  name: hello-world
 spec:
-  schematic:
-    cue:
-      template: |
-        parameter: {
-          serviceURL: string
-        }
-
-        processing: {
-          output: {
-            token?: string
-          }
-          // The target server will return a JSON data with `token` as key.
-          http: {
-            method: *"GET" | string
-            url:    parameter.serviceURL
-            request: {
-              body?: bytes
-              header: {}
-              trailer: {}
-            }
-          }
-        }
-
-        patch: {
-          data: token: processing.output.token
-        }
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: hello-world
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: hello-world
+    spec:
+      containers:
+      - name: hello-world
+        image: somefive/hello-world
+        ports: 
+        - name: http
+          containerPort: 80
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-service
+spec:
+  selector:
+    app: hello-world
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: LoadBalancer
 ```
 
-In above example, this trait definition will send request to get the `token` data, and then patch the data to given component instance.
+Running `vela def init my-comp -t component --desc "My component." --template-yaml ./my-deployment.yaml` to get the CUE-format ComponentDefinition
 
-## Data Passing
+```json
+"my-comp": {
+        annotations: {}
+        attributes: workload: definition: {
+                apiVersion: "<change me> apps/v1"
+                kind:       "<change me> Deployment"
+        }
+        description: "My component."
+        labels: {}
+        type: "component"
+}
+template: {
+        output: {
+                metadata: name: "hello-world"
+                spec: {
+                        replicas: 1
+                        selector: matchLabels: "app.kubernetes.io/name": "hello-world"
+                        template: {
+                                metadata: labels: "app.kubernetes.io/name": "hello-world"
+                                spec: containers: [{
+                                        name:  "hello-world"
+                                        image: "somefive/hello-world"
+                                        ports: [{
+                                                name:          "http"
+                                                containerPort: 80
+                                                protocol:      "TCP"
+                                        }]
+                                }]
+                        }
+                }
+                apiVersion: "apps/v1"
+                kind:       "Deployment"
+        }
+        outputs: "hello-world-service": {
+                metadata: name: "hello-world-service"
+                spec: {
+                        ports: [{
+                                name:       "http"
+                                protocol:   "TCP"
+                                port:       80
+                                targetPort: 8080
+                        }]
+                        selector: app: "hello-world"
+                        type: "LoadBalancer"
+                }
+                apiVersion: "v1"
+                kind:       "Service"
+        }
+        parameter: {}
 
-A trait definition can read the generated API resources (rendered from `output` and `outputs`) of given component definition.
+}
+```
 
->  KubeVela will ensure the component definitions are always rendered before traits definitions.
+Then the user can make further modifications based on the definition file above, like removing *\<change me\>* in **workload.definition**。
 
-Specifically, the `context.output` contains the rendered workload API resource (whose GVK is indicated by `spec.workload`in component definition), and use `context.outputs.<xx>` to contain all the other rendered API resources.
+### vet
 
-Below is an example for data passing:
+After initializing definition files, run `vela def vet my-comp.cue` to validate if there are any syntax error in the definition file. It can be used to detect some simple errors such as missing brackets.
+
+```bash
+$ vela def vet my-comp.cue
+Validation succeed.
+```
+
+### render / apply
+
+After confirming the definition file has correct syntax. users can run  `vela def apply my-comp.cue --namespace my-namespace` to apply this definition in the `my-namespace` namespace。If you want to check the transformed Kubernetes YAML file, `vela def apply my-comp.cue --dry-run` or `vela def render my-comp.cue -o my-comp.yaml` can achieve that.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: ComponentDefinition
 metadata:
-  name: worker
+  annotations:
+    definition.oam.dev/description: My component.
+  labels: {}
+  name: my-comp
+  namespace: vela-system
 spec:
-  workload:
-    definition:
-      apiVersion: apps/v1
-      kind: Deployment
   schematic:
     cue:
       template: |
         output: {
-          apiVersion: "apps/v1"
-          kind:       "Deployment"
-          spec: {
-            selector: matchLabels: {
-              "app.oam.dev/component": context.name
-            }
-
-            template: {
-              metadata: labels: {
-                "app.oam.dev/component": context.name
-              }
-              spec: {
-                containers: [{
-                  name:  context.name
-                  image: parameter.image
-                  ports: [{containerPort: parameter.port}]
-                  envFrom: [{
-                    configMapRef: name: context.name + "game-config"
-                  }]
-                  if parameter["cmd"] != _|_ {
-                    command: parameter.cmd
-                  }
-                }]
-              }
-            }
-          }
+                metadata: name: "hello-world"
+                spec: {
+                        replicas: 1
+                        selector: matchLabels: "app.kubernetes.io/name": "hello-world"
+                        template: {
+                                metadata: labels: "app.kubernetes.io/name": "hello-world"
+                                spec: containers: [{
+                                        name:  "hello-world"
+                                        image: "somefive/hello-world"
+                                        ports: [{
+                                                name:          "http"
+                                                containerPort: 80
+                                                protocol:      "TCP"
+                                        }]
+                                }]
+                        }
+                }
+                apiVersion: "apps/v11"
+                kind:       "Deployment"
         }
-
-        outputs: gameconfig: {
-          apiVersion: "v1"
-          kind:       "ConfigMap"
-          metadata: {
-            name: context.name + "game-config"
-          }
-          data: {
-            enemies: parameter.enemies
-            lives:   parameter.lives
-          }
+        outputs: "hello-world-service": {
+                metadata: name: "hello-world-service"
+                spec: {
+                        ports: [{
+                                name:       "http"
+                                protocol:   "TCP"
+                                port:       80
+                                targetPort: 8080
+                        }]
+                        selector: app: "hello-world"
+                        type: "LoadBalancer"
+                }
+                apiVersion: "v1"
+                kind:       "Service"
         }
-
-        parameter: {
-          // +usage=Which image would you like to use for your service
-          // +short=i
-          image: string
-          // +usage=Commands to run in the container
-          cmd?: [...string]
-          lives:   string
-          enemies: string
-          port:    int
-        }
-
-
----
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  name: ingress
-spec:
-  schematic:
-    cue:
-      template: |
-        parameter: {
-          domain:     string
-          path:       string
-          exposePort: int
-        }
-        // trait template can have multiple outputs in one trait
-        outputs: service: {
-          apiVersion: "v1"
-          kind:       "Service"
-          spec: {
-            selector:
-              app: context.name
-            ports: [{
-              port:       parameter.exposePort
-              targetPort: context.output.spec.template.spec.containers[0].ports[0].containerPort
-            }]
-          }
-        }
-        outputs: ingress: {
-          apiVersion: "networking.k8s.io/v1beta1"
-          kind:       "Ingress"
-          metadata:
-              name: context.name
-          labels: config: context.outputs.gameconfig.data.enemies
-          spec: {
-            rules: [{
-              host: parameter.domain
-              http: {
-                paths: [{
-                  path: parameter.path
-                  backend: {
-                    serviceName: context.name
-                    servicePort: parameter.exposePort
-                  }
-                }]
-              }
-            }]
-          }
-        }
+        parameter: {}
+  workload:
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
 ```
 
-In detail, during rendering `worker` `ComponentDefinition`:
-1. the rendered Kubernetes Deployment resource will be stored in the `context.output`,
-2. all other rendered resources will be stored in `context.outputs.<xx>`, with `<xx>` is the unique name in every `template.outputs`.
+```bash
+$ vela def apply my-comp.cue -n my-namespace
+ComponentDefinition my-comp created in namespace my-namespace.
+```
 
-Thus, in `TraitDefinition`, it can read the rendered API resources (e.g. `context.outputs.gameconfig.data.enemies`) from the `context`.
+### get / list / edit / del
+
+While you can use native kubectl tools to confirm the results of the apply command, as mentioned above, the YAML object mixed with raw CUE template string is complex. Using `vela def get` will automatically convert the YAML object into the CUE-format definition.
+
+```bash
+$ vela def get my-comp -t component
+```
+
+Or you can list all defintions installed through `vela def list`
+
+```bash
+$ vela def list -n my-namespace -t component
+NAME                    TYPE                    NAMESPACE       DESCRIPTION  
+my-comp                 ComponentDefinition     my-namespace    My component.
+```
+
+Similarly, using `vela def edit` to edit definitions in pure CUE-format. The transformation between CUE-format definition and YAML object is done by the command. Besides, you can specify the `EDITOR` environment variable to use your favourate editor.
+
+```bash
+$ EDITOR=vim vela def edit my-comp
+```
+
+Finally, `vela def del` can be utilized to delete existing definitions.
+
+```bash
+$ vela def del my-comp -n my-namespace  
+Are you sure to delete the following definition in namespace my-namespace?
+ComponentDefinition my-comp: My component.
+[yes|no] > yes
+ComponentDefinition my-comp in namespace my-namespace deleted.
+```
+
