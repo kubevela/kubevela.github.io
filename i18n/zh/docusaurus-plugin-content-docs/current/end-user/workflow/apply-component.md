@@ -83,7 +83,38 @@ first-vela-workflow   express-server   webservice   running   true              
 
 ## 期望结果
 
-查看集群中组件的状态：
+查看应用的状态：
+
+```shell
+kubectl get application first-vela-workflow -o yaml
+```
+
+所有步骤的状态均已成功：
+
+```yaml
+...
+  status:
+    workflow:
+      ...
+      stepIndex: 3
+      steps:
+      - name: express-server
+        phase: succeeded
+        resourceRef: {}
+        type: apply-component
+      - name: manual-approval
+        phase: succeeded
+        resourceRef: {}
+        type: suspend
+      - name: nginx-server
+        phase: succeeded
+        resourceRef: {}
+        type: apply-component
+      suspend: false
+      terminated: true
+```
+
+确认集群中组件的状态：
 
 ```shell
 $ kubectl get deployment

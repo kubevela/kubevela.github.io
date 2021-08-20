@@ -68,13 +68,40 @@ spec:
 
 ## 期望结果
 
+查看此时应用的状态：
+
+```shell
+kubectl get application first-vela-workflow -o yaml
+```
+
+可以看到执行到了 `manual-approval` 步骤时，工作流被暂停执行了：
+
+```yaml
+...
+  status:
+    workflow:
+      ...
+      stepIndex: 2
+      steps:
+      - name: first-server
+        phase: succeeded
+        resourceRef: {}
+        type: apply-component
+      - name: manual-approval
+        phase: succeeded
+        resourceRef: {}
+        type: suspend
+      suspend: true
+      terminated: false
+```
+
 查看集群中组件的状态，当组件运行成功后，再继续工作流：
 
 ```shell
 $ kubectl get deployment
 
 NAME             READY   UP-TO-DATE   AVAILABLE   AGE
-express-server   0/1     1            0           5s
+express-server   1/1     1            1           5s
 
 $ kubectl get ingress
 
@@ -86,6 +113,37 @@ express-server   <none>   testsvc.example.com             80      47s
 
 ```
 vela workflow resume first-vela-workflow
+```
+
+重新查看应用的状态：
+
+```shell
+kubectl get application first-vela-workflow -o yaml
+```
+
+可以看到所有步骤的状态均已成功：
+
+```yaml
+...
+  status:
+    workflow:
+      ...
+      stepIndex: 3
+      steps:
+      - name: first-server
+        phase: succeeded
+        resourceRef: {}
+        type: apply-component
+      - name: manual-approval
+        phase: succeeded
+        resourceRef: {}
+        type: suspend
+      - name: remaining-server
+        phase: succeeded
+        resourceRef: {}
+        type: apply-remaining
+      suspend: false
+      terminated: true
 ```
 
 重新查看集群中组件的状态：

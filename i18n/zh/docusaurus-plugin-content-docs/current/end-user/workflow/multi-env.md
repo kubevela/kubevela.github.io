@@ -89,7 +89,34 @@ spec:
 
 ## 期望结果
 
-首先在 `test` 集群中，查看应用的状态：
+查看此时应用的状态：
+
+```shell
+kubectl get application multi-env-demo -o yaml
+```
+
+可以看到执行到了 `manual-approval` 步骤时，工作流被暂停执行了：
+
+```yaml
+...
+  status:
+    workflow:
+      ...
+      stepIndex: 2
+      steps:
+      - name: deploy-test-server
+        phase: succeeded
+        resourceRef: {}
+        type: multi-env
+      - name: manual-approval
+        phase: succeeded
+        resourceRef: {}
+        type: suspend
+      suspend: true
+      terminated: false
+```
+
+切换到 `test` 集群，并查看应用的状态：
 
 ```shell
 $ kubectl get deployment
@@ -101,10 +128,40 @@ nginx-server     1/1     1            1           1m10s
 测试集群的应用一切正常后，使用命令继续工作流：
 
 ```shell
-$ kubectl get deployment
+$ vela workflow resume multi-env-demo
 
-NAME             READY   UP-TO-DATE   AVAILABLE   AGE
-nginx-server     1/1     1            1           1m10s
+Successfully resume workflow: multi-env-demo
+```
+
+重新查看应用的状态：
+
+```shell
+kubectl get application multi-env-demo -o yaml
+```
+
+可以看到所有步骤的状态均已成功：
+
+```yaml
+...
+  status:
+    workflow:
+      ...
+      stepIndex: 3
+      steps:
+      - name: deploy-test-server
+        phase: succeeded
+        resourceRef: {}
+        type: multi-env
+      - name: manual-approval
+        phase: succeeded
+        resourceRef: {}
+        type: suspend
+      - name: deploy-prod-server
+        phase: succeeded
+        resourceRef: {}
+        type: multi-env
+      suspend: false
+      terminated: true
 ```
 
 在 `prod` 集群中，查看应用的状态：

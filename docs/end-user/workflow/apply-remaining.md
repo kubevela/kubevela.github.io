@@ -69,13 +69,40 @@ spec:
 
 ## Expected outcome
 
+Check the `Application` status:
+
+```shell
+kubectl get application first-vela-workflow -o yaml
+```
+
+We can see that the workflow is suspended at `manual-approval`:
+
+```yaml
+...
+  status:
+    workflow:
+      ...
+      stepIndex: 2
+      steps:
+      - name: first-server
+        phase: succeeded
+        resourceRef: {}
+        type: apply-component
+      - name: manual-approval
+        phase: succeeded
+        resourceRef: {}
+        type: suspend
+      suspend: true
+      terminated: false
+```
+
 Check the component status in cluster and resume the workflow after the component is running:
 
 ```shell
 $ kubectl get deployment
 
 NAME             READY   UP-TO-DATE   AVAILABLE   AGE
-express-server   0/1     1            0           5s
+express-server   1/1     1            1           5s
 
 $ kubectl get ingress
 
@@ -87,6 +114,37 @@ Resume the workflow:
 
 ```
 vela workflow resume first-vela-workflow
+```
+
+Recheck the `Application` status:
+
+```shell
+kubectl get application first-vela-workflow -o yaml
+```
+
+All the step status in workflow is succeeded:
+
+```yaml
+...
+  status:
+    workflow:
+      ...
+      stepIndex: 3
+      steps:
+      - name: first-server
+        phase: succeeded
+        resourceRef: {}
+        type: apply-component
+      - name: manual-approval
+        phase: succeeded
+        resourceRef: {}
+        type: suspend
+      - name: remaining-server
+        phase: succeeded
+        resourceRef: {}
+        type: apply-remaining
+      suspend: false
+      terminated: true
 ```
 
 Recheck the component status:

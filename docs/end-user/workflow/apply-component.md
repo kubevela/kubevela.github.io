@@ -82,6 +82,37 @@ first-vela-workflow   express-server   webservice   running   true              
 ```
 ## Expected outcome
 
+Check the `Application` status:
+
+```shell
+kubectl get application first-vela-workflow -o yaml
+```
+
+All the step status in workflow is succeeded:
+
+```yaml
+...
+  status:
+    workflow:
+      ...
+      stepIndex: 3
+      steps:
+      - name: express-server
+        phase: succeeded
+        resourceRef: {}
+        type: apply-component
+      - name: manual-approval
+        phase: succeeded
+        resourceRef: {}
+        type: suspend
+      - name: nginx-server
+        phase: succeeded
+        resourceRef: {}
+        type: apply-component
+      suspend: false
+      terminated: true
+```
+
 Check the component status in cluster:
 
 ```shell
