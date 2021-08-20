@@ -1,5 +1,5 @@
 ---
-title:  系统插件：fluxcd
+title:  fluxcd 插件
 ---
 
 ## 开始之前
