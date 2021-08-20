@@ -64,7 +64,7 @@ first-vela-workflow   express-server   webservice   workflowSuspending          
 
 We can use `vela workflow resume` to resume the workflow.
 
-> For more information of `vela workflow`，please ref [vela cli](../../cli/vela_workflow.md).
+> For more information of `vela workflow`，please ref [vela cli](../../cli/vela_workflow).
 
 ```shell
 $ vela workflow resume first-vela-workflow
