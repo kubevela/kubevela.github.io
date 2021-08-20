@@ -6,7 +6,7 @@ title:  部署组件和运维特征
 
 ## 如何使用
 
-部署如下应用部署计划`：
+部署如下应用部署计划：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
