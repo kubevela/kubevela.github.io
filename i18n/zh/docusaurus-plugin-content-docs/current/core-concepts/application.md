@@ -98,6 +98,69 @@ sidecar    	vela-system	deployments.apps 	              	true          	Inject a
 
 同时作为管理员的你，也可以继续使用 [自定义运维特征](../platform-engineers/traits/customize-trait) 为你的用户，自定义任何需要的运维特征类型。
 
-## 下一步
+### Workflow 工作流
 
-在理解了应用部署计划这套核心概念后，你可以进一步阅读关于 Workflow 交付工作流的概念。
+在 KubeVela 里，工作流能够让用户去粘合各种运维任务到一个流程中去，实现自动化地快速交付云原生应用到任意混合环境中。
+从设计上讲，工作流是为了定制化控制逻辑：不仅仅是简单地 Apply 所有资源，更是为了能够提供一些面向过程的灵活性。
+比如说，使用工作流能够帮助我们实现暂停、人工验证、等待状态、数据流传递、多环境灰度、A/B 测试等复杂操作。
+
+工作流是基于模块化设计的。
+每一个工作流模块都由一个 Definition CRD 定义并且通过 K8s API 来提供给用户操作。
+工作流模块作为一个“超级粘合剂”可以将你任意的工具和流程都通过 CUE 语言来组合起来。
+这让你可以通过强大的声明式语言和云原生 API 来创建你自己的模块。
+
+下面是一个例子：
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-workflow
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+    traits:
+    - type: ingress
+      properties:
+        domain: testsvc.example.com
+        http:
+          /: 8000
+  - name: nginx-server
+    type: webservice
+    properties:
+      image: nginx:1.21
+      port: 80
+  workflow:
+    steps:
+      - name: express-server
+        # 指定步骤类型
+        type: apply-component
+        properties:
+          # 指定组件名称
+          component: express-server
+      - name: manual-approval
+        # 工作流内置 suspend 类型的任务，用于暂停工作流
+        type: suspend
+      - name: nginx-server
+        type: apply-component
+        properties:
+          component: nginx-server
+```
+
+接下来我们对上面的例子做更详细的说明：
+
+- 这里使用了 `apply-component` 和 `suspend` 类型的工作流步骤：
+  - `apply-component` 类型可以使用户部署指定的组件及其运维特征。
+  - 在第一步完成后，开始执行 `suspend` 类型的工作流步骤。该步骤会暂停工作流，我们可以查看集群中第一个组件的状态，当其成功运行后，再使用 `vela workflow resume first-vela-workflow` 命令来继续该工作流。
+  - 当工作流继续运行后，第三个步骤开始部署组件及运维特征。此时我们查看集群，可以看到所以资源都已经被成功部署。
+
+到这里我们已经介绍完 KubeVela 工作流的基本概念。作为下一步，你可以：
+
+- [动手尝试工作流的实践案例](../end-user/workflow/apply-component).
+- [学习创建你自己的 Definition 模块](../platform-engineers/workflow/steps). 
+- [了解工作流系统背后的设计和架构](https://github.com/oam-dev/kubevela/blob/master/design/vela-core/workflow_policy.md).
