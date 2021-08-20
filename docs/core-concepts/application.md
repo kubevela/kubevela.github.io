@@ -48,7 +48,7 @@ The fields here correspond to:
 - components: KubeVela's component system.
 - Traits: KubeVela's operation and maintenance feature system.
 
-## Workflow 工作流
+## Workflow
 
 In KubeVela, Workflow allows user to glue various operation and maintenance tasks into one process, and achieve automated and rapid delivery of cloud-native applications to any hybrid environment. From the design point of view, the Workflow is to customize the control logic: not only simply apply all resources, but also to provide some process-oriented flexibility. For example, the use of Workflow can help us implement complex operations such as pause, manual verification, waiting state, data flow transmission, multi-environment grayscale, and A/B testing.
 
