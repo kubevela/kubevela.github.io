@@ -1,94 +1,158 @@
 {
   "version.label": {
     "message": "v1.1",
-    "description": "The label for version v1.1"
-  },
-  "sidebar.docs.category.Overview": {
-    "message": "Overview",
-    "description": "The label for category Overview in sidebar docs"
+    "description": "The label for version current"
   },
   "sidebar.docs.category.Getting Started": {
-    "message": "Getting Started",
+    "message": "快速开始",
     "description": "The label for category Getting Started in sidebar docs"
   },
-  "sidebar.docs.category.Application Team Guide": {
-    "message": "Application Team Guide",
-    "description": "The label for category Application Team Guide in sidebar docs"
+  "sidebar.docs.category.Core Concepts": {
+    "message": "核心概念",
+    "description": "The label for Core Concepts in sidebar docs"
   },
-  "sidebar.docs.category.Components": {
-    "message": "Components",
-    "description": "The label for category Components in sidebar docs"
-  },
-  "sidebar.docs.category.Traits": {
-    "message": "Traits",
-    "description": "The label for category Traits in sidebar docs"
-  },
-  "sidebar.docs.category.Observability": {
-    "message": "Observability",
-    "description": "The label for category Observability in sidebar docs"
-  },
-  "sidebar.docs.category.Debugging": {
-    "message": "Debugging",
-    "description": "The label for category Debugging in sidebar docs"
-  },
-  "sidebar.docs.category.Platform Team Guide": {
-    "message": "Platform Team Guide",
-    "description": "The label for category Platform Team Guide in sidebar docs"
-  },
-  "sidebar.docs.category.Defining Components": {
-    "message": "Defining Components",
-    "description": "The label for category Defining Components in sidebar docs"
-  },
-  "sidebar.docs.category.CUE": {
-    "message": "CUE",
-    "description": "The label for category CUE in sidebar docs"
+  "sidebar.docs.category.Learning CUE": {
+    "message": "CUE 语言",
+    "description": "The label for category Learning CUE in sidebar docs"
   },
   "sidebar.docs.category.Helm": {
     "message": "Helm",
     "description": "The label for category Helm in sidebar docs"
+  },
+  "sidebar.docs.category.Raw Template": {
+    "message": "Raw Template",
+    "description": "The label for category Raw Template in sidebar docs"
+  },
+  "sidebar.docs.category.Traits System": {
+    "message": "运维特征系统",
+    "description": "The label for category Traits System in sidebar docs"
+  },
+  "sidebar.docs.category.Defining Cloud Service": {
+    "message": "定义 Cloud Service",
+    "description": "The label for category Defining Cloud Service in sidebar docs"
+  },
+  "sidebar.docs.category.Hands-on Lab": {
+    "message": "实践实验室",
+    "description": "The label for category Hands-on Lab in sidebar docs"
+  },
+  "sidebar.docs.category.Appfile": {
+    "message": "Appfile",
+    "description": "The label for category Appfile in sidebar docs"
+  },
+  "sidebar.docs.category.Roadmap": {
+    "message": "Roadmap",
+    "description": "The label for category Roadmap in sidebar docs"
+  },
+  "sidebar.docs.category.Application Deployment": {
+    "message": "Application Deployment",
+    "description": "The label for category Application Deployment in sidebar docs"
+  },
+  "sidebar.docs.category.More Operations": {
+    "message": "更多操作",
+    "description": "The label for category More Operations in sidebar docs"
+  },
+  "sidebar.docs.category.Platform Operation Guide": {
+    "message": "Platform Operation Guide",
+    "description": "The label for category Platform Operation Guide in sidebar docs"
+  },
+  "sidebar.docs.category.Using KubeVela CLI": {
+    "message": "使用命令行工具",
+    "description": "The label for category Using KubeVela CLI in sidebar docs"
+  },
+  "sidebar.docs.category.Managing Applications": {
+    "message": "管理应用",
+    "description": "The label for category Managing Applications in sidebar docs"
+  },
+  "sidebar.docs.category.References": {
+    "message": "参考",
+    "description": "The label for category References in sidebar docs"
+  },
+  "sidebar.docs.category.Learning OAM": {
+    "message": "开放应用模型",
+    "description": "The label for category Learning OAM in sidebar docs"
+  },
+  "sidebar.docs.category.Environment System": {
+    "message": "交付环境系统",
+    "description": "The label for category Environment System in sidebar docs"
+  },
+  "sidebar.docs.category.Workflow": {
+    "message": "定义交付工作流",
+    "description": "The label for category Workflow End User in sidebar docs"
+  },
+  "sidebar.docs.category.Worfklow System": {
+    "message": "工作流系统",
+    "description": "The label for category Worfklow System in sidebar docs"
+  },
+  "sidebar.docs.category.Customize Traits": {
+    "message": "自定义运维特征",
+    "description": "The label for category Customize Traits in sidebar docs"
+  },
+  "sidebar.docs.category.Customize Components": {
+    "message": "自定义组件",
+    "description": "The label for category Customize Traits in sidebar docs"
+  },
+  "sidebar.docs.category.CLI": {
+    "message": "CLI 命令行工具",
+    "description": "The label for category CLI in sidebar docs"
+  },
+  "sidebar.docs.category.Capabilities": {
+    "message": "Capabilities",
+    "description": "The label for category Capabilities in sidebar docs"
+  },
+  "sidebar.docs.category.Appendix": {
+    "message": "附录",
+    "description": "The label for category Appendix in sidebar docs"
+  },
+  "sidebar.docs.category.Component System": {
+    "message": "组件系统",
+    "description": "The label for category Component System in sidebar docs"
+  },
+  "sidebar.docs.category.End User Guide": {
+    "message": "用户手册",
+    "description": "The label for category User Guide in sidebar docs"
+  },
+  "sidebar.docs.category.Components": {
+    "message": "选择待交付组件",
+    "description": "The label for category Components in sidebar docs"
+  },
+  "sidebar.docs.category.Traits": {
+    "message": "绑定运维特征",
+    "description": "The label for category Traits in sidebar docs"
+  },
+  "sidebar.docs.category.Policies": {
+    "message": "设定应用策略",
+    "description": "The label for category Policies in sidebar docs"
+  },
+  "sidebar.docs.category.Case Studies": {
+    "message": "实践案例",
+    "description": "The label for category case studies in sidebar docs"
+  },
+  "sidebar.docs.category.Observability": {
+    "message": "新增可观测性",
+    "description": "The label for category Observability in sidebar docs"
+  },
+  "sidebar.docs.category.Scaling": {
+    "message": "扩缩容",
+    "description": "The label for category Scaler in sidebar docs"
+  },
+  "sidebar.docs.category.Debugging": {
+    "message": "调试指南",
+    "description": "The label for category Debugging in sidebar docs"
+  },
+  "sidebar.docs.category.Platform Admin Guide": {
+    "message": "管理员手册",
+    "description": "The label for category Platform Admin Guide in sidebar docs"
   },
   "sidebar.docs.category.Simple Template": {
     "message": "Simple Template",
     "description": "The label for category Simple Template in sidebar docs"
   },
   "sidebar.docs.category.Cloud Services": {
-    "message": "Cloud Services",
+    "message": "云服务",
     "description": "The label for category Cloud Services in sidebar docs"
   },
-  "sidebar.docs.category.Defining Traits": {
-    "message": "Defining Traits",
-    "description": "The label for category Defining Traits in sidebar docs"
-  },
-  "sidebar.docs.category.Hands-on Lab": {
-    "message": "Hands-on Lab",
-    "description": "The label for category Hands-on Lab in sidebar docs"
-  },
-  "sidebar.docs.category.Using KubeVela CLI": {
-    "message": "Using KubeVela CLI",
-    "description": "The label for category Using KubeVela CLI in sidebar docs"
-  },
-  "sidebar.docs.category.Appfile": {
-    "message": "Appfile",
-    "description": "The label for category Appfile in sidebar docs"
-  },
-  "sidebar.docs.category.Managing Applications": {
-    "message": "Managing Applications",
-    "description": "The label for category Managing Applications in sidebar docs"
-  },
-  "sidebar.docs.category.References": {
-    "message": "References",
-    "description": "The label for category References in sidebar docs"
-  },
-  "sidebar.docs.category.CLI": {
-    "message": "CLI",
-    "description": "The label for category CLI in sidebar docs"
-  },
-  "sidebar.docs.category.Roadmap": {
-    "message": "Roadmap",
-    "description": "The label for category Roadmap in sidebar docs"
-  },
-  "sidebar.docs.category.Appendix": {
-    "message": "Appendix",
-    "description": "The label for category Appendix in sidebar docs"
+  "sidebar.docs.category.Addons": {
+    "message": "插件系统",
+    "description": "The extended add-ons"
   }
 }

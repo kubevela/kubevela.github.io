@@ -10,7 +10,7 @@ Now let's walk through its experience.
 
 ## Step 1: Install
 
-Make sure you have finished and verified the installation following [this guide](./install).
+Make sure you have finished and verified the installation following quick-install.
 
 ## Step 2: Deploy Your First Application
 
@@ -59,7 +59,7 @@ Services:
       - ✅ ingress: Visiting URL: testsvc.example.com, IP: <your IP address>
 ```
 
-**In [kind cluster setup](./install#kind)**, you can visit the service via localhost. In other setups, replace localhost with ingress address accordingly.
+**In kind cluster setup, you can visit the service via localhost. In other setups, replace localhost with ingress address accordingly.
 
 ```
 curl -H "Host:testsvc.example.com" http://localhost/
