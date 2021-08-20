@@ -2,7 +2,7 @@
 title:  应用部署计划
 ---
 
-KubeVela 将 Application 应用程序作为建模的基础，使用 Components 组件和 Traits 运维特征，完成一整套的应用部署计划。在熟悉这些核心概念后，你可以根据需求，对应按照 [用户手册](../end-user/initializer-end-user) 和 [管理员手册](../platform-engineers/advanced-install.mdx) 进行开发。
+KubeVela 将 Application 应用程序作为建模的基础，使用 Components 组件和 Traits 运维特征，完成一整套的应用部署计划。在熟悉这些核心概念后，你可以根据需求，对应按照 [用户手册](../end-user/components/helm) 和 [管理员手册](../platform-engineers/oam/oam-model) 进行开发。
 
 ### Application 应用程序
 
@@ -73,7 +73,7 @@ worker     	vela-system	deployments.apps                     	Describes long-run
 
 ```
 
-作为用户的你，可以继续使用 [CUE 组件](../end-user/components/cue)、[Helm 组件](../end-user/components/helm)、[Kustomize 组件](../end-user/components/kustomize)和[云服务组件](../end-user/components/cloud-services/terraform/rds)来实现你需要的任何组件类型。
+作为用户的你，可以继续使用 [CUE 组件](../end-user/components/cue)、[Helm 组件](../end-user/components/helm)、[Kustomize 组件](../end-user/components/kustomize)和[云服务组件](../end-user/components/cloud-services)来实现你需要的任何组件类型。
 
 同时作为管理员的你，也可以使用 [自定义组件](../platform-engineers/components/custom-component)、[Terraform 组件](../platform-engineers/components/component-terraform) 来自定义你的用户所需要的任何组件类型。
 

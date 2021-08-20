@@ -148,6 +148,7 @@ module.exports = {
             'platform-engineers/debug/dry-run',
           ]
         },
+        'platform-engineers/advanced-install',
       ]
     },
     {
@@ -186,7 +187,6 @@ module.exports = {
       type: 'category',
       label: 'References',
       items: [
-        'platform-engineers/advanced-install',
         {
           type: 'category',
           label: 'CLI',
