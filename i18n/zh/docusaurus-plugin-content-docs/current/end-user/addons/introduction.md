@@ -1,13 +1,13 @@
 ---
-title:  插件系统
+title:  介绍
 ---
 
 本节会介绍如何使用 KubeVela 的默认系统插件（Addon）
 
 ## 背景
 
-KubeVela 默认是一个应用管理和交付的控制平面，同时它也支持一系列开箱即用的功能，这些都通过系统插件的方式提供。系统管理员只需要一键即可开启这些默认的系统插件，使用包括弹性扩缩容、可观测性、GitOps 在内的多种生态功能。
-除此之外，系统管理员也可以将系统插件交由用户使用，同时根据需要添加自定义的系统插件。本质上，系统插件提供了一种统一的方式，可以灵活的安装、拆卸满足应用交付和应用管理不同场景的系统能力。
+KubeVela 默认是一个应用管理和交付的控制平面，同时它也支持一系列开箱即用的功能，这些都通过系统插件的方式提供。你只需要有对 KubeVela 控制平面集群的写权限，即可一键即可开启这些默认的系统插件，使用包括弹性扩缩容、可观测性、GitOps 在内的多种生态功能。
+除此之外，你也可以让你的平台管理员，根据业务需要添加自定义的系统插件。本质上，系统插件提供了一种统一的方式，可以灵活的安装、拆卸满足应用交付和应用管理不同场景的系统能力。
 一个系统插件通常可以包含如下两个组成部分：
 - 系统组件，如 Kubernetes 的自定义资源（CRD Controller），系统所需的数据库、缓存、负载均衡等中间件，其他容易需要安装运行的系统组件。
 - OAM 标准化定义（X-Definition），如组件定义（ComponentDefinition）等，可以将系统组件的能力通过 OAM 的标准方式提供给最终的用户使用。
@@ -17,7 +17,6 @@ KubeVela 默认是一个应用管理和交付的控制平面，同时它也支�
 系统插件可以通过 KubeVela 的命令行工具一键安装，请确保你已经安装了 [vela CLI](../../getting-started/quick-install#quick-install/#3-安装-kubevela-cli)。
 
 ## 查看默认的系统插件
-
 
 1. 使用 vela CLI 查看可用的插件
 
@@ -58,7 +57,7 @@ terraform          	Terraform Controller is a Kubernetes Controller for Terrafor
 
 1. 需求
 
-作为一个平台管理员，假设此时你的用户想以 helm chart 形式作为应用部署计划的组件，你需要满足这个需求。经过一番查阅，你发现 KubeVela 提供的名为 fluxcd 的插件已经满足了你的需求。
+假设此时你想以 helm chart 形式作为应用部署计划的组件，你需要满足这个需求。经过一番查阅，你发现 KubeVela 提供的名为 fluxcd 的插件已经满足了你的需求。
 
 这个插件已经将调协集群中的 helm chart 的能力整理好，准备了相关的组件定义，可以一键启用。
 
@@ -67,7 +66,7 @@ terraform          	Terraform Controller is a Kubernetes Controller for Terrafor
 
 下面将以 fluxcd 为例，演示一个插件的安装和使用过程。
 
-2. 以 fluxcd 这个插件为例，启用 fluxcd 以后, CLI 将会持续检查 fluxcd 插件的状态，直至其成功安装。
+1. 以 fluxcd 这个插件为例，启用 fluxcd 以后, CLI 将会持续检查 fluxcd 插件的状态，直至其成功安装。
 
 ```shell
 vela addon enable fluxcd
@@ -115,14 +114,3 @@ redis           default         1               2021-08-17 04:12:49.3966701 +000
 你可以使用 `vela addon disable fluxcd` 来禁用该插件。 请注意在禁用插件之前清理相关应用。注意如果直接禁用插件，带有 helm 类型的交付组件将无法被正确地删除。
 
 另外，要完全清理 fluxcd 插件，最后你还需要执行 `vela addon disable ns-flux-system`，这是 fluxcd 的辅助插件，需要手动禁用。
-
-## 插件背后
-
-实际上每个插件在 vela-system 名字空间中创建了一个 Initializer。可以用下面的方式查看：
-
-```shell
-kubectl get initializer -n vela-system
-NAME                  PHASE     AGE
-fluxcd                success   23m
-ns-flux-system        success   23m
-```
