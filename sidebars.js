@@ -25,36 +25,24 @@ module.exports = {
       label: 'End User Guide',
       collapsed: false,
       items: [
-        'end-user/initializer-end-user',
-        {
-          'Workflow': [
-            'end-user/workflow/apply-component',
-            'end-user/workflow/apply-remaining',
-            'end-user/workflow/multi-env',
-          ]
-        },
+        // 'end-user/initializer-end-user',
         {
           'Components': [
             'end-user/components/helm',
             'end-user/components/kustomize',
-            {
-              'CUE': [
-                'end-user/components/cue/webservice',
-                'end-user/components/cue/task',
-                'end-user/components/cue/worker',
-              ]
-            },
-            {
-              'Cloud Services': [
-                {
-                  'Terraform': [
-                    'end-user/components/cloud-services/terraform/sls',
-                    'end-user/components/cloud-services/terraform/rds',
-                  ]
-                },
-                'end-user/components/cloud-services/alibaba-ros',
-              ]
-            },
+            'end-user/components/cue',
+            'end-user/components/cloud-services',
+            // {
+            //   'Cloud Services': [
+            //     {
+            //       'Terraform': [
+            //         'end-user/components/cloud-services/terraform/sls',
+            //         'end-user/components/cloud-services/terraform/rds',
+            //       ]
+            //     },
+            //     'end-user/components/cloud-services/alibaba-ros',
+            //   ]
+            // },
           ]
         },
         {
@@ -82,6 +70,13 @@ module.exports = {
           ]
         },
         {
+          'Workflow': [
+            'end-user/workflow/apply-component',
+            'end-user/workflow/apply-remaining',
+            'end-user/workflow/multi-env',
+          ]
+        },
+        {
           'Addons': [
             'end-user/addons/introduction',
             'end-user/addons/observability',
@@ -101,7 +96,7 @@ module.exports = {
       label: 'Case Studies',
       collapsed: false,
       items: [
-        'case-studies/workflow-edge-computing', // 待完成
+        // 'case-studies/workflow-edge-computing', // 待完成
         'case-studies/li-auto-inc',
         'case-studies/workflow-with-ocm',
       ],
@@ -132,14 +127,6 @@ module.exports = {
           ]
         },
         {
-          'Worfklow System': [
-            'platform-engineers/workflow/steps',
-            'platform-engineers/workflow/context',
-            'platform-engineers/workflow/data-flow',
-            'platform-engineers/workflow/cue-actions',
-          ]
-        },
-        {
           type: 'category',
           label: 'Component System',
           items: [
@@ -157,7 +144,14 @@ module.exports = {
             'platform-engineers/traits/advanced',
           ]
         },
-        'platform-engineers/advanced-install',
+        {
+          'Worfklow System': [
+            'platform-engineers/workflow/steps',
+            'platform-engineers/workflow/context',
+            'platform-engineers/workflow/data-flow',
+            'platform-engineers/workflow/cue-actions',
+          ]
+        },
         {
           'Debugging': [
             'platform-engineers/debug/dry-run',
@@ -191,6 +185,7 @@ module.exports = {
       type: 'category',
       label: 'References',
       items: [
+        'platform-engineers/advanced-install',
         {
           type: 'category',
           label: 'CLI',
