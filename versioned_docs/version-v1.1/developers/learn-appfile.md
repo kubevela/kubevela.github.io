@@ -35,7 +35,7 @@ Under the hood, `Appfile` will build the image from source code, and then genera
 
 ## Schema
 
-> Before learning about Appfile's detailed schema, we recommend you to get familiar with [core concepts](../concepts) in KubeVela.
+> Before learning about Appfile's detailed schema, we recommend you to get familiar with core concepts in KubeVela.
 
 
 ```yaml
@@ -81,7 +81,7 @@ In the following workflow, we will build and deploy an example NodeJS app under 
 ### Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) installed on the host
-- [KubeVela](../install) installed and configured
+- KubeVela] installed and configured
 
 ### 1. Download test app code
 
@@ -165,7 +165,7 @@ vela status testapp
 
 #### Alternative: Local testing without pushing image remotely
 
-If you have local [kind](../install) cluster running, you may try the local push option. No remote container registry is needed in this case.
+If you have local kind cluster running, you may try the local push option. No remote container registry is needed in this case.
 
 Add local option to `build`:
 
@@ -225,7 +225,7 @@ spec:
 
 ### [Optional] Configure another workload type
 
-By now we have deployed a *[Web Service](../end-user/components/webservice)*, which is the default workload type in KubeVela. We can also add another service of *[Task](../end-user/components/task)* type in the same app:
+By now we have deployed a *[Web Service](../end-user/components/cue/webservice)*, which is the default workload type in KubeVela. We can also add another service of *[Task](../end-user/components/cue/task)* type in the same app:
 
 ```yaml
 services:

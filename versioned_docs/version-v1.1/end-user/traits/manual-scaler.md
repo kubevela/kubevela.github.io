@@ -1,0 +1,5 @@
+---
+title: Manual Scaler
+---
+
+TBD
