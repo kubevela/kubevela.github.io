@@ -1,5 +1,5 @@
 ---
-title: 模块定义（X-Definitions）
+title: 模块定义（X-Definition）
 ---
 
 最终用户使用的 OAM 模型 [应用部署计划 Application](./oam-model) 中，有很多声明“类型的字段”，如组件类型、运维特征类型、应用策略类型、工作流节点类型等，这些类型实际上就是 OAM 模型的模块定义（X-Definition）。

@@ -66,7 +66,7 @@ module.exports = {
         },
         {
           'Policies': [
-              'end-user/policies/envbinding',
+            'end-user/policies/envbinding',
           ]
         },
         {
@@ -100,7 +100,7 @@ module.exports = {
           type: 'category',
           label: 'Learning OAM',
           collapsed: false,
-           items:[
+          items: [
             'platform-engineers/oam/oam-model',
             'platform-engineers/oam/x-definition',
           ]
@@ -108,6 +108,7 @@ module.exports = {
         {
           'Learning CUE': [
             'platform-engineers/cue/basic',
+            'platform-engineers/cue/definition-edit',
             // 'platform-engineers/cue/advanced', 暂时隐藏，来不及随 1.1 发布，随后补充
           ]
         },
