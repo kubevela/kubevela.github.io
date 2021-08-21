@@ -190,6 +190,10 @@
             {
               "type": "doc",
               "id": "version-v1.1/platform-engineers/cue/basic"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/cue/definition-edit"
             }
           ]
         },
@@ -279,6 +283,10 @@
               "id": "version-v1.1/platform-engineers/debug/dry-run"
             }
           ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.1/platform-engineers/advanced-install"
         }
       ]
     },
@@ -355,10 +363,6 @@
       "type": "category",
       "label": "References",
       "items": [
-        {
-          "type": "doc",
-          "id": "version-v1.1/platform-engineers/advanced-install"
-        },
         {
           "collapsed": true,
           "type": "category",
