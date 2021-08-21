@@ -1,8 +1,8 @@
 ---
-title:  自定义组件
+title:  自定义组件入门
 ---
 
-> 在阅读本部分之前，请确保你已经学习了 KubeVela 中的[组件定义（ComponentDefinition）](../oam/x-definition.md##组件定义（ComponentDefinition）) 原理
+> 在阅读本部分之前，请确保你已经了解 KubeVela 中[组件定义（ComponentDefinition）](../oam/x-definition.md##组件定义（ComponentDefinition）) 的概念
 
 > 学习掌握了 [CUE 的基本知识](../cue/basic)
 
@@ -384,12 +384,12 @@ output: {
 
 ### CUE `context` 的配置项
 
-| Context 变量名  | 说明 |
-| :--: | :---------: |
-| `context.appRevision` | 应用部署计划的版本 |
-| `context.appRevisionNum` | 应用部署计划的版本号(`int` 类型), 比如说如果 `context.appRevision` 是 `app-v1` 的话，`context.appRevisionNum` 会是 `1` |
-| `context.appName` | 应用部署计划的名称 |
-| `context.name` | 组件的名称 |
-| `context.namespace` | 应用部署计划的命名空间 |
-| `context.output` | 组件中渲染的工作负载 API 资源，这通常用在运维特征里 |
-| `context.outputs.<resourceName>` | 组件中渲染的运维特征 API 资源，这通常用在运维特征里 |
+|          Context 变量名          |                                                          说明                                                          |
+| :------------------------------: | :--------------------------------------------------------------------------------------------------------------------: |
+|      `context.appRevision`       |                                                   应用部署计划的版本                                                   |
+|     `context.appRevisionNum`     | 应用部署计划的版本号(`int` 类型), 比如说如果 `context.appRevision` 是 `app-v1` 的话，`context.appRevisionNum` 会是 `1` |
+|        `context.appName`         |                                                   应用部署计划的名称                                                   |
+|          `context.name`          |                                                       组件的名称                                                       |
+|       `context.namespace`        |                                                 应用部署计划的命名空间                                                 |
+|         `context.output`         |                                  组件中渲染的工作负载 API 资源，这通常用在运维特征里                                   |
+| `context.outputs.<resourceName>` |                                  组件中渲染的运维特征 API 资源，这通常用在运维特征里                                   |

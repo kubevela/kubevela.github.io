@@ -97,6 +97,6 @@ Hello World
 
 后续步骤:
 
+- 查看 KubeVela 的[`应用部署计划及其概念`](../core-concepts/application)，进一步理解其是如何工作的。
+- 查看 KubeVela 的[`系统架构`](../core-concepts/architecture)，了解 KubeVela 的系统构成和运转模式。
 - 加入 KubeVela 中文社区钉钉群，群号：23310022。
-- 查看 KubeVela 的[`核心概念`](../core-concepts/application.md)，进一步理解其是如何工作的。
-<!-- - 直接使用 [`用户手册`](../core-concepts/application.md) 或者 [`管理员手册`](../core-concepts/application.md) 开始实际开发。 -->
