@@ -4,6 +4,8 @@ title:  Application
 
 KubeVela takes Application as the basis of modeling, uses Components and Traits to complete a set of application deployment plans. After you are familiar with these core concepts, you can develop in accordance with the user manual and administrator manual according to your needs.
 
+## Application
+
 In modeling, the YAML file is the bearer of the application deployment plan. A typical YAML example is as follows:
 
 ```
@@ -45,3 +47,9 @@ The fields here correspond to:
 - Spec: Describe what we need to deliver and tell Kubernetes what to make. Here we put the components of KubeVela.
 - components: KubeVela's component system.
 - Traits: KubeVela's operation and maintenance feature system.
+
+## Workflow
+
+In KubeVela, Workflow allows user to glue various operation and maintenance tasks into one process, and achieve automated and rapid delivery of cloud-native applications to any hybrid environment. From the design point of view, the Workflow is to customize the control logic: not only simply apply all resources, but also to provide some process-oriented flexibility. For example, the use of Workflow can help us implement complex operations such as pause, manual verification, waiting state, data flow transmission, multi-environment grayscale, and A/B testing.
+
+The Workflow is based on modular design. Each Workflow module is defined by a Definition CRD and provided to users for operation through K8s API. As a "super glue", the Workflow module can combine any of your tools and processes through the CUE language. This allows you to create your own modules through a powerful declarative language and cloud-native APIs.
