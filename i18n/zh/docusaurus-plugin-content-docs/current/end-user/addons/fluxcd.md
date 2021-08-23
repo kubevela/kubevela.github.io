@@ -14,10 +14,11 @@ title:  fluxcd 插件
 
 1. Flux v2 的本体内容：包括 Deployment / Service / ClusterRole / ClusterRoleBinding / NetworkPolicy。这些内容是 Flux 的控制器、CRD 以及与之配合的 Kubernetes 对象。
 
-2. 随插件安装的将有如下两个组件定义，其各自的使用方法详见其各自的文档，更多 Flux 能力即将成为 KubeVela 的模块定义。
+2. 随插件安装的将有如下两个组件定义和一个运维特征定义，其各自的使用方法详见其各自的文档，更多 Flux 能力即将成为 KubeVela 的模块定义。
 
     1. [helm](../../end-user/components/helm)：帮助交付 helm chart 类型的组件
     2. [kustomize](../../end-user/components/kustomize)：帮助交付 kustomize 类型的组件
+    3. [patch](../../end-user/traits/kustomize-patch) 对 kustomize 组件进行 patch
 
 ## 依赖
 
