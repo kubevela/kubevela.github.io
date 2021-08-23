@@ -29,7 +29,7 @@ spec:
         port: 80
 
   policies:
-    - name: test-env
+    - name: env
       type: env-binding
       properties:
         created: false
@@ -46,11 +46,6 @@ spec:
               clusterSelector:
                 labels:
                   purpose: test
-    - name: prod-env
-      type: env-binding
-      properties:
-        created: false
-        envs:
           - name: prod
             patch:
               components:
@@ -73,7 +68,7 @@ spec:
           # 指定组件名称
           component: nginx-server
           # 指定 policy 名称
-          policy: test-env
+          policy: env
           # 指定 policy 中的 env 名称
           env: test
       - name: manual-approval
@@ -83,7 +78,7 @@ spec:
         type: multi-env
         properties:
           component: nginx-server
-          policy: prod-env
+          policy: env
           env: prod
 ```
 
