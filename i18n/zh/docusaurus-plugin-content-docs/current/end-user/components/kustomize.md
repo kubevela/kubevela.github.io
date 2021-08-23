@@ -8,7 +8,7 @@ title:  Kustomize 组件
 
 ## 开始之前
 
-> 🔧 开启 [fluxcd](../../reference/addon/fluxcd) 插件即可使用 kustomize 类型组件。
+> 🔧 开启 [fluxcd](../addons/fluxcd) 插件即可使用 kustomize 类型组件。
 
 ## 部署来自不同来源的 Kustomize
 
