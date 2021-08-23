@@ -248,7 +248,7 @@ $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 express-server   7        7          7       batchReady    rolloutSucceed   2d20h
 
-$ kubectl get deploy express-server-v1 -l app.oam.dev/component=express-server
+$ kubectl get deploy -l app.oam.dev/component=express-server
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   7/7     7            7           2m
 ```
@@ -287,7 +287,7 @@ $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 express-server   3        3          3       batchReady    rolloutSucceed   2d20h
 
-$ kubectl get deploy express-server-v1 -l app.oam.dev/component=express-server
+$ kubectl get deploy -l app.oam.dev/component=express-server
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   3/3     3            3           5m
 ```
@@ -395,7 +395,7 @@ NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 cloneset-server  5        5          5       batchReady    rolloutSucceed   6m10s
 ```
 
-查看工作负载状态，可见升级之后的工作负载仍是 express-server。
+查看工作负载状态，可见升级之后的工作负载仍是 cloneset-server。
 ```shell
 $ kubectl get cloneset -l app.oam.dev/component=cloneset-server
 NAME             DESIRED   UPDATED   UPDATED_READY   READY   TOTAL   AGE
