@@ -1,5 +1,5 @@
 ---
-etitle: 修改 Kustomize 配置
+title: 修改 Kustomize 配置
 ---
 本小节将介绍如何使用 trait patch 交付的 Kustomize 组件。
 
