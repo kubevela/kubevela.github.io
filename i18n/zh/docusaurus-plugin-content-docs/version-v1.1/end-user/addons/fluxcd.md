@@ -18,6 +18,7 @@ title:  fluxcd 插件
 
     1. [helm](../../end-user/components/helm)：帮助交付 helm chart 类型的组件
     2. [kustomize](../../end-user/components/kustomize)：帮助交付 kustomize 类型的组件
+    3. [patch](../../end-user/traits/kustomize-patch) 对 kustomize 组件进行 patch
 
 ## 依赖
 
