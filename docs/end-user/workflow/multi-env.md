@@ -12,7 +12,6 @@ In this guide, you will learn how to manage multi environments via `multi-env` i
 
 Apply the following `Application` with workflow step type of `multi-env`:
 
-
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -28,7 +27,7 @@ spec:
         port: 80
 
   policies:
-    - name: test-env
+    - name: env
       type: env-binding
       properties:
         created: false
@@ -45,11 +44,6 @@ spec:
               clusterSelector:
                 labels:
                   purpose: test
-    - name: prod-env
-      type: env-binding
-      properties:
-        created: false
-        envs:
           - name: prod
             patch:
               components:
@@ -65,16 +59,16 @@ spec:
 
   workflow:
     steps:
-      - name: deploy-server
+      - name: deploy-test-server
         # specify the workflow step type
         type: multi-env
         properties:
           # specify the component name
           component: nginx-server
           # specify the policy name
-          policy: patch
+          policy: env
           # specify the env name in policy
-          env: prod
+          env: test
       - name: manual-approval
         # suspend is a built-in task of workflow used to suspend the workflow
         type: suspend
@@ -82,7 +76,7 @@ spec:
         type: multi-env
         properties:
           component: nginx-server
-          policy: prod-env
+          policy: env
           env: prod
 ```
 
