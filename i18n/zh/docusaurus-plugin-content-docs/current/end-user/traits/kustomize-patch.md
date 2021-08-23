@@ -7,7 +7,7 @@ etitle: 修改 Kustomize 配置
 
 > ⚠️ 请已安装 [KubeVela CLI 命令行工具](../../getting-started/quick-install.mdx##3)
 
-> 🔧 开启 [fluxcd](../../reference/addon/fluxcd) 插件即可使用 kustomize 类型组件，并按照本文档进行修改。
+> 🔧 开启 [fluxcd](../addons/fluxcd) 插件即可使用 kustomize 类型组件，并按照本文档进行修改。
 
 ### 如何使用
 
