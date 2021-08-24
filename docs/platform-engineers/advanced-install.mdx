@@ -111,7 +111,7 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/chart
 kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_scopedefinitions.yaml
 kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_appdeployments.yaml
 kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_applicationcontexts.yaml
-kubectl apply -f  https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
 ```
 
 > Tips: If you see errors like `* is invalid: spec.scope: Invalid value: "Namespaced": filed is immutable`. Please delete the CRD which reports error and re-apply the kubevela crds.
@@ -159,5 +159,6 @@ Then clean up CRDs (CRDs are not removed via helm by default):
   podspecworkloads.standard.oam.dev \
   scopedefinitions.core.oam.dev \
   traitdefinitions.core.oam.dev \
-  workloaddefinitions.core.oam.dev
+  workloaddefinitions.core.oam.dev \
+  definitionrevisions.core.oam.dev
 ```
