@@ -70,6 +70,7 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/chart
 kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_scopedefinitions.yaml
 kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_appdeployments.yaml
 kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_applicationcontexts.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
 ```
 
 > 提示：如果看到诸如 `* is invalid: spec.scope: Invalid value: "Namespaced": filed is immutable` 之类的错误，请删除出错的 CRD 后再重新安装。
@@ -115,5 +116,6 @@ rm -r ~/.vela
   podspecworkloads.standard.oam.dev \
   scopedefinitions.core.oam.dev \
   traitdefinitions.core.oam.dev \
-  workloaddefinitions.core.oam.dev
+  workloaddefinitions.core.oam.dev \
+  definitionrevisions.core.oam.dev
 ```
