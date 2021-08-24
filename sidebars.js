@@ -30,7 +30,7 @@ module.exports = {
             'end-user/components/helm',
             'end-user/components/kustomize',
             'end-user/components/cue',
-            'end-user/components/cloud-services',
+            // 'end-user/components/cloud-services', 先隐藏，需要等用户侧的云服务支持 terraform 原生的 HCL
             // {
             //   'Cloud Services': [
             //     {
@@ -77,12 +77,6 @@ module.exports = {
           ]
         },
         {
-          'Addons': [
-            'end-user/addons/introduction',
-            'end-user/addons/fluxcd',
-          ]
-        },
-        {
           'Debugging': [
             // 'end-user/debug/health',
             // 'end-user/debug/monitoring', 这部分要和可观测合并
@@ -115,6 +109,12 @@ module.exports = {
         {
           'Environment System': [
             'platform-engineers/initializer/basic-initializer',
+          ]
+        },
+        {
+          'Addons': [
+            'end-user/addons/introduction',
+            // 'end-user/addons/fluxcd', 这个应该整体放在 reference 文档里去。它的使用方式，只需要在 helm 组件和 Kustomize 组件使用是 refer 即可。
           ]
         },
         {
@@ -152,16 +152,16 @@ module.exports = {
         'platform-engineers/advanced-install',
       ]
     },
-    {
-      type: 'category',
-      label: 'Case Studies',
-      collapsed: false,
-      items: [
+    // { 实践案例，重写
+    //   type: 'category',
+    //   label: 'Case Studies',
+    //   collapsed: false,
+    //   items: [
         // 'case-studies/workflow-edge-computing', // 待完成
-        'case-studies/li-auto-inc',
-        'case-studies/workflow-with-ocm',
-      ],
-    },
+        // 'case-studies/li-auto-inc',  暂时下掉，应该改写成一个 10-15 分钟体验的产品 lab 例子
+        // 'case-studies/workflow-with-ocm',
+    //   ],
+    // },
     {
       type: 'category',
       label: 'Using KubeVela CLI',
