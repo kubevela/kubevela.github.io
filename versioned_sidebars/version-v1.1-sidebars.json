@@ -55,10 +55,6 @@
             {
               "type": "doc",
               "id": "version-v1.1/end-user/components/cue"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.1/end-user/components/cloud-services"
             }
           ]
         },
@@ -137,21 +133,6 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "Addons",
-          "items": [
-            {
-              "type": "doc",
-              "id": "version-v1.1/end-user/addons/introduction"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.1/end-user/addons/fluxcd"
-            }
-          ]
-        },
-        {
-          "collapsed": true,
-          "type": "category",
           "label": "Debugging",
           "items": [
             {
@@ -205,6 +186,17 @@
             {
               "type": "doc",
               "id": "version-v1.1/platform-engineers/initializer/basic-initializer"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Addons",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/addons/introduction"
             }
           ]
         },
@@ -287,21 +279,6 @@
         {
           "type": "doc",
           "id": "version-v1.1/platform-engineers/advanced-install"
-        }
-      ]
-    },
-    {
-      "collapsed": false,
-      "type": "category",
-      "label": "Case Studies",
-      "items": [
-        {
-          "type": "doc",
-          "id": "version-v1.1/case-studies/li-auto-inc"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.1/case-studies/workflow-with-ocm"
         }
       ]
     },
