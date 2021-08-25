@@ -55,6 +55,28 @@
             {
               "type": "doc",
               "id": "version-v1.1/end-user/components/cue"
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Cloud Services",
+              "items": [
+                {
+                  "collapsed": true,
+                  "type": "category",
+                  "label": "Terraform",
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "version-v1.1/end-user/components/cloud-services/terraform/alibaba-rds"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "version-v1.1/end-user/components/cloud-services/terraform/alibaba-oss"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },

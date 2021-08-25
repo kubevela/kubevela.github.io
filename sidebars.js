@@ -31,17 +31,16 @@ module.exports = {
             'end-user/components/kustomize',
             'end-user/components/cue',
             // 'end-user/components/cloud-services', 先隐藏，需要等用户侧的云服务支持 terraform 原生的 HCL
-            // {
-            //   'Cloud Services': [
-            //     {
-            //       'Terraform': [
-            //         'end-user/components/cloud-services/terraform/sls',
-            //         'end-user/components/cloud-services/terraform/rds',
-            //       ]
-            //     },
-            //     'end-user/components/cloud-services/alibaba-ros',
-            //   ]
-            // },
+            {
+              'Cloud Services': [
+                {
+                  'Terraform': [
+                    'end-user/components/cloud-services/terraform/alibaba-rds',
+                    'end-user/components/cloud-services/terraform/alibaba-oss',
+                  ]
+                },
+              ]
+            },
           ]
         },
         {
