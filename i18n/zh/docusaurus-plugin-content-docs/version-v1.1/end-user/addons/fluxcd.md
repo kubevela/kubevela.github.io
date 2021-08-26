@@ -8,7 +8,7 @@ title:  fluxcd 插件
 
 ## 插件概览
 
-[Flux](https://fluxcd.io/) 是一套针对 Kubernetes 的持续交付（CD）解决方案，fluxcd 插件将帮助你在集群中安装 Flux，并为 KubeVela 提供 Flux 的持续交付能力，帮助你在应用交付计划中添加 helm chart 或 kustomize 类型的组件。
+[Flux](https://fluxcd.io/) 是一套针对 Kubernetes 的持续交付（CD）解决方案，fluxcd 插件将帮助你在集群中安装 Flux，并为 KubeVela 提供 Flux 的持续交付能力，帮助你在应用部署计划中添加 helm chart 或 kustomize 类型的组件。
 
 ## 插件内容
 
