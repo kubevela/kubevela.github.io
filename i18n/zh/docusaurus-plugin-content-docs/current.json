@@ -79,9 +79,9 @@
     "message": "定义交付工作流",
     "description": "The label for category Workflow End User in sidebar docs"
   },
-  "sidebar.docs.category.Worfklow System": {
+  "sidebar.docs.category.Workflow System": {
     "message": "工作流系统",
-    "description": "The label for category Worfklow System in sidebar docs"
+    "description": "The label for category Workflow System in sidebar docs"
   },
   "sidebar.docs.category.Customize Traits": {
     "message": "自定义运维特征",
