@@ -165,5 +165,5 @@ KubeVela 的工作流机制允许用户自定义应用部署计划中的步骤�
 后续步骤:
 
 - 加入 KubeVela 中文社区钉钉群，群号：23310022。
-- [阅读**用户手册**基于开箱即用功能，构建你的应用部署计划](../end-user/components/helm)。
+- [阅读**用户手册**基于开箱即用功能，构建你的应用部署计划](../end-user/component-delivery)。
 - [阅读**管理员手册**了解 KubeVela 的扩展方式和背后的原理](../platform-engineers/oam/oam-model)。
