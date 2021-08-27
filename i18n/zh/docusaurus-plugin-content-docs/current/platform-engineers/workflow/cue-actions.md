@@ -72,7 +72,7 @@ import "vela/op"
 
 apply: op.#Apply
 
-wait: op.#ConditionalWait: {
+wait: op.#ConditionalWait & {
   continue: apply.value.status.phase=="running"
 }
 ```
