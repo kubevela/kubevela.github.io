@@ -135,7 +135,7 @@ module.exports = {
           ]
         },
         {
-          'Worfklow System': [
+          'Workflow System': [
             'platform-engineers/workflow/steps',
             'platform-engineers/workflow/context',
             'platform-engineers/workflow/data-flow',
