@@ -103,5 +103,5 @@ KubeVela 的用户数据面数据流动采用 Pull 模式（订阅模式），Ku
 后续步骤:
 
 - 加入 KubeVela 中文社区钉钉群，群号：23310022。
-- 阅读**用户手册**基于开箱即用功能构建你的应用交付计划。
-- 阅读**管理员手册**了解 KubeVela 的扩展方式和背后的原理。
+- [阅读**用户手册**基于开箱即用功能，构建你的应用部署计划](../end-user/component-delivery)。
+- [阅读**管理员手册**了解 KubeVela 的扩展方式和背后的原理](../platform-engineers/oam/oam-model)。

@@ -16,17 +16,17 @@ metadata:
   name: website
 spec:
   components:
-    - name: frontend              # This is the component I want to deploy
+    - name: frontend              # 比如我们希望部署一个实现前端业务的 Web Service 类型组件
       type: webservice
       properties:
         image: nginx
       traits:
-        - type: cpuscaler         # Automatically scale the component by CPU usage after deployed
+        - type: cpuscaler         # 给组件设置一个可以动态调节 CPU 使用率的 cpuscaler 类型运维特征
           properties:
             min: 1
             max: 10
             cpuPercent: 60
-        - type: sidecar           # Inject a fluentd sidecar before applying the component to runtime cluster
+        - type: sidecar           # 往运行时集群部署之前，注入一个做辅助工作的 sidecar
           properties:
             name: "sidecar-test"
             image: "fluentd"
@@ -52,7 +52,24 @@ spec:
       - name: deploy-backend
         type: apply-component
         properties:
-          component: backend          
+          component: backend  
+  policies:
+    - name: demo-policy
+      type: env-binding
+      properties:
+        engine: local
+        envs:
+          - name: test
+            patch:
+              components:
+                - name: nginx-server
+                  type: webservice
+                  properties:
+                    image: nginx:1.20
+                    port: 80
+            placement:
+              namespaceSelector:
+                name: test
 ```
 
 这里的字段对应着：
@@ -62,8 +79,9 @@ spec:
 - `metadata`：业务相关信息。比如这次要创建的是一个网站。
 - `Spec`：描述我们需要应用去交付什么，告诉 Kubernetes 做成什么样。这里我们放入 KubeVela 的 `components`。
 - `components`：一次应用交付部署计划所涵盖的全部组件。
-- `traits`：应用交付部署计划中每个组件独立的运维策略。
-- `workflow`: 自定义应用交付的执行流程，可以不填，则默认依次全部创建。
+- `traits`：应用交付部署计划中每个组件独立的运维特征。
+- `workflow`：自定义应用交付的工作流，可以不填，则默认依次全部创建。
+- `policies`：应用策略。示例中的 `env-binding` 可以为应用提供差异化配置和环境调度策略。
 
 下面这张示意图诠释了它们之间的关系：
 ![image.png](../resources/concepts.png)
@@ -119,7 +137,7 @@ sidecar    	vela-system	deployments.apps 	              	true          	Inject a
 
 ## 工作流（Workflow）
 
-KubeVela 的工作流机制允许用户自定义应用交付计划中的步骤，粘合额外的交付流程，指定任意的交付环境。简而言之，工作流提供了定制化的控制逻辑，在原有 Kubernetes 模式交付资源（Apply）的基础上，提供了面向过程的灵活性。比如说，使用工作流实现暂停、人工验证、状态等待、数据流传递、多环境灰度、A/B 测试等复杂操作。
+KubeVela 的工作流机制允许用户自定义应用部署计划中的步骤，粘合额外的交付流程，指定任意的交付环境。简而言之，工作流提供了定制化的控制逻辑，在原有 Kubernetes 模式交付资源（Apply）的基础上，提供了面向过程的灵活性。比如说，使用工作流实现暂停、人工验证、状态等待、数据流传递、多环境灰度、A/B 测试等复杂操作。
 
 工作流是 KubeVela 实践过程中基于 OAM 模型的进一步探索和最佳实践，充分遵守 OAM 的模块化理念和可复用特性。每一个工作流模块都是一个“超级粘合剂”，可以将你任意的工具和流程都组合起来。使得你在现代复杂云原生应用交付环境中，可以通过一份申明式的配置，完整的描述所有的交付流程，保证交付过程的稳定性和便利性。
 
@@ -136,10 +154,16 @@ KubeVela 的工作流机制允许用户自定义应用交付计划中的步骤�
 
 如果你是熟悉 Kubernetes 的平台管理员，你可以[学习创建自定义工作流节点类型](../platform-engineers/workflow/steps)，或者通过[设计文档](https://github.com/oam-dev/kubevela/blob/master/design/vela-core/workflow_policy.md)了解工作流系统背后的设计和架构.
 
+## 应用策略（Policy)
+
+应用策略（Policy）负责定义应用级别的部署特征，比如健康检查规则、安全组、防火墙、SLO、检验等模块。
+
+应用策略的扩展性和功能与运维特征类似，可以灵活的扩展和对接所有云原生应用生命周期管理的能力。相对于运维特征而言，应用策略作用于一个应用的整体，而运维特征作用于应用中的某个组件。
+
 ## 下一步
 
 后续步骤:
 
 - 加入 KubeVela 中文社区钉钉群，群号：23310022。
-- 阅读**用户手册**基于开箱即用功能构建你的应用交付计划。
-- 阅读**管理员手册**了解 KubeVela 的扩展方式和背后的原理。
+- [阅读**用户手册**基于开箱即用功能，构建你的应用部署计划](../end-user/components/helm)。
+- [阅读**管理员手册**了解 KubeVela 的扩展方式和背后的原理](../platform-engineers/oam/oam-model)。
