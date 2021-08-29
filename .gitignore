@@ -4,6 +4,8 @@
 # Production
 /build
 
+.Ulysses-Settings.plist
+
 # Generated files
 .docusaurus
 .cache-loader

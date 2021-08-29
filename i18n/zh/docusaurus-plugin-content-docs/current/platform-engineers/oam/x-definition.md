@@ -2,7 +2,7 @@
 title: 模块定义（X-Definition）
 ---
 
-最终用户使用的 OAM 模型 [应用部署计划 Application](./oam-model) 中，有很多声明“类型的字段”，如组件类型、运维特征类型、应用策略类型、工作流节点类型等，这些类型实际上就是 OAM 模型的模块定义（X-Definition）。
+最终用户使用的 OAM 模型 [应用部署计划 Application][1] 中，有很多声明“类型的字段”，如组件类型、运维特征类型、应用策略类型、工作流节点类型等，这些类型实际上就是 OAM 模型的模块定义（X-Definition）。
 
 当前 OAM 模型支持的模块定义（X-Definition）包括组件定义（ComponentDefinition），运维特征定义（TraitDefinition）、应用策略定义（PolicyDefinition），工作流节点定义（WorkflowStepDefinition）等，随着系统演进，OAM 模型未来可能会根据场景需要进一步增加新的模块定义。
 
@@ -54,7 +54,7 @@ spec:
 
 工作负载类型名称对应了一个“工作负载定义”的引用，“工作负载定义”的原理会在下一个小节介绍。两种写法的区别在于第一种直接写工作负载的资源组和类型，如果背后没有工作负载定义，会自动生成。而指定“工作负载类型名称”则可以做校验，限制组件定义只能针对系统中已经存在的工作负载类型做抽象。
 
-* 组件描述（对应`.spec.schematic`）定义了组件的详细信息。该部分目前支持 [`cue`](../cue/basic) 和 [`kube`](../kube/component) 两种描述方式。
+* 组件描述（对应`.spec.schematic`）定义了组件的详细信息。该部分目前支持 [`cue`][2] 和 [`kube`][3] 两种描述方式。
 
 具体抽象方式和交付方式的编写可以查阅对应的文档，这里以一个完整的例子介绍组件定义的工作流程。
 
@@ -203,9 +203,9 @@ spec:
 
 * 运维特征能够适配的工作负载名称列表（`.spec.appliesToWorkloads`）,可缺省字段，字符串数组类型，申明这个运维特征可以用于的工作负载类型，填写的是工作负载的 CRD 名称，格式为 `<resources>.<api-group>`
 * 与该运维特征冲突的其他运维特征名称列表（`.spec.conflictsWith`）,可缺省字段，字符串数组类型，申明这个运维特征与哪些运维特征冲突，填写的是运维特征名称的列表。
-* 特征描述（对应`.spec.schematic`）字段定义了具体的运维动作。目前主要通过 [`CUE`](../traits/customize-trait) 来实现，同时也包含一系列诸如[`patch-trait`](../traits/advanced.md)这样的高级用法。
+* 特征描述（对应`.spec.schematic`）字段定义了具体的运维动作。目前主要通过 [`CUE`][4] 来实现，同时也包含一系列诸如[`patch-trait`][5]这样的高级用法。
 * 运维特征对应的 Kubernetes 资源定义（`.spec.definition`字段），可缺省字段，如果运维能力通过 Kubernetes 的 CRD 方式提供可以填写，其中 `apiVersion` 和 `kind` 分别描述了背后对应的 Kubernetes 资源组和资源类型。
-* 运维能力中对于工作负载对象的引用字段路径（`.spec.workloadRefPath`字段），可缺省字段，运维能力中如果涉及到工作负载的引用，可以填写这样一个路径地址（如操作弹性扩缩容的 [HPA](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/)对象，就可以填写`spec.scaleTargetRef`），然后 KubeVela 会自动将工作负载的实例化引用注入到运维能力的实例对象中。
+* 运维能力中对于工作负载对象的引用字段路径（`.spec.workloadRefPath`字段），可缺省字段，运维能力中如果涉及到工作负载的引用，可以填写这样一个路径地址（如操作弹性扩缩容的 [HPA][6]对象，就可以填写`spec.scaleTargetRef`），然后 KubeVela 会自动将工作负载的实例化引用注入到运维能力的实例对象中。
 * 运维能力的参数更新会不会引起底层资源（pod）重启（`.spec.podDisruptive`字段），可缺省字段，bool 类型，主要用于向用户标识 trait 的更新会不会导致底层资源（pod）的重启。这个标识通常可以提醒用户，改动这样一个trait可能应该再结合一个灰度发布，以免大量资源重启引入服务不可用和其他风险。
 * 是否由该运维特征管理工作负载（`.spec.manageWorkload`）,可缺省字段，bool 类型，设置为 true 则标识这个运维特征会负责工作负载的创建、更新、以及资源回收，通常是灰度发布的运维特征会具备这个能力。
 * 该运维特征是否不计入版本变化的计算（`.spec.skipRevisionAffect`）,可缺省字段，bool 类型，设置为 true 则标识这个运维特征的修改不计入版本的变化，即用户在应用中纯粹修改这个运维特征的字段不会触发应用本身的版本变化。
@@ -329,7 +329,7 @@ spec:
         }
 ```
 
-主要介绍其中的策略描述部分，基于 CUE 格式，输出一个 `EnvBinding` 对象，其参数就是 engine 和 envs 两个，其中 envs 是一个结构体数组，具体的结构体类型和其中的参数由 `#Env` 指定，这里面的 CUE 语法与[组件定义的 CUE 语法](../cue/basic.md)一致。
+主要介绍其中的策略描述部分，基于 CUE 格式，输出一个 `EnvBinding` 对象，其参数就是 engine 和 envs 两个，其中 envs 是一个结构体数组，具体的结构体类型和其中的参数由 `#Env` 指定，这里面的 CUE 语法与[组件定义的 CUE 语法][7]一致。
 
 
 ## 工作流节点定义（WorkflowStepDefinition）
@@ -425,7 +425,7 @@ spec:
 |       `trait.oam.dev/type=<运维特征定义名称>`       | 对应了运维特征定义（`TraitDefinition`）的名字 |
 |          `app.oam.dev/name=<应用实例名称>`          |        应用实例化（Application）的名称        |
 |       `app.oam.dev/component=<组件实例名称>`        |               组件实例化的名称                |
-| `trait.oam.dev/resource=<运维特征中输出的资源名称>` | 运维特征中输出(outputs.<资源名称>)的资源名称  |
+| `trait.oam.dev/resource=<运维特征中输出的资源名称>` | 运维特征中输出(outputs.\<资源名称\>)的资源名称  |
 |   `app.oam.dev/appRevision=<应用实例的版本名称>`    |              应用实例的版本名称               |
 
 这些元数据可以帮助应用部署以后的运维能力正常运作，比如灰度发布组件在应用更新时根据标签进行灰度发布等，同时这些标签也保证了 KubeVela 被其他系统集成时的正确性。
@@ -442,9 +442,17 @@ spec:
 |          `context.name`          | 在组件定义和运维特征定义中表示的是组件名称，在应用策略定义中表示的是应用策略名称 | 组件定义、运维特征定义、应用策略定义 |
 |       `context.namespace`        |                            应用当前实例所在的命名空间                            |        组件定义、运维特征定义        |
 |        `context.revision`        |                              当前组件实例的版本名称                              |        组件定义、运维特征定义        |
-|       `context.parameters`       |                当前组件实例的参数，可以在运维特征中获得组件的参数                |             运维特征定义             |
+|       `context.parameter`       |                当前组件实例的参数，可以在运维特征中获得组件的参数                |             运维特征定义             |
 |         `context.output`         |                           当前组件实例化后的对象结构体                           |        组件定义、运维特征定义        |
 | `context.outputs.<resourceName>` |                       当前组件和运维特征实例化以后的结构体                       |        组件定义、运维特征定义        |
 
 
 最后请注意，在本节介绍的所有的模块化定义概念，都只需要平台的管理员在希望对 KubeVela 进行功能扩展时了解，最终用户对这些概念不需要有任何感知。
+
+[1]:	./oam-model
+[2]:	../cue/basic
+[3]:	../kube/component
+[4]:	../traits/customize-trait
+[5]:	../traits/advanced.md
+[6]:	https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
+[7]:	../cue/basic.md
