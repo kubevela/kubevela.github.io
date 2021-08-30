@@ -8,7 +8,7 @@ title:  组件交付
 
 ## 查看 KubeVela 的组件类型
 
-我们通过 [KubeVela CLI](.,/../../getting-started/quick-install.mdx#3-安装-kubevela-cli) 来查看系统中可用组件类型：
+我们通过 [KubeVela CLI][1] 来查看系统中可用组件类型：
 
 ```shell
 $ vela components                                                           
@@ -40,7 +40,7 @@ worker     	vela-system	deployments.apps                     	Describes long-run
 - `alibaba-rds`：云资源之一，阿里云关系型数据库服务（RDS）
 - `raw`：直接引用原生的 Kubernetes 资源对象的组件
 
-下面让我们以几个典型的组件类型为例，介绍 KubeVela 组件交付的用法。如果你希望直接查看云资源的使用方式，请阅读[集成云资源](./cloud-services)。
+下面让我们以几个典型的组件类型为例，介绍 KubeVela 组件交付的用法。如果你希望直接查看云资源的使用方式，请阅读[集成云资源][2]。
 
 ## 使用服务型组件(webservice)部署应用
 
@@ -151,7 +151,7 @@ app-delivering-chart	redis-comp	helm      	      	running	healthy	      	2021-08
 
 我们也看到 app-delivering-chart APP 的 PHASE 为 running，同时 STATUS 为 healthy。
 
-关于 Git 仓库和 OSS bucket 的使用示例，以及关于它们的详细配置项信息，请前往管理员手册里的[内置组件](../platform-engineers/components/build-in-component)查阅。
+关于 Git 仓库和 OSS bucket 的使用示例，以及关于它们的详细配置项信息，请前往管理员手册里的[内置组件][3]查阅。
 
 ## 使用 Kustomize 组件部署应用
 
@@ -194,17 +194,26 @@ bucket-app          	bucket-comp	kustomize 	      	running	healthy	      	2021-0
 
 bucket-app APP 的 PHASE 为 running，同时 STATUS 为 healthy。应用部署成功！
 
-关于 Git 仓库的使用示例，以及关于它们的详细配置项信息，请前往管理员手册里的[内置组件](../platform-engineers/components/build-in-component)查阅。
+关于 Git 仓库的使用示例，以及关于它们的详细配置项信息，请前往管理员手册里的[内置组件][4]查阅。
 
 ## 使用云资源组件
 
-云资源组件也是 KubeVela 支持的核心组件，云资源往往不会单独使用，如数据库、缓存等云资源，往往需要在创建之后将相关信息传递到其他组件使用，同时云资源涉及到不同云厂商，以及一些鉴权相关的准备工作，我们将在[集成云资源](./cloud-services)这个章节独立讲解。
+云资源组件也是 KubeVela 支持的核心组件，云资源往往不会单独使用，如数据库、缓存等云资源，往往需要在创建之后将相关信息传递到其他组件使用，同时云资源涉及到不同云厂商，以及一些鉴权相关的准备工作，我们将在[集成云资源][5]这个章节独立讲解。
 
 ## 自定义组件
 
-当以上 KubeVela 内置的开箱组件都无法满足需求的时候，不要担心，KubeVela 提供了强大了扩展能力，几乎可以对接任意类型的组件形态，你可以查看管理员手册里的[自定义组件](../platform-engineers/components/custom-component)学习使用 CUE 和 Kubernetes 扩展 KubeVela 的组件类型。
+当以上 KubeVela 内置的开箱组件都无法满足需求的时候，不要担心，KubeVela 提供了强大了扩展能力，几乎可以对接任意类型的组件形态，你可以查看管理员手册里的[自定义组件][6]学习使用 CUE 和 Kubernetes 扩展 KubeVela 的组件类型。
 
 ## 下一步
 
-- 访问[集成云资源](./cloud-services)文档，掌握不同类型不同厂商的云资源集成方式
-- 访问[绑定运维特征][./binding-traits]文档，掌握如何给组件绑定你需要的运维动作和策略
+- 访问[集成云资源][7]文档，掌握不同类型不同厂商的云资源集成方式
+- 访问[绑定运维特征][8]文档，掌握如何给组件绑定你需要的运维动作和策略
+
+[1]:	../../getting-started/quick-install#3-%E5%AE%89%E8%A3%85-kubevela-cli
+[2]:	./cloud-services
+[3]:	../platform-engineers/components/build-in-component
+[4]:	../platform-engineers/components/build-in-component
+[5]:	./cloud-services
+[6]:	../platform-engineers/components/custom-component
+[7]:	./cloud-services
+[8]:	./binding-traits

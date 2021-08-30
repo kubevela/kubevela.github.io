@@ -33,7 +33,7 @@ module.exports = {
         //     'end-user/components/helm',
         //     'end-user/components/kustomize',
         //     'end-user/components/cue',
-            // 'end-user/components/cloud-services', 先隐藏，需要等用户侧的云服务支持 terraform 原生的 HCL
+        // 'end-user/components/cloud-services', 先隐藏，需要等用户侧的云服务支持 terraform 原生的 HCL
         //     {
         //       'Cloud Services': [
         //         {
@@ -105,7 +105,7 @@ module.exports = {
           'Learning CUE': [
             'platform-engineers/cue/basic',
             'platform-engineers/cue/definition-edit',
-            // 'platform-engineers/cue/advanced', 暂时隐藏，来不及随 1.1 发布，随后补充
+            'platform-engineers/cue/advanced',
           ]
         },
         {
@@ -159,7 +159,7 @@ module.exports = {
       label: 'Case Studies',
       collapsed: false,
       items: [
-        'case-studies/paas',
+        // 'case-studies/paas',
         //        'case-studies/workflow-edge-computing', // 待完成
         //        'case-studies/li-auto-inc', 暂时下掉，应该改写成一个 10 - 15 分钟体验的产品 lab 例子
         //        'case-studies/workflow-with-ocm',
