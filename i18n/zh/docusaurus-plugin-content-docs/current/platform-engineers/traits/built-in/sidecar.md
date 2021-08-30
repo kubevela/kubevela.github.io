@@ -5,7 +5,7 @@ title: 容器注入
 
 ### 开始之前
 
-> ⚠️ 请安装 [KubeVela CLI 命令行工具](../../getting-started/quick-install.mdx##3)
+> ⚠️ 请安装 [KubeVela CLI 命令行工具](../../../getting-started/quick-install.mdx##3##3)
 
 ### 如何使用
 

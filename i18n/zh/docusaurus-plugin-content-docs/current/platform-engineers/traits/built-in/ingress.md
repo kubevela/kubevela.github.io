@@ -7,7 +7,7 @@ title: 配置网关
 
 > ⚠️ 需要你的集群已安装 [Ingress 控制器](https://kubernetes.github.io/ingress-nginx/deploy/)。
 
-> ⚠️ 请已安装 [KubeVela CLI 命令行工具](../../getting-started/quick-install.mdx##3)
+> ⚠️ 请已安装 [KubeVela CLI 命令行工具](../../../getting-started/quick-install.mdx##3##3)
 
 ### 如何使用
 

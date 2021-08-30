@@ -5,7 +5,7 @@ title: 修改 Kustomize 配置
 
 ### 开始之前
 
-> ⚠️ 请已安装 [KubeVela CLI 命令行工具](../../getting-started/quick-install.mdx##3)
+> ⚠️ 请已安装 [KubeVela CLI 命令行工具](../../../getting-started/quick-install.mdx##3##3)
 
 > 🔧 开启 [fluxcd](../addons/fluxcd) 插件即可使用 kustomize 类型组件，并按照本文档进行修改。
 
@@ -15,11 +15,11 @@ title: 修改 Kustomize 配置
 
 kustomize-patch / kustomize-json-patch / kustomize-strategy-merge
 
-| Trait                    | 简介                                                         |
-| ------------------------ | ------------------------------------------------------------ |
+| Trait                    | 简介                                                                        |
+| ------------------------ | --------------------------------------------------------------------------- |
 | kustomize-patch          | 支持以 inline YAML 字符串形式支持 strategy Merge 和 JSON6902 格式的 patch。 |
-| kustomize-json-patch     | 支持以 JSON6902 格式对 kustomize 进行 patch                  |
-| kustomize-strategy-merge | 支持以 YAML 格式对 kustomize 进行 patch                      |
+| kustomize-json-patch     | 支持以 JSON6902 格式对 kustomize 进行 patch                                 |
+| kustomize-strategy-merge | 支持以 YAML 格式对 kustomize 进行 patch                                     |
 
 #### kustomize-patch
 
