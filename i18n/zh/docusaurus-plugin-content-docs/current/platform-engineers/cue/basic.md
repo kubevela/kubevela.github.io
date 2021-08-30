@@ -561,4 +561,4 @@ parameter: {
 
 ## 下一步
 
-统一使用 CUE 来[管理自定义 OAM 模块](./definition-edit)。
+* 了解如何统一使用 CUE 来[管理自定义 OAM 模块](./definition-edit)。

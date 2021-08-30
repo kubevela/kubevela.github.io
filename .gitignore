@@ -5,6 +5,7 @@
 /build
 
 .Ulysses-Settings.plist
+.Ulysses-Group.plist
 
 # Generated files
 .docusaurus

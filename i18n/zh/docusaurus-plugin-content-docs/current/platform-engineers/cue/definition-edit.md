@@ -1,5 +1,5 @@
 ---
-title:  管理 X-Definition
+title:  编辑管理模块定义
 ---
 
 在 KubeVela CLI (>= v1.1.0) 工具中，`vela def` 命令组为开发者提供了一系列便捷的 X-Definition 编写工具，使得 Definition 的编写将全部在 CUE 文件中进行，避免将 Template CUE 与 Kubernetes 的 YAML 格式进行混合，方便进行格式化与校验。
@@ -240,3 +240,7 @@ ComponentDefinition my-comp: My component.
 [yes|no] > yes
 ComponentDefinition my-comp in namespace my-namespace deleted.
 ```
+
+## 下一步
+
+* 了解如何使用 CUE 和 KubeVela 工具[交付完整的模块能力](./advanced)。
