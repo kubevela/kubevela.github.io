@@ -1,3 +1,5 @@
+const { Component } = require("react");
+
 module.exports = {
   docs: [
     {
@@ -25,24 +27,25 @@ module.exports = {
       collapsed: false,
       items: [
         // 'end-user/initializer-end-user',
-        {
-          'Components': [
-            'end-user/components/helm',
-            'end-user/components/kustomize',
-            'end-user/components/cue',
+        'end-user/component-delivery',
+        // {
+        //   'Components': [
+        //     'end-user/components/helm',
+        //     'end-user/components/kustomize',
+        //     'end-user/components/cue',
             // 'end-user/components/cloud-services', 先隐藏，需要等用户侧的云服务支持 terraform 原生的 HCL
-            {
-              'Cloud Services': [
-                {
-                  'Terraform': [
-                    'end-user/components/cloud-services/terraform/alibaba-rds',
-                    'end-user/components/cloud-services/terraform/alibaba-oss',
-                  ]
-                },
-              ]
-            },
-          ]
-        },
+        //     {
+        //       'Cloud Services': [
+        //         {
+        //           'Terraform': [
+        //             'end-user/components/cloud-services/terraform/alibaba-rds',
+        //             'end-user/components/cloud-services/terraform/alibaba-oss',
+        //           ]
+        //         },
+        //       ]
+        //     },
+        //   ]
+        // },
         {
           'Traits': [
             'end-user/traits/ingress',
