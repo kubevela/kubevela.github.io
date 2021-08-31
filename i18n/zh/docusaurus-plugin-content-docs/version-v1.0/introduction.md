@@ -1,7 +1,6 @@
 ---
 title: 简介
 slug: /
-
 ---
 
 ![alt](resources/KubeVela-01.png)
