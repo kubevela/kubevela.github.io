@@ -2,10 +2,33 @@
 title: Labels and Annotations
 ---
 
+`labels` and `annotations` traits allow us to mark annotations and labels on Pod for workload.
 
-## List Traits
+## Specification
 
-The `label` and `annotations` traits allows you to append labels and annotations to the component.
+```shell
+$ vela show annotations
+# Properties
++-----------+-------------+-------------------+----------+---------+
+|   NAME    | DESCRIPTION |       TYPE        | REQUIRED | DEFAULT |
++-----------+-------------+-------------------+----------+---------+
+| -         |             | map[string]string | true     |         |
++-----------+-------------+-------------------+----------+---------+
+```
+
+```shell
+$ vela show labels
+# Properties
++-----------+-------------+-------------------+----------+---------+
+|   NAME    | DESCRIPTION |       TYPE        | REQUIRED | DEFAULT |
++-----------+-------------+-------------------+----------+---------+
+| -         |             | map[string]string | true     |         |
++-----------+-------------+-------------------+----------+---------+
+```
+
+They're all string Key-Value pairs.
+
+## How to use
 
 ```shell
 # myapp.yaml
@@ -29,36 +52,4 @@ spec:
             "description": "web application"
 ```
 
-Deploy this application.
-
-```shell
-kubectl apply -f myapp.yaml
-```
-
-On runtime cluster, check the workload has been created successfully.
-
-```bash
-kubectl get deployments
-```
-```console
-NAME             READY   UP-TO-DATE   AVAILABLE   AGE
-express-server   1/1     1            1           15s
-```
-
-Check the `labels`.
-
-```bash
-kubectl get deployments express-server -o jsonpath='{.spec.template.metadata.labels}'
-```
-```console
-{"app.oam.dev/component":"express-server","release": "stable"}
-```
-
-Check the `annotations`.
-
-```bash
-kubectl get deployments express-server -o jsonpath='{.spec.template.metadata.annotations}'
-```
-```console
-{"description":"web application"}
-```
+Then the labels and annotations will mark on pods. 

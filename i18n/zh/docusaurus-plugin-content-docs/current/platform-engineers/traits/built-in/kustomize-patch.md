@@ -1,19 +1,10 @@
 ---
 title: 修改 Kustomize 配置
 ---
-本小节将介绍如何使用 trait patch 交付的 Kustomize 组件。
 
-### 开始之前
+本小节将介绍如何使用 trait 对 Kustomize 组件做差异化配置。
 
-> ⚠️ 请已安装 [KubeVela CLI 命令行工具](../../../getting-started/quick-install.mdx##3##3)
-
-> 🔧 开启 [fluxcd](../addons/fluxcd) 插件即可使用 kustomize 类型组件，并按照本文档进行修改。
-
-### 如何使用
-
-本部分将介绍 3 个可以 patch `kustomize` 类型组件的 trait，下面是一个简单介绍
-
-kustomize-patch / kustomize-json-patch / kustomize-strategy-merge
+## 功能说明
 
 | Trait                    | 简介                                                                        |
 | ------------------------ | --------------------------------------------------------------------------- |
@@ -21,13 +12,16 @@ kustomize-patch / kustomize-json-patch / kustomize-strategy-merge
 | kustomize-json-patch     | 支持以 JSON6902 格式对 kustomize 进行 patch                                 |
 | kustomize-strategy-merge | 支持以 YAML 格式对 kustomize 进行 patch                                     |
 
-#### kustomize-patch
 
-kustomize-patch 类型的 trait 只能以字符串形式描述 patch 内容。查看其相关信息：
+### kustomize-patch 字段说明
+
+kustomize-patch 类型的 trait 以字符串形式描述 patch 内容。
 
 ```shell
 vela show kustomize-patch
 ```
+
+输出如下：
 
 ```shell
 # Properties
@@ -61,7 +55,9 @@ vela show kustomize-patch
 +--------------------+-------------+--------+----------+---------+
 ```
 
-只能以字符串形式指 patch 字段为字符串，使用示例如下
+### 如何使用
+
+使用示例如下
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -88,9 +84,9 @@ spec:
                   labelSelector: "app=podinfo"
 ```
 
- 上面的例子给原本的 kustomize 添加了一个 patch ： 筛选出带有 app=podinfo 标签的 Pod 打了 patch。
+上面的例子给原本的 kustomize 添加了一个 patch ： 筛选出带有 app=podinfo 标签的 Pod 打了 patch。
 
-#### kustomize-json-patch
+### kustomize-json-patch 字段说明
 
 可以以 [JSON6902 格式](https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patchesjson6902/)进行 patch。先来了解其信息：
 
@@ -140,6 +136,8 @@ vela show kustomize-json-patch
 +-------+-------------+--------+----------+---------+
 ```
 
+### 如何使用
+
 使用示例如下：
 
 ```yaml
@@ -167,7 +165,7 @@ spec:
 ```
 上面这个例子中给所有 Deployment 对象的 annotations 添加了一条：`key: value`
 
-#### kustomize-strategy-merge
+### kustomize-strategy-merge 字段说明
 
 可以以  格式进行 patch。先来了解其信息：
 
@@ -190,6 +188,8 @@ vela show kustomize-json-patch
 +-----------+-------------+--------------------------------------------------------+----------+---------+
 | undefined |             | map[string](null|bool|string|bytes|{...}|[...]|number) | true     |         |
 ```
+
+### 如何使用
 
 使用示例如下：
 

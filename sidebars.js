@@ -120,15 +120,11 @@ module.exports = {
                 'platform-engineers/traits/built-in/ingress',
                 'platform-engineers/traits/built-in/manual-scaler',
                 'platform-engineers/traits/built-in/autoscaler',
-                // 云资源绑定和数据持久化，都需要通过写 Definition 来引入，要单开一个小节去讲
-                // 'end-user/traits/volumes',
-                // 'end-user/traits/service-binding',
                 'platform-engineers/traits/built-in/annotations-and-labels',
                 'platform-engineers/traits/built-in/sidecar',
                 'platform-engineers/traits/built-in/service-binding',
-                // 'end-user/traits/metrics',
+                'platform-engineers/traits/built-in/kustomize-patch',
                 'platform-engineers/traits/built-in/more',
-                // 并入可观测性，不再用一个 trait 来实现，本文档留作参考
               ]
             },
             'platform-engineers/traits/customize-trait',

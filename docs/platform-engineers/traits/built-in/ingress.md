@@ -6,6 +6,8 @@ title: Ingress
 
 The `ingress` trait exposes a component to public Internet via a valid domain.
 
+## Specification
+
 ```shell
 kubectl vela show ingress
 ```
@@ -18,6 +20,8 @@ kubectl vela show ingress
 | domain | Specify the domain you want to expose                                        | string         | true     |         |
 +--------+------------------------------------------------------------------------------+----------------+----------+---------+
 ```
+
+## How to use
 
 Attach a `ingress` trait to the component you want to expose and deploy.
 
@@ -78,7 +82,7 @@ spec:
     name: express-server
     traits:
     - healthy: true
-      message: 'Visiting URL: testsvc.example.com, IP: 47.111.233.220'
+      message: 'Visiting URL: testsvc.example.com, IP: <your ip address>'
       type: ingress
   status: running
 ...

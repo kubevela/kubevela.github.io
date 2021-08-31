@@ -2,7 +2,7 @@
 title:  绑定运维特征
 ---
 
-​运维特征（Traits）也是应用部署计划的核心组成之一，它作用于组件层面，可以让你自由地给组件绑定各式各样的运维动作和策略。比如业务层面的配置网关、标签管理和容器注入（Sidecar），又或者是管理员层面的弹性扩缩容、灰度发布等等。
+运维特征（Traits）也是应用部署计划的核心组成之一，它作用于组件层面，可以让你自由地给组件绑定各式各样的运维动作和策略。比如业务层面的配置网关、标签管理和容器注入（Sidecar），又或者是管理员层面的弹性扩缩容、灰度发布等等。
 
 
 与组件定义类似，KubeVela 提供了一系列开箱即用的运维特征能力，同时也允许你自定义扩展其它的运维能力。
@@ -131,7 +131,7 @@ status:
 ```
 
 
-// 后续文案，需要在 [https://github.com/oam-dev/kubevela/issues/2188](https://github.com/oam-dev/kubevela/issues/2188) resolve 之后解决 [@天元(jianbo.sjb)](/jianbo.sjb)
+// 后续文案，需要在 [https://github.com/oam-dev/kubevela/issues/2188](https://github.com/oam-dev/kubevela/issues/2188) resolve 之后解决
 
 
 ## 给组件添加标签和注释
@@ -180,7 +180,6 @@ $ vela ls
 APP                 	COMPONENT     	TYPE       	TRAITS 	PHASE  	HEALTHY	STATUS	CREATED-TIME                 
 labels-annotations  	server        	webservice 	labels,annotations	running	healthy	      	2021-08-29 20:55:28 +0800 CST
 ```
-​
 
 通过 Kubernetes 的命令我们可以看到，底层的资源已经打上的相应的标签：
 
@@ -278,13 +277,9 @@ kubectl logs -f log-gen-worker-7bb65dcdd6-tpbdh count-log
 
 
 以上，我们以几个常见的运维特征为例介绍了如何绑定运维特征，更多的运维特征功能和参数，请前往运维特征系统中的[内置运维特征](../platform-engineers/traits/built-in/overview)查看。
-​
 
 ## 自定义运维特征
-​
 
-​
-​
 
 ## 下一步
 

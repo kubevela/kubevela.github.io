@@ -70,7 +70,8 @@ spec:
           name: db-conn
 EOF
 ```
-我们在 alibaba-rds 获取的 name: db-conn 将会由 service-binding 运维特征对象进行转发，并注入 express-server 这个组件的环境变量 ENV 中，最终在运行时集群启用这个云服务。请结合 [运维特征 `service-binding`](../../../traits/service-binding) 对象的使用文档一起查看。
+我们在 alibaba-rds 获取的 name: db-conn 将会由 service-binding 运维特征对象进行转发，并注入 express-server 这个组件的环境变量 ENV 中，最终在运行时集群启用这个云服务。
+请结合 [运维特征 `service-binding`](../../../../platform-engineers/traits/built-in/service-binding) 对象的使用文档一起查看。
 
 查看 Vela CLI 控制台的返回信息：
 ```

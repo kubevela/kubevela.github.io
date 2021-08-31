@@ -46,16 +46,7 @@ spec:
               "/": 8000
 ```
 
-修改完毕，在 YAML 文件所在路径下，使用命令进行部署：
-
-```bash
-kubectl apply -f vela-app.yaml
-```
-```console
-application.core.oam.dev/first-vela-app created
-```
-
-当我们看到 `status` 为 `running` 并且服务为 `healthy`，表示应用部署计划完全生效：
+部署到集群后，检查应用状态为 running，并且状态是 healthy：
 
 ```bash
 kubectl get application first-vela-app -w
@@ -66,7 +57,7 @@ first-vela-app   express-server   webservice   healthChecking                   
 first-vela-app   express-server   webservice   running          true               42s
 ```
 
-这时候，让我们查看网关提供的公网 IP：
+如果你的集群带有云厂商的负载均衡机制可以通过 Application 查看到访问的 IP：
 
 ```shell
 kubectl get application first-vela-app -o yaml
@@ -90,7 +81,7 @@ spec:
 ...
 ```
 
-然后你的用户就能够通过这个 IP，来访问该应用程序了。
+然后就能够通过这个 IP，来访问该应用程序了。
 
 ```
 curl -H "Host:testsvc.example.com" http://<your ip address>/

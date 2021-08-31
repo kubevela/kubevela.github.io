@@ -2,7 +2,6 @@
 title: 特征总览
 ---
 
-
 ```
 $ vela traits
 NAME                    	NAMESPACE  	APPLIES-TO      	CONFLICTS-WITH	POD-DISRUPTIVE	DESCRIPTION

@@ -294,7 +294,7 @@ express-server-v1   3/3     3            3           5m
 
 ### cloneset-service 的滚动升级
 
-启用 kruise 的[扩展插件](../../end-user/addons/introduction)。
+启用 kruise 的[扩展插件](./addons/introduction)。
 ```shell
 $ vela addon enable kruise
 ```

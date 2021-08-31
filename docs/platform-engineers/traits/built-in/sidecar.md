@@ -4,7 +4,7 @@ title: Attaching Sidecar
 
 The `sidecar` trait allows you to attach a sidecar container to the component.
 
-## Show the Usage of Sidecar
+## Specification
 
 ```shell
 kubectl vela show sidecar
@@ -30,7 +30,7 @@ kubectl vela show sidecar
 +-----------+-------------+--------+----------+---------+
 ```
 
-## Deploy the Application
+## How to use
 
 In this Application, component `log-gen-worker` and sidecar share the data volume that saves the logs.
 The sidebar will re-output the log to stdout.
