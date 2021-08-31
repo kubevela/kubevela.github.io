@@ -83,6 +83,10 @@
     "message": "工作流系统",
     "description": "The label for category Workflow System in sidebar docs"
   },
+  "sidebar.docs.category.System Operation": {
+    "message": "系统运维",
+    "description": "The label for category System Operation in sidebar docs"
+  },
   "sidebar.docs.category.Customize Traits": {
     "message": "自定义运维特征",
     "description": "The label for category Customize Traits in sidebar docs"
