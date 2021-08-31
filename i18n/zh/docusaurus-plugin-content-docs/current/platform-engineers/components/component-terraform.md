@@ -12,10 +12,6 @@ title:  Terraform 组件
 3. KubeVela 通过 Terraform 控制器来拉起对应的云资源。
 
 
-### 开启 Terraform 控制器
-
-推荐你直接通过[系统插件（addon）](../../end-user/addons/introduction)来开启 Terraform 控制器。
-
 ### 配置阿里云鉴权
 以下是阿里云的鉴权相关步骤，其它云服务商同理：
 

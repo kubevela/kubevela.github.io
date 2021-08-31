@@ -94,7 +94,7 @@
   "sidebar.docs.category.Customize Components": {
     "message": "自定义组件",
     "description": "The label for category Customize Traits in sidebar docs"
-  },  
+  },
   "sidebar.docs.category.CLI": {
     "message": "CLI 命令行工具",
     "description": "The label for category CLI in sidebar docs"
@@ -158,5 +158,9 @@
   "sidebar.docs.category.Addons": {
     "message": "插件系统",
     "description": "The extended add-ons"
+  },
+  "sidebar.docs.category.Builtin Traits": {
+    "message": "内置运维特征",
+    "description": "The built in trait"
   }
 }

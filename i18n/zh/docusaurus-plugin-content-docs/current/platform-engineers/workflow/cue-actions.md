@@ -4,7 +4,7 @@ title:  CUE 操作
 
 这个文档介绍 step 定义过程中，可以使用的 CUE 操作类型。这些操作均由 `vela/op` 包提供。
 
-> 可以阅读 [CUE 基础文档](../cue/basic.md) 来学习 CUE 基础语法。
+> 可以阅读 [CUE 基础文档](../cue/basic) 来学习 CUE 基础语法。
 
 ## Apply
 

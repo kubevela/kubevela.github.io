@@ -1,14 +1,18 @@
 ---
-title: Ingress
+title: 配置网关
 ---
 
-> ⚠️ This section requires your runtime cluster has a working ingress controller.
+## 开始之前
 
-The `ingress` trait exposes a component to public Internet via a valid domain.
+> ⚠️ 需要你的集群已安装 [Ingress 控制器](https://kubernetes.github.io/ingress-nginx/deploy/)。
+
+## 字段说明
+
 
 ```shell
-kubectl vela show ingress
+vela show ingress
 ```
+
 ```console
 # Properties
 +--------+------------------------------------------------------------------------------+----------------+----------+---------+
@@ -19,7 +23,7 @@ kubectl vela show ingress
 +--------+------------------------------------------------------------------------------+----------------+----------+---------+
 ```
 
-Attach a `ingress` trait to the component you want to expose and deploy.
+## 如何使用
 
 ```yaml
 # vela-app.yaml
@@ -42,14 +46,7 @@ spec:
               "/": 8000
 ```
 
-```bash
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
-```
-```console
-application.core.oam.dev/first-vela-app created
-```
-
-Check the status until we see `status` is `running` and services are `healthy`:
+部署到集群后，检查应用状态为 running，并且状态是 healthy：
 
 ```bash
 kubectl get application first-vela-app -w
@@ -60,7 +57,7 @@ first-vela-app   express-server   webservice   healthChecking                   
 first-vela-app   express-server   webservice   running          true               42s
 ```
 
-Check the trait detail for the its visiting url:
+如果你的集群带有云厂商的负载均衡机制可以通过 Application 查看到访问的 IP：
 
 ```shell
 kubectl get application first-vela-app -o yaml
@@ -84,7 +81,7 @@ spec:
 ...
 ```
 
-Then you will be able to visit this application via its domain.
+然后就能够通过这个 IP，来访问该应用程序了。
 
 ```
 curl -H "Host:testsvc.example.com" http://<your ip address>/

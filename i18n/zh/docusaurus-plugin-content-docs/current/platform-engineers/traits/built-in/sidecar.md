@@ -3,13 +3,7 @@ title: 容器注入
 ---
 本小节会介绍，如何为应用部署计划的一个组件，添加 `sidecar` 运维特征来收集日志。
 
-### 开始之前
-
-> ⚠️ 请安装 [KubeVela CLI 命令行工具](../../getting-started/quick-install.mdx##3)
-
-### 如何使用
-
-先熟悉 `ingress` 运维特征的相关信息：
+## 字段说明
 
 ```shell
 $ vela show sidecar
@@ -34,7 +28,9 @@ $ vela show sidecar
 +-----------+-------------+--------+----------+---------+
 ```
 
-接下来，让我们来编写一个应用部署计划里的组件 `log-gen-worker`。
+## 如何使用
+
+我们来编写一个应用部署计划里的组件 `log-gen-worker`。
 同时，我们将 `sidecar` 所记录的日志数据目录和组件，指向同一个数据源 `varlog`。
 
 ```yaml
