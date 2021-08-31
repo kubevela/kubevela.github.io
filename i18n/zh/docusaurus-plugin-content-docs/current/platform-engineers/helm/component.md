@@ -8,7 +8,7 @@ title:  怎么用 helm
 
 ## 先决条件
 
-* [fluxcd/flux2](../../getting-started/quick-install#3-optional-install-flux2)，请确保你已经在[安装指南](/docs/getting-started/quick-install)中安装了 flux2。
+* [fluxcd/flux2](../../getting-started/quick-install#3-optional-install-flux2)，请确保你已经在[安装指南](../../getting-started/quick-install)中安装了 flux2。
 
 ## 声明 `ComponentDefinition`
 

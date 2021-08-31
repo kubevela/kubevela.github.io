@@ -78,15 +78,15 @@ module.exports = {
           items: [
             {
               label: 'Getting Started',
-              to: '/docs/getting-started/quick-install',
+              to: '/docs/install',
             },
             {
               label: 'Platform Admin Guide',
-              to: '/docs/platform-engineers/oam/oam-model',
+              to: '/docs/platform-engineers/overview',
             },
             {
               label: 'End User Guide',
-              to: '/docs/core-concepts/application',
+              to: '/docs/end-user/application',
             },
           ],
         },
@@ -152,7 +152,7 @@ module.exports = {
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           includeCurrentVersion: true,
-          lastVersion: 'v1.1',
+          lastVersion: 'v1.0',
         },
         blog: {
           showReadingTime: true,
