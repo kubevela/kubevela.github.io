@@ -145,7 +145,13 @@ module.exports = {
             'platform-engineers/workflow/cue-actions',
           ]
         },
-        'platform-engineers/observability',
+        {
+          'System Operation': [
+            'platform-engineers/system-operation/bootstrap-parameters',
+            'platform-engineers/observability',
+            'platform-engineers/system-operation/performance-finetuning',
+          ]
+        },
         {
           'Debugging': [
             'platform-engineers/debug/dry-run',
