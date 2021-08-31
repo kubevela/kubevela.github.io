@@ -6,7 +6,7 @@ KubeVela allows you to declare cloud services your application needs in consiste
 
 > Please check [the platform-engineers guide for cloud services](../../platform-engineers/cloud-services) if you are interested in how these capabilities are maintained in KubeVela.
 
-The cloud services will be consumed by the application via [Service Binding Trait](../traits/service-binding).
+The cloud services will be consumed by the application via [Service Binding Trait](../../platform-engineers/traits/built-in/service-binding).
 
 ## Terraform
 

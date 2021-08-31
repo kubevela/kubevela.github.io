@@ -4,7 +4,7 @@ title:  CUE Actions
 
 This doc will illustrate the CUE actions provided in `vela/op` stdlib package.
 
-> To learn the syntax of CUE, read [CUE Basic](../cue/basic.md)
+> To learn the syntax of CUE, read [CUE Basic](../cue/basic)
 
 ## Apply
 

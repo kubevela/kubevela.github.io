@@ -28,6 +28,7 @@ module.exports = {
       items: [
         // 'end-user/initializer-end-user',
         'end-user/component-delivery',
+        'end-user/binding-traits',
         // {
         //   'Components': [
         //     'end-user/components/helm',
@@ -46,26 +47,6 @@ module.exports = {
         //     },
         //   ]
         // },
-        {
-          'Traits': [
-            'end-user/traits/ingress',
-            {
-              'Scaling': [
-                'end-user/traits/manual-scaler',
-                'end-user/traits/autoscaler',
-              ]
-            },
-            // 云资源绑定和数据持久化，都需要通过写 Definition 来引入，要单开一个小节去讲
-            // 'end-user/traits/volumes',
-            // 'end-user/traits/service-binding',
-            'end-user/traits/annotations-and-labels',
-            'end-user/traits/sidecar',
-            'end-user/traits/service-binding',
-            // 'end-user/traits/metrics',
-            // 并入可观测性，不再用一个 trait 来实现，本文档留作参考
-            'end-user/traits/rollout',
-          ]
-        },
         {
           'Policies': [
             'end-user/policies/envbinding',
@@ -131,6 +112,21 @@ module.exports = {
           type: 'category',
           label: 'Traits System',
           items: [
+            {
+              type: 'category',
+              label: 'Builtin Traits',
+              items: [
+                'platform-engineers/traits/built-in/overview',
+                'platform-engineers/traits/built-in/ingress',
+                'platform-engineers/traits/built-in/manual-scaler',
+                'platform-engineers/traits/built-in/autoscaler',
+                'platform-engineers/traits/built-in/annotations-and-labels',
+                'platform-engineers/traits/built-in/sidecar',
+                'platform-engineers/traits/built-in/service-binding',
+                'platform-engineers/traits/built-in/kustomize-patch',
+                'platform-engineers/traits/built-in/more',
+              ]
+            },
             'platform-engineers/traits/customize-trait',
             'platform-engineers/traits/patch-trait',
             'platform-engineers/traits/status',
