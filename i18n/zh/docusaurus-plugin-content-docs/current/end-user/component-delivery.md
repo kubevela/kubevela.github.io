@@ -11,7 +11,8 @@ title:  组件交付
 我们通过 [KubeVela CLI][1] 来查看系统中可用组件类型：
 
 ```shell
-$ vela components                                                           
+$ vela components
+NAME        NAMESPACE  	WORKLOAD                             	DESCRIPTION                                                            
 alibaba-ack	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud ACK cluster       
 alibaba-oss	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud OSS object        
 alibaba-rds	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud RDS object        
