@@ -40,3 +40,5 @@ KubeVela 控制器的各项启动参数及其说明如下。
 - **kube-api-qps / kube-api-burst**: 用来控制 KubeVela 控制器访问 apiserver 的频率。当 KubeVela 控制器管理的应用较为复杂时 ( 包含较多的组件及资源 )，如果 KubeVela 控制器对 apiserver 的访问速率受限，则较难提高 KubeVela 控制器的并发量。然而过高的请求速率也有可能对 apiserver 造成较大的负担
 - **pprof-addr**: 开启该地址可以启用 pprof 进行控制器性能调试
 - **perf-enabled**: 启用时可以在日志中看到 KubeVela 控制器管理应用时各个阶段的时间开销，关闭可以简化日志记录
+
+> [性能调优](./performance-finetuning)章节中包含了若干组不同场景下的推荐参数配置。
