@@ -1,36 +1,24 @@
 ---
 title: Rollout
 ---
-This chapter will introduce how to use RolloutTraits to perform a rolling update on Workloads.
-
-## Configurations
-
-All configurations for Rolling Traits.
-
-Name | Description | Type | Required | Default 
------------- | ------------- | ------------- | ------------- | ------------- 
-targetRevision|The revision of target Trait|string|No|If this field is empty, it will always point to the latest revision
-targetSize|Size of target Trait|int|Yes|Nil
-rolloutBatches|Strategy of rolling update|[]rolloutBatch|Yes|Nil
-batchPartition|Partition of rolloutBatches|int|No|Nil, if this field is empty, all batches will be updated
-
-Configurations of rolloutBatch
-
-Name | Description | Type | Required | Default
------------- | ------------- | ------------- | ------------- | ------------- 
-replicas|number of replicas in one rolloutBatch|int|Yes|Nil
+This chapter will introduce how to use Rollout Trait to perform a rolling update on Workload.
 
 ## Background
+
+### ComponentRevision
 Each modification to a Trait will produce a kubernetes controllerRevision, the default role to generate a name of kubernetes controllerRevision is: `<Component name>-<revision number>`. You can also appoint controllerRevision name by setting `spec.components[x].externalRevision`.
 
-Other than that, when using webservice/worker as Workload's type with RolloutTraits, Workload's name will be controllerRevision's name. And when Workload's type is cloneset-service, Workloads's name will be component's name.
+### Support workload type
+Rollout Trait support webservice,worker and cloneset Workload.
+
+When using webservice/worker as Workload type with Rollout Trait, Workload's name will be controllerRevision's name. And when Workload's type is cloneset, because of clonset support in-place update Workload's name will always be component's name.
 
 
 ## How to
 
 ### First Deployment
    
-Apply the YAML below to create an Application, this Application includes a Workload of type webservice with RolloutTraits, and sets controllerRevision name to express-server-v1 by setting `spec.components[0].externalRevision` field.
+Apply the YAML below to create an Application, this Application includes a Workload of type webservice with Rollout Trait, and sets controllerRevision name to express-server-v1 by setting `spec.components[0].externalRevision` field.
 
 ```shell
 cat <<EOF | kubectl apply -f -
@@ -54,7 +42,7 @@ spec:
               - replicas: 3
 EOF
 ```
-This RolloutTraits has two batches with total target size of 5, the first batch has 2 replicas and second batch has 3. Only when all replicas in the first batch are ready, the second batch will start to rollout.
+This Rollout Trait has two batches with total target size of 5, the first batch has 2 replicas and second batch has 3. Only when all replicas in the first batch are ready, the second batch will start to rollout.
 
 Check the Application status when rollout has been succeed after a while.
 ```shell
@@ -70,7 +58,7 @@ NAME                CONTROLLER                                    REVISION   AGE
 express-server-v1   application.core.oam.dev/rollout-trait-test   1          2d22h
 ```
 
-Check the status of RolloutTraits. The rollout is succeed if `ROLLING-STATE` is rolloutSucceed, and all replicas are ready if `BATCH-STATE` is batchReady. `TARGET`, `UPGRADED` and `READY` indicates target size of replicas is 5, updated number of replicas is 5 and all 5 replicas are ready.
+Check the status of Rollout Trait. The rollout is succeed if `ROLLING-STATE` is rolloutSucceed, and all replicas are ready if `BATCH-STATE` is batchReady. `TARGET`, `UPGRADED` and `READY` indicates target size of replicas is 5, updated number of replicas is 5 and all 5 replicas are ready.
 ```shell
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
@@ -110,7 +98,7 @@ spec:
               - replicas: 3
 EOF
 ```
-This RolloutTrait represents the target size of replicas is 5 and update will be performed in 2 batches. The first batch will update 2 replicas and the second batch will update 3 replicas. Only 2 replicas in first batch will be updated by setting `batchPartition` to 0.
+This Rollout Trait represents the target size of replicas is 5 and update will be performed in 2 batches. The first batch will update 2 replicas and the second batch will update 3 replicas. Only 2 replicas in first batch will be updated by setting `batchPartition` to 0.
 
 Check controllerRevision and there is a new controllerRevision express-server-v2.
 ```shell
@@ -120,7 +108,7 @@ express-server-v1   application.core.oam.dev/rollout-trait-test   1          2d2
 express-server-v2   application.core.oam.dev/rollout-trait-test   2          1m
 ```
 
-Check the status of RolloutTraits after a while when first batch has been upgraded successfully. `TARGET`, `UPGREADED` and `READY` indicates the target size of replicas for this revision is 5, there are 2 replicas sucessfully upgraded and they are ready. batchReady means replicas in the first rolloutBatch are all ready, rollingInBatches means there are batches still yet to be upgraded.
+Check the status of Rollout Trait after a while when first batch has been upgraded successfully. `TARGET`, `UPGREADED` and `READY` indicates the target size of replicas for this revision is 5, there are 2 replicas sucessfully upgraded and they are ready. batchReady means replicas in the first rolloutBatch are all ready, rollingInBatches means there are batches still yet to be upgraded.
 ```shell
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
@@ -135,7 +123,7 @@ express-server-v1   3/3     3            3           2d20h
 express-server-v2   2/2     2            2           1m
 ```
 
-Apply the YAML below without `batchPartition` field in RolloutTraits to upgrade all replicas to latest revision.
+Apply the YAML below without `batchPartition` field in Rollout Trait to upgrade all replicas to latest revision.
 ```shell
 cat <<EOF | kubectl apply -f -
 apiVersion: core.oam.dev/v1beta1
@@ -159,7 +147,7 @@ spec:
 EOF
 ```
 
-Check RolloutTraits, we can see rollout is succeed.
+Check Rollout Trait, we can see rollout is succeed.
 ```shell
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
@@ -176,7 +164,7 @@ express-server-v2   5/5     5            5           1m
 
 ### Rollback
    
-Apply the YAML below to make controllerRevision roll back to express-server-v1 by assigning `targetRevision` field to express-server-v1 in RolloutTrait.
+Apply the YAML below to make controllerRevision roll back to express-server-v1 by assigning `targetRevision` field to express-server-v1 in Rollout Trait.
 ```shell
 cat <<EOF | kubectl apply -f -
 apiVersion: core.oam.dev/v1beta1
@@ -201,7 +189,7 @@ spec:
 EOF
 ```
 
-Check RolloutTrait status after rollback has been succeed.
+Check Rollout Trait status after rollback has been succeed.
 ```shell
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
@@ -215,9 +203,9 @@ NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   5/5     5            5           15s
 ```
 
-### Expand
+### Scale up
 
-RolloutTraits are also be able to expand a Workload, apply the YAML below to modify the `targetSize`, in order to increase the number of replicas from 5 to 7.
+Rollout Trait also be able to scale up a Workload, apply the YAML below to modify the `targetSize`, in order to increase the number of replicas from 5 to 7.
 ```shell
 cat <<EOF | kubectl apply -f -
 apiVersion: core.oam.dev/v1beta1
@@ -241,7 +229,7 @@ spec:
               - replicas: 1
 EOF
 ```
-This RolloutTrait represents this expansion consists of 2 rollout batches, each batch will expand 1 replica.
+This Rollout Trait represents this expansion consists of 2 rollout batches, each batch will scale 1 replica.
 
 Check the status after expansion has been succeed.
 ```shell
@@ -254,9 +242,9 @@ NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   7/7     7            7           2m
 ```
 
-### Shrink
+### Scale down
    
-Apply the YAML below to Shrink the size of replicas from 7 to 3.
+Apply the YAML below to scale down the size of replicas from 7 to 3.
 ```shell
 cat <<EOF | kubectl apply -f -
 apiVersion: core.oam.dev/v1beta1
@@ -280,9 +268,9 @@ spec:
               - replicas: 3
 EOF
 ```
-This RolloutTrait represents this shrink consists of 2 batches, first batch will remove 1 replica and second batch will remove 3 replicas.
+This Rollout Trait represents this scale down consists of 2 batches, first batch will remove 1 replica and second batch will remove 3 replicas.
 
-Check the status after shrink has been succeed.
+Check the status after scale up has been succeed.
 ```shell
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
@@ -293,9 +281,9 @@ NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   3/3     3            3           5m
 ```
 
-### Rollout update of cloneset-service
+### Rollout cloneset type Workload
 
-Enable kruise [extension](./addons/introduction)。
+Enable kruise [addon](./addons/introduction)。
 ```shell
 $ vela addon enable kruise
 ```
@@ -304,11 +292,11 @@ Check types of components.
 ```shell
 $ vela components
 NAME                NAMESPACE        WORKLOAD                        DESCRIPTION
-cloneset-service    vela-system     clonesets.apps.kruise.io
+cloneset           vela-system     clonesets.apps.kruise.io
 ```
 
 
-Apply the YAML below to create an Application, this Application includes a Workload of type cloneset-service with a RolloutTrait.
+Apply the YAML below to create an Application, this Application includes a Workload of type cloneset with a Rollout Trait.
 ```shell
 cat <<EOF | kubectl apply -f -
 apiVersion: core.oam.dev/v1beta1
@@ -318,7 +306,7 @@ metadata:
 spec:
   components:
     - name: cloneset-server
-      type: cloneset-service
+      type: cloneset
       externalRevision: cloneset-server-v1
       properties:
         image: stefanprodan/podinfo:4.0.3
@@ -336,7 +324,7 @@ Check the status of related resources.
 ```shell
 $ kubectl get app rollout-trait-test-cloneset
 NAME                              COMPONENT         TYPE               PHASE      HEALTHY   STATUS     AGE
-rollout-trait-test-cloneset   cloneset-service   clonesetservice      running      true               4m18s
+rollout-trait-test-cloneset        cloneset   clonesetservice          running      true               4m18s
 
 $ kubectl get controllerRevision  -l controller.oam.dev/component=cloneset-server
 NAME                CONTROLLER                                           REVISION   AGE
@@ -347,7 +335,7 @@ NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 cloneset-server   5        5          5       batchReady    rolloutSucceed   5m10s
 ```
 
-Check the status of Workload. As cloneset-service Workload supports inplace upgrade, the most noticable difference beween it and webservice/worker is that the name of underlying Workload's name is exactly the component's name.
+Check the status of Workload. As cloneset Workload supports in-place upgrade, the most noticeable difference between it and webservice/worker is that the name of underlying Workload's name is exactly the component's name.
 ```shell
 $ kubectl get cloneset -l app.oam.dev/component=cloneset-server
 NAME             DESIRED   UPDATED   UPDATED_READY   READY   TOTAL   AGE
@@ -370,7 +358,7 @@ metadata:
 spec:
   components:
     - name: cloneset-server
-      type: cloneset-service
+      type: cloneset
       externalRevision: cloneset-server-v2
       properties:
         image: stefanprodan/podinfo:5.0.2
@@ -409,4 +397,21 @@ $ kubectl get cloneset cloneset-server -o=jsonpath='{.spec.template.spec.contain
 stefanprodan/podinfo:5.0.2
 ```
 
-Other operations such as Expand, Shrink, Rollback are the same as the operations on webservice/worker.
+Other operations such as Scale up, Scale down, Rollback are the same as the operations on webservice/worker.
+
+## Configurations
+
+All configurations for Rolling Traits.
+
+Name | Description | Type | Required | Default
+------------ | ------------- | ------------- | ------------- | ------------- 
+targetRevision|The target ComponentRevision|string|No|If this field is empty, it will always point to the latest revision
+targetSize|Number of target Workload's replicas|int|Yes|Nil
+rolloutBatches|Strategy of rolling update|[]rolloutBatch|Yes|Nil
+batchPartition|Partition of rolloutBatches|int|No|Nil, if this field is empty, all batches will be updated
+
+Configurations of rolloutBatch
+
+Name | Description | Type | Required | Default
+------------ | ------------- | ------------- | ------------- | ------------- 
+replicas|number of replicas in one batch|int|Yes|Nil
