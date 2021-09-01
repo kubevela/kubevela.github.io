@@ -1,5 +1,5 @@
 ---
-title:  组件可观测性
+title:  Component Observability
 ---
 
 WIP
