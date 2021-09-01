@@ -11,7 +11,7 @@ KubeVela 通过云资源组件（Component）和运维特征（Trait）里的资
 我们通过 [KubeVela CLI](../getting-started/quick-install.mdx#3-安装-kubevela-cli)来查看，当前系统中可用的云资源组件类型：
 
 ```shell
-$ vela components --label
+$ vela components
 NAME        NAMESPACE  	WORKLOAD                             	DESCRIPTION                                                            
 alibaba-ack	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud ACK cluster       
 alibaba-oss	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud OSS object        
@@ -24,15 +24,16 @@ KubeVela 对云资源的集成流程大致如下：
  - 将鉴权信息保存到 Terrform 的全局配置中，下一步校验
  - KubeVela 通过 Terraform 控制器完成鉴权校验，通过后自动拉起对应云资源
 
-下面我们以阿里云关系型数据库（RDS）的例子，作为示例进行讲解。
+## 激活云资源权限
 
-## 集成阿里云关系型数据库（RDS）
-
-当你准备好，要访问对应云厂商的密钥信息后，使用 `vela addon enable` 指令来全局配置鉴权信息：
+首先准备好，要访问对应云厂商的密钥信息后，使用 `vela addon enable` 指令来全局配置鉴权信息：
 ```shell
 vela addon enable terraform/provider-alicloud --ALICLOUD_ACCESS_KEY_ID=xxx -ALICLOUD_SECRET_ACCESS_KEY=yyy
 ```
 
+下面我们以阿里云关系型数据库（RDS）的例子，作为示例进行讲解。
+
+### 部署云资源
 接下来，请直接复制一个编写好的应用部署计划，在命令行中执行：
 
 ```shell
@@ -75,6 +76,7 @@ webapp               	rds-server    	webservice 	service-binding   	running	heal
 └─                 	sample-db     	alibaba-rds	                  	running	healthy	Cloud resources are deployed and ready to use.	2021-08-30 20:04:03 +0800 CST
 ```
 
+### 绑定云资源到服务组件
 有了 RDS 的服务器，又有了正常运行的云资源，是时候让它们之间映射起来了：使用运维特征 service-binding。我们对 YAML 文件进行更新后，再次部署：
 
 ```shell
@@ -120,3 +122,10 @@ EOF
 ## 自定义云资源
 
 如果我们提供的开箱即用云资源没有覆盖你的研发需求，你依然可以通过灵活的[Terraform 组件](../platform-engineers/components/component-terraform)去自定义业务所需要的云资源。
+
+## 下一步
+
+- [组件可观测性](./component-observability)
+- [应用组件间的依赖和参数传递](./component-dependency-parameter)
+- [多应用、多环境、多集群编排](./multi-app-env-cluster)
+

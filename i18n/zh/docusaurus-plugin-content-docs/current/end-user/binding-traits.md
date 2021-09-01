@@ -103,7 +103,7 @@ ingerss-app         	express-server	webservice 	ingress	running	healthy	      	2
 如果 status 显示为 rendering，则表示仍在渲染中，或者 HEALTHY 一直 false，则你需要使用 `kubectl get application ingress-app -o yaml` 查看报错信息进行对应的处理。
 
 
-最后查看返回的信息：
+查看返回的信息：
 
 
 ```shell
@@ -130,8 +130,18 @@ status:
   status: running
 ```
 
-通过 vela port-forward ingress-app 访问服务：
+最后通过 vela port-forward ingress-app 转发到本地处理请求：
 ```shell
+vela port-forward ingress-app
+Forwarding from 127.0.0.1:8000 -> 8000
+Forwarding from [::1]:8000 -> 8000
+
+Forward successfully! Opening browser ...
+Handling connection for 8000
+```
+访问服务：
+```shell
+curl -H "Host:testsvc.example.com" http://127.0.0.1:8000/
 Hello World
 
 
