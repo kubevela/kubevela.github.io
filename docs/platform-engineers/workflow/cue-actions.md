@@ -11,6 +11,7 @@ This doc will illustrate the CUE actions provided in `vela/op` stdlib package.
 ---
 
 Create or update resource in Kubernetes cluster.
+
 ### Action Parameter
 
 - value: the resource structure to be created or updated. And after successful execution, `value` will be updated with resource status.
@@ -58,7 +59,6 @@ Step will be blocked until the condition is met.
 ### Action Parameter
 
 - continue: Step will be blocked until the value becomes `true`.
-
 
 ```
 #ConditionalWait: {
@@ -146,6 +146,26 @@ configmap: op.#Read & {
 }
 ```
 
+## ApplyApplication
+
+---
+
+Create or update resources corresponding to the application in Kubernetes cluster.
+
+### Action Parameter
+
+No parameters.
+
+```
+#ApplyApplication: {}
+```
+
+### Usage
+
+```
+apply: op.#ApplyApplication & {}
+```
+
 ## ApplyComponent
 
 ---
@@ -161,9 +181,9 @@ Create or update resources corresponding to the component in Kubernetes cluster.
 
 ```
 #ApplyComponent: {
-   component: string
-   workload: {...}
-   traits: [string]: {...}
+  component: string
+  workload: {...}
+  traits: [string]: {...}
 }
 ```
 
@@ -191,9 +211,9 @@ Create or update the resources corresponding to all components in the applicatio
 ```
 #ApplyRemaining: {
  exceptions?: [componentName=string]: {
-      skipApplyWorkload: *true | bool
+    skipApplyWorkload: *true | bool
       
-      skipAllTraits: *true| bool
+    skipAllTraits: *true| bool
   }
 }  
 ```
@@ -203,6 +223,64 @@ Create or update the resources corresponding to all components in the applicatio
 ```
 apply: op.#ApplyRemaining & {
   exceptions: {"applied-component-name": {}}
+}
+```
+
+## Slack
+
+---
+
+Send messages to Slack.
+
+### Action Parameter
+
+- url: The webhook address of Slack.
+- message: The messages that you want to send, please refer to [Slack messaging](https://api.slack.com/reference/messaging/payload) 。
+
+```
+#Slack: {
+  url: string
+  message: {...}
+}
+```
+
+### Usage
+
+```
+apply: op.#Slack & {
+  url: webhook url
+  message:
+    text: Hello KubeVela
+}
+```
+
+## DingTalk
+
+---
+
+Send messages to DingTalk.
+
+### Action Parameter
+
+- url: The webhook address of DingTalk.
+- message: The messages that you want to send, please refer to [DingTalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) 。
+
+```
+#DingTalk: {
+  url: string
+  message: {...}
+}
+```
+
+### Usage
+
+```
+apply: op.#DingTalk & {
+  url: webhook url
+  message:
+    msgtype: text
+    text:
+      context: Hello KubeVela
 }
 ```
 
