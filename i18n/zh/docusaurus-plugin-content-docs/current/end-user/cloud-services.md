@@ -8,10 +8,10 @@ KubeVela 通过云资源组件（Component）和运维特征（Trait）里的资
 
 ## 查看 KubeVela 的云资源组件
 
-我们通过 [KubeVela CLI](../../../getting-started/quick-install.mdx#3-安装-kubevela-cli)来查看，当前系统中可用的云资源组件类型：
+我们通过 [KubeVela CLI](../getting-started/quick-install.mdx#3-安装-kubevela-cli)来查看，当前系统中可用的云资源组件类型：
 
 ```shell
-$ vela components （加个label）
+$ vela components --label
 NAME        NAMESPACE  	WORKLOAD                             	DESCRIPTION                                                            
 alibaba-ack	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud ACK cluster       
 alibaba-oss	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud OSS object        
@@ -28,9 +28,9 @@ KubeVela 对云资源的集成流程大致如下：
 
 ## 集成阿里云关系型数据库（RDS）
 
-当你准备好，要访问对应云厂商的密钥信息后，使用 `vela add enable` 指令来全局配置鉴权信息：
+当你准备好，要访问对应云厂商的密钥信息后，使用 `vela addon enable` 指令来全局配置鉴权信息：
 ```shell
-vela addon enable terraform-provider-alicloud --secret 'ALICLOUD_ACCESS_KEY=<你的 Access Key> -ALICLOUD_SECRET_KEY=<你的 Secret Key>'
+vela addon enable terraform/provider-alicloud --ALICLOUD_ACCESS_KEY_ID=xxx -ALICLOUD_SECRET_ACCESS_KEY=yyy
 ```
 
 接下来，请直接复制一个编写好的应用部署计划，在命令行中执行：
