@@ -32,7 +32,7 @@ spec:
     - name: demo-policy
       type: env-binding
       properties:
-        engine: local
+        clusterManagementEngine: single-cluster
         envs:
           - name: test
             patch:
@@ -83,9 +83,8 @@ patch-test-workflow-demo   nginx-server   webservice   running   true           
 
 名称 | 描述 | 类型 | 是否必须 | 默认值
 :---------- | :----------- | :----------- | :----------- | :-----------
-engine|集群管理方案，可选值 local （单集群部署）、ocm|string|否|当该字段为空时，默认认为用户使用 ocm 多集群管理方案
+clusterManagementEngine|集群管理方案，可选值 single-cluster（单集群部署）、ocm|string|否|当该字段为空时，默认认为用户使用 ocm 多集群管理方案
 envs|环境差异化配置| env 数组|是|无
-created|是否创建差异化配置后的资源| bool |否|ture,默认创建差异化配置后的资源
 
 env 的属性
 
@@ -115,7 +114,7 @@ clusterSelector 的属性 （该属性只在 engine 为 ocm 时候有效）
 labels |集群标签| map[string]string |否|无
 name |集群名称| string |否|无
 
-namespaceSelector 的属性 （该属性只在 engine 为 local 时候有效）
+namespaceSelector 的属性 （该属性只在 engine 为 single-cluster 时候有效）
 
 名称 | 描述 | 类型 | 是否必须 | 默认值
 :----------- | :------------ | :------------ | :------------ | :------------
