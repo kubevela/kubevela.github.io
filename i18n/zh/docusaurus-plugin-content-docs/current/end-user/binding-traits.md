@@ -103,7 +103,7 @@ ingerss-app         	express-server	webservice 	ingress	running	healthy	      	2
 如果 status 显示为 rendering，则表示仍在渲染中，或者 HEALTHY 一直 false，则你需要使用 `kubectl get application ingress-app -o yaml` 查看报错信息进行对应的处理。
 
 
-接下来，让我们查看网关提供的公网 IP：
+查看返回的信息：
 
 
 ```shell
@@ -130,8 +130,30 @@ status:
   status: running
 ```
 
+最后通过 vela port-forward ingress-app 转发到本地处理请求：
+```shell
+vela port-forward ingress-app
+Forwarding from 127.0.0.1:8000 -> 8000
+Forwarding from [::1]:8000 -> 8000
 
-// 后续文案，需要在 [https://github.com/oam-dev/kubevela/issues/2188](https://github.com/oam-dev/kubevela/issues/2188) resolve 之后解决
+Forward successfully! Opening browser ...
+Handling connection for 8000
+```
+访问服务：
+```shell
+curl -H "Host:testsvc.example.com" http://127.0.0.1:8000/
+Hello World
+
+
+                                       ##         .
+                                 ## ## ##        ==
+                              ## ## ## ## ##    ===
+                           /""""""""""""""""\___/ ===
+                      ~~~ {~~ ~~~~ ~~~ ~~~~ ~~ ~ /  ===- ~~~
+                           \______ o          _,/
+                            \      \       _,'
+                             `'--.._\..--''
+```
 
 
 ## 给组件添加标签和注释
@@ -280,9 +302,9 @@ kubectl logs -f log-gen-worker-7bb65dcdd6-tpbdh count-log
 
 ## 自定义运维特征
 
+当已经内置的运维特征无法满足需求，你可以自由的自定义运维能力，请查看管理员手册里的[自定义运维特征](../platform-engineers/traits/customize-trait)进行实现。
 
 ## 下一步
 
-- 扩缩容
-- 云资源绑定
-- 灰度发布
+- [集成云资源](./cloud-services)，了解如何集成各类云厂商的云资源
+- [灰度发布和扩缩容](./rollout-scaler)
