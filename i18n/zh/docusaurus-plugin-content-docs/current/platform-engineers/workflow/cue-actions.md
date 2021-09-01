@@ -11,6 +11,7 @@ title:  CUE 操作
 --------
 
 在 Kubernetes 集群中创建或者更新资源。
+
 ### 操作参数
 
 - value: 将被 apply 的资源的定义。操作成功执行后，会用集群中资源的状态重新渲染 `value`。
@@ -58,7 +59,7 @@ stepName: op.#Apply & {
 ### 操作参数
 
 - continue: 当该字段为 true 时，workflow step 才会恢复继续执行。
-- 
+
 ```
 #ConditionalWait: {
   continue: bool
@@ -146,6 +147,26 @@ configmap: op.#Read & {
 }
 ```
 
+## ApplyApplication
+
+---
+
+在 Kubernetes 集群中创建或者更新应用对应的所有资源。
+
+### 操作参数
+
+无需指定参数。
+
+```
+#ApplyApplication: {}
+```
+
+### 用法示例
+
+```
+apply: op.#ApplyApplication & {}
+```
+
 ## ApplyComponent
 
 ---
@@ -161,9 +182,9 @@ configmap: op.#Read & {
 
 ```
 #ApplyComponent: {
-   componnet: string
-   workload: {...}
-   traits: [string]: {...}
+  component: string
+  workload: {...}
+  traits: [string]: {...}
 }
 ```
 
@@ -190,11 +211,11 @@ apply: op.#ApplyComponent & {
 ```
 #ApplyRemaining: {
  exceptions?: [componentName=string]: {
-      // skipApplyWorkload 表明是否需要跳过组件的部署
-      skipApplyWorkload: *true | bool
-      
-      // skipAllTraits 表明是否需要跳过所有运维特征的部署
-      skipAllTraits: *true| bool
+    // skipApplyWorkload 表明是否需要跳过组件的部署
+    skipApplyWorkload: *true | bool
+    
+    // skipAllTraits 表明是否需要跳过所有运维特征的部署
+    skipAllTraits: *true| bool
   }
 }  
 ```
@@ -204,6 +225,64 @@ apply: op.#ApplyComponent & {
 ```
 apply: op.#ApplyRemaining & {
   exceptions: {"applied-component-name": {}}
+}
+```
+
+## Slack
+
+---
+
+向 Slack 发送消息通知。
+
+### 操作参数
+
+- url: Slack 的 Webhook 地址。
+- message: 需要发送的 Slack 消息，需要符合 [Slack 信息规范](https://api.slack.com/reference/messaging/payload) 。
+
+```
+#Slack: {
+  url: string
+  message: {...}
+}
+```
+
+### 用法示例
+
+```
+apply: op.#Slack & {
+  url: webhook url
+  message:
+    text: Hello KubeVela
+}
+```
+
+## DingTalk
+
+---
+
+向钉钉发送消息通知。
+
+### 操作参数
+
+- url: 钉钉的 Webhook 地址。
+- message: 需要发送的钉钉消息，需要符合 [钉钉信息规范](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) 。
+
+```
+#DingTalk: {
+  url: string
+  message: {...}
+}
+```
+
+### 用法示例
+
+```
+apply: op.#DingTalk & {
+  url: webhook url
+  message:
+    msgtype: text
+    text:
+      context: Hello KubeVela
 }
 ```
 
