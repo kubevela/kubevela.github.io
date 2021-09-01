@@ -21,7 +21,7 @@ Name | Description | Type | Required | Default
 replicas|number of replicas in one rolloutBatch|int|Yes|Nil
 
 ## Background
-Each modification to a Trait will produce a kubernetes controllerRevision, the default role to generate a name of kubernetes controllerRevision is: <Component name>-<revision number>. You can also appoint controllerRevision name by setting spec.components[x].externalRevision .
+Each modification to a Trait will produce a kubernetes controllerRevision, the default role to generate a name of kubernetes controllerRevision is: `<Component name>-<revision number>`. You can also appoint controllerRevision name by setting `spec.components[x].externalRevision`.
 
 Other than that, when using webservice/worker as Workload's type with RolloutTraits, Workload's name will be controllerRevision's name. And when Workload's type is cloneset-service, Workloads's name will be component's name.
 
