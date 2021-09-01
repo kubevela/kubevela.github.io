@@ -33,8 +33,8 @@ module.exports = {
         'end-user/rollout-scaler',
         'end-user/component-observability',
         'end-user/component-dependency-parameter',
-        'end-user/canary-blue-green',
         'end-user/multi-app-env-cluster',
+          // 'end-user/canary-blue-green', v1.1+ 再上
         // {
         //   'Components': [
         //     'end-user/components/helm',
