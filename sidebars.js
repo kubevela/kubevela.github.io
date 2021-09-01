@@ -104,6 +104,23 @@ module.exports = {
           type: 'category',
           label: 'Component System',
           items: [
+            {
+            type: 'category',
+              label: 'Builtin Components',
+              items: [
+                'platform-engineers/components/built-in/overview',
+                'platform-engineers/components/built-in/helm',
+                'platform-engineers/components/built-in/kustomize',
+                'platform-engineers/components/built-in/raw',
+                'platform-engineers/components/built-in/task',
+                'platform-engineers/components/built-in/webservice',
+                'platform-engineers/components/built-in/worker',
+                'platform-engineers/components/built-in/alicloud-ack',
+                'platform-engineers/components/built-in/alicloud-oss',
+                'platform-engineers/components/built-in/alicloud-rds',
+                'platform-engineers/components/built-in/more',
+              ]
+            },
             'platform-engineers/components/custom-component',
             'platform-engineers/components/component-terraform',
           ]
