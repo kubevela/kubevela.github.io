@@ -162,5 +162,9 @@
   "sidebar.docs.category.Builtin Traits": {
     "message": "内置运维特征",
     "description": "The built in trait"
+  },
+  "sidebar.docs.category.Builtin Components": {
+    "message": "内置组件",
+    "description": "The built in component"
   }
 }
