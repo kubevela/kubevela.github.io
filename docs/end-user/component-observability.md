@@ -1,5 +1,5 @@
 ---
-title:  Component Obaservability
+title:  Component Observability
 ---
 
 WIP
