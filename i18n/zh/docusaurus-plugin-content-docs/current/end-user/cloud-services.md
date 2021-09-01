@@ -28,7 +28,7 @@ KubeVela 对云资源的集成流程大致如下：
 
 首先准备好，要访问对应云厂商的密钥信息后，使用 `vela addon enable` 指令来全局配置鉴权信息：
 ```shell
-vela addon enable terraform/provider-alicloud --ALICLOUD_ACCESS_KEY_ID=xxx -ALICLOUD_SECRET_ACCESS_KEY=yyy
+vela addon enable terraform/provider-alicloud --ALICLOUD_ACCESS_KEY_ID=<你的秘钥 Key ID> -ALICLOUD_SECRET_ACCESS_KEY=<你的秘钥密码>
 ```
 
 下面我们以阿里云关系型数据库（RDS）的例子，作为示例进行讲解。
