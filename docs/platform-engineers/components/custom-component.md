@@ -8,13 +8,13 @@ In this section, it will introduce how to use [CUE](https://cuelang.org/) to dec
 
 ## Declare `ComponentDefinition`
 
-First, generate a `ComponentDefinition` template with `vela def init`:
+First, generate `ComponentDefinition` scaffolds via `vela def init`:
 
 ```shell
 vela def init stateless -t component -o stateless.cue
 ```
 
-The result is as follows:
+It generates a file:
 
 ```shell
 $ cat stateless.cue
@@ -41,7 +41,7 @@ In detail:
     * The `output` filed defines the template for the abstraction.
     * The `parameter` filed defines the template parameters, i.e. the configurable properties exposed in the `Application`abstraction (and JSON schema will be automatically generated based on them).
 
-Let's edit this auto-generated custom component file:
+Edit this auto-generated custom component file:
 
 ```
 stateless: {
@@ -83,20 +83,20 @@ template: {
 }
 ```
 
-You can use `vela def vet` to check validation:
+You can use `vela def vet` to validate the format:
 
 ```shell
 $ vela def vet stateless.cue
 Validation succeed.
 ```
 
-Let's declare another component named `task`, i.e. an abstraction for run-to-completion workload.
+Declare another component named `task` which is an abstraction for run-to-completion workload.
 
 ```shell
 vela def init task -t component -o task.cue
 ```
 
-The result is as follows:
+It generates a file:
 
 ```shell
 $ cat task.cue
@@ -117,7 +117,7 @@ template: {
 }
 ```
 
-Edit this auto-generated custom component file:
+Edit the generated component file:
 
 ```
 task: {
@@ -158,7 +158,7 @@ template: {
 }
 ```
 
-Install above `ComponentDefinition` objects to your Kubernetes cluster:
+Apply above `ComponentDefinition` files to your Kubernetes cluster:
 
 ```shell
 $ vela def apply stateless.cue
@@ -398,7 +398,7 @@ template: {
 }
 ```
 
-Apply it to your Kubernetes cluster:
+Apply to your Kubernetes cluster:
 
 ```shell
 $ vela def apply webserver.cue
