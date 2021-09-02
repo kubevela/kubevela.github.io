@@ -30,7 +30,7 @@ worker     	vela-system	deployments.apps                     	Describes long-run
            	           	                                     	to receive external network traffic.    
 ```
 
-Let's take several typical component types as example to introduce the usage of KubeVela component delivery. If you want to directly view how cloud resources are used, please read [Integrate Cloud Service][2].
+Let's take several typical component types as example to introduce the usage of KubeVela component delivery. If you want to directly view how Cloud Services are used, please read [Integrate Cloud Service][2].
 
 
 ## Using service-based components (webservice)
@@ -186,19 +186,19 @@ bucket-app          	bucket-comp	kustomize 	      	running	healthy	      	2021-0
 
 The PHASE of the bucket-app APP is running, and the STATUS is healthy. Successful application deployment!
 
-For usage examples of Git repositories and their detailed configuration item information, please go to [Built-in Components][4] in the Administrator Manual.
+For usage examples of Git repositories and their detailed configuration item information, please go to [Built-in Components][4] in the Admin Guide.
 
-## Using Cloud Resource Component
+## Using Cloud Service Component
 
-Cloud resource components are also the core components supported by KubeVela. Cloud resources are often not used separately. Cloud resources such as databases and caches are often used after they are created. The relevant information is transferred to other components. At the same time, cloud resources involve different cloud vendors, and Some authentication-related preparations will be explained independently in the chapter [Integrated Cloud Resources][5].
+Cloud Service components are also the core components supported by KubeVela. Cloud Services are often not used separately. Cloud Services such as databases and caches are often used after they are created. The relevant information is transferred to other components. At the same time, Cloud Services involve different cloud vendors, and Some authentication-related preparations will be explained independently in the chapter [Integrated Cloud Services][5].
 
 ## Custom Component
 
-When none of the above KubeVela's built-in unpacking components can meet your needs, don’t worry, KubeVela provides powerful expansion capabilities and can be connected to almost any type of component form. You can check the [custom components][6] in the administrator manual. ]Learn to use CUE and Kubernetes to extend KubeVela's component types.
+When none of the above KubeVela's built-in unpacking components can meet your needs, don’t worry, KubeVela provides powerful expansion capabilities and can be connected to almost any type of component form. You can check the [custom components][6] in the Admin Guide to Learn about how to use CUE and Kubernetes to extend KubeVela's component types.
 
 ## Next
 
-- Visit the [Integrated Cloud Resources][7] document to master the cloud resource integration methods of different types and different vendors
+- Visit the [Integrated Cloud Services][7] document to master the Cloud Service integration methods of different types and different vendors
 - Visit the [Binding Trait][8] document to master how to bind the operation and maintenance actions and strategies you need to the component
 
 [1]:	../getting-started/quick-install#3-get-kubevela-cli
