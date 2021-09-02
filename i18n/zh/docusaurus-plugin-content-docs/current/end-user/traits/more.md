@@ -1,14 +1,18 @@
 ---
-title:  Want More?
+title:  获取更多
 ---
 
-## 1. Get from capability registry
+KubeVela 中的模块完全都是可定制和可插拔的，所以除了内置的运维能力之外，你还可以通过如下的方式获取更多。
 
-You can get more from official capability registry by using KubeVela [plugin](../../../developers/references/kubectl-plugin#install-kubectl-vela-plugin)。
+## 1. 从官方或第三方能力中心获取模块化能力
 
-### List
+可以通过 KubeVela 的 [Kubectl 插件](../../developers/references/kubectl-plugin#install-kubectl-vela-plugin)获取官方能力中心中发布的能力。
 
-By default, the commands will list capabilities from [repo](https://registry.kubevela.net) maintained by KubeVela.
+### 查看能力中心的模块列表
+
+默认情况下，命令会从 KubeVela 官方维护的[能力中心](https://registry.kubevela.net)中获取模块化功能。
+
+例如，让我们尝试列出注册表中所有可用的 trait：
 
 ```shell
 $ kubectl vela trait --discover
@@ -24,12 +28,11 @@ node-affinity  	default		                              		    [webservice worker]
 route          	default       routes.standard.oam.dev       		[webservice]             
 virtualgroup   	default		                              		    [webservice worker] 
 ```
+请注意，`--discover` 标志表示显示不在集群中的所有特征。
 
-Note that the `--discover` flag means show all traits not in your cluster.
+### 从能力中心安装模块
 
-### Install
-
-Then you can install a trait like:
+然后你可以安装一个 trait，如：
 
 ```shell
 $ kubectl vela trait get init-container
@@ -37,8 +40,7 @@ Installing component capability init-container
 Successfully install trait: init-container                                                                                                 
 ```
 
-## 2. Designed by yourself
+## 2. 自定义模块化能力
 
-* Read [how to edit definitions](../../cue/definition-edit) to build your own capability from existing ones.
-* [Build your own capability from scratch](../../cue/advanced)
-  and learn more features about how to [define custom traits](../customize-trait).
+* 阅读[管理模块化功能](../../platform-engineers/cue/definition-edit)，学习对已有的模块化能力进行修改和编辑。
+* 从头开始[自定义模块化能力](../../platform-engineers/cue/advanced)，并了解自定义运维能力的[更多用法和功能](../../platform-engineers/traits/customize-trait)。

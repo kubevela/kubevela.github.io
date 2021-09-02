@@ -280,7 +280,7 @@ kubectl logs -f log-gen-worker-7bb65dcdd6-tpbdh count-log
 ```
 
 
-Above, we took several common traits as examples to introduce how to bind traits. For more trait's functions and parameters, please go to [built-in Trait](../platform-engineers/traits/built-in/overview) view.
+Above, we took several common traits as examples to introduce how to bind traits. For more trait's functions and parameters, please go to built-in Trait view.
 
 ## Custom Trait
 
