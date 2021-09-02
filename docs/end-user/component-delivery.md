@@ -104,7 +104,7 @@ $ vela ls
 APP    	COMPONENT	TYPE      	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME                 
 website	frontend 	webservice	      	running	healthy	      	2021-08-28 18:26:47 +0800 CST
 ```
-We also see that the PHASE of the website APP is running and the STATUS is healthy.
+We also see that the PHASE of the app is running and the STATUS is healthy.
 
 ## Using Helm Component
 
