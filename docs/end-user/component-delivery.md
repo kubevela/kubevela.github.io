@@ -4,7 +4,7 @@ title:  Component Delivery
 
 Components are one of the core concepts of KubeVela. You can use them to build the most common types of services, such as a Web Service that provides external access, a Worker that runs scheduled tasks on the backend, or enables Redis and including OSS from Cloud Provider and so on.
 
-In order to help you quickly and comprehensively implement your business, KubeVela provides a large number of out-of-the-box component types, which not only include business components for conventional microservice scenarios, such as "service-oriented components" (webservice) and "back-end running components" (Worker), “one-off task component” (task), etc., and also include general-purpose components for different product categories in the community, such as the “Helm component” that supports Helm Chart, the “Kustomize component” that supports Git warehouse, etc., and also Contains a series of commonly used cloud service components. If KubeVela's built-in component types cannot meet all your needs, KubeVela also has the ability to expand almost any type of component products.
+In order to help you quickly and comprehensively implement your business, KubeVela provides a large number of out-of-the-box component types, which not only include business components for conventional microservice scenarios, such as "service-oriented components" (webservice) and "back-end running components" (Worker), “one-off task component” (task), etc., and also include general-purpose components for different product categories in the community, such as the “Helm component” that supports Helm Chart, the “Kustomize component” that supports Git Repo, etc., at last it contains a series of commonly used cloud service components. If KubeVela's built-in component types cannot meet all your needs, KubeVela also has the ability to expand to almost any type of component products.
 
 ## KubeVela's Component
 
@@ -30,10 +30,10 @@ worker     	vela-system	deployments.apps                     	Describes long-run
            	           	                                     	to receive external network traffic.    
 ```
 
-Let's take several typical component types as example to introduce the usage of KubeVela component delivery. If you want to directly view how Cloud Services are used, please read [Integrate Cloud Service][2].
+Let's take several typical component types as example to introduce the usage of KubeVela component delivery. If you want to directly view how Cloud Services are used, please read [Integrated Cloud Service][2].
 
 
-## Using service-based components (webservice)
+## Using Service-Based Components (Web Service)
 
 Service-oriented components are components that support external access to services with the container as the core, and their functions cover the needs of most of he microservice scenarios.
 
@@ -108,7 +108,7 @@ We also see that the PHASE of the website APP is running and the STATUS is healt
 
 ## Using Helm Component
 
-KubeVela's Helm component meets the needs of users to connect to Helm Chart. You can deploy any ready-made Helm chart software package from Helm Repo, Git Repo or OSS bucket through the Helm component, and override its parameters.
+KubeVela's Helm component meets the needs of users to connect to Helm Chart. You can deploy any ready-made Helm chart software package from Helm Repo, Git Repo or OSS bucket through the Helm component, and overwrite its parameters.
 
 We use the Chart package deployment method from the Helm Repo to explain. In this application deployment plan, We hope to deliver a component called redis-comp. It is a Chart from the https://charts.bitnami.com/bitnami Helm repository. The chart type is redis-cluster, version 6.2.7.
 
@@ -145,9 +145,9 @@ We also see that the PHASE of the app-delivering-chart APP is running and the ST
 
 For usage examples of Git repositories and OSS buckets, and detailed configuration information about them, please go to [Built-in Components][3] in the Admin's Guide.
 
-## Using Kustomize Componet
+## Using Kustomize Component
 
-KubeVela's `kustomize` component meets the needs of users to directly connect Yaml files and folders as component products. No matter whether your Yaml file/folder is stored in a Git warehouse or an OSS bucket, KubeVela can read and deliver it.
+KubeVela's `kustomize` component meets the needs of users to directly connect Yaml files and folders as component products. No matter whether your Yaml file/folder is stored in a Git Repo or an OSS bucket, KubeVela can read and deliver it.
 
 Let's take the YAML folder component from the OSS bucket warehouse as an example to explain the usage. In the application deployment plan this time, I hope to deliver a component named bucket-comp. The deployment file corresponding to the component is stored in the cloud storage OSS bucket, and the corresponding bucket name is definition-registry. kustomize.yaml comes from this address of oss-cn-beijing.aliyuncs.com and the path is `./app/prod/`.
 
@@ -203,8 +203,8 @@ When none of the above KubeVela's built-in unpacking components can meet your ne
 
 [1]:	../getting-started/quick-install#3-get-kubevela-cli
 [2]:	./cloud-services
-[3]:	../platform-engineers/components/build-in-component
-[4]:	../platform-engineers/components/build-in-component
+[3]:	../platform-engineers/components/built-in/helm
+[4]:	../platform-engineers/components/built-in/kustomize
 [5]:	./cloud-services
 [6]:	../platform-engineers/components/custom-component
 [7]:	./cloud-services
