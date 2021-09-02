@@ -110,7 +110,7 @@ worker     	vela-system	deployments.apps                     	Describes long-run
 
 ```
 
-你可以继续使用 [Helm 组件](../end-user/components/helm)、[Kustomize 组件](../end-user/components/kustomize)、[CUE 组件](../end-user/components/cue) 等开箱即用的 KubeVela 内置组件来构建你的应用部署计划。
+你可以继续使用 [Helm 组件](../platform-engineers/components/built-in/helm)和[Kustomize 组件](../platform-engineers/components/built-in/kustomize)等开箱即用的 KubeVela 内置组件来构建你的应用部署计划。
 
 如果你是熟悉 Kubernetes 的平台管理员，你可以通过[自定义组件入门](../platform-engineers/components/custom-component)文档了解 KubeVela 是如何扩展任意类型的自定义组件的。特别的，[Terraform 组件](../platform-engineers/components/component-terraform) 就是 KubeVela 自定义组件能力的一个最佳实践，可以满足任意云资源的供应，只需少量云厂商特定配置（如鉴权、云资源模块等），即可成为一个开箱即用的云资源组件。
 

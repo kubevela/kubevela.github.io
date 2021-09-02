@@ -345,5 +345,3 @@ spec:
                 key: Bucket
 ...
 ```
-
-你可以通过查看 [the end user usage workflow](../end-user/components/cloud-services) 了解其使用方式。
