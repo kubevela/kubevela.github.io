@@ -149,7 +149,7 @@ For usage examples of Git repositories and OSS buckets, and detailed configurati
 
 KubeVela's `kustomize` component meets the needs of users to directly connect Yaml files and folders as component products. No matter whether your Yaml file/folder is stored in a Git Repo or an OSS bucket, KubeVela can read and deliver it.
 
-Let's take the YAML folder component from the OSS bucket warehouse as an example to explain the usage. In the application deployment plan this time, I hope to deliver a component named bucket-comp. The deployment file corresponding to the component is stored in the cloud storage OSS bucket, and the corresponding bucket name is definition-registry. kustomize.yaml comes from this address of oss-cn-beijing.aliyuncs.com and the path is `./app/prod/`.
+Let's take the YAML folder component from the OSS bucket registry as an example to explain the usage. In the `Application` this time, I hope to deliver a component named bucket-comp. The deployment file corresponding to the component is stored in the cloud storage OSS bucket, and the corresponding bucket name is definition-registry. `kustomize.yaml` comes from this address of oss-cn-beijing.aliyuncs.com and the path is `./app/prod/`.
 
 ```shell
 cat <<EOF | kubectl apply -f -
