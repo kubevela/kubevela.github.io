@@ -8,95 +8,194 @@ In this section, it will introduce how to use [CUE](https://cuelang.org/) to dec
 
 ## Declare `ComponentDefinition`
 
-Here is a CUE based `ComponentDefinition` example which provides a abstraction for stateless workload type:
+First, generate `ComponentDefinition` scaffolds via `vela def init` with existed YAML file.
+
+The YAML file:
 
 ```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: ComponentDefinition
-metadata:
-  name: stateless
+apiVersion: "apps/v1"
+kind: "Deployment"
 spec:
-  workload:
-    definition:
-      apiVersion: apps/v1
-      kind: Deployment
-  schematic:
-    cue:
-      template: |
-        parameter: {
-        	name:  string
-        	image: string
-        }
-        output: {
-        	apiVersion: "apps/v1"
-        	kind:       "Deployment"
-        	spec: {
-        		selector: matchLabels: {
-        			"app.oam.dev/component": parameter.name
-        		}
-        		template: {
-        			metadata: labels: {
-        				"app.oam.dev/component": parameter.name
-        			}
-        			spec: {
-        				containers: [{
-        					name:  parameter.name
-        					image: parameter.image
-        				}]
-        			}
-        		}
-        	}
-        }
+  selector:
+    matchLabels:
+      "app.oam.dev/component": "name"
+  template:
+    metadata:
+      labels:
+        "app.oam.dev/component": "name"
+    spec:
+      containers: 
+      - name: "name"
+        image: "image"
 ```
+
+Generate `ComponentDefinition` based on the YAML file:
+
+```shell
+vela def init stateless -t component --template-yaml ./stateless.yaml -o stateless.cue
+```
+
+It generates a file:
+
+```shell
+$ cat stateless.cue
+stateless: {
+	annotations: {}
+	attributes: workload: definition: {
+		apiVersion: "<change me> apps/v1"
+		kind:       "<change me> Deployment"
+	}
+	description: ""
+	labels: {}
+	type: "component"
+}
+
+template: {
+	output: {
+		spec: {
+			selector: matchLabels: "app.oam.dev/component": "name"
+			template: {
+				metadata: labels: "app.oam.dev/component": "name"
+				spec: containers: [{
+					name:  "name"
+					image: "image"
+				}]
+			}
+		}
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+	}
+	outputs: {}
+	parameters: {}
+}
+```
+
 In detail:
 - `.spec.workload` is required to indicate the workload type of this component.
 - `.spec.schematic.cue.template` is a CUE template, specifically:
     * The `output` filed defines the template for the abstraction.
     * The `parameter` filed defines the template parameters, i.e. the configurable properties exposed in the `Application`abstraction (and JSON schema will be automatically generated based on them).
 
-Let's declare another component named `task`, i.e. an abstraction for run-to-completion workload.
+Add parameters in this auto-generated custom component file :
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: ComponentDefinition
-metadata:
-  name: task
-  annotations:
-    definition.oam.dev/description: "Describes jobs that run code or a script to completion."
-spec:
-  workload:
-    definition:
-      apiVersion: batch/v1
-      kind: Job
-  schematic:
-    cue:
-      template: |
-        output: {
-          apiVersion: "batch/v1"
-          kind:       "Job"
-          spec: {
-            parallelism: parameter.count
-            completions: parameter.count
-            template: spec: {
-              restartPolicy: parameter.restart
-              containers: [{
-                image: parameter.image
-                if parameter["cmd"] != _|_ {
-                  command: parameter.cmd
-                }
-              }]
-            }
-          }
-        }
-        parameter: {
-          count:   *1 | int
-          image:   string
-          restart: *"Never" | string
-          cmd?: [...string]
-        }
+```
+stateless: {
+	annotations: {}
+	attributes: workload: definition: {
+		apiVersion: "<change me> apps/v1"
+		kind:       "<change me> Deployment"
+	}
+	description: ""
+	labels: {}
+	type: "component"
+}
+
+template: {
+	output: {
+		spec: {
+			selector: matchLabels: "app.oam.dev/component": parameter.name
+			template: {
+				metadata: labels: "app.oam.dev/component": parameter.name
+				spec: containers: [{
+					name:  parameter.name
+					image: parameter.image
+				}]
+			}
+		}
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+	}
+	outputs: {}
+	parameters: {
+    name: string
+    image: string
+  }
+}
 ```
 
-Save above `ComponentDefinition` objects to files and install them to your Kubernetes cluster by `$ kubectl apply -f stateless-def.yaml task-def.yaml`
+You can use `vela def vet` to validate the format:
+
+```shell
+$ vela def vet stateless.cue
+Validation succeed.
+```
+
+Declare another component named `task` which is an abstraction for run-to-completion workload.
+
+```shell
+vela def init task -t component -o task.cue
+```
+
+It generates a file:
+
+```shell
+$ cat task.cue
+task: {
+	annotations: {}
+	attributes: workload: definition: {
+		apiVersion: "<change me> apps/v1"
+		kind:       "<change me> Deployment"
+	}
+	description: ""
+	labels: {}
+	type: "component"
+}
+
+template: {
+	output: {}
+	parameter: {}
+}
+```
+
+Edit the generated component file:
+
+```
+task: {
+	annotations: {}
+	attributes: workload: definition: {
+		apiVersion: "batch/v1"
+		kind:       "Job"
+	}
+	description: ""
+	labels: {}
+	type: "component"
+}
+
+template: {
+  output: {
+    apiVersion: "batch/v1"
+    kind:       "Job"
+    spec: {
+      parallelism: parameter.count
+      completions: parameter.count
+      template: spec: {
+        restartPolicy: parameter.restart
+        containers: [{
+          image: parameter.image
+          if parameter["cmd"] != _|_ {
+            command: parameter.cmd
+          }
+        }]
+      }
+    }
+  }
+	parameter: {
+    count:   *1 | int
+    image:   string
+    restart: *"Never" | string
+    cmd?: [...string]
+  }
+}
+```
+
+Apply above `ComponentDefinition` files to your Kubernetes cluster:
+
+```shell
+$ vela def apply stateless.cue
+ComponentDefinition stateless created in namespace vela-system.
+$ vela def apply task.cue
+ComponentDefinition task created in namespace vela-system.
+```
 
 ## Declare an `Application`
 
@@ -236,98 +335,104 @@ outputs: <unique-name>:
 
 Below is the example for `webserver` definition: 
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: ComponentDefinition
-metadata:
-  name: webserver
-  annotations:
-    definition.oam.dev/description: "webserver is a combo of Deployment + Service"
-spec:
-  workload:
-    definition:
-      apiVersion: apps/v1
-      kind: Deployment
-  schematic:
-    cue:
-      template: |
-        output: {
-            apiVersion: "apps/v1"
-            kind:       "Deployment"
-            spec: {
-                selector: matchLabels: {
-                    "app.oam.dev/component": context.name
-                }
-                template: {
-                    metadata: labels: {
-                        "app.oam.dev/component": context.name
-                    }
-                    spec: {
-                        containers: [{
-                            name:  context.name
-                            image: parameter.image
+```
+webserver: {
+	annotations: {}
+	attributes: workload: definition: {
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+	}
+	description: ""
+	labels: {}
+	type: "component"
+}
 
-                            if parameter["cmd"] != _|_ {
-                                command: parameter.cmd
-                            }
-
-                            if parameter["env"] != _|_ {
-                                env: parameter.env
-                            }
-
-                            if context["config"] != _|_ {
-                                env: context.config
-                            }
-
-                            ports: [{
-                                containerPort: parameter.port
-                            }]
-
-                            if parameter["cpu"] != _|_ {
-                                resources: {
-                                    limits:
-                                        cpu: parameter.cpu
-                                    requests:
-                                        cpu: parameter.cpu
-                                }
-                            }
-                        }]
-                }
-                }
-            }
+template: {
+  output: {
+    apiVersion: "apps/v1"
+    kind:       "Deployment"
+    spec: {
+      selector: matchLabels: {
+        "app.oam.dev/component": context.name
+      }
+      template: {
+        metadata: labels: {
+          "app.oam.dev/component": context.name
         }
-        // an extra template
-        outputs: service: {
-            apiVersion: "v1"
-            kind:       "Service"
-            spec: {
-                selector: {
-                    "app.oam.dev/component": context.name
-                }
-                ports: [
-                    {
-                        port:       parameter.port
-                        targetPort: parameter.port
-                    },
-                ]
+        spec: {
+          containers: [{
+            name:  context.name
+            image: parameter.image
+
+            if parameter["cmd"] != _|_ {
+              command: parameter.cmd
             }
-        }
-        parameter: {
-            image: string
-            cmd?: [...string]
-            port: *80 | int
-            env?: [...{
-                name:   string
-                value?: string
-                valueFrom?: {
-                    secretKeyRef: {
-                        name: string
-                        key:  string
-                    }
-                }
+
+            if parameter["env"] != _|_ {
+              env: parameter.env
+            }
+
+            if context["config"] != _|_ {
+              env: context.config
+            }
+
+            ports: [{
+              containerPort: parameter.port
             }]
-            cpu?: string
+
+            if parameter["cpu"] != _|_ {
+              resources: {
+                limits:
+                  cpu: parameter.cpu
+                requests:
+                  cpu: parameter.cpu
+              }
+            }
+          }]
         }
+      }
+    }
+  }
+  // an extra template
+  outputs: service: {
+    apiVersion: "v1"
+    kind:       "Service"
+    spec: {
+      selector: {
+        "app.oam.dev/component": context.name
+      }
+      ports: [
+        {
+          port:       parameter.port
+          targetPort: parameter.port
+        },
+      ]
+    }
+  }
+	parameter: {
+    image: string
+    cmd?: [...string]
+    port: *80 | int
+    env?: [...{
+      name:   string
+      value?: string
+      valueFrom?: {
+        secretKeyRef: {
+          name: string
+          key:  string
+        }
+      }
+    }]
+    cpu?: string
+  }
+}
+```
+
+Apply to your Kubernetes cluster:
+
+```shell
+$ vela def apply webserver.cue
+ComponentDefinition webserver created in namespace vela-system.
 ```
 
 The user could now declare an `Application` with it:

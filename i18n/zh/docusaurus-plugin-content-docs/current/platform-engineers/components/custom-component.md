@@ -2,109 +2,199 @@
 title:  自定义组件入门
 ---
 
-> 在阅读本部分之前，请确保你已经了解 KubeVela 中[组件定义（ComponentDefinition）](../oam/x-definition.md##组件定义（ComponentDefinition）) 的概念
-
-> 学习掌握了 [CUE 的基本知识](../cue/basic)
+> 在阅读本部分之前，请确保你已经了解 KubeVela 中 [组件定义（ComponentDefinition](../oam/x-definition.md##组件定义（ComponentDefinition）) 的概念且学习掌握了 [CUE 的基本知识](../cue/basic)
 
 本节将以组件定义的例子展开说明，介绍如何使用 [CUE](https://cuelang.org/) 通过组件定义 `ComponentDefinition` 来自定义应用部署计划的组件。
 
 ### 交付一个简单的自定义组件
 
-我们先编写一个基于 CUE 的组件定义，它想提供的是一个无状态工作负载类型的抽象：
+我们可以通过 `vela def init` 来根据已有的 YAML 文件来生成一个 `ComponentDefinition` 模板。
+
+YAML 文件：
 
 ```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: ComponentDefinition
-metadata:
-  name: stateless
+apiVersion: "apps/v1"
+kind: "Deployment"
 spec:
-  workload:
-    definition:
-      apiVersion: apps/v1
-      kind: Deployment
-  schematic:
-    cue:
-      template: |
-        parameter: {
-          name:  string
-          image: string
-        }
-        output: {
-          apiVersion: "apps/v1"
-          kind:       "Deployment"
-          spec: {
-            selector: matchLabels: {
-              "app.oam.dev/component": parameter.name
-            }
-            template: {
-              metadata: labels: {
-                "app.oam.dev/component": parameter.name
-              }
-              spec: {
-                containers: [{
-                  name:  parameter.name
-                  image: parameter.image
-                }]
-              }
-            }
-          }
-        }
+  selector:
+    matchLabels:
+      "app.oam.dev/component": "name"
+  template:
+    metadata:
+      labels:
+        "app.oam.dev/component": "name"
+    spec:
+      containers: 
+      - name: "name"
+        image: "image"
 ```
-详细来说：
+
+根据以上的 YAML 来生成 `ComponentDefinition`：
+
+```shell
+vela def init stateless -t component --template-yaml ./stateless.yaml -o stateless.cue
+```
+
+得到如下结果：
+
+```shell
+$ cat stateless.cue
+stateless: {
+	annotations: {}
+	attributes: workload: definition: {
+		apiVersion: "<change me> apps/v1"
+		kind:       "<change me> Deployment"
+	}
+	description: ""
+	labels: {}
+	type: "component"
+}
+
+template: {
+	output: {
+		spec: {
+			selector: matchLabels: "app.oam.dev/component": "name"
+			template: {
+				metadata: labels: "app.oam.dev/component": "name"
+				spec: containers: [{
+					name:  "name"
+					image: "image"
+				}]
+			}
+		}
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+	}
+	outputs: {}
+	parameters: {}
+}
+```
+
+在这个自动生成的模板中：
 - 需要 `.spec.workload` 来指示该组件的工作负载类型。
 - `.spec.schematic.cue.template` 是一个 CUE 模板：
      * `output` 字段定义了 CUE 要输出的抽象模板。
      * `parameter` 字段定义了模板参数，即在应用部署计划（Application）中公开的可配置属性（KubeVela 将基于 `parameter` 字段自动生成 Json schema）。
+  
+下面我们来给这个自动生成的自定义组件添加参数并进行赋值：
+
+```
+stateless: {
+	annotations: {}
+	attributes: workload: definition: {
+		apiVersion: "<change me> apps/v1"
+		kind:       "<change me> Deployment"
+	}
+	description: ""
+	labels: {}
+	type: "component"
+}
+
+template: {
+	output: {
+		spec: {
+			selector: matchLabels: "app.oam.dev/component": parameter.name
+			template: {
+				metadata: labels: "app.oam.dev/component": parameter.name
+				spec: containers: [{
+					name:  parameter.name
+					image: parameter.image
+				}]
+			}
+		}
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+	}
+	outputs: {}
+	parameters: {
+    name: string
+    image: string
+  }
+}
+```
+
+修改后可以用 `vela def vet` 做一下格式检查和校验。
+
+```shell
+$ vela def vet stateless.cue
+Validation succeed.
+```
 
 接着，让我们声明另一个名为 `task` 的组件。
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: ComponentDefinition
-metadata:
-  name: task
-  annotations:
-    definition.oam.dev/description: "Describes jobs that run code or a script to completion."
-spec:
-  workload:
-    definition:
-      apiVersion: batch/v1
-      kind: Job
-  schematic:
-    cue:
-      template: |
-        output: {
-          apiVersion: "batch/v1"
-          kind:       "Job"
-          spec: {
-            parallelism: parameter.count
-            completions: parameter.count
-            template: spec: {
-              restartPolicy: parameter.restart
-              containers: [{
-                image: parameter.image
-                if parameter["cmd"] != _|_ {
-                  command: parameter.cmd
-                }
-              }]
-            }
+```shell
+vela def init task -t component -o task.cue
+```
+
+得到如下结果：
+
+```shell
+$ cat task.cue
+task: {
+	annotations: {}
+	attributes: workload: definition: {
+		apiVersion: "<change me> apps/v1"
+		kind:       "<change me> Deployment"
+	}
+	description: ""
+	labels: {}
+	type: "component"
+}
+
+template: {
+	output: {}
+	parameter: {}
+}
+```
+
+修改该组件定义：
+
+```
+task: {
+	annotations: {}
+	attributes: workload: definition: {
+		apiVersion: "batch/v1"
+		kind:       "Job"
+	}
+	description: ""
+	labels: {}
+	type: "component"
+}
+
+template: {
+  output: {
+    apiVersion: "batch/v1"
+    kind:       "Job"
+    spec: {
+      parallelism: parameter.count
+      completions: parameter.count
+      template: spec: {
+        restartPolicy: parameter.restart
+        containers: [{
+          image: parameter.image
+          if parameter["cmd"] != _|_ {
+            command: parameter.cmd
           }
-        }
-        parameter: {
-          count:   *1 | int
-          image:   string
-          restart: *"Never" | string
-          cmd?: [...string]
-        }
+        }]
+      }
+    }
+  }
+	parameter: {
+    count:   *1 | int
+    image:   string
+    restart: *"Never" | string
+    cmd?: [...string]
+  }
+}
 ```
 
-将上面的组件定义对象保存到 YAML 文件中，并通过 `$ kubectl apply -f stateless-def.yaml task-def.yaml` 将它们部署到你的 Kubernetes 集群。
+将以上两个组件定义部署到集群中：
 
-```
-$  kubectl apply -f stateless-def.yaml              
-componentdefinition.core.oam.dev/stateless created
-$  kubectl apply -f task-def.yaml 
-componentdefinition.core.oam.dev/task created
+```shell
+$ vela def apply stateless.cue
+ComponentDefinition stateless created in namespace vela-system.
+$ vela def apply task.cue
+ComponentDefinition task created in namespace vela-system.
 ```
 
 这两个已经定义好的组件，最终会在应用部署计划中实例化，我们引用自定义的组件类型 `stateless`，命名为 `hello`。同样，我们也引用了自定义的第二个组件类型 `task`，并命令为 `countdown`。
@@ -192,100 +282,99 @@ outputs: <unique-name>:
   <full template data>
 ```
 
-回到 `webserver` 这个复合自定义组件上，它的 YAML 文件编写如下：
+回到 `webserver` 这个复合自定义组件上，它的 CUE 文件编写如下：
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: ComponentDefinition
-metadata:
-  name: webserver
-  annotations:
-    definition.oam.dev/description: "webserver is a combo of Deployment + Service"
-spec:
-  workload:
-    definition:
-      apiVersion: apps/v1
-      kind: Deployment
-  schematic:
-    cue:
-      template: |
-        output: {
-            apiVersion: "apps/v1"
-            kind:       "Deployment"
-            spec: {
-                selector: matchLabels: {
-                    "app.oam.dev/component": context.name
-                }
-                template: {
-                    metadata: labels: {
-                        "app.oam.dev/component": context.name
-                    }
-                    spec: {
-                        containers: [{
-                            name:  context.name
-                            image: parameter.image
+```
+webserver: {
+	annotations: {}
+	attributes: workload: definition: {
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+	}
+	description: ""
+	labels: {}
+	type: "component"
+}
 
-                            if parameter["cmd"] != _|_ {
-                                command: parameter.cmd
-                            }
-
-                            if parameter["env"] != _|_ {
-                                env: parameter.env
-                            }
-
-                            if context["config"] != _|_ {
-                                env: context.config
-                            }
-
-                            ports: [{
-                                containerPort: parameter.port
-                            }]
-
-                            if parameter["cpu"] != _|_ {
-                                resources: {
-                                    limits:
-                                        cpu: parameter.cpu
-                                    requests:
-                                        cpu: parameter.cpu
-                                }
-                            }
-                        }]
-                }
-                }
-            }
+template: {
+  output: {
+    apiVersion: "apps/v1"
+    kind:       "Deployment"
+    spec: {
+      selector: matchLabels: {
+        "app.oam.dev/component": context.name
+      }
+      template: {
+        metadata: labels: {
+          "app.oam.dev/component": context.name
         }
-        // an extra template
-        outputs: service: {
-            apiVersion: "v1"
-            kind:       "Service"
-            spec: {
-                selector: {
-                    "app.oam.dev/component": context.name
-                }
-                ports: [
-                    {
-                        port:       parameter.port
-                        targetPort: parameter.port
-                    },
-                ]
+        spec: {
+          containers: [{
+            name:  context.name
+            image: parameter.image
+
+            if parameter["cmd"] != _|_ {
+              command: parameter.cmd
             }
-        }
-        parameter: {
-            image: string
-            cmd?: [...string]
-            port: *80 | int
-            env?: [...{
-                name:   string
-                value?: string
-                valueFrom?: {
-                    secretKeyRef: {
-                        name: string
-                        key:  string
-                    }
-                }
+
+            if parameter["env"] != _|_ {
+              env: parameter.env
+            }
+
+            if context["config"] != _|_ {
+              env: context.config
+            }
+
+            ports: [{
+              containerPort: parameter.port
             }]
-            cpu?: string
+
+            if parameter["cpu"] != _|_ {
+              resources: {
+                limits:
+                  cpu: parameter.cpu
+                requests:
+                  cpu: parameter.cpu
+              }
+            }
+          }]
         }
+      }
+    }
+  }
+  // an extra template
+  outputs: service: {
+    apiVersion: "v1"
+    kind:       "Service"
+    spec: {
+      selector: {
+        "app.oam.dev/component": context.name
+      }
+      ports: [
+        {
+          port:       parameter.port
+          targetPort: parameter.port
+        },
+      ]
+    }
+  }
+	parameter: {
+    image: string
+    cmd?: [...string]
+    port: *80 | int
+    env?: [...{
+      name:   string
+      value?: string
+      valueFrom?: {
+        secretKeyRef: {
+          name: string
+          key:  string
+        }
+      }
+    }]
+    cpu?: string
+  }
+}
 ```
 
 可以看到：
@@ -305,11 +394,11 @@ outputs: third-resource: {
 ...                     
 ```
 
-在理解这些之后，将上面的组件定义对象保存到 YAML 文件中，并通过 `$ kubectl apply -f webserver-def.yaml` 部署到你的 Kubernetes 集群。
+在理解这些之后，将上面的组件定义对象保存到 CUE 文件中，并部署到你的 Kubernetes 集群。
 
-```
-$ kubectl apply -f webserver-def.yaml
-componentdefinition.core.oam.dev/webserver created
+```shell
+$ vela def apply webserver.cue
+ComponentDefinition webserver created in namespace vela-system.
 ```
 
 然后，我们使用它们，来编写一个应用部署计划：
