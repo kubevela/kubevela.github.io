@@ -6,10 +6,10 @@ This chapter will introduce how to use Rollout Trait to perform a rolling update
 ## Background
 
 ### ComponentRevision
-Each modification to a Trait will produce a kubernetes controllerRevision, the default role to generate a name of kubernetes controllerRevision is: `<Component name>-<revision number>`. You can also appoint controllerRevision name by setting `spec.components[x].externalRevision`.
+Updating a component will generate a new ControllerRevision. The format of the generated name for ControllerRevision is: `<Component name>-<revision number>`. You can also specify ControllerRevision name by setting `spec.components[x].externalRevision`.
 
-### Support workload type
-Rollout Trait support webservice,worker and cloneset Workload.
+### Supported workload type
+Rollout Trait supports following workload types: webservice,worker and cloneset.
 
 When using webservice/worker as Workload type with Rollout Trait, Workload's name will be controllerRevision's name. And when Workload's type is cloneset, because of clonset support in-place update Workload's name will always be component's name.
 
@@ -17,8 +17,8 @@ When using webservice/worker as Workload type with Rollout Trait, Workload's nam
 ## How to
 
 ### First Deployment
-   
-Apply the YAML below to create an Application, this Application includes a Workload of type webservice with Rollout Trait, and sets controllerRevision name to express-server-v1 by setting `spec.components[0].externalRevision` field.
+
+Apply the Application YAML below which includes a webservice-type workload with Rollout Trait, and sets ControllerRevision name to express-server-v1 by setting `spec.components[0].externalRevision` field.
 
 ```shell
 cat <<EOF | kubectl apply -f -
@@ -42,30 +42,30 @@ spec:
               - replicas: 3
 EOF
 ```
-This Rollout Trait has two batches with total target size of 5, the first batch has 2 replicas and second batch has 3. Only when all replicas in the first batch are ready, the second batch will start to rollout.
+This Rollout Trait has target size of 5 and two rollout batches. The first batch has 2 replicas and second batch has 3. Only after all replicas in the first batch are ready, it will start to rollout the second batch.
 
-Check the Application status when rollout has been succeed after a while.
+Check the Application status whether the rollout is successful:
 ```shell
 $ kubectl get app rollout-trait-test
 NAME                 COMPONENT        TYPE         PHASE     HEALTHY   STATUS   AGE
 rollout-trait-test   express-server   webservice   running   true               2d20h
 ```
 
-Check controllerRevision
+Check ControllerRevision
 ```shell
 $ kubectl get controllerRevision  -l controller.oam.dev/component=express-server
 NAME                CONTROLLER                                    REVISION   AGE
 express-server-v1   application.core.oam.dev/rollout-trait-test   1          2d22h
 ```
 
-Check the status of Rollout Trait. The rollout is succeed if `ROLLING-STATE` is rolloutSucceed, and all replicas are ready if `BATCH-STATE` is batchReady. `TARGET`, `UPGRADED` and `READY` indicates target size of replicas is 5, updated number of replicas is 5 and all 5 replicas are ready.
+Check the status of Rollout Trait. The rollout is successful only if `ROLLING-STATE` equals `rolloutSucceed`, and all replicas are ready only if `BATCH-STATE` equals `batchReady`. `TARGET`, `UPGRADED` and `READY` indicates target size of replicas is 5, updated number of replicas is 5 and all 5 replicas are ready.
 ```shell
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 express-server   5        5          5       batchReady    rolloutSucceed   2d20h
 ```
 
-Check Workload Status (Workload underlying webservice/worker is [deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) ultimately)
+Check Workload Status (Underlying resource behind the workload is [deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/))
 ```shell
 $ kubectl get deploy -l app.oam.dev/component=express-server
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE
@@ -73,8 +73,8 @@ express-server-v1   5/5     5            5           2d20h
 ```
 
 ### Rollout Update
-   
-Apply the YAML below to modify the image of container, update the Workload to a new controllerRevision.
+
+Apply the YAML below to modify the image of the container. It will generate a new ControllerRevision.
 ```shell
 cat <<EOF | kubectl apply -f -
 apiVersion: core.oam.dev/v1beta1
