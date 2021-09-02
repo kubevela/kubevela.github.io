@@ -1,5 +1,5 @@
 ---
-title:  Component Delivery
+title:  Component Delivery // Deprecated
 ---
 
 Components are one of the core concepts of KubeVela. You can use them to build the most common types of services, such as a Web Service that provides external access, a Worker that runs scheduled tasks on the backend, or enables Redis and including OSS from Cloud Provider and so on.
@@ -145,7 +145,7 @@ app-delivering-chart	redis-comp	helm      	      	running	healthy	      	2021-08
 
 We also see that the PHASE of the app-delivering-chart APP is running and the STATUS is healthy.
 
-For usage examples of Git repositories and OSS buckets, and detailed configuration information about them, please go to [Built-in Components][3] in the Admin's Guide.
+For usage examples of Git repositories and OSS buckets, and detailed configuration information about them, please go to Built-in Components in the Admin's Guide.
 
 ## Using Kustomize Component
 
@@ -188,7 +188,7 @@ bucket-app          	bucket-comp	kustomize 	      	running	healthy	      	2021-0
 
 The PHASE of the app is running, and the STATUS is healthy. Successful application deployment!
 
-For usage examples of Git repositories and their detailed configuration item information, please go to [Built-in Components][4] in the Admin Guide.
+For usage examples of Git repositories and their detailed configuration item information, please go to Built-in Components in the Admin Guide.
 
 ## Using Cloud Service Component
 
@@ -205,8 +205,7 @@ When none of the above KubeVela's built-in unpacking components can meet your ne
 
 [1]:	../getting-started/quick-install#3-get-kubevela-cli
 [2]:	./cloud-services
-[3]:	../platform-engineers/components/built-in/helm
-[4]:	../platform-engineers/components/built-in/kustomize
+
 [5]:	./cloud-services
 [6]:	../platform-engineers/components/custom-component
 [7]:	./cloud-services

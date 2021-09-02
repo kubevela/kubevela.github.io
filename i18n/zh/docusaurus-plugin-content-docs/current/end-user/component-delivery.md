@@ -1,5 +1,5 @@
 ---
-title:  组件交付
+title:  组件交付 // Deprecated
 ---
 
 组件（Components）是应用部署计划的核心组成之一，你可以使用它来构建最常见的服务类型，比如一个对外提供访问的 Web Service、一个在后端跑定时任务的 Worker，又或者开启 Redis 和引用 OSS 等等。
@@ -152,7 +152,7 @@ app-delivering-chart	redis-comp	helm      	      	running	healthy	      	2021-08
 
 我们也看到 app-delivering-chart APP 的 PHASE 为 running，同时 STATUS 为 healthy。
 
-关于 Git 仓库和 OSS bucket 的使用示例，以及关于它们的详细配置项信息，请前往管理员手册里的[内置组件][3]查阅。
+关于 Git 仓库和 OSS bucket 的使用示例，以及关于它们的详细配置项信息，请前往管理员手册里的内置组件查阅。
 
 ## 使用 Kustomize 组件部署应用
 
@@ -195,7 +195,7 @@ bucket-app          	bucket-comp	kustomize 	      	running	healthy	      	2021-0
 
 bucket-app APP 的 PHASE 为 running，同时 STATUS 为 healthy。应用部署成功！
 
-关于 Git 仓库的使用示例，以及关于它们的详细配置项信息，请前往管理员手册里的[内置组件][4]查阅。
+关于 Git 仓库的使用示例，以及关于它们的详细配置项信息，请前往管理员手册里的内置组件查阅。
 
 ## 使用云资源组件
 
@@ -212,8 +212,6 @@ bucket-app APP 的 PHASE 为 running，同时 STATUS 为 healthy。应用部署�
 
 [1]:	../getting-started/quick-install#3-安装-kubevela-cli
 [2]:	./cloud-services
-[3]:	../platform-engineers/components/built-in/helm
-[4]:	../platform-engineers/components/built-in/kustomize
 [5]:	./cloud-services
 [6]:	../platform-engineers/components/custom-component
 [7]:	./cloud-services

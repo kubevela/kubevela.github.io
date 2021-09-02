@@ -27,14 +27,29 @@ module.exports = {
       collapsed: false,
       items: [
         // 'end-user/initializer-end-user',
-        'end-user/component-delivery',
-        'end-user/binding-traits',
-        'end-user/cloud-services',
-        'end-user/rollout-scaler',
-        'end-user/component-observability',
-        'end-user/component-dependency-parameter',
-        'end-user/multi-app-env-cluster',
-          // 'end-user/canary-blue-green', v1.1+ 再上
+        {
+          'Components': [
+            'end-user/components/helm',
+            'end-user/components/kustomize',
+            {
+              'Cloud Services': [
+                'end-user/components/cloud-services/alicloud-ack',
+                'end-user/components/cloud-services/alicloud-rds',
+                'end-user/components/cloud-services/alicloud-oss',
+              ]
+            },
+            {
+              'CUE Component': [
+                'end-user/components/cue/raw',
+                'end-user/components/cue/task',
+                'end-user/components/cue/webservice',
+                'end-user/components/cue/worker',
+              ]
+            },
+            'end-user/components/more',
+          ]
+        },
+        // 'end-user/canary-blue-green', v1.1+ 再上
         // {
         //   'Components': [
         //     'end-user/components/helm',
@@ -110,23 +125,6 @@ module.exports = {
           type: 'category',
           label: 'Component System',
           items: [
-            {
-            type: 'category',
-              label: 'Builtin Components',
-              items: [
-                'platform-engineers/components/built-in/overview',
-                'platform-engineers/components/built-in/helm',
-                'platform-engineers/components/built-in/kustomize',
-                'platform-engineers/components/built-in/raw',
-                'platform-engineers/components/built-in/task',
-                'platform-engineers/components/built-in/webservice',
-                'platform-engineers/components/built-in/worker',
-                'platform-engineers/components/built-in/alicloud-ack',
-                'platform-engineers/components/built-in/alicloud-oss',
-                'platform-engineers/components/built-in/alicloud-rds',
-                'platform-engineers/components/built-in/more',
-              ]
-            },
             'platform-engineers/components/custom-component',
             'platform-engineers/components/component-terraform',
           ]
