@@ -1,5 +1,0 @@
----
-title:  Cue Component
----
-
-TBD
