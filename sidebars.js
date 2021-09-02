@@ -49,6 +49,19 @@ module.exports = {
             'end-user/components/more',
           ]
         },
+
+        {
+          'Traits': [
+            'end-user/traits/autoscaler',
+            'end-user/traits/ingress',
+            'end-user/traits/manual-scaler',
+            'end-user/traits/kustomize-patch',
+            'end-user/traits/annotations-and-labels',
+            'end-user/traits/service-binding',
+            'end-user/traits/sidecar',
+            'end-user/traits/more',
+          ]
+        },
         // 'end-user/canary-blue-green', v1.1+ 再上
         // {
         //   'Components': [
@@ -133,21 +146,7 @@ module.exports = {
           type: 'category',
           label: 'Traits System',
           items: [
-            {
-              type: 'category',
-              label: 'Builtin Traits',
-              items: [
-                'platform-engineers/traits/built-in/overview',
-                'platform-engineers/traits/built-in/ingress',
-                'platform-engineers/traits/built-in/manual-scaler',
-                'platform-engineers/traits/built-in/autoscaler',
-                'platform-engineers/traits/built-in/annotations-and-labels',
-                'platform-engineers/traits/built-in/sidecar',
-                'platform-engineers/traits/built-in/service-binding',
-                'platform-engineers/traits/built-in/kustomize-patch',
-                'platform-engineers/traits/built-in/more',
-              ]
-            },
+
             'platform-engineers/traits/customize-trait',
             'platform-engineers/traits/patch-trait',
             'platform-engineers/traits/status',
