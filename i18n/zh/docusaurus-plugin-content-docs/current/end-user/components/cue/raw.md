@@ -1,8 +1,8 @@
 ---
-title:  Raw
+title:  原生资源
 ---
 
-直接使用原生的 Kubernetes 资源。比如一个 Job。
+KubeVela 可以直接部署任何原生的 Kubernetes 资源。比如一个 Job。
 
 ## 如何使用
 
