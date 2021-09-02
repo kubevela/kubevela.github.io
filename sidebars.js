@@ -32,7 +32,14 @@ module.exports = {
             'end-user/components/helm',
             'end-user/components/kustomize',
             {
-              'CUE': [
+              'Cloud Services': [
+                'end-user/components/cloud-services/alicloud-ack',
+                'end-user/components/cloud-services/alicloud-rds',
+                'end-user/components/cloud-services/alicloud-oss',
+              ]
+            },
+            {
+              'CUE Component': [
                 'end-user/components/cue/raw',
                 'end-user/components/cue/task',
                 'end-user/components/cue/webservice',

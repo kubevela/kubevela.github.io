@@ -1,5 +1,5 @@
 ---
-title:  Helm
+title:  Helm 组件
 ---
 
 本节介绍使用一个 Helm Chart 作为组件 ，可以来自 Helm 仓库、Git 仓库 或者 OSS bucket。

@@ -1,5 +1,5 @@
 ---
-title:  Kustomize
+title:  Kustomize 组件
 ---
 
 引入一个 kustomize 对象作为组件，可以来自 Git 仓库、OSS bucket。
