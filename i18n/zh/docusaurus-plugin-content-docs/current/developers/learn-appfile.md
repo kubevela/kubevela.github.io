@@ -219,7 +219,7 @@ spec:
 
 ### [可选] 配置其他类型的 workload
 
-至此，我们成功地部署一个默认类型的 workload 的 *[web 服务](../end-user/components/cue/webservice)*。我们也可以添加 *[Task](../end-user/components/cue/task)* 类型的服务到同一个 app 中。
+至此，我们成功地部署一个默认类型的 workload 的 *[web 服务](../platform-engineers/components/built-in/webservice)*。我们也可以添加 *[Task](../platform-engineers/components/built-in/task)* 类型的服务到同一个 app 中。
 
 ```yaml
 services:
