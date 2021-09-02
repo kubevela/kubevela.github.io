@@ -1,29 +1,18 @@
 ---
-title: 灰度发布
+title: 灰度发布和扩缩容
 ---
-本章节会介绍，如何使用灰度发布（Rollout）运维特征动完成对工作负载的滚动发布。
-
-## 属性
-
-灰度发布运维特征的所有配置项
-
-名称 | 描述 | 类型 | 是否必须 | 默认值 
------------- | ------------- | ------------- | ------------- | ------------- 
-targetRevision|目标组件版本|string|否|当该字段为空时，一直指向组件的最新版本
-targetSize|目标副本个数|int|是|无
-rolloutBatches|批次发布策略|rolloutBatch数组|是|无
-batchPartition|发布批次|int|否|无，缺省为发布全部批次
-
-rolloutBatch的属性
-
-名称 | 描述 | 类型 | 是否必须 | 默认值
------------- | ------------- | ------------- | ------------- | ------------- 
-replicas|批次的副本个数|int|是|无
+本章节会介绍，如何使用灰度发布( Rollout )运维特征完成对工作负载的滚动发布和扩缩容。
 
 ## 背景
+
+### 组件版本
+
 每次对组件的修改都会产生一个组件版本(kubernetes controllerRevision)，组件版本名称的默认产生规则是：`<组件名>-<版本序号>`。你也可以通过设置应用部署计划的 `spec.components[x].externalRevision` 字段来指定组件版本名称。
 
-另外，当使用 webservice/worker 作为工作负载类型并配合使用灰度发布运维特征时，工作负载的名称将被命名为组件版本的名称。 当工作负载类型为 cloneset-service 时，工作负载的名称将被命名为组件的名称。
+### 支持的组件类型
+灰度发布运维特征支持 webservice，worker，clonset 类型的工作负载。
+
+当使用 webservice和worker 作为工作负载类型并配合使用灰度发布运维特征时，工作负载的名称将被命名为组件版本的名称。 当工作负载类型为 cloneset 时，由于 clonset 支持原地更新， 工作负载的名称将被命名为组件的名称。
 
 ## 如何使用
 
@@ -41,13 +30,17 @@ spec:
   components:
     - name: express-server
       type: webservice
+      # 设置组件版本为 express-server-v1
       externalRevision: express-server-v1
       properties:
         image: stefanprodan/podinfo:4.0.3
       traits:
         - type: rollout
+          # 缺省设置 targetRevision 直接指向最新的组件版本也就是 express-server-v1
           properties:
+            # 设置部署5个副本
             targetSize: 5
+            # 分两批发布，上一批次副本全部就绪之后部署下一批次
             rolloutBatches:
               - replicas: 2
               - replicas: 3
@@ -96,6 +89,7 @@ spec:
   components:
     - name: express-server
       type: webservice
+      # 设置更新后的组件版本为 express-server-v2
       externalRevision: express-server-v2
       properties:
         image: stefanprodan/podinfo:5.0.2
@@ -103,7 +97,9 @@ spec:
         - type: rollout
           properties:
             targetSize: 5
+            # 只灰度发布第一批次的副本
             batchPartition: 0
+            # 分两批灰度发布
             rolloutBatches:
               - replicas: 2
               - replicas: 3
@@ -192,6 +188,7 @@ spec:
       traits:
         - type: rollout
           properties:
+            # 设置目标版本为之前的组件版本来进行回滚
             targetRevision: express-server-v1
             targetSize: 5
             rolloutBatches:
@@ -235,6 +232,7 @@ spec:
           properties:
             targetRevision: express-server-v1
             targetSize: 7
+            # 刚才工作负载有5个副本，分两批扩容，第一批扩容1个，第二批再扩容1个
             rolloutBatches:
               - replicas: 1
               - replicas: 1
@@ -273,6 +271,7 @@ spec:
         - type: rollout
           properties:
             targetRevision: express-server-v1
+            # 刚才工作负载有7个，分两批缩容，第一批缩减1个，第二批缩减3个。
             targetSize: 3
             rolloutBatches:
               - replicas: 1
@@ -292,7 +291,7 @@ NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   3/3     3            3           5m
 ```
 
-### cloneset-service 的滚动升级
+### cloneset 类型工作负载的灰度发布
 
 启用 kruise 的[扩展插件](./addons/introduction)。
 ```shell
@@ -303,11 +302,11 @@ $ vela addon enable kruise
 ```shell
 $ vela components
 NAME                NAMESPACE        WORKLOAD                        DESCRIPTION
-cloneset-service    vela-system     clonesets.apps.kruise.io
+cloneset            vela-system     clonesets.apps.kruise.io                                  
 ```
 
 
-应用下面的 YAML 来创建一个应用部署计划，该应用包含一个 cloneset-service 类型的工作负载和一个灰度发布运维特征。
+应用下面的 YAML 来创建一个应用部署计划，该应用包含一个 cloneset 类型的工作负载和一个灰度发布运维特征。
 ```shell
 cat <<EOF | kubectl apply -f -
 apiVersion: core.oam.dev/v1beta1
@@ -317,7 +316,7 @@ metadata:
 spec:
   components:
     - name: cloneset-server
-      type: cloneset-service
+      type: cloneset
       externalRevision: cloneset-server-v1
       properties:
         image: stefanprodan/podinfo:4.0.3
@@ -335,7 +334,7 @@ EOF
 ```shell
 $ kubectl get app rollout-trait-test-cloneset
 NAME                              COMPONENT         TYPE               PHASE      HEALTHY   STATUS     AGE
-rollout-trait-test-cloneset   cloneset-service   clonesetservice      running      true               4m18s
+rollout-trait-test-cloneset   cloneset-server       clonset            running      true               4m18s
 
 $ kubectl get controllerRevision  -l controller.oam.dev/component=cloneset-server
 NAME                CONTROLLER                                           REVISION   AGE
@@ -346,7 +345,7 @@ NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 cloneset-server   5        5          5       batchReady    rolloutSucceed   5m10s
 ```
 
-查看工作负载状态，可以看到由于 cloneset-service 工作负载支持原地升级，它与 webservice/worker 的最大区别是底层工作负载的名称就是组件名称。
+查看工作负载状态，可以看到由于 cloneset 工作负载支持原地升级，它与 webservice/worker 的最大区别是底层工作负载的名称就是组件名称。
 ```shell
 $ kubectl get cloneset -l app.oam.dev/component=cloneset-server
 NAME             DESIRED   UPDATED   UPDATED_READY   READY   TOTAL   AGE
@@ -369,7 +368,7 @@ metadata:
 spec:
   components:
     - name: cloneset-server
-      type: cloneset-service
+      type: cloneset
       externalRevision: cloneset-server-v2
       properties:
         image: stefanprodan/podinfo:5.0.2
@@ -409,3 +408,20 @@ stefanprodan/podinfo:5.0.2
 ```
 
 其他的扩缩容，回滚等操作与 webservice/worker 类型的工作负载的操作方式完全一致。
+
+## 参数说明
+
+灰度发布运维特征的所有配置项
+
+名称 | 描述 | 类型 | 是否必须 | 默认值
+------------ | ------------- | ------------- | ------------- | ------------- 
+targetRevision|目标组件版本|string|否|当该字段为空时，一直指向组件的最新版本
+targetSize|目标副本个数|int|是|无
+rolloutBatches|批次发布策略|rolloutBatch数组|是|无
+batchPartition|发布批次|int|否|无，缺省为发布全部批次
+
+rolloutBatch的属性
+
+名称 | 描述 | 类型 | 是否必须 | 默认值
+------------ | ------------- | ------------- | ------------- | ------------- 
+replicas|批次的副本个数|int|是|无

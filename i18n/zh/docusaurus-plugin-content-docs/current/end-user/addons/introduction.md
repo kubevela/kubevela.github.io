@@ -43,7 +43,7 @@ terraform          	Terraform Controller is a Kubernetes Controller for Terrafor
 | ------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ---------------- |
 | fluxcd              | https://fluxcd.io/                                           | 提供 GitOps，持续部署的相关能力                              | kustomize、helm  |
 | ns-flux-system      | -                                                            | 目前为 fluxcd 插件提供 namespace 使用，后续优化方向为使之对所有用户不可见 | -                |
-| kruise              | https://openkruise.io/                                       | 提供比 Kubernetes 原生更强大的工作负载套件                   | cloneset-service |
+| kruise              | https://openkruise.io/                                       | 提供比 Kubernetes 原生更强大的工作负载套件                   | cloneset |
 | prometheus          | https://prometheus.io/                                       | 提供监控能力                                                 | -                |
 | keda                | https://keda.sh/                                             | 提供工作负载的自动扩缩容能力                                 | -                |
 | terraform           | https://github.com/oam-dev/terraform-controller <br />https://www.terraform.io/ | IaC（基础设施即代码）                                        | -                |
