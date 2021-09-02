@@ -2,7 +2,19 @@
 title:  Terraform 组件
 ---
 
-对云资源的集成需求往往是最频繁出现，比如你可能希望数据库、中间件等服务使用阿里云、AWS 等云厂商的，以获得生产级别的可用性并免去运维的麻烦。Terraform 是目前业内支持云资源最广泛也最受欢迎的组件，KubeVela 对 Terraform 进行了额外的支持，使得用户可以通过 Kubernetes CRD 的方式配合 Terraform 使用任意的云资源。
+对云资源的集成需求往往是最频繁出现，比如你可能希望数据库、中间件等服务使用阿里云、AWS 等云厂商的，以获得生产级别的可用性并免去运维的麻烦。
+Terraform 是目前业内支持云资源最广泛也最受欢迎的组件，KubeVela 对 Terraform 进行了额外的支持，使得用户可以通过 Kubernetes CRD 的方式配合
+Terraform 使用任意的云资源。
+
+目前支持的云资源如下：
+
+```shell
+$ vela components --label type=terraform
+NAME       	NAMESPACE  	WORKLOAD                             	DESCRIPTION
+alibaba-ack	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud ACK cluster
+alibaba-oss	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud OSS object
+alibaba-rds	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud RDS object
+```
 
 本章节，将专门为你介绍如何通过 KubeVela 以及 Terraform 来实现自定义的云资源组件。我们以阿里云的对象存储(OSS)，作为例子来进行讲解。
 
