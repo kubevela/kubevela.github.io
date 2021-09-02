@@ -94,7 +94,7 @@ status:
   status: running
 ```
 
-When we see that the status-services-healthy field is true and the status is running, it means that the entire application is delivered successfully.
+When we see that the `status.services.healthy` field is true and the status is running, it means that the entire application is delivered successfully.
 
 If status shows as rendering or healthy as false, it means that the application has either failed to deploy or is still being deployed. Please proceed according to the information returned in `kubectl get application <application name> -o yaml`.
 
