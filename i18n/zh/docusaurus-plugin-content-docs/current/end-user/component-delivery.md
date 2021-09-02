@@ -210,10 +210,10 @@ bucket-app APP 的 PHASE 为 running，同时 STATUS 为 healthy。应用部署�
 - 访问[集成云资源][7]文档，掌握不同类型不同厂商的云资源集成方式
 - 访问[绑定运维特征][8]文档，掌握如何给组件绑定你需要的运维动作和策略
 
-[1]:	../getting-started/quick-install#3-get-kubevela-cli
+[1]:	../getting-started/quick-install#3-安装-kubevela-cli
 [2]:	./cloud-services
-[3]:	../platform-engineers/components/build-in-component
-[4]:	../platform-engineers/components/build-in-component
+[3]:	../platform-engineers/components/built-in/helm
+[4]:	../platform-engineers/components/built-in/kustomize
 [5]:	./cloud-services
 [6]:	../platform-engineers/components/custom-component
 [7]:	./cloud-services
