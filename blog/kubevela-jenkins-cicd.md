@@ -31,15 +31,15 @@ KubeVela 打通了应用与基础设施之间的交付管控的壁垒，相较�
 
 ### Jenkins 环境
 
-本文采用了 Jenkins 作为持续集成工具，开发者也可以使用其他 CI 工具，如 TravisCI 或者 GitHub Action。
+> 本文采用了 Jenkins 作为持续集成工具，开发者也可以使用其他 CI 工具，如 TravisCI 或者 GitHub Action。
 
-首先您需要准备一份 Jenkins 环境来部署 CI 流水线。安装与初始化 Jenkins 流程可以参见官方文档。
+首先您需要准备一份 Jenkins 环境来部署 CI 流水线。安装与初始化 Jenkins 流程可以参见[官方文档](https://www.jenkins.io/doc/book/installing/linux/)。
 
 需要注意的是，由于本文的 CI 流水线是基于 Docker 及 GitHub 的，因此在安装 Jenkins 之后还需要安装相关插件 (Dashboard > Manage Jenkins > Manage Plugins) ，包括 Pipeline、HTTP Request Plugin、Docker Pipeline、Docker Plugin。
 
 此外，还需要为 Jenkins 配置 Docker 的运行环境 (Dashboard > Manage Jenkins > Configure System > Docker Builder) ，如 Jenkins 所在环境已经安装了 Docker，可以将 Docker URL 配置为 `unix:///var/run/docker.sock`。
 
-由于在 CI 流水线运行过程中，还需要将容器镜像推至镜像仓库，还需要在 Jenkins 的 Credential 中将镜像仓库的账户配置好 (Dashboard > Manage Jenkins > Manage Credentials > Add Credentials) ，比如将 DockerHub 的用户名及密码存入。
+由于在 CI 流水线运行过程中，还需要将容器镜像推至镜像仓库，为此需在 Jenkins 的 Credential 中将镜像仓库的账户配置好 (Dashboard > Manage Jenkins > Manage Credentials > Add Credentials) ，比如将 DockerHub 的用户名及密码存入。
 
 ![jenkins-credential](/img/jenkins-cicd/jenkins-credential.png)
 
@@ -130,7 +130,7 @@ ENTRYPOINT ./kubevela-demo-cicd-app
 EXPOSE 8088
 ```
 
-在 app.yaml 中，声明了部署的应用包含 5 个不同副本，同时通过 Ingress 的形式发布给集群外部。而 labels 则是给应用中的 Pod 打上了当前的 git commit 作为标签。当 Jenkins 的部署流水线运行时，会将 GIT_COMMIT 注入其中，提交到 KubeVela apiserver，从而触发 Application 的更新。在版本更新过程中，按照 1, 1, 3 的数量分三次更新副本，同时在第二次更新后停止自动更新，等待手动确认后再进行全部更新，实现金丝雀发布的过程。
+在 app.yaml 中，声明了部署的应用包含 5 个不同副本，同时通过 Ingress 的形式发布给集群外部。而 labels 则是给应用中的 Pod 打上了当前的 git commit 作为标签。当 Jenkins 的部署流水线运行时，会将 GIT_COMMIT 注入其中，提交到 KubeVela apiserver，从而触发 Application 的更新。在版本更新过程中，按照 3, 3 的数量分两次次更新副本，同时在第一次更新后停止自动更新，等待手动确认后再进行全部更新，实现金丝雀发布的过程。
 
 ```yaml
 # app.yaml
@@ -166,7 +166,7 @@ spec:
 
 ## 配置 CI 流水线
 
-在本文的案例中，包含两条流水线，一条是用来进行测试的流水线 (对应用代码运行测试) ，一条是交付流水线 (将应用代码打包上传镜像仓库，同时更新目标环境中的应用实现自动更新) 。
+在本文的案例中，包含两条流水线，一条是用来进行测试的流水线 (对应用代码运行测试) ，一条是交付流水线 (将应用代码打包上传镜像仓库，同时更新目标环境中的应用，实现自动更新) 。
 
 ### 测试流水线
 在 Jenkins 中创建一条新的 Pipeline，并配置 Build Triggers 为 GitHub hook trigger for GITScm polling。
@@ -326,7 +326,7 @@ NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
 kubevela-demo-app-web-v1   2/2     2            2           2m1s
 ```
 
-如图显示，要部署的应用顺利被 KubeVela apiserver 接受并由 KubeVela 控制器创建了相关资源。当前 Deployment 的 副本数是 2，在删除了该 Application 中 rollout 特征内的 batchPatition: 0 后代表确认了当前的发布，然后对应的 Deployment 副本数更新至 5。这时我们可以访问 Ingress 所配置的域名，成功显示了当前的版本号。
+如图显示，要部署的应用顺利被 KubeVela apiserver 接受并由 KubeVela 控制器创建了相关资源。当前 Deployment 的副本数是 2，在删除了该 Application 中 rollout 特征内的 batchPatition: 0 后代表确认了当前的发布，然后对应的 Deployment 副本数更新至 5。这时我们可以访问 Ingress 所配置的域名，成功显示了当前的版本号。
 
 ```bash
 $ kubectl edit app -n kubevela-demo-namespace
