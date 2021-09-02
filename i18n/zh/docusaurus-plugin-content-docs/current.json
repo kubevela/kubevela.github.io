@@ -155,16 +155,12 @@
     "message": "云服务",
     "description": "The label for category Cloud Services in sidebar docs"
   },
+  "sidebar.docs.category.CUE Component": {
+    "message": "CUE 组件",
+    "description": "The label for category CUE Components in sidebar docs"
+  },
   "sidebar.docs.category.Addons": {
     "message": "插件系统",
     "description": "The extended add-ons"
-  },
-  "sidebar.docs.category.Builtin Traits": {
-    "message": "内置运维特征",
-    "description": "The built in trait"
-  },
-  "sidebar.docs.category.Builtin Components": {
-    "message": "内置组件",
-    "description": "The built in component"
   }
 }
