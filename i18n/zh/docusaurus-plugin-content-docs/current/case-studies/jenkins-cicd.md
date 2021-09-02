@@ -1,5 +1,5 @@
 ---
-title:  实践案例 - 使用 Jenkins 和 KubeVela 完成 CI/CD 持续交付
+title:  Jenkins 对接 KubeVela 实现 CI/CD
 ---
 
 本文将会以一个 HTTP 服务的开发部署为例，简单介绍如何将 KubeVela 与 Jenkins 对接实现应用的持续集成与持续交付。[参考代码](https://github.com/Somefive/KubeVela-demo-CICD-app).
@@ -99,7 +99,7 @@ spec:
             jenkins-build-commit: GIT_COMMIT
         - type: ingress
           properties:
-            domain: kubevela-demo-cicd-app.cf7c0ed25b151437ebe1ef58efc29bca4.us-west-1.alicontainer.com
+            domain: <your domain>
             http:
               "/": 8088
 ```
@@ -115,10 +115,10 @@ NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
 kubevela-demo-app-web-v1   2/2     2            2           111s
 $ kubectl get ingress -n kubevela-demo-namespace 
 NAME                    CLASS    HOSTS                                                                                 ADDRESS          PORTS   AGE
-kubevela-demo-app-web   <none>   kubevela-demo-cicd-app.cf7c0ed25b151437ebe1ef58efc29bca4.us-west-1.alicontainer.com   198.11.175.125   80      117s
+kubevela-demo-app-web   <none>   <your domain>   198.11.175.125   80      117s
 ```
 
-由于使用了 rollout 特性，应用初始发布先创建 2 个 Pod，然后再在 Application 的配置中将 rollout 特性的 `batchPatition: 0` 删去后可以进行完全发布。
+在部署的应用文件中，我们使用了灰度发布(Rollout)的特性，应用初始发布先创建 2 个 Pod，以便进行金丝雀验证。待验证完毕，你可以将应用配置中 Rollout 特性的 `batchPatition: 0` 删去，以便完成剩余实例的更新发布。这个机制大大提高发布的安全性和稳定性，同时你也可以根据实际需要，调整 Rollout 发布策略。
 
 ```bash
 $ kubectl edit app -n kubevela-demo-namespace   
@@ -126,7 +126,7 @@ application.core.oam.dev/cicd-demo-app edited
 $ kubectl get deployment -n kubevela-demo-namespace
 NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
 kubevela-demo-app-web-v1   5/5     5            5           4m16s
-$ curl http://kubevela-demo-cicd-app.cf7c0ed25b151437ebe1ef58efc29bca4.us-west-1.alicontainer.com
+$ curl http://<your domain>/
 Version: 0.1.2
 ```
 

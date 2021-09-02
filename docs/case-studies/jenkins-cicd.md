@@ -1,5 +1,5 @@
 ---
-title:  Case Study - Jenkins + KubeVela for CI/CD
+title:  Jenkins + KubeVela for CI/CD
 ---
 
 This section will introduce how to combine KubeVela and Jenkins to do CI (continuous integration) and CD (continuous delivery). The following example is based on the publish process of a simple HTTP server. The code can be found at [here](https://github.com/Somefive/KubeVela-demo-CICD-app).
@@ -99,7 +99,7 @@ spec:
             jenkins-build-commit: GIT_COMMIT
         - type: ingress
           properties:
-            domain: kubevela-demo-cicd-app.cf7c0ed25b151437ebe1ef58efc29bca4.us-west-1.alicontainer.com
+            domain: <your domain>
             http:
               "/": 8088
 ```
@@ -115,10 +115,10 @@ NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
 kubevela-demo-app-web-v1   2/2     2            2           111s
 $ kubectl get ingress -n kubevela-demo-namespace 
 NAME                    CLASS    HOSTS                                                                                 ADDRESS          PORTS   AGE
-kubevela-demo-app-web   <none>   kubevela-demo-cicd-app.cf7c0ed25b151437ebe1ef58efc29bca4.us-west-1.alicontainer.com   198.11.175.125   80      117s
+kubevela-demo-app-web   <none>   <your domain>   198.11.175.125   80      117s
 ```
 
-Since the example application use rollout trait, it will create 2 pods at first and hang. When user confirms the service is running correctly, remove `batchPatition: 0` in application configuration in Trait rollout. After that, a complete publish will be fired.
+In the deployed application, we use rollout trait, which enables us to release 2 pods first for canary validation. After validation succeed, remove `batchPatition: 0` in application configuration in the rollout trait. After that, a complete release will be fired. This mechanism greatly improves the security and stability of the releasing process. You can adjust the rollout strategy depending on you scenario.
 
 ```bash
 $ kubectl edit app -n kubevela-demo-namespace   
@@ -126,7 +126,7 @@ application.core.oam.dev/cicd-demo-app edited
 $ kubectl get deployment -n kubevela-demo-namespace
 NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
 kubevela-demo-app-web-v1   5/5     5            5           4m16s
-$ curl http://kubevela-demo-cicd-app.cf7c0ed25b151437ebe1ef58efc29bca4.us-west-1.alicontainer.com
+$ curl http://<your domain>/
 Version: 0.1.2
 ```
 
