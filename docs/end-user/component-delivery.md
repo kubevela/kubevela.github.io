@@ -184,7 +184,7 @@ APP                 	COMPONENT  	TYPE      	TRAITS	PHASE  	HEALTHY	STATUS	CREATE
 bucket-app          	bucket-comp	kustomize 	      	running	healthy	      	2021-08-28 18:53:14 +0800 CST
 ```
 
-The PHASE of the bucket-app APP is running, and the STATUS is healthy. Successful application deployment!
+The PHASE of the app is running, and the STATUS is healthy. Successful application deployment!
 
 For usage examples of Git repositories and their detailed configuration item information, please go to [Built-in Components][4] in the Admin Guide.
 
