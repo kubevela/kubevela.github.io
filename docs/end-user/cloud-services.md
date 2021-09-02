@@ -1,5 +1,5 @@
 ---
-title:  Integrate Cloud Service
+title:  Integrated Cloud Services
 ---
 
 WIP
