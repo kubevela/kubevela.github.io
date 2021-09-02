@@ -131,7 +131,7 @@ scaler     	vela-system	webservice,worker	              	false         	Manually
 sidecar    	vela-system	deployments.apps 	              	true          	Inject a sidecar container to the component.   
 ```
 
-你可以继续阅读用户手册里的 [绑定运维特征](../platform-engineers/traits/built-in/ingress) ，具体查看如何完成各种运维特征的开发。
+你可以继续阅读用户手册里的 [绑定运维特征](../end-user/traits/ingress) ，具体查看如何完成各种运维特征的开发。
 
 如果你是熟悉 Kubernetes 的平台管理员，也可以了解 KubeVela 中[自定义运维特征](../platform-engineers/traits/customize-trait) 的能力，为你的用户扩展任意运维功能。
 

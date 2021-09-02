@@ -12,17 +12,8 @@ $ vela show service-binding
 +-------------+------------------------------------------------+------------------+----------+---------+
 |    NAME     |                  DESCRIPTION                   |       TYPE       | REQUIRED | DEFAULT |
 +-------------+------------------------------------------------+------------------+----------+---------+
-| envMappings | The mapping of environment variables to secret | map[string]#KeySecret | true     |         |
+| envMappings | The mapping of environment variables to secret | map[string]{...} | true     |         |
 +-------------+------------------------------------------------+------------------+----------+---------+
-
-## KeySecret
-+--------+---------------------------------------------------+-------------------+----------+---------+
-|  NAME  |                    DESCRIPTION                    |       TYPE        | REQUIRED | DEFAULT |
-+--------+---------------------------------------------------+-------------------+----------+---------+
-| key  | if key is empty, we will use envMappings key instead              | string            | false     |         |
-| secret | Kubernetes secret name | string | true     |         |
-+--------+---------------------------------------------------+-------------------+----------+---------+
-
 
 ```
 
