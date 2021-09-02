@@ -110,7 +110,7 @@ We also see that the PHASE of the app is running and the STATUS is healthy.
 
 KubeVela's Helm component meets the needs of users to connect to Helm Chart. You can deploy any ready-made Helm chart software package from Helm Repo, Git Repo or OSS bucket through the Helm component, and overwrite its parameters.
 
-We use the Chart package deployment method from the Helm Repo to explain. In this application deployment plan, We hope to deliver a component called redis-comp. It is a Chart from the https://charts.bitnami.com/bitnami Helm repository. The chart type is redis-cluster, version 6.2.7.
+We use the Chart package deployment method from the Helm Repo to explain. In this `Application`, we hope to deliver a component called redis-comp. It is a chart from the [bitnami](https://charts.bitnami.com/bitnami).
 
 ```shell
 cat <<EOF | kubectl apply -f -
