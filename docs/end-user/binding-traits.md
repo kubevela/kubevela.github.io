@@ -2,12 +2,12 @@
 title:  Binding Traits
 ---
 
-Traits is also one of the core concepts of the application deployment plan. It acts on the component level and allows you to freely bind various operation and maintenance actions and strategies to the component. For example, configuration gateway, label management and container injection (Sidecar) at the business level, or flexible expansion and contraction at the administrator level, gray release, etc.
+Traits is also one of the core concepts of the application. It acts on the component level and allows you to freely bind various operation and maintenance actions and strategies to the component. For example, configuration gateway, label management and container injection (Sidecar) at the business level, or flexible scaler at the admin level, gray release, etc.
 
 Similar to Component, KubeVela provides a series of out-of-the-box traits, and also allows you to customize and extend other operation and maintenance capabilities with traits.
 
 
-## 查看 KubeVela 的运维特征类型
+## KubeVela's Trait
 
 
 ```
@@ -34,36 +34,21 @@ sidecar                 	vela-system	*               	              	true       
 ```
 
 
-以其中比较常用的运维能力包括：
+Below, we will take a few typical traits as examples to introduce the usage of KubeVela Trait.
 
 
-- `annotations` ：给工作负载添加注释。
-- `labels`：给工作负载添加标签。
-- `env`: 为工作负载添加环境变量。
-- `configmap` ：添加键值对配置文件。
-- `ingress` ：配置一个公共网关。
-- `ingress-1-20` ：配置一个基于 Kubernetes v1.20+ 版本的公共网关。
-- `lifecycle` ：给工作负载增加生命周期“钩子”。
-- `rollout` ：组件的灰度发布策略。
-- `sidecar`：给组件注入一个容器。
+## Use Ingress to Configure the Gateway
 
 
-
-下面，我们将以几个典型的运维特征为例，介绍 KubeVela 运维特征的用法。
-
-
-## 使用 Ingress 给组件配置网关
+We will configure a gateway for a Web Service component as an example. This component is pulled from the `crccheck/hello-world` image. After setting the gateway, it provides external access through `testsvc.example.com` plus port 8000.
 
 
-我们以给一个 Web Service 组件配置网关，来进行示例讲解。这个组件从 `crccheck/hello-world` 镜像中拉取过来，设置网关后，对外通过 `testsvc.example.com` 加上端口 8000 提供访问。
-
-
-为了便于你快速学习，请直接复制下面的 Shell 执行，会部署到集群中：
+Please directly copy the following Shell code, which will be applied to the cluster:
 
 
 ```shell
 cat <<EOF | kubectl apply -f -
-# YAML 文件开始
+# YAML begins
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -81,15 +66,15 @@ spec:
             domain: testsvc.example.com
             http:
               "/": 8000
-# YAML 文件结束
+# YAML ends
 EOF
 ```
 
 
-你也可以自行将 YAML 文件保存为 ingerss-app.yaml，使用 `kubectl apply -f ingerss-app.yaml` 命令进行部署。
+You can also save the YAML file as ingerss-app.yaml and use the `kubectl apply -f ingerss-app.yaml` command to deploy.
 
 
-当我们通过 `vela ls` 看到应用的 status 为 running 并且服务为 healthy，表示应用部署计划完全生效。同时它的 TRAITS 类型也正确显示为 ingress。
+When we see that the status of the application is running and the service is healthy through `vela ls`, it means that the application is fully effective. At the same time, its TRAITS type is also correctly displayed as ingress.
 
 
 ```shell
@@ -99,10 +84,10 @@ ingerss-app         	express-server	webservice 	ingress	running	healthy	      	2
 ```
 
 
-如果 status 显示为 rendering，则表示仍在渲染中，或者 HEALTHY 一直 false，则你需要使用 `kubectl get application ingress-app -o yaml` 查看报错信息进行对应的处理。
+If the status is displayed as rendering, it means that it is still being rendered, or HEALTHY is always false, you need to use `kubectl get application ingress-app -o yaml` to view the error message in the return.
 
 
-查看返回的信息：
+View the information returned:
 
 
 ```shell
@@ -110,11 +95,11 @@ $ kubectl get application ingress-app -o yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  ... # 省略非关键信息
+  ... # Omit non-critical information
 spec:
-  ... # 省略非关键信息
+  ... # Omit non-critical information
 status:
-  ... # 省略非关键信息
+  ... # Omit non-critical information
   services:
   - healthy: true
     name: express-server
@@ -129,7 +114,7 @@ status:
   status: running
 ```
 
-最后通过 vela port-forward ingress-app 转发到本地处理请求：
+Then, it is forwarded to the local processing request through vela port-forward ingress-app:
 ```shell
 vela port-forward ingress-app
 Forwarding from 127.0.0.1:8000 -> 8000
@@ -138,7 +123,7 @@ Forwarding from [::1]:8000 -> 8000
 Forward successfully! Opening browser ...
 Handling connection for 8000
 ```
-访问服务：
+Access service:
 ```shell
 curl -H "Host:testsvc.example.com" http://127.0.0.1:8000/
 Hello World
@@ -155,18 +140,17 @@ Hello World
 ```
 
 
-## 给组件添加标签和注释
+## Attach Labels and Annotations to Component
 
 
-labels 和 annotations 运维特征，允许你将标签和注释附加到组件上，让我们在实现业务逻辑时，按需触发被标记的组件和获取注释信息。
+Labels and Annotations Trait allow you to attach labels and annotations to components, allowing us to trigger the marked components and obtain annotation information on demand when implementing business logic.
 
-
-首先，我们准备一个应用部署计划的示例，请直接复制执行：
+First, we prepare an example of an application, please copy and execute it directly:
 
 
 ```shell
 cat <<EOF | kubectl apply -f -
-# YAML 文件开始
+# YAML begins
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -185,15 +169,15 @@ spec:
         - type: annotations
           properties:
             "description": "web application"
-# YAML 文件结束
+# YAML ends
 EOF
 ```
 
 
-上述的业务中，我们定义了名称是 server 的这个组件，通过 labels 指定它供 stable 发布使用，并通过 annotations 注释它是一个针对网页应用程序的业务。
+In the above business, we define the component named `server`, specify it for stable release through labels, and annotate it to be a business for web applications through annotations.
 
 
-在运行时集群上，使用 `vela ls` 命令检查应用是否已成功创建：
+On the runtime cluster, use the `vela ls` command to check whether the application has been successfully created:
 
 
 ```shell
@@ -202,7 +186,7 @@ APP                 	COMPONENT     	TYPE       	TRAITS 	PHASE  	HEALTHY	STATUS	C
 labels-annotations  	server        	webservice 	labels,annotations	running	healthy	      	2021-08-29 20:55:28 +0800 CST
 ```
 
-通过 Kubernetes 的命令我们可以看到，底层的资源已经打上的相应的标签：
+Through Kubernetes commands, we can see that the underlying resources have been labeled accordingly:
 
 
 ```
@@ -216,18 +200,17 @@ $ kubectl get deployments server -o jsonpath='{.spec.template.metadata.annotatio
 
 
 
-## 给组件注入容器（Sidecar）
+## Inject the Container Into the Component (Sidecar)
 
 
-Sidecar 容器作为与业务容器解耦的存在，可以帮助我们很多辅助性的重要工作，比如常见的日志代理、用来实现 Service Mesh 等等。
+As the existence of sidecar container decoupling from business container, it can help us with many auxiliary important tasks, such as common log proxy, used to implement Service Mesh, and so on.
 
 
-这一次，让我们来编写一个应用部署计划里的组件 log-gen-worker。 同时我们将 sidecar 所记录的日志数据目录，和组件指向同一个数据存储卷 varlog。
-
+Let's write a `log-gen-worker` component in an application. At the same time, we point the log data directory recorded by the sidecar and the component to the same data storage volume `varlog`.
 
 ```shell
 cat <<EOF | kubectl apply -f -
-# YAML 文件开始
+# YAML begins
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -262,12 +245,12 @@ spec:
             volumes:
               - name: varlog
                 path: /var/log
-# YAML 文件结束
+# YAML ends
 EOF
 ```
 
 
-使用 `vela ls` 查看应用是否部署成功：
+Use `vela ls` to check whether the application is successfully deployed:
 
 
 ```shell
@@ -277,7 +260,7 @@ vela-app-with-sidecar	log-gen-worker	worker     	sidecar           	running	heal
 ```
 
 
-成功后，先检查应用生成的工作负载情况：
+After success, first to look out the workload generated by the application:
 
 
 ```
@@ -289,7 +272,7 @@ log-gen-worker-7bb65dcdd6-tpbdh   2/2     Running   0          45s
 
 
 
-最后查看 Sidecar 所输出的日志，可以看到读取日志的 sidecar 已经生效。
+Finally, check the log output by the sidecar, you can see that the sidecar that reads the log has taken effect.
 
 
 ```
@@ -297,13 +280,13 @@ kubectl logs -f log-gen-worker-7bb65dcdd6-tpbdh count-log
 ```
 
 
-以上，我们以几个常见的运维特征为例介绍了如何绑定运维特征，更多的运维特征功能和参数，请前往运维特征系统中的[内置运维特征](../platform-engineers/traits/built-in/overview)查看。
+Above, we took several common traits as examples to introduce how to bind traits. For more trait's functions and parameters, please go to [built-in Trait](../platform-engineers/traits/built-in/overview) view.
 
-## 自定义运维特征
+## Custom Trait
 
-当已经内置的运维特征无法满足需求，你可以自由的自定义运维能力，请查看管理员手册里的[自定义运维特征](../platform-engineers/traits/customize-trait)进行实现。
+When the built-in Trait cannot meet your needs, you can freely customize the maintenance capabilities. Please refer to [Custom Trait](../platform-engineers/traits/customize-trait) in the Admin Guide for implementation.
 
-## 下一步
+## Next
 
-- [集成云资源](./cloud-services)，了解如何集成各类云厂商的云资源
-- [灰度发布和扩缩容](./rollout-scaler)
+- [Integrated Cloud Services](./cloud-services), learn how to integrate cloud services from various cloud vendors
+- [Rollout & Scaler](./rollout-scaler)
