@@ -4,7 +4,9 @@ title:  Component Delivery
 
 Components are one of the core concepts of KubeVela. You can use them to build the most common types of services, such as a Web Service that provides external access, a Worker that runs scheduled tasks on the backend, or enables Redis and including OSS from Cloud Provider and so on.
 
-In order to help you quickly and comprehensively implement your business, KubeVela provides a large number of out-of-the-box component types, which not only include business components for conventional microservice scenarios, such as "service-oriented components" (webservice) and "back-end running components" (Worker), “one-off task component” (task), etc., and also include general-purpose components for different product categories in the community, such as the “Helm component” that supports Helm Chart, the “Kustomize component” that supports Git Repo, etc., at last it contains a series of commonly used cloud service components. If KubeVela's built-in component types cannot meet all your needs, KubeVela also has the ability to expand to almost any type of component products.
+In order to help you quickly and comprehensively implement your business, KubeVela provides a large number of out-of-the-box component types, which not only include business components for conventional microservice scenarios, such as "service-oriented components" (webservice) and "back-end running components" (Worker), “one-off task component” (task), etc.
+
+KubeVela also include general-purpose components for different product categories in the community, such as the “Helm component” that supports Helm Chart, the “Kustomize component” that supports Git Repo, etc. and at last it contains a series of commonly used cloud service components. If KubeVela's built-in component types cannot meet all your needs, KubeVela also has the ability to expand to almost any type of component products.
 
 ## KubeVela's Component
 
