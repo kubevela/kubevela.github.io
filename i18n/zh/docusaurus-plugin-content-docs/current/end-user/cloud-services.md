@@ -21,7 +21,7 @@ alibaba-rds	vela-system	configurations.terraform.core.oam.dev	Terraform configur
 KubeVela 对云资源的集成流程大致如下：
 
  - 熟悉各云服务商的鉴权机制，获取并准备需要的 secret 或者 token 等密钥
- - 将鉴权信息保存到 Terrform 的全局配置中，下一步校验
+ - 将鉴权信息保存到 Terraform 的全局配置中，下一步校验
  - KubeVela 通过 Terraform 控制器完成鉴权校验，通过后自动拉起对应云资源
 
 ## 激活云资源权限
@@ -60,7 +60,7 @@ spec:
 EOF
 ```
 
-可以看到，我们使用了一个 Web Service 组件作为 RDS 即将对外的服务器，而名称是 sample-db 的 alibaba-rds 组件则承载起去拉起云资源的责任，数据库相关访问信息被写 db-conn 中。
+可以看到，我们使用了一个 `webservice` 组件作为 RDS 即将对外的服务器，而名称是 `sample-db` 的 `alibaba-rds` 组件则承载起去拉起云资源的责任，数据库相关访问信息被写 `db-conn` 中。
 
 一般云资源的拉起，会消耗比较多的时间，比如这里的 RDS 就大约需要 15 分钟左右，我们可以看到它从渲染、健康检查到正常运行的全过程：
 ```
