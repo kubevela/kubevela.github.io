@@ -8,10 +8,31 @@ title:  自定义组件入门
 
 ### 交付一个简单的自定义组件
 
-首先，通过 `vela def init` 来生成一个 `ComponentDefinition` 模板：
+我们可以通过 `vela def init` 来根据已有的 YAML 文件来生成一个 `ComponentDefinition` 模板。
+
+YAML 文件：
+
+```yaml
+apiVersion: "apps/v1"
+kind: "Deployment"
+spec:
+  selector:
+    matchLabels:
+      "app.oam.dev/component": "name"
+  template:
+    metadata:
+      labels:
+        "app.oam.dev/component": "name"
+    spec:
+      containers: 
+      - name: "name"
+        image: "image"
+```
+
+根据以上的 YAML 来生成 `ComponentDefinition`：
 
 ```shell
-vela def init stateless -t component -o stateless.cue
+vela def init stateless -t component --template-yaml ./stateless.yaml -o stateless.cue
 ```
 
 得到如下结果：
@@ -30,8 +51,22 @@ stateless: {
 }
 
 template: {
-	output: {}
-	parameter: {}
+	output: {
+		spec: {
+			selector: matchLabels: "app.oam.dev/component": "name"
+			template: {
+				metadata: labels: "app.oam.dev/component": "name"
+				spec: containers: [{
+					name:  "name"
+					image: "image"
+				}]
+			}
+		}
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+	}
+	outputs: {}
+	parameters: {}
 }
 ```
 
@@ -41,14 +76,14 @@ template: {
      * `output` 字段定义了 CUE 要输出的抽象模板。
      * `parameter` 字段定义了模板参数，即在应用部署计划（Application）中公开的可配置属性（KubeVela 将基于 `parameter` 字段自动生成 Json schema）。
   
-下面我们来对这个自动生成的自定义组件做一些修改：
+下面我们来给这个自动生成的自定义组件添加参数并进行赋值：
 
 ```
 stateless: {
 	annotations: {}
 	attributes: workload: definition: {
-		apiVersion: "apps/v1"
-		kind:       "Deployment"
+		apiVersion: "<change me> apps/v1"
+		kind:       "<change me> Deployment"
 	}
 	description: ""
 	labels: {}
@@ -57,27 +92,22 @@ stateless: {
 
 template: {
 	output: {
-    apiVersion: "apps/v1"
-    kind:       "Deployment"
-    spec: {
-      selector: matchLabels: {
-        "app.oam.dev/component": parameter.name
-      }
-      template: {
-        metadata: labels: {
-          "app.oam.dev/component": parameter.name
-        }
-        spec: {
-          containers: [{
-            name:  parameter.name
-            image: parameter.image
-          }]
-        }
-      }
-    }
-  }
-	parameter: {
-    name:  string
+		spec: {
+			selector: matchLabels: "app.oam.dev/component": parameter.name
+			template: {
+				metadata: labels: "app.oam.dev/component": parameter.name
+				spec: containers: [{
+					name:  parameter.name
+					image: parameter.image
+				}]
+			}
+		}
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+	}
+	outputs: {}
+	parameters: {
+    name: string
     image: string
   }
 }
@@ -132,7 +162,7 @@ task: {
 }
 
 template: {
-	output: {
+  output: {
     apiVersion: "batch/v1"
     kind:       "Job"
     spec: {
@@ -267,7 +297,7 @@ webserver: {
 }
 
 template: {
-	output: {
+  output: {
     apiVersion: "apps/v1"
     kind:       "Deployment"
     spec: {

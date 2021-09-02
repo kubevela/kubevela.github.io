@@ -8,10 +8,31 @@ In this section, it will introduce how to use [CUE](https://cuelang.org/) to dec
 
 ## Declare `ComponentDefinition`
 
-First, generate `ComponentDefinition` scaffolds via `vela def init`:
+First, generate `ComponentDefinition` scaffolds via `vela def init` with existed YAML file.
+
+The YAML file:
+
+```yaml
+apiVersion: "apps/v1"
+kind: "Deployment"
+spec:
+  selector:
+    matchLabels:
+      "app.oam.dev/component": "name"
+  template:
+    metadata:
+      labels:
+        "app.oam.dev/component": "name"
+    spec:
+      containers: 
+      - name: "name"
+        image: "image"
+```
+
+Generate `ComponentDefinition` based on the YAML file:
 
 ```shell
-vela def init stateless -t component -o stateless.cue
+vela def init stateless -t component --template-yaml ./stateless.yaml -o stateless.cue
 ```
 
 It generates a file:
@@ -30,8 +51,22 @@ stateless: {
 }
 
 template: {
-	output: {}
-	parameter: {}
+	output: {
+		spec: {
+			selector: matchLabels: "app.oam.dev/component": "name"
+			template: {
+				metadata: labels: "app.oam.dev/component": "name"
+				spec: containers: [{
+					name:  "name"
+					image: "image"
+				}]
+			}
+		}
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+	}
+	outputs: {}
+	parameters: {}
 }
 ```
 
@@ -41,14 +76,14 @@ In detail:
     * The `output` filed defines the template for the abstraction.
     * The `parameter` filed defines the template parameters, i.e. the configurable properties exposed in the `Application`abstraction (and JSON schema will be automatically generated based on them).
 
-Edit this auto-generated custom component file:
+Add parameters in this auto-generated custom component file :
 
 ```
 stateless: {
 	annotations: {}
 	attributes: workload: definition: {
-		apiVersion: "apps/v1"
-		kind:       "Deployment"
+		apiVersion: "<change me> apps/v1"
+		kind:       "<change me> Deployment"
 	}
 	description: ""
 	labels: {}
@@ -57,27 +92,22 @@ stateless: {
 
 template: {
 	output: {
-    apiVersion: "apps/v1"
-    kind:       "Deployment"
-    spec: {
-      selector: matchLabels: {
-        "app.oam.dev/component": parameter.name
-      }
-      template: {
-        metadata: labels: {
-          "app.oam.dev/component": parameter.name
-        }
-        spec: {
-          containers: [{
-            name:  parameter.name
-            image: parameter.image
-          }]
-        }
-      }
-    }
-  }
-	parameter: {
-    name:  string
+		spec: {
+			selector: matchLabels: "app.oam.dev/component": parameter.name
+			template: {
+				metadata: labels: "app.oam.dev/component": parameter.name
+				spec: containers: [{
+					name:  parameter.name
+					image: parameter.image
+				}]
+			}
+		}
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+	}
+	outputs: {}
+	parameters: {
+    name: string
     image: string
   }
 }
@@ -132,7 +162,7 @@ task: {
 }
 
 template: {
-	output: {
+  output: {
     apiVersion: "batch/v1"
     kind:       "Job"
     spec: {
@@ -318,7 +348,7 @@ webserver: {
 }
 
 template: {
-	output: {
+  output: {
     apiVersion: "apps/v1"
     kind:       "Deployment"
     spec: {
