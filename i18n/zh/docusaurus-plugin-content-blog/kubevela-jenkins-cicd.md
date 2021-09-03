@@ -1,7 +1,7 @@
 ---
-title: Using Jenkins + KubeVela for Application Continuous Delivery
+title: 使用 Jenkins + KubeVela 完成应用的持续交付
 author: Da Yin, Yang Song
-author_title: KubeVela Team
+author_title: KubeVela 团队
 author_url: https://github.com/oam-dev/kubevela
 author_image_url: https://kubevela.io/img/logo.svg
 tags: [ kubevela ]
@@ -10,68 +10,68 @@ image: https://raw.githubusercontent.com/oam-dev/kubevela.io/main/docs/resources
 hide_table_of_contents: false
 ---
 
-KubeVela bridges the gap between applications and infrastructures, enabling easy delivery and management of development codes. Compared to Kubernetes objects, the Application in KubeVela better abstracts and simplifies the configurations which developers care about, and leave complex infrastruature capabilities and orchestration details to platform engineers. The KubeVela apiserver further exposes HTTP interfaces, which help developers to deploy applications even without Kubernetes cluster access.
+KubeVela 打通了应用与基础设施之间的交付管控的壁垒，相较于原生的 Kubernetes 对象，KubeVela 的 Application 更好地简化抽象了开发者需要关心的配置，将复杂的基础设施能力及编排细节留给了平台工程师。而 KubeVela 的 apiserver 则是进一步为开发者提供了使用 HTTP Request 直接操纵 Application 的途径，使得开发者即使没有 Kubernetes 的使用经验与集群访问权限也可以轻松部署自己的应用。
 
-This article will use Jenkins, a popular continuous integration tool, as basis and give a brief introduction to how to build GitOps-based application continuous delivery highway.
+本文就以经典的持续集成 (Continuous Integration) 工具 Jenkins 为基础，简单介绍如何打造基于 GitOps 的应用持续交付的“高速公路”。
 
-## Continuous Delivery Highway
+## 持续交付“高速公路”
 
-As application developer, you might care more about whether your application is functioning correctly and if development is convenient. There will be several system components on this highway to help you achieve that.
-1. First, you need a git repo to place program codes, test codes and a YAML file to declare your KubeVela application.
-2. Second, you also need a continuous integration tool to help you automate the integration test of codes, build container images and push images to image repo.
-3. Finally, you need to have a Kubernetes cluster and install KubeVela in it, with its apiserver function enabled.
+作为应用开发者的你，更多地关心自己的应用是否正常运作，开发流程是否便捷高效。为此，在这条持续交付的“高速公路”上，将会由以下部件为你保驾护航。
+1. 你需要一个 git 仓库来存放应用程序代码、测试代码，以及描述 KubeVela Application 的 YAML 文件。
+2. 你需要一个持续集成 (Continuous Integration) 的工具帮你自动化完成程序代码的测试，并打包成镜像上传到仓库中。
+3. 你需要在 Kubernetes 集群上安装 KubeVela 并启用 apiserver 功能。
 
-> Currently, the access management for KubeVela apiserver is under construction. You will need to configure apiserver access in later version of KubeVela (after v1.1).
+> 目前 KubeVela 的 apiserver 在权限认证方面仍待完善，后续启用 apiserver 后将会加入权限配置环节。
 
-In this article, we adopt GitHub as the git repo, Jenkins as the CI tool, DockerHub as the image repo. We use a simple HTTP Server written in Golang as example. The whole process of continuous delivery is shown as below. We can see that on this highway of continuous delivery, developers only need to care about application development and managing code version with Git. The highway will help developer run integration test and deploy applications into target Kubernetes cluster automatically.
+本文的介绍中采用了 Github 作为 git 仓库，Jenkins 作为 CI 工具，DockerHub 作为镜像仓库。应用程序以一个简单的 HTTP Server 为例，整个持续交付的流程如下。可以看到，在这条持续交付的“高速公路”上，开发者只需要关心应用的开发并使用 Git 进行代码版本的维护，即可自动走完测试流程并部署应用到 Kubernetes 集群中。
 
 ![arch](/img/jenkins-cicd/arch.png)
 
-## Set-up Environment
+## 部署环境
 
-### Jenkins
+### Jenkins 环境
 
-> This article takes Jenkins as the CI tool. Developers can choose other CI tools like Travis or GitHub Action.
+> 本文采用了 Jenkins 作为持续集成工具，开发者也可以使用其他 CI 工具，如 TravisCI 或者 GitHub Action。
 
-First you need to set up Jenkins to deploy CI pipelines. The installation and initialization of Jenkins could refer to the [official docs](https://www.jenkins.io/doc/book/installing/linux/).
+首先您需要准备一份 Jenkins 环境来部署 CI 流水线。安装与初始化 Jenkins 流程可以参见[官方文档](https://www.jenkins.io/doc/book/installing/linux/)。
 
-Notice that since the CI pipeline in this example is based on Docker and GitHub, you need to install related plugins in Jenkins (*Dashboard > Manage Jenkins > Manage Plugins*), including Pipeline、HTTP Request Plugin、Docker Pipeline、Docker Plugin.
+需要注意的是，由于本文的 CI 流水线是基于 Docker 及 GitHub 的，因此在安装 Jenkins 之后还需要安装相关插件 (Dashboard > Manage Jenkins > Manage Plugins) ，包括 Pipeline、HTTP Request Plugin、Docker Pipeline、Docker Plugin。
 
-Besides, you also need to configure Docker environment for Jenkins to use (*Dashboard > Manage Jenkins > Configure System > Docker Builder*). If Docker has already been installed, you can set Docker URL as `unix:///var/run/docker.sock`.
+此外，还需要为 Jenkins 配置 Docker 的运行环境 (Dashboard > Manage Jenkins > Configure System > Docker Builder) ，如 Jenkins 所在环境已经安装了 Docker，可以将 Docker URL 配置为 `unix:///var/run/docker.sock`。
 
-Since the docker image will be pushed to image repo during the running of CI pipelines, you also need to store image repo accounts in Jenkins Credintial (*Dashboard > Manage Jenkins > Manage Credentials > Add Credentials*), such as DockerHub username and password.
+由于在 CI 流水线运行过程中，还需要将容器镜像推至镜像仓库，为此需在 Jenkins 的 Credential 中将镜像仓库的账户配置好 (Dashboard > Manage Jenkins > Manage Credentials > Add Credentials) ，比如将 DockerHub 的用户名及密码存入。
 
 ![jenkins-credential](/img/jenkins-cicd/jenkins-credential.png)
 
-### GitHub
+### GitHub 仓库环境
 
-> This example uses GitHub as git repo. Developer can change it to other repos on demand, such as Gitlab.
+> 本文的介绍采用了 Github 作为代码仓库，开发者还可以根据各自的需求与喜好，使用其他代码仓库，如 Gitlab。
 
-To enable Jenkins to retrieve GitHub updates and write pipeline status back to GitHub, you need to execute the following two steps in GitHub. 
+为使持续集成工具 Jenkins 能够获取到 GitHub 中的更新，并将流水线的运行状态反馈回 GitHub，需要在 GitHub 中完成以下两步操作。
 
-1. [Configure](https://github.com/settings/tokens/new) Personal Access Token. Notice to check `repo:status` to get the permission for writing commit status.
+1. [配置](https://github.com/settings/tokens/new) Personal Access Token。注意将 `repo:status` 勾选，以获得向 GitHub 推送 Commit 状态的权限。
 
 ![github-pat](/img/jenkins-cicd/github-pat.png)
 
-Then fill Personal Access Token from GitHub in Jenkins Credential (with Secret Text type).
+然后在 Jenkins 的 Credential 中加入 Secret Text 类型的 Credential 并将上述的 GitHub 的 Personal Access Token 填入。
 
 ![jenkins-secret-text](/img/jenkins-cicd/jenkins-secret-text.png)
 
-Finally, go to *Dashboard > Manage Jenkins > Configure System > GitHub* in Jenkins and click Add *GitHub Server* to fill the newly created credential in. You can click *Test connection* to check if the configuration is correct.
+最后来到 Jenkins 的 Dashboard > Manage Jenkins > Configure System > GitHub 中点击 Add GitHub Server 并将刚才创建的 Credential 填入。完成后可以点击 Test connection 来验证配置是否正确。
 
 ![jenkins-github](/img/jenkins-cicd/jenkins-github.png)
 
-2. Add Webhook to GitHub code repo settings. Fill Jenkins Webhook address into it. For example, http://my-jenkins.example.com/github-webhook/ . In this way, all Push events in this code repo will be pushed to Jenkins.
+2. 在 GitHub 的代码仓库的设定里添加 Webhook，将 Jenkins 的地址对应的 Webhook 地址填入，比如 http://my-jenkins.example.com/github-webhook/ 。这样，该代码仓库的所有 Push 事件推送到 Jenkins 中。
 
 ![github-webhook](/img/jenkins-cicd/github-webhook.png)
 
-### KubeVela
+### KubeVela 环境
 
-You need to install KubeVela in your Kubernetes cluster and enable the apiserver function. Refer to [official doc](/docs/advanced-install#install-kubevela-with-apiserver) for details.
+您需要在 Kubernetes 集群中安装 KubeVela，并启用 apiserver 功能，可以参考[官方文档](/docs/advanced-install#install-kubevela-with-apiserver)。
 
-## Composing Applications
+## 编写应用
 
-We use a simple HTTP Server as example. Here, we declare a constant named `VERSION` and print it when accessing the HTTP service. A simple test is also set up, which can be used to validate the format of `VERSION`.
+本文采用的应用是一个基于 Golang 语言编写的简单的 HTTP Server。在代码中，声明了一个名叫 `VERSION` 的常量，并在访问该服务时打印出来。同时还附带一个简单的测试，用来校验 `VERSION` 的格式是否符合标准。
 ```go
 // main.go
 
@@ -114,7 +114,7 @@ func TestVersion(t *testing.T) {
 }
 ```
 
-To build container image for the HTTP server and publishing it as KubeVela Application into Kubernetes, we also need another two files `Dockerfile` and `app.yaml` in the code repo. They are used to describe how container image is built and configure the KubeVela Application respectively.
+在应用交付时需要将 Golang 服务打包成镜像并以 KubeVela Application 的形式发布到 Kubernetes 集群中，因此在代码仓库中还包含 `Dockerfile` 以及 `app.yaml` 文件，分别用来描述镜像的打包方式以及 Application 的相关配置。
 
 ```Dockerfile
 # Dockerfile
@@ -130,7 +130,7 @@ ENTRYPOINT ./kubevela-demo-cicd-app
 EXPOSE 8088
 ```
 
-In `app.yaml`, we declare the application should contain 5 replica and expose the service through `Ingress`. The `labels` trait is used to tag Application Pods with current git commit id. Then the delivery pipeline in Jenkins will inject GIT_COMMIT into it and submit the Application configuration to KubeVela apiserver. Then the updates for Application will be triggered. The application will update 2 replica first, then hang and wait for manual approve. After developer confirms the change is valid, the rest 3 replica will be updated. This canary release is configured by the `rollout` trait declared in the Application.
+在 app.yaml 中，声明了部署的应用包含 5 个不同副本，同时通过 Ingress 的形式发布给集群外部。而 labels 则是给应用中的 Pod 打上了当前的 git commit 作为标签。当 Jenkins 的部署流水线运行时，会将 GIT_COMMIT 注入其中，提交到 KubeVela apiserver，从而触发 Application 的更新。在版本更新过程中，按照 2, 3 的数量分两次次更新副本，同时在第一次更新后停止自动更新，等待手动确认后再进行全部更新，实现金丝雀发布的过程。
 
 ```yaml
 # app.yaml
@@ -164,17 +164,17 @@ spec:
               "/": 8088
 ```
 
-## Configure CI pipelines
+## 配置 CI 流水线
 
-In this article, we set up two pipelines in Jenkins. One is the test pipeline, which is for running tests for application codes. The other one is the delivery pipeline, which builds container images and uploads them to image repo. Then the application configuration will be updated.
+在本文的案例中，包含两条流水线，一条是用来进行测试的流水线 (对应用代码运行测试) ，一条是交付流水线 (将应用代码打包上传镜像仓库，同时更新目标环境中的应用，实现自动更新) 。
 
-### Test Pipeline
-Create a new pipeline in Jenkins. Set *Build Triggers* as *GitHub hook trigger for GITScm polling*.
+### 测试流水线
+在 Jenkins 中创建一条新的 Pipeline，并配置 Build Triggers 为 GitHub hook trigger for GITScm polling。
 
 ![test-pipeline-create](/img/jenkins-cicd/test-pipeline-create.png)
 ![test-pipeline-config](/img/jenkins-cicd/test-pipeline-config.png)
 
-This pipeline uses golang image as execution environment at first. Next, it checkouts the `dev` branch of the target GitHub repo, indicating that this pipeline will be triggered by push events to `dev` branch. The piepline status will be written back to GitHub after execution finished.
+在这条流水线中，首先是采用了 golang 的镜像作为执行环境，方便后续运行测试。然后将分支配置为 GitHub 仓库中的 dev 分支，代表该条流水线被 Push 事件触发后会拉取 dev 分支上的内容并执行测试。测试结束后将流水线的状态回写至 GitHub 中。
 
 ```groovy
 void setBuildStatus(String message, String state) {
@@ -219,13 +219,12 @@ pipeline {
 }
 ```
 
-### Delivery Pipeline
+### 部署流水线
+在部署流水线中，类似测试流水线，首先将代码仓库中的分支拉取下来，区别是这里采用 prod 分支。然后使用 Docker 进行镜像构建并推送至远端镜像仓库 (这里为 DockerHub，其中 withRegistry 中填写镜像仓库位置以及在先前步骤中存入的 DockerHub 的账户对应的 Credential 的 ID) 。构建成功后，再将 Application 对应的 YAML 文件转换为 JSON 文件并注入 GIT_COMMIT，最后向 KubeVela apiserver (此处为 http://47.88.24.19/) 发送请求进行创建或更新。
 
-The delivery pipeline, similar to the test pipeline, first pulls codes in `prod` branch of the git repo. Then use Docker to build images and push it to remote image repo. (Here we use DockerHub, the *withRegistry* function takes image repo location and the Credential ID of the repo as parameters). After image been built, the pipeline converts Application YAML file into JSON file, with GIT_COMMIT injected. Finally, the pipeline sends POST requests to KubeVela apiserver (here is http://47.88.24.19/) for creating or updating target application.
+> 目前的 KubeVela apiserver 接收 JSON 参数，因此在流水线中做了相应的转换。未来的 KubeVela apiserver 将会进一步改进交互模式，简化此处的流程，同时再加上更为严格的权限认证，提高安全性。
 
-> Currently, KubeVela apiserver takes JSON object as inputs. Therefore we do extra conversion in the delivery pipeline. In the future, the KubeVela apiserver will further improve and simplify this interaction process. The admission management will be added as well to address the security issue.
-
-> In this case we will create an application named *cicd-demo-app* in Namespace *kubevela-demo-namespace*. Notice that the Namespace need to be created in Kubernetes in advance. KubeVela apiserver will simplify it in later version.
+> 该案例中会向 kubevela-demo-namespace 这个 Namespace 中创建名叫 cicd-demo-app 的应用，注意这个 Namespace 需要预先在 Kubernetes 中创建出来。未来 KubeVela 的 apiserver 同样会简化这一流程。
 
 ```groovy
 void setBuildStatus(String message, String state) {
@@ -289,31 +288,31 @@ pipeline {
 }
 ```
 
-## Performance
+## 实际表现
 
-After finishing the configuration process described above, the whole process of continuous delivery has already been set up. Let's check how it works.
+在完成上述的配置流程后，持续交付的流程便已经搭建完成。我们可以来检验一下它的效果。
 
 ![pipeline-overview](/img/jenkins-cicd/pipeline-overview.png)
 
-First, we set the `VERSION` constant in `main.go` to `Bad Version Number`, aka,
+我们首先将 `main.go` 中的 `VERSION` 字段修改为 `Bad Version Number`，即
 ```go
 const VERSION = "Bad Version Number"
 ```
-Then, we submit this change to `dev` branch. We can see that the test pipeline in Jenkins is triggered and the failure status is written back to GitHub.
+然后提交该修改至 dev 分支。我们可以看到 Jenkins 上的测试流水线被触发运行，失败后将该状态回写给 GitHub。
 
 ![test-pipeline-fail](/img/jenkins-cicd/test-pipeline-fail.png)
 ![test-github-fail](/img/jenkins-cicd/test-github-fail.png)
 
-We edit the `VERSION` to `0.1.1` again and resubmit it. Now we see that the test pipeline is successfully executed, with the commit in GitHub marked as succeeded.
+我们重新将 `VERSION` 修改为 0.1.1，然后再次提交。可以看到这一次测试流水线成功完成执行，并在 GitHub 对应的 Commit 上看到了成功的标志。
 
 ![test-pipeline-success](/img/jenkins-cicd/test-pipeline-success.png)
 ![test-github-success](/img/jenkins-cicd/test-github-success.png)
 
-Then we issue a Pull Request to merge `dev` branch into `prod` branch.
+接下来我们在 GitHub 上提交 Pull Request 尝试将 dev 分支上的更新合并至 prod 分支上。
 
 ![pull-request](/img/jenkins-cicd/pull-request.png)
 
-The Jenkins delivery pipeline is triggered once the Pull Request is accepted. After execution finished, the latest commit in prod branch is also marked as succeeded.
+可以看到在 Jenkins 的部署流水线成功运行结束后，GitHub 上 prod 分支最新的 Commit 也显示了成功的标志。
 
 ![deploy-pipeline-success](/img/jenkins-cicd/deploy-pipeline-success.png)
 ![deploy-github-success](/img/jenkins-cicd/deploy-github-success.png)
@@ -327,7 +326,7 @@ NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
 kubevela-demo-app-web-v1   2/2     2            2           2m1s
 ```
 
-As shown above, the target application is successfully accepted by KubeVela apiserver and related resources are created by KubeVela controller. The current replica number of Deployment is 2. After deleting `batchPartition : 0` in the `rollout` trait of the application, which means confirming current release, the Deployment replica is updated to 5. Now we can access the domain configured in Ingress and get the current version number.
+如图显示，要部署的应用顺利被 KubeVela apiserver 接受并由 KubeVela 控制器创建了相关资源。当前 Deployment 的副本数是 2，在删除了该 Application 中 rollout 特征内的 `batchPartition: 0` 后代表确认了当前的发布，然后对应的 Deployment 副本数更新至 5。这时我们可以访问 Ingress 所配置的域名，成功显示了当前的版本号。
 
 ```bash
 $ kubectl edit app -n kubevela-demo-namespace
@@ -342,7 +341,7 @@ $ curl http://kubevela-demo-cicd-app.cf7c0ed25b151437ebe1ef58efc29bca4.us-west-1
 Version: 0.1.1
 ```
 
-Repeat the steps above. Upgrade the version number to `0.1.2`. Finish both test pipeline and delivery pipeline. Then we will see there is a version change to the Deployment managed by the target application. The replica number of the old Deployment decreases from 5 to 3 while the new one contains 2 replica at this moment. If we access the service now, we will find sometimes the old version number is returned and sometimes the new version number is displayed. This is because when rolling update the application, both new version replica and old version replica exist. The incoming traffic will be dispatched to different version replica. Therefore we can observe two different version at the same time. 
+我们重复以上步骤，将版本升级至 0.1.2，完成测试流水线及部署流水线。接着我们会发现 Kubernetes 的集群内对应的 Application 控制的 Deployment 发生了版本更替，旧版本的 Deployment 从 5 副本下降到 3 副本，新版本的 Deployment 则出现了 2 副本。如果此时我们再访问原来的服务地址，会发现有时会显示 0.1.1 版本，有时会显示 0.1.2 版本。这是因为在当前滚动更新过程中，新旧副本同时存在，访问的流量会被负载均衡器分发到不同的副本上，因此会出现两种版本的服务同时存在的现象。
 
 ```bash
 $ kubectl get deployment -n kubevela-demo-namespace -w
@@ -388,7 +387,7 @@ $ curl http://kubevela-demo-cicd-app.cf7c0ed25b151437ebe1ef58efc29bca4.us-west-1
 Version: 0.1.1
 ```
 
-After confirming new services are functioning correctly, we can remove the `batchPartition: 0` as described above to complete the whole canary release process.
+当我们确认新版本的服务正常运作后，可以类似上述步骤，将 Application 中 rollout 特性内的 `batchPartition: 0` 删去，完成整个金丝雀发布流程。
 
 ```bash
 $ kubectl get deployment -n kubevela-demo-namespace -w
@@ -411,8 +410,8 @@ kubevela-demo-app-web-v2   5/5     5            5           5m41s
 kubevela-demo-app-web-v1   0/0     0            0           18m
 ```
 
-## Conclusion
+## 小结
 
-In summary, we executed the whole continuous delivery process successfully. In this process, developers can easily update and deploy their applications, with the help of KubeVela and Jenkins. Besides, developers can use their favourite tools in different stages, such as substituting GitHub with Gitlab, or using TravisCI instead of Jenkins.
+至此，我们便已经成功实现了一整套持续交付流程。在这个流程中，应用的开发者借助 KubeVela + Jenkins 的能力，可以轻松完成应用的迭代更新、集成测试、自动发布与滚动升级，而整个流程在各个环节也可以按照开发者的喜好和条件选择不同的工具，比如使用 Gitlab 替代 GitHub，或是使用 TravisCI 替代 Jenkins。
 
-Readers might also notice that this progress can not only upgrade the application service, but also change deployment plan via editing `app.yaml`, such as scaling up or adding sidecars, which works like classical push-style GitOps. About more KubeVela GitOps content, you can refer to other related case studies.
+在上述过程中，细心的读者可能还会发现，这套流程不仅能够实现应用服务的升级，而且还可以通过修改 app.yaml 自动完成部署方案的升级，比如将 5 副本应用扩容到 10 副本，或是为容器添加 sidecar，从而实现部分 GitOps 能力。关于使用 KubeVela 实践 GitOps 的更多内容，感兴趣的读者可以继续阅读相关案例。
