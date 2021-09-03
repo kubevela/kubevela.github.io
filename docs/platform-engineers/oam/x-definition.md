@@ -342,8 +342,7 @@ spec:
   definitionRef:
     name: <corresponding Kubernetes resource group>
     version: <corresponding Kubernetes resource version>
-  podSpecPath: <path to the Pod field in the workload>
-  revisionLabel: <工作负载中可以明确版本的标签>
+  podSpecPath: <path to the Pod field in the Workload>
   childResourceKinds:
     - apiVersion: <resource group>
       kind: <resource type>

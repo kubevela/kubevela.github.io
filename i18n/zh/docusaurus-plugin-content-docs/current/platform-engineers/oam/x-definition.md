@@ -402,7 +402,6 @@ spec:
     name: <工作负载定义对应的 Kubernetes 资源>
     version: <工作负载定义对应的 Kubernetes 资源版本>
   podSpecPath: <工作负载中 Pod 字段的路径>
-  revisionLabel: <工作负载中可以明确版本的标签>
   childResourceKinds:
     - apiVersion: <资源组>
       kind: <资源类型>
