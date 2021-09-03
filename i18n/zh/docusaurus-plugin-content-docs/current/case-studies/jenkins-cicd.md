@@ -24,7 +24,7 @@ pipeline {
         GIT_URL = 'https://github.com/Somefive/KubeVela-demo-CICD-app.git'
         DOCKER_REGISTRY = 'https://registry.hub.docker.com'
         DOCKER_CREDENTIAL = 'DockerHubCredential'
-        DOCKER_IMAGE = 'somefive/hello-world:kubevela-demo-cicd-app'
+        DOCKER_IMAGE = 'somefive/kubevela-demo-cicd-app'
         APISERVER_URL = 'http://47.88.24.19'
         APPLICATION_YAML = 'app.yaml'
         APPLICATION_NAMESPACE = 'kubevela-demo-namespace'
