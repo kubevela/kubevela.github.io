@@ -71,7 +71,7 @@ pipeline {
 }
 ```
 
-Push commits to the target branch in git repository, which the Jenkins pipeline focuses on. The webhook of git repo will trigger the newly created Jenkins pipeline. This pipeline will automatically build container images and push it to the image repository. Then it will send POST request to KubeVela apiserver, which will deploy `app.yaml` to Kubernetes cluster. An example of `app.yaml` is shown below.
+Push commits to the target branch in the git repository, which the Jenkins pipeline focuses on. The webhook of git repo will trigger the newly created Jenkins pipeline. This pipeline will automatically build container images and push it to the image repository. Then it will send POST request to KubeVela apiserver, which will deploy `app.yaml` to Kubernetes cluster. An example of `app.yaml` is shown below.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
