@@ -2,7 +2,7 @@
 title:  Helm 组件
 ---
 
-本节介绍使用一个 Helm Chart 作为组件 ，可以来自 Helm 仓库、Git 仓库 或者 OSS bucket。
+KubeVela 可以部署任何 Helm Chart 组件 ，Chart 组件的来源可以是 Helm 仓库、Git 仓库 或者 OSS bucket。
 
 ## 部署来自 Helm 仓库的 Chart
 
