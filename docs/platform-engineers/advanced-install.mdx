@@ -49,6 +49,13 @@ REVISION: 1
 NOTES:
 Welcome to use the KubeVela! Enjoy your shipping application journey!
 ```
+
+## Install KubeVela with api-server
+
+```
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.1.0-nightly-build --set apiServer.enabled=true --wait
+```
+
 ## Install Kubectl Vela Plugin
 
 Install vela kubectl plugin can help you to ship applications more easily!
