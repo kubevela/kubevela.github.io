@@ -6,35 +6,22 @@ slug: /
 
 ## Motivation
 
-The trend of cloud-native technology is moving towards pursuing consistent application delivery across clouds and on-premises infrastructures using Kubernetes as the common layer. Kubernetes, although excellent in abstracting low-level infrastructure details, does not introduce abstractions to model software deployment on top of today's hybrid and distributed environments. We’ve seen the lack of application level context have impacted user experiences, slowed down productivity, led to unexpected errors or misconfigurations in production.
+The trend of cloud-native technology is moving towards pursuing consistent experience of application delivery across clouds and on-prem clusters. Kubernetes is becoming the standard layer which is excellent in abstracting away low-level infrastructure details. But it does not provide abstractions to model application deployment on top of hybrid and distributed environments. The lack of application level context have impacted user experience, slowed down productivity, led to unexpected errors due to misconfigurations in production.
 
-Meanwhile, modeling the deployment of a microservice application is a highly fragmented and challenging process. Thus, many solutions tried to solve above problem so far are either too simplified to fix the real issue, or too complicated to use at all. On the other hand, though many solutions provided friendly UI layer, the platform themselves can barely extend. This means as the needs of your application grow, they are almost certain to outgrow the capabilities of such systems. 
+Meanwhile, modeling the deployment of a microservice application is a highly fragmented and challenging process. Thus, many solutions that tried to solve the problem so far are either over simplified and could not fix the real issue, or too complicated to use at all. On the other hand, though many solutions provided friendly UI layer, the platform themselves are not customizable. This means as the needs of your platform grow, it is inevitable for the feature requirements to outgrow the capabilities of such systems.
 
-Today, the application teams are eager to find a platform that can simplify the application delivery across hybrid environments (e.g. multi-cluster/multi-cloud/hybrid-cloud/distributed-cloud), while it should also be flexible enough to meet the requirement of fast growing businesses. The platform-engineers do want to help but the engineering effort of building such system seems to be daunting.
+Today the application teams are eager to find a platform that can simplify the application delivery experience across hybrid environments (e.g. multi-cluster/multi-cloud/hybrid-cloud/distributed-cloud), while also be flexible enough to satisfy the fast growth of businesses requirements. The platform-engineers have similar empathy but the effort of building such system is out of their scope.
+
 
 ## What is KubeVela?
 
-KubeVela is a modern application platform that makes deploying and managing applications across today's hybrid, multi-cloud environments easier and faster, while at meantime, naturally adapts to your needs as they grow. This is achieved by doing the following:
+KubeVela is a modern application platform that makes it easier and faster to deliver and manage applications across hybrid, multi-cloud environments. At the mean time, it is highly extensible and programmable, which can adapt to your needs as they grow. This is achieved by doing the following:
 
-**Application Centric** - KubeVela introduces [Open Application Model (OAM)](https://oam.dev/) as the consistent yet higher level API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy.
+**Application Centric** - KubeVela introduces [Open Application Model (OAM)](https://oam.dev/) as the consistent and application-focused API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at the perspective of application developers. No infrastructure level concern, only application level concepts.
 
-**Programmable Workflow** - KubeVela leverages [CUE](https://cuelang.org/) to implement its model layer. This allows you to declare application deployment workflow as a DAG, with all steps and application's needs glued together in programmable approach. No restrictions, natively extensible.
+**Programmable Workflow** - KubeVela leverages [CUE](https://cuelang.org/) as the implementation engine behind the model layer. This allows you to compose deployment workflow in a modular and declarative API, and automates any operational tasks in a programmable manner. No restrictions, natively extensible.
 
 **Runtime Agnostic** - KubeVela works as an application delivery control plane that is fully runtime agnostic. It can deploy and manage any application components including containers, cloud functions, databases, or even EC2 instances across hybrid environments, following the workflow you defined.
-
-## Architecture
-
-The overall architecture of KubeVela is shown as below:
-
-![alt](../resources/arch.png)
-
-### Control Plane
-
-Control plane is where KubeVela itself lives in. As the project's name implies, KubeVela by design leverages Kubernetes as control plane. This is the key of how KubeVela guarantees full *automation* and strong *determinism* to application delivery at scale. Users will interact with KubeVela via the  application centric API to model the application deployment, and KubeVela will deliver the application to target *runtime infrastructure* per policies and workflow declared by users and ensure the success.
-
-### Runtime Infrastructures
-
-Runtime infrastructures are where the applications are actually running on. KubeVela allows you to deploy and manage applications on both Kubernetes based infrastructures (local, managed offerings, or IoT/Edge/On-Premise ones) and non-Kubernetes environments such as public/private clouds in a consistent workflow. KubeVela itself does not run on the runtime infrastructures, they two are fully decoupled.
 
 ## Comparisons
 
@@ -71,3 +58,11 @@ Of course, KubeVela also supports other encapsulation formats including Kustomiz
 KubeVela is a modern application deployment system built with cloud native stack. It leverages [Open Application Model](https://github.com/oam-dev/spec) and Kubernetes as control plane to resolve a hard problem - making shipping applications enjoyable.
 
 Welcome onboard and sail Vela!
+
+
+## What's Next
+
+Here are some recommended next steps:
+
+- Learn KubeVela's [Core Concepts](core-concepts/application).
+- Learn KubeVela's [Architecture](core-concepts/architecture).
