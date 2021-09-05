@@ -418,14 +418,14 @@ spec:
 
 应用一经创建，KubeVela 就会为创建的资源打上一系列的标签，这些标签包含了应用的版本、名称、类型等。通过这些标准协议，应用的组件和运维能力之间就可以进行协作。具体的元数据列表如下所示：
 
-|                        标签                         |                     描述                      |
-| :-------------------------------------------------: | :-------------------------------------------: |
-|       `workload.oam.dev/type=<组件定义名称>`        | 对应了组件定义（`ComponentDefinition`）的名字 |
-|       `trait.oam.dev/type=<运维特征定义名称>`       | 对应了运维特征定义（`TraitDefinition`）的名字 |
-|          `app.oam.dev/name=<应用实例名称>`          |        应用实例化（Application）的名称        |
-|       `app.oam.dev/component=<组件实例名称>`        |               组件实例化的名称                |
-| `trait.oam.dev/resource=<运维特征中输出的资源名称>` | 运维特征中输出(outputs.\<资源名称\>)的资源名称  |
-|   `app.oam.dev/appRevision=<应用实例的版本名称>`    |              应用实例的版本名称               |
+|                        标签                         |                      描述                      |
+| :-------------------------------------------------: | :--------------------------------------------: |
+|       `workload.oam.dev/type=<组件定义名称>`        | 对应了组件定义（`ComponentDefinition`）的名字  |
+|       `trait.oam.dev/type=<运维特征定义名称>`       | 对应了运维特征定义（`TraitDefinition`）的名字  |
+|          `app.oam.dev/name=<应用实例名称>`          |        应用实例化（Application）的名称         |
+|       `app.oam.dev/component=<组件实例名称>`        |                组件实例化的名称                |
+| `trait.oam.dev/resource=<运维特征中输出的资源名称>` | 运维特征中输出(outputs.\<资源名称\>)的资源名称 |
+|   `app.oam.dev/appRevision=<应用实例的版本名称>`    |               应用实例的版本名称               |
 
 这些元数据可以帮助应用部署以后的运维能力正常运作，比如灰度发布组件在应用更新时根据标签进行灰度发布等，同时这些标签也保证了 KubeVela 被其他系统集成时的正确性。
 
@@ -441,7 +441,7 @@ spec:
 |          `context.name`          | 在组件定义和运维特征定义中表示的是组件名称，在应用策略定义中表示的是应用策略名称 | 组件定义、运维特征定义、应用策略定义 |
 |       `context.namespace`        |                            应用当前实例所在的命名空间                            |        组件定义、运维特征定义        |
 |        `context.revision`        |                              当前组件实例的版本名称                              |        组件定义、运维特征定义        |
-|       `context.parameter`       |                当前组件实例的参数，可以在运维特征中获得组件的参数                |             运维特征定义             |
+|       `context.parameter`        |                当前组件实例的参数，可以在运维特征中获得组件的参数                |             运维特征定义             |
 |         `context.output`         |                           当前组件实例化后的对象结构体                           |        组件定义、运维特征定义        |
 | `context.outputs.<resourceName>` |                       当前组件和运维特征实例化以后的结构体                       |        组件定义、运维特征定义        |
 
@@ -460,6 +460,6 @@ spec:
 [2]:	../cue/basic
 [3]:	../kube/component
 [4]:	../traits/customize-trait
-[5]:	../traits/advanced.md
+[5]:	../traits/advanced
 [6]:	https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
-[7]:	../cue/basic.md
+[7]:	../cue/basic

@@ -13,12 +13,11 @@ KubeVela 的系统在默认安装的模式下，是一个只包含“控制平�
 
 ### 应用（Application）控制器
 
-应用控制器是 KubeVela 的核心控制器，也是 KubeVela 唯一一个必须要安装且不可替换的控制器，负责应用的全生命周期管控，主要包含应用版本化、模块渲染引擎、工作流引擎、资源回收等模块，即图中淡红色部分框图。
+应用控制器是 KubeVela 的核心控制器，也是 KubeVela 唯一一个必须要安装且不可替换的控制器，负责应用的全生命周期管控，主要包含应用版本化、交付模型引擎、工作流引擎等模块，即图中淡红色部分框图。
 
 * 版本化控制（Revision Manager）：对于 KubeVela 而言，应用的每一次变动都会生成两种类型的版本，一个是应用的版本（AppRevision），一个是组件版本（Component Revision）。应用版本主要作为应用的快照记录，可以方便的进行应用修改的审计。组件的版本主要用于组件的滚动升级与回滚，也可以指定不同的组件版本同时运行，并做发布时的流量控制。
 * 交付模型引擎（CUE Engine）：KubeVela 采用 Open Application Model（OAM）作为应用交付模型，并通过 [CUE](https://cuelang.org/) 配置语言来实现该模型，从而以可编程的方式（IaC）对待交付组件、运维能力、用户输入和交付工作流进行统一的编排和管理。
 * 工作流引擎（Workflow Engine）：工作流是一次应用部署执行过程的描述，用户可以通过工作流自己定义部署的完整流程，或者灵活的插入各种步骤。举例来说，用户可以在工作流的最开始加入一个环境初始化的节点，这个工作流节点可以是创建一个运行时 Kubernetes 集群，或者是在一个环境上安装某种系统组件。然后再将应用部署到刚刚初始化完成的部署环境中。简而言之，**KubeVela 的工作流使得应用部署的完整流程可以通过一份声明式配置文件完成描述**。
-* 资源回收引擎（Garbage Collection）：负责资源的记录和删除，声明式应用描述只记录终态时的资源情况，而实际有些已经存在的资源若不存在于终态，就需要通过这个模块来做自动化的垃圾回收。
 
 ### 模块定义（Definition）控制器
 
@@ -62,7 +61,7 @@ OCM（Open Cluster Management）是 KubeVela 默认的多集群管理引擎，�
 
 ### FluxCD 控制器
 
-KubeVela 通过 FluxCD 控制器来实现 Pull 模式的应用组件交付。
+KubeVela 通过 FluxCD 控制器来实现 Helm, Kustomize 等组件的交付，并实现基于 GitOps 模式的组件交付功能。
 
 
 ## 系统数据流
@@ -103,5 +102,5 @@ KubeVela 的用户数据面数据流动采用 Pull 模式（订阅模式），Ku
 后续步骤:
 
 - 加入 KubeVela 中文社区钉钉群，群号：23310022。
-- [阅读**用户手册**基于开箱即用功能，构建你的应用部署计划](../end-user/component-delivery)。
-- [阅读**管理员手册**了解 KubeVela 的扩展方式和背后的原理](../platform-engineers/oam/oam-model)。
+- 阅读[**用户手册**](../end-user/components/helm)，从 Helm 组件开始了解如何构建你的应用部署计划。
+- 阅读[**管理员手册**](../platform-engineers/oam/oam-model)了解 KubeVela 的扩展方式和背后的 OAM 模型原理。

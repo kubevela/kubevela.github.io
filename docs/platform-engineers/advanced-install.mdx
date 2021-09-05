@@ -183,3 +183,35 @@ Then clean up CRDs (CRDs are not removed via helm by default):
   workflowstepdefinitions.core.oam.dev \
   workloaddefinitions.core.oam.dev 
 ```
+
+## Addons
+
+| Name                  | Description                                             | capability        | Open Source Project Reference                                        |
+|---------------------|-------------------------------------------------|----------------|-------------------------------------------------|
+| terraform           | Basic addon to Provide Cloud Resources(installed by default)                                    | -              | https://github.com/oam-dev/terraform-controller |
+| fluxcd              | Support Deployment of Helm and Kustomize components                       | kustomize、helm | https://fluxcd.io/                              |
+| kruise              | Support more powerful workload feature                     | cloneset       | https://openkruise.io/                          |
+| prometheus          | Support basic observability from Promethus                           | -              | https://prometheus.io/                          |
+| keda                | Support event driven auto scaling                            | -              | https://keda.sh/                                |
+| ocm                 | Support Multi-cluster Application Deployment                                  | -              | http://open-cluster-management.io/              |
+| observability       | Support KubeVela core observability     | -              | -                                               |
+
+1. Search all addons 
+
+```shell
+vela addon list
+```
+
+2. Install addons (use fluxcd as example)
+
+```shell
+vela addon enable fluxcd
+```
+
+3. Disable addons
+
+```
+vela addon disable fluxcd
+```
+
+Please remove all application using this addon before disable it.

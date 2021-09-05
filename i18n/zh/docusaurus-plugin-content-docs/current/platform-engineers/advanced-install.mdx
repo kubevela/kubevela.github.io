@@ -140,3 +140,35 @@ rm -r ~/.vela
   workflowstepdefinitions.core.oam.dev \
   workloaddefinitions.core.oam.dev 
 ```
+
+## 插件列表
+
+| 插件                  | 简介                                              | 对应的内置功能        | 插件对应开源项目                                        |
+|---------------------|-------------------------------------------------|----------------|-------------------------------------------------|
+| terraform           | 提供云资源（默认已安装）                                    | -              | https://github.com/oam-dev/terraform-controller |
+| fluxcd              | 提供 Helm、Kustomize 组件的部署功能                       | kustomize、helm | https://fluxcd.io/                              |
+| kruise              | 提供比 Kubernetes 原生更强大的工作负载套件                     | cloneset       | https://openkruise.io/                          |
+| prometheus          | 提供基于 Promethus 的基础监控功能                          | -              | https://prometheus.io/                          |
+| keda                | 提供基于事件驱动的工作负载自动扩缩容功能                            | -              | https://keda.sh/                                |
+| ocm                 | 提供多集群功能的系统插件                                    | -              | http://open-cluster-management.io/              |
+| observability       | 为 KubeVela core 提供系统级别的监控，也可以为应用提供业务级别的监控。      | -              | -                                               |
+
+1. 查看可用的插件
+
+```shell
+vela addon list
+```
+
+2. 安装插件，以 fluxcd 插件为例
+
+```shell
+vela addon enable fluxcd
+```
+
+3. 禁用插件
+
+```
+vela addon disable fluxcd
+```
+
+禁用前请先清理使用插件功能的应用，否则将禁用失败。

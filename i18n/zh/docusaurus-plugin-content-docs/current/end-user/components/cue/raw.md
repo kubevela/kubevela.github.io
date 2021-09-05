@@ -30,3 +30,7 @@ spec:
               restartPolicy: Never
           backoffLimit: 4
 ```
+
+## 属性说明
+
+在 properties 字段中填写完整的 Kubernetes 资源结构体。
