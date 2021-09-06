@@ -40,17 +40,17 @@ View the generated "my-stateful.cue" file:
 		parameter: {}
 	}
 
-下面我们来对这个自动生成的自定义组件做一些微调：
+Let's do some fine-tuning of this automatically generated custom component:
 
-1. 根据 KubeVela [自定义组件的规则][6]，StatefulSet 官网的例子是由 `StatefulSet`和 `Service` 两个对象构成的一个复合组件，复合组件中，核心工作负载由 `template.output`字段表示，其他辅助对象用 `template.outputs`表示，所以我们将内容做一些调整，将自动生成的 output 和 outputs 中的全部调换。
-2. 然后我们将核心工作负载的 apiVersion 和 kind 数据填写到标注为 `<change me>`的部分
+1. The example of the official StatefulSet website is a composite component composed of two objects `StatefulSet` and `Service`. According to KubeVela [Rules for customize components] [6], in composite components, core workloads such as StatefulSet need to be represented by the `template.output` field, and other auxiliary objects are represented by `template.outputs`, so we make some adjustments and all the automatically generated output and outputs are switched.
+2. Then we fill in the apiVersion and kind data of the core workload into the part marked as `<change me>`
 
-修改后可以用 `vela def vet`做一下格式检查和校验。
+After modification, you can use `vela def vet` to do format check and verification.
 
 	$ vela def vet my-stateful.cue
 	Validation succeed.
 
-经过两步改动后的文件如下：
+The file after two steps of changes is as follows:
 
 	$ cat my-stateful.cue
 	"my-stateful": {
@@ -120,12 +120,11 @@ View the generated "my-stateful.cue" file:
 		parameter: {}
 	}
 
-将该组件定义安装到 Kubernetes 集群中：
-
+Install ComponentDefinition into the Kubernetes cluster:
 	$ vela def apply my-stateful.cue
 	ComponentDefinition my-stateful created in namespace vela-system.
 
-此时平台的最终用户已经可以通过 `vela components`命令看到有一个 `my-stateful`组件可以使用了。
+At this point, the end user of the platform can already see that a `my-stateful` component is available through the `vela components` command.
 
 	$ vela components
 	NAME       	NAMESPACE  	WORKLOAD                             	DESCRIPTION
@@ -133,7 +132,7 @@ View the generated "my-stateful.cue" file:
 	my-stateful	vela-system	statefulsets.apps                    	My StatefulSet component.
 	... 
 
-通过 KubeVela 的应用部署计划发布到集群中，就可以拉起我们刚刚定义的 StatefulSet 和 Service 对象。
+By publishing the `Application` of KubeVela to the cluster, we can pull up the StatefulSet and Service objects we just defined.
 
 	cat <<EOF | kubectl apply -f -
 	apiVersion: core.oam.dev/v1beta1
@@ -148,16 +147,18 @@ View the generated "my-stateful.cue" file:
 
 
 
-## 为组件定义定制化参数
+## Define Customized Parameters For Component
 
-为了满足用户变化的需求，我们需要在最后的 `parameter` 里暴露一些参数，在 [CUE 基础入门文档][7]中你可以了解到参数相关的语法。在本例中，我们为用户暴露一下参数：
+In order to meet the changing needs of users, we need to expose some parameters in the last `parameter`. You can learn about the syntax of parameters in [CUE Basic][7].
 
-* 镜像名称，允许用户自定义镜像
-* 实例名，允许用户自定义生成的 StatefulSet 对象和 Service 对象的实例名称
-* 副本数，生成对象的副本数
+In this example, we expose the following parameters to the user:
+
+* Image name, allowing users to customize the image
+* Instance name, allowing users to customize the instance name of the generated StatefulSet object and Service object
+* The number of copies, the number of copies of the generated object
 
 
-		... # 省略其他没有修改的字段 
+		... # Omit other unmodified fields
 		template: {
 			output: {
 				apiVersion: "apps/v1"
@@ -173,11 +174,11 @@ View the generated "my-stateful.cue" file:
 							containers: [{
 								image: parameter.image
 			
-							    ... // 省略其他没有修改的字段	
+							    ... // Omit other unmodified fields
 							}]
 						}
 					}
-					    ... // 省略其他没有修改的字段
+					    ... // Omit other unmodified fields
 				}
 			}
 			outputs: web: {
@@ -188,7 +189,7 @@ View the generated "my-stateful.cue" file:
 					labels: app: "nginx"
 				}
 				spec: {
-					... // 省略其他没有修改的字段		
+					... // Omit other unmodified fields	
 			    }
 			}
 			parameter: {
@@ -198,12 +199,12 @@ View the generated "my-stateful.cue" file:
 			}
 		}
 
-修改后同样使用 `vela def apply`安装到集群中：
+After modification, use `vela def apply` to install to the cluster:
 
 	$ vela def apply my-stateful.cue
 	ComponentDefinition my-stateful in namespace vela-system updated.
 
-这个修改过程是实时生效的，用户立即可以看到系统中的 my-stateful 组件增加了新的参数。
+This modification process takes effect in real time, and the user can immediately see that the my-stateful component in the system has added new parameters.
 
 	$ vela show my-stateful
 	# Properties
@@ -215,9 +216,9 @@ View the generated "my-stateful.cue" file:
 	| image    |             | string | true     |         |
 	+----------+-------------+--------+----------+---------+
 
-组件定义的修改并不会影响已经在运行的应用，当下次应用修改并重新部署时，新的组件定义就会生效。
+The modification of the ComponentDefinition will not affect the application that is already running. The new ComponentDefinition will take effect when the application is modified and redeployed next time.
 
-最终用户就可以在应用中指定新增的这三个参数：
+The end user can specify these three new parameters in the application:
 
 ```
 	apiVersion: core.oam.dev/v1beta1
@@ -234,17 +235,17 @@ View the generated "my-stateful.cue" file:
 	        name: my-component
 ```
 
-将文件保存在本地并命名为 `app-stateful.yaml`，执行 `kubectl apply -f app-stateful.yaml`更新应用，你可以看到 StatefulSet 对象的名称、镜像和实例数均已更新。
+Save the file locally and name it `app-stateful.yaml`, execute `kubectl apply -f app-stateful.yaml` to update the application, you can see that the name, image, and number of instances of the StatefulSet object have been updated.
 
-## 调试模块化功能的正确性
+## Debugging Modular Functions
 
-为了保证用户的应用使用参数能够正确运行，你也可以用 `vela dry-run` 命令对你的模板进行试运行验证。
+In order to ensure that the user's application can run correctly with the parameters, you can also use the `vela dry-run` command to verify the trial run of your template.
 
 ```shell
 vela dry-run -f app-stateful.yaml
 ```
 
-查看输出，你就可以对比生成的对象和你实际期望的对象是否一致。甚至可以直接把这个 YAML 执行到 Kubernetes 集群中使用看运行的结果做验证。
+By viewing the output, you can compare whether the generated object is consistent with the object you actually expect. You can even execute this YAML directly into the Kubernetes cluster and use the results of the operation for verification.
 
 <details>
 
@@ -324,14 +325,14 @@ spec:
 </details>
 
 
-你还可以通过 `vela dry-run -h` 来查看更多可用的功能参数。
+You can also use `vela dry-run -h` to view more available function parameters.
 
 
-## 使用上下文信息减少参数
+## Use `contxt` to Reduce Parameters
 
-在我们上面的 Application 例子中，properties 中的 name 和 Component 的 name 字段是相同的，此时我们可以在模板中使用携带了上下文信息的 `context`关键字，其中 `context.name` 就是运行时组件名称，此时 `parameter` 中的 name 参数就不再需要的。
+In our Application example above, the name field in the properties and the name field of the Component are the same. So we can use the `context` keyword that carries context information in the template, where `context.name` is the runtime component Name, thus the name parameter in `parameter` is no longer needed.
 
-	... # 省略其他没有修改的字段 
+	... # Omit other unmodified fields
 	template: {
 		output: {
 			apiVersion: "apps/v1"
@@ -345,13 +346,13 @@ spec:
 		}
 	}
 
-KubeVela 内置了应用[所需的上下文信息][9]，你可以根据需要配置.
+KubeVela has built-in application [required context][9], you can configure it according to your needs.
 
-## 使用运维能力按需添加配置
+## Add Traits On Demand
 
-对于用户的新需求，除了修改组件定义增加参数以外，你还可以使用运维能力，按需添加配置。一方面，KubeVela 已经内置了大量的通用运维能力，可以满足诸如：添加 label、annotation，注入环境变量、sidecar，添加 volume 等等的需求。另一方面，你可以像自定义组件一样，自定义[补丁型运维特征][10]，来满足更多的配置灵活组装的需求。
+For new user needs, in addition to modifying ComponentDefinitions and adding parameters, you can also use the TraitDefinition to add configurations as needed. On the one hand, KubeVela has built-in a large number of general operation and maintenance capabilities, which can meet the needs such as: adding labels, annotations, injecting environment variables, sidecars, adding volumes, and so on. On the other hand, like custom component does, you can [Customize Trait ][10] to meet the needs of more configuration and flexible assembly.
 
-你可以使用 `vela traits` 查看，带 `*` 标记的 trait 均为通用 trait，能够对常见的 Kubernetes 资源对象做操作。
+You can use `vela traits` to view, the traits marked with `*` are general traits, which can operate on common Kubernetes resource objects.
 
 	$ vela traits
 	NAME                    	NAMESPACE  	APPLIES-TO      	CONFLICTS-WITH	POD-DISRUPTIVE	DESCRIPTION
@@ -377,7 +378,7 @@ KubeVela 内置了应用[所需的上下文信息][9]，你可以根据需要配
 	                        	           	                	              	              	which follows the pod spec in path 'spec.template'.
 
 
-以 sidecar 为例，你可以查看 sidecar 的用法：
+Taking sidecar as an example, you can check the usage of sidecar:
 
 	$ vela show sidecar
 	# Properties
@@ -399,7 +400,7 @@ KubeVela 内置了应用[所需的上下文信息][9]，你可以根据需要配
 	| name |             | string | true     |         |
 	+------+-------------+--------+----------+---------+
 
-直接使用 sidecar 注入一个容器，应用的描述如下：
+Use the sidecar directly to inject a container, the application description is as follows:
 
 	apiVersion: core.oam.dev/v1beta1
 	kind: Application
@@ -419,25 +420,25 @@ KubeVela 内置了应用[所需的上下文信息][9]，你可以根据需要配
 	          name: my-sidecar
 	          image: saravak/fluentd:elastic
 
-部署运行该应用，就可以看到 StatefulSet 中已经部署运行了一个 fluentd 的 sidecar。
+Deploy and run the application, and you can see that a fluentd sidecar has been deployed and running in the StatefulSet.
 
-你也可以使用 `vela def` 获取 sidecar 的 CUE 源文件进行修改，增加参数等。
+You can also use `vela def` to get the CUE source file of the sidecar to modify, add parameters, etc.
 
 	vela def get sidecar
 
-运维能力的自定义与组件自定义类似，不再赘述，你可以阅读[运维能力自定义文档][11]了解更详细的功能。
+The customization of operation and maintenance capabilities is similar to component customization, so we won’t go into details here. You can read [Customize Trait][11] for more detailed functions.
 
-## 总结
+## Summarize
 
-本节介绍了如何通过 CUE 交付完整的模块化能力，其核心是可以随着用户的需求，不断动态增加配置能力，逐步暴露更多的功能和用法，以便降低用户整体的学习门槛，最终提升研发效率。
-KubeVela 背后提供的开箱即用的能力，包括组件、运维功能、策略以及工作流，均是通过同样的方式提供了可插拔、可修改的能力。
+This section introduces how to deliver complete modular capabilities through CUE. The core is that it can dynamically increase configuration capabilities according to user needs, and gradually expose more functions and usages, so as to reduce the overall learning threshold for users and ultimately improve R&D efficient.
+The out-of-the-box capabilities provided by KubeVela, including components, traits, policy, and workflow, are also designed as pluggable and modifiable capabilities.
 
-## 下一步
+## Next
 
-* 了解更多[自定义组件](../components/custom-component)的功能。
-* 了解更多[自定义运维能力](../traits/customize-trait)的功能。
-* 了解[自定义策略](../policy/custom-policy)背后的功能。
-* 了解[自定义工作流](../workflow/custom-workflow)背后的功能。
+* Get to know about [customize component](../components/custom-component)
+* Get to know about [customize trait](../traits/customize-trait)
+* Get to know about [customize policy](../policy/custom-policy)
+* Get to know about [customize workflow](../workflow/custom-workflow)
 
 [1]:	../oam/oam-model
 [2]:	../oam/x-definition
