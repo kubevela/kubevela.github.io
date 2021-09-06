@@ -35,7 +35,7 @@ services:
 
 ## Schema
 
-> 在深入学习 Appfile 的详细 schema 之前，我们建议你先熟悉 KubeVela 的[核心概念](../core-concepts/application.md)
+> 在深入学习 Appfile 的详细 schema 之前，我们建议你先熟悉 KubeVela 的[核心概念](../core-concepts/application)
 
 ```yaml
 name: _app-name_

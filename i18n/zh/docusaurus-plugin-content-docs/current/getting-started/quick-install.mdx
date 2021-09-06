@@ -189,17 +189,15 @@ sudo mv ./vela /usr/local/bin/vela
 </TabItem>
 </Tabs>
 
-## 4. 打开 Helm 支持
+## 4. 安装插件
 
-KubeVela 调用 [Flux v2](https://github.com/fluxcd/flux2) 的 [Helm](https://helm.sh/) 控制器来部署组件系统。
+KubeVela 支持一系列[开箱即用的插件](../platform-engineers/advanced-install#插件列表)，
+为保证 KubeVela 相关功能正常使用，建议您至少开启以下插件：
 
-你可以通过如下命令打开这个功能：
-
-```shell
-vela addon enable fluxcd
-```
-
-或者你也可以通过 Flux v2 的文档来安装完整版本。
+* Helm 以及 Kustomize 组件功能插件
+  ```shell
+  vela addon enable fluxcd
+  ```
 
 
 ## 5. 验证是否安装成功
@@ -226,4 +224,5 @@ worker    	vela-system	deployments.apps	Describes long-running, scalable, contai
 
 ## 下一步
 
-安装完毕 KubeVela，开始动手编写[第一个应用部署计划](./first-application)。
+* 安装完毕 KubeVela，开始动手编写[第一个应用部署计划](./first-application)。
+* 更多插件功能的安装，了解[自定义安装方式](../platform-engineers/advanced-install)安装。

@@ -30,3 +30,7 @@ spec:
               restartPolicy: Never
           backoffLimit: 4
 ```
+
+## Attributes
+
+Just write the whole Kubernetes Resource in properties.

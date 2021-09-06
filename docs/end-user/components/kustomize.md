@@ -4,21 +4,12 @@ title:  Kustomize
 
 Create a Kustomize Component, it could be from Git Repo or OSS bucket.
 
-### From OSS bucket 
+## Deploy From OSS bucket
 
-| Parameters            | Description                                                         | Example                       |
-| -------------- |  ------------------------------------------------------------ | --------------------------- |
-| repoType       | required, The value of the Git. To indicate that kustomize configuration comes from the Git repository                     | oss                         |
-| pullInterval   | optional, Synchronize with Git repository, and the time interval between tuning helm release. The default value is 5m (5 minutes） | 10m                         |
-| url            | required, bucket's endpoint, no need to fill in with scheme                          | oss-cn-beijing.aliyuncs.com |
-| secretRef      | optional, Save the name of a Secret, which is the credential to read the bucket. Secret contains accesskey and secretkey fields | sec-name                    |
-| timeout        | optional, The timeout period of the download operation, the default is 20s                                 | 60s                         |
-| path           | required, The directory containing the kustomization.yaml file, or the directory containing a set of YAML files (used to generate kustomization.yaml) | ./prod                      |
-| oss.bucketName | required, bucket name                                                  | your-bucket                 |
-| oss.provider   | optional, Generic or aws, if you get the certificate from aws EC2, fill in aws. The default is generic. | generic                     |
-| oss.region     | optional, bucket region                                                 |                             |
+KubeVela's `kustomize` component meets the needs of users to directly connect Yaml files and folders as component products. No matter whether your Yaml file/folder is stored in a Git Repo or an OSS bucket, KubeVela can read and deliver it.
 
-**How-to**
+Let's take the YAML folder component from the OSS bucket registry as an example to explain the usage. In the `Application` this time, I hope to deliver a component named bucket-comp. The deployment file corresponding to the component is stored in the cloud storage OSS bucket, and the corresponding bucket name is definition-registry. `kustomize.yaml` comes from this address of oss-cn-beijing.aliyuncs.com and the path is `./app/prod/`.
+
 
 1. (Opentional) If your OSS bucket needs identity verification, create a Secret:
 
@@ -27,8 +18,10 @@ $ kubectl create secret generic bucket-secret --from-literal=accesskey=<your-ak>
 secret/bucket-secret created
 ```
 
-2. Example
-```yaml
+2. Deploy it:
+
+```shell
+cat <<EOF | kubectl apply -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -39,26 +32,55 @@ spec:
       type: kustomize
       properties:
         repoType: oss
-        # required if bucket is private
+        # If the bucket is private, you will need to provide
         secretRef: bucket-secret
         url: oss-cn-beijing.aliyuncs.com
         oss:
           bucketName: definition-registry
         path: ./app/prod/
-            
+EOF
+```
+Please copy the above code block and deploy it directly to the runtime cluster:
+
+```shell
+application.core.oam.dev/bucket-app created
 ```
 
-### From Git Repo
+Finally, we use `vela ls` to view the application status after successful delivery:
+```shell
+vela ls
+APP                 	COMPONENT  	TYPE      	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME                 
+bucket-app          	bucket-comp	kustomize 	      	running	healthy	      	2021-08-28 18:53:14 +0800 CST
+```
+
+The PHASE of the app is running, and the STATUS is healthy. Successful application deployment!
+
+### Attributes
+
+| Parameters     | Description                                                                                                                                           | Example                     |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| repoType       | required, The value of the Git. To indicate that kustomize configuration comes from the Git repository                                                | oss                         |
+| pullInterval   | optional, Synchronize with Git repository, and the time interval between tuning helm release. The default value is 5m (5 minutes）                    | 10m                         |
+| url            | required, bucket's endpoint, no need to fill in with scheme                                                                                           | oss-cn-beijing.aliyuncs.com |
+| secretRef      | optional, Save the name of a Secret, which is the credential to read the bucket. Secret contains accesskey and secretkey fields                       | sec-name                    |
+| timeout        | optional, The timeout period of the download operation, the default is 20s                                                                            | 60s                         |
+| path           | required, The directory containing the kustomization.yaml file, or the directory containing a set of YAML files (used to generate kustomization.yaml) | ./prod                      |
+| oss.bucketName | required, bucket name                                                                                                                                 | your-bucket                 |
+| oss.provider   | optional, Generic or aws, if you get the certificate from aws EC2, fill in aws. The default is generic.                                               | generic                     |
+| oss.region     | optional, bucket region                                                                                                                               |                             |
 
 
-| Parameters          | Description                                                         | Example                                            |
-| --------------- | ------------------------------------------------------------ | ----------------------------------------------- |
-| repoType        | required, The value of the Git. To indicate that kustomize configuration comes from the Git repository                 | git                                             |
-| pullInterval    | optional, Synchronize with Git repository, and the time interval between tuning helm release. The default value is 5m (5 minutes） | 10m                                             |
-| url             | required, Git repository address                                                | https://github.com/oam-dev/terraform-controller |
-| secretRef       | optional, The Secret object name that holds the credentials required to pull the Git repository. The username and password fields must be included in the HTTP/S basic authentication Secret. For SSH authentication, the identity, identity.pub and known_hosts fields must be included | sec-name                                        |
-| timeout         | optional, The timeout period of the download operation, the default is 20s                                | 60s                                             |
-| git.branch      | optional, Git branch, master by default                                     | dev                                             |
+## Deploy From Git Repo
+
+
+| Parameters   | Description                                                                                                                                                                                                                                                                              | Example                                         |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| repoType     | required, The value of the Git. To indicate that kustomize configuration comes from the Git repository                                                                                                                                                                                   | git                                             |
+| pullInterval | optional, Synchronize with Git repository, and the time interval between tuning helm release. The default value is 5m (5 minutes）                                                                                                                                                       | 10m                                             |
+| url          | required, Git repository address                                                                                                                                                                                                                                                         | https://github.com/oam-dev/terraform-controller |
+| secretRef    | optional, The Secret object name that holds the credentials required to pull the Git repository. The username and password fields must be included in the HTTP/S basic authentication Secret. For SSH authentication, the identity, identity.pub and known_hosts fields must be included | sec-name                                        |
+| timeout      | optional, The timeout period of the download operation, the default is 20s                                                                                                                                                                                                               | 60s                                             |
+| git.branch   | optional, Git branch, master by default                                                                                                                                                                                                                                                  | dev                                             |
 
 **How-to**
 
@@ -79,7 +101,7 @@ spec:
         path: ./app/dev/
 ```
 
-## Override Kustomize
+**Override Kustomize**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

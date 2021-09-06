@@ -40,10 +40,10 @@ module.exports = {
             },
             {
               'CUE Component': [
-                'end-user/components/cue/raw',
-                'end-user/components/cue/task',
                 'end-user/components/cue/webservice',
                 'end-user/components/cue/worker',
+                'end-user/components/cue/task',
+                'end-user/components/cue/raw',
               ]
             },
             'end-user/components/more',
@@ -52,9 +52,9 @@ module.exports = {
 
         {
           'Traits': [
-            'end-user/traits/autoscaler',
             'end-user/traits/ingress',
-            'end-user/traits/manual-scaler',
+            'end-user/traits/rollout',
+            'end-user/traits/autoscaler',
             'end-user/traits/kustomize-patch',
             'end-user/traits/annotations-and-labels',
             'end-user/traits/service-binding',
@@ -86,13 +86,12 @@ module.exports = {
             'end-user/policies/envbinding',
           ]
         },
-        // {
-        //   'Workflow': [
-        //     'end-user/workflow/apply-component',
-        //     'end-user/workflow/apply-remaining',
-        //     'end-user/workflow/multi-env',
-        //   ]
-        // },
+        {
+          'Workflow': [
+            'end-user/workflow/multi-env',
+            'end-user/workflow/webhook-notification',
+          ]
+        },
         {
           'Debugging': [
             // 'end-user/debug/health',
@@ -123,17 +122,11 @@ module.exports = {
             'platform-engineers/cue/advanced',
           ]
         },
-        // {
-        //   'Environment System': [
-        //     'platform-engineers/initializer/basic-initializer',
-        //   ]
-        // },
-        {
-          'Addons': [
-            'end-user/addons/introduction',
-            // 'end-user/addons/fluxcd', 这个应该整体放在 reference 文档里去。它的使用方式，只需要在 helm 组件和 Kustomize 组件使用是 refer 即可。
-          ]
-        },
+        //{
+        //  'Environment System': [
+        //    'platform-engineers/initializer/basic-initializer',
+        //  ]
+        //},
         {
           type: 'category',
           label: 'Component System',

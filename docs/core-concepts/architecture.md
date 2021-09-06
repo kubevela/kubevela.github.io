@@ -55,3 +55,10 @@ KubeVela allows you to deploy and manage application resources in a consistent w
 Kubernetes cluster (e.g. local, managed offerings, IoT/edge, on-prem)
 and non-Kubernetes environments on clouds.
 KubeVela itself does not run on the execution infrastructures, but manage them instead.
+
+## What's Next
+
+Here are some recommended next steps:
+
+- Learn KubeVela's user guide to know how to deploy component, let's start from [helm component](../end-user/components/helm).
+- Learn KubeVela's admin guide to learn more about [the OAM model](../platform-engineers/oam/oam-model).

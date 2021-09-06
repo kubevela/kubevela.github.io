@@ -2,7 +2,7 @@
 title:  应用部署计划
 ---
 
-KubeVela 背后的应用交付模型是 [OAM（Open Application Model）](../platform-engineers/oam/oam-model.md)，其核心是将应用部署所需的所有组件和各项运维动作，描述为一个统一的、与基础设施无关的“部署计划”，进而实现在混合环境中进行标准化和高效率的应用交付。这个应用部署计划就是这一节所要介绍的 **Application** 对象，也是 OAM 模型的使用者唯一需要了解的 API。
+KubeVela 背后的应用交付模型是 [OAM（Open Application Model）](../platform-engineers/oam/oam-model)，其核心是将应用部署所需的所有组件和各项运维动作，描述为一个统一的、与基础设施无关的“部署计划”，进而实现在混合环境中进行标准化和高效率的应用交付。这个应用部署计划就是这一节所要介绍的 **Application** 对象，也是 OAM 模型的使用者唯一需要了解的 API。
 
 ## 应用程序部署计划（Application）
 
@@ -37,39 +37,38 @@ spec:
         cmd:
           - sleep
           - '1000'
-  workflow:
-    steps:
-        # 步骤名称
-      - name: deploy-frontend
-        # 指定步骤类型
-        type: apply-component
-        properties:
-          # 指定组件名称
-          component: frontend
-      - name: manual-approval
-        # 工作流内置 suspend 类型的任务，用于暂停工作流
-        type: suspend
-      - name: deploy-backend
-        type: apply-component
-        properties:
-          component: backend  
   policies:
     - name: demo-policy
       type: env-binding
       properties:
-        engine: local
         envs:
           - name: test
-            patch:
-              components:
-                - name: nginx-server
-                  type: webservice
-                  properties:
-                    image: nginx:1.20
-                    port: 80
             placement:
               namespaceSelector:
                 name: test
+          - name: prod
+            placement:
+              namespaceSelector:
+                name: prod                
+  workflow:
+    steps:
+        # 步骤名称
+      - name: deploy-test-env
+        # 指定步骤类型
+        type: multi-env
+        properties:
+          # 指定策略名称
+          policy: demo-policy
+          # 指定部署的环境名称
+          env: test    
+      - name: manual-approval
+        # 工作流内置 suspend 类型的任务，用于暂停工作流
+        type: suspend
+      - name: deploy-prod-env
+        type: multi-env
+        properties:
+          policy: demo-policy
+          env: prod    
 ```
 
 这里的字段对应着：
@@ -77,11 +76,11 @@ spec:
 - `apiVersion`：所使用的 OAM API 版本。
 - `kind`：种类。我们最经常用到的就是 Pod 了。
 - `metadata`：业务相关信息。比如这次要创建的是一个网站。
-- `Spec`：描述我们需要应用去交付什么，告诉 Kubernetes 做成什么样。这里我们放入 KubeVela 的 `components`。
+- `Spec`：描述我们需要应用去交付什么，告诉 Kubernetes 做成什么样。这里我们放入 KubeVela 的 `components`、`policies` 以及 `workflow`。
 - `components`：一次应用交付部署计划所涵盖的全部组件。
 - `traits`：应用交付部署计划中每个组件独立的运维特征。
-- `workflow`：自定义应用交付的工作流，可以不填，则默认依次全部创建。
-- `policies`：应用策略。示例中的 `env-binding` 可以为应用提供差异化配置和环境调度策略。
+- `policies`：作用于整个应用全局的部署策略。
+- `workflow`：自定义应用交付“执行过程”的工作流。
 
 下面这张示意图诠释了它们之间的关系：
 ![image.png](../resources/concepts.png)
@@ -92,7 +91,7 @@ spec:
 
 ## 组件（Components）
 
-KubeVela 内置了常用的组件类型，使用 [KubeVela CLI](../getting-started/quick-install.mdx##3) 命令查看：
+KubeVela 内置了常用的组件类型，使用 [KubeVela CLI](../getting-started/quick-install#3) 命令查看：
 ```
 vela components 
 ```
@@ -116,7 +115,7 @@ worker     	vela-system	deployments.apps                     	Describes long-run
 
 ## 运维特征（Traits）
 
-KubeVela 也内置了常用的运维特征类型，使用 [KubeVela CLI](../getting-started/quick-install.mdx##3) 命令查看：
+KubeVela 也内置了常用的运维特征类型，使用 [KubeVela CLI](../getting-started/quick-install#3-安装-kubevela-cli) 命令查看：
 ```
 vela traits 
 ```
@@ -135,35 +134,36 @@ sidecar    	vela-system	deployments.apps 	              	true          	Inject a
 
 如果你是熟悉 Kubernetes 的平台管理员，也可以了解 KubeVela 中[自定义运维特征](../platform-engineers/traits/customize-trait) 的能力，为你的用户扩展任意运维功能。
 
+## 应用策略（Policy)
+
+应用策略（Policy）负责定义应用级别的部署特征，比如健康检查规则、安全组、防火墙、SLO、检验等模块。
+应用策略的扩展性和功能与运维特征类似，可以灵活的扩展和对接所有云原生应用生命周期管理的能力。相对于运维特征而言，应用策略作用于一个应用的整体，而运维特征作用于应用中的某个组件。
+
+在本例中，我们设置了一个将应用部署到不同环境的策略。
+
 ## 工作流（Workflow）
 
 KubeVela 的工作流机制允许用户自定义应用部署计划中的步骤，粘合额外的交付流程，指定任意的交付环境。简而言之，工作流提供了定制化的控制逻辑，在原有 Kubernetes 模式交付资源（Apply）的基础上，提供了面向过程的灵活性。比如说，使用工作流实现暂停、人工验证、状态等待、数据流传递、多环境灰度、A/B 测试等复杂操作。
 
 工作流是 KubeVela 实践过程中基于 OAM 模型的进一步探索和最佳实践，充分遵守 OAM 的模块化理念和可复用特性。每一个工作流模块都是一个“超级粘合剂”，可以将你任意的工具和流程都组合起来。使得你在现代复杂云原生应用交付环境中，可以通过一份申明式的配置，完整的描述所有的交付流程，保证交付过程的稳定性和便利性。
 
-> 需要说明的是，工作流机制是应用交付过程中的强大补充能力，但并非必填能力，用户在不编写 Workflow 过程的情况下，依旧可以完成组件和运维策略的自动化部署。
+> 需要说明的是，工作流机制是基于“应用和环境”粒度工作的，它提供了“自定义交付过程”的强大能力。一旦定义工作流，就代表用户自己指定交付的执行过程，原有的组件部署过程会被取代。工作流并非必填能力，用户在不编写 Workflow 过程的情况下，依旧可以完成组件和运维策略的自动化部署。
 
 在上面的例子中，我们已经可以看到一些工作流的步骤：
 
-- 这里使用了 `apply-component` 和 `suspend` 类型的工作流步骤：
-  - `apply-component` 类型可以使用户部署指定的组件及其运维特征。
+- 这里使用了 `multi-env` 和 `suspend` 类型的工作流步骤：
+  - `multi-env` 类型可以根据用户定义的策略将应用部署到指定的环境。
   - 在第一步完成后，开始执行 `suspend` 类型的工作流步骤。该步骤会暂停工作流，我们可以查看集群中第一个组件的状态，当其成功运行后，再使用 `vela workflow resume website` 命令来继续该工作流。
   - 当工作流继续运行后，第三个步骤开始部署组件及运维特征。此时我们查看集群，可以看到所以资源都已经被成功部署。
 
-关于工作流，你可以从[指定组件部署](../end-user/workflow/apply-component)这个工作流节点类型开始逐次了解更多 KubeVela 当前的内置工作流节点类型。
+关于工作流，你可以从[指定环境部署](../end-user/workflow/multi-env)这个工作流节点类型开始逐次了解更多 KubeVela 当前的内置工作流节点类型。
 
 如果你是熟悉 Kubernetes 的平台管理员，你可以[学习创建自定义工作流节点类型](../platform-engineers/workflow/steps)，或者通过[设计文档](https://github.com/oam-dev/kubevela/blob/master/design/vela-core/workflow_policy.md)了解工作流系统背后的设计和架构.
-
-## 应用策略（Policy)
-
-应用策略（Policy）负责定义应用级别的部署特征，比如健康检查规则、安全组、防火墙、SLO、检验等模块。
-
-应用策略的扩展性和功能与运维特征类似，可以灵活的扩展和对接所有云原生应用生命周期管理的能力。相对于运维特征而言，应用策略作用于一个应用的整体，而运维特征作用于应用中的某个组件。
 
 ## 下一步
 
 后续步骤:
 
 - 加入 KubeVela 中文社区钉钉群，群号：23310022。
-- [阅读**用户手册**基于开箱即用功能，构建你的应用部署计划](../end-user/component-delivery)。
-- [阅读**管理员手册**了解 KubeVela 的扩展方式和背后的原理](../platform-engineers/oam/oam-model)。
+- 阅读[**用户手册**](../end-user/components/helm)，从 Helm 组件开始了解如何构建你的应用部署计划。
+- 阅读[**管理员手册**](../platform-engineers/oam/oam-model)了解 KubeVela 的扩展方式和背后的 OAM 模型原理。

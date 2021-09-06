@@ -55,16 +55,6 @@ module.exports = {
           position: 'left'
         },
         {
-          type: 'localeDropdown',
-          position: 'right',
-          dropdownItemsAfter: [
-            {
-              to: '/blog/kubevela-official-documentation-translation-event',
-              label: 'Help Us Translate',
-            },
-          ],
-        },
-        {
           href: 'https://github.com/oam-dev/kubevela',
           className: 'header-githab-link',
           position: 'right',
