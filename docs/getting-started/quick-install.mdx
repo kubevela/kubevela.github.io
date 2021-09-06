@@ -188,18 +188,15 @@ sudo mv ./vela /usr/local/bin/vela
 </TabItem>
 </Tabs>
 
-## 4. Enable Helm Support
+## 4. Enable Addons
 
-KubeVela leverages Helm controller from [Flux v2](https://github.com/fluxcd/flux2) to deploy [Helm](https://helm.sh/) based components.
+KubeVela support a dozen of [out-of-box addons](../platform-engineers/advanced-install#Addons),
+please at least enable following addons to make sure KubeVela functioning well:
 
-You can enable this feature by enabling fluxcd addon
-
-```shell
-vela addon enable fluxcd
-```
-
-Or you could install full Flux v2 following its own guide of course.
-
+* Helm and Kustomize Components addons
+  ```shell
+  vela addon enable fluxcd
+  ```
 
 ## 5. Verify
 
@@ -223,4 +220,8 @@ These capabilities are built-in so they are ready to use if showed up. KubeVela 
 
 Also, whenever new capabilities are added in the platform, you will immediately see them in above output.
 
-> See the [advanced installation guide](../platform-engineers/advanced-install) to learn more about installation details.
+## What's Next
+
+* Start to [deploy our first application](./first-application).
+* See the [advanced installation guide](../platform-engineers/advanced-install) to learn more about installation details.
+

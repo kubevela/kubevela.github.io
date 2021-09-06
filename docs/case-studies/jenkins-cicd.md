@@ -132,4 +132,4 @@ Version: 0.1.2
 
 ## More
 
-Refer to the [blog post](/blog/kubevela-jenkins-cicd) for more details about deploying Jenkins + KubeVela and more comprehensive demo for application rolling update.
+Refer to the [blog post](/blog/2021/09/02/kubevela-jenkins-cicd) for more details about deploying Jenkins + KubeVela and more comprehensive demo for application rolling update.

@@ -4,17 +4,12 @@ title: AutoScaler
 
 ## Specification
 
-```
-$ vela show cpuscaler
-# Properties
-+---------+---------------------------------------------------------------------------------+------+----------+---------+
-|  NAME   |                                   DESCRIPTION                                   | TYPE | REQUIRED | DEFAULT |
-+---------+---------------------------------------------------------------------------------+------+----------+---------+
-| min     | Specify the minimal number of replicas to which the autoscaler can scale down   | int  | true     |       1 |
-| max     | Specify the maximum number of of replicas to which the autoscaler can scale up  | int  | true     |      10 |
-| cpuUtil | Specify the average cpu utilization, for example, 50 means the CPU usage is 50% | int  | true     |      50 |
-+---------+---------------------------------------------------------------------------------+------+----------+---------+
-```
+
+| NAME    | DESCRIPTION                                                                     | TYPE | REQUIRED | DEFAULT |
+| ------- | ------------------------------------------------------------------------------- | ---- | -------- | ------- |
+| min     | Specify the minimal number of replicas to which the autoscaler can scale down   | int  | true     | 1       |
+| max     | Specify the maximum number of of replicas to which the autoscaler can scale up  | int  | true     | 10      |
+| cpuUtil | Specify the average cpu utilization, for example, 50 means the CPU usage is 50% | int  | true     | 50      |
 
 ## How to use
 

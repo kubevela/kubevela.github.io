@@ -132,4 +132,4 @@ Version: 0.1.2
 
 ## 更多
 
-详细的环境部署流程以及更加完整的应用滚动更新可以参考[博客](/blog/kubevela-jenkins-cicd)。
+详细的环境部署流程以及更加完整的应用滚动更新可以参考[博客](/blog/2021/09/02/kubevela-jenkins-cicd)。
