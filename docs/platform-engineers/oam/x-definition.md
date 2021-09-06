@@ -379,6 +379,15 @@ In the X-Definition, some runtime context information can be obtained through th
 |         `context.output`         |       Object structure after instantiation of current component                         |        ComponentDefinition, TraitDefinition         |
 | `context.outputs.<resourceName>` |                       Structure after instantiation of current component and trait                     |        ComponentDefinition, TraitDefinition          |
 
+At the same time, in the Workflow system, because the `context` has to act on the application level, it is very different from the above usage. We introduce it separately:
+
+|           Context Variable           |                                     Description                                     |               Scope               |
+| :------------------------------: | :------------------------------------------------------------------------------: | :----------------------------------: |
+|      `context.name`       |                 The name of the current instance of the application                          |        WorkflowStepDefinition        |
+|     `context.namespace`     |                The namespace of the current instance of the application                           |         WorkflowStepDefinition     |
+|      `context.labels`       |                     The labels of the current instance of the application                        |       WorkflowStepDefinition       |
+|     `context.annotations`     |                   The annotations of the current instance of the application                       |       WorkflowStepDefinition        |
+
 
 Please note that all the X-Definition concepts introduced in this section only need to be understood by the platform administrator when they want to expand the functions of KubeVela, and end users do not need to have any perception of these concepts.
 

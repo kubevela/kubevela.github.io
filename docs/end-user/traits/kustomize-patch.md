@@ -71,7 +71,7 @@ In this example, the `kustomize-patch` will patch the content for all Pods with 
 
 ## kustomize-json-patch Specification
 
-You could use [JSON6902 format](https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patchesjson6902/) to patch. Get to know it first:
+You could use [JSON6902 format](https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/patchesjson6902/) to patch the component. Get to know it first:
 
 ```shell
 vela show kustomize-json-patch
