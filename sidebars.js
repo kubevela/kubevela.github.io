@@ -123,11 +123,11 @@ module.exports = {
             'platform-engineers/cue/advanced',
           ]
         },
-        {
-          'Environment System': [
-            'platform-engineers/initializer/basic-initializer',
-          ]
-        },
+        // {
+        //   'Environment System': [
+        //     'platform-engineers/initializer/basic-initializer',
+        //   ]
+        // },
         {
           'Addons': [
             'end-user/addons/introduction',
