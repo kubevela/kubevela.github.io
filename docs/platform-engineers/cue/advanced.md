@@ -156,7 +156,7 @@ In this example, we expose the following parameters to the user:
 
 * Image name, allowing users to customize the image
 * Instance name, allowing users to customize the instance name of the generated StatefulSet object and Service object
-* The number of copies, the number of copies of the generated object
+* The number of replica, the number of copies of the generated object
 
 
 		... # Omit other unmodified fields
@@ -436,10 +436,11 @@ The out-of-the-box capabilities provided by KubeVela, including components, trai
 
 ## Next
 
-* Get to know about [customize component](../components/custom-component)
-* Get to know about [customize trait](../traits/customize-trait)
-* Get to know about [customize policy](../policy/custom-policy)
-* Get to know about [customize workflow](../workflow/steps)
+Get to know about how to customize:
+* [Component](../components/custom-component)
+* [Trait](../traits/customize-trait)
+* [Policy](../policy/custom-policy)
+* [Workflow](../workflow/steps)
 
 [1]:	../oam/oam-model
 [2]:	../oam/x-definition
