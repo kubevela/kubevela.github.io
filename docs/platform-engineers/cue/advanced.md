@@ -205,7 +205,7 @@ After modification, use `vela def apply` to install to the cluster:
 	$ vela def apply my-stateful.cue
 	ComponentDefinition my-stateful in namespace vela-system updated.
 
-This modification process takes effect in real time, and the user can immediately see that the my-stateful component in the system has added new parameters.
+You can see the parameters of my-stateful ComponentDefinition as follows:
 
 	$ vela show my-stateful
 	# Properties
