@@ -2,7 +2,7 @@
 title: CUE Advanced
 ---
 
-This section will introduce how to use CUE to deliver complete modular functions, so that your platform can dynamically expand functions as user needs change, adapt to various users and scenarios, and meet the iterative demands of the company's long-term business development.
+This section will introduce how to use CUE to deliver KubeVela modules. You can can dynamically expand the platform as user needs change, adapt to growing number of users and scenarios, and meet the iterative demands of the company's long-term business development.
 
 ## Convert Kubernetes API Objects Into Custom Components
 
