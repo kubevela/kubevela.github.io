@@ -3,11 +3,11 @@ title:  Alibaba Cloud ACK
 
 ---
 
-# Description
+# 描述
 
 Terraform configuration for Alibaba Cloud ACK cluster
 
-# Sample
+# 示例
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -25,12 +25,12 @@ spec:
 
 ```
 
-# Specification
+# 参数说明
 
 
 ## Properties
 
-Name | Description | Type | Required | Default
+名字 | 描述 | 类型 | 是否必须 | 默认值
 ------------ | ------------- | ------------- | ------------- | ------------- 
 k8s_worker_number | The number of worker nodes in kubernetes cluster. | number | false |
 zone_id | Availability Zone ID | string | false |
@@ -60,7 +60,7 @@ writeConnectionSecretToRef | The secret which the cloud resource connection will
 
 ### writeConnectionSecretToRef
 
-Name | Description | Type | Required | Default
+名字 | 描述 | 类型 | 是否必须 | 默认值
 ------------ | ------------- | ------------- | ------------- | ------------- 
 name | The secret name which the cloud resource connection will be written to | string | false |
 namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
