@@ -6,7 +6,7 @@ This section will introduce how to use CUE to deliver complete modular functions
 
 ## Convert Kubernetes API Objects Into Custom Components
 
-Let's take the official [StatefulSet object][5] of Kubernetes as an example to see how to use KubeVela to build custom modular functions and provide capabilities.
+Let's take the [Kubernetes StatefulSet][5] as an example to show how to use KubeVela to build custom modules and provide capabilities.
 
 We save the YAML example of StatefulSet in the official document locally and name it as `my-stateful.yaml`, then execute commande as below:
 
