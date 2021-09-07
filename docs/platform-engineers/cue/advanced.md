@@ -237,7 +237,7 @@ You can specify the three new parameters in the application:
 
 Save the file locally and name it `app-stateful.yaml`, execute `kubectl apply -f app-stateful.yaml` to update the application, you can see that the name, image, and number of instances of the StatefulSet object have been updated.
 
-## Debugging Modular Functions
+## Dry-run
 
 In order to ensure that the user's application can run correctly with the parameters, you can also use the `vela dry-run` command to verify the trial run of your template.
 
