@@ -31,14 +31,14 @@ spec:
 
 名字 | 描述 | 类型 | 是否必须 | 默认值
 ------------ | ------------- | ------------- | ------------- | ------------- 
-bucket | OSS bucket name | string | true |
-acl | OSS bucket ACL, supported 'private', 'public-read', 'public-read-write' | string | true |
-writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |
+bucket | OSS bucket 名字 | string | 是 |
+acl | OSS bucket ACL, 支持 'private', 'public-read', 'public-read-write' | string | 是 |
+writeConnectionSecretToRef | 云资源连接信息即将写入的 secret 的信息 | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | 否 |
 
 
 #### writeConnectionSecretToRef
 
 名字 | 描述 | 类型 | 是否必须 | 默认值
 ------------ | ------------- | ------------- | ------------- | ------------- 
-name | The secret name which the cloud resource connection will be written to | string | true |
-namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+name | 云资源连接信息即将写入的 secret 的名字 | string | 是 |
+namespace | 云资源连接信息即将写入的 secret 的 namespace | string | 否 |
