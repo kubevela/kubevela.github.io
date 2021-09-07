@@ -8,7 +8,7 @@ This section will introduce how to use CUE to deliver complete modular functions
 
 Let's take the [Kubernetes StatefulSet][5] as an example to show how to use KubeVela to build custom modules and provide capabilities.
 
-We save the YAML example of StatefulSet in the official document locally and name it as `my-stateful.yaml`, then execute commande as below:
+Save the YAML example of StatefulSet in the official document locally and name it as `my-stateful.yaml`, then execute commande as below:
 
 	 vela def init my-stateful -t component --desc "My StatefulSet component." --template-yaml ./my-stateful.yaml -o my-stateful.cue
 
