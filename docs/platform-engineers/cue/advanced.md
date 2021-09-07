@@ -216,7 +216,7 @@ This modification process takes effect in real time, and the user can immediatel
 	| image    |             | string | true     |         |
 	+----------+-------------+--------+----------+---------+
 
-The modification of the ComponentDefinition will not affect the application that is already running. The new ComponentDefinition will take effect when the application is modified and redeployed next time.
+Updating the ComponentDefinition will not affect existing Applications. It will take effect only after updating the Applications next time.
 
 The end user can specify these three new parameters in the application:
 
