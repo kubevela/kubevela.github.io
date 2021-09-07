@@ -40,7 +40,7 @@ View the generated "my-stateful.cue" file:
 		parameter: {}
 	}
 
-Let's do some fine-tuning of this automatically generated custom component:
+Modify the generated file as follows:
 
 1. The example of the official StatefulSet website is a composite component composed of two objects `StatefulSet` and `Service`. According to KubeVela [Rules for customize components] [6], in composite components, core workloads such as StatefulSet need to be represented by the `template.output` field, and other auxiliary objects are represented by `template.outputs`, so we make some adjustments and all the automatically generated output and outputs are switched.
 2. Then we fill in the apiVersion and kind data of the core workload into the part marked as `<change me>`
