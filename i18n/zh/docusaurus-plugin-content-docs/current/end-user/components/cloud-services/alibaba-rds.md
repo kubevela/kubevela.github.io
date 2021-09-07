@@ -32,15 +32,15 @@ spec:
 
 名字 | 描述 | 类型 | 是否必须 | 默认值
 ------------ | ------------- | ------------- | ------------- | ------------- 
-password | RDS instance account password | string | true |
-instance_name | RDS instance name | string | true |
-account_name | RDS instance user account name | string | true |
-writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |
+password | RDS 实例账号密码 | string | 是 |
+instance_name | RDS 实例名 | string | 是 |
+account_name | RDS 实例账号名 | string | 是 |
+writeConnectionSecretToRef | 云资源连接信息即将写入的 secret 的信息 | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | 否 |
 
 
 #### writeConnectionSecretToRef
 
 名字 | 描述 | 类型 | 是否必须 | 默认值
 ------------ | ------------- | ------------- | ------------- | ------------- 
-name | The secret name which the cloud resource connection will be written to | string | true |
-namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+name | 云资源连接信息即将写入的 secret 的名字 | string | 是 |
+namespace | 云资源连接信息即将写入的 secret 的 namespace | string | 否 |

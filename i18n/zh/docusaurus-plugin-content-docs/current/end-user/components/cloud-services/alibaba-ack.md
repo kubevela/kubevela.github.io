@@ -32,35 +32,35 @@ spec:
 
 名字 | 描述 | 类型 | 是否必须 | 默认值
 ------------ | ------------- | ------------- | ------------- | ------------- 
-k8s_worker_number | The number of worker nodes in kubernetes cluster. | number | false |
-zone_id | Availability Zone ID | string | false |
-node_cidr_mask | The node cidr block to specific how many pods can run on single node. Valid values: [24-28]. | number | false |
-proxy_mode | Proxy mode is option of kube-proxy. Valid values: 'ipvs','iptables'. Default to 'iptables'. | string | false |
-password | The password of ECS instance. | string | false |
-k8s_version | The version of the kubernetes version.  Valid values: '1.16.6-aliyun.1','1.14.8-aliyun.1'. Default to '1.16.6-aliyun.1'. | string | false |
-memory_size | Memory size used to fetch instance types. | number | false |
-vpc_cidr | The cidr block used to launch a new vpc when 'vpc_id' is not specified. | string | false |
-vswitch_cidrs | List of cidr blocks used to create several new vswitches when 'vswitch_ids' is not specified. | list | false |
-master_instance_types | The ecs instance types used to launch master nodes. | list | false |
-worker_instance_types | The ecs instance types used to launch worker nodes. | list | false |
-install_cloud_monitor | Install cloud monitor agent on ECS. | bool | false |
-k8s_service_cidr | The kubernetes service cidr block. It cannot be equals to vpc's or vswitch's or pod's and cannot be in them. | string | false |
-cpu_core_count | CPU core count is used to fetch instance types. | number | false |
-vpc_name | The vpc name used to create a new vpc when 'vpc_id' is not specified. Default to variable `example_name` | string | false |
-vswitch_name_prefix | The vswitch name prefix used to create several new vswitches. Default to variable 'example_name'. | string | false |
-number_format | The number format used to output. | string | false |
-vswitch_ids | List of existing vswitch id. | list | false |
-k8s_name_prefix | The name prefix used to create several kubernetes clusters. Default to variable `example_name` | string | false |
-new_nat_gateway | Whether to create a new nat gateway. In this template, a new nat gateway will create a nat gateway, eip and server snat entries. | bool | false |
-enable_ssh | Enable login to the node through SSH. | bool | false |
-cpu_policy | kubelet cpu policy. Valid values: 'none','static'. Default to 'none'. | string | false |
-k8s_pod_cidr | The kubernetes pod cidr block. It cannot be equals to vpc's or vswitch's and cannot be in them. | string | false |
-writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |
+k8s_worker_number | Worker 节点数 | number | 否 |
+zone_id | Availability Zone ID | string | 否 |
+node_cidr_mask | 节点 IP 数量，通过指定网络的 CIDR 来确定IP的数量，只对于 Flannel 网络类型集群生效 | number | 否 |
+proxy_mode | kube-proxy 代理模式，支持 'ipvs'、'iptables'，默认是 'iptables'. | string | 否 |
+password | ECS 示例的 SSH 登录密码 | string | 否 |
+k8s_version | 集群版本，与 Kubernetes 社区基线版本保持一致。建议选择最新版本，若不指定，默认使用最新版本 | string | 否 |
+memory_size | 实例规格的内存大小 | number | 否 |
+vpc_cidr | VPC CIDR | string | 否 |
+vswitch_cidrs | VSwitch CIDR 列表 | list | 否 |
+master_instance_types | Master 节点实例类型 | list | 否 |
+worker_instance_types | Worker 节点实例类型 | list | 否 |
+install_cloud_monitor | 是否在 ECS 上安装云监控 agent | bool | 否 |
+k8s_service_cidr | Kubernetes Service CIDR，不能与 VPC、VSwitch 或 Pod 的一样或是他们的子集 | string | 否 |
+cpu_core_count | 实例规格的 CPU 核数 | number | 否 |
+vpc_name | VPC 名字 | string | 否 |
+vswitch_name_prefix | VSwitch 名字前缀 | string | 否 |
+number_format | 数字的类型，用于给多个集群命名 | string | 否 |
+vswitch_ids | VSwitch ID 列表 | list | 否 |
+k8s_name_prefix | Kubernetes 集群名字前缀 | string | 否 |
+new_nat_gateway | 是否创建新的 NAT 网关 | bool | 否 |
+enable_ssh | 是否启用 SSH 登陆 | bool | 否 |
+cpu_policy | 节点 CPU 管理策略。当集群版本在1.12.6及以上时支持以下两种策略：'static'、'none'，默认是 'none' | string | 否 |
+k8s_pod_cidr | Kubernetes pod CIDR，不能与 VPC、VSwitch 的一样或是他们的子集 | string | 否 |
+writeConnectionSecretToRef | 云资源连接信息即将写入的 secret 的信息 | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | 否 |
 
 
 #### writeConnectionSecretToRef
 
 名字 | 描述 | 类型 | 是否必须 | 默认值
 ------------ | ------------- | ------------- | ------------- | ------------- 
-name | The secret name which the cloud resource connection will be written to | string | false |
-namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+name | 云资源连接信息即将写入的 secret 的名字 | string | 是 |
+namespace | 云资源连接信息即将写入的 secret 的 namespace | string | 否 |
