@@ -218,7 +218,7 @@ This modification process takes effect in real time, and the user can immediatel
 
 Updating the ComponentDefinition will not affect existing Applications. It will take effect only after updating the Applications next time.
 
-The end user can specify these three new parameters in the application:
+You can specify the three new parameters in the application:
 
 ```
 	apiVersion: core.oam.dev/v1beta1
