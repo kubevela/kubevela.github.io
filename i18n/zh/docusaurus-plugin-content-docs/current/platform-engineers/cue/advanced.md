@@ -44,7 +44,7 @@ KubeVela 使用 [CUE][3] 配置语言作为管理用户模块化交付的核心�
 
 下面我们来对这个自动生成的自定义组件做一些微调：
 
-1. 根据 KubeVela [自定义组件的规则][6]，StatefulSet 官网的例子是由 `StatefulSet`和 `Service` 两个对象构成的一个复合组件，复合组件中，核心工作负载由 `template.output`字段表示，其他辅助对象用 `template.outputs`表示，所以我们将内容做一些调整，将自动生成的 output 和 outputs 中的全部调换。
+1. StatefulSet 官网的例子是由 `StatefulSet`和 `Service` 两个对象构成的一个复合组件。而根据 KubeVela [自定义组件的规则][6]，在复合组件中，比如 StatefulSet 这样的核心工作负载需要由 `template.output`字段表示，其他辅助对象用 `template.outputs`表示，所以我们将内容做一些调整，将自动生成的 output 和 outputs 中的全部调换。
 2. 然后我们将核心工作负载的 apiVersion 和 kind 数据填写到标注为 `<change me>`的部分
 
 修改后可以用 `vela def vet`做一下格式检查和校验。
