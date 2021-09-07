@@ -350,7 +350,7 @@ KubeVela has built-in application [required context][9], you can configure it ac
 
 ## Add Traits On Demand
 
-For new user needs, in addition to modifying ComponentDefinitions and adding parameters, you can also use the TraitDefinition to add configurations as needed. On the one hand, KubeVela has built-in a large number of general operation and maintenance capabilities, which can meet the needs such as: adding labels, annotations, injecting environment variables, sidecars, adding volumes, and so on. On the other hand, like custom component does, you can [Customize Trait ][10] to meet the needs of more configuration and flexible assembly.
+n addition to modifying ComponentDefinitions and adding parameters, you can also use the TraitDefinition to patch configurations to Components.  KubeVela has built-in operations to meet the following needs: adding labels, annotations, injecting environment variables, sidecars, adding volumes, and so on.  You can also [customize Trait][10] to do more flexible patching.
 
 You can use `vela traits` to view, the traits marked with `*` are general traits, which can operate on common Kubernetes resource objects.
 
