@@ -328,7 +328,7 @@ spec:
 You can also use `vela dry-run -h` to view more available function parameters.
 
 
-## Use `contxt` to Reduce Parameters
+## Use `context` to get runtime information
 
 In our Application example above, the name field in the properties and the name field of the Component are the same. So we can use the `context` keyword that carries context information in the template, where `context.name` is the runtime component Name, thus the name parameter in `parameter` is no longer needed.
 
