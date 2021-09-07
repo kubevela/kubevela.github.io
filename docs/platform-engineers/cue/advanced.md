@@ -125,7 +125,7 @@ Install ComponentDefinition into the Kubernetes cluster:
 	$ vela def apply my-stateful.cue
 	ComponentDefinition my-stateful created in namespace vela-system.
 
-At this point, the end user of the platform can already see that a `my-stateful` component is available through the `vela components` command.
+You can see that a `my-stateful` component  via `vela components` command:
 
 	$ vela components
 	NAME       	NAMESPACE  	WORKLOAD                             	DESCRIPTION
