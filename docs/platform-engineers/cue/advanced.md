@@ -121,6 +121,7 @@ The file after two steps of changes is as follows:
 	}
 
 Install ComponentDefinition into the Kubernetes cluster:
+
 	$ vela def apply my-stateful.cue
 	ComponentDefinition my-stateful created in namespace vela-system.
 
@@ -350,7 +351,7 @@ KubeVela has built-in application [required context][9], you can configure it ac
 
 ## Add Traits On Demand
 
-n addition to modifying ComponentDefinitions and adding parameters, you can also use the TraitDefinition to patch configurations to Components.  KubeVela has built-in operations to meet the following needs: adding labels, annotations, injecting environment variables, sidecars, adding volumes, and so on.  You can also [customize Trait][10] to do more flexible patching.
+In addition to modifying ComponentDefinitions and adding parameters, you can also use the TraitDefinition to patch configurations to Components.  KubeVela has built-in operations to meet the following needs: adding labels, annotations, injecting environment variables, sidecars, adding volumes, and so on.  You can also [customize Trait][10] to do more flexible patching.
 
 You can use `vela traits` to view, the traits marked with `*` are general traits, which can operate on common Kubernetes resource objects.
 
@@ -445,9 +446,9 @@ The out-of-the-box capabilities provided by KubeVela, including components, trai
 [3]:	../cue/basic
 [4]:	../cue/definition-edit
 [5]:	https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
-[6]:	../components/custom-component#%E4%BA%A4%E4%BB%98%E4%B8%80%E4%B8%AA%E5%A4%8D%E5%90%88%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6
-[7]:	../cue/basic#%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA-cue-%E6%A8%A1%E6%9D%BF
-[9]:	../oam/x-definition#%E6%A8%A1%E5%9D%97%E5%AE%9A%E4%B9%89%E8%BF%90%E8%A1%8C%E6%97%B6%E4%B8%8A%E4%B8%8B%E6%96%87
+[6]:	../components/custom-component#composition
+[7]:	../cue/basic#cue-templating-and-references
+[9]:	../oam/x-definition#x-definition-runtime-context
 [10]:	../traits/patch-trait
 [11]:	../traits/customize-trait
 
