@@ -125,7 +125,7 @@ Install ComponentDefinition into the Kubernetes cluster:
 	$ vela def apply my-stateful.cue
 	ComponentDefinition my-stateful created in namespace vela-system.
 
-At this point, the end user of the platform can already see that a `my-stateful` component is available through the `vela components` command.
+You can see that a `my-stateful` component  via `vela components` command:
 
 	$ vela components
 	NAME       	NAMESPACE  	WORKLOAD                             	DESCRIPTION
@@ -133,7 +133,7 @@ At this point, the end user of the platform can already see that a `my-stateful`
 	my-stateful	vela-system	statefulsets.apps                    	My StatefulSet component.
 	... 
 
-By publishing the `Application` of KubeVela to the cluster, we can pull up the StatefulSet and Service objects we just defined.
+Apply the   KubeVela `Application` to the cluster:
 
 	cat <<EOF | kubectl apply -f -
 	apiVersion: core.oam.dev/v1beta1
@@ -205,7 +205,7 @@ After modification, use `vela def apply` to install to the cluster:
 	$ vela def apply my-stateful.cue
 	ComponentDefinition my-stateful in namespace vela-system updated.
 
-This modification process takes effect in real time, and the user can immediately see that the my-stateful component in the system has added new parameters.
+You can see the parameters of my-stateful ComponentDefinition as follows:
 
 	$ vela show my-stateful
 	# Properties
