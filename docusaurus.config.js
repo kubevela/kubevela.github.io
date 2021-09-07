@@ -55,8 +55,12 @@ module.exports = {
           position: 'left'
         },
         {
+          type: 'localeDropdown',
+          position: 'right',
+        },
+        {
           href: 'https://github.com/oam-dev/kubevela',
-          className: 'header-githab-link',
+          className: 'header-github-link',
           position: 'right',
         },
       ],
