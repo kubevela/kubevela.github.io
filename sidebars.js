@@ -33,9 +33,9 @@ module.exports = {
             'end-user/components/kustomize',
             {
               'Cloud Services': [
-                'end-user/components/cloud-services/alicloud-ack',
-                'end-user/components/cloud-services/alicloud-rds',
-                'end-user/components/cloud-services/alicloud-oss',
+                'end-user/components/cloud-services/alibaba-ack',
+                'end-user/components/cloud-services/alibaba-rds',
+                'end-user/components/cloud-services/alibaba-oss',
               ]
             },
             {

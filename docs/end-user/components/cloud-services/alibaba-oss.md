@@ -2,11 +2,11 @@
 title:  Alibaba Cloud OSS
 ---
 
-# Description
+## Description
 
 Terraform configuration for Alibaba Cloud OSS object
 
-# Samples
+## Samples
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -24,10 +24,10 @@ spec:
           name: oss-conn
 ```
 
-# Specification
+## Specification
 
 
-## Properties
+### Properties
 
 Name | Description | Type | Required | Default
 ------------ | ------------- | ------------- | ------------- | ------------- 
@@ -36,7 +36,7 @@ acl | OSS bucket ACL, supported 'private', 'public-read', 'public-read-write' | 
 writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |
 
 
-### writeConnectionSecretToRef
+#### writeConnectionSecretToRef
 
 Name | Description | Type | Required | Default
 ------------ | ------------- | ------------- | ------------- | ------------- 

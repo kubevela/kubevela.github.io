@@ -1,12 +1,12 @@
 ---
-title:  Alibaba Cloud OSS
+title:  阿里云 OSS
 ---
 
-# 描述
+## 描述
 
-Terraform configuration for Alibaba Cloud OSS object
+用于部署阿里云 OSS 的组件说明
 
-# 示例
+## 示例
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -24,10 +24,10 @@ spec:
           name: oss-conn
 ```
 
-# 参数说明
+## 参数说明
 
 
-## Properties
+### Properties
 
 名字 | 描述 | 类型 | 是否必须 | 默认值
 ------------ | ------------- | ------------- | ------------- | ------------- 
@@ -36,7 +36,7 @@ acl | OSS bucket ACL, supported 'private', 'public-read', 'public-read-write' | 
 writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |
 
 
-### writeConnectionSecretToRef
+#### writeConnectionSecretToRef
 
 名字 | 描述 | 类型 | 是否必须 | 默认值
 ------------ | ------------- | ------------- | ------------- | ------------- 
