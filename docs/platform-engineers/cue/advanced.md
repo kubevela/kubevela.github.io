@@ -133,7 +133,7 @@ You can see that a `my-stateful` component  via `vela components` command:
 	my-stateful	vela-system	statefulsets.apps                    	My StatefulSet component.
 	... 
 
-Apply the   KubeVela `Application` to the cluster:
+Apply the KubeVela `Application` to the cluster:
 
 	cat <<EOF | kubectl apply -f -
 	apiVersion: core.oam.dev/v1beta1
