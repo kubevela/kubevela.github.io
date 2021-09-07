@@ -150,7 +150,7 @@ Apply the   KubeVela `Application` to the cluster:
 
 ## Define Customized Parameters For Component
 
-In order to meet the changing needs of users, we need to expose some parameters in the last `parameter`. You can learn about the syntax of parameters in [CUE Basic][7].
+In previous section we have defined a ComponentDefinition that has no parameter. In this section we will show how to expose parameters.
 
 In this example, we expose the following parameters to the user:
 
