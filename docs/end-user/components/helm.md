@@ -42,7 +42,7 @@ We also see that the PHASE of the app-delivering-chart APP is running and the ST
 ### Attributes
 
 | Parameters      | Description                                                                                                                                                                                                                                                                                                                                                              | Example                            |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------- |
+| --------------- | ----------- | ---------------------------------- |
 | repoType        | required, indicates where it's from                                                                                                                                                                                                                                                                                                                                      | Helm                               |
 | pullInterval    | optional, synchronize with Helm Repo, tunning interval and 5 minutes by default                                                                                                                                                                                                                                                                                          | 10m                                |
 | url             | required, Helm Reop address, it supports http/https                                                                                                                                                                                                                                                                                                                      | https://charts.bitnami.com/bitnami |
@@ -58,7 +58,7 @@ We also see that the PHASE of the app-delivering-chart APP is running and the ST
 ## Deploy From OSS bucket
 
 | Parameters | Description | Example |
-| ---------- | ----------- | ------- ||
+| ---------- | ----------- | ------- |
 | repoType        | required, indicates where it's from                                                                                             | oss                         |
 | pullInterval    | optional, synchronize with bucket, tunning interval and 5 minutes by default                                                    | 10m                         |
 | url             | required, bucket's endpoint and no need to fill in with scheme                                                                  | oss-cn-beijing.aliyuncs.com |
@@ -105,7 +105,7 @@ spec:
 ## Deploy From Git Repo
 
 | Parameters | Description | Example |
-| ---------- | ----------- | ------- ||
+| ---------- | ----------- | ------- |
 | repoType        | required, indicates where it's from                                                                                                                                                                                                                                                           | git                                             |
 | pullInterval    | optional, synchronize with Git Repo, tunning interval and 5 minutes by default                                                                                                                                                                                                                | 10m                                             |
 | url             | required, Git Repo address                                                                                                                                                                                                                                                                    | https://github.com/oam-dev/terraform-controller |
