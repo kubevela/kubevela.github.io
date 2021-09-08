@@ -11,7 +11,7 @@ KubeVela 通过云资源组件（Component）和运维特征（Trait）里的资
 我们通过 [KubeVela CLI](../install#3-安装-kubevela-cli)来查看，当前系统中可用的云资源组件类型：
 
 ```shell
-$ vela components
+$ vela components --label type=terraform
 NAME        NAMESPACE  	WORKLOAD                             	DESCRIPTION                                                            
 alibaba-ack	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud ACK cluster       
 alibaba-oss	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud OSS object        
