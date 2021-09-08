@@ -1,5 +1,5 @@
 ---
-title:  集成云资源 // Deprecated
+title:  集成云资源
 ---
 
 在面向云开发逐渐成为范式的这个时代，我们希望集成来源不同、类型不同云资源的需求非常迫切。不管是最基本的对象存储、云数据库，还是更多的负载均衡等等，也面临着混合云、多云等复杂环境所带来的挑战，而 KubeVela 都可以很好满足你的需要。
@@ -16,19 +16,6 @@ NAME        NAMESPACE  	WORKLOAD                             	DESCRIPTION
 alibaba-ack	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud ACK cluster       
 alibaba-oss	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud OSS object        
 alibaba-rds	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud RDS object        
-```
-
-KubeVela 对云资源的集成流程大致如下：
-
- - 熟悉各云服务商的鉴权机制，获取并准备需要的 secret 或者 token 等密钥
- - 将鉴权信息保存到 Terraform 的全局配置中，下一步校验
- - KubeVela 通过 Terraform 控制器完成鉴权校验，通过后自动拉起对应云资源
-
-## 激活云资源权限
-
-首先准备好，要访问对应云厂商的密钥信息后，使用 `vela addon enable` 指令来全局配置鉴权信息：
-```shell
-vela addon enable terraform/provider-alicloud --ALICLOUD_ACCESS_KEY_ID=<你的秘钥 Key ID> -ALICLOUD_SECRET_ACCESS_KEY=<你的秘钥密码>
 ```
 
 下面我们以阿里云关系型数据库（RDS）的例子，作为示例进行讲解。
