@@ -18,7 +18,7 @@ alibaba-oss	vela-system	configurations.terraform.core.oam.dev	Terraform configur
 alibaba-rds	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud RDS object        
 ```
 
-Refer to [Terraform cloud resources usages docs](./terraform) to see to deploy these Cloud resource components.
+Refer to [Terraform cloud resources usages docs](./cloud-services-list) to see to deploy these Cloud resource components.
 
 Let's deploy the [application](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/application.yaml) below to provision Alibaba Cloud OSS and RDS cloud resources, and consume them by the web component.
 
