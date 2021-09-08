@@ -1,21 +1,21 @@
 ---
-title:  Installation
+title:  快速安装
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-> For upgrading existing KubeVela, please read the [upgrade guide](../platform-engineers/advanced-install/#upgrade).
+> 如果是要升级现有的 KubeVela，请直接阅读[升级指南](./platform-engineers/advanced-install#升级).
 
-## 1. Choose Control Plane Cluster
+## 1. 选择放置控制平面的集群
 
-Requirements:
-- Kubernetes cluster >= v1.18.0
-- `kubectl` installed and configured
+确保:
+- Kubernetes 集群版本 >= v1.18.0
+- 安装并配置 kubectl 命令行工具
 
-KubeVela relies on Kubernetes as control plane. The control plane could be any managed Kubernetes offering or your own cluster. 
+KubeVela 得以成为控制平面，主要是依赖 Kubernetes 。它可以放置在任何托管 Kubernetes 作为底座的产品或你自己的集群中。
 
-For local deployment and test, you could use `kind` or `minikube`. For production usage, you could use Kubernetes services provided by cloud providers.
+你可以使用 kind 或 minikube 在本地部署、测试 KubeVela，或者使用云厂商提供的 Kubernetes 服务做生产部署。
 
 <Tabs
 className="unique-tabs"
@@ -25,17 +25,16 @@ values={[
 {label: 'Minikube', value: 'minikube'},
 {label: 'Cloud Provider', value: 'cloudprovider'},
 ]}>
+
 <TabItem value="minikube">
 
-Follow the minikube [installation guide](https://minikube.sigs.k8s.io/docs/start/).
-
-Then spins up a minikube cluster
+[安装 minikube](https://minikube.sigs.k8s.io/docs/start/) 后，创建一个集群:
 
 ```shell script
 minikube start
 ```
 
-<details> <summary> Install ingress to enable service route </summary>
+<details> <summary> 安装 ingress 启用路由访问功能 </summary>
 
 ```shell script
 minikube addons enable ingress
@@ -46,9 +45,7 @@ minikube addons enable ingress
 
 <TabItem value="kind">
 
-Follow [this guide](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) to install kind.
-
-Then spins up a kind cluster:
+安装 [Kind 命令行工具](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)后，创建集群:
 
 ```shell script
 cat <<EOF | kind create cluster --image=kindest/node:v1.18.15 --config=-
@@ -72,52 +69,54 @@ nodes:
 EOF
 ```
 
-<details> <summary> Install ingress to enable service route </summary>
+<details> <summary> 安装 ingress 启用路由访问功能 </summary>
 
 ```shell script
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 ```
 
 </details>
-</TabItem>
+
+  </TabItem>
 
 <TabItem value="cloudprovider">
 
-* Alibaba Cloud [ACK Service](https://www.aliyun.com/product/kubernetes)
-* AWS [EKS Service](https://aws.amazon.com/cn/eks)
-* Azure [AKS Service](https://azure.microsoft.com/en-us/services/kubernetes-service)
-* Google [GKE Service](https://cloud.google.com/kubernetes-engine)
+* 阿里云 [ACK 服务](https://www.aliyun.com/product/kubernetes)
+* AWS [EKS 服务](https://aws.amazon.com/cn/eks)
+* Azure [AKS 服务](https://azure.microsoft.com/en-us/services/kubernetes-service)
+* Google [GKE 服务](https://cloud.google.com/kubernetes-engine)
 
-> Please ensure [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/) is installed and enabled.
+> 注意: 请确保云厂商的集群[已安装或启用 ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/) 以保证路由访问功能可正常使用。
 
-</TabItem>  
+</TabItem>
 </Tabs>
 
 
-## 2. Install KubeVela
+## 2. 安装 KubeVela
 
-1. Add helm chart repo for KubeVela
-    ```shell script
-    helm repo add kubevela https://charts.kubevela.net/core
-    ```
+1. 添加 KubeVela helm chart 仓库
+  ```shell script
+  helm repo add kubevela https://charts.kubevela.net/core
+  ```
 
-2. Update the chart repo
-    ```shell script
-    helm repo update
-    ```
+2. 更新 chart 仓库
+  ```shell script
+  helm repo update
+  ```
    
-3. Install KubeVela
-    ```shell script
-    helm install --create-namespace -n vela-system kubevela kubevela/vela-core
-    ```
-    You can refer to [advanced installation guide](../platform-engineers/advanced-install) for more custom ways.
+3. 安装 KubeVela
+  ```shell script
+  helm install --create-namespace -n vela-system kubevela kubevela/vela-core
+  ```
 
-4. Verify chart installed successfully
+你可以参考 [`自定义安装`](./platform-engineers/advanced-install) 获取更多安装模式和功能。
+
+4. 验证 chart 安装是否成功
     ```shell script
     helm test kubevela -n vela-system
     ```
 
-    <details> <summary> Click to see the expected output of helm test </summary>
+    <details> <summary> 点击查看期望输出 </summary>
 
     ```shell
     Pod kubevela-application-test pending
@@ -143,11 +142,11 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 
     </details>
 
-## 3. Get KubeVela CLI
+## 3. 安装 KubeVela CLI
 
-KubeVela CLI gives you a simplified workflow to manage applications with optimized output. It is not mandatory though.
+KubeVela CLI 可以让你更便捷地来管理应用交付。不过，它不是必须使用的。
 
-KubeVela CLI could be [installed as kubectl plugin](../platform-engineers/advanced-install#install-kubectl-vela-plugin), or install as standalone binary.
+KubeVela CLI 也可以通过 [kubectl plugin](./platform-engineers/advanced-install#install-kubectl-vela-plugin) 的方式来安装，或者通过二进制文件.
 
 <Tabs
     className="unique-tabs"
@@ -175,11 +174,12 @@ powershell -Command "iwr -useb https://kubevela.io/script/install.ps1 | iex"
 
 **macOS/Linux**
 
-Update your brew firstly.
+先更新下你的 brew
+
 ```shell script
 brew update
 ```
-Then install kubevela client.
+紧接着安装 KubeVela
 
 ```shell script
 brew install kubevela
@@ -187,39 +187,38 @@ brew install kubevela
 </TabItem>
 <TabItem value="download">
 
-- Download the latest `vela` binary from the [releases page](https://github.com/oam-dev/kubevela/releases).
-- Unpack the `vela` binary and add it to `$PATH` to get started.
+- 通过[发布日志](https://github.com/oam-dev/kubevela/releases)下载最新的 `vela` 二进制文件。
+- 解压二进制文件，并且在 `$PATH` 中配好环境变量，就搞定啦。
 
 ```shell script
 sudo mv ./vela /usr/local/bin/vela
 ```
 
-> Known Issue(https://github.com/oam-dev/kubevela/issues/625): 
-> If you're using mac, it will report that “vela” cannot be opened because the developer cannot be verified.
+> [安装提示](https://github.com/oam-dev/kubevela/issues/625): 
+> 如果你使用的是 Mac 系统，它会弹出 “vela” 无法打开的警告，因为来自开发者的包无法验证。
 >
-> The new version of MacOS is stricter about running software you've downloaded that isn't signed with an Apple developer key. And we haven't supported that for KubeVela yet.  
-> You can open your 'System Preference' -> 'Security & Privacy' -> General, click the 'Allow Anyway' to temporarily fix it.
+> MacOS 对能够在系统中运行的软件，采取了更加严格的限制。你暂时可以通过打开 'System Preference' -> 'Security & Privacy' -> General 并点击 'Allow Anyway' 来解决这个问题。
 
 </TabItem>
 </Tabs>
 
-## 4. Enable Addons
+## 4. 安装插件
 
-KubeVela support a dozen of [out-of-box addons](../platform-engineers/advanced-install#Addons),
-please at least enable following addons to make sure KubeVela functioning well:
+KubeVela 支持一系列[开箱即用的插件](./platform-engineers/advanced-install#插件列表)，建议您至少开启以下插件：
 
-* Helm and Kustomize Components addons
+* Helm 以及 Kustomize 组件功能插件
   ```shell
   vela addon enable fluxcd
   ```
 
-## 5. Verify
 
-* Get built-in component types by `vela` CLI:
+## 5. 查看已安装能力
+
+* 通过 `vela` CLI 来看看有哪些组件类型：
   ```shell script
   vela components
   ```
-    <details> <summary> Outputs </summary>
+    <details> <summary> 查看输出 </summary>
 
     ```console
     NAME        	NAMESPACE  	WORKLOAD                             	DESCRIPTION
@@ -242,11 +241,11 @@ please at least enable following addons to make sure KubeVela functioning well:
 
   </details>
 
-* Get built-in traits by `vela` CLI:
+* 通过 `vela` CLI 来看看有哪些运维功能：
   ```shell script
   vela traits
   ```
-    <details> <summary> Outputs </summary>
+    <details> <summary> 查看输出 </summary>
 
     ```console
     NAME                    	NAMESPACE  	APPLIES-TO       	CONFLICTS-WITH	POD-DISRUPTIVE	DESCRIPTION
@@ -292,10 +291,10 @@ please at least enable following addons to make sure KubeVela functioning well:
 
     </details>
 
-These capabilities are built-in so they are ready to use if showed up. KubeVela is designed to be programmable and fully self-service, so the assumption is more capabilities will be added later per your own needs. 
 
-## What's Next
+以上的这些能力都是已经内置的，随取随用。而由于 KubeVela 从一开始就被设计成可编程的，你可以按玩乐高积木一样，添加任何你需要的功能。
 
-* Start to [deploy our first application](./first-application).
-* See the [advanced installation guide](../platform-engineers/advanced-install) to learn more about installation details.
+## 下一步
 
+* 安装完毕 KubeVela，开始动手编写[第一个应用部署计划](./quick-start)。
+* 更多插件功能的安装，了解[自定义安装方式](./platform-engineers/advanced-install)安装。

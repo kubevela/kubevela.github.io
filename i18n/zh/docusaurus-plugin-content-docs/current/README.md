@@ -14,11 +14,11 @@ KubeVela is a modern application engine that adapts to your application's needs,
 
 ## Installation
 
-Installation guide is available on [this section](getting-started/quick-install).
+Installation guide is available on [this section](install).
 
 ## Quick Start
 
-Quick start is available on [this section](getting-started/first-application).
+Quick start is available on [this section](quick-start).
 
 ## Contributing
 Check out [CONTRIBUTING](https://github.com/oam-dev/kubevela/blob/master/CONTRIBUTING.md) to see how to develop with KubeVela.

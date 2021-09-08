@@ -86,7 +86,7 @@ The fields here correspond to:
 
 ## Components
 
-KubeVela has some built-in component types, you can find them by using [KubeVela CLI](../getting-started/quick-install#3-get-kubevela-cli):
+KubeVela has some built-in component types, you can find them by using [KubeVela CLI](../install#3-get-kubevela-cli):
 
 ```
 vela components 
@@ -119,7 +119,7 @@ If you're a platform builder who's familiar with Kubernetes, you can learn to [d
 
 ## Traits
 
-KubeVela also has many built-in traits, search them by using [KubeVela CLI](../getting-started/quick-install#3-get-kubevela-cli):
+KubeVela also has many built-in traits, search them by using [KubeVela CLI](../install#3-get-kubevela-cli):
 
 ```
 vela traits 
