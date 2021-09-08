@@ -6,6 +6,27 @@ title:  集成云资源
 
 KubeVela 通过云资源组件（Component）和运维特征（Trait）里的资源绑定功能，高效安全地完成不同类型云资源的集成工作。目前你可以直接调用阿里云容器服务 Kubernetes 版（ACK ）、阿里云对象存储服务（OSS）和阿里云关系型数据库服务（RDS）这些默认组件。同时在未来，更多新的云资源也会在社区的支撑下逐渐成为默认选项，让你标准化统一地去使用各种厂商的云资源。
 
+## 支持的云资源列表
+
+<table>
+	<tr>
+	    <th>编排类型</th>
+	    <th>云服务商</th>
+	    <th>云资源</th>  
+	</tr >
+	<tr >
+	    <td rowspan="3">Terraform</td>
+	    <td rowspan="3">Alibaba Cloud</td>
+	    <td><a href="./terraform/alibaba-ack">ACK</a></td>
+	</tr>
+	<tr>
+	    <td><a href="./terraform/alibaba-oss">OSS</a></td>
+	</tr>
+	<tr>
+	    <td><a href="./terraform/alibaba-rds">RDS</a></td>
+	</tr>
+</table>
+
 ## 查看 KubeVela 的云资源组件
 
 我们通过 [KubeVela CLI](../install#3-安装-kubevela-cli)来查看，当前系统中可用的云资源组件类型：

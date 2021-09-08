@@ -6,6 +6,27 @@ This tutorial will talk about how to provision and consume Cloud Resources by Te
 
 > ⚠️ This section requires your platform engineers have already enabled add-on `terraform/provider-alicloud` [Terraform related capabilities](../../../platform-engineers/components/component-terraform).
 
+## Supported Cloud Resource list
+
+<table>
+	<tr>
+	    <th>Type</th>
+	    <th>Cloud Provider</th>
+	    <th>Cloud Resource</th>  
+	</tr >
+	<tr >
+	    <td rowspan="3">Terraform</td>
+	    <td rowspan="3">Alibaba Cloud</td>
+	    <td><a href="./terraform/alibaba-ack">ACK</a></td>
+	</tr>
+	<tr>
+	    <td><a href="./terraform/alibaba-oss">OSS</a></td>
+	</tr>
+	<tr>
+	    <td><a href="./terraform/alibaba-rds">RDS</a></td>
+	</tr>
+</table>
+
 ## Terraform
 
 All supported cloud resources are as below.
@@ -18,9 +39,9 @@ alibaba-oss	vela-system	configurations.terraform.core.oam.dev	Terraform configur
 alibaba-rds	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud RDS object        
 ```
 
-Refer to [Terraform cloud resources usages docs](./cloud-services-list) to see to deploy these Cloud resource components.
-
-Let's deploy the [application](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/application.yaml) below to provision Alibaba Cloud OSS and RDS cloud resources, and consume them by the web component.
+Let's deploy
+the [application](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/application.yaml)
+below to provision Alibaba Cloud OSS and RDS cloud resources, and consume them by the web component.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

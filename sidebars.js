@@ -40,7 +40,6 @@ module.exports = {
                       ],
 
                   },
-                    'end-user/components/cloud-services/cloud-services-list',
                       'end-user/components/cloud-services/provider-and-consume-cloud-services',
                   ],
 
