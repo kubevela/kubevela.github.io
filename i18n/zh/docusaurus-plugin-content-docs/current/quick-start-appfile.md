@@ -4,13 +4,13 @@ title:  概述
 
 为了你的平台获得最佳用户体验，我们建议各位平台构建者们为最终用户提供简单并且友好的 UI，而不是仅仅简单展示全部平台层面的信息。一些常用的做法包括构建 GUI 控制台，使用 DSL，或者创建用户友好的命令行工具。
 
-为了证明在 KubeVela 中提供了良好的构建开发体验，我们开发了一个叫 `Appfile` 的客户端工具。这个工具使得开发者通过一个文件和一个简单的命令：`vela up` 就可以部署任何应用。 
+为了证明在 KubeVela 中提供了良好的构建开发体验，我们开发了一个叫 `Appfile` 的客户端工具。这个工具使得开发者通过一个文件和一个简单的命令：`vela up` 就可以部署任何应用。
 
 现在，让我们来体验一下它是如何使用的。
 
 ## Step 1: 安装
 
-确保你已经参照 [安装指南](getting-started/quick-install) 完成了所有的安装验证工作。
+确保你已经参照 [安装指南](install) 完成了所有的安装验证工作。
 
 ## Step 2: 部署你的第一个应用
 
@@ -55,7 +55,7 @@ Services:
       - ✅ ingress: Visiting URL: testsvc.example.com, IP: <your IP address>
 ```
 
-**在 [kind cluster 配置章节](getting-started/quick-install#kind)**, 你可以通过 localhost 访问 service。 在其他配置中, 使用相应的 ingress 地址来替换 localhost。
+**在 [kind cluster 配置章节](install#kind)**, 你可以通过 localhost 访问 service。 在其他配置中, 使用相应的 ingress 地址来替换 localhost。
 
 ```
 $ curl -H "Host:testsvc.example.com" http://localhost/

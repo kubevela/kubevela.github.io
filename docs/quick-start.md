@@ -6,7 +6,7 @@ Welcome to KubeVela! In this guide, we'll walk you through how to install KubeVe
 
 ## Step 1: Install
 
-Make sure you have finished and verified the installation following [this guide](quick-install).
+Make sure you have finished and verified the installation following [this guide](install).
 
 ## Step 2: Deploy Your First Application
 
@@ -60,5 +60,5 @@ Hello World
 
 Here are some recommended next steps:
 
-- Learn KubeVela's [Core Concepts](../core-concepts/application).
-- Learn KubeVela's [Architecture](../core-concepts/architecture).
+- Learn KubeVela's [Core Concepts](./core-concepts/application).
+- Learn KubeVela's [Architecture](./core-concepts/architecture).

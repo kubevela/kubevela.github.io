@@ -91,7 +91,7 @@ spec:
 
 ## 组件（Components）
 
-KubeVela 内置了常用的组件类型，使用 [KubeVela CLI](../getting-started/quick-install#3) 命令查看：
+KubeVela 内置了常用的组件类型，使用 [KubeVela CLI](../install#3) 命令查看：
 ```
 vela components 
 ```
@@ -115,7 +115,7 @@ worker     	vela-system	deployments.apps                     	Describes long-run
 
 ## 运维特征（Traits）
 
-KubeVela 也内置了常用的运维特征类型，使用 [KubeVela CLI](../getting-started/quick-install#3-安装-kubevela-cli) 命令查看：
+KubeVela 也内置了常用的运维特征类型，使用 [KubeVela CLI](../install#3-安装-kubevela-cli) 命令查看：
 ```
 vela traits 
 ```

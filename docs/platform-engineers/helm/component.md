@@ -8,7 +8,7 @@ In this section, it will introduce how to declare Helm charts as components via 
 
 ## Prerequisite
 
-* Make sure you have enabled Helm support in the [installation guide](../../getting-started/quick-install#4-enable-helm-support).
+* Make sure you have enabled Helm support in the [installation guide](../../install#4-enable-helm-support).
 
 ## Declare `ComponentDefinition`
 

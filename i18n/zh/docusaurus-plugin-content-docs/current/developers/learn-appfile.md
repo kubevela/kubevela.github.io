@@ -80,7 +80,7 @@ services:
 ### 环境要求
 
 - [Docker](https://docs.docker.com/get-docker/) 需要在主机上安装 docker
-- [KubeVela](../getting-started/quick-install) 需要安装 KubeVela 并配置
+- [KubeVela](../install) 需要安装 KubeVela 并配置
 
 ### 1. 下载测试的 app 的源码
 
@@ -159,7 +159,7 @@ $ vela status testapp
 
 #### 本地测试方式
 
-如果你本地有运行的 [kind](../getting-started/quick-install) 集群，你可以尝试推送到本地。这种方法无需注册远程容器仓库。
+如果你本地有运行的 [kind](../install) 集群，你可以尝试推送到本地。这种方法无需注册远程容器仓库。
 
 在 `build` 中添加 local 的选项值：
 
