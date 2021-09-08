@@ -84,6 +84,7 @@ module.exports = {
         {
           'Policies': [
             'end-user/policies/envbinding',
+            'end-user/policies/health',
           ]
         },
         {
