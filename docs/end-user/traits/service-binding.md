@@ -2,9 +2,7 @@
 title:  Service Binding
 ---
 
-# Description
-
-Service binding trait will bind data from Kubernetes `Secret` to the application container's ENV. 
+Service binding trait will bind data from Kubernetes `Secret` to the application container's ENV.
 
 ## Specification
 

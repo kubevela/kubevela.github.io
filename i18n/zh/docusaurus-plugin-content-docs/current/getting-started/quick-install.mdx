@@ -15,39 +15,37 @@ import TabItem from '@theme/TabItem';
 
 KubeVela 得以成为控制平面，主要是依赖 Kubernetes 。它可以放置在任何托管 Kubernetes 作为底座的产品或你自己的集群中。
 
-下面，我们使用 minikube 或 kind 在本地部署、测试来熟悉学习 KubeVela，
-
-> 注意: 如果你不是使用 minikube 或 kind 来进行学习，请确保[安装或启用 ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/)。
+你可以使用 kind 或 minikube 在本地部署、测试 KubeVela，或者使用云厂商提供的 Kubernetes 服务做生产部署。
 
 <Tabs
 className="unique-tabs"
-defaultValue="minikube"
+defaultValue="kind"
 values={[
+{label: 'Kind', value: 'kind'},
 {label: 'Minikube', value: 'minikube'},
-{label: 'KinD', value: 'kind'},
+{label: 'Cloud Provider', value: 'cloudprovider'},
 ]}>
+
 <TabItem value="minikube">
 
-先使用 minikube [安装指南](https://minikube.sigs.k8s.io/docs/start/)。
-
-安装 minikube 后，创建一个集群:
+[安装 minikube](https://minikube.sigs.k8s.io/docs/start/) 后，创建一个集群:
 
 ```shell script
 minikube start
 ```
 
-安装 ingress:
+<details> <summary> 安装 ingress 启用路由访问功能 </summary>
 
 ```shell script
 minikube addons enable ingress
 ``` 
 
-  </TabItem>
-  <TabItem value="kind">
+</details>
+</TabItem>
 
-请按照本[指南](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)进行安装。
+<TabItem value="kind">
 
-然后拉起一个 kind 集群:
+安装 [Kind 命令行工具](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)后，创建集群:
 
 ```shell script
 cat <<EOF | kind create cluster --image=kindest/node:v1.18.15 --config=-
@@ -71,39 +69,54 @@ nodes:
 EOF
 ```
 
-然后安装 [ingress for kind](https://kind.sigs.k8s.io/docs/user/ingress/#ingress-nginx):
+<details> <summary> 安装 ingress 启用路由访问功能 </summary>
+
 ```shell script
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 ```
 
+</details>
+
   </TabItem>
+
+<TabItem value="cloudprovider">
+
+* 阿里云 [ACK 服务](https://www.aliyun.com/product/kubernetes)
+* AWS [EKS 服务](https://aws.amazon.com/cn/eks)
+* Azure [AKS 服务](https://azure.microsoft.com/en-us/services/kubernetes-service)
+* Google [GKE 服务](https://cloud.google.com/kubernetes-engine)
+
+> 注意: 请确保云厂商的集群[已安装或启用 ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/) 以保证路由访问功能可正常使用。
+
+</TabItem>
 </Tabs>
 
 
 ## 2. 安装 KubeVela
 
 1. 添加 KubeVela helm chart 仓库
-```shell script
-helm repo add kubevela https://charts.kubevela.net/core
-```
+  ```shell script
+  helm repo add kubevela https://charts.kubevela.net/core
+  ```
 
 2. 更新 chart 仓库
-```shell script
-helm repo update
-```
+  ```shell script
+  helm repo update
+  ```
    
 3. 安装 KubeVela
-```shell script
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core
-```
-默认情况下，它将使用 [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen) 提供的自签名证书启用 webhook。你也可以用 [`cert-manager`](../platform-engineers/advanced-install#install-kubevela-with-cert-manager) 安装。
+  ```shell script
+  helm install --create-namespace -n vela-system kubevela kubevela/vela-core
+  ```
+
+你可以参考 [`自定义安装`](../platform-engineers/advanced-install) 获取更多安装模式和功能。
 
 4. 验证 chart 安装是否成功
     ```shell script
     helm test kubevela -n vela-system
     ```
 
-    <details> <summary> 可以点开看看输出会是什么样子 </summary>
+    <details> <summary> 点击查看期望输出 </summary>
 
     ```shell
     Pod kubevela-application-test pending
@@ -191,8 +204,7 @@ sudo mv ./vela /usr/local/bin/vela
 
 ## 4. 安装插件
 
-KubeVela 支持一系列[开箱即用的插件](../platform-engineers/advanced-install#插件列表)，
-为保证 KubeVela 相关功能正常使用，建议您至少开启以下插件：
+KubeVela 支持一系列[开箱即用的插件](../platform-engineers/advanced-install#插件列表)，建议您至少开启以下插件：
 
 * Helm 以及 Kustomize 组件功能插件
   ```shell
@@ -200,27 +212,87 @@ KubeVela 支持一系列[开箱即用的插件](../platform-engineers/advanced-i
   ```
 
 
-## 5. 验证是否安装成功
+## 5. 查看已安装能力
 
-通过 `vela` CLI 来看看有哪些应用程序的组件和特征：
+* 通过 `vela` CLI 来看看有哪些组件类型：
+  ```shell script
+  vela components
+  ```
+    <details> <summary> 查看输出 </summary>
 
-```shell script
-vela components
-```
-```console
-NAME      	NAMESPACE  	WORKLOAD        	DESCRIPTION
-task      	vela-system	jobs.batch      	Describes jobs that run code or a script to completion.
-webservice	vela-system	deployments.apps	Describes long-running, scalable, containerized services
-          	           	                	that have a stable network endpoint to receive external
-          	           	                	network traffic from customers.
-worker    	vela-system	deployments.apps	Describes long-running, scalable, containerized services
-          	           	                	that running at backend. They do NOT have network endpoint
-          	           	                	to receive external network traffic.
-```
+    ```console
+    NAME        	NAMESPACE  	WORKLOAD                             	DESCRIPTION
+    alibaba-ack 	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud ACK cluster
+    alibaba-oss 	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud OSS object
+    alibaba-rds 	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud RDS object
+    helm        	vela-system	autodetects.core.oam.dev             	helm release is a group of K8s resources from either git
+                                                                    repository or helm repo
+    kustomize   	vela-system	autodetects.core.oam.dev             	kustomize can fetching, building, updating and applying
+                                                                    Kustomize manifests from git repo.
+    raw         	vela-system	autodetects.core.oam.dev             	raw allow users to specify raw K8s object in properties
+    task        	vela-system	jobs.batch                           	Describes jobs that run code or a script to completion.
+    webservice  	vela-system	deployments.apps                     	Describes long-running, scalable, containerized services
+                                                                    that have a stable network endpoint to receive external
+                                                                    network traffic from customers.
+    worker      	vela-system	deployments.apps                     	Describes long-running, scalable, containerized services
+                                                                    that running at backend. They do NOT have network endpoint
+                                                                    to receive external network traffic.
+    ```
+
+  </details>
+
+* 通过 `vela` CLI 来看看有哪些运维功能：
+  ```shell script
+  vela traits
+  ```
+    <details> <summary> 查看输出 </summary>
+
+    ```console
+    NAME                    	NAMESPACE  	APPLIES-TO       	CONFLICTS-WITH	POD-DISRUPTIVE	DESCRIPTION
+    annotations             	vela-system	*                	              	true          	Add annotations on K8s pod for your workload which follows
+                                                                                            the pod spec in path 'spec.template'.
+    configmap               	vela-system	*                	              	true          	Create/Attach configmaps on K8s pod for your workload which
+                                                                                            follows the pod spec in path 'spec.template'.
+    cpuscaler               	vela-system	deployments.apps 	              	false         	Automatically scale the component based on CPU usage.
+    env                     	vela-system	*                	              	false         	add env on K8s pod for your workload which follows the pod
+                                                                                            spec in path 'spec.template.'
+    expose                  	vela-system	                 	              	false         	Expose port to enable web traffic for your component.
+    hostalias               	vela-system	*                	              	false         	Add host aliases on K8s pod for your workload which follows
+                                                                                            the pod spec in path 'spec.template'.
+    ingress                 	vela-system	                 	              	false         	Enable public web traffic for the component.
+    ingress-1-20            	vela-system	                 	              	false         	Enable public web traffic for the component, the ingress API
+                                                                                            matches K8s v1.20+.
+    init-container          	vela-system	deployments.apps 	              	true          	add an init container and use shared volume with pod
+    kustomize-json-patch    	vela-system	                 	              	false         	A list of JSON6902 patch to selected target
+    kustomize-patch         	vela-system	                 	              	false         	A list of StrategicMerge or JSON6902 patch to selected
+                                                                                            target
+    kustomize-strategy-merge	vela-system	                 	              	false         	A list of strategic merge to kustomize config
+    labels                  	vela-system	*                	              	true          	Add labels on K8s pod for your workload which follows the
+                                                                                            pod spec in path 'spec.template'.
+    lifecycle               	vela-system	*                	              	true          	Add lifecycle hooks for the first container of K8s pod for
+                                                                                            your workload which follows the pod spec in path
+                                                                                            'spec.template'.
+    node-affinity           	vela-system	*                	              	true          	affinity specify node affinity and toleration on K8s pod for
+                                                                                            your workload which follows the pod spec in path
+                                                                                            'spec.template'.
+    pvc                     	vela-system	deployments.apps 	              	true          	Create a Persistent Volume Claim and mount the PVC as volume
+                                                                                            to the  first container in the pod
+    resource                	vela-system	*                	              	true          	Add resource requests and limits on K8s pod for your
+                                                                                            workload which follows the pod spec in path 'spec.template.'
+    rollout                 	vela-system	                 	              	false         	rollout the component
+    scaler                  	vela-system	*                	              	false         	Manually scale K8s pod for your workload which follows the
+                                                                                            pod spec in path 'spec.template'.
+    service-binding         	vela-system	webservice,worker	              	false         	Binding secrets of cloud resources to component env
+    sidecar                 	vela-system	*                	              	true          	Inject a sidecar container to K8s pod for your workload
+                                                                                            which follows the pod spec in path 'spec.template'.
+    volumes                 	vela-system	deployments.apps 	              	true          	Add volumes on K8s pod for your workload which follows the
+                                                                                            pod spec in path 'spec.template'.
+    ```
+
+    </details>
+
 
 以上的这些能力都是已经内置的，随取随用。而由于 KubeVela 从一开始就被设计成可编程的，你可以按玩乐高积木一样，添加任何你需要的功能。
-
-并且，一旦这些自定力的能力被加入到 KubeVela 控制平面中，你立即就能从上面的输出中看到了。
 
 ## 下一步
 

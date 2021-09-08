@@ -2,8 +2,6 @@
 title: Ingress
 ---
 
-> ⚠️ This section requires your runtime cluster has a working ingress controller.
-
 The `ingress` trait exposes a component to public Internet via a valid domain.
 
 ## Specification
@@ -108,3 +106,5 @@ Hello World
                              `'--.._\..--''
 </xmp>
 ```
+
+> ⚠️ This section requires your runtime cluster has a working ingress controller.
