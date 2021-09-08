@@ -8,8 +8,8 @@ module.exports = {
       collapsed: false,
       items: [
         'getting-started/introduction',
-        'getting-started/quick-install',
-        'getting-started/first-application',
+        'install',
+        'quick-start',
       ],
     },
     {

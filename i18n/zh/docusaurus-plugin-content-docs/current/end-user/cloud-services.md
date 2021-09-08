@@ -8,7 +8,7 @@ KubeVela 通过云资源组件（Component）和运维特征（Trait）里的资
 
 ## 查看 KubeVela 的云资源组件
 
-我们通过 [KubeVela CLI](../getting-started/quick-install#3-安装-kubevela-cli)来查看，当前系统中可用的云资源组件类型：
+我们通过 [KubeVela CLI](../install#3-安装-kubevela-cli)来查看，当前系统中可用的云资源组件类型：
 
 ```shell
 $ vela components

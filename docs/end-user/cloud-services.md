@@ -8,7 +8,7 @@ KubeVela efficiently and securely integrates different types of cloud resources 
 
 ## Check the cloud resources in KubeVela
 
-We can use [KubeVela CLI](../getting-started/quick-install#3-Get-KubeVela-CLI) to check the available cloud resources in the current cluster:
+We can use [KubeVela CLI](../install#3-Get-KubeVela-CLI) to check the available cloud resources in the current cluster:
 
 ```shell
 $ vela components

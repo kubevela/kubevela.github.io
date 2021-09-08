@@ -18,7 +18,7 @@ KubeVela 将 CUE 作为应用交付核心依赖和扩展方式的原因如下：
 
 请确保你的环境中已经安装如下命令行：
 * [`cue` v0.2.2](https://cuelang.org/docs/install/) 目前 KubeVela 暂时只支持 CUE v0.2.2 版本，将在后续迭代中升级支持新的 CUE 版本。
-* [`vela` >= v1.1.0](../../getting-started/quick-install#3-get-kubevela-cli)
+* [`vela` >= v1.1.0](../../install#3-get-kubevela-cli)
 
 ## 学习 CUE 命令行
 
