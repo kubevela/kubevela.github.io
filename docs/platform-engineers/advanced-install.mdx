@@ -6,7 +6,8 @@ import TabItem from '@theme/TabItem';
 
 ## Install KubeVela with cert-manager
 
-KubeVela can use cert-manager generate certs for your application if it's available. Note that you need to install cert-manager **before** the KubeVela chart.
+By default, KubeVela will use a self-signed certificate provided by [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen) for admissionWebhooks.
+You can also use cert-manager if it's available. Note that you need to install cert-manager **before** the KubeVela chart.
 
 ```shell script
 helm repo add jetstack https://charts.jetstack.io
@@ -141,6 +142,39 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.1.0/chart
 helm upgrade --install --create-namespace --namespace vela-system  kubevela kubevela/vela-core --version <the_new_version>
 ```
 
+## Addons
+
+| Name                  | Description                                             | capability        | Open Source Project Reference                                        |
+|---------------------|-------------------------------------------------|----------------|-------------------------------------------------|
+| terraform           | Basic addon to Provide Cloud Resources(installed by default)                                    | -              | https://github.com/oam-dev/terraform-controller |
+| fluxcd              | Support Deployment of Helm and Kustomize components                       | kustomize、helm | https://fluxcd.io/                              |
+| kruise              | Support more powerful workload feature                     | cloneset       | https://openkruise.io/                          |
+| prometheus          | Support basic observability from Promethus                           | -              | https://prometheus.io/                          |
+| keda                | Support event driven auto scaling                            | -              | https://keda.sh/                                |
+| ocm                 | Support Multi-cluster Application Deployment                                  | -              | http://open-cluster-management.io/              |
+| observability       | Support KubeVela core observability     | -              | -                                               |
+
+1. Search all addons 
+
+```shell
+vela addon list
+```
+
+2. Install addons (use fluxcd as example)
+
+```shell
+vela addon enable fluxcd
+```
+
+3. Disable addons
+
+```
+vela addon disable fluxcd
+```
+
+Please remove all application using this addon before disable it.
+
+
 ## Clean Up
 
 Run:
@@ -184,34 +218,3 @@ Then clean up CRDs (CRDs are not removed via helm by default):
   workloaddefinitions.core.oam.dev 
 ```
 
-## Addons
-
-| Name                  | Description                                             | capability        | Open Source Project Reference                                        |
-|---------------------|-------------------------------------------------|----------------|-------------------------------------------------|
-| terraform           | Basic addon to Provide Cloud Resources(installed by default)                                    | -              | https://github.com/oam-dev/terraform-controller |
-| fluxcd              | Support Deployment of Helm and Kustomize components                       | kustomize、helm | https://fluxcd.io/                              |
-| kruise              | Support more powerful workload feature                     | cloneset       | https://openkruise.io/                          |
-| prometheus          | Support basic observability from Promethus                           | -              | https://prometheus.io/                          |
-| keda                | Support event driven auto scaling                            | -              | https://keda.sh/                                |
-| ocm                 | Support Multi-cluster Application Deployment                                  | -              | http://open-cluster-management.io/              |
-| observability       | Support KubeVela core observability     | -              | -                                               |
-
-1. Search all addons 
-
-```shell
-vela addon list
-```
-
-2. Install addons (use fluxcd as example)
-
-```shell
-vela addon enable fluxcd
-```
-
-3. Disable addons
-
-```
-vela addon disable fluxcd
-```
-
-Please remove all application using this addon before disable it.

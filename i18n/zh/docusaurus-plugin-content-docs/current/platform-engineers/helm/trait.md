@@ -7,9 +7,6 @@ KubeVela 中的 Trait 特性可以从基于Helm的组件无缝添加.
 在以下应用实例中，我们将基于 Helm 组件添加两个 Trait 特性 [scaler](https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml) 和 [virtualgroup](https://github.com/oam-dev/kubevela/blob/master/docs/examples/helm-module/virtual-group-td.yaml).
 
 
-
-
-
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
