@@ -100,7 +100,7 @@ spec:
 ---
 ```
 
-In this example, the definitions(`webservice` and `ingress`) which `vela-app` depends on is the built-in 
+In this example, the definitions(`webservice` and `ingress`) which `vela-app` depends on are the built-in 
 components and traits of KubeVela. You can also use `-d `or `--definitions` to specify your local definition files.
 
 `-d `or `--definitions` permitting user to provide capability definitions used in the application from local files.
