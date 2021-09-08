@@ -4,7 +4,7 @@ title: Architecture
 
 The overall architecture of KubeVela is shown as below:
 
-![alt](../resources/arch.jpg)
+![alt](../resources/system-arch.png)
 
 
 ## API
