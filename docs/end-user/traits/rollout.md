@@ -1,6 +1,7 @@
 ---
 title: Rollout
 ---
+
 This chapter will introduce how to use Rollout Trait to perform a rolling update on Workload.
 
 ## How to

@@ -13,16 +13,17 @@ Requirements:
 - Kubernetes cluster >= v1.18.0
 - `kubectl` installed and configured
 
-KubeVela relies on Kubernetes as control plane. The control plane could be any managed Kubernetes offering or your own cluster. The only requirement is please ensure [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/) is installed and enabled.
+KubeVela relies on Kubernetes as control plane. The control plane could be any managed Kubernetes offering or your own cluster. 
 
-For local deployment and test, you could use `minikube` or `kind`.
+For local deployment and test, you could use `kind` or `minikube`. For production usage, you could use Kubernetes services provided by cloud providers.
 
 <Tabs
 className="unique-tabs"
-defaultValue="minikube"
+defaultValue="kind"
 values={[
-{label: 'Minikube', value: 'minikube'},
 {label: 'Kind', value: 'kind'},
+{label: 'Minikube', value: 'minikube'},
+{label: 'Cloud Provider', value: 'cloudprovider'},
 ]}>
 <TabItem value="minikube">
 
@@ -34,14 +35,16 @@ Then spins up a minikube cluster
 minikube start
 ```
 
-Install ingress:
+<details> <summary> Install ingress to enable service route </summary>
 
 ```shell script
 minikube addons enable ingress
 ``` 
 
-  </TabItem>
-  <TabItem value="kind">
+</details>
+</TabItem>
+
+<TabItem value="kind">
 
 Follow [this guide](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) to install kind.
 
@@ -69,12 +72,25 @@ nodes:
 EOF
 ```
 
-Then install [ingress for kind](https://kind.sigs.k8s.io/docs/user/ingress/#ingress-nginx):
+<details> <summary> Install ingress to enable service route </summary>
+
 ```shell script
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 ```
 
-  </TabItem>
+</details>
+</TabItem>
+
+<TabItem value="cloudprovider">
+
+* Alibaba Cloud [ACK Service](https://www.aliyun.com/product/kubernetes)
+* AWS [EKS Service](https://aws.amazon.com/cn/eks)
+* Azure [AKS Service](https://azure.microsoft.com/en-us/services/kubernetes-service)
+* Google [GKE Service](https://cloud.google.com/kubernetes-engine)
+
+> Please ensure [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/) is installed and enabled.
+
+</TabItem>  
 </Tabs>
 
 
@@ -94,8 +110,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
     ```shell script
     helm install --create-namespace -n vela-system kubevela kubevela/vela-core
     ```
-    By default, it will enable the webhook with a self-signed certificate provided by [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen).
-    You can also [install it with `cert-manager`](../platform-engineers/advanced-install#install-kubevela-with-cert-manager).
+    You can refer to [advanced installation guide](../platform-engineers/advanced-install) for more custom ways.
 
 4. Verify chart installed successfully
     ```shell script
@@ -200,25 +215,84 @@ please at least enable following addons to make sure KubeVela functioning well:
 
 ## 5. Verify
 
-Checking available application components and traits by `vela` CLI tool:
+* Get built-in component types by `vela` CLI:
+  ```shell script
+  vela components
+  ```
+    <details> <summary> Outputs </summary>
 
-```shell script
-vela components
-```
-```console
-NAME      	NAMESPACE  	WORKLOAD        	DESCRIPTION
-task      	vela-system	jobs.batch      	Describes jobs that run code or a script to completion.
-webservice	vela-system	deployments.apps	Describes long-running, scalable, containerized services
-          	           	                	that have a stable network endpoint to receive external
-          	           	                	network traffic from customers.
-worker    	vela-system	deployments.apps	Describes long-running, scalable, containerized services
-          	           	                	that running at backend. They do NOT have network endpoint
-          	           	                	to receive external network traffic.
-```
+    ```console
+    NAME        	NAMESPACE  	WORKLOAD                             	DESCRIPTION
+    alibaba-ack 	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud ACK cluster
+    alibaba-oss 	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud OSS object
+    alibaba-rds 	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud RDS object
+    helm        	vela-system	autodetects.core.oam.dev             	helm release is a group of K8s resources from either git
+                                                                    repository or helm repo
+    kustomize   	vela-system	autodetects.core.oam.dev             	kustomize can fetching, building, updating and applying
+                                                                    Kustomize manifests from git repo.
+    raw         	vela-system	autodetects.core.oam.dev             	raw allow users to specify raw K8s object in properties
+    task        	vela-system	jobs.batch                           	Describes jobs that run code or a script to completion.
+    webservice  	vela-system	deployments.apps                     	Describes long-running, scalable, containerized services
+                                                                    that have a stable network endpoint to receive external
+                                                                    network traffic from customers.
+    worker      	vela-system	deployments.apps                     	Describes long-running, scalable, containerized services
+                                                                    that running at backend. They do NOT have network endpoint
+                                                                    to receive external network traffic.
+    ```
+
+  </details>
+
+* Get built-in traits by `vela` CLI:
+  ```shell script
+  vela traits
+  ```
+    <details> <summary> Outputs </summary>
+
+    ```console
+    NAME                    	NAMESPACE  	APPLIES-TO       	CONFLICTS-WITH	POD-DISRUPTIVE	DESCRIPTION
+    annotations             	vela-system	*                	              	true          	Add annotations on K8s pod for your workload which follows
+                                                                                            the pod spec in path 'spec.template'.
+    configmap               	vela-system	*                	              	true          	Create/Attach configmaps on K8s pod for your workload which
+                                                                                            follows the pod spec in path 'spec.template'.
+    cpuscaler               	vela-system	deployments.apps 	              	false         	Automatically scale the component based on CPU usage.
+    env                     	vela-system	*                	              	false         	add env on K8s pod for your workload which follows the pod
+                                                                                            spec in path 'spec.template.'
+    expose                  	vela-system	                 	              	false         	Expose port to enable web traffic for your component.
+    hostalias               	vela-system	*                	              	false         	Add host aliases on K8s pod for your workload which follows
+                                                                                            the pod spec in path 'spec.template'.
+    ingress                 	vela-system	                 	              	false         	Enable public web traffic for the component.
+    ingress-1-20            	vela-system	                 	              	false         	Enable public web traffic for the component, the ingress API
+                                                                                            matches K8s v1.20+.
+    init-container          	vela-system	deployments.apps 	              	true          	add an init container and use shared volume with pod
+    kustomize-json-patch    	vela-system	                 	              	false         	A list of JSON6902 patch to selected target
+    kustomize-patch         	vela-system	                 	              	false         	A list of StrategicMerge or JSON6902 patch to selected
+                                                                                            target
+    kustomize-strategy-merge	vela-system	                 	              	false         	A list of strategic merge to kustomize config
+    labels                  	vela-system	*                	              	true          	Add labels on K8s pod for your workload which follows the
+                                                                                            pod spec in path 'spec.template'.
+    lifecycle               	vela-system	*                	              	true          	Add lifecycle hooks for the first container of K8s pod for
+                                                                                            your workload which follows the pod spec in path
+                                                                                            'spec.template'.
+    node-affinity           	vela-system	*                	              	true          	affinity specify node affinity and toleration on K8s pod for
+                                                                                            your workload which follows the pod spec in path
+                                                                                            'spec.template'.
+    pvc                     	vela-system	deployments.apps 	              	true          	Create a Persistent Volume Claim and mount the PVC as volume
+                                                                                            to the  first container in the pod
+    resource                	vela-system	*                	              	true          	Add resource requests and limits on K8s pod for your
+                                                                                            workload which follows the pod spec in path 'spec.template.'
+    rollout                 	vela-system	                 	              	false         	rollout the component
+    scaler                  	vela-system	*                	              	false         	Manually scale K8s pod for your workload which follows the
+                                                                                            pod spec in path 'spec.template'.
+    service-binding         	vela-system	webservice,worker	              	false         	Binding secrets of cloud resources to component env
+    sidecar                 	vela-system	*                	              	true          	Inject a sidecar container to K8s pod for your workload
+                                                                                            which follows the pod spec in path 'spec.template'.
+    volumes                 	vela-system	deployments.apps 	              	true          	Add volumes on K8s pod for your workload which follows the
+                                                                                            pod spec in path 'spec.template'.
+    ```
+
+    </details>
 
 These capabilities are built-in so they are ready to use if showed up. KubeVela is designed to be programmable and fully self-service, so the assumption is more capabilities will be added later per your own needs. 
-
-Also, whenever new capabilities are added in the platform, you will immediately see them in above output.
 
 ## What's Next
 

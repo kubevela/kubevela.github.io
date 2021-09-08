@@ -9,6 +9,7 @@ The `sidecar` trait allows you to attach a sidecar container to the component.
 ```shell
 kubectl vela show sidecar
 ```
+
 ```console
 # Properties
 +---------+-----------------------------------------+-----------------------+----------+---------+
