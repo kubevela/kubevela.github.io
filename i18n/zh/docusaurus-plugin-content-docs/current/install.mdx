@@ -94,24 +94,19 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 
 ## 2. 安装 KubeVela
 
-1. 添加 KubeVela helm chart 仓库
+1. 添加并更新 KubeVela helm chart 仓库
   ```shell script
   helm repo add kubevela https://charts.kubevela.net/core
-  ```
-
-2. 更新 chart 仓库
-  ```shell script
   helm repo update
   ```
    
-3. 安装 KubeVela
+2. 安装 KubeVela
   ```shell script
   helm install --create-namespace -n vela-system kubevela kubevela/vela-core
   ```
+  你可以参考 [`自定义安装`](./platform-engineers/advanced-install) 获取更多安装模式和功能。
 
-你可以参考 [`自定义安装`](./platform-engineers/advanced-install) 获取更多安装模式和功能。
-
-4. 验证 chart 安装是否成功
+3. 验证 chart 安装是否成功
     ```shell script
     helm test kubevela -n vela-system
     ```
@@ -142,7 +137,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 
     </details>
 
-## 3. 安装 KubeVela CLI
+## 3. 【可选】安装 KubeVela CLI
 
 KubeVela CLI 可以让你更便捷地来管理应用交付。不过，它不是必须使用的。
 
@@ -202,7 +197,7 @@ sudo mv ./vela /usr/local/bin/vela
 </TabItem>
 </Tabs>
 
-## 4. 安装插件
+## 4. 【可选】安装插件
 
 KubeVela 支持一系列[开箱即用的插件](./platform-engineers/advanced-install#插件列表)，建议您至少开启以下插件：
 
@@ -213,6 +208,8 @@ KubeVela 支持一系列[开箱即用的插件](./platform-engineers/advanced-in
 
 
 ## 5. 查看已安装能力
+
+> 如果没安装 vela 命令行工具，你也可以通过 `kubectl get comp -A` 和 `kubectl get trait -A` 代替.
 
 * 通过 `vela` CLI 来看看有哪些组件类型：
   ```shell script

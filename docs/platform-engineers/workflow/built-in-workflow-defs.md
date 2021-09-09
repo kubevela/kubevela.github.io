@@ -1,5 +1,5 @@
 ---
-title:  Built-in Workflow Definitions
+title: Appendix - Built-in Workflow Definitions
 ---
 
 KubeVela provides some built-in workflow step definitions for better experience.
@@ -12,9 +12,7 @@ Apply all components and traits in Application.
 
 ### Parameter
 
-| Name | Type | Description |
-| :---: | :--: | :--: |
-| - | - | - |
+No arguments, used for custom steps before or after application applied.
 
 ### Example
 
@@ -51,9 +49,9 @@ Wait for the specified Application to complete.
 
 ### Parameter
 
-| Name | Type | Description |
-| :---: | :--: | :--: |
-| name | string | The name of the Application |
+|   Name    |  Type  |           Description            |
+| :-------: | :----: | :------------------------------: |
+|   name    | string |   The name of the Application    |
 | namespace | string | The namespace of the Application |
 
 ### Example
@@ -94,10 +92,10 @@ Apply Application in different policies and envs.
 
 ### Parameter
 
-| Name | Type | Description |
-| :---: | :--: | :--: |
+|  Name  |  Type  |      Description       |
+| :----: | :----: | :--------------------: |
 | policy | string | The name of the policy |
-| env | string | The name of the env |
+|  env   | string |  The name of the env   |
 
 ### Example
 
@@ -166,14 +164,14 @@ Send messages to the webhook address.
 
 ### 参数
 
-| Name | Type | Description |
-| :---: | :--: | :-- |
-| slack | Object | Optional, please fulfill its url and message if you want to send Slack messages |
-| slack.url | String | Required, the webhook address of Slack |
-| slack.message | Object | Required, the Slack messages you want to send, please follow [Slack messaging](https://api.slack.com/reference/messaging/payload) |
-| dingding | Object | Optional, please fulfill its url and message if you want to send DingTalk messages |
-| dingding.url | String | Required, the webhook address of DingTalk |
-| dingding.message | Object | Required, the DingTalk messages you want to send, please follow [DingTalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) | |
+|       Name       |  Type  | Description                                                                                                                                                                 |
+| :--------------: | :----: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|      slack       | Object | Optional, please fulfill its url and message if you want to send Slack messages                                                                                             |
+|    slack.url     | String | Required, the webhook address of Slack                                                                                                                                      |
+|  slack.message   | Object | Required, the Slack messages you want to send, please follow [Slack messaging](https://api.slack.com/reference/messaging/payload)                                           |
+|     dingding     | Object | Optional, please fulfill its url and message if you want to send DingTalk messages                                                                                          |
+|   dingding.url   | String | Required, the webhook address of DingTalk                                                                                                                                   |
+| dingding.message | Object | Required, the DingTalk messages you want to send, please follow [DingTalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |  |
 
 ### Example
 
@@ -230,9 +228,9 @@ Suspend the current workflow, we can use `vela workflow resume appname` to resum
 
 ### Parameter
 
-| Name | Type | Description |
-| :---: | :--: | :--: |
-| - | - | - |
+| Name  | Type  | Description |
+| :---: | :---: | :---------: |
+|   -   |   -   |      -      |
 
 ### Example
 

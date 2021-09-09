@@ -96,23 +96,19 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 
 ## 2. Install KubeVela
 
-1. Add helm chart repo for KubeVela
+1. Add and update helm chart repo for KubeVela
     ```shell script
     helm repo add kubevela https://charts.kubevela.net/core
-    ```
-
-2. Update the chart repo
-    ```shell script
     helm repo update
     ```
    
-3. Install KubeVela
+2. Install KubeVela
     ```shell script
     helm install --create-namespace -n vela-system kubevela kubevela/vela-core
     ```
     You can refer to [advanced installation guide](./platform-engineers/advanced-install) for more custom ways.
 
-4. Verify chart installed successfully
+3. Verify chart installed successfully
     ```shell script
     helm test kubevela -n vela-system
     ```
@@ -143,7 +139,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 
     </details>
 
-## 3. Get KubeVela CLI
+## 3. [Optional] Get KubeVela CLI
 
 KubeVela CLI gives you a simplified workflow to manage applications with optimized output. It is not mandatory though.
 
@@ -203,7 +199,7 @@ sudo mv ./vela /usr/local/bin/vela
 </TabItem>
 </Tabs>
 
-## 4. Enable Addons
+## 4. [Optional] Enable Addons
 
 KubeVela support a dozen of [out-of-box addons](./platform-engineers/advanced-install#Addons),
 please at least enable following addons to make sure KubeVela functioning well:
@@ -214,6 +210,8 @@ please at least enable following addons to make sure KubeVela functioning well:
   ```
 
 ## 5. Verify
+
+> You can also using `kubectl get comp -A` and `kubectl get trait -A` instead if you haven't installed CLI.
 
 * Get built-in component types by `vela` CLI:
   ```shell script

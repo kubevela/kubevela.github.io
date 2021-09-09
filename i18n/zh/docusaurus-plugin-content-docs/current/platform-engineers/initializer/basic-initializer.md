@@ -109,7 +109,7 @@ EOF
 ```
 
 环境初始化 kruise 能帮你在集群中部署一个 [kruise](https://github.com/openkruise/kruise) 的控制器，给集群提供 kruise 的各种能力。
-`dependsOn` 字段表示环境初始化 kruise 依赖环境初始化 fluxcd 提供的能力。 其中，环境初始化 fluxcd 是 KubeVela 内置的环境初始化, 
+`dependsOn` 字段表示环境初始化 kruise 依赖环境初始化 fluxcd 提供的能力。 其中，环境初始化 fluxcd 是 KubeVela 内置的环境初始化,
 当集群中没有 `fluxcd` 这个环境初始化时，KubeVela 会自动帮你安装。
 
 ```shell
