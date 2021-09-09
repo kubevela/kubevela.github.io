@@ -1,5 +1,5 @@
 ---
-title:  CUE 操作
+title:  附录：CUE 操作符
 ---
 
 这个文档介绍 step 定义过程中，可以使用的 CUE 操作类型。这些操作均由 `vela/op` 包提供。

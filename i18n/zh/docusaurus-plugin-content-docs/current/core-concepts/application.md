@@ -158,7 +158,7 @@ KubeVela 的工作流机制允许用户自定义应用部署计划中的步骤�
 
 关于工作流，你可以从[指定环境部署](../end-user/workflow/multi-env)这个工作流节点类型开始逐次了解更多 KubeVela 当前的内置工作流节点类型。
 
-如果你是熟悉 Kubernetes 的平台管理员，你可以[学习创建自定义工作流节点类型](../platform-engineers/workflow/steps)，或者通过[设计文档](https://github.com/oam-dev/kubevela/blob/master/design/vela-core/workflow_policy.md)了解工作流系统背后的设计和架构.
+如果你是熟悉 Kubernetes 的平台管理员，你可以[学习创建自定义工作流节点类型](../platform-engineers/workflow/workflow)，或者通过[设计文档](https://github.com/oam-dev/kubevela/blob/master/design/vela-core/workflow_policy.md)了解工作流系统背后的设计和架构.
 
 ## 下一步
 

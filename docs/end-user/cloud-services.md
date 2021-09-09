@@ -1,5 +1,5 @@
 ---
-title:  Integrated Cloud Services
+title:  Integrated Cloud Services # Deprecated
 ---
 
 Cloud-oriented development is now becoming the norm, there is an urgent need to integrate cloud resources from different sources and types. Whether it is the most basic object storage, cloud database, or load balancing, it is all faced with the challenges of hybrid cloud, multi-cloud and other complex environments, and KubeVela is perfect for the needs.
@@ -130,4 +130,4 @@ If the out-of-the-box cloud resources don't cover your needs, you can still use 
 
 - [Component Observability](./component-observability)
 - [Data Pass Between Components ](./component-dependency-parameter)
-- [Multi-Cluster and Environment](./multi-app-env-cluster)
+- [Multi-Cluster and Environment](../case-studies/multi-app-env-cluster)
