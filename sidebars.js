@@ -112,7 +112,8 @@ module.exports = {
       label: 'Case Studies',
       collapsed: false,
       items: [
-        'case-studies/jenkins-cicd'
+        'case-studies/jenkins-cicd',
+        'case-studies/multi-app-env-cluster',
         //        'case-studies/workflow-edge-computing', // 待完成
         //        'case-studies/li-auto-inc', 暂时下掉，应该改写成一个 10 - 15 分钟体验的产品 lab 例子
         //        'case-studies/workflow-with-ocm',
@@ -165,9 +166,8 @@ module.exports = {
         },
         {
           'Workflow System': [
-            'platform-engineers/workflow/steps',
-            'platform-engineers/workflow/context',
-            'platform-engineers/workflow/data-flow',
+            'platform-engineers/workflow/workflow',
+            'platform-engineers/workflow/built-in-workflow-defs',
             'platform-engineers/workflow/cue-actions',
           ]
         },

@@ -69,7 +69,7 @@ NAME          COMPONENT      TYPE         PHASE     HEALTHY   STATUS   AGE
 policy-demo   nginx-server   webservice   running   true               65s
 ```
 
-If you want to learn more about `env-binding`, please refer to **[Multi Cluster Deployment](../multi-app-env-cluster)**.
+If you want to learn more about `env-binding`, please refer to **[Multi Cluster Deployment](../../case-studies/multi-app-env-cluster)**.
 
 ## Appendix: Parameter List
 
