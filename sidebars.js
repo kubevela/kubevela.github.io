@@ -31,13 +31,19 @@ module.exports = {
           'Components': [
             'end-user/components/helm',
             'end-user/components/kustomize',
-            {
-              'Cloud Services': [
-                'end-user/components/cloud-services/alibaba-ack',
-                'end-user/components/cloud-services/alibaba-rds',
-                'end-user/components/cloud-services/alibaba-oss',
-              ]
-            },
+              {
+                  'Cloud Services': [{
+                      "Terraform": [
+                          'end-user/components/cloud-services/terraform/alibaba-ack',
+                          'end-user/components/cloud-services/terraform/alibaba-rds',
+                          'end-user/components/cloud-services/terraform/alibaba-oss',
+                      ],
+
+                  },
+                      'end-user/components/cloud-services/provider-and-consume-cloud-services',
+                  ],
+
+              },
             {
               'CUE Component': [
                 'end-user/components/cue/webservice',

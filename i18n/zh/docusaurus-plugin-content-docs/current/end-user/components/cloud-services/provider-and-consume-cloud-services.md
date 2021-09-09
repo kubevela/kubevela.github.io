@@ -1,34 +1,30 @@
 ---
-title:  集成云资源 // Deprecated
+title:  集成云资源
 ---
 
 在面向云开发逐渐成为范式的这个时代，我们希望集成来源不同、类型不同云资源的需求非常迫切。不管是最基本的对象存储、云数据库，还是更多的负载均衡等等，也面临着混合云、多云等复杂环境所带来的挑战，而 KubeVela 都可以很好满足你的需要。
 
 KubeVela 通过云资源组件（Component）和运维特征（Trait）里的资源绑定功能，高效安全地完成不同类型云资源的集成工作。目前你可以直接调用阿里云容器服务 Kubernetes 版（ACK ）、阿里云对象存储服务（OSS）和阿里云关系型数据库服务（RDS）这些默认组件。同时在未来，更多新的云资源也会在社区的支撑下逐渐成为默认选项，让你标准化统一地去使用各种厂商的云资源。
 
+> ⚠️ 请确认管理员已经安装了 [Terraform 插件 'terraform/provider-alicloud'](../../../platform-engineers/components/component-terraform).
+
+## 支持的云资源列表
+编排类型 | 云服务商 | 云资源 | 描述
+------------ | ------------- | ------------- | -------------
+Terraform | Alibaba Cloud | [ACK](./terraform/alibaba-ack) | 用于部署阿里云 ACK 的 Terraform Configuration 的 ComponentDefinition
+| |  | [OSS](./terraform/alibaba-oss) | 用于部署阿里云 OSS 的 Terraform Configuration 的 ComponentDefinition
+| |  | [RDS](./terraform/alibaba-rds) | 用于部署阿里云 RDS 的 Terraform Configuration 的 ComponentDefinition
+
 ## 查看 KubeVela 的云资源组件
 
-我们通过 [KubeVela CLI](../install#3-安装-kubevela-cli)来查看，当前系统中可用的云资源组件类型：
+我们通过 [KubeVela CLI](../../../install#3-安装-kubevela-cli)来查看，当前系统中可用的云资源组件类型：
 
 ```shell
-$ vela components
+$ vela components --label type=terraform
 NAME        NAMESPACE  	WORKLOAD                             	DESCRIPTION                                                            
 alibaba-ack	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud ACK cluster       
 alibaba-oss	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud OSS object        
 alibaba-rds	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud RDS object        
-```
-
-KubeVela 对云资源的集成流程大致如下：
-
- - 熟悉各云服务商的鉴权机制，获取并准备需要的 secret 或者 token 等密钥
- - 将鉴权信息保存到 Terraform 的全局配置中，下一步校验
- - KubeVela 通过 Terraform 控制器完成鉴权校验，通过后自动拉起对应云资源
-
-## 激活云资源权限
-
-首先准备好，要访问对应云厂商的密钥信息后，使用 `vela addon enable` 指令来全局配置鉴权信息：
-```shell
-vela addon enable terraform/provider-alicloud --ALICLOUD_ACCESS_KEY_ID=<你的秘钥 Key ID> -ALICLOUD_SECRET_ACCESS_KEY=<你的秘钥密码>
 ```
 
 下面我们以阿里云关系型数据库（RDS）的例子，作为示例进行讲解。
@@ -121,11 +117,11 @@ EOF
 
 ## 自定义云资源
 
-如果我们提供的开箱即用云资源没有覆盖你的研发需求，你依然可以通过灵活的[Terraform 组件](../platform-engineers/components/component-terraform)去自定义业务所需要的云资源。
+如果我们提供的开箱即用云资源没有覆盖你的研发需求，你依然可以通过灵活的[Terraform 组件](../../../platform-engineers/components/component-terraform)去自定义业务所需要的云资源。
 
 ## 下一步
 
-- [组件可观测性](./component-observability)
-- [应用组件间的依赖和参数传递](./component-dependency-parameter)
-- [多应用、多环境、多集群编排](./multi-app-env-cluster)
+- [组件可观测性](../../component-observability)
+- [应用组件间的依赖和参数传递](../../component-dependency-parameter)
+- [多应用、多环境、多集群编排](../../multi-app-env-cluster)
 
