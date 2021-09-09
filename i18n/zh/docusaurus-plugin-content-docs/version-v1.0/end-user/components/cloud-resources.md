@@ -235,4 +235,4 @@ $ kubectl port-forward deployment/express-server 80:80
 
 我们看到云资源已经正常地被应用使用了
 
-![](../resources/crossplane-visit-application.jpg)
+![](../../resources/crossplane-visit-application.jpg)
