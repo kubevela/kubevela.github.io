@@ -64,4 +64,13 @@ writeConnectionSecretToRef | The secret which the cloud resource connection will
 Name | Description | Type | Required | Default
 ------------ | ------------- | ------------- | ------------- | ------------- 
 name | The secret name which the cloud resource connection will be written to | string | false |
-namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+namespace | The secret namespace which the cloud resource connection will be written to | string | false |
+
+## Outputs
+
+If `writeConnectionSecretToRef` is set, a secret will be generated with these keys as below:
+
+Name | Description
+------------ | -------------
+name | ACK Kubernetes cluster name |
+kubeconfig | The KubeConfig string for the ACK Kubernetes cluster |
