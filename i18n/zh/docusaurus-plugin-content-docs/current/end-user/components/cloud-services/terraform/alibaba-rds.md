@@ -44,3 +44,15 @@ writeConnectionSecretToRef | 云资源连接信息即将写入的 secret 的信�
 ------------ | ------------- | ------------- | ------------- | ------------- 
 name | 云资源连接信息即将写入的 secret 的名字 | string | 是 |
 namespace | 云资源连接信息即将写入的 secret 的 namespace | string | 否 |
+
+## 输出
+
+如果设置了 `writeConnectionSecretToRef`，一个 Kubernetes Secret 将会被创建，并且，它的数据里有这些键（key）。
+
+名字 | 描述
+------------ | -------------
+DB_NAME | RDS 实例名 |
+DB_USER | RDS 实例的用户名 |
+DB_PORT | RDS 实例的端口 |
+DB_HOST | RDS 实例的主机名 |
+DB_PASSWORD | RDS 实例的密码 |
