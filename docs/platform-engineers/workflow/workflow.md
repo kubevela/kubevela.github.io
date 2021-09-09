@@ -20,9 +20,9 @@ KubeVela provides several CUE actions for writing workflow steps. These actions 
 
 | Action | Description | Parameter |
 | :---: | :--: | :-- |
-| ApplyApplication | Apply all the resources in Application. | - |
-| Read | Read resources in Kubernetes cluster. | value: the resource metadata to be get. And after successful execution, `value` will be updated with resource definition in cluster.<br /> err: if an error occurs, the `err` will contain the error message. |
-| ConditionalWait | The workflow step will be blocked until the condition is met. | continue: The workflow step will be blocked until the value becomes `true`. |
+| [ApplyApplication](./cue-actions#apply) | Apply all the resources in Application. | - |
+| [Read](./cue-actions#read) | Read resources in Kubernetes cluster. | value: the resource metadata to be get. And after successful execution, `value` will be updated with resource definition in cluster.<br /> err: if an error occurs, the `err` will contain the error message. |
+| [ConditionalWait](./cue-actions#conditionalwait) | The workflow step will be blocked until the condition is met. | continue: The workflow step will be blocked until the value becomes `true`. |
 | ... | ... | ... |
 
 > For all the workflow actions, please refer to [Cue Actions](./cue-actions)

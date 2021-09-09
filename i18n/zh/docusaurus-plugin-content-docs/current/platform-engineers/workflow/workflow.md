@@ -20,9 +20,9 @@ KubeVela 提供了一些 CUE 操作类型用于编写工作流步骤。这些操
 
 | 操作名 | 说明 | 参数 |
 | :---: | :--: | :-- |
-| ApplyApplication | 部署应用中的所有资源 | - |
-| Read | 读取 Kubernetes 集群中的资源。 | value: 描述需要被读取资源的元数据，比如 kind、name 等，操作完成后，集群中资源的数据会被填充到 `value` 上。<br /> err: 如果读取操作发生错误，这里会以字符串的方式指示错误信息。 |
-| ConditionalWait | 会让 Workflow Step 处于等待状态，直到条件被满足。 | continue: 当该字段为 true 时，Workflow Step 才会恢复继续执行。 |
+| [ApplyApplication](./cue-actions#apply) | 部署应用中的所有资源 | - |
+| [Read](./cue-actions#read) | 读取 Kubernetes 集群中的资源。 | value: 描述需要被读取资源的元数据，比如 kind、name 等，操作完成后，集群中资源的数据会被填充到 `value` 上。<br /> err: 如果读取操作发生错误，这里会以字符串的方式指示错误信息。 |
+| [ConditionalWait](./cue-actions#conditionalwait) | 会让 Workflow Step 处于等待状态，直到条件被满足。 | continue: 当该字段为 true 时，Workflow Step 才会恢复继续执行。 |
 | ... | ... | ... |
 
 > 所有的操作类型可参考 [Cue Actions](./cue-actions)
