@@ -6,30 +6,18 @@ title:  集成云资源
 
 KubeVela 通过云资源组件（Component）和运维特征（Trait）里的资源绑定功能，高效安全地完成不同类型云资源的集成工作。目前你可以直接调用阿里云容器服务 Kubernetes 版（ACK ）、阿里云对象存储服务（OSS）和阿里云关系型数据库服务（RDS）这些默认组件。同时在未来，更多新的云资源也会在社区的支撑下逐渐成为默认选项，让你标准化统一地去使用各种厂商的云资源。
 
-## 支持的云资源列表
+> ⚠️ 请确认管理员已经安装了 [Terraform 插件 'terraform/provider-alicloud'](../../../platform-engineers/components/component-terraform).
 
-<table>
-	<tr>
-	    <th>编排类型</th>
-	    <th>云服务商</th>
-	    <th>云资源</th>  
-	</tr >
-	<tr >
-	    <td rowspan="3">Terraform</td>
-	    <td rowspan="3">Alibaba Cloud</td>
-	    <td><a href="./terraform/alibaba-ack">ACK</a></td>
-	</tr>
-	<tr>
-	    <td><a href="./terraform/alibaba-oss">OSS</a></td>
-	</tr>
-	<tr>
-	    <td><a href="./terraform/alibaba-rds">RDS</a></td>
-	</tr>
-</table>
+## 支持的云资源列表
+编排类型 | 云服务商 | 云资源 | 描述
+------------ | ------------- | ------------- | -------------
+Terraform | Alibaba Cloud | [ACK](./terraform/alibaba-ack) | 用于部署阿里云 ACK 的 Terraform Configuration 的 ComponentDefinition
+| |  | [OSS](./terraform/alibaba-oss) | 用于部署阿里云 OSS 的 Terraform Configuration 的 ComponentDefinition
+| |  | [RDS](./terraform/alibaba-rds) | 用于部署阿里云 RDS 的 Terraform Configuration 的 ComponentDefinition
 
 ## 查看 KubeVela 的云资源组件
 
-我们通过 [KubeVela CLI](../install#3-安装-kubevela-cli)来查看，当前系统中可用的云资源组件类型：
+我们通过 [KubeVela CLI](../../../install#3-安装-kubevela-cli)来查看，当前系统中可用的云资源组件类型：
 
 ```shell
 $ vela components --label type=terraform
@@ -129,11 +117,11 @@ EOF
 
 ## 自定义云资源
 
-如果我们提供的开箱即用云资源没有覆盖你的研发需求，你依然可以通过灵活的[Terraform 组件](../platform-engineers/components/component-terraform)去自定义业务所需要的云资源。
+如果我们提供的开箱即用云资源没有覆盖你的研发需求，你依然可以通过灵活的[Terraform 组件](../../../platform-engineers/components/component-terraform)去自定义业务所需要的云资源。
 
 ## 下一步
 
-- [组件可观测性](./component-observability)
-- [应用组件间的依赖和参数传递](./component-dependency-parameter)
-- [多应用、多环境、多集群编排](./multi-app-env-cluster)
+- [组件可观测性](../../component-observability)
+- [应用组件间的依赖和参数传递](../../component-dependency-parameter)
+- [多应用、多环境、多集群编排](../../multi-app-env-cluster)
 

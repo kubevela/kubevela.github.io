@@ -4,40 +4,20 @@ title: Provision and Consume Cloud Services
 
 This tutorial will talk about how to provision and consume Cloud Resources by Terraform.
 
-> ⚠️ This section requires your platform engineers have already enabled add-on `terraform/provider-alicloud` [Terraform related capabilities](../../../platform-engineers/components/component-terraform).
+> ⚠️ This section requires your platform engineers have already enabled [add-on 'terraform/provider-alicloud'](../../../platform-engineers/components/component-terraform).
 
 ## Supported Cloud Resource list
 
-<table>
-	<tr>
-	    <th>Type</th>
-	    <th>Cloud Provider</th>
-	    <th>Cloud Resource</th>  
-	</tr >
-	<tr >
-	    <td rowspan="3">Terraform</td>
-	    <td rowspan="3">Alibaba Cloud</td>
-	    <td><a href="./terraform/alibaba-ack">ACK</a></td>
-	</tr>
-	<tr>
-	    <td><a href="./terraform/alibaba-oss">OSS</a></td>
-	</tr>
-	<tr>
-	    <td><a href="./terraform/alibaba-rds">RDS</a></td>
-	</tr>
-</table>
+Orchestration Type | Cloud Provider | Cloud Resource | Description
+------------ | ------------- | ------------- | -------------
+Terraform | Alibaba Cloud | [ACK](./terraform/alibaba-ack) | Terraform configuration for Alibaba Cloud ACK cluster
+| |  | [OSS](./terraform/alibaba-oss) | Terraform configuration for Alibaba Cloud OSS object
+| |  | [RDS](./terraform/alibaba-rds) | Terraform configuration for Alibaba Cloud RDS object
 
 ## Terraform
 
-All supported cloud resources are as below.
+All supported Terraform cloud resources can be seen in the list above. You can also filter them by command by `vela components --label type=terraform`.
 
-```shell
-$ vela components --label type=terraform
-NAME        NAMESPACE  	WORKLOAD                             	DESCRIPTION                                                            
-alibaba-ack	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud ACK cluster       
-alibaba-oss	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud OSS object        
-alibaba-rds	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud RDS object        
-```
 
 Let's deploy
 the [application](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/application.yaml)
