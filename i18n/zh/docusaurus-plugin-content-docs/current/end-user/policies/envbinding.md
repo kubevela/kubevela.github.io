@@ -68,7 +68,7 @@ NAME          COMPONENT      TYPE         PHASE     HEALTHY   STATUS   AGE
 policy-demo   nginx-server   webservice   running   true               65s
 ```
 
-如果你想使用 `env-binding` 在多集群环境下创建应用部署计划，请参考 **[应用多集群部署](../multi-app-env-cluster)** 。
+如果你想使用 `env-binding` 在多集群环境下创建应用部署计划，请参考 **[应用多集群部署](../../case-studies/multi-app-env-cluster)** 。
 
 ## 参数说明
 

@@ -440,7 +440,7 @@ Get to know about how to customize:
 * [Component](../components/custom-component)
 * [Trait](../traits/customize-trait)
 * [Policy](../policy/custom-policy)
-* [Workflow](../workflow/steps)
+* [Workflow](../workflow/workflow)
 
 [1]:	../oam/oam-model
 [2]:	../oam/x-definition

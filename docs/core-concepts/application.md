@@ -155,7 +155,7 @@ The Workflow is based on modular design. Each Workflow module is defined by a De
 
 > Especially, workflow works in application level, if you specify workflow, the resources won't be deployed if you don't specify any step to deploy it.
 
-If you're a platform builder who's familiar with Kubernetes, you can learn to [define your own workflow step by using CUE](../platform-engineers/workflow/steps).
+If you're a platform builder who's familiar with Kubernetes, you can learn to [define your own workflow step by using CUE](../platform-engineers/workflow/workflow).
 
 ## What's Next
 
