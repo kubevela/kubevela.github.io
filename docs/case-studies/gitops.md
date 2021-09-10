@@ -2,11 +2,13 @@
 title:  GitOps with KubeVela
 ---
 
-GitOps is a continuous delivery method that allows developers to automatically deploy applications by changing code in a Git repository. In this section, you will learn how to use KubeVela for GitOps deployment.
+GitOps is a continuous delivery method that allows developers to automatically deploy applications by changing code in a Git repository. KubeVela can support GitOps as an application delivery system. In this section, you will learn how to use KubeVela for GitOps deployment.
 
 ## Preparation
 
-First, prepare a Git Repository with `Application` files that need to be applied, please refer to [KubeVela-GitOps-Demo](https://github.com/FogDong/KubeVela-GitOps-Demo):
+First, prepare a Git Repository with `Application` files, some source code and a Dockerfile.
+
+The code is very simple, starting a service and displaying the version in the code. In `Application`, we'll start a `webservice` for the code and add an `Ingress` trait to access.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -16,25 +18,25 @@ metadata:
   namespace: default
 spec:
   components:
-  - name: express-server
-    type: webservice
-    properties:
-      image: stefanprodan/podinfo
-      port: 9898
-    traits:
-    - type: ingress
+    - name: test-server
+      type: webservice
       properties:
-        domain: testsvc.example.com
-        http:
-          /: 9898
-  - name: nginx-server
-    type: webservice
-    properties:
-      image: nginx:1.21
-      port: 80
+        # replace the imagepolicy `default:gitops` with your policy later
+        image: <your image> # {"$imagepolicy": "default:gitops"}
+        port: 8088
+      traits:
+        - type: ingress
+          properties:
+            domain: testsvc.example.com
+            http:
+              /: 8088
 ```
 
-Second, apply a secret with your Git username and password in cluster:
+We want users to build the image and push it to the image registry after changing the code, so we need to integrate with a CI tool like GitHub Actions or Jenkins to do it. In this example, we use GitHub Actions to build the image. For the code and configuration file, please refer to [Example Repo](https://github.com/oam-dev/kubevela/samples).
+
+## Create the Git secret
+
+After the new image is pushed to the image registry, KubeVela will recognize the new image and update the `Application` file in the Git repository and cluster. Therefore, we need a secret with Git information for KubeVela to commit to the Git repository.
 
 ```yaml
 apiVersion: v1
@@ -43,13 +45,13 @@ metadata:
   name: my-secret
 type: kubernetes.io/basic-auth
 stringData:
-  username: your username
-  password: your password
+  username: <your username>
+  password: <your password>
 ```
 
-## Write the Application that can apply automatically
+## Write the automatic apply file
 
-Apply the `Application` file to the cluster:
+After completing the basic configuration above, we can create a new automatic apply file locally and associate the corresponding Git repository and image registry information:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -62,82 +64,91 @@ spec:
     type: kustomize
     properties:
       repoType: git
-      # your git repository url
-      url: https://github.com/FogDong/KubeVela-GitOps-Demo
-      # your secret name
+      url: <your github repo address>
+      # your git secret
       secretRef: my-secret
-      # the interval time of pull config from repo
+      # the interval time to pull from git repo and image registry
       pullInterval: 1m
       git:
+        # the specific branch
         branch: master
+      # the path that you want to listen
       path: .
+      imageRepository:
+        image: <your image>
+        # if it's a private image registry, use `kubectl create secret docker-registry` to create the secret
+        # secretRef: imagesecret
+        filterTags:
+          # filter the image tag
+          pattern: '^master-[a-f0-9]+-(?P<ts>[0-9]+)'
+          extract: '$ts'
+        # use the policy to sort the latest image tag and update
+        policy:
+          numerical:
+            order: asc
 ```
 
-Check the `Application` in clusters, we can see that the `git-app` automatically pulls the config from Git Repository and apply the application to the cluster:
+Apply the file to the cluster and check the `Application` in clusters, we can see that the `git-app` automatically pulls the config from Git Repository and apply the application to the cluster:
 
 ```shell
-$ kubectl get application
+$ vela ls
 
-NAME                  COMPONENT        TYPE         PHASE     HEALTHY   STATUS   AGE
-first-vela-workflow   express-server   webservice   running   true               1s
-git-app               gitops           kustomize    running   true               3s
+APP                	COMPONENT     	TYPE      	TRAITS 	PHASE  	HEALTHY	STATUS	CREATED-TIME
+first-vela-workflow	test-server	    webservice	ingress	running	healthy	      	2021-09-10 11:23:34 +0800 CST
+git-app            	gitops        	kustomize 	       	running	healthy	      	2021-09-10 11:23:32 +0800 CST
 ```
 
-## Edit the configuration
+We can `curl` the `Ingress` to see the current version in code:
 
-After the `Application` is running, we want to re-apply the app to the `prod` namespace. We can edit the `Application` file in Git Repository:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-vela-workflow
-  namespace: default
-spec:
-  components:
-  - name: express-server
-    type: webservice
-    properties:
-      image: stefanprodan/podinfo
-      port: 9898
-    traits:
-    - type: ingress
-      properties:
-        domain: testsvc.example.com
-        http:
-          /: 9898
-  - name: nginx-server
-    type: webservice
-    properties:
-      image: nginx:1.21
-      port: 80
-
-  policies:
-    - name: my-policy
-      type: env-binding
-      properties:
-        clusterManagementEngine: single-cluster
-        envs:
-          - name: my-env
-            placement:
-              namespaceSelector:
-                name: prod
-  workflow:
-    steps:
-      - name: multi-env
-        type: multi-env
-        properties:
-          policy: my-policy
-          env: my-env
+```shell 
+$ curl -H "Host:testsvc.example.com" http://<your-ip>
+Version: 0.1.5
 ```
 
-Check the `Application` in clusters, we can see the application has been applied to `prod` namespace after a while:
+## Modify the code
 
-```shell
-$ kubectl get application -A
+After the first applying, we can modify the code in Git Repository to apply automatically.
 
-NAMESPACE     NAME                  COMPONENT                               TYPE         PHASE     HEALTHY   STATUS   AGE
-default       first-vela-workflow   express-server                          webservice   running   true               10m
-default       git-app               gitops                                  kustomize    running   true               10m
-prod          first-vela-workflow   express-server                          webservice   running   true               8s
+Change the `Version` to `0.1.6` in code:
+
+```go
+const VERSION = "0.1.6"
+
+func main() {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		_, _ = fmt.Fprintf(w, "Version: %s\n", VERSION)
+	})
+	if err := http.ListenAndServe(":8088", nil); err != nil {
+		println(err.Error())
+	}
+}
 ```
+
+Commit the change to the Git Repository, we can see that our CI pipelines has built the image and push it to the image registry.
+
+KubeVela will then listening to the image registry and update the `Application` in Git Repository with the latest image tag. We can see that there is a commit form `kubevelabot`, the commit message is `Update image automatically.`
+
+![alt](../resources/gitops-commit.png)
+
+> Note that the commit from `kubevelabot` will not trigger the pipeline again and since we filter out the commit from KubeVela in CI configuration.
+> 
+> ```shell
+> jobs:
+>  publish:
+>    if: "!contains(github.event.head_commit.message, 'Update image automatically')"
+> ```
+
+Re-check the `Application` in cluster, we can see that the image of the `Application` has been updated after a while. We can `curl` to `Ingress` to see the current version:
+
+```shell 
+$ curl -H "Host:testsvc.example.com" http://<your-ip>
+Version: 0.1.6
+```
+
+The `Version` has been updated successfully! Now we're done with everything from changing the code to automatically applying to the cluster.
+
+KubeVela gets the latest information from the code repository and the image repository at regular intervals, depending on the interval you specify:
+* When the `Application` file in the Git repository is updated, KubeVela will update the `Application` in the cluster based on the latest configuration.
+* When a new tag is added to the image registry, KubeVela will filter out the latest tag based on your policy and update it to Git repository. When the files in the repository are updated, KubeVela repeats the first step and updates the files in the cluster, thus achieving automatic deployment.
+
+By integrating with GitOps, KubeVela helps users speed up deployment and simplify continuous deployment.

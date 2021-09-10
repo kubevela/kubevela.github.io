@@ -8,7 +8,7 @@ GitOps 通过实现持续交付，使开发人员可以通过直接更改 Git �
 
 首先，准备一个 Git 仓库，里面含有一个 `Application` 配置文件，一些源代码以及对应的 Dockerfile。
 
-代码的实现逻辑非常简单，会启动一个服务，并显示对应的 Version 版本。而在 `Application` 当中，我们会通过一个 `webservice` 类型的 component 启动该服务，并添加一个 `ingress` 的 traits 以方便访问。
+代码的实现逻辑非常简单，会启动一个服务，并显示对应的 Version 版本。而在 `Application` 当中，我们会通过一个 `webservice` 类型的组件启动该服务，并添加一个 `ingress` 的运维特征以方便访问：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -21,8 +21,8 @@ spec:
     - name: test-server
       type: webservice
       properties:
-        # replace the imagepolicy `default:gitops` with your policy later
-        image: "your image" # {"$imagepolicy": "default:gitops"}
+        # 在创建完自动部署文件后，将 `default:gitops` 替换为其 namespace 和 name
+        image: <your image> # {"$imagepolicy": "default:gitops"}
         port: 8088
       traits:
         - type: ingress
@@ -36,7 +36,7 @@ spec:
 
 ## 配置秘钥信息
 
-在新的镜像推送到镜像仓库后，KubeVela 会识别到新的镜像，并更新仓库及集群中的 `Application` 配置文件。因此，我们需要一个含有 Git 信息的 Secret，使 Vela 向 Git 仓库进行提交。
+在新的镜像推送到镜像仓库后，KubeVela 会识别到新的镜像，并更新仓库及集群中的 `Application` 配置文件。因此，我们需要一个含有 Git 信息的 Secret，使 KubeVela 向 Git 仓库进行提交。
 
 ```yaml
 apiVersion: v1
@@ -45,8 +45,8 @@ metadata:
   name: my-secret
 type: kubernetes.io/basic-auth
 stringData:
-  username: your username
-  password: your password
+  username: <your username>
+  password: <your password>
 ```
 
 ## 编写自动部署配置文件
@@ -65,7 +65,7 @@ spec:
     properties:
       repoType: git
       # 将此处替换成你的 git 仓库地址
-      url: "your github repo address"
+      url: <your github repo address>
       # 关联 git secret
       secretRef: my-secret
       # 自动拉取配置的时间间隔
@@ -77,7 +77,7 @@ spec:
       path: .
       imageRepository:
         # 镜像地址
-        image: "your image"
+        image: <your image>
         # 如果这是一个私有的镜像仓库，可以通过 `kubectl create secret docker-registry` 创建对应的镜像秘钥并相关联
         # secretRef: imagesecret
         filterTags:
@@ -93,17 +93,17 @@ spec:
 将上述文件部署到集群中后，查看集群中的应用，可以看到，应用 `git-app` 自动拉取了 Git 仓库中的应用配置并部署到了集群中：
 
 ```shell
-$ kubectl get application
+$ vela ls
 
-NAME                  COMPONENT        TYPE         PHASE     HEALTHY   STATUS   AGE
-first-vela-workflow   test-server      webservice   running   true               1s
-git-app               gitops           kustomize    running   true               3s
+APP                	COMPONENT     	TYPE      	TRAITS 	PHASE  	HEALTHY	STATUS	CREATED-TIME
+first-vela-workflow	test-server	    webservice	ingress	running	healthy	      	2021-09-10 11:23:34 +0800 CST
+git-app            	gitops        	kustomize 	       	running	healthy	      	2021-09-10 11:23:32 +0800 CST
 ```
 
 通过 `curl` 对应的 `Ingress`，可以看到目前的版本是 0.1.5
 
 ```shell 
-$ curl -H "Host:testsvc.example.com" http://your-ip
+$ curl -H "Host:testsvc.example.com" http://<your-ip>
 Version: 0.1.5
 ```
 
@@ -132,7 +132,7 @@ func main() {
 
 ![alt](../resources/gitops-commit.png)
 
-> 值得注意的是，来自 `kubevelabot` 的提交不会再次触发流水线导致重复构建，因为我们在 CI 配置的时候，将来自 vela 的提交过滤掉了
+> 值得注意的是，来自 `kubevelabot` 的提交不会再次触发流水线导致重复构建，因为我们在 CI 配置的时候，将来自 KubeVela 的提交过滤掉了。
 > 
 > ```shell
 > jobs:
@@ -143,14 +143,14 @@ func main() {
 重新查看集群中的应用，可以看到经过一段时间后，`Application` 的镜像已经被更新。通过 `curl` 对应的 `Ingress` 查看当前版本：
 
 ```shell 
-$ curl -H "Host:testsvc.example.com" http://your-ip
+$ curl -H "Host:testsvc.example.com" http://<your-ip>
 Version: 0.1.6
 ```
 
 版本已被成功更新！至此，我们完成了从变更代码，到自动部署至集群的全部操作。
 
 KubeVela 会通过你配置的 `interval` 时间间隔，来每隔一段时间分别从代码仓库及镜像仓库中获取最新信息：
-* 当 Git 仓库中的配置文件被更新时，vela 将根据最新的配置更新集群中的应用。
-* 当镜像仓库中多了新的 Tag 时，vela 将根据你配置的 policy 规则，筛选出最新的镜像 Tag，并更新到 Git 仓库中。而当代码仓库中的文件被更新后，vela 将重复第一步，更新集群中的文件，从而达到了自动部署的效果。
+* 当 Git 仓库中的配置文件被更新时，KubeVela 将根据最新的配置更新集群中的应用。
+* 当镜像仓库中多了新的 Tag 时，KubeVela 将根据你配置的 policy 规则，筛选出最新的镜像 Tag，并更新到 Git 仓库中。而当代码仓库中的文件被更新后，KubeVela 将重复第一步，更新集群中的文件，从而达到了自动部署的效果。
 
 通过与 GitOps 的集成，KubeVela 可以帮助用户加速部署应用，更为简洁地完成持续部署。
