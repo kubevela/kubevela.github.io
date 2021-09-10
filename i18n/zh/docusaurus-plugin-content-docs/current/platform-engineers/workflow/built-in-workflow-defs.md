@@ -1,5 +1,5 @@
 ---
-title:  内置工作流步骤
+title: 附录：内置工作流步骤
 ---
 
 为了便于用户使用，KubeVela 提供了一些内置的工作流步骤。
@@ -12,9 +12,7 @@ title:  内置工作流步骤
 
 ### 参数
 
-| 参数名 | 类型 | 说明 |
-| :---: | :--: | :--: |
-| - | - | - |
+无需指定参数，主要用于应用部署前后增加自定义步骤。
 
 ### 示例
 
@@ -51,9 +49,9 @@ spec:
 
 ### 参数
 
-| 参数名 | 类型 | 说明 |
-| :---: | :--: | :--: |
-| name | string | 需要等待的 Application 名称 |
+|  参数名   |  类型  |                 说明                  |
+| :-------: | :----: | :-----------------------------------: |
+|   name    | string |      需要等待的 Application 名称      |
 | namespace | string | 需要等待的 Application 所在的命名空间 |
 
 ### 示例
@@ -94,10 +92,10 @@ spec:
 
 ### 参数
 
-| 参数名 | 类型 | 说明 |
-| :---: | :--: | :--: |
+| 参数名 |  类型  |       说明       |
+| :----: | :----: | :--------------: |
 | policy | string | 需要关联的策略名 |
-| env | string | 需要关联的环境名 |
+|  env   | string | 需要关联的环境名 |
 
 ### 示例
 
@@ -166,13 +164,13 @@ spec:
 
 ### 参数
 
-| 参数名 | 类型 | 说明 |
-| :---: | :--: | :-- |
-| slack | Object | 可选值，如果需要发送 Slack 信息，则需填写其 url 及 message |
-| slack.url | String | 必填值，Slack 的 Webhook 地址 |
-| slack.message | Object | 必填值，需要发送的 Slack 信息，请符合 [Slack 信息规范](https://api.slack.com/reference/messaging/payload) |
-| dingding | Object | 可选值，如果需要发送钉钉信息，则需填写其 url 及 message |
-| dingding.url | String | 必填值，钉钉的 Webhook 地址 |
+|      参数名      |  类型  | 说明                                                                                                                                     |
+| :--------------: | :----: | :--------------------------------------------------------------------------------------------------------------------------------------- |
+|      slack       | Object | 可选值，如果需要发送 Slack 信息，则需填写其 url 及 message                                                                               |
+|    slack.url     | String | 必填值，Slack 的 Webhook 地址                                                                                                            |
+|  slack.message   | Object | 必填值，需要发送的 Slack 信息，请符合 [Slack 信息规范](https://api.slack.com/reference/messaging/payload)                                |
+|     dingding     | Object | 可选值，如果需要发送钉钉信息，则需填写其 url 及 message                                                                                  |
+|   dingding.url   | String | 必填值，钉钉的 Webhook 地址                                                                                                              |
 | dingding.message | Object | 必填值，需要发送的钉钉信息，请符合 [钉钉信息规范](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |
 
 ### 示例
@@ -230,9 +228,9 @@ spec:
 
 ### 参数
 
-| 参数名 | 类型 | 说明 |
-| :---: | :--: | :--: |
-| - | - | - |
+| 参数名 | 类型  | 说明  |
+| :----: | :---: | :---: |
+|   -    |   -   |   -   |
 
 ### 示例
 
