@@ -43,4 +43,16 @@ writeConnectionSecretToRef | The secret which the cloud resource connection will
 Name | Description | Type | Required | Default
 ------------ | ------------- | ------------- | ------------- | ------------- 
 name | The secret name which the cloud resource connection will be written to | string | true |
-namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+namespace | The secret namespace which the cloud resource connection will be written to | string | false |
+
+## Outputs
+
+If `writeConnectionSecretToRef` is set, a secret will be generated with these keys as below:
+
+Name | Description
+------------ | -------------
+DB_NAME | RDS instance name |
+DB_USER | RDS instance username |
+DB_PORT | RDS instance port |
+DB_HOST | RDS instance host |
+DB_PASSWORD | RDS instance password |

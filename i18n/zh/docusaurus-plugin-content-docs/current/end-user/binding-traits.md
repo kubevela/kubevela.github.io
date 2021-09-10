@@ -306,5 +306,5 @@ kubectl logs -f log-gen-worker-7bb65dcdd6-tpbdh count-log
 
 ## 下一步
 
-- [集成云资源](./cloud-services)，了解如何集成各类云厂商的云资源
+- [集成云资源](./components/cloud-services/provider-and-consume-cloud-services.md)，了解如何集成各类云厂商的云资源
 - [灰度发布和扩缩容](./rollout-scaler)

@@ -288,5 +288,5 @@ When the built-in Trait cannot meet your needs, you can freely customize the mai
 
 ## Next
 
-- [Integrated Cloud Services](./cloud-services), learn how to integrate cloud services from various cloud vendors
+- [Integrated Cloud Services](./components/cloud-services/provider-and-consume-cloud-services), learn how to integrate cloud services from various cloud vendors
 - [Rollout & Scaler](./rollout-scaler)

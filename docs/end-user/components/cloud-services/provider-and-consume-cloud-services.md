@@ -2,6 +2,16 @@
 title: Provision and Consume Cloud Services
 ---
 
+Cloud-oriented development is now becoming the norm, there is an urgent need to integrate cloud resources from different
+sources and types. Whether it is the most basic object storage, cloud database, or load balancing, it is all faced with
+the challenges of hybrid cloud, multi-cloud and other complex environments. KubeVela is perfect to satisfy the needs.
+
+KubeVela efficiently and securely integrates different types of cloud resources through resource binding capabilities in
+cloud resource Components and Traits. At present, you can directly use the default components of AliCloud Kubernetes(ACK),
+AliCloud Object Storage Service (OSS) and AliCloud Relational Database Service (RDS). At the same time, more new cloud
+resources will gradually become the default option under the support of the community in the future. You can use cloud
+resources of various manufacturers in a standardized and unified way.
+
 This tutorial will talk about how to provision and consume Cloud Resources by Terraform.
 
 > ⚠️ This section requires your platform engineers have already enabled [add-on 'terraform/provider-alicloud'](../../../platform-engineers/components/component-terraform).
@@ -17,7 +27,6 @@ Terraform | Alibaba Cloud | [ACK](./terraform/alibaba-ack) | Terraform configura
 ## Terraform
 
 All supported Terraform cloud resources can be seen in the list above. You can also filter them by command by `vela components --label type=terraform`.
-
 
 Let's deploy
 the [application](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/application.yaml)
@@ -70,7 +79,9 @@ spec:
           name: oss-conn
 ```
 
-The component `express-server` consume OSS and RDS by trait [Service Binding](../../traits/service-binding).
+The component `sample-db` will generate secret `db-conn` with [these keys](./terraform/alibaba-rds#outputs), and the component
+`sample-oss` will generate secret `oss-conn`. These secrets are binded to the Envs of component `express-server` by trait
+[Service Binding](../../traits/service-binding). Then the component can consume instances of OSS and RDS.
 
 Deploy and verify the application.
 
@@ -91,4 +102,10 @@ Handling connection for 80
 Handling connection for 80
 ```
 
-![](../../../resources/crossplane-visit-application.jpg)
+![](../../../resources/crossplane-visit-application-v3.jpg)
+
+## Next
+
+- [Component Observability](../../component-observability)
+- [Data Pass Between Components ](../../component-dependency-parameter)
+- [Multi-Cluster and Environment](../../../case-studies/multi-app-env-cluster)
