@@ -49,9 +49,9 @@ stringData:
   password: <your password>
 ```
 
-## Write the automatic apply file
+## Create the Application that sync with Git
 
-After completing the basic configuration above, we can create a new automatic apply file locally and associate the corresponding Git repository and image registry information:
+After completing the basic configuration above, we can create an Application file that syncs with the corresponding Git repository and image registry information:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -105,7 +105,7 @@ $ curl -H "Host:testsvc.example.com" http://<your-ip>
 Version: 0.1.5
 ```
 
-## Modify the code
+## Modify the code to trigger automatic deployment
 
 After the first applying, we can modify the code in Git Repository to apply automatically.
 
@@ -147,7 +147,7 @@ Version: 0.1.6
 
 The `Version` has been updated successfully! Now we're done with everything from changing the code to automatically applying to the cluster.
 
-KubeVela gets the latest information from the code repository and the image repository at regular intervals, depending on the interval you specify:
+KubeVela polls the latest information from the code and image repo periodically (at an interval that can be customized):
 * When the `Application` file in the Git repository is updated, KubeVela will update the `Application` in the cluster based on the latest configuration.
 * When a new tag is added to the image registry, KubeVela will filter out the latest tag based on your policy and update it to Git repository. When the files in the repository are updated, KubeVela repeats the first step and updates the files in the cluster, thus achieving automatic deployment.
 
