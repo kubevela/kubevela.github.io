@@ -128,9 +128,17 @@ func main() {
 
 提交该改动至代码仓库，可以看到，我们配置的 CI 流水线开始构建镜像并推送至镜像仓库。
 
-而 KubeVela 会通过监听镜像仓库，根据最新的镜像 Tag 来更新代码仓库中的 `Application`。此时，可以看到代码仓库中有一条来自 `kubevelabot` 的提交：
+而 KubeVela 会通过监听镜像仓库，根据最新的镜像 Tag 来更新代码仓库中的 `Application`。此时，可以看到代码仓库中有一条来自 `kubevelabot` 的提交，提交信息为 `Update image automatically.`
 
 ![alt](../resources/gitops-commit.png)
+
+> 值得注意的是，来自 `kubevelabot` 的提交不会再次触发流水线导致重复构建，因为我们在 CI 配置的时候，将来自 vela 的提交过滤掉了
+> 
+> ```shell
+> jobs:
+>  publish:
+>    if: "!contains(github.event.head_commit.message, 'Update image automatically')"
+> ```
 
 重新查看集群中的应用，可以看到经过一段时间后，`Application` 的镜像已经被更新。通过 `curl` 对应的 `Ingress` 查看当前版本：
 
@@ -141,4 +149,8 @@ Version: 0.1.6
 
 版本已被成功更新！至此，我们完成了从变更代码，到自动部署至集群的全部操作。
 
-KubeVela 通过与 GitOps 的集成，可以帮助用户加速部署应用，更为简洁地完成持续部署。
+KubeVela 会通过你配置的 `interval` 时间间隔，来每隔一段时间分别从代码仓库及镜像仓库中获取最新信息：
+* 当 Git 仓库中的配置文件被更新时，vela 将根据最新的配置更新集群中的应用。
+* 当镜像仓库中多了新的 Tag 时，vela 将根据你配置的 policy 规则，筛选出最新的镜像 Tag，并更新到 Git 仓库中。而当代码仓库中的文件被更新后，vela 将重复第一步，更新集群中的文件，从而达到了自动部署的效果。
+
+通过与 GitOps 的集成，KubeVela 可以帮助用户加速部署应用，更为简洁地完成持续部署。
