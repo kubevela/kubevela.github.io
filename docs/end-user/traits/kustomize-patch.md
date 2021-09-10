@@ -182,7 +182,7 @@ spec:
       traits:
         - type: kustomize-strategy-merge
           properties:
-            patchesJson:
+            patchesStrategicMerge:
               - apiVersion: apps/v1
                 kind: Deployment
                 metadata:
