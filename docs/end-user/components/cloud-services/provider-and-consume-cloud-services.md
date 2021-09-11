@@ -51,7 +51,7 @@ spec:
 The above `alibaba-oss` component will create an OSS bucket named `vela-website-0911`, with private acl, with connection information stored in a secreted named `oss-conn`.
 description, whether it's compulsory, and default value.
 
-Deploy the application and check the status of the application.
+Apply the above application, then check the status:
 
 ```shell
 $ vela ls
