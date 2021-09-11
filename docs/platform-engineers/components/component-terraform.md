@@ -38,7 +38,7 @@ provider.terraform.core.oam.dev/default created
 
 Take [Elastic IP](https://www.alibabacloud.com/help/doc-detail/36016.htm) as an example.
 
-- Develop a Terraform resource or module for the cloud resource
+#### Develop a Terraform resource or module for the cloud resource
 
 We recommend you to search the required cloud resource module in [Terraform official module registry](https://registry.terraform.io/browse/modules).
 If no luck, you can create a Terraform resource or module yourself per
@@ -69,7 +69,7 @@ output "EIP_ADDRESS" {
 }
 ```
 
-- Develop a ComponentDefinition for the cloud resource
+#### Develop a ComponentDefinition for the cloud resource
 
 Here is the scaffold for a Terraform ComponentDefinition. You only need to modify three fields `metadata.name`,
 `metadata.annotations.definition.oam.dev/description` and `spec.schematic.terraform.configuration`. 
@@ -141,7 +141,7 @@ spec:
 
 ```
 
-- Verify
+#### Verify
 
 You can quickly verify the ComponentDefinition by command `vela show`.
 

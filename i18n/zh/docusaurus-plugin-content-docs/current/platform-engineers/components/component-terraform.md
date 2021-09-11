@@ -7,14 +7,14 @@ Terraform 是目前业内支持云资源最广泛也最受欢迎的组件，Kube
 Terraform 使用任意的云资源。
 
 为了使最终用户能够[部署和消费云资源](../../end-user/components/cloud-services/provider-and-consume-cloud-services)，管理员需要：
-1）应用云提供商的证书；2）当用户的要求超出了 [内置云资源的能力](../../end-user/components/cloud-services/provider-and-consume-cloud-services))
+1）配置云提供商的鉴权信息；2）当用户的要求超出了 [内置云资源的能力](../../end-user/components/cloud-services/provider-and-consume-cloud-services)
 ，要为云资源准备 ComponentDefinitions。
 
-### 配置阿里云鉴权
+### 配置云服务商的鉴权
 
-为了使Terraform能够配置云资源，需要配置云服务商的鉴权信息。
+为了使 Terraform 能够部署云资源，需要配置云服务商的鉴权信息。
 
-以阿里巴巴云为例，对于其他云供应商，请参考 [Terraform controller getting started](https://github.com/oam-dev/terraform-controller/blob/master/getting-started.md)。
+以下示例以阿里云为例，对于其他云供应商，请参考 [Terraform controller getting started](https://github.com/oam-dev/terraform-controller/blob/master/getting-started.md)。
 
 ```shell
 $ export ALICLOUD_ACCESS_KEY=xxx; export ALICLOUD_SECRET_KEY=yyy
@@ -42,11 +42,10 @@ provider.terraform.core.oam.dev/default created
 
 以 [弹性 IP](https://help.aliyun.com/document_detail/120192.html)为例。
 
-- 为云资源开发一个 Terraform resource 或 module
+#### 为云资源开发一个 Terraform resource 或 module
 
-建议你在[Terraform 官方 module 库](https://registry.terraform.io/browse/modules)中搜索需要的云资源 module； 如果没有找到，你需要根据
-文档 [Terraform Alibaba Cloud Provider specifications](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs)
-自己创建一个 Terraform resource 或 module，具体如下：
+建议你在[Terraform 官方 module 库](https://registry.terraform.io/browse/modules)中搜索需要的云资源 module； 如果没有找到，你需要根据文档 [Terraform Alibaba Cloud Provider specifications](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs)
+自己开发一个 Terraform resource 或 module，具体如下：
 
 ```terraform
 module "eip" {
@@ -73,9 +72,9 @@ output "EIP_ADDRESS" {
 }
 ```
 
-- 为云资源开发一个 ComponentDefinition
+#### 为云资源开发一个 ComponentDefinition
 
-这里是 Terraform ComponentDefinition 的脚手架。你只需要修改三个字段：`metadata.name`，`metadata.annotations.definition.oam.dev/description`
+这是 Terraform ComponentDefinition 的脚手架。你只需要修改三个字段：`metadata.name`，`metadata.annotations.definition.oam.dev/description`
 和 `spec.schematic.terraform.configuration`。
 
 
@@ -145,7 +144,7 @@ spec:
 
 ```
 
-- 验证
+#### 验证
 
 你可以通过 `vela show` 命令快速验证 ComponentDefinition。
 
@@ -170,6 +169,5 @@ $ vela show alibaba-eip
 +-----------+-----------------------------------------------------------------------------+--------+----------+---------+
 ```
 
-如果表格显示出来，ComponentDefinition 应该就可以工作了。为了更进一步，你可以通过文档 [部署云资源](.../.../end-user/components/cloud-services/provider-and-consume-cloud-services)
-创建一个实际的 EIP 来验证它。
+如果表格能正常出来，ComponentDefinition 应该就可以工作了。更进一步，你可以通过文档[部署云资源](.../.../end-user/components/cloud-services/provider-and-consume-cloud-services)创建一个实际的 EIP 来验证。
 
