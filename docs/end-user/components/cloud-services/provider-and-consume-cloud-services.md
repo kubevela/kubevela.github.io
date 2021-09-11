@@ -59,7 +59,7 @@ APP                            	COMPONENT 	TYPE       	TRAITS	PHASE  	HEALTHY	ST
 provision-cloud-resource-sample	sample-oss	alibaba-oss	      	running	healthy	Cloud resources are deployed and ready to use	2021-09-11 12:55:57 +0800 CST
 ```
 
-When the application is `running` and `healthy`. We can also check the OSS bucket in Alibaba Cloud console or by [ossutil](https://partners-intl.aliyun.com/help/doc-detail/50452.htm)
+After the phase becomes `running` and `healthy`, you can then check the OSS bucket in Alibaba Cloud console or by [ossutil](https://partners-intl.aliyun.com/help/doc-detail/50452.htm)
 command.
 
 ```shell
