@@ -169,5 +169,5 @@ $ vela show alibaba-eip
 +-----------+-----------------------------------------------------------------------------+--------+----------+---------+
 ```
 
-如果表格能正常出来，ComponentDefinition 应该就可以工作了。更进一步，你可以通过文档[部署云资源](.../.../end-user/components/cloud-services/provider-and-consume-cloud-services)创建一个实际的 EIP 来验证。
+如果表格能正常出来，ComponentDefinition 应该就可以工作了。更进一步，你可以通过文档[部署云资源](../../end-user/components/cloud-services/provider-and-consume-cloud-services)创建一个实际的 EIP 来验证。
 
