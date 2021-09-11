@@ -21,6 +21,7 @@ This tutorial will talk about how to provision and consume Cloud Resources by Te
 Orchestration Type | Cloud Provider | Cloud Resource | Description
 ------------ | ------------- | ------------- | -------------
 Terraform | Alibaba Cloud | [ACK](./terraform/alibaba-ack) | Terraform configuration for Alibaba Cloud ACK cluster
+| |  | [EIP](./terraform/alibaba-eip) | Terraform configuration for Alibaba Cloud EIP object
 | |  | [OSS](./terraform/alibaba-oss) | Terraform configuration for Alibaba Cloud OSS object
 | |  | [RDS](./terraform/alibaba-rds) | Terraform configuration for Alibaba Cloud RDS object
 
