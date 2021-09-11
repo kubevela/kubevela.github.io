@@ -47,6 +47,7 @@ module.exports = {
                   'Cloud Services': [{
                       "Terraform": [
                           'end-user/components/cloud-services/terraform/alibaba-ack',
+                          'end-user/components/cloud-services/terraform/alibaba-eip',
                           'end-user/components/cloud-services/terraform/alibaba-rds',
                           'end-user/components/cloud-services/terraform/alibaba-oss',
                       ],
