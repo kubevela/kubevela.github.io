@@ -28,6 +28,48 @@ Terraform | Alibaba Cloud | [ACK](./terraform/alibaba-ack) | Terraform configura
 
 All supported Terraform cloud resources can be seen in the list above. You can also filter them by command by `vela components --label type=terraform`.
 
+### Provision cloud resources
+
+Let's provision an OSS bucket as an example.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: provision-cloud-resource-sample
+spec:
+  components:
+    - name: sample-oss
+      type: alibaba-oss
+      properties:
+        bucket: vela-website-0911
+        acl: private
+        writeConnectionSecretToRef:
+          name: oss-conn
+```
+
+The properties of alibaba-oss component are clearly described in the doc above, including each property's name, type,
+description, whether it's compulsory, and default value.
+
+Deploy the application and check the status of the application.
+
+```shell
+$ vela ls
+APP                            	COMPONENT 	TYPE       	TRAITS	PHASE  	HEALTHY	STATUS                                       	CREATED-TIME
+provision-cloud-resource-sample	sample-oss	alibaba-oss	      	running	healthy	Cloud resources are deployed and ready to use	2021-09-11 12:55:57 +0800 CST
+```
+
+When the application is `running` and `healthy`. We can also check the OSS bucket in Alibaba Cloud console or by [ossutil](https://partners-intl.aliyun.com/help/doc-detail/50452.htm)
+command.
+
+```shell
+$ ossutil ls oss://
+CreationTime                                 Region    StorageClass    BucketName
+2021-09-11 12:56:17 +0800 CST        oss-cn-beijing        Standard    oss://vela-website-0911
+```
+
+### Consume cloud resources
+
 Let's deploy
 the [application](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/application.yaml)
 below to provision Alibaba Cloud OSS and RDS cloud resources, and consume them by the web component.
@@ -73,7 +115,7 @@ spec:
     - name: sample-oss
       type: alibaba-oss
       properties:
-        bucket: vela-website
+        bucket: vela-website-0911
         acl: private
         writeConnectionSecretToRef:
           name: oss-conn
