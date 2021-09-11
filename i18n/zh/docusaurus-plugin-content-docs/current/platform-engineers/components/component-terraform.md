@@ -6,157 +6,57 @@ title:  Terraform 组件
 Terraform 是目前业内支持云资源最广泛也最受欢迎的组件，KubeVela 对 Terraform 进行了额外的支持，使得用户可以通过 Kubernetes CRD 的方式配合
 Terraform 使用任意的云资源。
 
-目前支持的云资源如下：
+为了使最终用户能够[部署和消费云资源](../../end-user/components/cloud-services/provider-and-consume-cloud-services)，管理员需要：
+1）配置云提供商的鉴权信息；2）当用户的要求超出了 [内置云资源的能力](../../end-user/components/cloud-services/provider-and-consume-cloud-services)
+，要为云资源准备 ComponentDefinitions。
+
+### 配置云服务商的鉴权
+
+为了使 Terraform 能够部署云资源，需要配置云服务商的鉴权信息。
+
+以下示例以阿里云为例，对于其他云供应商，请参考 [Terraform controller getting started](https://github.com/oam-dev/terraform-controller/blob/master/getting-started.md)。
 
 ```shell
-$ vela components --label type=terraform
-NAME       	NAMESPACE  	WORKLOAD                             	DESCRIPTION
-alibaba-ack	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud ACK cluster
-alibaba-oss	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud OSS object
-alibaba-rds	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud RDS object
-```
-
-本章节，将专门为你介绍如何通过 KubeVela 以及 Terraform 来实现自定义的云资源组件。我们以阿里云的对象存储(OSS)，作为例子来进行讲解。
-
-它的大致流程如下：
-1. 熟悉各云服务商的鉴权机制，准备相关的 `secret` 和 `token` 等必要信息。
-2. Terraform 使用 `Provider` 对象，完成对应云服务商的权限校验过程。
-3. KubeVela 通过 Terraform 控制器来拉起对应的云资源。
-
-
-### 配置阿里云鉴权
-以下是阿里云的鉴权相关步骤，其它云服务商同理：
-
-```
 $ export ALICLOUD_ACCESS_KEY=xxx; export ALICLOUD_SECRET_KEY=yyy
-If you'd like to use Alicloud Security Token Service, also export ALICLOUD_SECURITY_TOKEN.
+```
 
+If you'd like to use Alicloud Security Token Service, also export `ALICLOUD_SECURITY_TOKEN`.
+```shell
 $ export ALICLOUD_SECURITY_TOKEN=zzz
-$ sh hack/prepare-alibaba-credentials.sh
+```
+
+```
+$ sh https://raw.githubusercontent.com/oam-dev/terraform-controller/master/hack/prepare-alibaba-credentials.sh
 
 $ kubectl get secret -n vela-system
 NAME                                              TYPE                                  DATA   AGE
 alibaba-account-creds                             Opaque                                1      11s
 
-$ kubectl apply -f examples/alibaba/provider.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/terraform-controller/master/examples/alibaba/provider.yaml
 provider.terraform.core.oam.dev/default created
 ```
 
-`provider.yaml` 请使用示例：
+## 为云资源开发 ComponentDefinition
 
-```
-apiVersion: terraform.core.oam.dev/v1beta1
-kind: Provider
-metadata:
-  name: default
-spec:
-  provider: alibaba
-  region: cn-beijing
-  credentials:
-    source: Secret
-    secretRef:
-      namespace: vela-system
-      name: alibaba-account-creds
-      key: credentials
-```
+### 阿里云
 
-### 云资源关联 Provider
+以 [弹性 IP](https://help.aliyun.com/document_detail/120192.html)为例。
 
-Terraform 可以编写、应用一个 configuration_hcl_oss.yaml 来配置阿里云的 OSS 存储 Bukcet。它会去自动关联 Kubernetes 集群里的默认 `Provider`，即上一步的 `name: default` YMAL 文件。
+#### 为云资源开发一个 ComponentDefinition
 
-```
-apiVersion: terraform.core.oam.dev/v1beta1
-kind: Configuration
-metadata:
-  name: alibaba-oss
-spec:
-  hcl: |
-    resource "alicloud_oss_bucket" "bucket-acl" {
-      bucket = var.bucket
-      acl = var.acl
-    }
+这是 Terraform ComponentDefinition 的脚手架。你只需要修改三个字段：`metadata.name`，`metadata.annotations.definition.oam.dev/description`
+和 `spec.schematic.terraform.configuration`。
 
-    output "BUCKET_NAME" {
-      value = "${alicloud_oss_bucket.bucket-acl.bucket}.${alicloud_oss_bucket.bucket-acl.extranet_endpoint}"
-    }
-
-    variable "bucket" {
-      description = "OSS bucket name"
-      default = "vela-website"
-      type = string
-    }
-
-    variable "acl" {
-      description = "OSS bucket ACL, supported 'private', 'public-read', 'public-read-write'"
-      default = "private"
-      type = string
-    }
-
-  variable:
-    bucket: "vela-website"
-    acl: "private"
-
-  writeConnectionSecretToRef:
-    name: oss-conn
-    namespace: default
-```
-然后部署：
-
-```
-$ kubectl apply -f configuration_hcl_oss.yaml
-
-$ kubectl get configuration.terraform.core.oam.dev
-NAME         AGE
-alibaba-oss   1h
-
-$ kubectl get configuration.terraform.core.oam.dev alibaba-oss -o yaml
-apiVersion: terraform.core.oam.dev/v1beta1
-kind: Configuration
-metadata:
-  annotations:
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"terraform.core.oam.dev/v1beta1","kind":"Configuration","metadata":{"annotations":{},"name":"alibaba-oss","namespace":"default"},"spec":
-      ...
-       \"private\"\n    }\n  }\n}\n","variable":{"acl":"private","bucket":"vela-website"},"writeConnectionSecretToRef":{"name":"oss-conn","namespace":"default"}}}
-  creationTimestamp: "2021-04-02T08:17:08Z"
-  generation: 2
-spec:
-  ...
-  variable:
-    acl: private
-    bucket: vela-website
-  writeConnectionSecretToRef:
-    name: oss-conn
-    namespace: default
-status:
-  outputs:
-    BUCKET_NAME:
-      type: string
-      value: vela-website.oss-cn-beijing.aliyuncs.com
-  state: provisioned
-```
-
-利用 [ossutil](https://help.aliyun.com/document_detail/50452.html) 可以看到 OSS bucket 已经被创建出来。
-
-```
-$ ossutil ls oss://
-CreationTime                                 Region    StorageClass    BucketName
-2021-04-10 00:42:09 +0800 CST        oss-cn-beijing        Standard    oss://vela-website
-Bucket Number is: 1
-
-0.146789(s) elapsed
-```
-
-### 自定义 OSS 云资源组件
-当前面的步骤全部完成之后，最后我们只需要继续使用组件定义，将这个 `alibaba-oss` 引入，作为后续应用部署计划的内置能力即可。
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha2
 kind: ComponentDefinition
 metadata:
-  name: alibaba-oss
+  name: # 1. ComponentDefinition name, like `alibaba-oss`
+  namespace: {{.Values.systemDefinitionNamespace}}
   annotations:
-    definition.oam.dev/description: Terraform configuration for Alibaba Cloud OSS object
+    definition.oam.dev/description: # 2. description, like `Terraform configuration for Alibaba Cloud OSS object`
+  labels:
     type: terraform
 spec:
   workload:
@@ -166,24 +66,78 @@ spec:
   schematic:
     terraform:
       configuration: |
-        resource "alicloud_oss_bucket" "bucket-acl" {
-          bucket = var.bucket
-          acl = var.acl
-        }
-
-        output "BUCKET_NAME" {
-          value = "${alicloud_oss_bucket.bucket-acl.bucket}.${alicloud_oss_bucket.bucket-acl.extranet_endpoint}"
-        }
-
-        variable "bucket" {
-          description = "OSS bucket name"
-          default = "vela-website"
-          type = string
-        }
-
-        variable "acl" {
-          description = "OSS bucket ACL, supported 'private', 'public-read', 'public-read-write'"
-          default = "private"
-          type = string
-        }
+        # 3. The developed Terraform HCL
 ```
+
+这里阿里云 EIP 的完整的 ComponentDefinition，我们热烈欢迎你将扩展的云资源的 ComponentDefinition 贡献到 [oam-dev/kubevela](https://github.com/oam-dev/kubevela/tree/master/charts/vela-core/templates/definitions)。
+
+```yaml
+apiVersion: core.oam.dev/v1alpha2
+kind: ComponentDefinition
+metadata:
+  name: alibaba-eip
+  namespace: {{.Values.systemDefinitionNamespace}}
+  annotations:
+    definition.oam.dev/description: Terraform configuration for Alibaba Cloud Elastic IP
+  labels:
+    type: terraform
+spec:
+  workload:
+    definition:
+      apiVersion: terraform.core.oam.dev/v1beta1
+      kind: Configuration
+  schematic:
+    terraform:
+      configuration: |
+        module "eip" {
+          source = "github.com/zzxwill/terraform-alicloud-eip"
+          name = var.name
+          bandwidth = var.bandwidth
+        }
+
+        variable "name" {
+          description = "Name to be used on all resources as prefix. Default to 'TF-Module-EIP'."
+          default = "TF-Module-EIP"
+          type = string
+        }
+
+        variable "bandwidth" {
+          description = "Maximum bandwidth to the elastic public network, measured in Mbps (Mega bit per second)."
+          type = number
+          default = 5
+        }
+
+        output "EIP_ADDRESS" {
+          description = "The elastic ip address."
+          value       = module.eip.this_eip_address.0
+        }
+
+```
+
+#### 验证
+
+你可以通过 `vela show` 命令快速验证 ComponentDefinition。
+
+```shell
+$ vela show alibaba-eip
+# Properties
++----------------------------+------------------------------------------------------------------------------------------+-----------------------------------------------------------+----------+---------+
+|            NAME            |                                       DESCRIPTION                                        |                           TYPE                            | REQUIRED | DEFAULT |
++----------------------------+------------------------------------------------------------------------------------------+-----------------------------------------------------------+----------+---------+
+| name                       | Name to be used on all resources as prefix. Default to 'TF-Module-EIP'.                  | string                                                    | true     |         |
+| bandwidth                  | Maximum bandwidth to the elastic public network, measured in Mbps (Mega bit per second). | number                                                    | true     |         |
+| writeConnectionSecretToRef | The secret which the cloud resource connection will be written to                        | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false    |         |
++----------------------------+------------------------------------------------------------------------------------------+-----------------------------------------------------------+----------+---------+
+
+
+## writeConnectionSecretToRef
++-----------+-----------------------------------------------------------------------------+--------+----------+---------+
+|   NAME    |                                 DESCRIPTION                                 |  TYPE  | REQUIRED | DEFAULT |
++-----------+-----------------------------------------------------------------------------+--------+----------+---------+
+| name      | The secret name which the cloud resource connection will be written to      | string | true     |         |
+| namespace | The secret namespace which the cloud resource connection will be written to | string | false    |         |
++-----------+-----------------------------------------------------------------------------+--------+----------+---------+
+```
+
+如果表格能正常出来，ComponentDefinition 应该就可以工作了。更进一步，你可以通过文档[部署云资源](../../end-user/components/cloud-services/provider-and-consume-cloud-services)创建一个实际的 EIP 来验证。
+

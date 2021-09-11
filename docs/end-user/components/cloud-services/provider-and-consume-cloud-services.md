@@ -29,6 +29,48 @@ Terraform | Alibaba Cloud | [ACK](./terraform/alibaba-ack) | Terraform configura
 
 All supported Terraform cloud resources can be seen in the list above. You can also filter them by command by `vela components --label type=terraform`.
 
+### Provision cloud resources
+
+Use the following Application to provision an OSS bucket:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: provision-cloud-resource-sample
+spec:
+  components:
+    - name: sample-oss
+      type: alibaba-oss
+      properties:
+        bucket: vela-website-0911
+        acl: private
+        writeConnectionSecretToRef:
+          name: oss-conn
+```
+
+The above `alibaba-oss` component will create an OSS bucket named `vela-website-0911`, with private acl, with connection information stored in a secreted named `oss-conn`.
+description, whether it's compulsory, and default value.
+
+Apply the above application, then check the status:
+
+```shell
+$ vela ls
+APP                            	COMPONENT 	TYPE       	TRAITS	PHASE  	HEALTHY	STATUS                                       	CREATED-TIME
+provision-cloud-resource-sample	sample-oss	alibaba-oss	      	running	healthy	Cloud resources are deployed and ready to use	2021-09-11 12:55:57 +0800 CST
+```
+
+After the phase becomes `running` and `healthy`, you can then check the OSS bucket in Alibaba Cloud console or by [ossutil](https://partners-intl.aliyun.com/help/doc-detail/50452.htm)
+command.
+
+```shell
+$ ossutil ls oss://
+CreationTime                                 Region    StorageClass    BucketName
+2021-09-11 12:56:17 +0800 CST        oss-cn-beijing        Standard    oss://vela-website-0911
+```
+
+### Consume cloud resources
+
 Let's deploy
 the [application](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/application.yaml)
 below to provision Alibaba Cloud OSS and RDS cloud resources, and consume them by the web component.
@@ -74,7 +116,7 @@ spec:
     - name: sample-oss
       type: alibaba-oss
       properties:
-        bucket: vela-website
+        bucket: vela-website-0911
         acl: private
         writeConnectionSecretToRef:
           name: oss-conn
