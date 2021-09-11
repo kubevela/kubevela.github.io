@@ -48,7 +48,7 @@ spec:
           name: oss-conn
 ```
 
-The properties of alibaba-oss component are clearly described in the doc above, including each property's name, type,
+The above `alibaba-oss` component will create an OSS bucket named `vela-website-0911`, with private acl, with connection information stored in a secreted named `oss-conn`.
 description, whether it's compulsory, and default value.
 
 Deploy the application and check the status of the application.
