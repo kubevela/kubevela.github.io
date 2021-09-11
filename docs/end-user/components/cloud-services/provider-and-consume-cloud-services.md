@@ -30,7 +30,7 @@ All supported Terraform cloud resources can be seen in the list above. You can a
 
 ### Provision cloud resources
 
-Let's provision an OSS bucket as an example.
+Use the following Application to provision an OSS bucket:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
