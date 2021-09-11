@@ -69,32 +69,6 @@ output "EIP_ADDRESS" {
 }
 ```
 
-#### Develop a ComponentDefinition for the cloud resource
-
-Here is the scaffold for a Terraform ComponentDefinition. You only need to modify three fields `metadata.name`,
-`metadata.annotations.definition.oam.dev/description` and `spec.schematic.terraform.configuration`. 
-
-```yaml
-apiVersion: core.oam.dev/v1alpha2
-kind: ComponentDefinition
-metadata:
-  name: # 1. ComponentDefinition name, like `alibaba-oss`
-  namespace: {{.Values.systemDefinitionNamespace}}
-  annotations:
-    definition.oam.dev/description: # 2. description, like `Terraform configuration for Alibaba Cloud OSS object`
-  labels:
-    type: terraform
-spec:
-  workload:
-    definition:
-      apiVersion: terraform.core.oam.dev/v1beta1
-      kind: Configuration
-  schematic:
-    terraform:
-      configuration: |
-        # 3. The developed Terraform HCL
-```
-
 For Alibaba Cloud EIP, here is the complete ComponentDefinition. You are warmly welcome to contribute this extended cloud
 resource ComponentDefinition to [oam-dev/kubevela](https://github.com/oam-dev/kubevela/tree/master/charts/vela-core/templates/definitions).
 

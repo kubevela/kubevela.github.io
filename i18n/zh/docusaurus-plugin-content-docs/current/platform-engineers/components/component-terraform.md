@@ -42,36 +42,6 @@ provider.terraform.core.oam.dev/default created
 
 以 [弹性 IP](https://help.aliyun.com/document_detail/120192.html)为例。
 
-#### 为云资源开发一个 Terraform resource 或 module
-
-建议你在[Terraform 官方 module 库](https://registry.terraform.io/browse/modules)中搜索需要的云资源 module； 如果没有找到，你需要根据文档 [Terraform Alibaba Cloud Provider specifications](https://registry.terraform.io/providers/aliyun/alicloud/latest/docs)
-自己开发一个 Terraform resource 或 module，具体如下：
-
-```terraform
-module "eip" {
-  source = "github.com/zzxwill/terraform-alicloud-eip"
-  name = var.name
-  bandwidth = var.bandwidth
-}
-
-variable "name" {
-  description = "Name to be used on all resources as prefix. Default to 'TF-Module-EIP'."
-  default = "TF-Module-EIP"
-  type = string
-}
-
-variable "bandwidth" {
-  description = "Maximum bandwidth to the elastic public network, measured in Mbps (Mega bit per second)."
-  type = number
-  default = 5
-}
-
-output "EIP_ADDRESS" {
-  description = "The elastic ip address."
-  value       = module.eip.this_eip_address.0
-}
-```
-
 #### 为云资源开发一个 ComponentDefinition
 
 这是 Terraform ComponentDefinition 的脚手架。你只需要修改三个字段：`metadata.name`，`metadata.annotations.definition.oam.dev/description`
