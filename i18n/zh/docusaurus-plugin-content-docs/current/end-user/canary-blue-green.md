@@ -18,7 +18,8 @@ NAME    PHASE          AGE
 istio   success       4h47m
 ```
 
- 为 default namespace 打上 Istio 自动注入 sidecar 的标签。
+因为后面的例子运行在 default namespace，需要为 default namespace 打上 Istio 自动注入 sidecar 的标签。
+
 ```shell
 kubectl label namespace default istio-injection=enabled
 ```
