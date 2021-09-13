@@ -17,7 +17,7 @@ helm install cert-manager jetstack/cert-manager --namespace cert-manager --versi
 
 Install kubevela with enabled certmanager:
 ```shell script
-helm install --create-namespace -n vela-system --set admissionWebhooks.certManager.enabled=true kubevela kubevela/vela-core
+helm install --create-namespace -n vela-system --set admissionWebhooks.certManager.enabled=true kubevela kubevela/vela-core --wait
 ```
 
 ## Install Pre-release
@@ -39,7 +39,7 @@ helm search repo kubevela/vela-core -l --devel
 And try the following command to install it.
 
 ```shell script
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version <next_version>-rc-master
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version <next_version>-rc-master --wait
 ```
 ```console
 NAME: kubevela
@@ -139,7 +139,7 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.1.0/chart
 ### Step 3. Upgrade KubeVela Helm chart
 
 ```shell
-helm upgrade --install --create-namespace --namespace vela-system  kubevela kubevela/vela-core --version <the_new_version>
+helm upgrade --install --create-namespace --namespace vela-system  kubevela kubevela/vela-core --version <the_new_version> --wait
 ```
 
 ## Addons

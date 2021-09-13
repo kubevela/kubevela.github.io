@@ -141,7 +141,7 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.1.0/chart
 ### 第三步 升级 KubeVela Helm chart
 
 ```shell
-helm upgrade --install --create-namespace --namespace vela-system  kubevela kubevela/vela-core --version <the_new_version>
+helm upgrade --install --create-namespace --namespace vela-system  kubevela kubevela/vela-core --version <the_new_version> --wait
 ```
 
 ## 插件列表

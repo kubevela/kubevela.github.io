@@ -102,7 +102,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
    
 2. 安装 KubeVela
   ```shell script
-  helm install --create-namespace -n vela-system kubevela kubevela/vela-core
+  helm install --create-namespace -n vela-system kubevela kubevela/vela-core --wait
   ```
   你可以参考 [`自定义安装`](./platform-engineers/advanced-install) 获取更多安装模式和功能。
 
