@@ -32,7 +32,7 @@ spec:
               /: 8088
 ```
 
-We want users to build the image and push it to the image registry after changing the code, so we need to integrate with a CI tool like GitHub Actions or Jenkins to do it. In this example, we use GitHub Actions to build the image. For the code and configuration file, please refer to [Example Repo](https://github.com/oam-dev/kubevela/samples).
+We want users to build the image and push it to the image registry after changing the code, so we need to integrate with a CI tool like GitHub Actions or Jenkins to do it. In this example, we use GitHub Actions to build the image. For the code and configuration file, please refer to [Example Repo](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo).
 
 ## Create the Git secret
 
