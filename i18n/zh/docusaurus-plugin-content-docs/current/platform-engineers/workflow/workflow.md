@@ -131,7 +131,7 @@ spec:
         outputs:
           - name: msg
             # 将 my-helm 中读取到的 deployment status 作为信息导出
-            exportKey: resource.value.status.conditions[0].message
+            valueFrom: resource.value.status.conditions[0].message
       - name: send-message
         type: webhook-notification
         inputs:

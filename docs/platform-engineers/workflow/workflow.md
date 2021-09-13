@@ -130,8 +130,8 @@ spec:
         type: my-helm
         outputs:
           - name: msg
-            # export the deployment status in my-helm
-            exportKey: resource.value.status.conditions[0].message
+            # get value from the deployment status in my-helm
+            valueFrom: resource.value.status.conditions[0].message
       - name: send-message
         type: webhook-notification
         inputs:
