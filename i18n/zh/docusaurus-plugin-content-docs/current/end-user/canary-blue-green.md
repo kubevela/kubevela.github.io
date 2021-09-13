@@ -10,7 +10,7 @@
 vela addon enable istio
 ```
 
-等待一段时间，确认集群插件已经就绪。
+等待一段时间，确认集群插件状态为 `success` 说明已经就绪。
 
 ```shell
 kubectl get initializer -n istio-system istio
@@ -25,7 +25,7 @@ kubectl label namespace default istio-injection=enabled
 
 ## 初次部署
 
-执行下面的命令，部署一个应用。
+执行下面的命令，部署 bookinfo 应用。
 
 ```shell
 kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/canary-rollout-use-case/first-deploy.yaml
@@ -37,7 +37,7 @@ kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/c
 
 该应用包含四个组件，每个组件均配置了一个暴露端口 (expose) 运维特征用来在集群内暴露服务。 
 
-productpage 组件还配置了一个 网关入口 (istio-gateway) 的运维特征，从而让组件接收进入集群的流量。 这个运维特征通过设置 `gateway:ingressgateway` 来使用 Istio 的默认网关实现，设置 `hosts: "*"` 来指定携带任意 host 信息的请求均可进入网关。
+productpage 组件还配置了一个 网关入口 (istio-gateway) 的运维特征，从而让该组件接收进入集群的流量。这个运维特征通过设置 `gateway:ingressgateway` 来使用 Istio 的默认网关实现，设置 `hosts: "*"` 来指定携带任意 host 信息的请求均可进入网关。
 ```shell
 ...
     - name: productpage
@@ -186,7 +186,7 @@ kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/c
 
 这次更新删除了之前定义好的工作流, 来终止执行工作流。
 
-并通过修改灰度发布运维特征的 `targetRevision` 指向之前的组件版本 `reviews-v1`。此外，还删除了组件的金丝雀流量发布 (canary-traffic) 运维特征，将全部流量打到同一个组件版本上 `reviews-v1`。
+并通过修改灰度发布运维特征的 `targetRevision` 指向之前的组件版本 `reviews-v1`。此外，这次更新还删除了组件的金丝雀流量发布 (canary-traffic) 运维特征，将全部流量打到同一个组件版本上 `reviews-v1`。
 
 ```shell
 ...
