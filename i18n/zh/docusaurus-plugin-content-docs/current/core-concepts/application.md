@@ -2,7 +2,7 @@
 title:  应用部署计划
 ---
 
-KubeVela 背后的应用交付模型是 [OAM（Open Application Model）](../platform-engineers/oam/oam-model)，其核心是将应用部署所需的所有组件和各项运维动作，描述为一个统一的、与基础设施无关的“部署计划”，进而实现在混合环境中进行标准化和高效率的应用交付。这个应用部署计划就是这一节所要介绍的 **Application** 对象，也是 OAM 模型的使用者唯一需要了解的 API。
+KubeVela 背后的应用交付模型是 [Open Application Model](../platform-engineers/oam/oam-model)，简称 OAM ，其核心是将应用部署所需的所有组件和各项运维动作，描述为一个统一的、与基础设施无关的“部署计划”，进而实现在混合环境中进行标准化和高效率的应用交付。这个应用部署计划就是这一节所要介绍的 **Application** 对象，也是 OAM 模型的使用者唯一需要了解的 API。
 
 ## 应用程序部署计划（Application）
 
@@ -91,7 +91,7 @@ spec:
 
 ## 组件（Components）
 
-KubeVela 内置了常用的组件类型，使用 [KubeVela CLI](../install#3) 命令查看：
+KubeVela 内置了常用的组件类型，使用 [KubeVela CLI](../install#3-安装-kubevela-cli) 命令查看：
 ```
 vela components 
 ```
