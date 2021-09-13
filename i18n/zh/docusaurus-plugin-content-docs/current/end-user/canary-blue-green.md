@@ -1,6 +1,6 @@
-
-# 金丝雀发布
-
+---
+title: 金丝雀发布
+---
 本文将会介绍 KubeVela 基于 [Istio](https://istio.io/latest/) 实现经典微服务场景 [bookinfo](https://istio.io/latest/docs/examples/bookinfo/?ie=utf-8&hl=en&docs-search=Canary) 的金丝雀发布功能。 
 
 ## 准备工作
