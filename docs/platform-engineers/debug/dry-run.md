@@ -30,7 +30,7 @@ spec:
 ```
 
 ```shell
-vela system dry-run -f app.yaml
+vela dry-run -f app.yaml
 ---
 # Application(vela-app) -- Comopnent(express-server)
 ---
