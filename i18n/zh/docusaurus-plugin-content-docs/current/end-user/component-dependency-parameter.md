@@ -30,8 +30,6 @@ spec:
         chart: mysql
         version: "8.8.2"
         values:
-          global:
-            storageClass: alicloud-disk-ssd
           auth:
             rootPassword: mypassword
     - name: wordpress
@@ -39,7 +37,7 @@ spec:
       inputs:
         # 将 mysql 的 service 地址赋值到 host 中
         - from: mysql-svc
-          parameterKey: values.externalDatabase.host
+          parameterKey: properties.values.externalDatabase.host
       properties:
         repoType: helm
         url: https://charts.bitnami.com/bitnami
@@ -53,14 +51,6 @@ spec:
             password: mypassword
             database: mysql
             port: 3306
-          service:
-            type: ClusterIP
-      traits:
-      - type: ingress
-        properties:
-          domain: testsvc.example.com
-          http:
-            "/": 80
 ```
 
 ## 期望结果

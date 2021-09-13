@@ -6,9 +6,7 @@ This section will introduce how to pass data between components.
 
 ## How to use
 
-If we want to apply a WordPress server with data stored in a MySQL database, we need to pass the MySQL address to WordPress.
-
-Apply the following `Application`:
+In the following we will apply a WordPress server with the MySQL address passed from a MySQL component:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -30,8 +28,6 @@ spec:
         chart: mysql
         version: "8.8.2"
         values:
-          global:
-            storageClass: alicloud-disk-ssd
           auth:
             rootPassword: mypassword
     - name: wordpress
@@ -39,7 +35,7 @@ spec:
       inputs:
         # set the host to mysql service address
         - from: mysql-svc
-          parameterKey: values.externalDatabase.host
+          parameterKey: properties.values.externalDatabase.host
       properties:
         repoType: helm
         url: https://charts.bitnami.com/bitnami
@@ -53,14 +49,6 @@ spec:
             password: mypassword
             database: mysql
             port: 3306
-          service:
-            type: ClusterIP
-      traits:
-      - type: ingress
-        properties:
-          domain: testsvc.example.com
-          http:
-            "/": 80
 ```
 
 ## Expected Outcome
