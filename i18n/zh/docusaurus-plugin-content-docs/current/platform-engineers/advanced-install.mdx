@@ -2,6 +2,9 @@
 title:  自定义安装
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 ## 带着证书管理器安装 KubeVela
 
 默认情况下，KubeVela 使用 [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen) 提供的自签名证书以便使用参数校验等 Webhook 功能。
@@ -49,6 +52,44 @@ REVISION: 1
 NOTES:
 Welcome to use the KubeVela! Enjoy your shipping application journey!
 ```
+## 安装 Kubectl KubeVela CLI 插件
+
+安装 Kubectl KubeVela CLI 插件，可以更好的进行应用交付操作。
+
+<Tabs
+className="unique-tabs"
+defaultValue="krew"
+values={[
+{label: 'Krew', value: 'krew'},
+{label: 'Script', value: 'script'},
+]}>
+
+<TabItem value="krew">
+
+1. [先安装](https://krew.sigs.k8s.io/docs/user-guide/setup/install/) Krew。
+2. 查看 Krew 上可用的插件:
+```shell
+kubectl krew update
+```
+3. 安装 Kubectl KubeVela CLI 插件:
+```shell script
+kubectl krew install vela
+```
+
+</TabItem>
+
+<TabItem value="script">
+
+**macOS/Linux**
+```shell script
+curl -fsSl https://kubevela.io/script/install-kubectl-vela.sh | bash
+```
+
+你也可以直接从[发布页面](https://github.com/oam-dev/kubevela/releases)手动下载来使用。
+
+</TabItem>
+</Tabs>
+
 
 ## 升级
 

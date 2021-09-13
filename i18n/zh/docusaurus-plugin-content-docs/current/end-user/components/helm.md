@@ -2,7 +2,7 @@
 title:  Helm 组件
 ---
 
-KubeVela 的 `helm` 组件满足了用户对接 Helm Chart 的需求，你可以通过 `helm` 组件部署任意来自 Helm 仓库、Git 仓库或者 OSS bucket 的现成 Helm chart 软件包，并对其进行参数覆盖。
+KubeVela 的 `helm` 组件满足了用户对接 Helm Chart 的需求，你可以通过 `helm` 组件部署任意来自 Helm 仓库、Git 仓库或者 OSS bucket 的现成 Helm Chart 软件包，并对其进行参数覆盖。
 
 ## 部署来自 Helm 仓库的 Chart
 
@@ -43,7 +43,7 @@ app-delivering-chart	redis-comp	helm      	      	running	healthy	      	2021-08
 
 | 参数            | 是否可选 | 含义                                                                                                                                                                                                                                                                | 例子                               |
 | --------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| repoType        | 必填     | 值为 Helm 标志chart来自 Helm 仓库                                                                                                                                                                                                                                   | Helm                               |
+| repoType        | 必填     | 值为 Helm，标志 chart 来自 Helm 仓库库                                                                                                                                                                                                                                   | Helm                               |
 | pullInterval    | 可选     | 与 Helm 仓库进行同步，与调谐 Helm release 的时间间隔 默认值5m（5分钟）                                                                                                                                                                                              | 10m                                |
 | url             | 必填     | Helm 仓库地址，支持 http/https                                                                                                                                                                                                                                      | https://charts.bitnami.com/bitnami |
 | secretRef       | 可选     | 存有拉取仓库所需凭证的 Secret 对象名，对 HTTP/S 基本鉴权 Secret 中必须包含  username 和 password 字段。对于 TLS the secret must contain a certFile and keyFile, and/or 	// caCert fields.对 TLS 鉴权 Secret 中必须包含  certFile / keyFile 字段 和/或 caCert 字段。 | sec-name                           |
@@ -102,7 +102,7 @@ spec:
             bucketName: definition-registry
 ```
 
-上面的示例中，Application 中名为 bucket-comp 的组件交付了一个来自 endpoint 为 oss-cn-beijing.aliyuncs.com 的 OSS bucket definition-registry 的 chart。chart 路径为 ./chart/podinfo-5.1.3.tgz。
+上面的示例中，Application 中名为 bucket-comp 的组件交付了一个来自 endpoint 为 oss-cn-beijing.aliyuncs.com 的 OSS bucket definition-registry 的 chart。Chart 路径为 ./chart/podinfo-5.1.3.tgz。
 
 ## 部署来自 Git 仓库的 Chart
 
@@ -139,4 +139,4 @@ spec:
           	branch: master
 ```
 
-上面的示例中，Application 中名为 terraform-controller 的组件交付了一个来自 https://github.com/oam-dev/terraform-controller 的 Github 仓库的 chart。chart 路径为 ./chart，仓库分支为 master。
+上面的示例中，Application 中名为 terraform-controller 的组件交付了一个来自 https://github.com/oam-dev/terraform-controller 的 Github 仓库的 chart。Chart 路径为 ./chart，仓库分支为 master。

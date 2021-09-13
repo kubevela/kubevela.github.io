@@ -2,7 +2,7 @@
 title:  Jenkins 对接 KubeVela 实现 CI/CD
 ---
 
-本文将会以一个 HTTP 服务的开发部署为例，简单介绍如何将 KubeVela 与 Jenkins 对接实现应用的持续集成与持续交付。[参考代码](https://github.com/Somefive/KubeVela-demo-CICD-app).
+本文将会以一个 HTTP 服务的开发部署为例，简单介绍如何将 KubeVela 与 Jenkins 对接实现应用的持续集成与持续交付。[参考代码，请点击](https://github.com/Somefive/KubeVela-demo-CICD-app)。
 
 ## 准备工作
 
@@ -14,7 +14,7 @@ title:  Jenkins 对接 KubeVela 实现 CI/CD
 
 ## 对接 Jenkins 与 KubeVela apiserver
 
-在 Jenkins 中以下面的 Groovy 脚本为例设置部署流水线。可以将流水线中的 git 地址、镜像地址、apiserver 的地址、应用命名空间及应用替换成自己的配置，同时在自己的代码仓库中存放 Dockerfile 及 app.yaml，用来构建及部署 KubeVela 应用。
+在 Jenkins 中以下面的 Groovy 脚本为例设置部署流水线。可以将流水线中的 Git 地址、镜像地址、apiserver 的地址、应用命名空间及应用替换成自己的配置，同时在自己的代码仓库中存放 Dockerfile 及 app.yaml，用来构建及部署 KubeVela 应用。
 
 ```groovy
 pipeline {

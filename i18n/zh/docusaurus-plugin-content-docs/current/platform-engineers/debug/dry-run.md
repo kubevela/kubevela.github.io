@@ -38,7 +38,7 @@ spec:
 然后打开本地试运行模式，使用如下命令：
 
 ```shell
-kubectl vela dry-run -f app.yaml
+vela dry-run -f app.yaml
 ```
 ```console
 ---
@@ -117,18 +117,22 @@ spec:
 
 在完成上述信息确认之后，我们就能进行后续的开发调试步骤了。
 
-最后，你还可以通过 `kubectl vela dry-run -h` 来查看更多可用的本地试运行模式：
+最后，你还可以通过 `vela dry-run -h` 来查看更多可用的本地试运行模式：
 
 ```
+Dry Run an application, and output the K8s resources as result to stdout, only CUE template supported for now
+
 Usage:
   vela dry-run
 
 Examples:
-kubectl vela dry-run
+vela dry-run
 
 Flags:
   -d, --definition string   specify a definition file or directory, it will only be used in dry-run rather than applied to K8s cluster
   -f, --file string         application file name (default "./app.yaml")
   -h, --help                help for dry-run
-  -n, --namespace string    specify namespace of the definition file, by default is default namespace (default "default")
+
+Global Flags:
+  -e, --env string   specify environment name for application
 ```
