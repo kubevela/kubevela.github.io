@@ -28,6 +28,7 @@ module.exports = {
       items: [
         'case-studies/jenkins-cicd',
         'case-studies/gitops',
+        'case-studies/canary-blue-green',
         // 'case-studies/multi-app-env-cluster',
       ],
     },
@@ -85,6 +86,7 @@ module.exports = {
           'Workflow': [
             'end-user/workflow/multi-env',
             'end-user/workflow/webhook-notification',
+            'end-user/workflow/component-dependency-parameter',
           ]
         },
         {

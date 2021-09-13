@@ -1,11 +1,12 @@
 ---
 title: 金丝雀发布
 ---
+
 本文将会介绍 KubeVela 基于 [Istio](https://istio.io/latest/) 实现经典微服务场景 [bookinfo](https://istio.io/latest/docs/examples/bookinfo/?ie=utf-8&hl=en&docs-search=Canary) 的金丝雀发布功能。 
 
 ## 准备工作
 
-开启 istio 集群插件
+开启 Istio 集群插件
 ```shell
 vela addon enable istio
 ```
@@ -83,7 +84,7 @@ kubectl port-forward service/istio-ingressgateway -n istio-system 19082:80
 ```shell
 kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/canary-rollout-use-case/rollout-v2.yaml
 ```
-这次操作更新了 reviews 组件的镜像，从之前的 v2 升级到了 v3。同时 reviews 组件的灰度发布 (Rollout) 运维特征指定了，升级的目标实例个数为2个，分两个批次升级，每批升级1个实例。
+这次操作更新了 reviews 组件的镜像，从之前的 v2 升级到了 v3。同时 reviews 组件的灰度发布 (Rollout) 运维特征指定了，升级的目标实例个数为 2 个，分两个批次升级，每批升级 1 个实例。
 
 此外还为该组件新增加了一个金丝雀流量发布 (canary-traffic) 运维特征。
 ```shell
@@ -123,7 +124,7 @@ kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/c
 
 这次更新还为应用新增了一个升级的执行工作流，该工作流包含三个步骤。
 
-第一步通过指定 `batchPartition` 等于0设置只升级第一批次的实例。并通过 `traffic.weightedTargets` 将10%的流量切换到新版本的实例上面。
+第一步通过指定 `batchPartition` 等于 0 设置只升级第一批次的实例。并通过 `traffic.weightedTargets` 将 10% 的流量切换到新版本的实例上面。
 
 完成第一步之后，执行第二步工作流会进入暂停状态，等待用户校验服务状态。
 

@@ -2,7 +2,9 @@
 title:  Multi Environments
 ---
 
-If we have multiple clusters, we want to apply our application in the test cluster first, and then apply it to the production cluster after the application in test cluster is running. KubeVela provides the `multi-env` workflow step to manage multi environments.
+If we have multiple clusters, we want to apply our application in the test cluster first, and then apply it to the production cluster after the application in test cluster is running. KubeVela provides the `multi-env` workflow step to manage multi environments. You can have a glimpse of how does it work as below:
+
+![alt](../../resources/workflow-multi-env.png)
 
 In this guide, you will learn how to manage multi environments via `multi-env` in `Workflow`.
 
