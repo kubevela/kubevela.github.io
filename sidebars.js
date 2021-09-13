@@ -27,10 +27,8 @@ module.exports = {
       collapsed: false,
       items: [
         'case-studies/jenkins-cicd',
+        'case-studies/gitops',
         // 'case-studies/multi-app-env-cluster',
-        //        'case-studies/workflow-edge-computing', // 待完成
-        //        'case-studies/li-auto-inc', 暂时下掉，应该改写成一个 10 - 15 分钟体验的产品 lab 例子
-        //        'case-studies/workflow-with-ocm',
       ],
     },
     {
@@ -38,7 +36,6 @@ module.exports = {
       label: 'End User Guide',
       collapsed: false,
       items: [
-        // 'end-user/initializer-end-user',
         {
           'Components': [
             'end-user/components/helm',
@@ -51,11 +48,9 @@ module.exports = {
                           'end-user/components/cloud-services/terraform/alibaba-rds',
                           'end-user/components/cloud-services/terraform/alibaba-oss',
                       ],
-
                   },
                       'end-user/components/cloud-services/provider-and-consume-cloud-services',
                   ],
-
               },
             {
               'CUE Component': [
@@ -68,7 +63,6 @@ module.exports = {
             'end-user/components/more',
           ]
         },
-
         {
           'Traits': [
             'end-user/traits/ingress',
@@ -81,25 +75,6 @@ module.exports = {
             'end-user/traits/more',
           ]
         },
-        // 'end-user/canary-blue-green', v1.1+ 再上
-        // {
-        //   'Components': [
-        //     'end-user/components/helm',
-        //     'end-user/components/kustomize',
-        //     'end-user/components/cue',
-        // 'end-user/components/cloud-services', 先隐藏，需要等用户侧的云服务支持 terraform 原生的 HCL
-        //     {
-        //       'Cloud Services': [
-        //         {
-        //           'Terraform': [
-        //             'end-user/components/cloud-services/terraform/alibaba-rds',
-        //             'end-user/components/cloud-services/terraform/alibaba-oss',
-        //           ]
-        //         },
-        //       ]
-        //     },
-        //   ]
-        // },
         {
           'Policies': [
             'end-user/policies/envbinding',
@@ -142,11 +117,6 @@ module.exports = {
             'platform-engineers/cue/advanced',
           ]
         },
-        //{
-        //  'Environment System': [
-        //    'platform-engineers/initializer/basic-initializer',
-        //  ]
-        //},
         {
           type: 'category',
           label: 'Component System',
