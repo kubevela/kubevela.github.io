@@ -15,7 +15,7 @@ It is based on Kubernetes CRDs to natively fit into the Kubernetes ecosystem.
 
 The APIs can be categorized for two purposes:
 
-- For **platform users** to compose final application manifest to deploy.
+- For **end users** to compose final application manifest to deploy.
   - Usually this contains only user-concerned config and hides infrastructure details.
   - Users will normally write the manifest in yaml format.
   - This currently includes Application only. But we may add more user-facing APIs, e.g. ApplicationSet to define multiple Applications.
@@ -60,5 +60,5 @@ KubeVela itself does not run on the execution infrastructures, but manage them i
 
 Here are some recommended next steps:
 
-- Learn KubeVela's user guide to know how to deploy component, let's start from [helm component](../end-user/components/helm).
+- Learn KubeVela's Application to know the basics of how to building App Delivery, let's start from [Application](./application).
 - Learn KubeVela's admin guide to learn more about [the OAM model](../platform-engineers/oam/oam-model).
