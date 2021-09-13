@@ -10,15 +10,6 @@ In KubeVela, we can use inputs and outputs in Components to pass data.
 
 ### Outputs
 
-```go
-type Outputs []outputItem
-
-type outputItem struct {
-	ValueFrom string `json:"valueFrom"`
-	Name      string `json:"name"`
-}
-```
-
 Outputs is made of `name` and `valueFrom`. Input will use `name` to reference output.
 
 We can write `valueFrom` in the following ways:
@@ -27,15 +18,6 @@ We can write `valueFrom` in the following ways:
 3. Use `+` to combine above two ways, the computed value will be the result, eg. `valueFrom: output.metadata.name + "testString"`.
 
 ### Inputs
-
-```go
-type Inputs []inputItem
-
-type inputItem struct {
-	ParameterKey string `json:"parameterKey"`
-	Name         string `json:"name"`
-}
-```
 
 Inputs is made of `name` and `parameterKey`. Input uses `name` to reference output, `parameterKey` is a expression that assigns the value of the input to the corresponding field.
 
@@ -49,21 +31,21 @@ eg.
   type: helm
   inputs:
     - from: mysql-svc
+      parameterKey: properties.values.externalDatabase.host
 ```
 
-2. The field `properties.values.externalDatabase.host` in component will be assigned after rendering:
+2. The field parameterKey specifies the field path of the parameter key in component to be assigned after rendering:
+
+Which means the input value will be passed into the below properties:
 
 ```yaml
 ...
 - name: wordpress
   type: helm
-  inputs:
-    - from: mysql-svc
-      parameterKey: properties.values.externalDatabase.host
   properties:
     values:
       externalDatabase:
-        host: "value"
+        host: <input value>
 ```
 
 ## How to use

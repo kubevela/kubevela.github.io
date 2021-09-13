@@ -10,32 +10,14 @@ title:  应用组件间的依赖和参数传递
 
 ### Outputs
 
-```go
-type Outputs []outputItem
-
-type outputItem struct {
-	ValueFrom string `json:"valueFrom"`
-	Name      string `json:"name"`
-}
-```
-
 outputs 由 `name` 和 `valueFrom` 组成。`name` 声明了这个 output 的名称，在 input 中将通过 `name` 引用 output。
 
 `valueFrom` 有以下几种写法：
-1. 直接通过字符串表示值，如：`valueFrom: testString`
+1. 直接通过字符串表示值，如：`valueFrom: testString`。
 2. 通过表达式来指定值，如：`valueFrom: output.metadata.name`。注意，`output` 为固定内置字段，指向组件中被部署在集群里的资源。
-3. 通过 `+` 来任意连接以上两种写法，如：`valueFrom: output.metadata.name + "testString"`
+3. 通过 `+` 来任意连接以上两种写法，最终值是计算后的字符串拼接结果，如：`valueFrom: output.metadata.name + "testString"`。
 
 ### Inputs
-
-```go
-type Inputs []inputItem
-
-type inputItem struct {
-	ParameterKey string `json:"parameterKey"`
-	Name         string `json:"name"`
-}
-```
 
 inputs 由 `name` 和 `parameterKey` 组成。`name` 声明了这个 input 从哪个 output 中取值，`parameterKey` 为一个表达式，将会把 input 取得的值赋给对应的字段。
 
@@ -51,19 +33,16 @@ inputs 由 `name` 和 `parameterKey` 组成。`name` 声明了这个 input 从�
       parameterKey: properties.values.externalDatabase.host
 ```
 
-2. 经过渲染后，该组件的 `properties.values.externalDatabase.host` 字段中会被赋上值：
+2. 经过渲染后，该组件的 `properties.values.externalDatabase.host` 字段中会被赋上值，效果如下所示：
 
 ```yaml
 ...
 - name: wordpress
   type: helm
-  inputs:
-    - from: mysql-svc
-      parameterKey: properties.values.externalDatabase.host
   properties:
     values:
       externalDatabase:
-        host: "value"
+        host: <input value>
 ```
 
 ## 如何使用
