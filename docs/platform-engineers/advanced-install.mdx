@@ -20,12 +20,6 @@ Install kubevela with enabled certmanager:
 helm install --create-namespace -n vela-system --set admissionWebhooks.certManager.enabled=true kubevela kubevela/vela-core --wait
 ```
 
-## Install KubeVela with multi-cluster management
-
-```shell script
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --set multicluster.enabled=true
-```
-
 ## Install Pre-release
     
 Add flag `--devel` in command `helm search` to choose a pre-release

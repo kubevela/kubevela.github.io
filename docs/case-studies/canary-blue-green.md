@@ -1,5 +1,5 @@
 ---
-title:  Canary Release with Istio
+title:  Progressive Rollout with Istio
 ---
 
 ## Introduction

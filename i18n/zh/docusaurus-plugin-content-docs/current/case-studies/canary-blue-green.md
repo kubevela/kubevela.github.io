@@ -1,5 +1,5 @@
 ---
-title: 基于 Istio 的金丝雀发布
+title: 基于 Istio 的渐进式发布
 ---
 
 ## 简介

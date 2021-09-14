@@ -30,6 +30,7 @@ KubeVela 控制器的各项启动参数及其说明如下。
 |         oam-spec-var        | string |                v0.3               | OAM 标准的使用版本                                                             |
 |          pprof-addr         | string |                 ""                | 使用 pprof 监测性能的监听地址，默认为空时不监测           |
 |         perf-enabled        |  bool  |               false               | 启用控制器性能记录，可以配合监控组件监测当前控制器的性能瓶颈 |
+| enable-cluster-gateway | bool | false | 启动多集群功能 |
 
 > 未列在表中的参数为旧版本参数，当前版本 v1.1 无需关心
 
