@@ -27,7 +27,7 @@ kubectl label namespace default istio-injection=enabled
 
 ## Initial deployment
 
-Execute the following command to deploy the Application of `bookinfo`.
+Deploy the Application of `bookinfo`:
 
 ```shell
 kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/canary-rollout-use-case/first-deploy.yaml
