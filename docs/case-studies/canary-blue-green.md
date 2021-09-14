@@ -6,7 +6,7 @@ This article introduces how KubeVela integrates [Istio](https://istio.io/latest/
 
 ## Praparation
 
-Open the Istio cluster plugin.
+Install the Istio cluster plugin.
 ```shell
 vela addon enable istio
 ```
