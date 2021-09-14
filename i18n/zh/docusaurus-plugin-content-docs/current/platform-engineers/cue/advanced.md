@@ -438,7 +438,7 @@ KubeVela 背后提供的开箱即用的能力，包括组件、运维功能、�
 
 * 了解更多[自定义组件](../components/custom-component)的功能。
 * 了解更多[自定义运维能力](../traits/customize-trait)的功能。
-* 了解[自定义策略](../policy/custom-policy)背后的功能。
+<!-- * 了解[自定义策略](../policy/custom-policy)背后的功能。 -->
 * 了解[自定义工作流](../workflow/workflow)背后的功能。
 
 [1]:	../oam/oam-model

@@ -1,44 +1,37 @@
 ---
-title: 金丝雀发布
+title:  Canary Release
 ---
-本文将会介绍 KubeVela 基于 [Istio](https://istio.io/latest/) 实现经典微服务场景 [bookinfo](https://istio.io/latest/docs/examples/bookinfo/?ie=utf-8&hl=en&docs-search=Canary) 的金丝雀发布功能。 
 
-## 准备工作
+This article introduces how KubeVela integrates [Istio](https://istio.io/latest/) to do a canary release.
 
-开启 istio 集群插件
+## Praparation
+
+Install the Istio cluster plugin.
 ```shell
 vela addon enable istio
 ```
 
-等待一段时间，确认集群插件状态为 `success` 说明已经就绪。
-
-```shell
-kubectl get initializer -n istio-system istio
-NAME    PHASE          AGE
-istio   success       4h47m
-```
-
-因为后面的例子运行在 default namespace，需要为 default namespace 打上 Istio 自动注入 sidecar 的标签。
+The default namespace needs to be labeled so that Istio will auto-inject sidecar.
 
 ```shell
 kubectl label namespace default istio-injection=enabled
 ```
 
-## 初次部署
+## Initial deployment
 
-执行下面的命令，部署 bookinfo 应用。
+Deploy the Application of `bookinfo`:
 
 ```shell
 kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/canary-rollout-use-case/first-deploy.yaml
 ```
 
-该应用的组件架构和访问关系如下所示：
+The component architecture and  relationship of the application are as follows:
 
 ![book-info-struct](../resources/book-info-struct.jpg)
 
-该应用包含四个组件，每个组件均配置了一个暴露端口 (expose) 运维特征用来在集群内暴露服务。 
+This Application has four Components, each configured with an`expose` Trait to expose cluster-level service.
 
-productpage 组件还配置了一个 网关入口 (istio-gateway) 的运维特征，从而让该组件接收进入集群的流量。这个运维特征通过设置 `gateway:ingressgateway` 来使用 Istio 的默认网关实现，设置 `hosts: "*"` 来指定携带任意 host 信息的请求均可进入网关。
+The `productpage` component is also configured with an `istio-gateway` Trait, allowing the Component to receive traffic coming from outside the cluster. The example below show that it sets `gateway:ingressgateway` to use Istio's default gateway, and `hosts: "*"` to specify that any request can enter the gateway.
 ```shell
 ...
     - name: productpage
@@ -67,25 +60,25 @@ productpage 组件还配置了一个 网关入口 (istio-gateway) 的运维特�
 ...
 ```
 
-你可以通过执行下面的命令将网关的端口映射到本地。
+You can port-forward to the gateway as follows:
 ```shell
 kubectl port-forward service/istio-ingressgateway -n istio-system 19082:80
 ```
-通过浏览器访问 `127.0.0.1:19082` 将会看到下面的页面。
+Visit `127.0.0.1:19082` through the browser and you will see the following page.
 
 ![pic-v2](../resources/canary-pic-v2.jpg)
 
-## 金丝雀发布
+## Canary Release
 
-接下来我们以 `reviews` 组件为例，模拟一次金丝雀发布的完整过程，及先升级一部分组件实例，同时调整流量，以此达到渐进式灰度发布的目的。
+Next, we take the `reviews` Component as an example to simulate the complete process of a canary release, and first upgrade a part of the component instances, and adjust the traffic at the same time, so as to achieve the purpose of progressive canary release.
 
-执行下面的命令，来更新应用。
+Execute the following command to update the application.
 ```shell
 kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/canary-rollout-use-case/rollout-v2.yaml
 ```
-这次操作更新了 reviews 组件的镜像，从之前的 v2 升级到了 v3。同时 reviews 组件的灰度发布 (Rollout) 运维特征指定了，升级的目标实例个数为2个，分两个批次升级，每批升级1个实例。
+This operation updates the mirror of the `reviews` Component from the previous v2 to v3. At the same time, the Rollout Trait of the `reviews` Component specifies that the number of target instances to be upgraded is two, which are upgraded in two batches, with one instance in each batch.
 
-此外还为该组件新增加了一个金丝雀流量发布 (canary-traffic) 运维特征。
+In addition, a canary-traffic Trait has been added to the Component.
 ```shell
 ...
 - name: reviews
@@ -121,13 +114,13 @@ kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/c
 ...
 ```
 
-这次更新还为应用新增了一个升级的执行工作流，该工作流包含三个步骤。
+This update also adds an upgraded execution Workflow to the Application, which contains three steps.
 
-第一步通过指定 `batchPartition` 等于0设置只升级第一批次的实例。并通过 `traffic.weightedTargets` 将10%的流量切换到新版本的实例上面。
+The first step is to upgrade only the first batch of instances by specifying `batchPartition` equal to 0. And use `traffic.weightedTargets` to switch 10% of the traffic to the new version of the instance.
 
-完成第一步之后，执行第二步工作流会进入暂停状态，等待用户校验服务状态。
+After completing the first step, the execution of the second step of the Workflow will enter a pause state, waiting for the user to verify the service status.
 
-工作流的第三步是完成剩下实例的升级，并将全部流量切换致新的组件版本上。
+The third step of the Workflow is to complete the upgrade of the remaining instances and switch all traffic to the new component version.
 
 ```shell
 ...
@@ -161,33 +154,33 @@ kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/c
 ...
 ```
 
-更新完成之后，再在浏览器多次访问之前的网址。发现有大概10%的概率会看到下面这个新的页面，
+After the update is complete, visit the previous URL multiple times in the browser. There is about 10% probability that you will see the new page below,
 
 ![pic-v3](../resources/canary-pic-v3.jpg)
 
-可见新版本的页面由之前的黑色五角星变成了红色五角星
+It can be seen that the new version of the page has changed from the previous black five-pointed star to a red five-pointed star.
 
-### 继续完成全量发布
+### Continue with Full Release
 
-如果在人工校验时，发现服务符合预期，需要继续执行工作流，完成全量发布。你可以通过执行下面的命令完成这一操作。
+If the service is found to meet expectations during manual verification, the Workflow needs to be continued to complete the full release. You can do that by executing the following command.
 
 ```shell
 vela workflow reumse book-info
 ```
 
-在浏览器上继续多次访问网页，会发现五角星将一直是红色的。
+If you continue to verify the webpage several times on the browser, you will find that the five-pointed star will always be red.
 
-### 终止发布工作流并回滚
+### Terminate the publishing Workflow and Roll Back
 
-如果在人工校验时，发现服务不符合预期，需要终止预先定义好的发布工作流，并将流量和实例切换回之前的版本。你可以通过执行下面的命令完成这一操作。
+If during manual verification, it is found that the service does not meet expectations, you need to terminate the pre-defined release workflow and switch the traffic and instances back to the previous version.
 
 ```shell
 kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/canary-rollout-use-case/revert-in-middle.yaml
 ```
 
-这次更新删除了之前定义好的工作流, 来终止执行工作流。
+This update deletes the previously defined workflow to terminate the execution of the workflow.
 
-并通过修改灰度发布运维特征的 `targetRevision` 指向之前的组件版本 `reviews-v1`。此外，这次更新还删除了组件的金丝雀流量发布 (canary-traffic) 运维特征，将全部流量打到同一个组件版本上 `reviews-v1`。
+And by modifying the `targetRevision` of the Rollout Trait to point to the previous component version `reviews-v1`. In addition, this update also removes the canary-traffic Trait of the Component, and puts all traffic on the same component version `reviews-v1`.
 
 ```shell
 ...
@@ -222,5 +215,5 @@ kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/c
 ...
 ```
 
-在浏览器上继续访问网址，会发现五角星又变回到了黑色。
+Continue to visit the website on the browser, you will find that the five-pointed star has changed back to black.
 
