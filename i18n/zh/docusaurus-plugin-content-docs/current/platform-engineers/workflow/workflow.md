@@ -120,7 +120,7 @@ spec:
     type: helm
     properties:
       repoType: helm
-      repoUrl: https://charts.bitnami.com/bitnami
+      url: https://charts.bitnami.com/bitnami
       chart: tomcat
       version: "9.2.20"
   workflow:
@@ -141,7 +141,7 @@ spec:
         properties:
           slack:
             # 你的 slack webhook 地址，请参考：https://api.slack.com/messaging/webhooks
-            url: slack url
+            url: <your slack url>
 ```
 
 将该应用部署到集群中，可以看到所有的资源都已被成功部署，且 Slack 中收到了对应的通知，通知内容为该 Deployment 的状态信息。

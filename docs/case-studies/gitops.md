@@ -86,6 +86,8 @@ spec:
         policy:
           numerical:
             order: asc
+        # add more commit message
+        commitMessage: "Image: {{range .Updated.Images}}{{println .}}{{end}}"
 ```
 
 Apply the file to the cluster and check the `Application` in clusters, we can see that the `git-app` automatically pulls the config from Git Repository and apply the application to the cluster:
@@ -126,7 +128,7 @@ func main() {
 
 Commit the change to the Git Repository, we can see that our CI pipelines has built the image and push it to the image registry.
 
-KubeVela will then listening to the image registry and update the `Application` in Git Repository with the latest image tag. We can see that there is a commit form `kubevelabot`, the commit message is `Update image automatically.`
+KubeVela will then listening to the image registry and update the `Application` in Git Repository with the latest image tag. We can see that there is a commit form `kubevelabot`, the commit message is always with a prefix `Update image automatically.` You can use format like `{{range .Updated.Images}}{{println .}}{{end}}` to specify the image name in the `commitMessage` field.
 
 ![alt](../resources/gitops-commit.png)
 

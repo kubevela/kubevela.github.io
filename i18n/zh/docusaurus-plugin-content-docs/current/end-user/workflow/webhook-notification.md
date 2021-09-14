@@ -48,23 +48,31 @@ spec:
         properties:
           dingding:
             # 钉钉 Webhook 地址，请查看：https://developers.dingtalk.com/document/robots/custom-robot-access
-            url: xxx
+            url: <your dingding url>
             # 具体要发送的信息详情
             message:
               msgtype: text
               text:
-                context: 开始运行工作流
+                content: 开始运行工作流
       - name: application
-        type: apply-application
+        type: apply-component
+        properties:
+          component: express-server
+        outputs:
+          - from: app-status
+            exportKey: output.status.conditions[0].message + "工作流运行完成"
       - name: slack-message
         type: webhook-notification
+        inputs:
+          - name: app-status
+            parameterKey: properties.slack.message.text
         properties:
           slack:
             # Slack Webhook 地址，请查看：https://api.slack.com/messaging/webhooks
-            url: xxx
-            # 具体要发送的信息详情
-            message:
-              text: 工作流运行完成
+            url: <your slack url>
+            # 具体要发送的信息详情，会被 input 中的值覆盖
+            # message:
+            #   text: condition message + 工作流运行完成
 ```
 
 ## 期望结果
