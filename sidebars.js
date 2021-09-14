@@ -148,6 +148,7 @@ module.exports = {
         {
           'System Operation': [
             'platform-engineers/system-operation/bootstrap-parameters',
+            'platform-engineers/system-operation/managing-clusters',
             'platform-engineers/system-operation/observability',
             'platform-engineers/system-operation/performance-finetuning',
           ]
