@@ -111,7 +111,7 @@ Grafana 的域名，可以使用您自定义的域名，也可以使用 ACK 提�
 
 ```shell
 $ kubectl get secret grafana -o jsonpath="{.data.admin-password}" -n observability | base64 --decode ; echo
-0OonKDVFhIZSaUvQAGZvZMQxbVEfakepassword
+<密码显示在这里>
 ```
 
 使用 `admin` 和上面的密码登陆下面的监控控制台。
