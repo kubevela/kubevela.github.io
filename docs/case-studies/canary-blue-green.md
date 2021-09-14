@@ -84,7 +84,7 @@ Execute the following command to update the application.
 ```shell
 kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/canary-rollout-use-case/rollout-v2.yaml
 ```
-This operation updated the mirror of the `reviews` Component from the previous v2 to v3. At the same time, the Rollout Trait of the `reviews` Component specifies that the number of target instances to be upgraded is two, which are upgraded in two batches, with one instance in each batch.
+This operation updates the mirror of the `reviews` Component from the previous v2 to v3. At the same time, the Rollout Trait of the `reviews` Component specifies that the number of target instances to be upgraded is two, which are upgraded in two batches, with one instance in each batch.
 
 In addition, a canary-traffic Trait has been added to the Component.
 ```shell
