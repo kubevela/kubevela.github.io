@@ -11,7 +11,7 @@ Install the Istio cluster plugin.
 vela addon enable istio
 ```
 
-Wait for a while and confirm if the status of the cluster plugin is `success`, indicating that it is ready.
+Wait until the status of the cluster plugin is `success`, which indicates it is ready.
 
 ```shell
 kubectl get initializer -n istio-system istio
