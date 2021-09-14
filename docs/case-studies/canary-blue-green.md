@@ -19,7 +19,7 @@ NAME    PHASE          AGE
 istio   success       4h47m
 ```
 
-Because the following example runs in the default namespace, the default namespace needs to be labeled with Istio auto-injecting sidecar.
+The default namespace needs to be labeled so that Istio will auto-inject sidecar.
 
 ```shell
 kubectl label namespace default istio-injection=enabled
