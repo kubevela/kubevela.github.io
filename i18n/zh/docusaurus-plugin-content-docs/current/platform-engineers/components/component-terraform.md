@@ -6,35 +6,8 @@ title:  Terraform 组件
 Terraform 是目前业内支持云资源最广泛也最受欢迎的组件，KubeVela 对 Terraform 进行了额外的支持，使得用户可以通过 Kubernetes CRD 的方式配合
 Terraform 使用任意的云资源。
 
-为了使最终用户能够[部署和消费云资源](../../end-user/components/cloud-services/provider-and-consume-cloud-services)，管理员需要：
-1）配置云提供商的鉴权信息；2）当用户的要求超出了 [内置云资源的能力](../../end-user/components/cloud-services/provider-and-consume-cloud-services)
-，要为云资源准备 ComponentDefinitions。
-
-### 配置云服务商的鉴权
-
-为了使 Terraform 能够部署云资源，需要配置云服务商的鉴权信息。
-
-以下示例以阿里云为例，对于其他云供应商，请参考 [Terraform controller getting started](https://github.com/oam-dev/terraform-controller/blob/master/getting-started.md)。
-
-```shell
-$ export ALICLOUD_ACCESS_KEY=xxx; export ALICLOUD_SECRET_KEY=yyy
-```
-
-If you'd like to use Alicloud Security Token Service, also export `ALICLOUD_SECURITY_TOKEN`.
-```shell
-$ export ALICLOUD_SECURITY_TOKEN=zzz
-```
-
-```
-$ sh https://raw.githubusercontent.com/oam-dev/terraform-controller/master/hack/prepare-alibaba-credentials.sh
-
-$ kubectl get secret -n vela-system
-NAME                                              TYPE                                  DATA   AGE
-alibaba-account-creds                             Opaque                                1      11s
-
-$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/terraform-controller/master/examples/alibaba/provider.yaml
-provider.terraform.core.oam.dev/default created
-```
+为了使最终用户能够[部署和消费云资源](../../end-user/components/cloud-services/provider-and-consume-cloud-services)，当用户的要求超出了 [内置云资源的能力](../../end-user/components/cloud-services/provider-and-consume-cloud-services)，
+管理员需要要为云资源准备 ComponentDefinitions。
 
 ## 为云资源开发 ComponentDefinition
 
