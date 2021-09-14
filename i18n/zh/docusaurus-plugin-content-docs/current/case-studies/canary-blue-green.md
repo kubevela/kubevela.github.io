@@ -11,14 +11,6 @@ title: 金丝雀发布
 vela addon enable istio
 ```
 
-等待一段时间，确认集群插件状态为 `success` 说明已经就绪。
-
-```shell
-kubectl get initializer -n istio-system istio
-NAME    PHASE          AGE
-istio   success       4h47m
-```
-
 因为后面的例子运行在 default namespace，需要为 default namespace 打上 Istio 自动注入 sidecar 的标签。
 
 ```shell

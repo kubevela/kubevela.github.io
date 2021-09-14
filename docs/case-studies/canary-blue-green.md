@@ -11,14 +11,6 @@ Install the Istio cluster plugin.
 vela addon enable istio
 ```
 
-Wait until the status of the cluster plugin is `success`, which indicates it is ready.
-
-```shell
-kubectl get initializer -n istio-system istio
-NAME    PHASE          AGE
-istio   success       4h47m
-```
-
 The default namespace needs to be labeled so that Istio will auto-inject sidecar.
 
 ```shell
