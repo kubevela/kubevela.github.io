@@ -39,7 +39,7 @@ The component architecture and  relationship of the application are as follows:
 
 This Application contains four Components, each of which is configured with a Trait of `expose` to expose services in the cluster.
 
-The component of `productpage` is also configured with an istio-gateway Trait, allowing the Component to receive traffic entering the cluster. This Trait is achieved by setting `gateway:ingressgateway` to use Istio's default gateway, and setting `hosts: "*"` to specify that requests carrying any host information can enter the gateway.
+The `productpage` component is also configured with an `istio-gateway` Trait, allowing the Component to receive traffic coming from outside the cluster. The example below show that it sets `gateway:ingressgateway` to use Istio's default gateway, and `hosts: "*"` to specify that any request can enter the gateway.
 ```shell
 ...
     - name: productpage
