@@ -88,6 +88,8 @@ spec:
         policy:
           numerical:
             order: asc
+        # 追加提交信息
+        commitMessage: "Image: {{range .Updated.Images}}{{println .}}{{end}}"
 ```
 
 将上述文件部署到集群中后，查看集群中的应用，可以看到，应用 `git-app` 自动拉取了 Git 仓库中的应用配置并部署到了集群中：
@@ -128,7 +130,7 @@ func main() {
 
 提交该改动至代码仓库，可以看到，我们配置的 CI 流水线开始构建镜像并推送至镜像仓库。
 
-而 KubeVela 会通过监听镜像仓库，根据最新的镜像 Tag 来更新代码仓库中的 `Application`。此时，可以看到代码仓库中有一条来自 `kubevelabot` 的提交，提交信息为 `Update image automatically.`
+而 KubeVela 会通过监听镜像仓库，根据最新的镜像 Tag 来更新代码仓库中的 `Application`。此时，可以看到代码仓库中有一条来自 `kubevelabot` 的提交，提交信息均带有 `Update image automatically.` 前缀。你也可以通过 `{{range .Updated.Images}}{{println .}}{{end}}` 在 `commitMessage` 字段中追加你所需要的信息。
 
 ![alt](../resources/gitops-commit.png)
 

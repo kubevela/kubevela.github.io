@@ -48,23 +48,31 @@ spec:
         properties:
           dingding:
             # the DingTalk webhook address, please refer to: https://developers.dingtalk.com/document/robots/custom-robot-access
-            url: xxx
+            url: <your dingding url>
             # specify the message details
             message:
               msgtype: text
               text:
-                context: Workflow starting...
+                content: Workflow starting...
       - name: application
-        type: apply-application
+        type: apply-component
+        properties:
+          component: express-server
+        outputs:
+          - from: app-status
+            exportKey: output.status.conditions[0].message + "工作流运行完成"
       - name: slack-message
         type: webhook-notification
+        inputs:
+          - name: app-status
+            parameterKey: properties.slack.message.text
         properties:
           slack:
             # the Slack webhook address, please refer to: https://api.slack.com/messaging/webhooks
-            url: xxx
-            # specify the message details
-            message:
-              text: Workflow ended.
+            url: <your slack url>
+            # specify the message details, will be filled by the input value
+            # message:
+            #   text: condition message + Workflow ended.
 ```
 
 ## Expected outcome

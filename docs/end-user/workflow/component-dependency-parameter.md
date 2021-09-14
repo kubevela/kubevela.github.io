@@ -19,7 +19,7 @@ We can write `valueFrom` in the following ways:
 
 ### Inputs
 
-Inputs is made of `name` and `parameterKey`. Input uses `name` to reference output, `parameterKey` is a expression that assigns the value of the input to the corresponding field.
+Inputs is made of `from` and `parameterKey`. Input uses `from` to reference output, `parameterKey` is a expression that assigns the value of the input to the corresponding field.
 
 eg.
 

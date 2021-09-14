@@ -120,7 +120,7 @@ spec:
     type: helm
     properties:
       repoType: helm
-      repoUrl: https://charts.bitnami.com/bitnami
+      url: https://charts.bitnami.com/bitnami
       chart: tomcat
       version: "9.2.20"
   workflow:
@@ -141,7 +141,7 @@ spec:
         properties:
           slack:
             # the address of your slack webhook, please refer to: https://api.slack.com/messaging/webhooks
-            url: slack url
+            url: <your slack url>
 ```
 
 Apply the Application to the cluster and you can see that all resources have been successfully applied and Slack has received the messages of the Deployment status.

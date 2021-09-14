@@ -98,7 +98,7 @@ spec:
           chart: ./charts/kruise/v0.9.0
           version: "*"
           repoType: git
-          repoUrl: https://github.com/openkruise/kruise
+          url: https://github.com/openkruise/kruise
   dependsOn:
   - ref:
       apiVersion: core.oam.dev/v1beta1
