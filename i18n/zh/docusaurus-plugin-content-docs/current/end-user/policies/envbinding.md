@@ -11,61 +11,88 @@ title: 多环境部署
 ## 如何使用
 
 ```yaml
-# app.yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: policy-demo
-  namespace: default
+  name: example-app
+  namespace: test
 spec:
   components:
-    - name: nginx-server
+    - name: hello-world-server
       type: webservice
       properties:
-        image: nginx:1.21
-        port: 80
-
+        image: crccheck/hello-world 
+        port: 8000
+      traits:
+        - type: scaler
+          properties:
+            replicas: 1
+    - name: data-worker
+      type: worker
+      properties:
+        image: busybox
+        cmd:
+          - sleep
+          - '1000000'
   policies:
-    - name: my-policy
+    - name: example-multi-env-policy
       type: env-binding
       properties:
-        clusterManagementEngine: single-cluster
         envs:
-          - name: test
-            patch:
+          - name: staging
+            placement: # 选择要部署的目标集群
+              clusterSelector:
+                name: cluster-staging
+            selector: # 选择要使用的组件
               components:
-                - name: nginx-server
-                  type: webservice
-                  properties:
-                    image: nginx:1.20
-                    port: 80
+                - hello-world-server
+
+          - name: prod
             placement:
-              namespaceSelector:
-                name: test
+              clusterSelector:
+                name: cluster-prod
+            patch: # 差异化配置该环境中的组件
+              components:
+                - name: hello-world-server
+                  type: webservice
+                  traits:
+                    - type: scaler
+                      properties:
+                        replicas: 3
+
   workflow:
     steps:
-      - name: deploy-test-env
+      # 部署 预发 环境
+      - name: deploy-staging
         type: multi-env
         properties:
-          # 指定 policy 名称
-          policy: my-policy
-          # 指定 policy 中的 env 名称
-          env: test
+          policy: example-multi-env-policy
+          env: staging
+      
+      # 人工确认
+      - name: manual-approval 
+        type: suspend
 
+      # 部署 生产 环境
+      - name: deploy-prod
+        type: multi-env
+        properties:
+          policy: example-multi-env-policy
+          env: prod
 ```
 
-> 创建应用部署计划之前需要当前集群中有名为 `test` 的命名空间，你可以通过执行 `kubectl create ns test` 来创建。
+> 创建应用部署计划之前需要当前集群、目标集群中均有名为 `test` 的命名空间，你可以通过执行 `kubectl create ns test` 来创建。
 
 ```shell
 kubectl apply -f app.yaml
 ```
 
-应用部署计划创建之后，在 `test` 命名空间下会创建一个配置化的应用部署计划。
+应用部署计划创建之后，在 `test` 命名空间下会创建一个配置化的应用部署计划。同时在子集群的 `test` 命名空间中会出现相应的资源。
 
 ```shell
 $ kubectl get app -n test
-NAME          COMPONENT      TYPE         PHASE     HEALTHY   STATUS   AGE
-policy-demo   nginx-server   webservice   running   true               65s
+NAME          COMPONENT            TYPE         PHASE     HEALTHY   STATUS   AGE
+example-app   hello-world-server   webservice   running                      25s
 ```
 
 如果你想使用 `env-binding` 在多集群环境下创建应用部署计划，请参考 **[应用多集群部署](../../case-studies/multi-app-env-cluster)** 。
@@ -76,7 +103,6 @@ policy-demo   nginx-server   webservice   running   true               65s
 
 | 名称                    | 描述                                                   | 类型     | 是否必须 | 默认值                                      |
 | :---------------------- | :----------------------------------------------------- | :------- | :------- | :------------------------------------------ |
-| clusterManagementEngine | 集群管理方案，可选值 single-cluster（单集群部署）、ocm | string   | 否       | 当该字段为空时，默认使用 ocm 多集群管理方案 |
 | envs                    | 环境配置                                               | env 数组 | 是       | 无                                          |
 
 env 的属性
@@ -86,6 +112,7 @@ env 的属性
 | name      | 环境名称                                                     | string           | 是       | 无     |
 | patch     | 对应用部署计划中的组件差异化配置                             | patch 结构体     | 是       | 无     |
 | placement | 资源调度策略，选择将配置化的资源部署到指定的集群或命名空间上 | placement 结构体 | 是       | 无     |
+| selector  | 为应用部署计划选择需要使用的组件，默认为空代表使用所有组件 | selector 结构体 | 否       | 无     |
 
 patch 的属性
 
@@ -97,19 +124,16 @@ placement 的属性
 
 | 名称              | 描述                                                                                                        | 类型                     | 是否必须 | 默认值 |
 | :---------------- | :---------------------------------------------------------------------------------------------------------- | :----------------------- | :------- | :----- |
-| clusterSelector   | 集群选择器，通过标签或者名称筛选集群，该属性只在 clusterManagementEngine 为 ocm 时候有效                    | clusterSelector 结构体   | 是       | 无     |
-| namespaceSelector | 命名空间选择器，通过标签或者名称筛选命名空间，该属性只在 clusterManagementEngine 为 single-cluster 时候有效 | namespaceSelector 结构体 | 是       | 无     |
+| clusterSelector   | 集群选择器，通过名称筛选集群                    | clusterSelector 结构体   | 是       | 无     |
+
+selector 的属性
+
+| 名称       | 描述                 | 类型           | 是否必须 | 默认值 |
+| :--------- | :------------------- | :------------- | :------- | :----- |
+| components | 需要使用的组件名称列表 | string 数组 | 否       | 无     |
 
 clusterSelector 的属性
 
 | 名称   | 描述     | 类型              | 是否必须 | 默认值 |
 | :----- | :------- | :---------------- | :------- | :----- |
-| labels | 集群标签 | map[string]string | 否       | 无     |
 | name   | 集群名称 | string            | 否       | 无     |
-
-namespaceSelector 的属性
-
-| 名称   | 描述           | 类型              | 是否必须 | 默认值 |
-| :----- | :------------- | :---------------- | :------- | :----- |
-| labels | 命名空间的标签 | map[string]string | 否       | 无     |
-| name   | 命名空间的名称 | string            | 否       | 无     |
