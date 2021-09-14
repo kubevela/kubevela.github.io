@@ -68,7 +68,7 @@ The component of `productpage` is also configured with an istio-gateway Trait, a
 ...
 ```
 
-You can map the port of the gateway to the local by executing the following command.
+You can port-forward to the gateway as follows:
 ```shell
 kubectl port-forward service/istio-ingressgateway -n istio-system 19082:80
 ```
