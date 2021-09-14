@@ -23,6 +23,15 @@ KubeVela is a modern application platform that makes it easier and faster to del
 
 **Runtime Agnostic** - KubeVela works as an application delivery control plane that is fully runtime agnostic. It can deploy and manage any application components including containers, cloud functions, databases, or even EC2 instances across hybrid environments, following the workflow you defined.
 
+## Who should use KubeVela?
+
+- Application developers, operators, DevOps engineers
+	- think about a modern Continuous Delivery (CD) platform.
+- Platform builders for PaaS, Serverless, application management/delivery systems
+	- think about an application delivery engine that you could build your advanced platform with.
+- ISV, SaaS owners, and application architects who need to distribute software to anywhere
+	- think about an App Store but on Kubernetes and clouds.
+
 ## Comparisons
 
 ### KubeVela vs. Platform-as-a-Service (PaaS) 

@@ -1,5 +1,5 @@
 ---
-title: Patch for Kustomize Component
+title: Kustomize Patch
 ---
 
 ## kustomize-patch Specification

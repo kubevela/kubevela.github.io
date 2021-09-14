@@ -83,9 +83,9 @@
     "message": "Appendix",
     "description": "The label for category Appendix in sidebar docs"
   },
-  "sidebar.docs.category.End User Guide": {
+  "sidebar.docs.category.User Manuals": {
     "message": "用户手册",
-    "description": "The label for category End User Guide in sidebar docs"
+    "description": "The label for category User Manuals in sidebar docs"
   },
   "sidebar.docs.category.Components": {
     "message": "Components",

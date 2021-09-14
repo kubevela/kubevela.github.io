@@ -34,7 +34,7 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'End User Guide',
+      label: 'User Manuals',
       collapsed: false,
       items: [
         {
@@ -100,7 +100,7 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'Platform Admin Guide',
+      label: 'Administrator Manuals',
       collapsed: false,
       items: [
         {
