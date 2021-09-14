@@ -37,7 +37,7 @@ The component architecture and  relationship of the application are as follows:
 
 ![book-info-struct](../resources/book-info-struct.jpg)
 
-This Application contains four Components, each of which is configured with a Trait of `expose` to expose services in the cluster.
+This Application has four Components, each configured with an`expose` Trait to expose cluster-level service.
 
 The `productpage` component is also configured with an `istio-gateway` Trait, allowing the Component to receive traffic coming from outside the cluster. The example below show that it sets `gateway:ingressgateway` to use Istio's default gateway, and `hosts: "*"` to specify that any request can enter the gateway.
 ```shell
