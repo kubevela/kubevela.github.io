@@ -115,6 +115,15 @@ cloud provider's Kubernetes clusters, and the domain rules.
 
 ## View monitoring data
 
+### Get an account for the monitoring dashboard
+
+```shell
+$ kubectl get secret grafana -o jsonpath="{.data.admin-password}" -n observability | base64 --decode ; echo
+<password printed here>
+```
+
+Using username `admin` and the password above to login to the monitoring dashboard below.
+
 ### Get the monitoring url
 
 - Self-built/regular clusters
