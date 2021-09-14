@@ -89,13 +89,13 @@ module.exports = {
             'end-user/workflow/component-dependency-parameter',
           ]
         },
-        {
-          'Debugging': [
+        'end-user/version-control',
+        //{
+          //'Debugging': [
             // 'end-user/debug/health',
             // 'end-user/debug/monitoring', 这部分要和可观测合并
-            'end-user/debug/live-diff',
-          ]
-        },
+          //]
+//        },
       ]
     },
     {
