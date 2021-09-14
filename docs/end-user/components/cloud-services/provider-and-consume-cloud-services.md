@@ -14,7 +14,7 @@ resources of various manufacturers in a standardized and unified way.
 
 This tutorial will talk about how to provision and consume Cloud Resources by Terraform.
 
-> ⚠️ This section requires your platform engineers have already enabled [add-on 'terraform/provider-alicloud'](../../../platform-engineers/components/component-terraform).
+> ⚠️ This section requires your platform engineers have already enabled [add-on 'terraform/provider-alicloud'](../../../install#4-optional-enable-addons).
 
 ## Supported Cloud Resource list
 

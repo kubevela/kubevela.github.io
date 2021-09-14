@@ -3,34 +3,8 @@ title: Terraform Component
 ---
 
 To enable end users to [provision and consume cloud resources](../../end-user/components/cloud-services/provider-and-consume-cloud-services),
-platform engineers need to 1) apply the credentials for a cloud provider, and 2) prepare ComponentDefinitions for cloud resources
-if end users' requirements are beyond the [built-in capabilities](../../end-user/components/cloud-services/provider-and-consume-cloud-services#supported-cloud-resource-list).
-
-## Apply the credential for a Cloud Provider
-
-To enable the ability to provision cloud resources by Terraform, the credential for a cloud provider needs to be applied.
-
-Taking Alibaba Cloud as an example, for other cloud providers, please refer to [Terraform controller getting started](https://github.com/oam-dev/terraform-controller/blob/master/getting-started.md).
-
-```shell
-$ export ALICLOUD_ACCESS_KEY=xxx; export ALICLOUD_SECRET_KEY=yyy
-```
-
-If you'd like to use Alicloud Security Token Service, also export `ALICLOUD_SECURITY_TOKEN`.
-```shell
-$ export ALICLOUD_SECURITY_TOKEN=zzz
-```
-
-```
-$ sh https://raw.githubusercontent.com/oam-dev/terraform-controller/master/hack/prepare-alibaba-credentials.sh
-
-$ kubectl get secret -n vela-system
-NAME                                              TYPE                                  DATA   AGE
-alibaba-account-creds                             Opaque                                1      11s
-
-$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/terraform-controller/master/examples/alibaba/provider.yaml
-provider.terraform.core.oam.dev/default created
-```
+platform engineers need to prepare ComponentDefinitions for cloud resources if end users' requirements are beyond the
+[built-in capabilities](../../end-user/components/cloud-services/provider-and-consume-cloud-services#supported-cloud-resource-list).
 
 ## Develop a ComponentDefinition for a cloud resource
 
