@@ -19,7 +19,7 @@ outputs 由 `name` 和 `valueFrom` 组成。`name` 声明了这个 output 的名
 
 ### Inputs
 
-inputs 由 `name` 和 `parameterKey` 组成。`name` 声明了这个 input 从哪个 output 中取值，`parameterKey` 为一个表达式，将会把 input 取得的值赋给对应的字段。
+inputs 由 `from` 和 `parameterKey` 组成。`from` 声明了这个 input 从哪个 output 中取值，`parameterKey` 为一个表达式，将会把 input 取得的值赋给对应的字段。
 
 如：
 1. 指定 inputs:
