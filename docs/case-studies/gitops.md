@@ -1,5 +1,5 @@
 ---
-title:  GitOps with KubeVela
+title:  GitOps with Workflow
 ---
 
 GitOps is a continuous delivery method that allows developers to automatically deploy applications by changing code in a Git repository. KubeVela can support GitOps as an application delivery system. In this section, you will learn how to use KubeVela to do GitOps.

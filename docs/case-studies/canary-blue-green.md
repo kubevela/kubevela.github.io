@@ -1,5 +1,5 @@
 ---
-title:  Canary Release
+title:  Canary Release with Istio
 ---
 
 This article introduces how KubeVela integrates [Istio](https://istio.io/latest/) to do a canary release.

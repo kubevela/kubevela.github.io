@@ -1,5 +1,5 @@
 ---
-title:  GitOps 部署
+title:  基于工作流的 GitOps
 ---
 
 GitOps 通过实现持续交付，使开发人员可以通过直接更改 Git 仓库中的代码来自动部署应用，在提高部署生产力的同时也通过分支回滚等能力提高了可靠性。 KubeVela 作为一个应用交付系统，同样可以支持 GitOps 能力，本节将介绍如何使用 KubeVela 完成 GitOps 自动部署。
