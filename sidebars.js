@@ -87,13 +87,13 @@ module.exports = {
             'end-user/workflow/webhook-notification',
           ]
         },
-        {
-          'Debugging': [
+        'end-user/version-control',
+        //{
+          //'Debugging': [
             // 'end-user/debug/health',
             // 'end-user/debug/monitoring', 这部分要和可观测合并
-            'end-user/debug/live-diff',
-          ]
-        },
+          //]
+//        },
       ]
     },
     {
