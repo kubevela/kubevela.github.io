@@ -9,7 +9,7 @@ KubeVela 通过云资源组件（Component）和运维特征（Trait）里的资
 服务 Kubernetes 版（ACK ）、阿里云对象存储服务（OSS）和阿里云关系型数据库服务（RDS）这些默认组件。同时在未来，更多新的云资源也会在社区的支撑下
 逐渐成为默认选项，让你标准化统一地去使用各种厂商的云资源。
 
-> ⚠️ 请确认管理员已经安装了 [Terraform 插件 'terraform/provider-alicloud'](../../../platform-engineers/components/component-terraform).
+> ⚠️ 请确认管理员已经安装了 [Terraform 插件 'terraform/provider-alicloud'](../../../install#4-【可选】安装插件).
 
 
 ## 支持的云资源列表
