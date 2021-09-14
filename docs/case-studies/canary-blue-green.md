@@ -2,7 +2,7 @@
 title:  Canary Release
 ---
 
-This article will introduce that based on [Istio](https://istio.io/latest/) how KubeVela implement classic microservice scenarios [bookinfo](https://istio.io/latest/docs/examples/bookinfo/?ie=utf-8&hl=en&docs-search=Canary) as Canary Release.
+This article introduces how KubeVela integrates [Istio](https://istio.io/latest/) to do a canary release.
 
 ## Praparation
 
