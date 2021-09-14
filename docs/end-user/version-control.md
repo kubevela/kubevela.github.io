@@ -159,7 +159,7 @@ spec:
 Run live-diff like this:
 
 ```shell
-kubectl vela live-diff -f new-app.yaml -r myapp-v1
+vela live-diff -f new-app.yaml -r myapp-v1
 ```
 
 `-r` or `--revision` is a flag that specifies the name of a living ApplicationRevision with which you want to compare the updated application.
