@@ -439,7 +439,7 @@ The out-of-the-box capabilities provided by KubeVela, including components, trai
 Get to know about how to customize:
 * [Component](../components/custom-component)
 * [Trait](../traits/customize-trait)
-* [Policy](../policy/custom-policy)
+<!-- * [Policy](../policy/custom-policy) -->
 * [Workflow](../workflow/workflow)
 
 [1]:	../oam/oam-model

@@ -158,6 +158,6 @@ EOF
 ## 下一步
 
 - [组件可观测性](../../component-observability)
-- [应用组件间的依赖和参数传递](../../component-dependency-parameter)
+- [应用组件间的依赖和参数传递](../../workflow/component-dependency-parameter)
 - [多应用、多环境、多集群编排](../../../case-studies/multi-app-env-cluster)
 
