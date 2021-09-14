@@ -8,7 +8,8 @@ This chapter will introduce how to use Rollout Trait to perform a rolling update
 
 ### First Deployment
 
-Apply the Application YAML below which includes a webservice-type workload with Rollout Trait, and sets ControllerRevision name to express-server-v1 by setting `spec.components[0].externalRevision` field. If the revision name is not specified, it will be genrated automatically by the format: `<Component name>-<revision number>`.
+Apply the Application YAML below which includes a webservice-type workload with Rollout Trait, and [control version](../version-control)
+of component name to be express-server-v1.
 
 ```shell
 cat <<EOF | kubectl apply -f -
@@ -42,7 +43,7 @@ NAME                 COMPONENT        TYPE         PHASE     HEALTHY   STATUS   
 rollout-trait-test   express-server   webservice   running   true               2d20h
 ```
 
-Check ControllerRevision
+Check component revision
 ```shell
 $ kubectl get controllerRevision  -l controller.oam.dev/component=express-server
 NAME                CONTROLLER                                    REVISION   AGE
