@@ -1,5 +1,5 @@
 ---
-title:  Jenkins 对接 KubeVela 实现 CI/CD
+title:  对接 Jenkins 实现 CI/CD
 ---
 
 本文将会以一个 HTTP 服务的开发部署为例，简单介绍如何将 KubeVela 与 Jenkins 对接实现应用的持续集成与持续交付。[参考代码，请点击](https://github.com/Somefive/KubeVela-demo-CICD-app)。

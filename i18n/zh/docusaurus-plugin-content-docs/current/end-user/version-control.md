@@ -155,7 +155,7 @@ spec:
 然后运行 `版本对比` 功能，使用如下命令：
 
 ```shell
-vela system live-diff -f new-app.yaml -r vela-app-v1
+vela live-diff -f new-app.yaml -r vela-app-v1
 ```
 
 * 通过 `-r` 或 `--revision` 参数，指定要比较的版本名称。
