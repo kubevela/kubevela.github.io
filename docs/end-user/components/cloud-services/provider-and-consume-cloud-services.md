@@ -151,4 +151,4 @@ Handling connection for 80
 
 - [Component Observability](../../component-observability)
 - [Data Pass Between Components ](../../workflow/component-dependency-parameter)
-- [Multi-Cluster and Environment](../../../case-studies/multi-app-env-cluster)
+- [Multi-Cluster and Environment](../../../case-studies/multi-cluster)
