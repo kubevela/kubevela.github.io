@@ -82,23 +82,15 @@ wait: op.#ConditionalWait & {
 
 ---
 
-通过组件名称从 Application 中获取组件对应的资源数据。
+获取 Application 中所有组件对应的资源数据。
 
 ### 操作参数
 
-- component: 指定资源名称。
-- workload: 获取到的组件的 workload 资源定义。
-- auxiliaries: 获取到的组件的辅助资源定义(key 为定义里面 outputs 对应的资源名)。
+无需指定参数。
 
 
 ```
-#Load: {
-  component: string
-  value: {
-     workload: {...}
-     auxiliaries: [string]: {...}
-  }   
-}
+#Load: {}
 ```
 
 ### 用法示例
@@ -106,10 +98,8 @@ wait: op.#ConditionalWait & {
 ```
 import "vela/op"
 
-// 该操作完成后，你可以使用 `load.value.workload` 以及 `load.value.traits` 来获取到组件相应的资源数据
-load: op.#Load & {
-  component: "component-name"
-}
+// 该操作完成后，你可以使用 `load.value.[componentName]` 来获取到对应组件的资源数据
+load: op.#Load & {}
 ```
 
 ## Read
