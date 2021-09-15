@@ -1,0 +1,454 @@
+{
+  "version-v1.1/docs": [
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Getting Started",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.1/getting-started/introduction"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.1/install"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.1/quick-start"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Core Concepts",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.1/core-concepts/architecture"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.1/core-concepts/application"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Case Studies",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.1/case-studies/jenkins-cicd"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.1/case-studies/gitops"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.1/case-studies/canary-blue-green"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.1/case-studies/multi-cluster"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "User Manuals",
+      "items": [
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Components",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/components/helm"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/components/kustomize"
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Cloud Services",
+              "items": [
+                {
+                  "collapsed": true,
+                  "type": "category",
+                  "label": "Terraform",
+                  "items": [
+                    {
+                      "type": "doc",
+                      "id": "version-v1.1/end-user/components/cloud-services/terraform/alibaba-ack"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "version-v1.1/end-user/components/cloud-services/terraform/alibaba-eip"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "version-v1.1/end-user/components/cloud-services/terraform/alibaba-rds"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "version-v1.1/end-user/components/cloud-services/terraform/alibaba-oss"
+                    }
+                  ]
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.1/end-user/components/cloud-services/provider-and-consume-cloud-services"
+                }
+              ]
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "CUE Component",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.1/end-user/components/cue/webservice"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.1/end-user/components/cue/worker"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.1/end-user/components/cue/task"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.1/end-user/components/cue/raw"
+                }
+              ]
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/components/more"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Traits",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/traits/ingress"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/traits/rollout"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/traits/autoscaler"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/traits/kustomize-patch"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/traits/annotations-and-labels"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/traits/service-binding"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/traits/sidecar"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/traits/more"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Policies",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/policies/envbinding"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/policies/health"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Workflow",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/workflow/webhook-notification"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/workflow/component-dependency-parameter"
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.1/end-user/version-control"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Administrator Manuals",
+      "items": [
+        {
+          "collapsed": false,
+          "type": "category",
+          "label": "Learning OAM",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/oam/oam-model"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/oam/x-definition"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Learning CUE",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/cue/basic"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/cue/definition-edit"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/cue/advanced"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Component System",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/components/custom-component"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/components/component-terraform"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Traits System",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/traits/customize-trait"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/traits/patch-trait"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/traits/status"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/traits/advanced"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Workflow System",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/workflow/workflow"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/workflow/built-in-workflow-defs"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/workflow/cue-actions"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "System Operation",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/system-operation/bootstrap-parameters"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/system-operation/managing-clusters"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/system-operation/observability"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/system-operation/performance-finetuning"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Debugging",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/platform-engineers/debug/dry-run"
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.1/platform-engineers/advanced-install"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "References",
+      "items": [
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "CLI",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_components"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_config"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_env"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_init"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_up"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_version"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_exec"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_logs"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_ls"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_port-forward"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_show"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_status"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_workloads"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_traits"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_system"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_template"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/cli/vela_cap"
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.1/developers/references/kubectl-plugin"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Roadmap",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.1/roadmap/README"
+        }
+      ]
+    },
+    {
+      "type": "doc",
+      "id": "version-v1.1/developers/references/devex/faq"
+    }
+  ]
+}

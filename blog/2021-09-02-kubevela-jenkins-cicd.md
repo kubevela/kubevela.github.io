@@ -67,7 +67,7 @@ Finally, go to *Dashboard > Manage Jenkins > Configure System > GitHub* in Jenki
 
 ### KubeVela
 
-You need to install KubeVela in your Kubernetes cluster and enable the apiserver function. Refer to [official doc](/docs/advanced-install#install-kubevela-with-apiserver) for details.
+You need to install KubeVela in your Kubernetes cluster and enable the apiserver function. Refer to [official doc](/docs/platform-engineers/advanced-install#install-kubevela-with-apiserver) for details.
 
 ## Composing Applications
 

@@ -76,11 +76,11 @@ module.exports = {
             },
             {
               label: 'User Manuals',
-              to: '/docs/end-user/application',
+              to: '/docs/end-user/components/helm',
             },
             {
               label: 'Administrator Manuals',
-              to: '/docs/platform-engineers/overview',
+              to: '/docs/platform-engineers/oam/oam-model',
             },
           ],
         },
@@ -146,7 +146,7 @@ module.exports = {
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           includeCurrentVersion: true,
-          lastVersion: 'v1.0',
+          lastVersion: 'v1.1',
         },
         blog: {
           showReadingTime: true,
