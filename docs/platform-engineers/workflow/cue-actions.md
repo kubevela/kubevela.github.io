@@ -82,22 +82,14 @@ wait: op.#ConditionalWait: {
 
 ---
 
-Get component from application by component name.
+Get all components in application.
 
 ### Action Parameter
-- component: the component name.
-- workload: the workload resource of the component.
-- auxiliaries: the auxiliary resources of the component.
+No parameters.
 
 
 ```
-#Load: {
-  component: string
-  value: {
-     workload: {...}
-     auxiliaries: [string]: {...}
-  }   
-}
+#Load: {}
 ```
 
 ### Usage
@@ -105,10 +97,8 @@ Get component from application by component name.
 ```
 import "vela/op"
 
-// You can use load.workload & load.traits after this action.
-load: op.#Load & {
-  component: "component-name"
-}
+// You can use `load.value.[componentName] after this action.
+load: op.#Load & {}
 ```
 
 ## Read
