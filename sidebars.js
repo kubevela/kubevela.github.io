@@ -41,18 +41,18 @@ module.exports = {
           'Components': [
             'end-user/components/helm',
             'end-user/components/kustomize',
-              {
-                  'Cloud Services': [{
-                      "Terraform": [
-                          'end-user/components/cloud-services/terraform/alibaba-ack',
-                          'end-user/components/cloud-services/terraform/alibaba-eip',
-                          'end-user/components/cloud-services/terraform/alibaba-rds',
-                          'end-user/components/cloud-services/terraform/alibaba-oss',
-                      ],
-                  },
-                      'end-user/components/cloud-services/provider-and-consume-cloud-services',
-                  ],
+            {
+              'Cloud Services': [{
+                "Terraform": [
+                  'end-user/components/cloud-services/terraform/alibaba-ack',
+                  'end-user/components/cloud-services/terraform/alibaba-eip',
+                  'end-user/components/cloud-services/terraform/alibaba-rds',
+                  'end-user/components/cloud-services/terraform/alibaba-oss',
+                ],
               },
+                'end-user/components/cloud-services/provider-and-consume-cloud-services',
+              ],
+            },
             {
               'CUE Component': [
                 'end-user/components/cue/webservice',
@@ -91,11 +91,11 @@ module.exports = {
         },
         'end-user/version-control',
         //{
-          //'Debugging': [
-            // 'end-user/debug/health',
-            // 'end-user/debug/monitoring', 这部分要和可观测合并
-          //]
-//        },
+        //'Debugging': [
+        // 'end-user/debug/health',
+        // 'end-user/debug/monitoring', 这部分要和可观测合并
+        //]
+        //        },
       ]
     },
     {
@@ -161,28 +161,28 @@ module.exports = {
         'platform-engineers/advanced-install',
       ]
     },
-    {
-      type: 'category',
-      label: 'Using KubeVela CLI',
-      items: [
-        {
-          'Appfile': [
-            'quick-start-appfile',
-            'developers/learn-appfile',
-          ]
-        },
-        {
-          'Managing Applications': [
-            'developers/config-enviroments',
-            'developers/port-forward',
-            'developers/check-logs',
-            'developers/exec-cmd',
-            'developers/cap-center',
-            'developers/config-app',
-          ]
-        },
-      ],
-    },
+    // {
+    //   type: 'category',
+    //   label: 'Using KubeVela CLI',
+    //   items: [
+    //     {
+    //       'Appfile': [
+    //         'quick-start-appfile',
+    //         'developers/learn-appfile',
+    //       ]
+    //     },
+    //     {
+    //       'Managing Applications': [
+    //         'developers/config-enviroments',
+    //         'developers/port-forward',
+    //         'developers/check-logs',
+    //         'developers/exec-cmd',
+    //         'developers/cap-center',
+    //         'developers/config-app',
+    //       ]
+    //     },
+    //   ],
+    // },
     {
       type: 'category',
       label: 'References',
