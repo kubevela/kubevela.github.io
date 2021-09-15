@@ -67,7 +67,7 @@ KubeVela 打通了应用与基础设施之间的交付管控的壁垒，相较�
 
 ### KubeVela 环境
 
-您需要在 Kubernetes 集群中安装 KubeVela，并启用 apiserver 功能，可以参考[官方文档](/docs/advanced-install#install-kubevela-with-apiserver)。
+您需要在 Kubernetes 集群中安装 KubeVela，并启用 apiserver 功能，可以参考[官方文档](/docs/platform-engineers/advanced-install#install-kubevela-with-apiserver)。
 
 ## 编写应用
 

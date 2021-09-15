@@ -76,11 +76,11 @@ module.exports = {
             },
             {
               label: 'User Manuals',
-              to: '/docs/end-user/application',
+              to: '/docs/end-user/components/helm',
             },
             {
               label: 'Administrator Manuals',
-              to: '/docs/platform-engineers/overview',
+              to: '/docs/platform-engineers/oam/oam-model',
             },
           ],
         },
