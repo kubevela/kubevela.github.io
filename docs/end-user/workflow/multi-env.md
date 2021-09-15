@@ -2,17 +2,17 @@
 title:  Multi Environments
 ---
 
-If we have multiple clusters, we want to apply our application in the test cluster first, and then apply it to the production cluster after the application in test cluster is running. KubeVela provides the `multi-env` workflow step to manage multi environments. You can have a glimpse of how does it work as below:
+If we have multiple clusters, we want to apply our application in the test cluster first, and then apply it to the production cluster after the application in test cluster is running. KubeVela provides the `deploy2env` workflow step to manage multi environments. You can have a glimpse of how does it work as below:
 
 ![alt](../../resources/workflow-multi-env.png)
 
-In this guide, you will learn how to manage multi environments via `multi-env` in `Workflow`.
+In this guide, you will learn how to manage multi environments via `deploy2env` in `Workflow`.
 
 > Before reading this section, please make sure you have learned about the [Env Binding](../policies/envbinding) in KubeVela.
 
 ## How to use
 
-Apply the following `Application` with workflow step type of `multi-env`:
+Apply the following `Application` with workflow step type of `deploy2env`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -63,7 +63,7 @@ spec:
     steps:
       - name: deploy-test-server
         # specify the workflow step type
-        type: multi-env
+        type: deploy2env
         properties:
           # specify the component name
           component: nginx-server
@@ -75,7 +75,7 @@ spec:
         # suspend is a built-in task of workflow used to suspend the workflow
         type: suspend
       - name: deploy-prod-server
-        type: multi-env
+        type: deploy2env
         properties:
           component: nginx-server
           policy: env
@@ -102,7 +102,7 @@ We can see that the workflow is suspended at `manual-approval`:
       - name: deploy-test-server
         phase: succeeded
         resourceRef: {}
-        type: multi-env
+        type: deploy2env
       - name: manual-approval
         phase: succeeded
         resourceRef: {}
@@ -146,7 +146,7 @@ All the step status in workflow is succeeded:
       - name: deploy-test-server
         phase: succeeded
         resourceRef: {}
-        type: multi-env
+        type: deploy2env
       - name: manual-approval
         phase: succeeded
         resourceRef: {}
@@ -154,7 +154,7 @@ All the step status in workflow is succeeded:
       - name: deploy-prod-server
         phase: succeeded
         resourceRef: {}
-        type: multi-env
+        type: deploy2env
       suspend: false
       terminated: true
 ```
@@ -170,4 +170,4 @@ nginx-server     1/1     1            1           1m10s
 
 We can see that the component have been applied to both clusters.
 
-With `multi-env`, we can easily manage applications in multiple environments.
+With `deploy2env`, we can easily manage applications in multiple environments.

@@ -44,18 +44,18 @@ spec:
         envs:
           - name: test
             placement:
-              namespaceSelector:
-                name: test
+              clusterSelector:
+                name: cluster-test
           - name: prod
             placement:
-              namespaceSelector:
-                name: prod                
+              clusterSelector:
+                name: cluster-prod
   workflow:
     steps:
         # 步骤名称
       - name: deploy-test-env
         # 指定步骤类型
-        type: multi-env
+        type: deploy2env
         properties:
           # 指定策略名称
           policy: demo-policy
@@ -65,7 +65,7 @@ spec:
         # 工作流内置 suspend 类型的任务，用于暂停工作流
         type: suspend
       - name: deploy-prod-env
-        type: multi-env
+        type: deploy2env
         properties:
           policy: demo-policy
           env: prod    
@@ -151,8 +151,8 @@ KubeVela 的工作流机制允许用户自定义应用部署计划中的步骤�
 
 在上面的例子中，我们已经可以看到一些工作流的步骤：
 
-- 这里使用了 `multi-env` 和 `suspend` 类型的工作流步骤：
-  - `multi-env` 类型可以根据用户定义的策略将应用部署到指定的环境。
+- 这里使用了 `deploy2env` 和 `suspend` 类型的工作流步骤：
+  - `deploy2env` 类型可以根据用户定义的策略将应用部署到指定的环境。
   - 在第一步完成后，开始执行 `suspend` 类型的工作流步骤。该步骤会暂停工作流，我们可以查看集群中第一个组件的状态，当其成功运行后，再使用 `vela workflow resume website` 命令来继续该工作流。
   - 当工作流继续运行后，第三个步骤开始部署组件及运维特征。此时我们查看集群，可以看到所以资源都已经被成功部署。
 
