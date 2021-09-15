@@ -9,7 +9,7 @@ health checking to an application.
 
 After an application is deployed, users usually want to monitor or observe the
 health condition of the running application as well as each components.
-Health policy decouples health chechking procedure from application workflow
+Health policy decouples health checking procedure from application workflow
 execution.
 It allows to set independent health inspection cycle, such as check every 30s.
 That helps users to notice as soon as applications turn out unhealthy and
@@ -82,36 +82,42 @@ Here is a snippet of health status.
 ```yaml
 ...
   services:
-  - healthy: false
-    message: 'Ready:0/1 '
-    name: my-server-unhealthy
-    scopes:
-    - apiVersion: core.oam.dev/v1alpha2
-      kind: HealthScope
-      name: health-check
-      namespace: default
-      uid: 93345ca1-70df-4bfd-9e37-d28539cb839f
-    workloadDefinition:
-      apiVersion: apps/v1
-      kind: Deployment
-  - healthy: true
-    message: 'Ready:1/1 '
-    name: my-server
-    scopes:
-    - apiVersion: core.oam.dev/v1alpha2
-      kind: HealthScope
-      name: health-check
-      namespace: default
-      uid: 93345ca1-70df-4bfd-9e37-d28539cb839f
-    traits:
     - healthy: true
-      message: |
-        No loadBalancer found, visiting by using 'vela port-forward policy-test'
-      type: ingress
-    workloadDefinition:
-      apiVersion: apps/v1
-      kind: Deployment
-  status: running
+      message: 'Ready:1/1 '
+      name: my-server
+      scopes:
+      - apiVersion: core.oam.dev/v1alpha2
+        kind: HealthScope
+        name: health-policy-demo
+        namespace: default
+        uid: 1d54b5a0-d951-4f20-9541-c2d76c412a94
+      traits:
+      - healthy: true
+        message: |
+          No loadBalancer found, visiting by using 'vela port-forward app-healthscope-unhealthy'
+        type: ingress
+      workloadDefinition:
+        apiVersion: apps/v1
+        kind: Deployment
+    - healthy: false
+      message: 'Ready:0/1 '
+      name: my-server-unhealthy
+      scopes:
+      - apiVersion: core.oam.dev/v1alpha2
+        kind: HealthScope
+        name: health-policy-demo
+        namespace: default
+        uid: 1d54b5a0-d951-4f20-9541-c2d76c412a94
+      workloadDefinition:
+        apiVersion: apps/v1
+        kind: Deployment
+    status: running
 ...
-
 ```
+
+## Appendix: Parameter List
+
+Name | Desc | Type | Required | Default Value
+:---------- | :----------- | :----------- | :----------- | :-----------
+probeInterval|time duration between checking (in units of seconds) | int |false| 30
+probeTimeout|time duration before checking timeout (in units of seconds) | int |false| 10

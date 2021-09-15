@@ -72,36 +72,43 @@ spec:
 ```yaml
 ...
   services:
-  - healthy: false
-    message: 'Ready:0/1 '
-    name: my-server-unhealthy
-    scopes:
-    - apiVersion: core.oam.dev/v1alpha2
-      kind: HealthScope
-      name: health-check
-      namespace: default
-      uid: 93345ca1-70df-4bfd-9e37-d28539cb839f
-    workloadDefinition:
-      apiVersion: apps/v1
-      kind: Deployment
-  - healthy: true
-    message: 'Ready:1/1 '
-    name: my-server
-    scopes:
-    - apiVersion: core.oam.dev/v1alpha2
-      kind: HealthScope
-      name: health-check
-      namespace: default
-      uid: 93345ca1-70df-4bfd-9e37-d28539cb839f
-    traits:
     - healthy: true
-      message: |
-        No loadBalancer found, visiting by using 'vela port-forward policy-test'
-      type: ingress
-    workloadDefinition:
-      apiVersion: apps/v1
-      kind: Deployment
-  status: running
+      message: 'Ready:1/1 '
+      name: my-server
+      scopes:
+      - apiVersion: core.oam.dev/v1alpha2
+        kind: HealthScope
+        name: health-policy-demo
+        namespace: default
+        uid: 1d54b5a0-d951-4f20-9541-c2d76c412a94
+      traits:
+      - healthy: true
+        message: |
+          No loadBalancer found, visiting by using 'vela port-forward app-healthscope-unhealthy'
+        type: ingress
+      workloadDefinition:
+        apiVersion: apps/v1
+        kind: Deployment
+    - healthy: false
+      message: 'Ready:0/1 '
+      name: my-server-unhealthy
+      scopes:
+      - apiVersion: core.oam.dev/v1alpha2
+        kind: HealthScope
+        name: health-policy-demo
+        namespace: default
+        uid: 1d54b5a0-d951-4f20-9541-c2d76c412a94
+      workloadDefinition:
+        apiVersion: apps/v1
+        kind: Deployment
+    status: running
 ...
 
 ```
+
+## 参数说明
+
+名称 | 描述 | 类型 | 是否必须 | 默认值
+:---------- | :----------- | :----------- | :----------- | :-----------
+probeInterval| 健康检查间隔时间（单位/秒） | int | 否 | 30
+probeTimeout| 健康检查超时时间 （单位/秒）| int | 否 | 10
