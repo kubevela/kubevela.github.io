@@ -16,7 +16,7 @@ The following guide will the multi-cluster that helps you easily deploy an appli
 
 ## Preparation
 
-You can simply join an existing cluster into KubeVela by specify it's KubeConfig like below.
+You can simply join an existing cluster into KubeVela by specify its KubeConfig like below.
 
 ```shell script
 vela cluster join <your kubeconfig path>
@@ -55,14 +55,15 @@ one or more environments.
 Below is an example, deploy to a staging environment first, check the application running well,
 and finally promote to production environment.
 
-For different environments, the deployment configuration can also have some nuance.
+For different environments, the deployment configuration can also have some nuance. In the staging environment, we only need one replica for the webservice and do not need the worker. In the production environment, we setup 3 replicas for the webservice and enable the worker.
+
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: example-app
-  namespace: test
+  namespace: default
 spec:
   components:
     - name: hello-world-server
@@ -141,7 +142,9 @@ After the application deployed, it will run as the workflow steps.
 It will deploy application to staging environment first, you can check the `Application` status by:
 
 ```shell
-kubectl get application multi-env-demo -o yaml
+> kubectl get application example-app -o yaml
+NAME          COMPONENT            TYPE         PHASE                HEALTHY   STATUS       AGE
+example-app   hello-world-server   webservice   workflowSuspending   true      Ready:1/1    10s
 ```
 
 We can see that the workflow is suspended at `manual-approval`:
@@ -150,35 +153,114 @@ We can see that the workflow is suspended at `manual-approval`:
 ...
   status:
     workflow:
-      ...
-      stepIndex: 2
+      appRevision: example-app-v1:44a6447e3653bcc2
+      contextBackend:
+        apiVersion: v1
+        kind: ConfigMap
+        name: workflow-example-app-context
+        uid: 56ddcde6-8a83-4ac3-bf94-d19f8f55eb3d
+      mode: StepByStep
       steps:
-      - name: deploy-test-server
+      - id: wek2b31nai
+        name: deploy-staging
         phase: succeeded
-        resourceRef: {}
         type: multi-env
-      - name: manual-approval
+      - id: 7j5eb764mk
+        name: manual-approval
         phase: succeeded
-        resourceRef: {}
         type: suspend
       suspend: true
       terminated: false
+      waitCount: 0
 ```
 
 You can also check the health status in the `status.service` field below.
 
+```yaml
+...
+  status:
+    services:
+    - env: staging
+      healthy: true
+      message: 'Ready:1/1 '
+      name: hello-world-server
+      scopes:
+      - apiVersion: core.oam.dev/v1alpha2
+        kind: HealthScope
+        name: health-policy-demo
+        namespace: test
+        uid: 6e6230a3-93f3-4dba-ba09-dd863b6c4a88
+      traits:
+      - healthy: true
+        type: scaler
+      workloadDefinition:
+        apiVersion: apps/v1
+        kind: Deployment
+```
+
 You can use `resume` command after everything verified in statging cluster:
 
 ```shell
-$ vela workflow resume multi-env-demo
-
-Successfully resume workflow: multi-env-demo
+> vela workflow resume example-app
+Successfully resume workflow: example-app
 ```
 
 Recheck the `Application` status:
 
 ```shell
-kubectl get application multi-env-demo -o yaml
+> kubectl get application example-app
+NAME          COMPONENT            TYPE         PHASE     HEALTHY   STATUS       AGE
+example-app   hello-world-server   webservice   running   true      Ready:1/1    62s
+```
+
+```yaml
+  status:
+    services:
+    - env: staging
+      healthy: true
+      message: 'Ready:1/1 '
+      name: hello-world-server
+      scopes:
+      - apiVersion: core.oam.dev/v1alpha2
+        kind: HealthScope
+        name: health-policy-demo
+        namespace: default
+        uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
+      traits:
+      - healthy: true
+        type: scaler
+      workloadDefinition:
+        apiVersion: apps/v1
+        kind: Deployment
+    - env: prod
+      healthy: true
+      message: 'Ready:3/3 '
+      name: hello-world-server
+      scopes:
+      - apiVersion: core.oam.dev/v1alpha2
+        kind: HealthScope
+        name: health-policy-demo
+        namespace: default
+        uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
+      traits:
+      - healthy: true
+        type: scaler
+      workloadDefinition:
+        apiVersion: apps/v1
+        kind: Deployment
+    - env: prod
+      healthy: true
+      message: 'Ready:1/1 '
+      name: data-worker
+      scopes:
+      - apiVersion: core.oam.dev/v1alpha2
+        kind: HealthScope
+        name: health-policy-demo
+        namespace: default
+        uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
+      workloadDefinition:
+        apiVersion: apps/v1
+        kind: Deployment
 ```
 
 All the step status in workflow is succeeded:
@@ -187,23 +269,29 @@ All the step status in workflow is succeeded:
 ...
   status:
     workflow:
-      ...
-      stepIndex: 3
+      appRevision: example-app-v1:44a6447e3653bcc2
+      contextBackend:
+        apiVersion: v1
+        kind: ConfigMap
+        name: workflow-example-app-context
+        uid: e1e7bd2d-8743-4239-9de7-55a0dd76e5d3
+      mode: StepByStep
       steps:
-      - name: deploy-test-server
+      - id: q8yx7pr8wb
+        name: deploy-staging
         phase: succeeded
-        resourceRef: {}
         type: multi-env
-      - name: manual-approval
+      - id: 6oxrtvki9o
+        name: manual-approval
         phase: succeeded
-        resourceRef: {}
         type: suspend
-      - name: deploy-prod-server
+      - id: uk287p8c31
+        name: deploy-prod
         phase: succeeded
-        resourceRef: {}
         type: multi-env
       suspend: false
-      terminated: true
+      terminated: false
+      waitCount: 0
 ```
 
 ## More use cases

@@ -84,7 +84,7 @@ module.exports = {
         },
         {
           'Workflow': [
-            'end-user/workflow/multi-env',
+            // 'end-user/workflow/multi-env',
             'end-user/workflow/webhook-notification',
             'end-user/workflow/component-dependency-parameter',
           ]
