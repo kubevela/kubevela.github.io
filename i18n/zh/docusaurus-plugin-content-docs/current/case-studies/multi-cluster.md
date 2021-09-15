@@ -1,209 +1,302 @@
 ---
-title:  应用多集群部署
+title:  多集群应用交付
 ---
 
-KubeVela 支持将单个应用针对不同的环境实现差异化的配置，并利用工作流将配置后的应用部署到不同的环境中。
+本章节会介绍如何使用 KubeVela 完成应用的多集群应用交付。
 
-## 多集群环境创建
+## 简介
 
-KubeVela 默认利用 [OCM](https://open-cluster-management.io/) 的能力完成多集群的管理。
+如今，越来越多的企业及开发者出于不同的原因，开始在多集群环境中进行应用交付：
 
-### 前置条件
+* 由于 Kubernetes 集群存在着部署规模的局限性（单一集群最多容纳 5k 节点），需要应用多集群技术来部署、管理海量的应用。
+* 考虑到稳定性及高可用性，同一个应用可以部署在多个集群中，以实现容灾、异地多活等需求。
+* 应用可能需要部署在不同的区域来满足不同政府对于数据安全性的政策需求。
 
-1. OCM 提供了 `clusteradm` CLI 用于搭建一个多集群环境。你需要下载并提取 [clusteradm](https://github.com/open-cluster-management-io/clusteradm/releases/tag/v0.1.0-alpha.5) 二进制文件。更多细节请查看 clusteradm 的 Github [仓库](https://github.com/open-cluster-management-io/clusteradm/blob/main/README.md#quick-start)。
+下文将会介绍如何在 KubeVela 中使用多集群技术帮助你快速将应用部署在多集群环境中。
 
-2. 管控集群的 Kubernetes 版本需要 1.19 及以上。
-### 初始化管控集群
+## 准备工作
+
+在使用多集群应用部署之前，你需要将子集群通过 KubeConfig 加入到 KubeVela 的管控中来。Vela CLI 可以帮您实现这一点。
+
+```shell script
+vela cluster join <your kubeconfig path>
+```
+
+该命令会自动使用 KubeConfig 中的 `context.cluster` 字段作为集群名称，你也可以使用 `--name` 参数来指定，如
 
 ```shell
-$ clusteradm init
-The multicluster hub control plane has been initialized successfully!
-
-You can now register cluster(s) to the hub control plane. Log onto those cluster(s) and run the following command:
-
-    clusteradm join --hub-token <token_data> --hub-apiserver https://127.0.0.1:52189 --cluster-name <cluster_name>
-
-Replace <cluster_name> with a cluster name of your choice. For example, cluster1.
+vela cluster join stage-cluster.kubeconfig --name cluster-staging
+vela cluster join prod-cluster.kubeconfig --name cluster-prod
 ```
 
-初始化成功之后，会得到一个用于后续注册管控集群的 `clusteradm join` 指令。
+在子集群加入 KubeVela 中后，你同样可以使用 CLI 命令来查看当前正在被 KubeVela 管控的所有集群。
 
-### 利用现有集群搭建多集群环境
-
-#### 1. 注册被管控集群
-
-我们以注册一个测试（test）集群为例，切换到要作为测试集群的集群。
-
-```
-kubectl config use-context <cluster context name>
+```bash
+$ vela cluster list
+CLUSTER         TYPE    ENDPOINT                
+cluster-prod    tls     https://47.88.4.97:6443 
+cluster-staging tls     https://47.88.7.230:6443
 ```
 
-执行 `clusteradm join` 指令，并修改 <cluster_name> 为 test。
+如果你不需要某个子集群了，还可以将子集群从 KubeVela 管控中移除。
 
-```
-clusteradm join --hub-token <token_data> --hub-apiserver https://XXXXX:XXXX --cluster-name test
-
-Deploying klusterlet agent. Please wait a few minutes then log onto the hub cluster and run the following command:
-
-    clusteradm accept --clusters test
+```shell script
+$ vela cluster detach cluster-prod
 ```
 
-#### 2. 接受被管控集群的注册请求
+当然，如果现在有应用正跑在该集群中，这条命令会被 KubeVela 拒绝。
 
-切换到管控集群。
+## 部署多集群应用
 
-```
-kubectl config use-context <hub cluster context name>
-```
+KubeVela 将一个 Kubernetes 集群看作是一个环境，对于一个应用，你可以将其部署在多个环境中。
 
-接受测试集群的注册请求。
+下面的这个例子将会把应用先部署在预发环境中，待确认应用正常运行后，再将其部署在生产环境中。
 
-```
-clusteradm accept --clusters test
-```
+对于不同的环境，KubeVela 支持进行差异化部署。比如在本文的例子中，预发环境只使用 webservice 组件而不是用 worker 组件，同时 webservice 也只部署了一份。而在生产环境中，两个组件都会使用，而且 webservice 还会部署三副本。
 
-本文的例子需要有一个测试（test）集群和一个生产（prod）集群，你可以通过重复第 1 - 2 步来注册一个新的集群作为生产（prod）集群。
 
-## 部署应用到不同的环境
-
-应用部署计划 `multi-env-demo` 的部署工作流程为：首先将测试应用部署计划部署到测试集群，这时应用部署计划的工作流会停止，当检查资源部署状态正常后，恢复工作流，继续将资源部署到生产集群中。
-
-```shell
-cat <<EOF | kubectl apply -f -
+```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: multi-env-demo
+  name: example-app
   namespace: default
 spec:
   components:
-    - name: podinfo-server
+    - name: hello-world-server
       type: webservice
       properties:
-        image: stefanprodan/podinfo:5.2.1
-        port: 9898
+        image: crccheck/hello-world
+        port: 8000
       traits:
-        - type: expose
+        - type: scaler
           properties:
-            port:
-              - 9898
-
+            replicas: 1
+    - name: data-worker
+      type: worker
+      properties:
+        image: busybox
+        cmd:
+          - sleep
+          - '1000000'
   policies:
-    - name: my-policies
+    - name: example-multi-env-policy
       type: env-binding
       properties:
         envs:
-          - name: test
-            patch:
-              components:
-                - name: podinfo-server
-                  type: webservice
-                  properties:
-                    image: stefanprodan/podinfo:6.0.0
-                    port: 9898
-            placement:
+          - name: staging
+            placement: # 选择要部署的集群
               clusterSelector:
-                name: test
+                name: cluster-staging
+            selector: # 选择要使用的组件
+              components:
+                - hello-world-server
 
           - name: prod
-            patch:
-              components:
-                - name: podinfo-server
-                  type: webservice
-                  properties:
-                    image: stefanprodan/podinfo:5.1.3
-                    port: 9898
-                  traits:
-                    - type: expose
-                      properties:
-                        port:
-                          - 9898
-                        type: LoadBalancer
             placement:
               clusterSelector:
-                name: prod
+                name: cluster-prod
+            patch: # 对组件进行差异化配置
+              components:
+                - name: hello-world-server
+                  type: webservice
+                  traits:
+                    - type: scaler
+                      properties:
+                        replicas: 3
+
+    - name: health-policy-demo
+      type: health
+      properties:
+        probeInterval: 5
+        probeTimeout: 10
 
   workflow:
     steps:
-      - name: deploy-test
+      # 部署到预发环境中
+      - name: deploy-staging
         type: multi-env
         properties:
-          env: test
-          policy: my-policies
+          policy: example-multi-env-policy
+          env: staging
 
+      # 手动确认
       - name: manual-approval
         type: suspend
 
+      # 部署到生产环境中
       - name: deploy-prod
         type: multi-env
         properties:
+          policy: example-multi-env-policy
           env: prod
-          policy: my-policies
-EOF
 ```
 
-### 检查应用部署计划状态
+在应用创建后，它会通过 KubeVela 工作流完成部署。
 
-查看应用部署计划的状态：
+> 你可以参考[多环境部署](../end-user/policies/envbinding)和[健康检查](../end-user/policies/health)的用户手册来查看更多参数细节。
 
+首先，它会将应用部署到预发环境中，你可以运行下面的命令来查看应用的状态。
+
+```shell
+> kubectl get application example-app -o yaml
+NAME          COMPONENT            TYPE         PHASE                HEALTHY   STATUS       AGE
+example-app   hello-world-server   webservice   workflowSuspending   true      Ready:1/1    10s
 ```
-kubectl get application multi-env-demo -o yaml
-```
 
-可以看到 `deploy-test` 步骤执行成功，表示应用部署计划成功部署到测试集群，并且执行到 `manual-approval` 步骤时，工作流被暂停执行了。
+可以看到，当前的部署工作流在 `manual-approval` 步骤中暂停。
 
 ```yaml
 ...
-  status: workflowSuspending
-  workflow:
-    ...
-    stepIndex: 2
-    steps:
-    - name: deploy-test
-      phase: succeeded
-      resourceRef: {}
-      type: multi-env
-    - name: manual-approval
-      phase: succeeded
-      resourceRef: {}
-      type: suspend
-    suspend: true
-    terminated: false
+  status:
+    workflow:
+      appRevision: example-app-v1:44a6447e3653bcc2
+      contextBackend:
+        apiVersion: v1
+        kind: ConfigMap
+        name: workflow-example-app-context
+        uid: 56ddcde6-8a83-4ac3-bf94-d19f8f55eb3d
+      mode: StepByStep
+      steps:
+      - id: wek2b31nai
+        name: deploy-staging
+        phase: succeeded
+        type: multi-env
+      - id: 7j5eb764mk
+        name: manual-approval
+        phase: succeeded
+        type: suspend
+      suspend: true
+      terminated: false
+      waitCount: 0
 ```
 
-完成人工审核之后，你可以继续工作流。
+你也可以检查 `status.service` 字段来查看应用的健康状态。
 
-```
-vela workflow resume multi-env-demo
+```yaml
+...
+  status:
+    services:
+    - env: staging
+      healthy: true
+      message: 'Ready:1/1 '
+      name: hello-world-server
+      scopes:
+      - apiVersion: core.oam.dev/v1alpha2
+        kind: HealthScope
+        name: health-policy-demo
+        namespace: test
+        uid: 6e6230a3-93f3-4dba-ba09-dd863b6c4a88
+      traits:
+      - healthy: true
+        type: scaler
+      workloadDefinition:
+        apiVersion: apps/v1
+        kind: Deployment
 ```
 
-重新查看应用部署计划的状态：
+通过工作流的 resume 指令，你可以在确认当前部署正常后，继续将应用部署至生产环境中。
 
-```
-kubectl get application multi-env-demo -o yaml
+```shell
+> vela workflow resume example-app
+Successfully resume workflow: example-app
 ```
 
-可以看到 `deploy-prod` 步骤执行成功，表示应用成功部署到了生产集群。
+再次确认应用的状态：
 
-``` yaml
-  ...
-  status: running
-  workflow:
-    ...
-    stepIndex: 3
-    steps:
-    - name: deploy-test
-      phase: succeeded
-      resourceRef: {}
-      type: multi-env
-    - name: manual-approval
-      phase: succeeded
-      resourceRef: {}
-      type: suspend
-    - name: deploy-prod
-      phase: succeeded
-      resourceRef: {}
-      type: multi-env
-    suspend: false
-    terminated: true
+```shell
+> kubectl get application example-app
+NAME          COMPONENT            TYPE         PHASE     HEALTHY   STATUS       AGE
+example-app   hello-world-server   webservice   running   true      Ready:1/1    62s
 ```
+
+```yaml
+  status:
+    services:
+    - env: staging
+      healthy: true
+      message: 'Ready:1/1 '
+      name: hello-world-server
+      scopes:
+      - apiVersion: core.oam.dev/v1alpha2
+        kind: HealthScope
+        name: health-policy-demo
+        namespace: default
+        uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
+      traits:
+      - healthy: true
+        type: scaler
+      workloadDefinition:
+        apiVersion: apps/v1
+        kind: Deployment
+    - env: prod
+      healthy: true
+      message: 'Ready:3/3 '
+      name: hello-world-server
+      scopes:
+      - apiVersion: core.oam.dev/v1alpha2
+        kind: HealthScope
+        name: health-policy-demo
+        namespace: default
+        uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
+      traits:
+      - healthy: true
+        type: scaler
+      workloadDefinition:
+        apiVersion: apps/v1
+        kind: Deployment
+    - env: prod
+      healthy: true
+      message: 'Ready:1/1 '
+      name: data-worker
+      scopes:
+      - apiVersion: core.oam.dev/v1alpha2
+        kind: HealthScope
+        name: health-policy-demo
+        namespace: default
+        uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
+      workloadDefinition:
+        apiVersion: apps/v1
+        kind: Deployment
+```
+
+现在，工作流中的所有步骤都已完成。
+
+```yaml
+...
+  status:
+    workflow:
+      appRevision: example-app-v1:44a6447e3653bcc2
+      contextBackend:
+        apiVersion: v1
+        kind: ConfigMap
+        name: workflow-example-app-context
+        uid: e1e7bd2d-8743-4239-9de7-55a0dd76e5d3
+      mode: StepByStep
+      steps:
+      - id: q8yx7pr8wb
+        name: deploy-staging
+        phase: succeeded
+        type: multi-env
+      - id: 6oxrtvki9o
+        name: manual-approval
+        phase: succeeded
+        type: suspend
+      - id: uk287p8c31
+        name: deploy-prod
+        phase: succeeded
+        type: multi-env
+      suspend: false
+      terminated: false
+      waitCount: 0
+```
+
+## 更多使用案例
+
+KubeVela 可以提供更多的应用多集群部署策略，如将单一应用的不同组件部署在不同环境中，或在管控集群及子集群中混合部署。
+
+对于工作流与多集群部署的使用，你可以通过下图简单了解其整体流程。
+
+![alt](../resources/workflow-multi-env.png)
+
+更多的多集群环境下应用部署的使用案例将在不久后加入文档中。
