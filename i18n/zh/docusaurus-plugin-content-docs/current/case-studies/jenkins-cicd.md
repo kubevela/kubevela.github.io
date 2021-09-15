@@ -1,8 +1,22 @@
 ---
-title:  对接 Jenkins 实现 CI/CD
+title:  Jenkins CI/CD
 ---
 
-本文将会以一个 HTTP 服务的开发部署为例，简单介绍如何将 KubeVela 与 Jenkins 对接实现应用的持续集成与持续交付。[参考代码，请点击](https://github.com/Somefive/KubeVela-demo-CICD-app)。
+本文将介绍如何使用 KubeVela 同已有的 CI/CD 工具（比如 Jenkins）共同协作来进行应用的持续交付，并解释这样集成的好处是什么。
+
+## 简介
+
+KubeVela 作为一个普适的应用交付控制平面，只需要一点点集成工作就可以同任何现有的 CI/CD 系统对接起来，并且为它们带来一系列现代云原生应用交付的能力，比如：
+- 混合云/多云应用交付；
+- 跨环境发布（Promotion）；
+- 基于 Service Mesh 的发布与回滚；
+- 处理部署过程中的各种依赖关系和拓扑结构；
+- 统一进行云服务的声明、部署和服务绑定；
+- 无需强迫你的团队采纳完整的 GitOps 协作方式即可享受 GitOps 技术本身的[一系列好处](https://www.weave.works/blog/what-is-gitops-really)；
+- …… 以及更多。
+
+
+接下来，本文将会以一个 HTTP 服务的开发部署为例，介绍 KubeVela + Jenkins 方式下应用的持续集成与持续交付步骤。这个应用的具体代码在[这个 GitHub 库中](https://github.com/Somefive/KubeVela-demo-CICD-app)。
 
 ## 准备工作
 

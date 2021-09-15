@@ -15,13 +15,13 @@
     "message": "快速开始",
     "description": "The label of footer link with label=Getting Started linking to /docs/install"
   },
-  "link.item.label.Platform Admin Guide": {
-    "message": "Platform Admin Guide",
-    "description": "The label of footer link with label=Platform Admin Guide linking to /docs/platform-engineers/overview"
+  "link.item.label.Administrator Manuals": {
+    "message": "管理员手册",
+    "description": "The label of footer link with label=Administrator Manuals linking to /docs/platform-engineers/overview"
   },
-  "link.item.label.End User Guide": {
-    "message": "End User Guide",
-    "description": "The label of footer link with label=End User Guide linking to /docs/end-user/application"
+  "link.item.label.User Manuals": {
+    "message": "用户手册",
+    "description": "The label of footer link with label=User Manuals linking to /docs/end-user/application"
   },
   "link.item.label.CNCF Slack ( #kubevela channel )": {
     "message": "CNCF Slack ( #kubevela channel )",

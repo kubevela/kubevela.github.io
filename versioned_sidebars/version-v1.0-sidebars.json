@@ -33,7 +33,7 @@
     {
       "collapsed": false,
       "type": "category",
-      "label": "End User Guide",
+      "label": "User Manuals",
       "items": [
         {
           "type": "doc",
@@ -132,7 +132,7 @@
     {
       "collapsed": false,
       "type": "category",
-      "label": "Platform Admin Guide",
+      "label": "Administrator Manuals",
       "items": [
         {
           "type": "doc",

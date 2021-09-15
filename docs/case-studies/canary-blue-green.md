@@ -2,9 +2,17 @@
 title:  Canary Release with Istio
 ---
 
-This article introduces how KubeVela integrates [Istio](https://istio.io/latest/) to do a canary release.
+## Introduction
 
-## Praparation
+The application deployment model in KubeVela is designed and implemented with extreme level of extensibility at heart. Hence, KubeVela can be easily integrated with any existing tools to superpower your application delivery with modern technologies such as Service Mesh immediately, without writing dirty glue code/scripts.
+
+This guide will introduce how to use KubeVela and [Istio](https://istio.io/latest/) to do an advanced canary release process. In this process, KubeVela will help you to:
+- ship Istio capabilities to end users without asking them to become an Istio expert (i.e. KubeVela will provide you a rollout trait as abstraction);
+- design canary release steps and do rollout/rollback in a declarative workflow, instead managing the whole process manually or with ugly scripts.
+
+We will use the well-known [bookinfo](https://istio.io/latest/docs/examples/bookinfo/?ie=utf-8&hl=en&docs-search=Canary) application as the sample.
+
+## Preparation
 
 Install the Istio cluster plugin.
 ```shell
