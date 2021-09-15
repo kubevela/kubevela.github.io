@@ -37,7 +37,9 @@ The component architecture and  relationship of the application are as follows:
 
 ![book-info-struct](../resources/book-info-struct.jpg)
 
-This Application has four Components, each configured with an`expose` Trait to expose cluster-level service.
+This Application has four Components, `productpage`, `ratings`, `details` components configured with an`expose` Trait to expose cluster-level service.
+
+And `reviews` component have a canary-traffic Trait.
 
 The `productpage` component is also configured with an `istio-gateway` Trait, allowing the Component to receive traffic coming from outside the cluster. The example below show that it sets `gateway:ingressgateway` to use Istio's default gateway, and `hosts: "*"` to specify that any request can enter the gateway.
 ```shell
@@ -89,7 +91,7 @@ This operation updates the mirror of the `reviews` Component from the previous v
 In addition, a canary-traffic Trait has been added to the Component.
 ```shell
 ...
-- name: reviews
+    - name: reviews
       type: webservice
       properties:
         image: docker.io/istio/examples-bookinfo-reviews-v3:1.16.2
