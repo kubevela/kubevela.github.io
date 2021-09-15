@@ -145,12 +145,12 @@ spec:
   workflow:
     steps:
       - name: deploy-test-server
-        type: multi-env
+        type: deploy2env
         properties:
           policy: env
           env: test
       - name: deploy-prod-server
-        type: multi-env
+        type: deploy2env
         properties:
           policy: env
           env: prod

@@ -64,7 +64,7 @@ spec:
     steps:
       # 部署 预发 环境
       - name: deploy-staging
-        type: multi-env
+        type: deploy2env
         properties:
           policy: example-multi-env-policy
           env: staging
@@ -75,7 +75,7 @@ spec:
 
       # 部署 生产 环境
       - name: deploy-prod
-        type: multi-env
+        type: deploy2env
         properties:
           policy: example-multi-env-policy
           env: prod

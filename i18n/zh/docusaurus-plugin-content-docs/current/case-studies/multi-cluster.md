@@ -115,7 +115,7 @@ spec:
     steps:
       # 部署到预发环境中
       - name: deploy-staging
-        type: multi-env
+        type: deploy2env
         properties:
           policy: example-multi-env-policy
           env: staging
@@ -126,7 +126,7 @@ spec:
 
       # 部署到生产环境中
       - name: deploy-prod
-        type: multi-env
+        type: deploy2env
         properties:
           policy: example-multi-env-policy
           env: prod
@@ -161,7 +161,7 @@ example-app   hello-world-server   webservice   workflowSuspending   true      R
       - id: wek2b31nai
         name: deploy-staging
         phase: succeeded
-        type: multi-env
+        type: deploy2env
       - id: 7j5eb764mk
         name: manual-approval
         phase: succeeded
@@ -277,7 +277,7 @@ example-app   hello-world-server   webservice   running   true      Ready:1/1   
       - id: q8yx7pr8wb
         name: deploy-staging
         phase: succeeded
-        type: multi-env
+        type: deploy2env
       - id: 6oxrtvki9o
         name: manual-approval
         phase: succeeded
@@ -285,7 +285,7 @@ example-app   hello-world-server   webservice   running   true      Ready:1/1   
       - id: uk287p8c31
         name: deploy-prod
         phase: succeeded
-        type: multi-env
+        type: deploy2env
       suspend: false
       terminated: false
       waitCount: 0

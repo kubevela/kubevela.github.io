@@ -65,7 +65,7 @@ spec:
     steps:
       - name: deploy-test-server
         # 指定步骤类型
-        type: multi-env
+        type: deploy2env
         properties:
           # 指定组件名称
           component: nginx-server
@@ -77,7 +77,7 @@ spec:
         # 工作流内置 suspend 类型的任务，用于暂停工作流
         type: suspend
       - name: deploy-prod-server
-        type: multi-env
+        type: deploy2env
         properties:
           component: nginx-server
           policy: env
@@ -104,7 +104,7 @@ kubectl get application multi-env-demo -o yaml
       - name: deploy-test-server
         phase: succeeded
         resourceRef: {}
-        type: multi-env
+        type: deploy2env
       - name: manual-approval
         phase: succeeded
         resourceRef: {}
@@ -148,7 +148,7 @@ kubectl get application multi-env-demo -o yaml
       - name: deploy-test-server
         phase: succeeded
         resourceRef: {}
-        type: multi-env
+        type: deploy2env
       - name: manual-approval
         phase: succeeded
         resourceRef: {}
@@ -156,7 +156,7 @@ kubectl get application multi-env-demo -o yaml
       - name: deploy-prod-server
         phase: succeeded
         resourceRef: {}
-        type: multi-env
+        type: deploy2env
       suspend: false
       terminated: true
 ```
@@ -172,4 +172,4 @@ nginx-server     1/1     1            1           1m10s
 
 可以看到，使用最新配置的组件已经被成功地部署到了两个集群中。
 
-通过 `multi-env`，我们可以轻松地在多个环境中管理应用。
+通过 `deploy2env`，我们可以轻松地在多个环境中管理应用。

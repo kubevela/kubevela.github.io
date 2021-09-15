@@ -44,17 +44,17 @@ spec:
         envs:
           - name: test
             placement:
-              namespaceSelector:
-                name: test
+              clusterSelector:
+                name: cluster-test
           - name: prod
             placement:
-              namespaceSelector:
-                name: prod                
+              clusterSelector:
+                name: cluster-prod
   workflow:
     steps:
       #workflow step name
       - name: deploy-test-env
-        type: multi-env
+        type: deploy2env
         properties:
           # Specify the policy name
           policy: demo-policy
@@ -64,7 +64,7 @@ spec:
         # use suspend can stop workflow and wait here until condition changed
         type: suspend
       - name: deploy-prod-env
-        type: multi-env
+        type: deploy2env
         properties:
           # Specify the policy name
           policy: demo-policy

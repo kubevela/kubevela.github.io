@@ -118,7 +118,7 @@ spec:
     steps:
       # deploy to staging env
       - name: deploy-staging
-        type: multi-env
+        type: deploy2env
         properties:
           policy: example-multi-env-policy
           env: staging
@@ -129,7 +129,7 @@ spec:
 
       # deploy to prod env
       - name: deploy-prod
-        type: multi-env
+        type: deploy2env
         properties:
           policy: example-multi-env-policy
           env: prod
@@ -164,7 +164,7 @@ We can see that the workflow is suspended at `manual-approval`:
       - id: wek2b31nai
         name: deploy-staging
         phase: succeeded
-        type: multi-env
+        type: deploy2env
       - id: 7j5eb764mk
         name: manual-approval
         phase: succeeded
@@ -280,7 +280,7 @@ All the step status in workflow is succeeded:
       - id: q8yx7pr8wb
         name: deploy-staging
         phase: succeeded
-        type: multi-env
+        type: deploy2env
       - id: 6oxrtvki9o
         name: manual-approval
         phase: succeeded
@@ -288,7 +288,7 @@ All the step status in workflow is succeeded:
       - id: uk287p8c31
         name: deploy-prod
         phase: succeeded
-        type: multi-env
+        type: deploy2env
       suspend: false
       terminated: false
       waitCount: 0
