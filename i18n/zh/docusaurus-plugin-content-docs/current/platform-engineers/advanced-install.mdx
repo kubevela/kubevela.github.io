@@ -24,12 +24,6 @@ helm install cert-manager jetstack/cert-manager --namespace cert-manager --versi
 helm install --create-namespace -n vela-system --set admissionWebhooks.certManager.enabled=true kubevela kubevela/vela-core
 ```
 
-## 安装含有多集群能力的 KubeVela
-
-```shell script
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --set multicluster.enabled=true
-```
-
 ## 安装预发布版
 
 在使用 `helm search` 命令时，添加标记参数 `--devel` 即可搜索出预发布版。预发布版的版本号格式为 `<next_version>-rc-master`，例如 `0.4.0-rc-master`，代表的是一个基于 `master` 分支构建的发布候选版。
