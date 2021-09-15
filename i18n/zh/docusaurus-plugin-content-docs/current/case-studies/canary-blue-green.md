@@ -39,7 +39,8 @@ kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/c
 
 ![book-info-struct](../resources/book-info-struct.jpg)
 
-该应用包含四个组件，每个组件均配置了一个暴露端口 (expose) 运维特征用来在集群内暴露服务。 
+该应用包含四个组件，其中组件 pruductpage, details, ratings 均配置了一个暴露端口 (expose) 运维特征用来在集群内暴露服务。
+组件 reviews 配置了一个金丝雀流量发布 (canary-traffic) 的运维特征。
 
 productpage 组件还配置了一个 网关入口 (istio-gateway) 的运维特征，从而让该组件接收进入集群的流量。这个运维特征通过设置 `gateway:ingressgateway` 来使用 Istio 的默认网关实现，设置 `hosts: "*"` 来指定携带任意 host 信息的请求均可进入网关。
 ```shell
@@ -88,10 +89,9 @@ kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/c
 ```
 这次操作更新了 reviews 组件的镜像，从之前的 v2 升级到了 v3。同时 reviews 组件的灰度发布 (Rollout) 运维特征指定了，升级的目标实例个数为 2 个，分两个批次升级，每批升级 1 个实例。
 
-此外还为该组件新增加了一个金丝雀流量发布 (canary-traffic) 运维特征。
 ```shell
 ...
-- name: reviews
+    - name: reviews
       type: webservice
       properties:
         image: docker.io/istio/examples-bookinfo-reviews-v3:1.16.2
