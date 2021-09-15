@@ -10,7 +10,7 @@ With a simple integration effort, KubeVela as a universal application delivery c
 - hybrid/multi-cloud delivery;
 - cross-environments promotion;
 - service mesh based application rollout/rollback;
-- handling deployment dependencies and topology;
+- handling deployment dependencies and topology (DAG);
 - declare, provision and consume cloud resources alongside with your application;
 - enjoy benefits of [GitOps](https://www.weave.works/blog/what-is-gitops-really) delivery without the need to introduce full GitOps transformation to your team;
 - ... and much more.
