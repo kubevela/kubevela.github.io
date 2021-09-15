@@ -1,8 +1,21 @@
 ---
-title:  Jenkins + KubeVela for CI/CD
+title:  Jenkins CI/CD
 ---
 
-This section will introduce how to combine KubeVela with Jenkins to do CI (continuous integration) and CD (continuous delivery). The following example is based on the release process of a simple HTTP server. The code can be found at [here](https://github.com/Somefive/KubeVela-demo-CICD-app).
+This section will introduce how to use KubeVela with existing CI/CD tools such as Jenkins and why.
+
+## Introduction
+
+With a simple integration effort, KubeVela as a universal application delivery control plane can then supercharge existing CI/CD tools with modern application deployment capabilities such as:
+- hybrid/multi-cloud delivery;
+- cross-environments promotion;
+- service mesh based application rollout/rollback;
+- handling deployment dependencies and topology;
+- declare, provision and consume cloud resources alongside with your application;
+- enjoy benefits of [GitOps](https://www.weave.works/blog/what-is-gitops-really) delivery without the need to introduce full GitOps transformation to your team;
+- ... and much more.
+
+The following guide will use Jenkins as an example to release a sample HTTP server application step by step. The application code can be found in [this GitHub repo](https://github.com/Somefive/KubeVela-demo-CICD-app).
 
 ## Preparation
 

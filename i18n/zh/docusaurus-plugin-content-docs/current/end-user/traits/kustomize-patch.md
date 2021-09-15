@@ -1,5 +1,5 @@
 ---
-title: 修改 Kustomize 配置
+title: Kustomize 补丁
 ---
 
 本小节将介绍如何使用 trait 对 Kustomize 组件做差异化配置。

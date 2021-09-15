@@ -2,7 +2,17 @@
 title: 基于 Istio 的金丝雀发布
 ---
 
-本文将会介绍 KubeVela 基于 [Istio](https://istio.io/latest/) 实现经典微服务场景 [bookinfo](https://istio.io/latest/docs/examples/bookinfo/?ie=utf-8&hl=en&docs-search=Canary) 的金丝雀发布功能。 
+## 简介
+
+KubeVela 后的应用交付模型（OAM）是一个从设计与实现上都高度可扩展的模型。因此，KubeVela 不需要任何“脏乱差”的胶水代码或者脚本就可以同任何云原生技术和工具（比如 Service Mesh）实现集成，让社区生态中各种先进技术立刻为你的应用交付助上“一臂之力”。
+
+
+本文将会介绍如何使用 KubeVela 结合 [Istio](https://istio.io/latest/) 进行复杂的金丝雀发布流程。在这个过程中，KubeVela 会帮助你：
+- 将 Istio 的能力进行封装和抽象后再交付给用户使用，使得用户无需成为 Istio 专家就可以直接使用这个金丝雀发布的场景（KubeVela 会为你提供一个封装好的 Rollout 运维特征）
+- 通过声明式工作流来设计金丝雀发布的步骤，以及执行发布/回滚，而无需通过“脏乱差”的脚本或者人工的方式管理这个过程。
+
+
+本案例中，我们将使用经典的微服务应用 [bookinfo](https://istio.io/latest/docs/examples/bookinfo/?ie=utf-8&hl=en&docs-search=Canary) 来展示上述金丝雀发布过程。
 
 ## 准备工作
 

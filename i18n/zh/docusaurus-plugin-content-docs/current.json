@@ -111,7 +111,7 @@
     "message": "组件系统",
     "description": "The label for category Component System in sidebar docs"
   },
-  "sidebar.docs.category.End User Guide": {
+  "sidebar.docs.category.User Manuals": {
     "message": "用户手册",
     "description": "The label for category User Guide in sidebar docs"
   },
@@ -143,9 +143,9 @@
     "message": "调试指南",
     "description": "The label for category Debugging in sidebar docs"
   },
-  "sidebar.docs.category.Platform Admin Guide": {
+  "sidebar.docs.category.Administrator Manuals": {
     "message": "管理员手册",
-    "description": "The label for category Platform Admin Guide in sidebar docs"
+    "description": "The label for category Administrator Manuals in sidebar docs"
   },
   "sidebar.docs.category.Simple Template": {
     "message": "Simple Template",
