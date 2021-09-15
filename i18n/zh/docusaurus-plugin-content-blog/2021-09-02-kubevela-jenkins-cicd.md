@@ -33,7 +33,7 @@ KubeVela 打通了应用与基础设施之间的交付管控的壁垒，相较�
 
 > 本文采用了 Jenkins 作为持续集成工具，开发者也可以使用其他 CI 工具，如 TravisCI 或者 GitHub Action。
 
-首先您需要准备一份 Jenkins 环境来部署 CI 流水线。安装与初始化 Jenkins 流程可以参见[官方文档](https://www.jenkins.io/doc/book/installing/linux/)。
+首先你需要准备一份 Jenkins 环境来部署 CI 流水线。安装与初始化 Jenkins 流程可以参见[官方文档](https://www.jenkins.io/doc/book/installing/linux/)。
 
 需要注意的是，由于本文的 CI 流水线是基于 Docker 及 GitHub 的，因此在安装 Jenkins 之后还需要安装相关插件 (Dashboard > Manage Jenkins > Manage Plugins) ，包括 Pipeline、HTTP Request Plugin、Docker Pipeline、Docker Plugin。
 
@@ -67,7 +67,7 @@ KubeVela 打通了应用与基础设施之间的交付管控的壁垒，相较�
 
 ### KubeVela 环境
 
-您需要在 Kubernetes 集群中安装 KubeVela，并启用 apiserver 功能，可以参考[官方文档](/docs/advanced-install#install-kubevela-with-apiserver)。
+你需要在 Kubernetes 集群中安装 KubeVela，并启用 apiserver 功能，可以参考[官方文档](/docs/platform-engineers/advanced-install#install-kubevela-with-apiserver)。
 
 ## 编写应用
 
