@@ -72,11 +72,11 @@ module.exports = {
           items: [
             {
               label: 'Getting Started',
-              to: '/docs/install',
+              to: '/docs/quick-start',
             },
             {
-              label: 'User Manuals',
-              to: '/docs/end-user/components/helm',
+              label: 'Case Studies',
+              to: '/docs/case-studies/jenkins-cicd',
             },
             {
               label: 'Administrator Manuals',
