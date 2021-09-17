@@ -74,7 +74,7 @@ You can port-forward to the gateway as follows:
 ```shell
 kubectl port-forward service/istio-ingressgateway -n istio-system 19082:80
 ```
-Visit `127.0.0.1:19082` through the browser and you will see the following page.
+Visit http://127.0.0.1:19082/productpage through the browser and you will see the following page.
 
 ![pic-v2](../resources/canary-pic-v2.jpg)
 
@@ -180,50 +180,29 @@ vela workflow reumse book-info
 
 If you continue to verify the webpage several times on the browser, you will find that the five-pointed star will always be red.
 
-### Terminate the publishing Workflow and Roll Back
+### Rollback to The Old Version
 
-If during manual verification, it is found that the service does not meet expectations, you need to terminate the pre-defined release workflow and switch the traffic and instances back to the previous version.
-
-```shell
-kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/canary-rollout-use-case/revert-in-middle.yaml
-```
-
-This update deletes the previously defined workflow to terminate the execution of the workflow.
-
-And by modifying the `targetRevision` of the Rollout Trait to point to the previous component version `reviews-v1`. In addition, this update also removes the canary-traffic Trait of the Component, and puts all traffic on the same component version `reviews-v1`.
+During the manual verification, if the service does not meet the expectations, you can terminate the pre-defined release workflow and rollback the instances and the traffic to the previous version.
 
 ```shell
-...
-    - name: reviews
-      type: webservice
-      properties:
-        image: docker.io/istio/examples-bookinfo-reviews-v3:1.16.2
-        port: 9080
-        volumes:
-          - name: wlp-output
-            type: emptyDir
-            mountPath: /opt/ibm/wlp/output
-          - name: tmp
-            type: emptyDir
-            mountPath: /tmp
-
-
-      traits:
-        - type: expose
-          properties:
-            port:
-              - 9080
-
-        - type: rollout
-          properties:
-            targetRevision: reviews-v1
-            batchPartition: 1
-            targetSize: 2
-            # This means to rollout two more replicas in two batches.
-            rolloutBatches:
-              - replicas: 2
-...
+kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/canary-rollout-use-case/rollback.yaml
 ```
+
+This is basically updates the workflow to rollback step:
+
+```yaml
+  ...
+  workflow:
+    steps:
+      - name: rollback
+        type: canary-rollback
+```
+Under the hood, it changes:
+- the Rollout spec to target to the old version, which rolls replicas of new versions to the old version and keeps replicas of old version as is.
+- the VirtualService spec to shift all traffic to the old version.
+- the DestinationRule spec to update the subsets to only the old version.
+
+You see?! All the complexity of the work is kept away from users and provided in a simple step!
 
 Continue to visit the website on the browser, you will find that the five-pointed star has changed back to black.
 
