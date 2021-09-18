@@ -205,4 +205,3 @@ Under the hood, it changes:
 You see?! All the complexity of the work is kept away from users and provided in a simple step!
 
 Continue to visit the website on the browser, you will find that the five-pointed star has changed back to black.
-
