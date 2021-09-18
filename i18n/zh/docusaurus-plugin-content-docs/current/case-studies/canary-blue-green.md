@@ -207,4 +207,3 @@ kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/c
 看到了吗？这么多操作，但是暴露给用户的只有一个简单的 step 定义，全部复杂的操作都并抽象化在背后自动运行！
 
 在浏览器上继续访问网址，会发现五角星又变回到了黑色。
-

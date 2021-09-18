@@ -75,7 +75,7 @@ productpage 组件还配置了一个 网关入口 (istio-gateway) 的运维特�
 ```shell
 kubectl port-forward service/istio-ingressgateway -n istio-system 19082:80
 ```
-通过浏览器访问 http://127.0.0.1:19082/productpage 将会看到下面的页面。
+通过浏览器访问 `127.0.0.1:19082` 将会看到下面的页面。
 
 ![pic-v2](../resources/canary-pic-v2.jpg)
 
@@ -182,29 +182,48 @@ vela workflow reumse book-info
 
 ### 终止发布工作流并回滚
 
-如果在人工校验时，发现服务不符合预期，需要终止预先定义好的发布工作流，并将流量和实例切换回之前的版本。你可以通过执行下面的命令完成这一操作：
+如果在人工校验时，发现服务不符合预期，需要终止预先定义好的发布工作流，并将流量和实例切换回之前的版本。你可以通过执行下面的命令完成这一操作。
 
 ```shell
-kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/canary-rollout-use-case/rollback.yaml
+kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/canary-rollout-use-case/revert-in-middle.yaml
 ```
 
-这个操作将会更新 Workflow 定义去使用 `canary-rollback` step：
+这次更新删除了之前定义好的工作流, 来终止执行工作流。
 
-```yaml
-  ...
-  workflow:
-    steps:
-      - name: rollback
-        type: canary-rollback
+并通过修改灰度发布运维特征的 `targetRevision` 指向之前的组件版本 `reviews-v1`。此外，这次更新还删除了组件的金丝雀流量发布 (canary-traffic) 运维特征，将全部流量打到同一个组件版本上 `reviews-v1`。
+
+```shell
+...
+    - name: reviews
+      type: webservice
+      properties:
+        image: docker.io/istio/examples-bookinfo-reviews-v3:1.16.2
+        port: 9080
+        volumes:
+          - name: wlp-output
+            type: emptyDir
+            mountPath: /opt/ibm/wlp/output
+          - name: tmp
+            type: emptyDir
+            mountPath: /tmp
+
+
+      traits:
+        - type: expose
+          properties:
+            port:
+              - 9080
+
+        - type: rollout
+          properties:
+            targetRevision: reviews-v1
+            batchPartition: 1
+            targetSize: 2
+            # This means to rollout two more replicas in two batches.
+            rolloutBatches:
+              - replicas: 2
+...
 ```
-
-此次操作的原理是：
-
-- 更新 Rollout 对象的 `targetRevisionName` 成旧的版本，这样会自动回滚所有已发布的新版本的实例回到旧版本，并且保持还没升级的旧版本实例。
-- 更新 VirtualService 对象的 `route` 字段，将所有流量导向旧的版本。
-- 更新 DestinationRule 对象的 `subset` 字段，只容纳旧的版本。
-
-看到了吗？这么多操作，但是暴露给用户的只有一个简单的 step 定义，全部复杂的操作都并抽象化在背后自动运行！
 
 在浏览器上继续访问网址，会发现五角星又变回到了黑色。
 
