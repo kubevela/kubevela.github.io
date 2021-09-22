@@ -222,7 +222,22 @@ please at least enable following addons to make sure KubeVela functioning well:
   vela addon enable terraform/provider-alibaba ALICLOUD_ACCESS_KEY=xxx ALICLOUD_SECRET_KEY=yyy ALICLOUD_SECURITY_TOKEN=zzz
   ```
 
-## 5. Verify
+## 5. [Optional] Enable Multi-Cluster Management
+
+KubeVela provides the capability of orchestrating applications across different kubernetes clusters. This capability can be enabled by running the following command
+
+```shell
+helm upgrade --install kubevela kubevela/vela-core -n vela-system --set multicluster.enabled=true --create-namespace --wait
+```
+
+You can verify it by running `vela cluster list`.
+
+```shell
+> vela cluster list
+No managed cluster found. 
+```
+
+## 6. Verify
 
 > You can also using `kubectl get comp -A` and `kubectl get trait -A` instead if you haven't installed CLI.
 
