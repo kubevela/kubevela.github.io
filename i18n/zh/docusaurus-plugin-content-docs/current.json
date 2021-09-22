@@ -127,8 +127,8 @@
     "message": "设定应用策略",
     "description": "The label for category Policies in sidebar docs"
   },
-  "sidebar.docs.category.Case Studies": {
-    "message": "实践案例",
+  "sidebar.docs.category.Best Practices": {
+    "message": "最佳实践",
     "description": "The label for category case studies in sidebar docs"
   },
   "sidebar.docs.category.Observability": {

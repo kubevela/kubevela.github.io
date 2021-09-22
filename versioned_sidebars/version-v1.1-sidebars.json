@@ -37,7 +37,7 @@
     {
       "collapsed": false,
       "type": "category",
-      "label": "Case Studies",
+      "label": "Best Practices",
       "items": [
         {
           "type": "doc",
@@ -58,7 +58,7 @@
       ]
     },
     {
-      "collapsed": false,
+      "collapsed": true,
       "type": "category",
       "label": "User Manuals",
       "items": [
@@ -214,7 +214,7 @@
       ]
     },
     {
-      "collapsed": false,
+      "collapsed": true,
       "type": "category",
       "label": "Administrator Manuals",
       "items": [
