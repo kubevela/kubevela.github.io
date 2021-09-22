@@ -30,11 +30,11 @@
   padding: 0 var(--ifm-pre-padding);
 }
 
-.header-githab-link:hover {
+.header-github-link:hover {
   opacity: 0.6;
 }
 
-.header-githab-link:before {
+.header-github-link:before {
   content: '';
   width: 24px;
   height: 24px;

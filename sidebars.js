@@ -8,8 +8,8 @@ module.exports = {
       collapsed: false,
       items: [
         'getting-started/introduction',
-        'getting-started/quick-install',
-        'getting-started/first-application',
+        'install',
+        'quick-start',
       ],
     },
     {
@@ -23,23 +23,38 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'End User Guide',
+      label: 'Case Studies',
       collapsed: false,
       items: [
-        // 'end-user/initializer-end-user',
+        'case-studies/jenkins-cicd',
+        'case-studies/gitops',
+        'case-studies/canary-blue-green',
+        'case-studies/multi-cluster',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'User Manuals',
+      collapsed: false,
+      items: [
         {
           'Components': [
             'end-user/components/helm',
             'end-user/components/kustomize',
             {
-              'Cloud Services': [
-                'end-user/components/cloud-services/alicloud-ack',
-                'end-user/components/cloud-services/alicloud-rds',
-                'end-user/components/cloud-services/alicloud-oss',
-              ]
+              'Cloud Services': [{
+                "Terraform": [
+                  'end-user/components/cloud-services/terraform/alibaba-ack',
+                  'end-user/components/cloud-services/terraform/alibaba-eip',
+                  'end-user/components/cloud-services/terraform/alibaba-rds',
+                  'end-user/components/cloud-services/terraform/alibaba-oss',
+                ],
+              },
+                'end-user/components/cloud-services/provider-and-consume-cloud-services',
+              ],
             },
             {
-              'CUE Component': [
+              'CUE Components': [
                 'end-user/components/cue/webservice',
                 'end-user/components/cue/worker',
                 'end-user/components/cue/task',
@@ -49,7 +64,6 @@ module.exports = {
             'end-user/components/more',
           ]
         },
-
         {
           'Traits': [
             'end-user/traits/ingress',
@@ -62,48 +76,24 @@ module.exports = {
             'end-user/traits/more',
           ]
         },
-        // 'end-user/canary-blue-green', v1.1+ 再上
-        // {
-        //   'Components': [
-        //     'end-user/components/helm',
-        //     'end-user/components/kustomize',
-        //     'end-user/components/cue',
-        // 'end-user/components/cloud-services', 先隐藏，需要等用户侧的云服务支持 terraform 原生的 HCL
-        //     {
-        //       'Cloud Services': [
-        //         {
-        //           'Terraform': [
-        //             'end-user/components/cloud-services/terraform/alibaba-rds',
-        //             'end-user/components/cloud-services/terraform/alibaba-oss',
-        //           ]
-        //         },
-        //       ]
-        //     },
-        //   ]
-        // },
         {
           'Policies': [
             'end-user/policies/envbinding',
+            'end-user/policies/health',
           ]
         },
         {
           'Workflow': [
-            'end-user/workflow/multi-env',
             'end-user/workflow/webhook-notification',
+            'end-user/workflow/component-dependency-parameter',
           ]
         },
-        {
-          'Debugging': [
-            // 'end-user/debug/health',
-            // 'end-user/debug/monitoring', 这部分要和可观测合并
-            'end-user/debug/live-diff',
-          ]
-        },
+        'end-user/version-control',
       ]
     },
     {
       type: 'category',
-      label: 'Platform Admin Guide',
+      label: 'Administrator Manuals',
       collapsed: false,
       items: [
         {
@@ -122,11 +112,6 @@ module.exports = {
             'platform-engineers/cue/advanced',
           ]
         },
-        //{
-        //  'Environment System': [
-        //    'platform-engineers/initializer/basic-initializer',
-        //  ]
-        //},
         {
           type: 'category',
           label: 'Component System',
@@ -148,15 +133,15 @@ module.exports = {
         },
         {
           'Workflow System': [
-            'platform-engineers/workflow/steps',
-            'platform-engineers/workflow/context',
-            'platform-engineers/workflow/data-flow',
+            'platform-engineers/workflow/workflow',
+            'platform-engineers/workflow/built-in-workflow-defs',
             'platform-engineers/workflow/cue-actions',
           ]
         },
         {
           'System Operation': [
             'platform-engineers/system-operation/bootstrap-parameters',
+            'platform-engineers/system-operation/managing-clusters',
             'platform-engineers/system-operation/observability',
             'platform-engineers/system-operation/performance-finetuning',
           ]
@@ -168,40 +153,6 @@ module.exports = {
         },
         'platform-engineers/advanced-install',
       ]
-    },
-    {
-      type: 'category',
-      label: 'Case Studies',
-      collapsed: false,
-      items: [
-        'case-studies/jenkins-cicd'
-        // 'case-studies/paas',
-        //        'case-studies/workflow-edge-computing', // 待完成
-        //        'case-studies/li-auto-inc', 暂时下掉，应该改写成一个 10 - 15 分钟体验的产品 lab 例子
-        //        'case-studies/workflow-with-ocm',
-      ],
-    },
-    {
-      type: 'category',
-      label: 'Using KubeVela CLI',
-      items: [
-        {
-          'Appfile': [
-            'quick-start-appfile',
-            'developers/learn-appfile',
-          ]
-        },
-        {
-          'Managing Applications': [
-            'developers/config-enviroments',
-            'developers/port-forward',
-            'developers/check-logs',
-            'developers/exec-cmd',
-            'developers/cap-center',
-            'developers/config-app',
-          ]
-        },
-      ],
     },
     {
       type: 'category',

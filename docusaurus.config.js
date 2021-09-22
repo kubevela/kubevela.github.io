@@ -55,8 +55,12 @@ module.exports = {
           position: 'left'
         },
         {
+          type: 'localeDropdown',
+          position: 'right',
+        },
+        {
           href: 'https://github.com/oam-dev/kubevela',
-          className: 'header-githab-link',
+          className: 'header-github-link',
           position: 'right',
         },
       ],
@@ -68,15 +72,15 @@ module.exports = {
           items: [
             {
               label: 'Getting Started',
-              to: '/docs/install',
+              to: '/docs/quick-start',
             },
             {
-              label: 'Platform Admin Guide',
-              to: '/docs/platform-engineers/overview',
+              label: 'Case Studies',
+              to: '/docs/case-studies/jenkins-cicd',
             },
             {
-              label: 'End User Guide',
-              to: '/docs/end-user/application',
+              label: 'Administrator Manuals',
+              to: '/docs/platform-engineers/oam/oam-model',
             },
           ],
         },
@@ -142,7 +146,7 @@ module.exports = {
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           includeCurrentVersion: true,
-          lastVersion: 'v1.0',
+          lastVersion: 'v1.1',
         },
         blog: {
           showReadingTime: true,

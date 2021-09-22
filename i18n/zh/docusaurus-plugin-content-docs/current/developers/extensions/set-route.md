@@ -72,7 +72,7 @@ Services:
       - route: 	Visiting URL: http://example.com	IP: <ingress-IP-address>
 ```
 
-**In [kind cluster setup](../../getting-started/quick-install#kind)**, you can visit the service via localhost:
+**In [kind cluster setup](../../install#kind)**, you can visit the service via localhost:
 
 > If not in kind cluster, replace 'localhost' with ingress address
 
