@@ -2,7 +2,7 @@
 title: Step Operations
 ---
 
-This doc will illustrate the CUE actions provided in `vela/op` stdlib package.
+This documentation will introduce the CUE operations provided in `vela/op` stdlib package that can be used in each workflow step.
 
 > To learn the syntax of CUE, read [CUE Basic](../cue/basic)
 
@@ -160,28 +160,28 @@ apply: op.#ApplyApplication & {}
 
 ---
 
-Create or update resources corresponding to the component in Kubernetes cluster.
+Create or update resources corresponding to the component in Kubernetes cluster. Note that need to use `Load` first to apply the resources.
 
 ### Action Parameter
 
-- component: the component name.
-- workload: the workload resource of the component. Value will be filled  after successful execution.
-- traits: the trait resources of the component. Value will be filled after successful execution.
+- value: the load value of the resource.
+- patch: the value to patch resource.
 
 
 ```
 #ApplyComponent: {
-  component: string
-  workload: {...}
-  traits: [string]: {...}
+  value: {...}
+  patch: {...}
 }
 ```
 
 ### Usage
 
 ```
+load: op.#Load & {}
+
 apply: op.#ApplyComponent & {
-  component: "component-name"
+  value: load.value[parameter.component]
 }
 ```
 

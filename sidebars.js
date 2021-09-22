@@ -84,18 +84,11 @@ module.exports = {
         },
         {
           'Workflow': [
-            // 'end-user/workflow/multi-env',
             'end-user/workflow/webhook-notification',
             'end-user/workflow/component-dependency-parameter',
           ]
         },
         'end-user/version-control',
-        //{
-        //'Debugging': [
-        // 'end-user/debug/health',
-        // 'end-user/debug/monitoring', 这部分要和可观测合并
-        //]
-        //        },
       ]
     },
     {
@@ -161,28 +154,6 @@ module.exports = {
         'platform-engineers/advanced-install',
       ]
     },
-    // {
-    //   type: 'category',
-    //   label: 'Using KubeVela CLI',
-    //   items: [
-    //     {
-    //       'Appfile': [
-    //         'quick-start-appfile',
-    //         'developers/learn-appfile',
-    //       ]
-    //     },
-    //     {
-    //       'Managing Applications': [
-    //         'developers/config-enviroments',
-    //         'developers/port-forward',
-    //         'developers/check-logs',
-    //         'developers/exec-cmd',
-    //         'developers/cap-center',
-    //         'developers/config-app',
-    //       ]
-    //     },
-    //   ],
-    // },
     {
       type: 'category',
       label: 'References',
