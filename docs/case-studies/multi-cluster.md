@@ -142,7 +142,7 @@ After the application deployed, it will run as the workflow steps.
 It will deploy application to staging environment first, you can check the `Application` status by:
 
 ```shell
-> kubectl get application example-app -o yaml
+> kubectl get application example-app
 NAME          COMPONENT            TYPE         PHASE                HEALTHY   STATUS       AGE
 example-app   hello-world-server   webservice   workflowSuspending   true      Ready:1/1    10s
 ```

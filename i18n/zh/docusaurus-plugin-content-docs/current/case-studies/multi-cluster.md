@@ -139,7 +139,7 @@ spec:
 首先，它会将应用部署到预发环境中，你可以运行下面的命令来查看应用的状态。
 
 ```shell
-> kubectl get application example-app -o yaml
+> kubectl get application example-app
 NAME          COMPONENT            TYPE         PHASE                HEALTHY   STATUS       AGE
 example-app   hello-world-server   webservice   workflowSuspending   true      Ready:1/1    10s
 ```
