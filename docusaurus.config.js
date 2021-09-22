@@ -141,7 +141,7 @@ module.exports = {
             locale,
             docPath,
           }) {
-            return `https://github.com/oam-dev/kubevela/edit/master/docs/${locale}/${docPath}`;
+            return `https://github.com/oam-dev/kubevela.io/edit/main/docs/${docPath}`;
           },
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
