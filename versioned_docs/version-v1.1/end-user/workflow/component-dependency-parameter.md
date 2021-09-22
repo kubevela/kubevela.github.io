@@ -1,5 +1,5 @@
 ---
-title:  Data Pass Between Components 
+title:  Data Passing
 ---
 
 This section will introduce how to pass data between components.

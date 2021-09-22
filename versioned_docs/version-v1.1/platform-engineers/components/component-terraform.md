@@ -1,5 +1,5 @@
 ---
-title: Terraform Component
+title: Terraform Components
 ---
 
 To enable end users to [provision and consume cloud resources](../../end-user/components/cloud-services/provider-and-consume-cloud-services),

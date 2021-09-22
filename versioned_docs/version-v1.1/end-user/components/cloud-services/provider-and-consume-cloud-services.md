@@ -1,5 +1,5 @@
 ---
-title: Provision and Consume Cloud Services
+title: Provision and Binding
 ---
 
 Cloud-oriented development is now becoming the norm, there is an urgent need to integrate cloud resources from different
@@ -69,7 +69,7 @@ CreationTime                                 Region    StorageClass    BucketNam
 2021-09-11 12:56:17 +0800 CST        oss-cn-beijing        Standard    oss://vela-website-0911
 ```
 
-### Consume cloud resources
+### Bind cloud resources
 
 Let's deploy
 the [application](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/application.yaml)

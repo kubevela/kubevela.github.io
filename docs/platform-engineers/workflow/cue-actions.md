@@ -1,8 +1,8 @@
 ---
-title: Appendix - CUE Actions
+title: Step Operations
 ---
 
-This doc will illustrate the CUE actions provided in `vela/op` stdlib package.
+This documentation will introduce the CUE operations provided in `vela/op` stdlib package that can be used in each workflow step.
 
 > To learn the syntax of CUE, read [CUE Basic](../cue/basic)
 

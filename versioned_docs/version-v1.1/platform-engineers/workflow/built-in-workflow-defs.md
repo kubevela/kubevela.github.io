@@ -1,5 +1,5 @@
 ---
-title: Appendix - Built-in Workflow Definitions
+title: Built-in Steps
 ---
 
 KubeVela provides some built-in workflow step definitions for better experience.
