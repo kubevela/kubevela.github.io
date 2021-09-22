@@ -23,7 +23,7 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'Case Studies',
+      label: 'Best Practices',
       collapsed: false,
       items: [
         'case-studies/jenkins-cicd',
@@ -35,7 +35,7 @@ module.exports = {
     {
       type: 'category',
       label: 'User Manuals',
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           'Components': [
@@ -94,7 +94,7 @@ module.exports = {
     {
       type: 'category',
       label: 'Administrator Manuals',
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           type: 'category',
