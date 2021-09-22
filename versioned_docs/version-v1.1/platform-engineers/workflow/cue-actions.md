@@ -1,5 +1,5 @@
 ---
-title: Appendix - CUE Actions
+title: Step Operations
 ---
 
 This doc will illustrate the CUE actions provided in `vela/op` stdlib package.

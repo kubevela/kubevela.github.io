@@ -114,7 +114,7 @@ alibaba-rds 	vela-system	configurations.terraform.core.oam.dev	Terraform configu
 
 You can continue to use [Helm](../end-user/components/helm) and [Kustomize](../end-user/components/kustomize) components to deploy your application, an application is a deployment plan.
 
-If you're a platform builder who's familiar with Kubernetes, you can learn to [define your custom component](../platform-engineers/components/custom-component) to extend every kind of component in KubeVela. Especially, [Terraform Component](../platform-engineers/components/component-terraform) is one of the best practice.
+If you're a platform builder who's familiar with Kubernetes, you can learn to [define your custom component](../platform-engineers/components/custom-component) to extend every kind of component in KubeVela. Especially, [Terraform Components](../platform-engineers/components/component-terraform) is one of the best practice.
 
 
 ## Traits

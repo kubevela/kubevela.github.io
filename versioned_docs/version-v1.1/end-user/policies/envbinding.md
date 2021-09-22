@@ -1,5 +1,5 @@
 ---
-title: Multi-Environment Deployment
+title: Multi-Environment Delivery
 ---
 
 This documentation will introduce how to use env-binding to automate multi-stage application rollout across multiple environments.

@@ -54,7 +54,7 @@ module.exports = {
               ],
             },
             {
-              'CUE Component': [
+              'CUE Components': [
                 'end-user/components/cue/webservice',
                 'end-user/components/cue/worker',
                 'end-user/components/cue/task',
