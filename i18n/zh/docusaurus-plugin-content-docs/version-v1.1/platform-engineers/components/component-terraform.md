@@ -17,7 +17,7 @@ Terraform 使用任意的云资源。
 
 #### 为云资源开发一个 ComponentDefinition
 
-这是 Terraform ComponentDefinition 的脚手架。你只需要修改三个字段：`metadata.name`，`metadata.annotations.definition.oam.dev/description`
+这是 Terraform ComponentsDefinition 的脚手架。你只需要修改三个字段：`metadata.name`，`metadata.annotations.definition.oam.dev/description`
 和 `spec.schematic.terraform.configuration`。
 
 

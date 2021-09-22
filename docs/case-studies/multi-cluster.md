@@ -1,5 +1,5 @@
 ---
-title:  Multi-Cluster Application Deploy
+title:  Multi-Cluster App Delivery
 ---
 
 This section will introduce how to use KubeVela for multi-cluster application delivery and why.

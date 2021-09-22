@@ -155,7 +155,7 @@
     "message": "云服务组件",
     "description": "The label for category Cloud Services in sidebar docs"
   },
-  "sidebar.docs.category.CUE Component": {
+  "sidebar.docs.category.CUE Components": {
     "message": "CUE 组件",
     "description": "The label for category CUE Components in sidebar docs"
   },
