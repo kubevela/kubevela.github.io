@@ -1,5 +1,5 @@
 ---
-title:  Designing Workflow Steps
+title: Designing Workflow Steps
 ---
 
 ## Overview

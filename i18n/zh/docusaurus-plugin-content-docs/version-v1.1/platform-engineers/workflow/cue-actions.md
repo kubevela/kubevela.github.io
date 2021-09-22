@@ -161,28 +161,28 @@ apply: op.#ApplyApplication & {}
 
 ---
 
-在 Kubernetes 集群中创建或者更新组件对应的所有资源。
+在 Kubernetes 集群中创建或者更新组件对应的所有资源。注意，在使用该操作前需要先用 `Load` 加载资源。
 
 ### 操作参数
 
-- component: 指定需要 apply 的组件名称。
-- workload: 操作完成后，从 Kubernetes 集群中获取到的组件对应的 workload 资源的状态数据。
-- traits: 操作完成后，从 Kubernetes 集群中获取到的组件对应的辅助资源的状态数据。数据结构为 map 类型, 索引为定义中 outputs 涉及到的名称。
+- value: 指定需要 apply 的资源定义。
+- patch: 指定需要 patch 的资源定义
 
 
 ```
 #ApplyComponent: {
-  component: string
-  workload: {...}
-  traits: [string]: {...}
+  value: {...}
+  patch: {...}
 }
 ```
 
 ### 用法示例
 
 ```
+load: op.#Load & {}
+
 apply: op.#ApplyComponent & {
-  component: "component-name"
+  value: load.value[parameter.component]
 }
 ```
 
