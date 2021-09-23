@@ -219,21 +219,7 @@ KubeVela 支持一系列[开箱即用的插件](./platform-engineers/advanced-in
   vela addon enable terraform/provider-alibaba ALICLOUD_ACCESS_KEY=xxx ALICLOUD_SECRET_KEY=yyy ALICLOUD_SECURITY_TOKEN=zzz
   ```
 
-## 5. 【可选】启用多集群管理
-
-KubeVela 提供了跨集群编排应用的能力。上文的安装命令已经启用了该功能，如果你是从旧版本 KubeVela 升级上来，或是在安装时没有选用多集群管理的能力，你可以运行以下命令启用该能力
-
-```shell
-helm upgrade --install kubevela kubevela/vela-core -n vela-system --set multicluster.enabled=true --create-namespace --wait
-```
-
-你可以运行 `vela cluster list` 命令来检查多集群功能是否正常启用。
-```shell
-> vela cluster list
-No managed cluster found. 
-```
-
-## 6. 查看已安装能力
+## 5. 查看已安装能力
 
 > 如果没安装 vela 命令行工具，你也可以通过 `kubectl get comp -A` 和 `kubectl get trait -A` 代替.
 

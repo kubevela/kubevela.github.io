@@ -173,6 +173,23 @@ vela addon disable fluxcd
 Please remove all application using this addon before disable it.
 
 
+## Multi-Cluster Management
+
+KubeVela can orchestrate applications across multiple Kubernetes clusters. This capability is enabled by default, but you can enable it manually by running the following command:
+
+```shell
+helm upgrade --install kubevela kubevela/vela-core -n vela-system --set multicluster.enabled=true --create-namespace --wait
+```
+
+Verify that multi-cluster is enabled:
+
+```shell
+> kubectl get APIService v1alpha1.cluster.core.oam.dev
+NAME                            SERVICE                                        AVAILABLE   AGE
+v1alpha1.cluster.core.oam.dev   vela-system/kubevela-cluster-gateway-service   True        7h40m
+```
+
+
 ## Clean Up
 
 Run:
