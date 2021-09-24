@@ -194,17 +194,11 @@ Create or update the resources corresponding to all components in the applicatio
 ### Action Parameter
 
 - exceptions: indicates the name of the exceptional component.
-- skipApplyWorkload:  indicates whether to skip apply the workload resource.
-- skipAllTraits: indicates to skip apply all resources of the traits.
 
 
 ```
 #ApplyRemaining: {
- exceptions?: [componentName=string]: {
-    skipApplyWorkload: *true | bool
-      
-    skipAllTraits: *true| bool
-  }
+ exceptions?: [...string]
 }  
 ```
 
@@ -212,7 +206,7 @@ Create or update the resources corresponding to all components in the applicatio
 
 ```
 apply: op.#ApplyRemaining & {
-  exceptions: {"applied-component-name": {}}
+  exceptions: ["applied-component-name"]
 }
 ```
 
@@ -294,4 +288,33 @@ app: op.#Steps & {
     value: load.value.workload
   } @step(2)
 } 
+```
+
+## DoVar
+
+---
+
+used to save or read user-defined data in the context of workflow
+
+### Action Parameter
+
+- method: The value is `get` or `put`, which indicates whether the action reads or saves data from workflow
+- path: Path to save or read data
+- value: Data content (in the format of cue). When the method is `get`, it indicates the read data, otherwise it indicates the data to be saved
+
+### Usage
+
+```
+put: op.ws.#DoVar & {
+  method: "Put"
+  path: "foo.score"
+  value: 100
+}
+
+// The user can get the data saved above through get.value (100)
+get: op.ws.#DoVar & {
+  method: "Get"
+  path: "foo.score"
+}
+
 ```
