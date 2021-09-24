@@ -14,7 +14,7 @@ Date: 2021-10-01 to 2021-12-30
 ## User Experience
 
 1. Enhance Dashboard to improve KubeVela experience on app delivery workflow, lifecycle management, addon center, etc.
-2. Release APIServer for PaaS integration and usage.
+2. Release APIServer for REST API integration.
 3. Align vela CLI with the new features such as workflow and env.
 4. Support vela doctor command to help diagnose application.
 
