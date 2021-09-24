@@ -20,5 +20,5 @@ Date: 2021-10-01 to 2021-12-30
 
 ## Third-party integrations
 
-1. Integrate with OpenYurt for edge computing.
+1. Provide OpenYurt integration to improve IoT/edge experience.
 2. Integrate with ArgoCD for GitOps.
