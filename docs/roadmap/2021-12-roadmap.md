@@ -8,7 +8,7 @@ Date: 2021-10-01 to 2021-12-30
 
 1. Support multi-cluster rollout and multi-version deployment.
 2. Improve cloud resource provisioning support on Alibaba and AWS.
-3. Support application level observability, log and metrics collection and show in grafana.
+3. Support application observability: collect and show log and metrics in Grafana.
 
 
 ## User Experience
