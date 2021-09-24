@@ -36,7 +36,7 @@ The introduction of bootstrap parameters in KubeVela controller are listed as be
 
 ## Key Parameters
 
-- **informer-resync-interval**: The resync time of applications when no changes were made. A short time may cause controller to reconcile frequently but uselessly. The regular reconciles of applications can help ensure that application and its components keep up-to-date in case some unexpected differences.
+- **informer-re-sync-interval**: The resync time of applications when no changes were made. A short time may cause controller to reconcile frequently but uselessly. The regular reconciles of applications can help ensure that application and its components keep up-to-date in case some unexpected differences.
 - **concurrent-reconciles**: The number of threads to use for controller to handle requests. When rich CPU resources are available, a small number of working threads may lead to insufficient usage of CPU resources.
 - **kube-api-qps / kube-api-burst**: The rate limit for KubeVela controller to access apiserver. When managed applications are complex (containing multiple components and resources), if the access rate of apiserver is limited, it will be hard to increase the concurrency of KubeVela controller. However, high access rate may cause huge burden to apiserver. It is critical to keep a balance when handling massive applications.
 - **pprof-addr**: The pprof address to enable controller performance debugging.

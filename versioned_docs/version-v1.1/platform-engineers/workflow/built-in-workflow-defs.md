@@ -84,7 +84,7 @@ spec:
           namespace: default
 ```
 
-## multi-env
+## deploy2env
 
 ### Overview
 
