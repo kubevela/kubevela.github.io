@@ -194,19 +194,11 @@ apply: op.#ApplyComponent & {
 ### 操作参数
 
 - exceptions: 指明该操作需要排除掉的组件。
-- skipApplyWorkload: 是否跳过该组件 workload 资源的同步。
-- skipAllTraits: 是否跳过该组件所有辅助资源的同步。
 
 
 ```
 #ApplyRemaining: {
- exceptions?: [componentName=string]: {
-    // skipApplyWorkload 表明是否需要跳过组件的部署
-    skipApplyWorkload: *true | bool
-    
-    // skipAllTraits 表明是否需要跳过所有运维特征的部署
-    skipAllTraits: *true| bool
-  }
+ exceptions?: [...string]
 }  
 ```
 
@@ -214,7 +206,7 @@ apply: op.#ApplyComponent & {
 
 ```
 apply: op.#ApplyRemaining & {
-  exceptions: {"applied-component-name": {}}
+  exceptions: ["applied-component-name"]
 }
 ```
 
@@ -298,4 +290,33 @@ app: op.#Steps & {
     value: load.value.workload
   } @step(2)
 } 
+```
+
+## DoVar
+
+---
+
+用来在workflow的上下文中保存或者读取用户定义的数据
+
+### 操作参数
+
+- method: 值为`Get`或者`Put`，用于表示该动作是从 workflow 中读取还是保存数据
+- path: 数据保存或者读取的路径
+- value: 数据内容(格式为 cue )，当 method 为 `Get` 表示读取到的数据，当 method 为 `Put` 时表示要保存的数据
+
+### 用法示例
+
+```
+put: op.ws.#DoVar & {
+  method: "Put"
+  path: "foo.score"
+  value: 100
+}
+
+// 用户可以通过get.value拿到上面保存的数据(100)
+get: op.ws.#DoVar & {
+  method: "Get"
+  path: "foo.score"
+}
+
 ```
