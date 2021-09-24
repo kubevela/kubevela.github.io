@@ -32,7 +32,7 @@ kubectl label namespace default istio-injection=enabled
 执行下面的命令，部署 bookinfo 应用。
 
 ```shell
-kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/canary-rollout-use-case/first-deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/canary-rollout-use-case/first-deploy.yaml
 ```
 
 该应用的组件架构和访问关系如下所示：
@@ -85,7 +85,7 @@ kubectl port-forward service/istio-ingressgateway -n istio-system 19082:80
 
 执行下面的命令，来更新应用。
 ```shell
-kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/canary-rollout-use-case/rollout-v2.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/canary-rollout-use-case/rollout-v2.yaml
 ```
 这次操作更新了 reviews 组件的镜像，从之前的 v2 升级到了 v3。同时 reviews 组件的灰度发布 (Rollout) 运维特征指定了，升级的目标实例个数为 2 个，分两个批次升级，每批升级 1 个实例。
 
@@ -185,7 +185,7 @@ vela workflow reumse book-info
 如果在人工校验时，发现服务不符合预期，需要终止预先定义好的发布工作流，并将流量和实例切换回之前的版本。你可以通过执行下面的命令完成这一操作：
 
 ```shell
-kubectl apply -f https://github.com/oam-dev/kubevela/blob/master/docs/examples/canary-rollout-use-case/rollback.yaml
+kubectl apply -f  https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/canary-rollout-use-case/rollback.yaml
 ```
 
 这个操作将会更新 Workflow 定义去使用 `canary-rollback` step：
