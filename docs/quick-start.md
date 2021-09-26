@@ -10,12 +10,13 @@ Make sure you have finished and verified the installation following [this guide]
 
 ## Step 2: Deploy Your First Application
 
+Run the following command:
+
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
-application.core.oam.dev/first-vela-app created
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
 ```
 
-Above command will apply an application to KubeVela and let it distribute the application to proper runtime infrastructure.
+This will apply an application to KubeVela and let it distribute the application to proper runtime infrastructure.
 
 Check the status until we see `status` is `running` and services are `healthy`:
 
