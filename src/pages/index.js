@@ -107,8 +107,9 @@ const WhatIs = () => (
               </Translate> <i> <Translate>easier and faster.</Translate> </i>
               <br />
               <br />
-              <Translate>KubeVela is runtime agnostic,
-                natively extensible, yet most importantly, </Translate><i> application-centric </i><Translate>.</Translate>
+              <Translate>
+                KubeVela is runtime agnostic, natively extensible, yet most importantly, 
+              </Translate><i> <Translate>application-centric.</Translate></i>
             </small>
           </p>
         </div>
