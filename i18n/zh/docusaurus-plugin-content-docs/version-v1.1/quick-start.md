@@ -11,8 +11,7 @@ title:  交付第一个应用
 首先，在你的集群上，我们使用一个提前准备好的 YMAL 文件。
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
-application.core.oam.dev/first-vela-app created
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
 ```
 
 检查状态：直到看到 `status` 是 `running`，并且 `services` 是 `healthy`。
