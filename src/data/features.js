@@ -27,7 +27,7 @@ const features = [
         <p>
           <Translate>
            KubeVela leverages </Translate> 
-            <a href="https://github.com/cuelang/cue">CUE</a> <Translate> to
+            <a href="https://github.com/cuelang/cue"> CUE</a> <Translate>to
             implement its model layer. This allows you to define an application deployment
               workflow as DAG, with all steps and application's needs glued together in programmable approach.  
               No restrictions, natively extensible.</Translate>
