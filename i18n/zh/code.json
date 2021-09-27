@@ -213,7 +213,7 @@
     "message": "Leveraging Open Application Model (OAM), KubeVela introduces consistent yet higher level API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy."
   },
   "KubeVela introduces Open Application Model (OAM) as the consistent yet higher level API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy.": {
-    "message": "KubeVela 引入了开放应用程序模型 (OAM) 作为一致而抽象的 API，以在混合环境之上捕获微服务的完整部署。分发策略、流量控制和滚动更新在应用程序级别声明。 无需担心基础架构细节，只需部署即可。"
+    "message": "KubeVela 基于开放应用模型 (OAM) 提供了抽象且对于不同基础设施一致的 API，从而使得微服务模式下的异构组件可以在混合环境中部署和编排。分发策略、流量控制和滚动更新均可以在应用程序中声明式的描述。无需担心基础架构细节，只需部署即可。"
   },
   "Natively Extensible": {
     "message": "Natively Extensible"
