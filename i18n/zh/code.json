@@ -207,10 +207,13 @@
     "message": "和/或"
   },
   "Application Centric": {
-    "message": "Application Centric"
+    "message": "完全以应用为中心"
   },
   "Leveraging Open Application Model (OAM), KubeVela introduces consistent yet higher level API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy.": {
     "message": "Leveraging Open Application Model (OAM), KubeVela introduces consistent yet higher level API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy."
+  },
+  "KubeVela introduces Open Application Model (OAM) as the consistent yet higher level API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy.": {
+    "message": "KubeVela 基于开放应用模型 (OAM) 提供了抽象且对于不同基础设施一致的 API，从而使得微服务模式下的异构组件可以在混合环境中部署和编排。分发策略、流量控制和滚动更新均可以在应用程序中声明式的描述。无需担心基础架构细节，只需部署即可。"
   },
   "Natively Extensible": {
     "message": "Natively Extensible"
@@ -222,11 +225,26 @@
     "message": "to glue capabilities (e.g. workload types, operational behaviors, and cloud services) provided by runtime infrastructure and expose them to users via self-service API. When users' needs grow, these API can naturally expand in programmable approach. No restriction, fully flexible."
   },
   "Runtime Agnostic": {
-    "message": "Runtime Agnostic"
+    "message": "基础设施无关"
+  },
+  "Programmable Workflow": {
+    "message": "可编程式交付工作流"
+  },
+  "KubeVela leverages ": {
+    "message": "KubeVela 利用"
+  },
+  " CUE": {
+    "message": "CUE"
+  },
+  "to implement its model layer. This allows you to define an application deployment workflow as DAG, with all steps and application's needs glued together in programmable approach. No restrictions, natively extensible.": {
+    "message": "来实现其模型层。这允许您将应用程序部署工作流定义为 DAG，将所有步骤和应用程序需求以可编程方式粘合在一起。没有限制，原生可扩展。"
   },
   "KubeVela is built with Kubernetes as control plane but adaptable to any runtime as data-plane. It can deploy (and manage) diverse workload types such as container, cloud functions, databases, or even EC2 instances across hybrid environments. Also, this means KubeVela seamlessly works with any Kubernetes compatible CI/CD or GitOps tools via declarative API.": {
-    "message": "KubeVela is built with Kubernetes as control plane but adaptable to any runtime as data-plane. It can deploy (and manage) diverse workload types such as container, cloud functions, databases, or even EC2 instances across hybrid environments. Also, this means KubeVela seamlessly works with any Kubernetes compatible CI/CD or GitOps tools via declarative API."
+    "message": "KubeVela 作为控制平面可以适应任何运行时。它可以跨混合环境部署和管理不同的工作负载类型，例如容器、云资源、数据库，甚至 EC2 实例。KubeVela 通过声明式 API 同任何与 Kubernetes 兼容的 CI/CD 或 GitOps 工具无缝协作。"
   },
+  "KubeVela works as an application delivery control plane that is fully runtime agnostic. It can deploy and operate any application components including containers, cloud functions, databases, or even EC2 instances across hybrid environments, following the workflow you defined.": {
+    "message": "KubeVela 作为一个控制平面，在应用程序交付过程中完全与运行时无关。它可以按照您定义的工作流，在混合环境中部署和操作任何应用程序组件，包括容器、云功能、数据库甚至 EC2 实例。"
+  }, 
   "KubeVela is a": {
     "message": "KubeVela 是"
   },
@@ -234,13 +252,16 @@
     "message": "sandbox 项目"
   },
   "KubeVela is a modern application platform that makes deploying and managing applications across today's hybrid, multi-cloud environments": {
-    "message": "KubeVela is a modern application platform that makes deploying and managing applications across today's hybrid, multi-cloud environments"
+    "message": "KubeVela 是一个现代应用程序平台，适用于在当今的混合多云环境中部署和管理应用程序。"
   },
   "easier and faster.": {
-    "message": "easier and faster."
+    "message": "更简单且轻松。"
   },
   "KubeVela is runtime agnostic, natively extensible, yet most importantly,": {
-    "message": "KubeVela is runtime agnostic, natively extensible, yet most importantly,"
+    "message": "KubeVela 不锁定运行时，原生可扩展。最重要的是，"
+  },
+  "application-centric.": {
+    "message": "以应用为中心。"
   },
   ".": {
     "message": "."
