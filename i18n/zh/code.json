@@ -240,7 +240,7 @@
     "message": "来实现其模型层。这允许您将应用程序部署工作流定义为 DAG，将所有步骤和应用程序需求以可编程方式粘合在一起。没有限制，原生可扩展。"
   },
   "KubeVela is built with Kubernetes as control plane but adaptable to any runtime as data-plane. It can deploy (and manage) diverse workload types such as container, cloud functions, databases, or even EC2 instances across hybrid environments. Also, this means KubeVela seamlessly works with any Kubernetes compatible CI/CD or GitOps tools via declarative API.": {
-    "message": "KubeVela 作为控制平面可以适应任何运行时。它可以跨混合环境部署和管理不同的工作负载类型，例如容器、云资源、数据库，甚至 EC2 实例。KubeVela 通过声明式 API 与任何与 Kubernetes 兼容的 CI/CD 或 GitOps 工具无缝协作。"
+    "message": "KubeVela 作为控制平面可以适应任何运行时。它可以跨混合环境部署和管理不同的工作负载类型，例如容器、云资源、数据库，甚至 EC2 实例。KubeVela 通过声明式 API 同任何与 Kubernetes 兼容的 CI/CD 或 GitOps 工具无缝协作。"
   },
   "KubeVela works as an application delivery control plane that is fully runtime agnostic. It can deploy and operate any application components including containers, cloud functions, databases, or even EC2 instances across hybrid environments, following the workflow you defined.": {
     "message": "KubeVela 作为一个控制平面，在应用程序交付过程中完全与运行时无关。它可以按照您定义的工作流，在混合环境中部署和操作任何应用程序组件，包括容器、云功能、数据库甚至 EC2 实例。"
