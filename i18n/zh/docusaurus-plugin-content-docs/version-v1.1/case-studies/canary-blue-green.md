@@ -175,7 +175,7 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/
 如果在人工校验时，发现服务符合预期，需要继续执行工作流，完成全量发布。你可以通过执行下面的命令完成这一操作。
 
 ```shell
-vela workflow reumse book-info
+vela workflow resume book-info
 ```
 
 在浏览器上继续多次访问网页，会发现五角星将一直是红色的。
