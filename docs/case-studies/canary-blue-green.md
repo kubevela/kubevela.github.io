@@ -175,7 +175,7 @@ It can be seen that the new version of the page has changed from the previous bl
 If the service is found to meet expectations during manual verification, the Workflow needs to be continued to complete the full release. You can do that by executing the following command.
 
 ```shell
-vela workflow reumse book-info
+vela workflow resume book-info
 ```
 
 If you continue to verify the webpage several times on the browser, you will find that the five-pointed star will always be red.
