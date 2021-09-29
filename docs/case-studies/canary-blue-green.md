@@ -14,10 +14,12 @@ We will use the well-known [bookinfo](https://istio.io/latest/docs/examples/book
 
 ## Preparation
 
-Install the Istio cluster plugin.
+If your cluster haven't installed Istio. Install the Istio cluster plugin.
 ```shell
 vela addon enable istio
 ```
+
+Otherwise, you just need apply these 4 YAML files under this [path](https://github.com/oam-dev/kubevela/tree/master/vela-templates/addons/istio/definitions) 
 
 The default namespace needs to be labeled so that Istio will auto-inject sidecar.
 
