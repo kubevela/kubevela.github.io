@@ -258,10 +258,12 @@ please at least enable following addons to make sure KubeVela functioning well:
 
 * Terraform Provider addon
 
-  Enable Terraform Alibaba Cloud Provider as below. Here is how to get [access key](https://help.aliyun.com/knowledge_detail/38738.html).
+  Enable Terraform Alibaba Cloud Provider as below to [provision and/or consume cloud resources](./end-user/components/cloud-services/provider-and-consume-cloud-services).
+
+  Here is how to get [access key](https://help.aliyun.com/knowledge_detail/38738.html). Set the value for `ALICLOUD_REGION` by picking one `RegionId` from [Alibaba Cloud region list](https://www.alibabacloud.com/help/doc-detail/72379.htm).
 
   ```shell
-  vela addon enable terraform/provider-alibaba ALICLOUD_ACCESS_KEY=xxx ALICLOUD_SECRET_KEY=yyy ALICLOUD_SECURITY_TOKEN=zzz
+  vela addon enable terraform/provider-alibaba ALICLOUD_ACCESS_KEY=<xxx> ALICLOUD_SECRET_KEY=<yyy> ALICLOUD_SECURITY_TOKEN=<zzz> ALICLOUD_REGION=<region>
   ```
 
 ## 5. Verify

@@ -256,10 +256,12 @@ KubeVela 支持一系列[开箱即用的插件](./platform-engineers/advanced-in
 
 * Terraform Provider 插件
 
-  开启 Terraform 对阿里云的支持，请执行（参考[如何获取 Access Key](https://help.aliyun.com/knowledge_detail/38738.html)）：
+  执行如下命令开启 Terraform 对阿里云的支持，可以[创建和消费云资源](./end-user/components/cloud-services/provider-and-consume-cloud-services)：
+
+  其中，请参考[如何获取 Access Key](https://help.aliyun.com/knowledge_detail/38738.html)设置 Access Key，参考 [Region 列表](https://www.alibabacloud.com/help/doc-detail/72379.htm) 中的 `RegionId` 设置 `ALICLOUD_REGION`。
 
   ```shell
-  vela addon enable terraform/provider-alibaba ALICLOUD_ACCESS_KEY=xxx ALICLOUD_SECRET_KEY=yyy ALICLOUD_SECURITY_TOKEN=zzz
+  vela addon enable terraform/provider-alibaba ALICLOUD_ACCESS_KEY=<xxx> ALICLOUD_SECRET_KEY=<yyy> ALICLOUD_SECURITY_TOKEN=<zzz> ALICLOUD_REGION=<region>
   ```
 
 ## 5. 查看已安装能力
