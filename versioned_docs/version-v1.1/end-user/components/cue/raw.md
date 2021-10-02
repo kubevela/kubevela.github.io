@@ -1,5 +1,5 @@
 ---
-title:  Raw
+title:  Raw Template
 ---
 
 Use raw Kubernetes resources directly. For example, a Job.

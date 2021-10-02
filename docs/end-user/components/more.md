@@ -1,5 +1,5 @@
 ---
-title:  Want More？
+title:  Needs More？
 ---
 
 ## 1. Get from capability registry

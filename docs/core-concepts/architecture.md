@@ -6,59 +6,34 @@ The overall architecture of KubeVela is shown as below:
 
 ![alt](../resources/system-arch.png)
 
+## KubeVela is a Control Plane System
 
-## API
+KubeVela orchestrates application components, cloud resources and pipeline over multiple clusters and hybrid environments. It is designed to be an application delivery and management control plane instead of a runtime plugin.
 
-The API layer provides KubeVela APIs exposed to users for building application delivery platform and solutions.
-KubeVela APIs are declarative and application centric.
-It is based on Kubernetes CRDs to natively fit into the Kubernetes ecosystem.
+For easy integration with upstream CI pipelines and GitOps tools, KubeVela API (i.e. Open Application Model) are designed as declarative and application-centric, including:
 
-The APIs can be categorized for two purposes:
+`Application` for designing application deployment plan.
 
-- For **end users** to compose final application manifest to deploy.
-  - Usually this contains only user-concerned config and hides infrastructure details.
-  - Users will normally write the manifest in yaml format.
-  - This currently includes Application only. But we may add more user-facing APIs, e.g. ApplicationSet to define multiple Applications.
-- For **platform admins** to define capability definitions to handle actual operations.
-  - Each definition glues operational tasks using CUE and exposes user-concerned config only.
-  - Admins will normally write the manifest in yaml + CUE format.
-  - This currently includes Component, Trait, Policy, and Workflow definition types.
+`X-Definitions` for managing the abstraction and capabilities of KubeVela with CUE.
+  - e.g. `ComponentDefinition`, `TraitDefinition`, etc.
 
-The APIs are served by the control plane.
-Because it is so important that we put a separate section to talk about it.
+In implementation, KubeVela relies on a dedicated Kubernetes cluster to achieve above goals. We chose to rely on Kubernetes as the control plane implementation because this approach is battle tested and brings determinism, convergence and automation to application management at scale. In detail, KubeVela is composed by several parts:
 
-## Control Plane
+- *Plugin Registry* that registers and manages `X-Definitions`.
+- *Core Controller* that provides the core control logic of the entire system. For example, handling KubeVela API resources, orchestrating workflow, storing revisions, parsing and executing CUE code, garbage collecting, etc.
+- *Addon Controllers* that register and manage built-in addons that KubeVela needed to work. For example, Flux and Terraform controller.
 
-The control plane layers is where KubeVela puts the components central to the entire system.
-It is the first entry to handle user API requests, the central place to register plugins,
-and central processor to manage global states and dispatches tasks/resources.
+This control plane Kubernetes cluster will be referenced as the "control plane cluster" in the following documentation. 
 
-The control plane contains three major parts:
+### Runtime Infrastructure
 
-- **Plugin registry** stores and manages X-Definitions.
-  X-Definitions are CRDs that users can apply and get via kubectl.
-  There are additional backend functions to store and manage multiple versions of X-Definitions.
-- **Core Control** provides the core control logic to the entire system.
-  It consists of the core components that are hanlding Application, X-Definition API requests,
-  orchestrating Workflows, storing revisions of Applications and Components,
-  parsing and executing CUE fields, garbage collecting unused resources.
-- **Builtin Controllers** registers builtin plugins and provides the backing controllers for the resources
-  created by X-Definitions. These are core to the KubeVela ecosystem that we believe everyone will use.
+The runtime infrastructure is where the applications are actually running on.
+KubeVela itself is fully runtime infrastructure agnostic and hence allows you to deploy application to both Kubernetes based infrastructure and non-Kubernetes environments such as cloud platforms and edge devices.
 
-The control plane (including API layer) is KubeVela per se.
-Technically speaking, KubeVela is a control plane to manage applications over multiple clusters, hybrid environments.
+## KubeVela is Programmable
 
-## Execution
+In real world, application deployment tends to be complex and varies from teams, environments and scenarios. Hence, KubeVela introduced a fully programmable approach to implement its deployment model so it can adapt to every need of your application delivery use case in-place.
 
-The execution layer is where the applications are actually running on.
-KubeVela allows you to deploy and manage application resources in a consistent workflow onto both
-Kubernetes cluster (e.g. local, managed offerings, IoT/edge, on-prem)
-and non-Kubernetes environments on clouds.
-KubeVela itself does not run on the execution infrastructures, but manage them instead.
+![alt](../resources/kernel.png)
 
-## What's Next
-
-Here are some recommended next steps:
-
-- Learn KubeVela's Application to know the basics of how to building App Delivery, let's start from [Application](./application).
-- Learn KubeVela's admin guide to learn more about [the OAM model](../platform-engineers/oam/oam-model).
+For learning how to program KubeVela in detail, please check the `Administrator Manuals` in the documentation site.

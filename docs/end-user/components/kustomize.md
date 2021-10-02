@@ -11,7 +11,7 @@ KubeVela's `kustomize` component meets the needs of users to directly connect Ya
 Let's take the YAML folder component from the OSS bucket registry as an example to explain the usage. In the `Application` this time, I hope to deliver a component named bucket-comp. The deployment file corresponding to the component is stored in the cloud storage OSS bucket, and the corresponding bucket name is definition-registry. `kustomize.yaml` comes from this address of oss-cn-beijing.aliyuncs.com and the path is `./app/prod/`.
 
 
-1. (Opentional) If your OSS bucket needs identity verification, create a Secret:
+1. (Optional) If your OSS bucket needs identity verification, create a Secret:
 
 ```shell
 $ kubectl create secret generic bucket-secret --from-literal=accesskey=<your-ak> --from-literal=secretkey=<your-sk>

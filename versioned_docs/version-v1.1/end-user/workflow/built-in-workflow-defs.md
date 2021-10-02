@@ -2,7 +2,7 @@
 title: Built-in Steps
 ---
 
-KubeVela provides some built-in workflow step definitions for better experience.
+This documentation will walk through the built-in workflow steps that you can use to design an application deployment process.
 
 ## apply-application
 

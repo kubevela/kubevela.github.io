@@ -1,5 +1,5 @@
 ---
-title: Health Status Check
+title: Health Check Policy
 ---
 
 This documentation will introduce how to use `health` policy to apply periodical

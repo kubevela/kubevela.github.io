@@ -1,8 +1,8 @@
 ---
-title:  原生资源
+title:  资源模板
 ---
 
-KubeVela 可以直接部署任何原生的 Kubernetes 资源。比如一个 Job。
+KubeVela 可以以资源模板的方式直接部署任何 Kubernetes 对象。比如一个 Job。
 
 ## 如何使用
 
