@@ -65,7 +65,7 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "Components",
+          "label": "Deploying Components",
           "items": [
             {
               "type": "doc",
@@ -112,7 +112,7 @@
             {
               "collapsed": true,
               "type": "category",
-              "label": "CUE Components",
+              "label": "CUE",
               "items": [
                 {
                   "type": "doc",
@@ -125,12 +125,12 @@
                 {
                   "type": "doc",
                   "id": "version-v1.1/end-user/components/cue/task"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.1/end-user/components/cue/raw"
                 }
               ]
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/components/cue/raw"
             },
             {
               "type": "doc",
@@ -141,7 +141,7 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "Traits",
+          "label": "Attaching Traits",
           "items": [
             {
               "type": "doc",
@@ -180,7 +180,7 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "Policies",
+          "label": "Defining Policies",
           "items": [
             {
               "type": "doc",
@@ -195,8 +195,12 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "Workflow",
+          "label": "Designing Workflow",
           "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/workflow/built-in-workflow-defs"
+            },
             {
               "type": "doc",
               "id": "version-v1.1/end-user/workflow/webhook-notification"
@@ -298,10 +302,6 @@
             {
               "type": "doc",
               "id": "version-v1.1/platform-engineers/workflow/workflow"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.1/platform-engineers/workflow/built-in-workflow-defs"
             },
             {
               "type": "doc",

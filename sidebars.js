@@ -38,7 +38,7 @@ module.exports = {
       collapsed: true,
       items: [
         {
-          'Components': [
+          'Deploying Components': [
             'end-user/components/helm',
             'end-user/components/kustomize',
             {
@@ -54,36 +54,37 @@ module.exports = {
               ],
             },
             {
-              'CUE Components': [
+              'CUE': [
                 'end-user/components/cue/webservice',
                 'end-user/components/cue/worker',
                 'end-user/components/cue/task',
-                'end-user/components/cue/raw',
               ]
             },
+            'end-user/components/cue/raw',
             'end-user/components/more',
           ]
         },
         {
-          'Traits': [
+          'Attaching Traits': [
             'end-user/traits/ingress',
             'end-user/traits/rollout',
             'end-user/traits/autoscaler',
-            'end-user/traits/kustomize-patch',
             'end-user/traits/annotations-and-labels',
             'end-user/traits/service-binding',
             'end-user/traits/sidecar',
+            'end-user/traits/kustomize-patch',
             'end-user/traits/more',
           ]
         },
         {
-          'Policies': [
+          'Defining Policies': [
             'end-user/policies/envbinding',
             'end-user/policies/health',
           ]
         },
         {
-          'Workflow': [
+          'Designing Workflow': [
+            'end-user/workflow/built-in-workflow-defs',
             'end-user/workflow/webhook-notification',
             'end-user/workflow/component-dependency-parameter',
           ]
@@ -134,7 +135,6 @@ module.exports = {
         {
           'Workflow System': [
             'platform-engineers/workflow/workflow',
-            'platform-engineers/workflow/built-in-workflow-defs',
             'platform-engineers/workflow/cue-actions',
           ]
         },

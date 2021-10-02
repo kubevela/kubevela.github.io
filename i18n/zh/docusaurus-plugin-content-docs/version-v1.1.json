@@ -75,8 +75,8 @@
     "message": "交付环境系统",
     "description": "The label for category Environment System in sidebar docs"
   },
-  "sidebar.docs.category.Workflow": {
-    "message": "定义交付工作流",
+  "sidebar.docs.category.Designing Workflow": {
+    "message": "设计交付工作流",
     "description": "The label for category Workflow End User in sidebar docs"
   },
   "sidebar.docs.category.Workflow System": {
@@ -115,15 +115,15 @@
     "message": "用户手册",
     "description": "The label for category User Guide in sidebar docs"
   },
-  "sidebar.docs.category.Components": {
+  "sidebar.docs.category.Deploying Components": {
     "message": "选择待交付组件",
     "description": "The label for category Components in sidebar docs"
   },
-  "sidebar.docs.category.Traits": {
+  "sidebar.docs.category.Attaching Traits": {
     "message": "绑定运维特征",
     "description": "The label for category Traits in sidebar docs"
   },
-  "sidebar.docs.category.Policies": {
+  "sidebar.docs.category.Defining Policies": {
     "message": "设定应用策略",
     "description": "The label for category Policies in sidebar docs"
   },
@@ -155,7 +155,7 @@
     "message": "云服务组件",
     "description": "The label for category Cloud Services in sidebar docs"
   },
-  "sidebar.docs.category.CUE Components": {
+  "sidebar.docs.category.CUE": {
     "message": "CUE 组件",
     "description": "The label for category CUE Components in sidebar docs"
   },
