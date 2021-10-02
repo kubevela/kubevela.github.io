@@ -26,29 +26,31 @@ const features = [
       <>
         <p>
           <Translate>
-           KubeVela leverages </Translate> 
-            <a href="https://github.com/cuelang/cue"> CUE</a> <Translate>to
-            implement its model layer. This allows you to define an application deployment
-              workflow as DAG, with all steps and application's needs glued together in programmable approach.  
-              No restrictions, natively extensible.</Translate>
+           KubeVela models application delivery as DAG (Directed Acyclic Graph) 
+           and expresses it with</Translate> 
+            <a href="https://github.com/cuelang/cue"> CUE</a>, <Translate>
+            a modern data configuration language. This allows you to declare 
+            application deployment workflow with all steps and delivery needs 
+            assembled together in programmable approach. No restrictions, 
+            natively extensible.</Translate>
         </p>
       </>
     ),
     reverse: true,
   },
   {
-    title: <><Translate>Runtime Agnostic</Translate></>,
+    title: <><Translate>Infrastructure Agnostic</Translate></>,
     imgUrl: 'img/simple-yet-extensible-abstraction-mechanism.svg',
     description: (
       <>
         <p>
           <Translate>
             KubeVela works as an application 
-            delivery control plane that is fully runtime agnostic. It can 
-            deploy and operate any 
-            application components including containers, cloud functions, databases, 
+            delivery control plane that is fully decoupled from runtime 
+            infrastructure. It can deploy and manage any 
+            application types including containers, cloud services, databases, 
             or even EC2 instances across hybrid environments, following the 
-            workflow you defined.</Translate>
+            workflow you designed.</Translate>
         </p>
       </>
     ),

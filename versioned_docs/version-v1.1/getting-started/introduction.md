@@ -15,13 +15,9 @@ Today the application teams are eager to find a platform that can simplify the a
 
 ## What is KubeVela?
 
-KubeVela is a modern application platform that makes it easier and faster to deliver and manage applications across hybrid, multi-cloud environments. At the mean time, it is highly extensible and programmable, which can adapt to your needs as they grow. This is achieved by doing the following:
+KubeVela is a modern application platform that makes it easier and faster to deliver and manage applications across hybrid, multi-cloud environments. At the mean time, it is highly extensible and programmable, which can adapt to your needs as they grow. 
 
-**Application Centric** - KubeVela introduces [Open Application Model (OAM)](https://oam.dev/) as the consistent and application-focused API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at the perspective of application developers. No infrastructure level concern, only application level concepts.
-
-**Programmable Workflow** - KubeVela leverages [CUE](https://cuelang.org/) as the implementation engine behind the model layer. This allows you to compose deployment workflow in a modular and declarative API, and automates any operational tasks in a programmable manner. No restrictions, natively extensible.
-
-**Runtime Agnostic** - KubeVela works as an application delivery control plane that is fully runtime agnostic. It can deploy and manage any application components including containers, cloud functions, databases, or even EC2 instances across hybrid environments, following the workflow you defined.
+![](../resources/system-arch.png)
 
 ## Who should use KubeVela?
 
@@ -74,6 +70,6 @@ Welcome onboard and sail Vela!
 Here are some recommended next steps:
 
 - Start to [install KubeVela](./install).
-- Learn KubeVela's [Core Concepts](core-concepts/application).
-- Learn KubeVela's [Architecture](core-concepts/architecture).
+- Learn KubeVela's [core concepts](core-concepts/application).
+- Learn KubeVela's [architecture](core-concepts/architecture).
 

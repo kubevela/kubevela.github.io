@@ -1,12 +1,12 @@
 ---
-title:  Application
+title:  The Application Model
 ---
 
-KubeVela takes Application as the basis of modeling, uses Components and Traits to complete a set of application deployment plans. After you are familiar with these core concepts, you can develop in accordance with the user manual and administrator manual according to your needs.
+KubeVela introduces Open Application Model (OAM) to capture a full deployment of micro-services application across hybrid environments.
 
 ## Application
 
-In modeling, the YAML file is the bearer of the application deployment plan. A typical YAML example is as follows:
+With this model, a typical deployment plan in KubeVela looks as below:
 
 ```yaml
 # sample.yaml
@@ -72,21 +72,9 @@ spec:
           env: prod    
 ```
 
-
-The fields here correspond to:
-
-- apiVersion: The OAM API version used.
-- kind: of CRD Resourse Type. The one we use most often is Pod.
-- metadata: business-related information. For example, this time I want to create a website.
-- Spec: Describe what we need to deliver and tell Kubernetes what to make. Here we put the `components`, `policies` and `workflow` of KubeVela.
-- components: KubeVela's component system.
-- Traits: KubeVela's operation and maintenance feature system, works in component level.
-- Policies: KubeVela's application level policy.
-- Workflow: KubeVela's application level deployment workflow, you can custom every deployment step with it.
-
 ## Components
 
-KubeVela has some built-in component types, you can find them by using [KubeVela CLI](../install#3-get-kubevela-cli):
+An application could be composed by multiple components. KubeVela already built-in with several widely used components definitions to help you model an application deployment, you can list them by using [KubeVela CLI](../install#3-get-kubevela-cli):
 
 ```
 vela components 
@@ -112,14 +100,11 @@ alibaba-oss 	vela-system	configurations.terraform.core.oam.dev	Terraform configu
 alibaba-rds 	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud RDS object
 ```
 
-You can continue to use [Helm](../end-user/components/helm) and [Kustomize](../end-user/components/kustomize) components to deploy your application, an application is a deployment plan.
-
-If you're a platform builder who's familiar with Kubernetes, you can learn to [define your custom component](../platform-engineers/components/custom-component) to extend every kind of component in KubeVela. Especially, [Terraform Components](../platform-engineers/components/component-terraform) is one of the best practice.
 
 
 ## Traits
 
-KubeVela also has many built-in traits, search them by using [KubeVela CLI](../install#3-get-kubevela-cli):
+Traits are operational behaviors that you can attach to component. KubeVela also has built-in traits installed, search them by using [KubeVela CLI](../install#3-get-kubevela-cli):
 
 ```
 vela traits 
@@ -137,29 +122,20 @@ scaler     	vela-system	webservice,worker	              	false         	Manually
 sidecar    	vela-system	deployments.apps 	              	true          	Inject a sidecar container to the component.   
 ```
 
-You can learn how to bind trait by these detail docs, such as [ingress trait](../end-user/traits/ingress).
-
-If you're a platform builder who's familiar with Kubernetes, you can learn to [define your custom trait](../platform-engineers/traits/customize-trait) to extend any operational capability for your users.
-
 ## Policy
 
-Policy allows you to define application level capabilities, such as health check, security group, fire wall, SLO and so on.
-
-Policy is similar to trait, but trait works for component while policy works for the whole application.
+Policy enforces deployment process of the application, such as quality gates, security groups, placement strategy, fire walls, SLO targets and so on.
 
 ## Workflow
 
-In KubeVela, Workflow allows user to glue various operation and maintenance tasks into one process, and achieve automated and rapid delivery of cloud-native applications to any hybrid environment. From the design point of view, the Workflow is to customize the control logic: not only simply apply all resources, but also to provide some process-oriented flexibility. For example, the use of Workflow can help us implement complex operations such as pause, manual verification, waiting state, data flow transmission, multi-environment grayscale, and A/B testing.
+Workflow allows you to assemble components, operation and task steps into a DAG, and it is process-oriented. Typical workflow steps includes pause, manual verification, waiting state, data flow transmission, multi-environment grayscale, and A/B testing, etc.
 
-The Workflow is based on modular design. Each Workflow module is defined by a Definition CRD and provided to users for operation through K8s API. As a "super glue", the Workflow module can combine any of your tools and processes through the CUE language. This allows you to create your own modules through a powerful declarative language and cloud-native APIs.
+Each workflow step is a independent capability entity that is fully plugable, KubeVela allows you to create your own step through CUE.
 
-> Especially, workflow works in application level, if you specify workflow, the resources won't be deployed if you don't specify any step to deploy it.
-
-If you're a platform builder who's familiar with Kubernetes, you can learn to [define your own workflow step by using CUE](../platform-engineers/workflow/workflow).
 
 ## What's Next
 
 Here are some recommended next steps:
 
-- Learn KubeVela's user guide to know how to deploy component, let's start from [helm component](../end-user/components/helm).
-- Learn KubeVela's admin guide to learn more about [the OAM model](../platform-engineers/oam/oam-model).
+- Start using KubeVela from deploying [Helm component](../end-user/components/helm).
+- Learn more about [Open Application Model](../platform-engineers/oam/oam-model).
