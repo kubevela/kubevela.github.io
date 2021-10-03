@@ -6,7 +6,7 @@ KubeVela 背后的应用交付模型是 [Open Application Model](../platform-eng
 
 ## 应用部署计划（Application）
 
-KubeVela 通过 YAML 文件的方式描述应用部署计划。一个典型的 YAML 样例如下：
+KubeVela 通过声明式 YAML 文件的方式来描述应用部署计划。一个典型的样例如下：
 
 ```yaml
 # sample.yaml
