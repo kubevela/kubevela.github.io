@@ -8,7 +8,7 @@ title:  交付第一个应用
 
 ## 一个最简单的示例
 
-KubeVela 中一个比较简单的应用部署定义，大致如下所示：
+KubeVela 中一个简单的应用部署定义，大致如下所示：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -61,7 +61,7 @@ Hello World
 
 KubeVela 允许你部署的组件类型是非常丰富的。在上面的例子中，`Web Service`组件实际上就是一个预先编写好的[CUE](https://cuelang.org/) 文件。
 
-你还可以其它很多类型，比如：
+你还可以选择其它很多类型，比如：
 
 ### Helm 组件
 
@@ -239,12 +239,12 @@ spec:
           env: prod
 ```  
 
-不需要任何“脏乱差”脚本，KubeVela 就能够以完全自动化、高确定性的声明式工作流完成所有的应用交付动作。更为重要的是，KubeVela 希望你继续使用你现有的 CI 方案，而 KubeVela 则负责帮助你更好的完成 CD 流程。
+不需要任何“脏乱差”脚本，KubeVela 就能够以完全自动化、高确定性的声明式工作流完成所有的应用交付动作。更为重要的是，KubeVela 希望你继续使用你现有的任何 CI 方案，而 KubeVela 则负责帮助你更好的完成 CD 流程。
 
 ## 下一步
 
 上述所有功能，只是 KubeVela 这个现代化的云原生应用交付与管理平台的冰山一角。您可以从下面步骤来开始更好的了解 KubeVela:
 
-- 查看 KubeVela 的[`应用部署模型`](./core-concepts/application)，进一步理解其是如何工作的。
-- 查看 KubeVela 的[`系统架构`](./core-concepts/architecture)，了解 KubeVela 本身的设计与架构原理。
+- 查看 KubeVela 的[`应用交付模型`](./core-concepts/application)，进一步理解其是如何工作的。
+- 学习 KubeVela 的[`系统架构`](./core-concepts/architecture)，深入了解 KubeVela 本身的设计与架构原理。
 - 加入 KubeVela 中文社区钉钉群，群号：23310022。
