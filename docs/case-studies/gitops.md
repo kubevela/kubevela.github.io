@@ -24,11 +24,11 @@ In this section, we will introduce steps of using KubeVela directly in GitOps ap
 
 > Note: you can also use it with existing tools such as ArgoCD with similar steps, detailed guides will be added in following releases.
 
-## Setup Code Repository
+## Setup App Code Repository
 
-First, setup a Git code repository with some source code and a Dockerfile.
+First, setup a Git repository with source code and Dockerfile.
 
-The code is very simple, starting a service and connect to a MySQL database. In the default path, it will display the version in the code; in the `/db` path, it will list the data in database.
+The app serves HTTP service and connects to a MySQL database. In the '/' path, it will display the version in the code; in the `/db` path, it will list the data in database.
 
 ```go
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -55,11 +55,11 @@ The code is very simple, starting a service and connect to a MySQL database. In 
 	}
 ```
 
-We want users to build the image and push it to the image registry after changing the code, so we need to integrate with a CI tool like GitHub Actions or Jenkins to do it. In this example, we use GitHub Actions to build the image. For the code and configuration file, please refer to [Example Repo](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo).
+ In this tutorial, we will setup a CI pipeline using GitHub Actions to build the image and push it to a registry. The code and configuration files are from the [Example Repo](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo).
 
-## Create the Git secret
+## Create Git Secret for KubeVela committing to Config Repo
 
-After the new image is pushed to the image registry, KubeVela will recognize the new image and update the `Application` file in the Git repository and cluster. Therefore, we need a secret with Git information for KubeVela to commit to the Git repository. Fill the following yaml files with your password and apply it to the cluster:
+After the new image is pushed to the image registry, KubeVela will be notified and update the `Application` file in the Git repository and cluster. Therefore, we need a secret with Git information for KubeVela to commit to the Git repository. Fill the following yaml files with your password and apply it to the cluster:
 
 ```yaml
 apiVersion: v1
@@ -74,9 +74,9 @@ stringData:
 
 ## Setup Config Repository
 
-We also need a config repository for clusters, applications, and some infrastructure configuration.
+We need a config repository for applications and infrastructure configuration.
 
-The structure of the config repository is as bellow:
+The structure of the config repository looks below:
 
 * The `apps/` contains the configuration of the application. In this case, the application is what we built in the code repository.
 * The `infrastructure/` contains some infrastructure tools, such as MySQL database.
@@ -263,7 +263,7 @@ mysql 	mysql-controller	helm      	       	running	healthy	      	2021-09-26 20:
 └─  	mysql-cluster   	raw       	       	running	healthy	      	2021-09-26 20:48:11 +0800 CST
 ```
 
-Curl the Ingress of the app, we can see that the current version is `0.1.5` and the application is connected to the database successfully:
+`curl` the Ingress of the app, we can see that the current version is `0.1.5` and the application is connected to the database successfully:
 
 ```shell
 $ kubectl get ingress
@@ -278,7 +278,7 @@ User: KubeVela
 Description: It's a test user
 ```
 
-## Modify the configuration
+## Modify the config for GitOps trigger
 
 After the first deployment, we can modify the files in config repo to update the applications in the cluster.
 
@@ -330,7 +330,7 @@ func InsertInitData(db *sql.DB) {
 
 Commit the change to the Git Repository, we can see that our CI pipelines has built the image and push it to the image registry.
 
-KubeVela will then listening to the image registry and update the `Application` in Git Repository with the latest image tag. Notice that KubeVela will only be able to modify the image field if the annotation `# {"$imagepolicy": "default:apps"}` is added after the field. `default:apps` is `namespace:application-name` of the application config file.
+KubeVela will listen to the image registry and update the `Application` in Git Repository with the latest image tag. Notice that KubeVela will only be able to modify the image field if the annotation `# {"$imagepolicy": "default:apps"}` is added after the field. `default:apps` is `namespace:application-name` of the application config file.
 
 We can see that there is a commit form `kubevelabot`, the commit message is always with a prefix `Update image automatically.` You can use format like `{{range .Updated.Images}}{{println .}}{{end}}` to specify the image name in the `commitMessage` field.
 
@@ -372,8 +372,9 @@ The `Version` has been updated successfully! Now we're done with everything from
 
 ## Summary
 
-On the development side, KubeVela automatically updates the image in the configuration repository after the user modifies the code in the repository, make it easier for developers to deploy and update their apps.
+For end user developers, KubeVela automatically updates the image in the configuration repository after the user modifies the code in the repository, make it easier for developers to deploy and update their apps.
 
-On the operation side, if you need to update the configuration of the infrastructure (such as database) or other fields of the application, the only thing you need to do is to modify the files in the configuration repository. KubeVela will automatically synchronize the configuration to the cluster, thus simplifying the deployment process.
+For platform admin/SRE, to update the configuration of the infrastructure (such as database) or other fields of the application, the only thing you need to do is to modify the files in the configuration repository. KubeVela will automatically synchronize the configuration to the cluster, thus simplifying the deployment process.
+
 
 By integrating with GitOps, KubeVela helps users speed up deployment and simplify continuous deployment.

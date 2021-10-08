@@ -21,65 +21,28 @@ KubeVela 作为一个声明式的应用交付控制平面，天然就可以以 G
 
 在本文中，我们主要讲解直接使用 KubeVela 在 GitOps 模式下进行交付的步骤。
 
+交付的模式有以下两种，我们将分别介绍：
+
+1. 面向平台管理员/运维人员的交付，用户可以通过直接更新仓库中的 KubeVela 配置文件，从而更新集群中的应用。
+2. 面向终端开发者的交付，用户通过更新应用代码仓库中的代码，从而更新集群中的应用。
+
 > 提示：你也可以通过类似的步骤使用 ArgoCD 等 GitOps 工具来间接使用 KubeVela，细节的操作文档我们会在后续发布中提供。
 
-## 准备代码仓库
+## 面向平台管理员/运维人员的交付
 
-准备一个代码仓库，里面包含一些源代码以及对应的 Dockerfile。
+![alt](../resources/ops-flow.jpg)
 
-这些代码将连接到一个 MySQL 数据库，并简单地启动服务。在默认的服务路径下，会显示当前版本号。在 `/db` 路径下，会列出当前数据库中的信息。
+如图所示，对于平台管理员/运维人员而言，只需要准备一个 KubeVela Git 配置仓库并部署 KubeVela 配置文件，后续对于应用及基础设施的配置变动，便可通过直接更新 Git 配置仓库来完成，使得每一次配置变更可追踪。
 
-```go
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		_, _ = fmt.Fprintf(w, "Version: %s\n", VERSION)
-	})
-	http.HandleFunc("/db", func(w http.ResponseWriter, r *http.Request) {
-		rows, err := db.Query("select * from userinfo;")
-		if err != nil {
-			_, _ = fmt.Fprintf(w, "Error: %v\n", err)
-		}
-		for rows.Next() {
-			var username string
-			var desc string
-			err = rows.Scan(&username, &desc)
-			if err != nil {
-				_, _ = fmt.Fprintf(w, "Scan Error: %v\n", err)
-			}
-			_, _ = fmt.Fprintf(w, "User: %s \nDescription: %s\n\n", username, desc)
-		}
-	})
+### 准备配置仓库
 
-	if err := http.ListenAndServe(":8088", nil); err != nil {
-		panic(err.Error())
-	}
-```
-
-我们希望用户改动代码进行提交后，自动构建出最新的镜像并推送到镜像仓库。这一步 CI 可以通过集成 GitHub Actions、Jenkins 或者其他 CI 工具来实现。在本例中，我们通过借助 GitHub Actions 来完成持续集成。具体的代码文件及配置可参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo)。
-
-## 配置秘钥信息
-
-在新的镜像推送到镜像仓库后，KubeVela 会识别到新的镜像，并更新仓库及集群中的 `Application` 配置文件。因此，我们需要一个含有 Git 信息的 Secret，使 KubeVela 向 Git 仓库进行提交。部署如下文件，将其中的用户名和密码替换成你的信息：
-
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: git-secret
-type: kubernetes.io/basic-auth
-stringData:
-  username: <your username>
-  password: <your password>
-```
-
-## 准备配置仓库
-
-在代码仓库以外，我们还需要一个配置仓库用于存放集群、应用以及一些基础设施的配置。
+具体的配置可参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo)。
 
 配置仓库的目录结构如下:
 
-* `apps/` 目录中包含应用的配置。在本例中，应用为代码仓库中构建出的应用。
+* `apps/` 目录中包含应用的配置。
 * `infrastructure/` 中包含一些基础架构工具，如 MySQL 数据库。
-* `clusters/` 中包含集群中的 KubeVela 配置，我们将 app 与 infra 的配置分开，以更好地进行配置。
+* `clusters/` 中包含集群中的 KubeVela 配置，我们将 app 与 infra 的配置分开，以更好地进行配置。只需要将 `clusters/` 中的文件部署到集群中，KubeVela 便能自动监听配置仓库中的文件变动且自动更新集群中的配置。
 
 ```shell
 ├── apps
@@ -93,9 +56,9 @@ stringData:
 
 > KubeVela 建议使用如上的目录结构管理你的 GitOps 仓库。`clusters/` 中存放相关的 KubeVela 配置，`apps/` 和 `infrastructure/` 中分别存放你的应用和基础配置。应用相关的配置可以通过运维特征绑定在应用上，通过把应用和基础配置分开，能够更为合理的管理你的部署环境，隔离应用的变动影响。
 
-### `apps/` 目录
+#### `apps/` 目录
 
-我们首先来看 apps 目录中的应用配置文件，这是一个配置了数据库信息以及 Ingress 的简单应用。同时，使用了 KubeVela 的多集群功能来部署到被选择的集群：
+我们首先来看 apps 目录中的应用配置文件，这是一个配置了数据库信息以及 Ingress 的简单应用。 该应用将连接到一个 MySQL 数据库，并简单地启动服务。在默认的服务路径下，会显示当前版本号。在 `/db` 路径下，会列出当前数据库中的信息。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -108,7 +71,7 @@ spec:
     - name: my-server
       type: webservice
       properties:
-        image: <your image address> # {"$imagepolicy": "default:apps"}
+        image: ghcr.io/fogdong/test-fog:master-cba5605f-1632714412
         port: 8088
         env:
           - name: DB_HOST
@@ -126,7 +89,7 @@ spec:
               /: 8088
 ```
 
-### `infrastructure/` 目录
+#### `infrastructure/` 目录
 
 接着，来看下 infrastructure 目录下，我们使用 [mysql controller](https://github.com/bitpoke/mysql-operator) 来部署了一个 MySQL 集群。
 
@@ -171,7 +134,7 @@ spec:
           component: mysql-cluster
 ```
 
-### `clusters/` 目录
+#### `clusters/` 目录
 
 最后，我们来看下 clusters 目录。只需要将这些配置文件部署到集群中，就能够自动拉取 `infrastructure/` 以及 `apps/` 目录下的配置文件并定期更新同步。
 
@@ -188,16 +151,16 @@ spec:
     type: kustomize
     properties:
       repoType: git
-      # 将此处替换成你的 git 仓库地址
-      url: <your repo url>
-      # 关联 git secret
-      secretRef: git-secret
+      # 将此处替换成你需要监听的 git 配置仓库地址
+      url: https://github.com/FogDong/KubeVela-GitOps-Infra-Demo
+      # 如果是私有仓库，还需要关联 git secret
+      # secretRef: git-secret
       # 自动拉取配置的时间间隔，由于基础设施的变动性较小，此处设置为十分钟
       pullInterval: 10m
       git:
         # 监听变动的分支
         branch: main
-      # 监听变动的路径，指向 infrastructure 目录下的文件
+      # 监听变动的路径，指向仓库中 infrastructure 目录下的文件
       path: ./infrastructure
 ```
 
@@ -225,32 +188,17 @@ spec:
     type: kustomize
     properties:
       repoType: git
-      # 将此处替换成你的 git 仓库地址
-      url: <your repo url>
-      # 关联 git secret
-      secretRef: git-secret
+      # 将此处替换成你需要监听的 git 配置仓库地址
+      url: https://github.com/FogDong/KubeVela-GitOps-Infra-Demo
+      # 如果是私有仓库，还需要关联 git secret
+      # secretRef: git-secret
       # 自动拉取配置的时间间隔，此处设置为一分钟
       pullInterval: 1m
       git:
         # 监听变动的分支
         branch: main
-      # 监听变动的路径，指向 apps 目录下的文件
+      # 监听变动的路径，指向仓库中 apps 目录下的文件
       path: ./apps
-      imageRepository:
-        # 镜像地址
-        image: <your image>
-        # 如果这是一个私有的镜像仓库，可以通过 `kubectl create secret docker-registry` 创建对应的镜像秘钥并相关联
-        # secretRef: imagesecret
-        filterTags:
-          # 可对镜像 tag 进行过滤
-          pattern: '^master-[a-f0-9]+-(?P<ts>[0-9]+)'
-          extract: '$ts'
-        # 通过 policy 筛选出最新的镜像 Tag 并用于更新
-        policy:
-          numerical:
-            order: asc
-        # 追加提交信息
-        commitMessage: "Image: {{range .Updated.Images}}{{println .}}{{end}}"
 ```
 
 将该文件部署到集群中，可以看到它自动拉起了 `apps/staging` 目录下的应用部署文件：
@@ -279,7 +227,7 @@ User: KubeVela
 Description: It's a test user
 ```
 
-## 修改配置
+### 修改配置
 
 完成了首次部署后，我们可以通过修改配置仓库中的配置，来完成集群中应用的配置更新。
 
@@ -304,9 +252,100 @@ my-server   <none>   kubevela.example.com  <ingress-ip>    80      162m
 
 可以看到，Ingress 的 Host 地址已被成功更新。
 
-## 修改代码
+## 面向终端开发者的交付
 
-除了可以直接修改配置仓库中的配置，我们也可以通过修改代码仓库中的代码，来完成应用的升级及自动部署。
+![alt](../resources/dev-flow.jpg)
+
+如图所示，对于终端开发者而言，在 KubeVela Git 配置仓库以外，还需要准备一个应用代码仓库。在用户更新了应用代码仓库中的代码后，需要配置一个 CI 来自动构建镜像并推送至镜像仓库中。KubeVela 会监听镜像仓库中的最新镜像，并自动更新配置仓库中的镜像配置，最后再更新集群中的应用配置。
+
+使用户可以达成在更新代码后，集群中的配置也自动更新的效果。
+### 准备代码仓库
+
+准备一个代码仓库，里面包含一些源代码以及对应的 Dockerfile。
+
+这些代码将连接到一个 MySQL 数据库，并简单地启动服务。在默认的服务路径下，会显示当前版本号。在 `/db` 路径下，会列出当前数据库中的信息。
+
+```go
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		_, _ = fmt.Fprintf(w, "Version: %s\n", VERSION)
+	})
+	http.HandleFunc("/db", func(w http.ResponseWriter, r *http.Request) {
+		rows, err := db.Query("select * from userinfo;")
+		if err != nil {
+			_, _ = fmt.Fprintf(w, "Error: %v\n", err)
+		}
+		for rows.Next() {
+			var username string
+			var desc string
+			err = rows.Scan(&username, &desc)
+			if err != nil {
+				_, _ = fmt.Fprintf(w, "Scan Error: %v\n", err)
+			}
+			_, _ = fmt.Fprintf(w, "User: %s \nDescription: %s\n\n", username, desc)
+		}
+	})
+
+	if err := http.ListenAndServe(":8088", nil); err != nil {
+		panic(err.Error())
+	}
+```
+
+我们希望用户改动代码进行提交后，自动构建出最新的镜像并推送到镜像仓库。这一步 CI 可以通过集成 GitHub Actions、Jenkins 或者其他 CI 工具来实现。在本例中，我们通过借助 GitHub Actions 来完成持续集成。具体的代码文件及配置可参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo)。
+
+### 配置秘钥信息
+
+在新的镜像推送到镜像仓库后，KubeVela 会识别到新的镜像，并更新仓库及集群中的 `Application` 配置文件。因此，我们需要一个含有 Git 信息的 Secret，使 KubeVela 向 Git 仓库进行提交。部署如下文件，将其中的用户名和密码替换成你的信息：
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: git-secret
+type: kubernetes.io/basic-auth
+stringData:
+  username: <your username>
+  password: <your password>
+```
+
+### 准备配置仓库
+
+配置仓库与之前的配置大同小异，只需要加上与镜像仓库相关的配置即可。具体配置请参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo)。
+
+修改 `apps` 中的 image 字段，在后面加上 `# {"$imagepolicy": "default:apps"}` 的注释。KubeVela 会通过该注释去修改对应的镜像字段。`default:apps` 是该应用配置文件对应的命名空间和应用名。
+
+```yaml
+spec:
+  components:
+    - name: my-server
+      type: webservice
+      properties:
+        image: ghcr.io/fogdong/test-fog:master-cba5605f-1632714412 # {"$imagepolicy": "default:apps"}
+```
+
+修改 `clusters/` 中的 `apps` 配置，该配置会监听仓库中 `apps` 下的应用文件变动以及镜像仓库中的镜像更新：
+
+```yaml
+...
+  imageRepository:
+    # 镜像地址
+    image: <your image>
+    # 如果这是一个私有的镜像仓库，可以通过 `kubectl create secret docker-registry` 创建对应的镜像秘钥并相关联
+    # secretRef: imagesecret
+    filterTags:
+      # 可对镜像 tag 进行过滤
+      pattern: '^master-[a-f0-9]+-(?P<ts>[0-9]+)'
+      extract: '$ts'
+    # 通过 policy 筛选出最新的镜像 Tag 并用于更新
+    policy:
+      numerical:
+        order: asc
+    # 追加提交信息
+    commitMessage: "Image: {{range .Updated.Images}}{{println .}}{{end}}"
+```
+
+将 `clusters` 中的配置文件更新到集群中后，我们便可以通过修改代码来完成应用的更新。
+
+### 修改代码
 
 将代码文件中的 `Version` 改为 `0.1.6`，并修改数据库中的数据:
 
@@ -332,7 +371,6 @@ func InsertInitData(db *sql.DB) {
 提交该改动至代码仓库，可以看到，我们配置的 CI 流水线开始构建镜像并推送至镜像仓库。
 
 而 KubeVela 会通过监听镜像仓库，根据最新的镜像 Tag 来更新代码仓库中的 `Application`。
-注意，只有在 image 字段后添加了 `# {"$imagepolicy": "default:apps"}` 的注释，KubeVela 才能够成功修改镜像字段。`default:apps` 是该应用配置文件对应的命名空间和应用名。
 
 此时，可以看到配置仓库中有一条来自 `kubevelabot` 的提交，提交信息均带有 `Update image automatically.` 前缀。你也可以通过 `{{range .Updated.Images}}{{println .}}{{end}}` 在 `commitMessage` 字段中追加你所需要的信息。
 
@@ -375,8 +413,8 @@ Description: It's another test user
 
 ## 总结
 
-在研发侧，用户修改代码仓库中的代码后，KubeVela 将自动更新配置仓库中的镜像。从而进行应用的版本更新。
-
 在运维侧，如若需要更新基础设施（如数据库）的配置，或是应用的配置项，只需要修改配置仓库中的文件，KubeVela 将自动把配置同步到集群中，简化了部署流程。
+
+在研发侧，用户修改代码仓库中的代码后，KubeVela 将自动更新配置仓库中的镜像。从而进行应用的版本更新。
 
 通过与 GitOps 的结合，KubeVela 加速了应用从开发到部署的整个流程。
