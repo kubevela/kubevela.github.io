@@ -37,7 +37,7 @@ The typical examples are Heroku and Cloud Foundry. They provide full application
 
 Though the biggest difference lies in **flexibility**.
 
-KubeVela is fully programmable. Its deployment workflow steps and even full feature set are all LEGO-sytle CUE modules and can be added/removed/re-programmed in-place when your needs change. Comparing to this mechanism, traditional PaaS systems are highly restricted, i.e. they have to enforce constraints in the type of supported applications and capabilities, and as application needs grows, you always outgrow the capabilities of the PaaS system - this will never happen in KubeVela platform.
+KubeVela is fully programmable. All of its deployment workflow and component feature set are LEGO-style CUE modules and can be extended or removed in-place when your needs change. Comparatively, traditional PaaS systems are highly restricted, i.e. they have to enforce constraints in the supported types of applications and capabilities -- That means as the platform grows, you always outgrow the capabilities of the PaaS system. Growing and extending is so much easier to do in the KubeVela platform.
 
 ### KubeVela vs. Serverless  
 
