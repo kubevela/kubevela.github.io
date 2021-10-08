@@ -7,7 +7,7 @@ title:  自定义运维特征
 
 ### 开始之前
 
-请先阅读和理解 [运维特征定义](../oam/x-definition.md#运维特征定义（traitdefinition）)
+请先阅读和理解 [运维特征定义](../oam/x-definition#运维特征定义（TraitDefinition）)
 
 ### 如何使用
 

@@ -2,7 +2,7 @@
 title:  自定义组件入门
 ---
 
-> 在阅读本部分之前，请确保你已经了解 KubeVela 中 [组件定义（ComponentDefinition](../oam/x-definition.md##组件定义（ComponentDefinition）) 的概念且学习掌握了 [CUE 的基本知识](../cue/basic)
+> 在阅读本部分之前，请确保你已经了解 KubeVela 中 [组件定义（ComponentDefinition](../oam/x-definition#组件定义（ComponentDefinition）) 的概念且学习掌握了 [CUE 的基本知识](../cue/basic)
 
 本节将以组件定义的例子展开说明，介绍如何使用 [CUE](https://cuelang.org/) 通过组件定义 `ComponentDefinition` 来自定义应用部署计划的组件。
 

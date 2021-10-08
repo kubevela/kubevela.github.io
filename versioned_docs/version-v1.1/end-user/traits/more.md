@@ -4,7 +4,7 @@ title:  Needs More?
 
 ## 1. Get from capability registry
 
-You can get more from official capability registry by using KubeVela [plugin](../../developers/references/kubectl-plugin#install-kubectl-vela-plugin)。
+You can get more from official capability registry by using KubeVela [plugin](../../kubectlplugin)。
 
 ### List
 

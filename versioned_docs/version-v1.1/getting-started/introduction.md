@@ -70,6 +70,6 @@ Welcome onboard and sail Vela!
 Here are some recommended next steps:
 
 - Start to [install KubeVela](./install).
-- Learn KubeVela's [core concepts](core-concepts/application).
-- Learn KubeVela's [architecture](core-concepts/architecture).
+- Learn KubeVela's [core concepts](./core-concepts/application).
+- Learn KubeVela's [architecture](./core-concepts/architecture).
 
