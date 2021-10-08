@@ -22,11 +22,11 @@ KubeVela as an declarative application delivery control plane can be naturally u
 
 In this section, we will introduce steps of using KubeVela directly in GitOps approach.
 
-There are two modes of delivery, which we will introduce separately:
+This article will separate into two perspectives:
 
-1. For platform administrators/SREs, users can update the KubeVela configuration file in the repository directly, and the application in the cluster will be updated by KubeVela automatically.
+1. For platform administrators/SREs, they can update the config in Git repo. It will trigger automated re-deployment.
 
-2. For developers, users can update the code in the application code repository, and KubeVela will update the application in the cluster with the latest image automatically.
+2. For developers, they can update the app source code and then push it to Git. It will trigger building latest image and re-deployment.
 
 > Note: you can also use it with existing tools such as ArgoCD with similar steps, detailed guides will be added in following releases.
 
@@ -34,7 +34,7 @@ There are two modes of delivery, which we will introduce separately:
 
 ![alt](../resources/ops-flow.jpg)
 
-For platform administrators/SREs, they only need to prepare a KubeVela Git configuration repository and apply the KubeVela files. Then they can update the config in the Git configuration repository directly, KubeVela will watch the configuration repository and update the cluster, making every configuration change traceable.
+Platform administrators/SREs prepares the Git repo for operational config. Every config config change will be traceable by that. KubeVela will watch the repo and apply changes to the clusters.
 
 ## Setup Config Repository
 
@@ -42,10 +42,9 @@ For platform administrators/SREs, they only need to prepare a KubeVela Git confi
 
 The structure of the config repository looks below:
 
-* The `clusters/` contains the KubeVela config in cluster. Users need to apply the files in this directory to cluster manually, KubeVela will then watch the repository and update the cluster.
-* The `apps/` contains the configuration of the applicatiThe files will be watched by `app.yaml` in `clusters/`.on. 
-* The `infrastructure/` contains some infrastructure tools, such as MySQL database. The files will be watched by `infra.yaml` in `clusters/`.
-
+* The `clusters/` contains the GitOps config. It will command KubeVela to watch the specified repo and apply latest changes.
+* The `apps/` contains the Application yaml for deploying the user-facing app.
+* The `infrastructure/` contains infrastructure tools, i.e. MySQL database.
 
 ```shell
 ├── apps
@@ -61,10 +60,11 @@ The structure of the config repository looks below:
 
 #### Directory `clusters/`
 
-`apps.yaml` is almost the same as `infra.yaml` in `clusters/`, the only difference is the watched directory.
+`apps.yaml` and `infra.yaml` in `clusters/` are similar. Their difference is to watch different directories.
 
-Apply the files in `clusters/` manually, they can pull and sync the files in `infrastructure/` and `apps/` automatically.
+Apply the files in `clusters/` manually. They will sync the files in `infrastructure/` and `apps/` dir of the Git repo.
 
+Below is how the infra.yaml looks like:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -125,7 +125,7 @@ spec:
 
 #### Directory `infrastructure/`
 
-The `infrastructure/` contains the config of some infrastructures like database.In this case, we use [mysql controller](https://github.com/bitpoke/mysql-operator) to deploy a MySQL cluster.
+The `infrastructure/` contains the config of some infrastructures like database. In the following, we will use [MySQL operator](https://github.com/bitpoke/mysql-operator) to deploy a MySQL cluster.
 
 > Notice that there must be a secret in your cluster with MySQL password specified in key `ROOT_PASSWORD`.
 
@@ -244,7 +244,7 @@ The host of the Ingress has been updated successfully!
 
 ![alt](../resources/dev-flow.jpg)
 
-For developers, they need to prepare an application code repository in addition to the KubeVela configuration repository. After the user updates the code in the application repository, a CI needs to be configured to automatically build the image and push it to the image registry. KubeVela listens for the latest images in the registry, automatically updates the image configuration in the repository, and finally updates the application configuration in the cluster.
+Developers writes the application source code and push it to a Git repo (aka app repo). Once app repo updates, the CI will build the image and push it to the image registry. KubeVela watches the image registry, and updates the image in config repo. Finally, it will apply the config to the cluster.
 
 User can update the configuration in the cluster automatically when the code is updated.
 
@@ -401,8 +401,8 @@ The `Version` has been updated successfully! Now we're done with everything from
 
 ## Summary
 
-For platform admin/SRE, to update the configuration of the infrastructure (such as database) or other fields of the application, the only thing you need to do is to modify the files in the configuration repository. KubeVela will automatically synchronize the configuration to the cluster, thus simplifying the deployment process.
+For platform admins/SREs, they update the config repo to operate the application and infrastructure. KubeVela will synchronize the config to the cluster, simplifying the deployment process.
 
-For end user developers, KubeVela automatically updates the image in the configuration repository after the user modifies the code in the repository, make it easier for developers to deploy and update their apps.
+For end users/developers, they write the source code, push it to Git, and then re-deployment will happen. It will make CI to build the image. KubeVela will then update the image field and apply the deployment config.
 
 By integrating with GitOps, KubeVela helps users speed up deployment and simplify continuous deployment.
