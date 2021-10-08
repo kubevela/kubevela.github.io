@@ -17,7 +17,7 @@ Today the application teams are eager to find a platform that can simplify the a
 
 KubeVela is a modern application platform that makes it easier and faster to deliver and manage applications across hybrid, multi-cloud environments. At the mean time, it is highly extensible and programmable, which can adapt to your needs as they grow. 
 
-![](../resources/system-arch.png)
+![](../resources/what-is-kubevela.png)
 
 
 ## Who should use KubeVela?
@@ -37,7 +37,7 @@ The typical examples are Heroku and Cloud Foundry. They provide full application
 
 Though the biggest difference lies in **flexibility**.
 
-KubeVela does not introduce any restriction. As a plus, even its deployment workflow and full feature set are implemented as LEGO-sytle CUE modules and can be extended at any time when your needs grow. Comparing to this mechanism, traditional PaaS systems are highly restricted, i.e. they have to enforce constraints in the type of supported applications and capabilities, and as application needs grows, you always outgrow the capabilities of the PaaS system - this will never happen in KubeVela platform.
+KubeVela is fully programmable. Its deployment workflow steps and even full feature set are all LEGO-sytle CUE modules and can be added/removed/re-programmed in-place when your needs change. Comparing to this mechanism, traditional PaaS systems are highly restricted, i.e. they have to enforce constraints in the type of supported applications and capabilities, and as application needs grows, you always outgrow the capabilities of the PaaS system - this will never happen in KubeVela platform.
 
 ### KubeVela vs. Serverless  
 
