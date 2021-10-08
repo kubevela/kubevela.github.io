@@ -36,13 +36,14 @@ KubeVela 作为一个声明式的应用交付控制平面，天然就可以以 G
 
 ### 准备配置仓库
 
-具体的配置可参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo)。
+> 具体的配置可参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo)。
 
 配置仓库的目录结构如下:
 
-* `apps/` 目录中包含应用的配置。
-* `infrastructure/` 中包含一些基础架构工具，如 MySQL 数据库。
-* `clusters/` 中包含集群中的 KubeVela 配置，我们将 app 与 infra 的配置分开，以更好地进行配置。只需要将 `clusters/` 中的文件部署到集群中，KubeVela 便能自动监听配置仓库中的文件变动且自动更新集群中的配置。
+* `clusters/` 中包含集群中的 KubeVela 配置，用户需要将 `clusters/` 中的文件手动部署到集群中后，KubeVela 便能自动监听配置仓库中的文件变动且自动更新集群中的配置。
+* `apps/` 目录中包含应用的配置。会被 `clusters/` 中的 `apps.yaml` 自动监听变化。
+* `infrastructure/` 中包含一些基础架构工具，如 MySQL 数据库。会被 `clusters/` 中的 ` infra.yaml` 自动监听变化。
+
 
 ```shell
 ├── apps
@@ -54,11 +55,42 @@ KubeVela 作为一个声明式的应用交付控制平面，天然就可以以 G
     └── mysql.yaml
 ```
 
-> KubeVela 建议使用如上的目录结构管理你的 GitOps 仓库。`clusters/` 中存放相关的 KubeVela 配置，`apps/` 和 `infrastructure/` 中分别存放你的应用和基础配置。应用相关的配置可以通过运维特征绑定在应用上，通过把应用和基础配置分开，能够更为合理的管理你的部署环境，隔离应用的变动影响。
+> KubeVela 建议使用如上的目录结构管理你的 GitOps 仓库。`clusters/` 中存放相关的 KubeVela 配置并需要被手动部署到集群中，`apps/` 和 `infrastructure/` 中分别存放你的应用和基础配置。应用相关的配置可以通过运维特征绑定在应用上，通过把应用和基础配置分开，能够更为合理的管理你的部署环境，隔离应用的变动影响。
+
+#### `clusters/` 目录
+
+首先，我们来看下 clusters 目录。
+
+`apps.yaml` 与 `infra.yaml` 几乎保持一致，只不过监听的文件目录有所区别。
+将两个文件手动部署到集群中后，KubeVela 将自动监听 `infrastructure/` 以及 `apps/` 目录下的配置文件并定期更新同步。
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: infra
+spec:
+  components:
+  - name: database-config
+    type: kustomize
+    properties:
+      repoType: git
+      # 将此处替换成你需要监听的 git 配置仓库地址
+      url: https://github.com/FogDong/KubeVela-GitOps-Infra-Demo
+      # 如果是私有仓库，还需要关联 git secret
+      # secretRef: git-secret
+      # 自动拉取配置的时间间隔，由于基础设施的变动性较小，此处设置为十分钟
+      pullInterval: 10m
+      git:
+        # 监听变动的分支
+        branch: main
+      # 监听变动的路径，指向仓库中 infrastructure 目录下的文件
+      path: ./infrastructure
+```
 
 #### `apps/` 目录
 
-我们首先来看 apps 目录中的应用配置文件，这是一个配置了数据库信息以及 Ingress 的简单应用。 该应用将连接到一个 MySQL 数据库，并简单地启动服务。在默认的服务路径下，会显示当前版本号。在 `/db` 路径下，会列出当前数据库中的信息。
+`apps/` 目录中存放着应用配置文件，这是一个配置了数据库信息以及 Ingress 的简单应用。 该应用将连接到一个 MySQL 数据库，并简单地启动服务。在默认的服务路径下，会显示当前版本号。在 `/db` 路径下，会列出当前数据库中的信息。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -91,7 +123,7 @@ spec:
 
 #### `infrastructure/` 目录
 
-接着，来看下 infrastructure 目录下，我们使用 [mysql controller](https://github.com/bitpoke/mysql-operator) 来部署了一个 MySQL 集群。
+`infrastructure/` 目录下存放一些基础设施的配置。此处我们使用 [mysql controller](https://github.com/bitpoke/mysql-operator) 来部署了一个 MySQL 集群。
 
 > 注意，请确保你的集群中有一个 secret，并通过 `ROOT_PASSWORD` 声明了 MySQL 密码。
 
@@ -134,37 +166,13 @@ spec:
           component: mysql-cluster
 ```
 
-#### `clusters/` 目录
+#### 部署 `clusters/` 目录下的文件
 
-最后，我们来看下 clusters 目录。只需要将这些配置文件部署到集群中，就能够自动拉取 `infrastructure/` 以及 `apps/` 目录下的配置文件并定期更新同步。
+在集群中部署 `infra.yaml`，可以看到它自动在集群中拉起了 `infrastructure` 目录下的 MySQL 部署文件：
 
-首先，来看下基础设施的配置文件，该配置会监听仓库中 `infrastructure/` 下的基础设施文件变动。
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: infra
-spec:
-  components:
-  - name: database-config
-    type: kustomize
-    properties:
-      repoType: git
-      # 将此处替换成你需要监听的 git 配置仓库地址
-      url: https://github.com/FogDong/KubeVela-GitOps-Infra-Demo
-      # 如果是私有仓库，还需要关联 git secret
-      # secretRef: git-secret
-      # 自动拉取配置的时间间隔，由于基础设施的变动性较小，此处设置为十分钟
-      pullInterval: 10m
-      git:
-        # 监听变动的分支
-        branch: main
-      # 监听变动的路径，指向仓库中 infrastructure 目录下的文件
-      path: ./infrastructure
+```shell
+kubectl apply -f clusters/infra.yaml
 ```
-
-将该文件部署到集群中，可以看到它自动在集群中拉起了 `infrastructure` 目录下的 MySQL 部署文件：
 
 ```shell
 $ vela ls
@@ -175,33 +183,11 @@ mysql 	mysql-controller	helm      	       	running	healthy	      	2021-09-26 20:
 └─  	mysql-cluster   	raw       	       	running	healthy	      	2021-09-26 20:48:11 +0800 CST
 ```
 
-接着来看应用的配置文件，该配置会监听仓库中 `apps` 下的应用文件变动以及镜像仓库中的镜像更新：
+在集群中部署 `apps.yaml`，可以看到它自动拉起了 `apps/staging` 目录下的应用部署文件：
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: apps
-spec:
-  components:
-  - name: apps
-    type: kustomize
-    properties:
-      repoType: git
-      # 将此处替换成你需要监听的 git 配置仓库地址
-      url: https://github.com/FogDong/KubeVela-GitOps-Infra-Demo
-      # 如果是私有仓库，还需要关联 git secret
-      # secretRef: git-secret
-      # 自动拉取配置的时间间隔，此处设置为一分钟
-      pullInterval: 1m
-      git:
-        # 监听变动的分支
-        branch: main
-      # 监听变动的路径，指向仓库中 apps 目录下的文件
-      path: ./apps
+```shell
+kubectl apply -f clusters/apps.yaml
 ```
-
-将该文件部署到集群中，可以看到它自动拉起了 `apps/staging` 目录下的应用部署文件：
 
 ```shell
 APP   	COMPONENT       	TYPE      	TRAITS 	PHASE  	HEALTHY	STATUS	CREATED-TIME
@@ -311,7 +297,7 @@ stringData:
 
 配置仓库与之前的配置大同小异，只需要加上与镜像仓库相关的配置即可。具体配置请参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo)。
 
-修改 `apps` 中的 image 字段，在后面加上 `# {"$imagepolicy": "default:apps"}` 的注释。KubeVela 会通过该注释去修改对应的镜像字段。`default:apps` 是该应用配置文件对应的命名空间和应用名。
+修改 `my-app` 中的 image 字段，在后面加上 `# {"$imagepolicy": "default:apps"}` 的注释。KubeVela 会通过该注释去修改对应的镜像字段。`default:apps` 是该应用配置文件对应的命名空间和应用名。
 
 ```yaml
 spec:
