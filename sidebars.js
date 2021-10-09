@@ -181,7 +181,6 @@ module.exports = {
             'cli/vela_cap',
           ],
         },
-        'developers/references/kubectl-plugin'
       ],
     },
     {
