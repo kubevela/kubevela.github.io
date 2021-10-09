@@ -157,10 +157,6 @@
             },
             {
               "type": "doc",
-              "id": "version-v1.1/end-user/traits/kustomize-patch"
-            },
-            {
-              "type": "doc",
               "id": "version-v1.1/end-user/traits/annotations-and-labels"
             },
             {
@@ -170,6 +166,10 @@
             {
               "type": "doc",
               "id": "version-v1.1/end-user/traits/sidecar"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.1/end-user/traits/kustomize-patch"
             },
             {
               "type": "doc",

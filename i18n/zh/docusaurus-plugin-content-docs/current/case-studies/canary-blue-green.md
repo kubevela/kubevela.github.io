@@ -16,10 +16,12 @@ KubeVela 后的应用交付模型（OAM）是一个从设计与实现上都高�
 
 ## 准备工作
 
-开启 Istio 集群插件
+如果你的集群尚未安装 Istio，你可以通过以下命令，开启 Istio 集群插件
 ```shell
 vela addon enable istio
 ```
+
+如果你的集群已经已经安装 Istio，你只需 apply [该目录](https://github.com/oam-dev/kubevela/tree/master/vela-templates/addons/istio/definitions) 下的四个 YAML 文件来达到和上面开启集群插件一样的效果
 
 因为后面的例子运行在 default namespace，需要为 default namespace 打上 Istio 自动注入 sidecar 的标签。
 
@@ -175,7 +177,7 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/
 如果在人工校验时，发现服务符合预期，需要继续执行工作流，完成全量发布。你可以通过执行下面的命令完成这一操作。
 
 ```shell
-vela workflow reumse book-info
+vela workflow resume book-info
 ```
 
 在浏览器上继续多次访问网页，会发现五角星将一直是红色的。
