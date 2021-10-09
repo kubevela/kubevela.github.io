@@ -58,4 +58,4 @@ jobs:
       - name: Configure Alibaba Cloud OSSUTIL
         run: ./ossutil --config-file .ossutilconfig config -i ${{ secrets.ACCESS_KEY_ID }} -k ${{ secrets.ACCESS_KEY_SECRET }} -e oss-us-west-1.aliyuncs.com -c .ossutilconfig
       - name: Deply To OSS
-        run: ossutil --config-file .ossutilconfig sync -f build oss://kubevela-io
+        run: ./ossutil --config-file .ossutilconfig sync -f build oss://kubevela-io
