@@ -22,6 +22,7 @@ className="unique-tabs"
 defaultValue="kind"
 values={[
 {label: 'Kind', value: 'kind'},
+{label: 'RKE', value: 'rke'},
 {label: 'Minikube', value: 'minikube'},
 {label: 'Cloud Provider', value: 'cloudprovider'},
 ]}>
@@ -41,6 +42,38 @@ minikube addons enable ingress
 ``` 
 
 </details>
+</TabItem>
+
+<TabItem value="rke">
+
+  <b>（1）安装 Docker (可选):</b>
+
+  RKE 的安装依赖于 Docker, 如未安装，请参考 [Docker 安装指南](https://docs.docker.com/engine/install/).
+
+  <b>（2）安装 RKE 命令行:</b>
+
+
+  下载 RKE 二进制文件， [前往RKE Release页面](https://github.com/rancher/rke/releases).
+  
+  如果你的网络受限无法下载（特别是中国用户），可直接使用下述方式安装:
+```
+wget https://static.kubevela.net/binary/rke/rke_linux-amd64 -O /usr/bin/rke
+chmod +x /usr/bin/rke
+```
+
+  <b>（3）安装 Kubernetes 集群:</b>
+
+```shell script
+  mkdir ~/rkeinit && cd ~/rkeinit
+  # 引导式配置，可参考 [RKE集群配置说明文档](https://rancher.com/docs/rke/latest/en/example-yamls/)。
+  rke config
+  # 安装集群
+  rke up
+  # 安装 Kubectl 命令行工具
+  mkdir ~/.kube
+  cp kube_config_cluster.yml ~/.kube/config
+  docker cp kubelet:/usr/local/bin/kubectl /usr/local/bin/kubectl
+```
 </TabItem>
 
 <TabItem value="kind">
@@ -93,6 +126,16 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 
 
 ## 2. 安装 KubeVela
+
+在安装之前，请确保 helm 工具是可用的，如未安装，请参考 [安装说明](https://helm.sh/docs/intro/install/) 安装完成。
+
+如果你的网络受限无法下载（特别是中国用户），可直接使用下述方式安装:
+
+```shell script
+wget https://static.kubevela.net/binary/helm/helm-v3.7.0-linux-amd64 -O /usr/bin/helm
+chmod +x /usr/bin/helm
+```
+> 该安装方式仅适用于 linux-amd64
 
 1. 添加并更新 KubeVela helm chart 仓库
   ```shell script
@@ -213,7 +256,7 @@ KubeVela 支持一系列[开箱即用的插件](./platform-engineers/advanced-in
 
 * Terraform Provider 插件
 
-  执行如下命令开启 Terraform 对阿里云的支持，可以[创建和消费云资源](./end-user/components/cloud-services/provider-and-consume-cloud-services)： 
+  执行如下命令开启 Terraform 对阿里云的支持，可以[创建和消费云资源](./end-user/components/cloud-services/provider-and-consume-cloud-services)：
 
   其中，请参考[如何获取 Access Key](https://help.aliyun.com/knowledge_detail/38738.html)设置 Access Key，参考 [Region 列表](https://www.alibabacloud.com/help/doc-detail/72379.htm) 中的 `RegionId` 设置 `ALICLOUD_REGION`。
 
