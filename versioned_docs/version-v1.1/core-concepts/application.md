@@ -100,8 +100,6 @@ alibaba-oss 	vela-system	configurations.terraform.core.oam.dev	Terraform configu
 alibaba-rds 	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud RDS object
 ```
 
-
-
 ## Traits
 
 Traits are operational behaviors that you can attach to component. KubeVela also has built-in traits installed, search them by using [KubeVela CLI](../install#3-get-kubevela-cli):
@@ -128,7 +126,7 @@ Policy enforces deployment process of the application, such as quality gates, se
 
 ## Workflow
 
-Workflow allows you to assemble components, operation and task steps into a DAG, and it is process-oriented. Typical workflow steps includes pause, manual verification, waiting state, data flow transmission, multi-environment grayscale, and A/B testing, etc.
+Workflow allows you to assemble components, operation and task steps into a DAG, and it is process-oriented. Typical workflow steps includes pause, manual verification, waiting state, data flow transmission, multi-environment rollout, and A/B testing, etc.
 
 Each workflow step is a independent capability entity that is fully plugable, KubeVela allows you to create your own step through CUE.
 

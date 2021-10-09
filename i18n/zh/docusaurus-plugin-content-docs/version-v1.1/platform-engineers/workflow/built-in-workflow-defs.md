@@ -1,20 +1,20 @@
 ---
-title: Built-in Steps
+title: 附录：内置工作流步骤
 ---
 
-KubeVela provides some built-in workflow step definitions for better experience.
+为了便于用户使用，KubeVela 提供了一些内置的工作流步骤。
 
 ## apply-application
 
-### Overview
+### 简介
 
-Apply all components and traits in Application.
+部署当前 Application 中的所有组件和运维特征。
 
-### Parameter
+### 参数
 
-No arguments, used for custom steps before or after application applied.
+无需指定参数，主要用于应用部署前后增加自定义步骤。
 
-### Example
+### 示例
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -43,18 +43,18 @@ spec:
 
 ## depends-on-app
 
-### Overview
+### 简介
 
-Wait for the specified Application to complete.
+等待指定的 Application 完成。
 
-### Parameter
+### 参数
 
-|   Name    |  Type  |           Description            |
-| :-------: | :----: | :------------------------------: |
-|   name    | string |   The name of the Application    |
-| namespace | string | The namespace of the Application |
+|  参数名   |  类型  |                 说明                  |
+| :-------: | :----: | :-----------------------------------: |
+|   name    | string |      需要等待的 Application 名称      |
+| namespace | string | 需要等待的 Application 所在的命名空间 |
 
-### Example
+### 示例
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -86,18 +86,18 @@ spec:
 
 ## deploy2env
 
-### Overview
+### 简介
 
-Apply Application in different policies and envs.
+将 Application 在不同的环境和策略中部署。
 
-### Parameter
+### 参数
 
-|  Name  |  Type  |      Description       |
-| :----: | :----: | :--------------------: |
-| policy | string | The name of the policy |
-|  env   | string |  The name of the env   |
+| 参数名 |  类型  |       说明       |
+| :----: | :----: | :--------------: |
+| policy | string | 需要关联的策略名 |
+|  env   | string | 需要关联的环境名 |
 
-### Example
+### 示例
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -158,22 +158,22 @@ spec:
 
 ## webhook-notification
 
-### Overview
+### 简介
 
-Send messages to the webhook address.
+向指定的 Webhook 发送信息。
 
-### Parameters
+### 参数
 
-|       Name       |  Type  | Description                                                                                                                                                                 |
-| :--------------: | :----: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|      slack       | Object | Optional, please fulfill its url and message if you want to send Slack messages                                                                                             |
-|    slack.url     | String | Required, the webhook address of Slack                                                                                                                                      |
-|  slack.message   | Object | Required, the Slack messages you want to send, please follow [Slack messaging](https://api.slack.com/reference/messaging/payload)                                           |
-|     dingding     | Object | Optional, please fulfill its url and message if you want to send DingTalk messages                                                                                          |
-|   dingding.url   | String | Required, the webhook address of DingTalk                                                                                                                                   |
-| dingding.message | Object | Required, the DingTalk messages you want to send, please follow [DingTalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |  |
+|      参数名      |  类型  | 说明                                                                                                                                     |
+| :--------------: | :----: | :--------------------------------------------------------------------------------------------------------------------------------------- |
+|      slack       | Object | 可选值，如果需要发送 Slack 信息，则需填写其 url 及 message                                                                               |
+|    slack.url     | String | 必填值，Slack 的 Webhook 地址                                                                                                            |
+|  slack.message   | Object | 必填值，需要发送的 Slack 信息，请符合 [Slack 信息规范](https://api.slack.com/reference/messaging/payload)                                |
+|     dingding     | Object | 可选值，如果需要发送钉钉信息，则需填写其 url 及 message                                                                                  |
+|   dingding.url   | String | 必填值，钉钉的 Webhook 地址                                                                                                              |
+| dingding.message | Object | 必填值，需要发送的钉钉信息，请符合 [钉钉信息规范](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |
 
-### Example
+### 示例
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -200,39 +200,39 @@ spec:
         type: webhook-notification
         properties:
           dingding:
-            # the DingTalk webhook address, please refer to: https://developers.dingtalk.com/document/robots/custom-robot-access
+            # 钉钉 Webhook 地址，请查看：https://developers.dingtalk.com/document/robots/custom-robot-access
             url: xxx
             message:
               msgtype: text
               text:
-                context: Workflow starting...
+                context: 开始运行工作流
       - name: application
         type: apply-application
       - name: slack-message
         type: webhook-notification
         properties:
           slack:
-            # the Slack webhook address, please refer to: https://api.slack.com/messaging/webhooks
+            # Slack Webhook 地址，请查看：https://api.slack.com/messaging/webhooks
             url: xxx
             message:
-              text: Workflow ended.
+              text: 工作流运行完成
 ```
 
 ## suspend
 
-### Overview
+### 简介
 
-Suspend the current workflow, we can use `vela workflow resume appname` to resume the suspended workflow.
+暂停当前工作流，可以通过 `vela workflow resume appname` 继续已暂停的工作流。
 
-> For more information of `vela workflow`, please refer to [vela cli](../../cli/vela_workflow)。
+> 有关于 `vela workflow` 命令的介绍，可以详见 [vela cli](../../cli/vela_workflow)。
 
-### Parameter
+### 参数
 
-| Name  | Type  | Description |
-| :---: | :---: | :---------: |
-|   -   |   -   |      -      |
+| 参数名 | 类型  | 说明  |
+| :----: | :---: | :---: |
+|   -    |   -   |   -   |
 
-### Example
+### 示例
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -259,12 +259,12 @@ spec:
         type: webhook-notification
         properties:
           slack:
-            # the Slack webhook address, please refer to: https://api.slack.com/messaging/webhooks
+            # Slack Webhook 地址，请查看：https://api.slack.com/messaging/webhooks
+            url: xxx
             message:
-              text: Ready to apply the application, ask the administrator to approve and resume the workflow.
+              text: 准备开始部署应用，请管理员审批并继续工作流
       - name: manual-approval
         type: suspend
       - name: express-server
         type: apply-application
 ```
-No newline at end of file
