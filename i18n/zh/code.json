@@ -197,71 +197,41 @@
   "What is KubeVela?": {
     "message": "KubeVela 是什么？"
   },
-  "KubeVela introduces the": {
-    "message": "KubeVela 引入了"
-  },
-  "as the main API to capture a full deployment of microservices, and builds features around the application needs only. Progressive rollout and multi-cluster deployment are provided out-of-box. No infrastructure level concerns, simply deploy.": {
-    "message": "作为主要的 API，以声明全部的微服务，并只围绕应用程序的需求建立功能。开箱即用的灰度发布和多集群部署功能。无需关心基础设施层面的问题，只要部署即可。"
-  },
-  "and/or": {
-    "message": "和/或"
-  },
   "Application Centric": {
     "message": "完全以应用为中心"
   },
-  "Leveraging Open Application Model (OAM), KubeVela introduces consistent yet higher level API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy.": {
-    "message": "Leveraging Open Application Model (OAM), KubeVela introduces consistent yet higher level API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy."
-  },
-  "KubeVela introduces Open Application Model (OAM) as the consistent yet higher level API to capture a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy.": {
-    "message": "KubeVela 基于开放应用模型 (OAM) 提供了抽象且对于不同基础设施一致的 API，从而使得微服务模式下的异构组件可以在混合环境中部署和编排。分发策略、流量控制和滚动更新均可以在应用程序中声明式的描述。无需担心基础架构细节，只需部署即可。"
-  },
-  "Natively Extensible": {
-    "message": "Natively Extensible"
-  },
-  "KubeVela uses": {
-    "message": "KubeVela uses"
-  },
-  "to glue capabilities (e.g. workload types, operational behaviors, and cloud services) provided by runtime infrastructure and expose them to users via self-service API. When users' needs grow, these API can naturally expand in programmable approach. No restriction, fully flexible.": {
-    "message": "to glue capabilities (e.g. workload types, operational behaviors, and cloud services) provided by runtime infrastructure and expose them to users via self-service API. When users' needs grow, these API can naturally expand in programmable approach. No restriction, fully flexible."
-  },
-  "Runtime Agnostic": {
-    "message": "基础设施无关"
+  "KubeVela introduces Open Application Model (OAM) as the consistent yet higher level API to capture and render a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy.": {
+    "message": "KubeVela 以开放应用模型（OAM）作为应用交付的顶层抽象，并通过声明式的交付工作流来捕获面向混合环境的微服务应用交付的整个过程，甚至连多集群分发策略、流量调配和滚动更新等运维特征，也都声明在应用级别。用户无需关心任何基础设施细节，只需要专注于定义和部署应用即可。"
   },
   "Programmable Workflow": {
     "message": "可编程式交付工作流"
   },
-  "KubeVela leverages ": {
-    "message": "KubeVela 利用"
+  "KubeVela models application delivery as DAG (Directed Acyclic Graph) and expresses it with CUE - a modern data configuration language. This allows you to design application deployment steps per needs and orchestrate them in programmable approach. No restrictions, natively extensible.": {
+    "message": "KubeVela 会将应用交付流程建模为有向无环图（DAG），并将它通过 CUE（一种源自 Google Borg 系统的数据配置语言）来进行表达和实现。这使得你可以自由的根据自己的需求来设计交付工作流中的每一个步骤，并通过可编程的方式将它们编排起来。没有任何限制，原生高可扩展"
   },
-  " CUE": {
-    "message": "CUE"
+  "Infrastructure Agnostic": {
+    "message": "基础设施无关"
   },
-  "to implement its model layer. This allows you to define an application deployment workflow as DAG, with all steps and application's needs glued together in programmable approach. No restrictions, natively extensible.": {
-    "message": "来实现其模型层。这允许您将应用程序部署工作流定义为 DAG，将所有步骤和应用程序需求以可编程方式粘合在一起。没有限制，原生可扩展。"
-  },
-  "KubeVela is built with Kubernetes as control plane but adaptable to any runtime as data-plane. It can deploy (and manage) diverse workload types such as container, cloud functions, databases, or even EC2 instances across hybrid environments. Also, this means KubeVela seamlessly works with any Kubernetes compatible CI/CD or GitOps tools via declarative API.": {
-    "message": "KubeVela 作为控制平面可以适应任何运行时。它可以跨混合环境部署和管理不同的工作负载类型，例如容器、云资源、数据库，甚至 EC2 实例。KubeVela 通过声明式 API 同任何与 Kubernetes 兼容的 CI/CD 或 GitOps 工具无缝协作。"
-  },
-  "KubeVela works as an application delivery control plane that is fully runtime agnostic. It can deploy and operate any application components including containers, cloud functions, databases, or even EC2 instances across hybrid environments, following the workflow you defined.": {
-    "message": "KubeVela 作为一个控制平面，在应用程序交付过程中完全与运行时无关。它可以按照您定义的工作流，在混合环境中部署和操作任何应用程序组件，包括容器、云功能、数据库甚至 EC2 实例。"
+  "KubeVela works as an application delivery control plane that is fully decoupled from runtime infrastructure. It can deploy any workload types including containers, cloud services, databases, or even VM instances to any cloud or Kubernetes cluster, following the workflow designed by you.": {
+    "message": "KubeVela 本质上是一个与运行时基础设施无关的应用交付与管理控制平面。所以它可以按照你定义的工作流与策略，面向任何环境交付和管理任何应用组件，比如：容器、云函数、数据库，甚至网络和虚拟机实例等等。"
   }, 
   "KubeVela is a": {
-    "message": "KubeVela 是"
+    "message": "KubeVela 是一个"
   },
   "sandbox project": {
-    "message": "sandbox 项目"
+    "message": "沙箱级项目"
   },
-  "KubeVela is a modern application platform that makes deploying and managing applications across today's hybrid, multi-cloud environments": {
-    "message": "KubeVela 是一个现代应用程序平台，适用于在当今的混合多云环境中部署和管理应用程序。"
+  "KubeVela is a modern application delivery platform that makes deploying and operating applications across today's hybrid, multi-cloud environments": {
+    "message": "KubeVela 是一个现代化的应用交付平台，它可以让你的应用交付与管理在当今流行的混合、多云环境中变得更加"
   },
-  "easier and faster.": {
-    "message": "更简单且轻松。"
+  " easier, faster and more reliable.": {
+    "message": "简单、轻松、可靠。"
   },
-  "KubeVela is runtime agnostic, natively extensible, yet most importantly,": {
-    "message": "KubeVela 不锁定运行时，原生可扩展。最重要的是，"
+  "KubeVela is infrastructure agnostic, programmable, yet most importantly,": {
+    "message": "KubeVela 是基础设施无关的、可编程的，但最重要的是："
   },
   "application-centric.": {
-    "message": "以应用为中心。"
+    "message": "它是完全以应用为中心的。"
   },
   ".": {
     "message": "."
