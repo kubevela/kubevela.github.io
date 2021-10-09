@@ -84,4 +84,4 @@ KubeVela 是一个基于云原生技术栈构建的现代应用交付系统。�
 
 接下来，我们推荐你：
 - 开始[安装使用 KubeVela](./install)
-- 了解[系统架构](core-concepts/architecture)和[核心概念](core-concepts/application)
+- 了解[系统架构](./core-concepts/architecture)和[核心概念](./core-concepts/application)

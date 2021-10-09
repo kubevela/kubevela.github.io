@@ -115,5 +115,4 @@ $ vela show alibaba-eip
 ```
 
 If the tables display, the ComponentDefinition should work. To take a step further, you can verify it by provision an actual EIP instance per
-the doc [Provision cloud resources](../../end-user/components/cloud-services/provider-and-consume-cloud-services#provision-cloud-resources
-).
+the doc [Provision cloud resources](../../end-user/components/cloud-services/provider-and-consume-cloud-services#provision-cloud-resources).
