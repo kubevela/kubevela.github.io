@@ -84,7 +84,7 @@ export default function Home() {
       <div className={clsx('hero', styles.hero)}>
         <div className="container text--center">
           <h3 className="hero__subtitle">
-            <Translate>KubeVela is a</Translate> <a href="https://cncf.io/">Cloud Native Computing Foundation</a> <Translate>sandbox project</Translate>
+            <Translate>KubeVela is a</Translate> <a href="https://cncf.io/">CNCF (Cloud Native Computing Foundation)</a> <Translate>sandbox project</Translate>
           </h3>
           <div className={clsx('cncf-logo', styles.cncfLogo)} />
         </div>
@@ -102,9 +102,8 @@ const WhatIs = () => (
           <p className="hero__subtitle">
             <small>
               <Translate>
-                KubeVela is a modern application platform that makes deploying and managing applications
-                across today's hybrid, multi-cloud environments
-              </Translate> <i> <Translate>easier and faster.</Translate> </i>
+                KubeVela is a modern application delivery platform that makes deploying and operating applications across today's hybrid, multi-cloud environments
+              </Translate><i><Translate> easier, faster and more reliable.</Translate></i>
               <br />
               <br />
               <Translate>

@@ -19,6 +19,7 @@ KubeVela is a modern application platform that makes it easier and faster to del
 
 ![](../resources/what-is-kubevela.png)
 
+
 ## Who should use KubeVela?
 
 - Application developers, operators, DevOps engineers
@@ -30,13 +31,23 @@ KubeVela is a modern application platform that makes it easier and faster to del
 
 ## Comparisons
 
+### KubeVela vs. CI/CD systems
+
+KubeVela is a CD (Continuous Delivery) control plane that works at downstream of your CI process. So you will reuse the CI process you already adopted and KubeVela will take over CD process by empowering it with modern application delivery best practices such as declarative CD workflow, programmable workflow steps, pull model, multi-cloud/cluster delivery, unified cloud resource provision/binding, and much more. 
+
+If you already adopted GitOps practice in CD section, KubeVela is even easier to fit in as it's fully declarative by design. All KubeVela features including CD workflow and multi-cloud/cluster delivery will be immediately available in your GitOps process by simply putting a KubeVela application YAML inside your configuration repository.
+
+> Feel free to check the [Best Practices](https://kubevela.io/docs/case-studies/jenkins-cicd) documentation for more details. 
+
 ### KubeVela vs. Platform-as-a-Service (PaaS) 
 
 The typical examples are Heroku and Cloud Foundry. They provide full application deployment and management capabilities and aim to improve developer experience and efficiency. In this context, KubeVela shares the same goal.
 
 Though the biggest difference lies in **flexibility**.
 
-KubeVela is fully programmable. All of its deployment workflow and component feature set are LEGO-style CUE modules and can be extended or removed in-place when your needs change. Comparatively, traditional PaaS systems are highly restricted, i.e. they have to enforce constraints in the supported types of applications and capabilities -- That means as the platform grows, you always outgrow the capabilities of the PaaS system. Growing and extending is so much easier to do in the KubeVela platform.
+KubeVela is fully programmable. All of its deployment workflow and component feature set are LEGO-style CUE modules and can be extended or removed in-place when your needs change. Comparatively, traditional PaaS systems are highly restricted, i.e. they have to enforce constraints in the supported types of applications and capabilities. When your needs expand, you always outgrow the capabilities of the PaaS system - this will never happen in KubeVela platform.
+
+Also, as a CD control plane, KubeVela is working on top of runtime infrastructures (and we believe this is the right form for next-gen PaaS), while most existing PaaS systems tend to be installed as a plugin inside runtime cluster.
 
 ### KubeVela vs. Serverless  
 

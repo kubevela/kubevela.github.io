@@ -9,11 +9,7 @@ const features = [
       <>
         <p>
           <Translate>
-            KubeVela introduces Open Application Model (OAM) as the consistent 
-            yet higher level API to capture and render a full deployment of microservices 
-            on top of hybrid environments. Placement strategy, traffic shifting 
-            and rolling update are declared at application level. 
-            No infrastructure level concern, simply deploy. 
+            KubeVela introduces Open Application Model (OAM) as the consistent yet higher level API to capture and render a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy. 
           </Translate>
         </p>
       </>
@@ -26,13 +22,7 @@ const features = [
       <>
         <p>
           <Translate>
-           KubeVela models application delivery as DAG (Directed Acyclic Graph) 
-           and expresses it with</Translate> 
-            <a href="https://github.com/cuelang/cue"> CUE</a>, <Translate>
-            a modern data configuration language. This allows you to design 
-            application deployment steps per needs and
-            orchestrate them in programmable approach. No restrictions, 
-            natively extensible.</Translate>
+           KubeVela models application delivery as DAG (Directed Acyclic Graph) and expresses it with CUE - a modern data configuration language. This allows you to design application deployment steps per needs and orchestrate them in programmable approach. No restrictions, natively extensible.</Translate>
         </p>
       </>
     ),
