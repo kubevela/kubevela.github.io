@@ -2,7 +2,7 @@
 title: 自定义环境初始化
 ---
 
-本章节介绍环境的概念以及如何初始化一个环境。
+本案例将介绍环境的概念以及如何初始化一个环境。
 
 ## 什么是环境？
 
@@ -27,48 +27,18 @@ KubeVela 允许你自定义组合不同的资源来初始化环境。
 你可以利用应用部署计划中的 “应用的执行策略（Policy）” 和 “部署工作流（Workflow）” 来流程化、配置化地创建环境。需要注意的是，多个环境初始化
 之间可能会存在依赖关系，一个环境初始化会依赖其他环境初始化提供的能力。我们通过工作流中的 `depends-on-app` 来完成依赖关系的确定。
 
-一个环境初始化应用的整体结构如下：
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: <Application 名称>
-spec:
-  # 我们利用 Application 来部署一个环境需要的资源
-   components:
-   - name: <环境组件名称>
-     type: <环境组件类型>
-     properties:
-       <环境组件参数>
-   policies:
-   - name: <应用策略名称>
-     type: <应用策略类型>
-     properties:
-       <应用策略参数>
-   workflow:
-    - name: <工作流节点名称>
-      # depends-on-app 表示依赖的环境初始化应用
-      type: depends-on-app
-      properties:
-        name: <需要依赖的环境初始化应用名称>
-        namespace: <需要依赖的环境初始化应用命名空间>
-```
-
-### 环境初始化依赖
-
 不同环境初始化存在依赖关系，可以将不同环境初始化的公共资源分离出一个单独的环境初始化作为依赖，这样可以形成可以被复用的初始化模块。
 例如，测试环境和开发环境都依赖了一些相同的控制器，可以将这些控制器提取出来作为单独的环境初始化，在开发环境和测试环境中都指定依赖该环境初始化。
 
 ## 如何使用
 
-### 利用 Helm 组件初始化环境
+### 使用 `depends-on-app` 确定依赖关系
+
+我们利用 Helm 组件，以环境初始化 kruise 为例：
 
 ```shell
 vela addon enable fluxcd
 ```
-
-我们以环境初始化 kruise 为例：
 
 ```shell
 cat <<EOF | kubectl apply -f -
@@ -88,11 +58,16 @@ spec:
       repoType: git
       url: https://github.com/openkruise/kruise
   workflow:
-  - name: init
-    type: depends-on-app
-    properties:
-      name: fluxcd
-      namespace: vela-system
+    steps:
+    - name: check-flux
+      type: depends-on-app
+      properties:
+        name: fluxcd
+        namespace: vela-system
+    - name: apply-kruise
+      type: apply-component
+      properties:
+        component: kruise
 EOF
 ```
 
@@ -101,64 +76,76 @@ EOF
 
 ```shell
 $ vela ls -n vela-system
-
 APP                	COMPONENT     	TYPE      	TRAITS 	PHASE  	HEALTHY	STATUS	CREATED-TIME
-kruise        	    ...           	raw 	    running	        healthy	      	2021-09-24 20:59:06 +0800 CST
-fluxcd        	    ...           	raw 	    running	        healthy	      	2021-09-24 20:59:06 +0800 CST
+kruise        	    ...           	raw 	      running	        healthy	      	2021-09-24 20:59:06 +0800 CST
+fluxcd        	    ...           	raw 	      running	        healthy	      	2021-09-24 20:59:06 +0800 CST
 ```
 
-### 在初始化环境中直接填写 Kubernetes 原生资源
+### 在初始化环境中使用通用配置
 
-KubeVela 为你提供了一个内置的组件定义 `raw`，你可以直接在组件的 `properties` 字段中填写创建到环境中的原生 Kubernetes 资源。
+在环境中，一些通用的 ConfigMap / PVC 等资源是十分常用的。
+
+KubeVela 为你提供了一个内置的工作流步骤 `apply-object`，你可以直接在组件的 `properties` 字段中填写创建到环境中的原生 Kubernetes 资源。
 这种在 Application 中直接填写 Kubernetes 原生资源的方式，可以避免编写多余的组件定义（ComponentDefinition）。
 
-一些通用的 ConfigMap / PVC 等资源，可以通过这种方式直接创建：
+部署如下应用，初始化一个带有 ConfigMap / PVC 的环境。同时，部署的组件中挂载了该 ConfigMap 及 PVC：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: init-cm-and-pvc
+  name: server-with-pvc-and-cm
   namespace: default
 spec:
   components:
-  - name: configmap
-    type: raw
+  - name: express-server
+    type: webservice
     properties:
-      apiVersion: v1
-      data:
-        my.cnf: |-
-          ...
-      kind: ConfigMap
-      metadata:
-        name: mysql
-        namespace: default
-  - name: pvc
-    type: raw
-    properties:
-      apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        name: data-mysql-0
-        namespace: default
-      spec:
-        accessModes:
-        - ReadWriteOnce
-        resources:
-          requests:
-            storage: 8Gi
-        storageClassName: standard
-      ....
+      image: crccheck/hello-world
+      port: 8000
+      volumes:
+        - name: "my-pvc"
+          type: "pvc"
+          mountPath: "/test-pvc"
+          claimName: "my-claim"
+        - name: "my-configmap"
+          type: "configMap"
+          mountPath: "/test-cm"
+          cmName: "my-cm"
+          items:
+            - key: test-key
+              path: test-key
+
+  workflow:
+    steps:
+      - name: apply-pvc
+        type: apply-object
+        properties:
+          apiVersion: v1
+          kind: PersistentVolumeClaim
+          metadata:
+            name: my-claim
+            namespace: default
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 8Gi
+            storageClassName: standard
+      - name: apply-cm
+        type: apply-object
+        properties:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: my-cm
+            namespace: default
+          data:
+            test-key: test-value
+      - name: apply-server
+        type: apply-component
+        properties:
+          component: express-server
 ```
 
-### 更复杂的初始化环境案例
-
-你可以利用应用部署计划中的部署工作流（Workflow）来流程化初始化环境。我们以实践案例 **[多集群部署](../../case-studies/workflow-with-ocm)** 
-中的环境初始化 [managed-cluster](../../case-studies/workflow-with-ocm#初始化多集群调度功能) 为例：
-
-环境初始化 managed-cluster 会为环境创建一个 ACK 集群，并利用 OCM 将新创建的集群注册到管控集群上。
-在 `AppTemplate` 的 `workflow` 字段中描述了环境初始化的流程:
-
-1. 利用 terraform 控制器的能力创建一个 ACK 集群，等待 ACK 创建成功。
-   
-2. 将新创建的 ACK 集群注册到管控集群。
