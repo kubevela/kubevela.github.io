@@ -53,10 +53,9 @@ jobs:
           npm install
           fi
           npm run deploy
-      - uses: manyuanrong/setup-ossutil@v1.0
-        with:
-          endpoint: "oss-us-west-1.aliyuncs.com"
-          access-key-id: ${{ secrets.ACCESS_KEY_ID }}
-          access-key-secret: ${{ secrets.ACCESS_KEY_SECRET }}
+      - name: Install ossutil
+        run: wget http://gosspublic.alicdn.com/ossutil/1.7.0/ossutil64 && chmod +x ossutil64 && mv ossutil64 ossutil
+      - name: Configure Alibaba Cloud OSSUTIL
+        run: ./ossutil --config-file .ossutilconfig config -i ${{ secrets.ACCESS_KEY_ID }} -k ${{ secrets.ACCESS_KEY_SECRET }} -e oss-us-west-1.aliyuncs.com -c .ossutilconfig
       - name: Deply To OSS
         run: ossutil cp build oss://kubevela-io/ -rf
