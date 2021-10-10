@@ -38,7 +38,9 @@ Platform administrators/SREs prepares the Git repo for operational config. Every
 
 ## Setup Config Repository
 
-> The configuration files are from the [Example Repo](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo).
+> The configuration files are from the [Example Repo](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo/for-SREs).
+
+In this example, we will deploy an application and a database, the application uses the database to store data.
 
 The structure of the config repository looks below:
 
@@ -56,7 +58,7 @@ The structure of the config repository looks below:
     └── mysql.yaml
 ```
 
-> KubeVela recommends using the directory structure above to manage your GitOps repository. `clusters/` holds the associated KubeVela configuration that need to be applied to cluster manually, `apps/` holds your application and `infrastructure/` holds your base configuration. Application-related configurations can be bound with traits. By separating applications from basic configurations, you can manage your deployment environment more reasonably and isolate application changes.
+> KubeVela recommends using the directory structure above to manage your GitOps repository. `clusters/` holds the associated KubeVela GitOps configuration that need to be applied to cluster manually, `apps/` holds your application and `infrastructure/` holds your base configuration. By separating applications from basic configurations, you can manage your deployment environment more reasonably and isolate application changes.
 
 #### Directory `clusters/`
 
@@ -92,7 +94,7 @@ spec:
 
 #### Directory `apps/`
 
-The file in `apps` is a simple application with database information and Ingress. The app serves HTTP service and connects to a MySQL database. In the '/' path, it will display the version in the code; in the `/db` path, it will list the data in database.
+The file in `apps/` is a simple application with database information and Ingress. The app serves HTTP service and connects to a MySQL database. In the '/' path, it will display the version in the code; in the `/db` path, it will list the data in database.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -170,7 +172,9 @@ spec:
 
 #### Apply the files in `clusters/`
 
-Apply the `infra.yaml` to cluster, we can see that the MySQL in `infrastructure/` is automatically deployed:
+After storing bellow files in the Git config repo, we need to apply the GitOps config files in `clusters/` manually.
+
+First, apply the `clusters/infra.yaml` to cluster, we can see that the MySQL in `infrastructure/` is automatically deployed:
 
 ```shell
 kubectl apply -f clusters/infra.yaml
@@ -185,7 +189,7 @@ mysql 	mysql-controller	helm      	       	running	healthy	      	2021-09-26 20:
 └─  	mysql-cluster   	raw       	       	running	healthy	      	2021-09-26 20:48:11 +0800 CST
 ```
 
-Apply the `apps.yaml` to cluster, we can see that the application in `apps/` is automatically deployed:
+Apply the `clusters/apps.yaml` to cluster, we can see that the application in `apps/` is automatically deployed:
 
 ```shell
 kubectl apply -f clusters/apps.yaml
@@ -199,6 +203,8 @@ my-app	my-server       	webservice	ingress	running	healthy	      	2021-09-27 16:
 mysql 	mysql-controller	helm      	       	running	healthy	      	2021-09-26 20:48:11 +0800 CST
 └─  	mysql-cluster   	raw       	       	running	healthy	      	2021-09-26 20:48:11 +0800 CST
 ```
+
+By deploying the KubeVela GitOps config files, we now automatically apply the application and database in cluster.
 
 `curl` the Ingress of the app, we can see that the current version is `0.1.5` and the application is connected to the database successfully:
 
@@ -240,6 +246,8 @@ my-server   <none>   kubevela.example.com  <ingress-ip>    80      162m
 
 The host of the Ingress has been updated successfully!
 
+In this way, we can edit the files in the Git repo to update the cluster.
+
 ## For developers
 
 ![alt](../resources/dev-flow.jpg)
@@ -279,7 +287,7 @@ The app serves HTTP service and connects to a MySQL database. In the '/' path, i
 	}
 ```
 
-In this tutorial, we will setup a CI pipeline using GitHub Actions to build the image and push it to a registry. The code and configuration files are from the [Example Repo](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo).
+In this tutorial, we will setup a CI pipeline using GitHub Actions to build the image and push it to a registry. The code and configuration files are from the [Example Repo](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo/for-developers/app-code).
 
 ## Create Git Secret for KubeVela committing to Config Repo
 
@@ -298,21 +306,9 @@ stringData:
 
 ## Setup Config Repository
 
-The configuration repository is almost the same as the previous configuration, you only need to add the image registry config to the file. For more details, please refer to [Example Repository](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo).
+The configuration repository is almost the same as the previous configuration, you only need to add the image registry config to the file. For more details, please refer to [Example Repository](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo/for-developers/kubevela-config).
 
-Modify the image field in `my-app` and add annotation `# {"$imagepolicy": "default:apps"}`.
-Notice that KubeVela will only be able to modify the image field if the annotation is added after the field. `default:apps` is `namespace:application-name` of the application config file.
-
-```yaml
-spec:
-  components:
-    - name: my-server
-      type: webservice
-      properties:
-        image: ghcr.io/fogdong/test-fog:master-cba5605f-1632714412 # {"$imagepolicy": "default:apps"}
-```
-
-Add the config of image registry in `apps`, it listens for image updates in the image registry:
+Add the config of image registry in `clusters/apps.yaml`, it listens for image updates in the image registry:
 
 ```yaml
 ...
@@ -330,6 +326,18 @@ Add the config of image registry in `apps`, it listens for image updates in the 
         order: asc
     # add more commit message
     commitMessage: "Image: {{range .Updated.Images}}{{println .}}{{end}}"
+```
+
+Modify the image field in `apps/my-app.yaml` and add annotation `# {"$imagepolicy": "default:apps"}`.
+Notice that KubeVela will only be able to modify the image field if the annotation is added after the field. `default:apps` is `namespace:name` of the GitOps config file above.
+
+```yaml
+spec:
+  components:
+    - name: my-server
+      type: webservice
+      properties:
+        image: ghcr.io/fogdong/test-fog:master-cba5605f-1632714412 # {"$imagepolicy": "default:apps"}
 ```
 
 After update the files in `clusters/` to cluster, we can then update the application by modifying the code.
@@ -359,7 +367,7 @@ func InsertInitData(db *sql.DB) {
 
 Commit the change to the Git Repository, we can see that our CI pipelines has built the image and push it to the image registry.
 
-KubeVela will listen to the image registry and update the `Application` in Git Repository with the latest image tag.
+KubeVela will listen to the image registry and update the `apps/my-app.yaml` in Git Repository with the latest image tag.
 
 We can see that there is a commit form `kubevelabot`, the commit message is always with a prefix `Update image automatically.` You can use format like `{{range .Updated.Images}}{{println .}}{{end}}` to specify the image name in the `commitMessage` field.
 
@@ -373,7 +381,7 @@ We can see that there is a commit form `kubevelabot`, the commit message is alwa
 >    if: "!contains(github.event.head_commit.message, 'Update image automatically')"
 > ```
 
-Re-check the `Application` in cluster, we can see that the image of the `Application` has been updated after a while.
+Re-check the `Application` in cluster, we can see that the image of the `my-app` has been updated after a while.
 
 > KubeVela polls the latest information from the code and image repo periodically (at an interval that can be customized):
 > * When the `Application` file in the Git repository is updated, KubeVela will update the `Application` in the cluster based on the latest configuration.
