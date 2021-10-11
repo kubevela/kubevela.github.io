@@ -15,13 +15,13 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: example-app
-  namespace: test
+  namespace: demo
 spec:
   components:
     - name: hello-world-server
       type: webservice
       properties:
-        image: crccheck/hello-world 
+        image: crccheck/hello-world
         port: 8000
       traits:
         - type: scaler
@@ -39,18 +39,25 @@ spec:
       type: env-binding
       properties:
         envs:
+          - name: test
+            placement: # 选择要部署的目标命名空间
+              namespaceSelector:
+                name: test
+            selector: # 选择要使用的组件
+              components:
+                - data-worker
+
           - name: staging
             placement: # 选择要部署的目标集群
               clusterSelector:
                 name: cluster-staging
-            selector: # 选择要使用的组件
-              components:
-                - hello-world-server
 
           - name: prod
-            placement:
+            placement: # 选择要部署的目标集群及命名空间
               clusterSelector:
                 name: cluster-prod
+              namespaceSelector:
+                name: prod
             patch: # 差异化配置该环境中的组件
               components:
                 - name: hello-world-server
@@ -62,6 +69,13 @@ spec:
 
   workflow:
     steps:
+      # 部署 测试 环境
+      - name: deploy-test
+        type: deploy2env
+        properties:
+          policy: example-multi-env-policy
+          env: test
+
       # 部署 预发 环境
       - name: deploy-staging
         type: deploy2env
@@ -81,16 +95,16 @@ spec:
           env: prod
 ```
 
-> 创建应用部署计划之前需要当前集群、目标集群中均有名为 `test` 的命名空间，你可以通过执行 `kubectl create ns test` 来创建。
+> 创建上述应用部署计划之前需要当前集群、预发集群 (cluster-staging) 中均有名为 `demo` 的命名空间，同时需要在当前集群中创建 `test` 命名空间、在生产 (cluster-prod) 集群中创建 `prod` 命名空间。你可以通过执行 `kubectl create ns <namespace>` 来创建它们。
 
 ```shell
 kubectl apply -f app.yaml
 ```
 
-应用部署计划创建之后，在 `test` 命名空间下会创建一个配置化的应用部署计划。同时在子集群的 `test` 命名空间中会出现相应的资源。
+应用部署计划创建之后，在 `demo` 命名空间下会创建一个配置化的应用部署计划。
 
 ```shell
-$ kubectl get app -n test
+$ kubectl get app -n demo
 NAME          COMPONENT            TYPE         PHASE     HEALTHY   STATUS   AGE
 example-app   hello-world-server   webservice   running                      25s
 ```
@@ -110,7 +124,7 @@ env 的属性
 | 名称      | 描述                                                         | 类型             | 是否必须 | 默认值 |
 | :-------- | :----------------------------------------------------------- | :--------------- | :------- | :----- |
 | name      | 环境名称                                                     | string           | 是       | 无     |
-| patch     | 对应用部署计划中的组件差异化配置                             | patch 结构体     | 是       | 无     |
+| patch     | 对应用部署计划中的组件差异化配置                             | patch 结构体     | 否       | 无     |
 | placement | 资源调度策略，选择将配置化的资源部署到指定的集群或命名空间上 | placement 结构体 | 是       | 无     |
 | selector  | 为应用部署计划选择需要使用的组件，默认为空代表使用所有组件 | selector 结构体 | 否       | 无     |
 
@@ -124,7 +138,8 @@ placement 的属性
 
 | 名称              | 描述                                                                                                        | 类型                     | 是否必须 | 默认值 |
 | :---------------- | :---------------------------------------------------------------------------------------------------------- | :----------------------- | :------- | :----- |
-| clusterSelector   | 集群选择器，通过名称筛选集群                    | clusterSelector 结构体   | 是       | 无     |
+| clusterSelector   | 集群选择器，通过名称筛选集群                    | clusterSelector 结构体   | 否       | 无     |
+| namespaceSelector   | 命名空间选择器，通过名称筛选集群                    | namespaceSelector 结构体   | 否       | 无     |
 
 selector 的属性
 
@@ -137,3 +152,11 @@ clusterSelector 的属性
 | 名称   | 描述     | 类型              | 是否必须 | 默认值 |
 | :----- | :------- | :---------------- | :------- | :----- |
 | name   | 集群名称 | string            | 否       | 无     |
+
+namespaceSelector 的属性
+
+Name | Desc | Type | Required | Default Value
+:----------- | :------------ | :------------ | :------------ | :------------
+name | 命名空间名称 | string | 否 | 无
+
+> 你需要升级至 KubeVela v1.1.5+ 来启用 `namespaceSelector`.
