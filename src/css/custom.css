@@ -105,3 +105,17 @@
 html[data-theme='dark'] .cncf-logo {
   background: center no-repeat url('/img/cncf-white.svg');
 }
+.wechat .wechat-label {
+  color: var(--ifm-footer-link-color);
+  line-height: 2;
+  cursor: pointer;
+}
+
+.wechat .wechat-img {
+  display: none;
+  position: absolute;
+  width: 100px;
+}
+.wechat:hover .wechat-img {
+  display: block;
+}
