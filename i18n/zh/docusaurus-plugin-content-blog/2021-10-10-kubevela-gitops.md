@@ -1,12 +1,30 @@
 ---
-title:  基于 KubeVela 的 GitOps 交付
+title: 基于 KubeVela 的 GitOps 交付
+author: Tianxin Dong
+author_title: KubeVela 团队
+author_url: https://github.com/oam-dev/kubevela
+author_image_url: https://kubevela.io/img/logo.svg
+tags: [ kubevela ]
+description: ""
+image: https://raw.githubusercontent.com/oam-dev/kubevela.io/main/docs/resources/KubeVela-03.png
+hide_table_of_contents: false
 ---
 
-本案例将介绍如何在 GitOps 场景下使用 KubeVela，并介绍这样做的好处是什么。
+KubeVela 作为一个简单、易用、且高可扩展的云原生应用管理工具，能让开发人员方便快捷地在 Kubernetes 上定义与交付现代微服务应用，无需了解任何 Kubernetes 基础设施相关的细节。
 
-## 简介
+KubeVela 背后的 OAM 模型天然解决了应用构建过程中对复杂资源的组合、编排等管理问题，同时也将后期的运维策略模型化，这意味着 KubeVela 可以结合 GitOps 管理复杂大规模应用，收敛团队与系统规模变大以后的系统复杂度问题。
 
-GitOps 是一种现代化的持续交付手段，它允许开发人员通过直接更改 Git 仓库中的代码和配置来自动部署应用，在提高部署生产力的同时也通过分支回滚等能力提高了可靠性。其具体的好处可以查看[这篇文章](https://www.weave.works/blog/what-is-gitops-really)，本文将不再赘述。
+## 什么是 GitOps
+
+GitOps 是一种现代化的持续交付手段，它的核心思想是：在拥有一个包含环境基础设施及各种应用配置的 Git 仓库中，配合一个自动化过程————使得每次仓库被更新后，自动化过程都能逐渐将环境更新到最新配置。
+
+这样的方式允许开发人员通过直接更改 Git 仓库中的代码和配置来自动部署应用，使用 GitOps 的好处有很多，如：
+- 提高生产效率。通过自动的持续部署能够加快平均部署时间，增加开发效率。
+- 降低开发人员部署的门槛。通过推送代码而非容器配置，开发人员可以不需要了解 Kubernetes 的内部实现，便可以轻易部署。
+- 使变更记录可追踪。通过 Git 来管理集群，可以使每一次更改都可追踪，加强了审计跟踪。
+- 可通过 Git 的回滚/分支功能来恢复集群。
+
+## KubeVela 与 GitOps
 
 KubeVela 作为一个声明式的应用交付控制平面，天然就可以以 GitOps 的方式进行使用，并且这样做会在 GitOps 的基础上为用户提供更多的益处和端到端的体验，包括：
 - 应用交付工作流（CD 流水线）
@@ -21,18 +39,26 @@ KubeVela 作为一个声明式的应用交付控制平面，天然就可以以 G
 
 在本文中，我们主要讲解直接使用 KubeVela 在 GitOps 模式下进行交付的步骤。
 
+## GitOps 工作流
+
+GitOps 工作流分为 CI 和 CD 两个部分：
+
+* CI（Continuous Integration）：持续集成对业务代码进行代码构建、构建镜像并推送至镜像仓库。目前有许多成熟的 CI 工具：如开源项目常用的 GitHub Action、Travis 等，以及企业中常用的 Jenkins、Tekton 等。在本文中，我们使用 GitHub Action 来完成 CI 这一步，你也可以使用别的 CI 工具来代替此步，KubeVela 围绕 GitOps 可以对接任意工具下的 CI 流程。
+* CD（Continuous Delivery）：持续部署会自动更新集群中的配置，如将镜像仓库中的最新镜像更新到集群中。
+  * 目前主要有两种方案的 CD：
+    * Push-Based：Push 模式的 CD 主要是通过配置 CI 流水线来完成的，这种方式需要将集群的访问秘钥共享给 CI，从而使得 CI 流水线能够通过命令将更改推送到集群中。这种方式的集成可以参考我们之前发表的博客：[使用 Jenkins + KubeVela 完成应用的持续交付](/blog/2021/09/02/kubevela-jenkins-cicd)。
+    * Pull-Based：Pull 模式的 CD 会在集群中监听仓库（代码仓库或者配置仓库）的变化，并且将这些变化同步到集群中。这种方式与 Push 模式相比，由集群主动拉取更新，从而避免了秘钥暴露的问题。这也是本文介绍的核心内容。
+
 交付的面向人员有以下两种，我们将分别介绍：
 
 1. 面向平台管理员/运维人员的基础设施交付，用户可以通过直接更新仓库中的配置文件，从而更新集群中的基础设施配置，如系统的依赖软件、安全策略、存储、网络等基础设施配置。
 2. 面向终端开发者的交付，用户的代码一旦合并到应用代码仓库，就自动化触发集群中应用的更新，可以更高效的完成应用的迭代，与 KubeVela 的灰度发布、流量调拨、多集群部署等功能结合可以形成更为强大的自动化发布能力。
 
-> 提示：你也可以通过类似的步骤使用 ArgoCD 等 GitOps 工具来间接使用 KubeVela，细节的操作文档我们会在后续发布中提供。
-
 ## 面向平台管理员/运维人员的交付
 
 如图所示，对于平台管理员/运维人员而言，他们并不需要关心应用的代码，所以只需要准备一个 Git 配置仓库并部署 KubeVela 配置文件，后续对于应用及基础设施的配置变动，便可通过直接更新 Git 配置仓库来完成，使得每一次配置变更可追踪。
 
-![alt](../resources/ops-flow.jpg)
+![alt](/img/gitops/ops-flow.jpg)
 
 ### 准备配置仓库
 
@@ -59,7 +85,7 @@ KubeVela 作为一个声明式的应用交付控制平面，天然就可以以 G
 
 #### `clusters/` 目录
 
-首先，我们来看下 clusters 目录，这也是 KubeVela 对接 GitOps 的初始化操作配置目录
+首先，我们来看下 clusters 目录，这也是 KubeVela 对接 GitOps 的初始化操作配置目录。
 
 以 `clusters/infra.yaml` 为例：
 
@@ -125,6 +151,8 @@ spec:
               /: 8088
 ```
 
+这是一个使用了 KubeVela 内置组件类型 `webservice` 的应用，该应用绑定了 Ingress 运维特征。通过在应用中声明运维能力的方式，只需一个文件，便能将底层的 Deployment、Service、Ingress 集合起来，从而更为便捷地管理应用。
+
 #### `infrastructure/` 目录
 
 `infrastructure/` 目录下存放一些基础设施的配置。此处我们使用 [mysql controller](https://github.com/bitpoke/mysql-operator) 来部署了一个 MySQL 集群。
@@ -169,6 +197,8 @@ spec:
         properties:
           component: mysql-cluster
 ```
+
+在这个 MySQL 应用中，我们使用了 KubeVela 工作流的能力。工作流分为两个步骤，第一个步骤会去部署 MySQL 的 controller。当 controller 部署成功且正确运行后，第二个步骤将开始部署 MySQL 集群。
 
 #### 部署 `clusters/` 目录下的文件
 
@@ -252,7 +282,7 @@ my-server   <none>   kubevela.example.com  <ingress-ip>    80      162m
 
 如图所示，对于终端开发者而言，在 KubeVela Git 配置仓库以外，还需要准备一个应用代码仓库。在用户更新了应用代码仓库中的代码后，需要配置一个 CI 来自动构建镜像并推送至镜像仓库中。KubeVela 会监听镜像仓库中的最新镜像，并自动更新配置仓库中的镜像配置，最后再更新集群中的应用配置。使用户可以达成在更新代码后，集群中的配置也自动更新的效果。
 
-![alt](../resources/dev-flow.jpg)
+![alt](/img/gitops/dev-flow.jpg)
 
 ### 准备代码仓库
 
@@ -369,7 +399,7 @@ func InsertInitData(db *sql.DB) {
 
 此时，可以看到配置仓库中有一条来自 `kubevelabot` 的提交，提交信息均带有 `Update image automatically.` 前缀。你也可以通过 `{{range .Updated.Images}}{{println .}}{{end}}` 在 `commitMessage` 字段中追加你所需要的信息。
 
-![alt](../resources/gitops-commit.png)
+![alt](/img/gitops/gitops-commit.png)
 
 > 值得注意的是，如果你希望将代码和配置放在同一个仓库，需要过滤掉来自 `kubevelabot` 的提交来防止流水线的重复构建。可以在 CI 中通过如下配置过滤：
 > 

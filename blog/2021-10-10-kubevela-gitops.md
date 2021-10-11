@@ -1,12 +1,30 @@
 ---
-title:  GitOps with KubeVela
+title: Using GitOps + KubeVela for Application Continuous Delivery
+author: Tianxin Dong
+author_title: KubeVela Team
+author_url: https://github.com/oam-dev/kubevela
+author_image_url: https://kubevela.io/img/logo.svg
+tags: [ kubevela ]
+description: ""
+image: https://raw.githubusercontent.com/oam-dev/kubevela.io/main/docs/resources/KubeVela-03.png
+hide_table_of_contents: false
 ---
 
-This section will introduce how to use KubeVela in GitOps environment and why.
+KubeVela is a simple, easy-to-use, and highly extensible cloud-native application platform. It can make developers deliver microservices applications easily, without knowing Kubernetes details.
 
-## Introduction
+KubeVela is based on OAM model, which naturally solves the orchestration problems of complex resources. It means that KubeVela can manage complex large-scale applications with GitOps. Convergence of team and system size after the system complexity problem.
 
-GitOps is a continuous delivery method that allows developers to automatically deploy applications by changing code and declarative configurations in a Git repository, with Git-centric operations such as PR and commit. For detailed benefits of GitOps, please check [this article](https://www.weave.works/blog/what-is-gitops-really).
+## What is GitOps
+
+GitOps is a modern way to do continuous delivery. Its core idea is to have a Git repository which contains environmental and application configurations. An automated process is also needed for sync the config to cluster.
+
+By changing the files in repository, developers can apply the applications automatically. The benefits of applying GitOps include:
+- Increased productivity. Continuous delivery can speed up the time of deployment.
+- Lower the barrier for developer to deploy. By pushing code instead of container configuration, developers can easily deploy Kubernetes without knowing its internal implementation.
+- Trace the change records. Managing the cluster with Git makes every change traceable, enhancing the audit trail.
+- Recover the cluster with Git's rollback and branch.
+
+## GitOps with KubeVela
 
 KubeVela as an declarative application delivery control plane can be naturally used in GitOps approach, and this will provide below extra bonus to end users alongside with GitOps benefits:
 - application delivery workflow (CD pipeline)
@@ -19,8 +37,17 @@ KubeVela as an declarative application delivery control plane can be naturally u
 - Kustomize-style patch for multi-env deployment without the need to learn Kustomize at all;
 - ... and much more.
 
-
 In this section, we will introduce steps of using KubeVela directly in GitOps approach.
+
+## GitOps workflow
+
+The GitOps workflow is divided into CI and CD:
+
+* CI(Continuous Integration): Continuous integration builds code and images, and pushes images to the registry. There are many CI tools like GitHub Action, Travis, Jenkins and so on. In this article, we use GitHub Action for CI. You can also use other CI tools. KubeVela can connect CI processes under any tool around GitOps.
+* CD(Continuous Delivery): Continuous delivery automatically updates the configuration in the cluster. For example, update the latest images in the registry to the cluster.
+  * Currently there are two main CD modes:
+    * Push-based: Push mode CD is mainly accomplished by configuring CI pipeline. In this way, the access key of the cluster is shared with CI so that the CI pipeline can push changes to the cluster. For this mode, please refer to our previous blog post: [Using Jenkins + KubeVela for Application Continuous Delivery](/blog/2021/09/02/kubevela-jenkins-cicd).
+    * Pull-based: Pull mode CD listens for changes to the repository (code repository or configuration repository) in the cluster and synchronizes those changes to the cluster. In this way, the cluster actively pulls the update, thus avoiding the problem of exposing the secret key. This article will introduce using KubeVela and GitOps in pull mode.
 
 This article will separate into two perspectives:
 
@@ -28,13 +55,11 @@ This article will separate into two perspectives:
 
 2. For developers, they can update the app source code and then push it to Git. It will trigger building latest image and re-deployment.
 
-> Note: you can also use it with existing tools such as ArgoCD with similar steps, detailed guides will be added in following releases.
-
 ## For platform administrators/SREs
 
 Platform administrators/SREs prepares the Git repo for operational config. Every config config change will be traceable by that. KubeVela will watch the repo and apply changes to the clusters.
 
-![alt](../resources/ops-flow.jpg)
+![alt](/img/gitops/ops-flow.jpg)
 
 ## Setup Config Repository
 
@@ -127,6 +152,8 @@ spec:
               /: 8088
 ```
 
+This is an Application binds with Traits Ingress. In this way, the underlying Deployment, Service, and Ingress can be brought together in a single file, making it easier to manage the application.
+
 #### Directory `infrastructure/`
 
 The `infrastructure/` contains the config of some infrastructures like database. In the following, we will use [MySQL operator](https://github.com/bitpoke/mysql-operator) to deploy a MySQL cluster.
@@ -171,6 +198,8 @@ spec:
         properties:
           component: mysql-cluster
 ```
+
+We use workflow in this Application. The first step is to deploy the MySQL controller, after the controller is running, the second step will deploy the MySQL cluster.
 
 #### Apply the files in `clusters/`
 
@@ -256,7 +285,7 @@ Developers writes the application source code and push it to a Git repo (aka app
 
 User can update the configuration in the cluster automatically when the code is updated.
 
-![alt](../resources/dev-flow.jpg)
+![alt](/img/gitops/dev-flow.jpg)
 
 ### Setup App Code Repository
 
@@ -373,7 +402,7 @@ KubeVela will listen to the image registry and update the `apps/my-app.yaml` in 
 
 We can see that there is a commit form `kubevelabot`, the commit message is always with a prefix `Update image automatically.` You can use format like `{{range .Updated.Images}}{{println .}}{{end}}` to specify the image name in the `commitMessage` field.
 
-![alt](../resources/gitops-commit.png)
+![alt](/img/gitops/gitops-commit.png)
 
 > Note that if you want to put the code and config in the same repository, you need to filter out the commit from KubeVela in CI configuration like below to avoid the repeat build of pipeline.
 > 
