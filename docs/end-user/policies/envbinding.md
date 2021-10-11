@@ -15,13 +15,13 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: example-app
-  namespace: test
+  namespace: demo
 spec:
   components:
     - name: hello-world-server
       type: webservice
       properties:
-        image: crccheck/hello-world 
+        image: crccheck/hello-world
         port: 8000
       traits:
         - type: scaler
@@ -39,18 +39,25 @@ spec:
       type: env-binding
       properties:
         envs:
+          - name: test
+            placement: # selecting the namespace (in local cluster) to deploy to
+              namespaceSelector:
+                name: test
+            selector: # selecting which component to use
+              components:
+                - data-worker
+
           - name: staging
             placement: # selecting the cluster to deploy to
               clusterSelector:
                 name: cluster-staging
-            selector: # selecting which component to use
-              components:
-                - hello-world-server
 
           - name: prod
-            placement:
+            placement: # selecting both namespace and cluster to deploy to
               clusterSelector:
                 name: cluster-prod
+              namespaceSelector:
+                name: prod
             patch: # overlay patch on above components
               components:
                 - name: hello-world-server
@@ -62,6 +69,13 @@ spec:
 
   workflow:
     steps:
+      # deploy to test env
+      - name: deploy-test
+        type: deploy2env
+        properties:
+          policy: example-multi-env-policy
+          env: test
+
       # deploy to staging env
       - name: deploy-staging
         type: deploy2env
@@ -83,16 +97,16 @@ spec:
 
 We apply the Application `policy-demo` in the example.
 
-> Before applying this example application, you need a namespace named `test` in the current cluster and two sub-clusters. You can create it by executing cmd `kubectl create ns test`.
+> Before applying this example application, you need a namespace named `demo` in the current cluster and namespace `test` in both the current cluster and the staging cluster. You need namespace `prod` in cluster `cluster-prod` as well. You can create it by executing cmd `kubectl create ns <namespace>`.
 
 ```shell
 kubectl apply -f app.yaml
 ```
 
-After the Application is created, a configured Application will be created under the `test` namespace.
+After the Application is created, a configured Application will be created under the `demo` namespace.
 
 ```shell
-$ kubectl get app -n test
+$ kubectl get app -n demo
 NAME          COMPONENT            TYPE         PHASE     HEALTHY   STATUS   AGE
 example-app   hello-world-server   webservice   running                      25s
 ```
@@ -110,7 +124,7 @@ env
 Name | Desc | Type | Required | Default Value
 :----------- | :------------ | :------------ | :------------ | :------------ 
 name|environment name|string|true|null
-patch|configure the components of the Application|`patch`|true|null
+patch|configure the components of the Application|`patch`|false|null
 placement|resource scheduling strategy, choose to deploy the configured resources to the specified cluster or namespace| `placement`|true|null
 | selector  | identify which components to be deployed for this environment, default to be empty which means deploying all components | `selector`  | false       | null     |
 
@@ -124,7 +138,8 @@ placement
 
 Name | Desc | Type | Required | Default Value
 :----------- | :------------ | :------------ | :------------ | :------------ 
-clusterSelector| select deploy cluster by cluster name | `clusterSelector` |true|null
+clusterSelector| select deploy cluster by cluster name | `clusterSelector` |false|null
+namespaceSelector| select deploy namespace by namespace name | `namespaceSelector` |false|null
 
 selector
 
@@ -137,3 +152,11 @@ clusterSelector
 Name | Desc | Type | Required | Default Value
 :----------- | :------------ | :------------ | :------------ | :------------
 name |cluster name| string |false|null
+
+namespaceSelector
+
+Name | Desc | Type | Required | Default Value
+:----------- | :------------ | :------------ | :------------ | :------------
+name |namespace name| string |false|null
+
+> You need to upgrade to KubeVela v1.1.5+ to enable `namespaceSelector`.
