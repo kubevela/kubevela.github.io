@@ -218,6 +218,62 @@ spec:
               text: 工作流运行完成
 ```
 
+## apply-object
+
+### 简介
+
+部署 Kubernetes 原生资源，该功能在 KubeVela v1.1.4 及以上版本可使用。
+
+### 参数
+
+|  参数名   |  类型  |                 说明                  |
+| :-------: | :----: | :-----------------------------------: |
+|    ...    | ... |      Kubernetes 原生资源字段      |
+
+### 示例
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: server-with-pvc
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+      volumes:
+        - name: "my-pvc"
+          type: "pvc"
+          mountPath: "/test"
+          claimName: "myclaim"
+
+  workflow:
+    steps:
+      - name: apply-pvc
+        type: apply-object
+        properties:
+          apiVersion: v1
+          kind: PersistentVolumeClaim
+          metadata:
+            name: myclaim
+            namespace: default
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 8Gi
+            storageClassName: standard
+      - name: apply-server
+        type: apply-component
+        properties:
+          component: express-server
+```
+
 ## suspend
 
 ### 简介
