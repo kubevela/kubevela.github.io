@@ -12,7 +12,7 @@ hide_table_of_contents: false
 
 KubeVela 作为一个简单、易用、且高可扩展的云原生应用管理工具，能让开发人员方便快捷地在 Kubernetes 上定义与交付现代微服务应用，无需了解任何 Kubernetes 基础设施相关的细节。
 
-KubeVela 背后的 OAM 模型天然解决了应用构建过程中对复杂资源的组合、编排等管理问题，同时也将后期的运维策略也模型化，这也意味着 KubeVela 可以结合 GitOps 管理复杂大规模应用。收敛团队与系统规模变大以后的系统复杂度问题。
+KubeVela 背后的 OAM 模型天然解决了应用构建过程中对复杂资源的组合、编排等管理问题，同时也将后期的运维策略模型化，这意味着 KubeVela 可以结合 GitOps 管理复杂大规模应用，收敛团队与系统规模变大以后的系统复杂度问题。
 
 ## 什么是 GitOps
 
@@ -46,7 +46,7 @@ GitOps 工作流分为 CI 和 CD 两个部分：
 * CI（Continuous Integration）：持续集成对业务代码进行代码构建、构建镜像并推送至镜像仓库。目前有许多成熟的 CI 工具：如开源项目常用的 GitHub Action、Travis 等，以及企业中常用的 Jenkins、Tekton 等。在本文中，我们使用 GitHub Action 来完成 CI 这一步，你也可以使用别的 CI 工具来代替此步，KubeVela 围绕 GitOps 可以对接任意工具下的 CI 流程。
 * CD（Continuous Delivery）：持续部署会自动更新集群中的配置，如将镜像仓库中的最新镜像更新到集群中。
   * 目前主要有两种方案的 CD：
-    * Push-Based：Push 模式的 CD 主要是通过配置 CI 流水线来完成的，这种方式需要将集群的访问秘钥共享给 CI，从而使得 CI 流水线能够通过命令将更改推送到集群中。这种方式的集成可以参考我们之前发表的博客：[使用 Jenkins + KubeVela 完成应用的持续交付](2021-09-02-kubevela-jenkins-cicd)。
+    * Push-Based：Push 模式的 CD 主要是通过配置 CI 流水线来完成的，这种方式需要将集群的访问秘钥共享给 CI，从而使得 CI 流水线能够通过命令将更改推送到集群中。这种方式的集成可以参考我们之前发表的博客：[使用 Jenkins + KubeVela 完成应用的持续交付](/blog/2021/09/02/kubevela-jenkins-cicd)。
     * Pull-Based：Pull 模式的 CD 会在集群中监听仓库（代码仓库或者配置仓库）的变化，并且将这些变化同步到集群中。这种方式与 Push 模式相比，由集群主动拉取更新，从而避免了秘钥暴露的问题。这也是本文介绍的核心内容。
 
 交付的面向人员有以下两种，我们将分别介绍：
@@ -56,19 +56,19 @@ GitOps 工作流分为 CI 和 CD 两个部分：
 
 ## 面向平台管理员/运维人员的交付
 
-![alt](/img/gitops/ops-flow.jpg)
-
 如图所示，对于平台管理员/运维人员而言，他们并不需要关心应用的代码，所以只需要准备一个 Git 配置仓库并部署 KubeVela 配置文件，后续对于应用及基础设施的配置变动，便可通过直接更新 Git 配置仓库来完成，使得每一次配置变更可追踪。
+
+![alt](/img/gitops/ops-flow.jpg)
 
 ### 准备配置仓库
 
 > 具体的配置可参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo/for-SREs)。
 
-在本例中，我们将部署一个使用数据库的应用及一个 MySQL 数据库。配置仓库的目录结构如下:
+在本例中，我们将部署一个 MySQL 数据库软件作为项目的基础设施，同时部署一个业务应用，使用这个数据库。配置仓库的目录结构如下:
 
-* `clusters/` 中包含集群中的 KubeVela GitOps 配置，在用户将 `clusters/` 中的文件手动部署到集群中后，KubeVela 便能自动监听配置仓库中的文件变动且自动更新集群中的配置（`clusters/apps.yaml` 将监听 `apps/` 下所有应用的变化，`clusters/infra.yaml` 将监听 `infrastructure/` 下所有基础设施的变化）。
-* `apps/` 目录中包含应用的配置。此处为一个使用数据库的简单应用。
-* `infrastructure/` 中包含一些基础架构工具。此处为 MySQL 数据库。
+* `clusters/` 中包含集群中的 KubeVela GitOps 配置，用户需要将 `clusters/` 中的文件手动部署到集群中。这个是一次性的管控操作，执行完成后，KubeVela 便能自动监听配置仓库中的文件变动且自动更新集群中的配置。其中，`clusters/apps.yaml` 将监听 `apps/` 下所有应用的变化，`clusters/infra.yaml` 将监听 `infrastructure/` 下所有基础设施的变化。
+* `apps/` 目录中包含业务应用的所有配置，在本例中为一个使用数据库的业务应用。
+* `infrastructure/` 中包含一些基础设施相关的配置和策略，在本例中为 MySQL 数据库。
 
 
 ```shell
@@ -85,10 +85,7 @@ GitOps 工作流分为 CI 和 CD 两个部分：
 
 #### `clusters/` 目录
 
-首先，我们来看下 clusters 目录。
-
-`apps.yaml` 与 `infra.yaml` 几乎保持一致，只不过监听的文件目录有所区别。
-将两个文件手动部署到集群中后，KubeVela 将自动监听 `apps/` 以及 `infrastructure/` 目录下的配置文件并定期更新同步。
+首先，我们来看下 clusters 目录，这也是 KubeVela 对接 GitOps 的初始化操作配置目录。
 
 以 `clusters/infra.yaml` 为例：
 
@@ -115,6 +112,11 @@ spec:
       # 监听变动的路径，指向仓库中 infrastructure 目录下的文件
       path: ./infrastructure
 ```
+
+`apps.yaml` 与 `infra.yaml` 几乎保持一致，只不过监听的文件目录有所区别。
+在 `apps.yaml` 中，`properties.path` 的值将改为 `./apps`，表明监听 `apps/` 目录下的文件变动。
+
+cluster 文件夹中的 GitOps 管控配置文件需要在初始化的时候一次性手动部署到集群中，在此之后 KubeVela 将自动监听 `apps/` 以及 `infrastructure/` 目录下的配置文件并定期更新同步。
 
 #### `apps/` 目录
 
@@ -148,6 +150,8 @@ spec:
             http:
               /: 8088
 ```
+
+这是一个使用了 KubeVela 内置组件类型 `webservice` 的应用，该应用绑定了 Ingress 运维特征。通过在应用中声明运维能力的方式，只需一个文件，便能将底层的 Deployment、Service、Ingress 集合起来，从而更为便捷地管理应用。
 
 #### `infrastructure/` 目录
 
@@ -193,6 +197,8 @@ spec:
         properties:
           component: mysql-cluster
 ```
+
+在这个 MySQL 应用中，我们使用了 KubeVela 工作流的能力。工作流分为两个步骤，第一个步骤会去部署 MySQL 的 controller。当 controller 部署成功且正确运行后，第二个步骤将开始部署 MySQL 集群。
 
 #### 部署 `clusters/` 目录下的文件
 
@@ -274,9 +280,9 @@ my-server   <none>   kubevela.example.com  <ingress-ip>    80      162m
 
 ## 面向终端开发者的交付
 
-![alt](/img/gitops/dev-flow.jpg)
-
 如图所示，对于终端开发者而言，在 KubeVela Git 配置仓库以外，还需要准备一个应用代码仓库。在用户更新了应用代码仓库中的代码后，需要配置一个 CI 来自动构建镜像并推送至镜像仓库中。KubeVela 会监听镜像仓库中的最新镜像，并自动更新配置仓库中的镜像配置，最后再更新集群中的应用配置。使用户可以达成在更新代码后，集群中的配置也自动更新的效果。
+
+![alt](/img/gitops/dev-flow.jpg)
 
 ### 准备代码仓库
 

@@ -23,26 +23,26 @@ KubeVela 作为一个声明式的应用交付控制平面，天然就可以以 G
 
 交付的面向人员有以下两种，我们将分别介绍：
 
-1. 面向平台管理员/运维人员的交付，用户可以通过直接更新仓库中的 KubeVela 配置文件，从而更新集群中的应用。
-2. 面向终端开发者的交付，用户通过更新应用代码仓库中的代码，从而更新集群中的应用。
+1. 面向平台管理员/运维人员的基础设施交付，用户可以通过直接更新仓库中的配置文件，从而更新集群中的基础设施配置，如系统的依赖软件、安全策略、存储、网络等基础设施配置。
+2. 面向终端开发者的交付，用户的代码一旦合并到应用代码仓库，就自动化触发集群中应用的更新，可以更高效的完成应用的迭代，与 KubeVela 的灰度发布、流量调拨、多集群部署等功能结合可以形成更为强大的自动化发布能力。
 
 > 提示：你也可以通过类似的步骤使用 ArgoCD 等 GitOps 工具来间接使用 KubeVela，细节的操作文档我们会在后续发布中提供。
 
 ## 面向平台管理员/运维人员的交付
 
-![alt](../resources/ops-flow.jpg)
+如图所示，对于平台管理员/运维人员而言，他们并不需要关心应用的代码，所以只需要准备一个 Git 配置仓库并部署 KubeVela 配置文件，后续对于应用及基础设施的配置变动，便可通过直接更新 Git 配置仓库来完成，使得每一次配置变更可追踪。
 
-如图所示，对于平台管理员/运维人员而言，只需要准备一个 KubeVela Git 配置仓库并部署 KubeVela 配置文件，后续对于应用及基础设施的配置变动，便可通过直接更新 Git 配置仓库来完成，使得每一次配置变更可追踪。
+![alt](../resources/ops-flow.jpg)
 
 ### 准备配置仓库
 
 > 具体的配置可参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo/for-SREs)。
 
-在本例中，我们将部署一个使用数据库的应用及一个 MySQL 数据库。配置仓库的目录结构如下:
+在本例中，我们将部署一个 MySQL 数据库软件作为项目的基础设施，同时部署一个业务应用，使用这个数据库。配置仓库的目录结构如下:
 
-* `clusters/` 中包含集群中的 KubeVela GitOps 配置，在用户将 `clusters/` 中的文件手动部署到集群中后，KubeVela 便能自动监听配置仓库中的文件变动且自动更新集群中的配置（`clusters/apps.yaml` 将监听 `apps/` 下所有应用的变化，`clusters/infra.yaml` 将监听 `infrastructure/` 下所有基础设施的变化）。
-* `apps/` 目录中包含应用的配置。此处为一个使用数据库的简单应用。
-* `infrastructure/` 中包含一些基础架构工具。此处为 MySQL 数据库。
+* `clusters/` 中包含集群中的 KubeVela GitOps 配置，用户需要将 `clusters/` 中的文件手动部署到集群中。这个是一次性的管控操作，执行完成后，KubeVela 便能自动监听配置仓库中的文件变动且自动更新集群中的配置。其中，`clusters/apps.yaml` 将监听 `apps/` 下所有应用的变化，`clusters/infra.yaml` 将监听 `infrastructure/` 下所有基础设施的变化。
+* `apps/` 目录中包含业务应用的所有配置，在本例中为一个使用数据库的业务应用。
+* `infrastructure/` 中包含一些基础设施相关的配置和策略，在本例中为 MySQL 数据库。
 
 
 ```shell
@@ -59,10 +59,7 @@ KubeVela 作为一个声明式的应用交付控制平面，天然就可以以 G
 
 #### `clusters/` 目录
 
-首先，我们来看下 clusters 目录。
-
-`apps.yaml` 与 `infra.yaml` 几乎保持一致，只不过监听的文件目录有所区别。
-将两个文件手动部署到集群中后，KubeVela 将自动监听 `apps/` 以及 `infrastructure/` 目录下的配置文件并定期更新同步。
+首先，我们来看下 clusters 目录，这也是 KubeVela 对接 GitOps 的初始化操作配置目录
 
 以 `clusters/infra.yaml` 为例：
 
@@ -89,6 +86,11 @@ spec:
       # 监听变动的路径，指向仓库中 infrastructure 目录下的文件
       path: ./infrastructure
 ```
+
+`apps.yaml` 与 `infra.yaml` 几乎保持一致，只不过监听的文件目录有所区别。
+在 `apps.yaml` 中，`properties.path` 的值将改为 `./apps`，表明监听 `apps/` 目录下的文件变动。
+
+cluster 文件夹中的 GitOps 管控配置文件需要在初始化的时候一次性手动部署到集群中，在此之后 KubeVela 将自动监听 `apps/` 以及 `infrastructure/` 目录下的配置文件并定期更新同步。
 
 #### `apps/` 目录
 
@@ -248,9 +250,9 @@ my-server   <none>   kubevela.example.com  <ingress-ip>    80      162m
 
 ## 面向终端开发者的交付
 
-![alt](../resources/dev-flow.jpg)
-
 如图所示，对于终端开发者而言，在 KubeVela Git 配置仓库以外，还需要准备一个应用代码仓库。在用户更新了应用代码仓库中的代码后，需要配置一个 CI 来自动构建镜像并推送至镜像仓库中。KubeVela 会监听镜像仓库中的最新镜像，并自动更新配置仓库中的镜像配置，最后再更新集群中的应用配置。使用户可以达成在更新代码后，集群中的配置也自动更新的效果。
+
+![alt](../resources/dev-flow.jpg)
 
 ### 准备代码仓库
 

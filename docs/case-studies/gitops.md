@@ -32,9 +32,9 @@ This article will separate into two perspectives:
 
 ## For platform administrators/SREs
 
-![alt](../resources/ops-flow.jpg)
-
 Platform administrators/SREs prepares the Git repo for operational config. Every config config change will be traceable by that. KubeVela will watch the repo and apply changes to the clusters.
+
+![alt](../resources/ops-flow.jpg)
 
 ## Setup Config Repository
 
@@ -62,11 +62,9 @@ The structure of the config repository looks below:
 
 #### Directory `clusters/`
 
-`apps.yaml` and `infra.yaml` in `clusters/` are similar. Their difference is to watch different directories.
+The `clusters/` is the initialize configuration directory for KubeVela GitOps.
 
-Apply the files in `clusters/` manually. They will sync the files in `infrastructure/` and `apps/` dir of the Git repo.
-
-Below is how the infra.yaml looks like:
+Below is how the `clusters/infra.yaml` looks like:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -91,6 +89,10 @@ spec:
       # the path to sync
       path: ./infrastructure
 ```
+
+`apps.yaml` and `infra.yaml` in `clusters/` are similar. Their difference is to watch different directories. In `apps.yaml`, the `properties.path` will be `./apps`.
+
+Apply the files in `clusters/` manually. They will sync the files in `infrastructure/` and `apps/` dir of the Git repo.
 
 #### Directory `apps/`
 
@@ -250,11 +252,11 @@ In this way, we can edit the files in the Git repo to update the cluster.
 
 ## For developers
 
-![alt](../resources/dev-flow.jpg)
-
 Developers writes the application source code and push it to a Git repo (aka app repo). Once app repo updates, the CI will build the image and push it to the image registry. KubeVela watches the image registry, and updates the image in config repo. Finally, it will apply the config to the cluster.
 
 User can update the configuration in the cluster automatically when the code is updated.
+
+![alt](../resources/dev-flow.jpg)
 
 ### Setup App Code Repository
 

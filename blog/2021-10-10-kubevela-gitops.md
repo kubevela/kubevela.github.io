@@ -46,7 +46,7 @@ The GitOps workflow is divided into CI and CD:
 * CI(Continuous Integration): Continuous integration builds code and images, and pushes images to the registry. There are many CI tools like GitHub Action, Travis, Jenkins and so on. In this article, we use GitHub Action for CI. You can also use other CI tools. KubeVela can connect CI processes under any tool around GitOps.
 * CD(Continuous Delivery): Continuous delivery automatically updates the configuration in the cluster. For example, update the latest images in the registry to the cluster.
   * Currently there are two main CD modes:
-    * Push-based: Push mode CD is mainly accomplished by configuring CI pipeline. In this way, the access key of the cluster is shared with CI so that the CI pipeline can push changes to the cluster. For this mode, please refer to our previous blog post: [Using Jenkins + KubeVela for Application Continuous Delivery](2021-09-02-kubevela-jenkins-cicd).
+    * Push-based: Push mode CD is mainly accomplished by configuring CI pipeline. In this way, the access key of the cluster is shared with CI so that the CI pipeline can push changes to the cluster. For this mode, please refer to our previous blog post: [Using Jenkins + KubeVela for Application Continuous Delivery](/blog/2021/09/02/kubevela-jenkins-cicd).
     * Pull-based: Pull mode CD listens for changes to the repository (code repository or configuration repository) in the cluster and synchronizes those changes to the cluster. In this way, the cluster actively pulls the update, thus avoiding the problem of exposing the secret key. This article will introduce using KubeVela and GitOps in pull mode.
 
 This article will separate into two perspectives:
@@ -57,9 +57,9 @@ This article will separate into two perspectives:
 
 ## For platform administrators/SREs
 
-![alt](/img/gitops/ops-flow.jpg)
-
 Platform administrators/SREs prepares the Git repo for operational config. Every config config change will be traceable by that. KubeVela will watch the repo and apply changes to the clusters.
+
+![alt](/img/gitops/ops-flow.jpg)
 
 ## Setup Config Repository
 
@@ -87,11 +87,9 @@ The structure of the config repository looks below:
 
 #### Directory `clusters/`
 
-`apps.yaml` and `infra.yaml` in `clusters/` are similar. Their difference is to watch different directories.
+The `clusters/` is the initialize configuration directory for KubeVela GitOps.
 
-Apply the files in `clusters/` manually. They will sync the files in `infrastructure/` and `apps/` dir of the Git repo.
-
-Below is how the infra.yaml looks like:
+Below is how the `clusters/infra.yaml` looks like:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -116,6 +114,10 @@ spec:
       # the path to sync
       path: ./infrastructure
 ```
+
+`apps.yaml` and `infra.yaml` in `clusters/` are similar. Their difference is to watch different directories. In `apps.yaml`, the `properties.path` will be `./apps`.
+
+Apply the files in `clusters/` manually. They will sync the files in `infrastructure/` and `apps/` dir of the Git repo.
 
 #### Directory `apps/`
 
@@ -149,6 +151,8 @@ spec:
             http:
               /: 8088
 ```
+
+This is an Application binds with Traits Ingress. In this way, the underlying Deployment, Service, and Ingress can be brought together in a single file, making it easier to manage the application.
 
 #### Directory `infrastructure/`
 
@@ -194,6 +198,8 @@ spec:
         properties:
           component: mysql-cluster
 ```
+
+We use workflow in this Application. The first step is to deploy the MySQL controller, after the controller is running, the second step will deploy the MySQL cluster.
 
 #### Apply the files in `clusters/`
 
@@ -275,11 +281,11 @@ In this way, we can edit the files in the Git repo to update the cluster.
 
 ## For developers
 
-![alt](/img/gitops/dev-flow.jpg)
-
 Developers writes the application source code and push it to a Git repo (aka app repo). Once app repo updates, the CI will build the image and push it to the image registry. KubeVela watches the image registry, and updates the image in config repo. Finally, it will apply the config to the cluster.
 
 User can update the configuration in the cluster automatically when the code is updated.
+
+![alt](/img/gitops/dev-flow.jpg)
 
 ### Setup App Code Repository
 
