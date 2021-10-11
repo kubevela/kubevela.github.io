@@ -1,5 +1,5 @@
 ---
-title:  基于工作流的 GitOps
+title:  基于 KubeVela 的 GitOps 交付
 ---
 
 本案例将介绍如何在 GitOps 场景下使用 KubeVela，并介绍这样做的好处是什么。

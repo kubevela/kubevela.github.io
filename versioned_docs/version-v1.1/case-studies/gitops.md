@@ -1,5 +1,5 @@
 ---
-title:  GitOps with Workflow
+title:  GitOps with KubeVela
 ---
 
 This section will introduce how to use KubeVela in GitOps environment and why.
