@@ -112,7 +112,7 @@ If you want to apply those resources before deploying your application, you can 
 KubeVela provides a built-in workflow step `apply-object` to fill in native Kubernetes resources.
 In this way, by filling in Kubernetes native resources, we can avoid writing redundant component definitions.
 
-Apply the following application, it will initialize an environment with ConfigMap/PVC:
+Apply the following application, it will initialize an environment with ConfigMap/PVC. There is two components in this application, the first one will write data to PVC, the second on will read the data from PVC:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -122,11 +122,21 @@ metadata:
   namespace: default
 spec:
   components:
-  - name: express-server1
-    type: webservice
+  - name: log-gen-worker
+    type: worker
     properties:
-      image: crccheck/hello-world
-      port: 8000
+      image: busybox
+      cmd:
+        - /bin/sh
+        - -c
+        - >
+          i=0;
+          while true;
+          do
+            echo "$i: $(date)" >> /test-pvc/date.log;
+            i=$((i+1));
+            sleep 1;
+          done
       volumes:
         - name: "my-pvc"
           type: "pvc"
@@ -139,11 +149,15 @@ spec:
           items:
             - key: test-key
               path: test-key
-  - name: express-server2
-    type: webservice
+  - name: log-read-worker
+    type: worker
     properties:
-      image: crccheck/hello-world
-      port: 8000
+      name: count-log
+      image: busybox
+      cmd: 
+        - /bin/sh
+        - -c
+        - 'tail -n+1 -f /test-pvc/date.log'
       volumes:
         - name: "my-pvc"
           type: "pvc"
@@ -184,14 +198,8 @@ spec:
             namespace: default
           data:
             test-key: test-value
-      - name: apply-server1
-        type: apply-component
-        properties:
-          component: express-server1
-      - name: apply-server2
-        type: apply-component
-        properties:
-          component: express-server2
+      - name: apply-remaining
+        type: apply-remaining
 ```
 
 Check the PVC and ConfigMap in cluster：
@@ -210,9 +218,23 @@ Check the application in cluster：
 
 ```shell
 $ vela ls
-APP                   	COMPONENT      	TYPE      	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
-server-with-pvc-and-cm	express-server1	webservice	      	running	       	      	2021-10-11 16:15:36 +0800 CST
-└─                  	express-server2	webservice	      	running	       	      	2021-10-11 16:15:36 +0800 CST
+APP                   	COMPONENT      	TYPE  	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
+server-with-pvc-and-cm	log-gen-worker 	worker	      	running	healthy	      	2021-10-11 20:42:38 +0800 CST
+└─                  	log-read-worker	worker	      	running	       	      	2021-10-11 20:42:38 +0800 CST
+```
+
+Check the logs of the second component:
+
+```shell
+$ kubectl logs -f log-read-worker-774b58f565-ch8ch
+0: Mon Oct 11 12:43:01 UTC 2021
+1: Mon Oct 11 12:43:02 UTC 2021
+2: Mon Oct 11 12:43:03 UTC 2021
+3: Mon Oct 11 12:43:04 UTC 2021
+4: Mon Oct 11 12:43:05 UTC 2021
+5: Mon Oct 11 12:43:06 UTC 2021
+6: Mon Oct 11 12:43:07 UTC 2021
+7: Mon Oct 11 12:43:08 UTC 2021
 ```
 
 We can see that both components is running. The two components share the same PVC and use the same ConfigMap.

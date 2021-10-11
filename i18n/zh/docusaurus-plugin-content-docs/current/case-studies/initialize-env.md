@@ -111,7 +111,7 @@ kruise 已经成功运行！之后，你可以在环境中使用 kruise 的能�
 KubeVela 提供了一个内置的工作流步骤 `apply-object`，可以直接在组件的 `properties` 字段中填写创建到环境中的原生 Kubernetes 资源。
 这种在 Application 中直接填写 Kubernetes 原生资源的方式，可以避免编写多余的组件定义（ComponentDefinition）。
 
-部署如下应用，初始化一个带有 ConfigMap / PVC 的环境。同时，部署的组件中挂载了该 ConfigMap 及 PVC：
+部署如下应用，初始化一个带有 ConfigMap / PVC 的环境。同时，部署两个组件，第一个组件会不断向 PVC 中写入数据，第二个组件会读取 PVC 中的数据：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -121,11 +121,21 @@ metadata:
   namespace: default
 spec:
   components:
-  - name: express-server1
-    type: webservice
+  - name: log-gen-worker
+    type: worker
     properties:
-      image: crccheck/hello-world
-      port: 8000
+      image: busybox
+      cmd:
+        - /bin/sh
+        - -c
+        - >
+          i=0;
+          while true;
+          do
+            echo "$i: $(date)" >> /test-pvc/date.log;
+            i=$((i+1));
+            sleep 1;
+          done
       volumes:
         - name: "my-pvc"
           type: "pvc"
@@ -138,11 +148,15 @@ spec:
           items:
             - key: test-key
               path: test-key
-  - name: express-server2
-    type: webservice
+  - name: log-read-worker
+    type: worker
     properties:
-      image: crccheck/hello-world
-      port: 8000
+      name: count-log
+      image: busybox
+      cmd: 
+        - /bin/sh
+        - -c
+        - 'tail -n+1 -f /test-pvc/date.log'
       volumes:
         - name: "my-pvc"
           type: "pvc"
@@ -183,14 +197,8 @@ spec:
             namespace: default
           data:
             test-key: test-value
-      - name: apply-server1
-        type: apply-component
-        properties:
-          component: express-server1
-      - name: apply-server2
-        type: apply-component
-        properties:
-          component: express-server2
+      - name: apply-remaining
+        type: apply-remaining
 ```
 
 查看集群中的 PVC 以及 ConfigMap：
@@ -209,9 +217,23 @@ my-cm                                     1      3m8s
 
 ```shell
 $ vela ls
-APP                   	COMPONENT      	TYPE      	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
-server-with-pvc-and-cm	express-server1	webservice	      	running	       	      	2021-10-11 16:15:36 +0800 CST
-└─                  	express-server2	webservice	      	running	       	      	2021-10-11 16:15:36 +0800 CST
+APP                   	COMPONENT      	TYPE  	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
+server-with-pvc-and-cm	log-gen-worker 	worker	      	running	healthy	      	2021-10-11 20:42:38 +0800 CST
+└─                  	log-read-worker	worker	      	running	       	      	2021-10-11 20:42:38 +0800 CST
+```
+
+检查第二个组件的日志输出：
+
+```shell
+$ kubectl logs -f log-read-worker-774b58f565-ch8ch
+0: Mon Oct 11 12:43:01 UTC 2021
+1: Mon Oct 11 12:43:02 UTC 2021
+2: Mon Oct 11 12:43:03 UTC 2021
+3: Mon Oct 11 12:43:04 UTC 2021
+4: Mon Oct 11 12:43:05 UTC 2021
+5: Mon Oct 11 12:43:06 UTC 2021
+6: Mon Oct 11 12:43:07 UTC 2021
+7: Mon Oct 11 12:43:08 UTC 2021
 ```
 
 可以看到，应用中的两个组件均已正常运行。同时，这两个组件共享同一个 PVC，并使用相同的 ConfigMap 进行配置。
