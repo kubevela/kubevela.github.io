@@ -57,7 +57,7 @@ This article will separate into two perspectives:
 
 ## For platform administrators/SREs
 
-![alt](../resources/ops-flow.jpg)
+![alt](/img/gitops/ops-flow.jpg)
 
 Platform administrators/SREs prepares the Git repo for operational config. Every config config change will be traceable by that. KubeVela will watch the repo and apply changes to the clusters.
 
@@ -275,7 +275,7 @@ In this way, we can edit the files in the Git repo to update the cluster.
 
 ## For developers
 
-![alt](../resources/dev-flow.jpg)
+![alt](/img/gitops/dev-flow.jpg)
 
 Developers writes the application source code and push it to a Git repo (aka app repo). Once app repo updates, the CI will build the image and push it to the image registry. KubeVela watches the image registry, and updates the image in config repo. Finally, it will apply the config to the cluster.
 
@@ -396,7 +396,7 @@ KubeVela will listen to the image registry and update the `apps/my-app.yaml` in 
 
 We can see that there is a commit form `kubevelabot`, the commit message is always with a prefix `Update image automatically.` You can use format like `{{range .Updated.Images}}{{println .}}{{end}}` to specify the image name in the `commitMessage` field.
 
-![alt](../resources/gitops-commit.png)
+![alt](/img/gitops/gitops-commit.png)
 
 > Note that if you want to put the code and config in the same repository, you need to filter out the commit from KubeVela in CI configuration like below to avoid the repeat build of pipeline.
 > 
