@@ -1,5 +1,5 @@
 ---
-title:  基于工作流的 GitOps
+title:  基于 KubeVela 的 GitOps 交付
 ---
 
 本案例将介绍如何在 GitOps 场景下使用 KubeVela，并介绍这样做的好处是什么。
@@ -21,28 +21,28 @@ KubeVela 作为一个声明式的应用交付控制平面，天然就可以以 G
 
 在本文中，我们主要讲解直接使用 KubeVela 在 GitOps 模式下进行交付的步骤。
 
-交付的模式有以下两种，我们将分别介绍：
+交付的面向人员有以下两种，我们将分别介绍：
 
-1. 面向平台管理员/运维人员的交付，用户可以通过直接更新仓库中的 KubeVela 配置文件，从而更新集群中的应用。
-2. 面向终端开发者的交付，用户通过更新应用代码仓库中的代码，从而更新集群中的应用。
+1. 面向平台管理员/运维人员的基础设施交付，用户可以通过直接更新仓库中的配置文件，从而更新集群中的基础设施配置，如系统的依赖软件、安全策略、存储、网络等基础设施配置。
+2. 面向终端开发者的交付，用户的代码一旦合并到应用代码仓库，就自动化触发集群中应用的更新，可以更高效的完成应用的迭代，与 KubeVela 的灰度发布、流量调拨、多集群部署等功能结合可以形成更为强大的自动化发布能力。
 
 > 提示：你也可以通过类似的步骤使用 ArgoCD 等 GitOps 工具来间接使用 KubeVela，细节的操作文档我们会在后续发布中提供。
 
 ## 面向平台管理员/运维人员的交付
 
-![alt](../resources/ops-flow.jpg)
+如图所示，对于平台管理员/运维人员而言，他们并不需要关心应用的代码，所以只需要准备一个 Git 配置仓库并部署 KubeVela 配置文件，后续对于应用及基础设施的配置变动，便可通过直接更新 Git 配置仓库来完成，使得每一次配置变更可追踪。
 
-如图所示，对于平台管理员/运维人员而言，只需要准备一个 KubeVela Git 配置仓库并部署 KubeVela 配置文件，后续对于应用及基础设施的配置变动，便可通过直接更新 Git 配置仓库来完成，使得每一次配置变更可追踪。
+![alt](../resources/ops-flow.jpg)
 
 ### 准备配置仓库
 
-> 具体的配置可参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo)。
+> 具体的配置可参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo/for-SREs)。
 
-配置仓库的目录结构如下:
+在本例中，我们将部署一个 MySQL 数据库软件作为项目的基础设施，同时部署一个业务应用，使用这个数据库。配置仓库的目录结构如下:
 
-* `clusters/` 中包含集群中的 KubeVela 配置，用户需要将 `clusters/` 中的文件手动部署到集群中后，KubeVela 便能自动监听配置仓库中的文件变动且自动更新集群中的配置。
-* `apps/` 目录中包含应用的配置。会被 `clusters/` 中的 `apps.yaml` 自动监听变化。
-* `infrastructure/` 中包含一些基础架构工具，如 MySQL 数据库。会被 `clusters/` 中的 ` infra.yaml` 自动监听变化。
+* `clusters/` 中包含集群中的 KubeVela GitOps 配置，用户需要将 `clusters/` 中的文件手动部署到集群中。这个是一次性的管控操作，执行完成后，KubeVela 便能自动监听配置仓库中的文件变动且自动更新集群中的配置。其中，`clusters/apps.yaml` 将监听 `apps/` 下所有应用的变化，`clusters/infra.yaml` 将监听 `infrastructure/` 下所有基础设施的变化。
+* `apps/` 目录中包含业务应用的所有配置，在本例中为一个使用数据库的业务应用。
+* `infrastructure/` 中包含一些基础设施相关的配置和策略，在本例中为 MySQL 数据库。
 
 
 ```shell
@@ -55,14 +55,13 @@ KubeVela 作为一个声明式的应用交付控制平面，天然就可以以 G
     └── mysql.yaml
 ```
 
-> KubeVela 建议使用如上的目录结构管理你的 GitOps 仓库。`clusters/` 中存放相关的 KubeVela 配置并需要被手动部署到集群中，`apps/` 和 `infrastructure/` 中分别存放你的应用和基础配置。应用相关的配置可以通过运维特征绑定在应用上，通过把应用和基础配置分开，能够更为合理的管理你的部署环境，隔离应用的变动影响。
+> KubeVela 建议使用如上的目录结构管理你的 GitOps 仓库。`clusters/` 中存放相关的 KubeVela GitOps 配置并需要被手动部署到集群中，`apps/` 和 `infrastructure/` 中分别存放你的应用和基础设施配置。通过把应用和基础配置分开，能够更为合理的管理你的部署环境，隔离应用的变动影响。
 
 #### `clusters/` 目录
 
-首先，我们来看下 clusters 目录。
+首先，我们来看下 clusters 目录，这也是 KubeVela 对接 GitOps 的初始化操作配置目录
 
-`apps.yaml` 与 `infra.yaml` 几乎保持一致，只不过监听的文件目录有所区别。
-将两个文件手动部署到集群中后，KubeVela 将自动监听 `infrastructure/` 以及 `apps/` 目录下的配置文件并定期更新同步。
+以 `clusters/infra.yaml` 为例：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -88,9 +87,14 @@ spec:
       path: ./infrastructure
 ```
 
+`apps.yaml` 与 `infra.yaml` 几乎保持一致，只不过监听的文件目录有所区别。
+在 `apps.yaml` 中，`properties.path` 的值将改为 `./apps`，表明监听 `apps/` 目录下的文件变动。
+
+cluster 文件夹中的 GitOps 管控配置文件需要在初始化的时候一次性手动部署到集群中，在此之后 KubeVela 将自动监听 `apps/` 以及 `infrastructure/` 目录下的配置文件并定期更新同步。
+
 #### `apps/` 目录
 
-`apps/` 目录中存放着应用配置文件，这是一个配置了数据库信息以及 Ingress 的简单应用。 该应用将连接到一个 MySQL 数据库，并简单地启动服务。在默认的服务路径下，会显示当前版本号。在 `/db` 路径下，会列出当前数据库中的信息。
+`apps/` 目录中存放着应用配置文件，这是一个配置了数据库信息以及 Ingress 的简单应用。该应用将连接到一个 MySQL 数据库，并简单地启动服务。在默认的服务路径下，会显示当前版本号。在 `/db` 路径下，会列出当前数据库中的信息。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -168,7 +172,9 @@ spec:
 
 #### 部署 `clusters/` 目录下的文件
 
-在集群中部署 `infra.yaml`，可以看到它自动在集群中拉起了 `infrastructure` 目录下的 MySQL 部署文件：
+配置完以上文件并存放到 Git 配置仓库后，我们需要在集群中手动部署 `clusters/` 目录下的 KubeVela GitOps 配置文件。
+
+首先，在集群中部署 `clusters/infra.yaml`。可以看到它自动在集群中拉起了 `infrastructure/` 目录下的 MySQL 部署文件：
 
 ```shell
 kubectl apply -f clusters/infra.yaml
@@ -183,7 +189,7 @@ mysql 	mysql-controller	helm      	       	running	healthy	      	2021-09-26 20:
 └─  	mysql-cluster   	raw       	       	running	healthy	      	2021-09-26 20:48:11 +0800 CST
 ```
 
-在集群中部署 `apps.yaml`，可以看到它自动拉起了 `apps/staging` 目录下的应用部署文件：
+接着，在集群中部署 `clusters/apps.yaml`，可以看到它自动拉起了 `apps/` 目录下的应用部署文件：
 
 ```shell
 kubectl apply -f clusters/apps.yaml
@@ -197,6 +203,8 @@ my-app	my-server       	webservice	ingress	running	healthy	      	2021-09-27 16:
 mysql 	mysql-controller	helm      	       	running	healthy	      	2021-09-26 20:48:11 +0800 CST
 └─  	mysql-cluster   	raw       	       	running	healthy	      	2021-09-26 20:48:11 +0800 CST
 ```
+
+至此，我们通过部署 KubeVela GitOps 配置文件，自动在集群中拉起了应用及数据库。
 
 通过 curl 应用的 Ingress，可以看到目前的版本是 0.1.5，并且成功地连接到了数据库：
 
@@ -238,13 +246,14 @@ my-server   <none>   kubevela.example.com  <ingress-ip>    80      162m
 
 可以看到，Ingress 的 Host 地址已被成功更新。
 
+通过这种方式，我们可以方便地通过更新 Git 配置仓库中的文件，从而自动化更新集群中的配置。
+
 ## 面向终端开发者的交付
+
+如图所示，对于终端开发者而言，在 KubeVela Git 配置仓库以外，还需要准备一个应用代码仓库。在用户更新了应用代码仓库中的代码后，需要配置一个 CI 来自动构建镜像并推送至镜像仓库中。KubeVela 会监听镜像仓库中的最新镜像，并自动更新配置仓库中的镜像配置，最后再更新集群中的应用配置。使用户可以达成在更新代码后，集群中的配置也自动更新的效果。
 
 ![alt](../resources/dev-flow.jpg)
 
-如图所示，对于终端开发者而言，在 KubeVela Git 配置仓库以外，还需要准备一个应用代码仓库。在用户更新了应用代码仓库中的代码后，需要配置一个 CI 来自动构建镜像并推送至镜像仓库中。KubeVela 会监听镜像仓库中的最新镜像，并自动更新配置仓库中的镜像配置，最后再更新集群中的应用配置。
-
-使用户可以达成在更新代码后，集群中的配置也自动更新的效果。
 ### 准备代码仓库
 
 准备一个代码仓库，里面包含一些源代码以及对应的 Dockerfile。
@@ -276,11 +285,11 @@ my-server   <none>   kubevela.example.com  <ingress-ip>    80      162m
 	}
 ```
 
-我们希望用户改动代码进行提交后，自动构建出最新的镜像并推送到镜像仓库。这一步 CI 可以通过集成 GitHub Actions、Jenkins 或者其他 CI 工具来实现。在本例中，我们通过借助 GitHub Actions 来完成持续集成。具体的代码文件及配置可参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo)。
+我们希望用户改动代码进行提交后，自动构建出最新的镜像并推送到镜像仓库。这一步 CI 可以通过集成 GitHub Actions、Jenkins 或者其他 CI 工具来实现。在本例中，我们通过借助 GitHub Actions 来完成持续集成。具体的代码文件及配置可参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo/for-developers/app-code)。
 
 ### 配置秘钥信息
 
-在新的镜像推送到镜像仓库后，KubeVela 会识别到新的镜像，并更新仓库及集群中的 `Application` 配置文件。因此，我们需要一个含有 Git 信息的 Secret，使 KubeVela 向 Git 仓库进行提交。部署如下文件，将其中的用户名和密码替换成你的信息：
+在新的镜像推送到镜像仓库后，KubeVela 会识别到新的镜像，并更新仓库及集群中的 `Application` 配置文件。因此，我们需要一个含有 Git 信息的 Secret，使 KubeVela 向 Git 仓库进行提交。部署如下文件，将其中的用户名和密码替换成你的 Git 用户名及密码（或 Token）：
 
 ```yaml
 apiVersion: v1
@@ -295,20 +304,9 @@ stringData:
 
 ### 准备配置仓库
 
-配置仓库与之前的配置大同小异，只需要加上与镜像仓库相关的配置即可。具体配置请参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo)。
+配置仓库与之前面向运维人员的配置大同小异，只需要加上与镜像仓库相关的配置即可。具体配置请参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/9.GitOps_Demo/for-developers/kubevela-config)。
 
-修改 `my-app` 中的 image 字段，在后面加上 `# {"$imagepolicy": "default:apps"}` 的注释。KubeVela 会通过该注释去修改对应的镜像字段。`default:apps` 是该应用配置文件对应的命名空间和应用名。
-
-```yaml
-spec:
-  components:
-    - name: my-server
-      type: webservice
-      properties:
-        image: ghcr.io/fogdong/test-fog:master-cba5605f-1632714412 # {"$imagepolicy": "default:apps"}
-```
-
-修改 `clusters/` 中的 `apps` 配置，该配置会监听仓库中 `apps` 下的应用文件变动以及镜像仓库中的镜像更新：
+修改 `clusters/` 中的 `apps.yaml`，该 GitOps 配置会监听仓库中 `apps/` 下的应用文件变动以及镜像仓库中的镜像更新：
 
 ```yaml
 ...
@@ -329,7 +327,18 @@ spec:
     commitMessage: "Image: {{range .Updated.Images}}{{println .}}{{end}}"
 ```
 
-将 `clusters` 中的配置文件更新到集群中后，我们便可以通过修改代码来完成应用的更新。
+修改 `apps/my-app.yaml` 中的 image 字段，在后面加上 `# {"$imagepolicy": "default:apps"}` 的注释。KubeVela 会通过该注释去更新对应的镜像字段。`default:apps` 是上面 GitOps 配置对应的命名空间和名称。
+
+```yaml
+spec:
+  components:
+    - name: my-server
+      type: webservice
+      properties:
+        image: ghcr.io/fogdong/test-fog:master-cba5605f-1632714412 # {"$imagepolicy": "default:apps"}
+```
+
+将 `clusters/` 中包含镜像仓库配置的文件更新到集群中后，我们便可以通过修改代码来完成应用的更新。
 
 ### 修改代码
 
@@ -356,7 +365,7 @@ func InsertInitData(db *sql.DB) {
 
 提交该改动至代码仓库，可以看到，我们配置的 CI 流水线开始构建镜像并推送至镜像仓库。
 
-而 KubeVela 会通过监听镜像仓库，根据最新的镜像 Tag 来更新代码仓库中的 `Application`。
+而 KubeVela 会通过监听镜像仓库，根据最新的镜像 Tag 来更新配置仓库中 `apps/` 下的应用 `my-app`。
 
 此时，可以看到配置仓库中有一条来自 `kubevelabot` 的提交，提交信息均带有 `Update image automatically.` 前缀。你也可以通过 `{{range .Updated.Images}}{{println .}}{{end}}` 在 `commitMessage` 字段中追加你所需要的信息。
 
@@ -370,12 +379,11 @@ func InsertInitData(db *sql.DB) {
 >    if: "!contains(github.event.head_commit.message, 'Update image automatically')"
 > ```
 
-重新查看集群中的应用，可以看到经过一段时间后，`Application` 的镜像已经被更新。
+重新查看集群中的应用，可以看到经过一段时间后，应用 `my-app` 的镜像已经被更新。
 
 > KubeVela 会通过你配置的 `interval` 时间间隔，来每隔一段时间分别从配置仓库及镜像仓库中获取最新信息：
 > * 当 Git 仓库中的配置文件被更新时，KubeVela 将根据最新的配置更新集群中的应用。
 > * 当镜像仓库中多了新的 Tag 时，KubeVela 将根据你配置的 policy 规则，筛选出最新的镜像 Tag，并更新到 Git 仓库中。而当代码仓库中的文件被更新后，KubeVela 将重复第一步，更新集群中的文件，从而达到了自动部署的效果。
-
 
 通过 `curl` 对应的 `Ingress` 查看当前版本和数据库信息：
 
