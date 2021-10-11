@@ -171,4 +171,4 @@ Service `podinfo-server` 绑定了一个 EXTERNAL-IP，允许用户通过公网�
 上述应用部署计划 `workflow-demo` 中使用了内置的应用策略 `env-binding` 对应用部署计划进行差异化配置，修改了组件 `podinfo-server` 的镜像，
 以及运维特征 `expose` 的类型以允许集群外部的请求访问，同时应用策略 `env-binding` 指定了资源调度策略，将资源部署到新注册的 ACK 集群内。
 
-应用部署计划的交付工作流也使用了内置的 [`multi-env`](../end-user/workflow/multi-env) 交付工作流定义，指定具体哪一个配置后的组件部署到集群中。
+应用部署计划的交付工作流也使用了内置的 `multi-env` 交付工作流定义，指定具体哪一个配置后的组件部署到集群中。
