@@ -177,6 +177,8 @@ spec:
         version: "0.4.0"
     - name: mysql-cluster
       type: raw
+      dependsOn:
+        - mysql-controller
       properties:
         apiVersion: mysql.presslabs.org/v1alpha1
         kind: MysqlCluster
@@ -186,17 +188,6 @@ spec:
           replicas: 1
           # replace it with your secret
           secretName: mysql-secret
-  
-  workflow:
-    steps:
-      - name: deploy-operator
-        type: apply-component
-        properties:
-          component: mysql-controller
-      - name: deploy-mysql
-        type: apply-component
-        properties:
-          component: mysql-cluster
 ```
 
 We use workflow in this Application. The first step is to deploy the MySQL controller, after the controller is running, the second step will deploy the MySQL cluster.

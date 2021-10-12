@@ -150,6 +150,8 @@ spec:
         version: "0.4.0"
     - name: mysql-cluster
       type: raw
+      dependsOn:
+        - mysql-controller
       properties:
         apiVersion: mysql.presslabs.org/v1alpha1
         kind: MysqlCluster
@@ -159,17 +161,6 @@ spec:
           replicas: 1
           # replace it with your secret
           secretName: mysql-secret
-  
-  workflow:
-    steps:
-      - name: deploy-operator
-        type: apply-component
-        properties:
-          component: mysql-controller
-      - name: deploy-mysql
-        type: apply-component
-        properties:
-          component: mysql-cluster
 ```
 
 #### Apply the files in `clusters/`

@@ -148,6 +148,8 @@ spec:
         version: "0.4.0"
     - name: mysql-cluster
       type: raw
+      dependsOn:
+        - mysql-controller
       properties:
         apiVersion: mysql.presslabs.org/v1alpha1
         kind: MysqlCluster
@@ -157,17 +159,6 @@ spec:
           replicas: 1
           # 关联 secret 名称
           secretName: mysql-secret
-  
-  workflow:
-    steps:
-      - name: deploy-operator
-        type: apply-component
-        properties:
-          component: mysql-controller
-      - name: deploy-mysql
-        type: apply-component
-        properties:
-          component: mysql-cluster
 ```
 
 #### 部署 `clusters/` 目录下的文件
