@@ -2,19 +2,6 @@
 title:  FAQ
 ---
 
-- [对比 X](#对比-x)
-  * [KubeVela 和 Helm 的区别?](#kubevela-和-helm-有什么区别)
-
-- [问题](#问题)
-  - [Error: unable to create new content in namespace cert-manager because it is being terminated](#error-unable-to-create-new-content-in-namespace-cert-manager-because-it-is-being-terminated)
-  - [Error: ScopeDefinition exists](#error-scopedefinition-exists)
-  - [You have reached your pull rate limit](#you-have-reached-your-pull-rate-limit)
-  - [Warning: Namespace cert-manager exists](#warning-namespace-cert-manager-exists)
-  - [如何修复问题: MutatingWebhookConfiguration mutating-webhook-configuration exists?](#如何修复问题：mutatingwebhookconfiguration-mutating-webhook-configuration-exists)
-
-- [运维](#运维)
-  * [Autoscale：如何在多个 Kkubernetes 集群上开启 metrics server？](#autoscale-如何在多个-kubernetes-集群上开启-metrics-server-？)
-  
 ## 对比 X
 
 ### KubeVela 和 Helm 有什么区别?
@@ -23,7 +10,24 @@ KubeVela 是一个平台构建工具，用于创建基于 Kubernete 的易使用
 
 同时，KubeVale 被设计为 Kubernetes 的一个控制器（即工作在服务端）,即使是其 Helm 部分，也会安装一个 Helm Operator。 
 
-## 问题
+
+## 常见问题
+
+### 目前 KubeVela 中使用的 Crossplane 云资源数量支持比较有限的，是否有计划加快开发、增加云资源数量？
+
+目前 KubeVela 支持 Crossplane 和 Terraform Controller 两种模式提供云资源，Terraform Controller 可以直接使用现成的 Terraform 模块，所以支持的云资源广度和数量都相对庞大，对于 Crossplane 不支持的云资源，可以考虑使用 Terraform Controller。目前 KubeVela 正在添加常用的云资源最佳实践用例，到 1.2 版本常用云资源都可以开箱即用。
+
+另一方面，Crossplane 中 阿里云的云资源支持也是由 KubeVela 的维护团队在负责维护，我们也非常乐意支持比较常用的云资源，在 Crossplane 项目中做更精细化的支持，所以比较倾向于使用 Crossplane 的用户可以在社区提 Issue 表达诉求，我们会根据用户的意愿确定开发计划。
+
+### Kubevela 未来具体要往哪个方向发展，是基于 GitOps 的 CD 工具，还是基于Workflow 的类似于 Tekton 或 Argo Worflow 这样的 Pipeline，还是重点在 OAM 的实现上？
+
+KubeVela 和 OAM 是一体的，OAM 是 KubeVela 背后的模型，随着 KubeVela 的演进，OAM 模型也会随之迭代发展。
+
+从最开始我们提出 OAM 模型，希望能够通过关注点分离的理念，降低云原生应用管理的复杂度，到后来出现 KubeVela 开箱即用的应用管理引擎，再到 v1.1 发布了混合云应用交付功能和工作流引擎。KubeVela 和 OAM 要解决的问题一直都是“让云原生的应用交付和应用管理更简单”。
+
+为了让云原生应用交付和管理更简单，我们需要标准化的模型，以应用为中心降低用户使用门槛和心智负担，同时支持工作流、多集群等技术，也是为了让应用交付可以更流畅、更高效、成本更低。整个理念和发展方向都是一致的。
+
+整体来说：Kubevela 正在向一款：原生面向混合云环境，以应用为中心的发布流水线一体化平台演进。
 
 ### Error: unable to create new content in namespace cert-manager because it is being terminated
 
