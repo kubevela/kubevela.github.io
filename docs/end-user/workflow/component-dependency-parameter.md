@@ -1,8 +1,97 @@
 ---
-title:  Data Passing
+title:  Dependency and Data Passing
 ---
 
-This section will introduce how to pass data between components.
+This section will introduce the dependencies in components and how to pass data between components.
+
+> We use helm in the examples, make sure you enable the fluxcd addon:
+> ```shell
+> vela addon enable fluxcd
+> ```
+
+## Dependency
+
+We can use `dependsOn` to specify the dependencies between components.
+
+For example, component A depends on component B:
+
+```yaml
+...
+components:
+  - name: A
+    type: helm
+    dependsOn:
+      - B
+  - name: B
+    type: helm
+```
+
+In this case, KubeVela will deploy B first, and then deploy A when the component B is running.
+
+### How to use
+
+If we want to apply a MySQL cluster, we need:
+
+1. Apply MySQL controller.
+2. Apply a secret for MySQL password.
+3. Apply MySQL cluster.
+
+Apply the following file:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: mysql
+  namespace: default
+spec:
+  components:
+    - name: mysql-controller
+      type: helm
+      properties:
+        repoType: helm
+        url: https://presslabs.github.io/charts
+        chart: mysql-operator
+        version: "0.4.0"
+    - name: mysql-secret
+      type: raw
+      properties:
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: mysql-secret
+        type: kubernetes.io/opaque
+        stringData:
+          ROOT_PASSWORD: test
+    - name: mysql-cluster
+      type: raw
+      dependsOn:
+        - mysql-controller
+        - mysql-secret
+      properties:
+        apiVersion: mysql.presslabs.org/v1alpha1
+        kind: MysqlCluster
+        metadata:
+          name: mysql-cluster
+        spec:
+          replicas: 1
+          secretName: mysql-secret
+```
+
+### Expected Outcome
+
+Check the application in the cluster:
+
+```shell
+$ vela ls
+APP  	COMPONENT       	TYPE	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
+mysql	mysql-controller	helm	      	running	healthy	      	2021-10-12 17:52:34 +0800 CST
+├─ 	mysql-secret    	raw 	      	running	healthy	      	2021-10-12 17:52:34 +0800 CST
+└─ 	mysql-cluster   	raw 	      	running	healthy 	     	2021-10-12 17:52:34 +0800 CST
+```
+
+All components is running successfully.
+
 
 ## Inputs and Outputs
 
@@ -48,7 +137,7 @@ Which means the input value will be passed into the below properties:
         host: <input value>
 ```
 
-## How to use
+### How to use
 
 In the following we will apply a WordPress server with the MySQL address passed from a MySQL component:
 
@@ -65,7 +154,7 @@ spec:
       outputs:
         # the output is the mysql service address
         - name: mysql-svc
-          exportKey: output.metadata.name + ".default.svc.cluster.local"
+          valueFrom: output.metadata.name + ".default.svc.cluster.local"
       properties:
         repoType: helm
         url: https://charts.bitnami.com/bitnami
@@ -95,6 +184,16 @@ spec:
             port: 3306
 ```
 
-## Expected Outcome
+### Expected Outcome
+
+Check the application in the cluster:
+
+```shell
+$ vela ls
+
+APP                 	COMPONENT	TYPE	TRAITS	PHASE          	HEALTHY	STATUS	CREATED-TIME
+wordpress-with-mysql	mysql    	helm	running	                healthy	        2021-10-12 18:04:10 +0800 CST
+└─                	    wordpress	helm	running	                healthy	       	2021-10-12 18:04:10 +0800 CST
+```
 
 The WordPress with MySQL has been successfully applied.
