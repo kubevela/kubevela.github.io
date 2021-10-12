@@ -176,6 +176,8 @@ spec:
         version: "0.4.0"
     - name: mysql-cluster
       type: raw
+      dependsOn:
+        - mysql-controller
       properties:
         apiVersion: mysql.presslabs.org/v1alpha1
         kind: MysqlCluster
@@ -185,17 +187,6 @@ spec:
           replicas: 1
           # 关联 secret 名称
           secretName: mysql-secret
-  
-  workflow:
-    steps:
-      - name: deploy-operator
-        type: apply-component
-        properties:
-          component: mysql-controller
-      - name: deploy-mysql
-        type: apply-component
-        properties:
-          component: mysql-cluster
 ```
 
 在这个 MySQL 应用中，我们使用了 KubeVela 工作流的能力。工作流分为两个步骤，第一个步骤会去部署 MySQL 的 controller。当 controller 部署成功且正确运行后，第二个步骤将开始部署 MySQL 集群。
