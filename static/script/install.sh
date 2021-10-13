@@ -92,6 +92,11 @@ getLatestRelease() {
         latest_release=$(wget -q --header="Accept: application/json" -O - $velaReleaseUrl | grep \"tag_name\" | grep -v rc | awk 'NR==1{print $2}' |  sed -n 's/\"\(.*\)\",/\1/p')
     fi
 
+    if [[ ! "$latest_release" =~ ^v[\.0-9]+$ ]]; then
+        echo "Failed to get latest release tag."
+        exit 1
+    fi
+
     ret_val=$latest_release
 }
 
