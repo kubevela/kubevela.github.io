@@ -4,6 +4,20 @@ title:  Custom Installation
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
+
+When installing KubeVela chart, you can customize it by `--set <parameter>=<value>`. For more detailed instructions, please
+go through the following parts.
+
+| Parameter                                 | Description                                                  | Default                       |
+| ----------------------------------------- | ------------------------------------------------------------ | ----------------------------- |
+| resources.limits.cpu            | CPU resource limit               | 500m                        |
+| resources.limits.memory         | Memory resource limit            | 1Gi                       |
+| resources.requests.cpu          | CPU resource request             | 50m                        |
+| resources.requests.memory       | Memory resource request          | 20Mi                       |
+| admissionWebhooks.certManager.enabled | Enable cert-manager| false
+| multicluster.enabled            | Enable multiple clusters  | true                            |
+
+
 ## Install KubeVela with cert-manager
 
 By default, KubeVela will use a self-signed certificate provided by [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen) for admissionWebhooks.
