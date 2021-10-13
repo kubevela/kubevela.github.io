@@ -28,6 +28,7 @@ module.exports = {
       items: [
         'case-studies/jenkins-cicd',
         'case-studies/gitops',
+        'case-studies/initialize-env',
         'case-studies/canary-blue-green',
         'case-studies/multi-cluster',
       ],
