@@ -15,6 +15,7 @@
   --ifm-color-primary-lighter: #37b5fb;
   --ifm-color-primary-lightest: #5ec3fc;
   --ifm-code-font-size: 95%;
+  --ifm-font-size-base: 16px;
 
   --hero-border-color: rgba(0, 0, 0, 0.1);
 }
@@ -118,4 +119,20 @@ html[data-theme='dark'] .cncf-logo {
 }
 .wechat:hover .wechat-img {
   display: block;
+}
+
+.menu__link {
+  font-size: 0.9rem;
+}
+
+article header h1 {
+  font-size: 2.2rem !important;
+}
+
+.markdown>h2 {
+  font-size: 1.5rem !important;
+}
+
+.markdown>h3 {
+  font-size: 1.2rem !important;
 }
