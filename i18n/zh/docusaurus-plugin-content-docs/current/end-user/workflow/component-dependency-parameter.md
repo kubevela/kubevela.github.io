@@ -2,11 +2,113 @@
 title:  应用组件间的依赖和参数传递
 ---
 
-本节将介绍如何在 KubeVela 中进行组件间的参数传递。
+本节将介绍如何在 KubeVela 中进行组件间的依赖关系和参数传递。
+
+> 由于本节示例中使用了 helm 功能，所以需要开启 fluxcd 插件：
+> ```shell
+> vela addon enable fluxcd
+> ```
+
+## 依赖关系
+
+在 KubeVela 中，可以在组件中通过 `dependsOn` 来指定组件间的依赖关系。
+
+如：A 组件依赖 B 组件，需要在 B 组件完成部署后再进行部署：
+
+```yaml
+...
+components:
+  - name: A
+    type: helm
+    dependsOn:
+      - B
+  - name: B
+    type: helm
+```
+
+在这种情况下，KubeVela 会先部署 B，当 B 组件的状态可用时，再部署 A 组件。
+
+### 如何使用
+
+假设我们需要在本地启动一个 MySQL 集群，那么我们需要：
+
+1. 部署一个 Secret 作为 MySQL 的密码。
+2. 部署 MySQL controller。
+2. 部署 MySQL 集群。
+
+部署如下文件：
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: mysql
+  namespace: default
+spec:
+  components:
+    - name: mysql-secret
+      type: raw
+      properties:
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: mysql-secret
+        type: kubernetes.io/opaque
+        stringData:
+          ROOT_PASSWORD: test
+    - name: mysql-controller
+      type: helm
+      properties:
+        repoType: helm
+        url: https://presslabs.github.io/charts
+        chart: mysql-operator
+        version: "0.4.0"
+    - name: mysql-cluster
+      type: raw
+      dependsOn:
+        - mysql-controller
+        - mysql-secret
+      properties:
+        apiVersion: mysql.presslabs.org/v1alpha1
+        kind: MysqlCluster
+        metadata:
+          name: mysql-cluster
+        spec:
+          replicas: 1
+          secretName: mysql-secret
+```
+
+### 期望结果
+
+查看集群中的应用：
+
+```shell
+$ vela ls
+APP  	COMPONENT       	TYPE	TRAITS	PHASE          	HEALTHY	STATUS	CREATED-TIME
+mysql	mysql-secret    	raw 	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
+├─ 	mysql-controller	helm	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
+└─ 	mysql-cluster   	raw 	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
+```
+
+一开始，由于 mysql-controller 尚未部署成功，三个组件状态均为 runningWorkflow。
+
+```shell
+$ vela ls
+APP  	COMPONENT       	TYPE	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
+mysql	mysql-secret    	raw 	      	running	healthy	      	2021-10-14 12:09:55 +0800 CST
+├─ 	mysql-controller	helm	      	running	healthy	      	2021-10-14 12:09:55 +0800 CST
+└─ 	mysql-cluster   	raw 	      	running	       	      	2021-10-14 12:09:55 +0800 CST
+```
+
+可以看到，所有组件都已成功运行.其中 `mysql-cluster` 组件的部署依赖于 `mysql-controller` 和 `mysql-secret` 部署状态达到 `healthy`。
+
+> `dependsOn` 会根据组件是否 `healthy` 来确定状态，若已 `healthy`，则表示该组件已成功运行，可以部署下一个组件。
+> 如果你向自定义组件的健康状态，请查看 [状态回写](../../platform-engineers/traits/status)
+
 
 ## 参数传递
 
-在 KubeVela 中，可以在组件中通过 outputs 和 inputs 来指定要传输的数据。
+除了显示指定依赖关系以外，还可以在组件中通过 outputs 和 inputs 来指定要传输的数据。
 
 ### Outputs
 
@@ -45,7 +147,7 @@ inputs 由 `from` 和 `parameterKey` 组成。`from` 声明了这个 input 从�
         host: <input value>
 ```
 
-## 如何使用
+### 如何使用
 
 假设我们希望在本地启动一个 WordPress，而这个 Wordpress 的数据存放在一个 MySQL 数据库中，我们需要将这个 MySQL 的地址传递给 WordPress。
 
@@ -94,6 +196,16 @@ spec:
             port: 3306
 ```
 
-## 期望结果
+### 期望结果
+
+查看集群中的应用：
+
+```shell
+$ vela ls
+
+APP                 	COMPONENT	TYPE	TRAITS	PHASE          	HEALTHY	STATUS	CREATED-TIME
+wordpress-with-mysql	mysql    	helm	running	                healthy	        2021-10-12 18:04:10 +0800 CST
+└─                	    wordpress	helm	running	                healthy	       	2021-10-12 18:04:10 +0800 CST
+```
 
 WordPress 已被成功部署，且与 MySQL 正常连接。

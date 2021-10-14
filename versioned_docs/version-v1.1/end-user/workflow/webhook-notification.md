@@ -60,7 +60,7 @@ spec:
           component: express-server
         outputs:
           - from: app-status
-            exportKey: output.status.conditions[0].message + "工作流运行完成"
+            valueFrom: output.status.conditions[0].message + "工作流运行完成"
       - name: slack-message
         type: webhook-notification
         inputs:
