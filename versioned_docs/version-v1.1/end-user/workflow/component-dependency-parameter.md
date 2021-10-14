@@ -32,8 +32,8 @@ In this case, KubeVela will deploy B first, and then deploy A when the component
 
 If we want to apply a MySQL cluster, we need:
 
-1. Apply MySQL controller.
-2. Apply a secret for MySQL password.
+1. Apply a secret for MySQL password.
+2. Apply MySQL controller.
 3. Apply MySQL cluster.
 
 Apply the following file:
@@ -46,13 +46,6 @@ metadata:
   namespace: default
 spec:
   components:
-    - name: mysql-controller
-      type: helm
-      properties:
-        repoType: helm
-        url: https://presslabs.github.io/charts
-        chart: mysql-operator
-        version: "0.4.0"
     - name: mysql-secret
       type: raw
       properties:
@@ -63,6 +56,13 @@ spec:
         type: kubernetes.io/opaque
         stringData:
           ROOT_PASSWORD: test
+    - name: mysql-controller
+      type: helm
+      properties:
+        repoType: helm
+        url: https://presslabs.github.io/charts
+        chart: mysql-operator
+        version: "0.4.0"
     - name: mysql-cluster
       type: raw
       dependsOn:
@@ -84,13 +84,26 @@ Check the application in the cluster:
 
 ```shell
 $ vela ls
-APP  	COMPONENT       	TYPE	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
-mysql	mysql-controller	helm	      	running	healthy	      	2021-10-12 17:52:34 +0800 CST
-├─ 	mysql-secret    	raw 	      	running	healthy	      	2021-10-12 17:52:34 +0800 CST
-└─ 	mysql-cluster   	raw 	      	running	healthy 	     	2021-10-12 17:52:34 +0800 CST
+APP  	COMPONENT       	TYPE	TRAITS	PHASE          	HEALTHY	STATUS	CREATED-TIME
+mysql	mysql-secret    	raw 	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
+├─ 	mysql-controller	helm	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
+└─ 	mysql-cluster   	raw 	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
 ```
 
-All components is running successfully.
+In the beginning, the status is running workflow since the mysql-controller is not ready.
+
+```shell
+$ vela ls
+APP  	COMPONENT       	TYPE	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
+mysql	mysql-secret    	raw 	      	running	healthy	      	2021-10-14 12:09:55 +0800 CST
+├─ 	mysql-controller	helm	      	running	healthy	      	2021-10-14 12:09:55 +0800 CST
+└─ 	mysql-cluster   	raw 	      	running	       	      	2021-10-14 12:09:55 +0800 CST
+```
+
+After a while, all components is running successfully. The `mysql-cluster` will be deployed after `mysql-controller` and `mysql-secret` is `healthy`.
+
+> `dependsOn` use `healthy` to check status. If the component is `healthy`, then KubeVela will deploy the next component.
+> If you want to customize the healthy status of the component, please refer to [Status Write Back](../../platform-engineers/traits/status)
 
 
 ## Inputs and Outputs

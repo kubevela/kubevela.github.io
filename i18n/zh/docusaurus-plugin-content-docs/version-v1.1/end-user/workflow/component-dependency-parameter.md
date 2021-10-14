@@ -32,9 +32,9 @@ components:
 
 假设我们需要在本地启动一个 MySQL 集群，那么我们需要：
 
-1. 部署 MySQL controller。
-2. 部署一个 Secret 作为 MySQL 的密码。
-3. 部署 MySQL 集群。
+1. 部署一个 Secret 作为 MySQL 的密码。
+2. 部署 MySQL controller。
+2. 部署 MySQL 集群。
 
 部署如下文件：
 
@@ -46,13 +46,6 @@ metadata:
   namespace: default
 spec:
   components:
-    - name: mysql-controller
-      type: helm
-      properties:
-        repoType: helm
-        url: https://presslabs.github.io/charts
-        chart: mysql-operator
-        version: "0.4.0"
     - name: mysql-secret
       type: raw
       properties:
@@ -63,6 +56,13 @@ spec:
         type: kubernetes.io/opaque
         stringData:
           ROOT_PASSWORD: test
+    - name: mysql-controller
+      type: helm
+      properties:
+        repoType: helm
+        url: https://presslabs.github.io/charts
+        chart: mysql-operator
+        version: "0.4.0"
     - name: mysql-cluster
       type: raw
       dependsOn:
@@ -84,13 +84,27 @@ spec:
 
 ```shell
 $ vela ls
-APP  	COMPONENT       	TYPE	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
-mysql	mysql-controller	helm	      	running	healthy	      	2021-10-12 17:52:34 +0800 CST
-├─ 	mysql-secret    	raw 	      	running	healthy	      	2021-10-12 17:52:34 +0800 CST
-└─ 	mysql-cluster   	raw 	      	running	healthy 	     	2021-10-12 17:52:34 +0800 CST
+APP  	COMPONENT       	TYPE	TRAITS	PHASE          	HEALTHY	STATUS	CREATED-TIME
+mysql	mysql-secret    	raw 	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
+├─ 	mysql-controller	helm	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
+└─ 	mysql-cluster   	raw 	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
 ```
 
-可以看到，所有组件都已成功运行。
+一开始，由于 mysql-controller 尚未部署成功，三个组件状态均为 runningWorkflow。
+
+```shell
+$ vela ls
+APP  	COMPONENT       	TYPE	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
+mysql	mysql-secret    	raw 	      	running	healthy	      	2021-10-14 12:09:55 +0800 CST
+├─ 	mysql-controller	helm	      	running	healthy	      	2021-10-14 12:09:55 +0800 CST
+└─ 	mysql-cluster   	raw 	      	running	       	      	2021-10-14 12:09:55 +0800 CST
+```
+
+可以看到，所有组件都已成功运行.其中 `mysql-cluster` 组件的部署依赖于 `mysql-controller` 和 `mysql-secret` 部署状态达到 `healthy`。
+
+> `dependsOn` 会根据组件是否 `healthy` 来确定状态，若已 `healthy`，则表示该组件已成功运行，可以部署下一个组件。
+> 如果你向自定义组件的健康状态，请查看 [状态回写](../../platform-engineers/traits/status)
+
 
 ## 参数传递
 
