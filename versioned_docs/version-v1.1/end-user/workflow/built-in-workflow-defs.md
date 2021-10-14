@@ -218,6 +218,62 @@ spec:
               text: Workflow ended.
 ```
 
+## apply-object
+
+### Overview
+
+Apply Kubernetes native resources, you need to upgrade to KubeVela v1.1.4 or higher to enable `apply-object`.
+
+### Parameters
+
+|  Name   |  Type  |                 Description                  |
+| :-------: | :----: | :-----------------------------------: |
+|    ...    | ... |      Kubernetes native resources fields      |
+
+### Example
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: server-with-pvc
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+      volumes:
+        - name: "my-pvc"
+          type: "pvc"
+          mountPath: "/test"
+          claimName: "myclaim"
+
+  workflow:
+    steps:
+      - name: apply-pvc
+        type: apply-object
+        properties:
+          apiVersion: v1
+          kind: PersistentVolumeClaim
+          metadata:
+            name: myclaim
+            namespace: default
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            resources:
+              requests:
+                storage: 8Gi
+            storageClassName: standard
+      - name: apply-server
+        type: apply-component
+        properties:
+          component: express-server
+```
+
 ## suspend
 
 ### Overview
