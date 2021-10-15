@@ -291,6 +291,88 @@ example-app   hello-world-server   webservice   running   true      Ready:1/1   
       waitCount: 0
 ```
 
+## 多集群应用的灰度发布
+
+在多集群应用交付场景中，经常在不同环境中执行不同的发布策略。下面这个例子，会借助灰度发布运维特征，实现差异化的发布策略。
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: example-app-rollout
+  namespace: default
+spec:
+  components:
+    - name: hello-world-server
+      type: webservice
+      properties:
+        image: crccheck/hello-world
+        port: 8000
+        type: webservice
+      traits:
+        - type: rollout
+          properties:
+            targetSize: 2
+            rolloutBatches:
+              - replicas: 2
+
+  policies:
+    - name: example-multi-env-policy
+      type: env-binding
+      properties:
+        envs:
+          - name: staging
+            placement: # 选择要部署的集群，并执行默认的发布策略
+              clusterSelector:
+                name: cluster-staging
+
+          - name: prod
+            placement:
+              clusterSelector:
+                name: cluster-prod
+            patch: #配置专门针对线上环境配置细粒度的发布策略
+              components:
+                - name: hello-world-server
+                  type: webservice
+                  traits:
+                    - type: rollout
+                      properties:
+                        targetSize: 5
+                        rolloutBatches:
+                          - replicas: 2
+                          - replicas: 3
+
+    - name: health-policy-demo
+      type: health
+      properties:
+        probeInterval: 5
+        probeTimeout: 10
+
+
+
+  workflow:
+    steps:
+      # 部署到预发环境中
+      - name: deploy-staging
+        type: deploy2env
+        properties:
+          policy: example-multi-env-policy
+          env: staging
+
+      # 手动确认
+      - name: manual-approval
+        type: suspend
+
+      # 部署到生产环境中
+      - name: deploy-prod
+        type: deploy2env
+        properties:
+          policy: example-multi-env-policy
+          env: prod
+```
+
+这个应用配置了一个初始的灰度发布运维特征，期望的副本个数为2，发布策略是一次性发布全部的副本。预发环境执行默认的发布策略，而正式环境中的副本个数为5，并为它定义了更加细粒度的发布策略：分两批发布，第一批先发布两个副本，第二批发布三个副本，当上一批次的副本全部处于就绪状态，才会发布下一批次的副本。
+
 ## 更多使用案例
 
 KubeVela 可以提供更多的应用多集群部署策略，如将单一应用的不同组件部署在不同环境中，或在管控集群及子集群中混合部署。
