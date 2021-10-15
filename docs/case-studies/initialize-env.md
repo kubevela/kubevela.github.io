@@ -1,5 +1,5 @@
 ---
-title: Initialize custom environment
+title: Initialize environment
 ---
 
 This case will introduce what is environment and how to initialize an environment.
@@ -18,9 +18,7 @@ In general, the resource types that can be initialized include the following typ
 
 3. All kinds of shared resources and services.  For example. shared resources in microservices. These shared resources can be a microservice component, cloud database, cache, load balancer, API gateway, and so on.
 
-4. Various management policies and processes. An environment may have different global policies. The policy can be initializing a database table, registering an automatic discovery configuration, and so on.
-
-## Initialize the environment
+4. Various management policies and processes. An environment may have different global policies. The policy can be chaos test, security scan, SLO and son on; the process can be initializing a database table, registering an automatic discovery configuration, and so on.
 
 KubeVela allows you to use different resources to initialize the environment.
 
@@ -34,13 +32,20 @@ For example, if both the test and develop environments rely on the same controll
 
 ### Directly use Application for initialization
 
-If we want to use `kruise` in cluster, we can use `Helm` to initialize `kruise`.
+> Make sure your KubeVela version is `v1.1.6+`.
 
-We can directly use Application to initialize a kruise environment. The application below will deploy a kruise controller in cluster:
+If we want to use some CRD controller like [OpenKruise](https://github.com/openkruise/kruise) in cluster, we can use `Helm` to initialize `kruise`.
 
-```shell
-vela addon enable fluxcd
-```
+We can directly use Application to initialize a kruise environment. The application below will deploy a kruise controller in cluster.
+
+We have to enable `fluxcd` in cluster since we use `Helm` to deploy kruise.
+We can use `depends-on-app` to make sure `fluxcd` is deployed before kruise.
+
+> `depends-on-app` will check if the cluster has the application with `name` and `namespace` defines in `properties`.
+> If the application exists, the next step will be executed after the application is running.
+> If the application do not exists, KubeVela will check the ConfigMap with the same name, and read the config of the Application and apply to cluster.
+> For more information, please refer to [depends-on-app](../end-user/workflow/built-in-workflow-defs#depends-on-app).
+
 
 ```shell
 cat <<EOF | kubectl apply -f -
@@ -73,7 +78,7 @@ spec:
 EOF
 ```
 
-After applying the files, we can check the application in cluster:
+Check the application in cluster:
 
 ```shell
 $ vela ls -n vela-system
@@ -82,26 +87,7 @@ kruise        	    ...           	raw 	      running	        healthy	      	2021
 fluxcd        	    ...           	raw 	      running	        healthy	      	2021-09-24 20:59:06 +0800 CST
 ```
 
-Kruise is running successfully! Then you can use kruise in your cluster. If you need to set up a new environment, the only thing you need to do is to apply the files above.
-
-#### Customize initialization dependencies
-
-In the example above, `depends-on-app` means this initialization depends on the ability of fluxcd. 
-
-`depends-on-app` will check if the cluster has the application with `name` and `namespace` defines in `properties`.
-
-If the application exists, the next step will be executed after the application is running.
-If the application do not exists, KubeVela will check the configMap with the same name, and read the config of the Application and apply to cluster.
-> If the application do not exists, we need configMap like below:
-> ```yaml
-> apiVersion: v1
-> kind: ConfigMap
-> metadata:
->   name: fluxcd
->   namespace: vela-system
-> data:
->   fluxcd: ...
-> ``` 
+Kruise is running successfully! Then you can use kruise in your cluster. If you need to set up a new environment, the only thing you need to do is to apply the files like above.
 
 ### Add initialize workflow in application
 
