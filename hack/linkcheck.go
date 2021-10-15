@@ -45,7 +45,6 @@ func main() {
 				d := strings.Index(s, ")")
 				subStr := s[:d]
 				targetFilePath := filepath.Clean(targetDir + "/" + subStr)
-				//fmt.Println(path, subStr, "=>", targetFilePath)
 				if _, err1 := os.Stat(targetFilePath); err1 != nil {
 					if _, err2 := os.Stat(targetFilePath + ".md"); err2 != nil {
 						ss := strings.LastIndex(targetFilePath, "#")
@@ -70,5 +69,5 @@ func main() {
 		cnt++
 		return nil
 	})
-	fmt.Printf("%d total files effected\n", cnt)
+	fmt.Printf("%d total files checked\n", cnt)
 }
