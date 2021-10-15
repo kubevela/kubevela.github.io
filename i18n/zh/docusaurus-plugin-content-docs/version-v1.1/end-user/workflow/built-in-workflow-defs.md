@@ -47,6 +47,21 @@ spec:
 
 等待指定的 Application 完成。
 
+`depends-on-app` 会根据 `properties` 中的 `name` 及 `namespace`，去查询集群中是否存在对应的应用。
+
+如果应用存在，则当该应用的状态可用时，才会进行下一个步骤；
+若该应用不存在，则会去查询同名的 configMap，从中读取出应用的配置并部署到集群中。
+> 若应用不存在，则需要形如下的 configMap：`name` 与 `namespace` 和 `properties` 中声明的保持一致，在 `data` 中，以 `name` 为 key，实际的 value 为需要部署的 KubeVela Application yaml。
+> ```yaml
+> apiVersion: v1
+> kind: ConfigMap
+> metadata:
+>   name: myapp
+>   namespace: vela-system
+> data:
+>   myapp: ...
+> ``` 
+
 ### 参数
 
 |  参数名   |  类型  |                 说明                  |

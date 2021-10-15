@@ -47,6 +47,20 @@ spec:
 
 Wait for the specified Application to complete.
 
+> `depends-on-app` will check if the cluster has the application with `name` and `namespace` defines in `properties`.
+> If the application exists, the next step will be executed after the application is running.
+> If the application do not exists, KubeVela will check the ConfigMap with the same name, and read the config of the Application and apply to cluster.
+> The ConfigMap is like below: the `name` and `namespace` of the ConfigMap is the same in properties. In data, the key is `name`, and the value is the yaml of the deployed application yaml.
+> ```yaml
+> apiVersion: v1
+> kind: ConfigMap
+> metadata:
+>   name: myapp
+>   namespace: vela-system
+> data:
+>   myapp: ...
+> ``` 
+
 ### Parameter
 
 |   Name    |  Type  |           Description            |
