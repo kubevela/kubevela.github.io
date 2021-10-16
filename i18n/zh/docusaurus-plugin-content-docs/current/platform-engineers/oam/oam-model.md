@@ -86,7 +86,7 @@ KubeVela 当前内置的工作流步骤节点包括了创建资源、条件判�
 
 ## 避免配置漂移
 
-在具体实现上，KubeVela 采用了脱胎于 Google Borg 系统的 [CUE 配置语言](https://cuelang.org/) 作为模型层实现，从而以 IaC (Infrastructure-as-Code) 的方式实现了 OAM 各个模块之间的高效协作和灵活扩展。但另一方面，常规的 IaC 技术往往会引入“配置漂移”（Infrastructure/Configuration Drift）的问题，即：当用户声明的应用部署配置和生产环境实际运行的实例状态发生不一致时，IaC 就无能为力了。
+在具体实现上，KubeVela 采用了脱胎于 Google Borg 系统的 [CUE 配置语言](https://cuelang.org/) 作为模型层实现，从而以可编程 (Infrastructure-as-Code) 的方式实现了 OAM 各个模块之间的高效协作和灵活扩展。但另一方面，常规的 IaC 技术往往会引入“配置漂移”（Infrastructure/Configuration Drift）的问题，即：当用户声明的应用部署配置和生产环境实际运行的实例状态发生不一致时，IaC 就无能为力了。
 
 所以 KubeVela 在采用 IaC 技术实现的同时，还同时通过 [Kubernetes 控制循环](https://kubernetes.io/docs/concepts/architecture/controller/) 来管控整个 IaC 模型的渲染和执行，从而以完全自动化的方式保证了应用配置和终态的一致性，同时在模块定义、封装、扩展过程中保留了完整的 IaC 的使用体验。简介明了的 CUE 模板语法是平台管理员自行扩展 KubeVela 时唯一需要学习的一项技术。
 
