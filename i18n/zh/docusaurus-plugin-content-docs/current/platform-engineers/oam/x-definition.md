@@ -2,7 +2,9 @@
 title: 模块定义（X-Definition）
 ---
 
-最终用户使用的 OAM 模型 [应用部署计划 Application][1] 中，有很多声明“类型的字段”，如组件类型、运维特征类型、应用策略类型、工作流节点类型等，这些类型实际上就是 OAM 模型的模块定义（X-Definition）。
+KubeVela 是完全可编程的，它可以轻松的根据你的需求实现原地定制和扩展。
+
+最终用户使用的 OAM 模型 [应用部署计划 Application][1] 中，有很多声明“类型的字段”，如组件类型、运维特征类型、应用策略类型、工作流节点类型等，这些类型实际上就是 OAM 模型的模块定义（X-Definition），这些模块在 KubeVela 中全部都是基于 [CUE](https://cuelang.org) 的可编程模块。
 
 当前 OAM 模型支持的模块定义（X-Definition）包括组件定义（ComponentDefinition），运维特征定义（TraitDefinition）、应用策略定义（PolicyDefinition），工作流节点定义（WorkflowStepDefinition）等，随着系统演进，OAM 模型未来可能会根据场景需要进一步增加新的模块定义。
 
@@ -73,89 +75,89 @@ spec:
     cue:
       template: |
         output: {
-        	apiVersion: "source.toolkit.fluxcd.io/v1beta1"
-        	metadata: {
-        		name: context.name
-        	}
-        	if parameter.repoType == "git" {
-        		kind: "GitRepository"
-        		spec: {
-        			url: parameter.repoUrl
-        			ref:
-        				branch: parameter.branch
-        			interval: parameter.pullInterval
-        		}
-        	}
-        	if parameter.repoType == "helm" {
-        		kind: "HelmRepository"
-        		spec: {
-        			interval: parameter.pullInterval
-        			url:      parameter.repoUrl
-        			if parameter.secretRef != _|_ {
-        				secretRef: {
-        					name: parameter.secretRef
-        				}
-        			}
-        		}
-        	}
+          apiVersion: "source.toolkit.fluxcd.io/v1beta1"
+          metadata: {
+            name: context.name
+          }
+          if parameter.repoType == "git" {
+            kind: "GitRepository"
+            spec: {
+              url: parameter.repoUrl
+              ref:
+                branch: parameter.branch
+              interval: parameter.pullInterval
+            }
+          }
+          if parameter.repoType == "helm" {
+            kind: "HelmRepository"
+            spec: {
+              interval: parameter.pullInterval
+              url:      parameter.repoUrl
+              if parameter.secretRef != _|_ {
+                secretRef: {
+                  name: parameter.secretRef
+                }
+              }
+            }
+          }
         }
 
         outputs: release: {
-        	apiVersion: "helm.toolkit.fluxcd.io/v2beta1"
-        	kind:       "HelmRelease"
-        	metadata: {
-        		name: context.name
-        	}
-        	spec: {
-        		interval: parameter.pullInterval
-        		chart: {
-        			spec: {
-        				chart:   parameter.chart
-        				version: parameter.version
-        				sourceRef: {
-        					if parameter.repoType == "git" {
-        						kind: "GitRepository"
-        					}
-        					if parameter.repoType == "helm" {
-        						kind: "HelmRepository"
-        					}
-        					name:      context.name
-        					namespace: context.namespace
-        				}
-        				interval: parameter.pullInterval
-        			}
-        		}
-        		if parameter.targetNamespace != _|_ {
-        			targetNamespace: parameter.targetNamespace
-        		}
-        		if parameter.values != _|_ {
-        			values: parameter.values
-        		}
-        	}
+          apiVersion: "helm.toolkit.fluxcd.io/v2beta1"
+          kind:       "HelmRelease"
+          metadata: {
+            name: context.name
+          }
+          spec: {
+            interval: parameter.pullInterval
+            chart: {
+              spec: {
+                chart:   parameter.chart
+                version: parameter.version
+                sourceRef: {
+                  if parameter.repoType == "git" {
+                    kind: "GitRepository"
+                  }
+                  if parameter.repoType == "helm" {
+                    kind: "HelmRepository"
+                  }
+                  name:      context.name
+                  namespace: context.namespace
+                }
+                interval: parameter.pullInterval
+              }
+            }
+            if parameter.targetNamespace != _|_ {
+              targetNamespace: parameter.targetNamespace
+            }
+            if parameter.values != _|_ {
+              values: parameter.values
+            }
+          }
         }
 
         parameter: {
-        	repoType: "git" | "helm"
-        	// +usage=The Git or Helm repository URL, accept HTTP/S or SSH address as git url.
-        	repoUrl: string
-        	// +usage=The interval at which to check for repository and relese updates.
-        	pullInterval: *"5m" | string
-        	// +usage=1.The relative path to helm chart for git source. 2. chart name for helm resource
-        	chart: string
-        	// +usage=Chart version
-        	version?: string
-        	// +usage=The Git reference to checkout and monitor for changes, defaults to master branch.
-        	branch: *"master" | string
-        	// +usage=The name of the secret containing authentication credentials for the Helm repository.
-        	secretRef?: string
-        	// +usage=The namespace for helm chart
-        	targetNamespace?: string
-        	// +usage=Chart version
-        	value?: #nestedmap
+          repoType: "git" | "helm"
+          // +usage=The Git or Helm repository URL, accept HTTP/S or SSH address as git url.
+          repoUrl: string
+          // +usage=The interval at which to check for repository and relese updates.
+          pullInterval: *"5m" | string
+          // +usage=1.The relative path to helm chart for git source. 2. chart name for helm resource
+          chart: string
+          // +usage=Chart version
+          version?: string
+          // +usage=The Git reference to checkout and monitor for changes, defaults to master branch.
+          branch: *"master" | string
+          // +usage=The name of the secret containing authentication credentials for the Helm repository.
+          secretRef?: string
+          // +usage=The namespace for helm chart
+          targetNamespace?: string
+          // +usage=Chart version
+          value?: #nestedmap
         }
 
         #nestedmap: {
-        	...
+          ...
         }
 ```
 
@@ -291,41 +293,41 @@ spec:
     cue:
       template: |
         output: {
-        	apiVersion: "core.oam.dev/v1alpha1"
-        	kind:       "EnvBinding"
-        	spec: {
-        		engine: parameter.engine
-        		appTemplate: {
-        			apiVersion: "core.oam.dev/v1beta1"
-        			kind:       "Application"
-        			metadata: {
-        				name:      context.appName
-        				namespace: context.namespace
-        			}
-        			spec: {
-        				components: context.components
-        			}
-        		}
-        		envs: parameter.envs
-        	}
+          apiVersion: "core.oam.dev/v1alpha1"
+          kind:       "EnvBinding"
+          spec: {
+            engine: parameter.engine
+            appTemplate: {
+              apiVersion: "core.oam.dev/v1beta1"
+              kind:       "Application"
+              metadata: {
+                name:      context.appName
+                namespace: context.namespace
+              }
+              spec: {
+                components: context.components
+              }
+            }
+            envs: parameter.envs
+          }
         }
 
         #Env: {
-        	name: string
-        	patch: components: [...{
-        		name: string
-        		type: string
-        		properties: {...}
-        	}]
-        	placement: clusterSelector: {
-        		labels?: [string]: string
-        		name?: string
-        	}
+          name: string
+          patch: components: [...{
+            name: string
+            type: string
+            properties: {...}
+          }]
+          placement: clusterSelector: {
+            labels?: [string]: string
+            name?: string
+          }
         }
 
         parameter: {
-        	engine: *"ocm" | string
-        	envs: [...#Env]
+          engine: *"ocm" | string
+          envs: [...#Env]
         }
 ```
 
@@ -456,10 +458,10 @@ spec:
 
 最后请注意，在本节介绍的所有的模块化定义概念，都只需要平台的管理员在希望对 KubeVela 进行功能扩展时了解，最终用户对这些概念不需要有任何感知。
 
-[1]:	./oam-model
-[2]:	../cue/basic
-[3]:	../kube/component
-[4]:	../traits/customize-trait
-[5]:	../traits/advanced
-[6]:	https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
-[7]:	../cue/basic
+[1]:  ./oam-model
+[2]:  ../cue/basic
+[3]:  ../kube/component
+[4]:  ../traits/customize-trait
+[5]:  ../traits/advanced
+[6]:  https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
+[7]:  ../cue/basic

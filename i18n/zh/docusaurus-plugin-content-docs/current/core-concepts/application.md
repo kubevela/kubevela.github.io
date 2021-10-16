@@ -81,15 +81,15 @@ vela components
 ```
 返回结果：
 ```
-NAME       	NAMESPACE  	WORKLOAD                             	DESCRIPTION                                                 
-alibaba-rds	default    	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud RDS object        
-task       	vela-system	jobs.batch                           	Describes jobs that run code or a script to completion.     
-webservice 	vela-system	deployments.apps                     	Describes long-running, scalable, containerized services    
-           	           	                                     	that have a stable network endpoint to receive external     
-           	           	                                     	network traffic from customers.                             
-worker     	vela-system	deployments.apps                     	Describes long-running, scalable, containerized services    
-           	           	                                     	that running at backend. They do NOT have network endpoint  
-           	           	                                     	to receive external network traffic.                        
+NAME        NAMESPACE   WORKLOAD                              DESCRIPTION                                                 
+alibaba-rds default     configurations.terraform.core.oam.dev Terraform configuration for Alibaba Cloud RDS object        
+task        vela-system jobs.batch                            Describes jobs that run code or a script to completion.     
+webservice  vela-system deployments.apps                      Describes long-running, scalable, containerized services    
+                                                              that have a stable network endpoint to receive external     
+                                                              network traffic from customers.                             
+worker      vela-system deployments.apps                      Describes long-running, scalable, containerized services    
+                                                              that running at backend. They do NOT have network endpoint  
+                                                              to receive external network traffic.                        
 
 ```
 
@@ -101,13 +101,13 @@ vela traits
 ```
 返回结果：
 ```
-NAME       	NAMESPACE  	APPLIES-TO       	CONFLICTS-WITH	POD-DISRUPTIVE	DESCRIPTION                                          
-annotations	vela-system	deployments.apps 	              	true          	Add annotations for your Workload.                   
-cpuscaler  	vela-system	webservice,worker	              	false         	Automatically scale the component based on CPU usage.
-ingress    	vela-system	webservice,worker	              	false         	Enable public web traffic for the component.         
-labels     	vela-system	deployments.apps 	              	true          	Add labels for your Workload.                        
-scaler     	vela-system	webservice,worker	              	false         	Manually scale the component.                        
-sidecar    	vela-system	deployments.apps 	              	true          	Inject a sidecar container to the component.   
+NAME        NAMESPACE   APPLIES-TO        CONFLICTS-WITH  POD-DISRUPTIVE  DESCRIPTION                                          
+annotations vela-system deployments.apps                  true            Add annotations for your Workload.                   
+cpuscaler   vela-system webservice,worker                 false           Automatically scale the component based on CPU usage.
+ingress     vela-system webservice,worker                 false           Enable public web traffic for the component.         
+labels      vela-system deployments.apps                  true            Add labels for your Workload.                        
+scaler      vela-system webservice,worker                 false           Manually scale the component.                        
+sidecar     vela-system deployments.apps                  true            Inject a sidecar container to the component.   
 ```
 
 ## 应用策略（Policy)
@@ -118,7 +118,9 @@ sidecar    	vela-system	deployments.apps 	              	true          	Inject a
 
 工作流允许用户将组件、运维特征、具体的交付动作等一系列元素组装成为一个完整的、面向过程的有向无环图（DAG）。典型的工作流步骤包括暂停、人工审核、等待、数据传递、多环境/多集群发布、A/B 测试等等。
 
-每一个工作流步骤在 KubeVela 中都是一个完全可插拔的独立功能模块，KubeVela 允许你通过 CUE 语言自由的定义和创建属于自己的工作流步骤来组成自己的交付计划。
+![alt](../resources/workflow.png)
+
+每一个策略和工作流步骤在 KubeVela 中都是一个完全可插拔的独立功能模块，KubeVela 允许你通过 CUE 语言自由的定义和创建属于自己的工作流步骤来组成自己的交付计划。
 
 ## 下一步
 
