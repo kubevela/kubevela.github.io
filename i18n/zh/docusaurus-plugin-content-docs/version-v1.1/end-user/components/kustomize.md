@@ -119,7 +119,7 @@ spec:
 | policy.numerical.order     | 可选     | 表示用数字顺序来筛选最新的镜像。asc 会优先选择 `9` 开头的镜像，desc 会优先选择 `0` 开头的镜像                                                                                                                                                 | asc                                             |
 | policy.semver.range     | 可选     | 表示在指定范围内找到最新的镜像                                                                                                                                                 | '>=1.0.0 <2.0.0'                                             |
 | filterTags.extract     | 可选     | extract 允许从指定的正则表达式模式中提取 pattern                                                                                                                                                 | $timestamp                                             |
-| filterTags.pattern     | 可选     | pattern 是用于过滤镜像的正则表达式模式 pattern                                                                                                                                                 | '^main-[a-fA-F0-9]+-(?P<timestamp>.*)'                                             |
+| filterTags.pattern     | 可选     | pattern 是用于过滤镜像的正则表达式模式 pattern                                                                                                                                                 | '^master-[a-f0-9]'                                             |
 | commitMessage     | 可选     | 用于追加更新镜像时的提交信息                                                                                                                                                 |  'Image: {{range .Updated.Images}}{{println .}}{{end}}'                                             |
 
 **使用示例**
