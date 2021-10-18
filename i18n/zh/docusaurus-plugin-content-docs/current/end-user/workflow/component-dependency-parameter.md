@@ -2,14 +2,14 @@
 title:  应用组件间的依赖和参数传递
 ---
 
-本节将介绍如何在 KubeVela 中进行组件间的依赖关系和参数传递。
+本节将介绍如何在 KubeVela 中进行应用及组件间的依赖关系和参数传递。
 
 > 由于本节示例中使用了 helm 功能，所以需要开启 fluxcd 插件：
 > ```shell
 > vela addon enable fluxcd
 > ```
 
-## 依赖关系
+## 组件间的依赖关系
 
 在 KubeVela 中，可以在组件中通过 `dependsOn` 来指定组件间的依赖关系。
 
@@ -106,7 +106,7 @@ mysql	mysql-secret    	raw 	      	running	healthy	      	2021-10-14 12:09:55 +0
 > 如果你向自定义组件的健康状态，请查看 [状态回写](../../platform-engineers/traits/status)
 
 
-## 参数传递
+## 组件间的参数传递
 
 除了显示指定依赖关系以外，还可以在组件中通过 outputs 和 inputs 来指定要传输的数据。
 
@@ -116,7 +116,7 @@ outputs 由 `name` 和 `valueFrom` 组成。`name` 声明了这个 output 的名
 
 `valueFrom` 有以下几种写法：
 1. 直接通过字符串表示值，如：`valueFrom: testString`。
-2. 通过表达式来指定值，如：`valueFrom: output.metadata.name`。注意，`output` 为固定内置字段，指向组件中被部署在集群里的资源。
+2. 通过表达式来指定值，如：`valueFrom: output.metadata.name`。注意，`output` 为固定内置字段，指向组件中被部署在集群里的资源，可以直接通过 `output.metadata.name` 这种方式来指向资源的名称。
 3. 通过 `+` 来任意连接以上两种写法，最终值是计算后的字符串拼接结果，如：`valueFrom: output.metadata.name + "testString"`。
 
 ### Inputs
@@ -196,6 +196,10 @@ spec:
             port: 3306
 ```
 
+在上面的应用中，第一个组件 `mysql` 会将自身资源 `output.metadata.name` 加上 `.default.svc.cluster.local` 拼接成一个 `mysql.default.svc.cluster.local` 的字符串，作为一个名为 `mysql-svc` 的 `output`。
+
+而在第二个组件中，`input` 中的值来源于 `mysql-svc` 这个 `output`，并会将其赋值给组件中的 `properties.values.externalDatabase.host`，从而使第二个组件中的数据库地址被赋值。
+
 ### 期望结果
 
 查看集群中的应用：
@@ -209,3 +213,118 @@ wordpress-with-mysql	mysql    	helm	running	                healthy	        2021
 ```
 
 WordPress 已被成功部署，且与 MySQL 正常连接。
+
+## 应用间的参数传递
+
+应用间的参数传递可以通过存储中间变量到 ConfigMap 或者 Secret 中，再使用 `inputs` 和 `outputs`，来完成应用间的参数传递。
+
+我们将上个例子中的两个组件拆为两个应用，首先，部署一个 MySQL 应用，并将其 service 地址存储到 ConfigMap 中：
+
+> 注意，`export2config` 要求 KubeVela 版本 `>=v1.1.6`。
+
+### 部署第一个应用
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: mysql
+  namespace: default
+spec:
+  components:
+    - name: mysql
+      type: helm
+      outputs:
+        # 将 service 地址作为 output
+        - name: mysql-svc
+          valueFrom: output.metadata.name + ".default.svc.cluster.local"
+      properties:
+        repoType: helm
+        url: https://charts.bitnami.com/bitnami
+        chart: mysql
+        version: "8.8.2"
+        values:
+          auth:
+            rootPassword: mypassword
+  
+  workflow:
+    steps:
+      - name: apply-mysql
+        type: apply-component
+        outputs:
+          - name: mysql-svc
+            valueFrom: output.metadata.name + ".default.svc.cluster.local"
+        properties:
+          component: mysql
+      - name: store-svc
+        type: export2config
+        inputs:
+          - from: mysql-svc
+            parameterKey: data.svc
+        properties:
+          configName: my-configmap
+```
+
+部署如上 yaml，可以看到在第一步工作流中，会去部署 MySQL 组件，并且将其 service 地址作为 `output` 导出。在第二步工作流中，会将上一步的 `output` 作为 `input` 导入，并且存放到名为 `my-configmap` 的 ConfigMap 中。在这个 ConfigMap 的 `data` 里，存储了一个 `key` 为 `svc` 的地址。
+
+### 部署第二个应用
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: wordpress
+  namespace: default
+spec:
+  components:
+    - name: wordpress
+      type: helm
+      properties:
+        repoType: helm
+        url: https://charts.bitnami.com/bitnami
+        chart: wordpress
+        version: "12.0.3"
+        values:
+          mariadb:
+            enabled: false
+          externalDatabase:
+            user: root
+            password: mypassword
+            database: mysql
+            port: 3306
+  
+  workflow:
+    steps:
+      - name: read-config
+        type: read-object
+        outputs:
+          - name: mysql-svc
+            valueFrom: output.value.data["svc"]
+        properties:
+          apiVersion: v1
+          kind: ConfigMap
+          name: my-configmap
+      - name: apply-wordpress
+        type: apply-component
+        inputs:
+          # 将 mysql 的 service 地址赋值到 host 中
+          - from: mysql-svc
+            parameterKey: values.externalDatabase.host
+        properties:
+          component: wordpress
+```
+
+部署如上 yaml，可以看到在第一步工作流中，会读取 `my-configmap` 这个 ConfigMap，并且将其 `data` 中 `svc` 的 value 作为 `output` 传递。在第二步中，会去部署 Wordpress 组件，并且将上一步的 `output` 作为 `input` 导入到组件中，并且赋值给组件中的 `values.externalDatabase.host`，从而达到应用间参数传递的效果。
+
+查看集群中的应用：
+
+```shell
+$ vela ls
+APP      	COMPONENT	TYPE	TRAITS	PHASE          	HEALTHY	STATUS	CREATED-TIME
+mysql    	mysql    	helm	      	running        	healthy	      	2021-10-18 16:46:16 +0800 CST
+wordpress	wordpress	helm	      	running     	  healthy   	   	2021-10-18 16:54:49 +0800 CST
+```
+
+所有应用均已成功运行！
+
+通过 `inputs`, `outputs` 以及中间产物的存储，我们可以完成应用间的参数传递。
