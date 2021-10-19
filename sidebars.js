@@ -50,6 +50,7 @@ module.exports = {
                   'end-user/components/cloud-services/terraform/alibaba-rds',
                   'end-user/components/cloud-services/terraform/alibaba-oss',
                   'end-user/components/cloud-services/terraform/azure-database-mariadb',
+                  'end-user/components/cloud-services/terraform/aws-s3',
                 ],
               },
                 'end-user/components/cloud-services/provider-and-consume-cloud-services',
