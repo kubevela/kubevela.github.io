@@ -6,15 +6,23 @@ title:  使用 Webhook 发送通知
 
 本节将介绍如何在工作流中通过 `webhook-notification` 发送 Webhook 通知。
 
+> 请确保你的 KubeVela 版本 `>=v1.1.6`。
+
 ## 参数说明
 
 | 参数 | 类型 | 说明 |
 | :---: | :--: | :-- |
 | slack | Object | 可选值，如果需要发送 Slack 信息，则需填写其 url 及 message |
-| slack.url | String | 必填值，Slack 的 Webhook 地址 |
+| slack.url | Object | 必填值，Slack 的 Webhook 地址，可以选择直接填写或从 secret 中获取 |
+| slack.url.address | String | 可选值，直接填写 Slack 的 Webhook 地址 |
+| slack.url.fromSecret.name | String | 可选值， 从 secret 中获取 Webhook 地址，secret 的名字 |
+| slack.url.fromSecret.key | String | 可选值， 从 secret 中获取 Webhook 地址，从 secret 中获取的 key |
 | slack.message | Object | 必填值，需要发送的 Slack 信息，请符合 [Slack 信息规范](https://api.slack.com/reference/messaging/payload) |
 | dingding | Object | 可选值，如果需要发送钉钉信息，则需填写其 url 及 message |
-| dingding.url | String | 必填值，钉钉的 Webhook 地址 |
+| dingding.url | Object | 必填值，钉钉的 Webhook 地址，可以选择直接填写或从 secret 中获取 |
+| dingding.url.address | String | 可选值，直接填写钉钉的 Webhook 地址 |
+| dingding.url.fromSecret.name | String | 可选值， 从 secret 中获取 Webhook 地址，secret 的名字 |
+| dingding.url.fromSecret.key | String | 可选值， 从 secret 中获取 Webhook 地址，从 secret 中获取的 key |
 | dingding.message | Object | 必填值，需要发送的钉钉信息，请符合 [钉钉信息规范](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |
 
 ## 如何使用
@@ -48,7 +56,8 @@ spec:
         properties:
           dingding:
             # 钉钉 Webhook 地址，请查看：https://developers.dingtalk.com/document/robots/custom-robot-access
-            url: <your dingding url>
+            url:
+              address: <your dingding url>
             # 具体要发送的信息详情
             message:
               msgtype: text
@@ -69,7 +78,10 @@ spec:
         properties:
           slack:
             # Slack Webhook 地址，请查看：https://api.slack.com/messaging/webhooks
-            url: <your slack url>
+            url:
+              fromSecret:
+                name: <the secret name that stores your slack url>
+                key: <the secret key that stores your slack url>
             # 具体要发送的信息详情，会被 input 中的值覆盖
             # message:
             #   text: condition message + 工作流运行完成

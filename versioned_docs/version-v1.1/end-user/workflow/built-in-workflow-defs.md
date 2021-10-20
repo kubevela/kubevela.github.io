@@ -174,17 +174,23 @@ spec:
 
 ### Overview
 
-Send messages to the webhook address.
+Send messages to the webhook address, you need to upgrade to KubeVela v1.1.6 or higher to enable `apply-object`.
 
 ### Parameters
 
 |       Name       |  Type  | Description                                                                                                                                                                 |
 | :--------------: | :----: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 |      slack       | Object | Optional, please fulfill its url and message if you want to send Slack messages                                                                                             |
-|    slack.url     | String | Required, the webhook address of Slack                                                                                                                                      |
+|    slack.url     | Object | Required, the webhook address of Slack, you can choose to fill it in directly or specify it in secret                                                                                                                                      |
+|    slack.url.address   | String | Optional, directly specify the webhook address of Slack                                                                                                                                      |
+|    slack.url.fromSecret.name     | String | Optional, specify the webhook address of Slack from secret                                                                                                                                       |
+|    slack.url.fromSecret.key     | String | Optional, specify the webhook address of Slack from secret, the key of the secret                                                                                                                                     |
 |  slack.message   | Object | Required, the Slack messages you want to send, please follow [Slack messaging](https://api.slack.com/reference/messaging/payload)                                           |
 |     dingding     | Object | Optional, please fulfill its url and message if you want to send DingTalk messages                                                                                          |
-|   dingding.url   | String | Required, the webhook address of DingTalk                                                                                                                                   |
+|   dingding.url   | Object | Required, the webhook address of DingTalk, you can choose to fill it in directly or specify it in secret                                                                                                                                   |
+|   dingding.url.address   | String | Optional, directly specify the webhook address of DingTalk                                                                                                                                   |
+|   dingding.url.fromSecret.name   | String | Optional, specify the webhook address of DingTalk from secret                                                                                                                                   |
+|   dingding.url.fromSecret.key   | String | Optional, specify the webhook address of DingTalk from secret, the key of the secret                                                                                                                                   |
 | dingding.message | Object | Required, the DingTalk messages you want to send, please follow [DingTalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |  |
 
 ### Example
@@ -215,7 +221,8 @@ spec:
         properties:
           dingding:
             # the DingTalk webhook address, please refer to: https://developers.dingtalk.com/document/robots/custom-robot-access
-            url: xxx
+            url:
+              address: <your dingtalk url>
             message:
               msgtype: text
               text:
@@ -227,7 +234,10 @@ spec:
         properties:
           slack:
             # the Slack webhook address, please refer to: https://api.slack.com/messaging/webhooks
-            url: xxx
+            url:
+              fromSecret:
+                name: <the secret name that stores your slack url>
+                key: <the secret key that stores your slack url>
             message:
               text: Workflow ended.
 ```
@@ -286,6 +296,158 @@ spec:
         type: apply-component
         properties:
           component: express-server
+```
+
+## read-object
+
+### Overview
+
+Read Kubernetes native resources, you need to upgrade to KubeVela v1.1.6 or higher to enable `read-object`.
+
+### Parameters
+
+|  Name   |  Type  |                 Description                  |
+| :-------: | :----: | :-----------------------------------: |
+| apiVersion | String |     Required, The apiVersion of the resource you want to read     |
+| kind | String |     Required, The kind of the resource you want to read     |
+| name | String |     Required, The apiVersion of the resource you want to read     |
+| namespace | String |     Optional, The namespace of the resource you want to read, defaults to `default`     |
+
+### Example
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: read-object
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+  workflow:
+    steps:
+    - name: read-object
+      type: read-object
+      outputs:
+        - name: cpu
+          valueFrom: output.value.data["cpu"]
+        - name: memory
+          valueFrom: output.value.data["memory"]
+      properties:
+        apiVersion: v1
+        kind: ConfigMap
+        name: my-cm-name
+    - name: apply
+      type: apply-component
+      inputs:
+        - from: cpu
+          parameterKey: cpu
+        - from: memory
+          parameterKey: memory
+      properties:
+        component: express-server
+```
+
+## export2config
+
+### Overview
+
+Export data to ConfigMap, you need to upgrade to KubeVela v1.1.6 or higher to enable `export2config`.
+
+### Parameters
+
+|  Name   |  Type  |                 Description                  |
+| :-------: | :----: | :-----------------------------------: |
+| configName | String |     Required, The name of the ConfigMap     |
+| namespace | String |     Optional, The namespace of the ConfigMap, defaults to `context.namespace`     |
+| data | Map |     Required, The data that you want to export to ConfigMap     |
+
+### Example
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: export-config
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+  workflow:
+    steps:
+      - name: apply-server
+        type: apply-component
+        outputs: 
+          - name: status
+            valueFrom: output.status.conditions[0].message
+        properties:
+          component: express-server
+      - name: export-config
+        type: export-config
+        inputs:
+          - from: status
+            parameterKey: data.serverstatus
+        properties:
+          configName: my-configmap
+          data:
+            testkey: testvalue
+```
+
+## export2secret
+
+### Overview
+
+Export data to Secret, you need to upgrade to KubeVela v1.1.6 or higher to enable `export2secret`.
+
+### Parameters
+
+|  Name   |  Type  |                 Description                  |
+| :-------: | :----: | :-----------------------------------: |
+| secretName | String |     Required, The name of the Secret     |
+| namespace | String |     Optional, The namespace of the Secret, defaults to `context.namespace`     |
+| data | Map |     Required, The data that you want to export to Secret     |
+
+### Example
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: export-secret
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+  workflow:
+    steps:
+      - name: apply-server
+        type: apply-component
+        outputs: 
+          - name: status
+            valueFrom: output.status.conditions[0].message
+        properties:
+          component: express-server
+      - name: export-secret
+        type: export-secret
+        inputs:
+          - from: status
+            parameterKey: data.serverstatus
+        properties:
+          secretName: my-secret
+          data:
+            testkey: testvalue
 ```
 
 ## suspend
