@@ -175,17 +175,23 @@ spec:
 
 ### 简介
 
-向指定的 Webhook 发送信息。
+向指定的 Webhook 发送信息，该功能在 KubeVela v1.1.6 及以上版本可使用。
 
 ### 参数
 
 |      参数名      |  类型  | 说明                                                                                                                                     |
 | :--------------: | :----: | :--------------------------------------------------------------------------------------------------------------------------------------- |
 |      slack       | Object | 可选值，如果需要发送 Slack 信息，则需填写其 url 及 message                                                                               |
-|    slack.url     | String | 必填值，Slack 的 Webhook 地址                                                                                                            |
+|    slack.url     | Object | 必填值，Slack 的 Webhook 地址，可以选择直接填写或从 secret 中获取                                                                                                            |
+|    slack.url.address     | String | 可选值，直接填写 Slack 的 Webhook 地址                                                                                                            |
+|    slack.url.fromSecret.name     | String | 可选值， 从 secret 中获取 Webhook 地址，secret 的名字                                                                                                            |
+|    slack.url.fromSecret.key     | String | 可选值， 从 secret 中获取 Webhook 地址，从 secret 中获取的 key                                                                                                            |
 |  slack.message   | Object | 必填值，需要发送的 Slack 信息，请符合 [Slack 信息规范](https://api.slack.com/reference/messaging/payload)                                |
 |     dingding     | Object | 可选值，如果需要发送钉钉信息，则需填写其 url 及 message                                                                                  |
-|   dingding.url   | String | 必填值，钉钉的 Webhook 地址                                                                                                              |
+|   dingding.url   | Object | 必填值，钉钉的 Webhook 地址，可以选择直接填写或从 secret 中获取                                                                                                              |
+|   dingding.url.address   | String | 可选值，直接填写钉钉的 Webhook 地址                                                                                                              |
+|   dingding.url.fromSecret.name   | String | 可选值， 从 secret 中获取 Webhook 地址，secret 的名字                                                                                                              |
+|   dingding.url.fromSecret.key   | String | 可选值， 从 secret 中获取 Webhook 地址，从 secret 中获取的 key                                                                                                              |
 | dingding.message | Object | 必填值，需要发送的钉钉信息，请符合 [钉钉信息规范](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |
 
 ### 示例
@@ -216,7 +222,8 @@ spec:
         properties:
           dingding:
             # 钉钉 Webhook 地址，请查看：https://developers.dingtalk.com/document/robots/custom-robot-access
-            url: xxx
+            url:
+              address: <your dingtalk url>
             message:
               msgtype: text
               text:
@@ -228,7 +235,10 @@ spec:
         properties:
           slack:
             # Slack Webhook 地址，请查看：https://api.slack.com/messaging/webhooks
-            url: xxx
+            url:
+              fromSecret:
+                name: <the secret name that stores your slack url>
+                key: <the secret key that stores your slack url>
             message:
               text: 工作流运行完成
 ```
@@ -288,6 +298,159 @@ spec:
         properties:
           component: express-server
 ```
+
+## read-object
+
+### 简介
+
+读取 Kubernetes 原生资源，该功能在 KubeVela v1.1.6 及以上版本可使用。
+
+### 参数
+
+|  参数名   |  类型  |                 说明                  |
+| :-------: | :----: | :-----------------------------------: |
+| apiVersion | String |     必填值，资源的 apiVersion     |
+| kind | String |     必填值，资源的 kind     |
+| name | String |     必填值，资源的 name     |
+| namespace | String |     选填值，资源的 namespace，默认为 `default`     |
+
+### 示例
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: read-object
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+  workflow:
+    steps:
+    - name: read-object
+      type: read-object
+      outputs:
+        - name: cpu
+          valueFrom: output.value.data["cpu"]
+        - name: memory
+          valueFrom: output.value.data["memory"]
+      properties:
+        apiVersion: v1
+        kind: ConfigMap
+        name: my-cm-name
+    - name: apply
+      type: apply-component
+      inputs:
+        - from: cpu
+          parameterKey: cpu
+        - from: memory
+          parameterKey: memory
+      properties:
+        component: express-server
+```
+
+## export2config
+
+### 简介
+
+导出数据到 ConfigMap，该功能在 KubeVela v1.1.6 及以上版本可使用。
+
+### 参数
+
+|  参数名   |  类型  |                 说明                  |
+| :-------: | :----: | :-----------------------------------: |
+| configName | String |     必填值，ConfigMap 的名称     |
+| namespace | String |     选填值，ConfigMap 的 namespace，默认为 `context.namespace`     |
+| data | Map |     必填值，需要导出到 ConfigMap 中的数据     |
+
+### 示例
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: export-config
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+  workflow:
+    steps:
+      - name: apply-server
+        type: apply-component
+        outputs: 
+          - name: status
+            valueFrom: output.status.conditions[0].message
+        properties:
+          component: express-server
+      - name: export-config
+        type: export-config
+        inputs:
+          - from: status
+            parameterKey: data.serverstatus
+        properties:
+          configName: my-configmap
+          data:
+            testkey: testvalue
+```
+
+## export2secret
+
+### 简介
+
+导出数据到 Secret，该功能在 KubeVela v1.1.6 及以上版本可使用。
+
+### 参数
+
+|  参数名   |  类型  |                 说明                  |
+| :-------: | :----: | :-----------------------------------: |
+| secretName | String |     必填值，Secret 的名称     |
+| namespace | String |    选填值，Secret 的 namespace，默认为 `context.namespace`      |
+| data | Map |    必填值，需要导出到 Secret 中的数据     |
+
+### 示例
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: export-secret
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+  workflow:
+    steps:
+      - name: apply-server
+        type: apply-component
+        outputs: 
+          - name: status
+            valueFrom: output.status.conditions[0].message
+        properties:
+          component: express-server
+      - name: export-secret
+        type: export-secret
+        inputs:
+          - from: status
+            parameterKey: data.serverstatus
+        properties:
+          secretName: my-secret
+          data:
+            testkey: testvalue
+```
+
 
 ## suspend
 
