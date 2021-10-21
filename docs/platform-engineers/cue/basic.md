@@ -253,7 +253,7 @@ is the parameters of the template.
 
 Add it into the `deployment.cue`.
 
-4. Then, let's add the value by adding following code block:
+3. Then, let's add the value by adding following code block:
 
 ```
 parameter:{
@@ -262,7 +262,7 @@ parameter:{
 }
 ```
 
-5. Finally, let's export it in yaml:
+4. Finally, let's export it in yaml:
 
 ```shell
 cue export deployment.cue -e template --out yaml

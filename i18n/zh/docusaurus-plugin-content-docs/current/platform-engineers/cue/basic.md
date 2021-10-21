@@ -251,7 +251,7 @@ template: {
 
 添加上述内容到文件 `deployment.cue`.
 
-4. 随后, 我们通过更新以下内容来完成变量赋值:
+3. 随后, 我们通过更新以下内容来完成变量赋值:
 
 ```
 parameter:{
@@ -260,7 +260,7 @@ parameter:{
 }
 ```
 
-5. 最后, 导出渲染结果为 YAML 格式:
+4. 最后, 导出渲染结果为 YAML 格式:
 
 ```shell
 $ cue export deployment.cue -e template --out yaml
