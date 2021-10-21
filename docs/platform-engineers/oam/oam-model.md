@@ -6,7 +6,7 @@ This and next documentation will explain Open Application Model (OAM) and how to
 
 ## An Abstraction to Model Application Deployment Process
 
-Open Application Model (OAM) allows end users to work with a simple artifact to capture the complete application deployment workflow with easier primitives. This provides a simpler path for on-boarding end users to the platform without leaking low level details in runtime infrastructure and allows users to fully focus on the application delivery itself.
+OAM allows end users to work with a simple artifact to capture the complete application deployment workflow with easier primitives. This provides a simpler path for on-boarding end users to the platform without leaking low level details in runtime infrastructure and allows users to fully focus on the application delivery itself.
 
 ![alt](../../resources/model.png)
 
