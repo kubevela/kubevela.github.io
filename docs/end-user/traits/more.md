@@ -8,33 +8,37 @@ You can get more from official capability registry by using KubeVela [plugin](..
 
 ### List
 
-By default, the commands will list capabilities from [repo](https://registry.kubevela.net) maintained by KubeVela.
+By default, the commands will list capabilities from [default registry](https://registry.kubevela.net) maintained by KubeVela.
 
 ```shell
-$ kubectl vela trait --discover
-Showing traits from registry: https://registry.kubevela.net
-NAME           	REGISTRY	  DEFINITION                    		APPLIES-TO               
-service-account	default  	                              		    [webservice worker]      
-env            	default 		                                    [webservice worker]      
-flagger-rollout	default       canaries.flagger.app          		[webservice]             
-init-container 	default 		                                    [webservice worker]      
-keda-scaler    	default       scaledobjects.keda.sh         		[deployments.apps]       
-metrics        	default       metricstraits.standard.oam.dev		[webservice backend task]
-node-affinity  	default		                              		    [webservice worker]      
-route          	default       routes.standard.oam.dev       		[webservice]             
-virtualgroup   	default		                              		    [webservice worker] 
+$ vela trait --discover
+Showing trait definition from registry: default
+I1025 19:18:59.276330   80303 request.go:665] Waited for 1.042612105s due to client-side throttling, not priority and fairness, request: GET:https://127.0.0.1:63926/apis/standard.oam.dev/v1alpha1?timeout=32s
+NAME                    REGISTRY        DEFINITION                      APPLIES-TO                      STATUS     
+autoscale               default         autoscalers.standard.oam.dev    [deployments.apps]              uninstalled
+crd-manual-scaler       default         manualscalertraits.core.oam.dev [deployments.apps]              uninstalled
+dynamic-sa              default                                         [deployments.apps]              uninstalled
+env                     default                                         [deployments.apps]              installed  
+expose                  default                                         []                              installed  
+hpa                     default                                         [deployments.apps]              uninstalled
+init-container          default                                         [deployments.apps]              installed  
+kautoscale              default                                         [deployments.apps]              uninstalled
+metrics                 default         metricstraits.standard.oam.dev  [deployments.apps jobs.batch]   uninstalled
+node-affinity           default                                         [deployments.apps]              installed  
+rollout                 default         canaries.flagger.app            [deployments.apps]              installed  
+route                   default         routes.standard.oam.dev         [deployments.apps]              uninstalled
+virtualgroup            default                                         [deployments.apps]              uninstalled
 ```
-
-Note that the `--discover` flag means show all traits not in your cluster.
 
 ### Install
 
 Then you can install a trait like:
 
 ```shell
-$ kubectl vela trait get init-container
-Installing component capability init-container
-Successfully install trait: init-container                                                                                                 
+$ vela trait get init-container
+Getting component definition from registry: default
+Installing component: init-container
+Successfully install trait: init-container
 ```
 
 ## 2. Designed by yourself

@@ -8,13 +8,14 @@ You can get more from official capability registry by using KubeVela [plugin](..
 
 ### List
 
-By default, the commands will list capabilities from [repo](https://registry.kubevela.net) maintained by KubeVela.
+By default, the commands will list capabilities from [default registry](https://registry.kubevela.net) maintained by KubeVela.
 
 ```shell
-$ kubectl vela comp --discover
-Showing components from registry: oss://registry.kubevela.net
-NAME     	REGISTRY	DEFINITION      
-webserver	default 	deployments.apps
+$ vela comp --discover
+Listing component definition from registry: default
+NAME            REGISTRY        DEFINITION                      STATUS     
+kustomize       default         autodetects.core.oam.dev        installed  
+webserver       default         deployments.apps                uninstalled
 ```
 
 ### Install
@@ -22,9 +23,10 @@ webserver	default 	deployments.apps
 Then you can install a component like:
 
 ```shell
-$ kubectl vela comp get webserver
-Installing component capability webserver
-Successfully install component: webserver                                                                                             
+$ vela comp get webserver
+Getting component definition from registry: default
+Installing component: webserver
+Successfully install component: webserver
 ```
 
 ## 2. Designed by yourself
