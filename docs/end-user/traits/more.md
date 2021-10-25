@@ -13,7 +13,6 @@ By default, the commands will list capabilities from [default registry](https://
 ```shell
 $ vela trait --discover
 Showing trait definition from registry: default
-I1025 19:18:59.276330   80303 request.go:665] Waited for 1.042612105s due to client-side throttling, not priority and fairness, request: GET:https://127.0.0.1:63926/apis/standard.oam.dev/v1alpha1?timeout=32s
 NAME                    REGISTRY        DEFINITION                      APPLIES-TO                      STATUS     
 autoscale               default         autoscalers.standard.oam.dev    [deployments.apps]              uninstalled
 crd-manual-scaler       default         manualscalertraits.core.oam.dev [deployments.apps]              uninstalled
