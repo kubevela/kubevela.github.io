@@ -431,6 +431,14 @@ rolloutBatch的属性
 | -------- | -------------- | ---- | -------- | ------ |
 | replicas | 批次的副本个数 | int  | 是       | 无     |
 
+## 子集群中运行的注意事项
+
+如果你期望灰度发布运维特征工作在子集群中，你需要先在子集群中执行下面的命令安装相应的控制器。
+
+```shell
+helm install vela-rollout kubevela/vela-rollout --version 1.1.5
+```
+
 ### 支持的组件类型
 
 灰度发布运维特征支持 `webservice`，`worker`，`clonset` 类型的工作负载。
