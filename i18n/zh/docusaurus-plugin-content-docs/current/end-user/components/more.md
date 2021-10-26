@@ -20,6 +20,9 @@ kustomize       default         autodetects.core.oam.dev        installed
 webserver       default         deployments.apps                uninstalled
 ```
 
+`--discover` 表明将从能力中心发现能力并列出
+
+
 ### 从能力中心安装模块
 
 然后你可以安装一个组件，如：

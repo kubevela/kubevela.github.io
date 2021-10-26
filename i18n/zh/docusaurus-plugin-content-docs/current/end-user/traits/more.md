@@ -32,6 +32,8 @@ route                   default         routes.standard.oam.dev         [deploym
 virtualgroup            default                                         [deployments.apps]              uninstalled
 ```
 
+`--discover` 表明将从能力中心发现能力并列出
+
 ### 从能力中心安装模块
 
 然后你可以安装一个 trait，如：

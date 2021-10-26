@@ -8,35 +8,28 @@ KubeVela is able to discover OAM definition files in this repo automatically and
 
 ## Add a capability center
 
-Add and sync a capability center in KubeVela:
+Add a registry in KubeVela:
 
 ```bash
-vela cap center config my-center https://github.com/oam-dev/catalog/tree/master/registry
+vela registry config my-center https://github.com/oam-dev/catalog/tree/master/registry
 ```
 ```console
-successfully sync 1/1 from my-center remote center
-Successfully configured capability center my-center and sync from remote
-```
-```bash
-vela cap center sync my-center
-```
-```console
-successfully sync 1/1 from my-center remote center
-sync finished
+Successfully configured registry my-center
 ```
 
-Now, this capability center `my-center` is ready to use.
+Now, this registry `my-center` is ready to use.
 
 ## List capability centers
 
 You are allowed to add more capability centers and list them.
 
 ```bash
-vela cap center ls
+vela registry ls
 ```
 ```console
-NAME     	ADDRESS
-my-center	https://github.com/oam-dev/catalog/tree/master/registry
+NAME            URL                                                    
+default         oss://registry.kubevela.net/                            
+my-center       https://github.com/oam-dev/catalog/tree/master/registry 
 ```
 
 ## [Optional] Remove a capability center
@@ -44,20 +37,16 @@ my-center	https://github.com/oam-dev/catalog/tree/master/registry
 Or, remove one.
 
 ```bash
-vela cap center remove my-center
+vela registry remove my-center
 ```
 
 ## List all available capabilities in capability center
 
-Or, list all available capabilities in certain center.
+Or, list all available ComponentDefinition/TraitDefinition in certain registry.
 
 ```bash
-vela cap ls my-center
-```
-```console
-NAME               	CENTER   	TYPE               	DEFINITION                    	STATUS     	APPLIES-TO
-clonesetservice    	my-center	componentDefinition	clonesets.apps.kruise.io      	uninstalled	[]
-```
+vela trait --discover --registry=my-center
+vela comp --discover --registry=my-center
 
 ## Install a capability from capability center
 
@@ -72,11 +61,7 @@ helm install kruise https://github.com/openkruise/kruise/releases/download/v0.7.
 Install `clonesetservice` component from `my-center`.
 
 ```bash
-vela cap install my-center/clonesetservice
-```
-```console
-Installing component capability clonesetservice
-Successfully installed capability clonesetservice from my-center
+vela comp get clonesetservice --registry=my-center
 ```
 
 ## Use the newly installed capability
@@ -145,8 +130,5 @@ testsvc   1         1         1               1       1       46s
 > NOTE: make sure no apps are using the capability before uninstalling.
 
 ```bash
-vela cap uninstall my-center/clonesetservice
-```
-```console
-Successfully uninstalled capability clonesetservice
+kubectl delete componentdefinition -n vela-system clonesetservice
 ```

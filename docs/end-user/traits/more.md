@@ -8,7 +8,7 @@ You can get more from official capability registry by using KubeVela [plugin](..
 
 ### List
 
-By default, the commands will list capabilities from [default registry](https://registry.kubevela.net) maintained by KubeVela.
+By default, the following command lists capabilities from [the default registry](https://registry.kubevela.net) maintained by KubeVela.
 
 ```shell
 $ vela trait --discover
@@ -28,6 +28,8 @@ rollout                 default         canaries.flagger.app            [deploym
 route                   default         routes.standard.oam.dev         [deployments.apps]              uninstalled
 virtualgroup            default                                         [deployments.apps]              uninstalled
 ```
+
+`--discover` means list components from registry
 
 ### Install
 
