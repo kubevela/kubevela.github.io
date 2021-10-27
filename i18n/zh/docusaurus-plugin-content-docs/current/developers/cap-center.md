@@ -8,16 +8,11 @@ KubeVela 可以从这些仓库中自动发现 OAM 抽象文件，并且同步这
 
 ## 添加能力中心
 
-新增且同步能力中心到 KubeVela：
+新增能力中心到 KubeVela：
 
 ```bash
-$ vela cap center config my-center https://github.com/oam-dev/catalog/tree/master/registry
-successfully sync 1/1 from my-center remote center
-Successfully configured capability center my-center and sync from remote
-
-$ vela cap center sync my-center
-successfully sync 1/1 from my-center remote center
-sync finished
+vela registry config my-center https://github.com/oam-dev/catalog/tree/master/registry
+Successfully configured registry my-center
 ```
 
 现在，该能力中心 `my-center` 已经可以使用。
@@ -27,9 +22,10 @@ sync finished
 你可以列出或者添加更多能力中心。
 
 ```bash
-$ vela cap center ls
-NAME     	ADDRESS
-my-center	https://github.com/oam-dev/catalog/tree/master/registry
+vela registry ls
+NAME            URL                                                    
+default         oss://registry.kubevela.net/                            
+my-center       https://github.com/oam-dev/catalog/tree/master/registry 
 ```
 
 ## [可选] 删除能力中心
@@ -37,17 +33,16 @@ my-center	https://github.com/oam-dev/catalog/tree/master/registry
 删除一个
 
 ```bash
-$ vela cap center remove my-center
+vela registry remove my-center
 ```
 
 ## 列出所有可用的能力中心
 
-列出某个中心所有可用的能力。
+列出某个中心所有可用的 ComponentDefinition/TraitDefinition。
 
 ```bash
-$ vela cap ls my-center
-NAME               	CENTER   	TYPE               	DEFINITION                    	STATUS     	APPLIES-TO
-clonesetservice    	my-center	componentDefinition	clonesets.apps.kruise.io      	uninstalled	[]
+vela trait --discover --registry=my-center
+vela comp --discover --registry=my-center
 ```
 
 ## 从能力中心安装能力
@@ -63,9 +58,7 @@ helm install kruise https://github.com/openkruise/kruise/releases/download/v0.7.
 从 `my-center` 中安装 `clonesetservice` component 。
 
 ```bash
-$ vela cap install my-center/clonesetservice
-Installing component capability clonesetservice
-Successfully installed capability clonesetservice from my-center
+vela comp get clonesetservice --registry=my-center
 ```
 
 ## 使用新安装的能力
@@ -128,6 +121,5 @@ testsvc   1         1         1               1       1       46s
 > 注意，删除能力前请先确认没有被应用引用。
 
 ```bash
-$ vela cap uninstall my-center/clonesetservice
-Successfully uninstalled capability clonesetservice
+kubectl delete componentdefinition -n vela-system clonesetservice
 ```
