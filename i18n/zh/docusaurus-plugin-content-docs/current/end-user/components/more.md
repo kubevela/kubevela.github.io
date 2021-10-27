@@ -6,29 +6,32 @@ KubeVela 中的模块完全都是可定制和可插拔的，所以除了内置�
 
 ## 1. 从官方或第三方能力中心获取模块化能力
 
-可以通过 KubeVela 的 [Kubectl 插件](../../kubectlplugin)获取官方能力中心中发布的能力。
-
 ### 查看能力中心的模块列表
 
 默认情况下，命令会从 KubeVela 官方维护的[能力中心](https://registry.kubevela.net)中获取模块化功能。
 
-例如，让我们尝试列出注册表中所有可用的组件，使用 `--discover` 这个标志位：
+例如，让我们尝试列出能力中心中所有可用的组件，使用 `--discover` 这个标志位：
 
 ```shell
-$ kubectl vela comp --discover
-Showing components from registry: oss://registry.kubevela.net
-NAME     	REGISTRY	DEFINITION      
-webserver	default 	deployments.apps
+$ vela comp --discover
+Listing component definition from registry: default
+NAME            REGISTRY        DEFINITION                      STATUS     
+kustomize       default         autodetects.core.oam.dev        installed  
+webserver       default         deployments.apps                uninstalled
 ```
+
+`--discover` 表明将从能力中心发现能力并列出
+
 
 ### 从能力中心安装模块
 
 然后你可以安装一个组件，如：
 
 ```shell
-$ kubectl vela comp get webserver
-Installing component capability webserver
-Successfully install component: webserver                                                                                             
+$ vela comp get webserver
+Getting component definition from registry: default
+Installing component: webserver
+Successfully install component: webserver
 ```
 
 ## 2. 自定义模块化能力
