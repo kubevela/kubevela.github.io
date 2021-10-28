@@ -233,14 +233,11 @@ spec:
         - type: rollout
           properties:
             targetRevision: express-server-v1
+            # 扩容至7个副本
             targetSize: 7
-            # 刚才工作负载有5个副本，分两批扩容，第一批扩容1个，第二批再扩容1个
-            rolloutBatches:
-              - replicas: 1
-              - replicas: 1
 EOF
 ```
-这个灰度发布运维特征的表示，从刚才的5个副本个数扩容至目标的7个副本，第一个批次扩容1个，第二个批次再扩容1个。
+这个灰度发布运维特征的表示，从刚才的5个副本个数扩容至目标的7个副本，你也可以通过设置 `rolloutBatches` 精确控制每个批次需要扩容的副本个数。
 
 扩容成功之后，查看资源状态。
 ```shell
@@ -273,26 +270,23 @@ spec:
         - type: rollout
           properties:
             targetRevision: express-server-v1
-            # 刚才工作负载有7个，分两批缩容，第一批缩减1个，第二批缩减3个。
-            targetSize: 3
-            rolloutBatches:
-              - replicas: 1
-              - replicas: 3
+            # 缩容至5个副本。
+            targetSize: 5
 EOF
 ```
 
-这个灰度发布运维特征的表示，从刚才扩容之后的7个副本缩容至目标的3个副本，第一个批次缩容1个，第二个批次缩容3个。
+这个灰度发布运维特征的表示，将工作负载缩容至5个副本，你也可以通过设置 `rolloutBatches` 精确控制每个批次需要扩容的副本个数。
 
 缩容成功之后，查看资源状态。
 
 ```shell
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
-express-server   3        3          3       batchReady    rolloutSucceed   2d20h
+express-server   5        5          5       batchReady    rolloutSucceed   2d20h
 
 $ kubectl get deploy -l app.oam.dev/component=express-server
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE
-express-server-v1   3/3     3            3           5m
+express-server-v1   5/5     5            5           5m
 ```
 
 ### 针对 cloneset 类型工作负载的灰度发布
