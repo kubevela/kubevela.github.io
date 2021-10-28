@@ -216,12 +216,9 @@ spec:
           properties:
             targetRevision: express-server-v1
             targetSize: 7
-            rolloutBatches:
-              - replicas: 1
-              - replicas: 1
 EOF
 ```
-This Rollout Trait represents this expansion consists of 2 rollout batches, each batch will scale 1 replica.
+This Rollout Trait represents it will scale workload up to 7. You also can set every batch's number by setting `rolloutBatches`.
 
 Check the status after expansion has been succeed.
 ```shell
@@ -254,23 +251,20 @@ spec:
         - type: rollout
           properties:
             targetRevision: express-server-v1
-            targetSize: 3
-            rolloutBatches:
-              - replicas: 1
-              - replicas: 3
+            targetSize: 5
 EOF
 ```
-This Rollout Trait represents this scale down consists of 2 batches, first batch will remove 1 replica and second batch will remove 3 replicas.
+This Rollout Trait scale workload down to 5.
 
 Check the status after scale up has been succeed.
 ```shell
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
-express-server   3        3          3       batchReady    rolloutSucceed   2d20h
+express-server   5        5          5       batchReady    rolloutSucceed   2d20h
 
 $ kubectl get deploy -l app.oam.dev/component=express-server
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE
-express-server-v1   3/3     3            3           5m
+express-server-v1   5/5     5            5           5m
 ```
 
 ### Rollout cloneset type Workload
