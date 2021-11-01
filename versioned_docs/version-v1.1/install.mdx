@@ -256,7 +256,7 @@ please at least enable following addons to make sure KubeVela functioning well:
   vela addon enable terraform
   ```
 
-* Terraform Provider addon
+* Terraform Provider addon for Alibaba Cloud
 
   Enable Terraform Alibaba Cloud Provider as below to [provision and/or consume cloud resources](./end-user/components/cloud-services/provider-and-consume-cloud-services).
 
@@ -266,6 +266,26 @@ please at least enable following addons to make sure KubeVela functioning well:
   ```shell
   vela addon enable terraform/provider-alibaba ALICLOUD_ACCESS_KEY=<xxx> ALICLOUD_SECRET_KEY=<yyy> ALICLOUD_REGION=<region>
   ```
+
+ * Terraform Provider addon for Azure
+
+   Enable Terraform Azure Provider as below to [provision and/or consume cloud resources](./end-user/components/cloud-services/provider-and-consume-cloud-services).
+
+   Set these parameters below per [Authenticate Terraform to Azure](https://docs.microsoft.com/en-us/azure/developer/terraform/authenticate-to-azure?tabs=bash).
+
+   ```shell
+   vela addon enable terraform/provider-azure ARM_CLIENT_ID=<aaa> ARM_CLIENT_SECRET=<bbb> ARM_SUBSCRIPTION_ID=<ccc> ARM_TENANT_ID=<ddd>
+   ```
+
+  * Terraform Provider addon for AWS
+
+    Enable Terraform AWS Provider as below to [provision and/or consume cloud resources](./end-user/components/cloud-services/provider-and-consume-cloud-services).
+
+    Set these parameters below per [Authenticate Terraform to AWS](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#environment-variables).
+
+    ```shell
+    vela addon enable terraform/provider-aws AWS_ACCESS_KEY_ID=<aaa> AWS_SECRET_ACCESS_KEY=<bbb> AWS_DEFAULT_REGION=<region>
+    ```
 
 ## 5. Verify
 

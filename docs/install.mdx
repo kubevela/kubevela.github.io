@@ -277,6 +277,16 @@ please at least enable following addons to make sure KubeVela functioning well:
    vela addon enable terraform/provider-azure ARM_CLIENT_ID=<aaa> ARM_CLIENT_SECRET=<bbb> ARM_SUBSCRIPTION_ID=<ccc> ARM_TENANT_ID=<ddd>
    ```
 
+  * Terraform Provider addon for AWS
+
+    Enable Terraform AWS Provider as below to [provision and/or consume cloud resources](./end-user/components/cloud-services/provider-and-consume-cloud-services).
+
+    Set these parameters below per [Authenticate Terraform to AWS](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#environment-variables).
+
+    ```shell
+    vela addon enable terraform/provider-aws AWS_ACCESS_KEY_ID=<aaa> AWS_SECRET_ACCESS_KEY=<bbb> AWS_DEFAULT_REGION=<region>
+    ```
+
 ## 5. Verify
 
 > You can also using `kubectl get comp -A` and `kubectl get trait -A` instead if you haven't installed CLI.

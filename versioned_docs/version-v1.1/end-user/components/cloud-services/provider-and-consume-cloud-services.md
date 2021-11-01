@@ -7,10 +7,9 @@ sources and types. Whether it is the most basic object storage, cloud database, 
 the challenges of hybrid cloud, multi-cloud and other complex environments. KubeVela is perfect to satisfy the needs.
 
 KubeVela efficiently and securely integrates different types of cloud resources through resource binding capabilities in
-cloud resource Components and Traits. At present, you can directly use the default components of AliCloud Kubernetes(ACK),
-AliCloud Object Storage Service (OSS) and AliCloud Relational Database Service (RDS). At the same time, more new cloud
-resources will gradually become the default option under the support of the community in the future. You can use cloud
-resources of various manufacturers in a standardized and unified way.
+cloud resource Components and Traits. At present, you can directly use the default components of those cloud resources below.
+At the same time, more new cloud resources will gradually become the default option under the support of the community in the future.
+You can use cloud resources of various manufacturers in a standardized and unified way.
 
 This tutorial will talk about how to provision and consume Cloud Resources by Terraform.
 
@@ -24,6 +23,9 @@ Terraform | Alibaba Cloud | [ACK](./terraform/alibaba-ack) | Terraform configura
 | |  | [EIP](./terraform/alibaba-eip) | Terraform configuration for Alibaba Cloud EIP object
 | |  | [OSS](./terraform/alibaba-oss) | Terraform configuration for Alibaba Cloud OSS object
 | |  | [RDS](./terraform/alibaba-rds) | Terraform configuration for Alibaba Cloud RDS object
+| | Azure | [Mariadb](./terraform/azure-database-mariadb) | Terraform configuration for Azure Database Mariadb
+| | AWS | [S3](./terraform/aws-s3) | Terraform configuration for AWS S3 bucket
+
 
 ## Terraform
 
