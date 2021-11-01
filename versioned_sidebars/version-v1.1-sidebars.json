@@ -104,6 +104,14 @@
                     {
                       "type": "doc",
                       "id": "version-v1.1/end-user/components/cloud-services/terraform/alibaba-oss"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "version-v1.1/end-user/components/cloud-services/terraform/azure-database-mariadb"
+                    },
+                    {
+                      "type": "doc",
+                      "id": "version-v1.1/end-user/components/cloud-services/terraform/aws-s3"
                     }
                   ]
                 },

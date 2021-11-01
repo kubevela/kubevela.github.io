@@ -265,7 +265,7 @@ KubeVela 支持一系列[开箱即用的插件](./platform-engineers/advanced-in
   vela addon enable terraform/provider-alibaba ALICLOUD_ACCESS_KEY=<xxx> ALICLOUD_SECRET_KEY=<yyy> ALICLOUD_REGION=<region>
   ```
 
- * Azure  Terraform Provider 插件
+ * Azure Terraform Provider 插件
 
    执行如下命令开启 Terraform 对 Azure 的支持，可以[创建和消费云资源](./end-user/components/cloud-services/provider-and-consume-cloud-services)：
 
@@ -274,6 +274,16 @@ KubeVela 支持一系列[开箱即用的插件](./platform-engineers/advanced-in
    ```shell
    vela addon enable terraform/provider-azure ARM_CLIENT_ID=<aaa> ARM_CLIENT_SECRET=<bbb> ARM_SUBSCRIPTION_ID=<ccc> ARM_TENANT_ID=<ddd>
    ```
+
+  * AWS Terraform Provider 插件
+
+    执行如下命令开启 Terraform 对 AWS 的支持，可以[创建和消费云资源](./end-user/components/cloud-services/provider-and-consume-cloud-services)：
+
+    参考 [Authenticate Terraform to AWS](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#environment-variables)，设置如下参数。
+
+    ```shell
+    vela addon enable terraform/provider-aws AWS_ACCESS_KEY_ID=<aaa> AWS_SECRET_ACCESS_KEY=<bbb> AWS_DEFAULT_REGION=<region>
+    ```
 
 ## 5. 查看已安装能力
 
