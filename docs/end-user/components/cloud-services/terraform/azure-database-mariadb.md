@@ -25,9 +25,6 @@ spec:
         db_name: "backend"
         username: "acctestun"
         password: "H@Sh1CoR3!Faked"
-        providerRef:
-          name: azure
-          namespace: default
         writeConnectionSecretToRef:
           name: azure-db-conn
           namespace: vela-system
