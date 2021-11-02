@@ -21,10 +21,6 @@ spec:
         bucket: vela-website-20211019
         acl: private
 
-        providerRef:
-          name: aws
-          namespace: default
-
         writeConnectionSecretToRef:
           name: s3-conn
 ```
