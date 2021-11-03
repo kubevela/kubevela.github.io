@@ -125,7 +125,7 @@ $ kubectl get svc grafana -n vela-system
 NAME      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
 grafana   ClusterIP   192.168.42.243   <none>        80/TCP    177m
 
-$ sudo k port-forward service/grafana -n vela-system 80:80
+$ sudo kubectl port-forward service/grafana -n vela-system 80:80
 Password:
 Forwarding from 127.0.0.1:80 -> 3000
 Forwarding from [::1]:80 -> 3000
