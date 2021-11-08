@@ -23,6 +23,7 @@ The introduction of bootstrap parameters in KubeVela controller are listed as be
 |        disable-caps         | string |                ""                 | Disable internal capabilities                                                                                                           |
 |       storage-driver        | string |               Local               | The storage driver for applications                                                                                                     |
 |  informer-re-sync-interval  |  time  |                1h                 | The resync period for for controller informer, also the time for application to be reconciled when no spec changes were made            |
+|     reconcile-timeout       |  time  |                3m                 | The timeout for controller reconcile. |
 | system-definition-namespace | string |            vela-system            | The namespace for storing system definitions                                                                                            |
 |    concurrent-reconciles    |  int   |                 4                 | The number of threads that controller uses to process requests                                                                          |
 |        kube-api-qps         |  int   |                50                 | The QPS for controller to access apiserver                                                                                              |
