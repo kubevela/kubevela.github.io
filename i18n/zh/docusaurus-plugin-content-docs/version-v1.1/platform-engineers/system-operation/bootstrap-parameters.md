@@ -23,6 +23,7 @@ KubeVela 控制器的各项启动参数及其说明如下。
 |         disable-caps        | string |                 ""                | 禁用内置的能力                                                                 |
 |        storage-driver       | string |               Local               | 应用文件的存储驱动                                                             |
 |  informer-re-sync-interval  |  time  |                 1h                | 无变更情况下，控制器轮询维护资源的周期                                         |
+|     reconcile-timeout       |  time  |                3m                 | 控制器单轮轮询的超时时间 |
 | system-definition-namespace | string |            vela-system            | 系统级特征定义的命名空间                                                       |
 |    concurrent-reconciles    |   int  |                 4                 | 控制器处理请求的并发线程数                                                     |
 |         kube-api-qps        |   int  |                 50                | 控制器访问 apiserver 的速率                                                    |
