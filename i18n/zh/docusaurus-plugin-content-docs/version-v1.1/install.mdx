@@ -127,17 +127,18 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 
 ## 2. 安装 KubeVela
 
-在安装之前，请确保 helm 工具是可用的，如未安装，请参考 [安装说明](https://helm.sh/docs/intro/install/) 安装完成。
+在安装之前，请确保 Helm 工具是可用的，如未安装，请参考 [安装说明](https://helm.sh/docs/intro/install/) 安装完成。
 
-如果你的网络受限无法下载（特别是中国用户），可直接使用下述方式安装:
+<details> <summary> 如果你的网络情况很难下载成功 Helm，请点击使用国内镜像来安装（仅适用于 linux-amd64） </summary>
 
 ```shell script
 wget https://static.kubevela.net/binary/helm/helm-v3.7.0-linux-amd64 -O /usr/bin/helm
 chmod +x /usr/bin/helm
 ```
-> 该安装方式仅适用于 linux-amd64
 
-1. 添加并更新 KubeVela helm chart 仓库
+</details>
+
+1. 添加并更新 KubeVela Helm chart 仓库
   ```shell script
   helm repo add kubevela https://charts.kubevela.net/core
   helm repo update
@@ -300,9 +301,9 @@ KubeVela 支持一系列[开箱即用的插件](./platform-engineers/advanced-in
     alibaba-ack 	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud ACK cluster
     alibaba-oss 	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud OSS object
     alibaba-rds 	vela-system	configurations.terraform.core.oam.dev	Terraform configuration for Alibaba Cloud RDS object
-    helm        	vela-system	autodetects.core.oam.dev             	helm release is a group of K8s resources from either git
-                                                                    repository or helm repo
-    kustomize   	vela-system	autodetects.core.oam.dev             	kustomize can fetching, building, updating and applying
+    helm        	vela-system	autodetects.core.oam.dev             	Helm release is a group of K8s resources from either git
+                                                                    repository or Helm repo
+    kustomize   	vela-system	autodetects.core.oam.dev             	Kustomize can fetching, building, updating and applying
                                                                     Kustomize manifests from git repo.
     raw         	vela-system	autodetects.core.oam.dev             	raw allow users to specify raw K8s object in properties
     task        	vela-system	jobs.batch                           	Describes jobs that run code or a script to completion.
