@@ -286,6 +286,36 @@ please at least enable following addons to make sure KubeVela functioning well:
     ```shell
     vela addon enable terraform/provider-aws AWS_ACCESS_KEY_ID=<aaa> AWS_SECRET_ACCESS_KEY=<bbb> AWS_DEFAULT_REGION=<region>
     ```
+    
+      * Terraform Provider addon for GCP
+
+    Enable Terraform GCP Provider as below to [provision and/or consume cloud resources](./end-user/components/cloud-services/provider-and-consume-cloud-services).
+
+    Set these parameters below per [Authenticate Terraform to GCP](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_reference#full-reference). The only authentication method currently supported is that of the GOOGLE_CREDENTIALS environment variable containing the authentication JSON. Environment variables with file path are not currently supported.
+
+    ```shell
+    vela addon enable terraform/provider-gcp GOOGLE_CREDENTIALS=<aaa> GOOGLE_PROJECT=<bbb> GCP_REGION=<region>
+    ```
+
+      * Terraform Provider addon for VSPHERE
+
+    Enable Terraform VSPHERE Provider as below to [provision and/or consume cloud resources](./end-user/components/cloud-services/provider-and-consume-cloud-services).
+
+    Set these parameters below per [Authenticate Terraform to VSPHERE](https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs#argument-reference).
+
+    ```shell
+    vela addon enable terraform/provider-vsphere VSPHERE_USER=<aaa> VSPHERE_PASSWORD=<bbb> VSPHERE_SERVER=<server> VSPHERE_ALLOW_UNVERIFIED_SSL=<true/false>
+    ```
+
+      * Terraform Provider addon for EC
+
+    Enable Terraform EC Provider as below to [provision and/or consume cloud resources](./end-user/components/cloud-services/provider-and-consume-cloud-services).
+
+    Set these parameters below per [Authenticate Terraform to EC](https://registry.terraform.io/providers/elastic/ec/latest/docs#api-key-authentication-recommended).
+
+    ```shell
+    vela addon enable terraform/provider-ec EC_API_KEY=<aaa>
+    ```
 
 ## 5. Verify
 
