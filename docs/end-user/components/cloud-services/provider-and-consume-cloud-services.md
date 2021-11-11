@@ -23,6 +23,7 @@ Terraform | Alibaba Cloud | [ACK](./terraform/alibaba-ack) | Terraform configura
 | |  | [EIP](./terraform/alibaba-eip) | Terraform configuration for Alibaba Cloud EIP object
 | |  | [OSS](./terraform/alibaba-oss) | Terraform configuration for Alibaba Cloud OSS object
 | |  | [RDS](./terraform/alibaba-rds) | Terraform configuration for Alibaba Cloud RDS object
+| |  | [Redis](./terraform/alibaba-redis) | Terraform configuration for Alibaba Cloud Redis object
 | | Azure | [Mariadb](./terraform/azure-database-mariadb) | Terraform configuration for Azure Database Mariadb
 | | Azure | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account
 | | AWS | [S3](./terraform/aws-s3) | Terraform configuration for AWS S3 bucket
