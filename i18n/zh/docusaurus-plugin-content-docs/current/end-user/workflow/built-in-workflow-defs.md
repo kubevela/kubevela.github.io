@@ -253,7 +253,8 @@ spec:
 
 |  参数名   |  类型  |                 说明                  |
 | :-------: | :----: | :-----------------------------------: |
-|    ...    | ... |      Kubernetes 原生资源字段      |
+|    value    | object |       必填值，Kubernetes 原生资源字段      |
+|    cluster    | object |      可选值，需要部署的集群名称。如果不指定，则为当前集群。在使用该字段前，请确保你已经使用 `vela cluster join` 纳管了你的集群     |
 
 ### 示例
 
@@ -281,18 +282,22 @@ spec:
       - name: apply-pvc
         type: apply-object
         properties:
-          apiVersion: v1
-          kind: PersistentVolumeClaim
-          metadata:
-            name: myclaim
-            namespace: default
-          spec:
-            accessModes:
-            - ReadWriteOnce
-            resources:
-              requests:
-                storage: 8Gi
-            storageClassName: standard
+          # Kubernetes 原生字段
+          value:
+            apiVersion: v1
+            kind: PersistentVolumeClaim
+            metadata:
+              name: myclaim
+              namespace: default
+            spec:
+              accessModes:
+              - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 8Gi
+              storageClassName: standard
+            # 需要部署的集群名称，如果不指定，则默认为当前集群
+            cluster: <your cluster name>  
       - name: apply-server
         type: apply-component
         properties:
@@ -313,6 +318,7 @@ spec:
 | kind | String |     必填值，资源的 kind     |
 | name | String |     必填值，资源的 name     |
 | namespace | String |     选填值，资源的 namespace，默认为 `default`     |
+| cluster | String |     选填值，资源的集群名，默认为当前集群，在使用该字段前，请确保你已经使用 `vela cluster join` 纳管了你的集群     |
 
 ### 示例
 
@@ -342,6 +348,7 @@ spec:
         apiVersion: v1
         kind: ConfigMap
         name: my-cm-name
+        cluster: <your cluster name>
     - name: apply
       type: apply-component
       inputs:

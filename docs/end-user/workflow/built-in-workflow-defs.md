@@ -252,7 +252,8 @@ Apply Kubernetes native resources, you need to upgrade to KubeVela v1.1.4 or hig
 
 |  Name   |  Type  |                 Description                  |
 | :-------: | :----: | :-----------------------------------: |
-|    ...    | ... |      Kubernetes native resources fields      |
+|    value    | Object |      Required, Kubernetes native resources fields      |
+|    cluster    | String |      Optional, The cluster you want to apply the resource to, default is the current cluster. If you want to apply resource in different cluster, use `vela cluster join` to join the cluster first, and then specify the cluster      |
 
 ### Example
 
@@ -280,22 +281,26 @@ spec:
       - name: apply-pvc
         type: apply-object
         properties:
-          apiVersion: v1
-          kind: PersistentVolumeClaim
-          metadata:
-            name: myclaim
-            namespace: default
-          spec:
-            accessModes:
-            - ReadWriteOnce
-            resources:
-              requests:
-                storage: 8Gi
-            storageClassName: standard
+          # Kubernetes native resources fields
+          value:
+            apiVersion: v1
+            kind: PersistentVolumeClaim
+            metadata:
+              name: myclaim
+              namespace: default
+            spec:
+              accessModes:
+              - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 8Gi
+              storageClassName: standard
+            # the cluster you want to apply the resource to, default is the current cluster
+            cluster: <your cluster name>  
       - name: apply-server
         type: apply-component
         properties:
-          component: express-server
+          component: express-serve
 ```
 
 ## read-object
@@ -312,6 +317,7 @@ Read Kubernetes native resources, you need to upgrade to KubeVela v1.1.6 or high
 | kind | String |     Required, The kind of the resource you want to read     |
 | name | String |     Required, The apiVersion of the resource you want to read     |
 | namespace | String |     Optional, The namespace of the resource you want to read, defaults to `default`     |
+| cluster | String |     Optional, The cluster you want to read the resource from, default is the current cluster. If you want to read resource in different cluster, use `vela cluster join` to join the cluster first, and then specify the cluster     |
 
 ### Example
 
@@ -341,6 +347,7 @@ spec:
         apiVersion: v1
         kind: ConfigMap
         name: my-cm-name
+        cluster: <your cluster name
     - name: apply
       type: apply-component
       inputs:
