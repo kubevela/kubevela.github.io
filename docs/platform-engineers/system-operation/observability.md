@@ -118,7 +118,7 @@ cloud provider's Kubernetes clusters, and the domain rules.
 ### Get an account for the monitoring dashboard
 
 ```shell
-$ kubectl get secret grafana -o jsonpath="{.data.admin-password}" -n observability | base64 --decode ; echo
+$ kubectl get secret grafana -o jsonpath="{.data.admin-password}" -n vela-system | base64 --decode ; echo
 <password printed here>
 ```
 
