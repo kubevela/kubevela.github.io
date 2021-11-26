@@ -2,9 +2,9 @@
 title:  交付第一个应用
 ---
 
-欢迎来到 KubeVela! 在本小节中，我们会向你介绍一些例子来帮助你理解如何使用 KubeVela 解决应用交付中的实际问题。
+欢迎来到 KubeVela! 在本小节中，我们会向你介绍一些例子来帮助你理解，如何使用 KubeVela 解决应用交付中的实际问题。
 
-在实践之前，请确保您已经按照《快速安装》文档，在您的控制平面集群中安装了 KubeVela。
+在实践之前，请确保你已经按照《快速安装》文档，在你的控制平面集群中安装了 KubeVela。
 
 ## 一个最简单的示例
 
@@ -36,7 +36,7 @@ spec:
 kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
 ```
 
-上述命令一旦执行，KubeVela 就会帮助你在目标集群中交付一个 `Web 服务`类型的组件，且该组件的容器镜像是`crccheck/hello-world`。在本示例中，我们并没有特别指明目标集群是哪个，所以 KubeVela 会默认把应用部署在它所在的集群也就是控制平面集群当中。
+上述命令一旦执行，KubeVela 就会帮助你在目标集群中交付一个 `Web 服务` 类型的组件，且该组件的容器镜像是 `crccheck/hello-world`。在本示例中，我们并没有特别指明目标集群是哪个，所以 KubeVela 会默认把应用部署在它所在的集群也就是控制平面集群当中。
 
 而由于我们已经在上述 YAML 文件中为这个组件绑定了一个 `ingress` 类型的运维特征，KubeVela 就会指导 Kubernetes 自动为这个组件背后的工作负载配置 Service、端口映射和 HTTP 路由规则。所以只要目标集群具备 Ingress 能力，上述 YAML 一部署成功，你就可以立刻通过外域名来问这个应用了。
 
@@ -59,7 +59,7 @@ Hello World
 
 ## 交付更多的组件
 
-KubeVela 允许你部署的组件类型是非常丰富的。在上面的例子中，`Web Service`组件实际上就是一个预先编写好的[CUE](https://cuelang.org/) 文件。
+KubeVela 允许你部署的组件类型是非常丰富的。在上面的例子中，`Web Service` 组件实际上就是一个预先编写好的 [CUE](https://cuelang.org/) 文件。
 
 你还可以选择其它很多类型，比如：
 
@@ -243,8 +243,8 @@ spec:
 
 ## 下一步
 
-上述所有功能，只是 KubeVela 这个现代化的云原生应用交付与管理平台的冰山一角。您可以从下面步骤来开始更好的了解 KubeVela:
+上述所有功能，只是 KubeVela 这个现代化的云原生应用交付与管理平台的冰山一角。你可以从下面步骤来开始使用 KubeVela:
 
-- 查看 KubeVela 的[`应用交付模型`](./core-concepts/application)，进一步理解其是如何工作的。
-- 学习 KubeVela 的[`系统架构`](./core-concepts/architecture)，深入了解 KubeVela 本身的设计与架构原理。
+- 查看如何 [`交付你的应用`](./deliver-app/kustomize)
+- 查看如何 [`管理你的应用`](./manage-app/autoscaler)
 - 加入 KubeVela 中文社区钉钉群，群号：23310022。

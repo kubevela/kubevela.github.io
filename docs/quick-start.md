@@ -248,5 +248,5 @@ For using KubeVela with your own CI pipelines and other tools, please check `Bes
 ## What's Next
 
 All above features are just the first glance of KubeVela. For next steps, we recommend:
-- Learn KubeVela's [application model](./core-concepts/application).
-- Interested in KubeVela itself? Learn its [design and architecture](./core-concepts/architecture).
+- Learn how to [Deliver Your App](./deliver-app/kustomize).
+- Learn how to [Manage Your App](./manage-app/autoscaler).
