@@ -38,7 +38,7 @@ KubeVela 社区在 Github 上维护了一个官方的[插件注册中心](https:
   - 所有其他文件将会渲染成 KubeVela Components。这些文件是以下类型的一种：
     - 包含一个资源的 YAML 文件。它将被渲染成 `raw` 类型的 Component。
     - 包含一个 CUE 模板的 CUE 文件，它将通过 `parameter.XXX` 读取用户参数并完成最终渲染。
-      **注意这里你需要指定相应的类型。**
+      **你需要指定component的类型**。
 
 如果一个插件被上传到注册中心里，你可以通过 UI/CLI 来管理。下面例子是一个插件在 UI 上的展示图：
 
