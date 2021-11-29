@@ -8,18 +8,22 @@ module.exports = {
       collapsed: false,
       items: [
         'getting-started/introduction',
-        'install',
-        'quick-start',
+        'getting-started/core-concept',
+        'getting-started/architecture',
       ],
     },
     {
       type: 'category',
-      label: 'Core Concepts',
+      label: 'Install',
       collapsed: false,
       items: [
-        'core-concepts/architecture',
-        'core-concepts/application',
+        'install',
+        'platform-engineers/advanced-install',
       ],
+    },
+    {
+      type: 'doc',
+      id: 'quick-start',
     },
     {
       type: 'category',
@@ -41,7 +45,6 @@ module.exports = {
         {
           'Deploying Components': [
             'end-user/components/helm',
-            'end-user/components/kustomize',
             {
               'Cloud Services': [{
                 "Terraform": [
@@ -73,7 +76,6 @@ module.exports = {
           'Attaching Traits': [
             'end-user/traits/ingress',
             'end-user/traits/rollout',
-            'end-user/traits/autoscaler',
             'end-user/traits/annotations-and-labels',
             'end-user/traits/service-binding',
             'end-user/traits/sidecar',
@@ -156,7 +158,6 @@ module.exports = {
             'platform-engineers/debug/dry-run',
           ]
         },
-        'platform-engineers/advanced-install',
       ]
     },
     {

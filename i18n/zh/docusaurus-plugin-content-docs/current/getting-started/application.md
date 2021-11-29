@@ -1,5 +1,5 @@
 ---
-title:  应用交付模型
+title:  核心概念
 ---
 
 KubeVela 背后的应用交付模型是 [Open Application Model](../platform-engineers/oam/oam-model)，简称 OAM ，其核心是将应用部署所需的所有组件和各项运维动作，描述为一个统一的、与基础设施无关的“部署计划”，进而实现在混合环境中进行标准化和高效率的应用交付。
