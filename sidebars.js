@@ -120,7 +120,7 @@ module.exports = {
         },
         {
           'Addon System': [
-            'platform-engineers/cue/intro',
+            'platform-engineers/addon/intro',
           ]
         },
         {
