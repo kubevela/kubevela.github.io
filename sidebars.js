@@ -119,6 +119,11 @@ module.exports = {
           ]
         },
         {
+          'Addon System': [
+            'platform-engineers/cue/intro',
+          ]
+        },
+        {
           type: 'category',
           label: 'Component System',
           items: [

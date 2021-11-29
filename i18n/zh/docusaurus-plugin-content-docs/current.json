@@ -107,6 +107,10 @@
     "message": "附录",
     "description": "The label for category Appendix in sidebar docs"
   },
+  "sidebar.docs.category.Addon System": {
+    "message": "插件系统",
+    "description": "The label for category Addon System in sidebar docs"
+  },
   "sidebar.docs.category.Component System": {
     "message": "组件系统",
     "description": "The label for category Component System in sidebar docs"
