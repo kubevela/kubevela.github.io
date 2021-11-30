@@ -27,6 +27,20 @@ module.exports = {
     },
     {
       type: 'category',
+      label: 'Deliver Your App',
+      collapsed: false,
+      items: [
+        'deliver-app/kustomize',
+        'deliver-app/helm',
+        'deliver-app/consume-cloud-services',
+        'deliver-app/multi-cluster',
+        'deliver-app/multi-env',
+        'deliver-app/integrated-ci',
+        'deliver-app/version-control',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Best Practices',
       collapsed: false,
       items: [
