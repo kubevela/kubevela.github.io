@@ -119,6 +119,11 @@ module.exports = {
           ]
         },
         {
+          'Addon System': [
+            'platform-engineers/addon/intro',
+          ]
+        },
+        {
           type: 'category',
           label: 'Component System',
           items: [

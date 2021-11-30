@@ -1,0 +1,46 @@
+---
+title: 插件管理系统
+---
+
+插件管理系统用于管理和扩展 KubeVela 的平台功能。
+用户可以通过 UI/CLI 交互界面来安装或卸载 KubeVela 的平台功能。
+插件通过插件注册中心来存储、发现、分发等。
+
+
+KubeVela 社区在 Github 上维护了一个官方的[插件注册中心](https://github.com/oam-dev/catalog/tree/master/addons)，里面有一些官方维护的插件。
+此外，用户还可以自行定制和添加插件和注册中心。
+
+
+## 插件注册中心 (Addon Registry)
+
+插件注册中心是一个上传和存储、发现和下载插件的地方。
+插件注册中心背后可以是一个 Git 仓库或者一个对象存储 Bucket。
+一个插件注册中心的模样可以参考这个[官方例子](https://github.com/oam-dev/catalog/tree/master/addons)。
+
+你可以通过 UI/CLI 来管理插件注册中心。下面例子展示如何通过 UI 来添加一个注册中心：
+
+![alt](../../resources/addon-registry.jpg)
+
+
+## 插件格式 (Addon Format)
+
+一个插件包括了 X-Definitions、Application 控制器和组件资源的模板、以及它的自描述文件。
+插件具体内容可以参考这个[官方例子](https://github.com/oam-dev/catalog/tree/master/experimental/addons/example)。
+
+一个插件的内容必须遵照以下格式：
+
+- `template.yaml`: 包含了基础的 Application 控制器模板。你可以添加更多的组件和工作流来满足你的需求。
+  其他在 `resources/` 和 `definitions/` 的模板文件将会被渲染成 Components 并且附加到 `spec.components` 后面。
+- `metadata.yaml`: 包含了插件的自描述元信息。
+- `definitions/`: 包含了 X-Definition yaml/cue 文件。这些文件将会渲染成 KubeVela Components 并添加到 `template.yaml` 中。
+- `resources/`:
+  - `parameter.cue` 将用于透出参数。它将会被转成 JSON schema 并渲染成 UI 表单。
+  - 所有其他文件将会渲染成 KubeVela Components。这些文件是以下类型的一种：
+    - 包含一个资源的 YAML 文件。它将被渲染成 `raw` 类型的 Component。
+    - 包含一个 CUE 模板的 CUE 文件，它将通过 `parameter.XXX` 读取用户参数并完成最终渲染。
+      **你需要指定component的类型**。
+
+如果一个插件被上传到注册中心里，你可以通过 UI/CLI 来管理。下面例子是一个插件在 UI 上的展示图：
+
+![alt](../../resources/addon.jpg)
+
