@@ -112,7 +112,7 @@ curl --location -g --request GET \
 
 In many scenarios, the built-in views cannot meet our needs, and the resources encapsulated under Application are not just the native resources of k8s. For many custom resources, users will have different query requirements. At this time, you need to write your own specific views to complete the query. This section will tell you how to write a custom view.
 
-The current view in velaQL relies on configMap in k8s as a storage medium，You can refer to [https://github.com/oam-dev/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml](https://github.com/oam-dev/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml). The template in the configMap data field stores the core logic of the view, template is a query statement implemented in cue language.
+The current view in velaQL relies on configMap in k8s as a storage medium, You can refer to [https://github.com/oam-dev/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml](https://github.com/oam-dev/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml). The template in the configMap data field stores the core logic of the view, template is a query statement implemented in cue language.
 
 Every time you use velaQL, the system will look for the configMap with the same name as the view under the vela-system namespace, and extract the template for query operations, so please ensure that your custom view is stored under vela-system.
 ​
