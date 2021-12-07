@@ -245,6 +245,20 @@ sudo mv ./vela /usr/local/bin/vela
 
 KubeVela 支持一系列[开箱即用的插件](./platform-engineers/advanced-install#插件列表)，建议你至少开启以下插件：
 
+
+* KubeVela 的 dashboard 插件
+  ```shell
+  vela addon enable velaux
+  ```
+
+  插件安装成功之后，可以通过 `vela port-forward` 命令做端口映射，注意选择 velaux 组件的 service，将 dashboard 的端口映射到本地。例如，我们以指定 `18080` 端口为例：
+
+  ```shell
+  vela port-forward -n vela-system addon-velaux 18080:80
+  ```
+
+  通过访问浏览器访问本地端口 `http://127.0.0.1:18080` 可以访问到 dashboard 页面.
+
 * Helm 以及 Kustomize 组件功能插件
   ```shell
   vela addon enable fluxcd
