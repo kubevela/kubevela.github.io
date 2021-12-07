@@ -257,8 +257,10 @@ please at least enable following addons to make sure KubeVela functioning well:
 
 
   For example, let's specify the local port `18080`:
-    ```shell
+  ```shell
   vela port-forward -n vela-system addon-velaux 18080:80
+  ```
+  Then you can visit it by http://127.0.0.1:18080.
 
 * Helm and Kustomize Components addons
   ```shell
