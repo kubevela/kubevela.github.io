@@ -87,15 +87,11 @@ getLatestRelease() {
     local latest_release=""
 
     if [ "$VELA_HTTP_REQUEST_CLI" == "curl" ]; then
-        latest_release=$(curl -s $velaReleaseUrl | grep \"tag_name\" | grep -v rc | awk 'NR==1{print $2}' |  sed -n 's/\"\(.*\)\",/\1/p')
+        latest_release=$(curl -s $velaReleaseUrl | grep \"tag_name\" | grep -v rc | awk '{print $2}' |  sed -n 's/\"\(.*\)\",/\1/p' | sed -n '/^v[.0-9]*$/ p'|awk 'NR==1{print $1}')
     else
-        latest_release=$(wget -q --header="Accept: application/json" -O - $velaReleaseUrl | grep \"tag_name\" | grep -v rc | awk 'NR==1{print $2}' |  sed -n 's/\"\(.*\)\",/\1/p')
+        latest_release=$(wget -q --header="Accept: application/json" -O - $velaReleaseUrl | grep \"tag_name\" | grep -v rc | awk '{print $2}' |  sed -n 's/\"\(.*\)\",/\1/p' | sed -n '/^v[.0-9]*$/ p'|awk 'NR==1{print $1}')
     fi
 
-#    if [[ ! "$latest_release" =~ ^v[\.0-9]+$ ]]; then
-#        echo "Failed to get latest release tag."
-#        exit 1
-#    fi
 
     ret_val=$latest_release
 }
@@ -141,7 +137,7 @@ installFile() {
         echo "$VELA_CLI_FILENAME installed into $VELA_INSTALL_DIR successfully."
 
         $VELA_CLI_FILE --version
-    else 
+    else
         echo "Failed to install $VELA_CLI_FILENAME"
         exit 1
     fi
