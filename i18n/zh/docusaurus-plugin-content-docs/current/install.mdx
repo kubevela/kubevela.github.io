@@ -146,7 +146,7 @@ chmod +x /usr/bin/helm
    
 2. 安装 KubeVela
   ```shell script
-  helm install --create-namespace -n vela-system kubevela kubevela/vela-core --set multicluster.enabled=true --wait
+  helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.0-beta.2 --set multicluster.enabled=true --wait
   ```
   你可以参考 [`自定义安装`](./platform-engineers/advanced-install) 获取更多安装模式和功能。
 
@@ -200,7 +200,7 @@ KubeVela CLI 也可以通过 [kubectl plugin](./platform-engineers/advanced-inst
 ** macOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.0-beta.2
 ```
 
 **Windows**
