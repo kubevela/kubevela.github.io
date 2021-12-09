@@ -10,6 +10,7 @@ module.exports = {
         'getting-started/introduction',
         'getting-started/core-concept',
         'getting-started/architecture',
+        'quick-start',
       ],
     },
     {
@@ -18,25 +19,30 @@ module.exports = {
       collapsed: false,
       items: [
         'install',
-        'platform-engineers/advanced-install',
       ],
     },
     {
-      type: 'doc',
-      id: 'quick-start',
-    },
-    {
       type: 'category',
-      label: 'Deliver Your App',
+      label: 'Deliver Your Application',
       collapsed: false,
       items: [
-        'deliver-app/kustomize',
+        'deliver-app/k8s-object',
         'deliver-app/helm',
         'deliver-app/consume-cloud-services',
         'deliver-app/multi-cluster',
         'deliver-app/multi-env',
-        'deliver-app/integrated-ci',
-        'deliver-app/version-control',
+        // 'deliver-app/integrated-ci',
+        // 'deliver-app/version-control',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Manage Your Application',
+      collapsed: false,
+      items: [
+        'manage-app/scaler',
+        'manage-app/gateway',
+        // 'manage-app/pvc',
       ],
     },
     {
@@ -46,7 +52,7 @@ module.exports = {
       items: [
         'case-studies/jenkins-cicd',
         'case-studies/gitops',
-        'case-studies/initialize-env',
+        // 'case-studies/initialize-env',
         'case-studies/canary-blue-green',
         'case-studies/multi-cluster',
       ],
@@ -59,6 +65,7 @@ module.exports = {
         {
           'Deploying Components': [
             'end-user/components/helm',
+            'end-user/components/kustomize',
             {
               'Cloud Services': [{
                 "Terraform": [
@@ -90,6 +97,7 @@ module.exports = {
           'Attaching Traits': [
             'end-user/traits/ingress',
             'end-user/traits/rollout',
+            'end-user/traits/autoscaler',
             'end-user/traits/annotations-and-labels',
             'end-user/traits/service-binding',
             'end-user/traits/sidecar',
