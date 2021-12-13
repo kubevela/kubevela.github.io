@@ -41,7 +41,7 @@ module.exports = {
       collapsed: false,
       items: [
         'manage-app/scaler',
-        'manage-app/gateway',
+        // 'manage-app/gateway',
         // 'manage-app/pvc',
       ],
     },
