@@ -2,14 +2,21 @@
 title:  交付第一个应用
 ---
 
+> 在实践之前，请确保你已经按照 [从 Kubernetes 集群安装](./install.mdx) 文档，在你的控制平面集群中安装了 KubeVela 和 VelaUX Dashboard。
+
 欢迎来到 KubeVela！在本小节中，我们会向你介绍如何使用 VelaUX Dashboard 来交付一个简单的应用。
 
-主要包含的步骤有：
+你将会操作的步骤有：
 
-1. 使用一个简单的无状态应用 `webservice` 镜像： [crccheck/hello-world](https://hub.docker.com/r/crccheck/hello-world)；
-2. 创建一个使用该镜像的 `Application`，并部署到本地 local 集群；
+1. 使用一个简单的镜像： [crccheck/hello-world](https://hub.docker.com/r/crccheck/hello-world)；
+2. 创建基于上一步镜像的无状态应用 `webservice` 的 `Application`，指向自带的 local 集群、local `Target` 所在的环境； 
+3. 设置应用配置，通过 LoadBalancer 的方式把服务以外网 IP 加端口暴露出去；
+4. 测试访问服务是否成功，应用交付完毕。
 
-> 在实践之前，请确保你已经按照 [从 Kubernetes 集群安装](./install.mdx) 文档，在你的控制平面集群中安装了 KubeVela 和 VelaUX Dashboard。
+你将学习到内容的有：
+
+- 初步接触 `Cluster`、`Target` 和 `Project` 等核心概念。
+- 通过 VelaUX Dashboard 完整操作交付一个应用
 
 ## 一个简单的示例
 

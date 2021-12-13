@@ -2,6 +2,8 @@
 title:  交付 Helm Chart
 ---
 
+本小节，将介绍如何交付一个 Helm Chart 的应用。
+
 > 准备工作：使用 Helm 需要先启用 Addon 里的 FluxCD。
 
 首先我们打开 VelaUX Dashboard 的启动页面，选择左侧第四个选项卡 `Addon` ，点开 fluxcd 并且 Enable 它：
