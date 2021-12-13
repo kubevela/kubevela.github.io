@@ -1,5 +1,5 @@
 ---
-title:  系统架构
+title: 系统架构
 ---
 
 KubeVela 的整体架构如下所示：
@@ -11,6 +11,7 @@ KubeVela 的整体架构如下所示：
 KubeVela 本身是一个的应用交付与管理控制平面，它架在 Kubernetes 集群、云平台等基础设施之上，通过开放应用模型来对组件、云服务、运维能力、交付工作流进行统一的编排和交付。KubeVela 这种与基础设施本身完全解耦的设计，很容易就能帮助你面向混合云/多云/多集群基础设施进行应用交付与管理。
 
 而为了能够同任何 CI 流水线或者 GitOps 工具无缝集成，KubeVela 的 API（即开放应用模型）被设计为是声明式、完全以应用为中心的，它包括：
+
 - 帮助用户定义应用交付计划的 `Application` 对象
 - 帮助平台管理员通过 CUE 语言定义平台能力和抽象的 `X-Definition `对象
   - 比如 `ComponentDefinition`、`TraitDefinition` 等
