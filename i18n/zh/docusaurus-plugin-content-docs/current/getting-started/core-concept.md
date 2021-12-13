@@ -1,36 +1,131 @@
 ---
-title:  系统架构
+title:  核心概念
 ---
 
-KubeVela 的整体架构如下所示：
+KubeVela 背后的应用交付模型是 [Open Application Model](../platform-engineers/oam/oam-model)，简称 OAM ，其核心是将应用部署所需的所有组件和各项运维动作，描述为一个统一的、与基础设施无关的“部署计划”，进而实现在混合环境中进行标准化和高效率的应用交付。
 
-![kubevela-arch](../resources/system-arch.png)
+## 应用部署计划（Application）
 
-## KubeVela 是一个控制平面系统
+KubeVela 通过声明式 YAML 文件的方式来描述应用部署计划。一个典型的样例如下：
 
-KubeVela 本身是一个的应用交付与管理控制平面，它架在 Kubernetes 集群、云平台等基础设施之上，通过开放应用模型来对组件、云服务、运维能力、交付工作流进行统一的编排和交付。KubeVela 这种与基础设施本身完全解耦的设计，很容易就能帮助你面向混合云/多云/多集群基础设施进行应用交付与管理。
+```yaml
+# sample.yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: website
+spec:
+  components:
+    - name: frontend              # 比如我们希望部署一个实现前端业务的 Web Service 类型组件
+      type: webservice
+      properties:
+        image: nginx
+      traits:
+        - type: cpuscaler         # 给组件设置一个可以动态调节 CPU 使用率的 cpuscaler 类型运维特征
+          properties:
+            min: 1
+            max: 10
+            cpuPercent: 60
+        - type: sidecar           # 往运行时集群部署之前，注入一个做辅助工作的 sidecar
+          properties:
+            name: "sidecar-test"
+            image: "fluentd"
+    - name: backend
+      type: worker
+      properties:
+        image: busybox
+        cmd:
+          - sleep
+          - '1000'
+  policies:
+    - name: demo-policy
+      type: env-binding
+      properties:
+        envs:
+          - name: test
+            placement:
+              clusterSelector:
+                name: cluster-test
+          - name: prod
+            placement:
+              clusterSelector:
+                name: cluster-prod
+  workflow:
+    steps:
+        # 步骤名称
+      - name: deploy-test-env
+        # 指定步骤类型
+        type: deploy2env
+        properties:
+          # 指定策略名称
+          policy: demo-policy
+          # 指定部署的环境名称
+          env: test    
+      - name: manual-approval
+        # 工作流内置 suspend 类型的任务，用于暂停工作流
+        type: suspend
+      - name: deploy-prod-env
+        type: deploy2env
+        properties:
+          policy: demo-policy
+          env: prod    
+```
 
-而为了能够同任何 CI 流水线或者 GitOps 工具无缝集成，KubeVela 的 API（即开放应用模型）被设计为是声明式、完全以应用为中心的，它包括：
-- 帮助用户定义应用交付计划的 `Application` 对象
-- 帮助平台管理员通过 CUE 语言定义平台能力和抽象的 `X-Definition `对象
-  - 比如 `ComponentDefinition`、`TraitDefinition` 等
+在使用时，一个应用部署计划由组件、运维特征、策略、工作流等多个模块组装而成。
 
-在具体实现上，KubeVela 依赖一个独立的 Kubernetes 集群来运行。这其实是一个“有意为之”的设计：云原生社区中大量的实践已经证明“构建一个科学的、健壮的控制平面系统”，正是 Kubernetes 项目最擅长的工作。所以，依赖 Kubernetes 作为控制平面集群这个选择，虽然会增加一定的部署难度，却能够让我们以最原生的方式为大规模应用交付带来至关重要的“确定性”、“收敛性”和“自动化能力”。
+## 组件（Components）
 
-具体来说，KubeVela 本身主要由如下几个部分组成:
+一个应用部署计划可以包含很多待部署组件。KubeVela 内置了常用的组件类型，使用 [KubeVela CLI](../install#3-安装-kubevela-cli) 命令查看：
+```
+vela components 
+```
+返回结果：
+```
+NAME        NAMESPACE   WORKLOAD                              DESCRIPTION                                                 
+alibaba-rds default     configurations.terraform.core.oam.dev Terraform configuration for Alibaba Cloud RDS object        
+task        vela-system jobs.batch                            Describes jobs that run code or a script to completion.     
+webservice  vela-system deployments.apps                      Describes long-running, scalable, containerized services    
+                                                              that have a stable network endpoint to receive external     
+                                                              network traffic from customers.                             
+worker      vela-system deployments.apps                      Describes long-running, scalable, containerized services    
+                                                              that running at backend. They do NOT have network endpoint  
+                                                              to receive external network traffic.                        
 
-- **核心控制器** 为整个系统提供核心控制逻辑，完成诸如编排应用和工作流、修订版本快照、垃圾回收等等基础逻辑
-- **模块化能力控制器** 负责对 X-Definitions 对象进行注册和管理。
-- **插件控制器** 负责注册和管理 KubeVela 运行所需要的第三方插件，比如 Flux、Terraform 组件等等。
+```
 
-### 运行时基础设施
+## 运维特征（Traits）
 
-运行时基础设施是应用实际运行的地方。KubeVela 本身是完全与这些基础设施无关的，因此它允许你面向任何环境（包括 Kubernetes 环境，也包括非 Kubernetes 环境比如云平台和边缘设备等）去交付和管理任何类型的应用。
+运维特征是可以随时绑定给待部署组件的、模块化的运维能力。KubeVela 也内置了常用的运维特征类型，使用 [KubeVela CLI](../install#3-安装-kubevela-cli) 命令查看：
+```
+vela traits 
+```
+返回结果：
+```
+NAME        NAMESPACE   APPLIES-TO        CONFLICTS-WITH  POD-DISRUPTIVE  DESCRIPTION                                          
+annotations vela-system deployments.apps                  true            Add annotations for your Workload.                   
+cpuscaler   vela-system webservice,worker                 false           Automatically scale the component based on CPU usage.
+ingress     vela-system webservice,worker                 false           Enable public web traffic for the component.         
+labels      vela-system deployments.apps                  true            Add labels for your Workload.                        
+scaler      vela-system webservice,worker                 false           Manually scale the component.                        
+sidecar     vela-system deployments.apps                  true            Inject a sidecar container to the component.   
+```
 
-## KubeVela 是可编程的
+## 应用策略（Policy)
 
-现实世界中的应用交付，往往是一个比较复杂的过程。哪怕是一个比较通用的交付流程，也会因为场景、环境、用户甚至团队的不同而千差万别。所以 KubeVela 从第一天起就采用了一种“可编程”式的方法来实现它的交付模型，这使得 KubeVela 可以以前所未有的灵活度适配到你的应用交付场景中。
+应用策略（Policy）负责定义指定应用交付过程中的策略，比如质量保证策略、安全组策略、防火墙规则、SLO 目标、放置策略等等。
 
-![kernel](../resources/kernel.png)
+## 工作流（Workflow）
 
-如果要详细学习 KubeVela 的可编程文档，欢迎查看文档网站中《管理员手册》部分。
+工作流允许用户将组件、运维特征、具体的交付动作等一系列元素组装成为一个完整的、面向过程的有向无环图（DAG）。典型的工作流步骤包括暂停、人工审核、等待、数据传递、多环境/多集群发布、A/B 测试等等。
+
+![alt](../resources/workflow.png)
+
+每一个策略和工作流步骤在 KubeVela 中都是一个完全可插拔的独立功能模块，KubeVela 允许你通过 CUE 语言自由的定义和创建属于自己的工作流步骤来组成自己的交付计划。
+
+## 下一步
+
+后续步骤:
+
+- 加入 KubeVela 中文社区钉钉群，群号：23310022。
+- 阅读[**用户手册**](../end-user/components/helm)，从 Helm 组件开始了解如何构建你的应用部署计划。
+- 阅读[**管理员手册**](../platform-engineers/oam/oam-model)了解开放应用模型的细节。
