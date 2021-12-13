@@ -16,7 +16,7 @@ title:  交付第一个应用
 你将学习到内容的有：
 
 - 初步接触 `Cluster`、`Target` 和 `Project` 等核心概念。
-- 通过 VelaUX Dashboard 完整操作交付一个应用
+- 通过操作 VelaUX Dashboard 完整交付一个应用。
 
 ## 一个简单的示例
 
