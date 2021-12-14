@@ -148,7 +148,7 @@ chmod +x /usr/bin/helm
    
 2. Install KubeVela
     ```shell script
-    helm install --create-namespace -n vela-system kubevela kubevela/vela-core --set multicluster.enabled=true --wait
+    helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.0-beta.2 --set multicluster.enabled=true --wait
     ```
     You can refer to [advanced installation guide](./platform-engineers/advanced-install) for more custom ways.
 
@@ -202,7 +202,7 @@ KubeVela CLI could be [installed as kubectl plugin](./platform-engineers/advance
 ** macOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.0-beta.2
 ```
 
 **Windows**
@@ -247,6 +247,20 @@ sudo mv ./vela /usr/local/bin/vela
 
 KubeVela support a dozen of [out-of-box addons](./platform-engineers/advanced-install#Addons),
 please at least enable following addons to make sure KubeVela functioning well:
+
+* Dashboard addon
+
+  ```shell
+  vela addon enable velaux
+  ```
+  After dashboard addon enabled successfully, you can use `vela port-forward` command and select the service of component `velaux` to use the dashboard.
+
+
+  For example, let's specify the local port `18080`:
+  ```shell
+  vela port-forward -n vela-system addon-velaux 18080:80
+  ```
+  Then you can visit it by http://127.0.0.1:18080.
 
 * Helm and Kustomize Components addons
   ```shell

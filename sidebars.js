@@ -143,6 +143,11 @@ module.exports = {
           ]
         },
         {
+          'Addon System': [
+            'platform-engineers/addon/intro',
+          ]
+        },
+        {
           type: 'category',
           label: 'Component System',
           items: [
@@ -173,6 +178,7 @@ module.exports = {
             'platform-engineers/system-operation/managing-clusters',
             'platform-engineers/system-operation/observability',
             'platform-engineers/system-operation/performance-finetuning',
+            'platform-engineers/system-operation/velaql',
           ]
         },
         {
