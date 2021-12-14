@@ -27,7 +27,7 @@ title:  管理多环境
 
 ## 新建两个交付目标
 
-有了上面这个叫做 `Hangzhou-Region` 的示例集群后，我们再次基础之上，创建 2 个交付目标。打开左侧导航的第二个 `Targets` 选项，点击 `New Target` 创建交付目标：
+有了上面这个叫做 `Hangzhou-Region` 的示例集群后，我们在此基础之上，创建 2 个交付目标。打开左侧导航的第二个 `Targets` 选项，点击 `New Target` 创建交付目标：
 
 ![](../resources/new-target-multi-env.jpg)
 
