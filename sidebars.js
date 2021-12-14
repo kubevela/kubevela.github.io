@@ -23,13 +23,13 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'Deliver Your Application',
+      label: 'Dashboard Manuals',
       collapsed: false,
       items: [
         'deliver-app/k8s-object',
         'deliver-app/helm',
         'deliver-app/consume-cloud-services',
-        'deliver-app/multi-env',
+        // 'deliver-app/multi-env',
         'deliver-app/multi-cluster',
         // 'deliver-app/integrated-ci',
         // 'deliver-app/version-control',
@@ -54,7 +54,6 @@ module.exports = {
         'case-studies/gitops',
         // 'case-studies/initialize-env',
         'case-studies/canary-blue-green',
-        'case-studies/multi-cluster',
       ],
     },
     {
@@ -118,6 +117,7 @@ module.exports = {
             'end-user/workflow/component-dependency-parameter',
           ]
         },
+        'case-studies/multi-cluster',
         'end-user/version-control',
       ]
     },
