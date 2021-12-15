@@ -23,7 +23,7 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'Dashboard Manuals',
+      label: 'App Delivery',
       collapsed: false,
       items: [
         'deliver-app/k8s-object',

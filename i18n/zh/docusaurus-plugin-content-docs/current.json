@@ -87,9 +87,9 @@
     "message": "交付第一个应用",
     "description": "The label for doc deliver-first-app in sidebar docs"
   },
-  "sidebar.docs.category.Dashboard Manuals": {
-    "message": "Dashboard 使用手册",
-    "description": "The label for category Dashboard Manuals in sidebar docs"
+  "sidebar.docs.category.App Delivery": {
+    "message": "应用交付",
+    "description": "The label for category App Delivery in sidebar docs"
   },
   "sidebar.docs.category.Manage Your Application": {
     "message": "管理你的应用",
