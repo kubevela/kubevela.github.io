@@ -13,7 +13,7 @@ KubeVela 围绕着云原生应用交付和管理场景展开，背后的应用�
 
 ### 组件（Component）
 
-定义一个制品或云服务的交付和管理形式，一个应用中可以包括多个组件，最佳的实践方案是一个应用中包括一个主组件（核心业务）和附属组件（强依赖或独享的中间件）。组件的类型由 [Component Definition](../platform-engineers/oam/x-definition#组件定义（componentdefinition）) 定义，它包括了用户输入参数的定义和输出资源描述的定义。
+定义一个制品或云服务的交付和管理形式，一个应用中可以包括多个组件，最佳的实践方案是一个应用中包括一个主组件（核心业务）和附属组件（强依赖或独享的中间件，运维组件等）。组件的类型由 [Component Definition](../platform-engineers/oam/x-definition#组件定义（componentdefinition）) 定义。
 
 ### 运维特征（Trait）
 
@@ -27,7 +27,7 @@ KubeVela 围绕着云原生应用交付和管理场景展开，背后的应用�
 
 应用策略（Policy）负责定义指定应用交付过程中的策略，比如质量保证策略、安全组策略、防火墙规则、SLO 目标、放置策略等。应用策略的类型由 [Policy Definition](../platform-engineers/oam/x-definition#应用策略定义（policydefinition）) 定义，它有以下关键场景：
 
-- <b>EnvBinding</b> 环境绑定策略, 环境绑定策略定义了将应用发布到某个环境时，环境中各个 Target 的部署差异。
+- <b>EnvBinding</b> 环境绑定策略, 环境绑定策略定义了将应用发布到某个环境时，当前环境的部署差异和环境中各个 Target 的部署差异。
 
 ### 版本记录 （Revision）
 
@@ -39,11 +39,11 @@ KubeVela 围绕着云原生应用交付和管理场景展开，背后的应用�
 
 ### 环境（Environment）
 
-环境指通常意义的开发、测试、生产的环境业务描述，它由多个 Target 构成和应用环境差异构成。环境协调上层应用和底层基础设施的匹配，不同的环境生成不同的 Application 部署实例。环境定义在项目中，每一个项目可以包含多个环境。
+环境指通常意义的开发、测试、生产的环境业务描述，它可以包括多个 Target。环境协调上层应用和底层基础设施的匹配，不同的环境生成不同的 Application 部署实例。环境定义在项目中，每一个项目可以包含多个环境。处在同一个环境中的应用可以具备内部互访和资源共享能力。
 
 ### 交付目标（Target）
 
-交付目标描述应用资源的创建空间，它精确到 Kubernetes 集群的 Namespace，对于普通应用，组件渲染生成的 Kubernetes 原生资源即会在 Target 指定的集群和 Namespace 中创建；对于云服务，服务创建时获取 Target 定义的云服务区域参数定义，在管控集群发起云资源创建任务，生成访问密钥后分发到 Target 指定的集群和 Namespace。
+交付目标描述应用及相关资源的实际部署空间，它精确到 Kubernetes 集群的 Namespace，对于普通应用，组件渲染生成的 Kubernetes 原生资源即会在 Target 指定的集群和 Namespace 中创建；对于云服务，服务创建时获取 Target 定义的云服务区域参数定义，在管控集群发起云资源创建任务，生成访问密钥后分发到 Target 指定的集群和 Namespace。
 
 ## 集群（Cluster）
 
@@ -51,4 +51,4 @@ Kubernetes 集群描述，它包括了集群通信密钥等信息，Kubernetes �
 
 ## 插件（Addon）
 
-平台扩展插件描述，KubeVela 遵从轻核心、高度可扩展的设计模式。KubeVela 在应用交付和管理的完整场景中设计多个可扩展的点。每一个插件包括了[X-Definition](../platform-engineers/oam/x-definition)定义，代表它扩展的能力集合。
+平台扩展插件描述，KubeVela 遵从轻核心、高度可扩展的设计模式。KubeVela 在应用交付和管理的完整场景中设计多个可扩展的点，通过与第三方解决方案结合形成 Addon。每一个插件一般会包括 [X-Definition](../platform-engineers/oam/x-definition) 定义，代表它扩展的能力集合。
