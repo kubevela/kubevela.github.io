@@ -2,6 +2,8 @@
 title:  交付 Kubernetes 原生资源
 ---
 
+
+
 首先我们打开 VelaUX Dashboard 的启动页面，打开左侧第一个 `Application` 第一个选项卡，点击右上角的 `New Application` 开始创建应用：
 
 ![](../resources/dashboard.png)

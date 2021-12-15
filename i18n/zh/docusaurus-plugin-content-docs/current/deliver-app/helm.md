@@ -2,6 +2,8 @@
 title:  交付 Helm Chart
 ---
 
+Helm Chart 作为 Kubernetes 的包管理器，为我们提供了一个管理的 YAML 文件的
+
 本小节，将介绍如何交付一个 Helm Chart 的应用。
 
 > 准备工作：使用 Helm 需要先启用 Addon 里的 FluxCD。
