@@ -4,7 +4,7 @@ title: 系统架构
 
 KubeVela 的整体架构如下所示：
 
-![kubevela-arch](../resources/system-arch.png)
+![kubevela-arch](../resources/system-arch.jpg)
 
 ## KubeVela 是一个控制平面系统
 
@@ -22,7 +22,8 @@ KubeVela 本身是一个的应用交付与管理控制平面，它架在 Kuberne
 
 - **核心控制器** 为整个系统提供核心控制逻辑，完成诸如编排应用和工作流、修订版本快照、垃圾回收等等基础逻辑
 - **模块化能力控制器** 负责对 X-Definitions 对象进行注册和管理。
-- **插件控制器** 负责注册和管理 KubeVela 运行所需要的第三方插件，比如 Flux、Terraform 组件等等。
+- **插件控制器** 负责注册和管理 KubeVela 运行所需要的第三方插件，比如 VelaUX、 Flux、Terraform 组件等等。
+- **UI 控制台和 CLI** UI 控制台服务于希望开箱即用的用户，CLI 适用于集成 KubeVela 和终端管理的用户。
 
 ### 运行时基础设施
 
@@ -34,4 +35,4 @@ KubeVela 本身是一个的应用交付与管理控制平面，它架在 Kuberne
 
 ![kernel](../resources/kernel.png)
 
-如果要详细学习 KubeVela 的可编程文档，欢迎查看文档网站中《管理员手册》部分。
+如果要详细学习 KubeVela 的可编程文档，欢迎查看文档网站中《自定义扩展》部分。

@@ -1,5 +1,6 @@
 ---
-title:  管理网关规则
+title: 设置应用的网关访问策略
+description: 本页面说明如何为应用分配网关策略，实现应用的集群外访问。
 ---
 
 ## 开始之前
@@ -7,7 +8,6 @@ title:  管理网关规则
 > ⚠️ 需要你的集群已安装 [Ingress 控制器](https://kubernetes.github.io/ingress-nginx/deploy/)。
 
 ## 字段说明
-
 
 ```shell
 vela show ingress
@@ -51,6 +51,7 @@ spec:
 ```bash
 kubectl get application first-vela-app -w
 ```
+
 ```console
 NAME             COMPONENT        TYPE         PHASE            HEALTHY   STATUS   AGE
 first-vela-app   express-server   webservice   healthChecking                      14s
@@ -62,6 +63,7 @@ first-vela-app   express-server   webservice   running          true            
 ```shell
 kubectl get application first-vela-app -o yaml
 ```
+
 ```console
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -86,6 +88,7 @@ spec:
 ```
 curl -H "Host:testsvc.example.com" http://<your ip address>/
 ```
+
 ```console
 <xmp>
 Hello World
