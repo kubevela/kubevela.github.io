@@ -1,6 +1,6 @@
 ---
-title: 设置应用的网关访问策略
-description: 本页面说明如何为应用分配网关策略，实现应用的集群外访问。
+title: 访问部署的应用
+description: 本页面介绍通过为应用分配网关策略，或设置应用的 Service 类型为 Loadbalancer 或 NodePort 实现应用的集群外访问。
 ---
 
 ## 开始之前

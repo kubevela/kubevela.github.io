@@ -1,5 +1,5 @@
 ---
-title:  Multi-Cluster App Delivery
+title: Multi-Cluster App Delivery
 ---
 
 This section will introduce how to use KubeVela for multi-cluster application delivery and why.
@@ -8,9 +8,9 @@ This section will introduce how to use KubeVela for multi-cluster application de
 
 There are more and more situations come out that organizations need multi-cluster technology for application delivery:
 
-* For scalability, a single Kubernetes cluster has its limit around 5K nodes or less, it is unable to handle the large scale application load.
-* For stability/availability, application can deploy in multi-cluster for backup which provides more stability and availability.
-* For security, you may need to deploy in different zones/areas as government policy requires.
+- For scalability, a single Kubernetes cluster has its limit around 5K nodes or less, it is unable to handle the large scale application load.
+- For stability/availability, application can deploy in multi-cluster for backup which provides more stability and availability.
+- For security, you may need to deploy in different zones/areas as government policy requires.
 
 The following guide will the multi-cluster that helps you easily deploy an application to different environments.
 
@@ -34,8 +34,8 @@ After clusters joined, you could list all clusters managed by KubeVela currently
 
 ```bash
 $ vela cluster list
-CLUSTER         TYPE    ENDPOINT                
-cluster-prod    tls     https://47.88.4.97:6443 
+CLUSTER         TYPE    ENDPOINT
+cluster-prod    tls     https://47.88.4.97:6443
 cluster-staging tls     https://47.88.7.230:6443
 ```
 
@@ -56,7 +56,6 @@ Below is an example, deploy to a staging environment first, check the applicatio
 and finally promote to production environment.
 
 For different environments, the deployment configuration can also have some nuance. In the staging environment, we only need one replica for the webservice and do not need the worker. In the production environment, we setup 3 replicas for the webservice and enable the worker.
-
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -81,7 +80,7 @@ spec:
         image: busybox
         cmd:
           - sleep
-          - '1000000'
+          - "1000000"
   policies:
     - name: example-multi-env-policy
       type: env-binding
@@ -150,17 +149,18 @@ example-app   hello-world-server   webservice   workflowSuspending   true      R
 We can see that the workflow is suspended at `manual-approval`:
 
 ```yaml
-...
-  status:
-    workflow:
-      appRevision: example-app-v1:44a6447e3653bcc2
-      contextBackend:
-        apiVersion: v1
-        kind: ConfigMap
-        name: workflow-example-app-context
-        uid: 56ddcde6-8a83-4ac3-bf94-d19f8f55eb3d
-      mode: StepByStep
-      steps:
+
+---
+status:
+  workflow:
+    appRevision: example-app-v1:44a6447e3653bcc2
+    contextBackend:
+      apiVersion: v1
+      kind: ConfigMap
+      name: workflow-example-app-context
+      uid: 56ddcde6-8a83-4ac3-bf94-d19f8f55eb3d
+    mode: StepByStep
+    steps:
       - id: wek2b31nai
         name: deploy-staging
         phase: succeeded
@@ -169,30 +169,31 @@ We can see that the workflow is suspended at `manual-approval`:
         name: manual-approval
         phase: succeeded
         type: suspend
-      suspend: true
-      terminated: false
-      waitCount: 0
+    suspend: true
+    terminated: false
+    waitCount: 0
 ```
 
 You can also check the health status in the `status.service` field below.
 
 ```yaml
-...
-  status:
-    services:
+
+---
+status:
+  services:
     - env: staging
       healthy: true
-      message: 'Ready:1/1 '
+      message: "Ready:1/1 "
       name: hello-world-server
       scopes:
-      - apiVersion: core.oam.dev/v1alpha2
-        kind: HealthScope
-        name: health-policy-demo
-        namespace: test
-        uid: 6e6230a3-93f3-4dba-ba09-dd863b6c4a88
+        - apiVersion: core.oam.dev/v1alpha2
+          kind: HealthScope
+          name: health-policy-demo
+          namespace: test
+          uid: 6e6230a3-93f3-4dba-ba09-dd863b6c4a88
       traits:
-      - healthy: true
-        type: scaler
+        - healthy: true
+          type: scaler
       workloadDefinition:
         apiVersion: apps/v1
         kind: Deployment
@@ -214,50 +215,50 @@ example-app   hello-world-server   webservice   running   true      Ready:1/1   
 ```
 
 ```yaml
-  status:
-    services:
+status:
+  services:
     - env: staging
       healthy: true
-      message: 'Ready:1/1 '
+      message: "Ready:1/1 "
       name: hello-world-server
       scopes:
-      - apiVersion: core.oam.dev/v1alpha2
-        kind: HealthScope
-        name: health-policy-demo
-        namespace: default
-        uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
+        - apiVersion: core.oam.dev/v1alpha2
+          kind: HealthScope
+          name: health-policy-demo
+          namespace: default
+          uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
       traits:
-      - healthy: true
-        type: scaler
+        - healthy: true
+          type: scaler
       workloadDefinition:
         apiVersion: apps/v1
         kind: Deployment
     - env: prod
       healthy: true
-      message: 'Ready:3/3 '
+      message: "Ready:3/3 "
       name: hello-world-server
       scopes:
-      - apiVersion: core.oam.dev/v1alpha2
-        kind: HealthScope
-        name: health-policy-demo
-        namespace: default
-        uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
+        - apiVersion: core.oam.dev/v1alpha2
+          kind: HealthScope
+          name: health-policy-demo
+          namespace: default
+          uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
       traits:
-      - healthy: true
-        type: scaler
+        - healthy: true
+          type: scaler
       workloadDefinition:
         apiVersion: apps/v1
         kind: Deployment
     - env: prod
       healthy: true
-      message: 'Ready:1/1 '
+      message: "Ready:1/1 "
       name: data-worker
       scopes:
-      - apiVersion: core.oam.dev/v1alpha2
-        kind: HealthScope
-        name: health-policy-demo
-        namespace: default
-        uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
+        - apiVersion: core.oam.dev/v1alpha2
+          kind: HealthScope
+          name: health-policy-demo
+          namespace: default
+          uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
       workloadDefinition:
         apiVersion: apps/v1
         kind: Deployment
@@ -266,17 +267,18 @@ example-app   hello-world-server   webservice   running   true      Ready:1/1   
 All the step status in workflow is succeeded:
 
 ```yaml
-...
-  status:
-    workflow:
-      appRevision: example-app-v1:44a6447e3653bcc2
-      contextBackend:
-        apiVersion: v1
-        kind: ConfigMap
-        name: workflow-example-app-context
-        uid: e1e7bd2d-8743-4239-9de7-55a0dd76e5d3
-      mode: StepByStep
-      steps:
+
+---
+status:
+  workflow:
+    appRevision: example-app-v1:44a6447e3653bcc2
+    contextBackend:
+      apiVersion: v1
+      kind: ConfigMap
+      name: workflow-example-app-context
+      uid: e1e7bd2d-8743-4239-9de7-55a0dd76e5d3
+    mode: StepByStep
+    steps:
       - id: q8yx7pr8wb
         name: deploy-staging
         phase: succeeded
@@ -289,9 +291,9 @@ All the step status in workflow is succeeded:
         name: deploy-prod
         phase: succeeded
         type: deploy2env
-      suspend: false
-      terminated: false
-      waitCount: 0
+    suspend: false
+    terminated: false
+    waitCount: 0
 ```
 
 ## More use cases
