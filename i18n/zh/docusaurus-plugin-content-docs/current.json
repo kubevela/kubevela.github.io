@@ -131,8 +131,8 @@
     "message": "组件系统",
     "description": "The label for category Component System in sidebar docs"
   },
-  "sidebar.docs.category.User Manuals": {
-    "message": "用户 CLI 手册",
+  "sidebar.docs.category.Vela CLI": {
+    "message": "Vela CLI 手册",
     "description": "The label for category User Guide in sidebar docs"
   },
   "sidebar.docs.category.Deploying Components": {

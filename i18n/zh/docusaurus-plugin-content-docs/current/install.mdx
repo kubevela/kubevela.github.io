@@ -285,6 +285,28 @@ vela addon enable velaux serviceType=LoadBalancer repo=acr.kubevela.net
 kubectl get service velaux -n vela-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}"
 ```
 
+如果您的集群中已经安装了 Nginx Ingress Controller, 而且你具有可用的域名，你可以这样部署 VelaUX(请使用真实域名替换 example.doamin.com):
+
+```shell script
+vela addon enable velaux repo=acr.kubevela.net domain=example.doamin.com
+```
+
+## 4. 卸载
+
+如果你试用完成后需要卸载 KubeVela，可参考如下操作进行：
+
+1. 卸载 VelaUX
+
+```
+vela addon disable velaux
+```
+
+2. 卸载 KubeVela Core
+
+```
+helm uninstall -n vela-system kubevela
+```
+
 ## 下一步
 
 - 安装完毕 KubeVela，开始 [交付第一个应用](./quick-start)。

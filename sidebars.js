@@ -30,6 +30,7 @@ module.exports = {
         "deliver-app/multi-cluster",
         "deliver-app/gateway",
         "deliver-app/scaler",
+        "deliver-app/manage-cluster",
       ],
     },
     {
@@ -45,7 +46,7 @@ module.exports = {
     },
     {
       type: "category",
-      label: "User Manuals",
+      label: "Vela CLI",
       collapsed: true,
       items: [
         {

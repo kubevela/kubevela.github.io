@@ -69,7 +69,7 @@ KubeVela 可以与此类工具无缝集成。在这种情况下，开发人员�
 
 Helm 是 Kubernetes 的包管理器，它能够以 Chart 为一个单元，提供打包、安装和升级的一组 YAML 文件的能力。
 
-KubeVela 作为一个应用交付系统天然可以部署各种制品类型，当然也包括 Helm Chart。 例如，你可以使用 KubeVela 定义一个由 WordPress Chart 和 AWS RDS 实例组成的应用，编排这两个组件之间的顺序关系，然后将它们按照一定的策略分发到多个 Kubernetes 集群当中。
+KubeVela 作为一个应用交付系统天然可以部署各种制品类型，Kustomize、Kubernetes Yaml 等，当然也包括 Chart。Helm 可以便捷的把 Chart 交付到一个集群，KubeVela 可以帮你把 Chart 交付到多个集群。
 
 当然，KubeVela 还支持其他制品格式比如 Kustomize。
 
