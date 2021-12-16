@@ -143,7 +143,7 @@ namespaceSelector| select deploy namespace by namespace name | `namespaceSelecto
 
 selector
 
-| 名称       | 描述                 | 类型           | 是否必须 | 默认值 |
+| Name       | Desc                 | Type           | Required | Default Value |
 | :--------- | :------------------- | :------------- | :------- | :----- |
 | components | component names to be used | string array | false       | null     |
 
