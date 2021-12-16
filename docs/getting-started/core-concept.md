@@ -1,143 +1,54 @@
 ---
-title:  The Application Model
+title:  Core Concept
 ---
 
-KubeVela introduces Open Application Model (OAM) to capture a full deployment of micro-services application across hybrid environments.
+KubeVela revolves around cloud-native application delivery and management scenarios. The application delivery model behind it is [Open Application Model](../platform-engineers/oam/oam-model), or OAM for short. It describe various components and  operation required for application as a unified, and Infrastructure-independent "deployment plan". Thus we can achieve standardized and efficient application delivery in a multi-cloud/hybrid-cloud environment. KubeVela includes the following core concepts:
 
-## The Application Deployment Plan
+## Application
 
-With this model, a typical deployment plan in KubeVela looks as below:
+An application defines the delivery and management requirements of an artifact (binary, Docker image, Helm Chart...) or cloud service included in a microservice business unit. It consists of four parts: [Component](#Component), [Trait](#Trait), [Workflow](#Workflow) and [Policy](#Policy) and its life cycle includes:
 
-```yaml
-# sample.yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: website
-spec:
-  components:
-    - name: frontend              # e.g. we want to deploy a frontend component and serves as web service
-      type: webservice
-      properties:
-        image: nginx
-      traits:
-        - type: cpuscaler         # e.g. we add a CPU based auto scaler to this component
-          properties:
-            min: 1
-            max: 10
-            cpuPercent: 60
-        - type: sidecar           # add a sidecar container into this component
-          properties:
-            name: "sidecar-test"
-            image: "fluentd"
-    - name: backend
-      type: worker
-      properties:
-        image: busybox
-        cmd:
-          - sleep
-          - '1000'
-  policies:
-    - name: demo-policy
-      type: env-binding
-      properties:
-        envs:
-          - name: test
-            placement:
-              clusterSelector:
-                name: cluster-test
-          - name: prod
-            placement:
-              clusterSelector:
-                name: cluster-prod
-  workflow:
-    steps:
-      #workflow step name
-      - name: deploy-test-env
-        type: deploy2env
-        properties:
-          # Specify the policy name
-          policy: demo-policy
-          # Specify the env name in the policy
-          env: test    
-      - name: manual-approval
-        # use suspend can stop workflow and wait here until condition changed
-        type: suspend
-      - name: deploy-prod-env
-        type: deploy2env
-        properties:
-          # Specify the policy name
-          policy: demo-policy
-          # Specify the env name in the policy
-          env: prod    
-```
+- <b>Deploy</b> Execute Workflow. Instantiate application in one environment.
+- <b>Recycle</b> Delete the instance of the application and reclaim its resources.
 
-The building blocks in this entity are explained as below.
+### Component
 
-### Components
+Component defines the artifact of application，The best pratice is to having one core component and subordinate components around it. Its type decided by [Component Definition](../platform-engineers/oam/x-definition#componentdefinition) .
 
-An application could be composed by multiple components. KubeVela already built-in with several widely used components definitions to help you model an application deployment, you can list them by using [KubeVela CLI](../install#3-get-kubevela-cli):
+### Trait
 
-```
-vela components 
-```
-
-The output shows:
-
-```
-NAME          NAMESPACE   WORKLOAD                              DESCRIPTION
-helm          vela-system autodetects.core.oam.dev              helm release is a group of K8s resources from either git
-                                                                repository or helm repo
-kustomize     vela-system autodetects.core.oam.dev              kustomize can fetching, building, updating and applying
-                                                                Kustomize manifests from git repo.
-task          vela-system jobs.batch                            Describes jobs that run code or a script to completion.
-webservice    vela-system deployments.apps                      Describes long-running, scalable, containerized services
-                                                                that have a stable network endpoint to receive external
-                                                                network traffic from customers.
-worker        vela-system deployments.apps                      Describes long-running, scalable, containerized services
-                                                                that running at backend. They do NOT have network endpoint
-                                                                to receive external network traffic.                    
-alibaba-ack   vela-system configurations.terraform.core.oam.dev Terraform configuration for Alibaba Cloud ACK cluster
-alibaba-oss   vela-system configurations.terraform.core.oam.dev Terraform configuration for Alibaba Cloud OSS object
-alibaba-rds   vela-system configurations.terraform.core.oam.dev Terraform configuration for Alibaba Cloud RDS object
-```
-
-### Traits
-
-Traits are operational behaviors that you can attach to component. KubeVela also has built-in traits installed, search them by using [KubeVela CLI](../install#3-get-kubevela-cli):
-
-```
-vela traits 
-```
-
-The result can be:
-
-```
-NAME        NAMESPACE   APPLIES-TO        CONFLICTS-WITH  POD-DISRUPTIVE  DESCRIPTION                                          
-annotations vela-system deployments.apps                  true            Add annotations for your Workload.                   
-cpuscaler   vela-system webservice,worker                 false           Automatically scale the component based on CPU usage.
-ingress     vela-system webservice,worker                 false           Enable public web traffic for the component.         
-labels      vela-system deployments.apps                  true            Add labels for your Workload.                        
-scaler      vela-system webservice,worker                 false           Manually scale the component.                        
-sidecar     vela-system deployments.apps                  true            Inject a sidecar container to the component.   
-```
-
-### Policy
-
-Policy enforces deployment process of the application, such as quality gates, security groups, placement strategy, fire walls, SLO targets and so on.
+Triat are plugable operations that can attach to Component, for example: scaler for replicas(manual and auto), PVC, gateway, DNS and so on. You can draw out-of-box Trait from the ecosystem or simply customize by [Trait Definition](../platform-engineers/oam/x-definition#traitdefinition).
 
 ### Workflow
 
-Workflow allows you to assemble components, operation and task steps into a DAG, and it is process-oriented. Typical workflow steps includes pause, manual verification, waiting state, data flow transmission, multi-environment rollout, and A/B testing, etc.
+Workflow allows you to define critical step in the process of application delivery, typical steps will be manual approve, data passing, release across multi-cluster, notification and etc. Its type decided by [Workflow Step Definition](../platform-engineers/oam/x-definition#workflowstepdefinition).
 
-![alt](../resources/workflow.png)
+### Policy
 
-Each policy and workflow step is a independent capability entity that is fully plugable, KubeVela allows you to create your own step through CUE.
+Policy defines a strategy of certain aspect for application as to quality assurance, security, firewall rules, SLO and etc. Its type decided by [Policy Definition](../platform-engineers/oam/x-definition#policydefinition), one of its usage:
 
+- <b>EnvBinding</b> Environment binding strategy. It enables you to ship patches into multi-targets along with exclusive changes for each of them.
 
-## What's Next
+### Revision
 
-Here are some recommended next steps:
+Revision generates each time when the application deployed and holds all infos in one snapshot. You use it for rolling back to whichever version whenever you needed.
 
-- Start using KubeVela from deploying [Helm component](../end-user/components/helm).
-- Learn about [customizing this application model](../platform-engineers/oam/oam-model) in programmable approach.
+## Project
+
+Project is where you manage all the applications and collaborate with your team member. Project is one stand alone scope that separates it from other project.
+
+### Environment
+
+Environment refers to the environment for development, testing, and production and it can include multiple Targets. We define Environment in each Project and each Project can contain multiple Environments. Applications inside a same environment can visit and share resource with each other.
+
+### Target
+
+Target describs the space where we actually host application and its affilicated resources. It bind to a Namespace of Kubernetes cluster.
+
+## Cluster
+
+Import and manage your Kubernetes cluster in KubeVela。Kubernetes cluster is currently the main way for KubeVela application delivery.
+
+## Addon
+
+Addon is where you can freely pull in third-party capability that fulfills your need. This relys on the highly scalable desgin pattern of KubeVela. Each Addon will have its own [X-Definition](../platform-engineers/oam/x-definition).
