@@ -1,138 +1,59 @@
 ---
-title:  Helm
+title:  Deploy Helm Chart
 ---
 
-KubeVela's Helm component meets the needs of users to connect to Helm Chart. You can deploy any ready-made Helm chart software package from Helm Repo, Git Repo or OSS bucket through the Helm component, and overwrite its parameters.
+This section introduces that how you deploy Helm Chart into multi-environments and clusters.
 
-## Deploy From Helm Repo
+The typical usage of deploying Helm Chart is to integrate middleware, many from in [bitnami](https://github.com/bitnami/charts) or open-source application tools such as Gitlab, Jenkins in [Helm Official Repo](https://hub.helm.sh/). KubeVela can help you easily deploy these applications to any managed cluster and manage them.
 
-In this `Application`, we hope to deliver a component called redis-comp. It is a chart from the [bitnami](https://charts.bitnami.com/bitnami).
+Starting from here, you will learn to use the KubeVela Addons to install plug-ins. The Helm Chart is currently supported by the FluxCD addon. In addition to the Helm Chart, FluxCD addon also supports Kustomize.
 
-```shell
-cat <<EOF | kubectl apply -f -
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: app-delivering-chart
-spec:
-  components:
-    - name: redis-comp
-      type: helm
-      properties:
-        chart: redis-cluster
-        version: 6.2.7
-        url: https://charts.bitnami.com/bitnami
-        repoType: helm
-EOF
-```
+## Before starting
 
-Please copy the above code block and deploy it directly to the runtime cluster:
-```shell
-application.core.oam.dev/app-delivering-chart created
-```
+- Choose a Helm Chart you needed. Or in this case, we take [bitnami/redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) as an example.
+- Ensure that the cluster you deliver has a usable default StorageClass. Most of our delivery middleware requires data persistence, and the default StorageClass is needed to allocate PV.
 
-Finally, we use `vela ls` to view the application status after successful delivery:
-```shell
-APP                 	COMPONENT 	TYPE      	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME                 
-app-delivering-chart	redis-comp	helm      	      	running	healthy	      	2021-08-28 18:48:21 +0800 CST
-```
+## Enable fluxcd addon
 
-We also see that the PHASE of the app-delivering-chart APP is running and the STATUS is healthy.
+Enabling Addon should have been experienced in the installation of KubeVela, like installing VelaUX. In this case, you will learn to enable addon in the UI page.
 
-### Attributes
+Let's get into the page of `Addon`. This page will automatically list the community Addons that can be installed. They are all from [Official Repo](https://github.com/oam-dev/catalog/tree/master/addons). We click `fluxcd` to check the details and status of this addon.
 
-| Parameters      | Description                                                                                                                                                                                                                                                                                                                                                              | Example                            |
-| --------------- | ----------- | ---------------------------------- |
-| repoType        | required, indicates where it's from                                                                                                                                                                                                                                                                                                                                      | Helm                               |
-| pullInterval    | optional, synchronize with Helm Repo, tunning interval and 5 minutes by default                                                                                                                                                                                                                                                                                          | 10m                                |
-| url             | required, Helm Reop address, it supports http/https                                                                                                                                                                                                                                                                                                                      | https://charts.bitnami.com/bitnami |
-| secretRef       | optional, The name of the Secret object that holds the credentials required to pull the repo. The username and password fields must be included in the HTTP/S basic authentication Secret. For TLS the secret must contain a certFile and keyFile, and/or caCert fields. For TLS authentication, the secret must contain a certFile / keyFile field and/or caCert field. | sec-name                           |
-| timeout         | optional, timeout for pulling repo index                                                                                                                                                                                                                                                                                                                                 | 60s                                |
-| chart           | required, chart title                                                                                                                                                                                                                                                                                                                                                    | redis-cluster                      |
-| version         | optional, chart version, * by default                                                                                                                                                                                                                                                                                                                                    | 6.2.7                              |
-| targetNamespace | optional, the namespace to install chart, decided by chart itself                                                                                                                                                                                                                                                                                                        | your-ns                            |
-| releaseName     | optional, release name after installed                                                                                                                                                                                                                                                                                                                                   | your-rn                            |
-| values          | optional, override the Values.yaml inchart, using for the rendering of Helm                                                                                                                                                                                                                                                                                              |                                    |
+From the details, we can know that:
 
+- Definitions： The extension capabilities provided by the addon may include component, trait, etc. For the fluxcd addon, it provides two component types, `helm` and `kustomize`, among which `helm` is the type we need to pay attention to and use here.
 
-## Deploy From OSS bucket
+- Readme： Addon description, explain the capabilities and related information.
 
-| Parameters | Description | Example |
-| ---------- | ----------- | ------- |
-| repoType        | required, indicates where it's from                                                                                             | oss                         |
-| pullInterval    | optional, synchronize with bucket, tunning interval and 5 minutes by default                                                    | 10m                         |
-| url             | required, bucket's endpoint and no need to fill in with scheme                                                                  | oss-cn-beijing.aliyuncs.com |
-| secretRef       | optional, Save the name of a Secret, which is the credential to read the bucket. Secret contains accesskey and secretkey fields | sec-name                    |
-| timeout         | optional, The timeout period of the download operation, the default is 20s                                                      | 60s                         |
-| chart           | required, Chart storage path (key)                                                                                              | ./chart/podinfo-5.1.3.tgz   |
-| version         | optional, In OSS source, this parameter has no effect                                                                           |                             |
-| targetNamespace | optional, The namespace of the installed chart, which is determined by the chart itself by default                              | your-ns                     |
-| releaseName     | optional, Installed release name                                                                                                | your-rn                     |
-| values          | optional, Overwrite the Values.yaml of the chart for Helm rendering.                                                            |                             |
-| oss.bucketName  | required, bucket name                                                                                                           | your-bucket                 |
-| oss.provider    | optional, Optional generic or aws, fill in aws if the certificate is obtained from aws EC2. The default is generic.             | generic                     |
-| oss.region      | optional, bucket region                                                                                                         |                             |
+We can click the `Enable` button. After the fluxcd addon is enabled, it will be installed on all clusters connected to KubeVela, so it will take a certain amount of time.
 
-**How-to**
+![fluxcd addon](../resources/addon-fluxcd.jpg)
 
-1. (Opentional) If your OSS bucket needs identity verification, create a Secret:
+When the addon is `enabled`, it means that it's ready to. You can start to deploy Helm Chart.
 
-```shell
-$ kubectl create secret generic bucket-secret --from-literal=accesskey=<your-ak> --from-literal=secretkey=<your-sk>
-secret/bucket-secret created
-```
+## Creating Redis application
 
-1. Example
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: bucket-app
-spec:
-  components:
-    - name: bucket-comp
-      type: helm
-      properties:
-        repoType: oss
-        # required if bucket is private
-        secretRef: bucket-secret
-        chart: ./chart/podinfo-5.1.3.tgz
-        url: oss-cn-beijing.aliyuncs.com
-        oss:
-            bucketName: definition-registry
-```
+You've must have mastered creating applications through the previous sections. When it comes to creating Redis with Helm Chart, all you need is to select type as `helm`, then Then select the Target which has the default StorageClass that provides PV, and at last enter the deployment parameter configuration page.
 
-## Deploy From Git Repo
+![helm app config](../resources/helm-app-config.jpg)
 
-| Parameters | Description | Example |
-| ---------- | ----------- | ------- |
-| repoType        | required, indicates where it's from                                                                                                                                                                                                                                                           | git                                             |
-| pullInterval    | optional, synchronize with Git Repo, tunning interval and 5 minutes by default                                                                                                                                                                                                                | 10m                                             |
-| url             | required, Git Repo address                                                                                                                                                                                                                                                                    | https://github.com/oam-dev/terraform-controller |
-| secretRef       | optional, The name of the Secret object that holds the credentials required to pull the Git repository. For HTTP/S basic authentication, the Secret must contain the username and password fields. For SSH authentication, the identity, identity.pub and known_hosts fields must be included | sec-name                                        |
-| timeout         | optional, The timeout period of the download operation, the default is 20s                                                                                                                                                                                                                    | 60s                                             |
-| chart           | required, Chart storage path (key)                                                                                                                                                                                                                                                            | ./chart/podinfo-5.1.3.tgz                       |
-| version         | optional, In Git source, this parameter has no effect                                                                                                                                                                                                                                         |                                                 |
-| targetNamespace | optional, the namespace to install chart, decided by chart itself                                                                                                                                                                                                                             | your-ns                                         |
-| releaseName     | optional, Installed release name                                                                                                                                                                                                                                                              | your-rn                                         |
-| values          | optional, Overwrite the Values.yaml of the chart for Helm rendering.                                                                                                                                                                                                                          |                                                 |
-| git.branch      | optional, Git branch, master by default                                                                                                                                                                                                                                                       | dev                                             |
+As shown, you need to do the following configuration:
 
-**How-to**
+- Repo Type: Git, Helm, and OSS are supported. In this example, we choose Helm.
+- Repo URL: Fill in the repo address you needed. we type in: https://charts.bitnami.com/bitnami
+- Chart Path: Chart package path, here we fill in: redis
+- Values: Custom parameters of Chart. Since we are using ACK cluster in the example, PV has a minimum capacity requirement, 15Gi. In the same way, other parameters can also be configured according to your cluster's status.
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-   name: app-delivering-chart
-spec:
-   components:
-     - name: terraform-controller
-       type: helm
-       properties:
-          repoType: git
-          url: https://github.com/oam-dev/terraform-controller
-          chart: ./chart
-          git:
-          	branch: master
-```
+After filling in the above parameters, click `Create` to complete the application creation and enter the application configuration page.
+
+## Modify deployment parameters
+
+Here we're unlocking new skills! Modify the parameters of the application. For any type of application, he can enter the application configuration page at any time by clicking the `Edit Properties` button at the top right of the `Benchmark Config` page. This page is the same as the page when we created the application. It is automatically generated by combining the parameters defined by the Definition of each application type and the KubeVela UISchema specification.
+
+After modifying the deployment parameters, the workflow of the environment must be executed to make the modified parameters take effect in the specified environment. Due to the existence of Revision, the configuration parameters will be saved in each historical version.
+
+At this point, Helm Chart in KubeVela is no stranger to you, go ahead and try more!
+
+## Next step
+
+- [Deploy Cloud Services](./consume-cloud-services)

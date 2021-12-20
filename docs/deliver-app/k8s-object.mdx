@@ -1,158 +1,146 @@
 ---
-title: Kustomize
+title: Deploy Kubernetes Raw Resource
 ---
 
-Create a Kustomize Component, it could be from Git Repo or OSS bucket or image registry.
+This section introduces that how you can deploy Kubernetes raw resources into multi environments and clusters.
 
-## Watch Files
+KubeVela supports you to render, orchestrate and deploy Kubernetes raw resources. The common usage type is Deployment+Service. Using customized Workflow, you can deploy an application into multi-cluster in sequence. Hence you'll get to know:
 
-### Deploy From OSS bucket
+1. Deploy Kubernetes raw resources.
+2. Workflow and its usage.
+3. Multi-env/cluster in application delivery.
+4. The control loop of application deployment: Rollback, Terminate and Continue.
 
-KubeVela's `kustomize` component meets the needs of users to directly connect Yaml files and folders as component products. No matter whether your Yaml file/folder is stored in a Git Repo or an OSS bucket, KubeVela can read and deliver it.
+## Before starting
 
-Let's take the YAML folder component from the OSS bucket registry as an example to explain the usage. In the `Application` this time, I hope to deliver a component named bucket-comp. The deployment file corresponding to the component is stored in the cloud storage OSS bucket, and the corresponding bucket name is definition-registry. `kustomize.yaml` comes from this address of oss-cn-beijing.aliyuncs.com and the path is `./app/prod/`.
+- Prepare a Deployment+Service resource, or directly use the example as below:
 
-1. (Optional) If your OSS bucket needs identity verification, create a Secret:
+    <details> <summary>Check out Demo example</summary>
 
-```shell
-$ kubectl create secret generic bucket-secret --from-literal=accesskey=<your-ak> --from-literal=secretkey=<your-sk>
-secret/bucket-secret created
-```
+  ```yaml
+  ---
+  apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+  kind: Deployment
+  metadata:
+  name: nginx
+  spec:
+  strategy:
+      type: Recreate
+  selector:
+      matchLabels:
+      app: nginx
+  replicas: 1 # tells deployment to run 1 pods matching the template
+  template: # create pods using pod definition in this template
+      metadata:
+      labels:
+          app: nginx
+      spec:
+      containers:
+          - name: nginx
+          image: nginx
+          ports:
+              - containerPort: 80
+  ---
+  apiVersion: v1
+  kind: Service
+  metadata:
+  name: nginx
+  namespace: default
+  labels:
+      app: nginx
+  annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+  spec:
+  externalTrafficPolicy: Local
+  ports:
+      - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+      app: nginx
+  type: LoadBalancer
+  ```
 
-2. Deploy it:
+  </details>
 
-```shell
-cat <<EOF | kubectl apply -f -
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: bucket-app
-spec:
-  components:
-    - name: bucket-comp
-      type: kustomize
-      properties:
-        repoType: oss
-        # If the bucket is private, you will need to provide
-        secretRef: bucket-secret
-        url: oss-cn-beijing.aliyuncs.com
-        oss:
-          bucketName: definition-registry
-        path: ./app/prod/
-EOF
-```
+- For setting up two and more runtime clusters, check out: [Manage Runtime Cluster](./manage-cluster)
 
-Please copy the above code block and deploy it directly to the runtime cluster:
+## Scheduling and creating Targets
 
-```shell
-application.core.oam.dev/bucket-app created
-```
+[Target](../getting-started/core-concept#target) defines the namespace in runtime cluster for application delivery. Once Target created, namespace in runtime cluster created accordingly.
 
-Finally, we use `vela ls` to view the application status after successful delivery:
+Target must belong to one Project. When there're many Projects to manage, it's very critical that you place Target in an organized manner.
 
-```shell
-vela ls
-APP                 	COMPONENT  	TYPE      	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
-bucket-app          	bucket-comp	kustomize 	      	running	healthy	      	2021-08-28 18:53:14 +0800 CST
-```
+Clicking `New Target` into the creating process. Type in necessary Infos as Project, Cluster, Namespace to create. We create targets in one project for different clusters. Or you can create targets by using the several namespaces of one cluster. For now, we at least give it to 3 Targets: 1 for test and 2 for prod environments.
 
-The PHASE of the app is running, and the STATUS is healthy. Successful application deployment!
+## Creating Kubernetes application
 
-#### Attributes
+After Target was created, we begin to create an application. Same to [Deploy First Application](../quick-start), we need to submit basic Infos:
 
-| Parameters     | Description                                                                                                                                           | Example                     |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| repoType       | required, The value of the Git. To indicate that kustomize configuration comes from the Git repository                                                | oss                         |
-| pullInterval   | optional, Synchronize with Git repository, and the time interval between tuning helm release. The default value is 5m (5 minutes）                    | 10m                         |
-| url            | required, bucket's endpoint, no need to fill in with scheme                                                                                           | oss-cn-beijing.aliyuncs.com |
-| secretRef      | optional, Save the name of a Secret, which is the credential to read the bucket. Secret contains accesskey and secretkey fields                       | sec-name                    |
-| timeout        | optional, The timeout period of the download operation, the default is 20s                                                                            | 60s                         |
-| path           | required, The directory containing the kustomization.yaml file, or the directory containing a set of YAML files (used to generate kustomization.yaml) | ./prod                      |
-| oss.bucketName | required, bucket name                                                                                                                                 | your-bucket                 |
-| oss.provider   | optional, Generic or aws, if you get the certificate from aws EC2, fill in aws. The default is generic.                                               | generic                     |
-| oss.region     | optional, bucket region                                                                                                                               |                             |
+(1) Select type: k8s-objects; NOTE that in one application please maintain at most one Workload type of resource, meaning without more than a Deployment or Statefulset.
 
-### Deploy From Git Repo
+(2) We schedule two environments, test and prod. Test environment links to the target for dev and prod environment select the other two targets.
 
-| Parameters   | Description                                                                                                                                                                                                                                                                              | Example                                         |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| repoType     | required, The value of the Git. To indicate that kustomize configuration comes from the Git repository                                                                                                                                                                                   | git                                             |
-| pullInterval | optional, Synchronize with Git repository, and the time interval between tuning helm release. The default value is 5m (5 minutes）                                                                                                                                                       | 10m                                             |
-| url          | required, Git repository address                                                                                                                                                                                                                                                         | https://github.com/oam-dev/terraform-controller |
-| secretRef    | optional, The Secret object name that holds the credentials required to pull the Git repository. The username and password fields must be included in the HTTP/S basic authentication Secret. For SSH authentication, the identity, identity.pub and known_hosts fields must be included | sec-name                                        |
-| timeout      | optional, The timeout period of the download operation, the default is 20s                                                                                                                                                                                                               | 60s                                             |
-| git.branch   | optional, Git branch, master by default                                                                                                                                                                                                                                                  | dev                                             |
-| git.provider | optional, Determines which git client library to use. Defaults to GitHub, it will pick go-git. AzureDevOps will pick libgit2                                                                                                                                                             | GitHub                                          |
+![](../resources/create-k8s-app.jpg)
 
-**How-to**
+(3) Upload your Yaml file. Note that, the name of the resource you specified must not conflict with existing ones. Also, the editor automatically formats the Yaml file.
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: git-app
-spec:
-  components:
-    - name: git-comp
-      type: kustomize
-      properties:
-        repoType: git
-        url: https://github.com/<path>/<to>/<repo>
-        git:
-          branch: master
-          provider: GitHub
-        path: ./app/dev/
-```
+![](../resources/config-k8s-app.jpg)
 
-**Override Kustomize**
+After above, click `Create` to finish.
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: bucket-app
-spec:
-  components:
-    - name: bucket-comp
-      type: kustomize
-      properties:
-        # ...omitted for brevity
-        path: ./app/
-```
+## Deploying test environment
 
-## Watch Image Registry
+![](../resources/app-dashboard.jpg)
 
-| Parameter                 | Required | Description                                                                                                                                                   | Example                                                |
-| ------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| image                     | required | The image url                                                                                                                                                 | oamdev/vela-core                                       |
-| secretRef                 | optional | If it's a private image registry, use `kubectl create secret docker-registry` to create the secret                                                            | my-secret                                              |
-| policy.alphabetical.order | optional | Order specifies the sorting order of the tags. Given the letters of the alphabet as tags, ascending order would select Z, and descending order would select A | asc                                                    |
-| policy.numerical.order    | optional | Given the integer values from 0 to 9 as tags, ascending order would select 9, and descending order would select 0                                             | asc                                                    |
-| policy.semver.range       | optional | Range gives a semver range for the image tag; the highest version within the range that's a tag yields the latest image                                       | '>=1.0.0 <2.0.0'                                       |
-| filterTags.extract        | optional | Extract allows a capture group to be extracted from the specified regular expression pattern, useful before tag evaluation                                    | $timestamp                                             |
-| filterTags.pattern        | optional | Pattern specifies a regular expression pattern used to filter for image tags                                                                                  | '^master-[a-f0-9]'                                     |
-| commitMessage             | optional | Use for more commit message                                                                                                                                   | 'Image: {{range .Updated.Images}}{{println .}}{{end}}' |
+Enter the further page, the application has automatically generated 2 environments and 2 workflows. Each environment has its workflow by default. A workflow consists of one or more steps such as `deploy2env`.
 
-**Example**
+Firstly let's switch to the Tab of the test environment, click Deploy on the page. Since we only assigned one target for the test environment, there's one step for workflow. Looking at the status of its execution in the upper-right, it turns green when succeeded. If it shows red means that workflow went into trouble, you can click on the red sign to look through the detailed reason. Fix it accordingly and the deployment will continue to be regained.
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: image-app
-spec:
-  components:
-    - name: image
-      type: kustomize
-      properties:
-        imageRepository:
-          image: <your image>
-          secretRef: imagesecret
-          filterTags:
-            pattern: "^master-[a-f0-9]+-(?P<ts>[0-9]+)"
-            extract: "$ts"
-          policy:
-            numerical:
-              order: asc
-          commitMessage: "Image: {{range .Updated.Images}}{{println .}}{{end}}"
-```
+After deployment is finished, refresh the list of instances to see Pods. Click for more if Pod shows abnormality.
+
+![](../resources/pod-list.jpg)
+
+As for the test environment, it sure can be updated at any time. When we update the parameters(image, instance), execute the workflow for an upgrade. Note that, choose the workflow for the test environment.
+
+![](../resources/select-workflow.jpg)
+
+## Deploying prod environment
+
+Let's switch to the Tab of the prod environment. It shows that it's not deployed yet. So now you can understand one basic thing for KubeVela, different environments in one application are completely dependant on each other, of each is an individual Application CR. 
+
+As we have two targets for the prod environment, it'll execute in sequence. If you hope to set up a manual approval before it gets into the second target, this is where workflow comes in.
+
+![](../resources/app-workflow.jpg)
+
+we can see two generated workflow. Now we click the `Edit` in the workflow of the prod environment, drag out the `suspend` into the board at the right. Set up the configuration you needed.
+
+Then we need to orchestrate their sequence. First disconnect existing steps (by clicking the line + delete button), connect the suspend step in the middle. After editing, you need to click the Save button on the upper right to save.
+
+![](../resources/workflow-edit.jpg)
+
+Back to the page of prod environment, click Deploy.
+
+![](../resources/workflow-suspend.jpg)
+
+Monitoring the status on the upper right. When the first target finished deploying, a window pops up for you to give out a command.
+
+`suspend` has three operations:
+
+- Rollback: the revision reverts to the latest one in history, even with the first Target.
+- Terminate: stop the deployment process but it will not change the first Target that already deployed.
+- Continue: enter the execution of the next step.
+
+If continued, the deployment goes on. In the list of instances, you can check out all the details. 
+
+![](../resources/multiple-target-pods.jpg)
+
+Congrats! Now you've learned how to deploy Kubernetes raw resources.
+
+## Video tutorial
+
+## Next step
+
+1. [Getting into more of Workflow](./multi-cluster)
+1. [Deploy Helm Chart](./helm)
