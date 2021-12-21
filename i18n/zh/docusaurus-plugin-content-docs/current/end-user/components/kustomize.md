@@ -1,5 +1,5 @@
 ---
-title:  Kustomize 组件
+title:  Kubernetes 组件
 ---
 
 KubeVela 的 [`kustomize` 组件](https://github.com/kubernetes-sigs/kustomize)满足了用户直接对接 Yaml 文件、文件夹作为组件制品的需求。无论你的 Yaml 文件/文件夹是存放在 Git 仓库还是对象存储库（如 OSS bucket），KubeVela 均能读取并交付。
