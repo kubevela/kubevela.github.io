@@ -6,7 +6,7 @@ KubeVela revolves around cloud-native application delivery and management scenar
 
 ## Application
 
-An application defines the delivery and management requirements of an artifact (binary, Docker image, Helm Chart...) or cloud service included in a microservice business unit. It consists of four parts: [Component](#Component), [Trait](#Trait), [Workflow](#Workflow) and [Policy](#Policy) and its life cycle includes:
+An application defines the delivery and management requirements of an artifact (binary, Docker image, Helm Chart...) or cloud service included in a microservice business unit. It consists of four parts: [Component](#component), [Trait](#trait), [Workflow](#workflow) and [Policy](#policy) and its life cycle includes:
 
 - <b>Deploy</b> Execute Workflow. Instantiate application in one environment.
 - <b>Recycle</b> Delete the instance of the application and reclaim its resources.

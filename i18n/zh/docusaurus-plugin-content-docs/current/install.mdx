@@ -5,7 +5,7 @@ title: 从 Kubernetes 集群安装
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-> 如果是要升级现有的 KubeVela，请直接阅读[升级指南](./platform-engineers/advanced-install#升级).
+> 如果是要升级现有的 KubeVela，请直接阅读 [升级指南](./platform-engineers/advanced-install#升级).
 
 ## 1. 准备控制平面的 Kubernetes 集群
 
@@ -285,7 +285,7 @@ vela addon enable velaux serviceType=LoadBalancer repo=acr.kubevela.net
 kubectl get service velaux -n vela-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}"
 ```
 
-如果您的集群中已经安装了 Nginx Ingress Controller, 而且你具有可用的域名，你可以这样部署 VelaUX(请使用真实域名替换 example.doamin.com):
+如果您的集群中已经安装了 Nginx Ingress Controller，而且你具有可用的域名，你可以这样部署 VelaUX(请使用真实域名替换 example.doamin.com):
 
 ```shell script
 vela addon enable velaux repo=acr.kubevela.net domain=example.doamin.com

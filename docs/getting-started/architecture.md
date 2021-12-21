@@ -4,7 +4,7 @@ title: Architecture
 
 The overall architecture of KubeVela is shown as below:
 
-![alt](../resources/system-arch.png)
+![alt](../resources/system-arch.jpg)
 
 ## KubeVela is a Control Plane System
 

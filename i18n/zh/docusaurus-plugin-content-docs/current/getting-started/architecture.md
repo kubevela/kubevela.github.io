@@ -35,4 +35,4 @@ KubeVela 本身是一个的应用交付与管理控制平面，它架在 Kuberne
 
 ![kernel](../resources/kernel.png)
 
-如果要详细学习 KubeVela 的可编程文档，欢迎查看文档网站中《自定义扩展》部分。
+如果要详细学习 KubeVela 的可编程文档，欢迎查看文档网站中 [自定义扩展](../platform-engineers/oam/oam-model) 部分。

@@ -53,7 +53,7 @@ Here we're unlocking new skills! Modify the parameters of the application. For a
 After modifying the deployment parameters, the workflow of the environment must be executed to make the modified parameters take effect in the specified environment. Due to the existence of Revision, the configuration parameters will be saved in each historical version.
 
 At this point, Helm Chart in KubeVela is no stranger to you, go ahead and try more!
-
+<!-- 
 ## Next step
-
-- [Deploy Cloud Services](./consume-cloud-services)
+TODO v1.2
+- [Deploy Cloud Services](./consume-cloud-services) -->

@@ -267,16 +267,10 @@ vela addon enable velaux serviceType=NodePort
 kubectl get service velaux -n vela-system -o jsonpath="{.spec.ports[0].nodePort}"
 ```
 
-The following installation methods can be used in the domestic environment:
-
-```
-vela addon enable velaux serviceType=NodePort repo=acr.kubevela.net
-```
-
 `serviceType` configures the access method of the VelaUX service. If you use a cloud service cluster, please configure it as `serviceType=LoadBalancer`, and obtain the access address through the following methods after activation:
 
 ```shell script
-vela addon enable velaux serviceType=LoadBalancer repo=acr.kubevela.net
+vela addon enable velaux serviceType=LoadBalancer
 
 kubectl get service velaux -n vela-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}"
 ```

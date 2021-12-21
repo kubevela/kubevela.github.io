@@ -18,7 +18,7 @@ description: 本文介绍通过 KubeVela 交付 Helm Chart
 
 插件的启用你在 KubeVela 的安装过程应该已经体验过，即安装 VelaUX 的过程。本文案例我们将通过 UI 页面完成插件的安装。
 
-首先进入 `Addon` 页面中，该页面正常情况下会自动列出可以安装的社区插件，这些插件来源于 [官方仓库](https://github.com/oam-dev/catalog/tree/master/addons), 我们点击 `fluxcd` 即可查询该插件的详情和启用状态。
+首先进入 `Addon` 页面中，该页面正常情况下会自动列出可以安装的社区插件，这些插件来源于 [官方仓库](https://github.com/oam-dev/catalog/tree/master/addons)，我们点击 `fluxcd` 即可查询该插件的详情和启用状态。
 
 从详情中我们可以获取到以下信息：
 
@@ -55,6 +55,6 @@ description: 本文介绍通过 KubeVela 交付 Helm Chart
 
 到此，你已经掌握了 Helm 应用的交付能力，快去交付更多的 Helm 应用吧。
 
-## 下一步
+<!-- ## 下一步
 
-- [学习云服务应用的交付](./consume-cloud-services)
+- [学习云服务应用的交付](./consume-cloud-services) TODO v1.2 -->
