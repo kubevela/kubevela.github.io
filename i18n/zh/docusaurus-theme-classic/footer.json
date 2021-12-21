@@ -20,7 +20,7 @@
     "description": "The label of footer link with label=Getting Case Studies to /docs/case-studies"
   },
   "link.item.label.Administrator Manuals": {
-    "message": "管理员手册",
+    "message": "自定义扩展",
     "description": "The label of footer link with label=Administrator Manuals linking to /docs/platform-engineers/overview"
   },
   "link.item.label.User Manuals": {

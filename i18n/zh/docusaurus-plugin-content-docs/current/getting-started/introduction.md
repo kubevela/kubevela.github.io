@@ -1,9 +1,7 @@
 ---
 title: KubeVela 简介
 slug: /
-
 ---
-
 
 ## 背景
 
@@ -21,19 +19,19 @@ KubeVela 是一个开箱即用的、现代化的应用交付与管理平台。
 
 KubeVela 通过以下设计，使得面向混合/多云环境的应用交付变得非常简单高效：
 
-- **完全以应用为中心** - KubeVela 创新性的提出了[开放应用模型（OAM）](https://oam.dev/)来作为应用交付的顶层抽象，并通过声明式的交付工作流来捕获面向混合环境的微服务应用交付的整个过程，甚至连多集群分发策略、流量调配和滚动更新等运维特征，也都声明在应用级别。用户无需关心任何基础设施细节，只需要专注于定义和部署应用即可。
+- **完全以应用为中心** - KubeVela 创新性的提出了 [开放应用模型（OAM）](https://oam.dev/)来作为应用交付的顶层抽象，并通过声明式的交付工作流来捕获面向混合环境的微服务应用交付的整个过程，甚至连多集群分发策略、流量调配和滚动更新等运维特征，也都声明在应用级别。用户无需关心任何基础设施细节，只需要专注于定义和部署应用即可。
+- **多环境/多集群交付** - KubeVela 原生支持多环境/多集群两个维度的混合应用交付，帮助用户大大降低了多集群分布式应用的云原生交付门槛。
 - **可编程式交付工作流** - KubeVela 的交付模型是利用 [CUE](https://cuelang.org/) 来实现的。CUE 是一种诞生自 Google Borg 系统的数据配置语言，它可以将应用交付的所有步骤、所需资源、关联的运维动作以可编程的方式粘合成一个 DAG（有向无环图）来作为最终的声明式交付计划。相比于其他系统的复杂性和不可扩展性，KubeVela 基于 CUE 的实现不仅使用简单、扩展性极强，也更符合现代 GitOps 应用交付的趋势与要求。
-- **基础设施无关** - KubeVela 是一个完全与运行时基础设施无关的应用交付与管理控制平面。所以它可以按照你定义的工作流与策略，面向任何环境交付和管理任何应用组件，比如：容器、云函数、数据库，甚至 网络和虚拟机实例等等。
+- **基础设施无关** - KubeVela 是一个完全与运行时基础设施无关的应用交付与管理控制平面。所以它可以按照你定义的工作流与策略，面向任何环境交付和管理任何应用组件，比如：容器、云函数、数据库，甚至网络和虚拟机实例等等。
 
 ## 谁应该使用 KubeVela？
 
 - 云原生时代的应用研发、运维人员、DevOps 工程师：
-	- KubeVela 是一个现代化的持续交付（CD）平台。
+  - KubeVela 是一个现代化的持续交付（CD）平台。
 - 云原生应用平台的构建者、PaaS、Serverless 平台工程师、基础设施平台管理员：
-	- KubeVela 是一个普适的、高可扩展的应用交付引擎与内核。
+  - KubeVela 是一个普适的、高可扩展的应用交付引擎与内核。
 - 第三方软件供应商（ISV）、垂直领域软件开发者、架构师：
-	- KubeVela 是一个 Kubernetes 和云平台之上的应用商店（App Store）。
-
+  - KubeVela 是一个 Kubernetes 和云平台之上的应用商店（App Store）。
 
 ## 产品形态对比
 
@@ -43,10 +41,9 @@ KubeVela 是一个工作在 CI 流程下游的 CD 控制平面（Continuous Deli
 
 如果你已经在 CD 环节中采纳了 GitOps 实践，KubeVela 会更容易跟你的 CI/CD 系统集成，因为 KubeVela 是完全声明式的。只需要把 KubeVela 的应用部署描述文件放置在你的配置仓库当中，所有的 KubeVela 特性（包括声明式交付工作流、多云/多集群交付流程等）就会立刻在你 的 GitOps 流程中出现。
 
-> 欢迎查阅 [《最佳实践》](case-studies/jenkins-cicd) 文档来了解更多关于 KubeVela 与各类 CI/CD 系统协作的实践. 
+> 欢迎查阅 [最佳实践](case-studies/jenkins-cicd) 文档来了解更多关于 KubeVela 与各类 CI/CD 系统协作的实践.
 
-
-### KubeVela vs. 平台即服务 (PaaS) 
+### KubeVela vs. 平台即服务 (PaaS)
 
 典型的例子是 Heroku 和 Cloud Foundry。 它们提供完整的应用程序部署和管理功能，旨在提高开发人员的体验和效率。在这个场景下，KubeVela 也有着相同的目标。
 
@@ -72,7 +69,7 @@ KubeVela 可以与此类工具无缝集成。在这种情况下，开发人员�
 
 Helm 是 Kubernetes 的包管理器，它能够以 Chart 为一个单元，提供打包、安装和升级的一组 YAML 文件的能力。
 
-KubeVela 作为一个应用交付系统天然可以部署各种制品类型，当然也包括 Helm Chart。 例如，你可以使用 KubeVela 定义一个由 WordPress Chart 和 AWS RDS 实例组成的应用，编排这两个组件之间的顺序关系，然后将它们按照一定的策略分发到多个 Kubernetes 集群当中。
+KubeVela 作为一个应用交付系统天然可以部署各种制品类型，Kustomize、Kubernetes Yaml 等，当然也包括 Chart。Helm 可以便捷的把 Chart 交付到一个集群，KubeVela 可以帮你把 Chart 交付到多个集群。
 
 当然，KubeVela 还支持其他制品格式比如 Kustomize。
 
@@ -83,5 +80,6 @@ KubeVela 是一个基于云原生技术栈构建的现代应用交付系统。�
 ## 下一步
 
 接下来，我们推荐你：
-- 开始[安装使用 KubeVela](./install)
-- 了解[系统架构](./core-concepts/architecture)和[核心概念](./core-concepts/application)
+
+- 开始 [安装使用 KubeVela](./install)
+- 了解 [系统架构](./getting-started/architecture) 和 [核心概念](./getting-started/core-concept)

@@ -1,8 +1,9 @@
 ---
-title:  Custom Installation
+title: Custom Installation
 ---
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 ## Install KubeVela with cert-manager
 
@@ -16,21 +17,24 @@ helm install cert-manager jetstack/cert-manager --namespace cert-manager --versi
 ```
 
 Install kubevela with enabled certmanager:
+
 ```shell script
 helm install --create-namespace -n vela-system --set admissionWebhooks.certManager.enabled=true kubevela kubevela/vela-core --wait
 ```
 
 ## Install Pre-release
-    
+
 Add flag `--devel` in command `helm search` to choose a pre-release
 version in format `<next_version>-beta.<version>`. It means a beta version of `<next_version>`,
-such as `1.2.0-beta.2`.
+such as `1.2.0-beta.3`.
 
 ```shell script
 helm search repo kubevela/vela-core -l --devel
 ```
+
 ```console
     NAME                        CHART VERSION           APP VERSION             DESCRIPTION
+kubevela/vela-core              1.2.0-beta.3            1.2.0-beta.3            A Helm chart for KubeVela core
 kubevela/vela-core              1.2.0-beta.2            1.2.0-beta.2            A Helm chart for KubeVela core
 kubevela/vela-core              1.2.0-beta.1            1.2.0-beta.1            A Helm chart for KubeVela core
 ```
@@ -40,6 +44,7 @@ And try the following command to install it.
 ```shell script
 helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version <next_version>-beta.<version> --set multicluster.enabled=true --wait
 ```
+
 ```console
 NAME: kubevela
 LAST DEPLOYED: Thu Apr  1 19:41:30 2021
@@ -49,6 +54,7 @@ REVISION: 1
 NOTES:
 Welcome to use the KubeVela! Enjoy your shipping application journey!
 ```
+
 ## Install Kubectl Vela Plugin
 
 Install vela kubectl plugin can help you to ship applications more easily!
@@ -64,10 +70,13 @@ values={[
 
 1. [Install and set up](https://krew.sigs.k8s.io/docs/user-guide/setup/install/) Krew on your machine.
 2. Discover plugins available on Krew:
+
 ```shell
 kubectl krew update
 ```
+
 3. install kubectl vela:
+
 ```shell script
 kubectl krew install vela
 ```
@@ -76,6 +85,7 @@ kubectl krew install vela
 <TabItem value="script">
 
 **macOS/Linux**
+
 ```shell script
 curl -fsSl https://kubevela.io/script/install-kubectl-vela.sh | bash
 ```
@@ -87,10 +97,10 @@ Kubectl will discover it from your system path automatically.
 </Tabs>
 
 For more usage please reference [kubectl plugin](../kubectlplugin).
+
 ## Upgrade
 
 ### Step 1. Update Helm repo
-
 
 You can explore the newly released chart versions of KubeVela by run:
 
@@ -135,17 +145,17 @@ helm upgrade --install --create-namespace --namespace vela-system  kubevela kube
 
 ## Addons
 
-| Name                  | Description                                             | capability        | Open Source Project Reference                                        |
-|---------------------|-------------------------------------------------|----------------|-------------------------------------------------|
-| terraform           | Basic addon to Provide Cloud Resources                                    | -              | https://github.com/oam-dev/terraform-controller |
-| fluxcd              | Support Deployment of Helm and Kustomize components                       | kustomize、helm | https://fluxcd.io/                              |
-| ocm-cluster-manager | Support Multi-cluster Application Deployment                                  | -              | http://open-cluster-management.io/              |
-| velaux              | The KubeVela User Experience (UX ). Dashboard Designed as an extensible, application-oriented delivery and management control panel |- |
-| terraform-alibaba   | Kubernetes Terraform Controller for Alibaba Cloud |-                          |-                                    |
-| terraform-azure     | Kubernetes Terraform Controller for Azure    |-                             |-                           |
-| terraform-aws       | Kubernetes Terraform Controller for AWS      |-                             |-                           |
+| Name                | Description                                                                                                                         | capability      | Open Source Project Reference                   |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------- | ----------------------------------------------- |
+| terraform           | Basic addon to Provide Cloud Resources                                                                                              | -               | https://github.com/oam-dev/terraform-controller |
+| fluxcd              | Support Deployment of Helm and Kustomize components                                                                                 | kustomize、helm | https://fluxcd.io/                              |
+| ocm-cluster-manager | Support Multi-cluster Application Deployment                                                                                        | -               | http://open-cluster-management.io/              |
+| velaux              | The KubeVela User Experience (UX ). Dashboard Designed as an extensible, application-oriented delivery and management control panel | -               |
+| terraform-alibaba   | Kubernetes Terraform Controller for Alibaba Cloud                                                                                   | -               | -                                               |
+| terraform-azure     | Kubernetes Terraform Controller for Azure                                                                                           | -               | -                                               |
+| terraform-aws       | Kubernetes Terraform Controller for AWS                                                                                             | -               | -                                               |
 
-1. Search all addons 
+1. Search all addons
 
 ```shell
 vela addon list
@@ -165,7 +175,6 @@ vela addon disable fluxcd
 
 Please remove all application using this addon before disable it.
 
-
 ## Multi-Cluster Management
 
 KubeVela can orchestrate applications across multiple Kubernetes clusters. This capability is enabled by default, but you can enable it manually by running the following command:
@@ -181,7 +190,6 @@ Verify that multi-cluster is enabled:
 NAME                            SERVICE                                        AVAILABLE   AGE
 v1alpha1.cluster.core.oam.dev   vela-system/kubevela-cluster-gateway-service   True        7h40m
 ```
-
 
 ## Clean Up
 
@@ -223,6 +231,5 @@ Then clean up CRDs (CRDs are not removed via helm by default):
   traitdefinitions.core.oam.dev \
   workflows.core.oam.dev \
   workflowstepdefinitions.core.oam.dev \
-  workloaddefinitions.core.oam.dev 
+  workloaddefinitions.core.oam.dev
 ```
-

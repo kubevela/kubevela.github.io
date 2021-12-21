@@ -35,7 +35,7 @@ Under the hood, `Appfile` will build the image from source code, and then genera
 
 ## Schema
 
-> Before learning about Appfile's detailed schema, we recommend you to get familiar with core concepts in KubeVela.
+> Before learning about Appfile's detailed schema, we recommend you to get familiar with [core concepts](../getting-started/core-concept)) in KubeVela.
 
 
 ```yaml

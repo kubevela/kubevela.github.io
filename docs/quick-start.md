@@ -2,251 +2,70 @@
 title:  Deploy First Application
 ---
 
-Welcome to KubeVela! In this guide, we'll walk you through how to install KubeVela, and deploy your first simple application.
+> Before starting, please confirm that you've installed KubeVela Core and VelaUX in the control plane cluster based on [Install from Kubernetes cluster](./install.mdx) 
+>
+> If you want to use KubeVela CLI for application delivery, please check [Deliver First Application](./end-user/quick-start-cli) in the Vela CLI manual.
+ 
+Welcome to KubeVela! In this section, we show you how to deliver your first app via VelaUX.
 
-## Installation
+Follow these steps:
+1. Prepare a Docker image. we use [crccheck/hello-world](https://hub.docker.com/r/crccheck/hello-world) for this time. Double-check if you're able to download it properly.
+2. Create the first `Application`.
+3. Check out the status of the Application's instance.
 
-Make sure you have finished and verified KubeVela installation following [this guide](install).
+You'll get to know:
+- Get familiar with core concepts as [Application](./getting-started/core-concept#application), [Cluster](getting-started/core-concept#cluster), [Target](getting-started/core-concept#target) and [Project](getting-started/core-concept#project)
+- Finished an application delivery by operating VelaUX
 
-## A Simple Application
+##  Choosing deployment type and Environment
 
-A simple deployment definition in KubeVela looks as below:
+After VelaUX is installed, the first page you enter is for managing the app:
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-vela-app
-spec:
-  components:
-    - name: express-server
-      type: webservice
-      properties:
-        image: crccheck/hello-world
-        port: 8000
-      traits:
-        - type: ingress-1-20
-          properties:
-            domain: testsvc.example.com
-            http:
-              "/": 8000
-```
+![](./resources/dashboard.png)
 
-Now deploy it to KubeVela:
+Then click the button of `New Application` on the upper-right, type in these things:
 
-```bash
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
-```
+- Name and other basic Infos
+- Choose the Project. We've created a default Project for you to use or you can click `New` to create your own
+- Choose the deployment type. In this case, we use `webservice` to deploy Stateless Application
+- Choose your environment. We select `local` Target for dev Environment
 
-This command will deploy a web service component to target environment, which in our case is the Kubernetes cluster that KubeVela itself is installed.
+![](./resources/new-first-vela-app.png)
 
-After deployed, you can now directly visit this application as it already attached with a `ingress` trait (assume your cluster has Ingress enabled).
+## Setting up properties
 
-```
-$ curl -H "Host:testsvc.example.com" http://<some ip address>/
-<xmp>
-Hello World
+Next step, we see the page of properties. Configure following:
 
+- Image address `crccheck/hello-world`
 
-                                       ##         .
-                                 ## ## ##        ==
-                              ## ## ## ## ##    ===
-                           /""""""""""""""""\___/ ===
-                      ~~~ {~~ ~~~~ ~~~ ~~~~ ~~ ~ /  ===- ~~~
-                           \______ o          _,/
-                            \      \       _,'
-                             `'--.._\..--''
-</xmp>
-```
+> Other properties can be left blank for this case
 
-## Deploy More Components
+![](./resources/port-first-vela-app.png)
 
-KubeVela allows you to deploy diverse components types. In above example, the `Web Service` component is actually a predefined [CUE](https://cuelang.org/) module. 
+Confirmed. Notice that this application is only created but not deployed yet. VelaUX defaultly generates [Workflow](./getting-started/core-concept#workflow) and replicas of [Trait](./getting-started/core-concept#trait).
 
-You can also try:
+![](./resources/created-first-vela-app.png)
 
-### Helm components
+## Executing Workflow to deploy
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: app-delivering-chart
-spec:
-  components:
-    - name: redis-comp
-      type: helm
-      properties:
-        chart: redis-cluster
-        version: 6.2.7
-        url: https://charts.bitnami.com/bitnami
-        repoType: helm
-```
+Click `Development Environment` and switch to the dev environment, deploy it. Or click the deploy button on the upper-right. When the workflow is finished, you'll get to see the list of instances lying within.
 
-### Terraform components
+![](./resources/succeed-first-vela-app.jpg)
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: rds-cloud-source
-spec:
-  components:
-    - name: sample-db
-      type: alibaba-rds
-      properties:
-        instance_name: sample-db
-        account_name: oamtest
-        password: U34rfwefwefffaked
-        writeConnectionSecretToRef:
-          name: db-conn
-```
+In the process of deploying, you can click `Check the details` to view the status of the application:
 
-### Components from Git repository
+![](./resources/status-first-vela-app.jpg)
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: git-app
-spec:
-  components:
-    - name: git-comp
-      type: kustomize
-      properties:
-        repoType: git
-        url: https://github.com/<path>/<to>/<repo>
-        git:
-          branch: master
-        path: ./app/dev/
-```
+## Deleting Application
 
-... and many many more. Please check the `Deploying Components` section under `User Manuals` for all supported types, and even go ahead to add your own.
+If you want to delete the application when it's no longer used, simply:
 
-## Attach Operational Behaviors
+1. Enter the page of environment, click `Recycle` to reclaim the resources that this environment used.
+2. Go back to the list of applications and click the drop-down menu to remove it. 
 
-KubeVela is not just about deploy. It allows you to attach predefined operational behaviors (named `Traits`) to your components in-place. For example, let's assign a batch rollout strategy to our web service:
+That's it! You succeed at the first application delivery. Congratulation!
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: rollout-trait-test
-spec:
-  components:
-    - name: express-server
-      type: webservice
-      externalRevision: express-server-v1
-      properties:
-        image: stefanprodan/podinfo:4.0.3
-      traits:
-        - type: rollout
-          properties:
-            targetSize: 5
-            rolloutBatches:
-              - replicas: 2
-              - replicas: 3
-```
+## Next Step
 
-Now whenever the image version is updated in above YAML file, the `express-server` component will rollout following strategy defined in `rolloutBatches`. 
-
-For all supported traits in KubeVela, please check `Attaching Traits` section under `User Manuals`. Not surprisingly, you can also add your own traits to KubeVela with just minimal effort.
-
-## Define Policies and Workflow
-
-Components and traits are just the beginning of your vela sail. KubeVela is by design a full functional Continuous Delivery (CD) platform with fine grained support for hybrid/multi-cloud/multi-cluster deployment.
-
-Let's say:
-
-> I want to deploy an micro-services application with two components, firstly to staging cluster with only 1 instance, then pause and wait for manual approval. If approved, then deploy it to production cluster but with instances scaled to 3.
-
-Oops, imagine how many add-hoc scripts and glue code are needed in your CI/CD pipeline to achieve automation and deployment success rate in above process.
-
-While with KubeVela, above process can be easily modeled as a declarative deployment plan as below:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: example-app
-  namespace: default
-spec:
-  components:
-    - name: hello-world-server
-      type: webservice
-      properties:
-        image: crccheck/hello-world
-        port: 8000
-      traits:
-        - type: scaler
-          properties:
-            replicas: 1
-    - name: data-worker
-      type: worker
-      properties:
-        image: busybox
-        cmd:
-          - sleep
-          - '1000000'
-  policies:
-    - name: example-multi-env-policy
-      type: env-binding
-      properties:
-        envs:
-          - name: staging
-            placement: # selecting the cluster to deploy to
-              clusterSelector:
-                name: cluster-staging
-            selector: # selecting which component to use
-              components:
-                - hello-world-server
-
-          - name: prod
-            placement:
-              clusterSelector:
-                name: cluster-prod
-            patch: # overlay patch on above components
-              components:
-                - name: hello-world-server
-                  type: webservice
-                  traits:
-                    - type: scaler
-                      properties:
-                        replicas: 3
-
-    - name: health-policy-demo
-      type: health
-      properties:
-        probeInterval: 5
-        probeTimeout: 10
-
-  workflow:
-    steps:
-      # deploy to staging env
-      - name: deploy-staging
-        type: deploy2env
-        properties:
-          policy: example-multi-env-policy
-          env: staging
-
-      # manual check
-      - name: manual-approval
-        type: suspend
-
-      # deploy to prod env
-      - name: deploy-prod
-        type: deploy2env
-        properties:
-          policy: example-multi-env-policy
-          env: prod
-```  
-
-No more add-hoc scripts or glue code, KubeVela will get the application delivery workflow done with full automation and determinism. Most importantly, KubeVela expects you keep using the CI solutions you are already familiar with and KubeVela is fully complementary to them as the CD control plane.
-
-For using KubeVela with your own CI pipelines and other tools, please check `Best Practices` section in the sidebar for more real world examples.
-
-## What's Next
-
-All above features are just the first glance of KubeVela. For next steps, we recommend:
-- Learn KubeVela's [application model](./core-concepts/application).
-- Interested in KubeVela itself? Learn its [design and architecture](./core-concepts/architecture).
+- View [Continuous Delivery](./deliver-app/k8s-object.mdx) to look on more of what you can achieve with KubeVela
+- View [Best Practices](./case-studies/jenkins-cicd) to check out more tutorials
