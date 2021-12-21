@@ -26,7 +26,7 @@ helm install --create-namespace -n vela-system --set admissionWebhooks.certManag
 
 Add flag `--devel` in command `helm search` to choose a pre-release
 version in format `<next_version>-beta.<version>`. It means a beta version of `<next_version>`,
-such as `1.2.0-beta.2`.
+such as `1.2.0-beta.3`.
 
 ```shell script
 helm search repo kubevela/vela-core -l --devel
@@ -34,6 +34,7 @@ helm search repo kubevela/vela-core -l --devel
 
 ```console
     NAME                        CHART VERSION           APP VERSION             DESCRIPTION
+kubevela/vela-core              1.2.0-beta.3            1.2.0-beta.3            A Helm chart for KubeVela core
 kubevela/vela-core              1.2.0-beta.2            1.2.0-beta.2            A Helm chart for KubeVela core
 kubevela/vela-core              1.2.0-beta.1            1.2.0-beta.1            A Helm chart for KubeVela core
 ```

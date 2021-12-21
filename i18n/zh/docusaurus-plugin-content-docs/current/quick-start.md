@@ -3,6 +3,8 @@ title: 交付第一个应用
 ---
 
 > 在实践之前，请确保你已经按照 [从 Kubernetes 集群安装](./install.mdx) 文档，在你的控制平面集群中安装了 KubeVela Core 和 VelaUX。
+>
+> 如果你希望通过使用 KubeVela CLI 来进行应用交付，请查看 Vela CLI 手册的 [交付第一个应用](./end-user/quick-start-cli)。
 
 欢迎来到 KubeVela！在本小节中，我们会向你介绍如何使用 VelaUX 来交付一个简单的应用。
 

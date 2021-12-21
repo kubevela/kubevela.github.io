@@ -46,9 +46,10 @@ module.exports = {
     },
     {
       type: "category",
-      label: "Vela CLI",
+      label: "Vela CLI Manuals",
       collapsed: true,
       items: [
+        "end-user/quick-start-cli",
         {
           "Deploying Components": [
             "end-user/components/helm",

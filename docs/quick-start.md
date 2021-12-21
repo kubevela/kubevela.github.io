@@ -3,7 +3,9 @@ title:  Deploy First Application
 ---
 
 > Before starting, please confirm that you've installed KubeVela Core and VelaUX in the control plane cluster based on [Install from Kubernetes cluster](./install.mdx) 
-
+>
+> If you want to use KubeVela CLI for application delivery, please check [Deliver First Application](./end-user/quick-start-cli) in the Vela CLI manual.
+ 
 Welcome to KubeVela! In this section, we show you how to deliver your first app via VelaUX.
 
 Follow these steps:
@@ -65,5 +67,5 @@ That's it! You succeed at the first application delivery. Congratulation!
 
 ## Next Step
 
-- View [Continuous Delivery](./deliver-app/k8s-object.mdx) to look on more of what you can achieve with KubeVela
+- View [Continuous Delivery](./deliver-app/k8s-object) to look on more of what you can achieve with KubeVela
 - View [Best Practices](./case-studies/jenkins-cicd) to check out more tutorials

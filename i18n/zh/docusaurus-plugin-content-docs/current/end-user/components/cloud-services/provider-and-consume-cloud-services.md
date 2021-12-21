@@ -157,9 +157,3 @@ EOF
 
 如果我们提供的开箱即用云资源没有覆盖你的研发需求，你依然可以通过灵活的[Terraform 组件](../../../platform-engineers/components/component-terraform)去自定义业务所需要的云资源。
 
-## 下一步
-
-- [组件可观测性](../../component-observability)
-- [应用组件间的依赖和参数传递](../../workflow/component-dependency-parameter)
-- [多应用、多环境、多集群编排](../../../case-studies/multi-cluster)
-
