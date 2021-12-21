@@ -160,7 +160,7 @@ helm repo update
 2. 安装 KubeVela Core
 
 ```shell script
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.0-beta.2 --set multicluster.enabled=true --wait
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.0-beta.3 --set multicluster.enabled=true --wait
 ```
 
 3. 验证 KubeVela Core 安装是否成功
@@ -216,7 +216,7 @@ KubeVela CLI 提供了便捷的应用终端管理能力，我们通过 CLI 来�
 ** MacOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.0-beta.2
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.0-beta.3
 ```
 
 **Windows**
@@ -290,6 +290,8 @@ kubectl get service velaux -n vela-system -o jsonpath="{.status.loadBalancer.ing
 ```shell script
 vela addon enable velaux repo=acr.kubevela.net domain=example.doamin.com
 ```
+
+对于生产环境，请考虑启用 MongoDB 作为 VelaUX 的数据存储。
 
 ## 4. 卸载
 

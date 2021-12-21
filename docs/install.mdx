@@ -1,5 +1,5 @@
 ---
-title:  Installation
+title: Installation
 ---
 
 import Tabs from "@theme/Tabs";
@@ -10,11 +10,12 @@ import TabItem from "@theme/TabItem";
 ## 1. Choose Control Plane Cluster
 
 Requirements:
+
 - Kubernetes cluster >= v1.18.0
 
-KubeVela relies on Kubernetes as a control plane. The control plane could be any managed Kubernetes offering or your cluster. 
+KubeVela relies on Kubernetes as a control plane. The control plane could be any managed Kubernetes offering or your cluster.
 
-For local deployment and test, you could use `kind` or `minikube`. 
+For local deployment and test, you could use `kind` or `minikube`.
 
 > For production usage, you could use your Kubernetes cluster or Kubernetes services provided by cloud providers.
 
@@ -55,13 +56,16 @@ minikube addons enable ingress
 
 <b>（1）Intall Docker (Optional)</b>
 
-  The rke depend on docker, Please install Docker on all servers or virtual machines, if not installed follow the docker [installation guide](https://docs.docker.com/engine/install/).
+The rke depend on docker, Please install Docker on all servers or virtual machines, if not installed follow the docker [installation guide](https://docs.docker.com/engine/install/).
 
-  <b>（2）Install rke:</b>
+{" "}
 
-  Download rke binary from [rke release page](https://github.com/rancher/rke/releases).
-  
-  If you have limited Internet access:
+<b>（2）Install rke:</b>
+
+Download rke binary from [rke release page](https://github.com/rancher/rke/releases).
+
+If you have limited Internet access:
+
 ```
 wget https://static.kubevela.net/binary/rke/rke_linux-amd64 -O /usr/bin/rke
 chmod +x /usr/bin/rke
@@ -82,6 +86,7 @@ chmod +x /usr/bin/rke
   cp kube_config_cluster.yml ~/.kube/config
   docker cp kubelet:/usr/local/bin/kubectl /usr/local/bin/kubectl
 ```
+
 </TabItem>
 
 <TabItem value="kind">
@@ -127,17 +132,17 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 
 > Using for production environment
 
-* Alibaba Cloud [ACK Service](https://www.aliyun.com/product/kubernetes)
-* AWS [EKS Service](https://aws.amazon.com/cn/eks)
-* Azure [AKS Service](https://azure.microsoft.com/en-us/services/kubernetes-service)
-* Google [GKE Service](https://cloud.google.com/kubernetes-engine)
+- Alibaba Cloud [ACK Service](https://www.aliyun.com/product/kubernetes)
+- AWS [EKS Service](https://aws.amazon.com/cn/eks)
+- Azure [AKS Service](https://azure.microsoft.com/en-us/services/kubernetes-service)
+- Google [GKE Service](https://cloud.google.com/kubernetes-engine)
 
 > Please ensure [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/) is installed and enabled.
 
 </TabItem>  
 </Tabs>
 
-## 2.  Install KubeVela Core
+## 2. Install KubeVela Core
 
 Before installation, please make sure that Helm is available. If not installed, please head to [Helm Installation](https://helm.sh/docs/intro/install/) first.
 
@@ -151,7 +156,7 @@ helm repo update
 2. Install KubeVela Core
 
 ```shell script
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.0-beta.2 --set multicluster.enabled=true --wait
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.0-beta.3 --set multicluster.enabled=true --wait
 ```
 
 3. Verify KubeVela Core installation
@@ -207,7 +212,7 @@ KubeVela CLI provides an easy to engage. We install VelaUX extensions through CL
 ** MacOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.0-beta.2
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.0-beta.3
 ```
 
 **Windows**
@@ -298,7 +303,6 @@ vela addon disable velaux
 helm uninstall -n vela-system kubevela
 ```
 
-##  Next Step
+## Next Step
 
 - After installed KubeVela, let's begin to [Deploy First Application](./quick-start)。
-
