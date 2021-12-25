@@ -1,5 +1,5 @@
 ---
-title: 从 Kubernetes 集群安装
+title: 快速安装
 ---
 
 import Tabs from "@theme/Tabs";
@@ -12,6 +12,8 @@ import TabItem from "@theme/TabItem";
 确保:
 
 - Kubernetes 集群版本 >= v1.18.0
+
+> 若你已是 Kubernetes 用户，具有满足上述条件的集群，请直接进入 [下一节](#2-安装-kubevela-core) 。若你没有满足要求的集群，可通过下述方式安装便捷安装。生产场景推荐使用云服务或 RKE 安装方式。
 
 KubeVela 控制平面依赖 Kubernetes。它可以放置在任何托管 Kubernetes 作为底座的产品或自建 Kubernetes 集群中。
 
@@ -26,7 +28,7 @@ values={[
 {label: 'Kind', value: 'kind'},
 {label: 'Minikube', value: 'minikube'},
 {label: 'RKE', value: 'rke'},
-{label: 'Cloud Provider', value: 'cloudprovider'},
+{label: '云服务', value: 'cloudprovider'},
 ]}>
 
 <TabItem value="minikube">
@@ -160,7 +162,7 @@ helm repo update
 2. 安装 KubeVela Core
 
 ```shell script
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.0-beta.3 --set multicluster.enabled=true --wait
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.0-rc.1 --wait
 ```
 
 3. 验证 KubeVela Core 安装是否成功
@@ -216,7 +218,7 @@ KubeVela CLI 提供了便捷的应用终端管理能力，我们通过 CLI 来�
 ** MacOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.0-beta.3
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.0-rc.1
 ```
 
 **Windows**
@@ -291,11 +293,17 @@ kubectl get service velaux -n vela-system -o jsonpath="{.status.loadBalancer.ing
 vela addon enable velaux repo=acr.kubevela.net domain=example.doamin.com
 ```
 
-对于生产环境，请考虑启用 MongoDB 作为 VelaUX 的数据存储。
+对于生产环境，请考虑启用 MongoDB 作为 VelaUX 的数据存储，使用 MongoDB 作为数据库的配置方式参考如下：
+
+```shell script
+vela addon enable velaux dbType=mongodb database=kubevela dbURL=mongodb://<Mongo-Host>:<Mongo-Port>
+```
 
 ## 4. 卸载
 
 如果你试用完成后需要卸载 KubeVela，可参考如下操作进行：
+
+在卸载之前，请先将所有应用删除，所有 addon 禁用。
 
 1. 卸载 VelaUX
 
@@ -307,6 +315,14 @@ vela addon disable velaux
 
 ```
 helm uninstall -n vela-system kubevela
+```
+
+3. 卸载 KubeVela 安装的 CRD
+
+删除前，需要确保所有对应的 CR 资源已删除。
+
+```
+kubectl get crd |grep oam | awk '{print $1}' | xargs kubectl delete crd
 ```
 
 ## 下一步

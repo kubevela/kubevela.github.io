@@ -1,23 +1,25 @@
 ---
-title:  Deploy First Application
+title: Deploy First Application
 ---
 
-> Before starting, please confirm that you've installed KubeVela Core and VelaUX in the control plane cluster based on [Install from Kubernetes cluster](./install.mdx) 
+> Before starting, please confirm that you've installed KubeVela Core and VelaUX in the control plane cluster based on [Install from Kubernetes cluster](./install.mdx)
 >
 > If you want to use KubeVela CLI for application delivery, please check [Deliver First Application](./end-user/quick-start-cli) in the Vela CLI manual.
- 
+
 Welcome to KubeVela! In this section, we show you how to deliver your first app via VelaUX.
 
 Follow these steps:
+
 1. Prepare a Docker image. we use [crccheck/hello-world](https://hub.docker.com/r/crccheck/hello-world) for this time. Double-check if you're able to download it properly.
 2. Create the first `Application`.
 3. Check out the status of the Application's instance.
 
 You'll get to know:
+
 - Get familiar with core concepts as [Application](./getting-started/core-concept#application), [Cluster](getting-started/core-concept#cluster), [Target](getting-started/core-concept#target) and [Project](getting-started/core-concept#project)
 - Finished an application delivery by operating VelaUX
 
-##  Choosing deployment type and Environment
+## Choosing deployment type and Environment
 
 After VelaUX is installed, the first page you enter is for managing the app:
 
@@ -61,11 +63,11 @@ In the process of deploying, you can click `Check the details` to view the statu
 If you want to delete the application when it's no longer used, simply:
 
 1. Enter the page of environment, click `Recycle` to reclaim the resources that this environment used.
-2. Go back to the list of applications and click the drop-down menu to remove it. 
+2. Go back to the list of applications and click the drop-down menu to remove it.
 
 That's it! You succeed at the first application delivery. Congratulation!
 
 ## Next Step
 
-- View [Continuous Delivery](./deliver-app/k8s-object.mdx) to look on more of what you can achieve with KubeVela
+- View [Continuous Delivery](./deliver-app/k8s-object) to look on more of what you can achieve with KubeVela
 - View [Best Practices](./case-studies/jenkins-cicd) to check out more tutorials

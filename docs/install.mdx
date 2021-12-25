@@ -24,8 +24,8 @@ className="unique-tabs"
 defaultValue="kind"
 values={[
 {label: 'Kind', value: 'kind'},
-{label: 'RKE', value: 'rke'},
 {label: 'Minikube', value: 'minikube'},
+{label: 'RKE', value: 'rke'},
 {label: 'Cloud Provider', value: 'cloudprovider'},
 ]}>
 
@@ -156,7 +156,7 @@ helm repo update
 2. Install KubeVela Core
 
 ```shell script
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.0-beta.3 --set multicluster.enabled=true --wait
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.0-rc.1 --wait
 ```
 
 3. Verify KubeVela Core installation
@@ -212,7 +212,7 @@ KubeVela CLI provides an easy to engage. We install VelaUX extensions through CL
 ** MacOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.0-beta.3
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.0-rc.1
 ```
 
 **Windows**
