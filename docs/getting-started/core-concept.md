@@ -35,11 +35,11 @@ Revision generates each time when the application deployed and holds all infos i
 
 Project is where you manage all the applications and collaborate with your team member. Project is one stand alone scope that separates it from other project.
 
-## Env
+## Environment
 
-Env refers to the environment for development, testing, and production and it can include multiple Targets. We define Environment in each Project and each Project can contain multiple Environments. Applications inside a same environment can visit and share resource with each other.
+Environment refers to the environment for development, testing, and production and it can include multiple Targets. We define Environment in each Project and each Project can contain multiple Environments. Applications in the same environment can visit and share resource with each other.
 
-- <b>EnvBinding</b> The application can be bound to multiple Environments, and for each environment, you can set the environment that is the deployment difference and the Target-level deployment difference.
+- <b>EnvBinding</b> The application can be bound to multiple Environments, and for each environment, you can set the environment that is the deployment difference.
 
 ## Target
 
