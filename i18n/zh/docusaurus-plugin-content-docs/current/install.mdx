@@ -309,6 +309,7 @@ vela addon enable velaux dbType=mongodb database=kubevela dbURL=mongodb://<Mongo
 
 ```
 vela addon disable velaux
+kubectl delete configmap --all -n kubevela
 ```
 
 2. 卸载 KubeVela Core

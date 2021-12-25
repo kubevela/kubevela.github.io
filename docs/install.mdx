@@ -283,18 +283,27 @@ vela addon enable velaux repo=acr.kubevela.net domain=example.doamin.com
 
 ## 4. Uninstall
 
-If you need to uninstall KubeVela after the trial, you can go:
+Before uninstalling kubevela, you must delete all applications and disable all addons.
 
 1. Uninstall VelaUX
 
 ```
 vela addon disable velaux
+kubectl delete configmap --all -n kubevela
 ```
 
 2. Uninstall KubeVela Core
 
 ```
 helm uninstall -n vela-system kubevela
+```
+
+3. Uninstall CRD
+
+Before deleting, you must delete all CR resources.
+
+```
+kubectl get crd |grep oam | awk '{print $1}' | xargs kubectl delete crd
 ```
 
 ## Next Step
