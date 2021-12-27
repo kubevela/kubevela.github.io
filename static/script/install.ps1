@@ -12,7 +12,7 @@ $ErrorActionPreference = 'stop'
 $VelaRoot = $VelaRoot -replace ' ', '` '
 
 # Constants
-$VelaCliFileName = "vela.exe"
+$VelaCliFileName = "vela"
 $VelaCliFilePath = "${VelaRoot}\${VelaCliFileName}"
 
 # GitHub Org and repo hosting Vela CLI
