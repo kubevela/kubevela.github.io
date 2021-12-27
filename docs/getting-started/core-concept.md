@@ -1,8 +1,8 @@
 ---
-title:  Core Concept
+title: Core Concept
 ---
 
-KubeVela revolves around cloud-native application delivery and management scenarios. The application delivery model behind it is [Open Application Model](../platform-engineers/oam/oam-model), or OAM for short. It describe various components and  operation required for application as a unified, and Infrastructure-independent "deployment plan". Thus we can achieve standardized and efficient application delivery in a multi-cloud/hybrid-cloud environment. KubeVela includes the following core concepts:
+KubeVela revolves around cloud-native application delivery and management scenarios. The application delivery model behind it is [Open Application Model](../platform-engineers/oam/oam-model), or OAM for short. It describe various components and operation required for application as a unified, and Infrastructure-independent "deployment plan". Thus we can achieve standardized and efficient application delivery in a multi-cloud/hybrid-cloud environment. KubeVela includes the following core concepts:
 
 ## Application
 
@@ -27,8 +27,6 @@ Workflow allows you to define critical step in the process of application delive
 
 Policy defines a strategy of certain aspect for application as to quality assurance, security, firewall rules, SLO and etc. Its type decided by [Policy Definition](../platform-engineers/oam/x-definition#policydefinition), one of its usage:
 
-- <b>EnvBinding</b> Environment binding strategy. It enables you to ship patches into multi-targets along with exclusive changes for each of them.
-
 ### Revision
 
 Revision generates each time when the application deployed and holds all infos in one snapshot. You use it for rolling back to whichever version whenever you needed.
@@ -37,11 +35,13 @@ Revision generates each time when the application deployed and holds all infos i
 
 Project is where you manage all the applications and collaborate with your team member. Project is one stand alone scope that separates it from other project.
 
-### Environment
+## Environment
 
-Environment refers to the environment for development, testing, and production and it can include multiple Targets. We define Environment in each Project and each Project can contain multiple Environments. Applications inside a same environment can visit and share resource with each other.
+Environment refers to the environment for development, testing, and production and it can include multiple Targets. We define Environment in each Project and each Project can contain multiple Environments. Applications in the same environment can visit and share resource with each other.
 
-### Target
+- <b>EnvBinding</b> The application can be bound to multiple Environments, and for each environment, you can set the environment that is the deployment difference.
+
+## Target
 
 Target describs the space where we actually host application and its affilicated resources. It bind to a Namespace of Kubernetes cluster.
 

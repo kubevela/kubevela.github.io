@@ -24,8 +24,8 @@ className="unique-tabs"
 defaultValue="kind"
 values={[
 {label: 'Kind', value: 'kind'},
-{label: 'RKE', value: 'rke'},
 {label: 'Minikube', value: 'minikube'},
+{label: 'RKE', value: 'rke'},
 {label: 'Cloud Provider', value: 'cloudprovider'},
 ]}>
 
@@ -156,7 +156,7 @@ helm repo update
 2. Install KubeVela Core
 
 ```shell script
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.0-beta.3 --set multicluster.enabled=true --wait
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.0-rc.1 --wait
 ```
 
 3. Verify KubeVela Core installation
@@ -212,7 +212,7 @@ KubeVela CLI provides an easy to engage. We install VelaUX extensions through CL
 ** MacOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.0-beta.3
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.0-rc.1
 ```
 
 **Windows**
@@ -283,18 +283,27 @@ vela addon enable velaux repo=acr.kubevela.net domain=example.doamin.com
 
 ## 4. Uninstall
 
-If you need to uninstall KubeVela after the trial, you can go:
+Before uninstalling kubevela, you must delete all applications and disable all addons.
 
 1. Uninstall VelaUX
 
 ```
 vela addon disable velaux
+kubectl delete configmap --all -n kubevela
 ```
 
 2. Uninstall KubeVela Core
 
 ```
 helm uninstall -n vela-system kubevela
+```
+
+3. Uninstall CRD
+
+Before deleting, you must delete all CR resources.
+
+```
+kubectl get crd |grep oam | awk '{print $1}' | xargs kubectl delete crd
 ```
 
 ## Next Step

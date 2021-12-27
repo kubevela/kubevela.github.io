@@ -25,7 +25,7 @@ description: 本文介绍Kubernetes的工作流工程模式，常用操作和适
 
 ## 内置支持的工作流步骤
 
-在 [交付 Kubernetes 原生资源](./k8s-object.mdx) 文章中，我们使用了人工审核步骤`suspend`。我们再来了解一下其他内置的步骤分别是什么作用：
+在 [交付 Kubernetes 原生资源](./k8s-object) 文章中，我们使用了人工审核步骤`suspend`。我们再来了解一下其他内置的步骤分别是什么作用：
 
 - `deploy2env`: 应用交付到指定 Target。该步骤 Vela 会根据环境中配置的 Target 自动生成。
 - `deploy-cloud-resource`: 云资源应用交付到指定 Target。该步骤 Vela 会为云资源应用，根据环境中配置的 Target 自动生成，需要注意的是，该类型步骤与 deploy2env 的区别在于控制云资源创建的 CR 资源是部署到管控集群的，服务创建完成生成访问密钥(Secret)后，将 Secret 分发到 Target 指定集群和 Namespace。

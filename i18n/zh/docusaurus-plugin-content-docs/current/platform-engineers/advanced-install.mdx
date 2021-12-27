@@ -1,9 +1,9 @@
 ---
-title:  自定义安装
+title: 自定义安装
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 ## 带着证书管理器安装 KubeVela
 
@@ -26,13 +26,15 @@ helm install --create-namespace -n vela-system --set admissionWebhooks.certManag
 
 ## 安装预发布版
 
-在使用 `helm search` 命令时，添加标记参数 `--devel` 即可搜索出预发布版。预发布版的版本号格式为 `<next_version>-beta.<version>`，例如 `1.2.0-beta.3`，代表的是 `<next_version>` 版本的试验版本。
+在使用 `helm search` 命令时，添加标记参数 `--devel` 即可搜索出预发布版。预发布版的版本号格式为 `<next_version>-beta.<version>`，例如 `1.2.0-rc.1`，代表的是 `<next_version>` 版本的试验版本。
 
 ```shell script
 helm search repo kubevela/vela-core -l --devel
 ```
+
 ```console
     NAME                      CHART VERSION             APP VERSION             DESCRIPTION
+kubevela/vela-core              1.2.0-rc.1              1.2.0-rc.1              A Helm chart for KubeVela core
 kubevela/vela-core              1.2.0-beta.3            1.2.0-beta.3            A Helm chart for KubeVela core
 kubevela/vela-core              1.2.0-beta.2            1.2.0-beta.2            A Helm chart for KubeVela core
 kubevela/vela-core              1.2.0-beta.1            1.2.0-beta.1            A Helm chart for KubeVela core
@@ -43,6 +45,7 @@ kubevela/vela-core              1.2.0-beta.1            1.2.0-beta.1            
 ```shell script
 helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version <next_version>-beta.<version> --set multicluster.enabled=true --wait
 ```
+
 ```console
 NAME: kubevela
 LAST DEPLOYED: Thu Apr  1 19:41:30 2021
@@ -52,6 +55,7 @@ REVISION: 1
 NOTES:
 Welcome to use the KubeVela! Enjoy your shipping application journey!
 ```
+
 ## 安装 Kubectl KubeVela CLI 插件
 
 安装 Kubectl KubeVela CLI 插件，可以更好的进行应用交付操作。
@@ -68,10 +72,13 @@ values={[
 
 1. [先安装](https://krew.sigs.k8s.io/docs/user-guide/setup/install/) Krew。
 2. 查看 Krew 上可用的插件:
+
 ```shell
 kubectl krew update
 ```
+
 3. 安装 Kubectl KubeVela CLI 插件:
+
 ```shell script
 kubectl krew install vela
 ```
@@ -81,6 +88,7 @@ kubectl krew install vela
 <TabItem value="script">
 
 **macOS/Linux**
+
 ```shell script
 curl -fsSl https://kubevela.io/script/install-kubectl-vela.sh | bash
 ```
@@ -89,7 +97,6 @@ curl -fsSl https://kubevela.io/script/install-kubectl-vela.sh | bash
 
 </TabItem>
 </Tabs>
-
 
 ## 升级
 
@@ -136,7 +143,6 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/chart
 helm upgrade --install --create-namespace --namespace vela-system  kubevela kubevela/vela-core --version <the_new_version> --wait
 ```
 
-
 ## 启用多集群管理
 
 KubeVela 提供了跨集群编排应用的能力。上文的安装命令已经启用了该功能，如果你是从旧版本 KubeVela 升级上来，或是在安装时没有选用多集群管理的能力，你可以运行以下命令启用该能力
@@ -146,24 +152,25 @@ helm upgrade --install kubevela kubevela/vela-core -n vela-system --set multiclu
 ```
 
 你可以运行以下命令来检查多集群功能是否正常启用。
+
 ```shell
 > kubectl get APIService v1alpha1.cluster.core.oam.dev
 NAME                            SERVICE                                        AVAILABLE   AGE
 v1alpha1.cluster.core.oam.dev   vela-system/kubevela-cluster-gateway-service   True        7h40m
 ```
 
-
 ## 插件列表
 
-| 插件                  | 简介                                              | 对应的内置功能        | 插件对应开源项目                                        |
-|---------------------|-------------------------------------------------|----------------|-------------------------------------------------|
-| terraform           | 提供云资源                                    | -              | https://github.com/oam-dev/terraform-controller |
-| fluxcd              | 提供 Helm、Kustomize 组件的部署功能                       | kustomize、helm | https://fluxcd.io/                              |
-| ocm-cluster-manager | 提供多集群功能的系统插件                                    | -              | http://open-cluster-management.io/              |
-| velaux              | 提供一个KubeVela的一个可视化管理界面  |-                 |-         |
-| terraform-alibaba   | 阿里云 Terraform Controller |-                     |-          |
-| terraform-azure     | Azure 的 Terraform Controller  |-                             |-                           |
-| terraform-aws       | AWS   的 Terraform Controller   |-                             |-                           |
+| 插件                | 简介                                   | 对应的内置功能  | 插件对应开源项目                                |
+| ------------------- | -------------------------------------- | --------------- | ----------------------------------------------- |
+| terraform           | 提供云资源                             | -               | https://github.com/oam-dev/terraform-controller |
+| fluxcd              | 提供 Helm、Kustomize 组件的部署功能    | kustomize、helm | https://fluxcd.io/                              |
+| ocm-cluster-manager | 提供多集群功能的系统插件               | -               | http://open-cluster-management.io/              |
+| velaux              | 提供一个 KubeVela 的一个可视化管理界面 | -               | -                                               |
+| terraform-alibaba   | 阿里云 Terraform Controller            | -               | -                                               |
+| terraform-azure     | Azure 的 Terraform Controller          | -               | -                                               |
+| terraform-aws       | AWS 的 Terraform Controller            | -               | -                                               |
+
 1. 查看可用的插件
 
 ```shell
@@ -183,7 +190,6 @@ vela addon disable fluxcd
 ```
 
 禁用前请先清理使用插件功能的应用，否则将禁用失败。
-
 
 ## 卸载
 
@@ -223,5 +229,5 @@ rm -r ~/.vela
   traitdefinitions.core.oam.dev \
   workflows.core.oam.dev \
   workflowstepdefinitions.core.oam.dev \
-  workloaddefinitions.core.oam.dev 
+  workloaddefinitions.core.oam.dev
 ```
