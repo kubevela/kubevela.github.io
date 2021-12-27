@@ -4,7 +4,7 @@ title:  交付第一个应用
 
 欢迎来到 KubeVela! 在本小节中，我们会向你介绍一些例子来帮助你理解如何使用 KubeVela 解决应用交付中的实际问题。
 
-在实践之前，请确保您已经按照 [快速安装](./install.mdx) 文档，在您的控制平面集群中安装了 KubeVela。
+在实践之前，请确保你已经按照 [快速安装](./install.mdx) 文档，在你的控制平面集群中安装了 KubeVela。
 
 ## 一个最简单的示例
 
@@ -243,7 +243,7 @@ spec:
 
 ## 下一步
 
-上述所有功能，只是 KubeVela 这个现代化的云原生应用交付与管理平台的冰山一角。您可以从下面步骤来开始更好的了解 KubeVela:
+上述所有功能，只是 KubeVela 这个现代化的云原生应用交付与管理平台的冰山一角。你可以从下面步骤来开始更好的了解 KubeVela:
 
 - 查看 KubeVela 的[`应用交付模型`](./core-concepts/application)，进一步理解其是如何工作的。
 - 学习 KubeVela 的[`系统架构`](./core-concepts/architecture)，深入了解 KubeVela 本身的设计与架构原理。

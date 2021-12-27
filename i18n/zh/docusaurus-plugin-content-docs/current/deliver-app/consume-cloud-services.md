@@ -23,7 +23,7 @@ description: 本文介绍通过KubeVela 交付云厂商提供的服务，并能�
 
 开启成功后，让我们回到左侧第一个 `Application` 第一个选项卡，点击右上角的 `New Application` 开始创建应用：
 
-![dashboard](../resources/dashboard.png)
+![dashboard](../resources/dashboard.jpg)
 
 然后选择你需要的 Name 和 Project 后，新建一个 `Type` 是 alibaba-oss 的应用。同时你可以看到，**可供选择使用的云资源类型已经包括了 ACK、RDS、Redis、SLS 等等**：
 
