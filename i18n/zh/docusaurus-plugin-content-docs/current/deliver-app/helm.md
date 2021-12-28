@@ -55,6 +55,6 @@ description: 本文介绍通过 KubeVela 交付 Helm Chart
 
 到此，你已经掌握了 Helm 应用的交付能力，快去交付更多的 Helm 应用吧。
 
-<!-- ## 下一步
+## 下一步
 
-- [学习云服务应用的交付](./consume-cloud-services) TODO v1.2 -->
+- [学习直接部署 Kubernetes 原生资源](./k8s-object)
