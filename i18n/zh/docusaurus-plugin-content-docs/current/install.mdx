@@ -279,7 +279,7 @@ kubectl get service velaux -n vela-system -o jsonpath="{.spec.ports[0].nodePort}
 vela addon enable velaux serviceType=NodePort repo=acr.kubevela.net
 ```
 
-`serviceType` 配置 velaux 服务的访问方式，如果您使用云服务集群，请配置为 `serviceType=LoadBalancer`，启用完成后通过以下方式获取访问地址:
+`serviceType` 配置 velaux 服务的访问方式，如果你使用云服务集群，请配置为 `serviceType=LoadBalancer`，启用完成后通过以下方式获取访问地址:
 
 ```shell script
 vela addon enable velaux serviceType=LoadBalancer repo=acr.kubevela.net
@@ -287,7 +287,7 @@ vela addon enable velaux serviceType=LoadBalancer repo=acr.kubevela.net
 kubectl get service velaux -n vela-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}"
 ```
 
-如果您的集群中已经安装了 Nginx Ingress Controller，而且你具有可用的域名，你可以这样部署 VelaUX(请使用真实域名替换 example.doamin.com):
+如果你的集群中已经安装了 Nginx Ingress Controller，而且你具有可用的域名，你可以这样部署 VelaUX(请使用真实域名替换 example.doamin.com):
 
 ```shell script
 vela addon enable velaux repo=acr.kubevela.net domain=example.doamin.com

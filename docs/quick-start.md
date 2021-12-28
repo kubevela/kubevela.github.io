@@ -2,7 +2,7 @@
 title: Deploy First Application
 ---
 
-> Before starting, please confirm that you've installed KubeVela Core and VelaUX in the control plane cluster based on [Install from Kubernetes cluster](./install.mdx)
+> Before starting, please confirm that you've installed KubeVela Core and VelaUX in the control plane cluster based on [Installation](./install.mdx)
 >
 > If you want to use KubeVela CLI for application delivery, please check [Deliver First Application](./end-user/quick-start-cli) in the Vela CLI manual.
 
@@ -11,28 +11,28 @@ Welcome to KubeVela! In this section, we show you how to deliver your first app 
 Follow these steps:
 
 1. Prepare a Docker image. we use [crccheck/hello-world](https://hub.docker.com/r/crccheck/hello-world) for this time. Double-check if you're able to download it properly.
-2. Create the first `Application`.
+2. Create the first `Application` of `webervice` which is the common way to deploy stateless service.
 3. Check out the status of the Application's instance.
 
 You'll get to know:
 
-- Get familiar with core concepts as [Application](./getting-started/core-concept#application), [Cluster](getting-started/core-concept#cluster), [Target](getting-started/core-concept#target) and [Project](getting-started/core-concept#project)
+- Get familiar with core concepts as [Application](./getting-started/core-concept#application), [Environment](getting-started/core-concept#environment), [Target](getting-started/core-concept#target) and [Project](getting-started/core-concept#project)
 - Finished an application delivery by operating VelaUX
 
 ## Choosing deployment type and Environment
 
 After VelaUX is installed, the first page you enter is for managing the app:
 
-![](./resources/dashboard.png)
+![](./resources/dashboard.jpg)
 
 Then click the button of `New Application` on the upper-right, type in these things:
 
-- Name and other basic Infos
-- Choose the Project. We've created a default Project for you to use or you can click `New` to create your own
-- Choose the deployment type. In this case, we use `webservice` to deploy Stateless Application
-- Choose your environment. We select `local` Target for dev Environment
+1. Name and other basic Infos.
+2. Choose the Project. We've created a default Project for you to use or you can click `New` to create your own.
+3. Choose the deployment type. In this case, we use `webservice` to deploy Stateless Application.
+4. Choose your environment. We select the `Default` Environment based on the `Default` Target.
 
-![](./resources/new-first-vela-app.png)
+![](./resources/new-first-vela-app.jpg)
 
 ## Setting up properties
 
@@ -46,7 +46,7 @@ Next step, we see the page of properties. Configure following:
 
 Confirmed. Notice that this application is only created but not deployed yet. VelaUX defaultly generates [Workflow](./getting-started/core-concept#workflow) and replicas of [Trait](./getting-started/core-concept#trait).
 
-![](./resources/created-first-vela-app.png)
+![](./resources/created-first-vela-app.jpg)
 
 ## Executing Workflow to deploy
 
