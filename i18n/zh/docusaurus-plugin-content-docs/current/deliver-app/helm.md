@@ -5,7 +5,7 @@ description: 本文介绍通过 KubeVela 交付 Helm Chart
 
 本文介绍了如何通过 KubeVela 交付 Helm Chart 包交付到多个目标环境和集群。
 
-通过 Helm Chart 包交付应用主要的应用场景是交付开源中间件应用，比如 [bitnami](https://github.com/bitnami/charts) 中包括了常用的生产可用中间件；交付开源工具应用，比如 Gitlab、Jenkins 等等，这些应用在 [Helm 官方仓库](https://hub.helm.sh/) 中可以获取到。KubeVela 可以帮助您将这些应用便捷地部署到管理的任何集群，并管理他们。
+通过 Helm Chart 包交付应用主要的应用场景是交付开源中间件应用，比如 [bitnami](https://github.com/bitnami/charts) 中包括了常用的生产可用中间件；交付开源工具应用，比如 Gitlab、Jenkins 等等，这些应用在 [Helm 官方仓库](https://hub.helm.sh/) 中可以获取到。KubeVela 可以帮助你将这些应用便捷地部署到管理的任何集群，并管理他们。
 
 通过本文，你将学习使用 KubeVela 插件体系安装扩展插件。Helm Chart 包的交付能力目前由 FluxCD 插件支撑，FluxCD 插件除了带来 Helm 类型的应用交付能力以外还带来了 Kustomize 的交付能力。
 
@@ -34,7 +34,7 @@ description: 本文介绍通过 KubeVela 交付 Helm Chart
 
 ## 通过 Chart 创建 Redis 应用
 
-相信你通过之前的文章，已经掌握了应用的创建能力。我们需要使用 Chart 创建 Redis 应用，只需要选择应用部署类型为 `helm`，然后选择您准备好的具有默认 StorageClass 可以提供 PV 的集群 Target，然后进入部署参数配置页面。
+相信你通过之前的文章，已经掌握了应用的创建能力。我们需要使用 Chart 创建 Redis 应用，只需要选择应用部署类型为 `helm`，然后选择你准备好的具有默认 StorageClass 可以提供 PV 的集群 Target，然后进入部署参数配置页面。
 
 ![helm app config](../resources/helm-app-config.jpg)
 

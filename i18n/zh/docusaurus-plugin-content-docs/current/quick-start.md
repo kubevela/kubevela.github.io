@@ -2,7 +2,7 @@
 title: 交付第一个应用
 ---
 
-> 在实践之前，请确保你已经按照 [从 Kubernetes 集群安装](./install.mdx) 文档，在你的控制平面集群中安装了 KubeVela Core 和 VelaUX。
+> 在实践之前，请确保你已经按照 [快速安装](./install.mdx) 文档，在你的控制平面集群中安装了 KubeVela Core 和 VelaUX。
 >
 > 如果你希望通过使用 KubeVela CLI 来进行应用交付，请查看 Vela CLI 手册的 [交付第一个应用](./end-user/quick-start-cli)。
 
@@ -10,30 +10,30 @@ title: 交付第一个应用
 
 你将会操作的步骤有：
 
-1. 准备一个服务镜像，本例中我们将使用： [crccheck/hello-world](https://hub.docker.com/r/crccheck/hello-world)，请确保您的环境可以正常下载该镜像；
+1. 准备一个服务镜像，本例中我们将使用： [crccheck/hello-world](https://hub.docker.com/r/crccheck/hello-world)，请确保你的环境可以正常下载该镜像；
 2. 基于服务镜像创建第一个 `webservice` 类型的 `Application`，这是无状态服务最简化的交付方式；
 3. 查看应用实例运行状态；
 
 你将学习到内容的有：
 
-- 初步接触 [Application](./getting-started/core-concept#应用（application）)、[Cluster](getting-started/core-concept#集群（cluster）)、[Target](getting-started/core-concept#交付目标（target）) 和 [Project](getting-started/core-concept#项目（project）) 等核心概念。
+- 初步接触 [应用(Application)](./getting-started/core-concept#应用（application）)、[环境(Environment)](getting-started/core-concept#环境（Environment））)、[交付目标(Target)](getting-started/core-concept#交付目标（target）) 和 [项目(Project)](getting-started/core-concept#项目（project）) 等核心概念。
 
 - 通过操作 VelaUX 完整交付一个应用。
 
 ## 选择应用的部署类型/规划应用部署环境
 
-VelaUX 正常安装后，您进入的第一个页面即应用交付管理页面。
+VelaUX 正常安装后，你进入的第一个页面即应用交付管理页面。
 
-![](./resources/dashboard.png)
+![](./resources/dashboard.jpg)
 
 然后点击右上角的 `New Application` 按钮开始创建应用，按照 UI 提示填写以下四个维度的信息：
 
 - 应用的名称等基础信息；
-- 选择所属的项目，我们已为你自动生成了默认项目，您也可以点击 `New` 进行创建；
+- 选择所属的项目，我们已为你自动生成了默认项目，你也可以点击 `New` 进行创建；
 - 选择应用的部署类型，本例中我们选择 `webservice` 类型，部署无状态服务，请注意，企业大多数业务应用都可以直接使用该类型进行部署。
-- 规划应用交付的环境，本例中我们为开发环境选择 `Default` 交付目标；
+- 规划应用交付的环境，我们选择基于默认 `Default` 交付目标创建的默认 `Default` 环境；
 
-![](./resources/new-first-vela-app.png)
+![](./resources/new-first-vela-app.jpg)
 
 ## 设置应用的部署参数
 
@@ -47,7 +47,7 @@ VelaUX 正常安装后，您进入的第一个页面即应用交付管理页面�
 
 确认创建后即可进入应用管理页面，这时应用还没有开始进行部署，VelaUX 默认生成了开发环境的交付 [工作流](./getting-started/core-concept#工作流（workflow）) 和调整应用副本数量的 [运维特征](./getting-started/core-concept#运维特征（trait）)。
 
-![](./resources/created-first-vela-app.png)
+![](./resources/created-first-vela-app.jpg)
 
 ## 执行环境的部署
 
