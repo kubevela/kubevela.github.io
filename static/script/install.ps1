@@ -12,6 +12,7 @@ $ErrorActionPreference = 'stop'
 $VelaRoot = $VelaRoot -replace ' ', '` '
 
 # Constants
+$VelaCliBuildName = "vela"
 $VelaCliFileName = "vela.exe"
 $VelaCliFilePath = "${VelaRoot}\${VelaCliFileName}"
 
@@ -88,7 +89,7 @@ if (!(Test-Path $zipFilePath -PathType Leaf)) {
 # Extract KubeVela CLI to $VelaRoot
 Write-Output "Extracting $zipFilePath..."
 Microsoft.Powershell.Archive\Expand-Archive -Force -Path $zipFilePath -DestinationPath $VelaRoot
-$ExtractedVelaCliFilePath = "${VelaRoot}\${os_arch}\${VelaCliFileName}"
+$ExtractedVelaCliFilePath = "${VelaRoot}\${os_arch}\${VelaCliBuildName}"
 Copy-Item $ExtractedVelaCliFilePath -Destination $VelaCliFilePath
 if (!(Test-Path $VelaCliFilePath -PathType Leaf)) {
     throw "Failed to extract Vela Cli archive - $zipFilePath"
