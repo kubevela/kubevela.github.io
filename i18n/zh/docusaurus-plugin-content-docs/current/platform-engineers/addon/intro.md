@@ -86,7 +86,7 @@ invisible: false
 
 该文件中除了 name，version，tag 等基础信息外。还包括以下能够控制插件行为的字段：
 
-- `deployTo.runtime_cluster`: 表示插件是否安装到子集群当中，当该字段被设置为 `true`，应用中的资源会被下发到子集群当中。
+- `deployTo.runtimeCluster`: 表示插件是否安装到子集群当中，当该字段被设置为 `true`，应用中的资源会被下发到子集群当中。
 - `dependencies`: 表示所依赖的其他插件，启用时 KubeVela 会自动启用它所依赖的插件。
 - `invisible`: 表示在拉取插件列表时，是否展示该插件。当发现插件有某些致命性的bug时，你可以通过设置该字段为 `true` 暂时对用户隐藏该插件。
 
