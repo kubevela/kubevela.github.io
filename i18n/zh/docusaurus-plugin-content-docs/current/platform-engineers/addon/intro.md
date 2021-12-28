@@ -9,13 +9,13 @@ title: 插件管理系统
 
 插件仓库是一个存储、发现和下载插件的地方。 插件仓库的地址可以是一个 Git 仓库或者一个对象存储 Bucket。
 
-KubeVela 社区在 Github 上维护了一个官方的 [插件仓库](https://github.com/oam-dev/catalog/tree/master/addons) 和 一个[试验阶段插件仓库](https://github.com/oam-dev/catalog/tree/master/experimental) 。
+KubeVela 社区在 Github 上维护了一个官方的[正式插件仓库](https://github.com/oam-dev/catalog/tree/master/addons) 和一个[试验阶段插件仓库](https://github.com/oam-dev/catalog/tree/master/experimental) 。
 
 你也可以参考这两个仓库，自己定制一个插件仓库， 之后通过 UX/CLI 来将它添加到你的系统。下图展示如何通过 UX 来添加一个插件仓库：
 
 ![alt](../../resources/addon-registry.jpg)
 
-需要注意的是，KubeVela 默认没有添加试验性的插件仓库，但你可以通过点击 `Add Experimental Registry` 一键添加进来，并使用其中的插件。
+需要注意的是，KubeVela 默认没有添加试验性的插件仓库，但你可以通过点击 `Add Experimental Registry` 一键将它添加进来，并使用其中的插件。
 
 ## 启用/停用插件 (Enable/Disable Addon)
 
@@ -59,11 +59,11 @@ KubeVela 社区在 Github 上维护了一个官方的 [插件仓库](https://git
 └── template.yaml
 ```
 
-接下来将介绍目录下的每个资源文件和子目录的详细作用。
+接下来将介绍该目录下的每个资源文件和子目录的详细作用。
 
 ### 元数据 (metadata.yaml) 文件 (必须)
 
-首先你需要编写一个插件的元数据文件(metadata.yaml)，该文件描述了插件的名称、描述等基本描述信息。只有包含这个文件，一个目录才会被 UX/CLI 识别为一个插件的资源目录, 一个元数据文件的例子如下所示。
+首先你需要编写一个插件的元数据文件 (metadata.yaml) ，该文件描述了插件的名称、描述等基本描述信息。只有包含这个文件，一个仓库下的目录才会被 UX/CLI 识别为一个插件的资源目录, 一个元数据文件的例子如下所示。
 
 ```yaml
 name: example
@@ -92,8 +92,8 @@ invisible: false
 
 ### 应用模版 (template.yaml) 文件 (必须)
 
-接下来你还需要编写一个插件的应用模版文件(template.yaml)，因为通过上面的介绍，插件目录下面的文件最终会被渲染为一个 KubeVela 的应用，那么你就可以通过该文件描述这个应用的基本信息，比如你可以为应用打上特定的标签或注解， 当然你也可以直接在该应用模版文件中添加组件和工作流步骤。
-需要注意的是，即使你通过设置 `metadata.name` 设置了应用的名称，这个设置也不会生效，在启用时应用会统一以 addon-{addonName} 的格式被命名。
+接下来你还需要编写一个插件的应用模版文件 (template.yaml) ，因为通过上面的介绍，我们知道插件目录下面的所有文件最终会被渲染为一个 KubeVela 应用，那么你就可以通过该文件描述这个应用的基本信息，比如你可以为应用打上特定的标签或注解， 当然你也可以直接在该应用模版文件中添加组件和工作流步骤。
+需要注意的是，即使你通过 `metadata.name` 字段设置了应用的名称，该设置也不会生效，在启用时应用会统一以 addon-{addonName} 的格式被命名。
 
 ### 自描述  (readme.md) 文件 (必须)
 
@@ -133,13 +133,13 @@ parameter: {
 
 ### 模块定义文件 (X-Definitions) 目录 (非必须)
 
-你可以在插件目录下面创建一个 definitions 文件目录，用于存放组件定义、运维特征定义和工作流节点定义等模版定义文件。需要注意的是，由于被管控集群中通常不会安装 KubeVela 控制器，所以即使插件通过设置元数据文件 (metadata.yaml) 中 `deployTo.runtimeCluster` 字段开启在子集群安装该插件，模版定义的文件也并不会在子集群中安装。
+你可以在插件目录下面创建一个 definitions 文件目录，用于存放组件定义、运维特征定义和工作流节点定义等模版定义文件。需要注意的是，由于被管控集群中通常不会安装 KubeVela 控制器，所以即使插件通过设置元数据文件 (metadata.yaml) 中 `deployTo.runtimeCluster` 字段开启在子集群安装该插件，模版定义的文件也并不会下发到子集群中。
 
 ### 模版参数展示增强文件 (UI-Schema) 目录 (非必须)
 
 schemas 目录用于存放`X-Definitions` 所对应的 UI-schema 文件，用于在 UX 中展示 `X-Definitions` 所需要填写参数时增强显示效果。
 
-上面就完整介绍了如何制作一个插件，你可以在这个[目录中](https://github.com/oam-dev/catalog/tree/master/experimental/addons/example) 找到上面所介绍插件的完整例子。
+上面就完整介绍了如何制作一个插件，你可以在这个 [目录中](https://github.com/oam-dev/catalog/tree/master/experimental/addons/example) 找到上面所介绍插件的完整例子。
 
 除了将插件资源文件上传到自己的插件仓库中，你也可以通过提交 pull request 向 KubeVela [官方插件仓库](https://github.com/oam-dev/catalog/tree/master/addons) 和 [试验阶段插件仓库](https://github.com/oam-dev/catalog/tree/master/experimental/addons) 添加新的插件，pr 合并之后你的插件就可以被其他 KubeVela 用户发现并使用了。
 
