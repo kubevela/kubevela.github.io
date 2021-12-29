@@ -15,54 +15,52 @@ KubeVela supports you to render, orchestrate and deploy Kubernetes raw resources
 
 - Prepare a Deployment+Service resource, or directly use the example as below:
 
-    <details> <summary>Check out Demo example</summary>
+<details> <summary>Check out Demo example</summary>
 
-  ```yaml
-  ---
-  apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+```yaml
+- apiVersion: apps/v1
   kind: Deployment
-  metadata:
+  metadata: null
   name: nginx
-  spec:
+  spec: null
   strategy:
-      type: Recreate
+    type: Recreate
   selector:
-      matchLabels:
+    matchLabels: null
+    app: nginx
+  replicas: 1
+  template:
+    metadata: null
+    labels:
       app: nginx
-  replicas: 1 # tells deployment to run 1 pods matching the template
-  template: # create pods using pod definition in this template
-      metadata:
-      labels:
-          app: nginx
-      spec:
-      containers:
-          - name: nginx
-          image: nginx
-          ports:
-              - containerPort: 80
-  ---
-  apiVersion: v1
+    spec: null
+    containers:
+      - name: nginx
+        image: nginx
+        ports:
+          - containerPort: 80
+- apiVersion: v1
   kind: Service
-  metadata:
+  metadata: null
   name: nginx
   namespace: default
   labels:
-      app: nginx
+    app: nginx
   annotations:
-      service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
-  spec:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+  spec: null
   externalTrafficPolicy: Local
   ports:
-      - name: http
+    - name: http
       port: 80
       protocol: TCP
       targetPort: 80
   selector:
-      app: nginx
+    app: nginx
   type: LoadBalancer
-  ```
+```
 
-  </details>
+</details>
 
 <!-- - For setting up two and more runtime clusters, check out: [Manage Runtime Cluster](./manage-cluster) TODO v1.2-->
 
@@ -70,9 +68,7 @@ KubeVela supports you to render, orchestrate and deploy Kubernetes raw resources
 
 [Target](../getting-started/core-concept#target) defines the namespace in runtime cluster for application delivery. Once Target created, namespace in runtime cluster created accordingly.
 
-Target must belong to one Project. When there're many Projects to manage, it's very critical that you place Target in an organized manner.
-
-Clicking `New Target` into the creating process. Type in necessary Infos as Project, Cluster, Namespace to create. We create targets in one project for different clusters. Or you can create targets by using the several namespaces of one cluster. For now, we at least give it to 3 Targets: 1 for test and 2 for prod environments.
+Clicking `New Target` into the creating process. Type in necessary Infos as Project, Cluster, Namespace to create. We create targets for 2 clusters. We create targets for 2 clusters. If you only have 1 cluster you can also use its namespaces to create several targets. For now, we at least give it to 3 Targets: 1 for test and 2 for prod environments.
 
 ## Creating Kubernetes application
 

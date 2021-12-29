@@ -44,7 +44,7 @@ As shown, you need to do the following configuration:
 - Chart Path: Chart package path, here we fill in: redis
 - Values: Custom parameters of Chart. Since we are using ACK cluster in the example, PV has a minimum capacity requirement, 15Gi. In the same way, other parameters can also be configured according to your cluster's status.
 
-After filling in the above parameters, click `Create` to complete the application creation and enter the application configuration page.
+After filling in the above parameters, click `Create` to complete the application creation and enter the application configuration page. The following steps will stay the same as you've learned in [Deploy First Application](../quick-start).
 
 ## Modify deployment parameters
 
