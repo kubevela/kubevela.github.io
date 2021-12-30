@@ -7,7 +7,7 @@ import TabItem from "@theme/TabItem";
 
 > 如果是要升级现有的 KubeVela，请直接阅读[升级指南](./platform-engineers/advanced-install#升级).
 
-> 1.2.0-rc.1 版本已发布，欢迎试用。[去安装](/zh/docs/next/install)
+> 1.2.0-rc.2 版本已发布，欢迎试用。[去安装](/zh/docs/next/install)
 
 ## 1. 选择放置控制平面的集群
 
@@ -50,11 +50,13 @@ minikube addons enable ingress
 <TabItem value="rke">
 
 {" "}
+
 <b>（1）安装 Docker (可选):</b>
 
 RKE 的安装依赖于 Docker, 如未安装，请参考 [Docker 安装指南](https://docs.docker.com/engine/install/).
 
 {" "}
+
 <b>（2）安装 RKE 命令行:</b>
 
 下载 RKE 二进制文件， [前往 RKE Release 页面](https://github.com/rancher/rke/releases).
@@ -67,6 +69,7 @@ chmod +x /usr/bin/rke
 ```
 
 {" "}
+
 <b>（3）安装 Kubernetes 集群:</b>
 
 ```shell script
