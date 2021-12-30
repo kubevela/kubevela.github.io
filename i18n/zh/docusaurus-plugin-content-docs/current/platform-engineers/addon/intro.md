@@ -3,27 +3,25 @@ title: 插件管理系统
 ---
 
 插件管理系统用于管理和扩展 KubeVela 的平台功能。
-用户可以通过 UI/CLI 交互界面来启用或停用插件，从而安装或卸载 KubeVela 平台的扩展功能。
-插件通过插件注册中心来存储、发现、分发等。
+用户可以通过 UX/CLI 来启用或停用插件，从而安装或卸载 KubeVela 平台的扩展功能。
 
-KubeVela 社区在 Github 上维护了一个官方的 [插件注册中心](https://github.com/oam-dev/catalog/tree/master/addons) ，里面有一些官方维护的插件。
-此外，用户还可以自行定制和添加插件注册中心。
+## 插件仓库 (Addon Registry)
 
-## 插件注册中心 (Addon Registry)
+插件仓库是一个存储、发现和下载插件的地方。 插件仓库的地址可以是一个 Git 仓库或者一个对象存储 Bucket。
 
-插件注册中心是一个上传和存储、发现和下载插件的地方。
-插件注册中心的地址可以是一个 Git 仓库或者一个对象存储 Bucket。
-一个插件注册中心的模样可以参考这个 [官方例子](https://github.com/oam-dev/catalog/tree/master/addons) 。
+KubeVela 社区在 Github 上维护了一个官方的[正式插件仓库](https://github.com/oam-dev/catalog/tree/master/addons) 和一个[试验阶段插件仓库](https://github.com/oam-dev/catalog/tree/master/experimental) 。
 
-你可以通过 UI/CLI 来管理插件注册中心。下图展示如何通过 UI 来添加一个注册中心：
+你也可以参考这两个仓库，自己定制一个插件仓库， 之后通过 UX/CLI 来将它添加到你的系统。下图展示如何通过 UX 来添加一个插件仓库：
 
 ![alt](../../resources/addon-registry.jpg)
 
+需要注意的是，KubeVela 默认没有添加试验性的插件仓库，但你可以通过点击 `Add Experimental Registry` 一键将它添加进来，并使用其中的插件。
+
 ## 启用/停用插件 (Enable/Disable Addon)
 
-你可以通过 UI/CLI 获取插件注册中心的插件列表，并启用/停用某个插件。
+你可以通过 UX/CLI 获取到当前插件仓库中的所有插件，并启用/停用某个插件。
 
-下面例子是一个插件在 UI 上的展示图：
+下面例子是一个插件列表在 UX 上的展示图：
 
 ![alt](../../resources/addon.jpg)
 
@@ -35,37 +33,126 @@ KubeVela 社区在 Github 上维护了一个官方的 [插件注册中心](https
 
 ![alt](../../resources/addon-parameter.jpg)
 
-除了使用 KubeVela 维护的官方插件，你也可以按照下面的规范制作并添加一个插件到注册中心中。
+## 插件原理 (Addon Mechanism)
 
-## 插件规范 (Addon Format)
+下图展示了在启用一个插件时，KubeVela 做了哪些事情。可以看到插件仓库中所存放的其实是插件的资源文件，当通过 UX/CLI 启用一个插件时，它们会从插件仓库把这些资源文件拉取下来，渲染成一个 KubeVela 应用并创建。最终由运行在管控集群的 KubeVela 控制器完成对应用中所描述资源的下发。
 
-一个插件需要包括自描述文件、 基础的应用模版、组件资源、以及X-Definitions。 插件具体内容可以参考这个 [官方例子](https://github.com/oam-dev/catalog/tree/master/experimental/addons/example) 。
+![alt](../../resources/addon-mechanism.jpg)
 
-当启用一个 KubeVela 插件时，KubeVela 的 CLI / ApiServer 会负责将插件目录下的各个资源文件渲染成一个 KubeVela 应用并创建，最终由控制器完成资源下发。
+## 制作插件 (Make an Addon)
 
-一个插件目录下通常包含以下文件：
+接下来将介绍如何制作一个自己的插件。
 
-- `metadata.yaml` (必须): 包含了插件的自描述元信息。该文件中定义了该插件的名称、版本、描述、标签等基础信息，此外你可以通过设置以下字段来控制插件的安装行为：
-    - `deployTo`: 表示插件是安装在控制平面还是子集群。
-    - `dependencies`: 表示插件所依赖的其他插件，只有当所有依赖的插件均启用了，才能启用该插件。
-    - `invisible`: 表示在拉取插件列表时，是否展示该插件。需要注意的是，当某个插件通过 `dependencies` 字段依赖了另一 `invisible` 字段为 true 的插件，启用插件时会自动启用其他所依赖插件。
-    
-- `template.yaml` (必须): 定义 KubeVela 应用模板，在启用插件时 KubeVela 会基于该模版渲染一个基础的 KubeVela 应用，你也可以在模版中增加更多的组件和工作流步骤。
-  
-- `resources/` (非必须): 该路径下的文件可以有 YAML 和 CUE 两种文件类型。
-  
-   - YAML 类型类型的文件是包含一个或多个 Kubernetes 对象的资源清单，这些对象在启用插件时会被渲染为 `k8s-object` 类型的组件并追加到上面提到的基础应用模版的组件列表当中。具体参考该[文件](https://github.com/oam-dev/catalog/tree/master/experimental/addons/example/resources/service) 。
-   - CUE 类型的文件包含的是一个组件模版，在启用该插件时，该模版会从下面即将介绍的 `parameter.cue` 文件中读取启用参数，渲染出来一个组件定义追加到基础应用模版的组件列表当中。具体参考该[文件](https://github.com/oam-dev/catalog/blob/master/experimental/addons/example/resources/configmap.cue) 。
+首先你需要在插件仓库中，添加一个用于存放插件资源文件的目录。通常这个目录结构如下所示。
 
-- `parameter.cue` (非必须) : 定义插件的启用参数，具体参考该[文件](https://github.com/oam-dev/catalog/blob/master/experimental/addons/example/resources/parameter.cue) 。
-- `definitions/` (非必须): 包含 `X-Definitions` (组件/运维特征/工作流步骤定义) YAML 文件。需要注意的是，即使插件开启了子集群安装，`definitions/`中的资源也不会在子集群中创建。
-- `schemas/` (非必须) :  包含 `X-Definitions` 所对应的 UI-schema 文件，用于在 UI 中展示 `X-Definitions` 所需要填写参数时增强显示效果`
+```shell
+├── resources/
+│   ├── xxx.cue
+│   ├── xxx.yaml
+│   └── parameter.cue
+├── definitions/
+├── schemas/
+├── definitions/
+├── schemas/
+├── README.md
+├── metadata.yaml
+└── template.yaml
+```
 
+接下来将介绍该目录下的每个资源文件和子目录的详细作用。
+
+### 元数据 (metadata.yaml) 文件 (必须)
+
+首先你需要编写一个插件的元数据文件 (metadata.yaml) ，该文件描述了插件的名称、描述等基本描述信息。只有包含这个文件，一个仓库下的目录才会被 UX/CLI 识别为一个插件的资源目录, 一个元数据文件的例子如下所示。
+
+```yaml
+name: example
+version: 1.0.0
+description: Example adddon.
+icon: xxx
+url: xxx
+
+tags:
+  - only_example
+
+deployTo:
+  runtimeCluster: false
+
+dependencies: []
+- name: addon_name
+
+invisible: false
+```
+
+该文件中除了 name，version，tag 等基础信息外。还包括以下能够控制插件行为的字段：
+
+- `deployTo.runtimeCluster`: 表示插件是否安装到子集群当中，当该字段被设置为 `true`，应用中的资源会被下发到子集群当中。
+- `dependencies`: 表示所依赖的其他插件，启用时 KubeVela 会自动启用它所依赖的插件。
+- `invisible`: 表示在拉取插件列表时，是否展示该插件。当发现插件有某些致命性的bug时，你可以通过设置该字段为 `true` 暂时对用户隐藏该插件。
+
+### 应用模版 (template.yaml) 文件 (必须)
+
+接下来你还需要编写一个插件的应用模版文件 (template.yaml) ，因为通过上面的介绍，我们知道插件目录下面的所有文件最终会被渲染为一个 KubeVela 应用，那么你就可以通过该文件描述这个应用的基本信息，比如你可以为应用打上特定的标签或注解， 当然你也可以直接在该应用模版文件中添加组件和工作流步骤。
+需要注意的是，即使你通过 `metadata.name` 字段设置了应用的名称，该设置也不会生效，在启用时应用会统一以 addon-{addonName} 的格式被命名。
+
+### 自描述  (README.md) 文件 (必须)
+
+插件的自描述文件用于描述插件的主要功能，并且该文件会在 UX 的插件详情页面呈现给用户。
+
+### 组件资源 (resources) 目录 (非必须)
+
+除了直接在模版文件中添加组件，你也可以在插件目录下创建一个 `resources` 目录，并在里面添加 YAML/CUE 类型的文件，这些文件最终会被渲染成组件并添加到应用当中。
+其中，YAML 类型的文件中应该包含的是一个 K8S 资源对象，在渲染时该对象会被做为 K8s-object 类型的组件直接添加到应用当中。 
+
+如果你需要为应用添加一个需要在启用时根据参数动态渲染的组件，你就可以编写一个 CUE 格式的文件，如下所示。
+
+```cue
+output: {
+	type: "k8s-obeject"
+	properties: {
+		apiVersion: "v1"
+		kind:       "ConfigMap"
+		metadata: {
+			name:      "exampleinput"
+			namespace: "default"
+		}
+		data: input: parameter.example
+	}
+}
+```
+
+你还需要编写一个 `parameter.cue` 的文件描述有哪些启用参数，如下所示。
+
+```cue
+parameter: {
+  example: string
+}
+```
+
+你如果了解 [模版定义](../oam/x-definition) 中 CUE 模版的写法的话，应该会对这种写法感到非常熟悉，它们之间的区别是模版定义的 `output` 是一个具体的 K8S 对象，而这里的 `output` 定义的其实是一个应用中的具体组件。
+
+可以看到上面例子中的 `output` 中描述了一个 `k8s-object` 类型的组件，其中 `properties.data.input` 需要在启用时根据输入参数指定。插件在启用时的参数都需要以 CUE 的语法编写在 `parameter.cue` 文件当中。 UX/CLI 在启用插件时会把全部的 CUE 文件和 `parameter.cue` 放在一个上下文中进行渲染，最终得到一系列的组件并添加到应用当中。
+
+你也可以通过 [CUE 基础入门文档](../cue/basic) 了解 CUE 的具体语法。 
+
+### 模块定义文件 (X-Definitions) 目录 (非必须)
+
+你可以在插件目录下面创建一个 definitions 文件目录，用于存放组件定义、运维特征定义和工作流节点定义等模版定义文件。需要注意的是，由于被管控集群中通常不会安装 KubeVela 控制器，所以即使插件通过设置元数据文件 (metadata.yaml) 中 `deployTo.runtimeCluster` 字段开启在子集群安装该插件，模版定义的文件也并不会下发到子集群中。
+
+### 模版参数展示增强文件 (UI-Schema) 目录 (非必须)
+
+schemas 目录用于存放`X-Definitions` 所对应的 UI-schema 文件，用于在 UX 中展示 `X-Definitions` 所需要填写参数时增强显示效果。
+
+上面就完整介绍了如何制作一个插件，你可以在这个 [目录中](https://github.com/oam-dev/catalog/tree/master/experimental/addons/example) 找到上面所介绍插件的完整例子。
+
+除了将插件资源文件上传到自己的插件仓库中，你也可以通过提交 pull request 向 KubeVela [官方插件仓库](https://github.com/oam-dev/catalog/tree/master/addons) 和 [试验阶段插件仓库](https://github.com/oam-dev/catalog/tree/master/experimental/addons) 添加新的插件，pr 合并之后你的插件就可以被其他 KubeVela 用户发现并使用了。
 
 ## 已知局限 (Known Limits)
 
 - 现在如果选择在集群中启用插件，KubeVela 会默认在所有子集群中安装，并且启用插件时所填的参数，会在所有集群中生效，之后计划完善多集群插件管理体系，包括支持集群差异化配置等特性。
 
 - 尚缺少插件的版本管理，升降级等机制，之后计划完善这些特性。
+
+- 尚缺少方便的本地插件调试手段，后续计划在 CLI 侧提供完善的插件本地调试的功能。
 
 - 尚不支持仅在子集群中安装插件。 如果不在控制平面安装插件，仅安装在子集群中，会遇到诸多已知问题。
