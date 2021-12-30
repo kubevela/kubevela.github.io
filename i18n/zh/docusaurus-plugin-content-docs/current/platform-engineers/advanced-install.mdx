@@ -26,7 +26,7 @@ helm install --create-namespace -n vela-system --set admissionWebhooks.certManag
 
 ## 安装预发布版
 
-在使用 `helm search` 命令时，添加标记参数 `--devel` 即可搜索出预发布版。预发布版的版本号格式为 `<next_version>-beta.<version>`，例如 `1.2.0-rc.1`，代表的是 `<next_version>` 版本的试验版本。
+在使用 `helm search` 命令时，添加标记参数 `--devel` 即可搜索出预发布版。预发布版的版本号格式为 `<next_version>-beta.<version>`，例如 `1.2.0-rc.2`，代表的是 `<next_version>` 版本的试验版本。
 
 ```shell script
 helm search repo kubevela/vela-core -l --devel
