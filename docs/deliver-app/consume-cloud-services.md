@@ -1,3 +1,3 @@
 ---
-title: Provision and Binding
+title: Deploy cloud service
 ---
