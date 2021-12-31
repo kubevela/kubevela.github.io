@@ -1,9 +1,9 @@
 ---
-title: 交付业务应用
+title: 交付 Docker 镜像
 description: 参考本文章，学习使用 Docker 镜像部署企业业务应用，大多数企业业务应用都可作为无状态应用交付。
 ---
 
-本文介绍企业基于 KubeVela 交付业务应用的操作方式，通过该方式交付应用无需你学习过多的 Kubernetes 领域知识。
+本文介绍企业基于 KubeVela 通过 Docker 镜像交付业务应用的操作方式，通过该方式交付应用无需你学习过多的 Kubernetes 领域知识。
 
 ## 开始之前
 
