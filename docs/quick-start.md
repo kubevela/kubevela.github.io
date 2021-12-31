@@ -16,7 +16,7 @@ Follow these steps:
 
 You'll get to know:
 
-- Get familiar with core concepts as [Application](./getting-started/core-concept#application), [Environment](getting-started/core-concept#environment), [Target](getting-started/core-concept#target) and [Project](getting-started/core-concept#project)
+- Get familiar with core concepts as [Application](./getting-started/core-concept#application), [Environment](getting-started/core-concept#environment) and [Target](getting-started/core-concept#target)
 - Finished an application delivery by operating VelaUX
 
 ## Choosing deployment type and Environment
@@ -28,7 +28,7 @@ After VelaUX is installed, the first page you enter is for managing the app:
 Then click the button of `New Application` on the upper-right, type in these things:
 
 1. Name and other basic Infos.
-2. Choose the Project. We've created a default Project for you to use or you can click `New` to create your own.
+<!-- 2. Choose the Project. We've created a default Project for you to use or you can click `New` to create your own. -->
 3. Choose the deployment type. In this case, we use `webservice` to deploy Stateless Application.
 4. Choose your environment. We select the `Default` Environment based on the `Default` Target.
 
