@@ -14,54 +14,7 @@ KubeVela 支持面向应用组织多个 Kubernetes 资源进行交付，常见�
 
 ## 开始之前
 
-- 准备一个 Deployment+Service 资源的定义文件，或直接使用下面的用例：
-
-<details> <summary>查看Demo用例</summary>
-
-```yaml
-- apiVersion: apps/v1
-  kind: Deployment
-  metadata: null
-  name: nginx
-  spec: null
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels: null
-    app: nginx
-  replicas: 1
-  template:
-    metadata: null
-    labels:
-      app: nginx
-    spec: null
-    containers:
-      - name: nginx
-        image: nginx
-        ports:
-          - containerPort: 80
-- apiVersion: v1
-  kind: Service
-  metadata: null
-  name: nginx
-  namespace: default
-  labels:
-    app: nginx
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: nlb
-  spec: null
-  externalTrafficPolicy: Local
-  ports:
-    - name: http
-      port: 80
-      protocol: TCP
-      targetPort: 80
-  selector:
-    app: nginx
-  type: LoadBalancer
-```
-
-</details>
+- 准备一个 Deployment+Service 资源的 Yaml 定义文件。
 
 <!-- - 准备两个或更多的运行时集群, 参考: [管理运行时集群](./manage-cluster) TODO v1.2-->
 
@@ -137,4 +90,6 @@ KubeVela 支持面向应用组织多个 Kubernetes 资源进行交付，常见�
 
 <!-- ## 参考视频 TODO v1.2 -->
 
-<!-- ## 下一步 -->
+## 下一步
+
+- [学习交付云厂商服务](./consume-cloud-services)

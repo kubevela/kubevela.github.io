@@ -24,7 +24,7 @@ module.exports = {
       label: "Continuous Delivery",
       collapsed: false,
       items: [
-        // "deliver-app/webservice",
+        "deliver-app/webservice",
         "deliver-app/helm",
         "deliver-app/k8s-object",
         // "deliver-app/consume-cloud-services",
