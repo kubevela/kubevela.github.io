@@ -1,14 +1,14 @@
-***kubevela订购aws s3中间过程演示***
+***Kubevela订购AWS s3中间过程演示***
 
 ------
 
-> 本文介绍如何通过Kubevela订购aws s3 bucket，演示kubevela在订购aws s3过程中，涉及到的kubevela application示例，以及kubevela在订购s3时，terraform-controller处理configuration的中间状态。对于在阅读kubevela terraform-controller代码时，本文可以作为参考，加深理解源码。
+> 本文介绍如何通过Kubevela订购AWS s3 bucket，演示Kubevela在订购AWS s3过程中，涉及到的Kubevela Application示例，以及Kubevela在订购AWS s3时，terraform-controller处理Configuration的中间状态。对于在阅读Kubevela terraform-controller代码时，本文可以作为参考，加深理解源码。
 
-# 创建aws-s3
+# 创建AWS-s3
 
 ## 示例介绍
 
-使用官方aws-s3 comp，订购aws s3 bucket。通过观察中间过程，深入理解vela实现订购云资源的过程。可以对照这更好的read terraform controller代码。
+使用官方aws-s3 componentdefinition，订购AWS s3 bucket。通过观察中间过程，深入理解Kubevela实现订购云资源的过程。可以对照这更好的read terraform controller代码。
 
 ![architecture.jpg](https://github.com/oam-dev/terraform-controller/blob/v0.2.13/docs/resources/architecture.jpg?raw=true)
 
@@ -28,9 +28,9 @@
 
 > 安装minikube、kubevela、terraform controller以及terraform-aws addon过程省略。
 
-### 定义配置provider
+### 定义配置Provider
 
-***provider模板如下***：
+***Provider模板如下***：
 
 ```
 apiVersion: terraform.core.oam.dev/v1beta1
@@ -49,7 +49,7 @@ spec:
   region: us-east-2
 ```
 
-provider使用secret aws-account-creds，其存储了terraform访问aws api所需的ak/sk信息：
+Provider使用Secret aws-account-creds，其存储了terraform访问AWS api所需的ak/sk信息：
 
 ```
 apiVersion: v1
@@ -65,9 +65,9 @@ awsAccessKeyID: xxx
 awsSecretAccessKey: xxx
 ```
 
-> 不同云提供商认证方式不同，aws采用ak/sk方式，其他云请参考官方文档
+> 不同云提供商认证方式不同，AWS采用ak/sk方式，其他云请参考官方文档
 
-截止到kubevela 最新的1.2版本为止，provider支持如下，***且都是hardcode编码的***：
+截止到kubevela 最新的1.2版本为止，Provider支持如下，***且都是hardcode编码的***：
 
 ```
 const (
@@ -81,7 +81,7 @@ const (
 )
 ```
 
-### 定义application
+### 定义Application
 
 ```
 apiVersion: core.oam.dev/v1beta1
@@ -123,9 +123,9 @@ kubectl apply即可
 
 ### 查看创建资源
 
-#### configuration
+#### Configuration
 
-kubectl apply application后，application controller会根据aws-s3 component definition模板，渲染出configuration workload。
+kubectl apply application yaml后，application controller会根据aws-s3 component definition模板，渲染出configuration workload。
 
 其中aws-s3 component definition模板内容如下：
 
@@ -171,9 +171,9 @@ spec:
     type: configurations.terraform.core.oam.dev
 ```
 
-可以看出，需要将上面comp definition模板内容渲染，最终输出configuration.
+可以看出，需要将上面component definition模板内容渲染，最终输出Configuration.
 
-configuration内容如下：
+Configuration内容如下：
 
 ```
 apiVersion: terraform.core.oam.dev/v1beta1
@@ -216,11 +216,11 @@ spec:
     namespace: terraform-system
 ```
 
-紧接着，terraform controller会处理该configuration，具体逻辑可参考代码：terraform-controller/controllers/configuraton_controller.go
+紧接着，terraform controller会处理该Configuration event，具体逻辑可参考代码：terraform-controller/controllers/configuraton_controller.go
 
-#### rbac
+#### RBAC
 
-configuration controller reconcile会处理configuration event，其大致思路是：针对每个configuration，创建一个job，拉起一个terraform pod，将configuration内容转换后通过secret/cm方式挂载到pod中，在pod中启动terraform，根据配置在远端创建s3 bucket云资源。
+configuration controller reconcile会处理Configuration event，其大致思路是：针对每个Configuration，创建一个job，拉起一个terraform pod，将Configuration内容转换后通过secret/cm方式挂载到pod中，在pod中启动terraform，根据配置在远端创建s3 bucket云资源。
 
 因此，configuration controller需要针对拉起的job/pod，创建rbac/cm/secret等资源，给pod使用。
 
@@ -283,9 +283,9 @@ secrets:
 - name: tf-executor-service-account-token-vlr4h
 ```
 
-#### configmap
+#### Configmap
 
-controller会根据configuration内容，生成configmap，并挂在到tf pod，用于将渲染的tf模板放置到Pod /data目录下面，configmap内容如下：
+controller会根据Configuration内容，生成Configmap，并挂在到tf pod，用于将渲染的tf模板放置到Pod /data目录下面，Configmap内容如下：
 
 ```
 apiVersion: v1
@@ -328,9 +328,9 @@ metadata:
 
 
 
-#### variable secret
+#### Variable Secret
 
-controller会根据configuration中variable，以及provider中存储的认证信息，生成variable secret，作为pod env使用。示例如下：
+controller会根据Configuration中Variable，以及Provider中存储的认证信息，生成Variable Secret，作为pod env使用。示例如下：
 
 ```
 apiVersion: v1
@@ -348,13 +348,13 @@ metadata:
 type: Opaque
 ```
 
-其中TF_VAR开头的，是从configuration variable中提取的参数。其他从provider secret中拿到并转换格式的。
+其中TF_VAR开头的，是从Configuration variable中提取的参数。其他从Provider Secret中拿到并转换格式的。
 
 
 
-#### job/pod
+#### Job/Pod
 
-上面创建的rbac/cm/secret都是给pod准备的，configuration会创建一个job，job模板也是hardcode的。job拉起pod启动后，直接执行：
+上面创建的rbac/cm/secret都是给pod准备的，configuration controller会创建一个job，job模板也是hardcode的。job拉起pod启动后，直接执行：
 
 ```
 terraform init && terraform apply -lock=false -auto-approve
@@ -362,7 +362,7 @@ terraform init && terraform apply -lock=false -auto-approve
 
 即可拉取terraform aws镜像，初始化tf provider，并最终apply创建云资源。
 
-进入pod中，查看有configmap转换后的terraform内容main.tf如下：
+进入pod中，查看有Configmap转换后的terraform内容main.tf如下：
 
 ```
 /data # cat main.tf
@@ -447,9 +447,9 @@ BUCKET_NAME = "littletiger-aws-s3.s3.amazonaws.com"
 
 
 
-#### secret
+#### Secret
 
-s3订购成功后，controller会根据返回的数据，会创建secret保存s3的name，这个也是在application中“writeConnectionSecretToRef”定义名字，示例如下：
+s3订购成功后，controller会根据返回的数据，会创建Secret保存s3的name，这个也是在Application中“writeConnectionSecretToRef”定义名字，示例如下：
 
 ```
 apiVersion: v1
