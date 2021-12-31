@@ -21,9 +21,7 @@ KubeVela supports you to render, orchestrate and deploy Kubernetes raw resources
 
 [Target](../getting-started/core-concept#target) defines the namespace in runtime cluster for application delivery. Once Target created, namespace in runtime cluster created accordingly.
 
-Target must belong to one Project. When there're many Projects to manage, it's very critical that you place Target in an organized manner.
-
-Clicking `New Target` into the creating process. Type in necessary Infos as Project, Cluster, Namespace to create. We create targets in one project for different clusters. Or you can create targets by using the several namespaces of one cluster. For now, we at least give it to 3 Targets: 1 for test and 2 for prod environments.
+Clicking `New Target` into the creating process. Type in necessary Infos as Project, Cluster, Namespace to create. We create targets for 2 clusters. We create targets for 2 clusters. If you only have 1 cluster you can also use its namespaces to create several targets. For now, we at least give it to 3 Targets: 1 for test and 2 for prod environments.
 
 ## Creating Kubernetes application
 

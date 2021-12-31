@@ -31,9 +31,9 @@ Policy defines a strategy of certain aspect for application as to quality assura
 
 Revision generates each time when the application deployed and holds all infos in one snapshot. You use it for rolling back to whichever version whenever you needed.
 
-## Project
+<!-- ## Project
 
-Project is where you manage all the applications and collaborate with your team member. Project is one stand alone scope that separates it from other project.
+Project is where you manage all the applications and collaborate with your team member. Project is one stand alone scope that separates it from other project. -->
 
 ## Environment
 
