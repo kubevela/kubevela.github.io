@@ -42,30 +42,23 @@ KubeVela 可观测能力是通过 [Grafana](https://grafana.com/) 展示的，�
 
 ## 安装插件
 
-可观测性插件是通过 `vela addon` 命令安装的。因为本插件依赖了 Prometheus，Prometheus 依赖 StorageClass，
-不同 Kubernetes 发行版，StorageClass 会有一定的差异，所以，在不同的 Kubernetes 发行版， 安装命令也有一些差异。
+可观测性插件是一款实验插件，首先需要[开启实验插件仓库](../addon/intro.md)，其依赖了 Prometheus，Prometheus 的 alert manager 和 server
+依赖 PersistentVolume，所以，需要设置 PV 的大小，也就是 `vela addon enable observability` 命令行里的 `disk-size` 参数，默认为 20GB，并且依赖 StorageClass，需要设置默认的
+StorageClass。
 
 ### 自建/常规集群
 
 执行如下命令安装可观测性插件，KinD 等测试集群的安装步骤同理。
 
 ```shell
-$ vela addon enable observability alertmanager-pvc-enabled=false server-pvc-enabled=false grafana-domain=example.com
+$ vela addon enable observability disk-size=2Gi
 ```
 
 ### 云服务商提供的 Kubernetes 集群
 
 #### 阿里云 ACK
 
-```shell
-$ vela addon enable observability alertmanager-pvc-class=alicloud-disk-available alertmanager-pvc-size=20Gi server-pvc-class=alicloud-disk-available server-pvc-size=20Gi grafana-domain=grafana.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com
-```
-
-其中，各个参数含义如下：
-
-- alertmanager-pvc-class
-
-Prometheus alert manager 需要的 pvc 的类型，也就是 StorageClass，在阿里云上，可选的 StorageClass 有：
+首先从 StorageClass 列表里选择一个合适的作为默认的 StorageClass。
 
 ```shell
 $ kubectl get storageclass
@@ -74,36 +67,20 @@ alicloud-disk-available    alicloud/disk   Delete          Immediate           t
 alicloud-disk-efficiency   alicloud/disk   Delete          Immediate           true                   6d
 alicloud-disk-essd         alicloud/disk   Delete          Immediate           true                   6d
 alicloud-disk-ssd          alicloud/disk   Delete          Immediate           true                   6d
+
+$ kubectl patch storageclass $StorageClass -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 ```
 
-此处取值 `alicloud-disk-available`。
 
-- alertmanager-pvc-size
+安装可观测性 Addon，使用默认的 PV 大小 20GB。
 
-Prometheus alert manager 需要的 pvc 的大小，在阿里云上，最小的 PV 是 20GB，此处取值 20Gi。
-
-- server-pvc-class
-
-Prometheus server 需要的 pvc 的类型，同 `alertmanager-pvc-class`。
-
-- server-pvc-size
-
-Prometheus server 需要的 pvc 的大小，同 `alertmanager-pvc-size`。
-
-- grafana-domain
-
-Grafana 的域名，可以使用你自定义的域名，也可以使用 ACK 提供的集群级别的泛域名，`*.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com`，
-如本处取值 `grafana.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com`。
+```shell
+$ vela addon enable observability
+```
 
 #### 其他云服务商提供的 Kubernetes 集群
 
-请根据不同云服务商 Kubernetes 集群提供的 PVC 的名字和大小规格，以及域名规则，对应更改以下参数：
-
-- alertmanager-pvc-class
-- alertmanager-pvc-size
-- server-pvc-class
-- server-pvc-size
-- grafana-domain
+请根据不同云服务商 Kubernetes 集群，设置默认的 StorageClass 和需要的 PV 大小。
 
 ## 查看监控数据
 
@@ -121,17 +98,10 @@ $ kubectl get secret grafana -o jsonpath="{.data.admin-password}" -n vela-system
 - 自建/常规集群
 
 ```shell
-$ kubectl get svc grafana -n vela-system
-NAME      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
-grafana   ClusterIP   192.168.42.243   <none>        80/TCP    177m
-
-$ sudo kubectl port-forward service/grafana -n vela-system 80:80
-Password:
-Forwarding from 127.0.0.1:80 -> 3000
-Forwarding from [::1]:80 -> 3000
+$ sudo vela port-forward addon-observability -n vela-system 80:80
 ```
 
-通过浏览器访问 [http://127.0.0.1/dashboards](http://127.0.0.1/dashboards)，点击相应的 Dashboard ，查看前面介绍的各种监控数据。
+通过访问上述命令行打开的浏览器页面的可观测性控制台 ，查看前面介绍的各种监控数据。
 
 ![](../../resources/observability-system-level-dashboards.png)
 
