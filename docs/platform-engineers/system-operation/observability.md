@@ -46,72 +46,45 @@ You can also filter the logs by filling keywords at the top.
 
 ## Installing the addon
 
-The observability plugin is installed with the `vela addon` command. Because this plugin relies on Prometheus,
-and Prometheus relies on StorageClass, the StorageClass varies to various Kubernetes distribution, so there are some
-differences in the installation command across Kubernetes distributions.
+The observability addon is experimental, [Experimental Addon Registry](../addon/intro.md) should be enabled first. The
+addon relies on Prometheus, and Prometheus alert manager, and server depend on PersistentVolume. So the size of PV has to be
+set, ie, the parameter `disk-size` in the command line `vela addon enable observability`, and the default value is 20GB.
+It also depends on StorageClass, so one default Storage has to be set.
 
 ### Self-built/regular Kubernetes clusters
 
 Execute the following command to install the observability plugin. The steps are the same for similar clusters, like KinD.
 
 ```shell
-$ vela addon enable observability alertmanager-pvc-enabled=false server-pvc-enabled=false grafana-domain=example.com
+$ vela addon enable observability disk-size=2Gi
 ```
 
 ### Kubernetes clusters provided by cloud providers
 
 #### Alibaba Cloud ACK
 
-```shell
-$ vela addon enable observability alertmanager-pvc-class=alicloud-disk-available alertmanager-pvc-size=20Gi server-pvc-class=alicloud- disk-available server-pvc-size=20Gi grafana-domain=grafana.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.
-com
-```
-
-The meaning of each parameter is as follows.
-
- - alertmanager-pvc-class
-
-The type of pvc required by 
-the Prometheus alert manager, which is the StorageClass. On Alibaba Cloud, pick one from the StorageClass list.
+First pick one StorageClass as the default one.
 
 ```shell
 $ kubectl get storageclass
-NAME PROVISIONER RECLAIMPOLICY VOLUMEBINDINGMODE ALLOWVOLUMEEXPANSION AGE
-alicloud-disk-available alicloud/disk Delete Immediate true 6d
-alicloud-disk-efficiency alicloud/disk Delete Immediate true true 6d
-alicloud-disk-essd alicloud/disk Delete Immediate true 6d
-alicloud-disk-ssd alicloud/disk Delete Immediate true 6d
+NAME                       PROVISIONER     RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+alicloud-disk-available    alicloud/disk   Delete          Immediate           true                   6d
+alicloud-disk-efficiency   alicloud/disk   Delete          Immediate           true                   6d
+alicloud-disk-essd         alicloud/disk   Delete          Immediate           true                   6d
+alicloud-disk-ssd          alicloud/disk   Delete          Immediate           true                   6d
+
+$ kubectl patch storageclass $StorageClass -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 ```
 
-We set the value as `alicloud-disk-available`.
+Enable the addon and use the default StorageClass size 20GB.
 
-- alertmanager-pvc-size
-
-The size of the pvc needed by the Prometheus alert manager, on Alibaba Cloud, the minimum PV is 20GB, here it takes the value 20Gi.
-
-- server-pvc-class
-
-The type of pvc required by Prometheus server, same as `alertmanager-pvc-class`.
-
-- server-pvc-size 
-  
-The size of the pvc required by the Prometheus server, same as `alertmanager-pvc-size`.
-
-- grafana-domain
-  
-The domain name of Grafana, you can use either your custom domain name, or the cluster-level wildcard domain provided by ACK,
-`*.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com`. You can set the value as `grafana.c276f4dac730c47b8b8988905e3c68fcf.cn-hongkong.alicontainer.com`.
+```shell
+$ vela addon enable observability
+```
 
 #### Kubernetes clusters offered by other cloud providers
 
-Please change the following parameters according to the name and size specifications of the PVCs provided by different
-cloud provider's Kubernetes clusters, and the domain rules.
-
-- alertmanager-pvc-class
-- alertmanager-pvc-size
-- server-pvc-class
-- server-pvc-size
-- grafana-domain
+Please set the default StorageClass and `disk-size` for different cloud provider's Kubernetes clusters.
 
 ## View monitoring data
 
@@ -129,19 +102,10 @@ Using username `admin` and the password above to login to the monitoring dashboa
 - Self-built/regular clusters
 
 ```shell
-$ kubectl get svc grafana -n vela-system
-NAME TYPE CLUSTER-IP EXTERNAL-IP PORT(S) AGE
-grafana ClusterIP 192.168.42.243 <none> 80/TCP 177m
-
-$ sudo k port-forward service/grafana -n vela-system 80:80
-Password:
-Forwarding from 127.0.0.1:80 -> 3000
-Forwarding from [::1]:80 -> 
-3000
+$ sudo vela port-forward addon-observability -n vela-system 80:80
 ```
 
-Visit [http://127.0.0.1/dashboards](http://127.0.0.1/dashboards) and click on the corresponding Dashboard to view the
-various monitoring data introduced earlier.
+Visit the Dashboard in the browser tab, which was opened by the command line, to view the various monitoring data introduced earlier.
 
 ![](../../resources/observability-system-level-dashboards.png)
 
