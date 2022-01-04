@@ -27,7 +27,7 @@ module.exports = {
         "deliver-app/webservice",
         "deliver-app/helm",
         "deliver-app/k8s-object",
-        // "deliver-app/consume-cloud-services",
+        "deliver-app/consume-cloud-services",
         // "deliver-app/workflows",
         // "deliver-app/scaler",
         // "deliver-app/gateway",

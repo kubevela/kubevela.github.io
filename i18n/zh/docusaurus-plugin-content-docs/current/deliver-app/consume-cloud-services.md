@@ -9,7 +9,7 @@ description: 本文介绍通过 KubeVela 交付云厂商提供的服务，并能
 
 ## 开始之前
 
-- 开通云厂商账户，根据权限最小化原则，分配好可获取 AK/SK 的子账号。阿里云请参考 [创建 RAM 用户](https://help.aliyun.com/document_detail/121941.html)
+- 开通云厂商账户，根据权限最小化原则，分配好可获取 AK/SK 的子账号。阿里云请参考 [创建 RAM 用户](https://help.aliyun.com/document_detail/121941.html)。
 
 - 确保云账号具有足够的费用。
 
@@ -25,7 +25,7 @@ description: 本文介绍通过 KubeVela 交付云厂商提供的服务，并能
 
 ![addon-alibaba](../resources/addon-alibaba.jpg)
 
-`terraform-alibaba` 插件依赖 `terraform` 插件，如果后者未启用，它会自动被启用。云资源的创建过程需要从 Github 中获取云服务配置文件，如果你的管控集群所在网络访问 Github 受限，你可以打开 `terraform` 插件管理页面开启`GithubBlocked` 选项。
+`terraform-alibaba` 插件依赖 `terraform` 插件，如果后者未启用，它会自动被启用。云资源的创建过程需要从 Github 中获取云服务配置文件，如果你的管控集群所在网络访问 Github 受限，你可以打开 `terraform` 插件管理页面开启 `GithubBlocked` 选项。
 
 `terraform-alibaba` 插件提供了以下类型资源的支持，并持续增加中：
 
@@ -39,21 +39,20 @@ description: 本文介绍通过 KubeVela 交付云厂商提供的服务，并能
 ## 设置交付目标参数
 
 云资源的交付模型与其他应用不同，它的控制器只会在管控集群运行，创建多云/多可用区的云服务。因此，我们需要在交付目标中设置每一个目标所处的云厂商和区域参数。
-进入交付目标管理页面，选择你需要使用云资源的目标区域，点击`Edit`进入编辑窗口，或直接创建新的交付目标。
+进入交付目标管理页面，选择你需要使用云资源的目标区域，点击 `Edit` 进入编辑窗口，或直接创建新的交付目标。
 
 ![target-variables](../resources/target-variables.jpg)
 
 交付目标首先主要描述的是 Kubernetes 集群的 Namespace，然后通过设置共享变量的方式描述该集群所处的云厂商和区域。
 
-- Cloud Service Provider: 云服务提供商，与 AK/SK 绑定，`terraform-alibaba` 默认生成的名称是`default`，因此这里填入 default 即可。
+- Cloud Service Provider: 云服务提供商，与 AK/SK 绑定，`terraform-alibaba` 默认生成的名称是 `default`，因此这里填入 default 即可。
 - Region: 地域，创建云服务时基于此参数选择地域。你应该填写当前交付目标所描述的 Kubernetes 集群所在地域，以便 Kubernetes 中的应用可直接访问交付的云服务。
-- Zone、VPC 等参数是进一步精确描述云服务创建区域，该参数在 1.2 版本中暂不生效。
 
 ## 创建你需要的云资源应用
 
-设置完交付目标后，让我们点击左侧第一个 `Applications` 选项卡进入应用管理页面，点击右上角的 `New Application` 开始创建应用。与其他类型的应用一样，你仅需要选择你想要部署的云服务类型，比如我们选择`alibaba-rds`，选择环境，请注意，选择的环境包括的交付目标必须都设置了`Cloud Service Provider` 和 `Region`参数。
+设置完交付目标后，让我们点击左侧第一个 `Applications` 选项卡进入应用管理页面，点击右上角的 `New Application` 开始创建应用。与其他类型的应用一样，你仅需要选择你想要部署的云服务类型，比如我们选择 `alibaba-rds`，选择环境，请注意，选择的环境包括的交付目标必须都设置了 `Cloud Service Provider` 和 `Region` 参数。
 
-点击`Next Step`按钮进入部署参数设置页面，对于不同的云服务有不同的设置参数，以`alibaba-rds`为例，支持以下参数：
+点击 `Next Step` 按钮进入部署参数设置页面，对于不同的云服务有不同的设置参数，以 `alibaba-rds` 为例，支持以下参数：
 
 - InstanceName: 实例名称
 - DatabaseName: 数据库名称
@@ -65,11 +64,11 @@ description: 本文介绍通过 KubeVela 交付云厂商提供的服务，并能
 
 ![set-rds](../resources/set-rds.jpg)
 
-对于其他云资源，可直接阅读每个字段的说明即可。按照你的需求设置以上参数，点击`Create`进入应用管理页面后，点击部署按钮即可开始云服务的部署。
+对于其他云资源，可直接阅读每个字段的说明即可。按照你的需求设置以上参数，点击 `Create` 进入应用管理页面后，点击部署按钮即可开始云服务的部署。
 
 ## 查看云资源创建状态
 
-与普通应用一样，云服务应用也是需要切换到对应环境页面下查看实例信息，默认情况下一个环境下有几个交付目标，云服务即会生成对应数量的实例。
+与普通应用一样，云服务应用也是需要切换到对应环境页面下查看实例信息。默认情况下一个环境下有几个交付目标，云服务即会生成对应数量的实例。
 
 ![rds-instances](../resources/rds-instances.jpg)
 
