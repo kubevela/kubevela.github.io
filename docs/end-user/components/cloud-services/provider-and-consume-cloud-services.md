@@ -20,10 +20,11 @@ This tutorial will talk about how to provision and consume Cloud Resources by Te
 Orchestration Type | Cloud Provider | Cloud Resource | Description
 ------------ | ------------- | ------------- | -------------
 Terraform | Alibaba Cloud | [ACK](./terraform/alibaba-ack) | Terraform configuration for Alibaba Cloud ACK cluster
-| |  | [EIP](./terraform/alibaba-eip) | Terraform configuration for Alibaba Cloud EIP object
-| |  | [OSS](./terraform/alibaba-oss) | Terraform configuration for Alibaba Cloud OSS object
-| |  | [RDS](./terraform/alibaba-rds) | Terraform configuration for Alibaba Cloud RDS object
-| |  | [Redis](./terraform/alibaba-redis) | Terraform configuration for Alibaba Cloud Redis object
+| |  | [EIP](./terraform/alibaba-eip) | Terraform configuration for Alibaba Cloud EIP
+| |  | [OSS](./terraform/alibaba-oss) | Terraform configuration for Alibaba Cloud OSS
+| |  | [RDS](./terraform/alibaba-rds) | Terraform configuration for Alibaba Cloud RDS
+| |  | [Redis](./terraform/alibaba-redis) | Terraform configuration for Alibaba Cloud Redis
+| |  | [VPC](./terraform/alibaba-vpc) | Terraform configuration for Alibaba Cloud VPC
 | | Azure | [Mariadb](./terraform/azure-database-mariadb) | Terraform configuration for Azure Database Mariadb
 | | Azure | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account
 | | AWS | [S3](./terraform/aws-s3) | Terraform configuration for AWS S3 bucket
