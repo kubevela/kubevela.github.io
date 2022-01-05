@@ -13,7 +13,7 @@ description: 本文介绍Kubernetes的工作流工程模式，常用操作和适
 
 ## 开始之前
 
-本文介绍内容相对深入，在此之前，建议先参考 [交付第一个应用](../quick-start), [交付 Kubernetes 原生资源](./k8s-object) 等文章了解其他基础知识和流程。
+本文介绍内容相对深入，在此之前，建议先参考 [交付第一个应用](../quick-start), [交付 Docker 镜像](./webservice) 等文章了解其他基础知识和流程。
 
 ## 工作流与应用版本的关系
 
@@ -21,7 +21,7 @@ description: 本文介绍Kubernetes的工作流工程模式，常用操作和适
 
 ![Application Revision List](../resources/app-revision.jpg)
 
-我们会支持企业用户自定义发布的版本号，对接 CI 系统后，版本直接与 Code Commit 关联，实现版本可追溯。在版本操作中后续会实现版本回退功能，用户可在任何时候选择将某个环境回退到指定版本。
+对接 CI 系统后，版本可以与 Code Commit 关联，实现版本可追溯。在版本操作中后续会实现版本回退功能，用户可在任何时候选择将某个环境回退到指定版本。
 
 ## 内置支持的工作流步骤
 
@@ -35,4 +35,20 @@ description: 本文介绍Kubernetes的工作流工程模式，常用操作和适
 
 ## 实现消息通知
 
-## 扩展工作流实现数据初始化
+使用 `notification` 步骤可实现钉钉、邮件和 Slack 三种通知模式。进入应用工作流管理页面，选择一个环境的工作流点击 `Edit` 按钮进入编辑状态。
+
+![workflow-edit](../resources/workflow-edit.jpg)
+
+选择左侧的 `notification` 类型的步骤拖入右侧画布，页面将自动弹出工作流步骤编辑窗口，在设置窗口中，你可以根据需要设置三种通知，在同一步骤中，如果设置了多种通知，它同时生效。
+
+![workflow-notification](../resources/workflow-notification.jpg)
+
+如果设置 `Dingding` 通知，点击 `Dingding` 窗口右侧的启用按钮，页面将出现两个输入框，一个是钉钉群通知机器人的 Webhook 地址，参考 [Dingding 群机器人参考文档](https://open.dingtalk.com/document/group/custom-robot-access) 获取。另外一个是通知内容输入框，你可以自定义任何需要发送的通知内容。
+
+`Slack` 与 `Dingding` 配置方式类似，参考 [Slack 中获取 Webhook 地址](https://api.slack.com/messaging/webhooks)。
+
+`Email` 相对配置数据更多，需要配置邮件服务器、邮件内容和发送目标邮件地址等。
+
+配置完成点击 `Submit` 保存步骤配置，这时需要规划通知步骤的位置，默认它将添加到最后，如果你希望将其放置到中间步骤，需要断开原有步骤直接的连线，然后将通知步骤进行连线放置在中间。
+
+工作流配置完成后注意点击工作流窗口右上方的 Save 按钮保存所有变更。保存完成后可以点击页面右上方的`Deploy`或右边的选择按钮选择执行该工作流，验证是否可以收到消息通知。

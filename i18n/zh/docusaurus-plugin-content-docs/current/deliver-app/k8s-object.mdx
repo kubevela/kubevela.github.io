@@ -14,7 +14,7 @@ KubeVela 支持面向应用组织多个 Kubernetes 资源进行交付，常见�
 
 ## 开始之前
 
-- 准备一个 Deployment+Service 资源的 Yaml 定义文件。
+- 准备一个 Deployment+Service 资源的 Yaml 定义文件，请注意，涉及多个资源时请将 Deployment、Statefulset、Job 等工作负载类资源置于第一个。如果多个工作负载类资源，请拆分为多个应用。
 
 <!-- - 准备两个或更多的运行时集群, 参考: [管理运行时集群](./manage-cluster) TODO v1.2-->
 

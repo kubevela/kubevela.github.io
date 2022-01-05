@@ -28,10 +28,8 @@ module.exports = {
         "deliver-app/helm",
         "deliver-app/k8s-object",
         "deliver-app/consume-cloud-services",
-        // "deliver-app/workflows",
         // "deliver-app/scaler",
-        // "deliver-app/gateway",
-        // "deliver-app/manage-cluster",
+        // "deliver-app/workflows",
       ],
     },
     {
