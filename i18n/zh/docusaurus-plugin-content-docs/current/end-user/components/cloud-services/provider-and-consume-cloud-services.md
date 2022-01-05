@@ -19,6 +19,7 @@ Terraform | Alibaba Cloud | [ACK](./terraform/alibaba-ack) | 用于部署阿里�
 | | | [OSS](./terraform/alibaba-oss) | 用于部署阿里云 OSS 的 Terraform Configuration 的 ComponentDefinition
 | | | [RDS](./terraform/alibaba-rds) | 用于部署阿里云 RDS 的 Terraform Configuration 的 ComponentDefinition
 | | | [Redis](./terraform/alibaba-redis) | 用于部署阿里云 Redis 的 Terraform Configuration 的 ComponentDefinition
+| |  | [VPC](./terraform/alibaba-vpc) | 用于部署阿里云 VPC 的 Terraform Configuration 的 ComponentDefinition
 | | Azure | [Mariadb](./terraform/azure-database-mariadb) | 用于部署 Azure mariadb 数据库的 Terraform Configuration 的 ComponentDefinition
 | | AWS | [S3](./terraform/aws-s3) | 用于部署 AWS S3 bucket 的 Terraform Configuration 的 ComponentDefinition
 
