@@ -1,34 +1,42 @@
 ---
-title: AutoScaler
+title: Modify Replicas
+description: This article introduces how KubeVela adjusts the number of application copies.
 ---
 
-## Specification
+This section introduces how manually modify replicas to apply. 
 
+## Before starting
 
-| NAME    | DESCRIPTION                                                                     | TYPE | REQUIRED | DEFAULT |
-| ------- | ------------------------------------------------------------------------------- | ---- | -------- | ------- |
-| min     | Specify the minimal number of replicas to which the autoscaler can scale down   | int  | true     | 1       |
-| max     | Specify the maximum number of of replicas to which the autoscaler can scale up  | int  | true     | 10      |
-| cpuUtil | Specify the average cpu utilization, for example, 50 means the CPU usage is 50% | int  | true     | 50      |
+- You've walked through at least one type of application deployment.
 
-## How to use
+## Attaching Trait
 
-```yaml
-# sample.yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: website
-spec:
-  components:
-    - name: frontend              # This is the component I want to deploy
-      type: webservice
-      properties:
-        image: nginx
-      traits:
-        - type: cpuscaler         # Automatically scale the component by CPU usage after deployed
-          properties:
-            min: 1
-            max: 10
-            cpuPercent: 60
-```
+KubeVela has a built-in `scaler` Trait by default, which supports the adjustment of replicas in typical workloads, such as `webservice` and `k8s-objects` applications.
+
+> For k8s-objects type applications, when multiple resources are involved, please put the workload resources such as Deployment, Statefulset, Job in the first place so that the Trait of `scaler` can take effect.
+
+Let's take first-vela-app in `Deliver First Application` as an example. First, open the application's `Benchmark Config`-`Properties` page:
+
+![app-trait-scaler](../resources/app-scaler.jpg)
+
+Next, we click the Settings (gear) button on the right side of Set Replicas to adjust replicas to 3. After clicking save, the changes will be temporarily stored.
+
+Then to make it effective in a certain environment, we need to click the `Deploy` button or the multi-environment workflow selection button next to it and select the corresponding environment to perform the deployment.
+
+After the deployment is complete, you can enter the environment instance page. You'll find 3 rows of data that have appeared in the instance list.
+
+![instance-trait-scaler](../resources/instance-trait-scaler.jpg)
+
+> Trait can extend more powerful features, such as HPA.
+
+## Edit deployment parameters
+
+For applications created using Helm or other custom deployment types, if Traits are not applicable, you can directly edit the deployment parameters to adjust the number of application instances.
+
+For example, in Helm applications, the general Chart package provides parameters for setting the number of replicas, which can be set by setting Values.
+
+Take [apache chart](https://github.com/bitnami/charts/tree/master/bitnami/apache) as an example, set `replicaCount=3` in Values to adjust the number of replicas.
+
+## Next step
+
+- [Customize Scaler Trait](../platform-engineers/traits/customize-trait)
