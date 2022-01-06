@@ -2,7 +2,7 @@
 title: 核心概念
 ---
 
-KubeVela 围绕着云原生应用交付和管理场景展开，背后的应用交付模型是 [Open Application Model](../platform-engineers/oam/oam-model)，简称 OAM ，其核心是将应用部署所需的所有组件和各项运维动作，描述为一个统一的、与基础设施无关的“部署计划”，进而实现在混合环境中进行标准化和高效率的应用交付。KubeVela 包括以下核心概念：
+KubeVela 围绕着云原生应用交付和管理场景展开，背后的应用交付模型是 [Open Application Model](../platform-engineers/oam/oam-model)，简称 OAM ，其核心是将应用部署所需的所有组件和各项运维动作，描述为一个统一的、与基础设施无关的“部署计划”，进而实现在混合环境中标准化和高效率的应用交付。KubeVela 包括以下核心概念：
 
 ## 应用（Application）
 
@@ -21,11 +21,11 @@ KubeVela 围绕着云原生应用交付和管理场景展开，背后的应用�
 
 ### 工作流（Workflow）
 
-工作流由多个步骤组成，允许用户定义应用在某个环境的交付过程。典型的工作流步骤包括人工审核、数据传递、多集群发布、通知等。工作流步骤类型由 [Workflow Step Definition](../platform-engineers/oam/x-definition#工作流节点定义（workflowstepdefinition）) 定义。
+工作流由多个步骤组成，允许用户自定义应用在某个环境的交付过程。典型的工作流步骤包括人工审核、数据传递、多集群发布、通知等。工作流步骤类型由 [Workflow Step Definition](../platform-engineers/oam/x-definition#工作流节点定义（workflowstepdefinition）) 定义。
 
 ### 应用策略（Policy）
 
-应用策略（Policy）负责定义指定应用交付过程中的策略，比如质量保证策略、安全组策略、防火墙规则、SLO 目标、放置策略等。应用策略的类型由 [Policy Definition](../platform-engineers/oam/x-definition#应用策略定义（policydefinition）) 定义，它有以下关键场景：
+应用策略（Policy）负责定义指定应用交付过程中的策略，比如质量保证策略、安全组策略、防火墙规则、SLO 目标、放置策略等。应用策略的类型由 [Policy Definition](../platform-engineers/oam/x-definition#应用策略定义（policydefinition）) 定义。
 
 ### 版本记录 （Revision）
 
@@ -37,13 +37,13 @@ KubeVela 围绕着云原生应用交付和管理场景展开，背后的应用�
 
 ## 环境（Environment）
 
-环境指通常意义的开发、测试、生产的环境业务描述，它可以包括多个交付目标。环境协调上层应用和底层基础设施的匹配，不同的环境对应管控集群的不同 Namespace。环境定义在项目中，每一个项目可以包含多个环境。处在同一个环境中的应用可以具备内部互访和资源共享能力。
+环境指通常意义的开发、测试、生产的环境业务描述，它可以包括多个交付目标。环境协调上层应用和底层基础设施的匹配关系，不同的环境对应管控集群的不同 Kubernetes Namespace。处在同一个环境中的应用才能具备内部互访和资源共享能力。
 
-- <b>EnvBinding</b> 应用环境绑定, 应用可绑定多个环境进行发布，对于每一个环境可设置环境级部署差异。
+- <b>应用环境绑定</b> 应用可绑定多个环境进行发布，对于每一个环境可设置环境级部署差异。
 
 ## 交付目标（Target）
 
-交付目标描述应用及相关资源的实际部署空间，它精确到 Kubernetes 集群的 Namespace，对于普通应用，组件渲染生成的 Kubernetes 原生资源即会在交付目标指定的集群和 Namespace 中创建；对于云服务，服务创建时获取交付目标定义的云服务区域参数定义，在管控集群发起云资源创建任务，生成访问密钥后分发到交付目标指定的集群和 Namespace。单个环境可关联多个交付目标，代表该环境需要多集群交付。
+交付目标用于描述应用的相关资源实际部署的物理空间，对应 Kubernetes 集群或者云的区域（Region）和专有网络（VPC）。对于普通应用，组件渲染生成的资源会在交付目标指定的 Kubernetes 集群中创建（可以精确到指定集群的 Namespace）；对于云服务，资源创建时会根据交付目标中指定的云厂商的参数创建到对应的区域和专有网络中，然后将生成的云资源信息分发到交付目标指定的 Kubernetes 集群中。单个环境可关联多个交付目标，代表该环境需要多集群交付。单个交付目标只能对应一个环境。
 
 ## 集群（Cluster）
 
@@ -51,4 +51,4 @@ Kubernetes 集群描述，它包括了集群通信密钥等信息，Kubernetes �
 
 ## 插件（Addon）
 
-平台扩展插件描述，KubeVela 遵从轻核心、高度可扩展的设计模式。KubeVela 在应用交付和管理的完整场景中设计多个可扩展的点，通过与第三方解决方案结合形成 Addon。每一个插件一般会包括 [X-Definition](../platform-engineers/oam/x-definition) 定义，代表它扩展的能力集合。
+平台扩展插件描述，KubeVela 遵从微内核、高度可扩展的设计模式。KubeVela 在应用交付和管理的完整场景中基于 OAM 模型的概念，将应用组件类型、运维特征、工作流步骤、应用策略等功能均设计成可插拔可扩展的模式。这些可扩展的机制定义与第三方解决方案结合形成插件（ Addon）。每一个插件一般会包括模块定义 [X-Definition](../platform-engineers/oam/x-definition) ，代表它扩展的能力集合，以及第三方解决方案的安装包，如 Kubernetes CRD 及其控制器等。
