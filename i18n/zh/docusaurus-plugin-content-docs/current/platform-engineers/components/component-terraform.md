@@ -26,7 +26,7 @@ apiVersion: core.oam.dev/v1alpha2
 kind: ComponentDefinition
 metadata:
   name: # 1. ComponentDefinition name, like `alibaba-oss`
-  namespace: {{.Values.systemDefinitionNamespace}}
+  namespace: vela-system
   annotations:
     definition.oam.dev/description: # 2. description, like `Terraform configuration for Alibaba Cloud OSS object`
   labels:
@@ -42,14 +42,14 @@ spec:
         # 3. The developed Terraform HCL
 ```
 
-这里阿里云 EIP 的完整的 ComponentDefinition，我们热烈欢迎你将扩展的云资源的 ComponentDefinition 贡献到 [oam-dev/kubevela](https://github.com/oam-dev/kubevela/tree/master/charts/vela-core/templates/definitions)。
+这里阿里云 EIP 的完整的 ComponentDefinition，我们热烈欢迎你将扩展的云资源的 ComponentDefinition 贡献到 [oam-dev/catalog](https://github.com/oam-dev/catalog/tree/master/addons/terraform-alibaba/definitions)。
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha2
 kind: ComponentDefinition
 metadata:
   name: alibaba-eip
-  namespace: {{.Values.systemDefinitionNamespace}}
+  namespace: vela-system
   annotations:
     definition.oam.dev/description: Terraform configuration for Alibaba Cloud Elastic IP
   labels:
@@ -114,3 +114,13 @@ $ vela show alibaba-eip
 
 如果表格能正常出来，ComponentDefinition 应该就可以工作了。更进一步，你可以通过文档[部署云资源](../../end-user/components/cloud-services/provider-and-consume-cloud-services)创建一个实际的 EIP 来验证。
 
+#### 生成文档
+
+我们鼓励你为你的 ComponentDefinition 生成文档并提交给 [KubeVela官方网站]（https://github.com/oam-dev/kubevela.io）。
+
+```shell
+$ vela def gen-doc alibaba-eip -n vela-system
+Generated docs for alibaba-eip in ./kubevela.io/docs/end-user/components/cloud-services/terraform/alibaba-eip.md
+```
+
+将生成的文件移到 oam-dev/catalog 库。参考 [贡献指南](https://github.com/oam-dev/kubevela.io#contributing-to-kubevela-en-docs) 来提交文档。

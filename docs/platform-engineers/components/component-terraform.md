@@ -44,14 +44,14 @@ output "EIP_ADDRESS" {
 ```
 
 For Alibaba Cloud EIP, here is the complete ComponentDefinition. You are warmly welcome to contribute this extended cloud
-resource ComponentDefinition to [oam-dev/kubevela](https://github.com/oam-dev/kubevela/tree/master/charts/vela-core/templates/definitions).
+resource ComponentDefinition to [oam-dev/catalog](https://github.com/oam-dev/catalog/tree/master/addons/terraform-alibaba/definitions).
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha2
 kind: ComponentDefinition
 metadata:
   name: alibaba-eip
-  namespace: {{.Values.systemDefinitionNamespace}}
+  namespace: vela-system
   annotations:
     definition.oam.dev/description: Terraform configuration for Alibaba Cloud Elastic IP
   labels:
@@ -116,3 +116,14 @@ $ vela show alibaba-eip
 
 If the tables display, the ComponentDefinition should work. To take a step further, you can verify it by provision an actual EIP instance per
 the doc [Provision cloud resources](../../end-user/components/cloud-services/provider-and-consume-cloud-services#provision-cloud-resources).
+
+#### Generate documentation
+
+You are encouraged to generate the documentation for your ComponentDefinition and submit it to [KubeVela official site](https://github.com/oam-dev/kubevela.io).
+
+```shell
+$ vela def gen-doc alibaba-eip -n vela-system
+Generated docs for alibaba-eip in ./kubevela.io/docs/end-user/components/cloud-services/terraform/alibaba-eip.md
+```
+
+Move the file generated to oam-dev/catalog repo. Follow the [contribution guide](https://github.com/oam-dev/kubevela.io#contributing-to-kubevela-en-docs) to submit the doc. 
