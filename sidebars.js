@@ -21,7 +21,7 @@ module.exports = {
     },
     {
       type: "category",
-      label: "Continuous Delivery",
+      label: "Tutorials",
       collapsed: false,
       items: [
         "deliver-app/webservice",
@@ -45,75 +45,96 @@ module.exports = {
     },
     {
       type: "category",
-      label: "Vela CLI Manuals",
+      label: "How-to Guides",
       collapsed: true,
       items: [
-        "end-user/quick-start-cli",
         {
-          "Deploying Components": [
-            "end-user/components/helm",
-            "end-user/components/kustomize",
+          Dashboard: [
             {
-              "Cloud Services": [
-                {
-                  Terraform: [
-                    "end-user/components/cloud-services/terraform/alibaba-ack",
-                    "end-user/components/cloud-services/terraform/alibaba-eip",
-                    "end-user/components/cloud-services/terraform/alibaba-rds",
-                    "end-user/components/cloud-services/terraform/alibaba-oss",
-                    "end-user/components/cloud-services/terraform/alibaba-redis",
-                    "end-user/components/cloud-services/terraform/alibaba-vpc",
-                    "end-user/components/cloud-services/terraform/azure-database-mariadb",
-                    "end-user/components/cloud-services/terraform/azure-storage-account",
-                    "end-user/components/cloud-services/terraform/aws-s3",
-                  ],
-                },
+              "Manage application": [
+                "how-to/dashboard/application/overview",
+                "how-to/dashboard/application/create-application",
+                "how-to/dashboard/application/deploy-application",
+                "how-to/dashboard/application/get-application-instance",
+                "how-to/dashboard/application/get-application-log",
+                "how-to/dashboard/application/get-application-endpoint",
+                "how-to/dashboard/application/get-application-revision",
+                "how-to/dashboard/application/bind-new-environment",
+                "how-to/dashboard/application/recycle-environment",
+                "how-to/dashboard/application/delete-application",
+              ],
+            },
+            {
+              "Manage workflow": ["how-to/dashboard/workflow/overview"],
+            },
+            {
+              "Manage trait": ["how-to/dashboard/trait/overview"],
+            },
+            {
+              "Manage environment": ["how-to/dashboard/environment/overview"],
+            },
+            {
+              "Manage target": ["how-to/dashboard/target/overview"],
+            },
+            {
+              "Manage cluster": [
+                "how-to/dashboard/cluster/overview",
+                "how-to/dashboard/cluster/connect-cluster",
+                "how-to/dashboard/cluster/detach-cluster",
+                "how-to/dashboard/cluster/set-cluster-dashboard",
+                "how-to/dashboard/cluster/edit-cluster",
+              ],
+            },
+            {
+              "Manage addon": [],
+            },
+          ],
+          CLI: [
+            "end-user/quick-start-cli",
+            {
+              "Deploying Components": [
+                "end-user/components/helm",
+                "end-user/components/kustomize",
                 "end-user/components/cloud-services/provider-and-consume-cloud-services",
+
+                "end-user/components/cue/raw",
+                "end-user/components/more",
               ],
             },
             {
-              CUE: [
-                "end-user/components/cue/webservice",
-                "end-user/components/cue/worker",
-                "end-user/components/cue/task",
+              "Attaching Traits": [
+                "end-user/traits/ingress",
+                "end-user/traits/rollout",
+                "end-user/traits/autoscaler",
+                "end-user/traits/annotations-and-labels",
+                "end-user/traits/service-binding",
+                "end-user/traits/sidecar",
+                "end-user/traits/kustomize-patch",
+                "end-user/traits/more",
               ],
             },
-            "end-user/components/cue/raw",
-            "end-user/components/more",
+            {
+              "Defining Policies": [
+                "end-user/policies/envbinding",
+                "end-user/policies/health",
+              ],
+            },
+            {
+              "Designing Workflow": [
+                "end-user/workflow/built-in-workflow-defs",
+                "end-user/workflow/webhook-notification",
+                "end-user/workflow/component-dependency-parameter",
+              ],
+            },
+            "case-studies/multi-cluster",
+            "end-user/version-control",
           ],
         },
-        {
-          "Attaching Traits": [
-            "end-user/traits/ingress",
-            "end-user/traits/rollout",
-            "end-user/traits/autoscaler",
-            "end-user/traits/annotations-and-labels",
-            "end-user/traits/service-binding",
-            "end-user/traits/sidecar",
-            "end-user/traits/kustomize-patch",
-            "end-user/traits/more",
-          ],
-        },
-        {
-          "Defining Policies": [
-            "end-user/policies/envbinding",
-            "end-user/policies/health",
-          ],
-        },
-        {
-          "Designing Workflow": [
-            "end-user/workflow/built-in-workflow-defs",
-            "end-user/workflow/webhook-notification",
-            "end-user/workflow/component-dependency-parameter",
-          ],
-        },
-        "case-studies/multi-cluster",
-        "end-user/version-control",
       ],
     },
     {
       type: "category",
-      label: "Administrator Manuals",
+      label: "Extension",
       collapsed: true,
       items: [
         {
@@ -179,7 +200,7 @@ module.exports = {
       items: [
         {
           type: "category",
-          label: "CLI",
+          label: "CLI Command",
           items: [
             "cli/vela_components",
             "cli/vela_config",
@@ -198,6 +219,26 @@ module.exports = {
             "cli/vela_system",
             "cli/vela_template",
             "cli/vela_cap",
+          ],
+        },
+        {
+          "Supported Cloud Resource": [
+            "end-user/components/cloud-services/terraform/alibaba-ack",
+            "end-user/components/cloud-services/terraform/alibaba-eip",
+            "end-user/components/cloud-services/terraform/alibaba-rds",
+            "end-user/components/cloud-services/terraform/alibaba-oss",
+            "end-user/components/cloud-services/terraform/alibaba-redis",
+            "end-user/components/cloud-services/terraform/alibaba-vpc",
+            "end-user/components/cloud-services/terraform/azure-database-mariadb",
+            "end-user/components/cloud-services/terraform/azure-storage-account",
+            "end-user/components/cloud-services/terraform/aws-s3",
+          ],
+        },
+        {
+          "Built-in Component Type": [
+            "end-user/components/cue/webservice",
+            "end-user/components/cue/worker",
+            "end-user/components/cue/task",
           ],
         },
       ],
