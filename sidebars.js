@@ -49,7 +49,10 @@ module.exports = {
       collapsed: true,
       items: [
         {
-          Dashboard: [
+          type: "category",
+          label: "Dashboard",
+          collapsed: true,
+          items: [
             {
               "Manage application": [
                 "how-to/dashboard/application/overview",
@@ -86,10 +89,15 @@ module.exports = {
               ],
             },
             {
-              "Manage addon": [],
+              "Manage addon": ["how-to/dashboard/addon/overview"],
             },
           ],
-          CLI: [
+        },
+        {
+          type: "category",
+          label: "CLI",
+          collapsed: false,
+          items: [
             "end-user/quick-start-cli",
             {
               "Deploying Components": [

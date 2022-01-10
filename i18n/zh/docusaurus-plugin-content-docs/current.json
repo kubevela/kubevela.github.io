@@ -112,7 +112,7 @@
     "description": "The label for category Customize Traits in sidebar docs"
   },
   "sidebar.docs.category.CLI": {
-    "message": "CLI 命令行工具",
+    "message": "CLI 命令行",
     "description": "The label for category CLI in sidebar docs"
   },
   "sidebar.docs.category.Capabilities": {
@@ -163,9 +163,9 @@
     "message": "调试指南",
     "description": "The label for category Debugging in sidebar docs"
   },
-  "sidebar.docs.category.Administrator Manuals": {
-    "message": "自定义扩展",
-    "description": "The label for category Administrator Manuals in sidebar docs"
+  "sidebar.docs.category.Extension": {
+    "message": "平台扩展",
+    "description": "平台扩展参考文档"
   },
   "sidebar.docs.category.Simple Template": {
     "message": "Simple Template",
@@ -182,5 +182,17 @@
   "sidebar.docs.category.Addons": {
     "message": "插件系统",
     "description": "The extended add-ons"
+  },
+  "sidebar.docs.category.Tutorials": {
+    "message": "教程",
+    "description": "KubeVela 场景场景教程"
+  },
+  "sidebar.docs.category.How-to Guides": {
+    "message": "操作手册",
+    "description": "CLI和Dashboard 的操作指导手册"
+  },
+  "sidebar.docs.category.Manage application": {
+    "message": "应用管理",
+    "description": "通过 Dashboard 对应用的管理操作说明"
   }
 }
