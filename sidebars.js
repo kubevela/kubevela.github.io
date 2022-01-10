@@ -198,29 +198,8 @@ module.exports = {
       type: "category",
       label: "References",
       items: [
-        {
-          type: "category",
-          label: "CLI Command",
-          items: [
-            "cli/vela_components",
-            "cli/vela_config",
-            "cli/vela_env",
-            "cli/vela_init",
-            "cli/vela_up",
-            "cli/vela_version",
-            "cli/vela_exec",
-            "cli/vela_logs",
-            "cli/vela_ls",
-            "cli/vela_port-forward",
-            "cli/vela_show",
-            "cli/vela_status",
-            "cli/vela_workloads",
-            "cli/vela_traits",
-            "cli/vela_system",
-            "cli/vela_template",
-            "cli/vela_cap",
-          ],
-        },
+        "cli/vela",
+
         {
           "Supported Cloud Resource": [
             "end-user/components/cloud-services/terraform/alibaba-ack",
