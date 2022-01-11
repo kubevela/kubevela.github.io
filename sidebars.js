@@ -39,7 +39,6 @@ module.exports = {
       items: [
         "case-studies/jenkins-cicd",
         "case-studies/gitops",
-        // 'case-studies/initialize-env',
         "case-studies/canary-blue-green",
       ],
     },
@@ -48,51 +47,52 @@ module.exports = {
       label: "How-to Guides",
       collapsed: true,
       items: [
-        {
-          type: "category",
-          label: "Dashboard",
-          collapsed: true,
-          items: [
-            {
-              "Manage application": [
-                "how-to/dashboard/application/overview",
-                "how-to/dashboard/application/create-application",
-                "how-to/dashboard/application/deploy-application",
-                "how-to/dashboard/application/get-application-instance",
-                "how-to/dashboard/application/get-application-log",
-                "how-to/dashboard/application/get-application-endpoint",
-                "how-to/dashboard/application/get-application-revision",
-                "how-to/dashboard/application/bind-new-environment",
-                "how-to/dashboard/application/recycle-environment",
-                "how-to/dashboard/application/delete-application",
-              ],
-            },
-            {
-              "Manage workflow": ["how-to/dashboard/workflow/overview"],
-            },
-            {
-              "Manage trait": ["how-to/dashboard/trait/overview"],
-            },
-            {
-              "Manage environment": ["how-to/dashboard/environment/overview"],
-            },
-            {
-              "Manage target": ["how-to/dashboard/target/overview"],
-            },
-            {
-              "Manage cluster": [
-                "how-to/dashboard/cluster/overview",
-                "how-to/dashboard/cluster/connect-cluster",
-                "how-to/dashboard/cluster/detach-cluster",
-                "how-to/dashboard/cluster/set-cluster-dashboard",
-                "how-to/dashboard/cluster/edit-cluster",
-              ],
-            },
-            {
-              "Manage addon": ["how-to/dashboard/addon/overview"],
-            },
-          ],
-        },
+        // TODO:
+        // {
+        //   type: "category",
+        //   label: "Dashboard",
+        //   collapsed: true,
+        //   items: [
+        //     {
+        //       "Manage application": [
+        //         "how-to/dashboard/application/overview",
+        //         "how-to/dashboard/application/create-application",
+        //         "how-to/dashboard/application/deploy-application",
+        //         "how-to/dashboard/application/get-application-instance",
+        //         "how-to/dashboard/application/get-application-log",
+        //         "how-to/dashboard/application/get-application-endpoint",
+        //         "how-to/dashboard/application/get-application-revision",
+        //         "how-to/dashboard/application/bind-new-environment",
+        //         "how-to/dashboard/application/recycle-environment",
+        //         "how-to/dashboard/application/delete-application",
+        //       ],
+        //     },
+        //     {
+        //       "Manage workflow": ["how-to/dashboard/workflow/overview"],
+        //     },
+        //     {
+        //       "Manage trait": ["how-to/dashboard/trait/overview"],
+        //     },
+        //     {
+        //       "Manage environment": ["how-to/dashboard/environment/overview"],
+        //     },
+        //     {
+        //       "Manage target": ["how-to/dashboard/target/overview"],
+        //     },
+        //     {
+        //       "Manage cluster": [
+        //         "how-to/dashboard/cluster/overview",
+        //         "how-to/dashboard/cluster/connect-cluster",
+        //         "how-to/dashboard/cluster/detach-cluster",
+        //         "how-to/dashboard/cluster/set-cluster-dashboard",
+        //         "how-to/dashboard/cluster/edit-cluster",
+        //       ],
+        //     },
+        //     {
+        //       "Manage addon": ["how-to/dashboard/addon/overview"],
+        //     },
+        //   ],
+        // },
         {
           type: "category",
           label: "CLI",

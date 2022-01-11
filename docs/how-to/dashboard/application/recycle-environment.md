@@ -1,3 +1,3 @@
 ---
-title: Recycle an environment
+title: How to recycle an environment
 ---
