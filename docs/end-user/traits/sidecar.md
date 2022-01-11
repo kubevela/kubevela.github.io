@@ -7,7 +7,7 @@ The `sidecar` trait allows you to attach a sidecar container to the component.
 ## Specification
 
 ```shell
-kubectl vela show sidecar
+vela show sidecar
 ```
 
 ```console

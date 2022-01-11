@@ -59,7 +59,7 @@ $ vela up -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/exam
 ```
 
 ```shell
-$ kubectl vela show aws-ebs-volume
+$ vela show aws-ebs-volume
 +-----------+----------------------------------------------------------------+--------+----------+---------+
 |   NAME    |                          DESCRIPTION                           |  TYPE  | REQUIRED | DEFAULT |
 +-----------+----------------------------------------------------------------+--------+----------+---------+

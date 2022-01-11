@@ -106,19 +106,16 @@ module.exports = {
                 "end-user/components/cloud-services/provider-and-consume-cloud-services",
 
                 "end-user/components/cue/raw",
-                "end-user/components/more",
+
               ],
             },
             {
               "Attaching Traits": [
                 "end-user/traits/ingress",
                 "end-user/traits/rollout",
-                "end-user/traits/autoscaler",
                 "end-user/traits/annotations-and-labels",
                 "end-user/traits/service-binding",
                 "end-user/traits/sidecar",
-                "end-user/traits/kustomize-patch",
-                "end-user/traits/more",
               ],
             },
             {
@@ -129,13 +126,13 @@ module.exports = {
             },
             {
               "Designing Workflow": [
-                "end-user/workflow/built-in-workflow-defs",
                 "end-user/workflow/webhook-notification",
                 "end-user/workflow/component-dependency-parameter",
               ],
             },
             "case-studies/multi-cluster",
             "end-user/version-control",
+            "end-user/addon",
           ],
         },
       ],
@@ -207,7 +204,6 @@ module.exports = {
       label: "References",
       items: [
         "cli/vela",
-
         {
           "Supported Cloud Resource": [
             "end-user/components/cloud-services/terraform/alibaba-ack",
@@ -226,8 +222,18 @@ module.exports = {
             "end-user/components/cue/webservice",
             "end-user/components/cue/worker",
             "end-user/components/cue/task",
+            "end-user/components/more",
           ],
         },
+        {
+          "Built-in Trait Type": [
+            "end-user/traits/ingress",
+            "end-user/traits/autoscaler",
+            "end-user/traits/kustomize-patch",
+            "end-user/traits/more",
+          ],
+        },
+        "end-user/workflow/built-in-workflow-defs",
       ],
     },
     {

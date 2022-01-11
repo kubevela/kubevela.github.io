@@ -1,0 +1,60 @@
+---
+title: Install Addon
+---
+
+You can get more capabilities from KubeVela ecosystem by installing addons.
+
+## List Addons
+
+By default, the following command lists addons from a default addon registry (https://addons.kubevela.net) maintained by KubeVela team.
+
+
+```shell
+$ vela addon list
+terraform               Terraform Controller is a Kubernetes Controller for Terraform.                                                                          disabled
+velaux                  The KubeVela User Experience (UX ). Dashboard Designed as an extensible, application-oriented delivery and management control panel.    disabled
+ocm-cluster-manager     ocm-cluster-manager can deploy an OCM hub cluster environment.                                                                          disabled
+fluxcd                  Extended workload to do continuous and progressive delivery                                                                             disabled
+terraform-aws           Kubernetes Terraform Controller for AWS                                                                                                 disabled
+observability           An out of the box solution for KubeVela observability                                                                                   disabled
+terraform-alibaba       Kubernetes Terraform Controller for Alibaba Cloud                                                                                       disabled
+terraform-azure         Kubernetes Terraform Controller for Azure                                                                                               disabled
+```
+
+## Install Addon
+
+```
+$ vela addon enable fluxcd
+I0111 21:45:24.553174   89345 apply.go:106] "creating object" name="addon-fluxcd" resource="core.oam.dev/v1beta1, Kind=Application"
+I0111 21:45:25.258914   89345 apply.go:106] "creating object" name="helm" resource="core.oam.dev/v1beta1, Kind=ComponentDefinition"
+I0111 21:45:25.342731   89345 apply.go:106] "creating object" name="kustomize-json-patch" resource="core.oam.dev/v1beta1, Kind=TraitDefinition"
+I0111 21:45:25.382201   89345 apply.go:106] "creating object" name="kustomize-patch" resource="core.oam.dev/v1beta1, Kind=TraitDefinition"
+I0111 21:45:25.411723   89345 apply.go:106] "creating object" name="kustomize" resource="core.oam.dev/v1beta1, Kind=ComponentDefinition"
+I0111 21:45:25.625815   89345 apply.go:106] "creating object" name="kustomize-strategy-merge" resource="core.oam.dev/v1beta1, Kind=TraitDefinition"
+I0111 21:45:25.660129   89345 apply.go:106] "creating object" name="component-uischema-helm" resource="/v1, Kind=ConfigMap"
+Addon: fluxcd enabled Successfully.
+```
+
+You can view the new component or trait types added by `vela component` or `vela trait`.
+
+## List Registry
+
+```
+$ vela addon registry list 
+Name            Type    URL                        
+KubeVela        OSS     https://addons.kubevela.net
+```
+
+## Add Registry
+
+```
+$ vela addon registry add experimental --type OSS --endpoint=https://addons.kubevela.net --path=experimental/
+Successfully add an addon registry experimental
+```
+
+## Delete Registry
+
+```
+$ vela addon registry delete experimental
+Successfully delete an addon registry experimental
+```

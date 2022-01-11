@@ -1,27 +1,12 @@
 ---
-title: Ingress
+title: Gateway
 ---
 
-The `ingress` trait exposes a component to public Internet via a valid domain.
-
-## Specification
-
-```shell
-kubectl vela show ingress
-```
-```console
-# Properties
-+--------+------------------------------------------------------------------------------+----------------+----------+---------+
-|  NAME  |                                 DESCRIPTION                                  |      TYPE      | REQUIRED | DEFAULT |
-+--------+------------------------------------------------------------------------------+----------------+----------+---------+
-| http   | Specify the mapping relationship between the http path and the workload port | map[string]int | true     |         |
-| domain | Specify the domain you want to expose                                        | string         | true     |         |
-+--------+------------------------------------------------------------------------------+----------------+----------+---------+
-```
+The `gateway` trait exposes a component to public Internet via a valid domain.
 
 ## How to use
 
-Attach a `ingress` trait to the component you want to expose and deploy.
+Attach a `gateway` trait to the component you want to expose and deploy.
 
 ```yaml
 # vela-app.yaml
@@ -37,7 +22,7 @@ spec:
         image: crccheck/hello-world
         port: 8000
       traits:
-        - type: ingress
+        - type: gateway
           properties:
             domain: testsvc.example.com
             http:
@@ -51,39 +36,52 @@ vela up -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/exampl
 application.core.oam.dev/first-vela-app created
 ```
 
-Check the status until we see `status` is `running` and services are `healthy`:
+Check the status until we see `status` is `running`:
 
 ```bash
-kubectl get application first-vela-app -w
+vela status first-vela-app
 ```
 ```console
-NAME             COMPONENT        TYPE         PHASE            HEALTHY   STATUS   AGE
-first-vela-app   express-server   webservice   healthChecking                      14s
-first-vela-app   express-server   webservice   running          true               42s
+About:
+
+  Name:      	first-vela-app
+  Namespace: 	default
+  Created at:	2022-01-11 22:04:29 +0800 CST
+  Status:    	running
+
+Workflow:
+
+  mode: DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id:gfgwqp6pqh
+    name:express-server
+    type:apply-component
+    phase:succeeded
+    message:
+
+Services:
+
+  - Name: express-server  Env:
+    Type: webservice
+    healthy Ready:1/1
+    Traits:
+      - ✅ gateway: Visiting URL: testsvc.example.com, IP: 1.5.1.1
 ```
 
-Check the trait detail for the its visiting url:
+You can also get the endpoint by:
 
 ```shell
-kubectl get application first-vela-app -o yaml
+vela status first-vela-app --endpoint
 ```
-```console
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-vela-app
-  namespace: default
-spec:
-...
-  services:
-  - healthy: true
-    name: express-server
-    traits:
-    - healthy: true
-      message: 'Visiting URL: testsvc.example.com, IP: <your ip address>'
-      type: ingress
-  status: running
-...
+```
+|--------------------------------|----------------------------+
+|    REF(KIND/NAMESPACE/NAME)    |          ENDPOINT          |
+|--------------------------------|----------------------------+
+| Ingress/default/express-server | http://testsvc.example.com |
+|--------------------------------|----------------------------+
 ```
 
 Then you will be able to visit this application via its domain.
@@ -108,3 +106,12 @@ Hello World
 ```
 
 > ⚠️ This section requires your runtime cluster has a working ingress controller.
+
+
+## Specification
+
+|  NAME  |                                 DESCRIPTION                                  |      TYPE      | REQUIRED | DEFAULT |
+|--------|------------------------------------------------------------------------------|----------------|----------|---------|
+| http   | Specify the mapping relationship between the http path and the workload port | map[string]int | true     |         |
+| class  | Specify the class of ingress to use                                          | string         | true     | nginx   |
+| domain | Specify the domain you want to expose                                        | string         | true     |         |

@@ -5,6 +5,7 @@ title: Web Service
 Service-oriented components are components that support external access to services with the container as the core, and their functions cover the needs of most of he microservice scenarios.
 
 Please copy shell below and apply to the cluster:
+
 ```shell
 cat <<EOF | vela up -f -
 # YAML begins
@@ -27,50 +28,52 @@ spec:
 # YAML ends
 EOF
 ```
+
 You can also save the YAML file as website.yaml and use the `vela up -f website.yaml` command to deploy.
 
-Next, check the deployment status of the application through `kubectl get application <application name> -o yaml`:
+Next, check the deployment status of the application through `vela status <application name>`:
+
 ```shell
-$ kubectl get application website -o yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: website
-  ... #  Omit non-critical information
-spec:
-  components:
-  - name: frontend
-    properties:
-      ... #  Omit non-critical information
-    type: webservice
-status:
-  conditions:
-  - lastTransitionTime: "2021-08-28T10:26:47Z"
-    reason: Available
-    status: "True"
-    ... #  Omit non-critical information
-    type: HealthCheck
-  observedGeneration: 1
-  ... #  Omit non-critical information
-  services:
-  - healthy: true
-    name: frontend
-    workloadDefinition:
-      apiVersion: apps/v1
-      kind: Deployment
-  status: running
+$ vela status website
+About:
+
+  Name:      	website
+  Namespace: 	default
+  Created at:	2022-01-11 21:04:59 +0800 CST
+  Status:    	running
+
+Workflow:
+
+  mode: DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id:2y4rv8479h
+    name:frontend
+    type:apply-component
+    phase:succeeded
+    message:
+
+Services:
+
+  - Name: frontend  Env:
+    Type: webservice
+    healthy Ready:1/1
 ```
 
-When we see that the `status.services.healthy` field is true and the status is running, it means that the entire application is delivered successfully.
+When we see that the `finished` field in Workflow is `true` and the Status is `running`, it means that the entire application is delivered successfully.
 
 If status shows as rendering or healthy as false, it means that the application has either failed to deploy or is still being deployed. Please proceed according to the information returned in `kubectl get application <application name> -o yaml`.
 
-You can also view through the CLI of vela, using the following command:
+You can also view application list by using the following command:
+
 ```shell
 $ vela ls
 APP    	COMPONENT	TYPE      	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME                 
 website	frontend 	webservice	      	running	healthy	      	2021-08-28 18:26:47 +0800 CST
 ```
+
 We also see that the PHASE of the app is running and the STATUS is healthy.
 
 ## Attributes

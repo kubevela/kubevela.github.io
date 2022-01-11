@@ -1,29 +1,18 @@
 ---
-title: 配置网关
+title: 访问部署的应用
+description: 本页面介绍通过为应用分配网关策略，或设置应用的 Service 类型为 Loadbalancer 或 NodePort 实现应用的集群外访问。
 ---
+
+本文介绍多种应用访问策略的设置方法，你可以根据基础设施条件选择应用合适访问方式。
 
 ## 开始之前
 
-> ⚠️ 需要你的集群已安装 [Ingress 控制器](https://kubernetes.github.io/ingress-nginx/deploy/)。
-
-## 字段说明
+- 建议在 Kubernetes 集群中安装 Ingress 控制器，比如 [Nginx Ingress Controller](https://kubernetes.github.io/ingress-nginx/deploy/)。
 
 
-```shell
-vela show ingress
-```
+## How to use
 
-```console
-# Properties
-+--------+------------------------------------------------------------------------------+----------------+----------+---------+
-|  NAME  |                                 DESCRIPTION                                  |      TYPE      | REQUIRED | DEFAULT |
-+--------+------------------------------------------------------------------------------+----------------+----------+---------+
-| http   | Specify the mapping relationship between the http path and the workload port | map[string]int | true     |         |
-| domain | Specify the domain you want to expose                                        | string         | true     |         |
-+--------+------------------------------------------------------------------------------+----------------+----------+---------+
-```
-
-## 如何使用
+Attach a `gateway` trait to the component you want to expose and deploy.
 
 ```yaml
 # vela-app.yaml
@@ -39,49 +28,69 @@ spec:
         image: crccheck/hello-world
         port: 8000
       traits:
-        - type: ingress
+        - type: gateway
           properties:
             domain: testsvc.example.com
             http:
               "/": 8000
 ```
 
-部署到集群后，检查应用状态为 running，并且状态是 healthy：
+```bash
+vela up -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
+```
+```console
+application.core.oam.dev/first-vela-app created
+```
+
+Check the status until we see `status` is `running`:
 
 ```bash
-kubectl get application first-vela-app -w
+vela status first-vela-app
 ```
 ```console
-NAME             COMPONENT        TYPE         PHASE            HEALTHY   STATUS   AGE
-first-vela-app   express-server   webservice   healthChecking                      14s
-first-vela-app   express-server   webservice   running          true               42s
+About:
+
+  Name:      	first-vela-app
+  Namespace: 	default
+  Created at:	2022-01-11 22:04:29 +0800 CST
+  Status:    	running
+
+Workflow:
+
+  mode: DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id:gfgwqp6pqh
+    name:express-server
+    type:apply-component
+    phase:succeeded
+    message:
+
+Services:
+
+  - Name: express-server  Env:
+    Type: webservice
+    healthy Ready:1/1
+    Traits:
+      - ✅ gateway: Visiting URL: testsvc.example.com, IP: 1.5.1.1
 ```
 
-如果你的集群带有云厂商的负载均衡机制可以通过 Application 查看到访问的 IP：
+You can also get the endpoint by:
 
 ```shell
-kubectl get application first-vela-app -o yaml
+vela status first-vela-app --endpoint
 ```
-```console
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-vela-app
-  namespace: default
-spec:
-...
-  services:
-  - healthy: true
-    name: express-server
-    traits:
-    - healthy: true
-      message: 'Visiting URL: testsvc.example.com, IP: 47.111.233.220'
-      type: ingress
-  status: running
-...
+```
+|--------------------------------|----------------------------+
+|    REF(KIND/NAMESPACE/NAME)    |          ENDPOINT          |
+|--------------------------------|----------------------------+
+| Ingress/default/express-server | http://testsvc.example.com |
+|--------------------------------|----------------------------+
 ```
 
-然后就能够通过这个 IP，来访问该应用程序了。
+Then you will be able to visit this application via its domain.
 
 ```
 curl -H "Host:testsvc.example.com" http://<your ip address>/
@@ -101,3 +110,14 @@ Hello World
                              `'--.._\..--''
 </xmp>
 ```
+
+> ⚠️ This section requires your runtime cluster has a working ingress controller.
+
+
+## Specification
+
+|  NAME  |                                 DESCRIPTION                                  |      TYPE      | REQUIRED | DEFAULT |
+|--------|------------------------------------------------------------------------------|----------------|----------|---------|
+| http   | Specify the mapping relationship between the http path and the workload port | map[string]int | true     |         |
+| class  | Specify the class of ingress to use                                          | string         | true     | nginx   |
+| domain | Specify the domain you want to expose                                        | string         | true     |         |
