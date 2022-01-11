@@ -79,7 +79,7 @@ the doc [Provision cloud resources](../../end-user/components/cloud-services/pro
 You are encouraged to generate the documentation for your ComponentDefinition and submit it to [KubeVela official site](https://github.com/oam-dev/kubevela.io).
 
 ```shell
-$ vela def gen-doc alibaba-eip -n vela-system
+$ vela def doc-gen alibaba-eip -n vela-system
 Generated docs for alibaba-eip in ./kubevela.io/docs/end-user/components/cloud-services/terraform/alibaba-eip.md
 ```
 
