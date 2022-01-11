@@ -1,3 +1,3 @@
 ---
-title: Bind new environment
+title: How to bind new environment
 ---
