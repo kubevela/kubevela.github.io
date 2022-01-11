@@ -80,7 +80,7 @@ $ vela show alibaba-eip
 我们鼓励你为你的 ComponentDefinition 生成文档并提交给 [KubeVela官方网站]（https://github.com/oam-dev/kubevela.io）。
 
 ```shell
-$ vela def gen-doc alibaba-eip -n vela-system
+$ vela def doc-gen alibaba-eip -n vela-system
 Generated docs for alibaba-eip in ./kubevela.io/docs/end-user/components/cloud-services/terraform/alibaba-eip.md
 ```
 
