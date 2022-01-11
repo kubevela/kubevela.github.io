@@ -133,10 +133,10 @@ installFile() {
     chmod o+x $tmp_root_vela_cli
     runAsRoot cp "$tmp_root_vela_cli" "$VELA_INSTALL_DIR"
 
-    if [ -f "$VELA_CLI_FILE" ]; then
+    if [ $? -eq 0 ] && [ -f "$VELA_CLI_FILE" ]; then
         echo "$VELA_CLI_FILENAME installed into $VELA_INSTALL_DIR successfully."
 
-        $VELA_CLI_FILE --version
+        $VELA_CLI_FILE version
     else
         echo "Failed to install $VELA_CLI_FILENAME"
         exit 1
