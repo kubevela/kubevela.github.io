@@ -77,7 +77,7 @@ spec:
 Deploy this Application.
 
 ```shell
-kubectl apply -f app.yaml
+vela up -f app.yaml
 ```
 
 On runtime cluster, check the name of running pod.

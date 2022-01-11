@@ -6,7 +6,7 @@ Service-oriented components are components that support external access to servi
 
 Please copy shell below and apply to the cluster:
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 # YAML begins
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -27,7 +27,7 @@ spec:
 # YAML ends
 EOF
 ```
-You can also save the YAML file as website.yaml and use the `kubectl apply -f website.yaml` command to deploy.
+You can also save the YAML file as website.yaml and use the `vela up -f website.yaml` command to deploy.
 
 Next, check the deployment status of the application through `kubectl get application <application name> -o yaml`:
 ```shell

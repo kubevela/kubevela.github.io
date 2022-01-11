@@ -9,7 +9,7 @@ title: Web 服务
 为了便于你快速学习，请直接复制下面的 Shell 执行，应用会部署到集群中：
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 # YAML 文件开始
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -31,7 +31,7 @@ spec:
 EOF
 ```
 
-你也可以自行将 YAML 文件保存为 website.yaml，使用 `kubectl apply -f website.yaml` 命令进行部署。
+你也可以自行将 YAML 文件保存为 website.yaml，使用 `vela up -f website.yaml` 命令进行部署。
 
 接下来，通过 `kubectl get application <应用 name> -o yaml` 查看应用的部署状态：
 

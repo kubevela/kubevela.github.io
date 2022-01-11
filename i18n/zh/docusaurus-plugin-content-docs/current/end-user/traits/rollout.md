@@ -11,7 +11,7 @@ title: 灰度发布和扩缩容
 应用下面的 YAML 来创建一个应用部署计划，该应用包含了一个使用了灰度发布运维特征的 webservice 类型的组件，并指定[组件版本](../version-control)名称为 express-server-v1 。如果你不指定，每次对组件的修改都会自动产生一个组件版本(ControllerRevision)，组件版本名称的默认产生规则是：`<组件名>-<版本序号>`。
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -75,7 +75,7 @@ express-server-v1   5/5     5            5           2d20h
    
 应用下面的 YAML 来修改容器的镜像，将工作负载升级到新的组件版本。
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -132,7 +132,7 @@ express-server-v2   2/2     2            2           1m
 应用下面的 YAML 来去掉灰度发布运维特征的 `batchPartition` 字段来将全部副本升级到最新版本。
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -175,7 +175,7 @@ express-server-v2   5/5     5            5           1m
    
 应用下面的 YAML 来指定灰度发布运维特征的 `targetRevision` 将组件回滚到 express-server-v1 组件版本。
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -217,7 +217,7 @@ express-server-v1   5/5     5            5           15s
 
 灰度发布运维特征还可以完成工作负载的扩容操作，应用下面的 YAML 来修改targetSize，将副本个数由原来的5个增加至7个。
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -254,7 +254,7 @@ express-server-v1   7/7     7            7           2m
    
 应用下面的 YAML 将副本个数由之前的7个缩减至3个
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -307,7 +307,7 @@ cloneset            vela-system     clonesets.apps.kruise.io
 
 应用下面的 YAML 来创建一个应用部署计划，该应用包含一个 cloneset 类型的工作负载和一个灰度发布运维特征。
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -359,7 +359,7 @@ stefanprodan/podinfo:4.0.3
 
 应用下面的 YAML 更新镜像。
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:

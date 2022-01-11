@@ -73,7 +73,7 @@ CreationTime                                 Region    StorageClass    BucketNam
 首先请直接复制一个编写好的应用部署计划，在命令行中执行：
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -115,7 +115,7 @@ webapp               	rds-server    	webservice 	service-binding   	running	heal
 有了 RDS 的服务器，又有了正常运行的云资源，是时候让它们之间映射起来了：使用运维特征 service-binding。我们对 YAML 文件进行更新后，再次部署：
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:

@@ -63,7 +63,7 @@ sidecar                 	vela-system	*               	              	true       
 
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 # YAML 文件开始
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -87,7 +87,7 @@ EOF
 ```
 
 
-你也可以自行将 YAML 文件保存为 ingerss-app.yaml，使用 `kubectl apply -f ingerss-app.yaml` 命令进行部署。
+你也可以自行将 YAML 文件保存为 ingerss-app.yaml，使用 `vela up -f ingerss-app.yaml` 命令进行部署。
 
 
 当我们通过 `vela ls` 看到应用的 status 为 running 并且服务为 healthy，表示应用部署计划完全生效。同时它的 TRAITS 类型也正确显示为 ingress。
@@ -166,7 +166,7 @@ labels 和 annotations 运维特征，允许你将标签和注释附加到组件
 
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 # YAML 文件开始
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -227,7 +227,7 @@ Sidecar 容器作为与业务容器解耦的存在，可以帮助我们很多辅
 
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 # YAML 文件开始
 apiVersion: core.oam.dev/v1beta1
 kind: Application

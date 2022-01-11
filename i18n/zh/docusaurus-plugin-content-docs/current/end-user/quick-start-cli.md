@@ -33,7 +33,7 @@ spec:
 我们可以直接使用 `kubectl` 把它提交给 KubeVela：
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
+vela up -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
 ```
 
 上述命令一旦执行，KubeVela 就会帮助你在目标集群中交付一个 `Web 服务`类型的组件，且该组件的容器镜像是`crccheck/hello-world`。在本示例中，我们并没有特别指明目标集群是哪个，所以 KubeVela 会默认把应用部署在它所在的集群也就是控制平面集群当中。

@@ -12,7 +12,7 @@ Apply the Application YAML below which includes a webservice-type workload with 
 of component name to be express-server-v1.
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -68,7 +68,7 @@ express-server-v1   5/5     5            5           2d20h
 
 Apply the YAML below to modify the image of the container. It will generate a new ControllerRevision.
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -117,7 +117,7 @@ express-server-v2   2/2     2            2           1m
 
 Apply the YAML below without `batchPartition` field in Rollout Trait to upgrade all replicas to latest revision.
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -158,7 +158,7 @@ express-server-v2   5/5     5            5           1m
    
 Apply the YAML below to make controllerRevision roll back to express-server-v1 by assigning `targetRevision` field to express-server-v1 in Rollout Trait.
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -199,7 +199,7 @@ express-server-v1   5/5     5            5           15s
 
 Rollout Trait also be able to scale up a Workload, apply the YAML below to modify the `targetSize`, in order to increase the number of replicas from 5 to 7.
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -235,7 +235,7 @@ express-server-v1   7/7     7            7           2m
    
 Apply the YAML below to scale down the size of replicas from 7 to 3.
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -285,7 +285,7 @@ cloneset           vela-system     clonesets.apps.kruise.io
 
 Apply the YAML below to create an Application, this Application includes a Workload of type cloneset with a Rollout Trait.
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -337,7 +337,7 @@ stefanprodan/podinfo:4.0.3
 
 Apply the YAML below to upgrade the image.
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:

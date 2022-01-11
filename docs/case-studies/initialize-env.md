@@ -48,7 +48,7 @@ We can use `depends-on-app` to make sure `fluxcd` is deployed before kruise.
 
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:

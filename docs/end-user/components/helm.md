@@ -9,7 +9,7 @@ KubeVela's Helm component meets the needs of users to connect to Helm Chart. You
 In this `Application`, we hope to deliver a component called redis-comp. It is a chart from the [bitnami](https://charts.bitnami.com/bitnami).
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:

@@ -7,7 +7,7 @@ title: CLI Commands
 
 * [vela env](vela_env)	 - Manage environments for vela applications to run.
 * [vela init](vela_init)	 - Create scaffold for vela application.
-* [vela up](vela_up)	 - Create or update vela application from file, both appfile or application object format are supported.
+* [vela up](vela_up)	 - Create or update vela application from file or URL, both appfile or application object format are supported.
 * [vela show](vela_show)	 - Show the reference doc for component or trait types.
 
 ## Managing Applications

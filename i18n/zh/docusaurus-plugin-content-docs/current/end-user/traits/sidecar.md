@@ -74,7 +74,7 @@ spec:
 编写完毕，在 YAML 文件所在路径下，部署这个应用：
 
 ```shell
-kubectl apply -f app.yaml
+vela up -f app.yaml
 ```
 
 成功后，先检查应用生成的工作负载情况：

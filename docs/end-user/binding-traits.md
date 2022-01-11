@@ -47,7 +47,7 @@ Please directly copy the following Shell code, which will be applied to the clus
 
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 # YAML begins
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -71,7 +71,7 @@ EOF
 ```
 
 
-You can also save the YAML file as ingerss-app.yaml and use the `kubectl apply -f ingerss-app.yaml` command to deploy.
+You can also save the YAML file as ingerss-app.yaml and use the `vela up -f ingerss-app.yaml` command to deploy.
 
 
 When we see that the status of the application is running and the service is healthy through `vela ls`, it means that the application is fully effective. At the same time, its TRAITS type is also correctly displayed as ingress.
@@ -149,7 +149,7 @@ First, we prepare an example of an application, please copy and execute it direc
 
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 # YAML begins
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -209,7 +209,7 @@ As the existence of sidecar container decoupling from business container, it can
 Let's write a `log-gen-worker` component in an application. At the same time, we point the log data directory recorded by the sidecar and the component to the same data storage volume `varlog`.
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 # YAML begins
 apiVersion: core.oam.dev/v1beta1
 kind: Application

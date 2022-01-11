@@ -24,7 +24,7 @@ secret/bucket-secret created
 2. 部署该组件
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:

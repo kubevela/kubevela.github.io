@@ -35,7 +35,7 @@ spec:
 Now deploy it to KubeVela:
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
+vela up -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
 ```
 
 This command will deploy a web service component to target environment, which in our case is the Kubernetes cluster that KubeVela itself is installed.
