@@ -424,7 +424,7 @@ spec:
 
 进行部署：
 ```
-$ kubectl apply -f webserver.yaml
+$ vela up -f webserver.yaml
 ```
 最后，它将在运行时集群生成相关 Kubernetes 资源如下：
 

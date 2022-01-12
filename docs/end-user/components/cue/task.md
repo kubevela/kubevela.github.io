@@ -17,8 +17,8 @@ spec:
       type: task
       properties:
         image: perl
-	    count: 10
-	    cmd: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+        count: 10
+        cmd: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
 ```
 
 ## Attributes

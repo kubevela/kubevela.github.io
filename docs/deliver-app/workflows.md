@@ -5,7 +5,7 @@ description: This article introduces the usage of Workflow and gives you a full 
 
 This section introduces the usage of Workflow and gives you a full picture of it.
 
-In the section of [Deploy Kubernetes Raw Resources](./k8s-object), we first learned the usage of workflow, that is, manual approval in the process of multi-cluster publishing. Now we continue to introduce the following topics:
+In the section of [Deploy Kubernetes Objects](./k8s-object), we first learned the usage of workflow, that is, manual approval in the process of multi-cluster publishing. Now we continue to introduce the following topics:
 
 1. Learn more about Workflow, Revision, and Environment, as well as all the built-in Workflow steps.
 2. Implement notifications in the workflow.

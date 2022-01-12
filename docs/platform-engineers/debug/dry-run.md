@@ -1,5 +1,5 @@
 ---
-title: Dry Run
+title: Dry Run for Debugging
 ---
 
 Dry run will help you to understand what are the real resources which will to be expanded and deployed

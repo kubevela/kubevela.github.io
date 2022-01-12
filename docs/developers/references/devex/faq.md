@@ -69,7 +69,7 @@ TYPE       	CATEGORY	DESCRIPTION
 And manually apply all WorkloadDefinition and TraitDefinition manifests to have all capabilities back.
 
 ```
-kubectl apply -f charts/vela-core/templates/defwithtemplate
+vela up -f charts/vela-core/templates/defwithtemplate
 ```
 ```console
 traitdefinition.core.oam.dev/autoscale created

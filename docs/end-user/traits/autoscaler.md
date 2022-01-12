@@ -2,15 +2,6 @@
 title: AutoScaler
 ---
 
-## Specification
-
-
-| NAME    | DESCRIPTION                                                                     | TYPE | REQUIRED | DEFAULT |
-| ------- | ------------------------------------------------------------------------------- | ---- | -------- | ------- |
-| min     | Specify the minimal number of replicas to which the autoscaler can scale down   | int  | true     | 1       |
-| max     | Specify the maximum number of of replicas to which the autoscaler can scale up  | int  | true     | 10      |
-| cpuUtil | Specify the average cpu utilization, for example, 50 means the CPU usage is 50% | int  | true     | 50      |
-
 ## How to use
 
 ```yaml
@@ -32,3 +23,12 @@ spec:
             max: 10
             cpuPercent: 60
 ```
+
+## Specification
+
+
+| NAME    | DESCRIPTION                                                                     | TYPE | REQUIRED | DEFAULT |
+| ------- | ------------------------------------------------------------------------------- | ---- | -------- | ------- |
+| min     | Specify the minimal number of replicas to which the autoscaler can scale down   | int  | true     | 1       |
+| max     | Specify the maximum number of of replicas to which the autoscaler can scale up  | int  | true     | 10      |
+| cpuUtil | Specify the average cpu utilization, for example, 50 means the CPU usage is 50% | int  | true     | 50      |

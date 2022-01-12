@@ -4,20 +4,6 @@ title:  Service Binding
 
 Service binding trait will bind data from Kubernetes `Secret` to the application container's ENV.
 
-## Specification
-
-### Properties
-Name | Description | Type | Required | Default
------------- | ------------- | ------------- | ------------- | -------------
-envMappings | The mapping of environment variables to secret | map[string]#KeySecret | true |
-
-#### KeySecret
-Name | Description | Type | Required | Default
------------- | ------------- | ------------- | ------------- | -------------
-| key  | if key is empty, we will use envMappings key instead              | string            | false     |         |
-| secret | Kubernetes secret name | string | true     |         |
-
-
 ## How to use
 
 1. Prepare a Kubernetes Secret
@@ -105,3 +91,17 @@ spec:
 ```
 
 Deploy this YAML and the Secret `db-conn-example` will be binding into environment of workload.
+
+## Specification
+
+### Properties
+Name | Description | Type | Required | Default
+------------ | ------------- | ------------- | ------------- | -------------
+envMappings | The mapping of environment variables to secret | map[string]#KeySecret | true |
+
+#### KeySecret
+Name | Description | Type | Required | Default
+------------ | ------------- | ------------- | ------------- | -------------
+| key  | if key is empty, we will use envMappings key instead              | string            | false     |         |
+| secret | Kubernetes secret name | string | true     |         |
+

@@ -1,5 +1,5 @@
 ---
-title: Provision and Binding
+title: Provision and Binding Cloud Resources
 ---
 
 Cloud-oriented development is now becoming the norm, there is an urgent need to integrate cloud resources from different
@@ -91,7 +91,7 @@ spec:
       type: webservice
       properties:
         image: zzxwill/flask-web-application:v0.3.1-crossplane
-        ports: 80
+        port: 80
       traits:
         - type: service-binding
           properties:
@@ -142,12 +142,11 @@ webapp	express-server	webservice 	service-binding	running     	healthy  	      	
 ```
 
 ```shell
-$ sudo kubectl port-forward deployment/express-server 80:80
+$ vela port-forward webapp
+Forwarding from 127.0.0.1:8080 -> 80
+Forwarding from [::1]:8080 -> 80
 
-Forwarding from 127.0.0.1:80 -> 80
-Forwarding from [::1]:80 -> 80
-Handling connection for 80
-Handling connection for 80
+Forward successfully! Opening browser ...
 ```
 
 ![](../../../resources/crossplane-visit-application-v3.jpg)

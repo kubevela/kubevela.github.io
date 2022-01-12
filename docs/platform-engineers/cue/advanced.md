@@ -135,7 +135,7 @@ You can see that a `my-stateful` component  via `vela components` command:
 
 When you put this customized component into `Application`, it looks like:
 
-	cat <<EOF | kubectl apply -f -
+	cat <<EOF | vela up -f -
 	apiVersion: core.oam.dev/v1beta1
 	kind: Application
 	metadata:
@@ -236,7 +236,7 @@ You can specify the three new parameters in the application:
 	        name: my-component
 ```
 
-Save the file locally and name it `app-stateful.yaml`, execute `kubectl apply -f app-stateful.yaml` to update the application, you can see that the name, image, and number of instances of the StatefulSet object have been updated.
+Save the file locally and name it `app-stateful.yaml`, execute `vela up -f app-stateful.yaml` to update the application, you can see that the name, image, and number of instances of the StatefulSet object have been updated.
 
 ## Dry-run
 

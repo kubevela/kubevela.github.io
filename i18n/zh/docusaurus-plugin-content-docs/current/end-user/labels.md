@@ -48,7 +48,7 @@ spec:
 Apply this Application.
 
 ```shell
-kubectl apply -f myapp.yaml
+vela up -f myapp.yaml
 ```
 
 Check the workload has been created successfully.

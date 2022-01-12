@@ -170,7 +170,7 @@ After storing bellow files in the Git config repo, we need to apply the GitOps c
 First, apply the `clusters/infra.yaml` to cluster, we can see that the MySQL in `infrastructure/` is automatically deployed:
 
 ```shell
-kubectl apply -f clusters/infra.yaml
+vela up -f clusters/infra.yaml
 ```
 
 ```shell
@@ -185,7 +185,7 @@ mysql 	mysql-controller	helm      	       	running	healthy	      	2021-09-26 20:
 Apply the `clusters/apps.yaml` to cluster, we can see that the application in `apps/` is automatically deployed:
 
 ```shell
-kubectl apply -f clusters/apps.yaml
+vela up -f clusters/apps.yaml
 ```
 
 ```shell

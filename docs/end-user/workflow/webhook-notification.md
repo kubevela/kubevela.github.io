@@ -8,23 +8,6 @@ In this guide, you will learn how to send notifications via `webhook-notificatio
 
 > Make sure the version of KubeVela is `>=v1.1.6`.
 
-## Parameters
-
-| Parameter | Type | Description |
-| :---: | :--: | :-- |
-| slack | Object | Optional, please fulfill its url and message if you want to send Slack messages |
-| slack.url | Object | Required, the webhook address of Slack, you can choose to fill it in directly or specify it in secret |
-| slack.url.address | String | Optional, directly specify the webhook address of Slack |
-| slack.url.fromSecret.name | String | Optional, specify the webhook address of Slack from secret |
-| slack.url.fromSecret.key | String | Optional, specify the webhook address of Slack from secret, the key of the secret |
-| slack.message | Object | Required, the Slack messages you want to send, please follow [Slack messaging](https://api.slack.com/reference/messaging/payload) |
-| dingding | Object | Optional, please fulfill its url and message if you want to send DingTalk messages |
-| dingding.url | Object | Required, the webhook address of DingTalk, you can choose to fill it in directly or specify it in secret |
-| dingding.url.address | String | Optional, directly specify the webhook address of DingTalk |
-| dingding.url.fromSecret.name | String | Optional, specify the webhook address of DingTalk from secret |
-| dingding.url.fromSecret.key | String | Optional, specify the webhook address of DingTalk from secret, the key of the secret |
-| dingding.message | Object | Required, the DingTalk messages you want to send, please follow [DingTalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |
-
 ## How to use
 
 Apply the following `Application` with workflow step type of `webhook-notification`:
@@ -92,3 +75,20 @@ spec:
 we can see that before and after the deployment of the application, the messages can be seen in the corresponding group chat.
 
 With `webhook-notification`, we can integrate with webhook notifier easily.
+
+## Parameters
+
+| Parameter | Type | Description |
+| :---: | :--: | :-- |
+| slack | Object | Optional, please fulfill its url and message if you want to send Slack messages |
+| slack.url | Object | Required, the webhook address of Slack, you can choose to fill it in directly or specify it in secret |
+| slack.url.address | String | Optional, directly specify the webhook address of Slack |
+| slack.url.fromSecret.name | String | Optional, specify the webhook address of Slack from secret |
+| slack.url.fromSecret.key | String | Optional, specify the webhook address of Slack from secret, the key of the secret |
+| slack.message | Object | Required, the Slack messages you want to send, please follow [Slack messaging](https://api.slack.com/reference/messaging/payload) |
+| dingding | Object | Optional, please fulfill its url and message if you want to send DingTalk messages |
+| dingding.url | Object | Required, the webhook address of DingTalk, you can choose to fill it in directly or specify it in secret |
+| dingding.url.address | String | Optional, directly specify the webhook address of DingTalk |
+| dingding.url.fromSecret.name | String | Optional, specify the webhook address of DingTalk from secret |
+| dingding.url.fromSecret.key | String | Optional, specify the webhook address of DingTalk from secret, the key of the secret |
+| dingding.message | Object | Required, the DingTalk messages you want to send, please follow [DingTalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |

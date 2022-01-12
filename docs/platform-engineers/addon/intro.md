@@ -1,8 +1,8 @@
 ---
-title: Addon Management System
+title: Make Addon and Build Registry
 ---
 
-Addon management system is used to manage and extend KubeVela platform capabilities.
+Addon can be used to manage and extend KubeVela platform capabilities.
 Users and install/uninstall addons on KubeVela via UI/CLI interfaces.
 Addons can be stored and discovered via addon registries.
 

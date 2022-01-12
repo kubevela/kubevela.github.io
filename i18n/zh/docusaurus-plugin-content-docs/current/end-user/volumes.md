@@ -55,11 +55,11 @@ Azure disk， Alibaba Cloud OSS。
 为了可以使用定制化类型的 volume，我们需要先安装特定的 Trait。
 
 ```shell
-$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/app-with-volumes/td-awsEBS.yaml
+$ vela up -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/app-with-volumes/td-awsEBS.yaml
 ```
 
 ```shell
-$ kubectl vela show aws-ebs-volume
+$ vela show aws-ebs-volume
 +-----------+----------------------------------------------------------------+--------+----------+---------+
 |   NAME    |                          DESCRIPTION                           |  TYPE  | REQUIRED | DEFAULT |
 +-----------+----------------------------------------------------------------+--------+----------+---------+

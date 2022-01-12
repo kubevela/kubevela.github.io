@@ -9,7 +9,7 @@ title: Web 服务
 为了便于你快速学习，请直接复制下面的 Shell 执行，应用会部署到集群中：
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 # YAML 文件开始
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -31,46 +31,44 @@ spec:
 EOF
 ```
 
-你也可以自行将 YAML 文件保存为 website.yaml，使用 `kubectl apply -f website.yaml` 命令进行部署。
+你也可以自行将 YAML 文件保存为 website.yaml，使用 `vela up -f website.yaml` 命令进行部署。
 
-接下来，通过 `kubectl get application <应用 name> -o yaml` 查看应用的部署状态：
+接下来，通过 `vela status <应用 name>` 查看应用的部署状态：
 
 ```shell
-$ kubectl get application website -o yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: website
-  ... #  省略非关键信息
-spec:
-  components:
-  - name: frontend
-    properties:
-      ... #  省略非关键信息
-    type: webservice
-status:
-  conditions:
-  - lastTransitionTime: "2021-08-28T10:26:47Z"
-    reason: Available
-    status: "True"
-    ... #  省略非关键信息
-    type: HealthCheck
-  observedGeneration: 1
-  ... #  省略非关键信息
-  services:
-  - healthy: true
-    name: frontend
-    workloadDefinition:
-      apiVersion: apps/v1
-      kind: Deployment
-  status: running
+$ vela status website
+About:
+
+  Name:      	website
+  Namespace: 	default
+  Created at:	2022-01-11 21:04:59 +0800 CST
+  Status:    	running
+
+Workflow:
+
+  mode: DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id:2y4rv8479h
+    name:frontend
+    type:apply-component
+    phase:succeeded
+    message:
+
+Services:
+
+  - Name: frontend  Env:
+    Type: webservice
+    healthy Ready:1/1
 ```
 
-当我们看到 status-services-healthy 的字段为 true，并且 status 为 running 时，即表示整个应用交付成功。
+当我们看到 Workflow 的 finished 的字段为 true，并且 Status 为 running 时，即表示整个应用交付成功。
 
-如果 status 显示为 rendering，或者 healthy 为 false，则表示应用要么部署失败，要么还在部署中。请根据 `kubectl get application <应用 name> -o yaml` 中返回的信息对应地进行处理。
+如果 Status 显示为 rendering，或者 healthy 为 false，则表示应用要么部署失败，要么还在部署中。
 
-你也可以通过 vela 的 CLI 查看，使用如下命令：
+你也可以通过列表查看，使用如下命令：
 
 ```shell
 $ vela ls

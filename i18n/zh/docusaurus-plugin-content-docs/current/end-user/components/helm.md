@@ -9,7 +9,7 @@ KubeVela 的 `helm` 组件满足了用户对接 Helm Chart 的需求，你可以
 来自 Helm 仓库的 Chart 包部署方式，我们以一个 redis-comp 组件为例。它是来自 [bitnami](https://charts.bitnami.com/) Helm 仓库的 Chart。Chart 类型为 `redis-cluster`，版本 `6.2.7`。
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
