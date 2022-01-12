@@ -1,5 +1,5 @@
 ---
-title:  绑定运维特征 // Deprecated
+title:  绑定运维特征
 ---
 
 运维特征（Traits）也是应用部署计划的核心组成之一，它作用于组件层面，可以让你自由地给组件绑定各式各样的运维动作和策略。比如业务层面的配置网关、标签管理和容器注入（Sidecar），又或者是管理员层面的弹性扩缩容、灰度发布等等。
@@ -20,9 +20,7 @@ configmap               	vela-system	*               	              	true       
                         	           	                	              	              	follows the pod spec in path 'spec.template'.
 env                     	vela-system	*               	              	false         	add env on K8s pod for your workload which follows the pod
                         	           	                	              	              	spec in path 'spec.template.'
-ingress                 	vela-system	                	              	false         	Enable public web traffic for the component.
-ingress-1-20            	vela-system	                	              	false         	Enable public web traffic for the component, the ingress API
-                        	           	                	              	              	matches K8s v1.20+.
+gateway                 	vela-system	                	              	false         	Enable public web traffic for the component.
 labels                  	vela-system	*               	              	true          	Add labels on K8s pod for your workload which follows the
                         	           	                	              	              	pod spec in path 'spec.template'.
 lifecycle               	vela-system	*               	              	true          	Add lifecycle hooks for the first container of K8s pod for
@@ -42,8 +40,7 @@ sidecar                 	vela-system	*               	              	true       
 - `labels`：给工作负载添加标签。
 - `env`: 为工作负载添加环境变量。
 - `configmap` ：添加键值对配置文件。
-- `ingress` ：配置一个公共网关。
-- `ingress-1-20` ：配置一个基于 Kubernetes v1.20+ 版本的公共网关。
+- `gateway` ：配置一个公共网关。
 - `lifecycle` ：给工作负载增加生命周期“钩子”。
 - `rollout` ：组件的灰度发布策略。
 - `sidecar`：给组件注入一个容器。
@@ -53,7 +50,7 @@ sidecar                 	vela-system	*               	              	true       
 下面，我们将以几个典型的运维特征为例，介绍 KubeVela 运维特征的用法。
 
 
-## 使用 Ingress 给组件配置网关
+## 使用 Gateway 给组件配置网关
 
 
 我们以给一个 Web Service 组件配置网关，来进行示例讲解。这个组件从 `crccheck/hello-world` 镜像中拉取过来，设置网关后，对外通过 `testsvc.example.com` 加上端口 8000 提供访问。
@@ -77,7 +74,7 @@ spec:
         image: crccheck/hello-world
         port: 8000
       traits:
-        - type: ingress
+        - type: gateway
           properties:
             domain: testsvc.example.com
             http:
@@ -100,37 +97,45 @@ ingerss-app         	express-server	webservice 	ingress	running	healthy	      	2
 ```
 
 
-如果 status 显示为 rendering，则表示仍在渲染中，或者 HEALTHY 一直 false，则你需要使用 `kubectl get application ingress-app -o yaml` 查看报错信息进行对应的处理。
+如果 status 显示为 rendering，则表示仍在渲染中，或者 HEALTHY 一直 false，则你需要使用 `vela status ingress-app` 查看报错信息进行对应的处理。
 
 
 查看返回的信息：
 
 
 ```shell
-$ kubectl get application ingress-app -o yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  ... # 省略非关键信息
-spec:
-  ... # 省略非关键信息
-status:
-  ... # 省略非关键信息
-  services:
-  - healthy: true
-    name: express-server
-    traits:
-    - healthy: true
-      message: |
-        No loadBalancer found, visiting by using 'vela port-forward ingress-app'
-      type: ingress
-    workloadDefinition:
-      apiVersion: apps/v1
-      kind: Deployment
-  status: running
+$ vela status ingress-app
+About:
+
+  Name:      	ingress-app
+  Namespace: 	default
+  Created at:	2022-01-12 17:34:25 +0800 CST
+  Status:    	running
+
+Workflow:
+
+  mode: DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id:n5u4dsa1t4
+    name:express-server3
+    type:apply-component
+    phase:succeeded
+    message:
+
+Services:
+
+  - Name: express-server3  Env:
+    Type: webservice
+    healthy Ready:1/1
+    Traits:
+      -  ✅ gateway: Visiting URL: testsvc.example.com, IP: 1.5.1.1
 ```
 
-最后通过 vela port-forward ingress-app 转发到本地处理请求：
+最后通过 `vela port-forward ingress-app` 转发到本地处理请求：
+
 ```shell
 vela port-forward ingress-app
 Forwarding from 127.0.0.1:8000 -> 8000
@@ -278,23 +283,11 @@ vela-app-with-sidecar	log-gen-worker	worker     	sidecar           	running	heal
 ```
 
 
-成功后，先检查应用生成的工作负载情况：
+成功后，查看 Sidecar 所输出的日志，可以看到读取日志的 sidecar 已经生效。
 
 
 ```
-$ kubectl get pods -l app.oam.dev/component=log-gen-worker
-NAME                              READY   STATUS    RESTARTS   AGE
-log-gen-worker-7bb65dcdd6-tpbdh   2/2     Running   0          45s
-```
-
-
-
-
-最后查看 Sidecar 所输出的日志，可以看到读取日志的 sidecar 已经生效。
-
-
-```
-kubectl logs -f log-gen-worker-7bb65dcdd6-tpbdh count-log
+vela logs vela-app-with-sidecar -c count-log
 ```
 
 

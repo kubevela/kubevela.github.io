@@ -72,4 +72,4 @@ Successfully delete an addon registry experimental
 
 ## 编写自己的扩展包
 
-请参考[扩展包制作文档](../../platform-engineers/addon/intro)。
+请参考[扩展包制作文档](../../../platform-engineers/addon/intro)。

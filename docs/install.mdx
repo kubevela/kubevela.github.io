@@ -275,34 +275,7 @@ vela port-forward addon-velaux -n vela-system
 ```
 Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` for visit.
 
-If your Kubernetes cluster has cloud LoadBalancer available, you can configure the `serviceType` for `velaux` addon.
-Configure it as `serviceType=LoadBalancer`, and obtain the access address through the following methods after activation:
-
-```shell script
-vela addon enable velaux serviceType=LoadBalancer
-```
-
-View the endpoint by:
-
-```
-vela status addon-velaux -n vela-system --endpoint
-```
-
-expected output:
-
-```
-+----------------------------+----------------------+
-|  REF(KIND/NAMESPACE/NAME)  |       ENDPOINT       |
-+----------------------------+----------------------+
-| Service/vela-system/velaux | http://<IP address> |
-+----------------------------+----------------------+
-```
-
-If you have installed Nginx Ingress Controller in your cluster, and you have an available domain, you can deploy VelaUX like this (please replace example.doamin.com with the real domain name):
-
-```shell script
-vela addon enable velaux repo=acr.kubevela.net domain=example.doamin.com
-```
+If you have loadbalaner or ingress, please refer to [VelaUX addon docs](./reference/addons/velaux) for more advanced installation ways.
 
 ## 4. Uninstall
 

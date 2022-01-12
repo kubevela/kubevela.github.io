@@ -25,7 +25,7 @@ spec:
         image: crccheck/hello-world
         port: 8000
       traits:
-        - type: ingress-1-20
+        - type: gateway
           properties:
             domain: testsvc.example.com
             http:

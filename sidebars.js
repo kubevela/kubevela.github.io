@@ -99,16 +99,7 @@ module.exports = {
           collapsed: false,
           items: [
             "end-user/quick-start-cli",
-            {
-              "Deploying Components": [
-                "end-user/components/helm",
-                "end-user/components/kustomize",
-                "end-user/components/cloud-services/provider-and-consume-cloud-services",
-
-                "end-user/components/cue/raw",
-
-              ],
-            },
+            "end-user/components/cloud-services/provider-and-consume-cloud-services",
             {
               "Attaching Traits": [
                 "end-user/traits/ingress",
@@ -225,9 +216,12 @@ module.exports = {
         },
         {
           "Built-in Component Type": [
+            "end-user/components/helm",
             "end-user/components/cue/webservice",
             "end-user/components/cue/worker",
             "end-user/components/cue/task",
+            "end-user/components/kustomize",
+            "end-user/components/cue/raw",
             "end-user/components/more",
           ],
         },
