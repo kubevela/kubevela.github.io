@@ -35,7 +35,7 @@ I0111 21:45:25.660129   89345 apply.go:106] "creating object" name="component-ui
 Addon: fluxcd enabled Successfully.
 ```
 
-You can view the new component or trait types added by `vela component` or `vela trait`.
+You can view the new component or trait types added by `vela component` or `vela trait`. You can also find more details about [built-in addon docs](../../../reference/addons/overview).
 
 ## Uninstall Addon
 

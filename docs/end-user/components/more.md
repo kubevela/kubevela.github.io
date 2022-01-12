@@ -2,7 +2,7 @@
 title:  Needs More？
 ---
 
-## 1. Get more from [install addons](../addon)
+## 1. Get more from [install addons](../../how-to/cli/addon/addon)
 
 ## 2. Extend KubeVela by yourself
 

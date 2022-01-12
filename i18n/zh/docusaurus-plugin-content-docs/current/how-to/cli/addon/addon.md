@@ -35,7 +35,7 @@ I0111 21:45:25.660129   89345 apply.go:106] "creating object" name="component-ui
 Addon: fluxcd enabled Successfully.
 ```
 
-安装完成后，扩展包中的功能会以组件，运维特征，工作流步骤等形式呈现，你可以通过 `vela component`，`vela trait` 等命令查看新增的能力，也可以在[扩展包的参考文档](../../../reference/addon/overview)中查看每个官方扩展包对应的能力.
+安装完成后，扩展包中的功能会以组件，运维特征，工作流步骤等形式呈现，你可以通过 `vela component`，`vela trait` 等命令查看新增的能力，也可以在[扩展包的参考文档](../../../reference/addons/overview)中查看每个官方扩展包对应的能力.
 
 ## 删除/卸载已安装的扩展包
 
@@ -69,3 +69,7 @@ Successfully add an addon registry experimental
 $ vela addon registry delete experimental
 Successfully delete an addon registry experimental
 ```
+
+## 编写自己的扩展包
+
+请参考[扩展包制作文档](../../platform-engineers/addon/intro)。
