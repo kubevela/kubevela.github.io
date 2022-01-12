@@ -4,33 +4,6 @@ title: Attaching Sidecar
 
 The `sidecar` trait allows you to attach a sidecar container to the component.
 
-## Specification
-
-```shell
-vela show sidecar
-```
-
-```console
-# Properties
-+---------+-----------------------------------------+-----------------------+----------+---------+
-|  NAME   |               DESCRIPTION               |         TYPE          | REQUIRED | DEFAULT |
-+---------+-----------------------------------------+-----------------------+----------+---------+
-| name    | Specify the name of sidecar container   | string                | true     |         |
-| cmd     | Specify the commands run in the sidecar | []string              | false    |         |
-| image   | Specify the image of sidecar container  | string                | true     |         |
-| volumes | Specify the shared volume path          | [[]volumes](#volumes) | false    |         |
-+---------+-----------------------------------------+-----------------------+----------+---------+
-
-
-## volumes
-+-----------+-------------+--------+----------+---------+
-|   NAME    | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+-----------+-------------+--------+----------+---------+
-| name      |             | string | true     |         |
-| path      |             | string | true     |         |
-+-----------+-------------+--------+----------+---------+
-```
-
 ## How to use
 
 In this Application, component `log-gen-worker` and sidecar share the data volume that saves the logs.
@@ -80,20 +53,19 @@ Deploy this Application.
 vela up -f app.yaml
 ```
 
-On runtime cluster, check the name of running pod.
+Use `vela ls` to check the application state:
+
 
 ```shell
-kubectl get pod
-```
-```console
-NAME                              READY   STATUS    RESTARTS   AGE
-log-gen-worker-76945f458b-k7n9k   2/2     Running   0          90s
+$ vela ls
+APP                 	COMPONENT     	TYPE       	TRAITS 	PHASE  	HEALTHY	STATUS	CREATED-TIME                 
+vela-app-with-sidecar	log-gen-worker	worker     	sidecar           	running	healthy	      	2021-08-29 22:07:07 +0800 CST
 ```
 
 And check the logging output of sidecar. 
 
 ```shell
-kubectl logs -f log-gen-worker-76945f458b-k7n9k count-log
+vela logs vela-app-with-sidecar -c count-log
 ```
 ```console
 0: Fri Apr 16 11:08:45 UTC 2021
@@ -106,4 +78,31 @@ kubectl logs -f log-gen-worker-76945f458b-k7n9k count-log
 7: Fri Apr 16 11:08:52 UTC 2021
 8: Fri Apr 16 11:08:53 UTC 2021
 9: Fri Apr 16 11:08:54 UTC 2021 
+```
+
+## Specification
+
+```shell
+vela show sidecar
+```
+
+```console
+# Properties
++---------+-----------------------------------------+-----------------------+----------+---------+
+|  NAME   |               DESCRIPTION               |         TYPE          | REQUIRED | DEFAULT |
++---------+-----------------------------------------+-----------------------+----------+---------+
+| name    | Specify the name of sidecar container   | string                | true     |         |
+| cmd     | Specify the commands run in the sidecar | []string              | false    |         |
+| image   | Specify the image of sidecar container  | string                | true     |         |
+| volumes | Specify the shared volume path          | [[]volumes](#volumes) | false    |         |
++---------+-----------------------------------------+-----------------------+----------+---------+
+
+
+## volumes
++-----------+-------------+--------+----------+---------+
+|   NAME    | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
++-----------+-------------+--------+----------+---------+
+| name      |             | string | true     |         |
+| path      |             | string | true     |         |
++-----------+-------------+--------+----------+---------+
 ```

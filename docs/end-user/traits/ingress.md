@@ -1,5 +1,5 @@
 ---
-title: Gateway
+title: Gateway for Public Access
 ---
 
 The `gateway` trait exposes a component to public Internet via a valid domain.

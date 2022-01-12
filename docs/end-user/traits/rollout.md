@@ -2,7 +2,12 @@
 title: Rollout
 ---
 
-This chapter will introduce how to use Rollout Trait to perform a rolling update on Workload.
+This section will introduce how to use Rollout Trait to perform a rolling update on Component.
+
+The component supported for rollout is:
+
+* [webservice](../components/cue/webservice)
+* [worker](../components/cue/worker)
 
 ## How to
 
@@ -37,20 +42,40 @@ EOF
 This Rollout Trait has target size of 5 and two rollout batches. The first batch has 2 replicas and second batch has 3. Only after all replicas in the first batch are ready, it will start to rollout the second batch.
 
 Check the Application status whether the rollout is successful:
-```shell
-$ kubectl get app rollout-trait-test
-NAME                 COMPONENT        TYPE         PHASE     HEALTHY   STATUS   AGE
-rollout-trait-test   express-server   webservice   running   true               2d20h
-```
 
-Check component revision
 ```shell
-$ kubectl get controllerRevision  -l controller.oam.dev/component=express-server
-NAME                CONTROLLER                                    REVISION   AGE
-express-server-v1   application.core.oam.dev/rollout-trait-test   1          2d22h
+vela status rollout-trait-test
+About:
+
+  Name:      	rollout-trait-test
+  Namespace: 	default
+  Created at:	2022-01-12 20:29:50 +0800 CST
+  Status:    	running
+
+Workflow:
+
+  mode: DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id:6pnibgonga
+    name:express-server
+    type:apply-component
+    phase:succeeded
+    message:
+
+Services:
+
+  - Name: express-server  Env:
+    Type: webservice
+    healthy Ready:5/5
+    Traits:
+      - ✅ rollout: rolloutSucceed
 ```
 
 Check the status of Rollout Trait. The rollout is successful only if `ROLLING-STATE` equals `rolloutSucceed`, and all replicas are ready only if `BATCH-STATE` equals `batchReady`. `TARGET`, `UPGRADED` and `READY` indicates target size of replicas is 5, updated number of replicas is 5 and all 5 replicas are ready.
+
 ```shell
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
@@ -58,6 +83,7 @@ express-server   5        5          5       batchReady    rolloutSucceed   2d20
 ```
 
 Check Workload Status (Underlying resource behind the workload is [deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/))
+
 ```shell
 $ kubectl get deploy -l app.oam.dev/component=express-server
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE
@@ -90,9 +116,11 @@ spec:
               - replicas: 3
 EOF
 ```
+
 This Rollout Trait represents the target size of replicas is 5 and update will be performed in 2 batches. The first batch will update 2 replicas and the second batch will update 3 replicas. Only 2 replicas in first batch will be updated by setting `batchPartition` to 0.
 
 Check controllerRevision and there is a new controllerRevision express-server-v2.
+
 ```shell
 $ kubectl get controllerRevision -l controller.oam.dev/component=express-server
 NAME                CONTROLLER                                    REVISION   AGE
@@ -101,6 +129,7 @@ express-server-v2   application.core.oam.dev/rollout-trait-test   2          1m
 ```
 
 Check the status of Rollout Trait after a while when first batch has been upgraded successfully. `TARGET`, `UPGREADED` and `READY` indicates the target size of replicas for this revision is 5, there are 2 replicas sucessfully upgraded and they are ready. batchReady means replicas in the first rolloutBatch are all ready, rollingInBatches means there are batches still yet to be upgraded.
+
 ```shell
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
@@ -108,6 +137,7 @@ express-server   5        2          2       batchReady   rollingInBatches  2d20
 ```
 
 Check Workload status to verify, we can see there are 2 replicas of new Workload express-server-v2 have been upgraded and old version of Workload express-server-v1 still has 3 replicas.
+
 ```shell
 $ kubectl get deploy -l app.oam.dev/component=express-server
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE
@@ -116,6 +146,7 @@ express-server-v2   2/2     2            2           1m
 ```
 
 Apply the YAML below without `batchPartition` field in Rollout Trait to upgrade all replicas to latest revision.
+
 ```shell
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1

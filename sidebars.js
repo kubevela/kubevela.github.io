@@ -99,29 +99,13 @@ module.exports = {
           collapsed: false,
           items: [
             "end-user/quick-start-cli",
+            "end-user/traits/ingress",
             "end-user/components/cloud-services/provider-and-consume-cloud-services",
-            {
-              "Attaching Traits": [
-                "end-user/traits/ingress",
-                "end-user/traits/rollout",
-                "end-user/traits/annotations-and-labels",
-                "end-user/traits/service-binding",
-                "end-user/traits/sidecar",
-              ],
-            },
-            {
-              "Defining Policies": [
-                "end-user/policies/envbinding",
-                "end-user/policies/health",
-              ],
-            },
-            {
-              "Designing Workflow": [
-                "end-user/workflow/webhook-notification",
-                "end-user/workflow/component-dependency-parameter",
-              ],
-            },
+            "end-user/traits/rollout",
+            "end-user/policies/health",
             "case-studies/multi-cluster",
+            "end-user/workflow/component-dependency-parameter",
+            "end-user/workflow/webhook-notification",
             "end-user/version-control",
             "how-to/cli/addon/addon",
           ],
@@ -185,9 +169,8 @@ module.exports = {
             "platform-engineers/system-operation/velaql",
           ],
         },
-        {
-          Debugging: ["platform-engineers/debug/dry-run"],
-        },
+        "platform-engineers/debug/dry-run",
+        "platform-engineers/x-def-version",
       ],
     },
     {
@@ -227,10 +210,17 @@ module.exports = {
         },
         {
           "Built-in Trait Type": [
-            "end-user/traits/ingress",
+            "end-user/traits/annotations-and-labels",
+            "end-user/traits/service-binding",
+            "end-user/traits/sidecar",
             "end-user/traits/autoscaler",
             "end-user/traits/kustomize-patch",
             "end-user/traits/more",
+          ],
+        },
+        {
+          "Built-in Policy Type": [
+            "end-user/policies/envbinding",
           ],
         },
         "end-user/workflow/built-in-workflow-defs",

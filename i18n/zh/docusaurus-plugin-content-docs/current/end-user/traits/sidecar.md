@@ -1,40 +1,17 @@
 ---
 title: 容器注入
 ---
-本小节会介绍，如何为应用部署计划的一个组件，添加 `sidecar` 运维特征来收集日志。
 
-## 字段说明
-
-```shell
-$ vela show sidecar
-
-# Properties
-+---------+-----------------------------------------+-----------------------+----------+---------+
-|  NAME   |               DESCRIPTION               |         TYPE          | REQUIRED | DEFAULT |
-+---------+-----------------------------------------+-----------------------+----------+---------+
-| name    | Specify the name of sidecar container   | string                | true     |         |
-| cmd     | Specify the commands run in the sidecar | []string              | false    |         |
-| image   | Specify the image of sidecar container  | string                | true     |         |
-| volumes | Specify the shared volume path          | [[]volumes](#volumes) | false    |         |
-+---------+-----------------------------------------+-----------------------+----------+---------+
-
-
-## volumes
-+-----------+-------------+--------+----------+---------+
-|   NAME    | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+-----------+-------------+--------+----------+---------+
-| name      |             | string | true     |         |
-| path      |             | string | true     |         |
-+-----------+-------------+--------+----------+---------+
-```
+Sidecar 容器作为与业务容器解耦的存在，可以帮助我们很多辅助性的重要工作，比如常见的日志代理、用来实现 Service Mesh 等等。
 
 ## 如何使用
 
-我们来编写一个应用部署计划里的组件 `log-gen-worker`。
-同时，我们将 `sidecar` 所记录的日志数据目录和组件，指向同一个数据源 `varlog`。
+这一次，让我们来编写一个应用部署计划里的组件 log-gen-worker。 同时我们将 sidecar 所记录的日志数据目录，和组件指向同一个数据存储卷 varlog。
 
-```yaml
-# app.yaml
+
+```shell
+cat <<EOF | vela up -f -
+# YAML 文件开始
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -69,34 +46,52 @@ spec:
             volumes:
               - name: varlog
                 path: /var/log
+# YAML 文件结束
+EOF
 ```
 
-编写完毕，在 YAML 文件所在路径下，部署这个应用：
+
+使用 `vela ls` 查看应用是否部署成功：
+
 
 ```shell
-vela up -f app.yaml
+$ vela ls
+APP                 	COMPONENT     	TYPE       	TRAITS 	PHASE  	HEALTHY	STATUS	CREATED-TIME                 
+vela-app-with-sidecar	log-gen-worker	worker     	sidecar           	running	healthy	      	2021-08-29 22:07:07 +0800 CST
 ```
 
-成功后，先检查应用生成的工作负载情况：
 
-```shell
-$ kubectl get pod
-NAME                              READY   STATUS    RESTARTS   AGE
-log-gen-worker-76945f458b-k7n9k   2/2     Running   0          90s
+成功后，查看 Sidecar 所输出的日志
+
+
+```
+vela logs vela-app-with-sidecar -c count-log
 ```
 
-然后，查看 `sidecar` 的输出，日志显示正常。
+从输出的日志可以看到读取日志的 sidecar 已经生效。
+
+
+## 字段说明
 
 ```shell
-$ kubectl logs -f log-gen-worker-76945f458b-k7n9k count-log
-0: Fri Apr 16 11:08:45 UTC 2021
-1: Fri Apr 16 11:08:46 UTC 2021
-2: Fri Apr 16 11:08:47 UTC 2021
-3: Fri Apr 16 11:08:48 UTC 2021
-4: Fri Apr 16 11:08:49 UTC 2021
-5: Fri Apr 16 11:08:50 UTC 2021
-6: Fri Apr 16 11:08:51 UTC 2021
-7: Fri Apr 16 11:08:52 UTC 2021
-8: Fri Apr 16 11:08:53 UTC 2021
-9: Fri Apr 16 11:08:54 UTC 2021 
+$ vela show sidecar
+
+# Properties
++---------+-----------------------------------------+-----------------------+----------+---------+
+|  NAME   |               DESCRIPTION               |         TYPE          | REQUIRED | DEFAULT |
++---------+-----------------------------------------+-----------------------+----------+---------+
+| name    | Specify the name of sidecar container   | string                | true     |         |
+| cmd     | Specify the commands run in the sidecar | []string              | false    |         |
+| image   | Specify the image of sidecar container  | string                | true     |         |
+| volumes | Specify the shared volume path          | [[]volumes](#volumes) | false    |         |
++---------+-----------------------------------------+-----------------------+----------+---------+
+
+
+## volumes
++-----------+-------------+--------+----------+---------+
+|   NAME    | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
++-----------+-------------+--------+----------+---------+
+| name      |             | string | true     |         |
+| path      |             | string | true     |         |
++-----------+-------------+--------+----------+---------+
 ```

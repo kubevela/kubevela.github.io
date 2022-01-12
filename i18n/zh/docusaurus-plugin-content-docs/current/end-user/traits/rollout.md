@@ -4,6 +4,11 @@ title: 灰度发布和扩缩容
 
 灰度发布( Rollout )运维特征可以用于对工作负载的滚动发布和扩缩容。
 
+目前灰度发布运维特征支持的组件类型为：
+
+* [webservice](../components/cue/webservice)
+* [worker](../components/cue/worker)
+
 ## 如何使用
 
 ### 首次发布 
