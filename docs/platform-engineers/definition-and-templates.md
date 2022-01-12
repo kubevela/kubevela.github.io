@@ -240,7 +240,7 @@ In KubeVela, definition entities are mutable. Each time a `ComponentDefinition` 
 For example, we can design a new parameter named `args` for the `webservice` component definition by applying a new definition with same name as below.
 
 ```shell
-kubectl vela show webservice
+vela show webservice
 ```
 ```console
 # Properties
@@ -258,7 +258,7 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/
 The change will take effect immediately.
 
 ```shell
-kubectl vela show webservice
+vela show webservice
 ```
 ```console
 # Properties

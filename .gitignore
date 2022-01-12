@@ -25,4 +25,5 @@ yarn-error.log*
 # editor and IDE paraphernalia
 .idea
 
+.vscode
 _tmp/

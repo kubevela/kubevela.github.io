@@ -1,5 +1,5 @@
 ---
-title: Built-in Steps
+title: Built-in Workflow Steps
 ---
 
 This documentation will walk through the built-in workflow steps that you can use to design an application deployment process.

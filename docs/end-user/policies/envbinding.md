@@ -1,5 +1,5 @@
 ---
-title: Multi-Environment Policy
+title: Multi-Environment
 ---
 
 This documentation will introduce how to use env-binding to automate multi-stage application rollout across multiple environments.
@@ -100,7 +100,7 @@ We apply the Application `policy-demo` in the example.
 > Before applying this example application, you need a namespace named `demo` in the current cluster and namespace `test` in both the current cluster and the staging cluster. You need namespace `prod` in cluster `cluster-prod` as well. You can create it by executing cmd `kubectl create ns <namespace>`.
 
 ```shell
-kubectl apply -f app.yaml
+vela up -f app.yaml
 ```
 
 After the Application is created, a configured Application will be created under the `demo` namespace.

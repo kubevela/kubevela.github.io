@@ -1,5 +1,5 @@
 ---
-title: Health Check Policy
+title: Health Check
 ---
 
 This documentation will introduce how to use `health` policy to apply periodical
@@ -11,6 +11,7 @@ After an application is deployed, users usually want to monitor or observe the
 health condition of the running application as well as each components.
 Health policy decouples health checking procedure from application workflow
 execution.
+
 It allows to set independent health inspection cycle, such as check every 30s.
 That helps users to notice as soon as applications turn out unhealthy and
 follow the diagnosis message to troubleshot.

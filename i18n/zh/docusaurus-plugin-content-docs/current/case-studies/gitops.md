@@ -168,7 +168,7 @@ spec:
 首先，在集群中部署 `clusters/infra.yaml`。可以看到它自动在集群中拉起了 `infrastructure/` 目录下的 MySQL 部署文件：
 
 ```shell
-kubectl apply -f clusters/infra.yaml
+vela up -f clusters/infra.yaml
 ```
 
 ```shell
@@ -183,7 +183,7 @@ mysql 	mysql-controller	helm      	       	running	healthy	      	2021-09-26 20:
 接着，在集群中部署 `clusters/apps.yaml`，可以看到它自动拉起了 `apps/` 目录下的应用部署文件：
 
 ```shell
-kubectl apply -f clusters/apps.yaml
+vela up -f clusters/apps.yaml
 ```
 
 ```shell

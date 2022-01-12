@@ -11,7 +11,8 @@ import TabItem from "@theme/TabItem";
 
 Requirements:
 
-- Kubernetes cluster >= v1.18.0
+- Kubernetes cluster >= v1.18.
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/) && [Helm v3](https://helm.sh/docs/intro/install/).
 
 KubeVela relies on Kubernetes as a control plane. The control plane could be any managed Kubernetes offering or your cluster.
 
@@ -31,7 +32,7 @@ values={[
 
 <TabItem value="minikube">
 
-> only for testing/trial
+> Minikube is **NOT RECOMMENDED** for production.
 
 Follow the minikube [installation guide](https://minikube.sigs.k8s.io/docs/start/).
 
@@ -52,19 +53,19 @@ minikube addons enable ingress
 
 <TabItem value="rke">
 
-> Before starting, please prepare 1-N server or virtual machine. This installation applies to the production environment
+> This installation applies to the production environment. Please prepare 1~N servers or VMs. 
 
-<b>（1）Intall Docker (Optional)</b>
+This section guides to install a RKE Kubernetes cluster, you can refer to their installation guides for [more details](https://rancher.com/docs/rancher/v2.5/en/installation/resources/k8s-tutorials/infrastructure-tutorials/infra-for-ha/).
 
-The rke depend on docker, Please install Docker on all servers or virtual machines, if not installed follow the docker [installation guide](https://docs.docker.com/engine/install/).
+<b>（1） Docker </b>
 
-{" "}
+The RKE depends on docker, Please install Docker on all servers or virtual machines, if not installed follow the docker [installation guide](https://docs.docker.com/engine/install/).
 
-<b>（2）Install rke:</b>
+<b>（2）Install RKE:</b>
 
-Download rke binary from [rke release page](https://github.com/rancher/rke/releases).
+Download RKE binary from [RKE release page](https://github.com/rancher/rke/releases).
 
-If you have limited Internet access:
+If your internet access was limited, try using the binary cached by KubeVela team:
 
 ```
 wget https://static.kubevela.net/binary/rke/rke_linux-amd64 -O /usr/bin/rke
@@ -73,7 +74,7 @@ chmod +x /usr/bin/rke
 
 <b>（3）Install RKE cluster</b>
 
-> Please switch to a non-root user who has permission to operate docker and execute the following command to install the RKE cluster, for example: docker
+> Please switch to a non-root user who has permission to operate docker and execute the following commands.
 
 ```shell script
   mkdir ~/rkeinit && cd ~/rkeinit
@@ -91,7 +92,7 @@ chmod +x /usr/bin/rke
 
 <TabItem value="kind">
 
-> only for testing/trial
+> Kind is **NOT RECOMMENDED** for production.
 
 Follow [this guide](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) to install kind.
 
@@ -137,7 +138,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 - Azure [AKS Service](https://azure.microsoft.com/en-us/services/kubernetes-service)
 - Google [GKE Service](https://cloud.google.com/kubernetes-engine)
 
-> Please ensure [ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/) is installed and enabled.
+> Please make sure one of the [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/) is available.
 
 </TabItem>  
 </Tabs>
@@ -261,25 +262,20 @@ sudo mv ./vela /usr/local/bin/vela
 #### 2. Install VelaUX via Addon
 
 ```shell script
-vela addon enable velaux serviceType=NodePort
-
-# Get the mapped port and access VelaUX through this port
-kubectl get service velaux -n vela-system -o jsonpath="{.spec.ports[0].nodePort}"
+vela addon enable velaux
 ```
-
-`serviceType` configures the access method of the VelaUX service. If you use a cloud service cluster, please configure it as `serviceType=LoadBalancer`, and obtain the access address through the following methods after activation:
-
-```shell script
-vela addon enable velaux serviceType=LoadBalancer
-
-kubectl get service velaux -n vela-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}"
+expected output:
 ```
-
-If you have installed Nginx Ingress Controller in your cluster, and you have an available domain, you can deploy VelaUX like this (please replace example.doamin.com with the real domain name):
-
-```shell script
-vela addon enable velaux repo=acr.kubevela.net domain=example.doamin.com
+Addon: velaux enabled Successfully.
 ```
+By default, velaux didn't have any exposed port, you can view it by:
+
+```
+vela port-forward addon-velaux -n vela-system
+```
+Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` for visit.
+
+If you have loadbalaner or ingress, please refer to [VelaUX addon docs](./reference/addons/velaux) for more advanced installation ways.
 
 ## 4. Uninstall
 
@@ -289,7 +285,6 @@ Before uninstalling kubevela, you must delete all applications and disable all a
 
 ```
 vela addon disable velaux
-kubectl delete configmap --all -n kubevela
 ```
 
 2. Uninstall KubeVela Core

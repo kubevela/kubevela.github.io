@@ -11,7 +11,7 @@ KubeVela is a modern application platform that makes it easier and faster to del
 ![](../resources/what-is-kubevela.png)
 
 
-## Why we built KubeVela?
+## Why KubeVela?
 
 The trend of cloud-native technology is moving towards pursuing consistent experience of application delivery across clouds and on-prem clusters. Kubernetes is becoming the standard layer which is excellent in abstracting away low-level infrastructure details. But it does not provide abstractions to model application deployment on top of hybrid and distributed environments. The lack of application level context have impacted user experience, slowed down productivity, led to unexpected errors due to misconfigurations in production.
 

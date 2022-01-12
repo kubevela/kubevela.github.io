@@ -137,7 +137,7 @@ KubeVela 使用 [CUE][3] 配置语言作为管理用户模块化交付的核心�
 
 通过 KubeVela 的应用部署计划发布到集群中，就可以拉起我们刚刚定义的 StatefulSet 和 Service 对象。
 
-	cat <<EOF | kubectl apply -f -
+	cat <<EOF | vela up -f -
 	apiVersion: core.oam.dev/v1beta1
 	kind: Application
 	metadata:
@@ -236,7 +236,7 @@ KubeVela 使用 [CUE][3] 配置语言作为管理用户模块化交付的核心�
 	        name: my-component
 ```
 
-将文件保存在本地并命名为 `app-stateful.yaml`，执行 `kubectl apply -f app-stateful.yaml`更新应用，你可以看到 StatefulSet 对象的名称、镜像和实例数均已更新。
+将文件保存在本地并命名为 `app-stateful.yaml`，执行 `vela up -f app-stateful.yaml`更新应用，你可以看到 StatefulSet 对象的名称、镜像和实例数均已更新。
 
 ## 调试模块化功能的正确性
 

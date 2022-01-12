@@ -46,7 +46,7 @@ KubeVela 同样是 Application 对象做环境的初始化，可以初始化的�
 部署如下文件：
 
 ```shell
-cat <<EOF | kubectl apply -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:

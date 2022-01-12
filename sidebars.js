@@ -99,43 +99,15 @@ module.exports = {
           collapsed: false,
           items: [
             "end-user/quick-start-cli",
-            {
-              "Deploying Components": [
-                "end-user/components/helm",
-                "end-user/components/kustomize",
-                "end-user/components/cloud-services/provider-and-consume-cloud-services",
-
-                "end-user/components/cue/raw",
-                "end-user/components/more",
-              ],
-            },
-            {
-              "Attaching Traits": [
-                "end-user/traits/ingress",
-                "end-user/traits/rollout",
-                "end-user/traits/autoscaler",
-                "end-user/traits/annotations-and-labels",
-                "end-user/traits/service-binding",
-                "end-user/traits/sidecar",
-                "end-user/traits/kustomize-patch",
-                "end-user/traits/more",
-              ],
-            },
-            {
-              "Defining Policies": [
-                "end-user/policies/envbinding",
-                "end-user/policies/health",
-              ],
-            },
-            {
-              "Designing Workflow": [
-                "end-user/workflow/built-in-workflow-defs",
-                "end-user/workflow/webhook-notification",
-                "end-user/workflow/component-dependency-parameter",
-              ],
-            },
+            "end-user/traits/ingress",
+            "end-user/components/cloud-services/provider-and-consume-cloud-services",
+            "end-user/traits/rollout",
+            "end-user/policies/health",
             "case-studies/multi-cluster",
+            "end-user/workflow/component-dependency-parameter",
+            "end-user/workflow/webhook-notification",
             "end-user/version-control",
+            "how-to/cli/addon/addon",
           ],
         },
       ],
@@ -197,9 +169,8 @@ module.exports = {
             "platform-engineers/system-operation/velaql",
           ],
         },
-        {
-          Debugging: ["platform-engineers/debug/dry-run"],
-        },
+        "platform-engineers/debug/dry-run",
+        "platform-engineers/x-def-version",
       ],
     },
     {
@@ -207,7 +178,12 @@ module.exports = {
       label: "References",
       items: [
         "cli/vela",
-
+        {
+          "Built-in Addons": [
+            "reference/addons/overview",
+            "reference/addons/velaux",
+          ],
+        },
         {
           "Supported Cloud Resource": [
             "end-user/components/cloud-services/terraform/alibaba-ack",
@@ -223,11 +199,31 @@ module.exports = {
         },
         {
           "Built-in Component Type": [
+            "end-user/components/helm",
             "end-user/components/cue/webservice",
             "end-user/components/cue/worker",
             "end-user/components/cue/task",
+            "end-user/components/kustomize",
+            "end-user/components/cue/raw",
+            "end-user/components/more",
           ],
         },
+        {
+          "Built-in Trait Type": [
+            "end-user/traits/annotations-and-labels",
+            "end-user/traits/service-binding",
+            "end-user/traits/sidecar",
+            "end-user/traits/autoscaler",
+            "end-user/traits/kustomize-patch",
+            "end-user/traits/more",
+          ],
+        },
+        {
+          "Built-in Policy Type": [
+            "end-user/policies/envbinding",
+          ],
+        },
+        "end-user/workflow/built-in-workflow-defs",
       ],
     },
     {
