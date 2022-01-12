@@ -132,7 +132,7 @@ module.exports = {
             },
             "case-studies/multi-cluster",
             "end-user/version-control",
-            "end-user/addon",
+            "how-to/cli/addon/addon",
           ],
         },
       ],
@@ -204,6 +204,12 @@ module.exports = {
       label: "References",
       items: [
         "cli/vela",
+        {
+          "Built-in Addons": [
+            "reference/addons/overview",
+            "reference/addons/velaux",
+          ],
+        },
         {
           "Supported Cloud Resource": [
             "end-user/components/cloud-services/terraform/alibaba-ack",

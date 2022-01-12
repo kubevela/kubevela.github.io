@@ -37,6 +37,15 @@ Addon: fluxcd enabled Successfully.
 
 You can view the new component or trait types added by `vela component` or `vela trait`.
 
+## Uninstall Addon
+
+> Please make sure this addon along with the capabilities is no longer used in any of your applications.
+
+```
+$ vela addon disable fluxcd
+Successfully disable addon:fluxcd
+```
+
 ## List Registry
 
 ```
@@ -58,3 +67,7 @@ Successfully add an addon registry experimental
 $ vela addon registry delete experimental
 Successfully delete an addon registry experimental
 ```
+
+## Make your own addon
+
+Refer to extension documents to learn how to [make your own addon and registry](../../../platform-engineers/addon/intro).
