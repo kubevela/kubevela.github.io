@@ -73,5 +73,4 @@ VelaUX 正常安装后，你进入的第一个页面即应用交付管理页面�
 
 ## 下一步
 
-- 阅读并参考 [持续交付](./deliver-app/k8s-object) 章节文章，解锁更多 KubeVela 能力。
-- 阅读并参考 [最佳实践](./case-studies/jenkins-cicd) 章节文章，获取最佳实践场景。
+- 阅读并参考 [实践教程](./tutorials/k8s-object) 章节文章，解锁更多 KubeVela 能力。
