@@ -171,28 +171,42 @@ spec:
           env: prod
 ```
 
-## webhook-notification
+## notification
 
 ### 简介
 
-向指定的 Webhook 发送信息，该功能在 KubeVela v1.1.6 及以上版本可使用。
+向指定的 Webhook 发送信息，支持邮件、钉钉、Slack 和飞书。
 
 ### 参数
 
 |      参数名      |  类型  | 说明                                                                                                                                     |
 | :--------------: | :----: | :--------------------------------------------------------------------------------------------------------------------------------------- |
+|      email       | Object | 可选值，如果需要发送邮件，则需填写其 from、to 以及 content                                                                                             |
+|    email.from.address     | String | 必填值，发送的邮件地址                                                                                                                                      |
+|  email.from.alias   | String | 可选值，发送的邮件别名                                           |
+|  email.from.password   | ValueOrSecret | 必填值，发送的邮件密码，可以选择直接在 value 填写或从 secretRef 中获取                                           |
+|  email.from.host   | String | 必填值，邮件的 Host                                           |
+|  email.from.port   | Int | 可选值，邮件发送的端口号，默认为 587                                           |
+|  email.to   | []String | 必填值，邮件发送的地址列表                                          |
+|  email.content.subject   | String | 必填值，邮件的标题                                           |
+|  email.content.body   | String | 必填值，邮件的内容                                           |
 |      slack       | Object | 可选值，如果需要发送 Slack 信息，则需填写其 url 及 message                                                                               |
-|    slack.url     | Object | 必填值，Slack 的 Webhook 地址，可以选择直接填写或从 secret 中获取                                                                                                            |
-|    slack.url.address     | String | 可选值，直接填写 Slack 的 Webhook 地址                                                                                                            |
-|    slack.url.fromSecret.name     | String | 可选值， 从 secret 中获取 Webhook 地址，secret 的名字                                                                                                            |
-|    slack.url.fromSecret.key     | String | 可选值， 从 secret 中获取 Webhook 地址，从 secret 中获取的 key                                                                                                            |
+|    slack.url     |  ValueOrSecret | 必填值，Slack 的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取                                                                                                            |
 |  slack.message   | Object | 必填值，需要发送的 Slack 信息，请符合 [Slack 信息规范](https://api.slack.com/reference/messaging/payload)                                |
 |     dingding     | Object | 可选值，如果需要发送钉钉信息，则需填写其 url 及 message                                                                                  |
-|   dingding.url   | Object | 必填值，钉钉的 Webhook 地址，可以选择直接填写或从 secret 中获取                                                                                                              |
-|   dingding.url.address   | String | 可选值，直接填写钉钉的 Webhook 地址                                                                                                              |
-|   dingding.url.fromSecret.name   | String | 可选值， 从 secret 中获取 Webhook 地址，secret 的名字                                                                                                              |
-|   dingding.url.fromSecret.key   | String | 可选值， 从 secret 中获取 Webhook 地址，从 secret 中获取的 key                                                                                                              |
+|   dingding.url   | ValueOrSecret | 必填值，钉钉的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取                                                                                                              |
 | dingding.message | Object | 必填值，需要发送的钉钉信息，请符合 [钉钉信息规范](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |
+|     lark     | Object | 可选值，如果需要发送飞书信息，则需填写其 url 及 message                                                                                  |
+|   lark.url   | ValueOrSecret | 必填值，飞书的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取                                                                                                              |
+| lark.message | Object | 必填值，需要发送的飞书信息，请符合 [飞书信息规范](https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN#8b0f2a1b) |
+
+`ValueOrSecret` 的格式为：
+
+|       参数名       |  类型  | 说明                                                                                                                                                                 |
+| :--------------: | :----: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| value | String | 可选值，直接填写值 |
+| secretRef.name | String | 可选值，从 secret 中获取值，secret 的名称 |
+| secretRef.key | String | 可选值，从 secret 中获取值，secret 的 key |
 
 ### 示例
 
@@ -218,12 +232,12 @@ spec:
   workflow:
     steps:
       - name: dingtalk-message
-        type: webhook-notification
+        type: notification
         properties:
           dingding:
             # 钉钉 Webhook 地址，请查看：https://developers.dingtalk.com/document/robots/custom-robot-access
             url:
-              address: <your dingtalk url>
+              value: <your dingtalk url>
             message:
               msgtype: text
               text:
@@ -231,12 +245,12 @@ spec:
       - name: application
         type: apply-application
       - name: slack-message
-        type: webhook-notification
+        type: notification
         properties:
           slack:
             # Slack Webhook 地址，请查看：https://api.slack.com/messaging/webhooks
             url:
-              fromSecret:
+              secretRef:
                 name: <the secret name that stores your slack url>
                 key: <the secret key that stores your slack url>
             message:

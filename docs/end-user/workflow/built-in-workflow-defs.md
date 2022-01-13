@@ -170,28 +170,42 @@ spec:
           env: prod
 ```
 
-## webhook-notification
+## notification
 
 ### Overview
 
-Send messages to the webhook address, you need to upgrade to KubeVela v1.1.6 or higher to enable `apply-object`.
+Send notifications. You can use the notification to send email, slack, ding talk and lark.
 
 ### Parameters
 
 |       Name       |  Type  | Description                                                                                                                                                                 |
 | :--------------: | :----: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|      email       | Object | Optional, please fulfill its from, to and content if you want to send email                                                                                             |
+|    email.from.address     | String | Required, the email address that you want to send from                                                                                                                                      |
+|  email.from.alias   | String | Optional, the email alias to show after sending the email                                           |
+|  email.from.password   | ValueOrSecret | Required, the password of the email, you can either specify it in value or use secretRef                                           |
+|  email.from.host   | String | Required, the host of your email                                           |
+|  email.from.port   | Int | Optional, the port of the email host, default to 587                                           |
+|  email.to   | []String | Required, the email address that you want to send to                                           |
+|  email.content.subject   | String | Required, the subject of the email                                           |
+|  email.content.body   | String | Required, the context body of the email                                           |
 |      slack       | Object | Optional, please fulfill its url and message if you want to send Slack messages                                                                                             |
-|    slack.url     | Object | Required, the webhook address of Slack, you can choose to fill it in directly or specify it in secret                                                                                                                                      |
-|    slack.url.address   | String | Optional, directly specify the webhook address of Slack                                                                                                                                      |
-|    slack.url.fromSecret.name     | String | Optional, specify the webhook address of Slack from secret                                                                                                                                       |
-|    slack.url.fromSecret.key     | String | Optional, specify the webhook address of Slack from secret, the key of the secret                                                                                                                                     |
+|    slack.url     | ValueOrSecret | Required, the webhook address of Slack, you can choose to fill it directly in value or specify it in secret                                                                                                                                      |
 |  slack.message   | Object | Required, the Slack messages you want to send, please follow [Slack messaging](https://api.slack.com/reference/messaging/payload)                                           |
 |     dingding     | Object | Optional, please fulfill its url and message if you want to send DingTalk messages                                                                                          |
-|   dingding.url   | Object | Required, the webhook address of DingTalk, you can choose to fill it in directly or specify it in secret                                                                                                                                   |
-|   dingding.url.address   | String | Optional, directly specify the webhook address of DingTalk                                                                                                                                   |
-|   dingding.url.fromSecret.name   | String | Optional, specify the webhook address of DingTalk from secret                                                                                                                                   |
-|   dingding.url.fromSecret.key   | String | Optional, specify the webhook address of DingTalk from secret, the key of the secret                                                                                                                                   |
+|   dingding.url   | ValueOrSecret | Required, the webhook address of DingTalk, you can choose to fill it directly in value or specify it in secret                                                                                                                                  |
 | dingding.message | Object | Required, the DingTalk messages you want to send, please follow [DingTalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |  |
+|     lark     | Object | Optional, please fulfill its url and message if you want to send Lark messages                                                                                          |
+|   lark.url   | ValueOrSecret | Required, the webhook address of Lark, you can choose to fill it directly in value or specify it in secret                                                                                                                                  |
+| lark.message | Object | Required, the Lark messages you want to send, please follow [Lark messaging](https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN#8b0f2a1b) |  |
+
+The `ValueOrSecret` format is:
+
+|       Name       |  Type  | Description                                                                                                                                                                 |
+| :--------------: | :----: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| value | String | Optional, directly get the data from value |
+| secretRef.name | String | Optional, get data from secret, the name of the secret |
+| secretRef.key | String | Optional, get data from secret, the key of the secret |
 
 ### Example
 
@@ -217,12 +231,12 @@ spec:
   workflow:
     steps:
       - name: dingtalk-message
-        type: webhook-notification
+        type: notification
         properties:
           dingding:
             # the DingTalk webhook address, please refer to: https://developers.dingtalk.com/document/robots/custom-robot-access
-            url:
-              address: <your dingtalk url>
+            url: 
+              value: <url>
             message:
               msgtype: text
               text:
@@ -230,16 +244,39 @@ spec:
       - name: application
         type: apply-application
       - name: slack-message
-        type: webhook-notification
+        type: notification
         properties:
           slack:
             # the Slack webhook address, please refer to: https://api.slack.com/messaging/webhooks
             url:
-              fromSecret:
-                name: <the secret name that stores your slack url>
-                key: <the secret key that stores your slack url>
+              secretRef:
+                name: <secret-key>
+                key: <secret-value>
             message:
               text: Workflow ended.
+          lark:
+            url:
+              value: <lark-url>
+            message:
+              msg_type: "text"
+              content: "{\"text\":\" Hello KubeVela\"}"
+          email:
+            from:
+              address: <sender-email-address>
+              alias: <sender-alias>
+              password:
+                # secretRef:
+                #   name: <secret-name>
+                #   key: <secret-key>
+                value: <sender-password>
+              host: <email host like smtp.gmail.com>
+              port: <email port, optional, default to 587>
+            to:
+              - kubevela1@gmail.com
+              - kubevela2@gmail.com
+            content:
+              subject: test-subject
+              body: test-body
 ```
 
 ## apply-object
