@@ -39,7 +39,7 @@ module.exports = {
       items: [
         "case-studies/jenkins-cicd",
         "case-studies/gitops",
-        "case-studies/canary-blue-green",
+        // "case-studies/canary-blue-green",
       ],
     },
     {
