@@ -15,15 +15,16 @@ For easy integration with upstream CI pipelines and GitOps tools, KubeVela API (
 `Application` for designing application deployment plan.
 
 `X-Definitions` for managing the abstraction and capabilities of KubeVela with CUE.
-  - e.g. `ComponentDefinition`, `TraitDefinition`, etc.
+
+- e.g. `ComponentDefinition`, `TraitDefinition`, etc.
 
 In implementation, KubeVela relies on a dedicated Kubernetes cluster to achieve above goals. We chose to rely on Kubernetes as the control plane implementation because this approach is battle tested and brings determinism, convergence and automation to application management at scale. In detail, KubeVela is composed by several parts:
 
-- *Plugin Registry* that registers and manages `X-Definitions`.
-- *Core Controller* that provides the core control logic of the entire system. For example, handling KubeVela API resources, orchestrating workflow, storing revisions, parsing and executing CUE code, garbage collecting, etc.
-- *Addon Controllers* that register and manage built-in addons that KubeVela needed to work. For example, Flux and Terraform controller.
+- _Plugin Registry_ that registers and manages `X-Definitions`.
+- _Core Controller_ that provides the core control logic of the entire system. For example, handling KubeVela API resources, orchestrating workflow, storing revisions, parsing and executing CUE code, garbage collecting, etc.
+- _Addon Controllers_ that register and manage built-in addons that KubeVela needed to work. For example, Flux and Terraform controller.
 
-This control plane Kubernetes cluster will be referenced as the "control plane cluster" in the following documentation. 
+This control plane Kubernetes cluster will be referenced as the "control plane cluster" in the following documentation.
 
 ### Runtime Infrastructure
 
@@ -40,5 +41,5 @@ For learning how to program KubeVela in detail, please check the `Administrator 
 
 ## Next Step
 
-- View [Tutorials](../deliver-app/webservice) to look on more of what you can achieve with KubeVela.
+- View [Tutorials](../tutorials/webservice) to look on more of what you can achieve with KubeVela.
 - View [How To guides](../how-to/dashboard/application/create-application) to check out more features.
