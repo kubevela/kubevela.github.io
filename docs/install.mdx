@@ -11,7 +11,7 @@ import TabItem from "@theme/TabItem";
 
 Requirements:
 
-- Kubernetes cluster >= v1.18.
+- Kubernetes cluster >= v1.18 && < v1.22
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/) && [Helm v3](https://helm.sh/docs/intro/install/).
 
 KubeVela relies on Kubernetes as a control plane. The control plane could be any managed Kubernetes offering or your cluster.
@@ -53,7 +53,7 @@ minikube addons enable ingress
 
 <TabItem value="rke">
 
-> This installation applies to the production environment. Please prepare 1~N servers or VMs. 
+> This installation applies to the production environment. Please prepare 1~N servers or VMs.
 
 This section guides to install a RKE Kubernetes cluster, you can refer to their installation guides for [more details](https://rancher.com/docs/rancher/v2.5/en/installation/resources/k8s-tutorials/infrastructure-tutorials/infra-for-ha/).
 
@@ -120,7 +120,7 @@ nodes:
 EOF
 ```
 
-<details> <summary> Install ingress to enable service route </summary>
+<details> <summary> Install ingress controller to enable service route </summary>
 
 ```shell script
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
@@ -264,15 +264,19 @@ sudo mv ./vela /usr/local/bin/vela
 ```shell script
 vela addon enable velaux
 ```
+
 expected output:
+
 ```
 Addon: velaux enabled Successfully.
 ```
+
 By default, velaux didn't have any exposed port, you can view it by:
 
 ```
 vela port-forward addon-velaux -n vela-system
 ```
+
 Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` for visit.
 
 If you have loadbalaner or ingress, please refer to [VelaUX addon docs](./reference/addons/velaux) for more advanced installation ways.
