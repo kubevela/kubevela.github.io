@@ -15,7 +15,7 @@ KubeVela has a built-in `scaler` Trait by default, which supports the adjustment
 
 > For k8s-objects type applications, when multiple resources are involved, please put the workload resources such as Deployment, Statefulset, Job in the first place so that the Trait of `scaler` can take effect.
 
-Let's take first-vela-app in `Deliver First Application` as an example. First, open the application's `Benchmark Config`-`Properties` page:
+Let's take first-vela-app in `Deliver First Application` as an example. First, open the application's `Baseline Config`-`Properties` page:
 
 ![app-trait-scaler](../resources/app-scaler.jpg)
 

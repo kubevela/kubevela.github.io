@@ -8,23 +8,6 @@ title:  使用 Webhook 发送通知
 
 > 请确保你的 KubeVela 版本 `>=v1.1.6`。
 
-## 参数说明
-
-| 参数 | 类型 | 说明 |
-| :---: | :--: | :-- |
-| slack | Object | 可选值，如果需要发送 Slack 信息，则需填写其 url 及 message |
-| slack.url | Object | 必填值，Slack 的 Webhook 地址，可以选择直接填写或从 secret 中获取 |
-| slack.url.address | String | 可选值，直接填写 Slack 的 Webhook 地址 |
-| slack.url.fromSecret.name | String | 可选值， 从 secret 中获取 Webhook 地址，secret 的名字 |
-| slack.url.fromSecret.key | String | 可选值， 从 secret 中获取 Webhook 地址，从 secret 中获取的 key |
-| slack.message | Object | 必填值，需要发送的 Slack 信息，请符合 [Slack 信息规范](https://api.slack.com/reference/messaging/payload) |
-| dingding | Object | 可选值，如果需要发送钉钉信息，则需填写其 url 及 message |
-| dingding.url | Object | 必填值，钉钉的 Webhook 地址，可以选择直接填写或从 secret 中获取 |
-| dingding.url.address | String | 可选值，直接填写钉钉的 Webhook 地址 |
-| dingding.url.fromSecret.name | String | 可选值， 从 secret 中获取 Webhook 地址，secret 的名字 |
-| dingding.url.fromSecret.key | String | 可选值， 从 secret 中获取 Webhook 地址，从 secret 中获取的 key |
-| dingding.message | Object | 必填值，需要发送的钉钉信息，请符合 [钉钉信息规范](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |
-
 ## 如何使用
 
 部署如下应用部署计划，在部署组件前后，都有一个 `webhook-notification` 步骤发送通知：
@@ -92,3 +75,20 @@ spec:
 通过与 Webhook 的对接，可以看到，在工作流中的组件部署前后，都能在对应的群聊中看到相应的信息。
 
 通过 `webhook-notification` ，可以使用户方便的与 Webhook 对接消息通知。
+
+## 参数说明
+
+| 参数 | 类型 | 说明 |
+| :---: | :--: | :-- |
+| slack | Object | 可选值，如果需要发送 Slack 信息，则需填写其 url 及 message |
+| slack.url | Object | 必填值，Slack 的 Webhook 地址，可以选择直接填写或从 secret 中获取 |
+| slack.url.address | String | 可选值，直接填写 Slack 的 Webhook 地址 |
+| slack.url.fromSecret.name | String | 可选值， 从 secret 中获取 Webhook 地址，secret 的名字 |
+| slack.url.fromSecret.key | String | 可选值， 从 secret 中获取 Webhook 地址，从 secret 中获取的 key |
+| slack.message | Object | 必填值，需要发送的 Slack 信息，请符合 [Slack 信息规范](https://api.slack.com/reference/messaging/payload) |
+| dingding | Object | 可选值，如果需要发送钉钉信息，则需填写其 url 及 message |
+| dingding.url | Object | 必填值，钉钉的 Webhook 地址，可以选择直接填写或从 secret 中获取 |
+| dingding.url.address | String | 可选值，直接填写钉钉的 Webhook 地址 |
+| dingding.url.fromSecret.name | String | 可选值， 从 secret 中获取 Webhook 地址，secret 的名字 |
+| dingding.url.fromSecret.key | String | 可选值， 从 secret 中获取 Webhook 地址，从 secret 中获取的 key |
+| dingding.message | Object | 必填值，需要发送的钉钉信息，请符合 [钉钉信息规范](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |

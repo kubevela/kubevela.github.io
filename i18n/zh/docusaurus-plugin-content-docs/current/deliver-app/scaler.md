@@ -15,7 +15,7 @@ KubeVela 默认内置了 `scaler` 运维特征，该特征支持常规工作负�
 
 > k8s-objects 类型的应用，涉及多个资源时请将 Deployment、Statefulset、Job 等工作负载类资源置于第一个，`scaler` 运维特征即可生效。
 
-我们以 `交付第一个应用` 中的 first-vela-app 为例。首先打开应用的 `Benchmark Config`-`Properties` 页面：
+我们以 `交付第一个应用` 中的 first-vela-app 为例。首先打开应用的 `Baseline Config`-`Properties` 页面：
 
 ![app-trait-scaler](../resources/app-scaler.jpg)
 

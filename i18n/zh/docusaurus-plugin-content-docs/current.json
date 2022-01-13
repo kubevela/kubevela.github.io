@@ -40,8 +40,8 @@
     "description": "The label for category Appfile in sidebar docs"
   },
   "sidebar.docs.category.Roadmap": {
-    "message": "Roadmap",
-    "description": "The label for category Roadmap in sidebar docs"
+    "message": "路线规划",
+    "description": "KubeVela 未来的发展计划"
   },
   "sidebar.docs.category.Application Deployment": {
     "message": "Application Deployment",
@@ -184,15 +184,35 @@
     "description": "The extended add-ons"
   },
   "sidebar.docs.category.Tutorials": {
-    "message": "教程",
-    "description": "KubeVela 场景场景教程"
+    "message": "实践教程",
+    "description": "KubeVela 实践教程"
   },
   "sidebar.docs.category.How-to Guides": {
     "message": "操作手册",
-    "description": "CLI和Dashboard 的操作指导手册"
+    "description": "CLI 和 Dashboard 的操作指导手册"
   },
   "sidebar.docs.category.Manage application": {
     "message": "应用管理",
     "description": "通过 Dashboard 对应用的管理操作说明"
+  },
+  "sidebar.docs.category.Built-in Addons": {
+    "message": "内置插件包",
+    "description": "内置插件包说明"
+  },
+  "sidebar.docs.category.Supported Cloud Resource": {
+    "message": "支持的云资源",
+    "description": "支持的云资源列表"
+  },
+  "sidebar.docs.category.Built-in Component Type": {
+    "message": "内置组件",
+    "description": "内置组件列表"
+  },
+  "sidebar.docs.category.Built-in Trait Type": {
+    "message": "内置运维特征",
+    "description": "内置运维特征列表"
+  },
+  "sidebar.docs.category.Built-in Policy Type": {
+    "message": "内置策略",
+    "description": "内置策略列表"
   }
 }
