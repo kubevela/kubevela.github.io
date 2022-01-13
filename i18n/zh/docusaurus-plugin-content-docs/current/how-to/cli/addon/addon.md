@@ -1,12 +1,12 @@
 ---
-title: 安装扩展包
+title: 安装插件包
 ---
 
-你可以通过安装 KubeVela 的扩展包（Addon）获取更多的系统功能。
+你可以通过安装 KubeVela 的插件包（Addon）获取更多的系统功能。
 
-## 查看所有扩展包
+## 查看所有插件包
 
-KubeVela 官方团队维护了一个默认的扩展包仓库 (https://addons.kubevela.net)，默认情况下会从这个仓库实时发现.
+KubeVela 官方团队维护了一个默认的插件包仓库 (https://addons.kubevela.net)，默认情况下会从这个仓库实时发现.
 
 
 ```shell
@@ -21,7 +21,7 @@ terraform-alibaba       Kubernetes Terraform Controller for Alibaba Cloud       
 terraform-azure         Kubernetes Terraform Controller for Azure                                                                                               disabled
 ```
 
-## 安装扩展包
+## 安装插件包
 
 ```
 $ vela addon enable fluxcd
@@ -35,18 +35,18 @@ I0111 21:45:25.660129   89345 apply.go:106] "creating object" name="component-ui
 Addon: fluxcd enabled Successfully.
 ```
 
-安装完成后，扩展包中的功能会以组件，运维特征，工作流步骤等形式呈现，你可以通过 `vela component`，`vela trait` 等命令查看新增的能力，也可以在[扩展包的参考文档](../../../reference/addons/overview)中查看每个官方扩展包对应的能力.
+安装完成后，插件包中的功能会以组件，运维特征，工作流步骤等形式呈现，你可以通过 `vela component`，`vela trait` 等命令查看新增的能力，也可以在[插件包的参考文档](../../../reference/addons/overview)中查看每个官方插件包对应的能力.
 
-## 删除/卸载已安装的扩展包
+## 删除/卸载已安装的插件包
 
-> 删除前请确认扩展包对应的能力没有被任何应用使用。
+> 删除前请确认插件包对应的能力没有被任何应用使用。
 
 ```
 $ vela addon disable fluxcd
 Successfully disable addon:fluxcd
 ```
 
-## 查看扩展包的下载仓库
+## 查看插件包的下载仓库
 
 ```
 $ vela addon registry list 
@@ -54,22 +54,22 @@ Name            Type    URL
 KubeVela        OSS     https://addons.kubevela.net
 ```
 
-## 添加扩展包仓库
+## 添加插件包仓库
 
-你可以添加自己的扩展包仓库，目前支持 OSS 和 Github 两种仓库类型。
+你可以添加自己的插件包仓库，目前支持 OSS 和 Github 两种仓库类型。
 
 ```
 $ vela addon registry add experimental --type OSS --endpoint=https://addons.kubevela.net --path=experimental/
 Successfully add an addon registry experimental
 ```
 
-## 删除一个扩展包仓库
+## 删除一个插件包仓库
 
 ```
 $ vela addon registry delete experimental
 Successfully delete an addon registry experimental
 ```
 
-## 编写自己的扩展包
+## 编写自己的插件包
 
-请参考[扩展包制作文档](../../../platform-engineers/addon/intro)。
+请参考[插件包制作文档](../../../platform-engineers/addon/intro)。

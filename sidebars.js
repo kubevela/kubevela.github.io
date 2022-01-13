@@ -30,13 +30,6 @@ module.exports = {
         "deliver-app/consume-cloud-services",
         "deliver-app/scaler",
         "deliver-app/workflows",
-      ],
-    },
-    {
-      type: "category",
-      label: "Best Practices",
-      collapsed: false,
-      items: [
         "case-studies/jenkins-cicd",
         "case-studies/gitops",
         // "case-studies/canary-blue-green",
@@ -179,13 +172,17 @@ module.exports = {
       items: [
         "cli/vela",
         {
-          "Built-in Addons": [
+          type: "category",
+          label: "Built-in Addons",
+          items: [
             "reference/addons/overview",
             "reference/addons/velaux",
           ],
         },
         {
-          "Supported Cloud Resource": [
+          type: "category",
+          label: "Supported Cloud Resource",
+          items: [
             "end-user/components/cloud-services/terraform/alibaba-ack",
             "end-user/components/cloud-services/terraform/alibaba-eip",
             "end-user/components/cloud-services/terraform/alibaba-rds",
@@ -198,7 +195,9 @@ module.exports = {
           ],
         },
         {
-          "Built-in Component Type": [
+          type: "category",
+          label: "Built-in Component Type",
+          items: [
             "end-user/components/helm",
             "end-user/components/cue/webservice",
             "end-user/components/cue/worker",
@@ -209,7 +208,9 @@ module.exports = {
           ],
         },
         {
-          "Built-in Trait Type": [
+          type: "category",
+          label: "Built-in Trait Type",
+          items: [
             "end-user/traits/annotations-and-labels",
             "end-user/traits/service-binding",
             "end-user/traits/sidecar",
@@ -219,7 +220,9 @@ module.exports = {
           ],
         },
         {
-          "Built-in Policy Type": [
+          type: "category",
+          label: "Built-in Policy Type",
+          items: [
             "end-user/policies/envbinding",
           ],
         },

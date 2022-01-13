@@ -31,7 +31,7 @@ Done by clicking `Create` and then we enter the management page.
 
 ## Deploying the application
 
-Click the `Deploy` button on the upper right, it executes the default Workflow. Note that each Environment of the application has its workflow. On the right of the `Benchmark Config` tab is the environments. Check out the status of the environment and its instance information as you wish.
+Click the `Deploy` button on the upper right, it executes the default Workflow. Note that each Environment of the application has its workflow. On the right of the `Baseline Config` tab is the environments. Check out the status of the environment and its instance information as you wish.
 
 ![webservice application env page](../resources/webservice-env.jpg)
 
@@ -43,7 +43,7 @@ In the `Instances` list, you may find some of them are in pending status. Click 
 
 After the first deployment, our business keeps evolving and the following updates come along.
 
-Click `Benchmark Config` and you can see the button `Edit Properties` on the right. Then again we're on the configuration page to update your latest requirements for image, version, and environment variable.
+Click `Baseline Config` and you can see the button `Edit Properties` on the right. Then again we're on the configuration page to update your latest requirements for image, version, and environment variable.
 
 ## Update replicas
 
