@@ -52,3 +52,8 @@ Kubernetes 集群描述，它包括了集群通信密钥等信息，Kubernetes �
 ## 插件（Addon）
 
 平台扩展插件描述，KubeVela 遵从微内核、高度可扩展的设计模式。KubeVela 在应用交付和管理的完整场景中基于 OAM 模型的概念，将应用组件类型、运维特征、工作流步骤、应用策略等功能均设计成可插拔可扩展的模式。这些可扩展的机制定义与第三方解决方案结合形成插件（ Addon）。每一个插件一般会包括模块定义 [X-Definition](../platform-engineers/oam/x-definition) ，代表它扩展的能力集合，以及第三方解决方案的安装包，如 Kubernetes CRD 及其控制器等。
+
+## 下一步
+
+- 查看 [实践教程](../deliver-app/webservice)，了解更多使用场景和最佳实践。
+- 查看 [操作手册](../how-to/dashboard/application/create-application)，一步步了解更多的功能。 

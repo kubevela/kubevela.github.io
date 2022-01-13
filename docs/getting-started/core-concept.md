@@ -52,3 +52,9 @@ Import and manage your Kubernetes cluster in KubeVela。Kubernetes cluster is cu
 ## Addon
 
 Addon is where you can freely pull in third-party capability that fulfills your need. This relies on the highly scalable design pattern of KubeVela. Each Addon will have its own [X-Definition](../platform-engineers/oam/x-definition).
+
+## Next Step
+
+- View [Tutorials](../deliver-app/webservice) to look on more of what you can achieve with KubeVela.
+- View [How To guides](../how-to/dashboard/application/create-application) to check out more features.
+
