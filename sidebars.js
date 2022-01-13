@@ -174,10 +174,7 @@ module.exports = {
         {
           type: "category",
           label: "Built-in Addons",
-          items: [
-            "reference/addons/overview",
-            "reference/addons/velaux",
-          ],
+          items: ["reference/addons/overview", "reference/addons/velaux"],
         },
         {
           type: "category",
@@ -222,11 +219,10 @@ module.exports = {
         {
           type: "category",
           label: "Built-in Policy Type",
-          items: [
-            "end-user/policies/envbinding",
-          ],
+          items: ["end-user/policies/envbinding"],
         },
         "end-user/workflow/built-in-workflow-defs",
+        "reference/ui-schema",
       ],
     },
     {
