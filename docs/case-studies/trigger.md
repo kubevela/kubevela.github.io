@@ -1,15 +1,14 @@
 ---
-title: Use KubeVela triggers to automatically apply application based on image tags
-
+title: Integrate Image Registry for Continuous Delivery
 ---
 
 ## Introduction
 
-In our daily development, when an image tags is changed, it is often necessary to update the latest image to each environment. We can apply it manually, but it's tedious and tricky. Therefore, we need a tool to automatically apply application based on image tags.
+In our daily development, when image tags changed, it is more convenient for CI/CD if the environments can automatically deploy the new image. KubeVela provides this mechanism.
 
 In KubeVela 1.2, [VelaUX](../install#3-install-velaux) provides a good way to do this. We can use KubeVela triggers to apply applications automatically.
 
-In this section, you will know how to use KubeVela triggers to automatically apply application based on image tags. In this example, we will use GitLab as code repository and ACR as image repository.
+In this section, we will use GitLab as code repository and ACR as image repository to integrate with KubeVela triggers, as a result, it will automatically update application when image tags changed.
 
 ## Create Application
 
