@@ -1,6 +1,6 @@
 ---
 title: How to view an application log
-description: View an application log by kubevela dashboard
+description: View an application log by KubeVela dashboard
 ---
 
 ![pod log](../../../resources/pod-log.jpg)

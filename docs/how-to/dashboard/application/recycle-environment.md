@@ -1,5 +1,5 @@
 ---
-title: How to recycle an environment
+title: Recycle application instance
 ---
 
 当你需要将应用在某个环境的部署资源回收，即关闭应用时，参考下述操作。

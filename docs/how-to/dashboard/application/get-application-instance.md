@@ -1,6 +1,6 @@
 ---
 title: How to view an application instances
-description: View an application instances by kubevela dashboard
+description: View an application instances by KubeVela dashboard
 ---
 
 查看应用运行实例信息是掌握应用运行状态的直接方式。

@@ -1,6 +1,6 @@
 ---
 title: How to view an application revision
-description: View an application revision by kubevela dashboard
+description: View an application revision by KubeVela dashboard
 ---
 
 应用每执行一次部署即可生成一个版本，通过应用 `Baseline Config` 视图下的 `Revisions` 页面展示应用的历史部署版本。
