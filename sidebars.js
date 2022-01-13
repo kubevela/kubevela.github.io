@@ -30,7 +30,7 @@ module.exports = {
         "deliver-app/consume-cloud-services",
         "deliver-app/scaler",
         "deliver-app/workflows",
-        "case-studies/jenkins-cicd",
+        // "case-studies/jenkins-cicd",
         "case-studies/gitops",
         // "case-studies/canary-blue-green",
       ],
