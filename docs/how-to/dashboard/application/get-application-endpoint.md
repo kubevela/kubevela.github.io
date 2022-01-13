@@ -1,6 +1,6 @@
 ---
 title: How to view an application endpoint
-description: View an application endpoints by kubevela dashboard
+description: View an application endpoints by KubeVela dashboard
 ---
 
 ### 设置应用访问方式

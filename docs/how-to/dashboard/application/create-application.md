@@ -3,20 +3,31 @@ title: How to create an application
 description: create an application by kubevela dashboard
 ---
 
-### 判断你的应用类别
+### Configure the basic information
 
-我们大致把应用分为三种类型，普通业务应用、中间件（第三方开源应用）、云服务。对于普通业务应用，我们建议你采用 `webservice` 部署类型或你的自定义类型。对于中间件或第三方复杂应用建议直接采用 `helm` 部署类型，对于比较简单且直接提供了 Docker 镜像的第三方开源应用，比如 wordpress,也可以直接采用 `webservice` 类型。
+Enter the `Applications` page, click `New Application` button, you can see the basic application configuration page. 
 
-### 设置应用基础信息
+### Choose your application(component) type
 
-进入 `Applications` 页面，点击 `New Application` 按钮，进入应用基础信息设置页面。设置应用名称等基础信息，根据上一步判断的应用类型选择类型，根据你的实际情况选择部署的环境。设置完成后直接进入下一步。
+Currently we only support one component for one application in VelaUX,
+so the application type here is actually component type.
 
-### 设置应用部署参数
+There're many component types supported in KubeVela including cloud resources and container based service type. New component types can be easily extended by KubeVela addons or component definition.
 
-应用部署参数对于不同的类型差异较大，可根据 UI 提示的帮助信息进行信息输入。比如对于 `webservice` 类型的应用，他的输入参数如下图：
+- We recommend to use `webservice` for your container based application.
+- For helm packages, you can choose `helm` type.
+
+### Configure the component
+
+After you choose component type well, KubeVela will render the configuration
+page according to the component type.
+
+Different component types are different significantly, you can fill in the forms with the help of UI. For example, below is the configuration page for `webservice` type.
 
 ![create-app](../../../resources/set-webservice.jpg)
 
-### 完成创建
+### Submit your application
 
-根据提示完成部署参数的设置后，点击提交按钮即可完成应用创建。成功创建后进入应用管理页面，应用处于未部署状态。
+After you finished configuring the application, click "Submit" to create the application. This means the application configuration was saved.
+
+You should choose to [bind environment](./bind-new-environment) to do real deployment.
