@@ -29,8 +29,8 @@ Then click the button of `New Application` on the upper-right, type in these thi
 
 1. Name and other basic Infos.
 <!-- 2. Choose the Project. We've created a default Project for you to use or you can click `New` to create your own. -->
-3. Choose the deployment type. In this case, we use `webservice` to deploy Stateless Application.
-4. Choose your environment. We select the `Default` Environment based on the `Default` Target.
+2. Choose the deployment type. In this case, we use `webservice` to deploy Stateless Application.
+3. Choose your environment. We select the `Default` Environment based on the `Default` Target.
 
 ![](./resources/new-first-vela-app.jpg)
 
@@ -69,5 +69,5 @@ That's it! You succeed at the first application delivery. Congratulation!
 
 ## Next Step
 
-- View [Tutorials](./deliver-app/webservice) to look on more of what you can achieve with KubeVela.
+- View [Tutorials](./tutorials/webservice) to look on more of what you can achieve with KubeVela.
 - View [How To guides](./how-to/dashboard/application/create-application) to check out more features.
