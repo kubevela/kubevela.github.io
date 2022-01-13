@@ -1,5 +1,5 @@
 ---
-title: How to bind new environment
+title: Bind application with environment
 ---
 
 We can specify bind with one or more environments before deploy.
