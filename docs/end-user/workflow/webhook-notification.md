@@ -1,16 +1,14 @@
 ---
-title:  Webhook Notification
+title: Notification
 ---
 
-If we want to be notified before or after deploying an application, KubeVela provides integration with notification webhooks, allowing users to send notifications to DingTalk or Slack.
+If we want to be notified before or after deploying an application, KubeVela provides integration with notification webhooks, allowing users to send notifications to Email, DingTalk, Slack, Lark.
 
-In this guide, you will learn how to send notifications via `webhook-notification` in workflow.
-
-> Make sure the version of KubeVela is `>=v1.1.6`.
+In this guide, you will learn how to send notifications via `notification` in workflow.
 
 ## How to use
 
-Apply the following `Application` with workflow step type of `webhook-notification`:
+Apply the following `Application` with workflow step type of `notification`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -35,7 +33,7 @@ spec:
     steps:
       - name: dingtalk-message
         # specify the workflow step type
-        type: webhook-notification
+        type: notification
         properties:
           dingding:
             # the DingTalk webhook address, please refer to: https://developers.dingtalk.com/document/robots/custom-robot-access
@@ -51,13 +49,13 @@ spec:
         properties:
           component: express-server
         outputs:
-          - from: app-status
+          - name: app-status
             valueFrom: output.status.conditions[0].message + "工作流运行完成"
       - name: slack-message
-        type: webhook-notification
+        type: notification
         inputs:
-          - name: app-status
-            parameterKey: properties.slack.message.text
+          - from: app-status
+            parameterKey: slack.message.text
         properties:
           slack:
             # the Slack webhook address, please refer to: https://api.slack.com/messaging/webhooks
@@ -74,21 +72,8 @@ spec:
 
 we can see that before and after the deployment of the application, the messages can be seen in the corresponding group chat.
 
-With `webhook-notification`, we can integrate with webhook notifier easily.
+With `notification`, we can integrate with webhook notifier easily.
 
 ## Parameters
 
-| Parameter | Type | Description |
-| :---: | :--: | :-- |
-| slack | Object | Optional, please fulfill its url and message if you want to send Slack messages |
-| slack.url | Object | Required, the webhook address of Slack, you can choose to fill it in directly or specify it in secret |
-| slack.url.address | String | Optional, directly specify the webhook address of Slack |
-| slack.url.fromSecret.name | String | Optional, specify the webhook address of Slack from secret |
-| slack.url.fromSecret.key | String | Optional, specify the webhook address of Slack from secret, the key of the secret |
-| slack.message | Object | Required, the Slack messages you want to send, please follow [Slack messaging](https://api.slack.com/reference/messaging/payload) |
-| dingding | Object | Optional, please fulfill its url and message if you want to send DingTalk messages |
-| dingding.url | Object | Required, the webhook address of DingTalk, you can choose to fill it in directly or specify it in secret |
-| dingding.url.address | String | Optional, directly specify the webhook address of DingTalk |
-| dingding.url.fromSecret.name | String | Optional, specify the webhook address of DingTalk from secret |
-| dingding.url.fromSecret.key | String | Optional, specify the webhook address of DingTalk from secret, the key of the secret |
-| dingding.message | Object | Required, the DingTalk messages you want to send, please follow [DingTalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |
+For details, please checkout [notification parameters](./built-in-workflow-defs##notification)
