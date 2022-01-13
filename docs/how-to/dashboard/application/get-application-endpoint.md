@@ -3,29 +3,36 @@ title: How to view an application endpoint
 description: View an application endpoints by KubeVela dashboard
 ---
 
-### 设置应用访问方式
+### Expose your application for public access
 
-交付的 Kubernetes 集群的应用需要设置访问方式即可生成访问地址，常见支持的方式如下：
+You can configure your application for public access.
 
-1. 设置 Service 的暴露类型，比如 `LoadBalancer` 和 `NodePort`。适用于所有应用协议。
-2. 设置 Ingress 策略，仅适用于 HTTP/HTTPs 协议。
+There're mainly three ways to expose your service.
 
-#### `webservice` 类型的应用
+1. Choose `webservice` Type and configure the service type to be `LoadBalancer` or `NodePort`.
+2. Configure `gateway` trait, it works for `webservice`, `worker` and `task` component types. `gateway` trait must configure a domain and works only for HTTP/HTTPs protocols.
+3. Case by case component configurations.
 
-在部署参数中可以修改 `ExposeType` 字段参数来设置其暴露方式，同时在 `Service Ports` 中设置应用的监听端口，并将 `Expose` 设置为 True。
+#### Expose service for `webservice` typed component
+
+You can modify `ExposeType` to choose the way, and you should configure the `Service Ports` to listen the ports and turn on the `Expose` radio.
 
 ![webservice](../../../resources/webservice-port.jpg)
 
-如果你的集群中存在 `Ingress Controller`，在应用 `Baseline Config` 页面中，新增 `gateway` 运维特征来设置访问域名。
+#### Add `gateway` trait
+
+The `gateway` trait requires you have `Ingress Controller` available in your cluster. You can add this trait to expose your service and configure a domain.
 
 ![trait](../../../resources/gateway-trait-add.jpg)
 
-如上图所示，在 `Domain` 中配置你的域名，注意请将该域名 DNS 解析到目标集群的网关 IP 之上。在 `Http` 模块下配置路由规则，默认你需要设置 `/`:`80`，根据你的应用监听端口设置。
+As the picture shows, the `Domain` field configure your domain, please configure your DNS for domain to route to the Kubernetes cluster gateway IP.
 
-其他部署类型的应用，一般存在对应的部署参数设置选项，根据部署参数设置即可。
+In the `Http` section, you can configure the routing rules. For example, set `/`:`80` means the domain index page will route to the port `80`. You can configure this rule as you need.
 
-### 获取访问地址
+Other component types can also be able to configure the service expose, but they're usually case by case, especially for helm charts.
 
-设置完应用访问方式后，执行应用部署，然后切换到环境视图下即可看到 `Service Endpoint` 按钮，鼠标移动到上方即可显示该应用的访问地址。
+### Get the service endpoint
+
+After the application deployed with service exposed configuration, you can see a `Service Endpoint` button on the left of the `Recycle` button. You'll see the endpoint when hover your mouse there.
 
 ![service endpoint](../../../resources/service-endpoint.jpg)
