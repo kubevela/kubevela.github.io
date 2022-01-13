@@ -3,7 +3,7 @@ title: Modify Replicas
 description: This article introduces how KubeVela adjusts the number of application copies.
 ---
 
-This section introduces how manually modify replicas to apply. 
+This section introduces how manually modify replicas to apply.
 
 ## Before starting
 

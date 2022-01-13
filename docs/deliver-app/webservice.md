@@ -8,11 +8,10 @@ This article introduces how companies deliver business applications based on Kub
 ## Before starting
 
 - Containerize your business. No matter what language you're using, first to build an image via CI or locally.
-  
+
   > In the future, KubeVela plans to provide the image-build-up solution for multi-langs
 
 - Place your business image at a hub that KubeVela can access to
-  
 - Make it clear what environment variables your business needs to set, and whether there are other middleware dependencies (such as databases, caches, etc.). If so, please deploy the middleware service first.
 
 ## Creating an application
