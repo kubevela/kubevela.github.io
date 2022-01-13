@@ -19,16 +19,16 @@ Then the workflow start to running, you can see the workflow status on the top r
 
 If you have configured a suspend workflow step, it will run and stop in that state. It will wait until you have checked your application well and click the approve button.
 
-// TODO: 等待 approve 图片。
+![workflow-suspend](../../../resources/workflow-suspend.jpg)
 
 If there's something wrong with the workflow step, the workflow node will become red. Move your mouse to hover that area, you'll see the error reason.
 
-// TODO: 错误信息图片
+![workflow-error](../../../resources/workflow-error.jpg)
 
 ### Upgrade the application
 
 There's a `Deploy` button on the top right corner, you can click that for deploy. On the right side of the button, there's detail button, you can choose which workflow to run if there's multiple environments configured.
 
-// TODO: 加一个选择 workflow执行的图片
+![select-workflow](../../../resources/select-workflow.jpg)
 
 You can upgrade the application in any state, as KubeVela is a declarative system. There will be a kindly reminder for you if the workflow is running when you want to upgrade.

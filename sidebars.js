@@ -44,7 +44,7 @@ module.exports = {
         {
           type: "category",
           label: "Dashboard",
-          collapsed: true,
+          collapsed: false,
           items: [
             {
               "Manage application": [
@@ -89,7 +89,7 @@ module.exports = {
         {
           type: "category",
           label: "CLI",
-          collapsed: false,
+          collapsed: true,
           items: [
             "end-user/quick-start-cli",
             "end-user/traits/ingress",
