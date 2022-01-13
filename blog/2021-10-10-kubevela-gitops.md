@@ -57,7 +57,7 @@ This article will separate into two perspectives:
 
 ## For platform administrators/SREs
 
-Platform administrators/SREs prepares the Git repo for operational config. Every config config change will be traceable by that. KubeVela will watch the repo and apply changes to the clusters.
+Platform administrators/SREs prepares the Git repo for operational config. Every config change will be traceable by that. KubeVela will watch the repo and apply changes to the clusters.
 
 ![alt](/img/gitops/ops-flow.jpg)
 
