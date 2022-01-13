@@ -1,5 +1,5 @@
 ---
-title: How to delete an application
+title: Delete application
 description: delete an application by KubeVela dashboard
 ---
 

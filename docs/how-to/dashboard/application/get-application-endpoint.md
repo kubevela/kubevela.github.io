@@ -1,5 +1,5 @@
 ---
-title: How to view an application endpoint
+title: Expose application for public access
 description: View an application endpoints by KubeVela dashboard
 ---
 

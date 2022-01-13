@@ -1,5 +1,5 @@
 ---
-title: How to deploy an application
+title: Deploy application
 description: deploy an application to environment by KubeVela dashboard
 ---
 

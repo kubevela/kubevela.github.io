@@ -1,12 +1,15 @@
 ---
-title: How to view an application log
+title: View application logs
 description: View an application log by KubeVela dashboard
 ---
 
+You can view the logs of application in the environment tab.
+
+Click the icon in the `Action` column, you'll see the running logs for pod.
+
 ![pod log](../../../resources/pod-log.jpg)
 
-如上图所示，交付到 Kubernetes 集群的应用支持查询容器运行日志，通过展开实例信息，点击容器列表 Actions 列下的日志按钮，即可查询该容器的运行日志。
 
 ![pod log](../../../resources/log-show.jpg)
 
-日志查询页面默认为每 5 秒自动刷新，查看最新的日志。若你的应用日志中没有时间信息，可点击 `Show timestamps` 展示日志记录时间。
+By default, the logs will refresh every 5s. If your logs didn't have timestamp, you can click the `Show timestamps` to see.
