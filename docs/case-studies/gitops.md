@@ -1,5 +1,5 @@
 ---
-title:  GitOps with KubeVela
+title:  GitOps
 ---
 
 This section will introduce how to use KubeVela in GitOps environment and why.
