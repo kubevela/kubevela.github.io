@@ -68,13 +68,13 @@ spec:
         properties:
           component: express-server
         outputs:
-          - from: app-status
+          - name: app-status
             valueFrom: output.status.conditions[0].message + "工作流运行完成"
       - name: slack-message
         type: webhook-notification
         inputs:
-          - name: app-status
-            parameterKey: properties.slack.message.text
+          - from: app-status
+            parameterKey: slack.message.text
         properties:
           slack:
             # the Slack webhook address, please refer to: https://api.slack.com/messaging/webhooks
