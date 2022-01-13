@@ -69,5 +69,5 @@ That's it! You succeed at the first application delivery. Congratulation!
 
 ## Next Step
 
-- View [Continuous Delivery](./deliver-app/k8s-object) to look on more of what you can achieve with KubeVela.
-- View [Best Practices](./case-studies/jenkins-cicd) to check out more tutorials.
+- View [Tutorials](./deliver-app/webservice) to look on more of what you can achieve with KubeVela.
+- View [How To guides](./how-to/dashboard/application/create-application) to check out more features.

@@ -37,3 +37,8 @@ In real world, application deployment tends to be complex and varies from teams,
 ![alt](../resources/kernel.png)
 
 For learning how to program KubeVela in detail, please check the `Administrator Manuals` in the documentation site.
+
+## Next Step
+
+- View [Tutorials](../deliver-app/webservice) to look on more of what you can achieve with KubeVela.
+- View [How To guides](../how-to/dashboard/application/create-application) to check out more features.

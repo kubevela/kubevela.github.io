@@ -1,5 +1,5 @@
 ---
-title: Integrate Image Registry for Continuous Delivery
+title: Continuous Delivery from Image Registry
 ---
 
 ## Introduction
