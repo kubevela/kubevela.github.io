@@ -32,6 +32,7 @@ module.exports = {
         "deliver-app/workflows",
         "case-studies/jenkins-cicd",
         "case-studies/gitops",
+        "case-studies/trigger",
         // "case-studies/canary-blue-green",
       ],
     },
