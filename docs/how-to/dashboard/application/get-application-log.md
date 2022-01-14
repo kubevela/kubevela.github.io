@@ -1,5 +1,5 @@
 ---
-title: View application logs
+title: View Application Logs
 description: View an application log by KubeVela dashboard
 ---
 
@@ -13,3 +13,7 @@ Click the icon in the `Action` column, you'll see the running logs for pod.
 ![pod log](../../../resources/log-show.jpg)
 
 By default, the logs will refresh every 5s. If your logs didn't have timestamp, you can click the `Show timestamps` to see.
+
+### Next Step
+
+* [Expose Application for Public Access](./get-application-endpoint)
