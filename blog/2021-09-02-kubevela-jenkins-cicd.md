@@ -289,6 +289,8 @@ pipeline {
 }
 ```
 
+> NOTE: the deploy stage is written with KubeVela v1.1. The apiserver interaction method is updated in KubeVela v1.2, leveraging VelaUX (the UI dashboard) and webhook trigger. If you are using KubeVela v1.2.0+, you should refer to the latest documents.
+
 ## Performance
 
 After finishing the configuration process described above, the whole process of continuous delivery has already been set up. Let's check how it works.

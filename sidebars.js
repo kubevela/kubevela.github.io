@@ -28,6 +28,7 @@ module.exports = {
         "tutorials/helm",
         "tutorials/consume-cloud-services",
         "tutorials/k8s-object",
+        "tutorials/jenkins",
         "tutorials/trigger",
         "case-studies/gitops",
         "tutorials/scaler",
