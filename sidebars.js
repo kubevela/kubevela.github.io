@@ -50,13 +50,13 @@ module.exports = {
             {
               "Manage application": [
                 "how-to/dashboard/application/create-application",
+                "how-to/dashboard/application/bind-new-environment",
                 "how-to/dashboard/application/deploy-application",
                 "how-to/dashboard/application/get-application-instance",
                 "how-to/dashboard/application/get-application-log",
                 "how-to/dashboard/application/get-application-endpoint",
                 "how-to/dashboard/application/view-application-resource",
                 "how-to/dashboard/application/get-application-revision",
-                "how-to/dashboard/application/bind-new-environment",
                 "how-to/dashboard/application/recycle-environment",
                 "how-to/dashboard/application/delete-application",
               ],

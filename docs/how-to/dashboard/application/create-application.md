@@ -1,5 +1,5 @@
 ---
-title: Create application
+title: Create Application
 description: create an application by kubevela dashboard
 ---
 
@@ -30,4 +30,8 @@ Different component types are different significantly, you can fill in the forms
 
 After you finished configuring the application, click "Submit" to create the application. This means the application configuration was saved.
 
-You should choose to [bind environment](./bind-new-environment) to do real deployment.
+You need to [bind environment](./bind-new-environment) for real deployment.
+
+### Next Step
+
+* [Bind Application with Environment](./bind-new-environment)

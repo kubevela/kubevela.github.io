@@ -26,3 +26,7 @@ description: 指定用户将创建的应用部署到指定的环境。
 ![select-workflow](../../../resources/select-workflow.jpg)
 
 更新部署可以在任意状态下进行，选择执行某一个流水线后，将使用最新的应用配置进行部署。如果该环境正在执行部署，UI 将提示你是否强制进行新的部署。
+
+### 下一步
+
+* [查看应用运行实例](./get-application-instance)

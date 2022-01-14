@@ -11,3 +11,7 @@ title: 查看应用部署的资源列表
 弹窗中展示了应用的 `Applied Resources` `Conditions` 和 `Component Status` 三方面信息，其中 `Applied Resources` 即是应用部署的资源列表。
 
 在列表中呈现了包括资源类型、名称、所在集群和 Namespace 等信息。
+
+### 下一步
+
+* [查看应用部署版本](./get-application-revision)

@@ -16,3 +16,7 @@ description: 通过 Dashboard 查看应用运行实例，掌握应用运行状�
 对于交付的 云服务 应用，用户可通过点击实例名称跳转到云服务商管理页面。
 
 ![rds-instances](../../../resources/rds-instances.jpg)
+
+### 下一步
+
+* [查看应用运行日志](./get-application-log)
