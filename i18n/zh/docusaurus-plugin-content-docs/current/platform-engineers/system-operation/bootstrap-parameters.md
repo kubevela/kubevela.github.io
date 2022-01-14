@@ -22,7 +22,7 @@ KubeVela 控制器的各项启动参数及其说明如下。
 |       apply-once-only       | string |               false               | 工作负载及特征在生成后不再变更，在特定需求环境下使用                           |
 |         disable-caps        | string |                 ""                | 禁用内置的能力                                                                 |
 |        storage-driver       | string |               Local               | 应用文件的存储驱动                                                             |
-|  informer-re-sync-interval  |  time  |                 1h                | 无变更情况下，控制器轮询维护资源的周期                                         |
+|  application-re-sync-period |  time  |                5m                 | 无变更情况下，控制器维护应用资源的周期                                         |
 |     reconcile-timeout       |  time  |                3m                 | 控制器单轮轮询的超时时间 |
 | system-definition-namespace | string |            vela-system            | 系统级特征定义的命名空间                                                       |
 |    concurrent-reconciles    |   int  |                 4                 | 控制器处理请求的并发线程数                                                     |
@@ -37,7 +37,7 @@ KubeVela 控制器的各项启动参数及其说明如下。
 
 ### 重点参数介绍
 
-- **informer-re-sync-interval**: 在应用配置未发生变化时，KubeVela 控制器主动维护应用的间隔时间。过短的时间会导致控制器频繁调谐不需要同步的应用。间隔性地维护确保应用及其组件的状态保持同步，不会因特殊情况造成的状态不一致持续过长时间
+- **application-re-sync-period**: 在应用配置未发生变化时，KubeVela 控制器主动维护应用的间隔时间。过短的时间会导致控制器频繁调谐不需要同步的应用。间隔性地维护确保应用及其组件的状态保持同步，不会因特殊情况造成的状态不一致持续过长时间
 - **concurrent-reconciles**: 用来控制并发处理请求的线程数，当控制器能够获得较多的 CPU 资源时，如果不相应的提高线程数会导致无法充分利用多核的性能
 - **kube-api-qps / kube-api-burst**: 用来控制 KubeVela 控制器访问 apiserver 的频率。当 KubeVela 控制器管理的应用较为复杂时 ( 包含较多的组件及资源 )，如果 KubeVela 控制器对 apiserver 的访问速率受限，则较难提高 KubeVela 控制器的并发量。然而过高的请求速率也有可能对 apiserver 造成较大的负担
 - **pprof-addr**: 开启该地址可以启用 pprof 进行控制器性能调试
