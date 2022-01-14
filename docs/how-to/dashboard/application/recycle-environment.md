@@ -1,5 +1,5 @@
 ---
-title: Recycle application instance
+title: Recycle Application Instance
 ---
 
 When you want to delete the application instance in some environment, you can click the `Recycle` button in that environment.
@@ -13,3 +13,7 @@ It will delete the whole application instance with related resources.
 ### Delete the environment binding
 
 After the application instance recycled, there will be a `Delete` button, click this button means unbound the environment for application.
+
+### Next Step
+
+* [Delete Application](./delete-application)

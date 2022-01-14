@@ -8,3 +8,7 @@ description: 查看应用当前部署版本和历史部署版本。
 ![app-revision](../../../resources/app-revisions.jpg)
 
 通过 Webhook Trigger 触发部署的版本，如果携带了代码信息，版本号可与代码 Commit 信息进行关联。
+
+### 下一步
+
+* [回收应用实例](./recycle-environment)

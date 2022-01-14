@@ -1,5 +1,5 @@
 ---
-title: Expose application for public access
+title: Expose Application for Public Access
 description: View an application endpoints by KubeVela dashboard
 ---
 
@@ -36,3 +36,7 @@ Other component types can also be able to configure the service expose, but they
 After the application deployed with service exposed configuration, you can see a `Service Endpoint` button on the left of the `Recycle` button. You'll see the endpoint when hover your mouse there.
 
 ![service endpoint](../../../resources/service-endpoint.jpg)
+
+### Next Step
+
+* [View Resources List Created](./view-application-resource)

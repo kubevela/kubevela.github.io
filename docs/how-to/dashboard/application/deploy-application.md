@@ -1,5 +1,5 @@
 ---
-title: Deploy application
+title: Deploy Application
 description: deploy an application to environment by KubeVela dashboard
 ---
 
@@ -32,3 +32,7 @@ There's a `Deploy` button on the top right corner, you can click that for deploy
 ![select-workflow](../../../resources/select-workflow.jpg)
 
 You can upgrade the application in any state, as KubeVela is a declarative system. There will be a kindly reminder for you if the workflow is running when you want to upgrade.
+
+### Next Step
+
+* [Check Application State](./get-application-instance)

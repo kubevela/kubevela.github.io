@@ -1,5 +1,5 @@
 ---
-title: Check application state
+title: Check Application State
 description: View an application instances by KubeVela dashboard
 ---
 
@@ -14,3 +14,7 @@ As the picture shows, check the application pod details by click the expand butt
 For cloud resources, there will be a link to the cloud console for management.
 
 ![rds-instances](../../../resources/rds-instances.jpg)
+
+### Next Step
+
+* [View Application Logs](./get-application-log)

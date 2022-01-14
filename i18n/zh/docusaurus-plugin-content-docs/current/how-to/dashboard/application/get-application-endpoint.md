@@ -1,6 +1,6 @@
 ---
-title: 访问应用
-description: 通过 Dashboard 设置应用访问方式，获取应用的访问地址并访问应用。
+title: 暴露访问地址
+description: 通过 UI 设置应用访问方式，获取应用的访问地址并访问应用。
 ---
 
 ### 设置应用访问方式
@@ -29,3 +29,7 @@ description: 通过 Dashboard 设置应用访问方式，获取应用的访问�
 设置完应用访问方式后，执行应用部署，然后切换到环境视图下即可看到 `Service Endpoint` 按钮，鼠标移动到上方即可显示该应用的访问地址。
 
 ![service endpoint](../../../resources/service-endpoint.jpg)
+
+### 下一步
+
+* [查看应用部署的资源列表](./view-application-resource)

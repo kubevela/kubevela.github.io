@@ -1,5 +1,5 @@
 ---
-title: Bind application with environment
+title: Bind Application with Environment
 ---
 
 We can specify bind with one or more environments before deploy.
@@ -21,3 +21,7 @@ After choose well, click the `submit` button, it will show the new environment c
 KubeVela will automatically generate the deploy workflow for the newly created environments.
 
 In the environment tab, you can click `Deploy` button to deploy the application.
+
+### Next Step
+
+* [Deploy the Application](./deploy-application)
