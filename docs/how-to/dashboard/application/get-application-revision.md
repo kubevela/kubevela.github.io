@@ -1,5 +1,5 @@
 ---
-title: View application revision
+title: List Application Revision
 description: View an application revision by KubeVela dashboard
 ---
 
@@ -10,3 +10,7 @@ You can check the application revision in the `Revisions` tab inside the baselin
 ![app-revision](../../../resources/app-revisions.jpg)
 
 Manually upgrade or triggered by webhooks will all list here.
+
+### Next Step
+
+* [Recycle Application Instance](./recycle-environment)
