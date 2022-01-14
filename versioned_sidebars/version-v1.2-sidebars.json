@@ -1,0 +1,502 @@
+{
+  "version-v1.2/docs": [
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Getting Started",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.2/getting-started/introduction"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/getting-started/core-concept"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/getting-started/architecture"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/quick-start"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Install",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.2/install"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Tutorials",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/webservice"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/helm"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/consume-cloud-services"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/k8s-object"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/jenkins"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/trigger"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/case-studies/gitops"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/scaler"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/workflows"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "How-to Guides",
+      "items": [
+        {
+          "collapsed": false,
+          "type": "category",
+          "label": "Dashboard",
+          "items": [
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Manage application",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/create-application"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/bind-new-environment"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/deploy-application"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/get-application-instance"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/get-application-log"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/get-application-endpoint"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/view-application-resource"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/get-application-revision"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/recycle-environment"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/delete-application"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "CLI",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/quick-start-cli"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/ingress"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/provider-and-consume-cloud-services"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/rollout"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/policies/health"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/case-studies/multi-cluster"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/workflow/component-dependency-parameter"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/workflow/webhook-notification"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/version-control"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/how-to/cli/addon/addon"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Extension",
+      "items": [
+        {
+          "collapsed": false,
+          "type": "category",
+          "label": "Learning OAM",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/oam/oam-model"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/oam/x-definition"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Learning CUE",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/cue/basic"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/cue/definition-edit"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/cue/advanced"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Addon System",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/addon/intro"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Component System",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/components/custom-component"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/components/component-terraform"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Traits System",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/traits/customize-trait"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/traits/patch-trait"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/traits/status"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/traits/advanced"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Workflow System",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/workflow/workflow"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/workflow/cue-actions"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "System Operation",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/system-operation/bootstrap-parameters"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/system-operation/managing-clusters"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/system-operation/observability"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/system-operation/performance-finetuning"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/system-operation/velaql"
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/platform-engineers/debug/dry-run"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/platform-engineers/x-def-version"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "References",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.2/cli/vela"
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Built-in Addons",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/reference/addons/overview"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/reference/addons/velaux"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Supported Cloud Resource",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-ack"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-eip"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-rds"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-oss"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-redis"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-vpc"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/azure-database-mariadb"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/azure-storage-account"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-s3"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Built-in Component Type",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/helm"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cue/webservice"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cue/worker"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cue/task"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/kustomize"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cue/raw"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/more"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Built-in Trait Type",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/annotations-and-labels"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/service-binding"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/sidecar"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/autoscaler"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/kustomize-patch"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/more"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Built-in Policy Type",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/policies/envbinding"
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/end-user/workflow/built-in-workflow-defs"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/reference/ui-schema"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/reference/user-improvement-plan"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Roadmap",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.2/roadmap/README"
+        }
+      ]
+    },
+    {
+      "type": "doc",
+      "id": "version-v1.2/developers/references/devex/faq"
+    }
+  ]
+}
