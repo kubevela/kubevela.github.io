@@ -288,6 +288,8 @@ pipeline {
 }
 ```
 
+> 备注：上述的 Deploy 阶段是基于 KubeVela 1.1 版本的。在 KubeVela 1.2 版本中，Jenkins 对接 KubeVela APIServer 的方法发生了变化，需要使用 VelaUX（UI 控制面板）和 WebHook 触发器。如果你使用的是 KubeVela v1.2.0+，你需要参考对应版本的相关文档。
+
 ## 实际表现
 
 在完成上述的配置流程后，持续交付的流程便已经搭建完成。我们可以来检验一下它的效果。
