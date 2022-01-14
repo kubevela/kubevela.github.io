@@ -1,0 +1,310 @@
+---
+title: Installation
+---
+
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
+> For upgrading existing KubeVela, please read the [upgrade guide](./platform-engineers/advanced-install/#upgrade).
+
+## 1. Choose Control Plane Cluster
+
+Requirements:
+
+- Kubernetes cluster >= v1.18 && < v1.22
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/) && [Helm v3](https://helm.sh/docs/intro/install/).
+
+KubeVela relies on Kubernetes as a control plane. The control plane could be any managed Kubernetes offering or your cluster.
+
+For local deployment and test, you could use `kind` or `minikube`.
+
+> For production usage, you could use your Kubernetes cluster or Kubernetes services provided by cloud providers.
+
+<Tabs
+className="unique-tabs"
+defaultValue="kind"
+values={[
+{label: 'Kind', value: 'kind'},
+{label: 'Minikube', value: 'minikube'},
+{label: 'RKE', value: 'rke'},
+{label: 'Cloud Provider', value: 'cloudprovider'},
+]}>
+
+<TabItem value="minikube">
+
+> Minikube is **NOT RECOMMENDED** for production.
+
+Follow the minikube [installation guide](https://minikube.sigs.k8s.io/docs/start/).
+
+Then spins up a minikube cluster
+
+```shell script
+minikube start
+```
+
+<details> <summary> Install ingress to enable service route </summary>
+
+```shell script
+minikube addons enable ingress
+```
+
+</details>
+</TabItem>
+
+<TabItem value="rke">
+
+> This installation applies to the production environment. Please prepare 1~N servers or VMs.
+
+This section guides to install a RKE Kubernetes cluster, you can refer to their installation guides for [more details](https://rancher.com/docs/rancher/v2.5/en/installation/resources/k8s-tutorials/infrastructure-tutorials/infra-for-ha/).
+
+<b>（1） Docker </b>
+
+The RKE depends on docker, Please install Docker on all servers or virtual machines, if not installed follow the docker [installation guide](https://docs.docker.com/engine/install/).
+
+<b>（2）Install RKE:</b>
+
+Download RKE binary from [RKE release page](https://github.com/rancher/rke/releases).
+
+If your internet access was limited, try using the binary cached by KubeVela team:
+
+```
+wget https://static.kubevela.net/binary/rke/rke_linux-amd64 -O /usr/bin/rke
+chmod +x /usr/bin/rke
+```
+
+<b>（3）Install RKE cluster</b>
+
+> Please switch to a non-root user who has permission to operate docker and execute the following commands.
+
+```shell script
+  mkdir ~/rkeinit && cd ~/rkeinit
+  # Wizard-style configuration
+  rke config
+  # Kubernetes Cluster Installation
+  rke up
+  # Install kubectl Command
+  mkdir ~/.kube
+  cp kube_config_cluster.yml ~/.kube/config
+  docker cp kubelet:/usr/local/bin/kubectl /usr/local/bin/kubectl
+```
+
+</TabItem>
+
+<TabItem value="kind">
+
+> Kind is **NOT RECOMMENDED** for production.
+
+Follow [this guide](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) to install kind.
+
+Then spins up a kind cluster:
+
+```shell script
+cat <<EOF | kind create cluster --image=kindest/node:v1.18.15 --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+EOF
+```
+
+<details> <summary> Install ingress controller to enable service route </summary>
+
+```shell script
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
+```
+
+</details>
+</TabItem>
+
+<TabItem value="cloudprovider">
+
+> Using for production environment
+
+- Alibaba Cloud [ACK Service](https://www.aliyun.com/product/kubernetes)
+- AWS [EKS Service](https://aws.amazon.com/cn/eks)
+- Azure [AKS Service](https://azure.microsoft.com/en-us/services/kubernetes-service)
+- Google [GKE Service](https://cloud.google.com/kubernetes-engine)
+
+> Please make sure one of the [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/) is available.
+
+</TabItem>  
+</Tabs>
+
+## 2. Install KubeVela Core
+
+Before installation, please make sure that Helm is available. If not installed, please head to [Helm Installation](https://helm.sh/docs/intro/install/) first.
+
+1. Add and update KubeVela Helm chart repo
+
+```shell script
+helm repo add kubevela https://charts.kubevela.net/core
+helm repo update
+```
+
+2. Install KubeVela Core
+
+```shell script
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.0 --wait
+```
+
+3. Verify KubeVela Core installation
+
+```shell script
+helm test kubevela -n vela-system
+```
+
+<details> <summary> check out the outcome </summary>
+
+```shell
+Pod kubevela-application-test pending
+Pod kubevela-application-test pending
+Pod kubevela-application-test running
+Pod kubevela-application-test succeeded
+NAME: kubevela
+LAST DEPLOYED: Tue Apr 13 18:42:20 2021
+NAMESPACE: vela-system
+STATUS: deployed
+REVISION: 1
+TEST SUITE:     kubevela-application-test
+Last Started:   Fri Apr 16 20:49:10 2021
+Last Completed: Fri Apr 16 20:50:04 2021
+Phase:          Succeeded
+TEST SUITE:     first-vela-app
+Last Started:   Fri Apr 16 20:49:10 2021
+Last Completed: Fri Apr 16 20:49:10 2021
+Phase:          Succeeded
+NOTES:
+Welcome to use the KubeVela! Enjoy your shipping application journey!
+```
+
+</details>
+
+## 3. Install VelaUX
+
+VelaUX is a dashboard including UI+API services, it enables you to do everything around application delivery and management.
+
+#### 1. Install KubeVela CLI
+
+KubeVela CLI provides an easy to engage. We install VelaUX extensions through CLI.
+
+<Tabs
+    className="unique-tabs"
+    defaultValue="script"
+    values={[
+        {label: 'Script', value: 'script'},
+        {label: 'Homebrew', value: 'homebrew'},
+        {label: 'Download directly from releases', value: 'download'},
+    ]}>
+<TabItem value="script">
+
+** MacOS/Linux **
+
+```shell script
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.0
+```
+
+**Windows**
+
+> Only the official release version is supported.
+
+```shell script
+powershell -Command "iwr -useb https://kubevela.io/script/install.ps1 | iex"
+```
+
+</TabItem>
+<TabItem value="homebrew">
+
+**macOS/Linux**
+
+Update your brew first. Please note that the brew method only supports the installation of the official release version.
+
+```shell script
+brew update
+```
+
+Then install KubeVela CLI
+
+```shell script
+brew install kubevela
+```
+
+</TabItem>
+<TabItem value="download">
+
+- Download the latest `vela` binary file via [release log](https://github.com/oam-dev/kubevela/releases).
+- Unzip the binary file, and configure the environment variables in `$PATH`, and you're done.
+
+```shell script
+sudo mv ./vela /usr/local/bin/vela
+```
+
+> [Installation Tips](https://github.com/oam-dev/kubevela/issues/625):
+> If you are using a Mac system, it will pop up a warning that "vela" cannot be opened because the package from the developer cannot be verified.
+>
+> MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
+
+</TabItem>
+</Tabs>
+
+#### 2. Install VelaUX via Addon
+
+```shell script
+vela addon enable velaux
+```
+
+expected output:
+
+```
+Addon: velaux enabled Successfully.
+```
+
+By default, velaux didn't have any exposed port, you can view it by:
+
+```
+vela port-forward addon-velaux -n vela-system
+```
+
+Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` for visit.
+
+If you have loadbalaner or ingress, please refer to [VelaUX addon docs](./reference/addons/velaux) for more advanced installation ways.
+
+## 4. Uninstall
+
+Before uninstalling kubevela, you must delete all applications and disable all addons.
+
+1. Uninstall VelaUX
+
+```
+vela addon disable velaux
+```
+
+2. Uninstall KubeVela Core
+
+```
+helm uninstall -n vela-system kubevela
+```
+
+3. Uninstall CRD
+
+Before deleting, you must delete all CR resources.
+
+```
+kubectl get crd |grep oam | awk '{print $1}' | xargs kubectl delete crd
+```
+
+## Next Step
+
+- After installed KubeVela, let's begin to [Deploy First Application](./quick-start)。
