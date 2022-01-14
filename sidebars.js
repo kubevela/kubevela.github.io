@@ -224,6 +224,7 @@ module.exports = {
         },
         "end-user/workflow/built-in-workflow-defs",
         "reference/ui-schema",
+        "reference/user-improvement-plan",
       ],
     },
     {
