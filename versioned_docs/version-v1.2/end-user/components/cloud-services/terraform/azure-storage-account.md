@@ -1,13 +1,12 @@
 ---
-title:  Azure Storage Account
+title:  Azure STORAGE-ACCOUNT
 ---
-
 
 ## Description
 
-Terraform configuration for Azure Storage Account
+Terraform configuration for Azure Blob Storage Account
 
-## Sample
+## Samples
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -41,31 +40,33 @@ spec:
 
 ## Specification
 
+
 ### Properties
 
-Name | Description | Type | Required | Default
------------- | ------------- | ------------- | ------------- | ------------- 
-| create_rsg | Conditional if create Resource Group or reuse existing one | bool | false | `true` |
-| resource_group_name | Name of Resource Group | string | true | `rsg` |
-| location | Location of Resource Group | string | false | `West Europe` |
-| name | Name of Storage Account | string | true | `storageaccount` |
-| tags | Tags for Storage Account | map(string) | false | `{}` |
-| static_website | Static website configuration | list(map(string)) | false     | `disabled` |
-| writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false    |         |
+ Name | Description | Type | Required | Default 
+ ------------ | ------------- | ------------- | ------------- | ------------- 
+ create_rsg | Conditional if resource group should be created. Defaults to 'true'. | bool | true |  
+ resource_group_name | Name of resource group. Defaults to 'rsg'. | string | true |  
+ name | Name of storage account. Defaults to 'storageaccount'. | string | true |  
+ location | Location of storage account. Defaults to 'West Europe'. | string | true |  
+ tags | Tags for storage account. Defaults to '{}'. | map(string) | true |  
+ static_website | Static website configuration. Defaults to disabled. | list(map(string)) | true |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
-Name | Description | Type | Required | Default
------------- | ------------- | ------------- | ------------- | ------------- 
-| name      | The secret name which the cloud resource connection will be written to      | string | true     |         |
-| namespace | The secret namespace which the cloud resource connection will be written to | string | false    |         |
+
+ Name | Description | Type | Required | Default 
+ ------------ | ------------- | ------------- | ------------- | ------------- 
+ name | The secret name which the cloud resource connection will be written to | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
 
 
-## Outputs
+### Outputs
 
 If `writeConnectionSecretToRef` is set, a secret will be generated with these keys as below:
 
-Name | Description
------------- | -------------
-BLOB_CONNECTION_STRING | Blob storage connection string |
-BLOB_WEB_ENDPOINT | Blob storage static web endpoint |
+ Name | Description 
+ ------------ | ------------- 
+ BLOB_CONNECTION_STRING | Blob storage connection string
+ BLOB_WEB_ENDPOINT | Blob storage static web endpoint
