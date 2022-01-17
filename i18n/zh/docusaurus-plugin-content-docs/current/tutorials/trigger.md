@@ -8,7 +8,7 @@ title:  在持续交付中集成镜像仓库
 
 在 KubeVela 1.2 版本中，[VelaUX](../install#3-安装-velaux) 自带的应用触发器提供了一个很好的入口。我们可以使用这个触发器，来帮助我们完成这些自动部署的工作。
 
-本文将详细介绍如何使用 KubeVela 触发器来完成基于镜像版本的自动化部署，在本文的例子当中，我们将使用 GitLab 作为代码仓库，ACR 作为镜像仓库来完成演示。
+本文将详细介绍如何使用 KubeVela 触发器来完成基于镜像版本的自动化部署，在本文的例子当中，我们将使用 GitLab 作为代码仓库，Harbor 作为镜像仓库来完成演示。
 
 ## 创建应用
 
@@ -18,19 +18,19 @@ title:  在持续交付中集成镜像仓库
 
 ## 为应用新建触发器
 
-在新建完应用后，使用 `New Trigger` 来创建新的触发器，这里我们选择 `ACR` 格式的触发器，使该触发器支持来自 `ACR` 镜像仓库的请求。
+在新建完应用后，使用 `New Trigger` 来创建新的触发器，这里我们选择 `Harbor` 格式的触发器，使该触发器支持来自 `Harbor` 镜像仓库的请求。
 
-![alt](../resources/acr-trigger-newtrigger.png)
+![alt](../resources/harbor-trigger-newtrigger.png)
 
 查看这个触发器的详细信息，可以看到具体的 Webhook URL 以及手动触发的命令。
 
 ![alt](../resources/acr-trigger-info.png)
 
-## 配置 ACR 触发器
+## 配置 Harbor 触发器
 
-ACR 格式触发器需要配合阿里云 ACR 镜像仓库使用。当创建完 ACR 类型的触发器后，我们可以复制该触发器的 Webhook URL，并在 ACR 镜像仓库中进行配置。
+Harbor 格式触发器需要配合 Harbor 镜像仓库使用。当创建完 Harbor 类型的触发器后，我们可以复制该触发器的 Webhook URL，并在 Harbor 镜像仓库中进行配置。
 
-![alt](../resources/acr-trigger.png)
+![alt](../resources/harbor-trigger.png)
 
 ## 测试部署
 
@@ -58,13 +58,13 @@ data(){
 
 修改完成后，GitLab CI 将自动构建并推送最新镜像。
 
-在 ACR 触发器的访问记录中，我们可以看到，当镜像仓库中有了最新镜像时，ACR 会往我们配置的 Webhook URL 中发送一个请求。
+在 Harbor 触发器的访问记录中，我们可以看到，当镜像仓库中有了最新镜像时，Harbor 会往我们配置的 Webhook URL 中发送一个请求。
 
-![alt](../resources/acr-trigger-acrrecord.png)
+![alt](../resources/harbor-trigger-harborrecord.png)
 
 查看 VelaUX 的应用部署版本列表，可以看到，最近一次部署是来自 `webhook` 的部署。
 
-![alt](../resources/acr-trigger-revisions.png)
+![alt](../resources/harbor-trigger-revisions.png)
 
 重新查看应用页面，可以看到，应用的版本已经变更成了 `v2.0.0`，同时页面的背景也随版本发生了变化。
 
@@ -72,6 +72,6 @@ data(){
 
 ## 总结
 
-KubeVela 触发器与制品仓库的对接是十分顺滑且无缝的，除了 ACR 之外，KubeVela 还支持 Harbor 以及自定义触发的格式。
+KubeVela 触发器与制品仓库的对接是十分顺滑且无缝的，除了 Harbor 之外，KubeVela 还支持 ACR 镜像仓库以及自定义触发的格式。
 
 通过使用 KubeVela 触发器，我们可以轻松地根据镜像版本实现自动部署，从而完成应用版本的迭代。

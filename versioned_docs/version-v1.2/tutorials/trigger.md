@@ -8,7 +8,7 @@ In our daily development, when image tags changed, it is more convenient for CI/
 
 In KubeVela 1.2, [VelaUX](../install#3-install-velaux) provides a good way to do this. We can use KubeVela triggers to apply applications automatically.
 
-In this section, we will use GitLab as code repository and ACR as image repository to integrate with KubeVela triggers, as a result, it will automatically update application when image tags changed.
+In this section, we will use GitLab as code repository and Harbor as image repository to integrate with KubeVela triggers, as a result, it will automatically update application when image tags changed.
 
 ## Create Application
 
@@ -18,19 +18,19 @@ To use triggers, we need to create a new application on VelaUX first. We can cre
 
 ## Create Triggers for Application
 
-After creating the application, use `New Trigger` to create a trigger. Here we use `ACR` as payload type to support requests from the `ACR` image registry.
+After creating the application, use `New Trigger` to create a trigger. Here we use `Harbor` as payload type to support requests from the `Harbor` image registry.
 
-![alt](../resources/acr-trigger-newtrigger.png)
+![alt](../resources/harbor-trigger-newtrigger.png)
 
 Check the details of the trigger, you can see the specific Webhook URL and the manual trigger command.
 
 ![alt](../resources/acr-trigger-info.png)
 
-## Setup ACR Trigger
+## Setup Harbor Trigger
 
-ACR payload triggers need to cooperate with Ali Cloud ACR image registry. After creating a trigger of type ACR, we can copy the Webhook URL of the trigger and configure it in the ACR image registry.
+Harbor payload triggers need to cooperate with Harbor image registry. After creating a trigger of type Harbor, we can copy the Webhook URL of the trigger and configure it in the Harbor image registry.
 
-![alt](../resources/acr-trigger.png)
+![alt](../resources/harbor-trigger.png)
 
 ## Test and Apply
 
@@ -58,13 +58,13 @@ data(){
 
 After changing the code, the GitLab CI will automatically build the image and push it to the image registry.
 
-In the access log of the ACR trigger, we can see that ACR sends a request to our Webhook URL when the latest image is pushed to the image registry.
+In the access log of the Harbor trigger, we can see that Harbor sends a request to our Webhook URL when the latest image is pushed to the image registry.
 
-![alt](../resources/acr-trigger-acrrecord.png)
+![alt](../resources/harbor-trigger-harborrecord.png)
 
 Check the application revisions in VelaUX, you can see that the most recent revision was from `Webhook`.
 
-![alt](../resources/acr-trigger-revisions.png)
+![alt](../resources/harbor-trigger-revisions.png)
 
 Looking back at the app page, you can see that the app version has changed to `v2.0.0` and the background of the page has changed with the version.
 
@@ -73,6 +73,6 @@ Looking back at the app page, you can see that the app version has changed to `v
 
 ## Summary
 
-The KubeVela triggers' combination with the image registry is smooth and seamless. In addition to ACR, KubeVela also supports Harbor and custom trigger payload types.
+The KubeVela triggers' combination with the image registry is smooth and seamless. In addition to Harbor, KubeVela also supports ACR registry and custom trigger payload types.
 
 With KubeVela triggers, we can easily apply application based on image tags automatically and complete iterations of application versions.
