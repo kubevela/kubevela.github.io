@@ -26,7 +26,7 @@ Terraform | Alibaba Cloud | [ACK](./terraform/alibaba-ack) | Terraform configura
 | |  | [Redis](./terraform/alibaba-redis) | Terraform configuration for Alibaba Cloud Redis
 | |  | [VPC](./terraform/alibaba-vpc) | Terraform configuration for Alibaba Cloud VPC
 | | Azure | [Mariadb](./terraform/azure-database-mariadb) | Terraform configuration for Azure Database Mariadb
-| | Azure | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account
+| |  | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account
 | | AWS | [S3](./terraform/aws-s3) | Terraform configuration for AWS S3 bucket
 
 
