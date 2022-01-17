@@ -31,5 +31,5 @@ If `writeConnectionSecretToRef` is set, a secret will be generated with these ke
 
  Name | Description 
  ------------ | ------------- 
- CLUSTER_ID | ID of the kunernetes cluster.
  Name | 
+ CLUSTER_ID | ID of the kunernetes cluster.

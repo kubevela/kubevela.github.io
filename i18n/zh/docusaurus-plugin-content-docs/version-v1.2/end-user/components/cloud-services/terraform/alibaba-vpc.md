@@ -4,7 +4,7 @@ title:  阿里云 VPC
 
 ## 描述
 
-Terraform configuration for Alibaba Cloud VPC
+用于部署阿里云 VPC 的组件说明
 
 ## 示例
 
@@ -31,9 +31,9 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
+ vpc_cidr | The cidr block used to launch a new vpc. | string | true |  
  vpc_name | The vpc name used to launch a new vpc. | string | true |  
  vpc_description | The vpc description used to launch a new vpc. | string | true |  
- vpc_cidr | The cidr block used to launch a new vpc. | string | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

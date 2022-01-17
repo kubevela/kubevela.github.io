@@ -4,7 +4,7 @@ title:  阿里云 REDIS
 
 ## 描述
 
-Terraform configuration for Alibaba Cloud Redis
+用于部署阿里云 Redis 的组件说明
 
 ## 示例
 
@@ -32,9 +32,9 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
+ instance_name | Redis instance name | string | true |  
  account_name | Redis instance user account name | string | true |  
  password | RDS instance account password | string | true |  
- instance_name | Redis instance name | string | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

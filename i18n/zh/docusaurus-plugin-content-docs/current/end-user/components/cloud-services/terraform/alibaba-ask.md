@@ -4,7 +4,7 @@ title:  阿里云 ASK
 
 ## 描述
 
-Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK)
+用于部署阿里云 Serverless Kubernetes (ASK) 的组件说明
 
 ## 参数说明
 
