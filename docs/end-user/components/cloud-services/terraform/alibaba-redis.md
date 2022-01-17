@@ -1,12 +1,12 @@
 ---
-title:  Alibaba Cloud Redis
+title:  Alibaba Cloud REDIS
 ---
 
 ## Description
 
-Terraform configuration for Alibaba Cloud Redis object
+Terraform configuration for Alibaba Cloud Redis
 
-## Sample
+## Samples
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -27,29 +27,33 @@ spec:
 
 ## Specification
 
+
 ### Properties
 
-Name | Description | Type | Required | Default
------------- | ------------- | ------------- | ------------- | ------------- 
-password | Redis instance account password | string | true |
-instance_name | Redis instance name | string | true |
-account_name | Redis instance user account name | string | true |
-writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |
+ Name | Description | Type | Required | Default 
+ ------------ | ------------- | ------------- | ------------- | ------------- 
+ password | RDS instance account password | string | true |  
+ instance_name | Redis instance name | string | true |  
+ account_name | Redis instance user account name | string | true |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+
 
 #### writeConnectionSecretToRef
 
-Name | Description | Type | Required | Default
------------- | ------------- | ------------- | ------------- | ------------- 
-name | The secret name which the cloud resource connection will be written to | string | true |
-namespace | The secret namespace which the cloud resource connection will be written to | string | false |
+ Name | Description | Type | Required | Default 
+ ------------ | ------------- | ------------- | ------------- | ------------- 
+ name | The secret name which the cloud resource connection will be written to | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
 
-## Outputs
+
+### Outputs
 
 If `writeConnectionSecretToRef` is set, a secret will be generated with these keys as below:
 
-Name | Description
------------- | -------------
-REDIS_NAME | redis instance name |
-REDIS_USER | redis instance username |
-REDIS_PASSWORD | redis instance password |
-REDIS_REDIS_CONNECT_ADDRESS | redis connect address |
+ Name | Description 
+ ------------ | ------------- 
+ REDIS_NAME | Redis instance name
+ REDIS_CONNECT_ADDRESS | Redis connect address
+ REDIS_USER | Redis user
+ REDIS_PASSWORD | Redis password
+ RESOURCE_IDENTIFIER | The identifier of the resource

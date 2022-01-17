@@ -1,29 +1,10 @@
 ---
-title:  AWS S3
+title:  Alibaba Cloud SLS-PROJECT
 ---
 
 ## Description
 
-Terraform configuration for AWS S3
-
-## Samples
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: s3-cloud-source
-spec:
-  components:
-    - name: sample-s3
-      type: aws-s3
-      properties:
-        bucket: vela-website-20211019
-        acl: private
-
-        writeConnectionSecretToRef:
-          name: s3-conn
-```
+Terraform configuration for Alibaba Cloud SLS Project
 
 ## Specification
 
@@ -32,8 +13,8 @@ spec:
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- bucket | S3 bucket name | string | true |  
- acl | S3 bucket ACL | string | true |  
+ description | Description of security group | string | true |  
+ name | Name of security group. It is used to create a new security group. | string | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
@@ -43,12 +24,3 @@ spec:
  ------------ | ------------- | ------------- | ------------- | ------------- 
  name | The secret name which the cloud resource connection will be written to | string | true |  
  namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
-
-
-### Outputs
-
-If `writeConnectionSecretToRef` is set, a secret will be generated with these keys as below:
-
- Name | Description 
- ------------ | ------------- 
- BUCKET_NAME | 

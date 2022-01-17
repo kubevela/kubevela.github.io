@@ -1,28 +1,10 @@
 ---
-title:  Alibaba Cloud VPC
+title:  Alibaba Cloud VSWITCH
 ---
 
 ## Description
 
-Terraform configuration for Alibaba Cloud VPC
-
-## Samples
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: app-vpc-sample
-spec:
-  components:
-    - name: sample-vpc
-      type: alibaba-vpc
-      properties:
-        vpc_cidr: "172.16.0.0/12"
-
-        writeConnectionSecretToRef:
-          name: vpc-conn
-```
+Terraform configuration for Alibaba Cloud VSwitch
 
 ## Specification
 
@@ -31,9 +13,15 @@ spec:
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
+ vswitch_description | The vswitch description used to launch several new vswitch. | string | true |  
+ vswitch_name | The vswitch name prefix used to launch several new vswitches. |  | true |  
+ create_vpc | Whether to create vpc. If false, you can specify an existing vpc by setting 'vpc_id'. | bool | true |  
  vpc_name | The vpc name used to launch a new vpc. | string | true |  
  vpc_description | The vpc description used to launch a new vpc. | string | true |  
  vpc_cidr | The cidr block used to launch a new vpc. | string | true |  
+ vpc_id | The vpc id used to launch several vswitches. If set, the 'create' will be ignored. | string | true |  
+ vswitch_cidr | cidr blocks used to launch a new vswitch. | string | true |  
+ zone_id | Availability Zone ID | string | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
@@ -51,4 +39,5 @@ If `writeConnectionSecretToRef` is set, a secret will be generated with these ke
 
  Name | Description 
  ------------ | ------------- 
- VPC_ID | The vpc id of the newly created vpc.
+ VSWITCH_ID | 
+ VPC_ID | 
