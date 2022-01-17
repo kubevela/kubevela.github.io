@@ -60,7 +60,7 @@ Alibaba Cloud  | [ACK](../end-user/components/cloud-services/terraform/alibaba-a
 First [create an application](../how-to/dashboard/application/create-application). Please choose the type of your cloud service,
 which has a prefix of `aws-`, `azure` or `alibaba-`.
 
-For different vendors, these parameters update accordingly.
+For different vendors, these parameters update accordingly. 
 
 For example, `aws-s3` has the following parameters:
 
