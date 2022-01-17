@@ -41,6 +41,8 @@ Environment refers to the environment for development, testing, and production a
 
 - <b>Bind Application with Environment</b> The application can be bound to multiple Environments, and for each environment, you can set the unique parameter difference for each environment.
 
+> The concept of environment exists only in VelaUX, and users who only use Vela Core need not pay attention it.
+
 ## Target
 
 Target describes the space where the application resources actually delivered. One target describes one Kubernetes cluster and namespace, it can also describe a region or VPC for cloud providers. In the target, credentials of cloud resources created will automatically delievered to the Kubernetes cluster.

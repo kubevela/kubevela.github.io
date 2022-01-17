@@ -19,18 +19,11 @@
         },
         {
           "type": "doc",
-          "id": "version-v1.2/quick-start"
-        }
-      ]
-    },
-    {
-      "collapsed": false,
-      "type": "category",
-      "label": "Install",
-      "items": [
+          "id": "version-v1.2/install"
+        },
         {
           "type": "doc",
-          "id": "version-v1.2/install"
+          "id": "version-v1.2/quick-start"
         }
       ]
     },
@@ -69,10 +62,6 @@
         },
         {
           "type": "doc",
-          "id": "version-v1.2/tutorials/scaler"
-        },
-        {
-          "type": "doc",
           "id": "version-v1.2/tutorials/workflows"
         }
       ]
@@ -107,6 +96,10 @@
                 {
                   "type": "doc",
                   "id": "version-v1.2/how-to/dashboard/application/get-application-instance"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/tutorials/scaler"
                 },
                 {
                   "type": "doc",
