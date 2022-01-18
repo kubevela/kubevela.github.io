@@ -36,12 +36,12 @@ spec:
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- server_name | mariadb server name | string | true |  
  db_name | Database instance name | string | true |  
  username | Database instance username | string | true |  
  password | Database instance password | string | true |  
  location | Azure location | string | true |  
  resource_group | Resource group | string | true |  
+ server_name | mariadb server name | string | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
@@ -59,9 +59,9 @@ If `writeConnectionSecretToRef` is set, a secret will be generated with these ke
 
  Name | Description 
  ------------ | ------------- 
- SERVER_NAME | mariadb server name
- DB_NAME | Database instance name
  DB_USER | Database instance username
  DB_PASSWORD | Database instance password
  DB_PORT | Database instance port
  DB_HOST | Database instance host
+ SERVER_NAME | mariadb server name
+ DB_NAME | Database instance name

@@ -4,7 +4,7 @@ title:  阿里云 VSWITCH
 
 ## 描述
 
-Terraform configuration for Alibaba Cloud VSwitch
+用于部署阿里云 VSwitch 的组件说明
 
 ## 参数说明
 
@@ -13,15 +13,15 @@ Terraform configuration for Alibaba Cloud VSwitch
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- vpc_cidr | The cidr block used to launch a new vpc. | string | true |  
  vpc_id | The vpc id used to launch several vswitches. If set, the 'create' will be ignored. | string | true |  
  vswitch_cidr | cidr blocks used to launch a new vswitch. | string | true |  
- zone_id | Availability Zone ID | string | true |  
- create_vpc | Whether to create vpc. If false, you can specify an existing vpc by setting 'vpc_id'. | bool | true |  
- vpc_name | The vpc name used to launch a new vpc. | string | true |  
- vpc_description | The vpc description used to launch a new vpc. | string | true |  
  vswitch_description | The vswitch description used to launch several new vswitch. | string | true |  
+ vpc_description | The vpc description used to launch a new vpc. | string | true |  
+ vpc_name | The vpc name used to launch a new vpc. | string | true |  
+ vpc_cidr | The cidr block used to launch a new vpc. | string | true |  
+ zone_id | Availability Zone ID | string | true |  
  vswitch_name | The vswitch name prefix used to launch several new vswitches. |  | true |  
+ create_vpc | Whether to create vpc. If false, you can specify an existing vpc by setting 'vpc_id'. | bool | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
@@ -39,5 +39,5 @@ Terraform configuration for Alibaba Cloud VSwitch
 
  名称 | 描述 
  ------------ | ------------- 
- VPC_ID | 
- VSWITCH_ID | 
+ VSWITCH_ID | VSwitch ID
+ VPC_ID | VPC ID

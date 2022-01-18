@@ -4,7 +4,7 @@ title:  阿里云 ASK
 
 ## 描述
 
-Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK)
+用于部署阿里云 Serverless Kubernetes (ASK) 的组件说明
 
 ## 参数说明
 
@@ -31,5 +31,8 @@ Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK)
 
  名称 | 描述 
  ------------ | ------------- 
- CLUSTER_ID | ID of the kunernetes cluster.
- Name | 
+ RESOURCE_IDENTIFIER | The identifier of the resource
+ Name | Cluster Name
+ API_SERVER_INTRANET | The API server intranet address of the kubernetes cluster.
+ API_SERVER_INTERNET | The API server internet address of the kubernetes cluster.
+ KUBECONFIG | The KubeConfig string of the kubernetes cluster.

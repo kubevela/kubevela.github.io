@@ -4,7 +4,26 @@ title:  阿里云 SLS-PROJECT
 
 ## 描述
 
-Terraform configuration for Alibaba Cloud SLS Project
+用于部署阿里云 SLS Project 的组件说明
+
+## 示例
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: app-sls-project-sample
+spec:
+  components:
+    - name: sample-sls-project
+      type: alibaba-sls-project
+      properties:
+        name: kubevela-1112
+        description: "Managed by KubeVela"
+
+        writeConnectionSecretToRef:
+          name: sls-project-conn
+```
 
 ## 参数说明
 

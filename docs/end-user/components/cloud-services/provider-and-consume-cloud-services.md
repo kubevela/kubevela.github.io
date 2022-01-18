@@ -17,18 +17,21 @@ This tutorial will talk about how to provision and consume Cloud Resources by Te
 
 ## Supported Cloud Resource list
 
-Orchestration Type | Cloud Provider | Cloud Resource | Description
------------- | ------------- | ------------- | -------------
-Terraform | Alibaba Cloud | [ACK](./terraform/alibaba-ack) | Terraform configuration for Alibaba Cloud ACK cluster
-| |  | [EIP](./terraform/alibaba-eip) | Terraform configuration for Alibaba Cloud EIP
-| |  | [OSS](./terraform/alibaba-oss) | Terraform configuration for Alibaba Cloud OSS
-| |  | [RDS](./terraform/alibaba-rds) | Terraform configuration for Alibaba Cloud RDS
-| |  | [Redis](./terraform/alibaba-redis) | Terraform configuration for Alibaba Cloud Redis
-| |  | [VPC](./terraform/alibaba-vpc) | Terraform configuration for Alibaba Cloud VPC
-| | Azure | [Mariadb](./terraform/azure-database-mariadb) | Terraform configuration for Azure Database Mariadb
-| |  | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account
-| | AWS | [S3](./terraform/aws-s3) | Terraform configuration for AWS S3 bucket
-
+| Orchestration Type | Cloud Provider | Cloud Resource                                       | Description                                                           |
+|--------------------|----------------|------------------------------------------------------|-----------------------------------------------------------------------|
+| Terraform          | Alibaba Cloud  | [ACK](./terraform/alibaba-ack)                       | Terraform configuration for Alibaba Cloud ACK cluster                 |
+|                    |                | [ASK](./terraform/alibaba-ask)                       | Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK) |
+|                    |                | [EIP](./terraform/alibaba-eip)                       | Terraform configuration for Alibaba Cloud EIP                         |
+|                    |                | [OSS](./terraform/alibaba-oss)                       | Terraform configuration for Alibaba Cloud OSS                         |
+|                    |                | [RDS](./terraform/alibaba-rds)                       | Terraform configuration for Alibaba Cloud RDS                         |
+|                    |                | [Redis](./terraform/alibaba-redis)                   | Terraform configuration for Alibaba Cloud Redis                       |
+|                    |                | [SLS Project](./terraform/alibaba-sls-project)       | Terraform configuration for Alibaba Cloud SLS Project                 |
+|                    |                | [SLS Store](./terraform/alibaba-sls-store)           | Terraform configuration for Alibaba Cloud SLS Store                   |
+|                    |                | [VPC](./terraform/alibaba-vpc)                       | Terraform configuration for Alibaba Cloud VPC                         |
+|                    |                | [VSwitch](./terraform/alibaba-vswitch)               | Terraform configuration for Alibaba Cloud VSwitch                     |
+|                    | AWS            | [S3](./terraform/aws-s3)                             | Terraform configuration for AWS S3 bucket                             |
+|                    | Azure          | [Mariadb](./terraform/azure-database-mariadb)        | Terraform configuration for Azure Database Mariadb                    |
+|                    |                | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account                     |
 
 ## Terraform
 

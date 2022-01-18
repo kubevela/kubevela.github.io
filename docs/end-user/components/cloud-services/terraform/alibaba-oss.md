@@ -4,7 +4,7 @@ title:  Alibaba Cloud OSS
 
 ## Description
 
-Terraform configuration for Alibaba Cloud OSS object
+Terraform configuration for Alibaba Cloud OSS
 
 ## Samples
 

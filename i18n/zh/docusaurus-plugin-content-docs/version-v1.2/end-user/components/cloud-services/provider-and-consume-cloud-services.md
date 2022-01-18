@@ -8,20 +8,25 @@ title:  创建和使用云资源
 KubeVela 通过云资源组件（Component）和运维特征（Trait）里的资源绑定功能，高效安全地完成不同类型云资源的集成工作。目前你可以直接调用下面这些云资源默认组件。
 同时在未来，更多新的云资源也会在社区的支撑下逐渐成为默认选项，让你标准化统一地去使用各种厂商的云资源。
 
-> ⚠️ 请确认管理员已经安装了 [Terraform 插件 'terraform/provider-alicloud'](../../../install#4-【可选】安装插件).
-
+> ⚠️ 请确认管理员已经安装了 [Terraform 插件 'terraform/provider-alicloud'](../../../install#4-【可选】安装插件)。
 
 ## 支持的云资源列表
-编排类型 | 云服务商 | 云资源 | 描述
------------- | ------------- | ------------- | -------------
-Terraform | Alibaba Cloud | [ACK](./terraform/alibaba-ack) | 用于部署阿里云 ACK 的 Terraform Configuration 的 ComponentDefinition
-| | | [EIP](./terraform/alibaba-eip) | 用于部署阿里云 EIP 的 Terraform Configuration 的 ComponentDefinition
-| | | [OSS](./terraform/alibaba-oss) | 用于部署阿里云 OSS 的 Terraform Configuration 的 ComponentDefinition
-| | | [RDS](./terraform/alibaba-rds) | 用于部署阿里云 RDS 的 Terraform Configuration 的 ComponentDefinition
-| | | [Redis](./terraform/alibaba-redis) | 用于部署阿里云 Redis 的 Terraform Configuration 的 ComponentDefinition
-| |  | [VPC](./terraform/alibaba-vpc) | 用于部署阿里云 VPC 的 Terraform Configuration 的 ComponentDefinition
-| | Azure | [Mariadb](./terraform/azure-database-mariadb) | 用于部署 Azure mariadb 数据库的 Terraform Configuration 的 ComponentDefinition
-| | AWS | [S3](./terraform/aws-s3) | 用于部署 AWS S3 bucket 的 Terraform Configuration 的 ComponentDefinition
+
+| 编排类型      | 云服务商  | 云资源                                                  | 描述                                                                         |
+|-----------|-------|------------------------------------------------------|----------------------------------------------------------------------------|
+| Terraform | 阿里云   | [ACK](./terraform/alibaba-ack)                       | 用于部署阿里云 ACK 的 Terraform Configuration 的 ComponentDefinition                |
+|           |       | [ASK](./terraform/alibaba-ask)                       | 用于部署阿里云 ASK 的 Terraform Configuration 的 ComponentDefinition                |
+|           |       | [EIP](./terraform/alibaba-eip)                       | 用于部署阿里云 EIP 的 Terraform Configuration 的 ComponentDefinition                |
+|           |       | [OSS](./terraform/alibaba-oss)                       | 用于部署阿里云 OSS 的 Terraform Configuration 的 ComponentDefinition                |
+|           |       | [RDS](./terraform/alibaba-rds)                       | 用于部署阿里云 RDS 的 Terraform Configuration 的 ComponentDefinition                |
+|           |       | [Redis](./terraform/alibaba-redis)                   | 用于部署阿里云 Redis 的 Terraform Configuration 的 ComponentDefinition              |
+|           |       | [SLS Project](./terraform/alibaba-sls-project)       | 用于部署阿里云 SLS project 的 Terraform Configuration 的 ComponentDefinition        |
+|           |       | [SLS Store](./terraform/alibaba-sls-store)           | 用于部署阿里云 SLS store 的 Terraform Configuration 的 ComponentDefinition          |
+|           |       | [VPC](./terraform/alibaba-vpc)                       | 用于部署阿里云 VPC 的 Terraform Configuration 的 ComponentDefinition                |
+|           |       | [VSwitch](./terraform/alibaba-vswitch)               | 用于部署阿里云 VSwitch 的 Terraform Configuration 的 ComponentDefinition            |
+|           | AWS   | [S3](./terraform/aws-s3)                             | 用于部署 AWS S3 的 Terraform Configuration 的 ComponentDefinition                |
+|           | Azure | [Mariadb](./terraform/azure-database-mariadb)        | 用于部署 Azure mariadb 数据库的 Terraform Configuration 的 ComponentDefinition      |
+|           |       | [Storage Account](./terraform/azure-storage-account) | 用于部署 Azure Storage account 的 Terraform Configuration 的 ComponentDefinition |
 
 ## Terraform
 
