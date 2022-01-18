@@ -39,7 +39,7 @@ module.exports = {
         // TODO:
         {
           type: "category",
-          label: "Dashboard",
+          label: "VelaUX",
           collapsed: false,
           items: [
             {
