@@ -4,7 +4,7 @@ title:  阿里云 EIP
 
 ## 描述
 
-Terraform configuration for Alibaba Cloud Elastic IP
+用于部署阿里云 Elastic IP 的组件说明
 
 ## 示例
 

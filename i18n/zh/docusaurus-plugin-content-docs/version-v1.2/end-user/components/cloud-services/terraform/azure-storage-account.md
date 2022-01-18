@@ -4,7 +4,7 @@ title:  Azure STORAGE-ACCOUNT
 
 ## 描述
 
-Terraform configuration for Azure Blob Storage Account
+用于部署 Azure Blob Storage 账号的的组件说明
 
 ## 示例
 
@@ -45,12 +45,12 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- static_website | Static website configuration. Defaults to disabled. | list(map(string)) | true |  
- create_rsg | Conditional if resource group should be created. Defaults to 'true'. | bool | true |  
  resource_group_name | Name of resource group. Defaults to 'rsg'. | string | true |  
  name | Name of storage account. Defaults to 'storageaccount'. | string | true |  
  location | Location of storage account. Defaults to 'West Europe'. | string | true |  
  tags | Tags for storage account. Defaults to '{}'. | map(string) | true |  
+ static_website | Static website configuration. Defaults to disabled. | list(map(string)) | true |  
+ create_rsg | Conditional if resource group should be created. Defaults to 'true'. | bool | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

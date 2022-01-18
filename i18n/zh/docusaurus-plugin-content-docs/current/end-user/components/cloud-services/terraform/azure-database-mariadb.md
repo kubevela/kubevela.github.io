@@ -4,7 +4,7 @@ title:  Azure DATABASE-MARIADB
 
 ## 描述
 
-Terraform configuration for Azure Database Mariadb
+用于部署 Azure mariadb 数据库的组件说明
 
 ## 示例
 
@@ -36,12 +36,12 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- server_name | mariadb server name | string | true |  
- db_name | Database instance name | string | true |  
- username | Database instance username | string | true |  
  password | Database instance password | string | true |  
  location | Azure location | string | true |  
  resource_group | Resource group | string | true |  
+ server_name | mariadb server name | string | true |  
+ db_name | Database instance name | string | true |  
+ username | Database instance username | string | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
