@@ -4,6 +4,8 @@ title: Labels and Annotations
 
 `labels` and `annotations` traits allow us to mark annotations and labels on Pod for workload.
 
+> Note: `labels` and `annotations` traits are hidden by default in `VelaUX`, you can use them in CLI.
+
 ## Specification
 
 ```shell
