@@ -205,6 +205,10 @@ module.exports = {
           type: "category",
           label: "Built-in Trait Type",
           items: [
+            "end-user/traits/scaler",
+            "end-user/traits/ingress",
+            "end-user/traits/storage",
+            "end-user/traits/rollout",
             "end-user/traits/annotations-and-labels",
             "end-user/traits/service-binding",
             "end-user/traits/sidecar",

@@ -4,6 +4,8 @@ title:  数据绑定
 
 本节将介绍 `service-binding` 运维特征的用法，它能将数据从 Kubernetes `Secret` 绑定到应用程序所在容器的 `ENV` 上。
 
+> 注：这个运维特征默认在 `VelaUX` 处隐藏，你可以在 CLI 侧使用。
+
 ## 字段说明
 
 ```
