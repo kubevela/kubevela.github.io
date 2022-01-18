@@ -4,7 +4,7 @@ title:  阿里云 OSS
 
 ## 描述
 
-用于部署阿里云 OSS 的组件说明
+Terraform configuration for Alibaba Cloud OSS object
 
 ## 示例
 
@@ -27,26 +27,28 @@ spec:
 ## 参数说明
 
 
-### Properties
+### 属性
 
-名字 | 描述 | 类型 | 是否必须 | 默认值
------------- | ------------- | ------------- | ------------- | ------------- 
-bucket | OSS bucket 名字 | string | 是 |
-acl | OSS bucket ACL, 支持 'private', 'public-read', 'public-read-write' | string | 是 |
-writeConnectionSecretToRef | 云资源连接信息即将写入的 secret 的信息 | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | 否 |
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------------ | ------------- | ------------- | ------------- | ------------- 
+ acl | OSS bucket ACL, supported 'private', 'public-read', 'public-read-write' | string | true |  
+ bucket | OSS bucket name | string | true |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
-名字 | 描述 | 类型 | 是否必须 | 默认值
------------- | ------------- | ------------- | ------------- | ------------- 
-name | 云资源连接信息即将写入的 secret 的名字 | string | 是 |
-namespace | 云资源连接信息即将写入的 secret 的 namespace | string | 否 |
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------------ | ------------- | ------------- | ------------- | ------------- 
+ name | The secret name which the cloud resource connection will be written to | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
 
-## 输出
 
-如果设置了 `writeConnectionSecretToRef`，一个 Kubernetes Secret 将会被创建，并且，它的数据里有这些键（key）。
+### 输出
 
-名字 | 描述
------------- | -------------
-BUCKET_NAME | OSS bucket 名字 |
+如果设置了 `writeConnectionSecretToRef`，一个 Kubernetes Secret 将会被创建，并且，它的数据里有这些键（key）：
+
+ 名称 | 描述 
+ ------------ | ------------- 
+ BUCKET_NAME | The name of the bucket
+ BUCKET_ENDPOINT | The endpoint of the bucket

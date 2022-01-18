@@ -1,29 +1,10 @@
 ---
-title:  AWS S3
+title:  阿里云 VSWITCH
 ---
 
 ## 描述
 
-Terraform configuration for AWS S3
-
-## 示例
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: s3-cloud-source
-spec:
-  components:
-    - name: sample-s3
-      type: aws-s3
-      properties:
-        bucket: vela-website-20211019
-        acl: private
-
-        writeConnectionSecretToRef:
-          name: s3-conn
-```
+Terraform configuration for Alibaba Cloud VSwitch
 
 ## 参数说明
 
@@ -32,8 +13,15 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- bucket | S3 bucket name | string | true |  
- acl | S3 bucket ACL | string | true |  
+ vpc_cidr | The cidr block used to launch a new vpc. | string | true |  
+ vpc_id | The vpc id used to launch several vswitches. If set, the 'create' will be ignored. | string | true |  
+ vswitch_cidr | cidr blocks used to launch a new vswitch. | string | true |  
+ zone_id | Availability Zone ID | string | true |  
+ create_vpc | Whether to create vpc. If false, you can specify an existing vpc by setting 'vpc_id'. | bool | true |  
+ vpc_name | The vpc name used to launch a new vpc. | string | true |  
+ vpc_description | The vpc description used to launch a new vpc. | string | true |  
+ vswitch_description | The vswitch description used to launch several new vswitch. | string | true |  
+ vswitch_name | The vswitch name prefix used to launch several new vswitches. |  | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
@@ -51,4 +39,5 @@ spec:
 
  名称 | 描述 
  ------------ | ------------- 
- BUCKET_NAME | 
+ VPC_ID | 
+ VSWITCH_ID | 

@@ -1,29 +1,10 @@
 ---
-title:  AWS S3
+title:  阿里云 SLS-PROJECT
 ---
 
 ## 描述
 
-Terraform configuration for AWS S3
-
-## 示例
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: s3-cloud-source
-spec:
-  components:
-    - name: sample-s3
-      type: aws-s3
-      properties:
-        bucket: vela-website-20211019
-        acl: private
-
-        writeConnectionSecretToRef:
-          name: s3-conn
-```
+Terraform configuration for Alibaba Cloud SLS Project
 
 ## 参数说明
 
@@ -32,8 +13,8 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- bucket | S3 bucket name | string | true |  
- acl | S3 bucket ACL | string | true |  
+ name | Name of security group. It is used to create a new security group. | string | true |  
+ description | Description of security group | string | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
@@ -43,12 +24,3 @@ spec:
  ------------ | ------------- | ------------- | ------------- | ------------- 
  name | The secret name which the cloud resource connection will be written to | string | true |  
  namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
-
-
-### 输出
-
-如果设置了 `writeConnectionSecretToRef`，一个 Kubernetes Secret 将会被创建，并且，它的数据里有这些键（key）：
-
- 名称 | 描述 
- ------------ | ------------- 
- BUCKET_NAME | 
