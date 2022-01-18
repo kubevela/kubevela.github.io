@@ -1,29 +1,10 @@
 ---
-title:  AWS S3
+title:  阿里云 ASK
 ---
 
 ## 描述
 
-Terraform configuration for AWS S3
-
-## 示例
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: s3-cloud-source
-spec:
-  components:
-    - name: sample-s3
-      type: aws-s3
-      properties:
-        bucket: vela-website-20211019
-        acl: private
-
-        writeConnectionSecretToRef:
-          name: s3-conn
-```
+Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK)
 
 ## 参数说明
 
@@ -32,8 +13,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- bucket | S3 bucket name | string | true |  
- acl | S3 bucket ACL | string | true |  
+ name | ASK name | string | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
@@ -51,4 +31,5 @@ spec:
 
  名称 | 描述 
  ------------ | ------------- 
- BUCKET_NAME | 
+ CLUSTER_ID | ID of the kunernetes cluster.
+ Name | 

@@ -29,8 +29,8 @@ spec:
 
 ### Properties
 
-Name | Description | Type | Required | Default 
------------- | ------------- | ------------- | ------------- | ------------- 
+ Name | Description | Type | Required | Default 
+ ------------ | ------------- | ------------- | ------------- | ------------- 
  vpc_name | The vpc name used to launch a new vpc. | string | true |  
  vpc_description | The vpc description used to launch a new vpc. | string | true |  
  vpc_cidr | The cidr block used to launch a new vpc. | string | true |  
@@ -39,8 +39,8 @@ Name | Description | Type | Required | Default
 
 #### writeConnectionSecretToRef
 
-Name | Description | Type | Required | Default 
------------- | ------------- | ------------- | ------------- | ------------- 
+ Name | Description | Type | Required | Default 
+ ------------ | ------------- | ------------- | ------------- | ------------- 
  name | The secret name which the cloud resource connection will be written to | string | true |  
  namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
 
@@ -49,6 +49,6 @@ Name | Description | Type | Required | Default
 
 If `writeConnectionSecretToRef` is set, a secret will be generated with these keys as below:
 
-Name | Description
------------- | ------------- 
+ Name | Description 
+ ------------ | ------------- 
  VPC_ID | The vpc id of the newly created vpc.

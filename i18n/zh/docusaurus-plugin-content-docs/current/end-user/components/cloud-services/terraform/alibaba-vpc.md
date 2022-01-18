@@ -2,11 +2,11 @@
 title:  阿里云 VPC
 ---
 
-## Description
+## 描述
 
 Terraform configuration for Alibaba Cloud VPC
 
-## Samples
+## 示例
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -24,13 +24,13 @@ spec:
           name: vpc-conn
 ```
 
-## Specification
+## 参数说明
 
 
-### Properties
+### 属性
 
-Name | Description | Type | Required | Default 
------------- | ------------- | ------------- | ------------- | ------------- 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------------ | ------------- | ------------- | ------------- | ------------- 
  vpc_name | The vpc name used to launch a new vpc. | string | true |  
  vpc_description | The vpc description used to launch a new vpc. | string | true |  
  vpc_cidr | The cidr block used to launch a new vpc. | string | true |  
@@ -39,16 +39,16 @@ Name | Description | Type | Required | Default
 
 #### writeConnectionSecretToRef
 
-Name | Description | Type | Required | Default 
------------- | ------------- | ------------- | ------------- | ------------- 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------------ | ------------- | ------------- | ------------- | ------------- 
  name | The secret name which the cloud resource connection will be written to | string | true |  
  namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
 
 
-### Outputs
+### 输出
 
-If `writeConnectionSecretToRef` is set, a secret will be generated with these keys as below:
+如果设置了 `writeConnectionSecretToRef`，一个 Kubernetes Secret 将会被创建，并且，它的数据里有这些键（key）：
 
-Name | Description
------------- | ------------- 
+ 名称 | 描述 
+ ------------ | ------------- 
  VPC_ID | The vpc id of the newly created vpc.

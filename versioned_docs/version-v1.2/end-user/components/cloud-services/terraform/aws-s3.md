@@ -4,7 +4,7 @@ title:  AWS S3
 
 ## Description
 
-Terraform configuration for AWS S3 bucket
+Terraform configuration for AWS S3
 
 ## Samples
 
@@ -30,25 +30,25 @@ spec:
 
 ### Properties
 
-Name | Description | Type | Required | Default
------------- | ------------- | ------------- | ------------- | ------------- 
-bucket                     | S3 bucket name                                                    | string                                                    | true     |         |
-acl                        | S3 bucket ACL                                                     | string                                                    | true     |         |
-writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |
+ Name | Description | Type | Required | Default 
+ ------------ | ------------- | ------------- | ------------- | ------------- 
+ bucket | S3 bucket name | string | true |  
+ acl | S3 bucket ACL | string | true |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
-Name | Description | Type | Required | Default
------------- | ------------- | ------------- | ------------- | ------------- 
-name | The secret name which the cloud resource connection will be written to | string | true |
-namespace | The secret namespace which the cloud resource connection will be written to | string | false |
+ Name | Description | Type | Required | Default 
+ ------------ | ------------- | ------------- | ------------- | ------------- 
+ name | The secret name which the cloud resource connection will be written to | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
 
 
-## Outputs
+### Outputs
 
 If `writeConnectionSecretToRef` is set, a secret will be generated with these keys as below:
 
-Name | Description
------------- | -------------
-BUCKET_NAME | S3 bucket name |
+ Name | Description 
+ ------------ | ------------- 
+ BUCKET_NAME | 

@@ -30,21 +30,21 @@ spec:
 
 ### 属性
 
- 名字 | 描述 | 类型 | 是否必须 | 默认值 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- security_ips | List of IP addresses allowed to access all databases of an instance | list | true |  
+ allocate_public_connection | Whether to allocate public connection for a RDS instance. | bool | true |  
+ security_ips | List of IP addresses allowed to access all databases of an instance | list(any) | true |  
  database_name | Database name | string | true |  
  privilege | The privilege of one account access database. | string | true |  
  instance_name | RDS instance name | string | true |  
  account_name | RDS instance user account name | string | true |  
  password | RDS instance account password | string | true |  
- allocate_public_connection | Whether to allocate public connection for a RDS instance. | bool | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
- 名字 | 描述 | 类型 | 是否必须 | 默认值 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  name | The secret name which the cloud resource connection will be written to | string | true |  
  namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
@@ -54,13 +54,14 @@ spec:
 
 如果设置了 `writeConnectionSecretToRef`，一个 Kubernetes Secret 将会被创建，并且，它的数据里有这些键（key）：
 
- 名字 | 描述 
+ 名称 | 描述 
  ------------ | ------------- 
  DB_PORT | RDS Instance Port
- DB_HOST | RDS Instance Host
- DB_PASSWORD | RDS Instance Password
- DB_PUBLIC_HOST | RDS Instance Public Host
  DATABASE_NAME | RDS Database Name
- DB_ID | RDS Instance ID
+ RESOURCE_IDENTIFIER | The identifier of the resource
  DB_NAME | RDS Instance Name
  DB_USER | RDS Instance User
+ DB_PUBLIC_HOST | RDS Instance Public Host
+ DB_ID | RDS Instance ID
+ DB_HOST | RDS Instance Host
+ DB_PASSWORD | RDS Instance Password
