@@ -2,6 +2,8 @@
 title: AutoScaler
 ---
 
+> Note: `autoscaler` trait is hidden by default in `VelaUX`, you can use it in CLI.
+
 ## How to use
 
 ```yaml

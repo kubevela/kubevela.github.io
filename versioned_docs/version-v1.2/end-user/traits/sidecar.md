@@ -4,6 +4,8 @@ title: Attaching Sidecar
 
 The `sidecar` trait allows you to attach a sidecar container to the component.
 
+> Note: `sidecar` trait is hidden by default in `VelaUX`, you can use it in CLI.
+
 ## How to use
 
 In this Application, component `log-gen-worker` and sidecar share the data volume that saves the logs.
