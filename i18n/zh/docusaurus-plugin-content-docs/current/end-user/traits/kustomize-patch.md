@@ -4,6 +4,8 @@ title: Kustomize 补丁
 
 本小节将介绍如何使用 trait 对 Kustomize 组件做差异化配置。
 
+> 注意，需要先开启 `fluxcd` 插件才能使用 `kustomize` 相关的运维特征。
+
 ## 功能说明
 
 | Trait                    | 简介                                                                        |

@@ -74,7 +74,7 @@
         {
           "collapsed": false,
           "type": "category",
-          "label": "Dashboard",
+          "label": "VelaUX",
           "items": [
             {
               "collapsed": true,
@@ -425,6 +425,22 @@
           "type": "category",
           "label": "Built-in Trait Type",
           "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/scaler"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/ingress"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/storage"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/rollout"
+            },
             {
               "type": "doc",
               "id": "version-v1.2/end-user/traits/annotations-and-labels"

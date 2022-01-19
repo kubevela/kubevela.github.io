@@ -2,6 +2,8 @@
 title: Kustomize Patch
 ---
 
+> Note: To use `kustomize` trait, you must enable `fluxcd` addon first. 
+
 ## kustomize-patch Specification
 
 ```shell
