@@ -31,13 +31,15 @@ getSystemInfo() {
     OS=$(echo `uname`|tr '[:upper:]' '[:lower:]')
 
     # Most linux distro needs root permission to copy the file to /usr/local/bin
-    if [ "$OS" == "linux" ] && [ "$VELA_INSTALL_DIR" == "/usr/local/bin" ]; then
-        USE_SUDO="true"
+    if [ "$OS" == "linux" ] || [ "$OS" == "darwin" ]; then
+        if [ "$VELA_INSTALL_DIR" == "/usr/local/bin" ]; then
+            USE_SUDO="true"
+        fi
     fi
 }
 
 verifySupported() {
-    local supported=(darwin-amd64 linux-amd64 linux-arm linux-arm64)
+    local supported=(darwin-amd64 darwin-arm64 linux-amd64 linux-arm linux-arm64)
     local current_osarch="${OS}-${ARCH}"
 
     for osarch in "${supported[@]}"; do
@@ -75,7 +77,7 @@ checkHttpRequestCLI() {
 checkExistingVela() {
     if [ -f "$VELA_CLI_FILE" ]; then
         echo -e "\nVela CLI is detected:"
-        $VELA_CLI_FILE --version
+        $VELA_CLI_FILE version
         echo -e "Reinstalling Vela CLI - ${VELA_CLI_FILE}...\n"
     else
         echo -e "Installing Vela CLI...\n"
