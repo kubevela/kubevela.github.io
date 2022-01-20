@@ -11,18 +11,104 @@ Terraform 使用任意的云资源。
 
 以下是为云供应商阿里云、AWS 和 Azure 创建 Terraform 类型的云资源 ComponentDefinitions 的指南。
 
-# 阿里云
+# 依赖
 
-以 [弹性 IP](https://help.aliyun.com/document_detail/120192.html)为例。
+- [`vela` 命令行](../../install.mdx)
 
 ## 开发 Terraform 资源或模块
 
-为阿里云 EIP 资源创建一个 Terraform 资源或模块，并将其存储在 GitHub 库，如 https://github.com/oam-dev/terraform-alibaba-eip.git。
+为云资源开发创建 Terraform 资源或模块。
+
+比如我们为 AWS S3 bucket 开发了 Terraform 资源，并写入本地文件 `aws_s3_bucket.tf` 里，内容如下：
+
+```terraform
+resource "aws_s3_bucket" "bucket-acl" {
+  bucket = var.bucket
+  acl = var.acl
+}
+
+output "BUCKET_NAME" {
+  value = aws_s3_bucket.bucket-acl.bucket_domain_name
+}
+
+variable "bucket" {
+  description = "S3 bucket name"
+  default = "vela-website"
+  type = string
+}
+
+variable "acl" {
+  description = "S3 bucket ACL"
+  default = "private"
+  type = string
+}
+```
+
+我们也给阿里云 EIP 开发了 Terraform 模板，并存储在 GitHub 库 https://github.com/oam-dev/terraform-alibaba-eip.git。
 
 ## 生成 ComponentDefinition
 
+通过运行 `vela def init` 命令，我们可以基于 Terraform 资源或模块的云资源生成一个 ComponentDefinition，Terraform 资源或模板可以来自本地文件，
+也可以来自远程 GitHub 仓库。
+
+```shell
+$vela def init -h
+
+      --git string             Specify which git repository the configuration(HCL) is stored in. Valid when --provider/-p is set.
+      --local string           Specify the local path of the configuration(HCL) file. Valid when --provider/-p is set.
+```
+
+我们使用 `--local` 来接受来自本地文件的 Terraform 资源或模块来生成 ComponentDefinition。
+
+```shell
+$vela def init s3 --type component --provider aws --desc "Terraform configuration for AWS S3" --local aws_s3_bucket.tf
+
+apiVersion: core.oam.dev/v1beta1
+kind: ComponentDefinition
+metadata:
+  annotations:
+    definition.oam.dev/description: Terraform configuration for AWS S3
+  creationTimestamp: null
+  labels:
+    type: terraform
+  name: aws-s3
+  namespace: vela-system
+spec:
+  schematic:
+    terraform:
+      configuration: |
+        resource "aws_s3_bucket" "bucket-acl" {
+          bucket = var.bucket
+          acl = var.acl
+        }
+
+        output "BUCKET_NAME" {
+          value = aws_s3_bucket.bucket-acl.bucket_domain_name
+        }
+
+        variable "bucket" {
+          description = "S3 bucket name"
+          default = "vela-website"
+          type = string
+        }
+
+        variable "acl" {
+          description = "S3 bucket ACL"
+          default = "private"
+          type = string
+        }
+  workload:
+    definition:
+      apiVersion: terraform.core.oam.dev/v1beta1
+      kind: Configuration
+status: {}
+```
+
+我们使用 `--git` 来接受来自远程 GitHub 仓库的 Terraform 模块或资源来生成 ComponentDefinition。
+
 ```shell
 $ vela def init eip --type component --provider alibaba --desc "Terraform configuration for Alibaba Cloud Elastic IP" --git https://github.com/oam-dev/terraform-alibaba-eip.git
+
 apiVersion: core.oam.dev/v1beta1
 kind: ComponentDefinition
 metadata:
@@ -46,7 +132,7 @@ spec:
 status: {}
 ```
 
-阿里云 EIP 的 ComponentDefinition 已生成，我们热烈欢迎你将扩展的云资源的 ComponentDefinition 贡献到 [oam-dev/catalog](https://github.com/oam-dev/catalog/tree/master/addons/terraform-alibaba/definitions)。
+我们热烈欢迎你将扩展的云资源的 ComponentDefinition 贡献到 [oam-dev/catalog](https://github.com/oam-dev/catalog/tree/master/addons/)。
 
 ## 验证
 
@@ -84,27 +170,4 @@ $ vela def doc-gen alibaba-eip -n vela-system
 Generated docs for alibaba-eip in ./kubevela.io/docs/end-user/components/cloud-services/terraform/alibaba-eip.md
 ```
 
-将生成的文件移到 oam-dev/catalog 库。参考 [贡献指南](https://github.com/oam-dev/kubevela.io#contributing-to-kubevela-en-docs) 来提交文档。
-
-# AWS、Azure 和其他云供应商
-
-这与阿里云唯一的区别在于[Generate ComponentDefinition](#生成-ComponentDefinition)部分。
-请将 `--provider` 设置为 `aws` 或 `azure`，以便为 AWS 或 Azure 云资源生成 ComponentDefinition。
-
-```shell
-$ vela def init -h
-
-Usage:
-  vela def init DEF_NAME [flags]
-
-Examples:
-# Command below initiate a typed ComponentDefinition named vswitch from Alibaba Cloud.
-> vela def init vswitch --type component --provider alibaba --desc xxx --git https://github.com/kubevela-contrib/terraform-modules.git --path alibaba/vswitch
-
-Flags:
-  -d, --desc string            Specify the description of the new definition.
-      --git string             Specify which git repository the configuration(HCL) is stored in. Valid when --provider/-p is set.
-  -h, --help                   help for init
-      --path string            Specify which path the configuration(HCL) is stored in the Git repository. Valid when --git is set.
-  -p, --provider alibaba       Specify which provider the cloud resource definition belongs to. Only `alibaba`, `aws`, `azure` are supported.
-```
+将生成的文件移到 [oam-dev/kubevela.io](https://github.com/oam-dev/kubevela.io) 库。参考 [贡献指南](https://github.com/oam-dev/kubevela.io#contributing-to-kubevela-en-docs) 来提交文档。
