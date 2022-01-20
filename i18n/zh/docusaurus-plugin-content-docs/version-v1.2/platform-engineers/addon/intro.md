@@ -1,39 +1,6 @@
 ---
-title: 插件管理系统
+title: 插件扩展
 ---
-
-插件管理系统用于管理和扩展 KubeVela 的平台功能。
-用户可以通过 UX/CLI 来启用或停用插件，从而安装或卸载 KubeVela 平台的扩展功能。
-
-## 插件仓库 (Addon Registry)
-
-插件仓库是一个存储、发现和下载插件的地方。 插件仓库的地址可以是一个 Git 仓库或者一个对象存储 Bucket。
-
-KubeVela 社区在 Github 上维护了一个官方的[正式插件仓库](https://github.com/oam-dev/catalog/tree/master/addons) 和一个[试验阶段插件仓库](https://github.com/oam-dev/catalog/tree/master/experimental) 。
-
-你也可以参考这两个仓库，自己定制一个插件仓库， 之后通过 UX/CLI 来将它添加到你的系统。下图展示如何通过 UX 来添加一个插件仓库：
-
-![alt](../../resources/addon-registry.jpg)
-
-需要注意的是，KubeVela 默认没有添加试验性的插件仓库，但你可以通过点击 `Add Experimental Registry` 一键将它添加进来，并使用其中的插件。
-
-## 启用/停用插件 (Enable/Disable Addon)
-
-你可以通过 UX/CLI 获取到当前插件仓库中的所有插件，并启用/停用某个插件。
-
-下面例子是一个插件列表在 UX 上的展示图：
-
-![alt](../../resources/addon.jpg)
-
-如果某个插件需要依赖其他插件，只有当被依赖的的插件被启用之后，该插件才能被启用，如下图所示。
-
-![alt](../../resources/addon-dependency.jpg)
-
-有些复杂的插件需要设置一些参数才能启用，如下图所示。
-
-![alt](../../resources/addon-parameter.jpg)
-
-## 插件原理 (Addon Mechanism)
 
 下图展示了在启用一个插件时，KubeVela 做了哪些事情。可以看到插件仓库中所存放的其实是插件的资源文件，当通过 UX/CLI 启用一个插件时，它们会从插件仓库把这些资源文件拉取下来，渲染成一个 KubeVela 应用并创建。最终由运行在管控集群的 KubeVela 控制器完成对应用中所描述资源的下发。
 
@@ -102,7 +69,7 @@ invisible: false
 ### 组件资源 (resources) 目录 (非必须)
 
 除了直接在模版文件中添加组件，你也可以在插件目录下创建一个 `resources` 目录，并在里面添加 YAML/CUE 类型的文件，这些文件最终会被渲染成组件并添加到应用当中。
-其中，YAML 类型的文件中应该包含的是一个 K8S 资源对象，在渲染时该对象会被做为 K8s-object 类型的组件直接添加到应用当中。 
+其中，YAML 类型的文件中应该包含的是一个 K8S 资源对象，在渲染时该对象会被做为 K8s-object 类型的组件直接添加到应用当中。
 
 如果你需要为应用添加一个需要在启用时根据参数动态渲染的组件，你就可以编写一个 CUE 格式的文件，如下所示。
 
@@ -133,7 +100,7 @@ parameter: {
 
 可以看到上面例子中的 `output` 中描述了一个 `k8s-object` 类型的组件，其中 `properties.data.input` 需要在启用时根据输入参数指定。插件在启用时的参数都需要以 CUE 的语法编写在 `parameter.cue` 文件当中。 UX/CLI 在启用插件时会把全部的 CUE 文件和 `parameter.cue` 放在一个上下文中进行渲染，最终得到一系列的组件并添加到应用当中。
 
-你也可以通过 [CUE 基础入门文档](../cue/basic) 了解 CUE 的具体语法。 
+你也可以通过 [CUE 基础入门文档](../cue/basic) 了解 CUE 的具体语法。
 
 ### 模块定义文件 (X-Definitions) 目录 (非必须)
 

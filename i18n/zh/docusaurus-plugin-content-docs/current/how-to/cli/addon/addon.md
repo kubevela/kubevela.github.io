@@ -54,6 +54,10 @@ Name            Type    URL
 KubeVela        OSS     https://addons.kubevela.net
 ```
 
+KubeVela 社区在 Github 上维护了一个官方的[正式插件包仓库](https://github.com/oam-dev/catalog/tree/master/addons) 和一个[试验阶段插件包仓库](https://github.com/oam-dev/catalog/tree/master/experimental) 。你在相应的仓库中找到插件包的定义文件。
+
+同时这些文件会被同步到 [对象存储](https://addons.kubevela.net) 当中，以加快下载速度。
+
 ## 添加插件包仓库
 
 你可以添加自己的插件包仓库，目前支持 OSS 和 Github 两种仓库类型。
@@ -68,6 +72,28 @@ Successfully add an addon registry experimental
 ```
 $ vela addon registry delete experimental
 Successfully delete an addon registry experimental
+```
+
+## 多集群环境中启用插件包
+
+如果你的环境中添加了若干个子集群，启用插件包时会默认在管控集群和所有子集群中安装此插件包。但如果子集群在某个插件包启用之后加入环境当中，则需要通过升级操作在新加入集群中安装此插件包。如下所示
+
+```
+$ vela addon upgrade velaux
+Addon: 
+ enabled Successfully
+```
+
+## 离线安装插件包
+
+如果因为某些原因，你的环境无法通过访问插件包仓库，你可以通过指定本地的插件包目录来进行离线安装。如下所示：
+
+```
+$ ls
+README.md           fluxcd              ocm-cluster-manager terraform           terraform-alibaba   terraform-aws       terraform-azure     velaux
+
+$ vela addon enable velaux/
+Addon: velaux enabled Successfully
 ```
 
 ## 编写自己的插件包
