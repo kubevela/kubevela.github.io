@@ -30,14 +30,15 @@ getSystemInfo() {
 
     OS=$(echo `uname`|tr '[:upper:]' '[:lower:]')
 
-    # Most linux distro needs root permission to copy the file to /usr/local/bin
-    if [ "$OS" == "linux" ] && [ "$VELA_INSTALL_DIR" == "/usr/local/bin" ]; then
-        USE_SUDO="true"
+    if [ "$OS" == "linux" ] || [ "$OS" == "darwin" ]; then
+        if [ "$KUBECTL_VELA_INSTALL_DIR" == "/usr/local/bin" ]; then
+            USE_SUDO="true"
+        fi
     fi
 }
 
 verifySupported() {
-    local supported=(darwin-amd64 linux-amd64 linux-arm linux-arm64)
+    local supported=(darwin-amd64 darwin-arm64 linux-amd64 linux-arm linux-arm64)
     local current_osarch="${OS}-${ARCH}"
 
     for osarch in "${supported[@]}"; do
@@ -75,7 +76,7 @@ checkHttpRequestCLI() {
 checkExistingKubectlVela() {
     if [ -f "$KUBECTL_VELA_CLI_FILE" ]; then
         echo -e "\nKubectl-Vela CLI is detected:"
-        $KUBECTL_VELA_CLI_FILE --version
+        $KUBECTL_VELA_CLI_FILE version
         echo -e "Reinstalling Kubectl-Vela CLI - ${KUBECTL_VELA_CLI_FILE}...\n"
     else
         echo -e "Installing Kubectl-Vela CLI...\n"
