@@ -43,7 +43,7 @@ module.exports = {
           collapsed: false,
           items: [
             {
-              "Manage application": [
+              "Manage applications": [
                 "how-to/dashboard/application/create-application",
                 "how-to/dashboard/application/bind-new-environment",
                 "how-to/dashboard/application/deploy-application",
@@ -60,9 +60,12 @@ module.exports = {
             // {
             //   "Manage workflow": ["how-to/dashboard/workflow/overview"],
             // },
-            // {
-            //   "Manage trait": ["how-to/dashboard/trait/overview"],
-            // },
+            {
+              "Manage traits": ["how-to/dashboard/trait/overview"],
+            },
+            {
+              "Manage triggers": ["how-to/dashboard/trigger/overview"],
+            },
             // {
             //   "Manage environment": ["how-to/dashboard/environment/overview"],
             // },
