@@ -224,7 +224,10 @@ module.exports = {
         {
           type: "category",
           label: "Built-in Policy Type",
-          items: ["end-user/policies/envbinding"],
+          items: [
+              "end-user/policies/envbinding",
+              "end-user/policies/apply-once",
+          ],
         },
         "end-user/workflow/built-in-workflow-defs",
         "reference/ui-schema",
