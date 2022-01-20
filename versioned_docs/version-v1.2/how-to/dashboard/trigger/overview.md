@@ -1,6 +1,6 @@
 ---
-title: Use triggers to integrate with CI tools
-description: Use triggers to integrate with CI tools
+title: Integrate with CI system by Triggers
+description: Integrate with CI system by Triggers
 ---
 
 After you have created an application, a default trigger is automatically created. You can also delete or create a new trigger.
