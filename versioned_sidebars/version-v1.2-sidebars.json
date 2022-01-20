@@ -353,11 +353,11 @@
             },
             {
               "type": "doc",
-              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-eip"
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-ask"
             },
             {
               "type": "doc",
-              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-rds"
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-eip"
             },
             {
               "type": "doc",
@@ -365,11 +365,31 @@
             },
             {
               "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-rds"
+            },
+            {
+              "type": "doc",
               "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-redis"
             },
             {
               "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-sls-project"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-sls-store"
+            },
+            {
+              "type": "doc",
               "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-vpc"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-vswitch"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-s3"
             },
             {
               "type": "doc",
@@ -378,10 +398,6 @@
             {
               "type": "doc",
               "id": "version-v1.2/end-user/components/cloud-services/terraform/azure-storage-account"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-s3"
             }
           ]
         },

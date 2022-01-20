@@ -8,7 +8,8 @@ title:  创建和使用云资源
 KubeVela 通过云资源组件（Component）和运维特征（Trait）里的资源绑定功能，高效安全地完成不同类型云资源的集成工作。目前你可以直接调用下面这些云资源默认组件。
 同时在未来，更多新的云资源也会在社区的支撑下逐渐成为默认选项，让你标准化统一地去使用各种厂商的云资源。
 
-> ⚠️ 请确认管理员已经安装了 [Terraform 插件 'terraform/provider-alicloud'](../../../install#4-【可选】安装插件)。
+> ⚠️ 请确认管理员已经安装了 [Terraform 插件 'terraform/provider-alicloud'](../../../install#4-【可选】安装插件).
+
 
 ## 支持的云资源列表
 
