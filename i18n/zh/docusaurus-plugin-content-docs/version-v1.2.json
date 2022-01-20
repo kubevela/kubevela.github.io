@@ -203,6 +203,10 @@
     "message": "内置插件包",
     "description": "内置插件包说明"
   },
+  "sidebar.docs.category.Cloud Resources": {
+    "message": "云资源",
+    "description": "云资源"
+  },
   "sidebar.docs.category.Supported Cloud Resource": {
     "message": "支持的云资源",
     "description": "支持的云资源列表"

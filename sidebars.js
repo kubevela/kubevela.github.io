@@ -132,6 +132,12 @@ module.exports = {
           label: "Component System",
           items: [
             "platform-engineers/components/custom-component",
+          ],
+        },
+        {
+          type: "category",
+          label: "Cloud Resources",
+          items: [
             "platform-engineers/components/component-terraform",
           ],
         },

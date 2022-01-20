@@ -251,7 +251,13 @@
             {
               "type": "doc",
               "id": "version-v1.2/platform-engineers/components/custom-component"
-            },
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Cloud Resources",
+          "items": [
             {
               "type": "doc",
               "id": "version-v1.2/platform-engineers/components/component-terraform"
