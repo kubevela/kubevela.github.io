@@ -79,7 +79,7 @@
             {
               "collapsed": true,
               "type": "category",
-              "label": "Manage application",
+              "label": "Manage applications",
               "items": [
                 {
                   "type": "doc",
@@ -124,6 +124,28 @@
                 {
                   "type": "doc",
                   "id": "version-v1.2/how-to/dashboard/application/delete-application"
+                }
+              ]
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Manage traits",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/trait/overview"
+                }
+              ]
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Manage triggers",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/trigger/overview"
                 }
               ]
             }
