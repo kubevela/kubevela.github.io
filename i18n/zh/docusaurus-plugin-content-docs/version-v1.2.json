@@ -191,9 +191,17 @@
     "message": "操作手册",
     "description": "CLI 和 Dashboard 的操作指导手册"
   },
-  "sidebar.docs.category.Manage application": {
+  "sidebar.docs.category.Manage applications": {
     "message": "应用管理",
     "description": "通过 Dashboard 对应用的管理操作说明"
+  },
+  "sidebar.docs.category.Manage traits": {
+    "message": "运维特征管理",
+    "description": "通过 Dashboard 对应用的运维特征管理操作说明"
+  },
+  "sidebar.docs.category.Manage triggers": {
+    "message": "触发器管理",
+    "description": "通过 Dashboard 对应用触发器的管理操作说明"
   },
   "sidebar.docs.category.Built-in Addons": {
     "message": "内置插件包",

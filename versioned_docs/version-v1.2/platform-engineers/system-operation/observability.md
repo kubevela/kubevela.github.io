@@ -56,7 +56,7 @@ It also depends on StorageClass, so one default Storage has to be set.
 Execute the following command to install the observability plugin. The steps are the same for similar clusters, like KinD.
 
 ```shell
-$ vela addon enable observability disk-size=2Gi
+$ vela addon enable observability disk-size=2
 ```
 
 ### Kubernetes clusters provided by cloud providers
