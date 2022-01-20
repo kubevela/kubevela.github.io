@@ -174,7 +174,11 @@ module.exports = {
         {
           type: "category",
           label: "Built-in Addons",
-          items: ["reference/addons/overview", "reference/addons/velaux"],
+          items: [
+              "reference/addons/overview",
+              "reference/addons/velaux",
+              "reference/addons/terraform",
+          ],
         },
         {
           type: "category",
