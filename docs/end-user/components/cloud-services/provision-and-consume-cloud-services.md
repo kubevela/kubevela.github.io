@@ -13,7 +13,7 @@ You can use cloud resources of various manufacturers in a standardized and unifi
 
 This tutorial will talk about how to provision and consume Cloud Resources by Terraform.
 
-> ⚠️ This section requires your platform engineers have already enabled [add-on 'terraform/provider-alicloud'](../../../install#4-optional-enable-addons).
+> ⚠️ This section requires your platform engineers have already enabled [cloud resources addon](../../../reference/addons/terraform).
 
 ## Supported Cloud Resource list
 
