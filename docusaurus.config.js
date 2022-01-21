@@ -55,6 +55,11 @@ module.exports = {
           position: "left",
         },
         {
+          href: "https://kubevela.net",
+          label: "Mirror",
+          position: "right",
+        },
+        {
           type: "localeDropdown",
           position: "right",
         },
