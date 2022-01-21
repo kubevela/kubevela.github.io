@@ -127,20 +127,8 @@ module.exports = {
           ],
         },
         "platform-engineers/addon/intro",
-        {
-          type: "category",
-          label: "Component System",
-          items: [
-            "platform-engineers/components/custom-component",
-          ],
-        },
-        {
-          type: "category",
-          label: "Cloud Resources",
-          items: [
-            "platform-engineers/components/component-terraform",
-          ],
-        },
+        "platform-engineers/components/custom-component",
+        "platform-engineers/components/component-terraform",
         {
           type: "category",
           label: "Traits System",
