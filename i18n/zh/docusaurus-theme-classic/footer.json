@@ -15,11 +15,11 @@
     "message": "快速开始",
     "description": "The label of footer link with label=Getting Started linking to /docs/install"
   },
-  "link.item.label.Case Studies": {
-    "message": "最佳实践",
+  "link.item.label.Tutorials": {
+    "message": "实践教程",
     "description": "The label of footer link with label=Getting Case Studies to /docs/case-studies"
   },
-  "link.item.label.Administrator Manuals": {
+  "link.item.label.Extension": {
     "message": "自定义扩展",
     "description": "The label of footer link with label=Administrator Manuals linking to /docs/platform-engineers/overview"
   },
