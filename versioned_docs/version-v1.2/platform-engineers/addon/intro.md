@@ -1,5 +1,5 @@
 ---
-title: Make Addon and Build Registry
+title: Make Addon
 ---
 
 Addon can be used to manage and extend KubeVela platform capabilities.
