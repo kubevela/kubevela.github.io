@@ -361,6 +361,10 @@
             {
               "type": "doc",
               "id": "version-v1.2/reference/addons/velaux"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/reference/addons/terraform"
             }
           ]
         },
