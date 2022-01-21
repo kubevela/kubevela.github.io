@@ -75,11 +75,11 @@ module.exports = {
               to: "/docs/quick-start",
             },
             {
-              label: "Case Studies",
-              to: "/docs/case-studies/jenkins-cicd",
+              label: "Tutorials",
+              to: "/docs/tutorials/webservice",
             },
             {
-              label: "Administrator Manuals",
+              label: "Extension",
               to: "/docs/platform-engineers/oam/oam-model",
             },
           ],
