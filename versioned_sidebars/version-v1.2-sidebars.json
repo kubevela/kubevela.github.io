@@ -240,15 +240,8 @@
           ]
         },
         {
-          "collapsed": true,
-          "type": "category",
-          "label": "Addon System",
-          "items": [
-            {
-              "type": "doc",
-              "id": "version-v1.2/platform-engineers/addon/intro"
-            }
-          ]
+          "type": "doc",
+          "id": "version-v1.2/platform-engineers/addon/intro"
         },
         {
           "collapsed": true,
