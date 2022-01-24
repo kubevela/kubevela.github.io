@@ -244,19 +244,12 @@
           "id": "version-v1.2/platform-engineers/addon/intro"
         },
         {
-          "collapsed": true,
-          "type": "category",
-          "label": "Component System",
-          "items": [
-            {
-              "type": "doc",
-              "id": "version-v1.2/platform-engineers/components/custom-component"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.2/platform-engineers/components/component-terraform"
-            }
-          ]
+          "type": "doc",
+          "id":"version-v1.2/platform-engineers/components/custom-component"
+        },
+        {
+          "type": "doc",
+          "id":"version-v1.2/platform-engineers/components/component-terraform"
         },
         {
           "collapsed": true,
