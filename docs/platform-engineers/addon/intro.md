@@ -1,5 +1,5 @@
 ---
-title: Make Addon
+title: Customize Addon
 ---
 
 Addon can be used to manage and extend KubeVela platform capabilities.
