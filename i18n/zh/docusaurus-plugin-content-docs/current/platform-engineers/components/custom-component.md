@@ -1,5 +1,5 @@
 ---
-title:  组件系统
+title:  自定义组件入门
 ---
 
 > 在阅读本部分之前，请确保你已经了解 KubeVela 中 [组件定义（ComponentDefinition](../oam/x-definition#组件定义（ComponentDefinition）) 的概念且学习掌握了 [CUE 的基本知识](../cue/basic)
