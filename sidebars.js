@@ -126,9 +126,7 @@ module.exports = {
             "platform-engineers/cue/advanced",
           ],
         },
-        {
-          "Addon System": ["platform-engineers/addon/intro"],
-        },
+        "platform-engineers/addon/intro",
         {
           type: "category",
           label: "Component System",
