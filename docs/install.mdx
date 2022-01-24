@@ -192,13 +192,9 @@ Welcome to use the KubeVela! Enjoy your shipping application journey!
 
 </details>
 
-## 3. Install VelaUX
+## 3. Install KubeVela CLI
 
-VelaUX is a dashboard including UI+API services, it enables you to do everything around application delivery and management.
-
-#### 1. Install KubeVela CLI
-
-KubeVela CLI provides an easy to engage. We install VelaUX extensions through CLI.
+KubeVela CLI provides an easy to engage and manage your application delivery in command lines.
 
 <Tabs
     className="unique-tabs"
@@ -259,7 +255,9 @@ sudo mv ./vela /usr/local/bin/vela
 </TabItem>
 </Tabs>
 
-#### 2. Install VelaUX via Addon
+## 4. Install VelaUX
+
+VelaUX is a dashboard including UI+API services, it enables you to do everything around application delivery and management.
 
 ```shell script
 vela addon enable velaux
@@ -281,7 +279,7 @@ Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Se
 
 If you have loadbalaner or ingress, please refer to [VelaUX addon docs](./reference/addons/velaux) for more advanced installation ways.
 
-## 4. Uninstall
+## 5. Uninstall
 
 Before uninstalling kubevela, you must delete all applications and disable all addons.
 
