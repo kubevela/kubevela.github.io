@@ -197,14 +197,9 @@ Welcome to use the KubeVela! Enjoy your shipping application journey!
 
 </details>
 
-## 3. 安装 VelaUX
+## 3. 安装 KubeVela CLI
 
-VelaUX 是一个可视化操作界面，包括 UI+API 服务，它适用于大多数厂商开箱即用的获取应用交付和管理能力。
-
-#### 1. 安装 KubeVela CLI
-
-KubeVela CLI 提供了便捷的应用终端管理能力，我们通过 CLI 来安装 VelaUX 扩展。
-
+KubeVela CLI 提供了命令行工具来便捷的应用终端管理能力。
 <Tabs
     className="unique-tabs"
     defaultValue="script"
@@ -264,7 +259,9 @@ sudo mv ./vela /usr/local/bin/vela
 </TabItem>
 </Tabs>
 
-#### 2. 通过 Addon 安装 VelaUX
+## 4. 安装 VelaUX
+
+VelaUX 是一个可视化操作界面，包括 UI+API 服务，它适用于大多数厂商开箱即用的获取应用交付和管理能力。
 
 ```shell script
 vela addon enable velaux serviceType=NodePort
@@ -299,7 +296,7 @@ vela addon enable velaux repo=acr.kubevela.net domain=example.doamin.com
 vela addon enable velaux dbType=mongodb database=kubevela dbURL=mongodb://<Mongo-Host>:<Mongo-Port>
 ```
 
-## 4. 卸载
+## 5. 卸载
 
 如果你试用完成后需要卸载 KubeVela，可参考如下操作进行：
 
