@@ -24,22 +24,18 @@ spec:
 ## 属性说明
 
 
-| NAME             | DESCRIPTION                                                                                      | TYPE                              | REQUIRED | DEFAULT |
-| ---------------- | ------------------------------------------------------------------------------------------------ | --------------------------------- | -------- | ------- |
-| cmd              | Commands to run in the container                                                                 | []string                          | false    |         |
-| env              | Define arguments by using environment variables                                                  | [[]env](#env)                     | false    |         |
-| count            | Specify number of tasks to run in parallel                                                       | int                               | true     | 1       |
-| restart          | Define the job restart policy, the value can only be Never or OnFailure. By default, it's Never. | string                            | true     | Never   |
-| image            | Which image would you like to use for your service                                               | string                            | true     |         |
-| cpu              | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core)                 | string                            | false    |         |
-| memory           | Specifies the attributes of the memory resource required for the container.                      | string                            | false    |         |
-| volumes          | Declare volumes and volumeMounts                                                                 | [[]volumes](#volumes)             | false    |         |
-| livenessProbe    | Instructions for assessing whether the container is alive.                                       | [livenessProbe](#livenessProbe)   | false    |         |
-| readinessProbe   | Instructions for assessing whether the container is in a suitable state to serve traffic.        | [readinessProbe](#readinessProbe) | false    |         |
-| labels           | Specify the labels in the workload                                                               | []string                          | false    |         |
-| annotations      | Specify the annotations in the workload                                                          | []string                          | false    |         |
-| imagePullPolicy  | Specify image pull policy for your service                                                       | string                            | false    |         |
-| imagePullSecrets | Specify image pull secrets for your service                                                      | []string                          | false    |         |
+| NAME           | DESCRIPTION                                                                                      | TYPE                              | REQUIRED | DEFAULT |
+| -------------- | ------------------------------------------------------------------------------------------------ | --------------------------------- | -------- | ------- |
+| cmd            | Commands to run in the container                                                                 | []string                          | false    |         |
+| env            | Define arguments by using environment variables                                                  | [[]env](#env)                     | false    |         |
+| count          | Specify number of tasks to run in parallel                                                       | int                               | true     | 1       |
+| restart        | Define the job restart policy, the value can only be Never or OnFailure. By default, it's Never. | string                            | true     | Never   |
+| image          | Which image would you like to use for your service                                               | string                            | true     |         |
+| cpu            | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core)                 | string                            | false    |         |
+| memory         | Specifies the attributes of the memory resource required for the container.                      | string                            | false    |         |
+| volumes        | Declare volumes and volumeMounts                                                                 | [[]volumes](#volumes)             | false    |         |
+| livenessProbe  | Instructions for assessing whether the container is alive.                                       | [livenessProbe](#livenessProbe)   | false    |         |
+| readinessProbe | Instructions for assessing whether the container is in a suitable state to serve traffic.        | [readinessProbe](#readinessProbe) | false    |         |
 
 
 ### readinessProbe

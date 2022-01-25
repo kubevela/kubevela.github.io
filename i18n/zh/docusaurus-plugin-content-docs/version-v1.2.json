@@ -195,6 +195,10 @@
     "message": "运维特征管理",
     "description": "通过 Dashboard 对应用的运维特征管理操作说明"
   },
+  "sidebar.docs.category.Manage workflows": {
+    "message": "工作流管理",
+    "description": "通过 Dashboard 对应用的工作流管理操作说明"
+  },
   "sidebar.docs.category.Manage triggers": {
     "message": "触发器管理",
     "description": "通过 Dashboard 对应用触发器的管理操作说明"

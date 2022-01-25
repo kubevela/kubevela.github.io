@@ -57,9 +57,9 @@ module.exports = {
                 "how-to/dashboard/application/delete-application",
               ],
             },
-            // {
-            //   "Manage workflow": ["how-to/dashboard/workflow/overview"],
-            // },
+            {
+              "Manage workflows": ["how-to/dashboard/workflow/overview"],
+            },
             {
               "Manage traits": ["how-to/dashboard/trait/overview"],
             },
