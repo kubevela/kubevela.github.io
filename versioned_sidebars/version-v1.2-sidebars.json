@@ -130,6 +130,17 @@
             {
               "collapsed": true,
               "type": "category",
+              "label": "Manage workflows",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/workflow/overview"
+                }
+              ]
+            },
+            {
+              "collapsed": true,
+              "type": "category",
               "label": "Manage traits",
               "items": [
                 {
@@ -245,11 +256,11 @@
         },
         {
           "type": "doc",
-          "id":"version-v1.2/platform-engineers/components/custom-component"
+          "id": "version-v1.2/platform-engineers/components/custom-component"
         },
         {
           "type": "doc",
-          "id":"version-v1.2/platform-engineers/components/component-terraform"
+          "id": "version-v1.2/platform-engineers/components/component-terraform"
         },
         {
           "collapsed": true,
