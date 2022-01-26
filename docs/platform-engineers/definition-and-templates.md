@@ -72,7 +72,7 @@ spec:
     - deployments.apps
   conflictsWith: 
     - service
-  workloadRefPath: spec.wrokloadRef
+  workloadRefPath: spec.workloadRef
   podDisruptive: false
 ```
 
