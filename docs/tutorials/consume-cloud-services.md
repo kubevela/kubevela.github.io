@@ -25,17 +25,19 @@ First, visit [VelaUX (KubeVela Dashboard)](../install#3-install-velaux), switch 
 - provider-alibaba
 - provider-aws
 - provider-azure
+- provider-tencent
 
-We can provision cloud resources in Alibaba Cloud, AWS, and Azure respectively.
+We can provision cloud resources in Alibaba Cloud, AWS, Azure and Tencent Cloud respectively.
 
 Follow the instructions on all the properties of the addon for each cloud provider to set the addon and enable it.
 
 For example, for Alibaba Cloud, you need to set the following properties:
-Then fill in your ALICLOUD_ACCESS_KEY, ALICLOUD_REGION, and ALICLOUD_SECRET_KEY to enable it。
 
 > Notice: KubeVela encrypts all the keys, hence no need to worry about its safety.
 
 ![addon-alibaba](../resources/addon-alibaba.jpg)
+
+Then fill in your ALICLOUD_ACCESS_KEY, ALICLOUD_REGION, and ALICLOUD_SECRET_KEY to enable it。
 
 The creating process of cloud services pulls configuration from GitHub. If your control plane
 cluster that runs KubeVela is very hard to connect to GitHub, please open up the `GithubBlocked` option in `terraform`
@@ -43,22 +45,26 @@ addon.
 
 KubeVela supports the following types of resources and more later on:
 
-Cloud Provider | Cloud Resource                                       | Description
-----------------|------------------------------------------------------| -------------
-Alibaba Cloud  | [ACK](../end-user/components/cloud-services/terraform/alibaba-ack)                 | Terraform configuration for Alibaba Cloud ACK cluster
-|                | [EIP](../end-user/components/cloud-services/terraform/alibaba-eip)                       | Terraform configuration for Alibaba Cloud EIP
-|                | [OSS](../end-user/components/cloud-services/terraform/alibaba-oss)                       | Terraform configuration for Alibaba Cloud OSS
-|                | [RDS](../end-user/components/cloud-services/terraform/alibaba-rds)                       | Terraform configuration for Alibaba Cloud RDS
-|                | [Redis](../end-user/components/cloud-services/terraform/alibaba-redis)                   | Terraform configuration for Alibaba Cloud Redis
-|                | [VPC](../end-user/components/cloud-services/terraform/alibaba-vpc)                       | Terraform configuration for Alibaba Cloud VPC
-| Azure          | [Mariadb](../end-user/components/cloud-services/terraform/azure-database-mariadb)        | Terraform configuration for Azure Database Mariadb
-|           | [Storage Account](../end-user/components/cloud-services/terraform/azure-storage-account) | Terraform configuration for Azure Storage Account
-| AWS            | [S3](../end-user/components/cloud-services/terraform/aws-s3)                             | Terraform configuration for AWS S3 bucket
+| Orchestration Type | Cloud Provider | Cloud Resource                                                                           | Description                                                           |
+|--------------------|----------------|------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| Terraform          | Alibaba Cloud  | [ACK](../end-user/components/cloud-services/terraform/alibaba-ack)                       | Terraform configuration for Alibaba Cloud ACK cluster                 |
+|                    |                | [ASK](../end-user/components/cloud-services/terraform/alibaba-ask)                       | Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK) |
+|                    |                | [EIP](../end-user/components/cloud-services/terraform/alibaba-eip)                       | Terraform configuration for Alibaba Cloud EIP                         |
+|                    |                | [OSS](../end-user/components/cloud-services/terraform/alibaba-oss)                       | Terraform configuration for Alibaba Cloud OSS                         |
+|                    |                | [RDS](../end-user/components/cloud-services/terraform/alibaba-rds)                       | Terraform configuration for Alibaba Cloud RDS                         |
+|                    |                | [Redis](../end-user/components/cloud-services/terraform/alibaba-redis)                   | Terraform configuration for Alibaba Cloud Redis                       |
+|                    |                | [SLS Project](../end-user/components/cloud-services/terraform/alibaba-sls-project)       | Terraform configuration for Alibaba Cloud SLS Project                 |
+|                    |                | [SLS Store](../end-user/components/cloud-services/terraform/alibaba-sls-store)           | Terraform configuration for Alibaba Cloud SLS Store                   |
+|                    |                | [VPC](../end-user/components/cloud-services/terraform/alibaba-vpc)                       | Terraform configuration for Alibaba Cloud VPC                         |
+|                    |                | [VSwitch](../end-user/components/cloud-services/terraform/alibaba-vswitch)               | Terraform configuration for Alibaba Cloud VSwitch                     |
+|                    | AWS            | [S3](../end-user/components/cloud-services/terraform/aws-s3)                             | Terraform configuration for AWS S3 bucket                             |
+|                    | Azure          | [Mariadb](../end-user/components/cloud-services/terraform/azure-database-mariadb)        | Terraform configuration for Azure Database Mariadb                    |
+|                    |                | [Storage Account](../end-user/components/cloud-services/terraform/azure-storage-account) | Terraform configuration for Azure Storage Account                     |
 
 ## Creating your cloud service
 
 First [create an application](../how-to/dashboard/application/create-application). Please choose the type of your cloud service,
-which has a prefix of `aws-`, `azure` or `alibaba-`.
+which has a prefix of `aws-`, `azure`, `alibaba-` or `tencent-`.
 
 For different vendors, these parameters update accordingly. 
 

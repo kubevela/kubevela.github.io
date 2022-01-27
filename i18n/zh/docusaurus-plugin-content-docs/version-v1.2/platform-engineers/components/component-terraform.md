@@ -6,7 +6,7 @@ title:  扩展云资源
 Terraform 是目前业内支持云资源最广泛也最受欢迎的组件，KubeVela 对 Terraform 进行了额外的支持，使得用户可以通过 Kubernetes CRD 的方式配合
 Terraform 使用任意的云资源。
 
-为了使最终用户能够[部署和消费云资源](../../end-user/components/cloud-services/provider-and-consume-cloud-services)，当用户的要求超出了 [内置云资源的能力](../../end-user/components/cloud-services/provider-and-consume-cloud-services)，
+为了使最终用户能够[部署和消费云资源](../../end-user/components/cloud-services/provision-and-consume-cloud-services)，当用户的要求超出了 [内置云资源的能力](../../end-user/components/cloud-services/provision-and-consume-cloud-services)，
 管理员需要要为云资源准备 ComponentDefinitions。
 
 以下是为云供应商阿里云、AWS 和 Azure 创建 Terraform 类型的云资源 ComponentDefinitions 的指南。
@@ -159,7 +159,7 @@ $ vela show alibaba-eip
 +-----------+-----------------------------------------------------------------------------+--------+----------+---------+
 ```
 
-如果表格能正常出来，ComponentDefinition 应该就可以工作了。更进一步，你可以通过文档[部署云资源](../../end-user/components/cloud-services/provider-and-consume-cloud-services)创建一个实际的 EIP 来验证。
+如果表格能正常出来，ComponentDefinition 应该就可以工作了。更进一步，你可以通过文档[部署云资源](../../end-user/components/cloud-services/provision-and-consume-cloud-services)创建一个实际的 EIP 来验证。
 
 ## 生成文档
 

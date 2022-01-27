@@ -2,9 +2,9 @@
 title: Extend Cloud Resources
 ---
 
-To enable end users to [provision and consume cloud resources](../../end-user/components/cloud-services/provider-and-consume-cloud-services),
+To enable end users to [provision and consume cloud resources](../../end-user/components/cloud-services/provision-and-consume-cloud-services),
 platform engineers need to prepare ComponentDefinitions for cloud resources if end users' requirements are beyond the
-[built-in capabilities](../../end-user/components/cloud-services/provider-and-consume-cloud-services#supported-cloud-resource-list).
+[built-in capabilities](../../end-user/components/cloud-services/provision-and-consume-cloud-services#supported-cloud-resource-list).
 
 Here is the guide to create Terraform typed ComponentDefinitions of cloud resources for cloud providers Alibaba Cloud, AWS and Azure.
 
@@ -157,7 +157,7 @@ $ vela show alibaba-eip
 ```
 
 If the tables display, the ComponentDefinition should work. To take a step further, you can verify it by provision an actual EIP instance per
-the doc [Provision cloud resources](../../end-user/components/cloud-services/provider-and-consume-cloud-services#provision-cloud-resources).
+the doc [Provision cloud resources](../../end-user/components/cloud-services/provision-and-consume-cloud-services#provision-cloud-resources).
 
 ## Generate documentation
 
