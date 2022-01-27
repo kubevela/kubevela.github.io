@@ -13,11 +13,11 @@ Terraform configuration for Tencent Cloud VPC
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- vpc_name | The vpc name used to launch a new vpc when 'vpc_id' is not specified. |  | false |  
- vpc_cidr | The cidr block used to launch a new vpc when 'vpc_id' is not specified. |  | false |  
- vpc_is_multicast | Specify the vpc is multicast when 'vpc_id' is not specified. |  | false |  
+ vpc_is_multicast | Specify the vpc is multicast when 'vpc_id' is not specified. | bool | false |  
  vpc_dns_servers | Specify the vpc dns servers when 'vpc_id' is not specified. | list(string) | false |  
  vpc_tags | Additional tags for the vpc. | map(string) | false |  
+ vpc_name | The vpc name used to launch a new vpc when 'vpc_id' is not specified. | string | false |  
+ vpc_cidr | The cidr block used to launch a new vpc when 'vpc_id' is not specified. | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
