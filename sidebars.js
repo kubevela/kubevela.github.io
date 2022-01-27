@@ -186,6 +186,7 @@ module.exports = {
             "end-user/components/cloud-services/terraform/alibaba-sls-store",
             "end-user/components/cloud-services/terraform/alibaba-vpc",
             "end-user/components/cloud-services/terraform/alibaba-vswitch",
+            "end-user/components/cloud-services/terraform/alibaba-mse",
             "end-user/components/cloud-services/terraform/aws-s3",
             "end-user/components/cloud-services/terraform/azure-database-mariadb",
             "end-user/components/cloud-services/terraform/azure-storage-account",
