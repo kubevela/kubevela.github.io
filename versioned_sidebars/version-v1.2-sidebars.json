@@ -415,6 +415,10 @@
             },
             {
               "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-mongodb"
+            },
+            {
+              "type": "doc",
               "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-s3"
             },
             {
