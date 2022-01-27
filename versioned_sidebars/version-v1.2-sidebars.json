@@ -421,6 +421,10 @@
             {
               "type": "doc",
               "id": "version-v1.2/end-user/components/cloud-services/terraform/azure-storage-account"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/tencent-vpc"
             }
           ]
         },
