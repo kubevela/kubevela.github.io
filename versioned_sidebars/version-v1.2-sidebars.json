@@ -428,6 +428,10 @@
             {
               "type": "doc",
               "id": "version-v1.2/end-user/components/cloud-services/terraform/tencent-vpc"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/tencent-subnet"
             }
           ]
         },
