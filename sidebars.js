@@ -69,9 +69,9 @@ module.exports = {
             // {
             //   "Manage environment": ["how-to/dashboard/environment/overview"],
             // },
-            // {
-            //   "Manage target": ["how-to/dashboard/target/overview"],
-            // },
+            {
+              "Manage target": ["how-to/dashboard/target/overview"],
+            },
             // {
             //   "Manage cluster": [
             //     "how-to/dashboard/cluster/overview",

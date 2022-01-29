@@ -159,6 +159,17 @@
                   "id": "version-v1.2/how-to/dashboard/trigger/overview"
                 }
               ]
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Manage target",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/target/overview"
+                }
+              ]
             }
           ]
         },
@@ -409,7 +420,8 @@
             {
               "type": "doc",
               "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-vswitch"
-            },{
+            },
+            {
               "type": "doc",
               "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-mse"
             },
