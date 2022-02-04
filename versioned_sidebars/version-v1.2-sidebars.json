@@ -431,6 +431,14 @@
             },
             {
               "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-amqp"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/alibaba-rocketmq"
+            },
+            {
+              "type": "doc",
               "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-s3"
             },
             {
