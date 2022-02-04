@@ -6,7 +6,7 @@ title: 安装插件包
 
 ## 查看所有插件包
 
-KubeVela 官方团队维护了一个默认的插件包仓库 (https://addons.kubevela.net)，默认情况下会从这个仓库实时发现.
+KubeVela 官方团队维护了一个默认的插件包仓库 (https://addons.kubevela.net) ，默认情况下会从这个仓库实时发现.
 
 
 ```shell
