@@ -48,11 +48,14 @@ KubeVela supports the following types of resources and more later on:
 | Orchestration Type | Cloud Provider | Cloud Resource                                                                           | Description                                                           |
 |--------------------|----------------|------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
 | Terraform          | Alibaba Cloud  | [ACK](../end-user/components/cloud-services/terraform/alibaba-ack)                       | Terraform configuration for Alibaba Cloud ACK cluster                 |
+|                    |                | [ASK](../end-user/components/cloud-services/terraform/alibaba-amqp)                      | Terraform configuration for Alibaba Cloud AMQP (RabbitMQ)             |
 |                    |                | [ASK](../end-user/components/cloud-services/terraform/alibaba-ask)                       | Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK) |
 |                    |                | [EIP](../end-user/components/cloud-services/terraform/alibaba-eip)                       | Terraform configuration for Alibaba Cloud EIP                         |
+|                    |                | [MSE](../end-user/components/cloud-services/terraform/alibaba-mse)                       | Terraform configuration for Alibaba Cloud MSE                         |
 |                    |                | [OSS](../end-user/components/cloud-services/terraform/alibaba-oss)                       | Terraform configuration for Alibaba Cloud OSS                         |
 |                    |                | [RDS](../end-user/components/cloud-services/terraform/alibaba-rds)                       | Terraform configuration for Alibaba Cloud RDS                         |
 |                    |                | [Redis](../end-user/components/cloud-services/terraform/alibaba-redis)                   | Terraform configuration for Alibaba Cloud Redis                       |
+|                    |                | [RocketMQ](../end-user/components/cloud-services/terraform/alibaba-rocketmq)             | Terraform configuration for Alibaba Cloud RocketMQ                    |
 |                    |                | [SLS Project](../end-user/components/cloud-services/terraform/alibaba-sls-project)       | Terraform configuration for Alibaba Cloud SLS Project                 |
 |                    |                | [SLS Store](../end-user/components/cloud-services/terraform/alibaba-sls-store)           | Terraform configuration for Alibaba Cloud SLS Store                   |
 |                    |                | [VPC](../end-user/components/cloud-services/terraform/alibaba-vpc)                       | Terraform configuration for Alibaba Cloud VPC                         |

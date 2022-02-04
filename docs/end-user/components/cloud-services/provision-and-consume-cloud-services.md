@@ -20,11 +20,14 @@ This tutorial will talk about how to provision and consume Cloud Resources by Te
 | Orchestration Type | Cloud Provider | Cloud Resource                                       | Description                                                           |
 |--------------------|----------------|------------------------------------------------------|-----------------------------------------------------------------------|
 | Terraform          | Alibaba Cloud  | [ACK](./terraform/alibaba-ack)                       | Terraform configuration for Alibaba Cloud ACK cluster                 |
+|                    |                | [ASK](./terraform/alibaba-amqp)                      | Terraform configuration for Alibaba Cloud AMQP (RabbitMQ)             |
 |                    |                | [ASK](./terraform/alibaba-ask)                       | Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK) |
 |                    |                | [EIP](./terraform/alibaba-eip)                       | Terraform configuration for Alibaba Cloud EIP                         |
+|                    |                | [MSE](./terraform/alibaba-mse)                       | Terraform configuration for Alibaba Cloud MSE                         |
 |                    |                | [OSS](./terraform/alibaba-oss)                       | Terraform configuration for Alibaba Cloud OSS                         |
 |                    |                | [RDS](./terraform/alibaba-rds)                       | Terraform configuration for Alibaba Cloud RDS                         |
 |                    |                | [Redis](./terraform/alibaba-redis)                   | Terraform configuration for Alibaba Cloud Redis                       |
+|                    |                | [RocketMQ](./terraform/alibaba-rocketmq)             | Terraform configuration for Alibaba Cloud RocketMQ                    |
 |                    |                | [SLS Project](./terraform/alibaba-sls-project)       | Terraform configuration for Alibaba Cloud SLS Project                 |
 |                    |                | [SLS Store](./terraform/alibaba-sls-store)           | Terraform configuration for Alibaba Cloud SLS Store                   |
 |                    |                | [VPC](./terraform/alibaba-vpc)                       | Terraform configuration for Alibaba Cloud VPC                         |
