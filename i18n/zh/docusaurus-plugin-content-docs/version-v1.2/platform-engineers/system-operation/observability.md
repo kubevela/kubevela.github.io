@@ -51,7 +51,7 @@ StorageClass。
 执行如下命令安装可观测性插件，KinD 等测试集群的安装步骤同理。
 
 ```shell
-$ vela addon enable observability disk-size=2Gi
+$ vela addon enable observability disk-size=2
 ```
 
 ### 云服务商提供的 Kubernetes 集群
