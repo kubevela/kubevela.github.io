@@ -95,3 +95,38 @@ After configuring the trigger, we can see the new deploy revisions when a new im
 ![alt](../../../resources/acr-trigger-acrrecord.png)
 
 ![alt](../../../resources/acr-trigger-revisions.png)
+
+## DockerHub Trigger
+
+DockerHub Trigger can be integrated with DockerHub.
+
+We can start with creating a new DockerHub trigger. The Payload Type is DockerHub, and the Execution Workflow is the workflow you want to deploy in the trigger.
+
+![alt](../../../resources/dockerhub-trigger-newtrigger.png)
+
+After creating the trigger, we can setup this trigger in DockerHub:
+
+![alt](../../../resources/dockerhub-trigger.png)
+
+After configuring the trigger, we can see the new deploy revisions when a new image is pushed to the registry.
+
+![alt](../../../resources/dockerhub-trigger-dockerhubrecord.png)
+
+![alt](../../../resources/dockerhub-trigger-revisions.png)
+
+## JFrog Trigger
+
+jFrog Trigger can be integrated with JFrog Artifactory.
+
+We can start with creating a new jFrog trigger. The Payload Type is jFrog, and the Execution Workflow is the workflow you want to deploy in the trigger.
+
+![alt](../../../resources/jfrog-trigger-newtrigger.png)
+
+
+After creating the trigger, we can setup this trigger in jFrog:
+
+![alt](../../../resources/jfrog-trigger.png)
+
+After configuring the trigger, we can see the new deploy revisions when a new image is pushed to the registry.
+
+Note: jFrog webhook callback has no jFrog address, KubeVela will recognize the request header `X-jFrogURL` as jFrog address and use it in application `image` field.
