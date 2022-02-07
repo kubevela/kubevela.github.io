@@ -95,3 +95,38 @@ ACR 触发器可以对接 ACR 镜像仓库。
 ![alt](../../../resources/acr-trigger-acrrecord.png)
 
 ![alt](../../../resources/acr-trigger-revisions.png)
+
+## DockerHub 触发器
+
+DockerHub 触发器可以对接 DockerHub 仓库。
+
+首先来创建一个 DockerHub 触发器，Payload Type 选择 dockerhub，Execution Workflow 选择触发器要触发的工作流：
+
+![alt](../../../resources/dockerhub-trigger-newtrigger.png)
+
+新建完毕后，在 DockerHub 中配置该触发器：
+
+![alt](../../../resources/dockerhub-trigger.png)
+
+配置完成后，当 DockerHub 中被推送了镜像时，VelaUX 中会收到对应的触发请求，从而完成自动部署。
+
+![alt](../../../resources/dockerhub-trigger-dockerhubrecord.png)
+
+![alt](../../../resources/dockerhub-trigger-revisions.png)
+
+## JFrog 触发器
+
+JFrog 触发器可以对接 JFrog Artifactory。
+
+首先来创建一个 JFrog 触发器，Payload Type 选择 jfrog， Workflow 选择触发器要触发的工作流：
+
+![alt](../../../resources/jfrog-trigger-newtrigger.png)
+
+
+新建完毕后，在 JFrog 中配置该触发器：
+
+![alt](../../../resources/jfrog-trigger.png)
+
+配置完成后，当 JFrog 中被推送了镜像时，VelaUX 中会收到对应的触发请求，从而完成自动部署。
+
+注意：由于 jFrog 的回调请求中不包含 jFrog 本身的地址，KubeVela 将识别在 jFrog Webhook 中配置的 `X-jFrogURL` 地址，将其写入到应用的 `image` 字段中。
