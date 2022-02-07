@@ -267,6 +267,11 @@
         },
         {
           "type": "doc",
+          "id": "version-v1.2/platform-engineers/addon/terraform"
+        },
+
+        {
+          "type": "doc",
           "id": "version-v1.2/platform-engineers/components/custom-component"
         },
         {

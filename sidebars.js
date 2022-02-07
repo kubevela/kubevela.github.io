@@ -128,6 +128,7 @@ module.exports = {
         },
         "platform-engineers/addon/intro",
         "platform-engineers/components/custom-component",
+        "platform-engineers/addon/terraform",
         "platform-engineers/components/component-terraform",
         {
           type: "category",
