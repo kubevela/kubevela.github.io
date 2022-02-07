@@ -32,9 +32,9 @@ spec:
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- instance_name | Redis instance name | string | true |  
- account_name | Redis instance user account name | string | true |  
- password | RDS instance account password | string | true |  
+ instance_name | Redis instance name | string | false |  
+ account_name | Redis instance user account name | string | false |  
+ password | RDS instance account password | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
@@ -52,8 +52,8 @@ If `writeConnectionSecretToRef` is set, a secret will be generated with these ke
 
  Name | Description 
  ------------ | ------------- 
+ REDIS_CONNECT_ADDRESS | Redis connect address
  REDIS_USER | Redis user
  REDIS_PASSWORD | Redis password
  RESOURCE_IDENTIFIER | The identifier of the resource
  REDIS_NAME | Redis instance name
- REDIS_CONNECT_ADDRESS | Redis connect address

@@ -4,7 +4,7 @@ title:  AWS S3
 
 ## 描述
 
-Terraform configuration for AWS S3
+用于部署 AWS S3 的组件说明
 
 ## 示例
 
@@ -32,8 +32,8 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- bucket | S3 bucket name | string | true |  
- acl | S3 bucket ACL | string | true |  
+ bucket | S3 bucket name | string | false |  
+ acl | S3 bucket ACL | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
