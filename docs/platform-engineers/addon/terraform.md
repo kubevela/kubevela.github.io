@@ -54,7 +54,15 @@ properties:
 Generate a Terraform Addon for your cloud provider. The generated addon code will be stored in `addons/terraform-tencent`.
 
 ```shell
-$ go run hack/addons/terraform/gen.go hack/addons/terraform/provider-tencent.yaml
+$ make terraform-addon-gen conf=hack/addons/terraform/provider-sample.yaml
+go run hack/addons/terraform/gen.go hack/addons/terraform/provider-sample.yaml
+Generating addon for provider tencent in addons/terraform-tencent
+Rendering hack/addons/terraform/terraform-provider-skaffold/metadata.yaml
+Rendering hack/addons/terraform/terraform-provider-skaffold/readme.md
+Rendering hack/addons/terraform/terraform-provider-skaffold/resources/account-creds.cue
+Rendering hack/addons/terraform/terraform-provider-skaffold/resources/parameter.cue
+Rendering hack/addons/terraform/terraform-provider-skaffold/resources/provider.cue
+Rendering hack/addons/terraform/terraform-provider-skaffold/template.yaml
 
 $ ls addons/terraform-tencent
 definitions   metadata.yaml readme.md     resources     template.yaml
