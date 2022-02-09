@@ -127,7 +127,7 @@ module.exports = {
           ],
         },
         {
-          "Addon": [
+          "Custom Addons": [
             "platform-engineers/addon/intro",
             "platform-engineers/addon/terraform",
           ],
