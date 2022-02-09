@@ -46,7 +46,7 @@ addon.
 KubeVela supports the following types of resources and more later on:
 
 | Orchestration Type | Cloud Provider | Cloud Resource                                                                           | Description                                                           |
-|--------------------|----------------|------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
+| ------------------ | -------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | Terraform          | Alibaba Cloud  | [ACK](../end-user/components/cloud-services/terraform/alibaba-ack)                       | Terraform configuration for Alibaba Cloud ACK cluster                 |
 |                    |                | [AMQP](../end-user/components/cloud-services/terraform/alibaba-amqp)                     | Terraform configuration for Alibaba Cloud AMQP (RabbitMQ)             |
 |                    |                | [ASK](../end-user/components/cloud-services/terraform/alibaba-ask)                       | Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK) |
@@ -78,7 +78,7 @@ KubeVela supports the following types of resources and more later on:
 First [create an application](../how-to/dashboard/application/create-application). Please choose the type of your cloud service,
 which has a prefix of `aws-`, `azure`, `alibaba-` or `tencent-`.
 
-For different vendors, these parameters update accordingly. 
+For different vendors, these parameters update accordingly.
 
 For example, `aws-s3` has the following parameters:
 

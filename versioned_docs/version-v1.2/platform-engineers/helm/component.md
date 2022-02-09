@@ -4,7 +4,6 @@ title:  How-to
 
 > ⚠️ This usage has been deprecated in version 1.2.x. Please refer to [doc](../../end-user/components/helm) for more info to use helm type component.
 
-
 In this section, it will introduce how to declare Helm charts as components via `ComponentDefinition`.
 
 > Before reading this part, please make sure you've learned [the definition and template concepts](../definition-and-templates).
