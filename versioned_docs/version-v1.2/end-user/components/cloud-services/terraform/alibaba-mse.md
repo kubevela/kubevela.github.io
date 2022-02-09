@@ -4,7 +4,7 @@ title:  Alibaba Cloud MSE
 
 ## Description
 
-Alibaba Cloud MSE
+Terraform configuration for Alibaba Cloud MSE
 
 ## Specification
 

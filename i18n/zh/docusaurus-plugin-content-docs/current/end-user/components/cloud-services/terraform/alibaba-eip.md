@@ -4,7 +4,7 @@ title:  阿里云 EIP
 
 ## 描述
 
-用于部署阿里云 Elastic IP 的组件说明
+用于部署阿里云弹性 IP 的组件说明
 
 ## 示例
 
@@ -29,8 +29,8 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | Name to be used on all resources as prefix. Default to 'TF-Module-EIP'. | string | true |  
- bandwidth | Maximum bandwidth to the elastic public network, measured in Mbps (Mega bit per second). | number | true |  
+ name | Name to be used on all resources as prefix. Default to 'TF-Module-EIP'. | string | false |  
+ bandwidth | Maximum bandwidth to the elastic public network, measured in Mbps (Mega bit per second). | number | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

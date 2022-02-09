@@ -38,9 +38,9 @@ If `writeConnectionSecretToRef` is set, a secret will be generated with these ke
 
  Name | Description 
  ------------ | ------------- 
+ TOPIC_ID | The id of ons topic
  GROUP_ID | The id of ons group
  HTTP_ENDPOINT_INTERNET | The internet http endpoint of ons instance
  HTTP_ENDPOINT_INTERNAL | The internal http endpoint of ons instance
  TCP_ENDPOINT | The tcp endpoint of ons instance
  INSTANCE_ID | The id of ons instance
- TOPIC_ID | The id of ons topic
