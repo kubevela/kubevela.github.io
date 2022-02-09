@@ -32,8 +32,8 @@ spec:
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | Name of security group. It is used to create a new security group. | string | true |  
- description | Description of security group | string | true |  
+ name | Name of security group. It is used to create a new security group. | string | false |  
+ description | Description of security group | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

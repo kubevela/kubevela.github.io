@@ -28,8 +28,18 @@ KubeVela 通过云资源组件（Component）和运维特征（Trait）里的资
 |           |       | [VPC](./terraform/alibaba-vpc)                       | Terraform configuration for Alibaba Cloud VPC                         |
 |           |       | [VSwitch](./terraform/alibaba-vswitch)               | Terraform configuration for Alibaba Cloud VSwitch                     |
 |           | AWS   | [S3](./terraform/aws-s3)                             | Terraform configuration for AWS S3 bucket                             |
+|           |       | [S3](./terraform/aws-rds)                            | Terraform configuration for AWS RDS                                   |
+|           |       | [S3](./terraform/aws-security-group)                 | Terraform configuration for AWS Security Group                        |
+|           |       | [S3](./terraform/aws-subnet)                         | Terraform configuration for AWS S3 Subnet                             |
+|           |       | [S3](./terraform/aws-vpc)                            | Terraform configuration for AWS S3 VPC                                |
 |           | Azure | [Mariadb](./terraform/azure-database-mariadb)        | Terraform configuration for Azure Database Mariadb                    |
 |           |       | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account                     |
+|           |       | [Storage Account](./terraform/azure-resource-group)  | Terraform configuration for Azure Resource group                      |
+|           |       | [Storage Account](./terraform/azure-subnet)          | Terraform configuration for Azure Subnet                              |
+|           |       | [Storage Account](./terraform/azure-virtual-network) | Terraform configuration for Azure Virtual network                     |
+|           |       | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account                     |
+|           | 腾讯云   | [Mariadb](./terraform/tencent-vpc)                   | Terraform configuration for Tencent Cloud VPC                         |
+|           |       | [Mariadb](./terraform/tencent-subnet)                | Terraform configuration for Tencent Cloud Subnet                      |
 
 ## Terraform
 

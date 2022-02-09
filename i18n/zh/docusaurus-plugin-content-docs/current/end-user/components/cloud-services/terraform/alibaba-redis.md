@@ -32,9 +32,9 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- instance_name | Redis instance name | string | true |  
- account_name | Redis instance user account name | string | true |  
- password | RDS instance account password | string | true |  
+ instance_name | Redis instance name | string | false |  
+ account_name | Redis instance user account name | string | false |  
+ password | RDS instance account password | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

@@ -36,12 +36,12 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- password | Database instance password | string | true |  
- location | Azure location | string | true |  
- resource_group | Resource group | string | true |  
- server_name | mariadb server name | string | true |  
- db_name | Database instance name | string | true |  
- username | Database instance username | string | true |  
+ resource_group | Resource group | string | false |  
+ server_name | mariadb server name | string | false |  
+ db_name | Database instance name | string | false |  
+ username | Database instance username | string | false |  
+ password | Database instance password | string | false |  
+ location | Azure location | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
@@ -59,9 +59,9 @@ spec:
 
  名称 | 描述 
  ------------ | ------------- 
+ DB_USER | Database instance username
  DB_PASSWORD | Database instance password
  DB_PORT | Database instance port
  DB_HOST | Database instance host
  SERVER_NAME | mariadb server name
  DB_NAME | Database instance name
- DB_USER | Database instance username
