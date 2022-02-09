@@ -8,7 +8,7 @@ title: CLI Commands
 * [vela env](vela_env)	 - Manage environments for vela applications to run.
 * [vela init](vela_init)	 - Create scaffold for vela application.
 * [vela up](vela_up)	 - Create or update vela application from file or URL, both appfile or application object format are supported.
-* [vela show](vela_show)	 - Show the reference doc for component or trait types.
+* [vela show](vela_show)	 - Show the reference doc for component, trait or workflow types.
 
 ## Managing Applications
 
@@ -37,6 +37,8 @@ title: CLI Commands
 
 ## Others
 
+* [vela uninstall](vela_uninstall)	 - Uninstalls KubeVela from a Kubernetes cluster.
+* [vela install](vela_install)	 - The Kubevela CLI allows installing Kubevela on any Kubernetes derivative to which your kube config is pointing to.
 * [vela completion](vela_completion)	 - Output shell completion code for the specified shell (bash or zsh). 
 The shell code must be evaluated to provide interactive completion of vela commands.
 * [vela export](vela_export)	 - Export deploy manifests from appfile or application.
