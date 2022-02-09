@@ -228,7 +228,7 @@
     "description": "内置策略列表"
   },
   "sidebar.docs.category.Addon": {
-    "message": "插件",
+    "message": "自定义插件",
     "description": "插件"
   }
 }
