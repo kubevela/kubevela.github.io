@@ -10,40 +10,9 @@ KubeVela 通过云资源组件（Component）和运维特征（Trait）里的资
 
 > ⚠️ 请确认管理员已经安装了 [云资源插件](../../../reference/addons/terraform)。
 
-## 支持的云资源列表
-
-| 编排类型      | 云服务商  | 云资源                                                  | 描述                                                                    |
-|-----------|-------|------------------------------------------------------|-----------------------------------------------------------------------|
-| Terraform | 阿里云   | [ACK](./terraform/alibaba-ack)                       | Terraform configuration for Alibaba Cloud ACK cluster                 |
-|           |       | [ASK](./terraform/alibaba-amqp)                      | Terraform configuration for Alibaba Cloud AMQP (RabbitMQ)             |
-|           |       | [ASK](./terraform/alibaba-ask)                       | Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK) |
-|           |       | [EIP](./terraform/alibaba-eip)                       | Terraform configuration for Alibaba Cloud EIP                         |
-|           |       | [MSE](./terraform/alibaba-mse)                       | Terraform configuration for Alibaba Cloud MSE                         |
-|           |       | [OSS](./terraform/alibaba-oss)                       | Terraform configuration for Alibaba Cloud OSS                         |
-|           |       | [RDS](./terraform/alibaba-rds)                       | Terraform configuration for Alibaba Cloud RDS                         |
-|           |       | [Redis](./terraform/alibaba-redis)                   | Terraform configuration for Alibaba Cloud Redis                       |
-|           |       | [RocketMQ](./terraform/alibaba-rocketmq)             | Terraform configuration for Alibaba Cloud RocketMQ                    |
-|           |       | [SLS Project](./terraform/alibaba-sls-project)       | Terraform configuration for Alibaba Cloud SLS Project                 |
-|           |       | [SLS Store](./terraform/alibaba-sls-store)           | Terraform configuration for Alibaba Cloud SLS Store                   |
-|           |       | [VPC](./terraform/alibaba-vpc)                       | Terraform configuration for Alibaba Cloud VPC                         |
-|           |       | [VSwitch](./terraform/alibaba-vswitch)               | Terraform configuration for Alibaba Cloud VSwitch                     |
-|           | AWS   | [S3](./terraform/aws-s3)                             | Terraform configuration for AWS S3 bucket                             |
-|           |       | [S3](./terraform/aws-rds)                            | Terraform configuration for AWS RDS                                   |
-|           |       | [S3](./terraform/aws-security-group)                 | Terraform configuration for AWS Security Group                        |
-|           |       | [S3](./terraform/aws-subnet)                         | Terraform configuration for AWS S3 Subnet                             |
-|           |       | [S3](./terraform/aws-vpc)                            | Terraform configuration for AWS S3 VPC                                |
-|           | Azure | [Mariadb](./terraform/azure-database-mariadb)        | Terraform configuration for Azure Database Mariadb                    |
-|           |       | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account                     |
-|           |       | [Storage Account](./terraform/azure-resource-group)  | Terraform configuration for Azure Resource group                      |
-|           |       | [Storage Account](./terraform/azure-subnet)          | Terraform configuration for Azure Subnet                              |
-|           |       | [Storage Account](./terraform/azure-virtual-network) | Terraform configuration for Azure Virtual network                     |
-|           |       | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account                     |
-|           | 腾讯云   | [Mariadb](./terraform/tencent-vpc)                   | Terraform configuration for Tencent Cloud VPC                         |
-|           |       | [Mariadb](./terraform/tencent-subnet)                | Terraform configuration for Tencent Cloud Subnet                      |
-
 ## Terraform
 
-KubeVela 支持的所有由 Terraform 编排的云资源如上所示，你也可以通过命令 `vela components --label type=terraform` 查看。
+KubeVela 支持的所有由 Terraform 编排的云资源请见[列表](./cloud-resources-list)，你也可以通过命令 `vela components --label type=terraform` 查看。
 
 ### 部署云资源
 
