@@ -15,39 +15,9 @@ This tutorial will talk about how to provision and consume Cloud Resources by Te
 
 > ⚠️ This section requires your platform engineers have already enabled [cloud resources addon](../../../reference/addons/terraform).
 
-## Supported Cloud Resource list
-
-| Orchestration Type | Cloud Provider | Cloud Resource                                       | Description                                                           |
-|--------------------|----------------|------------------------------------------------------|-----------------------------------------------------------------------|
-| Terraform          | Alibaba Cloud  | [ACK](./terraform/alibaba-ack)                       | Terraform configuration for Alibaba Cloud ACK cluster                 |
-|                    |                | [ASK](./terraform/alibaba-amqp)                      | Terraform configuration for Alibaba Cloud AMQP (RabbitMQ)             |
-|                    |                | [ASK](./terraform/alibaba-ask)                       | Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK) |
-|                    |                | [EIP](./terraform/alibaba-eip)                       | Terraform configuration for Alibaba Cloud EIP                         |
-|                    |                | [MSE](./terraform/alibaba-mse)                       | Terraform configuration for Alibaba Cloud MSE                         |
-|                    |                | [OSS](./terraform/alibaba-oss)                       | Terraform configuration for Alibaba Cloud OSS                         |
-|                    |                | [RDS](./terraform/alibaba-rds)                       | Terraform configuration for Alibaba Cloud RDS                         |
-|                    |                | [Redis](./terraform/alibaba-redis)                   | Terraform configuration for Alibaba Cloud Redis                       |
-|                    |                | [RocketMQ](./terraform/alibaba-rocketmq)             | Terraform configuration for Alibaba Cloud RocketMQ                    |
-|                    |                | [SLS Project](./terraform/alibaba-sls-project)       | Terraform configuration for Alibaba Cloud SLS Project                 |
-|                    |                | [SLS Store](./terraform/alibaba-sls-store)           | Terraform configuration for Alibaba Cloud SLS Store                   |
-|                    |                | [VPC](./terraform/alibaba-vpc)                       | Terraform configuration for Alibaba Cloud VPC                         |
-|                    |                | [VSwitch](./terraform/alibaba-vswitch)               | Terraform configuration for Alibaba Cloud VSwitch                     |
-|                    | AWS            | [S3](./terraform/aws-s3)                             | Terraform configuration for AWS S3 bucket                             |
-|                    |                | [S3](./terraform/aws-rds)                            | Terraform configuration for AWS RDS                                   |
-|                    |                | [S3](./terraform/aws-security-group)                 | Terraform configuration for AWS Security Group                        |
-|                    |                | [S3](./terraform/aws-subnet)                         | Terraform configuration for AWS S3 Subnet                             |
-|                    |                | [S3](./terraform/aws-vpc)                            | Terraform configuration for AWS S3 VPC                                |
-|                    | Azure          | [Mariadb](./terraform/azure-database-mariadb)        | Terraform configuration for Azure Database Mariadb                    |
-|                    |                | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account                     |
-|                    |                | [Storage Account](./terraform/azure-resource-group)  | Terraform configuration for Azure Resource group                      |
-|                    |                | [Storage Account](./terraform/azure-subnet)          | Terraform configuration for Azure Subnet                              |
-|                    |                | [Storage Account](./terraform/azure-virtual-network) | Terraform configuration for Azure Virtual network                     |
-|                    | Tencent Cloud  | [Mariadb](./terraform/tencent-vpc)                   | Terraform configuration for Tencent Cloud VPC                         |
-|                    |                | [Mariadb](./terraform/tencent-subnet)                | Terraform configuration for Tencent Cloud Subnet                      |
-
 ## Terraform
 
-All supported Terraform cloud resources can be seen in the list above. You can also filter them by command by `vela components --label type=terraform`.
+All supported Terraform cloud resources can be seen in the [list](./cloud-resources-list). You can also filter them by command by `vela components --label type=terraform`.
 
 ### Provision cloud resources
 
