@@ -200,7 +200,7 @@ module.exports = {
             "end-user/components/cloud-services/terraform/aws-cloudwatch-log-group",
             "end-user/components/cloud-services/terraform/aws-cloudwatch-log-metric-filter",
             "end-user/components/cloud-services/terraform/aws-cloudwatch-metric-alarm",
-            "end-user/components/cloud-services/terraform/aws-cloudwatch-metric-alarms-by-multiple-dimensions",
+            "end-user/components/cloud-services/terraform/aws-cloudwatch-metric-alarms",
             "end-user/components/cloud-services/terraform/aws-config",
             "end-user/components/cloud-services/terraform/aws-dynamodb-table",
             "end-user/components/cloud-services/terraform/aws-ec2-instance",

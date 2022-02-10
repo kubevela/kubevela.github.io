@@ -479,7 +479,7 @@
             },
             {
               "type": "doc",
-              "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-cloudwatch-metric-alarms-by-multiple-dimensions"
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-cloudwatch-metric-alarms"
             },
             {
               "type": "doc",
