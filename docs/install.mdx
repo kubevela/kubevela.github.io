@@ -26,6 +26,7 @@ defaultValue="kind"
 values={[
 {label: 'Kind', value: 'kind'},
 {label: 'Minikube', value: 'minikube'},
+{label: 'K3s', value: 'k3s'},
 {label: 'RKE', value: 'rke'},
 {label: 'Cloud Provider', value: 'cloudprovider'},
 ]}>
@@ -49,6 +50,29 @@ minikube addons enable ingress
 ```
 
 </details>
+</TabItem>
+
+<TabItem value="k3s">
+
+> The k3s is great for: Edge、IoT、Development.
+
+1. Install k3s
+
+> K3s provides an installation script that is a convenient way to install it as a service on systemd or openrc based systems.
+
+Follow [this guide](https://rancher.com/docs/k3s/latest/en/quick-start/) to get more support.
+
+```shell
+curl -sfL https://get.k3s.io | sh -
+```
+
+2. Copy kubeconfig
+
+```shell
+make ~/.kube
+cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+```
+
 </TabItem>
 
 <TabItem value="rke">
