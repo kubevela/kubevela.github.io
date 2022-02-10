@@ -30,44 +30,43 @@ description: 本文介绍通过 KubeVela 交付云厂商提供的服务，并能
 按照每个云提供商的插件的所有属性上的说明来设置插件并启用它。
 
 例如，对于阿里巴巴云，你需要设置以下属性：
-
-> 注意。KubeVela 对所有的密钥进行了加密，因此不必担心它的安全问题。
+> 注意。KubeVela对所有的密钥进行了加密，因此不必担心它的安全问题。
 
 ![addon-alibaba](../resources/addon-alibaba.jpg)
 
-然后填写你的 ALICLOUD_ACCESS_KEY，ALICLOUD_REGION，和 ALICLOUD_SECRET_KEY 来启用它。
+然后填写你的ALICLOUD_ACCESS_KEY，ALICLOUD_REGION，和ALICLOUD_SECRET_KEY来启用它。
 
-云服务的创建过程会从 GitHub 中提取配置。如果你的控制平面 运行 KubeVela 的集群很难连接到 GitHub，请在`terraform`插件中打开`GithubBlocked`选项。
+云服务的创建过程会从GitHub中提取配置。如果你的控制平面 运行KubeVela的集群很难连接到GitHub，请在`terraform`插件中打开`GithubBlocked`选项。
 
-KubeVela 支持以下类型的资源，以后还会有更多：
+KubeVela支持以下类型的资源，以后还会有更多：
 
-| 编排类型  | 云服务商 | 云资源                                                                                   | 描述                                                                  |
-| --------- | -------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| 编排类型      | 云服务商  | 云资源                                                                                      | 描述                                                                    |
+|-----------|-------|------------------------------------------------------------------------------------------|-----------------------------------------------------------------------|
 | Terraform | 阿里云   | [ACK](../end-user/components/cloud-services/terraform/alibaba-ack)                       | Terraform configuration for Alibaba Cloud ACK cluster                 |
-|           |          | [AMQP](../end-user/components/cloud-services/terraform/alibaba-amqp)                     | Terraform configuration for Alibaba Cloud AMQP (RabbitMQ)             |
-|           |          | [ASK](../end-user/components/cloud-services/terraform/alibaba-ask)                       | Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK) |
-|           |          | [EIP](../end-user/components/cloud-services/terraform/alibaba-eip)                       | Terraform configuration for Alibaba Cloud EIP                         |
-|           |          | [MSE](../end-user/components/cloud-services/terraform/alibaba-mse)                       | Terraform configuration for Alibaba Cloud MSE                         |
-|           |          | [OSS](../end-user/components/cloud-services/terraform/alibaba-oss)                       | Terraform configuration for Alibaba Cloud OSS                         |
-|           |          | [RDS](../end-user/components/cloud-services/terraform/alibaba-rds)                       | Terraform configuration for Alibaba Cloud RDS                         |
-|           |          | [Redis](../end-user/components/cloud-services/terraform/alibaba-redis)                   | Terraform configuration for Alibaba Cloud Redis                       |
-|           |          | [RocketMQ](../end-user/components/cloud-services/terraform/alibaba-rocketmq)             | Terraform configuration for Alibaba Cloud RocketMQ                    |
-|           |          | [SLS Project](../end-user/components/cloud-services/terraform/alibaba-sls-project)       | Terraform configuration for Alibaba Cloud SLS Project                 |
-|           |          | [SLS Store](../end-user/components/cloud-services/terraform/alibaba-sls-store)           | Terraform configuration for Alibaba Cloud SLS Store                   |
-|           |          | [VPC](../end-user/components/cloud-services/terraform/alibaba-vpc)                       | Terraform configuration for Alibaba Cloud VPC                         |
-|           |          | [VSwitch](../end-user/components/cloud-services/terraform/alibaba-vswitch)               | Terraform configuration for Alibaba Cloud VSwitch                     |
-|           | AWS      | [S3](../end-user/components/cloud-services/terraform/aws-s3)                             | Terraform configuration for AWS S3 bucket                             |
-|           |          | [S3](../end-user/components/cloud-services/terraform/aws-rds)                            | Terraform configuration for AWS RDS                                   |
-|           |          | [S3](../end-user/components/cloud-services/terraform/aws-security-group)                 | Terraform configuration for AWS Security Group                        |
-|           |          | [S3](../end-user/components/cloud-services/terraform/aws-subnet)                         | Terraform configuration for AWS S3 Subnet                             |
-|           |          | [S3](../end-user/components/cloud-services/terraform/aws-vpc)                            | Terraform configuration for AWS S3 VPC                                |
-|           | Azure    | [Mariadb](../end-user/components/cloud-services/terraform/azure-database-mariadb)        | Terraform configuration for Azure Database Mariadb                    |
-|           |          | [Storage Account](../end-user/components/cloud-services/terraform/azure-storage-account) | Terraform configuration for Azure Storage Account                     |
-|           |          | [Storage Account](../end-user/components/cloud-services/terraform/azure-resource-group)  | Terraform configuration for Azure Resource group                      |
-|           |          | [Storage Account](../end-user/components/cloud-services/terraform/azure-subnet)          | Terraform configuration for Azure Subnet                              |
-|           |          | [Storage Account](../end-user/components/cloud-services/terraform/azure-virtual-network) | Terraform configuration for Azure Virtual network                     |
+|           |       | [AMQP](../end-user/components/cloud-services/terraform/alibaba-amqp)                     | Terraform configuration for Alibaba Cloud AMQP (RabbitMQ)             |
+|           |       | [ASK](../end-user/components/cloud-services/terraform/alibaba-ask)                       | Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK) |
+|           |       | [EIP](../end-user/components/cloud-services/terraform/alibaba-eip)                       | Terraform configuration for Alibaba Cloud EIP                         |
+|           |       | [MSE](../end-user/components/cloud-services/terraform/alibaba-mse)                       | Terraform configuration for Alibaba Cloud MSE                         |
+|           |       | [OSS](../end-user/components/cloud-services/terraform/alibaba-oss)                       | Terraform configuration for Alibaba Cloud OSS                         |
+|           |       | [RDS](../end-user/components/cloud-services/terraform/alibaba-rds)                       | Terraform configuration for Alibaba Cloud RDS                         |
+|           |       | [Redis](../end-user/components/cloud-services/terraform/alibaba-redis)                   | Terraform configuration for Alibaba Cloud Redis                       |
+|           |       | [RocketMQ](../end-user/components/cloud-services/terraform/alibaba-rocketmq)             | Terraform configuration for Alibaba Cloud RocketMQ                    |
+|           |       | [SLS Project](../end-user/components/cloud-services/terraform/alibaba-sls-project)       | Terraform configuration for Alibaba Cloud SLS Project                 |
+|           |       | [SLS Store](../end-user/components/cloud-services/terraform/alibaba-sls-store)           | Terraform configuration for Alibaba Cloud SLS Store                   |
+|           |       | [VPC](../end-user/components/cloud-services/terraform/alibaba-vpc)                       | Terraform configuration for Alibaba Cloud VPC                         |
+|           |       | [VSwitch](../end-user/components/cloud-services/terraform/alibaba-vswitch)               | Terraform configuration for Alibaba Cloud VSwitch                     |
+|           | AWS   | [S3](../end-user/components/cloud-services/terraform/aws-s3)                             | Terraform configuration for AWS S3 bucket                             |
+|           |       | [S3](../end-user/components/cloud-services/terraform/aws-rds)                            | Terraform configuration for AWS RDS                                   |
+|           |       | [S3](../end-user/components/cloud-services/terraform/aws-security-group)                 | Terraform configuration for AWS Security Group                        |
+|           |       | [S3](../end-user/components/cloud-services/terraform/aws-subnet)                         | Terraform configuration for AWS S3 Subnet                             |
+|           |       | [S3](../end-user/components/cloud-services/terraform/aws-vpc)                            | Terraform configuration for AWS S3 VPC                                |
+|           | Azure | [Mariadb](../end-user/components/cloud-services/terraform/azure-database-mariadb)        | Terraform configuration for Azure Database Mariadb                    |
+|           |       | [Storage Account](../end-user/components/cloud-services/terraform/azure-storage-account) | Terraform configuration for Azure Storage Account                     |
+|           |       | [Storage Account](../end-user/components/cloud-services/terraform/azure-resource-group)  | Terraform configuration for Azure Resource group                      |
+|           |       | [Storage Account](../end-user/components/cloud-services/terraform/azure-subnet)          | Terraform configuration for Azure Subnet                              |
+|           |       | [Storage Account](../end-user/components/cloud-services/terraform/azure-virtual-network) | Terraform configuration for Azure Virtual network                     |
 |           | 腾讯云   | [Mariadb](../end-user/components/cloud-services/terraform/tencent-vpc)                   | Terraform configuration for Tencent Cloud VPC                         |
-|           |          | [Mariadb](../end-user/components/cloud-services/terraform/tencent-subnet)                | Terraform configuration for Tencent Cloud Subnet                      |
+|           |       | [Mariadb](../end-user/components/cloud-services/terraform/tencent-subnet)                | Terraform configuration for Tencent Cloud Subnet                      |
 
 ## 创建你的云服务
 
@@ -92,7 +91,7 @@ KubeVela 支持以下类型的资源，以后还会有更多：
 
 - DeleteResource：当应用程序被删除时，是否要删除相应的云服务
 - ProviderRef：被云服务引用的提供者。
-- Region：Region 是云提供商的区域。它将覆盖`providerRef`。
+- Region：Region是云提供商的区域。它将覆盖`providerRef`。
 
 根据你的需要设置上述参数，完成应用程序的创建，然后[部署应用程序](../how-to/dashboard/application/deploy-application)。
 
@@ -111,7 +110,7 @@ KubeVela 支持以下类型的资源，以后还会有更多：
 您可以在云提供商的控制台中访问该实例。例如，您可以检查名称或控制台来访问它。
 ![](../resources/application-console-link.png)
 
-例如，你可以在[https://console.aliyun.com](https://console.aliyun.com)中查看阿里巴巴云 RDS 实例。
+例如，你可以在[https://console.aliyun.com](https://console.aliyun.com)中查看阿里巴巴云RDS实例。
 
 ![](../resources/alibaba-cloud-rds-console.png)
 
@@ -121,7 +120,7 @@ KubeVela 支持以下类型的资源，以后还会有更多：
 
 ![rds-status](../resources/rds-status.jpg)
 
-你会发现，每个实例都会生成一个 Secret 资源，一般来说，它记录了服务的访问地址和密钥信息。秘密资源将被分配到目标所在的集群和命名空间，而
+你会发现，每个实例都会生成一个Secret资源，一般来说，它记录了服务的访问地址和密钥信息。秘密资源将被分配到目标所在的集群和命名空间，而
 控制集群存在。因此，同一环境中的其他应用程序可以直接使用资源中的环境变量来获取访问地址和密钥。
 
 ![env-secret](../resources/env-secret.jpg)

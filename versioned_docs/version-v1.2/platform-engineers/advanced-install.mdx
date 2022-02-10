@@ -19,42 +19,103 @@ helm install cert-manager jetstack/cert-manager --namespace cert-manager --versi
 Install kubevela with enabled certmanager:
 
 ```shell script
-helm install --create-namespace -n vela-system --set admissionWebhooks.certManager.enabled=true kubevela kubevela/vela-core --wait
+vela install --set admissionWebhooks.certManager.enabled=true
 ```
 
 ## Install Pre-release
 
-Add flag `--devel` in command `helm search` to choose a pre-release
-version in format `<next_version>-beta.<version>`. It means a beta version of `<next_version>`,
-such as `1.2.0-rc.2`.
+```
+# List all releases
+vela version list -a
+
+# Install the specified version.
+vela install --version 1.2.0-beta.3
+```
+
+## Upgrade
+
+### 1. Upgrade CLI
+
+<Tabs
+    className="unique-tabs"
+    defaultValue="script"
+    values={[
+        {label: 'Script', value: 'script'},
+        {label: 'Homebrew', value: 'homebrew'},
+        {label: 'Download directly from releases', value: 'download'},
+    ]}>
+<TabItem value="script">
+
+** MacOS/Linux **
 
 ```shell script
-helm search repo kubevela/vela-core -l --devel
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.3
 ```
 
-```console
-    NAME                        CHART VERSION           APP VERSION             DESCRIPTION
-kubevela/vela-core              1.2.0-rc.1              1.2.0-rc.1              A Helm chart for KubeVela core
-kubevela/vela-core              1.2.0-beta.3            1.2.0-beta.3            A Helm chart for KubeVela core
-kubevela/vela-core              1.2.0-beta.2            1.2.0-beta.2            A Helm chart for KubeVela core
-kubevela/vela-core              1.2.0-beta.1            1.2.0-beta.1            A Helm chart for KubeVela core
-```
+**Windows**
 
-And try the following command to install it.
+> Only the official release version is supported.
 
 ```shell script
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version <next_version>-beta.<version> --set multicluster.enabled=true --wait
+powershell -Command "iwr -useb https://kubevela.io/script/install.ps1 | iex"
 ```
 
-```console
-NAME: kubevela
-LAST DEPLOYED: Thu Apr  1 19:41:30 2021
-NAMESPACE: vela-system
-STATUS: deployed
-REVISION: 1
-NOTES:
-Welcome to use the KubeVela! Enjoy your shipping application journey!
+</TabItem>
+<TabItem value="homebrew">
+
+**macOS/Linux**
+
+Update your brew first. Please note that the brew method only supports the installation of the official release version.
+
+```shell script
+brew update
 ```
+
+Then install KubeVela CLI
+
+```shell script
+brew install kubevela
+```
+
+</TabItem>
+<TabItem value="download">
+
+- Download the latest `vela` binary file via [release log](https://github.com/oam-dev/kubevela/releases).
+- Unzip the binary file, and configure the environment variables in `$PATH`, and you're done.
+
+```shell script
+sudo mv ./vela /usr/local/bin/vela
+```
+
+> [Installation Tips](https://github.com/oam-dev/kubevela/issues/625):
+> If you are using a Mac system, it will pop up a warning that "vela" cannot be opened because the package from the developer cannot be verified.
+>
+> MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
+
+</TabItem>
+</Tabs>
+
+### 2. Upgrade Vela Core
+
+If current version >=1.2.0
+
+```shell
+vela install --version v1.2.3
+```
+
+If current version < 1.2.0:
+
+```shell
+vela install --version v1.2.3 -r
+```
+
+### 3. Upgrade VelaUX
+
+```shell
+vela addon enable velaux version=v1.2.3
+```
+
+> If you set custom parameters during installation, be sure to include the corresponding parameters.
 
 ## Install Kubectl Vela Plugin
 
@@ -98,139 +159,3 @@ Kubectl will discover it from your system path automatically.
 </Tabs>
 
 For more usage please reference [kubectl plugin](../kubectlplugin).
-
-## Upgrade
-
-### Step 1. Update Helm repo
-
-You can explore the newly released chart versions of KubeVela by run:
-
-```shell
-helm repo update
-helm search repo kubevela/vela-core -l
-```
-
-### Step 2. Upgrade KubeVela CRDs
-
-```shell
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_applications.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_clusters.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_healthscopes.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_manualscalertraits.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_policydefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_scopedefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_traitdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_workflowstepdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_workloaddefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/standard.oam.dev_rollouts.yaml
-```
-
-> Tips: If you see errors like `* is invalid: spec.scope: Invalid value: "Namespaced": filed is immutable`. Please delete the CRD which reports error and re-apply the kubevela crds.
-
-```shell
- kubectl delete crd \
-  scopedefinitions.core.oam.dev \
-  traitdefinitions.core.oam.dev \
-  workloaddefinitions.core.oam.dev
-```
-
-### Step 3. Upgrade KubeVela Helm chart
-
-```shell
-helm upgrade --install --create-namespace --namespace vela-system  kubevela kubevela/vela-core --version <the_new_version> --set multicluster.enabled=true --wait
-```
-
-## Addons
-
-| Name                | Description                                                                                                                         | capability      | Open Source Project Reference                   |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------- | ----------------------------------------------- |
-| terraform           | Basic addon to Provide Cloud Resources                                                                                              | -               | https://github.com/oam-dev/terraform-controller |
-| fluxcd              | Support Deployment of Helm and Kustomize components                                                                                 | kustomize、helm | https://fluxcd.io/                              |
-| ocm-cluster-manager | Support Multi-cluster Application Deployment                                                                                        | -               | http://open-cluster-management.io/              |
-| velaux              | The KubeVela User Experience (UX ). Dashboard Designed as an extensible, application-oriented delivery and management control panel | -               |
-| terraform-alibaba   | Kubernetes Terraform Controller for Alibaba Cloud                                                                                   | -               | -                                               |
-| terraform-azure     | Kubernetes Terraform Controller for Azure                                                                                           | -               | -                                               |
-| terraform-aws       | Kubernetes Terraform Controller for AWS                                                                                             | -               | -                                               |
-
-1. Search all addons
-
-```shell
-vela addon list
-```
-
-2. Install addons (use fluxcd as example)
-
-```shell
-vela addon enable fluxcd
-```
-
-3. Disable addons
-
-```
-vela addon disable fluxcd
-```
-
-Please remove all application using this addon before disable it.
-
-## Multi-Cluster Management
-
-KubeVela can orchestrate applications across multiple Kubernetes clusters. This capability is enabled by default, but you can enable it manually by running the following command:
-
-```shell
-helm upgrade --install kubevela kubevela/vela-core -n vela-system --set multicluster.enabled=true --create-namespace --wait
-```
-
-Verify that multi-cluster is enabled:
-
-```shell
-> kubectl get APIService v1alpha1.cluster.core.oam.dev
-NAME                            SERVICE                                        AVAILABLE   AGE
-v1alpha1.cluster.core.oam.dev   vela-system/kubevela-cluster-gateway-service   True        7h40m
-```
-
-## Clean Up
-
-Run:
-
-```shell script
-helm uninstall -n vela-system kubevela
-rm -r ~/.vela
-```
-
-This will uninstall KubeVela server component and its dependency components.
-This also cleans up local CLI cache.
-
-Then clean up CRDs (CRDs are not removed via helm by default):
-
-```shell script
- kubectl delete crd \
-  appdeployments.core.oam.dev \
-  applicationconfigurations.core.oam.dev \
-  applicationcontexts.core.oam.dev \
-  applicationrevisions.core.oam.dev \
-  applications.core.oam.dev \
-  approllouts.core.oam.dev \
-  clusters.core.oam.dev \
-  componentdefinitions.core.oam.dev \
-  components.core.oam.dev \
-  containerizedworkloads.core.oam.dev \
-  definitionrevisions.core.oam.dev \
-  envbindings.core.oam.dev \
-  healthscopes.core.oam.dev \
-  initializers.core.oam.dev \
-  manualscalertraits.core.oam.dev \
-  podspecworkloads.standard.oam.dev \
-  policydefinitions.core.oam.dev \
-  resourcetrackers.core.oam.dev \
-  rollouts.standard.oam.dev \
-  rollouttraits.standard.oam.dev \
-  scopedefinitions.core.oam.dev \
-  traitdefinitions.core.oam.dev \
-  workflows.core.oam.dev \
-  workflowstepdefinitions.core.oam.dev \
-  workloaddefinitions.core.oam.dev
-```

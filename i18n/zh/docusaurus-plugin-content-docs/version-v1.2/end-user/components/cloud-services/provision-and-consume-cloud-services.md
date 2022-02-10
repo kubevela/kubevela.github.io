@@ -1,5 +1,5 @@
 ---
-title: 创建和使用云资源
+title:  创建和使用云资源
 ---
 
 在面向云开发逐渐成为范式的这个时代，我们希望集成来源不同、类型不同云资源的需求非常迫切。不管是最基本的对象存储、云数据库，还是更多的负载均衡等等，
@@ -12,34 +12,34 @@ KubeVela 通过云资源组件（Component）和运维特征（Trait）里的资
 
 ## 支持的云资源列表
 
-| 编排类型  | 云服务商 | 云资源                                               | 描述                                                                  |
-| --------- | -------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
+| 编排类型      | 云服务商  | 云资源                                                  | 描述                                                                    |
+|-----------|-------|------------------------------------------------------|-----------------------------------------------------------------------|
 | Terraform | 阿里云   | [ACK](./terraform/alibaba-ack)                       | Terraform configuration for Alibaba Cloud ACK cluster                 |
-|           |          | [ASK](./terraform/alibaba-amqp)                      | Terraform configuration for Alibaba Cloud AMQP (RabbitMQ)             |
-|           |          | [ASK](./terraform/alibaba-ask)                       | Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK) |
-|           |          | [EIP](./terraform/alibaba-eip)                       | Terraform configuration for Alibaba Cloud EIP                         |
-|           |          | [MSE](./terraform/alibaba-mse)                       | Terraform configuration for Alibaba Cloud MSE                         |
-|           |          | [OSS](./terraform/alibaba-oss)                       | Terraform configuration for Alibaba Cloud OSS                         |
-|           |          | [RDS](./terraform/alibaba-rds)                       | Terraform configuration for Alibaba Cloud RDS                         |
-|           |          | [Redis](./terraform/alibaba-redis)                   | Terraform configuration for Alibaba Cloud Redis                       |
-|           |          | [RocketMQ](./terraform/alibaba-rocketmq)             | Terraform configuration for Alibaba Cloud RocketMQ                    |
-|           |          | [SLS Project](./terraform/alibaba-sls-project)       | Terraform configuration for Alibaba Cloud SLS Project                 |
-|           |          | [SLS Store](./terraform/alibaba-sls-store)           | Terraform configuration for Alibaba Cloud SLS Store                   |
-|           |          | [VPC](./terraform/alibaba-vpc)                       | Terraform configuration for Alibaba Cloud VPC                         |
-|           |          | [VSwitch](./terraform/alibaba-vswitch)               | Terraform configuration for Alibaba Cloud VSwitch                     |
-|           | AWS      | [S3](./terraform/aws-s3)                             | Terraform configuration for AWS S3 bucket                             |
-|           |          | [S3](./terraform/aws-rds)                            | Terraform configuration for AWS RDS                                   |
-|           |          | [S3](./terraform/aws-security-group)                 | Terraform configuration for AWS Security Group                        |
-|           |          | [S3](./terraform/aws-subnet)                         | Terraform configuration for AWS S3 Subnet                             |
-|           |          | [S3](./terraform/aws-vpc)                            | Terraform configuration for AWS S3 VPC                                |
-|           | Azure    | [Mariadb](./terraform/azure-database-mariadb)        | Terraform configuration for Azure Database Mariadb                    |
-|           |          | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account                     |
-|           |          | [Storage Account](./terraform/azure-resource-group)  | Terraform configuration for Azure Resource group                      |
-|           |          | [Storage Account](./terraform/azure-subnet)          | Terraform configuration for Azure Subnet                              |
-|           |          | [Storage Account](./terraform/azure-virtual-network) | Terraform configuration for Azure Virtual network                     |
-|           |          | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account                     |
+|           |       | [ASK](./terraform/alibaba-amqp)                      | Terraform configuration for Alibaba Cloud AMQP (RabbitMQ)             |
+|           |       | [ASK](./terraform/alibaba-ask)                       | Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK) |
+|           |       | [EIP](./terraform/alibaba-eip)                       | Terraform configuration for Alibaba Cloud EIP                         |
+|           |       | [MSE](./terraform/alibaba-mse)                       | Terraform configuration for Alibaba Cloud MSE                         |
+|           |       | [OSS](./terraform/alibaba-oss)                       | Terraform configuration for Alibaba Cloud OSS                         |
+|           |       | [RDS](./terraform/alibaba-rds)                       | Terraform configuration for Alibaba Cloud RDS                         |
+|           |       | [Redis](./terraform/alibaba-redis)                   | Terraform configuration for Alibaba Cloud Redis                       |
+|           |       | [RocketMQ](./terraform/alibaba-rocketmq)             | Terraform configuration for Alibaba Cloud RocketMQ                    |
+|           |       | [SLS Project](./terraform/alibaba-sls-project)       | Terraform configuration for Alibaba Cloud SLS Project                 |
+|           |       | [SLS Store](./terraform/alibaba-sls-store)           | Terraform configuration for Alibaba Cloud SLS Store                   |
+|           |       | [VPC](./terraform/alibaba-vpc)                       | Terraform configuration for Alibaba Cloud VPC                         |
+|           |       | [VSwitch](./terraform/alibaba-vswitch)               | Terraform configuration for Alibaba Cloud VSwitch                     |
+|           | AWS   | [S3](./terraform/aws-s3)                             | Terraform configuration for AWS S3 bucket                             |
+|           |       | [S3](./terraform/aws-rds)                            | Terraform configuration for AWS RDS                                   |
+|           |       | [S3](./terraform/aws-security-group)                 | Terraform configuration for AWS Security Group                        |
+|           |       | [S3](./terraform/aws-subnet)                         | Terraform configuration for AWS S3 Subnet                             |
+|           |       | [S3](./terraform/aws-vpc)                            | Terraform configuration for AWS S3 VPC                                |
+|           | Azure | [Mariadb](./terraform/azure-database-mariadb)        | Terraform configuration for Azure Database Mariadb                    |
+|           |       | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account                     |
+|           |       | [Storage Account](./terraform/azure-resource-group)  | Terraform configuration for Azure Resource group                      |
+|           |       | [Storage Account](./terraform/azure-subnet)          | Terraform configuration for Azure Subnet                              |
+|           |       | [Storage Account](./terraform/azure-virtual-network) | Terraform configuration for Azure Virtual network                     |
+|           |       | [Storage Account](./terraform/azure-storage-account) | Terraform configuration for Azure Storage Account                     |
 |           | 腾讯云   | [Mariadb](./terraform/tencent-vpc)                   | Terraform configuration for Tencent Cloud VPC                         |
-|           |          | [Mariadb](./terraform/tencent-subnet)                | Terraform configuration for Tencent Cloud Subnet                      |
+|           |       | [Mariadb](./terraform/tencent-subnet)                | Terraform configuration for Tencent Cloud Subnet                      |
 
 ## Terraform
 
@@ -76,7 +76,7 @@ provision-cloud-resource-sample	sample-oss	alibaba-oss	      	running	healthy	Cl
 ```
 
 当应用程序处于 `running` 和 `healthy`状态。我们可以在阿里云控制台或通过 [ossutil](https://partners-intl.aliyun.com/help/doc-detail/50452.htm)
-检查 OSS bucket 是否被创建。
+检查OSS bucket 是否被创建。
 
 ```shell
 $ ossutil ls oss://
@@ -117,10 +117,9 @@ EOF
 可以看到，我们使用了一个 `webservice` 组件作为 RDS 即将对外的服务器，而名称是 `sample-db` 的 `alibaba-rds` 组件则承载起去拉起云资源的责任，数据库相关访问信息被写 `db-conn` 中。
 
 一般云资源的拉起，会消耗比较多的时间，比如这里的 RDS 就大约需要 15 分钟左右，我们可以看到它从渲染、健康检查到正常运行的全过程：
-
 ```
-$ vela ls
-APP                  	COMPONENT     	TYPE       	TRAITS            	PHASE  	HEALTHY	STATUS                                        	CREATED-TIME
+$ vela ls                  
+APP                  	COMPONENT     	TYPE       	TRAITS            	PHASE  	HEALTHY	STATUS                                        	CREATED-TIME 
 webapp               	rds-server    	webservice 	service-binding   	rendering	       	      	2021-08-30 20:04:03 +0800 CST
 └─                 	sample-db     	alibaba-rds	                  	rendering	       	      	2021-08-30 20:04:03 +0800 CST
 
@@ -152,10 +151,10 @@ spec:
             envMappings:
               # 环境变量与 db-conn 密钥形成映射
               DB_PASSWORD:
-                secret: db-conn
+                secret: db-conn                             
               endpoint:
                 secret: db-conn
-                key: DB_HOST
+                key: DB_HOST          
               username:
                 secret: db-conn
                 key: DB_USER
@@ -169,7 +168,6 @@ spec:
           name: db-conn
 EOF
 ```
-
 可以看到，db-conn 负责将密钥的账户、密码等信息转发给 rds-server 这个组件来使用。
 
 ![](../../../resources/crossplane-visit-application-v3.jpg)
@@ -177,3 +175,4 @@ EOF
 ## 自定义云资源
 
 如果我们提供的开箱即用云资源没有覆盖你的研发需求，你依然可以通过灵活的[Terraform 组件](../../../platform-engineers/components/component-terraform)去自定义业务所需要的云资源。
+
