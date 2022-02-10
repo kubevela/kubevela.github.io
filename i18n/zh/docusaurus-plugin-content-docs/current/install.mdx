@@ -27,6 +27,7 @@ defaultValue="kind"
 values={[
 {label: 'Kind', value: 'kind'},
 {label: 'Minikube', value: 'minikube'},
+{label: 'K3s', value: 'k3s'},
 {label: 'RKE', value: 'rke'},
 {label: '云服务', value: 'cloudprovider'},
 ]}>
@@ -48,6 +49,29 @@ minikube addons enable ingress
 ```
 
 </details>
+</TabItem>
+
+<TabItem value="k3s">
+
+> k3s 适合以下场景 Edge、IoT、Development。你可以使用 k3s 作为 KubeVela 管控平面的的轻量级底座。
+
+1. 安装 K3s
+
+> K3s 只支持安装在具有 systemd 或者 openrc 服务的操作系统中。
+
+你可以参考 [K3s 快速开始文档](https://rancher.com/docs/k3s/latest/en/quick-start/) 获取更多支持。
+
+```shell
+curl -sfL https://get.k3s.io | sh -
+```
+
+2. 复制 kubeconfig 文件到默认目录下。如果你需要在本地操作后续安装，请将其复制到本地。
+
+```shell
+make ~/.kube
+cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+```
+
 </TabItem>
 
 <TabItem value="rke">
