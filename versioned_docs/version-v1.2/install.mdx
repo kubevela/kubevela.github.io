@@ -12,7 +12,7 @@ import TabItem from "@theme/TabItem";
 Requirements:
 
 - Kubernetes cluster >= v1.19 && < v1.22
-- [Kubectl](https://kubernetes.io/docs/tasks/tools/) && [Helm v3](https://helm.sh/docs/intro/install/).
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/)
 
 KubeVela relies on Kubernetes as a control plane. The control plane could be any managed Kubernetes offering or your cluster.
 
@@ -99,7 +99,7 @@ Follow [this guide](https://kind.sigs.k8s.io/docs/user/quick-start/#installation
 Then spins up a kind cluster:
 
 ```shell script
-cat <<EOF | kind create cluster --image=kindest/node:v1.18.15 --config=-
+cat <<EOF | kind create cluster --image=kindest/node:v1.20.7 --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
@@ -143,56 +143,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 </TabItem>  
 </Tabs>
 
-## 2. Install KubeVela Core
-
-Before installation, please make sure that Helm is available. If not installed, please head to [Helm Installation](https://helm.sh/docs/intro/install/) first.
-
-1. Add and update KubeVela Helm chart repo
-
-```shell script
-helm repo add kubevela https://charts.kubevela.net/core
-helm repo update
-```
-
-2. Install KubeVela Core
-
-```shell script
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.2 --wait
-```
-
-3. Verify KubeVela Core installation
-
-```shell script
-helm test kubevela -n vela-system
-```
-
-<details> <summary> check out the outcome </summary>
-
-```shell
-Pod kubevela-application-test pending
-Pod kubevela-application-test pending
-Pod kubevela-application-test running
-Pod kubevela-application-test succeeded
-NAME: kubevela
-LAST DEPLOYED: Tue Apr 13 18:42:20 2021
-NAMESPACE: vela-system
-STATUS: deployed
-REVISION: 1
-TEST SUITE:     kubevela-application-test
-Last Started:   Fri Apr 16 20:49:10 2021
-Last Completed: Fri Apr 16 20:50:04 2021
-Phase:          Succeeded
-TEST SUITE:     first-vela-app
-Last Started:   Fri Apr 16 20:49:10 2021
-Last Completed: Fri Apr 16 20:49:10 2021
-Phase:          Succeeded
-NOTES:
-Welcome to use the KubeVela! Enjoy your shipping application journey!
-```
-
-</details>
-
-## 3. Install KubeVela CLI
+## 2. Install KubeVela CLI
 
 KubeVela CLI provides an easy to engage and manage your application delivery in command lines.
 
@@ -209,7 +160,7 @@ KubeVela CLI provides an easy to engage and manage your application delivery in 
 ** MacOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.2
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.3
 ```
 
 **Windows**
@@ -255,6 +206,43 @@ sudo mv ./vela /usr/local/bin/vela
 </TabItem>
 </Tabs>
 
+## 2. Install KubeVela Core
+
+> The version of vela CLI >= 1.2.3.
+
+```shell script
+vela install
+```
+
+<details> <summary> check out the outcome </summary>
+
+```shell
+...
+Watching for changes to Job kubevela-vela-core-cluster-gateway-tls-secret-patch with timeout of 18m0s
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: ADDED
+kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 0, jobs failed: 0, jobs succeeded: 0
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
+kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
+kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
+Starting delete for "kubevela-vela-core-admission" ServiceAccount
+Starting delete for "kubevela-vela-core-admission" ClusterRole
+Starting delete for "kubevela-vela-core-admission" ClusterRoleBinding
+Starting delete for "kubevela-vela-core-admission" Role
+Starting delete for "kubevela-vela-core-admission" RoleBinding
+Starting delete for "kubevela-vela-core-admission-patch" Job
+Starting delete for "kubevela-vela-core-cluster-gateway-admission" ServiceAccount
+Starting delete for "kubevela-vela-core-cluster-gateway-admission" Role
+Starting delete for "kubevela-vela-core-cluster-gateway-admission" RoleBinding
+Starting delete for "kubevela-vela-core-cluster-gateway-tls-secret-patch" Job
+
+KubeVela control plane has been successfully set up on your cluster.
+If you want to enable dashboard, please run "vela addon enable velaux"
+```
+
+</details>
+
 ## 4. Install VelaUX
 
 VelaUX is a dashboard including UI+API services, it enables you to do everything around application delivery and management.
@@ -292,7 +280,7 @@ vela addon disable velaux
 2. Uninstall KubeVela Core
 
 ```
-helm uninstall -n vela-system kubevela
+vela uninstall
 ```
 
 3. Uninstall CRD

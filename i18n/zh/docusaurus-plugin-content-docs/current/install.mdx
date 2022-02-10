@@ -139,65 +139,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 </TabItem>
 </Tabs>
 
-## 2. 安装 KubeVela Core
-
-在安装之前，请确保 Helm 工具是可用的，如未安装，请参考 [Helm 安装说明](https://helm.sh/docs/intro/install/) 安装完成。
-
-<details> <summary> 如果你的网络情况很难下载成功 Helm，请点击使用国内镜像来安装（仅适用于 linux-amd64） </summary>
-
-```shell script
-wget https://static.kubevela.net/binary/helm/helm-v3.7.0-linux-amd64 -O /usr/bin/helm
-chmod +x /usr/bin/helm
-```
-
-</details>
-
-1. 添加并更新 KubeVela Helm chart 仓库
-
-```shell script
-helm repo add kubevela https://charts.kubevela.net/core
-helm repo update
-```
-
-2. 安装 KubeVela Core
-
-```shell script
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.2 --wait
-```
-
-3. 验证 KubeVela Core 安装是否成功
-
-```shell script
-helm test kubevela -n vela-system
-```
-
-<details> <summary>点击查看期望输出 </summary>
-
-```shell
-Pod kubevela-application-test pending
-Pod kubevela-application-test pending
-Pod kubevela-application-test running
-Pod kubevela-application-test succeeded
-NAME: kubevela
-LAST DEPLOYED: Tue Apr 13 18:42:20 2021
-NAMESPACE: vela-system
-STATUS: deployed
-REVISION: 1
-TEST SUITE:     kubevela-application-test
-Last Started:   Fri Apr 16 20:49:10 2021
-Last Completed: Fri Apr 16 20:50:04 2021
-Phase:          Succeeded
-TEST SUITE:     first-vela-app
-Last Started:   Fri Apr 16 20:49:10 2021
-Last Completed: Fri Apr 16 20:49:10 2021
-Phase:          Succeeded
-NOTES:
-Welcome to use the KubeVela! Enjoy your shipping application journey!
-```
-
-</details>
-
-## 3. 安装 KubeVela CLI
+## 2. 安装 KubeVela CLI
 
 KubeVela CLI 提供了命令行工具来便捷的应用终端管理能力。
 
@@ -214,7 +156,7 @@ KubeVela CLI 提供了命令行工具来便捷的应用终端管理能力。
 ** MacOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.2
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.3
 ```
 
 **Windows**
@@ -259,6 +201,43 @@ sudo mv ./vela /usr/local/bin/vela
 
 </TabItem>
 </Tabs>
+
+## 3. 安装 KubeVela Core
+
+> vela CLI 版本需要 >=1.2.3
+
+```shell script
+vela install
+```
+
+<details> <summary>成功安装后预期输出如下：</summary>
+
+```shell
+...
+Watching for changes to Job kubevela-vela-core-cluster-gateway-tls-secret-patch with timeout of 18m0s
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: ADDED
+kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 0, jobs failed: 0, jobs succeeded: 0
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
+kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
+kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
+Starting delete for "kubevela-vela-core-admission" ServiceAccount
+Starting delete for "kubevela-vela-core-admission" ClusterRole
+Starting delete for "kubevela-vela-core-admission" ClusterRoleBinding
+Starting delete for "kubevela-vela-core-admission" Role
+Starting delete for "kubevela-vela-core-admission" RoleBinding
+Starting delete for "kubevela-vela-core-admission-patch" Job
+Starting delete for "kubevela-vela-core-cluster-gateway-admission" ServiceAccount
+Starting delete for "kubevela-vela-core-cluster-gateway-admission" Role
+Starting delete for "kubevela-vela-core-cluster-gateway-admission" RoleBinding
+Starting delete for "kubevela-vela-core-cluster-gateway-tls-secret-patch" Job
+
+KubeVela control plane has been successfully set up on your cluster.
+If you want to enable dashboard, please run "vela addon enable velaux"
+```
+
+</details>
 
 ## 4. 安装 VelaUX
 
@@ -307,13 +286,12 @@ vela addon enable velaux dbType=mongodb database=kubevela dbURL=mongodb://<Mongo
 
 ```
 vela addon disable velaux
-kubectl delete configmap --all -n kubevela
 ```
 
 2. 卸载 KubeVela Core
 
 ```
-helm uninstall -n vela-system kubevela
+vela uninstall
 ```
 
 3. 卸载 KubeVela 安装的 CRD
