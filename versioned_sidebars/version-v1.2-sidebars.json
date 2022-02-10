@@ -483,10 +483,6 @@
             },
             {
               "type": "doc",
-              "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-cloudwatch"
-            },
-            {
-              "type": "doc",
               "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-config"
             },
             {
@@ -656,10 +652,6 @@
             {
               "type": "doc",
               "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-route53-zones"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-route53"
             },
             {
               "type": "doc",
