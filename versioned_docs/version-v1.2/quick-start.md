@@ -11,7 +11,7 @@ Welcome to KubeVela! In this section, we show you how to deliver your first app 
 Follow these steps:
 
 1. Prepare a Docker image. we use [crccheck/hello-world](https://hub.docker.com/r/crccheck/hello-world) for this time. Double-check if you're able to download it properly.
-2. Create the first `Application` of `webervice` which is the common way to deploy stateless service.
+2. Create the first `Application` of `webservice` which is the common way to deploy stateless service.
 3. Check out the status of the Application's instance.
 
 You'll get to know:

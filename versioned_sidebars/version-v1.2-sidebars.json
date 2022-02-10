@@ -443,11 +443,39 @@
             },
             {
               "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-rds"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-security-group"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-subnet"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/aws-vpc"
+            },
+            {
+              "type": "doc",
               "id": "version-v1.2/end-user/components/cloud-services/terraform/azure-database-mariadb"
             },
             {
               "type": "doc",
               "id": "version-v1.2/end-user/components/cloud-services/terraform/azure-storage-account"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/azure-resource-group"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/azure-subnet"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/terraform/azure-virtual-network"
             },
             {
               "type": "doc",
