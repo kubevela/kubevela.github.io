@@ -9,7 +9,7 @@ description: 使用触发器对接 CI 自动部署
 
 KubeVela 触发器可以对接不同类型的 CI 系统，在 CI 系统中添加触发器以此实现应用的自动部署。比如从制品仓库的镜像更新触发，通过 Jenkins Pipeline 触发等。
 
-目前可以创建三种不同类型的触发器：Custom、ACR、Harbor，我们将分别介绍。
+目前可以创建五种不同类型的触发器：Custom、ACR、Harbor、DockerHub、JFrog，我们将分别介绍。
 
 ## Custom 触发器
 
