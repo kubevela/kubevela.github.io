@@ -9,7 +9,7 @@ After you have created an application, a default trigger is automatically create
 
 KubeVela triggers can integrate with any CI tool like Gitlab CI, Jenkins Pipeline or image registry like Harbor or ACR.
 
-We now support three types of triggers: Custom, ACR, and Harbor.
+We now support five types of triggers: Custom, ACR, Harbor, DockerHub and JFrog.
 
 ## Custom Trigger
 
