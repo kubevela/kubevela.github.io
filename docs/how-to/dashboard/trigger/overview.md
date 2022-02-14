@@ -53,7 +53,7 @@ webhook-request:
     - apk add --update curl && rm -rf /var/cache/apk/*
   script:
     - |
-      curl -X POST -H "Content-Type: application/json" -d '{"upgrade":{"'"$ APP_NAME"'":{"image":"'"$BUILD_IMAGE"'"}},"codeInfo":{"user":"'"$CI_COMMIT_AUTHOR"'","commit":"'"$CI_COMMIT_SHA"'","branch":"'"$CI_COMMIT_BRANCH"'"}}' $WEBHOOK_URL
+      curl -X POST -H "Content-Type: application/json" -d '{"upgrade":{"'"$APP_NAME"'":{"image":"'"$BUILD_IMAGE"'"}},"codeInfo":{"user":"'"$CI_COMMIT_AUTHOR"'","commit":"'"$CI_COMMIT_SHA"'","branch":"'"$CI_COMMIT_BRANCH"'"}}' $WEBHOOK_URL
 ```
 
 After CI have executed this step, we can see that application is deployed successfully in VelaUX. We can also see some relative code infos of this deployment.
