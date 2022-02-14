@@ -19,8 +19,6 @@ title: 自定义插件
 │   └── parameter.cue
 ├── definitions/
 ├── schemas/
-├── definitions/
-├── schemas/
 ├── README.md
 ├── metadata.yaml
 └── template.yaml
