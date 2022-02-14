@@ -17,8 +17,6 @@ Next, we will introduce how to make an addon of your own. First, you need to add
 │   └── parameter.cue
 ├── definitions/
 ├── schemas/
-├── definitions/
-├── schemas/
 ├── README.md
 ├── metadata.yaml
 └── template.yaml
