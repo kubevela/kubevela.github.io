@@ -57,7 +57,47 @@ invisible: false
 
 ### 应用模版 (template.yaml) 文件 (必须)
 
-接下来你还需要编写一个插件的应用模版文件 (template.yaml) ，因为通过上面的介绍，我们知道插件目录下面的所有文件最终会被渲染为一个 KubeVela 应用，那么你就可以通过该文件描述这个应用的基本信息，比如你可以为应用打上特定的标签或注解， 当然你也可以直接在该应用模版文件中添加组件和工作流步骤。
+接下来你还需要编写一个插件的应用模版文件 (template.yaml)，template 文件有一个固定的开头。
+
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  namespace: vela-system
+spec:
+# component definition of resource dir .
+```
+
+
+事实上，通过上面的介绍，我们知道插件目录下面的所有文件最终会渲染成为一个 KubeVela 的 Application 应用，所以这里的模板就是用于组成这个应用的框架。你可以通过该文件描述这个应用的特定信息，比如你可以为应用打上特定的标签或注解，当然你也可以直接在该应用模版文件中添加组件和工作流步骤。
+
+```yaml   
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: kruise
+  namespace: vela-system
+spec:
+  components:
+    - name: kruise
+      type: helm
+      properties:
+        repoType: git
+        url: https://github.com/openkruise/kruise
+        chart: ./charts/kruise/v1.0.0
+        git:
+          branch: master
+        values:
+          featureGates: PreDownloadImageForInPlaceUpdate=true
+  workflow:
+    steps:
+      - name: apply-resources
+        type: apply-application
+```
+
+如上例所示，这个 template.yaml 文件中就描述了一个完整的应用，通过 helm chart 部署 openkurise 插件.
+
 需要注意的是，即使你通过 `metadata.name` 字段设置了应用的名称，该设置也不会生效，在启用时应用会统一以 addon-{addonName} 的格式被命名。
 
 ### 自描述  (README.md) 文件 (必须)
@@ -67,7 +107,15 @@ invisible: false
 ### 组件资源 (resources) 目录 (非必须)
 
 除了直接在模版文件中添加组件，你也可以在插件目录下创建一个 `resources` 目录，并在里面添加 YAML/CUE 类型的文件，这些文件最终会被渲染成组件并添加到应用当中。
+
+#### YAML 格式的资源
+
 其中，YAML 类型的文件中应该包含的是一个 K8S 资源对象，在渲染时该对象会被做为 K8s-object 类型的组件直接添加到应用当中。 
+
+
+如 [OCM](https://github.com/oam-dev/catalog/tree/master/addons/ocm-cluster-manager/resources) 中插件的例子所示，所有 yaml 都会通过 KubeVela Application 中的 Component 形式，被部署到系统中。
+
+#### CUE 格式的资源
 
 如果你需要为应用添加一个需要在启用时根据参数动态渲染的组件，你就可以编写一个 CUE 格式的文件，如下所示。
 
@@ -112,12 +160,18 @@ schemas 目录用于存放`X-Definitions` 所对应的 UI-schema 文件，用于
 
 除了将插件资源文件上传到自己的插件仓库中，你也可以通过提交 pull request 向 KubeVela [官方插件仓库](https://github.com/oam-dev/catalog/tree/master/addons) 和 [试验阶段插件仓库](https://github.com/oam-dev/catalog/tree/master/experimental/addons) 添加新的插件，pr 合并之后你的插件就可以被其他 KubeVela 用户发现并使用了。
 
+## 本地安装（离线安装）
+
+你可以通过本地安装的方式调试你的 addon，命令如下：
+
+```
+vela addon enable ./your-addon-dir/
+```
+
 ## 已知局限 (Known Limits)
 
 - 现在如果选择在集群中启用插件，KubeVela 会默认在所有子集群中安装，并且启用插件时所填的参数，会在所有集群中生效，之后计划完善多集群插件管理体系，包括支持集群差异化配置等特性。
 
 - 尚缺少插件的版本管理，升降级等机制，之后计划完善这些特性。
-
-- 尚缺少方便的本地插件调试手段，后续计划在 CLI 侧提供完善的插件本地调试的功能。
 
 - 尚不支持仅在子集群中安装插件。 如果不在控制平面安装插件，仅安装在子集群中，会遇到诸多已知问题。
