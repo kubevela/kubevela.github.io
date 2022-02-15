@@ -262,16 +262,38 @@
           ]
         },
         {
-          "type": "doc",
-          "id": "version-v1.2/platform-engineers/addon/intro"
+          "collapsed": true,
+          "type": "category",
+          "label": "Custom Addons",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/addon/intro"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/addon/terraform"
+            }
+          ]
         },
         {
           "type": "doc",
           "id": "version-v1.2/platform-engineers/components/custom-component"
         },
         {
-          "type": "doc",
-          "id": "version-v1.2/platform-engineers/components/component-terraform"
+          "collapsed": true,
+          "type": "category",
+          "label": "Cloud Resources",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/addon/terraform"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/components/component-terraform"
+            }
+          ]
         },
         {
           "collapsed": true,
