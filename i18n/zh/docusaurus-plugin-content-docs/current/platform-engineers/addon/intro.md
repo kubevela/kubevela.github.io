@@ -121,7 +121,7 @@ spec:
 
 ```cue
 output: {
-	type: "k8s-obeject"
+	type: "raw"
 	properties: {
 		apiVersion: "v1"
 		kind:       "ConfigMap"
@@ -144,7 +144,7 @@ parameter: {
 
 你如果了解 [模版定义](../oam/x-definition) 中 CUE 模版的写法的话，应该会对这种写法感到非常熟悉，它们之间的区别是模版定义的 `output` 是一个具体的 K8S 对象，而这里的 `output` 定义的其实是一个应用中的具体组件。
 
-可以看到上面例子中的 `output` 中描述了一个 `k8s-object` 类型的组件，其中 `properties.data.input` 需要在启用时根据输入参数指定。插件在启用时的参数都需要以 CUE 的语法编写在 `parameter.cue` 文件当中。 UX/CLI 在启用插件时会把全部的 CUE 文件和 `parameter.cue` 放在一个上下文中进行渲染，最终得到一系列的组件并添加到应用当中。
+可以看到上面例子中的 `output` 中描述了一个 `raw` 类型的组件，其中 `properties.data.input` 需要在启用时根据输入参数指定。插件在启用时的参数都需要以 CUE 的语法编写在 `parameter.cue` 文件当中。 UX/CLI 在启用插件时会把全部的 CUE 文件和 `parameter.cue` 放在一个上下文中进行渲染，最终得到一系列的组件并添加到应用当中。
 
 你也可以通过 [CUE 基础入门文档](../cue/basic) 了解 CUE 的具体语法。 
 
