@@ -126,9 +126,19 @@ module.exports = {
             "platform-engineers/cue/advanced",
           ],
         },
-        "platform-engineers/addon/intro",
+        {
+          "Custom Addons": [
+            "platform-engineers/addon/intro",
+            "platform-engineers/addon/terraform",
+          ],
+        },
         "platform-engineers/components/custom-component",
-        "platform-engineers/components/component-terraform",
+        {
+          "Cloud Resources": [
+            "platform-engineers/addon/terraform",
+            "platform-engineers/components/component-terraform",
+          ],
+        },
         {
           type: "category",
           label: "Traits System",
