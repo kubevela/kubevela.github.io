@@ -23,19 +23,22 @@ $ git clone https://github.com/oam-dev/catalog.git
   
 - Prepare a metadata file
 
-Copy the sample metadata file `hack/addons/terraform/provider-sample.yaml` for your cloud provider, like to `hack/addons/terraform/provider-tencent.yaml`.
+Edit the metadata file `hack/addons/terraform/terraform-provider-scaffold/metadata.yaml` for your cloud provider.
 
 ```yaml
-# provider name
-name: tencent
+...
+
+# -------------------------------------Configuration Metadata for a Terraform Addon-------------------------------------
+# provider short name
+shortCloudName: tencent
 
 # The Cloud name of the provider
-cloudName: Tencent Cloud
+completeCloudName: Tencent Cloud
 
 # When enabling a Terraform provider, these properties need to set for authentication. For Tencent Cloud,
 # name: Environment variable name when authenticating Terraform, like https://github.com/oam-dev/terraform-controller/blob/master/controllers/provider/credentials.go#L59
 # secretKey: Secret key when storing authentication information in a Kubernetes, like https://github.com/oam-dev/terraform-controller/blob/master/controllers/provider/credentials.go#L109.
-properties:
+cloudProperties:
   - name: TENCENTCLOUD_SECRET_ID
     secretKey: secretID
     description: Get TENCENTCLOUD_SECRET_ID per this guide https://cloud.tencent.com/document/product/1213/67093
@@ -46,7 +49,6 @@ properties:
   - name: TENCENTCLOUD_REGION
     description: Get TENCENTCLOUD_REGION by picking one RegionId from Tencent Cloud region list https://cloud.tencent.com/document/api/1140/40509#.E5.9C.B0.E5.9F.9F.E5.88.97.E8.A1.A8
     isRegion: true
-
 ```
 
 ## Generate a Terraform Addon
@@ -54,7 +56,15 @@ properties:
 Generate a Terraform Addon for your cloud provider. The generated addon code will be stored in `addons/terraform-tencent`.
 
 ```shell
-$ go run hack/addons/terraform/gen.go hack/addons/terraform/provider-tencent.yaml
+$ make terraform-addon-gen
+go run hack/addons/terraform/gen.go hack/addons/terraform/provider-sample.yaml
+Generating addon for provider tencent in addons/terraform-tencent
+Rendering hack/addons/terraform/terraform-provider-skaffold/metadata.yaml
+Rendering hack/addons/terraform/terraform-provider-skaffold/readme.md
+Rendering hack/addons/terraform/terraform-provider-skaffold/resources/account-creds.cue
+Rendering hack/addons/terraform/terraform-provider-skaffold/resources/parameter.cue
+Rendering hack/addons/terraform/terraform-provider-skaffold/resources/provider.cue
+Rendering hack/addons/terraform/terraform-provider-skaffold/template.yaml
 
 $ ls addons/terraform-tencent
 definitions   metadata.yaml readme.md     resources     template.yaml

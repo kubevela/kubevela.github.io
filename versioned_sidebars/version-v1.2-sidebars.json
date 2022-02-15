@@ -264,7 +264,7 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "Addon",
+          "label": "Custom Addons",
           "items": [
             {
               "type": "doc",
@@ -283,15 +283,15 @@
         {
           "collapsed": true,
           "type": "category",
-          "label":  "Cloud Resources",
+          "label": "Cloud Resources",
           "items": [
             {
               "type": "doc",
-              "id": "version-v1.2/platform-engineers/components/component-terraform"
+              "id": "version-v1.2/platform-engineers/addon/terraform"
             },
             {
               "type": "doc",
-              "id": "version-v1.2/platform-engineers/addon/terraform"
+              "id": "version-v1.2/platform-engineers/components/component-terraform"
             }
           ]
         },

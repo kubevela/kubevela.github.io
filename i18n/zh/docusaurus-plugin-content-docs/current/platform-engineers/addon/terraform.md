@@ -20,7 +20,7 @@ If it has been supported by Terraform Controller, you can continue to extend the
 ```bash
 $ git clone https://github.com/oam-dev/catalog.git
 ```
-  
+
 - Prepare a metadata file
 
 Copy the sample metadata file `hack/addons/terraform/provider-sample.yaml` for your cloud provider, like to `hack/addons/terraform/provider-tencent.yaml`.
