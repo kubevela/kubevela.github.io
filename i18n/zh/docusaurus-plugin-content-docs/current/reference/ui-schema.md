@@ -51,7 +51,7 @@ UI Schema 包含的字段如下：
     required: bool 是否必填
     max: int 最大值
     min: int 最小值
-    regular: string 正则校验规则
+    pattern: string 正则校验规则
     options: 可选项，适用于选择性表单
     - label: string 可选项显示名称
       value: string 可选项值
