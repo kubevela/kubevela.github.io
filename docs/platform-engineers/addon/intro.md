@@ -55,7 +55,47 @@ Other than the basic information such as name, version, tag, etc, it includes th
 
 ### template.yaml(Required)
 
-Next, you need to write an addon application template file (template.yaml). Through the above introduction, we know that all files under the Addon Registry will eventually be rendered as a KubeVela application, then you can describe the basic information of the application through this file. For example, you can add specific tags or annotations to the application. Of course, you can also add components and workflowsteps directly in the application template file.
+Next, you need to write an addon application template file (template.yaml).
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: velaux
+  namespace: vela-system
+spec:
+# component definition of resource dir .
+```
+
+The template file is actually a template of KubeVela Application, resources can be automatically rendered to fill the spec.
+
+All files under the Addon Registry will eventually be rendered as a KubeVela application, the template can be convenient if you want to describe some basic information of the application previously. For example, you can add specific tags or annotations to the application. Of course, you can also add components and workflowsteps directly in the application template file.
+
+```yaml   
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: kruise
+  namespace: vela-system
+spec:
+  components:
+    - name: kruise
+      type: helm
+      properties:
+        repoType: git
+        url: https://github.com/openkruise/kruise
+        chart: ./charts/kruise/v1.0.0
+        git:
+          branch: master
+        values:
+          featureGates: PreDownloadImageForInPlaceUpdate=true
+  workflow:
+    steps:
+      - name: apply-resources
+        type: apply-application
+```
+
+The example above will directly install openkurise addon from the helm chart.
 
 Note that even if you set the application name through the `metadata.name` field, this setting will not take effect. When enabled, the application will be uniformly named in the format of addon-{addonName}.
 
@@ -65,14 +105,17 @@ The addon's self-describing file is used to describe the main functionality of t
 
 ### Resources directory(Optional)
 
-In addition to adding components directly in the template file, you can also create a `resources` directory in the Addom Registry, and add YAML/CUE type files in it. These files are eventually rendered into components and added to the application.
+In addition to adding components directly in the template file, you can also create a `resources` directory in the Addon Registry, add YAML/CUE type files in it. These files are eventually rendered into components and added to the application.
+
 Among them, the YAML type file should contain a K8S resource object, which will be directly added to the application as a K8s-object type component during rendering.
+
+#### CUE format resource
 
 If you need to add a component to your application that needs to be rendered dynamically based on parameters when enabled, you can write a CUE format file as shown below:
 
 ```cue
 output: {
-	type: "k8s-obeject"
+	type: "raw"
 	properties: {
 		apiVersion: "v1"
 		kind:       "ConfigMap"
@@ -95,20 +138,38 @@ parameter: {
 
 If you know how to write the CUE template in [x-definition](../oam/x-definition), you should be very familiar with this. The difference between them is that the `output` defined by the template is a specific K8S object, and the `output` here is a specific component in an application.
 
-You can see that `output` in the above example describes a component of type `k8s-object`, where `properties.data.input` needs to be specified according to the input parameters when enabled. You can see that `output` in the above example describes a component of type `k8s-object`, where `properties.data.input` needs to be specified according to the input parameters when enabled.
+You can see that `output` in the above example describes a component of type `raw`, where `properties.data.input` needs to be specified according to the input parameters when enabled. You can see that `output` in the above example describes a component of type `raw`, where `properties.data.input` needs to be specified according to the input parameters when enabled.
 
 When the addon is enabled, the parameters need to be written in the `parameter.cue` file in CUE syntax. UX/CLI renders all CUE files and `parameter.cue` in one context when the addon is enabled, resulting in a set of components that are added to the application.
+
+#### YAML format resource
+
+The YAML format resources is just a Kubernetes YAML object, you can define any object one by one in a file.
+
+For example, the [OCM](https://github.com/oam-dev/catalog/tree/master/addons/ocm-cluster-manager/resources) addon defines all it's resources in the addon. All these YAML objects will be rendered as components in an Application.
+
 
 ### X-Definitions directory(Optional)
 
 You can create a definition's file directory under the Addon Registry to store template definition files such as component definitions, trait definitions, and workflowstep definitions. It should be noted that since the KubeVela controller is usually not installed in the managed cluster, even if the addon is enabled by setting the `deployTo.runtimeCluster` field in the metadata file (metadata.yaml) to install the addon in the subcluster, the template definition file will not be distributed to sub-clusters.
 
+For example, the [`fluxcd`](https://github.com/oam-dev/catalog/tree/master/addons/fluxcd/definitions) addon defines multiple ComponentDefinition and TraitDefinition.
+
 ### UI-Schema directory(Optional)
+
 The schemas directory is used to store the UI-schema files corresponding to `X-Definitions`, which is used to enhance the display effect when displaying the parameters required by `X-Definitions` in UX.
 
 The above is a complete introduction to how to make an addon, you can find the complete description of the above-mentioned addon in this [catalog](https://github.com/oam-dev/catalog/tree/master/experimental/addons/example) example.
 
 In addition to uploading the addon resource files to your addon repository, you can also submit a pull request to KubeVela [official addon repository](https://github.com/oam-dev/catalog/tree/master/addons) and [experimental addon repository](https://github.com/oam-dev/catalog/tree/master/experimental/addons) to addon new addons. After pr merged your addons can be discovered and used by other KubeVela users.
+
+## Install Addon Locally
+
+You can install addon from local to debug your own addon:
+
+```
+vela addon enable ./your-addon-dir/
+```
 
 ## Known Limits
 
