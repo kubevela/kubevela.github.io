@@ -232,6 +232,15 @@ sudo mv ./vela /usr/local/bin/vela
 
 ## 2. Install KubeVela Core
 
+<Tabs
+    className="unique-tabs"
+    defaultValue="vela"
+    values={[
+        {label: 'Default', value: 'vela'},
+        {label: 'Helm', value: 'helm'},
+    ]}>
+<TabItem value="vela">
+
 > The version of vela CLI >= 1.2.3.
 
 ```shell script
@@ -266,6 +275,23 @@ If you want to enable dashboard, please run "vela addon enable velaux"
 ```
 
 </details>
+
+</TabItem>
+
+<TabItem value="helm">
+
+If you are helm user, you can also use helm to install kubevela core:
+
+> helm v3.2.0+ required
+
+```
+helm repo add kubevela https://charts.kubevela.net/core
+helm repo update
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.2.3 --wait
+```
+
+</TabItem>
+</Tabs>
 
 ## 4. Install VelaUX
 

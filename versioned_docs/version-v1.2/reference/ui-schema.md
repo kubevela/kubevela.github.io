@@ -51,7 +51,7 @@ The spec are as follows:
     required: bool
     max: int
     min: int
-    regular: string
+    pattern: string
     options:              Optional, for select forms
     - label: string
       value: string
