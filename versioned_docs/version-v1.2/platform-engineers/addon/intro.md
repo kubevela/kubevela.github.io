@@ -115,7 +115,7 @@ If you need to add a component to your application that needs to be rendered dyn
 
 ```cue
 output: {
-	type: "k8s-object"
+	type: "raw"
 	properties: {
 		apiVersion: "v1"
 		kind:       "ConfigMap"
@@ -138,7 +138,7 @@ parameter: {
 
 If you know how to write the CUE template in [x-definition](../oam/x-definition), you should be very familiar with this. The difference between them is that the `output` defined by the template is a specific K8S object, and the `output` here is a specific component in an application.
 
-You can see that `output` in the above example describes a component of type `k8s-object`, where `properties.data.input` needs to be specified according to the input parameters when enabled. You can see that `output` in the above example describes a component of type `k8s-object`, where `properties.data.input` needs to be specified according to the input parameters when enabled.
+You can see that `output` in the above example describes a component of type `raw`, where `properties.data.input` needs to be specified according to the input parameters when enabled. You can see that `output` in the above example describes a component of type `raw`, where `properties.data.input` needs to be specified according to the input parameters when enabled.
 
 When the addon is enabled, the parameters need to be written in the `parameter.cue` file in CUE syntax. UX/CLI renders all CUE files and `parameter.cue` in one context when the addon is enabled, resulting in a set of components that are added to the application.
 
