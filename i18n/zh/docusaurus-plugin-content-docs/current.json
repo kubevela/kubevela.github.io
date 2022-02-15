@@ -199,10 +199,6 @@
     "message": "云资源",
     "description": "云资源"
   },
-  "sidebar.docs.category.Supported Cloud Resource": {
-    "message": "支持的云资源",
-    "description": "支持的云资源列表"
-  },
   "sidebar.docs.category.Built-in Component Type": {
     "message": "内置组件",
     "description": "内置组件列表"
