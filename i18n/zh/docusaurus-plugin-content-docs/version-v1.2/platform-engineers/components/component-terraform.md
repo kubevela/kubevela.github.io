@@ -133,7 +133,7 @@ status: {}
 ```
 
 我们热烈欢迎你将扩展的云资源的 ComponentDefinition 贡献到 [oam-dev/catalog](https://github.com/oam-dev/catalog/tree/master/addons/)。
-  `
+  
 ## 应用 ComponentDefinition  
 
 将生成的ComponentDefinition写入到文件中并将文件命名为`terraform-<ComponentDefinition_NAME>.yaml`，然后将其应用到正在运行中的kubernetes集群上。  
