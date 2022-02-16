@@ -23,7 +23,9 @@ description: 本文介绍通过 KubeVela 交付云厂商提供的服务，并能
 - provider-alibaba
 - provider-aws
 - provider-azure
-- provider-tencent
+- provider-tencent  
+- provider-gcp  
+- provider-baidu  
 
 我们可以分别在阿里巴巴云、AWS、Azure 和腾讯云配置云资源。
 

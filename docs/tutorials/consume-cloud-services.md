@@ -25,7 +25,9 @@ First, visit [VelaUX (KubeVela Dashboard)](../install#3-install-velaux), switch 
 - provider-alibaba
 - provider-aws
 - provider-azure
-- provider-tencent
+- provider-tencent  
+- provider-gcp  
+- provider-baidu  
 
 We can provision cloud resources in Alibaba Cloud, AWS, Azure and Tencent Cloud respectively.
 
