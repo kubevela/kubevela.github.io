@@ -141,6 +141,7 @@ kubectl apply -f <FILENAME>
 
 ## Verify
 
+
 You can quickly verify the ComponentDefinition by command `vela show`.
 
 ```shell
