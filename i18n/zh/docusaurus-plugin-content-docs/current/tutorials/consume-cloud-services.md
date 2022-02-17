@@ -20,9 +20,9 @@ description: 本文介绍通过 KubeVela 交付云厂商提供的服务，并能
 首先，访问[VelaUX (KubeVela Dashboard)](../install#3-安装-VelaUX)，切换到 "Addon" 标签，并点击 addon
 `terraform-xxx`。`xxx`代表云提供商的名称。我们支持以下的插件：
 
-- provider-alibaba
-- provider-aws
-- provider-azure
+- terraform-alibaba
+- terraform-aws
+- terraform-azure
 - terraform-tencent  
 - terraform-gcp  
 - terraform-baidu  

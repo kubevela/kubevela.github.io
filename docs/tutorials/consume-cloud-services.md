@@ -22,9 +22,9 @@ In this section, we introduce an example to show you how to deploy cloud service
 First, visit [VelaUX (KubeVela Dashboard)](../install#3-install-velaux), switch to the tab `Addon`, and click up addon
 `terraform-xxx`. `xxx` stands for the cloud provider name. We support the following Addons:
 
-- provider-alibaba
-- provider-aws
-- provider-azure
+- terraform-alibaba
+- terraform-aws
+- terraform-azure
 - terraform-tencent  
 - terraform-gcp  
 - terraform-baidu  
