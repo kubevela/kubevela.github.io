@@ -130,8 +130,17 @@ status: {}
 ```
 
 You are warmly welcome to contribute this extended cloud resource ComponentDefinition to [oam-dev/catalog](https://github.com/oam-dev/catalog/tree/master/addons/).
+  
+## Apply ComponentDefinition
+
+Write the generated ComponentDefinition into a file named `terraform-<ComponentDefinition_NAME>.yaml` and apply it to the running Kubernetes cluster.
+
+```shell
+kubectl apply -f <FILENAME>
+```  
 
 ## Verify
+
 
 You can quickly verify the ComponentDefinition by command `vela show`.
 
