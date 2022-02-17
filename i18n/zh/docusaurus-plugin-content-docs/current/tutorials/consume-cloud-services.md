@@ -23,11 +23,11 @@ description: 本文介绍通过 KubeVela 交付云厂商提供的服务，并能
 - provider-alibaba
 - provider-aws
 - provider-azure
-- provider-tencent  
-- provider-gcp  
-- provider-baidu  
+- terraform-tencent  
+- terraform-gcp  
+- terraform-baidu  
 
-我们可以分别在阿里巴巴云、AWS、Azure 和腾讯云配置云资源。
+我们可以分别在阿里巴巴云、AWS、Azure、腾讯云、Google Cloud Platform和百度云配置云资源。
 
 按照每个云提供商的插件的所有属性上的说明来设置插件并启用它。
 

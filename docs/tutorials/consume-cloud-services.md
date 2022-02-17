@@ -25,11 +25,11 @@ First, visit [VelaUX (KubeVela Dashboard)](../install#3-install-velaux), switch 
 - provider-alibaba
 - provider-aws
 - provider-azure
-- provider-tencent  
-- provider-gcp  
-- provider-baidu  
+- terraform-tencent  
+- terraform-gcp  
+- terraform-baidu  
 
-We can provision cloud resources in Alibaba Cloud, AWS, Azure and Tencent Cloud respectively.
+We can provision cloud resources in Alibaba Cloud, AWS, Azure, Tencent Cloud, Google Cloud Platform and Baidu Cloud respectively.
 
 Follow the instructions on all the properties of the addon for each cloud provider to set the addon and enable it.
 
