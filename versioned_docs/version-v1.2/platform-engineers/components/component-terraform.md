@@ -138,8 +138,9 @@ Write the generated ComponentDefinition into a file named `terraform-<ComponentD
 ```shell
 kubectl apply -f <FILENAME>
 ```  
-  
+
 ## Verify
+
 
 You can quickly verify the ComponentDefinition by command `vela show`.
 
