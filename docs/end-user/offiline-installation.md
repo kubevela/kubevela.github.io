@@ -1,13 +1,10 @@
 # KubeVela Offline Installation Guide
 
-KubeVela 离线部署包含：
+KubeVela 离线部署包含 KubeVela Core 和 KubeVela Addon 的离线部署。
 
-- KubeVela Core 离线部署
-- KubeVela Addon 离线部署
+## KubeVela Core 离线部署
 
-# KubeVela Core 离线部署
-
-## KubeVela chart
+### KubeVela chart
 
 - 下载 vela-core Helm Chart 包
 
@@ -47,9 +44,15 @@ charts/vela-core/templates/addon/fluxcd.yaml:                      image: fluxcd
 charts/vela-core/templates/addon/fluxcd.yaml:                      image: fluxcd/image-reflector-controller:v0.11.0
 charts/vela-core/templates/addon/fluxcd.yaml:                      image: fluxcd/kustomize-controller:v0.13.1
 charts/vela-core/templates/addon/fluxcd.yaml:                      image: fluxcd/source-controller:v0.15.3
+
+
+$  kubevela git:(master) grep -r -i image: charts/vela-core  --exclude-dir=charts/vela-core/templates/addon | grep -v .Values
+charts/vela-core/templates/defwithtemplate/nocalhost.yaml:        						image: "nocalhost-docker.pkg.coding.net/nocalhost/dev-images/golang:latest"
 ```
 
+- 重新打包 vela-core Helm Chart 包
+
+重新打包上面修改好的 Helm Chart 包，直接安装或者传入离线环境的 Helm Chart 仓库。
 
 
-## 镜像列表
-
+## KubeVela Addon 离线部署
