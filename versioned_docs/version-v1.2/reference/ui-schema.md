@@ -41,22 +41,30 @@ Its workflow is in the figure above. The API Schema is generated through the def
 
 The spec are as follows:
 
-```
-- jsonKey: string         field name
-  label: string           show name in UI
-  description: string     help info
-  uiType: string          the react component type in UI
-  sort: int               sort number
-  validate:               data validate rule.
+```yaml
+- jsonKey: string         The field name
+  label: string           The show name in UI
+  description: string     The help info in UI
+  uiType: string          The react component type in UI
+  sort: int               The sort number
+  disabled: bool          Disable this field.
+  style:  
+    colSpan: int          Defines the number of grids for the form, with 24 representing 100% width.
+  validate:               The value validate rule, It must be defined as a whole. 
+    defaultValue: any     The default values.
     required: bool
-    max: int
-    min: int
+    max: int              The max value for number.
+    min: int              The min value for number.
+    maxLength: int        The max length for string.
+    minLength: int        The min length for string.
     pattern: string
     options:              Optional, for select forms
     - label: string
       value: string
+    immutable: bool       Set the immutable is true, indicates that the parameter cannot be changed.
   subParameters:
-    ...
+    - jsonKey: string
+      ...
 ```
 
 ### Supported react component types
@@ -85,6 +93,7 @@ The spec are as follows:
 - [ ] PVCSelect
 - [x] CPUNumber
 - [x] MemoryNumber
+- [x] DiskNumber
 - [x] K8sObjectsCode
 
 #### Combination form
@@ -93,8 +102,11 @@ The spec are as follows:
 - [x] Strings
 - [x] Structs
 - [x] Group: render as a titled container
-- [x] InnerGroup
 - [ ] TabGroup
+
+### Example
+
+Ref：[https://github.com/oam-dev/catalog/tree/master/addons/velaux/schemas](https://github.com/oam-dev/catalog/tree/master/addons/velaux/schemas)
 
 ### How to expand
 

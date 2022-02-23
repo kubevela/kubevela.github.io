@@ -41,22 +41,30 @@ template: {
 
 UI Schema 包含的字段如下：
 
-```
-- jsonKey: string 字段名称
-  label: string UI 显示名称
-  description: string 描述信息
-  uiType: string UI 组件类型
-  sort: int 排序
-  validate:  数据校验规则
-    required: bool 是否必填
-    max: int 最大值
-    min: int 最小值
-    pattern: string 正则校验规则
-    options: 可选项，适用于选择性表单
-    - label: string 可选项显示名称
-      value: string 可选项值
-  subParameters: 下级参数
-    ...
+```yaml
+- jsonKey: string             字段名称
+  label: string UI            显示名称
+  description: string         描述信息
+  uiType: string              UI 组件类型
+  sort: int                   排序
+  disabled: bool              是否禁用该字段
+  style:                      样式定义
+    colSpan: int              表单栅格大小，24 代表 100% 宽度
+  validate:                   数据校验规则，自定义后整体替换默认配置
+    defaultValue: any         默认值
+    required: bool            是否是必填参数
+    max: int                  数字最大值
+    min: int                  数字最小值
+    maxLength: int            最大字符长度
+    minLength: int            最小字符长度
+    pattern: string           正则校验规则
+    options:                  可选项，适用于选择性表单
+    - label: string           可选项显示名称
+      value: string           可选项值
+    immutable: bool           是否为不可变字段，设为 true 则代表该字段不能在编辑中更改。
+  subParameters:              下级参数，结构一致
+    - jsonKey: string
+      ...
 ```
 
 ### 已支持的类型
@@ -85,6 +93,7 @@ UI Schema 包含的字段如下：
 - [ ] PVCSelect: 目标集群的存储卷选择 （参数：clusterName, namespace）
 - [x] CPUNumber: cpu 数值输入框 支持小数点后 2 位，默认单位为 Core
 - [x] MemoryNumber: 内存数值输入框 2^n 数值输入方式，默认单位为 MB
+- [x] DiskNumber: 默认单位为 GB
 - [x] K8sObjectsCode: kubernetes yaml 编辑框，支持上传 yaml，输出多个 k8s 资源对象。
 
 #### 组合表单
@@ -96,8 +105,12 @@ UI Schema 包含的字段如下：
   > AddByKV:env.name|env.value
   > AddBySecret:env.name|env.valueFrom
 - [x] Group: 组合（渲染为一个带标题的容器)
-- [x] InnerGroup: 行内组合容器
 - [ ] TabGroup: 条件判断 Tab，只有一组生效。
+
+
+### 配置案例
+
+参考：[https://github.com/oam-dev/catalog/tree/master/addons/velaux/schemas](https://github.com/oam-dev/catalog/tree/master/addons/velaux/schemas)
 
 ### 如何扩展
 
