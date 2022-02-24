@@ -20,7 +20,12 @@ spec:
       properties:
         image: oamdev/testapp:v1
         cmd: ["node", "server.js"]
-        port: 8080
+        ports:
+          - port: 80
+            name: http
+            protocol: "TCP"
+            expose: true
+        exposeType: "ClusterIP"
         cpu: "0.1"
         env:
           - name: FOO
@@ -70,7 +75,7 @@ You can also view application list by using the following command:
 
 ```shell
 $ vela ls
-APP    	COMPONENT	TYPE      	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME                 
+APP    	COMPONENT	TYPE      	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
 website	frontend 	webservice	      	running	healthy	      	2021-08-28 18:26:47 +0800 CST
 ```
 
@@ -78,40 +83,140 @@ We also see that the PHASE of the app is running and the STATUS is healthy.
 
 ## Attributes
 
-| NAME             | DESCRIPTION                                                                               | TYPE                              | REQUIRED | DEFAULT |
-| ---------------- | ----------------------------------------------------------------------------------------- | --------------------------------- | -------- | ------- |
-| cmd              | Commands to run in the container                                                          | []string                          | false    |         |
-| env              | Define arguments by using environment variables                                           | [[]env](#env)                     | false    |         |
-| image            | Which image would you like to use for your service                                        | string                            | true     |         |
-| port             | Which port do you want customer traffic sent to                                           | int                               | true     | 80      |
-| imagePullPolicy  | Specify image pull policy for your service                                                | string                            | false    |         |
-| cpu              | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core)          | string                            | false    |         |
-| memory           | Specifies the attributes of the memory resource required for the container.               | string                            | false    |         |
-| volumes          | Declare volumes and volumeMounts                                                          | [[]volumes](#volumes)             | false    |         |
-| livenessProbe    | Instructions for assessing whether the container is alive.                                | [livenessProbe](#livenessProbe)   | false    |         |
-| readinessProbe   | Instructions for assessing whether the container is in a suitable state to serve traffic. | [readinessProbe](#readinessProbe) | false    |         |
-| imagePullSecrets | Specify image pull secrets for your service                                               | []string                          | false    |         |
+| NAME             | DESCRIPTION                                                                               | TYPE                              | REQUIRED | DEFAULT   |
+| ---------------- | ----------------------------------------------------------------------------------------- | --------------------------------- | -------- | --------- |
+| labels           | Specify the labels in the workload                                                        | []string                          | false    |           |
+| annotations      | Specify the annotations in the workload                                                   | []string                          | false    |           |
+| image            | Which image would you like to use for your service                                        | string                            | true     |           |
+| imagePullPolicy  | Specify image pull policy for your service                                                | string                            | false    |           |
+|                  | options: "Always", "Never", "IfNotPresent"                                                |                                   |          |           |
+| imagePullSecrets | Specify image pull secrets for your service                                               | []string                          | false    |           |
+| ~~port~~         | Deprecated field, please use ports instead                                                | int                               | false    |           |
+| ports            | Which ports do you want customer traffic sent to                                          | [[]ports](#ports)                 | false    |           |
+| exposeType       | Specify what kind of Service you want.                                                    | string                            | false    | ClusterIP |
+|                  | options: "ClusterIP", "NodePort", "LoadBalancer", "ExternalName"                          |                                   |          |           |
+| addRevisionLabel | If addRevisionLabel is true, the appRevision label will be added to the underlying pods.  | bool                              | false    | false     |
+| cmd              | Commands to run in the container                                                          | []string                          | false    |           |
+| env              | Define arguments by using environment variables                                           | [[]env](#env)                     | false    |           |
+| cpu              | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core)          | string                            | false    |           |
+| memory           | Specifies the attributes of the memory resource required for the container.               | string                            | false    |           |
+| volumeMounts     | Declare volumeMounts                                                                      | [[]volumeMounts](#volumemounts)   | false    |           |
+| ~~volumes~~      | Deprecated field, use volumeMounts instead.                                               | [[]volumes](#volumes)             | false    |           |
+| livenessProbe    | Instructions for assessing whether the container is alive.                                | [HealthProbe](#healthprobe)   | false    |           |
+| readinessProbe   | Instructions for assessing whether the container is in a suitable state to serve traffic. | [HealthProbe](#healthprobe) | false    |           |
+
+### ports
+
+**[New Field]** After 1.2.0 add this field
+
+| NAME     | DESCRIPTION                                      | TYPE   | REQUIRED | DEFAULT |
+| -------- | ------------------------------------------------ | ------ | -------- | ------- |
+| port     | Number of port to expose on the pod's IP address | int    | true     |         |
+| name     | Name of the port                                 | string | false    |         |
+| protocol | Protocol for port. Must be UDP, TCP, or SCTP     | string | false    | TCP     |
+| expose   | Specify if the port should be exposed            | bool   | false    | false   |
+
+### env
+| NAME      | DESCRIPTION                                               | TYPE                    | REQUIRED | DEFAULT |
+| --------- | --------------------------------------------------------- | ----------------------- | -------- | ------- |
+| name      | Environment variable name                                 | string                  | true     |         |
+| value     | The value of the environment variable                     | string                  | false    |         |
+| valueFrom | Specifies a source the value of this var should come from | [valueFrom](#valuefrom) | false    |         |
 
 
-### readinessProbe
+### volumeMounts
 
-| NAME                | DESCRIPTION                                                                                          | TYPE                    | REQUIRED | DEFAULT |
-| ------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------- | -------- | ------- |
-| exec                | Instructions for assessing container health by executing a command. Either this attribute or the     | [exec](#exec)           | false    |         |
-|                     | httpGet attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive |                         |          |         |
-|                     | with both the httpGet attribute and the tcpSocket attribute.                                         |                         |          |         |
-| httpGet             | Instructions for assessing container health by executing an HTTP GET request. Either this attribute  | [httpGet](#httpGet)     | false    |         |
-|                     | or the exec attribute or the tcpSocket attribute MUST be specified. This attribute is mutually       |                         |          |         |
-|                     | exclusive with both the exec attribute and the tcpSocket attribute.                                  |                         |          |         |
-| tcpSocket           | Instructions for assessing container health by probing a TCP socket. Either this attribute or the    | [tcpSocket](#tcpSocket) | false    |         |
-|                     | exec attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with |                         |          |         |
-|                     | both the exec attribute and the httpGet attribute.                                                   |                         |          |         |
-| initialDelaySeconds | Number of seconds after the container is started before the first probe is initiated.                | int                     | true     | 0       |
-| periodSeconds       | How often, in seconds, to execute the probe.                                                         | int                     | true     | 10      |
-| timeoutSeconds      | Number of seconds after which the probe times out.                                                   | int                     | true     | 1       |
-| successThreshold    | Minimum consecutive successes for the probe to be considered successful after having failed.         | int                     | true     | 1       |
-| failureThreshold    | Number of consecutive failures required to determine the container is not alive (liveness probe) or  | int                     | true     | 3       |
-|                     | not ready (readiness probe).                                                                         |                         |          |         |
+**[New Field]** After v1.2.0 add this field
+
+| NAME      | DESCRIPTION                 | TYPE                    | REQUIRED | DEFAULT |
+| --------- | --------------------------- | ----------------------- | -------- | ------- |
+| pvc       | Mount PVC type volume       | [pvc](#pvc)             | false    |         |
+| configMap | Mount ConfigMap type volume | [configMap](#configMap) | false    |         |
+| secret    | Mount Secret type volume    | [secret](#secret)       | false    |         |
+| emptyDir  | Mount EmptyDir type volume  | [emptyDir](#emptyDir)   | false    |         |
+| hostPath  | Mount HostPath type volume  | [hostPath](#hostPath)   | false    |         |
+
+### volumes
+
+**[Deprecated Field]** After v1.2.0 use [volumeMounts](#volumemounts) instead
+
+| NAME      | DESCRIPTION                                                         | TYPE   | REQUIRED | DEFAULT |
+| --------- | ------------------------------------------------------------------- | ------ | -------- | ------- |
+| name      |                                                                     | string | true     |         |
+| mountPath |                                                                     | string | true     |         |
+| type      | Specify volume type, options: "pvc","configMap","secret","emptyDir" | string | true     |         |
+
+### HealthProbe
+
+| NAME                | DESCRIPTION                                                                                          | TYPE                       | REQUIRED | DEFAULT |
+| ------------------- | ---------------------------------------------------------------------------------------------------- | -------------------------- | -------- | ------- |
+| exec                | Instructions for assessing container health by executing a command. Either this attribute or the     | [exec](#exec)              | false    |         |
+|                     | httpGet attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive |                            |          |         |
+|                     | with both the httpGet attribute and the tcpSocket attribute.                                         |                            |          |         |
+| httpGet             | Instructions for assessing container health by executing an HTTP GET request. Either this attribute  | [httpGet](#httpGet)        | false    |         |
+|                     | or the exec attribute or the tcpSocket attribute MUST be specified. This attribute is mutually       |                            |          |         |
+|                     | exclusive with both the exec attribute and the tcpSocket attribute.                                  |                            |          |         |
+| tcpSocket           | Instructions for assessing container health by probing a TCP socket. Either this attribute or the    | [tcpSocket](#tcpSocket)    | false    |         |
+|                     | exec attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with |                            |          |         |
+|                     | both the exec attribute and the httpGet attribute.                                                   |                            |          |         |
+| initialDelaySeconds | Number of seconds after the container is started before the first probe is initiated.                | int                        | true     | 0       |
+| periodSeconds       | How often, in seconds, to execute the probe.                                                         | int                        | true     | 10      |
+| timeoutSeconds      | Number of seconds after which the probe times out.                                                   | int                        | true     | 1       |
+| successThreshold    | Minimum consecutive successes for the probe to be considered successful after having failed.         | int                        | true     | 1       |
+| failureThreshold    | Number of consecutive failures required to determine the container is not alive (liveness probe) or  | int                        | true     | 3       |
+|                     | not ready (readiness probe).                                                                         |                            |          |         |
+| hostAliases         | Specify the hostAliases to add                                                                       | [hostAliases](hostaliases) | true     |         |
+
+#### valueFrom
+
+| NAME            | DESCRIPTION                                          | TYPE                                | REQUIRED | DEFAULT |
+| --------------- | ---------------------------------------------------- | ----------------------------------- | -------- | ------- |
+| secretKeyRef    | Selects a key of a secret in the pod's namespace     | [secretKeyRef](#secretkeyref)       | false    |         |
+| configMapKeyRef | Selects a key of a config map in the pod's namespace | [configMapKeyRef](#configmapkeyref) | false    |         |
+
+
+#### pvc
+
+| NAME      | DESCRIPTION         | TYPE   | REQUIRED | DEFAULT |
+| --------- | ------------------- | ------ | -------- | ------- |
+| name      |                     | string | true     |         |
+| mountPath |                     | string | true     |         |
+| claimName | The name of the PVC | string | true     |         |
+
+#### configMap
+
+| NAME        | DESCRIPTION | TYPE            | REQUIRED | DEFAULT |
+| ----------- | ----------- | --------------- | -------- | ------- |
+| name        |             | string          | true     |         |
+| mountPath   |             | string          | true     |         |
+| defaultMode |             | int             | false    | 420     |
+| cmName      |             | string          | true     |         |
+| items       |             | [items](#items) | false    |         |
+
+#### secret
+
+| NAME        | DESCRIPTION | TYPE            | REQUIRED | DEFAULT |
+| ----------- | ----------- | --------------- | -------- | ------- |
+| name        |             | string          | true     |         |
+| mountPath   |             | string          | true     |         |
+| defaultMode |             | int             | false    | 420     |
+| secretName  |             | string          | true    |         |
+| items       |             | [items](#items) | false    |         |
+
+#### emptyDir
+
+| NAME      | DESCRIPTION          | TYPE   | REQUIRED | DEFAULT |
+| --------- | -------------------- | ------ | -------- | ------- |
+| name      |                      | string | true     |         |
+| mountPath |                      | string | true     |         |
+| medium    | Option: "", "Memory" | string | false    | ""      |
+
+#### hostPath
+| NAME      | DESCRIPTION | TYPE   | REQUIRED | DEFAULT |
+| --------- | ----------- | ------ | -------- | ------- |
+| name      |             | string | true     |         |
+| mountPath |             | string | true     |         |
+| path      |             | string | true     |         |
 
 
 #### tcpSocket
@@ -143,27 +248,6 @@ We also see that the PHASE of the app is running and the STATUS is healthy.
 |         | the command is a separate array element. Commands exiting 0 are considered to be successful probes, |          |          |         |
 |         | whilst all other exit codes are considered failures.                                                |          |          |         |
 
-
-### livenessProbe
-| NAME                | DESCRIPTION                                                                                          | TYPE                    | REQUIRED | DEFAULT |
-| ------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------- | -------- | ------- |
-| exec                | Instructions for assessing container health by executing a command. Either this attribute or the     | [exec](#exec)           | false    |         |
-|                     | httpGet attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive |                         |          |         |
-|                     | with both the httpGet attribute and the tcpSocket attribute.                                         |                         |          |         |
-| httpGet             | Instructions for assessing container health by executing an HTTP GET request. Either this attribute  | [httpGet](#httpGet)     | false    |         |
-|                     | or the exec attribute or the tcpSocket attribute MUST be specified. This attribute is mutually       |                         |          |         |
-|                     | exclusive with both the exec attribute and the tcpSocket attribute.                                  |                         |          |         |
-| tcpSocket           | Instructions for assessing container health by probing a TCP socket. Either this attribute or the    | [tcpSocket](#tcpSocket) | false    |         |
-|                     | exec attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with |                         |          |         |
-|                     | both the exec attribute and the httpGet attribute.                                                   |                         |          |         |
-| initialDelaySeconds | Number of seconds after the container is started before the first probe is initiated.                | int                     | true     | 0       |
-| periodSeconds       | How often, in seconds, to execute the probe.                                                         | int                     | true     | 10      |
-| timeoutSeconds      | Number of seconds after which the probe times out.                                                   | int                     | true     | 1       |
-| successThreshold    | Minimum consecutive successes for the probe to be considered successful after having failed.         | int                     | true     | 1       |
-| failureThreshold    | Number of consecutive failures required to determine the container is not alive (liveness probe) or  | int                     | true     | 3       |
-|                     | not ready (readiness probe).                                                                         |                         |          |         |
-
-
 ###### tcpSocket
 | NAME | DESCRIPTION                                                                           | TYPE | REQUIRED | DEFAULT |
 | ---- | ------------------------------------------------------------------------------------- | ---- | -------- | ------- |
@@ -193,31 +277,21 @@ We also see that the PHASE of the app is running and the STATUS is healthy.
 |         | whilst all other exit codes are considered failures.                                                |          |          |         |
 
 
-### volumes
-| NAME      | DESCRIPTION                                                         | TYPE   | REQUIRED | DEFAULT |
-| --------- | ------------------------------------------------------------------- | ------ | -------- | ------- |
-| name      |                                                                     | string | true     |         |
-| mountPath |                                                                     | string | true     |         |
-| type      | Specify volume type, options: "pvc","configMap","secret","emptyDir" | string | true     |         |
-
-
-#### env
-| NAME      | DESCRIPTION                                               | TYPE                    | REQUIRED | DEFAULT |
-| --------- | --------------------------------------------------------- | ----------------------- | -------- | ------- |
-| name      | Environment variable name                                 | string                  | true     |         |
-| value     | The value of the environment variable                     | string                  | false    |         |
-| valueFrom | Specifies a source the value of this var should come from | [valueFrom](#valueFrom) | false    |         |
-
-
-### valueFrom
-| NAME         | DESCRIPTION                                      | TYPE                          | REQUIRED | DEFAULT |
-| ------------ | ------------------------------------------------ | ----------------------------- | -------- | ------- |
-| secretKeyRef | Selects a key of a secret in the pod's namespace | [secretKeyRef](#secretKeyRef) | true     |         |
-
-
 #### secretKeyRef
 
 | NAME | DESCRIPTION                                                      | TYPE   | REQUIRED | DEFAULT |
 | ---- | ---------------------------------------------------------------- | ------ | -------- | ------- |
 | name | The name of the secret in the pod's namespace to select from     | string | true     |         |
 | key  | The key of the secret to select from. Must be a valid secret key | string | true     |         |
+
+#### configMapKeyRef
+| NAME | DESCRIPTION                                                          | TYPE   | REQUIRED | DEFAULT |
+| ---- | -------------------------------------------------------------------- | ------ | -------- | ------- |
+| name | The name of the config map in the pod's namespace to select from     | string | true     |         |
+| key  | The key of the config map to select from. Must be a valid secret key | string | true     |         |
+
+#### hostAliases
+| NAME      | DESCRIPTION | TYPE     | REQUIRED | DEFAULT |
+| --------- | ----------- | -------- | -------- | ------- |
+| ip        |             | string   | true     |         |
+| hostnames |             | []string | true     |         |
