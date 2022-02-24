@@ -51,7 +51,7 @@ vela install --version 1.2.0-beta.3
 ** MacOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.3
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.4
 ```
 
 **Windows**
@@ -99,22 +99,16 @@ sudo mv ./vela /usr/local/bin/vela
 
 ### 2. 升级核心控制器
 
-如果从 1.2.0 以后版本开始升级：
-
 ```
-vela install --version v1.2.3
+vela install --version v1.2.4 -r=false
 ```
 
-如果从 1.2.0 以前版本开始升级：
-
-```
-vela install --version v1.2.3 -r
-```
+> 如果你在首次安装时设置了自定义参数，`-r=false` 会重置配置，请在升级时同样通过 `--set` 进行自定义参数设置。
 
 ### 3. 升级 VelaUX
 
 ```
-vela addon enable velaux version=v1.2.3
+vela addon enable velaux version=v1.2.4
 ```
 
 > 请注意，如果安装时指定了自定义参数，比如数据库地址。请在升级时同时指定该参数。
