@@ -49,7 +49,7 @@ vela install --version 1.2.0-beta.3
 ** MacOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.3
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.4
 ```
 
 **Windows**
@@ -97,22 +97,17 @@ sudo mv ./vela /usr/local/bin/vela
 
 ### 2. Upgrade Vela Core
 
-If current version >=1.2.0
-
 ```shell
-vela install --version v1.2.3
+# set -r=false will reset values.
+vela install --version v1.2.4 -r=false
 ```
 
-If current version < 1.2.0:
-
-```shell
-vela install --version v1.2.3 -r
-```
+> If there are custom settings when installing the old version, set `-r=false` will reset the custom settings, please set them by `--set` during the upgrade.
 
 ### 3. Upgrade VelaUX
 
 ```shell
-vela addon enable velaux version=v1.2.3
+vela addon enable velaux version=v1.2.4
 ```
 
 > If you set custom parameters during installation, be sure to include the corresponding parameters.
