@@ -96,6 +96,8 @@ $ vela addon enable velaux/
 Addon: velaux enabled Successfully
 ```
 
+需要注意的是，在安装插件过程当中，仍可能需要从网络中拉取镜像或者 helm chart，如果你的网络环境同样无法访问这些地址，请参考[文档](../../../platform-engineers/system-operation/enable-addon-offline)进行完整的离线安装。
+
 ## 编写自己的插件包
 
 请参考[插件包制作文档](../../../platform-engineers/addon/intro)。
