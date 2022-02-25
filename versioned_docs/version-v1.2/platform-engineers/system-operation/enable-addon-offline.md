@@ -1,16 +1,39 @@
 ---
-title: Enable Addon without Internet
+title: Enable Addon without Internet Access
 ---
 
 ## Enable without Internet
 
-If your cluster cannot request `https://addons.kubevela.net` or `github.com`, you can download these files from `https://github.com/oam-dev/catalog/tree/master/addons` to local, and specify a local addon dir when enable an addon to install locally.
+If your environments don't have access to `https://addons.kubevela.net` or `https://github.com/oam-dev/catalog`, you should git clone the repo `https://github.com/oam-dev/catalog/tree/master/addons` locally. You can specify a local addon directory when enable an addon for installation.
+Before installing an addon, you should check if the addon contains any container images or other sub helm charts in it. If so, the addon also can't be installed well.  You can follow these steps to make it success.
 
-Please notice that, while installation the cluster maybe still need pull some images or helm charts from Internet.If your cluster also cannot request the Internet you need  follow these steps to install the addon.
+1. Git clone [the catalog repo](https://github.com/oam-dev/catalog) to download these addon files.You can find all official addons in subdirectory `./addons/` and experimental addons in subdirectory `./experimental/addons`
+```yaml
+git clone https://github.com/oam-dev/catalog
+```   
+2. Sync the container images relied on by addon to your own image repository. 
+   For example, you want sync the image of the helm controller image of fluxcd addon. 
+   
+```yaml
+$ docker pull fluxcd/helm-controller:v0.11.1
+$ docker push <your repo url>/fluxcd/helm-controller:v0.11.1
+```
+3. Parts of addons maybe rely on some helm charts such as terraform addon. You should sync these helm charts to your own chart repository.
 
-1. Download the addon's files from https://github.com/oam-dev/catalog/tree/master/addons` to your computer.
-2. Sync the addon needed images and helm charts which you want to enable to your own image/helm repo. Then modify the addon's files to reference you own repo. We will introduce what images/helm charts needed to sync for each addon below. 
-3. Use `vela cli` to enable an addon with specify a local addon dir to install offline. eg:
+```yaml
+$ helm repo add vela-charts https://charts.kubevela.net/addons
+$ helm repo update
+$ helm pull vela-charts/terraform-controller --version 0.3.5
+$ helm push terraform-controller-0.3.5.tgz <your charts repo url>
+```
+
+You can read this [docs](https://helm.sh/docs/topics/chart_repository/) to get knowledge how to build your own helm repo.
+
+4. Modify the values of addon by referring to your own  image/chart repository. 
+   Generally you can find all relied on images/charts in the files of subdirectory `resources/` and modify them.
+   For example, you can modify the fluxcd addon files `addons/fluxcd/resources/deployment/helm-controller.yaml` field `spec.sepc.containers[0].image` to your own image repo.
+
+5. Use `vela cli` to enable an addon with specify a local addon dir to install offline.We will introduce what images/helm charts needed to sync for each addon below.
 
 ```yaml
 $ vela addon enable <dir>

@@ -7,9 +7,36 @@ title: 插件的离线安装
 如果你的网络环境，无法访问 `https://addons.kubevela.net` 或者 `github.com`, 你可以通过将 `https://github.com/oam-dev/catalog/tree/master/addons` 中的文件拷贝到本地， 并指定本地的某个插件的目录进行本地安装。
 需要注意的是，安装插件的过程当中，可能仍需要从网络上拉取某些 helm chart 或者镜像。如果你的网络环境同样也无法访问这些资源，你需要执行以下步骤进行完全的离线安装。
 
-1. 将 `https://github.com/oam-dev/catalog/tree/master/addons` 中的文件目录下载到本地。
-2. 同步你想要安装的插件中的镜像或者 helm chart ，到自己的镜像仓库或 chart 仓库中，并修改插件文件引用到你自己的资源仓库。下面会专门介绍各个插件都需要同步哪些镜像和 helm chart以及如何替换这些资源。
-3. 通过 vela cli 指定一个本地的目录进行离线安装。例如：
+1. 将代码仓库 `https://github.com/oam-dev/catalog` 克隆到本地。然后你就可以在 `./addons/` 子目录中找到所有正式的插件，`./experimental/addons` 目录中实验阶段的插件。
+
+```yaml
+git clone https://github.com/oam-dev/catalog
+```   
+
+2. 同步你想要安装的插件中的镜像到自己的镜像仓库。例如，你可以通过下面的命令同步 fluxcd 插件的 helm controller 镜像到自己的镜像仓库。
+
+```yaml
+$ docker pull fluxcd/helm-controller:v0.11.1
+$ docker push <your repo url>/fluxcd/helm-controller:v0.11.1
+```
+
+3. 部分插件的安装可能需要依赖一些 helm chats 比如说 terraform 的插件。你需要将这些 charts 同步到你自己 chart 仓库。例如你可以通过下面的命令，同步 terraform 插件中依赖的 charts。
+
+```yaml
+$ helm repo add vela-charts https://charts.kubevela.net/addons
+$ helm repo update
+$ helm pull vela-charts/terraform-controller --version 0.3.5
+$ helm push terraform-controller-0.3.5.tgz <your charts repo url>
+```
+
+你可以通过这个 [文档](https://helm.sh/docs/topics/chart_repository/) 了解如何搭建自己的 charts 仓库。
+
+4. 修改对应插件的文件，引用到自己的镜像仓库。你可以在 `resources/` 子目录中的文件中所需要创建的 k8s 资源里找到需要依赖的镜像或 charts。例如，你可以修改 fluxcd 插件里的 `addons/fluxcd/resources/deployment/helm-controller.yaml`  deployment 的 `spec.sepc.containers[0].image` 改成自己镜像仓库的镜像。
+   下面会详细介绍每个插件需要同步哪些镜像和 charts，以及修改哪些文件去引用他们。
+
+   
+5. 通过 vela cli 指定一个本地的目录进行离线安装。例如：
+
 ```yaml
 $ vela addon enable <本地目录>
 ```
