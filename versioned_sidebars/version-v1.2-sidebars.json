@@ -192,6 +192,10 @@
             },
             {
               "type": "doc",
+              "id": "version-v1.2/end-user/components/cloud-services/provision-and-initiate-database"
+            },
+            {
+              "type": "doc",
               "id": "version-v1.2/end-user/traits/rollout"
             },
             {
