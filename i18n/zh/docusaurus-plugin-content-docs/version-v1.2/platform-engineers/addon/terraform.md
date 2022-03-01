@@ -1,41 +1,43 @@
 ---
-title: Extend a Terraform Addon
+title: 扩展 Terraform 插件
 ---
 
-[Terraform Controller](https://github.com/oam-dev/terraform-controller) is the core controller to provision and manage
-cloud resources for KubeVela. It has supported [some cloud providers](https://github.com/oam-dev/terraform-controller#supported-cloud-providers), including AWS, Azure, GCP, Alibaba Cloud,
-Tencent Cloud, etc. But only [a few](https://kubevela.io/docs/tutorials/consume-cloud-services#enabling-cloud-vendor-addons) has been supported as Terraform Addons in KubeVela.
+[Terraform Controller](https://github.com/oam-dev/terraform-controller) 是为 KubeVela 提供部署和管理云资源的核心控制器。
+它已经支持[一些云供应商](https://github.com/oam-dev/terraform-controller#supported-cloud-providers)，包括 AWS、Azure、GCP、阿里云，腾讯云，百度云等等。
+但 KubeVela 只支持[部分云供应商](https://kubevela.io/docs/tutorials/consume-cloud-services#enabling-cloud-vendor-addons)的 Terraform Addons。
 
-This guide will show you how to extend a Terraform Addon to support your cloud provider.
+本指南将告诉你如何扩展 Terraform Addon 以支持你的云供应商。
 
-## Choose a Cloud Provider
+## 选择一个云供应商
 
-If the cloud provider you want to support is none of supported cloud providers in Terraform Controller, you have to support it first.
-If it has been supported by Terraform Controller, you can continue to extend the addon.
+如果你想支持的云供应商不在 Terraform Controller 支持的云供应商之列，你必须先支持它。 如果它已经被Terraform Controller支持，你可以继续扩展该插件。
 
-## Prepare metadata for the Cloud Provider
+## 为云提供商准备 metadata
 
-- Clone oam-dev/catalog
+- 克隆 oam-dev/catalog
 
 ```bash
 $ git clone https://github.com/oam-dev/catalog.git
 ```
 
-- Prepare a metadata file
+- 准备 metadata 文件
 
-Copy the sample metadata file `hack/addons/terraform/provider-sample.yaml` for your cloud provider, like to `hack/addons/terraform/provider-tencent.yaml`.
+编辑你的云服务商的 metadata 文件 `hack/addons/terraform/terraform-provider-scaffold/metadata.yaml`。
 
 ```yaml
-# provider name
-name: tencent
+...
+
+# -------------------------------------Configuration Metadata for a Terraform Addon-------------------------------------
+# provider short name
+shortCloudName: tencent
 
 # The Cloud name of the provider
-cloudName: Tencent Cloud
+completeCloudName: Tencent Cloud
 
 # When enabling a Terraform provider, these properties need to set for authentication. For Tencent Cloud,
 # name: Environment variable name when authenticating Terraform, like https://github.com/oam-dev/terraform-controller/blob/master/controllers/provider/credentials.go#L59
 # secretKey: Secret key when storing authentication information in a Kubernetes, like https://github.com/oam-dev/terraform-controller/blob/master/controllers/provider/credentials.go#L109.
-properties:
+cloudProperties:
   - name: TENCENTCLOUD_SECRET_ID
     secretKey: secretID
     description: Get TENCENTCLOUD_SECRET_ID per this guide https://cloud.tencent.com/document/product/1213/67093
@@ -46,23 +48,30 @@ properties:
   - name: TENCENTCLOUD_REGION
     description: Get TENCENTCLOUD_REGION by picking one RegionId from Tencent Cloud region list https://cloud.tencent.com/document/api/1140/40509#.E5.9C.B0.E5.9F.9F.E5.88.97.E8.A1.A8
     isRegion: true
-
 ```
 
-## Generate a Terraform Addon
+## 生成 Terraform Addon
 
-Generate a Terraform Addon for your cloud provider. The generated addon code will be stored in `addons/terraform-tencent`.
+为你的云服务商生成一个 Terraform 插件。生成的插件代码将存储在 `addons/terraform-tencent`。
 
 ```shell
-$ go run hack/addons/terraform/gen.go hack/addons/terraform/provider-tencent.yaml
+$ make terraform-addon-gen
+go run hack/addons/terraform/gen.go hack/addons/terraform/provider-sample.yaml
+Generating addon for provider tencent in addons/terraform-tencent
+Rendering hack/addons/terraform/terraform-provider-skaffold/metadata.yaml
+Rendering hack/addons/terraform/terraform-provider-skaffold/readme.md
+Rendering hack/addons/terraform/terraform-provider-skaffold/resources/account-creds.cue
+Rendering hack/addons/terraform/terraform-provider-skaffold/resources/parameter.cue
+Rendering hack/addons/terraform/terraform-provider-skaffold/resources/provider.cue
+Rendering hack/addons/terraform/terraform-provider-skaffold/template.yaml
 
 $ ls addons/terraform-tencent
 definitions   metadata.yaml readme.md     resources     template.yaml
 ```
 
-## Verify the Terraform Addon
+## 验证 Terraform 插件
 
-Enable the addon Check whether a `Provider` is created whose name is the same as your cloud provider.
+启用该插件 检查是否创建了名称与你的云提供商相同的 `Provider`。
 
 ```shell
 $ vela addon enable ./addons/terraform-tencent TENCENTCLOUD_SECRET_ID=xxx TENCENTCLOUD_SECRET_KEY=yyy TENCENTCLOUD_REGION=ap-chengdu
@@ -75,12 +84,12 @@ NAME      STATE   AGE
 tencent   ready   1d
 ```
 
-You are encouraged to further verify the provider by [provision a cloud resource of your cloud provider](../../tutorials/consume-cloud-services).
+我们鼓励你通过[部署云资源](../../tutorials/consume-cloud-services)进一步验证提供商。
 
-## Submit the Terraform Addon
+## 提交 Terraform 插件
 
-Push the code generated in `./addons` and make a pull request.
+提交 `./addons` 中生成的代码，并创建一个 pull request。
 
-## Contribute documentation
+## 贡献官网文档
 
-Write [Terraform Addon enable doc](../../reference/addons/terraform) for your cloud provider and add it to [all supported cloud providers](../../tutorials/consume-cloud-services#enabling-cloud-vendor-addons).
+为你的云供应商编写[Terraform Addon启用文档](../../reference/addons/terraform)，并将其添加到[所有支持的云供应商](../../tutorials/consume-cloud-services#enabling-cloud-vendor-addons)。
