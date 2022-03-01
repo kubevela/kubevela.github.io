@@ -2,18 +2,17 @@
 title:  Gcp-Kthw
 ---
 
-## Description
+## 描述
 
 Kubernetes Cluster On GCP with Terraform
 
-## Specification
+## 参数说明
 
 
-### Properties
+### 属性
 
- Name | Description | Type | Required | Default 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- project |  |  | false |  
  region |  |  | false |  
  network |  | map | false |  
  machines |  | map | false |  
@@ -21,12 +20,13 @@ Kubernetes Cluster On GCP with Terraform
  number_of_controller |  |  | false |  
  number_of_worker |  |  | false |  
  kube_api_port |  |  | false |  
+ project |  |  | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
- Name | Description | Type | Required | Default 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  name | The secret name which the cloud resource connection will be written to | string | true |  
  namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
