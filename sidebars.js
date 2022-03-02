@@ -93,8 +93,13 @@ module.exports = {
           items: [
             "end-user/quick-start-cli",
             "end-user/traits/ingress",
-            "end-user/components/cloud-services/provision-and-consume-cloud-services",
-            "end-user/components/cloud-services/provision-and-initiate-database",
+            {
+              "Cloud Resources": [
+                "end-user/components/cloud-services/provision-and-consume-cloud-services",
+                "end-user/components/cloud-services/provision-and-initiate-database",
+                "end-user/components/cloud-services/secure-your-database-connection",
+              ],
+            },
             "end-user/traits/rollout",
             "end-user/policies/health",
             "case-studies/multi-cluster",

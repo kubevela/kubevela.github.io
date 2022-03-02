@@ -187,12 +187,23 @@
               "id": "version-v1.2/end-user/traits/ingress"
             },
             {
-              "type": "doc",
-              "id": "version-v1.2/end-user/components/cloud-services/provision-and-consume-cloud-services"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.2/end-user/components/cloud-services/provision-and-initiate-database"
+              "collapsed": true,
+              "type": "category",
+              "label": "Cloud Resources",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/end-user/components/cloud-services/provision-and-consume-cloud-services"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/end-user/components/cloud-services/provision-and-initiate-database"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/end-user/components/cloud-services/secure-your-database-connection"
+                }
+              ]
             },
             {
               "type": "doc",
