@@ -202,6 +202,10 @@
                 {
                   "type": "doc",
                   "id": "version-v1.2/end-user/components/cloud-services/secure-your-database-connection"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-databases"
                 }
               ]
             },
