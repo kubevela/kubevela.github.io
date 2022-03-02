@@ -86,7 +86,7 @@ spec:
                 secret: db-conn                                   # 1) If the env name is the same as the secret key, secret key can be omitted.
               endpoint:
                 secret: db-conn
-                key: DB_HOST                                      # 2) If the env name is different from secret key, secret key has to be set.
+                key: DB_PUBLIC_HOS                                # 2) If the env name is different from secret key, secret key has to be set.
               username:
                 secret: db-conn
                 key: DB_USER

@@ -123,7 +123,7 @@ spec:
                 secret: db-conn                             
               endpoint:
                 secret: db-conn
-                key: DB_HOST          
+                key: DB_PUBLIC_HOST          
               username:
                 secret: db-conn
                 key: DB_USER
