@@ -34,13 +34,15 @@ func main() {
 		panic(err)
 	}
 	i18n := I18N{Language: En, TargetFile: f}
+	i18n.createTitle()
 	i18n.createTable(terraformPath, infos)
 
 	f2, err := os.OpenFile(targetOutputZh, os.O_APPEND|os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		panic(err)
 	}
-	i18n = I18N{Language: En, TargetFile: f2}
+	i18n = I18N{Language: Zh, TargetFile: f2}
+	i18n.createTitle()
 	i18n.createTable(terraformPath, infos)
 
 	//i18n.createSidebar(infos)
@@ -138,13 +140,9 @@ func (i18n I18N) createTitle() {
 	var title string
 	switch i18n.Language {
 	case En:
-		title = `---
-title: Supported Cloud Resource list
----\n\n`
+		title = "---\ntitle: Supported Cloud Resource list\n---\n\n"
 	case Zh:
-		title = `---
-title: 云资源列表
----\n\n`
+		title = "---\ntitle: 云资源列表\n---\n\n"
 	}
 
 	if _, err := i18n.TargetFile.WriteString(title); err != nil {

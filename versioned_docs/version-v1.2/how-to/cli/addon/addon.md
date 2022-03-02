@@ -68,7 +68,6 @@ $ vela addon registry delete experimental
 Successfully delete an addon registry experimental
 ```
 
-
 ## Enable Addon offline
 
 For some reason, if your cluster network cannot request the official addon registry you can enable an addon with a local dir. eg:
@@ -82,7 +81,6 @@ Addon: velaux enabled Successfully
 ```
 
 Please notice that, while a addon installing cluster maybe still need pull some images or helm charts.If your cluster cannot reach these resources please refer [docs](../../../platform-engineers/system-operation/enable-addon-offline) to do complete installation without Internet.
-
 
 ## Make your own addon
 
