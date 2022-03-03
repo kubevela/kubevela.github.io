@@ -98,6 +98,7 @@ module.exports = {
                 "end-user/components/cloud-services/provision-and-consume-cloud-services",
                 "end-user/components/cloud-services/provision-and-initiate-database",
                 "end-user/components/cloud-services/secure-your-database-connection",
+                "end-user/components/cloud-services/three-ways-to-consume-cloud-resources",
               ],
             },
             "end-user/traits/rollout",
