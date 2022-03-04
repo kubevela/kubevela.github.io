@@ -521,6 +521,11 @@
         {
           "type": "doc",
           "id": "version-v1.2/reference/user-improvement-plan"
+        },
+        {
+          "label": "VelaUX API Doc",
+          "type": "link",
+          "href": "https://kubevela.stoplight.io/docs/kubevela/b3A6NDI5NzQxMzM-detail-definition"
         }
       ]
     },
