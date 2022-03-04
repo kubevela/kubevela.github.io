@@ -183,9 +183,9 @@ module.exports = {
           type: "category",
           label: "Built-in Addons",
           items: [
-              "reference/addons/overview",
-              "reference/addons/velaux",
-              "reference/addons/terraform",
+            "reference/addons/overview",
+            "reference/addons/velaux",
+            "reference/addons/terraform",
           ],
         },
         "end-user/components/cloud-services/cloud-resources-list",
@@ -226,6 +226,11 @@ module.exports = {
         "end-user/workflow/built-in-workflow-defs",
         "reference/ui-schema",
         "reference/user-improvement-plan",
+        {
+          label: "VelaUX API Doc",
+          type: "link",
+          href: "https://kubevela.stoplight.io/docs/kubevela/b3A6NDI5NzQxMzM-detail-definition",
+        },
       ],
     },
     {
