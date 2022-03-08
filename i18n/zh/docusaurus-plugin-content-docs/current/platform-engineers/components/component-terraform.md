@@ -141,7 +141,7 @@ status: {}
 ```shell
 kubectl apply -f <FILENAME>
 ```
-  
+
 ## 验证
 
 你可以通过 `vela show` 命令快速验证 ComponentDefinition。
@@ -173,9 +173,19 @@ $ vela show alibaba-eip
 
 我们鼓励你为你的 ComponentDefinition 生成文档并提交给 [KubeVela官方网站]（https://github.com/oam-dev/kubevela.io）。
 
+通过运行 `vela def doc-gen` 命令，我们可以基于已经应用在kubernetes集群上的ComponentDefinition生成相关文档，也可以基于本地ComponentDefinition文件生成相关文档。
+
+基于已经应用在kubernetes集群上的ComponentDefinition生成文档时，需要提供该ComponentDefinition运行的namespace。
+
 ```shell
 $ vela def doc-gen alibaba-eip -n vela-system
 Generated docs for alibaba-eip in ./kubevela.io/docs/end-user/components/cloud-services/terraform/alibaba-eip.md
+```
+
+基于本地文件生成文档时，需要提供文件路径。
+
+```shell
+$ vela def doc-gen alibaba-eip.yaml
 ```
 
 将生成的文件移到 [oam-dev/kubevela.io](https://github.com/oam-dev/kubevela.io) 库。参考 [贡献指南](https://github.com/oam-dev/kubevela.io#contributing-to-kubevela-en-docs) 来提交文档。
