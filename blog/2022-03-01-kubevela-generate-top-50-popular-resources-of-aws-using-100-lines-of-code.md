@@ -9,7 +9,7 @@ KubeVela 目前已经支持了 AWS、Azure、GCP、阿里云、腾讯云、百�
 
 # AWS 最受欢迎的云资源在哪里？
 
-Terraform 官网提供了各个云服务商的 Terraform modules，比如 AWS 的云资源 Terraform modules 是 [https://registry.terraform.io/namespaces/terraform-aws-modules](https://registry.terraform.io/namespaces/terraform-aws-modules)，云资源按照受欢迎的使用程度（下载量）排序，比如 AWS VPC 下载量为 1870 万次。
+Terraform 官网提供了各个云服务商的 Terraform modules，比如 [AWS 的云资源 Terraform modules](https://registry.terraform.io/namespaces/terraform-aws-modules)。其中，云资源按照受欢迎的使用程度（下载量）排序，比如 AWS VPC 下载量为 1870 万次。
 
 通过简单分析，我们发现 AWS 前 50 Terraform modules 的数据可以通过请求 [https://registry.terraform.io/v2/modules?filter%5Bprovider%5D=aws&include=latest-version&page%5Bsize%5D=50&page%5Bnumber%5D=1](https://registry.terraform.io/v2/modules?filter%5Bprovider%5D=aws&include=latest-version&page%5Bsize%5D=50&page%5Bnumber%5D=1) 获取。
 
