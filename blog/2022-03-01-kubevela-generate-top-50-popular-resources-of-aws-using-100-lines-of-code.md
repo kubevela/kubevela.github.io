@@ -1,8 +1,8 @@
-# 如何用 100 行代码快速引入 AWS 最受欢迎的 50 种云资源
+# Kubevela: 如何用 100 行代码快速引入 AWS 最受欢迎的 50 种云资源
 
 作者： **Avery Qi** （同济大学） 周正喜（阿里云)
 
-KubeVela 目前已经支持了 AWS，Azure, GCP, 阿里云，腾讯云、百度云、UCloud 等云厂商，也提供了[简单快捷的命令行工具](https://kubevela.io/docs/next/platform-engineers/components/component-terraform)引入云服务商的云资源，但是在 KubeVela 里一个一个地支持云服务商的云资源不利于快速满足用户对于云资源的需求，本文提供了一个方案，用不到 100 行代码快速引入 AWS 前 50 最受欢迎的云资源。
+KubeVela 目前已经支持了 AWS、Azure、GCP、阿里云、腾讯云、百度云、UCloud 等云厂商，也提供了[简单快捷的命令行工具](https://kubevela.io/docs/next/platform-engineers/components/component-terraform)引入云服务商的云资源，但是在 KubeVela 里一个一个地支持云服务商的云资源不利于快速满足用户对于云资源的需求，本文提供了一个方案，用不到 100 行代码快速引入 AWS 前 50 最受欢迎的云资源。
 
 同时，我们也期望用户受到本文的启发，贡献其他云服务商的云资源。
 
@@ -19,7 +19,7 @@ Terraform 官网提供了各个云服务商的 Terraform modules，比如 AWS �
 代码接受两个用户传入参数：
 
 * provider 的名称
-* 该provider对应的Terraform Modules 的 URL
+* 该 provider 对应的 Terraform Modules 的 URL
 
 对于 AWS 来说，Provider名称为 “aws”，对应的 Terraform modules为[Terraform Modules json格式接口](https://registry.terraform.io/v2/modules?filter%5Bprovider%5D=aws&include=latest-version&page%5Bsize%5D=50&page%5Bnumber%5D=1)（即在[Terraform Registry](https://registry.terraform.io/)中搜索provider为aws时最受欢迎的50种云资源）。
 
@@ -261,13 +261,13 @@ go run gen.go aws "https://registry.terraform.io/v2/modules?filter%5Bprovider%5D
 
 ## 批量生成云资源
 
-* 新建目录，生成资源所需文件
+1. 新建目录，生成资源所需文件
 
 解析完毕后，在当前目录下新建文件夹，文件夹命名为provider名称。
 
 遍历解析后的data，对于其中每个Module元素，执行下述操作，为其生成相应配置文件，定义和相应文档。
 
-* 生成定义文件
+2. 生成定义文件
 
 通过下述 vela 指令从模块对应的github仓库读取相应信息生成定义文件。
 
