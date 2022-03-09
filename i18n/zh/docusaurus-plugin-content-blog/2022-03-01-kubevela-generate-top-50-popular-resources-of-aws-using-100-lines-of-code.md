@@ -1,35 +1,35 @@
-# Kubevela: Generate top 50 popular resources of AWS using 100 lines of code
+# Kubevela: 如何用 100 行代码快速引入 AWS 最受欢迎的 50 种云资源
 
-Author: Avery Qi (Tongji University) Zhengxi Zhou (Alibaba Cloud)
+作者： **Avery Qi** （同济大学） 周正喜（阿里云)
 
-KubeVela currently supports AWS, Azure, GCP,  AliCloud, Tencent Cloud, Baidu Cloud, UCloud and other cloud vendors, and also provides [a quick and easy command line tool](https://kubevela.io/docs/next/platform-engineers/components/ component-terraform) to introduce cloud resources from cloud providers. But supporting cloud resources from cloud providers one by one in KubeVela is not conducive to quickly satisfying users' needs for cloud resources. This doc provides a solution to quickly introduce the top 50 most popular cloud resources from AWS in less than 100 lines of code.
+KubeVela 目前已经支持了 AWS、Azure、GCP、阿里云、腾讯云、百度云、UCloud 等云厂商，也提供了[简单快捷的命令行工具](https://kubevela.io/docs/next/platform-engineers/components/component-terraform)引入云服务商的云资源，但是在 KubeVela 里一个一个地支持云服务商的云资源不利于快速满足用户对于云资源的需求，本文提供了一个方案，用不到 100 行代码快速引入 AWS 前 50 最受欢迎的云资源。
 
-We also expect users to be inspired by this article to contribute cloud resources for other cloud providers.
-
-
-# Where are the most popular cloud resources on AWS?
-
-The official Terraform website provides Terraform modules for each cloud provider, for example, [AWS cloud resource Terraform modules]( https://registry.terraform.io/namespaces/terraform-aws-modules). And the cloud resources are sorted by popularity of usage (downloads), for example, AWS VPC has 18.7 million downloads.
-
-Through a simple analysis, we found that the data for the top 50 popular Terraform modules for AWS can be obtained by requesting [https://registry.terraform.io/v2/modules?filter%5Bprovider%5D=aws&include=latest-version&page%5Bsize%5D=50&page%5Bnumber%5D=1](https://registry.terraform.io/v2/modules?filter%5Bprovider%5D=aws&include=latest-version&page%5Bsize%5D=50&page%5Bnumber%5D=1) 。
+同时，我们也期望用户受到本文的启发，贡献其他云服务商的云资源。
 
 
+# AWS 最受欢迎的云资源在哪里？
 
-# Prerequisites
+Terraform 官网提供了各个云服务商的 Terraform modules，比如 [AWS 的云资源 Terraform modules](https://registry.terraform.io/namespaces/terraform-aws-modules)。其中，云资源按照受欢迎的使用程度（下载量）排序，比如 AWS VPC 下载量为 1870 万次。
 
-The code accepts two parameters.
-
-* provider Name
-* The URL of the Terraform Modules corresponding to the provider
-
-For AWS, Provider Name should be “aws”，corresponding Terraform modules URL is[Terraform Modules json API](https://registry.terraform.io/v2/modules?filter%5Bprovider%5D=aws&include=latest-version&page%5Bsize%5D=50&page%5Bnumber%5D=1)(Searching top 50 popular resources for provider aws in [Terraform Registry](https://registry.terraform.io/)).
-
-You need to make sure the providerName(aws) and Modules links are correct before executing the code.
+通过简单分析，我们发现 AWS 前 50 Terraform modules 的数据可以通过请求 [https://registry.terraform.io/v2/modules?filter%5Bprovider%5D=aws&include=latest-version&page%5Bsize%5D=50&page%5Bnumber%5D=1](https://registry.terraform.io/v2/modules?filter%5Bprovider%5D=aws&include=latest-version&page%5Bsize%5D=50&page%5Bnumber%5D=1) 获取。
 
 
-# Executing the code
+# 开始之前
 
-Then you can quickly bring in the top 50 most popular AWS cloud resources in bulk with the following 100 lines of code (filename gen.go).
+代码接受两个用户传入参数：
+
+* provider 的名称
+* 该 provider 对应的 Terraform Modules 的 URL
+
+对于 AWS 来说，Provider名称为 “aws”，对应的 Terraform modules为[Terraform Modules json格式接口](https://registry.terraform.io/v2/modules?filter%5Bprovider%5D=aws&include=latest-version&page%5Bsize%5D=50&page%5Bnumber%5D=1)（即在[Terraform Registry](https://registry.terraform.io/)中搜索provider为aws时最受欢迎的50种云资源）。
+
+在执行代码之前需要确认providerName(aws)和Modules链接无误。
+
+
+# 执行代码
+
+那么你就可以通过以下 100 行左右的代码（文件名 gen.go）来批量地快速引入 AWS 最受欢迎的前 50 种云资源。
+
 
 ```
 import (
@@ -166,7 +166,7 @@ func generateDefinition(provider, name, gitURL, path, description string) error 
 ```
 
 
-Executing the following command:
+执行命令：
 
 
 ```
@@ -175,14 +175,14 @@ go run gen.go aws "https://registry.terraform.io/v2/modules?filter%5Bprovider%5D
 
 
 
-# Explanation for the code
+# 代码简要说明
 
 
-## Unmarshal the json data for the resources
+## 解析云资源数据
 
-Access the URL passed in by the user and parse the returned json data into the Go structure.
+访问用户传入的URL，将返回的json数据解析为Go中的结构体。
 
-The json format corresponding to the resource is as follows.
+资源对应的json格式如下：
 
 
 ```
@@ -241,14 +241,14 @@ The json format corresponding to the resource is as follows.
 ```
 
 
-In the json data corresponding to Modules, we only care about two key-value pairs, viz.
+在Modules对应的json数据中，我们只关心两个键值对，即：
 
-* data: A list containing the names and properties of Modules
-* Included: Information about the specific version of Modules filtered out
+* data：包含Modules名称及属性的列表
+* Included：筛选出的特定版本的Modules具体信息
 
-In this case, for each Module element in data, resolve its attributes, Id and the id corresponding to the latest-version in relationship; for each Module version element in Included, resolve its attributes and Id.
+其中，对于data中的每个Module元素，解析它的属性，Id和relationship中的latest-version对应的id；对于Included中的每个Module版本元素，解析它的属性和Id。
 
-The attributes are further resolved as follows five items: 
+属性又解析如下五项：
 
 * Name
 * Downloads
@@ -256,20 +256,20 @@ The attributes are further resolved as follows five items:
 * Description
 * Verified
 
-The Go structure is named as `TFDownload `, The http library gets the json data and then parses the structure of the Terraform modules through the `json.Unmarshal`.
+结构体定义在结构体 `TFDownload `中，通过 http 库获取 json 数据，再通过 `json.Unmarshal` 解析出 Terraform modules 的结构体。
 
 
-## generating ComponentDefinitions in batch
+## 批量生成云资源
 
-1. creating directory and component definitions
+1. 新建目录，生成资源所需文件
 
-After parsing, create a new folder in the current directory and name the folder as \<provider name\>.
+解析完毕后，在当前目录下新建文件夹，文件夹命名为provider名称。
 
-Iterate through the parsed data, and for each Module element, perform the following operations to generate the corresponding definition and documentation for it.
+遍历解析后的data，对于其中每个Module元素，执行下述操作，为其生成相应配置文件，定义和相应文档。
 
-2. Generate definition files
+2. 生成定义文件
 
-Generate the definition file by reading the corresponding information from the module's github repository using the following vela command.
+通过下述 vela 指令从模块对应的github仓库读取相应信息生成定义文件。
 
 
 ```
@@ -277,20 +277,20 @@ vela def init {ModuleName} --type component --provider {providerName} --git {git
 ```
 
 
-Several items to be filled in the instruction are passed in from the parsed Module structure.
+指令中需要填入的几项由解析好的Module结构体传入。
 
 * gitURL: 	{Module.Attributes.Source}.git
-* description: If there are elements in `Included` which have the same ID with relationship.latest-version.ID, set the description as the corresponding description in `Included` elements, otherwise set the description as providerName+ModuleName. 
+* description:	如果Included中存在元素ID与模块relationship中latest-version对应ID相同，则description为Included中对应元素属性的description;否则description为providerName与模块名称的拼接
 * yamlFileName：terraform-{providerName}-{Module.Attributes.Name}.yaml
 
 
+# 你也来试试？
 
-# Have a try?
+还有不少云服务商也提供了丰富的 Terraform modules，比如
 
-There are also a number of cloud providers that offer a wealth of Terraform modules, such as
+GCP：[https://registry.terraform.io/namespaces/terraform-google-modules](https://registry.terraform.io/namespaces/terraform-google-modules)
 
-GCP: [https://registry.terraform.io/namespaces/terraform-google-modules](https://registry.terraform.io/namespaces/terraform-google- modules)
+阿里云：[https://registry.terraform.io/namespaces/terraform-alicloud-modules](https://registry.terraform.io/namespaces/terraform-alicloud-modules)
 
-Aliyun: [https://registry.terraform.io/namespaces/terraform-alicloud-modules](https://registry.terraform.io/namespaces/terraform- alicloud-modules)
+你要不要也为 KubeVela 引入你正在使用的、或喜欢的云服务商的云资源？
 
-Do you want to extend cloud resources for your current or favorite cloud provider for KubeVela as well?
