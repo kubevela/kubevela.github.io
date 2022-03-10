@@ -130,14 +130,14 @@ status: {}
 ```
 
 You are warmly welcome to contribute this extended cloud resource ComponentDefinition to [oam-dev/catalog](https://github.com/oam-dev/catalog/tree/master/addons/).
-  
+
 ## Apply ComponentDefinition
 
 Write the generated ComponentDefinition into a file named `terraform-<ComponentDefinition_NAME>.yaml` and apply it to the running Kubernetes cluster.
 
 ```shell
 kubectl apply -f <FILENAME>
-```  
+```
 
 ## Verify
 
@@ -172,9 +172,19 @@ the doc [Provision cloud resources](../../end-user/components/cloud-services/pro
 
 You are encouraged to generate the documentation for your ComponentDefinition and submit it to [KubeVela official site](https://github.com/oam-dev/kubevela.io).
 
+By running `vela def doc-gen` command, we can generate related docs for the ComponentDefinition either from a local file, or from the running application on kubernetes cluster.
+
+If you choose to generate docs from running cluster, you should provide the name of the ComponentDefinition and the namespace which it is running in.
+
 ```shell
 $ vela def doc-gen alibaba-eip -n vela-system
 Generated docs for alibaba-eip in ./kubevela.io/docs/end-user/components/cloud-services/terraform/alibaba-eip.md
+```
+
+If you choose to generate docs from local ComponentDefinition file, you should provide the file path.
+
+```shell
+$ vela def doc-gen alibaba-eip.yaml
 ```
 
 Move the file generated to [oam-dev/kubevela.io](https://github.com/oam-dev/kubevela.io) repo. Follow the [contribution guide](https://github.com/oam-dev/kubevela.io#contributing-to-kubevela-en-docs) to submit the doc. 
