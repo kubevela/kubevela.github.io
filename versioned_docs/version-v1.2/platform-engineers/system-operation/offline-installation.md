@@ -1,18 +1,19 @@
 # KubeVela Offline Installation Guide
 
-KubeVela 离线部署包含 KubeVela Core 和 KubeVela Addon 的离线部署。
+KubeVela offline installation includes the installation of KubeVela core and KubeVela Addon.
 
-## KubeVela Core 离线部署
+## KubeVela Core offline installation
 
 ### KubeVela chart
 
-- 下载 vela-core Helm Chart 包
+- Download Helm Chart package of vela-core
 
-通过 [Helm Chart 安装 KubeVela Core](http://kubevela.net/docs/install)文档下载您希望的 vela-core Chart 包，并解压。
+Download `vela-core` Helm Chart package per [Install KubeVela Core](../../install) and unarchive it.
 
-- 修改 values 里可配置的镜像
+- Modify images which can be configurable
 
-拉取以下镜像并导入离线环境的镜像仓库， 在 `helm install` 安装命令里通过 `--set` 覆盖每个镜像对应的离线环境镜像仓库里每个镜像的信息。
+Pull the following images and push them into an image repository in the dedicated environment. Overwrite each image's
+information with `-set` when installing by `helm install`.
 
 ```shell
 $  kubevela git:(master) grep -r repository charts/vela-core/values.yaml -A 1
@@ -32,10 +33,11 @@ charts/vela-core/values.yaml:    repository: oamdev/alpine-k8s
 charts/vela-core/values.yaml-    tag: 1.18.2
 ```
 
-- 修改无法配置的镜像
+- Modify images which could not be configurable
 
-Chart 参数 `enableFluxcdAddon` 决定是否默认安装 addon FluxCD， 如果参数 `enableFluxcdAddon` 为 true，拉取以下镜像并导入离线环境的镜像仓库，
-更改各个文件中的镜像 registry 地址为离线环境镜像仓库地址。
+The value `enableFluxcdAddon` indicates whether to enable Addon `FluxCD` by default. If it is `true`, the following images
+have to be pulled and pushed into an image repository in the dedicated environment in advance. Overwrite each image's information
+in the following YAML files.
 
 ```shell
 $  kubevela git:(master) grep -r -i image: charts/vela-core/templates/addon
@@ -50,9 +52,9 @@ $  kubevela git:(master) grep -r -i image: charts/vela-core  --exclude-dir=chart
 charts/vela-core/templates/defwithtemplate/nocalhost.yaml:        						image: "nocalhost-docker.pkg.coding.net/nocalhost/dev-images/golang:latest"
 ```
 
-- 重新打包 vela-core Helm Chart 包
+- Repackage vela-core Helm Chart
 
-重新打包上面修改好的 Helm Chart 包，直接安装或者传入离线环境的 Helm Chart 仓库。
+Repackage the Helm Chart package from the modified chart. Install it directly or install it from a dedicated Helm Chart
+repository after you pushed the package into the repository.
 
-
-## KubeVela Addon 离线部署
+## KubeVela Addon Offline installation
