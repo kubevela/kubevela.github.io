@@ -187,6 +187,7 @@ module.exports = {
             "reference/addons/overview",
             "reference/addons/velaux",
             "reference/addons/terraform",
+            "reference/addons/ai"
           ],
         },
         "end-user/components/cloud-services/cloud-resources-list",

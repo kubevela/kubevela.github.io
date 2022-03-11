@@ -41,6 +41,8 @@ vela addon enable model-serving
 
 模型训练中包含 `model-training` 和 `jupyter-notebook` 两个组件类型， 模型服务中包含 `model-serving` 这个组件类型。可以通过 `vela show` 命令来查看这三个组件中的具体参数。
 
+> 你也可以选择查阅 [KubeVela AI 插件文档](https://kubevela.io/zh/docs/next/reference/addons/ai), 来获取更多信息。
+
 ```bash
 vela show model-training
 vela show jupyter-notebook
