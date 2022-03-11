@@ -1,21 +1,28 @@
-# Kubevela: Generate top 50 popular resources of AWS using 100 lines of code
+---
+title: Generate top 50 popular resources of AWS using 100 lines of code
+author: Avery Qi (Tongji University) Zhengxi Zhou (Alibaba Cloud)
+author_title: KubeVela Team
+author_url: https://github.com/oam-dev/kubevela
+author_image_url: https://kubevela.io/img/logo.svg
+tags: [ Terraform ]
+description: ""
+hide_table_of_contents: false
+---
 
-Author: Avery Qi (Tongji University) Zhengxi Zhou (Alibaba Cloud)
-
-KubeVela currently supports AWS, Azure, GCP,  AliCloud, Tencent Cloud, Baidu Cloud, UCloud and other cloud vendors, and also provides [a quick and easy command line tool](https://kubevela.io/docs/next/platform-engineers/components/ component-terraform) to introduce cloud resources from cloud providers. But supporting cloud resources from cloud providers one by one in KubeVela is not conducive to quickly satisfying users' needs for cloud resources. This doc provides a solution to quickly introduce the top 50 most popular cloud resources from AWS in less than 100 lines of code.
+KubeVela currently supports AWS, Azure, GCP,  AliCloud, Tencent Cloud, Baidu Cloud, UCloud and other cloud vendors, and also provides [a quick and easy command line tool](https://kubevela.io/docs/next/platform-engineers/components/component-terraform) to introduce cloud resources from cloud providers. But supporting cloud resources from cloud providers one by one in KubeVela is not conducive to quickly satisfying users' needs for cloud resources. This doc provides a solution to quickly introduce the top 50 most popular cloud resources from AWS in less than 100 lines of code.
 
 We also expect users to be inspired by this article to contribute cloud resources for other cloud providers.
 
 
-# Where are the most popular cloud resources on AWS?
+## Where are the most popular cloud resources on AWS?
 
-The official Terraform website provides Terraform modules for each cloud provider, for example, [AWS cloud resource Terraform modules]( https://registry.terraform.io/namespaces/terraform-aws-modules). And the cloud resources are sorted by popularity of usage (downloads), for example, AWS VPC has 18.7 million downloads.
+The official Terraform website provides Terraform modules for each cloud provider, for example, [AWS cloud resource Terraform modules](https://registry.terraform.io/namespaces/terraform-aws-modules). And the cloud resources are sorted by popularity of usage (downloads), for example, AWS VPC has 18.7 million downloads.
 
-Through a simple analysis, we found that the data for the top 50 popular Terraform modules for AWS can be obtained by requesting [https://registry.terraform.io/v2/modules?filter%5Bprovider%5D=aws&include=latest-version&page%5Bsize%5D=50&page%5Bnumber%5D=1](https://registry.terraform.io/v2/modules?filter%5Bprovider%5D=aws&include=latest-version&page%5Bsize%5D=50&page%5Bnumber%5D=1) 。
+Through a simple analysis, we found that the data for the top 50 popular Terraform modules for AWS can be obtained by requesting [https://registry.terraform.io/v2/modules?filter%5Bprovider%5D=aws&include=latest-version&page%5Bsize%5D=50&page%5Bnumber%5D=1](https://registry.terraform.io/v2/modules?filter%5Bprovider%5D=aws&include=latest-version&page%5Bsize%5D=50&page%5Bnumber%5D=1).
 
 
 
-# Prerequisites
+## Prerequisites
 
 The code accepts two parameters.
 
@@ -27,7 +34,7 @@ For AWS, Provider Name should be “aws”，corresponding Terraform modules URL
 You need to make sure the providerName(aws) and Modules links are correct before executing the code.
 
 
-# Executing the code
+## Executing the code
 
 Then you can quickly bring in the top 50 most popular AWS cloud resources in bulk with the following 100 lines of code (filename gen.go).
 
@@ -175,10 +182,10 @@ go run gen.go aws "https://registry.terraform.io/v2/modules?filter%5Bprovider%5D
 
 
 
-# Explanation for the code
+## Explanation for the code
 
 
-## Unmarshal the json data for the resources
+### Unmarshal the json data for the resources
 
 Access the URL passed in by the user and parse the returned json data into the Go structure.
 
@@ -259,7 +266,7 @@ The attributes are further resolved as follows five items:
 The Go structure is named as `TFDownload `, The http library gets the json data and then parses the structure of the Terraform modules through the `json.Unmarshal`.
 
 
-## generating ComponentDefinitions in batch
+### generating ComponentDefinitions in batch
 
 1. creating directory and component definitions
 
@@ -285,7 +292,7 @@ Several items to be filled in the instruction are passed in from the parsed Modu
 
 
 
-# Have a try?
+## Have a try?
 
 There are also a number of cloud providers that offer a wealth of Terraform modules, such as
 
