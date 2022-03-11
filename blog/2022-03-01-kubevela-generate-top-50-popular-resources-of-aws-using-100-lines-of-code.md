@@ -296,8 +296,8 @@ Several items to be filled in the instruction are passed in from the parsed Modu
 
 There are also a number of cloud providers that offer a wealth of Terraform modules, such as
 
-GCP: [https://registry.terraform.io/namespaces/terraform-google-modules](https://registry.terraform.io/namespaces/terraform-google- modules)
+GCP: [https://registry.terraform.io/namespaces/terraform-google-modules](https://registry.terraform.io/namespaces/terraform-google-modules)
 
-Aliyun: [https://registry.terraform.io/namespaces/terraform-alicloud-modules](https://registry.terraform.io/namespaces/terraform- alicloud-modules)
+Alibaba Cloud: [https://registry.terraform.io/namespaces/terraform-alicloud-modules](https://registry.terraform.io/namespaces/terraform-alicloud-modules)
 
 Do you want to extend cloud resources for your current or favorite cloud provider for KubeVela as well?
