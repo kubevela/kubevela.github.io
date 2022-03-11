@@ -414,6 +414,10 @@
             {
               "type": "doc",
               "id": "version-v1.2/reference/addons/terraform"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/reference/addons/ai"
             }
           ]
         },
