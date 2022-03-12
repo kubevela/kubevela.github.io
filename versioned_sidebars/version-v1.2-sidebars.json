@@ -206,6 +206,10 @@
                 {
                   "type": "doc",
                   "id": "version-v1.2/end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/end-user/components/cloud-services/prepare-jdbc-connection-string"
                 }
               ]
             },
