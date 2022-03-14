@@ -180,6 +180,7 @@ module.exports = {
       label: "References",
       items: [
         "cli/vela",
+        "end-user/annotations",
         {
           type: "category",
           label: "Built-in Addons",
