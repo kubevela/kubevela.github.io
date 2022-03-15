@@ -226,6 +226,7 @@ module.exports = {
           items: ["end-user/policies/envbinding"],
         },
         "end-user/workflow/built-in-workflow-defs",
+        "end-user/service-account-integration",
         "reference/ui-schema",
         "reference/user-improvement-plan",
         {
