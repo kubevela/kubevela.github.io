@@ -180,7 +180,6 @@ module.exports = {
       label: "References",
       items: [
         "cli/vela",
-        "end-user/annotations",
         {
           type: "category",
           label: "Built-in Addons",
@@ -227,6 +226,7 @@ module.exports = {
           items: ["end-user/policies/envbinding"],
         },
         "end-user/workflow/built-in-workflow-defs",
+        "end-user/service-account-integration",
         "reference/ui-schema",
         "reference/user-improvement-plan",
         {
