@@ -17,7 +17,7 @@ title: Addon Cloud Resources
   You can also set the value for parameter `ALICLOUD_SECURITY_TOKEN`, which is optional, per [this doc](https://www.alibabacloud.com/help/doc-detail/28756.htm).
 
   ```shell
-  vela addon enable provider-alibaba ALICLOUD_ACCESS_KEY=<xxx> ALICLOUD_SECRET_KEY=<yyy> ALICLOUD_REGION=<region>
+  vela addon enable terraform-alibaba ALICLOUD_ACCESS_KEY=<xxx> ALICLOUD_SECRET_KEY=<yyy> ALICLOUD_REGION=<region>
   ```
 
 ## Terraform Provider addon for Azure
@@ -27,7 +27,7 @@ title: Addon Cloud Resources
   Set these parameters below per [Authenticate Terraform to Azure](https://docs.microsoft.com/en-us/azure/developer/terraform/authenticate-to-azure?tabs=bash).
 
   ```shell
-  vela addon enable provider-azure ARM_CLIENT_ID=<aaa> ARM_CLIENT_SECRET=<bbb> ARM_SUBSCRIPTION_ID=<ccc> ARM_TENANT_ID=<ddd>
+  vela addon enable terraform-azure ARM_CLIENT_ID=<aaa> ARM_CLIENT_SECRET=<bbb> ARM_SUBSCRIPTION_ID=<ccc> ARM_TENANT_ID=<ddd>
   ```
 
 ## Terraform Provider addon for AWS
@@ -37,7 +37,18 @@ title: Addon Cloud Resources
   Set these parameters below per [Authenticate Terraform to AWS](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#environment-variables).
 
   ```shell
-  vela addon enable provider-aws AWS_ACCESS_KEY_ID=<aaa> AWS_SECRET_ACCESS_KEY=<bbb> AWS_DEFAULT_REGION=<region>
+  vela addon enable terraform-aws AWS_ACCESS_KEY_ID=<aaa> AWS_SECRET_ACCESS_KEY=<bbb> AWS_DEFAULT_REGION=<region>
+  ```
+
+## Terraform Provider addon for Tencent Cloud
+
+Enable Terraform Tencent Cloud Provider as below to [provision and/or consume cloud resources](../../end-user/components/cloud-services/provision-and-consume-cloud-services).
+
+Get `TENCENTCLOUD_SECRET_ID` and `TENCENTCLOUD_SECRET_KEY` per [this guide](https://cloud.tencent.com/document/product/1213/67093)
+Get  `TENCENTCLOUD_REGION` by picking one RegionId from [Tencent Cloud region list](https://cloud.tencent.com/document/api/1140/40509#.E5.9C.B0.E5.9F.9F.E5.88.97.E8.A1.A8)
+
+  ```shell
+  vela addon enable terraform-tencent TENCENTCLOUD_SECRET_ID=<xxx> TENCENTCLOUD_SECRET_KEY=<yyy> TENCENTCLOUD_REGION=<region>
   ```
 
 ## Terraform Provider addon for GCP
