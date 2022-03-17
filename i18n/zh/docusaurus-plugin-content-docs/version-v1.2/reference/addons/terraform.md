@@ -37,3 +37,16 @@ title: 云资源插件
   ```shell
   vela addon enable provider-aws AWS_ACCESS_KEY_ID=<aaa> AWS_SECRET_ACCESS_KEY=<bbb> AWS_DEFAULT_REGION=<region>
   ```
+
+## GCP Terraform Provider 插件
+
+  执行如下命令开启 Terraform 对 GCP 的支持，可以[创建和消费云资源](../../end-user/components/cloud-services/provision-and-consume-cloud-services)：
+
+  参考[Add Credentials Guide](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/getting_started#adding-credentials)，设置参数 `GOOGLE_CREDENTIALS` 。参考 [Configure Provider Guide](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/getting_started#configuring-the-provider)，设置参数`GOOGLE_PROJECT` 。
+
+  参考[Google Cloud Platform Region 列表](https://cloud.google.com/compute/docs/regions-zones)中的`Region`设置 `GOOGLE_REGION` 。
+
+```shell
+vela addon enable provider-gcp GOOGLE_CREDENTIALS=<aaa> GOOGLE_PROJECT=<bbb> GOOGLE_REGION=<region>
+```
+
