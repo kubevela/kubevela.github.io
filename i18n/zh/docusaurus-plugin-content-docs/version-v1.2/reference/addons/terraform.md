@@ -37,3 +37,12 @@ title: 云资源插件
   ```shell
   vela addon enable provider-aws AWS_ACCESS_KEY_ID=<aaa> AWS_SECRET_ACCESS_KEY=<bbb> AWS_DEFAULT_REGION=<region>
   ```
+
+## 腾讯云 Terraform Provider 插件
+
+参考[文档](https://cloud.tencent.com/document/product/1213/67093) 获取 `TENCENTCLOUD_SECRET_ID` 和 `TENCENTCLOUD_SECRET_KEY`。
+在[腾讯云区域列表](https://cloud.tencent.com/document/api/1140/40509#.E5.9C.B0.E5.9F.9F.E5.88.97.E8.A1.A8)中选择一个 RegionId 作为 `TENCENTCLOUD_REGION`。
+
+  ```shell
+  vela addon enable terraform-tencent TENCENTCLOUD_SECRET_ID=<xxx> TENCENTCLOUD_SECRET_KEY=<yyy> TENCENTCLOUD_REGION=<region>
+  ```

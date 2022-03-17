@@ -39,3 +39,14 @@ title: Addon Cloud Resources
   ```shell
   vela addon enable provider-aws AWS_ACCESS_KEY_ID=<aaa> AWS_SECRET_ACCESS_KEY=<bbb> AWS_DEFAULT_REGION=<region>
   ```
+
+## Terraform Provider addon for Tencent Cloud
+
+Enable Terraform Tencent Cloud Provider as below to [provision and/or consume cloud resources](../../end-user/components/cloud-services/provision-and-consume-cloud-services).
+
+Get `TENCENTCLOUD_SECRET_ID` and `TENCENTCLOUD_SECRET_KEY` per [this guide](https://cloud.tencent.com/document/product/1213/67093)
+Get  `TENCENTCLOUD_REGION` by picking one RegionId from [Tencent Cloud region list](https://cloud.tencent.com/document/api/1140/40509#.E5.9C.B0.E5.9F.9F.E5.88.97.E8.A1.A8)
+
+  ```shell
+  vela addon enable terraform-tencent TENCENTCLOUD_SECRET_ID=<xxx> TENCENTCLOUD_SECRET_KEY=<yyy> TENCENTCLOUD_REGION=<region>
+  ```
