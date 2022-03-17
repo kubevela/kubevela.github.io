@@ -42,13 +42,12 @@ values={[
 minikube start
 ```
 
-<details> <summary> 安装 ingress 启用路由访问功能 </summary>
+安装 ingress 启用路由访问功能：
 
 ```shell script
 minikube addons enable ingress
 ```
 
-</details>
 </TabItem>
 
 <TabItem value="k3s">
@@ -139,13 +138,11 @@ nodes:
 EOF
 ```
 
-<details> <summary> 安装 ingress 启用路由访问功能 </summary>
+安装 ingress 启用路由访问功能：
 
 ```shell script
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 ```
-
-</details>
 
   </TabItem>
 

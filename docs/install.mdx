@@ -43,13 +43,12 @@ Then spins up a minikube cluster
 minikube start
 ```
 
-<details> <summary> Install ingress to enable service route </summary>
+Install ingress to enable service route:
 
 ```shell script
 minikube addons enable ingress
 ```
 
-</details>
 </TabItem>
 
 <TabItem value="k3s">
@@ -144,13 +143,12 @@ nodes:
 EOF
 ```
 
-<details> <summary> Install ingress controller to enable service route </summary>
+Install ingress controller to enable service route：
 
 ```shell script
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 ```
 
-</details>
 </TabItem>
 
 <TabItem value="cloudprovider">
