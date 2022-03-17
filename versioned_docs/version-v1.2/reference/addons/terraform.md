@@ -50,3 +50,16 @@ Get  `TENCENTCLOUD_REGION` by picking one RegionId from [Tencent Cloud region li
   ```shell
   vela addon enable terraform-tencent TENCENTCLOUD_SECRET_ID=<xxx> TENCENTCLOUD_SECRET_KEY=<yyy> TENCENTCLOUD_REGION=<region>
   ```
+
+## Terraform Provider addon for GCP
+
+  Enable Terraform GCP Provider as below to [provision and/or consume cloud resources](../../end-user/components/cloud-services/provision-and-consume-cloud-services).
+
+  Set `GOOGLE_CREDENTIALS` per [Add Credentials Guide](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/getting_started#adding-credentials). Set `GOOGLE_PROJECT` per [Configure Provider Guide](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/getting_started#configuring-the-provider). 
+
+  Set the value for `GOOGLE_REGION` by picking one `Region` from [Google Cloud Platform region list](https://cloud.google.com/compute/docs/regions-zones). 
+
+```shell
+vela addon enable provider-gcp GOOGLE_CREDENTIALS=<aaa> GOOGLE_PROJECT=<bbb> GOOGLE_REGION=<region>
+```
+
