@@ -89,6 +89,11 @@ func (i18n I18N) createTable(defDocPath string, infos []fs.FileInfo) {
 			if i18n.Language == Zh {
 				cloud = "Google Cloud Platform"
 			}
+		case "baidu":
+			cloud = "Baidu Cloud"
+			if i18n.Language == Zh {
+				cloud = "百度云"
+			}
 		default:
 			panic("Not supported Cloud Provider: " + provider)
 		}

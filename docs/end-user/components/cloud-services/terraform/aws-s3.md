@@ -32,7 +32,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- bucket | S3 bucket name | string | false |  
+ bucket | S3 bucket name | string | true |  
  acl | S3 bucket ACL | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
@@ -51,4 +51,4 @@ If `writeConnectionSecretToRef` is set, a secret will be generated with these ke
 
  Name | Description 
  ------------ | ------------- 
- BUCKET_NAME | 
+ BUCKET_NAME | Bucket name
