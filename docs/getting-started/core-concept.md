@@ -17,7 +17,7 @@ Component defines the artifact of application，The best practice is to having o
 
 ### Trait
 
-Triat are plugable operations that can attach to Component, for example: scaler for replicas(manual and auto), PVC, gateway, DNS and so on. You can draw out-of-box Trait from the ecosystem or simply customize by [Trait Definition](../platform-engineers/oam/x-definition#traitdefinition).
+Trait are plugable operations that can attach to Component, for example: scaler for replicas(manual and auto), PVC, gateway, DNS and so on. You can draw out-of-box Trait from the ecosystem or simply customize by [Trait Definition](../platform-engineers/oam/x-definition#traitdefinition).
 
 ### Workflow
 
