@@ -160,6 +160,7 @@ module.exports = {
           "Workflow System": [
             "platform-engineers/workflow/workflow",
             "platform-engineers/workflow/cue-actions",
+            "platform-engineers/workflow/working-mechanism",
           ],
         },
         {
