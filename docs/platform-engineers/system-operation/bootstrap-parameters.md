@@ -32,6 +32,9 @@ The introduction of bootstrap parameters in KubeVela controller are listed as be
 |         pprof-addr          | string |                ""                 | The address of pprof, default to be emtpy to disable pprof                                                                              |
 |        perf-enabled         |  bool  |               false               | Enable performance logging, working with monitoring tools like Loki and Grafana to discover performance bottleneck                      |
 | enable-cluster-gateway | bool | false | Enable multi cluster feature |
+| max-workflow-wait-backoff-time | int | 60 | the maximal backoff interval for workflow to retry when workflow step is waiting (unit: second) |
+| max-workflow-failed-backoff-time | int | 300 | the maximal backoff interval for workflow to retry when workflow step fails (unit: second) |
+| max-workflow-step-error-retry-times | int | 10 | the maximal retry times for workflow to retry when workflow step fails |
 
 > Other parameters not listed in the table are old parameters used in previous versions, the latest version ( v1.1 ) does not use them.
 
