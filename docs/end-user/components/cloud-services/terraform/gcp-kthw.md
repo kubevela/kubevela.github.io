@@ -13,7 +13,6 @@ Kubernetes Cluster On GCP with Terraform
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- project |  |  | false |  
  region |  |  | false |  
  network |  | map | false |  
  machines |  | map | false |  
@@ -21,6 +20,7 @@ Kubernetes Cluster On GCP with Terraform
  number_of_controller |  |  | false |  
  number_of_worker |  |  | false |  
  kube_api_port |  |  | false |  
+ project |  |  | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

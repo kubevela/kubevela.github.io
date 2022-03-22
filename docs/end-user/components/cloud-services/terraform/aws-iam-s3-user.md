@@ -13,10 +13,10 @@ Terraform module to provision a basic IAM user with permissions to access S3 res
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- force_destroy | Destroy even if it has non-Terraform-managed IAM access keys, login profiles or MFA devices | bool | false |  
- path | Path in which to create the user | string | false |  
  s3_actions | Actions to allow in the policy | list(string) | false |  
  s3_resources | S3 resources to apply the actions specified in the policy | list(string) | true |  
+ force_destroy | Destroy even if it has non-Terraform-managed IAM access keys, login profiles or MFA devices | bool | false |  
+ path | Path in which to create the user | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

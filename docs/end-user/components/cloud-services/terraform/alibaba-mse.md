@@ -36,9 +36,9 @@ If `writeConnectionSecretToRef` is set, a secret will be generated with these ke
 
  Name | Description 
  ------------ | ------------- 
+ INTRANET_DOMAIN | The intranet domain of the resource
  INTRANET_PORT | The intranet port of the resource
  Net_TYPE | The type of network
  RESOURCE_IDENTIFIER | The identifier of the resource
  INTERNET_DOMAIN | The internet domain of the resource
  INTERNET_PORT | The internet port of the resource
- INTRANET_DOMAIN | The intranet domain of the resource

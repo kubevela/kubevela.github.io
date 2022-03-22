@@ -14,14 +14,14 @@ Lazy GCP instance via Terraform
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  project |  |  | true |  
- ssh_user |  |  | true |  
- image |  |  | false |  
  machine_type |  |  | false |  
  region |  |  | false |  
+ service_account_file |  |  | false |  
  zone |  |  | false |  
  github_user |  |  | true |  
+ image |  |  | false |  
  preemptible |  |  | false |  
- service_account_file |  |  | false |  
+ ssh_user |  |  | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
