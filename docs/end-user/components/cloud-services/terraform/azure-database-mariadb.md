@@ -59,9 +59,9 @@ If `writeConnectionSecretToRef` is set, a secret will be generated with these ke
 
  Name | Description 
  ------------ | ------------- 
+ SERVER_NAME | mariadb server name
  DB_NAME | Database instance name
  DB_USER | Database instance username
  DB_PASSWORD | Database instance password
  DB_PORT | Database instance port
  DB_HOST | Database instance host
- SERVER_NAME | mariadb server name

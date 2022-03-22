@@ -13,12 +13,12 @@ For your cloud functions to GCP
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- common_tags | This is to help you add tags to your cloud objects | map(any) | true |  
- lambda | A map object that populates the majority of cloudfunction settings | map(any) | true |  
  project | GCP project | string | true |  
  region | GCP region | string | true |  
  sourcezippath | Full path to source zip file  | string | true |  
  location |  | string | false |  
+ common_tags | This is to help you add tags to your cloud objects | map(any) | true |  
+ lambda | A map object that populates the majority of cloudfunction settings | map(any) | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

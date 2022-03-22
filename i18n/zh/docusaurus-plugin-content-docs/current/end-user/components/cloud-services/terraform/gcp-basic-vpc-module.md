@@ -13,10 +13,10 @@ GCP Basic_vpc_module
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
+ network_name |  |  | true |  
  cidr_block |  |  | true |  
  ssh_source_ips |  |  | true |  
  region |  |  | true |  
- network_name |  |  | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
