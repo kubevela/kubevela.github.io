@@ -356,6 +356,6 @@ $ vela status color-style-ab-serving --endpoint
 
 ## 总结
 
-通过 KubeVela 的 AI 插件，可以帮助用户更便捷地进行模型训练与模型服务。
+通过 KubeVela 的 AI 插件，可以帮助你更便捷地进行模型训练与模型服务。
 
 除此之外，通过与 KubeVela 的结合，我们还能将测试完效果的模型通过 KubeVela 的多环境功能，下发到不同的环境中，从而实现模型的灵活部署。
