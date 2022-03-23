@@ -10,7 +10,7 @@ image: https://raw.githubusercontent.com/oam-dev/kubevela.io/main/docs/resources
 hide_table_of_contents: false
 ---
 
-At the background of Machine learning goes viral, AI engineers not only need to train and debug their models, but also need to deploy them online to verify how it looks(of course sometimes, this part of the work is done by AI system engineers. ). It is very tedious and draining AI engineers.
+At the background of Machine learning goes viral, AI engineers not only need to train and debug their models, but also need to deploy them online to verify how it looks(of course sometimes, this part of the work is done by AI platform engineers. ). It is very tedious and draining AI engineers.
 
 In the cloud-native era, our model training and model serving are also usually performed on the cloud. Doing so not only improves scalability, but also improves resource utility. This is very effective for machine learning scenarios that consume a lot of computing resources.
 
