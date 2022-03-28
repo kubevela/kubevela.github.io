@@ -53,6 +53,7 @@ app-delivering-chart	redis-comp	helm      	      	running	healthy	      	2021-08
 | targetNamespace | 可选     | 安装 chart 的名字空间，默认由 chart 本身决定                                                                                                                                                                                                                        | your-ns                            |
 | releaseName     | 可选     | 安装得到的 release 名称                                                                                                                                                                                                                                             | your-rn                            |
 | values          | 可选     | 覆写 chart 的 Values.yaml ，用于 Helm 渲染。                                                                                                                                                                                                                        | 见来自 Git 仓库的例子              |
+| installTimeout  | 可选     | `helm install`操作的超时时间，默认值 10m (10分钟)                                                                                                                                                                                                                        | 20m              |
 
 
 ## 部署来自 OSS bucket 的 Chart
