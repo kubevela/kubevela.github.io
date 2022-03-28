@@ -2,7 +2,7 @@
 title: Supported Cloud Resource list
 ---
 
-| Orchestration Type |    Cloud Provider     |                                                    Cloud Resource                                                     |                                                                              Description                                                                              | Valid |
+| Orchestration Type |    Cloud Provider     |                                                    Cloud Resource                                                     |                                                                              Description                                                                              | Verified |
 |--------------------|-----------------------|-----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
 | Terraform          | Alibaba Cloud         | [ack](./terraform/alibaba-ack.md)                                                                                     | Terraform configuration for Alibaba Cloud ACK cluster                                                                                                                 | true |
 |                    |                       | [amqp](./terraform/alibaba-amqp.md)                                                                                   | Terraform configuration for Alibaba Cloud AMQP(RabbitMQ)                                                                                                              | false |
