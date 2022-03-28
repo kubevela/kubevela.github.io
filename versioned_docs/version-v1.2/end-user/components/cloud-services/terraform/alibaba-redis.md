@@ -52,8 +52,8 @@ If `writeConnectionSecretToRef` is set, a secret will be generated with these ke
 
  Name | Description 
  ------------ | ------------- 
- REDIS_CONNECT_ADDRESS | Redis connect address
  REDIS_USER | Redis user
  REDIS_PASSWORD | Redis password
  RESOURCE_IDENTIFIER | The identifier of the resource
  REDIS_NAME | Redis instance name
+ REDIS_CONNECT_ADDRESS | Redis connect address

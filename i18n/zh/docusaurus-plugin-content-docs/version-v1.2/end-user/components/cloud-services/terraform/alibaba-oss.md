@@ -31,8 +31,8 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- bucket | OSS bucket name | string | false |  
  acl | OSS bucket ACL, supported 'private', 'public-read', 'public-read-write' | string | false |  
+ bucket | OSS bucket name | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
