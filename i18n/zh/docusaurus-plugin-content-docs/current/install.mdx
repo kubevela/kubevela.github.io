@@ -302,7 +302,7 @@ kubectl get service velaux -n vela-system -o jsonpath="{.spec.ports[0].nodePort}
 VelaUX 有鉴权机制，默认账号为admin，通过以下方式获取密码
 
 ```shell
-kubectl get secret -n vela-system admin -ojson |jq -r '.data.admin'|base64 -d
+vela logs -n vela-system --name apiserver addon-velaux | grep "init admin user"
 ```
 
 国内环境可使用以下安装方式:

@@ -25,7 +25,7 @@ title: 交付第一个应用
 正常安装 VelaUX 后你需要登陆。默认账号为admin，通过以下方式获取密码
 
 ```shell
-kubectl get secret -n vela-system admin -ojson |jq -r '.data.admin'|base64 -d
+vela logs -n vela-system --name apiserver addon-velaux | grep "init admin user"
 ```
 
 ## 选择应用的部署类型/规划应用部署环境
