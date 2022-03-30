@@ -20,9 +20,17 @@ title: 交付第一个应用
 
 - 通过操作 VelaUX 完整交付一个应用。
 
+## 登陆到 VelaUX
+
+正常安装 VelaUX 后你需要登陆。默认账号为admin，通过以下方式获取密码
+
+```shell
+kubectl get secret -n vela-system admin -ojson |jq -r '.data.admin'|base64 -d
+```
+
 ## 选择应用的部署类型/规划应用部署环境
 
-VelaUX 正常安装后，你进入的第一个页面即应用交付管理页面。
+你进入的第一个页面即应用交付管理页面。
 
 ![](./resources/dashboard.png)
 
