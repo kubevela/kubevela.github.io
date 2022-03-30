@@ -297,7 +297,7 @@ helm install --create-namespace -n vela-system kubevela kubevela/vela-core --ver
 VelaUX is a dashboard including UI+API services, it enables you to do everything around application delivery and management.
 
 ```shell script
-vela addon enable velaux
+vela addon enable velaux --version 1.3.0-beta.2
 ```
 
 expected output:
@@ -315,6 +315,12 @@ vela port-forward addon-velaux -n vela-system
 Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` for visit.
 
 If you have loadbalaner or ingress, please refer to [VelaUX addon docs](./reference/addons/velaux) for more advanced installation ways.
+
+VelaUX need authentication. Default username is admin and get default password as below
+
+```shell
+kubectl get secret -n vela-system admin -ojson |jq -r '.data.admin'|base64 -d
+```
 
 ## 5. Uninstall
 
