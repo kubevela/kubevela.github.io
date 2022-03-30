@@ -19,11 +19,20 @@ You'll get to know:
 - Get familiar with core concepts as [Application](./getting-started/core-concept#application), [Environment](getting-started/core-concept#environment) and [Target](getting-started/core-concept#target)
 - Finished an application delivery by operating VelaUX
 
+## Get password and login
+
+After install VelaUX, you need to log in. Default username is "admin" and you can get the password using command below
+```shell
+kubectl get secret -n vela-system admin -ojson |jq -r '.data.admin'|base64 -d
+```
+
+![](./resources/login.png)
+
 ## Choosing deployment type and Environment
 
-After VelaUX is installed, the first page you enter is for managing the app:
+After login, the first page you enter is for managing the app:
 
-![](./resources/dashboard.jpg)
+![](./resources/dashboard.png)
 
 Then click the button of `New Application` on the upper-right, type in these things:
 
@@ -50,7 +59,7 @@ Confirmed. Notice that this application is only created but not deployed yet. Ve
 
 ## Executing Workflow to deploy
 
-Click `Development Environment` and switch to the dev environment, deploy it. Or click the deploy button on the upper-right. When the workflow is finished, you'll get to see the list of instances lying within.
+Click the deploy button on the upper-right. When the workflow is finished, you'll get to see the list of status lying within.
 
 ![](./resources/succeed-first-vela-app.jpg)
 
