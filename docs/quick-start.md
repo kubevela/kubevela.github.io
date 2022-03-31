@@ -23,7 +23,7 @@ You'll get to know:
 
 After install VelaUX, you need to log in. Default username is "admin" and you can get the password using command below
 ```shell
-vela logs -n vela-system --name apiserver addon-velaux | grep "init admin user"
+vela logs -n vela-system --name apiserver addon-velaux | grep "initialized admin username"
 ```
 
 ![](./resources/login.png)
