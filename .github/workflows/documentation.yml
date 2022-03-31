@@ -123,6 +123,6 @@ jobs:
             VERSION=${{ steps.get_version.outputs.VERSION }}
             GOPROXY=https://proxy.golang.org
           tags: |-
-            docker.io/oamdev/kubevela.io:${{ steps.get_version.outputs.VERSION }}
-            ghcr.io/${{ github.repository }}/kubevela.io:${{ steps.get_version.outputs.VERSION }}
+            docker.io/oamdev/kubevela-io:${{ steps.get_version.outputs.VERSION }}
+            ghcr.io/${{ github.repository }}/kubevela-io:${{ steps.get_version.outputs.VERSION }}
 
