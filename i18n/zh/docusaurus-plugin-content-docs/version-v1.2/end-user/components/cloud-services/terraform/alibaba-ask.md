@@ -31,8 +31,8 @@ title:  阿里云 ASK
 
  名称 | 描述 
  ------------ | ------------- 
- KUBECONFIG | The KubeConfig string of the kubernetes cluster.
  RESOURCE_IDENTIFIER | The identifier of the resource
  Name | Cluster Name
  API_SERVER_INTRANET | The API server intranet address of the kubernetes cluster.
  API_SERVER_INTERNET | The API server internet address of the kubernetes cluster.
+ KUBECONFIG | The KubeConfig string of the kubernetes cluster.

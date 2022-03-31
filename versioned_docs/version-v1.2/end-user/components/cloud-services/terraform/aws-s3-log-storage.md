@@ -13,34 +13,28 @@ This module creates an S3 bucket suitable for receiving logs from other AWS serv
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- policy | A valid bucket policy JSON document. Note that if the policy document is not specific enough (but still valid), Terraform may view the policy as constantly changing in a terraform plan. In this case, please make sure you use the verbose/specific version of the policy | string | false |  
- abort_incomplete_multipart_upload_days | Maximum time (in days) that you want to allow multipart uploads to remain in progress | number | false |  
- bucket_notifications_type | Type of the notification configuration. Only SQS is supported. | string | false |  
- bucket_notifications_prefix | Prefix filter. Used to manage object notifications | string | false |  
- lifecycle_prefix | Prefix filter. Used to manage object lifecycle events | string | false |  
- block_public_policy | Set to `false` to disable the blocking of new public policies on the bucket | bool | false |  
- allow_encrypted_uploads_only | Set to `true` to prevent uploads of unencrypted objects to S3 bucket | bool | false |  
- access_log_bucket_name | Name of the S3 bucket where S3 access logs will be sent to | string | false |  
- versioning_mfa_delete_enabled | Enable MFA delete for the bucket | string | false |  
- enable_glacier_transition | Enables the transition to AWS Glacier which can cause unnecessary costs for huge amount of small files | bool | false |  
- kms_master_key_arn | The AWS KMS master key ARN used for the SSE-KMS encryption. This can only be used when you set the value of sse_algorithm as aws:kms. The default aws/s3 AWS KMS master key is used if this element is absent while the sse_algorithm is aws:kms | string | false |  
- noncurrent_version_expiration_days | Specifies when noncurrent object versions expire | number | false |  
- block_public_acls | Set to `false` to disable the blocking of new public access lists on the bucket | bool | false |  
- restrict_public_buckets | Set to `false` to disable the restricting of making the bucket public | bool | false |  
- force_destroy | (Optional, Default:false ) A boolean that indicates all objects should be deleted from the bucket so that the bucket can be destroyed without error. These objects are not recoverable | bool | false |  
- lifecycle_rule_enabled | Enable lifecycle events on this bucket | bool | false |  
- access_log_bucket_prefix | Prefix to prepend to the current S3 bucket name, where S3 access logs will be sent to | string | false |  
- bucket_notifications_enabled | Send notifications for the object created events. Used for 3rd-party log collection from a bucket | bool | false |  
- lifecycle_tags | Tags filter. Used to manage object lifecycle events | map(string) | false |  
- acl | The canned ACL to apply. We recommend log-delivery-write for compatibility with AWS services | string | false |  
- versioning_enabled | A state of versioning. Versioning is a means of keeping multiple variants of an object in the same bucket | bool | false |  
- expiration_days | Number of days after which to expunge the objects | number | false |  
- sse_algorithm | The server-side encryption algorithm to use. Valid values are AES256 and aws:kms | string | false |  
- noncurrent_version_transition_days | Specifies when noncurrent object versions transitions | number | false |  
- standard_transition_days | Number of days to persist in the standard storage tier before moving to the infrequent access tier | number | false |  
- glacier_transition_days | Number of days after which to move the data to the glacier storage tier | number | false |  
  ignore_public_acls | Set to `false` to disable the ignoring of public access lists on the bucket | bool | false |  
+ restrict_public_buckets | Set to `false` to disable the restricting of making the bucket public | bool | false |  
  allow_ssl_requests_only | Set to `true` to require requests to use Secure Socket Layer (HTTPS/SSL). This will explicitly deny access to HTTP requests | bool | false |  
+ bucket_notifications_prefix | Prefix filter. Used to manage object notifications | string | false |  
+ lifecycle_configuration_rules | A list of S3 bucket v2 lifecycle rules, as specified in [terraform-aws-s3-bucket](https://github.com/cloudposse/terraform-aws-s3-bucket)"\nThese rules are not affected by the deprecated `lifecycle_rule_enabled` flag.\n**NOTE:** Unless you also set `lifecycle_rule_enabled = false` you will also get the default deprecated rules set on your bucket.\n | list(object({\n    enabled = bool\n    id      = string\n\n    abort_incomplete_multipart_upload_days = number\n\n    # `filter_and` is the `and` configuration block inside the `filter` configuration.\n    # This is the only place you should specify a prefix.\n    filter_and = any\n    expiration = any\n    transition = list(any)\n\n    noncurrent_version_expiration = any\n    noncurrent_version_transition = list(any)\n  })) | false |  
+ source_policy_documents | List of IAM policy documents that are merged together into the exported document.\nStatements defined in source_policy_documents must have unique SIDs.\nStatement having SIDs that match policy SIDs generated by this module will override them.\n | list(string) | false |  
+ versioning_enabled | Enable object versioning, keeping multiple variants of an object in the same bucket | bool | false |  
+ sse_algorithm | The server-side encryption algorithm to use. Valid values are AES256 and aws:kms | string | false |  
+ bucket_notifications_type | Type of the notification configuration. Only SQS is supported. | string | false |  
+ force_destroy | When `true`, permits a non-empty S3 bucket to be deleted by first deleting all objects in the bucket.\nTHESE OBJECTS ARE NOT RECOVERABLE even if they were versioned and stored in Glacier.\nMust be set `false` unless `force_destroy_enabled` is also `true`.\n | bool | false |  
+ kms_master_key_arn | The AWS KMS master key ARN used for the SSE-KMS encryption. This can only be used when you set the value of sse_algorithm as aws:kms. The default aws/s3 AWS KMS master key is used if this element is absent while the sse_algorithm is aws:kms | string | false |  
+ allow_encrypted_uploads_only | Set to `true` to prevent uploads of unencrypted objects to S3 bucket | bool | false |  
+ block_public_acls | Set to `false` to disable the blocking of new public access lists on the bucket | bool | false |  
+ block_public_policy | Set to `false` to disable the blocking of new public policies on the bucket | bool | false |  
+ access_log_bucket_prefix | Prefix to prepend to the current S3 bucket name, where S3 access logs will be sent to | string | false |  
+ s3_object_ownership | Specifies the S3 object ownership control. Valid values are `ObjectWriter`, `BucketOwnerPreferred`, and 'BucketOwnerEnforced'. | string | false |  
+ force_destroy_enabled | When `true`, permits `force_destroy` to be set to `true`.\nThis is an extra safety precaution to reduce the chance that Terraform will destroy and recreate\nyour S3 bucket, causing COMPLETE LOSS OF ALL DATA even if it was stored in Glacier.\n\nWARNING: Upgrading this module from a version prior to 0.27.0 to this version\n  will cause Terraform to delete your existing S3 bucket CAUSING COMPLETE DATA LOSS\n  unless you follow the upgrade instructions on the Wiki [here](https://github.com/cloudposse/terraform-aws-s3-log-storage/wiki/Upgrading-to-v0.27.0-(POTENTIAL-DATA-LOSS)).\n  See additional instructions for upgrading from v0.27.0 to v0.28.0 [here](https://github.com/cloudposse/terraform-aws-s3-log-storage/wiki/Upgrading-to-v0.28.0-and-AWS-provider-v4-(POTENTIAL-DATA-LOSS)).\n\n | bool | false |  
+ bucket_key_enabled | Set this to true to use Amazon S3 Bucket Keys for SSE-KMS, which reduce the cost of AWS KMS requests.\n\nFor more information, see: https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-key.html\n | bool | false |  
+ bucket_notifications_enabled | Send notifications for the object created events. Used for 3rd-party log collection from a bucket | bool | false |  
+ bucket_name | Bucket name. If provided, the bucket will be created with this name\ninstead of generating the name from the context.\n | string | false |  
+ acl | The canned ACL to apply. We recommend log-delivery-write for compatibility with AWS services | string | false |  
+ access_log_bucket_name | Name of the S3 bucket where S3 access logs will be sent to | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
