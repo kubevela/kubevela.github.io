@@ -20,11 +20,19 @@ title: 交付第一个应用
 
 - 通过操作 VelaUX 完整交付一个应用。
 
+## 登陆到 VelaUX
+
+正常安装 VelaUX 后你需要登陆。默认账号为admin，通过以下方式获取密码
+
+```shell
+vela logs -n vela-system --name apiserver addon-velaux | grep "initialized admin username"
+```
+
 ## 选择应用的部署类型/规划应用部署环境
 
-VelaUX 正常安装后，你进入的第一个页面即应用交付管理页面。
+你进入的第一个页面即应用交付管理页面。
 
-![](./resources/dashboard.jpg)
+![](./resources/dashboard.png)
 
 然后点击右上角的 `New Application` 按钮开始创建应用，按照 UI 提示填写以下四个维度的信息：
 
@@ -47,13 +55,13 @@ VelaUX 正常安装后，你进入的第一个页面即应用交付管理页面�
 
 ![](./resources/port-first-vela-app.png)
 
-确认创建后即可进入应用管理页面，这时应用还没有开始进行部署，VelaUX 默认生成了开发环境的交付 [工作流](./getting-started/core-concept#工作流（workflow）) 和调整应用副本数量的 [运维特征](./getting-started/core-concept#运维特征（trait）)。
+确认创建后即可进入应用管理页面，这时应用还没有开始进行部署，VelaUX 默认生成了默认环境的交付 [工作流](./getting-started/core-concept#工作流（workflow）) 和调整应用副本数量的 [运维特征](./getting-started/core-concept#运维特征（trait）)。
 
 ![](./resources/created-first-vela-app.jpg)
 
 ## 执行环境的部署
 
-可以点击 `Development Environment` 切换到开发环境下，执行部署动作。或直接点击页面右上方的部署按钮。工作流执行完成后刷新应用实例列表即可查看到已经部署完成的实例。
+直接点击页面右上方的部署按钮。工作流执行完成后刷新应用实例列表即可查看到已经部署完成的实例。
 
 ![](./resources/succeed-first-vela-app.jpg)
 
