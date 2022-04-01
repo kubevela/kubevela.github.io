@@ -4,7 +4,7 @@ author: Lei Zhang and Fei Guo
 author_title: CNCF TOC Member/Kubernetes
 author_url: https://github.com/resouer
 author_image_url: https://avatars.githubusercontent.com/u/1701782?s=200&v=4
-tags: [ kubevela ]
+tags: [ KubeVela ]
 description: The Extensible App Platform Based on Open Application Model and Kubernetes
 image: https://tva1.sinaimg.cn/large/ad5fbf65gy1glgj5q8inej208g049aa6.jpg
 hide_table_of_contents: false
