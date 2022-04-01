@@ -82,7 +82,7 @@ jobs:
       - name: Get the version
         id: get_version
         run: |
-          VERSION=${GITHUB_REF#refs/tags/}
+          VERSION=${GITHUB_REF#refs/heads/}
           if [[ ${GITHUB_REF} == "refs/heads/master" ]]; then
             VERSION=latest
           fi
