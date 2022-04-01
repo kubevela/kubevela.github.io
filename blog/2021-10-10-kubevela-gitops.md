@@ -4,7 +4,7 @@ author: Tianxin Dong
 author_title: KubeVela Team
 author_url: https://github.com/oam-dev/kubevela
 author_image_url: https://kubevela.io/img/logo.svg
-tags: [ kubevela ]
+tags: [ KubeVela ]
 description: ""
 image: https://raw.githubusercontent.com/oam-dev/kubevela.io/main/docs/resources/KubeVela-03.png
 hide_table_of_contents: false

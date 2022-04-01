@@ -4,7 +4,7 @@ author: Da Yin, Yang Song, Zhengxi Zhou and Jianbo Sun
 author_title: KubeVela Team
 author_url: https://github.com/oam-dev/kubevela
 author_image_url: https://kubevela.io/img/logo.svg
-tags: [ kubevela ]
+tags: [ KubeVela ]
 description: KubeVela is demonstrated to be able to host thousands of applications effectively with limited resources.
 image: https://raw.githubusercontent.com/oam-dev/kubevela.io/main/docs/resources/KubeVela-03.png
 hide_table_of_contents: false
