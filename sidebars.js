@@ -200,6 +200,7 @@ module.exports = {
             "end-user/components/cue/webservice",
             "end-user/components/cue/worker",
             "end-user/components/cue/task",
+            "end-user/components/cue/cron-task",
             "end-user/components/kustomize",
             "end-user/components/cue/raw",
             "end-user/components/more",
