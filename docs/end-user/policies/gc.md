@@ -43,13 +43,10 @@ vela up -f app.yaml
 ```
 
 ```shell
-$ kubectl get app
-NAME             COMPONENT        TYPE         PHASE     HEALTHY   STATUS   AGE
-first-vela-app   express-server   webservice   running   true               29s
+$ vela ls
+APP             COMPONENT       TYPE            TRAITS          PHASE   HEALTHY STATUS          CREATED-TIME                 
+first-vela-app  express-server  webservice      ingress-1-20    running healthy Ready:1/1       2022-04-06 16:20:25 +0800 CST
 ```
-
-> In the following steps, we'll use `kubectl` command to do some verification. You can also use `vela status first-vela-app` to check the aggregated application status and see if components are healthy.
-
 
 2. update the app
 
@@ -84,12 +81,14 @@ vela up -f app1.yaml
 ```
 
 ```shell
-$ kubectl get app
-NAME             COMPONENT          TYPE         PHASE     HEALTHY   STATUS   AGE
-first-vela-app   express-server-1   webservice   running   true               9m35s
+$ vela ls
+APP             COMPONENT               TYPE            TRAITS          PHASE   HEALTHY STATUS          CREATED-TIME                 
+first-vela-app  express-server-1        webservice      ingress-1-20    running healthy Ready:1/1       2022-04-06 16:20:25 +0800 CST
 ```
 
 check whether legacy resources are reserved.
+
+> In the following steps, we'll use `kubectl` command to do some verification. You can also use `vela status first-vela-app` to check the aggregated application status and see if components are healthy.
 
 ```
 $ kubectl get deploy
@@ -123,7 +122,7 @@ first-vela-app-v2-default   2m56s
 3. delete the app
 
 ```
-$ kubectl delete app first-vela-app
+$ vela delete first-vela-app
 ```
 
 > If you hope to delete resources in one specified version, you can run `kubectl delete resourcetracker first-vela-app-v1-default`. 
@@ -173,7 +172,7 @@ hello-world   ClusterIP   10.96.160.208   <none>        8000/TCP   78s
 
 If you upgrade the application and use a different component, you will find the old versioned deployment is deleted but the service is kept.
 ```shell
-$ cat <<EOF | kubectl apply -f -
+$ cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
