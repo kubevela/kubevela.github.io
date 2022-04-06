@@ -43,9 +43,9 @@ vela up -f app.yaml
 ```
 
 ```shell
-$ kubectl get app
-NAME             COMPONENT        TYPE         PHASE     HEALTHY   STATUS   AGE
-first-vela-app   express-server   webservice   running   true               29s
+$ vela ls
+APP             COMPONENT       TYPE            TRAITS          PHASE   HEALTHY STATUS          CREATED-TIME                 
+first-vela-app  express-server  webservice      ingress-1-20    running healthy Ready:1/1       2022-04-06 16:20:25 +0800 CST
 ```
 
 2. 然后更新它
@@ -81,14 +81,14 @@ vela up -f app1.yaml
 ```
 
 ```shell
-$ kubectl get app
-NAME             COMPONENT          TYPE         PHASE     HEALTHY   STATUS   AGE
-first-vela-app   express-server-1   webservice   running   true               9m35s
+$ vela ls
+APP             COMPONENT               TYPE            TRAITS          PHASE   HEALTHY STATUS          CREATED-TIME                 
+first-vela-app  express-server-1        webservice      ingress-1-20    running healthy Ready:1/1       2022-04-06 16:20:25 +0800 CST
 ```
 
-> 在下述步骤中，我们将使用 `kubectl` 命令来做一些验证。你也可以使用 `vela status first-vela-app` 来检查应用及其组件的健康状态。
-
 可以发现旧版本的应用资源和新版本的应用资源同时存在于集群中。
+
+> 在下述步骤中，我们将使用 `kubectl` 命令来做一些验证。你也可以使用 `vela status first-vela-app` 来检查应用及其组件的健康状态。
 
 ```
 $ kubectl get deploy
@@ -122,7 +122,7 @@ first-vela-app-v2-default   2m56s
 在删除该应用时所有的版本资源会被一并回收。
 
 ```
-$ kubectl delete app first-vela-app
+$ vela delete first-vela-app
 ```
 
 > 如果你希望删除某个应用版本下的过时资源，你可以运行`kubectl delete resourcetracker first-vela-app-v1-default`。
@@ -172,7 +172,7 @@ hello-world   ClusterIP   10.96.160.208   <none>        8000/TCP   78s
 
 如果你升级该应用并使用一个新的组件，你会发现旧版本应用中通过 webservice 组件创建的 Deployment 被删除掉了，但是通过 expose 这一运维特征创建的 Service 资源仍然保留下来。
 ```shell
-$ cat <<EOF | kubectl apply -f -
+$ cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
