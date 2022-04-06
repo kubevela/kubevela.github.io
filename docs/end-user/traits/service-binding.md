@@ -1,11 +1,11 @@
 ---
-title:  Service Binding
+title:  Binding Configuration and Secrets
 ---
 
 Service binding trait will bind data from Kubernetes `Secret` to the application container's ENV.
 
 
-> Note: `service-biding` trait is hidden by default in `VelaUX`, you can use it in CLI.
+> Note: `service-binding` trait is hidden by default in `VelaUX`, you can use it in CLI.
 
 ## How to use
 
@@ -94,17 +94,4 @@ spec:
 ```
 
 Deploy this YAML and the Secret `db-conn-example` will be binding into environment of workload.
-
-## Specification
-
-### Properties
-Name | Description | Type | Required | Default
------------- | ------------- | ------------- | ------------- | -------------
-envMappings | The mapping of environment variables to secret | map[string]#KeySecret | true |
-
-#### KeySecret
-Name | Description | Type | Required | Default
------------- | ------------- | ------------- | ------------- | -------------
-| key  | if key is empty, we will use envMappings key instead              | string            | false     |         |
-| secret | Kubernetes secret name | string | true     |         |
 

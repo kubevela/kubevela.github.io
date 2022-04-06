@@ -1,8 +1,8 @@
 ---
-title:  Jenkins CI/CD
+title:  Jenkins CI Integration
 ---
 
-This section will introduce how to use KubeVela with existing CI/CD tools such as Jenkins and why.
+This section will introduce how to use KubeVela with existing CI tools such as Jenkins and why.
 
 ## Introduction
 
@@ -143,6 +143,8 @@ $ curl http://<your domain>/
 Version: 0.1.2
 ```
 
-## More
-
 Refer to the [blog post](/blog/2021/09/02/kubevela-jenkins-cicd) for more details about deploying Jenkins + KubeVela and more comprehensive demo for application rolling update.
+
+## Next Step
+
+- Learn how to do [GitOps](./gitops) with KubeVela.

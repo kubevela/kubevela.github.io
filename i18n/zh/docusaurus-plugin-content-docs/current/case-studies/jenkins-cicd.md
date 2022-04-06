@@ -1,8 +1,8 @@
 ---
-title:  Jenkins CI/CD
+title:  Jenkins CI 集成
 ---
 
-本文将介绍如何使用 KubeVela 同已有的 CI/CD 工具（比如 Jenkins）共同协作来进行应用的持续交付，并解释这样集成的好处是什么。
+本文将介绍如何使用 KubeVela 同已有的 CI 工具（比如 Jenkins）共同协作来进行应用的持续交付，并解释这样集成的好处是什么。
 
 ## 简介
 
@@ -147,3 +147,7 @@ Version: 0.1.2
 ## 更多
 
 详细的环境部署流程以及更加完整的应用滚动更新可以参考[博客](/blog/2021/09/02/kubevela-jenkins-cicd)。
+
+## 下一步
+
+- 学习 KubeVela 在 [GitOps](./gitops) 场景下的对接和使用方式。

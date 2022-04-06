@@ -1,10 +1,12 @@
 ---
-title:  Needs More？
+title:  Needs More Component？
 ---
 
-## 1. Get more from [install addons](../../how-to/cli/addon/addon)
+## 1. Refer to [All Component References](./references) for all other component types.
 
-## 2. Extend KubeVela by yourself
+## 2. Get more from [install addons](../../how-to/cli/addon/addon).
+
+## 3. Extend KubeVela by yourself
 
 * Read [how to build definitions](../../platform-engineers/cue/definition-edit) to build your own capability from existing ones.
 * [Build your own capability from scratch](../../platform-engineers/cue/advanced)

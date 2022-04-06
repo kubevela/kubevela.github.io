@@ -26,12 +26,24 @@ KubeVela 通过以下设计，使得面向混合/多云环境的应用交付变�
 
 ## 谁应该使用 KubeVela？
 
-- 云原生时代的应用研发、运维人员、DevOps 工程师：
-  - KubeVela 是一个现代化的持续交付（CD）平台。
+![](../resources/vela-overview.jpg)
+
 - 云原生应用平台的构建者、PaaS、Serverless 平台工程师、基础设施平台管理员：
-  - KubeVela 是一个普适的、高可扩展的应用交付引擎与内核。
+  - [Vela Core](../end-user/quick-start-cli) 是一个普适的、高可扩展的应用交付引擎与内核，它以极简的架构实现了原生 Kubernetes 多集群控制平面的能力，能够将 OAM 应用引擎直接植入企业已有的 PaaS 平台之中并不破坏已有的能力，从而实现标准化应用交付。
 - 第三方软件供应商（ISV）、垂直领域软件开发者、架构师：
-  - KubeVela 是一个 Kubernetes 和云平台之上的应用商店（App Store）。
+  - Vela 提供的充分的可扩展和集成能力，可以允许你[自定义插件](../platform-engineers/addon/intro) 完成复杂应用的构建和分发，是一个 Kubernetes 和云平台之上的应用商店（App Store）。
+- 云原生时代的应用研发、运维人员、DevOps 工程师：
+  - [VelaUX](../quick-start) 是一个基于 Vela Addon 机制构建的扩展能力集，安装这个插件后，你就拥有了一个开箱即用的现代化持续交付（CD）和应用管理平台。
+
+
+## OAM、KubeVela 和 VelaUX 是什么关系？
+
+- [OAM(Open Application Model)](https://github.com/oam-dev/spec) 是 KubeVela 背后的模型，它提供了一组平台无关的最佳实践和方法论，能够为不同的公司和厂商构建应用平台提供理论指导，共同提供标准化应用支撑，让应用可以在不同的平台顺畅的运行、平滑的迁移。当前 OAM 模型的演进主要基于 KubeVela 的实践。
+- KubeVela 是基于 Kubernetes 的混合云应用交付和管理控制平面，它以 [CRD 控制器](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) 的形式运行，可以很轻量的安装到企业现有的 PaaS 体系中，并带来 OAM 的标准化模型和基于模型高可扩展功能的丰富社区插件。
+- VelaUX 是 KubeVela 的众多插件之一，这个插件为应用开发者提供了开箱即用的应用交付和管理能力，包括一组 **restful API** 和 **UI 控制台**。
+
+KubeVela 团队将主要聚焦在核心控制器层面，面向所有用户提供可靠、易用的核心框架和能力。另一方面，我们通过构建 VelaUX 插件为中小型企业提供开箱即用的应用交付和管理功能，不仅可以扩大 OAM 模型的受众，也能吃自己的狗粮打磨 KubeVela 核心框架的可扩展性和插件体系。我们将在打磨核心控制器的同时，持续提供开箱即用的插件能力，并与开源社区的优质项目做更多更好的集成。
+
 
 ## 产品形态对比
 
@@ -81,5 +93,6 @@ KubeVela 是一个基于云原生技术栈构建的现代应用交付系统。�
 
 接下来，我们推荐你：
 
-- 开始 [安装使用 KubeVela](./install)
-- 了解 [系统架构](./getting-started/architecture) 和 [核心概念](./getting-started/core-concept)
+- 开始 [安装使用 KubeVela](./install)。
+- 查看 [KubeVela 核心应用引擎](./end-user/quick-start-cli)的使用场景和功能。
+- 查看开箱即用的 [应用托管平台 VelaUX](./quick-start) 的使用场景和功能。

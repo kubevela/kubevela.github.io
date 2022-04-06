@@ -7,7 +7,7 @@ title: 灰度发布和扩缩容
 目前灰度发布运维特征支持的组件类型为：
 
 * [webservice](../components/cue/webservice)
-* [worker](../components/cue/worker)
+* worker
 
 ## 如何使用
 
@@ -413,22 +413,6 @@ stefanprodan/podinfo:5.0.2
 
 其他的扩缩容，回滚等操作与 webservice/worker 类型的工作负载的操作方式完全一致。
 
-## 参数说明
-
-灰度发布运维特征的所有配置项
-
-| 名称           | 描述         | 类型             | 是否必须 | 默认值                                 |
-| -------------- | ------------ | ---------------- | -------- | -------------------------------------- |
-| targetRevision | 目标组件版本 | string           | 否       | 当该字段为空时，一直指向组件的最新版本 |
-| targetSize     | 目标副本个数 | int              | 是       | 无                                     |
-| rolloutBatches | 批次发布策略 | rolloutBatch数组 | 是       | 无                                     |
-| batchPartition | 发布批次     | int              | 否       | 无，缺省为发布全部批次                 |
-
-rolloutBatch的属性
-
-| 名称     | 描述           | 类型 | 是否必须 | 默认值 |
-| -------- | -------------- | ---- | -------- | ------ |
-| replicas | 批次的副本个数 | int  | 是       | 无     |
 
 ## 子集群中运行的注意事项
 

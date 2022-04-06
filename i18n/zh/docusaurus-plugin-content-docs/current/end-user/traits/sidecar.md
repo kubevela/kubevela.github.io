@@ -72,28 +72,3 @@ vela logs vela-app-with-sidecar -c count-log
 
 从输出的日志可以看到读取日志的 sidecar 已经生效。
 
-
-## 字段说明
-
-```shell
-$ vela show sidecar
-
-# Properties
-+---------+-----------------------------------------+-----------------------+----------+---------+
-|  NAME   |               DESCRIPTION               |         TYPE          | REQUIRED | DEFAULT |
-+---------+-----------------------------------------+-----------------------+----------+---------+
-| name    | Specify the name of sidecar container   | string                | true     |         |
-| cmd     | Specify the commands run in the sidecar | []string              | false    |         |
-| image   | Specify the image of sidecar container  | string                | true     |         |
-| volumes | Specify the shared volume path          | [[]volumes](#volumes) | false    |         |
-+---------+-----------------------------------------+-----------------------+----------+---------+
-
-
-## volumes
-+-----------+-------------+--------+----------+---------+
-|   NAME    | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+-----------+-------------+--------+----------+---------+
-| name      |             | string | true     |         |
-| path      |             | string | true     |         |
-+-----------+-------------+--------+----------+---------+
-```

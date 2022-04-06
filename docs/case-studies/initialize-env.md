@@ -1,8 +1,8 @@
 ---
-title: Initialize environment
+title: Initialize/Destroy Environment
 ---
 
-This case will introduce what is environment and how to initialize an environment.
+This section will introduce what is environment and how to initialize and destroy an environment with KubeVela easily.
 
 ## What is environment
 
@@ -14,7 +14,7 @@ In general, the resource types that can be initialized include the following typ
 
 1. One or more Kubernetes clusters. Different environments may need different sizes and versions of Kubernetes clusters. Environment initialization can also manage multiple clusters .
 
-2. Any type of Kubernetes custom resources (CRDS) and system plug-ins can be set up in environment initialization.
+2. Any type of Kubernetes custom resources (CRDs) and system plug-ins can be set up in environment initialization.
 
 3. All kinds of shared resources and services.  For example. shared resources in microservices. These shared resources can be a microservice component, cloud database, cache, load balancer, API gateway, and so on.
 
@@ -224,3 +224,14 @@ $ kubectl logs -f log-read-worker-774b58f565-ch8ch
 ```
 
 We can see that both components is running. The two components share the same PVC and use the same ConfigMap.
+
+## Destroy the Environment
+
+As we have already modeled the environment as a KubeVela Application, we can destroy the environment easily by deleting the application.
+
+```
+vela delete server-with-pvc-and-cm
+```
+
+Then the KubeVela controller will clean up all these resources.
+

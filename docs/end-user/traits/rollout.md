@@ -7,7 +7,7 @@ This section will introduce how to use Rollout Trait to perform a rolling update
 The component supported for rollout is:
 
 * [webservice](../components/cue/webservice)
-* [worker](../components/cue/worker)
+* worker
 
 ## How to
 
@@ -416,23 +416,6 @@ stefanprodan/podinfo:5.0.2
 ```
 
 Other operations such as Scale up, Scale down, Rollback are the same as the operations on webservice/worker.
-
-## Configurations
-
-All configurations for Rolling Traits.
-
-| Name           | Description                          | Type           | Required | Default                                                             |
-| -------------- | ------------------------------------ | -------------- | -------- | ------------------------------------------------------------------- |
-| targetRevision | The target ComponentRevision         | string         | No       | If this field is empty, it will always point to the latest revision |
-| targetSize     | Number of target Workload's replicas | int            | Yes      | Nil                                                                 |
-| rolloutBatches | Strategy of rolling update           | []rolloutBatch | Yes      | Nil                                                                 |
-| batchPartition | Partition of rolloutBatches          | int            | No       | Nil, if this field is empty, all batches will be updated            |
-
-Configurations of rolloutBatch
-
-| Name     | Description                     | Type | Required | Default |
-| -------- | ------------------------------- | ---- | -------- | ------- |
-| replicas | number of replicas in one batch | int  | Yes      | Nil     |
 
 ### Supported workload type
 

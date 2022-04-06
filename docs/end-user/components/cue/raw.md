@@ -1,5 +1,5 @@
 ---
-title:  Kubernetes Objects
+title: Deploy Kubernetes Objects
 ---
 
 Use raw Kubernetes resources directly.

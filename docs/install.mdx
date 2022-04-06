@@ -294,6 +294,8 @@ helm install --create-namespace -n vela-system kubevela kubevela/vela-core --ver
 
 ## 4. Install VelaUX
 
+> This is optional if you don't use UI console of KubeVela.
+
 VelaUX is a dashboard including UI+API services, it enables you to do everything around application delivery and management.
 
 ```shell script
@@ -348,4 +350,5 @@ kubectl get crd |grep oam | awk '{print $1}' | xargs kubectl delete crd
 
 ## Next Step
 
-- After installed KubeVela, let's begin to [Deploy First Application](./quick-start)。
+- Getting started with [KubeVela core application engine](./end-user/quick-start-cli).
+- Getting started with UI console by using [VelaUX](./quick-start).

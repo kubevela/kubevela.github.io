@@ -20,8 +20,7 @@ For easy integration with upstream CI pipelines and GitOps tools, KubeVela API (
 
 In implementation, KubeVela relies on a dedicated Kubernetes cluster to achieve above goals. We chose to rely on Kubernetes as the control plane implementation because this approach is battle tested and brings determinism, convergence and automation to application management at scale. In detail, KubeVela is composed by several parts:
 
-- _Plugin Registry_ that registers and manages `X-Definitions`.
-- _Core Controller_ that provides the core control logic of the entire system. For example, handling KubeVela API resources, orchestrating workflow, storing revisions, parsing and executing CUE code, garbage collecting, etc.
+- _KubeVela Core Controller_ that provides the core control logic of the entire system. For example, handling KubeVela API resources, orchestrating workflow, storing revisions, parsing and executing CUE code, garbage collecting, etc.
 - _Addon Controllers_ that register and manage built-in addons that KubeVela needed to work. For example, Flux and Terraform controller.
 
 This control plane Kubernetes cluster will be referenced as the "control plane cluster" in the following documentation.
@@ -41,5 +40,5 @@ For learning how to program KubeVela in detail, please check the `Administrator 
 
 ## Next Step
 
-- View [Tutorials](../tutorials/webservice) to look on more of what you can achieve with KubeVela.
-- View [How To guides](../how-to/dashboard/application/create-application) to check out more features.
+- View [Getting Started docs](../end-user/quick-start-cli) to look on more of what you can achieve with KubeVela.
+- View [How To guides](../end-user/components/helm) to check out more features.

@@ -82,29 +82,3 @@ vela logs vela-app-with-sidecar -c count-log
 9: Fri Apr 16 11:08:54 UTC 2021 
 ```
 
-## Specification
-
-```shell
-vela show sidecar
-```
-
-```console
-# Properties
-+---------+-----------------------------------------+-----------------------+----------+---------+
-|  NAME   |               DESCRIPTION               |         TYPE          | REQUIRED | DEFAULT |
-+---------+-----------------------------------------+-----------------------+----------+---------+
-| name    | Specify the name of sidecar container   | string                | true     |         |
-| cmd     | Specify the commands run in the sidecar | []string              | false    |         |
-| image   | Specify the image of sidecar container  | string                | true     |         |
-| volumes | Specify the shared volume path          | [[]volumes](#volumes) | false    |         |
-+---------+-----------------------------------------+-----------------------+----------+---------+
-
-
-## volumes
-+-----------+-------------+--------+----------+---------+
-|   NAME    | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+-----------+-------------+--------+----------+---------+
-| name      |             | string | true     |         |
-| path      |             | string | true     |         |
-+-----------+-------------+--------+----------+---------+
-```

@@ -199,10 +199,6 @@
     "message": "云资源",
     "description": "云资源"
   },
-  "sidebar.docs.category.Built-in Component Type": {
-    "message": "内置组件",
-    "description": "内置组件列表"
-  },
   "sidebar.docs.category.Built-in Trait Type": {
     "message": "内置运维特征",
     "description": "内置运维特征列表"
@@ -214,5 +210,21 @@
   "sidebar.docs.category.Custom Addons": {
     "message": "自定义插件",
     "description": "自定义插件"
+  },
+  "sidebar.docs.category.Deploy Components": {
+    "message": "部署组件",
+    "description": "部署组件"
+  },
+  "sidebar.docs.category.KubeVela Engine": {
+    "message": "开放应用引擎（KubeVela）",
+    "description": "开放应用引擎 KubeVela Core"
+  },
+  "sidebar.docs.category.VelaUX": {
+    "message": "应用托管平台（VelaUX）",
+    "description": "应用托管平台（VelaUX）"
+  },
+  "sidebar.docs.category.Basics": {
+    "message": "基础内容",
+    "description": "基础内容"
   }
 }
