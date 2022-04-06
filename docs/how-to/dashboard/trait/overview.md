@@ -31,4 +31,4 @@ Click the trash icon to delete the trait.
 
 ## More
 
-For more information about all traits, please refer to [Traits](../../../end-user/traits/scaler).
+For more information about all traits, please refer to [Traits](../../../end-user/traits/references).

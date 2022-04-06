@@ -2,7 +2,8 @@
 title:  Multi-Cluster App Delivery
 ---
 
-This section will introduce how to deliver multi-cluster application with KubeVela.
+KubeVela is by design a full functional Continuous Delivery (CD) platform with fine grained support for hybrid/multi-cloud/multi-cluster deployment.
+This section will introduce how to deliver multi-cluster application with KubeVela policies and workflow.
 
 ## Introduction
 
@@ -514,3 +515,13 @@ The outdated `env-binding` policy and `deploy2env` workflow step in old versions
 The new policies and workflow steps can cover all the use-cases in old versions so it is possible to upgrade all your applications while maintaining the same capabilities. Upgrade tools are not available now but will come out before deprecation happens.
 
 If you already have applications running in production environment and do not want to change them, KubeVela v1.3 is also compatible for it. It is **NOT** necessary to migrate old multi-cluster applications to new ones.
+
+## Conclusion
+
+In this section, we introduced how KubeVela delivering micro services in multiple clusters, the whole process can be easily modeled as a declarative deployment plan.
+
+No more add-hoc scripts or glue code, KubeVela will get the application delivery workflow done with full automation and determinism. Most importantly, KubeVela expects you keep using the CI solutions you are already familiar with and KubeVela is fully complementary to them as the CD control plane.
+
+## Next Step
+
+* For using KubeVela with your own CI pipelines and other tools, please check [Jenkins CI Integration](./jenkins-cicd) for more real world examples.

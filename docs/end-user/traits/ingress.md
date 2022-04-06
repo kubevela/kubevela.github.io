@@ -108,11 +108,3 @@ Hello World
 > ⚠️ This section requires your runtime cluster has a working ingress controller.
 
 
-## Specification
-
-| NAME        | DESCRIPTION                                                                                        | TYPE           | REQUIRED | DEFAULT |
-| ----------- | -------------------------------------------------------------------------------------------------- | -------------- | -------- | ------- |
-| http        | Specify the mapping relationship between the http path and the workload port                       | map[string]int | true     |         |
-| class       | Specify the class of ingress to use                                                                | string         | true     | nginx   |
-| classInSpec | Set ingress class in '.spec.ingressClassName' instead of 'kubernetes.io/ingress.class' annotation. | bool           | false    | false   |
-| domain      | Specify the domain you want to expose                                                              | string         | true     |         |

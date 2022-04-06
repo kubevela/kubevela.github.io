@@ -5,7 +5,7 @@ title:  Service Binding
 Service binding trait will bind data from Kubernetes `Secret` to the application container's ENV.
 
 
-> Note: `service-biding` trait is hidden by default in `VelaUX`, you can use it in CLI.
+> Note: `service-binding` trait is hidden by default in `VelaUX`, you can use it in CLI.
 
 ## How to use
 

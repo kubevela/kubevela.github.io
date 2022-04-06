@@ -1,5 +1,5 @@
 ---
-title:  资源模板
+title:  部署 Kubernetes 资源模板
 ---
 
 KubeVela 可以以资源模板的方式直接部署任何 Kubernetes 对象。
@@ -97,13 +97,3 @@ spec:
 ```
 
 
-## 属性说明
-
-
-|  字段名称   | 描述 |        类型          | 是否必填 | 默认值 |
-|---------|-------------|-----------------------|----------|---------|
-| objects |  Kubernetes 资源列表   | [[]K8s-Object](#K8s-Object) | true     |         |
-
-### K8s-Object
-
-列表中的元素为完整的 Kubernetes 资源结构体。

@@ -31,4 +31,4 @@ description: 管理应用的运维特征
 
 ## 更多
 
-关于所有运维特征的详细信息，请参考 [运维特征](../../../end-user/traits/scaler)。
+关于所有运维特征的详细信息，请参考 [运维特征](../../../end-user/traits/references)。

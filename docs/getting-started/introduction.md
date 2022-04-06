@@ -17,17 +17,30 @@ The trend of cloud-native technology is moving towards pursuing consistent exper
 
 Meanwhile, modeling the deployment of a microservice application is a highly fragmented and challenging process. Thus, many solutions that tried to solve the problem so far are either over simplified and could not fix the real issue, or too complicated to use at all. On the other hand, though many solutions provided friendly UI layer, the platform themselves are not customizable. This means as the needs of your platform grow, it is inevitable for the feature requirements to outgrow the capabilities of such systems.
 
-This is why KubeVela appears here. It can simplify the application delivery experience across hybrid environments (e.g. multi-cluster/multi-cloud/hybrid-cloud/distributed-cloud), while also be flexible enough to satisfy the fast growth of businesses requirements. KubeVela can be used by platform-engineers as an extensible application engine, while developers can also use it as an out-of-box application platforms with lots of addons available.
+This is why KubeVela appears here. It can simplify the application delivery and management experience across hybrid environments (e.g. multi-cluster/multi-cloud/hybrid-cloud/distributed-cloud), while also be flexible enough to satisfy the fast growth of businesses requirements. KubeVela can be used by platform-engineers as an extensible application engine, while developers can also use it as an out-of-box application platforms with lots of addons available.
 
 
 ## Who should use KubeVela?
 
-- Application developers, operators, DevOps engineers
-	- think about a modern Continuous Delivery (CD) platform.
-- Platform builders for PaaS, Serverless, application management/delivery systems
-	- think about an application delivery engine that you could build your advanced platform with.
-- ISV, SaaS owners, and application architects who need to distribute software to anywhere
-	- think about an App Store but on Kubernetes and clouds.
+![](../resources/vela-overview.jpg)
+
+We mainly provide two products for different users, they're [KubeVela](../end-user/quick-start-cli) and [VelaUX](../quick-start).
+
+- Platform builders for PaaS, Serverless, Application Management/Delivery systems
+	- [KubeVela](../end-user/quick-start-cli) works as an application delivery engine that you could build your advanced platform with.
+- ISV, SaaS owners, and Application Architects who need to distribute software to anywhere
+	- KubeVela has full extension and integration capabilities to allow users to distribute applications with [customized addons](../platform-engineers/addon/intro) easily. Think about an App Store but on Kubernetes and clouds.
+- Application Developers, Operators, DevOps Engineers
+	- [VelaUX](../quick-start) is an addon of KubeVela, with this addon enabled, it provides an out-of-box modern application Continuous Delivery (CD) and Management platform with an easy-to-use UI console.
+
+
+## What's the relationship between OAM, KubeVela and VelaUX?
+
+- [OAM(Open Application Model)](https://github.com/oam-dev/spec) is the model behind KubeVela, it provides a platform-agnostic application model including the best practices and methodology for different vendors to follow. The evolution of the model depends primarily on the practices of KubeVela currently.
+- KubeVela is the core engine running on Kubernetes, it works as a [CRD controller](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) and brings OAM model into your Cloud Native PaaS along with lots of addon capabilities.
+- VelaUX is one of the KubeVela addons, it provides out-of-box application delivery and management platform with **restful API** and **UI console**.
+
+The KubeVela team will mainly focus on the core controller. By building VelaUX, we aim to provide out-of-box solutions for small and medium sized companies, and also eat our own dog food and make the extension, integration and the addon system capabilities of KubeVela better. 
 
 ## Comparisons
 
@@ -78,9 +91,6 @@ Welcome onboard and sail Vela!
 
 ## What's Next
 
-Here are some recommended next steps:
-
 - Start to [install KubeVela](./install).
-- Learn KubeVela's [core concepts](./getting-started/core-concept).
-- Learn KubeVela's [architecture](./getting-started/architecture).
-
+- Getting started with [KubeVela core application engine](./end-user/quick-start-cli).
+- Getting started with UI console by using [VelaUX](./quick-start).

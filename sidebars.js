@@ -2,46 +2,113 @@ const { Component } = require("react");
 
 module.exports = {
   docs: [
+    "getting-started/introduction",
+    "install",
     {
       type: "category",
-      label: "Getting Started",
+      label: "KubeVela Engine",
       collapsed: false,
       items: [
-        "getting-started/introduction",
-        "getting-started/core-concept",
-        "getting-started/architecture",
-        "install",
-        "quick-start",
-      ],
-    },
-    {
-      type: "category",
-      label: "Tutorials",
-      collapsed: false,
-      items: [
-        "tutorials/webservice",
-        "tutorials/helm",
-        "tutorials/consume-cloud-services",
-        "tutorials/k8s-object",
-        "tutorials/jenkins",
-        "tutorials/trigger",
-        "case-studies/gitops",
-        "tutorials/workflows",
-        // "case-studies/jenkins-cicd",
-        // "case-studies/canary-blue-green",
-      ],
-    },
-    {
-      type: "category",
-      label: "How-to Guides",
-      collapsed: true,
-      items: [
-        // TODO:
         {
           type: "category",
-          label: "VelaUX",
+          label: "Getting Started",
           collapsed: false,
           items: [
+            "end-user/quick-start-cli",
+            "case-studies/multi-cluster",
+            "case-studies/jenkins-cicd",
+            "case-studies/gitops",
+            "case-studies/initialize-env",
+          ],
+        },
+        {
+          type: "category",
+          label: "Basics",
+          collapsed: false,
+          items: [
+            "getting-started/core-concept",
+            "getting-started/architecture",
+          ],
+        },
+        {
+          type: "category",
+          label: "How-to Guides",
+          collapsed: true,
+          items: [
+            {
+              type: "category",
+              label: "Deploy Components",
+              collapsed: false,
+              items: [
+                "end-user/components/helm",
+                "end-user/components/cue/webservice",
+                "end-user/components/cue/task",
+                "end-user/components/cue/raw",
+                "end-user/components/kustomize",
+                "end-user/components/more",
+              ],
+            },
+            {
+              "Cloud Resources": [
+                "end-user/components/cloud-services/provision-and-consume-cloud-services",
+                "end-user/components/cloud-services/provision-and-initiate-database",
+                "end-user/components/cloud-services/secure-your-database-connection",
+                "end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database",
+              ],
+            },
+            "end-user/traits/ingress",
+            "end-user/traits/rollout",
+            "end-user/traits/service-binding",
+            "end-user/traits/sidecar",
+            "end-user/traits/more",
+            "end-user/policies/health",
+            "end-user/policies/apply-once",
+            "end-user/policies/gc",
+            "end-user/workflow/component-dependency-parameter",
+            "end-user/workflow/webhook-notification",
+            "end-user/version-control",
+            "how-to/cli/addon/addon",
+          ],
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "VelaUX",
+      collapsed: false,
+      items: [
+        {
+          type: "category",
+          label: "Getting Started",
+          collapsed: false,
+          items: [
+            "quick-start",
+            "tutorials/webservice",
+            "tutorials/helm",
+            "tutorials/consume-cloud-services",
+            "tutorials/k8s-object",
+            "tutorials/jenkins",
+            "tutorials/trigger",
+            "tutorials/workflows",
+            // "case-studies/jenkins-cicd",
+            // "case-studies/canary-blue-green",
+          ],
+        },
+        {
+          type: "category",
+          label: "Basics",
+          collapsed: false,
+          items: [
+            "getting-started/velaux-concept",
+          ],
+        },
+        {
+          type: "category",
+          label: "How-to Guides",
+          collapsed: true,
+          items: [
+
+            // TODO: complete the docs
             {
               "Manage applications": [
                 "how-to/dashboard/application/create-application",
@@ -84,32 +151,6 @@ module.exports = {
             // {
             //   "Manage addon": ["how-to/dashboard/addon/overview"],
             // },
-          ],
-        },
-        {
-          type: "category",
-          label: "CLI",
-          collapsed: true,
-          items: [
-            "end-user/quick-start-cli",
-            "end-user/traits/ingress",
-            {
-              "Cloud Resources": [
-                "end-user/components/cloud-services/provision-and-consume-cloud-services",
-                "end-user/components/cloud-services/provision-and-initiate-database",
-                "end-user/components/cloud-services/secure-your-database-connection",
-                "end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database",
-              ],
-            },
-            "end-user/traits/rollout",
-            "end-user/policies/health",
-            "end-user/policies/apply-once",
-            "end-user/policies/gc",
-            "case-studies/multi-cluster",
-            "end-user/workflow/component-dependency-parameter",
-            "end-user/workflow/webhook-notification",
-            "end-user/version-control",
-            "how-to/cli/addon/addon",
           ],
         },
       ],
@@ -194,36 +235,8 @@ module.exports = {
           ],
         },
         "end-user/components/cloud-services/cloud-resources-list",
-        {
-          type: "category",
-          label: "Built-in Component Type",
-          items: [
-            "end-user/components/helm",
-            "end-user/components/cue/webservice",
-            "end-user/components/cue/worker",
-            "end-user/components/cue/task",
-            "end-user/components/cue/cron-task",
-            "end-user/components/kustomize",
-            "end-user/components/cue/raw",
-            "end-user/components/more",
-          ],
-        },
-        {
-          type: "category",
-          label: "Built-in Trait Type",
-          items: [
-            "end-user/traits/scaler",
-            "end-user/traits/ingress",
-            "end-user/traits/storage",
-            "end-user/traits/rollout",
-            "end-user/traits/annotations-and-labels",
-            "end-user/traits/service-binding",
-            "end-user/traits/sidecar",
-            "end-user/traits/autoscaler",
-            "end-user/traits/kustomize-patch",
-            "end-user/traits/more",
-          ],
-        },
+        "end-user/components/references",
+        "end-user/traits/references",
         "end-user/policies/references",
         "end-user/workflow/built-in-workflow-defs",
         "end-user/service-account-integration",
