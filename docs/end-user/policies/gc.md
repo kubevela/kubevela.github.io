@@ -48,6 +48,9 @@ NAME             COMPONENT        TYPE         PHASE     HEALTHY   STATUS   AGE
 first-vela-app   express-server   webservice   running   true               29s
 ```
 
+> In the following steps, we'll use `kubectl` command to do some verification. You can also use `vela status first-vela-app` to check the aggregated application status and see if components are healthy.
+
+
 2. update the app
 
 ```yaml
@@ -131,7 +134,7 @@ You can also persist some resources, which skips the normal garbage-collect proc
 
 Take the following app as an example, in the garbage-collect policy, a rule is added which marks all the resources created by the `expose` trait to use the `onAppDelete` strategy. This will keep those services until application is deleted.
 ```shell
-$ cat <<EOF | kubectl apply -f -
+$ cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:

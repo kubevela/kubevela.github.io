@@ -86,6 +86,8 @@ NAME             COMPONENT          TYPE         PHASE     HEALTHY   STATUS   AG
 first-vela-app   express-server-1   webservice   running   true               9m35s
 ```
 
+> 在下述步骤中，我们将使用 `kubectl` 命令来做一些验证。你也可以使用 `vela status first-vela-app` 来检查应用及其组件的健康状态。
+
 可以发现旧版本的应用资源和新版本的应用资源同时存在于集群中。
 
 ```
@@ -132,7 +134,7 @@ $ kubectl delete app first-vela-app
 在如下所示的样例中，添加了一条规则（rule）。该规则指定所有由`expose`这一运维特征创建出来的资源使用`onAppDelete`策略，即这些资源只有在应用删除时才会被回收。
 
 ```shell
-$ cat <<EOF | kubectl apply -f -
+$ cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
