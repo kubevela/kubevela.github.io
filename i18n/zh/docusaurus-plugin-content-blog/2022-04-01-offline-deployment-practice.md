@@ -1,5 +1,5 @@
 ---
-title: 招商银行 KubeVela 离线部署实践
+title: KubeVela v1.3 多集群初体验，轻松管理应用分发和差异化配置
 author: 马祥博
 author_title: （云平台开发团队）
 author_url: http://www.cmbchina.com/
