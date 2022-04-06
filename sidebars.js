@@ -103,6 +103,8 @@ module.exports = {
             },
             "end-user/traits/rollout",
             "end-user/policies/health",
+            "end-user/policies/apply-once",
+            "end-user/policies/gc",
             "case-studies/multi-cluster",
             "end-user/workflow/component-dependency-parameter",
             "end-user/workflow/webhook-notification",
