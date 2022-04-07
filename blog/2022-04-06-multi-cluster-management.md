@@ -17,9 +17,9 @@ KubeVela v1.3 iterates based on the previous multi-cluster function. This articl
 ### Before Starting
 
 1. Prepare a Kubernetes cluster as the control plane of KubeVela.
-1. Make sure [KubeVela v1.3] (https://github.com/tag-dev/KubeVela/releases/tag/v1.3.0) and KubeVela CLI v1.3.0 have been installed successfully.
+1. Make sure [KubeVela v1.3](https://github.com/oam-dev/kubevela/releases/tag/v1.3.0) and KubeVela CLI v1.3.0 have been installed successfully.
 2. The list of Kubeconfig from sub clusters that you want to manage. We will take three clusters naming beijing-1, beijing-2 and us-west-1 as examples.
-3. Download and combine with [Multi-Cluster-Demo] (https://github.com/oam-dev/sample/tree/master/12.multi_cluster_demo) to better understand how to use the KubeVela multi-cluster capabilities.
+3. Download and combine with [Multi-Cluster-Demo](https://github.com/oam-dev/sample/tree/master/12.multi_cluster_demo) to better understand how to use the KubeVela multi-cluster capabilities.
 
 ### Distribute to Multiple Specified Clusters
 Distributing multiple specified clusters is the most basic multi-cluster management operation. In KubeVela, you will use a policy called `topology` to implement it. The cluster will be listed in the attribute `clusters`, an array.
@@ -67,7 +67,7 @@ spec:
 ```
 It can be seen that this app uses the component of type `webservice` and distributes 3 Deployments to beijing-1 and beijing-2 clusters through the `topology` policy.
 
-**Please note that the premise of successfully distributing resource into sub-cluster is that it must exist a exactly the same namespace as control plane did. Since each cluster has the **`default`** namespace by default, we won't be worry in this case. But suppose we change the namespace in **`basic.yaml`** to be **`multi-cluster`**, we will receive an error: **
+Please note that the premise of successfully distributing resource into managed clusters is that it must contain the exactly same namespace as control plane did.  Since each cluster has the **`default`** namespace by default, we won't be worry in this case. But suppose we change the namespace in **`basic.yaml`** to be **`multi-cluster`**, we will receive an error:
 ```
 ... 
  Status:    	runningWorkflow
@@ -89,7 +89,7 @@ Services:
 ...
 ```
 
-**In future versions of KubeVela, we plan to support a comprehensive Authentication System, more convenient and more securely to: create namespaces in sub-cluster through the control plane cluster in quick moves.**
+**In future versions of KubeVela, we plan to support a comprehensive Authentication System, more convenient and more securely to: create namespaces in managed cluster through the hub cluster in quick moves.**
 
 After creating the sub cluster's namespace, come back to the control plane cluster to create the application and ship out resources:
 ```
@@ -141,7 +141,7 @@ Services:
     Traits:
       ✅ scaler      ✅ gateway: Visiting URL: testsvc-mc.example.com, IP: 182.92.222.128
 ```
-Both the beijing-1 and beijing-2 have issued the corresponding resources, they also displayed external access IP addresses, and you can therefor make it public for your users.
+Both the beijing-1 and beijing-2 have issued the corresponding resources, they also displayed external access IP addresses, and you can therefore make it public for your users.
 
 ### Use Cluster Labels to Do Grouping
 In addition to the above basic need, we often encounter additional situations: cross-regional deployment to certain clusters, specify which cloud provider's cluster, etc. In order to achieve a similar goal, the `labels` feature can be used.
@@ -282,4 +282,4 @@ Applying an application in vela K8s object format...
 
 The above all are what we'd like to share with you for this time, thank you for reading and trying them out.
 
-[We invite you to explore KubeVela v1.3 for more] (https://KubeVela.net/en/docs/install) to meet further complex requirements on business, such as dig deep in differentiated configurations to use `override` application policy to either override all resources on one type or only certain specific components.
+[We invite you to explore KubeVela v1.3 for more](https://KubeVela.net/en/docs/install) to meet further complex requirements on business, such as dig deep in differentiated configurations to use `override` application policy to either override all resources on one type or only certain specific components.
