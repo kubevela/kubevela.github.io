@@ -2,304 +2,484 @@
 title:  Multi-Cluster App Delivery
 ---
 
-This section will introduce how to use KubeVela for multi-cluster application delivery and why.
+This section will introduce how to deliver multi-cluster application with KubeVela.
 
 ## Introduction
 
-There are more and more situations come out that organizations need multi-cluster technology for application delivery:
+There are many scenarios that developers or system operators need to deploy and manage applications across multiple clusters.
 
 * For scalability, a single Kubernetes cluster has its limit around 5K nodes or less, it is unable to handle the large scale application load.
-* For stability/availability, application can deploy in multi-cluster for backup which provides more stability and availability.
-* For security, you may need to deploy in different zones/areas as government policy requires.
+* For stability/availability, one single application can be deployed in multiple clusters for backup, which provides more stability and availability.
+* For security, application might need to be deployed in different zones/areas as government policy requires.
 
-The following guide will the multi-cluster that helps you easily deploy an application to different environments.
+The following guide will introduce how to manage applications across clusters on KubeVela.
+
 
 ## Preparation
 
-You can simply join an existing cluster into KubeVela by specify its KubeConfig like below.
+You can simply join an existing cluster into KubeVela by specifying its KubeConfig as below
 
 ```shell script
 vela cluster join <your kubeconfig path>
 ```
 
-It will use field `context.cluster` in KubeConfig as the cluster name automatically,
+It will use the field `context.cluster` in KubeConfig as the cluster name automatically,
 you can also specify the name by `--name` parameter. For example:
 
 ```shell
-vela cluster join stage-cluster.kubeconfig --name cluster-staging
-vela cluster join prod-cluster.kubeconfig --name cluster-prod
+$ vela cluster join beijing.kubeconfig --name beijing
+$ vela cluster join hangzhou-1.kubeconfig --name hangzhou-1
+$ vela cluster join hangzhou-2.kubeconfig --name hangzhou-2
 ```
 
-After clusters joined, you could list all clusters managed by KubeVela currently.
+After clusters joined, you could list all clusters managed by KubeVela.
 
 ```bash
 $ vela cluster list
-CLUSTER         TYPE    ENDPOINT                
-cluster-prod    tls     https://47.88.4.97:6443 
-cluster-staging tls     https://47.88.7.230:6443
+CLUSTER                 TYPE            ENDPOINT                ACCEPTED        LABELS
+local                   Internal        -                       true                  
+cluster-beijing         X509Certificate <ENDPOINT_BEIJING>      true                  
+cluster-hangzhou-1      X509Certificate <ENDPOINT_HANGZHOU_1>   true                  
+cluster-hangzhou-2      X509Certificate <ENDPOINT_HANGZHOU_2>   true                  
 ```
 
-You can also detach a cluster if you're not using it any more.
+> By default, the hub cluster where KubeVela locates is registered as the `local` cluster. You can use it like a managed cluster in spite that you cannot detach it or modify it.
+
+You can also detach a cluster if you do not want to use it anymore.
 
 ```shell script
-$ vela cluster detach cluster-prod
+$ vela cluster detach beijing
 ```
 
-If there's still any application running in the cluster, the command will be rejected.
+> It is dangerous to detach a cluster that is still in-use. But if you want to do modifications to the held cluster credential, like rotating certificates, it is possible to do so. 
 
-## Deploy Application to multi cluster
+You can also give labels to your clusters, which helps you select clusters for deploying applications.
 
-KubeVela regards a Kubernetes cluster as an environment, so you can deploy an application into
-one or more environments.
+```bash
+$ vela cluster labels add cluster-hangzhou-1 region=hangzhou
+$ vela cluster labels add cluster-hangzhou-2 region=hangzhou
+$ vela cluster list
+CLUSTER                 TYPE            ENDPOINT                ACCEPTED        LABELS
+local                   Internal        -                       true                  
+cluster-beijing         X509Certificate <ENDPOINT_BEIJING>      true                  
+cluster-hangzhou-1      X509Certificate <ENDPOINT_HANGZHOU_1>   true            region=hangzhou
+cluster-hangzhou-2      X509Certificate <ENDPOINT_HANGZHOU_2>   true            region=hangzhou
+```
 
-Below is an example, deploy to a staging environment first, check the application running well,
-and finally promote to production environment.
+## Deliver Application to Clusters
 
-For different environments, the deployment configuration can also have some nuance. In the staging environment, we only need one replica for the webservice and do not need the worker. In the production environment, we setup 3 replicas for the webservice and enable the worker.
+To deliver your application into multiple clusters, you simply need to configure which clusters you want to deploy through the `topology` policy. For example, you can deploy an nginx webservice in hangzhou clusters by running the following commands
 
+```bash
+$ cat <<EOF | vela up -f -
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: basic-topology
+  namespace: examples
+spec:
+  components:
+    - name: nginx-basic
+      type: webservice
+      properties:
+        image: nginx
+  policies:
+    - name: topology-hangzhou-clusters
+      type: topology
+      properties:
+        clusters: ["cluster-hangzhou-1", "cluster-hangzhou-2"]
+EOF
+```
+
+You can check the deploy result by running `vela status`
+
+```bash
+$ vela status basic-topology -n examples
+About:
+
+  Name:         basic-topology               
+  Namespace:    examples                     
+  Created at:   2022-04-06 18:33:46 +0800 CST
+  Status:       running                      
+
+Workflow:
+
+  mode: DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id:v9x2joqg5s
+    name:deploy-topology-hangzhou-clusters
+    type:deploy
+    phase:succeeded 
+    message:
+
+Services:
+
+  - Name: nginx-basic  
+    Cluster: cluster-hangzhou-1  Namespace: examples
+    Type: webservice
+    Healthy Ready:1/1
+    No trait applied
+
+  - Name: nginx-basic  
+    Cluster: cluster-hangzhou-2  Namespace: examples
+    Type: webservice
+    Healthy Ready:1/1
+    No trait applied
+```
+
+You can debugging the deployed nginx webservice by running `vela port-forward` or `vela exec`. You will be asked to choose which cluster you want to use.
+
+```bash
+$ vela exec basic-topology -n examples -it -- ls 
+? You have 2 deployed resources in your app. Please choose one: Cluster: cluster-hangzhou-1 | Namespace: examples | Kind: Deployment | Name: nginx-basic
+bin   docker-entrypoint.d   home   media  proc  sbin  tmp
+boot  docker-entrypoint.sh  lib    mnt    root  srv   usr
+dev   etc                   lib64  opt    run   sys   var
+```
+
+## Advanced Usage
+
+
+### Configure the deploy destination
+
+The most straightforward way to configure the deploy destination is to write cluster names inside the `topology` policy. Sometimes, it will be more easy to select clusters by labels, like filtering all clusters in hangzhou:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: example-app
-  namespace: default
+  name: label-selector-topology
+  namespace: examples
 spec:
   components:
-    - name: hello-world-server
+    - name: nginx-label-selector
       type: webservice
       properties:
-        image: crccheck/hello-world
-        port: 8000
+        image: nginx
+  policies:
+    - name: topology-hangzhou-clusters
+      type: topology
+      properties:
+        clusterLabelSelector:
+          region: hangzhou
+```
+
+If you want to deploy application components into the control plane cluster, you can use the `local` cluster.
+Besides, you can also deploy your application components in another namespace other than the application's original namespace.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: local-ns-topology
+  namespace: examples
+spec:
+  components:
+    - name: nginx-local-ns
+      type: webservice
+      properties:
+        image: nginx
+  policies:
+    - name: topology-local
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: examples-alternative
+```
+
+> Sometimes, for security issues, you might want to disable this behavior and retrict the resources to be deployed within the same namespace of the application. This can be done by setting `--allow-cross-namespace-resource=false` in the bootstrap parameter of the KubeVela controller.
+
+
+### Control the deploy workflow
+
+By default, if you declare multiple topology policies in the application, the application components will be deployed in all destinations following the order of the policies.
+
+If you want to control the deploy process, like changing the order or adding manual approval, you can use the `deploy` workflow step explicitly in the workflow to achieve that.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: deploy-workflowstep
+  namespace: examples
+spec:
+  components:
+    - name: nginx-deploy-workflowstep
+      type: webservice
+      properties:
+        image: nginx
+  policies:
+    - name: topology-hangzhou-clusters
+      type: topology
+      properties:
+        clusterLabelSelector:
+          region: hangzhou
+    - name: topology-local
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: examples-alternative
+  workflow:
+    steps:
+      - type: deploy
+        name: deploy-local
+        properties:
+          policies: ["topology-local"]
+      - type: deploy
+        name: deploy-hangzhou
+        properties:
+          # require manual approval before running this step
+          auto: false
+          policies: ["topology-hangzhou-clusters"]
+```
+
+You can also deploy application components with different topology policies concurrently, by filling these topology policies in one `deploy` step.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: deploy-concurrently
+  namespace: examples
+spec:
+  components:
+    - name: nginx-deploy-concurrently
+      type: webservice
+      properties:
+        image: nginx
+  policies:
+    - name: topology-hangzhou-clusters
+      type: topology
+      properties:
+        clusterLabelSelector:
+          region: hangzhou
+    - name: topology-local
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: examples-alternative
+  workflow:
+    steps:
+      - type: deploy
+        name: deploy-all
+        properties:
+          policies: ["topology-local", "topology-hangzhou-clusters"]
+```
+
+
+### Override default configurations in clusters
+
+There are times that you want to make changes to the configuration in some clusters, rather than use the default configuration declared in the application's components field. For example, using a different container image or changing the default number of replicas.
+
+The override policy is able to help you make customizations in different clusters. You can use it together with the topology policy in the `deploy` workflow step.
+
+In the following example, the application will deploy a default nginx webservice in the `local` cluster. Then it will deploy a high-available nginx webservice with the legacy image `nginx:1.20` and 3 replicas in hangzhou clusters.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: deploy-with-override
+  namespace: examples
+spec:
+  components:
+    - name: nginx-with-override
+      type: webservice
+      properties:
+        image: nginx
+  policies:
+    - name: topology-hangzhou-clusters
+      type: topology
+      properties:
+        clusterLabelSelector:
+          region: hangzhou
+    - name: topology-local
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: examples-alternative
+    - name: override-nginx-legacy-image
+      type: override
+      properties:
+        components:
+          - name: nginx-with-override
+            properties:
+              image: nginx:1.20
+    - name: override-high-availability
+      type: override
+      properties:
+        components:
+          - type: webservice
+            traits:
+              - type: scaler
+                properties:
+                  replicas: 3
+  workflow:
+    steps:
+      - type: deploy
+        name: deploy-local
+        properties:
+          policies: ["topology-local"]
+      - type: deploy
+        name: deploy-hangzhou
+        properties:
+          policies: ["topology-hangzhou-clusters", "override-nginx-legacy-image", "override-high-availability"]
+```
+
+The override policy has many advanced capabilities, such as adding new component or selecting components to use.
+The following example will first deploy an nginx webservice with `nginx:1.20` image to local cluster. Then two nginx webservices with `nginx` and `nginx:stable` images will be deployed to hangzhou clusters respectively.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: advance-override
+  namespace: examples
+spec:
+  components:
+    - name: nginx-advance-override-legacy
+      type: webservice
+      properties:
+        image: nginx:1.20
+    - name: nginx-advance-override-latest
+      type: webservice
+      properties:
+        image: nginx
+  policies:
+    - name: topology-hangzhou-clusters
+      type: topology
+      properties:
+        clusterLabelSelector:
+          region: hangzhou
+    - name: topology-local
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: examples-alternative
+    - name: override-nginx-legacy
+      type: override
+      properties:
+        selector: ["nginx-advance-override-legacy"]
+    - name: override-nginx-latest
+      type: override
+      properties:
+        selector: ["nginx-advance-override-latest", "nginx-advance-override-stable"]
+        components:
+          - name: nginx-advance-override-stable
+            type: webservice
+            properties:
+              image: nginx:stable
+  workflow:
+    steps:
+      - type: deploy
+        name: deploy-local
+        properties:
+          policies: ["topology-local", "override-nginx-legacy"]
+      - type: deploy
+        name: deploy-hangzhou
+        properties:
+          policies: ["topology-hangzhou-clusters", "override-nginx-latest"]
+```
+
+
+### Use policies and workflow outside the application
+
+Sometimes, you may want to use the same policy across multiple applications or reuse previous workflow to deploy different resources.
+To reduce the repeated code, you can leverage the external policies and workflow and refer to them in your applications.
+
+> NOTE: you can only refer to Policy and Workflow within your application's namespace.
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: Policy
+metadata:
+  name: topology-hangzhou-clusters
+  namespace: examples
+type: topology
+properties:
+  clusterLabelSelector:
+    region: hangzhou
+---
+apiVersion: core.oam.dev/v1alpha1
+kind: Policy
+metadata:
+  name: override-high-availability-webservice
+  namespace: examples
+type: override
+properties:
+  components:
+    - type: webservice
       traits:
         - type: scaler
           properties:
-            replicas: 1
-    - name: data-worker
-      type: worker
-      properties:
-        image: busybox
-        cmd:
-          - sleep
-          - '1000000'
-  policies:
-    - name: example-multi-env-policy
-      type: env-binding
-      properties:
-        envs:
-          - name: staging
-            placement: # selecting the cluster to deploy to
-              clusterSelector:
-                name: cluster-staging
-            selector: # selecting which component to use
-              components:
-                - hello-world-server
+            replicas: 3
+---
+apiVersion: core.oam.dev/v1alpha1
+kind: Workflow
+metadata:
+  name: make-release-in-hangzhou
+  namespace: examples
+steps:
+  - type: deploy
+    name: deploy-hangzhou
+    properties:
+      auto: false
+      policies: ["override-high-availability-webservice", "topology-hangzhou-clusters"]
+```
 
-          - name: prod
-            placement:
-              clusterSelector:
-                name: cluster-prod
-            patch: # overlay patch on above components
-              components:
-                - name: hello-world-server
-                  type: webservice
-                  traits:
-                    - type: scaler
-                      properties:
-                        replicas: 3
-
-    - name: health-policy-demo
-      type: health
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: external-policies-and-workflow
+  namespace: examples
+spec:
+  components:
+    - name: nginx-external-policies-and-workflow
+      type: webservice
       properties:
-        probeInterval: 5
-        probeTimeout: 10
-
+        image: nginx
   workflow:
-    steps:
-      # deploy to staging env
-      - name: deploy-staging
-        type: deploy2env
-        properties:
-          policy: example-multi-env-policy
-          env: staging
-
-      # manual check
-      - name: manual-approval
-        type: suspend
-
-      # deploy to prod env
-      - name: deploy-prod
-        type: deploy2env
-        properties:
-          policy: example-multi-env-policy
-          env: prod
+    ref: make-release-in-hangzhou
 ```
 
-After the application deployed, it will run as the workflow steps.
-
-> You can refer to [Env Binding](../end-user/policies/envbinding) and [Health Check](../end-user/policies/health) policy user guide for parameter details.
-
-It will deploy application to staging environment first, you can check the `Application` status by:
-
-```shell
-> kubectl get application example-app
-NAME          COMPONENT            TYPE         PHASE                HEALTHY   STATUS       AGE
-example-app   hello-world-server   webservice   workflowSuspending   true      Ready:1/1    10s
-```
-
-We can see that the workflow is suspended at `manual-approval`:
+> NOTE: The internal policies will be loaded first. External policies will only be used when there is no corresponding policy inside the application. In the following example, we can reuse `topology-hangzhou-clusters` policy and `make-release-in-hangzhou` workflow but modify the `override-high-availability-webservice` policy by injecting the same-named policy inside the new application.
 
 ```yaml
-...
-  status:
-    workflow:
-      appRevision: example-app-v1:44a6447e3653bcc2
-      contextBackend:
-        apiVersion: v1
-        kind: ConfigMap
-        name: workflow-example-app-context
-        uid: 56ddcde6-8a83-4ac3-bf94-d19f8f55eb3d
-      mode: StepByStep
-      steps:
-      - id: wek2b31nai
-        name: deploy-staging
-        phase: succeeded
-        type: deploy2env
-      - id: 7j5eb764mk
-        name: manual-approval
-        phase: succeeded
-        type: suspend
-      suspend: true
-      terminated: false
-      waitCount: 0
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: nginx-stable-ultra
+  namespace: examples
+spec:
+  components:
+    - name: nginx-stable-ultra
+      type: webservice
+      properties:
+        image: nginx:stable
+  policies:
+    - name: override-high-availability-webservice
+      type: override
+      properties:
+        components:
+          - type: webservice
+            traits:
+              - type: scaler
+                properties:
+                  replicas: 5
+  workflow:
+    ref: make-release-in-hangzhou
 ```
 
-You can also check the health status in the `status.service` field below.
+## Backward Compatibility
 
-```yaml
-...
-  status:
-    services:
-    - env: staging
-      healthy: true
-      message: 'Ready:1/1 '
-      name: hello-world-server
-      scopes:
-      - apiVersion: core.oam.dev/v1alpha2
-        kind: HealthScope
-        name: health-policy-demo
-        namespace: test
-        uid: 6e6230a3-93f3-4dba-ba09-dd863b6c4a88
-      traits:
-      - healthy: true
-        type: scaler
-      workloadDefinition:
-        apiVersion: apps/v1
-        kind: Deployment
-```
+KubeVela Application v1.3 uses different policies and workflow steps to configure and managing multi-cluster applications.
 
-You can use `resume` command after everything verified in statging cluster:
+The outdated `env-binding` policy and `deploy2env` workflow step in old versions are kept now and might be deprecated in the future.
 
-```shell
-> vela workflow resume example-app
-Successfully resume workflow: example-app
-```
+The new policies and workflow steps can cover all the use-cases in old versions so it is possible to upgrade all your applications while maintaining the same capabilities. Upgrade tools are not available now but will come out before deprecation happens.
 
-Recheck the `Application` status:
-
-```shell
-> kubectl get application example-app
-NAME          COMPONENT            TYPE         PHASE     HEALTHY   STATUS       AGE
-example-app   hello-world-server   webservice   running   true      Ready:1/1    62s
-```
-
-```yaml
-  status:
-    services:
-    - env: staging
-      healthy: true
-      message: 'Ready:1/1 '
-      name: hello-world-server
-      scopes:
-      - apiVersion: core.oam.dev/v1alpha2
-        kind: HealthScope
-        name: health-policy-demo
-        namespace: default
-        uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
-      traits:
-      - healthy: true
-        type: scaler
-      workloadDefinition:
-        apiVersion: apps/v1
-        kind: Deployment
-    - env: prod
-      healthy: true
-      message: 'Ready:3/3 '
-      name: hello-world-server
-      scopes:
-      - apiVersion: core.oam.dev/v1alpha2
-        kind: HealthScope
-        name: health-policy-demo
-        namespace: default
-        uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
-      traits:
-      - healthy: true
-        type: scaler
-      workloadDefinition:
-        apiVersion: apps/v1
-        kind: Deployment
-    - env: prod
-      healthy: true
-      message: 'Ready:1/1 '
-      name: data-worker
-      scopes:
-      - apiVersion: core.oam.dev/v1alpha2
-        kind: HealthScope
-        name: health-policy-demo
-        namespace: default
-        uid: 9174ac61-d262-444b-bb6c-e5f0caee706a
-      workloadDefinition:
-        apiVersion: apps/v1
-        kind: Deployment
-```
-
-All the step status in workflow is succeeded:
-
-```yaml
-...
-  status:
-    workflow:
-      appRevision: example-app-v1:44a6447e3653bcc2
-      contextBackend:
-        apiVersion: v1
-        kind: ConfigMap
-        name: workflow-example-app-context
-        uid: e1e7bd2d-8743-4239-9de7-55a0dd76e5d3
-      mode: StepByStep
-      steps:
-      - id: q8yx7pr8wb
-        name: deploy-staging
-        phase: succeeded
-        type: deploy2env
-      - id: 6oxrtvki9o
-        name: manual-approval
-        phase: succeeded
-        type: suspend
-      - id: uk287p8c31
-        name: deploy-prod
-        phase: succeeded
-        type: deploy2env
-      suspend: false
-      terminated: false
-      waitCount: 0
-```
-
-## More use cases
-
-KubeVela can provide many strategies to deploy an application to multiple clusters by composing env-binding policy and workflow steps.
-
-You can have a glimpse of how does it work as below:
-
-![alt](../resources/workflow-multi-env.png)
-
-More use cases about the multi cluster application deployment are coming soon.
+If you already have applications running in production environment and do not want to change them, KubeVela v1.3 is also compatible for it. It is **NOT** necessary to migrate old multi-cluster applications to new ones.
