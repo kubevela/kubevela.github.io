@@ -13,14 +13,14 @@ First step using GCP and Terraform
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- machine_type |  | string | false |  
- image |  | string | false |  
- zone | GCP zone | string | false |  
- region | GCP region | string | true |  
- project_id | GCP project ID | string | true |  
- username | I think you'll figure this one out | string | true |  
  common_tags | Implements the common tags scheme | list(any) | true |  
+ image |  | string | false |  
+ machine_type |  | string | false |  
+ project_id | GCP project ID | string | true |  
+ region | GCP region | string | true |  
+ username | I think you'll figure this one out | string | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ zone | GCP zone | string | false |  
 
 
 #### writeConnectionSecretToRef

@@ -13,9 +13,9 @@ title:  Gcp-Subnet
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- subnet-region | Zone associated with the subnet. Defaults to the region configured in the provider. |  | false |  
  ip_cidr_range | IP range - format 0.0.0.0/0 |  | true |  
  name | Subnet name |  | true |  
+ subnet-region | Zone associated with the subnet. Defaults to the region configured in the provider. |  | false |  
  vpc | VPC to link the subnet to |  | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 

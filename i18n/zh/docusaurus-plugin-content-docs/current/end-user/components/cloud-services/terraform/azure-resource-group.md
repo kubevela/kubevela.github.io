@@ -13,8 +13,8 @@ Azure Resource Group
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The name of the resource group | string | false |  
  location | The location of the resource group | string | false |  
+ name | The name of the resource group | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

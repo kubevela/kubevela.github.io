@@ -13,13 +13,13 @@ Get your container running, simply.
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- common_labels | This is to help you add tags to your cloud objects | map(any) | true |  
- project | GCP Project | string | true |  
  app | A map of all the service properties | map(any) | true |  
+ common_labels | This is to help you add tags to your cloud objects | map(any) | true |  
+ location |  | string | false |  
+ project | GCP Project | string | true |  
  sourcezip | The Source zip file payload for app engine | string | true |  
  storage_class |  |  | false |  
  versioning | Switch for versioning | bool | false |  
- location |  | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

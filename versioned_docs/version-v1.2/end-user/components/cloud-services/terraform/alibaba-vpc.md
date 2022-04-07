@@ -31,8 +31,8 @@ spec:
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- vpc_description | The vpc description used to launch a new vpc. | string | false |  
  vpc_cidr | The cidr block used to launch a new vpc. | string | false |  
+ vpc_description | The vpc description used to launch a new vpc. | string | false |  
  vpc_name | The vpc name used to launch a new vpc. | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 

@@ -13,9 +13,9 @@ Baidu Cloud VPC
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The name of the VPC | string | false |  
- description | The description of the VPC | string | false |  
  cidr | The CIDR of the VPC | string | false |  
+ description | The description of the VPC | string | false |  
+ name | The name of the VPC | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

@@ -13,12 +13,12 @@ A simple Terraform module to build an instance a static public IP
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
+ common_tags | This is a map type for applying tags on resources | map(any) | true |  
  image | Instance Image | map(any) | false |  
  machine_type | Instance machine type | string | false |  
- zone | GCP Zone | string | false |  
- common_tags | This is a map type for applying tags on resources | map(any) | true |  
  name | Name of the instance |  | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ zone | GCP Zone | string | false |  
 
 
 #### writeConnectionSecretToRef

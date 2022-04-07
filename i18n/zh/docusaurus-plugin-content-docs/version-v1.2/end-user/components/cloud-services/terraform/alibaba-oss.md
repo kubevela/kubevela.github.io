@@ -50,5 +50,5 @@ spec:
 
  名称 | 描述 
  ------------ | ------------- 
- BUCKET_NAME | The name of the bucket
  BUCKET_ENDPOINT | The endpoint of the bucket
+ BUCKET_NAME | The name of the bucket

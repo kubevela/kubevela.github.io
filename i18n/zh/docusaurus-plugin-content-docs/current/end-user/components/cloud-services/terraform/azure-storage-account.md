@@ -45,12 +45,12 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- location | Location of storage account. Defaults to 'West Europe'. | string | false |  
- tags | Tags for storage account. Defaults to '{}'. | map(string) | false |  
- static_website | Static website configuration. Defaults to disabled. | list(map(string)) | false |  
  create_rsg | Conditional if resource group should be created. Defaults to 'true'. | bool | false |  
- resource_group_name | Name of resource group. Defaults to 'rsg'. | string | false |  
+ location | Location of storage account. Defaults to 'West Europe'. | string | false |  
  name | Name of storage account. Defaults to 'storageaccount'. | string | false |  
+ resource_group_name | Name of resource group. Defaults to 'rsg'. | string | false |  
+ static_website | Static website configuration. Defaults to disabled. | list(map(string)) | false |  
+ tags | Tags for storage account. Defaults to '{}'. | map(string) | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
