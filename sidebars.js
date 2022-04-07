@@ -224,11 +224,7 @@ module.exports = {
             "end-user/traits/more",
           ],
         },
-        {
-          type: "category",
-          label: "Built-in Policy Type",
-          items: ["end-user/policies/envbinding"],
-        },
+        "end-user/policies/references",
         "end-user/workflow/built-in-workflow-defs",
         "end-user/service-account-integration",
         "reference/ui-schema",
