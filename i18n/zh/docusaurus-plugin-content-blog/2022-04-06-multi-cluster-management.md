@@ -144,7 +144,7 @@ Services:
 beijing-1 和 beijing-2 都下发了对应的资源，它们可供外部访问的 IP 地址也显示出来，你因而可以用你希望的方式供用户访问了。
 
 ### 使用集群 labels 按需分组分发
-除了上述的基本操作，我们常常会遇到另外的情况：跨地域部署到某些集群、指定哪个云厂商的集群，以及选择是否带 GPU 的集群来保证高性能等等。为了实现类似这样的需求，可以使用多集群的 labels 功能。
+除了上述的基本操作，我们常常会遇到另外的情况：跨地域部署到某些集群、指定哪个云厂商的集群等等。为了实现类似这样的需求，可以使用多集群的 labels 功能。
 
 在这里，假设 us-west-1 集群来自 AWS，我们要额外分发应用到 AWS 的集群，则可以使用 `vela cluster labels add` 来对集群进行标记。当然，如果还有 us-west-2 等多个 AWS 相关集群，同样进行标记后，将会统一下发：
 ```
@@ -191,7 +191,7 @@ us-west-1      	X509Certificate	https://47.88.31.118:6443	true    	provider=AWS
 ```
 ### 通过应用策略进行配置差异化
 
-除了在 `basic.yaml` 里定义的 `deploy-beijing` 这种应用策略，我们往往有更多的应用策略需求，比如高可用，希望单独给某些资源分发 5 个副本。这样的话，使用`override` 类型的应用策略即可：
+除了在 `basic.yaml` 里定义的 `deploy-beijing` 这种应用策略，我们往往有更多的应用策略需求，比如高可用，希望单独给某些资源分发 5 个副本。这样的话，使用 `override` 类型的应用策略即可：
 ```
 ...        
         clusterLabelSelector:
@@ -282,4 +282,4 @@ Applying an application in vela K8s object format...
 
 以上就是本次的全部分享，感谢你的阅读和试玩。
 
-[请安装 KubeVela v1.3 的正式版](https://kubevela.net/zh/docs/install)，这里有更多差异化配置的进阶用法等你发现和使用，比如 `override` 应用策略如何完成资源类型通配还是针对某些特定组件进行覆盖等等，以满足更加复杂的场景需求。
+[欢迎你继续探索 KubeVela v1.3 正式版](https://kubevela.net/zh/docs/install)，这里有更多差异化配置的进阶用法等你发现和使用，比如 `override` 应用策略如何完成资源类型通配还是针对某些特定组件进行覆盖等等，以满足更加复杂的场景需求。
