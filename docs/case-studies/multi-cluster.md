@@ -83,6 +83,10 @@ spec:
       type: webservice
       properties:
         image: nginx
+      traits:
+        - type: expose
+          properties:
+            port: [80]
   policies:
     - name: topology-hangzhou-clusters
       type: topology
@@ -99,8 +103,8 @@ About:
 
   Name:         basic-topology               
   Namespace:    examples                     
-  Created at:   2022-04-06 18:33:46 +0800 CST
-  Status:       running                      
+  Created at:   2022-04-08 14:37:54 +0800 CST
+  Status:       workflowFinished             
 
 Workflow:
 
@@ -109,7 +113,7 @@ Workflow:
   Suspend: false
   Terminated: false
   Steps
-  - id:v9x2joqg5s
+  - id:3mvz5i8elj
     name:deploy-topology-hangzhou-clusters
     type:deploy
     phase:succeeded 
@@ -121,16 +125,31 @@ Services:
     Cluster: cluster-hangzhou-1  Namespace: examples
     Type: webservice
     Healthy Ready:1/1
-    No trait applied
-
+    Traits:
+      ✅ expose
   - Name: nginx-basic  
     Cluster: cluster-hangzhou-2  Namespace: examples
     Type: webservice
     Healthy Ready:1/1
-    No trait applied
+    Traits:
+      ✅ expose
 ```
 
-You can debugging the deployed nginx webservice by running `vela port-forward` or `vela exec`. You will be asked to choose which cluster you want to use.
+### Debugging Multi-cluster Application
+
+You can debugging the above deployed nginx webservice by running the following vela CLI commands. You can play with your pods in managed clusters directly on the hub cluster, without switching KubeConfig context. If you have multiple clusters in on application, the CLI command will ask you to choose one interactively.
+- `vela status` as shown above can give you an overview of your deployed multi-cluster application. Example usage is shown above.
+- `vela logs` shows pod logs in managed clusters.
+
+```bash
+$ vela logs basic-topology -n examples 
+? You have 2 deployed resources in your app. Please choose one: Cluster: cluster-hangzhou-1 | Namespace: examples | Kind: Deployment | Name: nginx-basic
++ nginx-basic-dfb6dcf8d-km5vk › nginx-basic
+nginx-basic-dfb6dcf8d-km5vk nginx-basic 2022-04-08T06:38:10.540430392Z /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+nginx-basic-dfb6dcf8d-km5vk nginx-basic 2022-04-08T06:38:10.540742240Z /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
+```
+
+- `vela port-forward` forward ports of pods or services in managed clusters to your local endpoint.
 
 ```bash
 $ vela exec basic-topology -n examples -it -- ls 
@@ -138,6 +157,18 @@ $ vela exec basic-topology -n examples -it -- ls
 bin   docker-entrypoint.d   home   media  proc  sbin  tmp
 boot  docker-entrypoint.sh  lib    mnt    root  srv   usr
 dev   etc                   lib64  opt    run   sys   var
+```
+
+- `vela exec` helps you execute commands in pods in managed clusters.
+
+```bash
+$ vela port-forward basic-topology -n examples 8080:80
+? You have 4 deployed resources in your app. Please choose one: Cluster: cluster-hangzhou-1 | Namespace: examples | Kind: Deployment | Name: nginx-basic
+Forwarding from 127.0.0.1:8080 -> 80
+Forwarding from [::1]:8080 -> 80
+
+Forward successfully! Opening browser ...
+Handling connection for 8080
 ```
 
 ## Advanced Usage
