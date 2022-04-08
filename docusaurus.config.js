@@ -77,7 +77,7 @@ module.exports = {
           items: [
             {
               label: "Getting Started",
-              to: "/docs/quick-start",
+              to: "/docs/end-user/quick-start-cli",
             },
             {
               label: "Tutorials",
