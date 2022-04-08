@@ -8,11 +8,9 @@ GCP Network-Peering
 
 ## Specification
 
-
-### Properties
-
+### Properties  
  Name | Description | Type | Required | Default 
- ------------ | ------------- | ------------- | ------------- | ------------- 
+------------|------------|------------|------------|------------
  cluster_name | Name of the DC/OS cluster |  | true |  
  local_network_name | Local network name, used for naming the peering | string | true |  
  local_network_self_link | Local network self_link | string | true |  
