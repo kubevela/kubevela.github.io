@@ -13,8 +13,8 @@ Azure Resource Group
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The name of the resource group | string | false |  
  location | The location of the resource group | string | false |  
+ name | The name of the resource group | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

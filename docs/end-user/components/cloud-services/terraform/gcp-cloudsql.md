@@ -13,13 +13,13 @@ A module to create a private database setup
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- require_ssl | Require SSL connections or not. | bool | false |  
+ database | A list of objects that describes if any databases to be created | list(object({\n    name = string\n  })) | false |  
+ instance |  | map(any) | false |  
+ name | The name of the database instance | string | true |  
  network_name | The name of the VCP to provision this in to | string | true |  
  project | The name of the GCP project | string | true |  
- name | The name of the database instance | string | true |  
- database | A list of objects that describes if any databases to be created | list(object({\n    name = string\n  })) | false |  
+ require_ssl | Require SSL connections or not. | bool | false |  
  users | A list of user that belong to a database instance | list(object({\n    name     = string\n    password = string\n  })) | false |  
- instance |  | map(any) | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

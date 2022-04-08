@@ -13,10 +13,10 @@ A helm repository
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- common_tags | This is a map type for applying tags on resources | map(any) | true |  
- bucket_name | The name of the bucket | string | true |  
- project | The GCP project | string | true |  
  binding | Permissions to set on the bucket |  | true |  
+ bucket_name | The name of the bucket | string | true |  
+ common_tags | This is a map type for applying tags on resources | map(any) | true |  
+ project | The GCP project | string | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

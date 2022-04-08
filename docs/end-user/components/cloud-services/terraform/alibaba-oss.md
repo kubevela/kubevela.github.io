@@ -50,5 +50,5 @@ If `writeConnectionSecretToRef` is set, a secret will be generated with these ke
 
  Name | Description 
  ------------ | ------------- 
- BUCKET_NAME | The name of the bucket
  BUCKET_ENDPOINT | The endpoint of the bucket
+ BUCKET_NAME | The name of the bucket

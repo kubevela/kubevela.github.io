@@ -13,10 +13,10 @@ Alibaba Cloud OSS static webstie bucket
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- bucket | OSS bucket name | string | false |  
  acl | OSS bucket ACL, supported 'private', 'public-read', 'public-read-write' | string | false |  
- index_document | OSS bucket static website index document | string | false |  
+ bucket | OSS bucket name | string | false |  
  error_document | OSS bucket static website error document | string | false |  
+ index_document | OSS bucket static website index document | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
@@ -34,6 +34,6 @@ Alibaba Cloud OSS static webstie bucket
 
  名称 | 描述 
  ------------ | ------------- 
+ BUCKET_NAME | 
  EXTRANET_ENDPOINT | OSS bucket external endpoint
  INTRANET_ENDPOINT | OSS bucket internal endpoint
- BUCKET_NAME | 

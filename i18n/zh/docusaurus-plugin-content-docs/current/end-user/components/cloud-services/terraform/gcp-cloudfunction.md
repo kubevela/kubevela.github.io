@@ -13,9 +13,9 @@ For your cloud functions to GCP
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- location |  | string | false |  
  common_tags | This is to help you add tags to your cloud objects | map(any) | true |  
  lambda | A map object that populates the majority of cloudfunction settings | map(any) | true |  
+ location |  | string | false |  
  project | GCP project | string | true |  
  region | GCP region | string | true |  
  sourcezippath | Full path to source zip file  | string | true |  
