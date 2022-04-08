@@ -6,7 +6,7 @@ module.exports = {
     "install",
     {
       type: "category",
-      label: "KubeVela Engine",
+      label: "Vela-Core",
       collapsed: false,
       items: [
         {

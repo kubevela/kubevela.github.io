@@ -215,7 +215,7 @@
     "message": "部署组件",
     "description": "部署组件"
   },
-  "sidebar.docs.category.KubeVela Engine": {
+  "sidebar.docs.category.Vela-Core": {
     "message": "开放应用引擎（KubeVela）",
     "description": "开放应用引擎 KubeVela Core"
   },
