@@ -8,11 +8,9 @@ GCP Network-Peering
 
 ## 参数说明
 
-
-### 属性
-
+### 属性  
  名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------------ | ------------- | ------------- | ------------- | ------------- 
+------------|------------|------------|------------|------------
  cluster_name | Name of the DC/OS cluster |  | true |  
  local_network_name | Local network name, used for naming the peering | string | true |  
  local_network_self_link | Local network self_link | string | true |  
