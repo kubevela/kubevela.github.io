@@ -13,8 +13,8 @@ Terraform module which creates Route53 resources on AWS
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- delegation_sets | Map of Route53 delegation set parameters | any | false |  
  create | Whether to create Route53 delegation sets | bool | false |  
+ delegation_sets | Map of Route53 delegation set parameters | any | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

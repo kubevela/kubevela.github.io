@@ -14,11 +14,11 @@ Terraform module which creates Route53 resources on AWS
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  create | Whether to create DNS records | bool | false |  
- zone_id | ID of DNS zone | string | false |  
- zone_name | Name of DNS zone | string | false |  
  private_zone | Whether Route53 zone is private or public | bool | false |  
  records | List of maps of DNS records | any | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ zone_id | ID of DNS zone | string | false |  
+ zone_name | Name of DNS zone | string | false |  
 
 
 #### writeConnectionSecretToRef

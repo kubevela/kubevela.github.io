@@ -13,9 +13,9 @@ Tencent Cloud Subnet
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
+ availability_zone | Availability Zone | string | false |  
  cidr_block | Subnet CIDR block | string | false |  
  is_multicast | Subnet is multicast | bool | false |  
- availability_zone | Availability Zone | string | false |  
  name | Subnet name | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 

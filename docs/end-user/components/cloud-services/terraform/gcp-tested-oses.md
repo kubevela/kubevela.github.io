@@ -13,9 +13,9 @@ GCP Tested-Oses
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- traditional_default_os_user | Standard Default OS Users | map | false |  
- os_image_version | GCP Images | map | false |  
  os | Operating system to use |  | false |  
+ os_image_version | GCP Images | map | false |  
+ traditional_default_os_user | Standard Default OS Users | map | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

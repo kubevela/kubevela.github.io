@@ -13,13 +13,13 @@ Create an ELB to be used for DC/OS for GCP
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- cluster_name | Name of the DC/OS cluster |  | true |  
- network | Network Name |  | true |  
- internal_subnets | List of internal subnets to allow traffic between them | list | true |  
  admin_ips | List of CIDR admin IPs | list | true |  
- public_agents_ips | List of ips allowed access to public agents. admin_ips are joined to this list | list | false |  
- public_agents_additional_ports | List of additional ports allowed for public access on public agents (80 and 443 open by default) | list | false |  
+ cluster_name | Name of the DC/OS cluster |  | true |  
+ internal_subnets | List of internal subnets to allow traffic between them | list | true |  
  name_prefix | Name Prefix |  | false |  
+ network | Network Name |  | true |  
+ public_agents_additional_ports | List of additional ports allowed for public access on public agents (80 and 443 open by default) | list | false |  
+ public_agents_ips | List of ips allowed access to public agents. admin_ips are joined to this list | list | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

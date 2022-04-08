@@ -13,9 +13,9 @@ Alibaba SAE namespace
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- namespace_name | Namespace Name | string | true |  
- namespace_id | Namespace ID | string | true |  
  namespace_description | Namespace Description |  | false |  
+ namespace_id | Namespace ID | string | true |  
+ namespace_name | Namespace Name | string | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

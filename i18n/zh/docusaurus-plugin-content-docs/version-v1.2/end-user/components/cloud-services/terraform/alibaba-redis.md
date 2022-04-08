@@ -32,8 +32,8 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- instance_name | Redis instance name | string | false |  
  account_name | Redis instance user account name | string | false |  
+ instance_name | Redis instance name | string | false |  
  password | RDS instance account password | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
@@ -52,8 +52,8 @@ spec:
 
  名称 | 描述 
  ------------ | ------------- 
- RESOURCE_IDENTIFIER | The identifier of the resource
- REDIS_NAME | Redis instance name
  REDIS_CONNECT_ADDRESS | Redis connect address
- REDIS_USER | Redis user
+ REDIS_NAME | Redis instance name
  REDIS_PASSWORD | Redis password
+ REDIS_USER | Redis user
+ RESOURCE_IDENTIFIER | The identifier of the resource

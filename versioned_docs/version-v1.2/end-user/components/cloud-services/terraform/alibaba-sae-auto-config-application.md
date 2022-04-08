@@ -13,13 +13,13 @@ Alibaba SAE application to be deployed in auto-config mode
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- cpu | The cpu of the application, in unit of millicore | string | false |  
- memory | The memory of the application, in unit of MB | string | false |  
- image_url | The image url of the application, like `registry.cn-hangzhou.aliyuncs.com/google_containers/nginx-slim:0.9` | string | true |  
- replicas | The replicas of the application | string | false |  
- app_name | The name of the application | string | true |  
  app_description | The description of the application | string | false |  
+ app_name | The name of the application | string | true |  
+ cpu | The cpu of the application, in unit of millicore | string | false |  
+ image_url | The image url of the application, like `registry.cn-hangzhou.aliyuncs.com/google_containers/nginx-slim:0.9` | string | true |  
+ memory | The memory of the application, in unit of MB | string | false |  
  package_type | The package type of the application | string | false |  
+ replicas | The replicas of the application | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

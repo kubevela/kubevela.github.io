@@ -13,14 +13,14 @@ GCP Dns-Module
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- service_account_file |  |  | false |  
- zone |  |  | false |  
  dns_name |  |  | true |  
  instance_ip_addr |  |  | true |  
  managed_zone |  |  | true |  
  project |  |  | true |  
  region |  |  | false |  
+ service_account_file |  |  | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ zone |  |  | false |  
 
 
 #### writeConnectionSecretToRef

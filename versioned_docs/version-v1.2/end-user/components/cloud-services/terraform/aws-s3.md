@@ -32,8 +32,8 @@ spec:
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- bucket | S3 bucket name | string | true |  
  acl | S3 bucket ACL | string | false |  
+ bucket | S3 bucket name | string | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

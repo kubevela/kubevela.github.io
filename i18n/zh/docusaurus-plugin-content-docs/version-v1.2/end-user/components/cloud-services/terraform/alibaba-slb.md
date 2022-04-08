@@ -13,10 +13,10 @@ Terraform configuration for Alicloud SLB
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- namePrefix |  | string | false |  
  createSlb |  | bool | false |  
- zone_id | Availability Zone ID | string | false |  
+ namePrefix |  | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ zone_id | Availability Zone ID | string | false |  
 
 
 #### writeConnectionSecretToRef
