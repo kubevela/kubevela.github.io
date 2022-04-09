@@ -150,7 +150,7 @@ nginx-basic-dfb6dcf8d-km5vk nginx-basic 2022-04-08T06:38:10.540430392Z /docker-e
 nginx-basic-dfb6dcf8d-km5vk nginx-basic 2022-04-08T06:38:10.540742240Z /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
 ```
 
-- `vela port-forward` forward ports of pods or services in managed clusters to your local endpoint.
+- `vela exec` helps you execute commands in pods in managed clusters.
 
 ```bash
 $ vela exec basic-topology -n examples -it -- ls 
@@ -160,7 +160,7 @@ boot  docker-entrypoint.sh  lib    mnt    root  srv   usr
 dev   etc                   lib64  opt    run   sys   var
 ```
 
-- `vela exec` helps you execute commands in pods in managed clusters.
+- `vela port-forward` forward ports of pods or services in managed clusters to your local endpoint.
 
 ```bash
 $ vela port-forward basic-topology -n examples 8080:80
