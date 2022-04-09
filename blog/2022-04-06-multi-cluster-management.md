@@ -282,4 +282,4 @@ Applying an application in vela K8s object format...
 
 The above all are what we'd like to share with you for this time, thank you for reading and trying them out.
 
-[We invite you to explore KubeVela v1.3 for more](https://kubevela.io/en/docs/install) to meet further complex requirements on business, such as [dig deep](https://kubevela.io/docs/next/case-studies/multi-cluster#override-default-configurations-in-clusters) in differentiated configurations to use `override` application policy to either override all resources on one type or only certain specific components.
+[We invite you to explore KubeVela v1.3 for more](https://kubevela.io/docs/install) to meet further complex requirements on business, such as [dig deep](https://kubevela.io/docs/next/case-studies/multi-cluster#override-default-configurations-in-clusters) in differentiated configurations to use `override` application policy to either override all resources on one type or only certain specific components.
