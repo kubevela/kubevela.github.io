@@ -1,8 +1,8 @@
-# Trunch gh-pages branch
+# Truncate gh-pages branch
 
 The branch is going to expand as every commit will trigger new rebuild all websites static files.
 
-We need to trunc it periodically.
+We need to Truncate it periodically.
 
 
 1. Check out to gh-pages and find the latest commit ID.
@@ -19,4 +19,10 @@ git log
 git checkout --orphan temp COMMIT_ID
 git commit -m "Truncate history"
 git rebase --onto temp COMMIT_ID gh-pages
+```
+
+3. Force push the Truncated branch.
+
+```
+git push origin gh-pages -f
 ```
