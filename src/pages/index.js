@@ -62,7 +62,7 @@ export default function Home() {
           <p className="hero__subtitle">{siteConfig.tagline}</p>
           <div
             className={clsx(styles.heroButtons, 'name', 'margin-vert--md')}>
-            <Button href={useBaseUrl('docs/quick-start')}><Translate>Get Started</Translate></Button>
+            <Button href={useBaseUrl('docs/end-user/quick-start-cli')}><Translate>Get Started</Translate></Button>
             <Button href={useBaseUrl('docs/')}><Translate>Learn More</Translate></Button>
           </div>
         </div>
@@ -107,7 +107,7 @@ const WhatIs = () => (
               <br />
               <br />
               <Translate>
-                KubeVela is infrastructure agnostic, programmable, yet most importantly, 
+                KubeVela is infrastructure agnostic, programmable, yet most importantly,
               </Translate><i> <Translate>application-centric.</Translate></i>
             </small>
           </p>
