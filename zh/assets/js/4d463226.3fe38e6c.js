@@ -1,0 +1,1 @@
+(self.webpackChunkkubevela_io=self.webpackChunkkubevela_io||[]).push([[68069],{38258:function(e){"use strict";e.exports=JSON.parse('{"allTagsPath":"/zh/blog/tags","slug":"terraform","name":"terraform","count":1,"permalink":"/zh/blog/tags/terraform"}')}}]);

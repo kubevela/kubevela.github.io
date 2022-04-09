@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>KubeVela Blog</title>
+        <link>https://kubevela.io/blog</link>
+        <description>KubeVela Blog</description>
+        <lastBuildDate>Wed, 06 Apr 2022 00:00:00 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
+        <item>
+            <title><![CDATA[Easily Manage your Application Shipment With Differentiated Configuration in Multi-Cluster]]></title>
+            <link>https://kubevela.io/blog/2022/04/06/multi-cluster-management</link>
+            <guid>Easily Manage your Application Shipment With Differentiated Configuration in Multi-Cluster</guid>
+            <pubDate>Wed, 06 Apr 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[China Merchants Bank's Practice on Offline Installation with KubeVela]]></title>
+            <link>https://kubevela.io/blog/2022/04/01/offline-deployment-practice copy</link>
+            <guid>China Merchants Bank's Practice on Offline Installation with KubeVela</guid>
+            <pubDate>Fri, 01 Apr 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Machine Learning Practice with KubeVela]]></title>
+            <link>https://kubevela.io/blog/2022/03/02/kubevela-with-machine-learning</link>
+            <guid>Machine Learning Practice with KubeVela</guid>
+            <pubDate>Wed, 02 Mar 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Generate top 50 popular resources of AWS using 100 lines of code]]></title>
+            <link>https://kubevela.io/blog/2022/03/01/kubevela-generate-top-50-popular-resources-of-aws-using-100-lines-of-code</link>
+            <guid>Generate top 50 popular resources of AWS using 100 lines of code</guid>
+            <pubDate>Tue, 01 Mar 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[KubeVela v1.2 - Focused on Developer Experience, Simplified Multi-Cluster Application Delivery]]></title>
+            <link>https://kubevela.io/blog/2022/01/27/blog-1.2</link>
+            <guid>KubeVela v1.2 - Focused on Developer Experience, Simplified Multi-Cluster Application Delivery</guid>
+            <pubDate>Thu, 27 Jan 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Using GitOps + KubeVela for Application Continuous Delivery]]></title>
+            <link>https://kubevela.io/blog/2021/10/10/kubevela-gitops</link>
+            <guid>Using GitOps + KubeVela for Application Continuous Delivery</guid>
+            <pubDate>Sun, 10 Oct 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[KubeVela Releases 1.1, Reaching New Peaks in Cloud-Native Continuous Delivery]]></title>
+            <link>https://kubevela.io/blog/2021/10/08/blog-1.1</link>
+            <guid>KubeVela Releases 1.1, Reaching New Peaks in Cloud-Native Continuous Delivery</guid>
+            <pubDate>Fri, 08 Oct 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Using Jenkins + KubeVela for Application Continuous Delivery]]></title>
+            <link>https://kubevela.io/blog/2021/09/02/kubevela-jenkins-cicd</link>
+            <guid>Using Jenkins + KubeVela for Application Continuous Delivery</guid>
+            <pubDate>Thu, 02 Sep 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[KubeVela Performance Test - Managing Massive Applications]]></title>
+            <link>https://kubevela.io/blog/2021/08/30/kubevela-performance-test</link>
+            <guid>KubeVela Performance Test - Managing Massive Applications</guid>
+            <pubDate>Mon, 30 Aug 2021 00:00:00 GMT</pubDate>
+            <description><![CDATA[KubeVela is demonstrated to be able to host thousands of applications effectively with limited resources.]]></description>
+        </item>
+        <item>
+            <title><![CDATA[KubeVela - The Extensible App Platform Based on Open Application Model and Kubernetes]]></title>
+            <link>https://kubevela.io/blog/2020/12/07/kubevela-the-extensible-app-platform-based-on-open-application-model-and-kubernetes</link>
+            <guid>KubeVela - The Extensible App Platform Based on Open Application Model and Kubernetes</guid>
+            <pubDate>Mon, 07 Dec 2020 00:00:00 GMT</pubDate>
+            <description><![CDATA[The Extensible App Platform Based on Open Application Model and Kubernetes]]></description>
+        </item>
+    </channel>
+</rss>

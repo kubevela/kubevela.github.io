@@ -1,0 +1,1 @@
+(self.webpackChunkkubevela_io=self.webpackChunkkubevela_io||[]).push([[96318],{59269:function(e){"use strict";e.exports=JSON.parse('{"allTagsPath":"/blog/tags","slug":"kube-vela","name":"kubevela","count":7,"permalink":"/blog/tags/kube-vela"}')}}]);

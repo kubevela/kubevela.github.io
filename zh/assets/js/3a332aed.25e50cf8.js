@@ -1,0 +1,1 @@
+(self.webpackChunkkubevela_io=self.webpackChunkkubevela_io||[]).push([[98800],{7553:function(e){"use strict";e.exports=JSON.parse('{"permalink":"/zh/blog","page":1,"postsPerPage":10,"totalPages":1,"totalCount":10,"previousPage":null,"nextPage":null,"blogDescription":"Blog","blogTitle":"Blog"}')}}]);
