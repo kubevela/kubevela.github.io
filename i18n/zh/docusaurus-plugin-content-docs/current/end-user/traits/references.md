@@ -12,7 +12,7 @@ The `gateway` trait exposes a component to public Internet via a valid domain.
 
 * 所有组件类型
 
-## 字段说明
+### 参数说明
 
 | NAME        | DESCRIPTION                                                                                        | TYPE           | REQUIRED | DEFAULT |
 | ----------- | -------------------------------------------------------------------------------------------------- | -------------- | -------- | ------- |
@@ -105,7 +105,7 @@ spec:
 * worker
 * task
 
-## Parameters
+### 参数说明
 
 ```
 $ vela show scaler
@@ -148,7 +148,7 @@ spec:
 * 所有基于 `deployments.apps` 类型的组件
 
 
-### 字段说明
+### 参数说明
 
 
 ```
@@ -198,7 +198,7 @@ spec:
 
 * 所有基于 `deployments.apps` 类型的组件
 
-### Parameters
+### 参数说明
 
 ```
 $ vela show storage
@@ -266,7 +266,7 @@ $ vela show storage
 
 ```
 
-## Examples
+### 样例
 
 ```yaml
 # sample.yaml
@@ -327,7 +327,7 @@ spec:
 
 * 所有组件类型
 
-### Parameters
+### 参数说明
 
 ```shell
 $ vela show labels
@@ -373,7 +373,7 @@ spec:
 
 * 所有组件类型
 
-### Parameters
+### 参数说明
 
 ```shell
 $ vela show annotations
@@ -418,7 +418,7 @@ spec:
 
 * kustomize
 
-### Parameters
+### 参数说明
 
 ```shell
 vela show kustomize-patch
@@ -493,7 +493,7 @@ In this example, the `kustomize-patch` will patch the content for all Pods with 
 
 * kustomize
 
-### Parameters
+### 参数说明
 
 ```shell
 vela show kustomize-json-patch
@@ -575,7 +575,7 @@ spec:
 
 * kustomize
 
-### Parameters
+### 参数说明
 
 ```shell
 vela show kustomize-json-patch
@@ -635,7 +635,7 @@ Service binding trait will bind data from Kubernetes `Secret` to the application
 * cron-task
 
 
-### Parameters
+### 参数说明
 
 Name | Description | Type | Required | Default
 ------------ | ------------- | ------------- | ------------- | -------------
@@ -684,7 +684,7 @@ The `sidecar` trait allows you to attach a sidecar container to the component.
 * task
 * cron-task
 
-### Parameters
+### 参数说明
 
 ```console
 # Properties
