@@ -175,6 +175,16 @@ Handling connection for 8080
 ## 进阶使用
 
 
+### 理解多集群应用
+
+下图为多集群应用的整体结构图。如图所示，所有的配置信息（包括应用、策略和工作流）都处于管控集群中。只有资源（如 deployment 或者 service）会被下发到子集群之中。
+
+策略主要负责描述资源的位置以及它们应该如何被差异化配置。资源下发真正的执行者是工作流。在工作流中，`deploy` 步骤会根据引用的策略对资源进行差异化配置，然后再将它们分发到对应的集群中。
+
+![multi-cluster-arch](../../../../../docs/resources/multi-cluster-arch.jpg)
+
+
+
 ### 配置部署目标
 
 选择部署目标的最直接的方法就是在 `topology` 策略中声明你想要部署的集群名称。有的时候，使用标签来筛选要部署的集群会更方便，比如下面这个例子通过标签筛选出所有的杭州集群：
@@ -359,6 +369,8 @@ spec:
         properties:
           policies: ["topology-hangzhou-clusters", "override-nginx-legacy-image", "override-high-availability"]
 ```
+
+> 注意：override 策略是用来修改基础配置的策略，因此**它被设计成必须需要和 topology 策略一同使用**。如果你不想要使用 topology 策略，你可以直接将配置写在组件声明中，而不是使用 override 策略。*如果你错误的在 deploy 工作流步骤中使用了 override 策略，而没有使用 topology 策略，应用不会发生错误，但是也不会下发任何资源。*
 
 差异化配置有一些高级配置能力，比如添加额外的组件，或者选择部分组件。下面的样例中，应用会首先在 `local` 集群中部署一个镜像为 `nginx:1.20` 的 webservice，然后再将 `nginx` 和 `nginx:stable` 两个 webservice 部署到杭州集群中
 

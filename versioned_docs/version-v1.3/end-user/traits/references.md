@@ -104,7 +104,7 @@ The `scaler` trait allows you to change the replicas for the component.
 * worker
 * task
 
-## Parameters
+### Parameters
 
 ```
 $ vela show scaler
@@ -257,7 +257,7 @@ $ vela show storage
 
 ```
 
-## Examples
+### Examples
 
 ```yaml
 # sample.yaml
