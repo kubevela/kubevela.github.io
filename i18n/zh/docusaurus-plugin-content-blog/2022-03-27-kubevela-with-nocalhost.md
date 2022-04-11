@@ -1,5 +1,5 @@
 ---
-title: KubeVela X Nocalhost
+title: 使用 Nocalhost 与 KubeVela 端云联调，一键完成多集群混合云环境部署
 author: Tianxin Dong and Yicai Yu
 author_title: KubeVela、Nocalhost 团队
 author_url: https://github.com/oam-dev/kubevela
@@ -10,11 +10,15 @@ image: https://raw.githubusercontent.com/oam-dev/kubevela.io/main/docs/resources
 hide_table_of_contents: false
 ---
 
-在云原生快速发展的当下，如何便捷地在 Kubernetes 集群中进行开发、调试及部署成了每位开发者都需要面对的问题。
+在云原生快速发展的当下，如何让云的技术赋能业务开发？在上线应用时，如何让云的开发者在现代化的多集群、混合云环境中便捷地进行应用的开发和调试？在部署过程中，又该如何让应用部署具备充分的验证和可靠性？
 
-当一个新应用需要开发上线时，我们希望本地 IDE 中调试的结果能和云端保持一致。同时，当新代码被推送至代码仓库中后，环境中的应用也同样可以实时更新，且这整个过程是稳定可靠的。
+这些至关重要的问题，都是我们急需解决的。
 
-而借助 KubeVela 以及 Nocalhost，我们可以完成这样一种部署过程：
+在本文中，我们将结合 KubeVela 以及 Nocalhost 开源项目，给出一个基于 Kubernetes 和容器生态的端云联调、一键完成多集群混合环境部署的解决方案，来回答上述问题。
+
+当一个新应用需要开发上线时，我们希望本地 IDE 中调试的结果能和云端最终部署的状态保持一致。这样一致的姿态，能最大程度上给予我们部署的信心，并且让我们可以采用类似 GitOps 这种更高效、敏捷的方式迭代应用更新。即：当新代码被推送至代码仓库中后，环境中的应用会自动化地实时更新。同时，基于端云联调的模式，可以让这整个过程不仅敏捷高效、同样更加稳定可靠。
+
+基于 KubeVela 和 Nocalhost，我们可以完成这样一种部署过程：
 
 ![alt](/img/nocalhost/0.png)
 
@@ -26,7 +30,16 @@ hide_table_of_contents: false
 
 KubeVela 是一个简单易用且高度可扩展的应用交付和管理平台，基于 Kubernetes 与 OAM 技术构建。其核心功能是让开发人员方便快捷地在 Kubernetes 上定义与交付现代微服务应用，而无需了解任何 Kubernetes 本身相关的细节。
 
-KubeVela 提供了 VelaUX 功能让整个应用分发的过程可视化，使应用组装、分发、交付的流程变得更简单。在 UX 上，不仅可以便捷地通过页面及时了解整个交付链路状态，还可以通过配置触发器，使应用随着制品仓库的更新而更新。
+KubeVela 提供了 VelaUX 功能，能够让整个应用分发的过程可视化，使应用组装、分发、交付的流程变得更简单。在 UX 上，不仅可以便捷地通过页面及时了解整个交付链路状态，还可以通过配置触发器，使应用随着制品仓库的更新而更新。
+
+而在本文的场景中，KubeVela 提供了以下能力：
+
+1. 完整的 GitOps 发布：
+  * KubeVela 同时支持了 Pull 模式以及 Push 模式的 GitOps 发布：我们只需要将更新后的代码推送到代码仓库，KubeVela 就能自动基于最新代码完成部署。在本文中，我们将使用 Push 模式的 GitOps，关于 Pull 模式的 GitOps 支持，可以查看[这篇文章](https://kubevela.io/blog/2021/10/10/kubevela-gitops)。
+2. 强大的工作流能力，实现跨环境（集群）部署、审批以及通知：
+  * KubeVela 借助其工作流能力，可以轻松让应用实现跨环境部署，并且支持用户在编排工作流的过程中，加入例如人工审批、消息通知等功能，使整个部署过程生产级可用。
+3. 应用抽象能力，让开发者都能看懂使用并且自定义基础设施能力
+  * KubeVela 遵循 OAM 的开放应用模型，提供了一套简单易用的应用抽象能力，使开发者能够更加清晰地理解应用的功能，并且可以自定义基础设施能力。例如，对于一个简单的应用来说，我们可以将其划分为组件，运维特征，工作流三大部分。在本文的例子中，我们的组件是一个简单的业务应用；在运维特征部分，我们为这个组件绑定了一个 Nocalhost 的运维特征，让这个组件能够使用 Nocalhost 端云联调的能力；在工作流部分，通过多环境管理，我们可以先让这个组件部署在测试环境，部署完成后自动暂停工作流的发布，直至人工验证审批通过后，再进行生产环境的部署。
 
 ## 什么是 Nocalhost
 
@@ -40,9 +53,9 @@ Nocalhost 还提供： VSCode 和 Jetbrains IDE 一键 Debug 和 HotReload；在
 
 ## 调试云端应用
 
-我们以一个简单的前端应用为例，首先，我们通过 VelaUX 在测试环境中部署该应用。
+我们以一个简单的前端应用为例，首先，我们通过 VelaUX 进行多环境部署。
 
-> 关于如何开启 KubeVela 的 VelaUX 插件，请查看 ...
+> 关于如何开启 KubeVela 的 VelaUX 插件，请查看 [官方文档](https://kubevela.io/docs/install#4-install-velaux)。
 
 ### 使用 VelaUX 部署云端应用
 
@@ -60,7 +73,7 @@ Nocalhost 还提供： VSCode 和 Jetbrains IDE 一键 Debug 和 HotReload；在
 
 ![alt](/img/nocalhost/3.png)
 
-创建完应用后，应用会默认带一个工作流，自动将应用部署到两个部署目标当中。但我们并不希望未经过调试的应用直接部署到生产目标中。因此，我们来编辑一下这个默认工作流：在部署到测试目标和生产目标中添加一个暂停步骤。
+创建完应用后，应用会默认带一个工作流，自动将应用部署到两个部署目标当中。但我们并不希望未经过调试的应用直接部署到生产目标中。因此，我们来编辑一下这个默认工作流：在部署到测试目标和生产目标中添加一个暂停步骤。这样，我们就可以在部署到测试环境中后，暂停部署，等待用户调试并验证完成后，再继续部署到生产环境中。
 
 ![alt](/img/nocalhost/4.png)
 
@@ -76,7 +89,7 @@ Command 分两种，Debug 和 Run。开发时在插件右键点击 Remote Debug�
 ![alt](/img/nocalhost/7.png)
 
 这里的 Image 指的是调试镜像，Nocalhost 默认提供了五种语言的镜像（go/java/python/ruby/node），可以通过填写语言名来使用内置镜像，当然，也可以填写完整镜像名以使用自定义镜像。
-开启 HotReload 意味着开启热加载功能，能够在修改代码后直接看到效果。PortForwad 会将云端应用的 80 端口转发到本地的 8080 端口。
+开启 HotReload 意味着开启热加载功能，能够在修改代码后直接看到效果。PortForward 会将云端应用的 80 端口转发到本地的 8080 端口。
 
 ![alt](/img/nocalhost/8.png)
 
@@ -116,15 +129,11 @@ Command 分两种，Debug 和 Run。开发时在插件右键点击 Remote Debug�
 
 ![alt](/img/nocalhost/17.png)
 
-## 使用 GitOps 进行发布
+## 使用 GitOps 进行多环境发布
 
 在我们结束调试后，环境上的应用依旧是之前 v1.0.0 的版本。那么，该使用什么方式来更新环境中的应用呢？
 
 在整个云端调试的过程中，我们修改的是源代码。因此，我们可以借助 GitOps 的模式，以代码作为更新来源，来完成对环境中应用的更新。
-
-KubeVela 同时支持了 Pull 模式以及 Push 模式的 GitOps 发布，在此，我们以 Push 模式举例。
-
-> 关于 Pull 模式的 GitOps 支持，可以查看这篇文章 ...
 
 查看 VelaUX 中部署的应用，可以看到，每个应用都会拥有一个默认 Trigger：
 
@@ -176,6 +185,7 @@ webhook-request:
 ![alt](/img/nocalhost/20.png)
 
 当镜像被更新后，再次查看应用的页面，可以看到，已经变成了 v2.0.0 版本。
+
 在测试部署目标中验证完毕后，我们可以点击应用工作流中的 Continue ，使最新版本的应用部署到生产部署目标中。
 
 ![alt](/img/nocalhost/21.png)
@@ -184,6 +194,7 @@ webhook-request:
 
 ![alt](/img/nocalhost/22.png)
 
+至此，我们就通过 KubeVela 首先在测试环境中使用 Nocalhost 进行端云联调，验证通过后，再通过更新代码，使用 GitOps 来完成部署更新，并且继续更新生产环境中的应用，从而完成了一次应用从开发到上线的完整部署流程。
 ## 总结
 
 使用 KubeVela + Nocalhost，不仅能够便捷地在开发环境中进行云端的联调测试，还能在测试完成后一键更新部署到生产环境，使整个开发上线过程稳定可靠。
