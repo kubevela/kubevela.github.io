@@ -125,7 +125,7 @@ Command 分两种，Debug 和 Run。开发时在插件右键点击 Remote Debug�
 
 ![alt](/img/nocalhost/16.png)
 
-此时，我们可以终止 Nocalhost 的调试模式。由于在之前的 sync 设置中，我们设置了 syncReceive 模式（双向同步），所以当终止调试模式后，本地 IDE 中依旧是我们更新过的代码。此时，我们可以将这份已更新的代码推送至代码仓库中。
+此时，我们可以终止 Nocalhost 的调试模式。将已通过调试的代码推送至代码仓库中。
 
 ![alt](/img/nocalhost/17.png)
 
