@@ -8,17 +8,15 @@ Terraform module which creates Route53 resources on AWS
 
 ## 参数说明
 
-
-### 属性
-
+### 属性  
  名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------------ | ------------- | ------------- | ------------- | ------------- 
+------------|------------|------------|------------|------------
+ create | Whether to create DNS records | bool | false |  
  private_zone | Whether Route53 zone is private or public | bool | false |  
  records | List of maps of DNS records | any | false |  
- create | Whether to create DNS records | bool | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
  zone_id | ID of DNS zone | string | false |  
  zone_name | Name of DNS zone | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef

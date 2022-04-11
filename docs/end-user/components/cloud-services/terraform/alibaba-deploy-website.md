@@ -8,14 +8,12 @@ Deploy a Static Website in object stroage, like S3 and OSS
 
 ## Specification
 
-
-### Properties
-
+### Properties  
  Name | Description | Type | Required | Default 
- ------------ | ------------- | ------------- | ------------- | ------------- 
+------------|------------|------------|------------|------------
+ bucket | OSS bucket name | string | false |  
  endpoint | OSS bucket endpoint | string | true |  
  static_web_url | The URL of the static website | string | false |  
- bucket | OSS bucket name | string | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 

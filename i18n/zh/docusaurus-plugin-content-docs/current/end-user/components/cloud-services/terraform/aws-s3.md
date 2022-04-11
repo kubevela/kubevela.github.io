@@ -27,11 +27,9 @@ spec:
 
 ## 参数说明
 
-
-### 属性
-
+### 属性  
  名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------------ | ------------- | ------------- | ------------- | ------------- 
+------------|------------|------------|------------|------------
  acl | S3 bucket ACL | string | false |  
  bucket | S3 bucket name | string | true |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
