@@ -150,23 +150,14 @@ nginx-basic-dfb6dcf8d-km5vk nginx-basic 2022-04-08T06:38:10.540430392Z /docker-e
 nginx-basic-dfb6dcf8d-km5vk nginx-basic 2022-04-08T06:38:10.540742240Z /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
 ```
 
-- `vela port-forward` forward ports of pods or services in managed clusters to your local endpoint.
+- `vela exec` helps you execute commands in pods in managed clusters.
 
 ```bash
 $ vela exec basic-topology -n examples -it -- ls 
 ? You have 2 deployed resources in your app. Please choose one: Cluster: cluster-hangzhou-1 | Namespace: examples | Kind: Deployment | Name: nginx-basic
 bin   docker-entrypoint.d   home   media  proc  sbin  tmp
 boot  docker-entrypoint.sh  lib    mnt    root  srv   usr
-dev   etc                   lib64  opt    run   sys   var
-```
-
-- `vela exec` helps you execute commands in pods in managed clusters.
-
-```bash
-$ vela port-forward basic-topology -n examples 8080:80
-? You have 4 deployed resources in your app. Please choose one: Cluster: cluster-hangzhou-1 | Namespace: examples | Kind: Deployment | Name: nginx-basic
-Forwarding from 127.0.0.1:8080 -> 80
-Forwarding from [::1]:8080 -> 80
+dev   etc                   lib64  opt    run   sys   varUpdate multi-cluster.md [::1]:8080 -> 80
 
 Forward successfully! Opening browser ...
 Handling connection for 8080

@@ -2,7 +2,7 @@
 title: CUE Advanced
 ---
 
-This section will introduce how to use CUE to deliver KubeVela modules. You can can dynamically expand the platform as user needs change, adapt to growing number of users and scenarios, and meet the iterative demands of the company's long-term business development.
+This section will introduce how to use CUE to deliver KubeVela modules. You can dynamically expand the platform as user needs change, adapt to growing number of users and scenarios, and meet the iterative demands of the company's long-term business development.
 
 ## Convert Kubernetes API Objects Into Custom Components
 
@@ -339,7 +339,7 @@ In our Application example above, the name field in the properties and the name 
 			apiVersion: "apps/v1"
 			kind:       "StatefulSet"
 			metadata: name: context.name
-				... // 省略其他没有修改的字段
+				... // omit the other unmodified fields
 		}
 	    parameter: {
 			image: string
