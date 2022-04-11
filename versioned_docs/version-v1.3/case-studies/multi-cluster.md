@@ -175,6 +175,14 @@ Handling connection for 8080
 ## Advanced Usage
 
 
+### Understanding the Multi-cluster Application
+
+The following figure displays the architecture of a multi-cluster application. All the configurations (including Application, Policy and Workflow) lives in the hub cluster. Only the resources (like deployment or service) will be dispatched in to managed clusters.
+
+The policies mainly takes charge of describing the destination of the resources and how they should be overrided. The real executor of the resource dispatch is the workflow. In each `deploy` workflow step, it will refer to some policies, override the default configuration, and dispatch the resources.
+
+![multi-cluster-arch](../resources/multi-cluster-arch.jpg)
+
 ### Configure the deploy destination
 
 The most straightforward way to configure the deploy destination is to write cluster names inside the `topology` policy. Sometimes, it will be more easy to select clusters by labels, like filtering all clusters in hangzhou:
@@ -360,6 +368,8 @@ spec:
         properties:
           policies: ["topology-hangzhou-clusters", "override-nginx-legacy-image", "override-high-availability"]
 ```
+
+> NOTE: The override policy is used to modify the basic configuration. Therefore, **it is designed to be used together with topology policy**. If you do not want to use topology policy, you can directly write configurations in the component part instead of using the override policy. *If you misuse the override policy in the deploy workflow step without topology policy, no error will be reported but you will find nothing is deployed.*
 
 The override policy has many advanced capabilities, such as adding new component or selecting components to use.
 The following example will first deploy an nginx webservice with `nginx:1.20` image to local cluster. Then two nginx webservices with `nginx` and `nginx:stable` images will be deployed to hangzhou clusters respectively.
