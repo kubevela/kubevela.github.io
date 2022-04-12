@@ -207,6 +207,10 @@
             {
               "type": "doc",
               "id": "version-v1.3/tutorials/workflows"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/tutorials/sso"
             }
           ]
         },
@@ -318,6 +322,17 @@
                 {
                   "type": "doc",
                   "id": "version-v1.3/how-to/dashboard/target/overview"
+                }
+              ]
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Manage config",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.3/how-to/dashboard/config/dex-connectors"
                 }
               ]
             }
