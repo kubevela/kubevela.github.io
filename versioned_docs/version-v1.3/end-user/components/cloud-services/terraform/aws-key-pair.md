@@ -8,11 +8,9 @@ Terraform module which creates EC2 key pair on AWS
 
 ## Specification
 
-
-### Properties
-
+### Properties  
  Name | Description | Type | Required | Default 
- ------------ | ------------- | ------------- | ------------- | ------------- 
+------------|------------|------------|------------|------------
  create_key_pair | Controls if key pair should be created | bool | false |  
  key_name | The name for the key pair. | string | false |  
  key_name_prefix | Creates a unique name beginning with the specified prefix. Conflicts with key_name. | string | false |  

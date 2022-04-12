@@ -8,15 +8,13 @@ Terraform module which creates Route53 resources on AWS
 
 ## Specification
 
-
-### Properties
-
+### Properties  
  Name | Description | Type | Required | Default 
- ------------ | ------------- | ------------- | ------------- | ------------- 
+------------|------------|------------|------------|------------
  create | Whether to create Route53 zone | bool | false |  
- zones | Map of Route53 zone parameters | any | false |  
  tags | Tags added to all zones. Will take precedence over tags from the 'zones' variable | map(any) | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ zones | Map of Route53 zone parameters | any | false |  
 
 
 #### writeConnectionSecretToRef
