@@ -90,6 +90,7 @@ module.exports = {
             "tutorials/jenkins",
             "tutorials/trigger",
             "tutorials/workflows",
+            "tutorials/sso"
             // "case-studies/jenkins-cicd",
             // "case-studies/canary-blue-green",
           ],
@@ -138,6 +139,9 @@ module.exports = {
             // },
             {
               "Manage target": ["how-to/dashboard/target/overview"],
+            },
+            {
+              "Manage config": ["how-to/dashboard/config/dex-connectors"],
             },
             // {
             //   "Manage cluster": [
