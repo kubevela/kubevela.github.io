@@ -8,11 +8,9 @@ IAC for provisioning Infrastructure component like network, subnetworks, route
 
 ## Specification
 
-
-### Properties
-
+### Properties  
  Name | Description | Type | Required | Default 
- ------------ | ------------- | ------------- | ------------- | ------------- 
+------------|------------|------------|------------|------------
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
