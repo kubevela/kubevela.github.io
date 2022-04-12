@@ -10,15 +10,27 @@ title:  使用单点登录
 
 平台初始化后，默认使用本地登录。平台管理员可以通过平台配置页面，配置单点登录。在本教程中，我们将使用 GitHub Connector 来演示单点登录。
 
+## 开启 Dex 插件
+
+要想使用 Dex，首先需要在插件页面中开启 Dex 插件：
+
+![alt](../resources/dex-addon.png)
+
+开启完毕后，我们还需要更新一下 VelaUX 插件，打开其 Dex 选项。同样，我们在插件列表中找到 VelaUX，进行更新：
+
+![alt](../resources/upgrade-velaux.png)
+
 ## 配置 Dex Connectors
 
-要使用单点登录，首先需要配置 Dex Connectors。我们以 GitHub Connector 为例，如果你没有 GitHub Oauth App，需要首先在 GitHub 的 Developer settings 上创建一个 Oauth App，并且设置该 App 的 Authorization callback URL 为 `[Vela UX 地址]/dex/callback`。
+接着，我们需要配置 Dex Connectors。以 GitHub Connector 为例，如果你没有 GitHub Oauth App，需要首先在 GitHub 的 Developer settings 上创建一个 Oauth App，并且设置该 App 的 Authorization callback URL 为 `[Vela UX 地址]/dex/callback`。
 
 > 注意，由于涉及到第三方跳转，请确保你的 Vela UX 拥有公网地址。
 
 完成 Oauth App 的创建后，在 Vela UX 的集成配置页面中，进行 Dex Connector 的配置。我们选择类型为 `GitHub`，并且设置对应 Oauth App 的 Client ID 以及 Client Secret，注意，此处的 Redirect URI 必须与之前在创建 Oauth App 时配置的 `[Vela UX 地址]/dex/callback` 保持一致。
 
 ![alt](../resources/intergration.png)
+
+> 关于更多类型的 Dex Connectors 配置，请查阅 [Dex Connectors 配置](../how-to/dashboard/config/dex-connectors)
 
 ## 平台配置
 
