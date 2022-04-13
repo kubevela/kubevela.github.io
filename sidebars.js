@@ -45,6 +45,7 @@ module.exports = {
                 "end-user/components/cue/task",
                 "end-user/components/cue/raw",
                 "end-user/components/kustomize",
+                "end-user/components/ref-objects",
                 "end-user/components/more",
               ],
             },
