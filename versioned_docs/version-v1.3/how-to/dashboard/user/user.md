@@ -2,7 +2,7 @@
 title: User management
 ---
 
-Once installed VelaUX has one built-in `admin` user that has full access to the system. it is recommended to use this user only for initial configuration and then create new user or configure SSO integration.
+Once VelaUX is installed, there's a built-in administrator user with full access to the system. It is recommended to use the admin user only for the initial configuration, then switch to another user or configure the SSO integration.
 
 ## Local users/accounts
 
@@ -13,7 +13,7 @@ The local users/accounts feature serves two main use-cases:
 
 ### Get full users list
 
-If login user have list users permission, he could switch to the `Platform/Users` page and get full users list.
+If the logged-in user has the list user permission, he can switch to the `Platforms/Users` page and get the full list of users.
 
 ![user list](https://static.kubevela.net/images/1.3/user-dashboard.jpg)
 
