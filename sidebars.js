@@ -104,7 +104,6 @@ module.exports = {
           label: "How-to Guides",
           collapsed: true,
           items: [
-            // TODO: complete the docs
             {
               "Manage applications": [
                 "how-to/dashboard/application/create-application",
@@ -129,27 +128,18 @@ module.exports = {
             {
               "Manage triggers": ["how-to/dashboard/trigger/overview"],
             },
-            // {
-            //   "Manage environment": ["how-to/dashboard/environment/overview"],
-            // },
             {
-              "Manage target": ["how-to/dashboard/target/overview"],
+              "Manage resource": ["how-to/dashboard/target/overview"],
             },
+            "how-to/dashboard/user/user",
+            "how-to/dashboard/user/rbac",
+            "how-to/dashboard/user/project",
             {
-              "Manage config": ["how-to/dashboard/config/dex-connectors"],
+              "Manage integration configs": [
+                "how-to/dashboard/config/dex-connectors",
+              ],
             },
-            // {
-            //   "Manage cluster": [
-            //     "how-to/dashboard/cluster/overview",
-            //     "how-to/dashboard/cluster/connect-cluster",
-            //     "how-to/dashboard/cluster/detach-cluster",
-            //     "how-to/dashboard/cluster/set-cluster-dashboard",
-            //     "how-to/dashboard/cluster/edit-cluster",
-            //   ],
-            // },
-            // {
-            //   "Manage addon": ["how-to/dashboard/addon/overview"],
-            // },
+            "how-to/dashboard/addon/overview",
           ],
         },
       ],
