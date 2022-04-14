@@ -313,7 +313,7 @@
             {
               "collapsed": true,
               "type": "category",
-              "label": "Manage target",
+              "label": "Manage resource",
               "items": [
                 {
                   "type": "doc",
@@ -322,15 +322,31 @@
               ]
             },
             {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/user/user"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/user/rbac"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/user/project"
+            },
+            {
               "collapsed": true,
               "type": "category",
-              "label": "Manage config",
+              "label": "Manage integration configs",
               "items": [
                 {
                   "type": "doc",
                   "id": "version-v1.3/how-to/dashboard/config/dex-connectors"
                 }
               ]
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/addon/overview"
             }
           ]
         }
