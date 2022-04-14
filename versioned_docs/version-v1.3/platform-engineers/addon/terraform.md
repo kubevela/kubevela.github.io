@@ -1,5 +1,5 @@
 ---
-title: Extend a Terraform Addon
+title: Extend Terraform Addon
 ---
 
 [Terraform Controller](https://github.com/oam-dev/terraform-controller) is the core controller to provision and manage

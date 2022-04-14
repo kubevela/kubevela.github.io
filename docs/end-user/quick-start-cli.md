@@ -64,5 +64,5 @@ Great! You have finished deploying your first KubeVela application, the simplest
 
 ## Next Step
 
-* Learn how to do [Multi-Cluster App Delivery](../case-studies/multi-cluster),Components and traits are just the beginning of your vela sail, there're more powerful features around Policy and Workflow.
+* Learn how to do [Multi-Cluster App Delivery](../case-studies/multi-cluster), Components and traits are just the beginning of your vela sail, there're more powerful features around Policy and Workflow.
 * Refer to [VelaUX](../quick-start) for UI Console experience.

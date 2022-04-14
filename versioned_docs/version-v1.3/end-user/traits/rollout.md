@@ -44,7 +44,7 @@ This Rollout Trait has target size of 5 and two rollout batches. The first batch
 Check the Application status whether the rollout is successful:
 
 ```shell
-vela status rollout-trait-test
+$ vela status rollout-trait-test
 About:
 
   Name:      	rollout-trait-test

@@ -99,9 +99,9 @@
     "message": "工作流系统",
     "description": "The label for category Workflow System in sidebar docs"
   },
-  "sidebar.docs.category.System Operation": {
-    "message": "系统运维",
-    "description": "The label for category System Operation in sidebar docs"
+  "sidebar.docs.category.Operator Manual": {
+    "message": "运维手册",
+    "description": "The label for category Operator Manual in sidebar docs"
   },
   "sidebar.docs.category.Customize Traits": {
     "message": "自定义运维特征",
@@ -238,5 +238,17 @@
   "sidebar.docs.category.Custom Addons": {
     "message": "自定义插件",
     "description": "自定义插件"
+  },
+  "sidebar.docs.category.Multi-Cluster Delivery": {
+    "message": "多集群交付",
+    "description": "多集群交付"
+  },
+  "sidebar.docs.category.Day-2 Operations": {
+    "message": "应用运维",
+    "description": "应用运维"
+  },
+  "sidebar.docs.category.Advanced Features": {
+    "message": "其他高级功能",
+    "description": "其他高级功能"
   }
 }

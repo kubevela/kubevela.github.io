@@ -180,3 +180,8 @@ vela addon enable ./your-addon-dir/
 - Convenient local addon debugging methods and the follow-up plan is to provide a complete addon local debugging function on the CLI side.
 
 - Install the addon in the subcluster. If the addon is not installed in the control plane, but only in subclusters, there are some issues.
+
+
+## Extend Terraform Addon
+
+* We have build some tool for more convenience to extend cloud resource addons, you can refer to the [extend terraform addon docs](./terraform).
