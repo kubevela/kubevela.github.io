@@ -82,11 +82,28 @@ func checkComponentDocsPropertiesSort(dirpath string) error {
 }
 
 func main() {
+	latestVersion := ""
+	dirEntries, err := os.ReadDir("./versioned_docs")
+	if err != nil {
+		fmt.Printf("err when read dir ./versioned_docs: %v\n", err)
+		os.Exit(1)
+	}
+	for i := len(dirEntries) - 1; i >= 0; i-- {
+		if strings.Contains(dirEntries[i].Name(), "version-v") {
+			latestVersion = dirEntries[i].Name()
+			break
+		}
+	}
+	if len(latestVersion) == 0 {
+		fmt.Printf("couldn't find latest version\n")
+		os.Exit(1)
+	}
+
 	componentDocsFolders := [4]string{
 		"./docs/end-user/components/cloud-services/terraform",
-		"./versioned-docs/version-v1.2/end-user/components/cloud-services/terraform",
+		"./versioned_docs/" + latestVersion + "/end-user/components/cloud-services/terraform",
 		"./i18n/zh/docusaurus-plugin-content-docs/current/end-user/components/cloud-services/terraform",
-		"./i18n/zh/docusaurus-plugin-content-docs/version-v1.2/end-user/components/cloud-services/terraform",
+		"./i18n/zh/docusaurus-plugin-content-docs/" + latestVersion + "/end-user/components/cloud-services/terraform",
 	}
 	for _, dirpath := range componentDocsFolders {
 		if err := checkComponentDocsPropertiesSort(dirpath); err != nil {
