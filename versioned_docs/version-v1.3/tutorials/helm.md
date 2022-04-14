@@ -33,15 +33,16 @@ When the addon is `enabled`, it means that it's ready to. You can start to deplo
 
 ## Creating Redis application
 
-You've must have mastered creating applications through the previous sections. When it comes to creating Redis with Helm Chart, all you need is to select type as `helm`, then Then select the Target which has the default StorageClass that provides PV, and at last enter the deployment parameter configuration page.
+You've must have mastered creating applications through the previous sections. When it comes to creating Redis with Helm Chart, all you need is to select type as `helm`, Then select the Target which has the default StorageClass that provides PV, and at last enter the deployment parameter configuration page.
 
 ![helm app config](../resources/helm-app-config.jpg)
 
 As shown, you need to do the following configuration:
 
-- Repo Type: Git, Helm, and OSS are supported. In this example, we choose Helm.
+- Repo Type: Git and Helm are supported. In this example, we choose Helm.
 - Repo URL: Fill in the repo address you needed. we type in: https://charts.bitnami.com/bitnami
-- Chart Path: Chart package path, here we fill in: redis
+- Chart: After fill Helm repo URL, will list all available chart in this field. You can choose one from the list, here we choose: redis.
+- Version: Choose one version of this chart, here we choose: 16.8.5.
 - Values: Custom parameters of Chart. Since we are using ACK cluster in the example, PV has a minimum capacity requirement, 15Gi. In the same way, other parameters can also be configured according to your cluster's status.
 
 After filling in the above parameters, click `Create` to complete the application creation and enter the application configuration page. The following steps will stay the same as you've learned in [Deploy First Application](../quick-start).

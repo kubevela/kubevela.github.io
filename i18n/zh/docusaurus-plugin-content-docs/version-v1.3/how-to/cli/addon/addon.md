@@ -11,14 +11,23 @@ KubeVela 官方团队维护了一个默认的插件仓库 (https://addons.kubeve
 
 ```shell
 $ vela addon list
-terraform               Terraform Controller is a Kubernetes Controller for Terraform.                                                                          disabled
-velaux                  The KubeVela User Experience (UX ). Dashboard Designed as an extensible, application-oriented delivery and management control panel.    disabled
-ocm-cluster-manager     ocm-cluster-manager can deploy an OCM hub cluster environment.                                                                          disabled
-fluxcd                  Extended workload to do continuous and progressive delivery                                                                             disabled
-terraform-aws           Kubernetes Terraform Controller for AWS                                                                                                 disabled
-observability           An out of the box solution for KubeVela observability                                                                                   disabled
-terraform-alibaba       Kubernetes Terraform Controller for Alibaba Cloud                                                                                       disabled
-terraform-azure         Kubernetes Terraform Controller for Azure                                                                                               disabled
+NAME                            REGISTRY        DESCRIPTION                                                                                             AVAILABLE-VERSIONS              STATUS          
+ocm-gateway-manager-addon       KubeVela        ocm-gateway-manager-addon is the OCM addon automates the cluster-gateway apiserver.                     [1.3.2, 1.3.0, 1.1.11]          disabled        
+rollout                         KubeVela        Provides basic batch publishing capability.                                                             [1.3.0, 1.2.4, 1.2.3]           disabled        
+terraform-baidu                 KubeVela        Kubernetes Terraform Controller Provider for Baidu Cloud                                                [1.0.1, 1.0.0]                  disabled        
+terraform-tencent               KubeVela        Kubernetes Terraform Controller Provider for Tencent Cloud                                              [1.0.1, 1.0.0]                  disabled        
+model-serving                   KubeVela        Enable serving for models                                                                               [1.0.0]                         disabled        
+model-training                  KubeVela        Enable training for models                                                                              [1.0.0]                         disabled        
+terraform                       KubeVela        Terraform Controller is a Kubernetes Controller for Terraform.                                          [1.0.6]                         disabled        
+terraform-aws                   KubeVela        Kubernetes Terraform Controller for AWS                                                                 [1.0.1, 1.0.0]                  disabled        
+terraform-azure                 KubeVela        Kubernetes Terraform Controller for Azure                                                               [1.0.1, 1.0.0]                  disabled        
+terraform-gcp                   KubeVela        Kubernetes Terraform Controller Provider for Google Cloud Platform                                      [1.0.1, 1.0.0]                  disabled        
+dex                             KubeVela        Enable dex for login                                                                                    [0.6.5]                         disabled        
+ocm-hub-control-plane           KubeVela        ocm-hub-control-plane can install OCM hub control plane to the central cluster.                         [0.6.0]                         disabled        
+terraform-ucloud                KubeVela        Kubernetes Terraform Controller Provider for UCloud                                                     [1.0.1, 1.0.0]                  disabled        
+fluxcd                          KubeVela        Extended workload to do continuous and progressive delivery                                             [1.1.0, 1.0.0]                  disabled
+velaux                          KubeVela        KubeVela User Experience (UX). An extensible, application-oriented delivery and management Dashboard.   [v1.3.0, v1.3.0-beta.2, 1.2.4]  enabled (v1.3.0)
+terraform-alibaba               KubeVela        Kubernetes Terraform Controller for Alibaba Cloud                                                       [1.0.2, 1.0.1]                  disabled    
 ```
 
 ## 安装插件
@@ -33,6 +42,22 @@ I0111 21:45:25.411723   89345 apply.go:106] "creating object" name="kustomize" r
 I0111 21:45:25.625815   89345 apply.go:106] "creating object" name="kustomize-strategy-merge" resource="core.oam.dev/v1beta1, Kind=TraitDefinition"
 I0111 21:45:25.660129   89345 apply.go:106] "creating object" name="component-uischema-helm" resource="/v1, Kind=ConfigMap"
 Addon: fluxcd enabled Successfully.
+```
+
+### 安装特定版本的插件
+
+你可以通过通过设置 `--version` 启动参数，来指定安装插件的某个特定版本。例如：
+
+```shell
+vela addon enable fluxcd --version=1.0.0
+```
+
+如果不指定该参数，默认会安装此插件的最新版本。
+
+启用一个插件时，默认会在所有子集群中安装该插件，你也可以通过设置 `--cluster` 启动参数选择安装在某些集群当中。例如：
+
+```shell
+vela addon enable <addon-name> --clusters={cluster1,cluster2}
 ```
 
 安装完成后，插件中的功能会以组件，运维特征，工作流步骤等形式呈现，你可以通过 `vela component`，`vela trait` 等命令查看新增的能力，也可以在[插件的参考文档](../../../reference/addons/overview)中查看每个官方插件对应的能力.
@@ -51,7 +76,7 @@ Successfully disable addon:fluxcd
 ```
 $ vela addon registry list 
 Name            Type    URL                        
-KubeVela        helm    https://addons.kubevela.net
+KubeVela        helm     https://addons.kubevela.net
 ```
 
 KubeVela 社区在 Github 上维护了一个官方的[正式插件包仓库](https://github.com/oam-dev/catalog/tree/master/addons) 和一个[试验阶段插件包仓库](https://github.com/oam-dev/catalog/tree/master/experimental) 。你在相应的仓库中找到插件包的定义文件。
@@ -63,7 +88,7 @@ KubeVela 社区在 Github 上维护了一个官方的[正式插件包仓库](htt
 你可以添加自己的插件包仓库，目前支持 OSS 和 Github 两种仓库类型。
 
 ```
-$ vela addon registry add experimental --type OSS --endpoint=https://addons.kubevela.net --path=experimental/
+$ vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
 Successfully add an addon registry experimental
 ```
 
