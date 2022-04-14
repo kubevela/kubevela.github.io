@@ -50,6 +50,11 @@ UI Schema 包含的字段如下：
   disabled: bool              是否禁用该字段
   style:                      样式定义
     colSpan: int              表单栅格大小，24 代表 100% 宽度
+  conditions:                 表单显示行为的条件
+    - jsonKey: string         数据来源字段名称
+      op: == | != | in        判断方式
+      value: any              预期的值
+      action: enable|disable  表单满足条件时是启用还是禁用
   validate:                   数据校验规则，自定义后整体替换默认配置
     defaultValue: any         默认值
     required: bool            是否是必填参数
@@ -76,25 +81,22 @@ UI Schema 包含的字段如下：
 - [x] Select: 固定可选值表单
 - [x] Switch: 开关选择器
 - [x] Radio: 单选表单
-- [ ] DatePicker: 时间选择框
-- [ ] Textarea: 多行文本输入框
 - [x] Password: 密码输入表单
 
 #### 业务表单
 
 - [x] Ignore: 当前字段存在下级字段，本级不显示。
-- [ ] ClusterSelect: 集群选择器
-- [ ] EnvSelect: 应用下环境选择器 （参数：appName）
 - [x] SecretSelect: 目标集群密钥选择器 （参数：clusterName）
 - [x] SecretKeySelect: Secret 资源中的 Key 选择，它必须与 SecretSelect 表单级联存在。 （参数：secretKeys）
-- [ ] ComponentSelect: 应用下组件选择器 （参数：appName）
-- [ ] ImageInput: 镜像输入框（针对镜像进行检测）
-- [ ] ClassStorageSelect：目标集群存储类型选择器 （参数：clusterName）
-- [ ] PVCSelect: 目标集群的存储卷选择 （参数：clusterName, namespace）
 - [x] CPUNumber: cpu 数值输入框 支持小数点后 2 位，默认单位为 Core
 - [x] MemoryNumber: 内存数值输入框 2^n 数值输入方式，默认单位为 MB
 - [x] DiskNumber: 默认单位为 GB
 - [x] K8sObjectsCode: kubernetes yaml 编辑框，支持上传 yaml，输出多个 k8s 资源对象。
+- [x] HelmRepoSelect: 选择 Helm 仓库，数据来源于配置管理
+- [x] HelmChartSelect: 从选择的仓库中加载 Chart 列表辅助用户选择
+- [x] HelmChartVersionSelect: 从选择的 Chart 加载版本列表辅助用户选择
+- [x] HelmValues: 从用户选择的 Chart 和 版本加载可配置的参数，供用户进行 Values 配置。
+- [x] ImageInput: 镜像输入框，针对镜像进行有效性检测并响应其匹配的镜像仓库认证信息。
 
 #### 组合表单
 
@@ -105,8 +107,6 @@ UI Schema 包含的字段如下：
   > AddByKV:env.name|env.value
   > AddBySecret:env.name|env.valueFrom
 - [x] Group: 组合（渲染为一个带标题的容器)
-- [ ] TabGroup: 条件判断 Tab，只有一组生效。
-
 
 ### 配置案例
 

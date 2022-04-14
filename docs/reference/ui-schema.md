@@ -50,6 +50,11 @@ The spec are as follows:
   disabled: bool          Disable this field.
   style:  
     colSpan: int          Defines the number of grids for the form, with 24 representing 100% width.
+  conditions:             Control whether fields are enabled or disabled by certain conditions.
+    - jsonKey: string     Specifies the path of the field, support the peer and subordinate fields.
+      op: == | != | in    
+      value: any          Specifies the expected value.
+      action: enable|disable
   validate:               The value validate rule, It must be defined as a whole. 
     defaultValue: any     The default values.
     required: bool
@@ -76,25 +81,21 @@ The spec are as follows:
 - [x] Select
 - [x] Switch
 - [x] Radio
-- [ ] DatePicker
-- [ ] Textarea
 - [x] Password
 
 #### Business form
 
 - [x] Ignore: There are subordinate fields, and the current field is not displayed.
-- [ ] ClusterSelect
-- [ ] EnvSelect
-- [x] SecretSelect
-- [x] SecretKeySelect
-- [ ] ComponentSelect
-- [ ] ImageInput
-- [ ] ClassStorageSelect
-- [ ] PVCSelect
-- [x] CPUNumber
-- [x] MemoryNumber
-- [x] DiskNumber
-- [x] K8sObjectsCode
+- [x] SecretSelect: Load the secret list to assist user selection
+- [x] SecretKeySelect: Load the secret key list by secret name of the user selected to assist user selection
+- [x] CPUNumber: CPU-style number input form.
+- [x] MemoryNumber: Memory-style number input form.
+- [x] DiskNumber: Disk-style number input form.
+- [x] K8sObjectsCode: The yaml input form of kubernetes resource.
+- [x] HelmRepoSelect: Load the helm repositories from integration configs to assist user selection.
+- [x] HelmChartSelect: Load the helm charts to assist user selection.
+- [x] HelmChartVersionSelect: Load the versions of selected helm chart to assist user selection.
+- [x] HelmValues: Load the default values of selected helm chart and version to assist user config the custom values.
 
 #### Combination form
 
@@ -102,7 +103,6 @@ The spec are as follows:
 - [x] Strings
 - [x] Structs
 - [x] Group: render as a titled container
-- [ ] TabGroup
 
 ### Example
 

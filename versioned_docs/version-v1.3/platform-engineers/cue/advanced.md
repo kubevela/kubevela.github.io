@@ -339,7 +339,7 @@ In our Application example above, the name field in the properties and the name 
 			apiVersion: "apps/v1"
 			kind:       "StatefulSet"
 			metadata: name: context.name
-				... // Omit other unmodified fields
+				... // Omit other unmodified field
 		}
 	    parameter: {
 			image: string
