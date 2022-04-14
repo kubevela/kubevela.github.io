@@ -29,7 +29,7 @@ vela install --set admissionWebhooks.certManager.enabled=true
 vela version list -a
 
 # Install the specified version.
-vela install --version 1.2.0-beta.3
+vela install --version 1.3.0-beta.2
 ```
 
 ## Upgrade
@@ -49,7 +49,7 @@ vela install --version 1.2.0-beta.3
 ** MacOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.4
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.3.1
 ```
 
 **Windows**
@@ -98,16 +98,13 @@ sudo mv ./vela /usr/local/bin/vela
 ### 2. Upgrade Vela Core
 
 ```shell
-# set -r=false will reset values.
-vela install --version v1.2.4 -r=false
+vela install --version v1.3.1
 ```
-
-> If there are custom settings when installing the old version, set `-r=false` will reset the custom settings, please set them by `--set` during the upgrade.
 
 ### 3. Upgrade VelaUX
 
 ```shell
-vela addon enable velaux version=v1.2.4
+vela addon enable velaux version=v1.3.1
 ```
 
 > If you set custom parameters during installation, be sure to include the corresponding parameters.
