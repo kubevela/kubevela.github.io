@@ -28,10 +28,6 @@
             },
             {
               "type": "doc",
-              "id": "version-v1.3/case-studies/jenkins-cicd"
-            },
-            {
-              "type": "doc",
               "id": "version-v1.3/case-studies/gitops"
             },
             {
@@ -41,7 +37,7 @@
           ]
         },
         {
-          "collapsed": false,
+          "collapsed": true,
           "type": "category",
           "label": "Basics",
           "items": [
@@ -215,7 +211,7 @@
           ]
         },
         {
-          "collapsed": false,
+          "collapsed": true,
           "type": "category",
           "label": "Basics",
           "items": [
