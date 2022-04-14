@@ -115,12 +115,19 @@
               ]
             },
             {
-              "type": "doc",
-              "id": "version-v1.3/end-user/traits/ingress"
+              "collapsed": true,
+              "type": "category",
+              "label": "Multi-Cluster Delivery",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.3/platform-engineers/system-operation/managing-clusters"
+                }
+              ]
             },
             {
               "type": "doc",
-              "id": "version-v1.3/end-user/traits/rollout"
+              "id": "version-v1.3/end-user/traits/ingress"
             },
             {
               "type": "doc",
@@ -132,35 +139,49 @@
             },
             {
               "type": "doc",
-              "id": "version-v1.3/end-user/traits/more"
-            },
-            {
-              "type": "doc",
               "id": "version-v1.3/end-user/policies/health"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/end-user/policies/apply-once"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/end-user/policies/gc"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/end-user/workflow/component-dependency-parameter"
             },
             {
               "type": "doc",
               "id": "version-v1.3/end-user/workflow/webhook-notification"
             },
             {
-              "type": "doc",
-              "id": "version-v1.3/end-user/version-control"
+              "collapsed": true,
+              "type": "category",
+              "label": "Day-2 Operations",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.3/end-user/traits/rollout"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.3/end-user/traits/more"
+                }
+              ]
             },
             {
-              "type": "doc",
-              "id": "version-v1.3/how-to/cli/addon/addon"
+              "collapsed": true,
+              "type": "category",
+              "label": "Advanced Features",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.3/end-user/workflow/component-dependency-parameter"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.3/end-user/version-control"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.3/end-user/policies/apply-once"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.3/end-user/policies/gc"
+                }
+              ]
             }
           ]
         }
@@ -398,15 +419,15 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "Custom Addons",
+          "label": "Addons",
           "items": [
             {
               "type": "doc",
-              "id": "version-v1.3/platform-engineers/addon/intro"
+              "id": "version-v1.3/how-to/cli/addon/addon"
             },
             {
               "type": "doc",
-              "id": "version-v1.3/platform-engineers/addon/terraform"
+              "id": "version-v1.3/platform-engineers/addon/intro"
             }
           ]
         },
@@ -472,31 +493,8 @@
           ]
         },
         {
-          "collapsed": true,
-          "type": "category",
-          "label": "System Operation",
-          "items": [
-            {
-              "type": "doc",
-              "id": "version-v1.3/platform-engineers/system-operation/bootstrap-parameters"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/platform-engineers/system-operation/managing-clusters"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/platform-engineers/system-operation/observability"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/platform-engineers/system-operation/performance-finetuning"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/platform-engineers/system-operation/velaql"
-            }
-          ]
+          "type": "doc",
+          "id": "version-v1.3/platform-engineers/system-operation/velaql"
         },
         {
           "type": "doc",
@@ -505,6 +503,33 @@
         {
           "type": "doc",
           "id": "version-v1.3/platform-engineers/x-def-version"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Operator Manual",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.3/platform-engineers/system-operation/bootstrap-parameters"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/end-user/service-account-integration"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/platform-engineers/system-operation/offline-installation"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/platform-engineers/system-operation/observability"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/platform-engineers/system-operation/performance-finetuning"
         }
       ]
     },
@@ -559,10 +584,6 @@
         {
           "type": "doc",
           "id": "version-v1.3/end-user/workflow/built-in-workflow-defs"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.3/end-user/service-account-integration"
         },
         {
           "type": "doc",

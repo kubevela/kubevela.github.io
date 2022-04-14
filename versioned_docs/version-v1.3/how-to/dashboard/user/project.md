@@ -4,8 +4,8 @@ title: Project management
 
 Project provides a logical separation of applications、environments and delivery targets, this is helpful when VelaUX is used by multiple teams. Project can provide the following features:
 
-* restrict where applications may be deployed to (target clusters and namespaces).
-* restrict what integration configs can be used (trusted Helm repositories, docker registries or cloud providers).
+* restrict where applications can be deployed to (target clusters and namespaces).
+* restrict which integrated configurations can be used (trusted Helm repositories, docker registries or cloud providers).
 * restrict the different permission of each user, and provide a multiple-level permission control (RBAC).
 
 ## The Default Project

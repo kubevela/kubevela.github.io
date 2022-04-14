@@ -57,18 +57,30 @@ module.exports = {
                 "end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database",
               ],
             },
+            {
+              "Multi-Cluster Delivery": [
+                "platform-engineers/system-operation/managing-clusters",
+              ],
+            },
             "end-user/traits/ingress",
-            "end-user/traits/rollout",
             "end-user/traits/service-binding",
             "end-user/traits/sidecar",
-            "end-user/traits/more",
             "end-user/policies/health",
-            "end-user/policies/apply-once",
-            "end-user/policies/gc",
-            "end-user/workflow/component-dependency-parameter",
             "end-user/workflow/webhook-notification",
-            "end-user/version-control",
-            "how-to/cli/addon/addon",
+            {
+              "Day-2 Operations": [
+                "end-user/traits/rollout",
+                "end-user/traits/more",
+              ],
+            },
+            {
+              "Advanced Features": [
+                "end-user/workflow/component-dependency-parameter",
+                "end-user/version-control",
+                "end-user/policies/apply-once",
+                "end-user/policies/gc",
+              ],
+            },
           ],
         },
       ],
@@ -167,9 +179,9 @@ module.exports = {
           ],
         },
         {
-          "Custom Addons": [
+          "Addons": [
+            "how-to/cli/addon/addon",
             "platform-engineers/addon/intro",
-            "platform-engineers/addon/terraform",
           ],
         },
         "platform-engineers/components/custom-component",
@@ -196,17 +208,20 @@ module.exports = {
             "platform-engineers/workflow/working-mechanism",
           ],
         },
-        {
-          "System Operation": [
-            "platform-engineers/system-operation/bootstrap-parameters",
-            "platform-engineers/system-operation/managing-clusters",
-            "platform-engineers/system-operation/observability",
-            "platform-engineers/system-operation/performance-finetuning",
-            "platform-engineers/system-operation/velaql",
-          ],
-        },
+        "platform-engineers/system-operation/velaql",
         "platform-engineers/debug/dry-run",
         "platform-engineers/x-def-version",
+      ],
+    },
+    {
+      type: "category",
+      label: "Operator Manual",
+      items: [
+        "platform-engineers/system-operation/bootstrap-parameters",
+        "end-user/service-account-integration",
+        "platform-engineers/system-operation/offline-installation",
+        "platform-engineers/system-operation/observability",
+        "platform-engineers/system-operation/performance-finetuning",
       ],
     },
     {
@@ -229,7 +244,6 @@ module.exports = {
         "end-user/traits/references",
         "end-user/policies/references",
         "end-user/workflow/built-in-workflow-defs",
-        "end-user/service-account-integration",
         "reference/ui-schema",
         "reference/user-improvement-plan",
         {

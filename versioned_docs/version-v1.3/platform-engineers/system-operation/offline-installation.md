@@ -1,10 +1,8 @@
-# KubeVela Offline Installation Guide
+# Air-gapped Installation
 
-KubeVela offline installation includes the installation of KubeVela core and KubeVela Addon.
+Air-gapped Installation of KubeVela includes the installation of KubeVela core and addons, they all contain the configuration files and images.
 
-## KubeVela Core offline installation
-
-### KubeVela chart
+## KubeVela Core
 
 - Download Helm Chart package of vela-core
 
@@ -57,4 +55,5 @@ charts/vela-core/templates/defwithtemplate/nocalhost.yaml:        						image: "
 Repackage the Helm Chart package from the modified chart. Install it directly or install it from a dedicated Helm Chart
 repository after you pushed the package into the repository.
 
-## KubeVela Addon Offline installation
+## Addon
+
