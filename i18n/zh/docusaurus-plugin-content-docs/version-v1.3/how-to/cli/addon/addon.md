@@ -60,6 +60,7 @@ vela addon enable fluxcd --version=1.0.0
 vela addon enable <addon-name> --clusters={cluster1,cluster2}
 ```
 
+
 安装完成后，插件中的功能会以组件，运维特征，工作流步骤等形式呈现，你可以通过 `vela component`，`vela trait` 等命令查看新增的能力，也可以在[插件的参考文档](../../../reference/addons/overview)中查看每个官方插件对应的能力.
 
 ## 删除/卸载已安装的插件
@@ -76,7 +77,7 @@ Successfully disable addon:fluxcd
 ```
 $ vela addon registry list 
 Name            Type    URL                        
-KubeVela        helm     https://addons.kubevela.net
+KubeVela        helm    https://addons.kubevela.net
 ```
 
 KubeVela 社区在 Github 上维护了一个官方的[正式插件包仓库](https://github.com/oam-dev/catalog/tree/master/addons) 和一个[试验阶段插件包仓库](https://github.com/oam-dev/catalog/tree/master/experimental) 。你在相应的仓库中找到插件包的定义文件。
@@ -88,7 +89,7 @@ KubeVela 社区在 Github 上维护了一个官方的[正式插件包仓库](htt
 你可以添加自己的插件包仓库，目前支持 OSS 和 Github 两种仓库类型。
 
 ```
-$ vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
+$ vela addon registry add experimental --type OSS --endpoint=https://addons.kubevela.net --path=experimental/
 Successfully add an addon registry experimental
 ```
 

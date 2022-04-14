@@ -183,7 +183,7 @@ KubeVela CLI provides an easy to engage and manage your application delivery in 
 ** MacOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.3.0
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.3.1
 ```
 
 **Windows**
@@ -286,7 +286,7 @@ If you are helm user, you can also use helm to install kubevela core:
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.3.0 --wait
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.3.1 --wait
 ```
 
 </TabItem>
@@ -299,7 +299,7 @@ helm install --create-namespace -n vela-system kubevela kubevela/vela-core --ver
 VelaUX is a dashboard including UI+API services, it enables you to do everything around application delivery and management.
 
 ```shell script
-vela addon enable velaux --version 1.3.0
+vela addon enable velaux --version 1.3.1
 ```
 
 expected output:
