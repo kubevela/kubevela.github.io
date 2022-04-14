@@ -1,46 +1,45 @@
 ---
-title: VelaQL
+title: VelaQL - Query Resources behind Application
 ---
 
 ## Introduction
-velaQL(vela Query Language) is a resource query language for KubeVela, used to query application-level resource status.
-​
 
-KubeVela's Application encapsulates the underlying resources of the infra. Although it brings the convenience of shielding the underlying infrastructure to users, it also brings many inconveniences to platform developers: the monitoring of the resource status of Application creation can only rely on the CR object of Application. Moreover, the status information is simple and the real-time feedback is poor.
-​
+VelaQL(Vela Query Language) is a resource query language for KubeVela, used to query status of any extended resources in application-level.
 
-The purpose of velaQL is to help users and platform developers uncover the mystery of Application. Users can query application deployment status through velaQL, or use the extensible interface provided by velaQL to customize query resource information to improve the observability of Application.
+KubeVela's Application encapsulates the underlying resources from the infrastructure. It brings the infrastructure agonistic experience to app developers but also makes challenges for platform builders to maintain. For example, the monitoring of the resource status created by KubeVela Application can be hard. Moreover, the status information within Application is not detailed enough for trouble shooting and the real-time feedback is poor.
+
+The purpose of VelaQL is to help users and platform builders to uncover the mysterious of the Application. Users can query application deployment status through VelaQL, or use the extensible interface provided by VelaQL to customize query information to improve the observability of one Application.
 
 ## Usage
 
 ### Install
 
-At present, if you want to use the query capabilities of velaQL, you need to install velaux and query the resource status with the help of apiserver. In the future, we will provide more interactive methods. Now you can install velaux with a simple command.
+At present, if you want to use the query capabilities of VelaQL, you need to install VelaUX and query the resource status with the help of apiserver. In the future, we will provide more interactive methods. Now you can install VelaUX with a simple command.
 
 ```shell
 vela addon enable velaux
 ```
 
-Assuming we started the apiserver at `http://127.0.0.1:8000`, you can use velaQL like:
+Assuming we started the apiserver at `http://127.0.0.1:8000`, you can use VelaQL like:
 
 ```shell
-http://127.0.0.1:8000/api/v1/query?velaql="write velaQL here"
+http://127.0.0.1:8000/api/v1/query?velaql="write VelaQL here"
 ```
 
-Below we explain how to write velaQL. The basic syntax of velaQL is as follows:
+Below we explain how to write VelaQL. The basic syntax of VelaQL is as follows:
 
 ```
 view{parameter1=value1,parameter2=value2}
 ```
 
 `view` represents a query view, which can be compared to the concept of a view in a database. 
-The `view` in velaQL is a collection of resource queries on the `k8s`.
+The `view` in VelaQL is a collection of resource queries on the `k8s`.
 
 Filter conditions are placed in `{}` as the form of key-value pairs, currently the value type only supports: string, int, float, boolean.
 
 ### Query view
 
-velaux has built-in 3 general query views. Below we will introduce the usage of these views:
+VelaUX has built-in 3 general query views. Below we will introduce the usage of these views:
 
 #### component-pod-view  
 
@@ -112,9 +111,9 @@ curl --location -g --request GET \
 
 In many scenarios, the built-in views cannot meet our needs, and the resources encapsulated under Application are not just the native resources of k8s. For many custom resources, users will have different query requirements. At this time, you need to write your own specific views to complete the query. This section will tell you how to write a custom view.
 
-The current view in velaQL relies on configMap in k8s as a storage medium, You can refer to [https://github.com/oam-dev/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml](https://github.com/oam-dev/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml). The template in the configMap data field stores the core logic of the view, template is a query statement implemented in cue language.
+The current view in VelaQL relies on configMap in k8s as a storage medium, You can refer to [https://github.com/oam-dev/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml](https://github.com/oam-dev/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml). The template in the configMap data field stores the core logic of the view, template is a query statement implemented in cue language.
 
-Every time you use velaQL, the system will look for the configMap with the same name as the view under the vela-system namespace, and extract the template for query operations, so please ensure that your custom view is stored under vela-system.
+Every time you use VelaQL, the system will look for the configMap with the same name as the view under the vela-system namespace, and extract the template for query operations, so please ensure that your custom view is stored under vela-system.
 ​
 The structure of a template is as follows:
 ```
@@ -122,7 +121,7 @@ import (
   "vela/ql"
 )
 
-// The parameter here corresponds to the parameter in velaQL
+// The parameter here corresponds to the parameter in VelaQL
 parameter: {
   appName:    string
   appNs:      string
@@ -134,7 +133,7 @@ parameter: {
 // query statement implemented with cue
 ... 
 
-// The query result of velaQL will return the content of the status field by default, 
+// The query result of VelaQL will return the content of the status field by default, 
 // so please summarize the results you need to query under the status field
 status: podList: {...}
 ```
@@ -179,7 +178,7 @@ import (
   "vela/ql"
 )
 
-// The parameter here corresponds to the parameter in velaQL
+// The parameter here corresponds to the parameter in VelaQL
 parameter: {
   appName:    string
   appNs:      string
@@ -206,7 +205,7 @@ resources: ql.#ListResourcesInApp & {
   }
 }
 
-// velaQL returns the value of the status field by default
+// VelaQL returns the value of the status field by default
 status: resourcesList: resources.list
 ```
 

@@ -534,4 +534,4 @@ No more add-hoc scripts or glue code, KubeVela will get the application delivery
 
 ## Next Step
 
-* For using KubeVela with your own CI pipelines and other tools, please check [Jenkins CI Integration](./jenkins-cicd) for more real world examples.
+* Refer to more examples about using KubeVela with [GitOps](./gitops).
