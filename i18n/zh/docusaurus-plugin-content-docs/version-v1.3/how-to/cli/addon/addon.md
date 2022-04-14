@@ -30,22 +30,6 @@ velaux                          KubeVela        KubeVela User Experience (UX). A
 terraform-alibaba               KubeVela        Kubernetes Terraform Controller for Alibaba Cloud                                                       [1.0.2, 1.0.1]                  disabled    
 ```
 
-你可以通过通过设置 `--version` 启动参数，来指定安装插件的某个特定版本。例如：
-
-```shell
-$ vela addon enable fluxcd --version=1.0.0
-```
-
-如果不指定该参数，默认会安装此插件的最新版本。
-
-启用一个插件时，默认会在所有子集群中安装该插件，你也可以通过设置 `--cluster` 启动参数选择安装在某些集群当中。例如：
-
-```shell
-$  vela addon enable <addon-name> --clusters={cluster1,cluster2}
-```
-
-
-
 ## 安装插件
 
 ```
@@ -58,6 +42,22 @@ I0111 21:45:25.411723   89345 apply.go:106] "creating object" name="kustomize" r
 I0111 21:45:25.625815   89345 apply.go:106] "creating object" name="kustomize-strategy-merge" resource="core.oam.dev/v1beta1, Kind=TraitDefinition"
 I0111 21:45:25.660129   89345 apply.go:106] "creating object" name="component-uischema-helm" resource="/v1, Kind=ConfigMap"
 Addon: fluxcd enabled Successfully.
+```
+
+### 安装特定版本的插件
+
+你可以通过通过设置 `--version` 启动参数，来指定安装插件的某个特定版本。例如：
+
+```shell
+vela addon enable fluxcd --version=1.0.0
+```
+
+如果不指定该参数，默认会安装此插件的最新版本。
+
+启用一个插件时，默认会在所有子集群中安装该插件，你也可以通过设置 `--cluster` 启动参数选择安装在某些集群当中。例如：
+
+```shell
+vela addon enable <addon-name> --clusters={cluster1,cluster2}
 ```
 
 安装完成后，插件中的功能会以组件，运维特征，工作流步骤等形式呈现，你可以通过 `vela component`，`vela trait` 等命令查看新增的能力，也可以在[插件的参考文档](../../../reference/addons/overview)中查看每个官方插件对应的能力.

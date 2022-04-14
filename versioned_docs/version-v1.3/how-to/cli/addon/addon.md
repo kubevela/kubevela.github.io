@@ -45,16 +45,18 @@ I0111 21:45:25.660129   89345 apply.go:106] "creating object" name="component-ui
 Addon: fluxcd enabled Successfully.
 ```
 
+### Install with specified version
+
 You can choose one special version of this addon by add `--version` flag in this command. eg:
 
 ```shell
-$ vela addon enable fluxcd --version=1.0.0
+vela addon enable fluxcd --version=1.0.0
 ```
 
 By default, this command will install this addon in all managed-clusters.You can use `--cluster` flag to choose specific clusters. eg:
 
 ```shell
-$  vela addon enable <addon-name> --clusters={cluster1,cluster2}
+vela addon enable <addon-name> --clusters={cluster1,cluster2}
 ```
 
 You can view the new component or trait types added by `vela component` or `vela trait`. You can also find more details about [built-in addon docs](../../../reference/addons/overview).
