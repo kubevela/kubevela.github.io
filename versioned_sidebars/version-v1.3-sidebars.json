@@ -83,6 +83,10 @@
                 },
                 {
                   "type": "doc",
+                  "id": "version-v1.3/end-user/components/ref-objects"
+                },
+                {
+                  "type": "doc",
                   "id": "version-v1.3/end-user/components/more"
                 }
               ]
