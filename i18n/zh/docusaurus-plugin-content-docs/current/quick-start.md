@@ -25,25 +25,26 @@ title: 交付第一个应用
 正常安装 VelaUX 后你需要登陆。默认账号为admin，通过以下方式获取密码
 
 ```shell
+# 首次安装时获取
 vela logs -n vela-system --name apiserver addon-velaux | grep "initialized admin username"
 ```
 
+如果日志中已不存在信息，可查询 `vela-system` 命名空间下的 `admin` 名称的 Secret。
+
 ## 选择应用的部署类型/规划应用部署环境
 
-你进入的第一个页面即应用交付管理页面。
+你进入的第一个页面即应用交付管理页面，在该页面中你可以查看到有权查看的所有应用列表。管理员初次进入时你可以看到一个只读的 `addon-velaux` 应用，它是VelaUX addon的运行应用，我们仅能进行运行数据观测。
 
-![](./resources/dashboard.png)
+![dashboard](https://static.kubevela.net/images/1.3/dashboard.jpg)
 
 然后点击右上角的 `New Application` 按钮开始创建应用，按照 UI 提示填写以下四个维度的信息：
 
 - 应用的名称等基础信息；
-<!-- - 选择所属的项目，我们已为你自动生成了默认项目，你也可以点击 `New` 进行创建； -->
+- 选择所属的项目，我们已为你自动生成了默认项目，你也可以点击 `New` 进行创建；
 - 选择应用的部署类型，本例中我们选择 `webservice` 类型，部署无状态服务，请注意，企业大多数业务应用都可以直接使用该类型进行部署。
 - 规划应用交付的环境，我们选择基于默认 `Default` 交付目标创建的默认 `Default` 环境；
 
-![](./resources/new-first-vela-app.jpg)
-
-<!-- TODO v1.2 更新截图，去掉 Proejct -->
+![new-app](https://static.kubevela.net/images/1.3/new-app.jpg)
 
 ## 设置应用的部署参数
 
@@ -61,13 +62,9 @@ vela logs -n vela-system --name apiserver addon-velaux | grep "initialized admin
 
 ## 执行环境的部署
 
-直接点击页面右上方的部署按钮。工作流执行完成后刷新应用实例列表即可查看到已经部署完成的实例。
+直接点击页面右上方的部署按钮。工作流执行完成后刷新应用部署状态页面即可查看到该应用交付的资源清单和组件状态。切换到实例页面可查询到该应用生成的实例信息。
 
 ![](./resources/succeed-first-vela-app.jpg)
-
-在部署的过程中，你可以点击 `Check the details` 来查看应用的相关状态信息：
-
-![](./resources/status-first-vela-app.jpg)
 
 ## 应用删除
 
