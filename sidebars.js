@@ -16,7 +16,7 @@ module.exports = {
           items: [
             "end-user/quick-start-cli",
             "case-studies/multi-cluster",
-            "case-studies/jenkins-cicd",
+            // "case-studies/jenkins-cicd",
             "case-studies/gitops",
             "case-studies/initialize-env",
           ],
@@ -24,7 +24,7 @@ module.exports = {
         {
           type: "category",
           label: "Basics",
-          collapsed: false,
+          collapsed: true,
           items: [
             "getting-started/core-concept",
             "getting-started/architecture",
@@ -90,25 +90,20 @@ module.exports = {
             "tutorials/jenkins",
             "tutorials/trigger",
             "tutorials/workflows",
-            "tutorials/sso"
-            // "case-studies/jenkins-cicd",
-            // "case-studies/canary-blue-green",
+            "tutorials/sso",
           ],
         },
         {
           type: "category",
           label: "Basics",
-          collapsed: false,
-          items: [
-            "getting-started/velaux-concept",
-          ],
+          collapsed: true,
+          items: ["getting-started/velaux-concept"],
         },
         {
           type: "category",
           label: "How-to Guides",
           collapsed: true,
           items: [
-
             // TODO: complete the docs
             {
               "Manage applications": [
@@ -235,7 +230,7 @@ module.exports = {
             "reference/addons/overview",
             "reference/addons/velaux",
             "reference/addons/terraform",
-            "reference/addons/ai"
+            "reference/addons/ai",
           ],
         },
         "end-user/components/cloud-services/cloud-resources-list",
