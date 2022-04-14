@@ -8,17 +8,27 @@ You can get more capabilities from KubeVela ecosystem by installing addons.
 
 By default, the following command lists addons from a default addon registry (https://addons.kubevela.net) maintained by KubeVela team.
 
+This command will show all available versions of every addon.
 
 ```shell
 $ vela addon list
-terraform               Terraform Controller is a Kubernetes Controller for Terraform.                                                                          disabled
-velaux                  The KubeVela User Experience (UX ). Dashboard Designed as an extensible, application-oriented delivery and management control panel.    disabled
-ocm-cluster-manager     ocm-cluster-manager can deploy an OCM hub cluster environment.                                                                          disabled
-fluxcd                  Extended workload to do continuous and progressive delivery                                                                             disabled
-terraform-aws           Kubernetes Terraform Controller for AWS                                                                                                 disabled
-observability           An out of the box solution for KubeVela observability                                                                                   disabled
-terraform-alibaba       Kubernetes Terraform Controller for Alibaba Cloud                                                                                       disabled
-terraform-azure         Kubernetes Terraform Controller for Azure                                                                                               disabled
+NAME                            REGISTRY        DESCRIPTION                                                                                             AVAILABLE-VERSIONS              STATUS          
+ocm-gateway-manager-addon       KubeVela        ocm-gateway-manager-addon is the OCM addon automates the cluster-gateway apiserver.                     [1.3.2, 1.3.0, 1.1.11]          disabled        
+rollout                         KubeVela        Provides basic batch publishing capability.                                                             [1.3.0, 1.2.4, 1.2.3]           disabled        
+terraform-baidu                 KubeVela        Kubernetes Terraform Controller Provider for Baidu Cloud                                                [1.0.1, 1.0.0]                  disabled        
+terraform-tencent               KubeVela        Kubernetes Terraform Controller Provider for Tencent Cloud                                              [1.0.1, 1.0.0]                  disabled        
+model-serving                   KubeVela        Enable serving for models                                                                               [1.0.0]                         disabled        
+model-training                  KubeVela        Enable training for models                                                                              [1.0.0]                         disabled        
+terraform                       KubeVela        Terraform Controller is a Kubernetes Controller for Terraform.                                          [1.0.6]                         disabled        
+terraform-aws                   KubeVela        Kubernetes Terraform Controller for AWS                                                                 [1.0.1, 1.0.0]                  disabled        
+terraform-azure                 KubeVela        Kubernetes Terraform Controller for Azure                                                               [1.0.1, 1.0.0]                  disabled        
+terraform-gcp                   KubeVela        Kubernetes Terraform Controller Provider for Google Cloud Platform                                      [1.0.1, 1.0.0]                  disabled        
+dex                             KubeVela        Enable dex for login                                                                                    [0.6.5]                         disabled        
+ocm-hub-control-plane           KubeVela        ocm-hub-control-plane can install OCM hub control plane to the central cluster.                         [0.6.0]                         disabled        
+terraform-ucloud                KubeVela        Kubernetes Terraform Controller Provider for UCloud                                                     [1.0.1, 1.0.0]                  disabled        
+fluxcd                          KubeVela        Extended workload to do continuous and progressive delivery                                             [1.1.0, 1.0.0]                  disabled
+velaux                          KubeVela        KubeVela User Experience (UX). An extensible, application-oriented delivery and management Dashboard.   [v1.3.0, v1.3.0-beta.2, 1.2.4]  enabled (v1.3.0)
+terraform-alibaba               KubeVela        Kubernetes Terraform Controller for Alibaba Cloud                                                       [1.0.2, 1.0.1]                  disabled    
 ```
 
 ## Install Addon
@@ -33,6 +43,18 @@ I0111 21:45:25.411723   89345 apply.go:106] "creating object" name="kustomize" r
 I0111 21:45:25.625815   89345 apply.go:106] "creating object" name="kustomize-strategy-merge" resource="core.oam.dev/v1beta1, Kind=TraitDefinition"
 I0111 21:45:25.660129   89345 apply.go:106] "creating object" name="component-uischema-helm" resource="/v1, Kind=ConfigMap"
 Addon: fluxcd enabled Successfully.
+```
+
+You can choose one special version of this addon by add `--version` flag in this command. eg:
+
+```shell
+$ vela addon enable fluxcd --version=1.0.0
+```
+
+By default, this command will install this addon in all managed-clusters.You can use `--cluster` flag to choose specific clusters. eg:
+
+```shell
+$  vela addon enable <addon-name> --clusters={cluster1,cluster2}
 ```
 
 You can view the new component or trait types added by `vela component` or `vela trait`. You can also find more details about [built-in addon docs](../../../reference/addons/overview).
@@ -51,13 +73,13 @@ Successfully disable addon:fluxcd
 ```
 $ vela addon registry list 
 Name            Type    URL                        
-KubeVela        OSS     https://addons.kubevela.net
+KubeVela        helm    https://addons.kubevela.net
 ```
 
 ## Add Registry
 
 ```
-$ vela addon registry add experimental --type OSS --endpoint=https://addons.kubevela.net --path=experimental/
+$ vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
 Successfully add an addon registry experimental
 ```
 
