@@ -40,9 +40,10 @@ description: 本文介绍通过 KubeVela 交付 Helm Chart
 
 参考上图，需要做如下配置：
 
-- Repo Type: 仓库类型，目前支持 Git、Helm 和 OSS 三种，本例我们选择 Helm 类型。
+- Repo Type: 仓库类型，目前支持 Git 和 Helm，本例我们选择 Helm 类型。
 - Repo URL: 仓库地址，基于不同的仓库类型填写仓库地址，这里我们填写：https://charts.bitnami.com/bitnami
-- Chart Path: Chart 包路径，这里我们填写: redis
+- Chart: 填写仓库地址之后，这里会展示出所有可用的 Helm chart，这里我们选择: redis
+- Version: 选择可用的 chart 版本，这里我们选择 16.8.5  
 - Values: Chart 的自定义配置参数，这里由于我们使用的是 ACK 集群，PV 有最小容量要求，这里填写 15Gi。同理，其他配置参数也可以通过该方式进行配置，你需要根据你的集群情况进行配置。
 
 如上参数填写完成后，点击 `Create` 完成应用创建进入应用管理页面。后续的部署流程与你在 [交付第一个应用](../quick-start) 的学习内容就一致了。
