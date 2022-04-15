@@ -138,6 +138,4 @@ Forward successfully! Opening browser ...
 
 ## Next
 
-- [Component Observability](../../component-observability)
-- [Data Pass Between Components ](../../workflow/component-dependency-parameter)
-- [Multi-Cluster and Environment](../../../case-studies/multi-cluster)
+- [Provision a Database and Import a SQL File for initialization](./provision-and-initiate-database)
