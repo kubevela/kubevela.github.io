@@ -14,6 +14,7 @@ title:  FAQ
   
 - [Operating](#operating)
   * [Autoscale: how to enable metrics server in various Kubernetes clusters?](#autoscale-how-to-enable-metrics-server-in-various-kubernetes-clusters)
+  * [How could I perform an air-gap installation of KubeVela as well as the components?](#how-could-i-perform-an-air-gap-installation-of-kubevela-as-well-as-the-components)
 
 ## Compare to X
 
@@ -335,3 +336,10 @@ minikube addons enable metrics-server
 
 
 Have fun to [set autoscale](../../extensions/set-autoscale) on your application.
+
+
+### How could I perform an air-gap installation of KubeVela as well as the components?
+
+Follow [the guide](../../../../blog/2022-04-01-offline-deployment-practice) to perform an air-gap installation for KubeVela Core, and [guide](../../../platform-engineers/system-operation/enable-addon-offline) to enable add-ons.
+
+And we are planning to support tools to automatically scan, pull and push images for component installation.
