@@ -41,7 +41,7 @@ KubeVela provides the following capabilities in this scenario:
 3. Application abstraction capabilities, make developers can understand, use and customize infrastructure capabilities easily:
   * KubeVela follows OAM and provides a set of simple and easy-to-use application abstraction capabilities, enabling developers easy to understand application and customize infrastructure capabilities. For example, for a simple application, we can divide it into three parts: components, traits and workflow. In the example in this article, the component is a simple FE application; in the traits, we bind the Nocalhost trait to this component, so that this component can use Nocalhost to debug in the cloud; In the workflow, we can first deploy this component in the test environment, and automatically suspend the workflow, then deploy to the production environment until the manual verification and approval are passed.
 
-## What it Nocalhost
+## What is Nocalhost
 
 Nocalhost is a tool that allows developers to develop applications directly within a Kubernetes cluster.
 
