@@ -292,7 +292,7 @@ helm install --create-namespace -n vela-system kubevela kubevela/vela-core --ver
 VelaUX 是一个可视化操作界面，包括 UI+API 服务，它适用于大多数厂商开箱即用的获取应用交付和管理能力。
 
 ```shell script
-vela addon enable velaux serviceType=NodePort --version 1.3.1
+vela addon enable velaux serviceType=NodePort --version v1.3.1
 
 # 获取映射的端口，通过该端口访问 VelaUX
 kubectl get service velaux -n vela-system -o jsonpath="{.spec.ports[0].nodePort}"
