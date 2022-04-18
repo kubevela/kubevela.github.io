@@ -4,7 +4,7 @@ title: Core Concept
 
 KubeVela revolves around cloud-native application delivery and management scenarios. The application delivery model behind it is [Open Application Model](../platform-engineers/oam/oam-model), or OAM for short. It describes various components and operational traits required for application as a unified, and infrastructure-independent "deployment plan". As a result, we can achieve standardized and efficient application delivery in a multi-cloud/hybrid-cloud environment. KubeVela includes the following core concepts:
 
-![alt](../resources/oam-concept.jpg)
+![alt](../resources/oam-concept.png)
 
 ## Application
 
