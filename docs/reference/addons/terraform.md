@@ -8,58 +8,96 @@ title: Addon Cloud Resources
   ```shell
   vela addon enable terraform
   ```
+## Enable a Terraform Provider addon
 
-## Terraform Provider addon for Alibaba Cloud
-
-  Enable Terraform Alibaba Cloud Provider as below to [provision and/or consume cloud resources](../../end-user/components/cloud-services/provision-and-consume-cloud-services).
-
-  Here is how to get [access key](https://help.aliyun.com/knowledge_detail/38738.html). Set the value for `ALICLOUD_REGION` by picking one `RegionId` from [Alibaba Cloud region list](https://www.alibabacloud.com/help/doc-detail/72379.htm).
-  You can also set the value for parameter `ALICLOUD_SECURITY_TOKEN`, which is optional, per [this doc](https://www.alibabacloud.com/help/doc-detail/28756.htm).
-
-  ```shell
-  vela addon enable terraform-alibaba ALICLOUD_ACCESS_KEY=<xxx> ALICLOUD_SECRET_KEY=<yyy> ALICLOUD_REGION=<region>
-  ```
-
-## Terraform Provider addon for Azure
-
-  Enable Terraform Azure Provider as below to [provision and/or consume cloud resources](../../end-user/components/cloud-services/provision-and-consume-cloud-services).
-
-  Set these parameters below per [Authenticate Terraform to Azure](https://docs.microsoft.com/en-us/azure/developer/terraform/authenticate-to-azure?tabs=bash).
-
-  ```shell
-  vela addon enable terraform-azure ARM_CLIENT_ID=<aaa> ARM_CLIENT_SECRET=<bbb> ARM_SUBSCRIPTION_ID=<ccc> ARM_TENANT_ID=<ddd>
-  ```
-
-## Terraform Provider addon for AWS
-
-  Enable Terraform AWS Provider as below to [provision and/or consume cloud resources](../../end-user/components/cloud-services/provision-and-consume-cloud-services).
-
-  Set these parameters below per [Authenticate Terraform to AWS](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#environment-variables).
-
-  ```shell
-  vela addon enable terraform-aws AWS_ACCESS_KEY_ID=<aaa> AWS_SECRET_ACCESS_KEY=<bbb> AWS_DEFAULT_REGION=<region>
-  ```
-
-## Terraform Provider addon for Tencent Cloud
-
-Enable Terraform Tencent Cloud Provider as below to [provision and/or consume cloud resources](../../end-user/components/cloud-services/provision-and-consume-cloud-services).
-
-Get `TENCENTCLOUD_SECRET_ID` and `TENCENTCLOUD_SECRET_KEY` per [this guide](https://cloud.tencent.com/document/product/1213/67093)
-Get  `TENCENTCLOUD_REGION` by picking one RegionId from [Tencent Cloud region list](https://cloud.tencent.com/document/api/1140/40509#.E5.9C.B0.E5.9F.9F.E5.88.97.E8.A1.A8)
-
-  ```shell
-  vela addon enable terraform-tencent TENCENTCLOUD_SECRET_ID=<xxx> TENCENTCLOUD_SECRET_KEY=<yyy> TENCENTCLOUD_REGION=<region>
-  ```
-
-## Terraform Provider addon for GCP
-
-  Enable Terraform GCP Provider as below to [provision and/or consume cloud resources](../../end-user/components/cloud-services/provision-and-consume-cloud-services).
-
-  Set `GOOGLE_CREDENTIALS` per [Add Credentials Guide](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/getting_started#adding-credentials). Set `GOOGLE_PROJECT` per [Configure Provider Guide](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/getting_started#configuring-the-provider). 
-
-  Set the value for `GOOGLE_REGION` by picking one `Region` from [Google Cloud Platform region list](https://cloud.google.com/compute/docs/regions-zones). 
+KubeVela can support following cloud providers by enabling the Terraform provider addons.
 
 ```shell
-vela addon enable provider-gcp GOOGLE_CREDENTIALS=<aaa> GOOGLE_PROJECT=<bbb> GOOGLE_REGION=<region>
+$ vela addon list | grep terraform-
+terraform-alibaba        	KubeVela	Kubernetes Terraform Controller for Alibaba Cloud                                                    	[1.0.2, 1.0.1]                      	enabled (1.0.2)
+terraform-tencent        	KubeVela	Kubernetes Terraform Controller Provider for Tencent Cloud                                           	[1.0.0, 1.0.1]                      	enabled (1.0.0)
+terraform-aws            	KubeVela	Kubernetes Terraform Controller for AWS                                                              	[1.0.0, 1.0.1]                      	enabled (1.0.0)
+terraform-azure          	KubeVela	Kubernetes Terraform Controller for Azure                                                            	[1.0.0, 1.0.1]                      	enabled (1.0.0)
+terraform-baidu          	KubeVela	Kubernetes Terraform Controller Provider for Baidu Cloud                                             	[1.0.0, 1.0.1]                      	enabled (1.0.0)
+terraform-gcp            	KubeVela	Kubernetes Terraform Controller Provider for Google Cloud Platform                                   	[1.0.0, 1.0.1]                      	enabled (1.0.0)
+terraform-ucloud         	KubeVela	Kubernetes Terraform Controller Provider for UCloud                                                  	[1.0.1, 1.0.0]                      	enabled (1.0.1)
 ```
 
+To enable one of them, use the following command:
+
+```shell
+$ vela addon enable terraform-xxx
+```
+
+You can also disable, upgrade, check status of an addon by command `vela addon`.
+
+## Authenticate Terraform Provider
+
+### Introduction
+
+Each Terraform provider can be authenticated by the command as below.
+
+```shell
+$ vela provider add -h
+Authenticate Terraform Cloud Provider by creating a credential secret and a Terraform Controller Provider
+
+Usage:
+  vela provider add [flags]
+  vela provider add [command]
+
+Examples:
+vela provider add <provider-type>
+
+Available Commands:
+  terraform-alibaba Authenticate Terraform Cloud Provider terraform-alibaba
+  terraform-aws     Authenticate Terraform Cloud Provider terraform-aws
+  terraform-azure   Authenticate Terraform Cloud Provider terraform-azure
+  terraform-baidu   Authenticate Terraform Cloud Provider terraform-baidu
+  terraform-gcp     Authenticate Terraform Cloud Provider terraform-gcp
+  terraform-tencent Authenticate Terraform Cloud Provider terraform-tencent
+  terraform-ucloud  Authenticate Terraform Cloud Provider terraform-ucloud
+```
+
+For example, let's authenticate the Terraform provider `terraform-aws`.
+
+Here is the help message for authenticate the `terraform-aws`.
+
+```
+$ vela provider add terraform-aws -h
+Authenticate Terraform Cloud Provider terraform-aws by creating a credential secret and a Terraform Controller Provider
+
+Usage:
+  vela provider add terraform-aws [flags]
+
+Examples:
+vela provider add terraform-aws
+
+Flags:
+      --AWS_ACCESS_KEY_ID string       Get AWS_ACCESS_KEY_ID per https://aws.amazon.com/blogs/security/wheres-my-secret-access-key/
+      --AWS_DEFAULT_REGION string      Choose one of Code form region list https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-available-regions
+      --AWS_SECRET_ACCESS_KEY string   Get AWS_SECRET_ACCESS_KEY per https://aws.amazon.com/blogs/security/wheres-my-secret-access-key/
+      --AWS_SESSION_TOKEN string       Get AWS_SESSION_TOKEN per https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_use-resources.html
+  -h, --help                           help for terraform-aws
+      --name default                   The name of Terraform Provider for AWS, default is default (default "aws")
+
+Global Flags:
+  -y, --yes   Assume yes for all user prompts
+```
+
+### Authenticate a Terraform provider
+
+```shell
+$ vela provider add terraform-aws --AWS_ACCESS_KEY_ID=xxx --AWS_SECRET_ACCESS_KEY=yyy --AWS_DEFAULT_REGION=us-east-1
+```
+
+Without setting a provider name by `--name`, an AWS Terraform provider named `aws` will be created.
+
+You also create multiple providers by specifying the `--name` flag.
+
+```shell
+$ vela provider add terraform-aws --name aws-dev --AWS_ACCESS_KEY_ID=xxx --AWS_SECRET_ACCESS_KEY=yyy --AWS_DEFAULT_REGION=us-east-1
+```
+
+### Provision cloud resources
+
+After a Terraform provider is authenticated, you can [provision and/or consume cloud resources](../../end-user/components/cloud-services/provision-and-consume-cloud-services).
