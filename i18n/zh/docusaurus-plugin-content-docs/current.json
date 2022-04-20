@@ -1,6 +1,6 @@
 {
   "version.label": {
-    "message": "next",
+    "message": "预览版",
     "description": "The label for version current"
   },
   "sidebar.docs.category.Getting Started": {
@@ -250,5 +250,21 @@
   "sidebar.docs.category.Advanced Features": {
     "message": "其他高级功能",
     "description": "其他高级功能"
+  },
+  "sidebar.docs.category.Basics": {
+    "message": "基础内容",
+    "description": "Basic information"
+  },
+  "sidebar.docs.category.Deploy Components": {
+    "message": "部署组件",
+    "description": "Deploy Components description"
+  },
+  "sidebar.docs.category.VelaUX": {
+    "message": "可视化交付平台（VelaUX）",
+    "description": "VelaUX description"
+  },
+  "sidebar.docs.category.Vela-Core": {
+    "message": "核心引擎（Vela-Core）",
+    "description": "Vela-Core description"
   }
 }

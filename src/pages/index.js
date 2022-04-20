@@ -102,13 +102,17 @@ const WhatIs = () => (
           <p className="hero__subtitle">
             <small>
               <Translate>
-                KubeVela is a modern application delivery platform that makes deploying and operating applications across today's hybrid, multi-cloud environments
+                KubeVela is a modern application delivery(CD) platform that makes deploying and operating applications across today's hybrid, multi-cloud environments
               </Translate><i><Translate> easier, faster and more reliable.</Translate></i>
+
               <br />
               <br />
-              <Translate>
-                KubeVela is infrastructure agnostic, programmable, yet most importantly,
-              </Translate><i><b> <Translate>application-centric,</Translate></b></i><Translate> with rich out-of-box capabilities as addons based on it's extensibility.</Translate>
+              <Translate>KubeVela is an infrastructure agnostic control plane, with an </Translate>
+              <i><b> <Translate>application-centric </Translate></b></i>
+              <Translate>UI console, that has rich </Translate>
+              <i><b><Translate>out-of-box</Translate></b></i>
+              <Translate> addons based on it's extensibility,</Translate>
+              <Translate> allow you to build applications and deploy them anywhere!</Translate>
               <br />
             </small>
           </p>
@@ -123,5 +127,5 @@ const WhatIs = () => (
         </div>
       </div>
     </div>
-  </div>
+  </div >
 );

@@ -3,39 +3,39 @@ title: VelaQL
 ---
 
 ## 简介
-velaQL(全称vela Query Language)，是面向 KubeVela 的资源查询语言，用于查询应用级别的资源状态。	
+VelaQL(全称Vela Query Language)，是面向 KubeVela 的资源查询语言，用于查询应用级别的资源状态。	
 ​
 
 KubeVela 的 Application 对象对底层资源进行封装，虽然给用户带来了屏蔽了底层基础架构的便捷，但是也给平台开发者带来了诸多不便: 对Application创建资源状态的监控，只能依赖Application的状态透出，但状态信息简略、状态实时反馈性差，
 Application 的抽象功能对用户屏蔽了实际创建出的资源，当 Application 的状态和实际部署资源状态出现偏差时，用户也很难排查出问题。
 ​
 
-velaQL的目的是帮用户和平台开发者揭开 Application 的神秘面纱，用户可以通过 velaQL 查询应用部署状态，或者利用 velaQL 提供的可扩展接口自定义查询资源信息，提升Application的可观测性，能够在应用出现问题时及时做出响应。
+VelaQL的目的是帮用户和平台开发者揭开 Application 的神秘面纱，用户可以通过 VelaQL 查询应用部署状态，或者利用 VelaQL 提供的可扩展接口自定义查询资源信息，提升Application的可观测性，能够在应用出现问题时及时做出响应。
 
 ## 使用
 
 ### 安装
 
-目前想要使用 velaQL 的查询能力，需要安装 velaux，借助 apiserver 的能力进行状态查询，未来我们会提供更多的交互方式。现在只需一个简单的指令就能安装 velaux。
+目前想要使用 VelaQL 的查询能力，需要安装 velaux，借助 apiserver 的能力进行状态查询，未来我们会提供更多的交互方式。现在只需一个简单的指令就能安装 velaux。
 
 ```shell
 vela addon enable velaux
 ```
 
-确保 velaux 安装成功之后，可以通过访问 apiserver 暴露出的服务接口进行状态查询。假设我们在 `http://127.0.0.1:8000` 启动了 apiserver 服务。通过下面的方式使用 velaQL
+确保 velaux 安装成功之后，可以通过访问 apiserver 暴露出的服务接口进行状态查询。假设我们在 `http://127.0.0.1:8000` 启动了 apiserver 服务。通过下面的方式使用 VelaQL
 
 ```shell
 http://127.0.0.1:8000/api/v1/query?velaql=此处填写查询语句
 ```
 
-下面我们讲解如何编写 velaQL，从命名上可以看出 velaQL 对标的是 PromQL ，我们期望能够成为应用监控领域的 Prometheus。
-在查询语法上，我们也和 PromQL 对齐，提供了和 PromQL 类似的查询语句，方便用户简单快捷的查询应用状态。velaQL的基本语法如下：
+下面我们讲解如何编写 VelaQL，从命名上可以看出 VelaQL 对标的是 PromQL ，我们期望能够成为应用监控领域的 Prometheus。
+在查询语法上，我们也和 PromQL 对齐，提供了和 PromQL 类似的查询语句，方便用户简单快捷的查询应用状态。VelaQL的基本语法如下：
 
 ```
 view{parameter1=value1,parameter2=value2}
 ```
 
-其中 `view` 代表查询视图，可以类比于数据库中视图的概念，velaQL 中的 `view` 是一个对 `k8s`这个“数据库”进行资源状态查询的集合。
+其中 `view` 代表查询视图，可以类比于数据库中视图的概念，VelaQL 中的 `view` 是一个对 `k8s`这个“数据库”进行资源状态查询的集合。
 大括号内是一组kv键值对的集合，使用逗号隔开，代表了进行查询时的过滤条件。目前 value 类型只支持：字符串、整数类型、浮点数、布尔类型。
 
 ### 查询视图
@@ -109,9 +109,9 @@ curl --location -g --request GET \
 
 在很多场景下，内置的视图不能满足我们的需求，Application 下封装的资源也都不仅仅是 k8s 的原生资源。针对很多自定义的资源，用户会有不同的查询需求，这时候你需要自己编写特定的视图来完成查询。本节就来告诉大家如何编写一个自定义的视图。
 
-目前velaQL中的视图依赖 k8s 中的 configMap 作为存储介质，你可以参考：[https://github.com/oam-dev/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml](https://github.com/oam-dev/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml)。configMap data 字段中的 template 存储着视图的核心逻辑，template 是一段 cue 语言描述的查询语句。
+目前VelaQL中的视图依赖 k8s 中的 configMap 作为存储介质，你可以参考：[https://github.com/oam-dev/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml](https://github.com/oam-dev/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml)。configMap data 字段中的 template 存储着视图的核心逻辑，template 是一段 cue 语言描述的查询语句。
 
-每次使用 velaQL 时，系统都会从 vela-system 命名空间下查找和视图同名的 configMap 提取出 template 来进行查询操作，所以请保证你的自定义视图存储在 vela-system 下。
+每次使用 VelaQL 时，系统都会从 vela-system 命名空间下查找和视图同名的 configMap 提取出 template 来进行查询操作，所以请保证你的自定义视图存储在 vela-system 下。
 ​
 一个 template 的整体结构如下：
 ```
@@ -119,7 +119,7 @@ import (
   "vela/ql"
 )
 
-// parameter 和 velaQL 中的参数一一对应
+// parameter 和 VelaQL 中的参数一一对应
 parameter: {
   appName:    string
   appNs:      string
@@ -131,7 +131,7 @@ parameter: {
 ... 
 用 cue 来实现的查询语句
 
-// velaQL 的查询结果会默认返回 status 字段的内容，所以请把需要查询的结果汇总在 status 字段下 
+// VelaQL 的查询结果会默认返回 status 字段的内容，所以请把需要查询的结果汇总在 status 字段下 
 status: podList: {...}
 ```
 
@@ -175,7 +175,7 @@ import (
   "vela/ql"
 )
 
-// parameter 和velaQL中的参数一一对应
+// parameter 和VelaQL中的参数一一对应
 parameter: {
   appName:    string
   appNs:      string
@@ -202,7 +202,7 @@ resources: ql.#ListResourcesInApp & {
   }
 }
 
-// velaQL 默认返回 status 字段的值
+// VelaQL 默认返回 status 字段的值
 status: resourcesList: resources.list
 ```
 
