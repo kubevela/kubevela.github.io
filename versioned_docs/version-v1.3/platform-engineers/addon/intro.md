@@ -1,5 +1,5 @@
 ---
-title: Customize Addon
+title: Build Your Own Addon
 ---
 
 The picture below shows what KubeVela does when an addon is enabled. You can see that the Addon Registry stores the addon's resource files. When an addon is enabled through UX/CLI, it will pull these resource files from the Addon Registry, render them and create a KubeVela application. Finally, the KubeVela controller running in the management cluster completes the delivery of the resources described in the application.

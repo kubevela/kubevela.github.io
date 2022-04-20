@@ -224,6 +224,7 @@ module.exports = {
         "platform-engineers/system-operation/performance-finetuning",
       ],
     },
+    "contributor/overview",
     {
       type: "category",
       label: "References",
