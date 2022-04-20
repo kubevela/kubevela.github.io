@@ -1,8 +1,8 @@
 ---
-title: UI-Schema
+title: VelaUX Extension
 ---
 
-KubeVela designs and implements the UI-Schema specification for the scalability of components, workflow steps, and operation and maintenance feature resources, in the case of variable input parameters, to achieve a more native UI experience.
+VelaUX uses the UI-Schema specification for the extension of components, workflow steps, and operation and maintenance feature resources, in the case of variable input parameters, to achieve a more native UI experience.
 
 At present, the UI-Schema specification mainly acts on the data input side and will be extended to the data visualization side in the future.
 

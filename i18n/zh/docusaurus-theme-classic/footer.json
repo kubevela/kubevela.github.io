@@ -48,7 +48,7 @@
     "description": "The label of footer link with label=Blog linking to blog"
   },
   "copyright": {
-    "message": "\n        <br />\n        <strong>© KubeVela Authors 2021 | Documentation Distributed under <a herf=\"https://creativecommons.org/licenses/by/4.0\">CC-BY-4.0</a> </strong> <strong>| Powered by <a href=\"https://www.netlify.com\">Netlify</a></strong>\n        <br />\n      ",
+    "message": "\n        <br />\n        <strong>© KubeVela Authors 2021 | Documentation Distributed under <a herf=\"https://creativecommons.org/licenses/by/4.0\">CC-BY-4.0</a> </strong> \n        <br />\n      ",
     "description": "The footer copyright"
   }
 }
