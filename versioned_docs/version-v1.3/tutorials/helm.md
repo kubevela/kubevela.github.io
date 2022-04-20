@@ -42,7 +42,7 @@ As shown, you need to do the following configuration:
 - Repo Type: Git and Helm are supported. In this example, we choose Helm.
 - Repo URL: Fill in the repo address you needed. we type in: https://charts.bitnami.com/bitnami
 - Chart: After fill Helm repo URL, will list all available chart in this field. You can choose one from the list, here we choose: redis.
-- Version: Choose one version of this chart, here we choose: 16.8.5.
+- Version: After choose the helm chart, will list all available version of it. Choose one version of this chart, here we choose: 16.8.5.
 - Values: Custom parameters of Chart. Since we are using ACK cluster in the example, PV has a minimum capacity requirement, 15Gi. In the same way, other parameters can also be configured according to your cluster's status.
 
 After filling in the above parameters, click `Create` to complete the application creation and enter the application configuration page. The following steps will stay the same as you've learned in [Deploy First Application](../quick-start).

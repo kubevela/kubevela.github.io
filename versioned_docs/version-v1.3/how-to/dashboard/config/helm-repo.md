@@ -11,7 +11,7 @@ Notice: You must enable the `fluxcd` addon firstly.
 
 You can set the url of your private repository in `url` field. If your repo have set up the HTTP basic authentication , you can set the `username` and `password` for it.
 
-In this image we use the [bitnami](https://charts.bitnami.com/bitnami) helm repo.
+In this image we use the [azure](https://marketplace.azurecr.io/helm/v1/repo) helm repo.
 
 ![config](../../../resources/helm-config.jpg)
 
