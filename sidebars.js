@@ -150,6 +150,7 @@ module.exports = {
             {
               "Manage integration configs": [
                 "how-to/dashboard/config/dex-connectors",
+                "how-to/dashboard/config/helm-repo",
               ],
             },
             "how-to/dashboard/addon/overview",

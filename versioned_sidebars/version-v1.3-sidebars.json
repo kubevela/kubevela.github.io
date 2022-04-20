@@ -366,6 +366,10 @@
                 {
                   "type": "doc",
                   "id": "version-v1.3/how-to/dashboard/config/dex-connectors"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.3/how-to/dashboard/config/helm-repo"
                 }
               ]
             },
