@@ -1,5 +1,5 @@
 ---
-title: Working with Jenkins
+title: Integrating with Jenkins
 ---
 
 ### Introduction
