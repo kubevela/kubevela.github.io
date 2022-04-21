@@ -303,3 +303,9 @@ $ minikube addons enable metrics-server
 
 
 享受在你的应用中 [设置 autoscale](../../extensions/set-autoscale)。
+
+### 我怎样才能离线安装 KubeVela 以及 KubeVela 组件？
+
+按照[指南](../../../../../docusaurus-plugin-content-blog/2022-04-01-offline-deployment-practice)来执行 KubeVela core 的离线安装，参考[指南](../../../platform-engineers/system-operation/enable-addon-offline)来启用插件。
+
+而且我们正计划实现自动扫描、拉动和推送镜像的工具以支持组件部署。
