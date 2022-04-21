@@ -3,52 +3,47 @@ const { Component } = require("react");
 module.exports = {
   docs: [
     "getting-started/introduction",
-    "install",
     {
       type: "category",
-      label: "Vela-Core",
+      label: "Getting Started",
       collapsed: false,
       items: [
+        "install",
+        "quick-start",
+        "getting-started/core-concept",
+        "getting-started/architecture",
+      ],
+    },
+    {
+      type: "category",
+      label: "User Guide",
+      collapsed: false,
+      items: [
+        "tutorials/webservice",
+        "tutorials/helm",
+        "tutorials/k8s-object",
+        "tutorials/consume-cloud-services",
         {
           type: "category",
-          label: "Getting Started",
-          collapsed: false,
-          items: [
-            "end-user/quick-start-cli",
-            "case-studies/multi-cluster",
-            // "case-studies/jenkins-cicd",
-            "case-studies/gitops",
-            "case-studies/initialize-env",
-          ],
-        },
-        {
-          type: "category",
-          label: "Basics",
+          label: "Deploy with more workload type",
           collapsed: true,
           items: [
-            "getting-started/core-concept",
-            "getting-started/architecture",
+            "end-user/components/cue/task",
+            "end-user/components/kustomize",
+            "end-user/components/ref-objects",
+            "end-user/components/more",
           ],
         },
+        "tutorials/jenkins",
+        "tutorials/trigger",
+        "case-studies/multi-cluster",
+        "case-studies/gitops",
+        "case-studies/initialize-env",
         {
           type: "category",
           label: "How-to Guides",
           collapsed: true,
           items: [
-            {
-              type: "category",
-              label: "Deploy Components",
-              collapsed: false,
-              items: [
-                "end-user/components/helm",
-                "end-user/components/cue/webservice",
-                "end-user/components/cue/task",
-                "end-user/components/cue/raw",
-                "end-user/components/kustomize",
-                "end-user/components/ref-objects",
-                "end-user/components/more",
-              ],
-            },
             {
               "Cloud Resources": [
                 "end-user/components/cloud-services/provision-and-consume-cloud-services",
@@ -81,42 +76,7 @@ module.exports = {
                 "end-user/policies/gc",
               ],
             },
-          ],
-        },
-      ],
-    },
-    {
-      type: "category",
-      label: "VelaUX",
-      collapsed: false,
-      items: [
-        {
-          type: "category",
-          label: "Getting Started",
-          collapsed: false,
-          items: [
-            "quick-start",
-            "tutorials/webservice",
-            "tutorials/helm",
-            "tutorials/consume-cloud-services",
-            "tutorials/k8s-object",
-            "tutorials/jenkins",
-            "tutorials/trigger",
-            "tutorials/workflows",
-            "tutorials/sso",
-          ],
-        },
-        {
-          type: "category",
-          label: "Basics",
-          collapsed: true,
-          items: ["getting-started/velaux-concept"],
-        },
-        {
-          type: "category",
-          label: "How-to Guides",
-          collapsed: true,
-          items: [
+
             {
               "Manage applications": [
                 "how-to/dashboard/application/create-application",
@@ -133,7 +93,10 @@ module.exports = {
               ],
             },
             {
-              "Manage workflows": ["how-to/dashboard/workflow/overview"],
+              "Manage workflows": [
+                "tutorials/workflows",
+                "how-to/dashboard/workflow/overview",
+              ],
             },
             {
               "Manage traits": ["how-to/dashboard/trait/overview"],
@@ -160,69 +123,70 @@ module.exports = {
     },
     {
       type: "category",
-      label: "Extension",
-      collapsed: true,
-      items: [
-        {
-          type: "category",
-          label: "Learning OAM",
-          collapsed: false,
-          items: [
-            "platform-engineers/oam/oam-model",
-            "platform-engineers/oam/x-definition",
-          ],
-        },
-        {
-          "Learning CUE": [
-            "platform-engineers/cue/basic",
-            "platform-engineers/cue/definition-edit",
-            "platform-engineers/cue/advanced",
-          ],
-        },
-        {
-          "Addons": [
-            "how-to/cli/addon/addon",
-            "platform-engineers/addon/intro",
-          ],
-        },
-        "platform-engineers/components/custom-component",
-        {
-          "Cloud Resources": [
-            "platform-engineers/addon/terraform",
-            "platform-engineers/components/component-terraform",
-          ],
-        },
-        {
-          type: "category",
-          label: "Traits System",
-          items: [
-            "platform-engineers/traits/customize-trait",
-            "platform-engineers/traits/patch-trait",
-            "platform-engineers/traits/status",
-            "platform-engineers/traits/advanced",
-          ],
-        },
-        {
-          "Workflow System": [
-            "platform-engineers/workflow/workflow",
-            "platform-engineers/workflow/cue-actions",
-            "platform-engineers/workflow/working-mechanism",
-          ],
-        },
-        "platform-engineers/system-operation/velaql",
-        "platform-engineers/debug/dry-run",
-        "platform-engineers/x-def-version",
-      ],
-    },
-    {
-      type: "category",
       label: "Operator Manual",
       items: [
+        "tutorials/sso",
         "platform-engineers/system-operation/bootstrap-parameters",
         "end-user/service-account-integration",
         "platform-engineers/system-operation/offline-installation",
         "platform-engineers/system-operation/observability",
         "platform-engineers/system-operation/performance-finetuning",
+        {
+          type: "category",
+          label: "Extension",
+          collapsed: true,
+          items: [
+            {
+              type: "category",
+              label: "Learning OAM",
+              collapsed: false,
+              items: [
+                "platform-engineers/oam/oam-model",
+                "platform-engineers/oam/x-definition",
+              ],
+            },
+            {
+              "Learning CUE": [
+                "platform-engineers/cue/basic",
+                "platform-engineers/cue/definition-edit",
+                "platform-engineers/cue/advanced",
+              ],
+            },
+            {
+              Addons: [
+                "how-to/cli/addon/addon",
+                "platform-engineers/addon/intro",
+              ],
+            },
+            "platform-engineers/components/custom-component",
+            {
+              "Cloud Resources": [
+                "platform-engineers/addon/terraform",
+                "platform-engineers/components/component-terraform",
+              ],
+            },
+            {
+              type: "category",
+              label: "Traits System",
+              items: [
+                "platform-engineers/traits/customize-trait",
+                "platform-engineers/traits/patch-trait",
+                "platform-engineers/traits/status",
+                "platform-engineers/traits/advanced",
+              ],
+            },
+            {
+              "Workflow System": [
+                "platform-engineers/workflow/workflow",
+                "platform-engineers/workflow/cue-actions",
+                "platform-engineers/workflow/working-mechanism",
+              ],
+            },
+            "platform-engineers/system-operation/velaql",
+            "platform-engineers/debug/dry-run",
+            "platform-engineers/x-def-version",
+          ],
+        },
       ],
     },
     "contributor/overview",

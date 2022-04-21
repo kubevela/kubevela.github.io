@@ -1,5 +1,5 @@
 ---
-title:  Deploy Container based Task and Cron Task
+title:  Deploy Task or Cron Task
 ---
 
 * Describes jobs that run code or a script to completion
