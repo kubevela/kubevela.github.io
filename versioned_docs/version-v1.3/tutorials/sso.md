@@ -8,7 +8,7 @@ In KubeVela V1.3, we provide two methods to login: local login and SSO.
 
 Local login uses the username and password stored in the local database to log in, and SSO integrates [Dex](https://dexidp.io/), which can be configured by configuring Dex's [OpenID Connect](https://dexidp.io/docs/openid-connect) to implement many different ways to log in, such as: GitHub, LDAP, etc.
 
-After the platform is initialized, local login is used by default. Platform administrators can configure SSO through the platform configuration page. In this tutorial, we'll use the GitHub Connector to show how to use SSO with KubeVela.
+After the platform is initialized, local login is used by default. Platform administrators can configure SSO through the platform configuration page. In this tutorial, we'll use the GitHub and LDAP Connector to show how to use SSO with KubeVela.
 
 ## Enable Dex Addon
 
@@ -22,13 +22,30 @@ After enabling the Dex Addon, we also need to upgrade the VelaUX addon and open 
 
 ## Configure Dex Connectors
 
-Next, we need to configure the Dex Connectors. Take GitHub Connector as an example, if you don't have a GitHub Oauth App, you need to create an Oauth App on GitHub's Developer settings first, and set the App's Authorization callback URL to `[Vela UX address]/dex/callback`.
+Next, we need to configure the Dex Connectors. 
+### Configure GitHub Connector
+
+Take GitHub Connector as an example, if you don't have a GitHub Oauth App, you need to create an Oauth App on GitHub's Developer settings first, and set the App's Authorization callback URL to `[Vela UX address]/dex/callback`.
 
 > Note that please make sure your Vela UX has a public IP address due to third-party redirection involved.
 
 After creating the Oauth App, configure the Dex Connector in the integration configuration page. We choose the type `GitHub`, and set the Client ID and Client Secret corresponding to the Oauth App. Note that the Redirect URI here must be the same as the `[Vela UX address]/dex/callback` previously configured when the Oauth App was created.
 
 ![alt](../resources/intergration.png)
+
+### Configure LDAP Connector
+
+If you want to use LDAP for SSO, you need to set up the LDAP Connector first.
+
+> Before configuring, please make sure you have LDAP installed correctly and that LDAP can communicate with the Vela UX network.
+
+After selecting the Connector type as LDAP, fill in the address of the LDAP server in `Host`, and specify `BaseDN`.
+
+![alt](../resources/ldap1.png)
+
+If your LDAP does not provide anonymous authentication access, then you need to open the `Advanced Parameters`, fill in `BindDN` and `BindPW`, Connector will use these credentials for user search.
+
+![alt](../resources/ldap2.png)
 
 > For more types of Dex Connectors, please refer to [Dex Connectors Configuration](../how-to/dashboard/config/dex-connectors).
 
@@ -48,7 +65,7 @@ Log out and refresh the page again, you can see that we have entered the Dex log
 
 ![alt](../resources/dex-login.png)
 
-Then, select GitHub to login.
+Then, you select GitHub or LDAP to login.
 
 ![alt](../resources/dex-grant-access.png)
 
