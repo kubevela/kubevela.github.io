@@ -38,4 +38,3 @@ Addon is where you can freely pull in third-party capability that fulfills your 
 
 - View [Architecture](./architecture) to learn the overall architecture of KubeVela.
 - View [Getting Started docs](../end-user/quick-start-cli) to look on more of what you can achieve with KubeVela.
-- View [How To guides](../end-user/components/helm) to check out more features.

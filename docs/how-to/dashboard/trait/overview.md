@@ -1,6 +1,7 @@
 ---
 title: Manage Traits
 description: Manage traits for application
+draft: true
 ---
 
 After deploying an application, VelaUX will automatically bind a `scaler` trait to the application. You can update, delete or bind other traits in the dashboard.
@@ -25,9 +26,7 @@ Click the gear icon to enter the edit page of the trait. You can set the number 
 
 ## Delete traits
 
-Click the trash icon to delete the trait.
-
-![delete-trait](../../../resources/delete-trait.png)
+Open the component configuration page, and click the trash icon of the trait to delete.
 
 ## More
 

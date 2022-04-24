@@ -41,4 +41,3 @@ For learning how to program KubeVela in detail, please check the `Administrator 
 ## Next Step
 
 - View [Getting Started docs](../end-user/quick-start-cli) to look on more of what you can achieve with KubeVela.
-- View [How To guides](../end-user/components/helm) to check out more features.

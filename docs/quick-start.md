@@ -26,22 +26,14 @@ spec:
         ports: 
          - port: 8000
            expose: true
-      traits:
-        - type: gateway
-          properties:
-            domain: testsvc.example.com
-            http:
-              "/": 8000
 # YAML ends
 EOF
 ```
 
 This command will deploy a web service component to target environment, which in our case is the Kubernetes cluster that KubeVela itself is installed.
 
-After deployed, you can now directly visit this application as it already attached with a `ingress` trait (assume your cluster has [ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) installed).
-
 ```
-$ curl -H "Host:testsvc.example.com" http://<some ip address>/
+$ vela port-forward first-vela-app 8000:8000
 <xmp>
 Hello World
 
