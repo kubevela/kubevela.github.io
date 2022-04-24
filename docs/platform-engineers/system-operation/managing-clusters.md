@@ -2,7 +2,18 @@
 title: Managing Clusters
 ---
 
-Users could manage clusters in KubeVela through a list of Vela CLI commands.
+## Manage the cluster via UI
+
+* Support connecting the exist kubernetes cluster.
+* Support connecting the ACK cluster.
+
+Users with cluster management permissions can enter the cluster management page to add or detach managed clusters.
+
+![cluster-management](https://static.kubevela.net/images/1.3/cluster-management.jpg)
+
+For connecting the ACK clusters, the platform will save some cloud info, Region, VPC, Dashboard Address, etc. When users use the cluster to create a Target, the cloud information is automatically assigned to the Target, which the cloud service applications can use.
+
+## Manage the cluster via CLI
 
 ### vela cluster list
 
@@ -10,8 +21,9 @@ This command could list all clusters managed by KubeVela currently.
 ```bash
 $ vela cluster list
 CLUSTER         TYPE    ENDPOINT                
-cluster-prod    tls     https://47.88.4.97:6443 
-cluster-staging tls     https://47.88.7.230:6443
+CLUSTER    	ALIAS	TYPE           	ENDPOINT                   	ACCEPTED	LABELS
+local      	     	Internal       	-                          	true
+ask-beijing	     	X509Certificate	https://*.*.*.*:6443	    true
 ```
 
 ### vela cluster join

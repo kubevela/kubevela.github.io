@@ -1,0 +1,15 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: init-namespace
+  namespace: default
+spec:
+  components:
+    - name: production
+      properties:
+        objects:
+          - kind: Namespace
+            apiVersion: v1
+            metadata:
+              name: production
+      type: k8s-objects

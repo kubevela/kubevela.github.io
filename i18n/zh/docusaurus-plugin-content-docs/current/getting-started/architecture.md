@@ -40,4 +40,3 @@ KubeVela 本身是一个的应用交付与管理控制平面，它架在 Kuberne
 ## 下一步
 
 - 查看 [快速开始](../end-user/quick-start-cli)，了解更多使用场景和最佳实践。
-- 查看 [操作手册](../end-user/components/helm)，一步步了解更多的功能。

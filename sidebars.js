@@ -34,11 +34,10 @@ module.exports = {
             "end-user/components/more",
           ],
         },
+        "case-studies/multi-cluster",
         "tutorials/jenkins",
         "tutorials/trigger",
-        "case-studies/multi-cluster",
         "case-studies/gitops",
-        "case-studies/initialize-env",
         {
           type: "category",
           label: "How-to Guides",
@@ -53,34 +52,10 @@ module.exports = {
               ],
             },
             {
-              "Multi-Cluster Delivery": [
-                "platform-engineers/system-operation/managing-clusters",
-              ],
-            },
-            "end-user/traits/ingress",
-            "end-user/traits/service-binding",
-            "end-user/traits/sidecar",
-            "end-user/policies/health",
-            "end-user/workflow/webhook-notification",
-            {
-              "Day-2 Operations": [
-                "end-user/traits/rollout",
-                "end-user/traits/more",
-              ],
-            },
-            {
-              "Advanced Features": [
-                "end-user/workflow/component-dependency-parameter",
-                "end-user/version-control",
-                "end-user/policies/apply-once",
-                "end-user/policies/gc",
-              ],
-            },
-
-            {
-              "Manage applications": [
+              "Deploy applications": [
                 "how-to/dashboard/application/create-application",
                 "how-to/dashboard/application/bind-new-environment",
+                "tutorials/workflows",
                 "how-to/dashboard/application/deploy-application",
                 "how-to/dashboard/application/get-application-instance",
                 "tutorials/scaler",
@@ -93,30 +68,32 @@ module.exports = {
               ],
             },
             {
-              "Manage workflows": [
-                "tutorials/workflows",
-                "how-to/dashboard/workflow/overview",
+              "Day-2 Operations": [
+                "end-user/traits/rollout",
+                "end-user/traits/ingress",
+                "end-user/traits/service-binding",
+                "end-user/traits/sidecar",
+                "end-user/policies/health",
+                "end-user/workflow/webhook-notification",
+                "end-user/service-account-integration",
+                "how-to/dashboard/trigger/overview",
+                "end-user/traits/more",
               ],
             },
-            {
-              "Manage traits": ["how-to/dashboard/trait/overview"],
-            },
-            {
-              "Manage triggers": ["how-to/dashboard/trigger/overview"],
-            },
-            {
-              "Manage resource": ["how-to/dashboard/target/overview"],
-            },
-            "how-to/dashboard/user/user",
-            "how-to/dashboard/user/rbac",
-            "how-to/dashboard/user/project",
             {
               "Manage integration configs": [
                 "how-to/dashboard/config/dex-connectors",
                 "how-to/dashboard/config/helm-repo",
               ],
             },
-            "how-to/dashboard/addon/overview",
+            {
+              "Advanced Features": [
+                "end-user/workflow/component-dependency-parameter",
+                "end-user/version-control",
+                "end-user/policies/apply-once",
+                "end-user/policies/gc",
+              ],
+            },
           ],
         },
       ],
@@ -126,9 +103,23 @@ module.exports = {
       label: "Operator Manual",
       items: [
         "tutorials/sso",
-        "platform-engineers/system-operation/bootstrap-parameters",
-        "end-user/service-account-integration",
-        "platform-engineers/system-operation/offline-installation",
+        "how-to/dashboard/user/user",
+        "how-to/dashboard/user/rbac",
+        "how-to/dashboard/user/project",
+        {
+          "Manage resource": [
+            "platform-engineers/system-operation/managing-clusters",
+            "how-to/dashboard/target/overview",
+          ],
+        },
+        "how-to/addon",
+        {
+          "Install or upgrade": [
+            "platform-engineers/system-operation/bootstrap-parameters",
+            "platform-engineers/advanced-install",
+            "platform-engineers/system-operation/offline-installation",
+          ],
+        },
         "platform-engineers/system-operation/observability",
         "platform-engineers/system-operation/performance-finetuning",
         {
@@ -153,10 +144,7 @@ module.exports = {
               ],
             },
             {
-              Addons: [
-                "how-to/cli/addon/addon",
-                "platform-engineers/addon/intro",
-              ],
+              Addons: ["platform-engineers/addon/intro"],
             },
             "platform-engineers/components/custom-component",
             {
