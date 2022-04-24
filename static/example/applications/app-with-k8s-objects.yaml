@@ -1,0 +1,74 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: app-with-k8s-objects
+  namespace: default
+spec:
+  components:
+    - name: k8s-demo-service
+      properties:
+        objects:
+          - apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: nginx
+            spec:
+              replicas: 2
+              selector:
+                matchLabels:
+                  app: nginx
+              strategy:
+                type: Recreate
+              template:
+                metadata:
+                  labels:
+                    app: nginx
+                spec:
+                  containers:
+                    - image: nginx
+                      name: nginx
+                      ports:
+                        - containerPort: 80
+          - apiVersion: v1
+            kind: Service
+            metadata:
+              annotations:
+                service.beta.kubernetes.io/aws-load-balancer-type: nlb
+              labels:
+                app: nginx
+              name: nginx
+              namespace: default
+            spec:
+              externalTrafficPolicy: Local
+              ports:
+                - name: http
+                  port: 80
+                  protocol: TCP
+                  targetPort: 80
+              selector:
+                app: nginx
+              type: LoadBalancer
+      type: k8s-objects
+  policies:
+    - name: topology-default
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: default
+    - name: topology-production
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: production
+  workflow:
+    steps:
+      - name: deploy2default
+        properties:
+          policies: ["topology-default"]
+        type: deploy
+      - name: suspend
+        type: suspend
+      - name: deploy2production
+        properties:
+          policies: ["topology-production"]
+        type: deploy

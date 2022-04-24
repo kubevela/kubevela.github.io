@@ -1,10 +1,27 @@
 ---
-title: Install Addon
+title: Addon management
+slug: how-to/cli/addon/addon
 ---
 
 You can get more capabilities from KubeVela ecosystem by installing addons.
 
-## List Addons
+## Manage the addon via UI
+
+Users with addon management permissions can enter the addon management page to enable or disable addons.
+
+![addon list](https://static.kubevela.net/images/1.3/addon-list.jpg)
+
+In the addon list, you can get the status of the addon and other info. Click the addon name could open the addon detail page, you can get the version list, definitions provided by the addon, and the readme message.
+
+![addon detail](https://static.kubevela.net/images/1.3/addon-detail.jpg)
+
+Select a version and deployed clusters, you can click the enable button to install this addon.
+
+For enabled addons, if no applications to use definitions, you can click the disable button to uninstall it.
+
+## Manage the addon via CLI
+
+### List Addons
 
 By default, the following command lists addons from a default addon registry (https://addons.kubevela.net) maintained by KubeVela team.
 
@@ -31,7 +48,7 @@ velaux                          KubeVela        KubeVela User Experience (UX). A
 terraform-alibaba               KubeVela        Kubernetes Terraform Controller for Alibaba Cloud                                                       [1.0.2, 1.0.1]                  disabled    
 ```
 
-## Install Addon
+### Install Addon
 
 ```
 $ vela addon enable fluxcd
@@ -45,7 +62,7 @@ I0111 21:45:25.660129   89345 apply.go:106] "creating object" name="component-ui
 Addon: fluxcd enabled Successfully.
 ```
 
-### Install with specified version
+#### Install with specified version
 
 You can choose one special version of this addon by add `--version` flag in this command. eg:
 
@@ -61,7 +78,7 @@ vela addon enable <addon-name> --clusters={cluster1,cluster2}
 
 You can view the new component or trait types added by `vela component` or `vela trait`. You can also find more details about [built-in addon docs](../../../reference/addons/overview).
 
-## Uninstall Addon
+### Uninstall Addon
 
 > Please make sure this addon along with the capabilities is no longer used in any of your applications.
 
@@ -70,7 +87,7 @@ $ vela addon disable fluxcd
 Successfully disable addon:fluxcd
 ```
 
-## List Registry
+### List Registry
 
 ```
 $ vela addon registry list 
@@ -78,21 +95,21 @@ Name            Type    URL
 KubeVela        helm    https://addons.kubevela.net
 ```
 
-## Add Registry
+### Add Registry
 
 ```
 $ vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
 Successfully add an addon registry experimental
 ```
 
-## Delete Registry
+### Delete Registry
 
 ```
 $ vela addon registry delete experimental
 Successfully delete an addon registry experimental
 ```
 
-## Enable Addon offline
+### Enable Addon offline
 
 For some reason, if your cluster network cannot request the official addon registry you can enable an addon with a local dir. eg:
 

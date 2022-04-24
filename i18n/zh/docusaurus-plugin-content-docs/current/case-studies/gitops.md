@@ -4,6 +4,8 @@ title:  GitOps 交付
 
 本案例将介绍如何在 GitOps 场景下使用 KubeVela，并介绍这样做的好处是什么。
 
+> 该教程仅适用于 CLI 用户。
+
 ## 简介
 
 GitOps 是一种现代化的持续交付手段，它允许开发人员通过直接更改 Git 仓库中的代码和配置来自动部署应用，在提高部署生产力的同时也通过分支回滚等能力提高了可靠性。其具体的好处可以查看[这篇文章](https://www.weave.works/blog/what-is-gitops-really)，本文将不再赘述。

@@ -15,7 +15,6 @@ There are many scenarios that developers or system operators need to deploy and 
 
 The following guide will introduce how to manage applications across clusters on KubeVela.
 
-
 ## Preparation
 
 You can simply join an existing cluster into KubeVela by specifying its KubeConfig as below
@@ -534,4 +533,4 @@ No more add-hoc scripts or glue code, KubeVela will get the application delivery
 
 ## Next Step
 
-* Refer to more examples about using KubeVela with [GitOps](./gitops).
+* Refer to more examples about [integrating with Jenkins](../tutorials/jenkins).

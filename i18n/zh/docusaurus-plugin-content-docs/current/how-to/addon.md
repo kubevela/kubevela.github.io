@@ -1,10 +1,24 @@
 ---
-title: 安装插件
+title: 插件管理
 ---
 
 你可以通过安装 KubeVela 的插件（Addon）获取更多的系统功能。
 
-## 查看所有插件
+## 通过 UI 管理插件
+
+具有插件管理权限的用户可以进入插件管理页面，进行插件启用/停用等操作。
+
+![addon list](https://static.kubevela.net/images/1.3/addon-list.jpg)
+
+如上图所示，在插件列表中，你可以查看到插件启用状态和其他基础信息。点击插件名称可以进入到插件详情页面，你可以查询到插件的版本列表，提供的扩展类型和介绍信息。
+
+![addon detail](https://static.kubevela.net/images/1.3/addon-detail.jpg)
+
+选择一个部署版本（默认为最新），设置需要部署的集群后，你可以点击 启用 按钮安装该插件。对于已启用的插件，如果没有应用使用该插件提供的扩展，你可以点击禁用按钮来卸载它。
+
+## 通过 CLI 管理插件
+
+### 查看所有插件
 
 KubeVela 官方团队维护了一个默认的插件仓库 (https://addons.kubevela.net) ，默认情况下会从这个仓库实时发现。
 
@@ -30,7 +44,7 @@ velaux                          KubeVela        KubeVela User Experience (UX). A
 terraform-alibaba               KubeVela        Kubernetes Terraform Controller for Alibaba Cloud                                                       [1.0.2, 1.0.1]                  disabled    
 ```
 
-## 安装插件
+### 安装插件
 
 ```
 $ vela addon enable fluxcd
@@ -44,7 +58,7 @@ I0111 21:45:25.660129   89345 apply.go:106] "creating object" name="component-ui
 Addon: fluxcd enabled Successfully.
 ```
 
-### 安装特定版本的插件
+#### 安装特定版本的插件
 
 你可以通过通过设置 `--version` 启动参数，来指定安装插件的某个特定版本。例如：
 
@@ -63,7 +77,7 @@ vela addon enable <addon-name> --clusters={cluster1,cluster2}
 
 安装完成后，插件中的功能会以组件，运维特征，工作流步骤等形式呈现，你可以通过 `vela component`，`vela trait` 等命令查看新增的能力，也可以在[插件的参考文档](../../../reference/addons/overview)中查看每个官方插件对应的能力.
 
-## 删除/卸载已安装的插件
+### 删除/卸载已安装的插件
 
 > 删除前请确认插件对应的能力没有被任何应用使用。
 
@@ -72,7 +86,7 @@ $ vela addon disable fluxcd
 Successfully disable addon:fluxcd
 ```
 
-## 查看插件的下载仓库
+### 查看插件的下载仓库
 
 ```
 $ vela addon registry list 
@@ -84,7 +98,7 @@ KubeVela 社区在 Github 上维护了一个官方的[正式插件包仓库](htt
 
 同时这些文件会被同步到 [对象存储](https://addons.kubevela.net) 当中，以加快下载速度。
 
-## 添加插件包仓库
+### 添加插件包仓库
 
 你可以添加自己的插件包仓库，目前支持 OSS 和 Github 两种仓库类型。
 
@@ -93,14 +107,14 @@ $ vela addon registry add experimental --type OSS --endpoint=https://addons.kube
 Successfully add an addon registry experimental
 ```
 
-## 删除一个插件包仓库
+### 删除一个插件包仓库
 
 ```
 $ vela addon registry delete experimental
 Successfully delete an addon registry experimental
 ```
 
-## 多集群环境中启用插件包
+### 多集群环境中启用插件包
 
 如果你的环境中添加了若干个子集群，启用插件包时会默认在管控集群和所有子集群中安装此插件包。但如果子集群在某个插件包启用之后加入环境当中，则需要通过升级操作在新加入集群中安装此插件包。如下所示
 
@@ -110,7 +124,7 @@ Addon:
  enabled Successfully
 ```
 
-## 离线安装插件包
+### 离线安装插件包
 
 如果因为某些原因，你的环境无法通过访问插件包仓库，你可以通过指定本地的插件包目录来进行离线安装。如下所示：
 

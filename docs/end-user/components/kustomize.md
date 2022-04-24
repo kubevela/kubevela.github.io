@@ -4,6 +4,16 @@ title:  Pull based Component
 
 Create a Kustomize Component, it could be from Git Repo or OSS bucket or image registry.
 
+> This type is only apply to CLI.
+
+## Enable the fluxcd addon
+
+This component type is provided by the fluxcd addon, you must enable it firstly.
+
+```shell
+vale addon enable fluxcd
+```
+
 ## Watch Files
 
 ### Deploy From OSS bucket
