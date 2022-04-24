@@ -58,3 +58,5 @@ charts/vela-core/templates/defwithtemplate/nocalhost.yaml:        						image: "
 
 
 ## KubeVela Addon 离线部署
+
+请查看[插件的离线安装](./enable-addon-offline.md).
