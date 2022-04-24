@@ -57,3 +57,4 @@ repository after you pushed the package into the repository.
 
 ## Addon
 
+Please refer to [Enable Addon without Internet Access](./enable-addon-offline.md).
