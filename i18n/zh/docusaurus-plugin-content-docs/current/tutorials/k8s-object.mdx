@@ -148,24 +148,24 @@ spec:
     - name: topology-default
       type: topology
       properties:
-        clusters: ["local"]
+        clusters: ['local']
         namespace: default
     - name: topology-production
       type: topology
       properties:
-        clusters: ["local"]
+        clusters: ['local']
         namespace: production
   workflow:
     steps:
       - name: deploy2default
         properties:
-          policies: ["topology-default"]
+          policies: ['topology-default']
         type: deploy
       - name: suspend
         type: suspend
       - name: deploy2production
         properties:
-          policies: ["topology-production"]
+          policies: ['topology-production']
         type: deploy
 ```
 
@@ -196,4 +196,5 @@ $ vela workflow resume app-with-k8s-objects
 
 ## 下一步
 
-- [学习交付云厂商服务](./consume-cloud-services)
+- [交付云厂商服务](./consume-cloud-services)
+- [分发已存在的 Kubernetes 对象](../end-user/components/ref-objects)
