@@ -3,13 +3,12 @@ const { Component } = require("react");
 module.exports = {
   docs: [
     "getting-started/introduction",
+    "install",
     {
       type: "category",
-      label: "Getting Started",
+      label: "Basics",
       collapsed: false,
       items: [
-        "install",
-        "quick-start",
         "getting-started/core-concept",
         "getting-started/architecture",
       ],
