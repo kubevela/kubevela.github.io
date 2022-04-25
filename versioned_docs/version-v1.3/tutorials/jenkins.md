@@ -1,5 +1,5 @@
 ---
-title: Working with Jenkins
+title: Integrating with Jenkins
 ---
 
 ### Introduction
@@ -13,7 +13,7 @@ In this section, we will demonstrate how to integrate KubeVela with Jenkins in d
 ### Prerequisite
 
 The following requirements are needed to be ensured before starting this tutorial
-- KubeVela v1.2.0 with VelaUX installed.
+- KubeVela v1.2.0+ with VelaUX installed.
 - Jenkins installed.
 - VelaUX can be accessed by Jenkins. (If KubeVela is installed in an offline environment, you need to check this condition.)
 

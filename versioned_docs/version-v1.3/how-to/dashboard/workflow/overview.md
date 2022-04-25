@@ -1,6 +1,7 @@
 ---
 title: Manage Workflows
 description: Manager workflows for application
+draft: true
 ---
 
 When an application is created, it is associated with an environment. Each environment is associated with a workflow for deployment. After a workflow is created, there is only one step by default. You can enter workflow editing mode by clicking the `Edit` button.

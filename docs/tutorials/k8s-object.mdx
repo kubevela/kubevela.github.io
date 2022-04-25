@@ -146,24 +146,24 @@ spec:
     - name: topology-default
       type: topology
       properties:
-        clusters: ["local"]
+        clusters: ['local']
         namespace: default
     - name: topology-production
       type: topology
       properties:
-        clusters: ["local"]
+        clusters: ['local']
         namespace: production
   workflow:
     steps:
       - name: deploy2default
         properties:
-          policies: ["topology-default"]
+          policies: ['topology-default']
         type: deploy
       - name: suspend
         type: suspend
       - name: deploy2production
         properties:
-          policies: ["topology-production"]
+          policies: ['topology-production']
         type: deploy
 ```
 
@@ -194,4 +194,5 @@ Congrats! Now you've learned how to deploy Kubernetes objects.
 
 ## Next step
 
-- [Deploy Helm Chart](./helm)
+- [Deploy Cloud Service](./consume-cloud-services)
+- [Distributed External Kubernetes Objects](../end-user/components/ref-objects)

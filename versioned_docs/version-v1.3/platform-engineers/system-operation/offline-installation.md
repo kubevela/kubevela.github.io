@@ -1,4 +1,6 @@
-# Air-gapped Installation
+---
+title: Air-gapped Installation
+---
 
 Air-gapped Installation of KubeVela includes the installation of KubeVela core and addons, they all contain the configuration files and images.
 
