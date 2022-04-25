@@ -1,13 +1,31 @@
 ---
-title: 安装插件
+title: Addon management
+slug: cli/addon/addon
 ---
 
-你可以通过安装 KubeVela 的插件（Addon）获取更多的系统功能。
+You can get more capabilities from KubeVela ecosystem by installing addons.
 
-## 查看所有插件
+## Manage the addon via UI
 
-KubeVela 官方团队维护了一个默认的插件仓库 (https://addons.kubevela.net) ，默认情况下会从这个仓库实时发现。
+Users with addon management permissions can enter the addon management page to enable or disable addons.
 
+![addon list](https://static.kubevela.net/images/1.3/addon-list.jpg)
+
+In the addon list, you can get the status of the addon and other info. Click the addon name could open the addon detail page, you can get the version list, definitions provided by the addon, and the readme message.
+
+![addon detail](https://static.kubevela.net/images/1.3/addon-detail.jpg)
+
+Select a version and deployed clusters, you can click the enable button to install this addon.
+
+For enabled addons, if no applications to use definitions, you can click the disable button to uninstall it.
+
+## Manage the addon via CLI
+
+### List Addons
+
+By default, the following command lists addons from a default addon registry (https://addons.kubevela.net) maintained by KubeVela team.
+
+This command will show all available versions of every addon.
 
 ```shell
 $ vela addon list
@@ -30,7 +48,7 @@ velaux                          KubeVela        KubeVela User Experience (UX). A
 terraform-alibaba               KubeVela        Kubernetes Terraform Controller for Alibaba Cloud                                                       [1.0.2, 1.0.1]                  disabled    
 ```
 
-## 安装插件
+### Install Addon
 
 ```
 $ vela addon enable fluxcd
@@ -44,35 +62,32 @@ I0111 21:45:25.660129   89345 apply.go:106] "creating object" name="component-ui
 Addon: fluxcd enabled Successfully.
 ```
 
-### 安装特定版本的插件
+#### Install with specified version
 
-你可以通过通过设置 `--version` 启动参数，来指定安装插件的某个特定版本。例如：
+You can choose one special version of this addon by add `--version` flag in this command. eg:
 
 ```shell
 vela addon enable fluxcd --version=1.0.0
 ```
 
-如果不指定该参数，默认会安装此插件的最新版本。
-
-启用一个插件时，默认会在所有子集群中安装该插件，你也可以通过设置 `--cluster` 启动参数选择安装在某些集群当中。例如：
+By default, this command will install this addon in all managed-clusters.You can use `--cluster` flag to choose specific clusters. eg:
 
 ```shell
 vela addon enable <addon-name> --clusters={cluster1,cluster2}
 ```
 
+You can view the new component or trait types added by `vela component` or `vela trait`. You can also find more details about [built-in addon docs](../../../reference/addons/overview).
 
-安装完成后，插件中的功能会以组件，运维特征，工作流步骤等形式呈现，你可以通过 `vela component`，`vela trait` 等命令查看新增的能力，也可以在[插件的参考文档](../../../reference/addons/overview)中查看每个官方插件对应的能力.
+### Uninstall Addon
 
-## 删除/卸载已安装的插件
-
-> 删除前请确认插件对应的能力没有被任何应用使用。
+> Please make sure this addon along with the capabilities is no longer used in any of your applications.
 
 ```
 $ vela addon disable fluxcd
 Successfully disable addon:fluxcd
 ```
 
-## 查看插件的下载仓库
+### List Registry
 
 ```
 $ vela addon registry list 
@@ -80,39 +95,23 @@ Name            Type    URL
 KubeVela        helm    https://addons.kubevela.net
 ```
 
-KubeVela 社区在 Github 上维护了一个官方的[正式插件包仓库](https://github.com/oam-dev/catalog/tree/master/addons) 和一个[试验阶段插件包仓库](https://github.com/oam-dev/catalog/tree/master/experimental) 。你在相应的仓库中找到插件包的定义文件。
-
-同时这些文件会被同步到 [对象存储](https://addons.kubevela.net) 当中，以加快下载速度。
-
-## 添加插件包仓库
-
-你可以添加自己的插件包仓库，目前支持 OSS 和 Github 两种仓库类型。
+### Add Registry
 
 ```
-$ vela addon registry add experimental --type OSS --endpoint=https://addons.kubevela.net --path=experimental/
+$ vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
 Successfully add an addon registry experimental
 ```
 
-## 删除一个插件包仓库
+### Delete Registry
 
 ```
 $ vela addon registry delete experimental
 Successfully delete an addon registry experimental
 ```
 
-## 多集群环境中启用插件包
+### Enable Addon offline
 
-如果你的环境中添加了若干个子集群，启用插件包时会默认在管控集群和所有子集群中安装此插件包。但如果子集群在某个插件包启用之后加入环境当中，则需要通过升级操作在新加入集群中安装此插件包。如下所示
-
-```
-$ vela addon upgrade velaux
-Addon: 
- enabled Successfully
-```
-
-## 离线安装插件包
-
-如果因为某些原因，你的环境无法通过访问插件包仓库，你可以通过指定本地的插件包目录来进行离线安装。如下所示：
+For some reason, if your cluster network cannot request the official addon registry you can enable an addon with a local dir. eg:
 
 ```
 $ ls
@@ -122,8 +121,8 @@ $ vela addon enable velaux/
 Addon: velaux enabled Successfully
 ```
 
-需要注意的是，在安装插件过程当中，仍可能需要从网络中拉取镜像或者 helm chart，如果你的网络环境同样无法访问这些地址，请参考[文档](../../../platform-engineers/system-operation/enable-addon-offline)进行完整的离线安装。
+Please notice that, while a addon installing cluster maybe still need pull some images or helm charts.If your cluster cannot reach these resources please refer [docs](../../../platform-engineers/system-operation/enable-addon-offline) to do complete installation without Internet.
 
-## 编写自己的插件包
+## Make your own addon
 
-请参考[插件包制作文档](../../../platform-engineers/addon/intro)。
+Refer to extension documents to learn how to [make your own addon and registry](../../../platform-engineers/addon/intro).

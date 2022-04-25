@@ -1,5 +1,6 @@
 ---
 title: 插件管理
+slug: cli/addon/addon
 ---
 
 你可以通过安装 KubeVela 的插件（Addon）获取更多的系统功能。

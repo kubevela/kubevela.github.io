@@ -8,33 +8,26 @@ This article introduces how companies deliver business applications based on Kub
 ## Before starting
 
 - Containerize your business. No matter what language you're using, first to build an image via CI or locally.
-
-  > In the future, KubeVela plans to provide the image-build-up solution for multi-langs
-
-- Place your business image at a hub that KubeVela can access to
-- Make it clear what environment variables your business needs to set, and whether there are other middleware dependencies (such as databases, caches, etc.). If so, please deploy the middleware service first.
+- Place your business image at a hub that KubeVela can access to.
+- Enable the VelaUX addon, If you are only CLI users, go to [Deploy via CLI](#deploy-via-cli)
 
 ## Creating an application
 
-Enter the page of Application on the left, click `New Application` to create. Pick your name, alias, and description; Select type of `webservice`; Decide your environment, Default ENV is already available in the first place. You could also enter the page of Envs to set up new.
+Enter the page of Application on the left, click `New Application` to create. Pick your name, alias, and description; Select type of `webservice`; Decide your environment, Default environment is already available in the first place. You could also enter the page of Environments to set up new.
 
-![create webservice application](../resources/create-webservice.jpg)
+Click `Next Step` so to the configuration page. We need to set up the Image address and resources limit. If you want to set up a command for the image, open up the row `CMD`.
 
-Click `Next Step` so to the configuration page. We need to set up the Image address. If you want to set up a command for the image, open up the row `CMD`. Also, set up Environment Variable in `ENV`.
-
-![set webservice application](../resources/set-webservice.jpg)
-
-As the screenshot shows, we're deploying a `Wordpress` app, filling in the name and setting up four Environment Variables. Ensure to have the right address of your database.
+![set webservice application](https://static.kubevela.net/images/1.3/create-webservice.jpg)
 
 Done by clicking `Create` and then we enter the management page.
 
 ## Deploying the application
 
-Click the `Deploy` button on the upper right, it executes the default Workflow. Note that each Environment of the application has its workflow. On the right of the `Baseline Config` tab is the environments. Check out the status of the environment and its instance information as you wish.
+Click the `Deploy` button on the upper right and select a workflow. Note that each Environment of the application has its workflow. On the right of the `Baseline Config` tab is the environments. Check out the status of the environment and its instance information as you wish.
 
 ![webservice application env page](../resources/webservice-env.jpg)
 
-When it has several Targets in this ENV, you may find them all in the `Instances` list. If you want to look at the process of application deployment, click `Check the details` to reveal.
+When it has several targets in this environment, you may find them all in the `Instances` list. If you want to look at the process of application deployment, click `Check the details` to reveal.
 
 In the `Instances` list, you may find some of them are in pending status. Click `+` in the beginning to figure out the reason in more detail.
 
@@ -42,11 +35,11 @@ In the `Instances` list, you may find some of them are in pending status. Click 
 
 After the first deployment, our business keeps evolving and the following updates come along.
 
-Click `Baseline Config` and you can see the button `Edit Properties` on the right. Then again we're on the configuration page to update your latest requirements for image, version, and environment variable.
+Click `Baseline Config` and you can see the all components. Then click the component name and open the configuration page, you can update your latest requirements for image, version, and environment variable.
 
 ## Update replicas
 
-If your business requires more than one replicas, enter the `Properties` page. By default, you have a `Set Replicas` trait. Click the gear so that you can update the replicas.
+If your business requires more than one replicas, enter the `Properties` page. By default, The component have a `Set Replicas` trait. Click it so that you can update the replicas.
 
 ![set application replicas](../resources/set-replicas.jpg)
 
@@ -63,6 +56,75 @@ After all of the environments have been recycled, the application can be deleted
 ![delete application](../resources/app-delete.jpg)
 
 At this point, you have basically mastered the deployment method of Docker image.
+
+## Deploy via CLI
+
+You also can deploy the application via CLI.
+
+```yaml
+cat <<EOF | vela up -f -
+# YAML begins
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: webservice-app
+spec:
+  components:
+    - name: frontend
+      type: webservice
+      properties:
+        image: oamdev/testapp:v1
+        cmd: ["node", "server.js"]
+        ports:
+          - port: 8080
+            expose: true
+        exposeType: LoadBalancer
+        cpu: "0.5"
+        memory: "512Mi"
+      traits:
+        - type: scaler
+          properties:
+            replicas: 1
+# YAML ends
+EOF
+```
+
+> Currently, The application created by CLI will be synced to UI, but it will be readonly.
+
+You can also save the YAML file as webservice-app.yaml and use the `vela up -f webservice-app.yaml` command to deploy.
+
+Next, check the deployment status of the application through `vela status webservice-app`
+
+```
+About:
+
+  Name:      	test-app
+  Namespace: 	default
+  Created at:	2022-04-21 12:03:42 +0800 CST
+  Status:    	running
+
+Workflow:
+
+  mode: DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id:y4n26n7uql
+    name:frontend
+    type:apply-component
+    phase:succeeded
+    message:
+
+Services:
+
+  - Name: frontend
+    Cluster: local  Namespace: default
+    Type: webservice
+    Healthy Ready:1/1
+    Traits:
+      ✅ scaler
+```
 
 ## Next Step
 

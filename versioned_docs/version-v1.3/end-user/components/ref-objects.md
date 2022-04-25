@@ -9,6 +9,8 @@ Sometimes, you may want to distribute existing Kubernetes objects. For example,
 
 > This document requires you to know how to deploy multi-cluster application with policy and workflow first. You can refer to [Multi-cluster Application Delivery](../../case-studies/multi-cluster) for details.
 
+> This type is only apply to CLI.
+
 ## Refer to Existing Kubernetes Objects in Component
 
 To use existing Kubernetes objects in the component, you need to use the `ref-objects` typed component and declare which resources you want to refer to. For example, in the following example, the secret `image-credential-to-copy` in namespace `examples` will be taken as the source object for the component. Then you can use the topology policy to dispatch it into hangzhou clusters.

@@ -24,14 +24,12 @@ This is why KubeVela appears here. It can simplify the application delivery and 
 
 ![](../resources/vela-overview.jpg)
 
-We mainly provide two products for different users, they're [KubeVela](./end-user/quick-start-cli) and [VelaUX](./quick-start).
-
 - Platform builders for PaaS, Serverless, Application Management/Delivery systems
-	- [KubeVela](./end-user/quick-start-cli) works as an application delivery engine that you could build your advanced platform with.
+	- KubeVela works as an application delivery engine that you could build your advanced platform with.
 - ISV, SaaS owners, and Application Architects who need to distribute software to anywhere
 	- KubeVela has full extension and integration capabilities to allow users to distribute applications with [customized addons](./platform-engineers/addon/intro) easily. Think about an App Store but on Kubernetes and clouds.
 - Application Developers, Operators, DevOps Engineers
-	- [VelaUX](./quick-start) is an addon of KubeVela, with this addon enabled, it provides an out-of-box modern application Continuous Delivery (CD) and Management platform with an easy-to-use UI console.
+	- VelaUX is an addon of KubeVela, with this addon enabled, it provides an out-of-box modern application Continuous Delivery (CD) and Management platform with an easy-to-use UI console.
 
 
 ## What's the relationship between OAM, KubeVela and VelaUX?
@@ -50,7 +48,7 @@ KubeVela is a CD (Continuous Delivery) control plane that works at downstream of
 
 If you already adopted GitOps practice in CD section, KubeVela is even easier to fit in as it's fully declarative by design. All KubeVela features including CD workflow and multi-cloud/cluster delivery will be immediately available in your GitOps process by simply putting a KubeVela application YAML inside your configuration repository.
 
-> Feel free to check the [Best Practices](https://kubevela.io/docs/case-studies/jenkins-cicd) documentation for more details. 
+> Feel free to check the [Best Practices](../tutorials/jenkins) documentation for more details.
 
 ### KubeVela vs. Platform-as-a-Service (PaaS) 
 
@@ -92,5 +90,3 @@ Welcome onboard and sail Vela!
 ## What's Next
 
 - Start to [install KubeVela](./install).
-- Getting started with [KubeVela core application engine](./end-user/quick-start-cli).
-- Getting started with UI console by using [VelaUX](./quick-start).

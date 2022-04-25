@@ -32,6 +32,12 @@ description: 本文介绍通过 KubeVela 交付 Helm Chart
 
 当观察到插件显示为 `enabled` 状态，即代表插件启用已经完成。可以开始交付 Helm 应用了。
 
+你也可以通过 CLI 来启用插件：
+
+```shell
+vale addon enable fluxcd
+```
+
 ## 通过 Chart 创建 Redis 应用
 
 相信你通过之前的文章，已经掌握了应用的创建能力。我们需要使用 Chart 创建 Redis 应用，只需要选择应用部署类型为 `helm`，然后选择你准备好的具有默认 StorageClass 可以提供 PV 的集群 Target，然后进入部署参数配置页面。
@@ -50,9 +56,65 @@ description: 本文介绍通过 KubeVela 交付 Helm Chart
 
 ## 修改部署参数
 
-这里我们解锁新技能，修改应用的部署参数。对于任何应用类型，它都可以在任何时候通过点击 `Baseline Config` 页面右上方的 `Edit Properties` 按钮进入部署参数的修改页面。该页面与我们创建应用时设置应用部署参数的页面完全一致，它是由每一个应用类型的 Definition 定义的参数结合 KubeVela UISchema 规范自动生成。
+在 UI 中点击配置页面的组件名称即可进入组件的配置页面，对于 Helm Chart 部署的组件，我们能够通过设置 Values 配置项来变更部署参数，也可以支持变更 Chart 的来源。其中 Values 配置项会基于 `values.yaml` 文件中的默认值来生成配置提醒，你可以选择需要配置的行并为其设置需要的值。
 
 修改部署参数后，必须执行环境的工作流才能将修改后的参数在指定的环境生效，由于版本管理的机制存在，历史配置参数会在版本中得以保存。
+
+## 通过 CLI 部署
+
+你也可以通过 CLI 来部署 Helm Chart 类型的应用, 基础配置如下：
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: helm-redis
+spec:
+  components:
+    - name: redis
+      type: helm
+      properties:
+        repoType: "helm"
+        url: "https://charts.bitnami.com/bitnami"
+        chart: "redis"
+        version: "16.8.5"
+        values: 
+          master.persistence.size: 16Gi
+          replica.persistence.size: 16Gi
+```
+
+你可以通过下述命令完成部署：
+
+```shell
+vela up -f https://kubevela.io/example/applications/app-with-chart-redis.yaml
+```
+
+接下来，通过 `vela status helm-redis` 命令查询部署应用的状态，直到进入下述状态即部署成功。
+
+```
+About:
+  Name:      	helm-redis
+  Namespace: 	default
+  Created at:	2022-04-21 17:19:12 +0800 CST
+  Status:    	running
+Workflow:
+  mode: DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id:n1gxswwina
+    name:redis
+    type:apply-component
+    phase:succeeded
+    message:
+Services:
+  - Name: redis
+    Cluster: local  Namespace: default
+    Type: helm
+    Healthy Fetch repository successfully, Create helm release successfully
+    No trait applied
+```
 
 到此，你已经掌握了 Helm 应用的交付能力，快去交付更多的 Helm 应用吧。
 

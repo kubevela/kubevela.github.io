@@ -29,12 +29,11 @@ KubeVela 通过以下设计，使得面向混合/多云环境的应用交付变�
 ![](../resources/vela-overview.jpg)
 
 - 云原生应用平台的构建者、PaaS、Serverless 平台工程师、基础设施平台管理员：
-  - [Vela Core](./end-user/quick-start-cli) 是一个普适的、高可扩展的应用交付引擎与内核，它以极简的架构实现了原生 Kubernetes 多集群控制平面的能力，能够将 OAM 应用引擎直接植入企业已有的 PaaS 平台之中并不破坏已有的能力，从而实现标准化应用交付。
+  - KubeVela 是一个普适的、高可扩展的应用交付引擎与内核，它以极简的架构实现了原生 Kubernetes 多集群控制平面的能力，能够将 OAM 应用引擎直接植入企业已有的 PaaS 平台之中并不破坏已有的能力，从而实现标准化应用交付。
 - 第三方软件供应商（ISV）、垂直领域软件开发者、架构师：
-  - Vela 提供的充分的可扩展和集成能力，可以允许你[自定义插件](./platform-engineers/addon/intro) 完成复杂应用的构建和分发，是一个 Kubernetes 和云平台之上的应用商店（App Store）。
+  - KubeVela 提供的充分的可扩展和集成能力，可以允许你[自定义插件](./platform-engineers/addon/intro) 完成复杂应用的构建和分发，是一个 Kubernetes 和云平台之上的应用商店（App Store）。
 - 云原生时代的应用研发、运维人员、DevOps 工程师：
-  - [VelaUX](./quick-start) 是一个基于 Vela Addon 机制构建的扩展能力集，安装这个插件后，你就拥有了一个开箱即用的现代化持续交付（CD）和应用管理平台。
-
+  - VelaUX 是一个基于 Vela Addon 机制构建的扩展能力集，安装这个插件后，你就拥有了一个开箱即用的现代化持续交付（CD）和应用管理平台。
 
 ## OAM、KubeVela 和 VelaUX 是什么关系？
 
@@ -53,7 +52,7 @@ KubeVela 是一个工作在 CI 流程下游的 CD 控制平面（Continuous Deli
 
 如果你已经在 CD 环节中采纳了 GitOps 实践，KubeVela 会更容易跟你的 CI/CD 系统集成，因为 KubeVela 是完全声明式的。只需要把 KubeVela 的应用部署描述文件放置在你的配置仓库当中，所有的 KubeVela 特性（包括声明式交付工作流、多云/多集群交付流程等）就会立刻在你 的 GitOps 流程中出现。
 
-> 欢迎查阅 [最佳实践](case-studies/jenkins-cicd) 文档来了解更多关于 KubeVela 与各类 CI/CD 系统协作的实践.
+> 欢迎查阅 [最佳实践](../tutorials/jenkins) 文档来了解更多关于 KubeVela 与各类 CI/CD 系统协作的实践.
 
 ### KubeVela vs. 平台即服务 (PaaS)
 
@@ -94,5 +93,3 @@ KubeVela 是一个基于云原生技术栈构建的现代应用交付系统。�
 接下来，我们推荐你：
 
 - 开始 [安装使用 KubeVela](./install)。
-- 查看 [KubeVela 核心应用引擎](./end-user/quick-start-cli)的使用场景和功能。
-- 查看开箱即用的 [应用托管平台 VelaUX](./quick-start) 的使用场景和功能。
