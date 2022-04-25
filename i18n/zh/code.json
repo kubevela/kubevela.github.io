@@ -197,23 +197,23 @@
   "What is KubeVela?": {
     "message": "KubeVela 是什么？"
   },
-  "Application Centric": {
-    "message": "完全以应用为中心"
+  "Unified Application Delivery Model": {
+    "message": "统一的应用交付模型"
   },
-  "KubeVela introduces Open Application Model (OAM) as the consistent yet higher level API to capture and render a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy.": {
-    "message": "KubeVela 以开放应用模型（OAM）作为应用交付的顶层抽象，并通过声明式的交付工作流来捕获面向混合环境的微服务应用交付的整个过程，甚至连多集群分发策略、流量调配和滚动更新等运维特征，也都声明在应用级别。用户无需关心任何基础设施细节，只需要专注于定义和部署应用即可。"
+  "KubeVela introduces a unified and cross-platform delivery model that allows you to deploy any workload type, including containers, databases, or even VM instances to any cloud or Kubernetes clusters. It supports cross-environment promotion and custom delivery workflow. The whole model was fully intention-driven, having both user experience and robustness.": {
+    "message": "KubeVela 对用户提供统一且跨平台的应用交付模型，该模型支持交付任意类型的工作负载包括容器、数据库甚至是虚拟机到不同的云和 Kubernetes 集群中，支持跨环境渐进式发布，支持自定义交付工作流。整个模型完全由用户声明式驱动，兼顾用户体验和健壮性。"
   },
-  "Out of Box UI Console": {
-    "message": "开箱即用的可视化控制台"
+  "Programmable Delivery Workflow": {
+    "message": "可编程交付工作流"
   },
-  "KubeVela has an UI Console along with other out-of-box capabilities from a large catalog of addons. It models application delivery as DAG (Directed Acyclic Graph) and expresses it with CUE - a modern data configuration language. This allows you to design application deployment steps per needs and orchestrate them in programmable approach. No restrictions, natively extensible.": {
-    "message": "包括可视化控制台在内，KubeVela 有大量开箱即用的插件可以选用。KubeVela 会将应用交付流程建模为有向无环图（DAG），并将它通过 CUE（一种源自 Google Borg 系统的数据配置语言）来进行表达和实现。这使得你可以自由的根据自己的需求来设计和选用交付工作流中的每一个步骤，并通过可编程的方式将它们编排起来。没有任何限制，原生高可扩展"
+  "Application delivery workflow is driven by CUE - a powerful configuration language developed at Google. This allows you to design application deployment steps per needs and orchestrate them in programmable approach. No restrictions, natively extensible, for maximum compatibility with your existing Infrastructure.": {
+    "message": "KubeVela 的交付工作流可通过 CUE 语言（一种源自 Google Borg 系统的数据配置语言）以可编程的方式进行自定义和扩展，这使得你可以自由的根据需求场景来设计和选用交付工作流中的每一个步骤，并通过可编程的方式将它们编排起来。没有任何限制，原生高可扩展，最大化兼容你已有的基础设施。"
   },
-  "Infrastructure Agnostic": {
-    "message": "基础设施无关"
+  "Multi-cluster/Hybrid-cloud Continuous Delivery Control Plane": {
+    "message": "多集群/混合云应用交付控制平面"
   },
-  "KubeVela works as an application delivery control plane that is fully decoupled from runtime infrastructure. It can deploy any workload types including containers, cloud services, databases, or even VM instances to any cloud or Kubernetes cluster, following the workflow designed by you.": {
-    "message": "KubeVela 本质上是一个与运行时基础设施无关的应用交付与管理控制平面。所以它可以按照你定义的工作流与策略，面向任何环境交付和管理任何应用组件，比如：容器、云函数、数据库，甚至网络和虚拟机实例等等。"
+  "KubeVela natively supports rich continuous delivery policies in various multi-cluster/hybrid-cloud scenarios or mixed environments. On the one hand, it can enhance the CI/CD pipeline by serving as unified control plane. On the other hand, it is also capable of leveraging GitOps to automate continuous delivery process in the style of IaC.": {
+    "message": "KubeVela 原生支持丰富的多集群/混合环境持续交付策略，既可作为统一的持续交付控制平面增强现有 CI/CD 流水线，也可以通过 GitOps 方式对接 Git 仓库以基础设施即代码（IaC）的方式来驱动持续交付过程。"
   },
   "KubeVela is a": {
     "message": "KubeVela 是一个"
@@ -221,32 +221,23 @@
   "sandbox project": {
     "message": "沙箱级项目"
   },
-  "KubeVela is a modern application delivery(CD) platform that makes deploying and operating applications across today's hybrid, multi-cloud environments": {
-    "message": "KubeVela 是一个现代化的应用交付（CD）平台，它可以让你的应用交付与管理在当今流行的混合、多云环境中变得更加"
+  "KubeVela is a modern software delivery platform that makes deploying and operating applications across today's hybrid, multi-cloud environments": {
+    "message": "KubeVela 是一个现代化的软件交付平台，它可以让你的应用交付在当今流行的混合、多云环境中变得更加"
   },
   " easier, faster and more reliable.": {
     "message": "简单、轻松、可靠。"
   },
-  "KubeVela is an infrastructure agnostic control plane, with an ": {
-    "message": "KubeVela 是一个基础设施无关的控制平面，它具备一个"
+  "KubeVela is infrastructure agnostic, programmable, yet most importantly,": {
+    "message": "KubeVela 是基础设施无关的、可编程的，但最重要的是："
   },
-  "application-centric ": {
-    "message": "以应用为中心、"
-  },
-  "UI console, that has rich ": {
-    "message": ""
+  "application-centric.": {
+    "message": "它是完全以应用为中心的。"
   },
   ".": {
     "message": "."
   },
-  "out-of-box": {
-    "message": "开箱即用"
-  },
-  " addons based on it's extensibility,": {
-    "message": " 的可视化控制台。得益于其可扩展性，KubeVela 具备丰富的插件，"
-  },
-  " allow you to build applications and deploy them anywhere!": {
-    "message": "使得你的应用可以一次构建、随处运行！"
+  " It allows you to build powerful software, and run them anywhere!": {
+    "message": "它可以帮助你构建多样化的云原生应用，并随处运行！"
   },
   "theme.SearchPage.documentsFound.plurals": {
     "message": "One document found|{count} documents found",
