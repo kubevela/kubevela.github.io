@@ -3,26 +3,26 @@ import Translate, { translate } from '@docusaurus/Translate';
 
 const features = [
   {
-    title: <><Translate>Application Centric</Translate></>,
+    title: <><Translate>Unified Application Delivery Model</Translate></>,
     imgUrl: 'img/application-centric.svg',
     description: (
       <>
         <p>
           <Translate>
-            KubeVela introduces Open Application Model (OAM) as the consistent yet higher level API to capture and render a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy.
+            KubeVela introduces a unified and cross-platform delivery model that allows you to deploy any workload type, including containers, databases, or even VM instances to any cloud or Kubernetes clusters. It supports cross-environment promotion and custom delivery workflow. The whole model was fully intention-driven, having both user experience and robustness.
           </Translate>
         </p>
       </>
     ),
   },
   {
-    title: <><Translate>Out of Box UI Console</Translate></>,
+    title: <><Translate>Programmable Delivery Workflow</Translate></>,
     imgUrl: 'img/extending-natively.svg',
     description: (
       <>
         <p>
           <Translate>
-            KubeVela has an UI Console along with other out-of-box capabilities from a large catalog of addons. It models application delivery as DAG (Directed Acyclic Graph) and expresses it with CUE - a modern data configuration language. This allows you to design application deployment steps per needs and orchestrate them in programmable approach. No restrictions, natively extensible.
+            Application delivery workflow is driven by CUE - a powerful configuration language developed at Google. This allows you to design application deployment steps per needs and orchestrate them in programmable approach. No restrictions, natively extensible, for maximum compatibility with your existing Infrastructure.
           </Translate>
         </p>
       </>
@@ -30,18 +30,13 @@ const features = [
     reverse: true,
   },
   {
-    title: <><Translate>Infrastructure Agnostic</Translate></>,
+    title: <><Translate>Multi-cluster/Hybrid-cloud Continuous Delivery Control Plane</Translate></>,
     imgUrl: 'img/simple-yet-extensible-abstraction-mechanism.svg',
     description: (
       <>
         <p>
           <Translate>
-            KubeVela works as an application
-            delivery control plane that is fully decoupled from runtime
-            infrastructure. It can deploy any
-            workload types including containers, cloud services, databases,
-            or even VM instances to any cloud or Kubernetes cluster, following the
-            workflow designed by you.</Translate>
+            KubeVela natively supports rich continuous delivery policies in various multi-cluster/hybrid-cloud scenarios or mixed environments. On the one hand, it can enhance the CI/CD pipeline by serving as unified control plane. On the other hand, it is also capable of leveraging GitOps to automate continuous delivery process in the style of IaC.</Translate>
         </p>
       </>
     ),
