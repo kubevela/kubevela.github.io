@@ -2,7 +2,9 @@
 title: 自定义插件
 ---
 
-下图展示了在启用一个插件时，KubeVela 做了哪些事情。可以看到插件仓库中所存放的其实是插件的资源文件，当通过 UX/CLI 启用一个插件时，它们会从插件仓库把这些资源文件拉取下来，渲染成一个 KubeVela 应用并创建。最终由运行在管控集群的 KubeVela 控制器完成对应用中所描述资源的下发。
+一个 KubeVela 的插件就是包含了一系列文件的目录。 下图展示了在启用一个插件时，KubeVela 做了哪些事情。当通过 UX/CLI 启用一个插件时，会从插件仓库把这些资源文件拉取下来。
+
+文件当中用于扩展平台能力的文件如各种模块定义文件（componentDefinition，traitDefinition 等）和 schema 文件（在 UX 上增强显示效果的文件）会被 UX/CLI 直接下发到管控集群。 资源描述（ resources, template 和 metadata ）文件会被用来渲染成一个 KubeVela 应用并创建，最终由运行在管控集群的 KubeVela 下发到各个集群当中。
 
 ![alt](../../resources/addon-mechanism.jpg)
 
@@ -150,11 +152,11 @@ parameter: {
 
 ### 模块定义文件 (X-Definitions) 目录 (非必须)
 
-你可以在插件目录下面创建一个 definitions 文件目录，用于存放组件定义、运维特征定义和工作流节点定义等模版定义文件。需要注意的是，由于被管控集群中通常不会安装 KubeVela 控制器，所以即使插件通过设置元数据文件 (metadata.yaml) 中 `deployTo.runtimeCluster` 字段开启在子集群安装该插件，模版定义的文件也并不会下发到子集群中。
+你可以在插件目录下面创建一个 definitions 文件目录，用于存放组件定义、运维特征定义和工作流节点定义等模版定义文件。需要注意的是，由于被管控集群中通常不会安装 KubeVela 控制器，所以在启用插件时这些文件仅会被下发到管控集群。
 
 ### 模版参数展示增强文件 (UI-Schema) 目录 (非必须)
 
-schemas 目录用于存放`X-Definitions` 所对应的 UI-schema 文件，用于在 UX 中展示 `X-Definitions` 所需要填写参数时增强显示效果。
+schemas 目录用于存放`X-Definitions` 所对应的 UI-schema 文件，用于在 UX 中展示 `X-Definitions` 所需要填写参数时增强显示效果。需要注意的是，和模块定义文件一样，这些文件仅会被下发到管控集群。
 
 上面就完整介绍了如何制作一个插件，你可以在这个 [目录中](https://github.com/oam-dev/catalog/tree/master/experimental/addons/example) 找到上面所介绍插件的完整例子。
 
