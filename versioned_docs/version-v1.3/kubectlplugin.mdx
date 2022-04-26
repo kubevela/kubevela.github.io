@@ -1,6 +1,8 @@
 ---
 title: Install kubectl plugin
+draft: true
 ---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -21,10 +23,13 @@ values={[
 
 1. [Install and set up](https://krew.sigs.k8s.io/docs/user-guide/setup/install/) Krew on your machine.
 2. Discover plugins available on Krew:
+
 ```shell
 kubectl krew update
 ```
+
 3. install kubectl vela:
+
 ```shell script
 kubectl krew install vela
 ```
@@ -33,6 +38,7 @@ kubectl krew install vela
 <TabItem value="script">
 
 **macOS/Linux**
+
 ```shell script
 curl -fsSl https://kubevela.io/script/install-kubectl-vela.sh | bash
 ```
@@ -42,8 +48,6 @@ Kubectl will discover it from your system path automatically.
 
 </TabItem>
 </Tabs>
-
-
 
 ## Usage
 
