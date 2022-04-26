@@ -1,0 +1,23 @@
+name: script
+
+on:
+  pull_request:
+    branches: 
+     - main
+  push:
+    branches: 
+     - main
+
+jobs:
+  check-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Check Install Script
+        run: static/script/install.sh
+  check-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Check Install Script
+        run: static/script/install.ps1

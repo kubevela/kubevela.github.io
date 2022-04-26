@@ -15,19 +15,7 @@ $VelaRoot = $VelaRoot -replace ' ', '` '
 $VelaCliBuildName = "vela"
 $VelaCliFileName = "vela.exe"
 $VelaCliFilePath = "${VelaRoot}\${VelaCliFileName}"
-
-# GitHub Org and repo hosting Vela CLI
-$GitHubOrg = "oam-dev"
-$GitHubRepo = "kubevela"
-
-# Set Github request authentication for basic authentication.
-if ($Env:GITHUB_USER) {
-    $basicAuth = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($Env:GITHUB_USER + ":" + $Env:GITHUB_TOKEN));
-    $githubHeader = @{"Authorization" = "Basic $basicAuth" }
-}
-else {
-    $githubHeader = @{}
-}
+$RemoteURL = "https://static.kubevela.net/binary/vela"
 
 if ((Get-ExecutionPolicy) -gt 'RemoteSigned' -or (Get-ExecutionPolicy) -eq 'ByPass') {
     Write-Output "PowerShell requires an execution policy of 'RemoteSigned'."
@@ -56,32 +44,24 @@ if (!(Test-Path $VelaRoot -PathType Container)) {
     throw "Cannot create $VelaRoot"
 }
 
-# Get the list of release from GitHub
-$releases = Invoke-RestMethod -Headers $githubHeader -Uri "https://api.github.com/repos/${GitHubOrg}/${GitHubRepo}/releases" -Method Get
-if ($releases.Count -eq 0) {
-    throw "No releases from github.com/oam-dev/kubevela repo"
-}
-
 # Filter windows binary and download archive
 $os_arch = "windows-amd64"
-$vela_cli_filename="vela"
+$vela_cli_filename = "vela"
 if (!$Version) {
-    $windowsAsset = $releases | Where-Object { $_.tag_name -notlike "*rc*" } | Select-Object -First 1 | Select-Object -ExpandProperty assets | Where-Object { $_.name -Like "${vela_cli_filename}-*${os_arch}.zip" }
-    if (!$windowsAsset) {
-        throw "Cannot find the windows KubeVela CLI binary"
-    }
-    $zipFileUrl = $windowsAsset.url
-    $assetName = $windowsAsset.name
-} else {
-    $assetName = "${vela_cli_filename}-${Version}-${os_arch}.zip"
-    $zipFileUrl = "https://github.com/${GitHubOrg}/${GitHubRepo}/releases/download/${Version}/${assetName}"
+    $Version = Invoke-RestMethod -Headers $githubHeader -Uri "${RemoteURL}/latest_version" -Method Get
+    $Version = $Version.Trim()
 }
+if (!$Version.startswith("v")) {
+    $Version = "v" + $Version
+}
+
+$assetName = "${vela_cli_filename}-${Version}-${os_arch}.zip"
+$zipFileUrl = "${RemoteURL}/${Version}/${assetName}"
 
 $zipFilePath = $VelaRoot + "\" + $assetName
 Write-Output "Downloading $zipFileUrl ..."
 
-$githubHeader.Accept = "application/octet-stream"
-Invoke-WebRequest -Headers $githubHeader -Uri $zipFileUrl -OutFile $zipFilePath
+Invoke-WebRequest -Uri $zipFileUrl -OutFile $zipFilePath
 if (!(Test-Path $zipFilePath -PathType Leaf)) {
     throw "Failed to download Vela Cli binary - $zipFilePath"
 }
