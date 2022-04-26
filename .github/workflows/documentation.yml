@@ -1,0 +1,138 @@
+name: documentation
+
+on:
+  pull_request:
+    branches: main
+  push:
+    branches: main
+
+jobs:
+  check-link:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-go@v1
+        with:
+          go-version: "1.16.6"
+      - name: Check Link
+        run: make check-link
+
+  check-sort:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-go@v1
+        with:
+          go-version: "1.16.6"
+      - name: Check Link
+        run: make check-sort
+
+  checks:
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - name: Test Build
+        run: |
+          if [ -e yarn.lock ]; then
+          yarn install --frozen-lockfile
+          elif [ -e package-lock.json ]; then
+          npm ci
+          else
+          npm i
+          fi
+          npm run build
+  gh-release:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - uses: webfactory/ssh-agent@v0.5.0
+        with:
+          ssh-private-key: ${{ secrets.GH_PAGES_DEPLOY }}
+      - name: Release to GitHub Pages
+        env:
+          USE_SSH: true
+          GIT_USER: git
+          DEPLOYMENT_BRANCH: gh-pages
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "gh-actions"
+          yarn add nodejieba
+          if [ -e yarn.lock ]; then
+          yarn install --frozen-lockfile
+          elif [ -e package-lock.json ]; then
+          npm ci
+          else
+          npm install
+          fi
+          npm run build
+      - name: Install ossutil
+        run: wget http://gosspublic.alicdn.com/ossutil/1.7.0/ossutil64 && chmod +x ossutil64 && mv ossutil64 ossutil
+      - name: Configure Alibaba Cloud OSSUTIL
+        run: ./ossutil --config-file .ossutilconfig config -i ${{ secrets.ACCESS_KEY_ID }} -k ${{ secrets.ACCESS_KEY_SECRET }} -e oss-us-west-1.aliyuncs.com -c .ossutilconfig
+      - name: Deply To OSS for kubevela.io
+        run: ./ossutil --config-file .ossutilconfig sync -f build oss://kubevela-io
+      - name: Configure Alibaba Cloud OSSUTIL
+        run: ./ossutil --config-file .ossutilconfig config -i ${{ secrets.ACCESS_KEY_ID }} -k ${{ secrets.ACCESS_KEY_SECRET }} -e oss-accelerate.aliyuncs.com -c .ossutilconfig
+      - name: Deply To OSS for kubevela.net
+        run: ./ossutil --config-file .ossutilconfig sync -f build oss://kubevela-docs
+
+  push-image:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Get the version
+        id: get_version
+        run: |
+          VERSION=${GITHUB_REF#refs/heads/}
+          if [[ ${GITHUB_REF} == "refs/heads/main" ]]; then
+            VERSION=latest
+          fi
+          echo ::set-output name=VERSION::${VERSION}
+      - name: Get git revision
+        id: vars
+        shell: bash
+        run: |
+          echo "::set-output name=git_revision::$(git rev-parse --short HEAD)"
+      - name: Login ghcr.io
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login docker.io
+        uses: docker/login-action@v1
+        with:
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - uses: docker/setup-qemu-action@v1
+      - uses: docker/setup-buildx-action@v1
+        with:
+          driver-opts: image=moby/buildkit:master
+      - uses: docker/build-push-action@v2
+        name: Build & Pushing kubevela.io for Dockerhub and GHCR
+        with:
+          context: .
+          file: Dockerfile
+          labels: |-
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          build-args: |
+            GITVERSION=git-${{ steps.vars.outputs.git_revision }}
+            VERSION=${{ steps.get_version.outputs.VERSION }}
+            GOPROXY=https://proxy.golang.org
+          tags: |-
+            docker.io/oamdev/kubevela-io:${{ steps.get_version.outputs.VERSION }}
+            ghcr.io/${{ github.repository }}/kubevela-io:${{ steps.get_version.outputs.VERSION }}
+

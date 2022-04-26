@@ -1,0 +1,287 @@
+{
+  "theme.NotFound.title": {
+    "message": "Page Not Found",
+    "description": "The title of the 404 page"
+  },
+  "theme.NotFound.p1": {
+    "message": "We could not find what you were looking for.",
+    "description": "The first paragraph of the 404 page"
+  },
+  "theme.NotFound.p2": {
+    "message": "Please contact the owner of the site that linked you to the original URL and let them know their link is broken.",
+    "description": "The 2nd paragraph of the 404 page"
+  },
+  "theme.blog.paginator.navAriaLabel": {
+    "message": "Blog list page navigation",
+    "description": "The ARIA label for the blog pagination"
+  },
+  "theme.blog.paginator.newerEntries": {
+    "message": "Newer Entries",
+    "description": "The label used to navigate to the newer blog posts page (previous page)"
+  },
+  "theme.blog.paginator.olderEntries": {
+    "message": "Older Entries",
+    "description": "The label used to navigate to the older blog posts page (next page)"
+  },
+  "theme.AnnouncementBar.closeButtonAriaLabel": {
+    "message": "Close",
+    "description": "The ARIA label for close button of announcement bar"
+  },
+  "theme.blog.post.paginator.navAriaLabel": {
+    "message": "Blog post page navigation",
+    "description": "The ARIA label for the blog posts pagination"
+  },
+  "theme.blog.post.paginator.newerPost": {
+    "message": "Newer Post",
+    "description": "The blog post button label to navigate to the newer/previous post"
+  },
+  "theme.blog.post.paginator.olderPost": {
+    "message": "Older Post",
+    "description": "The blog post button label to navigate to the older/next post"
+  },
+  "theme.blog.post.readingTime.plurals": {
+    "message": "阅读需要 1 分钟|阅读需要 {readingTime} 分钟",
+    "description": "Pluralized label for \"{readingTime} min read\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.tags.tagsListLabel": {
+    "message": "Tags:",
+    "description": "The label alongside a tag list"
+  },
+  "theme.blog.post.readMore": {
+    "message": "更多",
+    "description": "The label used in blog post item excerpts to link to full blog posts"
+  },
+  "theme.tags.tagsPageTitle": {
+    "message": "Tags",
+    "description": "The title of the tag list page"
+  },
+  "theme.blog.post.plurals": {
+    "message": "One post|{count} posts",
+    "description": "Pluralized label for \"{count} posts\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.blog.tagTitle": {
+    "message": "{nPosts} tagged with \"{tagName}\"",
+    "description": "The title of the page for a blog tag"
+  },
+  "theme.tags.tagsPageLink": {
+    "message": "View All Tags",
+    "description": "The label of the link targeting the tag list page"
+  },
+  "theme.CodeBlock.copyButtonAriaLabel": {
+    "message": "Copy code to clipboard",
+    "description": "The ARIA label for copy code blocks button"
+  },
+  "theme.CodeBlock.copied": {
+    "message": "复制成功",
+    "description": "The copied button label on code blocks"
+  },
+  "theme.CodeBlock.copy": {
+    "message": "复制",
+    "description": "The copy button label on code blocks"
+  },
+  "theme.docs.sidebar.expandButtonTitle": {
+    "message": "Expand sidebar",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.sidebar.expandButtonAriaLabel": {
+    "message": "Expand sidebar",
+    "description": "The ARIA label and title attribute for expand button of doc sidebar"
+  },
+  "theme.docs.paginator.navAriaLabel": {
+    "message": "Docs pages navigation",
+    "description": "The ARIA label for the docs pagination"
+  },
+  "theme.docs.paginator.previous": {
+    "message": "上一篇",
+    "description": "The label used to navigate to the previous doc"
+  },
+  "theme.docs.paginator.next": {
+    "message": "下一篇",
+    "description": "The label used to navigate to the next doc"
+  },
+  "theme.docs.sidebar.responsiveCloseButtonLabel": {
+    "message": "Close menu",
+    "description": "The ARIA label for close button of mobile doc sidebar"
+  },
+  "theme.docs.sidebar.responsiveOpenButtonLabel": {
+    "message": "Open menu",
+    "description": "The ARIA label for open button of mobile doc sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonTitle": {
+    "message": "Collapse sidebar",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.sidebar.collapseButtonAriaLabel": {
+    "message": "Collapse sidebar",
+    "description": "The title attribute for collapse button of doc sidebar"
+  },
+  "theme.docs.versions.unreleasedVersionLabel": {
+    "message": "This is unreleased documentation for {siteTitle} {versionLabel} version.",
+    "description": "The label used to tell the user that he's browsing an unreleased doc version"
+  },
+  "theme.docs.versions.unmaintainedVersionLabel": {
+    "message": "This is documentation for {siteTitle} {versionLabel}, which is no longer actively maintained.",
+    "description": "The label used to tell the user that he's browsing an unmaintained doc version"
+  },
+  "theme.docs.versions.latestVersionSuggestionLabel": {
+    "message": "For latest stable documentation, see the {latestVersionLink} ({versionLabel}).",
+    "description": "The label userd to tell the user that he's browsing an unmaintained doc version"
+  },
+  "theme.docs.versions.latestVersionLinkLabel": {
+    "message": "最近稳定版本",
+    "description": "The label used for the latest version suggestion link label"
+  },
+  "theme.common.editThisPage": {
+    "message": "编辑本页",
+    "description": "The link label to edit the current page"
+  },
+  "theme.common.headingLinkTitle": {
+    "message": "Direct link to heading",
+    "description": "Title for link to heading"
+  },
+  "theme.lastUpdated.atDate": {
+    "message": " on {date}",
+    "description": "The words used to describe on which date a page has been last updated"
+  },
+  "theme.lastUpdated.byUser": {
+    "message": " by {user}",
+    "description": "The words used to describe by who the page has been last updated"
+  },
+  "theme.lastUpdated.lastUpdatedAtBy": {
+    "message": "Last updated{atDate}{byUser}",
+    "description": "The sentence used to display when a page has been last updated, and by who"
+  },
+  "theme.common.skipToMainContent": {
+    "message": "Skip to main content",
+    "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
+  },
+  "KubeVela models platform features (such as workloads, operational behaviors, and cloud services) as reusable": {
+    "message": "KubeVela 将平台功能（如工作负载、运维操作行为和云服务）抽象建模为可重用的"
+  },
+  "components, and expose them to end users as self-service building blocks. When your needs grow, these capabilities can extend naturally in a programmable approach. No restriction, fully flexible.": {
+    "message": "组件，并将其作为自助式的服务构建块暴露给终端用户。当你的需求增加时，这些功能可以通过编程的方式自然扩展，没有限制且十分灵活。"
+  },
+  "KubeVela is built with Kubernetes as control plane so unlike traditional X-as-Code solutions, it never leaves configuration drift in your clusters. Also, this makes KubeVela work with any CI/CD or GitOps tools via declarative API without any integration burden.": {
+    "message": "KubeVela 是以 Kubernetes 为控制平面而构建的，因此与传统的 X-as-Code 解决方案不同，它绝不会在你的集群中发生配置漂移。此外，这使得 KubeVela 可以通过声明式 API 与任何 CI/CD 或 GitOps 工具整合，没有任何集成负担。"
+  },
+  "KubeVela is a modern application platform that": {
+    "message": "KubeVela 是一个现代的应用平台"
+  },
+  ", and adapts to your needs when you grow.": {
+    "message": "，并可以在需求增加时适应你的需求。"
+  },
+  "Think about a": {
+    "message": "类似"
+  },
+  "that is highly extensible.": {
+    "message": "那样的高拓展性。"
+  },
+  "Developer Centric": {
+    "message": "以开发者为中心"
+  },
+  "Self-Service": {
+    "message": "自助式服务"
+  },
+  "Simple yet Reliable": {
+    "message": "简单而可靠"
+  },
+  "is fully self-service": {
+    "message": "是完全自助式的服务"
+  },
+  "Get Started": {
+    "message": "快速开始"
+  },
+  "Learn More": {
+    "message": "了解更多"
+  },
+  "What is KubeVela?": {
+    "message": "KubeVela 是什么？"
+  },
+  "Application Centric": {
+    "message": "完全以应用为中心"
+  },
+  "KubeVela introduces Open Application Model (OAM) as the consistent yet higher level API to capture and render a full deployment of microservices on top of hybrid environments. Placement strategy, traffic shifting and rolling update are declared at application level. No infrastructure level concern, simply deploy.": {
+    "message": "KubeVela 以开放应用模型（OAM）作为应用交付的顶层抽象，并通过声明式的交付工作流来捕获面向混合环境的微服务应用交付的整个过程，甚至连多集群分发策略、流量调配和滚动更新等运维特征，也都声明在应用级别。用户无需关心任何基础设施细节，只需要专注于定义和部署应用即可。"
+  },
+  "Out of Box UI Console": {
+    "message": "开箱即用的可视化控制台"
+  },
+  "KubeVela has an UI Console along with other out-of-box capabilities from a large catalog of addons. It models application delivery as DAG (Directed Acyclic Graph) and expresses it with CUE - a modern data configuration language. This allows you to design application deployment steps per needs and orchestrate them in programmable approach. No restrictions, natively extensible.": {
+    "message": "包括可视化控制台在内，KubeVela 有大量开箱即用的插件可以选用。KubeVela 会将应用交付流程建模为有向无环图（DAG），并将它通过 CUE（一种源自 Google Borg 系统的数据配置语言）来进行表达和实现。这使得你可以自由的根据自己的需求来设计和选用交付工作流中的每一个步骤，并通过可编程的方式将它们编排起来。没有任何限制，原生高可扩展"
+  },
+  "Infrastructure Agnostic": {
+    "message": "基础设施无关"
+  },
+  "KubeVela works as an application delivery control plane that is fully decoupled from runtime infrastructure. It can deploy any workload types including containers, cloud services, databases, or even VM instances to any cloud or Kubernetes cluster, following the workflow designed by you.": {
+    "message": "KubeVela 本质上是一个与运行时基础设施无关的应用交付与管理控制平面。所以它可以按照你定义的工作流与策略，面向任何环境交付和管理任何应用组件，比如：容器、云函数、数据库，甚至网络和虚拟机实例等等。"
+  },
+  "KubeVela is a": {
+    "message": "KubeVela 是一个"
+  },
+  "sandbox project": {
+    "message": "沙箱级项目"
+  },
+  "KubeVela is a modern application delivery(CD) platform that makes deploying and operating applications across today's hybrid, multi-cloud environments": {
+    "message": "KubeVela 是一个现代化的应用交付（CD）平台，它可以让你的应用交付与管理在当今流行的混合、多云环境中变得更加"
+  },
+  " easier, faster and more reliable.": {
+    "message": "简单、轻松、可靠。"
+  },
+  "KubeVela is an infrastructure agnostic control plane, with an ": {
+    "message": "KubeVela 是一个基础设施无关的控制平面，它具备一个"
+  },
+  "application-centric ": {
+    "message": "以应用为中心、"
+  },
+  "UI console, that has rich ": {
+    "message": ""
+  },
+  ".": {
+    "message": "."
+  },
+  "out-of-box": {
+    "message": "开箱即用"
+  },
+  " addons based on it's extensibility,": {
+    "message": " 的可视化控制台。得益于其可扩展性，KubeVela 具备丰富的插件，"
+  },
+  " allow you to build applications and deploy them anywhere!": {
+    "message": "使得你的应用可以一次构建、随处运行！"
+  },
+  "theme.SearchPage.documentsFound.plurals": {
+    "message": "One document found|{count} documents found",
+    "description": "Pluralized label for \"{count} documents found\". Use as much plural forms (separated by \"|\") as your language support (see https://www.unicode.org/cldr/cldr-aux/charts/34/supplemental/language_plural_rules.html)"
+  },
+  "theme.SearchPage.existingResultsTitle": {
+    "message": "Search results for \"{query}\"",
+    "description": "The search page title for non-empty query"
+  },
+  "theme.SearchPage.emptyResultsTitle": {
+    "message": "Search the documentation",
+    "description": "The search page title for empty query"
+  },
+  "theme.SearchPage.inputPlaceholder": {
+    "message": "请在这里输入",
+    "description": "The placeholder for search page input"
+  },
+  "theme.SearchPage.inputLabel": {
+    "message": "搜索内容",
+    "description": "The ARIA label for search page input"
+  },
+  "theme.SearchPage.algoliaLabel": {
+    "message": "Search by Algolia",
+    "description": "The ARIA label for Algolia mention"
+  },
+  "theme.SearchPage.noResultsText": {
+    "message": "No results were found",
+    "description": "The paragraph for empty search result"
+  },
+  "theme.SearchPage.fetchingNewResults": {
+    "message": "Fetching new results...",
+    "description": "The paragraph for fetching new search results"
+  },
+  "theme.SearchBar.label": {
+    "message": "搜索",
+    "description": "The ARIA label and placeholder for search button"
+  }
+}

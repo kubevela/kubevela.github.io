@@ -1,0 +1,426 @@
+{
+  "version-v1.0/docs": [
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Overview",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.0/introduction"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Getting Started",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.0/install"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.0/quick-start"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.0/concepts"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "User Manuals",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.0/end-user/application"
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Components",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/components/webservice"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/components/task"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/components/worker"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/components/cloud-services"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/components/more"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Traits",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/traits/ingress"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/traits/scaler"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/traits/annotations-and-labels"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/traits/sidecar"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/traits/volumes"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/traits/service-binding"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/traits/more"
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.0/end-user/scopes/rollout-plan"
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Observability",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/scopes/health"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Debugging",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.0/end-user/debug"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Administrator Manuals",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.0/platform-engineers/overview"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.0/platform-engineers/definition-and-templates"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.0/platform-engineers/openapi-v3-json-schema"
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Defining Components",
+          "items": [
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "CUE",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.0/platform-engineers/cue/component"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.0/platform-engineers/cue/basic"
+                }
+              ]
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Helm",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.0/platform-engineers/helm/component"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.0/platform-engineers/helm/trait"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.0/platform-engineers/helm/known-issues"
+                }
+              ]
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Simple Template",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.0/platform-engineers/kube/component"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.0/platform-engineers/kube/trait"
+                }
+              ]
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Cloud Services",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.0/platform-engineers/cloud-services"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.0/platform-engineers/terraform"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.0/platform-engineers/crossplane"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Defining Traits",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.0/platform-engineers/cue/trait"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/platform-engineers/cue/patch-trait"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/platform-engineers/cue/status"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/platform-engineers/cue/advanced"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Hands-on Lab",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.0/platform-engineers/debug-test-cue"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/platform-engineers/keda"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Using KubeVela CLI",
+      "items": [
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Appfile",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.0/quick-start-appfile"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/developers/learn-appfile"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Managing Applications",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.0/developers/config-enviroments"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/developers/port-forward"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/developers/check-logs"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/developers/exec-cmd"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/developers/cap-center"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/developers/config-app"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "References",
+      "items": [
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "CLI",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_components"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_config"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_env"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_init"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_up"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_version"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_exec"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_logs"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_ls"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_port-forward"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_show"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_status"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_workloads"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_traits"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_system"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_template"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.0/cli/vela_cap"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Roadmap",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.0/roadmap"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Appendix",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.0/advanced-install"
+        }
+      ]
+    },
+    {
+      "type": "doc",
+      "id": "version-v1.0/developers/references/devex/faq"
+    }
+  ]
+}

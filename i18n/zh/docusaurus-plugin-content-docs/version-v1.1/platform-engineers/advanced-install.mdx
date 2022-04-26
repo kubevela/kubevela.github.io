@@ -1,0 +1,231 @@
+---
+title:  自定义安装
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## 带着证书管理器安装 KubeVela
+
+默认情况下，KubeVela 使用 [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen) 提供的自签名证书以便使用参数校验等 Webhook 功能。
+你可以对接证书管理软件（Cert Manager），但是你需要提前安装好。
+
+1. 安装 Cert Manager (如果已经安装，可省略)
+
+```shell script
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.2.0 --create-namespace --set installCRDs=true
+```
+
+2. 安装 KubeVela 同时启用证书管理器：
+
+```shell script
+helm install --create-namespace -n vela-system --set admissionWebhooks.certManager.enabled=true kubevela kubevela/vela-core
+```
+
+## 安装预发布版
+
+在使用 `helm search` 命令时，添加标记参数 `--devel` 即可搜索出预发布版。预发布版的版本号格式为 `<next_version>-rc-master`，例如 `0.4.0-rc-master`，代表的是一个基于 `master` 分支构建的发布候选版。
+
+```shell script
+helm search repo kubevela/vela-core -l --devel
+```
+```console
+    NAME                      CHART VERSION         APP VERSION           DESCRIPTION
+    kubevela/vela-core        0.4.0-rc-master         0.4.0-rc-master         A Helm chart for KubeVela core
+    kubevela/vela-core        0.3.2                   0.3.2                   A Helm chart for KubeVela core
+    kubevela/vela-core        0.3.1                 0.3.1                 A Helm chart for KubeVela core
+```
+
+然后尝试跟着以下的命令安装一个预发布版。
+
+```shell script
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version <next_version>-rc-master
+```
+```console
+NAME: kubevela
+LAST DEPLOYED: Thu Apr  1 19:41:30 2021
+NAMESPACE: vela-system
+STATUS: deployed
+REVISION: 1
+NOTES:
+Welcome to use the KubeVela! Enjoy your shipping application journey!
+```
+## 安装 Kubectl KubeVela CLI 插件
+
+安装 Kubectl KubeVela CLI 插件，可以更好的进行应用交付操作。
+
+<Tabs
+className="unique-tabs"
+defaultValue="krew"
+values={[
+{label: 'Krew', value: 'krew'},
+{label: 'Script', value: 'script'},
+]}>
+
+<TabItem value="krew">
+
+1. [先安装](https://krew.sigs.k8s.io/docs/user-guide/setup/install/) Krew。
+2. 查看 Krew 上可用的插件:
+```shell
+kubectl krew update
+```
+3. 安装 Kubectl KubeVela CLI 插件:
+```shell script
+kubectl krew install vela
+```
+
+</TabItem>
+
+<TabItem value="script">
+
+**macOS/Linux**
+```shell script
+curl -fsSl https://kubevela.io/script/install-kubectl-vela.sh | bash
+```
+
+你也可以直接从[发布页面](https://github.com/oam-dev/kubevela/releases)手动下载来使用。
+
+</TabItem>
+</Tabs>
+
+
+## 升级
+
+### 第一步 更新 Helm 仓库
+
+通过以下命令获取 KubeVela 最新发布的 chart：
+
+```shell
+helm repo update
+helm search repo kubevela/vela-core -l
+```
+
+### 第二步 升级 KubeVela 的 CRDs
+
+```shell
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_appdeployments.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_approllouts.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_clusters.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_envbindings.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_healthscopes.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_manualscalertraits.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_policydefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_scopedefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_traitdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_workflowstepdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/core.oam.dev_workloaddefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.1/charts/vela-core/crds/standard.oam.dev_rollouts.yaml
+```
+
+> 提示：如果看到诸如 `* is invalid: spec.scope: Invalid value: "Namespaced": filed is immutable` 之类的错误，请删除出错的 CRD 后再重新安装。
+
+```shell
+ kubectl delete crd \
+  scopedefinitions.core.oam.dev \
+  traitdefinitions.core.oam.dev \
+  workloaddefinitions.core.oam.dev
+```
+
+### 第三步 升级 KubeVela Helm chart
+
+```shell
+helm upgrade --install --create-namespace --namespace vela-system  kubevela kubevela/vela-core --version <the_new_version> --wait
+```
+
+
+## 启用多集群管理
+
+KubeVela 提供了跨集群编排应用的能力。上文的安装命令已经启用了该功能，如果你是从旧版本 KubeVela 升级上来，或是在安装时没有选用多集群管理的能力，你可以运行以下命令启用该能力
+
+```shell
+helm upgrade --install kubevela kubevela/vela-core -n vela-system --set multicluster.enabled=true --create-namespace --wait
+```
+
+你可以运行以下命令来检查多集群功能是否正常启用。
+```shell
+> kubectl get APIService v1alpha1.cluster.core.oam.dev
+NAME                            SERVICE                                        AVAILABLE   AGE
+v1alpha1.cluster.core.oam.dev   vela-system/kubevela-cluster-gateway-service   True        7h40m
+```
+
+
+## 插件列表
+
+| 插件                  | 简介                                              | 对应的内置功能        | 插件对应开源项目                                        |
+|---------------------|-------------------------------------------------|----------------|-------------------------------------------------|
+| terraform           | 提供云资源                                    | -              | https://github.com/oam-dev/terraform-controller |
+| fluxcd              | 提供 Helm、Kustomize 组件的部署功能                       | kustomize、helm | https://fluxcd.io/                              |
+| kruise              | 提供比 Kubernetes 原生更强大的工作负载套件                     | cloneset       | https://openkruise.io/                          |
+| prometheus          | 提供基于 Promethus 的基础监控功能                          | -              | https://prometheus.io/                          |
+| keda                | 提供基于事件驱动的工作负载自动扩缩容功能                            | -              | https://keda.sh/                                |
+| ocm                 | 提供多集群功能的系统插件                                    | -              | http://open-cluster-management.io/              |
+| observability       | 为 KubeVela core 提供系统级别的监控，也可以为应用提供业务级别的监控。      | -              | -                                               |
+
+1. 查看可用的插件
+
+```shell
+vela addon list
+```
+
+2. 安装插件，以 fluxcd 插件为例
+
+```shell
+vela addon enable fluxcd
+```
+
+3. 禁用插件
+
+```
+vela addon disable fluxcd
+```
+
+禁用前请先清理使用插件功能的应用，否则将禁用失败。
+
+
+## 卸载
+
+运行命令:
+
+```shell script
+helm uninstall -n vela-system kubevela
+rm -r ~/.vela
+```
+
+命令会卸载 KubeVela 服务和相关的依赖组件，同时会清理本地 CLI 的缓存  
+然后清理 CRDs（默认情况下，helm 不会移除 CRDs）
+
+```shell script
+ kubectl delete crd \
+  appdeployments.core.oam.dev \
+  applicationconfigurations.core.oam.dev \
+  applicationcontexts.core.oam.dev \
+  applicationrevisions.core.oam.dev \
+  applications.core.oam.dev \
+  approllouts.core.oam.dev \
+  clusters.core.oam.dev \
+  componentdefinitions.core.oam.dev \
+  components.core.oam.dev \
+  containerizedworkloads.core.oam.dev \
+  definitionrevisions.core.oam.dev \
+  envbindings.core.oam.dev \
+  healthscopes.core.oam.dev \
+  initializers.core.oam.dev \
+  manualscalertraits.core.oam.dev \
+  podspecworkloads.standard.oam.dev \
+  policydefinitions.core.oam.dev \
+  resourcetrackers.core.oam.dev \
+  rollouts.standard.oam.dev \
+  rollouttraits.standard.oam.dev \
+  scopedefinitions.core.oam.dev \
+  traitdefinitions.core.oam.dev \
+  workflows.core.oam.dev \
+  workflowstepdefinitions.core.oam.dev \
+  workloaddefinitions.core.oam.dev 
+```

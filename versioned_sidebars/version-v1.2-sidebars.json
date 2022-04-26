@@ -1,0 +1,556 @@
+{
+  "version-v1.2/docs": [
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Getting Started",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.2/getting-started/introduction"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/getting-started/core-concept"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/getting-started/architecture"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/install"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/quick-start"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "type": "category",
+      "label": "Tutorials",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/webservice"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/helm"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/consume-cloud-services"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/k8s-object"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/jenkins"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/trigger"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/case-studies/gitops"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/tutorials/workflows"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "How-to Guides",
+      "items": [
+        {
+          "collapsed": false,
+          "type": "category",
+          "label": "VelaUX",
+          "items": [
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Manage applications",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/create-application"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/bind-new-environment"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/deploy-application"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/get-application-instance"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/tutorials/scaler"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/get-application-log"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/get-application-endpoint"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/view-application-resource"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/get-application-revision"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/recycle-environment"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/application/delete-application"
+                }
+              ]
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Manage workflows",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/workflow/overview"
+                }
+              ]
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Manage traits",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/trait/overview"
+                }
+              ]
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Manage triggers",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/trigger/overview"
+                }
+              ]
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Manage target",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/how-to/dashboard/target/overview"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "CLI",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/quick-start-cli"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/ingress"
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Cloud Resources",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/end-user/components/cloud-services/provision-and-consume-cloud-services"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/end-user/components/cloud-services/provision-and-initiate-database"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/end-user/components/cloud-services/secure-your-database-connection"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.2/end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database"
+                }
+              ]
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/rollout"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/policies/health"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/case-studies/multi-cluster"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/workflow/component-dependency-parameter"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/workflow/webhook-notification"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/version-control"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/how-to/cli/addon/addon"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Extension",
+      "items": [
+        {
+          "collapsed": false,
+          "type": "category",
+          "label": "Learning OAM",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/oam/oam-model"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/oam/x-definition"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Learning CUE",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/cue/basic"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/cue/definition-edit"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/cue/advanced"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Custom Addons",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/addon/intro"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/addon/terraform"
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/platform-engineers/components/custom-component"
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Cloud Resources",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/addon/terraform"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/components/component-terraform"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Traits System",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/traits/customize-trait"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/traits/patch-trait"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/traits/status"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/traits/advanced"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Workflow System",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/workflow/workflow"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/workflow/cue-actions"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "System Operation",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/system-operation/bootstrap-parameters"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/system-operation/managing-clusters"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/system-operation/observability"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/system-operation/performance-finetuning"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/platform-engineers/system-operation/velaql"
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/platform-engineers/debug/dry-run"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/platform-engineers/x-def-version"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "References",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.2/cli/vela"
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Built-in Addons",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/reference/addons/overview"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/reference/addons/velaux"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/reference/addons/terraform"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/reference/addons/ai"
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/end-user/components/cloud-services/cloud-resources-list"
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Built-in Component Type",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/helm"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cue/webservice"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cue/worker"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cue/task"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/kustomize"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/cue/raw"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/components/more"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Built-in Trait Type",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/scaler"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/ingress"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/storage"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/rollout"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/annotations-and-labels"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/service-binding"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/sidecar"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/autoscaler"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/kustomize-patch"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/traits/more"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Built-in Policy Type",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.2/end-user/policies/envbinding"
+            }
+          ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/end-user/workflow/built-in-workflow-defs"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/reference/ui-schema"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.2/reference/user-improvement-plan"
+        },
+        {
+          "label": "VelaUX API Doc",
+          "type": "link",
+          "href": "https://kubevela.stoplight.io/docs/kubevela/b3A6NDI5NzQxMzM-detail-definition"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "type": "category",
+      "label": "Roadmap",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.2/roadmap/README"
+        }
+      ]
+    },
+    {
+      "type": "doc",
+      "id": "version-v1.2/developers/references/devex/faq"
+    }
+  ]
+}

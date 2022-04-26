@@ -1,0 +1,43 @@
+{
+  "name": "kubevela-io",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "start": "docusaurus start",
+    "build": "NODE_OPTIONS=\"--max-old-space-size=4096\" docusaurus build",
+    "swizzle": "docusaurus swizzle",
+    "deploy": "NODE_OPTIONS=\"--max-old-space-size=4096\" docusaurus deploy",
+    "clear": "docusaurus clear",
+    "serve": "docusaurus serve",
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids"
+  },
+  "dependencies": {
+    "@docusaurus/core": "2.0.0-alpha.75",
+    "@docusaurus/plugin-content-blog": "^2.0.0-alpha.75",
+    "@docusaurus/plugin-content-docs": "^2.0.0-alpha.75",
+    "@docusaurus/plugin-content-pages": "^2.0.0-alpha.75",
+    "@docusaurus/plugin-sitemap": "^2.0.0-alpha.75",
+    "@docusaurus/preset-classic": "2.0.0-alpha.75",
+    "@mdx-js/react": "^1.6.21",
+    "asciinema-player": "^2.6.1",
+    "clsx": "^1.1.1",
+    "nodejieba": "^2.5.2",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-github-btn": "^1.2.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
