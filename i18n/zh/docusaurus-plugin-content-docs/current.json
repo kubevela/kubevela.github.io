@@ -252,7 +252,7 @@
     "description": "其他高级功能"
   },
   "sidebar.docs.category.Basics": {
-    "message": "基础内容",
+    "message": "基本概念",
     "description": "Basic information"
   },
   "sidebar.docs.category.Deploy with more workload type": {

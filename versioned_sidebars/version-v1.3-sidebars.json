@@ -1,16 +1,23 @@
 {
   "version-v1.3/docs": [
     {
-      "type": "doc",
-      "id": "version-v1.3/getting-started/introduction"
-    },
-    {
-      "type": "doc",
-      "id": "version-v1.3/install"
-    },
-    {
-      "type": "doc",
-      "id": "version-v1.3/quick-start"
+      "collapsed": false,
+      "type": "category",
+      "label": "Getting Started",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.3/getting-started/introduction"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/install"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/quick-start"
+        }
+      ]
     },
     {
       "collapsed": true,
