@@ -55,6 +55,12 @@ module.exports = {
           position: "left",
         },
         {
+          to: "videos/best-practice/gitops",
+          activeBasePath: "videos",
+          label: "Videos",
+          position: "left",
+        },
+        {
           href: "https://kubevela.net",
           label: "Mirror",
           position: "right",
@@ -159,6 +165,18 @@ module.exports = {
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
+      },
+    ],
+  ],
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: "videos",
+        path: "videos",
+        routeBasePath: "videos",
+        include: ["**/*.md"],
+        sidebarPath: require.resolve("./sidebar-videos.js"),
       },
     ],
   ],
