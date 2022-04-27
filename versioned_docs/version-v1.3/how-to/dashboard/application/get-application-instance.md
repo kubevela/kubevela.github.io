@@ -17,4 +17,5 @@ For cloud resources, there will be a link to the cloud console for management.
 
 ### Next Step
 
+* [Modify Replicas](../../../tutorials/scaler)
 * [View Application Logs](./get-application-log)

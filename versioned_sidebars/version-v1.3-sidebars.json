@@ -90,166 +90,159 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "How-to Guides",
+          "label": "How-to manage the cloud resources",
           "items": [
             {
-              "collapsed": true,
-              "type": "category",
-              "label": "Cloud Resources",
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/components/cloud-services/provision-and-consume-cloud-services"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/components/cloud-services/provision-and-initiate-database"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/components/cloud-services/secure-your-database-connection"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database"
-                }
-              ]
+              "type": "doc",
+              "id": "version-v1.3/end-user/components/cloud-services/provision-and-consume-cloud-services"
             },
             {
-              "collapsed": true,
-              "type": "category",
-              "label": "Deploy applications",
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/how-to/dashboard/application/create-application"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/how-to/dashboard/application/bind-new-environment"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/tutorials/workflows"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/how-to/dashboard/application/deploy-application"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/how-to/dashboard/application/get-application-instance"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/tutorials/scaler"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/how-to/dashboard/application/get-application-log"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/how-to/dashboard/application/get-application-endpoint"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/how-to/dashboard/application/view-application-resource"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/how-to/dashboard/application/get-application-revision"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/how-to/dashboard/application/recycle-environment"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/how-to/dashboard/application/delete-application"
-                }
-              ]
+              "type": "doc",
+              "id": "version-v1.3/end-user/components/cloud-services/provision-and-initiate-database"
             },
             {
-              "collapsed": true,
-              "type": "category",
-              "label": "Day-2 Operations",
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/traits/rollout"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/traits/ingress"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/traits/service-binding"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/traits/sidecar"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/policies/health"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/workflow/webhook-notification"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/service-account-integration"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/how-to/dashboard/trigger/overview"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/traits/more"
-                }
-              ]
+              "type": "doc",
+              "id": "version-v1.3/end-user/components/cloud-services/secure-your-database-connection"
             },
             {
-              "collapsed": true,
-              "type": "category",
-              "label": "Manage integration configs",
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/how-to/dashboard/config/dex-connectors"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/how-to/dashboard/config/helm-repo"
-                }
-              ]
+              "type": "doc",
+              "id": "version-v1.3/end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "How-to manage the applications",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/create-application"
             },
             {
-              "collapsed": true,
-              "type": "category",
-              "label": "Advanced Features",
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/workflow/component-dependency-parameter"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/version-control"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/policies/apply-once"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/end-user/policies/gc"
-                }
-              ]
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/bind-new-environment"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/tutorials/workflows"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/deploy-application"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/get-application-instance"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/tutorials/scaler"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/get-application-log"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/get-application-endpoint"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/view-application-resource"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/get-application-revision"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/recycle-environment"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/delete-application"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Day-2 Operations",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/traits/rollout"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/traits/ingress"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/traits/service-binding"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/traits/sidecar"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/policies/health"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/workflow/webhook-notification"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/trigger/overview"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/traits/more"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Manage integration configs",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/config/dex-connectors"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/config/helm-repo"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Advanced Features",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/workflow/component-dependency-parameter"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/version-control"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/policies/apply-once"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/policies/gc"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/service-account-integration"
             }
           ]
         }

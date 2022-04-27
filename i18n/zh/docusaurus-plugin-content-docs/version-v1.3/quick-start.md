@@ -39,6 +39,7 @@ spec:
       type: topology
       properties:
         clusters: ["local"]
+        # 此命名空间需要在应用部署前完成创建
         namespace: "prod"
     - name: deploy-ha
       type: override
@@ -65,6 +66,8 @@ spec:
 * 开始应用部署
 
 ```bash
+# 此命令用于在管控集群创建命名空间
+$ vela env init prod --namespace prod
 $ vela up -f https://kubevela.net/example/applications/first-app.yaml
 ```
 

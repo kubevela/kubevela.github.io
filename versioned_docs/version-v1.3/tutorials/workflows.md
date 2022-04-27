@@ -54,3 +54,7 @@ If you set `Dingding` notification, click the enable button on the right side of
 After the configuration is complete, click `Submit` to save the step configuration. At this time, you need to plan the location of the notification step. By default, it will be added to the end. If you want to place it in the middle step, you need to disconnect the direct connection of the original step, and then notify Steps are placed in the middle of the wire.
 
 After the workflow is configured, please click the Save button at the top right of the workflow window to save all changes. After saving, you can click the `Deploy` on the top right of the page or the select button on the right to choose to execute the workflow and verify whether you can receive a message notification.
+
+## Next Steps
+
+- [Deploy the application to the environment](../how-to/dashboard/application/deploy-application)
