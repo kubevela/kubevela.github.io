@@ -55,9 +55,15 @@ module.exports = {
           position: 'left',
         },
         {
-          href: 'https://kubevela.net',
-          label: 'Mirror',
-          position: 'right',
+          to: "videos/best-practice/gitops",
+          activeBasePath: "videos",
+          label: "Videos",
+          position: "left",
+        },
+        {
+          href: "https://kubevela.net",
+          label: "Mirror",
+          position: "right",
         },
         {
           type: 'localeDropdown',
@@ -149,12 +155,26 @@ module.exports = {
           includeCurrentVersion: true,
         },
         blog: {
+          blogSidebarTitle: "All posts",
+          blogSidebarCount: "ALL",
           showReadingTime: true,
           editUrl: 'https://github.com/oam-dev/kubevela.io/tree/main/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
+      },
+    ],
+  ],
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: "videos",
+        path: "videos",
+        routeBasePath: "videos",
+        include: ["**/*.md"],
+        sidebarPath: require.resolve("./sidebar-videos.js"),
       },
     ],
   ],

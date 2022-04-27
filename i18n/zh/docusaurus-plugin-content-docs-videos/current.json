@@ -1,0 +1,38 @@
+{
+  "version.label": {
+    "message": "预览版",
+    "description": "The label for version current"
+  },
+  "sidebar.videos.category.Lessons": {
+    "message": "课程",
+    "description": "The label for category Lessons in sidebar videos"
+  },
+  "sidebar.videos.category.Best Practice": {
+    "message": "最佳实践",
+    "description": "The label for category Best Practice in sidebar videos"
+  },
+  "sidebar.videos.category.Community Meetings": {
+    "message": "社区会议",
+    "description": "The label for category Community Meetings in sidebar videos"
+  },
+  "sidebar.videos.category.Meetings in English": {
+    "message": "英文会议",
+    "description": "The label for category Meetings in English in sidebar videos"
+  },
+  "sidebar.videos.category.Meetings in Chinese": {
+    "message": "中文会议",
+    "description": "The label for category Meetings in Chinese in sidebar videos"
+  },
+  "sidebar.videos.category.Talks": {
+    "message": "演讲",
+    "description": "The label for category Talks in sidebar videos"
+  },
+  "sidebar.videos.category.Talks in English": {
+    "message": "英文演讲",
+    "description": "The label for category Talks in English in sidebar videos"
+  },
+  "sidebar.videos.category.Talks in Chinese": {
+    "message": "中文演讲",
+    "description": "The label for category Talks in Chinese in sidebar videos"
+  }
+}
