@@ -11,14 +11,12 @@
 # Http request CLI
 VELA_HTTP_REQUEST_CLI=curl
 
-# GitHub Organization and repo name to download release
-GITHUB_ORG=oam-dev
-GITHUB_REPO=kubevela
-
 # Vela CLI filename
 VELA_CLI_FILENAME=vela
 
 VELA_CLI_FILE="${VELA_INSTALL_DIR}/${VELA_CLI_FILENAME}"
+
+DOWNLOAD_BASE="https://static.kubevela.net/binary/vela"
 
 getSystemInfo() {
     ARCH=$(uname -m)
@@ -85,15 +83,14 @@ checkExistingVela() {
 }
 
 getLatestRelease() {
-    local velaReleaseUrl="https://api.github.com/repos/${GITHUB_ORG}/${GITHUB_REPO}/releases"
+    local velaReleaseUrl="${DOWNLOAD_BASE}/latest_version"
     local latest_release=""
 
     if [ "$VELA_HTTP_REQUEST_CLI" == "curl" ]; then
-        latest_release=$(curl -s $velaReleaseUrl | grep \"tag_name\" | grep -v rc | awk '{print $2}' |  sed -n 's/\"\(.*\)\",/\1/p' | sed -n '/^v[.0-9]*$/ p'|awk 'NR==1{print $1}')
+        latest_release=$(curl -s $velaReleaseUrl)
     else
-        latest_release=$(wget -q --header="Accept: application/json" -O - $velaReleaseUrl | grep \"tag_name\" | grep -v rc | awk '{print $2}' |  sed -n 's/\"\(.*\)\",/\1/p' | sed -n '/^v[.0-9]*$/ p'|awk 'NR==1{print $1}')
+        latest_release=$(wget -q -O - $velaReleaseUrl)
     fi
-
 
     ret_val=$latest_release
 }
@@ -103,7 +100,6 @@ downloadFile() {
 
     VELA_CLI_ARTIFACT="${VELA_CLI_FILENAME}-${LATEST_RELEASE_TAG}-${OS}-${ARCH}.tar.gz"
     # convert `-` to `_` to let it work
-    DOWNLOAD_BASE="https://github.com/${GITHUB_ORG}/${GITHUB_REPO}/releases/download"
     DOWNLOAD_URL="${DOWNLOAD_BASE}/${LATEST_RELEASE_TAG}/${VELA_CLI_ARTIFACT}"
 
     # Create the temp directory
@@ -179,6 +175,8 @@ checkHttpRequestCLI
 if [ -z "$1" ]; then
     echo "Getting the latest Vela CLI..."
     getLatestRelease
+elif [[ $1 == v* ]]; then
+    ret_val=$1
 else
     ret_val=v$1
 fi
