@@ -2,14 +2,24 @@ const { Component } = require('react');
 
 module.exports = {
   docs: [
-    'getting-started/introduction',
-    'install',
-    'quick-start',
+    {
+      type: 'category',
+      label: 'Getting Started',
+      collapsed: false,
+      items: [
+        'getting-started/introduction',
+        'install',
+        'quick-start',
+      ],
+    },
     {
       type: 'category',
       label: 'Basics',
       collapsed: true,
-      items: ['getting-started/core-concept', 'getting-started/architecture'],
+      items: [
+        'getting-started/core-concept',
+        'getting-started/architecture',
+      ],
     },
     {
       type: 'category',
