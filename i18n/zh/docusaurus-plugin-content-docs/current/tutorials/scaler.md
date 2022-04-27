@@ -33,4 +33,5 @@ KubeVela 默认内置了 `scaler` 运维特征，该特征支持常规工作负�
 
 ## 下一步
 
+- [查看应用运行日志](../how-to/dashboard/application/get-application-log)
 - [定义符合企业需求的副本数调整运维特征](../platform-engineers/traits/customize-trait)
