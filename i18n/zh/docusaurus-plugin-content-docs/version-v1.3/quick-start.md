@@ -8,11 +8,9 @@ title: 交付第一个应用
 
 ## 通过 CLI 部署应用
 
-一个基础的应用定义及部署方式如下所述：
+下面给出了一个经典的 OAM 应用定义，它包括了一个无状态服务组件和运维特征，三个部署策略和带有三个部署的工作流。此应用描述的含义是将一个服务部署到两个目标命名空间，并且在第一个目标部署完成后等待人工审核后部署到第二个目标，且在第二个目标时部署2个实例。
 
 ```yaml
-cat <<EOF | vela up -f -
-# YAML begins
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -23,16 +21,72 @@ spec:
       type: webservice
       properties:
         image: crccheck/hello-world
-        ports: 
+        ports:
          - port: 8000
            expose: true
-# YAML ends
-EOF
+      traits:
+        - type: scaler
+          properties:
+            replicas: 1
+  policies:
+    - name: target-default
+      type: topology
+      properties:
+        # local 集群即 Kubevela 所在的集群
+        clusters: ["local"]
+        namespace: "default"
+    - name: target-prod
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: "prod"
+    - name: deploy-ha
+      type: override
+      properties:
+        components:
+          - type: webservice
+            traits:
+              - type: scaler
+                properties:
+                  replicas: 2
+  workflow:
+    steps:
+      - name: deploy2default
+        type: deploy
+        properties:
+          policies: ["target-default"]
+      - type: suspend
+      - name: deploy2prod
+        type: deploy
+        properties:
+          policies: ["target-prod", "deploy-ha"]
 ```
 
-复制上述命名并执行后，一个简单的应用即可完成部署，需要注意的是需要你的部署环境可以正常获取 `crccheck/hello-world` 镜像。部署完成后可以通过下述方式来访问该应用。
+* 开始应用部署
 
+```bash
+$ vela up -f https://kubevela.net/example/applications/first-app.yaml
 ```
+
+> 需要注意的是需要你的部署环境可以正常获取 `crccheck/hello-world` 镜像
+
+* 查看部署状态
+
+```bash
+$ vela status first-vela-app
+```
+
+正常情况下应用完成第一个目标部署后进入暂停状态。
+
+* 人工审核，批准应用进入第二个目标部署
+
+```bash
+$ vela workflow resume first-vela-app
+```
+
+* 通过下述方式来访问该应用
+
+```bash
 $ vela port-forward first-vela-app 8000:8000
 <xmp>
 Hello World
@@ -49,7 +103,7 @@ Hello World
 </xmp>
 ```
 
-到这里，你已完成了第一个简单应用的部署，它仅包括一个组件，暂未涉及运维特征、工作流和多集群等特性。
+到这里，你已完成了第一个应用的部署。
 
 > 目前，通过 CLI 创建的应用会同步到 UI 进行可视化，但它是只读的。
 

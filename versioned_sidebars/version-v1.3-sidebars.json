@@ -5,18 +5,18 @@
       "id": "version-v1.3/getting-started/introduction"
     },
     {
-      "collapsed": false,
+      "type": "doc",
+      "id": "version-v1.3/install"
+    },
+    {
+      "type": "doc",
+      "id": "version-v1.3/quick-start"
+    },
+    {
+      "collapsed": true,
       "type": "category",
-      "label": "Getting Started",
+      "label": "Basics",
       "items": [
-        {
-          "type": "doc",
-          "id": "version-v1.3/install"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.3/quick-start"
-        },
         {
           "type": "doc",
           "id": "version-v1.3/getting-started/core-concept"

@@ -6,13 +6,11 @@ title: Deploy First Application
 
 Welcome to KubeVela! In this section, we show you how to deliver your first app.
 
-## Deploy a simple application via CLI
+## Deploy a classic application via CLI
 
-A simple deployment definition in KubeVela looks as below:
+A classic application configuration in KubeVela looks as below, there are one component and one trait, to deploy a stateless service with one instance. More advanced, there are three policies and three workflow steps, to deploy the application to two targets.
 
 ```yaml
-cat <<EOF | vela up -f -
-# YAML begins
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -23,16 +21,69 @@ spec:
       type: webservice
       properties:
         image: crccheck/hello-world
-        ports: 
+        ports:
          - port: 8000
            expose: true
-# YAML ends
-EOF
+      traits:
+        - type: scaler
+          properties:
+            replicas: 1
+  policies:
+    - name: target-default
+      type: topology
+      properties:
+        # The cluster with name local is installed the KubeVela.
+        clusters: ["local"]
+        namespace: "default"
+    - name: target-prod
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: "prod"
+    - name: deploy-ha
+      type: override
+      properties:
+        components:
+          - type: webservice
+            traits:
+              - type: scaler
+                properties:
+                  replicas: 2
+  workflow:
+    steps:
+      - name: deploy2default
+        type: deploy
+        properties:
+          policies: ["target-default"]
+      - name: deploy2prod
+        type: deploy
+        properties:
+          policies: ["target-prod", "deploy-ha"]
 ```
 
-This command will deploy a web service component to target environment, which in our case is the Kubernetes cluster that KubeVela itself is installed.
+* Starting deploy the application
 
+```bash
+$ vela up -f https://kubevela.net/example/applications/first-app.yaml
 ```
+
+* View the process and status of the application deploy
+
+```bash
+$ vela status first-vela-app
+```
+
+The application will become a `workflowSuspend` status if the first step is successfully run.
+
+* Resume the workflow
+
+```bash
+$ vela workflow resume first-vela-app
+```
+
+* Access the application
+
+```bash
 $ vela port-forward first-vela-app 8000:8000
 <xmp>
 Hello World
