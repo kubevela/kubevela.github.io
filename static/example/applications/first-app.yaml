@@ -41,6 +41,8 @@ spec:
         type: deploy
         properties:
           policies: ["target-default"]
+      - name: manual-approval
+        type: suspend
       - name: deploy2prod
         type: deploy
         properties:

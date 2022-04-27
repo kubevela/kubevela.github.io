@@ -2,13 +2,13 @@
 title: Deploy First Application
 ---
 
-> Before starting, please confirm that you've installed KubeVela Core and VelaUX in the control plane cluster based on [Installation](./install.mdx)
+> Before starting, please confirm that you've installed KubeVela and enabled the VelaUX addon according to [the installation guide](./install.mdx).
 
-Welcome to KubeVela! In this section, we show you how to deliver your first app.
+Welcome to KubeVela! This section will guide you to deliver your first app.
 
 ## Deploy a classic application via CLI
 
-A classic application configuration in KubeVela looks as below, there are one component and one trait, to deploy a stateless service with one instance. More advanced, there are three policies and three workflow steps, to deploy the application to two targets.
+Below is a classic KubeVela application which contains one component with one operational trait, basically, it means to deploy a container image as webservice with one replica. Additionally, there are three policies and workflow steps, it means to deploy the application into two different environments with a bit different configurations.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -56,6 +56,8 @@ spec:
         type: deploy
         properties:
           policies: ["target-default"]
+      - name: manual-approval
+        type: suspend
       - name: deploy2prod
         type: deploy
         properties:

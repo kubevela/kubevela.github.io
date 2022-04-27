@@ -9,20 +9,20 @@ const features = [
       <>
         <p>
           <Translate>
-            KubeVela introduces a unified and cross-platform delivery model that allows you to deploy any workload type, including containers, databases, or even VM instances to any cloud or Kubernetes clusters. It supports cross-environment promotion and custom delivery workflow. The whole model was fully intention-driven, having both user experience and robustness.
+            KubeVela introduces a unified and cross-platform delivery model(OAM) that allows you to deploy any workload type, including containers, databases, or even VM instances to any cloud or Kubernetes clusters. It helps you to just write application once, and deliver it the same everywhere, no more re-writing everything from scratch for any new delivery target.
           </Translate>
         </p>
       </>
     ),
   },
   {
-    title: <><Translate>Programmable Delivery Workflow</Translate></>,
+    title: <><Translate>Intention-driven Delivery Workflow</Translate></>,
     imgUrl: 'img/extending-natively.svg',
     description: (
       <>
         <p>
           <Translate>
-            Application delivery workflow is driven by CUE - a powerful configuration language developed at Google. This allows you to design application deployment steps per needs and orchestrate them in programmable approach. No restrictions, natively extensible, for maximum compatibility with your existing Infrastructure.
+            The whole delivery model was fully intention-driven, having both user experience and robustness. The implementation is driven by CUE - a powerful configuration language developed at Google, and runs on Kubernetes with reconciliation loops. This allows you to design application deployment steps per needs, satisfy the fast growth of businesses requirements, while also keep your production safe with continuous enforcement.
           </Translate>
         </p>
       </>
@@ -36,7 +36,8 @@ const features = [
       <>
         <p>
           <Translate>
-            KubeVela natively supports rich continuous delivery policies in various multi-cluster/hybrid-cloud scenarios or mixed environments. On the one hand, it can enhance the CI/CD pipeline by serving as unified control plane. On the other hand, it is also capable of leveraging GitOps to automate continuous delivery process in the style of IaC.</Translate>
+            KubeVela natively supports rich continuous delivery policies in various multi-cluster/hybrid-cloud scenarios or mixed environments, it supports cross-environment promotion as well. It can enhance the CI/CD pipeline by serving as unified control plane, while it is also capable of leveraging GitOps to automate continuous delivery process in the style of IaC.
+          </Translate>
         </p>
       </>
     ),

@@ -8,7 +8,7 @@ title: 交付第一个应用
 
 ## 通过 CLI 部署应用
 
-下面给出了一个经典的 OAM 应用定义，它包括了一个无状态服务组件和运维特征，三个部署策略和带有三个部署的工作流。此应用描述的含义是将一个服务部署到两个目标命名空间，并且在第一个目标部署完成后等待人工审核后部署到第二个目标，且在第二个目标时部署2个实例。
+下面给出了一个经典的 OAM 应用定义，它包括了一个无状态服务组件和运维特征，三个部署策略和工作流步骤。此应用描述的含义是将一个服务部署到两个目标命名空间，并且在第一个目标部署完成后等待人工审核后部署到第二个目标，且在第二个目标时部署2个实例。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -56,7 +56,8 @@ spec:
         type: deploy
         properties:
           policies: ["target-default"]
-      - type: suspend
+      - name: manual-approval
+        type: suspend
       - name: deploy2prod
         type: deploy
         properties:
