@@ -69,7 +69,7 @@ KubeVela支持的云资源请见[列表](../end-user/components/cloud-services/c
 
 根据你的需要设置上述参数，完成应用程序的创建，然后[部署应用程序](../how-to/dashboard/application/deploy-application)。
 
-##查看云资源创建状态
+## 查看云资源创建状态
 
 - 查看云实例列表
 

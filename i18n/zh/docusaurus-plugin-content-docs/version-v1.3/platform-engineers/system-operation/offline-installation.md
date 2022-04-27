@@ -57,3 +57,5 @@ charts/vela-core/templates/defwithtemplate/nocalhost.yaml:        						image: "
 重新打包上面修改好的 Helm Chart 包，直接安装或者传入离线环境的 Helm Chart 仓库。
 
 ## KubeVela Addon 离线部署
+
+请查看[插件的离线安装](./enable-addon-offline.md).
