@@ -24,4 +24,4 @@ In the environment tab, you can click `Deploy` button to deploy the application.
 
 ### Next Step
 
-* [Deploy the Application](./deploy-application)
+* [Manage Workflow](../../../tutorials/workflows)

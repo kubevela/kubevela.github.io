@@ -39,6 +39,7 @@ spec:
       type: topology
       properties:
         clusters: ["local"]
+        # This namespace must be created before deploying.
         namespace: "prod"
     - name: deploy-ha
       type: override
@@ -64,6 +65,8 @@ spec:
 * Starting deploy the application
 
 ```bash
+# This command for creating a namespace in the local cluster
+$ vela env init prod --namespace prod
 $ vela up -f https://kubevela.net/example/applications/first-app.yaml
 ```
 

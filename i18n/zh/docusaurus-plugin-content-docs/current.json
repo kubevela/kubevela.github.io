@@ -266,5 +266,13 @@
   "sidebar.docs.category.Install or upgrade": {
     "message": "平台安装或升级手册",
     "description": "详细解读平台的各种部署方式"
+  },
+  "sidebar.docs.category.How-to manage the cloud resources": {
+    "message": "云服务管理",
+    "description": "提供云服务的使用和管理相关能力说明"
+  },
+  "sidebar.docs.category.How-to manage the applications": {
+    "message": "应用基础管理",
+    "description": "提供基础管理能力说明"
   }
 }

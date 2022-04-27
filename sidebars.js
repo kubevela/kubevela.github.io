@@ -36,61 +36,54 @@ module.exports = {
         'tutorials/trigger',
         'case-studies/gitops',
         {
-          type: 'category',
-          label: 'How-to Guides',
-          collapsed: true,
-          items: [
-            {
-              'Cloud Resources': [
-                'end-user/components/cloud-services/provision-and-consume-cloud-services',
-                'end-user/components/cloud-services/provision-and-initiate-database',
-                'end-user/components/cloud-services/secure-your-database-connection',
-                'end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database',
-              ],
-            },
-            {
-              'Deploy applications': [
-                'how-to/dashboard/application/create-application',
-                'how-to/dashboard/application/bind-new-environment',
-                'tutorials/workflows',
-                'how-to/dashboard/application/deploy-application',
-                'how-to/dashboard/application/get-application-instance',
-                'tutorials/scaler',
-                'how-to/dashboard/application/get-application-log',
-                'how-to/dashboard/application/get-application-endpoint',
-                'how-to/dashboard/application/view-application-resource',
-                'how-to/dashboard/application/get-application-revision',
-                'how-to/dashboard/application/recycle-environment',
-                'how-to/dashboard/application/delete-application',
-              ],
-            },
-            {
-              'Day-2 Operations': [
-                'end-user/traits/rollout',
-                'end-user/traits/ingress',
-                'end-user/traits/service-binding',
-                'end-user/traits/sidecar',
-                'end-user/policies/health',
-                'end-user/workflow/webhook-notification',
-                'end-user/service-account-integration',
-                'how-to/dashboard/trigger/overview',
-                'end-user/traits/more',
-              ],
-            },
-            {
-              'Manage integration configs': [
-                'how-to/dashboard/config/dex-connectors',
-                'how-to/dashboard/config/helm-repo',
-              ],
-            },
-            {
-              'Advanced Features': [
-                'end-user/workflow/component-dependency-parameter',
-                'end-user/version-control',
-                'end-user/policies/apply-once',
-                'end-user/policies/gc',
-              ],
-            },
+          'How-to manage the cloud resources': [
+            'end-user/components/cloud-services/provision-and-consume-cloud-services',
+            'end-user/components/cloud-services/provision-and-initiate-database',
+            'end-user/components/cloud-services/secure-your-database-connection',
+            'end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database',
+          ],
+        },
+        {
+          'How-to manage the applications': [
+            'how-to/dashboard/application/create-application',
+            'how-to/dashboard/application/bind-new-environment',
+            'tutorials/workflows',
+            'how-to/dashboard/application/deploy-application',
+            'how-to/dashboard/application/get-application-instance',
+            'tutorials/scaler',
+            'how-to/dashboard/application/get-application-log',
+            'how-to/dashboard/application/get-application-endpoint',
+            'how-to/dashboard/application/view-application-resource',
+            'how-to/dashboard/application/get-application-revision',
+            'how-to/dashboard/application/recycle-environment',
+            'how-to/dashboard/application/delete-application',
+          ],
+        },
+        {
+          'Day-2 Operations': [
+            'end-user/traits/rollout',
+            'end-user/traits/ingress',
+            'end-user/traits/service-binding',
+            'end-user/traits/sidecar',
+            'end-user/policies/health',
+            'end-user/workflow/webhook-notification',
+            'how-to/dashboard/trigger/overview',
+            'end-user/traits/more',
+          ],
+        },
+        {
+          'Manage integration configs': [
+            'how-to/dashboard/config/dex-connectors',
+            'how-to/dashboard/config/helm-repo',
+          ],
+        },
+        {
+          'Advanced Features': [
+            'end-user/workflow/component-dependency-parameter',
+            'end-user/version-control',
+            'end-user/policies/apply-once',
+            'end-user/policies/gc',
+            'end-user/service-account-integration',
           ],
         },
       ],
