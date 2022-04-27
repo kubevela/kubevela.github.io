@@ -196,6 +196,7 @@ spec:
   conflictsWith:
   - <与该运维特征冲突的其他运维特征名称>
   revisionEnabled: <运维能力是否感知组件版本的变化>
+  controlPlaneOnly: <运维能力产生的资源是否部署到管控集群>
   schematic:  # 抽象方式
     cue: # 存在多种抽象方式
       template: <CUE 格式模板>
@@ -212,6 +213,7 @@ spec:
 * 是否由该运维特征管理工作负载（`.spec.manageWorkload`）,可缺省字段，bool 类型，设置为 true 则标识这个运维特征会负责工作负载的创建、更新、以及资源回收，通常是灰度发布的运维特征会具备这个能力。
 * 该运维特征是否不计入版本变化的计算（`.spec.skipRevisionAffect`）,可缺省字段，bool 类型，设置为 true 则标识这个运维特征的修改不计入版本的变化，即用户在应用中纯粹修改这个运维特征的字段不会触发应用本身的版本变化。
 * 运维能力是否感知组件版本的变化（`.spec.revisionEnabled`）字段，可缺省字段，bool 类型，设置为 true 表示组件会生成的资源后缀会带版本后缀。
+* 运维能力产生的资源是否部署到管控集群（`.spec.controlPlaneOnly`）字段，可缺省字段，bool 类型，设置为 true 表示 trait 生成的资源会被部署到管控集群，即`local`
 
 
 让我们来看一个实际的例子：
