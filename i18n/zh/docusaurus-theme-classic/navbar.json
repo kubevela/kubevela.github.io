@@ -11,6 +11,10 @@
     "message": "博客",
     "description": "Navbar item with label Blog"
   },
+  "item.label.Videos": {
+    "message": "视频",
+    "description": "Navbar item with label Video"
+  },
   "item.label.Mirror": {
     "message": "国内加速",
     "description": "Navbar item with label Mirror"
