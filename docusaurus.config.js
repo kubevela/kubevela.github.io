@@ -153,6 +153,8 @@ module.exports = {
           includeCurrentVersion: true,
         },
         blog: {
+          blogSidebarTitle: "All posts",
+          blogSidebarCount: "ALL",
           showReadingTime: true,
           editUrl: "https://github.com/oam-dev/kubevela.io/tree/main/",
         },
