@@ -1,7 +1,6 @@
 ---
 title: Introduction
 slug: /
-
 ---
 
 ## What is KubeVela?
@@ -34,8 +33,7 @@ Using KubeVela, software teams can build cloud native applications per needs as 
 
 KubeVela is a continuous delivery platform that works at downstream of your CI process. So you will reuse the CI process you already adopted, and KubeVela will take over CD process by empowering it with modern application delivery best practices, such as hybrid/multi-cloud promotion workflow, unified cloud resource provision/binding, and much more. KubeVela is fully declarative by design, it natively supports GitOps if you want.
 
-> Feel free to check the [Integrating with Jenkins](../tutorials/jenkins) or [GitOps](../case-studies/gitops) documentation for more details.
-
+> Feel free to check the [Integrating with Jenkins](./tutorials/jenkins) or [GitOps](./case-studies/gitops) documentation for more details.
 
 ### KubeVela vs. GitOps (ArgoCD, FluxCD, etc.)
 
