@@ -6,4 +6,6 @@ title:  使用 OAM 管理应用
 
 该演讲基于阿里巴巴 Web 级 Kubernetes 集群中的真实用例。
 
+> 视频的发布日期为 2020-09-12。
+
 <iframe width="720" height="480" src="https://www.youtube.com/embed/9TY40gHTnaw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

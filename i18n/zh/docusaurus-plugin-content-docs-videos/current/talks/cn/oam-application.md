@@ -10,4 +10,6 @@ title:  使用 OAM 构建应用管理平台
 * 我们如何让这个平台提供更好的最终用户体验？
 * CI/CD 系统如何构建？GitOps 是这个故事的一部分吗？
 
+> 视频的发布日期为 2020-07-22。
+
 <iframe width="720" height="480" src="https://www.youtube.com/embed/fagh1_vVmVY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

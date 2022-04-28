@@ -12,4 +12,6 @@ Specifically, we will try to answer these questions based on practices we learne
 * How to setup good developer experience for the platform?
 * How about the CI/CD pipeline? Is GitOps in the story?
 
+> This video is posted in 2020-07-22.
+
 <iframe width="720" height="480" src="https://www.youtube.com/embed/fagh1_vVmVY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

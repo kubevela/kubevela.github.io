@@ -6,5 +6,7 @@ title:  使用Jenkins CI/CD 和 KubeVela UI 部署静态网站
 
 ## 视频演示版
 
+> 视频的发布日期为 2022-02-23。
+
 <iframe height="480" width="720" src="//player.bilibili.com/player.html?aid=809353964&bvid=BV1A34y1k756&cid=515003117&page=1&high_quality=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 
