@@ -10,4 +10,6 @@ To solve this problem, we need a standard application model to bridge the gap be
 
 This talk introduces Open Application Model (OAM) which enables developers to build and deploy k8s applications in a platform-agnostic way. We will look at how it approaches the problem and how it leverages cloud services and open source projects to facilitate standardized application development across multiple environments. 
 
+> This video is posted in 2020-12-05.
+
 <iframe width="720" height="480" src="https://www.youtube.com/embed/0yhVuBIbHcI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
