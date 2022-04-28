@@ -6,20 +6,13 @@ module.exports = {
       type: 'category',
       label: 'Getting Started',
       collapsed: false,
-      items: [
-        'getting-started/introduction',
-        'install',
-        'quick-start',
-      ],
+      items: ['getting-started/introduction', 'install', 'quick-start'],
     },
     {
       type: 'category',
       label: 'Basics',
       collapsed: true,
-      items: [
-        'getting-started/core-concept',
-        'getting-started/architecture',
-      ],
+      items: ['getting-started/core-concept', 'getting-started/architecture'],
     },
     {
       type: 'category',
@@ -112,7 +105,7 @@ module.exports = {
             'how-to/dashboard/target/overview',
           ],
         },
-        'how-to/addon',
+        'how-to/cli/addon/addon',
         {
           'Install or upgrade': [
             'platform-engineers/system-operation/bootstrap-parameters',
