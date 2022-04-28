@@ -14,4 +14,6 @@ title:  KubeVela X Nocalhost：云端图形化调试应用
 
 ## 视频演示版
 
+> 视频的发布日期为 2021-11-05。
+
 <iframe height="480" width="720" src="//player.bilibili.com/player.html?aid=721472897&bvid=BV1mS4y1R7Ez&cid=436552361&page=1&high_quality=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>

@@ -55,7 +55,7 @@ module.exports = {
           position: 'left',
         },
         {
-          to: "videos/best-practice/gitops",
+          to: "videos/best-practice/jenkins",
           activeBasePath: "videos",
           label: "Videos",
           position: "left",
@@ -175,6 +175,8 @@ module.exports = {
         routeBasePath: "videos",
         include: ["**/*.md"],
         sidebarPath: require.resolve("./sidebar-videos.js"),
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true
       },
     ],
   ],

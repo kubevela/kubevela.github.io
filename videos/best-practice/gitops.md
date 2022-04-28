@@ -12,6 +12,8 @@ In this section, we will introduce steps of using KubeVela directly in GitOps ap
 
 ## Video
 
+> This video is posted in 2021-11-15.
+
 > Note: the video is in Chinese.
 
 <iframe height="480" width="720" src="//player.bilibili.com/player.html?aid=421711832&bvid=BV1a341187dX&cid=442686612&page=1&high_quality=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
