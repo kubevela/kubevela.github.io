@@ -9,60 +9,111 @@ description: 参考本文章，学习使用容器镜像部署企业业务应用�
 
 - 完成你的业务容器化，无论你的业务使用何种开发语言，请先将其通过 CI 系统或在本地完成运行镜像打包。
 
-  > KubeVela 未来计划提供支持多种开发语言的容器打包方案，帮助你低门槛完成业务容器化。
-
 - 将你的业务镜像存放于镜像仓库中，KubeVela 管理的集群可以正常获取该镜像。
 
-- 明确你的业务需要设置哪些环境变量，是否有其他中间件依赖（比如数据库、缓存等），如果有，请先部署中间件服务。
+- 启用了 VelaUX 插件，如果你仅是 CLI 用户，直接参考 [通过 CLI 部署](#deploy-via-cli)
 
 ## 创建应用
 
-进入 KubeVela 应用管理页面（目录：Applictaions），点击 `New Application` 进入应用创建流程。首先设置应用的名称、别名和描述；选择类型 `webservice`；选择发布的环境，初始情况下已经存在 Default 环境可选，你也可以进入环境管理页面(目录：Envs) 创建新的环境。
+进入应用管理页面，点击右上方的 `新建应用` 按钮，进入应用创建弹窗页面，输入应用名称等基础信息，选择 `webservice` 主组件类型，并选择需要部署的环境。点击下一步进入组件部署属性配置页面，如图所示，填写镜像名称、启动命令，端口等信息。根据你的集群支持情况选择合适的服务暴露方式。
 
-![create webservice application](../resources/create-webservice.jpg)
+![set webservice application](https://static.kubevela.net/images/1.3/create-webservice.jpg)
 
-点击 `Next Step` 进入部署参数设置页面。在当前页面中，我们需要设置业务应用的镜像名称（Image），如果需要设置镜像的启动命令，可以打开 `CMD` 栏目，添加启用命令，如果需要设置环境变量，可以打开 `ENV` 栏目，按照需要设置环境变量。
-
-![set webservice application](../resources/set-webservice.jpg)
-
-截图所示部署的业务是 `Wordpress`，填写了镜像名称 `wordpress` 和设置了四个环境变量，若你也使用该镜像进行测试，请设置正确的数据库地址变量。
-
-点击 `Create` 完成应用的创建流程，进入应用管理页面。
+确认提交后即完成应用初始化配置。
 
 ## 部署应用
 
-点击页面右上方的 `Deploy` 按钮，开始应用的部署。点击该按钮的含义是执行默认的工作流。请注意，KubeVela 已经为应用的每一个发布环境生成了对应的工作流。在 `Baseline Config` 的右方即为应用需要交付的环境，点击环境名称即可进入该环境页面查询应用部署状态和应用实例信息。
+应用创建后默认不会自动部署，需要点击页面右上方的部署按钮，并选择需要执行的工作流，每一个工作流对应部署一个环境。部署开始后可以点击 `基础配置` 旁边的不同 Tab 即进入不同环境的管理页面。
 
 ![webservice application env page](../resources/webservice-env.jpg)
 
-若该环境中包括多个交付目标，可以切换不同的交付目标查看应用实例列表。点击 `Check the details`，在弹窗中可以查看到应用的部署整体进度和创建的资源信息。
+每一个环境视图目前提供了部署资源状态、应用实例和应用日志的查询页面。部署资源状态页面展示了该应用实际分发的底层资源列表即各组件状态；应用实例页面中展示该应用部署的所有实例信息，点击实例行即可查询该实例的详细信息；日志页面可以查询该应用所有运行实例的标准输出日志。
 
-在实例列表中可以查看应用实例的交付状态，若其一直处于非运行态，可点击实例行最前方的+号展开实例详情，查看详细信息。
+## 更新镜像版本
 
-## 变更镜像版本
+当我们完成初始部署后，后续随着我们业务开发和升级需要变更镜像版本或其他部署参数。
 
-当应用完成第一次部署后，我们的业务可能在持续开发，后续产生的新版本镜像，我们需要变更镜像版本。点击 `Baseline Config`，进入应用配置页面，点击 `Edit Properties` 按钮即可再次进入部署参数设置页面，在该页面中可以变更镜像名称，版本和环境变量等参数。
+回到基础配置页面，点击需要修改的组件名称即可进入组件设置弹窗页面，在该页面中你可以修改部署镜像、环境变量等部署参数，也可以变更组件别名或描述等基础信息。
 
-## 变更应用的副本数量
+## 更新副本数
 
-如果业务应用需要设置多个副本，进入应用配置页面，在运维特征管理中，已经默认挂载了名为 `Set Replicas` 的运维特征，点击设置图标按钮即可进入副本数调整设置页面，填写你需要设置的副本数量，点击 `Update` 按钮提交即可。
+如果你的业务需要扩大或减小规模，我们使用调整副本数的运维特征来设置副本数量，在控制台中创建的应用该运维特征会自动创建。点击组件卡片上的`Scaler`运维特征即可进入配置页面，你可以手动设置需要的副本数量。
 
 ![set application replicas](../resources/set-replicas.jpg)
 
-## 应用升级
+## 升级应用
 
-上述两个步骤分别改变了应用的部署参数和运维特征，但是它还处于草稿状态，我们需要再次点击部署按钮即可将应用完成升级。
+上述两个步骤我们只是修改了应用的配置参数，但其不是立即在部署环境中生效的，我们可以再次点击部署按钮选择需要升级的环境对应的工作流执行，即可完成指定环境的升级。
 
-## 应用回收与删除
+## 通过 CLI 部署应用
 
-若你测试完成需要将应用删除，需要首先回收所有部署的环境，同样点击环境名称进入环境实例列表查询页面，点击 `Recycle` 按钮即可回收应用在该环境的部署。回收完成后应用在该环境进入未部署状态。
+如果你不使用 UI，通过 CLI 也可以完成业务应用示例的部署，通过执行下述命令即可：
 
-当所有环境都已回收完成后，可进行应用删除操作。目前应用删除入口在应用列表页面。点击左侧目录，回到应用列表页面，鼠标应用名称右侧的操作图标上，点击 `Remove` 选项即可。
+```yaml
+cat <<EOF | vela up -f -
+# YAML begins
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: webservice-app
+spec:
+  components:
+    - name: frontend
+      type: webservice
+      properties:
+        image: oamdev/testapp:v1
+        cmd: ["node", "server.js"]
+        ports:
+          - port: 8080
+            expose: true
+        exposeType: LoadBalancer
+        cpu: "0.5"
+        memory: "512Mi"
+      traits:
+        - type: scaler
+          properties:
+            replicas: 1
+# YAML ends
+EOF
+```
 
-![delete application](../resources/app-delete.jpg)
+> 目前，通过 CLI 部署的应用会同步到控制台中，但其为只读状态。
 
-到此，你已经基本掌握了业务应用的部署方法，更多的部署参数支持都集中在应用部署参数设置页面之中。
+你也可以复制上述的应用配置并创建一个 YAML 文件 `webservice-app.yaml`，然后使用命令 `vela up -f webservice-app.yaml` 来完成部署。
+
+接下来你可以通过 `vela status webservice-app` 命令获取应用的部署状态。
+
+```
+About:
+
+  Name:      	test-app
+  Namespace: 	default
+  Created at:	2022-04-21 12:03:42 +0800 CST
+  Status:    	running
+
+Workflow:
+
+  mode: DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id:y4n26n7uql
+    name:frontend
+    type:apply-component
+    phase:succeeded
+    message:
+
+Services:
+
+  - Name: frontend
+    Cluster: local  Namespace: default
+    Type: webservice
+    Healthy Ready:1/1
+    Traits:
+      ✅ scaler
+```
 
 ## 下一步
 
-[学习基于 Helm Chart 部署中间件应用](./helm)
+[学习基于 Helm Chart 部署应用](./helm)

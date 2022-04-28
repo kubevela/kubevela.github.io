@@ -85,12 +85,114 @@ If continued, the deployment goes on. In the list of instances, you can check ou
 
 ![](../resources/multiple-target-pods.jpg)
 
-Congrats! Now you've learned how to deploy Kubernetes objects.
+## Deploy kubernetes objects via CLI.
 
-<!-- ## Video tutorial TODO v1.2 -->
+This is a demo application with a kubernetes objects, the most kubernetes app are consists of Deployment and Service.
+There are two policies and three workflow steps, this means deploying the app to two namespaces and waiting for human review after the first step is successful.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: app-with-k8s-objects
+  namespace: default
+spec:
+  components:
+    - name: k8s-demo-service
+      properties:
+        objects:
+          - apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: nginx
+            spec:
+              replicas: 2
+              selector:
+                matchLabels:
+                  app: nginx
+              strategy:
+                type: Recreate
+              template:
+                metadata:
+                  labels:
+                    app: nginx
+                spec:
+                  containers:
+                    - image: nginx
+                      name: nginx
+                      ports:
+                        - containerPort: 80
+          - apiVersion: v1
+            kind: Service
+            metadata:
+              annotations:
+                service.beta.kubernetes.io/aws-load-balancer-type: nlb
+              labels:
+                app: nginx
+              name: nginx
+              namespace: default
+            spec:
+              externalTrafficPolicy: Local
+              ports:
+                - name: http
+                  port: 80
+                  protocol: TCP
+                  targetPort: 80
+              selector:
+                app: nginx
+              type: LoadBalancer
+      type: k8s-objects
+  policies:
+    - name: topology-default
+      type: topology
+      properties:
+        clusters: ['local']
+        namespace: default
+    - name: topology-production
+      type: topology
+      properties:
+        clusters: ['local']
+        namespace: production
+  workflow:
+    steps:
+      - name: deploy2default
+        properties:
+          policies: ['topology-default']
+        type: deploy
+      - name: suspend
+        type: suspend
+      - name: deploy2production
+        properties:
+          policies: ['topology-production']
+        type: deploy
+```
+
+- About the topology policy, refence: [Topology](../end-user/policies/references#override)
+- About the deploy workflow step, refence: [Deploy](../end-user/workflow/built-in-workflow-defs#deploy)
+
+Deploy this application by the following command:
+
+- create the namespace with the name `production` before deploying the application.
+
+```shell
+$ vela up -f https://kubevela.io/example/applications/create-namespace.yaml
+```
+
+- deploy the demo application.
+
+```shell
+$ vela up -f https://kubevela.io/example/applications/app-with-k8s-objects.yaml
+```
+
+- review and resume the workflow after the workflow becomes suspended.
+
+```shell
+$ vela workflow resume app-with-k8s-objects
+```
+
+Congrats! Now you've learned how to deploy Kubernetes objects.
 
 ## Next step
 
-<!-- 1. [Getting into more of Workflow](./multi-cluster) TODO v1.2 -->
-
-- [Deploy Helm Chart](./helm)
+- [Deploy Cloud Service](./consume-cloud-services)
+- [Distributed External Kubernetes Objects](../end-user/components/ref-objects)

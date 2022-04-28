@@ -2,72 +2,139 @@
 title: Deploy First Application
 ---
 
-> Before starting, please confirm that you've installed KubeVela Core and VelaUX in the control plane cluster based on [Installation](./install.mdx)
->
-> If you want to use KubeVela CLI for application delivery, please check [Deliver First Application](./end-user/quick-start-cli) in the Vela CLI manual.
+> Before starting, please confirm that you've installed KubeVela and enabled the VelaUX addon according to [the installation guide](./install.mdx).
 
-Welcome to KubeVela! In this section, we show you how to deliver your first app via VelaUX.
+Welcome to KubeVela! This section will guide you to deliver your first app.
 
-Follow these steps:
+## Deploy a classic application via CLI
 
-1. Prepare a Docker image. we use [crccheck/hello-world](https://hub.docker.com/r/crccheck/hello-world) for this time. Double-check if you're able to download it properly.
-2. Create the first `Application` of `webservice` which is the common way to deploy stateless service.
-3. Check out the status of the Application's instance.
+Below is a classic KubeVela application which contains one component with one operational trait, basically, it means to deploy a container image as webservice with one replica. Additionally, there are three policies and workflow steps, it means to deploy the application into two different environments with a bit different configurations.
 
-You'll get to know:
-
-- Get familiar with core concepts as [Application](./getting-started/core-concept#application), [Environment](getting-started/core-concept#environment) and [Target](getting-started/core-concept#target)
-- Finished an application delivery by operating VelaUX
-
-## Get password and login
-
-After install VelaUX, you need to log in. Default username is "admin" and you can get the password using command below
-```shell
-vela logs -n vela-system --name apiserver addon-velaux | grep "initialized admin username"
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-app
+spec:
+  components:
+    - name: express-server
+      type: webservice
+      properties:
+        image: crccheck/hello-world
+        ports:
+         - port: 8000
+           expose: true
+      traits:
+        - type: scaler
+          properties:
+            replicas: 1
+  policies:
+    - name: target-default
+      type: topology
+      properties:
+        # The cluster with name local is installed the KubeVela.
+        clusters: ["local"]
+        namespace: "default"
+    - name: target-prod
+      type: topology
+      properties:
+        clusters: ["local"]
+        # This namespace must be created before deploying.
+        namespace: "prod"
+    - name: deploy-ha
+      type: override
+      properties:
+        components:
+          - type: webservice
+            traits:
+              - type: scaler
+                properties:
+                  replicas: 2
+  workflow:
+    steps:
+      - name: deploy2default
+        type: deploy
+        properties:
+          policies: ["target-default"]
+      - name: manual-approval
+        type: suspend
+      - name: deploy2prod
+        type: deploy
+        properties:
+          policies: ["target-prod", "deploy-ha"]
 ```
 
-If there is no password in logs, you can get it from secret with the name `admin` in the `vela-system` namespace. 
+* Starting deploy the application
 
-![](./resources/login.png)
+```bash
+# This command for creating a namespace in the local cluster
+$ vela env init prod --namespace prod
+$ vela up -f https://kubevela.net/example/applications/first-app.yaml
+```
 
-## Choosing deployment type and Environment
+* View the process and status of the application deploy
 
-After login, the first page you enter is for managing the app:
+```bash
+$ vela status first-vela-app
+```
 
-![](./resources/dashboard.png)
+The application will become a `workflowSuspend` status if the first step is successfully run.
+
+* Resume the workflow
+
+```bash
+$ vela workflow resume first-vela-app
+```
+
+* Access the application
+
+```bash
+$ vela port-forward first-vela-app 8000:8000
+<xmp>
+Hello World
+
+
+                                       ##         .
+                                 ## ## ##        ==
+                              ## ## ## ## ##    ===
+                           /""""""""""""""""\___/ ===
+                      ~~~ {~~ ~~~~ ~~~ ~~~~ ~~ ~ /  ===- ~~~
+                           \______ o          _,/
+                            \      \       _,'
+                             `'--.._\..--''
+</xmp>
+```
+
+Great! You have finished deploying your first KubeVela application, the simplest component can only have one component, the rest fields are all optional including trait, policies and workflow.
+
+> Currently, The application created by CLI will be synced to UI, but it will be readonly.
+
+## Deploy a simple application via UI
+
+After logging into the UI, the first page you enter is for managing the applications:
 
 Then click the button of `New Application` on the upper-right, type in these things:
 
 1. Name and other basic Infos.
-<!-- 2. Choose the Project. We've created a default Project for you to use or you can click `New` to create your own. -->
-2. Choose the deployment type. In this case, we use `webservice` to deploy Stateless Application.
-3. Choose your environment. We select the `Default` Environment based on the `Default` Target.
+2. Choose the Project. We've created a default Project for you to use or you can click `New` to create your own.
+3. Choose the main component type. In this case, we use `webservice` to deploy Stateless Application.
+4. Choose your environment. We select the `Default` Environment based on the `Default` Target.
 
-![](./resources/new-first-vela-app.jpg)
-
-## Setting up properties
+### Setting up properties
 
 Next step, we see the page of properties. Configure following:
 
 - Image address `crccheck/hello-world`
 
-> Other properties can be left blank for this case
+![create hello world app](https://static.kubevela.net/images/1.3/create-helloworld.jpg)
 
-![](./resources/port-first-vela-app.png)
+Confirmed. Notice that this application is only created but not deployed yet. VelaUX default generates [Workflow](./getting-started/core-concept#workflow) and a scaler [Trait](./getting-started/core-concept#trait).
 
-Confirmed. Notice that this application is only created but not deployed yet. VelaUX defaultly generates [Workflow](./getting-started/core-concept#workflow) and replicas of [Trait](./getting-started/core-concept#trait).
-
-![](./resources/created-first-vela-app.jpg)
-
-## Executing Workflow to deploy
+### Executing Workflow to deploy
 
 Click the deploy button on the upper-right. When the workflow is finished, you'll get to see the list of status lying within.
 
 ![](./resources/succeed-first-vela-app.jpg)
-
-In the process of deploying, you can click `Check the details` to view the status of the application:
-
-![](./resources/status-first-vela-app.jpg)
 
 ## Deleting Application
 
@@ -80,5 +147,5 @@ That's it! You succeed at the first application delivery. Congratulation!
 
 ## Next Step
 
-- View [Tutorials](./tutorials/webservice) to look on more of what you can achieve with KubeVela.
-- View [How To guides](./how-to/dashboard/application/create-application) to check out more features.
+- View [Core Concepts](./getting-started/core-concept) to look on more concepts.
+- View [User Guide](./tutorials/webservice) to look on more of what you can achieve with KubeVela.

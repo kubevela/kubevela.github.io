@@ -6,6 +6,8 @@ KubeVela 的 [`kustomize` 组件](https://github.com/kubernetes-sigs/kustomize)�
 
 除了监听文件外，该组件还能监听镜像仓库中的镜像变动并交付。
 
+> 该类型仅适用于 CLI
+
 ## 监听文件/文件夹
 
 ### 监听 OSS bucket 中的文件

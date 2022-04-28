@@ -11,4 +11,5 @@ description: 查看应用当前部署版本和历史部署版本。
 
 ### 下一步
 
+* [通过 CLI 进行版本管理](../../../end-user/version-control)
 * [回收应用实例](./recycle-environment)

@@ -4,6 +4,8 @@ title: Manage Targets
 
 To deploy application components into different places, VelaUX provides **Target** for user to manage their deploy destinations like clusters or namespaces.
 
+> This document only apply to UI.
+
 ## Cluster
 
 First, before configuring Target, you need to ensure your clusters have been joined. You can check your clusters in the Cluster page. The **local** cluster represents the cluster that KubeVela control plane is running on. If you have other clusters, you can either connect those clusters directly to KubeVela by providing their KubeConfig, or join clusters from your cloud provider such as Alibaba Cloud.

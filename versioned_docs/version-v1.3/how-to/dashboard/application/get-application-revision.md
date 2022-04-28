@@ -13,4 +13,5 @@ Manually upgrade or triggered by webhooks will all list here.
 
 ### Next Step
 
+* [Version control via CLI](../../../end-user/version-control)
 * [Recycle Application Instance](./recycle-environment)

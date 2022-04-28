@@ -99,9 +99,9 @@
     "message": "工作流系统",
     "description": "The label for category Workflow System in sidebar docs"
   },
-  "sidebar.docs.category.System Operation": {
-    "message": "系统运维",
-    "description": "The label for category System Operation in sidebar docs"
+  "sidebar.docs.category.Operator Manual": {
+    "message": "运维手册",
+    "description": "The label for category Operator Manual in sidebar docs"
   },
   "sidebar.docs.category.Customize Traits": {
     "message": "自定义运维特征",
@@ -187,8 +187,8 @@
     "message": "操作手册",
     "description": "CLI 和 Dashboard 的操作指导手册"
   },
-  "sidebar.docs.category.Manage applications": {
-    "message": "应用管理",
+  "sidebar.docs.category.Deploy applications": {
+    "message": "交付应用",
     "description": "通过 Dashboard 对应用的管理操作说明"
   },
   "sidebar.docs.category.Manage traits": {
@@ -206,6 +206,10 @@
   "sidebar.docs.category.Manage integration configs": {
     "message": "集成配置管理",
     "description": "外部系统集成相关配置的管理说明"
+  },
+  "sidebar.docs.category.Manage resource": {
+    "message": "资源管理",
+    "description": "管理集群和交付目标等资源"
   },
   "sidebar.docs.category.Built-in Addons": {
     "message": "内置插件",
@@ -234,5 +238,41 @@
   "sidebar.docs.category.Custom Addons": {
     "message": "自定义插件",
     "description": "自定义插件"
+  },
+  "sidebar.docs.category.Multi-Cluster Delivery": {
+    "message": "多集群交付",
+    "description": "多集群交付"
+  },
+  "sidebar.docs.category.Day-2 Operations": {
+    "message": "应用运维",
+    "description": "应用运维"
+  },
+  "sidebar.docs.category.Advanced Features": {
+    "message": "其他高级功能",
+    "description": "其他高级功能"
+  },
+  "sidebar.docs.category.Basics": {
+    "message": "基础内容",
+    "description": "Basic information"
+  },
+  "sidebar.docs.category.Deploy with more workload type": {
+    "message": "更多组件类型",
+    "description": "非常用的组件类型"
+  },
+  "sidebar.docs.category.User Guide": {
+    "message": "用户手册",
+    "description": "引导用户学习使用 KubeVela 各项特性"
+  },
+  "sidebar.docs.category.Install or upgrade": {
+    "message": "平台安装或升级手册",
+    "description": "详细解读平台的各种部署方式"
+  },
+  "sidebar.docs.category.How-to manage the cloud resources": {
+    "message": "云服务管理",
+    "description": "提供云服务的使用和管理相关能力说明"
+  },
+  "sidebar.docs.category.How-to manage the applications": {
+    "message": "应用基础管理",
+    "description": "提供基础管理能力说明"
   }
 }

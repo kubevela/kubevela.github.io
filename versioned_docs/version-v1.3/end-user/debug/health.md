@@ -1,5 +1,6 @@
 ---
 title: Aggregated Health Probe
+draft: true
 ---
 
 The `HealthyScope` allows you to define an aggregated health probe for all components in same application.

@@ -324,6 +324,8 @@ VelaUX need authentication. Default username is admin and get default password a
 vela logs -n vela-system --name apiserver addon-velaux | grep "initialized admin username"
 ```
 
+If there is no password in logs, you can get it from secret with the name `admin` in the `vela-system` namespace.
+
 ## 5. Uninstall
 
 Before uninstalling kubevela, you must delete all applications and disable all addons.
@@ -350,5 +352,4 @@ kubectl get crd |grep oam | awk '{print $1}' | xargs kubectl delete crd
 
 ## Next Step
 
-- Getting started with [KubeVela core application engine](./end-user/quick-start-cli).
-- Getting started with UI console by using [VelaUX](./quick-start).
+- [Deploy your first application](./quick-start).

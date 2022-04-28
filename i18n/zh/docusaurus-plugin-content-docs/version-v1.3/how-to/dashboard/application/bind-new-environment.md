@@ -17,4 +17,4 @@ description: 发布应用到新的环境
 
 ### 下一步
 
-* [部署应用](./deploy-application).
+* [管理应用工作流](../../../tutorials/workflows)

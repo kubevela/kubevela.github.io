@@ -1,0 +1,16 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: helm-redis
+spec:
+  components:
+    - name: redis
+      type: helm
+      properties:
+        repoType: "helm"
+        url: "https://charts.bitnami.com/bitnami"
+        chart: "redis"
+        version: "16.8.5"
+        values: 
+          master.persistence.size: 16Gi
+          replica.persistence.size: 16Gi
