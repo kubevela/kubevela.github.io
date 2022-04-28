@@ -1,6 +1,5 @@
 ---
-标题: helm 仓库
-描述: 配置 helm 仓库
+title: 配置 Helm 仓库
 ---
 
 在本教程中，我们将会介绍如何通过集成配置，创建 helm 仓库，并在创建应用时使用该仓库。
@@ -9,7 +8,7 @@
 
 ## 创建一个 Helm 仓库
 
-例如在本图中，你可以设置 helm 仓库的 url，并且如果你的仓库还开启了 `HTTP basic authentication` 你也可以为这个仓库设置 `username` 和 `paswword`。
+例如在本图中，你可以设置 helm 仓库的 url，并且如果你的仓库还开启了 `HTTP basic authentication` 你也可以为这个仓库设置 `username` 和 `password`。
 
 在本例子中，我们使用 [azure](https://marketplace.azurecr.io/helm/v1/repo) 作为 helm 仓库。
 

@@ -86,10 +86,115 @@ KubeVela 支持面向应用组织多个 Kubernetes 资源进行交付，常见�
 
 ![](../resources/multiple-target-pods.jpg)
 
-到此你已经完成了交付 Kubernetes 原生资源的学习！
+## 通过 CLI 交付
 
-<!-- ## 参考视频 TODO v1.2 -->
+通过 CLI 部署的应用没有环境的概念，你可以通过部署多个应用来实现与控制台中类似的环境隔离。
+
+这是一个部署 Kubernetes 原生资源的示例应用，我们知道大多数 Kubernetes 应用都由 Deployment 和 Service 组成。该应用配置中包括了 2 个部署策略和 3 个工作流步骤，这些配置的表达的含义是部署应用到两个命名空间且在第一个完成部署后需要人工审核。
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: app-with-k8s-objects
+  namespace: default
+spec:
+  components:
+    - name: k8s-demo-service
+      properties:
+        objects:
+          - apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: nginx
+            spec:
+              replicas: 2
+              selector:
+                matchLabels:
+                  app: nginx
+              strategy:
+                type: Recreate
+              template:
+                metadata:
+                  labels:
+                    app: nginx
+                spec:
+                  containers:
+                    - image: nginx
+                      name: nginx
+                      ports:
+                        - containerPort: 80
+          - apiVersion: v1
+            kind: Service
+            metadata:
+              annotations:
+                service.beta.kubernetes.io/aws-load-balancer-type: nlb
+              labels:
+                app: nginx
+              name: nginx
+              namespace: default
+            spec:
+              externalTrafficPolicy: Local
+              ports:
+                - name: http
+                  port: 80
+                  protocol: TCP
+                  targetPort: 80
+              selector:
+                app: nginx
+              type: LoadBalancer
+      type: k8s-objects
+  policies:
+    - name: topology-default
+      type: topology
+      properties:
+        clusters: ['local']
+        namespace: default
+    - name: topology-production
+      type: topology
+      properties:
+        clusters: ['local']
+        namespace: production
+  workflow:
+    steps:
+      - name: deploy2default
+        properties:
+          policies: ['topology-default']
+        type: deploy
+      - name: suspend
+        type: suspend
+      - name: deploy2production
+        properties:
+          policies: ['topology-production']
+        type: deploy
+```
+
+- 关于 Topology 策略参考: [Topology](../end-user/policies/references#override)
+- 关于 Deploy 步骤参考: [Deploy](../end-user/workflow/built-in-workflow-defs#deploy)
+
+通过下述命令来部署该应用：
+
+- 在部署之前创建所需的命名空间 `production`
+
+```shell
+$ vela up -f https://kubevela.io/example/applications/create-namespace.yaml
+```
+
+- 部署该应用
+
+```shell
+$ vela up -f https://kubevela.io/example/applications/app-with-k8s-objects.yaml
+```
+
+- 查询应用状态进入暂停状态后执行审核命令：
+
+```shell
+$ vela workflow resume app-with-k8s-objects
+```
+
+到此你已经完成了交付 Kubernetes 原生资源的学习！
 
 ## 下一步
 
-- [学习交付云厂商服务](./consume-cloud-services)
+- [交付云厂商服务](./consume-cloud-services)
+- [分发已存在的 Kubernetes 对象](../end-user/components/ref-objects)

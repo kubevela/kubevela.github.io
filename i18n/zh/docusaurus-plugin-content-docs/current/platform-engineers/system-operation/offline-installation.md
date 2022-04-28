@@ -1,6 +1,6 @@
-
-
-# KubeVela Offline Installation Guide
+---
+title: 离线安装
+---
 
 KubeVela 离线部署包含 KubeVela Core 和 KubeVela Addon 的离线部署。
 
@@ -55,7 +55,6 @@ charts/vela-core/templates/defwithtemplate/nocalhost.yaml:        						image: "
 - 重新打包 vela-core Helm Chart 包
 
 重新打包上面修改好的 Helm Chart 包，直接安装或者传入离线环境的 Helm Chart 仓库。
-
 
 ## KubeVela Addon 离线部署
 

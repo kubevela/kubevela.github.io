@@ -1,8 +1,10 @@
 ---
-title:  Deploy Container based Task and Cron Task
+title:  Deploy Task or Cron Task
 ---
 
-* Describes jobs that run code or a script to completion
+> This type is apply to CLI and UI.
+
+## Describes jobs that run code or a script to completion
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -19,8 +21,7 @@ spec:
         cmd: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
 ```
 
-
-* Describes cron jobs that run code or a script to completion
+## Describes cron jobs that run code or a script to completion
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

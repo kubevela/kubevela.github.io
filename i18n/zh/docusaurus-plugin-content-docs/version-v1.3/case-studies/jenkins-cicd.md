@@ -1,5 +1,6 @@
 ---
 title:  Jenkins CI 集成
+draft: true
 ---
 
 本文将介绍如何使用 KubeVela 同已有的 CI 工具（比如 Jenkins）共同协作来进行应用的持续交付，并解释这样集成的好处是什么。

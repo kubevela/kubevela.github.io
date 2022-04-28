@@ -38,7 +38,26 @@ In real world, application deployment tends to be complex and varies from teams,
 
 For learning how to program KubeVela in detail, please check the `Administrator Manuals` in the documentation site.
 
+## Who should use KubeVela?
+
+![](../resources/vela-overview.jpg)
+
+- Platform builders for PaaS, Serverless, Application Management/Delivery systems
+	- KubeVela works as an application delivery engine that you could build your advanced platform with.
+- ISV, SaaS owners, and Application Architects who need to distribute software to anywhere
+	- KubeVela has full extension and integration capabilities to allow users to distribute applications with [customized addons](../platform-engineers/addon/intro) easily. Think about an App Store but on Kubernetes and clouds.
+- Application Developers, Operators, DevOps Engineers
+	- VelaUX is an addon of KubeVela, with this addon enabled, it provides an out-of-box modern application Continuous Delivery (CD) and Management platform with an easy-to-use UI console.
+
+
+## What's the relationship between OAM, KubeVela and VelaUX?
+
+- [OAM(Open Application Model)](https://github.com/oam-dev/spec) is the model behind KubeVela, it provides a platform-agnostic application model including the best practices and methodology for different vendors to follow. The evolution of the model depends primarily on the practices of KubeVela currently.
+- KubeVela is the core engine running on Kubernetes, it works as a [CRD controller](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) and brings OAM model into your Cloud Native PaaS along with lots of addon capabilities.
+- VelaUX is one of the KubeVela addons, it provides out-of-box application delivery and management platform with **restful API** and **UI console**.
+
+The KubeVela team will mainly focus on the core controller. By building VelaUX, we aim to provide out-of-box solutions for small and medium sized companies, and also eat our own dog food and make the extension, integration and the addon system capabilities of KubeVela better. 
+
 ## Next Step
 
-- View [Getting Started docs](../end-user/quick-start-cli) to look on more of what you can achieve with KubeVela.
-- View [How To guides](../end-user/components/helm) to check out more features.
+- View [User Guide](../tutorials/webservice) to look on more of what you can achieve with KubeVela.

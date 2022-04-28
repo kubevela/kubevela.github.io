@@ -39,4 +39,5 @@ Take [apache chart](https://github.com/bitnami/charts/tree/master/bitnami/apache
 
 ## Next step
 
+- [View Application Logs](../how-to/dashboard/application/get-application-log)
 - [Customize Scaler Trait](../platform-engineers/traits/customize-trait)
