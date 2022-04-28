@@ -14,11 +14,11 @@ After the platform is initialized, local login is used by default. Platform admi
 
 You need to enable the Dex Addon in the Addon list first to use SSO:
 
-![alt](../resources/dex-addon.png)
+![alt](https://static.kubevela.net/images/1.3/dex-addon.png)
 
 After enabling the Dex Addon, we also need to upgrade the VelaUX addon and open its Dex option:
 
-![alt](../resources/upgrade-velaux.png)
+![alt](https://static.kubevela.net/images/1.3/upgrade-velaux.png)
 
 ## Configure Dex Connectors
 
@@ -31,7 +31,7 @@ Take GitHub Connector as an example, if you don't have a GitHub Oauth App, you n
 
 After creating the Oauth App, configure the Dex Connector in the integration configuration page. We choose the type `GitHub`, and set the Client ID and Client Secret corresponding to the Oauth App. Note that the Redirect URI here must be the same as the `[Vela UX address]/dex/callback` previously configured when the Oauth App was created.
 
-![alt](../resources/intergration.png)
+![alt](https://static.kubevela.net/images/1.3/intergration.png)
 
 ### Configure LDAP Connector
 
@@ -41,11 +41,11 @@ If you want to use LDAP for SSO, you need to set up the LDAP Connector first.
 
 After selecting the Connector type as LDAP, fill in the address of the LDAP server in `Host`, and specify `BaseDN`.
 
-![alt](../resources/ldap1.png)
+![alt](https://static.kubevela.net/images/1.3/ldap1.png)
 
 If your LDAP does not provide anonymous authentication access, then you need to open the `Advanced Parameters`, fill in `BindDN` and `BindPW`, Connector will use these credentials for user search.
 
-![alt](../resources/ldap2.png)
+![alt](https://static.kubevela.net/images/1.3/ldap2.png)
 
 > For more types of Dex Connectors, please refer to [Dex Connectors Configuration](../how-to/dashboard/config/dex-connectors).
 
@@ -57,16 +57,16 @@ Since the newly logged in user does not have any permissions, we need to set an 
 
 After configuring the user email, we can change the login method to SSO login in the platform configuration page.
 
-![alt](../resources/platform-setting.png)
+![alt](https://static.kubevela.net/images/1.3/platform-setting.png)
 
 ## Use SSO Login
 
 Log out and refresh the page again, you can see that we have entered the Dex login page.
 
-![alt](../resources/dex-login.png)
+![alt](https://static.kubevela.net/images/1.3/dex-login.png)
 
 Then, you select GitHub or LDAP to login.
 
-![alt](../resources/dex-grant-access.png)
+![alt](https://static.kubevela.net/images/1.3/dex-grant-access.png)
 
 So far, we have successfully completed SSO login with GitHub. At this point, if the email of the logged in user can be associated with the email of the previously logged in user, the newly logged in user will inherit the permissions of the previous user.
