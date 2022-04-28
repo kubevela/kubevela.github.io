@@ -45,7 +45,7 @@ KubeVela 本身是一个的应用交付与管理控制平面，它架在 Kuberne
 - 云原生应用平台的构建者、PaaS、Serverless 平台工程师、基础设施平台管理员：
   - KubeVela 是一个普适的、高可扩展的应用交付引擎与内核，它以极简的架构实现了原生 Kubernetes 多集群控制平面的能力，能够将 OAM 应用引擎直接植入企业已有的 PaaS 平台之中并不破坏已有的能力，从而实现标准化应用交付。
 - 第三方软件供应商（ISV）、垂直领域软件开发者、架构师：
-  - KubeVela 提供的充分的可扩展和集成能力，可以允许你[自定义插件](./platform-engineers/addon/intro) 完成复杂应用的构建和分发，是一个 Kubernetes 和云平台之上的应用商店（App Store）。
+  - KubeVela 提供的充分的可扩展和集成能力，可以允许你[自定义插件](../platform-engineers/addon/intro) 完成复杂应用的构建和分发，是一个 Kubernetes 和云平台之上的应用商店（App Store）。
 - 云原生时代的应用研发、运维人员、DevOps 工程师：
   - VelaUX 是一个基于 Vela Addon 机制构建的扩展能力集，安装这个插件后，你就拥有了一个开箱即用的现代化持续交付（CD）和应用管理平台。
 
