@@ -42,7 +42,7 @@ KubeVela 是一个工作在 CI 流程下游的 CD 控制平面（Continuous Deli
 
 如果你已经在 CD 环节中采纳了 GitOps 实践，KubeVela 会更容易跟你的 CI/CD 系统集成，因为 KubeVela 是完全声明式的。只需要把 KubeVela 的应用部署描述文件放置在你的配置仓库当中，所有的 KubeVela 特性（包括声明式交付工作流、多云/多集群交付流程等）就会立刻在你 的 GitOps 流程中出现。
 
-> 欢迎查阅用户手册来了解更多关于 KubeVela 与[各类 CI/CD 系统](../tutorials/jenkins)以及 [GitOps](../case-studies/gitops) 模式协作的实践.
+> 欢迎查阅用户手册来了解更多关于 KubeVela 与[各类 CI/CD 系统](./tutorials/jenkins)以及 [GitOps](./case-studies/gitops) 模式协作的实践.
 
 ### KubeVela vs. GitOps ( 如 ArgoCD，FluxCD 等)
 
