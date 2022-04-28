@@ -1,6 +1,5 @@
 ---
 title: 插件管理
-slug: cli/addon/addon
 ---
 
 你可以通过安装 KubeVela 的插件（Addon）获取更多的系统功能。
@@ -74,7 +73,6 @@ vela addon enable fluxcd --version=1.0.0
 ```shell
 vela addon enable <addon-name> --clusters={cluster1,cluster2}
 ```
-
 
 安装完成后，插件中的功能会以组件，运维特征，工作流步骤等形式呈现，你可以通过 `vela component`，`vela trait` 等命令查看新增的能力，也可以在[插件的参考文档](../../../reference/addons/overview)中查看每个官方插件对应的能力.
 
