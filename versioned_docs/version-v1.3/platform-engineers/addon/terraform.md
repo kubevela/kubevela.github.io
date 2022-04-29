@@ -2,7 +2,7 @@
 title: Extend Terraform Addon
 ---
 
-[Terraform Controller](https://github.com/oam-dev/terraform-controller) is the core controller to provision and manage
+[Terraform Controller](https://github.com/kubevela/terraform-controller) is the core controller to provision and manage
 cloud resources for KubeVela. It has supported [some cloud providers](https://github.com/oam-dev/terraform-controller#supported-cloud-providers), including AWS, Azure, GCP, Alibaba Cloud,
 Tencent Cloud, etc. But only [a few](https://kubevela.io/docs/tutorials/consume-cloud-services#enabling-cloud-vendor-addons) has been supported as Terraform Addons in KubeVela.
 

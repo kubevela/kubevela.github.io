@@ -2,7 +2,7 @@
 title: Developer Guide
 ---
 
-Welcome developers out there! Please check the [Community Membership](https://github.com/oam-dev/community/blob/main/community-membership.md) to start engaging with the community.
+Welcome developers out there! Please check the [Community Membership](https://github.com/kubevela/community/blob/main/community-membership.md) to start engaging with the community.
 
 ## Common Code Contribution Guide
 
@@ -20,6 +20,7 @@ Welcome developers out there! Please check the [Community Membership](https://gi
 ## Contribute to the Docs & Website
 
 * [kubevela.io Developer Guide](https://github.com/kubevela/kubevela.io/blob/main/README.md)
+* [Update KubeVela.io CLI Reference Doc](./cli-ref-doc)
 
 ## Contribute use cases and more samples
 
