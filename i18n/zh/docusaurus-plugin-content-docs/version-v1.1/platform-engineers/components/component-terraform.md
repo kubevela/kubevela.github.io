@@ -42,7 +42,7 @@ spec:
         # 3. The developed Terraform HCL
 ```
 
-这里阿里云 EIP 的完整的 ComponentDefinition，我们热烈欢迎你将扩展的云资源的 ComponentDefinition 贡献到 [oam-dev/kubevela](https://github.com/oam-dev/kubevela/tree/master/charts/vela-core/templates/definitions)。
+这里阿里云 EIP 的完整的 ComponentDefinition，我们热烈欢迎你将扩展的云资源的 ComponentDefinition 贡献到 [kubevela/kubevela](https://github.com/kubevela/kubevela/tree/master/charts/vela-core/templates/definitions)。
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha2

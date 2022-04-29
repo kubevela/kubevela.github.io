@@ -2,11 +2,11 @@
 title: 基于 KubeVela 的机器学习实践
 author: Tianxin Dong
 author_title: KubeVela 团队
-author_url: https://github.com/oam-dev/kubevela
+author_url: https://github.com/kubevela/kubevela
 author_image_url: https://kubevela.io/img/logo.svg
 tags: [ KubeVela ]
 description: ""
-image: https://raw.githubusercontent.com/oam-dev/kubevela.io/main/docs/resources/KubeVela-03.png
+image: https://raw.githubusercontent.com/kubevela/kubevela.io/main/docs/resources/KubeVela-03.png
 hide_table_of_contents: false
 ---
 
@@ -28,7 +28,7 @@ KubeVela AI 插件分为模型训练和模型服务两个插件，模型训练�
 
 通过 KubeVela AI 插件，可以大大简化模型训练任务的部署以及模型服务的部署，同时，可以将模型训练、模型服务等过程与 KubeVela 本身的工作流、多集群等功能相结合，从而完成生产可用的服务部署。
 
-> 注：你可以在 [KubeVela Samples](https://github.com/oam-dev/samples/tree/master/11.Machine_Learning_Demo) 中找到所有的源码和 YAML 文件。如果你想使用在这个例子中预训练的模型，文件夹中的 `style-model.yaml` 和 `color-model.yaml` 会将模型复制到 PVC 中。
+> 注：你可以在 [KubeVela Samples](https://github.com/kubevela/samples/tree/master/11.Machine_Learning_Demo) 中找到所有的源码和 YAML 文件。如果你想使用在这个例子中预训练的模型，文件夹中的 `style-model.yaml` 和 `color-model.yaml` 会将模型复制到 PVC 中。
 
 ## 模型训练
 

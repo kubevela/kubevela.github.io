@@ -9,4 +9,4 @@ title:  KubeVela 路线规划
 - [2021 Spring Roadmap](./2021-03-roadmap)
 - [2020 Winter Roadmap](./2020-12-roadmap)
 
-可以通过查看 [github issues 列表](https://github.com/oam-dev/kubevela/issues) 以及相应里程碑获取更多信息。
+可以通过查看 [github issues 列表](https://github.com/kubevela/kubevela/issues) 以及相应里程碑获取更多信息。

@@ -39,7 +39,7 @@ Platform administrators/SREs prepares the Git repo for operational config. Every
 
 ## Setup Config Repository
 
-> The configuration files are from the [Example Repo](https://github.com/oam-dev/samples/tree/master/09.GitOps_Demo/for-SREs).
+> The configuration files are from the [Example Repo](https://github.com/kubevela/samples/tree/master/09.GitOps_Demo/for-SREs).
 
 In this example, we will deploy an application and a database, the application uses the database to store data.
 
@@ -281,7 +281,7 @@ The app serves HTTP service and connects to a MySQL database. In the '/' path, i
 	}
 ```
 
-In this tutorial, we will setup a CI pipeline using GitHub Actions to build the image and push it to a registry. The code and configuration files are from the [Example Repo](https://github.com/oam-dev/samples/tree/master/09.GitOps_Demo/for-developers/app-code).
+In this tutorial, we will setup a CI pipeline using GitHub Actions to build the image and push it to a registry. The code and configuration files are from the [Example Repo](https://github.com/kubevela/samples/tree/master/09.GitOps_Demo/for-developers/app-code).
 
 ## Create Git Secret for KubeVela committing to Config Repo
 
@@ -300,7 +300,7 @@ stringData:
 
 ## Setup Config Repository
 
-The configuration repository is almost the same as the previous configuration, you only need to add the image registry config to the file. For more details, please refer to [Example Repository](https://github.com/oam-dev/samples/tree/master/09.GitOps_Demo/for-developers/kubevela-config).
+The configuration repository is almost the same as the previous configuration, you only need to add the image registry config to the file. For more details, please refer to [Example Repository](https://github.com/kubevela/samples/tree/master/09.GitOps_Demo/for-developers/kubevela-config).
 
 Add the config of image registry in `clusters/apps.yaml`, it listens for image updates in the image registry:
 

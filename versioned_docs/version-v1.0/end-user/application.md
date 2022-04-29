@@ -137,7 +137,7 @@ spec:
 ## Step 4: Deploy the Application
 
 ```shell
-$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/enduser/sample.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/enduser/sample.yaml
 application.core.oam.dev/website created
 ```
 

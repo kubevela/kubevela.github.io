@@ -76,7 +76,7 @@ services:
 
 ## Example Workflow
 
-In the following workflow, we will build and deploy an example NodeJS app under [examples/testapp/](https://github.com/oam-dev/kubevela/tree/master/docs/examples/testapp).
+In the following workflow, we will build and deploy an example NodeJS app under [examples/testapp/](https://github.com/kubevela/kubevela/tree/master/docs/examples/testapp).
 
 ### Prerequisites
 
@@ -88,7 +88,7 @@ In the following workflow, we will build and deploy an example NodeJS app under 
 git clone and go to the testapp directory:
 
 ```bash
-git clone https://github.com/oam-dev/kubevela.git
+git clone https://github.com/kubevela/kubevela.git
 cd kubevela/docs/examples/testapp
 ```
 
@@ -96,7 +96,7 @@ The example contains NodeJS app code, Dockerfile to build the app.
 
 ### 2. Deploy app in one command
 
-In the directory there is a [vela.yaml](https://github.com/oam-dev/kubevela/tree/master/docs/examples/testapp/vela.yaml) which follows Appfile format supported by Vela.
+In the directory there is a [vela.yaml](https://github.com/kubevela/kubevela/tree/master/docs/examples/testapp/vela.yaml) which follows Appfile format supported by Vela.
 We are going to use it to build and deploy the app.
 
 > NOTE: please change `oamdev` to your own registry account so you can push. Or, you could try the alternative approach in `Local testing without pushing image remotely` section.

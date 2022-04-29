@@ -132,7 +132,7 @@ spec:
 status: {}
 ```
 
-我们热烈欢迎你将扩展的云资源的 ComponentDefinition 贡献到 [oam-dev/catalog](https://github.com/oam-dev/catalog/tree/master/addons/)。
+我们热烈欢迎你将扩展的云资源的 ComponentDefinition 贡献到 [oam-dev/catalog](https://github.com/kubevela/catalog/tree/master/addons/)。
 
 ## 应用 ComponentDefinition  
 
@@ -171,7 +171,7 @@ $ vela show alibaba-eip
 
 ## 生成文档
 
-我们鼓励你为你的 ComponentDefinition 生成文档并提交给 [KubeVela官方网站]（https://github.com/oam-dev/kubevela.io）。
+我们鼓励你为你的 ComponentDefinition 生成文档并提交给 [KubeVela官方网站]（https://github.com/kubevela/kubevela.io）。
 
 通过运行 `vela def doc-gen` 命令，我们可以基于已经应用在kubernetes集群上的ComponentDefinition生成相关文档，也可以基于本地ComponentDefinition文件生成相关文档。
 
@@ -188,4 +188,4 @@ Generated docs for alibaba-eip in ./kubevela.io/docs/end-user/components/cloud-s
 $ vela def doc-gen alibaba-eip.yaml
 ```
 
-将生成的文件移到 [oam-dev/kubevela.io](https://github.com/oam-dev/kubevela.io) 库。参考 [贡献指南](https://github.com/oam-dev/kubevela.io#contributing-to-kubevela-en-docs) 来提交文档。
+将生成的文件移到 [kubevela/kubevela.io](https://github.com/kubevela/kubevela.io) 库。参考 [贡献指南](https://github.com/kubevela/kubevela.io#contributing-to-kubevela-en-docs) 来提交文档。

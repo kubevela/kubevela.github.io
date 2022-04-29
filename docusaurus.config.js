@@ -25,7 +25,7 @@ module.exports = {
     announcementBar: {
       id: 'start',
       content:
-        '⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/oam-dev/kubevela">GitHub</a>! ⭐️',
+        '⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>! ⭐️',
     },
     algolia: {
       apiKey: 'f19c90b8ffe16ed118dae930cd070507',
@@ -70,7 +70,7 @@ module.exports = {
           position: 'right',
         },
         {
-          href: 'https://github.com/oam-dev/kubevela',
+          href: 'https://github.com/kubevela/kubevela',
           className: 'header-github-link',
           position: 'right',
         },
@@ -116,7 +116,7 @@ module.exports = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/oam-dev/kubevela',
+              href: 'https://github.com/kubevela/kubevela',
             },
             {
               label: 'Blog',
@@ -148,7 +148,7 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: function ({ locale, docPath }) {
-            return `https://github.com/oam-dev/kubevela.io/edit/main/docs/${docPath}`;
+            return `https://github.com/kubevela/kubevela.io/edit/main/docs/${docPath}`;
           },
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
@@ -158,7 +158,7 @@ module.exports = {
           blogSidebarTitle: "All posts",
           blogSidebarCount: "ALL",
           showReadingTime: true,
-          editUrl: 'https://github.com/oam-dev/kubevela.io/tree/main/',
+          editUrl: 'https://github.com/kubevela/kubevela.io/tree/main/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

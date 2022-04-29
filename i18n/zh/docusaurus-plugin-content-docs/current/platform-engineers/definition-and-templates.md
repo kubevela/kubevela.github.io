@@ -123,7 +123,7 @@ spec:
 
 如果设置了此字段，KubeVela core 会自动将 workload 引用填充到 trait 的目标字段中。然后，trait controller 可以之后从 trait 中获取 workload 引用。因此，此字段通常和 trait 一起出现，其 controller 在运行时依赖于 workload 引用。
 
-如何设置此字段的具体细节，请查阅 [scaler](https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml) trait 作为演示。
+如何设置此字段的具体细节，请查阅 [scaler](https://github.com/kubevela/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml) trait 作为演示。
 
 ##### `.spec.podDisruptive`
 

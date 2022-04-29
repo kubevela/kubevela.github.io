@@ -18,7 +18,7 @@ If it has been supported by Terraform Controller, you can continue to extend the
 - Clone oam-dev/catalog
 
 ```bash
-$ git clone https://github.com/oam-dev/catalog.git
+$ git clone https://github.com/kubevela/catalog.git
 ```
   
 - Prepare a metadata file

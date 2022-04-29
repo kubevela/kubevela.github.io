@@ -52,7 +52,7 @@ export default function Home() {
           </div>
           <h2 className={clsx('hero__title', styles.heroTitle)}>{siteConfig.title}</h2>
           <GitHubButton
-            href="https://github.com/oam-dev/kubevela"
+            href="https://github.com/kubevela/kubevela"
             data-icon="octicon-star"
             data-size="large"
             data-show-count="true"

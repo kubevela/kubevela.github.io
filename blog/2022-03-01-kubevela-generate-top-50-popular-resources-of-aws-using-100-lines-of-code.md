@@ -2,7 +2,7 @@
 title: Generate top 50 popular resources of AWS using 100 lines of code
 author: Avery Qi (Tongji University) Zhengxi Zhou (Alibaba Cloud)
 author_title: KubeVela Team
-author_url: https://github.com/oam-dev/kubevela
+author_url: https://github.com/kubevela/kubevela
 author_image_url: https://kubevela.io/img/logo.svg
 tags: [ Terraform ]
 description: ""

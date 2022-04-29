@@ -11,7 +11,7 @@ KubeVela 可以从这些仓库中自动发现 OAM 抽象文件，并且同步这
 新增且同步能力中心到 KubeVela：
 
 ```bash
-$ vela cap center config my-center https://github.com/oam-dev/catalog/tree/master/registry
+$ vela cap center config my-center https://github.com/kubevela/catalog/tree/master/registry
 successfully sync 1/1 from my-center remote center
 Successfully configured capability center my-center and sync from remote
 
@@ -29,7 +29,7 @@ sync finished
 ```bash
 $ vela cap center ls
 NAME     	ADDRESS
-my-center	https://github.com/oam-dev/catalog/tree/master/registry
+my-center	https://github.com/kubevela/catalog/tree/master/registry
 ```
 
 ## [可选] 删除能力中心

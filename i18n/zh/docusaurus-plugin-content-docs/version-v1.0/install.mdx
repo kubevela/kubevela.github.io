@@ -206,14 +206,14 @@ brew install kubevela
 </TabItem>
 <TabItem value="download">
 
-- 从[版本发布页面](https://github.com/oam-dev/kubevela/releases)下载最新的 `vela` 二进制版本.
+- 从[版本发布页面](https://github.com/kubevela/kubevela/releases)下载最新的 `vela` 二进制版本.
 - 解压缩 vela 二进制文件并将其添加到 `$PATH` 开始使用.
 
 ```shell script
 sudo mv ./vela /usr/local/bin/vela
 ```
 
-> 已知问题(https://github.com/oam-dev/kubevela/issues/625):
+> 已知问题(https://github.com/kubevela/kubevela/issues/625):
 > 如果你使用 mac，它会报告 “vela” 无法打开，因为开发者无法验证。
 >
 > 新版 MacOS 在运行你下载的没有使用苹果开发者密钥的软件方面更加严格，我们还没有为 KubeVela 做这方面支持。
@@ -295,16 +295,16 @@ helm search repo kubevela/vela-core -l
 ## Step 2. 升级 KubeVela CRDs
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_workloaddefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_traitdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_applications.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_approllouts.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_scopedefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_appdeployments.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_applicationcontexts.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_workloaddefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_traitdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_approllouts.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_scopedefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_appdeployments.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_applicationcontexts.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
 ```
 
 > Tips: 如果你碰到类似 `* is invalid: spec.scope: Invalid value: "Namespaced": filed is immutable`问题. 请删除带有错误的 crd

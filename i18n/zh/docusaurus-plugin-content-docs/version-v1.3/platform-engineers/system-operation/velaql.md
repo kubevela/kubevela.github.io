@@ -109,7 +109,7 @@ curl --location -g --request GET \
 
 在很多场景下，内置的视图不能满足我们的需求，Application 下封装的资源也都不仅仅是 k8s 的原生资源。针对很多自定义的资源，用户会有不同的查询需求，这时候你需要自己编写特定的视图来完成查询。本节就来告诉大家如何编写一个自定义的视图。
 
-目前VelaQL中的视图依赖 k8s 中的 configMap 作为存储介质，你可以参考：[https://github.com/oam-dev/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml](https://github.com/oam-dev/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml)。configMap data 字段中的 template 存储着视图的核心逻辑，template 是一段 cue 语言描述的查询语句。
+目前VelaQL中的视图依赖 k8s 中的 configMap 作为存储介质，你可以参考：[https://github.com/kubevela/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml](https://github.com/kubevela/kubevela/blob/master/test/e2e-apiserver-test/testdata/component-pod-view.yaml)。configMap data 字段中的 template 存储着视图的核心逻辑，template 是一段 cue 语言描述的查询语句。
 
 每次使用 VelaQL 时，系统都会从 vela-system 命名空间下查找和视图同名的 configMap 提取出 template 来进行查询操作，所以请保证你的自定义视图存储在 vela-system 下。
 ​

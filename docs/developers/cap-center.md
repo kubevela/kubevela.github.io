@@ -11,7 +11,7 @@ KubeVela is able to discover OAM definition files in this repo automatically and
 Add a registry in KubeVela:
 
 ```bash
-vela registry config my-center https://github.com/oam-dev/catalog/tree/master/registry
+vela registry config my-center https://github.com/kubevela/catalog/tree/master/registry
 ```
 ```console
 Successfully configured registry my-center
@@ -29,7 +29,7 @@ vela registry ls
 ```console
 NAME            URL                                                    
 default         oss://registry.kubevela.net/                            
-my-center       https://github.com/oam-dev/catalog/tree/master/registry 
+my-center       https://github.com/kubevela/catalog/tree/master/registry 
 ```
 
 ## [Optional] Remove a capability center

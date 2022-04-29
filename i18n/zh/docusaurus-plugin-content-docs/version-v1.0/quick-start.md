@@ -11,7 +11,7 @@ title:  快速开始
 ## Step 2: 部署你的第一个应用
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/vela-app.yaml
 application.core.oam.dev/first-vela-app created
 ```
 

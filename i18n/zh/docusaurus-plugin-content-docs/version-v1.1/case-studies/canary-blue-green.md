@@ -21,7 +21,7 @@ KubeVela 后的应用交付模型（OAM）是一个从设计与实现上都高�
 vela addon enable istio
 ```
 
-如果你的集群已经已经安装 Istio，你只需 apply [该目录](https://github.com/oam-dev/kubevela/tree/master/vela-templates/addons/istio/definitions) 下的四个 YAML 文件来达到和上面开启集群插件一样的效果
+如果你的集群已经已经安装 Istio，你只需 apply [该目录](https://github.com/kubevela/kubevela/tree/master/vela-templates/addons/istio/definitions) 下的四个 YAML 文件来达到和上面开启集群插件一样的效果
 
 因为后面的例子运行在 default namespace，需要为 default namespace 打上 Istio 自动注入 sidecar 的标签。
 
@@ -34,7 +34,7 @@ kubectl label namespace default istio-injection=enabled
 执行下面的命令，部署 bookinfo 应用。
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/canary-rollout-use-case/first-deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/canary-rollout-use-case/first-deploy.yaml
 ```
 
 该应用的组件架构和访问关系如下所示：
@@ -87,7 +87,7 @@ kubectl port-forward service/istio-ingressgateway -n istio-system 19082:80
 
 执行下面的命令，来更新应用。
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/canary-rollout-use-case/rollout-v2.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/canary-rollout-use-case/rollout-v2.yaml
 ```
 这次操作更新了 reviews 组件的镜像，从之前的 v2 升级到了 v3。同时 reviews 组件的灰度发布 (Rollout) 运维特征指定了，升级的目标实例个数为 2 个，分两个批次升级，每批升级 1 个实例。
 
@@ -187,7 +187,7 @@ vela workflow resume book-info
 如果在人工校验时，发现服务不符合预期，需要终止预先定义好的发布工作流，并将流量和实例切换回之前的版本。你可以通过执行下面的命令完成这一操作：
 
 ```shell
-kubectl apply -f  https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/canary-rollout-use-case/rollback.yaml
+kubectl apply -f  https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/canary-rollout-use-case/rollback.yaml
 ```
 
 这个操作将会更新 Workflow 定义去使用 `canary-rollback` step：

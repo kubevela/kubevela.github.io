@@ -15,7 +15,7 @@ title:  概述
 ## Step 2: 部署你的第一个应用
 
 ```bash
-$ vela up -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela.yaml
+$ vela up -f https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/vela.yaml
 Parsing vela.yaml ...
 Loading templates ...
 

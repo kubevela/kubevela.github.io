@@ -17,7 +17,7 @@ title:  KEDA 作为自动伸缩 Trait
 
 要在 KubeVela 中将 KEDA 注册为一项新功能（即 trait)，唯一需要做的就是为其创建一个 `TraitDefinition` 对象。
 
-完整的示例可以在 [keda.yaml](https://github.com/oam-dev/catalog/blob/master/registry/keda-scaler.yaml) 中找到。
+完整的示例可以在 [keda.yaml](https://github.com/kubevela/catalog/blob/master/registry/keda-scaler.yaml) 中找到。
 下面列出了几个要点。
 
 ### 1. 描述 Trait

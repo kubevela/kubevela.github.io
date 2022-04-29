@@ -2,7 +2,7 @@
 title: KubeVela v1.3 多集群初体验，轻松管理应用分发和差异化配置
 author: 段威（段少）
 author_title: KubeVela 团队
-author_url: https://github.com/oam-dev/kubevela
+author_url: https://github.com/kubevela/kubevela
 author_image_url: https://kubevela.io/img/logo.svg
 tags: [ KubeVela ]
 description: ""
@@ -17,9 +17,9 @@ KubeVela v1.3 在之前的多集群功能上进行了迭代，本文将为你揭
 ### 开始之前
 
 1. 准备一个 Kubernetes 集群作为 KubeVela 的控制平面。
-1. 确保 [KubeVela v1.3](https://github.com/oam-dev/kubevela/releases/tag/v1.3.0) 和 KubeVela CLI v1.3.0 已经安装成功。
+1. 确保 [KubeVela v1.3](https://github.com/kubevela/kubevela/releases/tag/v1.3.0) 和 KubeVela CLI v1.3.0 已经安装成功。
 1. 你要管理的子集群列表 kubeconfig。我们将以 beijing-1，beijing-2 和 us-west-1 这 3 个集群为例。
-1. 下载并结合 [multi-cluster-demo](https://github.com/oam-dev/samples/tree/master/12.Multi_Cluster_Demo) 来更好的理解，如何使用 KubeVela 多集群能力。
+1. 下载并结合 [multi-cluster-demo](https://github.com/kubevela/samples/tree/master/12.Multi_Cluster_Demo) 来更好的理解，如何使用 KubeVela 多集群能力。
 
 ### 分发到多个指定集群
 对多个指定集群进行分发是最基本的多集群管理操作。在 KubeVela 中，你将使用一个叫做 `topology` 的应用策略来实现它。集群以数组的形式，列在其属性的 `clusters` 字段里。

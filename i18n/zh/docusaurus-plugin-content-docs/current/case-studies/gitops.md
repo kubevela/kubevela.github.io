@@ -38,7 +38,7 @@ KubeVela 作为一个声明式的应用交付控制平面，天然就可以以 G
 
 ### 准备配置仓库
 
-> 具体的配置可参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/09.GitOps_Demo/for-SREs)。
+> 具体的配置可参考 [示例仓库](https://github.com/kubevela/samples/tree/master/09.GitOps_Demo/for-SREs)。
 
 在本例中，我们将部署一个 MySQL 数据库软件作为项目的基础设施，同时部署一个业务应用，使用这个数据库。配置仓库的目录结构如下:
 
@@ -278,7 +278,7 @@ my-server   <none>   kubevela.example.com  <ingress-ip>    80      162m
 	}
 ```
 
-我们希望用户改动代码进行提交后，自动构建出最新的镜像并推送到镜像仓库。这一步 CI 可以通过集成 GitHub Actions、Jenkins 或者其他 CI 工具来实现。在本例中，我们通过借助 GitHub Actions 来完成持续集成。具体的代码文件及配置可参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/09.GitOps_Demo/for-developers/app-code)。
+我们希望用户改动代码进行提交后，自动构建出最新的镜像并推送到镜像仓库。这一步 CI 可以通过集成 GitHub Actions、Jenkins 或者其他 CI 工具来实现。在本例中，我们通过借助 GitHub Actions 来完成持续集成。具体的代码文件及配置可参考 [示例仓库](https://github.com/kubevela/samples/tree/master/09.GitOps_Demo/for-developers/app-code)。
 
 ### 配置秘钥信息
 
@@ -297,7 +297,7 @@ stringData:
 
 ### 准备配置仓库
 
-配置仓库与之前面向运维人员的配置大同小异，只需要加上与镜像仓库相关的配置即可。具体配置请参考 [示例仓库](https://github.com/oam-dev/samples/tree/master/09.GitOps_Demo/for-developers/kubevela-config)。
+配置仓库与之前面向运维人员的配置大同小异，只需要加上与镜像仓库相关的配置即可。具体配置请参考 [示例仓库](https://github.com/kubevela/samples/tree/master/09.GitOps_Demo/for-developers/kubevela-config)。
 
 修改 `clusters/` 中的 `apps.yaml`，该 GitOps 配置会监听仓库中 `apps/` 下的应用文件变动以及镜像仓库中的镜像更新：
 

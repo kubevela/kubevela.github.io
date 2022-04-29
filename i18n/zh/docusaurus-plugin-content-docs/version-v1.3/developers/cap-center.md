@@ -11,7 +11,7 @@ KubeVela 可以从这些仓库中自动发现 OAM 抽象文件，并且同步这
 新增能力中心到 KubeVela：
 
 ```bash
-vela registry config my-center https://github.com/oam-dev/catalog/tree/master/registry
+vela registry config my-center https://github.com/kubevela/catalog/tree/master/registry
 Successfully configured registry my-center
 ```
 
@@ -25,7 +25,7 @@ Successfully configured registry my-center
 vela registry ls
 NAME            URL                                                    
 default         oss://registry.kubevela.net/                            
-my-center       https://github.com/oam-dev/catalog/tree/master/registry 
+my-center       https://github.com/kubevela/catalog/tree/master/registry 
 ```
 
 ## [可选] 删除能力中心

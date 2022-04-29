@@ -4,7 +4,7 @@ title:  添加 Traits
 
 通过 Component，KubeVela 中的所有 traits 都可以兼容原生的 K8s 对象模板。
 
-在这个例子中，我们会添加两个 traits 到 component 中。分别是：[scaler](https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml) 和 [virtualgroup](https://github.com/oam-dev/kubevela/blob/master/docs/examples/kube-module/virtual-group-td.yaml)
+在这个例子中，我们会添加两个 traits 到 component 中。分别是：[scaler](https://github.com/kubevela/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml) 和 [virtualgroup](https://github.com/kubevela/kubevela/blob/master/docs/examples/kube-module/virtual-group-td.yaml)
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

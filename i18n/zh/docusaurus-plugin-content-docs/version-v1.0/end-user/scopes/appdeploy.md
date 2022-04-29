@@ -102,7 +102,7 @@ data:
 
 ## 快速开始
 
-下面是一个你可以自己动手尝试的示例。 所有的 yaml 文件都在 [`docs/examples/appdeployment/`](https://github.com/oam-dev/kubevela/tree/master/docs/examples/appdeployment)中。
+下面是一个你可以自己动手尝试的示例。 所有的 yaml 文件都在 [`docs/examples/appdeployment/`](https://github.com/kubevela/kubevela/tree/master/docs/examples/appdeployment)中。
 你必须运行那个目录下所有的 command。
 
 1. 创建应用
@@ -197,7 +197,7 @@ data:
    $ kubectl apply -f appdeployment-2-traffic.yaml
    ```
 
-   注意：为了使流量切分能正常工作，你必须在工作负载的 cue templates 中设置下面所示的pod label(详见 [webservice.cue](https://github.com/oam-dev/kubevela/blob/master/hack/vela-templates/cue/webservice.cue)):
+   注意：为了使流量切分能正常工作，你必须在工作负载的 cue templates 中设置下面所示的pod label(详见 [webservice.cue](https://github.com/kubevela/kubevela/blob/master/hack/vela-templates/cue/webservice.cue)):
 
    ```shell
    "app.oam.dev/component": context.name

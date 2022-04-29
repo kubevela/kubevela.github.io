@@ -156,7 +156,7 @@ kubevela-vela-core-f8b987775-wjg25   0/1     -         0          35m
 你可以换成 github 的镜像仓库。
 
 ```
-$ docker pull ghcr.io/oam-dev/kubevela/vela-core:latest
+$ docker pull ghcr.io/kubevela/kubevela/vela-core:latest
 ```
 
 ### Warning: Namespace cert-manager exists
@@ -218,11 +218,11 @@ Failed to install the chart with error: MutatingWebhookConfiguration "mutating-w
 rendered manifests contain a resource that already exists. Unable to continue with install
 helm.sh/helm/v3/pkg/action.(*Install).Run
 	/home/runner/go/pkg/mod/helm.sh/helm/v3@v3.2.4/pkg/action/install.go:274
-github.com/oam-dev/kubevela/pkg/commands.InstallOamRuntime
+github.com/kubevela/kubevela/pkg/commands.InstallOamRuntime
 	/home/runner/work/kubevela/kubevela/pkg/commands/system.go:259
-github.com/oam-dev/kubevela/pkg/commands.(*initCmd).run
+github.com/kubevela/kubevela/pkg/commands.(*initCmd).run
 	/home/runner/work/kubevela/kubevela/pkg/commands/system.go:162
-github.com/oam-dev/kubevela/pkg/commands.NewInstallCommand.func2
+github.com/kubevela/kubevela/pkg/commands.NewInstallCommand.func2
 	/home/runner/work/kubevela/kubevela/pkg/commands/system.go:119
 github.com/spf13/cobra.(*Command).execute
 	/home/runner/go/pkg/mod/github.com/spf13/cobra@v1.1.1/command.go:850
@@ -239,7 +239,7 @@ runtime.goexit
 Error: rendered manifests contain a resource that already exists. Unable to continue with install: MutatingWebhookConfiguration "mutating-webhook-configuration" in namespace "" exists and cannot be imported into the current release: invalid ownership metadata; label validation error: missing key "app.kubernetes.io/managed-by": must be set to "Helm"; annotation validation error: missing key "meta.helm.sh/release-name": must be set to "kubevela"; annotation validation error: missing key "meta.helm.sh/release-namespace": must be set to "vela-system"
 ```
 
-要解决这个问题，请从 [KubeVela releases](https://github.com/oam-dev/kubevela/releases) 将 KubeVela Cli `vela` 版本升级到 `v0.2.2` 以上。
+要解决这个问题，请从 [KubeVela releases](https://github.com/kubevela/kubevela/releases) 将 KubeVela Cli `vela` 版本升级到 `v0.2.2` 以上。
 
 ## 运维
 

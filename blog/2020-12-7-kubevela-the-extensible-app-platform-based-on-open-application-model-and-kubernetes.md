@@ -14,7 +14,7 @@ hide_table_of_contents: false
 
 ![image](https://tva1.sinaimg.cn/large/ad5fbf65gy1glgj5q8inej208g049aa6.jpg)
 
-Last month at KubeCon+CloudNativeCon 2020, the [Open Application Model (OAM)](https://github.com/oam-dev/spec) community launched [KubeVela](https://github.com/oam-dev/kubevela/), an easy-to-use yet highly extensible application platform based on OAM and Kubernetes.
+Last month at KubeCon+CloudNativeCon 2020, the [Open Application Model (OAM)](https://github.com/oam-dev/spec) community launched [KubeVela](https://github.com/kubevela/kubevela/), an easy-to-use yet highly extensible application platform based on OAM and Kubernetes.
 
 For developers, KubeVela is an easy-to-use tool that enables you to describe and ship applications to Kubernetes with minimal effort, yet for platform builders, KubeVela serves as a framework that empowers them to create developer-facing yet fully extensible platforms at ease.
 
@@ -145,4 +145,4 @@ To learn more about KubeVela, please visit KubeVela’s [documentation site](htt
 - Try out KubeVela following the [step-by-step tutorial](https://kubevela.io/%23/en/quick-start) in its Quick Start page.
 - Give us feedback! KubeVela is still in its early stage and we are happy to ask the community for feedback via OAM [Gitter](https://gitter.im/oam-dev/community) or [Slack channel](https://cloud-native.slack.com/archives/C01BLQ3HTJA).
 - [Extend KubeVela](https://kubevela.io/%23/en/platform-engineers/trait) to build your own platforms. If you have an idea for a new workload type, trait or try to build something more complex like a database or AI PaaS with KubeVela, post your idea as a GitHub Issue or propose it to the OAM community, we are eager to know.
-- [Contribute to KubeVela](https://github.com/oam-dev/kubevela/blob/master/CONTRIBUTING.md). KubeVela is initialized by the open source community with [bootstrap contributors](https://github.com/oam-dev/kubevela/blob/bbb2c527d96d3e1a0694e2f49b3d1d1168e72c53/OWNERS_ALIASES%23L35) from 8+ different organizations. We intend to donate this project to a neutral foundation as soon as it gets stable.
+- [Contribute to KubeVela](https://github.com/kubevela/kubevela/blob/master/CONTRIBUTING.md). KubeVela is initialized by the open source community with [bootstrap contributors](https://github.com/kubevela/kubevela/blob/bbb2c527d96d3e1a0694e2f49b3d1d1168e72c53/OWNERS_ALIASES%23L35) from 8+ different organizations. We intend to donate this project to a neutral foundation as soon as it gets stable.

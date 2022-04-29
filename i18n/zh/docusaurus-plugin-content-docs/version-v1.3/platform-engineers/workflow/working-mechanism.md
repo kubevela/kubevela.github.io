@@ -44,4 +44,4 @@ title: 工作机制
 
 ## 状态维持
 
-当工作流处于健康运行状态 (running) 或是由于等待资源健康状态而暂停时 (suspending)，KubeVela 的应用在默认配置下会定期检查之前下发的资源是否存在配置漂移，并将这些资源恢复成原先下发时的配置。默认定期检查的时间是 5 分钟，可以通过在 KubeVela 控制器[启动参数](../system-operation/bootstrap-parameters)在中设置 `--application-re-sync-period` 来调节。如果想要禁用状态维持的能力，也可以在应用中配置 [apply-once](https://github.com/oam-dev/kubevela/blob/master/docs/examples/app-with-policy/apply-once-policy/apply-once.md) 策略。
+当工作流处于健康运行状态 (running) 或是由于等待资源健康状态而暂停时 (suspending)，KubeVela 的应用在默认配置下会定期检查之前下发的资源是否存在配置漂移，并将这些资源恢复成原先下发时的配置。默认定期检查的时间是 5 分钟，可以通过在 KubeVela 控制器[启动参数](../system-operation/bootstrap-parameters)在中设置 `--application-re-sync-period` 来调节。如果想要禁用状态维持的能力，也可以在应用中配置 [apply-once](https://github.com/kubevela/kubevela/blob/master/docs/examples/app-with-policy/apply-once-policy/apply-once.md) 策略。
