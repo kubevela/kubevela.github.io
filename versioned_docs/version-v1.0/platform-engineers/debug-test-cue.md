@@ -132,7 +132,7 @@ parameter: {
 }
 ```
 
-After everything is done, there's a script [`hack/vela-templates/mergedef.sh`](https://github.com/oam-dev/kubevela/blob/master/hack/vela-templates/mergedef.sh) to merge the `def.yaml` and `def.cue` into a completed Definition Object.
+After everything is done, there's a script [`hack/vela-templates/mergedef.sh`](https://github.com/kubevela/kubevela/blob/master/hack/vela-templates/mergedef.sh) to merge the `def.yaml` and `def.cue` into a completed Definition Object.
 
 ```shell
 $ ./hack/vela-templates/mergedef.sh def.yaml def.cue > microservice-def.yaml

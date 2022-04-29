@@ -130,7 +130,7 @@ parameter: {
 }
 ```
 
-以上操作完成之后，使用该脚本 [`hack/vela-templates/mergedef.sh`](https://github.com/oam-dev/kubevela/blob/master/hack/vela-templates/mergedef.sh) 将 `def.yaml` 和 `def.cue` 合并到完整的 Definition 对象中。
+以上操作完成之后，使用该脚本 [`hack/vela-templates/mergedef.sh`](https://github.com/kubevela/kubevela/blob/master/hack/vela-templates/mergedef.sh) 将 `def.yaml` 和 `def.cue` 合并到完整的 Definition 对象中。
 
 ```shell
 $ ./hack/vela-templates/mergedef.sh def.yaml def.cue > microservice-def.yaml

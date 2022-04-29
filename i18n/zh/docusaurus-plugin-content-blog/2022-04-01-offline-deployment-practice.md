@@ -6,7 +6,7 @@ author_url: http://www.cmbchina.com/
 author_image_url: /img/china-merchants-bank.jpg
 tags: [ KubeVela ]
 description: ""
-image: https://raw.githubusercontent.com/oam-dev/kubevela.io/main/docs/resources/KubeVela-03.png
+image: https://raw.githubusercontent.com/kubevela/kubevela.io/main/docs/resources/KubeVela-03.png
 hide_table_of_contents: false
 ---
 
@@ -22,7 +22,7 @@ hide_table_of_contents: false
 
 ### Vela Cli 离线部署
 
-- 首先，需要通过 KubeVela 的 [发布日志](https://github.com/oam-dev/kubevela/releases) 下载你所需版本的 `vela` 二进制文件
+- 首先，需要通过 KubeVela 的 [发布日志](https://github.com/kubevela/kubevela/releases) 下载你所需版本的 `vela` 二进制文件
 - 解压二进制文件，并且在 `$PATH` 中配置相应的环境变量 
    - 解压二进制文件 
       - `tar -zxvf vela-v1.2.5-linux-amd64.tar.gz`
@@ -63,7 +63,7 @@ GolangVersion: go1.17.7
       - `docker load kube-webhook-certgen.tar`
       - `docker load alpine-k8s.tar`
       - `docker load hello-world.tar`
-- 下载 [KubeVela 源码](https://github.com/oam-dev/kubevela/releases) ，拷贝到离线环境中，并使用 Helm 重新打包 
+- 下载 [KubeVela 源码](https://github.com/kubevela/kubevela/releases) ，拷贝到离线环境中，并使用 Helm 重新打包 
    - 将 KubeVela 源码重新打 chart 包，并离线安装 chart 包到控制集群 
       - `helm package kubevela/charts/vela-core --destination kubevela/charts`
       - `helm install --create-namespace -n vela-system kubevela kubevela/charts/vela-core-0.1.0.tgz --wait`
@@ -76,7 +76,7 @@ KubeVela control plane has been successfully set up on your cluster.
 
 ### Addon 离线部署
 
-- 首先下载 [Catalog 源码](https://github.com/oam-dev/catalog) 并拷贝到私有环境中
+- 首先下载 [Catalog 源码](https://github.com/kubevela/catalog) 并拷贝到私有环境中
 - 这里将以 VelaUX 为例介绍 Addon 的离线部署，首先准备 docker 镜像，VelaUX 主要涉及2个镜像，需要首先访问互联网从 Docker Hub 下载相应镜像，之后再 load 到离线环境 
    - 从 Docker Hub 拉取镜像 
       - `docker pull oamdev/vela-apiserver:v1.2.5`

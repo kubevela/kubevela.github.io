@@ -18,7 +18,7 @@ hide_table_of_contents: false
 
 从 11 月 18 号到 20 号，在为期三天的 KubeCon 北美峰会上有连续 3 场技术演讲，会从不同维度介绍关于 KubeVela 项目的具体细节，其中还包括一个长达 1 个半小时的 KubeVela 互动教学环节。多个重量级组织以如此规模和密度在 KubeCon 北美峰会演讲中介绍一个首次发布的社区开源项目，在 KubeCon 诞生以来并不多见。
 
-KubeVela Github 地址：[https://github.com/oam-dev/kubevela/](https://github.com/oam-dev/kubevela/)
+KubeVela Github 地址：[https://github.com/kubevela/kubevela/](https://github.com/kubevela/kubevela/)
 
 ## 什么是 KubeVela ？
 
@@ -178,13 +178,13 @@ KubeVela 和 OAM 社区欢迎大家设计和制作任何 Workload Type 和 Trait
 
 ## 了解更多
 
-KubeVela 项目是 OAM 社区的官方项目，旨在取代原先的 Rudr 项目。不过，与 [Rudr](https://github.com/oam-dev/rudr) 主要作为“参考实现”的定位不同，KubeVela 既是一个端到端、面向全量场景的 OAM Kubernetes 完整实现，同时也是阿里云 EDAS 服务和内部多个核心 PaaS/Serverless 生产系统底层的核心组件。 此外，KubeVela 中 Apppfile 的设计，也是 OAM 社区在 OAM 规范中即将引入的“面向用户侧对象”的核心部分。
+KubeVela 项目是 OAM 社区的官方项目，旨在取代原先的 Rudr 项目。不过，与 [Rudr](https://github.com/kubevela/rudr) 主要作为“参考实现”的定位不同，KubeVela 既是一个端到端、面向全量场景的 OAM Kubernetes 完整实现，同时也是阿里云 EDAS 服务和内部多个核心 PaaS/Serverless 生产系统底层的核心组件。 此外，KubeVela 中 Apppfile 的设计，也是 OAM 社区在 OAM 规范中即将引入的“面向用户侧对象”的核心部分。
 
 如果你想要更好的了解 KubeVela 项目，欢迎前往其官方网站上[学习具体的示例和手册](https://kubevela.io/)。以下也是一些非常好的学习内容和方式：
 
 - 前往学习 [KubeVela Quick Start（新手教程）](https://kubevela.io/#/en/quick-start)，一步步了解 KubeVela 的使用方法。
 - 前往 OAM 社区深入交流和反馈。中文：钉钉群 23310022，英文：[Gitter](https://gitter.im/oam-dev/community) 和 [CNCF Slack](https://cloud-native.slack.com/archives/C01BLQ3HTJA)。
 - 尝试为 [KubeVela 添加来自开源社区的插件能力](https://kubevela.io/#/en/platform-engineers/trait)。此外，如果你有任何关于扩展 KubeVela 的奇妙想法，比如，基于 KubeVela 开发一个自己的云原生数据库 PaaS 或者 AI PaaS，欢迎前往 OAM 社区通过 Issue 来进行讨论。
-- 为 KubeVela 贡献代码. KubeVela 项目是一个诞生自云原生社区的开源项目（感谢来自 8 家不同公司的[初始贡献者](https://github.com/oam-dev/kubevela/blob/bbb2c527d96d3e1a0694e2f49b3d1d1168e72c53/OWNERS_ALIASES#L35)，并特别鸣谢 KubeVela 网站的发起者 [guoxudong](https://github.com/sunny0826)）。 
+- 为 KubeVela 贡献代码. KubeVela 项目是一个诞生自云原生社区的开源项目（感谢来自 8 家不同公司的[初始贡献者](https://github.com/kubevela/kubevela/blob/bbb2c527d96d3e1a0694e2f49b3d1d1168e72c53/OWNERS_ALIASES#L35)，并特别鸣谢 KubeVela 网站的发起者 [guoxudong](https://github.com/sunny0826)）。 
 
 **KubeVela 项目的维护者会在项目稳定后，即将整个项目所有权捐赠给中立开源基金会。**

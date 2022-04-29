@@ -17,7 +17,7 @@ title: 扩展 Terraform 插件
 - 克隆 oam-dev/catalog
 
 ```bash
-$ git clone https://github.com/oam-dev/catalog.git
+$ git clone https://github.com/kubevela/catalog.git
 ```
 
 - 准备 metadata 文件

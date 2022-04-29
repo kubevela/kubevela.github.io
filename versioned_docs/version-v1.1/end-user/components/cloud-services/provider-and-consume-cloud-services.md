@@ -74,7 +74,7 @@ CreationTime                                 Region    StorageClass    BucketNam
 ### Bind cloud resources
 
 Let's deploy
-the [application](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/application.yaml)
+the [application](https://github.com/kubevela/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/application.yaml)
 below to provision Alibaba Cloud OSS and RDS cloud resources, and consume them by the web component.
 
 ```yaml

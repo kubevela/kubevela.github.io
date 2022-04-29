@@ -21,7 +21,7 @@ Installation guide is available on [this section](./install).
 Quick start is available on [this section](./quick-start).
 
 ## Contributing
-Check out [CONTRIBUTING](https://github.com/oam-dev/kubevela/blob/master/CONTRIBUTING.md) to see how to develop with KubeVela.
+Check out [CONTRIBUTING](https://github.com/kubevela/kubevela/blob/master/CONTRIBUTING.md) to see how to develop with KubeVela.
 
 ## Code of Conduct
 KubeVela adopts the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/master/code-of-conduct.md).

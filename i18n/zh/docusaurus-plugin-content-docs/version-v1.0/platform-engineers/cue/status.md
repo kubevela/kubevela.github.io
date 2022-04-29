@@ -51,7 +51,7 @@ spec:
    ...
 ```
 
-> Component 健康检查示例请参考 [这篇文章](https://github.com/oam-dev/kubevela/blob/master/docs/examples/app-with-status/template.yaml) 。
+> Component 健康检查示例请参考 [这篇文章](https://github.com/kubevela/kubevela/blob/master/docs/examples/app-with-status/template.yaml) 。
 
 该健康检查结果将被记录在组件对应的 `Application` 资源中。
 
@@ -112,7 +112,7 @@ context:{
 
 Trait 并不包含 `context.output` 字段，其他字段都是相同。
 
-Component 健康检查示例请参考 [这篇文章](https://github.com/oam-dev/kubevela/blob/master/docs/examples/app-with-status/template.yaml) 。
+Component 健康检查示例请参考 [这篇文章](https://github.com/kubevela/kubevela/blob/master/docs/examples/app-with-status/template.yaml) 。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

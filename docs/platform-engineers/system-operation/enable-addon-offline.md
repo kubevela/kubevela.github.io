@@ -4,13 +4,13 @@ title: Enable Addon without Internet Access
 
 ## Enable without Internet
 
-If your environments don't have access to `https://addons.kubevela.net` or `https://github.com/oam-dev/catalog`, you should git clone the repo `https://github.com/oam-dev/catalog/tree/master/addons` locally. You can specify a local addon directory when enable an addon for installation.
+If your environments don't have access to `https://addons.kubevela.net` or `https://github.com/kubevela/catalog`, you should git clone the repo `https://github.com/kubevela/catalog/tree/master/addons` locally. You can specify a local addon directory when enable an addon for installation.
 Before installing an addon, you should check if the addon contains any container images or other sub helm charts in it. If so, the addon also can't be installed well.  You can follow these steps to make it success.
 
-1. Git clone [the catalog repo](https://github.com/oam-dev/catalog) to download these addon files.You can find all official addons in subdirectory `./addons/` and experimental addons in subdirectory `./experimental/addons`.
+1. Git clone [the catalog repo](https://github.com/kubevela/catalog) to download these addon files.You can find all official addons in subdirectory `./addons/` and experimental addons in subdirectory `./experimental/addons`.
 
 ```yaml
-git clone https://github.com/oam-dev/catalog
+git clone https://github.com/kubevela/catalog
 ```   
 
 2. Sync the container images relied on by addon to your own image repository. 

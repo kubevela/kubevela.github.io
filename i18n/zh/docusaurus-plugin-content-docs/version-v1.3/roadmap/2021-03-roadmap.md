@@ -10,8 +10,8 @@ Date: 2021-01-01 to 2021-03-30
   - The new Application object will handle CUE template rendering on the server side. So the appfile would be translated to Application object directly without doing client side rendering.
   - CLI/UI will be updated to replace ApplicationConfiguration and Component objects with Application object.
 - Integrate Terraform as one of the core templating engines so that platform builders can add Terraform modules as Workloads/Traits into KubeVela.
-- Re-architect API Server to have clean API and storage layer as [designed](https://github.com/oam-dev/kubevela/blob/master/design/vela-core/APIServer-Catalog.md#2-api-design).
-- Automatically sync Catalog server and display packages information as [designed](https://github.com/oam-dev/kubevela/blob/master/design/vela-core/APIServer-Catalog.md#3-catalog-design).
+- Re-architect API Server to have clean API and storage layer as [designed](https://github.com/kubevela/kubevela/blob/master/design/vela-core/APIServer-Catalog.md#2-api-design).
+- Automatically sync Catalog server and display packages information as [designed](https://github.com/kubevela/kubevela/blob/master/design/vela-core/APIServer-Catalog.md#3-catalog-design).
 - Add Rollout CRD to do native Workload and Application level application rollout management.
 - Support intermediate store (e.g. ConfigMap) and JSON patch operations in data input/output.
 

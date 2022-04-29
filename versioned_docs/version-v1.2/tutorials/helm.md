@@ -17,7 +17,7 @@ Starting from here, you will learn to use the KubeVela Addons to install plug-in
 
 Enabling Addon should have been experienced in the installation of KubeVela, like installing VelaUX. In this case, you will learn to enable addon in the UI page.
 
-Let's get into the page of `Addon`. This page will automatically list the community Addons that can be installed. They are all from [Official Repo](https://github.com/oam-dev/catalog/tree/master/addons). We click `fluxcd` to check the details and status of this addon.
+Let's get into the page of `Addon`. This page will automatically list the community Addons that can be installed. They are all from [Official Repo](https://github.com/kubevela/catalog/tree/master/addons). We click `fluxcd` to check the details and status of this addon.
 
 From the details, we can know that:
 

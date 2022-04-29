@@ -11,7 +11,7 @@ KubeVela is able to discover OAM definition files in this repo automatically and
 Add and sync a capability center in KubeVela:
 
 ```bash
-vela cap center config my-center https://github.com/oam-dev/catalog/tree/master/registry
+vela cap center config my-center https://github.com/kubevela/catalog/tree/master/registry
 ```
 ```console
 successfully sync 1/1 from my-center remote center
@@ -36,7 +36,7 @@ vela cap center ls
 ```
 ```console
 NAME     	ADDRESS
-my-center	https://github.com/oam-dev/catalog/tree/master/registry
+my-center	https://github.com/kubevela/catalog/tree/master/registry
 ```
 
 ## [Optional] Remove a capability center

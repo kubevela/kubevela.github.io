@@ -6,30 +6,30 @@ title: 贡献者手册
 
 ## 基本信息
 
-* [提交代码](https://github.com/oam-dev/kubevela/blob/master/contribute/create-pull-request.md)
-* [开发指南](https://github.com/oam-dev/kubevela/blob/master/contribute/developer-guide.md)
-* [分类 Issue](https://github.com/oam-dev/kubevela/blob/master/contribute/triage-issues.md)
-* [代码规范](https://github.com/oam-dev/kubevela/blob/master/contribute/coding-conventions.md)
-* [发布流程和节奏](https://github.com/oam-dev/kubevela/blob/master/contribute/develop-code-flow.pdf)
+* [提交代码](https://github.com/kubevela/kubevela/blob/master/contribute/create-pull-request.md)
+* [开发指南](https://github.com/kubevela/kubevela/blob/master/contribute/developer-guide.md)
+* [分类 Issue](https://github.com/kubevela/kubevela/blob/master/contribute/triage-issues.md)
+* [代码规范](https://github.com/kubevela/kubevela/blob/master/contribute/coding-conventions.md)
+* [发布流程和节奏](https://github.com/kubevela/kubevela/blob/master/contribute/develop-code-flow.pdf)
 
 ## 贡献插件
 
 * [开发你的插件](../platform-engineers/addon/intro)
-* [官方插件仓库](https://github.com/oam-dev/catalog)
+* [官方插件仓库](https://github.com/kubevela/catalog)
 
 ## 贡献文档站
 
-* [文档站开发手册](https://github.com/oam-dev/kubevela.io/blob/main/README.md)
+* [文档站开发手册](https://github.com/kubevela/kubevela.io/blob/main/README.md)
 
 ## 贡献案例和 Demo
 
-* [社区登记](https://github.com/oam-dev/kubevela/issues/1662)
-* [官方 Demo 库](https://github.com/oam-dev/samples)
+* [社区登记](https://github.com/kubevela/kubevela/issues/1662)
+* [官方 Demo 库](https://github.com/kubevela/samples)
 * [添加博客](https://kubevela.net/blog)
 
 ## 其他项目
 
-* [VelaUX 开发手册](https://github.com/oam-dev/velaux/blob/main/CONTRIBUTING.md)
+* [VelaUX 开发手册](https://github.com/kubevela/velaux/blob/main/CONTRIBUTING.md)
 * [Terraform Controller 开发手册](https://github.com/oam-dev/terraform-controller/blob/master/CONTRIBUTING.md)
 
 

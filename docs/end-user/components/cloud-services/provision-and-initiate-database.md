@@ -11,7 +11,7 @@ your favorite web links in one application. It is using Node.js and MySQL. It ha
 file (which means to create tables, and insert data into them if needed).
 
 > Currently, it only works on Alibaba Cloud
-> ComponentDefinition [alibaba-rds-preview](https://github.com/oam-dev/catalog/blob/master/addons/terraform-alibaba/definitions/terraform-alibaba-rds-preview.yaml) is the feature preview for Alibaba Cloud RDS, and will be merged into alibaba-rds later.
+> ComponentDefinition [alibaba-rds-preview](https://github.com/kubevela/catalog/blob/master/addons/terraform-alibaba/definitions/terraform-alibaba-rds-preview.yaml) is the feature preview for Alibaba Cloud RDS, and will be merged into alibaba-rds later.
 
 ### How it works
 
@@ -27,7 +27,7 @@ Alibaba Cloud RDS Preview supports importing SQL file when create an RDS instanc
 
 After an RDS database is created, the SQL file from OSS bucket will be imported into the database by the power of Terraform
 [`local-exec` provisioner](https://github.com/kubevela-contrib/terraform-modules/blob/master/alibaba/rds-preview/main.tf#L24-L33)
-which is referenced by [Alibaba Cloud RDS Preview ComponentDefinition](https://github.com/oam-dev/catalog/blob/master/addons/terraform-alibaba/definitions/terraform-alibaba-rds-preview.yaml#L23-L25).
+which is referenced by [Alibaba Cloud RDS Preview ComponentDefinition](https://github.com/kubevela/catalog/blob/master/addons/terraform-alibaba/definitions/terraform-alibaba-rds-preview.yaml#L23-L25).
 
 ### Prerequisites
 

@@ -16,7 +16,7 @@ In the following tutorial, you will learn to add [KEDA](https://keda.sh/) as a n
 
 To register KEDA as a new capability (i.e. trait) in KubeVela, the only thing needed is to create an `TraitDefinition` object for it.
 
-A full example can be found in this [keda.yaml](https://github.com/oam-dev/catalog/blob/master/registry/keda-scaler.yaml).
+A full example can be found in this [keda.yaml](https://github.com/kubevela/catalog/blob/master/registry/keda-scaler.yaml).
 Several highlights are list below.
 
 ### 1. Describe The Trait

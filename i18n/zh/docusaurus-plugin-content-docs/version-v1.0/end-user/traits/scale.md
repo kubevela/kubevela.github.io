@@ -52,7 +52,7 @@ spec:
 Change and Apply the sample application:
 
 ```shell
-$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/enduser/sample-manual.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/enduser/sample-manual.yaml
 application.core.oam.dev/website configured
 ```
 

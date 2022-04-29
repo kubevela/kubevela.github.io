@@ -75,7 +75,7 @@ services:
 
 ## 示例流程
 
-在以下的流程中，我们会构建并部署一个 NodeJs 的示例 app。该 app 的源文件在[这里](https://github.com/oam-dev/kubevela/tree/master/docs/examples/testapp)。
+在以下的流程中，我们会构建并部署一个 NodeJs 的示例 app。该 app 的源文件在[这里](https://github.com/kubevela/kubevela/tree/master/docs/examples/testapp)。
 
 ### 环境要求
 
@@ -87,7 +87,7 @@ services:
 git clone 然后进入 testapp 目录:
 
 ```bash
-$ git clone https://github.com/oam-dev/kubevela.git
+$ git clone https://github.com/kubevela/kubevela.git
 $ cd kubevela/docs/examples/testapp
 ```
 
@@ -95,7 +95,7 @@ $ cd kubevela/docs/examples/testapp
 
 ### 2. 使用命令部署 app
 
-我们将会使用目录中的 [vela.yaml](https://github.com/oam-dev/kubevela/tree/master/docs/examples/testapp/vela.yaml) 文件来构建和部署 app
+我们将会使用目录中的 [vela.yaml](https://github.com/kubevela/kubevela/tree/master/docs/examples/testapp/vela.yaml) 文件来构建和部署 app
 
 > 注意：请修改 `oamdev` 为你自己注册的账号。或者你可以尝试 `本地测试方式`。
 

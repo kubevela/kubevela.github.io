@@ -44,7 +44,7 @@ output "EIP_ADDRESS" {
 ```
 
 For Alibaba Cloud EIP, here is the complete ComponentDefinition. You are warmly welcome to contribute this extended cloud
-resource ComponentDefinition to [oam-dev/kubevela](https://github.com/oam-dev/kubevela/tree/master/charts/vela-core/templates/definitions).
+resource ComponentDefinition to [kubevela/kubevela](https://github.com/kubevela/kubevela/tree/master/charts/vela-core/templates/definitions).
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha2

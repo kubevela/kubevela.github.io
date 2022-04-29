@@ -15,7 +15,7 @@ vela cap center config <centerName> <centerURL> [flags]
 ### Examples
 
 ```
-vela cap center config mycenter https://github.com/oam-dev/catalog/cap-center
+vela cap center config mycenter https://github.com/kubevela/catalog/cap-center
 ```
 
 ### Options

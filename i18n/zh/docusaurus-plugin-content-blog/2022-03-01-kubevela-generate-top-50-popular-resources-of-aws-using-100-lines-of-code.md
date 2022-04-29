@@ -2,7 +2,7 @@
 title: 如何用 100 行代码快速引入 AWS 最受欢迎的 50 种云资源
 author: Avery Qi（同济大学） 周正喜（阿里云)
 author_title: KubeVela Team
-author_url: https://github.com/oam-dev/kubevela
+author_url: https://github.com/kubevela/kubevela
 author_image_url: https://kubevela.io/img/logo.svg
 tags: [ Terraform ]
 description: ""

@@ -32,7 +32,7 @@ Please refer to [Terraform controller getting started](https://github.com/oam-de
 
 ## Register `alibaba-rds` Component
 
-Register [alibaba-rds](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/ComponentDefinition-alibaba-rds.yaml) to KubeVela.
+Register [alibaba-rds](https://github.com/kubevela/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/ComponentDefinition-alibaba-rds.yaml) to KubeVela.
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha2
@@ -99,7 +99,7 @@ spec:
 
 ### Register `alibaba-oss` Component
 
-Register [alibaba-oss](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/ComponentDefinition-alibaba-oss.yaml) to KubeVela.
+Register [alibaba-oss](https://github.com/kubevela/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/ComponentDefinition-alibaba-oss.yaml) to KubeVela.
 
 
 ```yaml

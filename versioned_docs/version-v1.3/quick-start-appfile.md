@@ -16,7 +16,7 @@ Make sure you have finished and verified the installation following quick-instal
 ## Step 2: Deploy Your First Application
 
 ```bash
-vela up -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela.yaml
+vela up -f https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/vela.yaml
 ```
 ```console
 Parsing vela.yaml ...

@@ -13,7 +13,7 @@ You need to [install the CRD controller](https://github.com/openkruise/kruise#qu
 ### Step 2: Create Component Definition
 
 To register Cloneset(one of the OpenKruise workloads) as a new workload type in KubeVela, the only thing needed is to create an `ComponentDefinition` object for it.
-A full example can be found in this [cloneset.yaml](https://github.com/oam-dev/catalog/blob/master/registry/cloneset.yaml).
+A full example can be found in this [cloneset.yaml](https://github.com/kubevela/catalog/blob/master/registry/cloneset.yaml).
 Several highlights are list below.
 
 #### 1. Describe The Workload Type

@@ -106,8 +106,8 @@ The spec are as follows:
 
 ### Example
 
-Ref：[https://github.com/oam-dev/catalog/tree/master/addons/velaux/schemas](https://github.com/oam-dev/catalog/tree/master/addons/velaux/schemas)
+Ref：[https://github.com/kubevela/catalog/tree/master/addons/velaux/schemas](https://github.com/kubevela/catalog/tree/master/addons/velaux/schemas)
 
 ### How to expand
 
-UI-Schema mainly extends front-end react components, refer to [https://github.com/oam-dev/velaux/tree/main/src/extends](https://github.com/oam-dev/velaux/tree/main/src/extends)
+UI-Schema mainly extends front-end react components, refer to [https://github.com/kubevela/velaux/tree/main/src/extends](https://github.com/kubevela/velaux/tree/main/src/extends)

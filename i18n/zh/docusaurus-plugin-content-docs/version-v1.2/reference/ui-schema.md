@@ -110,8 +110,8 @@ UI Schema 包含的字段如下：
 
 ### 配置案例
 
-参考：[https://github.com/oam-dev/catalog/tree/master/addons/velaux/schemas](https://github.com/oam-dev/catalog/tree/master/addons/velaux/schemas)
+参考：[https://github.com/kubevela/catalog/tree/master/addons/velaux/schemas](https://github.com/kubevela/catalog/tree/master/addons/velaux/schemas)
 
 ### 如何扩展
 
-UI-Schema 主要扩展的是前端组件，参考 [https://github.com/oam-dev/velaux/tree/main/src/extends](https://github.com/oam-dev/velaux/tree/main/src/extends)
+UI-Schema 主要扩展的是前端组件，参考 [https://github.com/kubevela/velaux/tree/main/src/extends](https://github.com/kubevela/velaux/tree/main/src/extends)
