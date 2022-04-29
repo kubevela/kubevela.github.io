@@ -2,7 +2,7 @@
 title: Easily Manage your Application Shipment With Differentiated Configuration in Multi-Cluster 
 author: Wei Duan
 author_title: KubeVela Team
-author_url: https://github.com/oam-dev/KubeVela
+author_url: https://github.com/kubevela/kubevela
 author_image_url: https://KubeVela.io/img/logo.svg
 tags: [ KubeVela ]
 description: ""
@@ -17,9 +17,9 @@ KubeVela v1.3 iterates based on the previous multi-cluster function. This articl
 ### Before Starting
 
 1. Prepare a Kubernetes cluster as the control plane of KubeVela.
-1. Make sure [KubeVela v1.3](https://github.com/oam-dev/kubevela/releases/tag/v1.3.0) and KubeVela CLI v1.3.0 have been installed successfully.
+1. Make sure [KubeVela v1.3](https://github.com/kubevela/kubevela/releases/tag/v1.3.0) and KubeVela CLI v1.3.0 have been installed successfully.
 2. The list of Kubeconfig from sub clusters that you want to manage. We will take three clusters naming beijing-1, beijing-2 and us-west-1 as examples.
-3. Download and combine with [Multi-Cluster-Demo](https://github.com/oam-dev/sample/tree/master/12.multi_cluster_demo) to better understand how to use the KubeVela multi-cluster capabilities.
+3. Download and combine with [Multi-Cluster-Demo](https://github.com/kubevela/sample/tree/master/12.multi_cluster_demo) to better understand how to use the KubeVela multi-cluster capabilities.
 
 ### Distribute to Multiple Specified Clusters
 Distributing multiple specified clusters is the most basic multi-cluster management operation. In KubeVela, you will use a policy called `topology` to implement it. The cluster will be listed in the attribute `clusters`, an array.

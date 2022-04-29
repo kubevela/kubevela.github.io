@@ -2,11 +2,11 @@
 title: Machine Learning Practice with KubeVela
 author: Tianxin Dong
 author_title: KubeVela team
-author_url: https://github.com/oam-dev/kubevela
+author_url: https://github.com/kubevela/kubevela
 author_image_url: https://kubevela.io/img/logo.svg
 tags: [ KubeVela ]
 description: ""
-image: https://raw.githubusercontent.com/oam-dev/kubevela.io/main/docs/resources/KubeVela-03.png
+image: https://raw.githubusercontent.com/kubevela/kubevela.io/main/docs/resources/KubeVela-03.png
 hide_table_of_contents: false
 ---
 
@@ -28,7 +28,7 @@ The KubeVela AI addon is divided into two: model training and model serving. The
 
 Through the KubeVela AI addon, the deployment of model training and serving tasks can be significantly simplified. At the same time, the process of model training and serving can be combined with KubeVela's own workflow, multi-cluster and other functions to complete production-level services.
 
-> Note: You can find all source code and YAML files in [KubeVela Samples](https://github.com/oam-dev/samples/tree/master/11.Machine_Learning_Demo). If you want to use the model pretrained in this example, `style-model.yaml` and `color-model.yaml` in the folder will do that and copy the model into the PVC.
+> Note: You can find all source code and YAML files in [KubeVela Samples](https://github.com/kubevela/samples/tree/master/11.Machine_Learning_Demo). If you want to use the model pretrained in this example, `style-model.yaml` and `color-model.yaml` in the folder will do that and copy the model into the PVC.
 
 ## Model Training
 

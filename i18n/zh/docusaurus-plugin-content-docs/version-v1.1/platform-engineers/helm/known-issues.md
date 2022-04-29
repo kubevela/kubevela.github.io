@@ -71,7 +71,7 @@ spec:
 
 ### 推出策略
 
-目前，基于 Helm 的组件无法受益于 [应用程序级部署策略](https://github.com/oam-dev/kubevela/blob/master/design/vela-core/rollout-design.md#applicationdeployment-workflow)。如[本示例](./trait#update-an-applicatiion)所示，如果应用更新了，只能直接 rollout，没有 canary 或者 blue-green 方式。
+目前，基于 Helm 的组件无法受益于 [应用程序级部署策略](https://github.com/kubevela/kubevela/blob/master/design/vela-core/rollout-design.md#applicationdeployment-workflow)。如[本示例](./trait#update-an-applicatiion)所示，如果应用更新了，只能直接 rollout，没有 canary 或者 blue-green 方式。
 
 ### 更新特征属性也可能导致 Pod 重启
 

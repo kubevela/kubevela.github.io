@@ -16,7 +16,7 @@ title:  使用工作流实现多集群部署
 - 在这个场景中，KubeVela 背后采用[OCM(open-cluster-management)](https://open-cluster-management.io/getting-started/quick-start/)技术做实际的多集群资源分发。
 
 
-- 本实践案例相关的 YAML 描述和 Shell 脚本都在 KubeVela 项目的 [docs/examples/workflow-with-ocm](https://github.com/oam-dev/kubevela/tree/master/docs/examples/workflow-with-ocm) 下，
+- 本实践案例相关的 YAML 描述和 Shell 脚本都在 KubeVela 项目的 [docs/examples/workflow-with-ocm](https://github.com/kubevela/kubevela/tree/master/docs/examples/workflow-with-ocm) 下，
   请下载该案例，在该目录执行下面的终端命令。
 
 

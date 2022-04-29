@@ -113,7 +113,7 @@ spec:
 其中，YAML 类型的文件中应该包含的是一个 K8S 资源对象，在渲染时该对象会被做为 K8s-object 类型的组件直接添加到应用当中。 
 
 
-如 [OCM](https://github.com/oam-dev/catalog/tree/master/addons/ocm-cluster-manager/resources) 中插件的例子所示，所有 yaml 都会通过 KubeVela Application 中的 Component 形式，被部署到系统中。
+如 [OCM](https://github.com/kubevela/catalog/tree/master/addons/ocm-cluster-manager/resources) 中插件的例子所示，所有 yaml 都会通过 KubeVela Application 中的 Component 形式，被部署到系统中。
 
 #### CUE 格式的资源
 
@@ -156,9 +156,9 @@ parameter: {
 
 schemas 目录用于存放`X-Definitions` 所对应的 UI-schema 文件，用于在 UX 中展示 `X-Definitions` 所需要填写参数时增强显示效果。
 
-上面就完整介绍了如何制作一个插件，你可以在这个 [目录中](https://github.com/oam-dev/catalog/tree/master/experimental/addons/example) 找到上面所介绍插件的完整例子。
+上面就完整介绍了如何制作一个插件，你可以在这个 [目录中](https://github.com/kubevela/catalog/tree/master/experimental/addons/example) 找到上面所介绍插件的完整例子。
 
-除了将插件资源文件上传到自己的插件仓库中，你也可以通过提交 pull request 向 KubeVela [官方插件仓库](https://github.com/oam-dev/catalog/tree/master/addons) 和 [试验阶段插件仓库](https://github.com/oam-dev/catalog/tree/master/experimental/addons) 添加新的插件，pr 合并之后你的插件就可以被其他 KubeVela 用户发现并使用了。
+除了将插件资源文件上传到自己的插件仓库中，你也可以通过提交 pull request 向 KubeVela [官方插件仓库](https://github.com/kubevela/catalog/tree/master/addons) 和 [试验阶段插件仓库](https://github.com/kubevela/catalog/tree/master/experimental/addons) 添加新的插件，pr 合并之后你的插件就可以被其他 KubeVela 用户发现并使用了。
 
 ## 本地安装（离线安装）
 

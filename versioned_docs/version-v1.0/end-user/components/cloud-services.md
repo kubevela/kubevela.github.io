@@ -46,7 +46,7 @@ $ kubectl vela show service-binding
 
 ### Alibaba Cloud RDS and OSS
 
-A sample [application](https://github.com/oam-dev/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/application.yaml) is as below.
+A sample [application](https://github.com/kubevela/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/application.yaml) is as below.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

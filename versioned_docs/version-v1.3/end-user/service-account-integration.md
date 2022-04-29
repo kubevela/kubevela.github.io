@@ -120,4 +120,4 @@ Dispatch: Found 1 errors. [(cannot get object: deployments.apps "nginx-server" i
 ServiceAccount Integration doesn't support Multi-Cluster Application Delivery.
 Even if you set ServiceAccount name to the annotation, KubeVela will ignore it if the scope is a non-local cluster.
 
-You can follow up about this issue on [GitHub](https://github.com/oam-dev/kubevela/issues/3440).
+You can follow up about this issue on [GitHub](https://github.com/kubevela/kubevela/issues/3440).

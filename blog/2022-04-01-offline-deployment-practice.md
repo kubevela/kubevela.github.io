@@ -22,7 +22,7 @@ Before doing so, please ensure that Kubernetes cluster version is  `>= v1.19 && 
 
 ### Vela CLI Offline Installation
 
-- First, you need to download of the binary version of `vela` that you want by checking KubeVela [Release Log](https://github.com/oam-dev/kubevela/releases)
+- First, you need to download of the binary version of `vela` that you want by checking KubeVela [Release Log](https://github.com/kubevela/kubevela/releases)
 - Unzip binary files and configure the appropriate environment variables in `$PATH`
    - Unzip binary file
       - `tar -zxvf vela-v1.2.5-linux-amd64.tar.gz`
@@ -63,7 +63,7 @@ GOLANGVERSION: Go1.17.7
       - `docker load kube-webhook-certgen.tar`
       - `docker load alpine-k8s.tar`
       - `docker load hello-world.tar`
-- Download [KubeVela Core](https://github.com/oam-dev/KubeVela/releases), copy it to offline environment and use Helm to repackage
+- Download [KubeVela Core](https://github.com/kubevela/KubeVela/releases), copy it to offline environment and use Helm to repackage
    - Repackage the KubeVela source code and install the chart package to the control cluster offline
       - `helm package kubevela/charts/vela-core --destination kubevela/charts`
       - `helm install --create-namespace -n vela-system kubevela kubevela/charts/vela-core-0.1.0.tgz --wait`
@@ -76,7 +76,7 @@ KubeVela Control Plane Has Been successfully set up on your cluster.
 
 ### Addon Offline Installation
 
-- First download [Catalog Source](https://github.com/oam-dev/catalog) and copy it to offline environment
+- First download [Catalog Source](https://github.com/kubevela/catalog) and copy it to offline environment
 - Here, we will take VelaUX, one of many more addons, as an example. First prepare its Docker image, VelaUX mainly involve 2 images, you need to first access the extranet to download the corresponding image from Docker Hub, then load it to offline environment
    - Pull the image from Docker Hub
       - `docker pull oamdev/vela-apiserver:v1.2.5`
@@ -118,12 +118,12 @@ wildcardPolicy: None
 curl -I -m 10 -o /dev/null -s -w %{http_code} http://velaux.xxx.xxx.cn/applications
 ```
 
-- At this point, VelaUX has been deployed offline! At the same time, for other types of Addon's offline deployment, access to the corresponding directory of the [Catalog Source](https://github.com/oam-dev/catalog) and repeat the above moves, you would complete all the addons' offline deployments for good.
+- At this point, VelaUX has been deployed offline! At the same time, for other types of Addon's offline deployment, access to the corresponding directory of the [Catalog Source](https://github.com/kubevela/catalog) and repeat the above moves, you would complete all the addons' offline deployments for good.
 
 ## Summarize
 
 During offline deployment, we also try to save Vela Core and Addon's resource that generated to be YAML files after deploying in extranet and re-deploy them in an offline environment, but because of all different kinds of resource involved in and it requires many other authorization issues to resolve, this way is more than cumbersome.
 
-With this practice of KubeVela's offline deployment, we hope it help you build a complete set of KubeVela in offline environment much faster. Offline installation is pretty much a pain point for most developers, we also see that the KubeVela community is introducing the brand new [velad](https://github.com/oam-dev/velad), a fully offline, highly accountable installation tool. Velad can help automate completion by making many steps as one, such as preparing clusters, downloading and packing image, installing and etc. Further more, it do support many features: In Linux machine (such as Alibaba Cloud ECS) we can locally spin up a cluster to install Vela-Core; while starting a KubeVela control plane, do not have to worry about its data to be lost when machine behind it accidentally was shutdown; Velad can stores all the data from control plane cluster into a traditional database (such as MySQL deployed on another ECS).
+With this practice of KubeVela's offline deployment, we hope it help you build a complete set of KubeVela in offline environment much faster. Offline installation is pretty much a pain point for most developers, we also see that the KubeVela community is introducing the brand new [velad](https://github.com/kubevela/velad), a fully offline, highly accountable installation tool. Velad can help automate completion by making many steps as one, such as preparing clusters, downloading and packing image, installing and etc. Further more, it do support many features: In Linux machine (such as Alibaba Cloud ECS) we can locally spin up a cluster to install Vela-Core; while starting a KubeVela control plane, do not have to worry about its data to be lost when machine behind it accidentally was shutdown; Velad can stores all the data from control plane cluster into a traditional database (such as MySQL deployed on another ECS).
 
 In the recent version to come, China Merchants Bank will increase the efforts in the open source community of KubeVela, actively building: enterprise-level capacity, enhancement on multi-cluster, offline deployment and application-level observability. We'll also be contributing the financial industry's user scenarios and business needs, driving cloud-native ecology achieve more easily and efficient application management experience, and at last but not at least, welcome you the community member to join us together in this journey.

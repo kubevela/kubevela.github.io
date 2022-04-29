@@ -93,7 +93,7 @@ Name            Type    URL
 KubeVela        helm    https://addons.kubevela.net
 ```
 
-KubeVela 社区在 Github 上维护了一个官方的[正式插件包仓库](https://github.com/oam-dev/catalog/tree/master/addons) 和一个[试验阶段插件包仓库](https://github.com/oam-dev/catalog/tree/master/experimental) 。你在相应的仓库中找到插件包的定义文件。
+KubeVela 社区在 Github 上维护了一个官方的[正式插件包仓库](https://github.com/kubevela/catalog/tree/master/addons) 和一个[试验阶段插件包仓库](https://github.com/kubevela/catalog/tree/master/experimental) 。你在相应的仓库中找到插件包的定义文件。
 
 同时这些文件会被同步到 [对象存储](https://addons.kubevela.net) 当中，以加快下载速度。
 

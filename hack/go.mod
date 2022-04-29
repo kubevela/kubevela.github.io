@@ -1,4 +1,4 @@
-module github.com/oam-dev/kubevela.io
+module github.com/kubevela/kubevela.io
 
 go 1.17
 

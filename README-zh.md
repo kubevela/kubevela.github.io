@@ -1,6 +1,6 @@
 欢迎加入中文翻译 SIG 钉群：
 
-https://github.com/oam-dev/kubevela.io/blob/main/static/img/zh-CN-dingding-group.png?raw=true
+https://github.com/kubevela/kubevela.io/blob/main/static/img/zh-CN-dingding-group.png?raw=true
 
 
 参与翻译活动的基本流程如下：
@@ -21,7 +21,7 @@ https://github.com/oam-dev/kubevela.io/blob/main/static/img/zh-CN-dingding-group
 
 - 账号：你需要先准备一个 GitHub 账号。使用 Github 进行翻译任务的认领和 PR 提交。
 - 仓库和分支管理
-  - fork [kubevela.io](https://github.com/oam-dev/kubevela.io) 的仓库，并作为自己仓库的上游： `git remote add upstream https://github.com/oam-dev/kubevela.io.git`
+  - fork [kubevela.io](https://github.com/kubevela/kubevela.io) 的仓库，并作为自己仓库的上游： `git remote add upstream https://github.com/kubevela/kubevela.io.git`
   - 在自己的仓库，也就是 origin 上进行翻译；
   - 一个任务新建一个 branch
 - Node.js 版本 >= 12.13.0 （可以使用 `node -v` 命令查看）
@@ -70,7 +70,7 @@ Docusaurus website is running at: http://localhost:3000/zh/
 
 **Step6：任务完成**
 
-翻译合格的文章将会 merge 到 [kubevela.io](https://github.com/oam-dev/kubevela.io) 的 master 分支进行发布。
+翻译合格的文章将会 merge 到 [kubevela.io](https://github.com/kubevela/kubevela.io) 的 master 分支进行发布。
 
 
 ### 翻译要求

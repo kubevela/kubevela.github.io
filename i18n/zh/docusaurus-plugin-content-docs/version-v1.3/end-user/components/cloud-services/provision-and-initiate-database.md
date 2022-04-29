@@ -9,7 +9,7 @@ title: 数据库创建和初始化
 文件（这意味着创建表，并在需要时向其中插入数据）。
 
 > 目前，它只在阿里云上工作
-> ComponentDefinition [alibaba-rds-preview](https://github.com/oam-dev/catalog/blob/master/addons/terraform-alibaba/definitions/terraform-alibaba-rds-preview.yaml)是阿里云 RDS xxx的功能预览，以后会并入alibaba-rds。
+> ComponentDefinition [alibaba-rds-preview](https://github.com/kubevela/catalog/blob/master/addons/terraform-alibaba/definitions/terraform-alibaba-rds-preview.yaml)是阿里云 RDS xxx的功能预览，以后会并入alibaba-rds。
 
 ### 它是如何工作的
 
@@ -24,7 +24,7 @@ title: 数据库创建和初始化
 | sql_bucket_endpoint | The endpoint of the bucket. like `oss-cn-hangzhou.aliyuncs.com` | string | false    |         |
 
 RDS 数据库创建后，OSS 中的 SQL 文件将通过 Terraform 的[`local-exec` provisioner](https://github.com/kubevela-contrib/terraform-modules/blob/master/alibaba/rds-preview/main.tf#L24-L33) 导入到数据库中。
-这是由[阿里云 RDS 预览组件定义](https://github.com/oam-dev/catalog/blob/master/addons/terraform-alibaba/definitions/terraform-alibaba-rds-preview.yaml#L23-L25)定义的。
+这是由[阿里云 RDS 预览组件定义](https://github.com/kubevela/catalog/blob/master/addons/terraform-alibaba/definitions/terraform-alibaba-rds-preview.yaml#L23-L25)定义的。
 
 ### 先决条件
 

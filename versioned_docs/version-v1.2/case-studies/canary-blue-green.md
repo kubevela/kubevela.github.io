@@ -19,7 +19,7 @@ If your cluster haven't installed Istio. Install the Istio cluster plugin.
 vela addon enable istio
 ```
 
-Otherwise, you just need apply these 4 YAML files under this [path](https://github.com/oam-dev/kubevela/tree/master/vela-templates/addons/istio/definitions) 
+Otherwise, you just need apply these 4 YAML files under this [path](https://github.com/kubevela/kubevela/tree/master/vela-templates/addons/istio/definitions) 
 
 The default namespace needs to be labeled so that Istio will auto-inject sidecar.
 
@@ -32,7 +32,7 @@ kubectl label namespace default istio-injection=enabled
 Deploy the Application of `bookinfo`:
 
 ```shell
-vela up -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/canary-rollout-use-case/first-deploy.yaml
+vela up -f https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/canary-rollout-use-case/first-deploy.yaml
 ```
 
 The component architecture and  relationship of the application are as follows:
@@ -86,7 +86,7 @@ Next, we take the `reviews` Component as an example to simulate the complete pro
 
 Execute the following command to update the application.
 ```shell
-vela up -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/canary-rollout-use-case/rollout-v2.yaml
+vela up -f https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/canary-rollout-use-case/rollout-v2.yaml
 ```
 This operation updates the mirror of the `reviews` Component from the previous v2 to v3. At the same time, the Rollout Trait of the `reviews` Component specifies that the number of target instances to be upgraded is two, which are upgraded in two batches, with one instance in each batch.
 
@@ -187,7 +187,7 @@ If you continue to verify the webpage several times on the browser, you will fin
 During the manual verification, if the service does not meet the expectations, you can terminate the pre-defined release workflow and rollback the instances and the traffic to the previous version.
 
 ```shell
-vela up -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/canary-rollout-use-case/rollback.yaml
+vela up -f https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/canary-rollout-use-case/rollback.yaml
 ```
 
 This is basically updates the workflow to rollback step:

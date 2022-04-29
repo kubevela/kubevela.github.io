@@ -11,7 +11,7 @@ Make sure you have finished and verified the installation following [this guide]
 ## Step 2: Deploy Your First Application
 
 ```bash
-$ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/vela-app.yaml
 application.core.oam.dev/first-vela-app created
 ```
 

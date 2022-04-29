@@ -116,7 +116,7 @@ This field defines the field path of the trait which is used to store the refere
 
 If this field is set, KubeVela core will automatically fill the workload reference into target field of the trait. Then the trait controller can get the workload reference from the trait latter. So this field usually accompanies with the traits whose controllers relying on the workload reference at runtime. 
 
-Please check [scaler](https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/scaler.yaml) trait as a demonstration of how to set this field.
+Please check [scaler](https://github.com/kubevela/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/scaler.yaml) trait as a demonstration of how to set this field.
 
 ##### `.spec.podDisruptive`
 
@@ -252,7 +252,7 @@ vela show webservice
 ```
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/definition-revision/webservice-v2.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/definition-revision/webservice-v2.yaml
 ```
 
 The change will take effect immediately.

@@ -146,22 +146,22 @@ When the addon is enabled, the parameters need to be written in the `parameter.c
 
 The YAML format resources is just a Kubernetes YAML object, you can define any object one by one in a file.
 
-For example, the [OCM](https://github.com/oam-dev/catalog/tree/master/addons/ocm-cluster-manager/resources) addon defines all it's resources in the addon. All these YAML objects will be rendered as components in an Application.
+For example, the [OCM](https://github.com/kubevela/catalog/tree/master/addons/ocm-cluster-manager/resources) addon defines all it's resources in the addon. All these YAML objects will be rendered as components in an Application.
 
 
 ### X-Definitions directory(Optional)
 
 You can create a definition's file directory under the Addon Registry to store template definition files such as component definitions, trait definitions, and workflowstep definitions. It should be noted that since the KubeVela controller is usually not installed in the managed cluster, even if the addon is enabled by setting the `deployTo.runtimeCluster` field in the metadata file (metadata.yaml) to install the addon in the subcluster, the template definition file will not be distributed to sub-clusters.
 
-For example, the [`fluxcd`](https://github.com/oam-dev/catalog/tree/master/addons/fluxcd/definitions) addon defines multiple ComponentDefinition and TraitDefinition.
+For example, the [`fluxcd`](https://github.com/kubevela/catalog/tree/master/addons/fluxcd/definitions) addon defines multiple ComponentDefinition and TraitDefinition.
 
 ### UI-Schema directory(Optional)
 
 The schemas directory is used to store the UI-schema files corresponding to `X-Definitions`, which is used to enhance the display effect when displaying the parameters required by `X-Definitions` in UX.
 
-The above is a complete introduction to how to make an addon, you can find the complete description of the above-mentioned addon in this [catalog](https://github.com/oam-dev/catalog/tree/master/experimental/addons/example) example.
+The above is a complete introduction to how to make an addon, you can find the complete description of the above-mentioned addon in this [catalog](https://github.com/kubevela/catalog/tree/master/experimental/addons/example) example.
 
-In addition to uploading the addon resource files to your addon repository, you can also submit a pull request to KubeVela [official addon repository](https://github.com/oam-dev/catalog/tree/master/addons) and [experimental addon repository](https://github.com/oam-dev/catalog/tree/master/experimental/addons) to addon new addons. After pr merged your addons can be discovered and used by other KubeVela users.
+In addition to uploading the addon resource files to your addon repository, you can also submit a pull request to KubeVela [official addon repository](https://github.com/kubevela/catalog/tree/master/addons) and [experimental addon repository](https://github.com/kubevela/catalog/tree/master/experimental/addons) to addon new addons. After pr merged your addons can be discovered and used by other KubeVela users.
 
 ## Install Addon Locally
 

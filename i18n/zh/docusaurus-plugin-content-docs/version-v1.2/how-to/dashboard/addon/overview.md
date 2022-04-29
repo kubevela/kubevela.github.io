@@ -33,7 +33,7 @@ title: 管理插件包
 
 插件包仓库是一个存储、发现和下载插件的地方。 插件包仓库的地址可以是一个 Git 仓库或者一个对象存储 Bucket。
 
-KubeVela 社区在 Github 上维护了一个官方的[正式插件仓库](https://github.com/oam-dev/catalog/tree/master/addons) 和一个[试验阶段插件仓库](https://github.com/oam-dev/catalog/tree/master/experimental) 。
+KubeVela 社区在 Github 上维护了一个官方的[正式插件仓库](https://github.com/kubevela/catalog/tree/master/addons) 和一个[试验阶段插件仓库](https://github.com/kubevela/catalog/tree/master/experimental) 。
 
 你也可以参考这两个仓库，自己定制一个插件仓库， 下图展示如何通过 VelaUX 来管理插件仓库，你可以在这里添加、更新或删除一个插件仓库。
 

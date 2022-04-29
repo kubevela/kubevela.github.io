@@ -4,8 +4,8 @@ title:  Attach Traits
 
 Traits in KubeVela can be attached to Helm based component seamlessly.
 
-In this sample application below, we add two traits, [scaler](https://github.com/oam-dev/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml)
-and [virtualgroup](https://github.com/oam-dev/kubevela/blob/master/docs/examples/helm-module/virtual-group-td.yaml) to a Helm based component.
+In this sample application below, we add two traits, [scaler](https://github.com/kubevela/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/manualscale.yaml)
+and [virtualgroup](https://github.com/kubevela/kubevela/blob/master/docs/examples/helm-module/virtual-group-td.yaml) to a Helm based component.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

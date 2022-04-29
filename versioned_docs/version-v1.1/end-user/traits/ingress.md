@@ -45,7 +45,7 @@ spec:
 ```
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/master/docs/examples/vela-app.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/vela-app.yaml
 ```
 ```console
 application.core.oam.dev/first-vela-app created

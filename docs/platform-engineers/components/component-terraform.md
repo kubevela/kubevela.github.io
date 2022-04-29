@@ -129,7 +129,7 @@ spec:
 status: {}
 ```
 
-You are warmly welcome to contribute this extended cloud resource ComponentDefinition to [oam-dev/catalog](https://github.com/oam-dev/catalog/tree/master/addons/).
+You are warmly welcome to contribute this extended cloud resource ComponentDefinition to [oam-dev/catalog](https://github.com/kubevela/catalog/tree/master/addons/).
 
 ## Apply ComponentDefinition
 
@@ -170,7 +170,7 @@ the doc [Provision cloud resources](../../end-user/components/cloud-services/pro
 
 ## Generate documentation
 
-You are encouraged to generate the documentation for your ComponentDefinition and submit it to [KubeVela official site](https://github.com/oam-dev/kubevela.io).
+You are encouraged to generate the documentation for your ComponentDefinition and submit it to [KubeVela official site](https://github.com/kubevela/kubevela.io).
 
 By running `vela def doc-gen` command, we can generate related docs for the ComponentDefinition either from a local file, or from the running application on kubernetes cluster.
 
@@ -187,4 +187,4 @@ If you choose to generate docs from local ComponentDefinition file, you should p
 $ vela def doc-gen alibaba-eip.yaml
 ```
 
-Move the file generated to [oam-dev/kubevela.io](https://github.com/oam-dev/kubevela.io) repo. Follow the [contribution guide](https://github.com/oam-dev/kubevela.io#contributing-to-kubevela-en-docs) to submit the doc. 
+Move the file generated to [kubevela/kubevela.io](https://github.com/kubevela/kubevela.io) repo. Follow the [contribution guide](https://github.com/kubevela/kubevela.io#contributing-to-kubevela-en-docs) to submit the doc. 

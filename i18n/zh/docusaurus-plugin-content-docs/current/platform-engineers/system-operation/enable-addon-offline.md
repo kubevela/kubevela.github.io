@@ -4,13 +4,13 @@ title: 插件的离线安装
 
 ## 离线安装步骤
 
-如果你的网络环境，无法访问 `https://addons.kubevela.net` 或者 `github.com`, 你可以通过将 `https://github.com/oam-dev/catalog/tree/master/addons` 中的文件拷贝到本地， 并指定本地的某个插件的目录进行本地安装。
+如果你的网络环境，无法访问 `https://addons.kubevela.net` 或者 `github.com`, 你可以通过将 `https://github.com/kubevela/catalog/tree/master/addons` 中的文件拷贝到本地， 并指定本地的某个插件的目录进行本地安装。
 需要注意的是，安装插件的过程当中，可能仍需要从网络上拉取某些 helm chart 或者镜像。如果你的网络环境同样也无法访问这些资源，你需要执行以下步骤进行完全的离线安装。
 
-1. 将代码仓库 `https://github.com/oam-dev/catalog` 克隆到本地。然后你就可以在 `./addons/` 子目录中找到所有正式的插件，`./experimental/addons` 目录中实验阶段的插件。
+1. 将代码仓库 `https://github.com/kubevela/catalog` 克隆到本地。然后你就可以在 `./addons/` 子目录中找到所有正式的插件，`./experimental/addons` 目录中实验阶段的插件。
 
 ```yaml
-git clone https://github.com/oam-dev/catalog
+git clone https://github.com/kubevela/catalog
 ```   
 
 2. 同步你想要安装的插件中的镜像到自己的镜像仓库。例如，你可以通过下面的命令同步 fluxcd 插件的 helm controller 镜像到自己的镜像仓库。
