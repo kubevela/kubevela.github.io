@@ -482,6 +482,10 @@
             {
               "type": "doc",
               "id": "version-v1.3/reference/addons/ai"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/reference/addons/traefik"
             }
           ]
         },
