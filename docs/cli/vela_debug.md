@@ -1,24 +1,31 @@
 ---
-title: vela export
+title: vela debug
 ---
 
-Export deploy manifests from appfile
+Debug running application
 
 ### Synopsis
 
-Export deploy manifests from appfile or application.
+Debug running application with debug policy.
 
 ```
-vela export
+vela debug [flags]
+```
+
+### Examples
+
+```
+vela debug <application-name>
 ```
 
 ### Options
 
 ```
   -e, --env string         specify environment name for application
-  -f, --file string        specify file path for appfile
-  -h, --help               help for export
+  -f, --focus string       specify the focus value to debug
+  -h, --help               help for debug
   -n, --namespace string   specify the Kubernetes namespace to use
+  -s, --step string        specify the step to debug
 ```
 
 ### Options inherited from parent commands
