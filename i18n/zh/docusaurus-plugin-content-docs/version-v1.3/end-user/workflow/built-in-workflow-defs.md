@@ -4,19 +4,77 @@ title: 内置工作流步骤
 
 本文档将详细介绍 KubeVela 内置的各个工作流步骤。你可以通过自由的组合它们来设计完整的交付工作流。
 
+## deploy
+
+**简介**
+
+使用对应的策略部署组件。
+
+**参数**
+
+
+|  参数名   |  类型  |                 说明                  |
+| :-------: | :----: | :-----------------------------------: |
+|   auto    | bool |      可选参数，默认为 true。如果为 false，工作流将在执行该步骤前自动暂停。      |
+|   policies    | []string |      可选参数。指定本次部署要使用的策略。如果不指定策略，将自动部署到管控集群。      |
+|   parallelism    | int |      可选参数。指定本次部署的并发度，默认为 5。      |
+
+**示例**
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: deploy-workflowstep
+  namespace: examples
+spec:
+  components:
+    - name: nginx-deploy-workflowstep
+      type: webservice
+      properties:
+        image: nginx
+  policies:
+    - name: topology-hangzhou-clusters
+      type: topology
+      properties:
+        clusterLabelSelector:
+          region: hangzhou
+    - name: topology-local
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: examples-alternative
+  workflow:
+    steps:
+      - type: deploy
+        name: deploy-local
+        properties:
+          policies: ["topology-local"]
+      - type: deploy
+        name: deploy-hangzhou
+        properties:
+          # 在执行该步骤前自动暂停
+          auto: false
+          policies: ["topology-hangzhou-clusters"]
+```
+
 ## suspend
 
-### 简介
+**简介**
 
 暂停当前工作流，可以通过 `vela workflow resume appname` 继续已暂停的工作流。
 
 > 有关于 `vela workflow` 命令的介绍，可以详见 [vela cli](../../cli/vela_workflow)。
 
-### 参数
+**参数**
 
-无参数。
+> 注意，duration 参数需要在 KubeVela v1.4 版本以上可用。
 
-### 示例
+|  参数名   |  类型  |                 说明                  |
+| :-------: | :----: | :-----------------------------------: |
+|   duration    | string |      可选参数，指定工作流暂停的时长，超过该时间后工作流将自动继续，如："30s"， "1min"， "2m15s"      |
+
+**示例**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -31,12 +89,6 @@ spec:
     properties:
       image: crccheck/hello-world
       port: 8000
-    traits:
-    - type: ingress
-      properties:
-        domain: testsvc.example.com
-        http:
-          /: 8000
   workflow:
     steps:
       - name: slack-message
@@ -49,17 +101,19 @@ spec:
               text: 准备开始部署应用，请管理员审批并继续工作流
       - name: manual-approval
         type: suspend
+        # properties:
+        #   duration: "30s"
       - name: express-server
         type: apply-application
 ```
 
 ## notification
 
-### 简介
+**简介**
 
 向指定的 Webhook 发送信息，支持邮件、钉钉、Slack 和飞书。
 
-### 参数
+**参数**
 
 |      参数名      |  类型  | 说明                                                                                                                                     |
 | :--------------: | :----: | :--------------------------------------------------------------------------------------------------------------------------------------- |
@@ -90,7 +144,7 @@ spec:
 | secretRef.name | String | 可选值，从 secret 中获取值，secret 的名称 |
 | secretRef.key | String | 可选值，从 secret 中获取值，secret 的 key |
 
-### 示例
+**示例**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -135,18 +189,18 @@ spec:
 
 ## webhook
 
-### 简介
+**简介**
 
 向指定 Webhook URL 发送请求，若不指定请求体，则默认发送当前 Application。
 
-### 参数
+**参数**
 
 |  参数名   |  类型  |                 说明                  |
 | :-------: | :----: | :-----------------------------------: |
-|   url    | ValueOrSecret |       需要发送的 Webhook URL，可以选择直接在 value 填写或从 secretRef 中获取      |
-| data | object | 需要发送的内容 |
+|   url    | ValueOrSecret |        必填值，需要发送的 Webhook URL，可以选择直接在 value 填写或从 secretRef 中获取      |
+| data | object | 可选值，需要发送的内容 |
 
-### 示例
+**示例**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -174,17 +228,17 @@ spec:
 
 ## apply-application
 
-### 简介
+**简介**
 
 部署当前 Application 中的所有组件和运维特征。
 
 > 该步骤默认在 VelaUX 中隐藏。
 
-### 参数
+**参数**
 
 无需指定参数，主要用于应用部署前后增加自定义步骤。
 
-### 示例
+**示例**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -207,20 +261,20 @@ spec:
 
 ## apply-component
 
-### 简介
+**简介**
 
 部署当前 Application 中的某个组件及其运维特征
 
 > 该步骤默认在 VelaUX 中隐藏。
 
-### 参数
+**参数**
 
 
 |  参数名   |  类型  |                 说明                  |
 | :-------: | :----: | :-----------------------------------: |
 |   component    | string |      需要部署的 component 名称      |
 
-### 示例
+**示例**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -242,7 +296,7 @@ spec:
 
 ## depends-on-app
 
-### 简介
+**简介**
 
 等待指定的 Application 完成。
 
@@ -263,14 +317,14 @@ spec:
 >   myapp: ...
 > ``` 
 
-### 参数
+**参数**
 
 |  参数名   |  类型  |                 说明                  |
 | :-------: | :----: | :-----------------------------------: |
 |   name    | string |      需要等待的 Application 名称      |
 | namespace | string | 需要等待的 Application 所在的命名空间 |
 
-### 示例
+**示例**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -294,94 +348,22 @@ spec:
           namespace: default
 ```
 
-## deploy2env
-
-### 简介
-
-将 Application 在不同的环境和策略中部署。
-
-### 参数
-
-| 参数名 |  类型  |       说明       |
-| :----: | :----: | :--------------: |
-| policy | string | 需要关联的策略名 |
-|  env   | string | 需要关联的环境名 |
-
-### 示例
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: multi-env-demo
-  namespace: default
-spec:
-  components:
-    - name: nginx-server
-      type: webservice
-      properties:
-        image: nginx:1.21
-        port: 80
-
-  policies:
-    - name: env
-      type: env-binding
-      properties:
-        created: false
-        envs:
-          - name: test
-            patch:
-              components:
-                - name: nginx-server
-                  type: webservice
-                  properties:
-                    image: nginx:1.20
-                    port: 80
-            placement:
-              namespaceSelector:
-                name: test
-          - name: prod
-            patch:
-              components:
-                - name: nginx-server
-                  type: webservice
-                  properties:
-                    image: nginx:1.20
-                    port: 80
-            placement:
-              namespaceSelector:
-                name: prod
-
-  workflow:
-    steps:
-      - name: deploy-test-server
-        type: deploy2env
-        properties:
-          policy: env
-          env: test
-      - name: deploy-prod-server
-        type: deploy2env
-        properties:
-          policy: env
-          env: prod
-```
-
 ## apply-object
 
-### 简介
+**简介**
 
 部署 Kubernetes 原生资源，该功能在 KubeVela v1.1.4 及以上版本可使用。
 
 > 该步骤默认在 VelaUX 中隐藏。
 
-### 参数
+**参数**
 
 |  参数名   |  类型  |                 说明                  |
 | :-------: | :----: | :-----------------------------------: |
 |    value    | object |       必填值，Kubernetes 原生资源字段      |
 |    cluster    | object |      可选值，需要部署的集群名称。如果不指定，则为当前集群。在使用该字段前，请确保你已经使用 `vela cluster join` 纳管了你的集群     |
 
-### 示例
+**示例**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -431,13 +413,13 @@ spec:
 
 ## read-object
 
-### 简介
+**简介**
 
 读取 Kubernetes 原生资源，该功能在 KubeVela v1.1.6 及以上版本可使用。
 
 > 该步骤默认在 VelaUX 中隐藏。
 
-### 参数
+**参数**
 
 |  参数名   |  类型  |                 说明                  |
 | :-------: | :----: | :-----------------------------------: |
@@ -447,7 +429,7 @@ spec:
 | namespace | String |     选填值，资源的 namespace，默认为 `default`     |
 | cluster | String |     选填值，资源的集群名，默认为当前集群，在使用该字段前，请确保你已经使用 `vela cluster join` 纳管了你的集群     |
 
-### 示例
+**示例**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -489,13 +471,13 @@ spec:
 
 ## export2config
 
-### 简介
+**简介**
 
 导出数据到 ConfigMap，该功能在 KubeVela v1.1.6 及以上版本可使用。
 
 > 该步骤默认在 VelaUX 中隐藏。
 
-### 参数
+**参数**
 
 |  参数名   |  类型  |                 说明                  |
 | :-------: | :----: | :-----------------------------------: |
@@ -503,7 +485,7 @@ spec:
 | namespace | String |     选填值，ConfigMap 的 namespace，默认为 `context.namespace`     |
 | data | Map |     必填值，需要导出到 ConfigMap 中的数据     |
 
-### 示例
+**示例**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -540,13 +522,13 @@ spec:
 
 ## export2secret
 
-### 简介
+**简介**
 
 导出数据到 Secret，该功能在 KubeVela v1.1.6 及以上版本可使用。
 
 > 该步骤默认在 VelaUX 中隐藏。
 
-### 参数
+**参数**
 
 |  参数名   |  类型  |                 说明                  |
 | :-------: | :----: | :-----------------------------------: |
@@ -554,7 +536,7 @@ spec:
 | namespace | String |    选填值，Secret 的 namespace，默认为 `context.namespace`      |
 | data | Map |    必填值，需要导出到 Secret 中的数据     |
 
-### 示例
+**示例**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
