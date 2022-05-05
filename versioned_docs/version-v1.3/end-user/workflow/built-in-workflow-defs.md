@@ -6,23 +6,74 @@ This documentation will walk through the built-in workflow steps that you can us
 
 ## deploy
 
-### Overview
+**Overview**
 
-### Parameter
+Deploy components with policies.
 
-### Example
+**Parameter**
 
-## apply-application
+|  Name   |  Type  |                 Description                  |
+| :-------: | :----: | :-----------------------------------: |
+|   auto    | bool |      Optional, default to true. If set to false, the workflow will suspend automatically before this step.      |
+|   policies    | []string |      Optional, the policies that used for this deployment. If not specified, the components will be deployed to the hub cluster.      |
+|   parallelism    | int |     Optional, defaults to 5.      |
 
-### Overview
+**Example**
 
-Apply all components and traits in Application.
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: deploy-workflowstep
+  namespace: examples
+spec:
+  components:
+    - name: nginx-deploy-workflowstep
+      type: webservice
+      properties:
+        image: nginx
+  policies:
+    - name: topology-hangzhou-clusters
+      type: topology
+      properties:
+        clusterLabelSelector:
+          region: hangzhou
+    - name: topology-local
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: examples-alternative
+  workflow:
+    steps:
+      - type: deploy
+        name: deploy-local
+        properties:
+          policies: ["topology-local"]
+      - type: deploy
+        name: deploy-hangzhou
+        properties:
+          # require manual approval before running this step
+          auto: false
+          policies: ["topology-hangzhou-clusters"]
+```
 
-### Parameter
+## suspend
 
-No arguments, used for custom steps before or after application applied.
+**Overview**
 
-### Example
+Suspend the current workflow, we can use `vela workflow resume appname` to resume the suspended workflow.
+
+> For more information of `vela workflow`, please refer to [vela cli](../../cli/vela_workflow)。
+
+**Parameter**
+
+> Notice that you need to upgrade to KubeVela v1.4 or higher to use `duration` parameter.
+
+| Name  | Type  | Description |
+| :---: | :---: | :---------: |
+|   duration   |   string   |      Optional, the wait duration time to resume workflow such as "30s", "1min" or "2m15s"     |
+
+**Example**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -37,154 +88,30 @@ spec:
     properties:
       image: crccheck/hello-world
       port: 8000
-    traits:
-    - type: ingress
-      properties:
-        domain: testsvc.example.com
-        http:
-          /: 8000
   workflow:
     steps:
+      - name: slack-message
+        type: webhook-notification
+        properties:
+          slack:
+            # the Slack webhook address, please refer to: https://api.slack.com/messaging/webhooks
+            message:
+              text: Ready to apply the application, ask the administrator to approve and resume the workflow.
+      - name: manual-approval
+        type: suspend
+        # properties:
+        #   duration: "30s"
       - name: express-server
         type: apply-application
 ```
 
-## depends-on-app
-
-### Overview
-
-Wait for the specified Application to complete.
-
-> `depends-on-app` will check if the cluster has the application with `name` and `namespace` defines in `properties`.
-> If the application exists, the next step will be executed after the application is running.
-> If the application do not exists, KubeVela will check the ConfigMap with the same name, and read the config of the Application and apply to cluster.
-> The ConfigMap is like below: the `name` and `namespace` of the ConfigMap is the same in properties. In data, the key is `name`, and the value is the yaml of the deployed application yaml.
-> ```yaml
-> apiVersion: v1
-> kind: ConfigMap
-> metadata:
->   name: myapp
->   namespace: vela-system
-> data:
->   myapp: ...
-> ``` 
-
-### Parameter
-
-|   Name    |  Type  |           Description            |
-| :-------: | :----: | :------------------------------: |
-|   name    | string |   The name of the Application    |
-| namespace | string | The namespace of the Application |
-
-### Example
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-vela-workflow
-  namespace: default
-spec:
-  components:
-  - name: express-server
-    type: webservice
-    properties:
-      image: crccheck/hello-world
-      port: 8000
-    traits:
-    - type: ingress
-      properties:
-        domain: testsvc.example.com
-        http:
-          /: 8000
-  workflow:
-    steps:
-      - name: express-server
-        type: depends-on-app
-        properties:
-          name: another-app
-          namespace: default
-```
-
-## deploy2env
-
-### Overview
-
-Apply Application in different policies and envs.
-
-### Parameter
-
-|  Name  |  Type  |      Description       |
-| :----: | :----: | :--------------------: |
-| policy | string | The name of the policy |
-|  env   | string |  The name of the env   |
-
-### Example
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: multi-env-demo
-  namespace: default
-spec:
-  components:
-    - name: nginx-server
-      type: webservice
-      properties:
-        image: nginx:1.21
-        port: 80
-
-  policies:
-    - name: env
-      type: env-binding
-      properties:
-        created: false
-        envs:
-          - name: test
-            patch:
-              components:
-                - name: nginx-server
-                  type: webservice
-                  properties:
-                    image: nginx:1.20
-                    port: 80
-            placement:
-              namespaceSelector:
-                name: test
-          - name: prod
-            patch:
-              components:
-                - name: nginx-server
-                  type: webservice
-                  properties:
-                    image: nginx:1.20
-                    port: 80
-            placement:
-              namespaceSelector:
-                name: prod
-
-  workflow:
-    steps:
-      - name: deploy-test-server
-        type: deploy2env
-        properties:
-          policy: env
-          env: test
-      - name: deploy-prod-server
-        type: deploy2env
-        properties:
-          policy: env
-          env: prod
-```
-
 ## notification
 
-### Overview
+**Overview**
 
 Send notifications. You can use the notification to send email, slack, ding talk and lark.
 
-### Parameters
+**Parameters**
 
 |       Name       |  Type  | Description                                                                                                                                                                 |
 | :--------------: | :----: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -215,7 +142,7 @@ The `ValueOrSecret` format is:
 | secretRef.name | String | Optional, get data from secret, the name of the secret |
 | secretRef.key | String | Optional, get data from secret, the key of the secret |
 
-### Example
+**Example**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -287,20 +214,153 @@ spec:
               body: test-body
 ```
 
+## webhook
+
+**Overview**
+
+Send a request to the specified Webhook URL. If no request body is specified, the current Application body will be sent by default.
+
+**Parameter**
+
+|  Name   |  Type  |                 Description                  |
+| :-------: | :----: | :-----------------------------------: |
+|   url    | ValueOrSecret |       Required, Webhook URL to be sent, you can choose to fill in value directly or get it from secretRef      |
+| data | object | Optional, the data that needs to be sent |
+
+**Example**
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-workflow
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+  workflow:
+    steps:
+      - name: express-server
+        type: apply-application
+      - name: webhook
+        type: webhook
+        properties:
+          url:
+            value: <your webhook url>
+```
+
+## apply-application
+
+**Overview**
+
+Apply all components and traits in Application.
+
+**Parameter**
+
+No arguments, used for custom steps before or after application applied.
+
+**Example**
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-workflow
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+    traits:
+    - type: ingress
+      properties:
+        domain: testsvc.example.com
+        http:
+          /: 8000
+  workflow:
+    steps:
+      - name: express-server
+        type: apply-application
+```
+
+## depends-on-app
+
+**Overview**
+
+Wait for the specified Application to complete.
+
+> `depends-on-app` will check if the cluster has the application with `name` and `namespace` defines in `properties`.
+> If the application exists, the next step will be executed after the application is running.
+> If the application do not exists, KubeVela will check the ConfigMap with the same name, and read the config of the Application and apply to cluster.
+> The ConfigMap is like below: the `name` and `namespace` of the ConfigMap is the same in properties. In data, the key is `name`, and the value is the yaml of the deployed application yaml.
+> ```yaml
+> apiVersion: v1
+> kind: ConfigMap
+> metadata:
+>   name: myapp
+>   namespace: vela-system
+> data:
+>   myapp: ...
+> ``` 
+
+**Parameter**
+
+|   Name    |  Type  |           Description            |
+| :-------: | :----: | :------------------------------: |
+|   name    | string |   The name of the Application    |
+| namespace | string | The namespace of the Application |
+
+**Example**
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-workflow
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+    traits:
+    - type: ingress
+      properties:
+        domain: testsvc.example.com
+        http:
+          /: 8000
+  workflow:
+    steps:
+      - name: express-server
+        type: depends-on-app
+        properties:
+          name: another-app
+          namespace: default
+```
+
 ## apply-object
 
-### Overview
+**Overview**
 
 Apply Kubernetes native resources, you need to upgrade to KubeVela v1.1.4 or higher to enable `apply-object`.
 
-### Parameters
+**Parameters**
 
 |  Name   |  Type  |                 Description                  |
 | :-------: | :----: | :-----------------------------------: |
 |    value    | Object |      Required, Kubernetes native resources fields      |
 |    cluster    | String |      Optional, The cluster you want to apply the resource to, default is the current cluster. If you want to apply resource in different cluster, use `vela cluster join` to join the cluster first, and then specify the cluster      |
 
-### Example
+**Example**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -350,11 +410,11 @@ spec:
 
 ## read-object
 
-### Overview
+**Overview**
 
 Read Kubernetes native resources, you need to upgrade to KubeVela v1.1.6 or higher to enable `read-object`.
 
-### Parameters
+**Parameters**
 
 |  Name   |  Type  |                 Description                  |
 | :-------: | :----: | :-----------------------------------: |
@@ -364,7 +424,7 @@ Read Kubernetes native resources, you need to upgrade to KubeVela v1.1.6 or high
 | namespace | String |     Optional, The namespace of the resource you want to read, defaults to `default`     |
 | cluster | String |     Optional, The cluster you want to read the resource from, default is the current cluster. If you want to read resource in different cluster, use `vela cluster join` to join the cluster first, and then specify the cluster     |
 
-### Example
+**Example**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -406,11 +466,11 @@ spec:
 
 ## export2config
 
-### Overview
+**Overview**
 
 Export data to ConfigMap, you need to upgrade to KubeVela v1.1.6 or higher to enable `export2config`.
 
-### Parameters
+**Parameters**
 
 |  Name   |  Type  |                 Description                  |
 | :-------: | :----: | :-----------------------------------: |
@@ -418,7 +478,7 @@ Export data to ConfigMap, you need to upgrade to KubeVela v1.1.6 or higher to en
 | namespace | String |     Optional, The namespace of the ConfigMap, defaults to `context.namespace`     |
 | data | Map |     Required, The data that you want to export to ConfigMap     |
 
-### Example
+**Example**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -455,11 +515,11 @@ spec:
 
 ## export2secret
 
-### Overview
+**Overview**
 
 Export data to Secret, you need to upgrade to KubeVela v1.1.6 or higher to enable `export2secret`.
 
-### Parameters
+**Parameters**
 
 |  Name   |  Type  |                 Description                  |
 | :-------: | :----: | :-----------------------------------: |
@@ -467,7 +527,7 @@ Export data to Secret, you need to upgrade to KubeVela v1.1.6 or higher to enabl
 | namespace | String |     Optional, The namespace of the Secret, defaults to `context.namespace`     |
 | data | Map |     Required, The data that you want to export to Secret     |
 
-### Example
+**Example**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -500,54 +560,4 @@ spec:
           secretName: my-secret
           data:
             testkey: testvalue
-```
-
-## suspend
-
-### Overview
-
-Suspend the current workflow, we can use `vela workflow resume appname` to resume the suspended workflow.
-
-> For more information of `vela workflow`, please refer to [vela cli](../../cli/vela_workflow)。
-
-### Parameter
-
-| Name  | Type  | Description |
-| :---: | :---: | :---------: |
-|   -   |   -   |      -      |
-
-### Example
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-vela-workflow
-  namespace: default
-spec:
-  components:
-  - name: express-server
-    type: webservice
-    properties:
-      image: crccheck/hello-world
-      port: 8000
-    traits:
-    - type: ingress
-      properties:
-        domain: testsvc.example.com
-        http:
-          /: 8000
-  workflow:
-    steps:
-      - name: slack-message
-        type: webhook-notification
-        properties:
-          slack:
-            # the Slack webhook address, please refer to: https://api.slack.com/messaging/webhooks
-            message:
-              text: Ready to apply the application, ask the administrator to approve and resume the workflow.
-      - name: manual-approval
-        type: suspend
-      - name: express-server
-        type: apply-application
 ```
