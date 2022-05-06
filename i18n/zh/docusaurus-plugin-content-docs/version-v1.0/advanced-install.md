@@ -61,16 +61,16 @@ helm search repo kubevela/vela-core -l
 ### 第二步 升级 KubeVela 的 CRDs
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_workloaddefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_traitdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_applications.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_approllouts.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_scopedefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_appdeployments.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_applicationcontexts.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/master/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.0/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.0/charts/vela-core/crds/core.oam.dev_workloaddefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.0/charts/vela-core/crds/core.oam.dev_traitdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.0/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.0/charts/vela-core/crds/core.oam.dev_approllouts.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.0/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.0/charts/vela-core/crds/core.oam.dev_scopedefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.0/charts/vela-core/crds/core.oam.dev_appdeployments.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.0/charts/vela-core/crds/core.oam.dev_applicationcontexts.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.0/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
 ```
 
 > 提示：如果看到诸如 `* is invalid: spec.scope: Invalid value: "Namespaced": filed is immutable` 之类的错误，请删除出错的 CRD 后再重新安装。
