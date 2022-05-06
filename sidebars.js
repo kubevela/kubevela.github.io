@@ -165,6 +165,7 @@ module.exports = {
             },
             'platform-engineers/system-operation/velaql',
             'platform-engineers/debug/dry-run',
+            'platform-engineers/debug/debug',
             'platform-engineers/x-def-version',
           ],
         },
