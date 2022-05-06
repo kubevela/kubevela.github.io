@@ -1,22 +1,22 @@
 ---
-title: Built-in Policy Type
+title: 内置策略类型
 ---
 
-This documentation will walk through the built-in policies.
+本文档将介绍 KubeVela 内置的各个策略类型。
 
 ## apply-once
 
-**Overview**
+**简介**
 
-Allow configuration drift for applied resources.
+允许被部署资源的配置漂移。
 
-**Parameter**
+**参数**
 
-|   Name    |  Type  |           Description            |
+|   参数名    |  类型  |           说明            |
 | :-------: | :----: | :------------------------------ |
-|  enable   |  bool  |   If true, allow configuration drift.  |
+|  enable   |  bool  |   当设置为 true 时，将允许配置飘逸  |
 
-**Example**
+**示例**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -42,33 +42,33 @@ spec:
 
 ## garbage-collect
 
-**Overview**
+**简介**
 
-Configure the garbage collection behaviour for the application.
+为应用配置垃圾回收行为。
 
-**Parameter**
+**参数**
 
-|   Name    |  Type  |           Description            |
+|   参数名    |   类型  |           说明            |
 | :-------: | :----: | :------------------------------ |
-|  keepLegacyResource   |  bool  |   If true, outdated versioned resourcetracker will not be recycled automatically. Outdated resources will be kept until resourcetracker be deleted manually.  |
-| rules | []GarbageCollectPolicyRule | A list of rules to control gc strategy at resource level, if one resource is controlled by multiple rules, first rule will be used. |
+|  keepLegacyResource   |  bool  |   如果为 true，过时的版本化 resource tracker 将不会自动回收。 过时的资源将被保留，直到手动删除 resource tracker。  |
+| rules | []GarbageCollectPolicyRule | 在资源级别控制垃圾回收策略的规则列表，如果一个资源由多个规则控制，将使用第一个规则。 |
 
 *GarbageCollectPolicyRule*
 
-|   Name    |  Type  |           Description            |
+|   参数名    |   类型  |           说明            |
 | :-------: | :----: | :------------------------------ |
-| selector | GarbageCollectPolicyRuleSelector | Select the target resources of the rule. |
-| strategy | String | The strategy for target resources to recycle. Available values: never, onAppDelete, onAppUpdate. |
+| selector | GarbageCollectPolicyRuleSelector | 选择规则的目标资源。 |
+| strategy | String | 目标资源循环利用的策略。 可用值：never、onAppDelete、onAppUpdate。 |
 
 *GarbageCollectPolicyRuleSelector*
 
-|   Name    |  Type  |           Description            |
+|   参数名    |   类型  |           说明            |
 | :-------: | :----: | :------------------------------ |
-| componentNames | []String | Select target resources by component names. |
-| componentTypes | []String | Select target resources by component types. |
-| traitTypes | []String | Select target resources by trait types. |
+| componentNames | []String | 按组件名称选择目标资源。 |
+| componentTypes | []String | 按组件类型选择目标资源。 |
+| traitTypes | []String | 按 trait 类型选择目标资源。 |
 
-**Example**
+**示例**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -123,35 +123,35 @@ spec:
 
 ## Override
 
-**Overview**
+**简介**
 
-Describe the configuration to override when deploying resources.
+描述部署资源时要覆盖的配置。
 
-**Parameter**
+**参数**
 
-|   Name    |  Type  |           Description            |
+|   参数名    |  类型  |           说明            |
 | :-------: | :----: | :------------------------------ |
-| components | []ComponentPatch | A list of component configurations to override. |
-| selector | []String | A list of component names to use. If not set, all components will be used. |
+| components | []ComponentPatch | 要覆盖的组件配置列表。 |
+| selector | []String | 要使用的组件名称列表。 如果未设置，将使用所有组件。 |
 
 *ComponentPatch*
 
-|   Name    |  Type  |           Description            |
+|   参数名    |  类型  |           说明            |
 | :-------: | :----: | :------------------------------ |
-| name | string | The name of the component to override. If not set, it will match all components with the specified type. Can be used with wildcard * for fuzzy match. |
-| type | String | The type of the component to override. If not set, all component types will be matched. |
-| properties | Object | The component properties to merge. |
-| traits | []TraitPatch | A list of trait configurations to override. |
+| name | string | 要覆盖的组件的名称。 如果未设置，它将匹配具有指定类型的所有组件。 可以与通配符 * 一起使用以进行模糊匹配。 |
+| type | String | 要覆盖的组件的类型。 如果未设置，将匹配所有组件类型。 |
+| properties | Object | 要合并的组件属性。 |
+| traits | []TraitPatch | 要覆盖的 trait 配置列表。 |
 
 *TraitPatch*
 
-|   Name    |  Type  |           Description            |
+|   参数名    |  类型  |           说明            |
 | :-------: | :----: | :------------------------------ |
-| type | String | The type of the trait to override. |
-| properties | Object | The trait properties to merge. |
-| disable | bool | If true, this trait will be removed. |
+| type | String | 要覆盖的 trait 类型。 |
+| properties | Object | 要合并的 trait 属性。 |
+| disable | bool | 如果为 true，该 trait 将被删除。 |
 
-**Examples**
+**示例**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -258,19 +258,19 @@ spec:
 
 ## topology
 
-**Overview**
+**简介**
 
-Describe the destination where components should be deployed to.
+描述组件应该部署到的环境。
 
-**Parameter**
+**参数**
 
-|   Name    |  Type  |           Description            |
+|   参数名    |   类型  |           说明            |
 | :-------: | :----: | :------------------------------ |
-| clusters |  []string | The names of the clusters to select. |
-| clusterLabelSelector | mpa[string]string | The label selector for clusters. Exclusive to "clusters" |
-| namespace | string | The target namespace to deploy in the selected clusters. If not set, components will inherit the original namespace. |
+| clusters |  []string | 要选择的集群的名称。 |
+| clusterLabelSelector | mpa[string]string | 集群的标签选择器。 |
+| namespace | string | 要在选定集群中部署的目标命名空间。 如果未设置，组件将继承原始命名空间。 |
 
-**Example**
+**示例**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
