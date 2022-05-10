@@ -197,23 +197,23 @@
   "What is KubeVela?": {
     "message": "KubeVela 是什么？"
   },
-  "Unified Application Delivery Model": {
+  "Unified Application Delivery Experience": {
     "message": "统一的应用交付模型"
   },
   "KubeVela introduces a unified and cross-platform delivery model(OAM) that allows you to deploy any workload type, including containers, databases, or even VM instances to any cloud or Kubernetes clusters. It helps you to just write application once, and deliver it the same everywhere, no more re-writing everything from scratch for any new delivery target.": {
     "message": "KubeVela 创新性的提出了开放应用模型（OAM）来作为应用交付的顶层抽象，该模型支持交付任意类型的工作负载包括容器、数据库甚至是虚拟机到不同的云和 Kubernetes 集群中。用户无需关心任何基础设施细节，只需要专注于定义和部署应用即可。应用只需要一次编排，就可以随处运行，免去了适配不同平台的痛苦。"
   },
-  "Intention-driven Delivery Workflow": {
-    "message": "声明式交付工作流"
+  "Automated Deployment across Clusters": {
+    "message": "自动化跨集群交付"
   },
-  "The whole delivery model was fully intention-driven, having both user experience and robustness. The implementation is driven by CUE - a powerful configuration language developed at Google, and runs on Kubernetes with reconciliation loops. This allows you to design application deployment steps per needs, satisfy the fast growth of businesses requirements, while also keep your production safe with continuous enforcement.": {
-    "message": "KubeVela 的整个交付模型完全是由用户声明式驱动的，兼顾用户体验和健壮性。实现层通过 CUE 语言（一种源自 Google Borg 系统的数据配置语言）保证可扩展性，运行在 Kubernetes 持续进行控制循环。这使得你可以自由的根据需求场景来设计和选用交付工作流中的每一个步骤，满足业务快速增长的需求，同时持续保证生产环境面向终态的稳定性。"
+  "The application delivery process is driven by declarative workflow. Executed by reconciliation loops with limited privileges, the workflow is both robust and secure enough to prevent any unexpected configuration drifts. Users can also make arbitrary reusable customizations to the workflow through writing CUE definitions. The extensibility will always satisfy your growing business demands while keeping your production safe with continuous enforcement.": {
+    "message": "KubeVela 的整个交付模型完全是由用户声明式驱动的，兼顾用户体验和健壮性，其控制循环能够有效避免配置漂移，且具备多租权限控制能力。用户可以通过 CUE 语言（一种源自 Google Borg 系统的数据配置语言）自由的根据需求场景来设计和选用交付工作流中的每一个步骤，满足业务快速增长的需求，同时持续保证生产环境面向终态的稳定性。"
   },
-  "Multi-cluster/Hybrid-cloud Continuous Delivery Control Plane": {
-    "message": "多集群/混合云应用交付控制平面"
+  "Declarative and Highly Extensible Workflow": {
+    "message": "声明式高可扩展工作流"
   },
-  "KubeVela natively supports rich continuous delivery policies in various multi-cluster/hybrid-cloud scenarios or mixed environments, it supports cross-environment promotion as well. It can enhance the CI/CD pipeline by serving as unified control plane, while it is also capable of leveraging GitOps to automate continuous delivery process in the style of IaC.": {
-    "message": "KubeVela 原生支持丰富的多集群/混合环境持续交付策略，也支持跨环境交付。它既可作为统一的持续交付控制平面增强现有 CI/CD 流水线，也可以满足现代 GitOps 应用交付的趋势与要求，以基础设施即代码（IaC）的方式来驱动持续交付过程。"
+  "KubeVela natively supports rich continuous delivery strategies in various multi-cluster/hybrid-cloud scenarios or mixed environments. These strategies provides efficiency and safety to the distributed delivery process. The centralized management reduces the burden of looking over each clusters and gives unified experience across platforms. With KubeVela, you don't need to have any Ph.D. degree in Kubernetes to run automatic deployments.": {
+    "message": "KubeVela 原生支持丰富的多集群/混合环境持续交付策略，也支持跨环境交付。这些交付策略为你的分布式交付流程提供了充足的效率和安全的保证。KubeVela 提供的中心化管控能力也减轻了到每一个集群去排查问题的负担，针对不同的平台提供统一的体验，为了享受自动化交付的便利，你再也不需要成为 Kubernetes 专家。"
   },
   "KubeVela is a": {
     "message": "KubeVela 是一个"
