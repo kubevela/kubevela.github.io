@@ -58,10 +58,6 @@
             },
             {
               "type": "doc",
-              "id": "version-v1.4/end-user/traits/rollout"
-            },
-            {
-              "type": "doc",
               "id": "version-v1.4/end-user/traits/ingress"
             },
             {

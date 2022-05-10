@@ -9,3 +9,4 @@ There's an official addon registry (https://addons.kubevela.net) maintained by K
 * [Addon Cloud Resources](./terraform): Provide a bunch of addons to provision cloud resources for different cloud providers.
 * [Machine Learning Addon](./ai): Machine learning addon is divided into model-training addon and model-serving addon.
 * [Traefik](./traefik): Traefik is a modern HTTP reverse proxy and load balancer made to deploy microservices with ease.
+* [Rollout](./rollout): Provide a capability rollout the applicaton.
