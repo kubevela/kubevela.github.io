@@ -3,7 +3,7 @@ import Translate, { translate } from '@docusaurus/Translate';
 
 const features = [
   {
-    title: <><Translate>Unified Application Delivery Model</Translate></>,
+    title: <><Translate>Unified Application Delivery Experience</Translate></>,
     imgUrl: 'img/application-centric.svg',
     description: (
       <>
@@ -16,13 +16,13 @@ const features = [
     ),
   },
   {
-    title: <><Translate>Intention-driven Delivery Workflow</Translate></>,
+    title: <><Translate>Automated Deployment across Clusters</Translate></>,
     imgUrl: 'img/extending-natively.svg',
     description: (
       <>
         <p>
           <Translate>
-            The whole delivery model was fully intention-driven, having both user experience and robustness. The implementation is driven by CUE - a powerful configuration language developed at Google, and runs on Kubernetes with reconciliation loops. This allows you to design application deployment steps per needs, satisfy the fast growth of businesses requirements, while also keep your production safe with continuous enforcement.
+            KubeVela natively supports rich continuous delivery strategies in various multi-cluster/hybrid-cloud scenarios or mixed environments. These strategies provides efficiency and safety to the distributed delivery process. The centralized management reduces the burden of looking over each clusters and gives unified experience across platforms. With KubeVela, you don't need to have any Ph.D. degree in Kubernetes to run automatic deployments.
           </Translate>
         </p>
       </>
@@ -30,13 +30,13 @@ const features = [
     reverse: true,
   },
   {
-    title: <><Translate>Multi-cluster/Hybrid-cloud Continuous Delivery Control Plane</Translate></>,
+    title: <><Translate>Declarative and Highly Extensible Workflow</Translate></>,
     imgUrl: 'img/simple-yet-extensible-abstraction-mechanism.svg',
     description: (
       <>
         <p>
           <Translate>
-            KubeVela natively supports rich continuous delivery policies in various multi-cluster/hybrid-cloud scenarios or mixed environments, it supports cross-environment promotion as well. It can enhance the CI/CD pipeline by serving as unified control plane, while it is also capable of leveraging GitOps to automate continuous delivery process in the style of IaC.
+            The application delivery process is driven by declarative workflow. Executed by reconciliation loops with limited privileges, the workflow is both robust and secure enough to prevent any unexpected configuration drifts. Users can also make arbitrary reusable customizations to the workflow through writing CUE definitions. The extensibility will always satisfy your growing business demands while keeping your production safe with continuous enforcement.
           </Translate>
         </p>
       </>

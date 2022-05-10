@@ -309,7 +309,7 @@ z ?:float
 ```
 
 Optional variables can be skipped, that usually works together with conditional logic.
-Specifically, if some field does not exit, the CUE grammar is `if _variable_ != _|_`, the example is like below:
+Specifically, if some field does not exist, the CUE grammar is `if _variable_ != _|_`, the example is like below:
 
 ```
 parameter: {
