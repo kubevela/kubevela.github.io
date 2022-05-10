@@ -7,24 +7,24 @@ slug: /
 
 KubeVela is a modern software delivery platform that makes it easier and faster to deliver and manage applications across hybrid, multi-cloud environments. 
 
-Using KubeVela, software teams can build cloud native applications per needs as they grow, then run them anywhere.
+Using KubeVela, software teams can build cloud native applications per needs as they grow, then deliver them anywhere.
 
 ![](../resources/what-is-kubevela.png)
 
 
 ## Key Features
 
-* **Unified Application Delivery Model**
+* **Unified Application Delivery Experience**
 
     KubeVela introduces a [unified and cross-platform delivery model(OAM)](https://oam.dev/) that allows you to deploy any workload type, including containers, databases, or even VM instances to any cloud or Kubernetes clusters. It helps you to just write application once, and deliver it the same everywhere, no more re-writing everything from scratch for any new delivery target.
 
-* **Intention-driven Delivery Workflow**
+* **Automated Deployment across Clusters**
 
-    The whole delivery model was fully intention-driven, having both user experience and robustness. The implementation is driven by CUE - a powerful configuration language developed at Google, and runs on Kubernetes with reconciliation loops. This allows you to design application deployment steps per needs, satisfy the fast growth of businesses requirements, while also keep your production safe with continuous enforcement.
+    KubeVela natively supports rich continuous delivery strategies in various multi-cluster/hybrid-cloud scenarios or mixed environments. These strategies provides efficiency and safety to the distributed delivery process. The centralized management reduces the burden of looking over each clusters and gives unified experience across platforms. With KubeVela, you don't need to have any Ph.D. degree in Kubernetes to run automatic deployments.
+    
+* **Declarative and Highly Extensible Workflow**
 
-* **Multi-cluster/Hybrid-cloud Continuous Delivery Control Plane**
-
-    KubeVela natively supports rich continuous delivery policies in various multi-cluster/hybrid-cloud scenarios or mixed environments, it supports cross-environment promotion as well. It can enhance the CI/CD pipeline by serving as unified control plane, while it is also capable of leveraging GitOps to automate continuous delivery process in the style of IaC.
+    The application delivery process is driven by declarative workflow. Executed by reconciliation loops with limited privileges, the workflow is both robust and secure enough to prevent any unexpected configuration drifts. Users can also make arbitrary reusable customizations to the workflow through writing CUE definitions. The extensibility will always satisfy your growing business demands while keeping your production safe with continuous enforcement at the same time.
 
 
 ## KubeVela vs. Other Software
@@ -37,10 +37,10 @@ KubeVela is a continuous delivery platform that works at downstream of your CI p
 
 ### KubeVela vs. GitOps (ArgoCD, FluxCD, etc.)
 
-KubeVela does not replace your GitOps process: it improves it by adding a unified control plane on top of it.
+KubeVela adopts your GitOps process and improves it by adding multi-cluster/hybrid-cloud capabilities:
 
-* KubeVela can provide cross-environment promotion for your multi-cluster/hybrid-cloud applications, it adopts major of your existing tools for the underlying GitOps driver.
-* KubeVela has a user-friendly delivery model that _reduces any lock-in_, you can change any underlying tools without rewriting all your application.
+* KubeVela has a user-friendly and programable workflow that allows you to integrate any of your delivery steps, including approval and notification flows. 
+* With the help of the workflow, KubeVela can provide cross-environment promotion for your multi-cluster/hybrid-cloud applications.
 
 
 ### KubeVela vs. PaaS (Heroku, Cloud Foundry, etc.)
