@@ -1,8 +1,8 @@
 ---
-title:  Needs More Component？
+title:  Needs More？
 ---
 
-* Refer to [All Component References](./references) for all other component types.
+* Refer to [All Component References](./references) to learn all built-in supported artifacts supported for delivery.
 
 * Get more from [install addons](../../how-to/cli/addon/addon).
 

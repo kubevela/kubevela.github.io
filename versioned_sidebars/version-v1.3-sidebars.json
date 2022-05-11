@@ -40,37 +40,25 @@
       "label": "User Guide",
       "items": [
         {
-          "type": "doc",
-          "id": "version-v1.3/tutorials/webservice"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.3/tutorials/helm"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.3/tutorials/k8s-object"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.3/tutorials/consume-cloud-services"
-        },
-        {
-          "collapsed": true,
+          "collapsed": false,
           "type": "category",
-          "label": "Deploy with more workload type",
+          "label": "Artifacts",
           "items": [
             {
               "type": "doc",
-              "id": "version-v1.3/end-user/components/cue/task"
+              "id": "version-v1.3/tutorials/webservice"
             },
             {
               "type": "doc",
-              "id": "version-v1.3/end-user/components/kustomize"
+              "id": "version-v1.3/tutorials/helm"
             },
             {
               "type": "doc",
-              "id": "version-v1.3/end-user/components/ref-objects"
+              "id": "version-v1.3/tutorials/k8s-object"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/tutorials/consume-cloud-services"
             },
             {
               "type": "doc",
@@ -83,16 +71,23 @@
           "id": "version-v1.3/case-studies/multi-cluster"
         },
         {
-          "type": "doc",
-          "id": "version-v1.3/tutorials/jenkins"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.3/tutorials/trigger"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.3/case-studies/gitops"
+          "collapsed": false,
+          "type": "category",
+          "label": "CI Integration",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.3/tutorials/jenkins"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/tutorials/trigger"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/case-studies/gitops"
+            }
+          ]
         },
         {
           "collapsed": true,
@@ -440,6 +435,10 @@
             {
               "type": "doc",
               "id": "version-v1.3/platform-engineers/debug/dry-run"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/platform-engineers/debug/debug"
             },
             {
               "type": "doc",

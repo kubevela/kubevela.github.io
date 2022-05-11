@@ -4,7 +4,7 @@ title:  GitOps
 
 This section will introduce how to use KubeVela in GitOps environment and why.
 
-> This section is only apply to CLI.
+> This section is only apply to CLI, you need to enable the fluxcd addon.
 
 ## Introduction
 
