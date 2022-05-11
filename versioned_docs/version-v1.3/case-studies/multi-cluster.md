@@ -1,5 +1,5 @@
 ---
-title:  Multi-Cluster App Delivery
+title:  Multi-Cluster Delivery
 ---
 
 KubeVela is by design a full functional Continuous Delivery (CD) platform with fine grained support for hybrid/multi-cloud/multi-cluster deployment.
