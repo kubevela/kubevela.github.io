@@ -35,7 +35,7 @@ When the addon is `enabled`, it means that it's ready to. You can start to deplo
 You can also enable the addon via CLI:
 
 ```shell
-vale addon enable fluxcd
+vela addon enable fluxcd
 ```
 
 ## Creating Redis application
@@ -79,8 +79,12 @@ spec:
         chart: "redis"
         version: "16.8.5"
         values: 
-          master.persistence.size: 16Gi
-          replica.persistence.size: 16Gi
+          master:
+            persistence:
+              size: 16Gi
+          replica:
+            persistence:
+              size: 16Gi
 ```
 
 Deploy this application：
