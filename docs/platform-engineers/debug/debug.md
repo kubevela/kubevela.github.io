@@ -2,6 +2,8 @@
 title:  Debug in the environment
 ---
 
+> This feature is available in KubeVela v1.4.
+
 When you deploy your application in a test environment and find problems with the application, you may want to debug the application in the environment. KubeVela provides the `vela debug` command to help you debug your application in the environment.
 
 ## Applications with workflow

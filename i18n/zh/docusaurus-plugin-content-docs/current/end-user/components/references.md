@@ -962,7 +962,20 @@ Create a Kustomize Component, it could be from Git Repo or OSS bucket or image r
 
 ### 样例
 
+
+Let's take the YAML folder component from the OSS bucket registry as an example to explain the usage. In the `Application` we will deliver a component named bucket-comp. The deployment file corresponding to the component is stored in the cloud storage OSS bucket, and the corresponding bucket name is definition-registry. `kustomize.yaml` comes from this address of `oss-cn-beijing.aliyuncs.com` and the path is `./app/prod/`.
+
+
+1. (Optional) If your OSS bucket needs identity verification, create a Secret:
+
+```shell
+$ kubectl create secret generic bucket-secret --from-literal=accesskey=<your-ak> --from-literal=secretkey=<your-sk>
+secret/bucket-secret created
 ```
+
+2. Deploy it:
+
+```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
