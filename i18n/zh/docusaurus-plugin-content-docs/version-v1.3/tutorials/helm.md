@@ -1,5 +1,5 @@
 ---
-title: 交付 Helm Chart
+title: Helm Chart
 description: 本文介绍通过 KubeVela 交付 Helm Chart
 ---
 

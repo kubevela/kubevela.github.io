@@ -255,9 +255,9 @@
     "message": "基本概念",
     "description": "Basic information"
   },
-  "sidebar.docs.category.Deploy with more workload type": {
-    "message": "更多组件类型",
-    "description": "非常用的组件类型"
+  "sidebar.docs.category.Artifacts": {
+    "message": "交付制品",
+    "description": "多样化交付制品"
   },
   "sidebar.docs.category.User Guide": {
     "message": "用户手册",
@@ -274,5 +274,9 @@
   "sidebar.docs.category.How-to manage the applications": {
     "message": "应用基础管理",
     "description": "提供基础管理能力说明"
+  },
+  "sidebar.docs.category.CI Integration": {
+    "message": "CI 集成",
+    "description": "CI 集成"
   }
 }

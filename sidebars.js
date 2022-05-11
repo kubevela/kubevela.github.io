@@ -19,25 +19,29 @@ module.exports = {
       label: 'User Guide',
       collapsed: false,
       items: [
-        'tutorials/webservice',
-        'tutorials/helm',
-        'tutorials/k8s-object',
-        'tutorials/consume-cloud-services',
         {
           type: 'category',
-          label: 'Deploy with more workload type',
-          collapsed: true,
+          label: 'Artifacts',
+          collapsed: false,
           items: [
-            'end-user/components/cue/task',
-            'end-user/components/kustomize',
-            'end-user/components/ref-objects',
+            'tutorials/webservice',
+            'tutorials/helm',
+            'tutorials/k8s-object',
+            'tutorials/consume-cloud-services',
             'end-user/components/more',
           ],
         },
         'case-studies/multi-cluster',
-        'tutorials/jenkins',
-        'tutorials/trigger',
-        'case-studies/gitops',
+        {
+          type: 'category',
+          label: 'CI Integration',
+          collapsed: false,
+          items: [
+            'tutorials/jenkins',
+            'tutorials/trigger',
+            'case-studies/gitops',
+          ],
+        },
         {
           'How-to manage the cloud resources': [
             'end-user/components/cloud-services/provision-and-consume-cloud-services',

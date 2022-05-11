@@ -1,5 +1,5 @@
 ---
-title: Allow Configuration Drift
+title: One-time delivery
 ---
 
 By default, the KubeVela controller will prevent configuration drift for applied resources by reconciling them routinely. This is useful if you want to keep your application always having the desired configuration in avoid of some unintentional changes by external modifiers.
