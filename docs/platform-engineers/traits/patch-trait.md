@@ -8,6 +8,8 @@ This pattern is extremely useful when the component definition is provided by th
 
 > Note that even patch trait itself is defined by CUE, it can patch any component regardless how its schematic is defined (i.e. CUE, Helm, and any other supported schematic approaches).
 
+## Patch to components
+
 Below is an example for `node-affinity` trait:
 
 ```yaml
@@ -54,8 +56,12 @@ spec:
         }
 ```
 
+In `patch`, we declare the component object fields that this trait will patch to. If you want to modify other traits in this trait, you can use `patchOutputs`.
+
 The patch trait above assumes the target component instance have `spec.template.spec.affinity` field.
 Hence, we need to use `appliesToWorkloads` to enforce the trait only applies to those workload types have this field.
+
+At the same time, this patch also assumes that there is another trait bound to the component, and that there will be a `service` resource in this trait.
 
 Another important field is `podDisruptive`, this patch trait will patch to the pod template field,
 so changes on any field of this trait will cause the pod to restart, We should add `podDisruptive` and make it to be true
@@ -76,6 +82,11 @@ spec:
       properties:
         image: oamdev/testapp:v1
       traits:
+        - type: "gateway"
+          properties:
+            domain: testsvc.example.com
+            http:
+              "/": 8000
         - type: "node-affinity"
           properties:
             affinity:
@@ -86,7 +97,64 @@ spec:
               server-owner: "old-owner"
 ```
 
-### Known Limitations
+## Patch to traits
+
+> Note: it's available after KubeVela v1.4.
+
+You can also patch to other traits by using `patchOutputs` in the Definition. Such as:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: TraitDefinition
+metadata:
+  name: patch-annotation
+spec:
+  appliesToWorkloads:
+    - deployments.apps
+  podDisruptive: true
+  schematic:
+    cue:
+      template: |
+        patchOutputs: {
+          service: {
+            metadata: annotations: {
+              "patched-by": parameter.name
+            }
+          }
+        }
+
+        parameter: {
+        	name: string
+        }
+```
+
+The patch trait above assumes that the component it binds has other traits which have `service` resource. The patch trait will patch an annotation to the `service` resource.
+
+We can deploy the following application:
+
+```yaml
+apiVersion: core.oam.dev/v1alpha2
+kind: Application
+metadata:
+  name: testapp
+spec:
+  components:
+    - name: express-server
+      type: webservice
+      properties:
+        image: oamdev/testapp:v1
+      traits:
+        - type: "gateway"
+          properties:
+            domain: testsvc.example.com
+            http:
+              "/": 8000
+        - type: "patch-annotation"
+          properties:
+            name: "patch-annotation-trait"
+```
+
+## Known Limitations and Workarounds
 
 By default, patch trait in KubeVela leverages the CUE `merge` operation. It has following known constraints though:
 
@@ -135,6 +203,8 @@ spec:
 
 In above example we defined `patchKey` is `name` which is the parameter key of container name. In this case, if the workload don't have the container with same name, it will be a sidecar container append into the `spec.template.spec.containers` array list. If the workload already has a container with the same name of this `sidecar` trait, then merge operation will happen instead of append (which leads to duplicated containers).
 
+> After KubeVela 1.4, you can use `,` to split multiple patchKeys, such as `patchKey=name,image`.
+
 If `patch` and `outputs` both exist in one trait definition, the `patch` operation will be handled first and then render the `outputs`. 
 
 ```yaml
@@ -173,11 +243,11 @@ spec:
 
 So the above trait which attaches a Service to given component instance will patch an corresponding label to the workload first and then render the Service resource based on template in `outputs`.
 
-#### 2. With `+patchStrategy=retainkeys` annotation
+#### 2. With `+patchStrategy=retainKeys` annotation
 
-Similar to strategy [retainkeys](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-strategic-merge-patch-to-update-a-deployment-using-the-retainkeys-strategy) in K8s strategic merge patch
+Similar to strategy [retainKeys](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-strategic-merge-patch-to-update-a-deployment-using-the-retainkeys-strategy) in K8s strategic merge patch
 
-In some scenarios that the entire object needs to be replaced, retainkeys strategy is the best choice. the example as follows:
+In some scenarios that the entire object needs to be replaced, retainKeys strategy is the best choice. the example as follows:
 
 Assume the Deployment is the base resource
 ```yaml
@@ -356,7 +426,7 @@ spec:
         		// +patchKey=name
         		containers: [{
         			name: context.name
-        			// +patchKey=name
+        			// +patchStrategy=retainKeys
         			env: [
         				for k, v in parameter.env {
         					name:  k
