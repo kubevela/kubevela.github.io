@@ -8,7 +8,7 @@ title:  FAQ
 
 KubeVela 是一个平台构建工具，用于创建基于 Kubernete 的易使用、可拓展的应用交付/管理系统。KubeVela 将 Helm 作为模板引擎和应用包的标准。但是 Helm 不是 KubeVela 唯一支持的模板模块。另一个同样最优先支持的是 CUE。
 
-同时，KubeVale 被设计为 Kubernetes 的一个控制器（即工作在服务端）,即使是其 Helm 部分，也会安装一个 Helm Operator。 
+同时，KubeVela 被设计为 Kubernetes 的一个控制器（即工作在服务端）,即使是其 Helm 部分，也会安装一个 Helm Operator。 
 
 
 ## 常见问题
