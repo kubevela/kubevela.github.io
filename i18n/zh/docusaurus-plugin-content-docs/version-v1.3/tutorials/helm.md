@@ -35,7 +35,7 @@ description: 本文介绍通过 KubeVela 交付 Helm Chart
 你也可以通过 CLI 来启用插件：
 
 ```shell
-vale addon enable fluxcd
+vela addon enable fluxcd
 ```
 
 ## 通过 Chart 创建 Redis 应用
