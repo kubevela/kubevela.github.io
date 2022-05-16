@@ -105,19 +105,15 @@ spec:
     cue:
       template: |
         patchOutputs: {
-          service: {
+          ingress: {
             metadata: annotations: {
-              "patched-by": parameter.name
+              "kubernetes.io/ingress.class": "istio"
             }
           }
         }
-
-        parameter: {
-        	name: string
-        }
 ```
 
-上面的这个补丁型特征，假定了它绑定的组件还有别的运维特征，并且别的运维特征拥有 `service` 资源。该补丁型特征则会为这个资源打上一个 annotation。
+上面的这个补丁型特征，假定了它绑定的组件还有别的运维特征，并且别的运维特征拥有 `ingress` 资源。该补丁型特征则会为这个 `ingress` 资源打上一个 istio 的 annotation。
 
 我们可以部署如下应用来查看：
 
@@ -141,6 +137,31 @@ spec:
         - type: "patch-annotation"
           properties:
             name: "patch-annotation-trait"
+```
+
+应用成功运行后，`ingress` 资源如下：
+
+```yaml
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: istio
+  name: ingress
+spec:
+  rules:
+  spec:
+    rules:
+    - host: testsvc.example.com
+      http:
+        paths:
+        - backend:
+            service:
+              name: express-server
+              port:
+                number: 8000
+          path: /
+          pathType: ImplementationSpecific
 ```
 
 ## 待解决的短板和解决方案

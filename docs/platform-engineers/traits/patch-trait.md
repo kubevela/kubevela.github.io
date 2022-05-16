@@ -116,19 +116,15 @@ spec:
     cue:
       template: |
         patchOutputs: {
-          service: {
+          ingress: {
             metadata: annotations: {
-              "patched-by": parameter.name
+              "kubernetes.io/ingress.class": "istio"
             }
           }
         }
-
-        parameter: {
-        	name: string
-        }
 ```
 
-The patch trait above assumes that the component it binds has other traits which have `service` resource. The patch trait will patch an annotation to the `service` resource.
+The patch trait above assumes that the component it binds has other traits which have `ingress` resource. The patch trait will patch an `istio` annotation to the `ingress` resource.
 
 We can deploy the following application:
 
@@ -152,6 +148,31 @@ spec:
         - type: "patch-annotation"
           properties:
             name: "patch-annotation-trait"
+```
+
+And the ingress resource is now like:
+
+```yaml
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: istio
+  name: ingress
+spec:
+  rules:
+  spec:
+    rules:
+    - host: testsvc.example.com
+      http:
+        paths:
+        - backend:
+            service:
+              name: express-server
+              port:
+                number: 8000
+          path: /
+          pathType: ImplementationSpecific
 ```
 
 ## Known Limitations and Workarounds
