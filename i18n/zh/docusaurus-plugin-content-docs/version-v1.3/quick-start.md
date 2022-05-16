@@ -20,7 +20,7 @@ spec:
     - name: express-server
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
         ports:
          - port: 8000
            expose: true
@@ -72,7 +72,7 @@ $ vela env init prod --namespace prod
 $ vela up -f https://kubevela.net/example/applications/first-app.yaml
 ```
 
-> 需要注意的是需要你的部署环境可以正常获取 `crccheck/hello-world` 镜像
+> 需要注意的是需要你的部署环境可以正常获取 `oamdev/hello-world` 镜像
 
 * 查看部署状态
 
@@ -124,7 +124,7 @@ Hello World
 
 设置完应用基础信息后进入第二步，设置主组件的部署参数，我们需要设置的参数包括：
 
-- 镜像地址： `crccheck/hello-world`
+- 镜像地址： `oamdev/hello-world`
 - 端口信息：将默认的 80 端口变更为 8080 端口。
 
 ![create hello world app](https://static.kubevela.net/images/1.3/create-helloworld.jpg)

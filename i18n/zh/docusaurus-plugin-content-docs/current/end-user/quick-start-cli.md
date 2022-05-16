@@ -20,7 +20,7 @@ spec:
     - name: express-server
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
         port: 8000
       traits:
         - type: ingress-1-20
@@ -36,7 +36,7 @@ spec:
 vela up -f https://raw.githubusercontent.com/kubevela/kubevela/master/docs/examples/vela-app.yaml
 ```
 
-上述命令一旦执行，KubeVela 就会帮助你在目标集群中交付一个 `Web 服务`类型的组件，且该组件的容器镜像是`crccheck/hello-world`。在本示例中，我们并没有特别指明目标集群是哪个，所以 KubeVela 会默认把应用部署在它所在的集群也就是控制平面集群当中。
+上述命令一旦执行，KubeVela 就会帮助你在目标集群中交付一个 `Web 服务`类型的组件，且该组件的容器镜像是`oamdev/hello-world`。在本示例中，我们并没有特别指明目标集群是哪个，所以 KubeVela 会默认把应用部署在它所在的集群也就是控制平面集群当中。
 
 而由于我们已经在上述 YAML 文件中为这个组件绑定了一个 `ingress` 类型的运维特征，KubeVela 就会指导 Kubernetes 自动为这个组件背后的工作负载配置 Service、端口映射和 HTTP 路由规则。所以只要目标集群具备 [Ingress 能力](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/)，上述 YAML 一部署成功，你就可以立刻通过外域名来问这个应用了。
 
