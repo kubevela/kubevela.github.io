@@ -19,7 +19,7 @@ spec:
     - name: express-server
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
         port: 8000
       traits:
         - type: ingress
@@ -53,7 +53,7 @@ spec:
         app.oam.dev/component: express-server
     spec:
       containers:
-      - image: crccheck/hello-world
+      - image: oamdev/hello-world
         name: express-server
         ports:
         - containerPort: 8000

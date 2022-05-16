@@ -86,7 +86,7 @@ spec:
   - name: express-server
     type: webservice
     properties:
-      image: crccheck/hello-world
+      image: oamdev/hello-world
       port: 8000
   workflow:
     steps:
@@ -155,7 +155,7 @@ spec:
   - name: express-server
     type: webservice
     properties:
-      image: crccheck/hello-world
+      image: oamdev/hello-world
       port: 8000
     traits:
     - type: ingress
@@ -240,7 +240,7 @@ spec:
   - name: express-server
     type: webservice
     properties:
-      image: crccheck/hello-world
+      image: oamdev/hello-world
       port: 8000
   workflow:
     steps:
@@ -276,7 +276,7 @@ spec:
   - name: express-server
     type: webservice
     properties:
-      image: crccheck/hello-world
+      image: oamdev/hello-world
       port: 8000
     traits:
     - type: ingress
@@ -330,7 +330,7 @@ spec:
   - name: express-server
     type: webservice
     properties:
-      image: crccheck/hello-world
+      image: oamdev/hello-world
       port: 8000
     traits:
     - type: ingress
@@ -373,7 +373,7 @@ spec:
   - name: express-server
     type: webservice
     properties:
-      image: crccheck/hello-world
+      image: oamdev/hello-world
       port: 8000
       volumes:
         - name: "my-pvc"
@@ -437,7 +437,7 @@ spec:
   - name: express-server
     type: webservice
     properties:
-      image: crccheck/hello-world
+      image: oamdev/hello-world
       port: 8000
   workflow:
     steps:
@@ -491,7 +491,7 @@ spec:
   - name: express-server
     type: webservice
     properties:
-      image: crccheck/hello-world
+      image: oamdev/hello-world
       port: 8000
   workflow:
     steps:
@@ -540,7 +540,7 @@ spec:
   - name: express-server
     type: webservice
     properties:
-      image: crccheck/hello-world
+      image: oamdev/hello-world
       port: 8000
   workflow:
     steps:

@@ -28,7 +28,7 @@ spec:
     - name: hello-world
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
       traits:
         - type: scaler
           properties:
@@ -80,7 +80,7 @@ spec:
     - name: express-server
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
         port: 8000
       traits:
         - type: ingress-1-20
@@ -105,7 +105,7 @@ spec:
     - name: hello-world-new
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
       traits:
         - type: expose
           properties:
