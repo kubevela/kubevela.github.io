@@ -23,7 +23,7 @@ spec:
     - name: express-server
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
         port: 8000
       traits:
         - type: ingress
@@ -33,7 +33,7 @@ spec:
               "/": 8000
 ```
 
-可以看到，我们的期望是交付一个 Web Service 的组件，使用来自 `crccheck/hello-world` 的镜像，并最终提供一个可供对外访问的网关，地址域名为 `testsvc.example.com`，端口号 8000。
+可以看到，我们的期望是交付一个 Web Service 的组件，使用来自 `oamdev/hello-world` 的镜像，并最终提供一个可供对外访问的网关，地址域名为 `testsvc.example.com`，端口号 8000。
 
 然后打开本地试运行模式，使用如下命令：
 
@@ -63,7 +63,7 @@ spec:
         app.oam.dev/component: express-server
     spec:
       containers:
-      - image: crccheck/hello-world
+      - image: oamdev/hello-world
         name: express-server
         ports:
         - containerPort: 8000

@@ -29,7 +29,7 @@ spec:
     - name: express-server
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
         port: 8080 # change port
         cpu: 0.5 # add requests cpu units
       scopes:

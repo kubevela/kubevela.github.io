@@ -11,7 +11,7 @@ description: 本页面介绍通过为应用分配网关策略，或设置应用�
 
 ## 如何使用
 
-我们以给一个 Web Service 组件配置网关，来进行示例讲解。这个组件从 `crccheck/hello-world` 镜像中拉取过来，设置网关后，对外通过 `testsvc.example.com` 加上端口 8000 提供访问。
+我们以给一个 Web Service 组件配置网关，来进行示例讲解。这个组件从 `oamdev/hello-world` 镜像中拉取过来，设置网关后，对外通过 `testsvc.example.com` 加上端口 8000 提供访问。
 
 
 为了便于你快速学习，请直接复制下面的 Shell 执行，会部署到集群中：
@@ -29,7 +29,7 @@ spec:
     - name: express-server
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
         port: 8000
       traits:
         - type: gateway

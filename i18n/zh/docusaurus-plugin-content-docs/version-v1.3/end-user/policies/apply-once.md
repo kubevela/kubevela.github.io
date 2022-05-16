@@ -17,7 +17,7 @@ spec:
     - name: hello-world
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
       traits:
         - type: scaler
           properties:

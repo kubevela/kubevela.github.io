@@ -88,7 +88,7 @@ name: testapp
 services:
   testsvc:
     type: clonesetservice
-    image: crccheck/hello-world
+    image: oamdev/hello-world
     port: 8000
 EOF
 ```
