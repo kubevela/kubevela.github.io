@@ -420,7 +420,7 @@ name: my-extend-app
 services:
   mysvc:
     type: mydeploy
-    image: crccheck/hello-world
+    image: oamdev/hello-world
     name: mysvc
 ```
 
@@ -513,7 +513,7 @@ name: my-extend-app
 services:
   mysvc:
     type: mydeploy
-    image: crccheck/hello-world
+    image: oamdev/hello-world
     name: mysvc
     config:
     - name: a
@@ -554,7 +554,7 @@ name: my-extend-app
 services:
   mysvc:
     type: mydeploy
-    image: crccheck/hello-world
+    image: oamdev/hello-world
     name: mysvc
     useENV: true
 ```

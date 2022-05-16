@@ -34,7 +34,7 @@ spec:
     - name: express-server
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
         port: 8000
       traits:
         - type: gateway
@@ -270,7 +270,7 @@ spec:
     - name: express-server
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
         ports:
           - port: 8000
       traits:
@@ -345,7 +345,7 @@ spec:
     - name: express-server
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
         port: 8000
       traits:
         - type: labels
@@ -391,7 +391,7 @@ spec:
     - name: express-server
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
         port: 8000
       traits:
         - type: annotations
@@ -651,7 +651,7 @@ spec:
   - name: my-server
     type: webservice
     properties:
-      image: crccheck/hello-world
+      image: oamdev/hello-world
       port: 8000
     traits:
     - type: service-binding

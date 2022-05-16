@@ -79,8 +79,12 @@ spec:
         chart: "redis"
         version: "16.8.5"
         values: 
-          master.persistence.size: 16Gi
-          replica.persistence.size: 16Gi
+          master:
+            persistence:
+              size: 16Gi
+          replica:
+            persistence:
+              size: 16Gi
 ```
 
 Deploy this application：

@@ -211,7 +211,7 @@ ComponentDefinition task created in namespace vela-system.
       - name: hello
         type: stateless
         properties:
-          image: crccheck/hello-world
+          image: oamdev/hello-world
           name: mysvc
       - name: countdown
         type: task
@@ -239,7 +239,7 @@ spec:
     spec:
       containers:
         - name: mysvc
-          image: crccheck/hello-world
+          image: oamdev/hello-world
     metadata:
       labels:
         app.oam.dev/component: mysvc
@@ -414,7 +414,7 @@ spec:
     - name: hello-world
       type: webserver
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
         port: 8000
         env:
         - name: "foo"

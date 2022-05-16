@@ -50,7 +50,7 @@ spec:
     - name: express-server
       type: webservice
       properties:
-        image: crccheck/hello-world
+        image: oamdev/hello-world
         ports:
           - port: 8000
       traits:
