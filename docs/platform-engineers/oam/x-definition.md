@@ -1,10 +1,10 @@
 ---
-title: X-Definition
+title: Definition Protocol
 ---
 
 KubeVela is fully programmable via [CUE](https://cuelang.org).
 
-This is achieved by implementing its [application model][1] as programmable entities (named `X-Definition`) include `ComponentDefinition`, `TraitDefinition`, `PolicyDefinition` and `WorkflowStepDefinition` etc as shown below.
+This is achieved by implementing its [application model][1] as programmable entities (named `Definition`) include `ComponentDefinition`, `TraitDefinition`, `PolicyDefinition` and `WorkflowStepDefinition` as shown below.
 
 ## ComponentDefinition
 
@@ -365,9 +365,9 @@ Once the application is created, KubeVela will tag the created resources with a 
 | `trait.oam.dev/resource` |   `outputs.\<resource type\>`in Trait  |
 |   `app.oam.dev/appRevision`    |              Application Revision Name               |
 
-## X-Definition Runtime Context
+## Definition Runtime Context
 
-In the X-Definition, some runtime context information can be obtained through the `context` variable. The specific list is as follows, where the scope indicates which module definitions the Context variable can be used in:
+In the Definition, some runtime context information can be obtained through the `context` variable. The specific list is as follows, where the scope indicates which module definitions the Context variable can be used in:
 
 |           Context Variable           |                                     Description                                    |               Scope               |
 | :------------------------------: | :------------------------------------------------------------------------------: | :----------------------------------: |
@@ -391,7 +391,7 @@ At the same time, in the Workflow system, because the `context` has to act on th
 |     `context.annotations`     |                   The annotations of the current instance of the application                       |       WorkflowStepDefinition        |
 
 
-Please note that all the X-Definition concepts introduced in this section only need to be understood by the platform administrator when they want to expand the functions of KubeVela. The end users will learn the schema of above definitions with visualized forms (or the JSON schema of parameters if they prefer) and reference them in application deployment plan. Please check the [Generate Forms from Definitions](../openapi-v3-json-schema) section about how this is achieved.
+Please note that all the Definition concepts introduced in this section only need to be understood by the platform administrator when they want to expand the functions of KubeVela. The end users will learn the schema of above definitions with visualized forms (or the JSON schema of parameters if they prefer) and reference them in application deployment plan. Please check the [Generate Forms from Definitions](../openapi-v3-json-schema) section about how this is achieved.
 
 [1]:  ./oam-model
 [2]:  ../cue/basic
