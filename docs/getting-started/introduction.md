@@ -6,8 +6,7 @@ slug: /
 ## What is KubeVela?
 
 KubeVela is a modern software delivery platform that makes it easier and faster to deliver and manage applications across hybrid, multi-cloud environments. 
-
-Using KubeVela, software teams can build cloud native applications per needs as they grow, then deliver them anywhere.
+Applications created with KubeVela use the best practices of modern applications by default: they are able to scale with clouds, they use infrastructure as code, they are observable, and they are secure.
 
 ![](../resources/what-is-kubevela.png)
 
@@ -16,15 +15,23 @@ Using KubeVela, software teams can build cloud native applications per needs as 
 
 * **Unified Application Delivery Experience**
 
-    KubeVela introduces a [unified and cross-platform delivery model(OAM)](https://oam.dev/) that allows you to deploy any workload type, including containers, databases, or even VM instances to any cloud or Kubernetes clusters. It helps you to just write application once, and deliver it the same everywhere, no more re-writing everything from scratch for any new delivery target.
+    KubeVela introduces a [unified and extensible model (OAM)](https://oam.dev/) that can glue and orchestrate all of your IaC based infrastructure configuration. As a result, KubeVela provides simple user experience for modern application delivery.
 
 * **Automated Deployment across Clusters**
 
-    KubeVela natively supports rich continuous delivery strategies in various multi-cluster/hybrid-cloud scenarios or mixed environments. These strategies provides efficiency and safety to the distributed delivery process. The centralized management reduces the burden of looking over each clusters and gives unified experience across platforms. With KubeVela, you don't need to have any Ph.D. degree in Kubernetes to run automatic deployments.
+    KubeVela natively supports multi-cluster/hybrid-cloud scenarios such as promotion across clusters, high availability between clusters, automated cloud infrastructure provision.
     
+* **Enterprise-Grade Security**
+
+    KubeVela provides enterprise-grade security with fine-grained and custom RBAC, multi-cluster authorization, and first-class LDAP integrations.
+
+* **Centralized Management and Observability**
+
+    KubeVela provides a unified control plane for modeling, provisioning, and deploying applications. The centralized management reduces the burden of looking over each clusters and gives unified experience across platforms. It greatly improve efficiency around troubleshooting and debugging when things go wrong.
+
 * **Declarative and Highly Extensible Workflow**
 
-    The application delivery process is driven by declarative workflow. Executed by reconciliation loops with limited privileges, the workflow is both robust and secure enough to prevent any unexpected configuration drifts. Users can also make arbitrary reusable customizations to the workflow through writing CUE definitions. The extensibility will always satisfy your growing business demands while keeping your production safe with continuous enforcement at the same time.
+    KubeVela drives the delivery process with a declarative workflow, it provides automated canary and blue-green deployments with verification and rollback. After the workflow finished, it keeps the reconciliation loops to prevent any unexpected configuration drifts.
 
 
 ## KubeVela vs. Other Software
