@@ -8,9 +8,11 @@ title:  补丁型特征
 
 当我们的组件是从第三方提供并自定义而来的时候，由于它们的模版往往是固定不可变的，所以能使用补丁型特征就显得尤为有用了。
 
-> 尽管运维特征是由 CUE 来定义，它能打补丁的组件类型并不限，不管是来自 CUE、Helm 还是其余支持的模版格式
+> 尽管运维特征是由 CUE 来定义，它能打补丁的组件类型并不限，不管是来自 CUE、Helm 还是其余支持的模版格式。
 
-下面，我们通过一个节点亲和性（node affinity）的例子，讲解如何使用补丁型特征：
+## 为组件打补丁
+
+下面，我们通过一个节点亲和性（node affinity）的例子，讲解如何使用补丁型特征为组件打补丁：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -84,7 +86,85 @@ spec:
               server-owner: "old-owner"
 ```
 
-### 待解决的短板
+## 为其他运维特征打补丁
+
+> 注意：该功能在 KubeVela 1.4 版本之后生效。
+
+你还可以通过在 Definition 中使用 `patchOutputs`，来为其他运维特征打补丁。如：
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: TraitDefinition
+metadata:
+  name: patch-annotation
+spec:
+  appliesToWorkloads:
+    - deployments.apps
+  podDisruptive: true
+  schematic:
+    cue:
+      template: |
+        patchOutputs: {
+          ingress: {
+            metadata: annotations: {
+              "kubernetes.io/ingress.class": "istio"
+            }
+          }
+        }
+```
+
+上面的这个补丁型特征，假定了它绑定的组件还有别的运维特征，并且别的运维特征拥有 `ingress` 资源。该补丁型特征则会为这个 `ingress` 资源打上一个 istio 的 annotation。
+
+我们可以部署如下应用来查看：
+
+```yaml
+apiVersion: core.oam.dev/v1alpha2
+kind: Application
+metadata:
+  name: testapp
+spec:
+  components:
+    - name: express-server
+      type: webservice
+      properties:
+        image: oamdev/testapp:v1
+      traits:
+        - type: "gateway"
+          properties:
+            domain: testsvc.example.com
+            http:
+              "/": 8000
+        - type: "patch-annotation"
+          properties:
+            name: "patch-annotation-trait"
+```
+
+应用成功运行后，`ingress` 资源如下：
+
+```yaml
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: istio
+  name: ingress
+spec:
+  rules:
+  spec:
+    rules:
+    - host: testsvc.example.com
+      http:
+        paths:
+        - backend:
+            service:
+              name: express-server
+              port:
+                number: 8000
+          path: /
+          pathType: ImplementationSpecific
+```
+
+## 待解决的短板和解决方案
 
 默认来说，补丁型特征是通过 CUE 的 `merge` 操作来实现的。它有以下限制：
 
@@ -104,7 +184,7 @@ spec:
  - 如果发现重复的键名，补丁数据会直接替换掉它的值
  - 如果没有重复键名，补丁则会自动附加这些数据
 
-下面来看看，一个使用 'patchKey' 的策略补丁：
+下面来看看，一个使用 `patchKey` 的策略补丁：
  
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -131,6 +211,8 @@ spec:
         }
 ```
 在上述的这个例子中，我们定义了要 `patchKey` 的字段 `name`，是来自容器的参数键名。如果工作负载中并没有同名的容器，那么一个 sidecar 容器就会被加到 `spec.template.spec.containers` 数组列表中。如果工作负载中有重名的 `sidecar` 运维特征，则会执行 merge 操作而不是附加。
+
+> 在 KubeVela 1.4 版本之后，你可以使用 `,` 分割多个 patchKey，如 `patchKey=name,image`。
 
 如果 `patch` 和 `outputs` 同时存在于一个运维特征定义中，`patch` 会率先被执行然后再渲染 `outputs`。
 
@@ -169,11 +251,11 @@ spec:
 ```
 在上面这个运维特征定义中，我们将会把一个 `Service` 添加到给定的组件实例上。同时会先去给工作负载类型打上补丁数据，然后基于模版里的 `outputs` 渲染余下的资源。
 
-#### 2. 使用 `+patchStrategy=retainkeys` 注解
+#### 2. 使用 `+patchStrategy=retainKeys` 注解
 
-这个注解的策略，与 Kubernetes 官方的 [retainkeys](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-strategic-merge-patch-to-update-a-deployment-using-the-retainkeys-strategy) 策略类似。
+这个注解的策略，与 Kubernetes 官方的 [retainKeys](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-strategic-merge-patch-to-update-a-deployment-using-the-retainkeys-strategy) 策略类似。
 
-在一些场景下，整个对象需要被一起替换掉，使用 `retainkeys` 就是最适合的办法。
+在一些场景下，整个对象需要被一起替换掉，使用 `retainKeys` 就是最适合的办法。
 
 假定一个 `Deployment` 对象是这样编写的：
 ```yaml
@@ -241,6 +323,7 @@ spec:
       - name: retainkeys-demo-ctr
         image: nginx
 ```
+
 ## 更多补丁型特征的使用场景
 
 补丁型特征，针对组件层面做些整体操作时，非常有用。我们看看还可以满足哪些需求：
@@ -354,7 +437,7 @@ spec:
         		// +patchKey=name
         		containers: [{
         			name: context.name
-        			// +patchKey=name
+        			// +patchStrategy=retainKeys
         			env: [
         				for k, v in parameter.env {
         					name:  k
