@@ -11,7 +11,7 @@ module.exports = {
     {
       type: 'category',
       label: 'Core Concepts',
-      collapsed: true,
+      collapsed: false,
       items: [
         'getting-started/core-concept',
         'getting-started/definition',

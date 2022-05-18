@@ -3,26 +3,26 @@ import Translate, { translate } from '@docusaurus/Translate';
 
 const features = [
   {
-    title: <><Translate>Unified Application Delivery Experience</Translate></>,
+    title: <><Translate>Deployment as Code</Translate></>,
     imgUrl: 'img/application-centric.svg',
     description: (
       <>
         <p>
           <Translate>
-            KubeVela introduces a unified and cross-platform delivery model(OAM) that allows you to deploy any workload type, including containers, databases, or even VM instances to any cloud or Kubernetes clusters. It helps you to just write application once, and deliver it the same everywhere, no more re-writing everything from scratch for any new delivery target.
+            Declare your deployment plan as workflow, run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with CUE. No add-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by Open Application Model.
           </Translate>
         </p>
       </>
     ),
   },
   {
-    title: <><Translate>Automated Deployment across Clusters</Translate></>,
+    title: <><Translate>Built-in security and compliance building blocks</Translate></>,
     imgUrl: 'img/extending-natively.svg',
     description: (
       <>
         <p>
           <Translate>
-            KubeVela natively supports rich continuous delivery strategies in various multi-cluster/hybrid-cloud scenarios or mixed environments. These strategies provides efficiency and safety to the distributed delivery process. The centralized management reduces the burden of looking over each clusters and gives unified experience across platforms. With KubeVela, you don't need to have any Ph.D. degree in Kubernetes to run automatic deployments.
+            Choose from the wide range of LDAP integrations we provided out-of-box, enjoy multi-cluster authorization that is fully automated, pick and apply fine-grained RBAC modules and customize them per your own supply chain requirements.
           </Translate>
         </p>
       </>
@@ -30,13 +30,13 @@ const features = [
     reverse: true,
   },
   {
-    title: <><Translate>Declarative and Highly Extensible Workflow</Translate></>,
+    title: <><Translate>Multi-cloud/hybrid-environments app delivery as first-class citizen</Translate></>,
     imgUrl: 'img/simple-yet-extensible-abstraction-mechanism.svg',
     description: (
       <>
         <p>
           <Translate>
-            The application delivery process is driven by declarative workflow. Executed by reconciliation loops with limited privileges, the workflow is both robust and secure enough to prevent any unexpected configuration drifts. Users can also make arbitrary reusable customizations to the workflow through writing CUE definitions. The extensibility will always satisfy your growing business demands while keeping your production safe with continuous enforcement.
+            Progressive rollout across test/staging/production environments, automatic canary, blue-green and continuous verification, rich placement strategy across clusters and clouds, fully managed cloud environments provision.
           </Translate>
         </p>
       </>

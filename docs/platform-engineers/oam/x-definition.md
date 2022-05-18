@@ -2,9 +2,10 @@
 title: Definition Protocol
 ---
 
-KubeVela is fully programmable via [CUE](https://cuelang.org).
+KubeVela is fully programmable via [CUE](https://cuelang.org), while it leverage Kubernetes as control plane and align with the API in yaml.
 
-This is achieved by implementing its [application model][1] as programmable entities (named `Definition`) include `ComponentDefinition`, `TraitDefinition`, `PolicyDefinition` and `WorkflowStepDefinition` as shown below.
+You can [manage the definition](../cue/definition-edit) in CUE and the `vela def` command will render it into Kubernetes API with the following protocol.
+
 
 ## ComponentDefinition
 
@@ -329,29 +330,6 @@ spec:
 ```
 
 
-## WorkloadDefinition
-
-WorkloadDefinition is a system-level feature. It's not a field that users should care about but as metadata checked, verified, and used by the OAM system itself.
-
-The format is as follows:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: WorkloadDefinition
-metadata:
-  name: <WorkloadDefinition name>
-spec:
-  definitionRef:
-    name: <corresponding Kubernetes resource group>
-    version: <corresponding Kubernetes resource version>
-  podSpecPath: <path to the Pod field in the Workload>
-  childResourceKinds:
-    - apiVersion: <resource group>
-      kind: <resource type>
-```
-
-In addition, other Kubernetes resource type that need to be introduced into OAM model in the future will also be added as fields to the workload definition.
-
 ## The Standard Protocol Behind Abstraction
 
 Once the application is created, KubeVela will tag the created resources with a series of tags, which include the version, name, type, etc. of the application. Through these standard protocols, application components, traits and policies can be coordinated. The specific metadata list is as follows:
@@ -392,11 +370,3 @@ At the same time, in the Workflow system, because the `context` has to act on th
 
 
 Please note that all the Definition concepts introduced in this section only need to be understood by the platform administrator when they want to expand the functions of KubeVela. The end users will learn the schema of above definitions with visualized forms (or the JSON schema of parameters if they prefer) and reference them in application deployment plan. Please check the [Generate Forms from Definitions](../openapi-v3-json-schema) section about how this is achieved.
-
-[1]:  ./oam-model
-[2]:  ../cue/basic
-[3]:  ../kube/component
-[4]:  ../traits/customize-trait
-[5]:  ../traits/advanced.md
-[6]:  https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/
-[7]:  ../cue/basic.md
