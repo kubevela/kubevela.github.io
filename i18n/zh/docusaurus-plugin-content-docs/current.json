@@ -211,8 +211,8 @@
     "message": "资源管理",
     "description": "管理集群和交付目标等资源"
   },
-  "sidebar.docs.category.Built-in Addons": {
-    "message": "内置插件",
+  "sidebar.docs.category.Official Addons": {
+    "message": "官方插件",
     "description": "内置插件说明"
   },
   "sidebar.docs.category.Cloud Resources": {
@@ -251,8 +251,8 @@
     "message": "其他高级功能",
     "description": "其他高级功能"
   },
-  "sidebar.docs.category.Basics": {
-    "message": "基本概念",
+  "sidebar.docs.category.Core Concepts": {
+    "message": "核心概念",
     "description": "Basic information"
   },
   "sidebar.docs.category.Artifacts": {

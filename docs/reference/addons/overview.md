@@ -1,6 +1,8 @@
 ---
-title: Built-in Addons
+title: Overview
 ---
+
+There's an official addon registry (https://addons.kubevela.net) maintained by KubeVela team. It contains following addons:
 
 * [VelaUX](./velaux): The KubeVela User Experience (UX ) addon. It will launch a dashboard and an APIServer for better user experience.
 * [Addon Cloud Resources](./terraform): Provide a bunch of addons to provision cloud resources for different cloud providers.

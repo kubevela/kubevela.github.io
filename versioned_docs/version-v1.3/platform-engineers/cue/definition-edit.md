@@ -1,8 +1,8 @@
 ---
-title: Manage X-Definition
+title: Manage Definition
 ---
 
-In KubeVela CLI (>= v1.1.0), `vela def` command group provides a series of convenient definition writing tools. With these commands, users only need to write CUE files to generate and edit definitions, instead of composing Kubernetes YAML object with mixed CUE string.
+In KubeVela CLI, `vela def` command group provides a series of convenient definition writing tools. With these commands, users only need to write CUE files to generate and edit definitions, instead of composing Kubernetes YAML object with mixed CUE string.
 
 ## init
 

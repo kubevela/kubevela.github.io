@@ -10,9 +10,13 @@ module.exports = {
     },
     {
       type: 'category',
-      label: 'Basics',
-      collapsed: true,
-      items: ['getting-started/core-concept', 'getting-started/architecture'],
+      label: 'Core Concepts',
+      collapsed: false,
+      items: [
+        'getting-started/core-concept',
+        'getting-started/definition',
+        'getting-started/architecture',
+      ],
     },
     {
       type: 'category',
@@ -125,15 +129,6 @@ module.exports = {
           collapsed: true,
           items: [
             {
-              type: 'category',
-              label: 'Learning OAM',
-              collapsed: false,
-              items: [
-                'platform-engineers/oam/oam-model',
-                'platform-engineers/oam/x-definition',
-              ],
-            },
-            {
               'Learning CUE': [
                 'platform-engineers/cue/basic',
                 'platform-engineers/cue/definition-edit',
@@ -181,9 +176,14 @@ module.exports = {
       label: 'References',
       items: [
         'cli/vela',
+        'platform-engineers/oam/x-definition',
+        'end-user/components/references',
+        'end-user/traits/references',
+        'end-user/policies/references',
+        'end-user/workflow/built-in-workflow-defs',
         {
           type: 'category',
-          label: 'Built-in Addons',
+          label: 'Official Addons',
           items: [
             'reference/addons/overview',
             'reference/addons/velaux',
@@ -193,10 +193,6 @@ module.exports = {
           ],
         },
         'end-user/components/cloud-services/cloud-resources-list',
-        'end-user/components/references',
-        'end-user/traits/references',
-        'end-user/policies/references',
-        'end-user/workflow/built-in-workflow-defs',
         'reference/ui-schema',
         'reference/user-improvement-plan',
         {

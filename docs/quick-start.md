@@ -209,5 +209,5 @@ That's it! You succeed at the first application delivery. Congratulation!
 
 ## Next Step
 
-- View [Core Concepts](./getting-started/core-concept) to look on more concepts.
+- View [Core Concepts](./getting-started/core-concept) to learn more about how it works.
 - View [User Guide](./tutorials/webservice) to look on more of what you can achieve with KubeVela.
