@@ -14,7 +14,7 @@ For easy integration with upstream CI pipelines and GitOps tools, KubeVela API (
 
 `Application` for designing application deployment plan.
 
-`X-Definitions` for managing the abstraction and capabilities of KubeVela with CUE.
+`Definitions` for managing the abstraction and capabilities of KubeVela with CUE.
 
 - e.g. `ComponentDefinition`, `TraitDefinition`, etc.
 

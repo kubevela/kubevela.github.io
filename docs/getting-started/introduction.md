@@ -5,40 +5,31 @@ slug: /
 
 ## What is KubeVela?
 
-KubeVela is a modern software delivery platform that makes it easier and faster to deliver and manage applications across hybrid, multi-cloud environments. 
-Applications created with KubeVela use the best practices of modern applications by default: they are able to scale with clouds, they use infrastructure as code, they are observable, and they are secure.
+KubeVela is a modern software delivery control plane. The goal is to make deploying and operating applications across today's hybrid, multi-cloud environments easier, faster and more reliable.
 
 ![](../resources/what-is-kubevela.png)
 
 
 ## Key Features
 
-* **Unified Application Delivery Experience**
+* **Deployment as Code**
 
-    KubeVela introduces a [unified and extensible model (OAM)](https://oam.dev/) that can glue and orchestrate all of your IaC based infrastructure configuration. As a result, KubeVela provides simple user experience for modern application delivery.
+    Declare your deployment plan as workflow, run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with CUE. No add-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by [Open Application Model](https://oam.dev/).
 
-* **Automated Deployment across Clusters**
+* **Built-in security and compliance building blocks**
 
-    KubeVela natively supports multi-cluster/hybrid-cloud scenarios such as promotion across clusters, high availability between clusters, automated cloud infrastructure provision.
+    Choose from the wide range of LDAP integrations we provided out-of-box, enjoy multi-cluster authorization that is fully automated, pick and apply fine-grained RBAC modules and customize them per your own supply chain requirements.
     
-* **Enterprise-Grade Security**
+* **Multi-cloud/hybrid-environments app delivery as first-class citizen**
 
-    KubeVela provides enterprise-grade security with fine-grained and custom RBAC, multi-cluster authorization, and first-class LDAP integrations.
-
-* **Centralized Management and Observability**
-
-    KubeVela provides a unified control plane for modeling, provisioning, and deploying applications. The centralized management reduces the burden of looking over each clusters and gives unified experience across platforms. It greatly improve efficiency around troubleshooting and debugging when things go wrong.
-
-* **Declarative and Highly Extensible Workflow**
-
-    KubeVela drives the delivery process with a declarative workflow, it provides automated canary and blue-green deployments with verification and rollback. After the workflow finished, it keeps the reconciliation loops to prevent any unexpected configuration drifts.
+    Progressive rollout across test/staging/production environments, automatic canary, blue-green and continuous verification, rich placement strategy across clusters and clouds, fully managed cloud environments provision.
 
 
 ## KubeVela vs. Other Software
 
 ### KubeVela vs. CI/CD (GitHub Actions, GitLab, CircleCI, Jenkins, etc.)
 
-KubeVela is a continuous delivery platform that works at downstream of your CI process. So you will reuse the CI process you already adopted, and KubeVela will take over CD process by empowering it with modern application delivery best practices, such as hybrid/multi-cloud promotion workflow, unified cloud resource provision/binding, and much more. KubeVela is fully declarative by design, it natively supports GitOps if you want.
+KubeVela is a continuous delivery platform that works at downstream of your CI process. So you will reuse the CI process you already adopted, and KubeVela will take over CD process by empowering it with modern application delivery best practices, such as declarative deployment plan as workflow, hybrid/multi-cloud resource provision/binding, security and compliance, and much more. It natively supports GitOps if you want.
 
 > Feel free to check the [Integrating with Jenkins](./tutorials/jenkins) or [GitOps](./case-studies/gitops) documentation for more details.
 
@@ -46,9 +37,8 @@ KubeVela is a continuous delivery platform that works at downstream of your CI p
 
 KubeVela adopts your GitOps process and improves it by adding multi-cluster/hybrid-cloud capabilities:
 
-* KubeVela has a user-friendly and programable workflow that allows you to integrate any of your delivery steps, including approval and notification flows. 
-* With the help of the workflow, KubeVela can provide cross-environment promotion for your multi-cluster/hybrid-cloud applications.
-
+* KubeVela has a user-friendly workflow that allows you to extend, re-program or share any of your delivery process, including security and compliance flows. 
+* KubeVela regards multi-cloud/hybrid-environments app delivery as first-class citizen, it provides rich deployment strategies across clusters and clouds with fully managed cloud environments provision.
 
 ### KubeVela vs. PaaS (Heroku, Cloud Foundry, etc.)
 
@@ -65,7 +55,7 @@ Using KubeVela is a good way to get many of the benefits of a PaaS (developer pr
 
 Helm is a package manager for Kubernetes that provides package, install, and upgrade a set of YAML files for Kubernetes as a unit. 
 
-KubeVela as a modern delivery system can naturally deploy Helm charts. For example, you could use KubeVela to define an application that is composed by a WordPress chart and a AWS RDS Terraform module, orchestrate the components' topology, and then deploy them to multiple environments following certain strategy.
+KubeVela as a modern software delivery control plane can naturally deploy Helm charts. For example, you could use KubeVela to define an application that is composed by a WordPress chart and a AWS RDS Terraform module, orchestrate the components' topology, and then deploy them to multiple environments following certain strategy.
 
 Of course, KubeVela also supports other encapsulation formats including Kustomize etc.
 
@@ -81,3 +71,4 @@ Welcome onboard and sail Vela!
 ## What's Next
 
 - Start to [install KubeVela](./install).
+- Learn [Core Concepts](./core-concept) to know more about how it works.

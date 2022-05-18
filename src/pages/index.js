@@ -109,7 +109,7 @@ const WhatIs = () => (
               <Translate>
                 KubeVela is infrastructure agnostic, programmable, yet most importantly,
               </Translate><i><b> <Translate>application-centric.</Translate></b></i>
-              <Translate> It allows you to build powerful software, and run them anywhere!</Translate>
+              <Translate> It allows you to build powerful software, and deliver them anywhere!</Translate>
             </small>
           </p>
         </div>
