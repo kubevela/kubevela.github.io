@@ -5,33 +5,31 @@ slug: /
 
 ## What is KubeVela?
 
-KubeVela is a modern software delivery platform that makes it easier and faster to deliver and manage applications across hybrid, multi-cloud environments. 
-
-Using KubeVela, software teams can build cloud native applications per needs as they grow, then deliver them anywhere.
+KubeVela is a modern software delivery control plane. The goal is to make deploying and operating applications across today's hybrid, multi-cloud environments easier, faster and more reliable.
 
 ![](../resources/what-is-kubevela.png)
 
 
 ## Key Features
 
-* **Unified Application Delivery Experience**
+* **Deployment as Code**
 
-    KubeVela introduces a [unified and cross-platform delivery model(OAM)](https://oam.dev/) that allows you to deploy any workload type, including containers, databases, or even VM instances to any cloud or Kubernetes clusters. It helps you to just write application once, and deliver it the same everywhere, no more re-writing everything from scratch for any new delivery target.
+    Declare your deployment plan as workflow, run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with CUE. No add-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by [Open Application Model](https://oam.dev/).
 
-* **Automated Deployment across Clusters**
+* **Built-in security and compliance building blocks**
 
-    KubeVela natively supports rich continuous delivery strategies in various multi-cluster/hybrid-cloud scenarios or mixed environments. These strategies provides efficiency and safety to the distributed delivery process. The centralized management reduces the burden of looking over each clusters and gives unified experience across platforms. With KubeVela, you don't need to have any Ph.D. degree in Kubernetes to run automatic deployments.
+    Choose from the wide range of LDAP integrations we provided out-of-box, enjoy multi-cluster authorization that is fully automated, pick and apply fine-grained RBAC modules and customize them per your own supply chain requirements.
     
-* **Declarative and Highly Extensible Workflow**
+* **Multi-cloud/hybrid-environments app delivery as first-class citizen**
 
-    The application delivery process is driven by declarative workflow. Executed by reconciliation loops with limited privileges, the workflow is both robust and secure enough to prevent any unexpected configuration drifts. Users can also make arbitrary reusable customizations to the workflow through writing CUE definitions. The extensibility will always satisfy your growing business demands while keeping your production safe with continuous enforcement at the same time.
+    Progressive rollout across test/staging/production environments, automatic canary, blue-green and continuous verification, rich placement strategy across clusters and clouds, fully managed cloud environments provision.
 
 
 ## KubeVela vs. Other Software
 
 ### KubeVela vs. CI/CD (GitHub Actions, GitLab, CircleCI, Jenkins, etc.)
 
-KubeVela is a continuous delivery platform that works at downstream of your CI process. So you will reuse the CI process you already adopted, and KubeVela will take over CD process by empowering it with modern application delivery best practices, such as hybrid/multi-cloud promotion workflow, unified cloud resource provision/binding, and much more. KubeVela is fully declarative by design, it natively supports GitOps if you want.
+KubeVela is a continuous delivery platform that works at downstream of your CI process. So you will reuse the CI process you already adopted, and KubeVela will take over CD process by empowering it with modern application delivery best practices, such as declarative deployment plan as workflow, hybrid/multi-cloud resource provision/binding, security and compliance, and much more. It natively supports GitOps if you want.
 
 > Feel free to check the [Integrating with Jenkins](./tutorials/jenkins) or [GitOps](./case-studies/gitops) documentation for more details.
 
@@ -39,9 +37,8 @@ KubeVela is a continuous delivery platform that works at downstream of your CI p
 
 KubeVela adopts your GitOps process and improves it by adding multi-cluster/hybrid-cloud capabilities:
 
-* KubeVela has a user-friendly and programable workflow that allows you to integrate any of your delivery steps, including approval and notification flows. 
-* With the help of the workflow, KubeVela can provide cross-environment promotion for your multi-cluster/hybrid-cloud applications.
-
+* KubeVela has a user-friendly workflow that allows you to extend, re-program or share any of your delivery process, including security and compliance flows. 
+* KubeVela regards multi-cloud/hybrid-environments app delivery as first-class citizen, it provides rich deployment strategies across clusters and clouds with fully managed cloud environments provision.
 
 ### KubeVela vs. PaaS (Heroku, Cloud Foundry, etc.)
 
@@ -58,7 +55,7 @@ Using KubeVela is a good way to get many of the benefits of a PaaS (developer pr
 
 Helm is a package manager for Kubernetes that provides package, install, and upgrade a set of YAML files for Kubernetes as a unit. 
 
-KubeVela as a modern delivery system can naturally deploy Helm charts. For example, you could use KubeVela to define an application that is composed by a WordPress chart and a AWS RDS Terraform module, orchestrate the components' topology, and then deploy them to multiple environments following certain strategy.
+KubeVela as a modern software delivery control plane can naturally deploy Helm charts. For example, you could use KubeVela to define an application that is composed by a WordPress chart and a AWS RDS Terraform module, orchestrate the components' topology, and then deploy them to multiple environments following certain strategy.
 
 Of course, KubeVela also supports other encapsulation formats including Kustomize etc.
 
@@ -74,3 +71,4 @@ Welcome onboard and sail Vela!
 ## What's Next
 
 - Start to [install KubeVela](./install).
+- Learn [Core Concepts](./getting-started/core-concept) to know more about how it works.

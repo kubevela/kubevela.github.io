@@ -20,13 +20,17 @@
       ]
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "type": "category",
-      "label": "Basics",
+      "label": "Core Concepts",
       "items": [
         {
           "type": "doc",
           "id": "version-v1.3/getting-started/core-concept"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/getting-started/definition"
         },
         {
           "type": "doc",
@@ -323,21 +327,6 @@
           "label": "Extension",
           "items": [
             {
-              "collapsed": false,
-              "type": "category",
-              "label": "Learning OAM",
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/platform-engineers/oam/oam-model"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.3/platform-engineers/oam/x-definition"
-                }
-              ]
-            },
-            {
               "collapsed": true,
               "type": "category",
               "label": "Learning CUE",
@@ -462,9 +451,29 @@
           "id": "version-v1.3/cli/vela"
         },
         {
+          "type": "doc",
+          "id": "version-v1.3/platform-engineers/oam/x-definition"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/end-user/components/references"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/end-user/traits/references"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/end-user/policies/references"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/end-user/workflow/built-in-workflow-defs"
+        },
+        {
           "collapsed": true,
           "type": "category",
-          "label": "Built-in Addons",
+          "label": "Official Addons",
           "items": [
             {
               "type": "doc",
@@ -491,22 +500,6 @@
         {
           "type": "doc",
           "id": "version-v1.3/end-user/components/cloud-services/cloud-resources-list"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.3/end-user/components/references"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.3/end-user/traits/references"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.3/end-user/policies/references"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.3/end-user/workflow/built-in-workflow-defs"
         },
         {
           "type": "doc",
