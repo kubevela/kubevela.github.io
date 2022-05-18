@@ -119,61 +119,6 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "How-to manage the applications",
-          "items": [
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/create-application"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/bind-new-environment"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/tutorials/workflows"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/deploy-application"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/get-application-instance"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/tutorials/scaler"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/get-application-log"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/get-application-endpoint"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/view-application-resource"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/get-application-revision"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/recycle-environment"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/delete-application"
-            }
-          ]
-        },
-        {
-          "collapsed": true,
-          "type": "category",
           "label": "Day-2 Operations",
           "items": [
             {
@@ -213,21 +158,6 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "Manage integration configs",
-          "items": [
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/config/dex-connectors"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/config/helm-repo"
-            }
-          ]
-        },
-        {
-          "collapsed": true,
-          "type": "category",
           "label": "Advanced Features",
           "items": [
             {
@@ -260,6 +190,25 @@
       "label": "Operator Manual",
       "items": [
         {
+          "collapsed": true,
+          "type": "category",
+          "label": "Advanced Installation",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.3/platform-engineers/system-operation/bootstrap-parameters"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/platform-engineers/advanced-install"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/platform-engineers/system-operation/offline-installation"
+            }
+          ]
+        },
+        {
           "type": "doc",
           "id": "version-v1.3/tutorials/sso"
         },
@@ -291,27 +240,23 @@
           ]
         },
         {
-          "type": "doc",
-          "id": "version-v1.3/how-to/cli/addon/addon"
-        },
-        {
           "collapsed": true,
           "type": "category",
-          "label": "Install or upgrade",
+          "label": "Manage integration configs",
           "items": [
             {
               "type": "doc",
-              "id": "version-v1.3/platform-engineers/system-operation/bootstrap-parameters"
+              "id": "version-v1.3/how-to/dashboard/config/dex-connectors"
             },
             {
               "type": "doc",
-              "id": "version-v1.3/platform-engineers/advanced-install"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/platform-engineers/system-operation/offline-installation"
+              "id": "version-v1.3/how-to/dashboard/config/helm-repo"
             }
           ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/how-to/cli/addon/addon"
         },
         {
           "type": "doc",
@@ -500,6 +445,61 @@
         {
           "type": "doc",
           "id": "version-v1.3/end-user/components/cloud-services/cloud-resources-list"
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "How-to manage the applications",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/create-application"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/bind-new-environment"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/tutorials/workflows"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/deploy-application"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/get-application-instance"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/tutorials/scaler"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/get-application-log"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/get-application-endpoint"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/view-application-resource"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/get-application-revision"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/recycle-environment"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/application/delete-application"
+            }
+          ]
         },
         {
           "type": "doc",

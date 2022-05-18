@@ -55,22 +55,6 @@ module.exports = {
           ],
         },
         {
-          'How-to manage the applications': [
-            'how-to/dashboard/application/create-application',
-            'how-to/dashboard/application/bind-new-environment',
-            'tutorials/workflows',
-            'how-to/dashboard/application/deploy-application',
-            'how-to/dashboard/application/get-application-instance',
-            'tutorials/scaler',
-            'how-to/dashboard/application/get-application-log',
-            'how-to/dashboard/application/get-application-endpoint',
-            'how-to/dashboard/application/view-application-resource',
-            'how-to/dashboard/application/get-application-revision',
-            'how-to/dashboard/application/recycle-environment',
-            'how-to/dashboard/application/delete-application',
-          ],
-        },
-        {
           'Day-2 Operations': [
             'end-user/traits/rollout',
             'end-user/traits/ingress',
@@ -80,12 +64,6 @@ module.exports = {
             'end-user/workflow/webhook-notification',
             'how-to/dashboard/trigger/overview',
             'end-user/traits/more',
-          ],
-        },
-        {
-          'Manage integration configs': [
-            'how-to/dashboard/config/dex-connectors',
-            'how-to/dashboard/config/helm-repo',
           ],
         },
         {
@@ -103,6 +81,13 @@ module.exports = {
       type: 'category',
       label: 'Operator Manual',
       items: [
+        {
+          'Advanced Installation': [
+            'platform-engineers/system-operation/bootstrap-parameters',
+            'platform-engineers/advanced-install',
+            'platform-engineers/system-operation/offline-installation',
+          ],
+        },
         'tutorials/sso',
         'how-to/dashboard/user/user',
         'how-to/dashboard/user/rbac',
@@ -113,14 +98,13 @@ module.exports = {
             'how-to/dashboard/target/overview',
           ],
         },
-        'how-to/cli/addon/addon',
         {
-          'Install or upgrade': [
-            'platform-engineers/system-operation/bootstrap-parameters',
-            'platform-engineers/advanced-install',
-            'platform-engineers/system-operation/offline-installation',
+          'Manage integration configs': [
+            'how-to/dashboard/config/dex-connectors',
+            'how-to/dashboard/config/helm-repo',
           ],
         },
+        'how-to/cli/addon/addon',
         'platform-engineers/system-operation/observability',
         'platform-engineers/system-operation/performance-finetuning',
         {
@@ -193,6 +177,22 @@ module.exports = {
           ],
         },
         'end-user/components/cloud-services/cloud-resources-list',
+        {
+          'How-to manage the applications': [
+            'how-to/dashboard/application/create-application',
+            'how-to/dashboard/application/bind-new-environment',
+            'tutorials/workflows',
+            'how-to/dashboard/application/deploy-application',
+            'how-to/dashboard/application/get-application-instance',
+            'tutorials/scaler',
+            'how-to/dashboard/application/get-application-log',
+            'how-to/dashboard/application/get-application-endpoint',
+            'how-to/dashboard/application/view-application-resource',
+            'how-to/dashboard/application/get-application-revision',
+            'how-to/dashboard/application/recycle-environment',
+            'how-to/dashboard/application/delete-application',
+          ],
+        },
         'reference/ui-schema',
         'reference/user-improvement-plan',
         {

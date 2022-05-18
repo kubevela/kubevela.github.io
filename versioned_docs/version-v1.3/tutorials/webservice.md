@@ -3,13 +3,13 @@ title: Container Image
 description: deploy the business application by kubevela
 ---
 
-This article introduces how companies deliver business applications based on KubeVela. It does not require you to know much about Kubernetes.
+In this section, we will introduce how to deploy a container based application with KubeVela. The main process will be shown with UI console,
+if you're using CLI, jump to [Deploy via CLI](#deploy-via-cli) part.
 
 ## Before starting
 
-- Containerize your business. No matter what language you're using, first to build an image via CI or locally.
-- Place your business image at a hub that KubeVela can access to.
-- Enable the VelaUX addon, If you are only CLI users, go to [Deploy via CLI](#deploy-via-cli)
+- Containerize your business, you need a container image within your image registry that can be accessed by KubeVela.
+- Enable the [VelaUX addon](../reference/addons/velaux) by running command `vela addon enable velaux`.
 
 ## Creating an application
 
@@ -57,6 +57,8 @@ After all of the environments have been recycled, the application can be deleted
 
 At this point, you have basically mastered the deployment method of Docker image.
 
+You can refer to [how to manage applications](../how-to/dashboard/application/create-application) to learn the details about the UI console operations.
+
 ## Deploy via CLI
 
 You also can deploy the application via CLI.
@@ -103,18 +105,7 @@ About:
   Created at:	2022-04-21 12:03:42 +0800 CST
   Status:    	running
 
-Workflow:
-
-  mode: DAG
-  finished: true
-  Suspend: false
-  Terminated: false
-  Steps
-  - id:y4n26n7uql
-    name:frontend
-    type:apply-component
-    phase:succeeded
-    message:
+...snip...
 
 Services:
 
@@ -125,6 +116,9 @@ Services:
     Traits:
       ✅ scaler
 ```
+
+* Refer to [webservice details](../end-user/components/references#webservice) to know usage of full fields.
+* Refer to [trait reference](../end-user/traits/references) to know which traits can be used for webservice.
 
 ## Next Step
 
