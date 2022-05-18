@@ -4,7 +4,7 @@ author: Tianxin Dong and Yicai Yu
 author_title: KubeVela and Nocalhost team
 author_url: https://github.com/kubevela/kubevela
 author_image_url: https://kubevela.io/img/logo.svg
-tags: [ kubevela ]
+tags: [ kubevela, "use-case" ]
 description: ""
 image: https://raw.githubusercontent.com/kubevela/kubevela.io/main/docs/resources/KubeVela-03.png
 hide_table_of_contents: false

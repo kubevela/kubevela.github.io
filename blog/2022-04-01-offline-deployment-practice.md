@@ -4,7 +4,7 @@ author: Xiangbo Ma
 author_title: (Cloud platform development team)
 author_url: http://www.cmbchina.com/
 author_image_url: /img/china-merchants-bank.jpg
-tags: [ KubeVela ]
+tags: [ KubeVela , "use-case"]
 description: ""
 image: https://raw.githubusercontent.com/oam-dev/KubeVela.io/main/docs/resources/KubeVela-03.png
 hide_table_of_contents: false
