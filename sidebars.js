@@ -25,29 +25,28 @@ module.exports = {
       items: [
         {
           type: 'category',
-          label: 'Artifacts',
-          collapsed: false,
+          label: 'Container Image CD',
+          collapsed: true,
           items: [
             'tutorials/webservice',
-            'tutorials/helm',
+            'case-studies/multi-cluster',
+            'end-user/traits/rollout',
+            'end-user/traits/ingress',
+            'end-user/traits/sidecar',
             'tutorials/k8s-object',
-            'tutorials/consume-cloud-services',
-            'end-user/components/more',
           ],
         },
-        'case-studies/multi-cluster',
         {
           type: 'category',
-          label: 'CI Integration',
-          collapsed: false,
+          label: 'Helm Chart CD',
+          collapsed: true,
           items: [
-            'tutorials/jenkins',
-            'tutorials/trigger',
-            'case-studies/gitops',
+            'tutorials/helm',
           ],
         },
         {
-          'How-to manage the cloud resources': [
+          'Cloud Resources CD': [
+            'tutorials/consume-cloud-services',
             'end-user/components/cloud-services/provision-and-consume-cloud-services',
             'end-user/components/cloud-services/provision-and-initiate-database',
             'end-user/components/cloud-services/secure-your-database-connection',
@@ -55,15 +54,38 @@ module.exports = {
           ],
         },
         {
-          'Day-2 Operations': [
-            'end-user/traits/rollout',
-            'end-user/traits/ingress',
-            'end-user/traits/service-binding',
-            'end-user/traits/sidecar',
-            'end-user/policies/health',
-            'end-user/workflow/webhook-notification',
+          type: 'category',
+          label: 'Kubernetes Manifest CD',
+          collapsed: true,
+          items: [
+            'tutorials/k8s-object',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'CI Integration',
+          collapsed: true,
+          items: [
+            'tutorials/jenkins',
+            'tutorials/trigger',
             'how-to/dashboard/trigger/overview',
-            'end-user/traits/more',
+            'case-studies/gitops',
+          ],
+        },
+        {
+          'How-to manage the applications': [
+            'how-to/dashboard/application/create-application',
+            'how-to/dashboard/application/bind-new-environment',
+            'tutorials/workflows',
+            'how-to/dashboard/application/deploy-application',
+            'how-to/dashboard/application/get-application-instance',
+            'tutorials/scaler',
+            'how-to/dashboard/application/get-application-log',
+            'how-to/dashboard/application/get-application-endpoint',
+            'how-to/dashboard/application/view-application-resource',
+            'how-to/dashboard/application/get-application-revision',
+            'how-to/dashboard/application/recycle-environment',
+            'how-to/dashboard/application/delete-application',
           ],
         },
         {
@@ -75,6 +97,7 @@ module.exports = {
             'end-user/service-account-integration',
           ],
         },
+        'end-user/components/more',
       ],
     },
     {
@@ -177,22 +200,6 @@ module.exports = {
           ],
         },
         'end-user/components/cloud-services/cloud-resources-list',
-        {
-          'How-to manage the applications': [
-            'how-to/dashboard/application/create-application',
-            'how-to/dashboard/application/bind-new-environment',
-            'tutorials/workflows',
-            'how-to/dashboard/application/deploy-application',
-            'how-to/dashboard/application/get-application-instance',
-            'tutorials/scaler',
-            'how-to/dashboard/application/get-application-log',
-            'how-to/dashboard/application/get-application-endpoint',
-            'how-to/dashboard/application/view-application-resource',
-            'how-to/dashboard/application/get-application-revision',
-            'how-to/dashboard/application/recycle-environment',
-            'how-to/dashboard/application/delete-application',
-          ],
-        },
         'reference/ui-schema',
         'reference/user-improvement-plan',
         {

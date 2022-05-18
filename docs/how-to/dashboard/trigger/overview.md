@@ -1,5 +1,5 @@
 ---
-title: Integrate with CI system by Triggers
+title: Integrate by Triggers
 description: Integrate with CI system by Triggers
 ---
 
