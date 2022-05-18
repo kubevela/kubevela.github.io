@@ -71,4 +71,4 @@ Welcome onboard and sail Vela!
 ## What's Next
 
 - Start to [install KubeVela](./install).
-- Learn [Core Concepts](./core-concept) to know more about how it works.
+- Learn [Core Concepts](./getting-started/core-concept) to know more about how it works.
