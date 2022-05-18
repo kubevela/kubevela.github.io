@@ -109,7 +109,7 @@ spec:
 
 **Overview**
 
-Send notifications. You can use the notification to send email, slack, ding talk and lark.
+Send notifications. You can use the notification to send notifications to Email, DingTalk, Slack, Lark.
 
 **Parameters**
 
@@ -213,6 +213,10 @@ spec:
               subject: test-subject
               body: test-body
 ```
+
+* Expected outcome
+
+we can see that before and after the deployment of the application, the messages can be seen in the corresponding group chat.
 
 ## webhook
 

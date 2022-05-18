@@ -2,9 +2,15 @@
 title:  Needs More？
 ---
 
-* Refer to [All Component References](./references) to learn all built-in supported artifacts supported for delivery.
+KubeVela is programmable, you have the following ways to discover and extend the platform.
 
-* Get more from [install addons](../../how-to/cli/addon/addon).
+* Refer to the following links to learn more built-in capabilities:
+    - [Built-in Component Reference](./references)
+    - [Built-in Trait Reference](../traits/references)
+    - [Built-in Policy Reference](../policies/references)
+    - [Built-in Workflow Step Reference](../workflow/built-in-workflow-defs)
+
+* Get more capabilities from [installing addons](../../how-to/cli/addon/addon), you can refer to [the overview of official addons](../../reference/addons/overview) for more details.
 
 * Extend KubeVela by yourself
 
