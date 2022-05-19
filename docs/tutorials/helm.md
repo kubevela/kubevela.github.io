@@ -128,7 +128,3 @@ Services:
 ```
 
 At this point, Helm Chart in KubeVela is no stranger to you, go ahead and try more!
-
-## Next step
-
-- [Deploy Kubernetes Objects](./k8s-object)
