@@ -67,10 +67,6 @@
             {
               "type": "doc",
               "id": "version-v1.3/end-user/traits/sidecar"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/tutorials/k8s-object"
             }
           ]
         },
@@ -120,6 +116,10 @@
             {
               "type": "doc",
               "id": "version-v1.3/tutorials/k8s-object"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/components/ref-objects"
             }
           ]
         },
@@ -149,7 +149,7 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "How-to manage the applications",
+          "label": "General CD Features",
           "items": [
             {
               "type": "doc",
@@ -157,55 +157,8 @@
             },
             {
               "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/bind-new-environment"
-            },
-            {
-              "type": "doc",
               "id": "version-v1.3/tutorials/workflows"
             },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/deploy-application"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/get-application-instance"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/tutorials/scaler"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/get-application-log"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/get-application-endpoint"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/view-application-resource"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/get-application-revision"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/recycle-environment"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/application/delete-application"
-            }
-          ]
-        },
-        {
-          "collapsed": true,
-          "type": "category",
-          "label": "Advanced Features",
-          "items": [
             {
               "type": "doc",
               "id": "version-v1.3/end-user/workflow/component-dependency-parameter"

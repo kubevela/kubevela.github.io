@@ -119,7 +119,3 @@ Services:
 
 * Refer to [webservice details](../end-user/components/references#webservice) to know usage of full fields.
 * Refer to [trait reference](../end-user/traits/references) to know which traits can be used for webservice.
-
-## Next Step
-
-[Learn to deploy Helm Chart](./helm)

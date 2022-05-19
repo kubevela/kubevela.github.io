@@ -1,5 +1,5 @@
 ---
-title:  Multi-Cluster Delivery
+title:  Deploy across Multi-Clusters
 ---
 
 KubeVela is by design a full functional Continuous Delivery (CD) platform with fine grained support for hybrid/multi-cloud/multi-cluster deployment.
@@ -17,22 +17,10 @@ The following guide will introduce how to manage applications across clusters on
 
 ## Preparation
 
-You can simply join an existing cluster into KubeVela by specifying its KubeConfig as below
+Please make sure you have clusters in your control plane, in general, this work should be done by operator engineers.
+If you're a DevOps engineer or trying KubeVela, you can refer to [manage cluster docs](../platform-engineers/system-operation/managing-clusters) to learn how to join clusters.
 
-```shell script
-vela cluster join <your kubeconfig path>
-```
-
-It will use the field `context.cluster` in KubeConfig as the cluster name automatically,
-you can also specify the name by `--name` parameter. For example:
-
-```shell
-$ vela cluster join beijing.kubeconfig --name beijing
-$ vela cluster join hangzhou-1.kubeconfig --name hangzhou-1
-$ vela cluster join hangzhou-2.kubeconfig --name hangzhou-2
-```
-
-After clusters joined, you could list all clusters managed by KubeVela.
+For the rest docs, we assume you have clusters with the following names:
 
 ```bash
 $ vela cluster list
@@ -44,27 +32,6 @@ cluster-hangzhou-2      X509Certificate <ENDPOINT_HANGZHOU_2>   true
 ```
 
 > By default, the hub cluster where KubeVela locates is registered as the `local` cluster. You can use it like a managed cluster in spite that you cannot detach it or modify it.
-
-You can also detach a cluster if you do not want to use it anymore.
-
-```shell script
-$ vela cluster detach beijing
-```
-
-> It is dangerous to detach a cluster that is still in-use. But if you want to do modifications to the held cluster credential, like rotating certificates, it is possible to do so. 
-
-You can also give labels to your clusters, which helps you select clusters for deploying applications.
-
-```bash
-$ vela cluster labels add cluster-hangzhou-1 region=hangzhou
-$ vela cluster labels add cluster-hangzhou-2 region=hangzhou
-$ vela cluster list
-CLUSTER                 TYPE            ENDPOINT                ACCEPTED        LABELS
-local                   Internal        -                       true                  
-cluster-beijing         X509Certificate <ENDPOINT_BEIJING>      true                  
-cluster-hangzhou-1      X509Certificate <ENDPOINT_HANGZHOU_1>   true            region=hangzhou
-cluster-hangzhou-2      X509Certificate <ENDPOINT_HANGZHOU_2>   true            region=hangzhou
-```
 
 ## Deliver Application to Clusters
 
@@ -530,7 +497,3 @@ If you already have applications running in production environment and do not wa
 In this section, we introduced how KubeVela delivering micro services in multiple clusters, the whole process can be easily modeled as a declarative deployment plan.
 
 No more add-hoc scripts or glue code, KubeVela will get the application delivery workflow done with full automation and determinism. Most importantly, KubeVela expects you keep using the CI solutions you are already familiar with and KubeVela is fully complementary to them as the CD control plane.
-
-## Next Step
-
-* Refer to more examples about [integrating with Jenkins](../tutorials/jenkins).

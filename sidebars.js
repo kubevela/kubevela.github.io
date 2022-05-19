@@ -33,7 +33,6 @@ module.exports = {
             'end-user/traits/rollout',
             'end-user/traits/ingress',
             'end-user/traits/sidecar',
-            'tutorials/k8s-object',
           ],
         },
         {
@@ -59,6 +58,7 @@ module.exports = {
           collapsed: true,
           items: [
             'tutorials/k8s-object',
+            'end-user/components/ref-objects',
           ],
         },
         {
@@ -73,23 +73,9 @@ module.exports = {
           ],
         },
         {
-          'How-to manage the applications': [
+          'General CD Features': [
             'how-to/dashboard/application/create-application',
-            'how-to/dashboard/application/bind-new-environment',
             'tutorials/workflows',
-            'how-to/dashboard/application/deploy-application',
-            'how-to/dashboard/application/get-application-instance',
-            'tutorials/scaler',
-            'how-to/dashboard/application/get-application-log',
-            'how-to/dashboard/application/get-application-endpoint',
-            'how-to/dashboard/application/view-application-resource',
-            'how-to/dashboard/application/get-application-revision',
-            'how-to/dashboard/application/recycle-environment',
-            'how-to/dashboard/application/delete-application',
-          ],
-        },
-        {
-          'Advanced Features': [
             'end-user/workflow/component-dependency-parameter',
             'end-user/version-control',
             'end-user/policies/apply-once',
