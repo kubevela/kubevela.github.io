@@ -1,10 +1,10 @@
 ---
-title: Using Jenkins + KubeVela for Application Continuous Delivery
+title: "Using Jenkins + KubeVela for Application Continuous Delivery"
 author: Da Yin, Yang Song
 author_title: KubeVela Team
 author_url: https://github.com/kubevela/kubevela
 author_image_url: https://kubevela.io/img/logo.svg
-tags: [ KubeVela ]
+tags: [ KubeVela, "use-case" ]
 description: ""
 image: https://raw.githubusercontent.com/kubevela/kubevela.io/main/docs/resources/KubeVela-03.png
 hide_table_of_contents: false
