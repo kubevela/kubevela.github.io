@@ -44,9 +44,9 @@
       "label": "User Guide",
       "items": [
         {
-          "collapsed": false,
+          "collapsed": true,
           "type": "category",
-          "label": "Artifacts",
+          "label": "Container Image CD",
           "items": [
             {
               "type": "doc",
@@ -54,50 +54,46 @@
             },
             {
               "type": "doc",
-              "id": "version-v1.3/tutorials/helm"
+              "id": "version-v1.3/case-studies/multi-cluster"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/traits/rollout"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/traits/ingress"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/end-user/traits/sidecar"
             },
             {
               "type": "doc",
               "id": "version-v1.3/tutorials/k8s-object"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/tutorials/consume-cloud-services"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/end-user/components/more"
-            }
-          ]
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.3/case-studies/multi-cluster"
-        },
-        {
-          "collapsed": false,
-          "type": "category",
-          "label": "CI Integration",
-          "items": [
-            {
-              "type": "doc",
-              "id": "version-v1.3/tutorials/jenkins"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/tutorials/trigger"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/case-studies/gitops"
             }
           ]
         },
         {
           "collapsed": true,
           "type": "category",
-          "label": "How-to manage the cloud resources",
+          "label": "Helm Chart CD",
           "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.3/tutorials/helm"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Cloud Resources CD",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.3/tutorials/consume-cloud-services"
+            },
             {
               "type": "doc",
               "id": "version-v1.3/end-user/components/cloud-services/provision-and-consume-cloud-services"
@@ -113,6 +109,40 @@
             {
               "type": "doc",
               "id": "version-v1.3/end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Kubernetes Manifest CD",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.3/tutorials/k8s-object"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "CI Integration",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.3/tutorials/jenkins"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/tutorials/trigger"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/how-to/dashboard/trigger/overview"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/case-studies/gitops"
             }
           ]
         },
@@ -174,60 +204,6 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "Day-2 Operations",
-          "items": [
-            {
-              "type": "doc",
-              "id": "version-v1.3/end-user/traits/rollout"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/end-user/traits/ingress"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/end-user/traits/service-binding"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/end-user/traits/sidecar"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/end-user/policies/health"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/end-user/workflow/webhook-notification"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/trigger/overview"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/end-user/traits/more"
-            }
-          ]
-        },
-        {
-          "collapsed": true,
-          "type": "category",
-          "label": "Manage integration configs",
-          "items": [
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/config/dex-connectors"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/how-to/dashboard/config/helm-repo"
-            }
-          ]
-        },
-        {
-          "collapsed": true,
-          "type": "category",
           "label": "Advanced Features",
           "items": [
             {
@@ -251,6 +227,10 @@
               "id": "version-v1.3/end-user/service-account-integration"
             }
           ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/end-user/components/more"
         }
       ]
     },
@@ -259,6 +239,25 @@
       "type": "category",
       "label": "Operator Manual",
       "items": [
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Advanced Installation",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.3/platform-engineers/system-operation/bootstrap-parameters"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/platform-engineers/advanced-install"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.3/platform-engineers/system-operation/offline-installation"
+            }
+          ]
+        },
         {
           "type": "doc",
           "id": "version-v1.3/tutorials/sso"
@@ -291,27 +290,23 @@
           ]
         },
         {
-          "type": "doc",
-          "id": "version-v1.3/how-to/cli/addon/addon"
-        },
-        {
           "collapsed": true,
           "type": "category",
-          "label": "Install or upgrade",
+          "label": "Manage integration configs",
           "items": [
             {
               "type": "doc",
-              "id": "version-v1.3/platform-engineers/system-operation/bootstrap-parameters"
+              "id": "version-v1.3/how-to/dashboard/config/dex-connectors"
             },
             {
               "type": "doc",
-              "id": "version-v1.3/platform-engineers/advanced-install"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.3/platform-engineers/system-operation/offline-installation"
+              "id": "version-v1.3/how-to/dashboard/config/helm-repo"
             }
           ]
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/how-to/cli/addon/addon"
         },
         {
           "type": "doc",

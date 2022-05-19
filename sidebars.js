@@ -25,33 +25,51 @@ module.exports = {
       items: [
         {
           type: 'category',
-          label: 'Artifacts',
-          collapsed: false,
+          label: 'Container Image CD',
+          collapsed: true,
           items: [
             'tutorials/webservice',
-            'tutorials/helm',
+            'case-studies/multi-cluster',
+            'end-user/traits/rollout',
+            'end-user/traits/ingress',
+            'end-user/traits/sidecar',
             'tutorials/k8s-object',
-            'tutorials/consume-cloud-services',
-            'end-user/components/more',
           ],
         },
-        'case-studies/multi-cluster',
         {
           type: 'category',
-          label: 'CI Integration',
-          collapsed: false,
+          label: 'Helm Chart CD',
+          collapsed: true,
           items: [
-            'tutorials/jenkins',
-            'tutorials/trigger',
-            'case-studies/gitops',
+            'tutorials/helm',
           ],
         },
         {
-          'How-to manage the cloud resources': [
+          'Cloud Resources CD': [
+            'tutorials/consume-cloud-services',
             'end-user/components/cloud-services/provision-and-consume-cloud-services',
             'end-user/components/cloud-services/provision-and-initiate-database',
             'end-user/components/cloud-services/secure-your-database-connection',
             'end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Kubernetes Manifest CD',
+          collapsed: true,
+          items: [
+            'tutorials/k8s-object',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'CI Integration',
+          collapsed: true,
+          items: [
+            'tutorials/jenkins',
+            'tutorials/trigger',
+            'how-to/dashboard/trigger/overview',
+            'case-studies/gitops',
           ],
         },
         {
@@ -71,24 +89,6 @@ module.exports = {
           ],
         },
         {
-          'Day-2 Operations': [
-            'end-user/traits/rollout',
-            'end-user/traits/ingress',
-            'end-user/traits/service-binding',
-            'end-user/traits/sidecar',
-            'end-user/policies/health',
-            'end-user/workflow/webhook-notification',
-            'how-to/dashboard/trigger/overview',
-            'end-user/traits/more',
-          ],
-        },
-        {
-          'Manage integration configs': [
-            'how-to/dashboard/config/dex-connectors',
-            'how-to/dashboard/config/helm-repo',
-          ],
-        },
-        {
           'Advanced Features': [
             'end-user/workflow/component-dependency-parameter',
             'end-user/version-control',
@@ -97,12 +97,20 @@ module.exports = {
             'end-user/service-account-integration',
           ],
         },
+        'end-user/components/more',
       ],
     },
     {
       type: 'category',
       label: 'Operator Manual',
       items: [
+        {
+          'Advanced Installation': [
+            'platform-engineers/system-operation/bootstrap-parameters',
+            'platform-engineers/advanced-install',
+            'platform-engineers/system-operation/offline-installation',
+          ],
+        },
         'tutorials/sso',
         'how-to/dashboard/user/user',
         'how-to/dashboard/user/rbac',
@@ -113,14 +121,13 @@ module.exports = {
             'how-to/dashboard/target/overview',
           ],
         },
-        'how-to/cli/addon/addon',
         {
-          'Install or upgrade': [
-            'platform-engineers/system-operation/bootstrap-parameters',
-            'platform-engineers/advanced-install',
-            'platform-engineers/system-operation/offline-installation',
+          'Manage integration configs': [
+            'how-to/dashboard/config/dex-connectors',
+            'how-to/dashboard/config/helm-repo',
           ],
         },
+        'how-to/cli/addon/addon',
         'platform-engineers/system-operation/observability',
         'platform-engineers/system-operation/performance-finetuning',
         {

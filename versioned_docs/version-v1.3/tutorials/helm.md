@@ -1,5 +1,5 @@
 ---
-title: Helm Chart
+title: Deploy Helm Chart
 ---
 
 This section introduces that how you deploy Helm Chart into multi-environments and clusters.
