@@ -59,7 +59,7 @@ When you add or modify the docs, these three files(`docs/en/`, `docs/en/resource
        },
    ```
 
-
+After you finished modify the docs, please try to [have a preview of the changes](#Website-Preview).
 
 
 ## Localization README
@@ -69,9 +69,9 @@ When you add or modify the docs, these three files(`docs/en/`, `docs/en/resource
 | [Chinese](README-zh.md) |
 
 
-
 # Website Preview
 
+Please make sure you have [yarn installed](https://www.geeksforgeeks.org/how-to-install-yarn-in-macos-ubuntu-windows/) in your OS environment.
 
 ## Installation
 
@@ -103,15 +103,22 @@ GIT_USER=<Your GitHub username> USE_SSH=true yarn deploy
 
 If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
 
+## Versions for new release
 
-## Build New Version
+All docs of new features should be updated in the latest docs, we will create a new version of docs along with the code release.
+
+### Build New Version
 
 ```
 yarn docusaurus docs:version v1.3
 ```
 
-## Update Docs for version
+### Update Docs for version
 
 ```
 make update-version version=v1.3
 ```
+
+## Send your pull request
+
+After all changes checked well, please [creating a pull request](https://help.github.com/en/articles/creating-a-pull-request) with [DCO](https://github.com/apps/dco).

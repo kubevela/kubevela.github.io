@@ -386,8 +386,35 @@
       ]
     },
     {
-      "type": "doc",
-      "id": "version-v1.3/contributor/overview"
+      "collapsed": true,
+      "type": "category",
+      "label": "Developer Guide",
+      "items": [
+        {
+          "type": "doc",
+          "id": "version-v1.3/contributor/overview"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/contributor/non-code-contribute"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/contributor/code-contribute"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/contributor/release-process"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/contributor/code-conventions"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.3/contributor/principle-of-test"
+        }
+      ]
     },
     {
       "collapsed": true,

@@ -1,5 +1,5 @@
 ---
-title: Distribute Reference Objects
+title: Multi-cluster Distribution
 ---
 
 > This section requires you to know the basics about how to deploy multi-cluster application with policy and workflow. You can refer to [Multi-cluster Delivery](../../case-studies/multi-cluster) for container images, they're working in the same way.
