@@ -32,7 +32,7 @@ Unsure where to begin contributing to KubeVela codebase? Start by browsing issue
 - [Help wanted](https://github.com/kubevela/kubevela/labels/help%20wanted) issues are problems we would like the community to help us with regardless of complexity.
 - Refer to [Code Contribution Guide](./code-contribute) for more details.
 
-Learn the [Release Process And Cadence](https://github.com/kubevela/kubevela/blob/master/contribute/develop-code-flow.pdf) to know when your code changes will be released.
+Learn the [Release Process And Cadence](./release-process) to know when your code changes will be released.
 
 
 ## Become a community member
