@@ -29,7 +29,7 @@ function Feature({ imgUrl, title, description, reverse }) {
 
 const Button = ({ children, href }) => {
   return (
-    <div className="col col--2 margin-horiz--sm">
+    <div className="col col--2 margin--sm">
       <Link
         className="button button--outline button--primary button--lg"
         to={href}>
