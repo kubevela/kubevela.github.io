@@ -163,7 +163,19 @@ module.exports = {
         },
       ],
     },
-    'contributor/overview',
+    {
+      type: 'category',
+      label: 'Developer Guide',
+      collapsed: true,
+      items: [
+        'contributor/overview',
+        'contributor/non-code-contribute',
+        'contributor/code-contribute',
+        'contributor/release-process',
+        'contributor/code-conventions',
+        'contributor/principle-of-test',
+      ],
+    },
     {
       type: 'category',
       label: 'References',
