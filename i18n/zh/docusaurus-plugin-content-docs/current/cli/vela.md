@@ -27,6 +27,7 @@ title: CLI Commands
 * [vela live-diff](vela_live-diff)	 - Compare application and revisions
 * [vela dry-run](vela_dry-run)	 - Dry-run application locally, render the Kubernetes resources as result to stdout.
 * [vela revision](vela_revision)	 - Manage KubeVela Application Revisions
+* [vela ql](vela_ql)	 - Query Resources behind Application
 
 ## Continuous Delivery
 

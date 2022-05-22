@@ -1,27 +1,27 @@
 ---
-title: vela provider add
+title: vela ql
 ---
 
-Authenticate Terraform Cloud Provider
+Show result of executing velaQL.
 
 ### Synopsis
 
-Authenticate Terraform Cloud Provider by creating a credential secret and a Terraform Controller Provider
+Show result of executing velaQL.
 
 ```
-vela provider add [flags]
+vela ql [flags]
 ```
 
 ### Examples
 
 ```
-vela provider add <provider-type>
+vela ql "view{parameter=value1,parameter=value2}"
 ```
 
 ### Options
 
 ```
-  -h, --help   help for add
+  -h, --help   help for ql
 ```
 
 ### Options inherited from parent commands
@@ -32,7 +32,7 @@ vela provider add <provider-type>
 
 ### SEE ALSO
 
-* [vela provider](vela_provider)	 - Authenticate Terraform Cloud Providers
+
 
 #### Go Back to [CLI Commands](vela) Homepage.
 

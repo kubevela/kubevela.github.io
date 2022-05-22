@@ -26,7 +26,7 @@ vela def list [flags]
 ```
   -h, --help               help for list
   -n, --namespace string   Specify which namespace to list. If empty, all namespaces will be searched.
-  -t, --type string        Specify which definition type to list. If empty, all types will be searched. Valid types: component, trait, policy, workload, scope, workflow-step
+  -t, --type string        Specify which definition type to list. If empty, all types will be searched. Valid types: policy, workload, scope, workflow-step, component, trait
 ```
 
 ### Options inherited from parent commands
