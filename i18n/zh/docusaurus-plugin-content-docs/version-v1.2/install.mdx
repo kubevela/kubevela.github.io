@@ -118,7 +118,7 @@ chmod +x /usr/bin/rke
 安装 [Kind 命令行工具](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)后，创建集群:
 
 ```shell script
-cat <<EOF | kind create cluster --image=kindest/node:v1.18.15 --config=-
+cat <<EOF | kind create cluster --image=kindest/node:v1.20.7 --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
