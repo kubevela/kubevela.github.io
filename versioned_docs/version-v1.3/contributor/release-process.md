@@ -7,7 +7,7 @@ KubeVela is being developed using the following process:
 * Maintainers commit to work on set of features and enhancements and create GitHub milestone to track the work.
 * We are trying to avoid delaying release and prefer moving the feature into the next release if we cannot complete it on time.
 * The new release is published every **2 month**.
-* Critical bug-fixes are cherry-picked into the release branch and delivered using patch releases as frequently as needed.
+* Critical bug-fixes are cherry-picked into the release branch and delivered using patch releases as frequently as needed, we will maintain the last **2 releases**.
 
 ![develop-flow](../resources/develop-code-flow.jpg)
 

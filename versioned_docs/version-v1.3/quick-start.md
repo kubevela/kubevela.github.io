@@ -173,7 +173,7 @@ Services:
 
 Great! You have finished deploying your first KubeVela application, you can also view and manage it in UI.
 
-## View and Manage the application from UI
+## Manage application with UI Console
 
 > Currently, the application created by CLI is readonly in your dashboard.
 
@@ -191,13 +191,13 @@ vela port-forward addon-velaux -n vela-system 8080:80
 vela logs -n vela-system --name apiserver addon-velaux | grep "initialized admin username"
 ```
 
-### View resources deployed
+* Check the resources deployed
 
 Click the application card, then you can view the details of the application.
 
 ![](./resources/succeed-first-vela-app.jpg)
 
-## Deleting Application
+## Clean up
 
 ```
 $ vela delete first-vela-app
