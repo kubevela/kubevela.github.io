@@ -229,7 +229,7 @@ If the pull request fixes a bug:
 
 - The pull request description must include `Closes #<issue number>` or `Fixes #<issue number>`.
 - To avoid regressions, the pull request should include tests that replicate the fixed bug.
-- If this pull request fixes a bug that needs to backport releases, you can add `backport release-x.x` label to automatically backport this PR to release-x.x branch.
+- Generally, we will maintain the last 2 releases for bugfix. You should add `backport release-x.x` label or comment `/backport release-x.y` for the releases contained the bug, github bot will automatically backport this PR to the specified release branch after PR merged. If there're any conflicts, you should cherry-pick it manually.
 
 ## Code review
 
@@ -359,6 +359,7 @@ Before merge, All test CI should pass green.
 
     Signed-off-by: Random Developer <random@developer.example.org>
     ```
+
 ## Update the docs & website
 
 If your pull request merged and this is a new feature or enhancement, it's necessary to update the docs and send a pull request to [kubevela.io](https://github.com/kubevela/kubevela.io) repo.
