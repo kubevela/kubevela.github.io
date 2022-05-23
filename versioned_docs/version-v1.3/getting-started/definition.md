@@ -30,16 +30,12 @@ When definitions installed in the system, they can be discovered by end user imm
 ```
 $ vela def list
 NAME                         	TYPE                  	NAMESPACE  	DESCRIPTION
-task                         	ComponentDefinition   	vela-system	Describes jobs that run code or a script to completion.
 webservice                   	ComponentDefinition   	vela-system	Describes long-running, scalable, containerized services
                              	                      	           	that have a stable network endpoint to receive external
                              	                      	           	network traffic from customers.
 gateway                      	TraitDefinition       	vela-system	Enable public web traffic for the component, the ingress API
                              	                      	           	matches K8s v1.20+.
-labels                       	TraitDefinition       	vela-system	Add labels on K8s pod for your workload which follows the
-                             	                      	           	pod spec in path 'spec.template'.
 health                       	PolicyDefinition      	vela-system	Apply periodical health checking to the application.
-deploy                       	WorkflowStepDefinition	vela-system	Deploy components with policies.
 notification                 	WorkflowStepDefinition	vela-system	Send message to webhook
 ...snip...
 ```
