@@ -11,16 +11,15 @@
 
 .heroLogoWrapper {
   position: relative;
-  left: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: auto;
   width: 256px;
   height: 256px;
   margin-bottom: 1.5rem;
   background: #fff;
   border-radius: 48px;
-  transform: translateX(-50%);
 }
 
 @media screen and (max-width: 768px) {
@@ -33,10 +32,6 @@
 .heroLogo {
   width: 80%;
   height: 80%;
-}
-
-.heroTitle {
-  padding-left: 1.5rem;
 }
 
 .installTextWrapper {
