@@ -95,4 +95,4 @@ else {
 }
 
 Write-Output "`r`nKubeVela CLI is installed successfully."
-Write-Output "To get started with KubeVela, please visit https://kubevela.io."
+Write-Output "To get started with KubeVela, please visit https://kubevela.io ."

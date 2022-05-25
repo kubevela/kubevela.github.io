@@ -55,7 +55,7 @@ Nocalhost 还提供： VSCode 和 Jetbrains IDE 一键 Debug 和 HotReload；在
 
 我们以一个简单的前端应用为例，首先，我们通过 VelaUX 进行多环境部署。
 
-> 关于如何开启 KubeVela 的 VelaUX 插件，请查看 [官方文档](https://kubevela.io/docs/install#4-install-velaux)。
+> 关于如何开启 KubeVela 的 VelaUX 插件，请查看 [官方文档](https://kubevela.io/docs/install#2-install-velaux)。
 
 ### 使用 VelaUX 部署云端应用
 
