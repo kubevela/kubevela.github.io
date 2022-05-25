@@ -177,7 +177,7 @@ Great! You have finished deploying your first KubeVela application, you can also
 
 > Currently, the application created by CLI is readonly in your dashboard.
 
-After finished [the installation of VelaUX](./install#4-install-velaux), you can view and manage the application created.
+After finished [the installation of VelaUX](./install#2-install-velaux), you can view and manage the application created.
 
 * Port forward the UI if you don't have endpoint for access:
 
