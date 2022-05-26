@@ -55,7 +55,7 @@ In the process of using Nocalhost to develop Kubernetes applications, image buil
 
 Let's take a simple front-end application as an example. First, we use VelaUX to deploy it in the multi-environment.
 
-> If you don't know how to enable KubeVela's VelaUX addon, please check the [official documentation](https://kubevela.io/docs/install#4-install-velaux).
+> If you don't know how to enable KubeVela's VelaUX addon, please check the [official documentation](https://kubevela.io/docs/install#2-install-velaux).
 
 ### Use VelaUX to deploy application
 

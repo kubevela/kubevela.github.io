@@ -94,7 +94,7 @@ module.exports = {
           'Advanced Installation': [
             'platform-engineers/system-operation/bootstrap-parameters',
             'platform-engineers/advanced-install',
-            'platform-engineers/system-operation/offline-installation',
+            'platform-engineers/system-operation/vela-cli-image',
           ],
         },
         'tutorials/sso',
