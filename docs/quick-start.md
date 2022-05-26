@@ -182,7 +182,7 @@ After finished [the installation of VelaUX](./install#2-install-velaux), you can
 * Port forward the UI if you don't have endpoint for access:
 
 ```
-vela port-forward addon-velaux -n vela-system 8080:80
+vela port-forward addon-velaux -n vela-system 8000:80
 ```
 
 * Check the password by:
