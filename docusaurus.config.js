@@ -6,7 +6,7 @@ module.exports = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/favicons/favicon.ico',
   organizationName: 'oam-dev', // Usually your GitHub org/user name.
   projectName: 'kubevela.io', // Usually your repo name.
   i18n: {
@@ -179,5 +179,6 @@ module.exports = {
         showLastUpdateTime: true
       },
     ],
+    './src/plugins/faviconCustomPlugin'
   ],
 };
