@@ -229,6 +229,7 @@ If the pull request fixes a bug:
 
 - The pull request description must include `Closes #<issue number>` or `Fixes #<issue number>`.
 - To avoid regressions, the pull request should include tests that replicate the fixed bug.
+- Generally, we will maintain the last 2 releases for bugfix. You should add `backport release-x.x` label or comment `/backport release-x.y` for the releases contained the bug, github bot will automatically backport this PR to the specified release branch after PR merged. If there're any conflicts, you should cherry-pick it manually.
 
 ## Code review
 
@@ -346,7 +347,18 @@ Make sure that the title for your pull request uses the same format as the subje
 ### Pass all the CI checks
 
 Before merge, All test CI should pass green.
-The `codecov/project` should also pass. This means the coverage should not drop.
+- The `codecov/project` should also pass. This means the coverage should not drop. Currently, the coverage of the Pull Request should have at least 70%.
+- KubeVela uses [DCO](https://wiki.linuxfoundation.org/dco) for contributor agreements. It requires you to sign-off every commit before the pull request being merged.
+  - Git provides a convenient flag `-s` in your commit command to sign-off automatically:
+    ```shell
+    git commit -s -m 'This is my commit message'
+    ```
+  - Contributors can also sign-off manually by adding a `Signed-off-by` line to commit messages as the following format, make sure the email matches your github account or the check bot won't pass.
+    ```shell
+    This is my commit message
+
+    Signed-off-by: Random Developer <random@developer.example.org>
+    ```
 
 ## Update the docs & website
 

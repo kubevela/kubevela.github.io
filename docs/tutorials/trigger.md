@@ -6,7 +6,7 @@ title: Integrating with Image registries
 
 In our daily development, when image tags changed, it is more convenient for CI/CD if the environments can automatically deploy the new image. KubeVela provides this mechanism.
 
-In KubeVela 1.2, [VelaUX](../install#3-install-velaux) provides a good way to do this. We can use KubeVela triggers to apply applications automatically.
+In KubeVela 1.2, [VelaUX](../install#2-install-velaux) provides a good way to do this. We can use KubeVela triggers to apply applications automatically.
 
 In this section, we will use GitLab as code repository and Harbor as image repository to integrate with KubeVela triggers, as a result, it will automatically update application when image tags changed.
 
