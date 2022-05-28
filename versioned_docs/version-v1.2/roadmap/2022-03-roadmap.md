@@ -29,7 +29,7 @@ Date: 2022-01-01 to 2022-03-31
 
 - Provide OpenYurt integration to improve IoT/edge experience.
 - Provide ArgoCD integration to improve GitOps experience, that'll be alternative to FluxCD addon.
-- Integrate with OPA/Keyverno/Cosign and other projects to provide a secure software supply chain.
+- Integrate with OPA/Kyverno/Cosign and other projects to provide a secure software supply chain.
 
 
 ## Best practices
