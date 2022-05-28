@@ -8,7 +8,7 @@ Welcome to KubeVela! This section will guide you to deliver your first app.
 
 ## Deploy a classic application
 
-Below is a classic KubeVela application which contains one component with one operational trait, basically, it means to deploy a container image as webservice with one replica. Additionally, there are three policies and workflow steps, it means to deploy the application into two different environments with a bit different configurations.
+Below is a classic KubeVela application which contains one component with one operational trait, basically, it means to deploy a container image as webservice with one replica. Additionally, there are three policies and workflow steps, it means to deploy the application into two different environments with different configurations.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -112,7 +112,7 @@ Services:
       ✅ scaler
 ```
 
-The application will become a `workflowSuspending` status, it means the workflow has finished the first two steps and waiting for manuel approval as the step specified.
+The application will become a `workflowSuspending` status, it means the workflow has finished the first two steps and waiting for manual approval as the step specified.
 
 * Access the application
 
@@ -133,14 +133,14 @@ Hello KubeVela! Make shipping applications more enjoyable.
 
 * Resume the workflow
 
-After we finshed check the application, we can approve the workflow to continue:
+After we finshed checking the application, we can approve the workflow to continue:
 
 ```bash
 $ vela workflow resume first-vela-app
 Successfully resume workflow: first-vela-app
 ```
 
-Then the rest part will be delivered in `prod` namespace:
+Then the rest will be delivered in the `prod` namespace:
 
 ```
 $ vela status first-vela-app
