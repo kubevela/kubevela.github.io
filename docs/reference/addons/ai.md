@@ -1,8 +1,6 @@
 ---
-title: Machine Learning Addon
+title: Machine Learning
 ---
-
-## Machine Learning Addon
 
 Machine learning addon is divided into model-training addon and model-serving addon. Run the following command to install the addon:
 

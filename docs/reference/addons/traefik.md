@@ -4,7 +4,7 @@ title: Traefik
 
 Traefik is a modern HTTP reverse proxy and load balancer made to deploy microservices with ease. you can use this addon as a cluster gateway or a microservices gateway.
 
-## XDefinitions
+## Definitions
 
 ### http-route(trait)
 

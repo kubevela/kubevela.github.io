@@ -1,5 +1,5 @@
 ---
-title: Built-in Trait Type
+title: 内置运维特征类型
 ---
 
 This documentation will walk through the built-in traits.

@@ -2,6 +2,8 @@
 title: Manage Definition
 ---
 
+> Before reading this part, please make sure you've learned the [Definition Concept](../../getting-started/definition) of KubeVela.
+
 In KubeVela CLI, `vela def` command group provides a series of convenient definition writing tools. With these commands, users only need to write CUE files to generate and edit definitions, instead of composing Kubernetes YAML object with mixed CUE string.
 
 ## init
@@ -242,3 +244,7 @@ ComponentDefinition my-comp: My component.
 ComponentDefinition my-comp in namespace my-namespace deleted.
 ```
 
+## Next
+
+* Learn more about [defining customized component](../components/custom-component).
+* Learn more about [defining customized trait](../traits/customize-trait).
