@@ -66,9 +66,16 @@ module.exports = {
           label: 'CI Integration',
           collapsed: true,
           items: [
+            'how-to/dashboard/trigger/overview',
             'tutorials/jenkins',
             'tutorials/trigger',
-            'how-to/dashboard/trigger/overview',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'GitOps',
+          collapsed: true,
+          items: [
             'case-studies/gitops',
           ],
         },
@@ -80,7 +87,6 @@ module.exports = {
             'end-user/version-control',
             'end-user/policies/apply-once',
             'end-user/policies/gc',
-            'end-user/service-account-integration',
           ],
         },
         'end-user/components/more',
@@ -97,10 +103,19 @@ module.exports = {
             'platform-engineers/system-operation/vela-cli-image',
           ],
         },
-        'tutorials/sso',
-        'how-to/dashboard/user/user',
-        'how-to/dashboard/user/rbac',
+        {
+          'User management': [
+            'how-to/dashboard/user/user',
+            'tutorials/sso',
+          ],
+        },
         'how-to/dashboard/user/project',
+        {
+          'Authentication and Authorization': [
+            'how-to/dashboard/user/rbac',
+            'end-user/service-account-integration',
+          ],
+        },
         {
           'Manage resource': [
             'platform-engineers/system-operation/managing-clusters',
@@ -116,51 +131,6 @@ module.exports = {
         'how-to/cli/addon/addon',
         'platform-engineers/system-operation/observability',
         'platform-engineers/system-operation/performance-finetuning',
-        {
-          type: 'category',
-          label: 'Extension',
-          collapsed: true,
-          items: [
-            {
-              'Learning CUE': [
-                'platform-engineers/cue/basic',
-                'platform-engineers/cue/definition-edit',
-                'platform-engineers/cue/advanced',
-              ],
-            },
-            {
-              Addons: ['platform-engineers/addon/intro'],
-            },
-            'platform-engineers/components/custom-component',
-            {
-              'Cloud Resources': [
-                'platform-engineers/addon/terraform',
-                'platform-engineers/components/component-terraform',
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Traits System',
-              items: [
-                'platform-engineers/traits/customize-trait',
-                'platform-engineers/traits/patch-trait',
-                'platform-engineers/traits/status',
-                'platform-engineers/traits/advanced',
-              ],
-            },
-            {
-              'Workflow System': [
-                'platform-engineers/workflow/workflow',
-                'platform-engineers/workflow/cue-actions',
-                'platform-engineers/workflow/working-mechanism',
-              ],
-            },
-            'platform-engineers/system-operation/velaql',
-            'platform-engineers/debug/dry-run',
-            'platform-engineers/debug/debug',
-            'platform-engineers/x-def-version',
-          ],
-        },
       ],
     },
     {
@@ -171,9 +141,61 @@ module.exports = {
         'contributor/overview',
         'contributor/non-code-contribute',
         'contributor/code-contribute',
-        'contributor/release-process',
-        'contributor/code-conventions',
-        'contributor/principle-of-test',
+        {
+          'Conventions': [
+            'contributor/release-process',
+            'contributor/code-conventions',
+            'contributor/principle-of-test',
+          ],
+        },
+        {
+          'CUE in KubeVela': [
+            'platform-engineers/cue/basic',
+            'platform-engineers/cue/definition-edit',
+            'platform-engineers/components/custom-component',
+            {
+              type: 'category',
+              label: 'Traits System',
+              items: [
+                'platform-engineers/traits/customize-trait',
+                'platform-engineers/traits/patch-trait',
+                'platform-engineers/traits/advanced',
+              ],
+            },
+            'platform-engineers/traits/status',
+            {
+              'Workflow System': [
+                'platform-engineers/workflow/workflow',
+                'platform-engineers/workflow/cue-actions',
+                'platform-engineers/workflow/working-mechanism',
+              ],
+            },
+            {
+              'Debugging': [
+                'platform-engineers/debug/dry-run',
+                'platform-engineers/debug/debug',
+              ],
+            },
+            'platform-engineers/system-operation/velaql',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Contribute Extension',
+          collapsed: true,
+          items: [
+            {
+              Addons: ['platform-engineers/addon/intro'],
+            },
+            {
+              'Cloud Resources': [
+                'platform-engineers/addon/terraform',
+                'platform-engineers/components/component-terraform',
+              ],
+            },
+            'platform-engineers/x-def-version',
+          ],
+        },
       ],
     },
     {
@@ -192,6 +214,7 @@ module.exports = {
           items: [
             'reference/addons/overview',
             'reference/addons/velaux',
+            'reference/addons/fluxcd',
             'reference/addons/terraform',
             'reference/addons/ai',
             'reference/addons/traefik',
@@ -207,11 +230,7 @@ module.exports = {
         },
       ],
     },
-    {
-      type: 'category',
-      label: 'Roadmap',
-      items: ['roadmap/README'],
-    },
+    'roadmap/README',
     {
       type: 'doc',
       id: 'developers/references/devex/faq',

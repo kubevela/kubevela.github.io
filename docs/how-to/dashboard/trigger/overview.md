@@ -1,15 +1,25 @@
 ---
-title: Integrate by Triggers
+title: Triggers
 description: Integrate with CI system by Triggers
 ---
 
-After you have created an application, a default trigger is automatically created. You can also delete or create a new trigger.
+You can use triggers from [VelaUX addon](../../../reference/addons/velaux) to integrate with different CI systems, the architecture and supported platforms are described in the following picture, they're:
+
+- [Custom](#custom-trigger), refer to [Jenkins CI](../../../tutorials/jenkins) guide for a real world use case
+- [ACR](#ACR-trigger)
+- [Harbor](#Harbor-trigger), refer to [Harbor Integration](../../../tutorials/trigger) guide for a real world use case
+- [DockerHub](#DockerHub-trigger)
+- [JFrog](#JFrog-trigger)
+
+![trigger](../../../resources/trigger.jpg)
+
+## How to use
+
+A default trigger will be automatically generated after an application created. You can also delete it and create a new one.
 
 ![default-trigger](../../../resources/default-trigger.png)
 
 KubeVela triggers can integrate with any CI tool like Gitlab CI, Jenkins Pipeline or image registry like Harbor or ACR.
-
-We now support five types of triggers: Custom, ACR, Harbor, DockerHub and JFrog.
 
 ## Custom Trigger
 
@@ -60,23 +70,13 @@ After CI have executed this step, we can see that application is deployed succes
 
 ![gitlab-trigger](../../../resources/gitlab-trigger.png)
 
+You can refer to [Jenkins CI](../../../tutorials/jenkins) guide for a real use case about custom trigger.
+
 ## Harbor Trigger
 
 Harbor Trigger can be integrated with Harbor image registry.
 
-We can start with creating a new harbor trigger. The Payload Type is Harbor, and the Execution Workflow is the workflow you want to deploy in the trigger.
-
-![alt](../../../resources/harbor-trigger-newtrigger.png)
-
-After creating the trigger, we can setup this trigger in Harbor:
-
-![alt](../../../resources/harbor-trigger.png)
-
-After configuring the trigger, we can see the new deploy revisions when a new image is pushed to the registry.
-
-![alt](../../../resources/harbor-trigger-harborrecord.png)
-
-![alt](../../../resources/harbor-trigger-revisions.png)
+You can refer to [Harbor Image Registry](../../../tutorials/trigger) guide for the end to end tutorial.
 
 ## ACR Trigger
 

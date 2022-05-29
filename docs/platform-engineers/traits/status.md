@@ -1,5 +1,5 @@
 ---
-title:  Status Write Back
+title:  Define Health of Component and Trait
 ---
 
 This documentation will explain how to achieve status write back by using CUE templates in definition objects.
