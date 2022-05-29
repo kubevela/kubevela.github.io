@@ -1,5 +1,5 @@
 ---
-title: Addon Cloud Resources
+title: Cloud Resources
 ---
 
 

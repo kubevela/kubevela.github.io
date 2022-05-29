@@ -1,12 +1,12 @@
 ---
-title: Integrating with Jenkins
+title: Jenkins CI
 ---
 
 ### Introduction
 
 The workflow execution of KubeVela application can be triggered by webhooks. Therefore, it is rather easy for user to integrate KubeVela with existing Continuous Integration platforms, such as Jenkins or Gitlab.
 
-In KubeVela 1.2, [VelaUX](../install#2-install-velaux) provides webhook triggers for applications to use. Only a simple curl command in Jenkins pipeline is needed to bridge CI and CD systems.
+From KubeVela 1.2, [VelaUX](../install#2-install-velaux) provides webhook triggers for applications to use. Only a simple curl command in Jenkins pipeline is needed to bridge CI and CD systems.
 
 In this section, we will demonstrate how to integrate KubeVela with Jenkins in details.
 

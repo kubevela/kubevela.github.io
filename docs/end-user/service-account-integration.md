@@ -1,5 +1,5 @@
 ---
-title: ServiceAccount Integration for RBAC
+title: Kubernetes RBAC
 ---
 
 KubeVela applies Components and runs Workflow with the controller service account, which allows you to manage components across namespaces.

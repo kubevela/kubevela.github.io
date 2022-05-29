@@ -1,5 +1,5 @@
 ---
-title: User management
+title: Introduction
 ---
 
 Once VelaUX is installed, there's a built-in administrator user with full access to the system. It is recommended to use the admin user only for the initial configuration, then switch to another user or configure the SSO integration.

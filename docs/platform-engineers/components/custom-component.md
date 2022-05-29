@@ -1,10 +1,8 @@
 ---
-title:  CUE Components
+title:  Component Definition
 ---
 
-In this section, it will introduce how to use [CUE](https://cuelang.org/) to declare app components via `ComponentDefinition`.
-
-> Before reading this part, please make sure you've learned the [Definition CRD](../definition-and-templates) in KubeVela.
+In this section, we will introduce how to use [CUE](https://cuelang.org/) to customize components via `ComponentDefinition`. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition) and [how to manage definition](../cue/definition-edit).
 
 ## Declare `ComponentDefinition`
 
