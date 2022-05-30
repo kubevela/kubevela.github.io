@@ -800,9 +800,165 @@ spec:
                 path: /var/log
 ```
 
+## affinity
 
+The `affinity` trait allows you to add affinity on k8s pod, properties include pod affinity/anti-affinity, as well as node affinity and tolerance.
 
+> Note: `affinity` trait is hidden by default in `VelaUX`, you can use it in CLI.
 
+### Apply To Component Types
 
+* webservice
+* worker
+* task
+* cron-task
 
+### Parameters
 
+```console
+# Properties
++------------------+---------------------------------------------------------+------------------------------------+----------+---------+
+|       NAME       |                     DESCRIPTION                         |                TYPE                | REQUIRED | DEFAULT |
++------------------+---------------------------------------------------------+------------------------------------+----------+---------+
+| podAffinity      | Specify the pod affinity scheduling rules               | podAffinity(#podAffinity)          | false    |         |
+| podAntiAffinity  | Specify the pod anti-affinity scheduling rules          | podAntiAffinity(#podAntiAffinity)  | false    |         |
+| nodeAffinity     | Specify the node affinity scheduling rules for the pod  | nodeAffinity(#nodeAffinity)        | false    |         |
+| tolerations      | Specify tolerant taint                                  | tolerations(#tolerations)          | false    |         |
++------------------+---------------------------------------------------------+------------------------------------+----------+---------+
+
+## podAffinity
++----------+-----------------------------------------------------------------+----------------------------------------+----------+---------+
+|   NAME   |                          DESCRIPTION                            |                  TYPE                  | REQUIRED | DEFAULT |
++----------+-----------------------------------------------------------------+----------------------------------------+----------+---------+
+| required | Specify the required during scheduling ignored during execution | [podAffinityTerm](#podAffinityTerm)    | false    |         |
+| preferred| Specify the preferred during scheduling ignored during execution| [podferredTerm](#podferredTerm)        | false    |         |
++----------+-----------------------------------------------------------------+----------------------------------------+----------+---------+
+
+### podferredTerm
++-----------------+---------------------------------------------------------------------------+----------------------------------+----------+---------+
+|       NAME      |                             DESCRIPTION                                   |              TYPE                | REQUIRED | DEFAULT |
++-----------------+---------------------------------------------------------------------------+----------------------------------+----------+---------+
+| weight          | Specify weight associated with matching the corresponding podAffinityTerm | int(>=1, <=100)                  | true     |         |
+| podAffinityTerm |                                                                           | podAffinityTerm(#podAffinityTerm)| true     |         |
++-----------------+---------------------------------------------------------------------------+----------------------------------+----------+---------+
+
+### podAffinityTerm
++---------------------+-------------+----------------------------------+----------+---------+
+|       NAME          | DESCRIPTION |              TYPE                | REQUIRED | DEFAULT |
++---------------------+-------------+----------------------------------+----------+---------+
+| labelSelector       |             | labelSelector(#labelSelector)    | false    |         |
+| namespaces          |             | [string]                         | false    |         |
+| topologyKey         |             | string                           | true     |         |
+| namespaceSelector   |             | labelSelector(#labelSelector)    | false    |         |
++---------------------+-------------+----------------------------------+----------+---------+
+
+#### labelSelector
++---------------------+-------------+--------------------------------------+----------+---------+
+|       NAME          | DESCRIPTION |                TYPE                  | REQUIRED | DEFAULT |
++---------------------+-------------+--------------------------------------+----------+---------+
+| matchLabels         |             | map[string]string                    | false    |         |
+| matchExpressions    |             | [matchExpressions]#matchExpressions  | false    |         |
++---------------------+-------------+--------------------------------------+----------+---------+
+
+##### matchExpressions
++---------------------+-------------+-----------------------------------------+----------+---------+
+|       NAME          | DESCRIPTION |                   TYPE                  | REQUIRED | DEFAULT |
++---------------------+-------------+-----------------------------------------+----------+---------+
+| key                 |             | string                                  | true     |         |
+| operator            |             | string(In/NotIn/Exists/DoesNotExist)    | false    | In      |
+| values              |             | [string]                                | false    |         |
++---------------------+-------------+-----------------------------------------+----------+---------+
+
+## podAntiAffinity
++----------+-----------------------------------------------------------------+----------------------------------------+----------+---------+
+|   NAME   |                          DESCRIPTION                            |                  TYPE                  | REQUIRED | DEFAULT |
++----------+-----------------------------------------------------------------+----------------------------------------+----------+---------+
+| required | Specify the required during scheduling ignored during execution | [[]podAffinityTerm](#podAffinityTerm)  | false    |         |
+| preferred| Specify the preferred during scheduling ignored during execution| [[]podferredTerm](#podferredTerm)      | false    |         |
++----------+-----------------------------------------------------------------+----------------------------------------+----------+---------+
+
+## nodeAffinity
++----------+-----------------------------------------------------------------+----------------------------------------+----------+---------+
+|   NAME   |                          DESCRIPTION                            |                  TYPE                  | REQUIRED | DEFAULT |
++----------+-----------------------------------------------------------------+----------------------------------------+----------+---------+
+| required | Specify the required during scheduling ignored during execution | nodeSelectorTerms(#nodeSelectorTerms)  | false    |         |
+| preferred| Specify the preferred during scheduling ignored during execution| [nodeferredTerm](#nodeferredTerm)      | false    |         |
++----------+-----------------------------------------------------------------+----------------------------------------+----------+---------+
+
+### nodeSelectorTerms
++---------------------+-------------+-----------------------------------------+----------+---------+
+|       NAME          | DESCRIPTION |                   TYPE                  | REQUIRED | DEFAULT |
++---------------------+-------------+-----------------------------------------+----------+---------+
+| nodeSelectorTerms   |             | [nodeSelectorTerm](#nodeSelectorTerm)   | true     |         |
++---------------------+-------------+-----------------------------------------+----------+---------+
+
+#### nodeSelectorTerm
++---------------------+-------------+-----------------------------------------+----------+---------+
+|       NAME          | DESCRIPTION |                   TYPE                  | REQUIRED | DEFAULT |
++---------------------+-------------+-----------------------------------------+----------+---------+
+| matchExpressions    |             | [nodeSelecor](#nodeSelecor)             | false    |         |
+| matchFields         |             | [nodeSelecor](#nodeSelecor)             | false    |         |
++---------------------+-------------+-----------------------------------------+----------+---------+
+
+##### nodeSelecor
++------------+-------------+--------------------------------------------+----------+---------+
+|    NAME    | DESCRIPTION |                      TYPE                  | REQUIRED | DEFAULT |
++------------+-------------+--------------------------------------------+----------+---------+
+| key        |             | string                                     | true     |         |
+| operator   |             | string(In/NotIn/Exists/DoesNotExist/Gt/Lt) | false    | In      |
+| values     |             | [string]                                   | false    |         |
++------------+-------------+--------------------------------------------+----------+---------+
+
+### nodeferredTerm
++------------+-------------+--------------------------------------+----------+---------+
+|    NAME    | DESCRIPTION |                 TYPE                 | REQUIRED | DEFAULT |
++------------+-------------+--------------------------------------+----------+---------+
+| weight     |             | int(>=1, <=100)                      | true     |         |
+| preferenc  |             | nodeSelectorTerm(#nodeSelectorTerm)  | true     |         |
++------------+-------------+--------------------------------------+----------+---------+
+
+## tolerations
++--------------------+--------------------------------------------+-----------------------------------------------+----------+---------+
+|        NAME        |                DESCRIPTION                 |                     TYPE                      | REQUIRED | DEFAULT |
++--------------------+--------------------------------------------+-----------------------------------------------+----------+---------+
+| key                |                                            | string                                        | false    |         |
+| operator           |                                            | string(Equal/Exists)                          | false    | Equal   |
+| value              |                                            | string                                        | false    |         |
+| effect             |                                            | string(NoSchedule/PreferNoSchedule/NoExecute) | false    |         |
+| tolerationSeconds  | Specify the period of time the toleration  | int                                           | false    |         |
++--------------------+--------------------------------------------+-----------------------------------------------+----------+---------+
+
+```
+
+### Examples
+
+```yaml
+# app.yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: busybox
+spec:
+  components:
+    - name: busybox
+      type: webservice
+      properties:
+        image: busybox
+        cmd: ["sleep", "86400"]
+        labels:
+          label-key: label-value
+          to-delete-label-key: to-delete-label-value
+      traits:
+        - type: affinity
+          properties:
+            podAffinity:
+              preferred:
+                - weight: 1
+                  podAffinityTerm:
+                    labelSelector:
+                      matchExpressions:
+                        - key: "security"
+                          values: ["S1"]
+                    namespaces: ["default"]
+                    topologyKey: "kubernetes.io/hostname"
+```
