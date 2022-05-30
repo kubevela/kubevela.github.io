@@ -76,7 +76,7 @@ In detail:
 
 Add parameters in this auto-generated custom component file :
 
-```
+```cue
 stateless: {
 	annotations: {}
 	attributes: workload: definition: {
@@ -105,9 +105,9 @@ template: {
 	}
 	outputs: {}
 	parameters: {
-    name: string
-    image: string
-  }
+		name: string
+		image: string
+	}
 }
 ```
 
@@ -147,7 +147,7 @@ template: {
 
 Edit the generated component file:
 
-```
+```cue
 task: {
 	annotations: {}
 	attributes: workload: definition: {
@@ -160,29 +160,29 @@ task: {
 }
 
 template: {
-  output: {
-    apiVersion: "batch/v1"
-    kind:       "Job"
-    spec: {
-      parallelism: parameter.count
-      completions: parameter.count
-      template: spec: {
-        restartPolicy: parameter.restart
-        containers: [{
-          image: parameter.image
-          if parameter["cmd"] != _|_ {
-            command: parameter.cmd
-          }
-        }]
-      }
-    }
-  }
+	output: {
+		apiVersion: "batch/v1"
+		kind:       "Job"
+		spec: {
+			parallelism: parameter.count
+			completions: parameter.count
+			template: spec: {
+				restartPolicy: parameter.restart
+				containers: [{
+					image: parameter.image
+					if parameter["cmd"] != _|_ {
+						command: parameter.cmd
+					}
+				}]
+			}
+		}
+	}
 	parameter: {
-    count:   *1 | int
-    image:   string
-    restart: *"Never" | string
-    cmd?: [...string]
-  }
+		count:   *1 | int
+		image:   string
+		restart: *"Never" | string
+		cmd?: [...string]
+	}
 }
 ```
 
@@ -276,8 +276,8 @@ The most widely used context is application name(`context.appName`) component na
 
 ```cue
 context: {
-  appName: string
-  name: string
+	appName: string
+	name: string
 }
 ```
 
@@ -285,17 +285,17 @@ For example, let's say you want to use the component name filled in by users as 
 
 ```cue
 parameter: {
-    image: string
+	image: string
 }
 output: {
-  ...
-    spec: {
-        containers: [{
-            name:  context.name
-            image: parameter.image
-        }]
-    }
-  ...
+	...
+	spec: {
+		containers: [{
+			name:  context.name
+			image: parameter.image
+		}]
+	}
+	...
 }
 ```
 
@@ -326,14 +326,14 @@ KubeVela requires you to define the template of workload type in `output` sectio
 
 ```cue
 outputs: <unique-name>: 
-  <full template data>
+	<full template data>
 ```
 
 > The reason for this requirement is KubeVela needs to know it is currently rendering a workload so it could do some "magic" like patching annotations/labels or other data during it.
 
 Below is the example for `webserver` definition: 
 
-```
+```cue
 webserver: {
 	annotations: {}
 	attributes: workload: definition: {
@@ -346,83 +346,83 @@ webserver: {
 }
 
 template: {
-  output: {
-    apiVersion: "apps/v1"
-    kind:       "Deployment"
-    spec: {
-      selector: matchLabels: {
-        "app.oam.dev/component": context.name
-      }
-      template: {
-        metadata: labels: {
-          "app.oam.dev/component": context.name
-        }
-        spec: {
-          containers: [{
-            name:  context.name
-            image: parameter.image
+	output: {
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+		spec: {
+			selector: matchLabels: {
+				"app.oam.dev/component": context.name
+			}
+			template: {
+				metadata: labels: {
+					"app.oam.dev/component": context.name
+				}
+				spec: {
+					containers: [{
+						name:  context.name
+						image: parameter.image
 
-            if parameter["cmd"] != _|_ {
-              command: parameter.cmd
-            }
+						if parameter["cmd"] != _|_ {
+							command: parameter.cmd
+						}
 
-            if parameter["env"] != _|_ {
-              env: parameter.env
-            }
+						if parameter["env"] != _|_ {
+							env: parameter.env
+						}
 
-            if context["config"] != _|_ {
-              env: context.config
-            }
+						if context["config"] != _|_ {
+							env: context.config
+						}
 
-            ports: [{
-              containerPort: parameter.port
-            }]
+						ports: [{
+							containerPort: parameter.port
+						}]
 
-            if parameter["cpu"] != _|_ {
-              resources: {
-                limits:
-                  cpu: parameter.cpu
-                requests:
-                  cpu: parameter.cpu
-              }
-            }
-          }]
-        }
-      }
-    }
-  }
-  // an extra template
-  outputs: service: {
-    apiVersion: "v1"
-    kind:       "Service"
-    spec: {
-      selector: {
-        "app.oam.dev/component": context.name
-      }
-      ports: [
-        {
-          port:       parameter.port
-          targetPort: parameter.port
-        },
-      ]
-    }
-  }
+						if parameter["cpu"] != _|_ {
+							resources: {
+								limits:
+									cpu: parameter.cpu
+								requests:
+									cpu: parameter.cpu
+							}
+						}
+					}]
+				}
+			}
+		}
+	}
+	// an extra template
+	outputs: service: {
+		apiVersion: "v1"
+		kind:       "Service"
+		spec: {
+			selector: {
+				"app.oam.dev/component": context.name
+			}
+			ports: [
+				{
+					port:       parameter.port
+					targetPort: parameter.port
+				},
+			]
+		}
+	}
 	parameter: {
-    image: string
-    cmd?: [...string]
-    port: *80 | int
-    env?: [...{
-      name:   string
-      value?: string
-      valueFrom?: {
-        secretKeyRef: {
-          name: string
-          key:  string
-        }
-      }
-    }]
-    cpu?: string
-  }
+		image: string
+		cmd?: [...string]
+		port: *80 | int
+		env?: [...{
+			name:   string
+			value?: string
+			valueFrom?: {
+				secretKeyRef: {
+					name: string
+					key:  string
+				}
+			}
+		}]
+		cpu?: string
+	}
 }
 ```
 
