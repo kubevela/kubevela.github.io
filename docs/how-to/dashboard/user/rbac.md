@@ -1,5 +1,5 @@
 ---
-title: RBAC 
+title: VelaUX RBAC
 ---
 
 The RBAC feature enabled restriction of access to VelaUX resources. The UI and API could strict permission verification. We designed platform-scope roles and project-scope roles, Each role can be bound to a set of permission policies, and users can obtain corresponding permissions when they are bound to the role.
@@ -60,3 +60,8 @@ Switch to the role management page on the project details page to add or modify 
 * Platform-scope roles need to be bound to users on the user management page. One user can be bound to multiple platform-scope roles.
 
 * Project-scope roles need to be set in the project member management page, and roles need to be bound when users are added to the project, or modify the existing users' roles.
+
+
+## Working with Kubernetes RBAC
+
+The VelaUX User will be projected into the underlying Kubernetes User when you configured the FeatureGates of the VelaUX apiserver through `--feature-gates=EnableImpersonation=true`. In this way, the application of VelaUX will use the idenity of the Project and the VelaUX User, which means it is possible for system operators to restrict the user's access through Kubernetes RBAC mechanism behind VelaUX.
