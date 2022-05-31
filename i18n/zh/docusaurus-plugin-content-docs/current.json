@@ -99,9 +99,9 @@
     "message": "工作流系统",
     "description": "The label for category Workflow System in sidebar docs"
   },
-  "sidebar.docs.category.Patch Definitions": {
-    "message": "在定义中打补丁",
-    "description": "The label for category Patch Definitions in sidebar docs"
+  "sidebar.docs.category.Patch and Override": {
+    "message": "配置覆盖",
+    "description": "The label for category Patch and Override in sidebar docs"
   },
   "sidebar.docs.category.Operator Manual": {
     "message": "运维手册",

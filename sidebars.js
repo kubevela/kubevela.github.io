@@ -170,7 +170,7 @@ module.exports = {
               ],
             },
             {
-              'Patch Definitions': [
+              'Patch and Override': [
                 'platform-engineers/traits/patch-trait',
                 'platform-engineers/cue/patch-strategy',
               ]

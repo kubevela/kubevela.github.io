@@ -1,22 +1,22 @@
 ---
-title:  补丁策略
+title:  Patch strategy
 ---
 
-在默认情况下，KubeVela 会将需要打补丁的值通过 CUE 的 merge 来进行合并。但是目前 CUE 无法处理有冲突的字段名。
+By default, KubeVela will merge patched values with CUE's merge. However, CUE cannot handle conflicting fields currently.
 
-KubeVela 提供了一系列补丁策略来帮助解决冲突的问题。在编写补丁型运维特征和工作流时，如果你发现值冲突的问题，可以结合使用这些补丁策略。值得注意的是，补丁策略并不是 CUE 官方提供的功能, 而是 KubeVela 扩展开发而来。
+KubeVela provides a series of patching strategies to help resolve conflicting issues. When writing patch traits and workflow steps, you can use these patch strategies to solve conflicting values. Note that the patch strategy is not an official capability provided by CUE, but an extension developed by KubeVela.
 
-> 关于如何在定义中打补丁，请参考 [在定义中打补丁](../traits/patch-trait)。
+> For more information about how to patch definitions, please refer to [Patch in the Definitions](../traits/patch-trait).
 
-我们以编写一个环境变量补丁的运维特征来分别介绍补丁策略的使用方法。
+Let's write an env-patch trait to show how to use these patch strategies.
 
 ## patchKey
 
-如果你希望为指定容器添加多个环境变量，你可以使用 `+patchKey=name` 注释来找到这个容器。此时，KubeVela 会执行 merge 操作，将这些环境变量与已有的环境变量进行合并。这意味着，patchKey 无法处理重复的字段名。
+If you want to add multiple environment variables for a specific container, you can use the `+patchKey=name` annotation to find the container. In this case, KubeVela will merge these environment variables by default. This means that `patchKey` cannot handle duplicate fields.
 
-> 在 KubeVela 1.4 版本之后，你可以使用 , 分割多个 patchKey，如 patchKey=name,image。
+> After KubeVela version 1.4, you can use `,` to split multiple patchKeys, such as `patchKey=name,image`.
 
-在环境中部署如下 definition：
+Apply the following definition to your cluster:
 
 ```yaml
 myenv: {
@@ -50,7 +50,7 @@ template: {
 }
 ```
 
-在如下应用中使用这个策略型补丁：
+Use the above `myenv` trait in your application:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -73,7 +73,7 @@ spec:
               NEW: new
 ```
 
-在不使用 `myenv` 这个补丁特征之前，应用的环境变量为：
+Before using the `myenv` patch trait, the `env` in the application is like:
 
 ```
 spec:
@@ -83,7 +83,7 @@ spec:
       value: old
 ```
 
-在使用了 `myenv` 这个补丁特征之后，应用的环境变量为：
+After using the `myenv` patch trait, the `env` in the application is like:
 
 ```
 spec:
@@ -95,15 +95,15 @@ spec:
       value: new
 ```
 
-最终，我们可以看到应用的环境变量中包含了两个环境变量：`OLD=old` 和 `NEW=new`。
+Finally, we can see that the application's `env` contains two environment variables: `OLD=old` and `NEW=new`.
 
-## retainKeys
+### retainKeys
 
-如果你希望在合并环境变量的同时，能够覆盖重复的环境变量值的话，你可以使用 `+patchStrategy=retainKeys` 注释。
+You can use the `+patchStrategy=retainKeys` annotation if you want to be able to override duplicate values while merging variables.
 
-这个注解的策略，与 Kubernetes 官方的 [retainKeys](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-strategic-merge-patch-to-update-a-deployment-using-the-retainkeys-strategy) 策略类似。
+The strategy of this annotation is similar to the Kubernetes official [retainKeys](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-strategic-merge-patch- to-update-a-deployment-using-the-retainkeys-strategy) strategy.
 
-> 在下面这个例子中，+patchKey=name 会指定 patch 应该应用到哪个容器上，而 +patchStrategy=retainKeys 则会指定在合并环境变量时，如果遇到重复的环境变量名，则覆盖环境变量值。
+> In the following example, `+patchKey=name` specifies which container the patch should be applied to, while `+patchStrategy=retainKeys` specifies that when merge environment variables, if a duplicate environment variable name is specified, the environment variable value will be overwritten.
 
 ```yaml
 myenv: {
@@ -138,7 +138,7 @@ template: {
 }
 ```
 
-在如下应用中使用这个策略型补丁：
+Use the above `myenv` trait in your application:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -164,7 +164,7 @@ spec:
               OLD2: override
 ```
 
-在不使用 `myenv` 这个补丁特征之前，应用的环境变量为：
+Before using the `myenv` patch trait, the `env` in the application is like:
 
 ```
 spec:
@@ -176,7 +176,7 @@ spec:
       value: old2
 ```
 
-在使用了 `myenv` 这个补丁特征之后，应用的环境变量为：
+After using the `myenv` patch trait, the `env` in the application is like:
 
 ```
 spec:
@@ -190,13 +190,13 @@ spec:
       value: new
 ```
 
-最终，我们可以看到应用的环境变量中包含了三个环境变量：`OLD=old`，`OLD2=override` 和 `NEW=new`。
+Finally, we can see that the application's `env` contains three environment variables: `OLD=old`, `OLD2=override` and `NEW=new`.
 
-## replace
+### replace
 
-如果你希望直接替换掉整个环境变量数组的话，你可以使用 `+patchStrategy=replace` 注释。
+If you wish to replace the entire env array directly, you can use the `+patchStrategy=replace` annotation.
 
-> 在下面这个例子中，+patchKey=name 会指定 patch 应该应用到哪个容器上，而 +patchStrategy=replace 则会指定在合并数组时，直接替换整个环境变量数组。
+> In the following example, `+patchKey=name` specifies which container the patch should be applied to, while `+patchStrategy=replace` specifies that when merge the arrays, the entire array of environment variables will be replaced directly.
 
 ```yaml
 myenv: {
@@ -231,7 +231,7 @@ template: {
 }
 ```
 
-在如下应用中使用这个策略型补丁：
+Use the above `myenv` trait in your application:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -256,7 +256,7 @@ spec:
               NEW: replace
 ```
 
-在不使用 `myenv` 这个补丁特征之前，应用的环境变量为：
+Before using the `myenv` patch trait, the `env` in the application is like:
 
 ```
 spec:
@@ -268,7 +268,7 @@ spec:
       value: old2
 ```
 
-在使用了 `myenv` 这个补丁特征之后，应用的环境变量为：
+After using the `myenv` patch trait, the `env` in the application is like:
 
 ```
 spec:
@@ -278,4 +278,4 @@ spec:
       value: replace
 ```
 
-最终，我们可以看到应用的环境变量中只保留了新的环境变量：`NEW=replace`。
+Finally, we can see that the application's `env` contains one environment variable: `NEW=replace`.
