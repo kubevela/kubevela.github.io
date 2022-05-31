@@ -32,6 +32,7 @@ module.exports = {
             'case-studies/multi-cluster',
             'tutorials/access-application',
             'end-user/traits/sidecar',
+            'end-user/traits/canary-release',
           ],
         },
         {
