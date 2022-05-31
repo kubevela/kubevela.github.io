@@ -153,6 +153,7 @@ module.exports = {
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           includeCurrentVersion: true,
+          remarkPlugins: [require('mdx-mermaid')],
         },
         blog: {
           blogSidebarTitle: "All posts",

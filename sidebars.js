@@ -113,7 +113,9 @@ module.exports = {
         {
           'Authentication and Authorization': [
             'how-to/dashboard/user/rbac',
-            'end-user/service-account-integration',
+            'platform-engineers/auth/basic',
+            'platform-engineers/auth/advance',
+            'platform-engineers/auth/integration',
           ],
         },
         {
