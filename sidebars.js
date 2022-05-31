@@ -158,7 +158,6 @@ module.exports = {
               label: 'Traits System',
               items: [
                 'platform-engineers/traits/customize-trait',
-                'platform-engineers/traits/patch-trait',
                 'platform-engineers/traits/advanced',
               ],
             },
@@ -169,6 +168,12 @@ module.exports = {
                 'platform-engineers/workflow/cue-actions',
                 'platform-engineers/workflow/working-mechanism',
               ],
+            },
+            {
+              'Patch Definitions': [
+                'platform-engineers/traits/patch-trait',
+                'platform-engineers/cue/patch-strategy',
+              ]
             },
             {
               'Debugging': [

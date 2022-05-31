@@ -1,75 +1,14 @@
 ---
-title:  为 CUE 变量打补丁
+title:  补丁策略
 ---
 
-在我们在进行 Definition 的编写时，有时我们需要对其他的组件或者运维特征进行修改、打补丁。
+在默认情况下，KubeVela 会将需要打补丁的值通过 CUE 的 merge 来进行合并。但是目前 CUE 无法处理有冲突的字段名。
 
-> 关于如何在运维特征和工作流中为资源打补丁，请参考 ...
+KubeVela 提供了一系列补丁策略来帮助解决冲突的问题。在编写补丁型运维特征和工作流时，如果你发现值冲突的问题，可以结合使用这些补丁策略。值得注意的是，补丁策略并不是 CUE 官方提供的功能, 而是 KubeVela 扩展开发而来。
 
-在默认情况下，KubeVela 会将需要打补丁的值通过 CUE 的 merge 来进行合并。然而，CUE 作为一门配置语言，为了保持其安全性，无法处理有冲突的字段名。
+> 关于如何在定义中打补丁，请参考 [在定义中打补丁](../traits/patch-trait)。
 
-比如，在一个组件实例中已经设置 replicas=5，那一旦有运维特征实例，尝试给 replicas 字段的值打补丁就会失败。所以我们建议你提前规划好，不要在组件和运维特征之间使用重复的字段名。
-
-但在一些情况下，我们确实需要处理覆盖已被赋值的字段。比如，在进行多环境资源的差异化配置时，我们希望不同环境中的环境变量是不同的：如默认的环境变量为 `MODE=PROD`，测试环境中需要修改为 `MODE=DEV DEBUG=true`。
-
-此时，我们可以部署如下的应用：
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: deploy-with-override
-spec:
-  components:
-    - name: nginx-with-override
-      type: webservice
-      properties:
-        image: nginx
-      traits:
-        - type: myenv
-          properties:
-            env:
-              MODE: prod
-  policies:
-    - name: test
-      type: topology
-      properties:
-        clusters: ["local"]
-        namespace: test
-    - name: prod
-      type: topology
-      properties:
-        clusters: ["local"]
-        namespace: prod
-    - name: override-env
-      type: override
-      properties:
-        components:
-          - name: nginx-with-override
-            traits:
-              - type: myenv
-                properties:
-                  env:
-                    MODE: test
-                    DEBUG: "true"
-
-  workflow:
-    steps:
-      - type: deploy
-        name: deploy-test
-        properties:
-          policies: ["test", "override-env"]
-      - type: deploy
-        name: deploy-prod
-        properties:
-          policies: ["prod"]
-```
-
-`deploy-test` 会将 nginx 部署到 test namespace 下，同时，为这个测试环境下的 nginx 加上 `MODE=test DEBUG=true` 的环境变量。而 prod namespace 下的 nginx 将保留原本的 `MODE=prod` 环境变量。
-
-KubeVela 提供了一系列策略型补丁来帮助你完成这类需求。值得注意的是，策略型补丁并不是 CUE 官方提供的功能, 而是 KubeVela 扩展开发而来。
-
-下面，我们以编写一个环境变量补丁的运维特征来分别介绍补丁策略的使用方法。
+我们以编写一个环境变量补丁的运维特征来分别介绍补丁策略的使用方法。
 
 ## 补丁策略
 
@@ -127,20 +66,44 @@ spec:
       properties:
         image: crccheck/hello-world
         env:
-          - name: TEST
-            value: test
+          - name: OLD
+            value: old
       traits:
         - type: myenv
           properties:
             env:
-              TEST2: test2
+              NEW: new
 ```
 
-最终，我们可以看到应用的环境变量中包含了两个环境变量：`TEST=test` 和 `TEST2=test2`。
+在不使用 `myenv` 这个补丁特征之前，应用的环境变量为：
+
+```
+spec:
+  containers:
+  - env:
+    - name: OLD
+      value: old
+```
+
+在使用了 `myenv` 这个补丁特征之后，应用的环境变量为：
+
+```
+spec:
+  containers:
+  - env:
+    - name: OLD
+      value: old
+    - name: NEW
+      value: new
+```
+
+最终，我们可以看到应用的环境变量中包含了两个环境变量：`OLD=old` 和 `NEW=new`。
 
 ### retainKeys
 
 如果你希望在合并环境变量的同时，能够覆盖重复的环境变量值的话，你可以使用 `+patchStrategy=retainKeys` 注释。
+
+这个注解的策略，与 Kubernetes 官方的 [retainKeys](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-strategic-merge-patch-to-update-a-deployment-using-the-retainkeys-strategy) 策略类似。
 
 > 在下面这个例子中，+patchKey=name 会指定 patch 应该应用到哪个容器上，而 +patchStrategy=retainKeys 则会指定在合并环境变量时，如果遇到重复的环境变量名，则覆盖环境变量值。
 
@@ -191,18 +154,45 @@ spec:
       properties:
         image: crccheck/hello-world
         env:
-          - name: TEST
-            value: test
-          - name: TEST2
-            value: old-value
+          - name: OLD
+            value: old
+          - name: OLD2
+            value: old2
       traits:
         - type: myenv
           properties:
             env:
-              TEST2: test2
+              NEW: new
+              OLD2: override
 ```
 
-最终，我们可以看到应用的环境变量中包含了两个环境变量：`TEST=test` 和 `TEST2=test2`。
+在不使用 `myenv` 这个补丁特征之前，应用的环境变量为：
+
+```
+spec:
+  containers:
+  - env:
+    - name: OLD
+      value: old
+    - name: OLD2
+      value: old2
+```
+
+在使用了 `myenv` 这个补丁特征之后，应用的环境变量为：
+
+```
+spec:
+  containers:
+  - env:
+    - name: OLD
+      value: old
+    - name: OLD2
+      value: override
+    - name: NEW
+      value: new
+```
+
+最终，我们可以看到应用的环境变量中包含了三个环境变量：`OLD=old`，`OLD2=override` 和 `NEW=new`。
 
 ### replace
 
@@ -257,15 +247,37 @@ spec:
       properties:
         image: crccheck/hello-world
         env:
-          - name: TEST
-            value: test
-          - name: TEST2
-            value: test2
+          - name: OLD
+            value: old
+          - name: OLD2
+            value: old2
       traits:
         - type: myenv
           properties:
             env:
-              TEST: replace
+              NEW: replace
 ```
 
-最终，我们可以看到应用的环境变量中只保留了新的环境变量：`TEST=replace`。
+在不使用 `myenv` 这个补丁特征之前，应用的环境变量为：
+
+```
+spec:
+  containers:
+  - env:
+    - name: OLD
+      value: old
+    - name: OLD2
+      value: old2
+```
+
+在使用了 `myenv` 这个补丁特征之后，应用的环境变量为：
+
+```
+spec:
+  containers:
+  - env:
+    - name: NEW
+      value: replace
+```
+
+最终，我们可以看到应用的环境变量中只保留了新的环境变量：`NEW=replace`。
