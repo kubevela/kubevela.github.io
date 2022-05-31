@@ -7,7 +7,7 @@ module.exports = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
   favicon: 'img/favicons/favicon.ico',
-  organizationName: 'oam-dev', // Usually your GitHub org/user name.
+  organizationName: 'kubevela', // Usually your GitHub org/user name.
   projectName: 'kubevela.io', // Usually your repo name.
   i18n: {
     defaultLocale: 'en',

@@ -19,7 +19,7 @@ vela addon upgrade [flags]
 Upgrade addon by:
 	vela addon upgrade <addon-name>
 Upgrade addon with specify version:
-    vela addon upgrade <addon-name> --version <addon-version>
+	vela addon upgrade <addon-name> --version <addon-version>
 Upgrade addon for specific clusters, (local means control plane):
 	vela addon upgrade <addon-name> --clusters={local,cluster1,cluster2}
 

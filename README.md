@@ -110,13 +110,13 @@ All docs of new features should be updated in the latest docs, we will create a 
 ### Build New Version
 
 ```
-yarn docusaurus docs:version v1.3
+yarn docusaurus docs:version v1.x
 ```
 
 ### Update Docs for version
 
 ```
-make update-version version=v1.3
+make update-version version=v1.x
 ```
 
 ## Send your pull request

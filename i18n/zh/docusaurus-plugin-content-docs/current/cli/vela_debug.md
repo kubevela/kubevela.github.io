@@ -22,10 +22,10 @@ vela debug <application-name>
 
 ```
   -e, --env string         specify environment name for application
-  -f, --focus string       specify the focus value to debug
+  -f, --focus string       specify the focus value to debug, only valid for application with workflow
   -h, --help               help for debug
   -n, --namespace string   specify the Kubernetes namespace to use
-  -s, --step string        specify the step to debug
+  -s, --step string        specify the step or component to debug
 ```
 
 ### Options inherited from parent commands
