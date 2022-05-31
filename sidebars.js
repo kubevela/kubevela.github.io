@@ -33,6 +33,7 @@ module.exports = {
             'end-user/traits/rollout',
             'end-user/traits/ingress',
             'end-user/traits/sidecar',
+            'end-user/traits/canary-release',
           ],
         },
         {
