@@ -21,7 +21,8 @@ vela addon status <addon-name>
 ### Options
 
 ```
-  -h, --help   help for status
+  -h, --help      help for status
+  -v, --verbose   show addon descriptions and parameters in addition to status
 ```
 
 ### Options inherited from parent commands

@@ -25,12 +25,15 @@ title: CLI Commands
 * [vela port-forward](vela_port-forward)	 - Forward local ports to container/service port of vela application.
 * [vela logs](vela_logs)	 - Tail logs for vela application.
 * [vela live-diff](vela_live-diff)	 - Compare application and revisions
+* [vela ql](vela_ql)	 - Show result of executing velaQL.
 * [vela dry-run](vela_dry-run)	 - Dry-run application locally, render the Kubernetes resources as result to stdout.
 * [vela revision](vela_revision)	 - Manage KubeVela Application Revisions
 
 ## Continuous Delivery
 
+* [vela auth](vela_auth)	 - 
 * [vela cluster](vela_cluster)	 - Manage Kubernetes Clusters for Continuous Delivery.
+* [vela kube](vela_kube)	 - 
 * [vela workflow](vela_workflow)	 - Operate the Workflow during Application Delivery.
 
 ## Managing Extension

@@ -26,6 +26,7 @@ vela dry-run
   -f, --file string         application file name (default "./app.yaml")
   -h, --help                help for dry-run
   -n, --namespace string    specify the Kubernetes namespace to use
+      --offline dry-run     Run dry-run in offline / local mode, all validation steps will be skipped
 ```
 
 ### Options inherited from parent commands

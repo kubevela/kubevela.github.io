@@ -19,7 +19,7 @@ vela addon enable [flags]
 Enable addon by:
 	vela addon enable <addon-name>
 Enable addon with specify version:
-    vela addon enable <addon-name> --version <addon-version>
+	vela addon enable <addon-name> --version <addon-version>
 Enable addon for specific clusters, (local means control plane):
 	vela addon enable <addon-name> --clusters={local,cluster1,cluster2}
 

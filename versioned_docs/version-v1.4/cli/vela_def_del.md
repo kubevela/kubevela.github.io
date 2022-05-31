@@ -24,7 +24,7 @@ vela def del DEFINITION_NAME [flags]
 ```
   -h, --help               help for del
   -n, --namespace string   Specify which namespace the definition locates.
-  -t, --type string        Specify the definition type of target. Valid types: workload, scope, workflow-step, component, trait, policy
+  -t, --type string        Specify the definition type of target. Valid types: component, trait, policy, workload, scope, workflow-step
 ```
 
 ### Options inherited from parent commands
