@@ -1,12 +1,8 @@
 ---
-title: Kubernetes RBAC
+title: Systems Integration 
 ---
 
-KubeVela applies Components and runs Workflow with the controller service account, which allows you to manage components across namespaces.
-
-However, in the soft-multitenancy environments, such as [Namespaces as a Service](https://kubernetes.io/blog/2021/04/15/three-tenancy-models-for-kubernetes/#namespaces-as-a-service), you may need to limit Applications to allow applying components or running workflows in the authorized namespaces only.
-
-You can limit by setting `app.oam.dev/service-account-name` annotation with the specific ServiceAccount name. If defined, KubeVela will use the given ServiceAccount instead of the controller ServiceAccount when applying Components and running Workflow.
+KubeVela application natively supports impersonation even without the Authentication flag enabled. That means when the Authentication flag is disabled, you can manually set the identity to impersonate in the application's annotation fields. For example, the following guide will give an example on how to manually set the application to impersonate as a ServiceAccount.
 
 ## Example
 
@@ -32,6 +28,8 @@ metadata:
 ### Creating Role/RoleBinding
 
 Allow `deployer` ServiceAccount in `demo-service` to manage Deployments in `demo-service-prod` by creating Role/RoleBinding.
+
+> Notice that KubeVela application requires the identity to impersonate to have the privileges for writing ControllerRevision. If you use `--optimize-disable-component-revision` in the KubeVela controller, you can ignore this requirement.
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -104,9 +102,35 @@ spec:
 
 After deploying the Application, you can check the Application is deployed successfully.
 
-```sh
-NAME                                  COMPONENT      TYPE         PHASE              HEALTHY   STATUS      AGE
-multi-env-demo-with-service-account   nginx-server   webservice   workflowFinished   true      Ready:1/1   18s
+```bash
+$ vela status multi-env-demo-with-service-account -n demo-service     
+About:
+
+  Name:         multi-env-demo-with-service-account
+  Namespace:    demo-service                       
+  Created at:   2022-05-31 17:58:14 +0800 CST      
+  Status:       running                            
+
+Workflow:
+
+  mode: StepByStep
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id:ut3bxuisoy
+    name:deploy-prod-server
+    type:deploy2env
+    phase:succeeded 
+    message:
+
+Services:
+
+  - Name: nginx-server  
+    Cluster: local  Namespace: demo-service-prod
+    Type: webservice
+    Healthy Ready:1/1
+    No trait applied
 ```
 
 If you set non-authorized ServiceAccount to the annotation, you can find an error message like below in the Application status.
@@ -115,9 +139,6 @@ If you set non-authorized ServiceAccount to the annotation, you can find an erro
 Dispatch: Found 1 errors. [(cannot get object: deployments.apps "nginx-server" is forbidden: User "system:serviceaccount:demo-service:non-authorized-account" cannot get resource "deployments" in API group "apps" in the namespace "demo-service-prod")]
 ```
 
-## Limitations
+## Impersonate as User/Groups
 
-ServiceAccount Integration doesn't support Multi-Cluster Application Delivery.
-Even if you set ServiceAccount name to the annotation, KubeVela will ignore it if the scope is a non-local cluster.
-
-You can follow up about this issue on [GitHub](https://github.com/kubevela/kubevela/issues/3440).
+If you would like to let the application to impersonate as specific user and group, you can set the annotation `app.oam.dev/username` and `app.oam.dev/group` in the application respectively. 
