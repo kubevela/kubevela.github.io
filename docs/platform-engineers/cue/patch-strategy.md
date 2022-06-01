@@ -97,7 +97,7 @@ spec:
 
 Finally, we can see that the application's `env` contains two environment variables: `OLD=old` and `NEW=new`.
 
-### retainKeys
+## retainKeys
 
 You can use the `+patchStrategy=retainKeys` annotation if you want to be able to override duplicate values while merging variables.
 
@@ -192,7 +192,7 @@ spec:
 
 Finally, we can see that the application's `env` contains three environment variables: `OLD=old`, `OLD2=override` and `NEW=new`.
 
-### replace
+## replace
 
 If you wish to replace the entire env array directly, you can use the `+patchStrategy=replace` annotation.
 
