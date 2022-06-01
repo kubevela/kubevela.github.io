@@ -364,10 +364,6 @@
                 },
                 {
                   "type": "doc",
-                  "id": "version-v1.4/platform-engineers/traits/patch-trait"
-                },
-                {
-                  "type": "doc",
                   "id": "version-v1.4/platform-engineers/traits/advanced"
                 }
               ]
@@ -392,6 +388,21 @@
                 {
                   "type": "doc",
                   "id": "version-v1.4/platform-engineers/workflow/working-mechanism"
+                }
+              ]
+            },
+            {
+              "collapsed": true,
+              "type": "category",
+              "label": "Patch and Override",
+              "items": [
+                {
+                  "type": "doc",
+                  "id": "version-v1.4/platform-engineers/traits/patch-trait"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.4/platform-engineers/cue/patch-strategy"
                 }
               ]
             },
