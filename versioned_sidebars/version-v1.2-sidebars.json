@@ -376,10 +376,6 @@
             {
               "type": "doc",
               "id": "version-v1.2/platform-engineers/system-operation/velaql"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.2/platform-engineers/system-operation/1.2.5-upgrade-practice"
             }
           ]
         },

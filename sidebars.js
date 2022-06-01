@@ -95,6 +95,7 @@ module.exports = {
             'platform-engineers/system-operation/bootstrap-parameters',
             'platform-engineers/advanced-install',
             'platform-engineers/system-operation/vela-cli-image',
+            'platform-engineers/system-operation/1.2.5-upgrade-practice'
           ],
         },
         'tutorials/sso',
