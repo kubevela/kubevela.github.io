@@ -1,18 +1,107 @@
 ---
-title:  补丁型特征
+title:  在定义中打补丁
 ---
+
+在我们在进行定义的编写时，有时需要对其他的组件或者运维特征进行修改、打补丁。我们可以在自定义运维特征和自定义工作流步骤中执行补丁操作。
+
+## 补丁策略
+
+在默认情况下，KubeVela 会将需要打补丁的值通过 CUE 的 merge 来进行合并。但是目前 CUE 无法处理有冲突的字段名。
+
+比如，在一个组件实例中已经设置 replicas=5，那一旦有运维特征实例，尝试给 replicas 字段的值打补丁就会失败。所以我们建议你提前规划好，不要在组件和运维特征之间使用重复的字段名。
+
+但在一些情况下，我们确实需要处理覆盖已被赋值的字段。比如，在进行多环境资源的差异化配置时，我们希望不同环境中的环境变量是不同的：如默认的环境变量为 `MODE=PROD`，测试环境中需要修改为 `MODE=DEV DEBUG=true`。
+
+此时，我们可以部署如下的应用：
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: deploy-with-override
+spec:
+  components:
+    - name: nginx-with-override
+      type: webservice
+      properties:
+        image: nginx
+        env:
+          - name: MODE
+            value: prod
+  policies:
+    - name: test
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: test
+    - name: prod
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: prod
+    - name: override-env
+      type: override
+      properties:
+        components:
+          - name: nginx-with-override
+            traits:
+              - type: env
+                properties:
+                  env:
+                    MODE: test
+                    DEBUG: "true"
+
+  workflow:
+    steps:
+      - type: deploy
+        name: deploy-test
+        properties:
+          policies: ["test", "override-env"]
+      - type: deploy
+        name: deploy-prod
+        properties:
+          policies: ["prod"]
+```
+
+部署完应用后，可以看到，在 `test` 命名空间下，nginx 应用的环境变量如下：
+
+```yaml
+spec:
+  containers:
+  - env:
+    - name: MODE
+      value: test
+    - name: DEBUG
+      value: "true"
+```
+
+而在 `prod` 命名空间下，nginx 应用的环境变量如下：
+
+```yaml
+spec:
+  containers:
+  - env:
+    - name: MODE
+      value: prod
+```
+
+`deploy-test` 会将 nginx 部署到 test namespace 下，同时，在 `env` 这个运维特征中，通过使用补丁策略，支持了覆盖相同变量的能力，从而为这个测试环境下的 nginx 加上 `MODE=test DEBUG=true` 的环境变量。而 prod namespace 下的 nginx 将保留原本的 `MODE=prod` 环境变量。
+
+KubeVela 提供了一系列补丁策略来帮助你完成这类需求。在编写补丁型运维特征和工作流时，如果你发现值冲突的问题，可以结合使用这些补丁策略。值得注意的是，补丁策略并不是 CUE 官方提供的功能, 而是 KubeVela 扩展开发而来。
+
+关于所有补丁策略的使用方法，请参考 [补丁策略](../cue/patch-strategy)。
+
+## 在运维特征中打补丁
 
 在自定义运维特征中，使用补丁型特征是一种比较常用的形式。
 
-它让我们可以修改、补丁某些属性给组件对象（一般是工作负载）来完成特定操作，比如更新 `sidecar` 和节点亲和性（node affinity）的规则（并且，这个操作一定是在资源往集群部署前就已经生效）。
+它让我们可以修改、补丁某些属性给组件对象（工作负载或者其他运维特征）来完成特定操作，比如更新 sidecar 和节点亲和性（node affinity）的规则（并且，这个操作一定是在资源往集群部署前就已经生效）。
 
 当我们的组件是从第三方提供并自定义而来的时候，由于它们的模版往往是固定不可变的，所以能使用补丁型特征就显得尤为有用了。
 
-> 尽管运维特征是由 CUE 来定义，它能打补丁的组件类型并不限，不管是来自 CUE、Helm 还是其余支持的模版格式。
+### 为组件打补丁
 
-## 为组件打补丁
-
-下面，我们通过一个节点亲和性（node affinity）的例子，讲解如何使用补丁型特征为组件打补丁：
+下面，我们通过一个节点亲和性（node affinity）的例子，讲解如何在运维特征中为组件打补丁：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -31,6 +120,7 @@ spec:
         patch: {
         	spec: template: spec: {
         		if parameter.affinity != _|_ {
+              // +patchStrategy=retainKeys
         			affinity: nodeAffinity: requiredDuringSchedulingIgnoredDuringExecution: nodeSelectorTerms: [{
         				matchExpressions: [
         					for k, v in parameter.affinity {
@@ -41,6 +131,7 @@ spec:
         				]}]
         		}
         		if parameter.tolerations != _|_ {
+              // +patchStrategy=retainKeys
         			tolerations: [
         				for k, v in parameter.tolerations {
         					effect:   "NoSchedule"
@@ -58,7 +149,7 @@ spec:
         }
 ```
 
-具体来说，我们上面的这个补丁型特征，假定了使用它的组件对象将会使用 `spec.template.spec.affinity` 这个字段。因此，我们需要用 `appliesToWorkloads` 来指明，让当前运维特征被应用到拥有这个字段的对应工作负载实例上。
+具体来说，我们上面的这个补丁型特征，假定了使用它的组件对象将会使用 `spec.template.spec.affinity` 这个字段。因此，我们需要用 `appliesToWorkloads` 来指明，让当前运维特征被应用到拥有这个字段的对应工作负载实例上。同时，在指定了 `// +patchStrategy=retainKeys` 补丁策略的情况下，如果遇到值冲突，则会使用新的值去覆盖。
 
 另一个重要的字段是 `podDisruptive`，这个补丁型特征将修改 Pod 模板字段，因此对该运维特征的任何字段进行更改，都会导致 Pod 重启。我们应该增加 `podDisruptive` 并且设置它的值为 true，以此告诉用户这个运维特征生效后将导致 Pod 重新启动。
 
@@ -86,7 +177,7 @@ spec:
               server-owner: "old-owner"
 ```
 
-## 为其他运维特征打补丁
+### 为其他运维特征打补丁
 
 > 注意：该功能在 KubeVela 1.4 版本之后生效。
 
@@ -164,425 +255,118 @@ spec:
           pathType: ImplementationSpecific
 ```
 
-## 待解决的短板和解决方案
+## 在工作流中打补丁
 
-默认来说，补丁型特征是通过 CUE 的 `merge` 操作来实现的。它有以下限制：
+当你在自定义工作流中使用 `op.#ApplyComponent` 时，你可以在其中的 `patch` 字段中为组件或者运维特征打补丁。
 
-- 不能处理有冲突的字段名
-  - 比方说，在一个组件实例中已经设置过这样的值 `replicas=5`，那一旦有运维特征实例，尝试给 `replicas` 字段的值打补丁就会失败。所以我们建议你提前规划好，不要在组件和运维特征之间使用重复的字段名。
-- 数组列表被补丁时，会按索引顺序进行合并。如果数组里出现了重复的值，将导致问题。为了规避这个风险，请查询后面的解决方案。
-
-### 策略补丁
-
-策略补丁，通过增加注解（annotation）而生效，并支持如下两种模式。
-
-> 请注意，这里开始并不是 CUE 官方提供的功能, 而是 KubeVela 扩展开发而来
-
-#### 1. 使用 `+patchKey=<key_name>` 注解
-
-这个注解，是给数组列表打补丁用的。它的执行方式也不遵循 CUE 官方的方式，而是将每一个数组列表视作对象，并执行如下的策略：
- - 如果发现重复的键名，补丁数据会直接替换掉它的值
- - 如果没有重复键名，补丁则会自动附加这些数据
-
-下面来看看，一个使用 `patchKey` 的策略补丁：
- 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "add sidecar to the app"
-  name: sidecar
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: true
-  schematic:
-    cue:
-      template: |
-        patch: {
-        	// +patchKey=name
-        	spec: template: spec: containers: [parameter]
-        }
-        parameter: {
-        	name:  string
-        	image: string
-        	command?: [...string]
-        }
-```
-在上述的这个例子中，我们定义了要 `patchKey` 的字段 `name`，是来自容器的参数键名。如果工作负载中并没有同名的容器，那么一个 sidecar 容器就会被加到 `spec.template.spec.containers` 数组列表中。如果工作负载中有重名的 `sidecar` 运维特征，则会执行 merge 操作而不是附加。
-
-> 在 KubeVela 1.4 版本之后，你可以使用 `,` 分割多个 patchKey，如 `patchKey=name,image`。
-
-如果 `patch` 和 `outputs` 同时存在于一个运维特征定义中，`patch` 会率先被执行然后再渲染 `outputs`。
+比如，在使用 Istio 进行渐进式的发布时，你可以通过在 `op.#ApplyComponent` 的 `patch: workload` 中，为其中的组件打上本次发布的 annotation；在 `patch: traits: <trait-name>` 中，变更本次渐进式发布的流量和路径。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
+kind: WorkflowStepDefinition
 metadata:
-  annotations:
-    definition.oam.dev/description: "expose the app"
-  name: expose
+  name: canary-rollout
+  namespace: vela-system
 spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: true
   schematic:
     cue:
-      template: |
-        patch: {spec: template: metadata: labels: app: context.name}
-        outputs: service: {
-        	apiVersion: "v1"
-        	kind:       "Service"
-        	metadata: name: context.name
-        	spec: {
-        		selector: app: context.name
-        		ports: [
-        			for k, v in parameter.http {
-        				port:       v
-        				targetPort: v
-        			},
-        		]
-        	}
-        }
+      template: |-
+        import ("vela/op")
+
         parameter: {
-        	http: [string]: int
+                batchPartition: int
+                traffic: weightedTargets: [...{
+                        revision: string
+                        weight:   int
+                }]
         }
-```
-在上面这个运维特征定义中，我们将会把一个 `Service` 添加到给定的组件实例上。同时会先去给工作负载类型打上补丁数据，然后基于模版里的 `outputs` 渲染余下的资源。
 
-#### 2. 使用 `+patchStrategy=retainKeys` 注解
+        comps__: op.#Load
+        compNames__: [ for name, c in comps__.value {name}]
+        comp__: compNames__[0]
 
-这个注解的策略，与 Kubernetes 官方的 [retainKeys](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-strategic-merge-patch-to-update-a-deployment-using-the-retainkeys-strategy) 策略类似。
+        apply: op.#ApplyComponent & {
+                value: comps__.value[comp__]
+                patch: {
 
-在一些场景下，整个对象需要被一起替换掉，使用 `retainKeys` 就是最适合的办法。
+                        workload: {
+                                // +patchStrategy=retainKeys
+                                metadata: metadata: annotations: {
+                                        "rollout": context.name
+                                }
+                        }
 
-假定一个 `Deployment` 对象是这样编写的：
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: retainkeys-demo
-spec:
-  selector:
-    matchLabels:
-      app: nginx
-  strategy:
-    type: rollingUpdate
-    rollingUpdate:
-      maxSurge: 30%
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: retainkeys-demo-ctr
-        image: nginx
-```
+                        traits: "rollout": {
+                               spec: rolloutPlan: batchPartition: parameter.batchPartition
+                        }
 
-现在如果我们想替换掉 `rollingUpdate` 策略，你可以这样写：
+                        traits: "virtualService": {
+                                spec:
+                                   // +patchStrategy=retainKeys
+                                   http: [
+                                        {
+                                                route: [
+                                                        for i, t in parameter.traffic.weightedTargets {
+                                                                destination: {
+                                                                        host:   comp__
+                                                                        subset: t.revision
+                                                                }
+                                                                weight: t.weight
+                                                        }]
+                                        },
+                                ]
+                        }
 
-```yaml
-apiVersion: core.oam.dev/v1alpha2
-kind: TraitDefinition
-metadata:
-  name: recreate
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  extension:
-    template: |-
-      patch: {
-         spec: {
-              // +patchStrategy=retainKeys
-              strategy: type: "Recreate"
-           }
-      }        
-```
-
-这个 YAML 资源将变更为：
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: retainkeys-demo
-spec:
-  selector:
-    matchLabels:
-      app: nginx
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: retainkeys-demo-ctr
-        image: nginx
-```
-
-## 更多补丁型特征的使用场景
-
-补丁型特征，针对组件层面做些整体操作时，非常有用。我们看看还可以满足哪些需求：
-
-### 增加标签
-
-比如说，我们要给组件实例打上 `virtualgroup` 的通用标签。
-
-```yaml
-apiVersion: core.oam.dev/v1alpha2
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "Add virtual group labels"
-  name: virtualgroup
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: true
-  schematic:
-    cue:
-      template: |
-        patch: {
-        	spec: template: {
-        		metadata: labels: {
-        			if parameter.scope == "namespace" {
-        				"app.namespace.virtual.group": parameter.group
-        			}
-        			if parameter.scope == "cluster" {
-        				"app.cluster.virtual.group": parameter.group
-        			}
-        		}
-        	}
+                        traits: "destinationRule": {
+                                 // +patchStrategy=retainKeys
+                                 spec: {
+                                   host: comp__
+                                   subsets: [
+                                        for i, t in parameter.traffic.weightedTargets {
+                                                name: t.revision
+                                                labels: {"app.oam.dev/revision": t.revision}
+                                        },
+                                ]}
+                        }
+                }
         }
-        parameter: {
-        	group: *"default" | string
-        	scope:  *"namespace" | string
+
+        applyRemaining: op.#ApplyRemaining & {
+            exceptions: [comp__]
         }
 ```
 
-然后这样用就可以了:
+部署完如上定义后，你可以声明如下的工作流：
 
 ```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-spec:
-  ...
-      traits:
-      - type: virtualgroup
+...
+  workflow:
+    steps:
+      - name: rollout-1st-batch
+        type: canary-rollout
         properties:
-          group: "my-group1"
-          scope: "cluster"
+          batchPartition: 0
+          traffic:
+            weightedTargets:
+              - revision: reviews-v1
+                weight: 90
+              - revision: reviews-v2
+                weight: 10
+
+      - name: manual-approval
+        type: suspend
+
+      - name: rollout-rest
+        type: canary-rollout
+        properties:
+          batchPartition: 1
+          traffic:
+            weightedTargets:
+              - revision: reviews-v2
+                weight: 100
+...
 ```
 
-### 增加注解
+在第一步和第三步中，我们分别在 traffic 中声明了不同的版本和流量，在 `canary-rollout` 这个步骤定义中，我们会将用户声明的版本和流量通过补丁的方式覆盖到原本的路由规则上，从而实现在工作流中的渐进式发布。
 
-与通用标签类似，你也可以给组件实例打补丁，增加一些注解。注解的格式，必须是 JSON。
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "Specify auto scale by annotation"
-  name: kautoscale
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: false
-  schematic:
-    cue:
-      template: |
-        import "encoding/json"
-
-        patch: {
-        	metadata: annotations: {
-        		"my.custom.autoscale.annotation": json.Marshal({
-        			"minReplicas": parameter.min
-        			"maxReplicas": parameter.max
-        		})
-        	}
-        }
-        parameter: {
-        	min: *1 | int
-        	max: *3 | int
-        }
-```
-
-### 增加 Pod 环境变量
-
-给 Pod 去注入环境变量也是非常常见的操作。
-
-> 这种使用方式依赖策略补丁而生效, 所以记得加上 `+patchKey=name`
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "add env into your pods"
-  name: env
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: true
-  schematic:
-    cue:
-      template: |
-        patch: {
-        	spec: template: spec: {
-        		// +patchKey=name
-        		containers: [{
-        			name: context.name
-        			// +patchStrategy=retainKeys
-        			env: [
-        				for k, v in parameter.env {
-        					name:  k
-        					value: v
-        				},
-        			]
-        		}]
-        	}
-        }
-
-        parameter: {
-        	env: [string]: string
-        }
-```
-
-### 基于外部鉴权服务注入 `ServiceAccount`
-
-在这个场景下，service-account 是从一个鉴权服务中动态获取、再通过打补丁给到应用的。
-
-我们这里展示的是，将 UID token 放进 `HTTP header` 的例子。你也可以用 `HTTP body` 来完成需求。
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "dynamically specify service account"
-  name: service-account
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: true
-  schematic:
-    cue:
-      template: |
-        processing: {
-        	output: {
-        		credentials?: string
-        	}
-        	http: {
-        		method: *"GET" | string
-        		url:    parameter.serviceURL
-        		request: {
-        			header: {
-        				"authorization.token": parameter.uidtoken
-        			}
-        		}
-        	}
-        }
-        patch: {
-        	spec: template: spec: serviceAccountName: processing.output.credentials
-        }
-
-        parameter: {
-        	uidtoken:   string
-        	serviceURL: string
-        }
-```
-
-### 增加 `InitContainer`
-
-[`InitContainer`](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-initialization/#create-a-pod-that-has-an-init-container) 常用于预定义镜像内的操作，并且在承载应用的容器运行前就跑起来。
-
-看看示例:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "add an init container and use shared volume with pod"
-  name: init-container
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: true
-  schematic:
-    cue:
-      template: |
-        patch: {
-        	spec: template: spec: {
-        		// +patchKey=name
-        		containers: [{
-        			name: context.name
-        			// +patchKey=name
-        			volumeMounts: [{
-        				name:      parameter.mountName
-        				mountPath: parameter.appMountPath
-        			}]
-        		}]
-        		initContainers: [{
-        			name:  parameter.name
-        			image: parameter.image
-        			if parameter.command != _|_ {
-        				command: parameter.command
-        			}
-
-        			// +patchKey=name
-        			volumeMounts: [{
-        				name:      parameter.mountName
-        				mountPath: parameter.initMountPath
-        			}]
-        		}]
-        		// +patchKey=name
-        		volumes: [{
-        			name: parameter.mountName
-        			emptyDir: {}
-        		}]
-        	}
-        }
-
-        parameter: {
-        	name:  string
-        	image: string
-        	command?: [...string]
-        	mountName:     *"workdir" | string
-        	appMountPath:  string
-        	initMountPath: string
-        }
-```
-
-用法像这样:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: testapp
-spec:
-  components:
-    - name: express-server
-      type: webservice
-      properties:
-        image: oamdev/testapp:v1
-      traits:
-        - type: "init-container"
-          properties:
-            name:  "install-container"
-            image: "busybox"
-            command:
-            - wget
-            - "-O"
-            - "/work-dir/index.html"
-            - http://info.cern.ch
-            mountName: "workdir"
-            appMountPath:  "/usr/share/nginx/html"
-            initMountPath: "/work-dir"
-```
+> 关于更多使用 KubeVela 完成 Istio 渐进式发布的细节和效果，请参考 [基于 Istio 的渐进式发布](https://kubevela.io/docs/case-studies/canary-blue-green/)。

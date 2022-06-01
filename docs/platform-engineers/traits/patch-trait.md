@@ -1,14 +1,103 @@
 ---
-title:  Patch Traits
+title:  Patch in the Definitions
 ---
 
-**Patch** is a very common pattern of trait definitions, i.e. the app operators can amend/patch attributes to the component instance (normally the workload) to enable certain operational features such as sidecar or node affinity rules (and this should be done **before** the resources applied to target cluster).
+When we are writing the definition, sometimes we need to patch to the corresponding component or traits. We can use the `patch` capability when you're writing trait definitions or workflow step definitions.
+
+## Patch Strategy
+
+By default, KubeVela will merge patched values with CUE's merge. However, CUE cannot handle conflicting fields currently.
+
+For example, if `replicas=5` has been set in a component instance, once there is another trait, attempting to patch the value of the replicas field, it will fail. So we recommend that you need to plan ahead and don't use duplicate fields between components and traits.
+
+But in some cases, we do need to deal with overwriting fields that have already been assigned a value. For example, when set up resources in multi-environments, we hope that the `envs` in different environments are different: i.e., the default `env` is `MODE=PROD`, and in the test environment, it needs to be modified to `MODE=DEV DEBUG=true `.
+
+In this case, we can apply the following application:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: deploy-with-override
+spec:
+  components:
+    - name: nginx-with-override
+      type: webservice
+      properties:
+        image: nginx
+        env:
+          - name: MODE
+            value: prod
+  policies:
+    - name: test
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: test
+    - name: prod
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: prod
+    - name: override-env
+      type: override
+      properties:
+        components:
+          - name: nginx-with-override
+            traits:
+              - type: env
+                properties:
+                  env:
+                    MODE: test
+                    DEBUG: "true"
+
+  workflow:
+    steps:
+      - type: deploy
+        name: deploy-test
+        properties:
+          policies: ["test", "override-env"]
+      - type: deploy
+        name: deploy-prod
+        properties:
+          policies: ["prod"]
+```
+
+After deploying the application, you can see that in the `test` namespace, the `envs` of the nginx application are as follows:
+
+```yaml
+spec:
+  containers:
+  - env:
+    - name: MODE
+      value: test
+    - name: DEBUG
+      value: "true"
+```
+
+At the same time, in the `prod` namespace, the `envs` are as follows:
+
+```yaml
+spec:
+  containers:
+  - env:
+    - name: MODE
+      value: prod
+```
+
+`deploy-test` will deploy nginx to the test namespace. At the same time, the `env` trait overwrite the same envs by using the patch strategy, thus adding `MODE=test DEBUG=true` in the test namespace, while the nginx in the prod namespace will retain the original `MODE=prod` env.
+
+KubeVela provides a series of patching strategies to help resolve conflicting issues. When writing patch traits and workflow steps, you can use these patch strategies to solve conflicting values. Note that the patch strategy is not an official capability provided by CUE, but an extension developed by KubeVela.
+
+For the usage of all patch strategies, please refer to [Patch Strategy](../cue/patch-strategy).
+
+## Patch in Traits
+
+**Patch** is a very common pattern of trait definitions, i.e. the app operators can amend/patch attributes to the component instance or traits to enable certain operational features such as sidecar or node affinity rules (and this should be done **before** the resources applied to target cluster).
 
 This pattern is extremely useful when the component definition is provided by third-party component provider (e.g. software distributor) so app operators do not have privilege to change its template.
 
-> Note that even patch trait itself is defined by CUE, it can patch any component regardless how its schematic is defined (i.e. CUE, Helm, and any other supported schematic approaches).
-
-## Patch to components
+### Patch to components
 
 Below is an example for `node-affinity` trait:
 
@@ -30,6 +119,7 @@ spec:
         	spec: template: spec: {
         		if parameter.affinity != _|_ {
         			affinity: nodeAffinity: requiredDuringSchedulingIgnoredDuringExecution: nodeSelectorTerms: [{
+                // +patchStrategy=retainKeys
         				matchExpressions: [
         					for k, v in parameter.affinity {
         						key:      k
@@ -39,6 +129,7 @@ spec:
         				]}]
         		}
         		if parameter.tolerations != _|_ {
+              // +patchStrategy=retainKeys
         			tolerations: [
         				for k, v in parameter.tolerations {
         					effect:   "NoSchedule"
@@ -56,17 +147,14 @@ spec:
         }
 ```
 
-In `patch`, we declare the component object fields that this trait will patch to. If you want to modify other traits in this trait, you can use `patchOutputs`.
+In `patch`, we declare the component object fields that this trait will patch to.
 
 The patch trait above assumes the target component instance have `spec.template.spec.affinity` field.
-Hence, we need to use `appliesToWorkloads` to enforce the trait only applies to those workload types have this field.
-
-At the same time, this patch also assumes that there is another trait bound to the component, and that there will be a `service` resource in this trait.
+Hence, we need to use `appliesToWorkloads` to enforce the trait only applies to those workload types have this field. Meanwhile, we use `// +patchStrategy=retainKeys` to override the conflict fields in the original component instance.
 
 Another important field is `podDisruptive`, this patch trait will patch to the pod template field,
 so changes on any field of this trait will cause the pod to restart, We should add `podDisruptive` and make it to be true
 to tell users that applying this trait will cause the pod to restart.
-
 
 Now the users could declare they want to add node affinity rules to the component instance as below:
 
@@ -97,7 +185,7 @@ spec:
               server-owner: "old-owner"
 ```
 
-## Patch to traits
+### Patch to traits
 
 > Note: it's available after KubeVela v1.4.
 
@@ -175,426 +263,121 @@ spec:
           pathType: ImplementationSpecific
 ```
 
-## Known Limitations and Workarounds
+## Patch in Workflow Step
 
-By default, patch trait in KubeVela leverages the CUE `merge` operation. It has following known constraints though:
+When you use `op.#ApplyComponent` in a custom workflow step definition, you can patch component or traits in the `patch` field.
 
-- Can not handle conflicts.
-  - For example, if a component instance already been set with value `replicas=5`, then any patch trait to patch `replicas` field will fail, a.k.a you should not expose `replicas` field in its component definition schematic.
-- Array list in the patch will be merged following the order of index. It can not handle the duplication of the array list members. This could be fixed by another feature below.
+For example, when using Istio for canary release, you can add annotations of the release name to the component in `patch: workload` of `op.#ApplyComponent`; meanwhile, you can change the traffic and destination rule in `patch: traits: <trait-name>`.
 
-### Strategy Patch
-
-Strategy Patch is effective by adding annotation, and supports the following two ways
-
-> Note that this is not a standard CUE feature, KubeVela enhanced CUE in this case.
-
-#### 1. With `+patchKey=<key_name>` annotation
-
-This is useful for patching array list, merging logic of two array lists will not follow the CUE behavior. Instead, it will treat the list as object and use a strategy merge approach:
- - if a duplicated key is found, the patch data will be merge with the existing values; 
- - if no duplication found, the patch will append into the array list.
-
-The example of strategy patch trait with 'patchKey' will like below:
- 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "add sidecar to the app"
-  name: sidecar
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: true
-  schematic:
-    cue:
-      template: |
-        patch: {
-        	// +patchKey=name
-        	spec: template: spec: containers: [parameter]
-        }
-        parameter: {
-        	name:  string
-        	image: string
-        	command?: [...string]
-        }
-```
-
-In above example we defined `patchKey` is `name` which is the parameter key of container name. In this case, if the workload don't have the container with same name, it will be a sidecar container append into the `spec.template.spec.containers` array list. If the workload already has a container with the same name of this `sidecar` trait, then merge operation will happen instead of append (which leads to duplicated containers).
-
-> After KubeVela 1.4, you can use `,` to split multiple patchKeys, such as `patchKey=name,image`.
-
-If `patch` and `outputs` both exist in one trait definition, the `patch` operation will be handled first and then render the `outputs`. 
+Following is a real example of canary rollout in a custom workflow step:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
+kind: WorkflowStepDefinition
 metadata:
-  annotations:
-    definition.oam.dev/description: "expose the app"
-  name: expose
+  name: canary-rollout
+  namespace: vela-system
 spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: true
   schematic:
     cue:
-      template: |
-        patch: {spec: template: metadata: labels: app: context.name}
-        outputs: service: {
-        	apiVersion: "v1"
-        	kind:       "Service"
-        	metadata: name: context.name
-        	spec: {
-        		selector: app: context.name
-        		ports: [
-        			for k, v in parameter.http {
-        				port:       v
-        				targetPort: v
-        			},
-        		]
-        	}
-        }
+      template: |-
+        import ("vela/op")
+
         parameter: {
-        	http: [string]: int
+                batchPartition: int
+                traffic: weightedTargets: [...{
+                        revision: string
+                        weight:   int
+                }]
+        }
+
+        comps__: op.#Load
+        compNames__: [ for name, c in comps__.value {name}]
+        comp__: compNames__[0]
+
+        apply: op.#ApplyComponent & {
+                value: comps__.value[comp__]
+                patch: {
+
+                        workload: {
+                                // +patchStrategy=retainKeys
+                                metadata: metadata: annotations: {
+                                        "rollout": context.name
+                                }
+                        }
+
+                        traits: "rollout": {
+                               spec: rolloutPlan: batchPartition: parameter.batchPartition
+                        }
+
+                        traits: "virtualService": {
+                                spec:
+                                   // +patchStrategy=retainKeys
+                                   http: [
+                                        {
+                                                route: [
+                                                        for i, t in parameter.traffic.weightedTargets {
+                                                                destination: {
+                                                                        host:   comp__
+                                                                        subset: t.revision
+                                                                }
+                                                                weight: t.weight
+                                                        }]
+                                        },
+                                ]
+                        }
+
+                        traits: "destinationRule": {
+                                 // +patchStrategy=retainKeys
+                                 spec: {
+                                   host: comp__
+                                   subsets: [
+                                        for i, t in parameter.traffic.weightedTargets {
+                                                name: t.revision
+                                                labels: {"app.oam.dev/revision": t.revision}
+                                        },
+                                ]}
+                        }
+                }
+        }
+
+        applyRemaining: op.#ApplyRemaining & {
+            exceptions: [comp__]
         }
 ```
 
-So the above trait which attaches a Service to given component instance will patch an corresponding label to the workload first and then render the Service resource based on template in `outputs`.
-
-#### 2. With `+patchStrategy=retainKeys` annotation
-
-Similar to strategy [retainKeys](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-strategic-merge-patch-to-update-a-deployment-using-the-retainkeys-strategy) in K8s strategic merge patch
-
-In some scenarios that the entire object needs to be replaced, retainKeys strategy is the best choice. the example as follows:
-
-Assume the Deployment is the base resource
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: retainkeys-demo
-spec:
-  selector:
-    matchLabels:
-      app: nginx
-  strategy:
-    type: rollingUpdate
-    rollingUpdate:
-      maxSurge: 30%
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: retainkeys-demo-ctr
-        image: nginx
-```
-Now want to replace rollingUpdate strategy with a new strategy, you can write the patch trait like below
+After deploying the above definition, you can apply the following workflow to control the canary rollout:
 
 ```yaml
-apiVersion: core.oam.dev/v1alpha2
-kind: TraitDefinition
-metadata:
-  name: recreate
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  extension:
-    template: |-
-      patch: {
-         spec: {
-              // +patchStrategy=retainKeys
-              strategy: type: "Recreate"
-           }
-      }        
-```
-Then the base resource becomes as follows
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: retainkeys-demo
-spec:
-  selector:
-    matchLabels:
-      app: nginx
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: retainkeys-demo-ctr
-        image: nginx
-```
-## More Use Cases of Patch Trait
-
-Patch trait is in general pretty useful to separate operational concerns from the component definition, here are some more examples.
-
-### Add Labels
-
-For example, patch common label (virtual group) to the component instance.
-
-```yaml
-apiVersion: core.oam.dev/v1alpha2
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "Add virtual group labels"
-  name: virtualgroup
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: true
-  schematic:
-    cue:
-      template: |
-        patch: {
-        	spec: template: {
-        		metadata: labels: {
-        			if parameter.scope == "namespace" {
-        				"app.namespace.virtual.group": parameter.group
-        			}
-        			if parameter.scope == "cluster" {
-        				"app.cluster.virtual.group": parameter.group
-        			}
-        		}
-        	}
-        }
-        parameter: {
-        	group: *"default" | string
-        	scope:  *"namespace" | string
-        }
-```
-
-Then it could be used like:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-spec:
-  ...
-      traits:
-      - type: virtualgroup
+...
+  workflow:
+    steps:
+      - name: rollout-1st-batch
+        type: canary-rollout
         properties:
-          group: "my-group1"
-          scope: "cluster"
+          batchPartition: 0
+          traffic:
+            weightedTargets:
+              - revision: reviews-v1
+                weight: 90
+              - revision: reviews-v2
+                weight: 10
+
+      - name: manual-approval
+        type: suspend
+
+      - name: rollout-rest
+        type: canary-rollout
+        properties:
+          batchPartition: 1
+          traffic:
+            weightedTargets:
+              - revision: reviews-v2
+                weight: 100
+...
 ```
 
-### Add Annotations
+In the first and third steps, we declared different revisions and weight in traffic. In the step definition of `canary-rollout`, we will overwrite the revision and weight declared by the user through `patch`, so as to control the progressive rollout in the workflow.
 
-Similar to common labels, you could also patch the component instance with annotations. The annotation value should be a JSON string.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "Specify auto scale by annotation"
-  name: kautoscale
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: false
-  schematic:
-    cue:
-      template: |
-        import "encoding/json"
-
-        patch: {
-        	metadata: annotations: {
-        		"my.custom.autoscale.annotation": json.Marshal({
-        			"minReplicas": parameter.min
-        			"maxReplicas": parameter.max
-        		})
-        	}
-        }
-        parameter: {
-        	min: *1 | int
-        	max: *3 | int
-        }
-```
-
-### Add Pod Environments
-
-Inject system environments into Pod is also very common use case.
-
-> This case relies on strategy merge patch, so don't forget add `+patchKey=name` as below:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "add env into your pods"
-  name: env
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: true
-  schematic:
-    cue:
-      template: |
-        patch: {
-        	spec: template: spec: {
-        		// +patchKey=name
-        		containers: [{
-        			name: context.name
-        			// +patchStrategy=retainKeys
-        			env: [
-        				for k, v in parameter.env {
-        					name:  k
-        					value: v
-        				},
-        			]
-        		}]
-        	}
-        }
-
-        parameter: {
-        	env: [string]: string
-        }
-```
-
-### Inject `ServiceAccount` Based on External Auth Service
-
-In this example, the service account was dynamically requested from an authentication service and patched into the service.
-
-This example put UID token in HTTP header but you can also use request body if you prefer.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "dynamically specify service account"
-  name: service-account
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: true
-  schematic:
-    cue:
-      template: |
-        processing: {
-        	output: {
-        		credentials?: string
-        	}
-        	http: {
-        		method: *"GET" | string
-        		url:    parameter.serviceURL
-        		request: {
-        			header: {
-        				"authorization.token": parameter.uidtoken
-        			}
-        		}
-        	}
-        }
-        patch: {
-        	spec: template: spec: serviceAccountName: processing.output.credentials
-        }
-
-        parameter: {
-        	uidtoken:   string
-        	serviceURL: string
-        }
-```
-
-The `processing.http` section is an advanced feature that allow trait definition to send a HTTP request during rendering the resource. Please refer to [Execute HTTP Request in Trait Definition](#Processing-Trait) section for more details.
-
-### Add `InitContainer`
-
-[`InitContainer`](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-initialization/#create-a-pod-that-has-an-init-container) is useful to pre-define operations in an image and run it before app container.
-
-Below is an example:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  annotations:
-    definition.oam.dev/description: "add an init container and use shared volume with pod"
-  name: init-container
-spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: true
-  schematic:
-    cue:
-      template: |
-        patch: {
-        	spec: template: spec: {
-        		// +patchKey=name
-        		containers: [{
-        			name: context.name
-        			// +patchKey=name
-        			volumeMounts: [{
-        				name:      parameter.mountName
-        				mountPath: parameter.appMountPath
-        			}]
-        		}]
-        		initContainers: [{
-        			name:  parameter.name
-        			image: parameter.image
-        			if parameter.command != _|_ {
-        				command: parameter.command
-        			}
-
-        			// +patchKey=name
-        			volumeMounts: [{
-        				name:      parameter.mountName
-        				mountPath: parameter.initMountPath
-        			}]
-        		}]
-        		// +patchKey=name
-        		volumes: [{
-        			name: parameter.mountName
-        			emptyDir: {}
-        		}]
-        	}
-        }
-
-        parameter: {
-        	name:  string
-        	image: string
-        	command?: [...string]
-        	mountName:     *"workdir" | string
-        	appMountPath:  string
-        	initMountPath: string
-        }
-```
-
-The usage could be:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: testapp
-spec:
-  components:
-    - name: express-server
-      type: webservice
-      properties:
-        image: oamdev/testapp:v1
-      traits:
-        - type: "init-container"
-          properties:
-            name:  "install-container"
-            image: "busybox"
-            command:
-            - wget
-            - "-O"
-            - "/work-dir/index.html"
-            - http://info.cern.ch
-            mountName: "workdir"
-            appMountPath:  "/usr/share/nginx/html"
-            initMountPath: "/work-dir"
-```
+> For more details of using KubeVela with Istio progressive release, please refer to [Progressive Rollout with Istio
+](https://kubevela.io/docs/case-studies/canary-blue-green/).
