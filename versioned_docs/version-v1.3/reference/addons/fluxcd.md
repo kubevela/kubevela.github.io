@@ -1,5 +1,5 @@
 ---
-title: FluxCD GitOps
+title: FluxCD
 ---
 
 This addon is built based [FluxCD](https://fluxcd.io/)
@@ -172,7 +172,6 @@ spec:
 #### Example
 
 1. If your kustomize style artifact is stored in oss, you can create application by flowing these steps:
-
 
 (Optional)If your OSS bucket needs identity verification, create a Secret first:
 

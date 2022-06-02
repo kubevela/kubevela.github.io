@@ -30,7 +30,6 @@ module.exports = {
           items: [
             'tutorials/webservice',
             'case-studies/multi-cluster',
-            'end-user/traits/rollout',
             'end-user/traits/ingress',
             'end-user/traits/sidecar',
           ],

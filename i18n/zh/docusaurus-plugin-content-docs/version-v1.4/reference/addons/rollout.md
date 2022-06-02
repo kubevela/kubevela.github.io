@@ -1,20 +1,19 @@
 ---
-title: Rollout
+title: 灰度发布和扩缩容
 ---
 
-This section will introduce how to use Rollout Trait to perform a rolling update on Component.
+灰度发布( Rollout )运维特征可以用于对工作负载的滚动发布和扩缩容。
 
-The component supported for rollout is:
+目前灰度发布运维特征支持的组件类型为：
 
-* [webservice](../components/cue/webservice)
+* [webservice](../../end-user/components/cue/webservice)
 * worker
 
-## How to
+## 如何使用
 
-### First Deployment
-
-Apply the Application YAML below which includes a webservice-type workload with Rollout Trait, and [control version](../version-control)
-of component name to be express-server-v1.
+### 首次发布 
+   
+应用下面的 YAML 来创建一个应用部署计划，该应用包含了一个使用了灰度发布运维特征的 webservice 类型的组件，并指定[组件版本](../../end-user/version-control)名称为 express-server-v1 。如果你不指定，每次对组件的修改都会自动产生一个组件版本(ControllerRevision)，组件版本名称的默认产生规则是：`<组件名>-<版本序号>`。
 
 ```shell
 cat <<EOF | vela up -f -
@@ -26,55 +25,42 @@ spec:
   components:
     - name: express-server
       type: webservice
+      # 设置组件版本为 express-server-v1
       externalRevision: express-server-v1
       properties:
         image: stefanprodan/podinfo:4.0.3
       traits:
         - type: rollout
+          # 缺省设置 targetRevision 直接指向最新的组件版本也就是 express-server-v1
           properties:
+            # 设置部署5个副本
             targetSize: 5
+            # 分两批发布，上一批次副本全部就绪之后部署下一批次
             rolloutBatches:
               - replicas: 2
               - replicas: 3
 EOF
 ```
 
-This Rollout Trait has target size of 5 and two rollout batches. The first batch has 2 replicas and second batch has 3. Only after all replicas in the first batch are ready, it will start to rollout the second batch.
+这个灰度发布运维特征表示分两个批次发布工作负载，目标工作负载的副本个数为5个，第一批发布2个副本，第二批发布3个副本。前一批次的副本全部就绪之后，才会发布下一批次。
 
-Check the Application status whether the rollout is successful:
+等待一段时间发布成功之后查看应用状态。
 
 ```shell
-$ vela status rollout-trait-test
-About:
-
-  Name:      	rollout-trait-test
-  Namespace: 	default
-  Created at:	2022-01-12 20:29:50 +0800 CST
-  Status:    	running
-
-Workflow:
-
-  mode: DAG
-  finished: true
-  Suspend: false
-  Terminated: false
-  Steps
-  - id:6pnibgonga
-    name:express-server
-    type:apply-component
-    phase:succeeded
-    message:
-
-Services:
-
-  - Name: express-server  Env:
-    Type: webservice
-    healthy Ready:5/5
-    Traits:
-      - ✅ rollout: rolloutSucceed
+$ kubectl get app rollout-trait-test
+NAME                 COMPONENT        TYPE         PHASE     HEALTHY   STATUS   AGE
+rollout-trait-test   express-server   webservice   running   true               2d20h
 ```
 
-Check the status of Rollout Trait. The rollout is successful only if `ROLLING-STATE` equals `rolloutSucceed`, and all replicas are ready only if `BATCH-STATE` equals `batchReady`. `TARGET`, `UPGRADED` and `READY` indicates target size of replicas is 5, updated number of replicas is 5 and all 5 replicas are ready.
+查看组件版本。
+
+```shell
+$ kubectl get controllerRevision  -l controller.oam.dev/component=express-server
+NAME                CONTROLLER                                    REVISION   AGE
+express-server-v1   application.core.oam.dev/rollout-trait-test   1          2d22h
+```
+
+查看灰度发布运维特征的状态， `ROLLING-STATE` 为 rolloutSucceed 说明发布成功，`BATCH-STATE` 为 batchReady 表明当前批次的副本已全部就绪。`TARGET` `UPGRADED` `READY` 三列说明目标的副本5个，完成升级的副本为5个，就绪的副本为5个。
 
 ```shell
 $ kubectl get rollout express-server
@@ -82,7 +68,7 @@ NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 express-server   5        5          5       batchReady    rolloutSucceed   2d20h
 ```
 
-Check Workload Status (Underlying resource behind the workload is [deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/))
+查看工作负载状态（ webservice/worker 的底层工作负载是  [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) )
 
 ```shell
 $ kubectl get deploy -l app.oam.dev/component=express-server
@@ -90,9 +76,9 @@ NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   5/5     5            5           2d20h
 ```
 
-### Rollout Update
-
-Apply the YAML below to modify the image of the container. It will generate a new ControllerRevision.
+### 灰度升级
+   
+应用下面的 YAML 来修改容器的镜像，将工作负载升级到新的组件版本。
 ```shell
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
@@ -103,6 +89,7 @@ spec:
   components:
     - name: express-server
       type: webservice
+      # 设置更新后的组件版本为 express-server-v2
       externalRevision: express-server-v2
       properties:
         image: stefanprodan/podinfo:5.0.2
@@ -110,16 +97,18 @@ spec:
         - type: rollout
           properties:
             targetSize: 5
+            # 只灰度发布第一批次的副本
             batchPartition: 0
+            # 分两批灰度发布
             rolloutBatches:
               - replicas: 2
               - replicas: 3
 EOF
 ```
 
-This Rollout Trait represents the target size of replicas is 5 and update will be performed in 2 batches. The first batch will update 2 replicas and the second batch will update 3 replicas. Only 2 replicas in first batch will be updated by setting `batchPartition` to 0.
+该灰度发布运维特征表示，目标副本个数为5个，分两批升级，第一批升级2个副本，第二批升级3个副本，并通过设置 `batchPartition` 为0来指定只升级第1批的2个副本。
 
-Check controllerRevision and there is a new controllerRevision express-server-v2.
+查看组件版本，可见生成了一个新的组件版本 express-server-v2。
 
 ```shell
 $ kubectl get controllerRevision -l controller.oam.dev/component=express-server
@@ -128,7 +117,7 @@ express-server-v1   application.core.oam.dev/rollout-trait-test   1          2d2
 express-server-v2   application.core.oam.dev/rollout-trait-test   2          1m
 ```
 
-Check the status of Rollout Trait after a while when first batch has been upgraded successfully. `TARGET`, `UPGREADED` and `READY` indicates the target size of replicas for this revision is 5, there are 2 replicas sucessfully upgraded and they are ready. batchReady means replicas in the first rolloutBatch are all ready, rollingInBatches means there are batches still yet to be upgraded.
+一段时间之后，成功升级第一批次后，查看灰度发布运维特征的状态。 `TARGET` `UPGRADED` `READY` 表示这次升级目标版本的副本5个，已经升级完成了2个，2个已经就绪。 batchReady 状态表示当前的第1批次的副本全部就绪， rollingInBatches 状态表示还未完成全部批次的升级，仍在升级当中。
 
 ```shell
 $ kubectl get rollout express-server
@@ -136,7 +125,7 @@ NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 express-server   5        2          2       batchReady   rollingInBatches  2d20h
 ```
 
-Check Workload status to verify, we can see there are 2 replicas of new Workload express-server-v2 have been upgraded and old version of Workload express-server-v1 still has 3 replicas.
+查看工作负载状态进行验证，可见新版本的工作负载 express-server-v2 已经升级完成2个副本，老版本的工作负载 express-server-v1 尚有3个副本。
 
 ```shell
 $ kubectl get deploy -l app.oam.dev/component=express-server
@@ -145,7 +134,7 @@ express-server-v1   3/3     3            3           2d20h
 express-server-v2   2/2     2            2           1m
 ```
 
-Apply the YAML below without `batchPartition` field in Rollout Trait to upgrade all replicas to latest revision.
+应用下面的 YAML 来去掉灰度发布运维特征的 `batchPartition` 字段来将全部副本升级到最新版本。
 
 ```shell
 cat <<EOF | vela up -f -
@@ -170,14 +159,16 @@ spec:
 EOF
 ```
 
-Check Rollout Trait, we can see rollout is succeed.
+查看灰度发布运维特征，可见已经升级成功。
+
 ```shell
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 express-server   5        5           5       batchReady   rolloutSucceed  2d20h
 ```
 
-Check Workload status, all replicas of Workload has been upgraded to a new revision and old workload has been deleted.
+查看工作负载状态，可见新版本的工作负载已经完成升级，并且老版本的工作负载已经被删除。
+
 ```shell
 $ kubectl get deploy -l app.oam.dev/component=express-server
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE
@@ -185,9 +176,9 @@ express-server-v2   5/5     5            5           1m
 ```
 
 
-### Rollback
+### 回滚
    
-Apply the YAML below to make controllerRevision roll back to express-server-v1 by assigning `targetRevision` field to express-server-v1 in Rollout Trait.
+应用下面的 YAML 来指定灰度发布运维特征的 `targetRevision` 将组件回滚到 express-server-v1 组件版本。
 ```shell
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
@@ -204,6 +195,7 @@ spec:
       traits:
         - type: rollout
           properties:
+            # 设置目标版本为之前的组件版本来进行回滚
             targetRevision: express-server-v1
             targetSize: 5
             rolloutBatches:
@@ -212,23 +204,23 @@ spec:
 EOF
 ```
 
-Check Rollout Trait status after rollback has been succeed.
+回滚成功之后查看灰度发布运维特征状态。
 ```shell
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 express-server   5        5          5       batchReady    rolloutSucceed  2d20h
 ```
 
-Check Workload status, we can see Workload has rolled back to express-server-v1. 
+查看工作负载状态，可见工作负载状态回滚到了 express-server-v1 组件版本。 
 ```shell
 $ kubectl get deploy -l app.oam.dev/component=express-server
 NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   5/5     5            5           15s
 ```
 
-### Scale up
+### 扩容
 
-Rollout Trait also be able to scale up a Workload, apply the YAML below to modify the `targetSize`, in order to increase the number of replicas from 5 to 7.
+灰度发布运维特征还可以完成工作负载的扩容操作，应用下面的 YAML 来修改targetSize，将副本个数由原来的5个增加至7个。
 ```shell
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
@@ -246,12 +238,13 @@ spec:
         - type: rollout
           properties:
             targetRevision: express-server-v1
+            # 扩容至7个副本
             targetSize: 7
 EOF
 ```
-This Rollout Trait represents it will scale workload up to 7. You also can set every batch's number by setting `rolloutBatches`.
+这个灰度发布运维特征的表示，从刚才的5个副本个数扩容至目标的7个副本，你也可以通过设置 `rolloutBatches` 精确控制每个批次需要扩容的副本个数。
 
-Check the status after expansion has been succeed.
+扩容成功之后，查看资源状态。
 ```shell
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
@@ -262,9 +255,9 @@ NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   7/7     7            7           2m
 ```
 
-### Scale down
+### 缩容
    
-Apply the YAML below to scale down the size of replicas from 7 to 3.
+应用下面的 YAML 将副本个数由之前的7个缩减至3个
 ```shell
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
@@ -282,12 +275,15 @@ spec:
         - type: rollout
           properties:
             targetRevision: express-server-v1
+            # 缩容至5个副本。
             targetSize: 5
 EOF
 ```
-This Rollout Trait scale workload down to 5.
 
-Check the status after scale up has been succeed.
+这个灰度发布运维特征的表示，将工作负载缩容至5个副本，你也可以通过设置 `rolloutBatches` 精确控制每个批次需要扩容的副本个数。
+
+缩容成功之后，查看资源状态。
+
 ```shell
 $ kubectl get rollout express-server
 NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
@@ -298,23 +294,23 @@ NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   5/5     5            5           5m
 ```
 
-### Rollout cloneset type Workload
+### 针对 cloneset 类型工作负载的灰度发布
 
-You need to enable kruise addon。
+启用 kruise 的扩展插件。
 
 ```shell
 $ vela addon enable kruise
 ```
 
-Check types of components.
+查看组件类型
 ```shell
 $ vela components
 NAME                NAMESPACE        WORKLOAD                        DESCRIPTION
-cloneset           vela-system     clonesets.apps.kruise.io
+cloneset            vela-system     clonesets.apps.kruise.io                                  
 ```
 
 
-Apply the YAML below to create an Application, this Application includes a Workload of type cloneset with a Rollout Trait.
+应用下面的 YAML 来创建一个应用部署计划，该应用包含一个 cloneset 类型的工作负载和一个灰度发布运维特征。
 ```shell
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
@@ -338,11 +334,11 @@ spec:
 EOF
 ```
 
-Check the status of related resources.
+查看相关资源。
 ```shell
 $ kubectl get app rollout-trait-test-cloneset
 NAME                              COMPONENT         TYPE               PHASE      HEALTHY   STATUS     AGE
-rollout-trait-test-cloneset        cloneset   clonesetservice          running      true               4m18s
+rollout-trait-test-cloneset   cloneset-server       clonset            running      true               4m18s
 
 $ kubectl get controllerRevision  -l controller.oam.dev/component=cloneset-server
 NAME                CONTROLLER                                           REVISION   AGE
@@ -353,20 +349,20 @@ NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 cloneset-server   5        5          5       batchReady    rolloutSucceed   5m10s
 ```
 
-Check the status of Workload. As cloneset Workload supports in-place upgrade, the most noticeable difference between it and webservice/worker is that the name of underlying Workload's name is exactly the component's name.
+查看工作负载状态，可以看到由于 cloneset 工作负载支持原地升级，它与 webservice/worker 的最大区别是底层工作负载的名称就是组件名称。
 ```shell
 $ kubectl get cloneset -l app.oam.dev/component=cloneset-server
 NAME             DESIRED   UPDATED   UPDATED_READY   READY   TOTAL   AGE
 cloneset-server   5         5         5               5       5       7m3s
 ```
 
-Check the image.
+查看镜像。
 ```shell
 $ kubectl get cloneset cloneset-server -o=jsonpath='{.spec.template.spec.containers[0].image}'
 stefanprodan/podinfo:4.0.3
 ```
 
-Apply the YAML below to upgrade the image.
+应用下面的 YAML 更新镜像。
 ```shell
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
@@ -390,7 +386,7 @@ spec:
 EOF
 ```
 
-Check the status of related resources after upgrade has been succeed.
+升级完成之后，查看相关资源。
 ```shell
 $ kubectl get controllerRevision  -l controller.oam.dev/component=cloneset-server
 NAME                CONTROLLER                                             REVISION    AGE
@@ -402,23 +398,32 @@ NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
 cloneset-server  5        5          5       batchReady    rolloutSucceed   6m10s
 ```
 
-Check the status of the Workload, we can see the name after upgrade is still cloneset-server.
+查看工作负载状态，可见升级之后的工作负载仍是 cloneset-server。
 ```shell
 $ kubectl get cloneset -l app.oam.dev/component=cloneset-server
 NAME             DESIRED   UPDATED   UPDATED_READY   READY   TOTAL   AGE
 cloneset-server   5         5         5               5       5       7m3s
 ```
 
-Verify the rollout by checking the image.
+进一步通过查看镜像进行验证。
 ```shell
 $ kubectl get cloneset cloneset-server -o=jsonpath='{.spec.template.spec.containers[0].image}'
 stefanprodan/podinfo:5.0.2
 ```
 
-Other operations such as Scale up, Scale down, Rollback are the same as the operations on webservice/worker.
+其他的扩缩容，回滚等操作与 webservice/worker 类型的工作负载的操作方式完全一致。
 
-### Supported workload type
 
-Rollout Trait supports following workload types: webservice,worker and cloneset.
+## 子集群中运行的注意事项
 
-When using webservice/worker as Workload type with Rollout Trait, Workload's name will be controllerRevision's name. And when Workload's type is cloneset, because of clonset support in-place update Workload's name will always be component's name.
+如果你期望灰度发布运维特征工作在子集群中，你需要先在子集群中执行下面的命令安装相应的控制器。
+
+```shell
+helm install vela-rollout kubevela/vela-rollout --version 1.1.5
+```
+
+### 支持的组件类型
+
+灰度发布运维特征支持 `webservice`，`worker`，`clonset` 类型的工作负载。
+
+当使用 webservice 和 worker 作为工作负载类型并配合使用灰度发布运维特征时，工作负载的名称将被命名为组件版本的名称。 当工作负载类型为 cloneset 时，由于 clonset 支持原地更新，工作负载的名称将被命名为组件的名称。

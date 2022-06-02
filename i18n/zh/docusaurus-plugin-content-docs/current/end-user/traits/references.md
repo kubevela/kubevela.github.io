@@ -2,11 +2,11 @@
 title: 内置运维特征类型
 ---
 
-This documentation will walk through the built-in traits.
+本文档将展示所有内置运维特征的参数列表。
 
 ## gateway
 
-The `gateway` trait exposes a component to public Internet via a valid domain.
+`gateway` 运维特征通过一个可用的域名在公网暴露一个组件的服务。
 
 ### 作用的 Component 类型
 
@@ -14,12 +14,12 @@ The `gateway` trait exposes a component to public Internet via a valid domain.
 
 ### 参数说明
 
-| NAME        | DESCRIPTION                                                                                        | TYPE           | REQUIRED | DEFAULT |
-| ----------- | -------------------------------------------------------------------------------------------------- | -------------- | -------- | ------- |
-| http        | Specify the mapping relationship between the http path and the workload port                       | map[string]int | true     |         |
-| class       | Specify the class of ingress to use                                                                | string         | true     | nginx   |
-| classInSpec | Set ingress class in '.spec.ingressClassName' instead of 'kubernetes.io/ingress.class' annotation. | bool           | false    | false   |
-| domain      | Specify the domain you want to expose                                                              | string         | true     |         |
+| NAME        | DESCRIPTION                                        | TYPE           | REQUIRED | DEFAULT |
+| ----------- | -------------------------------------------------- | -------------- | -------- | ------- |
+| http        | 定义一组网关路径到 Pod 服务端口的映射关系                 | map[string]int | true     |         |
+| class       | 所使用的 kubernetes ingress class                    | string         | true     | nginx   |
+| classInSpec | 在 kubernetes ingress 的 '.spec.ingressClassName' 定义 ingress class 而不是在 'kubernetes.io/ingress.class' 注解中定义 | bool           | false    | false   |
+| domain      | 暴露服务所绑定的域名                                   | string         | true     |         |
 
 ### 样例
 ```yaml
@@ -43,58 +43,6 @@ spec:
               "/": 8000
 ```
 
-
-## rollout
-
-Rollout Trait performs a rolling update on Component.
-
-### 作用的 Component 类型
-
-* [webservice](../components/cue/webservice)
-* worker
-* clonset
-
-### 参数说明
-
-灰度发布运维特征的所有配置项
-
-| 名称           | 描述         | 类型             | 是否必须 | 默认值                                 |
-| -------------- | ------------ | ---------------- | -------- | -------------------------------------- |
-| targetRevision | 目标组件版本 | string           | 否       | 当该字段为空时，一直指向组件的最新版本 |
-| targetSize     | 目标副本个数 | int              | 是       | 无                                     |
-| rolloutBatches | 批次发布策略 | rolloutBatch数组 | 是       | 无                                     |
-| batchPartition | 发布批次     | int              | 否       | 无，缺省为发布全部批次                 |
-
-rolloutBatch的属性
-
-| 名称     | 描述           | 类型 | 是否必须 | 默认值 |
-| -------- | -------------- | ---- | -------- | ------ |
-| replicas | 批次的副本个数 | int  | 是       | 无     |
-
-
-### 样例
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: rollout-trait-test
-spec:
-  components:
-    - name: express-server
-      type: webservice
-      externalRevision: express-server-v1
-      properties:
-        image: stefanprodan/podinfo:4.0.3
-      traits:
-        - type: rollout
-          properties:
-            targetSize: 5
-            rolloutBatches:
-              - replicas: 2
-              - replicas: 3
-```
-
 ## Scaler
 
 `scaler` 为组件配置副本数。
@@ -107,15 +55,9 @@ spec:
 
 ### 参数说明
 
-```
-$ vela show scaler
-# Properties
-+----------+--------------------------------+------+----------+---------+
-|   NAME   |          DESCRIPTION           | TYPE | REQUIRED | DEFAULT |
-+----------+--------------------------------+------+----------+---------+
-| replicas | Specify the number of workload | int  | true     |       1 |
-+----------+--------------------------------+------+----------+---------+
-```
+| NAME   |          DESCRIPTION           | TYPE | REQUIRED | DEFAULT |
+| -------- | -------------- | ---- | -------- | ------ |
+| replicas | 工作负载的 Pod 个数 | int  | true     |       1 |
 
 ### 样例
 
@@ -150,18 +92,11 @@ spec:
 
 ### 参数说明
 
-
-```
-$ vela show cpuscaler
-# Properties
-+---------+---------------------------------------------------------------------------------+------+----------+---------+
 |  NAME   |                                   DESCRIPTION                                   | TYPE | REQUIRED | DEFAULT |
-+---------+---------------------------------------------------------------------------------+------+----------+---------+
-| min     | Specify the minimal number of replicas to which the autoscaler can scale down   | int  | true     |       1 |
-| max     | Specify the maximum number of of replicas to which the autoscaler can scale up  | int  | true     |      10 |
-| cpuUtil | Specify the average cpu utilization, for example, 50 means the CPU usage is 50% | int  | true     |      50 |
-+---------+---------------------------------------------------------------------------------+------+----------+---------+
-```
+| -------- | -------------- | ---- | -------- | ------ |
+| min     | 能够将工作负载缩容到的最小副本个数    | int  | true     |       1 |
+| max     | 能够将工作负载扩容到的最大副本个数  | int  | true     |      10 |
+| cpuUtil | 每个容器的平均 CPU 利用率 例如, 50 意味者 CPU 利用率为 50% | int  | true     |      50 |
 
 ### 样例
 
@@ -200,14 +135,8 @@ spec:
 
 ### 参数说明
 
-```
-$ vela show storage
-# Properties
-
-## pvc
-+------------------+-------------+---------------------------------+----------+------------+
 |       NAME       | DESCRIPTION |              TYPE               | REQUIRED |  DEFAULT   |
-+------------------+-------------+---------------------------------+----------+------------+
+| ---------------- | ----------- | ------------------------------- | -------- | ---------- |
 | name             |             | string                          | true     |            |
 | volumeMode       |             | string                          | true     | Filesystem |
 | mountPath        |             | string                          | true     |            |
@@ -216,55 +145,46 @@ $ vela show storage
 | volumeName       |             | string                          | false    |            |
 | storageClassName |             | string                          | false    |            |
 | resources        |             | [resources](#resources)         | false    |            |
-| dataSourceRef    |             | [dataSourceRef](#dataSourceRef) | false    |            |
-| dataSource       |             | [dataSource](#dataSource)       | false    |            |
+| dataSourceRef    |             | [dataSourceRef](#datasourceref) | false    |            |
+| dataSource       |             | [dataSource](#datasource)       | false    |            |
 | selector         |             | [selector](#selector)           | false    |            |
-+------------------+-------------+---------------------------------+----------+------------+
 
-...
+#### emptyDir
 
-## emptyDir
-+-----------+-------------+--------+----------+---------+
 |   NAME    | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+-----------+-------------+--------+----------+---------+
+| --------- | ----------- | ------ | -------- | ------- |
 | name      |             | string | true     |         |
 | medium    |             | string | true     | empty   |
 | mountPath |             | string | true     |         |
-+-----------+-------------+--------+----------+---------+
 
-## secret
-+-------------+-------------+--------------------------------------------------------+----------+---------+
+
+#### secret
+
 |    NAME     | DESCRIPTION |                          TYPE                          | REQUIRED | DEFAULT |
-+-------------+-------------+--------------------------------------------------------+----------+---------+
+| ----------- | ----------- | ------------------------------------------------------ | -------- | ------- |
 | name        |             | string                                                 | true     |         |
 | defaultMode |             | int                                                    | true     |     420 |
 | items       |             | [[]items](#items)                                      | false    |         |
 | mountPath   |             | string                                                 | true     |         |
-| mountToEnv  |             | [mountToEnv](#mountToEnv)                              | false    |         |
+| mountToEnv  |             | [mountToEnv](#mounttoenv)                              | false    |         |
 | mountOnly   |             | bool                                                   | true     | false   |
 | data        |             | map[string]{null|bool|string|bytes|{...}|[...]|number} | false    |         |
 | stringData  |             | map[string]{null|bool|string|bytes|{...}|[...]|number} | false    |         |
 | readOnly    |             | bool                                                   | true     | false   |
-+-------------+-------------+--------------------------------------------------------+----------+---------+
 
-...
 
 ## configMap
-+-------------+-------------+--------------------------------------------------------+----------+---------+
+
 |    NAME     | DESCRIPTION |                          TYPE                          | REQUIRED | DEFAULT |
-+-------------+-------------+--------------------------------------------------------+----------+---------+
+| ----------- | ----------- | ------------------------------------------------------ | -------- | ------- |
 | name        |             | string                                                 | true     |         |
 | defaultMode |             | int                                                    | true     |     420 |
 | items       |             | [[]items](#items)                                      | false    |         |
 | mountPath   |             | string                                                 | true     |         |
-| mountToEnv  |             | [mountToEnv](#mountToEnv)                              | false    |         |
+| mountToEnv  |             | [mountToEnv](#mounttoenv)                              | false    |         |
 | mountOnly   |             | bool                                                   | true     | false   |
 | data        |             | map[string]{null|bool|string|bytes|{...}|[...]|number} | false    |         |
 | readOnly    |             | bool                                                   | true     | false   |
-+-------------+-------------+--------------------------------------------------------+----------+---------+
-
-
-```
 
 ### 样例
 
@@ -319,7 +239,7 @@ spec:
 
 ## Labels 
 
-`labels` trait allow us to mark labels on Pod for workload.
+`labels` 运维特征可以用来为工作负载上的 Pod 打特殊的标签。
 
 > 注：这个运维特征默认在 `VelaUX` 处隐藏，你可以在 CLI 侧使用。
 
@@ -329,17 +249,9 @@ spec:
 
 ### 参数说明
 
-```shell
-$ vela show labels
-# Properties
-+-----------+-------------+-------------------+----------+---------+
 |   NAME    | DESCRIPTION |       TYPE        | REQUIRED | DEFAULT |
-+-----------+-------------+-------------------+----------+---------+
+| --------- | ----------- | ----------------- | -------- | ------- |
 | -         |             | map[string]string | true     |         |
-+-----------+-------------+-------------------+----------+---------+
-```
-
-They're all string Key-Value pairs.
 
 ### 样例
 
@@ -365,7 +277,7 @@ spec:
 
 ## Annotations
 
-`annotations` trait allow us to mark annotations on Pod for workload.
+`annotations` 运维特征允许用户在工作负载的 Pod 上加入注解。
 
 > 注：这个运维特征默认在 `VelaUX` 处隐藏，你可以在 CLI 侧使用。
 
@@ -375,17 +287,9 @@ spec:
 
 ### 参数说明
 
-```shell
-$ vela show annotations
-# Properties
-+-----------+-------------+-------------------+----------+---------+
 |   NAME    | DESCRIPTION |       TYPE        | REQUIRED | DEFAULT |
-+-----------+-------------+-------------------+----------+---------+
+| --------- | ----------- | ----------------- | -------- | ------- |
 | -         |             | map[string]string | true     |         |
-+-----------+-------------+-------------------+----------+---------+
-```
-
-They're all string Key-Value pairs.
 
 ### 样例
 
@@ -420,32 +324,25 @@ spec:
 
 ### 参数说明
 
-```shell
-vela show kustomize-patch
-```
 
-```shell
-# Properties
-+---------+---------------------------------------------------------------+-----------------------+----------+---------+
 |  NAME   |                          DESCRIPTION                          |         TYPE          | REQUIRED | DEFAULT |
-+---------+---------------------------------------------------------------+-----------------------+----------+---------+
-| patches | a list of StrategicMerge or JSON6902 patch to selected target | [[]patches](#patches) | true     |         |
-+---------+---------------------------------------------------------------+-----------------------+----------+---------+
+| ------- | ------------------------------------------------------------- | --------------------- | -------- | ------ |
+| patches | 在目标上进行 StrategicMerge 或者 JSON6902 patch 的列表 | [[]patches](#patches) | true     |         |
 
 
-## patches
-+--------+---------------------------------------------------+-------------------+----------+---------+
+#### patches
+
 |  NAME  |                    DESCRIPTION                    |       TYPE        | REQUIRED | DEFAULT |
-+--------+---------------------------------------------------+-------------------+----------+---------+
-| patch  | Inline patch string, in yaml style                | string            | true     |         |
-| target | Specify the target the patch should be applied to | [target](#target) | true     |         |
-+--------+---------------------------------------------------+-------------------+----------+---------+
+| ------ | ------------------------------------------------- | ----------------- | -------- | ------ |
+| patch  | Inline yaml 格式的 patch                | string            | true     |         |
+| target | patch 需要作用在的目标 | [target](#target) | true     |         |
 
 
-### target
-+--------------------+-------------+--------+----------+---------+
+
+##### target
+
 |        NAME        | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+--------------------+-------------+--------+----------+---------+
+| ------------------ | ----------- | ------ | -------- | ------- |
 | name               |             | string | false    |         |
 | group              |             | string | false    |         |
 | version            |             | string | false    |         |
@@ -453,8 +350,6 @@ vela show kustomize-patch
 | namespace          |             | string | false    |         |
 | annotationSelector |             | string | false    |         |
 | labelSelector      |             | string | false    |         |
-+--------------------+-------------+--------+----------+---------+
-```
 
 ### 样例
 
@@ -483,7 +378,7 @@ spec:
                   labelSelector: "app=podinfo"
 ```
 
-In this example, the `kustomize-patch` will patch the content for all Pods with label `app=podinfo`.
+在这个例子中，`kustomize-patch` 会在所有标记了 `app=podinfo` 上的 Pod 上做 patch 。
 
 ## kustomize-json-patch 
 
@@ -495,32 +390,28 @@ In this example, the `kustomize-patch` will patch the content for all Pods with 
 
 ### 参数说明
 
-```shell
-vela show kustomize-json-patch
-```
 
-```shell
 # Properties
-+-------------+---------------------------+-------------------------------+----------+---------+
+
 |    NAME     |        DESCRIPTION        |             TYPE              | REQUIRED | DEFAULT |
-+-------------+---------------------------+-------------------------------+----------+---------+
-| patchesJson | A list of JSON6902 patch. | [[]patchesJson](#patchesJson) | true     |         |
-+-------------+---------------------------+-------------------------------+----------+---------+
+| ----------- | ------------------------- | ----------------------------- | -------- | ------- |
+| patchesJson |  JSON6902 patch 的列表 | [[]patchesJson](#patchesJson) | true     |         |
 
 
-## patchesJson
-+--------+-------------+-------------------+----------+---------+
+
+#### patchesJson
+
 |  NAME  | DESCRIPTION |       TYPE        | REQUIRED | DEFAULT |
-+--------+-------------+-------------------+----------+---------+
+| ------ | ----------- | ----------------- | -------- | ------- |
 | patch  |             | [patch](#patch)   | true     |         |
 | target |             | [target](#target) | true     |         |
-+--------+-------------+-------------------+----------+---------+
 
 
-#### target
-+--------------------+-------------+--------+----------+---------+
+
+##### target
+
 |        NAME        | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+--------------------+-------------+--------+----------+---------+
+| ------------------ | ----------- | ------ | -------- | ------- |
 | name               |             | string | false    |         |
 | group              |             | string | false    |         |
 | version            |             | string | false    |         |
@@ -528,18 +419,16 @@ vela show kustomize-json-patch
 | namespace          |             | string | false    |         |
 | annotationSelector |             | string | false    |         |
 | labelSelector      |             | string | false    |         |
-+--------------------+-------------+--------+----------+---------+
 
 
-### patch
-+-------+-------------+--------+----------+---------+
+
+##### patch
 | NAME  | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+-------+-------------+--------+----------+---------+
+| ----- | ----------- | ------ | -------- | ------- |
 | path  |             | string | true     |         |
 | op    |             | string | true     |         |
 | value |             | string | false    |         |
-+-------+-------------+--------+----------+---------+
-```
+
 
 ### 样例
 
@@ -577,25 +466,18 @@ spec:
 
 ### 参数说明
 
-```shell
-vela show kustomize-json-patch
-```
-
-```shell
-# Properties
-+-----------------------+-----------------------------------------------------------+---------------------------------------------------+----------+---------+
 |         NAME          |                        DESCRIPTION                        |                       TYPE                        | REQUIRED | DEFAULT |
-+-----------------------+-----------------------------------------------------------+---------------------------------------------------+----------+---------+
-| patchesStrategicMerge | a list of strategicmerge, defined as inline yaml objects. | [[]patchesStrategicMerge](#patchesStrategicMerge) | true     |         |
-+-----------------------+-----------------------------------------------------------+---------------------------------------------------+----------+---------+
+| --------------------- | --------------------------------------------------------- | ------------------------------------------------- | -------- | ------- |
+| patchesStrategicMerge |           patchesStrategicMerge 列表                       | [[]patchesStrategicMerge](#patchesStrategicMerge) | true     |         |
 
 
-## patchesStrategicMerge
-+-----------+-------------+--------------------------------------------------------+----------+---------+
+
+#### patchesStrategicMerge
+
 |   NAME    | DESCRIPTION |                          TYPE                          | REQUIRED | DEFAULT |
-+-----------+-------------+--------------------------------------------------------+----------+---------+
-| undefined |             | map[string]{null|bool|string|bytes|{...}|[...]|number} | true     |         |
-```
+| -------- | -------------- | ---- | -------- | ------ |
+|  |             | map[string]{null|bool|string|bytes|{...}|[...]|number} | true     |         |
+
 
 ### 样例
 
@@ -625,7 +507,7 @@ spec:
 
 ## service-binding
 
-Service binding trait will bind data from Kubernetes `Secret` to the application container's ENV.
+`service-binding` 运维特征会将一个 Kubernetes 的 secret 资源映射到容器中作为容器的环境变量。
 
 ### 作用的 Component 类型
 
@@ -639,13 +521,13 @@ Service binding trait will bind data from Kubernetes `Secret` to the application
 
 Name | Description | Type | Required | Default
 ------------ | ------------- | ------------- | ------------- | -------------
-envMappings | The mapping of environment variables to secret | map[string]#KeySecret | true |
+envMappings | 主键和 secret 名称的键值对 | map[string][KeySecret](#keysecret) | true |
 
 #### KeySecret
-Name | Description | Type | Required | Default
------------- | ------------- | ------------- | ------------- | -------------
-| key  | if key is empty, we will use envMappings key instead              | string            | false     |         |
-| secret | Kubernetes secret name | string | true     |         |
+|  Name | Description | Type | Required | Default |
+|------ | ----------- | ---- | -------- | --------|
+| key  | 主键名称      | string | false  |         |
+| secret | secret 名称 | string | true  |         |
 
 ### 样例
 
@@ -675,7 +557,7 @@ spec:
 
 ## sidecar
 
-The `sidecar` trait allows you to attach a sidecar container to the component.
+`sidecar` 能够为你的组件容器添加一个边车容器。
 
 ### 作用的 Component 类型
 
@@ -686,26 +568,19 @@ The `sidecar` trait allows you to attach a sidecar container to the component.
 
 ### 参数说明
 
-```console
-# Properties
-+---------+-----------------------------------------+-----------------------+----------+---------+
 |  NAME   |               DESCRIPTION               |         TYPE          | REQUIRED | DEFAULT |
-+---------+-----------------------------------------+-----------------------+----------+---------+
-| name    | Specify the name of sidecar container   | string                | true     |         |
-| cmd     | Specify the commands run in the sidecar | []string              | false    |         |
-| image   | Specify the image of sidecar container  | string                | true     |         |
-| volumes | Specify the shared volume path          | [[]volumes](#volumes) | false    |         |
-+---------+-----------------------------------------+-----------------------+----------+---------+
+| ------- | --------------------------------------- | --------------------- | -------- | ------- |
+| name    |   容器名称   | string                | true     |         |
+| cmd     | 容器的执行命令 | []string              | false    |         |
+| image   | 容器镜像  | string                | true     |         |
+| volumes | 挂载卷    | [[]volumes](#volumes) | false    |         |
 
+#### volumes
 
-## volumes
-+-----------+-------------+--------+----------+---------+
 |   NAME    | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+-----------+-------------+--------+----------+---------+
+| --------- | ----------- | ------ | -------- | ------- |
 | name      |             | string | true     |         |
 | path      |             | string | true     |         |
-+-----------+-------------+--------+----------+---------+
-```
 
 ### 样例
 
