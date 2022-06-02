@@ -5,357 +5,103 @@ title: 快速安装
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-> 如果是要升级现有的 KubeVela，请直接阅读 [升级指南](./platform-engineers/advanced-install#升级)。
-> 如果需要离线安装，请参考 [KubeVela 离线部署手册](./platform-engineers/system-operation/offline-installation)。
+- 在 Kubernetes 集群上安装，请参考 [高级安装](./platform-engineers/advanced-install/#install-kubevela-with-existing-kubernetes-cluster).
+- 升级 KubeVela 请参考 [升级文档](./platform-engineers/advanced-install/#upgrade).
 
-## 1. 准备控制平面的 Kubernetes 集群
+## 1. 安装 VelaD
 
-确保:
+[VelaD](https://github.com/kubevela/velad) 作为 KubeVela 的快速安装工具，帮助你在具有 Docker 的环境中快速一键完成安装。
 
-- Kubernetes 集群版本 >= v1.19 && <= v1.22
+- VelaD 继承了 [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) 和 [k3d](https://k3d.io/) 的能力，同时将 KubeVela 所需的制品整体打包。
+- VelaD 可以帮助你在离线环境中完成安装。
+- VelaD 目前仅适用于快速体验和测试开发， [生成环境安装请参考高级安装文档](./platform-engineers/advanced-install/#install-kubevela-with-existing-kubernetes-cluster)。
 
-> 若你已是 Kubernetes 用户，具有满足上述条件的集群，请直接进入 [下一节](#2-安装-kubevela-core) 。若你没有满足要求的集群，可通过下述方式安装便捷安装。生产场景推荐使用云服务或 RKE 安装方式。
+### 前提条件
 
-KubeVela 控制平面依赖 Kubernetes。它可以放置在任何托管 Kubernetes 作为底座的产品或自建 Kubernetes 集群中。
+- Docker v20.10.5+ (runc >= v1.0.0-rc93) **or** Linux system
 
-你可以使用 kind 或 minikube 在本地部署、测试 KubeVela。
+### 下载 VelaD
 
-> 当搭建生产环境时，请先准备生产用 Kubernetes 集群或使用云厂商提供的 Kubernetes 服务。
-
-<Tabs
-className="unique-tabs"
-defaultValue="kind"
-values={[
-{label: 'Kind', value: 'kind'},
-{label: 'Minikube', value: 'minikube'},
-{label: 'K3s', value: 'k3s'},
-{label: 'RKE', value: 'rke'},
-{label: '云服务', value: 'cloudprovider'},
-]}>
-
-<TabItem value="minikube">
-
-> 仅适用于测试/试用场景。
-
-[安装 minikube](https://minikube.sigs.k8s.io/docs/start/) 后，创建一个集群:
-
-```shell script
-minikube start
-```
-
-安装 ingress 启用路由访问功能：
-
-```shell script
-minikube addons enable ingress
-```
-
-</TabItem>
-
-<TabItem value="k3s">
-
-> k3s 适合以下场景 Edge、IoT、Development。你可以使用 k3s 作为 KubeVela 管控平面的的轻量级底座。
-
-1. 安装 K3s
-
-> K3s 只支持安装在具有 systemd 或者 openrc 服务的操作系统中。
-
-你可以参考 [K3s 快速开始文档](https://rancher.com/docs/k3s/latest/en/quick-start/) 获取更多支持。
+- ** MacOS/Linux **
 
 ```shell
-curl -sfL https://get.k3s.io | sh -
+curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash -s 1.4.1
 ```
 
-2. 复制 kubeconfig 文件到默认目录下。如果你需要在本地操作后续安装，请将其复制到本地。
+- **Windows**
 
 ```shell
-make ~/.kube
-cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
+powershell -Command "iwr -useb https://static.kubevela.net/script/install.ps1 | iex"
 ```
 
-</TabItem>
+`velad` 和 `vela` 命令行工具将存储于 `/usr/local/bin/`，对于 Windows，存储于 `C:\vela\`。
 
-<TabItem value="rke">
-
-> 开始前请准备 1-N 台服务器或虚拟机，该安装模式可用于生产环境。
-
-<b>（1）安装 Docker (可选)</b>
-
-RKE 的安装依赖于 Docker, 请在所有服务器或虚拟机安装 Docker 服务，如未安装，请参考 [Docker 安装指南](https://docs.docker.com/engine/install/).
-
-<b>（2）安装 RKE 命令行</b>
-
-下载 RKE 二进制文件， [前往 RKE Release 页面](https://github.com/rancher/rke/releases).
-
-如果你的网络受限无法下载（特别是中国用户），可直接使用下述方式安装:
-
-```
-wget https://static.kubevela.net/binary/rke/rke_linux-amd64 -O /usr/bin/rke
-chmod +x /usr/bin/rke
-```
-
-<b>（3）安装 RKE 集群</b>
-
-> 请切换到非 root 且有权限操作 docker 的用户下执行以下命令安装 RKE 集群，例如: docker
-
-```shell script
-  mkdir ~/rkeinit && cd ~/rkeinit
-  # 引导式配置，可参考 [RKE集群配置说明文档](https://rancher.com/docs/rke/latest/en/example-yamls/)。
-  rke config
-  # 确认配置完成后即可安装集群，如有异常请参考 RKE 相关文档。
-  rke up
-  # 安装 Kubectl 命令行工具
-  mkdir ~/.kube
-  cp kube_config_cluster.yml ~/.kube/config
-  docker cp kubelet:/usr/local/bin/kubectl /usr/local/bin/kubectl
-```
-
-</TabItem>
-
-<TabItem value="kind">
-
-> 仅适用于测试/试用场景。
-
-安装 [Kind 命令行工具](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)后，创建集群:
-
-```shell script
-cat <<EOF | kind create cluster --image=kindest/node:v1.20.7 --config=-
-kind: Cluster
-apiVersion: kind.x-k8s.io/v1alpha4
-nodes:
-- role: control-plane
-  kubeadmConfigPatches:
-  - |
-    kind: InitConfiguration
-    nodeRegistration:
-      kubeletExtraArgs:
-        node-labels: "ingress-ready=true"
-  extraPortMappings:
-  - containerPort: 80
-    hostPort: 80
-    protocol: TCP
-  - containerPort: 443
-    hostPort: 443
-    protocol: TCP
-EOF
-```
-
-安装 ingress 启用路由访问功能：
-
-```shell script
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
-```
-
-  </TabItem>
-
-<TabItem value="cloudprovider">
-
-> 可用于生产环境。
-
-- 阿里云 [ACK 服务](https://www.aliyun.com/product/kubernetes)
-- AWS [EKS 服务](https://aws.amazon.com/cn/eks)
-- Azure [AKS 服务](https://azure.microsoft.com/en-us/services/kubernetes-service)
-- Google [GKE 服务](https://cloud.google.com/kubernetes-engine)
-
-> 注意: 请确保云厂商的集群[已安装或启用 ingress-nginx](https://kubernetes.github.io/ingress-nginx/deploy/) 以保证路由访问功能可正常使用。
-
-</TabItem>
-</Tabs>
-
-## 2. 安装 KubeVela CLI
-
-KubeVela CLI 提供了命令行工具来便捷的应用终端管理能力。
-
-<Tabs
-    className="unique-tabs"
-    defaultValue="script"
-    values={[
-        {label: 'Script', value: 'script'},
-        {label: 'Homebrew', value: 'homebrew'},
-        {label: 'Download directly from releases', value: 'download'},
-    ]}>
-<TabItem value="script">
-
-** MacOS/Linux **
-
-```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.0
-```
-
-**Windows**
-
-> 仅支持安装正式发行版本。
-
-```shell script
-powershell -Command "iwr -useb https://kubevela.io/script/install.ps1 | iex"
-```
-
-</TabItem>
-<TabItem value="homebrew">
-
-**macOS/Linux**
-
-先更新下你的 brew，请注意 brew 途径仅支持安装正式发行版本。
-
-```shell script
-brew update
-```
-
-紧接着安装 KubeVela CLI
-
-```shell script
-brew install kubevela
-```
-
-</TabItem>
-<TabItem value="download">
-
-- 通过[发布日志](https://github.com/kubevela/kubevela/releases)下载最新的 `vela` 二进制文件。
-- 解压二进制文件，并且在 `$PATH` 中配好环境变量，就搞定啦。
-
-```shell script
-sudo mv ./vela /usr/local/bin/vela
-```
-
-> [安装提示](https://github.com/kubevela/kubevela/issues/625):
-> 如果你使用的是 Mac 系统，它会弹出 “vela” 无法打开的警告，因为来自开发者的包无法验证。
->
-> MacOS 对能够在系统中运行的软件，采取了更加严格的限制。你暂时可以通过打开 'System Preference' -> 'Security & Privacy' -> General 并点击 'Allow Anyway' 来解决这个问题。
-
-</TabItem>
-</Tabs>
-
-## 3. 安装 KubeVela Core
-
-<Tabs
-    className="unique-tabs"
-    defaultValue="vela"
-    values={[
-        {label: 'Default', value: 'vela'},
-        {label: 'Helm', value: 'helm'},
-    ]}>
-<TabItem value="vela">
-
-> Vela CLI 版本需要 >=1.2.3
-
-```shell script
-vela install
-```
-
-<details> <summary>成功安装后预期输出如下：</summary>
+### 一键安装
 
 ```shell
-...
-Watching for changes to Job kubevela-vela-core-cluster-gateway-tls-secret-patch with timeout of 18m0s
-Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: ADDED
-kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 0, jobs failed: 0, jobs succeeded: 0
-Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
-kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
-Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
-kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
-Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
-Starting delete for "kubevela-vela-core-admission" ServiceAccount
-Starting delete for "kubevela-vela-core-admission" ClusterRole
-Starting delete for "kubevela-vela-core-admission" ClusterRoleBinding
-Starting delete for "kubevela-vela-core-admission" Role
-Starting delete for "kubevela-vela-core-admission" RoleBinding
-Starting delete for "kubevela-vela-core-admission-patch" Job
-Starting delete for "kubevela-vela-core-cluster-gateway-admission" ServiceAccount
-Starting delete for "kubevela-vela-core-cluster-gateway-admission" Role
-Starting delete for "kubevela-vela-core-cluster-gateway-admission" RoleBinding
-Starting delete for "kubevela-vela-core-cluster-gateway-tls-secret-patch" Job
+velad install
+```
+
+查看到以下输出则代表安装成功:
+
+```
+Preparing K3s images...
+Successfully prepare k3s image:  /Users/sunjianbo/.vela/velad/k3s/k3s-airgap-images-amd64.tgz
+Successfully prepare k3d images
+
+...snip...
 
 KubeVela control plane has been successfully set up on your cluster.
-If you want to enable dashboard, please run "vela addon enable velaux"
+If you want to enable dashboard, please run "vela addon enable /Users/sunjianbo/.vela/addons/velaux"
+
+Keep the token below if you want to restart the control plane
+K1075e7f6c77555e6ebdaf4854e4a2f39ae4287cfad23f27cdac5b33608d44633fe::server:zSpzbdbGzVxOwfBvvjgT
+
+🚀  Successfully install KubeVela control plane
+🔭  See available commands with `vela help`
 ```
 
-</details>
-</TabItem>
-
-<TabItem value="helm">
-
-如果你是 Helm 用户，你同样可以使用 Helm 安装 KubeVela Core:
-
-> helm 版本 >= 3.2.0
+### 设置 KubeConfig
 
 ```
-helm repo add kubevela https://charts.kubevela.net/core
-helm repo update
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.4.0 --wait
+export KUBECONFIG=$(velad kubeconfig --host)
+vela comp
 ```
 
-</TabItem>
+## 2. 安装 VelaUX
 
-</Tabs>
-
-## 4. 安装 VelaUX
-
-VelaUX 是一个可视化操作界面，包括 UI+API 服务，它适用于大多数厂商开箱即用的获取应用交付和管理能力。
+VelaUX 是面向企业的应用交付控制台和可视化平台。
 
 ```shell script
-vela addon enable velaux serviceType=NodePort --version v1.4.0
-
-# 获取映射的端口，通过该端口访问 VelaUX
-kubectl get service velaux -n vela-system -o jsonpath="{.spec.ports[0].nodePort}"
+vela addon enable ~/.vela/addons/velaux
 ```
 
-VelaUX 有鉴权机制，默认账号为 admin，通过以下方式获取密码
-
-```shell
-vela logs -n vela-system --name apiserver addon-velaux | grep "initialized admin username"
-```
-
-国内环境可使用以下安装方式:
+查看到以下输出则代表安装成功:
 
 ```
-vela addon enable velaux serviceType=NodePort repo=acr.kubevela.net
+Addon: velaux enabled Successfully.
 ```
 
-`serviceType` 配置 velaux 服务的访问方式，如果你使用云服务集群，请配置为 `serviceType=LoadBalancer`，启用完成后通过以下方式获取访问地址:
-
-```shell script
-vela addon enable velaux serviceType=LoadBalancer repo=acr.kubevela.net
-
-kubectl get service velaux -n vela-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}"
-```
-
-如果你的集群中已经安装了 Nginx Ingress Controller，而且你具有可用的域名，你可以这样部署 VelaUX(请使用真实域名替换 example.doamin.com):
-
-```shell script
-vela addon enable velaux repo=acr.kubevela.net domain=example.doamin.com
-```
-
-对于生产环境，请考虑启用 MongoDB 作为 VelaUX 的数据存储，使用 MongoDB 作为数据库的配置方式参考如下：
-
-```shell script
-vela addon enable velaux dbType=mongodb database=kubevela dbURL=mongodb://<Mongo-Host>:<Mongo-Port>
-```
-
-## 5. 卸载
-
-如果你试用完成后需要卸载 KubeVela，可参考如下操作进行：
-
-在卸载之前，请先将所有应用删除，所有 addon 禁用。
-
-1. 卸载 VelaUX
+默认情况下，你可以通过以下方式快速访问到 VelaUX:
 
 ```
-vela addon disable velaux
+vela port-forward addon-velaux -n vela-system 8080:80
 ```
 
-2. 卸载 KubeVela Core
+Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` for visit.
+
+如果你希望使用更稳固的访问方式，请参考 [VelaUX 高级安装说明](./reference/addons/velaux)。
+
+VelaUX 是需要登陆认证的，默认管理员账号为 `admin` 密码为 `VelaUX12345`。请首次登陆成功后修改管理员密码并谨记。
+
+## 3. 卸载
 
 ```
-vela uninstall
+velad uninstall
 ```
 
-3. 卸载 KubeVela 安装的 CRD
-
-删除前，需要确保所有对应的 CR 资源已删除。
-
-```
-kubectl get crd |grep oam | awk '{print $1}' | xargs kubectl delete crd
-```
+此命令将删除 VelaD 安装的环境, 其他自定义方式安装的请参考 [KubeVela 卸载文档](./platform-engineers/advanced-install/#uninstall)。
 
 ## 下一步
 
-- 安装完毕 KubeVela，开始 [交付第一个应用](./quick-start)。
+- [部署第一个应用](./quick-start)。
