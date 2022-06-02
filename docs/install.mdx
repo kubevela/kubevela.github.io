@@ -5,20 +5,20 @@ title: Installation
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-* For Installation from existing Kubernetes Cluster, please read the [advanced installation guide](./platform-engineers/advanced-install/#install-kubevela-with-existing-kubernetes-cluster).
-* For upgrading from existing KubeVela control plane, please read the [upgrade guide](./platform-engineers/advanced-install/#upgrade).
+- For Installation from existing Kubernetes Cluster, please read the [advanced installation guide](./platform-engineers/advanced-install/#install-kubevela-with-existing-kubernetes-cluster).
+- For upgrading from existing KubeVela control plane, please read the [upgrade guide](./platform-engineers/advanced-install/#upgrade).
 
 ## 1. Install VelaD
 
 [VelaD](https://github.com/kubevela/velad) packages KubeVela with all dependencies that enables you to run KubeVela on any of docker compatible environments or linux system.
 
-* VelaD provides Kubernetes by leveraging [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) on linux or [k3d](https://k3d.io/) on docker environment.
-* KubeVela along with all related images, and `vela` command line are packaged together that enables air-gapped installation.
-* **VelaD suits great for local development and quick demos, while we strongly recommend you to [install KubeVela with managed Kubernetes services](./platform-engineers/advanced-install/#install-kubevela-with-existing-kubernetes-cluster) for production usage**.
+- VelaD provides Kubernetes by leveraging [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) on linux or [k3d](https://k3d.io/) on docker environment.
+- KubeVela along with all related images, and `vela` command line are packaged together that enables air-gapped installation.
+- **VelaD suits great for local development and quick demos, while we strongly recommend you to [install KubeVela with managed Kubernetes services](./platform-engineers/advanced-install/#install-kubevela-with-existing-kubernetes-cluster) for production usage**.
 
 ### Prerequisites
 
-* Docker v20.10.5+ (runc >= v1.0.0-rc93) **or** Linux system 
+- Docker v20.10.5+ (runc >= v1.0.0-rc93) **or** Linux system
 
 ### Download VelaD
 
@@ -26,12 +26,13 @@ It will download and place the binary in your system `PATH`,
 so you may be required for root privilege during the installation process.
 If you don't need the automation with root access, you can download from the [release page](https://github.com/kubevela/velad/releases) and uncompress manually.
 
-* ** MacOS/Linux **
+- ** MacOS/Linux **
+
 ```shell
-curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash -s 1.4.0
+curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash -s 1.4.1
 ```
 
-* **Windows**
+- **Windows**
 
 > Only the official release version is supported.
 
@@ -99,13 +100,7 @@ Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Se
 
 If you have loadbalaner or ingress, please refer to [VelaUX addon docs](./reference/addons/velaux) for more advanced installation ways.
 
-VelaUX need authentication. Default username is admin and get default password as below
-
-```shell
-vela logs -n vela-system --name apiserver addon-velaux | grep "initialized admin username"
-```
-
-If there is no password in logs, you can get it from secret with the name `admin` in the `vela-system` namespace.
+VelaUX need authentication. Default username is `admin` and the password is `VelaUX12345`. Please must set and remember the new password after the first login.
 
 ## 3. Cleanup
 
@@ -114,7 +109,6 @@ velad uninstall
 ```
 
 This command will clean up KubeVela controllers along with the Kubernetes cluster, refer to [the advanced guide](./platform-engineers/advanced-install/#uninstall) for more detailed steps.
-
 
 ## Next Step
 

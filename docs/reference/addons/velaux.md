@@ -7,11 +7,15 @@ title: VelaUX
 ```shell script
 vela addon enable velaux
 ```
+
 expected output:
 ```
 Addon: velaux enabled Successfully.
 ```
-By default, velaux didn't have any exposed port.
+
+VelaUX need authentication. Default username is `admin` and the password is `VelaUX12345`. Please must set and remember the new password after the first login.
+
+By default, VelaUX didn't have any exposed port.
 
 ## Visit VelaUX by port-forward
 
@@ -75,6 +79,11 @@ Please access the velaux from the following endpoints:
 +----------------------------+---------------------------+
 ```
 
+If you enabled the traefik addon, you can set the `gatewayDriver` parameter to use the Gateway API.
+
+```shell script
+$ vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik
+```
 
 ## Specify the addon image
 
