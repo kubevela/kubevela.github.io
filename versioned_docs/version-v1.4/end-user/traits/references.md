@@ -44,56 +44,6 @@ spec:
               "/": 8000
 ```
 
-
-## rollout
-
-Rollout Trait performs a rolling update on Component.
-
-### Apply To Component Types
-
-* [webservice](../components/cue/webservice)
-* worker
-* clonset
-
-### Parameters
-
-| Name           | Description                          | Type           | Required | Default                                                             |
-| -------------- | ------------------------------------ | -------------- | -------- | ------------------------------------------------------------------- |
-| targetRevision | The target ComponentRevision         | string         | No       | If this field is empty, it will always point to the latest revision |
-| targetSize     | Number of target Workload's replicas | int            | Yes      | Nil                                                                 |
-| rolloutBatches | Strategy of rolling update           | []rolloutBatch | Yes      | Nil                                                                 |
-| batchPartition | Partition of rolloutBatches          | int            | No       | Nil, if this field is empty, all batches will be updated            |
-
-Configurations of rolloutBatch
-
-| Name     | Description                     | Type | Required | Default |
-| -------- | ------------------------------- | ---- | -------- | ------- |
-| replicas | number of replicas in one batch | int  | Yes      | Nil     |
-
-
-### Examples
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: rollout-trait-test
-spec:
-  components:
-    - name: express-server
-      type: webservice
-      externalRevision: express-server-v1
-      properties:
-        image: stefanprodan/podinfo:4.0.3
-      traits:
-        - type: rollout
-          properties:
-            targetSize: 5
-            rolloutBatches:
-              - replicas: 2
-              - replicas: 3
-```
-
 ## Scaler
 
 The `scaler` trait allows you to change the replicas for the component.

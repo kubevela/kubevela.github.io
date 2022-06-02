@@ -44,56 +44,6 @@ spec:
               "/": 8000
 ```
 
-
-## rollout
-
-Rollout Trait performs a rolling update on Component.
-
-### Apply To Component Types
-
-* [webservice](../components/cue/webservice)
-* worker
-* clonset
-
-### Parameters
-
-| Name           | Description                          | Type           | Required | Default                                                             |
-| -------------- | ------------------------------------ | -------------- | -------- | ------------------------------------------------------------------- |
-| targetRevision | The target ComponentRevision         | string         | No       | If this field is empty, it will always point to the latest revision |
-| targetSize     | Number of target Workload's replicas | int            | Yes      | Nil                                                                 |
-| rolloutBatches | Strategy of rolling update           | []rolloutBatch | Yes      | Nil                                                                 |
-| batchPartition | Partition of rolloutBatches          | int            | No       | Nil, if this field is empty, all batches will be updated            |
-
-Configurations of rolloutBatch
-
-| Name     | Description                     | Type | Required | Default |
-| -------- | ------------------------------- | ---- | -------- | ------- |
-| replicas | number of replicas in one batch | int  | Yes      | Nil     |
-
-
-### Examples
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: rollout-trait-test
-spec:
-  components:
-    - name: express-server
-      type: webservice
-      externalRevision: express-server-v1
-      properties:
-        image: stefanprodan/podinfo:4.0.3
-      traits:
-        - type: rollout
-          properties:
-            targetSize: 5
-            rolloutBatches:
-              - replicas: 2
-              - replicas: 3
-```
-
 ## Scaler
 
 The `scaler` trait allows you to change the replicas for the component.
@@ -106,15 +56,9 @@ The `scaler` trait allows you to change the replicas for the component.
 
 ### Parameters
 
-```
-$ vela show scaler
-# Properties
-+----------+--------------------------------+------+----------+---------+
 |   NAME   |          DESCRIPTION           | TYPE | REQUIRED | DEFAULT |
-+----------+--------------------------------+------+----------+---------+
+| -------- | ------------------------------- | ---- | -------- | ------- |
 | replicas | Specify the number of workload | int  | true     |       1 |
-+----------+--------------------------------+------+----------+---------+
-```
 
 ### Examples
 
@@ -191,14 +135,8 @@ The `storage` trait allows you to manage storages for the component.
 
 ### Parameters
 
-```
-$ vela show storage
-# Properties
-
-## pvc
-+------------------+-------------+---------------------------------+----------+------------+
 |       NAME       | DESCRIPTION |              TYPE               | REQUIRED |  DEFAULT   |
-+------------------+-------------+---------------------------------+----------+------------+
+| -------- | ------------------------------- | ---- | -------- | ------- |
 | name             |             | string                          | true     |            |
 | volumeMode       |             | string                          | true     | Filesystem |
 | mountPath        |             | string                          | true     |            |
@@ -210,23 +148,19 @@ $ vela show storage
 | dataSourceRef    |             | [dataSourceRef](#dataSourceRef) | false    |            |
 | dataSource       |             | [dataSource](#dataSource)       | false    |            |
 | selector         |             | [selector](#selector)           | false    |            |
-+------------------+-------------+---------------------------------+----------+------------+
 
-...
+#### emptyDir
 
-## emptyDir
-+-----------+-------------+--------+----------+---------+
 |   NAME    | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+-----------+-------------+--------+----------+---------+
+| -------- | ------------------------------- | ---- | -------- | ------- |
 | name      |             | string | true     |         |
 | medium    |             | string | true     | empty   |
 | mountPath |             | string | true     |         |
-+-----------+-------------+--------+----------+---------+
 
-## secret
-+-------------+-------------+--------------------------------------------------------+----------+---------+
+#### secret
+
 |    NAME     | DESCRIPTION |                          TYPE                          | REQUIRED | DEFAULT |
-+-------------+-------------+--------------------------------------------------------+----------+---------+
+| ----------- | ----------- | ------------------------------------------------------ | -------- | ------- |
 | name        |             | string                                                 | true     |         |
 | defaultMode |             | int                                                    | true     |     420 |
 | items       |             | [[]items](#items)                                      | false    |         |
@@ -236,14 +170,11 @@ $ vela show storage
 | data        |             | map[string]{null|bool|string|bytes|{...}|[...]|number} | false    |         |
 | stringData  |             | map[string]{null|bool|string|bytes|{...}|[...]|number} | false    |         |
 | readOnly    |             | bool                                                   | true     | false   |
-+-------------+-------------+--------------------------------------------------------+----------+---------+
 
-...
+#### configMap
 
-## configMap
-+-------------+-------------+--------------------------------------------------------+----------+---------+
 |    NAME     | DESCRIPTION |                          TYPE                          | REQUIRED | DEFAULT |
-+-------------+-------------+--------------------------------------------------------+----------+---------+
+| --------    | ----------- | ------------------------------------------------------ | -------- | ------- |
 | name        |             | string                                                 | true     |         |
 | defaultMode |             | int                                                    | true     |     420 |
 | items       |             | [[]items](#items)                                      | false    |         |
@@ -252,10 +183,6 @@ $ vela show storage
 | mountOnly   |             | bool                                                   | true     | false   |
 | data        |             | map[string]{null|bool|string|bytes|{...}|[...]|number} | false    |         |
 | readOnly    |             | bool                                                   | true     | false   |
-+-------------+-------------+--------------------------------------------------------+----------+---------+
-
-
-```
 
 ### Examples
 
@@ -320,15 +247,9 @@ spec:
 
 ### Parameters
 
-```shell
-$ vela show labels
-# Properties
-+-----------+-------------+-------------------+----------+---------+
 |   NAME    | DESCRIPTION |       TYPE        | REQUIRED | DEFAULT |
-+-----------+-------------+-------------------+----------+---------+
+| --------- | ----------- | ----------------- | -------- | ------- |
 | -         |             | map[string]string | true     |         |
-+-----------+-------------+-------------------+----------+---------+
-```
 
 They're all string Key-Value pairs.
 
@@ -366,15 +287,9 @@ spec:
 
 ### Parameters
 
-```shell
-$ vela show annotations
-# Properties
-+-----------+-------------+-------------------+----------+---------+
 |   NAME    | DESCRIPTION |       TYPE        | REQUIRED | DEFAULT |
-+-----------+-------------+-------------------+----------+---------+
+| -------- | ------------ | ----------------- | -------- | ------- |
 | -         |             | map[string]string | true     |         |
-+-----------+-------------+-------------------+----------+---------+
-```
 
 They're all string Key-Value pairs.
 
@@ -411,32 +326,26 @@ Trait `kustomize-patch` will patch on the Kustomize component.
 
 ### Parameters
 
-```shell
-vela show kustomize-patch
-```
 
-```shell
-# Properties
-+---------+---------------------------------------------------------------+-----------------------+----------+---------+
 |  NAME   |                          DESCRIPTION                          |         TYPE          | REQUIRED | DEFAULT |
-+---------+---------------------------------------------------------------+-----------------------+----------+---------+
+| ------- | ------------------------------------------------------------- | --------------------- | -------- | ------- |
 | patches | a list of StrategicMerge or JSON6902 patch to selected target | [[]patches](#patches) | true     |         |
-+---------+---------------------------------------------------------------+-----------------------+----------+---------+
 
 
-## patches
-+--------+---------------------------------------------------+-------------------+----------+---------+
+
+#### patches
+
 |  NAME  |                    DESCRIPTION                    |       TYPE        | REQUIRED | DEFAULT |
-+--------+---------------------------------------------------+-------------------+----------+---------+
+| ------ | ------------------------------------------------- | ----------------- | -------- | ------- |
 | patch  | Inline patch string, in yaml style                | string            | true     |         |
 | target | Specify the target the patch should be applied to | [target](#target) | true     |         |
-+--------+---------------------------------------------------+-------------------+----------+---------+
 
 
-### target
-+--------------------+-------------+--------+----------+---------+
+
+##### target
+
 |        NAME        | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+--------------------+-------------+--------+----------+---------+
+| ------------------ | ----------- | ------ | -------- | ------- |
 | name               |             | string | false    |         |
 | group              |             | string | false    |         |
 | version            |             | string | false    |         |
@@ -444,8 +353,7 @@ vela show kustomize-patch
 | namespace          |             | string | false    |         |
 | annotationSelector |             | string | false    |         |
 | labelSelector      |             | string | false    |         |
-+--------------------+-------------+--------+----------+---------+
-```
+
 
 ### Examples
 
@@ -486,32 +394,22 @@ You could use this trait in [JSON6902 format](https://kubectl.docs.kubernetes.io
 
 ### Parameters
 
-```shell
-vela show kustomize-json-patch
-```
 
-```shell
-# Properties
-+-------------+---------------------------+-------------------------------+----------+---------+
 |    NAME     |        DESCRIPTION        |             TYPE              | REQUIRED | DEFAULT |
-+-------------+---------------------------+-------------------------------+----------+---------+
+| ----------- | ------------------------- | ----------------------------- | -------- | ------- |
 | patchesJson | A list of JSON6902 patch. | [[]patchesJson](#patchesJson) | true     |         |
-+-------------+---------------------------+-------------------------------+----------+---------+
 
+#### patchesJson
 
-## patchesJson
-+--------+-------------+-------------------+----------+---------+
 |  NAME  | DESCRIPTION |       TYPE        | REQUIRED | DEFAULT |
-+--------+-------------+-------------------+----------+---------+
+| ------ | ----------- | ----------------- | -------- | ------- |
 | patch  |             | [patch](#patch)   | true     |         |
 | target |             | [target](#target) | true     |         |
-+--------+-------------+-------------------+----------+---------+
 
+##### target
 
-#### target
-+--------------------+-------------+--------+----------+---------+
 |        NAME        | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+--------------------+-------------+--------+----------+---------+
+| ------------------ | ----------- | ------ | -------- | ------- |
 | name               |             | string | false    |         |
 | group              |             | string | false    |         |
 | version            |             | string | false    |         |
@@ -519,18 +417,15 @@ vela show kustomize-json-patch
 | namespace          |             | string | false    |         |
 | annotationSelector |             | string | false    |         |
 | labelSelector      |             | string | false    |         |
-+--------------------+-------------+--------+----------+---------+
 
 
-### patch
-+-------+-------------+--------+----------+---------+
+##### patch
+
 | NAME  | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+-------+-------------+--------+----------+---------+
+| ----- | ----------- | ------ | -------- | ------- |
 | path  |             | string | true     |         |
 | op    |             | string | true     |         |
 | value |             | string | false    |         |
-+-------+-------------+--------+----------+---------+
-```
 
 ### Examples
 
@@ -568,25 +463,16 @@ kustomize-strategy-merge trait provide strategy merge patch for kustomize compon
 
 ### Parameters
 
-```shell
-vela show kustomize-json-patch
-```
-
-```shell
-# Properties
-+-----------------------+-----------------------------------------------------------+---------------------------------------------------+----------+---------+
 |         NAME          |                        DESCRIPTION                        |                       TYPE                        | REQUIRED | DEFAULT |
-+-----------------------+-----------------------------------------------------------+---------------------------------------------------+----------+---------+
+| --------------------- | --------------------------------------------------------- | ------------------------------------------------- | -------- | ------- |
 | patchesStrategicMerge | a list of strategicmerge, defined as inline yaml objects. | [[]patchesStrategicMerge](#patchesStrategicMerge) | true     |         |
-+-----------------------+-----------------------------------------------------------+---------------------------------------------------+----------+---------+
 
 
-## patchesStrategicMerge
+#### patchesStrategicMerge
 +-----------+-------------+--------------------------------------------------------+----------+---------+
 |   NAME    | DESCRIPTION |                          TYPE                          | REQUIRED | DEFAULT |
 +-----------+-------------+--------------------------------------------------------+----------+---------+
 | undefined |             | map[string]{null|bool|string|bytes|{...}|[...]|number} | true     |         |
-```
 
 ### Examples
 
@@ -624,7 +510,6 @@ Service binding trait will bind data from Kubernetes `Secret` to the application
 * worker
 * task
 * cron-task
-
 
 ### Parameters
 
@@ -739,8 +624,6 @@ The `sidecar` trait allows you to attach a sidecar container to the component.
 
 ### Parameters
 
-```console
-# Properties
 +---------+-----------------------------------------+-----------------------+----------+---------+
 |  NAME   |               DESCRIPTION               |         TYPE          | REQUIRED | DEFAULT |
 +---------+-----------------------------------------+-----------------------+----------+---------+
@@ -750,15 +633,12 @@ The `sidecar` trait allows you to attach a sidecar container to the component.
 | volumes | Specify the shared volume path          | [[]volumes](#volumes) | false    |         |
 +---------+-----------------------------------------+-----------------------+----------+---------+
 
-
 ## volumes
-+-----------+-------------+--------+----------+---------+
+
 |   NAME    | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+-----------+-------------+--------+----------+---------+
+| --------- | ----------- | ------ | -------- | ------- |
 | name      |             | string | true     |         |
 | path      |             | string | true     |         |
-+-----------+-------------+--------+----------+---------+
-```
 
 ### Examples
 
