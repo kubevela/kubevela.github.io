@@ -159,7 +159,7 @@ To run vela-core locally for debugging with kubevela installed in the remote clu
   ```shell
   Internal error occurred: failed calling webhook 'validating.core.oam.dev.v1beta1.applications': Post "https://vela-core-webhook.vela-system.svc:443/validating-core-oam-dev-v1beta1-applications?timeout=10s"
   ```
-- Finally, pulling the repository of KubeVela and debugging the code with breakpoints.
+- Finally, you can use the commands in the above [Build](#build) and [Testing](#Testing) sections, such as `make run`, to code and debug in your local machine.
 
 ## Run VelaUX Locally
 
