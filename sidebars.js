@@ -229,6 +229,7 @@ module.exports = {
         },
         'end-user/components/cloud-services/cloud-resources-list',
         'reference/ui-schema',
+        'reference/topology-rule',
         'reference/user-improvement-plan',
         {
           label: 'VelaUX API Doc',
