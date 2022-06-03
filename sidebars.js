@@ -100,11 +100,11 @@ module.exports = {
             'platform-engineers/system-operation/bootstrap-parameters',
             'platform-engineers/advanced-install',
             'platform-engineers/system-operation/vela-cli-image',
-            'platform-engineers/system-operation/1.2.5-upgrade-practice'
+            'platform-engineers/system-operation/migration-from-old-version'
           ],
         },
         {
-          'User management': [
+          'User Management': [
             'how-to/dashboard/user/user',
             'tutorials/sso',
           ],
@@ -119,13 +119,13 @@ module.exports = {
           ],
         },
         {
-          'Manage resource': [
+          'Cluster Management': [
             'platform-engineers/system-operation/managing-clusters',
             'how-to/dashboard/target/overview',
           ],
         },
         {
-          'Manage integration configs': [
+          'Manage Config of Integration': [
             'how-to/dashboard/config/dex-connectors',
             'how-to/dashboard/config/helm-repo',
           ],
@@ -133,6 +133,12 @@ module.exports = {
         'how-to/cli/addon/addon',
         'platform-engineers/system-operation/observability',
         'platform-engineers/system-operation/performance-finetuning',
+        {
+          'UX Customization': [
+            'reference/ui-schema',
+            'reference/topology-rule',
+          ],
+        },
       ],
     },
     {
@@ -221,6 +227,7 @@ module.exports = {
           items: [
             'reference/addons/overview',
             'reference/addons/velaux',
+            'reference/addons/rollout',
             'reference/addons/fluxcd',
             'reference/addons/terraform',
             'reference/addons/ai',
@@ -228,8 +235,6 @@ module.exports = {
           ],
         },
         'end-user/components/cloud-services/cloud-resources-list',
-        'reference/ui-schema',
-        'reference/topology-rule',
         'reference/user-improvement-plan',
         {
           label: 'VelaUX API Doc',
