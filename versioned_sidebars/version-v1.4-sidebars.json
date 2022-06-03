@@ -532,6 +532,10 @@
         },
         {
           "type": "doc",
+          "id": "version-v1.4/reference/topology-rule"
+        },
+        {
+          "type": "doc",
           "id": "version-v1.4/reference/user-improvement-plan"
         },
         {
