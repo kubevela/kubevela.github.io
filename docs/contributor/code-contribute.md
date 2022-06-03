@@ -151,6 +151,16 @@ Start to test.
 make e2e-test
 ```
 
+### Debugging Locally with Remote KubeVela Environment
+
+To run vela-core locally for debugging with kubevela installed in the remote cluster:
+- Firstly, scaling the replicas of `kubevela-vela-core` to 0 for leader election of `controller-manager`, e.g `kubectl scale deploy -n vela-system kubevela-vela-core --replicas=0`.
+- Secondly, removing the `WebhookConfiguration`, otherwise an error will be reported when applying your application using `vela-cli` or `kubectl`.
+  ```shell
+  Internal error occurred: failed calling webhook 'validating.core.oam.dev.v1beta1.applications': Post "https://vela-core-webhook.vela-system.svc:443/validating-core-oam-dev-v1beta1-applications?timeout=10s"
+  ```
+- Finally, you can use the commands in the above [Build](#build) and [Testing](#Testing) sections, such as `make run`, to code and debug in your local machine.
+
 ## Run VelaUX Locally
 
 VelaUX is the UI console of KubeVela, it's also an addon including apiserver code in `kubevela` repo and the frontend code in `velaux` repo.
