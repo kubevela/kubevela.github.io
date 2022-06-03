@@ -11,6 +11,14 @@ The component supported for rollout is:
 
 ## How to
 
+### Enable the rollout addon
+
+Before using this trait you must enable the `rollout` addon by this command.
+
+```shell
+vela addon enable rollout
+```
+
 ### First Deployment
 
 Apply the Application YAML below which includes a webservice-type workload with Rollout Trait, and [control version](../../end-user/version-control)
@@ -249,7 +257,9 @@ spec:
             targetSize: 7
 EOF
 ```
+
 This Rollout Trait represents it will scale workload up to 7. You also can set every batch's number by setting `rolloutBatches`.
+Notice: A known issue exists if you scale up/down the workload twice or more times by not setting the `rolloutBatches`.So please set the `rolloutBatches` when scale up/down.
 
 Check the status after expansion has been succeed.
 ```shell

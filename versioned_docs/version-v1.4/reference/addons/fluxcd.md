@@ -1,5 +1,5 @@
 ---
-title: FluxCD GitOps
+title: FluxCD
 ---
 
 This addon is built based [FluxCD](https://fluxcd.io/)
@@ -16,7 +16,6 @@ The following definitions will be enabled after the installation of fluxcd addon
 
 |DEFINITION NAME                         |DEFINITION TYPE           |DEFINITION DESCRIPTION|
 |    :----:   |          :----: | ---|
-|config-helm-repository                  |ComponentDefinition       |Config information to authenticate helm chart repository|
 |helm                                    |ComponentDefinition       |helps to deploy a helm chart from git repo, helm repo or S3 compatible bucket|
 |kustomize                               |ComponentDefinition       |helps to deploy a kustomize style artifact and GitOps capability to watch changes from git repo or image registry|
 |kustomize-json-patch                    |TraitDefinition           |A list of JSON6902 patch to selected target|
@@ -56,7 +55,7 @@ The following definitions will be enabled after the installation of fluxcd addon
 
 | Parameters     | Description                                                                                                                                           | Example                     |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| provider       | optional, Git branch, master by default                                                                                                               | your-branch                 |
+| branch      | optional, Git branch, master by default                                                                                                               | your-branch                 |
 
 
 #### Example
@@ -132,7 +131,7 @@ spec:
 
 | Parameters     | Description                                                                                                                                           | Example                     |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| repoType       | required, The value of the Git. To indicate that kustomize configuration comes from the Git repository                                                | oss                         |
+| repoType       | required, indicates the type of repository, should be "helm","git" or "oss".                                                                          | oss                         |
 | pullInterval   | optional, Synchronize with Git repository, and the time interval between tuning helm release. The default value is 5m (5 minutes）                    | 10m                         |
 | url            | required, bucket's endpoint, no need to fill in with scheme                                                                                           | oss-cn-beijing.aliyuncs.com |
 | secretRef      | optional, Save the name of a Secret, which is the credential to read the bucket. Secret contains accesskey and secretkey fields                       | sec-name                    |
@@ -172,7 +171,6 @@ spec:
 #### Example
 
 1. If your kustomize style artifact is stored in oss, you can create application by flowing these steps:
-
 
 (Optional)If your OSS bucket needs identity verification, create a Secret first:
 

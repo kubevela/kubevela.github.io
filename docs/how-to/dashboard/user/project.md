@@ -1,5 +1,5 @@
 ---
-title: Project management
+title: Project Management
 ---
 
 Project provides a logical separation of applications、environments and delivery targets, this is helpful when VelaUX is used by multiple teams. Project can provide the following features:

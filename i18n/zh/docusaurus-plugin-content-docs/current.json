@@ -207,11 +207,11 @@
     "message": "触发器管理",
     "description": "通过 Dashboard 对应用触发器的管理操作说明"
   },
-  "sidebar.docs.category.Manage integration configs": {
+  "sidebar.docs.category.Manage Config of Integration": {
     "message": "集成配置管理",
     "description": "外部系统集成相关配置的管理说明"
   },
-  "sidebar.docs.category.Manage resource": {
+  "sidebar.docs.category.Cluster Management": {
     "message": "资源管理",
     "description": "管理集群和交付目标等资源"
   },
@@ -283,7 +283,7 @@
     "message": "开发者手册",
     "description": "developer guide for sidebar"
   },
-  "sidebar.docs.category.User management": {
+  "sidebar.docs.category.User Management": {
     "message": "用户管理",
     "description": "User management for sidebar"
   },
