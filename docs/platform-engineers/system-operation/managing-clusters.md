@@ -1,21 +1,20 @@
 ---
-title: Managing Clusters
+title: Lifecycle of Managed Cluster
 ---
 
-## Manage the cluster via UI
+This section will introduce the lifecycle of managed clusters.
 
-* Support connecting the exist kubernetes cluster.
-* Support connecting the ACK cluster.
+## Create clusters
 
-Users with cluster management permissions can enter the cluster management page to add or detach managed clusters.
+KubeVela can generally adopt any Kubernetes cluster as managed cluster, the control plane won't install anything to your managed cluster unless you have enable any addons.
 
-![cluster-management](https://static.kubevela.net/images/1.3/cluster-management.jpg)
+If you don't have any clusters, you can refer to [VelaD](https://github.com/kubevela/velad) to create one:
 
-For connecting the ACK clusters, the platform will save some cloud info, Region, VPC, Dashboard Address, etc. When users use the cluster to create a Target, the cloud information is automatically assigned to the Target, which the cloud service applications can use.
+```
+velad install --name <cluster-name> --cluster-only
+```
 
-## Manage the cluster via CLI
-
-### vela cluster join
+## Join Clusters
 
 You can simply join an existing cluster into KubeVela by specifying its KubeConfig as below
 
@@ -32,7 +31,7 @@ $ vela cluster join hangzhou-1.kubeconfig --name hangzhou-1
 $ vela cluster join hangzhou-2.kubeconfig --name hangzhou-2
 ```
 
-### vela cluster list
+## List clusters
 
 After clusters joined, you could list all clusters managed by KubeVela.
 
@@ -47,7 +46,7 @@ cluster-hangzhou-2      X509Certificate <ENDPOINT_HANGZHOU_2>   true
 
 > By default, the hub cluster where KubeVela locates is registered as the `local` cluster. You can use it like a managed cluster in spite that you cannot detach it or modify it.
 
-### label your cluster
+## Label your cluster
 
 You can also give labels to your clusters, which helps you select clusters for deploying applications.
 
@@ -62,7 +61,7 @@ cluster-hangzhou-1      X509Certificate <ENDPOINT_HANGZHOU_1>   true            
 cluster-hangzhou-2      X509Certificate <ENDPOINT_HANGZHOU_2>   true            region=hangzhou
 ```
 
-### vela cluster detach
+## Detach your cluster 
 
 You can also detach a cluster if you do not want to use it anymore.
 
@@ -72,10 +71,14 @@ $ vela cluster detach beijing
 
 > It is dangerous to detach a cluster that is still in-use. But if you want to do modifications to the held cluster credential, like rotating certificates, it is possible to do so. 
 
-### vela cluster rename
+## Rename a cluster 
 
 This command can rename cluster managed by KubeVela.
 
 ```shell script
 $ vela cluster rename cluster-prod cluster-production
 ```
+
+## Next
+
+- Manage cluster with [UI console](../../how-to/dashboard/target/overview).
