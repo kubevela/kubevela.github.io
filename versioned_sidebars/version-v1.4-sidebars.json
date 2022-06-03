@@ -207,13 +207,17 @@
             {
               "type": "doc",
               "id": "version-v1.4/platform-engineers/system-operation/vela-cli-image"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.4/platform-engineers/system-operation/migration-from-old-version"
             }
           ]
         },
         {
           "collapsed": true,
           "type": "category",
-          "label": "User management",
+          "label": "User Management",
           "items": [
             {
               "type": "doc",
@@ -255,7 +259,7 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "Manage resource",
+          "label": "Cluster Management",
           "items": [
             {
               "type": "doc",
@@ -270,7 +274,7 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "Manage integration configs",
+          "label": "Manage Config of Integration",
           "items": [
             {
               "type": "doc",
@@ -293,6 +297,21 @@
         {
           "type": "doc",
           "id": "version-v1.4/platform-engineers/system-operation/performance-finetuning"
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "UX Customization",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.4/reference/ui-schema"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.4/reference/topology-rule"
+            }
+          ]
         }
       ]
     },
@@ -506,6 +525,10 @@
             },
             {
               "type": "doc",
+              "id": "version-v1.4/reference/addons/rollout"
+            },
+            {
+              "type": "doc",
               "id": "version-v1.4/reference/addons/fluxcd"
             },
             {
@@ -525,14 +548,6 @@
         {
           "type": "doc",
           "id": "version-v1.4/end-user/components/cloud-services/cloud-resources-list"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.4/reference/ui-schema"
-        },
-        {
-          "type": "doc",
-          "id": "version-v1.4/reference/topology-rule"
         },
         {
           "type": "doc",

@@ -1,10 +1,26 @@
 ---
-title: Manage Targets
+title: Manage Clusters with UX
 ---
 
-To deploy application components into different places, VelaUX provides **Target** for user to manage their deploy destinations like clusters or namespaces.
+> This docs requires you to have [velaux](../../../reference/addons/velaux) installed.
 
-> This document only apply to UI.
+
+## Manage Clusters
+
+Currently, VelaUX support manage two kinds of clusters:
+
+* Support connecting the exist kubernetes cluster.
+* Support connecting the Alibaba ACK cluster.
+
+Users with cluster management permissions can enter the cluster management page to add or detach managed clusters.
+
+![cluster-management](https://static.kubevela.net/images/1.3/cluster-management.jpg)
+
+For connecting the ACK clusters, the platform will save some cloud info, Region, VPC, Dashboard Address, etc. When users use the cluster to create a Target, the cloud information is automatically assigned to the Target, which the cloud service applications can use.
+
+## Manage Delivery Target
+
+To deploy application components into different places, VelaUX provides a new concept **Delivery Target** for user to manage their deploy destinations not only clusters or namespaces, but also cloud provider information such as region, vpc and so on.
 
 ## Cluster
 
@@ -34,6 +50,8 @@ Now you can use the environent which was bound to the targets just created.
 
 ![bind-env-to-app](../../../resources/bind-env-to-app.jpg)
 
-In the newly created application, you will see two targets contained in the workflow, which means when you deploy this application, the component will be dispatch to both targets.
+In the newly created application, you will see two targets contained in the workflow.
 
 ![app-with-target](../../../resources/app-with-target.jpg)
+
+After you deployed this application, the component will be dispatch to both targets for specific namespace of clusters.
