@@ -11,7 +11,7 @@
     "message": "核心概念",
     "description": "The label for Core Concepts in sidebar docs"
   },
-  "sidebar.docs.category.Learning CUE": {
+  "sidebar.docs.category.CUE in KubeVela": {
     "message": "CUE 语言",
     "description": "The label for category Learning CUE in sidebar docs"
   },
@@ -35,13 +35,13 @@
     "message": "实践实验室",
     "description": "The label for category Hands-on Lab in sidebar docs"
   },
-  "sidebar.docs.category.Appfile": {
-    "message": "Appfile",
-    "description": "The label for category Appfile in sidebar docs"
+  "sidebar.docs.category.Authentication and Authorization": {
+    "message": "认证和授权",
+    "description": "The label for category Authentication and Authorization in sidebar docs"
   },
-  "sidebar.docs.category.Roadmap": {
-    "message": "路线规划",
-    "description": "KubeVela 未来的发展计划"
+  "sidebar.docs.category.Conventions": {
+    "message": "开发规约",
+    "description": "KubeVela developer Conventions"
   },
   "sidebar.docs.category.Application Deployment": {
     "message": "Application Deployment",
@@ -98,6 +98,10 @@
   "sidebar.docs.category.Workflow System": {
     "message": "工作流系统",
     "description": "The label for category Workflow System in sidebar docs"
+  },
+  "sidebar.docs.category.Patch and Override": {
+    "message": "配置覆盖",
+    "description": "The label for category Patch and Override in sidebar docs"
   },
   "sidebar.docs.category.Operator Manual": {
     "message": "运维手册",
@@ -159,8 +163,8 @@
     "message": "调试指南",
     "description": "The label for category Debugging in sidebar docs"
   },
-  "sidebar.docs.category.Extension": {
-    "message": "平台扩展",
+  "sidebar.docs.category.Contribute Extension": {
+    "message": "贡献平台扩展",
     "description": "平台扩展参考文档"
   },
   "sidebar.docs.category.Simple Template": {
@@ -203,16 +207,16 @@
     "message": "触发器管理",
     "description": "通过 Dashboard 对应用触发器的管理操作说明"
   },
-  "sidebar.docs.category.Manage integration configs": {
+  "sidebar.docs.category.Manage Config of Integration": {
     "message": "集成配置管理",
     "description": "外部系统集成相关配置的管理说明"
   },
-  "sidebar.docs.category.Manage resource": {
+  "sidebar.docs.category.Cluster Management": {
     "message": "资源管理",
     "description": "管理集群和交付目标等资源"
   },
-  "sidebar.docs.category.Built-in Addons": {
-    "message": "内置插件",
+  "sidebar.docs.category.Official Addons": {
+    "message": "官方插件",
     "description": "内置插件说明"
   },
   "sidebar.docs.category.Cloud Resources": {
@@ -251,13 +255,9 @@
     "message": "其他高级功能",
     "description": "其他高级功能"
   },
-  "sidebar.docs.category.Core Concepts": {
-    "message": "核心概念",
-    "description": "Basic information"
-  },
-  "sidebar.docs.category.Deploy with more workload type": {
-    "message": "更多组件类型",
-    "description": "非常用的组件类型"
+  "sidebar.docs.category.Artifacts": {
+    "message": "交付制品",
+    "description": "多样化交付制品"
   },
   "sidebar.docs.category.User Guide": {
     "message": "用户手册",
@@ -274,5 +274,36 @@
   "sidebar.docs.category.How-to manage the applications": {
     "message": "应用基础管理",
     "description": "提供基础管理能力说明"
+  },
+  "sidebar.docs.category.CI Integration": {
+    "message": "CI 集成",
+    "description": "CI 集成"
+  },
+  "sidebar.docs.category.Developer Guide": {
+    "message": "开发者手册",
+    "description": "developer guide for sidebar"
+  },
+  "sidebar.docs.category.User Management": {
+    "message": "用户管理",
+    "description": "User management for sidebar"
+  },
+  "sidebar.docs.category.Advanced Installation": {
+    "message": "高级安装",
+    "description": "Advanced Installation for sidebar"
+  },
+  "sidebar.docs.category.Helm Chart CD": {
+    "message": "Helm Chart 交付"
+  },
+  "sidebar.docs.category.Container Image CD": {
+    "message": "容器镜像交付"
+  },
+  "sidebar.docs.category.Cloud Resources CD": {
+    "message": "云资源交付"
+  },
+  "sidebar.docs.category.Kubernetes Manifest CD": {
+    "message": "Kubernetes 资源交付"
+  },
+  "sidebar.docs.category.General CD Features": {
+    "message": "通用功能"
   }
 }
