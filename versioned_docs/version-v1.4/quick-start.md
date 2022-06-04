@@ -185,11 +185,9 @@ After finished [the installation of VelaUX](./install#2-install-velaux), you can
 vela port-forward addon-velaux -n vela-system 8080:80
 ```
 
-* Check the password by:
+* VelaUX need authentication, default username is `admin` and the password is `VelaUX12345`.
 
-```
-vela logs -n vela-system --name apiserver addon-velaux | grep "initialized admin username"
-```
+It requires you to override with a new password for the first login, please make sure to remember the new password.
 
 * Check the resources deployed
 
