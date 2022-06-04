@@ -1,5 +1,5 @@
 ---
-title: Customize Resource Topology
+title: Resource Topology
 ---
 
 The resource topology graph of VelaUX can automatically show the resource tree of an application for any workloads including Helm charts and cloud resources.
