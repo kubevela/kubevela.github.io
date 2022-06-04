@@ -108,7 +108,7 @@ $ vela addon registry delete experimental
 Successfully delete an addon registry experimental
 ```
 
-### Enable Addon offline
+### Air-Gapped Installation for Addon
 
 For some reason, if your cluster network cannot request the official addon registry you can enable an addon with a local dir. eg:
 

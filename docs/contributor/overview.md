@@ -2,13 +2,20 @@
 title: Introduction
 ---
 
+The developer guide including two parts:
+
+1. The first part is [contribution guide](#contribution-guide) that introduces how to participate and contribute to the community.
+2. The second part is [extension guide](#extension-guide) that introduces how to extend KubeVela, you are also very welcome to contribute your extension to the community.
+
+## Contribution Guide
+
 KubeVela project is initialized and maintained by the cloud native community since day 0 with [bootstrapping contributors from 8+ different organizations](https://github.com/kubevela/community/blob/main/OWNERS.md#bootstrap-contributors). We intend for KubeVela to have an open governance since the very beginning and donate the project to neutral foundation as soon as it's released. 
 
 To help us create a safe and positive community experience for all, we require all participants adhere to the CNCF Community [Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md).
 
-This document is a guide to help you through the process of contributing to KubeVela.
+This part is a guide to help you through the process of contributing to KubeVela.
 
-## Become a contributor
+### Become a contributor
 
 You can contribute to KubeVela in several ways including code and non-code contributions,
 we appreciate every effort you contribute to the community. Here are some examples:
@@ -34,18 +41,32 @@ Unsure where to begin contributing to KubeVela codebase? Start by browsing issue
 
 Learn the [Release Process And Cadence](./release-process) to know when your code changes will be released.
 
-
-## Become a community member
+### Become a community member
 
 If you're interested to become a community member or learn more about the governance, please check the [community membership](https://github.com/kubevela/community/blob/main/community-membership.md) for details.
 
+### Contribute to other community projects
 
-## Contribute Addons and related projects
-
-* [Build Your Own Addon](../platform-engineers/addon/intro)
-* [Addon Repository](https://github.com/kubevela/catalog)
 * [VelaUX Developer Guide](https://github.com/kubevela/velaux/blob/main/CONTRIBUTING.md)
 * [Terraform Controller Developer Guide](https://github.com/oam-dev/terraform-controller/blob/master/CONTRIBUTING.md)
 
+
+## Extension Guide
+
+This part is a guide to help you extend capabilities for KubeVela. Make sure you have already understand the [**core concepts**](../getting-started/core-concept) before you start.
+
+### Learn CUE with KubeVela
+
+KubeVela use CUE as it's core engine, and you can use CUE and CRD controller to glue almost every infrastructure capabilities.
+
+- [Learn CUE in KubeVela](../platform-engineers/cue/basic)
+- Learn what is [CRD Controller](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) in Kubernetes
+
+### Extend Addons
+
+Building or installing addons is the most important way to extend KubeVela, there's a growing [catalog](https://github.com/kubevela/catalog) of addons you can choose for installation.
+
+* [Build Your Own Addon](../platform-engineers/addon/intro)
+* [Extend Cloud Resources by Addon](../platform-engineers/addon/terraform)
 
 Enjoy coding and collaboration in OSS world!
