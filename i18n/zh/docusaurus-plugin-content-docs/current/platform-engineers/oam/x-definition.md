@@ -1,5 +1,5 @@
 ---
-title: 模块定义（X-Definition）
+title: 模块定义（Definition）
 ---
 
 KubeVela 是完全可编程的，它可以轻松的根据你的需求实现原地定制和扩展。

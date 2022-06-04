@@ -305,5 +305,8 @@
   },
   "sidebar.docs.category.General CD Features": {
     "message": "通用功能"
+  },
+  "sidebar.docs.category.UX Customization": {
+    "message": "定制 UI"
   }
 }

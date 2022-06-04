@@ -23,7 +23,7 @@ Install auto-scaler trait controller with helm
     ```shell script
     helm install --create-namespace -n vela-system autoscalertrait oam.catalog/autoscalertrait
 
-Autoscale depends on metrics server, please [enable it in your Kubernetes cluster](../references/devex/faq#autoscale-how-to-enable-metrics-server-in-various-kubernetes-clusters) at the beginning.
+Autoscale depends on metrics server, please enable it in your Kubernetes cluster at the beginning.
 
 > Note: autoscale is one of the extension capabilities [installed from cap center](../cap-center),
 > please install it if you can't find it in `vela traits`.
