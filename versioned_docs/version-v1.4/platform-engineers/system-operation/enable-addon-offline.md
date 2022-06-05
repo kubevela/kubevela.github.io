@@ -1,27 +1,27 @@
 ---
-title: Enable Addon without Internet Access
+title: Air-gapped Installation for Addon
 ---
 
-## Enable without Internet
+If your environments don't have network access to `https://addons.kubevela.net` or `https://github.com/kubevela/catalog`, this guide will demonstrate how to install in the air-gapped environment.
 
-If your environments don't have access to `https://addons.kubevela.net` or `https://github.com/kubevela/catalog`, you should git clone the repo `https://github.com/kubevela/catalog/tree/master/addons` locally. You can specify a local addon directory when enable an addon for installation.
-Before installing an addon, you should check if the addon contains any container images or other sub helm charts in it. If so, the addon also can't be installed well.  You can follow these steps to make it success.
+Generally, you should git clone the repo which contained the addon configuration, you can specify a local addon directory when enable an addon for installation. While you should make sure all container images or helm charts are replaced by your private registry.
 
-1. Git clone [the catalog repo](https://github.com/kubevela/catalog) to download these addon files.You can find all official addons in subdirectory `./addons/` and experimental addons in subdirectory `./experimental/addons`.
+You can follow these steps as an example.
+
+1. Git clone [the catalog repo](https://github.com/kubevela/catalog) to download these addon files. You can find all official addons in subdirectory `./addons/` and experimental addons in subdirectory `./experimental/addons`.
 
 ```yaml
 git clone https://github.com/kubevela/catalog
 ```   
 
-2. Sync the container images relied on by addon to your own image repository. 
-   For example, you want sync the image of the helm controller image of fluxcd addon. 
+2. Sync the dependency container images in the addon to your private image registry, the sync command can be as following: 
    
 ```yaml
 $ docker pull fluxcd/helm-controller:v0.11.1
 $ docker push <your repo url>/fluxcd/helm-controller:v0.11.1
 ```
 
-3. Parts of addons maybe rely on some helm charts such as terraform addon. You should sync these helm charts to your own chart repository.
+3. Parts of addons may rely on helm charts, e.g. `terraform addon`. You should sync these helm charts to your private chart registry.
 
 ```yaml
 $ helm repo add vela-charts https://charts.kubevela.net/addons
@@ -30,18 +30,20 @@ $ helm pull vela-charts/terraform-controller --version 0.3.5
 $ helm push terraform-controller-0.3.5.tgz <your charts repo url>
 ```
 
-You can read this [docs](https://helm.sh/docs/topics/chart_repository/) to get knowledge how to build your own helm repo.
+You can read the [helm official docs](https://helm.sh/docs/topics/chart_repository/) to learn more about how to build your own helm registry.
 
-4. Modify the values of addon by referring to your own  image/chart repository. You can find all relied on images/charts in the files of subdirectory `resources/` and modify them.
-   For example, you can modify the fluxcd addon files `addons/fluxcd/resources/deployment/helm-controller.yaml` the deployment object's  field `spec.sepc.containers[0].image` to your own image repo.We will introduce what images/helm charts needed to sync for each addon below.
+4. Modify the values of addon by referring to your own image/chart registry. You can find all images/charts dependency in the files of subdirectory `resources/`, just modify the configuration.
+   For example, you can modify the fluxcd addon files `addons/fluxcd/resources/deployment/helm-controller.yaml` the deployment object's field `spec.sepc.containers[0].image` to your own image repo.
 
 5. Use `vela cli` to enable an addon with specify a local addon dir to install offline.
 
 ```yaml
-$ vela addon enable <dir>
+$ vela addon enable /your/local/addon/directory
 ```
 
 ## Images or helm charts need to sync
+
+Here's a list about images or helm charts of all official addons that should be synced for air-gapped installation.
 
 ### 1. FluxCD
 
