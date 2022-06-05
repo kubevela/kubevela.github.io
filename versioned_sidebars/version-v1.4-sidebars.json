@@ -210,6 +210,10 @@
             },
             {
               "type": "doc",
+              "id": "version-v1.4/platform-engineers/system-operation/enable-addon-offline"
+            },
+            {
+              "type": "doc",
               "id": "version-v1.4/platform-engineers/system-operation/migration-from-old-version"
             }
           ]

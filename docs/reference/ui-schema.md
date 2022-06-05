@@ -1,5 +1,5 @@
 ---
-title: Customize UX of Definition
+title: UX of Definition
 ---
 
 VelaUX uses the UI-Schema specification for the extension of components, workflow steps, and operation and maintenance feature resources, in the case of variable input parameters, to achieve a more native UI experience.

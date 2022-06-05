@@ -1,5 +1,5 @@
 ---
-title: Version Migration
+title: Migrate from Old Versions
 ---
 
 This doc aims to provide a migration guide from old versions to the new ones without disturb the running business. However scenarios are different from each other, we strongly recommend you to test the migration with a simulation environment before real migration for your production.

@@ -12,9 +12,8 @@ KubeVela is programmable, you have the following ways to discover and extend the
 
 * Get more capabilities from [installing addons](../../how-to/cli/addon/addon), you can refer to [the overview of official addons](../../reference/addons/overview) for more details.
 
-* Extend KubeVela by yourself
+* Develop and Extend KubeVela by yourself
+  - Read the [developer guide](../../contributor/overview) to learn how to contribute and extend capabilities for KubeVela.
+  - KubeVela use CUE as it's core engine, [learn CUE in KubeVela](../../platform-engineers/cue/basic) and try to extend with CUE configurations.
+  - [Building your own addons](../../platform-engineers/addon/intro) for extension, you can also [extend cloud resources by addon](../../platform-engineers/addon/terraform).
 
-  * Read [how to build definitions](../../platform-engineers/cue/definition-edit) to build your own capability from existing ones.
-  * [Build your own capability from scratch](../../platform-engineers/cue/advanced)
-    and learn more features about how to [define custom components](../../platform-engineers/components/custom-component).
-  * [Build your own addons](../../platform-engineers/addon/intro).  

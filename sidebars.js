@@ -100,6 +100,7 @@ module.exports = {
             'platform-engineers/system-operation/bootstrap-parameters',
             'platform-engineers/advanced-install',
             'platform-engineers/system-operation/vela-cli-image',
+            'platform-engineers/system-operation/enable-addon-offline',
             'platform-engineers/system-operation/migration-from-old-version'
           ],
         },
