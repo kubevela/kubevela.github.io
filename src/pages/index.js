@@ -5,6 +5,7 @@ import Link from '@docusaurus/Link';
 import features from '../data/features'
 import Translate, { translate } from '@docusaurus/Translate';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import GitHubButton from 'react-github-btn';
 import styles from './styles.module.css';
@@ -48,7 +49,14 @@ export default function Home() {
       <header className={clsx('hero', styles.hero)}>
         <div className="container text--center">
           <div className={styles.heroLogoWrapper}>
-            <img className={styles.heroLogo} src={useBaseUrl('img/logo.svg')} alt="Kubevela Logo" />
+            <ThemedImage
+                alt="Kubevela Logo"
+                className={styles.heroLogo}
+                sources={{
+                  light: useBaseUrl('img/logo.svg'),
+                  dark: useBaseUrl('img/logoDark.svg'),
+                }}
+            />;
           </div>
           <h2 className={clsx('hero__title', styles.heroTitle)}>{siteConfig.title}</h2>
           <GitHubButton
