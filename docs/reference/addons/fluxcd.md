@@ -28,7 +28,7 @@ The following definitions will be enabled after the installation of fluxcd addon
 
 | Parameters      | Description                                                                                                                                                                                                                                                                                                                                                              | Example                            |
 | --------------- | ----------- | ---------------------------------- |
-| repoType        | required, indicates the type of repository, should be "helm","git" or "oss".                                                                                                                                                                                                                                                                                             | Helm                               |
+| repoType        | required, indicates the type of repository, should be "helm","git", "oss", or "oci".                                                                                                                                                                                                                                                                                             | Helm                               |
 | pullInterval    | optional, the interval at which to check for repository/bucket and release updates, default to 5m                                                                                                                                                                                                                                                                        | 5m                                 |
 | url             | required, the Git or Helm repository URL, OSS endpoint, accept HTTP/S or SSH address as git url                                                                                                                                                                                                                                                                          | https://charts.bitnami.com/bitnami |
 | secretRef       | optional, the name of the Secret object that holds the credentials required to pull the repo. The username and password fields must be included in the HTTP/S basic authentication Secret. For TLS the secret must contain a certFile and keyFile, and/or caCert fields. For TLS authentication, the secret must contain a certFile / keyFile field and/or caCert field. | sec-name                           |
@@ -83,6 +83,27 @@ spec:
           replica:
             persistence:
               size: 16Gi
+```
+
+If your helm chart is stored in OCI registry, you can create the application like this:
+
+***Note***: Please guarantee your fluxcd addon version >= v1.3.1
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: oci-app
+  namespace: default
+spec:
+  components:
+    - name: test-oci
+      type: helm
+      properties:
+        repoType: "oci"
+        url: oci://ghcr.io/stefanprodan/charts
+        chart: podinfo
+        version: '6.1.*'
 ```
 
 If your helm chart is stored in OSS, you can create the application like this:
