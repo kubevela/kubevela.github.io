@@ -8,7 +8,7 @@ Generally, you should git clone the repo which contained the addon configuration
 
 You can follow these steps as an example.
 
-1. Git clone [the catalog repo](https://github.com/kubevela/catalog) to download these addon files. You can find all official addons in subdirectory `./addons/` and experimental addons in subdirectory `./experimental/addons`.
+1. Git clone [the catalog repo](https://github.com/kubevela/catalog) to download these addon files. You can find all community addons in subdirectory `./addons/` and experimental addons in subdirectory `./experimental/addons`.
 
 ```yaml
 git clone https://github.com/kubevela/catalog
@@ -43,7 +43,7 @@ $ vela addon enable /your/local/addon/directory
 
 ## Images or helm charts need to sync
 
-Here's a list about images or helm charts of all official addons that should be synced for air-gapped installation.
+Here's a list about images or helm charts of all community addons that should be synced for air-gapped installation.
 
 ### 1. FluxCD
 
@@ -88,4 +88,4 @@ $ helm pull https://charts.kubevela.net/addons/terraform-controller-0.3.5.tgz
 3. Extract the chart and modify the `values.yaml` change `image.repository` to your own image registry.Then push it to your helm chart museum.
 4. Modify the addon file `terraform/resources/terraform-controller.cue` change `output.properties.url` to your chart museum's url.
 
-Other official addons needn't sync any resources.
+Other community addons needn't sync any resources.
