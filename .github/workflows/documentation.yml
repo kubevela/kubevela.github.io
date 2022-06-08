@@ -55,10 +55,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: "14.x"
-      - uses: webfactory/ssh-agent@v0.5.0
-        with:
-          ssh-private-key: ${{ secrets.GH_PAGES_DEPLOY }}
-      - name: Release to GitHub Pages
+      - name: Build Static Files
         env:
           USE_SSH: true
           GIT_USER: git
