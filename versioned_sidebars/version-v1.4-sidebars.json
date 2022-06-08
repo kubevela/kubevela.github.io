@@ -292,10 +292,6 @@
         },
         {
           "type": "doc",
-          "id": "version-v1.4/how-to/cli/addon/addon"
-        },
-        {
-          "type": "doc",
           "id": "version-v1.4/platform-engineers/system-operation/observability"
         },
         {
@@ -517,7 +513,7 @@
         {
           "collapsed": true,
           "type": "category",
-          "label": "Official Addons",
+          "label": "Community Addons",
           "items": [
             {
               "type": "doc",

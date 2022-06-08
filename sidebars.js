@@ -131,7 +131,6 @@ module.exports = {
             'how-to/dashboard/config/helm-repo',
           ],
         },
-        'how-to/cli/addon/addon',
         'platform-engineers/system-operation/observability',
         'platform-engineers/system-operation/performance-finetuning',
         {
@@ -224,7 +223,7 @@ module.exports = {
         'end-user/workflow/built-in-workflow-defs',
         {
           type: 'category',
-          label: 'Official Addons',
+          label: 'Community Addons',
           items: [
             'reference/addons/overview',
             'reference/addons/velaux',
