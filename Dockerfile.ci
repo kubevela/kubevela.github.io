@@ -1,0 +1,3 @@
+FROM nginx:1.21
+WORKDIR /
+COPY build /usr/share/nginx/html
