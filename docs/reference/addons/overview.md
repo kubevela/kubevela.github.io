@@ -2,7 +2,7 @@
 title: Overview
 ---
 
-There's an official addon registry (https://addons.kubevela.net) maintained by KubeVela team. It contains following addons:
+There's an community addon registry (https://addons.kubevela.net) maintained by KubeVela team. It contains following addons:
 
 * [VelaUX](./velaux): The KubeVela User Experience (UX ) addon. It will launch a dashboard and an APIServer for better user experience.
 * [FluxCD](./fluxcd): Provides capability to deliver helm chart and drive GitOps.
