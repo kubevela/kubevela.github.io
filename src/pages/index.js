@@ -56,7 +56,7 @@ export default function Home() {
                   light: useBaseUrl('img/logo.svg'),
                   dark: useBaseUrl('img/logoDark.svg'),
                 }}
-            />;
+            />
           </div>
           <h2 className={clsx('hero__title', styles.heroTitle)}>{siteConfig.title}</h2>
           <GitHubButton
