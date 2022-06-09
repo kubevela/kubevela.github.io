@@ -2,7 +2,7 @@
 title: Deploy Helm Chart
 ---
 
-This section introduces how you deploy Helm Chart into multi-environments and clusters.
+This section introduces how you deploy Helm Chart.
 
 The typical usage of deploying Helm Chart is to integrate middleware, many from in [bitnami](https://github.com/bitnami/charts) or open-source application tools such as Gitlab, and Jenkins in [Helm Official Repo](https://hub.helm.sh/). KubeVela can help you easily deploy these applications to any managed cluster and manage them.
 
@@ -10,74 +10,46 @@ Starting from here, you will learn to use the KubeVela Addons to install plug-in
 
 ## Before starting
 
-- Choose a Helm Chart you needed. Or in this case, we take [bitnami/redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) as an example.
+- Choose a Helm Chart you want to deploy. In the tutorial, we take [bitnami/redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) as an example.
 - Ensure that the cluster you deliver has a usable default StorageClass. Most of our delivery middleware requires data persistence, and the default StorageClass is needed to allocate PV.
-- Enable the VelaUX addon, If you are only CLI users, go to [Deploy via CLI](#deploy-via-cli)
+- Enable the VelaUX addon for UI console. If you are only CLI users, you can skip to [Deploy via CLI](#deploy-via-cli)
 
 ## Enable fluxcd addon
 
-Enabling Addon should have been experienced in the installation of KubeVela, like installing VelaUX. In this case, you will learn to enable addon in the UI page.
-
-Let's get into the page of `Addon`. This page will automatically list the community Addons that can be installed. They are all from [Official Repo](https://github.com/kubevela/catalog/tree/master/addons). We click `fluxcd` to check the details and status of this addon.
-
-From the details, we can know that:
-
-- Definitions： The extension capabilities provided by the addon may include component, trait, etc. For the fluxcd addon, it provides two component types, `helm` and `kustomize`, among which `helm` is the type we need to pay attention to and use here.
-
-- Readme： Addon description, explain the capabilities and related information.
-
-We can click the `Enable` button. After the fluxcd addon is enabled, it will be installed on all clusters connected to KubeVela, so it will take a certain amount of time.
-
-![fluxcd addon](../resources/addon-fluxcd.jpg)
-
-When the addon is `enabled`, it means that it's ready to. You can start to deploy Helm Chart.
-
-You can also enable the addon via CLI:
+Helm Chart delivery relies on addon in KubeVela, you need to enable `fluxcd` addon before start.
 
 ```shell
 vela addon enable fluxcd
 ```
 
+You can also enable the addon from UI console with more detail information. After `velaux` addon enabled, you can get into the page of `Addon`.
+This page will automatically list the community Addons that can be installed.
+They are all from [Community Repo](https://github.com/kubevela/catalog/tree/master/addons).
+You can check detail information of this addon by clicking the `fluxcd` UI section.
+
+Details will include:
+
+- Definitions: The extension capabilities provided by the addon may include component, trait, etc. For the fluxcd addon, it provides two component types, `helm` and `kustomize`, among which `helm` is the type we need to pay attention to and use here.
+
+- README: Addon description, explain the capabilities and related information.
+
+We can click the `Enable` button. After the fluxcd addon is enabled, it will be installed on all clusters connected to KubeVela, so it will take a certain amount of time.
+
+![fluxcd addon](../resources/addon-fluxcd.jpg)
+
+When the addon status become `enabled`, it means it's ready for helm chart delivery.
+
 ## Creating Redis application
 
-You've must have mastered creating applications through the previous sections. When it comes to creating Redis with Helm Chart, all you need is to select type as `helm`, Then select the Target which has the default StorageClass that provides PV, and at last enter the deployment parameter configuration page.
+After `fluxcd` addon enabled, there's a `helm` definition added, you can check the parameter details by:
 
-![helm app config](../resources/helm-app-config.jpg)
-
-As shown, you need to do the following configuration:
-
-- Repo Type: Git and Helm are supported. In this example, we choose Helm.
-- Repo URL: Fill in the repo address you needed. we type in: https://charts.bitnami.com/bitnami. If you have configured the helm repo in [Integration](../how-to/dashboard/config/helm-repo) you can choose the repo directly.
-- Chart: After fill Helm repo URL, will list all available charts in this field. You can choose one from the list, here we choose: redis.
-- Version: After choosing the helm chart, will list all available versions in this field. Choose one version of this chart, here we choose: 16.8.5.
-- Values: After choosing the version, will list all parameters of this helm Chart. Since we are using ACK cluster in the example, PV has a minimum capacity requirement, 15Gi. In the same way, other parameters can also be configured according to your cluster's status.
-
-After filling in the above parameters, click `Create` to complete the application creation and enter the application configuration page. The following steps will stay the same as you've learned in [Deploy First Application](../quick-start).
-
-## Modify deployment parameters
-
-Clicking the component name, you can open the component configuration page. For the Helm Chart component, we can set the Values configuration options to change the application deployment parameters. the Values configuration options are generated by `values.yaml`, you can set the custom value for every option.
-
-In the VelaUX, the value key format like `replica.persistence.size=15Gi`. they will be converted to YAML value:
-
-```yaml
-values: 
-    replica:
-       persistence:
-          size: 15Gi
+```
+vela show helm
 ```
 
-After modifying the deployment parameters, the workflow of the environment must be executed to make the modified parameters take effect in the specified environment. Due to the existence of Revision, the configuration parameters will be saved in each historical version.
+You can also check the [fluxcd addon](../reference/addons/fluxcd) docs for details.
 
-## Visualize the resources created by Helm Release
-
-For a helm chart, users often don't know what resources they will create, making it difficult to troubleshoot. In VelaUX, users can visualize the resources created by Helm Release. via the resource graph, users could know the relationships between the resources and the status of all resources. Click the `Detail` action button could view the resource YAML.
-
-![resource-graph](https://static.kubevela.net/images/1.4/helm-graph.jpg)
-
-## Deploy via CLI
-
-You can also create the application with the helm component via CLI:
+Let's take the `redis` chart as example, you can deploy by the following application:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -102,15 +74,13 @@ spec:
               size: 16Gi
 ```
 
-Deploy this application：
+Deploy it by：
 
 ```shell
 vela up -f https://kubevela.io/example/applications/app-with-chart-redis.yaml
 ```
 
-> Currently, The application created by CLI will be synced to UI, but it will be readonly.
-
-Next, check the deployment status of the application through `vela status helm-redis`
+Then check the deployment status of the application through `vela status helm-redis`
 
 ```
 About:
@@ -142,4 +112,55 @@ Services:
     No trait applied
 ```
 
+> You can also check the application on UI, application created by CLI will be synced automatically but readonly.
+
+## Deploy Helm Chart from UI Console
+
+The experience on UI console is quite the same with [container image delivery](../tutorials/webservice). When it comes to deploying Helm Chart, all you need is to select type as `helm`.
+
+>The `helm` component type will automatically discovered after fluxcd addon enabled.
+
+Then select the Target which has the default StorageClass that provides PV, and at last enter the deployment parameter configuration page.
+
+![helm app config](../resources/helm-app-config.jpg)
+
+As shown, you need to do the following configuration:
+
+- Repo Type: Git and Helm are supported. In this example, we choose Helm.
+- Repo URL: Fill in the repo address you needed. we type in: https://charts.bitnami.com/bitnami. If you have configured the helm repo in [Integration](../how-to/dashboard/config/helm-repo) you can choose the repo directly.
+- Chart: After fill Helm repo URL, will list all available charts in this field. You can choose one from the list, here we choose: redis.
+- Version: After choosing the helm chart, will list all available versions in this field. Choose one version of this chart, here we choose: 16.8.5.
+- Values: After choosing the version, will list all parameters of this helm Chart. Since we are using ACK cluster in the example, PV has a minimum capacity requirement, 15Gi. In the same way, other parameters can also be configured according to your cluster's status.
+
+After filling in the above parameters, click `Create` to complete the application creation and enter the application configuration page. The following steps will stay the same as you've learned in [Deploy First Application](../quick-start).
+
+### Modify deployment parameters
+
+Clicking the component name, you can open the component configuration page. For the Helm Chart component, we can set the Values configuration options to change the application deployment parameters. the Values configuration options are generated by `values.yaml`, you can set the custom value for every option.
+
+In the VelaUX, the value key format like `replica.persistence.size=15Gi`. they will be converted to YAML value:
+
+```yaml
+values: 
+    replica:
+       persistence:
+          size: 15Gi
+```
+
+After modifying the deployment parameters, the workflow of the environment must be executed to make the modified parameters take effect in the specified environment. Due to the existence of Revision, the configuration parameters will be saved in each historical version.
+
+### Visualize the resources created by Helm Release
+
+For a helm chart, users often don't know what resources they will create, making it difficult to troubleshoot. In VelaUX, users can visualize the resources created by Helm Release. via the resource graph, users could know the relationships between the resources and the status of all resources. Click the `Detail` action button could view the resource YAML.
+
+![resource-graph](https://static.kubevela.net/images/1.4/helm-graph.jpg)
+
+You can hover your mouse on it to check the health status, by clicking the icon on the right, you can even get the yaml details for debug.
+
+![resource-detail](../resources/resouce-detail.jpg)
+
 At this point, Helm Chart in KubeVela is no stranger to you, go ahead and try more!
+
+## Next
+
+* Learn [multi cluster delivery](./helm-multi-cluster) for helm chart.
