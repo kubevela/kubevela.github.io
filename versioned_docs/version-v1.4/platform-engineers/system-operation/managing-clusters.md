@@ -8,7 +8,7 @@ This section will introduce the lifecycle of managed clusters.
 
 KubeVela can generally adopt any Kubernetes cluster as managed cluster, the control plane won't install anything to your managed cluster unless you have enable any addons.
 
-If you don't have any clusters, you can refer to [VelaD](https://github.com/kubevela/velad) to create one:
+If you don't have any clusters, you can refer to [VelaD](https://github.com/kubevela/velad/blob/main/docs/02.multicluster.md) to create one for demo:
 
 ```
 velad install --name <cluster-name> --cluster-only
