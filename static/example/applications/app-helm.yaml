@@ -1,0 +1,52 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: helm-hello
+spec:
+  components:
+    - name: hello
+      type: helm
+      properties:
+        repoType: "helm"
+        url: "https://jhidalgo3.github.io/helm-charts/"
+        chart: "hello-kubernetes-chart"
+        version: "3.0.0"
+  policies:
+    - name: topology-local
+      type: topology
+      properties:
+        clusters: ["local"]
+    - name: topology-test1
+      type: topology
+      properties:
+        clusters: ["test1"]
+    - name: override-local
+      type: override
+      properties:
+        components:
+          - name: hello
+            properties:
+              values:
+                configs:
+                  MESSAGE: Welcome to Control Plane Cluster!
+    - name: override-test1
+      type: override
+      properties:
+        components:
+          - name: hello
+            properties:
+              values:
+                configs:
+                  MESSAGE: Welcome to Your New Test Cluster!
+  workflow:
+    steps:
+      - name: deploy2local
+        type: deploy
+        properties:
+          policies: ["topology-local", "override-local"]
+      - name: manual-approval
+        type: suspend
+      - name: deploy2test1
+        type: deploy
+        properties:
+          policies: ["topology-test1", "override-test1"]

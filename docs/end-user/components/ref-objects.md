@@ -1,5 +1,5 @@
 ---
-title: Multi-cluster Distribution
+title: Multi Cluster Distribution
 ---
 
 > This section requires you to know the basics about how to deploy multi-cluster application with policy and workflow. You can refer to [Multi-cluster Delivery](../../case-studies/multi-cluster) for container images, they're working in the same way.
@@ -9,7 +9,6 @@ You can reference and distribute existing Kubernetes objects with KubeVela in th
 - Copying secrets from the hub cluster into managed clusters.
 - Promote deployments from canary clusters into production clusters.
 - Using Kubernetes apiserver as the control plane and storing all Kubernetes objects data in external databases. Then dispatch those data into real Kuberenetes managed clusters.
-
 
 
 ### Refer to Existing Kubernetes Objects in Component
