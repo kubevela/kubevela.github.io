@@ -40,6 +40,7 @@ module.exports = {
           collapsed: true,
           items: [
             'tutorials/helm',
+            'tutorials/helm-multi-cluster',
           ],
         },
         {

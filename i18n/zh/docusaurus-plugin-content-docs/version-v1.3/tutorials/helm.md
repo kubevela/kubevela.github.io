@@ -78,9 +78,13 @@ spec:
         url: "https://charts.bitnami.com/bitnami"
         chart: "redis"
         version: "16.8.5"
-        values: 
-          master.persistence.size: 16Gi
-          replica.persistence.size: 16Gi
+        values:
+          master:
+            persistence:
+              size: 16Gi
+          replica:
+            persistence:
+              size: 16Gi
 ```
 
 你可以通过下述命令完成部署：
