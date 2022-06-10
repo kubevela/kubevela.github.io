@@ -17,7 +17,7 @@ In this section, we introduce an example to show you how to deploy cloud service
 
 - Connect to a Kubernetes cluster on this cloud vendor for hosting your cloud services
 
-## Enabling cloud vendor Addons
+## Enabling a cloud provider addon
 
 First, visit [VelaUX (KubeVela Dashboard)](../install#2-install-velaux), switch to the tab `Addon`, and click up addon
 `terraform-xxx`. `xxx` stands for the cloud provider name. We support the following Addons:
@@ -31,13 +31,20 @@ First, visit [VelaUX (KubeVela Dashboard)](../install#2-install-velaux), switch 
 
 We can provision cloud resources in Alibaba Cloud, AWS, Azure, Tencent Cloud, Google Cloud Platform and Baidu Cloud respectively.
 
-Follow the instructions on all the properties of the addon for each cloud provider to set the addon and enable it.
+Choose the specific version and enable an addon .
+
+![addon-alibaba](../resources/addon-alibaba.jpg)
+
+## Authenticating the cloud provider
+
+Click the tab `Platform`, and then `Integrations`. Choose `Terraform Controller Provider` to authenticate a cloud provider.
+Follow the instructions on all the properties to authenticate the provider for each cloud provider.
 
 For example, for Alibaba Cloud, you need to set the following properties:
 
 > Notice: KubeVela encrypts all the keys, hence no need to worry about its safety.
 
-![addon-alibaba](../resources/addon-alibaba.jpg)
+![](../resources/provider-alibaba.jpg)
 
 Then fill in your ALICLOUD_ACCESS_KEY, ALICLOUD_REGION, and ALICLOUD_SECRET_KEY to enable it。
 
