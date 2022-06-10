@@ -74,6 +74,10 @@
             {
               "type": "doc",
               "id": "version-v1.4/tutorials/helm"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.4/tutorials/helm-multi-cluster"
             }
           ]
         },
