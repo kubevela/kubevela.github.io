@@ -2,25 +2,25 @@
 title: Kubernetes RBAC
 ---
 
-In KubeVela v1.4, Authentication & Authorization mechanism is introduced. This allows applications to dispatch and manage resources using the identity of the application's creator/modifier. With this feature, it will be easy to limit the access of KubeVela users/applications and isolate their living spaces, which will make your KubeVela system safer.
+KubeVela 1.4 开始，我们加入了认证和授权的功能，这使得控制器可以严格根据使用者的权限去做应用的交付和管理，隔离不同的租户，让应用交付变得更安全。
 
-## Installation
+## 安装
 
-To enable Authentication & Authorization in your KubeVela system, you need to do the following steps
+为了不影响之前的用户体验，在 1.4 版本中我们为多集群权限做了功能开关，默认不开启，你可以在安装或升级时指定开启，方法如下。
 
-1. Delete the ClusterRoleBinding ends with `vela-core:manager-rolebinding`. Usually you can do it through:
+1. 删除原先的集群绑定权限 `vela-core:manager-rolebinding`，避免 KubeVela 控制器使用已有的高权限。
   ```
   kubectl delete ClusterRoleBinding kubevela-vela-core:manager-rolebinding
   ```
 
-2. Upgrade the controller, and wait for the installation finished:
+2. 升级控制器，开启用户权限认证功能：
   ```
   helm upgrade --install kubevela kubevela/vela-core --create-namespace -n vela-system --set authentication.enabled=true --set authentication.withUser=true --wait
   ```
 
-3. Make sure your version Vela CLI v1.4.1+, refer to [the installation guide](../../install#2-install-kubevela-cli).
+3. 确保命令行工具 Vela CLI 版本为 v1.4.1+，参考[安装文档](../../install#2-install-kubevela-cli).
 
-4. (Optional) Install [vela-prism](https://github.com/kubevela/prism) through running the following commands, which will allow you to enjoy the advanced API extensions in KubeVela.
+4. (可选) 安装 [vela-prism](https://github.com/kubevela/prism) 组件，开启高级的权限管理能力。
 
 ```bash
 helm repo add prism https://charts.kubevela.net/prism
@@ -28,9 +28,11 @@ helm repo update
 helm install vela-prism prism/vela-prism -n vela-system
 ```
 
-## Usage
+## 使用
 
-0. Before we start, assume we already have two managed clusters joined in KubeVela, called `c2` and `c3`. You can refer to the [multi-cluster document](../system-operation/managing-clusters#manage-the-cluster-via-cli) and see how to join managed clusters into KubeVela control plane.
+### 准备好集群
+
+在我们开始之前，请确保你已经有 2 个集群添加到管控中，假设命名为 `c2` 和 `c3`。你可以参考[多集群管理文档](../system-operation/managing-clusters#manage-the-cluster-via-cli) 查看如何添加集群。
 
 ```bash
 $ vela cluster list
@@ -40,11 +42,9 @@ c3              X509Certificate   <c3 apiserver url>            true
 c2              X509Certificate   <c2 apiserver url>            true       
 ```
 
-### Create User
+### 创建用户组（用户）
 
-1. Let's start with a new coming user named Alice. As the system administrator, you can assign a KubeConfig for Alice to use.
-
-```bash
+```
 $ vela auth gen-kubeconfig --user alice > alice.kubeconfig
 Private key generated.
 Certificate request generated.
@@ -53,11 +53,12 @@ Certificate signing request alice approved.
 Signed certificate retrieved.
 ```
 
-### Grant Privileges
+这里的 alice (--user指定) 既可以表示某个用户组，也可以代表某个用户。通常我们建议用来表示用户组，以便降低整体权限控制的复杂度。在 VelaUX 中则与“项目”这个概念对应，每一个项目创建一个独立的用户组权限，而 VelaUX 中支持使用 LDAP 对接公司的账号体系，可以对具体的某个用户账号授权，加入到某个项目中（即加入用户组），以此完成 VelaUX 终端用户和底层资源权限的打通。
 
-2. Now alice is unabled to do anything in the cluster with the given KubeConfig. We can grant her the privileges of Read/Write resources in the `dev` namespace of the control plane and managed cluster `c2`.
 
-```bash
+### 对用户组授权
+
+```
 $ vela auth grant-privileges --user alice --for-namespace dev --for-cluster=local,c2 --create-namespace
 ClusterRole kubevela:writer created in local.
 RoleBinding dev/kubevela:writer:binding unchanged in local.
@@ -66,9 +67,12 @@ RoleBinding dev/kubevela:writer:binding created in c2.
 Privileges granted.
 ```
 
-3. We can check the privileges of Alice by the following command
+这里采用了 KubeVela 简化了的权限能力，直接授权了 2 个集群的 `dev` 命名空间的“读/写”权限，同时还可以方便的创建命名空间。授权命令可以多次执行，用于增加权限。
 
-```bash
+
+### 查看用户组权限
+
+```
 $ vela auth list-privileges --user alice --cluster local,c2
 User=alice
 ├── [Cluster]  local
@@ -85,9 +89,12 @@ User=alice
                 Verb:            get, list, watch, create, update, patch, delete
 ```
 
-### Use Privileges
+你可以一目了然的看到这个用户组在不同集群中的权限。
 
-4. Alice can create an application in the dev namespace now. The application can also dispatch resources into the dev namespace of cluster `c2`.
+
+### 使用权限
+
+创建用户组之后（`vela auth gen-kubeconfig`），会生成一个 KubeConfig 对应该权限，最终用户可以拿着这个 KubeConfig 使用 vela 命令行工具进行操作，生态的插件功能也可以通过这个 KubeConfig 跟 KubeVela 的 API 对接。 使用的方式与 KubeConfig 原先的用法完全一致，你可以将 KubeConfig 放到 `~/.kube/config` 中，也可以通过环境变量使用。
 
 ```bash
 cat <<EOF | KUBECONFIG=alice.kubeconfig vela up -f -
@@ -110,7 +117,7 @@ spec:
 EOF
 ```
 
-5. Alice can see the the application is successfully deployed.
+可以通过如下命令查看多集群下资源的部署状态：
 
 ```bash
 $ KUBECONFIG=alice.kubeconfig vela status podinfo -n dev
