@@ -16,7 +16,7 @@ Addon: kruise-rollout enabled Successfully.
 ```
 
 2. 请保证你的集群有一种  [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/) 正在运行。
-如果没有你可以通过启用  [nginx-ingrss-controller](./nginx-ingress-controller) 安装一个。
+如果没有你可以通过启用  [nginx-ingress-controller](./nginx-ingress-controller) 安装一个。
 
 ```shell
 vela addon enable ingress-controller
