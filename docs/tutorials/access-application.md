@@ -6,7 +6,7 @@ After deploying the application, the next station is publishing your service.
 
 There are multiple ways to do this, for testing, such as Port Forward and Node Port. for production, such as LoadBalancer and via cluster gateway. This section focus on the production environment.
 
-## Use Cloud LoadBalancer
+## Use LoadBalancer by Cloud Provider
 
 This way is only suitable for the cloud environment, such as Aliyun, AWS, and Azure.
 
@@ -34,7 +34,7 @@ spec:
 
 For other components, similarly, only need to generate the Kubernetes Service with LoadBalancer type.
 
-## Use Ingress Gateway
+## Use HTTP Domain by Ingress Gateway
 
 This way required installed the ingress controller in the cluster.
 
