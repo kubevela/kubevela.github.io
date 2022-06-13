@@ -21,12 +21,11 @@ KubeVela 1.4 开始，我们加入了认证和授权的功能，这使得控制�
 3. 确保命令行工具 Vela CLI 版本为 v1.4.1+，参考[安装文档](../../install#2-install-kubevela-cli).
 
 4. (可选) 安装 [vela-prism](https://github.com/kubevela/prism) 组件，开启高级的权限管理能力。
-
-```bash
-helm repo add prism https://charts.kubevela.net/prism
-helm repo update
-helm install vela-prism prism/vela-prism -n vela-system
-```
+    ```bash
+    helm repo add prism https://charts.kubevela.net/prism
+    helm repo update
+    helm install vela-prism prism/vela-prism -n vela-system
+    ```
 
 ## 使用
 
@@ -59,15 +58,13 @@ Signed certificate retrieved.
 ### 对用户组授权
 
 ```
-$ vela auth grant-privileges --user alice --for-namespace dev --for-cluster=local,c2 --create-namespace
-ClusterRole kubevela:writer created in local.
-RoleBinding dev/kubevela:writer:binding unchanged in local.
+$ vela auth grant-privileges --user alice --for-namespace dev --for-cluster=c2 --create-namespace
 ClusterRole kubevela:writer created in c2.
 RoleBinding dev/kubevela:writer:binding created in c2.
 Privileges granted.
 ```
 
-这里采用了 KubeVela 简化了的权限能力，直接授权了 2 个集群的 `dev` 命名空间的“读/写”权限，同时还可以方便的创建命名空间。授权命令可以多次执行，用于增加权限。
+这里采用了 KubeVela 简化的权限能力，对 c2 集群授权了 `dev` 命名空间的“读/写”权限，同时还可以方便的创建命名空间。授权命令可以多次执行，用于增加权限。
 
 
 ### 查看用户组权限
@@ -89,7 +86,7 @@ User=alice
                 Verb:            get, list, watch, create, update, patch, delete
 ```
 
-你可以一目了然的看到这个用户组在不同集群中的权限。
+你可以一目了然的看到这个用户组在不同集群中的权限，在 local 集群中无权限。
 
 
 ### 使用权限
@@ -113,7 +110,7 @@ spec:
   - type: topology
     name: topology
     properties:
-      clusters: ["local", "c2"]
+      clusters: ["c2"]
 EOF
 ```
 
@@ -144,30 +141,23 @@ Workflow:
 Services:
 
   - Name: podinfo  
-    Cluster: local  Namespace: dev
-    Type: webservice
-    Healthy Ready:1/1
-    No trait applied
-
-  - Name: podinfo  
     Cluster: c2  Namespace: dev
     Type: webservice
     Healthy Ready:1/1
     No trait applied
 ```
 
-### Unauthorized access forbidden
+### 未授权的操作会被禁止
 
-6. If Alice wants to access resources outside the dev namespace, she will be forbidden to do so.
+对于创建出的 KubeConfig，如果 Alice 访问 dev 这个命名空间以外的资源，服务端会禁止这个操作。
 
 ```bash
 KUBECONFIG=alice.kubeconfig kubectl get pod -n vela-system
 Error from server (Forbidden): pods is forbidden: User "alice" cannot list resource "pods" in API group "" in the namespace "vela-system"
 ```
 
-7. If Alice try to create a application in the dev namespace and the application intends to dispatch resources in `c3` cluster (which Alice does not have the privileges), the application will not be able to do so.
+Alice 使用 Application 创建涉及其他集群的资源也会被禁止，比如创建如下的应用  `podinfo-bad`：
 
-Alice create the application `podinfo-bad`
 ```bash
 $ cat <<EOF | KUBECONFIG=alice.kubeconfig vela up -f -
 apiVersion: core.oam.dev/v1beta1
@@ -189,7 +179,8 @@ spec:
 EOF
 ```
 
-Alice checks the status of `podinfo-bad`, the error message will be shown.
+Alice在查看应用状态时会了解到错误情况：
+
 ```bash
 $ KUBECONFIG=alice.kubeconfig vela status podinfo-bad -n dev
 About:
@@ -212,12 +203,11 @@ Workflow:
     phase:failed 
     message:step deploy: run step(provider=multicluster,do=deploy): Found 1 errors. [(error encountered in cluster c3: HandleComponentsRevision: controllerrevisions.apps is forbidden: User "alice" cannot list resource "controllerrevisions" in API group "apps" in the namespace "dev")]
 
-Services:
 ```
 
-### Readonly Access
+### 只读权限
 
-8. Let's create a new KubeConfig for another new User Bob. Bob will only be granted with the readonly privileges for the resources in the dev namespace of the control plane and cluster `c2`.
+我们也可以给用户创建一个只读权限，这也是 KubeVela 封装好的预置权限，比如给用户 Bob 提供只读的 KubeConfig：
 
 ```bash
 $ vela auth gen-kubeconfig --user bob > bob.kubeconfig
@@ -235,7 +225,7 @@ RoleBinding dev/kubevela:reader:binding created in c2.
 Privileges granted.
 ```
 
-9. User Bob can see the applications and their status under the namespace of dev.
+用户 Bob 就可以看到 `dev` 这个命名空间的应用状态了。
 
 ```bash
 $ KUBECONFIG=bob.kubeconfig vela ls -n dev
@@ -279,7 +269,7 @@ Services:
     No trait applied
 ```
 
-10. But he is forbidden to do any mutating actions, such as deleting application in dev namespace.
+但是如果他想做其他操作，比如删除一个应用，就会被禁止：
 
 ```bash
 $ KUBECONFIG=bob.kubeconfig vela delete podinfo-bad -n dev
@@ -288,16 +278,16 @@ Error: delete application err: applications.core.oam.dev "podinfo-bad" is forbid
 2022/05/31 17:17:51 delete application err: applications.core.oam.dev "podinfo-bad" is forbidden: User "bob" cannot delete resource "applications" in API group "core.oam.dev" in the namespace "dev"
 ```
 
-11. Instead, User Alice can delete application.
+而对于有权限的 Alice 来说，她可以删除应用：
 
 ```bash
 $ KUBECONFIG=alice.kubeconfig vela delete podinfo-bad -n dev
 application.core.oam.dev "podinfo-bad" deleted
 ```
 
-### Listing resources in Application
+### 查看应用的资源
 
-12. (Optional) After `vela-prism` installed, you will be able to list resources of the application through the following command
+如果用户想要细粒度的资源查看能力，就要安装之前提到的  `vela-prism` 组件了。安装完成后就可以使用如下命令查看资源关联关系和状态：
 
 ```bash
 $ KUBECONFIG=bob.kubeconfig vela status podinfo -n dev --tree --detail
@@ -306,10 +296,10 @@ c2        ─── dev       ─── Deployment/podinfo updated   2022-05-31 
 local     ─── dev       ─── Deployment/podinfo updated   2022-05-31 17:06:14 Ready: 1/1  Up-to-date: 1  Available: 1  Age: 13m
 ```
 
-> Notice that if `vela-prism` is not installed, Alice and Bob will be forbidden to run this listing command.
+> 注意，如果没有安装 `vela-prism` 组件，非管理员用户都无法查看资源状态。
 
-## Extension Reading
+## 扩展阅读
 
-The guide above demonstrates how system operators can grant limited privileges for users and therefore restrict the access of their created applications. For more detail explanation on how this capability is achieved, read the [Underlying Mechanism](./advance) article.
+这个文档提供了系统授权的基本操作说明，事实上 KubeVela 支持更细粒度的权限管理，并与 Kubernetes RBAC 权限一致，你可以阅读[底层实现原理](./advance)文档了解更多详情。
 
-> As the platform builder, you may want to bind KubeVela application with your customized identity. For example, using a manual specified ServiceAccount for the application. If you want to do so, it is not mandatory to enable the Authentication feature flag in KubeVela. Read the [System Integration](./integration) for more details.
+> 如果你是平台管理员，你可以阅读[系统集成](./integration)文档了解更多与 Kubernetes RBAC 集成的细节。
