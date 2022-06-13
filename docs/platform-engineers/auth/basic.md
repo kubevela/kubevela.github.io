@@ -21,12 +21,11 @@ To enable Authentication & Authorization in your KubeVela system, you need to do
 3. Make sure your version Vela CLI v1.4.1+, refer to [the installation guide](../../install#2-install-kubevela-cli).
 
 4. (Optional) Install [vela-prism](https://github.com/kubevela/prism) through running the following commands, which will allow you to enjoy the advanced API extensions in KubeVela.
-
-```bash
-helm repo add prism https://charts.kubevela.net/prism
-helm repo update
-helm install vela-prism prism/vela-prism -n vela-system
-```
+  ```bash
+  helm repo add prism https://charts.kubevela.net/prism
+  helm repo update
+  helm install vela-prism prism/vela-prism -n vela-system
+  ```
 
 ## Usage
 
@@ -58,9 +57,7 @@ Signed certificate retrieved.
 2. Now alice is unabled to do anything in the cluster with the given KubeConfig. We can grant her the privileges of Read/Write resources in the `dev` namespace of the control plane and managed cluster `c2`.
 
 ```bash
-$ vela auth grant-privileges --user alice --for-namespace dev --for-cluster=local,c2 --create-namespace
-ClusterRole kubevela:writer created in local.
-RoleBinding dev/kubevela:writer:binding unchanged in local.
+$ vela auth grant-privileges --user alice --for-namespace dev --for-cluster=c2 --create-namespace
 ClusterRole kubevela:writer created in c2.
 RoleBinding dev/kubevela:writer:binding created in c2.
 Privileges granted.
@@ -85,6 +82,8 @@ User=alice
                 Verb:            get, list, watch, create, update, patch, delete
 ```
 
+Alice don't have any privilege in local cluster while she have read/write capability in namespace(dev) of cluster(c2).
+
 ### Use Privileges
 
 4. Alice can create an application in the dev namespace now. The application can also dispatch resources into the dev namespace of cluster `c2`.
@@ -106,7 +105,7 @@ spec:
   - type: topology
     name: topology
     properties:
-      clusters: ["local", "c2"]
+      clusters: ["c2"]
 EOF
 ```
 
@@ -135,12 +134,6 @@ Workflow:
     message:
 
 Services:
-
-  - Name: podinfo  
-    Cluster: local  Namespace: dev
-    Type: webservice
-    Healthy Ready:1/1
-    No trait applied
 
   - Name: podinfo  
     Cluster: c2  Namespace: dev
