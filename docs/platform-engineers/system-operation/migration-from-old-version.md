@@ -23,18 +23,18 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.1 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.2 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.1
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.2
 ```
 
 3. Upgrade VelaUX or other addon
 
 ```
-vela addon upgrade velaux --version 1.4.0
+vela addon upgrade velaux --version 1.4.2
 ```
 
 Please note if you're using terraform addon, you should upgrade the `terraform` addon to version `1.0.6+` along with the vela-core upgrade, you can follow the following steps:
