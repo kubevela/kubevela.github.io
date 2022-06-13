@@ -29,12 +29,20 @@ description: 本文介绍通过 KubeVela 交付云厂商提供的服务，并能
 
 我们可以分别在阿里云、AWS、Azure、腾讯云、Google Cloud Platform和百度云配置云资源。
 
+选择对应的插件版本并启用该插件。
+
+![addon-alibaba](../resources/addon-alibaba.jpg)
+
+## 认证云服务商的插件
+
+点击菜单 `Platform` 后再点击 `集成配置`，选择 `Terraform Controller Provider` 来认证一个云服务商的插件。
+
 按照每个云提供商的插件的所有属性上的说明来设置插件并启用它。
 
 例如，对于阿里巴巴云，你需要设置以下属性：
 > 注意。KubeVela对所有的密钥进行了加密，因此不必担心它的安全问题。
 
-![addon-alibaba](../resources/addon-alibaba.jpg)
+![](../resources/provider-alibaba.jpg)
 
 然后填写你的ALICLOUD_ACCESS_KEY，ALICLOUD_REGION，和ALICLOUD_SECRET_KEY来启用它。
 

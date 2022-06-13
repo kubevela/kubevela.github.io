@@ -31,7 +31,7 @@ First, visit [VelaUX (KubeVela Dashboard)](../install#2-install-velaux), switch 
 
 We can provision cloud resources in Alibaba Cloud, AWS, Azure, Tencent Cloud, Google Cloud Platform and Baidu Cloud respectively.
 
-Choose the specific version and enable an addon .
+Choose the specific version and enable an addon.
 
 ![addon-alibaba](../resources/addon-alibaba.jpg)
 
