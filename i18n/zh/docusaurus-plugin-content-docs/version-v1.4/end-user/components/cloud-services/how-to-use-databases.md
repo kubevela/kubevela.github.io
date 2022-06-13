@@ -15,7 +15,7 @@ description: 本节介绍了部署和使用数据库的四种方法。
 
 - 如果你想在一个RDS实例中创建一个以上的数据库：
 
-[用一个以上的数据库配置RDS实例](./provision-an-RDS-instance-with-more-than-one-databases)
+[用一个以上的数据库配置RDS实例](./provision-an-RDS-instance-with-more-than-one-database)
 
 - 如果你想通过导入SQL文件来配置一个关系型数据库，并启动一个依赖数据库的应用程序：
 
