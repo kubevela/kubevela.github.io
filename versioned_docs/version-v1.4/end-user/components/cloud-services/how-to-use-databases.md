@@ -18,7 +18,7 @@ This document focus on the deep scenarios of database provision and usages.
 [Provision an RDS instance with more than one database](./provision-an-RDS-instance-with-more-than-one-database.md)
 
 - If you want to provision a relational database with SQL file imported, and bootstrap an
-  application which depends on the database
+  application which depends on the database:
 
 [Provision a Database and Import a SQL File for initialization](./provision-and-initiate-database.md)
 
