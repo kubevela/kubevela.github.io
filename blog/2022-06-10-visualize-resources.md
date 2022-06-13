@@ -9,7 +9,7 @@ image: https://raw.githubusercontent.com/oam-dev/KubeVela.io/main/docs/resources
 hide_table_of_contents: false
 ---
 
-Another big appeal in application delivery is the transparent management of the Kubernetes resource in the delivery process. For example, many users in the community like to use Helm Chart to package a lot of complex YAML, but once there is a deployment problem, such as the underlying storage can not be provided normally, the associated resources are not created normally, the underlying configuration is incorrect, etc., even a small problem will be difficult to troubleshoot due to the overall black box. Especially in the modern hybrid multi-cluster environment, there is a wide range of resources, how to obtain effective information and solve the problem? this is a very big problem.
+One of the biggest requests from KubeVela community is to provide a transparent delivery process for resources in the application. For example, many users prefer to use Helm Chart to package a lot of complex YAML, but once there is any issue during the deployment, such as the underlying storage can not be provided normally, the associated resources are not created normally, or the underlying configuration is incorrect, etc., even a small problem will be a huge threshold for troubleshooting due to the black box of Helm chart. Especially in the modern hybrid multi-cluster environment, there is a wide range of resources, how to obtain effective information and solve the problem? This can be a very big challenge.
 
 ![resource graph](https://static.kubevela.net/images/1.4/resource-graph.jpg)
 
@@ -130,7 +130,7 @@ Further, if you want to query the detailed configuration of ConfigMap, whether t
 
 ![resource-detail](https://kubevela.net/assets/images/resouce-detail-0919c787c88e6b38f00ea490d558a927.jpg)
 
-## Next station
+## What's next?
 
 * More intelligent
 

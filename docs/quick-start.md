@@ -193,11 +193,11 @@ It requires you to override with a new password for the first login, please make
 
 Click the application card, then you can view the details of the application.
 
-![](./resources/succeed-first-vela-app.jpg)
+![first-app-graph](https://static.kubevela.net/images/1.4/first-app-graph.jpg)
 
 ## Clean up
 
-```
+```bash
 $ vela delete first-vela-app
 Deleting Application "first-vela-app"
 app "first-vela-app" deleted from namespace "prod"
