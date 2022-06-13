@@ -1,40 +1,20 @@
 ---
-title: Access the application
+title: 访问应用
 ---
 
 After deploying the application, the next station is publishing your service.
 
 There are multiple ways to do this, for testing, such as Port Forward and Node Port. for production, such as LoadBalancer and via cluster gateway. This section focus on the production environment.
 
-## Use Cloud LoadBalancer
+## Via LoadBalancer
 
 This way is only suitable for the cloud environment, such as Aliyun, AWS, and Azure.
 
 For the webservice component, you only need to set the `ExposeType` to `LoadBalancer`, it means this component will generate a Kubernetes Service with LoadBalancer type. After deployment, you could get the service endpoints.
 
-For Example:
+For other component, similarly, only need to generate the Kubernetes Service with LoadBalancer type.
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: webservice-app
-spec:
-  components:
-    - name: frontend
-      type: webservice
-      properties:
-        image: oamdev/testapp:v1
-        cmd: ["node", "server.js"]
-        ports:
-          - port: 8080
-            expose: true
-        exposeType: LoadBalancer
-```
-
-For other components, similarly, only need to generate the Kubernetes Service with LoadBalancer type.
-
-## Use Ingress Gateway
+## Via Ingress
 
 This way required installed the ingress controller in the cluster.
 
@@ -56,7 +36,7 @@ In VelaUX, you can click the `Add Trait` button and select the `gateway` trait t
 
 ![gateway trait](https://static.kubevela.net/images/1.4/gateway-trait.jpg)
 
-## Use Traefik
+## Via Gateway API
 
 This way required installed the traefik addon firstly.
 
