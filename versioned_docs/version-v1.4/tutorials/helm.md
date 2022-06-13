@@ -165,6 +165,30 @@ At this point, Helm Chart in KubeVela is no stranger to you, go ahead and try mo
 
 You can change the default values file `values.yaml` with another value file present inside the Helm chart by set the `valuesFiles` field. eg:
 
+We use the chart `hello-kubernetes-chart` as an example.This chart has two values files. You can pull this chart and have a look all contains files in it:
+
+```yaml
+$ tree ./hello-kubernetes-chart
+./hello-kubernetes-chart
+├── Chart.yaml
+├── templates
+│ ├── NOTES.txt
+│ ├── _helpers.tpl
+│ ├── config-map.yaml
+│ ├── deployment.yaml
+│ ├── hpa.yaml
+│ ├── ingress.yaml
+│ ├── service.yaml
+│ ├── serviceaccount.yaml
+│ └── tests
+│ └── test-connection.yaml
+├── values-production.yaml
+└── values.yaml
+```
+
+As we can see, there are values files `values.yaml` `values-production.yaml` in this chart.If you not set the `valuesFiles` field, `values.yaml` will used by rendering the resources.
+
+You can switch to use `values-production.yaml` by:
 ```yaml
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
