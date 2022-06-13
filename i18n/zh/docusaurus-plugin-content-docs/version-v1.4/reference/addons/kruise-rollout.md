@@ -22,7 +22,7 @@ Addon: kruise-rollout enabled Successfully.
 vela addon enable ingress-controller
 ```
 
-请参考[文档](./nginx-ingrss-controller) 获取网关的访问地址。
+请参考[文档](./nginx-ingress-controller) 获取网关的访问地址。
 
 ## 首次部署
 
