@@ -2,29 +2,34 @@
 title: Kubernetes RBAC
 ---
 
-In KubeVela v1.4, Authentication & Authorization mechanism is introduced. This allows applications to dispatch and manage resources using the identity of the application's creator/modifier. With this feature, it will be easy to limit the access of KubeVela users/applications and isolate their living spaces, which will makes your KubeVela system safer.
+In KubeVela v1.4, Authentication & Authorization mechanism is introduced. This allows applications to dispatch and manage resources using the identity of the application's creator/modifier. With this feature, it will be easy to limit the access of KubeVela users/applications and isolate their living spaces, which will make your KubeVela system safer.
 
 ## Installation
 
 To enable Authentication & Authorization in your KubeVela system, you need to do the following steps
 
-1. Delete the ClusterRoleBinding ends with `vela-core:manager-rolebinding`. Usually you can do it through `kubectl delete ClusterRoleBinding kubevela-vela-core:manager-rolebinding`.
+1. Delete the ClusterRoleBinding ends with `vela-core:manager-rolebinding`. Usually you can do it through:
+  ```
+  kubectl delete ClusterRoleBinding kubevela-vela-core:manager-rolebinding
+  ```
 
-2. Run `helm upgrade --install kubevela kubevela/vela-core --create-namespace -n vela-system --set authentication.enabled=true --set authentication.withUser=true --wait`. Wait for the installation finished.
+2. Upgrade the controller, and wait for the installation finished:
+  ```
+  helm upgrade --install kubevela kubevela/vela-core --create-namespace -n vela-system --set authentication.enabled=true --set authentication.withUser=true --wait
+  ```
 
-3. Install the latest [Vela CLI](../../install#2-install-kubevela-cli).
+3. Make sure your version Vela CLI v1.4.1+, refer to [the installation guide](../../install#2-install-kubevela-cli).
 
 4. (Optional) Install [vela-prism](https://github.com/kubevela/prism) through running the following commands, which will allow you to enjoy the advanced API extensions in KubeVela.
-
-```bash
-helm repo add prism https://charts.kubevela.net/prism
-helm repo update
-helm install vela-prism prism/vela-prism -n vela-system
-```
+  ```bash
+  helm repo add prism https://charts.kubevela.net/prism
+  helm repo update
+  helm install vela-prism prism/vela-prism -n vela-system
+  ```
 
 ## Usage
 
-0. Before we start, assume we already have two managed clusters joined in KubeVela, called `c2` and `c3`. You can refer to the [multicluster document](../system-operation/managing-clusters#manage-the-cluster-via-cli) and see how to join managed clusters into KubeVela control plane.
+0. Before we start, assume we already have two managed clusters joined in KubeVela, called `c2` and `c3`. You can refer to the [multi-cluster document](../system-operation/managing-clusters#manage-the-cluster-via-cli) and see how to join managed clusters into KubeVela control plane.
 
 ```bash
 $ vela cluster list
@@ -36,7 +41,7 @@ c2              X509Certificate   <c2 apiserver url>            true
 
 ### Create User
 
-1. Let's start with a new comming user named Alice. As the system adminitrator, you can assign a KubeConfig for Alice to use.
+1. Let's start with a new coming user named Alice. As the system administrator, you can assign a KubeConfig for Alice to use.
 
 ```bash
 $ vela auth gen-kubeconfig --user alice > alice.kubeconfig
@@ -52,9 +57,7 @@ Signed certificate retrieved.
 2. Now alice is unabled to do anything in the cluster with the given KubeConfig. We can grant her the privileges of Read/Write resources in the `dev` namespace of the control plane and managed cluster `c2`.
 
 ```bash
-$ vela auth grant-privileges --user alice --for-namespace dev --for-cluster=local,c2 --create-namespace
-ClusterRole kubevela:writer created in local.
-RoleBinding dev/kubevela:writer:binding unchanged in local.
+$ vela auth grant-privileges --user alice --for-namespace dev --for-cluster=c2 --create-namespace
 ClusterRole kubevela:writer created in c2.
 RoleBinding dev/kubevela:writer:binding created in c2.
 Privileges granted.
@@ -79,6 +82,8 @@ User=alice
                 Verb:            get, list, watch, create, update, patch, delete
 ```
 
+Alice don't have any privilege in local cluster while she have read/write capability in namespace(dev) of cluster(c2).
+
 ### Use Privileges
 
 4. Alice can create an application in the dev namespace now. The application can also dispatch resources into the dev namespace of cluster `c2`.
@@ -100,7 +105,7 @@ spec:
   - type: topology
     name: topology
     properties:
-      clusters: ["local", "c2"]
+      clusters: ["c2"]
 EOF
 ```
 
@@ -129,12 +134,6 @@ Workflow:
     message:
 
 Services:
-
-  - Name: podinfo  
-    Cluster: local  Namespace: dev
-    Type: webservice
-    Healthy Ready:1/1
-    No trait applied
 
   - Name: podinfo  
     Cluster: c2  Namespace: dev
@@ -299,4 +298,4 @@ local     ─── dev       ─── Deployment/podinfo updated   2022-05-31 
 
 The guide above demonstrates how system operators can grant limited privileges for users and therefore restrict the access of their created applications. For more detail explanation on how this capability is achieved, read the [Underlying Mechanism](./advance) article.
 
-> As the platform builder, you may want to bind KubeVela application with your customized identity. For example, using a manual specified ServiceAccount for the application. If you want to do so, it is not mandentary to enable the Authentication feature flag in KubeVela. Read the [System Integration](./integration) for more details.
+> As the platform builder, you may want to bind KubeVela application with your customized identity. For example, using a manual specified ServiceAccount for the application. If you want to do so, it is not mandatory to enable the Authentication feature flag in KubeVela. Read the [System Integration](./integration) for more details.
