@@ -161,6 +161,30 @@ You can hover your mouse on it to check the health status, by clicking the icon 
 
 At this point, Helm Chart in KubeVela is no stranger to you, go ahead and try more!
 
+## Specify different value file
+
+You can change the default values file `values.yaml` with another value file present inside the Helm chart by set the `valuesFiles` field. eg:
+
+```yaml
+cat <<EOF | vela up -f -
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: hello-kubernetes
+spec:
+  components:
+    - name: hello-kubernetes
+      type: helm
+      properties:
+        repoType: "helm"
+        url: "https://wangyikewxgm.github.io/my-charts/"
+        chart: "hello-kubernetes-chart"
+        version: "0.1.0"
+        valuesFiles:
+          - "values-production.yaml"
+  EOF
+```
+
 ## Next
 
 * Learn [multi cluster delivery](./helm-multi-cluster) for helm chart.
