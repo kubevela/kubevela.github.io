@@ -5,7 +5,7 @@ title: VelaUX 控制台
 ## Install
 
 ```shell script
-vela addon enable velaux
+vela addon enable velaux --version=v1.4.2
 ```
 
 expected output:
@@ -43,7 +43,7 @@ If you want to expose your VelaUX dashboard for convenience, you can specify the
     vela addon enable velaux serviceType=NodePort
     ```
 
-After specifying the service type to `LoadBalancer` or `NodePort`, you can obtain the access address through `vela status`:
+After the service type specified to `LoadBalancer` or `NodePort`, you can obtain the access address through `vela status`:
 
 ```
 vela status addon-velaux -n vela-system --endpoint
@@ -63,7 +63,7 @@ The expected output:
 If you have ingress and domain available in your cluster, you can also deploy VelaUX by specify a domain like below:
 
 ```bash
-$ vela addon enable velaux domain=example.doamin.com
+vela addon enable velaux domain=example.doamin.com
 ```
 
 The expected output:
@@ -82,7 +82,7 @@ Please access the velaux from the following endpoints:
 If you enabled the traefik addon, you can set the `gatewayDriver` parameter to use the Gateway API.
 
 ```shell script
-$ vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik
+vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik
 ```
 
 ## Setup with MongoDB database
@@ -90,14 +90,14 @@ $ vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik
 VelaUX supports the Kubernetes and MongoDB as the database. the default is Kubernetes. We strongly advise using the MongoDB database to power your production environment.
 
 ```shell script
-$ vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_PASSWORD>@<MONGODB_URL>
+vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_PASSWORD>@<MONGODB_URL>
 ```
 
 ## Specify the addon image
 
 By default the image repo is docker hub, you can specify the image repo by the `repo` parameter: 
 
-```
+```shell script
 vela addon enable velaux repo=acr.kubevela.net
 ```
 

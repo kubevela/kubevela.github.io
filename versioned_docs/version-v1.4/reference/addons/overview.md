@@ -10,3 +10,5 @@ There's an community addon registry (https://addons.kubevela.net) maintained by 
 * [Machine Learning Addon](./ai): Machine learning addon is divided into model-training addon and model-serving addon.
 * [Traefik](./traefik): Traefik is a modern HTTP reverse proxy and load balancer made to deploy microservices with ease.
 * [Rollout](./rollout): Provide a capability rollout the applicaton.
+* [Pyroscope](./pyroscope): Pyroscope is an open source platform, consisting of server and agent. It allows the user to collect, store, and query the profiling data in a CPU and disk efficient way.
+

@@ -5,7 +5,7 @@ title: VelaUX
 ## Install
 
 ```shell script
-vela addon enable velaux
+vela addon enable velaux --version=v1.4.2
 ```
 
 expected output:
@@ -13,7 +13,7 @@ expected output:
 Addon: velaux enabled Successfully.
 ```
 
-VelaUX need authentication. Default username is `admin` and the password is `VelaUX12345`. Please must set and remember the new password after the first login.
+VelaUX needs authentication. The default username is `admin` and the password is `VelaUX12345`. Please must set and remember the new password after the first login.
 
 By default, VelaUX didn't have any exposed port.
 
@@ -30,9 +30,10 @@ Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Se
 ## Setup with Specified Service Type
 
 There are three service types for VelaUX addon which aligned with Kubernetes service, they're `ClusterIP`, `NodePort` and `LoadBalancer`.
+
 By default the service type is ClusterIP for security.
 
-If you want to expose your VelaUX dashboard for convenient, you can specify the service type.
+If you want to expose your VelaUX dashboard for convenience, you can specify the service type.
 
 - `LoadBalancer` type requires your cluster has cloud LoadBalancer available.
     ```shell script
@@ -43,7 +44,7 @@ If you want to expose your VelaUX dashboard for convenient, you can specify the 
     vela addon enable velaux serviceType=NodePort
     ```
 
-After specify the service type to `LoadBalancer` or `NodePort`, you can obtain the access address through `vela status`:
+After the service type specified to `LoadBalancer` or `NodePort`, you can obtain the access address through `vela status`:
 
 ```
 vela status addon-velaux -n vela-system --endpoint
@@ -62,7 +63,7 @@ The expected output:
 
 If you have ingress and domain available in your cluster, you can also deploy VelaUX by specify a domain like below:
 
-```shell script
+```bash
 vela addon enable velaux domain=example.doamin.com
 ```
 
@@ -82,7 +83,15 @@ Please access the velaux from the following endpoints:
 If you enabled the traefik addon, you can set the `gatewayDriver` parameter to use the Gateway API.
 
 ```shell script
-$ vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik
+vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik
+```
+
+## Setup with MongoDB database
+
+VelaUX supports the Kubernetes and MongoDB as the database. the default is Kubernetes. We strongly advise using the MongoDB database to power your production environment.
+
+```shell script
+vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_PASSWORD>@<MONGODB_URL>
 ```
 
 ## Specify the addon image
@@ -93,7 +102,6 @@ By default the image repo is docker hub, you can specify the image repo by the `
 vela addon enable velaux repo=acr.kubevela.net
 ```
 
-But it has API request limit, so you can try specify the `acr.kubevela.net` image registry as alternative,
-It's maintained by KubeVela team, we will upload/sync the built-in addon image for convenience.
+You can try to specify the `acr.kubevela.net` image registry as an alternative, It's maintained by KubeVela team, and we will upload/sync the built-in addon image for convenience.
 
 This feature can also help you to build your private installation, just upload all images to your private image registry.
