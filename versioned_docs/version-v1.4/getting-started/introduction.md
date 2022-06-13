@@ -5,7 +5,7 @@ slug: /
 
 ## What is KubeVela?
 
-KubeVela is a modern software delivery control plane. The goal is to make deploying and operating applications across today's hybrid, multi-cloud environments easier, faster and more reliable.
+KubeVela is a modern software delivery control plane. The goal is to make deploying and operating applications across today's hybrid, multi-cloud environments easier, faster and more reliable. Welcome onboard and sail Vela!
 
 ![](../resources/what-is-kubevela.png)
 
@@ -65,8 +65,13 @@ Of course, KubeVela also supports other encapsulation formats including Kustomiz
 KubeVela is a modern application delivery system built with cloud native stack. It leverages [Open Application Model](https://github.com/oam-dev/spec) and Kubernetes as control plane to resolve a hard problem - making shipping applications enjoyable.
 
 
-Welcome onboard and sail Vela!
+## Development Status
 
+KubeVela is being actively developed by the community, our releases can be found [here](https://github.com/kubevela/kubevela/releases).
+
+## Adoption
+
+Organizations who have officially adopted KubeVela can be found [here](https://github.com/kubevela/community/blob/main/ADOPTERS.md).
 
 ## What's Next
 
