@@ -30,7 +30,7 @@ module.exports = {
           items: [
             'tutorials/webservice',
             'case-studies/multi-cluster',
-            'end-user/traits/ingress',
+            'tutorials/access-application',
             'end-user/traits/sidecar',
           ],
         },
@@ -38,10 +38,7 @@ module.exports = {
           type: 'category',
           label: 'Helm Chart CD',
           collapsed: true,
-          items: [
-            'tutorials/helm',
-            'tutorials/helm-multi-cluster',
-          ],
+          items: ['tutorials/helm', 'tutorials/helm-multi-cluster'],
         },
         {
           'Cloud Resources CD': [
@@ -56,10 +53,7 @@ module.exports = {
           type: 'category',
           label: 'Kubernetes Manifest CD',
           collapsed: true,
-          items: [
-            'tutorials/k8s-object',
-            'end-user/components/ref-objects',
-          ],
+          items: ['tutorials/k8s-object', 'end-user/components/ref-objects'],
         },
         {
           type: 'category',
@@ -75,9 +69,7 @@ module.exports = {
           type: 'category',
           label: 'GitOps',
           collapsed: true,
-          items: [
-            'case-studies/gitops',
-          ],
+          items: ['case-studies/gitops'],
         },
         {
           'General CD Features': [
@@ -102,14 +94,11 @@ module.exports = {
             'platform-engineers/advanced-install',
             'platform-engineers/system-operation/vela-cli-image',
             'platform-engineers/system-operation/enable-addon-offline',
-            'platform-engineers/system-operation/migration-from-old-version'
+            'platform-engineers/system-operation/migration-from-old-version',
           ],
         },
         {
-          'User Management': [
-            'how-to/dashboard/user/user',
-            'tutorials/sso',
-          ],
+          'User Management': ['how-to/dashboard/user/user', 'tutorials/sso'],
         },
         'how-to/dashboard/user/project',
         {
@@ -151,7 +140,7 @@ module.exports = {
         'contributor/non-code-contribute',
         'contributor/code-contribute',
         {
-          'Conventions': [
+          Conventions: [
             'contributor/release-process',
             'contributor/code-conventions',
             'contributor/principle-of-test',
@@ -182,10 +171,10 @@ module.exports = {
               'Patch and Override': [
                 'platform-engineers/traits/patch-trait',
                 'platform-engineers/cue/patch-strategy',
-              ]
+              ],
             },
             {
-              'Debugging': [
+              Debugging: [
                 'platform-engineers/debug/dry-run',
                 'platform-engineers/debug/debug',
               ],

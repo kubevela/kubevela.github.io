@@ -133,9 +133,9 @@ Hello World
 
 ### 执行工作流部署应用
 
-点击应用详情页右上方的 `部署` 按钮，选择指定环境的工作流即可开始部署应用。
+点击应用详情页右上方的 `部署` 按钮，选择指定环境的工作流即可开始部署应用，开始部署后可以切换到环境视图下打开应用资源拓扑图观测资源状态。
 
-![](./resources/succeed-first-vela-app.jpg)
+![first-app-graph](https://static.kubevela.net/images/1.4/first-app-graph.jpg)
 
 ### 删除应用
 
