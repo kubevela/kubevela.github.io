@@ -14,7 +14,7 @@ The git type registry type has supported github, gitlab and gitee.
 A typical git addon registry is like [catalog](https://github.com/kubevela/catalog/tree/master/addons). You can clone
 this repo to your local path and then push to your own git repository.
 
-If your repository type is github,you can use this command to add your addon registry.
+If your repository type is github, you can use this command to add your addon registry.
 
 ```yaml
 vela addon registry add my-repo --type git --endpoint=<URL> --path=<ptah> --gitToken=<git token>
