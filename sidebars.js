@@ -96,7 +96,8 @@ module.exports = {
             'platform-engineers/system-operation/enable-addon-offline',
             'platform-engineers/system-operation/migration-from-old-version',
           ],
-        },
+        }
+        ,
         {
           'User Management': ['how-to/dashboard/user/user', 'tutorials/sso'],
         },
@@ -113,6 +114,7 @@ module.exports = {
           'Cluster Management': [
             'platform-engineers/system-operation/managing-clusters',
             'how-to/dashboard/target/overview',
+            'platform-engineers/system-operation/working-with-ocm',
           ],
         },
         {
