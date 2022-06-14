@@ -317,6 +317,97 @@ If you're using the `velaux` UI console, you can get even more information with 
 
 ![resource-detail](../resources/helm-topology.jpg)
 
+## Specify different value file for different environment
+
+You can choose different value file present in a helm chart for different environment. eg:
+
+Please make sure your local cluster have two namespaces "test" and "prod" which represent two environments in our example.
+
+We use the chart `hello-kubernetes-chart` as an example.This chart has two values files. You can pull this chart and have a look all contains files in it:
+
+```yaml
+$ tree ./hello-kubernetes-chart
+./hello-kubernetes-chart
+├── Chart.yaml
+├── templates
+│ ├── NOTES.txt
+│ ├── _helpers.tpl
+│ ├── config-map.yaml
+│ ├── deployment.yaml
+│ ├── hpa.yaml
+│ ├── ingress.yaml
+│ ├── service.yaml
+│ ├── serviceaccount.yaml
+│ └── tests
+│ └── test-connection.yaml
+├── values-production.yaml
+└── values.yaml
+```
+
+As we can see, there are values files `values.yaml` `values-production.yaml` in this chart.
+
+```yaml
+cat <<EOF | vela up -f -
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: hello-kubernetes
+spec:
+  components:
+    - name: hello-kubernetes
+      type: helm
+      properties:
+        repoType: "helm"
+        url: "https://wangyikewxgm.github.io/my-charts/"
+        chart: "hello-kubernetes-chart"
+        version: "0.1.0"
+
+  policies:
+    - name: topology-test
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: "test"
+    - name: topology-prod
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: "prod"
+    - name: override-prod
+      type: override
+      properties:
+        components:
+          - name: hello-kubernetes
+            properties:
+              valuesFiles:
+                - "values-production.yaml"
+  workflow:
+    steps:
+      - name: deploy2test
+        type: deploy
+        properties:
+          policies: ["topology-test"]
+      - name: deploy2prod
+        type: deploy
+        properties:
+          policies: ["topology-prod", "override-prod"]  
+EOF
+```
+
+Access the endpoints of application:
+
+```yaml
+vela port-forward hello-kubernetes
+```
+
+If you choose ```Cluster: local | Namespace: test | Kind: HelmRelease | Name: hello-kubernetes``` you will see:
+
+![image](../resources/helm-files-test.jpg)
+
+If you choose ```Cluster: local | Namespace: prod | Kind: HelmRelease | Name: hello-kubernetes``` you will see:
+
+![image](../resources/helm-files-prod.jpg)
+
 ## Clean up
 
 If you're using velad for this demo, you can clean up very easily by:
