@@ -188,7 +188,10 @@ module.exports = {
           collapsed: true,
           items: [
             {
-              Addons: ['platform-engineers/addon/intro'],
+              Addons: [
+                  'platform-engineers/addon/intro',
+                  'platform-engineers/addon/addon-registry'
+              ],
             },
             {
               'Cloud Resources': [

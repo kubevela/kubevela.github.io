@@ -459,6 +459,10 @@
                 {
                   "type": "doc",
                   "id": "version-v1.4/platform-engineers/addon/intro"
+                },
+                {
+                  "type": "doc",
+                  "id": "version-v1.4/platform-engineers/addon/addon-registry"
                 }
               ]
             },
