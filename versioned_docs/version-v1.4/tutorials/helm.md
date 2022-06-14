@@ -209,6 +209,15 @@ spec:
   EOF
 ```
 
+Files defined in field `valuesFiles` are merged in the order of this list with the last file overriding the first.
+
+Example below `values-production.yaml` will override `values.yaml` if they have same value key.
+```yaml
+        valuesFiles:
+          - "values.yaml"
+          - "values-production.yaml"
+```
+
 ## Next
 
 * Learn [multi cluster delivery](./helm-multi-cluster) for helm chart.
