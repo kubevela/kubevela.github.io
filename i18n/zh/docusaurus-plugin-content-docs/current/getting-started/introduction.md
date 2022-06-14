@@ -73,8 +73,17 @@ KubeVela 作为一个应用交付系统天然可以部署各种制品类型，Ku
 
 KubeVela 是一个基于云原生技术栈构建的现代应用交付系统。它利用了开放应用程序模型（Open Application Model）和 Kubernetes 作为控制平面来解决一个旷日已久的难题——如何让应用交付变得更加轻松愉快。
 
+## 开发状态
+
+KubeVela 的开发者社区非常活跃，你可以在[这里](https://github.com/kubevela/kubevela/releases)看到所有已发布版本。
+
+## 企业采纳
+
+你可以在[这里](https://github.com/kubevela/community/blob/main/ADOPTERS.md)看到正式采纳了 KubeVela 的公司或组织。
+
 ## 下一步
 
 接下来，我们推荐你：
 
 - 开始 [安装使用 KubeVela](./install)。
+- 了解 [核心概念](./getting-started/core-concept) 及其原理。

@@ -45,7 +45,7 @@ spec:
 
 This `Application` entity will reference `component`, `trait`, `policy` and `workflow step` types which are essentially programmable modules that are maintained by platform team. Hence, this abstraction is highly extensible and can be customized in-place at ease.
 
-* **Component**: A Component defines the delivery artifact (binary, Docker image, Helm Chart...) or cloud service included in one application. As we will regard an application as a microservice business unit, the best practice is to having one component as the core and the others are dependencies with a maximum number under control.
+* **Component**: A Component defines the delivery artifact (binary, Docker image, Helm Chart...) or cloud service included in one application. As we will regard an application as a microservice business, the best practice is to control the maximum number of components with application under ~15.
 
 * **Trait**: Traits are management requirements of an artifact that can be declared with each Component. For example: scale and rollout strategy, persistent storage claim, gateway endpoint and so on.
 
