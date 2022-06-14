@@ -276,6 +276,10 @@
             {
               "type": "doc",
               "id": "version-v1.4/how-to/dashboard/target/overview"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.4/platform-engineers/system-operation/working-with-ocm"
             }
           ]
         },
