@@ -67,7 +67,9 @@ export default function Home() {
             aria-label="Star facebook/metro on GitHub">
             Star
           </GitHubButton>
-          <p className="hero__subtitle">{siteConfig.tagline}</p>
+          <p className="hero__subtitle">
+              <Translate>Make shipping applications more enjoyable.</Translate>
+          </p>
           <div
             className={clsx(styles.heroButtons, 'name', 'margin-vert--md')}>
             <Button href={useBaseUrl('docs/quick-start')}><Translate>Get Started</Translate></Button>
