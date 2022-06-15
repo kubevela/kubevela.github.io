@@ -307,6 +307,10 @@
           "id": "version-v1.4/platform-engineers/system-operation/performance-finetuning"
         },
         {
+          "type": "doc",
+          "id": "version-v1.4/platform-engineers/workflow/working-mechanism"
+        },
+        {
           "collapsed": true,
           "type": "category",
           "label": "UX Customization",
@@ -377,42 +381,16 @@
               "id": "version-v1.4/platform-engineers/components/custom-component"
             },
             {
-              "collapsed": true,
-              "type": "category",
-              "label": "Traits System",
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "version-v1.4/platform-engineers/traits/customize-trait"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.4/platform-engineers/traits/advanced"
-                }
-              ]
+              "type": "doc",
+              "id": "version-v1.4/platform-engineers/traits/customize-trait"
             },
             {
               "type": "doc",
               "id": "version-v1.4/platform-engineers/traits/status"
             },
             {
-              "collapsed": true,
-              "type": "category",
-              "label": "Workflow System",
-              "items": [
-                {
-                  "type": "doc",
-                  "id": "version-v1.4/platform-engineers/workflow/workflow"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.4/platform-engineers/workflow/cue-actions"
-                },
-                {
-                  "type": "doc",
-                  "id": "version-v1.4/platform-engineers/workflow/working-mechanism"
-                }
-              ]
+              "type": "doc",
+              "id": "version-v1.4/platform-engineers/workflow/workflow"
             },
             {
               "collapsed": true,
@@ -521,6 +499,10 @@
         {
           "type": "doc",
           "id": "version-v1.4/end-user/workflow/built-in-workflow-defs"
+        },
+        {
+          "type": "doc",
+          "id": "version-v1.4/platform-engineers/workflow/cue-actions"
         },
         {
           "collapsed": true,

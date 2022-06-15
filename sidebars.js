@@ -125,6 +125,7 @@ module.exports = {
         },
         'platform-engineers/system-operation/observability',
         'platform-engineers/system-operation/performance-finetuning',
+        'platform-engineers/workflow/working-mechanism',
         {
           'UX Customization': [
             'reference/ui-schema',
@@ -153,23 +154,9 @@ module.exports = {
             'platform-engineers/cue/basic',
             'platform-engineers/cue/definition-edit',
             'platform-engineers/components/custom-component',
-            {
-              type: 'category',
-              label: 'Traits System',
-              items: [
-                'platform-engineers/traits/customize-trait',
-                'platform-engineers/traits/advanced',
-              ],
-            },
+            'platform-engineers/traits/customize-trait',
             'platform-engineers/traits/status',
-            {
-              'Workflow System': [
-                'platform-engineers/workflow/workflow',
-                'platform-engineers/workflow/cue-actions',
-                'platform-engineers/workflow/working-mechanism',
-              ],
-            },
-            {
+            'platform-engineers/workflow/workflow', {
               'Patch and Override': [
                 'platform-engineers/traits/patch-trait',
                 'platform-engineers/cue/patch-strategy',
@@ -191,8 +178,8 @@ module.exports = {
           items: [
             {
               Addons: [
-                  'platform-engineers/addon/intro',
-                  'platform-engineers/addon/addon-registry'
+                'platform-engineers/addon/intro',
+                'platform-engineers/addon/addon-registry'
               ],
             },
             {
@@ -216,6 +203,7 @@ module.exports = {
         'end-user/traits/references',
         'end-user/policies/references',
         'end-user/workflow/built-in-workflow-defs',
+        'platform-engineers/workflow/cue-actions',
         {
           type: 'category',
           label: 'Community Addons',
