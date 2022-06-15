@@ -57,7 +57,7 @@ $ helm plugin install https://github.com/chartmuseum/helm-push
 $ helm cm-push <addon-pacakge> <remote>
 ```
 
-More info please [refer](https://github.com/chartmuseum/helm-push).
+More info please refer to [chartmuseum docs](https://github.com/chartmuseum/helm-push).
 
 Then you can add it as addon registry by this command:
 
