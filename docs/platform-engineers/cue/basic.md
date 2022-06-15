@@ -2,9 +2,9 @@
 title: CUE Basic
 ---
 
-This document will explain more about how to use CUE to encapsulate and abstract a given capability in Kubernetes in detail.
+In this section, we will explain more about how KubeVela use CUE to encapsulate and abstract a given capability in Kubernetes in detail.
 
-> Please make sure you have already learned about `Application` custom resource before reading the following guide. 
+We'll start from some basic CUE knowledge first, if you don't have any idea of [KubeVela Concept](../../getting-started/core-concept), don't worry! This doc is available for anyone who want to learn how to use CUE in practice quickly.
 
 ## Overview
 
@@ -21,8 +21,8 @@ The reasons for KubeVela supports CUE as a first-class solution to design abstra
 ## Prerequisites
 
 Please make sure below CLIs are present in your environment:
-* [`cue` >=v0.2.2](https://cuelang.org/docs/install/)
-* [`vela` (>v1.0.0)](../../install)
+* [`cue` v0.2.2+](https://cuelang.org/docs/install/), currently KubeVela only supports CUE v0.2.2, we're positively discussing with CUE community for upgrade.
+* [`vela` v1.0.0+](../../install).
 
 ## CUE CLI Basic
 
@@ -455,6 +455,7 @@ output: {
         }
     }
     ```
+    Note that we use `"\( _my-statement_ )"` for inner calculation in string, it's very useful!
   -  Loop for Slice
     ```cue
     parameter: {
@@ -478,8 +479,50 @@ output: {
         }
     }
     ```
+  - If clause in Loop {}
+  ```
+  parameter: [
+	{
+		name: "empty"
+	}, {
+		name: "xx1"
+	},
+  ]
 
-Note that we use `"\( _my-statement_ )"` for inner calculation in string.
+  dataFrom: [ for _, v in parameter {
+	if v.name != "empty" {
+		name: v.name
+	}
+  }]
+  ```
+  the result is:
+  ```
+  cue eval ../blog/a.cue -e dataFrom
+  [{}, {
+    name: "xx1"
+  }]
+  ```
+  - If clause in Loop with condition
+  ```
+  parameter: [
+	{
+		name: "empty"
+	}, {
+		name: "xx1"
+	},
+  ]
+
+  dataFrom: [ for _, v in parameter if v.name != "empty" {
+	name: v.name
+  }]
+  ```
+  the result is:
+  ```
+  cue eval ../blog/a.cue -e dataFrom
+  [{
+    name: "xx1"
+  }]
+  ```
 
 ## Import CUE Internal Packages
 
@@ -504,6 +547,10 @@ output: {
 	}
 }
 ```
+
+Great, now you've learned all of the basic skills and best practices about how to use CUE! If you want to learn more details of CUE, please refer to the [official docs](https://cuelang.org/).
+
+In the following sections, we'll start to learn how KubeVela use CUE to glue resources. Make sure you have learned the [core concepts](../../getting-started/core-concept) of KubeVela before that.
 
 ## Next
 

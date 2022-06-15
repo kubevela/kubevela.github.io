@@ -1,5 +1,5 @@
 ---
-title: Step Operations
+title: Built-in Workflow Operations
 ---
 
 This documentation will introduce the CUE operations provided in `vela/op` stdlib package that can be used in each workflow step.

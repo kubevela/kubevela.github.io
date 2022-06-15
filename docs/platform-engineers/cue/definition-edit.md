@@ -244,7 +244,7 @@ ComponentDefinition my-comp: My component.
 ComponentDefinition my-comp in namespace my-namespace deleted.
 ```
 
-## Next
+## Next Step
 
 * Learn more about [defining customized component](../components/custom-component).
 * Learn more about [defining customized trait](../traits/customize-trait).

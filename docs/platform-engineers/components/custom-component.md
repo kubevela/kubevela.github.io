@@ -2,7 +2,7 @@
 title:  Component Definition
 ---
 
-In this section, we will introduce how to use [CUE](https://cuelang.org/) to customize components via `ComponentDefinition`. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition) and [how to manage definition](../cue/definition-edit).
+In this section, we will introduce how to use [CUE](../cue/basic) to customize components via `ComponentDefinition`. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition) and [how to manage definition](../cue/definition-edit).
 
 ## Declare `ComponentDefinition`
 
@@ -301,18 +301,9 @@ output: {
 
 > Note that `context` information are auto-injected before resources are applied to target cluster.
 
-### Full available information in CUE `context`
+### Full available `context` information can be used
 
-| Context Variable  | Description |
-| :--: | :---------: |
-| `context.appRevision` | The revision of the application |
-| `context.appRevisionNum` | The revision number(`int` type) of the application, e.g., `context.appRevisionNum` will be `1` if `context.appRevision` is `app-v1`|
-| `context.appName` | The name of the application |
-| `context.name` | The name of the component of the application |
-| `context.namespace` | The namespace of the application |
-| `context.output` | The rendered workload API resource of the component, this usually used in trait |
-| `context.outputs.<resourceName>` | The rendered trait API resource of the component, this usually used in trait |
-
+* Check the reference docs of [definition protocol](../../platform-engineers/oam/x-definition#definition-runtime-context) to see all of the available information in KubeVela `context`.
 
 ## Composition
 
@@ -454,7 +445,7 @@ spec:
         cpu: "100m"
 ```
 
-It will generate and manage below API resources in target cluster:
+It will generate and manage below Kubernetes API resources in target cluster, you can use [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) to check:
 
 ```shell
 kubectl get deployment
@@ -474,4 +465,5 @@ hello-world-trait-7bdcff98f7   ClusterIP   <your ip>       <none>        8000/TC
 
 ## What's Next
 
-Please check the [Learning CUE](../cue/basic) documentation about why we support CUE as first-class templating solution and more details about using CUE efficiently.
+* Learn more about [defining customized trait](../traits/customize-trait) in CUE.
+* Learn how to [define health check and custom status](../traits/status) of Component.

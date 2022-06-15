@@ -1,10 +1,10 @@
 ---
-title:  自定义组件入门
+title:  自定义组件
 ---
 
 > 在阅读本部分之前，请确保你已经了解 KubeVela 中 [组件定义（ComponentDefinition](../oam/x-definition#组件定义（ComponentDefinition）) 的概念且学习掌握了 [CUE 的基本知识](../cue/basic)
 
-本节将以组件定义的例子展开说明，介绍如何使用 [CUE](https://cuelang.org/) 通过组件定义 `ComponentDefinition` 来自定义应用部署计划的组件。
+本节将以组件定义的例子展开说明，介绍如何使用 [CUE](../cue/basic) 通过组件定义 `ComponentDefinition` 来自定义应用部署计划的组件。
 
 ### 交付一个简单的自定义组件
 
@@ -473,12 +473,9 @@ output: {
 
 ### CUE `context` 的配置项
 
-|          Context 变量名          |                                                          说明                                                          |
-| :------------------------------: | :--------------------------------------------------------------------------------------------------------------------: |
-|      `context.appRevision`       |                                                   应用部署计划的版本                                                   |
-|     `context.appRevisionNum`     | 应用部署计划的版本号(`int` 类型), 比如说如果 `context.appRevision` 是 `app-v1` 的话，`context.appRevisionNum` 会是 `1` |
-|        `context.appName`         |                                                   应用部署计划的名称                                                   |
-|          `context.name`          |                                                       组件的名称                                                       |
-|       `context.namespace`        |                                                 应用部署计划的命名空间                                                 |
-|         `context.output`         |                                  组件中渲染的工作负载 API 资源，这通常用在运维特征里                                   |
-| `context.outputs.<resourceName>` |                                  组件中渲染的运维特征 API 资源，这通常用在运维特征里                                   |
+* 你可以通过查看[模块定义的完整协议](../../platform-engineers/oam/x-definition#definition-runtime-context)来了解全部的 `context` 运行时变量.
+
+## 下一步
+
+* 了解如何基于 CUE [自定义运维特征](../traits/customize-trait) in CUE。
+* 了解如何为组件和运维特征模块[定义健康状态](../traits/status)。

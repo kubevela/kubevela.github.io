@@ -1,5 +1,5 @@
 ---
-title: Working Mechanism
+title: Workflow Working Mechanism
 ---
 
 This document will give a brief introduction to the core mechanisms of KubeVela Workflow.

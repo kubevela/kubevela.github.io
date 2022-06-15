@@ -3,200 +3,125 @@ title:  自定义运维特征
 ---
 
 
-本节介绍如何自定义运维特征，为用户的组件增添任何需要的运维特征能力。
+本节介绍如何自定义运维特征，为用户的组件增添任何需要的运维特征能力。开始这一部分之前，请确保你已经对[核心概念](../../getting-started/definition) 以及 [如何管理模块定义](../cue/definition-edit)有了基本的了解。
 
-### 开始之前
+## 通过 Trait 生成资源对象
 
-请先阅读和理解 [运维特征定义](../oam/x-definition#运维特征定义（TraitDefinition）)
+通过 Trait 生成资源的用法和 Component 基本类似，这种场景通常用于生成运维的对象，比如用于服务访问的 Ingress、Service，或者用于扩缩容的 HPA 等对象。
 
-### 如何使用
-
-我们首先为你展示一个简单的示例，比如直接引用已有的 Kubernetes API 资源 Ingress。来编写一个下面这样的 YAML 文件：
-
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  name: customize-ingress
-spec:
-  definitionRef:
-    name: ingresses.networking.k8s.io
-```
-
-为了和我们已经内置的 ingress 有所区分，我们将其命名为 `customize-ingress`。然后我们部署到运行时集群：
+同样的，我们使用 `vela def init`命令来生成一个框架：
 
 ```
-$ kubectl apply -f customize-ingress.yaml 
-traitdefinition.core.oam.dev/customize-ingress created
+vela def init my-route -t trait --desc "My ingress route trait." > myroute.cue
 ```
 
-创建成功。这时候，你的用户可以通过 `vela traits` 查看到这个能力：
+> 注意： 在 vela CLI(`<=1.4.2`)的版本中有一个已知问题，`vela def init` 命令会生成一个错误的 `definitionRef: ""` 字段，这一行需要删除。
+
+期望生成的内容如下：
 
 ```
-$ vela traits
-NAME             	NAMESPACE  	APPLIES-TO       	CONFLICTS-WITH	POD-DISRUPTIVE	DESCRIPTION                                          
-customize-ingress	default    	                 	              	false         	description not defined                              
-ingress          	default    	                 	              	false         	description not defined                              
-annotations      	vela-system	deployments.apps 	              	true          	Add annotations for your Workload.                   
-configmap        	vela-system	deployments.apps 	              	true          	Create/Attach configmaps to workloads.               
-cpuscaler        	vela-system	deployments.apps 	              	false         	Automatically scale the component based on CPU usage.
-expose           	vela-system	deployments.apps 	              	false         	Expose port to enable web traffic for your component.
-hostalias        	vela-system	deployment.apps  	              	false         	Add host aliases to workloads.                       
-labels           	vela-system	deployments.apps 	              	true          	Add labels for your Workload.                        
-lifecycle        	vela-system	deployments.apps 	              	true          	Add lifecycle hooks to workloads.                    
-resource         	vela-system	deployments.apps 	              	true          	Add resource requests and limits to workloads.       
-rollout          	vela-system	                 	              	false         	rollout the component                                
-scaler           	vela-system	deployments.apps 	              	false         	Manually scale the component.                        
-service-binding  	vela-system	webservice,worker	              	false         	Binding secrets of cloud resources to component env  
-sidecar          	vela-system	deployments.apps 	              	true          	Inject a sidecar container to the component.         
-volumes          	vela-system	deployments.apps 	              	true          	Add volumes for your Workload.      
+$ cat myroute.cue
+"my-route": {
+	annotations: {}
+	attributes: {
+		appliesToWorkloads: []
+		conflictsWith: []
+		podDisruptive:   false
+		workloadRefPath: ""
+	}
+	description: "My ingress route trait."
+	labels: {}
+	type: "trait"
+}
+
+template: {
+	patch: {}
+	parameter: {}
+}
 ```
 
-最后用户只需要把这个自定义的运维特征，放入一个与之匹配的组件中进行使用即可：
-
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: testapp
-spec:
-  components:
-    - name: express-server
-      type: webservice
-      properties:
-        cmd:
-          - node
-          - server.js
-        image: oamdev/testapp:v1
-        port: 8080
-      traits:
-        - type: customize-ingress
-          properties:
-            rules:
-            - http:
-                paths:
-                - path: /testpath
-                  pathType: Prefix
-                  backend:
-                    service:
-                      name: test
-                      port:
-                        number: 80
-```
-
-参照上面的开发过程，你可以继续自定义其它需要的 Kubernetes 资源来提供给你的用户。
-
-请注意：这种自定义运维特征的方式中，是无法设置诸如 `annotations` 这样的元信息(metadata)，来作为运维特征属性的。也就是说，当你只想简单引入自己的 CRD 资源或者控制器作为运维特征时，可以遵循这种做法。
-
-#### 使用 CUE 来自定义运维特征
-
-我们更推荐你使用 CUE 模版来自定义运维特征。这种方法给你可以模版化任何资源和资源的灵活性。比如，我们可以组合自定义 `Service` 和 `ingeress` 成为一个运维特征来使用。
-
-在用法上，你需要把所有的运维特征定义在 `outputs` 里(注意，不是 `output`)，格式如下：
-
+与组件定义有所不同，在用法上，你需要把所有的运维特征定义在 `outputs` 里(注意，不是 `output`)，格式如下：
 
 ```cue
 outputs: <unique-name>: 
   <full template data>
 ```
 
-我们下面同样使用一个 `ingress` 和 `Service` 的示例进行讲解：
+我们下面使用一个 `ingress` 和 `Service` 组成一个称为 `my-route` 的运维特征作为示例讲解：
 
+```cue
+"my-route": {
+	annotations: {}
+	attributes: {
+		appliesToWorkloads: []
+		conflictsWith: []
+		podDisruptive:   false
+		workloadRefPath: ""
+	}
+	description: "My ingress route trait."
+	labels: {}
+	type: "trait"
+}
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  name: cue-ingress
-spec:
-  podDisruptive: false
-  schematic:
-    cue:
-      template: |
-        parameter: {
-        	domain: string
-        	http: [string]: int
-        }
+template: {
+	parameter: {
+		domain: string
+		http: [string]: int
+	}
 
-        // 我们可以在一个运维特征 CUE 模版定义多个 outputs
-        outputs: service: {
-        	apiVersion: "v1"
-        	kind:       "Service"
-          metadata: {
-            annotations: {
-              address-type: "intranet"
-            }
-          }
-        	spec: {
-        		selector:
-        			app: context.name
-        		ports: [
-        			for k, v in parameter.http {
-        				port:       v
-        				targetPort: v
-        			},
-        		]
+  // 我们可以在一个运维特征 CUE 模版定义多个 outputs
+	outputs: service: {
+		apiVersion: "v1"
+		kind:       "Service"
+		spec: {
+			selector:
+				app: context.name
+			ports: [
+				for k, v in parameter.http {
+					port:       v
+					targetPort: v
+				},
+			]
+		}
+	}
 
-            type: "LoadBalancer"
-        	}
-        }
-
-        outputs: ingress: {
-        	apiVersion: "networking.k8s.io/v1beta1"
-        	kind:       "Ingress"
-        	metadata:
-        		name: context.name
-        	spec: {
-        		rules: [{
-        			host: parameter.domain
-        			http: {
-        				paths: [
-        					for k, v in parameter.http {
-        						path: k
-        						backend: {
-        							serviceName: context.name
-        							servicePort: v
-        						}
-        					},
-        				]
-        			}
-        		}]
-        	}
-        }
+	outputs: ingress: {
+		apiVersion: "networking.k8s.io/v1beta1"
+		kind:       "Ingress"
+		metadata:
+			name: context.name
+		spec: {
+			rules: [{
+				host: parameter.domain
+				http: {
+					paths: [
+						for k, v in parameter.http {
+							path: k
+							backend: {
+								serviceName: context.name
+								servicePort: v
+							}
+						},
+					]
+				}
+			}]
+		}
+	}
+}
 ```
 
-可以看到，`parameter` 字段让我们可以自由自定义和传递业务参数。同时在 `metadata` 的 `annotations` 里可以标记任何你们需要的信息，我们上文的例子里标记了 `Service` 是一个给内网使用的负载均衡。
+将这个运维特征通过如下命令部署到控制平面上：
 
-接下来我们把这个 cue-ingress YMAL 部署到运行时集群，成功之后用户同样可以通过 `vela traits` 命令，查看到这个新生成的运维特征：
+```
+vela def apply -f myroute.cue
+```
+
+然后最终用户就立即可以发现并使用这个运维特征了，这个运维特征没有限制，可以作用于任意 `Application`。
+
+我们通过如下的 `vela up` 命令将它启动起来：
 
 ```shell
-$ kubectl apply -f cue-ingress.yaml                
-traitdefinition.core.oam.dev/cue-ingress created
-$ vela traits                      
-NAME           	NAMESPACE  	APPLIES-TO       	CONFLICTS-WITH	POD-DISRUPTIVE	DESCRIPTION                                          
-cue-ingress    	default    	                 	              	false         	description not defined                              
-ingress        	default    	                 	              	false         	description not defined                              
-annotations    	vela-system	deployments.apps 	              	true          	Add annotations for your Workload.                   
-configmap      	vela-system	deployments.apps 	              	true          	Create/Attach configmaps to workloads.               
-cpuscaler      	vela-system	deployments.apps 	              	false         	Automatically scale the component based on CPU usage.
-expose         	vela-system	deployments.apps 	              	false         	Expose port to enable web traffic for your component.
-hostalias      	vela-system	deployment.apps  	              	false         	Add host aliases to workloads.                       
-labels         	vela-system	deployments.apps 	              	true          	Add labels for your Workload.                        
-lifecycle      	vela-system	deployments.apps 	              	true          	Add lifecycle hooks to workloads.                    
-resource       	vela-system	deployments.apps 	              	true          	Add resource requests and limits to workloads.       
-rollout        	vela-system	                 	              	false         	rollout the component                                
-scaler         	vela-system	deployments.apps 	              	false         	Manually scale the component.                        
-service-binding	vela-system	webservice,worker	              	false         	Binding secrets of cloud resources to component env  
-sidecar        	vela-system	deployments.apps 	              	true          	Inject a sidecar container to the component.         
-volumes        	vela-system	deployments.apps 	              	true          	Add volumes for your Workload.        
-```
-
-最后用户将这个运维特征放入对应组件，通过应用部署计划完成交付:
-
-
-```yaml
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -212,11 +137,263 @@ spec:
         image: oamdev/testapp:v1
         port: 8080
       traits:
-        - type: cue-ingress
+        - type: my-route
           properties:
             domain: test.my.domain
             http:
               "/api": 8080
+EOF
 ```
 
-基于 CUE 的运维特征定义方式，也提供了满足于更多业务场景的用法，比如给运维特征打补丁、传递数据等等。后面的文档将进一步介绍相关内容。
+然后 KubeVela 在服务端就会将其生成 Kubernetes 资源，通过 CUE 我们可以完成很多复杂的玩法。
+
+### 一次渲染多个资源
+
+你可以在 `outputs` 里定义 For 循环。
+
+> 注意在 For 循环里的 `parameter` 字段必须是 map 类型。
+
+看看如下这个例子，在一个 `TraitDefinition` 对象里渲染多个 `Service`：
+
+```yaml
+"expose": {
+	type: "trait"
+}
+
+template: {
+	parameter: {
+		http: [string]: int
+	}
+	outputs: {
+		for k, v in parameter.http {
+			"\(k)": {
+				apiVersion: "v1"
+				kind:       "Service"
+				spec: {
+					selector:
+						app: context.name
+					ports: [{
+						port:       v
+						targetPort: v
+					}]
+				}
+			}
+		}
+	}
+}
+```
+
+这个运维特征可以这样使用：
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: testapp
+spec:
+  components:
+    - name: express-server
+      type: webservice
+      properties:
+        ...
+      traits:
+        - type: expose
+          properties:
+            http:
+              myservice1: 8080
+              myservice2: 8081
+```
+
+### 自定义运维特征里执行 HTTP Request
+
+`TraitDefinition` 对象可以发送 HTTP 请求并获取应答，让你可以通过关键字 `processing` 来渲染资源。
+
+你可以在 `processing.http` 里定义 HTTP 请求的 `method`, `url`, `body`, `header` 和 `trailer`，然后返回的数据将被存储在 `processing.output` 中。
+
+> 请确保目标 HTTP 服务器返回的数据是 JSON 格式
+
+接着，你就可以通过 `patch` 或者 `output/outputs` 里的 `processing.output` 来引用返回数据了。
+
+下面是一个示例:
+
+```yaml
+"auth-service": {
+	type: "trait"
+}
+
+template: {
+	parameter: {
+		serviceURL: string
+	}
+
+	processing: {
+		output: {
+			token?: string
+		}
+		// The target server will return a JSON data with `token` as key.
+		http: {
+			method: *"GET" | string
+			url:    parameter.serviceURL
+			request: {
+				body?: bytes
+				header: {}
+				trailer: {}
+			}
+		}
+	}
+
+	patch: {
+		data: token: processing.output.token
+	}
+}
+```
+
+在上面这个例子中，`TraitDefinition` 对象发送请求来获取 `token` 的数据，然后将这些数据补丁给组件实例。
+
+## 数据传递
+
+`TraitDefinition` 对象可以读取特定 `ComponentDefinition` 对象生成的 API 资源（渲染自 `output` 和 `outputs`）。
+
+>  KubeVela 保证了 `ComponentDefinition` 一定会在 `TraitDefinition` 之前渲染
+
+具体来说，`context.output` 字段包含了所有渲染后的工作负载 API 资源，然后 `context.outputs.<xx>` 则包含渲染后的其它类型 API 资源。
+
+下面是一个数据传递的例子:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: ComponentDefinition
+metadata:
+  name: worker
+spec:
+  workload:
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+  schematic:
+    cue:
+      template: |
+        output: {
+          apiVersion: "apps/v1"
+          kind:       "Deployment"
+          spec: {
+            selector: matchLabels: {
+              "app.oam.dev/component": context.name
+            }
+
+            template: {
+              metadata: labels: {
+                "app.oam.dev/component": context.name
+              }
+              spec: {
+                containers: [{
+                  name:  context.name
+                  image: parameter.image
+                  ports: [{containerPort: parameter.port}]
+                  envFrom: [{
+                    configMapRef: name: context.name + "game-config"
+                  }]
+                  if parameter["cmd"] != _|_ {
+                    command: parameter.cmd
+                  }
+                }]
+              }
+            }
+          }
+        }
+
+        outputs: gameconfig: {
+          apiVersion: "v1"
+          kind:       "ConfigMap"
+          metadata: {
+            name: context.name + "game-config"
+          }
+          data: {
+            enemies: parameter.enemies
+            lives:   parameter.lives
+          }
+        }
+
+        parameter: {
+          // +usage=Which image would you like to use for your service
+          // +short=i
+          image: string
+          // +usage=Commands to run in the container
+          cmd?: [...string]
+          lives:   string
+          enemies: string
+          port:    int
+        }
+
+
+---
+apiVersion: core.oam.dev/v1beta1
+kind: TraitDefinition
+metadata:
+  name: ingress
+spec:
+  schematic:
+    cue:
+      template: |
+        parameter: {
+          domain:     string
+          path:       string
+          exposePort: int
+        }
+        // trait template can have multiple outputs in one trait
+        outputs: service: {
+          apiVersion: "v1"
+          kind:       "Service"
+          spec: {
+            selector:
+              app: context.name
+            ports: [{
+              port:       parameter.exposePort
+              targetPort: context.output.spec.template.spec.containers[0].ports[0].containerPort
+            }]
+          }
+        }
+        outputs: ingress: {
+          apiVersion: "networking.k8s.io/v1beta1"
+          kind:       "Ingress"
+          metadata:
+              name: context.name
+          labels: config: context.outputs.gameconfig.data.enemies
+          spec: {
+            rules: [{
+              host: parameter.domain
+              http: {
+                paths: [{
+                  path: parameter.path
+                  backend: {
+                    serviceName: context.name
+                    servicePort: parameter.exposePort
+                  }
+                }]
+              }
+            }]
+          }
+        }
+```
+
+在渲染 `worker` `ComponentDefinition` 时，具体发生了：
+1. 渲染的 `Deployment` 资源放在 `context.output` 中。
+2. 其它类型资源则放进 `context.outputs.<xx>` 中，同时 `<xx>` 是在特指 `template.outputs` 的唯一名字
+
+因而，`TraitDefinition` 对象可以从 `context` 里读取渲染后的 API 资源（比如 `context.outputs.gameconfig.data.enemies` 这个字段）。
+
+## 使用 Patch Trait 对参数增补或覆盖
+
+除了利用 Trait 生成资源以外，一个更高级的用法是对组件生成的参数做增补或修改。
+
+什么场景下会使用这种功能？
+
+1. 组件由其他人定义，运维人员对参数做修改。
+2. 组件由第三方组织定义，我们不拥有修改能力（不维护），只在部署时使用。
+
+针对上述场景，KubeVela 通过 patch 功能来支撑，因为 Patch 的能力针对 Trait 和 Workflow 均适用，我们通过[这篇 Patch 文档](./patch-trait)统一介绍。
+
+## 下一步
+
+* 了解组件和运维特征如何[定义健康状态](../traits/status)。
+* 了解如何通过 CUE [定义工作流步骤](../workflow/workflow)。
