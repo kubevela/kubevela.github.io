@@ -408,6 +408,10 @@
               ]
             },
             {
+              "type": "doc",
+              "id": "version-v1.4/platform-engineers/system-operation/velaql"
+            },
+            {
               "collapsed": true,
               "type": "category",
               "label": "Debugging",
@@ -421,10 +425,6 @@
                   "id": "version-v1.4/platform-engineers/debug/debug"
                 }
               ]
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.4/platform-engineers/system-operation/velaql"
             }
           ]
         },

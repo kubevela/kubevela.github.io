@@ -2,7 +2,7 @@
 title:  Component Definition
 ---
 
-In this section, we will introduce how to use [CUE](https://cuelang.org/) to customize components via `ComponentDefinition`. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition) and [how to manage definition](../cue/definition-edit).
+In this section, we will introduce how to use [CUE](../cue/basic) to customize components via `ComponentDefinition`. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition) and [how to manage definition](../cue/definition-edit).
 
 ## Declare `ComponentDefinition`
 

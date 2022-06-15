@@ -2,7 +2,7 @@
 title:  Trait Definition
 ---
 
-In this section we will introduce how to define a basic trait with CUE. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition) and [how to manage definition](../cue/definition-edit).
+In this section we will introduce how to define a custom trait with CUE. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition) and [how to manage definition](../cue/definition-edit).
 
 ## Generate Resources by Trait
 

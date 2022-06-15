@@ -162,13 +162,13 @@ module.exports = {
                 'platform-engineers/cue/patch-strategy',
               ],
             },
+            'platform-engineers/system-operation/velaql',
             {
               Debugging: [
                 'platform-engineers/debug/dry-run',
                 'platform-engineers/debug/debug',
               ],
             },
-            'platform-engineers/system-operation/velaql',
           ],
         },
         {

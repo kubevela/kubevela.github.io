@@ -1,5 +1,5 @@
 ---
-title: VelaQL - Query Resources behind Application
+title: Query Resources behind Application
 ---
 
 ## Introduction
