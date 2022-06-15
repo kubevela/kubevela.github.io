@@ -1,5 +1,5 @@
 ---
-title:  Define Health of Component and Trait
+title:  Define Health for Definition
 ---
 
 This documentation will explain how to achieve status write back by using CUE templates in definition objects.
@@ -135,3 +135,7 @@ spec:
       message: "type: "+ context.outputs.service.spec.type +",\t clusterIP:"+ context.outputs.service.spec.clusterIP+",\t ports:"+ "\(context.outputs.service.spec.ports[0].port)"+",\t domain"+context.outputs.ingress.spec.rules[0].host
    ...
 ```
+
+## Next Step
+
+* Learn how to [define custom workflow](../workflow/workflow) with CUE.

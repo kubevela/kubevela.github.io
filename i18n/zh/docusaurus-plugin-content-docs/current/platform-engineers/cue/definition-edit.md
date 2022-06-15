@@ -243,4 +243,5 @@ ComponentDefinition my-comp in namespace my-namespace deleted.
 
 ## 下一步
 
-* 了解如何使用 CUE 和 KubeVela 工具[交付完整的模块能力](./advanced)。
+* 了解如何使用 CUE [自定义组件](../components/custom-component)。
+* 了解如何使用 CUE [自定义运维特征](../traits/customize-trait)。

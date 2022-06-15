@@ -2,7 +2,7 @@
 title:  基础入门
 ---
 
-CUE 是 KubeVela 的核心依赖，也是用户实现自定义扩展的主要方式。本章节将详细介绍 CUE 的基础知识，帮助你更好地使用 KubeVela。
+从这一部分开始，我们会介绍 KubeVela 是如何基于 CUE 来实现抽象和扩展的。本节将主要介绍一些 CUE 的基础知识，如果你对 KubeVela 的[核心概念](../../getting-started/core-concept)还不了解也没有关系，对于那些想要快速了解 CUE 并做一些实践的读者，本节也同样适用。
 
 ## 概述
 
@@ -12,13 +12,13 @@ KubeVela 将 CUE 作为应用交付核心依赖和扩展方式的原因如下：
 -  **CUE 支持一流的代码生成和自动化。** CUE 原生支持与现有工具以及工作流进行集成，反观其他工具则需要自定义复杂的方案才能实现。例如，需要手动使用 Go 代码生成 OpenAPI 模式。KubeVela 也是依赖 CUE 该特性进行构建开发工具和 GUI 界面的。
 - **CUE 与 Go 完美集成。** KubeVela 像 Kubernetes 系统中的大多数项目一样使用 GO 进行开发。CUE 已经在 Go 中实现并提供了丰富的 API。KubeVela 以 CUE 为核心实现 Kubernetes 控制器。借助 CUE，KubeVela 可以轻松处理数据约束问题。
 
-> 更多细节请查看 [The Configuration Complexity Curse](https://blog.cedriccharly.com/post/20191109-the-configuration-complexity-curse/) 以及 [The Logic of CUE](https://cuelang.org/docs/concepts/logic/)。
+> 更多细节请查看 [The Configuration Complexity Curse](https://blog.cedriccharly.com/post/20191109-the-configuration-complexity-curse/) 以及 [The Logic of CUE](https://cuelang.org/docs/concepts/logic/) 两篇文章。
 
 ## 前提
 
 请确保你的环境中已经安装如下命令行：
 * [`cue` v0.2.2](https://cuelang.org/docs/install/) 目前 KubeVela 暂时只支持 CUE v0.2.2 版本，将在后续迭代中升级支持新的 CUE 版本。
-* [`vela` >= v1.1.0](../../install#3-get-kubevela-cli)
+* [`vela` >= v1.1.0](../../install#3-get-kubevela-cli)。
 
 ## 学习 CUE 命令行
 
@@ -472,6 +472,50 @@ output: {
         }
     }
     ```
+    - 循环内使用条件判断
+    ```
+    parameter: [
+    {
+      name: "empty"
+    }, {
+      name: "xx1"
+    },
+    ]
+
+    dataFrom: [ for _, v in parameter {
+    if v.name != "empty" {
+      name: v.name
+    }
+    }]
+    ```
+    结果是：
+    ```
+    cue eval ../blog/a.cue -e dataFrom
+    [{}, {
+      name: "xx1"
+    }]
+    ```
+    - 将条件判断作为循环的条件
+    ```
+    parameter: [
+    {
+      name: "empty"
+    }, {
+      name: "xx1"
+    },
+    ]
+
+  dataFrom: [ for _, v in parameter if v.name != "empty" {
+	name: v.name
+  }]
+  ```
+  结果是：
+  ```
+  cue eval ../blog/a.cue -e dataFrom
+  [{
+    name: "xx1"
+  }]
+  ```
 
 另外，可以使用 `"\( _my-statement_ )"` 进行字符串内部计算，比如上面类型循环示例中，获取值的长度等等操作。
 
@@ -499,65 +543,9 @@ output: {
 }
 ```
 
-## 导入 Kubernetes 包
+至此，你已经学会了基础的 CUE 知识，如果你还想了解更多的 CUE 实践细节，可以参考其[官方文档](https://cuelang.org/)。
 
-KubeVela 会从 Kubernetes 集群中读取 OpenAPI，并将 Kubernetes 所有资源自动构建为内部包。
-
-你可以在 KubeVela 的 CUE 模版中通过 `kube/<apiVersion>` 导入这些包，就像使用 CUE 内部包一样。
-
-比如，`Deployment` 可以这样使用：
-
-```cue
-import (
-   apps "kube/apps/v1"
-)
-
-parameter: {
-    name:  string
-}
-
-output: apps.#Deployment
-output: {
-    metadata: name: parameter.name
-}
-```
-
-`Service` 可以这样使用（无需使用别名导入软件包）：
-
-```cue
-import ("kube/v1")
-
-output: v1.#Service
-output: {
-	metadata: {
-		"name": parameter.name
-	}
-	spec: type: "ClusterIP",
-}
-
-parameter: {
-	name:  "myapp"
-}
-```
-
-甚至已经安装的 CRD 也可以导入使用：
-
-```
-import (
-  oam  "kube/core.oam.dev/v1alpha2"
-)
-
-output: oam.#Application
-output: {
-	metadata: {
-		"name": parameter.name
-	}
-}
-
-parameter: {
-	name:  "myapp"
-}
-```
+在本部分接下来的章节里，我们会开始介绍 KubeVela 如何使用 CUE 像胶水一样衔接不同的资源，请确保你对 KubeVela 的[核心概念](../../getting-started/core-concept)有所了解。
 
 ## 下一步
 

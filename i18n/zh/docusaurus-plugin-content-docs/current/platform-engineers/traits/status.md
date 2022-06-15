@@ -1,8 +1,8 @@
 ---
-title:  状态回写
+title:  自定义健康检查和状态
 ---
 
-本文档将为你讲解，如何通过 CUE 模版在定义对象时实现状态回写。
+本文档将为你讲解，如何通过 CUE 模版在定义模块时实现健康检查和状态。
 
 ## 健康检查
 
@@ -128,3 +128,7 @@ spec:
       message: "type: "+ context.outputs.service.spec.type +",\t clusterIP:"+ context.outputs.service.spec.clusterIP+",\t ports:"+ "\(context.outputs.service.spec.ports[0].port)"+",\t domain"+context.outputs.ingress.spec.rules[0].host
    ...
 ```
+
+## 下一步
+
+* 了解如何基于 CUE  [自定义工作流](../workflow/workflow)。
