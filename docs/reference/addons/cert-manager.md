@@ -1,5 +1,5 @@
 ---
-title: Cert-manager
+title: cert-manager
 ---
 
 This addon is for cert-manager, which is managing the kubernetes certificates.

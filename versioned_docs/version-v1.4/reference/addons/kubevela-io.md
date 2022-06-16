@@ -1,5 +1,5 @@
 ---
-title: kubevela.io
+title: KubeVela.io
 ---
 
 This addon is the document website, align with https://kubevela.io/ and its mirror https://kubevela.net/ .

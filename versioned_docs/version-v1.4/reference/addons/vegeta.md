@@ -1,5 +1,5 @@
 ---
-title: vegeta
+title: Vegeta
 ---
 
 ## Install

@@ -1,4 +1,4 @@
-# flink-kubernetes-operator
+# Flink-kubernetes-operator
 
 A Kubernetes operator for Apache Flink(https://github.com/apache/flink-kubernetes-operator), it allows users to manage Flink applications and their lifecycle through native k8s tooling like kubectl.
 
@@ -31,7 +31,7 @@ addon-fluxcd                    flux-system-namespace   raw                     
 ```
 
 
- Show the component type `flink-cluster`, so we know how to use it in one application. As a flink user, you can choose the parameter to set for your flink cluster
+ Show the component type `flink-cluster`, so we know how to use it in one application. As a Flink user, you can choose the parameter to set for your Flink cluster
 ```shell
 vela show flink-cluster
 # Properties

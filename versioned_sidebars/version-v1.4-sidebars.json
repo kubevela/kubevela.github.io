@@ -536,6 +536,38 @@
             {
               "type": "doc",
               "id": "version-v1.4/reference/addons/traefik"
+            },
+            {
+              "type": "doc",
+              "id": "reference/addons/cert-manager"
+            },
+            {
+              "type": "doc",
+              "id": "reference/addons/kubevela-io"
+            },
+            {
+              "type": "doc",
+              "id": "reference/addons/pyroscope"
+            },
+            {
+              "type": "doc",
+              "id": "reference/addons/vegeta"
+            },
+            {
+              "type": "doc",
+              "id": "reference/addons/ocm-gateway-manager-addon"
+            },
+            {
+              "type": "doc",
+              "id": "reference/addons/ocm-hub-control-plane"
+            },
+            {
+              "type": "doc",
+              "id": "reference/addons/vela-prism"
+            },
+            {
+              "type": "doc",
+              "id": "reference/addons/flink-kubernetes-operator"
             }
           ]
         },
