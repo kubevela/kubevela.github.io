@@ -539,35 +539,35 @@
             },
             {
               "type": "doc",
-              "id": "reference/addons/cert-manager"
+              "id": "version-v1.4/reference/addons/cert-manager"
             },
             {
               "type": "doc",
-              "id": "reference/addons/kubevela-io"
+              "id": "version-v1.4/reference/addons/kubevela-io"
             },
             {
               "type": "doc",
-              "id": "reference/addons/pyroscope"
+              "id": "version-v1.4/reference/addons/pyroscope"
             },
             {
               "type": "doc",
-              "id": "reference/addons/vegeta"
+              "id": "version-v1.4/reference/addons/vegeta"
             },
             {
               "type": "doc",
-              "id": "reference/addons/ocm-gateway-manager-addon"
+              "id": "version-v1.4/reference/addons/ocm-gateway-manager-addon"
             },
             {
               "type": "doc",
-              "id": "reference/addons/ocm-hub-control-plane"
+              "id": "version-v1.4/reference/addons/ocm-hub-control-plane"
             },
             {
               "type": "doc",
-              "id": "reference/addons/vela-prism"
+              "id": "version-v1.4/reference/addons/vela-prism"
             },
             {
               "type": "doc",
-              "id": "reference/addons/flink-kubernetes-operator"
+              "id": "version-v1.4/reference/addons/flink-kubernetes-operator"
             }
           ]
         },
