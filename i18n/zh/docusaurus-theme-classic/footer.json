@@ -19,21 +19,17 @@
     "message": "实践教程",
     "description": "The label of footer link with label=Getting Case Studies to /docs/case-studies"
   },
-  "link.item.label.Extension": {
-    "message": "自定义扩展",
-    "description": "The label of footer link with label=Administrator Manuals linking to /docs/platform-engineers/overview"
+  "link.item.label.Core Concepts": {
+    "message": "核心概念",
+    "description": "The label of footer link with label=Core Concepts linking to /docs/getting-started/core-concept"
   },
   "link.item.label.User Manuals": {
     "message": "用户手册",
     "description": "The label of footer link with label=User Manuals linking to /docs/end-user/application"
   },
   "link.item.label.CNCF Slack ( #kubevela channel )": {
-    "message": "CNCF Slack ( #kubevela channel )",
+    "message": "CNCF Slack ( #kubevela 频道 )",
     "description": "The label of footer link with label=CNCF Slack ( #kubevela channel ) linking to https://slack.cncf.io/"
-  },
-  "link.item.label.Gitter": {
-    "message": "Gitter",
-    "description": "The label of footer link with label=Gitter linking to https://gitter.im/oam-dev/community"
   },
   "link.item.label.DingTalk (23310022)": {
     "message": "钉钉 (23310022)",
@@ -47,8 +43,12 @@
     "message": "博客",
     "description": "The label of footer link with label=Blog linking to blog"
   },
+  "link.item.label.Videos": {
+    "message": "视频资料",
+    "description": "The label of footer link with label=Video linking to video resources"
+  },
   "copyright": {
-    "message": "\n        <br />\n        <strong>© KubeVela Authors 2021 | Documentation Distributed under <a herf=\"https://creativecommons.org/licenses/by/4.0\">CC-BY-4.0</a> </strong> \n        <br />\n      ",
+    "message": "\n        <br />\n        <strong>© KubeVela Authors 2022 | Documentation Distributed under <a herf=\"https://creativecommons.org/licenses/by/4.0\">CC-BY-4.0</a> </strong> \n        <br />\n      ",
     "description": "The footer copyright"
   }
 }

@@ -11,7 +11,7 @@ KubeVela 的核心是将应用部署所需的所有组件和各项运维动作�
 
 ![alt](../resources/model.png)
 
-每一个应用部署计划都you四个部分组成，分别是组件、运维能力、部署策略和工作流。其格式如下：
+每一个应用部署计划都由四个部分组成，分别是组件、运维能力、部署策略和工作流。其格式如下：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -55,7 +55,7 @@ spec:
 
 * **工作流步骤（Workflow Step）**: 工作流由多个步骤组成，允许用户自定义应用在某个环境的交付过程。典型的工作流步骤包括人工审核、数据传递、多集群发布、通知等。
 
-以上这些概念的背后都是由一组称为[模块定义（Definitions）](../platform-engineers/oam/x-definition)的可编程模块提供具体功能的。KubeVela 会像胶水一样基于 Kubernetes API 定义基础设施定义的抽象并将不同的能力组合起来。下图描述了概念间的关系：
+以上这些概念的背后都是由一组称为[模块定义（Definitions）](../platform-engineers/oam/x-definition)的可编程模块提供具体功能。KubeVela 会像胶水一样基于 Kubernetes API 定义基础设施定义的抽象并将不同的能力组合起来。下图描述了概念间的关系：
 
 ![alt](../resources/oam-concept.png)
 

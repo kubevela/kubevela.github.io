@@ -50,12 +50,12 @@ export default function Home() {
         <div className="container text--center">
           <div className={styles.heroLogoWrapper}>
             <ThemedImage
-                alt="Kubevela Logo"
-                className={styles.heroLogo}
-                sources={{
-                  light: useBaseUrl('img/logo.svg'),
-                  dark: useBaseUrl('img/logoDark.svg'),
-                }}
+              alt="Kubevela Logo"
+              className={styles.heroLogo}
+              sources={{
+                light: useBaseUrl('img/logo.svg'),
+                dark: useBaseUrl('img/logoDark.svg'),
+              }}
             />
           </div>
           <h2 className={clsx('hero__title', styles.heroTitle)}>{siteConfig.title}</h2>
@@ -68,7 +68,7 @@ export default function Home() {
             Star
           </GitHubButton>
           <p className="hero__subtitle">
-              <Translate>Make shipping applications more enjoyable.</Translate>
+            <Translate>Make shipping applications more enjoyable.</Translate>
           </p>
           <div
             className={clsx(styles.heroButtons, 'name', 'margin-vert--md')}>
@@ -94,7 +94,7 @@ export default function Home() {
       <div className={clsx('hero', styles.hero)}>
         <div className="container text--center">
           <h3 className="hero__subtitle">
-            <Translate>KubeVela is a</Translate> <a href="https://cncf.io/">CNCF (Cloud Native Computing Foundation)</a> <Translate>sandbox project</Translate>
+            <Translate>KubeVela is a</Translate> <a href="https://cncf.io/">CNCF (Cloud Native Computing Foundation)</a> <Translate>project.</Translate>
           </h3>
           <div className={clsx('cncf-logo', styles.cncfLogo)} />
         </div>
