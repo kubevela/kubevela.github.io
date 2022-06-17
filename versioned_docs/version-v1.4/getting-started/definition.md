@@ -6,17 +6,17 @@ Definition are the basic building block of the KubeVela platform. A definition e
 
 There're four types of Definition, they're `ComponentDefinition`, `TraitDefinition`, `PolicyDefinition` and `WorkflowStepDefinition`, corresponding to the application concepts.
 
-## Sources of Definitions
+## How to get out-of-box Definitions?
 
-There're two sources of definitions:
+There're two sources to get out-of-box definitions:
 
 * Built-in definitions will be installed along with KubeVela helm chart. You can refer to the following links to learn more about built-in definitions.
     - [Component Definition](../end-user/components/references)
     - [Trait Definition](../end-user/traits/references)
     - [Policy Definition](../end-user/policies/references)
     - [Workflow Step Definition](../end-user/workflow/built-in-workflow-defs)
-* Installation of addons will install definitions if there're new capabilities contained.
-    - [Addon registry](../reference/addons/overview) contains a large catalog of addon which are maintained and verified by the KubeVela team.
+* [Addons](../reference/addons/overview), as extension of KubeVela, each addon contains a bunch of definitions along its CRD controllers.
+    - The community has a [verified addon registry](https://github.com/kubevela/catalog) which contains a large catalog of addons, the registry is maintained by the KubeVela team.
 
 ## Lifecycle of a Definition
 
@@ -64,7 +64,7 @@ You can also view the details with a browser, the following command will launch 
 vela show webservice --web
 ```
 
-* Discover in UI console
+* Discover in UI console ( addon `velaux` installed)
 
 ![alt](../resources/definition-ui.png)
 
@@ -75,6 +75,10 @@ These definitions can also be discovered by the UI console, the more important t
 If you're a fan of our UI console, the usage of definition is very straight forward, just click along with the creation of the deployment process.
 
 ![alt](../resources/usage-of-def.png)
+
+1. Create Application and choose Component type which is actually choosing which component definition to use.
+2. Fill the properties of component is actually fill the parameter of component definition.
+3. The same step for trait, policy and workflow.
 
 Finally, the UI console will compose the whole deployment plan in the format of OAM like below, then KubeVela controller will take care of the rest things:
 

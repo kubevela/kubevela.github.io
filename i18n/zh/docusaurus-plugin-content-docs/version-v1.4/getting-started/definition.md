@@ -2,32 +2,31 @@
 title: 模块定义
 ---
 
-Definition are the basic building block of the KubeVela platform. A definition encapsulates an arbitrarily complex automation as a lego style module that can be used to compose an Application, then safely shared, and repeatably executed by any KubeVela engine.
+模块定义是组成 KubeVela 平台的基本扩展能力单元，一个模块定义就像乐高积木，它将底层的能力封装成抽象的模块，使得这些能力可以被最终用户快速理解、使用并和其他能力组装、衔接，最终构成一个具有丰富功能的业务应用。模块定义最大的优势是可以被**分发**和**共享**，在不同的业务应用中重复使用，在基于 KubeVela 的不同平台上均能执行。
 
-There're four types of Definition, they're `ComponentDefinition`, `TraitDefinition`, `PolicyDefinition` and `WorkflowStepDefinition`, corresponding to the application concepts.
+目前 KubeVela 一共有四种不同类型的模块定义，分别是组件定义（ComponentDefinition）、运维特征定义（TraitDefinition）、策略定义（PolicyDefinition）以及工作流步骤定义（WorkflowStepDefinition），对应了构成[应用](./core-concept)的四个基本概念。
 
-## 模块定义的来源
+## 如何获取现成的模块定义？
 
-There're two sources of definitions:
+除了自己编写模块定义以外，你可以通过以下两大途径获得社区已有的模块定义：
 
-* Built-in definitions will be installed along with KubeVela helm chart. You can refer to the following links to learn more about built-in definitions.
-    - [Component Definition](../end-user/components/references)
-    - [Trait Definition](../end-user/traits/references)
-    - [Policy Definition](../end-user/policies/references)
-    - [Workflow Step Definition](../end-user/workflow/built-in-workflow-defs)
-* Installation of addons will install definitions if there're new capabilities contained.
-    - [Addon registry](../reference/addons/overview) contains a large catalog of addon which are maintained and verified by the KubeVela team.
+* KubeVela 安装时自动就会安装内置的模块定义，你可以在下面这些参考文档中查看有哪些现成的能力：
+    - [组件定义列表](../end-user/components/references)
+    - [运维特征定义列表](../end-user/traits/references)
+    - [策略定义列表](../end-user/policies/references)
+    - [工作流步骤定义列表](../end-user/workflow/built-in-workflow-defs)
+* [扩展插件列表](../reference/addons/overview)，作为 KubeVela 的扩展，每一个插件都包含一组模块定义以及支撑其功能的 CRD Controller。
+    - 社区有一个[插件注册中心](https://github.com/kubevela/catalog)包含了大量开箱即用的插件，由 KubeVela 核心维护者负责认证和维护。
 
-## Lifecycle of a Definition
+## 模块定义的生命周期
 
-A definition's lifecycle usually has 3 stages:
+一个模块定义通常有三个生命周期阶段：
 
-### Discovery
+### 发现
 
-When definitions installed in the system, they can be discovered by end user immediately.
+当模块定义被安装到 KubeVela 控制平面以后，最终用户就可以立即发现和查看它们。
 
-* Check the list:
-
+* 查看模块定义列表
 ```
 $ vela def list
 NAME                         	TYPE                  	NAMESPACE  	DESCRIPTION
@@ -41,7 +40,7 @@ notification                 	WorkflowStepDefinition	vela-system	Send message to
 ...snip...
 ```
 
-* Show the details:
+* 查看模块定义的参数
 ```
 $ vela show webservice
 # Properties
@@ -58,25 +57,31 @@ $ vela show webservice
 ...snip...
 ```
 
-You can also view the details with a browser, the following command will launch a server and invoke your browser automatically:
+你也可以通过命令行打开一个网页查看这些参数：
 
 ```
 vela show webservice --web
 ```
 
-* Discover in UI console
+* 在 KubeVela 的 UI 控制台（需安装 velaux 插件）也可以看到
 
 ![alt](../resources/definition-ui.png)
 
-These definitions can also be discovered by the UI console, the more important thing is they can be displayed very well with [ui schema](../reference/ui-schema) defined.
+模块定义在 UI 控制台上可以比较方便的查看，更重要的是会有一个比较好的用户体验，你还可以[自定义 UI 展示](../reference/ui-schema)来优化 UI 控制台上模块定义的参数展示。
 
-### Use
+### 使用
 
-If you're a fan of our UI console, the usage of definition is very straight forward, just click along with the creation of the deployment process.
+在 KubeVela 的 UI 控制台上使用模块定义是非常自然的，整个流程紧紧围绕应用部署计划展开，你只要跟着界面操作指引一步步点击即可使用。
 
 ![alt](../resources/usage-of-def.png)
 
-Finally, the UI console will compose the whole deployment plan in the format of OAM like below, then KubeVela controller will take care of the rest things:
+分为如下几步：
+
+1. 创建应用选择组件类型，这个过程就是选择使用某个组件定义。
+2. 填写组件的参数则会根据组件定义的不同出现不同的待填写参数。
+3. 运维特征、策略、工作流步骤的使用也是如此，分别在不同的应用部署计划业务流程中体现。
+
+最终 UI 控制台会组装成一个符合 OAM 模型定义的完整应用部署计划，然后 KubeVela 控制器会自动化处理剩下的事情：
 
 ```
 apiVersion: core.oam.dev/v1beta1
@@ -130,19 +135,21 @@ spec:
           policies: ["target-prod", "deploy-ha"]
 ```
 
-Use the definition in command works the same, you can compose the application yaml manually and use `vela` command line tool to deploy.
+使用 KubeVela 命令行工具来使用模块定义也是如此，只要编写上述 Application 对象的 YAML 文件即可，可以使用 `vela` 命令如下：
 
 ```
 vela up -f https://kubevela.net/example/applications/first-app.yaml
 ```
 
-### Customize
+Application 也是一种 Kubernetes 的 CRD，你可以通过 `kubectl` 工具，或者直接调用 Kubernetes API 集成 KubeVela 功能。
 
-> **⚠️ In most cases, you don't need to customize any definitions unless you're going to extend the capability of KubeVela. Before that, you should check the built-in definitions and addons to confirm if they can fit your needs.**
+### 自定义
 
-A new definition is built in a declarative template in [CUE configuration language](https://cuelang.org/). If you're not familiar with CUE, you can refer to [CUE Basic](../platform-engineers/cue/basic) for some knowledge. 
+> **⚠️ 请注意，在多数情况下，你不需要编写自定义模块，除非你的目的是扩展 KubeVela 的系统能力。在此之前，我们建议你先查看 KubeVela 内置的模块定义以及扩展插件，可能它们已经足够满足你的需求。**
 
-A definition describes the module's inputs, outputs, operations, and the wiring between them. Here is an example of a simple component definition:
+KubeVela 使用 [CUE 配置语言](https://cuelang.org/)来编写自定义模块，如果你对 CUE 语言还不熟悉也不必担心，可以查看 [CUE 入门指南](../platform-engineers/cue/basic)，花 15 分钟即可了解基本的实用操作。
+
+一个模块定义包含输入、输出、操作以及这三者之间的衔接关系，一个简单的组件模块定义如下所示：
 
 ```
 webserver: {
@@ -168,9 +175,8 @@ template: {
 }
 ```
 
-The `type` defines what kind of definition it is, the `parameter` defines the inputs, while the `output` section defines the outputs.
-You can refer to detail docs about [how to manage definition](../platform-engineers/cue/definition-edit) or learn the [definition protocol](../platform-engineers/oam/x-definition).
+`type` 字段定义了这个模块是哪种类型（组件、运维特征、策略或者工作流步骤）， `parameter` 定义了模块的输入，`output` 定义了模块的输出。还有一些高级的操作你可以通过了解[如何管理、编写模块定义](../platform-engineers/cue/definition-edit)以及[模块定义与 Kubernetes 的交互协议](../platform-engineers/oam/x-definition) 等章节文档了解更多细节。
 
-## Next Step
+## 下一步
 
-- View [Architecture](./architecture) to learn the overall architecture of KubeVela.
+- 查看 KubeVela [项目架构](./architecture)文档了解全局的架构。
