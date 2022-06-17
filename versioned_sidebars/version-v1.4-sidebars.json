@@ -112,6 +112,10 @@
                   "id": "version-v1.4/end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database"
                 }
               ]
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.4/end-user/components/cloud-services/deploy-static-website-in-bucket"
             }
           ]
         },
