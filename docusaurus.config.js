@@ -61,6 +61,11 @@ module.exports = {
           position: "left",
         },
         {
+          href: "https://github.com/kubevela/community",
+          label: "Community",
+          position: "left",
+        },
+        {
           href: "https://kubevela.net",
           label: "Mirror",
           position: "right",
@@ -90,8 +95,8 @@ module.exports = {
               to: '/docs/tutorials/webservice',
             },
             {
-              label: 'Extension',
-              to: '/docs/platform-engineers/oam/oam-model',
+              label: 'Core Concepts',
+              to: '/docs/getting-started/core-concept',
             },
           ],
         },
@@ -100,7 +105,7 @@ module.exports = {
           items: [
             {
               label: 'CNCF Slack ( #kubevela channel )',
-              href: 'https://slack.cncf.io/',
+              href: 'https://cloud-native.slack.com/archives/C01BLQ3HTJA',
             },
             {
               label: 'DingTalk (23310022)',
@@ -121,6 +126,10 @@ module.exports = {
             {
               label: 'Blog',
               to: 'blog',
+            },
+            {
+              label: 'Videos',
+              to: 'videos/best-practice/jenkins',
             },
           ],
         },

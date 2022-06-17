@@ -6,7 +6,7 @@ Definition are the basic building block of the KubeVela platform. A definition e
 
 There're four types of Definition, they're `ComponentDefinition`, `TraitDefinition`, `PolicyDefinition` and `WorkflowStepDefinition`, corresponding to the application concepts.
 
-## Sources of Definitions
+## 模块定义的来源
 
 There're two sources of definitions:
 
@@ -15,7 +15,8 @@ There're two sources of definitions:
     - [Trait Definition](../end-user/traits/references)
     - [Policy Definition](../end-user/policies/references)
     - [Workflow Step Definition](../end-user/workflow/built-in-workflow-defs)
-* Installation of addons will install definitions if there're new capabilities contained. You can refer to [the community addon registry](../reference/addons/overview) for more details.
+* Installation of addons will install definitions if there're new capabilities contained.
+    - [Addon registry](../reference/addons/overview) contains a large catalog of addon which are maintained and verified by the KubeVela team.
 
 ## Lifecycle of a Definition
 
