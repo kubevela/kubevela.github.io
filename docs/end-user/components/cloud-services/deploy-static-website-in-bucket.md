@@ -1,5 +1,5 @@
 ---
-title: How to host your static website in a bucket?
+title: Deploy static website in bucket
 ---
 
 Imaging you are starting up your business and would you like host your static website.
