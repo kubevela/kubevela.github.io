@@ -156,7 +156,7 @@
     "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
   },
   "Make shipping applications more enjoyable.": {
-    "message": "让应用交付更愉快！"
+    "message": "让应用部署和管理更轻松！"
   },
   "KubeVela models platform features (such as workloads, operational behaviors, and cloud services) as reusable": {
     "message": "KubeVela 将平台功能（如工作负载、运维操作行为和云服务）抽象建模为可重用的"

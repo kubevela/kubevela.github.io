@@ -53,6 +53,3 @@ description: 本文介绍 KubeVela 的工作流工程模式，常用操作和适
 
 工作流配置完成后注意点击工作流窗口右上方的 Save 按钮保存所有变更。保存完成后可以点击页面右上方的 `Deploy` 或右边的选择按钮选择执行该工作流，验证是否可以收到消息通知。
 
-## 下一步
-
-- [部署应用到指定环境](../how-to/dashboard/application/deploy-application)
