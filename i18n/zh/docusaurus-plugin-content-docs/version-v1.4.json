@@ -308,5 +308,9 @@
     },
     "sidebar.docs.category.UX Customization": {
         "message": "定制 UI"
+    },
+    "sidebar.docs.category.Community Verified Addons": {
+        "message": "社区认证插件",
+        "description": "内置插件说明"
     }
 }

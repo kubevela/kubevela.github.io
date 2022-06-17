@@ -215,7 +215,7 @@
     "message": "资源管理",
     "description": "管理集群和交付目标等资源"
   },
-  "sidebar.docs.category.Community Addons": {
+  "sidebar.docs.category.Community Verified Addons": {
     "message": "社区认证插件",
     "description": "内置插件说明"
   },
