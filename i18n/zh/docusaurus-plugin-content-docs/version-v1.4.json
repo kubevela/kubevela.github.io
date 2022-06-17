@@ -300,6 +300,9 @@
     "sidebar.docs.category.Cloud Resources CD": {
         "message": "云资源交付"
     },
+    "sidebar.docs.category.Manage Database": {
+        "message": "数据库管理"
+    },
     "sidebar.docs.category.Kubernetes Manifest CD": {
         "message": "Kubernetes 资源交付"
     },
