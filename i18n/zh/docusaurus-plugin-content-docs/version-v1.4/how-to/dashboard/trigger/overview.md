@@ -1,7 +1,19 @@
 ---
-title: 使用触发器对接 CI 自动部署
+title: 触发器
 description: 使用触发器对接 CI 自动部署
 ---
+
+You can use triggers from [VelaUX addon](../../../reference/addons/velaux) to integrate with different CI systems, the architecture and supported platforms are described in the following picture, they're:
+
+- [Custom](#custom-trigger), refer to [Jenkins CI](../../../tutorials/jenkins) guide for a real world use case
+- [ACR](#ACR-trigger)
+- [Harbor](#Harbor-trigger), refer to [Harbor Integration](../../../tutorials/trigger) guide for a real world use case
+- [DockerHub](#DockerHub-trigger)
+- [JFrog](#JFrog-trigger)
+
+![trigger](../../../resources/trigger.jpg)
+
+## 如何使用
 
 应用在创建完成后，会自动创建一个默认触发器，你可以删除或者创建新的触发器。
 

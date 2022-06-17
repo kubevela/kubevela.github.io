@@ -162,5 +162,7 @@ If you're a system infra or operator, you can refer to extension documents to le
 
 If you're extremely interested in KubeVela, you can also extend more features as a developer.
 
-- Read the [developer guide](../../contributor/overview) to learn how to contribute and extend capabilities for KubeVela.
 - KubeVela use CUE as it's core engine, [learn CUE in KubeVela](../../platform-engineers/cue/basic) and try to extend with CUE configurations.
+- Read the [developer guide](../../contributor/overview) to learn how to contribute and extend capabilities for KubeVela.
+
+Welcome to join the KubeVela community! We're eager to see you to contribute your extension.
