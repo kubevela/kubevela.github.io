@@ -206,7 +206,7 @@ module.exports = {
         'platform-engineers/workflow/cue-actions',
         {
           type: 'category',
-          label: 'Community Addons',
+          label: 'Community Verified Addons',
           items: [
             'reference/addons/overview',
             'reference/addons/velaux',

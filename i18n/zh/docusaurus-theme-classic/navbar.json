@@ -13,7 +13,11 @@
   },
   "item.label.Videos": {
     "message": "视频",
-    "description": "Navbar item with label Video"
+    "description": "Navbar item with label Videos"
+  },
+  "item.label.Community": {
+    "message": "社区",
+    "description": "Navbar item with label Community"
   },
   "item.label.Mirror": {
     "message": "国内加速",

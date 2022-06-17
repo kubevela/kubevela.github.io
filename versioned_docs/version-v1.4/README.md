@@ -9,7 +9,6 @@ KubeVela is a modern application platform that makes deploying and managing appl
 ## Community
 
 - Slack:  [CNCF Slack](https://slack.cncf.io/) #kubevela channel
-- Gitter: [Discussion](https://gitter.im/oam-dev/community)
 - Bi-weekly Community Call: [Meeting Notes](https://docs.google.com/document/d/1nqdFEyULekyksFHtFvgvFAYE-0AMHKoS3RMnaKsarjs)
 
 ## Installation

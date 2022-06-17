@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: 内置插件包
 ---
 
 There's an community addon registry (https://addons.kubevela.net) maintained by KubeVela team. It contains following addons:
