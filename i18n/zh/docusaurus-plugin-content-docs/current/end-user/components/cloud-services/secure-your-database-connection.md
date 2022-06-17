@@ -2,7 +2,7 @@
 title: 安全访问数据库
 ---
 
-在指南 [创建和使用云资源](./provision-and-consume-cloud-services)和[数据库创建和初始化](./provision-and-initiate-database)，业务组件
+在指南 [创建和使用云资源](./provision-and-consume-database)和[数据库创建和初始化](./provision-and-initiate-database)，业务组件
 使用数据库的公网连接 `DB_PUBLIC_HOS` 来访问数据库。当你想试用，创建 PoC，或在云提供商集群之外使用数据库时，这是必要的。但是，对于数据库的生产使用来说，它是不安全的。
 
 本教程将讨论如何安全访问你的数据库。
@@ -51,4 +51,4 @@ spec:
 
 ## 执行应用
 
-你可以使用[创建和使用云资源](./provision-and-consume-cloud-services)和[数据库创建和初始化](./provision-and-initiate-database)的实例来安全访问数据库。
+你可以使用[创建和使用云资源](./provision-and-consume-database)和[数据库创建和初始化](./provision-and-initiate-database)的实例来安全访问数据库。
