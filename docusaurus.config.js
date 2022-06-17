@@ -66,6 +66,11 @@ module.exports = {
           position: "left",
         },
         {
+          to: "https://github.com/kubevela/samples",
+          label: "Examples",
+          position: "left",
+        },
+        {
           href: "https://kubevela.net",
           label: "Mirror",
           position: "right",
