@@ -19,6 +19,10 @@
     "message": "社区",
     "description": "Navbar item with label Community"
   },
+  "item.label.Examples": {
+    "message": "参考样例",
+    "description": "Navbar item with label Examples"
+  },
   "item.label.Mirror": {
     "message": "国内加速",
     "description": "Navbar item with label Mirror"
