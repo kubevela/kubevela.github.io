@@ -467,3 +467,4 @@ hello-world-trait-7bdcff98f7   ClusterIP   <your ip>       <none>        8000/TC
 
 * Learn more about [defining customized trait](../traits/customize-trait) in CUE.
 * Learn how to [define health check and custom status](../traits/status) of Component.
+* Learn how to [define policy](../policy/custom-policy) in CUE.
