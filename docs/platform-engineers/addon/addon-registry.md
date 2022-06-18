@@ -1,5 +1,5 @@
 ---
-title: Build your addon registry
+title: Build your Own Registry
 ---
 
 An addon registry can be used for discovering and distributing addons. Currently, KubeVela has supported two type registry: git server and helm repo.

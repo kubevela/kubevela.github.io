@@ -2,13 +2,20 @@
 title: Build Your Own Addon
 ---
 
-The picture below shows what KubeVela does when an addon is enabled. You can see that the [Addon Registry](./addon-registry) stores the addon's resource files. When an addon is enabled through UX/CLI, it will pull these resource files from the Addon Registry, render them and create a KubeVela application. Finally, the KubeVela controller running in the management cluster completes the delivery of the resources described in the application.
+The picture below shows what KubeVela does when an addon is enabled. There are mainly three process:
+* [Addon Registry](./addon-registry) store addons which can be used to share and distribute addons anywhere, it can be any git repo, OSS bucket or OCI registry.
+* When an addon is enabled through UX/CLI, it will pull these resource files from the Addon Registry, render them and create a KubeVela application.
+* Finally, the KubeVela controller take care the rest things and deliver the addon as a normal application into control plane or multi-clusters.
 
 ![alt](../../resources/addon-mechanism.jpg)
 
-## Make an addon
+## Build an addon
 
-Next, we will introduce how to make an addon of your own. First, you need to add a directory for storing addon resource files in the Addon Registry. Typically this directory structure looks like this:
+To build an addon, you should follow some basic rules as follows.
+
+You need to create an addon directory to place addon resource files. We're building a [CLI command](https://github.com/kubevela/kubevela/pull/4162) to create the scaffold, it will be released in v1.5.
+
+Typically the directory hierarchy looks like below:
 
 ```shell
 ├── resources/
@@ -22,11 +29,11 @@ Next, we will introduce how to make an addon of your own. First, you need to add
 └── template.yaml
 ```
 
-Then let's get to the details of each resource file and subdirectory under this directory.
+Not all of these directory or files are necessary, let's explain them one by one.
 
 ### metadata.yaml(Required)
 
-First, you need to write an addon metadata file (metadata.yaml), which describes the basic information such as the name and description of the addon. Only obeying this format, a directory under a repository will be recognized by UX/CLI as an addon's resource directory, an example of a metadata file is shown below:
+A `metadata.yaml` describes the basic information of an addon, such as the name, version, description, etc. With this basic info, an addon can be recognized by UX/CLI, an example likes:
 
 ```yaml
 name: example
@@ -40,22 +47,53 @@ tags:
 
 deployTo:
   runtimeCluster: false
+  disableControlPlane: false
 
-dependencies: []
+dependencies:
 - name: addon_name
+
+system:
+  vela: ">=v1.4.0"
+  kubernetes: ">=1.19.0-0"
+
+needNamespace:
+  - flux-system
 
 invisible: false
 ```
 
-Other than the basic information such as name, version, tag, etc, it includes the following fields that control the behavior of the addon:
+Here's the usage of every field:
 
-- `deployTo.runtimeCluster`: Indicates whether the addon is installed in the sub-cluster. When this field is set to `true`, the resources in the application will be delivered to the sub-cluster.
-- `dependencies`: Indicates other addons it depends on. When enabled, KubeVela will automatically enable the addons it depends on.
-- `invisible`: Indicates whether to display the addon when pulling the addon list. When you find that the addon has some fatal bugs, you can temporarily hide the addon from users by setting this field to `true`.
+| Field | Required  | Type | Usage  |
+|:----:|:---:|:--:|:------:|
+|  name    |  yes | string | The name of the addon.  |
+|  version    | yes  | string | The version of addon, increase for every changes and follow [SemVer](https://semver.org/) rule.  |
+| description     | yes  | string | Description of the addon.  |
+| icon     | no  | string | Icon of the addon, will display in addon dashboard.  |
+| url     | no  | string | The official website of the project behind the addon.  |
+| tags     | no  | []string | The tags to display and organize the addon.  |
+| deployTo.runtimeCluster     | no  | bool | By default, the addon will not be installed in the managed clusters. If it's `true`, it will be delivered to all managed clusters automatically.  |
+| deployTo.disableControlPlane     | no  | bool | By default the addon will be installed in the control plane cluster. If it's `true`, the addon will not be installed in the control plane cluster. |
+| dependencies     | no  | []{ name: string } | Names of other addons it depends on. KubeVela will make sure these dependencies are enabled before installing this addon.  |
+| system.vela     | no  | string | Required version of vela controller, vela CLI will block the installation if vela controller can't match the requirements.  |
+| system.kubernetes     | no  | string | Required version of Kubernetes, vela CLI will block the installation if Kubernetes cluster can't match the requirements.  |
+| needNamespace     | no  | []string | Vela will create these namespaces needed for addon in every clusters before installation.  |
+| invisible     | no  | bool | If `true`, the addon won't be discovered by users. It's useful for tests when addon is in draft state. |
 
-### template.yaml(Required)
+### README.md(Required)
 
-Next, you need to write an addon application template file (template.yaml).
+The README of this addon, it will be displayed in the dashboard for end user who's going to install this addon. So you should let them understand the basic knowledge of the addon which contains:
+
+* What is the addon?
+* Why to use this addon? The use case and scenarios.
+* How to use this addon? It is the `end user` who should understand. An end to end demo is recommended.
+* What will be installed? The definitions along with the CRD controllers behind.
+
+There're no restrict rules for an [experimental addon](https://github.com/kubevela/catalog/tree/master/experimental/addons), but if the addon want to be [verified](https://github.com/kubevela/catalog/tree/master/addons), the README is the most important thing.
+
+### template.yaml(Optional)
+
+An addon is actually a KubeVela Application in the system, so you can also define the application by using the `template.yaml`. 
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -67,47 +105,22 @@ spec:
 # component definition of resource dir .
 ```
 
-The template file is actually a template of KubeVela Application, resources can be automatically rendered to fill the spec.
+You can describe anything in the application if you want, the rest resources defined in other folders will be automatically rendered and appended into this template as components.
 
-All files under the Addon Registry will eventually be rendered as a KubeVela application, the template can be convenient if you want to describe some basic information of the application previously. For example, you can add specific tags or annotations to the application. Of course, you can also add components and workflowsteps directly in the application template file.
+The name of Application in template will be replaced by the addon name in `metadata.yaml`. The addon application will always have a unified name in the format of `addon-<addon_name>`.
 
-```yaml   
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: kruise
-  namespace: vela-system
-spec:
-  components:
-    - name: kruise
-      type: helm
-      properties:
-        repoType: git
-        url: https://github.com/openkruise/kruise
-        chart: ./charts/kruise/v1.0.0
-        git:
-          branch: master
-        values:
-          featureGates: PreDownloadImageForInPlaceUpdate=true
-  workflow:
-    steps:
-      - name: apply-resources
-        type: apply-application
-```
+> If the addon will be installed in managed clusters, please don't define policies or workflow steps in the template, or it will break the automatic precess built internally for addon installation.
 
-The example above will directly install openkurise addon from the helm chart.
+#### Examples
 
-Note that even if you set the application name through the `metadata.name` field, this setting will not take effect. When enabled, the application will be uniformly named in the format of addon-{addonName}.
+* [velaux](https://github.com/kubevela/catalog/blob/master/addons/velaux/template.yaml), define only the header of application in the template.
+* [ocm control plane](https://github.com/kubevela/catalog/blob/master/addons/ocm-hub-control-plane/template.yaml), the addon only be installed in control plane, so it just defines everything in the application template.
 
-### README.md(Required)
+### `resources/` directory(Optional)
 
-The addon's self-describing file is used to describe the main functionality of the addon, and this file is presented to the user on the addon details page in UX.
+Addon is actually an Application, but it provides more convenience for you to compose a complex application. You can use CUE or YAML to render resources into an application. This is what `resources` directory does for you.
 
-### Resources directory(Optional)
-
-In addition to adding components directly in the template file, you can also create a `resources` directory in the Addon Registry, add YAML/CUE type files in it. These files are eventually rendered into components and added to the application.
-
-Among them, the YAML type file should contain a K8S resource object, which will be directly added to the application as a K8s-object type component during rendering.
+Files defined in `resources` folder eventually rendered as components in the application described in `template.yaml`.
 
 #### CUE format resource
 
@@ -115,49 +128,91 @@ If you need to add a component to your application that needs to be rendered dyn
 
 ```cue
 output: {
-	type: "raw"
+	type: "webservice"
 	properties: {
-		apiVersion: "v1"
-		kind:       "ConfigMap"
-		metadata: {
-			name:      "exampleinput"
-			namespace: "default"
-		}
-		data: input: parameter.example
+		image: "oamdev/vela-apiserver:v1.4.0"
 	}
+	traits:[{
+		type: "service-account"
+		properties: name: "serviceAccountName"
+	}]
 }
 ```
 
-You also need to write a `parameter.cue` file describing which parameters are enabled, as shown below:
+You can refer to the [CUE basic](../cue/basic) to learn language details.
+
+The `output` is the keywords of addon, contents defined in output will be rendered as component of application.
+
+The result of the example will be as follows in YAML:
+
+```yaml
+kind: Application
+... 
+# application header in template
+spec:
+  components:
+  - type: webservice
+    properties:
+    	image: "oamdev/vela-apiserver:v1.4.0"
+    traits:
+    - type: service-account
+      properties:
+        name: serviceAccountName
+```
+
+The detail of the example is [velaux](https://github.com/kubevela/catalog/tree/master/addons/velaux).
+
+#### Define parameter for addon
+
+When the resource is defined in CUE, you can also define parameters for addon by writing a `parameter.cue` file in the resources folder as shown below:
 
 ```cue
 parameter: {
-  example: string
+  serviceAccountName: string
 }
 ```
 
-If you know how to write the CUE template in [x-definition](../oam/x-definition), you should be very familiar with this. The difference between them is that the `output` defined by the template is a specific K8S object, and the `output` here is a specific component in an application.
+It can cooperate with the resource file in CUE:
 
-You can see that `output` in the above example describes a component of type `raw`, where `properties.data.input` needs to be specified according to the input parameters when enabled. You can see that `output` in the above example describes a component of type `raw`, where `properties.data.input` needs to be specified according to the input parameters when enabled.
+```cue
+output: {
+	type: "webservice"
+	properties: {
+		image: "oamdev/vela-apiserver:v1.4.0"
+	}
+	traits:[{
+		type: "service-account"
+		properties: name: parameter.serviceAccountName
+	}]
+}
+```
 
-When the addon is enabled, the parameters need to be written in the `parameter.cue` file in CUE syntax. UX/CLI renders all CUE files and `parameter.cue` in one context when the addon is enabled, resulting in a set of components that are added to the application.
+When an end user enabling the addon, he will be able to specify parameters:
+
+```
+vela addon enable velaux serviceAccountName="my-account"
+```
+
+UX/CLI renders all CUE files and `parameter.cue` in one context when the addon is enabled, resulting in a set of components that are appended to the application template.
 
 #### YAML format resource
 
 The YAML format resources is just a Kubernetes YAML object, you can define any object one by one in a file.
 
-For example, the [OCM](https://github.com/kubevela/catalog/tree/master/addons/ocm-cluster-manager/resources) addon defines all it's resources in the addon. All these YAML objects will be rendered as components in an Application.
+It will be directly added to the application as a `K8s-object` type component during rendering.
+
+For example, the [OCM](https://github.com/kubevela/catalog/tree/master/addons/ocm-hub-control-plane) addon defines all it's resources in the addon. All these YAML objects will be rendered as components in an Application.
 
 
-### X-Definitions directory(Optional)
+### `definitions/` directory(Optional)
 
 You can create a definition's file directory under the Addon Registry to store template definition files such as component definitions, trait definitions, and workflowstep definitions. It should be noted that since the KubeVela controller is usually not installed in the managed cluster, even if the addon is enabled by setting the `deployTo.runtimeCluster` field in the metadata file (metadata.yaml) to install the addon in the subcluster, the template definition file will not be distributed to sub-clusters.
 
 For example, the [`fluxcd`](https://github.com/kubevela/catalog/tree/master/addons/fluxcd/definitions) addon defines multiple ComponentDefinition and TraitDefinition.
 
-### UI-Schema directory(Optional)
+### `schemas/` directory(Optional)
 
-The schemas directory is used to store the UI-schema files corresponding to `X-Definitions`, which is used to enhance the display effect when displaying the parameters required by `X-Definitions` in UX.
+The schemas directory is used to store the [UI schema](../../reference/ui-schema) files corresponding to `Definitions`, which is used to enhance the display effect when displaying the parameters required by `Definitions` in UX.
 
 The above is a complete introduction to how to make an addon, you can find the complete description of the above-mentioned addon in this [catalog](https://github.com/kubevela/catalog/tree/master/experimental/addons/example) example.
 
