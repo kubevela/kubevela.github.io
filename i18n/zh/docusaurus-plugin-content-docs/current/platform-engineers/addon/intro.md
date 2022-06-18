@@ -44,18 +44,38 @@ tags:
 
 deployTo:
   runtimeCluster: false
+  disableControlPlane: false
 
-dependencies: []
+dependencies:
 - name: addon_name
+
+system:
+  vela: ">=v1.4.0"
+  kubernetes: ">=1.19.0-0"
+
+needNamespace:
+  - flux-system
 
 invisible: false
 ```
 
-该文件中除了 name，version，tag 等基础信息外。还包括以下能够控制插件行为的字段：
+所有的字段及其作用如下：
 
-- `deployTo.runtimeCluster`: 表示插件是否安装到子集群当中，当该字段被设置为 `true`，应用中的资源会被下发到子集群当中。
-- `dependencies`: 表示所依赖的其他插件，启用时 KubeVela 会自动启用它所依赖的插件。
-- `invisible`: 表示在拉取插件列表时，是否展示该插件。当发现插件有某些致命性的bug时，你可以通过设置该字段为 `true` 暂时对用户隐藏该插件。
+| Field | Required  | Type | Usage  |
+|:----:|:---:|:--:|:------:|
+|  name    |  yes | string | The name of the addon.  |
+|  version    | yes  | string | The version of addon, increase for every changes and follow [SemVer](https://semver.org/) rule.  |
+| description     | yes  | string | Description of the addon.  |
+| icon     | no  | string | Icon of the addon, will display in addon dashboard.  |
+| url     | no  | string | The official website of the project behind the addon.  |
+| tags     | no  | []string | The tags to display and organize the addon.  |
+| deployTo.runtimeCluster     | no  | bool | By default, the addon will not be installed in the managed clusters. If it's `true`, it will be delivered to all managed clusters automatically.  |
+| deployTo.disableControlPlane     | no  | bool | By default the addon will be installed in the control plane cluster. If it's `true`, the addon will not be installed in the control plane cluster. |
+| dependencies     | no  | []{ name: string } | Names of other addons it depends on. KubeVela will make sure these dependencies are enabled before installing this addon.  |
+| system.vela     | no  | string | Required version of vela controller, vela CLI will block the installation if vela controller can't match the requirements.  |
+| system.kubernetes     | no  | string | Required version of Kubernetes, vela CLI will block the installation if Kubernetes cluster can't match the requirements.  |
+| needNamespace     | no  | []string | Vela will create these namespaces needed for addon in every clusters before installation.  |
+| invisible     | no  | bool | If `true`, the addon won't be discovered by users. It's useful for tests when addon is in draft state. |
 
 ### 应用模版 (template.yaml) 文件 (必须)
 
