@@ -401,5 +401,6 @@ So KubeVela allow patch or override in this case, please refer to [patch trait](
 
 ## What's Next
 
+* Learn how to [define policy](../policy/custom-policy) in CUE.
 * Learn how to [define health check and custom status](../traits/status) of Trait.
 * Learn how to [define workflow step](../workflow/workflow) in CUE.

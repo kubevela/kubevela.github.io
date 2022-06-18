@@ -299,54 +299,55 @@ spec:
       ```
 
 * Operator  `|`, it represents a value could be both case. Below is an example that the variable `a` could be in string or int type.
-
-```shell
-a: string | int
-```
+  ```shell
+  a: string | int
+  ```
 
 * Default Value, we can use `*` symbol to represent a default value for variable. That's usually used with `|`,
   which represents a default value for some type. Below is an example that variable `a` is `int` and it's default value is `1`.
-
-```shell
-a: *1 | int
-```
+  ```shell
+  a: *1 | int
+  ```
 
 * Optional Variable. In some cases, a variable could not be used, they're optional variables, we can use `?:` to define it.
   In the below example, `a` is an optional variable, `x` and `z` in `#my` is optional while `y` is a required variable.
+  ```
+  a ?: int
 
-```
-a ?: int
-
-#my: {
-x ?: string
-y : int
-z ?:float
-}
-```
+  #my: {
+    x ?: string
+    y : int
+    z ?:float
+  }
+  ```
 
 Optional variables can be skipped, that usually works together with conditional logic.
 Specifically, if some field does not exist, the CUE grammar is `if _variable_ != _|_`, the example is like below:
+  ```
+  #Config: {
+    name:  string
+    value: string
+  }
 
-```
-parameter: {
-    name: string
-    image: string
-    config?: [...#Config]
-}
-output: {
-    ...
-    spec: {
-        containers: [{
-            name:  parameter.name
-            image: parameter.image
-            if parameter.config != _|_ {
-                config: parameter.config
-            }
-        }]
-    }
-    ...
-}
-```
+  parameter: {
+      name: string
+      image: string
+      config?: [...#Config]
+  }
+  output: {
+      ...
+      spec: {
+          containers: [{
+              name:  parameter.name
+              image: parameter.image
+              if parameter.config != _|_ {
+                  config: parameter.config
+              }
+          }]
+      }
+      ...
+  }
+  ```
 
 * Operator  `&`, it used to calculate two variables.
 

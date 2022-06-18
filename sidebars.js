@@ -47,13 +47,13 @@ module.exports = {
           items: [
             'tutorials/consume-cloud-services',
             {
-            'Manage Database': [
-              'end-user/components/cloud-services/provision-and-consume-cloud-services',
-              'end-user/components/cloud-services/provision-and-initiate-database',
-              'end-user/components/cloud-services/secure-your-database-connection',
-              'end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database'
-            ],
-          }
+              'Manage Database': [
+                'end-user/components/cloud-services/provision-and-consume-cloud-services',
+                'end-user/components/cloud-services/provision-and-initiate-database',
+                'end-user/components/cloud-services/secure-your-database-connection',
+                'end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database'
+              ],
+            }
           ],
         },
         {
@@ -162,6 +162,7 @@ module.exports = {
             'platform-engineers/cue/definition-edit',
             'platform-engineers/components/custom-component',
             'platform-engineers/traits/customize-trait',
+            'platform-engineers/policy/custom-policy',
             'platform-engineers/traits/status',
             'platform-engineers/workflow/workflow', {
               'Patch and Override': [
