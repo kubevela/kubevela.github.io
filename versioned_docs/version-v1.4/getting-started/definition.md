@@ -15,7 +15,7 @@ There're two sources to get out-of-box definitions:
     - [Trait Definition](../end-user/traits/references)
     - [Policy Definition](../end-user/policies/references)
     - [Workflow Step Definition](../end-user/workflow/built-in-workflow-defs)
-* [Addons](../reference/addons/overview), as extension of KubeVela, each addon contains a bunch of definitions along its CRD controllers.
+* [Addons](../reference/addons/overview), as extensions of KubeVela, each addon contains a bunch of definitions along its CRD controllers.
     - The community has a [verified addon registry](https://github.com/kubevela/catalog) which contains a large catalog of addons, the registry is maintained by the KubeVela team.
 
 ## Lifecycle of a Definition
