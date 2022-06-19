@@ -154,6 +154,15 @@ module.exports = {
       trackingID: 'G-5GLR1Y52M7',
       anonymizeIP: false,
     },
+    zoom: {
+      selector: '.markdown :not(em) > img',
+      config: {
+        background: {
+          light: 'rgb(255, 255, 255)',
+          dark: 'rgb(50, 50, 50)'
+        }
+      }
+    },
   },
   presets: [
     [
@@ -194,6 +203,7 @@ module.exports = {
         showLastUpdateTime: true
       },
     ],
-    './src/plugins/faviconCustomPlugin'
+    './src/plugins/faviconCustomPlugin',
+    require.resolve("docusaurus-plugin-image-zoom"),
   ],
 };

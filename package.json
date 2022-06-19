@@ -23,6 +23,7 @@
     "@mdx-js/react": "^1.6.21",
     "asciinema-player": "^2.6.1",
     "clsx": "^1.1.1",
+    "docusaurus-plugin-image-zoom": "^0.1.1",
     "mdx-mermaid": "^1.2.3",
     "mermaid": "^9.1.1",
     "nodejieba": "^2.5.2",
