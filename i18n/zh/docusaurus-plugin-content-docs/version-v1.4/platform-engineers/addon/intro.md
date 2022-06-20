@@ -172,9 +172,9 @@ vela addon enable ./your-addon-dir/
 
 ## 已知局限 (Known Limits)
 
-- 尚不支持仅在子集群中安装插件。 如果不在控制平面安装插件，仅安装在子集群中，会遇到诸多已知问题。
+- 尚不支持仅在子集群中安装插件。 由于 KubeVela 需要在管控平面中渲染出所有类型的资源再将其下发到子集群当中，如果插件中包含了一些 [CRD](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), 插件不在管控平面安装的话 Vela 的控制器会遇到无法找到 CRD 错误。
 
 ## 贡献 Addon
 
-如果你根据本文档制作了新的插件，非常欢迎贡献到社区。通过如此，整个社区可以帮助你测试、升级、维护这个插件。并发觉更多关于该插件的可能场景。
-同时，如果你发现了某个插件的 bug，也欢迎帮助社区修复此 bug。 贡献的方式是给该 [仓库](https://github.com/kubevela/catalog) 提交 Pull request。 在贡献前请阅读[文档](https://github.com/kubevela/catalog#contribution)了解贡献规则。
+如果你根据本文档制作了新的插件，非常欢迎贡献到社区。
+同时，如果你发现了某个插件的 bug，也欢迎帮助社区修复此 bug。
