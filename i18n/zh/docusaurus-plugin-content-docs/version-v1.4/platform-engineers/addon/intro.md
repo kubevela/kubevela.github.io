@@ -2,9 +2,13 @@
 title: 自定义插件
 ---
 
-一个 KubeVela 的插件就是包含了一系列文件的目录。 下图展示了在启用一个插件时，KubeVela 做了哪些事情。当通过 UX/CLI 启用一个插件时，会从插件仓库把这些资源文件拉取下来。
+一个 KubeVela 的插件就是包含了一系列文件的目录。 下图展示了在启用一个插件时，KubeVela 做了哪些事情, 主要包含以下三个步骤。
 
-文件当中用于扩展平台能力的文件如各种模块定义文件（componentDefinition，traitDefinition 等）和 schema 文件（在 UX 上增强显示效果的文件）会被 UX/CLI 直接下发到管控集群。 资源描述（ resources, template 和 metadata ）文件会被用来渲染成一个 KubeVela 应用并创建，最终由运行在管控集群的 KubeVela 下发到各个集群当中。
+* 当通过 UX/CLI 启用一个插件时，会从插件仓库把这些资源文件拉取下来。
+
+* 文件当中用于扩展平台能力的文件如各种模块定义文件（componentDefinition，traitDefinition 等）和 schema 文件（在 UX 上增强显示效果的文件）会被 UX/CLI 直接下发到管控集群。 资源描述（ resources, template 和 metadata ）文件会被用来渲染成一个 KubeVela 应用并创建，最终由运行在管控集群的 KubeVela 下发到各个集群当中。
+
+* 接下来运行在管控集群的 KubeVela 控制器根据需要在管控平面或者子集群中下发资源。
 
 ![alt](../../resources/addon-mechanism.jpg)
 
@@ -12,7 +16,7 @@ title: 自定义插件
 
 接下来将介绍如何制作一个自己的插件。
 
-首先你需要在插件仓库中，添加一个用于存放插件资源文件的目录。通常这个目录结构如下所示。
+你需要先创建一个包含一些插件基本文件的目录。 社区正在支持一个 CLI 的[功能](https://github.com/kubevela/kubevela/pull/4162) 帮助你快速创建一个插件目录框架，该特性将在 1.5 推出。
 
 ```shell
 ├── resources/
@@ -26,11 +30,11 @@ title: 自定义插件
 └── template.yaml
 ```
 
-接下来将介绍该目录下的每个资源文件和子目录的详细作用。
+需要注意的是，上面的文件并不都是必须的。接下来将介绍该目录下的每个资源文件和子目录的详细作用。
 
 ### 元数据 (metadata.yaml) 文件 (必须)
 
-首先你需要编写一个插件的元数据文件 (metadata.yaml) ，该文件描述了插件的名称、描述等基本描述信息。只有包含这个文件，一个仓库下的目录才会被 UX/CLI 识别为一个插件的资源目录, 一个元数据文件的例子如下所示。
+首先你需要编写一个插件的元数据文件 (metadata.yaml) ，该文件描述了插件的名称、版本、描述等基本描述信息。只有包含这个文件，一个仓库下的目录才会被 UX/CLI 识别为一个插件的资源目录, 一个元数据文件的例子如下所示。
 
 ```yaml
 name: example
@@ -44,7 +48,6 @@ tags:
 
 deployTo:
   runtimeCluster: false
-  disableControlPlane: false
 
 dependencies:
 - name: addon_name
@@ -63,23 +66,35 @@ invisible: false
 
 | Field | Required  | Type | Usage  |
 |:----:|:---:|:--:|:------:|
-|  name    |  yes | string | The name of the addon.  |
-|  version    | yes  | string | The version of addon, increase for every changes and follow [SemVer](https://semver.org/) rule.  |
-| description     | yes  | string | Description of the addon.  |
-| icon     | no  | string | Icon of the addon, will display in addon dashboard.  |
-| url     | no  | string | The official website of the project behind the addon.  |
-| tags     | no  | []string | The tags to display and organize the addon.  |
-| deployTo.runtimeCluster     | no  | bool | By default, the addon will not be installed in the managed clusters. If it's `true`, it will be delivered to all managed clusters automatically.  |
-| deployTo.disableControlPlane     | no  | bool | By default the addon will be installed in the control plane cluster. If it's `true`, the addon will not be installed in the control plane cluster. |
-| dependencies     | no  | []{ name: string } | Names of other addons it depends on. KubeVela will make sure these dependencies are enabled before installing this addon.  |
-| system.vela     | no  | string | Required version of vela controller, vela CLI will block the installation if vela controller can't match the requirements.  |
-| system.kubernetes     | no  | string | Required version of Kubernetes, vela CLI will block the installation if Kubernetes cluster can't match the requirements.  |
-| needNamespace     | no  | []string | Vela will create these namespaces needed for addon in every clusters before installation.  |
-| invisible     | no  | bool | If `true`, the addon won't be discovered by users. It's useful for tests when addon is in draft state. |
+| name    |  yes | string | 名称  |
+| version    | yes  | string | 版本，每次变更递增且符合 [SemVer](https://semver.org/) 规范  |
+| description     | yes  | string | 描述  |
+| icon     | no  | string |  图标，图标将在 VelaUX 的插件页面展示  |
+| url     | no  | string |  插件所包含项目的官网地址   |
+| tags     | no  | []string | 标签 |
+| deployTo.runtimeCluster     | no  | bool |  插件是否可以安装到子集群，默认不设置该字段插件不会安装在任何子集群中 |
+| dependencies     | no  | []{ name: string } | 依赖的其他插件，安装是 KubeVela 会保证依赖插件均已安装 |
+| system.vela     | no  | string | 环境中所要求的 KubeVela 的版本，如果不满足，安装将会被拒绝  |
+| system.kubernetes     | no  | string | 环境中所要求的 Kubernetes 的版本 |
+| needNamespace     | no  | []string | 安装之前需要创建的 namespace ， kubeVela 在插件安装开始之前会在所有集群上创建该 namespace   |
+| invisible     | no  | bool | 是否不可见，当插件尚在未完成阶段，可以设置暂时不可被启用 |
+
+### 自描述  (README.md) 文件 (必须)
+
+插件的自描述文件用于描述插件的主要功能，并且该文件会在 UX 的插件详情页面呈现给用户。所以 README.md 需要包含以下基本信息：
+
+* 插件是什么？
+* 为什么要使用该插件？使用案例或场景
+* 如何使用？ `End user` 能够快速理解如何使用该插件。最好能够提供一个端到端的例子。
+* 安装了什么？ 插件中包含的各个 `definition` 以及相关的 CRD 和 controller。
+
+[实验](https://github.com/kubevela/catalog/tree/master/experimental/addons) 阶段的插件通常没有这些非常严格的规则，但对于一个想要进阶到 [成熟](https://github.com/kubevela/catalog/tree/master/addons) README 至关重要。
+
 
 ### 应用模版 (template.yaml) 文件 (必须)
 
-接下来你还需要编写一个插件的应用模版文件 (template.yaml)，template 文件有一个固定的开头。
+事实上，通过上面的介绍，我们知道插件目录下面的所有文件最终会渲染成为一个 KubeVela 的 Application 应用，所以这里的模板就是用于组成这个应用的框架。你可以通过该文件描述这个应用的特定信息，比如你可以为应用打上特定的标签或注解，当然你也可以直接在该应用模版文件中添加组件和工作流步骤。
+定义在其他目录中的资源在安装时，会自动被追加到这个应用的组件列表中。
 
 
 ```yaml
@@ -91,51 +106,16 @@ spec:
 # component definition of resource dir .
 ```
 
-
-事实上，通过上面的介绍，我们知道插件目录下面的所有文件最终会渲染成为一个 KubeVela 的 Application 应用，所以这里的模板就是用于组成这个应用的框架。你可以通过该文件描述这个应用的特定信息，比如你可以为应用打上特定的标签或注解，当然你也可以直接在该应用模版文件中添加组件和工作流步骤。
-
-```yaml   
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: kruise
-  namespace: vela-system
-spec:
-  components:
-    - name: kruise
-      type: helm
-      properties:
-        repoType: git
-        url: https://github.com/openkruise/kruise
-        chart: ./charts/kruise/v1.0.0
-        git:
-          branch: master
-        values:
-          featureGates: PreDownloadImageForInPlaceUpdate=true
-  workflow:
-    steps:
-      - name: apply-resources
-        type: apply-application
-```
-
-如上例所示，这个 template.yaml 文件中就描述了一个完整的应用，通过 helm chart 部署 openkurise 插件.
-
 需要注意的是，即使你通过 `metadata.name` 字段设置了应用的名称，该设置也不会生效，在启用时应用会统一以 addon-{addonName} 的格式被命名。
 
-### 自描述  (README.md) 文件 (必须)
+#### 例子
 
-插件的自描述文件用于描述插件的主要功能，并且该文件会在 UX 的插件详情页面呈现给用户。
+* [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/template.yaml)，这个例子中仅定义了应用的头信息。
+* [OCM control plane](https://github.com/kubevela/catalog/blob/master/addons/ocm-hub-control-plane/template.yaml)，这个例子中则在 `template` 中定义了插件 所有组件。
 
 ### 组件资源 (resources) 目录 (非必须)
 
 除了直接在模版文件中添加组件，你也可以在插件目录下创建一个 `resources` 目录，并在里面添加 YAML/CUE 类型的文件，这些文件最终会被渲染成组件并添加到应用当中。
-
-#### YAML 格式的资源
-
-其中，YAML 类型的文件中应该包含的是一个 K8S 资源对象，在渲染时该对象会被做为 K8s-object 类型的组件直接添加到应用当中。 
-
-
-如 [OCM](https://github.com/kubevela/catalog/tree/master/addons/ocm-cluster-manager/resources) 中插件的例子所示，所有 yaml 都会通过 KubeVela Application 中的 Component 形式，被部署到系统中。
 
 #### CUE 格式的资源
 
@@ -143,38 +123,84 @@ spec:
 
 ```cue
 output: {
-	type: "raw"
+	type: "webservice"
 	properties: {
-		apiVersion: "v1"
-		kind:       "ConfigMap"
-		metadata: {
-			name:      "exampleinput"
-			namespace: "default"
-		}
-		data: input: parameter.example
+		image: "oamdev/vela-apiserver:v1.4.0"
 	}
-}
-```
-
-你还需要编写一个 `parameter.cue` 的文件描述有哪些启用参数，如下所示。
-
-```cue
-parameter: {
-  example: string
+	traits:[{
+		type: "service-account"
+		properties: name: "serviceAccountName"
+	}]
 }
 ```
 
 你如果了解 [模版定义](../oam/x-definition) 中 CUE 模版的写法的话，应该会对这种写法感到非常熟悉，它们之间的区别是模版定义的 `output` 是一个具体的 K8S 对象，而这里的 `output` 定义的其实是一个应用中的具体组件。
 
-可以看到上面例子中的 `output` 中描述了一个 `raw` 类型的组件，其中 `properties.data.input` 需要在启用时根据输入参数指定。插件在启用时的参数都需要以 CUE 的语法编写在 `parameter.cue` 文件当中。 UX/CLI 在启用插件时会把全部的 CUE 文件和 `parameter.cue` 放在一个上下文中进行渲染，最终得到一系列的组件并添加到应用当中。
+可以看到上面例子中的 `output` 中描述了一个 `webservice` 类型的组件。
 
-你也可以通过 [CUE 基础入门文档](../cue/basic) 了解 CUE 的具体语法。 
+这个组件被渲染出来之后的应用如下：
 
-### 模块定义文件 (X-Definitions) 目录 (非必须)
+```yaml
+kind: Application
+... 
+# application header in template
+spec:
+  components:
+  - type: webservice
+    properties:
+    	image: "oamdev/vela-apiserver:v1.4.0"
+    traits:
+    - type: service-account
+      properties:
+        name: serviceAccountName
+```
+
+你也可以通过 [CUE 基础入门文档](../cue/basic) 了解 CUE 的具体语法。
+
+#### 定义插件参数
+
+当资源通过 CUE 的方式定义时，你可以在 `resources` 目录下，另外定义一个 `parameter.cue` 如下所示：
+
+```cue
+parameter: {
+  serviceAccountName: string
+}
+```
+
+再定一个使用这个参数的资源文件：
+
+```cue
+output: {
+	type: "webservice"
+	properties: {
+		image: "oamdev/vela-apiserver:v1.4.0"
+	}
+	traits:[{
+		type: "service-account"
+		properties: name: parameter.serviceAccountName
+	}]
+}
+```
+
+这样在用户启用时，就可以通过输入参数来设置对应字段：
+
+```shell
+vela addon enable velaux serviceAccountName="my-account"
+```
+
+背后的机制是，在启用时 UX/CLI 会把 CUE 定义的资源文件和参数文件放在一个上下文中渲染，得到一系列组件追加到应用当中去。
+
+#### YAML 格式的资源
+
+YAML 类型的文件中应该包含的是一个 K8S 资源对象，在渲染时该对象会被做为 K8s-object 类型的组件直接添加到应用当中。 
+
+如 [OCM](https://github.com/kubevela/catalog/tree/master/addons/ocm-cluster-manager/resources) 中插件的例子所示，所有 yaml 都会通过 KubeVela Application 中的 Component 形式，被部署到系统中。
+
+### 模块定义文件 (definitions/) 目录 (非必须)
 
 你可以在插件目录下面创建一个 definitions 文件目录，用于存放组件定义、运维特征定义和工作流节点定义等模版定义文件。需要注意的是，由于被管控集群中通常不会安装 KubeVela 控制器，所以在启用插件时这些文件仅会被下发到管控集群。
 
-### 模版参数展示增强文件 (UI-Schema) 目录 (非必须)
+### 模版参数展示增强文件 (schema/) 目录 (非必须)
 
 schemas 目录用于存放`X-Definitions` 所对应的 UI-schema 文件，用于在 UX 中展示 `X-Definitions` 所需要填写参数时增强显示效果。需要注意的是，和模块定义文件一样，这些文件仅会被下发到管控集群。
 
