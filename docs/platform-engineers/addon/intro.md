@@ -29,7 +29,7 @@ Typically the directory hierarchy looks like below:
 └── template.yaml
 ```
 
-Not all of these directory or files are necessary, let's explain them one by one.
+Not all of these directories or files are necessary, let's explain them one by one.
 
 ### metadata.yaml(Required)
 
@@ -47,7 +47,6 @@ tags:
 
 deployTo:
   runtimeCluster: false
-  disableControlPlane: false
 
 dependencies:
 - name: addon_name
@@ -73,7 +72,6 @@ Here's the usage of every field:
 | url     | no  | string | The official website of the project behind the addon.  |
 | tags     | no  | []string | The tags to display and organize the addon.  |
 | deployTo.runtimeCluster     | no  | bool | By default, the addon will not be installed in the managed clusters. If it's `true`, it will be delivered to all managed clusters automatically.  |
-| deployTo.disableControlPlane     | no  | bool | By default the addon will be installed in the control plane cluster. If it's `true`, the addon will not be installed in the control plane cluster. |
 | dependencies     | no  | []{ name: string } | Names of other addons it depends on. KubeVela will make sure these dependencies are enabled before installing this addon.  |
 | system.vela     | no  | string | Required version of vela controller, vela CLI will block the installation if vela controller can't match the requirements.  |
 | system.kubernetes     | no  | string | Required version of Kubernetes, vela CLI will block the installation if Kubernetes cluster can't match the requirements.  |
@@ -114,7 +112,7 @@ The name of Application in template will be replaced by the addon name in `metad
 #### Examples
 
 * [velaux](https://github.com/kubevela/catalog/blob/master/addons/velaux/template.yaml), define only the header of application in the template.
-* [ocm control plane](https://github.com/kubevela/catalog/blob/master/addons/ocm-hub-control-plane/template.yaml), the addon only be installed in control plane, so it just defines everything in the application template.
+* [OCM control plane](https://github.com/kubevela/catalog/blob/master/addons/ocm-hub-control-plane/template.yaml), the addon only be installed in control plane, so it just defines everything in the application template.
 
 ### `resources/` directory(Optional)
 
