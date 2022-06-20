@@ -20,3 +20,5 @@ There's an community addon registry (https://addons.kubevela.net) maintained by 
 * [KubeVela doc](./kubevela-io) Help you to read the KubeVela document in your cluster which can be air-gaped environment.
 * [Flink kubernetes operator](./flink-kubernetes-operator) A Kubernetes operator for Apache Flink(https://github.com/apache/flink-kubernetes-operator).
 * [dex](./dex) Provide [dex](https://github.com/dexidp/dex) login for VelaUX.
+
+**If you want to make your own addon please refer to [doc](../../platform-engineers/addon/intro.md).**

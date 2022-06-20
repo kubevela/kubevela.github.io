@@ -228,15 +228,14 @@ vela addon enable ./your-addon-dir/
 
 ## Known Limits
 
-- Now if you choose to enable the addon in the cluster, KubeVela will be installed in all subclusters by default, and the parameters filled in when enabling the addon will take effect in all clusters. Later, we plan to improve the multi-cluster addon management system, including supporting features such as cluster differential configuration.
-
-- Addon version management and upgrade mechanisms, and plans to improve these features in the future.
-
-- Convenient local addon debugging methods and the follow-up plan is to provide a complete addon local debugging function on the CLI side.
-
-- Install the addon in the subcluster. If the addon is not installed in the control plane, but only in subclusters, there are some issues.
-
+- Cannot only install addon in the sub-clusters. Because of KubeVela need render out every kind of resource in control plane, if an addon contain some [CRD](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), these CRD must be installed in control plane, otherwise Vela-core controller will meet an error of cannot find CRD.
 
 ## Extend Terraform Addon
 
-* We have build some tool for more convenience to extend cloud resource addons, you can refer to the [extend terraform addon docs](./terraform).
+*  We have built some tools to extend cloud resource as addons  for convenience, you can refer to the [extend terraform addon docs](./terraform).
+
+## Contribution
+
+If you have developed your own addons, welcome to contribute to the [community catalog](https://github.com/kubevela/catalog). 
+
+Meanwhile, any bugfix of existing addons are welcomed. Just make a pull request to [this](https://github.com/kubevela/catalog) repo.
