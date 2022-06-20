@@ -88,10 +88,9 @@ invisible: false
 * 如何使用？ `End user` 能够快速理解如何使用该插件。最好能够提供一个端到端的例子。
 * 安装了什么？ 插件中包含的各个 `definition` 以及相关的 CRD 和 controller。
 
-[实验](https://github.com/kubevela/catalog/tree/master/experimental/addons) 阶段的插件通常没有这些非常严格的规则，但对于一个想要进阶到 [成熟](https://github.com/kubevela/catalog/tree/master/addons) README 至关重要。
+[实验阶段的插件](https://github.com/kubevela/catalog/tree/master/experimental/addons)通常没有这些非常严格的规则，但对于一个想要进阶到 [认证仓库](https://github.com/kubevela/catalog/tree/master/addons) 的插件而言，README 至关重要。
 
-
-### 应用模版 (template.yaml) 文件 (必须)
+### 应用模版 (template.yaml) 文件 (非必须)
 
 事实上，通过上面的介绍，我们知道插件目录下面的所有文件最终会渲染成为一个 KubeVela 的 Application 应用，所以这里的模板就是用于组成这个应用的框架。你可以通过该文件描述这个应用的特定信息，比如你可以为应用打上特定的标签或注解，当然你也可以直接在该应用模版文件中添加组件和工作流步骤。
 定义在其他目录中的资源在安装时，会自动被追加到这个应用的组件列表中。
@@ -186,6 +185,23 @@ output: {
 
 ```shell
 vela addon enable velaux serviceAccountName="my-account"
+```
+
+这样最终渲染出来的组件如下：
+
+```yaml
+kind: Application
+... 
+# application header in template
+spec:
+  components:
+  - type: webservice
+    properties:
+    	image: "oamdev/vela-apiserver:v1.4.0"
+    traits:
+    - type: service-account
+      properties:
+        name: my-account
 ```
 
 背后的机制是，在启用时 UX/CLI 会把 CUE 定义的资源文件和参数文件放在一个上下文中渲染，得到一系列组件追加到应用当中去。
