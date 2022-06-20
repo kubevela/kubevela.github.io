@@ -188,6 +188,23 @@ output: {
 vela addon enable velaux serviceAccountName="my-account"
 ```
 
+这样最终渲染出来的组件如下：
+
+```yaml
+kind: Application
+... 
+# application header in template
+spec:
+  components:
+  - type: webservice
+    properties:
+    	image: "oamdev/vela-apiserver:v1.4.0"
+    traits:
+    - type: service-account
+      properties:
+        name: my-account
+```
+
 背后的机制是，在启用时 UX/CLI 会把 CUE 定义的资源文件和参数文件放在一个上下文中渲染，得到一系列组件追加到应用当中去。
 
 #### YAML 格式的资源

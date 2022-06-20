@@ -191,6 +191,23 @@ When an end user enabling the addon, he will be able to specify parameters:
 vela addon enable velaux serviceAccountName="my-account"
 ```
 
+Then the render result will be:
+
+```yaml
+kind: Application
+... 
+# application header in template
+spec:
+  components:
+  - type: webservice
+    properties:
+    	image: "oamdev/vela-apiserver:v1.4.0"
+    traits:
+    - type: service-account
+      properties:
+        name: my-account
+```
+
 UX/CLI renders all CUE files and `parameter.cue` in one context when the addon is enabled, resulting in a set of components that are appended to the application template.
 
 #### YAML format resource
