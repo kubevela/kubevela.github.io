@@ -1,5 +1,5 @@
 ---
-title: Deploy static website in bucket
+title: Deploy static website in OSS
 ---
 
 Imaging you are starting up your business and would you like host your static website.
