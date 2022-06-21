@@ -208,7 +208,45 @@ spec:
         name: my-account
 ```
 
-UX/CLI renders all CUE files and `parameter.cue` in one context when the addon is enabled, resulting in a set of components that are appended to the application template.
+##### Use context render component
+
+Beside use `parameter` to generate component dynamically when enable the addon, you also use context to do this. All field defined in `metadata.yaml` can be used in rendering phase.
+
+For example, you can define the component with cue like this:
+```cue
+output: {
+	type: "webservice"
+	properties: {
+		image: "oamdev/vela-apiserver:" + context.metadata.version
+		....
+    }
+}
+```
+
+And the `metadata.yaml` is:
+```yaml
+...
+name: velaux
+version: 1.2.4
+...
+```
+
+The render result is:
+```yaml
+kind: Application
+... 
+# application header in template
+spec:
+  components:
+  - type: webservice
+    properties:
+    	image: "oamdev/vela-apiserver:v1.2.4"
+```
+
+The image tag will be set with addon's version. The real example is [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue).
+
+UX/CLI renders all CUE files , `parameter.cue` and data defined in `metadata.yaml` in one context when the addon is enabled, resulting in a set of components that are appended to the application template.
+
 
 #### YAML format resource
 
