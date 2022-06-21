@@ -1,5 +1,5 @@
 ---
-title: Deploy static website in bucket
+title: Deploy static website in OSS
 ---
 
 Imaging you are starting up your business and would you like host your static website.
@@ -9,7 +9,7 @@ No! It's complicated and expensive, and you will have to maintain everything you
 
 Here is another solution -- deploy your static website in a bucket of Object Storage service in just one step.
 
-The object storage service can be AWS S3, Alibaba OSS and so on. In the example below, let's take Alibaba OSS as an example.
+The object storage service can be AWS S3, Alibaba Cloud OSS and so on. In the example below, let's take Alibaba OSS as an example.
 
 ## Prerequisites
 
