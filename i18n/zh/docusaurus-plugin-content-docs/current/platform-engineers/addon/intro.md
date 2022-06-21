@@ -204,7 +204,47 @@ spec:
         name: my-account
 ```
 
-背后的机制是，在启用时 UX/CLI 会把 CUE 定义的资源文件和参数文件放在一个上下文中渲染，得到一系列组件追加到应用当中去。
+##### 使用 context 中的变量渲染组件
+
+除了定义参数动态渲染组件外，你还可以使用运行时自动填充到  `context` 中的变量来做渲染。
+例如你可以定义一个这样的 CUE 组件：
+
+```cue
+output: {
+	type: "webservice"
+	properties: {
+		image: "oamdev/vela-apiserver:" + context.metadata.version
+		....
+    }
+}
+```
+
+同时你的  `metadata.yaml` 为：
+
+```yaml
+...
+name: velaux
+version: 1.2.4
+...
+```
+
+渲染的结果为：
+
+```yaml
+kind: Application
+... 
+# application header in template
+spec:
+  components:
+  - type: webservice
+    properties:
+    	image: "oamdev/vela-apiserver:v1.2.4"
+```
+
+这个例子中，使用了插件的版本来填充镜像的 tag。一个例子是 [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue) 插件。
+其他字段请参考元数据文件定义。
+
+插件渲染的机制是，在启用时 UX/CLI 会把 CUE 定义的资源文件、参数文件和 `metadata.yaml` 中定义的数据放在一个上下文中渲染，得到一系列组件追加到应用当中去。
 
 #### YAML 格式的资源
 
