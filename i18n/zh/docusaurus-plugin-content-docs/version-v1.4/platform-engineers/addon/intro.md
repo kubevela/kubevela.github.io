@@ -206,7 +206,7 @@ spec:
 
 ##### 使用 context 中的变量渲染组件
 
-除了使用定义使用参数动态渲染组件外，你还可以使用定义在  `context` 中的变量来进行渲染。
+除了定义参数动态渲染组件外，你还可以使用运行时自动填充到  `context` 中的变量来做渲染。
 例如你可以定义一个这样的 CUE 组件：
 
 ```cue
@@ -242,6 +242,7 @@ spec:
 ```
 
 这个例子中，使用了插件的版本来填充镜像的 tag。一个例子是 [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue) 插件。
+其他字段请参考元数据文件定义。
 
 插件渲染的机制是，在启用时 UX/CLI 会把 CUE 定义的资源文件、参数文件和 `metadata.yaml` 中定义的数据放在一个上下文中渲染，得到一系列组件追加到应用当中去。
 
