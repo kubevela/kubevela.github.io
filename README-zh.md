@@ -1,10 +1,10 @@
 欢迎加入中文翻译 SIG 钉群：
 
-https://github.com/kubevela/kubevela.io/blob/main/static/img/zh-CN-dingding-group.png?raw=true
+![alt](https://raw.githubusercontent.com/kubevela/kubevela.io/main/static/img/zh-CN-dingding-group.png)
 
 
 参与翻译活动的基本流程如下：
-- 任务领取：在 [KubeVela 官方文档翻译登记](https://shimo.im/sheets/QrCwcDqh8xkRWKPC/MODOC) 登记并认领任务；
+- 任务领取：在 [标记了 i18n/zh 标签的 Issues](https://github.com/kubevela/kubevela.io/labels/i18n%2Fzh) 下面留言即可认领任务；
 - 提交：参与人员提交 PR 等待 review；
 - 审阅：maintainer 审阅 PR；
 - 终审： 对 review 后的内容进行最后确认；
@@ -31,11 +31,11 @@ https://github.com/kubevela/kubevela.io/blob/main/static/img/zh-CN-dingding-grou
 
 **Step1：任务浏览**
 
-在 [KubeVela 官方文档翻译登记](https://shimo.im/sheets/QrCwcDqh8xkRWKPC/MODOC) 登记并浏览有哪些任务可以认领。
+在[标记了 i18n/zh 标签的 Issues](https://github.com/kubevela/kubevela.io/labels/i18n%2Fzh) 中浏览有哪些需要翻译的任务。
 
 **Step2：任务领取**
 
-在 [KubeVela 官方文档翻译登记](https://shimo.im/sheets/QrCwcDqh8xkRWKPC/MODOC) 表格中编辑并认领任务。注意：为保证质量，同一译者只能同时认领三个任务，完成后才可继续认领。
+在对应 Issue 下面留言并认领任务。注意：为保证质量，同一译者只能同时认领三个任务，完成后才可继续认领。
 
 **Step3：本地构建和预览**
 
@@ -70,7 +70,7 @@ Docusaurus website is running at: http://localhost:3000/zh/
 
 **Step6：任务完成**
 
-翻译合格的文章将会 merge 到 [kubevela.io](https://github.com/kubevela/kubevela.io) 的 master 分支进行发布。
+翻译合格的文章将会 merge 到 [kubevela.io](https://github.com/kubevela/kubevela.io) 的 main 分支进行发布。
 
 
 ### 翻译要求
