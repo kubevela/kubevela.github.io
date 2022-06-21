@@ -31,9 +31,9 @@ title: CLI Commands
 
 ## Continuous Delivery
 
-* [vela auth](vela_auth)	 - 
+* [vela auth](vela_auth)	 - Manage identity and authorizations.
 * [vela cluster](vela_cluster)	 - Manage Kubernetes Clusters for Continuous Delivery.
-* [vela kube](vela_kube)	 - 
+* [vela kube](vela_kube)	 - Managing native Kubernetes resources across clusters.
 * [vela workflow](vela_workflow)	 - Operate the Workflow during Application Delivery.
 
 ## Managing Extension
