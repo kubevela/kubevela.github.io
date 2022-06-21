@@ -31,7 +31,7 @@ A single test requires high efficiency. For example, during code refactoring, af
 
 ## Integration Test
 
-The purpose of integration test is to set up parts of highly associated modules in a system. The test is to ensure the interaction between modules is within expectations. 
+The purpose of an integration test is to ensure the interaction between modules is within expectations by setting up parts of highly associated modules in a system.
 
 Let's use an example to learn how it works. In KubeVela project, integration tests are mainly divided into two categories:
 
@@ -61,7 +61,7 @@ The purpose of tests is to ensure the quality of continuous software delivery, w
 | integration test | medium | medium | almost |
 | e2e test | much  | low | yes |
 
-Time consumed running is easy to understand here. The larger the scale of software abilities that one test covers, the more time that environment preparation and case running will cost. As a result, the testing efficiency is also decreased. 
+Time consumed running is easy to understand here. The larger the scale of software abilities that one test covers, the more time that environment preparation and case running will cost. As a result, the testing efficiency is also lower.
 In terms of stability, the higher the case coverage is, the more problems it may encounter, and some problems are not real bugs we want to discover, but merely noises. When simulating real user behavior, only e2e can cover end-to-end to ensure that the entire link can work together.
 
 As for the long-term value, it refers to the value of the existing case in continuous software iteration processes. For unit tests, during code refactoring, it is adjusted according to the changes of classes and functions. As a result, the code base is consistent with the hot spots in software iterations and continues to evolve. 
