@@ -55,7 +55,7 @@ We recommend e2e test to be added in the following situations:
 
 The purpose of tests is to ensure the quality of continuous software delivery, with emphasis on the word "continuous". It is necessary to ensure not only the quality of the current delivery, but also the quality of future software delivery. It is particularly important to make good use of the respective advantages of the three test types and combine them to ensure the overall quality of the software.
 
-|  | Time Consumed | Test Stability | Can Simulate User behavior |
+|  | Time Consumed Running | Test Stability | Can Simulate User behavior |
 | --- | --- | --- | --- |
 | unit test | minimal | high | no |
 | integration test | medium | medium | almost |
