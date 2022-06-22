@@ -63,13 +63,13 @@ Addon: fluxcd enabled Successfully.
 
 You can also install addons with some advanced flags.
 
-* Choose one specific version by adding `--version` flag in this command. eg:
+* Choose one specific version by adding `--version` flag in this command. e.g:
 
 ```shell
 vela addon enable fluxcd --version=1.0.0
 ```
 
-* Choose specific clusters for installation. You can use `--cluster` flag to choose specific clusters. eg:
+* Choose specific clusters for installation. You can use `--cluster` flag to choose specific clusters. e.g:
 
 ```shell
 vela addon enable <addon-name> --clusters={cluster1,cluster2}
@@ -77,7 +77,7 @@ vela addon enable <addon-name> --clusters={cluster1,cluster2}
 
 By default, the place for installation is specified as control plane cluster or managed cluster inside the metadata of addon. 
 
-* Some addons support setting parts of parameter while enabling. For example `velaux` addon supports change image repository by set `repo` parameter, then you can change the repo address to your own. eg:
+* Some addons support setting parts of parameter while enabling. For example `velaux` addon supports change image repository by set `repo` parameter, then you can change the repo address to your own. e.g:
 
 ```shell
 vela addon enable velaux repo=<your repo address>
@@ -85,7 +85,7 @@ vela addon enable velaux repo=<your repo address>
 
 ### Get addon info
 
-If you want to check the status of an addon, or get the knowledge of the available parameters and other useful info of an addon, you can use command `addon status`. eg:
+If you want to check the detail status of an addon, or get more available parameters and other useful info of an addon, you can use command `addon status`. For example:
 
 ```shell
 $ vela addon enable velaux --verbose
@@ -119,6 +119,8 @@ KubeVela
         default: "kubevela-vela-core"
         required: ✔
 ```
+
+As above shows, these infos contain the available parameters, available versions, dependent addons and description of and addon.
 
 ### Discover the capabilities installed
 
