@@ -39,7 +39,8 @@ jobs:
           node-version: "14.x"
       - name: Test Build
         run: |
-          yarn install --frozen-lockfile
+          yarn install --frozen-lockfile --production=false
+          yarn build
   gh-release:
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
