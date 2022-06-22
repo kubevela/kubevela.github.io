@@ -13,11 +13,18 @@ if you're using CLI, jump to [Deploy via CLI](#deploy-via-cli) part.
 
 ## Creating an application
 
-Enter the page of Application on the left, click `New Application` to create. Pick your name, alias, and description; Select type of `webservice`; Decide your environment, Default environment is already available in the first place. You could also enter the page of Environments to set up new.
+Enter the page of Application on the left, and click `New Application` to create. Pick your name, alias, and description; Select type of `webservice`; Decide your environment, Default environment is already available in the first place. You could also enter the page of Environments to set up new.
 
-Click `Next Step` so to the configuration page. We need to set up the Image address and resources limit. If you want to set up a command for the image, open up the row `CMD`.
+Click `Next Step` so to the configuration page. You need to set up the Image address and resources limit. If you want to set up a command for the image, open up the row `CMD`.
 
-![set webservice application](https://static.kubevela.net/images/1.3/create-webservice.jpg)
+If you want to deploy the private image, please create the registry integration configuration. refer to: [Image registry configuration](../how-to/dashboard/config/image-registry)
+
+After inputting the Image address, the system will load the Image info from the registry. If the image belongs to the private image registry, the `Secret` field will be automatically assigned values.
+
+You could refer to their information to configure the `Service Ports` and `Persistent Storage`.
+
+
+![set webservice application](https://static.kubevela.net/images/1.4/create-webservice.jpg)
 
 Done by clicking `Create` and then we enter the management page.
 
@@ -39,7 +46,7 @@ Click `Baseline Config` and you can see the all components. Then click the compo
 
 ## Update replicas
 
-If your business requires more than one replicas, enter the `Properties` page. By default, The component have a `Set Replicas` trait. Click it so that you can update the replicas.
+If your business requires more than one replica, enter the `Properties` page. By default, The component has a `Set Replicas` trait. Click it so that you can update the replicas.
 
 ![set application replicas](../resources/set-replicas.jpg)
 
@@ -122,4 +129,4 @@ Services:
 
 ## Next
 
-* Learn [multi cluster delivery](../case-studies/multi-cluster) for container image.
+* Learn [multi-cluster delivery](../case-studies/multi-cluster) for the container image.

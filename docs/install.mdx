@@ -29,7 +29,7 @@ If you don't need the automation with root access, you can download from the [re
 - ** MacOS/Linux **
 
 ```shell
-curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash -s 1.4.2
+curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash -s 1.4.3
 ```
 
 - **Windows**
@@ -90,7 +90,7 @@ expected output:
 Addon: velaux enabled Successfully.
 ```
 
-By default, velaux didn't have any exposed port, you can view it by:
+By default, velaux didn't have any exposed port, If installing it locally, you can view it by:
 
 ```
 vela port-forward addon-velaux -n vela-system 8080:80
@@ -98,9 +98,10 @@ vela port-forward addon-velaux -n vela-system 8080:80
 
 Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` for visit.
 
-If you have loadbalaner or ingress, please refer to [VelaUX addon docs](./reference/addons/velaux) for more advanced installation ways.
+If you installing it in remote node, please refer to [VelaUX addon docs](./reference/addons/velaux) for more advanced installation ways.
 
-VelaUX need authentication. Default username is `admin` and the password is `VelaUX12345`.
+VelaUX needs authentication. The default username is `admin` and the password is `VelaUX12345`.
+
 It requires you to override with a new password for the first login, please make sure to remember the new password.
 
 ## 3. Cleanup

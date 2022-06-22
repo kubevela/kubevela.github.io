@@ -1,10 +1,10 @@
 ---
-title:  FluxCD
+title: GitOps with FluxCD
 ---
 
 This section will introduce how to use KubeVela in GitOps environment and why.
 
-> This section is only apply to CLI, you need to enable the [fluxcd](../reference/addons/fluxcd) addon.
+> This section is only apply to CLI, you need to enable the [FluxCD](../reference/addons/fluxcd) addon.
 
 ## Introduction
 

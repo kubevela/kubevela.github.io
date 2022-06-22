@@ -25,7 +25,7 @@ import TabItem from '@theme/TabItem';
 - ** MacOS/Linux **
 
 ```shell
-curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash -s 1.4.2
+curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash -s 1.4.3
 ```
 
 - **Windows**
@@ -82,7 +82,7 @@ vela addon enable ~/.vela/addons/velaux
 Addon: velaux enabled Successfully.
 ```
 
-默认情况下，你可以通过以下方式快速访问到 VelaUX:
+如果你是在本地执行安装，你可以通过以下方式快速访问到 VelaUX:
 
 ```
 vela port-forward addon-velaux -n vela-system 8080:80
@@ -90,7 +90,7 @@ vela port-forward addon-velaux -n vela-system 8080:80
 
 Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` for visit.
 
-如果你希望使用更稳固的访问方式，请参考 [VelaUX 高级安装说明](./reference/addons/velaux)。
+如果你是在远程主机安装或希望使用更稳固的访问方式，请参考 [VelaUX 高级安装说明](./reference/addons/velaux)。
 
 VelaUX 是需要登陆认证的，默认管理员账号为 `admin` 密码为 `VelaUX12345`。请首次登陆成功后修改管理员密码并谨记。
 

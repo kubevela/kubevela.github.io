@@ -1,8 +1,8 @@
 ---
-title:  GitOps 交付
+title: 集成 FluxCD 进行 GitOps
 ---
 
-本案例将介绍如何在 GitOps 场景下使用 KubeVela，并介绍这样做的好处是什么。
+本文将介绍使用 KubeVela 结合 FluxCD 的仓库源监控能力，执行增强的 GitOps 持续发布的用法。
 
 > 该教程仅适用于 CLI 用户。
 

@@ -302,6 +302,10 @@
             {
               "type": "doc",
               "id": "version-v1.4/how-to/dashboard/config/helm-repo"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.4/how-to/dashboard/config/image-registry"
             }
           ]
         },
