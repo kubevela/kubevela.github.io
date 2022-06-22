@@ -77,6 +77,49 @@ vela addon enable <addon-name> --clusters={cluster1,cluster2}
 
 By default, the place for installation is specified as control plane cluster or managed cluster inside the metadata of addon. 
 
+* Some addons support setting parts of parameter while enabling. For example `velaux` addon supports change image repository by set `repo` parameter, then you can change the repo address to your own. eg:
+
+```shell
+vela addon enable velaux repo=<your repo address>
+```
+
+### Get addon info
+
+If you want to check the status of an addon, or get the knowledge of the available parameters and other useful info of an addon, you can use command `addon status`. eg:
+
+```shell
+$ vela addon enable velaux --verbose
+velaux: disabled 
+KubeVela User Experience (UX). An extensible, application-oriented delivery and management Dashboard.
+==> Registry Name
+KubeVela
+==> Available Versions
+[v1.4.3, v1.4.2, v1.4.0, v1.4.0-beta.2, v1.3.6, v1.3.4, v1.3.3, v1.3.2, ...]
+==> Dependencies ✔
+[]
+==> Parameters
+-> dbType: Specify the database type, current support KubeAPI(default) and MongoDB.
+        default: "kubeapi"
+        required: ✔
+-> dbURL: Specify the MongoDB URL. it only enabled where DB type is MongoDB.
+-> gatewayDriver: Specify the gateway type.
+        default: "nginx"
+        required: ✔
+-> imagePullSecrets: Specify the names of imagePullSecret for private image registry, eg. "{a,b,c}"
+-> serviceType: Specify the service type.
+        default: "ClusterIP"
+        required: ✔
+-> database: Specify the database name, for the kubeapi db type, it represents namespace.
+-> dex: Specify whether to enable the dex
+        default: "false"
+        required: ✔
+-> domain: Specify the domain, if set, ingress will be created if the gateway driver is nginx.
+-> repo: Specify the image hub of velaux, eg. "acr.kubevela.net"
+-> serviceAccountName: Specify the serviceAccountName for apiserver
+        default: "kubevela-vela-core"
+        required: ✔
+```
+
 ### Discover the capabilities installed
 
 Once addon installed, end user can discover and use these capabilities immediately.
