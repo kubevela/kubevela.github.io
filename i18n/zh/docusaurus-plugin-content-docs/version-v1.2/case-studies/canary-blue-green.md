@@ -21,7 +21,7 @@ KubeVela 后的应用交付模型（OAM）是一个从设计与实现上都高�
 vela addon enable istio
 ```
 
-如果你的集群已经安装 Istio，你只需 apply [该目录](https://github.com/kubevela/kubevela/tree/master/vela-templates/addons/istio/definitions) 下的四个 YAML 文件来达到和上面开启集群插件一样的效果
+如果你的集群已经安装 Istio，你只需 apply [该目录](https://github.com/kubevela/catalog/tree/master/experimental/addons/istio/definitions) 下的四个 YAML 文件来达到和上面开启集群插件一样的效果
 
 因为后面的例子运行在 default namespace，需要为 default namespace 打上 Istio 自动注入 sidecar 的标签。
 

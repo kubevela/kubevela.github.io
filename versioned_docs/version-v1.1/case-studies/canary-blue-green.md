@@ -19,7 +19,7 @@ If your cluster haven't installed Istio. Install the Istio cluster plugin.
 vela addon enable istio
 ```
 
-Otherwise, you just need apply these 4 YAML files under this [path](https://github.com/kubevela/kubevela/tree/master/vela-templates/addons/istio/definitions) 
+Otherwise, you just need apply these 4 YAML files under this [path](https://github.com/kubevela/catalog/tree/master/experimental/addons/istio/definitions) 
 
 The default namespace needs to be labeled so that Istio will auto-inject sidecar.
 
