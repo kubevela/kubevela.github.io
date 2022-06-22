@@ -77,7 +77,7 @@ vela addon enable <addon-name> --clusters={cluster1,cluster2}
 
 By default, the place for installation is specified as control plane cluster or managed cluster inside the metadata of addon. 
 
-* Some addons support setting parts of parameter while enabling. For example `velaux` addon supports change image repository by set `repo` parameter, then you can change the repo address to your own. e.g:
+* Some addons support setting parts of parameter while enabling. For example `velaux` addon supports change image repository by setting `repo` parameter, then you can change the repo address to your own. e.g:
 
 ```shell
 vela addon enable velaux repo=<your repo address>
