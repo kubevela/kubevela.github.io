@@ -73,6 +73,51 @@ vela addon enable fluxcd --version=1.0.0
 vela addon enable <addon-name> --clusters={cluster1,cluster2}
 ```
 
+某些插件支持在启用时设置一些参数。例如 `velaux` 插件支持通过设置  `repo` 参数使用其他的镜像仓库。你就可以通过以下命令设置使用你自己的镜像仓库：
+
+```shell
+vela addon enable velaux repo=<your repo address>
+```
+
+### 获取插件详情
+
+如果你想获取插件的详细信息，或者查看插件支持哪些启用参数等其他信息，你就可以用 `addon status` 的命令。 例如：
+
+```shell
+$ vela addon enable velaux --verbose
+velaux: disabled 
+KubeVela User Experience (UX). An extensible, application-oriented delivery and management Dashboard.
+==> Registry Name
+KubeVela
+==> Available Versions
+[v1.4.3, v1.4.2, v1.4.0, v1.4.0-beta.2, v1.3.6, v1.3.4, v1.3.3, v1.3.2, ...]
+==> Dependencies ✔
+[]
+==> Parameters
+-> dbType: Specify the database type, current support KubeAPI(default) and MongoDB.
+        default: "kubeapi"
+        required: ✔
+-> dbURL: Specify the MongoDB URL. it only enabled where DB type is MongoDB.
+-> gatewayDriver: Specify the gateway type.
+        default: "nginx"
+        required: ✔
+-> imagePullSecrets: Specify the names of imagePullSecret for private image registry, eg. "{a,b,c}"
+-> serviceType: Specify the service type.
+        default: "ClusterIP"
+        required: ✔
+-> database: Specify the database name, for the kubeapi db type, it represents namespace.
+-> dex: Specify whether to enable the dex
+        default: "false"
+        required: ✔
+-> domain: Specify the domain, if set, ingress will be created if the gateway driver is nginx.
+-> repo: Specify the image hub of velaux, eg. "acr.kubevela.net"
+-> serviceAccountName: Specify the serviceAccountName for apiserver
+        default: "kubevela-vela-core"
+        required: ✔
+```
+
+如上所示， 命令结果包含了一个插件的参数详细信息，可用版本，依赖的其他的插件等信息。
+
 安装完成后，插件中的功能会以组件，运维特征，工作流步骤等形式呈现，你可以通过 `vela component`，`vela trait` 等命令查看新增的能力，也可以在[插件的参考文档](../../reference/addons/overview)中查看每个官方插件对应的能力.
 
 ### 删除/卸载已安装的插件
