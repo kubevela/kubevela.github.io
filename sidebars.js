@@ -128,6 +128,7 @@ module.exports = {
           'Manage Config of Integration': [
             'how-to/dashboard/config/dex-connectors',
             'how-to/dashboard/config/helm-repo',
+            'how-to/dashboard/config/image-registry',
           ],
         },
         'platform-engineers/system-operation/observability',
