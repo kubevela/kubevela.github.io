@@ -7,20 +7,26 @@ In this guide, we will introduce how to create a private image registry and how 
 
 ## Create an image registry
 
-In Image Registry page, let's create a private image registry `acr` whose url is `registry.cn-beijing.aliyuncs.com`.
+In `Image Registry` page, let's create a private image registry with the following fields:
 
-![config](../../../resources/config-image-registry.jpg)
+* Registry
 
+Your image registry domain, such as `index.docker.io`. Please make sure this domain could be accessed from all cluster nodes.
+
+* Insecure
+
+If your registry server uses the self-signed certificate, you should enable this field. This only means KubeVela could trust your registry. You also need to make sure the `dockerd` or `containerd` in your cluster node trust this registry. refer to: [Test an insecure registry with docker](https://docs.docker.com/registry/insecure/).
+
+* UseHTTP
+
+If your registry with the HTTP protocol to provide the service, you should enable this field. You also need to make sure the `dockerd` or `containerd` in your cluster node trust this registry. refer to: [Test an insecure registry with docker](https://docs.docker.com/registry/insecure/).
+
+* Auth
+
+If your registry needs authentication, you need must set the username and password. KubeVela will generate the secret and distribute it to all clusters.
+
+![config](https://static.kubevela.net/images/1.4/create-image-registry.jpg)
 
 ## How to use the image registry
 
-Let's follow the [application creation guide](../application/create-application.md) to create an application in project `default`.
-
-Let's set container image to `registry.cn-beijing.aliyuncs.com/vela/nginx:latest` which locates in the private image registry `acr`.
-Also set `ImagePullSecrets` to `acr`.
-
-![imagePullSecrets](./../../../resources/config-image-registry-application.jpg)
-
-Deploy the application and wait for a while. You can see the application is running and the container image is successfully pulled from the private image registry.
-
-![image](./../../../resources/config-image-registry-image.jpg)
+Let's follow the [Deploy Container Image](../../../tutorials/webservice) to create an application. After you input the image name, KubeVela will automatically identify the matched registries.

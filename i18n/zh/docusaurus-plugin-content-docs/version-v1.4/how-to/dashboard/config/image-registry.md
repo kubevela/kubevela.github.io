@@ -1,26 +1,32 @@
 ---
-标题: 镜像仓库
-描述: 配置镜像仓库
+title: 镜像仓库
+description: 配置私有的镜像仓库
 ---
 
-在本教程中，我们将介绍如何创建私有镜像仓库，以及如何创建镜像位于该镜像仓库中的应用。
+In this guide, we will introduce how to create a private image registry and how to create an application whose image locates in the registry.
 
-## 创建镜像仓库
+## Create an image registry
 
-在镜像仓库页面中，我们创建一个私有镜像仓库 `acr`，其地址为 `registry.cn-beijing.aliyuncs.com`。
+In `Image Registry` page, let's create a private image registry with the following fields:
 
-![config](../../../resources/config-image-registry.jpg)
+* Registry
 
+Your image registry domain, such as `index.docker.io`. Please make sure this domain could be accessed from all cluster nodes.
 
-## 如何使用镜像仓库
+* Insecure
 
-让我们按照 [应用创建指南](../application/create-application.md) 在项目 `default` 中创建应用程序。
+If your registry server uses the self-signed certificate, you should enable this field. This only means KubeVela could trust your registry. You also need to make sure the `dockerd` or `containerd` in your cluster node trust this registry. refer to: [Test an insecure registry with docker](https://docs.docker.com/registry/insecure/).
 
-将容器镜像设置为位于私有镜像为 `acr` 中的镜像 `registry.cn-beijing.aliyuncs.com/vela/nginx:latest`。
-并将 `ImagePullSecrets` 设置为 `acr`。
+* UseHTTP
 
-![imagePullSecrets](./../../../resources/config-image-registry-application.jpg)
+If your registry with the HTTP protocol to provide the service, you should enable this field. You also need to make sure the `dockerd` or `containerd` in your cluster node trust this registry. refer to: [Test an insecure registry with docker](https://docs.docker.com/registry/insecure/).
 
-部署应用程序并等待一段时间。您可以看到应用程序正在运行，并且容器镜像已成功从私有镜像仓库中拉取。
+* Auth
 
-![image](./../../../resources/config-image-registry-image.jpg)
+If your registry needs authentication, you need must set the username and password. KubeVela will generate the secret and distribute it to all clusters.
+
+![config](https://static.kubevela.net/images/1.4/create-image-registry.jpg)
+
+## How to use the image registry
+
+Let's follow the [Deploy Container Image](../../../tutorials/webservice) to create an application. After you input the image name, KubeVela will automatically identify the matched registries.
