@@ -16,26 +16,11 @@ Starting from here, you will learn to use the KubeVela Addons to install plug-in
 
 ## Enable fluxcd addon
 
-Helm Chart delivery relies on addon in KubeVela, you need to enable `fluxcd` addon before start.
+Helm Chart delivery relies on addon in KubeVela, you need to enable `fluxcd` addon before start. You can refer to [addon management doc](../end-user/components/more) for more detail information about addon.
 
 ```shell
 vela addon enable fluxcd
 ```
-
-You can also enable the addon from UI console with more detail information. After `velaux` addon enabled, you can get into the page of `Addon`.
-This page will automatically list the community Addons that can be installed.
-They are all from [Community Repo](https://github.com/kubevela/catalog/tree/master/addons).
-You can check detail information of this addon by clicking the `fluxcd` UI section.
-
-Details will include:
-
-- Definitions: The extension capabilities provided by the addon may include component, trait, etc. For the fluxcd addon, it provides two component types, `helm` and `kustomize`, among which `helm` is the type we need to pay attention to and use here.
-
-- README: Addon description, explain the capabilities and related information.
-
-We can click the `Enable` button. After the fluxcd addon is enabled, it will be installed on all clusters connected to KubeVela, so it will take a certain amount of time.
-
-![fluxcd addon](../resources/addon-fluxcd.jpg)
 
 When the addon status become `enabled`, it means it's ready for helm chart delivery.
 

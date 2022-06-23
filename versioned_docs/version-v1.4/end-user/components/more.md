@@ -13,7 +13,7 @@ There're many out-of-box capabilities installed along with KubeVela controller, 
   - [Built-in Policy Reference](../policies/references)
   - [Built-in Workflow Step Reference](../workflow/built-in-workflow-defs)
 
-## Manage Addons
+## Extend by Managing Addons
 
 Installing addon from the community is also one of the most important way to discover more capabilities.
 
@@ -184,7 +184,7 @@ Addon: velaux enabled Successfully
 
 Please notice that, while an addon installing cluster maybe still need pull some images or helm charts.If your cluster cannot reach these resources please refer [docs](../../platform-engineers/system-operation/enable-addon-offline) to do complete installation without internet.
 
-### Manage the addon with VelaUX
+### Manage the addon with UI Console
 
 If you have installed [VelaUX](../../reference/addons/velaux) which is also one of the addon, you can manage it directly on the UI console with admin privileges.
 
@@ -194,10 +194,12 @@ In the addon list, you can get the status of the addon and other info. Click the
 
 ![addon detail](https://static.kubevela.net/images/1.3/addon-detail.jpg)
 
-Select a version and deployed clusters, you can click the enable button to install this addon.
+Select a version and deployed clusters, you can click the enable button to install this addon. You can check detail information in this section include:
+
+- Definitions: The extension capabilities provided by the addon may include component, trait, etc.
+- README: Addon description, explain the capabilities and related information.
 
 For enabled addons, if no applications to use definitions, you can click the disable button to uninstall it.
-
 
 ### Make your own addon
 
