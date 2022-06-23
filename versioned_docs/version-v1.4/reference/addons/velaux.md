@@ -13,7 +13,7 @@ expected output:
 Addon: velaux enabled Successfully.
 ```
 
-VelaUX needs authentication. The default username is `admin` and the password is `VelaUX12345`. Please must set and remember the new password after the first login.
+VelaUX needs authentication. The default username is `admin` and the password is **`VelaUX12345`**. Please must set and remember the new password after the first login.
 
 By default, VelaUX didn't have any exposed port.
 
@@ -105,3 +105,38 @@ vela addon enable velaux repo=acr.kubevela.net
 You can try to specify the `acr.kubevela.net` image registry as an alternative, It's maintained by KubeVela team, and we will upload/sync the built-in addon image for convenience.
 
 This feature can also help you to build your private installation, just upload all images to your private image registry.
+
+## Concept of VelaUX
+
+VelaUX is an addon on top of KubeVela, it works as UI console for KubeVela, while it's also an out-of-box platform for end-user.
+
+We add some more concepts for enterprise integration.
+
+![alt](../../resources/velaux-concept.png)
+
+### Project
+
+Project is where you manage all the applications and collaborate with your team member. Project is one stand alone scope that separates it from other project.
+
+### Environment
+
+Environment refers to the environment for development, testing, and production and it can include multiple Delivery Targets. Only applications in the same environment can visit and share resource with each other.
+
+- <b>Bind Application with Environment</b> The application can be bound to multiple Environments, and for each environment, you can set the unique parameter difference for each environment.
+
+### Delivery Target
+
+Delivery Target describes the space where the application resources actually delivered. One target describes one Kubernetes cluster and namespace, it can also describe a region or VPC for cloud providers which includes shared variables and machine resources.
+
+Kubernetes cluster and Cloud resources are currently the main way for KubeVela application delivery. In one target, credentials of cloud resources created will automatically delievered to the Kubernetes cluster.
+
+### Application
+
+An application in VelaUX is a bit different with KubeVela, we add lifecycle includes:
+
+- <b>Create</b> an application is just create a metadata records, it won't run in real cluster.
+- <b>Deploy</b> an application will bind with specified environment and instantiate application resource into Kubernetes clusters.
+- <b>Recycle</b> an application will delete the instance of the application and reclaim its resources from Kubernetes clusters.
+- <b>Delete</b> an application is actually delete the metadata.
+
+The rest concept in VelaUX Application are align with KubeVela Core.

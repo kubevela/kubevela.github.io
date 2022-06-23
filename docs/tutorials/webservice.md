@@ -3,8 +3,7 @@ title: Deploy Container Image
 description: deploy the business application by kubevela
 ---
 
-In this section, we will introduce how to deploy a container based application with KubeVela. The main process will be shown with UI console,
-if you're using CLI, jump to [Deploy via CLI](#deploy-via-cli) part.
+In this section, we will introduce how to deploy a container based application with KubeVela. The guide will run the whole process with UI console as it's quite the same with the [quick start](../quick-start) if you're using CLI. 
 
 ## Before starting
 
@@ -22,7 +21,6 @@ If you want to deploy the private image, please create the registry integration 
 After inputting the Image address, the system will load the Image info from the registry. If the image belongs to the private image registry, the `Secret` field will be automatically assigned values.
 
 You could refer to their information to configure the `Service Ports` and `Persistent Storage`.
-
 
 ![set webservice application](https://static.kubevela.net/images/1.4/create-webservice.jpg)
 
