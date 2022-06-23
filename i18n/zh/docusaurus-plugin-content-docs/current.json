@@ -311,5 +311,8 @@
   },
   "sidebar.docs.category.UX Customization": {
     "message": "定制 UI"
+  },
+  "sidebar.docs.category.Declarative Workflow": {
+    "message": "声明式工作流"
   }
 }

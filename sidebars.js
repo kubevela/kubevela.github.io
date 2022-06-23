@@ -76,14 +76,25 @@ module.exports = {
           type: 'category',
           label: 'GitOps',
           collapsed: true,
-          items: ['case-studies/gitops'],
+          items: [
+            'case-studies/gitops',
+            'end-user/gitops/fluxcd',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Declarative Workflow',
+          collapsed: true,
+          items: [
+            'tutorials/workflows',
+            'end-user/workflow/component-dependency-parameter',
+            'end-user/workflow/webhook-notification',
+          ],
         },
         {
           'General CD Features': [
             'how-to/dashboard/application/create-application',
             'end-user/version-control',
-            'tutorials/workflows',
-            'end-user/workflow/component-dependency-parameter',
             'end-user/policies/apply-once',
             'end-user/policies/gc',
           ],

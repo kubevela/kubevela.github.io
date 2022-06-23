@@ -1,16 +1,13 @@
 ---
-title: FluxCD
+title:  Overview
 ---
 
-This section will introduce how to use KubeVela in GitOps environment and why.
+> This section will introduce how to use KubeVela in GitOps area and why.
 
-> This section is only apply to CLI, you need to enable the [FluxCD](../reference/addons/fluxcd) addon.
+GitOps is a continuous delivery method that allows developers to automatically deploy applications by changing code and declarative configurations in a Git repository, with "git-centric" operations such as PR and commit. For detailed benefits of GitOps, you can refer to [this blog](https://www.weave.works/blog/what-is-gitops-really).
 
-## Introduction
+KubeVela uses a declarative model which can be naturally used in GitOps approach, and this will provide below extra bonus to end users alongside with GitOps benefits:
 
-GitOps is a continuous delivery method that allows developers to automatically deploy applications by changing code and declarative configurations in a Git repository, with Git-centric operations such as PR and commit. For detailed benefits of GitOps, please check [this article](https://www.weave.works/blog/what-is-gitops-really).
-
-KubeVela as an declarative application delivery control plane can be naturally used in GitOps approach, and this will provide below extra bonus to end users alongside with GitOps benefits:
 - application delivery workflow (CD pipeline)
   - i.e. KubeVela supports pipeline style application delivery process in GitOps, instead of simply declaring final status;
 - handling deployment dependencies and designing typologies (DAG);
