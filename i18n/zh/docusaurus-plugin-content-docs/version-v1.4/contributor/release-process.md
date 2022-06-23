@@ -2,21 +2,21 @@
 title: 发布流程及周期
 ---
 
-开发 KubeVela 将遵循以下流程：
+KubeVela 的开发流程遵循以下规范：
 
-* Maintainer 指定一系列功能和增强并通过创建 GitHub 里程碑（GitHub milestone）跟进工作进度。
-* 尽可能避免推迟发布。因此在无法按时完成时将某个功能时，我们会将其移至下一次发布。
-* 每 **2 个月**进行一次新发布。
-* 重要的错误修复将会通过 cherry pick 的方式提交进 release 分支，并尽快通过补丁版本的方式发布。我们将会维护最新的 **2 个 release**。
+* Maintainer 承诺一些要完成的功能和增强，并通过 GitHub 里程碑（milestone）来跟进工作进度。
+* 我们会尽可能避免发布的延期，所以在无法按时完成将某个功能时，我们会将其移至下一次发布。
+* 每 **2 个月** 做一次新版本发布。
+* 重要的错误补丁将会通过 cherry-pick 的方式提交进已经发布的分支，并尽快通过补丁版本的方式发布。我们将会维护最新的 **2 个 release**。
 
 ![develop-flow](../resources/develop-code-flow.jpg)
 
-## 发布计划
+## 发布规划
 
-我们将通过 [GitHub 里程碑](https://github.com/kubevela/kubevela/milestones) 制定发布计划并持续跟进。每个发布里程碑中将会包括两类 issue：
+我们将通过 [GitHub 里程碑](https://github.com/kubevela/kubevela/milestones) 制定发布计划并持续跟进。每个发布里程碑中将会包括两类任务：
 
-* Maintainer 计划完成的重点 issues。Maintainers 将根据时间精力确定下一次发布前他们致力于完成的功能。通常来说，issue 可以会被任意一个 maintainer 离线添加，最终在贡献者会议或 [社区会议](https://github.com/kubevela/community#community-meetings) 中敲定。此类 issue 将会被分配给计划实现或测试它的 maintainer。
-* 社区贡献者贡献的 nice-to-have 功能改进或 nice-to-have issue （通常是不紧急且足够小的功能增强）。Maintainer 不会致力于实现这些 issue，但会逐一审查来自社区的 PR。
+* Maintainer 承诺要完成的任务。Maintainers 将根据时间精力确定下一次发布前他们致力于完成的功能。通常来说，任务会经过线下的讨论或者 [社区会议](https://github.com/kubevela/community#community-meetings) 最终决定，然后添加到里程碑中。此类任务将会被分配给计划实现或测试它的 maintainer。
+* 社区贡献者主动参与贡献的其他事项，通常是不紧急的功能或优化。Maintainer 不会承诺这些问题一定会在发布周期中完成，但会承诺评审来自社区的提交。
 
 里程碑会清晰地描述最重要的那些功能和预期完成日期。这将明确地告诉终端用户下一次发布的时间及内容。
 
@@ -24,7 +24,7 @@ title: 发布流程及周期
 
 ## 社区贡献
 
-我们十分感谢来自优秀的社区的大量贡献。然而，审查和测试这些 PR 是大量的计划外工作，因此我们不能保证能在一次发布周期内及时地审查社区贡献（特别是那些特别大或复杂的）。Maintainer 将自行决定是否参与进贡献者的 PR，因此他们会自己给自己分配 PR 从而开始审查、合并，并在之后进行放行测试。
+我们也收到了大量来自社区的优秀贡献，对此我们非常感激。然而，审查和测试这些代码提交是大量的计划外工作，因此我们不能保证能在一次发布周期内及时地审查全部的社区贡献（特别是那些特别大或复杂的）。Maintainer 将自行决定是否参与评审贡献者的代码提交，因此他们主动审查、合并，并在发布周期内进行验证和测试。
 
 ## 放行测试
 
