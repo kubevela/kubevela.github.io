@@ -1,5 +1,5 @@
 ---
-title: GitOps with FluxCD
+title: FluxCD
 ---
 
 This section will introduce how to use KubeVela in GitOps environment and why.

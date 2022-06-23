@@ -19,8 +19,6 @@ description: 参考本文章，学习使用容器镜像部署企业业务应用�
 
 如果你需要部署来自私有镜像仓库的镜像，请先进行镜像仓库配置，参考：[私有镜像仓库配置](../how-to/dashboard/config/image-registry)
 
-After inputting the Image address, the system will load the Image info from the registry. If the image belongs to the private image registry, the Secret field will be automatically assigned values.
-
 当你输入完镜像名称后，系统将自动开始加载镜像信息。如果你输入的镜像属于已配置的私有镜像仓库，`Secret` 字段将自动赋值。你可以参考镜像的 Volume 和 Port 信息来选择性配置应用的 `Service Ports` 和 `Persistent Storage` 等字段。
 
 ![set webservice application](https://static.kubevela.net/images/1.4/create-webservice.jpg)

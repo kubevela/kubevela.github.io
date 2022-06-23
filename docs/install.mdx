@@ -90,7 +90,7 @@ expected output:
 Addon: velaux enabled Successfully.
 ```
 
-By default, velaux didn't have any exposed port, If installing it locally, you can view it by:
+By default, velaux didn't have any exposed port, If there is the browser in local, you can view it by:
 
 ```
 vela port-forward addon-velaux -n vela-system 8080:80
@@ -98,7 +98,7 @@ vela port-forward addon-velaux -n vela-system 8080:80
 
 Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` for visit.
 
-If you installing it in remote node, please refer to [VelaUX addon docs](./reference/addons/velaux) for more advanced installation ways.
+If you are installing it in a remote environment such as a virtual machine, you can refer to [VelaUX addon](./reference/addons/velaux) document to expose an endpoint or other advanced installation arguments.
 
 VelaUX needs authentication. The default username is `admin` and the password is `VelaUX12345`.
 
