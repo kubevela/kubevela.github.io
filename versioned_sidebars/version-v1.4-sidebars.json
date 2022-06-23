@@ -157,6 +157,29 @@
             {
               "type": "doc",
               "id": "version-v1.4/case-studies/gitops"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.4/end-user/gitops/fluxcd"
+            }
+          ]
+        },
+        {
+          "collapsed": true,
+          "type": "category",
+          "label": "Declarative Workflow",
+          "items": [
+            {
+              "type": "doc",
+              "id": "version-v1.4/tutorials/workflows"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.4/end-user/workflow/component-dependency-parameter"
+            },
+            {
+              "type": "doc",
+              "id": "version-v1.4/end-user/workflow/webhook-notification"
             }
           ]
         },
@@ -172,14 +195,6 @@
             {
               "type": "doc",
               "id": "version-v1.4/end-user/version-control"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.4/tutorials/workflows"
-            },
-            {
-              "type": "doc",
-              "id": "version-v1.4/end-user/workflow/component-dependency-parameter"
             },
             {
               "type": "doc",
