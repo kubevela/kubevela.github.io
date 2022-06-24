@@ -32,13 +32,14 @@ module.exports = {
             'case-studies/multi-cluster',
             'tutorials/access-application',
             'end-user/traits/sidecar',
+            'end-user/traits/rollout',
           ],
         },
         {
           type: 'category',
           label: 'Helm Chart CD',
           collapsed: true,
-          items: ['tutorials/helm', 'tutorials/helm-multi-cluster'],
+          items: ['tutorials/helm', 'tutorials/helm-multi-cluster', 'tutorials/helm-rollout'],
         },
         {
           type: 'category',
