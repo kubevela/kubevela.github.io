@@ -3,7 +3,7 @@ title: 多集群交付
 ---
 
 本章节介绍如何将 Helm Chart 部署到多个目标环境和集群。
-在开始之前，请确保你已经了解 [Helm Chart 交付](./helm) 以及所有启用的插件。
+在开始之前，请确保你已经了解 [Helm Chart 交付](./helm) 及其相关背景。
 
 ## 准备集群
 
@@ -64,7 +64,7 @@ foo    	     	X509Certificate	https://172.20.0.6:6443	true
 
 ## 多集群部署
 
-多集群交付的基本机制与 [容器的多集群应用交付](../case-studies/multi-cluster#deliver-application-to-clusters) 的基本一致。
+多集群交付的原理与 [容器的多集群应用交付](../case-studies/multi-cluster#deliver-application-to-clusters) 的基本一致。
 
 我们可以使用 `topology` 策略来指定 Helm Chart 交付的环境，指令如下：
 
