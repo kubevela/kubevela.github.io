@@ -16,13 +16,13 @@ Addon: kruise-rollout enabled Successfully.
 
 
 2. Please make sure one of the [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/) is available in your Kubernetes cluster.
-   If not yet, you can install one in your cluster by enable the [ingress-nginx](../../reference/addons/nginx-ingress-controller.md) addon:
+   If not yet, you can install one in your cluster by enable the [ingress-nginx](../../reference/addons/nginx-ingress-controller) addon:
 
 ```shell
 vela addon enable ingress-nginx
 ```
 
-Please refer [this](../../reference/addons/nginx-ingress-controller.md) to get the gateway's access address.
+Please refer [this](../../reference/addons/nginx-ingress-controller) to get the gateway's access address.
 
 
 ## First Deployment
@@ -103,7 +103,7 @@ Services:
 
 ```
 
-If you have enabled [velaux](./velaux) addon you can view the application topology graph , then you will see all `v1` pods are ready now.
+If you have enabled [velaux](../../reference/addons/velaux) addon you can view the application topology graph , then you will see all `v1` pods are ready now.
 
 ![image](../../resources/kruise-rollout-v1.jpg)
 
