@@ -36,6 +36,8 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: canary-demo
+  annotations:
+    app.oam.dev/publishVersion: v1
 spec:
   components:
   - name: canary-demo
@@ -59,6 +61,8 @@ spec:
           # The first batch of Canary releases 20% Pods, and 20% traffic imported to the new version, require manual confirmation before subsequent releases are completed
           steps:
           - weight: 20
+          trafficRoutings:
+            - type: nginx
 EOF
 ```
 
@@ -98,6 +102,10 @@ Services:
 
 ```
 
+If you have enabled [velaux](./velaux) addon you can view the application topology graph , then you will see all `v1` pods are ready now.
+
+![image](../../resources/kruise-rollout-v1.jpg)
+
 Access the gateway endpoint with the specific host.
 ```shell
 $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
@@ -114,6 +122,8 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: canary-demo
+  annotations:
+    app.oam.dev/publishVersion: v2
 spec:
   components:
   - name: canary-demo
@@ -137,6 +147,8 @@ spec:
           # The first batch of Canary releases 20% Pods, and 20% traffic imported to the new version, require manual confirmation before subsequent releases are completed
           steps:
           - weight: 20
+          trafficRoutings:
+          - type: nginx
 EOF
 ```
 
@@ -179,6 +191,10 @@ Services:
 
 The application's status is `runningWorkflow` that means the application's rollout process has not finished yet.
 
+View topology graph again, you will see `kruise-rollout` trait created a `v2` pod, and this pod will serve the canary traffic. Meanwhile, the pods of `v1` are still running and server non-canary traffic.
+
+![image](../../resources/kruise-rollout-v2.jpg)
+
 Access the gateway endpoint again. You will find out there is about 20% chance to meet `Demo: v2` result.
 
 ```shell
@@ -219,6 +235,8 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: canary-demo
+  annotations:
+    app.oam.dev/publishVersion: v1
 spec:
   components:
   - name: canary-demo
@@ -231,13 +249,12 @@ spec:
     traits:
     - type: kruise-rollout
       properties:
-        workloadType:
-           apiVersion: apps/v1
-           kind: Deployment
         canary:
           # The first batch of Canary releases 20% Pods, and 20% traffic imported to the new version, require manual confirmation before subsequent releases are completed
           steps:
           - weight: 20
+          trafficRoutings:
+          - type: nginx
 EOF
 ```
 
@@ -261,6 +278,8 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: canary-demo
+  annotations:
+    app.oam.dev/publishVersion: v2
 spec:
   components:
   - name: canary-demo
@@ -274,13 +293,12 @@ spec:
     traits:
     - type: kruise-rollout
       properties:
-        workloadType:
-           apiVersion: apps/v1
-           kind: Deployment
         canary:
           # The first batch of Canary releases 20% Pods, and 20% traffic imported to the new version, require manual confirmation before subsequent releases are completed
           steps:
           - weight: 20
+          trafficRoutings:
+          - type: nginx
 EOF
 ```
 
