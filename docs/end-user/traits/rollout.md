@@ -24,6 +24,7 @@ vela addon enable ingress-nginx
 
 Please refer [this](../../reference/addons/nginx-ingress-controller) to get the gateway's access address.
 
+3. Please make sure the version of  Vela-cli `>=1.5.0-alpha.1`.
 
 ## First Deployment
 
