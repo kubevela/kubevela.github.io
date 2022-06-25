@@ -1,14 +1,18 @@
 ---
-title: Cloud Resources
+title: Terraform
 ---
 
+To provision cloud resources, you can use terraform along with related cloud provider addons.
 
-## Terraform addon
+## Enable Terraform addon
 
   ```shell
   vela addon enable terraform
   ```
-## Enable a Terraform Provider addon
+
+After terraform addon enabled, you will have a basic capability to create cloud resource in CRD ways. Then you can enable a terraform provider addon for specific cloud.s
+
+## Enable Terraform Provider addon
 
 KubeVela can support following cloud providers by enabling the Terraform provider addons.
 
@@ -26,14 +30,16 @@ terraform-ucloud         	KubeVela	Kubernetes Terraform Controller Provider for 
 To enable one of them, use the following command:
 
 ```shell
-$ vela addon enable terraform-xxx
+$ vela addon enable terraform-<provider-name>
 ```
 
 You can also disable, upgrade, check status of an addon by command `vela addon`.
 
 ## Authenticate Terraform Provider
 
-### Introduction
+After any of the terraform provider addon enabled, you can create credential for them by `vela provider` command.
+
+### Add Credential
 
 Each Terraform provider can be authenticated by the command as below.
 
