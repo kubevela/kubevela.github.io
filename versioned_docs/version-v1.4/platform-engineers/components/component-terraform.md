@@ -43,13 +43,16 @@ variable "acl" {
 
 We also created a Terraform module for Alibaba Cloud EIP, and stored it in GitHub repository https://github.com/oam-dev/terraform-alibaba-eip.git.
 
+> Please make sure this module is fine and ready for use. You're recommended to debug these modules first with terraform command line and make sure they can work with parameters that should be shared with your end users. 
+
+
 ## Generate ComponentDefinition
 
 By running `vela def init` command, we can generate a ComponentDefinition for a cloud resource based on Terraform resource or module
 either from a local file, or from a remote GitHub repository.
 
 ```shell
-$vela def init -h
+$ vela def init -h
 
       --git string             Specify which git repository the configuration(HCL) is stored in. Valid when --provider/-p is set.
       --local string           Specify the local path of the configuration(HCL) file. Valid when --provider/-p is set.
@@ -58,7 +61,7 @@ $vela def init -h
 We use `--local` to accept Terraform resource or module from a local file to generate a ComponentDefinition.
 
 ```shell
-$vela def init s3 --type component --provider aws --desc "Terraform configuration for AWS S3" --local aws_s3_bucket.tf
+$ vela def init s3 --type component --provider aws --desc "Terraform configuration for AWS S3" --local aws_s3_bucket.tf
 
 apiVersion: core.oam.dev/v1beta1
 kind: ComponentDefinition
@@ -141,8 +144,7 @@ kubectl apply -f <FILENAME>
 
 ## Verify
 
-
-You can quickly verify the ComponentDefinition by command `vela show`.
+You can quickly verify the ComponentDefinition by command `vela show`. It may be a bit slow if you're loading terraform module from remote git server for the first time. After that, vela will cache the data in `$HOME/.vela/terraform` folder. You may need to clean up the cached data from this folder if you want to update the module.
 
 ```shell
 $ vela show alibaba-eip
@@ -165,8 +167,31 @@ $ vela show alibaba-eip
 +-----------+-----------------------------------------------------------------------------+--------+----------+---------+
 ```
 
-If the tables display, the ComponentDefinition should work. To take a step further, you can verify it by provision an actual EIP instance per
-the doc [Provision cloud resources](../../end-user/components/cloud-services/provision-and-consume-cloud-services#provision-cloud-resources).
+If the tables display, the ComponentDefinition should work.
+
+## Create Application using the Component
+
+The end user will be able to use the component in an application like below, he must follow the spec as `vela show`:
+
+```
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: cloud-resource-example
+spec:
+  components:
+    - name: sample-eip
+      type: alibaba-eip
+      properties:
+        name: "my-eip"
+        bandwidth: 1
+        writeConnectionSecretToRef:
+          name: outputs-eip
+```
+
+Generally, the values in the properties are aligned with the `variables` defined in the terraform module, the terraform controller will help run `terraform init`, `terraform plan` automatically and finally use the parameters defined in the properties of application component to run `terraform apply`.
+
+You can refer to scenario docs such as [Provision cloud resources](../../end-user/components/cloud-services/provision-and-consume-cloud-services#provision-cloud-resources) for more real use cases.
 
 ## Generate documentation
 
