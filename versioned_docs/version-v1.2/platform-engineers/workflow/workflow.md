@@ -1,5 +1,6 @@
 ---
 title: Designing Workflow Steps
+slug: /platform-engineers/workflow/workflow
 ---
 
 ## Overview

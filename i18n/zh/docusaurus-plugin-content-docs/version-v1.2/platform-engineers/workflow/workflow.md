@@ -1,5 +1,6 @@
 ---
 title:  自定义工作流
+slug: /platform-engineers/workflow/workflow
 ---
 
 ## 总览
