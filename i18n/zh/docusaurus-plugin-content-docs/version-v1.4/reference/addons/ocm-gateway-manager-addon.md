@@ -2,31 +2,23 @@
 title: OCM Cluster-Gateway Manager
 ---
 
-__TL;DR__: "OCM Cluster-Gateway Manager" addon installs an operator component
-into the hub cluster that help the administrator to easily operate the
-configuration of cluster-gateway instances via "ClusterGatewayConfiguration"
-custom resource. *WARNING* this addon will restart the cluster-gateway
-instances upon the first-time installation.
+OCM Cluster-Gateway Manager 插件在管理集群中安装了一个 operator 组件，帮助管理员通过自定义资源 ClusterGatewayConfiguration 轻松操作集群网关实例的配置。 *警告*：此插件将在首次安装时重新启动集群网关实例。
 
-## What does "Cluster-Gateway Manager" do?
+## Cluster-Gateway Manager 可以做什么？
 
-Basically it helps us to sustainably operate the cluster-gateway instances from
-the following aspects:
+一般来说，它可以在以下几个方面来帮助我们：
 
-* Automatic cluster-gateway's server TLS certificate rotation.
-* Automatic cluster discovery.
-* Structurize the component configuration for cluster-gateway.
-* Manages the "egress identity" for cluster-gateway to access each clusters.
+* 自动轮换集群网关服务器的 TLS 证书。
+* 自动发现新集群。
+* 结构化集群网关的组件配置。
+* 管理集群网关访问每个集群的“出口认证”。
 
-Note that the requests proxied by cluster-gateway will use the identity of
-`open-cluster-management-managed-serviceaccount/cluster-gateway` to access
-the managed clusters, and by default w/ cluster-admin permission, so please
-be mindful of that.
+请注意，由 cluster-gateway 代理的请求将使用`open-cluster-management-managed-serviceaccount/cluster-gateway`的身份访问托管集群，并且默认情况下具有 cluster-admin 权限，因此请注意这一点。
 
 
-### How to confirm if the addon installation is working?
+###  如何确定插件是正常运转的？
 
-Run the following commands to check the healthiness of the addons:
+运行以下命令来检查插件的健康状况：
 
 ```shell
 $ kubectl -n <cluster> get managedclusteraddon
@@ -37,14 +29,13 @@ NAMESPACE   NAME                     AVAILABLE   DEGRADED   PROGRESSING
 <cluster>   managed-serviceaccount   True 
 ```
 
-In case you have too many clusters to browse at a time, install the command-line
-binary via:
+如果一次要浏览的集群太多，请通过下面的命令来安装二进制命令`clusteradm`：
 
 ```shell
 curl -L https://raw.githubusercontent.com/open-cluster-management-io/clusteradm/main/install.sh | bash
 ```
 
-Then run the following commands to see the details of the addon:
+然后通过运行下面的命令来获取多集群插件状态：
 
 ```shell
 $ clusteradm get addon
@@ -72,10 +63,9 @@ $ clusteradm get addon
             └── ...
 ```
 
-### Sample of ClusterGatewayConfiguration API
+### ClusterGatewayConfiguration API 配置示例
 
-You can read or edit the overall configuration of cluster-gateway deployments
-via the following command:
+你可以通过以下命令来查看或编辑集群网关部署的整体配置信息：
 
 ```shell
 $ kubectl get clustergatewayconfiguration -o yaml
