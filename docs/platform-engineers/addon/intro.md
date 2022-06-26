@@ -13,7 +13,7 @@ The picture below shows what KubeVela does when an addon is enabled. There are m
 
 To build an addon, you should follow some basic rules as follows.
 
-You need to create an addon directory to place addon resource files. Won't bother to create? `vela addon init` command will do this for you. You can create a basic structure or with a Helm component inside. Refer to `vela addon init -h` for details.
+You need to create an addon directory to place addon resource files. Won't bother to create? `vela addon init` command will do this for you. You can create a basic structure or with a Helm component inside. Refer to `vela addon init -h` for details. For quick starts, just use `vela addon init your-addon-name`.
 
 Typically, the directory hierarchy looks like below:
 
