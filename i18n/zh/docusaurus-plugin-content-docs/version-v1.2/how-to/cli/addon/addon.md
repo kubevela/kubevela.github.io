@@ -1,5 +1,6 @@
 ---
 title: 安装插件包
+slug: /how-to/cli/addon/addon
 ---
 
 你可以通过安装 KubeVela 的插件包（Addon）获取更多的系统功能。
