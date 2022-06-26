@@ -104,4 +104,4 @@ NAME         	REGISTRY	DESCRIPTION            	AVAILABLE-VERSIONS 	STATUS
 sample-addon 	localcm 	An addon for KubeVela. 	[1.0.0]            	disabled
 ```
 
-Refer to `vela addon push -h` for more options.
+For more advanced usages, please refer to `vela addon push -h`.

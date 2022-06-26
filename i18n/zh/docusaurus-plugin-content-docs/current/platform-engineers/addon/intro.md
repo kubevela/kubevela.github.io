@@ -16,7 +16,7 @@ title: 自定义插件
 
 接下来将介绍如何制作一个自己的插件。
 
-你需要先创建一个包含一些插件基本文件的目录。 社区正在支持一个 CLI 的[功能](https://github.com/kubevela/kubevela/pull/4162) 帮助你快速创建一个插件目录框架，该特性将在 1.5 推出。
+你需要先创建一个包含一些插件基本文件的目录。不想手动创建？ `vela addon init` 可以帮你创建目录结构，其中包含最基本的信息或者一个 Helm 组件，你可以查阅 `vela addon init -h` 来获取详细信息。对于快速开始，这里我们使用 `vela addon init your-addon-name` 就足够了。
 
 ```shell
 ├── resources/
