@@ -1,5 +1,6 @@
 ---
 title: Workflow Step Definition
+slug: /platform-engineers/workflow/workflow
 ---
 
 ## Overview

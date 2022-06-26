@@ -28,6 +28,7 @@ module.exports = {
         '⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>! ⭐️',
     },
     algolia: {
+      appId: 'PXMFHFWUGZ',
       apiKey: 'f19c90b8ffe16ed118dae930cd070507',
       indexName: 'kubevela',
     },
@@ -66,7 +67,7 @@ module.exports = {
           position: "left",
         },
         {
-          to: "https://github.com/kubevela/samples",
+          href: "https://github.com/kubevela/samples",
           label: "Examples",
           position: "left",
         },
@@ -150,10 +151,6 @@ module.exports = {
     prism: {
       theme: require('prism-react-renderer/themes/dracula'),
     },
-    gtag: {
-      trackingID: 'G-5GLR1Y52M7',
-      anonymizeIP: false,
-    },
     zoom: {
       selector: '.markdown :not(em) > img',
       config: {
@@ -177,6 +174,10 @@ module.exports = {
           showLastUpdateTime: true,
           includeCurrentVersion: true,
           remarkPlugins: [require('mdx-mermaid')],
+        },
+        gtag: {
+          trackingID: 'G-5GLR1Y52M7',
+          anonymizeIP: false,
         },
         blog: {
           blogSidebarTitle: "All posts",

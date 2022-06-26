@@ -1,5 +1,6 @@
 ---
 title: Addon management
+slug: /how-to/cli/addon/addon
 ---
 
 You can get more capabilities from KubeVela ecosystem by installing addons.
