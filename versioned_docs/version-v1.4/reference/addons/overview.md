@@ -20,7 +20,7 @@ There's an community addon registry (https://addons.kubevela.net) maintained by 
 * [KubeVela doc](./kubevela-io) Help you to read the KubeVela document in your cluster which can be air-gaped environment.
 * [Flink kubernetes operator](./flink-kubernetes-operator) A Kubernetes operator for Apache Flink(https://github.com/apache/flink-kubernetes-operator).
 * [dex](./dex) Provide [dex](https://github.com/dexidp/dex) login for VelaUX.
-* [Rollout](./kruise-rollout): Base on KubeVela Rollout implementation canary rollout and other types of rollout.
-* [nginx-ingress-controller](./nginx-ingress-controller): An Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer.
+* [Kruise Rollout](./kruise-rollout): [OpenKruise rollout](https://github.com/openkruise/rollouts) supports canary rollout for native deployment, stateful-set and OpenKruise [cloneset](https://openkruise.io/docs/user-manuals/cloneset/).
+* [ingress-nginx](./nginx-ingress-controller): An Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer.
 
 **If you want to make your own addon please refer to [doc](../../platform-engineers/addon/intro.md).**
