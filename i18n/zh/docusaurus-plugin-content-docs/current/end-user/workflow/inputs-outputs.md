@@ -10,7 +10,7 @@ outputs 由 `name` 和 `valueFrom` 组成。`name` 声明了这个 output 的名
 
 `valueFrom` 有以下几种写法：
 1. 直接通过字符串表示值，如：`valueFrom: "testString"`。
-2. 通过表达式来指定值，如：`valueFrom: output.value.status.workflow.message`。注意，`output.value.status.workflow.message` 会从当前步骤的模板中去取值，如果该步骤的模板中没有该字段，那么得到的值为空。
+2. 通过 CUE 表达式来指定值，如：`valueFrom: output.value.status.workflow.message`。注意，`output.value.status.workflow.message` 将使用变量引用的方式从当前步骤的 CUE 模板中取值，如果该步骤的 CUE 模板中没有该字段，那么得到的值为空。
 3. 通过 `+` 来任意连接以上两种写法，最终值是计算后的字符串拼接结果，如：`valueFrom: output.value.status.workflow.message + "testString"`。
 
 ## Inputs
