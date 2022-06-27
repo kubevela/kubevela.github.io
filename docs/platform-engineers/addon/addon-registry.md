@@ -38,10 +38,9 @@ vela addon registry add my-repo --type gitlab --gitRepoName=<repoName> --endpoin
 
 ## Helm Chart repository as registry
 
-A [helm chart repository](https://helm.sh/docs/topics/chart_repository/) can be used to store versioned addon packages. [ChartMuseum](https://chartmuseum.com/) is an open-source, easy to deploy,
-Helm Chart Repository server.
+A [Helm Chart repository](https://helm.sh/docs/topics/chart_repository/) can be used to store versioned addon packages. [ChartMuseum](https://chartmuseum.com/) is an open-source, easy to deploy, Helm Chart Repository server.
 
-In this tutorial, we are going to use [ChartMuseum](https://chartmuseum.com/) to build our repository. If you already have one without ChartMuseum, don't worry. You can still follow these steps, except that you cannot utilize `vela addon push` command and will have to manually upload your addon.
+In this tutorial, we are going to use [ChartMuseum](https://chartmuseum.com/) to build our repository. If you already have one, don't worry. You can still follow these steps, except that you cannot utilize `vela addon push` command and will have to manually upload your addon. Note: registries that are compatible with ChartMuseum (e.g. Harbor) should also work.
 
 Follow the instructions [here](https://chartmuseum.com/#Instructions) to set up your ChartMuseum instance. 
 
