@@ -1,18 +1,18 @@
 ---
-title: Access the application
+title: 访问应用程序
 ---
 
-After deploying the application, the next station is publishing your service.
+服务部署完成之后，接下来就是发布你的应用。
 
-There are multiple ways to do this, for testing, such as Port Forward and Node Port. for production, such as LoadBalancer and via cluster gateway. This section focus on the production environment.
+有很多种方法可以发布你的应用程序，对于测试环境来说，你完全可以使用端口转发或者 NodePort 方式。生产环境则可以使用 LoadBalancer 方式或者通过集群网关。本文主要关注生产环境。
 
-## Use LoadBalancer by Cloud Provider
+## 使用云厂商提供的 LoadBalancer 方式
 
-This way is only suitable for the cloud environment, such as Aliyun, AWS, and Azure.
+这种方式仅限于云服务，像阿里云， AWS， Azure等。
 
-For the webservice component, you only need to set the `ExposeType` to `LoadBalancer`, it means this component will generate a Kubernetes Service with LoadBalancer type. After deployment, you could get the service endpoints.
+对于 webservice 组件来说，你只需要设置`ExposeType`为`LoadBalancer`，这意味着这个组件会生成一个以 LoadBalancer 方式访问的 Kubernetes 服务。部署成功之后，你可以获得服务访问点。
 
-For Example:
+参考以下配置：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -32,13 +32,13 @@ spec:
         exposeType: LoadBalancer
 ```
 
-For other components, similarly, only need to generate the Kubernetes Service with LoadBalancer type.
+对于其他的组件，同样的只需要生成使用 LoadBalancer 访问方式的 Kubernetes 服务即可。
 
-## Use HTTP Domain by Ingress Gateway
+## 使用 Ingress 网关提供的 HTTP 域名方式
 
-This way required installed the ingress controller in the cluster.
+这种方式需要你在集群中事先安装 ingress 控制器。
 
-Users could bound the `gateway` trait for the component to generate the Ingress. for example:
+用户可以为组件绑定`gateway`特征来生成 Ingress，参考以下配置：
 
 ```yaml
 traits:
@@ -50,27 +50,27 @@ traits:
         "/manage": 8090
 ```
 
-This means accessing the component service by domain `testsvc.example.com`, there are two rules, the request path begins with `/manage` will request the component 8090 port. others request path request the component 8000 port.
+这意味着可以通过域名`testsvc.example.com`来访问这个组件，这里有两条访问规则，以`/manage`开头的请求路径将会访问组件的 8090 端口，其余的将会访问组件的 8000 端口。
 
-In VelaUX, you can click the `Add Trait` button and select the `gateway` trait type. refer to follow configuration:
+在 VelaUX 控制台中，你可以点击`Add Trait`按钮并选择`gateway`。参考以下配置：
 
 ![gateway trait](https://static.kubevela.net/images/1.4/gateway-trait.jpg)
 
-## Use Traefik
+## 使用 Traefik 方式
 
-This way required installed the traefik addon firstly.
+这种方式需要提前安装 traefik 插件。
 
 ```bash
 $ vela addon enable traefik
 ```
 
-Get more info about this addon, refer to [Traefik Addon](../reference/addons/traefik)
+获取更多关于插件的帮助，请参考[Traefik 插件](../reference/addons/traefik)
 
-This addon provides three traits, including [http-route](../reference/addons/traefik#http-routetrait), [https-route](../reference/addons/traefik#https-routetrait) and [tcp-route](../reference/addons/traefik#tcp-routetrait).
+这个插件提供了三种特征, 包含 [http-route](../reference/addons/traefik#http-routetrait), [https-route](../reference/addons/traefik#https-routetrait) 和 [tcp-route](../reference/addons/traefik#tcp-routetrait)。
 
-### HTTP/HTTPS
+### 使用 HTTP/HTTPS 方式
 
-For HTTP, you can click the `Add Trait` button and select the `http-route` trait type. refer to follow configuration:
+你可以点击`Add Trait`按钮并选择 `http-route`。参考以下配置：
 
 ![http route trait](https://static.kubevela.net/images/1.4/http-route-trait.jpg)
 
@@ -86,15 +86,15 @@ traits:
     listenerName: web
 ```
 
-There must be one route rule. The port is the same as the service port, the route condition supports the Header and Request Path.
+这里只允许出现一个规则。端口号要和服务暴露的端口号一致。 路由规则可以使用的条件包含 HTTP 头和请求路径。
 
-For HTTPS, you must create the TLS certificate firstly. In VelaUX, open the Integrations page, there is a `TLS Certificate` type. Click the New button, You need to provide the certificate public and private keys and encoded the content by base64.
+对于 HTTPS 访问方式，你首先得创建一个 TLS 证书。在 VelaUX 控制台中，打开集成页面，然后选择 `TLS Certificate` 类型。点击创建按钮，你需要提供base64格式的证书公私钥。
 
 ![new tls](https://static.kubevela.net/images/1.4/new-tls.jpg)
 
-This will generate the secret and distribute to managed clusters with the application.
+这将生成密钥并与应用程序一起分发到托管集群。
 
-Then open the application configuration page and click the `Add Trait` button and select the `https-route` trait type. refer to follow configuration:
+然后打开应用程序配置页面并单击 Add Trait 按钮并选择 https-route trait 类型。 参考以下配置：
 
 ![https route trait](https://static.kubevela.net/images/1.4/https-route-trait.jpg)
 
@@ -111,13 +111,13 @@ traits:
     - port: 80
 ```
 
-The secret name is the same as the name of the certificate configuration.
+Secrets 名称需要与证书配置的名称相同。
 
-### TCP
+### 使用 TCP 方式
 
-This way is suitable for the service with the stream protocol, reusing the same public IP address.
+这种方式适用于流协议的服务，复用同一个公网IP地址。
 
-You can click the `Add Trait` button and select the `tcp-route` trait type. refer to follow configuration:
+你可以单击`Add Trait`按钮并选择`tcp-route`。 参考以下配置：
 
 ![tcp route trait](https://static.kubevela.net/images/1.4/tcp-route.jpg)
 
