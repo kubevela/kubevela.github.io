@@ -2,54 +2,53 @@
 title: VelaUX 控制台
 ---
 
-## Install
+## 安装插件
 
 ```shell script
 vela addon enable velaux --version=v1.4.3
 ```
 
-expected output:
+期望得到的输出如下：
 ```
 Addon: velaux enabled Successfully.
 ```
 
-VelaUX needs authentication. The default username is `admin` and the password is **`VelaUX12345`**. Please must set and remember the new password after the first login.
+VelaUX 需要认证访问。默认的用户名是`admin`，默认密码是 **VelaUX12345**。请务必在第一次登录之后重新设置和保管好你的新密码。
 
-By default, VelaUX didn't have any exposed port.
+默认情况下， VelaUX 没有暴露任何端口。
 
-## Visit VelaUX by port-forward
+## 通过端口转发来访问 VelaUX
 
-Port forward will work as a proxy to allow visiting VelaUX dashboard by local port.
+端口转发会以代理的方式允许你通过本地端口来访问 VelaUX 控制台。
 
 ```
 vela port-forward addon-velaux -n vela-system
 ```
 
-Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` for visit.
+选择 `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` 来启用端口转发。
 
-## Setup with Specified Service Type
+## 配置特定服务访问方式
 
-There are three service types for VelaUX addon which aligned with Kubernetes service, they're `ClusterIP`, `NodePort` and `LoadBalancer`.
-By default the service type is ClusterIP for security.
+VelaUX 控制台插件支持三种和 Kubernetes 服务一样的服务访问方式，它们是：`ClusterIP`，`NodePort`以及`LoadBalancer`。
 
-If you want to expose your VelaUX dashboard for convenience, you can specify the service type.
+为了安全起见，默认的服务访问方式为 ClusterIP。
 
-- `LoadBalancer` type requires your cluster has cloud LoadBalancer available.
+如果你想要改变 VelaUX 控制台的访问方式，你需要通过下面的方法来改变：
+
+- `LoadBalancer`方式需要你的集群有可用的 LoadBalancer。
     ```shell script
     vela addon enable velaux serviceType=LoadBalancer
     ```
-- `NodePort` type requires you can access the Kubernetes Node IP/Port.
+- `NodePort`方式需要你能够访问 Kubernetes 节点 IP 和 端口。
     ```shell script
     vela addon enable velaux serviceType=NodePort
     ```
-
-After the service type specified to `LoadBalancer` or `NodePort`, you can obtain the access address through `vela status`:
-
+一旦服务访问方式指定为`LoadBalancer`或者`NodePort`，你可以通过执行`vela status`来获取访问地址：
 ```
 vela status addon-velaux -n vela-system --endpoint
 ```
 
-The expected output:
+期望得到的输出如下：
 ```
 +----------------------------+----------------------+
 |  REF(KIND/NAMESPACE/NAME)  |       ENDPOINT       |
@@ -58,15 +57,15 @@ The expected output:
 +----------------------------+----------------------+
 ```
 
-## Setup with Ingress domain
+## 配置 Ingress 域名访问
 
-If you have ingress and domain available in your cluster, you can also deploy VelaUX by specify a domain like below:
+如果你集群中拥有可用的 ingress 和域名，那么你可以按照下面的方式给你的 VelaUX 在部署过程中指定一个域名。
 
 ```bash
 vela addon enable velaux domain=example.doamin.com
 ```
 
-The expected output:
+期望得到的输出如下：
 ```
 I0112 15:23:40.428364   34884 apply.go:106] "patching object" name="addon-velaux" resource="core.oam.dev/v1beta1, Kind=Application"
 I0112 15:23:40.676894   34884 apply.go:106] "patching object" name="addon-secret-velaux" resource="/v1, Kind=Secret"
@@ -79,31 +78,31 @@ Please access the velaux from the following endpoints:
 +----------------------------+---------------------------+
 ```
 
-If you enabled the traefik addon, you can set the `gatewayDriver` parameter to use the Gateway API.
+如果你已经启用了 traefik 插件，那么你可以指定`gatewayDriver`参数来启用网关 API。
 
 ```shell script
 vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik
 ```
 
-## Setup with MongoDB database
+## 配置 MongoDB
 
-VelaUX supports the Kubernetes and MongoDB as the database. the default is Kubernetes. We strongly advise using the MongoDB database to power your production environment.
+VelaUX 支持 Kubernetes 和 MongoDB 作为其数据库。默认数据库为 Kubernetes。我们强烈建议你通过使用 MongoDB 来增强你的生产环境使用体验。
 
 ```shell script
 vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_PASSWORD>@<MONGODB_URL>
 ```
 
-## Specify the addon image
+## 指定插件镜像仓库
 
-By default the image repo is docker hub, you can specify the image repo by the `repo` parameter: 
+默认情况下，VelaUX 仓库使用的是 docker hub，你可以通过`repo`参数来改变插件镜像的仓库：
 
 ```shell script
 vela addon enable velaux repo=acr.kubevela.net
 ```
 
-You can try to specify the `acr.kubevela.net` image registry as an alternative, It's maintained by KubeVela team, and we will upload/sync the built-in addon image for convenience.
+你可以尝试指定`acr.kubevela.net` 镜像注册表作为 docker hub 的替换，这个镜像仓库由 KubeVela 团队维护，并且他们会定期上传/同步内建组件到这个仓库。
 
-This feature can also help you to build your private installation, just upload all images to your private image registry.
+这个特性也同样可以帮助你使用你的私有仓库来完成安装，你仅仅需要将所有镜像都上传到你的私有镜像仓库即可。
 
 ## VelaUX 概念
 
