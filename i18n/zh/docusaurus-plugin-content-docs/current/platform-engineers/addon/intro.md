@@ -16,7 +16,7 @@ title: 自定义插件
 
 接下来将介绍如何制作一个自己的插件。
 
-你需要先创建一个包含一些插件基本文件的目录。不想手动创建？ `vela addon init` 可以帮你快速创建目录框架，你可以查阅 `vela addon init -h` 来获取详细信息。对于快速开始，这里我们使用 `vela addon init your-addon-name` 就足够了。
+你需要先创建一个包含一些插件基本文件的目录。不想手动创建？ `vela addon init`（vela CLI v1.5 或更新）可以帮你快速创建目录框架，你可以查阅 `vela addon init -h` 来获取详细信息。对于快速开始，这里我们使用 `vela addon init your-addon-name` 就足够了。
 
 ```shell
 ├── resources/
