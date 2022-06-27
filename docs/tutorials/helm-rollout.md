@@ -4,17 +4,16 @@ title: Canary Rollout Helm chart
 
 ## Before starting
 
-1. Please make sure have read doc of [deploying helm chart](./helm).
+1. Please make sure you have read the doc of about [deploying helm chart](./helm).
 
-2. Install Kruise Rollout
+2. Make sure you have already enableld the kruise-rollout addon.
 ```shell
 % vela addon enable kruise-rollout
-enable addon by local dir: addons/kruise-rollout
 Addon: kruise-rollout enabled Successfully.
 ```
 
 3. Please make sure one of the [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/) is available in your Kubernetes cluster.
-   If not yet, you can install one in your cluster by enable the [ingress-nginx](../reference/addons/nginx-ingress-controller) addon:
+   If not, you can install one in your cluster by enable the [ingress-nginx](../reference/addons/nginx-ingress-controller) addon:
 
 ```shell
 vela addon enable ingress-nginx
@@ -22,9 +21,13 @@ vela addon enable ingress-nginx
 
 Please refer [this](../reference/addons/nginx-ingress-controller) to get the gateway's access address.
 
-4. Please make sure the version of  Vela-cli `>=1.5.0-alpha.1`.
+**You also can choose to install [traefik](../reference/addons/traefik) addon.**
+
+4. Please make sure the version of  Vela CLI tool `>=1.5.0-alpha.1`, some commands such as rollback rely on the new version.
 
 ### First deployment
+
+When you want to use the canary rollout, you need to add the `kruise-rollout` trait at the first time, this configuration will take effect at next release process. Deploy the application with traits like below:
 
 ```shell
 cat <<EOF | vela up -f -
@@ -57,7 +60,7 @@ spec:
 EOF
 ```
 
-This  is a general helm chart created by `helm create` command, which contains a deployment whose image is `barnett/canarydemo:v1`, a service and a ingress. You can check the source of chart in [repo](https://github.com/wangyikewxgm/my-charts/tree/main/canary-demo).
+This is a general helm chart created by `helm create` command, which contains a deployment whose image is `barnett/canarydemo:v1`, a service and an ingress. You can check the source of chart in [repo](https://github.com/wangyikewxgm/my-charts/tree/main/canary-demo).
 
 Access the gateway endpoint. You can see the result always is `Demo: V1`
 ```shell
@@ -113,7 +116,7 @@ Demo: V2
 The other operations such as `continue rollout/rollback` are totally same with the operation for webservice component.
 
 
-## Continue rollout process
+### Continue rollout process
 
 After verify the success of the canary version through business-related metrics, such as logs, metrics, and other means, you can resume the workflow to continue the process of rollout.
 
@@ -128,7 +131,7 @@ $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
 Demo: V2
 ```
 
-## Canary validation successful, full release
+### Canary validation successful, full release
 
 In the end, you can resume again to finish the rollout process.
 
@@ -143,11 +146,24 @@ $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
 Demo: V2
 ```
 
-## Canary verification failed, rollback
+### Canary verification failed, rollback
 
-If you want to cancel the rollout process and rollback the application to the latest version, after manually check. You can use this command:
+If you want to cancel the rollout process and rollback the application to the latest version, after manually check. You can rollback the rollout workflow:
+
+You should suspend the workflow before rollback:
 ```shell
-vela workflow rollback canary-demo
+$ vela workflow suspend canary-demo
+Rollout default/canary-demo in cluster  suspended.
+Successfully suspend workflow: canary-demo
+```
+
+Then rollback:
+```shell
+$ vela workflow rollback canary-demo
+Application spec rollback successfully.
+Application status rollback successfully.
+Rollout default/canary-demo in cluster  rollback.
+Successfully rollback rolloutApplication outdated revision cleaned up.
 ```
 
 Access the gateway endpoint again. You can see the result always is `Demo: V1`.
@@ -155,3 +171,14 @@ Access the gateway endpoint again. You can see the result always is `Demo: V1`.
 $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
 Demo: V1
 ```
+
+Please notice: rollback operation in middle of a runningWorkflow will rollback to latest succeed revision which is `v1` in this case.
+Image a scenario, you deploy a successful `v1` and canary rollout to `v2`, but you find some error in this version, then you continue to rollout to `v3` directly. Error still exists, application is unhealthy then you decide to rollback.
+When you execute rollback workload will let application rollback to version `v1`.
+
+##Limitation
+
+1. As you can see, the helm chart used in this tutorial contains a service point to workload, an ingress route to the service. 
+If your helm chart doesn't have service or ingress that need not exposure the service, you cannot reproduce the canary rollout with this chart.
+   
+2. Currently, canary rollout has supported several types of workloads such as deployment, statefulset, and [open-kruise cloneset](https://openkruise.io/docs/user-manuals/cloneset/). That means the workload in your helm chart must be one of this three types.

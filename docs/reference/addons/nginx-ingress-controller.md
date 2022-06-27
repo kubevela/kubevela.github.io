@@ -5,6 +5,8 @@ title: Nginx Ingress Controller
 
 [Nginx Ingress controller](https://kubernetes.github.io/ingress-nginx/) is an Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer.
 
+**Notice: If your cluster is already have any kinds of [ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/), you don't need to enable this addon.**
+
 ## Install
 
 ```shell
@@ -14,7 +16,7 @@ vela addon enable ingrss-controller
 ## Setup with Specified Service Type
 
 There are three service types for this addon which aligned with Kubernetes service, they're `ClusterIP`, `NodePort` and `LoadBalancer`.
-By default the service type is ClusterIP for security.
+By default, the service type is ClusterIP for security.
 
 - `LoadBalancer` type requires your cluster has cloud LoadBalancer available.
     ```shell script

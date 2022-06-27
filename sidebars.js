@@ -61,7 +61,7 @@ module.exports = {
           type: 'category',
           label: 'Kubernetes Manifest CD',
           collapsed: true,
-          items: ['tutorials/k8s-object', 'end-user/components/ref-objects'],
+          items: ['tutorials/k8s-object', 'end-user/components/ref-objects', "tutorials/k8s-object-rollout"],
         },
         {
           type: 'category',

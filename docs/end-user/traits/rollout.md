@@ -10,7 +10,6 @@ In this section, we will introduce how to canary rollout a container service.
 
 ```shell
 % vela addon enable kruise-rollout
-enable addon by local dir: addons/kruise-rollout
 Addon: kruise-rollout enabled Successfully.
 ```
 
@@ -28,7 +27,7 @@ Please refer [this](../../reference/addons/nginx-ingress-controller) to get the 
 
 ## First Deployment
 
-Deploy the application:
+When you want to use the canary rollout, you need to add the `kruise-rollout` trait at the first time, this configuration will take effect in the process of next release. Deploy the application with traits like below:
 
 ```shell
 cat <<EOF | vela up -f -
@@ -237,9 +236,22 @@ Demo: V2
 
 ## Canary verification failed, rollback
 
-If you want to cancel the rollout process and rollback the application to the latest version, after manually check. You can use this command:
+If you want to cancel the rollout process and rollback the application to the latest version, after manually check. You can rollback the rollout workflow:
+
+You should suspend the workflow before rollback:
 ```shell
-vela workflow rollback canary-demo
+$ vela workflow suspend canary-demo
+Rollout default/canary-demo in cluster  suspended.
+Successfully suspend workflow: canary-demo
+```
+
+Then rollback:
+```shell
+$ vela workflow rollback canary-demo
+Application spec rollback successfully.
+Application status rollback successfully.
+Rollout default/canary-demo in cluster  rollback.
+Successfully rollback rolloutApplication outdated revision cleaned up.
 ```
 
 Access the gateway endpoint again. You can see the result always is `Demo: V1`.
@@ -247,3 +259,7 @@ Access the gateway endpoint again. You can see the result always is `Demo: V1`.
 $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
 Demo: V1
 ```
+
+Please notice: rollback operation in middle of a runningWorkflow will rollback to latest succeed revision which is `v1` in this case.
+Image a scenario, you deploy a successful `v1` and canary rollout to `v2`, but you find some error in this version, then you continue to rollout to `v3` directly. Error still exists, application is unhealthy then you decide to rollback.
+When you execute rollback workload will let application rollback to version `v1`.
