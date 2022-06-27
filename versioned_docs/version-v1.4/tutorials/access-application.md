@@ -8,7 +8,7 @@ title: 访问应用程序
 
 ## 使用云厂商提供的 LoadBalancer 方式
 
-这种方式仅限于云服务，像阿里云， AWS， Azure等。
+这种方式只适用于云环境，比如阿里云、AWS、Azure。
 
 对于 webservice 组件来说，你只需要设置`ExposeType`为`LoadBalancer`，这意味着这个组件会生成一个以 LoadBalancer 方式访问的 Kubernetes 服务。部署成功之后，你可以获得服务访问点。
 
