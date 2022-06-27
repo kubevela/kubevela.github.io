@@ -32,13 +32,14 @@ module.exports = {
             'case-studies/multi-cluster',
             'tutorials/access-application',
             'end-user/traits/sidecar',
+            'end-user/traits/rollout',
           ],
         },
         {
           type: 'category',
           label: 'Helm Chart CD',
           collapsed: true,
-          items: ['tutorials/helm', 'tutorials/helm-multi-cluster'],
+          items: ['tutorials/helm', 'tutorials/helm-multi-cluster', 'tutorials/helm-rollout'],
         },
         {
           type: 'category',
@@ -60,7 +61,7 @@ module.exports = {
           type: 'category',
           label: 'Kubernetes Manifest CD',
           collapsed: true,
-          items: ['tutorials/k8s-object', 'end-user/components/ref-objects'],
+          items: ['tutorials/k8s-object', 'end-user/components/ref-objects', "tutorials/k8s-object-rollout"],
         },
         {
           type: 'category',
