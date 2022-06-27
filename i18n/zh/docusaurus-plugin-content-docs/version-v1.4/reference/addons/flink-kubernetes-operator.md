@@ -1,22 +1,22 @@
 # flink-kubernetes-operator
 
-A Kubernetes operator for Apache Flink(https://github.com/apache/flink-kubernetes-operator), it allows users to manage Flink applications and their lifecycle through native k8s tooling like kubectl.
+Apache Flink (https://github.com/apache/flink-kubernetes-operator) 的 Kubernetes operator，它允许用户通过 kubectl 等原生 k8s 工具来管理 Flink 应用程序及其生命周期。
 
-## Install
+## 安装插件
 
 ```shell
 vela addon enable flink-kubernetes-operator
 ```
 
-## Uninstall
+## 卸载插件
 
 ```shell
 vela addon disable flink-kubernetes-operator
 ```
 
-## Check the flink-kubernetes-operator running status
+## 检查 flink-kubernetes-operator 的运行状态
 
-Since this addon dependents `fluxcd` and `cert-manager` addon, so will enable them automatically. Check the status of them:
+由于这个插件依赖于`fluxcd`和`cert-manager`插件，所以会自动启用它们。执行下面的命令来检查它们的状态：
 ```shell
 $ vela ls -n vela-system
 APP                             COMPONENT               TYPE            TRAITS  PHASE   HEALTHY STATUS                                                          CREATED-TIME                 
@@ -30,8 +30,7 @@ addon-fluxcd                    flux-system-namespace   raw                     
 
 ```
 
-
- Show the component type `flink-cluster`, so we know how to use it in one application. As a flink user, you can choose the parameter to set for your flink cluster
+通过显示`flink-cluster`组件的字段类型，让我们知道如何在一个应用程序中使用它们。 作为 flink 用户，你可以选择它们作为你的 flink 集群的设置参数。
 ```shell
 vela show flink-cluster
 # Properties
@@ -54,12 +53,11 @@ vela show flink-cluster
 +--------------+-------------+--------+----------+---------------------------------------------------------------+
 ```
 
-## Example for how to run a component typed flink-cluster in application
+## 在应用中运行一个 flink-cluster 类型组件的示例
 
-First please make sure your cluster already exists namespace `flink-home`.
+首先请确保你的集群已经存在命名空间`flink-home`。
 
-Then deploy the application:
-
+然后部署下面的应用：
 ```shell
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
@@ -76,7 +74,7 @@ components:
 EOF      
 ```
 
-Check all the related resources:
+检查相关资源的状态：
 
 ```shell
 vela status flink-app-v1 
@@ -108,4 +106,4 @@ Services:
   No trait applied
 ```
 
-You can see you first flink-cluster application is running!
+你会看到你的第一个 flink-cluster 应用已经处于运行状态了。
