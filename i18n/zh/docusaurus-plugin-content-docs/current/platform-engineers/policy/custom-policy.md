@@ -2,19 +2,19 @@
 title: 自定义策略
 ---
 
-In this section we will introduce how to define a custom policy with CUE. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition) and [how to manage definition](../cue/definition-edit).
+本节将介绍通过 CUE 实现自定义策略，在开始之前，你需要学习模块[模块定义](../../getting-started/definition) 的基本概念 和 [如何管理模块定义](../cue/definition-edit)。
 
-## Generate Resources by Policy
+## 通过策略生成资源
 
-Generate resources in policy is similar to trait, policy can be used to define things across components.
+通过策略生成资源类似于 Trait ，策略可用于跨 components 定义事物。
 
-Let's use `vela def init` to create a basic policy scaffold:
+让我们使用 `vela def init` 创建一个基本的策略脚手架：
 
 ```
 vela def init my-plc -t policy --desc "My ingress route policy." > myroute.cue
 ```
 
-The content of the scaffold expected to be:
+我们希望创建一个这样的脚手架:
 
 ```
 $ cat myroute.cue
@@ -30,7 +30,7 @@ template: {
 }
 ```
 
-The rule is align with component definition, you must specify `output`, while you can use `outputs` for more objects, the format as below:
+规则要和 components 定义保持一致，必须制定 `output`，对于多个对象的 `outputs` ，格式如下:
 
 ```cue
 output: {
@@ -40,8 +40,7 @@ outputs: <unique-name>:
   <full template data>
 ```
 
-Below is an example that we create a traffic split service mesh object in policy.
-
+如下是一个通过策略创建流量拆分服务网格对象的示例。
 ```cue
 "my-plc": {
 	description: "My service mesh policy."
@@ -69,15 +68,15 @@ template: {
 }
 ```
 
-Apply to our control plane to make this trait work:
+通过控制台，可以创建这个 Trait ：
 
 ```
 vela def apply -f myroute.cue
 ```
 
-Then our end users can discover it immediately and use it in `Application`.
+随后我们的终端用户可以立即发现并在 `Application`中使用这个 Trait 。
 
-After using `vela up` by the following command:
+通过如下命令使用 `vela up` ：
 
 ```shell
 cat <<EOF | vela up -f -
@@ -107,7 +106,7 @@ spec:
 EOF
 ```
 
-The policy will generate Kubernetes resources by KubeVela like below:
+该策略由 KubeVela 生成如下所示的 Kubernetes 资源:
 
 ```
 apiVersion: split.smi-spec.io/v1alpha3
@@ -124,13 +123,13 @@ spec:
   service: unified
 ```
 
-You can define any Kubernetes API objects in policies if you want.
+如果需要，您可以在策略中定义任何 Kubernetes API 对象。
 
-## Special Policy
+## 特殊策略
 
-Not all policies generate resources, there're several [built-in policies](../../end-user/policies/references) which are used to control the whole delivery precess and workflows. These special polices are usually coded in the application controller.
+并不是所有的策略都可以生成资源, 有几个 [内置策略](../../end-user/policies/references) 用于控制整个交付过程和工作流程。这些特殊策略通常编写在application controller中。
 
-## What's Next
+## 下一篇
 
-* Learn how to [define health check and custom status](../traits/status) of Trait.
-* Learn how to [define workflow step](../workflow/workflow) in CUE.
+* 如何 [自定义 Trait 健康检查和状态](../traits/status) 。
+* 如何基于 CUE [自定义工作流](../workflow/workflow) 。
