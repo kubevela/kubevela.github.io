@@ -75,7 +75,7 @@ Services:
 
 可以看到，步骤 `apply-err` 会因为尝试部署一个非法的资源而导致失败，同时，因为之前的步骤失败了，步骤 `apply-comp` 将被跳过。
 
-## Always
+## If Always
 
 如果你希望一个步骤无论如何都应该被执行，那么，你可以为这个步骤指定 `if` 为 `always`。
 
@@ -89,34 +89,43 @@ metadata:
   namespace: default
 spec:
   components:
-  - name: express-server
+  - name: invalid
     type: webservice
     properties:
-      image: oamdev/hello-world
+      image: invalid
       ports:
         - port: 8000
   workflow:
     steps:
-      - name: apply-err
-        type: apply-object
-        properties:
-          value:
-            test: err
-      - name: apply-comp
-        if: always
+      - name: comp
         type: apply-component
+        timeout: 5s
+        outputs:
+          - name: status
+            valueFrom: output.status.conditions[0].type + output.status.conditions[0].status
         properties:
-          component: express-server
+          component: invalid
+      - name: notification
+        type: notification
+        inputs:
+          - from: status
+            parameterKey: slack.message.text
+        if: always
+        properties:
+          slack:
+            url:
+              value: <your slack url>
 ```
 
 使用 vela status 命令查看应用状态：
 
 ```bash
+$ vela status err-with-always
 About:
 
   Name:      	err-with-always
   Namespace: 	default
-  Created at:	2022-06-24 18:20:50 +0800 CST
+  Created at:	2022-06-27 17:30:29 +0800 CST
   Status:    	workflowTerminated
 
 Workflow:
@@ -126,27 +135,27 @@ Workflow:
   Suspend: false
   Terminated: true
   Steps
-  - id:ocqbzsg5ma
-    name:apply-err
-    type:apply-object
-    phase:failed
-    message:step apply: run step(provider=kube,do=apply): Object 'Kind' is missing in '{"test":"err"}'
-  - id:vzei1r7tb7
-    name:apply-comp
+  - id:loeqr6dlcn
+    name:comp
     type:apply-component
+    phase:failed
+    message:
+  - id:hul9tayu82
+    name:notification
+    type:notification
     phase:succeeded
     message:
 
 Services:
 
-  - Name: express-server
+  - Name: invalid
     Cluster: local  Namespace: default
     Type: webservice
-    Healthy Ready:1/1
+    Unhealthy Ready:0/1
     No trait applied
 ```
 
-可以看到，步骤 `apply-err` 会因为尝试部署一个非法的资源而导致失败，而步骤 `apply-comp` 因为指定了 `if: always`，所以一定会被执行。
+可以看到，步骤 `comp` 会去尝试部署一个镜像为 `invalid` 的组件，而组件因为拉取不到镜像，所以会在五秒后因为超时而失败，同时，这个步骤将组件的 `status` 作为 outputs 传出。而步骤 `notification` 因为指定了 `if: always`，所以一定会被执行，同时，消息通知的内容为上一个步骤中组件的状态，因此，我们可以在 slack 中看到携带状态信息的消息通知。
 
 ## 自定义 If 条件判断
 
