@@ -33,8 +33,8 @@
             "tutorials/webservice",
             "case-studies/multi-cluster",
             "tutorials/access-application",
-            "end-user/traits/sidecar",
-            "end-user/traits/rollout"
+            "end-user/traits/rollout",
+            "end-user/traits/sidecar"
           ]
         },
         {
@@ -97,15 +97,20 @@
           "label": "Declarative Workflow",
           "collapsed": true,
           "items": [
-            "tutorials/workflows",
-            "end-user/workflow/component-dependency-parameter",
-            "end-user/workflow/webhook-notification"
+            "end-user/workflow/overview",
+            "end-user/workflow/suspend",
+            "end-user/workflow/step-group",
+            "end-user/workflow/dependency",
+            "end-user/workflow/inputs-outputs",
+            "end-user/workflow/if-condition",
+            "end-user/workflow/timeout"
           ]
         },
         {
           "General CD Features": [
             "how-to/dashboard/application/create-application",
             "end-user/version-control",
+            "end-user/workflow/component-dependency-parameter",
             "end-user/policies/apply-once",
             "end-user/policies/gc"
           ]
