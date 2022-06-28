@@ -12,7 +12,7 @@ A workflow consists of multiple steps, and typical workflow steps include step g
 
 In fact, if you only use components in the Application and do not declare a workflow, KubeVela will automatically create a default workflow for deploying the components when running the Application.
 
-In [VelaUX](../../how-to/dashboard/workflow/overview), you can feel the workflow more intuitively. As shown in the figure: The following is a workflow that controls the application to be deployed to the test environment, paused in the manual approval step, and then deployed to the production environment:
+In VelaUX, you can feel the workflow more intuitively. As shown in the figure: The following is a workflow that controls the application to be deployed to the test environment, paused in the manual approval step, and then deployed to the production environment:
 
 ![continue-workflow](../../resources/continue-workflow.png)
 
@@ -20,7 +20,6 @@ In [VelaUX](../../how-to/dashboard/workflow/overview), you can feel the workflow
 
 In the workflow, all the steps will be executed sequentially and the next step will be executed after the previous one succeeded. If a step is of type `step-group`, it can contain a series of sub-steps, all of which are executed together when the step group is executed.
 
-> 在 KubeVela 未来的版本（1.5+）中，你可以显示地指定步骤的执行方式来控制并发或者单步执行，如：
 > In future versions of KubeVela (1.5+), you can explicitly specify the execution mode of steps, such as:
 > ```yaml
 > workflow:
