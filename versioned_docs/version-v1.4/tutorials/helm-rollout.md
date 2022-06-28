@@ -6,7 +6,7 @@ title: Canary Rollout Helm chart
 
 1. Please make sure you have read the doc of about [deploying helm chart](./helm).
 
-2. Make sure you have already enableld the kruise-rollout addon.
+2. Make sure you have already enabled the kruise-rollout addon.
 ```shell
 % vela addon enable kruise-rollout
 Addon: kruise-rollout enabled Successfully.

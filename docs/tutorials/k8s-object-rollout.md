@@ -6,7 +6,7 @@ title: Canary Rollout Kubernetes Objects
 
 1. Please make sure you have read the doc of about [deploying helm chart](./helm).
 
-2. Make sure you have already enableld the kruise-rollout addon.
+2. Make sure you have already enabled the kruise-rollout addon.
 ```shell
 % vela addon enable kruise-rollout
 Addon: kruise-rollout enabled Successfully.
@@ -205,7 +205,7 @@ EOF
 
 The configuration strategy of kruise-rollout trait means: The first batch of Canary releases 20% Pods, and 20% traffic imported to the new version, require manual confirmation before subsequent releases are completed.
 
-Check the status of applciation:
+Check the status of application:
 ```shell
 $ vela status canary-demo
 About:

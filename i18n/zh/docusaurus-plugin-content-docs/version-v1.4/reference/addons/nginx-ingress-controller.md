@@ -7,7 +7,7 @@ title: Nginx Ingress Controller
 ##  安装
 
 ```shell
-vela addon enable ingrss-controller
+vela addon enable ingress-controller
 ```
 
 ## 指定 Service Type
@@ -16,12 +16,12 @@ vela addon enable ingrss-controller
 
 - `LoadBalancer` 需要你的集群运行在某个公有云上，并有一种支持的 cloud LoadBalancer。
     ```shell script
-    vela addon enable ingrss-controller serviceType=LoadBalancer
+    vela addon enable ingress-controller serviceType=LoadBalancer
     ```   
   
 - `NodePort` 类型需要你能够访问集群节点的 IP和端口
     ```shell script
-    vela addon enable ingrss-controller serviceType=NodePort
+    vela addon enable ingress-controller serviceType=NodePort
     ```
   
 ## 获取网关地址
@@ -29,7 +29,7 @@ vela addon enable ingrss-controller
 如果指定了服务类型是 `NodePort` 和 `LoadBalancer`，你可以通过下面的命令，获取到网关的地址：
 
 ```shell
-vela status addon-ingrss-controller -n vela-system --endpoint
+vela status addon-ingress-controller -n vela-system --endpoint
 ```
 
 如果是 `ClusterIP` 类型，又可以通过 `vela port-forward` 命令将网关的端口映射到本地：
@@ -41,7 +41,7 @@ vela port-forward -n vela-system addon-ingress-controller 9080:80
 ## 卸载
 
 ```shell
-vela addon disable ingrss-controller
+vela addon disable ingress-controller
 ```
 
 ## 例子
