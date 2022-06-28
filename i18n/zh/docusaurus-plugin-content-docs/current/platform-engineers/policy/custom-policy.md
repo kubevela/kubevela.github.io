@@ -2,11 +2,11 @@
 title: 自定义策略
 ---
 
-本节将介绍通过 CUE 实现自定义策略，在开始之前，你需要学习模块[模块定义](../../getting-started/definition) 的基本概念 和 [如何管理模块定义](../cue/definition-edit)。
+本节将介绍通过 CUE 实现自定义策略，在开始之前，你要学习 [模块定义](../../getting-started/definition) 的基本概念和 [如何管理模块定义](../cue/definition-edit)。
 
 ## 通过策略生成资源
 
-通过策略生成资源类似于 Trait ，策略可用于跨 components 定义事物。
+通过 Policy 生成资源类似于 Trait ，策略可用于跨 component 定义事物。
 
 让我们使用 `vela def init` 创建一个基本的策略脚手架：
 
@@ -30,7 +30,7 @@ template: {
 }
 ```
 
-规则要和 components 定义保持一致，必须制定 `output`，对于多个对象的 `outputs` ，格式如下:
+规则要和 component 定义保持一致，必须制定 `output`，`outputs` 可用于多个对象，格式如下:
 
 ```cue
 output: {
@@ -68,15 +68,15 @@ template: {
 }
 ```
 
-通过控制台，可以创建这个 Trait ：
+把这个 Trait 应用到控制平面来使其生效：
 
 ```
 vela def apply -f myroute.cue
 ```
 
-随后我们的终端用户可以立即发现并在 `Application`中使用这个 Trait 。
+随后我们的终端用户可以立即发现并在 `Application` 中使用这个 Trait。
 
-通过如下命令使用 `vela up` ：
+执行 `vela up` 命令后：
 
 ```shell
 cat <<EOF | vela up -f -
@@ -123,13 +123,13 @@ spec:
   service: unified
 ```
 
-如果需要，您可以在策略中定义任何 Kubernetes API 对象。
+如果需要，你可以在策略中定义任何 Kubernetes API 对象。
 
 ## 特殊策略
 
-并不是所有的策略都可以生成资源, 有几个 [内置策略](../../end-user/policies/references) 用于控制整个交付过程和工作流程。这些特殊策略通常编写在application controller中。
+并不是所有的策略都可以生成资源, 有几个 [内置策略](../../end-user/policies/references) 用于控制整个交付过程和工作流程。这些特殊策略通常编写在 application controller 中。
 
-## 下一篇
+## 下一步
 
 * 如何 [自定义 Trait 健康检查和状态](../traits/status) 。
 * 如何基于 CUE [自定义工作流](../workflow/workflow) 。
