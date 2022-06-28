@@ -7,7 +7,7 @@ description: 该部分介绍云资源管理的一些场景
 
 ### 部署和使用数据库
 
-- [创建和使用云资源](../../../tutorials//cloud-resources-orchestration)
+- [创建和使用云资源](../../../tutorials/cloud-resources-orchestration)
 
 - [安全访问数据库](./secure-your-database-connection)
 
