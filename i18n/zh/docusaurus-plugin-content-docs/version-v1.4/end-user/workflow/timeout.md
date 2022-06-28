@@ -1,18 +1,18 @@
 ---
-title:  Timeout of Step
+title:  步骤的超时
 ---
 
-> Note: You need to upgrade to version 1.5 or above to use the timeout.
+> 注意：你需要升级到 1.5 及以上版本来使用超时功能。
 
-This section introduces how to add timeout to workflow steps in KubeVela.
+本节将介绍如何在 KubeVela 中为工作流步骤添加超时时间。
 
-In KubeVela workflow, each step can specify a `timeout`, you can use `timeout` to specify the timeout time for the step.
+在 KubeVela 工作流中，每个步骤都可以指定一个 `timeout`，你可以使用 `timeout` 来指定该步骤的超时时间。
 
-`timeout` follows the `duration` format, e.g. `30s`, `1m`, etc. You can refer to Golang's [parseDuration](https://pkg.go.dev/time#ParseDuration).
+`timeout` 遵循 `duration` 格式，例如 `30s`, `1m` 等。你可以参考 Golang 的 [parseDuration](https://pkg.go.dev/time#ParseDuration)。
 
-If a step is not completed within the specified time, KubeVela will set the status of the step to `failed` and the `Reason` of the step will be set to `Timeout`.
+如果一个步骤在指定的时间内没有完成，KubeVela 会将该步骤的状态置为 `failed`，步骤的 Reason 会设置为 `timeout`。
 
-Apply the following example:
+部署如下例子：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -47,7 +47,7 @@ spec:
         component: comp2
 ```
 
-Use `vela status` to check the status of the Application:
+使用 vela status 命令查看应用状态：
 
 ```bash
 $ vela status timeout-example
@@ -90,4 +90,4 @@ Services:
     No trait applied
 ```
 
-As you can see, when the first component is successfully deployed, the workflow is suspended on the second `suspend` step. The `suspend` step is set with a timeout of five seconds. If the workflow is not resumed within five seconds, the step will fail because of timeout. The third step is skipped because the previous `suspend` step failed.
+可以看到，当第一个组件被成功部署后，工作流会暂停在第二个 `suspend` 步骤上。该 `suspend` 步骤被设置了一个五秒的超时时间，如果在五秒内没有继续该工作流的话，该步骤会因为超时而失败。而第三个步骤因为前面的 `suspend` 步骤失败了，从而被跳过了执行。

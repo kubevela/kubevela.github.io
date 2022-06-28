@@ -169,7 +169,7 @@ Check [this doc](https://kubevela.net/docs/reference/addons/terraform) for more 
 
 After the environment prepared well, you can create an application as below.
 
-```shell
+```yaml
 cat <<EOF | vela up -f -
 # YAML begins
 apiVersion: core.oam.dev/v1beta1

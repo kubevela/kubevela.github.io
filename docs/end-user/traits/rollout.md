@@ -6,30 +6,28 @@ In this section, we will introduce how to canary rollout a container service.
 
 ## Before starting
 
-1. Enable `kruise-rollout` addon.
+1. Enable [`kruise-rollout`](../../reference/addons/kruise-rollout) addon, our canary rollout capability relies on the [rollouts from OpenKruise](https://github.com/openkruise/rollouts).
+  ```shell
+  $ vela addon enable kruise-rollout
+  Addon: kruise-rollout enabled Successfully.
+  ```
 
-```shell
-% vela addon enable kruise-rollout
-Addon: kruise-rollout enabled Successfully.
-```
+2. Please make sure one of the [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/) is available in your cluster.
+   You can also enable the [`ingress-nginx`](../../reference/addons/nginx-ingress-controller) addon if you don't have any:
+  ```shell
+  vela addon enable ingress-nginx
+  ```
+  Please refer to [the addon doc](../../reference/addons/nginx-ingress-controller) to get the access address of gateway.
+
+3. Some of the commands such as `rollback` relies on vela-cli `>=1.5.0-alpha.1`, please upgrade the command line for convenience. You don't need to upgrade the controller.
 
 
-2. Please make sure one of the [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/) is available in your Kubernetes cluster.
-   If not yet, you can install one in your cluster by enable the [ingress-nginx](../../reference/addons/nginx-ingress-controller) addon:
+## First Time Deploy
 
-```shell
-vela addon enable ingress-nginx
-```
+When you want to use the canary rollout for every upgrade, you should **ALWAYS** have a `kruise-rollout` trait on your component.
+The day-2 canary rollout of the component need you have this trait attached already. Deploy the application with traits like below:
 
-Please refer [this](../../reference/addons/nginx-ingress-controller) to get the gateway's access address.
-
-3. Please make sure the version of  Vela-cli `>=1.5.0-alpha.1`.
-
-## First Deployment
-
-When you want to use the canary rollout, you need to add the `kruise-rollout` trait at the first time, this configuration will take effect in the process of next release. Deploy the application with traits like below:
-
-```shell
+```yaml
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -67,7 +65,14 @@ spec:
 EOF
 ```
 
-Then check the status of application will find out the application is running.
+Here's an **overview about what will happen** when upgrade under this `kruise-rollout` trait configuration, the whole process will be divided into 3 steps:
+
+1. When the upgrade start, a new canary deployment will be created with `20%` of the total replicas. In our example, we have 5 total replicas, it will keep all the old ones and create `5 * 20% = 1` for the new canary, and serve for `20%` of the traffic. It will wait for a manual approval when everything gets ready.
+   - By default, the percent of replicas are aligned with the traffic, you can also configure the replicas individually according to [this doc](../../reference/addons/kruise-rollout).
+2. After the manual approval, the second batch starts. It will create `5 * 90% = 4.5` which is actually `5` replicas of new version in the system with the `90%` traffic. As a result, the system will totally have `10` replicas now. It will wait for a second manual approval.
+3. After the second approval, it will update the workload which means leverage the rolling update mechanism of the workload itself for upgrade. After the workload finished the upgrade, all the traffic will route to that workload and the canary deployment will be destroyed.
+
+Let's continue our demo, the first deployment has no difference with a normal deploy, you can check the status of application to make sure it's running for our next step.
 
 ```shell
 $ vela status canary-demo
@@ -78,18 +83,7 @@ About:
   Created at:   2022-06-09 16:43:10 +0800 CST
   Status:       running                      
 
-Workflow:
-
-  mode: DAG
-  finished: true
-  Suspend: false
-  Terminated: false
-  Steps
-  - id:x6rnat7iby
-    name:canary-demo
-    type:apply-component
-    phase:succeeded 
-    message:
+...snip...
 
 Services:
 
@@ -103,21 +97,24 @@ Services:
 
 ```
 
-If you have enabled [velaux](../../reference/addons/velaux) addon you can view the application topology graph , then you will see all `v1` pods are ready now.
+If you have enabled [velaux](../../reference/addons/velaux) addon, you can view the application topology graph that all `v1` pods are ready now.
 
 ![image](../../resources/kruise-rollout-v1.jpg)
 
-Access the gateway endpoint with the specific host.
+Access the gateway endpoint with the specific host by:
+
 ```shell
 $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
 Demo: V1
 ``` 
 
+The host `canary-demo.com` is aligned with the `gateway` trait in your application, you can also configure it in your `/etc/hosts` to use the host url for visiting.
 
-## Canary Release
-Modify the webservice image tag, from v1 to v2, as follows:
+## Day-2 Canary Release
 
-```shell
+Let's modify the image tag of the component, from `v1` to `v2` as follows:
+
+```yaml
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -154,9 +151,8 @@ spec:
 EOF
 ```
 
-The configuration strategy of kruise-rollout trait means: The first batch of Canary releases 20% Pods, and 20% traffic imported to the new version, require manual confirmation before subsequent releases are completed.
+It will create a canary deployment and wait for manual approval, check the status of the application:
 
-Check the status of applciation:
 ```shell
 $ vela status canary-demo
 About:
@@ -166,18 +162,7 @@ About:
   Created at:   2022-06-09 16:43:10 +0800 CST
   Status:       runningWorkflow              
 
-Workflow:
-
-  mode: DAG
-  finished: false
-  Suspend: false
-  Terminated: false
-  Steps
-  - id:8adxa11wku
-    name:canary-demo
-    type:apply-component
-    phase:running 
-    message:wait healthy
+...snip...
 
 Services:
 
@@ -197,29 +182,29 @@ View topology graph again, you will see `kruise-rollout` trait created a `v2` po
 
 ![image](../../resources/kruise-rollout-v2.jpg)
 
-Access the gateway endpoint again. You will find out there is about 20% chance to meet `Demo: v2` result.
+Access the gateway endpoint again. You will find out there is about `20%` chance to meet `Demo: v2` result.
 
 ```shell
 $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
 Demo: V2
 ```
 
-## Continue rollout process
+## Continue Canary Process
 
-After verify the success of the canary version through business-related metrics, such as logs, metrics, and other means, you can resume the workflow to continue the process of rollout.
+After verify the success of the canary version through business-related metrics, such as logs, metrics, and other means, you can `resume` the workflow to continue the process of rollout.
 
 ```shell
 vela workflow resume canary-demo
 ```
 
-Access the gateway endpoint again multi times. You will find out the chance to meet result `Demo: v2` is highly increased, almost 90%.
+Access the gateway endpoint again multi times. You will find out the chance (`90%`) to meet result `Demo: v2` is highly increased.
 
 ```shell
 $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
 Demo: V2
 ```
 
-## Canary validation successful, full release
+## Canary validation succeed, finished the release
 
 In the end, you can resume again to finish the rollout process.
 
@@ -234,11 +219,12 @@ $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
 Demo: V2
 ```
 
-## Canary verification failed, rollback
+## Canary verification failed, rollback the release
 
 If you want to cancel the rollout process and rollback the application to the latest version, after manually check. You can rollback the rollout workflow:
 
 You should suspend the workflow before rollback:
+
 ```shell
 $ vela workflow suspend canary-demo
 Rollout default/canary-demo in cluster  suspended.
@@ -246,6 +232,7 @@ Successfully suspend workflow: canary-demo
 ```
 
 Then rollback:
+
 ```shell
 $ vela workflow rollback canary-demo
 Application spec rollback successfully.
@@ -254,12 +241,11 @@ Rollout default/canary-demo in cluster  rollback.
 Successfully rollback rolloutApplication outdated revision cleaned up.
 ```
 
-Access the gateway endpoint again. You can see the result always is `Demo: V1`.
+Access the gateway endpoint again. You can see the result is always `Demo: V1`.
+
 ```shell
 $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
 Demo: V1
 ```
 
-Please notice: rollback operation in middle of a runningWorkflow will rollback to latest succeed revision which is `v1` in this case.
-Image a scenario, you deploy a successful `v1` and canary rollout to `v2`, but you find some error in this version, then you continue to rollout to `v3` directly. Error still exists, application is unhealthy then you decide to rollback.
-When you execute rollback workload will let application rollback to version `v1`.
+Any rollback operation in middle of a runningWorkflow will rollback to the latest succeeded revision of this application. So, if you deploy a successful `v1` and upgrade to `v2`, but this version didn't succeed while you continue to upgrade to `v3`. The rollback of `v3` will automatically to `v1`, because release `v2` is not a succeeded one.
