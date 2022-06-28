@@ -46,7 +46,7 @@ module.exports = {
           label: 'Cloud Resources CD',
           collapsed: true,
           items: [
-            'end-user/components/cloud-services/cloud-resources-orchestration',
+            'tutorials/cloud-resources-orchestration',
             {
               type: 'category',
               label: 'Terraform',
