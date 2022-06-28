@@ -2,25 +2,25 @@
 title: vegeta
 ---
 
-## Install
+## 安装插件
 
 ```shell
 $ vela addon enable vegeta
 ```
 
-## Uninstall
+## 卸载插件
 
 ```shell
 $ vela addon disable vegeta
 ```
 
-## Supported workload type
+## 支持的工作负载类型
 
-Vegeta Trait supports following component types: webservice, worker and cloneset.
+Vegeta Trait 支持下面的几种工作负载webservice，worker 和 cloneset。
 
-## How to start
+## 开始使用
 
-Use a component typed webservice to start, keep the following to show-vegeta.yaml, then vela up -f show-vegeta.yaml
+使用一个 webservice 组件来开始，将下面的声明保存到 show-vegeta.yaml，并运行 vela up -f show-vegeta.yaml 来启动。
 
 ```shell
 apiVersion: core.oam.dev/v1beta1
@@ -48,7 +48,7 @@ spec:
             backofflimit: 10
 ```
 
-Check the app status and trait status
+检查 app 和 trait 的状态：
 
 ```shell
 vela ls app -n vegeta
@@ -93,11 +93,12 @@ vela logs new-vegeta --name new-vegeta -n vegeta
 Choose the Job to show testing data logs
 ```
 
-- If you want a more nice demo, use the two tools: jaggr and jplot to show the data
+- 如果你想获取一个更友好的输出，使用下面这两个工具： jaggr 和 jplot 来查看数据。
+
 ```shell
 kubectl logs new-vegeta--1-qrh67  -n vegeta -f | jaggr @count=rps hist\[100,200,300,400,500\]:code p25,p50,p95:latency sum:bytes_in sum:bytes_out | jplot rps+code.hist.100+code.hist.200+code.hist.300+code.hist.400+code.hist.500 latency.p95+latency.p50+latency.p25 bytes_in.sum+bytes_out.sum
 ```
 
-- How to install jplot and jagrr
+- 如何安装 jplot 和 jagrr
     - https://github.com/rs/jplot
     - https://github.com/rs/jaggr
