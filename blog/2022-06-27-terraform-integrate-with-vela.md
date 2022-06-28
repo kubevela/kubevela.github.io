@@ -10,22 +10,21 @@ image: https://raw.githubusercontent.com/oam-dev/KubeVela.io/main/docs/resources
 hide_table_of_contents: false
 ---
 
-If you're looking for something to glue Terraform ecosystem with the Kubernetes world, congratulations! You will get exactly what you want here in this blog.
+If you're looking for something to glue Terraform ecosystem with the Kubernetes world, congratulations! You're getting exactly what you want in this blog.
 
-We will introduce how to integrate terraform modules into KubeVela by fixing a real world problem -- "Fixing the Developer Experience of Kubernetes Port Forwarding". This idea was inspired by [article](https://inlets.dev/blog/2022/06/24/fixing-kubectl-port-forward.html) from Alex Ellis.
+We will introduce how to integrate terraform modules into KubeVela by fixing a real world problem -- "Fixing the Developer Experience of Kubernetes Port Forwarding" inspired by [article](https://inlets.dev/blog/2022/06/24/fixing-kubectl-port-forward.html) from Alex Ellis.
 
-In general, this article will divide into two parts:
+In general, this article will be divided into two parts:
 
 * Part.1 will introduce how to glue Terraform with KubeVela, it needs some basic knowledge of both Terraform and KubeVela. You can just skip this part if you don't want to extend KubeVela as a Developer.
-* Part.2 will introduce how KubeVela can "Fix the Developer Experience of Kubernetes Port Forwarding" by using the solution provided in Part.1 .
+* Part.2 will introduce how KubeVela can 1) provision a Cloud ECS instance by KubeVela with public IP; 2) Use the ECS instance as a tunnel sever to provide public access for any container service within an intranet environment.
 
 OK, let's go!
 
 
 ## Part 1. Glue Terraform Module as KubeVela Capability
 
-[KubeVela](https://kubevela.net/docs/) is a modern software delivery control plane.
-The first question you may ask is "What benefit from doing this":
+In general, [KubeVela](https://kubevela.net/docs/) is a modern software delivery control plane, you may ask: "What benefit from doing this":
 
 1. The power of gluing Terraform with Kubernetes ecosystem including Helm Charts in one unified solution, that helps you to do GitOps, CI/CD integration and application lifecycle management.
     - Thinking of deploy a product that includes Cloud Database, Container Service and several helm charts, now you can manage and deploy them together without switching to different tools.
@@ -104,7 +103,7 @@ We'll use the terraform module we have already prepared just now.
 vela def init ecs --type component --provider alibaba --desc "Terraform configuration for Alibaba Cloud Elastic Compute Service" --git https://github.com/wonderflow/terraform-alicloud-ecs-instance.git > alibaa-ecs.yaml
 ```
 
-Change the git url with your own if you have customized.
+> Change the git url with your own if you have customized.
 
 * Apply it to the vela control plane
 
@@ -256,57 +255,13 @@ By now, we have finished the server part here.
 
 ### Use frp client in KubeVela
 
-The usage of frp client is very straight-forward, we can provide public IP for any of the workload inside the cluster.
+The usage of frp client is very straight-forward, we can provide public IP for any of the service inside the cluster.
 
+![](../docs/resources/terraform-ecs.png)
 
-1. Proxy local port as a sidecar.
+1. Deploy as standalone to proxy for any [Kubernetes Service](https://kubernetes.io/docs/concepts/services-networking/service/).
 
-```shell
-cat <<EOF | vela up -f -
-# YAML begins
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: vela-app-with-sidecar
-spec:
-  components:
-    - name: web
-      type: webservice
-      properties:
-        image: oamdev/hello-world:v2
-        ports:
-          - port: 8000
-      traits:
-        - type: sidecar
-          properties:
-            name: frp-client
-            image: oamdev/frpc:0.43.0
-            env:
-              - name: server_addr
-                value: "121.196.106.174"
-              - name: server_port
-                value: "9090"
-              - name: local_port
-                value: "8000"
-              - name: connect_name
-                value: "my_web"
-              - name: local_ip
-                value: "127.0.0.1"                
-              - name: remote_port
-                value: "8082"
-# YAML ends
-EOF
-```
-
-Wow! Then you can visiting the `hello-world` by:
-
-```
-curl 121.196.106.174:8082
-```
-
-2. Deploy as standalone to proxy for any [Kubernetes Service](https://kubernetes.io/docs/concepts/services-networking/service/).
-
-```shell
+```yaml
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -314,7 +269,7 @@ metadata:
   name: frp-proxy
 spec:
   components:
-    - name: frp
+    - name: frp-proxy
       type: worker
       properties:
         image: oamdev/frpc:0.43.0
@@ -334,9 +289,11 @@ spec:
 EOF
 ```
 
-In this case, we specify the `local_ip` which means we're visiting the Kubernetes Service with name `velaux` in the namespace `vela-system`. As a result, you can visit velaux service from the public IP `121.196.106.174:8083`.
+In this case, we specify the `local_ip` by `velaux.vela-system`, which means we're visiting the Kubernetes Service with name `velaux` in the namespace `vela-system`.
 
-3. Compose them together for the same lifecycle.
+As a result, you can visit velaux service from the public IP `121.196.106.174:8083`.
+
+2. Compose two components together for the same lifecycle.
 
 ```yaml
 cat <<EOF | vela up -f -
@@ -370,20 +327,29 @@ spec:
           - name: local_ip
             value: "web-new.default"
           - name: remote_port
-            value: "8081"
+            value: "8082"
 EOF
 ```
 
-The `webservice` type component will generate a service with the name of the component automatically. The `frp` component will proxy the traffic to the service `web-new` in the `default` namespace which is exactly the service generated.
+Wow! Then you can visiting the `hello-world` by:
+
+```
+curl 121.196.106.174:8082
+```
+
+The `webservice` type component will generate a service with the name of the component automatically. The `frp-web` component will proxy the traffic to the service `web-new` in the `default` namespace which is exactly the service generated.
 
 When the application deleted, all of the resources defined in the same app are deleted together.
+
+You can also compose the database together with them, then you can deliver all components needed in one time.
+
+### Clean Up
 
 You can clean up all the applications in the demo by `vela delete`:
 
 ```
 vela delete composed-app -y
 vela delete frp-proxy -y
-vela delete vela-app-with-sidecar -y
 vela delete ecs-demo -y
 ```
 

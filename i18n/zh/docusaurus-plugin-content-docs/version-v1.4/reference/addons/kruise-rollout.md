@@ -34,6 +34,8 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: canary-demo
+  annotations:
+    app.oam.dev/publishVersion: v1
 spec:
   components:
   - name: canary-demo
@@ -57,6 +59,8 @@ spec:
           # The first batch of Canary releases 20% Pods, and 20% traffic imported to the new version, require manual confirmation before subsequent releases are completed
           steps:
           - weight: 20
+          trafficRoutings:
+            - type: nginx
 EOF
 ```
 
@@ -113,6 +117,8 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: canary-demo
+  annotations:
+    app.oam.dev/publishVersion: v2
 spec:
   components:
   - name: canary-demo
@@ -136,6 +142,8 @@ spec:
           # The first batch of Canary releases 20% Pods, and 20% traffic imported to the new version, require manual confirmation before subsequent releases are completed
           steps:
           - weight: 20
+          trafficRoutings:
+          - type: nginx
 EOF
 ```
 
@@ -218,6 +226,8 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: canary-demo
+  annotations:
+    app.oam.dev/publishVersion: v1
 spec:
   components:
   - name: canary-demo
@@ -237,6 +247,8 @@ spec:
           # The first batch of Canary releases 20% Pods, and 20% traffic imported to the new version, require manual confirmation before subsequent releases are completed
           steps:
           - weight: 20
+          trafficRoutings:
+          - type: nginx
 EOF
 ```
 
@@ -261,6 +273,8 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: canary-demo
+  annotations:
+    app.oam.dev/publishVersion: v2
 spec:
   components:
   - name: canary-demo
@@ -281,6 +295,8 @@ spec:
           # The first batch of Canary releases 20% Pods, and 20% traffic imported to the new version, require manual confirmation before subsequent releases are completed
           steps:
           - weight: 20
+          trafficRoutings:
+          - type: nginx
 EOF
 ```
 
