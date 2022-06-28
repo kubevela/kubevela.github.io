@@ -86,9 +86,13 @@ module.exports = {
           label: 'Declarative Workflow',
           collapsed: true,
           items: [
-            'tutorials/workflows',
-            'end-user/workflow/component-dependency-parameter',
-            'end-user/workflow/webhook-notification',
+            'end-user/workflow/overview',
+            'end-user/workflow/suspend',
+            'end-user/workflow/step-group',
+            'end-user/workflow/dependency',
+            'end-user/workflow/inputs-outputs',
+            'end-user/workflow/if-condition',
+            'end-user/workflow/timeout',
           ],
         },
         {
