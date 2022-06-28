@@ -156,7 +156,7 @@ EOF
 
 The configuration strategy of kruise-rollout trait means: The first batch of Canary releases 20% Pods, and 20% traffic imported to the new version, require manual confirmation before subsequent releases are completed.
 
-Check the status of applciation:
+Check the status of application:
 ```shell
 $ vela status canary-demo
 About:

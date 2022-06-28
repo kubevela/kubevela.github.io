@@ -31,8 +31,8 @@ module.exports = {
             'tutorials/webservice',
             'case-studies/multi-cluster',
             'tutorials/access-application',
-            'end-user/traits/sidecar',
             'end-user/traits/rollout',
+            'end-user/traits/sidecar',
           ],
         },
         {
