@@ -76,6 +76,10 @@ Here's an **overview about what will happen** when upgrade under this `kruise-ro
 
 Let's continue our demo, the first deployment has no difference with a normal deploy, you can check the status of application to make sure it's running for our next step.
 
+```shell
+vela status canary-demo
+```
+
 Access the gateway endpoint. You can see the result always is `Demo: V1`
 ```shell
 $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
