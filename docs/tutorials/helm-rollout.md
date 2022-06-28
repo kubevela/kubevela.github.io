@@ -70,7 +70,7 @@ This is a general helm chart created by `helm create` command, which contains a 
 Here's an **overview about what will happen** when upgrade under this `kruise-rollout` trait configuration, the whole process will be divided into 3 steps:
 
 1. When the upgrade start, a new canary deployment will be created with `20%` of the total replicas. In our example, we have 5 total replicas, it will keep all the old ones and create `5 * 20% = 1` for the new canary, and serve for `20%` of the traffic. It will wait for a manual approval when everything gets ready.
-   - By default, the percent of replicas are aligned with the traffic, you can also configure the replicas individually according to [this doc](../../reference/addons/kruise-rollout).
+   - By default, the percent of replicas are aligned with the traffic, you can also configure the replicas individually according to [this doc](../reference/addons/kruise-rollout).
 2. After the manual approval, the second batch starts. It will create `5 * 90% = 4.5` which is actually `5` replicas of new version in the system with the `90%` traffic. As a result, the system will totally have `10` replicas now. It will wait for a second manual approval.
 3. After the second approval, it will update the workload which means leverage the rolling update mechanism of the workload itself for upgrade. After the workload finished the upgrade, all the traffic will route to that workload and the canary deployment will be destroyed.
 

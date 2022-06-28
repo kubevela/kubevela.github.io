@@ -1,25 +1,25 @@
 ---
-title:  Suspend and Resume
+title:  暂停和继续工作流
 ---
 
-This section introduces how to suspend and resume the workflow in KubeVela.
+本节将介绍如何在 KubeVela 中暂停和继续工作流。
 
-## Suspend the Workflow
+## 暂停工作流
 
-In KubeVela, you can choose to use the `vela` command to manually suspend the execution of the workflow, or use a built-in special step type `suspend` to automatically suspend the workflow.
+在 KubeVela 中，你可以选择使用 `vela` 命令来手动暂停工作流的执行，也可以使用一个内置的特殊步骤类型 `suspend` 使工作流自动进入暂停状态。
 
-### Suspend Manually
+### 手动暂停
 
-If you have a running application and you want to suspend its execution, you can use `vela workflow suspend` to suspend the workflow.
+如果你有一个正在运行的应用，并且你希望暂停它的执行，你可以使用 `vela workflow suspend` 来暂停该工作流。
 
 ```bash
 $ vela workflow suspend my-app
 Successfully suspend workflow: my-app
 ```
 
-### Use Suspend Step
+### 使用暂停步骤
 
-Apply the following example:
+部署如下例子：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -53,7 +53,7 @@ spec:
         component: comp2
 ```
 
-Use `vela status` to check the status of the Application:
+使用 vela status 命令查看应用状态：
 
 ```bash
 $ vela status suspend
@@ -91,22 +91,22 @@ Services:
     No trait applied
 ```
 
-As you can see, when the first step is completed, the `suspend` step will be executed and this step will suspend the workflow.
+可以看到，当第一个步骤执行完成之后，会开始执行 `suspend` 步骤。而这个步骤会让工作流进入暂停状态。
 
-## Resume the Workflow
+## 继续工作流
 
-### Resume Manually
+### 手动继续工作流
 
-Once the workflow is suspended, you can use the `vela workflow resume` command to manually resume the workflow.
+当工作流进入暂停状态后，你可以使用 `vela workflow resume` 命令来手动继续工作流。workflow resume 命令会把工作流从暂停状态恢复到执行状态。
 
-Take the above suspended application as an example:
+以上面处于暂停状态的应用为例：
 
 ```bash
 $ vela workflow resume suspend
 Successfully resume workflow: suspend
 ```
 
-After successfully continuing the workflow, view the status of the app:
+成功继续工作流后，查看应用的状态：
 
 ```bash
 $ vela status suspend
@@ -155,22 +155,22 @@ Services:
     No trait applied
 ```
 
-As you can see, the workflow has continued to execute.
+可以看到，工作流已经继续执行完毕。
 
-### Terminate Manually
+### 手动终止工作流
 
-If you want to terminate a workflow while it is suspended, you can use the `vela workflow terminate` command to terminate the workflow.
+当工作流处于暂停状态时，如果你想终止它，你可以使用 `vela workflow terminate` 命令来终止工作流。
 
 ```bash
 $ vela workflow terminate my-app
 Successfully terminate workflow: my-app
 ```
 
-### Resume the Workflow Automatically
+### 自动继续工作流
 
-If you want the workflow to be continued automatically after a period of time has passed. Then, you can add a `duration` parameter to the `suspend` step. When the `duration` time elapses, the workflow will automatically continue execution.
+如果你希望经过了一段时间后，工作流能够自动被继续。那么，你可以在 `suspend` 步骤中加上 `duration` 参数。当 `duration` 时间超过后，工作流将自动继续执行。
 
-Apply the following example:
+部署如下例子：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -206,7 +206,7 @@ spec:
         component: comp2
 ```
 
-Use `vela status` to check the status of the Application:
+查看应用状态：
 
 ```bash
 $ vela status auto-resume
@@ -255,4 +255,4 @@ Services:
     No trait applied
 ```
 
-As you can see, the `suspend` step is automatically executed successfully after five seconds, and the workflow is executed successfully.
+可以看到，`suspend` 步骤在五秒后自动执行成功，继续了工作流。

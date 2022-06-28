@@ -100,6 +100,7 @@ module.exports = {
           'General CD Features': [
             'how-to/dashboard/application/create-application',
             'end-user/version-control',
+            'end-user/workflow/component-dependency-parameter',
             'end-user/policies/apply-once',
             'end-user/policies/gc',
           ],

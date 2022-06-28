@@ -1,16 +1,16 @@
 ---
-title: Sub Steps
+title:  子步骤
 ---
 
-This section describes how to use sub steps in KubeVela.
+本节将介绍如何在 KubeVela 中使用子步骤。
 
-There is a special step type `step-group` in KubeVela workflow where you can declare sub-steps when using `step-group` type steps.
+KubeVela 工作流中有一个特殊的步骤类型 `step-group`，在使用步骤组类型的步骤时，你可以在其中声明子步骤。
 
-> Note: In the current version (1.4), sub steps in a step group are executed concurrently.
+> 注意：在当前版本（1.4）中，步骤组中的子步骤们是并发执行的。
 > 
-> In future versions (1.5+), you will be able to specify the execution mode of steps and sub-steps.
+> 在未来的版本（1.5+）中，你将可以显示指定工作流步骤及子步骤的执行方式。
 
-Apply the following example:
+部署如下例子：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -51,4 +51,4 @@ spec:
               component: express-server3
 ```
 
-By default, steps are executed sequentially, so step2 is not executed until step1 is deployed. Whereas in the step-group, sub-steps will be executed concurrently by default, so step2-sub1 and step2-sub2 will be deployed at the same time.
+在默认情况下，步骤顺序执行，因此，step1 部署完成后才会执行 step2。而在步骤组中，默认子步骤将并发执行，因此 step2-sub1 和 step2-sub2 将同时部署。

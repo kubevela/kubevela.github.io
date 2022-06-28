@@ -1,18 +1,18 @@
 ---
-title:  If Conditions
+title:  条件判断
 ---
 
-This section introduces how to add if conditions to workflow steps.
+本节将介绍如何在 KubeVela 中为工作流步骤添加条件判断。
 
-In the KubeVela workflow, each step can specify an `if`, in which you can determine whether the step should be executed.
+在 KubeVela 工作流中，每个步骤都可以指定一个 `if`，你可以使用 `if` 来确定是否应该执行该步骤。
 
-## No If specified
+## 不指定 If
 
-In the case where a step does not specify an If, KubeVela will determine whether to execute the step based on the status of the previous steps. In default, if all the previous steps are succeeded, the step will be executed.
+在步骤没有指定 If 的情况下，KubeVela 会根据先前步骤的状态来判断是否应该执行该步骤。默认步骤的执行条件是：在该步骤前的所有步骤状态均为成功。
 
-This also means that if step A fails, step B after step A will be skipped and will not be executed.
+这也意味着，如果步骤 A 执行失败，那么步骤 A 之后的步骤 B 会被跳过，不会被执行。
 
-Apply the following example:
+部署如下例子：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -41,7 +41,7 @@ spec:
           component: express-server
 ```
 
-Use `vela status` to check the status of the Application:
+使用 vela status 命令查看应用状态：
 
 ```bash
 $ vela status err-with-no-if
@@ -73,13 +73,13 @@ Workflow:
 Services:
 ```
 
-As you can see, the step `apply-err` will fail due to an attempt to deploy an invalid resource, and the step `apply-comp` will be skipped because the previous step failed.
+可以看到，步骤 `apply-err` 会因为尝试部署一个非法的资源而导致失败，同时，因为之前的步骤失败了，步骤 `apply-comp` 将被跳过。
 
 ## If Always
 
-If you want a step to be executed anyway, you can specify `if` to `always` for this step.
+如果你希望一个步骤无论如何都应该被执行，那么，你可以为这个步骤指定 `if` 为 `always`。
 
-Apply the following example:
+部署如下例子：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -117,7 +117,7 @@ spec:
               value: <your slack url>
 ```
 
-Use `vela status` to check the status of the Application:
+使用 vela status 命令查看应用状态：
 
 ```bash
 $ vela status err-with-always
@@ -155,20 +155,20 @@ Services:
     No trait applied
 ```
 
-You can see that step `comp` will try to deploy a component whose image is `invalid`, and the component will fail due to timeout after five seconds because the image cannot be pulled. In the meanwhile, this step passes the component's `status` as outputs. The step `notification` will be executed because `if: always` is specified. At the same time, the content of the message notification is the status of the component in the previous step. Therefore, we can see the message notification carrying the status information in slack.
+可以看到，步骤 `comp` 会去尝试部署一个镜像为 `invalid` 的组件，而组件因为拉取不到镜像，所以会在五秒后因为超时而失败，同时，这个步骤将组件的 `status` 作为 outputs 传出。而步骤 `notification` 因为指定了 `if: always`，所以一定会被执行，同时，消息通知的内容为上一个步骤中组件的状态，因此，我们可以在 slack 中看到携带状态信息的消息通知。
 
-## Custom If conditions
+## 自定义 If 条件判断
 
-> Note: You need to upgrade to version 1.5 or above to use custom If conditions.
+> 注意：你需要升级到 1.5 及以上版本来使用自定义 If 条件判断。
 
-You can also write your own judgment logic to determine whether the step should be executed. Note: The value in `if` will be executed as CUE codes. KubeVela provides some built-in variables in `if`, they are:
+你也可以编写自己的判断逻辑来确定是否应该执行该步骤。注意： `if` 里的值将作为 CUE 代码执行。KubeVela 在 `if` 中提供了一些内置变量，它们是：
 
-* `status`：`status` contains status information for all workflow steps. You can use `status.<step-name>.phase == "succeeded"` to determine the status of a step, or you can use the simplified `status.<step-name>.succeeded` to determine.
-* `inputs`：`inputs` contains all the inputs parameters of the step. You can use `inputs.<input-name> == "value"` to get input for the step.
+* `status`：status 中包含了所有工作流步骤的状态信息。你可以使用 `status.<step-name>.phase == "succeeded"` 来判断步骤的状态，也可以使用简化方式`status.<step-name>.succeeded` 来进行判断。
+* `inputs`：inputs 中包含了该步骤的所有 inputs 参数。你可以使用 `inputs.<input-name> == "value"` 来获取判断步骤的输入。
 
-> Note that if your step name or inputs name is not a valid CUE variable name (eg: contains `-`, or starts with a number, etc.), you can refer to it as follows: `status["invalid-name"].failed`
+> 注意，如果你的步骤名或者 inputs 名并不是一个有效的 CUE 变量名（如：包含 `-`，或者以数字开头等），你可以用如下方式引用：`status["invalid-name"].failed`
 
-Apply the following example:
+部署如下例子：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -223,7 +223,7 @@ spec:
             text: the notification is succeeded
 ```
 
-Use `vela status` to check the status of the Application:
+使用 vela status 命令查看应用状态：
 
 ```bash
 $ vela status custom-if
@@ -271,4 +271,4 @@ Services:
     No trait applied
 ```
 
-As you can see, after the first step `apply` succeeded, the outputs `comp-output` will be output. The second step `notification` refers to the outputs of the first step as inputs and makes a judgment. After the condition is met, the notification is successfully sent. The third step `notification-skip` judges whether the second step is in a failed state. If the condition is not met, this step is skipped. The fourth step `notification-succeeded` judges whether the second step is successful, if the condition is met, the step is successfully executed.
+可以看到，第一个步骤 `apply` 成功后，会输出一个 outputs。第二个步骤 `notification` 中引用第一个步骤的 outputs 作为 inputs 并且进行判断，满足条件后成功发送通知。第三个步骤 `notification-skip` 判断第二个步骤是否为失败状态，条件不满足，这个步骤跳过。第四个步骤 `notification-succeeded` 判断第二个步骤是否成功，条件满足，该步骤成功执行。
