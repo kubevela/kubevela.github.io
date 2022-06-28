@@ -2,8 +2,6 @@
 title: Overview
 ---
 
-## Overview
-
 Workflows, as part of the Application, can glue together additional delivery processes and specify arbitrary delivery environments. In short, `Workflow` provides customized control flow and flexibility based on the original delivery model of Kubernetes(Apply). For example, `Workflow` can be used to implement complex operations such as pause, manual approval, if conditions, waiting status, data flow, multi-environment gray release, A/B testing, etc.
 
 A workflow consists of multiple steps, and typical workflow steps include step groups (containing a series of sub-steps), human review, multi-cluster publishing, notifications, etc. You can view all built-in workflow steps provided by default in KubeVela in [built-in workflow steps](./built-in-workflow-defs). If the built-in workflow steps don't meet your needs, you can also [custom workflow steps](../../platform-engineers/workflow/workflow).
