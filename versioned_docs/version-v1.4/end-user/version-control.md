@@ -1,5 +1,5 @@
 ---
-title:  Version Control
+title: Application Version Control
 ---
 
 ## Introduction

@@ -112,7 +112,7 @@ mysql	mysql-secret    	raw 	      	running	healthy	      	2021-10-14 12:09:55 +0
 
 ### Outputs
 
-outputs 由 `name` 和 `valueFrom` 组成。`name` 声明了这个 output 的名称，在 input 中将通过 `name` 引用 output。
+outputs 由 `name` 和 `valueFrom` 组成。`name` 声明了这个 output 的名称，在 input 中将通过 `from` 引用 output。
 
 `valueFrom` 有以下几种写法：
 1. 直接通过字符串表示值，如：`valueFrom: testString`。
