@@ -2,7 +2,7 @@
 title: Provision cloud resources by Crossplane
 ---
 
-The guide [Deploy Cloud Services](./cloud-resources-orchestration) shows how to provision cloud resources by Terraform in
+The guide [Deploy Cloud Services](../../../tutorials//cloud-resources-orchestration) shows how to provision cloud resources by Terraform in
 CLI and VelaUX. This tutorial will talk about how to provision Cloud Resources by [Crossplane](https://crossplane.io/).
 
 Let's take cloud provider AWS as an example.

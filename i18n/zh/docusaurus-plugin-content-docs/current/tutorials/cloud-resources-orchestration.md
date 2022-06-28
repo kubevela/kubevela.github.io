@@ -137,7 +137,7 @@ In this section, we introduce an example to show you how to deploy cloud service
 
 云服务的创建过程会从GitHub中提取配置。如果你的控制平面 运行KubeVela的集群很难连接到GitHub，请在`terraform`插件中打开`GithubBlocked`选项。
 
-KubeVela支持的云资源请见[列表](../end-user/components/cloud-services/cloud-services/cloud-resources-list)。
+KubeVela支持的云资源请见[列表](../end-user/components/cloud-services/cloud-resources-list)。
 
 ## 创建你的云服务
 
@@ -206,4 +206,4 @@ KubeVela支持的云资源请见[列表](../end-user/components/cloud-services/c
 
 # 更多
 
-更多云资源使用方法，比如如何使用和消费云资源，请参见[云资源管理场景](./cloud-resource-scenarios)。
+更多云资源使用方法，比如如何使用和消费云资源，请参见[云资源管理场景](../end-user/components/cloud-services/cloud-resource-scenarios)。

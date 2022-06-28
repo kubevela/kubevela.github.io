@@ -2,7 +2,7 @@
 title: 通过 Crossplane 部署云资源
 ---
 
-教程 [部署云服务](./cloud-resources-orchestration)展示了如何通过 Terraform 在 CLI 和 VelaUX 上部署云服务。
+教程 [部署云服务](../../../tutorials//cloud-resources-orchestration)展示了如何通过 Terraform 在 CLI 和 VelaUX 上部署云服务。
 本教程将讨论如何通过 [Crossplane](https://crossplane.io/) 部署云资源。
 
 让我们以云供应商AWS为例。

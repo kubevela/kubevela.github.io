@@ -20,7 +20,7 @@ If you'd like to know how to deploy cloud resources by [Crossplane](https://cros
 
 ## Prerequisites
 
-Please ask platform engineers to enable cloud resources Terraform addon and authenticate the target cloud provider per the [instruction](../../../reference/addons/terraform).
+Please ask platform engineers to enable cloud resources Terraform addon and authenticate the target cloud provider per the [instruction](../reference/addons/terraform).
 
 Let's take Alibaba Cloud as an example.
 

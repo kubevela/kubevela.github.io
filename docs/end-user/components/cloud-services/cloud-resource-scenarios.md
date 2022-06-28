@@ -7,7 +7,7 @@ description: This section introduces some scenarios of cloud resources managemen
 
 ### Provision and use databases
 
-- [Provision and Binding Cloud Resources](./cloud-resources-orchestration)
+- [Provision and Binding Cloud Resources](../../../tutorials//cloud-resources-orchestration)
 
 - [Secure your Database Connection](./secure-your-database-connection)
 
