@@ -212,6 +212,7 @@ module.exports = {
           'Contribution Guide': [
             'contributor/non-code-contribute',
             'contributor/code-contribute',
+            'contributor/cli-ref-doc',
           ],
         },
         {

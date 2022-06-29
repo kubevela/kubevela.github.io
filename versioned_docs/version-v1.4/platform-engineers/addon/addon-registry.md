@@ -72,10 +72,3 @@ vela addon registry add my-repo --type helm --endpoint=<URL> --username=<usernam
 ```
 
 A helm repo type registry can store addon's multi-versions of an addon. In the future we will support [chart-museum](https://chartmuseum.com/docs/) addon, and provide an easier way to build your own versioned addon registry.
-
-
-
-
-
-
-

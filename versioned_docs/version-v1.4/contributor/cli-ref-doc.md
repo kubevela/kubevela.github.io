@@ -1,4 +1,9 @@
-# Update KubeVela.io CLI Reference Doc
+---
+title: Update CLI Reference
+---
+
+This guide introduce how to update [CLI reference doc](../cli/vela) in the website.
+The whole process was done by script automatically. You need to follow this guide to build your environment.
 
 1. step up these two projects in the same folder.
 
