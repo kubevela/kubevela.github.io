@@ -4,8 +4,28 @@ title: Overview
 
 The developer guide including two parts:
 
-1. The first part is [contribution guide](#contribution-guide) that introduces how to participate and contribute to the community.
-2. The second part is [extension guide](#extension-guide) that introduces how to extend KubeVela, you are also very welcome to contribute your extension to the community.
+1. The first part is [extension guide](#extension-guide) that introduces how to extend KubeVela, you are also very welcome to contribute your extension to the community.
+2. The second part is [contribution guide](#contribution-guide) that introduces how to participate and contribute to the community.
+
+## Extension Guide
+
+This part is a guide to help you extend capabilities for KubeVela. Make sure you have already understand the [**core concepts**](../getting-started/core-concept) before you start.
+
+### Extend Addons
+
+Building or installing addons is the most important way to extend KubeVela, there's a growing [catalog](https://github.com/kubevela/catalog) of addons you can choose for installation. You can also share your platform extension by KubeVela addon registry.
+
+* [Build Your Own Addon](../platform-engineers/addon/intro).
+* [Build Your Addon Registry](../platform-engineers/addon/addon-registry).
+* [Extend Cloud Resources by Addon](../platform-engineers/addon/terraform).
+
+### Learn CUE to extend more powerful features
+
+KubeVela use CUE as it's core engine, and you can use CUE and CRD controller to glue almost every infrastructure capabilities.
+As a result, you can extend more powerful features for your platform.
+
+- Start to [Learn CUE in KubeVela](../platform-engineers/cue/basic).
+- Learn what is [CRD Controller](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) in Kubernetes.
 
 ## Contribution Guide
 
@@ -49,24 +69,5 @@ If you're interested to become a community member or learn more about the govern
 
 * [VelaUX Developer Guide](https://github.com/kubevela/velaux/blob/main/CONTRIBUTING.md)
 * [Terraform Controller Developer Guide](https://github.com/oam-dev/terraform-controller/blob/master/CONTRIBUTING.md)
-
-
-## Extension Guide
-
-This part is a guide to help you extend capabilities for KubeVela. Make sure you have already understand the [**core concepts**](../getting-started/core-concept) before you start.
-
-### Learn CUE with KubeVela
-
-KubeVela use CUE as it's core engine, and you can use CUE and CRD controller to glue almost every infrastructure capabilities.
-
-- [Learn CUE in KubeVela](../platform-engineers/cue/basic)
-- Learn what is [CRD Controller](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) in Kubernetes
-
-### Extend Addons
-
-Building or installing addons is the most important way to extend KubeVela, there's a growing [catalog](https://github.com/kubevela/catalog) of addons you can choose for installation.
-
-* [Build Your Own Addon](../platform-engineers/addon/intro)
-* [Extend Cloud Resources by Addon](../platform-engineers/addon/terraform)
 
 Enjoy coding and collaboration in OSS world!

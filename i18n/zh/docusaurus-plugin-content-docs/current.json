@@ -163,8 +163,12 @@
     "message": "调试指南",
     "description": "The label for category Debugging in sidebar docs"
   },
-  "sidebar.docs.category.Contribute Extension": {
-    "message": "贡献平台扩展",
+  "sidebar.docs.category.Extension": {
+    "message": "平台扩展",
+    "description": "平台扩展参考文档"
+  },
+  "sidebar.docs.category.Contribution Guide": {
+    "message": "贡献指南",
     "description": "平台扩展参考文档"
   },
   "sidebar.docs.category.Simple Template": {
