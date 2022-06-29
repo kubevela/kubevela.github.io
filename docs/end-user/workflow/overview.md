@@ -10,9 +10,9 @@ A workflow consists of multiple steps, and typical workflow steps include step g
 
 In fact, if you only use components in the Application and do not declare a workflow, KubeVela will automatically create a default workflow for deploying the components when running the Application.
 
-In VelaUX, you can feel the workflow more intuitively. As shown in the figure: The following is a workflow that controls the application to be deployed to the test environment, paused in the manual approval step, and then deployed to the production environment:
+In VelaUX, you can feel the workflow more intuitively. As shown in the figure: The following is a workflow where the first step succeeds and the second fails:
 
-![continue-workflow](../../resources/continue-workflow.png)
+![velaux-workflow](../../resources/velaux-workflow.png)
 
 ## Execution order
 
