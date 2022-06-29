@@ -1,5 +1,5 @@
 ---
-title:  Build a standard and scalable cloud-native application management platform based on Kubernetes
+title:  基于 Kubernetes 构建标准可扩展的云原生应用管理平台
 ---
 
 > This video is posted in 2020-11-02.

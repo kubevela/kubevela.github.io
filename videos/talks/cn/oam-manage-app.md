@@ -1,5 +1,5 @@
 ---
-title:  Managing Applications with Kubernetes and OAM 
+title: Li Xiang - Managing Applications with Kubernetes and OAM 
 ---
 
 Improving the user experience of Kubernetes and lowering its complexity is one of the most interesting problem.
