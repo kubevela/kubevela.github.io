@@ -1,6 +1,8 @@
 ---
-title:  Gopher China - KubeVela
+title:  Go开源说第三期 - KubeVela
 ---
+
+Powerpoint: https://github.com/gocn/opentalk
 
 > This video is posted in 2021-01-15.
 
