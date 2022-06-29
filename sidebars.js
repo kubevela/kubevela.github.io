@@ -165,13 +165,23 @@ module.exports = {
       collapsed: true,
       items: [
         'contributor/overview',
-        'contributor/non-code-contribute',
-        'contributor/code-contribute',
         {
-          Conventions: [
-            'contributor/release-process',
-            'contributor/code-conventions',
-            'contributor/principle-of-test',
+          type: 'category',
+          label: 'Extension',
+          collapsed: true,
+          items: [
+            {
+              Addons: [
+                'platform-engineers/addon/intro',
+                'platform-engineers/addon/addon-registry'
+              ],
+            },
+            {
+              'Cloud Resources': [
+                'platform-engineers/addon/terraform',
+                'platform-engineers/components/component-terraform',
+              ],
+            },
           ],
         },
         {
@@ -195,26 +205,20 @@ module.exports = {
                 'platform-engineers/debug/debug',
               ],
             },
+            'platform-engineers/x-def-version',
           ],
         },
         {
-          type: 'category',
-          label: 'Contribute Extension',
-          collapsed: true,
-          items: [
-            {
-              Addons: [
-                'platform-engineers/addon/intro',
-                'platform-engineers/addon/addon-registry'
-              ],
-            },
-            {
-              'Cloud Resources': [
-                'platform-engineers/addon/terraform',
-                'platform-engineers/components/component-terraform',
-              ],
-            },
-            'platform-engineers/x-def-version',
+          'Contribution Guide': [
+            'contributor/non-code-contribute',
+            'contributor/code-contribute',
+          ],
+        },
+        {
+          Conventions: [
+            'contributor/release-process',
+            'contributor/code-conventions',
+            'contributor/principle-of-test',
           ],
         },
       ],

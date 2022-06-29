@@ -100,7 +100,7 @@ We'll use the terraform module we have already prepared just now.
 * Generate Component Definition
 
 ```
-vela def init ecs --type component --provider alibaba --desc "Terraform configuration for Alibaba Cloud Elastic Compute Service" --git https://github.com/wonderflow/terraform-alicloud-ecs-instance.git > alibaa-ecs.yaml
+vela def init ecs --type component --provider alibaba --desc "Terraform configuration for Alibaba Cloud Elastic Compute Service" --git https://github.com/wonderflow/terraform-alicloud-ecs-instance.git > alibaba-ecs-def.yaml
 ```
 
 > Change the git url with your own if you have customized.
@@ -108,7 +108,7 @@ vela def init ecs --type component --provider alibaba --desc "Terraform configur
 * Apply it to the vela control plane
 
 ```
-vela kube apply -f alibaa-ecs-def.yaml
+vela kube apply -f alibaba-ecs-def.yaml
 ```
 
 > `vela kube apply` works the same with `kubectl apply`.
@@ -291,7 +291,7 @@ EOF
 
 In this case, we specify the `local_ip` by `velaux.vela-system`, which means we're visiting the Kubernetes Service with name `velaux` in the namespace `vela-system`.
 
-As a result, you can visit velaux service from the public IP `121.196.106.174:8083`.
+As a result, you can visit [velaux](https://kubevela.io/docs/reference/addons/velaux) service from the public IP `121.196.106.174:8083`.
 
 2. Compose two components together for the same lifecycle.
 
