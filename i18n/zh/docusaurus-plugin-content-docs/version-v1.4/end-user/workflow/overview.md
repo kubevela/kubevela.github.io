@@ -8,9 +8,9 @@ title: 总览
 
 实际上，如果你在应用部署计划中只使用了组件，并没有声明工作流时，KubeVela 会在运行这个应用时自动创建一个默认的工作流，用于部署应用中的组件。
 
-在 VelaUX 中，你可以更加直观地感受工作流。如图：下面是一个控制应用先部署到测试环境，暂停在人工审核步骤，然后再部署到生产环境的工作流：
+在 VelaUX 中，你可以更加直观地感受工作流。如图，下面是一个第一个步骤成功，而第二个步骤失败的工作流：
 
-![continue-workflow](../../resources/continue-workflow.png)
+![velaux-workflow](../../resources/velaux-workflow.png)
 
 ## 执行顺序
 
