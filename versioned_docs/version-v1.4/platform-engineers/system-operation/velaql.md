@@ -1,5 +1,5 @@
 ---
-title: Query Resources behind Application
+title: Query Resources
 ---
 
 ## Introduction
@@ -12,102 +12,135 @@ The purpose of VelaQL is to help users and platform builders to uncover the myst
 
 ## Usage
 
-### Install
+### Query from CLI
 
-At present, if you want to use the query capabilities of VelaQL, you need to install VelaUX and query the resource status with the help of apiserver. In the future, we will provide more interactive methods. Now you can install VelaUX with a simple command.
+KubeVela command has supported a `vela ql` command to query resources.
+
+You can specify a query file in cue like below:
+
+```ql.cue
+import (
+	"vela/ql"
+)
+configmap: ql.#Read & {
+	value: {
+		kind:       "ConfigMap"
+		apiVersion: "v1"
+		metadata: {
+			name:      "vela-addon-registry"
+			namespace: "vela-system"
+		}
+	}
+}
+status: configmap.value.data["registries"]
+```
+
+Then use the following command to query:
+
+```console
+$ vela ql -f ql.cue
+{ \"KubeVela\":{ \"name\": \"KubeVela\", \"helm\": { \"url\": \"https://addons.kubevela.net\" } } }
+```
+
+It will print the value in the field `status` which is a keyword of VelaQL.
+
+There're some [other `op` CUE operations](#built-in-velaql-operations) you can use in VelaQL.
+
+### Create VelaQL View for Query
+
+You can apply the view to server for re-use, you need to wrap it in ConfigMap.
+We're going to provide [a convenient command](https://github.com/kubevela/kubevela/issues/4268) for this.
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: query-config-map
+  namespace: vela-system
+data:
+  template: |
+    import (
+      "vela/ql"
+    )
+
+    parameter: {
+      name:      string
+      namespace: string
+      key:       string
+    }
+
+    configmap: ql.#Read & {
+      value: {
+        kind:       "ConfigMap"
+        apiVersion: "v1"
+        metadata: {
+          name:      parameter.name
+          namespace: parameter.namespace
+        }
+      }
+    }
+    status: configmap.value.data["\(parameter.key)"]
+```
+
+There're two keywords:
+
+* The `parameter`, indicates which parameters can use in the query.
+* The `status`, indicates which fields of resources will be exported.
+
+Apply the yaml into Kubernetes:
+
+```
+vela kube apply -f query-configmap.yaml
+```
+
+> `vela kube apply` is the same with `kubectl apply` in case you don't `kubectl` command line.
+
+### Query from VelaQL View
+
+Then everyone who has access to the cluster can query by re-use the view, the basic syntax is:
+
+```
+<view-name>{parameter1=value1,parameter2=value2}
+```
+
+In our example, you can query in the following command:
+
+```
+vela ql -q "query-config-map{name=vela-addon-registry,namespace=vela-system,key=registries}"
+```
+
+The result is the same.
+
+
+### Query from VelaUX API
+
+VelaUX has use VelaQL for all it's resources query. You can also integrate in this way, just install VelaUX and query the resource status with the help of its api server. You can install VelaUX addon by:
 
 ```shell
 vela addon enable velaux
 ```
 
+You can refer to the [velaux](../../reference/addons/velaux) doc to learn how to expose endpoint.
 Assuming we started the apiserver at `http://127.0.0.1:8000`, you can use VelaQL like:
 
 ```shell
 http://127.0.0.1:8000/api/v1/query?velaql="write VelaQL here"
 ```
 
-Below we explain how to write VelaQL. The basic syntax of VelaQL is as follows:
+The basic syntax is the same with command line.
 
 ```
 view{parameter1=value1,parameter2=value2}
 ```
 
 `view` represents a query view, which can be compared to the concept of a view in a database. 
-The `view` in VelaQL is a collection of resource queries on the `k8s`.
+The `view` in VelaQL is a collection of ConfigMap resources in the Kubernetes system, the name of the ConfigMap is also the name of the view.
 
 Filter conditions are placed in `{}` as the form of key-value pairs, currently the value type only supports: string, int, float, boolean.
 
-### Query view
+You can refer to [velaux addon repo](https://github.com/kubevela/catalog/tree/master/addons/velaux) for more view examples.
 
-VelaUX has built-in 3 general query views. Below we will introduce the usage of these views:
-
-#### component-pod-view  
-
-`component-pod-view` indicates the status query of pods which created by a component.
-
-**Parameter List**
-
-
-| name | type | describe |
-| --- | --- | --- |
-| appName | string | application name |
-| appNs | string | application namespace|
-| name | string | component name |
-| cluster | string | the cluster the pod is deployed to |
-| clusterNs | string | the namespace the pod is deployed to |
-
-Let's show how to use `component-pod-view` to query resources.
-
-```shell
-curl --location -g --request GET \
-http://127.0.0.1:8000/api/v1/query?velaql=component-pod-view{appNs=default,appName=demo,name=demo}
-```
-
-![component-pod-view](/img/component-pod-view.png)
-
-podList includes a list of pods created by the application.
-
-#### pod-view 
-
-`pod-view` queries the detailed status of a pod, including container status and pod-related events.
-
-| name | type | describe |
-| --- | --- | --- |
-| name | string | pod name |
-| namespace | string | pod namespace |
-| cluster | string | the cluster the pod is deployed to |
-
-Let's show how to use `pod-view` to query resources.
-
-```shell
-curl --location -g --request GET \
-http://127.0.0.1:8000/api/v1/query?velaql=pod-view{name=demo-1-bf6799bb5-dpmk6,namespace=default}
-```
-
-![component-pod-view](/img/pod-view.png)
-
-The query result contains the status information of the container and various events associated with the pod when it is created.
-
-#### resource-view 
-
-`resource-view` get a list of certain types of resources in the cluster。
-
-| name | type | describe |
-| --- | --- | --- |
-| type | string | Resource type, optional types are "ns", "secret", "configMap", "pvc", "storageClass" |
-| namespace | string | namespace |
-| cluster | string | cluster |
-
-Let's show how to use `resource-view` to query resources.
-
-```shell
-curl --location -g --request GET \
-'http://127.0.0.1:8000/api/v1/query?velaql=resource-view{type=ns}'
-```
-
-![resource-view](/img/resource-view.png)
-
-## Advanced view
+## Under the hood
 
 In many scenarios, the built-in views cannot meet our needs, and the resources encapsulated under Application are not just the native resources of k8s. For many custom resources, users will have different query requirements. At this time, you need to write your own specific views to complete the query. This section will tell you how to write a custom view.
 
@@ -137,6 +170,8 @@ parameter: {
 // so please summarize the results you need to query under the status field
 status: podList: {...}
 ```
+
+## Built-in VelaQL Operations
 
 We provide the `vela/ql` package to help you query resources. The following explains the cue operators that can be used:
 
@@ -308,3 +343,4 @@ List resources in the k8s cluster.
 }
 ```
 
+Happy enjoy the extensibility of VelaQL for query resources in Kubernetes with CUE.
