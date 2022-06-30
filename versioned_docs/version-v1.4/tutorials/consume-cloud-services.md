@@ -1,87 +1,116 @@
 ---
 title: Deploy Cloud Services
-description: This section introduces the delivery of services provided by cloud vendors through KubeVela and orchestrating your services in the Kubernetes cluster.
 ---
 
-Integrating cloud service is the most frequent need in our daily development, varying from the Object storage, Cloud
-database to LoadBalancer, Cache, or search engine. Faster to load them save more time, meanwhile, to orchestrate
-different resources from multi-cloud is quite a pain point.
+KubeVela efficiently and securely integrates different types of cloud resources in hybrid/multi-cloud environments.
 
-In this section, we introduce an example to show you how to deploy cloud services.
+You can use the integrated cloud resources as out-of-box components or integrate by Terraform or Crossplane easily.
+With the help of KubeVela, you can use cloud resources from various providers in a unified way.
 
-## Before starting
+This tutorial will mainly focus on talking about how to provision cloud resources by [Terraform](https://github.com/kubevela/terraform-controller).
+If you'd like to know more about cloud resources from [Crossplane](https://crossplane.io/), please refer to [this guide](../end-user/components/cloud-services/provision-cloud-resources-by-crossplane).
 
-- Has a cloud vendor account with proper access to your target cloud resources
+## Provision Cloud Resources
 
-- Ensure your account has a sufficient balance
+### Prerequisites
 
-- Connect to a Kubernetes cluster on this cloud vendor for hosting your cloud services
+* Enable Terraform addon and authenticate the target cloud provider per the [instruction](../reference/addons/terraform).
 
-## Enabling a cloud provider addon
+Let's take Alibaba Cloud as an example.
 
-First, visit [VelaUX (KubeVela Dashboard)](../install#2-install-velaux), switch to the tab `Addon`, and click up addon
-`terraform-xxx`. `xxx` stands for the cloud provider name. We support the following Addons:
+### Familiar with cloud resources specification
 
-- terraform-alibaba
-- terraform-aws
-- terraform-azure
-- terraform-tencent  
-- terraform-gcp  
-- terraform-baidu  
+All supported Terraform cloud resources can be seen in the [list](../end-user/components/cloud-services/cloud-resources-list). You can also filter them by
+command `vela components --label type=terraform`.
 
-We can provision cloud resources in Alibaba Cloud, AWS, Azure, Tencent Cloud, Google Cloud Platform and Baidu Cloud respectively.
+You can use any of the following ways to check the specification of one cloud resource.
 
-Choose the specific version and enable an addon.
+- Using command `vela show <component type name>` .
+
+```console
+$ vela show alibaba-oss
+### Properties
++----------------------------+-------------------------------------------------------------------------+-----------------------------------------------------------+----------+---------+
+|            NAME            |                               DESCRIPTION                               |                           TYPE                            | REQUIRED | DEFAULT |
++----------------------------+-------------------------------------------------------------------------+-----------------------------------------------------------+----------+---------+
+| acl                        | OSS bucket ACL, supported 'private', 'public-read', 'public-read-write' | string                                                    | false    |         |
+| bucket                     | OSS bucket name                                                         | string                                                    | false    |         |
+| writeConnectionSecretToRef | The secret which the cloud resource connection will be written to       | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false    |         |
++----------------------------+-------------------------------------------------------------------------+-----------------------------------------------------------+----------+---------+
+
+...snip...
+```
+
+You can also add flag `--web` to view the usage by a local browser.
+
+- Reading [official docs](../end-user/components/cloud-services/cloud-resources-list).
+
+For example, you can check the specification for Alibaba OSS at [here](../end-user/components/cloud-services/terraform/alibaba-oss). 
+
+For different vendors, these parameters update accordingly. All cloud resources have the following common parameters.
+
+- `writeConnectionSecretToRef`: `struct` Type, represents the outputs of Terraform will become key/values in the secret with the name specified here.
+  - `name`, specifies the name of the secret.
+  - `namespace`, specifies the namespace of the secret.
+- `providerRef`: `struct` Type, represents the Provider which is referenced by a cloud service.
+  - `name`, specifies the name of the provider.
+- `deleteResource`: `bool` Type, specify whether to delete the corresponding cloud service when the app is deleted. By Default it's `true`.
+- `customRegion`: `string` Type, specify region for resources, it will override the default region from `providerRef`.
+
+### Provision by Creating Application
+
+Use the following Application to provision an OSS bucket:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: provision-cloud-resource-sample
+spec:
+  components:
+    - name: sample-oss
+      type: alibaba-oss
+      properties:
+        bucket: vela-website-0911
+        acl: private
+        writeConnectionSecretToRef:
+          name: oss-conn
+```
+
+The above `alibaba-oss` component will create an OSS bucket named `vela-website-0911`, with `private` acl, with connection
+information stored in a secreted named `oss-conn`.
+
+Apply the above application, then check the status:
+
+```shell
+$ vela ls
+APP                            	COMPONENT 	TYPE       	TRAITS	PHASE  	HEALTHY	STATUS                                       	CREATED-TIME
+provision-cloud-resource-sample	sample-oss	alibaba-oss	      	running	healthy	Cloud resources are deployed and ready to use	2021-09-11 12:55:57 +0800 CST
+```
+
+After the phase becomes `running` and `healthy`, you can then check the OSS bucket in Alibaba Cloud console.
+
+## Provision with UI Console
+
+Provision cloud resources from UI Console can be more appropriate.
+
+### Before starting
+
+- Enable [VelaUX](../reference/addons/velaux) addon.
+
+- Enable [Terraform](../reference/addons/terraform) addon, just like the prerequisites in CLI part above. VelaUX can also enable these addons in UI console.
 
 ![addon-alibaba](../resources/addon-alibaba.jpg)
 
-## Authenticating the cloud provider
+### Creating your cloud service
 
-Click the tab `Platform`, and then `Integrations`. Choose `Terraform Controller Provider` to authenticate a cloud provider.
-Follow the instructions on all the properties to authenticate the provider for each cloud provider.
+The UI console operations are the same, you can refer to [this guide](../how-to/dashboard/application/create-application).
 
-For example, for Alibaba Cloud, you need to set the following properties:
+Firstly, Create an application and choose the type of your cloud service, they will always has a prefix of vendor such as `aws-`, `azure` or `alibaba-`.
 
-> Notice: KubeVela encrypts all the keys, hence no need to worry about its safety.
+Set the above parameters according to your needs to complete creating the application, and then deploy the application. The resources will be provisioned after the application become ready.
 
-![](../resources/provider-alibaba.jpg)
-
-Then fill in your ALICLOUD_ACCESS_KEY, ALICLOUD_REGION, and ALICLOUD_SECRET_KEY to enable it。
-
-The creating process of cloud services pulls configuration from GitHub. If your control plane
-cluster that runs KubeVela is very hard to connect to GitHub, please open up the `GithubBlocked` option in `terraform`
-addon.
-
-All supported Terraform cloud resources can be seen in the [list](../end-user/components/cloud-services/cloud-resources-list).
-
-## Creating your cloud service
-
-First [create an application](../how-to/dashboard/application/create-application). Please choose the type of your cloud service,
-which has a prefix of `aws-`, `azure`, `alibaba-` or `tencent-`.
-
-For different vendors, these parameters update accordingly. 
-
-For example, `aws-s3` has the following parameters:
-
-![](../resources/aws-s3-parameters.png)
-
-`azure-database-mariadb` has the following parameters:
-
-![](../resources/azure-database-mariadb-parameters.png)
-
-`alibaba-rds` has the following parameters:
-
-![](../resources/alibaba-rds-parameters.png)
-
-All cloud resources have some common parameters.
-
-- DeleteResource: Whether to delete the corresponding cloud service when the app is deleted
-- ProviderRef: The Provider which is referenced by a cloud service
-- Region: Region is cloud provider's region. It will override `providerRef`.
-
-Set the above parameters according to your needs to complete creating the application, and then [deploy the application](../how-to/dashboard/application/deploy-application).
-
-## Viewing cloud resource creation status
+### Viewing cloud resource creation status
 
 - Check the cloud instance list
 
@@ -98,9 +127,7 @@ because the cloud service instance generation takes a certain amount of time, an
 You can visit the instance in the console of the cloud provider. For example, you can check the name or console to visit it.
 ![](../resources/application-console-link.png)
 
-For example, you can check Alibaba Cloud RDS instance in [https://console.aliyun.com](https://console.aliyun.com).
-
-![](../resources/alibaba-cloud-rds-console.png)
+It will redirect to the UI Console of the provider, in our example, resources from Alibaba Cloud will go to [https://console.aliyun.com](https://console.aliyun.com).
 
 - Check details and status of the cloud instance
 
@@ -122,3 +149,7 @@ In the last section `Component Status`, the health status and the message of the
 - The cloud service is always ProvisioningAndChecking and has no name
 
 > The creation of cloud services generally takes a certain amount of time. Please wait or enter the cloud vendor console to view the creation progress.
+
+## More
+
+For more usages of cloud resources, like how to provision and consume cloud resources, please refer to [Scenarios of Cloud Resources Management](./../end-user/components/cloud-services/cloud-resource-scenarios).
