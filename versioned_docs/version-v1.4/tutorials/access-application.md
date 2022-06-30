@@ -1,6 +1,3 @@
----
-title: Access the application
----
 
 After deploying the application, the next station is publishing your service.
 
@@ -123,10 +120,10 @@ You can click the `Add Trait` button and select the `tcp-route` trait type. refe
 
 ```yaml
 traits:
-- type: https-route
-  properties:
-    rules:
-    - gatewayPort: 16379
-        port: 6379
-        serviceName: redis-master
+  - type: https-route
+    properties:
+      rules:
+        - gatewayPort: 16379
+            port: 6379
+            serviceName: redis-master
 ```
