@@ -2,7 +2,7 @@
 title: VelaUX OpenAPI
 ---
 
-This section demo by local address, so you first prepare the VelaUX.
+This section will introduce how to integrate VelaUX OpenAPI, please make sure you have enabled the `velaux` addon. Let's use port-forward to expose the endpoint for the following demo.
 
 ```bash
 vela port-forward addon-velaux -n vela-system 8000:80
@@ -12,7 +12,7 @@ vela port-forward addon-velaux -n vela-system 8000:80
 
 ### Login and get the token
 
-Before you call the OpenAPI, you should complete authentication. VelaUX OpenAPI only supports local accounts. The following example is with the default admin account.
+VelaUX has introduced [Json Web Token](https://jwt.io/) for authorization. As a result, you need to call the login API to complete the authentication and get the token. The following example is with the default admin account.
 
 ```bash
 curl -H Content-Type:application/json -X POST -d '{"username": "admin", "password":"VelaUX12345"}' http://127.0.0.1:8000/api/v1/auth/login
@@ -20,7 +20,7 @@ curl -H Content-Type:application/json -X POST -d '{"username": "admin", "passwor
 
 > `http://127.0.0.1:8000` This is demo address, you should replace it with the real address. If you changed the password, replace it with the real password.
 
-expected output:
+The expected output should be like this:
 
 ```json
 {
@@ -36,8 +36,8 @@ expected output:
 }
 ```
 
-* accessToken: This is the token to request other APIs.
-* refreshToken: This is the token to refresh the accessToken, which will expire in an hour.
+* accessToken: This is the token to request other APIs, which will expire in an hour.
+* refreshToken: This is the token to refresh the access token.
 
 ### Request other APIs
 
@@ -47,9 +47,9 @@ expected output:
 curl -H Content-Type:application/json -H "Authorization: Bearer <accessToken>" -X POST -d '{"name":"first-vela-app", "project": "default", "alias": "Demo App", "envBinding": [{"name": "default"}], "component": {"name":"express-server","componentType":"webservice", "properties": "{\"image\":\"oamdev/hello-world\"}"}}' http://127.0.0.1:8000/api/v1/applications
 ```
 
-> Please replace the `<accessToken>` with the last step response.
+> Please replace `<accessToken>` with the response from the previous step.
 
-expected output:
+The expected output should be like this:
 
 ```json
 {
@@ -79,7 +79,7 @@ expected output:
 curl -H Content-Type:application/json -H "Authorization: Bearer <accessToken>" -X POST -d '{"workflowName":"workflow-default","triggerType":"api"}' http://127.0.0.1:8000/api/v1/applications/first-vela-app/deploy
 ```
 
-expected output:
+The expected output should be like this:
 
 ```json
 {
@@ -96,13 +96,15 @@ expected output:
 }
 ```
 
-* Query the application pod list
+* Using VelaQL to Query the application pod list
 
 ```bash
-curl -X GET -H "Authorization: Bearer <accessToken>" http://127.0.0.1:8000/api/v1/query\?velaql\=component-pod-view%7BappNs%3Ddefault,+appName%3Dfirst-vela-app%7D.status
+curl -H "Authorization: Bearer <accessToken>" -G \
+    "http://127.0.0.1:8000/api/v1/query" \
+    --data-urlencode 'velaql=component-pod-view{appNs=default,appName=first-vela-app}.status'
 ```
 
-expected output:
+The expected output should be like this:
 
 ```json
 {
@@ -136,13 +138,15 @@ expected output:
 }
 ```
 
+For more use cases about VelaQL, Please refer to [VelaQL](../system-operation/velaql)
+
 ### Refresh the token
 
 ```bash
 curl -H Content-Type:application/json -X GET -H RefreshToken:<refreshToken> http://127.0.0.1:8000/api/v1/auth/refresh_token
 ```
 
-expected output:
+The expected output should be like this:
 
 ```json
 {
