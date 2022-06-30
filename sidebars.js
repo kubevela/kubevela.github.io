@@ -39,7 +39,11 @@ module.exports = {
           type: 'category',
           label: 'Helm Chart CD',
           collapsed: true,
-          items: ['tutorials/helm', 'tutorials/helm-multi-cluster', 'tutorials/helm-rollout'],
+          items: [
+            'tutorials/helm',
+            'tutorials/helm-multi-cluster',
+            'tutorials/helm-rollout',
+          ],
         },
         {
           type: 'category',
@@ -52,16 +56,20 @@ module.exports = {
                 'end-user/components/cloud-services/provision-and-consume-cloud-services',
                 'end-user/components/cloud-services/provision-and-initiate-database',
                 'end-user/components/cloud-services/secure-your-database-connection',
-                'end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database'
+                'end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database',
               ],
-            }
+            },
           ],
         },
         {
           type: 'category',
           label: 'Kubernetes Manifest CD',
           collapsed: true,
-          items: ['tutorials/k8s-object', 'end-user/components/ref-objects', "tutorials/k8s-object-rollout"],
+          items: [
+            'tutorials/k8s-object',
+            'end-user/components/ref-objects',
+            'tutorials/k8s-object-rollout',
+          ],
         },
         {
           type: 'category',
@@ -77,10 +85,7 @@ module.exports = {
           type: 'category',
           label: 'GitOps',
           collapsed: true,
-          items: [
-            'case-studies/gitops',
-            'end-user/gitops/fluxcd',
-          ],
+          items: ['case-studies/gitops', 'end-user/gitops/fluxcd'],
         },
         {
           type: 'category',
@@ -120,8 +125,7 @@ module.exports = {
             'platform-engineers/system-operation/enable-addon-offline',
             'platform-engineers/system-operation/migration-from-old-version',
           ],
-        }
-        ,
+        },
         {
           'User Management': ['how-to/dashboard/user/user', 'tutorials/sso'],
         },
@@ -157,6 +161,7 @@ module.exports = {
             'reference/topology-rule',
           ],
         },
+        'platform-engineers/openapi/overview',
       ],
     },
     {
@@ -173,7 +178,7 @@ module.exports = {
             {
               Addons: [
                 'platform-engineers/addon/intro',
-                'platform-engineers/addon/addon-registry'
+                'platform-engineers/addon/addon-registry',
               ],
             },
             {
@@ -192,7 +197,8 @@ module.exports = {
             'platform-engineers/traits/customize-trait',
             'platform-engineers/policy/custom-policy',
             'platform-engineers/traits/status',
-            'platform-engineers/workflow/workflow', {
+            'platform-engineers/workflow/workflow',
+            {
               'Patch and Override': [
                 'platform-engineers/traits/patch-trait',
                 'platform-engineers/cue/patch-strategy',
@@ -258,11 +264,6 @@ module.exports = {
         },
         'end-user/components/cloud-services/cloud-resources-list',
         'reference/user-improvement-plan',
-        {
-          label: 'VelaUX API Doc',
-          type: 'link',
-          href: 'https://kubevela.stoplight.io/docs/kubevela/b3A6NDI5NzQxMzM-detail-definition',
-        },
       ],
     },
     'roadmap/README',
