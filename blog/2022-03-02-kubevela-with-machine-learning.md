@@ -20,6 +20,8 @@ As a simple, easy-to-use, and highly scalable cloud-native application managemen
 
 This article mainly focus on how to use KubeVela's AI addon to help engineers complete model training and model serving more easily.
 
+<!--truncate-->
+
 ## KubeVela AI Addon
 
 The KubeVela AI addon is divided into two: model training and model serving. The model training addon is based on KubeFlow's training-operator and can support distributed model training in different frameworks such as TensorFlow, PyTorch, and MXNet. The model serving addon is based on Seldon Core, which can easily use the model to start the model serving, and also supports advanced functions such as traffic distribution and A/B testing.
