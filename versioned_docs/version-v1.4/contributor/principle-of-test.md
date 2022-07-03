@@ -76,7 +76,7 @@ Combined with the characteristics of all three, the best way to balance is to co
            /   \                      
           /     \                     
          /  e2e  \                    
-        /----------                   
+        /---------\                   
        /           \                  
       / integration \                 
      /               \                
@@ -89,6 +89,6 @@ Combined with the characteristics of all three, the best way to balance is to co
 
 KubeVela would like to follow the 70/20/10 principle, that is, 70% unittest, 20% integration test, and 10% e2e test. Each module has some differences. However, the higher the upper layer, the larger the test coverage, but the smaller the test case set. This pyramid model remains unchanged. The following situations need to be avoided:
 -  Inverted pyramid, all rely on e2e to build the test
--  Funnel model, a large number of unit + e2e test, but no integration test
+-  Hourglass model, a large number of unit + e2e test, but no integration test
 
 It's hard to keep the test quality as we mainly focus on features instead of the stability. But for all of our maintainers, it's our duty to keep the test in good quality to ensure the community runs well in the long term.
