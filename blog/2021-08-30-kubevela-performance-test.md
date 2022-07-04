@@ -12,6 +12,8 @@ hide_table_of_contents: false
 
 As an application management and integration platform, KubeVela needs to handle thousands of applications in production scenario. To evaluate the performance of KubeVela, develop team has conducted performance tests based on simultated environments and demonstrated the capability of managing a large number of applications concurrently.
 
+<!--truncate-->
+
 ## Setup
 
 ### Cluster Environment

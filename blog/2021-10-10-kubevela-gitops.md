@@ -14,6 +14,8 @@ KubeVela is a simple, easy-to-use, and highly extensible cloud-native applicatio
 
 KubeVela is based on OAM model, which naturally solves the orchestration problems of complex resources. It means that KubeVela can manage complex large-scale applications with GitOps. Convergence of team and system size after the system complexity problem.
 
+<!--truncate-->
+
 ## What is GitOps
 
 GitOps is a modern way to do continuous delivery. Its core idea is to have a Git repository which contains environmental and application configurations. An automated process is also needed for sync the config to cluster.
