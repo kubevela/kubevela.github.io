@@ -2,7 +2,7 @@
 title: Provision an RDS instance with more than one database
 ---
 
-In the guide [Provision and Binding Cloud Resources](./provision-and-consume-cloud-services) and [Provision a Database and Import a SQL File for initialization](./provision-and-initiate-database),
+In the guide [Provision and Binding Cloud Resources](../../../tutorials/consume-cloud-services) and [Provision a Database and Import a SQL File for initialization](./provision-and-initiate-database),
 only one database will be created in an RDS instance. This tutorial will show you how to create more than one database in an RDS instance.
 
 In the [reference doc for Alibaba Cloud RDS](./terraform/alibaba-rds), set `database_name` if you want to create one database.

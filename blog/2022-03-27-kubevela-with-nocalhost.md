@@ -26,6 +26,8 @@ As shown in the figure: Use KubeVela to create an application, deploy the applic
 
 In the following, we will introduce how to use KubeVela and Nocalhost for cloud debugging and multi-cluster hybrid cloud deployment.
 
+<!--truncate-->
+
 ## What is KubeVela
 
 KubeVela is an easy-to-use and highly scalable application delivery platform built on Kubernetes and OAM. Its core capability is to allow developers to easily and quickly define and deliver modern microservice applications on Kubernetes without knowing any details related to Kubernetes itself.

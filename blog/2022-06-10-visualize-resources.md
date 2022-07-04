@@ -17,6 +17,8 @@ As shown in the figure above, KubeVela has offered a real-time observation resou
 
 In this post, we will describe how this new feature of KubeVela is implemented and works, and the roadmap for this feature.
 
+<!--truncate-->
+
 ## Application resource composition
 
 In KubeVela, an application consists of multiple components and traits and is associated with delivery workflow and delivery policy configuration. The application configuration generates Kubernetes resources through rendering and inspection and applies them to the target cluster. Take a simple application as an example:

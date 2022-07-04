@@ -12,6 +12,8 @@ hide_table_of_contents: false
 
 As an application management and integration platform, KubeVela needs to handle thousands of applications in production scenario. To evaluate the performance of KubeVela, develop team has conducted performance tests based on simultated environments and demonstrated the capability of managing a large number of applications concurrently.
 
+<!--truncate-->
+
 ## Setup
 
 ### Cluster Environment
@@ -77,7 +79,7 @@ The average reconcile time is under 200ms while 99% are about 800ms~900ms. Each 
 ![med-p99](/img/pressure-test/med-p99.png)
 
 ### Deletion
-The application deletion process is fast and low-resource consumptive. It takes less than 3min to delete all applications. However, notice that the deletion of resources managed by application usually takes longer time. This is because the cleanup of these resources (such as deployments or pods) are not directly controlled by the KubeVela controller. KubeVela controller takes charge of deleting their owner and cleanup them by triggering cascading deletion. In addition, each deletion is associated with two turns of reconcile where the second turn returns immediately when it fails to retrieve target applciation (since it is deleted).
+The application deletion process is fast and low-resource consumptive. It takes less than 3min to delete all applications. However, notice that the deletion of resources managed by application usually takes longer time. This is because the cleanup of these resources (such as deployments or pods) are not directly controlled by the KubeVela controller. KubeVela controller takes charge of deleting their owner and cleanup them by triggering cascading deletion. In addition, each deletion is associated with two turns of reconcile where the second turn returns immediately when it fails to retrieve target application (since it is deleted).
 
 ![del-cpu](/img/pressure-test/del-cpu.png)
 ![del-memory](/img/pressure-test/del-memory.png)

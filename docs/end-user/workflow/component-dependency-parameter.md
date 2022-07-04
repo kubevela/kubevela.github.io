@@ -1,5 +1,5 @@
 ---
-title:  Dependency and Data Passing
+title: Component Composition
 ---
 
 This section will introduce the dependencies in components and how to pass data between components.

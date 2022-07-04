@@ -31,6 +31,7 @@ module.exports = {
             'tutorials/webservice',
             'case-studies/multi-cluster',
             'tutorials/access-application',
+            'end-user/traits/rollout',
             'end-user/traits/sidecar',
           ],
         },
@@ -38,7 +39,11 @@ module.exports = {
           type: 'category',
           label: 'Helm Chart CD',
           collapsed: true,
-          items: ['tutorials/helm', 'tutorials/helm-multi-cluster'],
+          items: [
+            'tutorials/helm',
+            'tutorials/helm-multi-cluster',
+            'tutorials/helm-rollout',
+          ],
         },
         {
           type: 'category',
@@ -47,20 +52,29 @@ module.exports = {
           items: [
             'tutorials/consume-cloud-services',
             {
-              'Manage Database': [
-                'end-user/components/cloud-services/provision-and-consume-cloud-services',
+              type: 'category',
+              label: 'Terraform',
+              collapsed: false,
+              items: [
+                'end-user/components/cloud-services/cloud-resource-scenarios',
+                'end-user/components/cloud-services/provision-and-consume-database',
                 'end-user/components/cloud-services/provision-and-initiate-database',
                 'end-user/components/cloud-services/secure-your-database-connection',
                 'end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database'
               ],
-            }
+            },
+            "end-user/components/cloud-services/provision-cloud-resources-by-crossplane",
           ],
         },
         {
           type: 'category',
           label: 'Kubernetes Manifest CD',
           collapsed: true,
-          items: ['tutorials/k8s-object', 'end-user/components/ref-objects'],
+          items: [
+            'tutorials/k8s-object',
+            'end-user/components/ref-objects',
+            'tutorials/k8s-object-rollout',
+          ],
         },
         {
           type: 'category',
@@ -76,25 +90,27 @@ module.exports = {
           type: 'category',
           label: 'GitOps',
           collapsed: true,
-          items: [
-            'case-studies/gitops',
-            'end-user/gitops/fluxcd',
-          ],
+          items: ['case-studies/gitops', 'end-user/gitops/fluxcd'],
         },
         {
           type: 'category',
           label: 'Declarative Workflow',
           collapsed: true,
           items: [
-            'tutorials/workflows',
-            'end-user/workflow/component-dependency-parameter',
-            'end-user/workflow/webhook-notification',
+            'end-user/workflow/overview',
+            'end-user/workflow/suspend',
+            'end-user/workflow/step-group',
+            'end-user/workflow/dependency',
+            'end-user/workflow/inputs-outputs',
+            'end-user/workflow/if-condition',
+            'end-user/workflow/timeout',
           ],
         },
         {
           'General CD Features': [
             'how-to/dashboard/application/create-application',
             'end-user/version-control',
+            'end-user/workflow/component-dependency-parameter',
             'end-user/policies/apply-once',
             'end-user/policies/gc',
           ],
@@ -114,8 +130,7 @@ module.exports = {
             'platform-engineers/system-operation/enable-addon-offline',
             'platform-engineers/system-operation/migration-from-old-version',
           ],
-        }
-        ,
+        },
         {
           'User Management': ['how-to/dashboard/user/user', 'tutorials/sso'],
         },
@@ -151,6 +166,7 @@ module.exports = {
             'reference/topology-rule',
           ],
         },
+        'platform-engineers/openapi/overview',
       ],
     },
     {
@@ -159,13 +175,23 @@ module.exports = {
       collapsed: true,
       items: [
         'contributor/overview',
-        'contributor/non-code-contribute',
-        'contributor/code-contribute',
         {
-          Conventions: [
-            'contributor/release-process',
-            'contributor/code-conventions',
-            'contributor/principle-of-test',
+          type: 'category',
+          label: 'Extension',
+          collapsed: true,
+          items: [
+            {
+              Addons: [
+                'platform-engineers/addon/intro',
+                'platform-engineers/addon/addon-registry',
+              ],
+            },
+            {
+              'Cloud Resources': [
+                'platform-engineers/addon/terraform',
+                'platform-engineers/components/component-terraform',
+              ],
+            },
           ],
         },
         {
@@ -176,7 +202,8 @@ module.exports = {
             'platform-engineers/traits/customize-trait',
             'platform-engineers/policy/custom-policy',
             'platform-engineers/traits/status',
-            'platform-engineers/workflow/workflow', {
+            'platform-engineers/workflow/workflow',
+            {
               'Patch and Override': [
                 'platform-engineers/traits/patch-trait',
                 'platform-engineers/cue/patch-strategy',
@@ -189,26 +216,21 @@ module.exports = {
                 'platform-engineers/debug/debug',
               ],
             },
+            'platform-engineers/x-def-version',
           ],
         },
         {
-          type: 'category',
-          label: 'Contribute Extension',
-          collapsed: true,
-          items: [
-            {
-              Addons: [
-                'platform-engineers/addon/intro',
-                'platform-engineers/addon/addon-registry'
-              ],
-            },
-            {
-              'Cloud Resources': [
-                'platform-engineers/addon/terraform',
-                'platform-engineers/components/component-terraform',
-              ],
-            },
-            'platform-engineers/x-def-version',
+          'Contribution Guide': [
+            'contributor/non-code-contribute',
+            'contributor/code-contribute',
+            'contributor/cli-ref-doc',
+          ],
+        },
+        {
+          Conventions: [
+            'contributor/release-process',
+            'contributor/code-conventions',
+            'contributor/principle-of-test',
           ],
         },
       ],
@@ -232,7 +254,12 @@ module.exports = {
             'reference/addons/velaux',
             'reference/addons/rollout',
             'reference/addons/fluxcd',
-            'reference/addons/terraform',
+            {
+              "Cloud Resources": [
+                'reference/addons/terraform',
+                'reference/addons/crossplane',
+              ]
+            },
             'reference/addons/ai',
             'reference/addons/traefik',
             'reference/addons/cert-manager',
@@ -247,11 +274,6 @@ module.exports = {
         },
         'end-user/components/cloud-services/cloud-resources-list',
         'reference/user-improvement-plan',
-        {
-          label: 'VelaUX API Doc',
-          type: 'link',
-          href: 'https://kubevela.stoplight.io/docs/kubevela/b3A6NDI5NzQxMzM-detail-definition',
-        },
       ],
     },
     'roadmap/README',

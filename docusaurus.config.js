@@ -29,7 +29,7 @@ module.exports = {
     },
     algolia: {
       appId: 'PXMFHFWUGZ',
-      apiKey: 'f19c90b8ffe16ed118dae930cd070507',
+      apiKey: '2d1f4924c15d2cc0947820c01e65521f',
       indexName: 'kubevela',
     },
     navbar: {

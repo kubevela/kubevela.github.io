@@ -1,0 +1,36 @@
+name: release-pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  gh-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+          cache: "yarn"
+      - name: Build Static Files
+        env:
+          USE_SSH: true
+          GIT_USER: git
+          DEPLOYMENT_BRANCH: gh-pages
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "gh-actions"
+          yarn install --frozen-lockfile --production=false
+          yarn build
+      - name: Install ossutil
+        run: wget http://gosspublic.alicdn.com/ossutil/1.7.0/ossutil64 && chmod +x ossutil64 && mv ossutil64 ossutil
+      - name: Configure Alibaba Cloud OSSUTIL
+        run: ./ossutil --config-file .ossutilconfig config -i ${{ secrets.ACCESS_KEY_ID }} -k ${{ secrets.ACCESS_KEY_SECRET }} -e oss-us-west-1.aliyuncs.com -c .ossutilconfig
+      - name: Deply To OSS for kubevela.io
+        run: ./ossutil --config-file .ossutilconfig sync -f build oss://kubevela-io
+      - name: Configure Alibaba Cloud OSSUTIL
+        run: ./ossutil --config-file .ossutilconfig config -i ${{ secrets.ACCESS_KEY_ID }} -k ${{ secrets.ACCESS_KEY_SECRET }} -e oss-accelerate.aliyuncs.com -c .ossutilconfig
+      - name: Deply To OSS for kubevela.net
+        run: ./ossutil --config-file .ossutilconfig sync -f build oss://kubevela-docs

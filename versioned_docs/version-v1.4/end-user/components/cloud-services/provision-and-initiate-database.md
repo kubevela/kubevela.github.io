@@ -111,7 +111,3 @@ Handling connection for 4000
 
 ![](https://kubevela-assets.oss-cn-beijing.aliyuncs.com/gifs/db-import-sql-sample-favorite-links.gif)
 
-## Next
-
-- [Secure your Database Connection](./secure-your-database-connection)
-- [Provision an RDS instance with more than one database](./provision-an-RDS-instance-with-more-than-one-database)

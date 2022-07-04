@@ -13,7 +13,7 @@ module.exports = {
     {
       type: "category",
       label: "Lessons",
-      collapsed: true,
+      collapsed: false,
       items: [
         "lessons/live-1024",
       ],
@@ -21,21 +21,26 @@ module.exports = {
     {
       type: "category",
       label: "Talks",
-      collapsed: true,
+      collapsed: false,
       items: [
         {
           type: "category",
           label: "Talks in English",
           collapsed: false,
           items: [
+            "talks/en/devops-toolkit-2",
+            "talks/en/devops-toolkit-1",
             "talks/en/standardizing-app",
+            "talks/en/bytedance-practice",
+            "talks/en/oam-dapr",
           ],
         },
         {
           type: "category",
-          label: "Talks in Chinese",
+          label: "中文演讲 - Talks in Chinese",
           collapsed: false,
           items: [
+            "talks/cn/vela-delivery-202206",
             "talks/cn/next-app-delivery",
             "talks/cn/multi-cluster",
             "talks/cn/gopher-china",
@@ -49,7 +54,7 @@ module.exports = {
     {
       type: "category",
       label: "Community Meetings",
-      collapsed: true,
+      collapsed: false,
       items: [
         {
           type: "category",
@@ -61,7 +66,7 @@ module.exports = {
         },
         {
           type: "category",
-          label: "Meetings in Chinese",
+          label: "中文社区会议 - Meetings in Chinese",
           collapsed: false,
           items: [
             "meetings/cn/v1.3",

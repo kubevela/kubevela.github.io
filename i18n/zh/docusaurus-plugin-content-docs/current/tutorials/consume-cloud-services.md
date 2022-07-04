@@ -1,100 +1,125 @@
 ---
-title: 云服务
-description: 本文介绍通过 KubeVela 交付云厂商提供的服务，并能够与 Kubernetes 集群中的业务打通。
+title:  创建和使用云资源
 ---
 
-集成云服务是实际开发中最频繁的使用需求之一。从基础的对象存储、云数据库到负载均衡、云缓存，再到基于业务的搜索引擎等等，快速的接入云服务并便捷的使用它们可以大大降低开发成本。与此同时，由于可供选择的云服务厂商非常多，多云交付已成为未来必然形态，如何管理好接入混合云环境时各类资源之间的关系，也成为必须解决的最大挑战。
+KubeVela 可以帮助开发者集成、编排不同类型的云资源，涵盖混合多云环境，让你用统一地方式去使用不同厂商的云资源。
 
-在本文中，我们介绍一个例子，向你展示如何部署云服务。
+本教程将主要集中在通过 Terraform 插件创建云资源，KubeVela 也支持使用 [Crossplane](https://crossplane.io/)，你可以参考[这个教程](../end-user/components/cloud-services/provision-cloud-resources-by-crossplane)。
 
-## 开始之前
+## 通过 Vela CLI 创建云资源
 
-- 拥有一个能适当权限访问你的目标云资源的云供应商账户
+请平台工程师启用云资源 Terraform 插件并授权目标云服务商的认证信息。
+我们将使用阿里云作为示例。
 
-- 确保云账号具有足够的费用。
+### 熟悉云资源的使用参数
 
-- 对接一个处在同一个云上的 Kubernetes 集群，用以验证云服务的正常开通与使用。
+KubeVela 支持的所有由 Terraform 编排的云资源请见[列表](../end-user/components/cloud-services/cloud-resources-list)，你也可以通过命令 `vela components --label type=terraform` 查看。
 
-## 开启对应云服务商的插件
+你可以使用一下任意方式来检查云资源的使用参数：
 
-首先，访问[VelaUX (KubeVela Dashboard)](../install#3-安装-VelaUX)，切换到 "Addon" 标签，并点击 addon
-`terraform-xxx`。`xxx`代表云提供商的名称。我们支持以下的插件：
+- 通过命令 `vela show <component type name>`。
 
-- terraform-alibaba
-- terraform-aws
-- terraform-azure
-- terraform-tencent  
-- terraform-gcp  
-- terraform-baidu  
+```console
+$ vela show alibaba-oss
+### Properties
++----------------------------+-------------------------------------------------------------------------+-----------------------------------------------------------+----------+---------+
+|            NAME            |                               DESCRIPTION                               |                           TYPE                            | REQUIRED | DEFAULT |
++----------------------------+-------------------------------------------------------------------------+-----------------------------------------------------------+----------+---------+
+| acl                        | OSS bucket ACL, supported 'private', 'public-read', 'public-read-write' | string                                                    | false    |         |
+| bucket                     | OSS bucket name                                                         | string                                                    | false    |         |
+| writeConnectionSecretToRef | The secret which the cloud resource connection will be written to       | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false    |         |
++----------------------------+-------------------------------------------------------------------------+-----------------------------------------------------------+----------+---------+
 
-我们可以分别在阿里云、AWS、Azure、腾讯云、Google Cloud Platform和百度云配置云资源。
+...snip...
+```
 
-选择对应的插件版本并启用该插件。
+你也可以使用 `--web` 参数来在本地浏览器中查看使用说明。
+
+- 阅读 [官网文档](http://kubevela.net/docs/end-user/components/cloud-services/cloud-resources-list).
+
+比如，你可以在[这里](http://kubevela.net/docs/end-user/components/cloud-services/terraform/alibaba-oss)查看阿里云 OSS 的使用参数。
+
+
+For different vendors, these parameters update accordingly. All cloud resources have the following common parameters.
+
+- `writeConnectionSecretToRef`: `struct` Type, represents the outputs of Terraform will become key/values in the secret with the name specified here.
+  - `name`, specifies the name of the secret.
+  - `namespace`, specifies the namespace of the secret.
+- `providerRef`: `struct` Type, represents the Provider which is referenced by a cloud service.
+  - `name`, specifies the name of the provider.
+- `deleteResource`: `bool` Type, specify whether to delete the corresponding cloud service when the app is deleted. By Default it's `true`.
+- `customRegion`: `string` Type, specify region for resources, it will override the default region from `providerRef`.
+
+
+### 部署云资源
+
+我们以 OSS bucket 为例展示如何部署云资源。
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: provision-cloud-resource-sample
+spec:
+  components:
+    - name: sample-oss
+      type: alibaba-oss
+      properties:
+        bucket: vela-website-0911
+        acl: private
+        writeConnectionSecretToRef:
+          name: oss-conn
+```
+
+`alibaba-oss` 类型的组件的参数在上面文档有清晰的描述，包括每一个 property 的名字、类型、描述、是否必填和默认值。
+
+部署应用程序并检查应用程序的状态。
+
+```shell
+$ vela ls
+APP                            	COMPONENT 	TYPE       	TRAITS	PHASE  	HEALTHY	STATUS                                       	CREATED-TIME
+provision-cloud-resource-sample	sample-oss	alibaba-oss	      	running	healthy	Cloud resources are deployed and ready to use	2021-09-11 12:55:57 +0800 CST
+```
+
+当应用程序处于 `running` 和 `healthy`状态。你也可以在阿里云控制台查看。
+
+## 通过 UI 控制台查看
+
+除了命令行以外，使用 UI 控制台也可以很方便的创建云资源。
+
+### 开始之前
+
+- Enable [VelaUX](../reference/addons/velaux) addon.
+
+- Enable [Terraform](../reference/addons/terraform) addon, just like the prerequisites in CLI part above. VelaUX can also enable these addons in UI console.
 
 ![addon-alibaba](../resources/addon-alibaba.jpg)
 
-## 认证云服务商的插件
+### Creating your cloud service
 
-点击菜单 `Platform` 后再点击 `集成配置`，选择 `Terraform Controller Provider` 来认证一个云服务商的插件。
+The UI console operations are the same, you can refer to [this guide](../how-to/dashboard/application/create-application).
 
-按照每个云提供商的插件的所有属性上的说明来设置插件并启用它。
+Firstly, Create an application and choose the type of your cloud service, they will always has a prefix of vendor such as `aws-`, `azure` or `alibaba-`.
 
-例如，对于阿里巴巴云，你需要设置以下属性：
-> 注意。KubeVela对所有的密钥进行了加密，因此不必担心它的安全问题。
+Set the above parameters according to your needs to complete creating the application, and then deploy the application. The resources will be provisioned after the application become ready.
 
-![](../resources/provider-alibaba.jpg)
-
-然后填写你的ALICLOUD_ACCESS_KEY，ALICLOUD_REGION，和ALICLOUD_SECRET_KEY来启用它。
-
-云服务的创建过程会从GitHub中提取配置。如果你的控制平面 运行KubeVela的集群很难连接到GitHub，请在`terraform`插件中打开`GithubBlocked`选项。
-
-KubeVela支持的云资源请见[列表](../end-user/components/cloud-services/cloud-resources-list)。
-
-## 创建你的云服务
-
-首先[创建一个应用程序](../how-to/dashboard/application/create-application)。请选择你的云服务的类型。
-其前缀为`aws-`、`azure`、`alibaba-`或 `tencent-`。
-
-对于不同的供应商，这些参数会相应更新。
-
-例如，`aws-s3` 有以下参数。
-
-![](../resources/aws-s3-parameters.png)
-
-`azure-database-mariadb` 有以下参数。
-
-![](../resources/azure-database-mariadb-parameters.png)
-
-`alibaba-rds` 有以下参数。
-
-![](../resources/alibaba-rds-parameters.png)
-
-所有的云资源都有一些共同的参数。
-
-- DeleteResource：当应用程序被删除时，是否要删除相应的云服务
-- ProviderRef：被云服务引用的提供者。
-- Region：Region是云提供商的区域。它将覆盖`providerRef`。
-
-根据你的需要设置上述参数，完成应用程序的创建，然后[部署应用程序](../how-to/dashboard/application/deploy-application)。
-
-## 查看云资源创建状态
+### Viewing cloud resource creation status
 
 - 查看云实例列表
 
-与其他应用程序一样，云服务应用程序也需要切换到相应的环境页面来查看实例信息。 默认情况下，一个环境中有多个目标，云服务会生成相应数量的实例。
+与其他应用程序一样，云服务应用程序也需要切换到相应的环境页面来查看实例信息。默认情况下，一个环境中有多个目标，云服务会生成相应数量的实例。
 
-![rds-inststances](../resources/rds-instances.jpg)
+![rds-instances](../resources/rds-instances.jpg)
 
 在实例列表中，会显示实例名称、状态、资源类型和位置。在开始时，名称是空的。 因为云服务实例的生成需要一定的时间，当实例正常生成后，名称会出现。
 
 - 在云提供商的控制台中查看云资源
 
 您可以在云提供商的控制台中访问该实例。例如，您可以检查名称或控制台来访问它。
+
 ![](../resources/application-console-link.png)
 
-例如，你可以在[https://console.aliyun.com](https://console.aliyun.com)中查看阿里巴巴云RDS实例。
-
-![](../resources/alibaba-cloud-rds-console.png)
+创建出的云资源也会自动跳转到云资源的官方网站控制台，例如，这里的云资源会自动跳转到阿里云官网的 RDS 实例控制台。
 
 - 检查云实例的细节和状态
 
@@ -114,3 +139,7 @@ KubeVela支持的云资源请见[列表](../end-user/components/cloud-services/c
 - 云服务一直处在 ProvisioningAndChecking 状态，且无名称。
 
 > 云服务的创建一般需要一定时间，请等候或者进入云厂商控制台查看创建进度。
+
+# 更多
+
+更多云资源使用方法，比如如何使用和消费云资源，请参见[云资源管理场景](../end-user/components/cloud-services/cloud-resource-scenarios)。

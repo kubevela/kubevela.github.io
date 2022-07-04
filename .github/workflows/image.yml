@@ -13,9 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: "14.x"
+          node-version: "16.x"
+          cache: "yarn"
       - name: Build Static Files
         env:
           USE_SSH: true
@@ -24,15 +25,8 @@ jobs:
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "gh-actions"
-          yarn add nodejieba
-          if [ -e yarn.lock ]; then
-          yarn install --frozen-lockfile
-          elif [ -e package-lock.json ]; then
-          npm ci
-          else
-          npm install
-          fi
-          npm run build
+          yarn install --frozen-lockfile --production=false
+          yarn build
       - name: Get the version
         id: get_version
         run: |

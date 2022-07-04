@@ -180,7 +180,7 @@ $ kubectl create secret generic bucket-secret --from-literal=accesskey=<your-ak>
 secret/bucket-secret created
 ```
 
-Deploy this applciation:
+Deploy this application:
 
 ```shell
 apiVersion: core.oam.dev/v1beta1

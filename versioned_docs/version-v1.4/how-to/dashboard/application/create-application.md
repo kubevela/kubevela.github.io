@@ -1,9 +1,11 @@
 ---
-title: Lifecycle of Application
+title: UI Console Operations
 description: lifecycle of an application by kubevela dashboard
 ---
 
-### Configure the basic information
+In this docs, we'll guide you how to use the UI console for the whole application lifecycle management.
+
+## Configure Application Basics
 
 Enter the `Applications` page, click `New Application` button, you can see the basic application configuration page. 
 
@@ -30,7 +32,7 @@ Different component types are different significantly, you can fill in the forms
 
 After you finished configuring the application, click "Submit" to create the application. This means the application configuration was saved.
 
-### Bind Application with Environment
+## Bind Application with Environment
 
 We can specify bind with one or more environments before deploy.
 
@@ -52,12 +54,11 @@ KubeVela will automatically generate the deploy workflow for the newly created e
 
 In the environment tab, you can click `Deploy` button to deploy the application.
 
-### Deploy Application
-
+## Deploy Application
 
 After application created and bond with an environment, you can deploy the application instance.
 
-#### First time deploy
+### First time deploy
 
 You can view the application detail page by click the application name or the UI card.
 
@@ -77,7 +78,7 @@ If there's something wrong with the workflow step, the workflow node will become
 
 ![workflow-error](../../../resources/workflow-error.jpg)
 
-#### Upgrade the application
+### Upgrade the application
 
 There's a `Deploy` button on the top right corner, you can click that for deploy. On the right side of the button, there's detail button, you can choose which workflow to run if there's multiple environments configured.
 
@@ -85,7 +86,35 @@ There's a `Deploy` button on the top right corner, you can click that for deploy
 
 You can upgrade the application in any state, as KubeVela is a declarative system. There will be a kindly reminder for you if the workflow is running when you want to upgrade.
 
-### Check Application State
+## Manage Workflows
+
+The workflow is bound to the environment where the application is released, that is, each environment of the application has an independent workflow.
+
+### Workflow Revision
+
+When the application is deployed, a certain workflow is executed to release a version. The Revision follows the execution status of the workflow, which means that if the workflow is successfully executed, Revision will increase by +1.
+
+![Application Revision List](../../../resources/app-revision.jpg)
+
+After integrating with the CI system, Revision can be associated with Code Commit to trace the history. Later, the version rollback function will be implemented, and you can choose to roll back an environment to a specified version at any time.
+
+### Edit Workflows
+
+Enter the application workflow management page, select an environment workflow and click the `Edit` button to enter the editing state.
+
+![workflow-edit](../../../resources/workflow-edit.jpg)
+
+Select the steps you want add and connect, assuming you're adding a `notification` step.
+
+Select the step of `notification` type on the left and drag it into the canvas on the right, the page will automatically pop up the workflow step editing window. In the setting window, you can set the parameters of the step.
+
+![workflow-notification](../../../resources/workflow-notification.jpg)
+
+After the configuration completed, click `Submit` to save the step configuration. At this time, you need to plan the location of the notification step. By default, it will be added to the end. If you want to place it in the middle step, you need to disconnect the direct connection of the original step, and then notify Steps are placed in the middle of the wire.
+
+After the workflow is configured, please click the Save button at the top right of the workflow window to save all changes. After saving, you can click the `Deploy` on the top right of the page or the select button on the right to choose to execute the workflow and verify whether you can receive a message notification.
+
+## Check Application State
 
 Different tabs of environment will show different application instances inside.
 
@@ -99,7 +128,7 @@ For cloud resources, there will be a link to the cloud console for management.
 
 ![rds-instances](../../../resources/rds-instances.jpg)
 
-### View Application Logs
+## View Application Logs
 
 ![pod log](https://static.kubevela.net/images/1.3/pod-log.jpg)
 
@@ -116,7 +145,7 @@ vela logs <app_name> -n <namespace>
 Select a workload to view the logs.
 
 
-### Expose your application for public access
+## Expose your application for public access
 
 You can configure your application for public access.
 
@@ -126,13 +155,13 @@ There're mainly three ways to expose your service.
 2. Configure `gateway` trait, it works for `webservice`, `worker` and `task` component types. `gateway` trait must configure a domain and works only for HTTP/HTTPs protocols.
 3. Case by case component configurations.
 
-#### Expose service for `webservice` typed component
+### Expose service for `webservice` typed component
 
 You can modify `ExposeType` to choose the way, and you should configure the `Service Ports` to listen the ports and turn on the `Expose` radio.
 
 ![webservice](../../../resources/webservice-port.jpg)
 
-#### Add `gateway` trait
+### Add `gateway` trait
 
 The `gateway` trait requires you have `Ingress Controller` available in your cluster. You can add this trait to expose your service and configure a domain.
 
@@ -150,7 +179,7 @@ After the application deployed with service exposed configuration, you can see a
 
 ![service endpoint](../../../resources/service-endpoint.jpg)
 
-### List Resources Created
+## List Resources Created
 
 If you want to learn the resources created by the applications, you can open the environment status page.
 
@@ -164,7 +193,7 @@ You can also list resources from command line:
 $ vela status <app_name> -n <namespace> --tree
 ```
 
-### Recycle Application Instance
+## Recycle Application Instance
 
 When you want to delete the application instance in some environment, you can click the `Recycle` button in that environment.
 
@@ -174,7 +203,7 @@ It will delete the whole application instance with related resources.
 
 > Note that recycle means delete an application, data can't be recovered automatically. Please make sure you have back up all the important data of this instance before recycle it.
 
-### Delete Application
+## Delete Application
 
 After all application instance were recycled, you can click `Remove` for deletion.
 

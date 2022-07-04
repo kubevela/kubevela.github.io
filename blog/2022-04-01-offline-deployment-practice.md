@@ -14,6 +14,8 @@ The cloud platform development team of China Merchants Bank has been trying out 
 
 This article will take the KubeVela V1.2.5 version as an example, introduce the offline installation practice to help other users easier to complete KubeVela's deployment in offline environment.
 
+<!--truncate-->
+
 ## KubeVela Offline Installation Solution
 
 We divide the offline installation of KubeVela in three parts, which are Vela CLI, Vela Core, and Addon offline installation. Each part mainly involves the loading of the relevant Docker image and Helm's package, which can greatly speed up deployment process in offline environment.

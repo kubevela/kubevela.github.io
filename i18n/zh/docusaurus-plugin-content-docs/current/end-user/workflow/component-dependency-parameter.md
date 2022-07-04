@@ -1,5 +1,5 @@
 ---
-title:  应用组件间的依赖和参数传递
+title: 组件编排
 ---
 
 本节将介绍如何在 KubeVela 中进行组件间的依赖关系和参数传递。
@@ -112,7 +112,7 @@ mysql	mysql-secret    	raw 	      	running	healthy	      	2021-10-14 12:09:55 +0
 
 ### Outputs
 
-outputs 由 `name` 和 `valueFrom` 组成。`name` 声明了这个 output 的名称，在 input 中将通过 `name` 引用 output。
+outputs 由 `name` 和 `valueFrom` 组成。`name` 声明了这个 output 的名称，在 input 中将通过 `from` 引用 output。
 
 `valueFrom` 有以下几种写法：
 1. 直接通过字符串表示值，如：`valueFrom: testString`。

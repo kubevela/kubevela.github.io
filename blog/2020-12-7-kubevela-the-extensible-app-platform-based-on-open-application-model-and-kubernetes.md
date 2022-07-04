@@ -26,6 +26,8 @@ Thus, many platforms today introduce restricted abstractions and add-on mechanis
 
 In the end, developers complain those platforms are too rigid and slow in response to feature requests or improvements. The platform builders do want to help but the engineering effort is daunting: any simple API change in the platform could easily become a marathon negotiation around the opinionated abstraction design.
 
+<!--truncate-->
+
 ## Introducing KubeVela
 
 With KubeVela, we aim to solve these two challenges in an approach that separates concerns of developers and platform builders.
