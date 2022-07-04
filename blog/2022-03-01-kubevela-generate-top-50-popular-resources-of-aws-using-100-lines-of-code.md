@@ -13,6 +13,7 @@ KubeVela currently supports AWS, Azure, GCP,  AliCloud, Tencent Cloud, Baidu Clo
 
 We also expect users to be inspired by this article to contribute cloud resources for other cloud providers.
 
+<!--truncate-->
 
 ## Where are the most popular cloud resources on AWS?
 

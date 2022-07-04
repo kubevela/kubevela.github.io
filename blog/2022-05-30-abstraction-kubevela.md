@@ -12,6 +12,8 @@ hide_table_of_contents: false
 
 This blog will introduce how to use CUE and KubeVela to build you own abstraction API to reduce the complexity of Kubernetes resources. As a platform builder, you can dynamically customzie the abstraction, build a path from shallow to deep for your developers per needs, adapt to growing number of different scenarios, and meet the iterative demands of the company's long-term business development.
 
+<!--truncate-->
+
 ## Convert Kubernetes API Objects Into Custom Components
 
 Let's start the journey by using the [Kubernetes StatefulSet](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/) as example, we will convert it to be a customized module and provide capabilities.

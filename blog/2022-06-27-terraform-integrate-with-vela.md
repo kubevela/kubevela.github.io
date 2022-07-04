@@ -21,6 +21,7 @@ In general, this article will be divided into two parts:
 
 OK, let's go!
 
+<!--truncate-->
 
 ## Part 1. Glue Terraform Module as KubeVela Capability
 

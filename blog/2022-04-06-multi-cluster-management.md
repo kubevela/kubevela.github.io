@@ -14,6 +14,8 @@ Under today's multi-cluster business scene, we often encounter these typical req
 
 KubeVela v1.3 iterates based on the previous multi-cluster function. This article will reveal how to use it to do swift multiple clustered deployment and management to address all your anxieties.
 
+<!--truncate-->
+
 ### Before Starting
 
 1. Prepare a Kubernetes cluster as the control plane of KubeVela.

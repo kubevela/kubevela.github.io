@@ -14,6 +14,8 @@ KubeVela bridges the gap between applications and infrastructures, enabling easy
 
 This article will use Jenkins, a popular continuous integration tool, as basis and give a brief introduction to how to build GitOps-based application continuous delivery highway.
 
+<!--truncate-->
+
 ## Continuous Delivery Highway
 
 As application developer, you might care more about whether your application is functioning correctly and if development is convenient. There will be several system components on this highway to help you achieve that.
