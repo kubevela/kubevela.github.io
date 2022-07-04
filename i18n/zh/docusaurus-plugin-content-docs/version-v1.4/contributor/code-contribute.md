@@ -17,7 +17,7 @@ This guide helps you get started developing KubeVela.
 ### Prerequisites
 
 1. Golang version 1.17+
-2. Kubernetes version v1.20+ with `~/.kube/config` configured.
+2. Kubernetes version v1.20+ with `~/.kube/config` configured. (Don't have a test cluster? Try [VelaD](https://github.com/kubevela/velad/blob/main/docs/06.develop_kubevela.md) to develop KubeVela)
 3. ginkgo 1.14.0+ (just for [E2E test](#e2e-test))
 4. golangci-lint 1.38.0+, it will install automatically if you run `make`, you can [install it manually](https://golangci-lint.run/usage/install/#local-installation) if the installation is too slow.
 5. kubebuilder v3.1.0+ and you need to manually install the dependency tools for unit test.
@@ -109,7 +109,8 @@ make core-run
 ```
 
 This command will run controller locally, it will use your local KubeConfig which means you need to have a k8s cluster
-locally. If you don't have a one, we suggest that you could setup up a cluster with [kind](https://kind.sigs.k8s.io/).
+locally. If you don't have a one, Try [VelaD](https://github.com/kubevela/velad/blob/main/docs/06.develop_kubevela.md)
+to develop KubeVela.
 
 When you're developing `vela-core`, make sure the controller installed by helm chart is not running.
 Otherwise, it will conflict with your local running controller.
