@@ -6,7 +6,7 @@ title: 使用 FluxCD 做 GitOps
 
 > 请确保你已经开启了 FluxCD Addon。
 
-## 自动同步仓库的配置到集群
+## 监听 Git 仓库并自动同步
 
 ### 准备配置仓库
 
@@ -96,7 +96,7 @@ NAME                                             DATA   AGE
 server-config                                    1      2m58s
 ```
 
-## 自动更新仓库中应用的镜像
+## 监听镜像仓库并自动同步
 
 GitOps 也可以通过监听你的镜像仓库，获得最新镜像版本，并用最新版本来更新你代码仓库中的配置，从而达到自动更新镜像的目的。
 
@@ -193,3 +193,7 @@ my-app      	my-app      	webservice	      	running       	healthy	 Ready:1/1	20
 > KubeVela 会通过你配置的 `interval` 时间间隔，来每隔一段时间分别从配置仓库及镜像仓库中获取最新信息：
 > * 当 Git 仓库中的配置文件被更新时，KubeVela 将根据最新的配置更新集群中的应用。
 > * 当镜像仓库中多了新的 Tag 时，KubeVela 将根据你配置的 policy 规则，筛选出最新的镜像 Tag，并更新到 Git 仓库中。而当代码仓库中的文件被更新后，KubeVela 将重复第一步，更新集群中的文件，从而达到了自动部署的效果。
+
+## 获取更多
+
+你还可以查看 GitOps [博客](https://kubevela.io/blog/2021/10/10/kubevela-gitops) 以及 [视频实践](https://kubevela.io/videos/best-practice/gitops) 来更好地体验以及使用 GitOps 功能。
