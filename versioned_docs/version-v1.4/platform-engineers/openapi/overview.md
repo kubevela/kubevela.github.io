@@ -157,10 +157,10 @@ The expected output should be like this:
 
 ## API Document
 
-### 1.3.0
+### 1.3
 
-Refer to [Kubevela API 1.3.0](https://kubevela.stoplight.io/docs/kubevela/b3A6NDI5NzQxMzM-detail-definition)
+Refer to [Kubevela API 1.3](https://kubevela.stoplight.io/docs/kubevela/1d086db94299e-kube-vela-api-1-3)
 
-### 1.4.0
+### 1.4
 
-Refer to [Kubevela API 1.4.0](https://kubevela.stoplight.io/docs/kubevela/branches/1.4.0/he0oz8fzf6ihs-kubevela-api-1-4-0)
+Refer to [Kubevela API 1.4](https://kubevela.stoplight.io/docs/kubevela/uz7fzdxthv175-kube-vela-api-1-4)
