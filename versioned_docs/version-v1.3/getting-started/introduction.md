@@ -42,14 +42,9 @@ KubeVela adopts your GitOps process and improves it by adding multi-cluster/hybr
 
 ### KubeVela vs. PaaS (Heroku, Cloud Foundry, etc.)
 
-KubeVela is not a PaaS, but you can use it to add PaaS-like features to your application delivery process:
+KubeVela shares the same goal with the traditional PaaS to provide full application deployment and management capabilities and aim to improve developer experience and efficiency.
 
-* A simple deployment abstraction for the developer
-* A catalog of possible customizations(addons), managed by the platform team
-* On-demand staging or development environments
-
-Using KubeVela is a good way to get many of the benefits of a PaaS (developer productivity and peace of mind), without giving up any **flexibility** to take full control over your infrastructure and tooling.
-
+Though the biggest difference lies in **flexibility**. KubeVela is fully programmable, all of its deployment workflow and component feature set are LEGO-style CUE modules and can be extended or removed in-place when your needs change. As a CD control plane, KubeVela allow you to take full control over your infrastructure and tooling.
 
 ### KubeVela vs. Helm 
 
