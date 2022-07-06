@@ -2,6 +2,8 @@
 title:  Version Control for Definition
 ---
 
+> A better version control management is comming in v1.5, refer to [this issue](https://github.com/kubevela/kubevela/issues/4131) to learn the progress.
+
 When the capabilities(Component or Trait) changes, KubeVela will generate a definition revision automatically.
 
 * Check ComponentDefinition Revision

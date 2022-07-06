@@ -8,6 +8,36 @@ KubeVela 是完全可编程的，它可以轻松的根据你的需求实现原�
 
 当前 OAM 模型支持的模块定义（X-Definition）包括组件定义（ComponentDefinition），运维特征定义（TraitDefinition）、应用策略定义（PolicyDefinition），工作流节点定义（WorkflowStepDefinition）等，随着系统演进，OAM 模型未来可能会根据场景需要进一步增加新的模块定义。
 
+## 概述
+
+本质上，KubeVela 中的定义对象由三个部分组成：
+
+- **能力指示器 （Capability Indicator）**
+  - `ComponentDefinition` 使用 `spec.workload` 指出此组件的 workload 类型.
+  - `TraitDefinition` 使用 `spec.definition` 指出此 trait 的提供者。
+- **互操作字段 （Interoperability Fields）**
+  - 他们是为平台所设计的，用来确保给定的 workload 类型可以和某个 trait 一起工作。因此只有 `TraitDefinition` 有这些字段。
+- **能力封装和抽象 （Capability Encapsulation and Abstraction）** （由 `spec.schematic` 定义）
+  - 它定义了此 capability 的**模板和参数** ，比如封装。
+
+因此，定义对象的基本结构如下所示：
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: XxxDefinition
+metadata:
+  name: <definition name>
+spec:
+  ...
+  schematic:
+    cue:
+      # cue template ...
+    helm:
+      # Helm chart ...
+  # ... interoperability fields
+```
+
+我们接下来详细解释每一种类型。
 
 ## 组件定义（ComponentDefinition）
 
@@ -59,6 +89,8 @@ spec:
 * 组件描述（对应`.spec.schematic`）定义了组件的详细信息。该部分目前支持 [`cue`][2] 和 [`kube`][3] 两种描述方式。
 
 具体抽象方式和交付方式的编写可以查阅对应的文档，这里以一个完整的例子介绍组件定义的工作流程。
+
+<detail>
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -160,6 +192,7 @@ spec:
           ...
         }
 ```
+</detail>
 
 如上所示，这个组件定义的名字叫 `helm`，一经注册，最终用户在 Application 的组件类型（`components[*].type`）字段就可以填写这个类型。
 
@@ -204,15 +237,33 @@ spec:
 
 从上述运维特征的格式和功能中我们可以看到，运维特征定义提供了一系列运维能力和组件之间衔接的方式，使得相同功能的运维功能可以适配到不同的组件中。具体的字段功能如下所示：
 
-* 运维特征能够适配的工作负载名称列表（`.spec.appliesToWorkloads`）,可缺省字段，字符串数组类型，申明这个运维特征可以用于的工作负载类型，填写的是工作负载的 CRD 名称，格式为 `<resources>.<api-group>`
-* 与该运维特征冲突的其他运维特征名称列表（`.spec.conflictsWith`）,可缺省字段，字符串数组类型，申明这个运维特征与哪些运维特征冲突，填写的是运维特征名称的列表。
+* 运维特征能够适配的工作负载名称列表（`.spec.appliesToWorkloads`）,可缺省字段，字符串数组类型，申明这个运维特征可以用于的一种或一组工作负载类型，有四种填写方法：
+  - 填写工作负载的 CRD 名称，格式为 `<resources>.<api-group>`
+  - 填写 `ComponentDefinition` 命名， 例如 `webservice`， `worker`
+  - 以`*.`为前缀的 `ComponentDefinition` 定义引用的资源组，例如`*.apps` 和 `*.oam.dev`。这表示 trait 被允许应用于该组中的任意 workload。
+  - `*` 表示 trait 被允许应用于任意 workload。
+  如果省略此字段，则表示该 trait 允许应用于任意 workload 类型。
+
+* 与该运维特征冲突的其他运维特征名称列表（`.spec.conflictsWith`）,可缺省字段，字符串数组类型，申明这个运维特征与哪些运维特征冲突，填写的是运维特征名称的列表。有四种来表示：
+  - `TraitDefinition` 命名，比如 `ingress`
+  - 以`*.`为前缀的 `TraitDefinition` 定义引用的资源组，例如`*.networking.k8s.io`。这表示当前 trait 与该组中的任意 trait 相冲突。
+  - `*` 表示当前 trait 与任意 trait 相冲突。
+  - 如果省略此字段，则表示该 trait 没有和其他任何 trait 相冲突。
+
 * 特征描述（对应`.spec.schematic`）字段定义了具体的运维动作。目前主要通过 [`CUE`][4] 来实现，同时也包含一系列诸如[`patch-trait`][5]这样的高级用法。
+
 * 运维特征对应的 Kubernetes 资源定义（`.spec.definition`字段），可缺省字段，如果运维能力通过 Kubernetes 的 CRD 方式提供可以填写，其中 `apiVersion` 和 `kind` 分别描述了背后对应的 Kubernetes 资源组和资源类型。
+
 * 运维能力中对于工作负载对象的引用字段路径（`.spec.workloadRefPath`字段），可缺省字段，运维能力中如果涉及到工作负载的引用，可以填写这样一个路径地址（如操作弹性扩缩容的 [HPA][6]对象，就可以填写`spec.scaleTargetRef`），然后 KubeVela 会自动将工作负载的实例化引用注入到运维能力的实例对象中。
+
 * 运维能力的参数更新会不会引起底层资源（pod）重启（`.spec.podDisruptive`字段），可缺省字段，bool 类型，主要用于向用户标识 trait 的更新会不会导致底层资源（pod）的重启。这个标识通常可以提醒用户，改动这样一个trait可能应该再结合一个灰度发布，以免大量资源重启引入服务不可用和其他风险。
+
 * 是否由该运维特征管理工作负载（`.spec.manageWorkload`）,可缺省字段，bool 类型，设置为 true 则标识这个运维特征会负责工作负载的创建、更新、以及资源回收，通常是灰度发布的运维特征会具备这个能力。
+
 * 该运维特征是否不计入版本变化的计算（`.spec.skipRevisionAffect`）,可缺省字段，bool 类型，设置为 true 则标识这个运维特征的修改不计入版本的变化，即用户在应用中纯粹修改这个运维特征的字段不会触发应用本身的版本变化。
+
 * 运维能力是否感知组件版本的变化（`.spec.revisionEnabled`）字段，可缺省字段，bool 类型，设置为 true 表示组件会生成的资源后缀会带版本后缀。
+
 * 运维能力产生的资源是否部署到管控集群（`.spec.controlPlaneOnly`）字段，可缺省字段，bool 类型，设置为 true 表示 trait 生成的资源会被部署到管控集群，即`local`
 
 

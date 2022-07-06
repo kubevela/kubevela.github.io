@@ -6,7 +6,7 @@ title: 灰度发布和扩缩容
 
 目前灰度发布运维特征支持的组件类型为：
 
-* [webservice](../../end-user/components/cue/webservice)
+* webservice
 * worker
 
 ## 如何使用
