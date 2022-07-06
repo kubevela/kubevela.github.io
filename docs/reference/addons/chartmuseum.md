@@ -1,5 +1,5 @@
 ---
-title: cert-manager
+title: ChartMuseum
 ---
 
 # ChartMuseum
