@@ -139,8 +139,6 @@ $ vela ql apply -f my-view.cue
 
 A view named `my-view` will be created. You can use it later.
 
-> Refer to `vela ql apply -h` for advanced usages.
-
 ### Query from VelaQL View
 
 Then everyone who has access to the cluster can query by re-use the view, the basic syntax is:
