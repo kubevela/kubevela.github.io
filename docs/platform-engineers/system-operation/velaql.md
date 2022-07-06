@@ -95,7 +95,8 @@ Apply the yaml into Kubernetes:
 vela kube apply -f query-configmap.yaml
 ```
 
-> `vela kube apply` is the same with `kubectl apply` in case you don't `kubectl` command line.
+> `vela kube apply` is the same with `kubectl apply` in case you don't use `kubectl` command line.
+
 </details>
 
 
