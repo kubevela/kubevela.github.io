@@ -6,7 +6,7 @@ This section will introduce how to use Rollout Trait to perform a rolling update
 
 The component supported for rollout is:
 
-* [webservice](../../end-user/components/cue/webservice)
+* webservice
 * worker
 
 ## How to

@@ -6,6 +6,36 @@ KubeVela is fully programmable via [CUE](https://cuelang.org), while it leverage
 
 You can [manage the definition](../cue/definition-edit) in CUE and the `vela def` command will render it into Kubernetes API with the following protocol.
 
+## Overview
+
+Essentially, a definition object in KubeVela is a programmable building block. A definition object normally includes several information to model a certain platform capability that would used in further application deployment:
+- **Capability Indicator** 
+  - `ComponentDefinition` uses `spec.workload` to indicate the workload type of this component.
+  - `TraitDefinition` uses `spec.definition` to indicate the provider of this trait.
+  - These indicators can be auto detected, so they're not necessary.
+- **Interoperability Fields**
+  - they are for the platform to ensure a trait can work with given workload type. Hence only `TraitDefinition` has these fields.
+- **Capability Encapsulation and Abstraction** defined by `spec.schematic`
+  - this defines the **templating and parametering** (i.e. encapsulation) of this capability.
+
+Hence, the basic structure of definition object is as below:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: XxxDefinition
+metadata:
+  name: <definition name>
+spec:
+  ...
+  schematic:
+    cue:
+      # cue template ...
+    helm:
+      # Helm chart ...
+  # ... interoperability fields
+```
+
+Let's explain them one by one.
 
 ## ComponentDefinition
 
@@ -25,7 +55,7 @@ metadata:
   annotations:
     definition.oam.dev/description: <Function description>
 spec:
-  workload: # Workload description
+  workload: # Workload Capability Indicator
     definition:
       apiVersion: <Kubernetes Workload resource group>
       kind: <Kubernetes Workload types>
@@ -33,7 +63,32 @@ spec:
     cue: # Details of components defined by CUE language
       template: <CUE format template>
 ```
-Here is a complete example to introduce how to use ComponentDefinition.
+
+The indicator of workload type is declared as `spec.workload`.
+
+Below is a definition for *Web Service* in KubeVela: 
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: ComponentDefinition
+metadata:
+  name: webservice
+  namespace: default
+  annotations:
+    definition.oam.dev/description: "Describes long-running, scalable, containerized services that have a stable network endpoint to receive external network traffic from customers."
+spec:
+  workload:
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+    ...        
+```
+
+In above example, it claims to leverage Kubernetes Deployment (`apiVersion: apps/v1`, `kind: Deployment`) as the workload type for component.
+
+The programmable template of given capability are defined in `spec.schematic` field. For example, below is the full definition of *Helm* type in KubeVela:
+
+<details>
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -135,6 +190,9 @@ spec:
           ...
         }
 ```
+</details>
+
+The specification of `schematic` is explained in the [CUE with KubeVela](../cue/basic) documentations.
 
 ## TraitDefinition
 
@@ -167,6 +225,56 @@ spec:
     cue: # There are many abstracts
       template: <CUE format template>
 ```
+
+The interoperability fields are **trait only**. Let's explain them in detail.
+
+### `.spec.appliesToWorkloads`
+
+This field defines the constraints that what kinds of workloads this trait is allowed to apply to.
+- It accepts an array of string as value.
+- Each item in the array refers to one or a group of workload types to which this trait is allowed to apply.
+
+There are three approaches to denote one or a group of workload types.
+
+- `ComponentDefinition` definition reference (CRD name), e.g., `deployments.apps`
+- Resource group of `ComponentDefinition` definition reference prefixed with `*.`, e.g., `*.apps`, `*.oam.dev`. This means the trait is allowed to apply to any workloads in this group.
+- `*` means this trait is allowed to apply to any workloads
+
+If this field is omitted, it means this trait is allowed to apply to any workload types.
+
+KubeVela will raise an error if a trait is applied to a workload type which is NOT included in the `appliesToWorkloads`.
+
+
+### `.spec.conflictsWith` 
+
+This field defines that constraints that what kinds of traits are conflicting with this trait, if they are applied to the same workload.
+- It accepts an array of string as value. 
+- Each item in the array refers to one or a group of traits.
+
+There are four approaches to denote one or a group of workload types.
+
+- `TraitDefinition` name, e.g., `ingress`
+- Resource group of `TraitDefinition` definition reference prefixed with `*.`, e.g., `*.networking.k8s.io`. This means the trait is conflicting with any traits in this group.
+- `*` means this trait is conflicting with any other trait.
+
+If this field is omitted, it means this trait is NOT conflicting with any traits.
+
+### `.spec.workloadRefPath`
+
+This field defines the field path of the trait which is used to store the reference of the workload to which the trait is applied.
+- It accepts a string as value, e.g., `spec.workloadRef`.
+
+If this field is set, KubeVela core will automatically fill the workload reference into target field of the trait. Then the trait controller can get the workload reference from the trait latter. So this field usually accompanies with the traits whose controllers relying on the workload reference at runtime. 
+
+Please check [scaler](https://github.com/kubevela/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/scaler.yaml) trait as a demonstration of how to set this field.
+
+### `.spec.podDisruptive`
+
+This field defines that adding/updating the trait will disruptive the pod or not.
+In this example, the answer is not, so the field is `false`, it will not affect the pod when the trait is added or updated.
+If the field is `true`, then it will cause the pod to disruptive and restart when the trait is added or updated.
+By default, the value is `false` which means this trait will not affect.
+Please take care of this field, it's really important and useful for serious large scale production usage scenarios.
 
 Let's look at a practical example:
 

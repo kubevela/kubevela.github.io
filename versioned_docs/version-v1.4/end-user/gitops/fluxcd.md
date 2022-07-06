@@ -2,57 +2,33 @@
 title:  GitOps with FluxCD
 ---
 
-> You need to enable the [fluxcd](../../reference/addons/fluxcd) addon.
+In this section, we will introduce how to use KubeVela to deliver in GitOps mode.
 
-As a best practice, this article will separate into two perspectives simulating to the real scenarios:
+> Please make sure you have enabled the [fluxcd](../../reference/addons/fluxcd) addon.
 
-1. For platform administrators/SREs, they can update the config in Git repo. It will trigger automated re-deployment.
+## Watch the Git repositories and sync automatically
 
-2. For developers, they can update the app source code and then push it to Git. It will trigger building latest image and re-deployment.
+### Preparing the configuration repository
 
-## For platform administrators/SREs
+GitOps will automatically synchronize the configuration in the repository to the cluster. First, we need a repository that stores all the configuration files you need: such as some Kubernetes native resources Deployment, Secret, ConfigMap, etc. Also, you can store KubeVela's Application in the repository.
 
-Platform administrators/SREs prepares the Git repo for operational config. There will have a gitops agent watch the git server events, every changes of the configuration will be traceable by that. 
+Suppose in our repository, there is a folder called `infrastructure`, which has a KubeVela Application called `server` and a ConfigMap called `server-config`.
 
-In this scenario, KubeVela will watch the repo and apply changes to the clusters.
-
-![alt](../../resources/ops-flow.jpg)
-
-### Setup Config Repository to watch
-
-> The configuration files are from the [Example Repo](https://github.com/kubevela/samples/tree/master/09.GitOps_Demo/for-SREs).
-
-In this example, we will deploy an application and a database, the application uses the database to store data.
-
-The structure of the config repository looks below:
-
-* The `clusters/` contains the GitOps config. It will command KubeVela to watch the specified repo and apply latest changes.
-* The `apps/` contains the Application yaml for deploying the user-facing app.
-* The `infrastructure/` contains infrastructure tools, i.e. MySQL database.
+The directory structure of the repository is as follows:
 
 ```shell
-├── apps
-│   └── my-app.yaml
-├── clusters
-│   ├── apps.yaml
-│   └── infra.yaml
-└── infrastructure
-    └── mysql.yaml
+├── infrastructure
+    ├── server-config.yaml
+    └── server.yaml
 ```
 
-> KubeVela recommends using the directory structure above to manage your GitOps repository. `clusters/` holds the associated KubeVela GitOps configuration that need to be applied to cluster manually, `apps/` holds your application and `infrastructure/` holds your base configuration. By separating applications from basic configurations, you can manage your deployment environment more reasonably and isolate application changes.
-
-#### Directory `clusters/`
-
-The `clusters/` is the initialize configuration directory for KubeVela GitOps.
-
-Below is how the `clusters/infra.yaml` looks like:
+Deploy the following KubeVela GitOps application:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: infra
+  name: infra-gitops
 spec:
   components:
   - name: database-config
@@ -67,18 +43,71 @@ spec:
       pullInterval: 10m
       git:
         # the branch name
-        branch: main
+        branch: infra
       # the path to sync
       path: ./infrastructure
 ```
 
-`apps.yaml` and `infra.yaml` in `clusters/` are similar. Their difference is to watch different directories. In `apps.yaml`, the `properties.path` will be `./apps`.
+Check the status of this GitOps application:
 
-Apply the files in `clusters/` manually. They will sync the files in `infrastructure/` and `apps/` dir of the Git repo.
+```yaml
+$ vela status infra-gitops
+About:
 
-#### Directory `apps/`
+  Name:      	infra-gitops
+  Namespace: 	default
+  Created at:	2022-06-30 14:52:33 +0800 CST
+  Status:    	running
 
-The file in `apps/` is a simple application with database information and Ingress. The app serves HTTP service and connects to a MySQL database. In the '/' path, it will display the version in the code; in the `/db` path, it will list the data in database.
+Workflow:
+
+  mode: DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id:dgatat8jag
+    name:database-config
+    type:apply-component
+    phase:succeeded
+    message:
+
+Services:
+
+  - Name: database-config
+    Cluster: local  Namespace: default
+    Type: kustomize
+    Healthy
+    No trait applied
+```
+
+As you can see, the GitOps application is running successfully. At this point, the application continuously pulls the configuration from the repository and syncs across the cluster at 10-minute intervals.
+
+Looking at the resources in the cluster, you can find that the `server` Application and the `server-config` ConfigMap have been automatically deployed.
+
+```bash
+$ vela ls
+APP         	COMPONENT      	TYPE      	TRAITS	PHASE  	HEALTHY	STATUS   	CREATED-TIME
+infra-gitops	database-config	kustomize 	      	running	healthy	         	2022-06-30 14:52:33 +0800 CST
+server      	server         	webservice	      	running	healthy	Ready:1/1	2022-06-30 14:52:35 +0800 CST
+
+$ kubectl get configmap
+NAME                                             DATA   AGE
+server-config                                    1      2m58s
+```
+
+## Watch the image repositories and synchronize automatically
+
+GitOps can also watch your image repository, get the latest image version, and update the configuration in your code repository with the latest version, so as to achieve the purpose of automatically updating the image.
+
+Suppose the directory structure of our repository is as follows:
+
+```shell
+├── application
+    └── my-app.yaml
+```
+
+The `my-app.yaml` in the application is as follows:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -88,265 +117,68 @@ metadata:
   namespace: default
 spec:
   components:
-    - name: my-server
+    - name: my-app
       type: webservice
       properties:
-        image: <your image address> # {"$imagepolicy": "default:apps"}
-        port: 8088
-        env:
-          - name: DB_HOST
-            value: mysql-cluster-mysql.default.svc.cluster.local:3306
-          - name: DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: mysql-secret
-                key: ROOT_PASSWORD
-      traits:
-        - type: ingress
-          properties:
-            domain: testsvc.example.com
-            http:
-              /: 8088
+        image: nginx # {"$imagepolicy": "default:image-gitops"}
 ```
 
-#### Directory `infrastructure/`
+> Note that there is a `# {"$imagepolicy": "default:image-gitops"}` comment after the image field. KubeVela will update the corresponding image field through this annotation. `default:image-gitops` is the namespace and name of the GitOps application component we will deploy.
 
-The `infrastructure/` contains the config of some infrastructures like database. In the following, we will use [MySQL operator](https://github.com/bitpoke/mysql-operator) to deploy a MySQL cluster.
-
-> Notice that there must be a secret in your cluster with MySQL password specified in key `ROOT_PASSWORD`.
+Deploy the following KubeVela GitOps application:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: mysql
-  namespace: default
+  name: image-gitops
 spec:
   components:
-    - name: mysql-controller
-      type: helm
-      properties:
-        repoType: helm
-        url: https://presslabs.github.io/charts
-        chart: mysql-operator
-        version: "0.4.0"
-    - name: mysql-cluster
-      type: raw
-      dependsOn:
-        - mysql-controller
-      properties:
-        apiVersion: mysql.presslabs.org/v1alpha1
-        kind: MysqlCluster
-        metadata:
-          name: mysql-cluster
-        spec:
-          replicas: 1
-          # replace it with your secret
-          secretName: mysql-secret
+  - name: image-gitops
+    type: kustomize
+    properties:
+      repoType: git
+      # replace it with your repo url
+      url: https://github.com/FogDong/KubeVela-GitOps-Infra-Demo
+      # replace it with your git secret, GitOps will update the files in your repository with the latest image, which requires write permission
+      secretRef: git-secret
+      pullInterval: 1m
+      git:
+        # the branch name
+        branch: image
+      # the path to sync
+      path: ./application
+      imageRepository:
+        # replace it with your image url
+        image: ghcr.io/fogdong/test-fog
+        # if it's a private image registry, use `kubectl create secret docker-registry` to create the secret
+        # secretRef: imagesecret
+        filterTags:
+          # filter the image tag
+          pattern: '^master-[a-f0-9]+-(?P<ts>[0-9]+)'
+          extract: '$ts'
+        # use the policy to sort the latest image tag and update
+        policy:
+          numerical:
+            order: asc
+        # add more commit message
+        commitMessage: "Image: {{range .Updated.Images}}{{println .}}{{end}}"
 ```
 
-#### Apply the files in `clusters/`
+After the application is deployed successfully, you can see that the `my-app` application has also been automatically deployed. At this point, the image in `my-app` is `nginx`:
 
-After storing bellow files in the Git config repo, we need to apply the GitOps config files in `clusters/` manually.
-
-First, apply the `clusters/infra.yaml` to cluster, we can see that the MySQL in `infrastructure/` is automatically deployed:
-
-```shell
-vela up -f clusters/infra.yaml
-```
-
-```shell
+```bash
 $ vela ls
-
-APP   	COMPONENT       	TYPE      	TRAITS 	PHASE  	HEALTHY	STATUS	CREATED-TIME
-infra 	database-config 	kustomize 	       	running	healthy	      	2021-09-26 20:48:09 +0800 CST
-mysql 	mysql-controller	helm      	       	running	healthy	      	2021-09-26 20:48:11 +0800 CST
-└─  	mysql-cluster   	raw       	       	running	healthy	      	2021-09-26 20:48:11 +0800 CST
+APP         	COMPONENT   	TYPE      	TRAITS	PHASE          	HEALTHY  	STATUS   	CREATED-TIME
+image-gitops	image-gitops	kustomize 	      	running        	healthy  	         	2022-06-30 15:16:30 +0800 CST
+my-app      	my-app      	webservice	      	running       	healthy	 Ready:1/1	2022-06-30 15:16:31 +0800 CST
 ```
 
-Apply the `clusters/apps.yaml` to cluster, we can see that the application in `apps/` is automatically deployed:
+After a period of time, the imageRepository we configured will automatically pull the latest image we want and update the application image in the repository.
 
-```shell
-vela up -f clusters/apps.yaml
-```
+At this point, you can see a commit from `kubevelabot` in the config repository, which replaces the `nginx` image with the latest image from our own repository. Commits are prefixed with `Update image automatically.`. You can also append the information you want in the `commitMessage` field with `{{range .Updated.Images}}{{println .}}{{end}}`.
 
-```shell
-APP   	COMPONENT       	TYPE      	TRAITS 	PHASE  	HEALTHY	STATUS	CREATED-TIME
-apps  	apps            	kustomize 	       	running	healthy	      	2021-09-27 16:55:53 +0800 CST
-infra 	database-config 	kustomize 	       	running	healthy	      	2021-09-26 20:48:09 +0800 CST
-my-app	my-server       	webservice	ingress	running	healthy	      	2021-09-27 16:55:55 +0800 CST
-mysql 	mysql-controller	helm      	       	running	healthy	      	2021-09-26 20:48:11 +0800 CST
-└─  	mysql-cluster   	raw       	       	running	healthy	      	2021-09-26 20:48:11 +0800 CST
-```
-
-By deploying the KubeVela GitOps config files, we now automatically apply the application and database in cluster.
-
-`curl` the Ingress of the app, we can see that the current version is `0.1.5` and the application is connected to the database successfully:
-
-```shell
-$ kubectl get ingress
-NAME        CLASS    HOSTS                 ADDRESS         PORTS   AGE
-my-server   <none>   testsvc.example.com   <ingress-ip>    80      162m
-
-$ curl -H "Host:testsvc.example.com" http://<ingress-ip>
-Version: 0.1.5
-
-$ curl -H "Host:testsvc.example.com" http://<ingress-ip>/db
-User: KubeVela
-Description: It's a test user
-```
-
-### Modify the config for GitOps trigger
-
-After the first deployment, we can modify the files in config repo to update the applications in the cluster.
-
-Modify the domain of the application's Ingress:
-
-```yaml
-...
-      traits:
-        - type: ingress
-          properties:
-            domain: kubevela.example.com
-            http:
-              /: 8089
-```
-
-Check the Ingress in cluster after a while:
-
-```shell
-NAME        CLASS    HOSTS                 ADDRESS         PORTS   AGE
-my-server   <none>   kubevela.example.com  <ingress-ip>    80      162m
-```
-
-The host of the Ingress has been updated successfully!
-
-In this way, we can edit the files in the Git repo to update the cluster.
-
-## For developers
-
-Developers writes the application source code and push it to a Git repo (aka app repo). Once app repo updates, the CI will build the image and push it to the image registry. KubeVela watches the image registry, and updates the image in config repo. Finally, it will apply the config to the cluster.
-
-User can update the configuration in the cluster automatically when the code is updated.
-
-![alt](../../resources/dev-flow.jpg)
-
-### Setup App Code Repository
-
-Setup a Git repository with source code and Dockerfile.
-
-The app serves HTTP service and connects to a MySQL database. In the '/' path, it will display the version in the code; in the `/db` path, it will list the data in database.
-
-```go
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		_, _ = fmt.Fprintf(w, "Version: %s\n", VERSION)
-	})
-	http.HandleFunc("/db", func(w http.ResponseWriter, r *http.Request) {
-		rows, err := db.Query("select * from userinfo;")
-		if err != nil {
-			_, _ = fmt.Fprintf(w, "Error: %v\n", err)
-		}
-		for rows.Next() {
-			var username string
-			var desc string
-			err = rows.Scan(&username, &desc)
-			if err != nil {
-				_, _ = fmt.Fprintf(w, "Scan Error: %v\n", err)
-			}
-			_, _ = fmt.Fprintf(w, "User: %s \nDescription: %s\n\n", username, desc)
-		}
-	})
-
-	if err := http.ListenAndServe(":8088", nil); err != nil {
-		panic(err.Error())
-	}
-```
-
-In this tutorial, we will setup a CI pipeline using GitHub Actions to build the image and push it to a registry. The code and configuration files are from the [Example Repo](https://github.com/kubevela/samples/tree/master/09.GitOps_Demo/for-developers/app-code).
-
-## Create Git Secret for KubeVela committing to Config Repo
-
-After the new image is pushed to the image registry, KubeVela will be notified and update the `Application` file in the Git repository and cluster. Therefore, we need a secret with Git information for KubeVela to commit to the Git repository. Fill the following yaml files with your password and apply it to the cluster:
-
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: my-secret
-type: kubernetes.io/basic-auth
-stringData:
-  username: <your username>
-  password: <your password>
-```
-
-## Setup Config Repository
-
-The configuration repository is almost the same as the previous configuration, you only need to add the image registry config to the file. For more details, please refer to [Example Repository](https://github.com/kubevela/samples/tree/master/09.GitOps_Demo/for-developers/kubevela-config).
-
-Add the config of image registry in `clusters/apps.yaml`, it listens for image updates in the image registry:
-
-```yaml
-...
-  imageRepository:
-    image: <your image>
-    # if it's a private image registry, use `kubectl create secret docker-registry` to create the secret
-    # secretRef: imagesecret
-    filterTags:
-      # filter the image tag
-      pattern: '^master-[a-f0-9]+-(?P<ts>[0-9]+)'
-      extract: '$ts'
-    # use the policy to sort the latest image tag and update
-    policy:
-      numerical:
-        order: asc
-    # add more commit message
-    commitMessage: "Image: {{range .Updated.Images}}{{println .}}{{end}}"
-```
-
-Modify the image field in `apps/my-app.yaml` and add annotation `# {"$imagepolicy": "default:apps"}`.
-Notice that KubeVela will only be able to modify the image field if the annotation is added after the field. `default:apps` is `namespace:name` of the GitOps config file above.
-
-```yaml
-spec:
-  components:
-    - name: my-server
-      type: webservice
-      properties:
-        image: ghcr.io/fogdong/test-fog:master-cba5605f-1632714412 # {"$imagepolicy": "default:apps"}
-```
-
-After update the files in `clusters/` to cluster, we can then update the application by modifying the code.
-
-## Modify the code
-
-Change the `Version` to `0.1.6` and modify the data in database:
-
-```go
-const VERSION = "0.1.6"
-
-...
-
-func InsertInitData(db *sql.DB) {
-	stmt, err := db.Prepare(insertInitData)
-	if err != nil {
-		panic(err)
-	}
-	defer stmt.Close()
-
-	_, err = stmt.Exec("KubeVela2", "It's another test user")
-	if err != nil {
-		panic(err)
-	}
-}
-```
-
-Commit the change to the Git Repository, we can see that our CI pipelines has built the image and push it to the image registry.
-
-KubeVela will listen to the image registry and update the `apps/my-app.yaml` in Git Repository with the latest image tag.
-
-We can see that there is a commit form `kubevelabot`, the commit message is always with a prefix `Update image automatically.` You can use format like `{{range .Updated.Images}}{{println .}}{{end}}` to specify the image name in the `commitMessage` field.
-
-![alt](../../resources/gitops-commit.png)
+![alt](../../resources/gitops-image.png)
 
 > Note that if you want to put the code and config in the same repository, you need to filter out the commit from KubeVela in CI configuration like below to avoid the repeat build of pipeline.
 > 
@@ -356,36 +188,12 @@ We can see that there is a commit form `kubevelabot`, the commit message is alwa
 >    if: "!contains(github.event.head_commit.message, 'Update image automatically')"
 > ```
 
-Re-check the `Application` in cluster, we can see that the image of the `my-app` has been updated after a while.
+Re-check the Application in cluster, we can see that the image of the `my-app` has been updated after a while.
 
 > KubeVela polls the latest information from the code and image repo periodically (at an interval that can be customized):
-> * When the `Application` file in the Git repository is updated, KubeVela will update the `Application` in the cluster based on the latest configuration.
+> * When the Application file in the Git repository is updated, KubeVela will update the Application in the cluster based on the latest configuration.
 > * When a new tag is added to the image registry, KubeVela will filter out the latest tag based on your policy and update it to Git repository. When the files in the repository are updated, KubeVela repeats the first step and updates the files in the cluster, thus achieving automatic deployment.
 
-We can `curl` to `Ingress` to see the current version and data:
+## More
 
-```shell
-$ kubectl get ingress
-NAME        CLASS    HOSTS                 ADDRESS         PORTS   AGE
-my-server   <none>   kubevela.example.com  <ingress-ip>    80      162m
-
-$ curl -H "Host:kubevela.example.com" http://<ingress-ip>
-Version: 0.1.6
-
-$ curl -H "Host:kubevela.example.com" http://<ingress-ip>/db
-User: KubeVela
-Description: It's a test user
-
-User: KubeVela2
-Description: It's another test user
-```
-
-The `Version` has been updated successfully! Now we're done with everything from changing the code to automatically applying to the cluster.
-
-## Summary
-
-For platform admins/SREs, they update the config repo to operate the application and infrastructure. KubeVela will synchronize the config to the cluster, simplifying the deployment process.
-
-For end users/developers, they write the source code, push it to Git, and then re-deployment will happen. It will make CI to build the image. KubeVela will then update the image field and apply the deployment config.
-
-By integrating with GitOps, KubeVela helps users speed up deployment and simplify continuous deployment.
+You can also check out GitOps [blog](https://kubevela.io/blog/2021/10/10/kubevela-gitops) and [video practice](https://kubevela.io/videos/best-practice/gitops ) to better experience and use GitOps.
