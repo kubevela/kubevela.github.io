@@ -111,6 +111,7 @@ module.exports = {
             'how-to/dashboard/application/create-application',
             'end-user/version-control',
             'end-user/workflow/component-dependency-parameter',
+            'case-studies/initialize-env',
             'end-user/policies/apply-once',
             'end-user/policies/gc',
           ],
