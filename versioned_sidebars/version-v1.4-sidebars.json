@@ -171,6 +171,7 @@
         "platform-engineers/workflow/working-mechanism",
         {
           "UX Customization": [
+            "platform-engineers/openapi-v3-json-schema",
             "reference/ui-schema",
             "reference/topology-rule"
           ]
