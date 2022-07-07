@@ -1,5 +1,5 @@
 ---
-title:  Generating UI Forms
+title: Generating OpenAPI Schema
 ---
 
 For any capabilities installed via [Definition Objects](./definition-and-templates),
@@ -70,20 +70,8 @@ data:
 Specifically, this schema is generated based on `parameter` section in capability definition:
 
 * For CUE based definition: the `parameter` is a keyword in CUE template.
-* For Helm based definition: the `parameter` is generated from `values.yaml` in Helm chart.
+* For Terraform based definition: the `variable` is the keyword in TF template.
 
-## Render Form
+## Next
 
-You can render above schema into a form by [form-render](https://github.com/alibaba/form-render) or [React JSON Schema form](https://github.com/rjsf-team/react-jsonschema-form) and integrate with your dashboard easily.
-
-Below is a form rendered with `form-render`:
-
-![](../resources/json-schema-render-example.jpg)
-
-### Helm Based Components
-
-If a Helm based component definition is installed in KubeVela, it will also generate OpenAPI v3 JSON schema based on the [`values.schema.json`](https://helm.sh/docs/topics/charts/#schema-files) in the Helm chart, and store it in the `ConfigMap` following convention above. If `values.schema.json` is not provided by the chart author, KubeVela will automatically generate OpenAPI v3 JSON schema based on its `values.yaml` file automatically. 
-
-# What's Next
-
-It's by design that KubeVela supports multiple ways to define the schematic. Hence, we will explain `.schematic` field in detail with following guides.
+Refer to [UX of Definition](../reference/ui-schema)

@@ -37,7 +37,7 @@ template: {
 
 ![ui schema](../resources/ui-schema.jpg)
 
-它的工作流程如上图所示，通过定义的 CUE 生成 API Schema，然后再通过 API Schema 生成 默认的 UI Schema，如果存在自定义的 UI Schema，使用自定义的配置对默认配置进行更新。UI 基于最终的 UI Schema 渲染出前端页面。
+它的工作流程如上图所示，通过定义的 [CUE 生成 API Schema](../platform-engineers/openapi-v3-json-schema)，然后再通过 API Schema 生成 默认的 UI Schema，如果存在自定义的 UI Schema，使用自定义的配置对默认配置进行更新。UI 基于最终的 UI Schema 渲染出前端页面。
 
 UI Schema 包含的字段如下：
 
@@ -97,6 +97,7 @@ UI Schema 包含的字段如下：
 - [x] HelmChartVersionSelect: 从选择的 Chart 加载版本列表辅助用户选择
 - [x] HelmValues: 从用户选择的 Chart 和 版本加载可配置的参数，供用户进行 Values 配置。
 - [x] ImageInput: 镜像输入框，针对镜像进行有效性检测并响应其匹配的镜像仓库认证信息。
+- [x] PolicySelect: 加载当前应用的策略列表，供用户进行选择，支持多选。
 
 #### 组合表单
 
