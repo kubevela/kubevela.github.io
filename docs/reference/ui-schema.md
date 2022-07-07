@@ -37,7 +37,7 @@ In the UI we want the user to be able to set the number of replicas via a number
 
 ![ui schema](../resources/ui-schema.jpg)
 
-Its workflow is in the figure above. The API Schema is generated through the defined CUE, and then the default UI Schema is generated through the API Schema. If there is a custom UI Schema, the default configuration is patched with the custom configuration. The UI renders the front-end page based on the final UI Schema.
+Its workflow is in the figure above. The API Schema is [generated through the defined CUE](../platform-engineers/openapi-v3-json-schema), and then the default UI Schema is generated through the API Schema. If there is a custom UI Schema, the default configuration is patched with the custom configuration. The UI renders the front-end page based on the final UI Schema.
 
 The spec are as follows:
 
@@ -87,15 +87,18 @@ The spec are as follows:
 
 - [x] Ignore: There are subordinate fields, and the current field is not displayed.
 - [x] SecretSelect: Load the secret list to assist user selection
-- [x] SecretKeySelect: Load the secret key list by secret name of the user selected to assist user selection
+- [x] SecretKeySelect: Load the secret key list by the secret name of the user selected to assist user selection
 - [x] CPUNumber: CPU-style number input form.
 - [x] MemoryNumber: Memory-style number input form.
 - [x] DiskNumber: Disk-style number input form.
-- [x] K8sObjectsCode: The yaml input form of kubernetes resource.
+- [x] K8sObjectsCode: The YAML input form of Kubernetes resource.
 - [x] HelmRepoSelect: Load the helm repositories from integration configs to assist user selection.
 - [x] HelmChartSelect: Load the helm charts to assist user selection.
-- [x] HelmChartVersionSelect: Load the versions of selected helm chart to assist user selection.
-- [x] HelmValues: Load the default values of selected helm chart and version to assist user config the custom values.
+- [x] HelmChartVersionSelect: Load the versions of the selected helm chart to assist user selection.
+- [x] HelmValues: Load the default values of the selected helm chart and version to assist the user to configure the custom values.
+- [x] PolicySelect: Load the policies of the current application to assist user selection.
+- [x] ImageInput: Load and show the image info by users input image name.
+- [x] CertBase64: Support users upload or input the string, automatically base64 encoded. Suitable the fields such as the certificates and keys. (Added in 1.5+)
 
 #### Combination form
 

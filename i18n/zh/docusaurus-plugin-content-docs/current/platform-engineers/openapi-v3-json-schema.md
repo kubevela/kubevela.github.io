@@ -1,5 +1,5 @@
 ---
-title:  从定义中生成表单
+title:  Definition 生成 OpenAPI 描述
 ---
 
 对于任何通过[定义对象](./definition-and-templates) 安装的 capability, KubeVela 会自动根据 OpenAPI v3 JSON schema 的参数列表来生成 OpenAPI v3 JSON schema，并把它储存到一个和定义对象处于同一个 `namespace` 的 `ConfigMap` 中。
@@ -49,16 +49,8 @@ data:
 具体来说，该 schema 是根据capability 定义中的 `parameter` 部分生成的：
 
 * 对于基于 CUE 的定义：`parameter` CUE 模板中的关键词。
-* 对于基于 Helm 的定义：`parameter` 是从在 Helm Chart 中的 `values.yaml` 生成的。
+* 对于基于 Terraform 的定义：读取 TF 模块配置中的 `variable` 关键词。
 
-## 渲染表单
+## 下一步
 
-你可以通过 [form-render](https://github.com/alibaba/form-render) 或者 [React JSON Schema form](https://github.com/rjsf-team/react-jsonschema-form) 渲染上述 schema 到表单中并轻松地集成到你的仪表盘中。
-
-以下是使用 `form-render` 渲染的表单：
-
-![](../resources/json-schema-render-example.jpg)
-
-# 下一步
-
-根据设计，KubeVela 支持多种方法来定义 schematic。因此，我们将在接下来的文档来详细解释 `.schematic` 字段。
+参考 [UI 扩展](../reference/ui-schema)。
