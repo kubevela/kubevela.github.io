@@ -84,6 +84,8 @@ localcm 	helm	http://localhost:8080
 
 ### Push an addon to your registry
 
+> Note: you need to upgrade your CLI to v1.5.0+ for this feature.
+
 Prepare your addon. We will create a new one named `sample-addon` here:
 
 ```shell
