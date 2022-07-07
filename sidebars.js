@@ -60,10 +60,10 @@ module.exports = {
                 'end-user/components/cloud-services/provision-and-consume-database',
                 'end-user/components/cloud-services/provision-and-initiate-database',
                 'end-user/components/cloud-services/secure-your-database-connection',
-                'end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database'
+                'end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database',
               ],
             },
-            "end-user/components/cloud-services/provision-cloud-resources-by-crossplane",
+            'end-user/components/cloud-services/provision-cloud-resources-by-crossplane',
           ],
         },
         {
@@ -163,6 +163,7 @@ module.exports = {
         'platform-engineers/workflow/working-mechanism',
         {
           'UX Customization': [
+            'platform-engineers/openapi-v3-json-schema',
             'reference/ui-schema',
             'reference/topology-rule',
           ],
@@ -256,10 +257,10 @@ module.exports = {
             'reference/addons/rollout',
             'reference/addons/fluxcd',
             {
-              "Cloud Resources": [
+              'Cloud Resources': [
                 'reference/addons/terraform',
                 'reference/addons/crossplane',
-              ]
+              ],
             },
             'reference/addons/ai',
             'reference/addons/traefik',
