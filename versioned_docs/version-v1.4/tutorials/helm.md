@@ -203,6 +203,4 @@ Example below `values-production.yaml` will override `values.yaml` if they have 
           - "values-production.yaml"
 ```
 
-## Next
-
-* Learn [multi cluster delivery](./helm-multi-cluster) for helm chart.
+Now, you have learned the basic helm delivery. If you want to delivery Helm Chart into multi-clusters, you can refer to [this blog](https://kubevela.io/blog/2022/07/07/helm-multi-cluster).

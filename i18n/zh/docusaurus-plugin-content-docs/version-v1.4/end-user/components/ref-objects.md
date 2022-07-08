@@ -382,3 +382,130 @@ traits:
               image: busybox:1.34
               command: ["sleep", "864000"]
 ```
+
+## 引用对象的多集群差异化部署
+
+通过 `override` 策略与负责差异化配置的运维特征相结合，可以完成引用对象的多集群差异化部署。
+
+我们以一个 Kubernetes Deployment YAML 为例：
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo
+  name: demo
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+      - image: oamdev/testapp:v1
+        name: demo
+```
+
+通过指定 `topology` 策略来描述部署的集群。
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: Policy
+metadata:
+  name: cluster-beijing
+  namespace: demo
+type: topology
+properties:
+  clusters: ["<clusterid1>"]
+---
+apiVersion: core.oam.dev/v1alpha1
+kind: Policy
+metadata:
+  name: cluster-hangzhou
+  namespace: demo
+type: topology
+properties:
+  clusters: ["<clusterid2>"]
+```
+
+然后我们通过 `override` 策略来差异化配置运维特征，即给不同的环境配置不同的运维特征。通过这些运维特征去修改引用对象的参数。
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: Policy
+metadata:
+  name: override-replic-beijing
+  namespace: demo
+type: override
+properties:
+  components:
+  - name: "demo"
+    traits:
+    - type: scaler
+      properties:
+        replicas: 3
+---
+apiVersion: core.oam.dev/v1alpha1
+kind: Policy
+metadata:
+  name: override-replic-hangzhou
+  namespace: demo
+type: override
+properties:
+  components:
+  - name: "demo"
+    traits:
+    - type: scaler
+      properties:
+        replicas: 5
+```
+
+然后，定义一个使用差异化配置做多集群部署的工作流：
+
+```
+apiVersion: core.oam.dev/v1alpha1
+kind: Workflow
+metadata:
+  name: deploy-demo
+  namespace: demo
+steps:
+  - type: deploy
+    name: deploy-bejing
+    properties:
+      policies: ["override-replic-beijing", "cluster-beijing"]
+  - type: deploy
+    name: deploy-hangzhou
+    properties:
+      policies: ["override-replic-hangzhou", "cluster-hangzhou"]
+```
+
+最终，我们将这些对象组合起来，并且通过部署一个执行计划（Application） 来触发部署：
+
+```
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: demo
+  namespace: demo
+  annotations:
+    app.oam.dev/publishVersion: version1
+spec:
+  components:
+    - name: demo
+      type: ref-objects
+      properties:
+        objects:
+          - apiVersion: apps/v1
+            kind: Deployment
+            name: demo
+  workflow:
+    ref: deploy-demo
+```
+
+通过 KubeVela，你可以引用任意的 Kubernetes 资源，然后做多集群分发和差异化配置。

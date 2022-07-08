@@ -122,9 +122,8 @@ Services:
       ✅ scaler
 ```
 
+Now, you have finished learning the basic delivery for container images. Then, you could:
+
 * Refer to [webservice details](../end-user/components/references#webservice) to know usage of full fields.
 * Refer to [trait reference](../end-user/traits/references) to know which traits can be used for webservice.
-
-## Next
-
-* Learn [multi-cluster delivery](../case-studies/multi-cluster) for the container image.
+* Refer to [multi-cluster delivery](../case-studies/multi-cluster) to know how to deploy container image into hybrid environment and multi-clusters.

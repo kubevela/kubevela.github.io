@@ -14,6 +14,8 @@ hide_table_of_contents: false
 
 KubeVela v1.3 在之前的多集群功能上进行了迭代，本文将为你揭示，如何使用 KubeVela 进行多集群应用的部署与管理，实现以上的业务需求。
 
+<!--truncate-->
+
 ### 开始之前
 
 1. 准备一个 Kubernetes 集群作为 KubeVela 的控制平面。

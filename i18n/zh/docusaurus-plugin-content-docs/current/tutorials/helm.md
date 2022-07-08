@@ -122,6 +122,4 @@ Services:
 
 到此，你已经掌握了 Helm 应用的交付能力，快去交付更多的 Helm 应用吧。
 
-## 下一步
-
-- [学习直接部署 Kubernetes 原生资源](./k8s-object)
+如果你想掌握 Helm Chart 的多集群部署，可以参考[这篇博客](https://kubevela.net/zh/blog/2022/07/07/helm-multi-cluster)了解实践细节。
