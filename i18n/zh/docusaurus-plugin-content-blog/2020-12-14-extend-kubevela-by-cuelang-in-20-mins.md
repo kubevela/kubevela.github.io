@@ -18,6 +18,8 @@ hide_table_of_contents: false
 
 在正式开始本文档的教程之前，请确保你本地已经正确[安装了 KubeVela](https://kubevela.io/#/en/install) 及其依赖的 K8s 环境。
 
+<!--truncate-->
+
 # KubeVela 扩展的基本结构
 
 KubeVela 的基本架构如图所示：

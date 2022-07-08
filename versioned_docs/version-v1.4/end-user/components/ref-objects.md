@@ -1,8 +1,8 @@
 ---
-title: Multi Cluster Distribution
+title: Distribute Reference Objects
 ---
 
-> This section requires you to know the basics about how to deploy multi-cluster application with policy and workflow. You can refer to [Multi-cluster Delivery](../../case-studies/multi-cluster) for container images, they're working in the same way.
+> This section requires you to know the basics about how to deploy [multi-cluster application](../../case-studies/multi-cluster) with policy and workflow.
 
 You can reference and distribute existing Kubernetes objects with KubeVela in the following scenarios:
 
@@ -71,9 +71,11 @@ spec:
 
 > In some cases, you might want to restrict the scope for the application to access resources. You can set the `--ref-objects-available-scope` to `namespace` or `cluster` in KubeVela controller's bootstrap parameter, to retrict the application to be only able to refer to the resources inside the same namespace or the same cluster.
 
-## Working with Trait
+## Override Configuration for Reference Objects
 
-The *ref-objects* typed component can also be used together with traits. The implicit main workload is the first referenced object and trait patch will be applied on it. The following example demonstrate how to set the replica number for the referenced deployment while deploying it in hangzhou clusters.
+The [override policy](../../case-studies/multi-cluster#override-default-configurations-in-clusters) can be used to override properties defined in component and traits while the reference objects don't have those properties.
+
+If you want to override configuration for the *ref-objects* typed component, you can use traits. The implicit main workload is the first referenced object and trait patch will be applied on it. The following example demonstrate how to set the replica number for the referenced deployment while deploying it in hangzhou clusters.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -103,7 +105,7 @@ spec:
 
 There are several commonly used trait that could be used together with the ref-objects, particularly for Deployment.
 
-### Container Image
+### Override Container Image
 
 The `container-image` trait can be used to change the default image settings declared in the original deployment.
 
@@ -147,7 +149,7 @@ traits:
         image: nginx-1.20
 ```
 
-### Command
+### Override Container Command
 
 The `command` trait can be used to modify the original running command in deployment's pods.
 ```yaml
@@ -200,7 +202,7 @@ traits:
         args: ["-q"]
 ```
 
-### Environment Variable
+### Override Container Environment Variable
 
 With the trait `env`, you can easily manipulate the declared environment variables.
 
@@ -260,7 +262,7 @@ traits:
           key_for_nginx_second: value_second
 ```
 
-### Labels & Annotations
+### Override Labels & Annotations
 
 To add/update/remove labels or annotations for the workload (like Kubernetes Deployment), use the `labels` or `annotations` trait.
 
@@ -292,7 +294,7 @@ traits:
       to-delete-annotation-key: null
 ```
 
-### JSON Patch & JSON Merge Patch
+### Override by using JSON Patch & JSON Merge Patch
 
 Except for the above trait, a more powerful but more complex way to modify the original resources is to use the `json-patch` or `json-merge-patch` trait. They follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) and [RFC 7386](https://datatracker.ietf.org/doc/html/rfc7386) respectively. Usage examples are shown below.
 
@@ -351,3 +353,130 @@ traits:
               image: busybox:1.34
               command: ["sleep", "864000"]
 ```
+
+## Distribute Reference Objects with different configuration
+
+The general idea is to using `override` policy to override traits. Then you can distribute reference objects with different traits for different clusters.
+
+Assume we're distributing the following Deployment YAML to multi-clusters:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo
+  name: demo
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+      - image: oamdev/testapp:v1
+        name: demo
+```
+
+We can specify the following `topology` policies.
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: Policy
+metadata:
+  name: cluster-beijing
+  namespace: demo
+type: topology
+properties:
+  clusters: ["<clusterid1>"]
+---
+apiVersion: core.oam.dev/v1alpha1
+kind: Policy
+metadata:
+  name: cluster-hangzhou
+  namespace: demo
+type: topology
+properties:
+  clusters: ["<clusterid2>"]
+```
+
+Then we can use `override` policy to override with different traits for the reference objects.
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: Policy
+metadata:
+  name: override-replic-beijing
+  namespace: demo
+type: override
+properties:
+  components:
+  - name: "demo"
+    traits:
+    - type: scaler
+      properties:
+        replicas: 3
+---
+apiVersion: core.oam.dev/v1alpha1
+kind: Policy
+metadata:
+  name: override-replic-hangzhou
+  namespace: demo
+type: override
+properties:
+  components:
+  - name: "demo"
+    traits:
+    - type: scaler
+      properties:
+        replicas: 5
+```
+
+The workflow can be defined like:
+
+```
+apiVersion: core.oam.dev/v1alpha1
+kind: Workflow
+metadata:
+  name: deploy-demo
+  namespace: demo
+steps:
+  - type: deploy
+    name: deploy-bejing
+    properties:
+      policies: ["override-replic-beijing", "cluster-beijing"]
+  - type: deploy
+    name: deploy-hangzhou
+    properties:
+      policies: ["override-replic-hangzhou", "cluster-hangzhou"]
+```
+
+As a result, we can combine them and trigger the final deploy by the following application:
+
+```
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: demo
+  namespace: demo
+  annotations:
+    app.oam.dev/publishVersion: version1
+spec:
+  components:
+    - name: demo
+      type: ref-objects
+      properties:
+        objects:
+          - apiVersion: apps/v1
+            kind: Deployment
+            name: demo
+  workflow:
+    ref: deploy-demo
+```
+
+With the help of KubeVela, you can reference and distribute any Kubernetes resources to multi clusters.

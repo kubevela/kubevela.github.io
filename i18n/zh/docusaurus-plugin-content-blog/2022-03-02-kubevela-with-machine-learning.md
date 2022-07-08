@@ -20,6 +20,8 @@ hide_table_of_contents: false
 
 本文主要介绍如何使用 KubeVela 的 AI 插件，来帮助工程师更便捷地完成模型训练及模型服务。
 
+<!--truncate-->
+
 ## KubeVela AI 插件
 
 KubeVela AI 插件分为模型训练和模型服务两个插件，模型训练插件基于 KubeFlow 的 training-operator，能够支持如 TensorFlow、PyTorch、MXNet 等不同框架的分布式模型训练。而模型服务插件基于 Seldon Core，可以便捷地使用模型启动模型服务，同时也支持流量分发，A/B 测试等高级功能。

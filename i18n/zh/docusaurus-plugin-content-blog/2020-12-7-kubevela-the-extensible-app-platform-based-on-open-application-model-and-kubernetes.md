@@ -20,6 +20,8 @@ hide_table_of_contents: false
 
 KubeVela Github 地址：[https://github.com/kubevela/kubevela/](https://github.com/kubevela/kubevela/)
 
+<!--truncate-->
+
 ## 什么是 KubeVela ？
 
 一言以蔽之，**KubeVela 是一个简单易用且高度可扩展的应用管理平台与核心引擎**。KubeVela 是基于 Kubernetes 与 OAM 技术构建的。

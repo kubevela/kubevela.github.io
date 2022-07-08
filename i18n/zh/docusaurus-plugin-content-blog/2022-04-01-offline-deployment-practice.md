@@ -14,6 +14,8 @@ hide_table_of_contents: false
 
 本文将以 KubeVela v1.2.5 版本为例，介绍招商银行 KubeVela 的离线部署实践，来帮助其他用户在离线环境中更便捷的完成 KubeVela 的部署。
 
+<!--truncate-->
+
 ## KubeVela 离线部署方案
 
 我们将 KubeVela 的离线部署主要分为三部分，分别是 Vela Cli、Vela Core 以及 Addon 的离线部署，每一部分主要涉及到相关 docker 镜像的加载及 Helm 的 repackage，通过该离线部署方案，能够大大加快 KubeVela 在离线环境的部署。

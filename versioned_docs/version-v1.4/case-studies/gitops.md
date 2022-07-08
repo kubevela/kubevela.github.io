@@ -1,5 +1,5 @@
 ---
-title:  Overview
+title:  Overview of GitOps
 ---
 
 > This section will introduce how to use KubeVela in GitOps area and why.
