@@ -73,13 +73,17 @@ Docusaurus website is running at: http://localhost:3000/zh/
 翻译合格的文章将会 merge 到 [kubevela.io](https://github.com/kubevela/kubevela.io) 的 main 分支进行发布。
 
 
-### 翻译要求
+## 翻译注意事项
 
 - 数字和英文两边是中文要加空格。
-- KubeVela 统一写法。K 和 V 大写。
-- 翻译完请先阅读一遍，不要出现遗漏段落，保证文章通顺、符合中文阅读习惯。不追求严格一致，可以意译。review 的时候也会检验。
+- 品牌名称和概念一般不翻译，但要统一写法，注意大小写。
+  * 品牌名称如 KubeVela 这个品牌名称的 K 和 V 大写。把握不准某个项目名称的写法可以参考其官网。
+  * 概念如 Component、Workload、Trait 这些 OAM/KubeVela 里面定义的专属概念不要翻译，我们也要加强这些词汇的认知。可以在一篇新文章最开始出现的时候用括号加上中文翻译。
+- 翻译完请先阅读一遍，不要出现遗漏段落，保证文章通顺、符合中文阅读习惯。不追求严格一致，可以意译。
 - 你和您不要混用，统一使用用 **“你”**。
-- 不会翻译的词汇可以不翻译，可以在 PR 中说明，review 的时候会查看。
-- Component、Workload、Trait 这些 OAM/KubeVela 里面定义的专属概念不要翻译，我们也要加强这些词汇的认知。可以在一篇新文章最开始出现的时候用括号加上中文翻译。
+- 不会翻译的词汇可以不翻译，可以在 PR 中说明，review 的时候会查看/修正。
 - 注意中英文标点符号。
+- 注意链接，中文的文档里对应的链接也用中文链接。
+  * 一般国外访问 https://kubevela.io ， 国内访问 https://kubevela.net 更快。
+  * 中文的文档有 `/zh` 后缀，如 `https://kubevela.net/zh/blog/2022/06/27/terraform-integrate-with-vela`。
 - `PR` 命名规范 `Translate <翻译文件相对路径>`，如 `Translate i18n/zh/docusaurus-plugin-content-docs/current/introduction.md`。

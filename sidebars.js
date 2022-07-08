@@ -29,7 +29,6 @@ module.exports = {
           collapsed: true,
           items: [
             'tutorials/webservice',
-            'case-studies/multi-cluster',
             'tutorials/access-application',
             'end-user/traits/rollout',
             'end-user/traits/sidecar',
@@ -41,7 +40,6 @@ module.exports = {
           collapsed: true,
           items: [
             'tutorials/helm',
-            'tutorials/helm-multi-cluster',
             'tutorials/helm-rollout',
           ],
         },
@@ -72,8 +70,16 @@ module.exports = {
           collapsed: true,
           items: [
             'tutorials/k8s-object',
-            'end-user/components/ref-objects',
             'tutorials/k8s-object-rollout',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Multi Cluster Delivery',
+          collapsed: true,
+          items: [
+            'case-studies/multi-cluster',
+            'end-user/components/ref-objects',
           ],
         },
         {

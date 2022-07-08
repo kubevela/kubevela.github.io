@@ -318,5 +318,8 @@
     },
     "sidebar.docs.category.Declarative Workflow": {
         "message": "声明式工作流"
+    },
+    "sidebar.docs.category.Multi Cluster Delivery": {
+        "message": "多集群交付"
     }
 }
