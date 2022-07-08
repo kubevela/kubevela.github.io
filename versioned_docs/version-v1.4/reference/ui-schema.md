@@ -98,6 +98,7 @@ The spec are as follows:
 - [x] HelmValues: Load the default values of the selected helm chart and version to assist the user to configure the custom values.
 - [x] PolicySelect: Load the policies of the current application to assist user selection.
 - [x] ImageInput: Load and show the image info by users input image name.
+- [x] CertBase64: Support users upload or input the string, automatically base64 encoded. Suitable the fields such as the certificates and keys. (Added in 1.5+)
 
 #### Combination form
 

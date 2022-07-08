@@ -118,6 +118,8 @@ Services:
       ✅ scaler
 ```
 
-## 下一步
+至此，你已经了解了最基本的容器镜像部署，接下来你可以：
 
-[学习基于 Helm Chart 部署应用](./helm)
+* 了解 [组件参考手册](../end-user/components/references#webservice)查看更多字段说明。
+* 了解 [运维特征参考手册](../end-user/traits/references)查看适用的运维特征功能。
+* 了解 [多集群交付](../case-studies/multi-cluster)，学习如何将容器镜像部署到多集群、多环境中。
