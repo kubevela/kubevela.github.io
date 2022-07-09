@@ -197,9 +197,6 @@ kind: TraitDefinition
 metadata:
   name: patch-annotation
 spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: true
   schematic:
     cue:
       template: |
@@ -262,6 +259,39 @@ spec:
           path: /
           pathType: ImplementationSpecific
 ```
+
+Note: You need to put this kind of trait at the last place to patch for other traits.
+
+You can even write a `for-loop` in patch trait, below is an example that can patch for all resources with specific annotation.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: TraitDefinition
+metadata:
+  name: patch-for-argo
+spec:
+  schematic:
+    cue:
+      template: |
+        patch: {
+            metadata: annotations: {
+                "argocd.argoproj.io/compare-options": "IgnoreExtraneous"
+                "argocd.argoproj.io/sync-options": "Prune=false"
+            }
+        }
+        patchOutputs: {
+          for k, v in context.outputs {
+            "\(k)": {
+              metadata: annotations: {
+                "argocd.argoproj.io/compare-options": "IgnoreExtraneous"
+                "argocd.argoproj.io/sync-options":    "Prune=false"
+              }
+            }
+          }
+        }
+```
+
+This example solved a [real case](https://github.com/kubevela/kubevela/issues/4342).
 
 ## Patch in Workflow Step
 

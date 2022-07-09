@@ -189,9 +189,6 @@ kind: TraitDefinition
 metadata:
   name: patch-annotation
 spec:
-  appliesToWorkloads:
-    - deployments.apps
-  podDisruptive: true
   schematic:
     cue:
       template: |
@@ -254,6 +251,39 @@ spec:
           path: /
           pathType: ImplementationSpecific
 ```
+
+注意：为了能够 Patch 其他 trait 生成的资源，你要把这类 `patchOutputs` 的 trait 放到其他 trait 后面。
+
+你甚至可以写一个 `for` 循环来 patch 所有的资源，例子如下：
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: TraitDefinition
+metadata:
+  name: patch-for-argo
+spec:
+  schematic:
+    cue:
+      template: |
+        patch: {
+            metadata: annotations: {
+                "argocd.argoproj.io/compare-options": "IgnoreExtraneous"
+                "argocd.argoproj.io/sync-options": "Prune=false"
+            }
+        }
+        patchOutputs: {
+          for k, v in context.outputs {
+            "\(k)": {
+              metadata: annotations: {
+                "argocd.argoproj.io/compare-options": "IgnoreExtraneous"
+                "argocd.argoproj.io/sync-options":    "Prune=false"
+              }
+            }
+          }
+        }
+```
+
+这个例子对应了一个[真实的场景](https://github.com/kubevela/kubevela/issues/4342).
 
 ## 在工作流中打补丁
 

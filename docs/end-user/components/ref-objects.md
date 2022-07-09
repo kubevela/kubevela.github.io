@@ -439,7 +439,7 @@ properties:
 
 The workflow can be defined like:
 
-```
+```yaml
 apiVersion: core.oam.dev/v1alpha1
 kind: Workflow
 metadata:
@@ -458,7 +458,7 @@ steps:
 
 As a result, we can combine them and trigger the final deploy by the following application:
 
-```
+```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
