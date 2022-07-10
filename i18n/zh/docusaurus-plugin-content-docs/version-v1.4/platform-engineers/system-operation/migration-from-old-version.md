@@ -2,11 +2,11 @@
 title: 从旧版本进行迁移
 ---
 
-本文档旨在提供在不会干扰正在运行的业务的情况下从旧版本到新版本的迁移指南。但是考虑到场景彼此不同，我们强烈建议您在实际迁移之前使用模拟环境对迁移进行测试。
+本文档旨在提供在不会干扰正在运行的业务的情况下从旧版本到新版本的迁移指南。但是考虑到场景彼此不同，我们强烈建议你在实际迁移之前使用模拟环境对迁移进行测试。
 
 ## 从 v1.3.x 版本 到 v1.4.x 版本
 
-> ⚠️ 注意: 在从 v1.2.x 或更早版本升级到 v1.4.x 之前，您必须先升级到 v1.3.x。
+> ⚠️ 注意: 在从 v1.2.x 或更早版本升级到 v1.4.x 之前，你必须先升级到 v1.3.x。
 
 1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
 
@@ -38,11 +38,11 @@ curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.2
 vela addon upgrade velaux --version 1.4.2
 ```
 
-请注意，如果您使用的是 terraform 插件，您应该将 `terraform` 插件升级到 `1.0.6+` 版本以及 vela-core 升级，您可以按照以下步骤进行操作：
+请注意，如果你使用的是 terraform 插件，你应该将 `terraform` 插件升级到 `1.0.6+` 版本以及 vela-core 升级，你可以按照以下步骤进行操作：
 
 1. 升级 vela-core 到 v1.3.4+，所有现有的 Terraform 类型的应用程序在此过程中不会受到影响。 
 2. 升级 `terrorform` 插件，否则新配置的 Terraform 类型的应用程序不会成功。 
-   - 2.1 手动升级 CRD 配置 [https:github.comoam-devterraform-controllerblobv0.4.3chartcrdsterraform.core.oam.dev_configurations.yaml]()。 
+   - 2.1 手动升级 CRD 配置 https://github.com/oam-dev/terraform-controller/blob/v0.4.3/chart/crds/terraform.core.oam.dev_configurations.yaml 
    - 2.2 将附加组件 `terraform` 升级到版本 `1.0.6+`。
 
 ## 从 v1.2.x 版本 到 v1.3.x 版本
@@ -77,17 +77,17 @@ curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.3.6
 vela addon upgrade velaux --version 1.3.6
 ```
 
-请注意，如果您使用的是 terraform 插件，您应该将 `terraform` 插件升级到 `1.0.6+` 版本以及 vela-core 升级，您可以按照以下步骤操作： 
+请注意，如果你使用的是 terraform 插件，你应该将 `terraform` 插件升级到 `1.0.6+` 版本以及 vela-core 升级，你可以按照以下步骤操作： 
 1. 将 vela-core 升级到 v1.3.4+，所有现有的 Terraform 类型应用程序将不会在此过程中受到影响。 
 2. 升级 `terrorform` 插件，否则新配置的 Terraform 类型的应用程序不会成功。 
-   - 2.1 手动升级 CRD 配置 [https:github.comoam-devterraform-controllerblobv0.4.3chartcrdsterraform.core.oam.dev_configurations.yaml]()。 
+   - 2.1 手动升级 CRD 配置 https://github.com/oam-dev/terraform-controller/blob/v0.4.3/chart/crds/terraform.core.oam.dev_configurations.yaml
    - 2.2 将附加组件 `terraform` 升级到版本 `1.0.6+`。
 
 ## 从 v1.1.x 版本到 v1.2.x 版本
 
 1. 检查服务是否正常运行
 
-迁移前请确保您的所有服务都正常运行。
+迁移前请确保你的所有服务都正常运行。
 
 ```
 $ kubectl get all -n vela-system
@@ -156,10 +156,10 @@ vela addon enable <addon name>
 
 5. 更新 Custom Definition 
 
-检查您的 Custom Definition 是否在新版本中正常工作，如果有任何问题，请尝试升级它们。如果您没有定义任何内容，则升级过程已经完成！
+检查你的 Custom Definition 是否在新版本中正常工作，如果有任何问题，请尝试升级它们。如果你没有定义任何内容，则升级过程已经完成！
 
 6. 迁移的常见问题
 - Q：从1.1.x 版本升级到 1.2.x 版本后，申请状态变成`workflowsuspending`，使用`vela workflow resume`不起作用。 
   - A：关于资源跟踪器机制的迁移。一般可以删除已有的 resourcetracker，之后可以使用`vela workflow resume`命令。 
 - Q：为什么我的应用在升级后变成了 suspend 状态？ 
-  - A：如果您的应用程序在升级后暂停，请不要担心，这不会影响正在运行的业务应用。应用会在下次部署后变为正常状态。您还可以手动更改应用的任何注解来解决这个问题。
+  - A：如果你的应用程序在升级后暂停，请不要担心，这不会影响正在运行的业务应用。应用会在下次部署后变为正常状态。你还可以手动更改应用的任何注解来解决这个问题。
