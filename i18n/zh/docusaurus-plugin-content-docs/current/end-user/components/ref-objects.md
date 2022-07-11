@@ -468,7 +468,7 @@ properties:
 
 然后，定义一个使用差异化配置做多集群部署的工作流：
 
-```
+```yaml
 apiVersion: core.oam.dev/v1alpha1
 kind: Workflow
 metadata:
@@ -487,7 +487,7 @@ steps:
 
 最终，我们将这些对象组合起来，并且通过部署一个执行计划（Application） 来触发部署：
 
-```
+```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:

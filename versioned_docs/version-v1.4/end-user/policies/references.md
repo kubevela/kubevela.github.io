@@ -10,6 +10,8 @@ This documentation will walk through the built-in policies.
 
 Allow configuration drift for applied resources.
 
+It's generally used in [one time delivery only without continuous management](../policies/apply-once) scenario.
+
 **Parameter**
 
 |   Name    |  Type  |           Description            |
@@ -44,7 +46,9 @@ spec:
 
 **Overview**
 
-Configure the garbage collection behaviour for the application.
+Configure the garbage collection behavior for the application.
+
+It's used in [garbage collection](../policies/gc) scenario. It can be used to configure the collection policy, e.g. don't delete the legacy resources when update.
 
 **Parameter**
 
@@ -126,6 +130,8 @@ spec:
 **Overview**
 
 Describe the configuration to override when deploying resources.
+
+Override policy need to use along with the deploy workflow step.
 
 **Parameter**
 
