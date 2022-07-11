@@ -5,10 +5,11 @@ title: VelaUX
 ## Install
 
 ```shell script
-vela addon enable velaux --version=v1.4.5
+vela addon enable velaux --version=v1.4.6
 ```
 
 expected output:
+
 ```
 Addon: velaux enabled Successfully.
 ```
@@ -36,13 +37,13 @@ By default the service type is ClusterIP for security.
 If you want to expose your VelaUX dashboard for convenience, you can specify the service type.
 
 - `LoadBalancer` type requires your cluster has cloud LoadBalancer available.
-    ```shell script
-    vela addon enable velaux serviceType=LoadBalancer
-    ```
+  ```shell script
+  vela addon enable velaux serviceType=LoadBalancer
+  ```
 - `NodePort` type requires you can access the Kubernetes Node IP/Port.
-    ```shell script
-    vela addon enable velaux serviceType=NodePort
-    ```
+  ```shell script
+  vela addon enable velaux serviceType=NodePort
+  ```
 
 After the service type specified to `LoadBalancer` or `NodePort`, you can obtain the access address through `vela status`:
 
@@ -51,6 +52,7 @@ vela status addon-velaux -n vela-system --endpoint
 ```
 
 The expected output:
+
 ```
 +----------------------------+----------------------+
 |  REF(KIND/NAMESPACE/NAME)  |       ENDPOINT       |
@@ -68,6 +70,7 @@ vela addon enable velaux domain=example.doamin.com
 ```
 
 The expected output:
+
 ```
 I0112 15:23:40.428364   34884 apply.go:106] "patching object" name="addon-velaux" resource="core.oam.dev/v1beta1, Kind=Application"
 I0112 15:23:40.676894   34884 apply.go:106] "patching object" name="addon-secret-velaux" resource="/v1, Kind=Secret"
@@ -96,7 +99,7 @@ vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_
 
 ## Specify the addon image
 
-By default the image repo is docker hub, you can specify the image repo by the `repo` parameter: 
+By default the image repo is docker hub, you can specify the image repo by the `repo` parameter:
 
 ```
 vela addon enable velaux repo=acr.kubevela.net
