@@ -145,7 +145,7 @@ Handling connection for 8080
 
 The following figure displays the architecture of a multi-cluster application. All the configurations (including Application, Policy and Workflow) lives in the hub cluster. Only the resources (like deployment or service) will be dispatched in to managed clusters.
 
-The policies mainly takes charge of describing the destination of the resources and how they should be overrided. The real executor of the resource dispatch is the workflow. In each `deploy` workflow step, it will refer to some policies, override the default configuration, and dispatch the resources.
+The policies mainly takes charge of describing the destination of the resources and how they should be overridden. The real executor of the resource dispatch is the workflow. In each `deploy` workflow step, it will refer to some policies, override the default configuration, and dispatch the resources.
 
 ![multi-cluster-arch](../resources/multi-cluster-arch.jpg)
 

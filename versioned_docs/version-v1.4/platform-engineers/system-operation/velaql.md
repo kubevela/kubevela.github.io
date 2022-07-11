@@ -48,8 +48,10 @@ There're some [other `op` CUE operations](#built-in-velaql-operations) you can u
 
 ### Create VelaQL View for Query
 
-You can apply the view to server for re-use, you need to wrap it in ConfigMap.
-We're going to provide [a convenient command](https://github.com/kubevela/kubevela/issues/4268) for this.
+You can apply the view to server for re-use, either use `vela ql apply` command (recommended, requires CLI v1.5 or later) or wrap it in ConfigMap.
+
+<details>
+<summary>Instructions on using ConfigMaps</summary>
 
 ```yaml
 apiVersion: v1
@@ -93,7 +95,49 @@ Apply the yaml into Kubernetes:
 vela kube apply -f query-configmap.yaml
 ```
 
-> `vela kube apply` is the same with `kubectl apply` in case you don't `kubectl` command line.
+> `vela kube apply` is the same with `kubectl apply` in case you don't use `kubectl` command line.
+
+</details>
+
+
+Create a file named `my-view.cue` with:
+
+```yaml
+import (
+  "vela/ql"
+)
+
+parameter: {
+  name:      string
+  namespace: string
+  key:       string
+}
+
+configmap: ql.#Read & {
+  value: {
+    kind:       "ConfigMap"
+    apiVersion: "v1"
+    metadata: {
+      name:      parameter.name
+      namespace: parameter.namespace
+    }
+  }
+}
+status: configmap.value.data["\(parameter.key)"]
+```
+
+There're two keywords:
+
+* The `parameter`, indicates which parameters can use in the query.
+* The `status`, indicates which fields of resources will be exported.
+
+Create the view in Kubernetes for later use:
+
+```shell
+$ vela ql apply -f my-view.cue
+```
+
+A view named `my-view` will be created. You can use it later.
 
 ### Query from VelaQL View
 
