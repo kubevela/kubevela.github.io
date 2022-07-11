@@ -44,7 +44,7 @@ spec:
 
 **Overview**
 
-Configure the garbage collection behaviour for the application.
+Configure the garbage collection behavior for the application.
 
 **Parameter**
 
