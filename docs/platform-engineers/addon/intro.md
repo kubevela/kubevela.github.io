@@ -13,9 +13,9 @@ The picture below shows what KubeVela does when an addon is enabled. There are m
 
 To build an addon, you should follow some basic rules as follows.
 
-You need to create an addon directory to place addon resource files. We're building a [CLI command](https://github.com/kubevela/kubevela/pull/4162) to create the scaffold, it will be released in v1.5.
+You need to create an addon directory to place addon resource files. Won't bother to create? `vela addon init` command will create a basic structure for you (vela CLI v1.5 or later). Please refer to `vela addon init -h` for details. For quick starts, we will just use `vela addon init your-addon-name` now.
 
-Typically the directory hierarchy looks like below:
+Typically, the directory hierarchy looks like below:
 
 ```shell
 ├── resources/
