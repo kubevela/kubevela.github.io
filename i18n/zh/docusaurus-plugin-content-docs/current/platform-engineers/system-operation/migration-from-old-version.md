@@ -1,14 +1,14 @@
 ---
-title: Migrate from Old Versions
+title: 从旧版本进行迁移
 ---
 
-This doc aims to provide a migration guide from old versions to the new ones without disturb the running business. However scenarios are different from each other, we strongly recommend you to test the migration with a simulation environment before real migration for your production.
+本文档旨在提供在不会干扰正在运行的业务的情况下从旧版本到新版本的迁移指南。但是考虑到场景彼此不同，我们强烈建议你在实际迁移之前使用模拟环境对迁移进行测试。
 
-## From v1.3.x to v1.4.x
+## 从 v1.3.x 版本 到 v1.4.x 版本
 
-> ⚠️ Note: You must upgrade to v1.3.x first before you upgrade to v1.4.x from version v1.2.x or older.
+> ⚠️ 注意: 在从 v1.2.x 或更早版本升级到 v1.4.x 之前，你必须先升级到 v1.3.x。
 
-1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
+1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
@@ -18,7 +18,7 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/
 kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
 ```
 
-2. Upgrade your kubevela chart
+2. 升级 kubevela chart
 
 ```
 helm repo add kubevela https://charts.kubevela.net/core
@@ -26,28 +26,28 @@ helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.2 --wait
 ```
 
-3. Download and upgrade to the corresponding CLI
+3. 下载并升级对应的CLI
+
 ```
 curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.2
 ```
 
-4. Upgrade VelaUX or other addon
+4. 升级 VelaUX 或其他插件
 
 ```
 vela addon upgrade velaux --version 1.4.2
 ```
 
-Please note if you're using terraform addon, you should upgrade the `terraform` addon to version `1.0.6+` along with the vela-core upgrade, you can follow the following steps:
+请注意，如果你使用的是 terraform 插件，你应该将 `terraform` 插件升级到 `1.0.6+` 版本以及 vela-core 升级，你可以按照以下步骤进行操作：
 
-1. upgrading vela-core to v1.3.4+, all existing Terraform typed Applications won't be affected in this process.
-2. upgrade the `terrorform` addon, or the newly provisioned Terraform typed Applications won't become successful. 
-   - 2.1 Manually upgrade CRD Configuration https://github.com/oam-dev/terraform-controller/blob/v0.4.3/chart/crds/terraform.core.oam.dev_configurations.yaml.
-   - 2.2 Upgrade add-on `terraform` to version `1.0.6+`.
+1. 升级 vela-core 到 v1.3.4+，所有现有的 Terraform 类型的应用程序在此过程中不会受到影响。 
+2. 升级 `terrorform` 插件，否则新配置的 Terraform 类型的应用程序不会成功。 
+   - 2.1 手动升级 CRD 配置 https://github.com/oam-dev/terraform-controller/blob/v0.4.3/chart/crds/terraform.core.oam.dev_configurations.yaml 
+   - 2.2 将附加组件 `terraform` 升级到版本 `1.0.6+`。
 
+## 从 v1.2.x 版本 到 v1.3.x 版本
 
-## From v1.2.x to v1.3.x
-
-1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
+1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.3/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
@@ -57,7 +57,7 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.3/
 kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.3/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
 ```
 
-2. Upgrade your kubevela chart
+2. 升级 kubevela chart
 
 ```
 helm repo add kubevela https://charts.kubevela.net/core
@@ -65,29 +65,29 @@ helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.3.6 --wait
 ```
 
-3. Download and upgrade to the corresponding CLI
+3. 下载并升级对应的CLI
+
 ```
 curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.3.6
 ```
 
-4. Upgrade VelaUX or other addon
+4. 升级 VelaUX 或其他插件
 
 ```
 vela addon upgrade velaux --version 1.3.6
 ```
 
-Please note if you're using terraform addon, you should upgrade the `terraform` addon to version `1.0.6+` along with the vela-core upgrade, you can follow the following steps:
+请注意，如果你使用的是 terraform 插件，你应该将 `terraform` 插件升级到 `1.0.6+` 版本以及 vela-core 升级，你可以按照以下步骤操作： 
+1. 将 vela-core 升级到 v1.3.4+，所有现有的 Terraform 类型应用程序将不会在此过程中受到影响。 
+2. 升级 `terrorform` 插件，否则新配置的 Terraform 类型的应用程序不会成功。 
+   - 2.1 手动升级 CRD 配置 https://github.com/oam-dev/terraform-controller/blob/v0.4.3/chart/crds/terraform.core.oam.dev_configurations.yaml
+   - 2.2 将附加组件 `terraform` 升级到版本 `1.0.6+`。
 
-1. upgrading vela-core to v1.3.4+, all existing Terraform typed Applications won't be affected in this process.
-2. upgrade the `terrorform` addon, or the newly provisioned Terraform typed Applications won't become successful. 
-   - 2.1 Manually upgrade CRD Configuration https://github.com/oam-dev/terraform-controller/blob/v0.4.3/chart/crds/terraform.core.oam.dev_configurations.yaml.
-   - 2.2 Upgrade add-on `terraform` to version `1.0.6+`.
+## 从 v1.1.x 版本到 v1.2.x 版本
 
-## From v1.1.x to v1.2.x
+1. 检查服务是否正常运行
 
-1. Check the service running normally
-
-Make sure all your services are running normally before migration.
+迁移前请确保你的所有服务都正常运行。
 
 ```
 $ kubectl get all -n vela-system
@@ -104,12 +104,11 @@ NAME                                       READY   UP-TO-DATE   AVAILABLE   AGE
 deployment.apps/kubevela-cluster-gateway   1/1     1            1           16d
 deployment.apps/kubevela-vela-core         1/1     1            1           284d
 ```
+此外，还需要检查所有 KubeVela 应用的状态，包括正常运行的插件。
 
-In addition, it's also necessary to check the status of all the KubeVela applications including addons running normally.
+2. 将 CRD 更新到 v1.2.x 版本
 
-2. update the CRD to v1.2.x
-
-Update the CRD in the cluster to v1.2.x, the CRD list is as follows, some of them can be omitted if you don't have them before:
+将集群中的 CRD 更新到 v1.2.x 版本，CRD 列表如下，如果在之前没有的部分则可以省略：
 
 ```shell
 kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
@@ -128,23 +127,23 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/
 kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/standard.oam.dev_rollouts.yaml
 ```
 
-3. Execute the upgrade command
+3. 执行升级命令
 
-This step will upgrade the system to the new version:
+升级系统到新版本：
 
 ``` shell
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.2.6 --wait
 ```
 
-Upgrade the CLI to v1.2.x corresponding the the core version:
+将 CLI 升级到与核心版本对应的 v1.2.x 版本：
 
 ```
 curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.6
 ```
 
-4. Enable addon
+4. 启用插件
 
-After the upgrade succeed, users can use the following methods to enable addons if they need to be enabled:
+升级成功后，如果需要启用插件，用户可以通过以下方式启用插件：
 
 ```shell
 # View the list of addons
@@ -153,16 +152,14 @@ vela addon list
 vela addon enable <addon name>
 ```
 
-⚠️Note: This step is not required if the addon is already enabled and used in the pre-upgrade version
+⚠️注意: 如果插件在升级前的版本中已经启用并且在使用中，则不需要此步骤
 
-5. Update Custom Definition
+5. 更新 Custom Definition 
 
-Check if your custom definition works in the new version, try to upgrade them if there're any issues.
-If you haven't defined any, the normal upgrade process is completed!
+检查你的 Custom Definition 是否在新版本中正常工作，如果有任何问题，请尝试升级它们。如果你没有定义任何内容，则升级过程已经完成！
 
-6. Common Questions for this migration
-
-- Q: After upgrading from 1.1.x to 1.2.x, the application status becomes `workflowsuspending`, and using `vela workflow resume` doesn't work.
-  - A: There're migration about the resource tracker mechanism. Generally, you can delete the existing resourcetracker, after that you can use `vela workflow resume` command.
-- Q: Why the status of my application become suspend after the upgrade?
-  - A: Don't worry if your application become suspend after the upgrade, this won't affect the running business application. It will become normal after you deploy the application next time. You can also manually change any annotation of the application to resolve it.
+6. 迁移的常见问题
+- Q：从1.1.x 版本升级到 1.2.x 版本后，申请状态变成`workflowsuspending`，使用`vela workflow resume`不起作用。 
+  - A：关于资源跟踪器机制的迁移。一般可以删除已有的 resourcetracker，之后可以使用`vela workflow resume`命令。 
+- Q：为什么我的应用在升级后变成了 suspend 状态？ 
+  - A：如果你的应用程序在升级后暂停，请不要担心，这不会影响正在运行的业务应用。应用会在下次部署后变为正常状态。你还可以手动更改应用的任何注解来解决这个问题。
