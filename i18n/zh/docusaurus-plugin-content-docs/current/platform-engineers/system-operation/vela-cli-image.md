@@ -1,5 +1,5 @@
 ---
-title: 用容器运行 vela 命令
+title: 用容器镜像运行 vela 命令行
 ---
 
 当前主题，用于描述如何利用 Docker 容器运行、配置 Vela 命令行工具，以及对其进行版本控制。有关更多使用 Docker 的信息，请参考 [Docker 官方文档](https://docs.docker.com/) 。
