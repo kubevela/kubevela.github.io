@@ -6,18 +6,18 @@ title: 金丝雀发布
 
 1. 请确保你已经阅读过关于 [helm chart的基本部署](./helm) 的文档。
 
-2. 确认你已经开启了 [`kruise-rollout`](../reference/addons/kruise-rollout) 插件，我们的金丝雀发布依赖于 [rollouts from OpenKruise](https://github.com/openkruise/rollouts)。
+2. 确认你已经开启了 [`kruise-rollout`](../reference/addons/kruise-rollout.md) 插件，我们的金丝雀发布依赖于 [rollouts from OpenKruise](https://github.com/openkruise/rollouts)。
   ```shell
   $ vela addon enable kruise-rollout
   Addon: kruise-rollout enabled Successfully.
   ```
 
 3. 请确保在你的集群中已经安装了一种 [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/) 。
-   如果没有安装Ingress，你也可以通过如下命令启用 [ingress-nginx](../reference/addons/nginx-ingress-controller) or [traefik](../reference/addons/traefik) 插件：
+   如果没有安装Ingress，你也可以通过如下命令启用 [ingress-nginx](../reference/addons/nginx-ingress-controller.md) or [traefik](../reference/addons/traefik.md) 插件：
   ```shell
   vela addon enable ingress-nginx
   ```
-  请参阅 [插件文档](../reference/addons/nginx-ingress-controller) 获取网关地址。
+  请参阅 [插件文档](../reference/addons/nginx-ingress-controller.md) 获取网关地址。
 
 4. 一些命令比如 `rollback` 依赖 vela-cli 版本 `>=1.5.0-alpha.1`，请更新cli到最新版本。你不需要更新controller。
 
