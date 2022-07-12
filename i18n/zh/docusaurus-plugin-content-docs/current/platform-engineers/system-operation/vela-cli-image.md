@@ -8,7 +8,7 @@ title: 用容器镜像运行 vela 命令行
 
 ## 前提条件
 
-你必须已经安装好了 Docker 。 如果你不知道如何安装它，请参考 [Docker 安装文档](https://docs.docker.com/install/) 。
+你必须已经安装好了 Docker 。如果你不知道如何安装它，请参考 [Docker 安装文档](https://docs.docker.com/install/) 。
 
 运行以下命令来确认 Docker 是否安装成功，确认你得到了以下输出。
 
