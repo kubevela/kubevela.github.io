@@ -42,7 +42,7 @@ $ docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli <command>
 
 * `--rm` – 指定该参数，将会在退出容器的同时删除它。
 
-* `-it` – 指定该参数，将会打开一个伴随标准输入的伪TTY。这将允许你为运行中的 KubeVela 命令行容器提供输入，例如，使用 `vela port-forward` 命令。
+* `-it` – 指定该参数，将会打开一个伴随标准输入的伪 TTY。这将允许你为运行中的 KubeVela 命令行容器提供输入，例如，使用 `vela port-forward` 命令。
 
 * `-v ~/.kube:/root/.kube` - 指定该参数，将会把你环境中的 kube config 配置文件挂载到容器当中。Vela 命令行工具利用该配置文件与 Kubernetes 环境进行交互。
 
