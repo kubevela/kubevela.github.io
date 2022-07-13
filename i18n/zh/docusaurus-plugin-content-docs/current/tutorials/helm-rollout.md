@@ -67,11 +67,11 @@ spec:
 EOF
 ```
 
-这是通过 `helm create` 创建的通用的 helm chart，它包含了镜像 `barnett/canarydemo:v1`，一个 Service 和一个 Ingress 。你可以通过 [仓库](https://github.com/wangyikewxgm/my-charts/tree/main/canary-demo) 查看 chart 源。
+这个例子中所使用的 helm chart 是一个通过 `helm create` 创建的通用的 helm chart，它包含了一个镜像是`barnett/canarydemo:v1`的 Deployment ，并且副本个数被设置为了 5 ，一个 Service 和一个 Ingress 。你可以通过 [仓库](https://github.com/wangyikewxgm/my-charts/tree/main/canary-demo) 查看 chart 源。
 
-下面是 **这一过程是如何发生的** 当应用使用 `kruise-rollout` 运维特征里升级策略的配置，整个过程分为三步：
+下面解释了在使用了 `kruise-rollout` 运维特征之后，下次升级应用时，是如何进行金丝雀发布的，整个发布过程会分成3步：
 
-1. 当开始升级时，会产生 `20%` 的实例数量。在我们的示例中， 我们一共设置了5个实例，它会保留所有的老的版本并创建 `5 * 20% = 1` 个金丝雀版本，并且导入了 `20%` 的流量到新版本中。在所有都准备好后，它会等待手工批准。
+1. 升级到第一个批次时，会创建 `20%` 的实例数量。在我们的示例中， 我们一共设置了5个实例，它会保留所有的老的版本并创建 `5 * 20% = 1` 个金丝雀版本，并且导入了 `20%` 的流量到新版本中。在所有都准备好后，它会等待手工批准。
    - 实例数量和导入流量的百分比默认是一致的，你可以根据 [文档](../reference/addons/kruise-rollout.md) 配置比例。
 2. 在手工批准后，会进入到第二个阶段，它会创建 `5 * 90% = 4.5` 实际上是 `5` 个实例的新版本，并且导入 `90%` 的流量到新版本中。这样一来，目前系统一共有 `10` 个实例，它需要等待下一步的手工批准。
 3. 在批准后，它就会利用滚动更新的机制来更新实例，在实例完成升级后，所有的流量都指向新的实例，金丝雀发布也会被销毁。
@@ -127,7 +127,7 @@ EOF
 
 两个版本唯一的区别就是镜像标签。`2.0.0` 版本使用 `barnett/canarydemo:v2`。
 
-再次访问网关，你会发现有 20% 的机率会返回新版本的 `Demo: v2`。
+再次访问网关，你会发现访问结果中有 `20%` 的机率是 `Demo: v2`。
 
 ```shell
 $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
@@ -138,13 +138,13 @@ Demo: V2
 
 ## 金丝雀验证
 
-用户通过业务的相关指标，如：日志、Metrics等其它手段，验证金丝雀版本OK之后，继续执行工作流发布继续发布。
+用户可以通过检查业务的相关指标，如：日志、Metrics等其它手段，验证金丝雀的版本访问成功后，你可以继续执行工作流，让发布继续往下进行。
 
 ```shell
 vela workflow resume canary-demo
 ```
 
-再次多次访问网关，你会发布访问 `Demo: v2` 的机率显著提升，大概在 90%。
+在多次重新访问网关后，你会发现机率大幅提升，有  `90%` 的结果是 `Demo: v2`。
 
 ```shell
 $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
@@ -195,4 +195,4 @@ $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
 Demo: V1
 ```
 
-任何在 `runningWorkflow` 过程中的回滚操作都会回滚到应用最后一次成功发布的版本，所以如果你已经成功部署了 `v1` 并且升级到 `v2`， 但是如果 `v2` 失败了但是你又继续更新到 `v3`。那么从 `v3` 回滚会自动到 `v1`，这是因为 `v2` 并不是成功发布的版本。
+需要注意的是，任何在应用处于 `runningWorkflow` 状态时的回滚操作，都会回滚到应用最后一次成功发布的版本，所以如果你已经成功部署了 `v1` 并且升级到 `v2`， 但是如果 `v2` 失败了但是你又继续更新到 `v3`。那么从 `v3` 回滚会自动到 `v1`，这是因为 `v2` 并不是成功发布的版本。
