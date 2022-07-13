@@ -209,7 +209,7 @@ spec:
         name: my-account
 ```
 
-**Please notice** The component name is set with file name which remove the file type suffix.
+**Please notice** The **name** of component is the same with file name in the `resource/` folder with file type suffix trimmed.
 
 ##### Use context render component
 
