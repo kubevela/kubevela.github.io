@@ -160,7 +160,7 @@ spec:
 
 The detail of the example is [velaux](https://github.com/kubevela/catalog/tree/master/addons/velaux).
 
-#### Define parameter for addon
+### Define parameter for addon
 
 When the resource is defined in CUE, you can also define parameters for addon by writing a `parameter.cue` file in the resources folder as shown below:
 
