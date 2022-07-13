@@ -170,7 +170,7 @@ parameter: {
 }
 ```
 
-It can cooperate with the resource file in CUE:
+It can cooperate with the resource file in CUE, here we have a CUE file `vela-apiserver.cue` :
 
 ```cue
 output: {
@@ -200,6 +200,7 @@ kind: Application
 spec:
   components:
   - type: webservice
+    name: api-server
     properties:
     	image: "oamdev/vela-apiserver:v1.4.0"
     traits:
@@ -207,6 +208,8 @@ spec:
       properties:
         name: my-account
 ```
+
+**Please notice** The component name is set with file name which remove the file type suffix.
 
 ##### Use context render component
 
