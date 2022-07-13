@@ -80,6 +80,10 @@ Let's continue our demo, the first deployment has no difference with a normal de
 vela status canary-demo
 ```
 
+If you have enabled [velaux](../reference/addons/velaux) addon, you can view the application topology graph that all `v1` pods are ready now.
+
+![image](../resources/helm-rollout-v1.jpg)
+
 Access the gateway endpoint. You can see the result always is `Demo: V1`
 ```shell
 $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
@@ -141,6 +145,10 @@ After verify the success of the canary version through business-related metrics,
 ```shell
 vela workflow resume canary-demo
 ```
+
+View topology graph again, you will see `kruise-rollout` trait created a `v2` pod, and this pod will serve the canary traffic. Meanwhile, the pods of `v1` are still running and server non-canary traffic.
+
+![image](../resources/helm-rollout-v2.jpg)
 
 Access the gateway endpoint again multi times. You will find out the chance to meet result `Demo: v2` is highly increased, almost 90%.
 

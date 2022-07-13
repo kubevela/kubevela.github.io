@@ -128,6 +128,10 @@ Let's continue our demo, the first deployment has no difference with a normal de
 vela status canary-demo
 ```
 
+If you have enabled [velaux](../reference/addons/velaux) addon, you can view the application topology graph that all `v1` pods are ready now.
+
+![image](../resources/object-rollout-v1.jpg)
+
 Access the gateway endpoint with the specific host.
 ```shell
 $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
@@ -259,6 +263,10 @@ Services:
 ```
 
 The application's status is `runningWorkflow` that means the application's rollout process has not finished yet.
+
+View topology graph again, you will see `kruise-rollout` trait created a `v2` pod, and this pod will serve the canary traffic. Meanwhile, the pods of `v1` are still running and server non-canary traffic.
+
+![image](../resources/object-rollout-v2.jpg)
 
 Access the gateway endpoint again. You will find out there is about 20% chance to meet `Demo: v2` result.
 
