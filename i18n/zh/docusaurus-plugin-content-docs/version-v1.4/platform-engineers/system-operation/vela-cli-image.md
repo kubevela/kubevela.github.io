@@ -1,5 +1,5 @@
 ---
-title: 用容器运行 vela 命令
+title: 用容器镜像运行 vela 命令行
 ---
 
 当前主题，用于描述如何利用 Docker 容器运行、配置 Vela 命令行工具，以及对其进行版本控制。有关更多使用 Docker 的信息，请参考 [Docker 官方文档](https://docs.docker.com/) 。
@@ -8,7 +8,7 @@ title: 用容器运行 vela 命令
 
 ## 前提条件
 
-你必须已经安装好了 Docker 。 如果你不知道如何安装它，请参考 [Docker 安装文档](https://docs.docker.com/install/) 。
+你必须已经安装好了 Docker 。如果你不知道如何安装它，请参考 [Docker 安装文档](https://docs.docker.com/install/) 。
 
 运行以下命令来确认 Docker 是否安装成功，确认你得到了以下输出。
 
@@ -42,7 +42,7 @@ $ docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli <command>
 
 * `--rm` – 指定该参数，将会在退出容器的同时删除它。
 
-* `-it` – 指定该参数，将会打开一个伴随标准输入的伪TTY。这将允许你为运行中的 KubeVela 命令行容器提供输入，例如，使用 `vela port-forward` 命令。
+* `-it` – 指定该参数，将会打开一个伴随标准输入的伪 TTY。这将允许你为运行中的 KubeVela 命令行容器提供输入，例如，使用 `vela port-forward` 命令。
 
 * `-v ~/.kube:/root/.kube` - 指定该参数，将会把你环境中的 kube config 配置文件挂载到容器当中。Vela 命令行工具利用该配置文件与 Kubernetes 环境进行交互。
 
