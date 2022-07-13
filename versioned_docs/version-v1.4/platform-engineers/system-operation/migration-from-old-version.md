@@ -31,7 +31,7 @@ helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.
 curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.2
 ```
 
-3. Upgrade VelaUX or other addon
+4. Upgrade VelaUX or other addon
 
 ```
 vela addon upgrade velaux --version 1.4.2
@@ -142,7 +142,7 @@ Upgrade the CLI to v1.2.x corresponding the the core version:
 curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.6
 ```
 
-3. Enable addon
+4. Enable addon
 
 After the upgrade succeed, users can use the following methods to enable addons if they need to be enabled:
 
@@ -155,12 +155,12 @@ vela addon enable <addon name>
 
 ⚠️Note: This step is not required if the addon is already enabled and used in the pre-upgrade version
 
-4. Update Custom Definition
+5. Update Custom Definition
 
 Check if your custom definition works in the new version, try to upgrade them if there're any issues.
 If you haven't defined any, the normal upgrade process is completed!
 
-5. Common Questions for this migration
+6. Common Questions for this migration
 
 - Q: After upgrading from 1.1.x to 1.2.x, the application status becomes `workflowsuspending`, and using `vela workflow resume` doesn't work.
   - A: There're migration about the resource tracker mechanism. Generally, you can delete the existing resourcetracker, after that you can use `vela workflow resume` command.

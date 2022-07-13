@@ -170,19 +170,33 @@ $ vela addon registry delete experimental
 Successfully delete an addon registry experimental
 ```
 
+* Build custom registry
+
+  You can use ChartMuseum to build your custom addon registry. We have a ChartMuseum addon available. Please refer to [*Build your Own Registry*](../../platform-engineers/addon/addon-registry) for details.
+
 ### Air-Gapped Installation for Addon
 
-If your cluster network cannot request the community addon registry you can enable an addon with a local dir. eg:
+If your cluster network cannot connect to the community addon registry you can: 
+- build your custom addon registry. Please refer to [*Build your Own Registry*](../../platform-engineers/addon/addon-registry) for details.
+- enable an addon from a local directory. Example:
 
+```shell
+$ tree velaux -L 1
+velaux
+├── metadata.yaml
+├── readme_cn.md
+├── readme.md
+├── resources
+├── schemas
+└── template.yaml
+
+2 directories, 4 files
+
+$ vela addon enable ./velaux
+Addon: velaux enabled successfully
 ```
-$ ls
-README.md           fluxcd              ocm-cluster-manager terraform           terraform-alibaba   terraform-aws       terraform-azure     velaux
 
-$ vela addon enable velaux/
-Addon: velaux enabled Successfully
-```
-
-Please notice that, while an addon installing cluster maybe still need pull some images or helm charts.If your cluster cannot reach these resources please refer [docs](../../platform-engineers/system-operation/enable-addon-offline) to do complete installation without internet.
+Please notice that, while an addon is being installed in a cluster, it maybe still need pull some images or Helm Charts. If your cluster cannot reach these resources please refer [docs](../../platform-engineers/system-operation/enable-addon-offline) to complete installation without Internet access.
 
 ### Manage the addon with UI Console
 

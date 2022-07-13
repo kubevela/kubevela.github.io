@@ -368,15 +368,14 @@ spec:
 
 
 ## k8s-objects
-### 参数说明
+
+This type allow you to nest Kubernetes manifests into properties.
+
+### Parameters
 
 |  NAME   | DESCRIPTION  |        TYPE          | REQUIRED | DEFAULT |
 |---------|-------------|-----------------------|----------|---------|
 | objects |  Kubernetes resource manifest   | [[]K8s-Object](#k8s-object) | true     |         |
-
-#### k8s-object
-
-A kubernetes plane manifest.
 
 ### Examples
 

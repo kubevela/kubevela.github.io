@@ -22,5 +22,6 @@ There's an community addon registry (https://addons.kubevela.net) maintained by 
 * [dex](./dex) Provide [dex](https://github.com/dexidp/dex) login for VelaUX.
 * [Kruise Rollout](./kruise-rollout): [OpenKruise rollout](https://github.com/openkruise/rollouts) supports canary rollout for native deployment, stateful-set and OpenKruise [cloneset](https://openkruise.io/docs/user-manuals/cloneset/).
 * [ingress-nginx](./nginx-ingress-controller): An Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer.
+* [ChartMuseum](./chartmuseum): an open-source and easy to deploy Helm Chart Repository server.
 
 **If you want to make your own addon please refer to [doc](../../platform-engineers/addon/intro.md).**
