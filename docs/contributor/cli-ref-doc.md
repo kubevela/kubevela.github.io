@@ -1,6 +1,10 @@
 ---
-title: Update CLI Reference
+title: Update Reference Docs
 ---
+
+Here're introduction of how to generate docs automatically from Golang scripts.
+
+## CLI Reference
 
 This guide introduce how to update [CLI reference doc](../cli/vela) in the website.
 The whole process was done by script automatically. You need to follow this guide to build your environment.
@@ -18,13 +22,13 @@ $ tree -L 1
 
 ```shell
 cd kubevela/
-go run ./hack/docgen/gen.go
+go run ./hack/docgen/cli/gen.go
 ```
 
 3. Update more docs such as i18n zh
 
 ```shell
-$ go run ./hack/docgen/gen.go ../kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
+$ go run ./hack/docgen/cli/gen.go ../kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
 scanning rootPath of CLI docs for replace:  ../kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
 ```
 
@@ -33,4 +37,6 @@ scanning rootPath of CLI docs for replace:  ../kubevela.io/i18n/zh/docusaurus-pl
 ```shell
 cd ../kubevela.io
 git status
+ga .
+git push
 ```
