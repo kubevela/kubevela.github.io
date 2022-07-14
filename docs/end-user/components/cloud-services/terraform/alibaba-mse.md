@@ -9,8 +9,6 @@ Terraform configuration for Alibaba Cloud MSE
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  acl_entry_list | The whitelist | list(any) | false |  

@@ -6,7 +6,7 @@ title:  Alibaba Cloud RDS
 
 Terraform configuration for Alibaba Cloud RDS
 
-## Samples
+## Examples
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -27,8 +27,6 @@ spec:
 
 ## Specification
 
-
-### Properties
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 

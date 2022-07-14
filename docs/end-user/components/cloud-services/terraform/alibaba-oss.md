@@ -6,7 +6,7 @@ title:  Alibaba Cloud OSS
 
 Terraform configuration for Alibaba Cloud OSS
 
-## Samples
+## Examples
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -26,8 +26,6 @@ spec:
 
 ## Specification
 
-
-### Properties
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 

@@ -9,8 +9,6 @@ Terraform configuration for Alicloud SLB
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  createSlb |  | bool | false |  

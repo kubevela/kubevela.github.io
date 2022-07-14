@@ -9,8 +9,6 @@ Create a functional computing service based on Terraform under AliCloud's RAM ro
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  document | Authorization strategy of the RAM role. | string | false |  

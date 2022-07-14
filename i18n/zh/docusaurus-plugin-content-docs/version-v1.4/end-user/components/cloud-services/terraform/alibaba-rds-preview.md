@@ -9,8 +9,6 @@ Alibaba RDS in a preview mode
 ## 参数说明
 
 
-### 属性
-
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  account_name | RDS instance user account name | string | false |  

@@ -9,8 +9,6 @@ Create a lightweight web service based on Terraform under AliCloud's VPC, includ
 ## 参数说明
 
 
-### 属性
-
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  availability_zone | The available zone to launch modules. | string | false |  

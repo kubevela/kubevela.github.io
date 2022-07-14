@@ -9,8 +9,6 @@ Deploy a Static Website in object stroage, like S3 and OSS
 ## 参数说明
 
 
-### 属性
-
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  bucket | OSS bucket name | string | false |  

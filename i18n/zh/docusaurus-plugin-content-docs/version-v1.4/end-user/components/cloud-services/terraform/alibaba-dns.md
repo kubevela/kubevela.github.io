@@ -9,8 +9,6 @@ Terraform configuration for Alibaba Cloud DNS
 ## 参数说明
 
 
-### 属性
-
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  add_records | Whether to add records to dns. Default to true. | bool | false |  

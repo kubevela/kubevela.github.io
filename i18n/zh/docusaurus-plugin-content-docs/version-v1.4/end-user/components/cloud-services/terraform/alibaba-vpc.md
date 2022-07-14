@@ -19,15 +19,12 @@ spec:
       type: alibaba-vpc
       properties:
         vpc_cidr: "172.16.0.0/12"
-
         writeConnectionSecretToRef:
           name: vpc-conn
 ```
 
 ## 参数说明
 
-
-### 属性
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 

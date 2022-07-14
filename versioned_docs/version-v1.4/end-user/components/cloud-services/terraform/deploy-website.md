@@ -9,8 +9,6 @@ Deploy a Static Website in object stroage, like S3 and OSS
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  bucket | OSS bucket name | string | false |  

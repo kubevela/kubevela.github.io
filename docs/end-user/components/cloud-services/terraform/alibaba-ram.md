@@ -9,8 +9,6 @@ Create RAM User instances on AliCloud based on Terraform module
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  admin_name_regex | A regex string to filter resulting policies by name. | string | false |  

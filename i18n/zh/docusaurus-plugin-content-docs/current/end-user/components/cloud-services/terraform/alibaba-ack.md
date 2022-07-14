@@ -26,8 +26,6 @@ spec:
 ## 参数说明
 
 
-### 属性
-
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  cpu_core_count | CPU core count is used to fetch instance types. | number | false |  

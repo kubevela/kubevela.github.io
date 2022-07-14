@@ -9,8 +9,6 @@ Create a functional computing service based on Terraform under AliCloud's RAM ro
 ## 参数说明
 
 
-### 属性
-
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  document | Authorization strategy of the RAM role. | string | false |  

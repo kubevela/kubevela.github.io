@@ -9,8 +9,6 @@ Based on Terraform module, create ECS instances on Ali cloud to achieve one-clic
 ## 参数说明
 
 
-### 属性
-
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  create_instance | Whether to create ecs instance. | bool | false |  

@@ -6,7 +6,7 @@ title:  Alibaba Cloud EIP
 
 Bind and unbind hundreds of EIPs to multiple cloud resources with one click based on Terraform
 
-## Samples
+## Examples
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -24,8 +24,6 @@ spec:
 
 ## Specification
 
-
-### Properties
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 

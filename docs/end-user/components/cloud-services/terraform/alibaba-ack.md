@@ -6,7 +6,7 @@ title:  Alibaba Cloud ACK
 
 Terraform configuration for Alibaba Cloud ACK cluster
 
-## Samples
+## Examples
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -25,8 +25,6 @@ spec:
 
 ## Specification
 
-
-### Properties
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 

@@ -9,8 +9,6 @@ Build VPC and Nat gateway network environment and bind EIP, add SNAT and DNAT en
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  availability_zones | List available zones to launch several VSwitches. | list(string) | false |  

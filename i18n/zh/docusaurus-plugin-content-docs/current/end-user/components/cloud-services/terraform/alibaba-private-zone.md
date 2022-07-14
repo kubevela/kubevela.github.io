@@ -9,8 +9,6 @@ Terraform-based modules are used to create a Private Zone on AliCloud, while you
 ## 参数说明
 
 
-### 属性
-
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  adjustment_type | (Deprecated from version 1.2.0) The method only used by the simple and step scaling rule to adjust the number of ECS instances. Valid values: QuantityChangeInCapacity, PercentChangeInCapacity and TotalCapacity. Use simple_rule_adjustment_type and step_rule_adjustment_type instead. | string | false |  

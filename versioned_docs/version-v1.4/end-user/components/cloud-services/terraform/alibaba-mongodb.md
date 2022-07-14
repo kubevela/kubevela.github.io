@@ -9,8 +9,6 @@ Alibaba Cloud MongoDB
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  account_password | Password of the root account. It is a string of 6 to 32 characters and is composed of letters, numbers, and underlines | string | true |  

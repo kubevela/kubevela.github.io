@@ -9,8 +9,6 @@ Terraform-based module creates an SLB instance under AliCloud's VPC and configur
 ## 参数说明
 
 
-### 属性
-
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  address_type | The type of address. Choices are 'intranet' and 'internet'. Default to 'internet'. | string | false |  
