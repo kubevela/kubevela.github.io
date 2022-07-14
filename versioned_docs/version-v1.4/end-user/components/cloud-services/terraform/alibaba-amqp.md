@@ -9,8 +9,6 @@ Terraform configuration for Alibaba Cloud AMQP(RabbitMQ)
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  argument | The specification of the argument. | string | false |  

@@ -9,8 +9,6 @@ Create a RabbitMQ based on Terraform module in Ali cloud
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  argument | The specification of the argument. | string | false |  

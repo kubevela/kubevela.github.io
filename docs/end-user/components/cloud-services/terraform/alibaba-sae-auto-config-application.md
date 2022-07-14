@@ -9,8 +9,6 @@ Alibaba SAE application to be deployed in auto-config mode
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  app_description | The description of the application | string | false |  

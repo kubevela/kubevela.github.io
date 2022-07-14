@@ -9,8 +9,6 @@ Terraform-based module supports creating access control lists for load balancers
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  entry_list |  A list of entry (IP addresses or CIDR blocks) to be added. At most 50 etnry can be supported in one resource. It contains two sub-fields as: entry(IP addresses or CIDR blocks), comment(the comment of the entry) | list(object({\n    entry   = string\n    comment = string\n  })) | true |  

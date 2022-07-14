@@ -9,8 +9,6 @@ Create a set of network environment related resources for Kubernetes clusters on
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  availability_zones | List available zones to launch several VSwitches. | list(string) | false |  

@@ -9,8 +9,6 @@ Terraform configuration for Alibaba Cloud VSwitch
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  create_vpc | Whether to create vpc. If false, you can specify an existing vpc by setting 'vpc_id'. | bool | false |  

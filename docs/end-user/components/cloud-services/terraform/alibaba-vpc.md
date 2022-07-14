@@ -6,7 +6,7 @@ title:  Alibaba Cloud VPC
 
 Terraform configuration for Alibaba Cloud VPC
 
-## Samples
+## Examples
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -19,15 +19,12 @@ spec:
       type: alibaba-vpc
       properties:
         vpc_cidr: "172.16.0.0/12"
-
         writeConnectionSecretToRef:
           name: vpc-conn
 ```
 
 ## Specification
 
-
-### Properties
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 

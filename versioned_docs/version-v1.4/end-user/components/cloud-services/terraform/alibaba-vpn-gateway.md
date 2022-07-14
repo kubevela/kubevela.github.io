@@ -9,8 +9,6 @@ Create VPN resources on AliCloud based on Terraform module
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  cgw_description | The description of the VPN customer gateway instance. | string | false |  

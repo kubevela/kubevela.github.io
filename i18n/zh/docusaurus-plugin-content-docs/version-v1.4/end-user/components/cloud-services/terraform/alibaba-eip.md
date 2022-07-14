@@ -25,8 +25,6 @@ spec:
 ## 参数说明
 
 
-### 属性
-
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  bandwidth | Maximum bandwidth to the elastic public network, measured in Mbps (Mega bit per second). | number | false |  

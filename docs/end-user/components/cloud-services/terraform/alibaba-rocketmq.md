@@ -9,8 +9,6 @@ Terraform configuration for Alibaba Cloud RocketMQ
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  group_name | The name of MQ group | string | false |  

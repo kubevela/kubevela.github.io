@@ -9,8 +9,6 @@ Create a lightweight WEB service based on Terraform under AliCloud's VPC, includ
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  availability_zone | The available zone to launch modules. | string | false |  

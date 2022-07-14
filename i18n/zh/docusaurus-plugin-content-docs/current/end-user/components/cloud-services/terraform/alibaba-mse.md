@@ -9,8 +9,6 @@ Terraform configuration for Alibaba Cloud MSE
 ## 参数说明
 
 
-### 属性
-
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  acl_entry_list | The whitelist | list(any) | false |  

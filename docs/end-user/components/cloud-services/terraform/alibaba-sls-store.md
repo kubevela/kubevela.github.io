@@ -6,7 +6,7 @@ title:  Alibaba Cloud SLS-STORE
 
 Terraform configuration for Alibaba Cloud SLS Store
 
-## Samples
+## Examples
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -29,8 +29,6 @@ spec:
 
 ## Specification
 
-
-### Properties
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 

@@ -9,8 +9,6 @@ Alibaba SAE namespace
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  namespace_description | Namespace Description |  | false |  

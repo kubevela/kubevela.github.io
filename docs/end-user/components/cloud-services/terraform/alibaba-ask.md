@@ -9,8 +9,6 @@ Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK)
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  name | ASK name | string | false |  

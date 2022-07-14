@@ -9,8 +9,6 @@ Terraform configuration for Alicloud NAS
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  cidr_ip | cidr blocks used to create a new security group rule | string | false |  

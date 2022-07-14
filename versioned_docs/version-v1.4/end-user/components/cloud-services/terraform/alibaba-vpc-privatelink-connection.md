@@ -9,8 +9,6 @@ Terraform-based for creating VPC networks in AliCloud and creating private netwo
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  auto_accept_connection | Whether to automatically accept terminal node connections. | bool | false |  

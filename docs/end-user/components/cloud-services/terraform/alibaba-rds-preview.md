@@ -9,8 +9,6 @@ Alibaba RDS in a preview mode
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  account_name | RDS instance user account name | string | false |  

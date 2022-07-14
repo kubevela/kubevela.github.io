@@ -6,7 +6,7 @@ title:  Alibaba Cloud SLS-PROJECT
 
 Terraform configuration for Alibaba Cloud SLS Project
 
-## Samples
+## Examples
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -27,8 +27,6 @@ spec:
 
 ## Specification
 
-
-### Properties
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 

@@ -9,8 +9,6 @@ Alibaba Cloud OSS static webstie bucket
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  acl | OSS bucket ACL, supported 'private', 'public-read', 'public-read-write' | string | false |  
