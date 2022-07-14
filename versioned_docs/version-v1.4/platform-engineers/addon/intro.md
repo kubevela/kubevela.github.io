@@ -13,9 +13,9 @@ The picture below shows what KubeVela does when an addon is enabled. There are m
 
 To build an addon, you should follow some basic rules as follows.
 
-You need to create an addon directory to place addon resource files. We're building a [CLI command](https://github.com/kubevela/kubevela/pull/4162) to create the scaffold, it will be released in v1.5.
+You need to create an addon directory to place addon resource files. Won't bother to create? `vela addon init` command will create a basic structure for you (vela CLI v1.5 or later). Please refer to `vela addon init -h` for details. For quick starts, we will just use `vela addon init your-addon-name` now.
 
-Typically the directory hierarchy looks like below:
+Typically, the directory hierarchy looks like below:
 
 ```shell
 ├── resources/
@@ -160,7 +160,7 @@ spec:
 
 The detail of the example is [velaux](https://github.com/kubevela/catalog/tree/master/addons/velaux).
 
-#### Define parameter for addon
+### Define parameter for addon
 
 When the resource is defined in CUE, you can also define parameters for addon by writing a `parameter.cue` file in the resources folder as shown below:
 
@@ -170,7 +170,7 @@ parameter: {
 }
 ```
 
-It can cooperate with the resource file in CUE:
+It can cooperate with the resource file in CUE, here we have a CUE file `vela-apiserver.cue` :
 
 ```cue
 output: {
@@ -200,6 +200,7 @@ kind: Application
 spec:
   components:
   - type: webservice
+    name: api-server
     properties:
     	image: "oamdev/vela-apiserver:v1.4.0"
     traits:
@@ -207,6 +208,8 @@ spec:
       properties:
         name: my-account
 ```
+
+**Please notice** The **name** of component is the same with file name in the `resource/` folder with file type suffix trimmed.
 
 ##### Use context render component
 
