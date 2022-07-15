@@ -210,7 +210,7 @@ Pushing cloudshell-0.2.0.tgz to localcm(http://10.2.1.4:8080)... Done
 ...
 ```
 
-Congratulations, all community-verified addons are now available in your ChartMuseum instance (check it out using `vela addon list`). You can do the same thing with `experimental` addons.
+Congratulations, all community-verified addons are now available in your ChartMuseum instance (check it out using `vela addon list`, and enable them using `vela addon enable addon-name`). You can do the same thing with `experimental` addons.
 
 ### Sync Helm Charts to your ChartMuseum instance
 
