@@ -278,6 +278,7 @@ module.exports = {
             'reference/addons/ocm-hub-control-plane',
             'reference/addons/vela-prism',
             'reference/addons/flink-kubernetes-operator',
+            'reference/addons/chartmuseum',
           ],
         },
         'end-user/components/cloud-services/cloud-resources-list',
