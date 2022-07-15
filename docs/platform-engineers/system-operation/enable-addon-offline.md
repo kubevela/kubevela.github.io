@@ -32,10 +32,10 @@ $ helm push terraform-controller-0.3.5.tgz <your charts repo url>
 ```
 > You can use ChartMuseum addon to build your private Helm Chart registry and hold these Charts. Please refer to [*Sync Helm Charts to your ChartMuseum instance*](../addon/addon-registry#sync-helm-charts-to-your-chartmuseum-instance) for complete instructions and usage examples.
 
-1. Modify the values of addon by referring to your own image/chart registry. You can find all images/charts dependency in the files of subdirectory `resources/`, just modify the configuration.
+4. Modify the values of addon by referring to your own image/chart registry. You can find all images/charts dependency in the files of subdirectory `resources/`, just modify the configuration.
    For example, you can modify the fluxcd addon files `addons/fluxcd/resources/deployment/helm-controller.yaml` the deployment object's field `spec.sepc.containers[0].image` to your own image repo.
 
-2. Use `vela cli` to enable an addon with specify a local addon dir to install offline.
+5. Use `vela cli` to enable an addon with specify a local addon dir to install offline.
 
 ```yaml
 $ vela addon enable /your/local/addon/directory
