@@ -4,7 +4,7 @@ title:  Alibaba Cloud EIP-SLB-ECS-RDS
 
 ## Description
 
-Create a lightweight web service based on Terraform under AliCloud's VPC, including: EIP, SLB, ECS, RDS
+Create a lightweight web service based on Terraform under AliCloud's VPC, including: EIP, SLB, ECS, RDS.
 
 ## Specification
 
@@ -38,12 +38,12 @@ Create a lightweight web service based on Terraform under AliCloud's VPC, includ
  system_disk_description | The specification of the system disk description. | string | false |  
  system_disk_name | The specification of the system disk name. | string | false |  
  vswitch_id | VSwitch variables, if vswitch_id is empty, then the net_type = classic. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  

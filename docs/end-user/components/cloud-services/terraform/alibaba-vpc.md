@@ -4,7 +4,7 @@ title:  Alibaba Cloud VPC
 
 ## Description
 
-Terraform configuration for Alibaba Cloud VPC
+Terraform configuration for Alibaba Cloud VPC.
 
 ## Examples
 
@@ -31,15 +31,15 @@ spec:
  vpc_cidr | The cidr block used to launch a new vpc. | string | false |  
  vpc_description | The vpc description used to launch a new vpc. | string | false |  
  vpc_name | The vpc name used to launch a new vpc. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  
 
 
 ### Outputs

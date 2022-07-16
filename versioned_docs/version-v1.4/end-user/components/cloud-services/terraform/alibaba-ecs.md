@@ -4,7 +4,7 @@ title:  Alibaba Cloud ECS
 
 ## Description
 
-Terraform configuration for Alibaba Cloud Elastic Compute Service
+Terraform configuration for Alibaba Cloud Elastic Compute Service.
 
 ## Specification
 
@@ -33,14 +33,14 @@ Terraform configuration for Alibaba Cloud Elastic Compute Service
  password | The password of instance. | string | false |  
  ports | A list of ports open in security group. | list(number) | false |  
  private_ip | Configure Instance private IP address. | string | false |  
- private_ips | A list to configure Instance private IP address | list(string) | false |  
+ private_ips | A list to configure Instance private IP address. | list(string) | false |  
  resource_group_id | The Id of resource group which the instance belongs. | string | false |  
  role_name | Instance RAM role name. The name is provided and maintained by RAM. You can use 'alicloud_ram_role' to create a new one. | string | false |  
  security_enhancement_strategy | The security enhancement strategy. | string | false |  
  security_group_ids | A list of security group ids to associate with. | list(string) | false |  
  spot_price_limit | The hourly price threshold of a instance, and it takes effect only when parameter 'spot_strategy' is 'SpotWithPriceLimit'. Three decimals is allowed at most. | number | false |  
  spot_strategy | The spot strategy of a Pay-As-You-Go instance, and it takes effect only when parameter 'instance_charge_type' is 'PostPaid'. Value range: 'NoSpot': A regular Pay-As-You-Go instance. 'SpotWithPriceLimit': A price threshold for a spot instance. 'SpotAsPriceGo': A price that is based on the highest Pay-As-You-Go instance. | string | false |  
- subscription | A mapping of fields for Prepaid ECS instances created.  | map(string) | false |  
+ subscription | A mapping of fields for Prepaid ECS instances created. | map(string) | false |  
  system_disk_auto_snapshot_policy_id | The ID of the automatic snapshot policy applied to the system disk. | string | false |  
  system_disk_category | The system disk category used to launch one or more ecs instances. | string | false |  
  system_disk_size | The system disk size used to launch one or more ecs instances. | number | false |  
@@ -49,12 +49,12 @@ Terraform configuration for Alibaba Cloud Elastic Compute Service
  user_data_path | User data to pass to instance on boot. | string | false |  
  volume_tags | A mapping of tags to assign to the devices created by the instance at launch time. | map(string) | false |  
  vswitch_id | The virtual switch ID to launch in VPC. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  

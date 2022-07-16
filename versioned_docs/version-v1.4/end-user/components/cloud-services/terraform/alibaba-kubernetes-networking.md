@@ -4,7 +4,7 @@ title:  Alibaba Cloud KUBERNETES-NETWORKING
 
 ## Description
 
-Create a set of network environment related resources for Kubernetes clusters on AliCloud based on Terraform module
+Create a set of network environment related resources for Kubernetes clusters on AliCloud based on Terraform module.
 
 ## Specification
 
@@ -15,8 +15,8 @@ Create a set of network environment related resources for Kubernetes clusters on
  create | Whether to create kubernetes networking resources. | bool | false |  
  eip_bandwidth | The eip bandwidth. | number | false |  
  eip_instance_charge_type | (Deprecated from version 1.3.0) Elastic IP instance charge type. | string | false |  
- eip_internet_charge_type | Internet charge type of the EIP, Valid values are `PayByBandwidth`, `PayByTraffic`.  | string | false |  
- eip_name | The name prefix used to launch the eip.  | string | false |  
+ eip_internet_charge_type | Internet charge type of the EIP, Valid values are `PayByBandwidth`, `PayByTraffic`. | string | false |  
+ eip_name | The name prefix used to launch the eip. | string | false |  
  eip_payment_type | The billing method of the NAT gateway. | string | false |  
  eip_period | The duration that you will buy the EIP, in month. | number | false |  
  eip_tags | The tags used to launch the eip. | map(string) | false |  
@@ -36,14 +36,14 @@ Create a set of network environment related resources for Kubernetes clusters on
  vpc_name | The vpc name used to launch a new vpc. | string | false |  
  vpc_tags | The tags used to launch a new vpc. | map(string) | false |  
  vswitch_cidrs | List of cidr blocks used to create several new vswitches when 'vswitch_ids' is not specified. | list(string) | false |  
- vswitch_name | The name prefix used to launch the vswitch.  | string | false |  
+ vswitch_name | The name prefix used to launch the vswitch. | string | false |  
  vswitch_tags | The tags used to launch serveral vswitches. | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  

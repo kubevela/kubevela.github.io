@@ -4,7 +4,7 @@ title:  Alibaba Cloud VPC-ECS-EIP
 
 ## Description
 
-Create a lightweight WEB service based on Terraform under AliCloud's VPC, including: VPC, ECS, EIP
+Create a lightweight WEB service based on Terraform under AliCloud's VPC, including: VPC, ECS, EIP.
 
 ## Specification
 
@@ -13,7 +13,7 @@ Create a lightweight WEB service based on Terraform under AliCloud's VPC, includ
  ------------ | ------------- | ------------- | ------------- | ------------- 
  availability_zone | The available zone to launch modules. | string | false |  
  category | The specification of the category. | string | false |  
- cidr_block | The cidr block of VPC | string | false |  
+ cidr_block | The cidr block of VPC. | string | false |  
  data_disks_name | The name of the data disk. | string | false |  
  description | The specification of module description. | string | false |  
  ecs_size | The specification of the ecs size. | number | false |  
@@ -31,12 +31,12 @@ Create a lightweight WEB service based on Terraform under AliCloud's VPC, includ
  system_disk_category | The specification of the system disk category. | string | false |  
  system_disk_description | The specification of the system disk description. | string | false |  
  system_disk_name | The specification of the system disk name. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  

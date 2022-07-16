@@ -4,7 +4,7 @@ title:  Alibaba Cloud RABBITMQ
 
 ## Description
 
-Create a RabbitMQ based on Terraform module in Ali cloud
+Create a RabbitMQ based on Terraform module in Ali cloud.
 
 ## Specification
 
@@ -31,12 +31,12 @@ Create a RabbitMQ based on Terraform module in Ali cloud
  queue_name | The name of the queue. | string | false |  
  support_eip | The specification of support EIP. | bool | false |  
  virtual_host_name | VirtualHostName. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  

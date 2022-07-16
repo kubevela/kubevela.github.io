@@ -4,25 +4,25 @@ title:  Alibaba Cloud SAE-NAMESPACE
 
 ## Description
 
-Alibaba SAE namespace
+Alibaba SAE namespace.
 
 ## Specification
 
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- namespace_description | Namespace Description |  | false |  
- namespace_id | Namespace ID | string | true |  
- namespace_name | Namespace Name | string | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ namespace_description | Namespace Description. |  | false |  
+ namespace_id | Namespace ID. | string | true |  
+ namespace_name | Namespace Name. | string | true |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  
 
 
 ### Outputs

@@ -4,7 +4,7 @@ title:  阿里云 SLS-PROJECT
 
 ## 描述
 
-用于部署阿里云 SLS Project 的组件说明
+用于部署阿里云 SLS Project 的组件说明。
 
 ## 示例
 
@@ -30,14 +30,14 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- description | Description of security group | string | false |  
- name | Name of security group. It is used to create a new security group. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ description | Description of security group。 | string | false |  
+ name | Name of security group. It is used to create a new security group。 | string | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to。 | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to。 | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to。 | string | false |  
