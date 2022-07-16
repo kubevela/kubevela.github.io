@@ -478,5 +478,35 @@
 	},
 	"if key is empty, we will use envMappings key instead": {
 		"Chinese": "主键名称"
+	},
+	"The TCP socket within the container that should be probed to assess container health": {
+		"Chinese": "指定健康检查的 TCP socket"
+	},
+	"Specify volume type, options: \"pvc\",\"configMap\",\"secret\",\"emptyDir\"": {
+		"Chinese": "指定存储卷类型，类型包括 \"pvc\",\"configMap\",\"secret\",\"emptyDir\" "
+	},
+	"Number of port to expose on the pod's IP address": {
+		"Chinese": "要暴露的 IP 端口号"
+	},
+	"Name of the port": {
+		"Chinese": "端口名称"
+	},
+	"The name of the secret in the pod's namespace to select from": {
+		"Chinese": "Secret 名称"
+	},
+	"The key of the secret to select from. Must be a valid secret key": {
+		"Chinese": "选择 Secret 中存在的 key"
+	},
+	"Environment variable name": {
+		"Chinese": "环境变量名称"
+	},
+	"Specify image pull policy for your service": {
+		"Chinese": "镜像拉取策略"
+	},
+	"Which ports do you want customer traffic sent to, defaults to 80": {
+		"Chinese": "指定业务流量进入的端口（多个），默认为 80"
+	},
+	"A slice of Kubernetes resource manifests": {
+		"Chinese": "一组 Kubernetes 原生资源对象配置"
 	}
 }
