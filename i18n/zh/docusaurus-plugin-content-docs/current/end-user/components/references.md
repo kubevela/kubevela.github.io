@@ -2,339 +2,17 @@
 title: 内置组件列表
 ---
 
-本文档将展示所有内置组件的参数列表。
+本文档将**按字典序**展示所有内置组件的参数列表。
 
-## Webservice
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-16T15:16:33+08:00。
+
+## Cron-Task
 
 ### 描述
 
-定义一个长期运行的，可伸缩的容器化的服务，并且会暴露一个服务端点用来接受来自客户的外部流量。
-
-### 参数定义
-
- 字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- cmd | 容器的启动命令 | []string | false |
- env | 容器中的环境变量 | [[]env](#env) | false |
- volumeMounts |  | [volumeMounts](#volumemounts) | false |
- labels | 工作负载的标签 | map[string]string | false |
- annotations | 工作负载的注解 | map[string]string | false |
- image | 使用的镜像 | string | true |
- ports | 承接用户流量的端口，默认 80 | [[]ports](#ports) | false |
- imagePullPolicy | 镜像拉取策略，可选值为（"Always"，"Never" 或者 "IfNotPresent"）| string | false |
- cpu |  CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核) | string | false |
- memory | 所需要的内存大小 | string | false |
- livenessProbe | 判断容器是否存活的探针 | [livenessProbe](#livenessprobe) | false |
- readinessProbe | 判断容器是否就绪，能够接受用户流量的探针 | [readinessProbe](#readinessprobe) | false |
- imagePullSecrets | 容器的镜像拉取密钥 | []string | false |
- hostAliases | 定义容器内的 hostAliases | [[]hostAliases](#hostaliases) | true |
-
-
-
-#### readinessProbe
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个 | [exec](#exec) | false |
- httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个 | [httpGet](#httpget) | false |
- tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个 | [tcpSocket](#tcpsocket) | false |
- initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查 | int | true | 0
- periodSeconds | 定义每次检查之间的时间间隔 | int | true | 10
- timeoutSeconds | 定义检查的超时时间      | int | true | 1
- successThreshold | 定义检查成功多少次之后判断容器已经就绪 | int | true | 1
- failureThreshold | 定义检查失败多少次之后判断容器已经不健康 | int | true | 3
-
-
-##### tcpSocket
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- port | TCP 检查的端口号 | int | true |
-
-
-##### httpGet
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- path | 定义服务端点请求的路径 | string | true |
- port | 定义服务端点的端口号 | int | true |
- httpHeaders | 检查请求中的请求头 | [[]httpHeaders](#httpheaders) | false |
-
-
-###### httpHeaders
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- name |  | string | true |
- value |  | string | true |
-
-
-##### exec
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败 | []string | true |
-
-
-##### hostAliases
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- ip |  | string | true |
- hostnames |  | []string | true |
-
-#### ports
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- name | 端口名称 | string | false |
- port | 端口号 | int | true |
- protocol | 端口协议类型 UDP， TCP， 或者 SCTP | string | true | TCP
- expose | 端口是否需要暴露 | bool | true | false
-
-
-#### volumeMounts
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- pvc | 挂载一个 PVC 卷  | [[]pvc](#pvc) | false |
- configMap | 挂载一个 configmap 卷 | [[]configMap](#configmap) | false |
- secret | 挂载一个 secret 卷 | [[]secret](#secret) | false |
- emptyDir | 挂载一个 emptyDir 的卷 | [[]emptyDir](#emptydir) | false |
- hostPath | 挂载主机目录卷 | [[]hostPath](#hostpath) | false |
-
-
-##### hostPath
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- path |  | string | true |
- name |  | string | true |
- mountPath |  | string | true |
-
-
-##### emptyDir
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- name |  | string | true |
- mountPath |  | string | true |
- medium |  | string | true | empty
-
-
-##### secret
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- name |  | string | true |
- mountPath |  | string | true |
- defaultMode |  | int | true | 420
- items |  | [[]items](#items) | false |
- secretName |  | string | true |
-
-
-###### items
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- path |  | string | true |
- key |  | string | true |
- mode |  | int | true | 511
-
-
-##### configMap
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- name |  | string | true |
- mountPath |  | string | true |
- defaultMode |  | int | true | 420
- cmName |  | string | true |
- items |  | [[]items](#items) | false |
-
-
-###### items
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- path |  | string | true |
- key |  | string | true |
- mode |  | int | true | 511
-
-
-##### pvc
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- name |  | string | true |
- mountPath |  | string | true |
- claimName | PVC 名称 | string | true |
-
-
-#### env
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- name | 环境变量的名称 | string | true |
- value | 环境变量的值 | string | false |
- valueFrom | 从哪个资源中读取环境变量的定义 | [valueFrom](#valuefrom) | false |
-
-
-##### valueFrom
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- secretKeyRef | secret 键的引用 | [secretKeyRef](#secretkeyref) | false |
- configMapKeyRef | configmap 键的引用 | [configMapKeyRef](#configmapkeyref) | false |
-
-
-###### configMapKeyRef
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- name | configmap 名称 | string | true |
- key | configmap 中的键名 | string | true |
-
-
-###### secretKeyRef
-
-字段名称 | 描述 | 类型 | 是否必须 | 默认值
- ------------ | ------------- | ------------- | ------------- | -------------
- name | secret 名称 | string | true |
- key | secret 中的键名 | string | true |
-
-### 样例
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: website
-spec:
-  components:
-    - name: frontend
-      type: webservice
-      properties:
-        image: oamdev/testapp:v1
-        cmd: ["node", "server.js"]
-        port: 8080
-        cpu: "0.1"
-        env:
-          - name: FOO
-            value: bar
-          - name: FOO
-            valueFrom:
-              secretKeyRef:
-                name: bar
-                key: bar
-```
-
-## Worker
-
-定义一个长期运行的，可伸缩的容器化的服务，并且不会暴露承接用户流量的网络端点。
-
-### Parameters
-
-| NAME             | DESCRIPTION                                                                               | TYPE                              | REQUIRED | DEFAULT |
-| ---------------- | ----------------------------------------------------------------------------------------- | --------------------------------- | -------- | ------- |
-| cmd              | 容器的启动命令                                                          | []string                          | false    |         |
-| env              | 容器中的环境变量                                           | [[]env](#env)                     | false    |         |
-| image            | 使用的镜像                                        | string                            | true     |         |
-| imagePullPolicy  | 镜像拉取策略，可选值为（"Always"，"Never" 或者 "IfNotPresent"）                                              | string                            | false    |         |
-| cpu              | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)          | string                            | false    |         |
-| memory           | 所需要的内存大小               | string                            | false    |         |
-| volumeMounts |  | [volumeMounts](#volumemounts) | false |
-| livenessProbe    | 判断容器是否存活的探针                                | [livenessProbe](#livenessProbe)   | false    |         |
-| readinessProbe   | 判断容器是否就绪，能够接受用户流量的探针 | [readinessProbe](#readinessProbe) | false    |         |
-| imagePullSecrets | 容器的镜像拉取密钥                                               | []string                          | false    |         |
-
-### 样例
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: app-worker
-spec:
-  components:
-    - name: myworker
-      type: worker
-      properties:
-        image: "busybox"
-        cmd:
-          - sleep
-          - "1000"
-```
-
-## Task
-
-定义一个只执行一次代码或者脚本的任务。
-
-### Parameters
-
-| NAME             | DESCRIPTION                                                                                      | TYPE                              | REQUIRED | DEFAULT |
-| ---------------- | ------------------------------------------------------------------------------------------------ | --------------------------------- | -------- | ------- |
-| cmd              | 容器的启动命令                                                                | []string                          | false    |         |
-| env              | 容器中的环境变量                                                  | [[]env](#env)                     | false    |         |
-| count            | 定义任务执行的并行度                                                      | int                               | true     | 1       |
-| restart          | 定义失败重启策略，可选值为 Never 或者 OnFailure，默认是 OnFailure | string                            | true     | Never   |
-| image            | 使用的镜像                                               | string                            | true     |         |
-| cpu              | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)                 | string                            | false    |         |
-| memory           | 所需要的内存大小                      | string                            | false    |         |
-| volumeMounts     |  | [volumeMounts](#volumemounts) | false |
-| livenessProbe    | 判断容器是否存活的探针                                       | [livenessProbe](#livenessProbe)   | false    |         |
-| readinessProbe   | 判断容器是否就绪，能够接受用户流量的探针        | [readinessProbe](#readinessProbe) | false    |         |
-| labels           | 工作负载的标签                                                               | []string                          | false    |         |
-| annotations      | 工作负载的注解                                                      | []string                          | false    |         |
-| imagePullPolicy  | 镜像拉取策略，可选值为（"Always"，"Never" 或者 "IfNotPresent"）        | string                            | false    |         |
-| imagePullSecrets | 容器的镜像拉取密钥                                                  | []string                          | false    |         |
-
-### 样例
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: app-worker
-spec:
-  components:
-    - name: mytask
-      type: task
-      properties:
-        image: perl
-        count: 10
-        cmd: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
-```
-
-## Cron Task
-
 定义一个周期性运行代码或者脚本的任务。
 
-### Parameters
-
-| NAME                       | DESCRIPTION                                                                                      | TYPE                              | REQUIRED | DEFAULT |
-|----------------------------|--------------------------------------------------------------------------------------------------|-----------------------------------|----------|---------|
-| cmd                        | 容器的启动命令                                                                 | []string                          | false    |         |
-| env                        | 容器中的环境变量                                                  | [[]env](#env)                     | false    |         |
-| schedule                   | 执行规则 [Cron 规范](https://en.wikipedia.org/wiki/Cron)                        | string                            | true     |         |
-| suspend                    | 是否暂停执行                                                                   | bool                              | false    | false   |
-| concurrencyPolicy          | 定义任务如何处理任务的重叠运行，可选值为 "Allow"，"Forbid" 或者 "Replace"，默认值为 Allow                | string                            | false    | Allow   |
-| successfulJobsHistoryLimit | 保留多少个已经成功完成的任务记录                                              | int                               | false    | 3       |
-| failedJobsHistoryLimit     | 保留多少个已经失败的任务记录                                                      | int                               | false    | 1       |
-| count                      | 每次任务执行的并行度                                                      | int                               | true     | 1       |
-| restart                    | 定义失败重启策略，可选值为 Never 或者 OnFailure，默认是 OnFailure | string                            | true     | Never   |
-| image                      | 容器使用的镜像                                               | string                            | true     |         |
-| cpu                        | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)                 | string                            | false    |         |
-| memory                     | 所需要的内存大小                      | string                            | false    |         |
-| volumeMounts     |  | [volumeMounts](#volumemounts) | false |
-| livenessProbe              | 判断容器是否存活的探针                                       | [livenessProbe](#livenessProbe)   | false    |         |
-| readinessProbe             | 判断容器是否就绪，能够接受用户流量的探针        | [readinessProbe](#readinessProbe) | false    |         |
-| labels                     | 工作负载的标签                                                               | []string                          | false    |         |
-| annotations                | 工作负载的注解                                                          | []string                          | false    |         |
-| imagePullPolicy            | 镜像拉取策略，可选值为（"Always"，"Never" 或者 "IfNotPresent"）                                                       | string                            | false    |         |
-| imagePullSecrets           | 容器的镜像拉取密钥                                                      | []string                          | false    |         |
-
-### 样例
+### 示例 (cron-task)
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -352,18 +30,497 @@ spec:
         schedule: "*/1 * * * *"
 ```
 
-## k8s-objects
-### 参数说明
+### 参数说明 (cron-task)
 
-|  字段名称   | 描述 |        类型          | 是否必填 | 默认值 |
-|---------|-------------|-----------------------|----------|---------|
-| objects |  Kubernetes 资源列表   | [[]K8s-Object](#K8s-Object) | true     |         |
 
-#### K8s-Object
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ cmd | 容器的启动命令。 | []string | false |  
+ env | 容器中的环境变量。 | [[]env](#env-cron-task) | false |  
+ schedule | 执行规则 [Cron 规范](https://en.wikipedia.org/wiki/Cron)。 | string | true |  
+ concurrencyPolicy | 定义任务如何处理任务的重叠运行，可选值为 "Allow"，"Forbid" 或者 "Replace"，默认值为 Allow。 | string | true | Allow 
+ suspend | 是否暂停执行。 | bool | true | false 
+ successfulJobsHistoryLimit | 保留多少个已经成功完成的任务记录。 | int | true | 3 
+ failedJobsHistoryLimit | 保留多少个已经失败的任务记录。 | int | true | 1 
+ startingDeadlineSeconds | Specify deadline in seconds for starting the job if it misses scheduled。 | int | false |  
+ labels | 工作负载的标签。 | map[string]string | false |  
+ annotations | 工作负载的注解。 | map[string]string | false |  
+ count | 每次任务执行的并行度。 | int | true | 1 
+ ttlSecondsAfterFinished | Limits the lifetime of a Job that has finished。 | int | false |  
+ activeDeadlineSeconds | The duration in seconds relative to the startTime that the job may be continuously active before the system tries to terminate it。 | int | false |  
+ backoffLimit | The number of retries before marking this job failed。 | int | true | 6 
+ restart | 定义失败重启策略，可选值为 Never 或者 OnFailure，默认是 OnFailure。 | string | true | Never 
+ image | 容器使用的镜像。 | string | true |  
+ imagePullPolicy | 镜像拉取策略。 | string | false |  
+ cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
+ memory | 所需要的内存大小。 | string | false |  
+ volumes | Declare volumes and volumeMounts。 | [[]volumes](#volumes-cron-task) | false |  
+ imagePullSecrets | 容器的镜像拉取密钥。 | []string | false |  
+ hostAliases | An optional list of hosts and IPs that will be injected into the pod's hosts file。 | [[]hostAliases](#hostaliases-cron-task) | false |  
+ livenessProbe | 判断容器是否存活的探针。 | [livenessProbe](#livenessprobe-cron-task) | false |  
+ readinessProbe | 判断容器是否就绪，能够接受用户流量的探针。 | [readinessProbe](#readinessprobe-cron-task) | false |  
+
+
+#### env (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | 环境变量名称。 | string | true |  
+ value | 环境变量的值。 | string | false |  
+ valueFrom | 从哪个资源中读取环境变量的定义。 | [valueFrom](#valuefrom-cron-task) | false |  
+
+
+##### valueFrom (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ secretKeyRef | secret 键的引用。 | [secretKeyRef](#secretkeyref-cron-task) | false |  
+ configMapKeyRef | configmap 键的引用。 | [configMapKeyRef](#configmapkeyref-cron-task) | false |  
+
+
+##### secretKeyRef (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Secret 名称。 | string | true |  
+ key | 选择 Secret 中存在的 key。 | string | true |  
+
+
+##### configMapKeyRef (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | 环境变量的名称。 | string | true |  
+ key | configmap 中的键名。 | string | true |  
+
+
+#### volumes (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ type | 指定存储卷类型，类型包括 "pvc","configMap","secret","emptyDir"。 | string | true |  
+
+
+#### hostAliases (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ ip |  | string | true |  
+ hostnames |  | []string | true |  
+
+
+#### livenessProbe (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-cron-task) | false |  
+ httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-cron-task) | false |  
+ tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-cron-task) | false |  
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+
+
+##### exec (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+
+
+##### httpGet (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path | 定义服务端点请求的路径。 | string | true |  
+ port | 定义服务端点的端口号。 | int | true |  
+ httpHeaders |  | [[]httpHeaders](#httpheaders-cron-task) | false |  
+
+
+##### httpHeaders (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ value |  | string | true |  
+
+
+##### tcpSocket (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | 指定健康检查的 TCP socket。 | int | true |  
+
+
+#### readinessProbe (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-cron-task) | false |  
+ httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-cron-task) | false |  
+ tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-cron-task) | false |  
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+
+
+##### exec (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+
+
+##### httpGet (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path | 定义服务端点请求的路径。 | string | true |  
+ port | 定义服务端点的端口号。 | int | true |  
+ httpHeaders |  | [[]httpHeaders](#httpheaders-cron-task) | false |  
+
+
+##### httpHeaders (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ value |  | string | true |  
+
+
+##### tcpSocket (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | 指定健康检查的 TCP socket。 | int | true |  
+
+
+## Daemon
+
+### 描述
+
+定义一个同 Kubernetes 每个机器 Node 都运行的服务。
+
+### 示例 (daemon)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: addon-node-exporter
+  namespace: vela-system
+spec:
+  components:
+  - name: node-exporter
+    type: daemon    
+    properties:
+      image: prom/node-exporter
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        hostPath:
+        - mountPath: /host/sys
+          mountPropagation: HostToContainer
+          name: sys
+          path: /sys
+          readOnly: true
+        - mountPath: /host/root
+          mountPropagation: HostToContainer
+          name: root
+          path: /
+          readOnly: true
+    traits:
+    - properties:
+        args:
+        - --path.sysfs=/host/sys
+        - --path.rootfs=/host/root
+        - --no-collector.wifi
+        - --no-collector.hwmon
+        - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
+        - --collector.netclass.ignored-devices=^(veth.*)$
+      type: command
+    - properties:
+        annotations:
+          prometheus.io/path: /metrics
+          prometheus.io/port: "8080"
+          prometheus.io/scrape: "true"
+        port:
+        - 9100
+      type: expose
+    - properties:
+        cpu: 0.1
+        memory: 250Mi
+      type: resource
+```
+
+### 参数说明 (daemon)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ cmd | 容器的启动命令。 | []string | false |  
+ env | 容器中的环境变量。 | [[]env](#env-daemon) | false |  
+ volumeMounts |  | [volumeMounts](#volumemounts-daemon) | false |  
+ labels | 工作负载的标签。 | map[string]string | false |  
+ annotations | 工作负载的注解。 | map[string]string | false |  
+ image | 容器使用的镜像。 | string | true |  
+ ports | 指定业务流量进入的端口（多个），默认为 80。 | [[]ports](#ports-daemon) | false |  
+ imagePullPolicy | 镜像拉取策略。 | string | false |  
+ cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
+ memory | 所需要的内存大小。 | string | false |  
+ volumes | Deprecated field, use volumeMounts instead。 | [[]volumes](#volumes-daemon) | false |  
+ livenessProbe | 判断容器是否存活的探针。 | [livenessProbe](#livenessprobe-daemon) | false |  
+ readinessProbe | 判断容器是否就绪，能够接受用户流量的探针。 | [readinessProbe](#readinessprobe-daemon) | false |  
+ hostAliases | 定义容器内的 hostAliases。 | [[]hostAliases](#hostaliases-daemon) | false |  
+ imagePullSecrets | 容器的镜像拉取密钥。 | []string | false |  
+
+
+#### env (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | 环境变量名称。 | string | true |  
+ value | 环境变量的值。 | string | false |  
+ valueFrom | 从哪个资源中读取环境变量的定义。 | [valueFrom](#valuefrom-daemon) | false |  
+
+
+##### valueFrom (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ secretKeyRef | secret 键的引用。 | [secretKeyRef](#secretkeyref-daemon) | false |  
+ configMapKeyRef | configmap 键的引用。 | [configMapKeyRef](#configmapkeyref-daemon) | false |  
+
+
+##### secretKeyRef (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Secret 名称。 | string | true |  
+ key | 选择 Secret 中存在的 key。 | string | true |  
+
+
+##### configMapKeyRef (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | 环境变量的名称。 | string | true |  
+ key | configmap 中的键名。 | string | true |  
+
+
+#### volumeMounts (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ pvc | 挂载一个 PVC 卷。 | [[]pvc](#pvc-daemon) | false |  
+ configMap | 挂载一个 configmap 卷。 | [[]configMap](#configmap-daemon) | false |  
+ secret | 挂载一个 secret 卷。 | [[]secret](#secret-daemon) | false |  
+ emptyDir | 挂载一个 emptyDir 的卷。 | [[]emptyDir](#emptydir-daemon) | false |  
+ hostPath | 挂载主机目录卷。 | [[]hostPath](#hostpath-daemon) | false |  
+
+
+##### pvc (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ claimName | PVC 名称。 | string | true |  
+
+
+##### configMap (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ defaultMode |  | int | true | 420 
+ cmName |  | string | true |  
+ items |  | [[]items](#items-daemon) | false |  
+
+
+##### items (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path |  | string | true |  
+ key |  | string | true |  
+ mode |  | int | true | 511 
+
+
+##### secret (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ defaultMode |  | int | true | 420 
+ items |  | [[]items](#items-daemon) | false |  
+ secretName |  | string | true |  
+
+
+##### items (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path |  | string | true |  
+ key |  | string | true |  
+ mode |  | int | true | 511 
+
+
+##### emptyDir (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ medium |  | string | true | empty 
+
+
+##### hostPath (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path |  | string | true |  
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ mountPropagation |  | string | false |  
+ readOnly |  | bool | false |  
+
+
+#### ports (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | 端口名称。 | string | false |  
+ port | 要暴露的 IP 端口号。 | int | true |  
+ protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | string | true | TCP 
+ expose | 端口是否需要暴露。 | bool | true | false 
+
+
+#### volumes (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ type | 指定存储卷类型，类型包括 "pvc","configMap","secret","emptyDir"。 | string | true |  
+
+
+#### livenessProbe (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-daemon) | false |  
+ httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-daemon) | false |  
+ tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-daemon) | false |  
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+
+
+##### exec (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+
+
+##### httpGet (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path | 定义服务端点请求的路径。 | string | true |  
+ port | 定义服务端点的端口号。 | int | true |  
+ host |  | string | false |  
+ scheme |  | string | false | HTTP 
+ httpHeaders |  | [[]httpHeaders](#httpheaders-daemon) | false |  
+
+
+##### httpHeaders (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ value |  | string | true |  
+
+
+##### tcpSocket (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | 指定健康检查的 TCP socket。 | int | true |  
+
+
+#### readinessProbe (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-daemon) | false |  
+ httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-daemon) | false |  
+ tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-daemon) | false |  
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+
+
+##### exec (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+
+
+##### httpGet (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path | 定义服务端点请求的路径。 | string | true |  
+ port | 定义服务端点的端口号。 | int | true |  
+ host |  | string | false |  
+ scheme |  | string | false | HTTP 
+ httpHeaders |  | [[]httpHeaders](#httpheaders-daemon) | false |  
+
+
+##### httpHeaders (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ value |  | string | true |  
+
+
+##### tcpSocket (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | 指定健康检查的 TCP socket。 | int | true |  
+
+
+#### hostAliases (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ ip |  | string | true |  
+ hostnames |  | []string | true |  
+
+
+## K8s-Objects
+
+### 描述
 
 列表中的元素为完整的 Kubernetes 资源结构体。
 
-### 样例
+### 示例 (k8s-objects)
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -390,5 +547,473 @@ spec:
                 restartPolicy: Never
             backoffLimit: 4
 ```
+
+### 参数说明 (k8s-objects)
+|  NAME   | DESCRIPTION  |        TYPE          | REQUIRED | DEFAULT |
+|---------|-------------|-----------------------|----------|---------|
+| objects | A slice of Kubernetes resource manifests   | [][Kubernetes-Objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) | true     |         |
+
+## Task
+
+### 描述
+
+定义一个只执行一次代码或者脚本的任务。
+
+### 示例 (task)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: app-worker
+spec:
+  components:
+    - name: mytask
+      type: task
+      properties:
+        image: perl
+	    count: 10
+	    cmd: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+```
+
+### 参数说明 (task)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ cmd | 容器的启动命令。 | []string | false |  
+ env | 容器中的环境变量。 | [[]env](#env-task) | false |  
+ count | 每次任务执行的并行度。 | int | true | 1 
+ labels | 工作负载的标签。 | map[string]string | false |  
+ annotations | 工作负载的注解。 | map[string]string | false |  
+ restart | 定义失败重启策略，可选值为 Never 或者 OnFailure，默认是 OnFailure。 | string | true | Never 
+ image | 容器使用的镜像。 | string | true |  
+ imagePullPolicy | 镜像拉取策略。 | string | false |  
+ cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
+ memory | 所需要的内存大小。 | string | false |  
+ volumes | Declare volumes and volumeMounts。 | [[]volumes](#volumes-task) | false |  
+ imagePullSecrets | 容器的镜像拉取密钥。 | []string | false |  
+ livenessProbe | 判断容器是否存活的探针。 | [livenessProbe](#livenessprobe-task) | false |  
+ readinessProbe | 判断容器是否就绪，能够接受用户流量的探针。 | [readinessProbe](#readinessprobe-task) | false |  
+
+
+#### env (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | 环境变量名称。 | string | true |  
+ value | 环境变量的值。 | string | false |  
+ valueFrom | 从哪个资源中读取环境变量的定义。 | [valueFrom](#valuefrom-task) | false |  
+
+
+##### valueFrom (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ secretKeyRef | secret 键的引用。 | [secretKeyRef](#secretkeyref-task) | false |  
+ configMapKeyRef | configmap 键的引用。 | [configMapKeyRef](#configmapkeyref-task) | false |  
+
+
+##### secretKeyRef (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Secret 名称。 | string | true |  
+ key | 选择 Secret 中存在的 key。 | string | true |  
+
+
+##### configMapKeyRef (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | 环境变量的名称。 | string | true |  
+ key | configmap 中的键名。 | string | true |  
+
+
+#### volumes (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ type | 指定存储卷类型，类型包括 "pvc","configMap","secret","emptyDir"。 | string | true |  
+
+
+#### livenessProbe (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-task) | false |  
+ httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-task) | false |  
+ tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-task) | false |  
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+
+
+##### exec (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+
+
+##### httpGet (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path | 定义服务端点请求的路径。 | string | true |  
+ port | 定义服务端点的端口号。 | int | true |  
+ httpHeaders |  | [[]httpHeaders](#httpheaders-task) | false |  
+
+
+##### httpHeaders (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ value |  | string | true |  
+
+
+##### tcpSocket (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | 指定健康检查的 TCP socket。 | int | true |  
+
+
+#### readinessProbe (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-task) | false |  
+ httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-task) | false |  
+ tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-task) | false |  
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+
+
+##### exec (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+
+
+##### httpGet (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path | 定义服务端点请求的路径。 | string | true |  
+ port | 定义服务端点的端口号。 | int | true |  
+ httpHeaders |  | [[]httpHeaders](#httpheaders-task) | false |  
+
+
+##### httpHeaders (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ value |  | string | true |  
+
+
+##### tcpSocket (task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | 指定健康检查的 TCP socket。 | int | true |  
+
+
+## Webservice
+
+### 描述
+
+定义一个长期运行的，可伸缩的容器化的服务，并且会暴露一个服务端点用来接受来自客户的外部流量。
+
+### 示例 (webservice)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: website
+spec:
+  components:
+    - name: frontend
+      type: webservice
+      properties:
+        image: oamdev/testapp:v1
+        cmd: ["node", "server.js"]
+        ports:
+          - port: 8080
+            expose: true
+        cpu: "0.1"
+        env:
+          - name: FOO
+            value: bar
+          - name: FOO
+            valueFrom:
+              secretKeyRef:
+                name: bar
+                key: bar
+```
+
+### 参数说明 (webservice)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ cmd | 容器的启动命令。 | []string | false |  
+ env | 容器中的环境变量。 | [[]env](#env-webservice) | false |  
+ volumeMounts |  | [volumeMounts](#volumemounts-webservice) | false |  
+ labels | 工作负载的标签。 | map[string]string | false |  
+ annotations | 工作负载的注解。 | map[string]string | false |  
+ image | 容器使用的镜像。 | string | true |  
+ ports | 指定业务流量进入的端口（多个），默认为 80。 | [[]ports](#ports-webservice) | false |  
+ imagePullPolicy | 镜像拉取策略。 | string | false |  
+ cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
+ memory | 所需要的内存大小。 | string | false |  
+ volumes | Deprecated field, use volumeMounts instead。 | [[]volumes](#volumes-webservice) | false |  
+ livenessProbe | 判断容器是否存活的探针。 | [livenessProbe](#livenessprobe-webservice) | false |  
+ readinessProbe | 判断容器是否就绪，能够接受用户流量的探针。 | [readinessProbe](#readinessprobe-webservice) | false |  
+ hostAliases | 定义容器内的 hostAliases。 | [[]hostAliases](#hostaliases-webservice) | false |  
+ imagePullSecrets | 容器的镜像拉取密钥。 | []string | false |  
+
+
+#### env (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | 环境变量名称。 | string | true |  
+ value | 环境变量的值。 | string | false |  
+ valueFrom | 从哪个资源中读取环境变量的定义。 | [valueFrom](#valuefrom-webservice) | false |  
+
+
+##### valueFrom (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ secretKeyRef | secret 键的引用。 | [secretKeyRef](#secretkeyref-webservice) | false |  
+ configMapKeyRef | configmap 键的引用。 | [configMapKeyRef](#configmapkeyref-webservice) | false |  
+
+
+##### secretKeyRef (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Secret 名称。 | string | true |  
+ key | 选择 Secret 中存在的 key。 | string | true |  
+
+
+##### configMapKeyRef (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | 环境变量的名称。 | string | true |  
+ key | configmap 中的键名。 | string | true |  
+
+
+#### volumeMounts (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ pvc | 挂载一个 PVC 卷。 | [[]pvc](#pvc-webservice) | false |  
+ configMap | 挂载一个 configmap 卷。 | [[]configMap](#configmap-webservice) | false |  
+ secret | 挂载一个 secret 卷。 | [[]secret](#secret-webservice) | false |  
+ emptyDir | 挂载一个 emptyDir 的卷。 | [[]emptyDir](#emptydir-webservice) | false |  
+ hostPath | 挂载主机目录卷。 | [[]hostPath](#hostpath-webservice) | false |  
+
+
+##### pvc (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ claimName | PVC 名称。 | string | true |  
+
+
+##### configMap (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ defaultMode |  | int | true | 420 
+ cmName |  | string | true |  
+ items |  | [[]items](#items-webservice) | false |  
+
+
+##### items (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path |  | string | true |  
+ key |  | string | true |  
+ mode |  | int | true | 511 
+
+
+##### secret (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ defaultMode |  | int | true | 420 
+ items |  | [[]items](#items-webservice) | false |  
+ secretName |  | string | true |  
+
+
+##### items (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path |  | string | true |  
+ key |  | string | true |  
+ mode |  | int | true | 511 
+
+
+##### emptyDir (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ medium |  | string | true | empty 
+
+
+##### hostPath (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path |  | string | true |  
+ name |  | string | true |  
+ mountPath |  | string | true |  
+
+
+#### ports (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | 端口名称。 | string | false |  
+ port | 要暴露的 IP 端口号。 | int | true |  
+ protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | string | true | TCP 
+ expose | 端口是否需要暴露。 | bool | true | false 
+
+
+#### volumes (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ type | 指定存储卷类型，类型包括 "pvc","configMap","secret","emptyDir"。 | string | true |  
+
+
+#### livenessProbe (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-webservice) | false |  
+ httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-webservice) | false |  
+ tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-webservice) | false |  
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+
+
+##### exec (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+
+
+##### httpGet (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path | 定义服务端点请求的路径。 | string | true |  
+ port | 定义服务端点的端口号。 | int | true |  
+ host |  | string | false |  
+ scheme |  | string | false | HTTP 
+ httpHeaders |  | [[]httpHeaders](#httpheaders-webservice) | false |  
+
+
+##### httpHeaders (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ value |  | string | true |  
+
+
+##### tcpSocket (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | 指定健康检查的 TCP socket。 | int | true |  
+
+
+#### readinessProbe (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-webservice) | false |  
+ httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-webservice) | false |  
+ tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-webservice) | false |  
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+
+
+##### exec (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+
+
+##### httpGet (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path | 定义服务端点请求的路径。 | string | true |  
+ port | 定义服务端点的端口号。 | int | true |  
+ host |  | string | false |  
+ scheme |  | string | false | HTTP 
+ httpHeaders |  | [[]httpHeaders](#httpheaders-webservice) | false |  
+
+
+##### httpHeaders (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ value |  | string | true |  
+
+
+##### tcpSocket (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | 指定健康检查的 TCP socket。 | int | true |  
+
+
+#### hostAliases (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ ip |  | string | true |  
+ hostnames |  | []string | true |  
 
 
