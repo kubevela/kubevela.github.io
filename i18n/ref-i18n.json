@@ -342,7 +342,7 @@
 	"Specify the number of workload": {
 		"Chinese": "工作负载的 Pod 个数"
 	},
-	"Specify the schedule in [Cron format](https://en.wikipedia.org/wiki/Cron)": {
+	"Specify the schedule in Cron format, see https://en.wikipedia.org/wiki/Cron": {
 		"Chinese": "执行规则 [Cron 规范](https://en.wikipedia.org/wiki/Cron)"
 	},
 	"Specify the shared volume path": {

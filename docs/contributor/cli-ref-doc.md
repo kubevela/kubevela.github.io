@@ -193,7 +193,7 @@ $ tree -L 1
 
 ```shell
 cd kubevela/
-go run ./hack/docgen/terraform/generate.go
+go run ./hack/docgen/terraform/generate.go --i18n ../kubevela.io/i18n/ref-i18n.json
 ```
 
 3. Update the list if there're new cloud resources
