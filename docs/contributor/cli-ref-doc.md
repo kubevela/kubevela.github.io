@@ -89,10 +89,10 @@ You can specify some args for more flexible usage.
 * Generate only for specified type
 
 ```shell
-go run hack/docgen/def/gen.go --type component
-go run hack/docgen/def/gen.go --type trait
-go run hack/docgen/def/gen.go --type policy
-go run hack/docgen/def/gen.go --type workflowstep
+go run hack/docgen/def/gen.go --type component --i18n ../kubevela.io/i18n/ref-i18n.json
+go run hack/docgen/def/gen.go --type trait --i18n ../kubevela.io/i18n/ref-i18n.json
+go run hack/docgen/def/gen.go --type policy --i18n ../kubevela.io/i18n/ref-i18n.json
+go run hack/docgen/def/gen.go --type workflowstep --i18n ../kubevela.io/i18n/ref-i18n.json
 ```
 
 * Specify the path of output
@@ -108,7 +108,7 @@ go run hack/docgen/def/gen.go --type component --path ../kubevela.io/docs/end-us
 > You must specify a type if i18n location specified.
 
 ```shell
-go run hack/docgen/def/gen.go --location zh --path ../kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/end-user/components/references.md
+go run hack/docgen/def/gen.go --location zh --i18n ../kubevela.io/i18n/ref-i18n.json --path ../kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/end-user/components/references.md
 ```
 
 ### How the docs generated?
@@ -208,3 +208,7 @@ git status
 ```
 
 5. Check in the changes and send pull request.
+
+## Translate for the reference docs
+
+You need to translate into this file `kubevela.io/i18n/ref-i18n.json` for i18n, after translate, run the commands above to update all these reference docs.

@@ -4,7 +4,7 @@ title:  Alibaba Cloud REDIS
 
 ## Description
 
-Terraform configuration for Alibaba Cloud Redis
+Terraform configuration for Alibaba Cloud Redis.
 
 ## Examples
 
@@ -30,18 +30,18 @@ spec:
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- account_name | Redis instance user account name | string | false |  
- instance_name | Redis instance name | string | false |  
- password | RDS instance account password | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ account_name | Redis instance user account name. | string | false |  
+ instance_name | Redis instance name. | string | false |  
+ password | RDS instance account password. | string | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  
 
 
 ### Outputs

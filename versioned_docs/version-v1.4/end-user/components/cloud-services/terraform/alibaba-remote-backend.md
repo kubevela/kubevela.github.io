@@ -4,7 +4,7 @@ title:  Alibaba Cloud REMOTE-BACKEND
 
 ## Description
 
-Deploy remote backend storage in Aliyun based on Terraform module
+Deploy remote backend storage in Aliyun based on Terraform module.
 
 ## Specification
 
@@ -22,12 +22,12 @@ Deploy remote backend storage in Aliyun based on Terraform module
  state_acl | Canned ACL applied to bucket. | string | false |  
  state_name | The name of the state file. Examples: dev/tf.state, dev/frontend/tf.tfstate, etc.. | string | false |  
  state_path | The path directory of the state file will be stored. Examples: dev/frontend, prod/db, etc.. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  

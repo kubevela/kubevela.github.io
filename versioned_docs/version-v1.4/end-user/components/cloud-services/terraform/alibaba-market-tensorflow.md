@@ -4,7 +4,7 @@ title:  Alibaba Cloud MARKET-TENSORFLOW
 
 ## Description
 
-Based on Terraform module, create ECS instances on Ali cloud to achieve one-click deployment of cloud marketplace Tensorflow
+Based on Terraform module, create ECS instances on Ali cloud to achieve one-click deployment of cloud marketplace Tensorflow.
 
 ## Specification
 
@@ -21,7 +21,7 @@ Based on Terraform module, create ECS instances on Ali cloud to achieve one-clic
  image_id | The image id used to launch one ecs instance. If not set, a fetched market place image by product_keyword will be used. | string | false |  
  internet_charge_type | The internet charge type of ECS instance. Choices are 'PayByTraffic' and 'PayByBandwidth'. | string | false |  
  internet_max_bandwidth_out | The maximum internet out bandwidth of ECS instance. | number | false |  
- private_ip | Configure ECS Instance private IP address | string | false |  
+ private_ip | Configure ECS Instance private IP address. | string | false |  
  product_keyword | The name keyword of Market Product used to fetch the specified product image. | string | false |  
  product_suggested_price | The suggested price of Market Product used to fetch the specified product image. | number | false |  
  product_supplier_name_keyword | The name keyword of Market Product supplier name used to fetch the specified product image. | string | false |  
@@ -35,12 +35,12 @@ Based on Terraform module, create ECS instances on Ali cloud to achieve one-clic
  system_disk_size | The system disk size used to launch ecs instance. | number | false |  
  tags | A mapping of tags to assign to the ECS. | map(string) | false |  
  vswitch_id | The virtual switch ID to launch ECS instance in VPC. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  

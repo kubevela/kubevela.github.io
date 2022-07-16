@@ -4,7 +4,7 @@ title:  Alibaba Cloud DNS
 
 ## Description
 
-Terraform configuration for Alibaba Cloud DNS
+Terraform configuration for Alibaba Cloud DNS.
 
 ## Specification
 
@@ -25,12 +25,12 @@ Terraform configuration for Alibaba Cloud DNS
  resource_group_id | The Id of resource group which the DNS belongs. | string | false |  
  shared_credentials_file | (Deprecated from version 1.5.0) This is the path to the shared credentials file. If this is not set and a profile is specified, $HOME/.aliyun/config.json will be used. | string | false |  
  skip_region_validation | (Deprecated from version 1.5.0) Skip static validation of region ID. Used by users of alternative AlibabaCloud-like APIs or users w/ access to regions that are not public (yet). | bool | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  

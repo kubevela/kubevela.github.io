@@ -4,7 +4,7 @@ title:  Alibaba Cloud SLB-RULE
 
 ## Description
 
-Terraform-based module creates an SLB instance under AliCloud's VPC and configures rules
+Terraform-based module creates an SLB instance under AliCloud's VPC and configures rules.
 
 ## Specification
 
@@ -48,12 +48,12 @@ Terraform-based module creates an SLB instance under AliCloud's VPC and configur
  unhealthy_threshold | Threshold determining the result of the health check is fail. It is required when `health_check` is on. Valid value range: [1-10] in seconds. Default to 3. | number | false |  
  url | Domain of the forwarding rule. It must be 2-80 characters in length. Only letters a-z, numbers 0-9, and characters '-' '/' '?' '%' '#' and '&' are allowed. URLs must be started with the character '/', but cannot be '/' alone. | string | false |  
  vswitch_id | VSwitch variables, if vswitch_id is empty, then the net_type = classic. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  

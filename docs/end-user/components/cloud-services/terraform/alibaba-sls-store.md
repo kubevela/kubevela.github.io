@@ -4,7 +4,7 @@ title:  Alibaba Cloud SLS-STORE
 
 ## Description
 
-Terraform configuration for Alibaba Cloud SLS Store
+Terraform configuration for Alibaba Cloud SLS Store.
 
 ## Examples
 
@@ -32,8 +32,8 @@ spec:
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- create_project | Whether to create log resources | string | false |  
- description | Description of security group | string | false |  
+ create_project | Whether to create log resources. | string | false |  
+ description | Description of security group. | string | false |  
  project_name | Name of security group. It is used to create a new security group. | string | false |  
  store_append_meta | Determines whether to append log meta automatically. The meta includes log receive time and client IP address. Default to true. | bool | false |  
  store_auto_split | Determines whether to automatically split a shard. Default to true. | bool | false |  
@@ -41,12 +41,12 @@ spec:
  store_name | Log store name. | string | false |  
  store_retention_period | The data retention time (in days). Valid values: [1-3650]. Default to 30. Log store data will be stored permanently when the value is '3650'. | number | false |  
  store_shard_count | The number of shards in this log store. Default to 2. You can modify it by 'Split' or 'Merge' operations. | number | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  

@@ -4,7 +4,7 @@ title:  Alibaba Cloud VPN-GATEWAY
 
 ## Description
 
-Create VPN resources on AliCloud based on Terraform module
+Create VPN resources on AliCloud based on Terraform module.
 
 ## Specification
 
@@ -50,12 +50,12 @@ Create VPN resources on AliCloud based on Terraform module
  vpn_name | Name of the VPN gateway. | string | false |  
  vpn_period | The filed is only required while the InstanceChargeType is prepaid. | number | false |  
  vpn_ssl_connections | The max connections of SSL VPN. Default to 5. This field is ignored when enable_ssl is false. | number | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  
