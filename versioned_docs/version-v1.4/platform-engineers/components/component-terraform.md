@@ -202,7 +202,7 @@ By running `vela def doc-gen` command, we can generate related docs for the Comp
 If you choose to generate docs from running cluster, you should provide the name of the ComponentDefinition and the namespace which it is running in.
 
 ```shell
-$ vela def doc-gen alibaba-eip -n vela-system
+$ vela def doc-gen alibaba-eip --path ./kubevela.io/docs/end-user/components/cloud-services/terraform/
 Generated docs for alibaba-eip in ./kubevela.io/docs/end-user/components/cloud-services/terraform/alibaba-eip.md
 ```
 

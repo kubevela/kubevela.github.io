@@ -4,28 +4,26 @@ title:  Alibaba Cloud OSS-WEBSITE
 
 ## Description
 
-Alibaba Cloud OSS static webstie bucket
+Alibaba Cloud OSS static webstie bucket.
 
 ## Specification
 
 
-### Properties
-
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- acl | OSS bucket ACL, supported 'private', 'public-read', 'public-read-write' | string | false |  
- bucket | OSS bucket name | string | false |  
- error_document | OSS bucket static website error document | string | false |  
- index_document | OSS bucket static website index document | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ acl | OSS bucket ACL, supported 'private', 'public-read', 'public-read-write'. | string | false |  
+ bucket | OSS bucket name. | string | false |  
+ error_document | OSS bucket static website error document. | string | false |  
+ index_document | OSS bucket static website index document. | string | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  
 
 
 ### Outputs

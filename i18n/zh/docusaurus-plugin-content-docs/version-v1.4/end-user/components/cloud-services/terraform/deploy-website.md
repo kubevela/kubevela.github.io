@@ -4,27 +4,25 @@ title:  Deploy-Website
 
 ## 描述
 
-Deploy a Static Website in object stroage, like S3 and OSS
+Deploy a Static Website in object stroage, like S3 and OSS。
 
 ## 参数说明
 
 
-### 属性
-
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- bucket | OSS bucket name | string | false |  
- endpoint | OSS bucket endpoint | string | true |  
- static_web_url | The URL of the static website | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ bucket | OSS bucket name。 | string | false |  
+ endpoint | OSS bucket endpoint。 | string | true |  
+ static_web_url | The URL of the static website。 | string | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to。 | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to。 | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to。 | string | false |  
 
 
 ### 输出

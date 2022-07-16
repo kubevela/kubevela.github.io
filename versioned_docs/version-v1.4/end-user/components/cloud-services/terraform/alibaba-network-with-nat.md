@@ -4,12 +4,10 @@ title:  Alibaba Cloud NETWORK-WITH-NAT
 
 ## Description
 
-Build VPC and Nat gateway network environment and bind EIP, add SNAT and DNAT entries on AliCloud based on Terraform module
+Build VPC and Nat gateway network environment and bind EIP, add SNAT and DNAT entries on AliCloud based on Terraform module.
 
 ## Specification
 
-
-### Properties
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
@@ -31,7 +29,7 @@ Build VPC and Nat gateway network environment and bind EIP, add SNAT and DNAT en
  dnat_table_id | The value can get from alicloud_nat_gateway Attributes 'forward_table_ids'. | string | false |  
  eip_bandwidth | Maximum bandwidth to the elastic public network, measured in Mbps (Mega bit per second). | number | false |  
  eip_instance_charge_type | Elastic IP instance charge type. | string | false |  
- eip_internet_charge_type | Internet charge type of the EIP, Valid values are 'PayByBandwidth', 'PayByTraffic'.  | string | false |  
+ eip_internet_charge_type | Internet charge type of the EIP, Valid values are 'PayByBandwidth', 'PayByTraffic'. | string | false |  
  eip_isp | The line type of the Elastic IP instance. | string | false |  
  eip_name | Name to be used on all eip as prefix. Default to 'TF-EIP-for-Nat'. The final default name would be TF-EIP-for-Nat001, TF-EIP-for-Nat002 and so on. | string | false |  
  eip_period | The duration that you will buy the EIP, in month. | number | false |  
@@ -57,7 +55,7 @@ Build VPC and Nat gateway network environment and bind EIP, add SNAT and DNAT en
  snat_with_vswitch_ids | List of snat entries to create by vswitch ids. Each item valid keys: 'vswitch_ids'(required, using comma joinor to set multi vswitch ids), 'snat_ip'(if not, use root parameter 'snat_ips', using comma joinor to set multi ips), 'name'(if not, will return one automatically). | list(map(string)) | false |  
  tags | The common tags will apply to all of resources. | map(string) | false |  
  use_existing_vpc | The vpc id used to launch several vswitches. If set, the 'create_vpc' will be ignored. | bool | false |  
- use_num_suffix | Always append numerical suffix(like 001, 002 and so on) to vswitch name, even if the length of `vswitch_cidrs` is 1 | bool | false |  
+ use_num_suffix | Always append numerical suffix(like 001, 002 and so on) to vswitch name, even if the length of `vswitch_cidrs` is 1. | bool | false |  
  vpc_cidr | The cidr block used to launch a new vpc. | string | false |  
  vpc_description | The vpc description used to launch a new vpc. | string | false |  
  vpc_name | The vpc name used to launch a new vpc. | string | false |  
@@ -68,12 +66,12 @@ Build VPC and Nat gateway network environment and bind EIP, add SNAT and DNAT en
  vswitch_ids | A list of virtual switch IDs to launch in. | list(string) | false |  
  vswitch_name | The vswitch name prefix used to launch several new vswitches. | string | false |  
  vswitch_tags | The tags used to launch serveral vswitches. | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  

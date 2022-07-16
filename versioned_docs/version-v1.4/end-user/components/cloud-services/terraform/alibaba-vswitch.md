@@ -4,12 +4,10 @@ title:  Alibaba Cloud VSWITCH
 
 ## Description
 
-Terraform configuration for Alibaba Cloud VSwitch
+Terraform configuration for Alibaba Cloud VSwitch.
 
 ## Specification
 
-
-### Properties
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
@@ -21,16 +19,16 @@ Terraform configuration for Alibaba Cloud VSwitch
  vswitch_cidr | cidr blocks used to launch a new vswitch. | string | false |  
  vswitch_description | The vswitch description used to launch several new vswitch. | string | false |  
  vswitch_name | The vswitch name prefix used to launch several new vswitches. |  | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
- zone_id | Availability Zone ID | string | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ zone_id | Availability Zone ID. | string | false |  
 
 
 #### writeConnectionSecretToRef
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to. | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to. | string | false |  
 
 
 ### Outputs
