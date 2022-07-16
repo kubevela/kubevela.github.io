@@ -4,27 +4,25 @@ title:  阿里云 SLB
 
 ## 描述
 
-Terraform configuration for Alicloud SLB
+Terraform configuration for Alicloud SLB。
 
 ## 参数说明
 
 
-### 属性
-
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- createSlb |  | bool | false |  
- namePrefix |  | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
- zone_id | Availability Zone ID | string | false |  
+ createSlb | 。 | bool | false |  
+ namePrefix | 。 | string | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to。 | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ zone_id | Availability Zone ID。 | string | false |  
 
 
 #### writeConnectionSecretToRef
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name | The secret name which the cloud resource connection will be written to | string | true |  
- namespace | The secret namespace which the cloud resource connection will be written to | string | false |  
+ name | The secret name which the cloud resource connection will be written to。 | string | true |  
+ namespace | The secret namespace which the cloud resource connection will be written to。 | string | false |  
 
 
 ### 输出

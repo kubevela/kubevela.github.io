@@ -18,13 +18,13 @@ $ tree -L 1
 
 ```shell
 cd kubevela/
-go run ./hack/docgen/gen.go
+go run ./hack/docgen/cli/gen.go
 ```
 
 3. Update more docs such as i18n zh
 
 ```shell
-$ go run ./hack/docgen/gen.go ../kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
+$ go run ./hack/docgen/cli/gen.go ../kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
 scanning rootPath of CLI docs for replace:  ../kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
 ```
 
