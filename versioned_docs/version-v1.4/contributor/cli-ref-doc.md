@@ -89,26 +89,28 @@ You can specify some args for more flexible usage.
 * Generate only for specified type
 
 ```shell
-go run hack/docgen/def/gen.go --type component --i18n ../kubevela.io/i18n/ref-i18n.json
-go run hack/docgen/def/gen.go --type trait --i18n ../kubevela.io/i18n/ref-i18n.json
-go run hack/docgen/def/gen.go --type policy --i18n ../kubevela.io/i18n/ref-i18n.json
-go run hack/docgen/def/gen.go --type workflowstep --i18n ../kubevela.io/i18n/ref-i18n.json
+go run hack/docgen/def/gen.go --type component
+go run hack/docgen/def/gen.go --type trait
+go run hack/docgen/def/gen.go --type policy
+go run hack/docgen/def/gen.go --type workflowstep
 ```
 
-* Specify the path of output
+* Specify a path for output
 
-> You must specify a type if path specified.
+> You must choose one of the type generated if path specified.
 
 ```shell
 go run hack/docgen/def/gen.go --type component --path ../kubevela.io/docs/end-user/components/references.md
 ```
 
-* Specify the i18n location of the output
-
-> You must specify a type if i18n location specified.
+* Specify the i18n location with a translation script data for the output
 
 ```shell
-go run hack/docgen/def/gen.go --location zh --i18n ../kubevela.io/i18n/ref-i18n.json --path ../kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/end-user/components/references.md
+go run hack/docgen/def/gen.go --location zh --i18n ../kubevela.io/static/reference-i18n.json
+
+go run hack/docgen/def/gen.go --location zh --i18n https://kubevela.io/reference-i18n.json
+
+go run hack/docgen/def/gen.go --type component --path ../kubevela.io/docs/end-user/components/references.md --location zh --i18n ../kubevela.io/static/reference-i18n.json
 ```
 
 ### How the docs generated?
@@ -193,12 +195,12 @@ $ tree -L 1
 
 ```shell
 cd kubevela/
-go run ./hack/docgen/terraform/generate.go --i18n ../kubevela.io/i18n/ref-i18n.json
+go run ./hack/docgen/terraform/generate.go --i18n ../kubevela.io/static/reference-i18n.json
 ```
 
-3. Update the list if there're new cloud resources
-  - `kubevela.io/docs/end-user/components/cloud-services/cloud-resources-list.md`
-  - I18n/zh: `kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/end-user/components/cloud-services/cloud-resources-list.md`
+3. Update the resource catalog list if there're new cloud resources
+  - Resource Catalog(English): `kubevela.io/docs/end-user/components/cloud-services/cloud-resources-list.md`
+  - Resource Catalog(Chinese): `kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/end-user/components/cloud-services/cloud-resources-list.md`
 
 4. Then you can check the difference in kubevela.io.
 
@@ -211,4 +213,9 @@ git status
 
 ## Translate for the reference docs
 
-You need to translate into this file `kubevela.io/i18n/ref-i18n.json` for i18n, after translate, run the commands above to update all these reference docs.
+You need to translate into this file if you want to contribute for internationalization(i18n):
+
+- File path: `kubevela.io/static/reference-i18n.json`
+- URL for public access: https://kubevela.io/reference-i18n.json
+
+After any translate, run the commands above to update all these reference docs.
