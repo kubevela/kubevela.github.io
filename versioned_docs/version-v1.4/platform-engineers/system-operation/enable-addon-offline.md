@@ -13,6 +13,7 @@ You can follow these steps as an example.
 ```yaml
 git clone https://github.com/kubevela/catalog
 ```   
+> If you want to self-host addon catalog, refer to [*Sync addon catalog to your ChartMuseum instance*](../addon/addon-registry#sync-addon-catalog-to-your-chartmuseum-instance)
 
 2. Sync the dependency container images in the addon to your private image registry, the sync command can be as following: 
    
@@ -29,8 +30,7 @@ $ helm repo update
 $ helm pull vela-charts/terraform-controller --version 0.3.5
 $ helm push terraform-controller-0.3.5.tgz <your charts repo url>
 ```
-
-You can read the [helm official docs](https://helm.sh/docs/topics/chart_repository/) to learn more about how to build your own helm registry.
+> You can use ChartMuseum addon to build your private Helm Chart registry and hold these Charts. Please refer to [*Sync Helm Charts to your ChartMuseum instance*](../addon/addon-registry#sync-helm-charts-to-your-chartmuseum-instance) for complete instructions and usage examples.
 
 4. Modify the values of addon by referring to your own image/chart registry. You can find all images/charts dependency in the files of subdirectory `resources/`, just modify the configuration.
    For example, you can modify the fluxcd addon files `addons/fluxcd/resources/deployment/helm-controller.yaml` the deployment object's field `spec.sepc.containers[0].image` to your own image repo.
@@ -44,6 +44,8 @@ $ vela addon enable /your/local/addon/directory
 ## Images or helm charts need to sync
 
 Here's a list about images or helm charts of all community addons that should be synced for air-gapped installation.
+
+> The image versions below can be outdated. You should check the addon files to find out the latest version used in addons.
 
 ### 1. FluxCD
 
@@ -88,4 +90,3 @@ $ helm pull https://charts.kubevela.net/addons/terraform-controller-0.3.5.tgz
 3. Extract the chart and modify the `values.yaml` change `image.repository` to your own image registry.Then push it to your helm chart museum.
 4. Modify the addon file `terraform/resources/terraform-controller.cue` change `output.properties.url` to your chart museum's url.
 
-Other community addons needn't sync any resources.

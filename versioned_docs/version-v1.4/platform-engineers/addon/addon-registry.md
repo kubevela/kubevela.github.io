@@ -136,3 +136,128 @@ NAME          REGISTRY   DESCRIPTION             AVAILABLE-VERSIONS  STATUS
 ...
 sample-addon  localcm    An addon for KubeVela.  [1.0.0]             disabled
 ```
+
+## Sync addons to ChartMuseum in an air-gapped environment
+
+As described in [*Air-gapped Installation for Addon*](../system-operation/enable-addon-offline), you can enable an addon from local filesystem. But some addons required a Helm Chart, then you will need to build a Chart repository for that. This section is to tackle that problem. You will also learn how to sync [addon catalog](https://github.com/kubevela/catalog) to your ChartMuseum instance, so that you can directly enable an addon from a registry, instead of enabling it from local filesystem.
+
+### Goals
+
+- Air-gapped installation of ChartMuseum addon
+- Sync addon catalog to your ChartMuseum instance
+- Sync Helm Charts to your ChartMuseum instance
+
+### Air-gapped installation of ChartMuseum addon
+
+Since all the required files to install ChartMuseum addon are stored in the catalog, you need to download [addon catalog](https://github.com/kubevela/catalog) first:
+
+```shell
+$ git clone --depth=1 https://github.com/kubevela/catalog
+```
+Navigate to ChartMuseum addon directory:
+
+```shell
+$ cd catalog/addons/chartmuseum
+```
+Now, you need to find a way to sync ChartMuseum image to your cluster. For example, you can pre-load the original image into your cluster or sync the image to your private image registry and use a custom image.
+
+To find out the default image that ChartMuseum is using:
+
+```shell
+$ cat resources/parameter.cue | grep "image"
+	// +usage=ChartMuseum image
+	image: *"ghcr.io/helm/chartmuseum:v0.15.0" | string
+# At the time of writing, ChartMuseum is using ghcr.io/helm/chartmuseum:v0.15.0
+# Fetch this image and make it available in your private cluster.
+```
+
+To use your custom image and enable the addon:
+
+```shell
+$ vela addon enable . image=your-private-repo.com/chartmuseum:v0.15.0
+# Since you are already inside chartmuseum/ dir, we use `.`
+```
+
+Now ChartMuseum addon should be enabled.
+
+### Sync addon catalog to your ChartMuseum instance
+
+Before you continue, you need to make sure you can access your ChartMuseum instance. Check out the previous section on how to use it as an addon registry. We will assume you are using the same settings as the previous section (i.e. you can properly access it,  and named as `localcm`).
+
+Inside the repo that you just cloned, navigate to `catalog/addons`. You should see a list of community-verified addons. 
+
+You can sync all of our addons in the catalog to your ChartMuseum instance and use them in your private environment. We will leverage `vela addon push` command (CLI v1.5 or later) to package these and sync them to ChartMuseum.
+
+As we all know, we can push a single addon to ChartMuseum by:
+
+```shell
+# push chartmusem/ to localcm registry
+vela addon push chartmuseum localcm
+```
+
+Therefore, we can use a loop to push all addons to ChartMuseum:
+
+```shell
+# You PWD should be catalog/addons.
+# Replace `localcm` with you own registry name.
+for i in *; do \
+    vela addon push $i localcm -f; \
+done;
+
+Pushing cert-manager-1.7.1.tgz to localcm(http://10.2.1.4:8080)... Done
+Pushing chartmuseum-4.0.0.tgz to localcm(http://10.2.1.4:8080)... Done
+Pushing cloudshell-0.2.0.tgz to localcm(http://10.2.1.4:8080)... Done
+...
+```
+
+Congratulations, all community-verified addons are now available in your ChartMuseum instance (check it out using `vela addon list`, and enable them using `vela addon enable addon-name`). You can do the same thing with `experimental` addons.
+
+### Sync Helm Charts to your ChartMuseum instance
+
+This is useful when you need to enable an addon that uses a Helm Chart inside, but you cannot access the Chart.
+
+We will take `dex` addon as an example here. It originally uses a Chart named `dex` from `dexidp`. We are going to make that Chart available in our ChartMuseum instance and modify `dex` addon to use our custom Chart.
+
+Check `template.yaml` or `resources/` directory to find out what Chart is `dex` using.
+
+After you know the right Chart, pull the corresponding Chart:
+
+```shell
+# Add the repo
+$ helm repo add dexidp https://charts.dexidp.io
+# Pull the right Chart
+$ helm pull dexidp/dex --version 0.6.5
+# You should see a package named `dex-0.6.5.tgz`
+```
+
+Push the Chart to ChartMuseum:
+
+```shell
+$ vela addon push dex-0.6.5.tgz localcm
+# You can use helm cm-push as well, if you have the Helm plugin installed.
+```
+
+Now you have `dex` inside your ChartMuseum instance. It is time to use it.
+
+Edit `template.yaml` or Helm component in `resources/` to use your custom Chart:
+
+```yaml
+# template.yaml of dex addon
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: dex
+  namespace: vela-system
+spec:
+  components:
+    - name: dex
+      type: helm
+      properties:
+        chart: dex
+        version: "0.6.5"
+        # Put your ChartMuseum URL here
+        url: "http://10.2.1.4:8080"
+        repoType: helm
+```
+
+Great! After you enable this addon, it will try to fetch the Chart from your ChartMuseum instance. (You should also consider making the images inside the Chart available to you too.)
