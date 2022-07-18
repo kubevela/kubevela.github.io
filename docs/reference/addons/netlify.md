@@ -11,6 +11,19 @@ title: netlify
    - https://user-images.githubusercontent.com/2173670/168455109-b6de6fcf-6e99-48c8-928c-03ff9f47d632.png
 
 ```shell
+# Properties
++---------------+-----------------------------------------------------------------------------------------------+--------+----------+------------------------------------------------+
+|     NAME      |                                          DESCRIPTION                                          |  TYPE  | REQUIRED |                    DEFAULT                     |
++---------------+-----------------------------------------------------------------------------------------------+--------+----------+------------------------------------------------+
+| token         | Specify the token got from app.netlify.com                                                    | string | true     | your-own-token-after-base64                    |
+| backofflimit  | Specify the backofflimit of the job for deploying the website by netlify                     | int    | true     |                                              5 |
+| completions   | Specify the completions of the job for deploying the website by netlify                      | int    | true     |                                              1 |
+| reponame      | Specify the direcotry name for saving the resources from git or other repo supporting git-cli | string | true     | oeular.github.io                               |
+| gitrepo       | Specify the repo address your resources of the frontend service  store                        | string | true     | https://github.com/oeular/oeular.github.io.git |
+| restartPolicy | Specify the restartPolicy of the job for deploying the website by netlify                     | string | true     | OnFailure                                      |
+| sitname       | Specify the website name on app.netlify.com                                                   | string | true     | deploy-from-vela                               |
++---------------+-----------------------------------------------------------------------------------------------+--------+----------+------------------------------------------------+
+
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
