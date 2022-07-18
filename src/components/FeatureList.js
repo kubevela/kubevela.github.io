@@ -1,23 +1,21 @@
 import React from 'react';
 import HomePageFeatures from '../data/features';
-import clsx from 'clsx';
-import styles from '../pages/styles.module.css';
 
 const FeatureBlock = () => {
     return (
-        <div className={clsx('hero', styles.hero)}>
+        <div className="hero">
             <div className="container">
-                <section className={styles.features}>
+                <section className="features">
                     <div className="container">
                         {
                             HomePageFeatures.map(({imgUrl, title, description, reverse}, index) => (
-                                <div key={index} className={clsx('row', styles.feature, reverse ? styles.featureReverse : '')}>
+                                <div key={index} className="row feature">
                                     <div className="col col--3">
                                         <div className="text--center">
-                                            {imgUrl && <img className={styles.featureImage} src={imgUrl} alt={title} />}
+                                            {imgUrl && <img className="featureImage" src={imgUrl} alt={title} />}
                                         </div>
                                     </div>
-                                    <div className={clsx('col col--9', styles.featureDesc)}>
+                                    <div className="col col--9 featureDesc">
                                         <div>
                                             <h2>{title}</h2>
                                             <div>{description}</div>
