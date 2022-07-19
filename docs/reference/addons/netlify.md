@@ -15,13 +15,13 @@ title: netlify
 +---------------+-----------------------------------------------------------------------------------------------+--------+----------+------------------------------------------------+
 |     NAME      |                                          DESCRIPTION                                          |  TYPE  | REQUIRED |                    DEFAULT                     |
 +---------------+-----------------------------------------------------------------------------------------------+--------+----------+------------------------------------------------+
-| token         | Specify the token got from app.netlify.com                                                    | string | true     | your-own-token-after-base64                    |
-| backofflimit  | Specify the backofflimit of the job for deploying the website by netlify                     | int    | true     |                                              5 |
-| completions   | Specify the completions of the job for deploying the website by netlify                      | int    | true     |                                              1 |
-| reponame      | Specify the direcotry name for saving the resources from git or other repo supporting git-cli | string | true     | oeular.github.io                               |
-| gitrepo       | Specify the repo address your resources of the frontend service  store                        | string | true     | https://github.com/oeular/oeular.github.io.git |
-| restartPolicy | Specify the restartPolicy of the job for deploying the website by netlify                     | string | true     | OnFailure                                      |
-| sitname       | Specify the website name on app.netlify.com                                                   | string | true     | deploy-from-vela                               |
+| token         | Specify the token got from app.netlify.com                                                    | string | true     |                                              |
+| backofflimit  | Specify the backofflimit of the job for deploying the website by netlify                     | int    | true     |                                              |
+| completions   | Specify the completions of the job for deploying the website by netlify                      | int    | true     |                                              |
+| reponame      | Specify the direcotry name for saving the resources from git or other repo supporting git-cli | string | true     |                                             |
+| gitrepo       | Specify the repo address your resources of the frontend service  store                        | string | true     |                                             |
+| restartPolicy | Specify the restartPolicy of the job for deploying the website by netlify                     | string | true     |                                             |
+| sitname       | Specify the website name on app.netlify.com                                                   | string | true     |                                             |
 +---------------+-----------------------------------------------------------------------------------------------+--------+----------+------------------------------------------------+
 
 apiVersion: core.oam.dev/v1beta1
@@ -34,8 +34,13 @@ spec:
     - name: netlify-comp
       type: netlify
       properties:
-         sitename: deploy-from-vela
-         token: <Here needs your own token from https://app.netlify.com/user/applications/personal which you should base64 >
+        backofflimit: 5
+        completions:  1
+        reponame: <github reponame>
+        gitrepo: <github repo address>
+        restartPolicy: OnFailure
+        sitename: <sitename>
+        token: <Here needs your own token from https://app.netlify.com/user/applications/personal which you should base64 >
 ```
 
 - Check the app status
