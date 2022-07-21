@@ -4,7 +4,7 @@ title: 基本机制
 
 KubeVela 从 v1.4 版本引入认证和应用程序交付和管理授权。这篇文章将深入理解根本原理，并展示它如何运作。
 
-> 这一基本机制主要侧重于KubeVela的应用。 VelaUX 在它上面构建了自己的认证和授权。
+> 这一基本机制主要侧重于 KubeVela 的应用。 VelaUX 在它上面构建了自己的认证和授权。
 
 > 这篇文章讨论了范围较广的 KubeVela 认证和授权，包括设计、实现和高级用法。 实际使用并不需要阅读并了解所有材料。
 
@@ -111,7 +111,7 @@ $ vela auth grant-privileges --user alice --for-namespace demo --for-cluster man
 $ vela auth grant-privileges --group org:dev-team
 ```
 
-`grant-privileges` 命令将首先检查目标命名空间是否存在。 使用 `--create-namespace` 在命名空间不存在时将被创建。 它将创建一个 ClusterRole 并允许用户对该命名空间中的任何资源进行读/写操作。 身份将通过 RoleBinding 或 ClusterRoleBinding 绑定到集群角色，具体使用哪个取决于授权范围。 最后，整个过程将在所有指定的集群中分别执行。
+`grant-privileges` 命令将首先检查目标命名空间是否存在。 使用 `--create-namespace` 在命名空间不存在时将自动创建。 它将创建一个 ClusterRole 并允许用户对该命名空间中的任何资源进行读/写操作。 身份将通过 RoleBinding 或 ClusterRoleBinding 绑定到集群角色，具体使用哪个取决于授权范围。 最后，整个过程将在所有指定的集群中分别执行。
 
 有时，您可能想要授予用户只读访问权限。 在这种情况下，您需要使用 `--readonly` 参数。
 
@@ -222,7 +222,7 @@ vela-prise 提供了访问 ResourceTrackers 和 Cluster Secrets 等敏感数据�
 
 ![vela-prism](https://raw.githubusercontent.com/kubevela/prism/master/hack/prism-arch.jpg)
 
-原始的 KubeVela 中的 ResourceTracker 是一个集群资源，用于记录应用的所有资源并在应用更新和再回收过程中跟踪它们。
+原始的 KubeVela 中的 ResourceTracker 是一个集群级别资源，用于记录应用的所有资源并在应用更新和再回收过程中跟踪它们。
 
 允许用户访问集群的 ResourceTracker 可能是危险的，因为用户将拥有读取其他用户应用发布的对象的权限。 ApplicationResourceTracker 是由 vela-prism 提供的，它提供了一个命名空间作用域来访问 ResourceTracker 对象，这意味着访问权限可以通过命名空间来限制。 使用 vela-prism 的好处之一是您可以运行 `vela status <appname> -n <namespace> --tree --detail` 查看应用的详细信息。 即使只有有限的特权。
 
