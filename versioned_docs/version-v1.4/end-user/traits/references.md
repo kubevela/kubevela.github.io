@@ -469,10 +469,9 @@ kustomize-strategy-merge trait provide strategy merge patch for kustomize compon
 
 
 #### patchesStrategicMerge
-+-----------+-------------+--------------------------------------------------------+----------+---------+
-|   NAME    | DESCRIPTION |                          TYPE                          | REQUIRED | DEFAULT |
-+-----------+-------------+--------------------------------------------------------+----------+---------+
-| undefined |             | map[string]{null|bool|string|bytes|{...}|[...]|number} | true     |         |
+| NAME      | DESCRIPTION | TYPE                                                         | REQUIRED | DEFAULT |
+| --------- | ----------- | ------------------------------------------------------------ | -------- | ------- |
+| undefined |             | map[string]{null\|bool\|string\|bytes\|{...}\|[...]\|number} | true     |         |
 
 ### Examples
 
@@ -624,14 +623,12 @@ The `sidecar` trait allows you to attach a sidecar container to the component.
 
 ### Parameters
 
-+---------+-----------------------------------------+-----------------------+----------+---------+
-|  NAME   |               DESCRIPTION               |         TYPE          | REQUIRED | DEFAULT |
-+---------+-----------------------------------------+-----------------------+----------+---------+
+| NAME    | DESCRIPTION                             | TYPE                  | REQUIRED | DEFAULT |
+| ------- | --------------------------------------- | --------------------- | -------- | ------- |
 | name    | Specify the name of sidecar container   | string                | true     |         |
 | cmd     | Specify the commands run in the sidecar | []string              | false    |         |
 | image   | Specify the image of sidecar container  | string                | true     |         |
 | volumes | Specify the shared volume path          | [[]volumes](#volumes) | false    |         |
-+---------+-----------------------------------------+-----------------------+----------+---------+
 
 ## volumes
 
@@ -679,10 +676,3 @@ spec:
               - name: varlog
                 path: /var/log
 ```
-
-
-
-
-
-
-

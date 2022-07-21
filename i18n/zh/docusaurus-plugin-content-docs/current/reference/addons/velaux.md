@@ -5,7 +5,7 @@ title: VelaUX 控制台
 ## 安装插件
 
 ```shell script
-vela addon enable velaux --version=v1.4.6
+vela addon enable velaux
 ```
 
 期望得到的输出如下：
