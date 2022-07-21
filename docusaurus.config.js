@@ -25,7 +25,8 @@ module.exports = {
     announcementBar: {
       id: 'start',
       content:
-        '⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>! ⭐️',
+        '⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>!⭐️' +
+        '<span style="color:#1b58f4">KubeVela v1.4.8 is already released.(2022-07-20)</span> <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/v1.4.8">Read Release Note</a>',
     },
     algolia: {
       appId: 'PXMFHFWUGZ',
@@ -56,25 +57,25 @@ module.exports = {
           position: 'left',
         },
         {
-          to: "videos/best-practice/jenkins",
-          activeBasePath: "videos",
-          label: "Videos",
-          position: "left",
+          to: 'videos/best-practice/jenkins',
+          activeBasePath: 'videos',
+          label: 'Videos',
+          position: 'left',
         },
         {
-          href: "https://github.com/kubevela/community",
-          label: "Community",
-          position: "left",
+          href: 'https://github.com/kubevela/community',
+          label: 'Community',
+          position: 'left',
         },
         {
-          href: "https://github.com/kubevela/samples",
-          label: "Examples",
-          position: "left",
+          href: 'https://github.com/kubevela/samples',
+          label: 'Examples',
+          position: 'left',
         },
         {
-          href: "https://kubevela.net",
-          label: "Mirror",
-          position: "right",
+          href: 'https://kubevela.net',
+          label: 'Mirror',
+          position: 'right',
         },
         {
           type: 'localeDropdown',
@@ -156,9 +157,9 @@ module.exports = {
       config: {
         background: {
           light: 'rgb(255, 255, 255)',
-          dark: 'rgb(50, 50, 50)'
-        }
-      }
+          dark: 'rgb(50, 50, 50)',
+        },
+      },
     },
   },
   presets: [
@@ -180,8 +181,8 @@ module.exports = {
           anonymizeIP: false,
         },
         blog: {
-          blogSidebarTitle: "All posts",
-          blogSidebarCount: "ALL",
+          blogSidebarTitle: 'All posts',
+          blogSidebarCount: 'ALL',
           showReadingTime: true,
           editUrl: 'https://github.com/kubevela/kubevela.io/tree/main/',
         },
@@ -195,16 +196,16 @@ module.exports = {
     [
       '@docusaurus/plugin-content-docs',
       {
-        id: "videos",
-        path: "videos",
-        routeBasePath: "videos",
-        include: ["**/*.md"],
-        sidebarPath: require.resolve("./sidebar-videos.js"),
+        id: 'videos',
+        path: 'videos',
+        routeBasePath: 'videos',
+        include: ['**/*.md'],
+        sidebarPath: require.resolve('./sidebar-videos.js'),
         showLastUpdateAuthor: true,
-        showLastUpdateTime: true
+        showLastUpdateTime: true,
       },
     ],
     './src/plugins/faviconCustomPlugin',
-    require.resolve("docusaurus-plugin-image-zoom"),
+    require.resolve('docusaurus-plugin-image-zoom'),
   ],
 };
