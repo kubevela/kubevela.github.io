@@ -41,13 +41,13 @@ rm -rf versions.json.bak
 success "update versions.json"
 
 # 4 update docusaurus.config.js
-sed -i.bak "/${version}/d" docusaurus.config.js
-success "update docusaurus.config.js"
+# sed -i.bak "/${version}/d" docusaurus.config.js
+# success "update docusaurus.config.js"
 
 # 5 generate versioned docs
 yarn run docusaurus docs:version "${version}"
-rm -rf docusaurus.config.js
-mv docusaurus.config.js.bak docusaurus.config.js
+# rm -rf docusaurus.config.js
+# mv docusaurus.config.js.bak docusaurus.config.js
 success "generate versioned docs"
 
 # 6 update i18n docs
