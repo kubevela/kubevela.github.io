@@ -4,7 +4,7 @@ title: Built-in Policy Type
 
 This documentation will walk through all the built-in policy types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-23T14:30:08+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-23T15:27:57+08:00.
 
 ## Apply-Once
 
@@ -305,17 +305,17 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name | Specify the name of the patch component, if empty, all components will be merged. | string | false |  
  type | Specify the type of the patch component. | string | false |  
- properties |  | map[string](null|bool|string|bytes|{...}|[...]|number) | false |  
- traits |  | [[]traits](#traits-override) | false |  
+ properties | Specify the properties to override. | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+ traits | Specify the traits to override. | [[]traits](#traits-override) | false |  
 
 
 ##### traits (override)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- type |  | string | true |  
- properties |  | map[string](null|bool|string|bytes|{...}|[...]|number) | false |  
- disable | Specify if the trait shoued be remove, default false. | bool | true | false 
+ type | Specify the type of the trait to be patched. | string | true |  
+ properties | Specify the properties to override. | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+ disable | Specify if the trait should be remove, default false. | bool | true | false 
 
 
 ## Topology
@@ -391,8 +391,8 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  cluster | Specify the names of the clusters to select. | []string | false |  
- clusterLabelSelector | Specify the label selector for clusters. | map[string]string | false |  
- clusterSelector | Deprecated: Use clusterLabelSelector instead. | map[string]string | false |  
+ clusterLabelSelector | Specify the label selector for clusters. | map[string]:string | false |  
+ clusterSelector | Deprecated: Use clusterLabelSelector instead. | map[string]:string | false |  
  namespace | Specify the target namespace to deploy in the selected clusters, default inherit the original namespace. | string | false |  
 
 
