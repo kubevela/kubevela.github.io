@@ -2,23 +2,19 @@
 title: Built-in Policy Type
 ---
 
-This documentation will walk through the built-in policies.
+This documentation will walk through all the built-in policy types sorted alphabetically.
 
-## apply-once
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-23T15:27:57+08:00.
 
-**Overview**
+## Apply-Once
 
-Allow configuration drift for applied resources.
+### Description
+
+Allow configuration drift for applied resources, delivery the resource without continuously reconciliation.
+
+### Examples (apply-once)
 
 It's generally used in [one time delivery only without continuous management](../policies/apply-once) scenario.
-
-**Parameter**
-
-|   Name    |  Type  |           Description            |
-| :-------: | :----: | :------------------------------ |
-|  enable   |  bool  |   If true, allow configuration drift.  |
-
-**Example**
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -42,37 +38,51 @@ spec:
         enable: true
 ```
 
-## garbage-collect
+### Specification (apply-once)
 
-**Overview**
 
-Configure the garbage collection behavior for the application.
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ enable | Whether to enable apply-once for the whole application. | bool | true | false 
+ rules | Specify the rules for configuring apply-once policy in resource level. | [[]rules](#rules-apply-once) | false |  
 
-It's used in [garbage collection](../policies/gc) scenario. It can be used to configure the collection policy, e.g. don't delete the legacy resources when update.
 
-**Parameter**
+#### rules (apply-once)
 
-|   Name    |  Type  |           Description            |
-| :-------: | :----: | :------------------------------ |
-|  keepLegacyResource   |  bool  |   If true, outdated versioned resourcetracker will not be recycled automatically. Outdated resources will be kept until resourcetracker be deleted manually.  |
-| rules | []GarbageCollectPolicyRule | A list of rules to control gc strategy at resource level, if one resource is controlled by multiple rules, first rule will be used. |
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ selector | Specify how to select the targets of the rule. | [selector](#selector-apply-once) | false |  
+ strategy | Specify the strategy for configuring the resource level configuration drift behaviour. | [strategy](#strategy-apply-once) | true |  
 
-*GarbageCollectPolicyRule*
 
-|   Name    |  Type  |           Description            |
-| :-------: | :----: | :------------------------------ |
-| selector | GarbageCollectPolicyRuleSelector | Select the target resources of the rule. |
-| strategy | String | The strategy for target resources to recycle. Available values: never, onAppDelete, onAppUpdate. |
+##### selector (apply-once)
 
-*GarbageCollectPolicyRuleSelector*
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ componentNames | Select resources by component names. | []string | false |  
+ componentTypes | Select resources by component types. | []string | false |  
+ oamTypes | Select resources by oamTypes (COMPONENT or TRAIT). | []string | false |  
+ traitTypes | Select resources by trait types. | []string | false |  
+ resourceTypes | Select resources by resource types (like Deployment). | []string | false |  
+ resourceNames | Select resources by their names. | []string | false |  
 
-|   Name    |  Type  |           Description            |
-| :-------: | :----: | :------------------------------ |
-| componentNames | []String | Select target resources by component names. |
-| componentTypes | []String | Select target resources by component types. |
-| traitTypes | []String | Select target resources by trait types. |
 
-**Example**
+##### strategy (apply-once)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ path | Specify the path of the resource that allow configuration drift. | []string | true |  
+
+
+## Garbage-Collect
+
+### Description
+
+Configure the garbage collect behaviour for the application.
+
+### Examples (garbage-collect)
+
+It's used in [garbage collection](../policies/gc) scenario. It can be used to configure the collection policy, e.g. don't delete the legacy resources when updating.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -125,39 +135,57 @@ spec:
             strategy: onAppDelete
 ```
 
+### Specification (garbage-collect)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ keepLegacyResource | If is set, outdated versioned resourcetracker will not be recycled automatically, outdated resources will be kept until resourcetracker be deleted manually. | bool | true | false 
+ rules | Specify the list of rules to control gc strategy at resource level, if one resource is controlled by multiple rules, first rule will be used. | [[]rules](#rules-garbage-collect) | false |  
+
+
+#### rules (garbage-collect)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ selector | Specify how to select the targets of the rule. | [[]selector](#selector-garbage-collect) | true |  
+ strategy | Specify the strategy for target resource to recycle. | string | true | onAppUpdate 
+
+
+##### selector (garbage-collect)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ componentNames | Select resources by component names. | []string | false |  
+ componentTypes | Select resources by component types. | []string | false |  
+ oamTypes | Select resources by oamTypes (COMPONENT or TRAIT). | []string | false |  
+ traitTypes | Select resources by trait types. | []string | false |  
+ resourceTypes | Select resources by resource types (like Deployment). | []string | false |  
+ resourceNames | Select resources by their names. | []string | false |  
+
+
+## Health
+
+### Description
+
+Apply periodical health checking to the application.
+
+### Specification (health)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ probeTimeout | Specify health checking timeout(seconds), default 10s. | int | true | 10 
+ probeInterval | Specify health checking interval(seconds), default 30s. | int | true | 30 
+
+
 ## Override
 
-**Overview**
+### Description
 
-Describe the configuration to override when deploying resources.
+Describe the configuration to override when deploying resources, it only works with specified `deploy` step in workflow.
 
-Override policy need to use along with the deploy workflow step.
-
-**Parameter**
-
-|   Name    |  Type  |           Description            |
-| :-------: | :----: | :------------------------------ |
-| components | []ComponentPatch | A list of component configurations to override. |
-| selector | []String | A list of component names to use. If not set, all components will be used. |
-
-*ComponentPatch*
-
-|   Name    |  Type  |           Description            |
-| :-------: | :----: | :------------------------------ |
-| name | string | The name of the component to override. If not set, it will match all components with the specified type. Can be used with wildcard * for fuzzy match. |
-| type | String | The type of the component to override. If not set, all component types will be matched. |
-| properties | Object | The component properties to merge. |
-| traits | []TraitPatch | A list of trait configurations to override. |
-
-*TraitPatch*
-
-|   Name    |  Type  |           Description            |
-| :-------: | :----: | :------------------------------ |
-| type | String | The type of the trait to override. |
-| properties | Object | The trait properties to merge. |
-| disable | bool | If true, this trait will be removed. |
-
-**Examples**
+### Examples (override)
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -262,21 +290,41 @@ spec:
           policies: ["topology-hangzhou-clusters", "override-nginx-latest"]
 ```
 
-## topology
+### Specification (override)
 
-**Overview**
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ components | Specify the overridden component configuration. | [[]components](#components-override) | true |  
+ selector | Specify a list of component names to use, if empty, all components will be selected. | []string | false |  
+
+
+#### components (override)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name | Specify the name of the patch component, if empty, all components will be merged. | string | false |  
+ type | Specify the type of the patch component. | string | false |  
+ properties | Specify the properties to override. | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+ traits | Specify the traits to override. | [[]traits](#traits-override) | false |  
+
+
+##### traits (override)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type | Specify the type of the trait to be patched. | string | true |  
+ properties | Specify the properties to override. | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+ disable | Specify if the trait should be remove, default false. | bool | true | false 
+
+
+## Topology
+
+### Description
 
 Describe the destination where components should be deployed to.
 
-**Parameter**
-
-|   Name    |  Type  |           Description            |
-| :-------: | :----: | :------------------------------ |
-| clusters |  []string | The names of the clusters to select. |
-| clusterLabelSelector | mpa[string]string | The label selector for clusters. Exclusive to "clusters" |
-| namespace | string | The target namespace to deploy in the selected clusters. If not set, components will inherit the original namespace. |
-
-**Example**
+### Examples (topology)
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -336,3 +384,15 @@ spec:
         clusters: ["local"]
         namespace: examples-alternative
 ```
+
+### Specification (topology)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ cluster | Specify the names of the clusters to select. | []string | false |  
+ clusterLabelSelector | Specify the label selector for clusters. | map[string]:string | false |  
+ clusterSelector | Deprecated: Use clusterLabelSelector instead. | map[string]:string | false |  
+ namespace | Specify the target namespace to deploy in the selected clusters, default inherit the original namespace. | string | false |  
+
+
