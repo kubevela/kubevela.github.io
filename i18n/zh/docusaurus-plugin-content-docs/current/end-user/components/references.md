@@ -4,7 +4,7 @@ title: 内置组件列表
 
 本文档将**按字典序**展示所有内置组件的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-16T15:16:33+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-24T21:02:31+08:00。
 
 ## Cron-Task
 
@@ -38,18 +38,18 @@ spec:
  cmd | 容器的启动命令。 | []string | false |  
  env | 容器中的环境变量。 | [[]env](#env-cron-task) | false |  
  schedule | 执行规则 [Cron 规范](https://en.wikipedia.org/wiki/Cron)。 | string | true |  
- concurrencyPolicy | 定义任务如何处理任务的重叠运行，可选值为 "Allow"，"Forbid" 或者 "Replace"，默认值为 Allow。 | string | true | Allow 
- suspend | 是否暂停执行。 | bool | true | false 
- successfulJobsHistoryLimit | 保留多少个已经成功完成的任务记录。 | int | true | 3 
- failedJobsHistoryLimit | 保留多少个已经失败的任务记录。 | int | true | 1 
+ concurrencyPolicy | 定义任务如何处理任务的重叠运行，可选值为 "Allow"，"Forbid" 或者 "Replace"，默认值为 Allow。 | string | false | Allow 
+ suspend | 是否暂停执行。 | bool | false | false 
+ successfulJobsHistoryLimit | 保留多少个已经成功完成的任务记录。 | int | false | 3 
+ failedJobsHistoryLimit | 保留多少个已经失败的任务记录。 | int | false | 1 
  startingDeadlineSeconds | Specify deadline in seconds for starting the job if it misses scheduled。 | int | false |  
- labels | 工作负载的标签。 | map[string]string | false |  
- annotations | 工作负载的注解。 | map[string]string | false |  
- count | 每次任务执行的并行度。 | int | true | 1 
+ labels | 工作负载的标签。 | map[string]:string | false |  
+ annotations | 工作负载的注解。 | map[string]:string | false |  
+ count | 每次任务执行的并行度。 | int | false | 1 
  ttlSecondsAfterFinished | Limits the lifetime of a Job that has finished。 | int | false |  
  activeDeadlineSeconds | The duration in seconds relative to the startTime that the job may be continuously active before the system tries to terminate it。 | int | false |  
- backoffLimit | The number of retries before marking this job failed。 | int | true | 6 
- restart | 定义失败重启策略，可选值为 Never 或者 OnFailure，默认是 OnFailure。 | string | true | Never 
+ backoffLimit | The number of retries before marking this job failed。 | int | false | 6 
+ restart | 定义失败重启策略，可选值为 Never 或者 OnFailure，默认是 OnFailure。 | string | false | Never 
  image | 容器使用的镜像。 | string | true |  
  imagePullPolicy | 镜像拉取策略。 | string | false |  
  cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
@@ -118,11 +118,11 @@ spec:
  exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-cron-task) | false |  
  httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-cron-task) | false |  
  tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-cron-task) | false |  
- initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
- periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
- timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
- successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
- failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | false | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | false | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | false | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | false | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | false | 3 
 
 
 ##### exec (cron-task)
@@ -163,11 +163,11 @@ spec:
  exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-cron-task) | false |  
  httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-cron-task) | false |  
  tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-cron-task) | false |  
- initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
- periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
- timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
- successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
- failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | false | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | false | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | false | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | false | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | false | 3 
 
 
 ##### exec (cron-task)
@@ -266,8 +266,8 @@ spec:
  cmd | 容器的启动命令。 | []string | false |  
  env | 容器中的环境变量。 | [[]env](#env-daemon) | false |  
  volumeMounts |  | [volumeMounts](#volumemounts-daemon) | false |  
- labels | 工作负载的标签。 | map[string]string | false |  
- annotations | 工作负载的注解。 | map[string]string | false |  
+ labels | 工作负载的标签。 | map[string]:string | false |  
+ annotations | 工作负载的注解。 | map[string]:string | false |  
  image | 容器使用的镜像。 | string | true |  
  ports | 指定业务流量进入的端口（多个），默认为 80。 | [[]ports](#ports-daemon) | false |  
  imagePullPolicy | 镜像拉取策略。 | string | false |  
@@ -339,7 +339,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- defaultMode |  | int | true | 420 
+ defaultMode |  | int | false | 420 
  cmName |  | string | true |  
  items |  | [[]items](#items-daemon) | false |  
 
@@ -350,7 +350,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  path |  | string | true |  
  key |  | string | true |  
- mode |  | int | true | 511 
+ mode |  | int | false | 511 
 
 
 ##### secret (daemon)
@@ -359,7 +359,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- defaultMode |  | int | true | 420 
+ defaultMode |  | int | false | 420 
  items |  | [[]items](#items-daemon) | false |  
  secretName |  | string | true |  
 
@@ -370,7 +370,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  path |  | string | true |  
  key |  | string | true |  
- mode |  | int | true | 511 
+ mode |  | int | false | 511 
 
 
 ##### emptyDir (daemon)
@@ -379,7 +379,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- medium |  | string | true | empty 
+ medium |  | string | false | empty 
 
 
 ##### hostPath (daemon)
@@ -399,8 +399,8 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name | 端口名称。 | string | false |  
  port | 要暴露的 IP 端口号。 | int | true |  
- protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | string | true | TCP 
- expose | 端口是否需要暴露。 | bool | true | false 
+ protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | string | false | TCP 
+ expose | 端口是否需要暴露。 | bool | false | false 
 
 
 #### volumes (daemon)
@@ -419,11 +419,11 @@ spec:
  exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-daemon) | false |  
  httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-daemon) | false |  
  tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-daemon) | false |  
- initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
- periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
- timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
- successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
- failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | false | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | false | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | false | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | false | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | false | 3 
 
 
 ##### exec (daemon)
@@ -466,11 +466,11 @@ spec:
  exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-daemon) | false |  
  httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-daemon) | false |  
  tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-daemon) | false |  
- initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
- periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
- timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
- successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
- failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | false | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | false | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | false | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | false | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | false | 3 
 
 
 ##### exec (daemon)
@@ -583,10 +583,10 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  cmd | 容器的启动命令。 | []string | false |  
  env | 容器中的环境变量。 | [[]env](#env-task) | false |  
- count | 每次任务执行的并行度。 | int | true | 1 
- labels | 工作负载的标签。 | map[string]string | false |  
- annotations | 工作负载的注解。 | map[string]string | false |  
- restart | 定义失败重启策略，可选值为 Never 或者 OnFailure，默认是 OnFailure。 | string | true | Never 
+ count | 每次任务执行的并行度。 | int | false | 1 
+ labels | 工作负载的标签。 | map[string]:string | false |  
+ annotations | 工作负载的注解。 | map[string]:string | false |  
+ restart | 定义失败重启策略，可选值为 Never 或者 OnFailure，默认是 OnFailure。 | string | false | Never 
  image | 容器使用的镜像。 | string | true |  
  imagePullPolicy | 镜像拉取策略。 | string | false |  
  cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
@@ -646,11 +646,11 @@ spec:
  exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-task) | false |  
  httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-task) | false |  
  tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-task) | false |  
- initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
- periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
- timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
- successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
- failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | false | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | false | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | false | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | false | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | false | 3 
 
 
 ##### exec (task)
@@ -691,11 +691,11 @@ spec:
  exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-task) | false |  
  httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-task) | false |  
  tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-task) | false |  
- initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
- periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
- timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
- successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
- failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | false | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | false | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | false | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | false | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | false | 3 
 
 
 ##### exec (task)
@@ -771,8 +771,8 @@ spec:
  cmd | 容器的启动命令。 | []string | false |  
  env | 容器中的环境变量。 | [[]env](#env-webservice) | false |  
  volumeMounts |  | [volumeMounts](#volumemounts-webservice) | false |  
- labels | 工作负载的标签。 | map[string]string | false |  
- annotations | 工作负载的注解。 | map[string]string | false |  
+ labels | 工作负载的标签。 | map[string]:string | false |  
+ annotations | 工作负载的注解。 | map[string]:string | false |  
  image | 容器使用的镜像。 | string | true |  
  ports | 指定业务流量进入的端口（多个），默认为 80。 | [[]ports](#ports-webservice) | false |  
  imagePullPolicy | 镜像拉取策略。 | string | false |  
@@ -844,7 +844,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- defaultMode |  | int | true | 420 
+ defaultMode |  | int | false | 420 
  cmName |  | string | true |  
  items |  | [[]items](#items-webservice) | false |  
 
@@ -855,7 +855,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  path |  | string | true |  
  key |  | string | true |  
- mode |  | int | true | 511 
+ mode |  | int | false | 511 
 
 
 ##### secret (webservice)
@@ -864,7 +864,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- defaultMode |  | int | true | 420 
+ defaultMode |  | int | false | 420 
  items |  | [[]items](#items-webservice) | false |  
  secretName |  | string | true |  
 
@@ -875,7 +875,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  path |  | string | true |  
  key |  | string | true |  
- mode |  | int | true | 511 
+ mode |  | int | false | 511 
 
 
 ##### emptyDir (webservice)
@@ -884,7 +884,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- medium |  | string | true | empty 
+ medium |  | string | false | empty 
 
 
 ##### hostPath (webservice)
@@ -902,8 +902,8 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name | 端口名称。 | string | false |  
  port | 要暴露的 IP 端口号。 | int | true |  
- protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | string | true | TCP 
- expose | 端口是否需要暴露。 | bool | true | false 
+ protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | string | false | TCP 
+ expose | 端口是否需要暴露。 | bool | false | false 
 
 
 #### volumes (webservice)
@@ -922,11 +922,11 @@ spec:
  exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-webservice) | false |  
  httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-webservice) | false |  
  tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-webservice) | false |  
- initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
- periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
- timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
- successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
- failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | false | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | false | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | false | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | false | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | false | 3 
 
 
 ##### exec (webservice)
@@ -969,11 +969,11 @@ spec:
  exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-webservice) | false |  
  httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-webservice) | false |  
  tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-webservice) | false |  
- initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | true | 0 
- periodSeconds | 定义每次检查之间的时间间隔。 | int | true | 10 
- timeoutSeconds | 定义检查的超时时间。 | int | true | 1 
- successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | true | 1 
- failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | true | 3 
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | false | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | false | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | false | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | false | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | false | 3 
 
 
 ##### exec (webservice)

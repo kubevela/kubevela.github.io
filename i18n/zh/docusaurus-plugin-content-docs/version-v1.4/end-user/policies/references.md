@@ -4,7 +4,7 @@ title: 内置策略列表
 
 本文档将**按字典序**展示所有内置策略的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-23T15:27:57+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-24T21:01:20+08:00。
 
 ## Apply-Once
 
@@ -14,7 +14,7 @@ title: 内置策略列表
 
 ### 示例 (apply-once)
 
-It's generally used in [one time delivery only without continuous management](../policies/apply-once) scenario.
+It's generally used in [one time delivery only without continuous management](https://kubevela.io/docs/end-user/policies/apply-once) scenario.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -43,7 +43,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- enable | 当设置为 true 时，表示只交付部署、不保证终态一致、允许配置漂移。 | bool | true | false 
+ enable | 当设置为 true 时，表示只交付部署、不保证终态一致、允许配置漂移。 | bool | false | false 
  rules | 指定交付一次的资源规则。 | [[]rules](#rules-apply-once) | false |  
 
 
@@ -82,7 +82,7 @@ spec:
 
 ### 示例 (garbage-collect)
 
-It's used in [garbage collection](../policies/gc) scenario. It can be used to configure the collection policy, e.g. don't delete the legacy resources when updating.
+It's used in [garbage collection](https://kubevela.io/docs/end-user/policies/gc) scenario. It can be used to configure the collection policy, e.g. don't delete the legacy resources when updating.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -140,7 +140,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- keepLegacyResource | 如果为 true，过时的版本化 resource tracker 将不会自动回收。 过时的资源将被保留，直到手动删除 resource tracker。 | bool | true | false 
+ keepLegacyResource | 如果为 true，过时的版本化 resource tracker 将不会自动回收。 过时的资源将被保留，直到手动删除 resource tracker。 | bool | false | false 
  rules | 在资源级别控制垃圾回收策略的规则列表，如果一个资源由多个规则控制，将使用第一个规则。 | [[]rules](#rules-garbage-collect) | false |  
 
 
@@ -149,7 +149,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  selector | 指定资源筛选目标规则。 | [[]selector](#selector-garbage-collect) | true |  
- strategy | 目标资源循环利用的策略。 可用值：never、onAppDelete、onAppUpdate。 | string | true | onAppUpdate 
+ strategy | 目标资源循环利用的策略。 可用值：never、onAppDelete、onAppUpdate。 | string | false | onAppUpdate 
 
 
 ##### selector (garbage-collect)
@@ -175,8 +175,8 @@ Apply periodical health checking to the application。
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- probeTimeout | Specify health checking timeout(seconds), default 10s。 | int | true | 10 
- probeInterval | Specify health checking interval(seconds), default 30s。 | int | true | 30 
+ probeTimeout | Specify health checking timeout(seconds), default 10s。 | int | false | 10 
+ probeInterval | Specify health checking interval(seconds), default 30s。 | int | false | 30 
 
 
 ## Override
@@ -315,7 +315,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  type | 要做参数覆盖的 trait 类型。 | string | true |  
  properties | 要覆盖的配置属性，未填写配置会与原先的配置合并。 | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
- disable | 如果为 true，该 trait 将被删除，默认 false。 | bool | true | false 
+ disable | 如果为 true，该 trait 将被删除，默认 false。 | bool | false | false 
 
 
 ## Topology
