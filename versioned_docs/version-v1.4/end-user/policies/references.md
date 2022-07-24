@@ -4,7 +4,7 @@ title: Built-in Policy Type
 
 This documentation will walk through all the built-in policy types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-23T15:27:57+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-24T21:01:20+08:00.
 
 ## Apply-Once
 
@@ -14,7 +14,7 @@ Allow configuration drift for applied resources, delivery the resource without c
 
 ### Examples (apply-once)
 
-It's generally used in [one time delivery only without continuous management](../policies/apply-once) scenario.
+It's generally used in [one time delivery only without continuous management](https://kubevela.io/docs/end-user/policies/apply-once) scenario.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -43,7 +43,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- enable | Whether to enable apply-once for the whole application. | bool | true | false 
+ enable | Whether to enable apply-once for the whole application. | bool | false | false 
  rules | Specify the rules for configuring apply-once policy in resource level. | [[]rules](#rules-apply-once) | false |  
 
 
@@ -82,7 +82,7 @@ Configure the garbage collect behaviour for the application.
 
 ### Examples (garbage-collect)
 
-It's used in [garbage collection](../policies/gc) scenario. It can be used to configure the collection policy, e.g. don't delete the legacy resources when updating.
+It's used in [garbage collection](https://kubevela.io/docs/end-user/policies/gc) scenario. It can be used to configure the collection policy, e.g. don't delete the legacy resources when updating.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -140,7 +140,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- keepLegacyResource | If is set, outdated versioned resourcetracker will not be recycled automatically, outdated resources will be kept until resourcetracker be deleted manually. | bool | true | false 
+ keepLegacyResource | If is set, outdated versioned resourcetracker will not be recycled automatically, outdated resources will be kept until resourcetracker be deleted manually. | bool | false | false 
  rules | Specify the list of rules to control gc strategy at resource level, if one resource is controlled by multiple rules, first rule will be used. | [[]rules](#rules-garbage-collect) | false |  
 
 
@@ -149,7 +149,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  selector | Specify how to select the targets of the rule. | [[]selector](#selector-garbage-collect) | true |  
- strategy | Specify the strategy for target resource to recycle. | string | true | onAppUpdate 
+ strategy | Specify the strategy for target resource to recycle. | string | false | onAppUpdate 
 
 
 ##### selector (garbage-collect)
@@ -175,8 +175,8 @@ Apply periodical health checking to the application.
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- probeTimeout | Specify health checking timeout(seconds), default 10s. | int | true | 10 
- probeInterval | Specify health checking interval(seconds), default 30s. | int | true | 30 
+ probeTimeout | Specify health checking timeout(seconds), default 10s. | int | false | 10 
+ probeInterval | Specify health checking interval(seconds), default 30s. | int | false | 30 
 
 
 ## Override
@@ -315,7 +315,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  type | Specify the type of the trait to be patched. | string | true |  
  properties | Specify the properties to override. | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
- disable | Specify if the trait should be remove, default false. | bool | true | false 
+ disable | Specify if the trait should be remove, default false. | bool | false | false 
 
 
 ## Topology
