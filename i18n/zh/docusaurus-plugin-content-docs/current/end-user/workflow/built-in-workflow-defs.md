@@ -1,25 +1,143 @@
 ---
-title: 内置工作流步骤
+title: 内置工作流步骤列表
 ---
 
-本文档将详细介绍 KubeVela 内置的各个工作流步骤。你可以通过自由的组合它们来设计完整的交付工作流。
+本文档将**按字典序**展示所有内置工作流步骤的参数列表。
 
-## deploy
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-24T20:59:39+08:00。
 
-**简介**
+## Apply-Object
 
-使用对应的策略部署组件。
+### 描述
 
-**参数**
+在工作流中部署 Kubernetes 资源对象。
+
+### 示例 (apply-object)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: server-with-pvc
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: oamdev/hello-world
+      port: 8000
+      volumes:
+        - name: "my-pvc"
+          type: "pvc"
+          mountPath: "/test"
+          claimName: "myclaim"
+
+  workflow:
+    steps:
+      - name: apply-pvc
+        type: apply-object
+        properties:
+          # Kubernetes native resources fields
+          value:
+            apiVersion: v1
+            kind: PersistentVolumeClaim
+            metadata:
+              name: myclaim
+              namespace: default
+            spec:
+              accessModes:
+              - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 8Gi
+              storageClassName: standard
+            # the cluster you want to apply the resource to, default is the current cluster
+            cluster: <your cluster name>  
+      - name: apply-server
+        type: apply-component
+        properties:
+          component: express-serve
+```
+
+### 参数说明 (apply-object)
 
 
-|  参数名   |  类型  |                 说明                  |
-| :-------: | :----: | :-----------------------------------: |
-|   auto    | bool |      可选参数，默认为 true。如果为 false，工作流将在执行该步骤前自动暂停。      |
-|   policies    | []string |      可选参数。指定本次部署要使用的策略。如果不指定策略，将自动部署到管控集群。      |
-|   parallelism    | int |      可选参数。指定本次部署的并发度，默认为 5。      |
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ value | Kubernetes 资源对象参数。 | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | true |  
+ cluster | 需要部署的集群名称。如果不指定，则为当前集群。 | string | false | empty 
 
-**示例**
+
+## Depends-On-App
+
+### 描述
+
+等待指定的 Application 完成。
+
+### 示例 (depends-on-app)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-workflow
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: oamdev/hello-world
+      port: 8000
+    traits:
+    - type: ingress
+      properties:
+        domain: testsvc.example.com
+        http:
+          /: 8000
+  workflow:
+    steps:
+      - name: express-server
+        type: depends-on-app
+        properties:
+          name: another-app
+          namespace: default
+```
+
+`depends-on-app` will check if the cluster has the application with `name` and `namespace` given in properties.
+If the application exists, it will hang the next step until the application is running.
+If the application does not exist, KubeVela will check the ConfigMap with the same name, and read the config of the Application and apply to cluster.
+The ConfigMap is like below: the `name` and `namespace` of the ConfigMap is the same in properties.
+In data, the `key` must be specified by `application`, and the `value` is the yaml of the deployed application yaml.
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myapp
+  namespace: vela-system
+data:
+  application: 
+    <app yaml file>
+```
+
+### 参数说明 (depends-on-app)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | 需要等待的 Application 名称。 | string | true |  
+ namespace | 需要等待的 Application 所在的命名空间。 | string | true |  
+
+
+## Deploy
+
+### 描述
+
+功能丰富且统一的用于多集群部署的步骤，可以指定多集群差异化配置策略。
+
+### 示例 (deploy)
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -53,439 +171,44 @@ spec:
       - type: deploy
         name: deploy-hangzhou
         properties:
-          # 在执行该步骤前自动暂停
+          # require manual approval before running this step
           auto: false
           policies: ["topology-hangzhou-clusters"]
 ```
 
-## suspend
+### 参数说明 (deploy)
 
-**简介**
 
-暂停当前工作流，可以通过 `vela workflow resume appname` 继续已暂停的工作流。
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ policies | 指定本次部署要使用的策略。如果不指定策略，将自动部署到管控集群。 | []string | false |  
+ parallelism | 指定本次部署的并发度。 | int | false | 5 
+ ignoreTerraformComponent | 部署时忽略 Terraform 的组件，默认忽略，Terraform 仅需要在管控集群操作云资源，不需要管控信息下发到多集群。 | bool | false | true 
+ auto | 默认为 true。如果为 false，工作流将在执行该步骤前自动暂停。。 | bool | false | true 
 
-> 有关于 `vela workflow` 命令的介绍，可以详见 [vela cli](../../cli/vela_workflow)。
 
-**参数**
+## Deploy-Cloud-Resource
 
-> 注意，duration 参数需要在 KubeVela v1.4 版本以上可用。
+### 描述
 
-|  参数名   |  类型  |                 说明                  |
-| :-------: | :----: | :-----------------------------------: |
-|   duration    | string |      可选参数，指定工作流暂停的时长，超过该时间后工作流将自动继续，如："30s"， "1min"， "2m15s"      |
+将云资源生成的秘钥部署到多集群。
 
-**示例**
+### 参数说明 (deploy-cloud-resource)
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-vela-workflow
-  namespace: default
-spec:
-  components:
-  - name: express-server
-    type: webservice
-    properties:
-      image: oamdev/hello-world
-      port: 8000
-  workflow:
-    steps:
-      - name: slack-message
-        type: webhook-notification
-        properties:
-          slack:
-            # Slack Webhook 地址，请查看：https://api.slack.com/messaging/webhooks
-            url: xxx
-            message:
-              text: 准备开始部署应用，请管理员审批并继续工作流
-      - name: manual-approval
-        type: suspend
-        # properties:
-        #   duration: "30s"
-      - name: express-server
-        type: apply-application
-```
 
-## notification
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ env | 指定多集群策略中定义的环境名称。 | string | true |  
+ policy | Declare the name of the env-binding policy, if empty, the first env-binding policy will be used。 | string | false | empty 
 
-**简介**
 
-向指定的 Webhook 发送信息，支持邮件、钉钉、Slack 和飞书。
+## Export2config
 
-**参数**
+### 描述
 
-|      参数名      |  类型  | 说明                                                                                                                                     |
-| :--------------: | :----: | :--------------------------------------------------------------------------------------------------------------------------------------- |
-|      email       | Object | 可选值，如果需要发送邮件，则需填写其 from、to 以及 content                                                                                             |
-|    email.from.address     | String | 必填值，发送的邮件地址                                                                                                                                      |
-|  email.from.alias   | String | 可选值，发送的邮件别名                                           |
-|  email.from.password   | ValueOrSecret | 必填值，发送的邮件密码，可以选择直接在 value 填写或从 secretRef 中获取                                           |
-|  email.from.host   | String | 必填值，邮件的 Host                                           |
-|  email.from.port   | Int | 可选值，邮件发送的端口号，默认为 587                                           |
-|  email.to   | []String | 必填值，邮件发送的地址列表                                          |
-|  email.content.subject   | String | 必填值，邮件的标题                                           |
-|  email.content.body   | String | 必填值，邮件的内容                                           |
-|      slack       | Object | 可选值，如果需要发送 Slack 信息，则需填写其 url 及 message                                                                               |
-|    slack.url     |  ValueOrSecret | 必填值，Slack 的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取                                                                                                            |
-|  slack.message   | Object | 必填值，需要发送的 Slack 信息，请符合 [Slack 信息规范](https://api.slack.com/reference/messaging/payload)                                |
-|     dingding     | Object | 可选值，如果需要发送钉钉信息，则需填写其 url 及 message                                                                                  |
-|   dingding.url   | ValueOrSecret | 必填值，钉钉的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取                                                                                                              |
-| dingding.message | Object | 必填值，需要发送的钉钉信息，请符合 [钉钉信息规范](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw) |
-|     lark     | Object | 可选值，如果需要发送飞书信息，则需填写其 url 及 message                                                                                  |
-|   lark.url   | ValueOrSecret | 必填值，飞书的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取                                                                                                              |
-| lark.message | Object | 必填值，需要发送的飞书信息，请符合 [飞书信息规范](https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN#8b0f2a1b) |
+在工作流中导出数据到 Kubernetes ConfigMap 对象。
 
-`ValueOrSecret` 的格式为：
-
-|       参数名       |  类型  | 说明                                                                                                                                                                 |
-| :--------------: | :----: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| value | String | 可选值，直接填写值 |
-| secretRef.name | String | 可选值，从 secret 中获取值，secret 的名称 |
-| secretRef.key | String | 可选值，从 secret 中获取值，secret 的 key |
-
-**示例**
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-vela-workflow
-  namespace: default
-spec:
-  components:
-  - name: express-server
-    type: webservice
-    properties:
-      image: oamdev/hello-world
-      port: 8000
-  workflow:
-    steps:
-      - name: dingtalk-message
-        type: notification
-        properties:
-          dingding:
-            # 钉钉 Webhook 地址，请查看：https://developers.dingtalk.com/document/robots/custom-robot-access
-            url:
-              value: <your dingtalk url>
-            message:
-              msgtype: text
-              text:
-                context: 开始运行工作流
-      - name: application
-        type: apply-application
-      - name: slack-message
-        type: notification
-        properties:
-          slack:
-            # Slack Webhook 地址，请查看：https://api.slack.com/messaging/webhooks
-            url:
-              secretRef:
-                name: <the secret name that stores your slack url>
-                key: <the secret key that stores your slack url>
-            message:
-              text: 工作流运行完成
-```
-
-## webhook
-
-**简介**
-
-向指定 Webhook URL 发送请求，若不指定请求体，则默认发送当前 Application。
-
-**参数**
-
-|  参数名   |  类型  |                 说明                  |
-| :-------: | :----: | :-----------------------------------: |
-|   url    | ValueOrSecret |        必填值，需要发送的 Webhook URL，可以选择直接在 value 填写或从 secretRef 中获取      |
-| data | object | 可选值，需要发送的内容 |
-
-**示例**
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-vela-workflow
-  namespace: default
-spec:
-  components:
-  - name: express-server
-    type: webservice
-    properties:
-      image: oamdev/hello-world
-      port: 8000
-  workflow:
-    steps:
-      - name: express-server
-        type: apply-application
-      - name: webhook
-        type: webhook
-        properties:
-          url:
-            value: <your webhook url>
-```
-
-## apply-application
-
-**简介**
-
-部署当前 Application 中的所有组件和运维特征。
-
-> 该步骤默认在 VelaUX 中隐藏。
-
-**参数**
-
-无需指定参数，主要用于应用部署前后增加自定义步骤。
-
-**示例**
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-vela-workflow
-  namespace: default
-spec:
-  components:
-  - name: express-server
-    type: webservice
-    properties:
-      image: oamdev/hello-world
-      port: 8000
-  workflow:
-    steps:
-      - name: express-server
-        type: apply-application
-```
-
-## apply-component
-
-**简介**
-
-部署当前 Application 中的某个组件及其运维特征
-
-> 该步骤默认在 VelaUX 中隐藏。
-
-**参数**
-
-
-|  参数名   |  类型  |                 说明                  |
-| :-------: | :----: | :-----------------------------------: |
-|   component    | string |      需要部署的 component 名称      |
-
-**示例**
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-vela-workflow
-  namespace: default
-spec:
-  components:
-  - name: express-server
-    type: webservice
-  workflow:
-    steps:
-      - name: express-server
-        type: apply-component
-        properties:
-          component: express-server
-```
-
-## depends-on-app
-
-**简介**
-
-等待指定的 Application 完成。
-
-> 该步骤默认在 VelaUX 中隐藏。
-
-`depends-on-app` 会根据 `properties` 中的 `name` 及 `namespace`，去查询集群中是否存在对应的应用。
-
-如果应用存在，则当该应用的状态可用时，才会进行下一个步骤；
-若该应用不存在，则会去查询同名的 configMap，从中读取出应用的配置并部署到集群中。
-> 若应用不存在，则需要形如下的 configMap：`name` 与 `namespace` 和 `properties` 中声明的保持一致，在 `data` 中，以 `name` 为 key，实际的 value 为需要部署的 KubeVela Application yaml。
-> ```yaml
-> apiVersion: v1
-> kind: ConfigMap
-> metadata:
->   name: myapp
->   namespace: vela-system
-> data:
->   myapp: ...
-> ``` 
-
-**参数**
-
-|  参数名   |  类型  |                 说明                  |
-| :-------: | :----: | :-----------------------------------: |
-|   name    | string |      需要等待的 Application 名称      |
-| namespace | string | 需要等待的 Application 所在的命名空间 |
-
-**示例**
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-vela-workflow
-  namespace: default
-spec:
-  components:
-  - name: express-server
-    type: webservice
-    properties:
-      image: oamdev/hello-world
-      port: 8000
-  workflow:
-    steps:
-      - name: express-server
-        type: depends-on-app
-        properties:
-          name: another-app
-          namespace: default
-```
-
-## apply-object
-
-**简介**
-
-部署 Kubernetes 原生资源，该功能在 KubeVela v1.1.4 及以上版本可使用。
-
-> 该步骤默认在 VelaUX 中隐藏。
-
-**参数**
-
-|  参数名   |  类型  |                 说明                  |
-| :-------: | :----: | :-----------------------------------: |
-|    value    | object |       必填值，Kubernetes 原生资源字段      |
-|    cluster    | object |      可选值，需要部署的集群名称。如果不指定，则为当前集群。在使用该字段前，请确保你已经使用 `vela cluster join` 纳管了你的集群     |
-
-**示例**
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: server-with-pvc
-  namespace: default
-spec:
-  components:
-  - name: express-server
-    type: webservice
-    properties:
-      image: oamdev/hello-world
-      port: 8000
-      volumes:
-        - name: "my-pvc"
-          type: "pvc"
-          mountPath: "/test"
-          claimName: "myclaim"
-
-  workflow:
-    steps:
-      - name: apply-pvc
-        type: apply-object
-        properties:
-          # Kubernetes 原生字段
-          value:
-            apiVersion: v1
-            kind: PersistentVolumeClaim
-            metadata:
-              name: myclaim
-              namespace: default
-            spec:
-              accessModes:
-              - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 8Gi
-              storageClassName: standard
-            # 需要部署的集群名称，如果不指定，则默认为当前集群
-            cluster: <your cluster name>  
-      - name: apply-server
-        type: apply-component
-        properties:
-          component: express-server
-```
-
-## read-object
-
-**简介**
-
-读取 Kubernetes 原生资源，该功能在 KubeVela v1.1.6 及以上版本可使用。
-
-> 该步骤默认在 VelaUX 中隐藏。
-
-**参数**
-
-|  参数名   |  类型  |                 说明                  |
-| :-------: | :----: | :-----------------------------------: |
-| apiVersion | String |     必填值，资源的 apiVersion     |
-| kind | String |     必填值，资源的 kind     |
-| name | String |     必填值，资源的 name     |
-| namespace | String |     选填值，资源的 namespace，默认为 `default`     |
-| cluster | String |     选填值，资源的集群名，默认为当前集群，在使用该字段前，请确保你已经使用 `vela cluster join` 纳管了你的集群     |
-
-**示例**
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: read-object
-  namespace: default
-spec:
-  components:
-  - name: express-server
-    type: webservice
-    properties:
-      image: oamdev/hello-world
-      port: 8000
-  workflow:
-    steps:
-    - name: read-object
-      type: read-object
-      outputs:
-        - name: cpu
-          valueFrom: output.value.data["cpu"]
-        - name: memory
-          valueFrom: output.value.data["memory"]
-      properties:
-        apiVersion: v1
-        kind: ConfigMap
-        name: my-cm-name
-        cluster: <your cluster name>
-    - name: apply
-      type: apply-component
-      inputs:
-        - from: cpu
-          parameterKey: cpu
-        - from: memory
-          parameterKey: memory
-      properties:
-        component: express-server
-```
-
-## export2config
-
-**简介**
-
-导出数据到 ConfigMap，该功能在 KubeVela v1.1.6 及以上版本可使用。
-
-> 该步骤默认在 VelaUX 中隐藏。
-
-**参数**
-
-|  参数名   |  类型  |                 说明                  |
-| :-------: | :----: | :-----------------------------------: |
-| configName | String |     必填值，ConfigMap 的名称     |
-| namespace | String |     选填值，ConfigMap 的 namespace，默认为 `context.namespace`     |
-| data | Map |     必填值，需要导出到 ConfigMap 中的数据     |
-
-**示例**
+### 示例 (export2config)
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -520,23 +243,24 @@ spec:
             testkey: testvalue
 ```
 
-## export2secret
+### 参数说明 (export2config)
 
-**简介**
 
-导出数据到 Secret，该功能在 KubeVela v1.1.6 及以上版本可使用。
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ cluster | 要导出到的集群名称。 | string | false | empty 
+ namespace | ConfigMap 的 namespace，默认为当前应用的 namespace。 | string | false |  
+ data | 需要导出到 ConfigMap 中的数据，是一个 key-value 的 map。 | {...} | true |  
+ configName | ConfigMap 的名称。 | string | true |  
 
-> 该步骤默认在 VelaUX 中隐藏。
 
-**参数**
+## Export2secret
 
-|  参数名   |  类型  |                 说明                  |
-| :-------: | :----: | :-----------------------------------: |
-| secretName | String |     必填值，Secret 的名称     |
-| namespace | String |    选填值，Secret 的 namespace，默认为 `context.namespace`      |
-| data | Map |    必填值，需要导出到 Secret 中的数据     |
+### 描述
 
-**示例**
+在工作流中导出数据到 Kubernetes Secret 对象。
+
+### 示例 (export2secret)
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -570,3 +294,534 @@ spec:
           data:
             testkey: testvalue
 ```
+
+### 参数说明 (export2secret)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ cluster | 要导出到的集群名称。 | string | false | empty 
+ namespace | secret 的 namespace，默认为当前应用的 namespace。 | string | false |  
+ type | 指定导出的 secret 类型。 | string | false |  
+ secretName | Secret 的名称。 | string | true |  
+ data | 需要导出到 Secret 中的数据。 | {...} | true |  
+
+
+## Generate-Jdbc-Connection
+
+### 描述
+
+Generate a JDBC connection based on Component of alibaba-rds。
+
+### 参数说明 (generate-jdbc-connection)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Specify the name of the secret generated by database component。 | string | true |  
+ namespace | Specify the namespace of the secret generated by database component。 | string | false |  
+
+
+## Notification
+
+### 描述
+
+向指定的 Webhook 发送信息，支持邮件、钉钉、Slack 和飞书。
+
+### 示例 (notification)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-workflow
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: oamdev/hello-world
+      port: 8000
+    traits:
+    - type: ingress
+      properties:
+        domain: testsvc.example.com
+        http:
+          /: 8000
+  workflow:
+    steps:
+      - name: dingtalk-message
+        type: notification
+        properties:
+          dingding:
+            # the DingTalk webhook address, please refer to: https://developers.dingtalk.com/document/robots/custom-robot-access
+            url: 
+              value: <url>
+            message:
+              msgtype: text
+              text:
+                context: Workflow starting...
+      - name: application
+        type: apply-application
+      - name: slack-message
+        type: notification
+        properties:
+          slack:
+            # the Slack webhook address, please refer to: https://api.slack.com/messaging/webhooks
+            url:
+              secretRef:
+                name: <secret-key>
+                key: <secret-value>
+            message:
+              text: Workflow ended.
+          lark:
+            url:
+              value: <lark-url>
+            message:
+              msg_type: "text"
+              content: "{\"text\":\" Hello KubeVela\"}"
+          email:
+            from:
+              address: <sender-email-address>
+              alias: <sender-alias>
+              password:
+                # secretRef:
+                #   name: <secret-name>
+                #   key: <secret-key>
+                value: <sender-password>
+              host: <email host like smtp.gmail.com>
+              port: <email port, optional, default to 587>
+            to:
+              - kubevela1@gmail.com
+              - kubevela2@gmail.com
+            content:
+              subject: test-subject
+              body: test-body
+```
+
+**Expected outcome**
+
+We can see that before and after the deployment of the application, the messages can be seen in the corresponding group chat.
+
+### 参数说明 (notification)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ lark | 发送飞书信息。 | [lark](#lark-notification) | false |  
+ slack | 发送 Slack 信息。 | [slack](#slack-notification) | false |  
+ email | 发送邮件通知。 | [email](#email-notification) | false |  
+ dingding | 发送钉钉信息。 | [dingding](#dingding-notification) | false |  
+
+
+#### lark (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ url | Specify the the lark url, you can either sepcify it in value or use secretRef。 | [url-option-0](#url-option-0-notification) or [url-option-1](#url-option-1-notification) | true |  
+ message | Specify the message that you want to sent, refer to [Lark messaging](https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN#8b0f2a1b)。 | [message](#message-notification) | true |  
+
+
+##### url-option-0 (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ value | the url address content in string。 | string | true |  
+
+
+##### url-option-1 (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ secretRef |  | [secretRef](#secretref-notification) | true |  
+
+
+##### secretRef (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Kubernetes Secret 名称。 | string | true |  
+ key | Kubernetes Secret 中的 key。 | string | true |  
+
+
+##### message (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ content | content should be json encode string。 | string | true |  
+ msg_type | msg_type can be text, post, image, interactive, share_chat, share_user, audio, media, file, sticker。 | string | true |  
+
+
+#### slack (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ url | Slack 的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取。 | [url-option-0](#url-option-0-notification) or [url-option-1](#url-option-1-notification) | true |  
+ message | Specify the message that you want to sent, refer to [slack messaging](https://api.slack.com/reference/messaging/payload)。 | [message](#message-notification) | true |  
+
+
+##### url-option-0 (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ value | the url address content in string。 | string | true |  
+
+
+##### url-option-1 (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ secretRef |  | [secretRef](#secretref-notification) | true |  
+
+
+##### secretRef (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Kubernetes Secret 名称。 | string | true |  
+ key | Kubernetes Secret 中的 key。 | string | true |  
+
+
+##### message (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ text | Specify the message text for slack notification。 | string | true |  
+ blocks |  | (null\|[...]) | false |  
+ attachments |  | (null\|{...}) | false |  
+ thread_ts |  | string | false |  
+ mrkdwn | Specify the message text format in markdown for slack notification。 | bool | false | true 
+
+
+#### email (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ content | 指定邮件内容。 | [content](#content-notification) | true |  
+ from | 指定邮件发送人信息。 | [from](#from-notification) | true |  
+ to | 指定收件人信息。 | []string | true |  
+
+
+##### content (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ body | 指定邮件正文内容。 | string | true |  
+ subject | 指定邮件标题。 | string | true |  
+
+
+##### from (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ address | 发件人邮件地址。 | string | true |  
+ alias | The alias is the email alias to show after sending the email。 | string | false |  
+ password | Specify the password of the email, you can either sepcify it in value or use secretRef。 | [password-option-0](#password-option-0-notification) or [password-option-1](#password-option-1-notification) | true |  
+ host | Specify the host of your email。 | string | true |  
+ port | Specify the port of the email host, default to 587。 | int | false | 587 
+
+
+##### password-option-0 (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ value | the password content in string。 | string | true |  
+
+
+##### password-option-1 (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ secretRef |  | [secretRef](#secretref-notification) | true |  
+
+
+##### secretRef (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Kubernetes Secret 名称。 | string | true |  
+ key | Kubernetes Secret 中的 key。 | string | true |  
+
+
+#### dingding (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ url | Specify the the dingding url, you can either sepcify it in value or use secretRef。 | [url-option-0](#url-option-0-notification) or [url-option-1](#url-option-1-notification) | true |  
+ message | Specify the message that you want to sent, refer to [dingtalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw)。 | [message](#message-notification) | true |  
+
+
+##### url-option-0 (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ value | the url address content in string。 | string | true |  
+
+
+##### url-option-1 (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ secretRef |  | [secretRef](#secretref-notification) | true |  
+
+
+##### secretRef (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Kubernetes Secret 名称。 | string | true |  
+ key | Kubernetes Secret 中的 key。 | string | true |  
+
+
+##### message (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ text | Specify the message content of dingtalk notification。 | (null\|{...}) | false |  
+ msgtype | msgType can be text, link, mardown, actionCard, feedCard。 | string | false | text 
+ link |  | (null\|{...}) | false |  
+ markdown |  | (null\|{...}) | false |  
+ at |  | (null\|{...}) | false |  
+ actionCard |  | (null\|{...}) | false |  
+ feedCard |  | (null\|{...}) | false |  
+
+
+## Read-Object
+
+### 描述
+
+在工作流中读取 Kubernetes 资源对象。
+
+### 示例 (read-object)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: read-object
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: oamdev/hello-world
+      port: 8000
+  workflow:
+    steps:
+    - name: read-object
+      type: read-object
+      outputs:
+        - name: cpu
+          valueFrom: output.value.data["cpu"]
+        - name: memory
+          valueFrom: output.value.data["memory"]
+      properties:
+        apiVersion: v1
+        kind: ConfigMap
+        name: my-cm-name
+        cluster: <your cluster name
+    - name: apply
+      type: apply-component
+      inputs:
+        - from: cpu
+          parameterKey: cpu
+        - from: memory
+          parameterKey: memory
+      properties:
+        component: express-server
+```
+
+### 参数说明 (read-object)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Specify the name of the object。 | string | true |  
+ cluster | 需要部署的集群名称。如果不指定，则为当前集群。 | string | false | empty 
+ apiVersion | Specify the apiVersion of the object, defaults to 'core.oam.dev/v1beta1'。 | string | false |  
+ kind | Specify the kind of the object, defaults to Application。 | string | false |  
+ namespace | The namespace of the resource you want to read。 | string | false | default 
+
+
+## Share-Cloud-Resource
+
+### 描述
+
+Sync secrets created by terraform component to runtime clusters so that runtime clusters can share the created cloud resource。
+
+### 参数说明 (share-cloud-resource)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ env | 指定多集群策略中定义的环境名称。 | string | true |  
+ policy | Declare the name of the env-binding policy, if empty, the first env-binding policy will be used。 | string | false | empty 
+ placements | Declare the location to bind。 | [[]placements](#placements-share-cloud-resource) | true |  
+
+
+#### placements (share-cloud-resource)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ cluster |  | string | false |  
+ namespace |  | string | false |  
+
+
+## Step-Group
+
+### 描述
+
+A special step that you can declare 'subSteps' in it, 'subSteps' is an array containing any step type whose valid parameters do not include the `step-group` step type itself. The sub steps were executed in parallel。
+
+### 示例 (step-group)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: example
+  namespace: default
+spec:
+  components:
+    - name: express-server
+      type: webservice
+      properties:
+        image: crccheck/hello-world
+        port: 8000
+    - name: express-server2
+      type: webservice
+      properties:
+        image: crccheck/hello-world
+        port: 8000
+
+  workflow:
+    steps:
+      - name: step
+        type: step-group
+        subSteps:
+          - name: apply-sub-step1
+            type: apply-component
+            properties:
+              component: express-server
+          - name: apply-sub-step2
+            type: apply-component
+            properties:
+              component: express-server2
+```
+
+### 参数说明 (step-group)
+This capability has no arguments.
+
+## Suspend
+
+### 描述
+
+暂停当前工作流，可以通过 'vela workflow resume' 继续已暂停的工作流。
+
+### 示例 (suspend)
+
+The `duration` parameter is supported in KubeVela v1.4 or higher.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-workflow
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: oamdev/hello-world
+      port: 8000
+  workflow:
+    steps:
+      - name: slack-message
+        type: webhook-notification
+        properties:
+          slack:
+            # the Slack webhook address, please refer to: https://api.slack.com/messaging/webhooks
+            message:
+              text: Ready to apply the application, ask the administrator to approve and resume the workflow.
+      - name: manual-approval
+        type: suspend
+        # properties:
+        #   duration: "30s"
+      - name: express-server
+        type: apply-application
+```
+
+### 参数说明 (suspend)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ duration | 指定工作流暂停的时长，超过该时间后工作流将自动继续，如："30s"， "1min"， "2m15s"。 | string | false |  
+
+
+## Webhook
+
+### 描述
+
+向指定 Webhook URL 发送请求，若不指定请求体，则默认发送当前 Application。
+
+### 示例 (webhook)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-workflow
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: oamdev/hello-world
+      port: 8000
+  workflow:
+    steps:
+      - name: express-server
+        type: apply-application
+      - name: webhook
+        type: webhook
+        properties:
+          url:
+            value: <your webhook url>
+```
+
+### 参数说明 (webhook)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ url | 需要发送的 Webhook URL，可以选择直接在 value 填写或从 secretRef 中获取。 | [url-option-0](#url-option-0-webhook) or [url-option-1](#url-option-1-webhook) | true |  
+ data | 需要发送的内容。 | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+
+
+#### url-option-0 (webhook)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ value |  | string | true |  
+
+
+#### url-option-1 (webhook)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ secretRef |  | [secretRef](#secretref-webhook) | true |  
+
+
+##### secretRef (webhook)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Kubernetes Secret 名称。 | string | true |  
+ key | Kubernetes Secret 中的 key。 | string | true |  
+
+

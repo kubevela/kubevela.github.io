@@ -595,5 +595,140 @@
 	},
 	"Specify the target namespace to deploy in the selected clusters, default inherit the original namespace": {
 		"Chinese": "要在选定集群中部署的目标命名空间。 如果未设置，组件将继承原始命名空间"
+	},
+	"Apply raw kubernetes objects for your workflow steps": {
+		"Chinese": "在工作流中部署 Kubernetes 资源对象"
+	},
+	"Specify Kubernetes native resource object to be applied": {
+		"Chinese": "Kubernetes 资源对象参数"
+	},
+	"The cluster you want to apply the resource to, default is the current control plane cluster": {
+		"Chinese": "需要部署的集群名称。如果不指定，则为当前集群"
+	},
+	"Wait for the specified Application to complete": {
+		"Chinese": "等待指定的 Application 完成"
+	},
+	"Specify the name of the dependent Application": {
+		"Chinese": "需要等待的 Application 名称"
+	},
+	"Specify the namespace of the dependent Application": {
+		"Chinese": "需要等待的 Application 所在的命名空间"
+	},
+	"A powerful and unified deploy step for components multi-cluster delivery with policies": {
+		"Chinese": "功能丰富且统一的用于多集群部署的步骤，可以指定多集群差异化配置策略"
+	},
+	"If set to false, the workflow will suspend automatically before this step, default to be true": {
+		"Chinese": "默认为 true。如果为 false，工作流将在执行该步骤前自动暂停。"
+	},
+	"Maximum number of concurrent delivered components": {
+		"Chinese": "指定本次部署的并发度"
+	},
+	"If set false, this step will apply the components with the terraform workload": {
+		"Chinese": "部署时忽略 Terraform 的组件，默认忽略，Terraform 仅需要在管控集群操作云资源，不需要管控信息下发到多集群"
+	},
+	"Declare the policies that used for this deployment. If not specified, the components will be deployed to the hub cluster": {
+		"Chinese": "指定本次部署要使用的策略。如果不指定策略，将自动部署到管控集群"
+	},
+	"Deploy cloud resource and deliver secret to multi clusters": {
+		"Chinese": "将云资源生成的秘钥部署到多集群"
+	},
+	"Declare the name of the env in policy": {
+		"Chinese": "指定多集群策略中定义的环境名称"
+	},
+	"Export data to specified Kubernetes ConfigMap in your workflow": {
+		"Chinese": "在工作流中导出数据到 Kubernetes ConfigMap 对象"
+	},
+	"Specify the cluster of the config map": {
+		"Chinese": "要导出到的集群名称"
+	},
+	"Specify the name of the config map": {
+		"Chinese": "ConfigMap 的名称"
+	},
+	"Specify the data of config map": {
+		"Chinese": "需要导出到 ConfigMap 中的数据，是一个 key-value 的 map"
+	},
+	"Specify the namespace of the config map": {
+		"Chinese": "ConfigMap 的 namespace，默认为当前应用的 namespace"
+	},
+	"Export data to Kubernetes Secret in your workflow": {
+		"Chinese": "在工作流中导出数据到 Kubernetes Secret 对象"
+	},
+	"Specify the cluster of the secret": {
+		"Chinese": "要导出到的集群名称"
+	},
+	"Specify the namespace of the secret": {
+		"Chinese": "secret 的 namespace，默认为当前应用的 namespace"
+	},
+	"Specify the type of the secret": {
+		"Chinese": "指定导出的 secret 类型"
+	},
+	"Specify the name of the secret": {
+		"Chinese": "Secret 的名称"
+	},
+	"Specify the data of secret": {
+		"Chinese": "需要导出到 Secret 中的数据"
+	},
+	"Send notifications to Email, DingTalk, Slack, Lark or webhook in your workflow": {
+		"Chinese": "向指定的 Webhook 发送信息，支持邮件、钉钉、Slack 和飞书"
+	},
+	"Please fulfill its url and message if you want to send Lark messages": {
+		"Chinese": "发送飞书信息"
+	},
+	"Please fulfill its url and message if you want to send Slack messages": {
+		"Chinese": "发送 Slack 信息"
+	},
+	"Please fulfill its from, to and content if you want to send email": {
+		"Chinese": "发送邮件通知"
+	},
+	"Please fulfill its url and message if you want to send DingTalk messages": {
+		"Chinese": "发送钉钉信息"
+	},
+	"Specify the content of the email": {
+		"Chinese": "指定邮件内容"
+	},
+	"Specify the email info that you want to send from": {
+		"Chinese": "指定邮件发送人信息"
+	},
+	"Specify the email address that you want to send to": {
+		"Chinese": "指定收件人信息"
+	},
+	"Specify the context body of the email": {
+		"Chinese": "指定邮件正文内容"
+	},
+	"Specify the subject of the email": {
+		"Chinese": "指定邮件标题"
+	},
+	"Specify the email address that you want to send from": {
+		"Chinese": "发件人邮件地址"
+	},
+	"Specify the the slack url, you can either sepcify it in value or use secretRef": {
+		"Chinese": "Slack 的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取"
+	},
+	"Read Kubernetes objects from cluster for your workflow steps": {
+		"Chinese": "在工作流中读取 Kubernetes 资源对象"
+	},
+	"A special step that you can declare 'subSteps' in it, 'subSteps' is an array containing any step type whose valid parameters do not include the `step-group` step type itself. The sub steps were executed in parallel.": {
+		"Chinese": "特殊的工作流步骤类型，指定 step-group 类型表示使用工作流子步骤，指定 'subSteps'字段执行子步骤，子步骤并行执行"
+	},
+	"Suspend the current workflow, it can be resumed by 'vela workflow resume' command": {
+		"Chinese": "暂停当前工作流，可以通过 'vela workflow resume' 继续已暂停的工作流"
+	},
+	"Specify the wait duration time to resume workflow such as \"30s\", \"1min\" or \"2m15s\"": {
+		"Chinese": "指定工作流暂停的时长，超过该时间后工作流将自动继续，如：\"30s\"， \"1min\"， \"2m15s\""
+	},
+	"Send a request to the specified Webhook URL. If no request body is specified, the current Application body will be sent by default": {
+		"Chinese": "向指定 Webhook URL 发送请求，若不指定请求体，则默认发送当前 Application"
+	},
+	"Specify the webhook url": {
+		"Chinese": "需要发送的 Webhook URL，可以选择直接在 value 填写或从 secretRef 中获取"
+	},
+	"Specify the data you want to send": {
+		"Chinese": "需要发送的内容"
+	},
+	"name is the name of the secret": {
+		"Chinese": "Kubernetes Secret 名称"
+	},
+	"key is the key in the secret": {
+		"Chinese": "Kubernetes Secret 中的 key"
 	}
 }

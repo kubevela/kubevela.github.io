@@ -4,7 +4,7 @@ title: Built-in WorkflowStep Type
 
 This documentation will walk through all the built-in workflow step types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-24T18:00:59+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-24T20:59:39+08:00.
 
 ## Apply-Object
 
@@ -202,36 +202,6 @@ Deploy cloud resource and deliver secret to multi clusters.
  policy | Declare the name of the env-binding policy, if empty, the first env-binding policy will be used. | string | false | empty 
 
 
-## Deploy2env
-
-### Description
-
-Deploy env binding component to target env.
-
-### Specification (deploy2env)
-
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- env | Declare the name of the env in policy. | string | true |  
- policy | Declare the name of the env-binding policy, if empty, the first env-binding policy will be used. | string | false | empty 
- parallel | components are applied in parallel. | bool | false | false 
-
-
-## Deploy2runtime
-
-### Description
-
-Deploy application to runtime clusters.
-
-### Specification (deploy2runtime)
-
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- clusters | Declare the runtime clusters to apply, if empty, all runtime clusters will be used. | []string | false |  
-
-
 ## Export2config
 
 ### Description
@@ -330,7 +300,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- cluster | Specify the cluster of the config map. | string | false | empty 
+ cluster | Specify the cluster of the secret. | string | false | empty 
  namespace | Specify the namespace of the secret. | string | false |  
  type | Specify the type of the secret. | string | false |  
  secretName | Specify the name of the secret. | string | true |  
@@ -457,7 +427,7 @@ We can see that before and after the deployment of the application, the messages
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- value |  | string | true |  
+ value | the url address content in string. | string | true |  
 
 
 ##### url-option-1 (notification)
@@ -495,7 +465,7 @@ We can see that before and after the deployment of the application, the messages
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- value |  | string | true |  
+ value | the url address content in string. | string | true |  
 
 
 ##### url-option-1 (notification)
@@ -556,7 +526,7 @@ We can see that before and after the deployment of the application, the messages
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- value |  | string | true |  
+ value | the password content in string. | string | true |  
 
 
 ##### password-option-1 (notification)
@@ -586,7 +556,7 @@ We can see that before and after the deployment of the application, the messages
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- value |  | string | true |  
+ value | the url address content in string. | string | true |  
 
 
 ##### url-option-1 (notification)
@@ -703,15 +673,46 @@ Sync secrets created by terraform component to runtime clusters so that runtime 
 
 ### Description
 
-step group.
+A special step that you can declare 'subSteps' in it, 'subSteps' is an array containing any step type whose valid parameters do not include the `step-group` step type itself. The sub steps were executed in parallel.
+
+### Examples (step-group)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: example
+  namespace: default
+spec:
+  components:
+    - name: express-server
+      type: webservice
+      properties:
+        image: crccheck/hello-world
+        port: 8000
+    - name: express-server2
+      type: webservice
+      properties:
+        image: crccheck/hello-world
+        port: 8000
+
+  workflow:
+    steps:
+      - name: step
+        type: step-group
+        subSteps:
+          - name: apply-sub-step1
+            type: apply-component
+            properties:
+              component: express-server
+          - name: apply-sub-step2
+            type: apply-component
+            properties:
+              component: express-server2
+```
 
 ### Specification (step-group)
-
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- \- |  | {} | true |  
-
+This capability has no arguments.
 
 ## Suspend
 
