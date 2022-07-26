@@ -187,7 +187,7 @@ module.exports = {
           editUrl: 'https://github.com/kubevela/kubevela.io/tree/main/',
         },
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: require.resolve('./src/css/custom.scss'),
         },
       },
     ],
@@ -205,6 +205,7 @@ module.exports = {
         showLastUpdateTime: true,
       },
     ],
+    'docusaurus-plugin-sass',
     './src/plugins/faviconCustomPlugin',
     require.resolve('docusaurus-plugin-image-zoom'),
   ],
