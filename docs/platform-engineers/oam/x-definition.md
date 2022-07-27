@@ -242,7 +242,7 @@ There are three approaches to denote one or a group of workload types.
 
 If this field is omitted, it means this trait is allowed to apply to any workload types.
 
-KubeVela will raise an error if a trait is applied to a workload type which is NOT included in the `appliesToWorkloads`.
+For now, this field is not checked when applying application. Strict checking is planed to be implemented in the KubeVela 1.6.
 
 
 ### `.spec.conflictsWith` 
