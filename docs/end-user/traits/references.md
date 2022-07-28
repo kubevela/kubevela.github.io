@@ -4,7 +4,7 @@ title: Built-in Trait Type
 
 This documentation will walk through all the built-in trait types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-28T11:51:03+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-28T16:25:31+08:00.
 
 ## Affinity
 
@@ -14,6 +14,7 @@ Affinity specifies affinity and toleration K8s pod for your workload which follo
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -330,12 +331,11 @@ Affinity specifies affinity and toleration K8s pod for your workload which follo
 
 ### Description
 
-Add annotations on K8s pod for your workload which follows the pod spec in path 'spec.template'.
+Add annotations on your workload. if it generates pod, add same annotations for generated pods.
 
 ### Apply To Component Types
 
-- *
-
+All Component Types
 
 
 ### Examples (annotations)
@@ -377,6 +377,7 @@ Add command on K8s pod for your workload which follows the pod spec in path 'spe
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -419,7 +420,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- - | Composition type. | parameter: cannot use value C{containerName: (*"" \| string), command: (*null \| [, ...string]), args: (*null \| [, ...string]), addArgs: (*null \| [, ...string]), delArgs: (*null \| [, ...string])} (type struct) as string | false |  
+ -- | Composition type. | parameter: cannot use value C{containerName: (*"" \| string), command: (*null \| [, ...string]), args: (*null \| [, ...string]), addArgs: (*null \| [, ...string]), delArgs: (*null \| [, ...string])} (type struct) as string | false |  
 
 
 ## Container-Image
@@ -430,6 +431,7 @@ Set the image of the container.
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -473,7 +475,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- - | Composition type. | parameter: cannot use value C{containerName: (*"" \| string), image: string, imagePullPolicy: (*"" \| "IfNotPresent" \| "Always" \| "Never")} (type struct) as string | false |  
+ -- | Composition type. | parameter: cannot use value C{containerName: (*"" \| string), image: string, imagePullPolicy: (*"" \| "IfNotPresent" \| "Always" \| "Never")} (type struct) as string | false |  
 
 
 ## Cpuscaler
@@ -484,6 +486,7 @@ Automatically scale the component based on CPU usage.
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 
@@ -530,6 +533,7 @@ Add env on K8s pod for your workload which follows the pod spec in path 'spec.te
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -576,7 +580,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- - | Composition type. | parameter: cannot use value C{env: {[]: (_: string)->string, }, containerName: (*"" \| string), replace: (*false \| bool), unset: (*[] \| [, ...string])} (type struct) as string | false |  
+ -- | Composition type. | parameter: cannot use value C{env: {[]: (_: string)->string, }, containerName: (*"" \| string), replace: (*false \| bool), unset: (*[] \| [, ...string])} (type struct) as string | false |  
 
 
 ## Expose
@@ -587,6 +591,7 @@ Expose port to enable web traffic for your component.
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 
@@ -629,6 +634,7 @@ Enable public web traffic for the component, the ingress API matches K8s v1.20+.
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 
@@ -666,7 +672,7 @@ spec:
  classInSpec | Set ingress class in '.spec.ingressClassName' instead of 'kubernetes.io/ingress.class' annotation. | bool | false | false 
  class | Specify the class of ingress to use. | string | false | nginx 
  gatewayHost | Specify the host of the ingress gateway, which is used to generate the endpoints when the host is empty. | string | false |  
- secretName | Specify the secret name you want to quote. | string | false |  
+ secretName | Specify the secret name you want to quote to use tls. | string | false |  
  domain | Specify the domain you want to expose. | string | false |  
 
 
@@ -678,6 +684,7 @@ Add host aliases on K8s pod for your workload which follows the pod spec in path
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -735,7 +742,8 @@ Import dashboards to Grafana.
 
 ### Apply To Component Types
 
-- All/*
+Component based on the following kinds of resources:
+
 
 
 ### Specification (import-grafana-dashboard)
@@ -758,6 +766,7 @@ add an init container and use shared volume with pod.
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -854,8 +863,7 @@ Patch the output following Json Merge Patch strategy, following RFC 7396.
 
 ### Apply To Component Types
 
-- *
-
+All Component Types
 
 
 ### Specification (json-merge-patch)
@@ -874,8 +882,7 @@ Patch the output following Json Patch strategy, following RFC 6902.
 
 ### Apply To Component Types
 
-- *
-
+All Component Types
 
 
 ### Specification (json-patch)
@@ -897,12 +904,11 @@ Patch the output following Json Patch strategy, following RFC 6902.
 
 ### Description
 
-Add labels on K8s pod for your workload which follows the pod spec in path 'spec.template'.
+Add labels on your workload. if it generates pod, add same label for generated pods.
 
 ### Apply To Component Types
 
-- *
-
+All Component Types
 
 
 ### Examples (labels)
@@ -944,6 +950,7 @@ Add lifecycle hooks for every container of K8s pod for your workload which follo
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1085,6 +1092,7 @@ nocalhost develop configuration.
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1239,6 +1247,7 @@ Add resource requests and limits on K8s pod for your workload which follows the 
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1309,6 +1318,7 @@ Manually scale K8s pod for your workload which follows the pod spec in path 'spe
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 
@@ -1360,6 +1370,7 @@ Specify serviceAccount for your workload which follows the pod spec in path 'spe
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1421,6 +1432,7 @@ Binding secrets of cloud resources to component env. This definition is DEPRECAT
 
 ### Apply To Component Types
 
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1532,7 +1544,8 @@ Inject a sidecar container to K8s pod for your workload which follows the pod sp
 
 ### Apply To Component Types
 
-- All/*
+Component based on the following kinds of resources:
+
 
 
 ### Examples (sidecar)
@@ -1736,7 +1749,8 @@ Add storages on K8s pod for your workload which follows the pod spec in path 'sp
 
 ### Apply To Component Types
 
-- All/*
+Component based on the following kinds of resources:
+
 
 
 ### Examples (storage)

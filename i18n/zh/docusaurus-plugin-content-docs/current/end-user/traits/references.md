@@ -4,16 +4,17 @@ title: 内置运维特征列表
 
 本文档将**按字典序**展示所有内置运维特征的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-28T11:51:03+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-28T16:25:31+08:00。
 
 ## Affinity
 
 ### 描述
 
-Affinity specifies affinity and toleration K8s pod for your workload which follows the pod spec in path 'spec.template'。
+为 pod 添加 affinity 和 toleration，它遵循路径“spec.template”中的 pod 规范。
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -26,9 +27,9 @@ Affinity specifies affinity and toleration K8s pod for your workload which follo
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- podAffinity | Specify the pod affinity scheduling rules。 | [podAffinity](#podaffinity-affinity) | false |  
- podAntiAffinity | Specify the pod anti-affinity scheduling rules。 | [podAntiAffinity](#podantiaffinity-affinity) | false |  
- nodeAffinity | Specify the node affinity scheduling rules for the pod。 | [nodeAffinity](#nodeaffinity-affinity) | false |  
+ podAffinity | 指定 pod 的亲和性调度规则。 | [podAffinity](#podaffinity-affinity) | false |  
+ podAntiAffinity | 指定 pod 的反亲和性调度规则。 | [podAntiAffinity](#podantiaffinity-affinity) | false |  
+ nodeAffinity | 指定 pod 的节点亲和性调度规则。 | [nodeAffinity](#nodeaffinity-affinity) | false |  
  tolerations | Specify tolerant taint。 | [[]tolerations](#tolerations-affinity) | false |  
 
 
@@ -36,8 +37,8 @@ Affinity specifies affinity and toleration K8s pod for your workload which follo
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- required | Specify the required during scheduling ignored during execution。 | [[]required](#required-affinity) | false |  
- preferred | Specify the preferred during scheduling ignored during execution。 | [[]preferred](#preferred-affinity) | false |  
+ required | 指定 `requiredDuringSchedulingIgnoredDuringExecution` 字段，只有规则被满足时才执行调度。 | [[]required](#required-affinity) | false |  
+ preferred | 指定 `preferredDuringSchedulingIgnoredDuringExecution` 字段，调度器会尝试寻找满足对应规则的节点。如果找不到匹配的节点，调度器仍然会调度该 Pod。 | [[]preferred](#preferred-affinity) | false |  
 
 
 ##### required (affinity)
@@ -88,8 +89,8 @@ Affinity specifies affinity and toleration K8s pod for your workload which follo
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- weight | Specify weight associated with matching the corresponding podAffinityTerm。 | int | true |  
- podAffinityTerm | Specify a set of pods。 | [podAffinityTerm](#podaffinityterm-affinity) | true |  
+ weight | 指定对应 podAffinityTerm 的权重。 | int | true |  
+ podAffinityTerm | 指定一组 pod。 | [podAffinityTerm](#podaffinityterm-affinity) | true |  
 
 
 ##### podAffinityTerm (affinity)
@@ -140,8 +141,8 @@ Affinity specifies affinity and toleration K8s pod for your workload which follo
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- required | Specify the required during scheduling ignored during execution。 | [[]required](#required-affinity) | false |  
- preferred | Specify the preferred during scheduling ignored during execution。 | [[]preferred](#preferred-affinity) | false |  
+ required | 指定 `requiredDuringSchedulingIgnoredDuringExecution` 字段，只有规则被满足时才执行调度。 | [[]required](#required-affinity) | false |  
+ preferred | 指定 `preferredDuringSchedulingIgnoredDuringExecution` 字段，调度器会尝试寻找满足对应规则的节点。如果找不到匹配的节点，调度器仍然会调度该 Pod。 | [[]preferred](#preferred-affinity) | false |  
 
 
 ##### required (affinity)
@@ -192,8 +193,8 @@ Affinity specifies affinity and toleration K8s pod for your workload which follo
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- weight | Specify weight associated with matching the corresponding podAffinityTerm。 | int | true |  
- podAffinityTerm | Specify a set of pods。 | [podAffinityTerm](#podaffinityterm-affinity) | true |  
+ weight | 指定对应 podAffinityTerm 的权重。 | int | true |  
+ podAffinityTerm | 指定一组 pod。 | [podAffinityTerm](#podaffinityterm-affinity) | true |  
 
 
 ##### podAffinityTerm (affinity)
@@ -244,15 +245,15 @@ Affinity specifies affinity and toleration K8s pod for your workload which follo
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- required | Specify the required during scheduling ignored during execution。 | [required](#required-affinity) | false |  
- preferred | Specify the preferred during scheduling ignored during execution。 | [[]preferred](#preferred-affinity) | false |  
+ required | 指定 `requiredDuringSchedulingIgnoredDuringExecution` 字段，只有规则被满足时才执行调度。 | [required](#required-affinity) | false |  
+ preferred | 指定 `preferredDuringSchedulingIgnoredDuringExecution` 字段，调度器会尝试寻找满足对应规则的节点。如果找不到匹配的节点，调度器仍然会调度该 Pod。 | [[]preferred](#preferred-affinity) | false |  
 
 
 ##### required (affinity)
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- nodeSelectorTerms | Specify a list of node selector。 | [[]nodeSelectorTerms](#nodeselectorterms-affinity) | true |  
+ nodeSelectorTerms | 指定一组节点选择器。 | [[]nodeSelectorTerms](#nodeselectorterms-affinity) | true |  
 
 
 ##### nodeSelectorTerms (affinity)
@@ -323,19 +324,18 @@ Affinity specifies affinity and toleration K8s pod for your workload which follo
  effect |  | string | false |  
  value |  | string | false |  
  operator |  | string | false | Equal 
- tolerationSeconds | Specify the period of time the toleration。 | int | false |  
+ tolerationSeconds | 指定 toleration 的时间周期。 | int | false |  
 
 
 ## Annotations
 
 ### 描述
 
-Add annotations on K8s pod for your workload which follows the pod spec in path 'spec.template'。
+Add annotations on your workload. if it generates pod, add same annotations for generated pods。
 
 ### 适用于组件类型
 
-- *
-
+所有组件类型
 
 
 ### 示例 (annotations)
@@ -373,10 +373,11 @@ spec:
 
 ### 描述
 
-Add command on K8s pod for your workload which follows the pod spec in path 'spec.template'。
+为 pod 添加命令，它遵循路径“spec.template”中的 pod 规范。
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -419,7 +420,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- - | Composition type。 | parameter: cannot use value C{containerName: (*"" \| string), command: (*null \| [, ...string]), args: (*null \| [, ...string]), addArgs: (*null \| [, ...string]), delArgs: (*null \| [, ...string])} (type struct) as string | false |  
+ -- | Composition type。 | parameter: cannot use value C{containerName: (*"" \| string), command: (*null \| [, ...string]), args: (*null \| [, ...string]), addArgs: (*null \| [, ...string]), delArgs: (*null \| [, ...string])} (type struct) as string | false |  
 
 
 ## Container-Image
@@ -430,6 +431,7 @@ Set the image of the container。
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -473,7 +475,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- - | Composition type。 | parameter: cannot use value C{containerName: (*"" \| string), image: string, imagePullPolicy: (*"" \| "IfNotPresent" \| "Always" \| "Never")} (type struct) as string | false |  
+ -- | Composition type。 | parameter: cannot use value C{containerName: (*"" \| string), image: string, imagePullPolicy: (*"" \| "IfNotPresent" \| "Always" \| "Never")} (type struct) as string | false |  
 
 
 ## Cpuscaler
@@ -484,6 +486,7 @@ Automatically scale the component based on CPU usage。
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 
@@ -530,6 +533,7 @@ Add env on K8s pod for your workload which follows the pod spec in path 'spec.te
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -576,17 +580,18 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- - | Composition type。 | parameter: cannot use value C{env: {[]: (_: string)->string, }, containerName: (*"" \| string), replace: (*false \| bool), unset: (*[] \| [, ...string])} (type struct) as string | false |  
+ -- | Composition type。 | parameter: cannot use value C{env: {[]: (_: string)->string, }, containerName: (*"" \| string), replace: (*false \| bool), unset: (*[] \| [, ...string])} (type struct) as string | false |  
 
 
 ## Expose
 
 ### 描述
 
-Expose port to enable web traffic for your component。
+为组件暴露端口，以便能够通过 web 进行访问。
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 
@@ -617,18 +622,19 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  annotations | Specify the annotaions of the exposed service。 | map[string]:string | true |  
- port | Specify the exposion ports。 | []int | true |  
- type | Specify what kind of Service you want. options: "ClusterIP","NodePort","LoadBalancer","ExternalName"。 | string | false | ClusterIP 
+ port | 指定要暴露的端口。 | []int | true |  
+ type | 指定要创建的服务类型，可选值："ClusterIP","NodePort","LoadBalancer","ExternalName"。 | string | false | ClusterIP 
 
 
 ## Gateway
 
 ### 描述
 
-Enable public web traffic for the component, the ingress API matches K8s v1.20+。
+为组件启用公网访问，使用 K8s v1.20+ 的 Ingress API。
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 
@@ -665,8 +671,8 @@ spec:
  http | 定义一组网关路径到 Pod 服务端口的映射关系。 | map[string]:int | true |  
  classInSpec | 在 kubernetes ingress 的 '.spec.ingressClassName' 定义 ingress class 而不是在 'kubernetes.io/ingress.class' 注解中定义。 | bool | false | false 
  class | 所使用的 kubernetes ingress class。 | string | false | nginx 
- gatewayHost | Specify the host of the ingress gateway, which is used to generate the endpoints when the host is empty。 | string | false |  
- secretName | Specify the secret name you want to quote。 | string | false |  
+ gatewayHost | 指定 Ingress 网关的主机名，当为空时，会自动生成主机名。 | string | false |  
+ secretName | Specify the secret name you want to quote to use tls。 | string | false |  
  domain | 暴露服务所绑定的域名。 | string | false |  
 
 
@@ -678,6 +684,7 @@ Add host aliases on K8s pod for your workload which follows the pod spec in path
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -731,11 +738,12 @@ spec:
 
 ### 描述
 
-Import dashboards to Grafana。
+导入 Grafana 仪表盘。
 
 ### 适用于组件类型
 
-- All/*
+基于以下资源的组件：
+
 
 
 ### 参数说明 (import-grafana-dashboard)
@@ -754,10 +762,11 @@ Import dashboards to Grafana。
 
 ### 描述
 
-add an init container and use shared volume with pod。
+为 pod 添加初始化容器，并使用共享卷。
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -794,15 +803,15 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- name | Specify the name of init container。 | string | true |  
- cmd | Specify the commands run in the init container。 | []string | false |  
- env | Specify the env run in the init container。 | [[]env](#env-init-container) | false |  
- mountName | Specify the mount name of shared volume。 | string | false | workdir 
- appMountPath | Specify the mount path of app container。 | string | true |  
- image | Specify the image of init container。 | string | true |  
- args | Specify the args run in the init container。 | []string | false |  
- initMountPath | Specify the mount path of init container。 | string | true |  
- extraVolumeMounts | Specify the extra volume mounts for the init container。 | [[]extraVolumeMounts](#extravolumemounts-init-container) | true |  
+ name | 指定初始化容器的名称。 | string | true |  
+ cmd | 指定初始化容器的命令。 | []string | false |  
+ env | 指定初始化容器的环境变量。 | [[]env](#env-init-container) | false |  
+ mountName | 指定共享卷的挂载名。 | string | false | workdir 
+ appMountPath | 指定共享卷在应用容器的挂载路径。 | string | true |  
+ image | 指定初始化容器的镜像。 | string | true |  
+ args | 指定初始化容器的参数。 | []string | false |  
+ initMountPath | 指定共享卷初始化容器的挂载路径。 | string | true |  
+ extraVolumeMounts | 指定初始化容器的额外挂载卷。 | [[]extraVolumeMounts](#extravolumemounts-init-container) | true |  
 
 
 #### env (init-container)
@@ -842,20 +851,19 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- name | The name of the volume to be mounted。 | string | true |  
- mountPath | The mountPath for mount in the init container。 | string | true |  
+ name | 挂载的卷名。 | string | true |  
+ mountPath | 初始化容器中的挂载路径。 | string | true |  
 
 
 ## Json-Merge-Patch
 
 ### 描述
 
-Patch the output following Json Merge Patch strategy, following RFC 7396。
+使用 JSON Merge Patch 策略，遵循 RFC 7396。
 
 ### 适用于组件类型
 
-- *
-
+所有组件类型
 
 
 ### 参数说明 (json-merge-patch)
@@ -870,12 +878,11 @@ Patch the output following Json Merge Patch strategy, following RFC 7396。
 
 ### 描述
 
-Patch the output following Json Patch strategy, following RFC 6902。
+使用 JSON Patch 策略，遵循 RFC 6902。
 
 ### 适用于组件类型
 
-- *
-
+所有组件类型
 
 
 ### 参数说明 (json-patch)
@@ -897,12 +904,11 @@ Patch the output following Json Patch strategy, following RFC 6902。
 
 ### 描述
 
-Add labels on K8s pod for your workload which follows the pod spec in path 'spec.template'。
+Add labels on your workload. if it generates pod, add same label for generated pods。
 
 ### 适用于组件类型
 
-- *
-
+所有组件类型
 
 
 ### 示例 (labels)
@@ -940,10 +946,11 @@ spec:
 
 ### 描述
 
-Add lifecycle hooks for every container of K8s pod for your workload which follows the pod spec in path 'spec.template'。
+为 pod 添加生命周期钩子，它遵循路径“spec.template”中的 pod 规范。
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1081,10 +1088,11 @@ spec:
 
 ### 描述
 
-nocalhost develop configuration。
+使用 nocalhost 作为开发环境的配置。
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1235,10 +1243,11 @@ spec:
 
 ### 描述
 
-Add resource requests and limits on K8s pod for your workload which follows the pod spec in path 'spec.template.'。
+为 pod 添加资源请求和限制，它遵循路径“spec.template”中的 pod 规范。
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1279,36 +1288,37 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- cpu | Specify the amount of cpu for requests and limits。 | number | false | 1 
- memory | Specify the amount of memory for requests and limits。 | string | false | 2048Mi 
- requests | Specify the resources in requests。 | [requests](#requests-resource) | false |  
- limits | Specify the resources in limits。 | [limits](#limits-resource) | false |  
+ cpu | 指定 cpu 请求和限制的大小。 | number | false | 1 
+ memory | 指定内存请求和限制的大小。 | string | false | 2048Mi 
+ requests | 指定请求的资源。 | [requests](#requests-resource) | false |  
+ limits | 指定限制的资源。 | [limits](#limits-resource) | false |  
 
 
 #### requests (resource)
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- cpu | Specify the amount of cpu for requests。 | number | false | 1 
- memory | Specify the amount of memory for requests。 | string | false | 2048Mi 
+ cpu | 指定 cpu 请求的大小。 | number | false | 1 
+ memory | 指定内存请求的大小。 | string | false | 2048Mi 
 
 
 #### limits (resource)
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- cpu | Specify the amount of cpu for limits。 | number | false | 1 
- memory | Specify the amount of memory for limits。 | string | false | 2048Mi 
+ cpu | 指定 cpu 限制的大小。 | number | false | 1 
+ memory | 指定内存限制的大小。 | string | false | 2048Mi 
 
 
 ## Scaler
 
 ### 描述
 
-Manually scale K8s pod for your workload which follows the pod spec in path 'spec.template'。
+调整 pod 的副本数，它遵循路径“spec.template”中的 pod 规范。
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 
@@ -1356,10 +1366,11 @@ spec:
 
 ### 描述
 
-Specify serviceAccount for your workload which follows the pod spec in path 'spec.template'。
+为 pod 指定 serviceAccount，它遵循路径“spec.template”中的 pod 规范。
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1396,31 +1407,32 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- name | Specify the name of ServiceAccount。 | string | true |  
- create | Specify whether to create new ServiceAccount or not。 | bool | false | false 
- privileges | Specify the privileges of the ServiceAccount, if not empty, RoleBindings(ClusterRoleBindings) will be created。 | [[]privileges](#privileges-service-account) | false |  
+ name | 指定 ServiceAccount 名称。 | string | true |  
+ create | 指定是否创建新的 ServiceAccount。 | bool | false | false 
+ privileges | 指定 ServiceAccount 的权限，若不为空，则会创建 RoleBinding 及 ClusterRoleBindings。 | [[]privileges](#privileges-service-account) | false |  
 
 
 #### privileges (service-account)
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- verbs | Specify the verbs to be allowed for the resource。 | []string | true |  
- apiGroups | Specify the apiGroups of the resource。 | []string | false |  
- resources | Specify the resources to be allowed。 | []string | false |  
- resourceNames | Specify the resourceNames to be allowed。 | []string | false |  
- nonResourceURLs | Specify the resource url to be allowed。 | []string | false |  
- scope | Specify the scope of the privileges, default to be namespace scope。 | string | false | namespace 
+ verbs | 指定资源允许的动作。 | []string | true |  
+ apiGroups | 指定资源的 apiGroups。 | []string | false |  
+ resources | 指定允许的资源。 | []string | false |  
+ resourceNames | 指定允许的资源名称。 | []string | false |  
+ nonResourceURLs | 指定允许的资源 URL。 | []string | false |  
+ scope | 指定权限的范围，默认为 namespace 范围。 | string | false | namespace 
 
 
 ## Service-Binding
 
 ### 描述
 
-Binding secrets of cloud resources to component env. This definition is DEPRECATED, please use 'storage' instead。
+绑定云资源的密钥到组件环境变量中，该定义已废弃，请使用 'storage' 定义。
 
 ### 适用于组件类型
 
+基于以下资源的组件：
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1521,18 +1533,19 @@ Deploy this YAML and the Secret `db-conn-example` will be binding into environme
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- envMappings | The mapping of environment variables to secret。 | map[string]:#KeySecret | true |  
+ envMappings | 环境变量到密钥的映射。 | map[string]:#KeySecret | true |  
 
 
 ## Sidecar
 
 ### 描述
 
-Inject a sidecar container to K8s pod for your workload which follows the pod spec in path 'spec.template'。
+为 pod 添加 sidecar 容器，它遵循路径“spec.template”中的 pod 规范。
 
 ### 适用于组件类型
 
-- All/*
+基于以下资源的组件：
+
 
 
 ### 示例 (sidecar)
@@ -1581,9 +1594,9 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name | 容器名称。 | string | true |  
  cmd | 容器的执行命令。 | []string | false |  
- env | Specify the env in the sidecar。 | [[]env](#env-sidecar) | false |  
+ env | 指定 sidecar 中的环境变量。 | [[]env](#env-sidecar) | false |  
  image | 容器镜像。 | string | true |  
- args | Specify the args in the sidecar。 | []string | false |  
+ args | 指定 sidecar 中的参数。 | []string | false |  
  volumes | 挂载卷。 | [[]volumes](#volumes-sidecar) | false |  
  livenessProbe | 判断容器是否存活的探针。 | [livenessProbe](#livenessprobe-sidecar) | false |  
  readinessProbe | 判断容器是否就绪，能够接受用户流量的探针。 | [readinessProbe](#readinessprobe-sidecar) | false |  
@@ -1604,7 +1617,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  secretKeyRef | secret 键的引用。 | [secretKeyRef](#secretkeyref-sidecar) | false |  
  configMapKeyRef | configmap 键的引用。 | [configMapKeyRef](#configmapkeyref-sidecar) | false |  
- fieldRef | Specify the field reference for env。 | [fieldRef](#fieldref-sidecar) | false |  
+ fieldRef | 指定要用于环境变量的字段。 | [fieldRef](#fieldref-sidecar) | false |  
 
 
 ##### secretKeyRef (sidecar)
@@ -1627,7 +1640,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- fieldPath | Specify the field path for env。 | string | true |  
+ fieldPath | 指定要用于环境变量的字段路径。 | string | true |  
 
 
 #### volumes (sidecar)
@@ -1736,7 +1749,8 @@ Add storages on K8s pod for your workload which follows the pod spec in path 'sp
 
 ### 适用于组件类型
 
-- All/*
+基于以下资源的组件：
+
 
 
 ### 示例 (storage)
@@ -1795,10 +1809,10 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- pvc | Declare pvc type storage。 | [[]pvc](#pvc-storage) | false |  
- configMap | Declare config map type storage。 | [[]configMap](#configmap-storage) | false |  
- secret | Declare secret type storage。 | [[]secret](#secret-storage) | false |  
- emptyDir | Declare empty dir type storage。 | [[]emptyDir](#emptydir-storage) | false |  
+ pvc | 声明 pvc 类型存储。 | [[]pvc](#pvc-storage) | false |  
+ configMap | 声明 ConfigMap 类型存储。 | [[]configMap](#configmap-storage) | false |  
+ secret | 声明 Secret 类型存储。 | [[]secret](#secret-storage) | false |  
+ emptyDir | 声明 EmptyDir 类型存储。 | [[]emptyDir](#emptydir-storage) | false |  
 
 
 #### pvc (storage)

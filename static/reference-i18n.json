@@ -1,734 +1,951 @@
 {
-	"A command to be executed inside the container to assess its health. Each space delimited token of the command is a separate array element. Commands exiting 0 are considered to be successful probes, whilst all other exit codes are considered failures": {
-		"Chinese": "容器中执行的命令，命令返回 0 则为正常，否则则为失败"
-	},
-	"A command to be executed inside the container to assess its health. Each space delimited token of the command is a separate array element. Commands exiting 0 are considered to be successful probes, whilst all other exit codes are considered failures.": {
-		"Chinese": "容器中执行的命令，命令返回 0 则为正常，否则则为失败"
-	},
-	"A list of JSON6902 patch": {
-		"Chinese": "JSON6902 patch 的列表"
-	},
-	"A list of component configurations to override": {
-		"Chinese": "要覆盖的组件配置列表。"
-	},
-	"A list of component names to use. If not set, all components will be used": {
-		"Chinese": "要使用的组件名称列表。 如果未设置，将使用所有组件。"
-	},
-	"A list of rules to control gc strategy at resource level, if one resource is controlled by multiple rules, first rule will be used": {
-		"Chinese": "在资源级别控制垃圾回收策略的规则列表，如果一个资源由多个规则控制，将使用第一个规则。"
-	},
-	"A list of trait configurations to override": {
-		"Chinese": "要覆盖的 trait 配置列表。"
-	},
-	"Commands to run in the container": {
-		"Chinese": "容器的启动命令"
-	},
-	"DESCRIPTION": {
-		"Chinese": "DESCRIPTION"
-	},
-	"Define arguments by using environment variables": {
-		"Chinese": "容器中的环境变量"
-	},
-	"Define the job restart policy, the value can only be Never or OnFailure. By default, it's Never": {
-		"Chinese": "定义失败重启策略，可选值为 Never 或者 OnFailure，默认是 OnFailure"
-	},
-	"Describes cron jobs that run code or a script to completion": {
-		"Chinese": "定义一个周期性运行代码或者脚本的任务"
-	},
-	"Describes daemonset services in Kubernetes": {
-		"Chinese": "定义一个同 Kubernetes 每个机器 Node 都运行的服务"
-	},
-	"Describes jobs that run code or a script to completion": {
-		"Chinese": "定义一个只执行一次代码或者脚本的任务"
-	},
-	"Describes long-running, scalable, containerized services that have a stable network endpoint to receive external network traffic from customers": {
-		"Chinese": "定义一个长期运行的，可伸缩的容器化的服务，并且会暴露一个服务端点用来接受来自客户的外部流量"
-	},
-	"Describes long-running, scalable, containerized services that running at backend. They do NOT have network endpoint to receive external network traffic": {
-		"Chinese": "定义一个长期运行的，可伸缩的容器化的服务，并且不会暴露承接用户流量的网络端点"
-	},
-	"Description": {
-		"Chinese": ""
-	},
-	"How often, in seconds, to execute the probe": {
-		"Chinese": "定义每次检查之间的时间间隔"
-	},
-	"How often, in seconds, to execute the probe.": {
-		"Chinese": "定义每次检查之间的时间间隔"
-	},
-	"If true, allow configuration drift": {
-		"Chinese": "当设置为 true 时，将允许配置飘逸"
-	},
-	"If true, outdated versioned resourcetracker will not be recycled automatically. Outdated resources will be kept until resourcetracker be deleted manually": {
-		"Chinese": "如果为 true，过时的版本化 resource tracker 将不会自动回收。 过时的资源将被保留，直到手动删除 resource tracker。"
-	},
-	"If true, this trait will be removed": {
-		"Chinese": "如果为 true，该 trait 将被删除。"
-	},
-	"Inline patch string, in yaml style": {
-		"Chinese": "Inline yaml 格式的 patch"
-	},
-	"Instructions for assessing container health by executing a command. Either this attribute or the httpGet attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the httpGet attribute and the tcpSocket attribute": {
-		"Chinese": "通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个"
-	},
-	"Instructions for assessing container health by executing a command. Either this attribute or the httpGet attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the httpGet attribute and the tcpSocket attribute.": {
-		"Chinese": "通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个"
-	},
-	"Instructions for assessing container health by executing an HTTP GET request. Either this attribute or the exec attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the tcpSocket attribute": {
-		"Chinese": "通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个"
-	},
-	"Instructions for assessing container health by executing an HTTP GET request. Either this attribute or the exec attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the tcpSocket attribute.": {
-		"Chinese": "通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个"
-	},
-	"Instructions for assessing container health by probing a TCP socket. Either this attribute or the exec attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the httpGet attribute": {
-		"Chinese": "通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个"
-	},
-	"Instructions for assessing container health by probing a TCP socket. Either this attribute or the exec attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the httpGet attribute.": {
-		"Chinese": "通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个"
-	},
-	"Instructions for assessing whether the container is alive": {
-		"Chinese": "判断容器是否存活的探针"
-	},
-	"Instructions for assessing whether the container is alive.": {
-		"Chinese": "判断容器是否存活的探针"
-	},
-	"Instructions for assessing whether the container is in a suitable state to serve traffic": {
-		"Chinese": "判断容器是否就绪，能够接受用户流量的探针"
-	},
-	"Instructions for assessing whether the container is in a suitable state to serve traffic.": {
-		"Chinese": "判断容器是否就绪，能够接受用户流量的探针"
-	},
-	"K8s-objects allow users to specify raw K8s objects in properties": {
-		"Chinese": "列表中的元素为完整的 Kubernetes 资源结构体"
-	},
-	"Kubernetes resource manifest": {
-		"Chinese": "Kubernetes 资源列表"
-	},
-	"Kubernetes secret name": {
-		"Chinese": "secret 名称"
-	},
-	"Minimum consecutive successes for the probe to be considered successful after having failed": {
-		"Chinese": "定义检查成功多少次之后判断容器已经就绪"
-	},
-	"Minimum consecutive successes for the probe to be considered successful after having failed.": {
-		"Chinese": "定义检查成功多少次之后判断容器已经就绪"
-	},
-	"Mount ConfigMap type volume": {
-		"Chinese": "挂载一个 configmap 卷"
-	},
-	"Mount EmptyDir type volume": {
-		"Chinese": "挂载一个 emptyDir 的卷"
-	},
-	"Mount HostPath type volume": {
-		"Chinese": "挂载主机目录卷"
-	},
-	"Mount PVC type volume": {
-		"Chinese": "挂载一个 PVC 卷"
-	},
-	"Mount Secret type volume": {
-		"Chinese": "挂载一个 secret 卷"
-	},
-	"Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core)": {
-		"Chinese": "CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)"
-	},
-	"Number of consecutive failures required to determine the container is not alive (liveness probe) or not ready (readiness probe)": {
-		"Chinese": "定义检查失败多少次之后判断容器已经不健康"
-	},
-	"Number of consecutive failures required to determine the container is not alive (liveness probe) or not ready (readiness probe).": {
-		"Chinese": "定义检查失败多少次之后判断容器已经不健康"
-	},
-	"Number of seconds after the container is started before the first probe is initiated": {
-		"Chinese": "定义容器启动多少秒之后开始第一次检查"
-	},
-	"Number of seconds after the container is started before the first probe is initiated.": {
-		"Chinese": "定义容器启动多少秒之后开始第一次检查"
-	},
-	"Number of seconds after which the probe times out": {
-		"Chinese": "定义检查的超时时间"
-	},
-	"Number of seconds after which the probe times out.": {
-		"Chinese": "定义检查的超时时间"
-	},
-	"Optional, The cluster you want to read the resource from, default is the current cluster. If you want to read resource in different cluster, use `vela cluster join` to join the cluster first, and then specify the cluster": {
-		"Chinese": "可选值，需要部署的集群名称。如果不指定，则为当前集群。在使用该字段前，请确保你已经使用 `vela cluster join` 纳管了你的集群"
-	},
-	"Optional, The namespace of the resource you want to read, defaults to `default`": {
-		"Chinese": "选填值，ConfigMap 的 namespace，默认为 `context.namespace`"
-	},
-	"Optional, default to true. If set to false, the workflow will suspend automatically before this step": {
-		"Chinese": "可选参数，默认为 true。如果为 false，工作流将在执行该步骤前自动暂停。"
-	},
-	"Optional, defaults to 5": {
-		"Chinese": "可选参数。指定本次部署的并发度，默认为 5。"
-	},
-	"Optional, get data from secret, the key of the secret": {
-		"Chinese": "可选值，从 secret 中获取值，secret 的 key"
-	},
-	"Optional, get data from secret, the name of the secret": {
-		"Chinese": "可选值，从 secret 中获取值，secret 的名称"
-	},
-	"Optional, please fulfill its from, to and content if you want to send email": {
-		"Chinese": "可选值，如果需要发送邮件，则需填写其 from、to 以及 content"
-	},
-	"Optional, please fulfill its url and message if you want to send DingTalk messages": {
-		"Chinese": "可选值，如果需要发送钉钉信息，则需填写其 url 及 message"
-	},
-	"Optional, please fulfill its url and message if you want to send Lark messages": {
-		"Chinese": "可选值，如果需要发送飞书信息，则需填写其 url 及 message"
-	},
-	"Optional, please fulfill its url and message if you want to send Slack messages": {
-		"Chinese": "可选值，如果需要发送 Slack 信息，则需填写其 url 及 message"
-	},
-	"Optional, the email alias to show after sending the email": {
-		"Chinese": "可选值，发送的邮件别名"
-	},
-	"Optional, the policies that used for this deployment. If not specified, the components will be deployed to the hub cluster": {
-		"Chinese": "可选参数。指定本次部署要使用的策略。如果不指定策略，将自动部署到管控集群。"
-	},
-	"Optional, the port of the email host, default to 587": {
-		"Chinese": "可选值，邮件发送的端口号，默认为 587"
-	},
-	"Optional, the wait duration time to resume workflow such as \"30s\", \"1min\" or \"2m15s\"": {
-		"Chinese": "可选参数，指定工作流暂停的时长，超过该时间后工作流将自动继续，如：\"30s\"， \"1min\"， \"2m15s\""
-	},
-	"Outputs": {
-		"Chinese": "输出",
-		"English": "Outputs"
-	},
-	"Protocol for port. Must be UDP, TCP, or SCTP": {
-		"Chinese": "端口协议类型 UDP， TCP， 或者 SCTP"
-	},
-	"Ref-objects allow users to specify ref objects to use. Notice that this component type have special handle logic": {
-		"Chinese": "定义引用集群中的 Kubernetes 对象，这个组件类型部署前会先读取引用的对象"
-	},
-	"Required, Kubernetes native resources fields": {
-		"Chinese": "必填值，Kubernetes 原生资源字段"
-	},
-	"Required, The apiVersion of the resource you want to read": {
-		"Chinese": "需要等待的 Application 名称"
-	},
-	"Required, The data that you want to export to ConfigMap": {
-		"Chinese": "必填值，需要导出到 ConfigMap 中的数据"
-	},
-	"Required, The kind of the resource you want to read": {
-		"Chinese": "必填值，资源的 kind"
-	},
-	"Required, The name of the ConfigMap": {
-		"Chinese": "必填值，ConfigMap 的名称"
-	},
-	"Required, The name of the Secret": {
-		"Chinese": "必填值，Secret 的名称"
-	},
-	"Required, Webhook URL to be sent, you can choose to fill in value directly or get it from secretRef": {
-		"Chinese": "必填值，需要发送的 Webhook URL，可以选择直接在 value 填写或从 secretRef 中获取"
-	},
-	"Required, the DingTalk messages you want to send, please follow [DingTalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw)": {
-		"Chinese": "必填值，需要发送的钉钉信息，请符合 [钉钉信息规范](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw)"
-	},
-	"Required, the Lark messages you want to send, please follow [Lark messaging](https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN#8b0f2a1b)": {
-		"Chinese": "必填值，需要发送的飞书信息，请符合 [飞书信息规范](https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN#8b0f2a1b)"
-	},
-	"Required, the Slack messages you want to send, please follow [Slack messaging](https://api.slack.com/reference/messaging/payload)": {
-		"Chinese": "必填值，需要发送的 Slack 信息，请符合 [Slack 信息规范](https://api.slack.com/reference/messaging/payload)"
-	},
-	"Required, the context body of the email": {
-		"Chinese": "必填值，邮件的内容"
-	},
-	"Required, the email address that you want to send from": {
-		"Chinese": "必填值，发送的邮件地址"
-	},
-	"Required, the email address that you want to send to": {
-		"Chinese": "必填值，邮件发送的地址列表"
-	},
-	"Required, the host of your email": {
-		"Chinese": "必填值，邮件的 Host"
-	},
-	"Required, the password of the email, you can either specify it in value or use secretRef": {
-		"Chinese": "必填值，发送的邮件密码，可以选择直接在 value 填写或从 secretRef 中获取"
-	},
-	"Required, the subject of the email": {
-		"Chinese": "必填值，邮件的标题"
-	},
-	"Required, the webhook address of DingTalk, you can choose to fill it directly in value or specify it in secret": {
-		"Chinese": "必填值，钉钉的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取"
-	},
-	"Required, the webhook address of Lark, you can choose to fill it directly in value or specify it in secret": {
-		"Chinese": "必填值，飞书的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取"
-	},
-	"Required, the webhook address of Slack, you can choose to fill it directly in value or specify it in secret": {
-		"Chinese": "必填值，Slack 的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取"
-	},
-	"Select target resources by component names": {
-		"Chinese": "按组件名称选择目标资源。"
-	},
-	"Select target resources by component types": {
-		"Chinese": "按组件类型选择目标资源。"
-	},
-	"Select target resources by trait types": {
-		"Chinese": "按 trait 类型选择目标资源。"
-	},
-	"Selects a key of a config map in the pod's namespace": {
-		"Chinese": "configmap 键的引用"
-	},
-	"Selects a key of a secret in the pod's namespace": {
-		"Chinese": "secret 键的引用"
-	},
-	"Set ingress class in '.spec.ingressClassName' instead of 'kubernetes.io/ingress.class' annotation": {
-		"Chinese": "在 kubernetes ingress 的 '.spec.ingressClassName' 定义 ingress class 而不是在 'kubernetes.io/ingress.class' 注解中定义"
-	},
-	"Specifies a source the value of this var should come from": {
-		"Chinese": "从哪个资源中读取环境变量的定义"
-	},
-	"Specifies how to treat concurrent executions of a Job": {
-		"Chinese": "定义任务如何处理任务的重叠运行，可选值为 \"Allow\"，\"Forbid\" 或者 \"Replace\"，默认值为 Allow"
-	},
-	"Specifies the attributes of the memory resource required for the container": {
-		"Chinese": "所需要的内存大小"
-	},
-	"Specifies the attributes of the memory resource required for the container.": {
-		"Chinese": "所需要的内存大小"
-	},
-	"Specify if the port should be exposed": {
-		"Chinese": "端口是否需要暴露"
-	},
-	"Specify image pull policy for your service. Should be \"Always\",\"Never\" or \"IfNotPresent\"": {
-		"Chinese": "镜像拉取策略，可选值为（\"Always\"，\"Never\" 或者 \"IfNotPresent\"）"
-	},
-	"Specify image pull policy for your service. Should be \"Always\",\"Never\" or \"IfNotPresent\".": {
-		"Chinese": "镜像拉取策略，可选值为（\"Always\"，\"Never\" 或者 \"IfNotPresent\"）"
-	},
-	"Specify image pull secrets for your service": {
-		"Chinese": "容器的镜像拉取密钥"
-	},
-	"Specify number of tasks to run in parallel": {
-		"Chinese": "每次任务执行的并行度"
-	},
-	"Specify the annotations in the workload": {
-		"Chinese": "工作负载的注解"
-	},
-	"Specify the average cpu utilization, for example, 50 means the CPU usage is 50%": {
-		"Chinese": "每个容器的平均 CPU 利用率 例如, 50 意味者 CPU 利用率为 50%"
-	},
-	"Specify the class of ingress to use": {
-		"Chinese": "所使用的 kubernetes ingress class"
-	},
-	"Specify the commands run in the sidecar": {
-		"Chinese": "容器的执行命令"
-	},
-	"Specify the domain you want to expose": {
-		"Chinese": "暴露服务所绑定的域名"
-	},
-	"Specify the hostAliases to add": {
-		"Chinese": "定义容器内的 hostAliases"
-	},
-	"Specify the image of sidecar container": {
-		"Chinese": "容器镜像"
-	},
-	"Specify the labels in the workload": {
-		"Chinese": "工作负载的标签"
-	},
-	"Specify the mapping relationship between the http path and the workload port": {
-		"Chinese": "定义一组网关路径到 Pod 服务端口的映射关系"
-	},
-	"Specify the maximum number of of replicas to which the autoscaler can scale up": {
-		"Chinese": "能够将工作负载扩容到的最大副本个数"
-	},
-	"Specify the minimal number of replicas to which the autoscaler can scale down": {
-		"Chinese": "能够将工作负载缩容到的最小副本个数"
-	},
-	"Specify the name of sidecar container": {
-		"Chinese": "容器名称"
-	},
-	"Specify the number of workload": {
-		"Chinese": "工作负载的 Pod 个数"
-	},
-	"Specify the schedule in Cron format, see https://en.wikipedia.org/wiki/Cron": {
-		"Chinese": "执行规则 [Cron 规范](https://en.wikipedia.org/wiki/Cron)"
-	},
-	"Specify the shared volume path": {
-		"Chinese": "挂载卷"
-	},
-	"Specify the target the patch should be applied to": {
-		"Chinese": "patch 需要作用在的目标"
-	},
-	"Suspend subsequent executions": {
-		"Chinese": "是否暂停执行"
-	},
-	"Terraform configuration for AWS S3": {
-		"Chinese": "用于部署 AWS S3 的组件说明",
-		"English": "Terraform configuration for AWS S3"
-	},
-	"Terraform configuration for Alibaba Cloud ACK cluster": {
-		"Chinese": "用于部署阿里云 ACK 集群的组件说明",
-		"English": "Terraform configuration for Alibaba Cloud ACK cluster"
-	},
-	"Terraform configuration for Alibaba Cloud Elastic IP": {
-		"Chinese": "用于部署阿里云弹性 IP 的组件说明",
-		"English": "Terraform configuration for Alibaba Cloud Elastic IP"
-	},
-	"Terraform configuration for Alibaba Cloud OSS object": {
-		"Chinese": "用于部署阿里云 OSS 的组件说明",
-		"English": "Terraform configuration for Alibaba Cloud OSS"
-	},
-	"Terraform configuration for Alibaba Cloud RDS object": {
-		"Chinese": "用于部署阿里云 RDS 的组件说明",
-		"English": "Terraform configuration for Alibaba Cloud RDS"
-	},
-	"Terraform configuration for Alibaba Cloud Redis": {
-		"Chinese": "用于部署阿里云 Redis 的组件说明",
-		"English": "Terraform configuration for Alibaba Cloud Redis"
-	},
-	"Terraform configuration for Alibaba Cloud SLS Project": {
-		"Chinese": "用于部署阿里云 SLS Project 的组件说明",
-		"English": "Terraform configuration for Alibaba Cloud SLS Project"
-	},
-	"Terraform configuration for Alibaba Cloud SLS Store": {
-		"Chinese": "用于部署阿里云 SLS Store 的组件说明",
-		"English": "Terraform configuration for Alibaba Cloud SLS Store"
-	},
-	"Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK)": {
-		"Chinese": "用于部署阿里云 Serverless Kubernetes (ASK) 的组件说明",
-		"English": "Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK)"
-	},
-	"Terraform configuration for Alibaba Cloud VPC": {
-		"Chinese": "用于部署阿里云 VPC 的组件说明",
-		"English": "Terraform configuration for Alibaba Cloud VPC"
-	},
-	"Terraform configuration for Alibaba Cloud VSwitch": {
-		"Chinese": "用于部署阿里云 VSwitch 的组件说明",
-		"English": "Terraform configuration for Alibaba Cloud VSwitch"
-	},
-	"Terraform configuration for Azure Blob Storage Account": {
-		"Chinese": "用于部署 Azure Blob Storage 账号的的组件说明",
-		"English": "Terraform configuration for Azure Blob Storage Account"
-	},
-	"Terraform configuration for Azure Database Mariadb": {
-		"Chinese": "用于部署 Azure mariadb 数据库的组件说明",
-		"English": "Terraform configuration for Azure Database Mariadb"
-	},
-	"The TCP socket within the container to which the HTTP GET request should be directed": {
-		"Chinese": "定义服务端点的端口号"
-	},
-	"The TCP socket within the container to which the HTTP GET request should be directed.": {
-		"Chinese": "定义服务端点的端口号"
-	},
-	"The component properties to merge": {
-		"Chinese": "要合并的 trait 属性。"
-	},
-	"The endpoint, relative to the port, to which the HTTP GET request should be directed": {
-		"Chinese": "定义服务端点请求的路径"
-	},
-	"The endpoint, relative to the port, to which the HTTP GET request should be directed.": {
-		"Chinese": "定义服务端点请求的路径"
-	},
-	"The key of the config map to select from. Must be a valid secret key": {
-		"Chinese": "configmap 中的键名"
-	},
-	"The label selector for clusters. Exclusive to \"clusters\"": {
-		"Chinese": "集群的标签选择器。"
-	},
-	"The name of the PVC": {
-		"Chinese": "PVC 名称"
-	},
-	"The name of the component to override. If not set, it will match all components with the specified type. Can be used with wildcard * for fuzzy match": {
-		"Chinese": "要覆盖的组件的名称。 如果未设置，它将匹配具有指定类型的所有组件。 可以与通配符 * 一起使用以进行模糊匹配。"
-	},
-	"The name of the config map in the pod's namespace to select from": {
-		"Chinese": "环境变量的名称"
-	},
-	"The names of the clusters to select": {
-		"Chinese": "要选择的集群的名称。"
-	},
-	"The number of failed finished jobs to retain": {
-		"Chinese": "保留多少个已经失败的任务记录"
-	},
-	"The number of successful finished jobs to retain": {
-		"Chinese": "保留多少个已经成功完成的任务记录"
-	},
-	"The strategy for target resources to recycle. Available values: never, onAppDelete, onAppUpdate": {
-		"Chinese": "目标资源循环利用的策略。 可用值：never、onAppDelete、onAppUpdate。"
-	},
-	"The target namespace to deploy in the selected clusters. If not set, components will inherit the original namespace": {
-		"Chinese": "要在选定集群中部署的目标命名空间。 如果未设置，组件将继承原始命名空间。"
-	},
-	"The type of the component to override. If not set, all component types will be matched": {
-		"Chinese": "要覆盖的组件的类型。 如果未设置，将匹配所有组件类型。"
-	},
-	"The value of the environment variable": {
-		"Chinese": "环境变量的值"
-	},
-	"Type": {
-		"Chinese": "Type"
-	},
-	"Which image would you like to use for your service": {
-		"Chinese": "容器使用的镜像"
-	},
-	"Which ports do you want customer traffic sent to": {
-		"Chinese": "承接用户流量的端口，默认 80"
-	},
-	"WriteConnectionSecretToRefIntroduction": {
-		"Chinese": "如果设置了 `writeConnectionSecretToRef`，一个 Kubernetes Secret 将会被创建，并且，它的数据里有这些键（key）：",
-		"English": "If `writeConnectionSecretToRef` is set, a secret will be generated with these keys as below:"
-	},
-	"a list of StrategicMerge or JSON6902 patch to selected target": {
-		"Chinese": "在目标上进行 StrategicMerge 或者 JSON6902 patch 的列表"
-	},
-	"a list of strategicmerge, defined as inline yaml objects": {
-		"Chinese": "patchesStrategicMerge 列表"
-	},
-	"if key is empty, we will use envMappings key instead": {
-		"Chinese": "主键名称"
-	},
-	"The TCP socket within the container that should be probed to assess container health": {
-		"Chinese": "指定健康检查的 TCP socket"
-	},
-	"Specify volume type, options: \"pvc\",\"configMap\",\"secret\",\"emptyDir\"": {
-		"Chinese": "指定存储卷类型，类型包括 \"pvc\",\"configMap\",\"secret\",\"emptyDir\" "
-	},
-	"Number of port to expose on the pod's IP address": {
-		"Chinese": "要暴露的 IP 端口号"
-	},
-	"Name of the port": {
-		"Chinese": "端口名称"
-	},
-	"The name of the secret in the pod's namespace to select from": {
-		"Chinese": "Secret 名称"
-	},
-	"The key of the secret to select from. Must be a valid secret key": {
-		"Chinese": "选择 Secret 中存在的 key"
-	},
-	"Environment variable name": {
-		"Chinese": "环境变量名称"
-	},
-	"Specify image pull policy for your service": {
-		"Chinese": "镜像拉取策略"
-	},
-	"Which ports do you want customer traffic sent to, defaults to 80": {
-		"Chinese": "指定业务流量进入的端口（多个），默认为 80"
-	},
-	"A slice of Kubernetes resource manifests": {
-		"Chinese": "一组 Kubernetes 原生资源对象配置"
-	},
-	"Allow configuration drift for applied resources, delivery the resource without continuously reconciliation": {
-		"Chinese": "只交付部署资源，不保证终态一致、允许配置漂移。适用于与其他控制器协作的轻量级交付场景"
-	},
-	"Whether to enable apply-once for the whole application": {
-		"Chinese": "当设置为 true 时，表示只交付部署、不保证终态一致、允许配置漂移"
-	},
-	"Specify the rules for configuring apply-once policy in resource level": {
-		"Chinese": "指定交付一次的资源规则"
-	},
-	"Specify how to select the targets of the rule": {
-		"Chinese": "指定资源筛选目标规则"
-	},
-	"Configure the garbage collect behaviour for the application": {
-		"Chinese": "为应用配置资源回收策略。 如配置资源不回收"
-	},
-	"If is set, outdated versioned resourcetracker will not be recycled automatically, outdated resources will be kept until resourcetracker be deleted manually": {
-		"Chinese": "如果为 true，过时的版本化 resource tracker 将不会自动回收。 过时的资源将被保留，直到手动删除 resource tracker"
-	},
-	"Specify the list of rules to control gc strategy at resource level, if one resource is controlled by multiple rules, first rule will be used": {
-		"Chinese": "在资源级别控制垃圾回收策略的规则列表，如果一个资源由多个规则控制，将使用第一个规则"
-	},
-	"Specify the strategy for target resource to recycle": {
-		"Chinese": "目标资源循环利用的策略。 可用值：never、onAppDelete、onAppUpdate"
-	},
-	"Select resources by component names": {
-		"Chinese": "按组件名称选择目标资源"
-	},
-	"Select resources by component types": {
-		"Chinese": "按组件类型选择目标资源"
-	},
-	"Select resources by oamTypes (COMPONENT or TRAIT)": {
-		"Chinese": "按 OAM 概念，组件(COMPONENT) 或 运维特征(TRAIT) 筛选"
-	},
-	"Select resources by trait types": {
-		"Chinese": "按 trait 类型选择目标资源"
-	},
-	"Select resources by resource types (like Deployment)": {
-		"Chinese": "按资源类型选择"
-	},
-	"Select resources by their names": {
-		"Chinese": "按资源名称选择"
-	},
-	"Describe the configuration to override when deploying resources, it only works with specified `deploy` step in workflow": {
-		"Chinese": "描述部署资源时要覆盖的配置，需要配合工作流的 `deploy` 步骤一起使用才能生效"
-	},
-	"Specify the overridden component configuration": {
-		"Chinese": "要覆盖的组件配置列表"
-	},
-	"Specify a list of component names to use, if empty, all components will be selected": {
-		"Chinese": "要使用的组件名称列表。 如果未设置，将使用所有组件"
-	},
-	"Specify the name of the patch component, if empty, all components will be merged": {
-		"Chinese": "要覆盖的组件的名称。 如果未设置，它将匹配具有指定类型的所有组件。 可以与通配符 * 一起使用以进行模糊匹配。"
-	},
-	"Specify the type of the patch component": {
-		"Chinese": "要覆盖的组件的类型。 如果未设置，将匹配所有组件类型"
-	},
-	"Specify the properties to override": {
-		"Chinese": "要覆盖的配置属性，未填写配置会与原先的配置合并"
-	},
-	"Specify if the trait should be remove, default false": {
-		"Chinese": "如果为 true，该 trait 将被删除，默认 false"
-	},
-	"Specify the traits to override": {
-		"Chinese": "要覆盖的 trait 配置列表"
-	},
-	"Specify the strategy for configuring the resource level configuration drift behavior": {
-		"Chinese": "指定仅交付一次的资源层级"
-	},
-	"Specify the path of the resource that allow configuration drift": {
-		"Chinese": "指定资源的路径"
-	},
-	"Specify the type of the trait to be patched": {
-		"Chinese": "要做参数覆盖的 trait 类型"
-	},
-	"Describe the destination where components should be deployed to": {
-		"Chinese": "描述组件应该部署到的集群环境"
-	},
-	"Specify the names of the clusters to select": {
-		"Chinese": "要选择的集群的名称"
-	},
-	"Specify the label selector for clusters": {
-		"Chinese": "根据集群标签选择"
-	},
-	"Specify the target namespace to deploy in the selected clusters, default inherit the original namespace": {
-		"Chinese": "要在选定集群中部署的目标命名空间。 如果未设置，组件将继承原始命名空间"
-	},
-	"Apply raw kubernetes objects for your workflow steps": {
-		"Chinese": "在工作流中部署 Kubernetes 资源对象"
-	},
-	"Specify Kubernetes native resource object to be applied": {
-		"Chinese": "Kubernetes 资源对象参数"
-	},
-	"The cluster you want to apply the resource to, default is the current control plane cluster": {
-		"Chinese": "需要部署的集群名称。如果不指定，则为当前集群"
-	},
-	"Wait for the specified Application to complete": {
-		"Chinese": "等待指定的 Application 完成"
-	},
-	"Specify the name of the dependent Application": {
-		"Chinese": "需要等待的 Application 名称"
-	},
-	"Specify the namespace of the dependent Application": {
-		"Chinese": "需要等待的 Application 所在的命名空间"
-	},
-	"A powerful and unified deploy step for components multi-cluster delivery with policies": {
-		"Chinese": "功能丰富且统一的用于多集群部署的步骤，可以指定多集群差异化配置策略"
-	},
-	"If set to false, the workflow will suspend automatically before this step, default to be true": {
-		"Chinese": "默认为 true。如果为 false，工作流将在执行该步骤前自动暂停。"
-	},
-	"Maximum number of concurrent delivered components": {
-		"Chinese": "指定本次部署的并发度"
-	},
-	"If set false, this step will apply the components with the terraform workload": {
-		"Chinese": "部署时忽略 Terraform 的组件，默认忽略，Terraform 仅需要在管控集群操作云资源，不需要管控信息下发到多集群"
-	},
-	"Declare the policies that used for this deployment. If not specified, the components will be deployed to the hub cluster": {
-		"Chinese": "指定本次部署要使用的策略。如果不指定策略，将自动部署到管控集群"
-	},
-	"Deploy cloud resource and deliver secret to multi clusters": {
-		"Chinese": "将云资源生成的秘钥部署到多集群"
-	},
-	"Declare the name of the env in policy": {
-		"Chinese": "指定多集群策略中定义的环境名称"
-	},
-	"Export data to specified Kubernetes ConfigMap in your workflow": {
-		"Chinese": "在工作流中导出数据到 Kubernetes ConfigMap 对象"
-	},
-	"Specify the cluster of the config map": {
-		"Chinese": "要导出到的集群名称"
-	},
-	"Specify the name of the config map": {
-		"Chinese": "ConfigMap 的名称"
-	},
-	"Specify the data of config map": {
-		"Chinese": "需要导出到 ConfigMap 中的数据，是一个 key-value 的 map"
-	},
-	"Specify the namespace of the config map": {
-		"Chinese": "ConfigMap 的 namespace，默认为当前应用的 namespace"
-	},
-	"Export data to Kubernetes Secret in your workflow": {
-		"Chinese": "在工作流中导出数据到 Kubernetes Secret 对象"
-	},
-	"Specify the cluster of the secret": {
-		"Chinese": "要导出到的集群名称"
-	},
-	"Specify the namespace of the secret": {
-		"Chinese": "secret 的 namespace，默认为当前应用的 namespace"
-	},
-	"Specify the type of the secret": {
-		"Chinese": "指定导出的 secret 类型"
-	},
-	"Specify the name of the secret": {
-		"Chinese": "Secret 的名称"
-	},
-	"Specify the data of secret": {
-		"Chinese": "需要导出到 Secret 中的数据"
-	},
-	"Send notifications to Email, DingTalk, Slack, Lark or webhook in your workflow": {
-		"Chinese": "向指定的 Webhook 发送信息，支持邮件、钉钉、Slack 和飞书"
-	},
-	"Please fulfill its url and message if you want to send Lark messages": {
-		"Chinese": "发送飞书信息"
-	},
-	"Please fulfill its url and message if you want to send Slack messages": {
-		"Chinese": "发送 Slack 信息"
-	},
-	"Please fulfill its from, to and content if you want to send email": {
-		"Chinese": "发送邮件通知"
-	},
-	"Please fulfill its url and message if you want to send DingTalk messages": {
-		"Chinese": "发送钉钉信息"
-	},
-	"Specify the content of the email": {
-		"Chinese": "指定邮件内容"
-	},
-	"Specify the email info that you want to send from": {
-		"Chinese": "指定邮件发送人信息"
-	},
-	"Specify the email address that you want to send to": {
-		"Chinese": "指定收件人信息"
-	},
-	"Specify the context body of the email": {
-		"Chinese": "指定邮件正文内容"
-	},
-	"Specify the subject of the email": {
-		"Chinese": "指定邮件标题"
-	},
-	"Specify the email address that you want to send from": {
-		"Chinese": "发件人邮件地址"
-	},
-	"Specify the the slack url, you can either sepcify it in value or use secretRef": {
-		"Chinese": "Slack 的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取"
-	},
-	"Read Kubernetes objects from cluster for your workflow steps": {
-		"Chinese": "在工作流中读取 Kubernetes 资源对象"
-	},
-	"A special step that you can declare 'subSteps' in it, 'subSteps' is an array containing any step type whose valid parameters do not include the `step-group` step type itself. The sub steps were executed in parallel.": {
-		"Chinese": "特殊的工作流步骤类型，指定 step-group 类型表示使用工作流子步骤，指定 'subSteps'字段执行子步骤，子步骤并行执行"
-	},
-	"Suspend the current workflow, it can be resumed by 'vela workflow resume' command": {
-		"Chinese": "暂停当前工作流，可以通过 'vela workflow resume' 继续已暂停的工作流"
-	},
-	"Specify the wait duration time to resume workflow such as \"30s\", \"1min\" or \"2m15s\"": {
-		"Chinese": "指定工作流暂停的时长，超过该时间后工作流将自动继续，如：\"30s\"， \"1min\"， \"2m15s\""
-	},
-	"Send a request to the specified Webhook URL. If no request body is specified, the current Application body will be sent by default": {
-		"Chinese": "向指定 Webhook URL 发送请求，若不指定请求体，则默认发送当前 Application"
-	},
-	"Specify the webhook url": {
-		"Chinese": "需要发送的 Webhook URL，可以选择直接在 value 填写或从 secretRef 中获取"
-	},
-	"Specify the data you want to send": {
-		"Chinese": "需要发送的内容"
-	},
-	"name is the name of the secret": {
-		"Chinese": "Kubernetes Secret 名称"
-	},
-	"key is the key in the secret": {
-		"Chinese": "Kubernetes Secret 中的 key"
-	}
+  "A command to be executed inside the container to assess its health. Each space delimited token of the command is a separate array element. Commands exiting 0 are considered to be successful probes, whilst all other exit codes are considered failures": {
+    "Chinese": "容器中执行的命令，命令返回 0 则为正常，否则则为失败"
+  },
+  "A command to be executed inside the container to assess its health. Each space delimited token of the command is a separate array element. Commands exiting 0 are considered to be successful probes, whilst all other exit codes are considered failures.": {
+    "Chinese": "容器中执行的命令，命令返回 0 则为正常，否则则为失败"
+  },
+  "A list of JSON6902 patch": {
+    "Chinese": "JSON6902 patch 的列表"
+  },
+  "A list of component configurations to override": {
+    "Chinese": "要覆盖的组件配置列表。"
+  },
+  "A list of component names to use. If not set, all components will be used": {
+    "Chinese": "要使用的组件名称列表。 如果未设置，将使用所有组件。"
+  },
+  "A list of rules to control gc strategy at resource level, if one resource is controlled by multiple rules, first rule will be used": {
+    "Chinese": "在资源级别控制垃圾回收策略的规则列表，如果一个资源由多个规则控制，将使用第一个规则。"
+  },
+  "A list of trait configurations to override": {
+    "Chinese": "要覆盖的 trait 配置列表。"
+  },
+  "Commands to run in the container": {
+    "Chinese": "容器的启动命令"
+  },
+  "DESCRIPTION": {
+    "Chinese": "DESCRIPTION"
+  },
+  "Define arguments by using environment variables": {
+    "Chinese": "容器中的环境变量"
+  },
+  "Define the job restart policy, the value can only be Never or OnFailure. By default, it's Never": {
+    "Chinese": "定义失败重启策略，可选值为 Never 或者 OnFailure，默认是 OnFailure"
+  },
+  "Describes cron jobs that run code or a script to completion": {
+    "Chinese": "定义一个周期性运行代码或者脚本的任务"
+  },
+  "Describes daemonset services in Kubernetes": {
+    "Chinese": "定义一个同 Kubernetes 每个机器 Node 都运行的服务"
+  },
+  "Describes jobs that run code or a script to completion": {
+    "Chinese": "定义一个只执行一次代码或者脚本的任务"
+  },
+  "Describes long-running, scalable, containerized services that have a stable network endpoint to receive external network traffic from customers": {
+    "Chinese": "定义一个长期运行的，可伸缩的容器化的服务，并且会暴露一个服务端点用来接受来自客户的外部流量"
+  },
+  "Describes long-running, scalable, containerized services that running at backend. They do NOT have network endpoint to receive external network traffic": {
+    "Chinese": "定义一个长期运行的，可伸缩的容器化的服务，并且不会暴露承接用户流量的网络端点"
+  },
+  "Description": {
+    "Chinese": ""
+  },
+  "How often, in seconds, to execute the probe": {
+    "Chinese": "定义每次检查之间的时间间隔"
+  },
+  "How often, in seconds, to execute the probe.": {
+    "Chinese": "定义每次检查之间的时间间隔"
+  },
+  "If true, allow configuration drift": {
+    "Chinese": "当设置为 true 时，将允许配置飘逸"
+  },
+  "If true, outdated versioned resourcetracker will not be recycled automatically. Outdated resources will be kept until resourcetracker be deleted manually": {
+    "Chinese": "如果为 true，过时的版本化 resource tracker 将不会自动回收。 过时的资源将被保留，直到手动删除 resource tracker。"
+  },
+  "If true, this trait will be removed": {
+    "Chinese": "如果为 true，该 trait 将被删除。"
+  },
+  "Inline patch string, in yaml style": {
+    "Chinese": "Inline yaml 格式的 patch"
+  },
+  "Instructions for assessing container health by executing a command. Either this attribute or the httpGet attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the httpGet attribute and the tcpSocket attribute": {
+    "Chinese": "通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个"
+  },
+  "Instructions for assessing container health by executing a command. Either this attribute or the httpGet attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the httpGet attribute and the tcpSocket attribute.": {
+    "Chinese": "通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个"
+  },
+  "Instructions for assessing container health by executing an HTTP GET request. Either this attribute or the exec attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the tcpSocket attribute": {
+    "Chinese": "通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个"
+  },
+  "Instructions for assessing container health by executing an HTTP GET request. Either this attribute or the exec attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the tcpSocket attribute.": {
+    "Chinese": "通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个"
+  },
+  "Instructions for assessing container health by probing a TCP socket. Either this attribute or the exec attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the httpGet attribute": {
+    "Chinese": "通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个"
+  },
+  "Instructions for assessing container health by probing a TCP socket. Either this attribute or the exec attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the httpGet attribute.": {
+    "Chinese": "通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个"
+  },
+  "Instructions for assessing whether the container is alive": {
+    "Chinese": "判断容器是否存活的探针"
+  },
+  "Instructions for assessing whether the container is alive.": {
+    "Chinese": "判断容器是否存活的探针"
+  },
+  "Instructions for assessing whether the container is in a suitable state to serve traffic": {
+    "Chinese": "判断容器是否就绪，能够接受用户流量的探针"
+  },
+  "Instructions for assessing whether the container is in a suitable state to serve traffic.": {
+    "Chinese": "判断容器是否就绪，能够接受用户流量的探针"
+  },
+  "K8s-objects allow users to specify raw K8s objects in properties": {
+    "Chinese": "列表中的元素为完整的 Kubernetes 资源结构体"
+  },
+  "Kubernetes resource manifest": {
+    "Chinese": "Kubernetes 资源列表"
+  },
+  "Kubernetes secret name": {
+    "Chinese": "secret 名称"
+  },
+  "Minimum consecutive successes for the probe to be considered successful after having failed": {
+    "Chinese": "定义检查成功多少次之后判断容器已经就绪"
+  },
+  "Minimum consecutive successes for the probe to be considered successful after having failed.": {
+    "Chinese": "定义检查成功多少次之后判断容器已经就绪"
+  },
+  "Mount ConfigMap type volume": {
+    "Chinese": "挂载一个 configmap 卷"
+  },
+  "Mount EmptyDir type volume": {
+    "Chinese": "挂载一个 emptyDir 的卷"
+  },
+  "Mount HostPath type volume": {
+    "Chinese": "挂载主机目录卷"
+  },
+  "Mount PVC type volume": {
+    "Chinese": "挂载一个 PVC 卷"
+  },
+  "Mount Secret type volume": {
+    "Chinese": "挂载一个 secret 卷"
+  },
+  "Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core)": {
+    "Chinese": "CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)"
+  },
+  "Number of consecutive failures required to determine the container is not alive (liveness probe) or not ready (readiness probe)": {
+    "Chinese": "定义检查失败多少次之后判断容器已经不健康"
+  },
+  "Number of consecutive failures required to determine the container is not alive (liveness probe) or not ready (readiness probe).": {
+    "Chinese": "定义检查失败多少次之后判断容器已经不健康"
+  },
+  "Number of seconds after the container is started before the first probe is initiated": {
+    "Chinese": "定义容器启动多少秒之后开始第一次检查"
+  },
+  "Number of seconds after the container is started before the first probe is initiated.": {
+    "Chinese": "定义容器启动多少秒之后开始第一次检查"
+  },
+  "Number of seconds after which the probe times out": {
+    "Chinese": "定义检查的超时时间"
+  },
+  "Number of seconds after which the probe times out.": {
+    "Chinese": "定义检查的超时时间"
+  },
+  "Optional, The cluster you want to read the resource from, default is the current cluster. If you want to read resource in different cluster, use `vela cluster join` to join the cluster first, and then specify the cluster": {
+    "Chinese": "可选值，需要部署的集群名称。如果不指定，则为当前集群。在使用该字段前，请确保你已经使用 `vela cluster join` 纳管了你的集群"
+  },
+  "Optional, The namespace of the resource you want to read, defaults to `default`": {
+    "Chinese": "选填值，ConfigMap 的 namespace，默认为 `context.namespace`"
+  },
+  "Optional, default to true. If set to false, the workflow will suspend automatically before this step": {
+    "Chinese": "可选参数，默认为 true。如果为 false，工作流将在执行该步骤前自动暂停。"
+  },
+  "Optional, defaults to 5": {
+    "Chinese": "可选参数。指定本次部署的并发度，默认为 5。"
+  },
+  "Optional, get data from secret, the key of the secret": {
+    "Chinese": "可选值，从 secret 中获取值，secret 的 key"
+  },
+  "Optional, get data from secret, the name of the secret": {
+    "Chinese": "可选值，从 secret 中获取值，secret 的名称"
+  },
+  "Optional, please fulfill its from, to and content if you want to send email": {
+    "Chinese": "可选值，如果需要发送邮件，则需填写其 from、to 以及 content"
+  },
+  "Optional, please fulfill its url and message if you want to send DingTalk messages": {
+    "Chinese": "可选值，如果需要发送钉钉信息，则需填写其 url 及 message"
+  },
+  "Optional, please fulfill its url and message if you want to send Lark messages": {
+    "Chinese": "可选值，如果需要发送飞书信息，则需填写其 url 及 message"
+  },
+  "Optional, please fulfill its url and message if you want to send Slack messages": {
+    "Chinese": "可选值，如果需要发送 Slack 信息，则需填写其 url 及 message"
+  },
+  "Optional, the email alias to show after sending the email": {
+    "Chinese": "可选值，发送的邮件别名"
+  },
+  "Optional, the policies that used for this deployment. If not specified, the components will be deployed to the hub cluster": {
+    "Chinese": "可选参数。指定本次部署要使用的策略。如果不指定策略，将自动部署到管控集群。"
+  },
+  "Optional, the port of the email host, default to 587": {
+    "Chinese": "可选值，邮件发送的端口号，默认为 587"
+  },
+  "Optional, the wait duration time to resume workflow such as \"30s\", \"1min\" or \"2m15s\"": {
+    "Chinese": "可选参数，指定工作流暂停的时长，超过该时间后工作流将自动继续，如：\"30s\"， \"1min\"， \"2m15s\""
+  },
+  "Outputs": {
+    "Chinese": "输出",
+    "English": "Outputs"
+  },
+  "Protocol for port. Must be UDP, TCP, or SCTP": {
+    "Chinese": "端口协议类型 UDP， TCP， 或者 SCTP"
+  },
+  "Ref-objects allow users to specify ref objects to use. Notice that this component type have special handle logic": {
+    "Chinese": "定义引用集群中的 Kubernetes 对象，这个组件类型部署前会先读取引用的对象"
+  },
+  "Required, Kubernetes native resources fields": {
+    "Chinese": "必填值，Kubernetes 原生资源字段"
+  },
+  "Required, The apiVersion of the resource you want to read": {
+    "Chinese": "需要等待的 Application 名称"
+  },
+  "Required, The data that you want to export to ConfigMap": {
+    "Chinese": "必填值，需要导出到 ConfigMap 中的数据"
+  },
+  "Required, The kind of the resource you want to read": {
+    "Chinese": "必填值，资源的 kind"
+  },
+  "Required, The name of the ConfigMap": {
+    "Chinese": "必填值，ConfigMap 的名称"
+  },
+  "Required, The name of the Secret": {
+    "Chinese": "必填值，Secret 的名称"
+  },
+  "Required, Webhook URL to be sent, you can choose to fill in value directly or get it from secretRef": {
+    "Chinese": "必填值，需要发送的 Webhook URL，可以选择直接在 value 填写或从 secretRef 中获取"
+  },
+  "Required, the DingTalk messages you want to send, please follow [DingTalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw)": {
+    "Chinese": "必填值，需要发送的钉钉信息，请符合 [钉钉信息规范](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw)"
+  },
+  "Required, the Lark messages you want to send, please follow [Lark messaging](https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN#8b0f2a1b)": {
+    "Chinese": "必填值，需要发送的飞书信息，请符合 [飞书信息规范](https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN#8b0f2a1b)"
+  },
+  "Required, the Slack messages you want to send, please follow [Slack messaging](https://api.slack.com/reference/messaging/payload)": {
+    "Chinese": "必填值，需要发送的 Slack 信息，请符合 [Slack 信息规范](https://api.slack.com/reference/messaging/payload)"
+  },
+  "Required, the context body of the email": {
+    "Chinese": "必填值，邮件的内容"
+  },
+  "Required, the email address that you want to send from": {
+    "Chinese": "必填值，发送的邮件地址"
+  },
+  "Required, the email address that you want to send to": {
+    "Chinese": "必填值，邮件发送的地址列表"
+  },
+  "Required, the host of your email": {
+    "Chinese": "必填值，邮件的 Host"
+  },
+  "Required, the password of the email, you can either specify it in value or use secretRef": {
+    "Chinese": "必填值，发送的邮件密码，可以选择直接在 value 填写或从 secretRef 中获取"
+  },
+  "Required, the subject of the email": {
+    "Chinese": "必填值，邮件的标题"
+  },
+  "Required, the webhook address of DingTalk, you can choose to fill it directly in value or specify it in secret": {
+    "Chinese": "必填值，钉钉的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取"
+  },
+  "Required, the webhook address of Lark, you can choose to fill it directly in value or specify it in secret": {
+    "Chinese": "必填值，飞书的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取"
+  },
+  "Required, the webhook address of Slack, you can choose to fill it directly in value or specify it in secret": {
+    "Chinese": "必填值，Slack 的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取"
+  },
+  "Select target resources by component names": {
+    "Chinese": "按组件名称选择目标资源。"
+  },
+  "Select target resources by component types": {
+    "Chinese": "按组件类型选择目标资源。"
+  },
+  "Select target resources by trait types": {
+    "Chinese": "按 trait 类型选择目标资源。"
+  },
+  "Selects a key of a config map in the pod's namespace": {
+    "Chinese": "configmap 键的引用"
+  },
+  "Selects a key of a secret in the pod's namespace": {
+    "Chinese": "secret 键的引用"
+  },
+  "Set ingress class in '.spec.ingressClassName' instead of 'kubernetes.io/ingress.class' annotation": {
+    "Chinese": "在 kubernetes ingress 的 '.spec.ingressClassName' 定义 ingress class 而不是在 'kubernetes.io/ingress.class' 注解中定义"
+  },
+  "Specifies a source the value of this var should come from": {
+    "Chinese": "从哪个资源中读取环境变量的定义"
+  },
+  "Specifies how to treat concurrent executions of a Job": {
+    "Chinese": "定义任务如何处理任务的重叠运行，可选值为 \"Allow\"，\"Forbid\" 或者 \"Replace\"，默认值为 Allow"
+  },
+  "Specifies the attributes of the memory resource required for the container": {
+    "Chinese": "所需要的内存大小"
+  },
+  "Specifies the attributes of the memory resource required for the container.": {
+    "Chinese": "所需要的内存大小"
+  },
+  "Specify if the port should be exposed": {
+    "Chinese": "端口是否需要暴露"
+  },
+  "Specify image pull policy for your service. Should be \"Always\",\"Never\" or \"IfNotPresent\"": {
+    "Chinese": "镜像拉取策略，可选值为（\"Always\"，\"Never\" 或者 \"IfNotPresent\"）"
+  },
+  "Specify image pull policy for your service. Should be \"Always\",\"Never\" or \"IfNotPresent\".": {
+    "Chinese": "镜像拉取策略，可选值为（\"Always\"，\"Never\" 或者 \"IfNotPresent\"）"
+  },
+  "Specify image pull secrets for your service": {
+    "Chinese": "容器的镜像拉取密钥"
+  },
+  "Specify number of tasks to run in parallel": {
+    "Chinese": "每次任务执行的并行度"
+  },
+  "Specify the annotations in the workload": {
+    "Chinese": "工作负载的注解"
+  },
+  "Specify the average cpu utilization, for example, 50 means the CPU usage is 50%": {
+    "Chinese": "每个容器的平均 CPU 利用率 例如, 50 意味者 CPU 利用率为 50%"
+  },
+  "Specify the class of ingress to use": {
+    "Chinese": "所使用的 kubernetes ingress class"
+  },
+  "Specify the commands run in the sidecar": {
+    "Chinese": "容器的执行命令"
+  },
+  "Specify the domain you want to expose": {
+    "Chinese": "暴露服务所绑定的域名"
+  },
+  "Specify the hostAliases to add": {
+    "Chinese": "定义容器内的 hostAliases"
+  },
+  "Specify the image of sidecar container": {
+    "Chinese": "容器镜像"
+  },
+  "Specify the labels in the workload": {
+    "Chinese": "工作负载的标签"
+  },
+  "Specify the mapping relationship between the http path and the workload port": {
+    "Chinese": "定义一组网关路径到 Pod 服务端口的映射关系"
+  },
+  "Specify the maximum number of of replicas to which the autoscaler can scale up": {
+    "Chinese": "能够将工作负载扩容到的最大副本个数"
+  },
+  "Specify the minimal number of replicas to which the autoscaler can scale down": {
+    "Chinese": "能够将工作负载缩容到的最小副本个数"
+  },
+  "Specify the name of sidecar container": {
+    "Chinese": "容器名称"
+  },
+  "Specify the number of workload": {
+    "Chinese": "工作负载的 Pod 个数"
+  },
+  "Specify the schedule in Cron format, see https://en.wikipedia.org/wiki/Cron": {
+    "Chinese": "执行规则 [Cron 规范](https://en.wikipedia.org/wiki/Cron)"
+  },
+  "Specify the shared volume path": {
+    "Chinese": "挂载卷"
+  },
+  "Specify the target the patch should be applied to": {
+    "Chinese": "patch 需要作用在的目标"
+  },
+  "Suspend subsequent executions": {
+    "Chinese": "是否暂停执行"
+  },
+  "Terraform configuration for AWS S3": {
+    "Chinese": "用于部署 AWS S3 的组件说明",
+    "English": "Terraform configuration for AWS S3"
+  },
+  "Terraform configuration for Alibaba Cloud ACK cluster": {
+    "Chinese": "用于部署阿里云 ACK 集群的组件说明",
+    "English": "Terraform configuration for Alibaba Cloud ACK cluster"
+  },
+  "Terraform configuration for Alibaba Cloud Elastic IP": {
+    "Chinese": "用于部署阿里云弹性 IP 的组件说明",
+    "English": "Terraform configuration for Alibaba Cloud Elastic IP"
+  },
+  "Terraform configuration for Alibaba Cloud OSS object": {
+    "Chinese": "用于部署阿里云 OSS 的组件说明",
+    "English": "Terraform configuration for Alibaba Cloud OSS"
+  },
+  "Terraform configuration for Alibaba Cloud RDS object": {
+    "Chinese": "用于部署阿里云 RDS 的组件说明",
+    "English": "Terraform configuration for Alibaba Cloud RDS"
+  },
+  "Terraform configuration for Alibaba Cloud Redis": {
+    "Chinese": "用于部署阿里云 Redis 的组件说明",
+    "English": "Terraform configuration for Alibaba Cloud Redis"
+  },
+  "Terraform configuration for Alibaba Cloud SLS Project": {
+    "Chinese": "用于部署阿里云 SLS Project 的组件说明",
+    "English": "Terraform configuration for Alibaba Cloud SLS Project"
+  },
+  "Terraform configuration for Alibaba Cloud SLS Store": {
+    "Chinese": "用于部署阿里云 SLS Store 的组件说明",
+    "English": "Terraform configuration for Alibaba Cloud SLS Store"
+  },
+  "Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK)": {
+    "Chinese": "用于部署阿里云 Serverless Kubernetes (ASK) 的组件说明",
+    "English": "Terraform configuration for Alibaba Cloud Serverless Kubernetes (ASK)"
+  },
+  "Terraform configuration for Alibaba Cloud VPC": {
+    "Chinese": "用于部署阿里云 VPC 的组件说明",
+    "English": "Terraform configuration for Alibaba Cloud VPC"
+  },
+  "Terraform configuration for Alibaba Cloud VSwitch": {
+    "Chinese": "用于部署阿里云 VSwitch 的组件说明",
+    "English": "Terraform configuration for Alibaba Cloud VSwitch"
+  },
+  "Terraform configuration for Azure Blob Storage Account": {
+    "Chinese": "用于部署 Azure Blob Storage 账号的的组件说明",
+    "English": "Terraform configuration for Azure Blob Storage Account"
+  },
+  "Terraform configuration for Azure Database Mariadb": {
+    "Chinese": "用于部署 Azure mariadb 数据库的组件说明",
+    "English": "Terraform configuration for Azure Database Mariadb"
+  },
+  "The TCP socket within the container to which the HTTP GET request should be directed": {
+    "Chinese": "定义服务端点的端口号"
+  },
+  "The TCP socket within the container to which the HTTP GET request should be directed.": {
+    "Chinese": "定义服务端点的端口号"
+  },
+  "The component properties to merge": {
+    "Chinese": "要合并的 trait 属性。"
+  },
+  "The endpoint, relative to the port, to which the HTTP GET request should be directed": {
+    "Chinese": "定义服务端点请求的路径"
+  },
+  "The endpoint, relative to the port, to which the HTTP GET request should be directed.": {
+    "Chinese": "定义服务端点请求的路径"
+  },
+  "The key of the config map to select from. Must be a valid secret key": {
+    "Chinese": "configmap 中的键名"
+  },
+  "The label selector for clusters. Exclusive to \"clusters\"": {
+    "Chinese": "集群的标签选择器。"
+  },
+  "The name of the PVC": {
+    "Chinese": "PVC 名称"
+  },
+  "The name of the component to override. If not set, it will match all components with the specified type. Can be used with wildcard * for fuzzy match": {
+    "Chinese": "要覆盖的组件的名称。 如果未设置，它将匹配具有指定类型的所有组件。 可以与通配符 * 一起使用以进行模糊匹配。"
+  },
+  "The name of the config map in the pod's namespace to select from": {
+    "Chinese": "环境变量的名称"
+  },
+  "The names of the clusters to select": {
+    "Chinese": "要选择的集群的名称。"
+  },
+  "The number of failed finished jobs to retain": {
+    "Chinese": "保留多少个已经失败的任务记录"
+  },
+  "The number of successful finished jobs to retain": {
+    "Chinese": "保留多少个已经成功完成的任务记录"
+  },
+  "The strategy for target resources to recycle. Available values: never, onAppDelete, onAppUpdate": {
+    "Chinese": "目标资源循环利用的策略。 可用值：never、onAppDelete、onAppUpdate。"
+  },
+  "The target namespace to deploy in the selected clusters. If not set, components will inherit the original namespace": {
+    "Chinese": "要在选定集群中部署的目标命名空间。 如果未设置，组件将继承原始命名空间。"
+  },
+  "The type of the component to override. If not set, all component types will be matched": {
+    "Chinese": "要覆盖的组件的类型。 如果未设置，将匹配所有组件类型。"
+  },
+  "The value of the environment variable": {
+    "Chinese": "环境变量的值"
+  },
+  "Type": {
+    "Chinese": "Type"
+  },
+  "Which image would you like to use for your service": {
+    "Chinese": "容器使用的镜像"
+  },
+  "Which ports do you want customer traffic sent to": {
+    "Chinese": "承接用户流量的端口，默认 80"
+  },
+  "WriteConnectionSecretToRefIntroduction": {
+    "Chinese": "如果设置了 `writeConnectionSecretToRef`，一个 Kubernetes Secret 将会被创建，并且，它的数据里有这些键（key）：",
+    "English": "If `writeConnectionSecretToRef` is set, a secret will be generated with these keys as below:"
+  },
+  "a list of StrategicMerge or JSON6902 patch to selected target": {
+    "Chinese": "在目标上进行 StrategicMerge 或者 JSON6902 patch 的列表"
+  },
+  "a list of strategicmerge, defined as inline yaml objects": {
+    "Chinese": "patchesStrategicMerge 列表"
+  },
+  "if key is empty, we will use envMappings key instead": {
+    "Chinese": "主键名称"
+  },
+  "The TCP socket within the container that should be probed to assess container health": {
+    "Chinese": "指定健康检查的 TCP socket"
+  },
+  "Specify volume type, options: \"pvc\",\"configMap\",\"secret\",\"emptyDir\"": {
+    "Chinese": "指定存储卷类型，类型包括 \"pvc\",\"configMap\",\"secret\",\"emptyDir\" "
+  },
+  "Number of port to expose on the pod's IP address": {
+    "Chinese": "要暴露的 IP 端口号"
+  },
+  "Name of the port": {
+    "Chinese": "端口名称"
+  },
+  "The name of the secret in the pod's namespace to select from": {
+    "Chinese": "Secret 名称"
+  },
+  "The key of the secret to select from. Must be a valid secret key": {
+    "Chinese": "选择 Secret 中存在的 key"
+  },
+  "Environment variable name": {
+    "Chinese": "环境变量名称"
+  },
+  "Specify image pull policy for your service": {
+    "Chinese": "镜像拉取策略"
+  },
+  "Which ports do you want customer traffic sent to, defaults to 80": {
+    "Chinese": "指定业务流量进入的端口（多个），默认为 80"
+  },
+  "A slice of Kubernetes resource manifests": {
+    "Chinese": "一组 Kubernetes 原生资源对象配置"
+  },
+  "Allow configuration drift for applied resources, delivery the resource without continuously reconciliation": {
+    "Chinese": "只交付部署资源，不保证终态一致、允许配置漂移。适用于与其他控制器协作的轻量级交付场景"
+  },
+  "Whether to enable apply-once for the whole application": {
+    "Chinese": "当设置为 true 时，表示只交付部署、不保证终态一致、允许配置漂移"
+  },
+  "Specify the rules for configuring apply-once policy in resource level": {
+    "Chinese": "指定交付一次的资源规则"
+  },
+  "Specify how to select the targets of the rule": {
+    "Chinese": "指定资源筛选目标规则"
+  },
+  "Configure the garbage collect behaviour for the application": {
+    "Chinese": "为应用配置资源回收策略。 如配置资源不回收"
+  },
+  "If is set, outdated versioned resourcetracker will not be recycled automatically, outdated resources will be kept until resourcetracker be deleted manually": {
+    "Chinese": "如果为 true，过时的版本化 resource tracker 将不会自动回收。 过时的资源将被保留，直到手动删除 resource tracker"
+  },
+  "Specify the list of rules to control gc strategy at resource level, if one resource is controlled by multiple rules, first rule will be used": {
+    "Chinese": "在资源级别控制垃圾回收策略的规则列表，如果一个资源由多个规则控制，将使用第一个规则"
+  },
+  "Specify the strategy for target resource to recycle": {
+    "Chinese": "目标资源循环利用的策略。 可用值：never、onAppDelete、onAppUpdate"
+  },
+  "Select resources by component names": {
+    "Chinese": "按组件名称选择目标资源"
+  },
+  "Select resources by component types": {
+    "Chinese": "按组件类型选择目标资源"
+  },
+  "Select resources by oamTypes (COMPONENT or TRAIT)": {
+    "Chinese": "按 OAM 概念，组件(COMPONENT) 或 运维特征(TRAIT) 筛选"
+  },
+  "Select resources by trait types": {
+    "Chinese": "按 trait 类型选择目标资源"
+  },
+  "Select resources by resource types (like Deployment)": {
+    "Chinese": "按资源类型选择"
+  },
+  "Select resources by their names": {
+    "Chinese": "按资源名称选择"
+  },
+  "Describe the configuration to override when deploying resources, it only works with specified `deploy` step in workflow": {
+    "Chinese": "描述部署资源时要覆盖的配置，需要配合工作流的 `deploy` 步骤一起使用才能生效"
+  },
+  "Specify the overridden component configuration": {
+    "Chinese": "要覆盖的组件配置列表"
+  },
+  "Specify a list of component names to use, if empty, all components will be selected": {
+    "Chinese": "要使用的组件名称列表。 如果未设置，将使用所有组件"
+  },
+  "Specify the name of the patch component, if empty, all components will be merged": {
+    "Chinese": "要覆盖的组件的名称。 如果未设置，它将匹配具有指定类型的所有组件。 可以与通配符 * 一起使用以进行模糊匹配。"
+  },
+  "Specify the type of the patch component": {
+    "Chinese": "要覆盖的组件的类型。 如果未设置，将匹配所有组件类型"
+  },
+  "Specify the properties to override": {
+    "Chinese": "要覆盖的配置属性，未填写配置会与原先的配置合并"
+  },
+  "Specify if the trait should be remove, default false": {
+    "Chinese": "如果为 true，该 trait 将被删除，默认 false"
+  },
+  "Specify the traits to override": {
+    "Chinese": "要覆盖的 trait 配置列表"
+  },
+  "Specify the strategy for configuring the resource level configuration drift behavior": {
+    "Chinese": "指定仅交付一次的资源层级"
+  },
+  "Specify the path of the resource that allow configuration drift": {
+    "Chinese": "指定资源的路径"
+  },
+  "Specify the type of the trait to be patched": {
+    "Chinese": "要做参数覆盖的 trait 类型"
+  },
+  "Describe the destination where components should be deployed to": {
+    "Chinese": "描述组件应该部署到的集群环境"
+  },
+  "Specify the names of the clusters to select": {
+    "Chinese": "要选择的集群的名称"
+  },
+  "Specify the label selector for clusters": {
+    "Chinese": "根据集群标签选择"
+  },
+  "Specify the target namespace to deploy in the selected clusters, default inherit the original namespace": {
+    "Chinese": "要在选定集群中部署的目标命名空间。 如果未设置，组件将继承原始命名空间"
+  },
+  "Apply raw kubernetes objects for your workflow steps": {
+    "Chinese": "在工作流中部署 Kubernetes 资源对象"
+  },
+  "Specify Kubernetes native resource object to be applied": {
+    "Chinese": "Kubernetes 资源对象参数"
+  },
+  "The cluster you want to apply the resource to, default is the current control plane cluster": {
+    "Chinese": "需要部署的集群名称。如果不指定，则为当前集群"
+  },
+  "Wait for the specified Application to complete": {
+    "Chinese": "等待指定的 Application 完成"
+  },
+  "Specify the name of the dependent Application": {
+    "Chinese": "需要等待的 Application 名称"
+  },
+  "Specify the namespace of the dependent Application": {
+    "Chinese": "需要等待的 Application 所在的命名空间"
+  },
+  "A powerful and unified deploy step for components multi-cluster delivery with policies": {
+    "Chinese": "功能丰富且统一的用于多集群部署的步骤，可以指定多集群差异化配置策略"
+  },
+  "If set to false, the workflow will suspend automatically before this step, default to be true": {
+    "Chinese": "默认为 true。如果为 false，工作流将在执行该步骤前自动暂停。"
+  },
+  "Maximum number of concurrent delivered components": {
+    "Chinese": "指定本次部署的并发度"
+  },
+  "If set false, this step will apply the components with the terraform workload": {
+    "Chinese": "部署时忽略 Terraform 的组件，默认忽略，Terraform 仅需要在管控集群操作云资源，不需要管控信息下发到多集群"
+  },
+  "Declare the policies that used for this deployment. If not specified, the components will be deployed to the hub cluster": {
+    "Chinese": "指定本次部署要使用的策略。如果不指定策略，将自动部署到管控集群"
+  },
+  "Deploy cloud resource and deliver secret to multi clusters": {
+    "Chinese": "将云资源生成的秘钥部署到多集群"
+  },
+  "Declare the name of the env in policy": {
+    "Chinese": "指定多集群策略中定义的环境名称"
+  },
+  "Export data to specified Kubernetes ConfigMap in your workflow": {
+    "Chinese": "在工作流中导出数据到 Kubernetes ConfigMap 对象"
+  },
+  "Specify the cluster of the config map": {
+    "Chinese": "要导出到的集群名称"
+  },
+  "Specify the name of the config map": {
+    "Chinese": "ConfigMap 的名称"
+  },
+  "Specify the data of config map": {
+    "Chinese": "需要导出到 ConfigMap 中的数据，是一个 key-value 的 map"
+  },
+  "Specify the namespace of the config map": {
+    "Chinese": "ConfigMap 的 namespace，默认为当前应用的 namespace"
+  },
+  "Export data to Kubernetes Secret in your workflow": {
+    "Chinese": "在工作流中导出数据到 Kubernetes Secret 对象"
+  },
+  "Specify the cluster of the secret": {
+    "Chinese": "要导出到的集群名称"
+  },
+  "Specify the namespace of the secret": {
+    "Chinese": "secret 的 namespace，默认为当前应用的 namespace"
+  },
+  "Specify the type of the secret": {
+    "Chinese": "指定导出的 secret 类型"
+  },
+  "Specify the name of the secret": {
+    "Chinese": "Secret 的名称"
+  },
+  "Specify the data of secret": {
+    "Chinese": "需要导出到 Secret 中的数据"
+  },
+  "Send notifications to Email, DingTalk, Slack, Lark or webhook in your workflow": {
+    "Chinese": "向指定的 Webhook 发送信息，支持邮件、钉钉、Slack 和飞书"
+  },
+  "Please fulfill its url and message if you want to send Lark messages": {
+    "Chinese": "发送飞书信息"
+  },
+  "Please fulfill its url and message if you want to send Slack messages": {
+    "Chinese": "发送 Slack 信息"
+  },
+  "Please fulfill its from, to and content if you want to send email": {
+    "Chinese": "发送邮件通知"
+  },
+  "Please fulfill its url and message if you want to send DingTalk messages": {
+    "Chinese": "发送钉钉信息"
+  },
+  "Specify the content of the email": {
+    "Chinese": "指定邮件内容"
+  },
+  "Specify the email info that you want to send from": {
+    "Chinese": "指定邮件发送人信息"
+  },
+  "Specify the email address that you want to send to": {
+    "Chinese": "指定收件人信息"
+  },
+  "Specify the context body of the email": {
+    "Chinese": "指定邮件正文内容"
+  },
+  "Specify the subject of the email": {
+    "Chinese": "指定邮件标题"
+  },
+  "Specify the email address that you want to send from": {
+    "Chinese": "发件人邮件地址"
+  },
+  "Specify the the slack url, you can either sepcify it in value or use secretRef": {
+    "Chinese": "Slack 的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取"
+  },
+  "Read Kubernetes objects from cluster for your workflow steps": {
+    "Chinese": "在工作流中读取 Kubernetes 资源对象"
+  },
+  "A special step that you can declare 'subSteps' in it, 'subSteps' is an array containing any step type whose valid parameters do not include the `step-group` step type itself. The sub steps were executed in parallel.": {
+    "Chinese": "特殊的工作流步骤类型，指定 step-group 类型表示使用工作流子步骤，指定 'subSteps'字段执行子步骤，子步骤并行执行"
+  },
+  "Suspend the current workflow, it can be resumed by 'vela workflow resume' command": {
+    "Chinese": "暂停当前工作流，可以通过 'vela workflow resume' 继续已暂停的工作流"
+  },
+  "Specify the wait duration time to resume workflow such as \"30s\", \"1min\" or \"2m15s\"": {
+    "Chinese": "指定工作流暂停的时长，超过该时间后工作流将自动继续，如：\"30s\"， \"1min\"， \"2m15s\""
+  },
+  "Send a request to the specified Webhook URL. If no request body is specified, the current Application body will be sent by default": {
+    "Chinese": "向指定 Webhook URL 发送请求，若不指定请求体，则默认发送当前 Application"
+  },
+  "Specify the webhook url": {
+    "Chinese": "需要发送的 Webhook URL，可以选择直接在 value 填写或从 secretRef 中获取"
+  },
+  "Specify the data you want to send": {
+    "Chinese": "需要发送的内容"
+  },
+  "name is the name of the secret": {
+    "Chinese": "Kubernetes Secret 名称"
+  },
+  "key is the key in the secret": {
+    "Chinese": "Kubernetes Secret 中的 key"
+  },
+  "Specify the privileges of the ServiceAccount, if not empty, RoleBindings(ClusterRoleBindings) will be created": {
+    "Chinese": "指定 ServiceAccount 的权限，若不为空，则会创建 RoleBinding 及 ClusterRoleBindings"
+  },
+  "Specify the verbs to be allowed for the resource": {
+    "Chinese": "指定资源允许的动作"
+  },
+  "Specify the apiGroups of the resource": {
+    "Chinese": "指定资源的 apiGroups"
+  },
+  "Specify the resources to be allowed": {
+    "Chinese": "指定允许的资源"
+  },
+  "Specify the resourceNames to be allowed": {
+    "Chinese": "指定允许的资源名称"
+  },
+  "Specify the resource url to be allowed": {
+    "Chinese": "指定允许的资源 URL"
+  },
+  "Specify the scope of the privileges, default to be namespace scope": {
+    "Chinese": "指定权限的范围，默认为 namespace 范围"
+  },
+  "Binding secrets of cloud resources to component env. This definition is DEPRECATED, please use 'storage' instead": {
+    "Chinese": "绑定云资源的密钥到组件环境变量中，该定义已废弃，请使用 'storage' 定义"
+  },
+  "The mapping of environment variables to secret": {
+    "Chinese": "环境变量到密钥的映射"
+  },
+  "Inject a sidecar container to K8s pod for your workload which follows the pod spec in path 'spec.template'": {
+    "Chinese": "为 pod 添加 sidecar 容器，它遵循路径“spec.template”中的 pod 规范"
+  },
+  "Affinity specifies affinity and toleration K8s pod for your workload which follows the pod spec in path 'spec.template'": {
+    "Chinese": "为 pod 添加 affinity 和 toleration，它遵循路径“spec.template”中的 pod 规范"
+  },
+  "Specify the pod affinity scheduling rules": {
+    "Chinese": "指定 pod 的亲和性调度规则"
+  },
+  "Specify the pod anti-affinity scheduling rules": {
+    "Chinese": "指定 pod 的反亲和性调度规则"
+  },
+  "Specify the node affinity scheduling rules for the pod": {
+    "Chinese": "指定 pod 的节点亲和性调度规则"
+  },
+  "Specify the required during scheduling ignored during execution": {
+    "Chinese": "指定 `requiredDuringSchedulingIgnoredDuringExecution` 字段，只有规则被满足时才执行调度"
+  },
+  "Specify the preferred during scheduling ignored during execution": {
+    "Chinese": "指定 `preferredDuringSchedulingIgnoredDuringExecution` 字段，调度器会尝试寻找满足对应规则的节点。如果找不到匹配的节点，调度器仍然会调度该 Pod"
+  },
+  "Specify weight associated with matching the corresponding podAffinityTerm": {
+    "Chinese": "指定对应 podAffinityTerm 的权重"
+  },
+  "Specify a set of pods": {
+    "Chinese": "指定一组 pod"
+  },
+  "Specify a list of node selector": {
+    "Chinese": "指定一组节点选择器"
+  },
+  "Specify the period of time the toleration": {
+    "Chinese": "指定 toleration 的时间周期"
+  },
+  "Add command on K8s pod for your workload which follows the pod spec in path 'spec.template'": {
+    "Chinese": "为 pod 添加命令，它遵循路径“spec.template”中的 pod 规范"
+  },
+  "Expose port to enable web traffic for your component": {
+    "Chinese": "为组件暴露端口，以便能够通过 web 进行访问"
+  },
+  "Specify the exposion ports": {
+    "Chinese": "指定要暴露的端口"
+  },
+  "Specify the annotations of the exposed service": {
+    "Chinese": "指定暴露的服务的注解"
+  },
+  "Specify what kind of Service you want. options: \"ClusterIP\",\"NodePort\",\"LoadBalancer\",\"ExternalName\"": {
+    "Chinese": "指定要创建的服务类型，可选值：\"ClusterIP\",\"NodePort\",\"LoadBalancer\",\"ExternalName\""
+  },
+  "Enable public web traffic for the component, the ingress API matches K8s v1.20+": {
+    "Chinese": "为组件启用公网访问，使用 K8s v1.20+ 的 Ingress API "
+  },
+  "Specify the host of the ingress gateway, which is used to generate the endpoints when the host is empty": {
+    "Chinese": "指定 Ingress 网关的主机名，当为空时，会自动生成主机名"
+  },
+  "Specify the secret name you want to quote to use tls.": {
+    "Chinese": "指定要引用的密钥名，用于 TLS 证书"
+  },
+  "Add host aliases on K8s pod for your workload which follows the pod spec in path 'spec.template": {
+    "Chinese": "为 pod 添加主机别名，它遵循路径“spec.template”中的 pod 规范"
+  },
+  "Import dashboards to Grafana": {
+    "Chinese": "导入 Grafana 仪表盘"
+  },
+  "add an init container and use shared volume with pod": {
+    "Chinese": "为 pod 添加初始化容器，并使用共享卷"
+  },
+  "Specify the name of init container": {
+    "Chinese": "指定初始化容器的名称"
+  },
+  "Specify the commands run in the init container": {
+    "Chinese": "指定初始化容器的命令"
+  },
+  "Specify the env run in the init container": {
+    "Chinese": "指定初始化容器的环境变量"
+  },
+  "Specify the mount name of shared volume": {
+    "Chinese": "指定共享卷的挂载名"
+  },
+  "Specify the mount path of app container": {
+    "Chinese": "指定共享卷在应用容器的挂载路径"
+  },
+  "Specify the mount path of init container": {
+    "Chinese": "指定共享卷初始化容器的挂载路径"
+  },
+  "Specify the image of init container": {
+    "Chinese": "指定初始化容器的镜像"
+  },
+  "Specify the args run in the init container": {
+    "Chinese": "指定初始化容器的参数"
+  },
+  "Specify the extra volume mounts for the init container": {
+    "Chinese": "指定初始化容器的额外挂载卷"
+  },
+  "The name of the volume to be mounted": {
+    "Chinese": "挂载的卷名"
+  },
+  "The mountPath for mount in the init container": {
+    "Chinese": "初始化容器中的挂载路径"
+  },
+  "Patch the output following Json Merge Patch strategy, following RFC 7396": {
+    "Chinese": "使用 JSON Merge Patch 策略，遵循 RFC 7396"
+  },
+  "Patch the output following Json Patch strategy, following RFC 6902": {
+    "Chinese": "使用 JSON Patch 策略，遵循 RFC 6902"
+  },
+  "Add labels on your workload. if it generates pod, add same label for generated pods.": {
+    "Chinese": "为工作负载添加标签，如果工作负载生成 pod，则为生成的 pod 添加相同的标签"
+  },
+  "Add annotations on your workload. if it generates pod, add same annotations for generated pods.": {
+    "Chinese": "为工作负载添加注解，如果工作负载生成 pod，则为生成的 pod 添加相同的注解"
+  },
+  "Add lifecycle hooks for every container of K8s pod for your workload which follows the pod spec in path 'spec.template'": {
+    "Chinese": "为 pod 添加生命周期钩子，它遵循路径“spec.template”中的 pod 规范"
+  },
+  "nocalhost develop configuration": {
+    "Chinese": "使用 nocalhost 作为开发环境的配置"
+  },
+  "Add resource requests and limits on K8s pod for your workload which follows the pod spec in path 'spec.template.'": {
+    "Chinese": "为 pod 添加资源请求和限制，它遵循路径“spec.template”中的 pod 规范"
+  },
+  "Specify the amount of cpu for requests and limits": {
+    "Chinese": "指定 cpu 请求和限制的大小"
+  },
+  "Specify the amount of memory for requests and limits": {
+    "Chinese": "指定内存请求和限制的大小"
+  },
+  "Specify the resources in requests": {
+    "Chinese": "指定请求的资源"
+  },
+  "Specify the resources in limits": {
+    "Chinese": "指定限制的资源"
+  },
+  "Specify the amount of cpu for requests": {
+    "Chinese": "指定 cpu 请求的大小"
+  },
+  "Specify the amount of memory for requests": {
+    "Chinese": "指定内存请求的大小"
+  },
+  "Specify the amount of cpu for limits": {
+    "Chinese": "指定 cpu 限制的大小"
+  },
+  "Specify the amount of memory for limits": {
+    "Chinese": "指定内存限制的大小"
+  },
+  "Manually scale K8s pod for your workload which follows the pod spec in path 'spec.template'": {
+    "Chinese": "调整 pod 的副本数，它遵循路径“spec.template”中的 pod 规范"
+  },
+  "Specify serviceAccount for your workload which follows the pod spec in path 'spec.template'": {
+    "Chinese": "为 pod 指定 serviceAccount，它遵循路径“spec.template”中的 pod 规范"
+  },
+  "Specify the name of ServiceAccount": {
+    "Chinese": "指定 ServiceAccount 名称"
+  },
+  "Specify whether to create new ServiceAccount or not": {
+    "Chinese": "指定是否创建新的 ServiceAccount"
+  },
+  "Specify the args in the sidecar": {
+    "Chinese": "指定 sidecar 中的参数"
+  },
+  "Specify the env in the sidecar": {
+    "Chinese": "指定 sidecar 中的环境变量"
+  },
+  "Specify the field reference for env": {
+    "Chinese": "指定要用于环境变量的字段"
+  },
+  "Specify the field path for env": {
+    "Chinese": "指定要用于环境变量的字段路径"
+  },
+  "Add storages on K8s pod for your workload which follows the pod spec in path 'spec.template": {
+    "Chinese": "为 pod 添加存储，它遵循路径“spec.template”中的 pod 规范"
+  },
+  "Declare pvc type storage": {
+    "Chinese": "声明 pvc 类型存储"
+  },
+  "Declare config map type storage": {
+    "Chinese": "声明 ConfigMap 类型存储"
+  },
+  "Declare secret type storage": {
+    "Chinese": "声明 Secret 类型存储"
+  },
+  "Declare empty dir type storage": {
+    "Chinese": "声明 EmptyDir 类型存储"
+  },
+  "All Component Types":
+  {
+    "Chinese": "所有组件类型"
+  },
+  "Component based on the following kinds of resources:": {
+    "Chinese": "基于以下资源的组件："
+  }
 }
