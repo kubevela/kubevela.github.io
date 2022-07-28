@@ -4,7 +4,7 @@ title: Built-in Trait Type
 
 This documentation will walk through all the built-in trait types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-28T17:22:20+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-28T17:57:01+08:00.
 
 ## Affinity
 
