@@ -4,7 +4,7 @@ title: 内置运维特征列表
 
 本文档将**按字典序**展示所有内置运维特征的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-28T16:25:31+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-28T16:41:27+08:00。
 
 ## Affinity
 
@@ -366,7 +366,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- \- |  | map[string]:(null\|string) | true |  
+ \- |  | map[string]:(null&#124;string) | true |  
 
 
 ## Command
@@ -871,7 +871,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- \- |  | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | true |  
+ \- |  | map[string]:(null&#124;bool&#124;string&#124;bytes&#124;{...}&#124;[...]&#124;number) | true |  
 
 
 ## Json-Patch
@@ -897,7 +897,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- \- |  | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | true |  
+ \- |  | map[string]:(null&#124;bool&#124;string&#124;bytes&#124;{...}&#124;[...]&#124;number) | true |  
 
 
 ## Labels
@@ -939,7 +939,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- \- |  | map[string]:(null\|string) | true |  
+ \- |  | map[string]:(null&#124;string) | true |  
 
 
 ## Lifecycle

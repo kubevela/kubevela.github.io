@@ -4,7 +4,7 @@ title: Built-in Trait Type
 
 This documentation will walk through all the built-in trait types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-28T16:25:31+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-28T16:41:27+08:00.
 
 ## Affinity
 
@@ -366,7 +366,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- \- |  | map[string]:(null\|string) | true |  
+ \- |  | map[string]:(null&#124;string) | true |  
 
 
 ## Command
@@ -871,7 +871,7 @@ All Component Types
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- \- |  | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | true |  
+ \- |  | map[string]:(null&#124;bool&#124;string&#124;bytes&#124;{...}&#124;[...]&#124;number) | true |  
 
 
 ## Json-Patch
@@ -897,7 +897,7 @@ All Component Types
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- \- |  | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | true |  
+ \- |  | map[string]:(null&#124;bool&#124;string&#124;bytes&#124;{...}&#124;[...]&#124;number) | true |  
 
 
 ## Labels
@@ -939,7 +939,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- \- |  | map[string]:(null\|string) | true |  
+ \- |  | map[string]:(null&#124;string) | true |  
 
 
 ## Lifecycle
