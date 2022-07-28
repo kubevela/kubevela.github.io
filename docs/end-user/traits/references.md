@@ -4,7 +4,7 @@ title: Built-in Trait Type
 
 This documentation will walk through all the built-in trait types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-27T17:18:25+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-28T11:51:03+08:00.
 
 ## Affinity
 
@@ -14,7 +14,11 @@ Affinity specifies affinity and toleration K8s pod for your workload which follo
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### Specification (affinity)
@@ -330,7 +334,8 @@ Add annotations on K8s pod for your workload which follows the pod spec in path 
 
 ### Apply To Component Types
 
-- All/*
+- *
+
 
 
 ### Examples (annotations)
@@ -372,7 +377,11 @@ Add command on K8s pod for your workload which follows the pod spec in path 'spe
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### Examples (command)
@@ -421,7 +430,11 @@ Set the image of the container.
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### Examples (container-image)
@@ -471,7 +484,9 @@ Automatically scale the component based on CPU usage.
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+
 
 
 ### Examples (cpuscaler)
@@ -515,7 +530,11 @@ Add env on K8s pod for your workload which follows the pod spec in path 'spec.te
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### Examples (env)
@@ -568,7 +587,9 @@ Expose port to enable web traffic for your component.
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+
 
 
 ### Examples (expose)
@@ -608,7 +629,9 @@ Enable public web traffic for the component, the ingress API matches K8s v1.20+.
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+
 
 
 ### Examples (gateway)
@@ -655,7 +678,11 @@ Add host aliases on K8s pod for your workload which follows the pod spec in path
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### Examples (hostalias)
@@ -731,7 +758,11 @@ add an init container and use shared volume with pod.
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### Examples (init-container)
@@ -823,7 +854,8 @@ Patch the output following Json Merge Patch strategy, following RFC 7396.
 
 ### Apply To Component Types
 
-- All/*
+- *
+
 
 
 ### Specification (json-merge-patch)
@@ -842,7 +874,8 @@ Patch the output following Json Patch strategy, following RFC 6902.
 
 ### Apply To Component Types
 
-- All/*
+- *
+
 
 
 ### Specification (json-patch)
@@ -868,7 +901,8 @@ Add labels on K8s pod for your workload which follows the pod spec in path 'spec
 
 ### Apply To Component Types
 
-- All/*
+- *
+
 
 
 ### Examples (labels)
@@ -910,7 +944,11 @@ Add lifecycle hooks for every container of K8s pod for your workload which follo
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### Examples (lifecycle)
@@ -1047,7 +1085,11 @@ nocalhost develop configuration.
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### Examples (nocalhost)
@@ -1189,53 +1231,6 @@ spec:
  ignoreFilePattern |  | [...] | true |  
 
 
-## Pure-Ingress
-
-### Description
-
-Enable public web traffic for the component without creating a Service.
-
-### Apply To Component Types
-
-- All/*
-
-
-### Specification (pure-ingress)
-
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- domain | Specify the domain you want to expose. | string | true |  
- http | Specify the mapping relationship between the http path and the workload port. | map[string]:int | true |  
-
-
-## Register-Grafana-Datasource
-
-### Description
-
-Add a datasource to Grafana.
-
-### Apply To Component Types
-
-- All/*
-
-
-### Specification (register-grafana-datasource)
-
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- name |  | string | true |  
- service |  | string | true |  
- grafanaServiceName |  | string | true |  
- namespace |  | string | false | default 
- grafanaServiceNamespace |  | string | false | default 
- credentialSecret |  | string | true |  
- credentialSecretNamespace |  | string | true |  
- type |  | string | true |  
- access |  | string | false | proxy 
-
-
 ## Resource
 
 ### Description
@@ -1244,7 +1239,11 @@ Add resource requests and limits on K8s pod for your workload which follows the 
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### Examples (resource)
@@ -1310,7 +1309,9 @@ Manually scale K8s pod for your workload which follows the pod spec in path 'spe
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+
 
 
 ### Examples (scaler)
@@ -1359,7 +1360,11 @@ Specify serviceAccount for your workload which follows the pod spec in path 'spe
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### Examples (service-account)
@@ -1416,7 +1421,11 @@ Binding secrets of cloud resources to component env. This definition is DEPRECAT
 
 ### Apply To Component Types
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### Examples (service-binding)

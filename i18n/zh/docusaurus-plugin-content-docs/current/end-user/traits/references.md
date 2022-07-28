@@ -4,7 +4,7 @@ title: 内置运维特征列表
 
 本文档将**按字典序**展示所有内置运维特征的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-27T17:18:25+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-28T11:51:03+08:00。
 
 ## Affinity
 
@@ -14,7 +14,11 @@ Affinity specifies affinity and toleration K8s pod for your workload which follo
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### 参数说明 (affinity)
@@ -330,7 +334,8 @@ Add annotations on K8s pod for your workload which follows the pod spec in path 
 
 ### 适用于组件类型
 
-- All/*
+- *
+
 
 
 ### 示例 (annotations)
@@ -372,7 +377,11 @@ Add command on K8s pod for your workload which follows the pod spec in path 'spe
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### 示例 (command)
@@ -421,7 +430,11 @@ Set the image of the container。
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### 示例 (container-image)
@@ -471,7 +484,9 @@ Automatically scale the component based on CPU usage。
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+
 
 
 ### 示例 (cpuscaler)
@@ -515,7 +530,11 @@ Add env on K8s pod for your workload which follows the pod spec in path 'spec.te
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### 示例 (env)
@@ -568,7 +587,9 @@ Expose port to enable web traffic for your component。
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+
 
 
 ### 示例 (expose)
@@ -608,7 +629,9 @@ Enable public web traffic for the component, the ingress API matches K8s v1.20+�
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+
 
 
 ### 示例 (gateway)
@@ -655,7 +678,11 @@ Add host aliases on K8s pod for your workload which follows the pod spec in path
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### 示例 (hostalias)
@@ -731,7 +758,11 @@ add an init container and use shared volume with pod。
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### 示例 (init-container)
@@ -823,7 +854,8 @@ Patch the output following Json Merge Patch strategy, following RFC 7396。
 
 ### 适用于组件类型
 
-- All/*
+- *
+
 
 
 ### 参数说明 (json-merge-patch)
@@ -842,7 +874,8 @@ Patch the output following Json Patch strategy, following RFC 6902。
 
 ### 适用于组件类型
 
-- All/*
+- *
+
 
 
 ### 参数说明 (json-patch)
@@ -868,7 +901,8 @@ Add labels on K8s pod for your workload which follows the pod spec in path 'spec
 
 ### 适用于组件类型
 
-- All/*
+- *
+
 
 
 ### 示例 (labels)
@@ -910,7 +944,11 @@ Add lifecycle hooks for every container of K8s pod for your workload which follo
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### 示例 (lifecycle)
@@ -1047,7 +1085,11 @@ nocalhost develop configuration。
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### 示例 (nocalhost)
@@ -1189,53 +1231,6 @@ spec:
  ignoreFilePattern |  | [...] | true |  
 
 
-## Pure-Ingress
-
-### 描述
-
-Enable public web traffic for the component without creating a Service。
-
-### 适用于组件类型
-
-- All/*
-
-
-### 参数说明 (pure-ingress)
-
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- domain | 暴露服务所绑定的域名。 | string | true |  
- http | 定义一组网关路径到 Pod 服务端口的映射关系。 | map[string]:int | true |  
-
-
-## Register-Grafana-Datasource
-
-### 描述
-
-Add a datasource to Grafana。
-
-### 适用于组件类型
-
-- All/*
-
-
-### 参数说明 (register-grafana-datasource)
-
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- service |  | string | true |  
- grafanaServiceName |  | string | true |  
- namespace |  | string | false | default 
- grafanaServiceNamespace |  | string | false | default 
- credentialSecret |  | string | true |  
- credentialSecretNamespace |  | string | true |  
- type |  | string | true |  
- access |  | string | false | proxy 
-
-
 ## Resource
 
 ### 描述
@@ -1244,7 +1239,11 @@ Add resource requests and limits on K8s pod for your workload which follows the 
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### 示例 (resource)
@@ -1310,7 +1309,9 @@ Manually scale K8s pod for your workload which follows the pod spec in path 'spe
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+
 
 
 ### 示例 (scaler)
@@ -1359,7 +1360,11 @@ Specify serviceAccount for your workload which follows the pod spec in path 'spe
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### 示例 (service-account)
@@ -1416,7 +1421,11 @@ Binding secrets of cloud resources to component env. This definition is DEPRECAT
 
 ### 适用于组件类型
 
-- All/*
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
 
 
 ### 示例 (service-binding)
