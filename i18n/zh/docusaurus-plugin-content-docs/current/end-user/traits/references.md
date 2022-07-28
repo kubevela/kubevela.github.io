@@ -4,13 +4,15 @@ title: 内置运维特征列表
 
 本文档将**按字典序**展示所有内置运维特征的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-28T16:41:27+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-28T17:22:20+08:00。
 
 ## Affinity
 
 ### 描述
 
 为 pod 添加 affinity 和 toleration，它遵循路径“spec.template”中的 pod 规范。
+
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
 
 ### 适用于组件类型
 
@@ -333,6 +335,8 @@ title: 内置运维特征列表
 
 Add annotations on your workload. if it generates pod, add same annotations for generated pods。
 
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
+
 ### 适用于组件类型
 
 所有组件类型
@@ -374,6 +378,8 @@ spec:
 ### 描述
 
 为 pod 添加命令，它遵循路径“spec.template”中的 pod 规范。
+
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
 
 ### 适用于组件类型
 
@@ -428,6 +434,8 @@ spec:
 ### 描述
 
 Set the image of the container。
+
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
 
 ### 适用于组件类型
 
@@ -484,6 +492,8 @@ spec:
 
 Automatically scale the component based on CPU usage。
 
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
+
 ### 适用于组件类型
 
 基于以下资源的组件：
@@ -530,6 +540,8 @@ spec:
 ### 描述
 
 Add env on K8s pod for your workload which follows the pod spec in path 'spec.template'。
+
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
 
 ### 适用于组件类型
 
@@ -588,6 +600,8 @@ spec:
 ### 描述
 
 为组件暴露端口，以便能够通过 web 进行访问。
+
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
 
 ### 适用于组件类型
 
@@ -682,6 +696,8 @@ spec:
 
 Add host aliases on K8s pod for your workload which follows the pod spec in path 'spec.template'。
 
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
+
 ### 适用于组件类型
 
 基于以下资源的组件：
@@ -740,6 +756,8 @@ spec:
 
 导入 Grafana 仪表盘。
 
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
+
 ### 适用于组件类型
 
 基于以下资源的组件：
@@ -763,6 +781,8 @@ spec:
 ### 描述
 
 为 pod 添加初始化容器，并使用共享卷。
+
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
 
 ### 适用于组件类型
 
@@ -861,6 +881,8 @@ spec:
 
 使用 JSON Merge Patch 策略，遵循 RFC 7396。
 
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
+
 ### 适用于组件类型
 
 所有组件类型
@@ -879,6 +901,8 @@ spec:
 ### 描述
 
 使用 JSON Patch 策略，遵循 RFC 6902。
+
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
 
 ### 适用于组件类型
 
@@ -905,6 +929,8 @@ spec:
 ### 描述
 
 Add labels on your workload. if it generates pod, add same label for generated pods。
+
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
 
 ### 适用于组件类型
 
@@ -947,6 +973,8 @@ spec:
 ### 描述
 
 为 pod 添加生命周期钩子，它遵循路径“spec.template”中的 pod 规范。
+
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
 
 ### 适用于组件类型
 
@@ -1089,6 +1117,8 @@ spec:
 ### 描述
 
 使用 nocalhost 作为开发环境的配置。
+
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
 
 ### 适用于组件类型
 
@@ -1244,6 +1274,8 @@ spec:
 ### 描述
 
 为 pod 添加资源请求和限制，它遵循路径“spec.template”中的 pod 规范。
+
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
 
 ### 适用于组件类型
 
@@ -1430,6 +1462,8 @@ spec:
 
 绑定云资源的密钥到组件环境变量中，该定义已废弃，请使用 'storage' 定义。
 
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
+
 ### 适用于组件类型
 
 基于以下资源的组件：
@@ -1541,6 +1575,8 @@ Deploy this YAML and the Secret `db-conn-example` will be binding into environme
 ### 描述
 
 为 pod 添加 sidecar 容器，它遵循路径“spec.template”中的 pod 规范。
+
+> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用
 
 ### 适用于组件类型
 
@@ -1750,6 +1786,10 @@ Add storages on K8s pod for your workload which follows the pod spec in path 'sp
 ### 适用于组件类型
 
 基于以下资源的组件：
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
 
 
 

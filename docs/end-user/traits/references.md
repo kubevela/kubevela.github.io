@@ -4,13 +4,15 @@ title: Built-in Trait Type
 
 This documentation will walk through all the built-in trait types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-28T16:41:27+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-28T17:22:20+08:00.
 
 ## Affinity
 
 ### Description
 
 Affinity specifies affinity and toleration K8s pod for your workload which follows the pod spec in path 'spec.template'.
+
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -333,6 +335,8 @@ Component based on the following kinds of resources:
 
 Add annotations on your workload. if it generates pod, add same annotations for generated pods.
 
+> For now this trait is hidden from the VelaUX. Available when using CLI
+
 ### Apply To Component Types
 
 All Component Types
@@ -374,6 +378,8 @@ spec:
 ### Description
 
 Add command on K8s pod for your workload which follows the pod spec in path 'spec.template'.
+
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -428,6 +434,8 @@ spec:
 ### Description
 
 Set the image of the container.
+
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -484,6 +492,8 @@ spec:
 
 Automatically scale the component based on CPU usage.
 
+> For now this trait is hidden from the VelaUX. Available when using CLI
+
 ### Apply To Component Types
 
 Component based on the following kinds of resources:
@@ -530,6 +540,8 @@ spec:
 ### Description
 
 Add env on K8s pod for your workload which follows the pod spec in path 'spec.template'.
+
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -588,6 +600,8 @@ spec:
 ### Description
 
 Expose port to enable web traffic for your component.
+
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -682,6 +696,8 @@ spec:
 
 Add host aliases on K8s pod for your workload which follows the pod spec in path 'spec.template'.
 
+> For now this trait is hidden from the VelaUX. Available when using CLI
+
 ### Apply To Component Types
 
 Component based on the following kinds of resources:
@@ -740,6 +756,8 @@ spec:
 
 Import dashboards to Grafana.
 
+> For now this trait is hidden from the VelaUX. Available when using CLI
+
 ### Apply To Component Types
 
 Component based on the following kinds of resources:
@@ -763,6 +781,8 @@ Component based on the following kinds of resources:
 ### Description
 
 add an init container and use shared volume with pod.
+
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -861,6 +881,8 @@ spec:
 
 Patch the output following Json Merge Patch strategy, following RFC 7396.
 
+> For now this trait is hidden from the VelaUX. Available when using CLI
+
 ### Apply To Component Types
 
 All Component Types
@@ -879,6 +901,8 @@ All Component Types
 ### Description
 
 Patch the output following Json Patch strategy, following RFC 6902.
+
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -905,6 +929,8 @@ All Component Types
 ### Description
 
 Add labels on your workload. if it generates pod, add same label for generated pods.
+
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -947,6 +973,8 @@ spec:
 ### Description
 
 Add lifecycle hooks for every container of K8s pod for your workload which follows the pod spec in path 'spec.template'.
+
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -1089,6 +1117,8 @@ spec:
 ### Description
 
 nocalhost develop configuration.
+
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -1244,6 +1274,8 @@ spec:
 ### Description
 
 Add resource requests and limits on K8s pod for your workload which follows the pod spec in path 'spec.template.'.
+
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -1430,6 +1462,8 @@ spec:
 
 Binding secrets of cloud resources to component env. This definition is DEPRECATED, please use 'storage' instead.
 
+> For now this trait is hidden from the VelaUX. Available when using CLI
+
 ### Apply To Component Types
 
 Component based on the following kinds of resources:
@@ -1541,6 +1575,8 @@ Deploy this YAML and the Secret `db-conn-example` will be binding into environme
 ### Description
 
 Inject a sidecar container to K8s pod for your workload which follows the pod spec in path 'spec.template'.
+
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -1750,6 +1786,10 @@ Add storages on K8s pod for your workload which follows the pod spec in path 'sp
 ### Apply To Component Types
 
 Component based on the following kinds of resources:
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
 
 
 

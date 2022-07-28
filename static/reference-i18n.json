@@ -947,5 +947,8 @@
   },
   "Component based on the following kinds of resources:": {
     "Chinese": "基于以下资源的组件："
+  },
+  "For now this trait is hidden from the VelaUX. Available when using CLI": {
+    "Chinese": "目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用"
   }
 }
