@@ -41,6 +41,10 @@ c3              X509Certificate   <c3 apiserver url>            true
 c2              X509Certificate   <c2 apiserver url>            true       
 ```
 
+下图概括了下述的流程。在下文的介绍中，相关命令将会通过使用 `KUBECONFIG` 环境变量来切换身份，代表不同身份（用户）的操作。（不同的 `KUBECONFIG` 代表不同的用户身份。）
+
+![auth-procedure](../../resources/auth-procedure.jpg)
+
 ### 创建用户组（用户）
 
 ```
@@ -58,13 +62,15 @@ Signed certificate retrieved.
 ### 对用户组授权
 
 ```
-$ vela auth grant-privileges --user alice --for-namespace dev --for-cluster=c2 --create-namespace
+$ vela auth grant-privileges --user alice --for-namespace dev --for-cluster=local,c2 --create-namespace
+ClusterRole kubevela:writer created in local.
+RoleBinding dev/kubevela:writer:binding created in local.
 ClusterRole kubevela:writer created in c2.
 RoleBinding dev/kubevela:writer:binding created in c2.
 Privileges granted.
 ```
 
-这里采用了 KubeVela 简化的权限能力，对 c2 集群授权了 `dev` 命名空间的“读/写”权限，同时还可以方便的创建命名空间。授权命令可以多次执行，用于增加权限。
+这里采用了 KubeVela 简化的权限能力，对 local 和 c2 集群授权了 `dev` 命名空间的“读/写”权限，同时还可以方便的创建命名空间。授权命令可以多次执行，用于增加权限。
 
 
 ### 查看用户组权限
@@ -73,7 +79,15 @@ Privileges granted.
 $ vela auth list-privileges --user alice --cluster local,c2
 User=alice
 ├── [Cluster]  local
-│   └── no privilege found
+│   └── [ClusterRole]  kubevela:writer
+│       ├── [Scope]  
+│       │   └── [Namespaced]  dev (RoleBinding kubevela:writer:binding)
+│       └── [PolicyRules]  
+│           ├── APIGroups:       *
+│           │   Resources:       *
+│           │   Verb:            get, list, watch, create, update, patch, delete
+│           └── NonResourceURLs: *
+│               Verb:            get, list, watch, create, update, patch, delete
 └── [Cluster]  c2
     └── [ClusterRole]  kubevela:writer
         ├── [Scope]  
@@ -86,7 +100,7 @@ User=alice
                 Verb:            get, list, watch, create, update, patch, delete
 ```
 
-你可以一目了然的看到这个用户组在不同集群中的权限，在 local 集群中无权限。
+你可以一目了然的看到这个用户组在不同集群中的权限。
 
 
 ### 使用权限
