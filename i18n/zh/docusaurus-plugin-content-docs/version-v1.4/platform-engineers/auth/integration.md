@@ -1,20 +1,21 @@
 ---
-title: 系统集成 
+title: Systems Integration 
 ---
 
-即使没有启用[权限验证](./basic)功能，KubeVela 应用程序本身也支持 Kubernetes 角色扮演。这意味着当权限验证功能被禁用时，你可以在应用程序的注释字段中手动设置要扮演的身份。例如，以下指南将举例说明如何手动将应用程序角色扮演为指定账号 ServiceAccount。
-## 例子
+KubeVela application natively supports impersonation even without the Authentication flag enabled. That means when the Authentication flag is disabled, you can manually set the identity to impersonate in the application's annotation fields. For example, the following guide will give an example on how to manually set the application to impersonate as a ServiceAccount.
 
-假设我们有两个命名空间:
+## Example
 
-- `demo-service`: 用于管理应用程序
-- `demo-service-prod`: 为生产环境部署组件
+Let's assume that we have two namespaces:
 
-在这个例子, 我们将使应用程序使用特定的 ServiceAccount，而不是控制器 ServiceAccount。
+- `demo-service`: for managing application
+- `demo-service-prod`: to deploy components for the production environment
 
-### 创建 ServiceAccount
+In this example, we will make the Application use a specific ServiceAccount instead of the controller ServiceAccount.
 
-在 `demo-service` 命名空间里，创建 `deployer` ServiceAccount .
+### Creating ServiceAccount
+
+Create `deployer` ServiceAccount in `demo-service` namespace.
 
 ```yaml
 apiVersion: v1
@@ -24,11 +25,11 @@ metadata:
   namespace: demo-service
 ```
 
-### 创建 Role/RoleBinding
+### Creating Role/RoleBinding
 
-允许在 `demo-service` 里的类型为ServiceAccount的`deployer`  通过创建 Role/RoleBinding 管理在 `demo-service-prod` 里的部署
+Allow `deployer` ServiceAccount in `demo-service` to manage Deployments in `demo-service-prod` by creating Role/RoleBinding.
 
-> 注意 KubeVela 应用程序需要模拟身份才能具有写入ControllerRevision的权限。如果在KubeVela控制器中使用`--optimize-disable-component-revision` ，则可以忽略此要求。
+> Notice that KubeVela application requires the identity to impersonate to have the privileges for writing ControllerRevision. If you use `--optimize-disable-component-revision` in the KubeVela controller, you can ignore this requirement.
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -56,7 +57,7 @@ subjects:
     namespace: demo-service
 ```
 
-### 使用ServiceAccount部署应用程序
+### Deploying an Application with ServiceAccount
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -99,7 +100,7 @@ spec:
           env: prod
 ```
 
-部署应用程序后，您可以检查应用程序是否已成功部署。
+After deploying the Application, you can check the Application is deployed successfully.
 
 ```bash
 $ vela status multi-env-demo-with-service-account -n demo-service     
@@ -132,12 +133,12 @@ Services:
     No trait applied
 ```
 
-如果你将非授权的ServiceAccount设置为标注 , 则可以在应用程序状态中找到如下错误消息。
+If you set non-authorized ServiceAccount to the annotation, you can find an error message like below in the Application status.
 
 ```
 Dispatch: Found 1 errors. [(cannot get object: deployments.apps "nginx-server" is forbidden: User "system:serviceaccount:demo-service:non-authorized-account" cannot get resource "deployments" in API group "apps" in the namespace "demo-service-prod")]
 ```
 
-## 模拟为 User/Groups
+## Impersonate as User/Groups
 
-如果您想让应用程序模拟为特定的用户和组，您可以分别在应用程序中设置注释为`app.oam.dev/username` and `app.oam.dev/group`。
+If you would like to let the application to impersonate as specific user and group, you can set the annotation `app.oam.dev/username` and `app.oam.dev/group` in the application respectively. 
