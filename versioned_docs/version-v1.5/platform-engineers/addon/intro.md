@@ -2,6 +2,8 @@
 title: Build Your Own Addon
 ---
 
+An KubeVela addon is actually a series of files. After the addon enabled, some of them will be rendered out as a KubeVela application and be applied to control-plane. Others such as X-definitions and UI-schemas those are enhancement for KubeVela will be applied to contol-plane too.
+
 The picture below shows what KubeVela does when an addon is enabled. There are mainly three process:
 * [Addon Registry](./addon-registry) store addons which can be used to share and distribute addons anywhere, it can be any git repo, OSS bucket or OCI registry.
 * When an addon is enabled through UX/CLI, it will pull these resource files from the Addon Registry, render them and create a KubeVela application.
@@ -20,13 +22,13 @@ Typically, the directory hierarchy looks like below:
 ```shell
 ├── resources/
 │   ├── xxx.cue
-│   ├── xxx.yaml
-│   └── parameter.cue
+│   └── xxx.yaml
 ├── definitions/
 ├── schemas/
 ├── README.md
 ├── metadata.yaml
-└── template.yaml
+├── parameter.cue
+└── template.yaml(or template.cue)
 ```
 
 Not all of these directories or files are necessary, let's explain them one by one.
@@ -71,14 +73,14 @@ Here's the usage of every field:
 | icon     | no  | string | Icon of the addon, will display in addon dashboard.  |
 | url     | no  | string | The official website of the project behind the addon.  |
 | tags     | no  | []string | The tags to display and organize the addon.  |
-| deployTo.runtimeCluster     | no  | bool | By default, the addon will not be installed in the managed clusters. If it's `true`, it will be delivered to all managed clusters automatically.  |
 | dependencies     | no  | []{ name: string } | Names of other addons it depends on. KubeVela will make sure these dependencies are enabled before installing this addon.  |
 | system.vela     | no  | string | Required version of vela controller, vela CLI will block the installation if vela controller can't match the requirements.  |
 | system.kubernetes     | no  | string | Required version of Kubernetes, vela CLI will block the installation if Kubernetes cluster can't match the requirements.  |
 | needNamespace     | no  | []string | Vela will create these namespaces needed for addon in every clusters before installation.  |
 | invisible     | no  | bool | If `true`, the addon won't be discovered by users. It's useful for tests when addon is in draft state. |
+| deployTo.runtimeCluster     | no  | bool | By default, the addon will not be installed in the managed clusters. If it's `true`, it will be delivered to all managed clusters automatically. (This filed will only take effect when template is CUE file) |
 
-### README.md(Required)
+### README.md (Required)
 
 The README of this addon, it will be displayed in the dashboard for end user who's going to install this addon. So you should let them understand the basic knowledge of the addon which contains:
 
@@ -89,9 +91,15 @@ The README of this addon, it will be displayed in the dashboard for end user who
 
 There're no restrict rules for an [experimental addon](https://github.com/kubevela/catalog/tree/master/experimental/addons), but if the addon want to be [verified](https://github.com/kubevela/catalog/tree/master/addons), the README is the most important thing.
 
-### template.yaml(Optional)
+### template file (Optional)
 
-An addon is actually a KubeVela Application in the system, so you can also define the application by using the `template.yaml`. 
+As mentioned above, the most import part of an addon is an application, it can help you to install any resources to multi clusters. You can choose to write a `template.yaml` or `template.cue` file to define the application base framework, that's determine if you want to change some contents when enable an addon by parameters.
+
+>Please notice: You can only choose one of `template.cue` or `template.yaml`, otherwise will report an error when enable the addon.
+
+#### template.yaml
+
+If you don't want change the application framework while enabling, a simple `template.yaml` is enough. For example:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -100,123 +108,334 @@ metadata:
   name: velaux
   namespace: vela-system
 spec:
-# component definition of resource dir .
+  components:
+    - name: namespace
+      type: k8s-objects
+      properties:
+        objects:
+        - apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: my-namespace
 ```
 
-You can describe anything in the application if you want, the rest resources defined in other folders will be automatically rendered and appended into this template as components.
+In this application, we declare a namespace resources in `k8s-objects` component, KubeVela application controller will help to dispatch it to any clusters as you want. Beside of this, you also can define workflows or policies in this file, but as the same they cannot be changed with parameters.
 
-The name of Application in template will be replaced by the addon name in `metadata.yaml`. The addon application will always have a unified name in the format of `addon-<addon_name>`.
+#### template.cue
 
-> If the addon will be installed in managed clusters, please don't define policies or workflow steps in the template, or it will break the automatic precess built internally for addon installation.
+If you want to change some fields by parameters you can choose to define the application framework by `template.cue` file. For example:
+
+```cue
+package main
+
+output: {
+	apiVersion: "core.oam.dev/v1beta1"
+	kind:       "Application"
+	metadata: {
+		name:      "example"
+		namespace: "vela-system"
+	}
+	spec: {
+		components: [
+			{
+				type: "k8s-objects"
+				name: parameter.name + "-ns"
+				properties: objects: [{
+					apiVersion: "v1"
+					kind:       "Namespace"
+					metadata: name: parameter.namespace
+				}]
+			},
+		]
+	}}
+```
+
+As we can see, this cue file mainly contain a `ouput` block. The `output` block must be a KubeVela application which can contain components, policies, or workflow. Meanwhile, this cue file must have a `package main` header.
+In this example, we also define a namespace in `k8s-objects` component, but unlike the example of `template.yaml`, we want to change the namespace name by input parameters while enabling. If you want the created namespace is `my-namespace` you can execute this command:
+
+```shell
+$ vela addon enable <addon-name> namespace=my-namespace
+```
+
+After rendered, the applied application is:
+
+```yaml
+kind: Application
+metadata:
+  name: example
+  namespace: vela-system
+spec:
+  components:
+    - name: namespace
+      type: k8s-objects
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: Namespace
+            metadata:
+              name: my-namespace
+```
+
+> Please notice: The name of Application in template file will be replaced by the addon name in `metadata.yaml`. The addon application will always have a unified name in the format of `addon-<addon_name>`.
+
+If you don't want to write all cue things in one `template.cue` (which will cause this file is very huge), you can choose to split some of them to several separated files under `/resources` dir, later section will tell you all the details.
+
+##### Auxiliary resources
+
+You also can define some auxiliary resources in `template.cue` in`outputs` CUE block. These resources will applied to control-plane directly. For example:
+
+```cue
+package main
+
+output: {
+	apiVersion: "core.oam.dev/v1beta1"
+	kind:       "Application"
+	metadata: {
+		name:      "example"
+		namespace: "vela-system"
+	}
+	spec: {
+		
+	}
+	... 
+}
+
+outputs: resourceTree: {
+	apiVersion: "v1"
+	kind:       "ConfigMap"
+	metadata: {
+		name:      "resource-tree"
+		namespace: "vela-system"
+		labels: {
+			"rules.oam.dev/resources":       "true"
+			"rules.oam.dev/resource-format": "json"
+		}
+	}
+	data: rules: json.Marshal(_rules)
+}
+
+_rules: {...}
+```
+
+In this example, we declare a configmap `resourceTree` as auxiliary resource, this configmap is a [resource topology rule](../../reference/topology-rule) which only need to be applied to control-plane for enhancing KubeVela.
+
+##### Install to which clusters according to parameters:
+
+In some case, you may want an addon not only installed in control plane cluster but also managed cluster, and want let end-user determine which clusters should be installed while enabling, you can write `template.cue` like this:
+
+```cue
+package main
+
+output: {
+	apiVersion: "core.oam.dev/v1beta1"
+	kind:       "Application"
+	metadata: {
+		name:      "example"
+		namespace: "vela-system"
+	}
+	spec: {
+		components:{...}
+		policies: [{
+			type: "topology"
+			name: "deploy-topology"
+			properties: {
+				if parameter.clusters != _|_ {
+					clusters: parameter.clusters
+				}
+				if parameter.clusters == _|_ {
+					clusterLabelSelector: {}
+				}
+			}
+		}]
+	}}
+```
+
+In this example, we leverage the capability of [topology policy](../../end-user/policies/references) to implement deploy resource to managed clusters. If you execute command like below, resources will only be deployed to `local` cluster and `cluster1` cluster.
+
+```shell
+$ vela addon enable <addon-name> clusters=local,cluser1
+```
+
+The render result will be:
+
+```yaml
+kind: Application
+metadata:
+  name: example
+  namespace: vela-system
+spec:
+  components: ...
+  policies:
+    - type: "topology"
+      name: "deploy-topology"
+      properties:
+        clusters:
+          - local
+          - cluster1
+```
+
+Since an empty `clusterLabelSelector` topology will choose all exist clusters as target clusters, you can just enable the addon without `clsuters` parameter:
+
+```shell
+$ vela addon enable <addon-name>
+```
+
+The render result is :
+
+```yaml
+kind: Application
+metadata:
+  name: example
+  namespace: vela-system
+spec:
+  components: ...
+  policies:
+    - type: "topology"
+      name: "deploy-topology"
+      properties:
+        clusterLabelSelector: {}
+```
 
 #### Examples
 
-* [velaux](https://github.com/kubevela/catalog/blob/master/addons/velaux/template.yaml), define only the header of application in the template.
-* [OCM control plane](https://github.com/kubevela/catalog/blob/master/addons/ocm-hub-control-plane/template.yaml), the addon only be installed in control plane, so it just defines everything in the application template.
+Here are some existing addons made by community.
 
-### `resources/` directory(Optional)
+* [OCM control plane](https://github.com/kubevela/catalog/blob/master/addons/ocm-hub-control-plane/template.yaml), this addon needn't change any fields while enabling and can only be installed control plane, so it just uses `template.yaml`.
+* [ingress-nginx](https://github.com/kubevela/catalog/tree/master/addons/ingress-nginx), is the example install managed clusters and can change some fields by parameters.
 
-Addon is actually an Application, but it provides more convenience for you to compose a complex application. You can use CUE or YAML to render resources into an application. This is what `resources` directory does for you.
+### parameter.cue (Optional)
 
-Files defined in `resources` folder eventually rendered as components in the application described in `template.yaml`.
-
-#### CUE format resource
-
-If you need to add a component to your application that needs to be rendered dynamically based on parameters when enabled, you can write a CUE format file as shown below:
+As last section said, `parameter` can help you to change some contents while enabling. File `parameter.cue` is used to declare those parameters. A `parameter.cue` for above example is:
 
 ```cue
-output: {
-	type: "webservice"
-	properties: {
-		image: "oamdev/vela-apiserver:v1.4.0"
-	}
-	traits:[{
-		type: "service-account"
-		properties: name: "serviceAccountName"
-	}]
+parameter: {		
+  //+usage=clsuters install to
+  clsuters: [...string]
+  //+usage=namespace to create
+  namespace: string
 }
 ```
+
+### `resources/` directory (Optional)
+
+As we can see, although you can write every thing about an application in  one `temaplte.cue` or `template.yaml` file, this will cause to a very huge file. So you can split them to `resources` directory. File type in this dir can be YAML or CUE.
+
+#### YAML resources
+
+The YAML format files must be Kubernetes YAML object, you can define any object one by one in a file. It will be directly added to the application as a `K8s-object` type component during rendering. For example:
+
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: my-service-account
+  namespace: default
+secrets:
+- name: my-secret
+```
+
+In this example, we define a service account resource. After rendered the addon application will be:
+
+```yaml
+kind: Application
+metadata:
+  name: example
+  namespace: vela-system
+spec:
+  components:
+    -
+    #   ...
+    #   other contents defined in template file
+    #   ...
+    - name: namespace
+      type: k8s-objects
+      components:
+        objects:
+        -  apiVersion: v1
+           kind: ServiceAccount
+           metadata:
+            name: my-service-account
+            namespace: default
+            secrets:
+            - name: my-secret
+```
+
+After enable the addon, the service account will be dispatched to any cluster by application.
+
+An actual example is the [OCM](https://github.com/kubevela/catalog/tree/master/addons/ocm-hub-control-plane) addon which defines all it's resources in the addon. All these YAML objects will be rendered as components in an Application.
+
+#### CUE resources
+
+As previous section said, you can split some CUE files to `resoures/` dir for rendering application to avoid template file become too large. All of them will be gathered  with `template.cue` in a same render context to generate the final application. 
+
+Continue using the example above, we can separate the topology policy CUE block to a single file and referenced by `template.cue`. File `policy.cue` in `resources/` dir is:
+
+```cue
+// resources/policy.cue
+package main
+
+topology: {
+	type: "topology"
+	name: "deploy-topology"
+	properties: {
+		if parameter.clusters != _|_ {
+			clusters: parameter.clusters
+		}
+		if parameter.clusters == _|_ {
+			clusterLabelSelector: {}
+		}
+	}
+}
+```
+
+This file defines a CUE block `topology` which represent a topology policy, then you can reference it in `template.cue` like this:
+
+```cue
+// template.cue
+package main
+
+output: {
+	apiVersion: "core.oam.dev/v1beta1"
+	kind:       "Application"
+	metadata: {
+		name:      "example"
+		namespace: "vela-system"
+	}
+	spec: {
+		policies: [topology]
+	}}
+```
+
+After enabled with command `$ vela addon enable <addon-name> clusters=local,cluser1`, the application is:
+
+```yaml
+kind: Application
+metadata:
+  name: example
+  namespace: vela-system
+spec:
+  components: ...
+  policies:
+    - type: "topology"
+      name: "deploy-topology"
+      properties:
+        clusters:
+          - local
+          - cluster1
+```
+
+> Please notice: Only those CUE files with header `package main` will gathered in one rendering context.
+
+So as we can see, compare with YAML resource file, CUE resources file also has a big advantage: changing some contents by parameters.
 
 You can refer to the [CUE basic](../cue/basic) to learn language details.
 
-The `output` is the keywords of addon, contents defined in output will be rendered as component of application.
+#### Use metadata of context 
 
-The result of the example will be as follows in YAML:
-
-```yaml
-kind: Application
-... 
-# application header in template
-spec:
-  components:
-  - type: webservice
-    properties:
-    	image: "oamdev/vela-apiserver:v1.4.0"
-    traits:
-    - type: service-account
-      properties:
-        name: serviceAccountName
-```
-
-The detail of the example is [velaux](https://github.com/kubevela/catalog/tree/master/addons/velaux).
-
-### Define parameter for addon
-
-When the resource is defined in CUE, you can also define parameters for addon by writing a `parameter.cue` file in the resources folder as shown below:
-
-```cue
-parameter: {
-  serviceAccountName: string
-}
-```
-
-It can cooperate with the resource file in CUE, here we have a CUE file `vela-apiserver.cue` :
-
-```cue
-output: {
-	type: "webservice"
-	properties: {
-		image: "oamdev/vela-apiserver:v1.4.0"
-	}
-	traits:[{
-		type: "service-account"
-		properties: name: parameter.serviceAccountName
-	}]
-}
-```
-
-When an end user enabling the addon, he will be able to specify parameters:
-
-```
-vela addon enable velaux serviceAccountName="my-account"
-```
-
-Then the render result will be:
-
-```yaml
-kind: Application
-... 
-# application header in template
-spec:
-  components:
-  - type: webservice
-    name: api-server
-    properties:
-    	image: "oamdev/vela-apiserver:v1.4.0"
-    traits:
-    - type: service-account
-      properties:
-        name: my-account
-```
-
-**Please notice** The **name** of component is the same with file name in the `resource/` folder with file type suffix trimmed.
-
-##### Use context render component
-
-Besides using `parameter` to generate component dynamically, you can also use `context` to  render runtime variable.
+Besides using `parameter` to generate content dynamically, you also can use `context` to  render runtime variable.
 For example, you can define the component with cue like this:
 ```cue
-output: {
+apiserver: {
 	type: "webservice"
 	properties: {
 		image: "oamdev/vela-apiserver:" + context.metadata.version
@@ -233,7 +452,25 @@ version: 1.2.4
 ...
 ```
 
-The render will be:
+Reference `apiserver` block in `template.cue`: 
+
+```cue
+// template.cue
+package main
+
+output: {
+	apiVersion: "core.oam.dev/v1beta1"
+	kind:       "Application"
+	metadata: {
+		name:      "example"
+		namespace: "vela-system"
+	}
+	spec: {
+		components: [apiserver]
+	}}
+```
+
+The render result will be:
 ```yaml
 kind: Application
 ... 
@@ -248,23 +485,19 @@ spec:
 The image tag becomes the addon's version due to the `context.metadata.version` points to. The real example is [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue).
 Other available fields please refer to [metadata](#metadata.yaml(Required)).
 
-UX/CLI renders all CUE files , `parameter.cue` and data defined in `metadata.yaml` in one context when the addon is enabled, resulting in a set of components that are appended to the application template.
-
-
-#### YAML format resource
-
-The YAML format resources is just a Kubernetes YAML object, you can define any object one by one in a file.
-
-It will be directly added to the application as a `K8s-object` type component during rendering.
-
-For example, the [OCM](https://github.com/kubevela/catalog/tree/master/addons/ocm-hub-control-plane) addon defines all it's resources in the addon. All these YAML objects will be rendered as components in an Application.
-
+UX/CLI renders all CUE files , `parameter.cue`, `template.cue`, and data defined in `metadata.yaml` in one context when the addon is enabled.
 
 ### `definitions/` directory(Optional)
 
-You can create a definition's file directory under the Addon Registry to store template definition files such as component definitions, trait definitions, and workflowstep definitions. It should be noted that since the KubeVela controller is usually not installed in the managed cluster, even if the addon is enabled by setting the `deployTo.runtimeCluster` field in the metadata file (metadata.yaml) to install the addon in the subcluster, the template definition file will not be distributed to sub-clusters.
+You can create a definition's file directory under the Addon Registry to store template definition files such as component definitions, trait definitions, and workflowStep definitions. It should be noted that since the KubeVela controller is usually not installed in the managed cluster, even if the addon is enabled by setting the `deployTo.runtimeCluster` field in the metadata file (metadata.yaml) to install the addon in the managed-clusters, the definition file will not be distributed to managed-clusters.
 
-For example, the [`fluxcd`](https://github.com/kubevela/catalog/tree/master/addons/fluxcd/definitions) addon defines multiple ComponentDefinition and TraitDefinition.
+These definitions can be YAML files those are ComponentDefinition Kubernetes custom resources or CUE files of [vela def file](../../getting-started/definition#customize).
+
+In some cases, you may want a definition's installation binding to a controller which is defined by a KubeVela application component. If the component is disabled by end-user's input parameter, do not apply the definition either. You can use the `addon.oam.dev/bind-component` annotation.
+
+An actual example is [`fluxcd`](https://github.com/kubevela/catalog/tree/master/addons/fluxcd/definitions) addon. 
+
+Component definition `kustomize` has an annotation `"addon.oam.dev/bind-component": "fluxcd-kustomize-controller"`, if end-user enable this addon by `onlyHelmComponents=true` to disable the `fluxcd-kustomize-controller` component. This definition won't be applied to control-plane either.
 
 ### `schemas/` directory(Optional)
 
