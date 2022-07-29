@@ -39,6 +39,10 @@ c3              X509Certificate   <c3 apiserver url>            true
 c2              X509Certificate   <c2 apiserver url>            true       
 ```
 
+The following procedures are illustrated in the following figure. The operations below are associated with different users, which are identified by switching `KUBECONFIG` environment variable. (Each `KUBECONFIG` corresponds to one user.)
+
+![auth-procedure](../../resources/auth-procedure.jpg)
+
 ### Create User
 
 1. Let's start with a new coming user named Alice. As the system administrator, you can assign a KubeConfig for Alice to use.
@@ -54,10 +58,12 @@ Signed certificate retrieved.
 
 ### Grant Privileges
 
-2. Now alice is unabled to do anything in the cluster with the given KubeConfig. We can grant her the privileges of Read/Write resources in the `dev` namespace of the control plane and managed cluster `c2`.
+2. Now alice is unable to do anything in the cluster with the given KubeConfig. We can grant her the privileges of Read/Write resources in the `dev` namespace of the control plane and managed cluster `c2`.
 
 ```bash
-$ vela auth grant-privileges --user alice --for-namespace dev --for-cluster=c2 --create-namespace
+$ vela auth grant-privileges --user alice --for-namespace dev --for-cluster=local,c2 --create-namespace
+ClusterRole kubevela:writer created in local.
+RoleBinding dev/kubevela:writer:binding created in local.
 ClusterRole kubevela:writer created in c2.
 RoleBinding dev/kubevela:writer:binding created in c2.
 Privileges granted.
@@ -69,7 +75,15 @@ Privileges granted.
 $ vela auth list-privileges --user alice --cluster local,c2
 User=alice
 ├── [Cluster]  local
-│   └── no privilege found
+│   └── [ClusterRole]  kubevela:writer
+│       ├── [Scope]  
+│       │   └── [Namespaced]  dev (RoleBinding kubevela:writer:binding)
+│       └── [PolicyRules]  
+│           ├── APIGroups:       *
+│           │   Resources:       *
+│           │   Verb:            get, list, watch, create, update, patch, delete
+│           └── NonResourceURLs: *
+│               Verb:            get, list, watch, create, update, patch, delete
 └── [Cluster]  c2
     └── [ClusterRole]  kubevela:writer
         ├── [Scope]  
@@ -81,8 +95,6 @@ User=alice
             └── NonResourceURLs: *
                 Verb:            get, list, watch, create, update, patch, delete
 ```
-
-Alice don't have any privilege in local cluster while she have read/write capability in namespace(dev) of cluster(c2).
 
 ### Use Privileges
 
