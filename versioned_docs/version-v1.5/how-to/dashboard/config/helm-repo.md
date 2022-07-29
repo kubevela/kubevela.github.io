@@ -15,6 +15,8 @@ In this image we use the [azure](https://marketplace.azurecr.io/helm/v1/repo) he
 
 ![config](../../../resources/helm-config.jpg)
 
+If your helm repo's certificate is self-signed, you can set the `caFile` field with your own certificate.
+
 ## Use the helm repo
 
 You can follow the [application creation guide](../application/create-application) to create a helm type application in project `default`. eg:

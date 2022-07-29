@@ -203,4 +203,27 @@ Example below `values-production.yaml` will override `values.yaml` if they have 
           - "values-production.yaml"
 ```
 
+## Specify OCI registry
+
+If your chart is stored in [OCI registry](https://helm.sh/docs/topics/registries/), you can create the application like this:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: oci-app
+  namespace: default
+spec:
+  components:
+    - name: test-helm
+      type: helm
+      properties:
+        repoType: "oci"
+        url: oci://ghcr.io/stefanprodan/charts
+        chart: podinfo
+        version: '6.1.*'
+```
+
+> Notice: your fluxcd addon version must be `>=1.3.1`.
+
 Now, you have learned the basic helm delivery. If you want to delivery Helm Chart into multi-clusters, you can refer to [this blog](https://kubevela.io/blog/2022/07/07/helm-multi-cluster).

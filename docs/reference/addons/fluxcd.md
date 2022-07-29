@@ -10,6 +10,13 @@ This addon is built based [FluxCD](https://fluxcd.io/)
 vela addon enable fluxcd
 ```
 
+
+If you only want to deploy the helm application with fluxcd addon, you can execute the following command to enable only helm related components.
+
+```shell
+$ vela addon enable fluxcd onlyHelmComponents=true
+```
+
 ## Definitions
 
 The following definitions will be enabled after the installation of fluxcd addon.
