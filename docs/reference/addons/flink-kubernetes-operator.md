@@ -34,25 +34,26 @@ addon-fluxcd                    flux-system-namespace   raw                     
  Show the component type `flink-cluster`, so we know how to use it in one application. As a Flink user, you can choose the parameter to set for your Flink cluster
 ```shell
 vela show flink-cluster
-# Properties
 # Specification
-+--------------+-------------------------------------------------------+--------+----------+---------------------------------------------------------------+
-|     NAME     |                      DESCRIPTION                      |  TYPE  | REQUIRED |                            DEFAULT                            |
-+--------------+-------------------------------------------------------+--------+----------+---------------------------------------------------------------+
-| name         | Specify the flink cluster name.                       | string | true     |                                                               |
-| namespace    | Specify the namespace for flink cluster to install.   | string | true     |                                                               |
-| nots         | Specify the taskmanager.numberOfTaskSlots.            | string | true    |                                                               |
-| flinkVersion | Specify the flink cluster version.                    | string | true    |                                                              |
-| image        | Specify the image for flink cluster to run.           | string | true    |                                                              |
-| jarURI       | Specify the uri for the jar of the flink cluster job. | string | true    |                                                              |
-| parallelism  | Specify the parallelism of the flink cluster job.     | int    | true    |                                                              |
-| upgradeMode  | Specify the upgradeMode of the flink cluster job.     | string | true    |                                                              | 
-| replicas     | Specify the replicas of the flink cluster jobManager. | int    | true    |                                                              |
-| jmcpu        | Specify the cpu of the flink cluster jobManager.      | int    | true    |                                                              |
-| jmmem        | Specify the memory of the flink cluster jobManager.   | string | true    |                                                              |
-| tmcpu        | Specify the cpu of the flink cluster taskManager.     | int    | true    |                                                              |
-| tmmem        | Specify the memory of the flink cluster taskManager.  | string | true    |                                                              |
-+--------------+-------------------------------------------------------+--------+----------+---------------------------------------------------------------+
+# Specification
++--------------+------------------------------------------------------------------------------------------------------+--------+----------+---------+
+|     NAME     |                                             DESCRIPTION                                              |  TYPE  | REQUIRED | DEFAULT |
++--------------+------------------------------------------------------------------------------------------------------+--------+----------+---------+
+| name         | Specify the flink cluster name.                                                                      | string | true     |         |
+| namespace    | Specify the namespace for flink cluster to install.                                                  | string | true     |         |
+| nots         | Specify the taskmanager.numberOfTaskSlots, e.g "2".                                                  | string | true     |         |
+| flinkVersion | Specify the flink cluster version, e.g "v1_14".                                                      | string | true     |         |
+| image        | Specify the image for flink cluster to run, e.g "flink:latest".                                      | string | true     |         |
+| jarURI       | Specify the uri for the jar of the flink cluster job, e.g                                            | string | true     |         |
+|              | "local:///opt/flink/examples/streaming/StateMachineExample.jar".                                     |        |          |         |
+| parallelism  | Specify the parallelism of the flink cluster job, e.g 2.                                             | int    | true     |         |
+| upgradeMode  | Specify the upgradeMode of the flink cluster job, e.g "stateless".                                   | string | true     |         |
+| replicas     | Specify the replicas of the flink cluster jobManager, e.g 1.                                         | int    | true     |         |
+| jmcpu        | Specify the cpu of the flink cluster jobManager, e.g 1.                                              | int    | true     |         |
+| jmmem        | Specify the memory of the flink cluster jobManager, e.g "1024m".                                     | string | true     |         |
+| tmcpu        | Specify the cpu of the flink cluster taskManager, e.g 1.                                             | int    | true     |         |
+| tmmem        | Specify the memory of the flink cluster taskManager, e.g "1024m".                                    | string | true     |         |
++--------------+------------------------------------------------------------------------------------------------------+--------+----------+---------+
 
 
 ```
