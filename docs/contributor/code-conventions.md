@@ -20,7 +20,7 @@ In this section, you will find the code conventions for all kinds of code KubeVe
   - Know and avoid [Go landmines](https://gist.github.com/lavalamp/4bd23295a9f32706a48f)
 
   - Comment your code.
-    - [Go's commenting conventions](http://blog.golang.org/godoc-documenting-go-code)
+    - [Go's commenting conventions](https://go.dev/blog/godoc)
     - If reviewers ask questions about why the code is the way it is, that's a
       sign that comments might be helpful.
 
