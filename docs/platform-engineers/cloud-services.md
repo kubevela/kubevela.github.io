@@ -11,7 +11,7 @@ In KubeVela, the needed cloud services are claimed as *components* in an applica
 
 ## Does KubeVela Talk to the Clouds?
 
-KubeVela relies on [Terraform Controller](https://github.com/oam-dev/terraform-controller) or [Crossplane](http://crossplane.io/) as providers to talk to the clouds. Please check the documentations below for detailed steps.
+KubeVela relies on [Terraform Controller](https://github.com/oam-dev/terraform-controller) or [Crossplane](https://crossplane.io/) as providers to talk to the clouds. Please check the documentations below for detailed steps.
 
 - [Terraform](./components/component-terraform)
 - [Crossplane](./crossplane)
