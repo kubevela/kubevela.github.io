@@ -68,14 +68,10 @@ spec:
         account_name: first_db_account
 ```
 
-About 2 minutes later, you can check the app status by running the following command, and the result will be like
+About 2 minutes later, you can check the app status by running `vela status`:
 
 ```shell
-kubectl get app app-db-1 -n default
-```
-```shell
-NAME       COMPONENT         TYPE                   PHASE     HEALTHY   STATUS                                          AGE
-app-db-1   demo-database-1   alibaba-rds-database   running   true      Cloud resources are deployed and ready to use   3m37s
+vela status app-db-1 -n default
 ```
 
 ## Conclusion
