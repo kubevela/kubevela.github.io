@@ -70,3 +70,13 @@ https://kubevela.io/docs/platform-engineers/addon/addon-registry
 ### How does KubeVela support stateful workload?
 
 We recommend you to use [CRD Operator](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) for stateful workload. If you just want to use StatefulSet, you can refer to [this blog](https://kubevela.io/blog/2022/05/30/abstraction-kubevela) to build your own easily.
+
+### How to deal with slow multi-cluster requests?
+
+There are several common possible reasons for slow multi-cluster requests.
+
+1. Your managed cluster is far from your hub cluster. For example, one in Beijing and another one in London. This is hard to speed up. You might need to find methods to build stable network connections between them. KubeVela currently cannot help it.
+
+2. Your cluster-gateway uses version <= 1.3.2. There is a rate limiter in cluster-gateway in old versions. Therefore, if you have lots of multi-cluster requests, they will be blocked at cluster-gateway. Upgrade cluster-gateway to newer version could solve it.
+
+3. Your cluster-gateway hits the resource limits. For example, the CPU/Memory usage is high. This could happen if you have lots of clusters. You can raise the resource configuration for the cluster-gateway.
