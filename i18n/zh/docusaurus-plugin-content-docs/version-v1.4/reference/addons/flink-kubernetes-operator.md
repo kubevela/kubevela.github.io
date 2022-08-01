@@ -33,29 +33,31 @@ addon-fluxcd                    flux-system-namespace   raw                     
 通过显示`flink-cluster`组件的字段类型，让我们知道如何在一个应用程序中使用它们。 作为 flink 用户，你可以选择它们作为你的 flink 集群的设置参数。
 ```shell
 vela show flink-cluster
-# Properties
-+--------------+-------------+--------+----------+---------------------------------------------------------------+
-|     NAME     | DESCRIPTION |  TYPE  | REQUIRED |                            DEFAULT                            |
-+--------------+-------------+--------+----------+---------------------------------------------------------------+
-| name         |             | string | true     |                                                               |
-| namespace    |             | string | true     |                                                               |
-| nots         |             | string | true     |                                                             2 |
-| flinkVersion |             | string | true     | v1_14                                                         |
-| image        |             | string | true     | flink:latest                                                  |
-| jarURI       |             | string | true     | local:///opt/flink/examples/streaming/StateMachineExample.jar |
-| parallelism  |             | int    | true     |                                                             2 |
-| upgradeMode  |             | string | true     | stateless                                                     |
-| replicas     |             | int    | true     |                                                             1 |
-| jmcpu        |             | int    | true     |                                                             1 |
-| jmmem        |             | string | true     | 1024m                                                         |
-| tmcpu        |             | int    | true     |                                                             1 |
-| tmmem        |             | string | true     | 1024m                                                         |
-+--------------+-------------+--------+----------+---------------------------------------------------------------+
+# Specification
++--------------+------------------------------------------------------------------------------------------------------+--------+----------+---------+
+|     NAME     |                                             DESCRIPTION                                              |  TYPE  | REQUIRED | DEFAULT |
++--------------+------------------------------------------------------------------------------------------------------+--------+----------+---------+
+| name         | Specify the flink cluster name.                                                                      | string | true     |         |
+| namespace    | Specify the namespace for flink cluster to install.                                                  | string | true     |         |
+| nots         | Specify the taskmanager.numberOfTaskSlots, e.g "2".                                                  | string | true     |         |
+| flinkVersion | Specify the flink cluster version, e.g "v1_14".                                                      | string | true     |         |
+| image        | Specify the image for flink cluster to run, e.g "flink:latest".                                      | string | true     |         |
+| jarURI       | Specify the uri for the jar of the flink cluster job, e.g                                            | string | true     |         |
+|              | "local:///opt/flink/examples/streaming/StateMachineExample.jar".                                     |        |          |         |
+| parallelism  | Specify the parallelism of the flink cluster job, e.g 2.                                             | int    | true     |         |
+| upgradeMode  | Specify the upgradeMode of the flink cluster job, e.g "stateless".                                   | string | true     |         |
+| replicas     | Specify the replicas of the flink cluster jobManager, e.g 1.                                         | int    | true     |         |
+| jmcpu        | Specify the cpu of the flink cluster jobManager, e.g 1.                                              | int    | true     |         |
+| jmmem        | Specify the memory of the flink cluster jobManager, e.g "1024m".                                     | string | true     |         |
+| tmcpu        | Specify the cpu of the flink cluster taskManager, e.g 1.                                             | int    | true     |         |
+| tmmem        | Specify the memory of the flink cluster taskManager, e.g "1024m".                                    | string | true     |         |
++--------------+------------------------------------------------------------------------------------------------------+--------+----------+---------+
+
 ```
 
 ## 在应用中运行一个 flink-cluster 类型组件的示例
 
-首先请确保你的集群已经存在命名空间`flink-home`。
+首先请确保你的集群已经存在命名空间`flink-cluster`。
 
 然后部署下面的应用：
 ```shell
@@ -63,47 +65,43 @@ cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-   name: flink-app-v1
+  name: flink-app-v1
+  namespace: vela-system
 spec:
-components:
+  components:
   - name: my-flink-component
     type: flink-cluster
     properties:
       name: my-flink-cluster
-      namespace: flink-home
+      namespace: flink-cluster
+      nots: '2'
+      flinkVersion: v1_14
+      image: flink:latest
+      jarURI: local:///opt/flink/examples/streaming/StateMachineExample.jar
+      parallelism: 2
+      upgradeMode:  stateless
+      replicas: 1
+      jmcpu: 1
+      jmmem: 1024m
+      tmcpu: 1
+      tmmem: 1024m
 EOF      
 ```
 
-检查相关资源的状态：
-
+检查部署出来的flink集群状态
 ```shell
-vela status flink-app-v1 
-About:
+vela ls  -n vela-system | grep app
+flink-app-v1                    my-flink-component      flink-cluster                   running healthy                                                               2022-07-30 18:53:34 +0800 CST
 
-Name:         flink-app-v1
-Created at:   2022-04-22 17:33:51 +0800 CST
-Status:       running
 
-Workflow:
-
-mode: DAG
-finished: true
-Suspend: false
-Terminated: false
-Steps
-- id:n6na24x6dr
-  name:my-flink-component
-  type:apply-component
-  phase:succeeded
-  message:
-
-Services:
-
-- Name: my-flink-component
-  Cluster: local  Namespace: default
-  Type: flink-cluster
-  Healthy
-  No trait applied
 ```
+使用port-forward暴露flink集群的WebUI，则可在浏览器中访问到flink集群（如在浏览器中输入http://localhost:8888即可）
+```shell
+kubectl get svc -n flink-cluster | grep rest
+my-flink-cluster-rest   ClusterIP   192.168.149.175   <none>        8081/TCP            17m
 
-你会看到你的第一个 flink-cluster 应用已经处于运行状态了。
+
+kubectl port-forward service/my-flink-cluster-rest 8888:8081 -n flink-cluster
+Forwarding from 127.0.0.1:8888 -> 8081
+
+
