@@ -1,5 +1,5 @@
 ---
-title: Provision Instance And Database Separately
+title: Provision Instance and Database Separately
 ---
 
 In the guide [Provision and Binding Cloud Resources](../../../tutorials/consume-cloud-services) and [Provision a Database and Import a SQL File for initialization](./provision-and-initiate-database),
