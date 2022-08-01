@@ -15,4 +15,5 @@ Here're the scenarios KubeVela already supported by Using Terraform.
 - [Secure your Database Connection](./secure-your-database-connection).
 - [Provision an RDS instance with more than one database](./provision-an-RDS-instance-with-more-than-one-database).
 - [Provision a Database and Import a SQL File for initialization](./provision-and-initiate-database).
+- [Provision Instance and Database separately](./provision-instance-and-database-separately).
 
