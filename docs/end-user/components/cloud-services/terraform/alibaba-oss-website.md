@@ -6,8 +6,29 @@ title:  Alibaba Cloud OSS-WEBSITE
 
 Alibaba Cloud OSS static webstie bucket.
 
+## Examples
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: alibaba-cloud-oss-webstie
+spec:
+  components:
+    - name: oss-website-example
+      type: alibaba-oss-website
+      properties:
+        acl: public-read
+        bucket: oss-website-example
+        index_document: index.html
+        error_document: 404.html
+        writeConnectionSecretToRef:
+          name: oss-website-conn
+```
+
 ## Specification
 
+### Properties
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
