@@ -25,8 +25,10 @@ vela def get NAME [flags]
 
 ```
   -h, --help               help for get
-  -n, --namespace string   Specify which namespace to get. If empty, all namespaces will be searched.
-  -t, --type string        Specify which definition type to get. If empty, all types will be searched. Valid types: component, trait, policy, workload, scope, workflow-step
+  -n, --namespace string   Specify which namespace the definition locates. (default "vela-system")
+  -r, --revision string    Get the specified version of a definition.
+      --revisions          List revisions of the specified definition.
+  -t, --type string        Specify which definition type to get. If empty, all types will be searched. Valid types: scope, workflow-step, component, trait, policy, workload
 ```
 
 ### Options inherited from parent commands

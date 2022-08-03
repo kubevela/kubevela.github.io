@@ -24,9 +24,10 @@ vela def list [flags]
 ### Options
 
 ```
+      --from string        Filter definitions by which addon installed them.
   -h, --help               help for list
-  -n, --namespace string   Specify which namespace to list. If empty, all namespaces will be searched.
-  -t, --type string        Specify which definition type to list. If empty, all types will be searched. Valid types: workflow-step, component, trait, policy, workload, scope
+  -n, --namespace string   Specify which namespace the definition locates. (default "vela-system")
+  -t, --type string        Specify which definition type to list. If empty, all types will be searched. Valid types: trait, policy, workload, scope, workflow-step, component
 ```
 
 ### Options inherited from parent commands

@@ -6,7 +6,9 @@ Show result of executing velaQL.
 
 ### Synopsis
 
-Show result of executing velaQL.
+Show result of executing velaQL, use it like:
+		vela ql --query "inner-view-name{param1=value1,param2=value2}"
+		vela ql --file ./ql.cue
 
 ```
 vela ql [flags]
@@ -15,13 +17,43 @@ vela ql [flags]
 ### Examples
 
 ```
-vela ql "view{parameter=value1,parameter=value2}"
+  Users can query with a query statement:
+		vela ql --query "inner-view-name{param1=value1,param2=value2}"
+
+  Query by a ql file:
+		vela ql --file ./ql.cue
+  Query by a ql file from remote url:
+		vela ql --file https://my.host.to.cue/ql.cue
+  Query by a ql file from stdin:
+		cat ./ql.cue | vela ql --file -
+
+Example content of ql.cue:
+---
+import (
+	"vela/ql"
+)
+configmap: ql.#Read & {
+   value: {
+      kind: "ConfigMap"
+      apiVersion: "v1"
+      metadata: {
+        name: "mycm"
+      }
+   }
+}
+status: configmap.value.data.key
+
+export: "status"
+---
+
 ```
 
 ### Options
 
 ```
-  -h, --help   help for ql
+  -f, --file string    The CUE file path for VelaQL, it could be a remote url.
+  -h, --help           help for ql
+  -q, --query string   The query statement for VelaQL.
 ```
 
 ### Options inherited from parent commands
@@ -33,6 +65,7 @@ vela ql "view{parameter=value1,parameter=value2}"
 ### SEE ALSO
 
 
+* [vela ql apply](vela_ql_apply)	 - Create and store a VelaQL view
 
 #### Go Back to [CLI Commands](vela) Homepage.
 

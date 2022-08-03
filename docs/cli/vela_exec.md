@@ -28,9 +28,13 @@ vela exec [flags] APP_NAME -- COMMAND [args...]
 ### Options
 
 ```
+      --cluster string                 filter the pod by the cluster name
+  -c, --component string               filter the pod by the component name
+      --container string               specify the container name
   -e, --env string                     specify environment name for application
   -h, --help                           help for exec
   -n, --namespace string               specify the Kubernetes namespace to use
+  -p, --pod string                     specify the pod name
       --pod-running-timeout duration   The length of time (like 5s, 2m, or 3h, higher than zero) to wait until at least one pod is running (default 1m0s)
   -i, --stdin                          Pass stdin to the container (default true)
   -t, --tty                            Stdin is a TTY (default true)

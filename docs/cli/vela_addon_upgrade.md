@@ -15,21 +15,29 @@ vela addon upgrade [flags]
 ### Examples
 
 ```
-\
-Upgrade addon by:
+
+  Upgrade addon by:
 	vela addon upgrade <addon-name>
-Upgrade addon with specify version:
+  Upgrade addon with specify version:
 	vela addon upgrade <addon-name> --version <addon-version>
-Upgrade addon for specific clusters, (local means control plane):
+  Upgrade addon for specific clusters, (local means control plane):
 	vela addon upgrade <addon-name> --clusters={local,cluster1,cluster2}
+  Upgrade addon locally:
+	vela addon upgrade <your-local-addon-path>
+  Upgrade addon with specified args (the args should be defined in addon's parameters):
+	vela addon upgrade <addon-name> <my-parameter-of-addon>=<my-value>
+  The specified args will be merged with legacy args, what user specified in 'vela addon enable', and non-empty legacy arg will be overridden by
+non-empty new arg
 
 ```
 
 ### Options
 
 ```
-  -h, --help             help for upgrade
-  -v, --version string   specify the addon version to upgrade
+  -h, --help                      help for upgrade
+      --override-definitions      override existing definitions if conflict with those contained in this addon
+  -s, --skip-version-validating   skip validating system version requirement
+  -v, --version string            specify the addon version to upgrade
 ```
 
 ### Options inherited from parent commands

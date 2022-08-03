@@ -26,8 +26,8 @@ vela def edit NAME [flags]
 
 ```
   -h, --help               help for edit
-  -n, --namespace string   Specify which namespace to get. If empty, all namespaces will be searched.
-  -t, --type string        Specify which definition type to get. If empty, all types will be searched. Valid types: scope, workflow-step, component, trait, policy, workload
+  -n, --namespace string   Specify which namespace the definition locates. (default "vela-system")
+  -t, --type string        Specify which definition type to get. If empty, all types will be searched. Valid types: trait, policy, workload, scope, workflow-step, component
 ```
 
 ### Options inherited from parent commands

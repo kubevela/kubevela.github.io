@@ -17,9 +17,13 @@ vela def apply DEFINITION.cue [flags]
 ```
 # Command below will apply the local my-webservice.cue file to kubernetes vela-system namespace
 > vela def apply my-webservice.cue
+# Apply the local directory including all files(YAML and CUE definition) to kubernetes vela-system namespace
+> vela def apply def/
 # Command below will apply the ./defs/my-trait.cue file to kubernetes default namespace
 > vela def apply ./defs/my-trait.cue --namespace default# Command below will convert the ./defs/my-trait.cue file to kubernetes CRD object and print it without applying it to kubernetes
-> vela def apply ./defs/my-trait.cue --dry-run
+> vela def apply ./defs/my-trait.cue --dry-run# Apply a CUE from URL 
+> vela def apply https://my-host-to-def/my-trait.cue --dry-run# Apply a CUE from stdin 
+> vela def apply -
 ```
 
 ### Options
@@ -27,7 +31,7 @@ vela def apply DEFINITION.cue [flags]
 ```
       --dry-run            only build definition from CUE into CRB object without applying it to kubernetes clusters
   -h, --help               help for apply
-  -n, --namespace string   Specify which namespace to apply. (default "vela-system")
+  -n, --namespace string   Specify which namespace the definition locates. (default "vela-system")
 ```
 
 ### Options inherited from parent commands
