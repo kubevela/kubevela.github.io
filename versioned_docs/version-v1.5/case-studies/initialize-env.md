@@ -1,6 +1,5 @@
 ---
 title: Initialize/Destroy Environment
-draft: true
 ---
 
 This section will introduce what is environment and how to initialize and destroy an environment with KubeVela easily.
