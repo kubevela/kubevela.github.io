@@ -44,6 +44,8 @@ velad install
 
 查看到以下输出则代表安装成功:
 
+<details>
+
 ```
 Preparing K3s images...
 Successfully prepare k3s image:  /Users/sunjianbo/.vela/velad/k3s/k3s-airgap-images-amd64.tgz
@@ -60,6 +62,7 @@ K1075e7f6c77555e6ebdaf4854e4a2f39ae4287cfad23f27cdac5b33608d44633fe::server:zSpz
 🚀  Successfully install KubeVela control plane
 🔭  See available commands with `vela help`
 ```
+</details>
 
 ### 设置 KubeConfig
 
@@ -67,6 +70,40 @@ K1075e7f6c77555e6ebdaf4854e4a2f39ae4287cfad23f27cdac5b33608d44633fe::server:zSpz
 export KUBECONFIG=$(velad kubeconfig --host)
 vela comp
 ```
+
+The expected output:
+
+<details>
+
+```
+NAME                  	DEFINITION              	DESCRIPTION
+kustomize             	autodetects.core.oam.dev	kustomize can fetching, building, updating and applying
+                      	                        	Kustomize manifests from git repo.
+helm                  	autodetects.core.oam.dev	helm release is a group of K8s resources from either git
+                      	                        	repository or helm repo
+config-helm-repository	autodetects.core.oam.dev	Config information to authenticate helm chart repository
+yurt-helm             	autodetects.core.oam.dev	helm release is a group of K8s resources from either git
+                      	                        	repository or helm repo
+daemon                	daemonsets.apps         	Describes daemonset services in Kubernetes.
+cron-task             	cronjobs.batch          	Describes cron jobs that run code or a script to completion.
+worker                	deployments.apps        	Describes long-running, scalable, containerized services
+                      	                        	that running at backend. They do NOT have network endpoint
+                      	                        	to receive external network traffic.
+task                  	jobs.batch              	Describes jobs that run code or a script to completion.
+webservice            	deployments.apps        	Describes long-running, scalable, containerized services
+                      	                        	that have a stable network endpoint to receive external
+                      	                        	network traffic from customers.
+clickhouse            	autodetects.core.oam.dev	Clickhouse Component provision a clickhouse cluster.
+config-image-registry 	autodetects.core.oam.dev	Config information to authenticate image registry
+k8s-objects           	autodetects.core.oam.dev	K8s-objects allow users to specify raw K8s objects in
+                      	                        	properties
+raw                   	autodetects.core.oam.dev	Raw allow users to specify raw K8s object in properties.
+                      	                        	This definition is DEPRECATED, please use 'k8s-objects'
+                      	                        	instead.
+ref-objects           	autodetects.core.oam.dev	Ref-objects allow users to specify ref objects to use.
+                      	                        	Notice that this component type have special handle logic.
+```
+</details>
 
 ## 2. 安装 VelaUX
 

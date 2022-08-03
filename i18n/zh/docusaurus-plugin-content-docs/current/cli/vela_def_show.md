@@ -1,5 +1,5 @@
 ---
-title: vela show
+title: vela def show
 ---
 
 Show the reference doc for a component, trait, policy or workflow.
@@ -9,7 +9,7 @@ Show the reference doc for a component, trait, policy or workflow.
 Show the reference doc for component, trait, policy or workflow types. 'vela show' equals with 'vela def show'. 
 
 ```
-vela show [flags]
+vela def show [flags]
 ```
 
 ### Examples
@@ -54,7 +54,7 @@ vela show [flags]
 
 ### SEE ALSO
 
-
+* [vela def](vela_def)	 - Manage Definitions
 
 #### Go Back to [CLI Commands](vela) Homepage.
 
