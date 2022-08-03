@@ -1,0 +1,350 @@
+---
+title: Custom Installation/Upgrade
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## Install KubeVela with Existing Kubernetes cluster
+
+### 1. Prerequisites:
+
+- Kubernetes cluster >= v1.19 && <= v1.22
+
+KubeVela relies on Kubernetes as a control plane. The control plane could be any managed Kubernetes offering or your own clusters, such as:
+
+- Alibaba Cloud [ACK Service](https://www.aliyun.com/product/kubernetes)
+- AWS [EKS Service](https://aws.amazon.com/cn/eks)
+- Azure [AKS Service](https://azure.microsoft.com/en-us/services/kubernetes-service)
+- Google [GKE Service](https://cloud.google.com/kubernetes-engine)
+- Rancher [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) or [RKE](https://github.com/rancher/rke/releases)
+
+> Please make sure one of the [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/) is available in your Kubernetes cluster.
+
+### 2. Install KubeVela CLI
+
+KubeVela CLI provides an easy to engage and manage your application delivery in command lines.
+
+<Tabs
+    className="unique-tabs"
+    defaultValue="script"
+    values={[
+        {label: 'Script', value: 'script'},
+        {label: 'Homebrew', value: 'homebrew'},
+        {label: 'Download directly from releases', value: 'download'},
+        {label: 'Docker', value: 'docker'},
+    ]}>
+<TabItem value="script">
+
+** MacOS/Linux **
+
+```shell script
+curl -fsSl https://kubevela.net/script/install.sh | bash
+```
+
+**Windows**
+
+> Only the official release version is supported.
+
+```shell script
+powershell -Command "iwr -useb https://kubevela.net/script/install.ps1 | iex"
+```
+
+</TabItem>
+<TabItem value="homebrew">
+
+**macOS/Linux**
+
+Update your brew first. Please note that the brew method only supports the installation of the official release version.
+
+```shell script
+brew update
+```
+
+Then install KubeVela CLI
+
+```shell script
+brew install kubevela
+```
+
+</TabItem>
+<TabItem value="download">
+
+- Download the latest `vela` binary file via [release log](https://github.com/kubevela/kubevela/releases).
+- Unzip the binary file, and configure the environment variables in `$PATH`, and you're done.
+
+```shell script
+sudo mv ./vela /usr/local/bin/vela
+```
+
+> [Installation Tips](https://github.com/kubevela/kubevela/issues/625):
+> If you are using a Mac system, it will pop up a warning that "vela" cannot be opened because the package from the developer cannot be verified.
+>
+> MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
+
+</TabItem>
+<TabItem value="docker">
+
+If you have docker environment, you can easily run CLI with the vela CLI docker image called `oamdev/vela-cli`:
+
+```
+$ docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli version
+CLI Version: master
+Core Version: v1.3.4
+GitRevision: git-1d823780
+GolangVersion: go1.17.10
+```
+
+Refer to [using Vela CLI docker image](./system-operation/vela-cli-image) for more usage.
+
+</TabItem>
+</Tabs>
+
+### 3. Install KubeVela Core
+
+<Tabs
+    className="unique-tabs"
+    defaultValue="vela"
+    values={[
+        {label: 'Default', value: 'vela'},
+        {label: 'Helm', value: 'helm'},
+    ]}>
+<TabItem value="vela">
+
+```shell script
+$ vela install
+```
+
+<details> <summary> check out the outcome </summary>
+
+```shell
+...
+Watching for changes to Job kubevela-vela-core-cluster-gateway-tls-secret-patch with timeout of 18m0s
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: ADDED
+kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 0, jobs failed: 0, jobs succeeded: 0
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
+kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
+kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
+Starting delete for "kubevela-vela-core-admission" ServiceAccount
+Starting delete for "kubevela-vela-core-admission" ClusterRole
+Starting delete for "kubevela-vela-core-admission" ClusterRoleBinding
+Starting delete for "kubevela-vela-core-admission" Role
+Starting delete for "kubevela-vela-core-admission" RoleBinding
+Starting delete for "kubevela-vela-core-admission-patch" Job
+Starting delete for "kubevela-vela-core-cluster-gateway-admission" ServiceAccount
+Starting delete for "kubevela-vela-core-cluster-gateway-admission" Role
+Starting delete for "kubevela-vela-core-cluster-gateway-admission" RoleBinding
+Starting delete for "kubevela-vela-core-cluster-gateway-tls-secret-patch" Job
+
+KubeVela control plane has been successfully set up on your cluster.
+If you want to enable dashboard, please run "vela addon enable velaux"
+```
+
+</details>
+
+</TabItem>
+
+<TabItem value="helm">
+
+If you are helm user, you can also use helm to install kubevela core:
+
+> helm v3.2.0+ required
+
+```
+helm repo add kubevela https://charts.kubevela.net/core
+helm repo update
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --wait
+```
+
+</TabItem>
+</Tabs>
+
+### 4 Install VelaUX
+
+Please refer to [VelaUX Guide](../reference/addons/velaux).
+
+## Upgrade
+
+> If you're trying to upgrade from a big version later (e.g. from 1.2.x to 1.4.x), please refer to [version migration](./system-operation/migration-from-old-version) for more guides.
+
+### 1. Upgrade CLI
+
+<Tabs
+    className="unique-tabs"
+    defaultValue="script"
+    values={[
+        {label: 'Script', value: 'script'},
+        {label: 'Homebrew', value: 'homebrew'},
+        {label: 'Download directly from releases', value: 'download'},
+        {label: 'Docker', value: 'docker'},
+    ]}>
+<TabItem value="script">
+
+** MacOS/Linux **
+
+```shell script
+curl -fsSl https://kubevela.io/script/install.sh | bash
+```
+
+**Windows**
+
+> Only the official release version is supported.
+
+```shell script
+powershell -Command "iwr -useb https://kubevela.io/script/install.ps1 | iex"
+```
+
+</TabItem>
+<TabItem value="homebrew">
+
+**macOS/Linux**
+
+Update your brew first. Please note that the brew method only supports the installation of the official release version.
+
+```shell script
+brew update
+```
+
+Then install KubeVela CLI
+
+```shell script
+brew install kubevela
+```
+
+</TabItem>
+<TabItem value="download">
+
+- Download the latest `vela` binary file via [release log](https://github.com/kubevela/kubevela/releases).
+- Unzip the binary file, and configure the environment variables in `$PATH`, and you're done.
+
+```shell script
+sudo mv ./vela /usr/local/bin/vela
+```
+
+> [Installation Tips](https://github.com/kubevela/kubevela/issues/625):
+> If you are using a Mac system, it will pop up a warning that "vela" cannot be opened because the package from the developer cannot be verified.
+>
+> MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
+
+</TabItem>
+
+<TabItem value="docker">
+
+Pull the latest image from the docker registry, or specify a version as tag:
+
+```shell script
+docker pull oamdev/vela-cli:latest
+```
+
+</TabItem>
+</Tabs>
+
+### 2. Upgrade Vela Core
+
+> Please make sure you already upgraded the Vela CLI to latest stable version.
+
+```shell
+vela install
+```
+
+### 3. Upgrade VelaUX
+
+```shell
+vela addon enable velaux
+```
+
+> If you set custom parameters during installation, be sure to include the corresponding parameters.
+
+## Uninstall
+
+Before uninstalling kubevela, you must delete all applications and disable all addons.
+
+1. Uninstall VelaUX
+
+```
+vela addon disable velaux
+```
+
+2. Uninstall KubeVela Core
+
+```
+vela uninstall
+```
+
+3. Uninstall CRD
+
+Before deleting, you must delete all CR resources.
+
+```
+kubectl get crd |grep oam | awk '{print $1}' | xargs kubectl delete crd
+```
+
+## Install KubeVela with cert-manager
+
+By default, KubeVela will use a self-signed certificate provided by [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen) for admissionWebhooks.
+You can also use cert-manager if it's available. Note that you need to install cert-manager **before** the KubeVela chart.
+
+```shell script
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.2.0 --create-namespace --set installCRDs=true
+```
+
+Install kubevela with enabled certmanager:
+
+```shell script
+vela install --set admissionWebhooks.certManager.enabled=true
+```
+
+## Install Pre-release
+
+```
+# List all releases
+vela version list -a
+
+# Install the specified version.
+vela install --version 1.3.0-beta.2
+```
+
+## Install Kubectl Vela Plugin
+
+`kubectl-vela` provides the same features with `vela` CLI, it helps you to integrate with kubectl better.
+
+<Tabs
+className="unique-tabs"
+defaultValue="krew"
+values={[
+{label: 'Krew', value: 'krew'},
+{label: 'Script', value: 'script'},
+]}>
+<TabItem value="krew">
+
+1. [Install and set up](https://krew.sigs.k8s.io/docs/user-guide/setup/install/) Krew on your machine.
+2. Discover plugins available on Krew:
+
+```shell
+kubectl krew update
+```
+
+3. install kubectl vela:
+
+```shell script
+kubectl krew install vela
+```
+
+</TabItem>
+<TabItem value="script">
+
+**macOS/Linux**
+
+```shell script
+curl -fsSl https://kubevela.io/script/install-kubectl-vela.sh | bash
+```
+
+You can also download the binary from [release pages ( >= v1.0.3)](https://github.com/kubevela/kubevela/releases) manually.
+Kubectl will discover it from your system path automatically.
+
+</TabItem>
+</Tabs>

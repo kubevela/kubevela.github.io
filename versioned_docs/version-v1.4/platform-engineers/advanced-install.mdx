@@ -39,7 +39,7 @@ KubeVela CLI provides an easy to engage and manage your application delivery in 
 ** MacOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.net/script/install.sh | bash
+curl -fsSl https://kubevela.net/script/install.sh | bash -s v1.4.9
 ```
 
 **Windows**
@@ -112,7 +112,7 @@ Refer to [using Vela CLI docker image](./system-operation/vela-cli-image) for mo
 <TabItem value="vela">
 
 ```shell script
-$ vela install
+$ vela install --version=v1.4.9
 ```
 
 <details> <summary> check out the outcome </summary>
@@ -155,7 +155,7 @@ If you are helm user, you can also use helm to install kubevela core:
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --wait
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --wait --version 1.4.9
 ```
 
 </TabItem>
@@ -185,7 +185,7 @@ Please refer to [VelaUX Guide](../reference/addons/velaux).
 ** MacOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash
+curl -fsSl https://kubevela.io/script/install.sh | bash -s v1.4.9
 ```
 
 **Windows**
@@ -246,13 +246,13 @@ docker pull oamdev/vela-cli:latest
 > Please make sure you already upgraded the Vela CLI to latest stable version.
 
 ```shell
-vela install
+vela install --version=v1.4.9
 ```
 
 ### 3. Upgrade VelaUX
 
 ```shell
-vela addon enable velaux
+vela addon enable velaux --version v1.4.7
 ```
 
 > If you set custom parameters during installation, be sure to include the corresponding parameters.
