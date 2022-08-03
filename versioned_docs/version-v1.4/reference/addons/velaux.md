@@ -5,7 +5,7 @@ title: VelaUX
 ## Install
 
 ```shell script
-vela addon enable velaux
+vela addon enable velaux --version v1.4.7
 ```
 
 expected output:
