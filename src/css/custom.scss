@@ -16,6 +16,7 @@
   --ifm-code-font-size: 95%;
   --ifm-font-size-base: 16px;
   --hero-border-color: rgba(0, 0, 0, 0.1);
+  --docusaurus-announcement-bar-height: "auto" !important;
 }
 
 :root[data-theme='dark'] {
@@ -281,4 +282,43 @@ article {
     flex: 0 0 var(--ifm-col-width) !important;
     max-width: var(--ifm-col-width) !important;
   }
+}
+
+.logoWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+}
+
+.logoWrapper img {
+  width: 80%;
+}
+
+@media screen and (max-width: 768px) {
+  .logoWrapper {
+    height: 100px;
+  }
+
+  .logoWrapper img {
+    width: 50%;
+  }
+}
+
+.cncf-Logo {
+  height: 90px;
+}
+
+@media screen and (max-width: 768px) {
+  .cncf-Logo {
+    height: 64px;
+  }
+}
+
+.heroButtons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }

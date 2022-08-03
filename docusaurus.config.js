@@ -25,8 +25,8 @@ module.exports = {
     announcementBar: {
       id: 'start',
       content:
-        '⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>!⭐️' +
-        '<span style="color:#1b58f4">KubeVela v1.4.8 is already released.(2022-07-20)</span> <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/v1.4.8">Read Release Note</a>',
+        '<div class="header-item">⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>!⭐️</div>' +
+        '<div class="header-item"><span>KubeVela v1.5.0 is already released.(2022-08-03)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/v1.5.0">Read Release Note</a></div>',
     },
     algolia: {
       appId: 'PXMFHFWUGZ',
