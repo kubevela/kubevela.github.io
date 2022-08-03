@@ -15,22 +15,27 @@ vela addon enable [flags]
 ### Examples
 
 ```
-\
-Enable addon by:
+  Enable addon by:
 	vela addon enable <addon-name>
-Enable addon with specify version:
+  Enable addon with specify version:
 	vela addon enable <addon-name> --version <addon-version>
-Enable addon for specific clusters, (local means control plane):
+  Enable addon for specific clusters, (local means control plane):
 	vela addon enable <addon-name> --clusters={local,cluster1,cluster2}
+  Enable addon locally:
+	vela addon enable <your-local-addon-path>
+  Enable addon with specified args (the args should be defined in addon's parameters):
+	vela addon enable <addon-name> <my-parameter-of-addon>=<my-value>
 
 ```
 
 ### Options
 
 ```
-  -c, --clusters string   specify the runtime-clusters to enable
-  -h, --help              help for enable
-  -v, --version string    specify the addon version to enable
+  -c, --clusters string           specify the runtime-clusters to enable
+  -h, --help                      help for enable
+      --override-definitions      override existing definitions if conflict with those contained in this addon
+  -s, --skip-version-validating   skip validating system version requirement
+  -v, --version string            specify the addon version to enable
 ```
 
 ### Options inherited from parent commands

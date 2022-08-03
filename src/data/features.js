@@ -8,18 +8,18 @@ const features = [
     description: (
       <p>
         <Translate>
-          Declare your deployment plan as workflow, run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with CUE. No add-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by Open Application Model.
+          Declare your deployment plan as workflow, run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with CUE. Glue and orchestrate all your infrastructure capabilities as reusable modules and share the large growing community addons. No add-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by Open Application Model.
         </Translate>
       </p>
     ),
   },
   {
-    title: <Translate>Built-in security and compliance building blocks</Translate>,
+    title: <Translate>Built-in security, compliance and observability building blocks</Translate>,
     imgUrl: 'img/extending-natively.svg',
     description: (
       <p>
         <Translate>
-          Choose from the wide range of LDAP integrations we provided out-of-box, enjoy multi-cluster authorization that is fully automated, pick and apply fine-grained RBAC modules and customize them per your own supply chain requirements.
+          Choose from the wide range of LDAP integrations we provided out-of-box, enjoy enhanced multi-cluster authorization and authentication, pick and apply fine-grained RBAC modules and customize them per your own supply chain requirements. All delivery process has fully automated observability.
         </Translate>
       </p>
     ),
@@ -31,7 +31,7 @@ const features = [
     description: (
       <p>
         <Translate>
-          Progressive rollout across test/staging/production environments, automatic canary, blue-green and continuous verification, rich placement strategy across clusters and clouds, fully managed cloud environments provision.
+          Natively supports multi-cluster/hybrid-cloud scenarios such as progressive rollout across test/staging/production environments, automatic canary, blue-green and continuous verification, rich placement strategy across clusters and clouds, along with automated cloud environments provision.
         </Translate>
       </p>
     ),

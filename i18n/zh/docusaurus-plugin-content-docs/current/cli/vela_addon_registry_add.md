@@ -25,6 +25,7 @@ vela addon registry add [flags]
       --endpoint string   specify the addon registry endpoint
       --gitToken string   specify the github repo token
   -h, --help              help for add
+      --insecureSkipTLS   specify the Helm addon registry skip tls verify
       --password string   specify the Helm addon registry password
       --path string       specify the addon registry OSS path
       --type string       specify the addon registry type

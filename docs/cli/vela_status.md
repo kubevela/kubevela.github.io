@@ -15,19 +15,39 @@ vela status APP_NAME [flags]
 ### Examples
 
 ```
-vela status APP_NAME
+  # Get basic app info
+  vela status APP_NAME
+
+  # Show detailed info in tree
+  vela status first-vela-app --tree --detail --detail-format list
+
+  # Show pod list
+  vela status first-vela-app --pod
+  vela status first-vela-app --pod --component express-server --cluster local
+
+  # Show endpoint list
+  vela status first-vela-app --endpoint
+
+  # Get raw Application yaml (without managedFields)
+  vela status first-vela-app -o yaml
+
+  # Get raw Application status using jsonpath
+  vela status first-vela-app -o jsonpath='{.status}'
 ```
 
 ### Options
 
 ```
-  -c, --component string       filter service endpoints by component name
-  -d, --detail                 display the realtime details of application resources
-      --detail-format string   the format for displaying details. Can be one of inline (default), wide, list, table, raw. (default "inline")
+      --cluster string         filter the endpoints or pods by cluster name
+  -c, --component string       filter the endpoints or pods by component name
+  -d, --detail                 display the realtime details of application resources, must be used with --tree
+      --detail-format string   the format for displaying details, must be used with --detail. Can be one of inline, wide, list, table, raw. (default "inline")
   -p, --endpoint               show all service endpoints of the application
   -e, --env string             specify environment name for application
   -h, --help                   help for status
   -n, --namespace string       specify the Kubernetes namespace to use
+  -o, --output string          raw Application output format. One of: (json, yaml, jsonpath)
+      --pod                    show pod list of the application
   -s, --svc string             service name
   -t, --tree                   display the application resources into tree structure
 ```

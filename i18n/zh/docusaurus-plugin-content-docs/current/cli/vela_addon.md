@@ -25,8 +25,10 @@ Manage addons for extension.
 
 * [vela addon disable](vela_addon_disable)	 - disable an addon
 * [vela addon enable](vela_addon_enable)	 - enable an addon
+* [vela addon init](vela_addon_init)	 - create an addon scaffold
 * [vela addon list](vela_addon_list)	 - List addons
 * [vela addon package](vela_addon_package)	 - package an addon directory
+* [vela addon push](vela_addon_push)	 - uploads an addon package to ChartMuseum
 * [vela addon registry](vela_addon_registry)	 - Manage addon registry.
 * [vela addon status](vela_addon_status)	 - get an addon's status.
 * [vela addon upgrade](vela_addon_upgrade)	 - upgrade an addon
