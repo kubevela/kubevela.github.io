@@ -32,6 +32,22 @@ module.exports = function faviconCustomPlugin() {
                     {
                         tagName: "link",
                         attributes: {
+                            rel: "icon",
+                            type: "image/svg+xml",
+                            href: "/img/favicons/favicon.svg",
+                        },
+                    },
+                    {
+                        tagName: "link",
+                        attributes: {
+                            rel: "icon",
+                            type: "image/png",
+                            href: "/img/favicons/favicon.png",
+                        },
+                    },
+                    {
+                        tagName: "link",
+                        attributes: {
                             rel: "manifest",
                             href: "/img/favicons/site.webmanifest",
                         },
