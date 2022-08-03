@@ -4,11 +4,29 @@ title:  Alibaba Cloud DEPLOY-WEBSITE
 
 ## Description
 
-Deploy a Static Website in object stroage, like S3 and OSS
+Deploy a Static Website in object stroage, like S3 and OSS.
+
+## Examples
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: alibaba-cloud-deploy-website
+spec:
+  components:
+    - name: static-website-example
+      type: deploy-website
+      properties:
+        bucket: static-website-example
+        endpoint: oss-cn-hangzhou.aliyuncs.com
+        static_web_url: 'https://github.com/cloudflare/cloudflare.github.io.git'
+```
 
 ## Specification
 
-### Properties  
+### Properties
+
  Name | Description | Type | Required | Default 
 ------------|------------|------------|------------|------------
  bucket | OSS bucket name | string | false |  
