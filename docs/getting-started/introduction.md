@@ -14,15 +14,15 @@ KubeVela is a modern software delivery control plane. The goal is to make deploy
 
 * **Deployment as Code**
 
-    Declare your deployment plan as workflow, run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with CUE. No add-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by [Open Application Model](https://oam.dev/).
+    Declare your deployment plan as [workflow](./getting-started/core-concept), run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with [CUE](https://cuelang.org/). Glue and orchestrate all your infrastructure capabilities as reusable modules and share the large growing community [addons](./reference/addons/overview). No add-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by [Open Application Model](https://oam.dev/).
 
-* **Built-in security and compliance building blocks**
+* **Built-in security, compliance and observability building blocks**
 
-    Choose from the wide range of LDAP integrations we provided out-of-box, enjoy multi-cluster authorization that is fully automated, pick and apply fine-grained RBAC modules and customize them per your own supply chain requirements.
-    
+    Choose from the wide range of LDAP integrations we provided out-of-box, enjoy enhanced [multi-cluster authorization and authentication](./platform-engineers/auth/advance), pick and apply fine-grained RBAC modules and customize them per your own supply chain requirements. All delivery process has fully [automated observability](./platform-engineers/operations/observability).
+
 * **Multi-cloud/hybrid-environments app delivery as first-class citizen**
 
-    Progressive rollout across test/staging/production environments, automatic canary, blue-green and continuous verification, rich placement strategy across clusters and clouds, fully managed cloud environments provision.
+    Natively supports multi-cluster/hybrid-cloud scenarios such as progressive rollout across test/staging/production environments, automatic canary, blue-green and continuous verification, rich placement strategy across clusters and clouds, along with automated cloud environments provision.
 
 
 ## KubeVela vs. Other Software

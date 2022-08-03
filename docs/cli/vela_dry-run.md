@@ -7,6 +7,11 @@ Dry Run an application, and output the K8s resources as result to stdout
 ### Synopsis
 
 Dry-run application locally, render the Kubernetes resources as result to stdout.
+	vela dry-run -d /definition/directory/or/file/ -f /path/to/app.yaml
+
+You can also specify a remote url for app:
+	vela dry-run -d /definition/directory/or/file/ -f https://remote-host/app.yaml
+
 
 ```
 vela dry-run

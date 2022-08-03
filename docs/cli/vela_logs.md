@@ -15,12 +15,14 @@ vela logs APP_NAME [flags]
 ### Options
 
 ```
-  -c, --container string   specify container name for output
+      --cluster string     filter the pod by the cluster name
+  -c, --component string   filter the pod by the component name
+      --container string   specify the container name
   -e, --env string         specify environment name for application
   -h, --help               help for logs
-      --name string        specify resource name for output
   -n, --namespace string   specify the Kubernetes namespace to use
   -o, --output string      output format for logs, support: [default, raw, json] (default "default")
+  -p, --pod string         specify the pod name
 ```
 
 ### Options inherited from parent commands

@@ -22,11 +22,14 @@ port-forward APP_NAME [options] [LOCAL_PORT:]REMOTE_PORT [...[LOCAL_PORT_N:]REMO
 
 ```
       --address strings                Addresses to listen on (comma separated). Only accepts IP addresses or localhost as a value. When localhost is supplied, vela will try to bind on both 127.0.0.1 and ::1 and will fail if neither of these addresses are available to bind. (default [localhost])
+      --cluster string                 filter the pod by the cluster name
+  -c, --component string               filter the pod by the component name
   -e, --env string                     specify environment name for application
   -h, --help                           help for port-forward
   -n, --namespace string               specify the Kubernetes namespace to use
       --pod-running-timeout duration   The length of time (like 5s, 2m, or 3h, higher than zero) to wait until at least one pod is running (default 1m0s)
-      --route                          forward ports from route trait service
+      --resource-name string           specify the resource name
+  -t, --resource-type string           specify the resource type, support the service, and pod
 ```
 
 ### Options inherited from parent commands

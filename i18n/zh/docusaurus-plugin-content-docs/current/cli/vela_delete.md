@@ -9,7 +9,7 @@ Delete an application
 Delete an application.
 
 ```
-vela delete APP_NAME
+vela delete APP_NAME1 [APP_NAME2 APP_NAME3...]
 ```
 
 ### Examples
@@ -25,7 +25,6 @@ vela delete frontend
   -f, --force              force to delete the application
   -h, --help               help for delete
   -n, --namespace string   specify the Kubernetes namespace to use
-      --svc string         delete only the specified service in this app
   -w, --wait               wait util the application is deleted completely
 ```
 

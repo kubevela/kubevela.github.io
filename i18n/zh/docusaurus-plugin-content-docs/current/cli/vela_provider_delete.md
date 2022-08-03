@@ -15,7 +15,7 @@ vela provider delete [flags]
 ### Examples
 
 ```
-vela provider delete <provider-type> -name <provider-name>
+vela provider delete <provider-type> --name <provider-name>
 ```
 
 ### Options

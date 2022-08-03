@@ -25,13 +25,13 @@ Manage X-Definitions for extension.
 
 * [vela def apply](vela_def_apply)	 - Apply X-Definition.
 * [vela def del](vela_def_del)	 - Delete X-Definition.
-* [vela def doc-gen](vela_def_doc-gen)	 - Generate documentation of definitions (Only Terraform typed definitions are supported)
 * [vela def edit](vela_def_edit)	 - Edit X-Definition.
 * [vela def gen-api](vela_def_gen-api)	 - Generate Go struct of Parameter from X-Definition.
 * [vela def get](vela_def_get)	 - Get definition
 * [vela def init](vela_def_init)	 - Init a new definition
 * [vela def list](vela_def_list)	 - List definitions.
 * [vela def render](vela_def_render)	 - Render X-Definition.
+* [vela def show](vela_def_show)	 - Show the reference doc for a component, trait, policy or workflow.
 * [vela def vet](vela_def_vet)	 - Validate X-Definition.
 
 #### Go Back to [CLI Commands](vela) Homepage.

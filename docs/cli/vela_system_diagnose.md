@@ -1,28 +1,21 @@
 ---
-title: vela env set
+title: vela system diagnose
 ---
 
-Set an environment.
+Diagnoses system problems.
 
 ### Synopsis
 
-Set an environment as the default one for running vela applications.
+Diagnoses system problems.
 
 ```
-vela env set
-```
-
-### Examples
-
-```
-vela env set test
+vela system diagnose [flags]
 ```
 
 ### Options
 
 ```
-  -h, --help            help for set
-      --labels string   set labels for namespace
+  -h, --help   help for diagnose
 ```
 
 ### Options inherited from parent commands
@@ -33,7 +26,7 @@ vela env set test
 
 ### SEE ALSO
 
-* [vela env](vela_env)	 - Manage environments for vela applications to run.
+* [vela system](vela_system)	 - Manage system.
 
 #### Go Back to [CLI Commands](vela) Homepage.
 

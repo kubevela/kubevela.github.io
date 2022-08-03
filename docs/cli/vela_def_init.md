@@ -33,6 +33,7 @@ vela def init DEF_NAME [flags]
 ### Options
 
 ```
+  -a, --alias string           Specify the alias of the new definition.
   -d, --desc string            Specify the description of the new definition.
       --git string             Specify which git repository the configuration(HCL) is stored in. Valid when --provider/-p is set.
   -h, --help                   help for init

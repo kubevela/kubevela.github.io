@@ -21,7 +21,8 @@ vela env set test
 ### Options
 
 ```
-  -h, --help   help for set
+  -h, --help            help for set
+      --labels string   set labels for namespace
 ```
 
 ### Options inherited from parent commands
