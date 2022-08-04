@@ -244,6 +244,10 @@ ComponentDefinition my-comp: My component.
 ComponentDefinition my-comp in namespace my-namespace deleted.
 ```
 
+A brief quick view for these commands are shown below.
+
+![def-demo](../../resources/veladef.gif)
+
 ## Next Step
 
 * Learn more about [defining customized component](../components/custom-component).
