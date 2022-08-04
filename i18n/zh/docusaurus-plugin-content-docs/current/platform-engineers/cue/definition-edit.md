@@ -241,6 +241,10 @@ ComponentDefinition my-comp: My component.
 ComponentDefinition my-comp in namespace my-namespace deleted.
 ```
 
+下图简单展示了如何使用`vela def`命令来操作管理 Definition。
+
+![def-demo](../../resources/veladef.gif)
+
 ## 下一步
 
 * 了解如何使用 CUE [自定义组件](../components/custom-component)。
