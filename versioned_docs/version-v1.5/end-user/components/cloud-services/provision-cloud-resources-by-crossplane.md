@@ -10,7 +10,7 @@ Let's take cloud provider AWS as an example.
 ## Enable addon `crossplane-aws`
 
 ```shell
-$ vela addon enable crossplane-aws
+vela addon enable crossplane-aws
 ```
 
 ## Authenticate AWS Provider for Crossplane

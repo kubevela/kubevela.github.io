@@ -113,6 +113,7 @@ module.exports = {
             'end-user/workflow/timeout',
           ],
         },
+        'platform-engineers/operations/observability',
         {
           'General CD Features': [
             'how-to/dashboard/application/create-application',
@@ -165,7 +166,6 @@ module.exports = {
             'how-to/dashboard/config/image-registry',
           ],
         },
-        'platform-engineers/operations/observability',
         'platform-engineers/system-operation/performance-finetuning',
         'platform-engineers/workflow/working-mechanism',
         {
