@@ -1,10 +1,13 @@
 ---
-title: 自行构建 Addon Registry
+title: 自定义 Addon 仓库
 ---
 
-Addon registry 可以用来发现和分发 addon。 目前，KubeVela 支持两种类型的 registry：Git 仓库和 Helm Chart 仓库。
+Addon registry 可以用来发现和分发 addon。 目前，KubeVela 支持两种类型的 registry：
 
-## Git 作为 registry
+- Git 仓库，只需要将你的配置上传到任意一个 Git 服务地址就可以使用，依赖 Git 做版本管理，Addon 体系只能安装最新的版本。
+- Helm Chart 仓库，KubeVela 的 Addon 仓库可以与 Helm Chart 共用仓库，格式完全兼容。区别是 Addon 安装只能通过 Vela 体系。版本管理与 Helm Chart 相同，Addon 体系可以识别多版本并指定版本安装。
+
+## 使用 Git Repo 作为 Addon Registry
 
 Git 类型的 registry 目前支持 GitHub 、 GitLab 和 Gitee。
 
@@ -34,21 +37,27 @@ vela addon registry add my-repo --type gitee --endpoint=<URL> --path=<ptah> --gi
 vela addon registry add my-repo --type gitlab --gitRepoName=<repoName> --endpoint=<URL> --path=<ptah> --gitToken=<git token>
 ```
 
-## 使用自建 Helm Chart 仓库并上传 Addon
+上传 Addon 等价于向 Git 仓库提交代码。
 
-[Helm Chart 仓库](https://helm.sh/docs/topics/chart_repository/) 可以用来存储 addon ，并带有版本管理。 [ChartMuseum](https://chartmuseum.com/) 是一个开源的容易部署的 Helm Chart 仓库服务器。  
+## 使用 Helm Repo 作为 Addon Registry
 
-在这个教程中，我们将使用 [ChartMuseum](https://chartmuseum.com/) 来构建我们的仓库。假如你已经有这样一个仓库，不用担心，除了你不能使用 `vela addon push` 命令需要手动上传你的 addon， 你依然可以遵循以下步骤。  
+[Helm Chart 仓库](https://helm.sh/docs/topics/chart_repository/) 可以用来存储 addon，并带有版本管理。 [ChartMuseum](https://chartmuseum.com/) 是一个开源的容易部署的 Helm Chart 仓库服务器。  
+
+在这个教程中，我们将使用 [ChartMuseum](https://chartmuseum.com/) 来构建我们的仓库。假如你已经有 Helm 仓库而非 ChartMuseum，不用担心，除了你不能使用 `vela addon push` 命令需要手动上传你的 addon 之外，下列文档中的其他功能均可以正常使用。  
 
 注：你也可以使用兼容 ChartMuseum 的仓库 （例如 Harbor ），它们具有类似的功能。
 
-### 使用 ChartMuseum 创建 addon registry
+### 使用 Addon 部署 ChartMuseum
 
-KubeVela 已经提供了 ChartMuseum addon，你可以手动创建你自己的 ChartMuseum 实例或者直接使用 ChartMuseum addon。 要使用该 addon ，运行命令：
+为了方便用户使用，KubeVela 提供了开箱即用的 ChartMuseum addon，你完全可以用其他任意方式创建你自己的 ChartMuseum 实例或者直接复用已经部署好的。
+
+使用该 addon ，运行命令：
 
 ```shell
-$ vela addon enable chartmuseum
+vela addon enable chartmuseum
 ```
+
+如果这一步你不能访问默认的官方插件仓库，你可以参考下面的离线安装文档。
 
 > 如果要自定义 addon 的参数，任选其一:
 > - 使用 VelaUX 并且在启用 addon 时填写相应的参数
@@ -63,6 +72,8 @@ vela port-forward -n vela-system addon-chartmuseum 8080:8080 --address 0.0.0.0
 ```
 
 > 一般来说，你可能需要配置 ingress（可以通过 addon 的参数来实现）来实现外界的访问。 
+
+### 添加一个 Helm Repo 作为 Addon Registry
 
 使用你刚刚创建的 ChartMuseum （或者其他  Helm Chart 仓库 ）作为 addon registry ，我们将其命名为 `localcm` :
 
