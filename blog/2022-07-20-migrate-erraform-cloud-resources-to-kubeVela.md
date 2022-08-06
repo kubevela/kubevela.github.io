@@ -98,20 +98,19 @@ Let's get started!
 1. Create the `application.yaml` file, please ensure that the description of each field of Component is consistent with your cloud resource configuration:
 
     ```yaml
-    apiVersion: core.oam.dev/v1beta1
-    kind: Application
-    metadata:
-    name: app-aws-s3
-    spec:
-    components:
-        - name: sample-s3
-        type: aws-s3
-        properties:
-            bucket: vela-website-202110191745
-            acl: private
-
-            writeConnectionSecretToRef:
-            name: s3-conn
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: app-aws-s3
+spec:
+  components:
+    - name: sample-s3
+      type: aws-s3
+      properties:
+        bucket: vela-website-202110191745
+        acl: private
+        writeConnectionSecretToRef:
+        name: s3-conn
     ```
 
 2. Get the [`backup_restore` tool](https://github.com/kubevela/terraform-controller/tree/master/hack/tool/backup_restore):
