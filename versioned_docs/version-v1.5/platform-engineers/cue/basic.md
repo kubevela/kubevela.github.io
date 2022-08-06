@@ -549,7 +549,10 @@ output: {
 }
 ```
 
-Great, now you've learned all of the basic skills and best practices about how to use CUE! If you want to learn more details of CUE, please refer to the [official docs](https://cuelang.org/).
+Great, now you've learned all of the basic skills and best practices about how to use CUE! 
+
+If you want to learn more details of CUE, you can refer to [the CUE official documentation](https://cuelang.org/) or [the well documented tutorials](https://cuetorials.com/introduction/).
+
 
 In the following sections, we'll start to learn how KubeVela use CUE to glue resources. Make sure you have learned the [core concepts](../../getting-started/core-concept) of KubeVela before that.
 

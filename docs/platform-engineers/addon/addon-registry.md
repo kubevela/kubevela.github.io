@@ -2,9 +2,12 @@
 title: Build your Own Registry
 ---
 
-An addon registry can be used for discovering and distributing addons. Currently, KubeVela supports two types of registries: git server and Helm repo.
+An addon registry can be used for discovering and distributing addons. Currently, KubeVela supports two kinds of registries:
 
-## Git repo as registry
+- Git Repo, you just need to push addon artifacts to any git repository to work. This kind relies on git to manage addon version while kubevela can only recognize the latest version.
+- Helm repo, addon registry can share the same infrastructure with your helm charts, the format are strictly aligned. But addon can's be installed by helm, it need render for special files such as CUE. The package version management is aligned with Helm and KubeVela can recognize versions and install with a specified one.
+
+## Build Addon Registry with Git Repository
 
 A directory with some subdirectories stored in a git repository can be used as an addon registry.
 
@@ -36,21 +39,29 @@ If your type is GitLab, you can use:
 vela addon registry add my-repo --type gitlab --gitRepoName=<repoName> --endpoint=<URL> --path=<ptah> --gitToken=<git token>
 ```
 
+Push new addons just like checking code into your git repository.
+
 ## Build and push to custom Helm Chart repository
 
 A [Helm Chart repository](https://helm.sh/docs/topics/chart_repository/) can be used to store versioned addon packages. [ChartMuseum](https://chartmuseum.com/) is an open-source and easy-to-deploy Helm Chart Repository server.
 
-In this tutorial, we are going to use [ChartMuseum](https://chartmuseum.com/) to build our repository. If you already have one, don't worry. You can still follow these steps, except that you cannot utilize `vela addon push` command and will have to manually upload your addon.
+In this tutorial, we are going to use [ChartMuseum](https://chartmuseum.com/) to build our repository. If you don't have ChartMuseum but already have some helm registries, you can re-use your registry with the following guide. The only exception for not having ChartMuseum is that you cannot utilize `vela addon push` command and will have to manually upload your addon.
 
 Note: you can also use registries that are compatible with ChartMuseum (e.g. Harbor). They will have the same capabilities.
 
-### Create an addon registry using ChartMuseum
+### Install ChartMuseum by Addon
 
-We have provided a ChartMuseum addon. You can create your own ChartMuseum instance or use our addon. To enable it, run:
+> You can skip this step if you already have ChartMuseum.
+
+We have provided a ChartMuseum addon, you can also create your own ChartMuseum instance or re-use exist one.
+
+To enable it, run:
 
 ```shell
-$ vela addon enable chartmuseum
+vela addon enable chartmuseum
 ```
+
+If you don't have access to the default registry, refer to [the air gap installation of chartmuseum](#sync-addons-to-chartmuseum-in-an-air-gapped-environment).
 
 > To customize addon parameters, either:
 > - use VelaUX and fill out the form when enabling addon
@@ -65,6 +76,8 @@ vela port-forward -n vela-system addon-chartmuseum 8080:8080 --address 0.0.0.0
 ```
 
 > Typically, you would configure ingress (achievable using addon parameters) to make the addon accessible to the outside.
+
+### Add an addon registry using Helm Repository
 
 Use your newly created ChartMuseum repository (or any other Helm Chart repository) as an addon registry. We will name it `localcm`:
 

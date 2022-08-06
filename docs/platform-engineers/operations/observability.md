@@ -1,5 +1,5 @@
 ---
-title: Observability
+title: Automated Observability
 ---
 
 Observability is critical for infrastructures. Without observability system, it is hard to identify what happens when system broke down. On contrary, a strong observabilty system can not only provide confidences for operators but can also help developers quickly locate the performance bottleneck or the weak points inside the whole system.

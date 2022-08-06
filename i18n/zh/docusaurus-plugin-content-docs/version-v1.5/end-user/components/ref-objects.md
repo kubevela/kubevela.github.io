@@ -36,6 +36,24 @@ spec:
           region: hangzhou
 ```
 
+### 通过 URL 地址引用对象
+
+通常我们可以看到社区已经存在的 YAML 地址，你可以通过引用对象类型安装这些 YAML。
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: example-app
+  namespace: default
+spec:
+  components:
+  - name: busybox
+    type: ref-objects
+    properties:
+      urls: ["https://gist.githubusercontent.com/Somefive/b189219a9222eaa70b8908cf4379402b/raw/e603987b3e0989e01e50f69ebb1e8bb436461326/example-busybox-deployment.yaml"]
+```
+
 ## *ref-objects* 类型组件的细节
 
 声明需要引用资源最直接的方法是使用 `resource: secret` 或 `resource: deployment` 这样的方式来确定引用资源的类型。如果 `name` 和 `labelSelector` 都没有被设置，那么应用将会在它的命名空间下尝试寻找与和组件名称一致的资源。你也可以显式地指定 `name` 和 `namespace` 来确定需要引用的资源。
