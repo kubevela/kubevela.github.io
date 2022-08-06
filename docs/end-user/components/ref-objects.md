@@ -10,8 +10,11 @@ You can reference and distribute existing Kubernetes objects with KubeVela in th
 - Promote deployments from canary clusters into production clusters.
 - Using Kubernetes apiserver as the control plane and storing all Kubernetes objects data in external databases. Then dispatch those data into real Kuberenetes managed clusters.
 
+Besides, you can also refer to Kubernetes objects from remote URL links.
 
 ## Refer to Existing Kubernetes Objects in Component
+
+### Refer to objects in cluster
 
 To use existing Kubernetes objects in the component, you need to use the `ref-objects` typed component and declare which resources you want to refer to. For example, in the following example, the secret `image-credential-to-copy` in namespace `examples` will be taken as the source object for the component. Then you can use the topology policy to dispatch it into hangzhou clusters.
 
@@ -35,6 +38,24 @@ spec:
       properties:
         clusterLabelSelector:
           region: hangzhou
+```
+
+### Refer to objects from URL
+
+If your source Kubernetes objects are from remote URLs, you can also refer to them in the component properties as follows. Your remote URL files could include multiple-resources as well.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: example-app
+  namespace: default
+spec:
+  components:
+  - name: busybox
+    type: ref-objects
+    properties:
+      urls: ["https://gist.githubusercontent.com/Somefive/b189219a9222eaa70b8908cf4379402b/raw/e603987b3e0989e01e50f69ebb1e8bb436461326/example-busybox-deployment.yaml"]
 ```
 
 ## Details for the *ref-objects* typed component
