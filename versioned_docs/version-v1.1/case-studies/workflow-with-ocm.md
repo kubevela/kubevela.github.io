@@ -1,5 +1,0 @@
----
-title:  Practical Case
----
-
-TBD

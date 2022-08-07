@@ -209,4 +209,10 @@ module.exports = {
     './src/plugins/faviconCustomPlugin',
     require.resolve('docusaurus-plugin-image-zoom'),
   ],
+  scripts: [
+    {
+      src: '/custom.js',
+      async: true,
+    },
+  ],
 };
