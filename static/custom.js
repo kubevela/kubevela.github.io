@@ -4,7 +4,7 @@ function appendVersionList() {
     var versionItem = document.createElement('li');
     var link = document.createElement('a');
     link.href = '/docs/' + version;
-    link.innerText = version + '(legacy)';
+    link.innerText = version + '(Archived)';
     link.classList = ['dropdown__link'];
     versionItem.appendChild(link);
     document
