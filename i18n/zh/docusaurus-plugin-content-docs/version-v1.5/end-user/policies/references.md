@@ -4,7 +4,7 @@ title: 内置策略列表
 
 本文档将**按字典序**展示所有内置策略的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-24T21:01:20+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-08-08T11:22:49+08:00。
 
 ## Apply-Once
 
@@ -305,7 +305,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name | 要覆盖的组件的名称。 如果未设置，它将匹配具有指定类型的所有组件。 可以与通配符 * 一起使用以进行模糊匹配。。 | string | false |  
  type | 要覆盖的组件的类型。 如果未设置，将匹配所有组件类型。 | string | false |  
- properties | 要覆盖的配置属性，未填写配置会与原先的配置合并。 | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+ properties | 要覆盖的配置属性，未填写配置会与原先的配置合并。 | map[string]:(null&#124;bool&#124;string&#124;bytes&#124;{...}&#124;[...]&#124;number) | false |  
  traits | 要覆盖的 trait 配置列表。 | [[]traits](#traits-override) | false |  
 
 
@@ -314,8 +314,116 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  type | 要做参数覆盖的 trait 类型。 | string | true |  
- properties | 要覆盖的配置属性，未填写配置会与原先的配置合并。 | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+ properties | 要覆盖的配置属性，未填写配置会与原先的配置合并。 | map[string]:(null&#124;bool&#124;string&#124;bytes&#124;{...}&#124;[...]&#124;number) | false |  
  disable | 如果为 true，该 trait 将被删除，默认 false。 | bool | false | false 
+
+
+## Shared-Resource
+
+### 描述
+
+Configure the resources to be sharable across applications。
+
+### 示例 (shared-resource)
+
+It's used in [shared-resource](https://kubevela.io/docs/end-user/policies/shared-resource) scenario.
+It can be used to configure which resources can be shared between applications. The target resource will allow multiple application to read it but only the first one to be able to write it.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: app1
+spec:
+  components:
+    - name: ns1
+      type: k8s-objects
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: Namespace
+            metadata:
+              name: example
+    - name: cm1
+      type: k8s-objects
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: ConfigMap
+            metadata:
+              name: cm1
+              namespace: example
+            data:
+              key: value1
+  policies:
+    - name: shared-resource
+      type: shared-resource
+      properties:
+        rules:
+          - selector:
+              resourceTypes: ["Namespace"]
+```
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: app2
+spec:
+  components:
+    - name: ns2
+      type: k8s-objects
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: Namespace
+            metadata:
+              name: example
+    - name: cm2
+      type: k8s-objects
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: ConfigMap
+            metadata:
+              name: cm2
+              namespace: example
+            data:
+              key: value2
+  policies:
+    - name: shared-resource
+      type: shared-resource
+      properties:
+        rules:
+          - selector:
+              resourceTypes: ["Namespace"]
+```
+
+### 参数说明 (shared-resource)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ rules | Specify the list of rules to control shared-resource strategy at resource level。 | [[]rules](#rules-shared-resource) | false |  
+
+
+#### rules (shared-resource)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ selector | 指定资源筛选目标规则。 | [[]selector](#selector-shared-resource) | true |  
+
+
+##### selector (shared-resource)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ componentNames | 按组件名称选择目标资源。 | []string | false |  
+ componentTypes | 按组件类型选择目标资源。 | []string | false |  
+ oamTypes | 按 OAM 概念，组件(COMPONENT) 或 运维特征(TRAIT) 筛选。 | []string | false |  
+ traitTypes | 按 trait 类型选择目标资源。 | []string | false |  
+ resourceTypes | 按资源类型选择。 | []string | false |  
+ resourceNames | 按资源名称选择。 | []string | false |  
 
 
 ## Topology

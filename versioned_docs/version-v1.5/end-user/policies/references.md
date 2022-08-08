@@ -4,7 +4,7 @@ title: Built-in Policy Type
 
 This documentation will walk through all the built-in policy types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-24T21:01:20+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-08-08T11:22:49+08:00.
 
 ## Apply-Once
 
@@ -305,7 +305,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name | Specify the name of the patch component, if empty, all components will be merged. | string | false |  
  type | Specify the type of the patch component. | string | false |  
- properties | Specify the properties to override. | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+ properties | Specify the properties to override. | map[string]:(null&#124;bool&#124;string&#124;bytes&#124;{...}&#124;[...]&#124;number) | false |  
  traits | Specify the traits to override. | [[]traits](#traits-override) | false |  
 
 
@@ -314,8 +314,116 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  type | Specify the type of the trait to be patched. | string | true |  
- properties | Specify the properties to override. | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+ properties | Specify the properties to override. | map[string]:(null&#124;bool&#124;string&#124;bytes&#124;{...}&#124;[...]&#124;number) | false |  
  disable | Specify if the trait should be remove, default false. | bool | false | false 
+
+
+## Shared-Resource
+
+### Description
+
+Configure the resources to be sharable across applications.
+
+### Examples (shared-resource)
+
+It's used in [shared-resource](https://kubevela.io/docs/end-user/policies/shared-resource) scenario.
+It can be used to configure which resources can be shared between applications. The target resource will allow multiple application to read it but only the first one to be able to write it.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: app1
+spec:
+  components:
+    - name: ns1
+      type: k8s-objects
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: Namespace
+            metadata:
+              name: example
+    - name: cm1
+      type: k8s-objects
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: ConfigMap
+            metadata:
+              name: cm1
+              namespace: example
+            data:
+              key: value1
+  policies:
+    - name: shared-resource
+      type: shared-resource
+      properties:
+        rules:
+          - selector:
+              resourceTypes: ["Namespace"]
+```
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: app2
+spec:
+  components:
+    - name: ns2
+      type: k8s-objects
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: Namespace
+            metadata:
+              name: example
+    - name: cm2
+      type: k8s-objects
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: ConfigMap
+            metadata:
+              name: cm2
+              namespace: example
+            data:
+              key: value2
+  policies:
+    - name: shared-resource
+      type: shared-resource
+      properties:
+        rules:
+          - selector:
+              resourceTypes: ["Namespace"]
+```
+
+### Specification (shared-resource)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ rules | Specify the list of rules to control shared-resource strategy at resource level. | [[]rules](#rules-shared-resource) | false |  
+
+
+#### rules (shared-resource)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ selector | Specify how to select the targets of the rule. | [[]selector](#selector-shared-resource) | true |  
+
+
+##### selector (shared-resource)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ componentNames | Select resources by component names. | []string | false |  
+ componentTypes | Select resources by component types. | []string | false |  
+ oamTypes | Select resources by oamTypes (COMPONENT or TRAIT). | []string | false |  
+ traitTypes | Select resources by trait types. | []string | false |  
+ resourceTypes | Select resources by resource types (like Deployment). | []string | false |  
+ resourceNames | Select resources by their names. | []string | false |  
 
 
 ## Topology

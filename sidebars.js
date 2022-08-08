@@ -122,6 +122,7 @@ module.exports = {
             'case-studies/initialize-env',
             'end-user/policies/apply-once',
             'end-user/policies/gc',
+            'end-user/policies/shared-resource',
           ],
         },
         'end-user/components/more',
