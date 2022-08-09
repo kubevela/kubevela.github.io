@@ -47,7 +47,7 @@ services:
       build:
         docker:
           file: Dockerfile
-          contrxt: .
+          context: .
       cmd: ["node", "server.js"]
       port: 8080
       cpu: "0.01"

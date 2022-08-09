@@ -1,5 +1,5 @@
 ---
-title: Definition Protocol
+title: OAM Definition Protocol
 ---
 
 KubeVela is fully programmable via [CUE](https://cuelang.org), while it leverage Kubernetes as control plane and align with the API in yaml.
@@ -266,7 +266,42 @@ This field defines the field path of the trait which is used to store the refere
 
 If this field is set, KubeVela core will automatically fill the workload reference into target field of the trait. Then the trait controller can get the workload reference from the trait latter. So this field usually accompanies with the traits whose controllers relying on the workload reference at runtime. 
 
-Please check [scaler](https://github.com/kubevela/kubevela/blob/master/charts/vela-core/templates/defwithtemplate/scaler.yaml) trait as a demonstration of how to set this field.
+For example, when this field set in the following custom trait:
+  ```yaml
+  apiVersion: core.oam.dev/v1beta1
+  kind: TraitDefinition
+  metadata:
+    name: myscaler
+  spec:
+    workloadRefPath: spec.workloadRef
+    schematic:
+      cue:
+        template: |
+          outputs: scaler: {
+            apiVersion: "core.oam.dev/v1alpha2"
+            kind:       "ManualScalerTrait"
+            spec: {
+              replicaCount: parameter.replicas
+            }
+          }
+          parameter: {
+            //+short=r
+            //+usage=Replicas of the workload
+            replicas: *1 | int
+          }
+  ```
+
+The controller will automatically inject the apiVersion/Kind/Name of the workload defined in the component into the field specified in `workloadRefPath`, the result of the trait object in the app can be something like below, assume the workload is a Kubernetes Deployment:
+  ```yaml
+  apiVersion: "core.oam.dev/v1alpha2"
+  kind:       "ManualScalerTrait"
+  spec:
+    workloadRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: mywork
+    replicaCount: 1
+  ```
 
 ### `.spec.podDisruptive`
 
