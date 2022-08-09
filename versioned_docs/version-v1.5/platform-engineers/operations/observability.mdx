@@ -51,9 +51,9 @@ To enable the addon suites, you simply needs to run the `vela addon enable` comm
 
 Now you can access your grafana by access `http://localhost:8080` in your browser. The default username and password are `admin` and `kubevela` respectively.
 
-## Internal Dashboards
+## Automated Dashboards
 
-There are four internal dashboards you can navigate and view your system.
+There are four automated dashboards you can navigate and view your system.
 
 ### KubeVela Application
 
@@ -340,6 +340,10 @@ Now you can manage your dashboard and datasource on your grafana instance throug
 ```
 
 For more details, you can refer to [vela-prism](https://github.com/kubevela/prism#grafana-related-apis).
+
+### Integrate Other Tools or Systems
+
+There are a wide range of community tools or eco-systems that users can leverage for building their observability system, such as prometheus-operator or DataDog. By far, KubeVela does not have existing best practices for those integration. We may integrate with those popular projects through KubeVela addons in the future. We are also welcome to community contributions for broader explorations and more connections.
 
 ## Comparisons
 
