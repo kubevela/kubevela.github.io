@@ -30,7 +30,7 @@ For example, each application wants to create a ConfigMap, but their ConfigMaps 
 To achieve that, KubeVela application could utilize the `shared-resource` policy to make it possible.
 
 ### create
-When one resource is created as sharing resource, one special annotation app.oam.dev/shared-by will be added to the resource.
+When one resource is created as sharing resource, one special annotation `app.oam.dev/shared-by` will be added to the resource.
 It will record the **sharer** of the resource in time order. The application that firstly creates the resource will set its owner labels to itself.
 
 Then it will add itself to the sharer annotation.
@@ -128,3 +128,9 @@ The above two applications will dispatch the same namespace "example". They will
 Both application use the shared-resource policy and declared the namespace resource as shared. In this way, there will be no conflict for creating the same namespace. If the shared-resource policy is not used, the second application will report error after it finds that the namespace "example" is managed by the first application.
 
 The namespace will only be recycled when both applications are removed.
+
+## Notice
+
+1. When multiple applications share the same resource, the first one who creates it can make updates to its content. The others cannot modify it. Once the first application does not use it anymore (for example, the first application is deleted), then the second one will become the owner, which means it is now able to modify the content. **This will not take effect immediately.** But when StateKeep happens, or application re-runs its workflow (for example, it is updated), it will set the resource content to be its desired state.
+
+2. Although shared-resource policy allows you to share resources across Applications, it does not guarantee the outside system can behave proper to coordinate with the shared resource, which may sometimes lead to unexpected results. For example, if you have two applications share the same namespace, it is fine for those applications to use this namespace. But if you manually create other resources into that namespace, once those two applications are gone, **the namespace will be recycled automatically, and then your manually created resources in that namespace will be deleted as well**, even if you do not intend to do that.
