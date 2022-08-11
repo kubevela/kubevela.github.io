@@ -35,8 +35,8 @@ vela def init stateless -t component --template-yaml ./stateless.yaml -o statele
 
 It generates a file:
 
-```shell
-$ cat stateless.cue
+```cue
+// $ cat stateless.cue
 stateless: {
 	annotations: {}
 	attributes: workload: definition: {
@@ -76,7 +76,7 @@ In detail:
 
 Add parameters in this auto-generated custom component file :
 
-```
+```cue
 stateless: {
 	annotations: {}
 	attributes: workload: definition: {
@@ -126,8 +126,8 @@ vela def init task -t component -o task.cue
 
 It generates a file:
 
-```shell
-$ cat task.cue
+```cue
+// $ cat task.cue
 task: {
 	annotations: {}
 	attributes: workload: definition: {
@@ -147,7 +147,7 @@ template: {
 
 Edit the generated component file:
 
-```
+```cue
 task: {
 	annotations: {}
 	attributes: workload: definition: {
@@ -324,7 +324,7 @@ outputs: <unique-name>:
 
 Below is the example for `webserver` definition: 
 
-```
+```cue
 webserver: {
 	annotations: {}
 	attributes: workload: definition: {

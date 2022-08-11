@@ -28,7 +28,7 @@ Please make sure below CLIs are present in your environment:
 
 Below is the basic CUE data, you can define both schema and value in the same file with the almost same format:
 
-```
+```cue
 a: 1.5
 a: float
 b: 1
@@ -68,7 +68,7 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
     ```shell
     cue eval first.cue
     ```
-    ```console
+    ```cue
     a: 1.5
     b: 1
     d: [1, 2, 3]
@@ -102,7 +102,7 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
     ```shell
     cue export first.cue
     ```
-    ```console
+    ```json
     {
         "a": 1.5,
         "b": 1,
@@ -122,7 +122,7 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
     ```shell
     cue export first.cue --out yaml
     ```
-    ```console
+    ```yaml
     a: 1.5
     b: 1
     d:
@@ -138,7 +138,7 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
     ```shell
     cue export -e g first.cue
     ```
-    ```console
+    ```cue
     {
         "h": "abc"
     }
@@ -150,7 +150,7 @@ For now, you have learned all useful CUE cli operations.
 
 * Data structure: Below is the basic data structure of CUE.
 
-```shell
+```cue
 // float
 a: 1.5
 
@@ -191,13 +191,13 @@ Let's name it `second.cue`. Then the `cue export` won't complain as the `#abc` i
 ```shell
 cue export second.cue
 ```
-```console
+```json
 {}
 ```
 
 You can also define a more complex custom struct, such as:
 
-```
+```cue
 #abc: {
   x: int
   y: string
@@ -216,7 +216,7 @@ Let's try to define a CUE template with the knowledge just learned.
 
 1. Define a struct variable `parameter`.
 
-```shell
+```cue
 parameter: {
 	name: string
 	image: string
@@ -227,7 +227,7 @@ Let's save it in a file called `deployment.cue`.
 
 2. Define a more complex struct variable `template` and reference the variable `parameter`.
 
-```
+```cue
 template: {
 	apiVersion: "apps/v1"
 	kind:       "Deployment"
@@ -255,7 +255,7 @@ Add it into the `deployment.cue`.
 
 3. Then, let's add the value by adding following code block:
 
-```
+```cue
 parameter:{
    name: "mytest"
    image: "nginx:v1"
@@ -267,7 +267,7 @@ parameter:{
 ```shell
 cue export deployment.cue -e template --out yaml
 ```
-```console
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 spec:
@@ -291,7 +291,7 @@ spec:
    -  A list like `[...string]` means it can hold multiple string elements.
       If we don't add `...`, then `[string]` means the list can only have one `string` element in it.
    -  A struct like below means the struct can contain unknown fields. 
-      ```
+      ```cue
       {
         abc: string   
         ...
@@ -299,19 +299,19 @@ spec:
       ```
 
 * Operator  `|`, it represents a value could be both case. Below is an example that the variable `a` could be in string or int type.
-  ```shell
+  ```cue
   a: string | int
   ```
 
 * Default Value, we can use `*` symbol to represent a default value for variable. That's usually used with `|`,
   which represents a default value for some type. Below is an example that variable `a` is `int` and it's default value is `1`.
-  ```shell
+  ```cue
   a: *1 | int
   ```
 
 * Optional Variable. In some cases, a variable could not be used, they're optional variables, we can use `?:` to define it.
   In the below example, `a` is an optional variable, `x` and `z` in `#my` is optional while `y` is a required variable.
-  ```
+  ```cue
   a ?: int
 
   #my: {
@@ -323,7 +323,7 @@ spec:
 
 Optional variables can be skipped, that usually works together with conditional logic.
 Specifically, if some field does not exist, the CUE grammar is `if _variable_ != _|_`, the example is like below:
-  ```
+  ```cue
   #Config: {
     name:  string
     value: string
@@ -351,7 +351,7 @@ Specifically, if some field does not exist, the CUE grammar is `if _variable_ !=
 
 * Operator  `&`, it used to calculate two variables.
 
-```shell
+```cue
 a: *1 | int
 b: 3
 c: a & b
@@ -364,7 +364,7 @@ You can evaluate the result by using `cue eval`:
 ```shell
 cue eval third.cue
 ```
-```console
+```cue
 a: 1
 b: 3
 c: 3
@@ -373,7 +373,7 @@ c: 3
 * Conditional statement, it's really useful when you have some cascade operations that different value affects different results.
   So you can do `if..else` logic in the template.
 
-```shell
+```cue
 price: number
 feel: *"good" | string
 // Feel bad if price is too high
@@ -390,14 +390,14 @@ You can evaluate the result by using `cue eval`:
 ```shell
 cue eval fourth.cue
 ```
-```console
+```cue
 price: 200
 feel:  "bad"
 ```
 
 Another example is to use bool type as parameter.
 
-```
+```cue
 parameter: {
     name:   string
     image:  string
@@ -443,7 +443,7 @@ output: {
     }
     ```
   - Loop for type
-    ```
+    ```cue
     #a: {
         "hello": "Barcelona"
         "nihao": "Shanghai"
@@ -481,7 +481,7 @@ output: {
     }
     ```
   - If clause in Loop {}
-  ```
+  ```cue
   parameter: [
 	{
 		name: "empty"
@@ -497,14 +497,14 @@ output: {
   }]
   ```
   the result is:
-  ```
+  ```console
   cue eval ../blog/a.cue -e dataFrom
   [{}, {
     name: "xx1"
   }]
   ```
   - If clause in Loop with condition
-  ```
+  ```cue
   parameter: [
 	{
 		name: "empty"
@@ -518,7 +518,7 @@ output: {
   }]
   ```
   the result is:
-  ```
+  ```console
   cue eval ../blog/a.cue -e dataFrom
   [{
     name: "xx1"

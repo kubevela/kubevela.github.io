@@ -4,11 +4,11 @@ title: 单点登录
 
 ## 简介
 
-在 KubeVela 1.3 版本中，默认提供了两种方式：本地登录以及单点登录。
+在 KubeVela 1.3 及以后的版本中，默认提供了两种方式：本地登录以及单点登录。
 
-本地登录使用本地数据库中存储的用户名密码进行登录，而单点登录集成了 [Dex](https://dexidp.io/)，可以通过配置 Dex 的 [OpenID Connect](https://dexidp.io/docs/openid-connect) 来实现多种不同方式的登录，如：GitHub、LDAP 等等。
+本地登录使用本地数据库中存储的用户名密码进行登录，而单点登录集成了 [Dex](https://dexidp.io/)，可以通过配置 Dex 的 [OpenID Connect](https://dexidp.io/docs/openid-connect) 来实现多种不同方式的登录，如：GitHub, LDAP, Gitlab, Oidc, Saml, Google 等等。
 
-平台初始化后，默认使用本地登录。平台管理员可以通过平台配置页面，配置单点登录。在本教程中，我们将分别使用 GitHub 和 LDAP Connector 来演示单点登录。
+平台初始化后，默认使用本地登录。平台管理员可以通过平台配置页面，配置单点登录。在本教程中，本文我们将分别使用 GitHub 和 LDAP Connector 来演示单点登录。其他类型只有配置参数的差异，启动流程一致。
 
 ## 开启 Dex 插件
 
@@ -18,7 +18,7 @@ title: 单点登录
 
 开启完毕后，我们还需要更新一下 VelaUX 插件，打开其 Dex 选项。同样，我们在插件列表中找到 VelaUX，进行更新：
 
-![alt](https://static.kubevela.net/images/1.3/upgrade-velaux.png)
+![alt](https://static.kubevela.net/images/1.5/enable-dex-in-velaux.png)
 
 ## 配置 Dex Connectors
 
@@ -56,9 +56,13 @@ title: 单点登录
 
 由于新登入的用户没有任何权限，因此，我们需要先为平台管理员设置一个邮箱地址。之后，再使用拥有相同邮箱地址的用户进行单点登录时，便能自动拥有平台管理员的权限。
 
-配置完用户邮箱后，我们可以在平台配置页面中，将登录方式修改为 SSO 登录。
+配置完用户邮箱后，我们可以在平台配置页面中，将登录方式修改为 SSO 登录。在提交之前强烈建议先点击策略链接跳转到 Dex 登录页面进行登录测试。
 
-![alt](https://static.kubevela.net/images/1.3/platform-setting.png)
+> 请注意，admin 用户可以通过 Dex 的邮箱登录途径进行登录，使用你配置的邮箱和密码即可。
+
+![alt](https://static.kubevela.net/images/1.5/platform-setting.jpg)
+
+在该页面中，你还可以未单点登录的用户配置初始化权限，设置默认加入的项目和角色。如果不设置，初次登录的用户将无任何权限。
 
 ### 使用单点登录
 

@@ -6,19 +6,19 @@ title:  SSO Login
 
 In KubeVela V1.3, we provide two methods to login: local login and SSO.
 
-Local login uses the username and password stored in the local database to log in, and SSO integrates [Dex](https://dexidp.io/), which can be configured by configuring Dex's [OpenID Connect](https://dexidp.io/docs/openid-connect) to implement many different ways to log in, such as: GitHub, LDAP, etc.
+Local login uses the username and password stored in the local database to log in, and SSO integrates [Dex](https://dexidp.io/), which can be configured by configuring Dex's [OpenID Connect](https://dexidp.io/docs/openid-connect) to implement many different ways to log in, such as GitHub, LDAP, Gitlab, Oidc, Saml, Google etc.
 
-After the platform is initialized, local login is used by default. Platform administrators can configure SSO through the platform configuration page. In this tutorial, we'll use the GitHub and LDAP Connector to show how to use SSO with KubeVela.
+After the platform is initialized, local login is used by default. Platform administrators can configure SSO through the platform configuration page. In this tutorial, we'll use GitHub and LDAP Connector to show how to use SSO with KubeVela.
 
 ## Enable Dex Addon
 
-You need to enable the Dex Addon in the Addon list first to use SSO:
+1. You need to enable the Dex Addon in the Addon list first to use SSO:
 
 ![alt](https://static.kubevela.net/images/1.3/dex-addon.png)
 
-After enabling the Dex Addon, we also need to upgrade the VelaUX addon and open its Dex option:
+2. After enabling the Dex Addon, we also need to upgrade the VelaUX addon and open its Dex option:
 
-![alt](https://static.kubevela.net/images/1.3/upgrade-velaux.png)
+![alt](https://static.kubevela.net/images/1.5/enable-dex-in-velaux.png)
 
 ## Configure Dex Connectors
 
@@ -51,13 +51,17 @@ If your LDAP does not provide anonymous authentication access, then you need to 
 
 ## Platform setting
 
-Users who login in through SSO will be automatically bound to the users who have the same email in the local database, otherwise a new user will be created.
+Users who log in through SSO will be automatically bound to the users who have the same email in the local database, otherwise, a new user will be created.
 
-Since the newly logged in user does not have any permissions, we need to set an email address for the platform administrator first. After that, when you use a user with the same email address for SSO login, you can automatically have platform administrator privileges.
+Since the newly logged-in user does not have any permissions, we need to set an email address for the platform administrator first. After that, when you use a user with the same email address for SSO login, you can automatically have platform administrator privileges.
 
-After configuring the user email, we can change the login method to SSO login in the platform configuration page.
+> The admin user also could log in from the dex with the email and password.
 
-![alt](https://static.kubevela.net/images/1.3/platform-setting.png)
+After configuring the user email, we can change the login method to SSO login on the platform configuration page. Before updating the configuration, it is strongly recommended to click `Click me to test open the dex page` to verify that the dex connector configuration is ready.
+
+![alt](https://static.kubevela.net/images/1.5/platform-setting.jpg)
+
+On this page, you could set the default project and roles for the users who log in through SSO.
 
 ## Use SSO Login
 
@@ -65,8 +69,8 @@ Log out and refresh the page again, you can see that we have entered the Dex log
 
 ![alt](https://static.kubevela.net/images/1.3/dex-login.png)
 
-Then, you select GitHub or LDAP to login.
+Then, you select GitHub or LDAP to log in.
 
 ![alt](https://static.kubevela.net/images/1.3/dex-grant-access.png)
 
-So far, we have successfully completed SSO login with GitHub. At this point, if the email of the logged in user can be associated with the email of the previously logged in user, the newly logged in user will inherit the permissions of the previous user.
+So far, we have completed SSO login with GitHub. At this point, if the email of the log-in user can be associated with the email of the previously log-in user, the newly log-in user will inherit the permissions of the previous user.
