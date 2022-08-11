@@ -10,12 +10,12 @@ title: 自定义插件
 
 下图展示了在启用一个插件时，KubeVela 做了哪些事情, 主要包含以下三个步骤。
 * 当通过 UX/CLI 启用一个插件时，会从插件仓库把插件中的源文件拉取下来。
-* 文件中`扩展配置`文件会被 UX/CLI 直接下发到管控集群。 资源描述（ [template](#应用模版-templateyaml-或-templatecue-文件)）, [metadata](#元数据metadatayaml-文件) 和 [resources/](#资源目录-resources) 目录下的文件 ）文件会被用来渲染成一个 KubeVela 应用并创建。
+* 文件中`扩展配置`文件会被 UX/CLI 直接下发到管控集群。 资源描述（ [template](#应用模版-templateyaml文件) , [metadata](#元数据metadatayaml-文件) 和 [resources/](#资源目录-resources) 目录下的文件 ）文件会被用来渲染成一个 KubeVela 应用并创建。
 * 接下来运行在管控集群的 KubeVela 控制器完全按照应用（Application）的执行流程交付资源，与 KubeVela 其他的应用执行没有差别。
 
 ![alt](../../resources/addon-mechanism.jpg)
 
-# 制作插件 (Make an Addon)
+## 制作插件 (Make an Addon)
 
 接下来将介绍如何制作一个自己的插件。
 
@@ -30,16 +30,16 @@ title: 自定义插件
 ├── README.md
 ├── metadata.yaml
 ├── parameter.cue
-└── template.yaml(or template.cue)
+└── template.yaml
 ```
 
-你也可以使用命令 `vela addon init`（vela CLI v1.5 或更新）帮你快速创建这个目录框架，你可以查阅 `vela addon init -h`来获取详细信息。这里我们使用最简单的 `vela addon init your-addon-name` 就足够了。
+你也可以使用命令 `vela addon init` 帮你快速创建这个目录框架，你可以查阅 `vela addon init -h`来获取详细信息。这里我们使用最简单的 `vela addon init your-addon-name` 就足够了。
 
 需要注意的是，上面的文件并不都是必须的。接下来将介绍该目录下的每个文件和子目录的详细作用。
 
-## 插件的基本信息文件 （必须）
+### 插件的基本信息文件 （必须）
 
-### 元数据 (metadata.yaml) 文件 
+#### 元数据 (metadata.yaml) 文件 
 
 首先你需要编写一个插件的元数据文件 (metadata.yaml) ，该文件描述了插件的名称、版本、描述等基本描述信息。只有包含这个文件，一个目录才会被 UX/CLI 识别为一个插件的资源目录, 一个元数据文件的例子如下所示：
 
@@ -81,7 +81,7 @@ invisible: false
 | system.kubernetes     | no  | string | 环境中所要求的 Kubernetes 的版本 |
 | deployTo.runtimeCluster     | no  | bool |  插件是否可以安装到子集群，默认不设置该字段插件不会安装在任何子集群中 |
 
-### 自描述  (README.md) 文件 
+#### 自描述  (README.md) 文件 
 
 插件的自描述文件用于描述插件的主要功能，并且该文件会在 UX 的插件详情页面呈现给用户。所以 README.md 需要包含以下基本信息：
 
@@ -92,33 +92,33 @@ invisible: false
 
 [实验阶段的插件](https://github.com/kubevela/catalog/tree/master/experimental/addons) 通常没有这些非常严格的规则，但对于一个想要进阶到 [认证仓库](https://github.com/kubevela/catalog/tree/master/addons) 的插件而言，README 至关重要。
 
-## KubeVela 的扩展配置文件 （可缺省）
+### KubeVela 的扩展配置文件 （可缺省）
 
-### 模版定义文件 (definitions/) 目录
+#### 模版定义文件 (definitions/) 目录
 
 `definitions` 文件目录用于存放模版定义文件（`X-Definitions`）, 这些文件可以是一个 YAML 类型的 ComponentDefinition，traitDefinitions 或 workflowStepDefinitions Kubernetes CR。也可以是 CUE 格式的 KubeVela [def](../../getting-started/definition) 文件，这类文件在启用时会被渲染成对应的 X-definitions CR 再下发到集群。
 
 > 需要注意的是，这些 X-definitions 只会被下发到管控集群。
 
-### 模版参数展示增强文件 (schema/) 目录
+#### 模版参数展示增强文件 (schema/) 目录
 
 `schemas/` 目录用于存放 `X-Definitions` 所对应的 [UI-schema](../../reference/ui-schema) 文件，用于在 UX 中展示 `X-Definitions`所需要填写参数时增强显示效果。需要注意的是，和模块定义文件一样，这些文件仅会被下发到管控集群。
 
-## 资源描述文件（可缺省）
+### 资源描述文件（可缺省）
 
 通过上面的介绍，我们知道插件中很重要的一部分就是通过`资源描述文件`定义需要安装的 Kubernetes 资源对象。你可以在应用模版文件和 `resources/` 目录下的文件中定义这些资源。而这些资源描述文件会最终被渲染成一个 KubeVela 的 `应用`（application），由 KubeVela 控制器下发至集群。
 
 需要注意的是，应用模版文件和资源目录下面的资源描述文件，都可以通过 CUE 或 YAML 格式定义，本文档会只介绍最简单的通过 YAML 描述资源的方法，[下一篇文档](./addon-cue) 会详细介绍如何如果通过 CUE 定义资源描述文件。
 
-### 应用模版 (template.yaml 或 template.cue) 文件
+#### 应用模版 (template.yaml) 文件
 
 应用模板文件就是用来定义这个`应用` （application） 的基础框架。你可以通过该文件描述这个`应用`的特定信息，比如你可以为`应用`打上特定的标签或注解，当然你也可以直接在该应用模版文件中添加组件，策略和设置工作流。 应用模版定义文件可以是 YAML 类型的文件（template.yaml）或 CUE 类型文件 （template.cue）。
 
 > 请注意，你只能选择 template.yaml 或 template.cue 其中之一，同时包含两个文件的插件，启用时会报错。
 
-#### template.yaml
+##### template.yaml
 
-一个 YAML 格式的应用模版定义文件 （`template.yaml`） 文件就是定义一个 KubeVela 的 application，下面就是一个 `template.yaml` 例子：
+一个 YAML 格式的应用模版文件 （`template.yaml`） 文件就是定义一个 KubeVela 的 application，下面就是一个 `template.yaml` 例子：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -140,11 +140,13 @@ spec:
 
 在这个例子中，我们所定义的应用基础框架中包含了一个` k8s-objects` 类型的组件，组件中是一个 `namespace` 资源，插件启用之后这个 namespace 就会被 KubeVela 在集群中下发。
 
+如果你希望这个应用框架能够在启用时通过启动参数被渲染请参考[CUE 定义插件](./addon-cue) 了解 CUE 应用模版文件的定义方式。
+
 > 需要注意的是，即使你通过 `metadata.name` 字段设置了应用的名称，该设置也不会生效，在启用时应用会统一以 addon-{addonName} 的格式被命名。
 
-### 资源目录 (resources)
+#### 资源目录 (resources)
 
-虽然你可以在应用模版文件中定义全部的资源，但这可能会导致单个文件过于庞大，所以你也可以选择在 `resources/` 目录下编写单独的文件定义资源。该目录下面的文件格式也可以是 YAML 或 CUE 格式的文件，同样为了简单，本文档会直接介绍 YAML 方式的定义方法。[下篇文档](./addon-cue) 将会详细介绍 CUE 的定义方式。
+虽然你可以在应用模版文件中定义全部的资源，但这可能会导致单个文件过于庞大，所以你也可以选择在 `resources/` 目录下编写单独的文件定义资源。该目录下面的文件格式也可以是 YAML 或 CUE 格式的文件，同样为了简单，本文档会直接介绍 YAML 方式的定义方法。文档 [CUE 定义插件](./addon-cue) 将会详细介绍 CUE 的定义方式。
 
 `resources` 目录下的 YAML 资源描述文件中所定义的必须是一些个 kubernetes 对象，这些对象在渲染时会被追加到应用的组件列表中，被 KubeVela 下发至集群。下面就是一个例子：
 
@@ -196,11 +198,11 @@ spec:
 
 [CUE 定义资源描述文件](./addon-cue) 会详细介绍通过 CUE 定义资源的方法。
 
-#### 例子
+##### 例子
 
 * [OCM control plane](https://github.com/kubevela/catalog/blob/master/addons/ocm-hub-control-plane/template.yaml) 插件的 应用模版定义文件和 `resources/` 目录下的资源描述文件就是全部通过 YAML 的方式来定义的。
 
-# 本地安装（离线安装）
+## 本地安装（离线安装）
 
 你可以通过本地安装的方式调试你的 addon，命令如下：
 
@@ -208,11 +210,11 @@ spec:
 $ vela addon enable ./your-addon-dir/
 ```
 
-# 已知局限 (Known Limits)
+## 已知局限 (Known Limits)
 
 - 尚不支持仅在子集群中安装插件。 由于 KubeVela 需要在管控平面中渲染出所有类型的资源再将其下发到子集群当中，如果插件中包含了一些 [CRD](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), 插件不在管控平面安装的话 Vela 的控制器会遇到无法找到 CRD 错误。
 
-# 贡献 Addon
+## 贡献 Addon
 
 除了将插件资源文件上传到自己的插件仓库中，你也可以通过提交 pull request 向 KubeVela [官方插件仓库](https://github.com/kubevela/catalog/tree/master/addons) 和 [试验阶段插件仓库](https://github.com/kubevela/catalog/tree/master/experimental/addons) 添加新的插件，pr 合并之后你的插件就可以被其他 KubeVela 用户发现并使用了。
 
