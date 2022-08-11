@@ -12,7 +12,7 @@ title: FluxCD
 vela addon enable fluxcd
 ```
 
-如果你只想利用 fluxcd addon 部署 helm 应用，你就可以执行下面的命令启只启用 helm 相关的组件：
+如果你只想利用 fluxcd addon 部署 helm 应用，你可以执行下面的命令启只启用 helm 相关的组件：
 
 ```shell
 $ vela addon enable fluxcd onlyHelmComponents=true
