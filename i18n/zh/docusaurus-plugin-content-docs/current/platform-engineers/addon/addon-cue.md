@@ -2,7 +2,7 @@
 title: CUE 定义资源描述文件
 ---
 
-本文档将会详细介绍如何通过 CUE 编写应用模版定义文件 (template.cue) 和 `resources/` 目录下的资源文件来定义需要下发的资源。
+本文档将会详细介绍如何通过 CUE 编写应用模版文件 (template.cue) 和 `resources/` 目录下的资源文件来定义需要下发的资源。
 
 通过编写 CUE 的资源文件，插件将会获得以下能力：
 
@@ -171,7 +171,7 @@ parameter: {
   //+usage=clsuters install to
   clsuters: [...string]
   //+usage=namespace to create
-  namespace: string
+  namespace?: foo-namespace | string
 }
 ```
 

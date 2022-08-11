@@ -4,8 +4,8 @@ title: 自定义插件
 
 一个 KubeVela 插件就是一个主要包含了以下三类文件的集合:
 * 插件的`基本信息文件`，这类文件是制作一个插件所必须具备的文件。包括元数据文件（metadata.yaml）和 自描述文件（README.md）。
-* 定义 KubeVela 可扩展点的`扩展配置文件`，另外这些文件是非必须的。例如[模版定义文件](../../getting-started/definition) (X-definitions), [UI 扩展](../../reference/ui-schema)，[资源拓扑规则](../../reference/topology-rule)等。
-* 定义 Kubernetes 资源对象的`资源描述文件`，同样文件也是非必须的。他们可以是一个支撑某个模版定义文件背后的 kubernetes operator，或者其他的 Kubernetes 应用。
+* 定义 KubeVela 可扩展点的`扩展配置文件`，这些文件是非必须的。例如[模版定义文件](../../getting-started/definition) (X-definitions), [UI 扩展](../../reference/ui-schema)，[资源拓扑规则](../../reference/topology-rule)等。
+* 定义 Kubernetes 资源对象的`资源描述文件`，同样这些文件也是非必须的。他们可以是一个支撑某个模版定义文件背后的 kubernetes operator，或是其他的 Kubernetes 应用。
 后面的章节会分别介绍这三类文件的作用和编写规则。
 
 下图展示了在启用一个插件时，KubeVela 做了哪些事情, 主要包含以下三个步骤。
@@ -118,7 +118,7 @@ invisible: false
 
 #### template.yaml
 
-一个 YAML 格式的应用模版定义文件 （`template.yaml`） 文件就是定义一个 KubeVela 的 application，下面就是一个 `template.yaml` 例子：
+一个 YAML 格式的应用模版文件 （`template.yaml`） 文件就是定义一个 KubeVela 的 application，下面就是一个 `template.yaml` 例子：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -144,7 +144,7 @@ spec:
 
 ### 资源目录 (resources)
 
-虽然你可以在应用模版定义文件中定义全部的资源，但这可能会导致单个文件过于庞大，所以你也可以选择在 `resources/` 目录下编写单独的文件定义资源。该目录下面的文件格式也可以是 YAML 或 CUE 格式的文件，同样为了简单，本文档会直接介绍 YAML 方式的定义方法。[下篇文档](./addon-cue) 将会详细介绍 CUE 的定义方式。
+虽然你可以在应用模版文件中定义全部的资源，但这可能会导致单个文件过于庞大，所以你也可以选择在 `resources/` 目录下编写单独的文件定义资源。该目录下面的文件格式也可以是 YAML 或 CUE 格式的文件，同样为了简单，本文档会直接介绍 YAML 方式的定义方法。[下篇文档](./addon-cue) 将会详细介绍 CUE 的定义方式。
 
 `resources` 目录下的 YAML 资源描述文件中所定义的必须是一些个 kubernetes 对象，这些对象在渲染时会被追加到应用的组件列表中，被 KubeVela 下发至集群。下面就是一个例子：
 
@@ -188,7 +188,7 @@ spec:
                 - name: my-secret
 ```
 
-上面通过一个最简单的例子，讲述了如何通过简单的 YAML 定义资源描述文件。但如果你想要插件具备以下功能的话，则可以通过 CUE 的方式来定义资源描述文件。
+上面通过一个最简单的例子，讲述了如何通过简单的 YAML 定义资源描述文件。但如果你想要插件具备以下功能的话，可以通过 CUE 的方式来定义资源描述文件。
 
 * 资源可以在启用插件时通过启动参数动态渲染结果。
 * 插件中某些特殊的资源并不想作为应用的一部分在多集群范围内下发，而只想仅在管控中被创建。
@@ -205,7 +205,7 @@ spec:
 你可以通过本地安装的方式调试你的 addon，命令如下：
 
 ```
-vela addon enable ./your-addon-dir/
+$ vela addon enable ./your-addon-dir/
 ```
 
 # 已知局限 (Known Limits)
