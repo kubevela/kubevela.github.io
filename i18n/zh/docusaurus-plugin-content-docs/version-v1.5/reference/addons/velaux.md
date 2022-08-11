@@ -25,7 +25,7 @@ VelaUX 需要认证访问。默认的用户名是`admin`，默认密码是 **Vel
 vela port-forward addon-velaux -n vela-system
 ```
 
-选择 `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` 来启用端口转发。
+选择 `> local | velaux | velaux` 来启用端口转发。
 
 ## 配置特定服务访问方式
 

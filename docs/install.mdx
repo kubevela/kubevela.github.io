@@ -70,6 +70,7 @@ K1075e7f6c77555e6ebdaf4854e4a2f39ae4287cfad23f27cdac5b33608d44633fe::server:zSpz
 🚀  Successfully install KubeVela control plane
 🔭  See available commands with `vela help`
 ```
+
 </details>
 
 **Export the Kubernetes config **
@@ -111,6 +112,7 @@ raw                   	autodetects.core.oam.dev	Raw allow users to specify raw K
 ref-objects           	autodetects.core.oam.dev	Ref-objects allow users to specify ref objects to use.
                       	                        	Notice that this component type have special handle logic.
 ```
+
 </details>
 
 ## 2. Install VelaUX
@@ -135,7 +137,7 @@ By default, velaux didn't have any exposed port, If there is the browser in loca
 vela port-forward addon-velaux -n vela-system 8080:80
 ```
 
-Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` for visit.
+Choose `> local | velaux | velaux` for visit.
 
 If you are installing it in a remote environment such as a virtual machine, you can refer to [VelaUX addon](./reference/addons/velaux) document to expose an endpoint or other advanced installation arguments.
 
