@@ -62,6 +62,7 @@ K1075e7f6c77555e6ebdaf4854e4a2f39ae4287cfad23f27cdac5b33608d44633fe::server:zSpz
 🚀  Successfully install KubeVela control plane
 🔭  See available commands with `vela help`
 ```
+
 </details>
 
 ### 设置 KubeConfig
@@ -103,6 +104,7 @@ raw                   	autodetects.core.oam.dev	Raw allow users to specify raw K
 ref-objects           	autodetects.core.oam.dev	Ref-objects allow users to specify ref objects to use.
                       	                        	Notice that this component type have special handle logic.
 ```
+
 </details>
 
 ## 2. 安装 VelaUX
@@ -125,7 +127,7 @@ Addon: velaux enabled Successfully.
 vela port-forward addon-velaux -n vela-system 8080:80
 ```
 
-Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` for visit.
+Choose `> local | velaux | velaux` for visit.
 
 如果你是在远程主机安装或希望使用更稳固的访问方式，请参考 [VelaUX 高级安装说明](./reference/addons/velaux)。
 

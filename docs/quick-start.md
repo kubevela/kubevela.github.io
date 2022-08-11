@@ -175,8 +175,6 @@ Great! You have finished deploying your first KubeVela application, you can also
 
 ## Manage application with UI Console
 
-> Currently, the application created by CLI is readonly in your dashboard.
-
 After finished [the installation of VelaUX](./install#2-install-velaux), you can view and manage the application created.
 
 * Port forward the UI if you don't have endpoint for access:
@@ -193,7 +191,9 @@ It requires you to override with a new password for the first login, please make
 
 Click the application card, then you can view the details of the application.
 
-![first-app-graph](https://static.kubevela.net/images/1.4/first-app-graph.jpg)
+![first-app-graph](https://static.kubevela.net/images/1.5/first-app-graph.jpg)
+
+> If you deploy the application once on the UI side, the application source of trust changes to UI. then, it is not recommended to modify the application properties from the CLI. You can use the following ways: UI, API, and Webhook.
 
 ## Clean up
 
