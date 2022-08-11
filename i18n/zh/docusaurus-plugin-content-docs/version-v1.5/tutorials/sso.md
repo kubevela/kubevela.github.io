@@ -6,7 +6,7 @@ title: 单点登录
 
 在 KubeVela 1.3 及以后的版本中，默认提供了两种方式：本地登录以及单点登录。
 
-本地登录使用本地数据库中存储的用户名密码进行登录，而单点登录集成了 [Dex](https://dexidp.io/)，可以通过配置 Dex 的 [OpenID Connect](https://dexidp.io/docs/openid-connect) 来实现多种不同方式的登录，如：GitHub, LDAP, Gitlab, Oidc, Saml, Google 等等。
+本地登录使用本地数据库中存储的用户名密码进行登录，而单点登录集成了 [Dex](https://dexidp.io/)，可以通过配置 Dex 的 [OpenID Connect](https://dexidp.io/docs/openid-connect) 来实现多种不同方式的登录，如：GitHub, LDAP, Gitlab, OIDC, SAML, Google 等等。
 
 平台初始化后，默认使用本地登录。平台管理员可以通过平台配置页面，配置单点登录。在本教程中，本文我们将分别使用 GitHub 和 LDAP Connector 来演示单点登录。其他类型只有配置参数的差异，启动流程一致。
 

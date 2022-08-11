@@ -6,7 +6,7 @@ title:  SSO Login
 
 In KubeVela V1.3, we provide two methods to log in: local login and SSO.
 
-Local login uses the username and password stored in the local database to log in, and SSO integrates [Dex](https://dexidp.io/), which can be configured by configuring Dex's [OpenID Connect](https://dexidp.io/docs/openid-connect) to implement many different ways to log in, such as GitHub, LDAP, Gitlab, Oidc, Saml, Google etc.
+Local login uses the username and password stored in the local database to log in, and SSO integrates [Dex](https://dexidp.io/), which can be configured by configuring Dex's [OpenID Connect](https://dexidp.io/docs/openid-connect) to implement many different ways to log in, such as GitHub, LDAP, Gitlab, OIDC, SAML, Google etc.
 
 After the platform is initialized, local login is used by default. Platform administrators can configure SSO through the platform configuration page. In this tutorial, we'll use GitHub and LDAP Connector to show how to use SSO with KubeVela.
 
