@@ -16,8 +16,8 @@ vela def init my-plc -t policy --desc "My ingress route policy." > myroute.cue
 
 The content of the scaffold expected to be:
 
-```
-$ cat myroute.cue
+```cue
+// $ cat myroute.cue
 "my-plc": {
 	annotations: {}
 	attributes: {}
