@@ -68,8 +68,8 @@ spec:
 
 ```bash
 # 此命令用于在管控集群创建命名空间
-$ vela env init prod --namespace prod
-$ vela up -f https://kubevela.net/example/applications/first-app.yaml
+vela env init prod --namespace prod
+vela up -f https://kubevela.net/example/applications/first-app.yaml
 ```
 
 > 需要注意的是需要你的部署环境可以正常获取 `oamdev/hello-world` 镜像
@@ -77,7 +77,7 @@ $ vela up -f https://kubevela.net/example/applications/first-app.yaml
 * 查看部署状态
 
 ```bash
-$ vela status first-vela-app
+vela status first-vela-app
 ```
 
 正常情况下应用完成第一个目标部署后进入暂停状态。
@@ -85,66 +85,55 @@ $ vela status first-vela-app
 * 人工审核，批准应用进入第二个目标部署
 
 ```bash
-$ vela workflow resume first-vela-app
+vela workflow resume first-vela-app
 ```
 
 * 通过下述方式来访问该应用
 
 ```bash
 $ vela port-forward first-vela-app 8000:8000
-<xmp>
-Hello World
-
-
-                                       ##         .
-                                 ## ## ##        ==
-                              ## ## ## ## ##    ===
-                           /""""""""""""""""\___/ ===
-                      ~~~ {~~ ~~~~ ~~~ ~~~~ ~~ ~ /  ===- ~~~
-                           \______ o          _,/
-                            \      \       _,'
-                             `'--.._\..--''
-</xmp>
 ```
 
-到这里，你已完成了第一个应用的部署。
+上述命令将创建本地代理并打开本地浏览器，你可以查看到如下内容：
 
-> 目前，通过 CLI 创建的应用会同步到 UI 进行可视化，但它是只读的。
+```
+<xmp>
+Hello KubeVela! Make shipping applications more enjoyable. 
 
-## 通过 UI 部署应用
+...snip...
+```
 
-登陆到 KubeVela UI 控制后，默认你将进入应用管理页面。点击页面右上方的 `新建应用` 按钮，输入应用基础信息：
+## 基于 UI 管理应用
 
-1. 应用名称、别名等基础信息；
-2. 选择一个应用所属项目，平台默认生成了 `Default` 项目，你可以根据需要创建新的项目；
-3. 选择主组件类型，这里我们选择默认的 `webservice` 类型。
-4. 选择部署环境，部署环境选项由不同的项目决定。
+如果你已完成 [VelaUX 安装](./install#2-install-velaux)， 你可以通过 UI 来管理和可视化应用。
 
-### 设置部署参数
+本地测试模式下通过下述命令即可打开 UI 界面。
 
-设置完应用基础信息后进入第二步，设置主组件的部署参数，我们需要设置的参数包括：
+```bash
+vela port-forward addon-velaux -n vela-system 8080:80
+```
 
-- 镜像地址： `oamdev/hello-world`
-- 端口信息：将默认的 80 端口变更为 8080 端口。
+UI 控制台需要用户认证，默认的账号是： `admin` 密码是： **`VelaUX12345`**。
 
-![create hello world app](https://static.kubevela.net/images/1.3/create-helloworld.jpg)
+首次登录后会进入修改密码和设置邮箱流程，请正确设置你的企业邮箱（后期不可修改）和谨记修改后的密码。
 
-确认创建后即可完成应用配置，控制台创建的应用默认会根据所选环境生成 [工作流](./getting-started/core-concept#workflow) 和一个设置副本数的 [运维特征](./getting-started/core-concept#trait)。
+* 查看第一个应用的部署拓扑图
 
-### 执行工作流部署应用
+通过 CLI 部署的应用会自动同步到 UI 侧，你可以进入应用页面查看到应用的相关可视化状态，比如：资源拓扑图，实例等。如果你未在 CLI 侧执行审核操作，应用页面右上方将显示审核窗口。
 
-点击应用详情页右上方的 `部署` 按钮，选择指定环境的工作流即可开始部署应用，开始部署后可以切换到环境视图下打开应用资源拓扑图观测资源状态。
+> 如果你在 UI 侧执行一次应用的部署，该应用将被 UI 完全接管，此时不建议再从 CLI 来修改应用部署属性，可通过 UI 提供的方式：界面、API 和 Webhook 来执行部署。
 
-![first-app-graph](https://static.kubevela.net/images/1.4/first-app-graph.jpg)
+![first-app-graph](https://static.kubevela.net/images/1.5/first-app-graph.jpg)
 
-### 删除应用
+## 清理
 
-如果在你测试完成后需要删除该应用，操作方式如下：
+```bash
+$ vela delete first-vela-app
+Deleting Application "first-vela-app"
+app "first-vela-app" deleted from namespace "prod"
+```
 
-1. 进入应用环境页面，点击 `回收` 按钮完成所有环境的资源回收。
-2. 回到应用列表页面，点击卡片中的操作按钮，点击删除选项确认删除即可。
-
-到此，你完成了 KubeVela 的初体验。
+处于同步状态的应用，如果通过 CLI 删除后，UI 侧的应用同步删除。
 
 ## 下一步
 

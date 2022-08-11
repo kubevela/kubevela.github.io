@@ -26,7 +26,7 @@ Port forward will work as a proxy to allow visiting VelaUX dashboard by local po
 vela port-forward addon-velaux -n vela-system
 ```
 
-Choose `> Cluster: local | Namespace: vela-system | Component: velaux | Kind: Service` for visit.
+Choose `> local | velaux | velaux` for visit.
 
 ## Setup with Specified Service Type
 
@@ -132,7 +132,7 @@ vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_
 
 You can also deploy the MongoDB with this application configuration:
 
-> Your cluster must have a default storage class. 
+> Your cluster must have a default storage class.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -142,30 +142,30 @@ metadata:
   namespace: vela-system
 spec:
   components:
-  - name: velaux-db
-    properties:
-      chart: mongodb
-      repoType: helm
-      url: https://charts.bitnami.com/bitnami
-      values:
-        persistence:
-          size: 20Gi
-      version: 12.1.12
-    type: helm
+    - name: velaux-db
+      properties:
+        chart: mongodb
+        repoType: helm
+        url: https://charts.bitnami.com/bitnami
+        values:
+          persistence:
+            size: 20Gi
+        version: 12.1.12
+      type: helm
   policies:
-  - name: vela-system
-    properties:
-      clusters:
-      - local
-      namespace: vela-system
-    type: topology
-  workflow:
-    steps:
     - name: vela-system
       properties:
-        policies:
-        - vela-system
-      type: deploy
+        clusters:
+          - local
+        namespace: vela-system
+      type: topology
+  workflow:
+    steps:
+      - name: vela-system
+        properties:
+          policies:
+            - vela-system
+        type: deploy
 ```
 
 After deployed, let's get the root password from the secret `vela-system/velaux-db-mongodb`.
