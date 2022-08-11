@@ -379,7 +379,7 @@ spec:
 
 ## `definitions/` 中模版定义文件与`应用`中组件关联
 
-一些情况下，你的插件中可能包含多个模版定义文件 (X-definitions) 和背后支撑这些能力的 operators，如果你希望他们能够根据启动参数被动态的被启用，你就可以通过在[模版定义文件](X-definitions) 上设置 `addon.oam.dev/bind-component` 注解的方式和`应用`中的某个组件相关联来实现。 一个典型的例子就是 [`fluxcd` 插件](https://github.com/kubevela/catalog/tree/master/addons/fluxcd) 。 插件中的 `kustomize` componentDefinitions 如下所示：
+一些情况下，你的插件中可能包含多个模版定义文件 (X-definitions) 和背后支撑这些能力的 operators，如果你希望他们能够根据启动参数被动态的被启用，你就可以通过在模版定义文件 (X-definitions) 上设置 `addon.oam.dev/bind-component` 注解的方式和`应用`中的某个组件相关联来实现。 一个典型的例子就是 [`fluxcd` 插件](https://github.com/kubevela/catalog/tree/master/addons/fluxcd) 。 插件中的 `kustomize` componentDefinitions 如下所示：
 
 ```cue
 kustomize: {
