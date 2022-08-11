@@ -164,3 +164,8 @@ Refer to [Kubevela API 1.3](https://kubevela.stoplight.io/docs/kubevela/1d086db9
 ### 1.4
 
 Refer to [Kubevela API 1.4](https://kubevela.stoplight.io/docs/kubevela/uz7fzdxthv175-kube-vela-api-1-4)
+
+### 1.5
+
+Refer to [KubeVela API 1.5](https://kubevela.stoplight.io/docs/kubevela/pi1st0zdzoejp-kube-vela-api-1-5)
+
