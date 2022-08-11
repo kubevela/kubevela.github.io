@@ -10,7 +10,7 @@ In KubeVela CLI, `vela def` command group provides a series of convenient defini
 
 `vela def init` is a command that helps users bootstrap new definitions. To create an empty trait definition, run `vela def init my-trait -t trait --desc "My trait description."`
 
-```json
+```cue
 "my-trait": {
         annotations: {}
         attributes: {
@@ -83,7 +83,7 @@ spec:
 
 Running `vela def init my-comp -t component --desc "My component." --template-yaml ./my-deployment.yaml` to get the CUE-format ComponentDefinition
 
-```json
+```cue
 "my-comp": {
         annotations: {}
         attributes: workload: definition: {

@@ -18,7 +18,7 @@ KubeVela command has supported a `vela ql` command to query resources.
 
 You can specify a query file in cue like below:
 
-```ql.cue
+```cue
 import (
 	"vela/ql"
 )
@@ -102,7 +102,7 @@ vela kube apply -f query-configmap.yaml
 
 Create a file named `my-view.cue` with:
 
-```yaml
+```cue
 import (
   "vela/ql"
 )
@@ -193,7 +193,7 @@ The current view in VelaQL relies on configMap in k8s as a storage medium, You c
 Every time you use VelaQL, the system will look for the configMap with the same name as the view under the vela-system namespace, and extract the template for query operations, so please ensure that your custom view is stored under vela-system.
 ​
 The structure of a template is as follows:
-```
+```cue
 import (
   "vela/ql"
 )
@@ -229,7 +229,7 @@ List all resources created by Application
 - list: after the operation is successful, this field will be filled. `list` is a list of all resources, the k8s description of the resource is stored in the object field.
 - err: if an error occurs in the operation, the error message will be displayed as a string.
 
-```
+```cue
 #ListResourcesInApp: {
 	app: {
 		name:      string
@@ -252,7 +252,7 @@ List all resources created by Application
 
 #### Usage
 
-```
+```cue
 import (
   "vela/ql"
 )
@@ -299,7 +299,7 @@ List all pods created by the workload
 - list: after the operation is successful, this field will be filled. `list` is a list of all pod resources
 - err: if an error occurs in the operation, the error message will be displayed as a string.
 
-```
+```cue
 #CollectPods: {
 	value: {...}
 	cluster: string
@@ -309,7 +309,7 @@ List all pods created by the workload
 ```
 
 #### Usage
-```
+```cue
 import (
   "vela/ql"
 )
@@ -338,7 +338,7 @@ Get resource in Kubernetes cluster.
 - value: the resource metadata to be get. And after successful execution, value will be updated with resource definition in cluster.
 - err:  if an error occurs, the err will contain the error message.
 
-```
+```cue
 #Read: {
   value: {}
   err?: string
@@ -347,7 +347,7 @@ Get resource in Kubernetes cluster.
 
 ### Usage
 
-```
+```cue
 // You can use configmap.value.data after this action.
 configmap: ql.#Read & {
    value: {
@@ -371,7 +371,7 @@ List resources in the k8s cluster.
 - filter: namespace is used to select a namespace, and the matchingLabels field is used to filter labels
 - err: if an error occurs, the err will contain the error message.
 
-```
+```cue
 #List: {
 	cluster:   *"" | string
 	resource: {

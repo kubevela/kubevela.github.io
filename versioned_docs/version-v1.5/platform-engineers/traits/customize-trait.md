@@ -18,8 +18,8 @@ vela def init my-route -t trait --desc "My ingress route trait." > myroute.cue
 
 The content of the scaffold expected to be:
 
-```
-$ cat myroute.cue
+```cue
+// $ cat myroute.cue
 "my-route": {
 	annotations: {}
 	attributes: {

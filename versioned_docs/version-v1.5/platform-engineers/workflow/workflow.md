@@ -41,8 +41,8 @@ vela def init my-helm -t workflow-step --desc "Apply helm charts and wait till i
 ```
 
 The result is as follows：
-```shell
-$ cat my-helm.cue
+```cue
+// $ cat my-helm.cue
 
 "my-helm": {
 	annotations: {}
@@ -58,7 +58,7 @@ template: {
 
 Import `vela/op` and complete the Cue code in `template`:
 
-```
+```cue
 import (
   "vela/op"
 )

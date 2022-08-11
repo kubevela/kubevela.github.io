@@ -18,7 +18,7 @@ If you want to add multiple environment variables for a specific container, you 
 
 Apply the following definition to your cluster:
 
-```yaml
+```cue
 myenv: {
 	type: "trait"
 	annotations: {}
@@ -75,7 +75,7 @@ spec:
 
 Before using the `myenv` patch trait, the `env` in the application is like:
 
-```
+```yaml
 spec:
   containers:
   - env:
@@ -85,7 +85,7 @@ spec:
 
 After using the `myenv` patch trait, the `env` in the application is like:
 
-```
+```yaml
 spec:
   containers:
   - env:
@@ -105,7 +105,7 @@ The strategy of this annotation is similar to the Kubernetes official [retainKey
 
 > In the following example, `+patchKey=name` specifies which container the patch should be applied to, while `+patchStrategy=retainKeys` specifies that when merge environment variables, if a duplicate environment variable name is specified, the environment variable value will be overwritten.
 
-```yaml
+```cue
 myenv: {
 	type: "trait"
 	annotations: {}
@@ -198,7 +198,7 @@ If you wish to replace the entire env array directly, you can use the `+patchStr
 
 > In the following example, `+patchKey=name` specifies which container the patch should be applied to, while `+patchStrategy=replace` specifies that when merge the arrays, the entire array of environment variables will be replaced directly.
 
-```yaml
+```cue
 myenv: {
 	type: "trait"
 	annotations: {}
@@ -258,7 +258,7 @@ spec:
 
 Before using the `myenv` patch trait, the `env` in the application is like:
 
-```
+```yaml
 spec:
   containers:
   - env:
@@ -270,7 +270,7 @@ spec:
 
 After using the `myenv` patch trait, the `env` in the application is like:
 
-```
+```yaml
 spec:
   containers:
   - env:
