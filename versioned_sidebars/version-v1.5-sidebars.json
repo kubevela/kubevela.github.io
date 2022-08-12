@@ -183,8 +183,7 @@
             "reference/ui-schema",
             "reference/topology-rule"
           ]
-        },
-        "platform-engineers/openapi/overview"
+        }
       ]
     },
     {
@@ -292,7 +291,8 @@
           ]
         },
         "end-user/components/cloud-services/cloud-resources-list",
-        "reference/user-improvement-plan"
+        "reference/user-improvement-plan",
+        "platform-engineers/openapi/overview"
       ]
     },
     "roadmap/README",
