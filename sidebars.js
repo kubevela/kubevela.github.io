@@ -38,10 +38,7 @@ module.exports = {
           type: 'category',
           label: 'Helm Chart CD',
           collapsed: true,
-          items: [
-            'tutorials/helm',
-            'tutorials/helm-rollout',
-          ],
+          items: ['tutorials/helm', 'tutorials/helm-rollout'],
         },
         {
           type: 'category',
@@ -69,10 +66,7 @@ module.exports = {
           type: 'category',
           label: 'Kubernetes Manifest CD',
           collapsed: true,
-          items: [
-            'tutorials/k8s-object',
-            'tutorials/k8s-object-rollout',
-          ],
+          items: ['tutorials/k8s-object', 'tutorials/k8s-object-rollout'],
         },
         {
           type: 'category',
@@ -176,7 +170,6 @@ module.exports = {
             'reference/topology-rule',
           ],
         },
-        'platform-engineers/openapi/overview',
       ],
     },
     {
@@ -285,6 +278,7 @@ module.exports = {
         },
         'end-user/components/cloud-services/cloud-resources-list',
         'reference/user-improvement-plan',
+        'platform-engineers/openapi/overview',
       ],
     },
     'roadmap/README',
