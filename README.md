@@ -1,7 +1,7 @@
 # KubeVela Docs & Website
 
 This repo contains the source code of [Kubevela website](http://kubevela.io/) and all of the docs for KubeVela.
-It's built by [Docusaurus 2](https://v2.docusaurus.io/), a modern static website generator.
+It's built by [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 
 Welcome to join us and you are more than appreciated to contribute!
 
