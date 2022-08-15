@@ -1,9 +1,9 @@
 ---
-title: Deploy Container Image
-description: deploy the business application by kubevela
+title: Deploy the container image
+description: Deploy the business application by kubevela
 ---
 
-In this section, we will introduce how to deploy a container based application with KubeVela. The guide will run the whole process with UI console as it's quite the same with the [quick start](../quick-start) if you're using CLI. 
+In this section, we will introduce how to deploy a container-based application with KubeVela. The guide will run the whole process with UI console as it's quite the same with the [quick start](../quick-start) if you're using CLI. 
 
 ## Before starting
 
