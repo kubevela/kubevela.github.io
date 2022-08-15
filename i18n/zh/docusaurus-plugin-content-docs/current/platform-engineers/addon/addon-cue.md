@@ -1,20 +1,19 @@
 ---
-title: 使用 CUE 制作自定义插件
+title: 使用 CUE 描述插件应用
 ---
 
-文档 [自定义插件](./intro) 已经介绍如何通过简单的 YAML 文件制作一个插件，本文档将会详细介绍如何通过 CUE 编写应用模版文件 (template.cue) 和 `resources/` 目录下的资源文件来定义插件。
+文档 [自定义插件](./intro) 介绍了插件的基本目录结构和原理。此外，文档 [YAML 描述插件应用](./addon-yaml) 也介绍了通过最简单的 YAML 格式如何定义应用描述文件。如果你希望插件具备以下能力，你也可以选择使用 CUE 格式定义插件的应用描述文件：
 
-通过编写 CUE 的资源文件，插件将会获得以下能力：
+* 利用 CUE 语言灵活简洁的语法、丰富的内置函数及其参数校验能力，根据启动参数和插件元数据渲染和部署插件应用和[附属资源](#部署附属资源) 。
+* 插件中可能包含多个模块定义（Definition）文件及其背后支撑的 CRD Operator，他们能够根据启动参数被选择性安装。
 
-* 资源可以在启用插件时通过启动参数动态渲染结果。
-* 利用 CUE 语言灵活的语法和内置丰富的功能渲染和部署附属资源。
-* 插件中可能包含多个 X-definitions 和背后支撑这些能力的 operator，他们能够根据启动参数被动态的被启用。
+本文将会详细介绍如何编写 CUE 格式的应用描述文件，并实现特定的场景和功能。
 
-通过 CUE 定义插件和通过 YAML 定义插件的主要区别是在 `资源描述文件`（template.cue 和 resources 目录下的资源描述文件）。而`基本信息文件`和`扩展配置文件`定义的方式和 YAML 定义方式完全一直，具体请参考[文档](./intro)。
+应用描述文件通常包含两个部分：应用模版文件和 resources/ 目录下的资源文件。
 
-## 应用模版文件（template.cue）
+## 应用模版文件 （template.cue）
 
-CUE 格式的应用模版描述文件中最重要的是定义一个 `output` 的 CUE 代码块，这个代码块所包含的必须是一个 KubeVela 的`应用`（application）。如下所示：
+CUE 格式的应用模版中最重要的是定义一个 `output` 的 CUE 代码块，这个代码块所包含的必须是一个 KubeVela 的`应用`（application）。如下所示：
 
 ```cue
 output: {
@@ -39,7 +38,7 @@ output: {
 	}}
 ```
 
-请注意这个`应用`与 [YAML](./intro#templateyaml) 应用模版文件中所定义的`应用`不同的是，这个`应用`中 `spec.components[0].properties.objects[0].metadata.name` 资源所定义的 namespace 的名称是由 `parameter.namespace` 所决定的。这代表它的名字在启用插件时被 `namespace` 启动参数所设置。
+请注意这个应用中的 `spec.components[0].properties.objects[0]` 中所所定义的 Kubernetes namespace 的名称是由 `parameter.namespace` 所决定的。这代表它的名字在启用插件时会被 `namespace` 启动参数所动态渲染。
 
 如果你希望这个 `namespace` 的名称是 `my-namespace`, 就可以这样启用这个插件：
 
@@ -47,7 +46,7 @@ output: {
 $ vela addon enable <addon-name> namespace=my-namespace
 ```
 
-经过渲染之后，`应用`如下所示：
+经过渲染之后，这个插件的应用如下所示：
 
 ```yaml
 kind: Application
@@ -66,18 +65,107 @@ spec:
               name: my-namespace
 ```
 
-> 需要注意的是，即使你通过 `metadata.name` 字段设置了应用的名称，该设置也不会生效，在启用时应用会统一以 addon-{addonName} 的格式被命名。
+> 需要注意的是，即使你在应用模版文件中设置了应用的名称，该设置也不会生效，在启用时应用会统一以 addon-{addonName} 的格式自动命名。
 
-虽然你可以在应用模版文件中定义应用的全部内容，但这可能会导致整个模版文件变得非常的庞大，所以你可以选择将一部分关于资源描述的内容拆分到 `resources` 目录下面，后面的章节将会详细介绍 `resources` 目录中的资源描述文件如何定义。
+虽然你可以在应用模版文件中定义应用的全部内容，但这可能会导致这个文件变得非常的庞大，所以你可以选择将一部分关于资源描述的内容拆分到 `resources/` 目录下面，后面的章节将会详细介绍 `resources/` 目录中的资源描述文件如何定义。
 
-### 例子
+## 参数定义文件 （parameter.cue）
 
-* [ingress-nginx](https://github.com/kubevela/catalog/tree/master/addons/ingress-nginx/template.cue) 这个例子中使用的就是 CUE 模版定义文件。
+在上面的例子中，我们使用了通过 `parameter.namespace` 启动参数设置被创建资源 `namespace` 的名称。 但其实我们还需要一个参数定义文件（`parameter.cue`）来定义插件有哪些启动参数。 针对上面的例子参数定义文件就是：
 
+```cue
+parameter: {
+  //+usage=namespace to create
+  namespace?: foo-namespace | string
+}
+```
 
-### 如何定义 `template.cue` 实现根据参数选择安装集群
+## 目录 `resources/` 下的 CUE 资源文件
 
-如果你希望插件中的资源能够不止被安装在管控集群，同时也能够安装在各个其他的子集群中， 并且具体安装在哪些集群需要由用户在启用插件时设置 `clusters` 启动参数来指定。 你就可以在 `template.cue` 中添加一个 topology 策略来实现，如下所示：
+目录 `resources/` 下的资源文件的作用是：定义可以被应用模版文件（template.cue）引用的 CUE 代码块。
+
+继续使用上面的例子，我们把定义 `namesapce` 资源的 CUE 代码块拆分到 `resources` 目录下，那么插件的目录结构如下所示：
+
+```shell
+├── resources/
+│   └── namespace.cue
+├── README.md
+├── metadata.yaml
+├── parameter.cue
+└── template.cue
+```
+
+`resources/namesapce.cue` 文件的内容如下所示：
+
+```cue
+// resources/namespace.cue
+package main
+
+namespace: {
+	type: "k8s-objects"
+	name: "example-namespace"
+	properties: objects: [{
+		apiVersion: "v1"
+		kind:       "Namespace"
+		metadata: name: parameter.namespace
+	}]
+}
+```
+
+可以看到我们在这个文件中分别定义了一个 Kubernetes namespace 的 CUE 代码块，接下来我们就可以在 `template.cue` 中引用这个代码块：
+
+```cue
+// template.cue
+
+package main
+
+output: {
+	apiVersion: "core.oam.dev/v1beta1"
+	kind:       "Application"
+	metadata: {
+		name:      "example"
+		namespace: "vela-system"
+	}
+	spec: {
+		// reference namespace block from resources/naemspace.cue
+		components: [namespace]
+	}
+}
+```
+
+通过下面的命令，设置 `namespace` 参数启用插件后，渲染出来的应用如下所示：
+
+```shell
+$ vela addon enable <addon-name> namespace=my-namespace
+```
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: example
+  namespace: vela-system
+spec:
+  components:
+    - name: namespace
+      type: k8s-objects
+      properties:
+        objects:
+        - apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: my-namespace
+```
+
+> 需要注意的是，CUE 资源描述文件需要必须要包含一个 `package main` header 才会被识别为一个资源描述文件，进而才会与应用模版文件放在一个渲染上下文中渲染。这可以帮你过滤掉不想放到渲染上下文中的那些 CUE 文件。
+
+## 场景和功能
+
+下面将会介绍几个核心插件功能的应用描述文件的编写方法。
+
+### 实现根据参数选择安装集群
+
+如果你希望插件中的 Kubernetes 资源能够不止被安装在管控集群，同时也能够安装在其他的子集群中， 并且具体安装在哪些集群需要由用户在启用插件时设置 `clusters` 启动参数来指定。 你就可以在插件应用中添加一个根据参数渲染的 [topology 策略](../../end-user/policies/references#topology) 来实现，应用模版文件如下所示：
 
 ```cue
 package main
@@ -111,13 +199,13 @@ outputs: {
 }	
 ```
 
-在这个例子中，我们在应用的策略列表中定一个了 [topology 策略](../../end-user/policies/references)。如果你执行下面的命令，应用中的资源将会被部署在 `local` 集群和 `cluster1` 集群：
+如果你执行下面的命令，应用中的资源将会被部署在 `local` 集群和 `cluster1` 集群：
 
 ```shell
 $ vela addon enable <addon-name> clusters=local,cluser1
 ```
 
-经过渲染，`应用`为：
+经过渲染，应用为：
 
 ```yaml
 kind: Application
@@ -144,7 +232,7 @@ spec:
 $ vela addon enable <addon-name>
 ```
 
-渲染出来的应用结果为：
+渲染出来的应用为：
 
 ```yaml
 kind: Application
@@ -163,22 +251,9 @@ spec:
         clusterLabelSelector: { }
 ```
 
-## parameter.cue
+### 部署附属资源
 
-在上面的例子中，我们使用了通过 `parameter.namespace` 启动参数设置被创建资源 `namespace` 的名称，和 `parameter.clusters` 设置插件的安装集群。 但其实我们还需要一个参数定义文件（`parameter.cue`）来定义插件有哪些启动参数。 针对上面的例子就是：
-
-```cue
-parameter: {		
-  //+usage=clsuters install to
-  clsuters: [...string]
-  //+usage=namespace to create
-  namespace?: foo-namespace | string
-}
-```
-
-## 部署附属资源
-
-在 CUE 类型的应用模版 (`template.cue`) 文件中，除了在 `output` 代码块中定义`应用`外，还可以定义其他需要仅在管控集群部署的 `附属资源`。定义的方法是把需要部署的 Kubernetes 资源对象放到 `outputs` 中，并且这些资源只会被下发到管控集群。例如：
+在 CUE 类型的应用模版文件中，除了在 `output` 代码块中定义 KubeVela 应用外，还可以定义其他需要仅在管控集群部署的 `附属资源`。定义的方法是把需要部署的 Kubernetes 资源对象放到 `outputs` 中，这些资源会被渲染并直接下发到管控集群。例如：
 
 ```cue
 package main
@@ -215,116 +290,10 @@ _rules: {...}
 
 这个例子中我们定义了一个 `resourceTree` 的 configmap ，这个 configmap 其实是一个[拓扑树资源关系规则](../../reference/topology-rule)，这个 configmap 就只需要在管控集群中部署。
 
-## 资源目录 `resources/` 下的 CUE 资源描述文件
-
-跟 [YAML 资源描述文件](./intro#资源目录) 中是 Kubernetes 资源对象不同，CUE 资源描述文件的作用是定义可以被 `template.cue` 引用的 CUE 代码块。
-
-继续使用在介绍 `template.cue` 的例子，我们把定义 `namesapce` 组件和 `topology` 策略的代码块拆分到 `resources` 目录下，目录结构如下：
-
-```shell
-├── resources/
-│   ├── namespace.cue
-│   └── topology.cue
-├── README.md
-├── metadata.yaml
-├── parameter.cue
-└── template.cue
-```
-
-`topology.cue` 和 `namesapce.cue` 文件的内容分别如下所示：
-
-```cue
-// resources/topology.cue
-package main
-
-topology: {
-	type: "topology"
-	name: "deploy-topology"
-	properties: {
-		if parameter.clusters != _|_ {
-			clusters: parameter.clusters
-		}
-		if parameter.clusters == _|_ {
-			clusterLabelSelector: {}
-		}
-	}
-}
-```
-
-```cue
-// resources/namespace.cue
-package main
-
-namespace: {
-	type: "k8s-objects"
-	name: "example-namespace"
-	properties: objects: [{
-		apiVersion: "v1"
-		kind:       "Namespace"
-		metadata: name: parameter.namespace
-	}]
-}
-```
-
-可以看到我们在这两个文件中分别定义了一个 `topology` 的策略和 `namespace` 的组件代码块，接下来我们就可以在 `template.cue` 中引用这两个代码块：
-
-```cue
-// template.cue
-
-package main
-
-output: {
-	apiVersion: "core.oam.dev/v1beta1"
-	kind:       "Application"
-	metadata: {
-		name:      "example"
-		namespace: "vela-system"
-	}
-	spec: {
-		// reference namespace block from resources/naemspace.cue
-		components: [namespace]
-		// reference topology block from resources/topology.cue
-		policies: [topology]
-	}
-}
-```
-
-通过下面的命令，设置 `namespace` 和 `clusters` 参数启用插件后，渲染出来的应用如下所示：
-
-```shell
-$ vela addon enable <addon-name> namespace=my-namespace clusters=local,cluster1
-```
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: example
-  namespace: vela-system
-spec:
-  components:
-    - name: namespace
-      type: k8s-objects
-      properties:
-        objects:
-        - apiVersion: v1
-          kind: Namespace
-          metadata:
-            name: my-namespace
-  policies:
-    - type: "topology"
-      name: "deploy-topology"
-      properties:
-        clusters:
-          - local
-          - cluster1
-```
-
-> 需要注意的是，CUE 资源描述文件需要必须要包含一个 `package main` header 才会被识别为一个资源描述文件，从而与应用模版文件放在一个渲染上下文中渲染。 
 
 ### 使用 context 中的变量渲染组件
 
-除了通过启动参数动态渲染应用外，你还可以读取 `metadata.yaml` 中定义的字段来做渲染。 例如你可以如下定义一个 `templatec.cue` 文件：
+除了通过启动参数动态渲染应用外，你还可以读取插件的元数据文件 `metadata.yaml` 中定义的字段来做渲染。 例如你可以如下定义一个应用模版文件：
 
 ```cue
 output: {
@@ -348,7 +317,7 @@ output: {
 
 ```
 
-在渲染时 `metadata.yaml` 中定义的各个字段，会被放进 `context` CUE 的代码块中，连同其他 CUE 文件一并渲染，假如你的 `metadata.yaml` 为：
+在渲染时元数据文件（`metadata.yaml`）中定义的各个字段，会被放进 `context` CUE 代码块中，连同其他 CUE 文件一并渲染，假如你的元数据文件（`metadata.yaml`）为：
 
 ```yaml
 ...
@@ -357,7 +326,7 @@ version: 1.2.4
 ...
 ```
 
-渲染的结果为：
+渲染出来的应用为：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -372,17 +341,17 @@ spec:
         image: "oamdev/vela-apiserver:v1.2.4"
 ```
 
-这个例子中，使用了插件的版本来填充镜像的 tag。一个例子是 [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue) 插件。 其他字段请参考元数据文件定义。
+这个例子中，使用了插件的版本来填充镜像的 tag。一个例子是 [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue) 插件。 其他字段请参考插件的[元数据文件](./intro) 定义。
 
-上面就完整的介绍了如何用 CUE 编写 `template.cue`, `parameter.cue` 以及 `resources/` 目录下的 CUE 资源文件，在启用插件时这些文件会联同 `metadata.yaml` 中记录的插件元信息在同一个上下文中渲染得到渲染结果并下发。
+上面就完整的介绍了如何用 CUE 编写 `template.cue`, `parameter.cue` 以及 `resources/` 目录下的 CUE 资源文件，在启用插件时这些文件会连同 `metadata.yaml` 中记录的插件元信息在同一个上下文中渲染得到结果并下发。
 
 如果你对 CUE 语言还不了解，可以通过 [CUE 基础入门文档](../cue/basic) 了解 CUE 的具体语法。
 
 你也可以在本地使用 `cue eval *.cue resources/*.cue -e output -d yaml` 命令查看资源渲染的效果。
 
-## `definitions/` 中模版定义文件与`应用`中组件关联
+### 模块化能力与应用中组件关联
 
-一些情况下，你的插件中可能包含多个模版定义文件 (X-definitions) 和背后支撑这些能力的 operators，如果你希望他们能够根据启动参数被动态的被启用，你就可以通过在模版定义文件 (X-definitions) 上设置 `addon.oam.dev/bind-component` 注解的方式和`应用`中的某个组件相关联来实现。 一个典型的例子就是 [`fluxcd` 插件](https://github.com/kubevela/catalog/tree/master/addons/fluxcd) 。 插件中的 `kustomize` componentDefinitions 如下所示：
+一些情况下，你的插件中可能包含多个模块化能力 (Definitions) 和背后支撑这些能力的 operator，如果你希望他们能够根据启动被参数选择性的安装，你就可以通过在模版化能力（Definition）上设置 `addon.oam.dev/bind-component` 注解的方式和应用中的某个组件相关联来实现。 一个典型的例子就是 [`fluxcd` 插件](https://github.com/kubevela/catalog/tree/master/addons/fluxcd) 。 插件中的 `kustomize` componentDefinitions 如下所示：
 
 ```cue
 kustomize: {
@@ -397,9 +366,9 @@ kustomize: {
 ...
 ```
 
-可见这个模版定义文件与插件应用中的 `fluxcd-kustomize-controller` 组件相关联。
+可见这个 definition 与插件应用中的 `fluxcd-kustomize-controller` 组件相关联。
 
-它的 `template.cue` 如下所示：
+这个插件中的应用模版文件如下所示：
 
 ```cue
 //...
@@ -431,8 +400,12 @@ output: {
 //...
 ```
 
-当用户通过下面的命令启用插件时 `fluxcd-kustomize-controller` 组件并不会被添加到应用当中，同时`kustomize` ComponentDefinitions 也不会被在管控集群当中创建。
+当用户通过下面的命令启用插件时 `fluxcd-kustomize-controller` 组件并不会被添加到应用当中，同时`kustomize` ComponentDefinition 也不会被在管控集群当中创建。
 
 ```shell
 $ vela addon enable fluxcd onlyHelmComponents=true
 ```
+
+## 例子
+
+一个 CUE 定义应用描述文件的例子就是 [ingress-nginx](https://github.com/kubevela/catalog/tree/master/addons/ingress-nginx/template.cue) 插件。

@@ -7,7 +7,7 @@ A KubeVela addon is a collection that can contain the following two types of fil
 * `Resource description file` that defines Kubernetes resource objects. They may be the Kubernetes operator behind a X-definition, or the webserver, etc.
 
 The picture below shows what KubeVela does when an addon is enabled. There are mainly three process:
-* [Addon Registry](./addon-registry) store addons which can be used to share and distribute addons anywhere, it can be any git repo, helm repo.
+* [Addon Registry](./addon-registry) store addons which can be used to share and distribute addons anywhere, it can be any git repo or helm chart repository.
 * When an addon is enabled through UX/CLI, it will pull these resource files from the Addon Registry, render them and create a KubeVela application.
 * Finally, the KubeVela controller take care the rest things and deliver the addon as a normal application into control plane or multi-clusters.
 
