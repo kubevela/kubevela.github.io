@@ -4,7 +4,7 @@ title: Build Your Own Addon
 
 A KubeVela addon is a collection that can contain the following two types of files；
 * `Extension configuration file` that defines KubeVela extensibility points, such as [X-definitions](../../getting-started/definition), [UI-Schema](../../reference/ui-schema) or [topology-rules](../../reference/topology-rule).
-* `Resource description file` that defines Kubernetes resource objects. They may be the kubernetes operator behind a X-definition, or the webserver, etc.
+* `Resource description file` that defines Kubernetes resource objects. They may be the Kubernetes operator behind a X-definition, or the webserver, etc.
 
 The picture below shows what KubeVela does when an addon is enabled. There are mainly three process:
 * [Addon Registry](./addon-registry) store addons which can be used to share and distribute addons anywhere, it can be any git repo, helm repo.
@@ -90,7 +90,7 @@ There're no restrict rules for an [experimental addon](https://github.com/kubeve
 
 ### template file (Optional)
 
-Through the above introduction, we know that a very important part of an addon is resource description file that define the kubernetes resource objects that needs to be installed. You can write the `template file` (template.yaml or template.cue) or files below `resources/` dir to define these resources. These resources will be rendered into a KubeVela application, which applied to each cluster by the KubeVela controller. So the template file here can be used to define the basic framework of the application. You can use this file to describe the specific information of the application, for example: labels or annotations of the application, and of course you can directly add components, policies and set workflows in the template file. The type of template file can be YAML (template.yaml) or CUE (template.cue).
+Through the above introduction, we know that a very important part of an addon is resource description file that define the Kubernetes resource objects that needs to be installed. You can write the `template file` (template.yaml or template.cue) or files below `resources/` dir to define these resources. These resources will be rendered into a KubeVela application, which applied to each cluster by the KubeVela controller. So the template file here can be used to define the basic framework of the application. You can use this file to describe the specific information of the application, for example: labels or annotations of the application, and of course you can directly add components, policies and set workflows in the template file. The type of template file can be YAML (template.yaml) or CUE (template.cue).
 
 Which to choose depends on whether you want to change the application by parameters when the addon is enabled.
 
