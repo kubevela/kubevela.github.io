@@ -2,9 +2,9 @@
 title: 使用 YAML 描述插件应用
 ---
 
-文档 [自定义插件](./intro) 介绍了插件的基本目录结构，并且介绍了插件中所需要安装的 Kubernetes operator 需要被定义在一个 KubeVela 应用（Application）中。本文档就将会详细介绍如何使用 YAML 格式的应用描述文件来定义这个应用。
+文档 [自定义插件](./intro) 介绍了插件的基本目录结构，并且介绍了插件中所需要安装的 Kubernetes operator 应当被定义在一个 KubeVela 应用（Application）中。本文档将会详细介绍如何使用 YAML 格式的应用描述文件来定义这个应用。
 
-应用描述文件通常需要包含两个部分，应用模版文件（template）和 resources/ 目录下的资源文件。
+应用描述文件通常需要包含两个部分，应用模版文件和 resources/ 目录下的资源文件。
 
 ## 应用模版文件 (template.yaml)
 
