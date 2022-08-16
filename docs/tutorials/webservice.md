@@ -1,5 +1,5 @@
 ---
-title: Deploy the container image
+title: Deploy Container Image
 description: Deploy the business application by kubevela
 ---
 

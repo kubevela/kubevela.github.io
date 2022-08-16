@@ -1,5 +1,5 @@
 ---
-title: Attaching the sidecar
+title: Attaching Sidecar Container
 ---
 
 The `sidecar` trait allows you to attach a sidecar container to the component.

@@ -1,5 +1,5 @@
 ---
-title: Custom the image delivery
+title: Custom Image Delivery
 ---
 
 If the default `webservice` component type is not suitable for your team, and you want to get a more simple way to deploy your business application. This guide will help you. Before, you must have the platform manager's permission.
