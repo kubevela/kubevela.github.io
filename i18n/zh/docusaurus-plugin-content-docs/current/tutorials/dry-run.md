@@ -126,7 +126,7 @@ More use cases refer to the [Dry run command](../cli/vela_dry-run)
 
 ![dry-run](https://static.kubevela.net/images/1.5/dry-run.jpg)
 
-Click the `Deploy` button to open the workflow select dialog. You cloud select a workflow(every workflow corresponding to an environment) and click the `DryRun` button to execute a dry run. If passed, the result is like this:
+Clicking the `Deploy` button to open the workflow selector dialog. You could select a workflow(every workflow corresponding to an environment) and click the `DryRun` button to execute a dry run. If passed, the result is like this
 
 ![dry-run-successfully](https://static.kubevela.net/images/1.5/dry-run-success.jpg)
 

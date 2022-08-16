@@ -1,5 +1,5 @@
 ---
-title: One-time delivery（Allow the configuration to drift）
+title: One-time delivery(Allow the configuration to drift)
 ---
 
 By default, the KubeVela controller will prevent configuration drift for applied resources by reconciling them routinely. This is useful if you want to keep your application always having the desired configuration to avoid some unintentional changes by external modifiers.
@@ -30,7 +30,7 @@ spec:
         enable: true
 ```
 
-In this case, if you change the replicas or other configurations of the hello-world deployment after Application enters the running state, the change will not be reverted. On the contrary, if you disable the apply-once policy (by default), any changes to the replicas of the hello-world application will be brought back in the next reconcile loop.
+In this case, if you change the replicas or other managed fields of the hello-world deployment after the application enters the running state, the change will not be reverted. On the contrary, if you disable the apply-once policy (by default), any changes to the replicas of the hello-world application will be brought back in the next reconcile loop.
 
 ### Allow a part of the configuration to drift
 
@@ -63,7 +63,6 @@ spec:
 
 ```
 
-In this case, only support changing the replicas by other controllers, such as HPA. The selector rule support: `componentNames`,`componentTypes`,`oamTypes`,`resourceNames`,`resourceTypes` and `traitTypes`.
+In this case, only support changing the replicas field by other controllers, such as HPA. The selector rule support: `componentNames`,`componentTypes`,`oamTypes`,`resourceNames`,`resourceTypes` and `traitTypes`.
 
-
-The configuration drift check will be launched every 5 minutes after Application enters the running state or the suspending state without errors. You can configure the time by setting the `application-re-sync-period` bootstrap parameter in the controller. See [bootstrap parameters](../../platform-engineers/system-operation/bootstrap-parameters) for details.
+The configuration drift check will be launched every 5 minutes after the application enters the running state or the suspending state without errors. You can configure the time by setting the `application-re-sync-period` bootstrap parameter in the controller. See [bootstrap parameters](../../platform-engineers/system-operation/bootstrap-parameters) for details.
