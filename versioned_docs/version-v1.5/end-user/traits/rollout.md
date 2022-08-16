@@ -1,5 +1,5 @@
 ---
-title: Canary rollout
+title: Canary Rollout
 ---
 
 In this section, we will introduce how to canary rollout a container service.

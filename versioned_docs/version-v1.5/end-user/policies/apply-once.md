@@ -1,12 +1,16 @@
 ---
-title: One-time delivery(Allow the configuration to drift)
+title: One-time Delivery(Working With Other Controllers)
 ---
 
 By default, the KubeVela controller will prevent configuration drift for applied resources by reconciling them routinely. This is useful if you want to keep your application always having the desired configuration to avoid some unintentional changes by external modifiers.
 
-However, sometimes, you might want to use KubeVela Application to dispatch jobs and recycle jobs, but also want to leave those resources mutable after the workflow is finished. In this case, you can use the following apply-once policy.
+However, sometimes, you might want to use KubeVela Application to dispatch jobs and recycle jobs, but also want to leave those resources mutable after the workflow is finished. In this case, you can use the following apply-once policy. Some use cases:
 
-### Allow all configurations to drift
+1. Working with HPA, which will change the deployment replicas.
+2. Working with Istio, which will change the deployment containers.
+3. Other controllers...
+
+### All managed fields once apply
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -32,7 +36,7 @@ spec:
 
 In this case, if you change the replicas or other managed fields of the hello-world deployment after the application enters the running state, the change will not be reverted. On the contrary, if you disable the apply-once policy (by default), any changes to the replicas of the hello-world application will be brought back in the next reconcile loop.
 
-### Allow a part of the configuration to drift
+### Specified fields once apply
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

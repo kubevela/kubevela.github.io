@@ -7,7 +7,7 @@ In KubeVela, the environment bond a namespace in the hub cluster. The applicatio
 
 For one application, If you want to deploy to a multi-environment, you need to apply the application CR to multi namespaces in hub cluster. There is a way in UI that you only need to manage one application configuration.
 
-## Deploy the application to a multi-environment
+## Deploy the application to multi-environment
 
 ### 1. Create an environment
 
@@ -43,7 +43,7 @@ By default, every environment is deployed independently. When you deploy an appl
 
 For example, you want to deploy the prod environment after the QA environment is completed deploy. you could create a trigger with the custom type for the prod environment, you could get a webhook URL. Then, edit the workflow of the QA environment and added a webhook type step that uses the trigger webhook URL at the end. Now, the QA workflow will trigger the prod workflow.
 
-## Deploy the helm chart to a multi-environment
+## Deploy the helm chart to multi-environment
 
 Some teams deploy the application to a multi-environment through the helm chart and multi values files. You also move this solution to the KubeVela.
 
