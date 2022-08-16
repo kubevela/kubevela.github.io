@@ -2,7 +2,7 @@
 title: 使用 YAML 描述插件应用
 ---
 
-文档 [自定义插件](./intro) 介绍了插件的基本目录结构，并且介绍了插件中所需要安装的 Kubernetes operator 应当被定义在一个 KubeVela 应用（Application）中。本文档将会详细介绍如何使用 YAML 格式的应用描述文件来定义这个应用。
+文档 [自定义插件](./intro) 介绍了插件的基本目录结构，并且说明了插件中所需要安装的 Kubernetes operator 应当被定义在一个 KubeVela 应用（Application）中。本文档将会详细介绍如何使用 YAML 格式的应用描述文件来定义这个应用。
 
 应用描述文件通常需要包含两个部分，应用模版文件和 resources/ 目录下的资源文件。
 
@@ -16,8 +16,6 @@ title: 使用 YAML 描述插件应用
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: velaux
-  namespace: vela-system
 spec:
   components:
     - name: namespace
@@ -55,8 +53,6 @@ secrets:
 ```yaml
 kind: Application
 metadata:
-  name: example
-  namespace: vela-system
 spec:
   components:
     - name: namespace
@@ -79,6 +75,10 @@ spec:
               secrets:
                 - name: my-secret
 ```
+
+这里我们只是通过简单的 namespace 和 serviceAccount 来举例。通常一个 operator 所需要安装的 CRD 和工作负载（deployment 或 statefulSet）同样可以按照相同的方式被定义在这个应用当中。
+
+> [元数据文件](./intro)介绍文档提到了你可以在元数据文件中通过设置插件的 `deployTo.RuntimeCluster` 字段来将插件应用中的资源安装到子集群中。其背后的原理是在启用插件时自动为插件添加一个 [topology](../../end-user/policies/references#topology) 策略，所以为避免冲突你的插件的应用模版文件最好不要包含 topology 策略。
 
 ## 例子
 

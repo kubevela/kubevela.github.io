@@ -1,5 +1,5 @@
 ---
-title: Build Your Own Addon
+title: Make Your Own Addon
 ---
 
 A KubeVela addon is a collection that can contain the following two types of files；

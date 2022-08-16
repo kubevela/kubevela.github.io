@@ -64,6 +64,7 @@ spec:
             metadata:
               name: my-namespace
 ```
+如果你对 CUE 语言还不了解，可以通过 [CUE 基础入门文档](../cue/basic) 了解 CUE 的具体语法。
 
 > 需要注意的是，即使你在应用模版文件中设置了应用的名称，该设置也不会生效，在启用时应用会统一以 addon-{addonName} 的格式自动命名。
 
@@ -78,6 +79,12 @@ parameter: {
   //+usage=namespace to create
   namespace?: foo-namespace | string
 }
+```
+
+在启用插件时，你可以通过在启动命令后面追加启动参数的方式来设置参数定义文件中声明的参数，如下所示：
+
+```shell
+& vela addon enable <addon-Name> <parameter-name-1=value> <parameter-name-1=value>
 ```
 
 ## 目录 `resources/` 下的 CUE 资源文件
@@ -161,7 +168,7 @@ spec:
 
 ## 场景和功能
 
-下面将会介绍几个核心插件功能的应用描述文件的编写方法。
+下面将会介绍几个核心的插件功能所对应的应用描述文件的编写方法。
 
 ### 实现根据参数选择安装集群
 
@@ -226,13 +233,15 @@ spec:
           - cluster1
 ```
 
-因为应用如果设置一个空 `clusterLabelSelector` topology 策略，会默认在所有集群创建应用中所定义的资源，所以如果你需要在所有集群中启用插件的话，你可以执行下面的命令：
+启用插件之后，应用会被在管控集群中创建。KubeVela 控制器会进一步根据这个应用的 topology 策略中的定义把组件安装到 local 和 cluster1 集群。
+
+如果你需要在所有集群中启用插件的，可以通过在启用插件时不设置 cluster 参数，如下所示：
 
 ```shell
 $ vela addon enable <addon-name>
 ```
 
-渲染出来的应用结果为：
+渲染出来的应用则会变成：
 
 ```yaml
 kind: Application
@@ -250,6 +259,8 @@ spec:
       properties:
         clusterLabelSelector: { }
 ```
+
+由于如果应用如果设置一个空的 （`{}`） `clusterLabelSelector` topology 策略，会默认在所有集群部署组件，所以插件启用之后应用中的组件会被安装到 KubeVela 所管控的所有集群中。
 
 ### 部署附属资源
 
@@ -326,7 +337,7 @@ version: 1.2.4
 ...
 ```
 
-渲染的结果为：
+渲染出来的应用为：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -344,8 +355,6 @@ spec:
 这个例子中，使用了插件的版本来填充镜像的 tag。一个例子是 [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue) 插件。 其他字段请参考插件的[元数据文件](./intro) 定义。
 
 上面就完整的介绍了如何用 CUE 编写 `template.cue`, `parameter.cue` 以及 `resources/` 目录下的 CUE 资源文件，在启用插件时这些文件会连同 `metadata.yaml` 中记录的插件元信息在同一个上下文中渲染得到结果并下发。
-
-如果你对 CUE 语言还不了解，可以通过 [CUE 基础入门文档](../cue/basic) 了解 CUE 的具体语法。
 
 你也可以在本地使用 `cue eval *.cue resources/*.cue -e output -d yaml` 命令查看资源渲染的效果。
 
@@ -400,11 +409,13 @@ output: {
 //...
 ```
 
-当用户通过下面的命令启用插件时 `fluxcd-kustomize-controller` 组件并不会被添加到应用当中，同时`kustomize` ComponentDefinition 也不会被在管控集群当中创建。
+用户就可以通过设置 `onlyHelmComponents=true` 的启动参数禁用 `kustomize` 相关模块化能力和 operator ，如下所示：
 
 ```shell
 $ vela addon enable fluxcd onlyHelmComponents=true
 ```
+
+由于当参数 `onlyHelmComponents` 被设置为 `true` 时, 渲染出来的应用中不会包含 `fluxcd-kustomize-controller` 组件，所以与之绑定的 `kustomize` ComponentDefinition 也不会被在管控集群当中创建。
 
 ## 例子
 

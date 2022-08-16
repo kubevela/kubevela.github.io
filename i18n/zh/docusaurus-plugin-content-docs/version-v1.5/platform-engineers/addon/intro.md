@@ -2,7 +2,7 @@
 title: 自定义插件
 ---
 
-一个 KubeVela 插件就是一个主要包含了以下三类文件的文件集合:
+一个 KubeVela 插件就是一个主要包含了以下三类文件的集合:
 * 插件的`基本信息文件` 包括元数据文件（metadata.yaml）和插件介绍文档（README.md）。
 * 定义 KubeVela 的`OAM 模型文件`。包括[模块化能力](../../getting-started/definition), [UI 扩展](../../reference/ui-schema)，[资源拓扑规则](../../reference/topology-rule)等。
 * 描述一个 KubeVela [应用（Application）](../../getting-started/core-concept) 的 `应用描述文件`。通常插件中的模块化能力（Definition）背后需要一个 Kubernetes operator 的支撑，而应用描述文件的作用就是，定义一个包含相应的 Kubernetes 资源的 KubeVela 应用（application），进而由 KubeVela 控制器把 operator 安装到各个集群当中。
@@ -101,7 +101,7 @@ invisible: false
 
 #### 模块化能力定义文件 (definitions/ 目录) 
 
-该目录用于存放模块化能力（Definition）定义文件, 这些文件可以是一个 YAML 类型的 ComponentDefinition，traitDefinitions 或 workflowStepDefinitions Kubernetes 资源对象（CustomResource）。也可以是 CUE 格式的 KubeVela [def](../../getting-started/definition) 文件，这类文件在启用时会被渲染成对应的 Kubernetes 资源对象再下发到集群。
+这个目录包含了插件所提供的模块化能力（Definition），安装插件之后这些能力就会被用户看到并使用。 该目录中的文件可以是一个 YAML 类型的 ComponentDefinition，TraitDefinitions 或 WorkflowStepDefinitions Kubernetes 资源对象（CustomResource）。也可以是 CUE 格式的 KubeVela [def](../../getting-started/definition) 文件，这类文件在启用时会被渲染成对应的 Kubernetes 资源对象再下发到集群。
 
 > 需要注意的是，这些 Definition 只会被下发到管控集群。
 
@@ -113,9 +113,9 @@ invisible: false
 
 > 这类文件在插件中也是可以缺省的
 
-应用描述文件主要包含，应用模版文件（template.cue 或 template.yaml）和 资源文件（`resources/` 目录下的文件 ）。这些文件可以通过 CUE 或 YAML 格式定义。
+经过上面介绍，我们知道插件中支撑某项模块化能力的 Kubernetes operator 需要通过一个 KubeVela 应用被安装。应用描述文件的作用就是定义这个插件应用。应用描述文件主要包含，应用模版文件（template.cue 或 template.yaml）和 资源文件（`resources/` 目录下的文件 ）。这些文件可以通过 CUE 或 YAML 格式定义。
 
-YAML 格式的应用描述文件的特点是编写简单，你只需要编写一系列包含 Kubernetes 资源对象的 YAML 文件来描述这个插件应用即可。而如果使用 CUE 格式的文件描述插件应用的话，插件将会获得以下能力：
+YAML 格式的应用描述文件的特点是编写简单，你只需要编写一系列包含 Kubernetes 资源对象的 YAML 文件来描述这个插件应用即可。而如果使用 CUE 格式的文件描述插件应用的话，插件将会具备以下能力：
 
 * 利用 CUE 语言灵活简洁的语法、丰富的内置函数及其参数校验能力，根据启动参数和插件元数据渲染和部署插件应用和附属资源。
 * 插件中可能包含多个模块化能力（Definition）及其背后支撑的 CRD Operator，他们能够根据启动参数被选择性安装。
