@@ -126,7 +126,7 @@ boot  docker-entrypoint.sh  lib    mnt    root  srv   usr
 dev   etc                   lib64  opt    run   sys   var
 ```
 
-- `vela port-forward` forward ports of pods or services in managed clusters to your local endpoint.
+- `vela port-forward` can discover and forward ports of pods or services in managed clusters to your local endpoint.
 
 ```bash
 $ vela port-forward basic-topology -n examples 8080:80

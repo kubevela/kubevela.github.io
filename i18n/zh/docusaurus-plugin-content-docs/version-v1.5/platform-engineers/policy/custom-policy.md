@@ -71,7 +71,7 @@ template: {
 把这个 Trait 应用到控制平面来使其生效：
 
 ```
-vela def apply -f myroute.cue
+vela def apply myroute.cue
 ```
 
 随后我们的终端用户可以立即发现并在 `Application` 中使用这个 Trait。

@@ -30,7 +30,7 @@ template: {
 }
 ```
 
-The rule is align with component definition, you must specify `output`, while you can use `outputs` for more objects, the format as below:
+The rule is aligned with component definition, you must specify `output`, while you can use `outputs` for more objects, the format as below:
 
 ```cue
 output: {
@@ -72,7 +72,7 @@ template: {
 Apply to our control plane to make this trait work:
 
 ```
-vela def apply -f myroute.cue
+vela def apply myroute.cue
 ```
 
 Then our end users can discover it immediately and use it in `Application`.

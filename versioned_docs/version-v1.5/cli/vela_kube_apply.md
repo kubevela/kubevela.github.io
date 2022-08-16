@@ -8,7 +8,7 @@ Apply resources in Kubernetes YAML file to clusters.
 
 Apply Kubernetes objects in clusters
 
- Apply Kubernetes objects in multiple clusters. Use --clusters to specify which clusters to apply. If -n/--namespace is used, the original object namespace will be overrode.
+ Apply Kubernetes objects in multiple clusters. Use --clusters to specify which clusters to apply. If -n/--namespace is used, the original object namespace will be overridden.
 
  You can use -f/--file to specify the object file/folder to apply. Multiple file inputs are allowed. Directory input and web url input is supported as well. File format can be in YAML, JSON or CUE.
 

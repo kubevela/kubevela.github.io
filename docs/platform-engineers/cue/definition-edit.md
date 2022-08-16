@@ -220,7 +220,7 @@ While you can use native kubectl tools to confirm the results of the apply comma
 $ vela def get my-comp -t component
 ```
 
-Or you can list all defintions installed through `vela def list`
+Or you can list all definitions installed through `vela def list`
 
 ```bash
 $ vela def list -n my-namespace -t component
