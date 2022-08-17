@@ -139,6 +139,7 @@ module.exports = {
             'platform-engineers/system-operation/vela-cli-image',
             'platform-engineers/system-operation/enable-addon-offline',
             'platform-engineers/system-operation/migration-from-old-version',
+            'platform-engineers/system-operation/system-info-diagnose',
           ],
         },
         {
