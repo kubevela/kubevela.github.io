@@ -84,7 +84,7 @@ parameter: {
 在启用插件时，你可以通过在启动命令后面追加启动参数的方式来设置参数定义文件中声明的参数，如下所示：
 
 ```shell
-& vela addon enable <addon-Name> <parameter-name-1=value> <parameter-name-1=value>
+$ vela addon enable <addon-Name> <parameter-name-1=value> <parameter-name-1=value>
 ```
 
 ## 目录 `resources/` 下的 CUE 资源文件
@@ -299,7 +299,7 @@ outputs: resourceTree: {
 _rules: {...}
 ```
 
-这个例子中我们定义了一个 `resourceTree` 的 configmap ，这个 configmap 其实是一个[拓扑树资源关系规则](../../reference/topology-rule)，这个 configmap 就只需要在管控集群中部署。
+这个例子中我们定义了一个 `resourceTree` 的 configmap ，这个 configmap 其实是一个[拓扑树资源关系规则](../../reference/topology-rule)，这个资源的作用是建立集群中自定义类型资源的关联关系，从而使这些能够被在资源拓扑图中展示。这个 configmap 就只需要在管控集群中部署。
 
 
 ### 使用 context 中的变量渲染组件
