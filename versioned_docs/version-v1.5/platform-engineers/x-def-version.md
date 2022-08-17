@@ -24,6 +24,22 @@ affinity        1               Trait   9db54dd8d5314bd5
 affinity        2               Trait   8bf3e82a6884db2c
 ```
 
+* Check PolicyDefinition Revision
+
+```shell
+vela def get override --revisions
+NAME            REVISION        TYPE    HASH
+override        1               Policy  f6f87a5eb2271b8a
+```
+
+* Check WorkflowStepDefinition Revision
+
+```shell
+vela def get deploy --revisions
+NAME    REVISION        TYPE            HASH
+deploy  1               WorkflowStep    2ea741dae457850b
+```
+
 The best way to control version is using a new name for every definition version.
 
 ## Specify Component/Trait Capability Revision in Application
