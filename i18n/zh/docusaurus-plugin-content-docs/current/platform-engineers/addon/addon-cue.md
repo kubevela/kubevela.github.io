@@ -166,6 +166,8 @@ spec:
 
 > 需要注意的是，CUE 资源描述文件需要必须要包含一个 `package main` header 才会被识别为一个资源描述文件，进而才会与应用模版文件放在一个渲染上下文中渲染。这可以帮你过滤掉不想放到渲染上下文中的那些 CUE 文件。
 
+你也可以在本地使用 `cue eval *.cue resources/*.cue -e output -d yaml` 命令查看资源渲染的效果。
+
 ## 场景和功能
 
 下面将会介绍几个核心的插件功能所对应的应用描述文件的编写方法。
@@ -354,9 +356,7 @@ spec:
 
 这个例子中，使用了插件的版本来填充镜像的 tag。一个例子是 [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue) 插件。 其他字段请参考插件的[元数据文件](./intro) 定义。
 
-上面就完整的介绍了如何用 CUE 编写 `template.cue`, `parameter.cue` 以及 `resources/` 目录下的 CUE 资源文件，在启用插件时这些文件会连同 `metadata.yaml` 中记录的插件元信息在同一个上下文中渲染得到结果并下发。
-
-你也可以在本地使用 `cue eval *.cue resources/*.cue -e output -d yaml` 命令查看资源渲染的效果。
+在启用插件时 `template.cue`, `parameter.cue` 以及 `resources/` 目录下的 CUE 资源文件会连同 `metadata.yaml` 中记录的插件元信息在同一个上下文中渲染得到结果并下发。
 
 ### 模块化能力与应用中组件关联
 

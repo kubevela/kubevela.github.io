@@ -111,17 +111,17 @@ The `schemas/` folder is used to store the [UI schema](../../reference/ui-schema
 
 > This type of file isn't required in an addon.
 
-Through the above introduction, we know that the Definition of an addon usually should be supported by a Kubernetes operator. The operator should be defined in a KubeVela application and installed by KubeVela application controller. So the function of application description file is describing this application. Application description file contains two type of file: application template file (template.yaml or template.cue) and resources files which under `resources/` folder.
+Through the above introduction, we know that the Definition of an addon usually should be supported by a Kubernetes operator. The operator should be defined in a KubeVela application and installed by KubeVela application controller. So the function of application description file is describing this application. Application description file contains two types of file: application template file (template.yaml or template.cue) and resources files which under `resources/` folder.
 
 The content of a YAML typed file must be a Kubernetes object manifest, so you can use the simplest way to define a KubeVela application that may contain several components, policies, or workflow. If you choose to use CUE to define application description files the addon will have these abilities:
 
 * Utilize the flexible and concise syntax of the CUE language, rich built-in functions and its parameter verification capabilities, to render and deploy the application and auxiliary resources with parameters and metadata of addon.
 * An addon may contain multiple Definitions and CRD Operators, they can be selectively installed according to parameters of addon.
 
-[Write application description files with YAML](./addon-yaml) will discuss how to use YAML define application of the addon.
-[Write application description files with CUE](./addon-cue) will discuss how to use CUE define the application of the addon.
+[YAML application description file](./addon-yaml) will introduce how to use YAML define application of addon.
+[CUE application description file](./addon-cue) will introduce how to use CUE define the application of addon.
 
-The above is a complete introduction to how to make an addon, you can find the complete description of the above-mentioned addon in this [catalog](https://github.com/kubevela/catalog/tree/master/experimental/addons/example) example.
+The above is a complete introduction to how to make an addon, you can find the complete description of the above-mentioned addon in [catalog](https://github.com/kubevela/catalog/tree/master/experimental/addons/example).
 
 ## Install Addon Locally
 
@@ -133,7 +133,7 @@ vela addon enable ./your-addon-dir/
 
 ## Known Limits
 
-- Cannot only install addon in the sub-clusters. Because of KubeVela need render out every kind of resource in control plane, if an addon contain some [CRD](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), these CRD must be installed in control plane, otherwise Vela-core controller will meet an error of cannot find CRD.
+- Cannot only install addon in the sub-clusters. Because of KubeVela need render out every kind of resource in control plane, if an addon contain some [CRD](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), and these CRDs must be installed in control plane, otherwise Vela-core controller will meet an error of cannot find CRD.
 
 ## Extend Terraform Addon
 

@@ -1,20 +1,19 @@
 ---
-title: Write application description files with CUE
+title: CUE application description file
 ---
 
-[Make Your Own Addon](./intro) introduces the basic structure of an addon and illustrate that any Kubernetes operator to be installed of an addon should be defined in a KubeVela application. [Write application description files with YAML](./addon-yaml) explains the way using YAML define the application. If you choose to use CUE to write application description files the addon will be able to have these abilities:
+[Document](./intro) introduces the basic structure of an addon and illustrate that any Kubernetes operator to be installed of an addon should be defined in a KubeVela application. Document [YAML application description file](./addon-yaml) explains the way using YAML define the application. If you use CUE to write application description file the addon will be able to have these abilities:
 
 * Utilize the flexible and concise syntax of the CUE language, rich built-in functions and its parameter verification capabilities, to render and deploy the application and auxiliary resources with parameters and metadata of addon.
 * An addon may contain multiple Definitions and CRD Operators, they can be selectively installed according to parameters of addon.
 
-This doc will introduce how to Write the application description file with the CUE.
+This doc will introduce how to Write the application description file using CUE.
 
 Application description files contain two parts: application template files and resource files (files in the `resources/` folder).
 
 ## Application template file (template.cue)
 
-
-The most important part in the application template is `output` field, which must embed a KubeVela application. As follows:
+The most important part in the application template is `output` field, which must embed a KubeVela application as follows:
 
 ```cue
 package main
@@ -157,6 +156,8 @@ spec:
 
 > Please notice: Only those CUE files with header `package main` can be reference by `template.cue`, this can be used to help you filter CUE files that you don't want to set into the rendering context.
 
+We just use namespace as example here, other resources of an operator can also be defined in KubeVela application in the same way.
+
 ## Features
 
 This section will introduce the way of writing application description file to implement several core features of addon.
@@ -281,6 +282,8 @@ _rules: {...}
 
 In this example, we define a configmap `resourceTree` as an auxiliary resource, this configmap is actually a [resource topology rule](../../reference/topology-rule) . The function of this resource is to establish the relationship of CustomResources in the cluster, so that it can be displayed in the topology graph. It only needs to be applied to control-plane.
 
+You can also run the `cue eval *.cue resources/*.cue -e output -d yaml` command from local to see the result of resource rendering.
+
 ### Use metadata of context to render application
 
 In addition to dynamically rendering the application by parameters, you can also read fields defined in `metadata.yaml` for rendering. For example, you can define a `template.cue` file as follows:
@@ -332,6 +335,8 @@ spec:
 ```
 
 The image tag becomes the addon's version due to the `context.metadata.version` points to. The real example is [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue). Other available fields of metadata please refer to [metadata](./intro).
+
+When the addon is enabled, `template.cue`, `parameter.cue` and the resource files will be gathered  with the addon metadata in `metadata.yaml` to render out the resources and apply them.
 
 ### Binding the Definition to a component
 
@@ -395,7 +400,6 @@ $ vela addon enable fluxcd `onlyHelmComponents=true`
 ```
 
 The `fluxcd-kustomize-controller` component won't be added to the application. The `kustomize` ComponentDefinitions will not be applied either.
-
 
 ## Examples
 

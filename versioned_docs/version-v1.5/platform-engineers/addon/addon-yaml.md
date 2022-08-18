@@ -1,8 +1,8 @@
 ---
-title: Write application description files with YAML
+title: YAML application description file
 ---
 
-[Make Your Own Addon] introduces the basic structure of an addon, and illustrate that any Kubernetes operator need to be installed of an addon should be defined in a KubeVela application. This doc will discuss all the details of writing the application description file with YAML.
+[Make Your Own Addon] introduces the basic structure of an addon, and illustrate that any Kubernetes operator to be installed of an addon should be defined in a KubeVela application. This doc will discuss all the details of writing the application description file with YAML.
 
 Application description files contain two parts: application template file and resource files (files under the `resources/` folder).
 
@@ -71,6 +71,8 @@ spec:
             secrets:
             - name: my-secret
 ```
+
+We just use namespace and serviceAccount resource as example here, other resources of an operator can also be defined in KubeVela application in the same way.
 
 ## Example
 
