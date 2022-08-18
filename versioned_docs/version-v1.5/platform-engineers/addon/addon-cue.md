@@ -117,7 +117,7 @@ namespace: {
 }
 ```
 
-Then we can reference the two CUE blocks in `template.cue` :
+Then we can reference this CUE block in `template.cue` :
 
 ```cue
 // template.cue
