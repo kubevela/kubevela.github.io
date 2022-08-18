@@ -2,7 +2,7 @@
 title: YAML application description file
 ---
 
-[Make Your Own Addon] introduces the basic structure of an addon, and illustrate that any Kubernetes operator to be installed of an addon should be defined in a KubeVela application. This doc will discuss all the details of writing the application description file with YAML.
+[Make Your Own Addon](./intro) introduces the basic structure of an addon, and illustrate that any Kubernetes operator to be installed of an addon should be defined in a KubeVela application. This doc will discuss all the details of writing the application description file with YAML.
 
 Application description files contain two parts: application template file and resource files (files under the `resources/` folder).
 
@@ -34,7 +34,7 @@ In this example, we define the skeleton of an application. This application cont
 
 In case your template file is too large, you can split the entire content of the application into multiple files under the `resources/` folder.
 
-YAML file in`resources/` folder must be Kubernetes objects, you can define many objects one by one in a file. These objects will be directly added to the application as a `K8s-object` typed component during rendering. An example as follows:
+YAML file in`resources/` folder must be Kubernetes objects, you can define many objects one by one in a file. These objects will be directly added to the application as a `K8s-objects` typed component during rendering. An example as follows:
 
 ```yaml
 apiVersion: v1
@@ -72,8 +72,8 @@ spec:
             - name: my-secret
 ```
 
-We just use namespace and serviceAccount resource as example here, other resources of an operator can also be defined in KubeVela application in the same way.
+We just use namespace and serviceAccount resources as an example here, other resources of an operator can also be defined in KubeVela application in the same way.
 
 ## Example
 
-An example is [OCM](https://github.com/kubevela/catalog/tree/master/addons/ocm-hub-control-plane). All files included in this addon are all YAML typed.
+An example is [OCM](https://github.com/kubevela/catalog/tree/master/addons/ocm-hub-control-plane). All files included in this addon are all YAML coded.

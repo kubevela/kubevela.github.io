@@ -2,12 +2,12 @@
 title: CUE application description file
 ---
 
-[Document](./intro) introduces the basic structure of an addon and illustrate that any Kubernetes operator to be installed of an addon should be defined in a KubeVela application. Document [YAML application description file](./addon-yaml) explains the way using YAML define the application. If you use CUE to write application description file the addon will be able to have these abilities:
+[Previous tutorial](./intro) introduces the basic structure of an addon and illustrate that any Kubernetes operator to be installed of an addon should be defined in a KubeVela application. Document [YAML application description file](./addon-yaml) explains the way of using YAML define the addon application. If you use CUE to write application description file, the addon will be able to have these abilities:
 
 * Utilize the flexible and concise syntax of the CUE language, rich built-in functions and its parameter verification capabilities, to render and deploy the application and auxiliary resources with parameters and metadata of addon.
-* An addon may contain multiple Definitions and CRD Operators, they can be selectively installed according to parameters of addon.
+* An addon may contain multiple Definitions and CRD Operators. They can be selectively installed according to parameters of the addon.
 
-This doc will introduce how to Write the application description file using CUE.
+This doc will introduce how to define addon application by writing CUE files.
 
 Application description files contain two parts: application template files and resource files (files in the `resources/` folder).
 
@@ -37,7 +37,7 @@ output: {
 }
 ```
 
-In this example, the name of the namespace defined in `spec.components[0].properties.objects[0]` in this application is determined by `parameter.namespace`, which means that its name will be dynamically rendered by the `namespace` parameter when the addon is enabled. If you want the created namespace to be my-namespace, you can run the following command:
+In this example, the name of the namespace defined in `spec.components[0].properties.objects[0]` in this application is determined by `parameter.namespace`, which means that its name will be dynamically rendered by the `namespace` parameter when the addon is enabled. If you want the created namespace to be `my-namespace`, you can run the following command:
 
 ```shell
 $ vela addon enable <addon-name> namespace=my-namespace
@@ -68,7 +68,7 @@ You can refer to the [CUE basic](../cue/basic) to learn language details.
 
 ## Parameter definition file (parameter.cue) 
 
-In the example above, we use the parameter `namespace`  to set the name of namespace resource. Actually, We also need a parameter definition file (`parameter.cue`) to declare what parameters this addon has. For examples:
+In the example above, we use the parameter `namespace`  to set the name of namespace resource. Actually, we also need a parameter definition file (`parameter.cue`) to declare what parameters this addon has. For example,
 
 ```cue
 parameter: {
@@ -80,7 +80,7 @@ parameter: {
 When enabling the addon, you can set the parameters declared in the parameter definition file by appending the parameters to the command, as follows:
 
 ```shell
-$ vela addon enable <addon-Name> <parameter-name-1=value> <parameter-name-1=value>
+$ vela addon enable <addon-Name> <parameter-name-1=value> <parameter-name-2=value>
 ```
 
 ## Resource files (CUE files under `resources/` folder)
@@ -117,7 +117,7 @@ namespace: {
 }
 ```
 
-Then we can reference the two CUE block in `template.cue` :
+Then we can reference the two CUE blocks in `template.cue` :
 
 ```cue
 // template.cue
@@ -154,7 +154,7 @@ spec:
               name: my-namespace
 ```
 
-> Please notice: Only those CUE files with header `package main` can be reference by `template.cue`, this can be used to help you filter CUE files that you don't want to set into the rendering context.
+> Please notice: Only those CUE files with header `package main` can be reference by `template.cue`, this can be used to help you filter CUE files that you don't want to use in the rendering context.
 
 We just use namespace as example here, other resources of an operator can also be defined in KubeVela application in the same way.
 
@@ -241,11 +241,11 @@ spec:
         clusterLabelSelector: {}
 ```
 
-Since an empty (`{}`) `clusterLabelSelector` topology will choose all exist clusters as target, so the components in application will be dispatched to all clusters including control-plane and managed-cluster.
+Since an empty (`{}`) `clusterLabelSelector` topology will choose all exist clusters as target, so the components in the application will be dispatched to all clusters including both the control-plane and the managed clusters.
 
 ### Auxiliary resources
 
-You can also define some auxiliary resources in the outputs field of the `template.cue` file. These resources will only be applied to the control plane.
+You can also define some auxiliary resources in the `outputs` field of the `template.cue` file. These resources will only be applied to the control plane.
 
 ```cue
 package main
@@ -334,13 +334,13 @@ spec:
         image: "oamdev/vela-apiserver:v1.2.4"
 ```
 
-The image tag becomes the addon's version due to the `context.metadata.version` points to. The real example is [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue). Other available fields of metadata please refer to [metadata](./intro).
+The image tag becomes the addon's version which the `context.metadata.version` field points to. The real example is [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue). Other available fields of metadata please refer to [metadata](./intro).
 
 When the addon is enabled, `template.cue`, `parameter.cue` and the resource files will be gathered  with the addon metadata in `metadata.yaml` to render out the resources and apply them.
 
 ### Binding the Definition to a component
 
-If you want to bind a Definition to a component in the application, to achieve dynamically enable the ability of one X-definition, you can do it by setting `addon.oam.dev/bind-component` annotation on the definition.
+If you want to bind a Definition to a component in the application, to dynamically enable the ability of one Definition, you can do it by setting `addon.oam.dev/bind-component` annotation on the Definition.
 
 An actual example is [`fluxcd`](https://github.com/kubevela/catalog/tree/master/addons/fluxcd/definitions) addon.
 
@@ -393,7 +393,7 @@ output: {
 //...
 ```
 
-If you enable this addon by following command:
+If you enable this addon by following the command:
 
 ```shell
 $ vela addon enable fluxcd `onlyHelmComponents=true`
