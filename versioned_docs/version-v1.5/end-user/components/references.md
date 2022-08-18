@@ -4,13 +4,17 @@ title: Built-in Component Type
 
 This documentation will walk through all the built-in component types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-24T21:02:31+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-08-18T16:25:37+08:00.
 
 ## Cron-Task
 
 ### Description
 
 Describes cron jobs that run code or a script to completion.
+
+### Base on Kubernetes resource kind(s) (cron-task)
+
+cronjobs.batch
 
 ### Examples (cron-task)
 
@@ -35,28 +39,28 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- cmd | Commands to run in the container. | []string | false |  
- env | Define arguments by using environment variables. | [[]env](#env-cron-task) | false |  
- schedule | Specify the schedule in Cron format, see https://en.wikipedia.org/wiki/Cron. | string | true |  
- concurrencyPolicy | Specifies how to treat concurrent executions of a Job. | string | false | Allow 
- suspend | Suspend subsequent executions. | bool | false | false 
- successfulJobsHistoryLimit | The number of successful finished jobs to retain. | int | false | 3 
- failedJobsHistoryLimit | The number of failed finished jobs to retain. | int | false | 1 
- startingDeadlineSeconds | Specify deadline in seconds for starting the job if it misses scheduled. | int | false |  
  labels | Specify the labels in the workload. | map[string]:string | false |  
  annotations | Specify the annotations in the workload. | map[string]:string | false |  
+ schedule | Specify the schedule in Cron format, see https://en.wikipedia.org/wiki/Cron. | string | true |  
+ startingDeadlineSeconds | Specify deadline in seconds for starting the job if it misses scheduled. | int | false |  
+ suspend | Suspend subsequent executions. | bool | false | false 
+ concurrencyPolicy | Specifies how to treat concurrent executions of a Job. | string | false | Allow 
+ successfulJobsHistoryLimit | The number of successful finished jobs to retain. | int | false | 3 
+ failedJobsHistoryLimit | The number of failed finished jobs to retain. | int | false | 1 
  count | Specify number of tasks to run in parallel. | int | false | 1 
- ttlSecondsAfterFinished | Limits the lifetime of a Job that has finished. | int | false |  
- activeDeadlineSeconds | The duration in seconds relative to the startTime that the job may be continuously active before the system tries to terminate it. | int | false |  
- backoffLimit | The number of retries before marking this job failed. | int | false | 6 
- restart | Define the job restart policy, the value can only be Never or OnFailure. By default, it's Never. | string | false | Never 
  image | Which image would you like to use for your service. | string | true |  
  imagePullPolicy | Specify image pull policy for your service. | string | false |  
+ imagePullSecrets | Specify image pull secrets for your service. | []string | false |  
+ restart | Define the job restart policy, the value can only be Never or OnFailure. By default, it's Never. | string | false | Never 
+ cmd | Commands to run in the container. | []string | false |  
+ env | Define arguments by using environment variables. | [[]env](#env-cron-task) | false |  
  cpu | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core). | string | false |  
  memory | Specifies the attributes of the memory resource required for the container. | string | false |  
  volumes | Declare volumes and volumeMounts. | [[]volumes](#volumes-cron-task) | false |  
- imagePullSecrets | Specify image pull secrets for your service. | []string | false |  
  hostAliases | An optional list of hosts and IPs that will be injected into the pod's hosts file. | [[]hostAliases](#hostaliases-cron-task) | false |  
+ ttlSecondsAfterFinished | Limits the lifetime of a Job that has finished. | int | false |  
+ activeDeadlineSeconds | The duration in seconds relative to the startTime that the job may be continuously active before the system tries to terminate it. | int | false |  
+ backoffLimit | The number of retries before marking this job failed. | int | false | 6 
  livenessProbe | Instructions for assessing whether the container is alive. | [livenessProbe](#livenessprobe-cron-task) | false |  
  readinessProbe | Instructions for assessing whether the container is in a suitable state to serve traffic. | [readinessProbe](#readinessprobe-cron-task) | false |  
 
@@ -100,7 +104,8 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- type | Specify volume type, options: "pvc","configMap","secret","emptyDir". | string | true |  
+ medium |  | string | false | empty 
+ type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir. | string | false | emptyDir 
 
 
 #### hostAliases (cron-task)
@@ -207,6 +212,10 @@ spec:
 
 Describes daemonset services in Kubernetes.
 
+### Base on Kubernetes resource kind(s) (daemon)
+
+daemonsets.apps
+
 ### Examples (daemon)
 
 ```yaml
@@ -263,21 +272,31 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- cmd | Commands to run in the container. | []string | false |  
- env | Define arguments by using environment variables. | [[]env](#env-daemon) | false |  
- volumeMounts |  | [volumeMounts](#volumemounts-daemon) | false |  
  labels | Specify the labels in the workload. | map[string]:string | false |  
  annotations | Specify the annotations in the workload. | map[string]:string | false |  
  image | Which image would you like to use for your service. | string | true |  
- ports | Which ports do you want customer traffic sent to, defaults to 80. | [[]ports](#ports-daemon) | false |  
  imagePullPolicy | Specify image pull policy for your service. | string | false |  
+ imagePullSecrets | Specify image pull secrets for your service. | []string | false |  
+ ports | Which ports do you want customer traffic sent to, defaults to 80. | [[]ports](#ports-daemon) | false |  
+ cmd | Commands to run in the container. | []string | false |  
+ env | Define arguments by using environment variables. | [[]env](#env-daemon) | false |  
  cpu | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core). | string | false |  
  memory | Specifies the attributes of the memory resource required for the container. | string | false |  
+ volumeMounts |  | [volumeMounts](#volumemounts-daemon) | false |  
  volumes | Deprecated field, use volumeMounts instead. | [[]volumes](#volumes-daemon) | false |  
  livenessProbe | Instructions for assessing whether the container is alive. | [livenessProbe](#livenessprobe-daemon) | false |  
  readinessProbe | Instructions for assessing whether the container is in a suitable state to serve traffic. | [readinessProbe](#readinessprobe-daemon) | false |  
  hostAliases | Specify the hostAliases to add. | [[]hostAliases](#hostaliases-daemon) | false |  
- imagePullSecrets | Specify image pull secrets for your service. | []string | false |  
+
+
+#### ports (daemon)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ port | Number of port to expose on the pod's IP address. | int | true |  
+ name | Name of the port. | string | false |  
+ protocol | Protocol for port. Must be UDP, TCP, or SCTP. | string | false | TCP 
+ expose | Specify if the port should be exposed. | bool | false | false 
 
 
 #### env (daemon)
@@ -348,8 +367,8 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- path |  | string | true |  
  key |  | string | true |  
+ path |  | string | true |  
  mode |  | int | false | 511 
 
 
@@ -360,16 +379,16 @@ spec:
  name |  | string | true |  
  mountPath |  | string | true |  
  defaultMode |  | int | false | 420 
- items |  | [[]items](#items-daemon) | false |  
  secretName |  | string | true |  
+ items |  | [[]items](#items-daemon) | false |  
 
 
 ##### items (daemon)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- path |  | string | true |  
  key |  | string | true |  
+ path |  | string | true |  
  mode |  | int | false | 511 
 
 
@@ -386,21 +405,11 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- path |  | string | true |  
  name |  | string | true |  
  mountPath |  | string | true |  
  mountPropagation |  | string | false |  
+ path |  | string | true |  
  readOnly |  | bool | false |  
-
-
-#### ports (daemon)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- name | Name of the port. | string | false |  
- port | Number of port to expose on the pod's IP address. | int | true |  
- protocol | Protocol for port. Must be UDP, TCP, or SCTP. | string | false | TCP 
- expose | Specify if the port should be exposed. | bool | false | false 
 
 
 #### volumes (daemon)
@@ -409,7 +418,8 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- type | Specify volume type, options: "pvc","configMap","secret","emptyDir". | string | true |  
+ medium |  | string | false | empty 
+ type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir. | string | false | emptyDir 
 
 
 #### livenessProbe (daemon)
@@ -559,6 +569,10 @@ spec:
 
 Describes jobs that run code or a script to completion.
 
+### Base on Kubernetes resource kind(s) (task)
+
+jobs.batch
+
 ### Examples (task)
 
 ```yaml
@@ -581,18 +595,18 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- cmd | Commands to run in the container. | []string | false |  
- env | Define arguments by using environment variables. | [[]env](#env-task) | false |  
- count | Specify number of tasks to run in parallel. | int | false | 1 
  labels | Specify the labels in the workload. | map[string]:string | false |  
  annotations | Specify the annotations in the workload. | map[string]:string | false |  
- restart | Define the job restart policy, the value can only be Never or OnFailure. By default, it's Never. | string | false | Never 
+ count | Specify number of tasks to run in parallel. | int | false | 1 
  image | Which image would you like to use for your service. | string | true |  
  imagePullPolicy | Specify image pull policy for your service. | string | false |  
+ imagePullSecrets | Specify image pull secrets for your service. | []string | false |  
+ restart | Define the job restart policy, the value can only be Never or OnFailure. By default, it's Never. | string | false | Never 
+ cmd | Commands to run in the container. | []string | false |  
+ env | Define arguments by using environment variables. | [[]env](#env-task) | false |  
  cpu | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core). | string | false |  
  memory | Specifies the attributes of the memory resource required for the container. | string | false |  
  volumes | Declare volumes and volumeMounts. | [[]volumes](#volumes-task) | false |  
- imagePullSecrets | Specify image pull secrets for your service. | []string | false |  
  livenessProbe | Instructions for assessing whether the container is alive. | [livenessProbe](#livenessprobe-task) | false |  
  readinessProbe | Instructions for assessing whether the container is in a suitable state to serve traffic. | [readinessProbe](#readinessprobe-task) | false |  
 
@@ -636,7 +650,8 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- type | Specify volume type, options: "pvc","configMap","secret","emptyDir". | string | true |  
+ medium |  | string | false | empty 
+ type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir. | string | false | emptyDir 
 
 
 #### livenessProbe (task)
@@ -735,6 +750,10 @@ spec:
 
 Describes long-running, scalable, containerized services that have a stable network endpoint to receive external network traffic from customers.
 
+### Base on Kubernetes resource kind(s) (webservice)
+
+deployments.apps
+
 ### Examples (webservice)
 
 ```yaml
@@ -768,21 +787,31 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- cmd | Commands to run in the container. | []string | false |  
- env | Define arguments by using environment variables. | [[]env](#env-webservice) | false |  
- volumeMounts |  | [volumeMounts](#volumemounts-webservice) | false |  
  labels | Specify the labels in the workload. | map[string]:string | false |  
  annotations | Specify the annotations in the workload. | map[string]:string | false |  
  image | Which image would you like to use for your service. | string | true |  
- ports | Which ports do you want customer traffic sent to, defaults to 80. | [[]ports](#ports-webservice) | false |  
  imagePullPolicy | Specify image pull policy for your service. | string | false |  
+ imagePullSecrets | Specify image pull secrets for your service. | []string | false |  
+ ports | Which ports do you want customer traffic sent to, defaults to 80. | [[]ports](#ports-webservice) | false |  
+ cmd | Commands to run in the container. | []string | false |  
+ env | Define arguments by using environment variables. | [[]env](#env-webservice) | false |  
  cpu | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core). | string | false |  
  memory | Specifies the attributes of the memory resource required for the container. | string | false |  
+ volumeMounts |  | [volumeMounts](#volumemounts-webservice) | false |  
  volumes | Deprecated field, use volumeMounts instead. | [[]volumes](#volumes-webservice) | false |  
  livenessProbe | Instructions for assessing whether the container is alive. | [livenessProbe](#livenessprobe-webservice) | false |  
  readinessProbe | Instructions for assessing whether the container is in a suitable state to serve traffic. | [readinessProbe](#readinessprobe-webservice) | false |  
  hostAliases | Specify the hostAliases to add. | [[]hostAliases](#hostaliases-webservice) | false |  
- imagePullSecrets | Specify image pull secrets for your service. | []string | false |  
+
+
+#### ports (webservice)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ port | Number of port to expose on the pod's IP address. | int | true |  
+ name | Name of the port. | string | false |  
+ protocol | Protocol for port. Must be UDP, TCP, or SCTP. | string | false | TCP 
+ expose | Specify if the port should be exposed. | bool | false | false 
 
 
 #### env (webservice)
@@ -835,6 +864,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
+ subPath |  | string | false |  
  claimName | The name of the PVC. | string | true |  
 
 
@@ -844,6 +874,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
+ subPath |  | string | false |  
  defaultMode |  | int | false | 420 
  cmName |  | string | true |  
  items |  | [[]items](#items-webservice) | false |  
@@ -853,8 +884,8 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- path |  | string | true |  
  key |  | string | true |  
+ path |  | string | true |  
  mode |  | int | false | 511 
 
 
@@ -864,17 +895,18 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
+ subPath |  | string | false |  
  defaultMode |  | int | false | 420 
- items |  | [[]items](#items-webservice) | false |  
  secretName |  | string | true |  
+ items |  | [[]items](#items-webservice) | false |  
 
 
 ##### items (webservice)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- path |  | string | true |  
  key |  | string | true |  
+ path |  | string | true |  
  mode |  | int | false | 511 
 
 
@@ -884,6 +916,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
+ subPath |  | string | false |  
  medium |  | string | false | empty 
 
 
@@ -891,19 +924,10 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- path |  | string | true |  
  name |  | string | true |  
  mountPath |  | string | true |  
-
-
-#### ports (webservice)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- name | Name of the port. | string | false |  
- port | Number of port to expose on the pod's IP address. | int | true |  
- protocol | Protocol for port. Must be UDP, TCP, or SCTP. | string | false | TCP 
- expose | Specify if the port should be exposed. | bool | false | false 
+ subPath |  | string | false |  
+ path |  | string | true |  
 
 
 #### volumes (webservice)
@@ -912,7 +936,8 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- type | Specify volume type, options: "pvc","configMap","secret","emptyDir". | string | true |  
+ medium |  | string | false | empty 
+ type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir. | string | false | emptyDir 
 
 
 #### livenessProbe (webservice)

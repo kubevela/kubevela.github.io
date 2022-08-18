@@ -950,5 +950,8 @@
   },
   "For now this trait is hidden from the VelaUX. Available when using CLI": {
     "Chinese": "目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。"
+  },
+  "Base on Kubernetes resource kind(s)":{
+    "Chinese": "该组件基于的 Kubernetes 资源类型"
   }
 }
