@@ -4,7 +4,7 @@ title: 内置组件列表
 
 本文档将**按字典序**展示所有内置组件的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-08-18T16:25:37+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-08-19T17:50:10+08:00。
 
 ## Cron-Task
 
@@ -12,9 +12,9 @@ title: 内置组件列表
 
 定义一个周期性运行代码或者脚本的任务。
 
-### 该组件基于的 Kubernetes 资源类型 (cron-task)
+### 底层 Kubernetes 资源 (cron-task)
 
-cronjobs.batch
+- cronjobs.batch
 
 ### 示例 (cron-task)
 
@@ -212,9 +212,9 @@ spec:
 
 定义一个同 Kubernetes 每个机器 Node 都运行的服务。
 
-### 该组件基于的 Kubernetes 资源类型 (daemon)
+### 底层 Kubernetes 资源 (daemon)
 
-daemonsets.apps
+- daemonsets.apps
 
 ### 示例 (daemon)
 
@@ -569,9 +569,9 @@ spec:
 
 定义一个只执行一次代码或者脚本的任务。
 
-### 该组件基于的 Kubernetes 资源类型 (task)
+### 底层 Kubernetes 资源 (task)
 
-jobs.batch
+- jobs.batch
 
 ### 示例 (task)
 
@@ -750,9 +750,9 @@ spec:
 
 定义一个长期运行的，可伸缩的容器化的服务，并且会暴露一个服务端点用来接受来自客户的外部流量。
 
-### 该组件基于的 Kubernetes 资源类型 (webservice)
+### 底层 Kubernetes 资源 (webservice)
 
-deployments.apps
+- deployments.apps
 
 ### 示例 (webservice)
 

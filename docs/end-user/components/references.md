@@ -4,7 +4,7 @@ title: Built-in Component Type
 
 This documentation will walk through all the built-in component types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-08-18T16:25:37+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-08-19T17:50:10+08:00.
 
 ## Cron-Task
 
@@ -12,9 +12,9 @@ This documentation will walk through all the built-in component types sorted alp
 
 Describes cron jobs that run code or a script to completion.
 
-### Base on Kubernetes resource kind(s) (cron-task)
+### Underlying Kubernetes Resources (cron-task)
 
-cronjobs.batch
+- cronjobs.batch
 
 ### Examples (cron-task)
 
@@ -212,9 +212,9 @@ spec:
 
 Describes daemonset services in Kubernetes.
 
-### Base on Kubernetes resource kind(s) (daemon)
+### Underlying Kubernetes Resources (daemon)
 
-daemonsets.apps
+- daemonsets.apps
 
 ### Examples (daemon)
 
@@ -569,9 +569,9 @@ spec:
 
 Describes jobs that run code or a script to completion.
 
-### Base on Kubernetes resource kind(s) (task)
+### Underlying Kubernetes Resources (task)
 
-jobs.batch
+- jobs.batch
 
 ### Examples (task)
 
@@ -750,9 +750,9 @@ spec:
 
 Describes long-running, scalable, containerized services that have a stable network endpoint to receive external network traffic from customers.
 
-### Base on Kubernetes resource kind(s) (webservice)
+### Underlying Kubernetes Resources (webservice)
 
-deployments.apps
+- deployments.apps
 
 ### Examples (webservice)
 
