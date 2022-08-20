@@ -4,13 +4,17 @@ title: 内置组件列表
 
 本文档将**按字典序**展示所有内置组件的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-24T21:02:31+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-08-19T17:50:10+08:00。
 
 ## Cron-Task
 
 ### 描述
 
 定义一个周期性运行代码或者脚本的任务。
+
+### 底层 Kubernetes 资源 (cron-task)
+
+- cronjobs.batch
 
 ### 示例 (cron-task)
 
@@ -35,28 +39,28 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- cmd | 容器的启动命令。 | []string | false |  
- env | 容器中的环境变量。 | [[]env](#env-cron-task) | false |  
- schedule | 执行规则 [Cron 规范](https://en.wikipedia.org/wiki/Cron)。 | string | true |  
- concurrencyPolicy | 定义任务如何处理任务的重叠运行，可选值为 "Allow"，"Forbid" 或者 "Replace"，默认值为 Allow。 | string | false | Allow 
- suspend | 是否暂停执行。 | bool | false | false 
- successfulJobsHistoryLimit | 保留多少个已经成功完成的任务记录。 | int | false | 3 
- failedJobsHistoryLimit | 保留多少个已经失败的任务记录。 | int | false | 1 
- startingDeadlineSeconds | Specify deadline in seconds for starting the job if it misses scheduled。 | int | false |  
  labels | 工作负载的标签。 | map[string]:string | false |  
  annotations | 工作负载的注解。 | map[string]:string | false |  
+ schedule | 执行规则 [Cron 规范](https://en.wikipedia.org/wiki/Cron)。 | string | true |  
+ startingDeadlineSeconds | Specify deadline in seconds for starting the job if it misses scheduled。 | int | false |  
+ suspend | 是否暂停执行。 | bool | false | false 
+ concurrencyPolicy | 定义任务如何处理任务的重叠运行，可选值为 "Allow"，"Forbid" 或者 "Replace"，默认值为 Allow。 | string | false | Allow 
+ successfulJobsHistoryLimit | 保留多少个已经成功完成的任务记录。 | int | false | 3 
+ failedJobsHistoryLimit | 保留多少个已经失败的任务记录。 | int | false | 1 
  count | 每次任务执行的并行度。 | int | false | 1 
- ttlSecondsAfterFinished | Limits the lifetime of a Job that has finished。 | int | false |  
- activeDeadlineSeconds | The duration in seconds relative to the startTime that the job may be continuously active before the system tries to terminate it。 | int | false |  
- backoffLimit | The number of retries before marking this job failed。 | int | false | 6 
- restart | 定义失败重启策略，可选值为 Never 或者 OnFailure，默认是 OnFailure。 | string | false | Never 
  image | 容器使用的镜像。 | string | true |  
  imagePullPolicy | 镜像拉取策略。 | string | false |  
+ imagePullSecrets | 容器的镜像拉取密钥。 | []string | false |  
+ restart | 定义失败重启策略，可选值为 Never 或者 OnFailure，默认是 OnFailure。 | string | false | Never 
+ cmd | 容器的启动命令。 | []string | false |  
+ env | 容器中的环境变量。 | [[]env](#env-cron-task) | false |  
  cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
  memory | 所需要的内存大小。 | string | false |  
  volumes | Declare volumes and volumeMounts。 | [[]volumes](#volumes-cron-task) | false |  
- imagePullSecrets | 容器的镜像拉取密钥。 | []string | false |  
  hostAliases | An optional list of hosts and IPs that will be injected into the pod's hosts file。 | [[]hostAliases](#hostaliases-cron-task) | false |  
+ ttlSecondsAfterFinished | Limits the lifetime of a Job that has finished。 | int | false |  
+ activeDeadlineSeconds | The duration in seconds relative to the startTime that the job may be continuously active before the system tries to terminate it。 | int | false |  
+ backoffLimit | The number of retries before marking this job failed。 | int | false | 6 
  livenessProbe | 判断容器是否存活的探针。 | [livenessProbe](#livenessprobe-cron-task) | false |  
  readinessProbe | 判断容器是否就绪，能够接受用户流量的探针。 | [readinessProbe](#readinessprobe-cron-task) | false |  
 
@@ -100,7 +104,8 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- type | 指定存储卷类型，类型包括 "pvc","configMap","secret","emptyDir"。 | string | true |  
+ medium |  | string | false | empty 
+ type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir。 | string | false | emptyDir 
 
 
 #### hostAliases (cron-task)
@@ -207,6 +212,10 @@ spec:
 
 定义一个同 Kubernetes 每个机器 Node 都运行的服务。
 
+### 底层 Kubernetes 资源 (daemon)
+
+- daemonsets.apps
+
 ### 示例 (daemon)
 
 ```yaml
@@ -263,21 +272,31 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- cmd | 容器的启动命令。 | []string | false |  
- env | 容器中的环境变量。 | [[]env](#env-daemon) | false |  
- volumeMounts |  | [volumeMounts](#volumemounts-daemon) | false |  
  labels | 工作负载的标签。 | map[string]:string | false |  
  annotations | 工作负载的注解。 | map[string]:string | false |  
  image | 容器使用的镜像。 | string | true |  
- ports | 指定业务流量进入的端口（多个），默认为 80。 | [[]ports](#ports-daemon) | false |  
  imagePullPolicy | 镜像拉取策略。 | string | false |  
+ imagePullSecrets | 容器的镜像拉取密钥。 | []string | false |  
+ ports | 指定业务流量进入的端口（多个），默认为 80。 | [[]ports](#ports-daemon) | false |  
+ cmd | 容器的启动命令。 | []string | false |  
+ env | 容器中的环境变量。 | [[]env](#env-daemon) | false |  
  cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
  memory | 所需要的内存大小。 | string | false |  
+ volumeMounts |  | [volumeMounts](#volumemounts-daemon) | false |  
  volumes | Deprecated field, use volumeMounts instead。 | [[]volumes](#volumes-daemon) | false |  
  livenessProbe | 判断容器是否存活的探针。 | [livenessProbe](#livenessprobe-daemon) | false |  
  readinessProbe | 判断容器是否就绪，能够接受用户流量的探针。 | [readinessProbe](#readinessprobe-daemon) | false |  
  hostAliases | 定义容器内的 hostAliases。 | [[]hostAliases](#hostaliases-daemon) | false |  
- imagePullSecrets | 容器的镜像拉取密钥。 | []string | false |  
+
+
+#### ports (daemon)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | 要暴露的 IP 端口号。 | int | true |  
+ name | 端口名称。 | string | false |  
+ protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | string | false | TCP 
+ expose | 端口是否需要暴露。 | bool | false | false 
 
 
 #### env (daemon)
@@ -348,8 +367,8 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- path |  | string | true |  
  key |  | string | true |  
+ path |  | string | true |  
  mode |  | int | false | 511 
 
 
@@ -360,16 +379,16 @@ spec:
  name |  | string | true |  
  mountPath |  | string | true |  
  defaultMode |  | int | false | 420 
- items |  | [[]items](#items-daemon) | false |  
  secretName |  | string | true |  
+ items |  | [[]items](#items-daemon) | false |  
 
 
 ##### items (daemon)
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- path |  | string | true |  
  key |  | string | true |  
+ path |  | string | true |  
  mode |  | int | false | 511 
 
 
@@ -386,21 +405,11 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- path |  | string | true |  
  name |  | string | true |  
  mountPath |  | string | true |  
  mountPropagation |  | string | false |  
+ path |  | string | true |  
  readOnly |  | bool | false |  
-
-
-#### ports (daemon)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | 端口名称。 | string | false |  
- port | 要暴露的 IP 端口号。 | int | true |  
- protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | string | false | TCP 
- expose | 端口是否需要暴露。 | bool | false | false 
 
 
 #### volumes (daemon)
@@ -409,7 +418,8 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- type | 指定存储卷类型，类型包括 "pvc","configMap","secret","emptyDir"。 | string | true |  
+ medium |  | string | false | empty 
+ type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir。 | string | false | emptyDir 
 
 
 #### livenessProbe (daemon)
@@ -559,6 +569,10 @@ spec:
 
 定义一个只执行一次代码或者脚本的任务。
 
+### 底层 Kubernetes 资源 (task)
+
+- jobs.batch
+
 ### 示例 (task)
 
 ```yaml
@@ -581,18 +595,18 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- cmd | 容器的启动命令。 | []string | false |  
- env | 容器中的环境变量。 | [[]env](#env-task) | false |  
- count | 每次任务执行的并行度。 | int | false | 1 
  labels | 工作负载的标签。 | map[string]:string | false |  
  annotations | 工作负载的注解。 | map[string]:string | false |  
- restart | 定义失败重启策略，可选值为 Never 或者 OnFailure，默认是 OnFailure。 | string | false | Never 
+ count | 每次任务执行的并行度。 | int | false | 1 
  image | 容器使用的镜像。 | string | true |  
  imagePullPolicy | 镜像拉取策略。 | string | false |  
+ imagePullSecrets | 容器的镜像拉取密钥。 | []string | false |  
+ restart | 定义失败重启策略，可选值为 Never 或者 OnFailure，默认是 OnFailure。 | string | false | Never 
+ cmd | 容器的启动命令。 | []string | false |  
+ env | 容器中的环境变量。 | [[]env](#env-task) | false |  
  cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
  memory | 所需要的内存大小。 | string | false |  
  volumes | Declare volumes and volumeMounts。 | [[]volumes](#volumes-task) | false |  
- imagePullSecrets | 容器的镜像拉取密钥。 | []string | false |  
  livenessProbe | 判断容器是否存活的探针。 | [livenessProbe](#livenessprobe-task) | false |  
  readinessProbe | 判断容器是否就绪，能够接受用户流量的探针。 | [readinessProbe](#readinessprobe-task) | false |  
 
@@ -636,7 +650,8 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- type | 指定存储卷类型，类型包括 "pvc","configMap","secret","emptyDir"。 | string | true |  
+ medium |  | string | false | empty 
+ type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir。 | string | false | emptyDir 
 
 
 #### livenessProbe (task)
@@ -735,6 +750,10 @@ spec:
 
 定义一个长期运行的，可伸缩的容器化的服务，并且会暴露一个服务端点用来接受来自客户的外部流量。
 
+### 底层 Kubernetes 资源 (webservice)
+
+- deployments.apps
+
 ### 示例 (webservice)
 
 ```yaml
@@ -768,21 +787,31 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- cmd | 容器的启动命令。 | []string | false |  
- env | 容器中的环境变量。 | [[]env](#env-webservice) | false |  
- volumeMounts |  | [volumeMounts](#volumemounts-webservice) | false |  
  labels | 工作负载的标签。 | map[string]:string | false |  
  annotations | 工作负载的注解。 | map[string]:string | false |  
  image | 容器使用的镜像。 | string | true |  
- ports | 指定业务流量进入的端口（多个），默认为 80。 | [[]ports](#ports-webservice) | false |  
  imagePullPolicy | 镜像拉取策略。 | string | false |  
+ imagePullSecrets | 容器的镜像拉取密钥。 | []string | false |  
+ ports | 指定业务流量进入的端口（多个），默认为 80。 | [[]ports](#ports-webservice) | false |  
+ cmd | 容器的启动命令。 | []string | false |  
+ env | 容器中的环境变量。 | [[]env](#env-webservice) | false |  
  cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
  memory | 所需要的内存大小。 | string | false |  
+ volumeMounts |  | [volumeMounts](#volumemounts-webservice) | false |  
  volumes | Deprecated field, use volumeMounts instead。 | [[]volumes](#volumes-webservice) | false |  
  livenessProbe | 判断容器是否存活的探针。 | [livenessProbe](#livenessprobe-webservice) | false |  
  readinessProbe | 判断容器是否就绪，能够接受用户流量的探针。 | [readinessProbe](#readinessprobe-webservice) | false |  
  hostAliases | 定义容器内的 hostAliases。 | [[]hostAliases](#hostaliases-webservice) | false |  
- imagePullSecrets | 容器的镜像拉取密钥。 | []string | false |  
+
+
+#### ports (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | 要暴露的 IP 端口号。 | int | true |  
+ name | 端口名称。 | string | false |  
+ protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | string | false | TCP 
+ expose | 端口是否需要暴露。 | bool | false | false 
 
 
 #### env (webservice)
@@ -835,6 +864,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
+ subPath |  | string | false |  
  claimName | PVC 名称。 | string | true |  
 
 
@@ -844,6 +874,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
+ subPath |  | string | false |  
  defaultMode |  | int | false | 420 
  cmName |  | string | true |  
  items |  | [[]items](#items-webservice) | false |  
@@ -853,8 +884,8 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- path |  | string | true |  
  key |  | string | true |  
+ path |  | string | true |  
  mode |  | int | false | 511 
 
 
@@ -864,17 +895,18 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
+ subPath |  | string | false |  
  defaultMode |  | int | false | 420 
- items |  | [[]items](#items-webservice) | false |  
  secretName |  | string | true |  
+ items |  | [[]items](#items-webservice) | false |  
 
 
 ##### items (webservice)
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- path |  | string | true |  
  key |  | string | true |  
+ path |  | string | true |  
  mode |  | int | false | 511 
 
 
@@ -884,6 +916,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
+ subPath |  | string | false |  
  medium |  | string | false | empty 
 
 
@@ -891,19 +924,10 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- path |  | string | true |  
  name |  | string | true |  
  mountPath |  | string | true |  
-
-
-#### ports (webservice)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | 端口名称。 | string | false |  
- port | 要暴露的 IP 端口号。 | int | true |  
- protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | string | false | TCP 
- expose | 端口是否需要暴露。 | bool | false | false 
+ subPath |  | string | false |  
+ path |  | string | true |  
 
 
 #### volumes (webservice)
@@ -912,7 +936,8 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- type | 指定存储卷类型，类型包括 "pvc","configMap","secret","emptyDir"。 | string | true |  
+ medium |  | string | false | empty 
+ type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir。 | string | false | emptyDir 
 
 
 #### livenessProbe (webservice)
