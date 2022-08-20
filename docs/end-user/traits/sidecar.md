@@ -1,10 +1,8 @@
 ---
-title: Attaching Sidecar
+title: Attaching Sidecar Container
 ---
 
 The `sidecar` trait allows you to attach a sidecar container to the component.
-
-> Note: `sidecar` trait is hidden by default in `VelaUX`, you can use it in CLI.
 
 ## How to use
 
