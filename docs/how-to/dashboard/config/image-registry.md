@@ -1,5 +1,5 @@
 ---
-title: Image Registry
+title: Connect Image Registry
 description: Configure an image registry
 ---
 

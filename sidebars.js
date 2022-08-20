@@ -29,9 +29,9 @@ module.exports = {
           collapsed: true,
           items: [
             'tutorials/webservice',
-            'tutorials/access-application',
             'end-user/traits/rollout',
             'end-user/traits/sidecar',
+            'tutorials/custom-image-delivery',
           ],
         },
         {
@@ -77,16 +77,7 @@ module.exports = {
             'end-user/components/ref-objects',
           ],
         },
-        {
-          type: 'category',
-          label: 'CI Integration',
-          collapsed: true,
-          items: [
-            'how-to/dashboard/trigger/overview',
-            'tutorials/jenkins',
-            'tutorials/trigger',
-          ],
-        },
+        'tutorials/multi-env',
         {
           type: 'category',
           label: 'GitOps',
@@ -107,18 +98,32 @@ module.exports = {
             'end-user/workflow/timeout',
           ],
         },
-        'platform-engineers/operations/observability',
         {
           'General CD Features': [
-            'how-to/dashboard/application/create-application',
             'end-user/version-control',
+            'tutorials/dry-run',
             'end-user/workflow/component-dependency-parameter',
+            'end-user/policies/shared-resource',
             'case-studies/initialize-env',
             'end-user/policies/apply-once',
             'end-user/policies/gc',
-            'end-user/policies/shared-resource',
+            'how-to/dashboard/config/helm-repo',
+            'how-to/dashboard/config/image-registry',
+            'tutorials/access-application',
+            'tutorials/cloud-shell',
           ],
         },
+        {
+          type: 'category',
+          label: 'CI Integration',
+          collapsed: true,
+          items: [
+            'how-to/dashboard/trigger/overview',
+            'tutorials/jenkins',
+            'tutorials/trigger',
+          ],
+        },
+        'platform-engineers/operations/observability',
         'end-user/components/more',
       ],
     },
@@ -136,7 +141,11 @@ module.exports = {
           ],
         },
         {
-          'User Management': ['how-to/dashboard/user/user', 'tutorials/sso'],
+          'User Management': [
+            'how-to/dashboard/user/user',
+            'tutorials/sso',
+            'how-to/dashboard/config/dex-connectors',
+          ],
         },
         'how-to/dashboard/user/project',
         {
@@ -152,13 +161,6 @@ module.exports = {
             'platform-engineers/system-operation/managing-clusters',
             'how-to/dashboard/target/overview',
             'platform-engineers/system-operation/working-with-ocm',
-          ],
-        },
-        {
-          'Manage Config of Integration': [
-            'how-to/dashboard/config/dex-connectors',
-            'how-to/dashboard/config/helm-repo',
-            'how-to/dashboard/config/image-registry',
           ],
         },
         'platform-engineers/system-operation/performance-finetuning',
