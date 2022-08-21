@@ -10,7 +10,7 @@ title: Nginx Ingress Controller
 ## Install
 
 ```shell
-vela addon enable ingress-controller
+vela addon enable ingress-nginx
 ```
 
 ## Setup with Specified Service Type
@@ -20,11 +20,11 @@ By default, the service type is ClusterIP for security.
 
 - `LoadBalancer` type requires your cluster has cloud LoadBalancer available.
     ```shell script
-    vela addon enable ingress-controller serviceType=LoadBalancer
+    vela addon enable ingress-nginx serviceType=LoadBalancer
     ```
 - `NodePort` type requires you can access the Kubernetes Node IP/Port.
     ```shell script
-    vela addon enable ingress-controller serviceType=NodePort
+    vela addon enable ingress-nginx serviceType=NodePort
     ```
 
 ## Get access address 
@@ -32,19 +32,19 @@ By default, the service type is ClusterIP for security.
 After specify the service type to `LoadBalancer` or `NodePort`, you can obtain the access address through `vela status`:
 
 ```shell
-vela status addon-ingress-controller -n vela-system --endpoint
+vela status addon-ingress-nginx -n vela-system --endpoint
 ```
 
 If the service type is `ClusterIP`, you use `vela port-forward` map the ingress-controller's port to local
 
 ```shell
-vela port-forward -n vela-system addon-ingress-controller 9080:80
+vela port-forward -n vela-system addon-ingress-nginx 9080:80
 ```
 
 ## Uninstall
 
 ```shell
-vela addon disable ingress-controller
+vela addon disable ingress-nginx
 ```
 
 ## Example
@@ -77,6 +77,6 @@ EOF
 Then access the gateway's endpoint will see:
 
 ```shell
-$ curl -H "Host: canary-demo.com" <ingress-controller-endpoint>/version
+$ curl -H "Host: canary-demo.com" <ingress-nginx-endpoint>/version
 Demo: V1
 ```
