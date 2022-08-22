@@ -106,6 +106,7 @@ Services:
 
 You can debugging the above deployed nginx webservice by running the following vela CLI commands. You can play with your pods in managed clusters directly on the hub cluster, without switching KubeConfig context. If you have multiple clusters in on application, the CLI command will ask you to choose one interactively.
 - `vela status` as shown above can give you an overview of your deployed multi-cluster application. Example usage is shown above.
+- `vela status --pod` can list the pod status of your application.
 - `vela logs` shows pod logs in managed clusters.
 
 ```bash
@@ -126,7 +127,7 @@ boot  docker-entrypoint.sh  lib    mnt    root  srv   usr
 dev   etc                   lib64  opt    run   sys   var
 ```
 
-- `vela port-forward` forward ports of pods or services in managed clusters to your local endpoint.
+- `vela port-forward` can discover and forward ports of pods or services in managed clusters to your local endpoint.
 
 ```bash
 $ vela port-forward basic-topology -n examples 8080:80
