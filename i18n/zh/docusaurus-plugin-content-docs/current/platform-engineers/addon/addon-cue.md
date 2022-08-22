@@ -19,10 +19,7 @@ CUE 格式的应用模版中最重要的是定义一个 `output` 的 CUE 代码�
 output: {
 	apiVersion: "core.oam.dev/v1beta1"
 	kind:       "Application"
-	metadata: {
-		name:      "example"
-		namespace: "vela-system"
-	}
+	metadata: {}
 	spec: {
 		components: [
 			{
@@ -51,7 +48,7 @@ $ vela addon enable <addon-name> namespace=my-namespace
 ```yaml
 kind: Application
 metadata:
-  name: example
+  name: addon-example
   namespace: vela-system
 spec:
   components:
@@ -84,12 +81,12 @@ parameter: {
 在启用插件时，你可以通过在启动命令后面追加启动参数的方式来设置参数定义文件中声明的参数，如下所示：
 
 ```shell
-$ vela addon enable <addon-Name> <parameter-name-1=value> <parameter-name-1=value>
+vela addon enable <addon-Name> <parameter-name-1=value> <parameter-name-1=value>
 ```
 
 ## 目录 `resources/` 下的 CUE 资源文件
 
-目录 `resources/` 下的资源文件的作用是：定义可以被应用模版文件（template.cue）引用的 CUE 代码块。
+KubeVela 插件通过 CUE 的包特性，支持在目录 `resources/` 下的资源文件，这些资源定义的可以是任意的 CUE 代码块，这些代码块最终在渲染时可以被应用模版文件（template.cue）所引用。这可以帮你避免在一个应用模版文件中定义所有的内容。
 
 继续使用上面的例子，我们把定义 `namesapce` 资源的 CUE 代码块拆分到 `resources` 目录下，那么插件的目录结构如下所示：
 
@@ -129,10 +126,7 @@ package main
 output: {
 	apiVersion: "core.oam.dev/v1beta1"
 	kind:       "Application"
-	metadata: {
-		name:      "example"
-		namespace: "vela-system"
-	}
+	metadata: {}
 	spec: {
 		// reference namespace block from resources/naemspace.cue
 		components: [namespace]
@@ -143,15 +137,12 @@ output: {
 通过下面的命令，设置 `namespace` 参数启用插件后，渲染出来的应用如下所示：
 
 ```shell
-$ vela addon enable <addon-name> namespace=my-namespace
+vela addon enable <addon-name> namespace=my-namespace
 ```
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
-metadata:
-  name: example
-  namespace: vela-system
 spec:
   components:
     - name: namespace
@@ -182,10 +173,7 @@ package main
 output: {
 	apiVersion: "core.oam.dev/v1beta1"
 	kind:       "Application"
-	metadata: {
-		name:      "example"
-		namespace: "vela-system"
-	}
+	metadata: {}
 	spec: {
 		components:{...}
 		policies: [{
@@ -219,7 +207,7 @@ $ vela addon enable <addon-name> clusters=local,cluser1
 ```yaml
 kind: Application
 metadata:
-  name: example
+  name: addon-example
   namespace: vela-system
 spec:
   components: 
@@ -274,10 +262,7 @@ package main
 output: {
 	apiVersion: "core.oam.dev/v1beta1"
 	kind:       "Application"
-	metadata: {
-		name:      "example"
-		namespace: "vela-system"
-	}
+	metadata: {}
 	spec: {
 		
 	}
@@ -312,10 +297,7 @@ _rules: {...}
 output: {
 	apiVersion: "core.oam.dev/v1beta1"
 	kind:       "Application"
-	metadata: {
-		name:      "example"
-		namespace: "vela-system"
-	}
+	metadata: {}
 	spec: {
 		components: [
 			{

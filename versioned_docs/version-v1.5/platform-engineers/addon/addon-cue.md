@@ -1,5 +1,5 @@
 ---
-title: CUE application description file
+title: CUE based Addon Application
 ---
 
 [Previous tutorial](./intro) introduces the basic structure of an addon and illustrate that any Kubernetes operator to be installed of an addon should be defined in a KubeVela application. Document [YAML application description file](./addon-yaml) explains the way of using YAML define the addon application. If you use CUE to write application description file, the addon will be able to have these abilities:
@@ -9,11 +9,11 @@ title: CUE application description file
 
 This doc will introduce how to define addon application by writing CUE files.
 
-Application description files contain two parts: application template files and resource files (files in the `resources/` folder).
+Application description files contain two parts: application template files and resource files (they are in the `resources/` folder).
 
 ## Application template file (template.cue)
 
-The most important part in the application template is `output` field, which must embed a KubeVela application as follows:
+The most important part in the application template is `output` field, which must place a KubeVela application as follows:
 
 ```cue
 package main
@@ -37,10 +37,10 @@ output: {
 }
 ```
 
-In this example, the name of the namespace defined in `spec.components[0].properties.objects[0]` in this application is determined by `parameter.namespace`, which means that its name will be dynamically rendered by the `namespace` parameter when the addon is enabled. If you want the created namespace to be `my-namespace`, you can run the following command:
+In this example, the name of the namespace defined in `spec.components[0].properties.objects[0]` of this application is determined by `parameter.namespace`, which means that its name will be dynamically rendered by the `namespace` parameter when the addon is enabled. If you want the created namespace to be `my-namespace`, you can run the following command:
 
 ```shell
-$ vela addon enable <addon-name> namespace=my-namespace
+vela addon enable <addon-name> namespace=my-namespace
 ```
 
 After rendered, the resulting application is:
@@ -48,8 +48,6 @@ After rendered, the resulting application is:
 ```yaml
 kind: Application
 metadata:
-  name: example
-  namespace: vela-system
 spec:
   components:
     - name: namespace
@@ -68,7 +66,7 @@ You can refer to the [CUE basic](../cue/basic) to learn language details.
 
 ## Parameter definition file (parameter.cue) 
 
-In the example above, we use the parameter `namespace`  to set the name of namespace resource. Actually, we also need a parameter definition file (`parameter.cue`) to declare what parameters this addon has. For example,
+In the example above, we use the parameter `namespace`  to set the name of Kubernetes `namespace` resource. Actually, we also need a parameter definition file (`parameter.cue`) to declare what parameters this addon has. For example,
 
 ```cue
 parameter: {
@@ -80,14 +78,12 @@ parameter: {
 When enabling the addon, you can set the parameters declared in the parameter definition file by appending the parameters to the command, as follows:
 
 ```shell
-$ vela addon enable <addon-Name> <parameter-name-1=value> <parameter-name-2=value>
+vela addon enable <addon-Name> <parameter-name-1=value> <parameter-name-2=value>
 ```
 
 ## Resource files (CUE files under `resources/` folder)
 
-In case your template file is too large, you can split the entire content of the application into multiple files under the `resources/` folder.
-
-Unlike the YAML resource file, the CUE resource file defines the CUE block that can be referenced by `template.cue`
+KubeVela has supported CUE package in an addon, which means you can define any CUE files containing data or schema inside the `resources/` folder and reference them in application CUE file as a while package. This also help you avoid defining all content in one template file.
 
 Continuing with the example above, we split the CUE blocks that define the `namesapce` component under the `resources/` folder, the folder structure is as follows:
 
@@ -156,7 +152,7 @@ spec:
 
 > Please notice: Only those CUE files with header `package main` can be reference by `template.cue`, this can be used to help you filter CUE files that you don't want to use in the rendering context.
 
-We just use namespace as example here, other resources of an operator can also be defined in KubeVela application in the same way.
+We just use namespace as example here, other resources of an operator can also be defined in KubeVela application in the same way. This also gives your addon re-usability and validation capability powered by the CUE.
 
 ## Features
 
@@ -172,10 +168,6 @@ package main
 output: {
 	apiVersion: "core.oam.dev/v1beta1"
 	kind:       "Application"
-	metadata: {
-		name:      "example"
-		namespace: "vela-system"
-	}
 	spec: {
 		components:{...}
 		policies: [{
@@ -204,7 +196,7 @@ The rendering result will be:
 ```yaml
 kind: Application
 metadata:
-  name: example
+  name: addon-example
   namespace: vela-system
 spec:
   components: ...
@@ -230,7 +222,7 @@ The rendering result is :
 ```yaml
 kind: Application
 metadata:
-  name: example
+  name: addon-example
   namespace: vela-system
 spec:
   components: ...
@@ -253,10 +245,6 @@ package main
 output: {
 	apiVersion: "core.oam.dev/v1beta1"
 	kind:       "Application"
-	metadata: {
-		name:      "example"
-		namespace: "vela-system"
-	}
 	spec: {
 		
 	}
@@ -292,10 +280,6 @@ In addition to dynamically rendering the application by parameters, you can also
 output: {
 	apiVersion: "core.oam.dev/v1beta1"
 	kind:       "Application"
-	metadata: {
-		name:      "example"
-		namespace: "vela-system"
-	}
 	spec: {
 		components: [
 			{
@@ -325,7 +309,7 @@ Resulting application is:
 apiVersion: core.oam.dev/v1beta1
 kind:       Application
 metadata:
-  name: example
+  name: addon-example
   namespace: "vela-system"
 spec:
   components:

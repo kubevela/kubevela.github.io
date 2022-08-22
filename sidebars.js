@@ -193,6 +193,8 @@ module.exports = {
             {
               Addons: [
                 'platform-engineers/addon/intro',
+                'platform-engineers/addon/addon-cue',
+                'platform-engineers/addon/addon-yaml',
                 'platform-engineers/addon/addon-registry',
               ],
             },

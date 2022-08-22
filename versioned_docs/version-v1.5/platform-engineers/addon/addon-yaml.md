@@ -1,14 +1,14 @@
 ---
-title: YAML application description file
+title: YAML based Addon Application
 ---
 
-[Make Your Own Addon](./intro) introduces the basic structure of an addon, and illustrate that any Kubernetes operator to be installed of an addon should be defined in a KubeVela application. This doc will discuss all the details of writing the application description file with YAML.
+[Make Your Own Addon](./intro) introduces the basic structure of an addon, and illustrate that any Kubernetes operator to be installed of an addon should be defined in a KubeVela [application](../../getting-started/core-concept). This doc will guide you with all the details of writing the application description file with YAML.
 
 Application description files contain two parts: application template file and resource files (files under the `resources/` folder).
 
 ## Application template file (template.yaml)
 
-The YAML typed application template file must define a KubeVela application that can contain components, policies or workflow. A simple example is as follows: 
+The YAML typed application template file only accepts a KubeVela [application](../../getting-started/core-concept) that can contain components, policies or workflow. A simple example is as follows: 
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
