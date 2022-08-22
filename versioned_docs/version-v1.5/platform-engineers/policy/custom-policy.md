@@ -72,7 +72,7 @@ template: {
 Apply to our control plane to make this trait work:
 
 ```
-vela def apply -f myroute.cue
+vela def apply myroute.cue
 ```
 
 Then our end users can discover it immediately and use it in `Application`.

@@ -113,7 +113,7 @@ template: {
 将这个运维特征通过如下命令部署到控制平面上：
 
 ```
-vela def apply -f myroute.cue
+vela def apply myroute.cue
 ```
 
 然后最终用户就立即可以发现并使用这个运维特征了，这个运维特征没有限制，可以作用于任意 `Application`。

@@ -2,25 +2,42 @@
 title:  Version Control for Definition
 ---
 
-> A better version control management is comming in v1.5, refer to [this issue](https://github.com/kubevela/kubevela/issues/4131) to learn the progress.
-
 When the capabilities(Component or Trait) changes, KubeVela will generate a definition revision automatically.
 
 * Check ComponentDefinition Revision
 
-```shell
-$  kubectl get definitionrevision -l="componentdefinition.oam.dev/name=webservice" -n vela-system
-NAME            REVISION   HASH               TYPE
-webservice-v1   1          3f6886d9832021ba   Component
-webservice-v2   2          b3b9978e7164d973   Component
+> Note: there are only one revision of definition if you never update it.
+
+```bash
+$ vela def get webservice --revisions
+NAME      	REVISION	TYPE     	HASH            
+webservice	1       	Component	dfa072dac5088ed8
+webservice	2       	Component	519e11eb7cbe9cdd
 ```
 
 * Check TraitDefinition Revision
 
 ```shell
-$ kubectl get definitionrevision -l="trait.oam.dev/name=rollout" -n vela-system
-NAME         REVISION   HASH               TYPE
-rollout-v1   1          e441f026c1884b14   Trait
+$ vela def get affinity --revisions  
+NAME            REVISION        TYPE    HASH            
+affinity        1               Trait   9db54dd8d5314bd5
+affinity        2               Trait   8bf3e82a6884db2c
+```
+
+* Check PolicyDefinition Revision
+
+```shell
+$ vela def get override --revisions
+NAME            REVISION        TYPE    HASH
+override        1               Policy  f6f87a5eb2271b8a
+```
+
+* Check WorkflowStepDefinition Revision
+
+```shell
+$ vela def get deploy --revisions
+NAME    REVISION        TYPE            HASH
+deploy  1               WorkflowStep    2ea741dae457850b
 ```
 
 The best way to control version is using a new name for every definition version.
@@ -44,6 +61,6 @@ spec:
       image: stefanprodan/podinfo:4.0.3
 ```
 
-In this way, if system admin changes the ComponentDefinition, it won't affect your application. 
+In this way, if system admin changes the ComponentDefinition, it won't affect your application.
 
 If no revision specified, KubeVela will always use the latest revision when you upgrade your application.

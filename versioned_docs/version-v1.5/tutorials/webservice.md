@@ -122,6 +122,20 @@ Services:
       ✅ scaler
 ```
 
+You can check the application endpoint using `vela status --endpoint`. This command can detect multiple kinds of endpoints.
+In this case, it is a LoadBalancer Service.
+
+```shell
+vela status webservice-app --endpoint                                                                                                  1 ↵
+I0816 21:20:08.536617   59163 utils.go:156] find cluster gateway service vela-system/kubevela-cluster-gateway-service:9443
+Please access webservice-app from the following endpoints:
++---------+-----------+--------------------------+----------------------------+-------+
+| CLUSTER | COMPONENT | REF(KIND/NAMESPACE/NAME) |          ENDPOINT          | INNER |
++---------+-----------+--------------------------+----------------------------+-------+
+| local   | frontend  | Service/default/frontend | http://182.92.178.219:8080 | false |
++---------+-----------+--------------------------+----------------------------+-------+
+```
+
 Now, you have finished learning the basic delivery for container images. Then, you could:
 
 * Refer to [webservice details](../end-user/components/references#webservice) to know usage of full fields.
