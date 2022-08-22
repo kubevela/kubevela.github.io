@@ -84,6 +84,7 @@ Use your newly created ChartMuseum repository (or any other Helm Chart repositor
 ```shell
 $ vela addon registry add localcm --type helm --endpoint=http://localhost:8080 
 # If username and password is required, you can specify them with --username and --password
+# If the repo setup with self-signed certificate, you can use flag `--insecureSkipTLS` to add it.
 ```
 
 You should see it in the list now:
