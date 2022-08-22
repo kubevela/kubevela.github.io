@@ -9,7 +9,7 @@ When the capabilities(Component or Trait) changes, KubeVela will generate a defi
 > Note: there are only one revision of definition if you never update it.
 
 ```bash
-vela def get webservice --revisions
+$ vela def get webservice --revisions
 NAME      	REVISION	TYPE     	HASH            
 webservice	1       	Component	dfa072dac5088ed8
 webservice	2       	Component	519e11eb7cbe9cdd
@@ -18,7 +18,7 @@ webservice	2       	Component	519e11eb7cbe9cdd
 * Check TraitDefinition Revision
 
 ```shell
-vela def get affinity --revisions  
+$ vela def get affinity --revisions  
 NAME            REVISION        TYPE    HASH            
 affinity        1               Trait   9db54dd8d5314bd5
 affinity        2               Trait   8bf3e82a6884db2c
@@ -27,7 +27,7 @@ affinity        2               Trait   8bf3e82a6884db2c
 * Check PolicyDefinition Revision
 
 ```shell
-vela def get override --revisions
+$ vela def get override --revisions
 NAME            REVISION        TYPE    HASH
 override        1               Policy  f6f87a5eb2271b8a
 ```
@@ -35,7 +35,7 @@ override        1               Policy  f6f87a5eb2271b8a
 * Check WorkflowStepDefinition Revision
 
 ```shell
-vela def get deploy --revisions
+$ vela def get deploy --revisions
 NAME    REVISION        TYPE            HASH
 deploy  1               WorkflowStep    2ea741dae457850b
 ```
