@@ -53,7 +53,7 @@ KubeVela 是一个现代的软件交付控制平面， 面向开发者提供统�
 * 准备一个云服务账号（AK/SK），本文用例使用阿里云。
 * 学习一些使用 Terraform 的基础知识。
 
-这是我用于此演示的 Terraform 模块（https://github.com/wonderflow/terraform-alicloud-ecs-instance）。
+这是我用于此演示的 Terraform 模块（ https://github.com/wonderflow/terraform-alicloud-ecs-instance ）。
 
 1. 下载 Terraform 模块。
 
