@@ -2,7 +2,7 @@
 title: 资源关联规则
 --- 
 
-`资源关联规则`主要规定了：一个类型的 Kubernetes 资源可能包含哪些类型的子资源。它的主要作用是帮助 KubeVela 建立应用所纳管资源的拓扑关系。举例来说，系统中已经内置了这样的一条关系规则：[Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) 类型的资源下面的子资源只可能是 [ReplicaSet](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)，而 ReplicaSet 的子资源只可能是 [Pod](https://kubernetes.io/docs/concepts/workloads/pods/)。
+`资源关联规则`主要规定了：一个类型的 Kubernetes 资源可能包含哪些类型的子资源。它的主要作用是帮助 KubeVela 建立应用所纳管资源的拓扑关系。举例来说，系统中已经内置了这样的一条资源关联规则：[Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) 类型的资源下面的子资源只可能是 [ReplicaSet](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/)，而 ReplicaSet 的子资源只可能是 [Pod](https://kubernetes.io/docs/concepts/workloads/pods/)。
 这样当创建了一个 Deployment 为工作负载的 KubeVela 应用后，在 VelaUX 的资源拓扑图页面查看该应用的拓扑关系视图，KubeVela 就会根据上面的`资源关联规则`，先列出和 Deployment 同一 namespace 的所有 ReplicaSet 并过滤掉 OwnerReference 不是该 Deployment 的结果，进一步经过一样的过程找出 ReplicaSet 下面的 Pod，从而建立起整个应用下面纳管资源的拓扑层级关系。
 
 总体上这些`资源关联规则`主要会在以下场景中被用到：
@@ -13,11 +13,11 @@ title: 资源关联规则
   
 - 通过 cli 使用 `vela port-forward`, `vela logs`, `vela exec` 以及 `vela status --endpoint` 或者在 VelaUX 上查看应用下实例的日志或访问端口等功能时，用来发现应用下面的 pod 或 service。
 
-## 为自定义资源添加关系规则
+## 为自定义资源添加关联规则
 
 系统所内置的`资源关联规则`是有限的，如果系统中添加了新的自定义资源（Kubernetes CustomResource），你可以创建一个 Kubernetes `configmap` 来为这个类型资源添加关系规则。
 
-接下来我们通过一个实际的例子来讲解资源关系规则的作用。
+接下来我们通过一个实际的例子来讲解资源关联规则的作用。
 
 你可以先通过下面的命令，启用一个尚在实验阶段的插件 [kruise](https://github.com/kubevela/catalog/tree/master/experimental/addons/kruise)。
 
@@ -78,7 +78,7 @@ $ vela exec app-cloneset
 Error: no pod found in your application
 ```
 
-其实以上问题的原因都是由于系统添加了一个 `cloneset` 的自定义资源之后，并没有与之相关的资源关系规则来定义它下面可能有那些类型的子资源。进而在展示资源拓扑图时 KubeVela 不知道该去查找哪些资源类型，也无法找到相应的实例。如果我们通过 `kubectl` 的命令查看由这个 `cloneset` 创建 pod 的详细信息会看到这样的结果：
+其实以上问题的原因都是由于系统添加了一个 `cloneset` 的自定义资源之后，并没有与之相关的资源关联规则来定义它下面可能有那些类型的子资源。进而在展示资源拓扑图时 KubeVela 不知道该去查找哪些资源类型，也无法找到相应的实例。如果我们通过 `kubectl` 的命令查看由这个 `cloneset` 创建 pod 的详细信息会看到这样的结果：
 
 ```yaml
 apiVersion: v1
@@ -98,7 +98,7 @@ spec:
 #...
 ```
 
-可见，该 pod 的 OwnerReference 就是应用所创建出来的 `cloneset`。接下来我们为系统添加定义了一个资源关系规则的 `configmap` 如下所示：
+可见，该 pod 的 OwnerReference 就是应用所创建出来的 `cloneset`。接下来我们为系统添加定义了一个资源关联规则的 `configmap` 如下所示：
 
 ```yaml
 apiVersion: v1
@@ -168,11 +168,11 @@ $ vela logs app-cloneset
 clone-set 2022-08-22T11:53:46.005267600Z {"level":"info","ts":"2022-08-22T11:53:46.002Z","caller":"podinfo/main.go:123","msg":"Starting podinfo","version":"4.0.3","revision":"a2f9216fe43849c3b4844032771ba632307d8738","port":"9898"}
 ```
 
-同样的，如果你的某个自定义资源会创建 Kubernetes service ，你也可以为系统添加一个资源关系规则，从而支持查找应用的访问端点的功能： `vela status --endpoints`。
+同样的，如果你的某个自定义资源会创建 Kubernetes service ，你也可以为系统添加一个资源关联规则，从而支持查找应用的访问端点的功能： `vela status --endpoints`。
 
 ## 集成在插件当中
 
-经过上面的介绍相信你应该已经想到，如果一个 KubeVela [插件](../platform-engineers/addon/intro)中安装了某种自定义资源，你就可以通过在插件中添加一个这样的 configmap 来建立这个它与其他资源的关系规则。 具体方法是在插件的应用模版文件中的 `outputs` 定义一个资源关联规则的 configmap。例如：
+经过上面的介绍相信你应该已经想到，如果一个 KubeVela [插件](../platform-engineers/addon/intro)中安装了某种自定义资源，你就可以通过在插件中添加一个这样的 configmap 来建立这个它与其他资源的关联规则。 具体方法是在插件的应用模版文件中的 `outputs` 定义一个资源关联规则的 configmap。例如：
 
 ```cue
 package main
