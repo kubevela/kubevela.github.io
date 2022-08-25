@@ -61,6 +61,6 @@ spec:
       image: stefanprodan/podinfo:4.0.3
 ```
 
-In this way, if system admin changes the ComponentDefinition, it won't affect your application.
+In this way, if system admin changes the ComponentDefinition, it won't affect your application. 
 
 If no revision specified, KubeVela will always use the latest revision when you upgrade your application.
