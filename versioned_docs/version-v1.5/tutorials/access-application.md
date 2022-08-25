@@ -1,5 +1,5 @@
 ---
-title: Access the application
+title: Access Application
 ---
 
 After deploying the application, the next station is publishing your service.

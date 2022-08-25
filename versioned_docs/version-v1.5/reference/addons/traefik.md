@@ -4,6 +4,127 @@ title: Traefik
 
 Traefik is a modern HTTP reverse proxy and load balancer made to deploy microservices with ease. you can use this addon as a cluster gateway or a microservices gateway.
 
+## Install
+
+```bash
+vela addon enable traefik
+```
+
+### Visit Traefik dashboard by port-forward
+
+Port forward will work as a proxy to allow visiting Traefik dashboard by local port.
+
+```bash
+vela port-forward -n vela-system addon-traefik 
+```
+
+expected output:
+
+```bash
+Forwarding from 127.0.0.1:9000 -> 9000
+Forwarding from [::1]:9000 -> 9000
+
+Forward successfully! Opening browser ...
+Handling connection for 9000
+```
+
+You can visiting Traefik dashboard with address `http://127.0.0.1:9000/dashboard/`.
+
+### Setup with Specified Service Type
+
+If your cluster has cloud LoadBalancer available:
+
+```bash
+vela addon enable traefik serviceType=LoadBalancer
+```
+
+## How to use
+
+1. Configure a HTTP domain for a component.
+
+```bash
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: example
+  namespace: e2e-test
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+        image: oamdev/hello-world
+        ports:
+         - port: 8000
+           expose: true
+    traits:
+    - properties:
+        domains:
+        - example.domain.com
+        rules:
+        - path:
+            type: PathPrefix
+            value: /
+          port: 8080
+      type: http-route
+```
+
+2. Configure a HTTPS domain for a component.
+
+You should create a secret that includes the certificate first.
+
+```yaml
+
+apiVersion: v1
+type: Opaque
+data:
+  tls.crt: <BASE64>
+  tls.key: <BASE64>
+kind: Secret
+metadata:
+  annotations:
+    config.oam.dev/alias: ""
+    config.oam.dev/description: ""
+  labels:
+    config.oam.dev/catalog: velacore-config
+    config.oam.dev/multi-cluster: "true"
+    config.oam.dev/project: addons
+    config.oam.dev/type: config-tls-certificate
+    workload.oam.dev/type: config-tls-certificate
+  name: example
+```
+
+The example application configuration:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: example-https
+  namespace: e2e-test
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+        image: oamdev/hello-world
+        ports:
+         - port: 8000
+           expose: true
+    traits:
+    - properties:
+        domains:
+        - example.domain.com
+        rules:
+        - path:
+            type: PathPrefix
+            value: /
+          port: 8080
+        secrets: 
+        - name: example
+      type: https-route
+```
+
 ## Definitions
 
 ### http-route(trait)
@@ -121,38 +242,3 @@ This component definition is designed to manage the TLS certificate
  ------------ | ------------- | ------------- | ------------- | -------------
  cert | the certificate public key encrypted by base64 | string | true |  
  key | the certificate private key encrypted by base64 | string | true |  
-
-
-## Install
-
-```bash
-vela addon enable traefik
-```
-
-### Visit Traefik dashboard by port-forward
-
-Port forward will work as a proxy to allow visiting Traefik dashboard by local port.
-
-```bash
-vela port-forward -n vela-system addon-traefik 
-```
-
-expected output:
-
-```
-Forwarding from 127.0.0.1:9000 -> 9000
-Forwarding from [::1]:9000 -> 9000
-
-Forward successfully! Opening browser ...
-Handling connection for 9000
-```
-
-You can visiting Traefik dashboard with address `http://127.0.0.1:9000/dashboard/`.
-
-### Setup with Specified Service Type
-
-If your cluster has cloud LoadBalancer available:
-
-```bash
-vela addon enable traefik serviceType=LoadBalancer
-```
