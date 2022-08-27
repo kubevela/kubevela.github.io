@@ -1,5 +1,5 @@
 ---
-title: Helm repository
+title: Connect Helm Repository
 description: Configure a helm repository
 ---
 

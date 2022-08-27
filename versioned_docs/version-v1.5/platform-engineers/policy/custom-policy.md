@@ -30,7 +30,7 @@ template: {
 }
 ```
 
-The rule is align with component definition, you must specify `output`, while you can use `outputs` for more objects, the format as below:
+The rule is aligned with component definition, you must specify `output`, while you can use `outputs` for more objects, the format as below:
 
 ```cue
 output: {

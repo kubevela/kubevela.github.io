@@ -170,7 +170,6 @@ module.exports = {
           'UX Customization': [
             'platform-engineers/openapi-v3-json-schema',
             'reference/ui-schema',
-            'reference/topology-rule',
           ],
         },
       ],
@@ -182,24 +181,18 @@ module.exports = {
       items: [
         'contributor/overview',
         {
-          type: 'category',
-          label: 'Extension',
-          collapsed: true,
-          items: [
-            {
-              Addons: [
-                'platform-engineers/addon/intro',
-                'platform-engineers/addon/addon-cue',
-                'platform-engineers/addon/addon-yaml',
-                'platform-engineers/addon/addon-registry',
-              ],
-            },
-            {
-              'Cloud Resources': [
-                'platform-engineers/addon/terraform',
-                'platform-engineers/components/component-terraform',
-              ],
-            },
+          Addons: [
+            'platform-engineers/addon/intro',
+            'platform-engineers/addon/addon-cue',
+            'platform-engineers/addon/addon-yaml',
+            'reference/topology-rule',
+            'platform-engineers/addon/addon-registry',
+          ],
+        },
+        {
+          'Cloud Resources': [
+            'platform-engineers/addon/terraform',
+            'platform-engineers/components/component-terraform',
           ],
         },
         {
