@@ -23,6 +23,8 @@ Before start, make sure you have:
 - Have a Cloud Service credentials, in this article, we will use aws as example.
 - Learn the basic knowledge of [how to use terraform](https://www.terraform.io/language).
 
+<!--truncate-->
+
 Let's get started!
 
 1. Create an empty directory to start.
