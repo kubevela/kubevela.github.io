@@ -17,6 +17,8 @@ Helm is an application packaging and deployment tool of client side widely used 
 
 2.	**Giving Application Lifecycle Solutions:** Production, upload (hosting), versioning, distribution (discovery), and deployment.
 
+<!--truncate-->
+
 These two design principles ensure that Helm is flexible and simple enough to cover all Kubernetes APIs, which solves the problem of one-off cloud-native application delivery. However, for enterprises with a certain scale, using Helm for continuous software delivery poses quite a challenge.
 ## Challenges of the Continuous Delivery of Helm
 Helm was initially designed to ensure simplicity and ease of use instead of complex component orchestration. Therefore, **Helm delivers all resources to Kubernetes clusters during the application deployment. It is expected to solve application dependency and orchestration problems automatically using Kubernetes' final-state oriented self-healing capabilities.** Such a design may not be a problem during its first deployment, but it is too idealistic for the enterprise with a certain scale of production environment.
