@@ -8,4 +8,4 @@ Classical games servers are running on physical machines or virtual machines to 
 
 > This video is posted in 2022-06-02.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/bHDPCuCCH0E" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="720" height="480" src="https://www.youtube.com/embed/bHDPCuCCH0E" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
