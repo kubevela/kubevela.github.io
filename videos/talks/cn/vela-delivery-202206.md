@@ -15,4 +15,4 @@ title:  从开源技术 KubeVela 谈起：云原生应用交付会怎样发展
 
 > This video is posted in 2022-06-01.
 
-<iframe height="480" width="720"  src="//player.bilibili.com/player.html?aid=299698557&bvid=BV1UF411G7r4&cid=736196914&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+<iframe height="480" width="720"  src="//player.bilibili.com/player.html?aid=299698557&bvid=BV1UF411G7r4&cid=736196914&page=1" scrolling="no" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>

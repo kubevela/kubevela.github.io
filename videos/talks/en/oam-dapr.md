@@ -6,4 +6,4 @@ Join Azure CTO, Mark Russinovich, for a view on the future of app development an
 
 > This video is posted in 2020-06-03.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/eJCu6a-x9uo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="720" height="480" src="https://www.youtube.com/embed/eJCu6a-x9uo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>

@@ -28,6 +28,8 @@ module.exports = {
           label: "Talks in English",
           collapsed: false,
           items: [
+            "talks/en/saiyam-cncf-minutes",
+            "talks/en/application-centric-platform",
             "talks/en/devops-toolkit-2",
             "talks/en/devops-toolkit-1",
             "talks/en/standardizing-app",
@@ -40,6 +42,7 @@ module.exports = {
           label: "中文演讲 - Talks in Chinese",
           collapsed: false,
           items: [
+            "talks/cn/x-as-code",
             "talks/cn/vela-delivery-202206",
             "talks/cn/next-app-delivery",
             "talks/cn/multi-cluster",
