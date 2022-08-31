@@ -2,6 +2,10 @@
 title: VelaUX
 ---
 
+VelaUX provides the UI console of KubeVela.
+
+![alt](../../resources/velaux-view.jpg)
+
 ## Install
 
 ```shell script
