@@ -4,6 +4,12 @@ title: 模块定义
 
 模块定义是组成 KubeVela 平台的基本扩展能力单元，一个模块定义就像乐高积木，它将底层的能力封装成抽象的模块，使得这些能力可以被最终用户快速理解、使用并和其他能力组装、衔接，最终构成一个具有丰富功能的业务应用。模块定义最大的优势是可以被**分发**和**共享**，在不同的业务应用中重复使用，在基于 KubeVela 的不同平台上均能执行。
 
+通过模块定义，平台构建者可以很容易的将云原生生态的基础设施组件扩展为应用层能力，基于最佳实践为上层开发者屏蔽底层细节而不失可扩展性。最重要的是，模块定义为上层应用提供了良好的抽象体系，能力的实现层即使被完全替换也不会影响上层应用，真正做到基础设施无关。
+
+![alt](../resources/definition-cap.png)
+
+为了更好的理解模块定义，上图给出了以 `helm` 为例的原理示意图。平台构建者可以基于 [FluxCD](https://fluxcd.io/) 或者 [ArgoCD](https://argo-cd.readthedocs.io/) 编写模块定义并注册为 `helm` 模块，最终用户可以自动发现这个模块并在应用中定义 `helm` 模块暴露的参数。模块定义的编写基于 [CUE](https://cuelang.org/) 语言，在本节的最后你也将了解到如何制作自定义模块。
+
 目前 KubeVela 一共有四种不同类型的模块定义，分别是组件定义（ComponentDefinition）、运维特征定义（TraitDefinition）、策略定义（PolicyDefinition）以及工作流步骤定义（WorkflowStepDefinition），对应了构成[应用](./core-concept)的四个基本概念。
 
 ## 如何获取现成的模块定义？
@@ -27,8 +33,15 @@ title: 模块定义
 当模块定义被安装到 KubeVela 控制平面以后，最终用户就可以立即发现和查看它们。
 
 * 查看模块定义列表
+
 ```
-$ vela def list
+vela def list
+```
+
+期望输出：
+<details>
+
+```
 NAME                         	TYPE                  	NAMESPACE  	DESCRIPTION
 webservice                   	ComponentDefinition   	vela-system	Describes long-running, scalable, containerized services
                              	                      	           	that have a stable network endpoint to receive external
@@ -39,10 +52,16 @@ health                       	PolicyDefinition      	vela-system	Apply periodica
 notification                 	WorkflowStepDefinition	vela-system	Send message to webhook
 ...snip...
 ```
+</details>
 
 * 查看模块定义的参数
 ```
-$ vela show webservice
+vela show webservice
+```
+期望输出：
+<details>
+
+```
 # Properties
 +------------------+-------------------------------------------------------------------------------------------+-----------------------------------+----------+---------+
 |       NAME       |                                        DESCRIPTION                                        |               TYPE                | REQUIRED | DEFAULT |
@@ -56,6 +75,7 @@ $ vela show webservice
 +------------------+-------------------------------------------------------------------------------------------+-----------------------------------+----------+---------+
 ...snip...
 ```
+</details>
 
 你也可以通过命令行打开一个网页查看这些参数：
 
@@ -63,17 +83,16 @@ $ vela show webservice
 vela show webservice --web
 ```
 
-* 在 KubeVela 的 UI 控制台（需安装 velaux 插件）也可以看到
+* 在 KubeVela 的 UI 控制台（ [velaux 插件](../reference/addons/velaux)）
 
-![alt](../resources/definition-ui.png)
+模块定义在 UI 控制台上可以比较方便的查看和使用，更重要的是，你还可以[自定义 UI 展示](../reference/ui-schema)来优化 UI 控制台上模块定义的参数展示。
 
-模块定义在 UI 控制台上可以比较方便的查看，更重要的是会有一个比较好的用户体验，你还可以[自定义 UI 展示](../reference/ui-schema)来优化 UI 控制台上模块定义的参数展示。
+![alt](../resources/customize-def.jpg)
+
 
 ### 使用
 
 在 KubeVela 的 UI 控制台上使用模块定义是非常自然的，整个流程紧紧围绕应用部署计划展开，你只要跟着界面操作指引一步步点击即可使用。
-
-![alt](../resources/usage-of-def.png)
 
 分为如下几步：
 
@@ -176,7 +195,3 @@ template: {
 ```
 
 `type` 字段定义了这个模块是哪种类型（组件、运维特征、策略或者工作流步骤）， `parameter` 定义了模块的输入，`output` 定义了模块的输出。还有一些高级的操作你可以通过了解[如何管理、编写模块定义](../platform-engineers/cue/definition-edit)以及[模块定义与 Kubernetes 的交互协议](../platform-engineers/oam/x-definition) 等章节文档了解更多细节。
-
-## 下一步
-
-- 查看 KubeVela [项目架构](./architecture)文档了解全局的架构。

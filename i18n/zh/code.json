@@ -210,7 +210,7 @@
     "message": "天然支持企业级集成，安全、合规、可观测一应俱全"
   },
   "Choose from the wide range of LDAP integrations we provided out-of-box, enjoy enhanced multi-cluster authorization and authentication, pick and apply fine-grained RBAC modules and customize them per your own supply chain requirements. All delivery process has fully automated observability.": {
-    "message": "天然支持多集群安全和 RBAC 集成，你还可以从社区的插件中心找到一系列开箱即用的平台扩展，包括多种用户体系（LDAP 等）集成、多租户权限控制、安全校验和扫描、应用可观测性等大量企业级能力。轻松根据需求和场景来设计和定制你的平台扩展能力，满足业务快速增长的需求，同时持续保证生产环境的稳定和安全。整个应用交付流程完全透明化、可观测。"
+    "message": "天然支持多集群安全和 RBAC 集成，你还可以从社区的插件中心找到一系列开箱即用的平台扩展，包括多种用户体系（LDAP 等）集成、多租户权限控制、安全校验和扫描、应用可观测性等大量企业级能力。轻松根据需求和场景来设计和定制你的平台扩展能力，满足业务快速增长的需求，同时持续保证生产环境的稳定和安全。整个应用交付流程充分具备透明化、可观测能力，系统自身的各项指标和监控大盘完全自动化生成。"
   },
   "Multi-cloud/hybrid-environments app delivery as first-class citizen": {
     "message": "面向多云多集群混合环境，丰富的应用交付和管理能力"
