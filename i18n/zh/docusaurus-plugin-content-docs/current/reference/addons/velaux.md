@@ -2,6 +2,10 @@
 title: VelaUX 控制台
 ---
 
+VelaUX 插件为 KubeVela 提供了可视化的 UI 控制台操作能力。
+
+![alt](../../resources/velaux-view.jpg)
+
 ## 安装插件
 
 ```shell script
