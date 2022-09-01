@@ -38,9 +38,8 @@ When definitions installed in the system, they can be discovered by end user imm
 vela def list
 ```
 
-The expected output:
-
 <details>
+<summary>expected output</summary>
 
 ```
 NAME                         	TYPE                  	NAMESPACE  	DESCRIPTION
@@ -61,9 +60,8 @@ notification                 	WorkflowStepDefinition	vela-system	Send message to
 vela show webservice
 ```
 
-The expected output:
-
 <details>
+<summary>expected output</summary>
 
 ```
 # Properties

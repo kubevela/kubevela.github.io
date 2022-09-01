@@ -68,14 +68,27 @@ spec:
 
 ```bash
 # This command will create a namespace in the local cluster
-$ vela env init prod --namespace prod
+vela env init prod --namespace prod
+```
+
+<details>
+<summary>expected output</summary>
+
+```console
 environment prod with namespace prod created
 ```
+</details>
 
 * Starting deploy the application
 
 ```
-$ vela up -f https://kubevela.net/example/applications/first-app.yaml
+vela up -f https://kubevela.net/example/applications/first-app.yaml
+```
+
+<details>
+<summary>expected output</summary>
+
+```console
 Applying an application in vela K8s object format...
 I0516 15:45:18.123356   27156 apply.go:107] "creating object" name="first-vela-app" resource="core.oam.dev/v1beta1, Kind=Application"
 ✅ App has been deployed 🚀🚀🚀
@@ -86,11 +99,18 @@ I0516 15:45:18.123356   27156 apply.go:107] "creating object" name="first-vela-a
         Endpoint: vela status first-vela-app --endpoint
 Application prod/first-vela-app applied.
 ```
+</details>
 
 * View the process and status of the application deploy
 
 ```bash
-$ vela status first-vela-app
+vela status first-vela-app
+```
+
+<details>
+<summary>expected output</summary>
+
+```console
 About:
 
   Name:      	first-vela-app
@@ -111,6 +131,7 @@ Services:
     Traits:
       ✅ scaler
 ```
+</details>
 
 The application will become a `workflowSuspending` status, it means the workflow has finished the first two steps and waiting for manual approval as the step specified.
 
@@ -124,26 +145,43 @@ vela port-forward first-vela-app 8000:8000
 
 It will invoke your browser and your can see the website:
 
+<details>
+<summary>expected output</summary>
+
 ```
 <xmp>
 Hello KubeVela! Make shipping applications more enjoyable. 
 
 ...snip...
 ```
+</details>
 
 * Resume the workflow
 
-After we finshed checking the application, we can approve the workflow to continue:
+After we finished checking the application, we can approve the workflow to continue:
 
 ```bash
-$ vela workflow resume first-vela-app
+vela workflow resume first-vela-app
+```
+
+<details>
+<summary>expected output</summary>
+
+```console
 Successfully resume workflow: first-vela-app
 ```
+</details>
 
 Then the rest will be delivered in the `prod` namespace:
 
+```bash
+vela status first-vela-app
 ```
-$ vela status first-vela-app
+
+<details>
+<summary>expected output</summary>
+
+```console
 About:
 
   Name:      	first-vela-app
@@ -170,6 +208,7 @@ Services:
     Traits:
       ✅ scaler
 ```
+</details>
 
 Great! You have finished deploying your first KubeVela application, you can also view and manage it in UI.
 
@@ -193,15 +232,28 @@ Click the application card, then you can view the details of the application.
 
 ![first-app-graph](https://static.kubevela.net/images/1.5/first-app-graph.jpg)
 
-> If you deploy the application once on the UI side, the application source of trust changes to UI. then, it is not recommended to modify the application properties from the CLI. You can use the following ways: UI, API, and Webhook.
+The UI console shares a different metadata layer with the controller. It's more like a PaaS architecture of a company which choose a database as the source of truth instead of relying on the etcd of Kubernetes.
+
+By default, if you're using CLI to manage the applications directly from Kubernetes API, we will sync the metadata to UI backend automatically. Once you deployed the application from the UI console, the automatic sync process will be stopped as the source of truth may be changed.
+
+If there're any changes happen from CLI after that, the UI console will detect the difference and show it for you. However, it's not recommended to modify the application properties from both sides.
+
+In conclusion, if you're a CLI/YAML/GitOps user, you'd better just use CLI to manage the application CRD and just use the UI console (velaux) as a dashboard. Once you've managed the app from the UI console, you need to align the behavior and manage apps from UI, API, or Webhook provided by velaux.
 
 ## Clean up
 
 ```bash
-$ vela delete first-vela-app
+vela delete first-vela-app
+```
+
+<details>
+<summary>expected output</summary>
+
+```console
 Deleting Application "first-vela-app"
 app "first-vela-app" deleted from namespace "prod"
 ```
+</details>
 
 That's it! You succeed at the first application delivery. Congratulation!
 
