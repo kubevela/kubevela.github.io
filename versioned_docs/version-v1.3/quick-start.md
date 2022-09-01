@@ -133,7 +133,7 @@ Hello KubeVela! Make shipping applications more enjoyable.
 
 * Resume the workflow
 
-After we finshed check the application, we can approve the workflow to continue:
+After we finished check the application, we can approve the workflow to continue:
 
 ```bash
 $ vela workflow resume first-vela-app
