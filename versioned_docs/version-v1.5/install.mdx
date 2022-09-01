@@ -50,9 +50,8 @@ Check `velad` and `vela` command line tools are exist in `/usr/local/bin/` for M
 velad install
 ```
 
-The expected output:
-
 <details>
+<summary>expected output</summary>
 
 ```
 Preparing K3s images...
@@ -80,9 +79,8 @@ export KUBECONFIG=$(velad kubeconfig --host)
 vela comp
 ```
 
-The expected output:
-
 <details>
+<summary>expected output</summary>
 
 ```
 NAME                  	DEFINITION              	DESCRIPTION
@@ -125,11 +123,13 @@ VelaUX is a dashboard including UI console and API services.
 vela addon enable ~/.vela/addons/velaux
 ```
 
-expected output:
+<details>
+<summary>expected output</summary>
 
 ```
 Addon: velaux enabled Successfully.
 ```
+</details>
 
 By default, velaux didn't have any exposed port, If there is the browser in local, you can view it by:
 
@@ -152,7 +152,3 @@ velad uninstall
 ```
 
 This command will clean up KubeVela controllers along with the Kubernetes cluster, refer to [the advanced guide](./platform-engineers/advanced-install#uninstall) for more detailed steps.
-
-## Next Step
-
-- [Deploy your first application](./quick-start).

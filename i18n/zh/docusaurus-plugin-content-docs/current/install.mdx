@@ -42,9 +42,8 @@ powershell -Command "iwr -useb https://static.kubevela.net/script/install.ps1 | 
 velad install
 ```
 
-查看到以下输出则代表安装成功:
-
 <details>
+<summary>期望输出</summary>
 
 ```
 Preparing K3s images...
@@ -72,9 +71,8 @@ export KUBECONFIG=$(velad kubeconfig --host)
 vela comp
 ```
 
-The expected output:
-
 <details>
+<summary>期望输出</summary>
 
 ```
 NAME                  	DEFINITION              	DESCRIPTION
@@ -115,11 +113,13 @@ VelaUX 是面向企业的应用交付控制台和可视化平台。
 vela addon enable ~/.vela/addons/velaux
 ```
 
-查看到以下输出则代表安装成功:
+<details>
+<summary>期望输出</summary>
 
 ```
 Addon: velaux enabled Successfully.
 ```
+</details>
 
 如果你是在本地执行安装，你可以通过以下方式快速访问到 VelaUX:
 

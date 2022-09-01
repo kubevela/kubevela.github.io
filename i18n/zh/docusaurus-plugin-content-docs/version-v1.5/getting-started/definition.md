@@ -38,8 +38,8 @@ title: 模块定义
 vela def list
 ```
 
-期望输出：
 <details>
+<summary>期望输出</summary>
 
 ```
 NAME                         	TYPE                  	NAMESPACE  	DESCRIPTION
@@ -58,8 +58,9 @@ notification                 	WorkflowStepDefinition	vela-system	Send message to
 ```
 vela show webservice
 ```
-期望输出：
+
 <details>
+<summary>期望输出</summary>
 
 ```
 # Properties
