@@ -140,3 +140,21 @@ $ vela addon enable ./your-addon-dir/
 除了将插件资源文件上传到自己的插件仓库中，你也可以通过提交 pull request 向 KubeVela [官方插件仓库](https://github.com/kubevela/catalog/tree/master/addons) 和 [试验阶段插件仓库](https://github.com/kubevela/catalog/tree/master/experimental/addons) 添加新的插件，pr 合并之后你的插件就可以被其他 KubeVela 用户发现并使用了。
 
 如果你根据本文档制作了新的插件，非常欢迎贡献到社区。 同时，如果你发现了某个插件的 bug，也欢迎帮助社区修复此 bug。
+
+在为社区贡献插件时请留意以下规则：
+
+- 一个新的插件默认应该先提交到 `experimental` 目录，作为试验阶段的插件。如果你的插件已经在生产环境中经过了大量的测试和验证，并被多数维护者评审通过，也可以直接作为正式阶段的插件。
+  
+- 一个试验阶段的插件具备以下条件可以提升为正式插件：
+  
+  - 该插件被添加到了仓库的 [e2e-test](https://github.com/kubevela/catalog/tree/master/test/e2e-test/addon-test) 中，从而保证插件能够被正常启用。
+    
+  - 插件必须包含以下基本的信息：
+     
+    - 元数据文件中（`metadata.yaml`）中包含了一个可访问的图标链接和插件来源链接。
+    
+    - `README.md` 中详细介绍了插件的使用方法和作用。
+    
+    - KubeVela 的插件[文档站](../../reference/addons/overview) 中有关于该插件的详细介绍文档。
+    
+    - [案例中](https://github.com/kubevela/catalog/tree/master/examples) 如果包含了丰富的关于此插件的使用案例，插件将会更容易被提升至正式阶段。
