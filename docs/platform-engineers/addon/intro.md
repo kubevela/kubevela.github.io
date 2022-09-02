@@ -144,3 +144,21 @@ vela addon enable ./your-addon-dir/
 In addition to uploading the addon resource files to your addon repository, you can also submit a pull request to KubeVela [community addon repository](https://github.com/kubevela/catalog/tree/master/addons) and [experimental addon repository](https://github.com/kubevela/catalog/tree/master/experimental/addons) to addon new addons. After pr merged your addons can be discovered and used by other KubeVela users.
 
 Meanwhile, any bug fix of existing addons are welcomed. Just make a pull request to [this](https://github.com/kubevela/catalog) repo.
+
+Please be aware of these contribution rules when contribute addons:
+
+- A new addon added in this repo should be put in as an experimental one unless you have test for a long time in your product environment and be approved by most maintainers.
+
+- An experimental addon must meet these conditions to be promoted as a verified one.
+
+    - This addon must be tested by addon's [e2e-test](https://github.com/kubevela/catalog/tree/master/test/e2e-test/addon-test) to guarantee this addon can be enabled successfully.
+
+    - This addon must have some basic but necessary information.
+
+        - An accessible icon url and source url defined in addon's `metadata.yaml`.
+
+        - A detail introduction include a basic example about how to use and what's the benefit of this addon in `README.md`.
+
+        - Also provide an introduction in KubeVela [documentation](../../reference/addons/overview).
+
+        - It's more likely to be accepted if useful examples are provided in example [dir](https://github.com/kubevela/catalog/tree/master/examples).
