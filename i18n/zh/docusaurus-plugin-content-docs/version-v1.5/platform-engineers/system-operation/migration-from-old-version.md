@@ -4,6 +4,38 @@ title: 从旧版本进行迁移
 
 本文档旨在提供在不会干扰正在运行的业务的情况下从旧版本到新版本的迁移指南。但是考虑到场景彼此不同，我们强烈建议你在实际迁移之前使用模拟环境对迁移进行测试。
 
+## 从 v1.4.x 版本 到 v1.5.x 版本
+
+1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
+
+```
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+```
+
+2. 升级 kubevela chart
+
+```
+helm repo add kubevela https://charts.kubevela.net/core
+helm repo update
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.4 --wait
+```
+
+3. 下载并升级对应的CLI
+
+```
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.4
+```
+
+4. 升级 VelaUX 或其他插件
+
+```
+vela addon upgrade velaux --version 1.5.4
+```
+
 ## 从 v1.3.x 版本 到 v1.4.x 版本
 
 > ⚠️ 注意: 在从 v1.2.x 或更早版本升级到 v1.4.x 之前，你必须先升级到 v1.3.x。
@@ -23,19 +55,19 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.2 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.11 --wait
 ```
 
 3. 下载并升级对应的CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.2
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.11
 ```
 
 4. 升级 VelaUX 或其他插件
 
 ```
-vela addon upgrade velaux --version 1.4.2
+vela addon upgrade velaux --version 1.4.7
 ```
 
 请注意，如果你使用的是 terraform 插件，你应该将 `terraform` 插件升级到 `1.0.6+` 版本以及 vela-core 升级，你可以按照以下步骤进行操作：
