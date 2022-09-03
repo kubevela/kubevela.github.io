@@ -159,6 +159,6 @@ Please be aware of these contribution rules when contribute addons:
 
         - A detail introduction include a basic example about how to use and what's the benefit of this addon in `README.md`.
 
-        - Also provide an introduction in KubeVela [documentation](https://kubevela.net/docs/reference/addons/overview).
+        - Also provide an introduction in KubeVela [documentation](../../reference/addons/overview).
 
         - It's more likely to be accepted if useful examples are provided in example [dir](https://github.com/kubevela/catalog/tree/master/examples).

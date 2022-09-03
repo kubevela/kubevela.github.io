@@ -4,6 +4,38 @@ title: Migrate from Old Versions
 
 This doc aims to provide a migration guide from old versions to the new ones without disturb the running business. However scenarios are different from each other, we strongly recommend you to test the migration with a simulation environment before real migration for your production.
 
+## From v1.4.x to v1.5.x
+
+1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
+
+```
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+```
+
+2. Upgrade your kubevela chart
+
+```
+helm repo add kubevela https://charts.kubevela.net/core
+helm repo update
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.4 --wait
+```
+
+3. Download and upgrade to the corresponding CLI
+
+```
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.4
+```
+
+4. Upgrade VelaUX or other addon
+
+```
+vela addon upgrade velaux --version 1.5.4
+```
+
 ## From v1.3.x to v1.4.x
 
 > ⚠️ Note: You must upgrade to v1.3.x first before you upgrade to v1.4.x from version v1.2.x or older.
@@ -23,18 +55,18 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.2 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.11 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.2
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.11
 ```
 
 4. Upgrade VelaUX or other addon
 
 ```
-vela addon upgrade velaux --version 1.4.2
+vela addon upgrade velaux --version 1.4.7
 ```
 
 Please note if you're using terraform addon, you should upgrade the `terraform` addon to version `1.0.6+` along with the vela-core upgrade, you can follow the following steps:
