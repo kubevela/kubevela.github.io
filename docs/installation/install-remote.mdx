@@ -170,7 +170,7 @@ Check the endpoint of VelaUX with following command:
 vela status addon-velaux -n vela-system --endpoint
 ```
 
-It will show URL like `http://<PUBLIC-IP>:<PORT> access that URL with your browser.
+It will show URL like `http://PUBLIC-IP:PORT access that URL with your browser.
 
 :::caution open the port
 If you are using a cloud server, please open this port in secure group.
@@ -224,7 +224,7 @@ Run following command on remote-server.
 
 This command will clean up KubeVela controllers along with the Kubernetes cluster, refer to [the advanced guide](../platform-engineers/advanced-install#uninstall) for more detailed steps.
 
-```
+```shell
 velad uninstall
 ```
 
