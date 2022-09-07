@@ -14,7 +14,7 @@ module.exports = {
         collapsed: true,
         label: "Installation",
         items: [
-          'installation/install',
+          'install',
           {
             type: "doc",
             label: "Install on Remote Server",
