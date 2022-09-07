@@ -10,7 +10,7 @@ Here is the guide to create Terraform typed ComponentDefinitions of cloud resour
 
 # Prerequisites
 
-- [`vela` binary](../../installation/install)
+- [`vela` binary](../advanced-install#install-vela-cli)
 
 ## Develop a Terraform resource or module
 

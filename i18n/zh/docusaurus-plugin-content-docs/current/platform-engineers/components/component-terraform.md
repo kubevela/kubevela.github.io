@@ -13,7 +13,7 @@ Terraform 使用任意的云资源。
 
 # 依赖
 
-- [`vela` 命令行](../../install.mdx)
+- [`vela` 命令行](../advanced-install#install-vela-cli)
 
 ## 开发 Terraform 资源或模块
 
