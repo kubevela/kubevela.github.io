@@ -10,7 +10,7 @@ Here is the guide to create Terraform typed ComponentDefinitions of cloud resour
 
 # Prerequisites
 
-- [`vela` binary](../../install.mdx)
+- [`vela` binary](../../installation/install)
 
 ## Develop a Terraform resource or module
 

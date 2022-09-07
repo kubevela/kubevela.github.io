@@ -1,0 +1,198 @@
+---
+title: Install Kubernetes and KubeVela in Local Machine
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+This documents will show you how to install KubeVela in your local machine in all-in-one mode.
+
+## 1. Prepare a machine
+
+You can install KubeVela on machines with these OS: Linux, macOS, Windows。
+
+**Requirements**
+
+1. Make sure your machine have `curl` installed.
+2. If you are using macOS or Windows, you need to install [Docker Desktop](https://www.docker.com/products/docker-desktop) first.
+
+## 2. Install VelaD and Setup KubeVela
+
+[VelaD](https://github.com/kubevela/velad) packages KubeVela with all dependencies that enables you to run KubeVela on any of docker compatible environments or linux system.
+
+- VelaD provides Kubernetes by leveraging [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) on linux or [k3d](https://k3d.io/) on docker environment.
+- KubeVela along with all related images, and `vela` command line are packaged together that enables air-gapped installation.
+
+### Download VelaD
+
+It will download and place the binary in your system `PATH`,
+so you may be required for root privilege during the installation process.
+If you don't need the automation with root access, you can download from the [release page](https://github.com/kubevela/velad/releases) and uncompress manually.
+
+
+<Tabs className="unique-tabs">
+  <TabItem value="Linux">
+
+  ```shell
+  curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
+  ```
+
+  Check `velad` installed in `/usr/local/bin/`
+
+  </TabItem>
+  <TabItem value="Windows">
+
+  Run following command in powershell:
+
+  ```shell
+  powershell -Command "iwr -useb https://static.kubevela.net/script/install-velad.ps1 | iex"
+  ```
+  Check `velad` installed in `C:\vela\`
+
+  </TabItem>
+</Tabs>
+
+### Setup KubeVela
+
+```shell
+velad install
+```
+
+<details>
+  <summary>expected output</summary>
+
+  ```
+  Preparing K3s images...
+  Successfully prepare k3s image: /Users/sunjianbo/.vela/velad/k3s/k3s-airgap-images-amd64.tgz
+  Successfully prepare k3d images
+
+  ...snip...
+
+  KubeVela control plane has been successfully set up on your cluster.
+  If you want to enable dashboard, please run "vela addon enable /Users/sunjianbo/.vela/addons/velaux"
+
+  Keep the token below if you want to restart the control plane
+  K1075e7f6c77555e6ebdaf4854e4a2f39ae4287cfad23f27cdac5b33608d44633fe::server:zSpzbdbGzVxOwfBvvjgT
+
+  🚀 Successfully install KubeVela control plane
+  🔭 See available commands with `vela help`
+  ```
+
+</details>
+
+### Verify Installation
+
+Export kubeconfig and list all built-in ComponentDefinition:
+
+```
+export KUBECONFIG=$(velad kubeconfig --host)
+vela comp
+```
+
+:::tip
+- When executing `velad install`, vela CLI (`vela`) is already installed and add to `PATH` automatically. So you can use it directly.
+Later we will access KubeVela in local machine, we will install vela CLI in local machine again.
+- A file uesd to configure access to clusters is called *kubeconfig file*
+:::
+
+<details>
+  <summary>expected output</summary>
+
+  ```
+  NAME DEFINITION DESCRIPTION
+  daemon daemonsets.apps Describes daemonset services in Kubernetes.
+  webservice deployments.apps Describes long-running, scalable, containerized services
+  that have a stable network endpoint to receive external
+  network traffic from customers.
+  worker deployments.apps Describes long-running, scalable, containerized services
+  that running at backend. They do NOT have network endpoint
+  to receive external network traffic.
+  config-image-registry autodetects.core.oam.dev Config information to authenticate image registry
+  k8s-objects autodetects.core.oam.dev K8s-objects allow users to specify raw K8s objects in
+  properties
+  task jobs.batch Describes jobs that run code or a script to completion.
+  ref-objects autodetects.core.oam.dev Ref-objects allow users to specify ref objects to use.
+  Notice that this component type have special handle logic.
+  raw autodetects.core.oam.dev Raw allow users to specify raw K8s object in properties.
+  This definition is DEPRECATED, please use 'k8s-objects'
+  instead.
+  cron-task cronjobs.batch Describes cron jobs that run code or a script to completion.
+  ```
+
+</details>
+Export kubeconfig and list all built-in ComponentDefinition:
+
+```
+export KUBECONFIG=$(velad kubeconfig --host)
+vela comp
+```
+
+:::tip
+- When executing `velad install`, vela CLI (`vela`) is already installed and add to `PATH` automatically. So you can use it directly.
+- A file uesd to configure access to clusters is called *kubeconfig file*
+:::
+
+<details>
+  <summary>expected output</summary>
+
+  ```
+  NAME                    DEFINITION                      DESCRIPTION
+  daemon                  daemonsets.apps                 Describes daemonset services in Kubernetes.
+  webservice              deployments.apps                Describes long-running, scalable, containerized services
+  that have a stable network endpoint to receive external
+  network traffic from customers.
+  worker                  deployments.apps                Describes long-running, scalable, containerized services
+  that running at backend. They do NOT have network endpoint
+  to receive external network traffic.
+  config-image-registry   autodetects.core.oam.dev        Config information to authenticate image registry
+  k8s-objects             autodetects.core.oam.dev        K8s-objects allow users to specify raw K8s objects in
+  properties
+  task                    jobs.batch                      Describes jobs that run code or a script to completion.
+  ref-objects             autodetects.core.oam.dev        Ref-objects allow users to specify ref objects to use.
+  Notice that this component type have special handle logic.
+  raw                     autodetects.core.oam.dev        Raw allow users to specify raw K8s object in properties.
+  This definition is DEPRECATED, please use 'k8s-objects'
+  instead.
+  cron-task               cronjobs.batch                  Describes cron jobs that run code or a script to completion.
+  ```
+
+</details>
+
+## 3. Install VelaUX
+
+VelaUX is a dashboard for KubeVela. It is a web application that runs in your cluster. You can access it with your browser.
+This is optional if you don't use UI console of KubeVela.
+
+```shell script
+vela addon enable ~/.vela/addons/velaux
+```
+
+<details>
+  <summary>expected output</summary>
+
+  ```
+  Addon: velaux enabled Successfully.
+  ```
+</details>
+
+By default, velaux didn't have any exposed port, you can view it by:
+
+```
+vela port-forward addon-velaux -n vela-system 8080:80
+```
+
+Choose `> local | velaux | velaux` for visit.
+
+> For more VelaUX options, refer to [VelaUX addon](../reference/addons/velaux) document for other advanced installation arguments.
+
+VelaUX needs authentication. The default username is `admin` and the password is **`VelaUX12345`**.
+
+It requires you to override with a new password for the first login, please make sure to remember the new password.
+
+## 4. Cleanup
+
+This command will clean up KubeVela controllers along with the Kubernetes cluster, refer to [the advanced guide](../platform-engineers/advanced-install#uninstall) for more detailed steps.
+
+```
+velad uninstall
+```

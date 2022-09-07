@@ -6,7 +6,7 @@ Welcome to KubeVela! In this guide, we'll walk you through how to install KubeVe
 
 ## Installation
 
-Make sure you have finished and verified KubeVela installation following [this guide](../install.mdx).
+Make sure you have finished and verified KubeVela installation following [this guide](../installation/install).
 
 ## A Simple Application
 
