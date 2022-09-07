@@ -1,146 +1,25 @@
 ---
-title: 快速安装
+title: 安装概览
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+根据你的情况，KubeVela 提供了一些安装选项:
 
-- 在 Kubernetes 集群上安装，请参考 [高级安装](./platform-engineers/advanced-install#install-kubevela-with-existing-kubernetes-cluster).
-- 升级 KubeVela 请参考 [升级文档](./platform-engineers/advanced-install#upgrade).
+### 没有 Kubernetes 集群？
 
-## 1. 安装 VelaD
+对于第一次接触 KubeVela 或 Kubernetes 的人们来说，使用 all-in-one 模式安装 KubeVela 是最好的选择。
+[VelaD](https://github.com/kubevela/velad) 就是为此开发的一个命令行软件。VelaD 把安装 KubeVela 以及其所需的 Kubernetes 等依赖打包为一个单独的可执行文件。
 
-[VelaD](https://github.com/kubevela/velad) 作为 KubeVela 的快速安装工具，帮助你在具有 Docker 的环境中快速一键完成安装。
+- [在远程服务器上安装](./installation/install-remote): 在一个远程服务器上安装 Kubernetes 和 KubeVela。
+- [在本地安装](./installation/install-local): 在一个本地计算机上安装 Kubernetes 和 KubeVela。
 
-- VelaD 继承了 [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) 和 [k3d](https://k3d.io/) 的能力，同时将 KubeVela 所需的制品整体打包。
-- VelaD 可以帮助你在离线环境中完成安装。
-- VelaD 目前仅适用于快速体验和测试开发， [生成环境安装请参考高级安装文档](./platform-engineers/advanced-install#install-kubevela-with-existing-kubernetes-cluster)。
+:::info
+VelaD 非常适合测试开发和快速体验，但是我们强烈建议在生产使用时，使用一个生产级别的 Kubernetes 集群安装 KubeVela，参考[集群安装](../installation/install-kubernetes)。
+:::
 
-### 前提条件
+### 已有 Kubernetes 集群
+- [集群安装](./installation/install-kubernetes): 在 Kubernetes 集群中安装 KubeVela
 
-- Docker v20.10.5+ (runc >= v1.0.0-rc93) **or** Linux system
-
-### 下载 VelaD
-
-- ** MacOS/Linux **
-
-```shell
-curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
-```
-
-- **Windows**
-
-```shell
-powershell -Command "iwr -useb https://static.kubevela.net/script/install.ps1 | iex"
-```
-
-`velad` 和 `vela` 命令行工具将存储于 `/usr/local/bin/`，对于 Windows，存储于 `C:\vela\`。
-
-### 一键安装
-
-```shell
-velad install
-```
-
-<details>
-<summary>期望输出</summary>
-
-```
-Preparing K3s images...
-Successfully prepare k3s image:  /Users/sunjianbo/.vela/velad/k3s/k3s-airgap-images-amd64.tgz
-Successfully prepare k3d images
-
-...snip...
-
-KubeVela control plane has been successfully set up on your cluster.
-If you want to enable dashboard, please run "vela addon enable /Users/sunjianbo/.vela/addons/velaux"
-
-Keep the token below if you want to restart the control plane
-K1075e7f6c77555e6ebdaf4854e4a2f39ae4287cfad23f27cdac5b33608d44633fe::server:zSpzbdbGzVxOwfBvvjgT
-
-🚀  Successfully install KubeVela control plane
-🔭  See available commands with `vela help`
-```
-
-</details>
-
-### 设置 KubeConfig
-
-```
-export KUBECONFIG=$(velad kubeconfig --host)
-vela comp
-```
-
-<details>
-<summary>期望输出</summary>
-
-```
-NAME                  	DEFINITION              	DESCRIPTION
-kustomize             	autodetects.core.oam.dev	kustomize can fetching, building, updating and applying
-                      	                        	Kustomize manifests from git repo.
-helm                  	autodetects.core.oam.dev	helm release is a group of K8s resources from either git
-                      	                        	repository or helm repo
-config-helm-repository	autodetects.core.oam.dev	Config information to authenticate helm chart repository
-yurt-helm             	autodetects.core.oam.dev	helm release is a group of K8s resources from either git
-                      	                        	repository or helm repo
-daemon                	daemonsets.apps         	Describes daemonset services in Kubernetes.
-cron-task             	cronjobs.batch          	Describes cron jobs that run code or a script to completion.
-worker                	deployments.apps        	Describes long-running, scalable, containerized services
-                      	                        	that running at backend. They do NOT have network endpoint
-                      	                        	to receive external network traffic.
-task                  	jobs.batch              	Describes jobs that run code or a script to completion.
-webservice            	deployments.apps        	Describes long-running, scalable, containerized services
-                      	                        	that have a stable network endpoint to receive external
-                      	                        	network traffic from customers.
-clickhouse            	autodetects.core.oam.dev	Clickhouse Component provision a clickhouse cluster.
-config-image-registry 	autodetects.core.oam.dev	Config information to authenticate image registry
-k8s-objects           	autodetects.core.oam.dev	K8s-objects allow users to specify raw K8s objects in
-                      	                        	properties
-raw                   	autodetects.core.oam.dev	Raw allow users to specify raw K8s object in properties.
-                      	                        	This definition is DEPRECATED, please use 'k8s-objects'
-                      	                        	instead.
-ref-objects           	autodetects.core.oam.dev	Ref-objects allow users to specify ref objects to use.
-                      	                        	Notice that this component type have special handle logic.
-```
-
-</details>
-
-## 2. 安装 VelaUX
-
-VelaUX 是面向企业的应用交付控制台和可视化平台。
-
-```shell script
-vela addon enable ~/.vela/addons/velaux
-```
-
-<details>
-<summary>期望输出</summary>
-
-```
-Addon: velaux enabled Successfully.
-```
-</details>
-
-如果你是在本地执行安装，你可以通过以下方式快速访问到 VelaUX:
-
-```
-vela port-forward addon-velaux -n vela-system 8080:80
-```
-
-Choose `> local | velaux | velaux` for visit.
-
-如果你是在远程主机安装或希望使用更稳固的访问方式，请参考 [VelaUX 高级安装说明](./reference/addons/velaux)。
-
-VelaUX 是需要登陆认证的，默认管理员账号为 `admin` 密码为 **`VelaUX12345`**。请首次登陆成功后修改管理员密码并谨记。
-
-## 3. 卸载
-
-```
-velad uninstall
-```
-
-此命令将删除 VelaD 安装的环境, 其他自定义方式安装的请参考 [KubeVela 卸载文档](./platform-engineers/advanced-install#uninstall)。
-
-## 下一步
-
-- [部署第一个应用](./quick-start)。
+:::tip
+- 要升级已有的 KubeVela，参考[升级文档](./platform-engineers/advanced-install#upgrade)。
+:::
+---

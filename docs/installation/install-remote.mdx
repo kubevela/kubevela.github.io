@@ -17,11 +17,11 @@ Linux as example.
 **Requirements**
 
 1. Make sure your machine have `curl` installed.
-2. This server have a public IP.
-3. If you are using a cloud server, make sure you have opened the port 6443, 30000 in secure group.
+2. This server have a public IP, or in the corporate intranet you can access the server's IP. Hereinafter, it is collectively referred to as having a public network IP.
+3. If you are using a cloud server, make sure you have opened the port 6443 in secure group.
 
 :::note
-It's OK to continue installation if the server doesn't have a public IP. In this case, you can only access KubeVela on the server.
+It's OK to continue installation if the server doesn't have a public IP. In this case, You can only log in to the server via ssh to access KubeVela.
 And you can't access VelaUX.
 :::
 
@@ -93,7 +93,7 @@ Check `velad` installed in `/usr/local/bin/`
 
 Export kubeconfig and list all built-in ComponentDefinition:
 
-```
+```shell
 export KUBECONFIG=$(velad kubeconfig --host)
 vela comp
 ```
@@ -101,7 +101,7 @@ vela comp
 :::tip
 - When executing `velad install`, vela CLI (`vela`) is already installed and add to `PATH` automatically. So you can use it directly.
 Later we will access KubeVela in local machine, we will install vela CLI in local machine again.
-- A file uesd to configure access to clusters is called *kubeconfig file*
+- A file uesd to configure access to clusters is called *kubeconfig file*. Vela CLI also use this file to access KubeVela.
 :::
 
 <details>
@@ -130,45 +130,11 @@ Later we will access KubeVela in local machine, we will install vela CLI in loca
 
 </details>
 
-## 3. Access cluster From Local
-
-If you have bind a public IP address to your server, you can access it with your local machine.
+## 3. Install VelaUX
 
 :::note
-Make sure you add `--bind-ip` when executing `velad install` command in the last step.
+If server doesn't have a public IP, you can skip this step.
 :::
-
-### Copy KubeConfig
-
-Following command will print the kubeconfig for your cluster. `--external` means printed kubeconfig can be used from other
-machine (like your local machine).
-
-```shell
-cat $(velad kubeconfig --external)
-```
-
-Then you need to copy this kubeconfig to your local machine. Let's say you saving a file in `~/.kube/velad-config` in your local machine.
-
-### Install Vela CLI in Local
-
-To access the cluster, you also need to install `vela` CLI in your local machine.
-
-```shell
-curl -fsSl https://static.kubevela.net/script/install.sh | bash
-```
-
-### Access Cluster
-
-Export KUBECONFIG environment variable and list all built-in ComponentDefinition:
-
-```shell
-export KUBECONFIG=~/.kube/velad-config
-vela comp
-```
-
-## 4. Install VelaUX
-
-> Only for server with Public IP
 
 VelaUX is a dashboard for KubeVela. It is a web application that runs in your cluster. You can access it with your browser.
 
@@ -198,19 +164,59 @@ vela addon enable ~/.vela/addons/velaux serviceType=NodePort
 
 By adding `serviceType=NodePort`, we are telling VelaUX to expose service with K8s
 [NodePort](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport) type.
-The default port is 30000. Check the endpoint of VelaUX with following command:
+Check the endpoint of VelaUX with following command:
 
 ```shell
 vela status addon-velaux -n vela-system --endpoint
 ```
 
-It will show URL like `http://<PUBLIC-IP>:30000`. You can access that URL with your browser.
+It will show URL like `http://<PUBLIC-IP>:<PORT> access that URL with your browser.
+
+:::caution open the port
+If you are using a cloud server, please open this port in secure group.
+:::
 
 > For more VelaUX options, refer to [VelaUX addon](../reference/addons/velaux) document for other advanced installation arguments.
 
 VelaUX needs authentication. The default username is `admin` and the password is **`VelaUX12345`**.
 
 It requires you to override with a new password for the first login, please make sure to remember the new password.
+
+## 4. Access cluster From Local (Optional)
+
+:::note
+If the server doesn't have a public IP, skip this step.
+:::
+
+If the server have a public IP, you can access KubeVela with your local machine. Make sure you add `--bind-ip` when executing `velad install` command in the last step on the server.
+
+### Copy KubeConfig
+
+Following command will print the kubeconfig for your cluster. `--external` means printed kubeconfig can be used from other
+machine (like your local machine).
+
+```shell
+cat $(velad kubeconfig --external)
+```
+
+Then you need to copy this kubeconfig to your local machine. Let's say you saving a file in `~/.kube/velad-config` in your local machine.
+
+### Install Vela CLI in Local
+
+To access the cluster, you also need to install `vela` CLI in your local machine.
+
+```shell
+curl -fsSl https://static.kubevela.net/script/install.sh | bash
+```
+
+### Access KubeVela
+
+Export KUBECONFIG environment variable and list all built-in ComponentDefinition:
+
+```shell
+export KUBECONFIG=~/.kube/velad-config
+vela comp
+```
 
 ## 5. Cleanup
 

@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 This documents will show you how to install KubeVela in your local machine in all-in-one mode.
 
-## 1. Prepare a machine
+## 1. Prepare environment
 
 You can install KubeVela on machines with these OS: Linux, macOS, Windows。
 
@@ -18,10 +18,10 @@ You can install KubeVela on machines with these OS: Linux, macOS, Windows。
 
 ## 2. Install VelaD and Setup KubeVela
 
-[VelaD](https://github.com/kubevela/velad) packages KubeVela with all dependencies that enables you to run KubeVela on any of docker compatible environments or linux system.
+[VelaD](https://github.com/kubevela/velad) packages KubeVela with all dependencies for minimal installation and VelaUX, which enables you to run KubeVela on any of docker compatible environments or linux system.
 
 - VelaD provides Kubernetes by leveraging [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) on linux or [k3d](https://k3d.io/) on docker environment.
-- KubeVela along with all related images, and `vela` command line are packaged together that enables air-gapped installation.
+- KubeVela along with all related images, and `vela` command line are packaged together that enables air-gapped installation of KubeVela and VelaUX.
 
 ### Download VelaD
 
@@ -84,14 +84,13 @@ velad install
 
 Export kubeconfig and list all built-in ComponentDefinition:
 
-```
+```shell
 export KUBECONFIG=$(velad kubeconfig --host)
 vela comp
 ```
 
 :::tip
 - When executing `velad install`, vela CLI (`vela`) is already installed and add to `PATH` automatically. So you can use it directly.
-Later we will access KubeVela in local machine, we will install vela CLI in local machine again.
 - A file uesd to configure access to clusters is called *kubeconfig file*
 :::
 
@@ -177,7 +176,7 @@ vela addon enable ~/.vela/addons/velaux
 
 By default, velaux didn't have any exposed port, you can view it by:
 
-```
+```shell
 vela port-forward addon-velaux -n vela-system 8080:80
 ```
 
