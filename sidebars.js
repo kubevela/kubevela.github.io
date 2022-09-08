@@ -17,18 +17,13 @@ module.exports = {
           'install',
           {
             type: "doc",
-            label: "Install on Local Machine",
-            id: 'installation/install-local'
-          },
-          {
-            type: "doc",
-            label: "Install on Remote Server",
-            id: 'installation/install-remote'
+            label: "Standalone Installation",
+            id: 'installation/standalone'
           },
           {
             type: "doc",
             label: "Install in Kubernetes",
-            id: 'installation/install-kubernetes'
+            id: 'installation/kubernetes'
           }
         ]
       }, {

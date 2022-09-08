@@ -5,9 +5,9 @@ title: Install KubeVela in Kubernetes
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-### 1. Prerequisites:
+### 1. Kubernetes Requirements:
 
-- Kubernetes cluster >= v1.19 && <= v1.23
+- Kubernetes version >= v1.19 && <= v1.23
 
 KubeVela relies on Kubernetes as a control plane. The control plane could be any managed Kubernetes offering or your own clusters, such as:
 
@@ -17,7 +17,9 @@ KubeVela relies on Kubernetes as a control plane. The control plane could be any
 - Google [GKE Service](https://cloud.google.com/kubernetes-engine)
 - Rancher [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) or [RKE](https://github.com/rancher/rke/releases)
 
-> Please make sure one of the [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/) is available in your Kubernetes cluster.
+:::note
+Please make sure one of the [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/) is available in your Kubernetes cluster.
+:::
 
 ### 2. Install KubeVela CLI {#install-vela-cli}
 
@@ -42,7 +44,9 @@ curl -fsSl https://kubevela.net/script/install.sh | bash
 
 **Windows**
 
-> Only the official release version is supported.
+:::note
+Only the official release version is supported.
+:::
 
 ```shell script
 powershell -Command "iwr -useb https://kubevela.net/script/install.ps1 | iex"
@@ -75,11 +79,11 @@ brew install kubevela
 sudo mv ./vela /usr/local/bin/vela
 ```
 
-> [Installation Tips](https://github.com/kubevela/kubevela/issues/625):
-> If you are using a Mac system, it will pop up a warning that "vela" cannot be opened because the package from the developer cannot be verified.
->
-> MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
-
+:::note
+- [Installation Tips](https://github.com/kubevela/kubevela/issues/625):
+- If you are using a Mac system, it will pop up a warning that "vela" cannot be opened because the package from the developer cannot be verified.
+- MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
+:::
 </TabItem>
 <TabItem value="docker">
 
@@ -145,9 +149,11 @@ $ vela install
 </TabItem>
 <TabItem value="helm">
 
-If you are helm user, you can also use helm to install kubevela core:
+If you are helm user, you can also use helm to install KubeVela core:
 
-> helm v3.2.0+ required
+:::note
+helm v3.2.0+ required
+:::
 
 ```
 helm repo add kubevela https://charts.kubevela.net/core

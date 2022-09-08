@@ -6,18 +6,17 @@ Here are available installation options depends on your environment:
 
 ### Don't have Kubernetes cluster yet?
 
-For those who are new to KubeVela or Kubernetes, installing KubeVela in all-in-one mode is the best choice.
+For those who are new to KubeVela or Kubernetes, installing KubeVela in standalone mode is the best choice.
 [VelaD](https://github.com/kubevela/velad) is developed for this purpose. VelaD package Kubernetes and KubeVela requirements to a single binary.
 
-- [Local Machine](./installation/install-local): Install Kubernetes and KubeVela in local machine.
-- [Remote Server](./installation/install-remote): Install Kubernetes and KubeVela in remote server.
+- [Standalone Installation](./installation/standalone): Install Kubernetes and KubeVela in local machine or a remote Linux server which you can access its IP address (Public Cloud or On-premise).
 
 :::info
 VelaD suits great for local development and quick demos, while we strongly recommend you to [install KubeVela with managed Kubernetes services](../installation/install-kubernetes) for production usage.
 :::
 
 ### Already have Kubernetes cluster
-- [Kubernetes Cluster](./platform-engineers/advanced-install#install-kubevela-with-existing-kubernetes-cluster): Install KubeVela in existing Kubernetes cluster.
+- [Kubernetes Cluster](./installation/kubernetes): Install KubeVela in existing Kubernetes cluster.
 
 :::tip
 - For upgrading from existing KubeVela control plane, please read the [upgrade guide](./platform-engineers/advanced-install#upgrade).

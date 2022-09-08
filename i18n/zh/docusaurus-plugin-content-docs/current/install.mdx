@@ -6,18 +6,17 @@ title: 安装概览
 
 ### 没有 Kubernetes 集群？
 
-对于第一次接触 KubeVela 或 Kubernetes 的人们来说，使用 all-in-one 模式安装 KubeVela 是最好的选择。
+对于第一次接触 KubeVela 或 Kubernetes 的人们来说，使用独立模式安装 KubeVela 是最好的选择。
 [VelaD](https://github.com/kubevela/velad) 就是为此开发的一个命令行软件。VelaD 把安装 KubeVela 以及其所需的 Kubernetes 等依赖打包为一个单独的可执行文件。
 
-- [在本地安装](./installation/install-local): 在一个本地计算机上安装 Kubernetes 和 KubeVela。
-- [在远程服务器上安装](./installation/install-remote): 在一个远程服务器上安装 Kubernetes 和 KubeVela。
+- [独立安装](./installation/standalone): 在一个本地计算机上安装，或在一个远端的服务器上安装，你可以访问该服务器的IP地址（公网或企业内网）。
 
 :::info
 VelaD 非常适合测试开发和快速体验，但是我们强烈建议在生产使用时，使用一个生产级别的 Kubernetes 集群安装 KubeVela，参考[集群安装](../installation/install-kubernetes)。
 :::
 
 ### 已有 Kubernetes 集群
-- [集群安装](./installation/install-kubernetes): 在 Kubernetes 集群中安装 KubeVela
+- [集群安装](./installation/kubernetes): 在 Kubernetes 集群中安装 KubeVela
 
 :::tip
 - 要升级已有的 KubeVela，参考[升级文档](./platform-engineers/advanced-install#upgrade)。

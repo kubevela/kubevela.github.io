@@ -325,10 +325,10 @@
   "sidebar.docs.doc.Install on Remote Server": {
     "message": "在远程服务器上安装 KubeVela"
   },
-  "sidebar.docs.doc.Install on Local Machine": {
-    "message": "在本地安装 KubeVela"
+  "sidebar.docs.doc.Standalone Installation": {
+    "message": "独立安装"
   },
   "sidebar.docs.doc.Install in Kubernetes": {
-    "message": "在 Kubernetes 集群上安装 KubeVela"
+    "message": "在 Kubernetes 中安装"
   }
 }
