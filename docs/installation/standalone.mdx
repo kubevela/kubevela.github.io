@@ -12,6 +12,16 @@ This documents will show you how to install KubeVela in standalone mode. There a
 1. [Local machine](#local): Install on a local machine.
 2. [Remote Linux server](#remote): Install on a remote Linux server with accessible IP.
 
+### About VelaD
+
+We'll use [VelaD](https://github.com/kubevela/velad) to install KubeVela in standalone mode. VelaD is a CLI tool that
+packages KubeVela with all dependencies for minimal installation and VelaUX.
+VelaD enables you to run KubeVela on any of docker compatible environments or Linux system.
+
+- VelaD provides Kubernetes by leveraging [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) on linux or [k3d](https://k3d.io/) on docker environment.
+- KubeVela along with all related images, and `vela` command line are packaged together that enables air-gapped installation of KubeVela and VelaUX.
+
+
 :::caution
 Installation with standalone mode is suited for development and testing purpose only. It is not recommended to use it in production environment.
 :::
@@ -29,17 +39,11 @@ You can install KubeVela on machines with these OS: Linux, macOS, Windows。
 
 ### 2. Install VelaD and Setup KubeVela
 
-[VelaD](https://github.com/kubevela/velad) packages KubeVela with all dependencies for minimal installation and VelaUX, which enables you to run KubeVela on any of docker compatible environments or linux system.
-
-- VelaD provides Kubernetes by leveraging [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) on linux or [k3d](https://k3d.io/) on docker environment.
-- KubeVela along with all related images, and `vela` command line are packaged together that enables air-gapped installation of KubeVela and VelaUX.
-
 #### Download VelaD
 
 It will download and place the binary in your system `PATH`,
 so you may be required for root privilege during the installation process.
 If you don't need the automation with root access, you can download from the [release page](https://github.com/kubevela/velad/releases) and uncompress manually.
-
 
 <Tabs className="unique-tabs">
   <TabItem value="Linux">
@@ -188,11 +192,6 @@ Prepare a Linux server, make sure it meets the following requirements:
 3. If you are using a cloud server, make sure you have opened the port 6443 in secure group.
 
 ### 2. Install VelaD and Setup KubeVela
-
-[VelaD](https://github.com/kubevela/velad) packages KubeVela with all dependencies that enables you to run KubeVela on any of docker compatible environments or linux system.
-
-- VelaD provides Kubernetes by leveraging [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) on linux or [k3d](https://k3d.io/) on docker environment.
-- KubeVela along with all related images, and `vela` command line are packaged together that enables air-gapped installation.
 
 #### Download VelaD
 
