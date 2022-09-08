@@ -179,14 +179,12 @@ This documents show you how to install KubeVela on a remote Linux server (e.g. a
 
 ### 1. Prepare a machine
 
-You can install KubeVela on Linux, macOS or Windows. Usually we use a Linux as remote server and this document will use
-Linux as example.
-
+Prepare a Linux server, make sure it meets the following requirements:
 
 **Requirements**
 
 1. Make sure your machine have `curl` installed.
-2. This server have a public IP, or you can access the server's IP in the corporate intranet.
+2. This server has a public IP, or you can access the server's IP if it's a on-premise server.
 3. If you are using a cloud server, make sure you have opened the port 6443 in secure group.
 
 ### 2. Install VelaD and Setup KubeVela
@@ -198,7 +196,7 @@ Linux as example.
 
 #### Download VelaD
 
-It will download and place the binary in your system `PATH`,
+Following script will download and place the binary in your system `PATH`,
 so you may be required for root privilege during the installation process.
 If you don't need the automation with root access, you can download from the [release page](https://github.com/kubevela/velad/releases) and uncompress manually.
 
