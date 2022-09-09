@@ -2,6 +2,15 @@
 title: Roadmap
 ---
 
+The goal of KubeVela is to **make deploying and operating applications across today's hybrid, multi-cloud environments easier, faster and more reliable**. We will make effort on the following aspects to make the goal achievable:
+
+* Provide a **modular, extensible, and portable control plane** for modeling application deployment with **higher level yet consistent** API. The control plane can both adapt to the existing infrastructure and extend with the fast growing cloud native ecosystem as **reusable building blocks**.
+* Enable simple and robust **application delivery across hybrid environments** including Kubernetes, cloud, or even IoT devices. This also enables you to have a vendor agnostic application platform.
+* Build an **open, inclusive, and vibrant OSS developer community** focused on solving real-world application delivery and operation problems, sharing the reusable building blocks and best practices.
+
+They're aligned with the roadmap direction for the next three years. As for the detailed roadmap, we'll update and list below.
+
+- [2022 Winter Roadmap](./2022-12-roadmap)
 - [2022 Fall Roadmap](./2022-09-roadmap)
 - [2022 Summer Roadmap](./2022-06-roadmap)
 - [2022 Spring Roadmap](./2022-03-roadmap)
