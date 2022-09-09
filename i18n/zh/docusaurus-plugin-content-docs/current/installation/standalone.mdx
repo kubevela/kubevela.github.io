@@ -40,32 +40,43 @@ import TabItem from '@theme/TabItem';
 #### 下载 VelaD
 
 下面等脚本将下载二进制文件并将其放置在你的系统“PATH”中，
-因此在安装过程中你可能需要 root 权限。
-如果你不需要root权限和自动化，你可以从[发布页面](https://github.com/kubevela/velad/releases)下载并手动解压缩。
 
 <Tabs className="unique-tabs">
-  <TabItem value="Linux">
+<TabItem value="Linux">
 
-  ```shell
-  curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
-  ```
+在安装过程中你可能需要 root 权限。 如果你不需要 root 权限和自动化，你可以从[发布页面](https://github.com/kubevela/velad/releases)下载并手动解压缩。
+```shell
+curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
+```
 
-  检查 `velad` 安装到 `/usr/local/bin/`
+检查 `velad` 安装到 `/usr/local/bin/`
 
-  </TabItem>
-  <TabItem value="Windows">
+</TabItem>
+<TabItem value="Windows">
 
-  在 powershell 中执行如下命令:
+以管理员身份启动 PowerShell 并执行如下命令:
 
-  ```shell
-  powershell -Command "iwr -useb https://static.kubevela.net/script/install-velad.ps1 | iex"
-  ```
-  检查 `velad` 安装到 `C:\vela\`
+```shell
+powershell -Command "iwr -useb https://static.kubevela.net/script/install-velad.ps1 | iex"
+```
+检查 `velad` 安装到 `C:\vela\`
 
-  </TabItem>
+:::info
+VelaD 会帮助安装 Vela CLI，这要求管理员权限。
+:::
+
+<details>
+  <summary>如何以管理员身份启动 PowerShell</summary>
+
+  1. 点击"开始"按钮打开开始菜单。
+  2. 在开始菜单中，向下滚动找到"Windows PowerShell"目录，右键点击其中的"Windows Powershell"选项，并选择"以管理员身份运行"。
+
+</details>
+
+</TabItem>
 </Tabs>
 
-### 安装 KubeVela
+#### 安装 KubeVela
 
 ```shell
 velad install
@@ -93,17 +104,32 @@ velad install
 
 </details>
 
-### 验证安装结果
+#### 验证安装结果
 
 设置 kubeconfig 并列出所有内置的组件定义:
 
-```shell
-export KUBECONFIG=$(velad kubeconfig --host)
-vela comp
-```
+<Tabs className="unique-tabs" groupId="os">
+  <TabItem label="Linux/macOS" value="unix">
+
+  ```shell
+  export KUBECONFIG=$(velad kubeconfig --host)
+  vela comp
+  ```
+
+  </TabItem>
+  <TabItem label="Windows" value="win">
+
+  ```powershell
+  $env:PATH += ";$HOME\.vela\bin;"
+  $env:KUBECONFIG = $(velad kubeconfig --host)
+  vela comp
+  ```
+
+  </TabItem>
+</Tabs>
 
 :::tip
-- 执行 `velad install` 时，已经安装了 vela CLI (`vela`) 并自动添加到 `PATH`。 所以你可以直接使用它。
+- 在macOS/Linux中，执行 `velad install` 时，已经安装了 vela CLI (`vela`) 并自动添加到 `PATH`。 所以你可以直接使用它。
 - 用于配置对集群的访问的文件称为 *kubeconfig 文件*
 :::
 
@@ -138,9 +164,22 @@ vela comp
 VelaUX 是 KubeVela 的仪表板。 它是在你的集群中运行的 Web 应用程序。 你可以使用浏览器访问它。
 如果你不使用 KubeVela 的 UI 控制台，这是可选的。
 
-```shell script
-vela addon enable ~/.vela/addons/velaux
-```
+<Tabs className="unique-tabs" groupId="os">
+  <TabItem label="Linux/macOS" value="unix">
+
+  ```shell script
+  vela addon enable ~/.vela/addons/velaux
+  ```
+
+  </TabItem>
+  <TabItem label="Windows" value="win">
+
+  ```powershell
+  vela addon enable $HOME\.vela\addons\velaux
+  ```
+
+  </TabItem>
+</Tabs>
 
 <details>
   <summary>期望输出</summary>
@@ -150,7 +189,7 @@ vela addon enable ~/.vela/addons/velaux
   ```
 </details>
 
-默认情况下，velaux 没有任何暴露的端口，期望可以通过以下方式查看：
+默认情况下，velaux 没有任何暴露的端口，你可以通过以下方式查看：
 
 ```shell
 vela port-forward addon-velaux -n vela-system 8080:80
@@ -174,7 +213,7 @@ velad uninstall
 
 ## 在远程服务器上安装 KubeVela
 
-下面向你展示如何在远程服务器（如 aws EC2 或 aliyun ECS）上以独立模式安装 KubeVela。
+下面向你展示如何在远程服务器（如 aws EC2 或 阿里云 ECS）上以独立模式安装 KubeVela。
 
 ### 1.准备一台机器
 
@@ -205,7 +244,7 @@ curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
 运行以下命令并将`$SERVER_PUBLIC_IP`替换为服务器的公共 IP。
 
 ```shell
-velad install --bind-ip=SERVER-PUBLIC-IP
+velad install --bind-ip=$SERVER_PUBLIC_IP
 ```
 
 <details>

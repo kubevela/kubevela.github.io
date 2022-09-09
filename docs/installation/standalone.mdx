@@ -42,29 +42,42 @@ You can install KubeVela on machines with these OS: Linux, macOS, Windows。
 #### Download VelaD
 
 It will download and place the binary in your system `PATH`,
-so you may be required for root privilege during the installation process.
+
+<Tabs className="unique-tabs" groupId="os">
+<TabItem label="Linux/macOS" value="unix">
+
+You may be required for root privilege during the installation process if not using root.
 If you don't need the automation with root access, you can download from the [release page](https://github.com/kubevela/velad/releases) and uncompress manually.
 
-<Tabs className="unique-tabs">
-  <TabItem value="Linux">
+```shell
+curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
+```
 
-  ```shell
-  curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
-  ```
+Check `velad` installed in `/usr/local/bin/`
 
-  Check `velad` installed in `/usr/local/bin/`
+</TabItem>
+<TabItem label="Windows" value="win">
 
-  </TabItem>
-  <TabItem value="Windows">
+Run following command in powershell with administrator privilege.
 
-  Run following command in powershell:
+```powershell
+powershell -Command "iwr -useb https://static.kubevela.net/script/install-velad.ps1 | iex"
+```
+Check `velad` installed in `C:\vela\`
 
-  ```shell
-  powershell -Command "iwr -useb https://static.kubevela.net/script/install-velad.ps1 | iex"
-  ```
-  Check `velad` installed in `C:\vela\`
+:::info
+VelaD helps install Vela CLI, which requires administrator.
+:::
 
-  </TabItem>
+<details>
+<summary>How to start powershell with administrator privilege</summary>
+
+1. Click on the 'Start' button to open the Start menu.
+2. Scroll to the Windows PowerShell shortcut folder then, right click on the Windows Powershell option and select 'Run as administrator'.
+
+</details>
+
+</TabItem>
 </Tabs>
 
 #### Setup KubeVela
@@ -99,10 +112,25 @@ velad install
 
 Export kubeconfig and list all built-in ComponentDefinition:
 
-```shell
-export KUBECONFIG=$(velad kubeconfig --host)
-vela comp
-```
+<Tabs className="unique-tabs" groupId="os">
+  <TabItem label="Linux/macOS" value="unix">
+
+    ```shell
+    export KUBECONFIG=$(velad kubeconfig --host)
+    vela comp
+    ```
+
+  </TabItem>
+  <TabItem label="Windows" value="win">
+
+    ```powershell
+    $env:PATH += ";$HOME\.vela\bin;"
+    $env:KUBECONFIG = $(velad kubeconfig --host)
+    vela comp
+    ```
+
+  </TabItem>
+</Tabs>
 
 :::tip
 - When executing `velad install`, vela CLI (`vela`) is already installed and add to `PATH` automatically. So you can use it directly.
@@ -141,9 +169,22 @@ Export kubeconfig and list all built-in ComponentDefinition:
 VelaUX is a dashboard for KubeVela. It is a web application that runs in your cluster. You can access it with your browser.
 This is optional if you don't use UI console of KubeVela.
 
-```shell script
-vela addon enable ~/.vela/addons/velaux
-```
+<Tabs className="unique-tabs" groupId="os">
+  <TabItem label="Linux/macOS" value="unix">
+
+  ```shell script
+  vela addon enable ~/.vela/addons/velaux
+  ```
+
+  </TabItem>
+  <TabItem label="Windows" value="win">
+
+  ```powershell
+  vela addon enable $HOME\.vela\addons\velaux
+  ```
+
+  </TabItem>
+</Tabs>
 
 <details>
   <summary>expected output</summary>
@@ -151,6 +192,7 @@ vela addon enable ~/.vela/addons/velaux
   ```
   Addon: velaux enabled Successfully.
   ```
+
 </details>
 
 By default, velaux didn't have any exposed port, you can view it by:

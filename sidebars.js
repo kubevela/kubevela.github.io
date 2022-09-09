@@ -13,16 +13,19 @@ module.exports = {
         type: "category",
         collapsed: true,
         label: "Installation",
+        link: {
+          type: "doc",
+          id: 'install'
+        },
         items: [
-          'install',
           {
             type: "doc",
-            label: "Standalone Installation",
+            label: "Standalone",
             id: 'installation/standalone'
           },
           {
             type: "doc",
-            label: "Install in Kubernetes",
+            label: "Kubernetes",
             id: 'installation/kubernetes'
           }
         ]

@@ -322,13 +322,13 @@
   "sidebar.docs.category.Multi Cluster Delivery": {
     "message": "多集群交付"
   },
-  "sidebar.docs.doc.Install on Remote Server": {
-    "message": "在远程服务器上安装 KubeVela"
-  },
-  "sidebar.docs.doc.Standalone Installation": {
+  "sidebar.docs.doc.Standalone": {
     "message": "独立安装"
   },
-  "sidebar.docs.doc.Install in Kubernetes": {
-    "message": "在 Kubernetes 中安装"
+  "sidebar.docs.category.Installation": {
+    "message": "安装"
+  },
+  "sidebar.docs.doc.Kubernetes": {
+    "message": "Kubernetes 安装"
   }
 }
