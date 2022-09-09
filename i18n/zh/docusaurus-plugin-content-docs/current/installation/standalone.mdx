@@ -137,25 +137,27 @@ velad install
   <summary>期望输出</summary>
 
   ```
-  NAME DEFINITION DESCRIPTION
-  daemon daemonsets.apps Describes daemonset services in Kubernetes.
-  webservice deployments.apps Describes long-running, scalable, containerized services
-  that have a stable network endpoint to receive external
-  network traffic from customers.
-  worker deployments.apps Describes long-running, scalable, containerized services
+  NAME                  	DEFINITION              	DESCRIPTION
+  config-helm-repository	autodetects.core.oam.dev	Config information to authenticate helm chart repository
+  daemon                	daemonsets.apps         	Describes daemonset services in Kubernetes.
+  cron-task             	cronjobs.batch          	Describes cron jobs that run code or a script to completion.
+  worker                	deployments.apps        	Describes long-running, scalable, containerized services
   that running at backend. They do NOT have network endpoint
   to receive external network traffic.
-  config-image-registry autodetects.core.oam.dev Config information to authenticate image registry
-  k8s-objects autodetects.core.oam.dev K8s-objects allow users to specify raw K8s objects in
+  task                  	jobs.batch              	Describes jobs that run code or a script to completion.
+  webservice            	deployments.apps        	Describes long-running, scalable, containerized services
+  that have a stable network endpoint to receive external
+  network traffic from customers.
+  config-image-registry 	autodetects.core.oam.dev	Config information to authenticate image registry
+  k8s-objects           	autodetects.core.oam.dev	K8s-objects allow users to specify raw K8s objects in
   properties
-  task jobs.batch Describes jobs that run code or a script to completion.
-  ref-objects autodetects.core.oam.dev Ref-objects allow users to specify ref objects to use.
-  Notice that this component type have special handle logic.
-  raw autodetects.core.oam.dev Raw allow users to specify raw K8s object in properties.
+  raw                   	autodetects.core.oam.dev	Raw allow users to specify raw K8s object in properties.
   This definition is DEPRECATED, please use 'k8s-objects'
   instead.
-  cron-task cronjobs.batch Describes cron jobs that run code or a script to completion.
+  ref-objects           	autodetects.core.oam.dev	Ref-objects allow users to specify ref objects to use.
+  Notice that this component type have special handle logic.
   ```
+
 
 </details>
 
@@ -290,24 +292,25 @@ vela comp
   <summary>期望输出</summary>
 
   ```
-  NAME DEFINITION DESCRIPTION
-  daemon daemonsets.apps Describes daemonset services in Kubernetes.
-  webservice deployments.apps Describes long-running, scalable, containerized services
-  that have a stable network endpoint to receive external
-  network traffic from customers.
-  worker deployments.apps Describes long-running, scalable, containerized services
+  NAME                  	DEFINITION              	DESCRIPTION
+  config-helm-repository	autodetects.core.oam.dev	Config information to authenticate helm chart repository
+  daemon                	daemonsets.apps         	Describes daemonset services in Kubernetes.
+  cron-task             	cronjobs.batch          	Describes cron jobs that run code or a script to completion.
+  worker                	deployments.apps        	Describes long-running, scalable, containerized services
   that running at backend. They do NOT have network endpoint
   to receive external network traffic.
-  config-image-registry autodetects.core.oam.dev Config information to authenticate image registry
-  k8s-objects autodetects.core.oam.dev K8s-objects allow users to specify raw K8s objects in
+  task                  	jobs.batch              	Describes jobs that run code or a script to completion.
+  webservice            	deployments.apps        	Describes long-running, scalable, containerized services
+  that have a stable network endpoint to receive external
+  network traffic from customers.
+  config-image-registry 	autodetects.core.oam.dev	Config information to authenticate image registry
+  k8s-objects           	autodetects.core.oam.dev	K8s-objects allow users to specify raw K8s objects in
   properties
-  task jobs.batch Describes jobs that run code or a script to completion.
-  ref-objects autodetects.core.oam.dev Ref-objects allow users to specify ref objects to use.
-  Notice that this component type have special handle logic.
-  raw autodetects.core.oam.dev Raw allow users to specify raw K8s object in properties.
+  raw                   	autodetects.core.oam.dev	Raw allow users to specify raw K8s object in properties.
   This definition is DEPRECATED, please use 'k8s-objects'
   instead.
-  cron-task cronjobs.batch Describes cron jobs that run code or a script to completion.
+  ref-objects           	autodetects.core.oam.dev	Ref-objects allow users to specify ref objects to use.
+  Notice that this component type have special handle logic.
   ```
 
 </details>
