@@ -17,10 +17,6 @@ KubeVela relies on Kubernetes as a control plane. The control plane could be any
 - Google [GKE Service](https://cloud.google.com/kubernetes-engine)
 - Rancher [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) or [RKE](https://github.com/rancher/rke/releases)
 
-:::note
-Please make sure one of the [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/) is available in your Kubernetes cluster.
-:::
-
 ### 2. Install KubeVela CLI {#install-vela-cli}
 
 KubeVela CLI provides an easy to engage and manage your application delivery in command lines.
@@ -165,6 +161,9 @@ helm install --create-namespace -n vela-system kubevela kubevela/vela-core --wai
 </Tabs>
 
 ### 4. Install VelaUX
+
+VelaUX is a dashboard for KubeVela. It is a web application that runs in your cluster. You can access it with your browser.
+This is optional if you don't use UI console of KubeVela.
 
 Please refer to [VelaUX Guide](../reference/addons/velaux).
 
