@@ -17,7 +17,7 @@ import TabItem from '@theme/TabItem';
 以上两种选项中，我们都将使用 [VelaD](https://github.com/kubevela/velad) 来以独立模式安装 KubeVela。它是一个命令行工具，
 将 KubeVela 最小安装以及使用 VelaUX 的一切依赖打包为一个可执行文件。你可以使用 VelaD 在安装有 Docker 的 macOS/Windows 中或 Linux 中安装 KubeVela。
 
-- VelaD 集成了 [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/)  和 [k3d](https://k3d.io/) 来提供了 Kubernetes 集群。无需担心集群的创建和配置。
+- VelaD 集成了 [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) 和 [k3d](https://k3d.io/) 用于自动化管理 Kubernetes 集群，用户无需关心 Kubernetes 集群管理的细节。
 - VelaD 打包了镜像等依赖，可以在没有网络的环境中最小化安装 KubeVela 以及其 VelaUX 插件。
 
 :::caution
@@ -28,11 +28,11 @@ import TabItem from '@theme/TabItem';
 
 ### 1. 准备环境
 
-支持在这些操作系统中安装 KubeVela：Linux, macOS, Windows。
+VelaD 支持在这些操作系统中安装 KubeVela：Linux, macOS, Windows。
 
 **要求**
 
-1. 确保你的机器上安装了 `curl`。
+1. 如果你在使用 Linux 或者 macOS，确保你的机器上安装了 `curl`。
 2. 如果你在使用 macOS or Windows, 确保你已经安装 [Docker Desktop](https://www.docker.com/products/docker-desktop)。
 
 ### 2. 安装 VelaD 和 KubeVela

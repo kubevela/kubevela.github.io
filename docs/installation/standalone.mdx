@@ -18,7 +18,7 @@ We'll use [VelaD](https://github.com/kubevela/velad) to install KubeVela in stan
 packages KubeVela with all dependencies for minimal installation and VelaUX.
 VelaD enables you to run KubeVela on any of docker compatible environments or Linux system.
 
-- VelaD provides Kubernetes by leveraging [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) on linux or [k3d](https://k3d.io/) on docker environment.
+- VelaD leverages [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) and [k3d](https://k3d.io/) to manage Kubernetes automatically. Users needn't care the details about Kubernetes.
 - KubeVela along with all related images, and `vela` command line are packaged together that enables air-gapped installation of KubeVela and VelaUX.
 
 
@@ -30,11 +30,11 @@ Installation with standalone mode is suited for development and testing purpose 
 
 ### 1. Prepare environment
 
-You can install KubeVela on machines with these OS: Linux, macOS, Windows.
+VelaD support installing KubeVela on machines based on these OS: Linux, macOS, Windows.
 
 **Requirements**
 
-1. Make sure your machine have `curl` installed.
+1. If you are using Linux or macOS, make sure your machine have `curl` installed.
 2. If you are using macOS or Windows, make sure you've already installed [Docker](https://www.docker.com/products/docker-desktop).
 
 ### 2. Install VelaD and Setup KubeVela
