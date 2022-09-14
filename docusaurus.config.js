@@ -153,7 +153,7 @@ module.exports = {
     },
     prism: {
       theme: require('prism-react-renderer/themes/dracula'),
-      additionalLanguages: ['cue'],
+      additionalLanguages: ['cue','powershell'],
     },
     zoom: {
       selector: '.markdown :not(em) > img',
