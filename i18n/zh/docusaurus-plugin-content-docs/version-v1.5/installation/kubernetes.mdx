@@ -49,15 +49,15 @@ powershell -Command "iwr -useb https://kubevela.net/script/install.ps1 | iex"
 
 **macOS/Linux**
 
-Update your brew first. Please note that the brew method only supports the installation of the official release version.
+首先更新你的 Homebrew。注意，使用 Homebrew 安装只支持安装正式 release 的版本。
 
-```shell script
+```shell
 brew update
 ```
 
-Then install KubeVela CLI
+安装 Vela CLI。
 
-```shell script
+```shell
 brew install kubevela
 ```
 
@@ -71,10 +71,10 @@ brew install kubevela
 sudo mv ./vela /usr/local/bin/vela
 ```
 
-> [Installation Tips](https://github.com/kubevela/kubevela/issues/625):
-> If you are using a Mac system, it will pop up a warning that "vela" cannot be opened because the package from the developer cannot be verified.
+> [安装提示](https://github.com/kubevela/kubevela/issues/625):
+> 如果你使用的是 macOS，会弹出因为开发者的包无法验证，“vela”无法打开的警告。
 >
-> MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
+> macOS 对可以在系统中运行的软件施加了更严格的限制。您可以通过打开“系统偏好设置 -> 安全和隐私 -> 常规”，并选择“从任何位置下载的程序”来临时解决此问题。
 
 </TabItem>
 <TabItem value="docker">

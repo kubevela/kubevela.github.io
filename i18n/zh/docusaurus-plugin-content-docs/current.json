@@ -323,7 +323,7 @@
     "message": "多集群交付"
   },
   "sidebar.docs.doc.Standalone": {
-    "message": "独立安装"
+    "message": "无依赖独立安装"
   },
   "sidebar.docs.category.Installation": {
     "message": "安装"
