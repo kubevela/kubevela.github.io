@@ -59,26 +59,7 @@ module.exports = {
       label: "Community Meetings",
       collapsed: false,
       items: [
-        {
-          type: "category",
-          label: "Meetings in English",
-          collapsed: false,
-          items: [
-            "meetings/en/meetings",
-          ],
-        },
-        {
-          type: "category",
-          label: "中文社区会议 - Meetings in Chinese",
-          collapsed: false,
-          items: [
-            "meetings/cn/v1.3",
-            "meetings/cn/v1.2",
-            "meetings/cn/v1.1",
-            "meetings/cn/v1.0",
-            "meetings/cn/before-v1.0",
-          ],
-        },
+        "meetings/meetings",
       ],
     },
   ],
