@@ -1,4 +1,4 @@
-const { Component } = require('react');
+const {Component} = require('react');
 
 module.exports = {
   docs: [
@@ -6,7 +6,34 @@ module.exports = {
       type: 'category',
       label: 'Getting Started',
       collapsed: false,
-      items: ['getting-started/introduction', 'install', 'quick-start'],
+      items: [{
+        type: "doc",
+        id: 'getting-started/introduction'
+      }, {
+        type: "category",
+        collapsed: true,
+        label: "Installation",
+        link: {
+          type: "doc",
+          id: 'install'
+        },
+        items: [
+          {
+            type: "doc",
+            label: "Standalone",
+            id: 'installation/standalone'
+          },
+          {
+            type: "doc",
+            label: "Kubernetes",
+            id: 'installation/kubernetes'
+          }
+        ]
+      }, {
+        type: "doc",
+        id: 'quick-start'
+      }
+      ],
     },
     {
       type: 'category',

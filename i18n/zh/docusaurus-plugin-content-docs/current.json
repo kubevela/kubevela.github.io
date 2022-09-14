@@ -321,5 +321,14 @@
   },
   "sidebar.docs.category.Multi Cluster Delivery": {
     "message": "多集群交付"
+  },
+  "sidebar.docs.doc.Standalone": {
+    "message": "无依赖独立安装"
+  },
+  "sidebar.docs.category.Installation": {
+    "message": "安装"
+  },
+  "sidebar.docs.doc.Kubernetes": {
+    "message": "基于 Kubernetes 安装"
   }
 }
