@@ -9,8 +9,8 @@ import TabItem from '@theme/TabItem';
 
 This documents will show you how to install KubeVela in standalone mode. There are two options:
 
-1. [Local machine](#local): Install in a local machine.
-2. [Remote Linux server](#remote): Install on a remote Linux server with accessible IP.
+1. [Local machine](#local): Install on a local machine based on Linux, macOS or Windows operating system.
+2. [Remote Linux server](#remote): Install on a remote Linux server with accessible IP address.
 
 ### About VelaD
 
@@ -23,19 +23,19 @@ VelaD enables you to run KubeVela on any of docker compatible environments or Li
 
 
 :::caution
-Installation with standalone mode is suited for development and testing purpose only. It is not recommended to use it in production environment.
+Installation with standalone mode is suited for development and testing purpose best that you don't even aware of the Kubernetes inside. If you want to use it in production, you need to understand and maintain the K3s for Kubernetes management well.
 :::
 
 ## Install in a local machine {#local}
 
 ### 1. Prepare environment
 
-You can install KubeVela on machines with these OS: Linux, macOS, Windows。
+You can install KubeVela on machines with these OS: Linux, macOS, Windows.
 
 **Requirements**
 
 1. Make sure your machine have `curl` installed.
-2. If you are using macOS or Windows, you need to install [Docker Desktop](https://www.docker.com/products/docker-desktop) first.
+2. If you are using macOS or Windows, make sure you've already installed [Docker](https://www.docker.com/products/docker-desktop).
 
 ### 2. Install VelaD and Setup KubeVela
 
@@ -66,11 +66,11 @@ powershell -Command "iwr -useb https://static.kubevela.net/script/install-velad.
 Check `velad` installed in `C:\vela\`
 
 :::info
-VelaD helps install Vela CLI, which requires administrator.
+VelaD helps install Vela CLI, which requires administrator privilege.
 :::
 
 <details>
-<summary>How to start powershell with administrator privilege</summary>
+<summary>Start powershell as administrator</summary>
 
 1. Click on the 'Start' button to open the Start menu.
 2. Scroll to the Windows PowerShell shortcut folder then, right click on the Windows Powershell option and select 'Run as administrator'.
@@ -196,7 +196,7 @@ This is optional if you don't use UI console of KubeVela.
 
 </details>
 
-By default, velaux didn't have any exposed port, you can view it by:
+By default, velaux don't have any exposed port, you can view it by:
 
 ```shell
 vela port-forward addon-velaux -n vela-system 8080:80
