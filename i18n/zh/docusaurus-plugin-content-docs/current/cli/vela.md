@@ -28,6 +28,7 @@ title: CLI Commands
 		vela ql --query "inner-view-name{param1=value1,param2=value2}"
 		vela ql --file ./ql.cue
 * [vela live-diff](vela_live-diff)	 - Compare application and revisions
+* [vela top](vela_top)	 - Launch UI to display platform overview information and diagnose the status for any specific application.
 * [vela ls](vela_ls)	 - List all vela applications.
 * [vela dry-run](vela_dry-run)	 - Dry-run application locally, render the Kubernetes resources as result to stdout.
 	vela dry-run -d /definition/directory/or/file/ -f /path/to/app.yaml
