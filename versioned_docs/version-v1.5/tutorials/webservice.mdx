@@ -3,7 +3,10 @@ title: Deploy Container Image
 description: Deploy the business application by kubevela
 ---
 
-In this section, we will introduce how to deploy a container-based application with KubeVela. The guide will run the whole process with UI console as it's quite the same with the [quick start](../quick-start) if you're using CLI. 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+In this section, we will introduce how to deploy a container-based application with KubeVela. The guide will run the whole process with UI console as it's quite the same with the [quick start](../quick-start) if you're using CLI.
 
 ## Before starting
 
@@ -85,7 +88,7 @@ spec:
         ports:
           - port: 8080
             expose: true
-        exposeType: LoadBalancer
+        exposeType: NodePort
         cpu: "0.5"
         memory: "512Mi"
       traits:
@@ -96,7 +99,9 @@ spec:
 EOF
 ```
 
-> Currently, The application created by CLI will be synced to UI, but it will be readonly.
+:::note
+Currently, The application created by CLI will be synced to UI, but it will be readonly.
+:::
 
 You can also save the YAML file as webservice-app.yaml and use the `vela up -f webservice-app.yaml` command to deploy.
 
@@ -122,19 +127,72 @@ Services:
       ✅ scaler
 ```
 
-You can check the application endpoint using `vela status --endpoint`. This command can detect multiple kinds of endpoints.
-In this case, it is a LoadBalancer Service.
+Depending on how you install KubeVela, you can choose the way to access the endpoint.
+
+<Tabs
+  defaultValue="standalone-local"
+  values={[
+    {label: 'Standalone Local', value: 'standalone-local'},
+    {label: 'Standalone Remote', value: 'standalone-remote'},
+    {label: 'Kubernetes', value: 'kubernetes'},
+  ]}>
+<TabItem value="standalone-local">
+
+You can access the endpoint by port-forward command:
 
 ```shell
-vela status webservice-app --endpoint                                                                                                  1 ↵
+vela port-forward webservice-app -n default 8080:8080
+```
+
+This command will open a browser automatically. Or you could access the endpoint by `http://127.0.0.1:8080` in your browser.
+
+</TabItem>
+<TabItem value="standalone-remote">
+
+Since we have install KubeVela in a remote server with accessible IP address, you can check the application endpoint using `vela status --endpoint`. This command can detect multiple kinds of endpoints.
+In this case, it is a NodePort Service under the hood. You can access the endpoint listed in the output.
+
+```shell
+vela status webservice-app --endpoint
 I0816 21:20:08.536617   59163 utils.go:156] find cluster gateway service vela-system/kubevela-cluster-gateway-service:9443
 Please access webservice-app from the following endpoints:
 +---------+-----------+--------------------------+----------------------------+-------+
 | CLUSTER | COMPONENT | REF(KIND/NAMESPACE/NAME) |          ENDPOINT          | INNER |
 +---------+-----------+--------------------------+----------------------------+-------+
-| local   | frontend  | Service/default/frontend | http://182.92.178.219:8080 | false |
+| local   | frontend  | Service/default/frontend | http://182.92.178.219:30128 | false |
 +---------+-----------+--------------------------+----------------------------+-------+
 ```
+
+:::caution open the port
+If you are using a cloud server, please open this port in secure group.
+:::
+
+</TabItem>
+<TabItem value="kubernetes">
+
+You can check the application endpoint using `vela status --endpoint`. This command can detect multiple kinds of endpoints.
+In this case, it is a NodePort Service under the hood. You can access the endpoint listed in the output.
+
+```shell
+vela status webservice-app --endpoint
+I0816 21:20:08.536617   59163 utils.go:156] find cluster gateway service vela-system/kubevela-cluster-gateway-service:9443
+Please access webservice-app from the following endpoints:
++---------+-----------+--------------------------+----------------------------+-------+
+| CLUSTER | COMPONENT | REF(KIND/NAMESPACE/NAME) |          ENDPOINT          | INNER |
++---------+-----------+--------------------------+----------------------------+-------+
+| local   | frontend  | Service/default/frontend | http://182.92.178.219:30128 | false |
++---------+-----------+--------------------------+----------------------------+-------+
+```
+
+:::caution open the port
+The output from the preceding command shows that the NodePort service is exposed externally on the port (30128) of the available cluster node.
+Before you access NodeIP:NodePort(182.92.178.219:30128) from outside the cluster, you must set the security group of the nodes to allow incoming traffic.
+You should allow incoming traffic through the port (30994).
+:::
+
+</TabItem>
+</Tabs>
+
 
 Now, you have finished learning the basic delivery for container images. Then, you could:
 
