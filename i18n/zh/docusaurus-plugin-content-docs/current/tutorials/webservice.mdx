@@ -3,6 +3,9 @@ title: 容器镜像
 description: 参考本文章，学习使用容器镜像部署企业业务应用，大多数企业业务应用都可作为无状态应用交付。
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 本文介绍企业基于 KubeVela 通过容器镜像交付业务应用的操作方式，通过该方式交付应用无需你学习过多的 Kubernetes 领域知识。
 
 ## 开始之前
@@ -70,7 +73,7 @@ spec:
         ports:
           - port: 8080
             expose: true
-        exposeType: LoadBalancer
+        exposeType: NodePort
         cpu: "0.5"
         memory: "512Mi"
       traits:
@@ -81,7 +84,9 @@ spec:
 EOF
 ```
 
-> 目前，通过 CLI 部署的应用会同步到控制台中，但其为只读状态。
+:::note
+目前，通过 CLI 部署的应用会同步到控制台中，但其为只读状态。
+:::
 
 你也可以复制上述的应用配置并创建一个 YAML 文件 `webservice-app.yaml`，然后使用命令 `vela up -f webservice-app.yaml` 来完成部署。
 
@@ -118,7 +123,69 @@ Services:
       ✅ scaler
 ```
 
-至此，你已经了解了最基本的容器镜像部署，接下来你可以：
+你可以访问该应用的端点，根据安装的 KubeVela 方式，有以下几种选择
+
+<Tabs
+    defaultValue="standalone-local"
+    values={[
+      {label: 'Standalone Local', value: 'standalone-local'},
+      {label: 'Standalone Remote', value: 'standalone-remote'},
+      {label: 'Kubernetes', value: 'kubernetes'},
+    ]}>
+<TabItem value="standalone-local">
+
+通过端口转发访问端点
+
+```shell
+vela port-forward webservice-app -n default 8080:8080
+```
+
+这条命令自动打开一个浏览器，或者你也可以手动访问 `http://localhost:8080`。
+
+</TabItem>
+<TabItem value="standalone-remote">
+
+因为我们已经在远程服务器中安装了 KubeVela，并且该服务器还有以可访问的 IP 地址。所以可以通过 `vela status --endpoint` 检测应用端点。该命令可以检测多种暴露的端点。
+在本例中，这个应用的底层会创建一个 NodePort 类型的 Service。你可以访问列出的端点。
+
+```shell
+vela status webservice-app --endpoint
+I0816 21:20:08.536617   59163 utils.go:156] find cluster gateway service vela-system/kubevela-cluster-gateway-service:9443
+Please access webservice-app from the following endpoints:
++---------+-----------+--------------------------+----------------------------+-------+
+| CLUSTER | COMPONENT | REF(KIND/NAMESPACE/NAME) |          ENDPOINT          | INNER |
++---------+-----------+--------------------------+----------------------------+-------+
+| local   | frontend  | Service/default/frontend | http://182.92.178.219:30128 | false |
++---------+-----------+--------------------------+----------------------------+-------+
+```
+
+:::caution 打开端口
+如果你在使用云服务器，请在云服务器的安全组中开放该端口(30128)。
+:::
+
+</TabItem>
+<TabItem value="kubernetes">
+所以可以通过 `vela status --endpoint` 检测应用端点。该命令可以检测多种暴露的端点。
+在本例中，这个应用的底层会创建一个 NodePort 类型的 Service。你可以访问列出的端点。
+
+```shell
+vela status webservice-app --endpoint
+I0816 21:20:08.536617   59163 utils.go:156] find cluster gateway service vela-system/kubevela-cluster-gateway-service:9443
+Please access webservice-app from the following endpoints:
++---------+-----------+--------------------------+----------------------------+-------+
+| CLUSTER | COMPONENT | REF(KIND/NAMESPACE/NAME) |          ENDPOINT          | INNER |
++---------+-----------+--------------------------+----------------------------+-------+
+| local   | frontend  | Service/default/frontend | http://182.92.178.219:30128 | false |
++---------+-----------+--------------------------+----------------------------+-------+
+```
+
+:::caution 打开端口
+上面命令的输出中，你可以看到 NodePort 类型 Service 对外暴露了集群可用节点的 30128 端口，在从集群外部访问该 URL(182.92.178.219:30128) 之前，
+必须在节点的安全组中打开该端口，允许 30128 端口的入站流量。
+:::
+
+</TabItem>
+</Tabs>
 
 * 了解 [组件参考手册](../end-user/components/references#webservice)查看更多字段说明。
 * 了解 [运维特征参考手册](../end-user/traits/references)查看适用的运维特征功能。
