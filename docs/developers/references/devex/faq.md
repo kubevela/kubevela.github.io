@@ -53,15 +53,24 @@ This could be a potential problem for k8s 1.19. Try to run the following command
 kubectl patch crd applicationrevisions.core.oam.dev --type json -p='[{"op": "remove", "path": "/spec/versions/1/schema/openAPIV3Schema/properties/spec/properties/referredObjects/x-kubernetes-preserve-unknown-fields"}]'
 ```
 
-### How to get my admin password of VelaUX?
+### How to change the admin password of VelaUX?
 
 If you're using v1.3, the default password is in the secret:
 
-```
+```bash
 kubectl get secret admin -n vela-system
 ```
 
-If you're using v1.4+, the default password is `VelaUX12345`.
+If you're using v1.4+, the default password is `VelaUX12345`. After you first log in, you must change the password. If you forget the password, you could delete the admin user from the database, then restart the API server. The admin user will regenerate.
+
+```bash
+
+# Delete the admin user. If you use the MongoDB, you should delete from the MongoDB.
+kubectl delete cm usr-admin -n kubevela
+
+# Restart the API server and regenerate the admin user
+kubectl delete pod -l app.oam.dev/component=apiserver -n vela-system
+```
 
 ### How can I build my own addon registry?
 
