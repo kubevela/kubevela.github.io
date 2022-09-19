@@ -261,7 +261,8 @@
           "Contribution Guide": [
             "contributor/non-code-contribute",
             "contributor/code-contribute",
-            "contributor/cli-ref-doc"
+            "contributor/cli-ref-doc",
+            "contributor/fig-auto-complete"
           ]
         },
         {
