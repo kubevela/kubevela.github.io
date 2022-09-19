@@ -2,7 +2,7 @@
 title: Deploy First Application
 ---
 
-> Before starting, please confirm that you've installed KubeVela and enabled the VelaUX addon according to [the installation guide](./install.mdx).
+> Before starting, please confirm that you've installed KubeVela and enabled the VelaUX addon according to [the installation guide](./install).
 
 Welcome to KubeVela! This section will guide you to deliver your first app.
 
