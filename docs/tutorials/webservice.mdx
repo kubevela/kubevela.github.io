@@ -154,6 +154,12 @@ In this case, it is a NodePort Service under the hood. You can access the endpoi
 
 ```shell
 vela status webservice-app --endpoint
+```
+
+<details>
+<summary>expected output</summary>
+
+```shell
 I0816 21:20:08.536617   59163 utils.go:156] find cluster gateway service vela-system/kubevela-cluster-gateway-service:9443
 Please access webservice-app from the following endpoints:
 +---------+-----------+--------------------------+----------------------------+-------+
@@ -162,6 +168,8 @@ Please access webservice-app from the following endpoints:
 | local   | frontend  | Service/default/frontend | http://182.92.178.219:30128 | false |
 +---------+-----------+--------------------------+----------------------------+-------+
 ```
+
+</details>
 
 :::caution open the port
 If you are using a cloud server, please open this port in secure group.
@@ -175,6 +183,12 @@ In this case, it is a NodePort Service under the hood. You can access the endpoi
 
 ```shell
 vela status webservice-app --endpoint
+```
+
+<details>
+<summary>expected output</summary>
+
+```shell
 I0816 21:20:08.536617   59163 utils.go:156] find cluster gateway service vela-system/kubevela-cluster-gateway-service:9443
 Please access webservice-app from the following endpoints:
 +---------+-----------+--------------------------+----------------------------+-------+
@@ -183,6 +197,8 @@ Please access webservice-app from the following endpoints:
 | local   | frontend  | Service/default/frontend | http://182.92.178.219:30128 | false |
 +---------+-----------+--------------------------+----------------------------+-------+
 ```
+
+</details>
 
 :::caution open the port
 The output from the preceding command shows that the NodePort service is exposed externally on the port (30128) of the available cluster node.

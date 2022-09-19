@@ -126,12 +126,12 @@ Services:
 你可以访问该应用的端点，根据安装的 KubeVela 方式，有以下几种选择
 
 <Tabs
-    defaultValue="standalone-local"
-    values={[
-      {label: 'Standalone Local', value: 'standalone-local'},
-      {label: 'Standalone Remote', value: 'standalone-remote'},
-      {label: 'Kubernetes', value: 'kubernetes'},
-    ]}>
+defaultValue="standalone-local"
+values={[
+{label: 'Standalone Local', value: 'standalone-local'},
+{label: 'Standalone Remote', value: 'standalone-remote'},
+{label: 'Kubernetes', value: 'kubernetes'},
+]}>
 <TabItem value="standalone-local">
 
 通过端口转发访问端点
@@ -150,6 +150,12 @@ vela port-forward webservice-app -n default 8080:8080
 
 ```shell
 vela status webservice-app --endpoint
+```
+
+<details>
+  <summary>期望输出</summary>
+
+```shell
 I0816 21:20:08.536617   59163 utils.go:156] find cluster gateway service vela-system/kubevela-cluster-gateway-service:9443
 Please access webservice-app from the following endpoints:
 +---------+-----------+--------------------------+----------------------------+-------+
@@ -158,6 +164,8 @@ Please access webservice-app from the following endpoints:
 | local   | frontend  | Service/default/frontend | http://182.92.178.219:30128 | false |
 +---------+-----------+--------------------------+----------------------------+-------+
 ```
+
+</details>
 
 :::caution 打开端口
 如果你在使用云服务器，请在云服务器的安全组中开放该端口(30128)。
@@ -170,6 +178,11 @@ Please access webservice-app from the following endpoints:
 
 ```shell
 vela status webservice-app --endpoint
+```
+<details>
+  <summary>期望输出</summary>
+
+```shell
 I0816 21:20:08.536617   59163 utils.go:156] find cluster gateway service vela-system/kubevela-cluster-gateway-service:9443
 Please access webservice-app from the following endpoints:
 +---------+-----------+--------------------------+----------------------------+-------+
@@ -178,6 +191,8 @@ Please access webservice-app from the following endpoints:
 | local   | frontend  | Service/default/frontend | http://182.92.178.219:30128 | false |
 +---------+-----------+--------------------------+----------------------------+-------+
 ```
+
+</details>
 
 :::caution 打开端口
 上面命令的输出中，你可以看到 NodePort 类型 Service 对外暴露了集群可用节点的 30128 端口，在从集群外部访问该 URL(182.92.178.219:30128) 之前，
