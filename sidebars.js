@@ -1,4 +1,4 @@
-const {Component} = require('react');
+const { Component } = require('react');
 
 module.exports = {
   docs: [
@@ -252,6 +252,7 @@ module.exports = {
             'contributor/non-code-contribute',
             'contributor/code-contribute',
             'contributor/cli-ref-doc',
+            'contributor/fig-auto-complete',
           ],
         },
         {
