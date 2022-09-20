@@ -26,7 +26,7 @@ module.exports = {
       id: 'start',
       content:
         '<div class="header-item">⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>!⭐️</div>' +
-        '<div class="header-item"><span>KubeVela v1.5.4 is now available.(2022-09-02)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/v1.5.4">Read Release Note</a></div>',
+        '<div class="header-item"><span>KubeVela v1.5.5 is now available.(2022-09-20)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/v1.5.5">Read Release Note</a></div>',
     },
     algolia: {
       appId: 'PXMFHFWUGZ',
@@ -153,7 +153,7 @@ module.exports = {
     },
     prism: {
       theme: require('prism-react-renderer/themes/dracula'),
-      additionalLanguages: ['cue','powershell'],
+      additionalLanguages: ['cue', 'powershell'],
     },
     zoom: {
       selector: '.markdown :not(em) > img',

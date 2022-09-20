@@ -8,6 +8,8 @@ KubeVela has [release cadence](../../contributor/release-process) for every 2-3 
 
 ## From v1.4.x to v1.5.x
 
+> ⚠️ Note: Please upgrade to v1.5.5+ to avoid application workflow rerun when controller upgrade.
+
 1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
 
 ```
@@ -23,24 +25,24 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.4 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.5 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.4
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.5
 ```
 
 4. Upgrade VelaUX or other addon
 
 ```
-vela addon upgrade velaux --version 1.5.4
+vela addon upgrade velaux --version 1.5.5
 ```
 
 ## From v1.3.x to v1.4.x
 
-> ⚠️ Note: You must upgrade to v1.3.x first before you upgrade to v1.4.x from version v1.2.x or older.
+> ⚠️ Note: It may cause application workflow rerun when controller upgrade.
 
 1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
 
@@ -81,6 +83,8 @@ Please note if you're using terraform addon, you should upgrade the `terraform` 
 
 ## From v1.2.x to v1.3.x
 
+> ⚠️ Note: It may cause application workflow rerun when controller upgrade.
+
 1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
 
 ```
@@ -118,6 +122,8 @@ Please note if you're using terraform addon, you should upgrade the `terraform` 
    - 2.2 Upgrade add-on `terraform` to version `1.0.6+`.
 
 ## From v1.1.x to v1.2.x
+
+> ⚠️ Note: It will cause application workflow rerun when controller upgrade.
 
 1. Check the service running normally
 
