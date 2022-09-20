@@ -119,19 +119,19 @@ Export kubeconfig and list all built-in ComponentDefinition:
 <Tabs className="unique-tabs" groupId="os">
   <TabItem label="Linux/macOS" value="unix">
 
-    ```shell
-    export KUBECONFIG=$(velad kubeconfig --host)
-    vela comp
-    ```
+  ```shell
+  export KUBECONFIG=$(velad kubeconfig --host)
+  vela comp
+  ```
 
   </TabItem>
   <TabItem label="Windows" value="win">
 
-    ```powershell
-    $env:PATH += ";$HOME\.vela\bin;"
-    $env:KUBECONFIG = $(velad kubeconfig --host)
-    vela comp
-    ```
+  ```powershell
+  $env:PATH += ";$HOME\.vela\bin;"
+  $env:KUBECONFIG = $(velad kubeconfig --host)
+  vela comp
+  ```
 
   </TabItem>
 </Tabs>
