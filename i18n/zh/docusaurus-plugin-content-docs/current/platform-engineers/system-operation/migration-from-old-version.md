@@ -8,6 +8,8 @@ KubeVela 的[发布周期](../../contributor/release-process)定为每隔 2-3 �
 
 ## 从 v1.4.x 版本 到 v1.5.x 版本
 
+> ⚠️ 注意: 升级到 v1.5.4 及以前的版本可能会触发应用重启，升级到 v1.5.5 可以保证已经正常运行的应用不受影响。
+
 1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
 
 ```
@@ -23,24 +25,24 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.4 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.5 --wait
 ```
 
 3. 下载并升级对应的CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.4
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.5
 ```
 
 4. 升级 VelaUX 或其他插件
 
 ```
-vela addon upgrade velaux --version 1.5.4
+vela addon upgrade velaux --version 1.5.5
 ```
 
 ## 从 v1.3.x 版本 到 v1.4.x 版本
 
-> ⚠️ 注意: 在从 v1.2.x 或更早版本升级到 v1.4.x 之前，你必须先升级到 v1.3.x。
+> ⚠️ 注意: 升级到该版本可能会触发应用重启。
 
 1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
 
@@ -81,6 +83,8 @@ vela addon upgrade velaux --version 1.4.7
 
 ## 从 v1.2.x 版本 到 v1.3.x 版本
 
+> ⚠️ 注意: 升级到该版本可能会触发应用重启。
+
 1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
 
 ```
@@ -118,6 +122,8 @@ vela addon upgrade velaux --version 1.3.6
    - 2.2 将附加组件 `terraform` 升级到版本 `1.0.6+`。
 
 ## 从 v1.1.x 版本到 v1.2.x 版本
+
+> ⚠️ 注意: 升级到该版本会触发应用重启。
 
 1. 检查服务是否正常运行
 
