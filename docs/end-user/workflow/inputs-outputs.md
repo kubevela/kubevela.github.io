@@ -10,9 +10,13 @@ Outputs consists of `name` and `valueFrom`. `name` declares the name of this out
 
 `valueFrom` can be written in the following ways:
 
-1. Fill string value in the field, eg. `valueFrom: "testString"`.
-2. Use CUE expression, eg. `valueFrom: output.value.status.workflow.message`. Note that `output.value.status.workflow.message` will use the value of the variable from the CUE template of the current step. If this field does not exist in the CUE template of the step, the resulting value will be empty.
-3. Use `+` to combine above two ways, the computed value will be the result, eg. `valueFrom: output.value.status.workflow.message + "testString"`.
+1. Use value expression, eg. `valueFrom: output.value.status.workflow.message`. Note that `output.value.status.workflow.message` will use the value of the variable from the CUE template of the current step. If this field does not exist in the CUE template of the step, the resulting value will be empty.
+2. Use CUE expressions, eg. use `+` to combine value and string: `valueFrom: output.metadata.name + "testString"` or you can import built-in packages in CUE like:
+```
+valueFrom: |
+          import "strings"
+          strings.Join(["1","2"], ",")
+```
 
 ## Inputs
 
