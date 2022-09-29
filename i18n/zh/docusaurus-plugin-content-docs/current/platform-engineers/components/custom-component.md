@@ -2,7 +2,7 @@
 title:  自定义组件
 ---
 
-> 在阅读本部分之前，请确保你已经了解 KubeVela 中 [组件定义（ComponentDefinition](../oam/x-definition#组件定义（ComponentDefinition）) 的概念且学习掌握了 [CUE 的基本知识](../cue/basic)
+> 在阅读本部分之前，请确保你已经了解 KubeVela 中 [组件定义（ComponentDefinition)](../oam/x-definition#组件定义（ComponentDefinition）) 的概念且学习掌握了 [CUE 的基本知识](../cue/basic)
 
 本节将以组件定义的例子展开说明，介绍如何使用 [CUE](../cue/basic) 通过组件定义 `ComponentDefinition` 来自定义应用部署计划的组件。
 
@@ -477,5 +477,5 @@ output: {
 
 ## 下一步
 
-* 了解如何基于 CUE [自定义运维特征](../traits/customize-trait) in CUE。
+* 了解如何基于 CUE [自定义运维特征](../traits/customize-trait)。
 * 了解如何为组件和运维特征模块[定义健康状态](../traits/status)。
