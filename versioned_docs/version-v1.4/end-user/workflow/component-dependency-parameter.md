@@ -115,9 +115,13 @@ In KubeVela, we can use inputs and outputs in Components to pass data.
 Outputs is made of `name` and `valueFrom`. Input will use `name` to reference output.
 
 We can write `valueFrom` in the following ways:
-1. Fill string value in the field, eg. `valueFrom: testString`.
-2. Use expression, eg. `valueFrom: output.metadata.name`. Note that `output` is a built-in field referring to the resource in the component that is rendered and deployed to the cluster.
-3. Use `+` to combine above two ways, the computed value will be the result, eg. `valueFrom: output.metadata.name + "testString"`.
+1. Use value expression, eg. `valueFrom: output.metadata.name`. Note that `output` is a built-in field referring to the resource in the component that is rendered and deployed to the cluster.
+2. Use CUE expressions, eg. use `+` to combine value and string: `valueFrom: output.metadata.name + "testString"` or you can import built-in packages in CUE like:
+```
+valueFrom: |
+          import "strings"
+          strings.Join(["1","2"], ",")
+```
 
 ### Inputs
 
