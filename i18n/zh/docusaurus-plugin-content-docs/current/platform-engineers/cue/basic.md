@@ -6,7 +6,7 @@ title:  基础入门
 
 ## 概述
 
-KubeVela 将 CUE 作为应用交付核心依赖和扩展方式的原因如下：：
+KubeVela 将 CUE 作为应用交付核心依赖和扩展方式的原因如下：
 
 - **CUE 本身就是为大规模配置而设计。** CUE 能够感知非常复杂的配置文件，并且能够安全地更改可修改配置中成千上万个对象的值。这非常符合 KubeVela 的目标，即以可编程的方式，去定义和交付生产级别的应用程序。
 -  **CUE 支持一流的代码生成和自动化。** CUE 原生支持与现有工具以及工作流进行集成，反观其他工具则需要自定义复杂的方案才能实现。例如，需要手动使用 Go 代码生成 OpenAPI 模式。KubeVela 也是依赖 CUE 该特性进行构建开发工具和 GUI 界面的。
@@ -505,17 +505,17 @@ output: {
     },
     ]
 
-  dataFrom: [ for _, v in parameter if v.name != "empty" {
-	name: v.name
-  }]
-  ```
-  结果是：
-  ```
-  cue eval ../blog/a.cue -e dataFrom
-  [{
-    name: "xx1"
-  }]
-  ```
+    dataFrom: [ for _, v in parameter if v.name != "empty" {
+      name: v.name
+    }]
+    ```
+    结果是：
+    ```
+    cue eval ../blog/a.cue -e dataFrom
+    [{
+      name: "xx1"
+    }]
+    ```
 
 另外，可以使用 `"\( _my-statement_ )"` 进行字符串内部计算，比如上面类型循环示例中，获取值的长度等等操作。
 
