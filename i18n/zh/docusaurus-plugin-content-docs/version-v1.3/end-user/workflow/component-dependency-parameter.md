@@ -115,9 +115,13 @@ mysql	mysql-secret    	raw 	      	running	healthy	      	2021-10-14 12:09:55 +0
 outputs 由 `name` 和 `valueFrom` 组成。`name` 声明了这个 output 的名称，在 input 中将通过 `name` 引用 output。
 
 `valueFrom` 有以下几种写法：
-1. 直接通过字符串表示值，如：`valueFrom: testString`。
-2. 通过表达式来指定值，如：`valueFrom: output.metadata.name`。注意，`output` 为固定内置字段，指向组件中被部署在集群里的资源。
-3. 通过 `+` 来任意连接以上两种写法，最终值是计算后的字符串拼接结果，如：`valueFrom: output.metadata.name + "testString"`。
+1. 通过指定 value 来指定值，如：`valueFrom: output.metadata.name`。注意，`output` 为固定内置字段，指向组件中被部署在集群里的资源。
+2. 使用 CUE 表达式。如，用 `+` 来连接值和字符串: `valueFrom: output.metadata.name + "testString"`。你也可以引入 CUE 的内置包:
+```
+valueFrom: |
+          import "strings"
+          strings.Join(["1","2"], ",")
+```
 
 ### Inputs
 
