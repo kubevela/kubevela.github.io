@@ -44,9 +44,9 @@ VelaUX 控制台插件支持三种和 Kubernetes 服务一样的服务访问方�
     vela addon enable velaux serviceType=LoadBalancer
     ```
 - `NodePort`方式需要你能够访问 Kubernetes 节点 IP 和 端口。
-    ```shell script
-    vela addon enable velaux serviceType=NodePort
-    ```
+  ```shell script
+  vela addon enable velaux serviceType=NodePort
+  ```
 一旦服务访问方式指定为`LoadBalancer`或者`NodePort`，你可以通过执行`vela status`来获取访问地址：
 ```
 vela status addon-velaux -n vela-system --endpoint
