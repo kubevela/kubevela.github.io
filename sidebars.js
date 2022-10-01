@@ -223,6 +223,12 @@ module.exports = {
           ],
         },
         {
+          Debugging: [
+            'platform-engineers/debug/dry-run',
+            'platform-engineers/debug/debug',
+          ],
+        },
+        {
           'CUE in KubeVela': [
             'platform-engineers/cue/basic',
             'platform-engineers/cue/definition-edit',
@@ -238,12 +244,6 @@ module.exports = {
               ],
             },
             'platform-engineers/system-operation/velaql',
-            {
-              Debugging: [
-                'platform-engineers/debug/dry-run',
-                'platform-engineers/debug/debug',
-              ],
-            },
             'platform-engineers/x-def-version',
           ],
         },
