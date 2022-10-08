@@ -66,7 +66,7 @@ template: {
 		kind:       "Deployment"
 	}
 	outputs: {}
-	parameters: {}
+	parameter: {}
 }
 ```
 
@@ -106,7 +106,7 @@ template: {
 		kind:       "Deployment"
 	}
 	outputs: {}
-	parameters: {
+	parameter: {
     name: string
     image: string
   }
