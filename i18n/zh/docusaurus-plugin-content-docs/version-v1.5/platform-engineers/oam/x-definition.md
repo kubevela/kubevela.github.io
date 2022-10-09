@@ -90,7 +90,7 @@ spec:
 
 具体抽象方式和交付方式的编写可以查阅对应的文档，这里以一个完整的例子介绍组件定义的工作流程。
 
-<detail>
+<details>
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -192,7 +192,7 @@ spec:
           ...
         }
 ```
-</detail>
+</details>
 
 如上所示，这个组件定义的名字叫 `helm`，一经注册，最终用户在 Application 的组件类型（`components[*].type`）字段就可以填写这个类型。
 

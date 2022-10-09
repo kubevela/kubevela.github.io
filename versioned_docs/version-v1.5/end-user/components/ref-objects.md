@@ -2,7 +2,9 @@
 title: Distribute Reference Objects
 ---
 
-> This section requires you to know the basics about how to deploy [multi-cluster application](../../case-studies/multi-cluster) with policy and workflow.
+:::note
+This section requires you to know the basics about how to deploy [multi-cluster application](../../case-studies/multi-cluster) with policy and workflow.
+:::
 
 You can reference and distribute existing Kubernetes objects with KubeVela in the following scenarios:
 

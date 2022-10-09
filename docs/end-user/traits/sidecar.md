@@ -67,6 +67,10 @@ And check the logging output of sidecar.
 ```shell
 vela logs vela-app-with-sidecar -c count-log
 ```
+
+<details>
+<summary>expected output</summary>
+
 ```console
 0: Fri Apr 16 11:08:45 UTC 2021
 1: Fri Apr 16 11:08:46 UTC 2021
@@ -80,3 +84,4 @@ vela logs vela-app-with-sidecar -c count-log
 9: Fri Apr 16 11:08:54 UTC 2021 
 ```
 
+</details>

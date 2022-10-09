@@ -6,9 +6,11 @@ This section describes how to use sub steps in KubeVela.
 
 There is a special step type `step-group` in KubeVela workflow where you can declare sub-steps when using `step-group` type steps.
 
-> Note: In the current version (1.4), sub steps in a step group are executed concurrently.
-> 
-> In future versions (1.5+), you will be able to specify the execution mode of steps and sub-steps.
+:::note
+In the version less or equal than v1.4.x, sub steps in a step group are executed concurrently.
+
+In version 1.5+, you can specify the execution mode of steps and sub-steps.
+:::
 
 Apply the following example:
 

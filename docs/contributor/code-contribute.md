@@ -167,7 +167,9 @@ To run vela-core locally for debugging with kubevela installed in the remote clu
 
 Finally, you can use the commands in the above [Build](#build) and [Testing](#Testing) sections, such as `make run`, to code and debug in your local machine.
 
-> Note you will not be able to test features relate with validating/mutating webhooks in this way.
+:::caution
+Note you will not be able to test features relate with validating/mutating webhooks in this way.
+:::
 
 ## Run VelaUX Locally
 

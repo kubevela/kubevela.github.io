@@ -4,7 +4,9 @@ title: Provision and Binding Database
 
 This tutorial will talk about how to provision and consume Alibaba Cloud RDS (and OSS) by Terraform.
 
-> ⚠️ This section requires your platform engineers have already enabled [cloud resources addon](../../../reference/addons/terraform).
+:::caution
+This section requires your platform engineers have already enabled [cloud resources addon](../../../reference/addons/terraform).
+:::
 
 Let's deploy the [application](https://github.com/kubevela/kubevela/tree/master/docs/examples/terraform/cloud-resource-provision-and-consume/application.yaml)
 below to provision Alibaba Cloud OSS and RDS cloud resources, and consume them by the web component.

@@ -55,10 +55,10 @@ See [this document](https://kubevela.net/docs/install#1-install-velad) for more 
 - Enable related addon
 
 ```shell
-$ vela addon enable fluxcd
-$ vela addon enable ingress-nginx
-$ vela addon enable kruise-rollout
-$ vela addon enable velaux
+vela addon enable fluxcd
+vela addon enable ingress-nginx
+vela addon enable kruise-rollout
+vela addon enable velaux
 ```
 
 In this step, the following addons are started:
@@ -70,7 +70,7 @@ In this step, the following addons are started:
 - Map the Nginx ingress-controller port to local
 
 ```shell
-$ vela port-forward addon-ingress-nginx -n vela-system
+vela port-forward addon-ingress-nginx -n vela-system
 ```
 
 ### First Deployment
