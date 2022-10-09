@@ -99,6 +99,7 @@ Services:
     Healthy Ready:1/1
     No trait applied
 ```
+</details>
 
 可以看到，当第一个步骤执行完成之后，会开始执行 `suspend` 步骤。而这个步骤会让工作流进入暂停状态。
 
@@ -245,7 +246,7 @@ vela status auto-resume
 ```
 
 <details>
-  <summary>期望输出</summary>
+<summary>期望输出</summary>
 
 ```
 About:
@@ -292,6 +293,7 @@ Services:
     Healthy Ready:1/1
     No trait applied
 ```
+
 </details>
 
 可以看到，`suspend` 步骤在五秒后自动执行成功，继续了工作流。

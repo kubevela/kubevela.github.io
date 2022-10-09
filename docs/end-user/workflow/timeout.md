@@ -2,7 +2,9 @@
 title:  Timeout of Step
 ---
 
-> Note: You need to upgrade to version 1.5 or above to use the timeout.
+:::note
+You need to upgrade to version 1.5+ to use the timeout feature.
+:::
 
 This section introduces how to add timeout to workflow steps in KubeVela.
 
