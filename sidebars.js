@@ -127,7 +127,7 @@ module.exports = {
           items: ['end-user/gitops/fluxcd'],
         },
         {
-          'Delivery Policies': [
+          'CD Policies': [
             'end-user/policies/shared-resource',
             'end-user/policies/apply-once',
             'end-user/policies/gc',
@@ -307,8 +307,11 @@ module.exports = {
         {
           type: 'category',
           label: 'Community Verified Addons',
+          link: {
+            type: "doc",
+            id: 'reference/addons/overview'
+          },
           items: [
-            'reference/addons/overview',
             'reference/addons/velaux',
             'reference/addons/rollout',
             'reference/addons/fluxcd',

@@ -259,7 +259,10 @@ EOF
 ```
 
 This Rollout Trait represents it will scale workload up to 7. You also can set every batch's number by setting `rolloutBatches`.
-Notice: A known issue exists if you scale up/down the workload twice or more times by not setting the `rolloutBatches`.So please set the `rolloutBatches` when scale up/down.
+
+:::danger
+A known issue exists if you scale up/down the workload twice or more times by not setting the `rolloutBatches`.So please set the `rolloutBatches` when scale up/down.
+:::
 
 Check the status after expansion has been succeed.
 ```shell

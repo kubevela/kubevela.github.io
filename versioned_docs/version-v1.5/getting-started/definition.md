@@ -164,7 +164,9 @@ Application is also one kind of Kubernetes CRD, you can also use `kubectl apply`
 
 ### Customize
 
-> **⚠️ In most cases, you don't need to customize any definitions unless you're going to extend the capability of KubeVela. Before that, you should check the built-in definitions and addons to confirm if they can fit your needs.**
+:::caution
+In most cases, you don't need to customize any definitions **unless you're going to extend the capability of KubeVela**. Before that, you should check the built-in definitions and addons to confirm if they can fit your needs.
+:::
 
 A new definition is built in a declarative template in [CUE configuration language](https://cuelang.org/). If you're not familiar with CUE, you can refer to [CUE Basic](../platform-engineers/cue/basic) for some knowledge. 
 

@@ -7,7 +7,9 @@ import TabItem from '@theme/TabItem';
 
 ## Upgrade
 
-> If you're trying to upgrade from a big version later (e.g. from 1.2.x to 1.4.x), please refer to [version migration](./system-operation/migration-from-old-version) for more guides.
+:::caution
+If you're trying to upgrade from a big version later (e.g. from 1.2.x to 1.4.x), please refer to [version migration](./system-operation/migration-from-old-version) for more guides.
+:::
 
 ### 1. Upgrade CLI
 
@@ -30,7 +32,9 @@ curl -fsSl https://kubevela.io/script/install.sh | bash
 
 **Windows**
 
-> Only the official release version is supported.
+:::tip
+Pre-release versions will not be listed.
+:::
 
 ```shell script
 powershell -Command "iwr -useb https://kubevela.io/script/install.ps1 | iex"
@@ -63,10 +67,12 @@ brew install kubevela
 sudo mv ./vela /usr/local/bin/vela
 ```
 
-> [Installation Tips](https://github.com/kubevela/kubevela/issues/625):
-> If you are using a Mac system, it will pop up a warning that "vela" cannot be opened because the package from the developer cannot be verified.
->
-> MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
+:::caution
+[Installation Tips](https://github.com/kubevela/kubevela/issues/625):
+If you are using a Mac system, it will pop up a warning that "vela" cannot be opened because the package from the developer cannot be verified.
+
+MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
+:::
 
 </TabItem>
 
@@ -83,7 +89,9 @@ docker pull oamdev/vela-cli:latest
 
 ### 2. Upgrade Vela Core
 
-> Please make sure you already upgraded the Vela CLI to latest stable version.
+:::note
+Please make sure you already upgraded the Vela CLI to latest stable version.
+:::
 
 ```shell
 vela install
@@ -95,7 +103,9 @@ vela install
 vela addon enable velaux
 ```
 
-> If you set custom parameters during installation, be sure to include the corresponding parameters.
+:::tip
+You can use advanced parameters provided by [addons](../reference/addons/overview).
+:::
 
 ## Uninstall
 

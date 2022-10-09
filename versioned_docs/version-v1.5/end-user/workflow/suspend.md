@@ -10,12 +10,17 @@ In KubeVela, you can choose to use the `vela` command to manually suspend the ex
 
 ### Suspend Manually
 
-If you have a running application and you want to suspend its execution, you can use `vela workflow suspend` to suspend the workflow.
+If you have an application in `runningWorkflow` state, you want to stop the execution of the workflow, you can use `vela workflow suspend` to stop the workflow and use `vela workflow resume` to continue it.
+
+* Suspend the application
 
 ```bash
-$ vela workflow suspend my-app
-Successfully suspend workflow: my-app
+vela workflow suspend my-app
 ```
+
+:::tip
+Nothing will happen if you suspend an application that has already finished running workflow, which is in `running` status.
+:::
 
 ### Use Suspend Step
 
@@ -25,7 +30,7 @@ Apply the following example:
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: suspend
+  name: suspend-demo
   namespace: default
 spec:
   components:
@@ -56,10 +61,16 @@ spec:
 Use `vela status` to check the status of the Application:
 
 ```bash
-$ vela status suspend
+vela status suspend-demo
+```
+
+<details>
+  <summary>expected output</summary>
+
+```
 About:
 
-  Name:      	suspend
+  Name:      	suspend-demo
   Namespace: 	default
   Created at:	2022-06-27 17:36:58 +0800 CST
   Status:    	workflowSuspending
@@ -75,12 +86,10 @@ Workflow:
     name:apply1
     type:apply-component
     phase:succeeded
-    message:
   - id:xvmda4he5e
     name:suspend
     type:suspend
     phase:running
-    message:
 
 Services:
 
@@ -90,6 +99,7 @@ Services:
     Healthy Ready:1/1
     No trait applied
 ```
+</details>
 
 As you can see, when the first step is completed, the `suspend` step will be executed and this step will suspend the workflow.
 
@@ -102,17 +112,22 @@ Once the workflow is suspended, you can use the `vela workflow resume` command t
 Take the above suspended application as an example:
 
 ```bash
-$ vela workflow resume suspend
-Successfully resume workflow: suspend
+vela workflow resume suspend-demo
 ```
 
 After successfully continuing the workflow, view the status of the app:
 
 ```bash
-$ vela status suspend
+vela status suspend-demo
+```
+
+<details>
+  <summary>expected output</summary>
+
+```
 About:
 
-  Name:      	suspend
+  Name:      	suspend-demo
   Namespace: 	default
   Created at:	2022-06-27 17:36:58 +0800 CST
   Status:    	running
@@ -154,6 +169,7 @@ Services:
     Healthy Ready:1/1
     No trait applied
 ```
+</details>
 
 As you can see, the workflow has continued to execute.
 
@@ -161,10 +177,27 @@ As you can see, the workflow has continued to execute.
 
 If you want to terminate a workflow while it is suspended, you can use the `vela workflow terminate` command to terminate the workflow.
 
+* Terminate the application workflow
+
 ```bash
-$ vela workflow terminate my-app
-Successfully terminate workflow: my-app
+vela workflow terminate my-app
 ```
+
+:::tip
+Different from suspend, the terminated application workflow can't be resumed, you can only restart the workflow. This means restart the workflow will execute the workflow steps from scratch while resume workflow only continue the unfinished steps.
+:::
+
+* Restart the application workflow
+
+```bash
+vela workflow restart my-app
+```
+
+:::caution
+Once application is terminated, KubeVela controller won't reconcile the application resources. It can also be used in some cases when you want to manually operate the underlying resources, please caution the configuration drift.
+:::
+
+Once application come into `running` status, it can't be terminated or restarted. 
 
 ### Resume the Workflow Automatically
 
@@ -209,7 +242,13 @@ spec:
 Use `vela status` to check the status of the Application:
 
 ```bash
-$ vela status auto-resume
+vela status auto-resume
+```
+
+<details>
+  <summary>expected output</summary>
+
+```
 About:
 
   Name:      	auto-resume
@@ -254,5 +293,6 @@ Services:
     Healthy Ready:1/1
     No trait applied
 ```
+</details>
 
 As you can see, the `suspend` step is automatically executed successfully after five seconds, and the workflow is executed successfully.

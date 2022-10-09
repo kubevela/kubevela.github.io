@@ -9,14 +9,13 @@ For more details, please refer to: [Kruise Rollout](https://github.com/openkruis
 ## Installation
 
 ```shell
-$ vela addon enable kruise-rollout
-Addon: kruise-rollout enabled Successfully.
+vela addon enable kruise-rollout
 ```
 
 ## Uninstallation
 
 ```shell
-$ vela addon disable kruise-rollout
+vela addon disable kruise-rollout
 ```
 
 ## Usage

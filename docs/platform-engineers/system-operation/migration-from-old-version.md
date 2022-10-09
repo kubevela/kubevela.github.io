@@ -8,7 +8,9 @@ KubeVela has [release cadence](../../contributor/release-process) for every 2-3 
 
 ## From v1.4.x to v1.5.x
 
-> ⚠️ Note: Please upgrade to v1.5.5+ to avoid application workflow rerun when controller upgrade.
+:::caution
+Note: Please upgrade to v1.5.5+ to avoid application workflow rerun when controller upgrade.
+:::
 
 1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
 
@@ -42,7 +44,9 @@ vela addon upgrade velaux --version 1.5.5
 
 ## From v1.3.x to v1.4.x
 
-> ⚠️ Note: It may cause application workflow rerun when controller upgrade.
+:::danger
+Note: It may cause application workflow rerun when controller upgrade.
+:::
 
 1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
 
@@ -83,7 +87,9 @@ Please note if you're using terraform addon, you should upgrade the `terraform` 
 
 ## From v1.2.x to v1.3.x
 
-> ⚠️ Note: It may cause application workflow rerun when controller upgrade.
+:::danger
+Note: It may cause application workflow rerun when controller upgrade.
+:::
 
 1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
 
@@ -123,7 +129,9 @@ Please note if you're using terraform addon, you should upgrade the `terraform` 
 
 ## From v1.1.x to v1.2.x
 
-> ⚠️ Note: It will cause application workflow rerun when controller upgrade.
+:::danger
+Note: It will cause application workflow rerun when controller upgrade.
+:::
 
 1. Check the service running normally
 

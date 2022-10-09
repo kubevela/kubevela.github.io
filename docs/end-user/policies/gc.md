@@ -10,8 +10,10 @@ In garbage-collect policy, there are two major capabilities you can use.
 
 Suppose you want to keep the resources created by the old version of the application. Use the garbage-collect policy and enable the option `keepLegacyResource`.
 
-```yaml
-# app.yaml
+1. create app
+
+```shell
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -24,9 +26,10 @@ spec:
         image: oamdev/hello-world
         port: 8000
       traits:
-        - type: ingress-1-20
+        - type: gateway
           properties:
-            domain: testsvc.example.com
+            class: traefik
+            domain: 47.251.8.82.nip.io
             http:
               "/": 8000
   policies:
@@ -34,24 +37,31 @@ spec:
       type: garbage-collect
       properties:
         keepLegacyResource: true
+EOF
 ```
 
-1. create app
-
-``` shell
-vela up -f app.yaml
-```
+Check the status:
 
 ```shell
-$ vela ls
-APP             COMPONENT       TYPE            TRAITS          PHASE   HEALTHY STATUS          CREATED-TIME                 
-first-vela-app  express-server  webservice      ingress-1-20    running healthy Ready:1/1       2022-04-06 16:20:25 +0800 CST
+vela status first-vela-app --tree
 ```
+
+<details>
+<summary>expected output</summary>
+
+```
+CLUSTER       NAMESPACE     RESOURCE                  STATUS
+local     ─── default   ─┬─ Service/express-server    updated
+                         ├─ Deployment/express-server updated
+                         └─ Ingress/express-server    updated
+```
+</details>
+
 
 2. update the app
 
 ```yaml
-# app1.yaml
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -64,9 +74,10 @@ spec:
         image: oamdev/hello-world
         port: 8000
       traits:
-        - type: ingress-1-20
+        - type: gateway
           properties:
-            domain: testsvc.example.com
+            class: traefik
+            domain: 47.251.8.82.nip.io
             http:
               "/": 8000
   policies:
@@ -74,50 +85,30 @@ spec:
       type: garbage-collect
       properties:
         keepLegacyResource: true
+EOF
 ```
 
-``` shell
-vela up -f app1.yaml
-```
+Check the status again:
 
 ```shell
-$ vela ls
-APP             COMPONENT               TYPE            TRAITS          PHASE   HEALTHY STATUS          CREATED-TIME                 
-first-vela-app  express-server-1        webservice      ingress-1-20    running healthy Ready:1/1       2022-04-06 16:20:25 +0800 CST
+vela status first-vela-app --tree
 ```
 
-check whether legacy resources are reserved.
+<details>
+<summary>expected output</summary>
 
-> In the following steps, we'll use `kubectl` command to do some verification. You can also use `vela status first-vela-app` to check the aggregated application status and see if components are healthy.
+```shell
+CLUSTER       NAMESPACE     RESOURCE                    STATUS
+local     ─── default   ─┬─ Service/express-server      outdated
+                         ├─ Service/express-server-1    updated
+                         ├─ Deployment/express-server   outdated
+                         ├─ Deployment/express-server-1 updated
+                         ├─ Ingress/express-server      outdated
+                         └─ Ingress/express-server-1    updated
+```
+</details>
 
-```
-$ kubectl get deploy
-NAME               READY   UP-TO-DATE   AVAILABLE   AGE
-express-server     1/1     1            1           10m
-express-server-1   1/1     1            1           40s
-```
-
-```
-$ kubectl get svc
-NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-express-server     ClusterIP   10.96.102.249   <none>        8000/TCP   10m
-express-server-1   ClusterIP   10.96.146.10    <none>        8000/TCP   46s
-```
-
-```
-$ kubectl get ingress
-NAME               CLASS    HOSTS                 ADDRESS   PORTS   AGE
-express-server     <none>   testsvc.example.com             80      10m
-express-server-1   <none>   testsvc.example.com             80      50s
-```
-
-```
-$ kubectl get resourcetracker
-NAME                        AGE
-first-vela-app-default      12m
-first-vela-app-v1-default   12m
-first-vela-app-v2-default   2m56s
-```
+You can see the legacy resources are reserved but the status is outdated, it will not be synced by periodically reconciliation.
 
 3. delete the app
 
@@ -127,20 +118,21 @@ $ vela delete first-vela-app
 
 > If you hope to delete resources in one specified version, you can run `kubectl delete resourcetracker first-vela-app-v1-default`. 
 
-## Persist resources
+## Persist partial resources
 
-You can also persist some resources, which skips the normal garbage-collect process when the application is updated.
+You can also persist part of the resources, which skips the normal garbage-collect process when the application is updated.
 
 Take the following app as an example, in the garbage-collect policy, a rule is added which marks all the resources created by the `expose` trait to use the `onAppDelete` strategy. This will keep those services until application is deleted.
+
 ```shell
-$ cat <<EOF | vela up -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: garbage-collect-app
 spec:
   components:
-    - name: hello-world
+    - name: demo-gc
       type: webservice
       properties:
         image: oamdev/hello-world
@@ -161,6 +153,7 @@ EOF
 ```
 
 You can find deployment and service created.
+
 ```shell
 $ kubectl get deployment
 NAME          READY   UP-TO-DATE   AVAILABLE   AGE
@@ -171,8 +164,9 @@ hello-world   ClusterIP   10.96.160.208   <none>        8000/TCP   78s
 ```
 
 If you upgrade the application and use a different component, you will find the old versioned deployment is deleted but the service is kept.
+
 ```shell
-$ cat <<EOF | vela up -f -
+cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:

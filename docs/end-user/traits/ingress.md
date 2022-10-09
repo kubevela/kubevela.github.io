@@ -105,6 +105,7 @@ Hello World
 </xmp>
 ```
 
-> ⚠️ This section requires your runtime cluster has a working ingress controller.
-
+:::caution
+This section requires your runtime cluster has a working ingress controller.
+:::
 

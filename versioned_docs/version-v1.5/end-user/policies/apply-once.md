@@ -1,5 +1,5 @@
 ---
-title: One-time Delivery(Working With Other Controllers)
+title: One-time Delivery (Coordinate with Multi-Controllers)
 ---
 
 By default, the KubeVela controller will prevent configuration drift for applied resources by reconciling them routinely. This is useful if you want to keep your application always having the desired configuration to avoid some unintentional changes by external modifiers.
