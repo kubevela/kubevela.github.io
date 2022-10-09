@@ -132,7 +132,9 @@ Once addon installed, end user can discover and use these capabilities immediate
 
 ### Uninstall Addon
 
-> Please make sure the addon along with its capabilities is no longer used in any of your applications before uninstalling it.
+:::danger
+Please make sure the addon along with its capabilities is no longer used in any of your applications before uninstalling it.
+:::
 
 ```shell
 vela addon disable fluxcd

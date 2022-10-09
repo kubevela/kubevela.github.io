@@ -10,12 +10,17 @@ title:  暂停和继续
 
 ### 手动暂停
 
-如果你有一个正在运行的应用，并且你希望暂停它的执行，你可以使用 `vela workflow suspend` 来暂停该工作流。
+如果你有一个正在运行工作流的应用，并且你希望暂停它的执行，你可以使用 `vela workflow suspend` 来暂停该工作流，在未来可以通过 `vela workflow resume` 继续工作流。
+
+* 暂停工作流
 
 ```bash
-$ vela workflow suspend my-app
-Successfully suspend workflow: my-app
+vela workflow suspend my-app
 ```
+
+:::tip
+如果工作流已经执行完毕，对应用使用 `vela workflow suspend` 命令不会产生任何效果。
+:::
 
 ### 使用暂停步骤
 
@@ -25,7 +30,7 @@ Successfully suspend workflow: my-app
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: suspend
+  name: suspend-demo
   namespace: default
 spec:
   components:
@@ -56,10 +61,16 @@ spec:
 使用 vela status 命令查看应用状态：
 
 ```bash
-$ vela status suspend
+vela status suspend-demo
+```
+
+<details>
+  <summary>期望输出</summary>
+
+```
 About:
 
-  Name:      	suspend
+  Name:      	suspend-demo
   Namespace: 	default
   Created at:	2022-06-27 17:36:58 +0800 CST
   Status:    	workflowSuspending
@@ -75,12 +86,10 @@ Workflow:
     name:apply1
     type:apply-component
     phase:succeeded
-    message:
   - id:xvmda4he5e
     name:suspend
     type:suspend
     phase:running
-    message:
 
 Services:
 
@@ -102,17 +111,22 @@ Services:
 以上面处于暂停状态的应用为例：
 
 ```bash
-$ vela workflow resume suspend
-Successfully resume workflow: suspend
+vela workflow resume suspend-demo
 ```
 
 成功继续工作流后，查看应用的状态：
 
 ```bash
-$ vela status suspend
+vela status suspend-demo
+```
+
+<details>
+  <summary>期望输出</summary>
+
+```
 About:
 
-  Name:      	suspend
+  Name:      	suspend-demo
   Namespace: 	default
   Created at:	2022-06-27 17:36:58 +0800 CST
   Status:    	running
@@ -154,6 +168,7 @@ Services:
     Healthy Ready:1/1
     No trait applied
 ```
+</details>
 
 可以看到，工作流已经继续执行完毕。
 
@@ -161,10 +176,27 @@ Services:
 
 当工作流处于暂停状态时，如果你想终止它，你可以使用 `vela workflow terminate` 命令来终止工作流。
 
+* 终止工作流
+
 ```bash
-$ vela workflow terminate my-app
-Successfully terminate workflow: my-app
+vela workflow terminate my-app
 ```
+
+:::tip
+区别于暂停，终止的工作流不能继续执行，只能重新运行工作流。重新运行意味着工作流会重新开始执行所有工作流步骤，而继续工作流则是从暂停的步骤后面继续执行。
+:::
+
+* 重新运行工作流
+
+```bash
+vela workflow restart my-app
+```
+
+:::caution
+一旦应用被终止，KubeVela 控制器不会再对资源做状态维持，你可以对底层资源做手动修改但请注意防止配置漂移。
+:::
+
+工作流执行完毕进入正常运行状态的应用无法被终止或重新运行。
 
 ### 自动继续工作流
 
@@ -209,7 +241,13 @@ spec:
 查看应用状态：
 
 ```bash
-$ vela status auto-resume
+vela status auto-resume
+```
+
+<details>
+  <summary>期望输出</summary>
+
+```
 About:
 
   Name:      	auto-resume
@@ -254,5 +292,6 @@ Services:
     Healthy Ready:1/1
     No trait applied
 ```
+</details>
 
 可以看到，`suspend` 步骤在五秒后自动执行成功，继续了工作流。

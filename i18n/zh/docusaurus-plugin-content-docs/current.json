@@ -310,7 +310,7 @@
   "sidebar.docs.category.Kubernetes Manifest CD": {
     "message": "Kubernetes 资源交付"
   },
-  "sidebar.docs.category.Delivery Policies": {
+  "sidebar.docs.category.CD Policies": {
     "message": "资源交付策略"
   },
   "sidebar.docs.category.UX Customization": {

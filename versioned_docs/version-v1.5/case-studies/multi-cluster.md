@@ -31,7 +31,9 @@ cluster-hangzhou-1      X509Certificate <ENDPOINT_HANGZHOU_1>   true
 cluster-hangzhou-2      X509Certificate <ENDPOINT_HANGZHOU_2>   true                  
 ```
 
-> By default, the hub cluster where KubeVela locates is registered as the `local` cluster. You can use it like a managed cluster in spite that you cannot detach it or modify it.
+:::note
+By default, the hub cluster where KubeVela locates is registered as the `local` cluster. You can use it like a managed cluster in spite that you cannot detach it or modify it.
+:::
 
 ## Deliver Application to Clusters
 
@@ -197,8 +199,9 @@ spec:
         namespace: examples-alternative
 ```
 
-> Sometimes, for security issues, you might want to disable this behavior and retrict the resources to be deployed within the same namespace of the application. This can be done by setting `--allow-cross-namespace-resource=false` in the bootstrap parameter of the KubeVela controller.
-
+:::tip
+Sometimes, for security issues, you might want to disable this behavior and retrict the resources to be deployed within the same namespace of the application. This can be done by setting `--allow-cross-namespace-resource=false` in the [bootstrap parameter](../platform-engineers/system-operation/bootstrap-parameters) of the KubeVela controller.
+:::
 
 ### Control the deploy workflow
 
@@ -336,7 +339,9 @@ spec:
           policies: ["topology-hangzhou-clusters", "override-nginx-legacy-image", "override-high-availability"]
 ```
 
-> NOTE: The override policy is used to modify the basic configuration. Therefore, **it is designed to be used together with topology policy**. If you do not want to use topology policy, you can directly write configurations in the component part instead of using the override policy. *If you misuse the override policy in the deploy workflow step without topology policy, no error will be reported but you will find nothing is deployed.*
+:::note
+The override policy is used to modify the basic configuration. Therefore, **it is designed to be used together with topology policy**. If you do not want to use topology policy, you can directly write configurations in the component part instead of using the override policy. *If you misuse the override policy in the deploy workflow step without topology policy, no error will be reported but you will find nothing is deployed.*
+:::
 
 The override policy has many advanced capabilities, such as adding new component or selecting components to use.
 The following example will first deploy an nginx webservice with `nginx:1.20` image to local cluster. Then two nginx webservices with `nginx` and `nginx:stable` images will be deployed to hangzhou clusters respectively.
@@ -399,7 +404,9 @@ spec:
 Sometimes, you may want to use the same policy across multiple applications or reuse previous workflow to deploy different resources.
 To reduce the repeated code, you can leverage the external policies and workflow and refer to them in your applications.
 
-> NOTE: you can only refer to Policy and Workflow within your application's namespace.
+:::caution
+You can only refer to Policy and Workflow within your application's namespace.
+:::
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha1
@@ -455,7 +462,11 @@ spec:
     ref: make-release-in-hangzhou
 ```
 
-> NOTE: The internal policies will be loaded first. External policies will only be used when there is no corresponding policy inside the application. In the following example, we can reuse `topology-hangzhou-clusters` policy and `make-release-in-hangzhou` workflow but modify the `override-high-availability-webservice` policy by injecting the same-named policy inside the new application.
+:::note
+The internal policies will be loaded first. External policies will only be used when there is no corresponding policy inside the application.
+:::
+
+In the following example, we can reuse `topology-hangzhou-clusters` policy and `make-release-in-hangzhou` workflow but modify the `override-high-availability-webservice` policy by injecting the same-named policy inside the new application.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

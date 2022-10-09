@@ -9,8 +9,7 @@ title: 金丝雀发布
 1. 通过如下命令启用 [`kruise-rollout`](../../reference/addons/kruise-rollout) 插件，金丝雀发布依赖于 [rollouts from OpenKruise](https://github.com/openkruise/rollouts).
    
    ```shell
-   $ vela addon enable kruise-rollout
-   Addon: kruise-rollout enabled Successfully.
+   vela addon enable kruise-rollout
    ```
 
 2. 请确保在集群中至少安装一种 [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/)。

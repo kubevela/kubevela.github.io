@@ -8,8 +8,7 @@ In this section, we will introduce how to canary rollout a container service.
 
 1. Enable [`kruise-rollout`](../../reference/addons/kruise-rollout) addon, our canary rollout capability relies on the [rollouts from OpenKruise](https://github.com/openkruise/rollouts).
   ```shell
-  $ vela addon enable kruise-rollout
-  Addon: kruise-rollout enabled Successfully.
+  vela addon enable kruise-rollout
   ```
 
 2. Please make sure one of the [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/) is available in your cluster.

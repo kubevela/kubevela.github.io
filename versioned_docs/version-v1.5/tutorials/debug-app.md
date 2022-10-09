@@ -114,7 +114,7 @@ Please access first-vela-app from the following endpoints:
 
 </details>
 
--- `vela status --tree --detail` can list resources of your application.
+- `vela status --tree --detail` can list resources of your application.
 
 ```
 vela status first-vela-app --tree --detail
@@ -143,10 +143,8 @@ vela logs first-vela-app
 <summary>expected output</summary>
 
 ```
-? You have 2 deployed resources in your app. Please choose one: Cluster: cluster-hangzhou-1 | Namespace: examples | Kind: Deployment | Name: nginx-basic
-+ nginx-basic-dfb6dcf8d-km5vk › nginx-basic
-nginx-basic-dfb6dcf8d-km5vk nginx-basic 2022-04-08T06:38:10.540430392Z /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
-nginx-basic-dfb6dcf8d-km5vk nginx-basic 2022-04-08T06:38:10.540742240Z /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
++ express-server-b768d95b7-qnwb4 › express-server
+express-server 2022-10-09T12:10:33.785549770+08:00 httpd started
 ```
 
 </details>
@@ -156,17 +154,14 @@ nginx-basic-dfb6dcf8d-km5vk nginx-basic 2022-04-08T06:38:10.540742240Z /docker-e
 - `vela exec` helps you execute commands in pods in managed clusters.
 
 ```bash
-vela exec basic-topology -n examples -it -- ls 
+vela exec first-vela-app -it -- ls
 ```
 
 <details>
 <summary>expected output</summary>
 
 ```
-? You have 2 deployed resources in your app. Please choose one: Cluster: cluster-hangzhou-1 | Namespace: examples | Kind: Deployment | Name: nginx-basic
-bin   docker-entrypoint.d   home   media  proc  sbin  tmp
-boot  docker-entrypoint.sh  lib    mnt    root  srv   usr
-dev   etc                   lib64  opt    run   sys   var
+bin   dev   etc   home  proc  root  sys   tmp   usr   var   www
 ```
 
 </details>
@@ -175,23 +170,11 @@ dev   etc                   lib64  opt    run   sys   var
 
 - `vela port-forward` can discover and forward ports of pods or services in managed clusters to your local endpoint. 
 
-```bash
-vela port-forward basic-topology -n examples 8080:80
+```
+vela port-forward first-vela-app 8001:8000
 ```
 
-<details>
-<summary>expected output</summary>
-
-```
-? You have 4 deployed resources in your app. Please choose one: Cluster: cluster-hangzhou-1 | Namespace: examples | Kind: Deployment | Name: nginx-basic
-Forwarding from 127.0.0.1:8080 -> 80
-Forwarding from [::1]:8080 -> 80
-
-Forward successfully! Opening browser ...
-Handling connection for 8080
-```
-
-</details>
+You can curl this app by `curl http://127.0.0.1:8001/`.
 
 ## More CLI Details
 

@@ -4,7 +4,9 @@ title: Component Orchestration
 
 This section will introduce the dependencies in components and how to pass data between components.
 
-> We use `helm` component type in the following examples, make sure you have the `fluxcd` addon enabled (`vela addon enable fluxcd`).
+:::tip
+We use `helm` component type in the following examples, make sure you have the `fluxcd` addon enabled (`vela addon enable fluxcd`).
+:::
 
 ## Dependency
 
@@ -99,9 +101,9 @@ mysql	mysql-secret    	raw 	      	running	healthy	      	2021-10-14 12:09:55 +0
 
 After a while, all components is running successfully. The `mysql-cluster` will be deployed after `mysql-controller` and `mysql-secret` is `healthy`.
 
-> `dependsOn` use `healthy` to check status. If the component is `healthy`, then KubeVela will deploy the next component.
-> If you want to customize the healthy status of the component, please refer to [Status Write Back](../../platform-engineers/traits/status)
-
+:::info
+`dependsOn` use `healthy` to check status. If the component is `healthy`, then KubeVela will deploy the next component. If you want to customize the healthy status of the component, please refer to [Status Write Back](../../platform-engineers/traits/status)
+:::
 
 ## Inputs and Outputs
 

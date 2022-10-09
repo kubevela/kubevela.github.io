@@ -31,7 +31,9 @@ contains the following attributes: name, character_set, description.
 
 Applying the following application can create more than one database in an RDS instance.
 
-> ⚠️ This section requires your platform engineers have already enabled [cloud resources addon](../../../reference/addons/terraform).
+:::caution
+This section requires your platform engineers have already enabled [cloud resources addon](../../../reference/addons/terraform).
+:::
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
