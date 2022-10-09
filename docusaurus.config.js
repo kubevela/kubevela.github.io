@@ -169,6 +169,12 @@ module.exports = {
     [
       '@docusaurus/preset-classic',
       {
+        sitemap: {
+          changefreq: 'weekly',
+          priority: 0.5,
+          ignorePatterns: ['/tags/**'],
+          filename: 'sitemap.xml',
+        },
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: function ({ locale, docPath }) {
