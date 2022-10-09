@@ -1,5 +1,5 @@
 ---
-title: Multi Environment Delivery
+title: Delivery across Multi Environments
 ---
 
 Environments represent your deployment targets logically (QA, Prod, etc). You can add the same Environment to as many Targets as you need.
