@@ -4,9 +4,11 @@ title:  Dependency
 
 This section will introduce how to specify dependencies for workflow steps.
 
-> Note: In the current version (1.4), the steps in the workflow are executed sequentially, which means that there is an implicit dependency between steps, ie: the next step depends on the successful execution of the previous step. At this point, specifying dependencies in the workflow may not make much sense.
-> 
-> In future versions (1.5+), you will be able to display the execution method of the specified workflow steps (eg: change to DAG parallel execution). At this time, you can control the execution of the workflow by specifying the dependencies of the steps.
+:::note
+In the version <=1.4, the steps in the workflow are executed sequentially, which means that there is an implicit dependency between steps, ie: the next step depends on the successful execution of the previous step. At this point, specifying dependencies in the workflow may not make much sense.
+
+In versions 1.5+, you can display the execution method of the specified workflow steps (eg: change to DAG parallel execution). At this time, you can control the execution of the workflow by specifying the dependencies of the steps.
+:::
 
 ## How to use
 

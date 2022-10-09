@@ -23,36 +23,38 @@ title: 自动化可观测性
 
 要启用插件套件，只需运行 `vela addon enable` 命令，如下所示。
 
-> 如果你的 KubeVela 是多集群场景，请参阅下面的 [多集群安装](#多集群安装) 章节。
+:::tip
+如果你的 KubeVela 是多集群场景，请参阅下面的 [多集群安装](#多集群安装) 章节。
+:::
 
 1. 安装 kube-state-metrics 插件
 
 ```shell
-> vela addon enable kube-state-metrics
+vela addon enable kube-state-metrics
 ```
 
 2. 安装 node-exporter 插件
 
 ```shell
-> vela addon enable node-exporter
+vela addon enable node-exporter
 ```
 
 3. 安装 prometheus-server
 
 ```shell
-> vela addon enable prometheus-server
+vela addon enable prometheus-server
 ```
 
 4. 安装 grafana 插件
 
 ```shell
-> vela addon enable grafana
+vela addon enable grafana
 ```
 
 5. 通过端口转发访问 grafana
 
 ```shell
-> kubectl port-forward svc/grafana -n o11y-system 8080:3000
+kubectl port-forward svc/grafana -n o11y-system 8080:3000
 ```
 
 现在在浏览器中访问 `http://localhost:8080` 就可以访问你的 grafana。 默认的用户名和密码分别是 `admin` 和 `kubevela`。
@@ -178,7 +180,7 @@ URL: http://localhost:8080/d/kubernetes-apiserver/kubernetes-apiserver
 默认情况下，`kube-state-metrics`、`node-exporter` 和 `prometheus-server` 的安装过程原生支持多集群（它们将自动安装到所有集群）。 但是要让控制平面上的 `grafana` 能够访问托管集群中的 prometheus-server，你需要使用以下命令来启用 `prometheus-server`。
 
 ```shell
-> vela addon enable prometheus-server thanos=true serviceType=LoadBalancer
+vela addon enable prometheus-server thanos=true serviceType=LoadBalancer
 ```
 
 这将安装 [thanos](https://github.com/thanos-io/thanos) sidecar 和 prometheus-server。 然后启用 grafana，你将能够看到聚合的 prometheus 指标。
@@ -186,7 +188,7 @@ URL: http://localhost:8080/d/kubernetes-apiserver/kubernetes-apiserver
 你还可以使用以下命令选择要在哪个集群安装插件：
 
 ```shell
-> vela addon enable kube-state-metrics clusters=\{local,c2\}
+vela addon enable kube-state-metrics clusters=\{local,c2\}
 ```
 
 > 如果在安装插件后将新集群添加到控制平面，则需要重新启用插件才能使其生效。
@@ -234,7 +236,7 @@ spec:
 然后你需要在 prometheus-server 插件的启用过程中添加 `customConfig` 参数，比如：
 
 ```shell
-> vela addon enable prometheus-server thanos=true serviceType=LoadBalancer storage=1G customConfig=my-prom
+vela addon enable prometheus-server thanos=true serviceType=LoadBalancer storage=1G customConfig=my-prom
 ```
 
 然后你将看到记录规则配置被分发到到所有 prome。
@@ -263,7 +265,7 @@ data:
 如果要更改 Grafana 的默认用户名和密码，可以运行以下命令：
 
 ```shell
-> vela addon enable grafana adminUser=super-user adminPassword=PASSWORD
+vela addon enable grafana adminUser=super-user adminPassword=PASSWORD
 ```
 
 这会将你的默认管理员用户更改为 `super-user`，并将其密码更改为 `PASSWORD`。
@@ -273,7 +275,7 @@ data:
 如果你希望 prometheus-server 和 grafana 将数据持久化在卷中，可以在安装时指定 `storage` 参数，例如：
 
 ```shell
-> vela addon enable prometheus-server storage=1G
+vela addon enable prometheus-server storage=1G
 ```
 
 这将创建 PersistentVolumeClaims 并让插件使用提供的存储。 即使插件被禁用，存储也不会自动回收。 你需要手动清理存储。
@@ -357,9 +359,9 @@ my-grafana   https://grafana-rngwzwnsuvl4s9p66m.grafana.aliyuncs.com:80/   Beare
 
 ```shell
 # 显示你拥有的所有 dashboard
-> kubectl get grafanadashboard -l grafana=my-grafana
+kubectl get grafanadashboard -l grafana=my-grafana
 # 显示你拥有的所有数据源
-> kubectl get grafanadatasource -l grafana=my-grafana
+kubectl get grafanadatasource -l grafana=my-grafana
 ```
 
 更多详情，你可以参考 [vela-prism](https://github.com/kubevela/prism#grafana-related-apis)。
