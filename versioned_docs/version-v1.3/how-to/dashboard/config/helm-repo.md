@@ -5,7 +5,9 @@ description: Configure a helm repository
 
 In this guide, we will introduce how to use Integration create a private helm repository and create a helm type application to use this repo.
 
-Notice: You must enable the `fluxcd` addon firstly.
+:::note
+You must enable the `fluxcd` addon firstly.
+:::
 
 ## Create a helm repo
 

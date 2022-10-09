@@ -5,7 +5,9 @@ title: Nginx Ingress Controller
 
 [Nginx Ingress controller](https://kubernetes.github.io/ingress-nginx/) is an Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer.
 
-**Notice: If your cluster is already have any kinds of [ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/), you don't need to enable this addon.**
+:::note
+If your cluster is already have any kinds of [ingress controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/), you don't need to enable this addon.
+:::
 
 ## Install
 

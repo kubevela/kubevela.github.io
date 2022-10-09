@@ -67,6 +67,9 @@ vela up -f https://kubevela.io/example/applications/app-with-chart-redis.yaml
 
 Then check the deployment status of the application through `vela status helm-redis`
 
+<details>
+<summary>expected output of vela status </summary>
+
 ```
 About:
 
@@ -96,6 +99,7 @@ Services:
     Healthy Fetch repository successfully, Create helm release successfully
     No trait applied
 ```
+</details>
 
 > You can also check the application on UI, application created by CLI will be synced automatically but readonly.
 
@@ -224,6 +228,8 @@ spec:
         version: '6.1.*'
 ```
 
-> Notice: your fluxcd addon version must be `>=1.3.1`.
+:::note
+Your fluxcd addon version must be `1.3.1+`.
+:::
 
 Now, you have learned the basic helm delivery. If you want to delivery Helm Chart into multi-clusters, you can refer to [this blog](https://kubevela.io/blog/2022/07/07/helm-multi-cluster).

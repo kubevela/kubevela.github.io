@@ -24,7 +24,7 @@ Building or installing addons is the most important way to extend KubeVela, ther
 KubeVela use CUE as it's core engine, and you can use CUE and CRD controller to glue almost every infrastructure capabilities.
 As a result, you can extend more powerful features for your platform.
 
-- Start to [Learn CUE in KubeVela](../platform-engineers/cue/basic).
+- Start to [Learn Manage Definition with CUE](../platform-engineers/cue/basic).
 - Learn what is [CRD Controller](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) in Kubernetes.
 
 ## Contribution Guide

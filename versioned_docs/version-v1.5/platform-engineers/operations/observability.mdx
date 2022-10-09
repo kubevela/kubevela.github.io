@@ -23,36 +23,38 @@ More addons for logging and tracing will be introduced in later versions.
 
 To enable the addon suites, you simply needs to run the `vela addon enable` commands as below.
 
-> If your KubeVela is multi-cluster scenario, see the [multi-cluster installation](#multi-cluster-installation) section below.
+:::tip
+If your KubeVela is multi-cluster scenario, see the [multi-cluster installation](#multi-cluster-installation) section below.
+:::
 
 1. Install the kube-state-metrics addon
 
 ```shell
-> vela addon enable kube-state-metrics
+vela addon enable kube-state-metrics
 ```
 
 2. Install the node-exporter addon
 
 ```shell
-> vela addon enable node-exporter
+vela addon enable node-exporter
 ```
 
 3. Install the prometheus-server
 
 ```shell
-> vela addon enable prometheus-server
+vela addon enable prometheus-server
 ```
 
 4. Install the grafana addon.
 
 ```shell
-> vela addon enable grafana
+vela addon enable grafana
 ```
 
 5. Access your grafana through port-forward.
 
 ```shell
-> kubectl port-forward svc/grafana -n o11y-system 8080:3000
+kubectl port-forward svc/grafana -n o11y-system 8080:3000
 ```
 
 Now you can access your grafana by access `http://localhost:8080` in your browser. The default username and password are `admin` and `kubevela` respectively.
@@ -178,7 +180,7 @@ If you want to install observability addons in multi-cluster scenario, make sure
 By default, the installation process for `kube-state-metrics`, `node-exporter` and `prometheus-server` are natually multi-cluster supported (they will be automatically installed to all clusters). But to let your `grafana` on the control plane to be able to access prometheus-server in managed clusters, you need to use the following command to enable `prometheus-server`.
 
 ```shell
-> vela addon enable prometheus-server thanos=true serviceType=LoadBalancer
+vela addon enable prometheus-server thanos=true serviceType=LoadBalancer
 ```
 
 This will install [thanos](https://github.com/thanos-io/thanos) sidecar & query along with prometheus-server. Then enable grafana, you will be able to see aggregated prometheus metrics now.
@@ -186,7 +188,7 @@ This will install [thanos](https://github.com/thanos-io/thanos) sidecar & query 
 You can also choose which clusters to install addons by using commands as below
 
 ```shell
-> vela addon enable kube-state-metrics clusters=\{local,c2\}
+vela addon enable kube-state-metrics clusters=\{local,c2\}
 ```
 
 > If you add new clusters to your control plane after addons being installed, you need to re-enable the addon to let it take effect.
@@ -234,7 +236,7 @@ spec:
 Then you need to add `customConfig` parameter to the enabling process of the prometheus-server addon, like
 
 ```shell
-> vela addon enable prometheus-server thanos=true serviceType=LoadBalancer storage=1G customConfig=my-prom
+vela addon enable prometheus-server thanos=true serviceType=LoadBalancer storage=1G customConfig=my-prom
 ```
 
 Then you will be able to see the recording rules configuration being delivered into all prome
@@ -263,7 +265,7 @@ data:
 If you want to change the default username and password for Grafana, you can run the following command
 
 ```shell
-> vela addon enable grafana adminUser=super-user adminPassword=PASSWORD
+vela addon enable grafana adminUser=super-user adminPassword=PASSWORD
 ```
 
 This will change your default admin user to `super-user` and its password to `PASSWORD`.
@@ -273,7 +275,7 @@ This will change your default admin user to `super-user` and its password to `PA
 If you want your prometheus-server and grafana to persist data in volumes, you can also specify `storage` parameter for your installation, like
 
 ```shell
-> vela addon enable prometheus-server storage=1G
+vela addon enable prometheus-server storage=1G
 ```
 
 This will create PersistentVolumeClaims and let the addon use the provided storage. The storage will not be automatically recycled even if the addon is disabled. You need to clean up the storage manually.
@@ -357,9 +359,9 @@ Now you can manage your dashboard and datasource on your grafana instance throug
 
 ```shell
 # show all the dashboard you have
-> kubectl get grafanadashboard -l grafana=my-grafana
+kubectl get grafanadashboard -l grafana=my-grafana
 # show all the datasource you have
-> kubectl get grafanadatasource -l grafana=my-grafana
+kubectl get grafanadatasource -l grafana=my-grafana
 ```
 
 For more details, you can refer to [vela-prism](https://github.com/kubevela/prism#grafana-related-apis).

@@ -2,7 +2,9 @@
 title: Deploy First Application
 ---
 
-> Before starting, please confirm that you've installed KubeVela and enabled the VelaUX addon according to [the installation guide](./install).
+:::note
+Before starting, please confirm that you've installed KubeVela and enabled the VelaUX addon according to [the installation guide](./install).
+:::
 
 Welcome to KubeVela! This section will guide you to deliver your first app.
 
@@ -217,10 +219,9 @@ Great! You have finished deploying your first KubeVela application, you can also
 After finished [the installation of VelaUX](./install#2-install-velaux), you can view and manage the application created.
 
 * Port forward the UI if you don't have endpoint for access:
-
-```
-vela port-forward addon-velaux -n vela-system 8080:80
-```
+  ```
+  vela port-forward addon-velaux -n vela-system 8080:80
+  ```
 
 * VelaUX need authentication, default username is `admin` and the password is **`VelaUX12345`**.
 

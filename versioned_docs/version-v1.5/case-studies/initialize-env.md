@@ -1,16 +1,16 @@
 ---
-title: Initialize/Destroy Environment
+title: Initialize/Destroy Infrastructure of Environment
 ---
 
-This section will introduce what is environment and how to initialize and destroy an environment with KubeVela easily.
+This section will introduce how to initialize and destroy infrastructure of environment with KubeVela easily.
 
-## What is environment
+## What can be infrastructure of environment
 
-An Application development team usually needs to initialize some shared environment for users. An environment is a logical concept that represents a set of common resources for Applications.
+An Application development team usually needs to initialize some shared environment for users. An environment is a logical concept that represents a set of common infrastructure resources for Applications.
 
 For example, a team usually wants two environments: one for development, and one for production.
 
-In general, the resource types that can be initialized include the following types:
+In general, the infra resource types that can be initialized include the following types:
 
 1. One or more Kubernetes clusters. Different environments may need different sizes and versions of Kubernetes clusters. Environment initialization can also manage multiple clusters .
 
@@ -31,8 +31,6 @@ For example, if both the test and develop environments rely on the same controll
 ## How to use
 
 ### Directly use Application for initialization
-
-> Make sure your KubeVela version is `v1.1.6+`.
 
 If we want to use some CRD controller like [OpenKruise](https://github.com/openkruise/kruise) in cluster, we can use `Helm` to initialize `kruise`.
 
@@ -225,7 +223,7 @@ $ kubectl logs -f log-read-worker-774b58f565-ch8ch
 
 We can see that both components is running. The two components share the same PVC and use the same ConfigMap.
 
-## Destroy the Environment
+## Destroy the infrastructure of environment
 
 As we have already modeled the environment as a KubeVela Application, we can destroy the environment easily by deleting the application.
 

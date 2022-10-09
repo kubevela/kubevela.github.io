@@ -1,5 +1,5 @@
 ---
-title:  Needs More？
+title:  Needs More Capabilities？
 ---
 
 KubeVela is programmable, it can be extended easily with [definition](../../getting-started/definition). You have the following ways to discover and extend the platform.
@@ -132,7 +132,9 @@ Once addon installed, end user can discover and use these capabilities immediate
 
 ### Uninstall Addon
 
-> Please make sure the addon along with its capabilities is no longer used in any of your applications before uninstalling it.
+:::danger
+Please make sure the addon along with its capabilities is no longer used in any of your applications before uninstalling it.
+:::
 
 ```shell
 vela addon disable fluxcd
@@ -223,7 +225,7 @@ If you're a system infra or operator, you can refer to extension documents to le
 
 If you're extremely interested in KubeVela, you can also extend more features as a developer.
 
-- KubeVela use CUE as it's core engine, [learn CUE in KubeVela](../../platform-engineers/cue/basic) and try to extend with CUE configurations.
+- KubeVela use CUE as it's core engine, [learn Manage Definition with CUE](../../platform-engineers/cue/basic) and try to extend capabilities with definitions.
 - Read the [developer guide](../../contributor/overview) to learn how to contribute and extend capabilities for KubeVela.
 
 Welcome to join the KubeVela community! We're eager to see you to contribute your extension.
