@@ -4,10 +4,7 @@ title: Component Orchestration
 
 This section will introduce the dependencies in components and how to pass data between components.
 
-> We use helm in the examples, make sure you enable the fluxcd addon:
-> ```shell
-> vela addon enable fluxcd
-> ```
+> We use `helm` component type in the following examples, make sure you have the `fluxcd` addon enabled (`vela addon enable fluxcd`).
 
 ## Dependency
 

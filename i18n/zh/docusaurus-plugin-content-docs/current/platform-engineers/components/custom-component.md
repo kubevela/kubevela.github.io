@@ -66,7 +66,7 @@ template: {
 		kind:       "Deployment"
 	}
 	outputs: {}
-	parameters: {}
+	parameter: {}
 }
 ```
 

@@ -77,8 +77,11 @@ module.exports = {
               type: 'category',
               label: 'Terraform',
               collapsed: false,
+              link: {
+                type: "doc",
+                id: 'end-user/components/cloud-services/cloud-resource-scenarios',
+              },
               items: [
-                'end-user/components/cloud-services/cloud-resource-scenarios',
                 'end-user/components/cloud-services/provision-and-consume-database',
                 'end-user/components/cloud-services/provision-and-initiate-database',
                 'end-user/components/cloud-services/secure-your-database-connection',
@@ -104,50 +107,70 @@ module.exports = {
             'end-user/components/ref-objects',
           ],
         },
-        'tutorials/multi-env',
+        {
+          type: 'category',
+          label: 'Multi Environment Delivery',
+          collapsed: true,
+          items: [
+            'case-studies/initialize-env',
+            'tutorials/multi-env'
+          ],
+        },
         {
           type: 'category',
           label: 'GitOps',
           collapsed: true,
-          items: ['case-studies/gitops', 'end-user/gitops/fluxcd'],
+          link: {
+            type: "doc",
+            id: 'case-studies/gitops',
+          },
+          items: ['end-user/gitops/fluxcd'],
         },
         {
-          type: 'category',
-          label: 'Declarative Workflow',
-          collapsed: true,
-          items: [
-            'end-user/workflow/overview',
-            'end-user/workflow/suspend',
-            'end-user/workflow/step-group',
-            'end-user/workflow/dependency',
-            'end-user/workflow/inputs-outputs',
-            'end-user/workflow/if-condition',
-            'end-user/workflow/timeout',
-          ],
-        },
-        {
-          'General CD Features': [
-            'end-user/version-control',
-            'tutorials/dry-run',
-            'end-user/workflow/component-dependency-parameter',
+          'Delivery Policies': [
             'end-user/policies/shared-resource',
-            'case-studies/initialize-env',
             'end-user/policies/apply-once',
             'end-user/policies/gc',
-            'how-to/dashboard/config/helm-repo',
-            'how-to/dashboard/config/image-registry',
-            'tutorials/access-application',
-            'tutorials/cloud-shell',
           ],
         },
         {
           type: 'category',
           label: 'CI Integration',
           collapsed: true,
+          link: {
+            type: "doc",
+            id: 'how-to/dashboard/trigger/overview',
+          },
           items: [
-            'how-to/dashboard/trigger/overview',
             'tutorials/jenkins',
             'tutorials/trigger',
+          ],
+        },
+        {
+          'Day-2 Operations': [
+            'tutorials/dry-run',
+            'tutorials/access-application',
+            'tutorials/debug-app',
+            'tutorials/cloud-shell',
+          ],
+        },
+        'end-user/version-control',
+        'end-user/workflow/component-dependency-parameter',
+        {
+          type: 'category',
+          label: 'Declarative Workflow',
+          collapsed: true,
+          link: {
+            type: "doc",
+            id: 'end-user/workflow/overview',
+          },
+          items: [
+            'end-user/workflow/suspend',
+            'end-user/workflow/step-group',
+            'end-user/workflow/dependency',
+            'end-user/workflow/inputs-outputs',
+            'end-user/workflow/if-condition',
+            'end-user/workflow/timeout',
           ],
         },
         'platform-engineers/operations/observability',
@@ -173,6 +196,12 @@ module.exports = {
             'how-to/dashboard/user/user',
             'tutorials/sso',
             'how-to/dashboard/config/dex-connectors',
+          ],
+        },
+        {
+          'Registry Integration': [
+            'how-to/dashboard/config/helm-repo',
+            'how-to/dashboard/config/image-registry',
           ],
         },
         'how-to/dashboard/user/project',
@@ -229,7 +258,7 @@ module.exports = {
           ],
         },
         {
-          'CUE in KubeVela': [
+          'Manage Definition with CUE': [
             'platform-engineers/cue/basic',
             'platform-engineers/cue/definition-edit',
             'platform-engineers/components/custom-component',

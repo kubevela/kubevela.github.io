@@ -11,8 +11,8 @@
         "message": "核心概念",
         "description": "The label for Core Concepts in sidebar docs"
     },
-    "sidebar.docs.category.CUE in KubeVela": {
-        "message": "CUE 语言",
+    "sidebar.docs.category.Manage Definition with CUE": {
+        "message": "使用 CUE 扩展模块定义",
         "description": "The label for category Learning CUE in sidebar docs"
     },
     "sidebar.docs.category.Helm": {
@@ -310,8 +310,8 @@
     "sidebar.docs.category.Kubernetes Manifest CD": {
         "message": "Kubernetes 资源交付"
     },
-    "sidebar.docs.category.General CD Features": {
-        "message": "通用功能"
+    "sidebar.docs.category.Delivery Policies": {
+        "message": "资源交付策略"
     },
     "sidebar.docs.category.UX Customization": {
         "message": "定制 UI"
@@ -330,5 +330,11 @@
     },
     "sidebar.docs.doc.Kubernetes": {
         "message": "基于 Kubernetes 安装"
+    },
+    "sidebar.docs.category.Day-2 Operations": {
+        "message": "应用运维"
+    },
+    "sidebar.docs.category.Registry Integration": {
+        "message": "注册中心集成"
     }
 }
