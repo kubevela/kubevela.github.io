@@ -1,3 +1,8 @@
+---
+title: README
+slug: /readme
+---
+
 ![alt](resources/KubeVela-03.png)
 
 *Make shipping applications more enjoyable.*
