@@ -6,7 +6,7 @@ authors:
   url: https://github.com/charlie0129
   image_url: https://github.com/charlie0129.png
 tags: [ "KubeVela", "addon", "extensibility" ]
-description: TODO
+description: Introduction to Building Addons
 image: https://raw.githubusercontent.com/oam-dev/KubeVela.io/main/docs/resources/KubeVela-03.png
 hide_table_of_contents: false
 ---
