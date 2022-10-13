@@ -56,7 +56,7 @@ KubeVela 插件（addon）可以方便地扩展 KubeVela 的能力。正如我�
 - 编写插件的应用描述文件（OAM Application），其中包含了一个 Redis Operator （见完整代码的 template.cue 及 resources 目录）
 - 编写 `redis-failover` 类型的 ComponentDefinition （见完整代码的 definitions 目录）
 
-不过在开始编写之前，我们首先需要了解一个 KubeVela 插件的目录结构。后续我们会在编写的过程中详细说明每个文件的作用，在这里只需大致了解有哪些文件即可。同时，在插件中我们会大量使用 CUE ，你可能需要先查阅[入门指南](https://kubevela.net/zh/docs/platform-engineers/cue/basic)。
+不过在开始编写之前，我们首先需要了解一个 KubeVela 插件的目录结构（ `vela addon int` 可以帮助你创建目录结构）。后续我们会在编写的过程中详细说明每个文件的作用，在这里只需大致了解有哪些文件即可。同时，在插件中我们会大量使用 CUE ，你可能需要先查阅[入门指南](https://kubevela.net/zh/docs/platform-engineers/cue/basic)。
 
 ```shell
 redis-operator/            # 目录名为插件名称
@@ -129,6 +129,8 @@ output: {
 outputs: topology: resourceTopology // 定义于 resources/topology.cue 中
 ```
 #### resources 资源文件
+
+我们这里使用一个 `web-service` 类型的 Component 来安装 Redis Operator。当然，如果你可以接受依赖 FluxCD 的话，你也可以使用 `helm` 类型的 Component 直接安装一个 Helm Chart（因为 `helm` 类型的 Component 主要由 FluxCD 插件提供）。不过编写 addon 的一个原则是尽量减少外部依赖，所以我们这里使用 KubeVela 内置的 `web-service` 类型，而不是 `helm`。
 
 ```cue
 // resources/redis-operator.cue
