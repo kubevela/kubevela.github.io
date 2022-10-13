@@ -89,6 +89,7 @@ metadata:
   name: clone-set-relation
   namespace: vela-system
   labels:
+    "rules.oam.dev/resource-format": "yaml"
     "rules.oam.dev/resources": "true"
 data:
   rules: |-
@@ -108,9 +109,8 @@ kind: ConfigMap
 metadata:
   name: clone-set-relation
   namespace: vela-system
-  annotations:
-   "rules.oam.dev/resource-format": "json"
   labels:
+    "rules.oam.dev/resource-format": "json"
     "rules.oam.dev/resources": "true"
 data:
   rules: |-
