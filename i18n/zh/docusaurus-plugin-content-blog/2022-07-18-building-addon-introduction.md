@@ -13,7 +13,7 @@ hide_table_of_contents: false
 
 KubeVela 插件（addon）可以方便地扩展 KubeVela 的能力。正如我们所知，KubeVela 是一个高度可扩展的平台，用户可以通过 [模块定义（Definition）](https://kubevela.net/zh/docs/platform-engineers/oam/x-definition)扩展 KubeVela 的能力，而 KubeVela 插件正是方便将这些**自定义扩展**及其**依赖**打包并分发的功能。
 
-这篇博客将会简要介绍 KubeVeka 插件的机制和如何自行编写插件。
+这篇博客将会简要介绍 KubeVela 插件的机制和如何自行编写插件。
 
 <!--truncate-->
 
@@ -97,6 +97,7 @@ parameter: {
 
 template.cue 和 resource 目录本质上是相同的，他们共同组成一个 Application 。那为什么需要 resources 目录呢？除去历史原因，这主要是为了可读性的考虑，在 Application 中包含大量资源的时候 template.cue 可能变得很长，这时我们可以把资源放置在 resource 中增加可读性。一般来说，我们将 Application 的框架放在 template.cue 中，将 Application 内部的 Components 放在 resource 目录中。
 
+#### template.cue
 
 ```cue
 // template.cue 应用描述文件
@@ -127,6 +128,7 @@ output: {
 // 定义资源关联规则，后续详细介绍
 outputs: topology: resourceTopology // 定义于 resources/topology.cue 中
 ```
+#### resources 资源文件
 
 ```cue
 // resources/redis-operator.cue
@@ -150,18 +152,24 @@ redisOperator: {
 }
 ```
 
+#### 其他增强
+
+值得注意的一个功能是 [*资源关联规则 (Resource Topology)*](https://kubevela.net/zh/docs/reference/topology-rule) 。虽然它不是必须的，但是它能帮助 KubeVela 建立应用所纳管资源的拓扑关系，这在我们使用了 CR 的时候特别有用。
+
+在本例中，`redis-failover` 类型的 Component 会创建一个 CR ，名为 RedisFailover 。但是在没有资源关联规则的情况下，假设在你的 Application 中使用了 RedisFailover ，虽然我们知道 RedisFailover 管控了数个 Redis Deployment ，但是 KubeVela 并不知道 RedisFailover 之下有 Deployment 。这时我们可以通过 *资源关联规则* 将我们对于 RedisFailover 的了解*告诉* KubeVela，这样 KubeVela 可以帮助我们建立起整个应用下面纳管资源的拓扑层级关系。此时你将获得 KubeVela 提供的许多有用功能，例如（效果见 [运行插件](#运行插件) ）：
+
+- VelaUX 资源拓扑视图
+- `vela exec` 直接在 Application 包含容器中执行命令
+- `vela port-forward` 转发 Application 包含容器的端口
+- `vela log` 查看 Application 包含容器的日志
+- `vela status --pod/--endpoint` 查看 Application 包含的 Pod ，可供访问的 endpoint 等
+
 ```cue
 // resources/topology.cue
 
 package main
 
 import "encoding/json"
-
-// 资源关联规则不是必须的，但是它能帮助 KubeVela 建立应用所纳管资源的拓扑关系。
-// 在本例中，由于我们即将创建的 `redis-failover` 类型的 ComponentDefinition 会创建
-// 一个 RedisFailover 类型的 CustomResource ，而这个 RedisFailover 类型的 CustomResource 
-// 又会包括一系列资源，资源关联规则就可以帮助 KubeVela 了解他们之间的关系，在 VelaUX 显示拓扑图等。
-// https://kubevela.net/zh/docs/reference/topology-rule
 
 resourceTopology: {
 	apiVersion: "v1"
@@ -185,6 +193,7 @@ resourceTopology: {
 				apiVersion: "apps/v1"
 				kind:  "StatefulSet"
 			},
+			// KubeVela 内置 Deployment 等资源的拓扑，因此无需继续向下编写
 			{
 				apiVersion: "apps/v1"
 				kind:  "Deployment"
@@ -234,10 +243,45 @@ system:
   kubernetes: ">=1.19"
 ```
 
-## 运行自定义插件
+## 运行插件
 
 至此我们已经将插件的主要部分编写完成，下载 [完整代码](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator) 补全部分细节后，即可尝试运行。
 
-下载得到 redis-operator 目录后，我们可以通过 `vela addon enable redis-operator` 安装本地插件。安装完成后就可以参考插件的 [README](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator) 试用我们的 Redis 插件了！
+下载得到 redis-operator 目录后，我们可以通过 `vela addon enable redis-operator` 安装本地的 `redis-operator` 插件。安装完成后就可以参考插件的 [README](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator) 试用我们的 Redis 插件了！
 
 > 这里也体现出插件的 README 的重要性，其中需要包括插件的作用、详细使用指南等，确保用户可以快速上手
+
+在用户使用你编写的插件时，只需如下 **4** 行 yaml 即可在 Application 中创建包含 3 个 Node 的高可用 Redis 集群！相比于手动安装 Redis Operator 并创建 CR ，甚至逐一手动配置 Redis 集群，插件的方式极大地方便了用户。
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: redis-operator-sample
+spec:
+  components:
+    # This component is provided by redis-operator addon.
+    # In this example, 2 redis instance and 2 sentinel instance
+    # will be created.
+    - type: redis-failover
+      name: ha-redis
+      properties:
+        # You can increase/decrease this later to add/remove instances.
+        replicas: 3
+```
+
+只需 apply 仅仅数行的 yaml 文件，我们就轻松创建了如下图所示的整个复杂的资源。并且由于我们编写了 *资源关联规则 (Resource Topology)* ，用户可以通过 VelaUX 轻松获得刚刚创建的 Redis 集群的资源拓扑状态，了解 Application 底层资源的运行状况，不再受限于 Application Component 级别的可观测性。如图我们能直接观测到整个 Application 的拓扑，直至每个 Redis Pod ，可见图中部分 Pod 仍在准备中：
+
+![redis-operator-sample-topology-graph](/img/blog-addon/redis-operator-sample-topology-graph.png)
+
+在执行 `vela exec/log/port-forward` 等命令时也可以精确地看到 Application 底层包含的资源（即支撑 Redis 集群的 3 个 Redis Pod 和 3 个 Sentinel Pod）：
+
+![redis-operator-sample-pod-topology](/img/blog-addon/redis-operator-sample-pod-topology.png)
+
+使用 `vela status` 命令能获取这个 Application 的运行状态，有了资源关联规则后可以更进一步，直接通过 vela 寻找出 Redis Sentinel 的 Endpoint 来访问 Redis 集群：
+
+![redis-operator-sample-endpoint](/img/blog-addon/redis-operator-sample-endpoint.png)
+
+## 结语
+
+通过本文档，相信你已经了解插件的作用及制作插件的要点。如果你成功制作了属于自己的插件， KubeVela 社区欢迎开发者贡献插件至 [addon catalog](https://github.com/kubevela/catalog) ，这样你的插件还能够被其他 KubeVela 用户发现并使用！
