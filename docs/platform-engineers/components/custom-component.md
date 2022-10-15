@@ -69,7 +69,7 @@ template: {
 ```
 
 In detail:
-- `.spec.workload` is required to indicate the workload type of this component.
+- `.spec.workload` indicates the workload type of this component, it can help integrate with traits that apply to this kind of workload.
 - `.spec.schematic.cue.template` is a CUE template, specifically:
     * The `output` filed defines the template for the abstraction.
     * The `parameter` filed defines the template parameters, i.e. the configurable properties exposed in the `Application`abstraction (and JSON schema will be automatically generated based on them).
@@ -195,7 +195,7 @@ $ vela def apply task.cue
 ComponentDefinition task created in namespace vela-system.
 ```
 
-## Declare an `Application`
+## Declare an `Application` using this component
 
 The `ComponentDefinition` can be instantiated in `Application` abstraction as below:
 
@@ -221,8 +221,8 @@ The `ComponentDefinition` can be instantiated in `Application` abstraction as be
             - "for i in 9 8 7 6 5 4 3 2 1 ; do echo $i ; done"
   ```
 
-### Under The Hood
 <details>
+<summary> Learn Details Under The Hood </summary>
 
 Above application resource will generate and manage following Kubernetes resources in your target cluster based on the `output` in CUE template and user input in `Application` properties.
 
@@ -299,17 +299,34 @@ output: {
 }
 ```
 
-> Note that `context` information are auto-injected before resources are applied to target cluster.
+:::tip
+Note that `context` information are auto-injected before resources are applied to target cluster.
+:::
 
-### Full available `context` information can be used
+### Full available `context` in Component
 
-* Check the reference docs of [definition protocol](../../platform-engineers/oam/x-definition#definition-runtime-context) to see all of the available information in KubeVela `context`.
 
-## Composition
+|         Context Variable         |                                                                           Description                                                                           |    Type    |                         Scope                          |
+| :------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------: | :----------------------------------------------------: |
+|        `context.appName`         |                                             The app name corresponding to the current instance of the application.                                              |   string   |          ComponentDefinition, TraitDefinition          |
+|       `context.namespace`        | The target namespace of the current resource is going to be deployed, not it can be different with the namespace of application if overridden by some policies. |   string   |          ComponentDefinition, TraitDefinition          |
+|      `context.appRevision`       |                                          The app version name corresponding to the current instance of the application                                          |   string   |          ComponentDefinition, TraitDefinition          |
+|     `context.appRevisionNum`     |                                        The app version number corresponding to the current instance of the application.                                         |    int     |          ComponentDefinition, TraitDefinition          |
+|          `context.name`          |                                          The component name corresponding to the current instance of the application.                                           |   string   | ComponentDefinition, TraitDefinition, PolicyDefinition |
+|        `context.revision`        |                                                       The version name of the current component instance.                                                       |   string   |          ComponentDefinition, TraitDefinition          |
+|         `context.output`         |                                                 The object structure after instantiation of current component.                                                  | Object Map |          ComponentDefinition, TraitDefinition          |
+| `context.outputs.<resourceName>` |                                                  Structure after instantiation of current component and trait                                                   | Object Map |          ComponentDefinition, TraitDefinition          |
+
+`context.workflowName`
+`context.publishVersion`
+
+## Compose resources in one Component
 
 It's common that a component definition is composed by multiple API resources, for example, a `webserver` component that is composed by a Deployment and a Service. CUE is a great solution to achieve this in simplified primitives.
 
-> Another approach to do composition in KubeVela of course is [using Helm](../../tutorials/helm).
+:::tip
+Compare to [using Helm](../../tutorials/helm), this approach gives your more flexibility as you can control the abstraction any time and integrate with traits, workflows in KubeVela better.
+:::
 
 ## How-to
 
