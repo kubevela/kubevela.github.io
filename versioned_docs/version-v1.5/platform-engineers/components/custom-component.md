@@ -10,7 +10,7 @@ First, generate `ComponentDefinition` scaffolds via `vela def init` with existed
 
 The YAML file:
 
-```yaml
+```yaml title="stateless.yaml"
 apiVersion: "apps/v1"
 kind: "Deployment"
 spec:
@@ -35,8 +35,7 @@ vela def init stateless -t component --template-yaml ./stateless.yaml -o statele
 
 It generates a file:
 
-```cue
-// $ cat stateless.cue
+```cue title="stateless.cue"
 stateless: {
 	annotations: {}
 	attributes: workload: definition: {
@@ -69,10 +68,11 @@ template: {
 ```
 
 In detail:
-- `.spec.workload` is required to indicate the workload type of this component.
-- `.spec.schematic.cue.template` is a CUE template, specifically:
-    * The `output` filed defines the template for the abstraction.
-    * The `parameter` filed defines the template parameters, i.e. the configurable properties exposed in the `Application`abstraction (and JSON schema will be automatically generated based on them).
+- The `stateless` is the name of component definition, it can be defined by yourself when initialize the component.
+- `stateless.attributes.workload` indicates the workload type of this component, it can help integrate with traits that apply to this kind of workload.
+- `template` is a CUE template, specifically:
+    * The `output` and `outputs` fields define the resources that the component will be composed.
+    * The `parameter` field defines the parameters of the component, i.e. the configurable properties exposed in the `Application` (and schema will be automatically generated based on them for end users to learn this component).
 
 Add parameters in this auto-generated custom component file :
 
@@ -80,8 +80,8 @@ Add parameters in this auto-generated custom component file :
 stateless: {
 	annotations: {}
 	attributes: workload: definition: {
-		apiVersion: "<change me> apps/v1"
-		kind:       "<change me> Deployment"
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
 	}
 	description: ""
 	labels: {}
@@ -114,11 +114,56 @@ template: {
 You can use `vela def vet` to validate the format:
 
 ```shell
-$ vela def vet stateless.cue
-Validation succeed.
+vela def vet stateless.cue
 ```
 
-Declare another component named `task` which is an abstraction for run-to-completion workload.
+<details>
+<summary>expected output</summary>
+
+```
+Validation succeed.
+```
+</details>
+
+Apply above `ComponentDefinition` to your Kubernetes cluster to make it work:
+
+```shell
+vela def apply stateless.cue
+```
+
+<details>
+<summary>expected output</summary>
+
+```
+ComponentDefinition stateless created in namespace vela-system.
+```
+</details>
+
+Then the end user can check the schema and use it in an application now:
+
+```
+vela show stateless
+```
+
+<details>
+<summary>expected output</summary>
+
+```
+# Specification
++-------+-------------+--------+----------+---------+
+| NAME  | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
++-------+-------------+--------+----------+---------+
+| name  |             | string | true     |         |
+| image |             | string | true     |         |
++-------+-------------+--------+----------+---------+
+```
+</details>
+
+
+Declare another component named `task` which is an abstraction for run-to-completion workload works the same.
+
+<details>
+<summary>Check the details for another example to define a task based component.</summary>
 
 ```shell
 vela def init task -t component -o task.cue
@@ -186,16 +231,17 @@ template: {
 }
 ```
 
-Apply above `ComponentDefinition` files to your Kubernetes cluster:
+Apply above `ComponentDefinition` files to your Kubernetes cluster to make it work:
 
 ```shell
-$ vela def apply stateless.cue
-ComponentDefinition stateless created in namespace vela-system.
 $ vela def apply task.cue
 ComponentDefinition task created in namespace vela-system.
 ```
+</details>
 
-## Declare an `Application`
+Now let's use the `stateless` and `task` component type.
+
+## Declare an `Application` using this component
 
 The `ComponentDefinition` can be instantiated in `Application` abstraction as below:
 
@@ -221,8 +267,8 @@ The `ComponentDefinition` can be instantiated in `Application` abstraction as be
             - "for i in 9 8 7 6 5 4 3 2 1 ; do echo $i ; done"
   ```
 
-### Under The Hood
 <details>
+<summary> Learn Details Under The Hood </summary>
 
 Above application resource will generate and manage following Kubernetes resources in your target cluster based on the `output` in CUE template and user input in `Application` properties.
 
@@ -268,7 +314,10 @@ spec:
 ```  
 </details>
 
-## CUE `Context`
+You can also use [dry run](../debug/dry-run) to show what the yaml results will be rendered for debugging.
+
+
+## CUE `Context` for runtime information
 
 KubeVela allows you to reference the runtime information of your application via `context` keyword.
 
@@ -299,32 +348,40 @@ output: {
 }
 ```
 
-> Note that `context` information are auto-injected before resources are applied to target cluster.
+:::tip
+Note that `context` information are auto-injected before resources are applied to target cluster.
+:::
 
-### Full available `context` information can be used
+The list of [all available context variables](#full-available-context-in-component) are listed at last of this doc.
 
-* Check the reference docs of [definition protocol](../../platform-engineers/oam/x-definition#definition-runtime-context) to see all of the available information in KubeVela `context`.
-
-## Composition
+## Compose resources in one component
 
 It's common that a component definition is composed by multiple API resources, for example, a `webserver` component that is composed by a Deployment and a Service. CUE is a great solution to achieve this in simplified primitives.
 
-> Another approach to do composition in KubeVela of course is [using Helm](../../tutorials/helm).
+:::tip
+Compare to [using Helm](../../tutorials/helm), this approach gives your more flexibility as you can control the abstraction any time and integrate with traits, workflows in KubeVela better.
+:::
 
-## How-to
-
-KubeVela requires you to define the template of workload type in `output` section, and leave all the other resource templates in `outputs` section with format as below:
+KubeVela requires you to define the template of main workload in `output` section, and leave all the other resource templates in `outputs` section with format as below:
 
 ```cue
-outputs: <unique-name>: 
-  <full template data>
+output: {
+  <template of main workload structural data>
+}
+outputs: {
+  <unique-name>: {
+    <template of auxiliary resource structural data>
+  }
+}
 ```
 
-> The reason for this requirement is KubeVela needs to know it is currently rendering a workload so it could do some "magic" like patching annotations/labels or other data during it.
+:::note
+The reason for this requirement is KubeVela needs to know it is currently rendering a workload so it could do some "magic" by traits such like patching annotations/labels or other data during it.
+:::
 
-Below is the example for `webserver` definition: 
+Below is the example for `webserver` definition, let's use a demo to show how to use it: 
 
-```cue
+```cue title="webserver.cue"
 webserver: {
 	annotations: {}
 	attributes: workload: definition: {
@@ -420,13 +477,20 @@ template: {
 Apply to your Kubernetes cluster:
 
 ```shell
-$ vela def apply webserver.cue
+vela def apply webserver.cue
+```
+
+<details>
+<summary>expected output</summary>
+
+```
 ComponentDefinition webserver created in namespace vela-system.
 ```
+</details>
 
 The user could now declare an `Application` with it:
 
-```yaml
+```yaml title="webserver-app.yaml"
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -434,7 +498,7 @@ metadata:
   namespace: default
 spec:
   components:
-    - name: hello-world
+    - name: hello-webserver
       type: webserver
       properties:
         image: oamdev/hello-world
@@ -445,26 +509,196 @@ spec:
         cpu: "100m"
 ```
 
-It will generate and manage below Kubernetes API resources in target cluster, you can use [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) to check:
+Create this application by:
+
+```
+vela up -f webserver-app.yaml
+```
+
+Then you can check the resources and find the results:
 
 ```shell
-kubectl get deployment
+vela status webserver-demo --tree --detail
 ```
+
+<details>
+<summary>expected output</summary>
+
 ```console
-NAME             READY   UP-TO-DATE   AVAILABLE   AGE
-hello-world-v1   1/1     1            1           15s
+CLUSTER       NAMESPACE     RESOURCE                                             STATUS    APPLY_TIME          DETAIL
+local     ─── default   ─┬─ Service/hello-webserver-auxiliaryworkload-685d98b6d9 updated   2022-10-15 21:58:35 Type: ClusterIP
+                         │                                                                                     Cluster-IP: 10.43.255.55
+                         │                                                                                     External-IP: <none>
+                         │                                                                                     Port(s): 8000/TCP
+                         │                                                                                     Age: 66s
+                         └─ Deployment/hello-webserver                           updated   2022-10-15 21:58:35 Ready: 1/1  Up-to-date: 1
+                                                                                                               Available: 1  Age: 66s
+```
+</details>
+
+
+## Define health check and status message for component
+
+You can also define health check policy and status message when a component deployed and tell the real status to end users.
+
+:::caution
+Reference `parameter` defined in `template` is not supported now in health check and custom status, they work in different stage with the resource template. While we're going to support this feature in https://github.com/kubevela/kubevela/issues/4863 .
+:::
+
+### Health check
+
+The spec of health check is `<component-type-name>.attributes.status.healthPolicy`.
+
+If not defined, the health result will always be `true`, which means it will be marked as healthy immediately after resources applied to Kubernetes. You can define a CUE expression in it to notify if the component is healthy or not.
+
+The keyword is `isHealth`, the result of CUE expression must be `bool` type.
+
+KubeVela runtime will evaluate the CUE expression periodically until it becomes healthy. Every time the controller will get all the Kubernetes resources and fill them into the `context` variables.
+
+So the context will contain following information:
+
+```cue
+context:{
+  name: <component name>
+  appName: <app name>
+  output: <K8s workload resource>
+  outputs: {
+    <resource1>: <K8s trait resource1>
+    <resource2>: <K8s trait resource2>
+  }
+}
 ```
 
-```shell
-kubectl get svc
-```
-```console
-NAME                           TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-hello-world-trait-7bdcff98f7   ClusterIP   <your ip>       <none>        8000/TCP   32s
+The example of health check likes below:
+
+```cue
+webserver: {
+	type: "component"
+  ...
+	attributes: {
+		status: {
+			healthPolicy: #"""
+        isHealth: (context.output.status.readyReplicas > 0) && (context.output.status.readyReplicas == context.output.status.replicas)
+        """#
+    }
+  }
+}
 ```
 
-## What's Next
+The health check result will be recorded into the corresponding component in `.status.services` of `Application` resource.
 
-* Learn more about [defining customized trait](../traits/customize-trait) in CUE.
-* Learn how to [define health check and custom status](../traits/status) of Component.
-* Learn how to [define policy](../policy/custom-policy) in CUE.
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+status:
+  ...
+  services:
+  - healthy: true
+    name: myweb
+    ...
+  status: running
+```
+
+> Please refer to [this doc](https://github.com/kubevela/kubevela/blob/master/vela-templates/definitions/internal/component/webservice.cue#L29-L50) for more examples.
+
+### Custom Status
+
+The spec of custom status is `<component-type-name>.attributes.status.customStatus`, it shares the same mechanism with the health check.
+
+The keyword in CUE expression is `message`, the result must be `string` type.
+
+Application CRD controller will evaluate the CUE expression after the health check succeed.
+
+The example of custom status likes below:
+
+```cue
+webserver: {
+	type: "component"
+  ...
+	attributes: {
+		status: {
+			customStatus: #"""
+				ready: {
+					readyReplicas: *0 | int
+				} & {
+					if context.output.status.readyReplicas != _|_ {
+						readyReplicas: context.output.status.readyReplicas
+					}
+				}
+				message: "Ready:\(ready.readyReplicas)/\(context.output.spec.replicas)"
+				"""#
+    }
+  }
+}
+```
+
+The message will be recorded into the corresponding component in `.status.services` of `Application` resource like below.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+status:
+  ...
+  services:
+  - healthy: false
+    message: Ready:1/1
+    name: express-server
+```
+
+> Please refer to [this doc](https://github.com/kubevela/kubevela/blob/master/vela-templates/definitions/internal/component/webservice.cue#L29-L50) for more examples.
+
+
+## Full available `context` in Component
+
+
+|         Context Variable         |                                                                                  Description                                                                                  |    Type    |
+| :------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------: |
+|        `context.appName`         |                                                    The app name corresponding to the current instance of the application.                                                     |   string   |
+|       `context.namespace`        |          The target namespace of the current resource is going to be deployed, it can be different with the namespace of application if overridden by some policies.          |   string   |
+|        `context.cluster`         |           The target cluster of the current resource is going to be deployed, it can be different with the namespace of application if overridden by some policies.           |   string   |
+|      `context.appRevision`       |                                                The app version name corresponding to the current instance of the application.                                                 |   string   |
+|     `context.appRevisionNum`     |                                               The app version number corresponding to the current instance of the application.                                                |    int     |
+|          `context.name`          |                                                 The component name corresponding to the current instance of the application.                                                  |   string   |
+|        `context.revision`        |                                                              The version name of the current component instance.                                                              |   string   |
+|         `context.output`         |                                                        The object structure after instantiation of current component.                                                         | Object Map |
+| `context.outputs.<resourceName>` |                                                    Structure after instantiation of current component auxiliary resources.                                                    | Object Map |
+|      `context.workflowName`      |                                                                  The workflow name specified in annotation.                                                                   |   string   |
+|     `context.publishVersion`     |                                                         The version of application instance specified in annotation.                                                          |   string   |
+|       `context.components`       |                                                         The object structure of components spec  in this application.                                                         | Object Map |
+|       `context.appLabels`        |                                                                The labels of the current application instance.                                                                | Object Map |
+|     `context.appAnnotations`     |                                                             The annotations of the current application instance.                                                              | Object Map |
+|       `context.replicaKey`       | The key of replication in context. Replication is an internal policy, it will replicate resources with different keys specified.  (This feature will be introduced in v1.6+.) |   string   |
+
+
+## Component definition in Kubernetes
+
+KubeVela is fully programmable via CUE, while it leverage Kubernetes as control plane and align with the API in yaml.
+As a result, the CUE definition will be converted as Kubernetes API when applied into cluster.
+
+The component definition will be in the following API format:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: ComponentDefinition
+metadata:
+  name: <ComponentDefinition name>
+  annotations:
+    definition.oam.dev/description: <Function description>
+spec:
+  workload: # Workload Capability Indicator
+    definition:
+      apiVersion: <Kubernetes Workload resource group>
+      kind: <Kubernetes Workload types>
+  schematic:  # Component description
+    cue: # Details of components defined by CUE language
+      template: <CUE format template>
+```
+
+You can check the detail of this format [here](../oam/x-definition).
+
+## More examples to learn
+
+You can check the following resources for more examples:
+
+- Builtin component definitions in the [KubeVela github repo](https://github.com/kubevela/kubevela/tree/master/vela-templates/definitions/internal/component).
+- Definitions defined in addons in the [catalog repo](https://github.com/kubevela/catalog/tree/master/addons).
