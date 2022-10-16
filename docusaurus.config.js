@@ -32,6 +32,7 @@ module.exports = {
       appId: 'PXMFHFWUGZ',
       apiKey: '2d1f4924c15d2cc0947820c01e65521f',
       indexName: 'kubevela',
+      contextualSearch: false,
     },
     navbar: {
       title: 'KubeVela',
