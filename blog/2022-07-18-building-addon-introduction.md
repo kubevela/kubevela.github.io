@@ -11,9 +11,9 @@ image: https://raw.githubusercontent.com/oam-dev/KubeVela.io/main/docs/resources
 hide_table_of_contents: false
 ---
 
-As we all know, KubeVela is a highly extensible platform, on which users can build their own customizations using [Definitions](https://kubevela.io/docs/platform-engineers/oam/x-definition). KubeVela addons are a convenient way to package all these customizations and their dependencies together, to extend the capabilities of KubeVela.
+As we all know, KubeVela is a highly extensible platform, on which users can build their own customizations using [Definitions](https://kubevela.io/docs/platform-engineers/oam/x-definition). KubeVela addons are a convenient way to pack all these customizations and their dependencies together as a bundle, to extend the capabilities of KubeVela.
 
-This blog introduces the main concepts of an addon and guides you to quickly start building an addon.
+This blog introduces the main concepts of an addon and guides you to quickly start building an addon. Finally, we'll show you the experience of the end user, and how the capabilities provided by addon are glued.
 
 <!--truncate-->
 
@@ -33,7 +33,8 @@ Although it seems like only 2 steps is needed, we found it to be quite troubleso
 1. Complicated installation: users are required to refer to documentations to manually install FluxCD and tackle possible errors
 2. Scattered resources: users need to obtain different resource files from different places
 3. Hard distribution: users having to download manifests manually makes it hard to distribute all these resources in a uniformed way
-4. No multi-cluster support: KubeVela emphasizes multi-cluster delivery a lot. However, manual installation makes multi-cluster support hard to carry out.
+4. Lack multi-cluster support: KubeVela emphasizes multi-cluster delivery a lot. However, manual installation makes multi-cluster support hard to carry out.
+5. No version management: users need to manage the relationship between definitions, controllers, and corresponding versions by themselves.
 
 KubeVela addons are born to solve these problems.
 
@@ -49,16 +50,18 @@ The installation process of an addon includes installing Applications (which inc
 
 ## Create your own addon
 
-> Note: this guide only applies to KubeVela v1.5 and later
+:::tip
+This guide only applies to KubeVela v1.5 and later
+:::
 
 We will take Redis addon as an example, and guide you through the whole process of making an addon. The full source code of this guide is located at [catalog/redis-operator](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator). As an introduction, we will not dive too deep into the details. If you are interested in official documentations, refer to [Make Your Own Addon](https://kubevela.io/docs/platform-engineers/addon/intro).
 
 **First, we will need to consider what our addon can do for users.** Let's say our Redis addon can provide a Component called `redis-failover`, which will create a whole Redis cluster with just one Component. **Then we will figure out how to achieve this.** To define a `redis-failover` Component, we write a ComponentDefinition. To be able to create a Redis Cluster, we use a [Redis Operator](https://github.com/spotahome/redis-operator).
 
-Now the goals are clear:
+Now our goals are clear:
 
-- Write an OAM Application, which includes a Redis Operator. (refer to `template.cue` and `resources` directory in the full source code)
-- Write a ComponentDefinition, which defines Components called `redis-failover`. (refer to `definitions` directory in the full source code)
+- Write an OAM Application, which includes the installation of a Redis Operator. (refer to `template.cue` and `resources` directory in the full source code)
+- Write a [ComponentDefinition](https://kubevela.io/docs/platform-engineers/components/custom-component), which defines Components called `redis-failover`. (refer to `definitions` directory in the full source code)
 
 But before we start coding, we need to understand the directory structure of an addon (`vela addon init` can help you create the directories and files). We will describe each file later, just have a basic understanding of what files are needed for now.
 
@@ -76,7 +79,9 @@ redis-operator/            # directory name is the same as the addon name
 └── template.cue           # Application description file, which defines an OAM Application
 ```
 
-> We will use CUE extensively when writing addons, so [CUE Basic](https://kubevela.io/docs/platform-engineers/cue/basic) might be useful.
+:::tip
+We will use CUE extensively when writing addons, so [CUE Basic](https://kubevela.io/docs/platform-engineers/cue/basic) might be useful.
+:::
 
 ### parameter.cue
 
@@ -89,6 +94,8 @@ parameter: {
 
 The parameters defined in `parameter.cue` are customizable by users when installing addons, just like Helm Values. You can access the values of these parameters in CUE later by `parameter.<parameter-name>`. In our example, `image` is provided to let the user customize Redis Operator image and can be accessed in `redis-operator.cue` by `parameter.image`.
 
+Apart from customizing some fields, you can also do something creative, such as parameterized installation of addons. For example, `fluxcd` addon have a parameter called [`onlyHelmComponents`](https://github.com/kubevela/catalog/blob/958a770a9adb3268e56ca4ec2ce99d2763617b15/addons/fluxcd/parameter.cue#L9). Since `fluxcd` addon is a big one, which includes 5 different controllers, not all users want such a heavy installation. So if the `onlyHelmComponents` parameter is set to `true` by the user, only 2 controllers will be installed, making it a relatively light installation. (If you are insterested in how this is achieved, you can refer to [fluxcd code](https://github.com/kubevela/catalog/blob/958a770a9adb3268e56ca4ec2ce99d2763617b15/addons/fluxcd/template.cue#L25) here after you finished reading this blog.)
+
 When you design what parameters are provided to the user, there are several things to consider:
 
 - Do not provide every possible parameter to your user and let them figure out how to dial dozens of knobs by themselves. Abstract fine-grained knobs into some broad parameters, so that the user can input a few parameters and get a usable but customized addon.
@@ -99,9 +106,9 @@ When you design what parameters are provided to the user, there are several thin
 
 ### template.cue and resources directory
 
-OAM Application is stored here. In our case, we will create an Application that includes a Redis Operator to give our cluster the ability to create Redis clusters.
+OAM Application is stored here, which contains the actual installation process of addons. In our case, we will create an Application that includes a Redis Operator to give our cluster the ability to create Redis clusters.
 
-template.cue and resources directory both serve the same purpose -- to define an Application. Aside from historical reasons, the reason why we split it into two places is readability. When we have a ton of resource in template.cue, it will eventually be too long to read. So we typically put the Application scaffold in `template.cue`, and Application Components in `resources` directory.
+`template.cue` and `resources/` directory both serve the same purpose -- to define an Application. Aside from historical reasons, the reason why we split it into two places is readability. When we have a ton of resource in template.cue, it will eventually be too long to read. So we typically put the Application scaffold in `template.cue`, and Application Components in `resources` directory.
 
 #### template.cue
 
@@ -133,7 +140,9 @@ output: {
 		]
 	}
 }
-// Resource topology. We will discuss this in detail later.
+// Resource topology, which can help KubeVela glue resources toghther.
+// We will discuss this in detail later.
+// Documentation: https://kubevela.io/docs/reference/topology-rule
 outputs: topology: resourceTopology // defined in resources/topology.cue
 ```
 
@@ -163,11 +172,11 @@ redisOperator: {
 }
 ```
 
-#### Other enhancements
+#### Highlights of the glue capability provided by KubeVela
 
-One of the notable features is [*Topology Rules*](https://kubevela.io/docs/reference/topology-rule) (or Resource Topologies, Resource Relationships). Although not required, it can help KubeVela build the topological relationships of the resources managed by a KubeVela Application. It is especially helpful when we use CRs (which is the case in the example).
+One of the notable features is [*Topology Rules*](https://kubevela.io/docs/reference/topology-rule) (or Resource Topologies, Resource Relationships). Although not required, it can help KubeVela build the topological relationships of the resources managed by a KubeVela Application. This is how KubeVela can glue all kinds of resources together into an Applicatiob. It is especially helpful when we use CRs (which is exactly the case in this example).
 
-In our case, the `redis-failover` Component will create a CR, named `RedisFailover`. If we don't have *Topology Rules*, although we know `RedisFailover` is managing several Deployments, KubeVela doesn't know this. So we can *tell* KubeVela our understanding by *Topology Rules*. Once KubeVela know what's inside a `RedisFailover`, it will know the relationships of all the resources inside an Application. So what's the benefits? For example: (refer to [Run our addon](#Run our addon))
+In our case, the `redis-failover` Component will create a CR, named `RedisFailover`. If we don't have *Topology Rules*, although we know `RedisFailover` is managing several Deployments and Services, KubeVela doesn't magically know this. So we can *tell* KubeVela our understanding with *Topology Rules*. Once KubeVela know what's inside a `RedisFailover`, it will know the relationships of all the resources inside an Application. So what's the benefits? For example: (refer to [Run our addon](#Run our addon))
 
 - Resource topology graphs in VelaUX
 - Execute commands in containers of an Application using `vela exec`
@@ -221,17 +230,19 @@ resourceTopology: {
 
 ### definitions directory
 
-Definitions directory contains KubeVela Definitions, including ComponentDefinitions, TraitDefinitions, and etc.
+Definitions directory contains KubeVela Definitions, including ComponentDefinitions, TraitDefinitions, and etc. This is the most important part of an addon as it provides the real capability to end users. With the Component and Trait types defined here, users can use them in their applications. 
 
-Writing Definitions for an addon is the same as writing regular Definitions. We will refer to [Component Definition](https://kubevela.io/docs/platform-engineers/components/custom-component) and [Redis Operator](https://github.com/spotahome/redis-operator/blob/master/README.md) to write our ComponentDefinition.
+Writing Definitions for an addon is the same as writing regular Definitions, including [Component Definition](https://kubevela.io/docs/platform-engineers/components/custom-component), [Trait Definition](https://kubevela.io/docs/platform-engineers/traits/customize-trait), [Policy Definition](https://kubevela.io/docs/platform-engineers/policy/custom-policy), and [Workflow Step Definition](https://kubevela.io/docs/platform-engineers/workflow/workflow). We will refer to [Component Definition](https://kubevela.io/docs/platform-engineers/components/custom-component) and [Redis Operator](https://github.com/spotahome/redis-operator/blob/master/README.md) to write our ComponentDefinition.
 
-The ComponentDefinition we are going to write is called `redis-failover`. It will create a CR called RedisFailover. So the Redis Operator in our addon Application will create a Redis cluster for us. You can refer to the [source code](https://github.com/kubevela/catalog/blob/master/experimental/addons/redis-operator/definitions/redis-failover.cue).
+The Component Definition we are going to write is called `redis-failover`. It will create a CR called RedisFailover. With RedisFailover created, the Redis Operator in our addon Application will create a Redis cluster for us. You can refer to the [source code](https://github.com/kubevela/catalog/blob/master/experimental/addons/redis-operator/definitions/redis-failover.cue).
 
 ### metadata.yaml
 
-Just the name implies, these are all metadata of an addon, including addon name, version, system requirements, and etc. (per [documentation](https://kubevela.net/docs/platform-engineers/addon/intro#basic-information-file)). One thing to notice: we are focusing on the new addon format introduced in KubeVela v1.5, so you should avoid using old incompatible fields. The fields listed below contain all the fields available to you.
+Just the name implies, these are all metadata of an addon, including addon name, version, system requirements, and etc. (per [documentation](https://kubevela.io/docs/platform-engineers/addon/intro#basic-information-file)). One thing to notice: we are focusing on the new addon format introduced in KubeVela v1.5, so you should avoid using old incompatible fields. The example listed below contains all the fields available to you.
 
-> For example, the old `deployTo.runtimeCluster` has an alternative in the new addon format (using topology Policy) and should be avoided. You can refer to `template.cue` in the full source code.
+:::tip
+For example, the old `deployTo.runtimeCluster` has an alternative in the new addon format (using topology Policy) and should be avoided. You can refer to [`template.cue`](https://github.com/kubevela/catalog/blob/958a770a9adb3268e56ca4ec2ce99d2763617b15/experimental/addons/redis-operator/template.cue#L28) in the full source code.
+:::
 
 
 ```yaml
@@ -288,7 +299,7 @@ A whole tree of complicated resources are created with just a few lines of yaml,
 
 ![redis-operator-sample-topology-graph](/img/blog-addon/redis-operator-sample-topology-graph.png)
 
-Users can also choose the low-level resources of our sample Application, i.e., 3 Redis Pods and 3 Sentinal Pods, when executing `vela exec/log/port-forward`:
+Users can also choose the low-level resources of our sample Application, i.e., 3 Redis Pods and 3 Sentinal Pods, when executing `vela exec/log/port-forward`. At the first glance, it may not seem that useful to `exec` into a Pod if you are running a single cluster. However, if you are running multi-cluster installations, having the option to choose resource spanning across multiple clusters is a huge time-saver:
 
 ![redis-operator-sample-pod-topology](/img/blog-addon/redis-operator-sample-pod-topology.png)
 

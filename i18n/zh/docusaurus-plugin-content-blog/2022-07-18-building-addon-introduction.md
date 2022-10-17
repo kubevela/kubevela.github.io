@@ -13,7 +13,7 @@ hide_table_of_contents: false
 
 KubeVela 插件（addon）可以方便地扩展 KubeVela 的能力。正如我们所知，KubeVela 是一个高度可扩展的平台，用户可以通过 [模块定义（Definition）](https://kubevela.net/zh/docs/platform-engineers/oam/x-definition)扩展 KubeVela 的能力，而 KubeVela 插件正是方便将这些**自定义扩展**及其**依赖**打包并分发的功能。
 
-这篇博客将会简要介绍 KubeVela 插件的机制和如何自行编写插件。
+这篇博客将会简要介绍 KubeVela 插件的机制和如何自行编写插件。并展示最终用户使用插件的体验、以及插件提供的功能是如何融合的。
 
 <!--truncate-->
 
@@ -32,6 +32,7 @@ KubeVela 插件（addon）可以方便地扩展 KubeVela 的能力。正如我�
 2. 资源分散：用户需要从所处下载不同的文件，既需要安装 Helm 安装 FluxCD 还需要下载模块定义
 3. 难以分发：用户需要手动下载模块定义就注定了这些资源难以以一个统一的方式分发给用户
 4. 缺少多集群支持：KubeVela 注重多集群交付，而这样的手动安装方式显然是难以维护多集群的环境的
+5. 无版本管理：用户需要手动管理模块定义和 Controller 之间的版本
 
 而 KubeVela 插件就是为了逐一解决这些问题而生。
 
@@ -45,7 +46,9 @@ KubeVela 插件（addon）可以方便地扩展 KubeVela 的能力。正如我�
 
 ## 创建自己的插件
 
-> 注意：以下内容适用于 KubeVela v1.5 及更新的版本
+:::tip
+以下内容适用于 KubeVela v1.5 及更新的版本
+:::
 
 我们将以 Redis 插件为例，讲解如何从头创建一个 KubeVela 插件的实际过程。本次完整的 Redis 插件代码见 [catalog/redis-operator](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator)，在这里我们会避免讨论过深的细节，文档可以参考[自定义插件](https://kubevela.net/zh/docs/platform-engineers/addon/intro)。
 
