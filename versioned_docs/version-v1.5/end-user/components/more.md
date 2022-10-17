@@ -25,7 +25,8 @@ KubeVela community has maintained a growing [catalog of addons](https://github.c
 vela addon list
 ```
 
-The command will show the basic addon info along with all available versions.
+<details>
+<summary>The command will show the basic addon info along with all available versions.</summary>
 
 ```console
 NAME                            REGISTRY        DESCRIPTION                                                                                             AVAILABLE-VERSIONS              STATUS          
@@ -38,6 +39,7 @@ velaux                          KubeVela        KubeVela User Experience (UX). A
 terraform-alibaba               KubeVela        Kubernetes Terraform Controller for Alibaba Cloud                                                       [1.0.2, 1.0.1]                  disabled    
 ...snip...
 ```
+</details>
 
 * You can refer to [addon reference docs](../../reference/addons/overview) for more details of these community certificated addons.
 
@@ -49,7 +51,9 @@ The simplest command for installing one addon is:
 vela addon enable fluxcd
 ```
 
-The expected output should be:
+<details>
+<summary>The expected output.</summary>
+
 ```console
 I0111 21:45:24.553174   89345 apply.go:106] "creating object" name="addon-fluxcd" resource="core.oam.dev/v1beta1, Kind=Application"
 I0111 21:45:25.258914   89345 apply.go:106] "creating object" name="helm" resource="core.oam.dev/v1beta1, Kind=ComponentDefinition"
@@ -60,6 +64,7 @@ I0111 21:45:25.625815   89345 apply.go:106] "creating object" name="kustomize-st
 I0111 21:45:25.660129   89345 apply.go:106] "creating object" name="component-uischema-helm" resource="/v1, Kind=ConfigMap"
 Addon: fluxcd enabled Successfully.
 ```
+</details>
 
 You can also install addons with some advanced flags.
 
@@ -88,7 +93,14 @@ vela addon enable velaux repo=<your repo address>
 If you want to check the detail status of an addon, or get more available parameters and other useful info of an addon, you can use command `addon status`. For example:
 
 ```shell
-$ vela addon enable velaux --verbose
+vela addon enable velaux --verbose
+```
+
+
+<details>
+<summary>expected output</summary>
+
+```shell
 velaux: disabled 
 KubeVela User Experience (UX). An extensible, application-oriented delivery and management Dashboard.
 ==> Registry Name
@@ -119,12 +131,15 @@ KubeVela
         default: "kubevela-vela-core"
         required: ✔
 ```
+</details>
 
 As above shows, these infos contain the available parameters, available versions, dependent addons and description of and addon.
 
 ### Discover the capabilities installed
 
+:::tip
 Once addon installed, end user can discover and use these capabilities immediately.
+:::
 
 * Generally, end user can list the new component or trait types added by `vela component` or `vela trait`. Refer to [Lifecycle of a Definition](../../getting-started/definition#lifecycle-of-a-definition) for more usage details.
 
@@ -140,10 +155,13 @@ Please make sure the addon along with its capabilities is no longer used in any 
 vela addon disable fluxcd
 ```
 
-Expect output:
-```
+<details>
+<summary>expected output</summary>
+
+```shell
 Successfully disable addon:fluxcd
 ```
+</details>
 
 ### Manage Addon Registry
 
@@ -153,24 +171,45 @@ Let's take the experimental community registry as example.
 * List your current registries
 
 ```
-$ vela addon registry list 
+vela addon registry list 
+```
+
+<details>
+<summary>expected output</summary>
+
+```shell
 Name            Type    URL                        
 KubeVela        helm    https://addons.kubevela.net
 ```
+</details>
 
 * Add a new registry
 
 ```
-$ vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
+vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
+```
+
+<details>
+<summary>expected output</summary>
+
+```
 Successfully add an addon registry experimental
 ```
+</details>
 
 * Delete one registry
 
 ```
-$ vela addon registry delete experimental
+vela addon registry delete experimental
+```
+
+<details>
+<summary>expected output</summary>
+
+```
 Successfully delete an addon registry experimental
 ```
+</details>
 
 * Build custom registry
 
@@ -193,12 +232,25 @@ velaux
 └── template.yaml
 
 2 directories, 4 files
-
-$ vela addon enable ./velaux
-Addon: velaux enabled successfully
 ```
 
+* Enable the addon from local directory.
+
+```
+vela addon enable ./velaux
+```
+
+<details>
+<summary>expected output</summary>
+
+```
+Addon: velaux enabled successfully
+```
+</details>
+
+:::caution
 Please notice that, while an addon is being installed in a cluster, it maybe still need pull some images or Helm Charts. If your cluster cannot reach these resources please refer [docs](../../platform-engineers/system-operation/enable-addon-offline) to complete installation without Internet access.
+:::
 
 ### Manage the addon with UI Console
 

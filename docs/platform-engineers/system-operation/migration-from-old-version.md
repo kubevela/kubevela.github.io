@@ -9,7 +9,7 @@ KubeVela has [release cadence](../../contributor/release-process) for every 2-3 
 ## From v1.4.x to v1.5.x
 
 :::caution
-Note: Please upgrade to v1.5.5+ to avoid application workflow rerun when controller upgrade.
+Note: Please upgrade to v1.5.7+ to avoid application workflow rerun when controller upgrade.
 :::
 
 1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
@@ -27,19 +27,19 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.5 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.7 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.5
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.7
 ```
 
 4. Upgrade VelaUX or other addon
 
 ```
-vela addon upgrade velaux --version 1.5.5
+vela addon upgrade velaux --version 1.5.6
 ```
 
 ## From v1.3.x to v1.4.x
@@ -201,9 +201,11 @@ vela addon list
 vela addon enable <addon name>
 ```
 
-⚠️Note: This step is not required if the addon is already enabled and used in the pre-upgrade version
+:::tip
+This step is not required if the addon is already enabled and used in the pre-upgrade version
+:::
 
-5. Update Custom Definition
+1. Update Custom Definition
 
 Check if your custom definition works in the new version, try to upgrade them if there're any issues.
 If you haven't defined any, the normal upgrade process is completed!

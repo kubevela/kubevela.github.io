@@ -336,5 +336,8 @@
     },
     "sidebar.docs.category.Registry Integration": {
         "message": "注册中心集成"
+    },
+    "sidebar.docs.category.Multi Environment Delivery": {
+        "message": "多环境交付"
     }
 }
