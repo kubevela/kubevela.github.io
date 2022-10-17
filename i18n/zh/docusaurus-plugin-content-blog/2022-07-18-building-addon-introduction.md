@@ -19,9 +19,9 @@ KubeVela 插件（addon）可以方便地扩展 KubeVela 的能力。正如我�
 
 ## 为什么要使用 KubeVela 插件
 
-用户使用插件的一个典型方法是通过 KubeVela 团队维护的 [addon catalog](https://github.com/kubevela/catalog) ，它包含了 KubeVela 团队与社区开发者精心编写的扩展，并以插件的形式发布于 catalog 中，这样你可以一键下载并安装这些插件。例如安装 FluxCD 可以快速给你的 KubeVela Application 提供部署 HelmComponent 等 FluxCD 提供的能力。
+用户使用插件的一个典型方法是通过 KubeVela 团队维护的 [addon catalog](https://github.com/kubevela/catalog) ，它包含了 KubeVela 团队与社区开发者精心编写的扩展，并以插件的形式发布于 catalog 中，这样你可以一键下载并安装这些插件。例如安装 FluxCD 可以快速给你的 KubeVela Application 提供部署 Helm Component 等 FluxCD 提供的能力。
 
-以上述的 FluxCD 为例，相较于一键安装，如果不使用插件就必须这么安装（实际上，这也是 KubeVela v1.1 及之前的安装方法）：
+相较于一键安装的便利性，如果不使用插件就必须这么安装（实际上，这也是 KubeVela v1.1 及之前的安装方法）：
 
 1. 通过 Helm 或者下载 yaml 文件手动安装 FluxCD （包括数个 Controller 和 CRD）
 2. 下载 FluxCD 相关的模块定义文件并安装
@@ -53,10 +53,10 @@ KubeVela 插件（addon）可以方便地扩展 KubeVela 的能力。正如我�
 
 那至此我们的大目标就明确了：
 
-- 编写插件的应用描述文件（OAM Application），其中包含了一个 Redis Operator （见完整代码的 template.cue 及 resources 目录）
+- 编写插件的应用描述文件（OAM Application），其中包含了一个 Redis Operator （见完整代码的 `template.cue` 及 `resources` 目录）
 - 编写 `redis-failover` 类型的 ComponentDefinition （见完整代码的 definitions 目录）
 
-不过在开始编写之前，我们首先需要了解一个 KubeVela 插件的目录结构（ `vela addon int` 可以帮助你创建目录结构）。后续我们会在编写的过程中详细说明每个文件的作用，在这里只需大致了解有哪些文件即可。同时，在插件中我们会大量使用 CUE ，你可能需要先查阅[入门指南](https://kubevela.net/zh/docs/platform-engineers/cue/basic)。
+不过在开始编写之前，我们首先需要了解一个 KubeVela 插件的目录结构（ `vela addon init` 可以帮助你创建目录结构）。后续我们会在编写的过程中详细说明每个文件的作用，在这里只需大致了解有哪些文件即可。
 
 ```shell
 redis-operator/            # 目录名为插件名称
@@ -71,6 +71,8 @@ redis-operator/            # 目录名为插件名称
 ├── README.md              # 提供给用户阅读，包含插件使用指南等
 └── template.cue           # 应用描述文件，包含一个 OAM Application
 ```
+
+> 同时，在插件中我们会大量使用 CUE ，你可能需要先查阅[入门指南](https://kubevela.net/zh/docs/platform-engineers/cue/basic)。
 
 ### parameter.cue
 
@@ -208,6 +210,7 @@ resourceTopology: {
 	}])
 }
 ```
+
 ### definitions 目录
 
 Definitions 目录存放 KubeVela 模块定义（Definition），包括组件定义（ComponentDefinition）、策略定义（TraitDefinition）等。
@@ -249,7 +252,7 @@ system:
 
 至此我们已经将插件的主要部分编写完成，下载 [完整代码](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator) 补全部分细节后，即可尝试运行。
 
-下载得到 redis-operator 目录后，我们可以通过 `vela addon enable redis-operator` 安装本地的 `redis-operator` 插件。安装完成后就可以参考插件的 [README](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator) 试用我们的 Redis 插件了！
+下载得到 redis-operator 目录后，我们可以通过 `vela addon enable redis-operator` 安装本地的 `redis-operator` 插件。安装完成后就可以参考插件的 [README](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator/README.md) 试用我们的 Redis 插件了！
 
 > 这里也体现出插件的 README 的重要性，其中需要包括插件的作用、详细使用指南等，确保用户可以快速上手
 
