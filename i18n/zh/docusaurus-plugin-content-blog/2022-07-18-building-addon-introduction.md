@@ -13,15 +13,15 @@ hide_table_of_contents: false
 
 KubeVela 插件（addon）可以方便地扩展 KubeVela 的能力。正如我们所知，KubeVela 是一个高度可扩展的平台，用户可以通过 [模块定义（Definition）](https://kubevela.net/zh/docs/platform-engineers/oam/x-definition)扩展 KubeVela 的能力，而 KubeVela 插件正是方便将这些**自定义扩展**及其**依赖**打包并分发的功能。
 
-这篇博客将会简要介绍 KubeVela 插件的机制和如何自行编写插件。
+这篇博客将会简要介绍 KubeVela 插件的机制和如何自行编写插件。并展示最终用户使用插件的体验、以及插件提供的功能是如何融合的。
 
 <!--truncate-->
 
 ## 为什么要使用 KubeVela 插件
 
-用户使用插件的一个典型方法是通过 KubeVela 团队维护的 [addon catalog](https://github.com/kubevela/catalog) ，它包含了 KubeVela 团队与社区开发者精心编写的扩展，并以插件的形式发布于 catalog 中，这样你可以一键下载并安装这些插件。例如安装 FluxCD 可以快速给你的 KubeVela Application 提供部署 HelmComponent 等 FluxCD 提供的能力。
+用户使用插件的一个典型方法是通过 KubeVela 团队维护的 [addon catalog](https://github.com/kubevela/catalog) ，它包含了 KubeVela 团队与社区开发者精心编写的扩展，并以插件的形式发布于 catalog 中，这样你可以一键下载并安装这些插件。例如安装 FluxCD 可以快速给你的 KubeVela Application 提供部署 Helm Component 等 FluxCD 提供的能力。
 
-以上述的 FluxCD 为例，相较于一键安装，如果不使用插件就必须这么安装（实际上，这也是 KubeVela v1.1 及之前的安装方法）：
+相较于一键安装的便利性，如果不使用插件就必须这么安装（实际上，这也是 KubeVela v1.1 及之前的安装方法）：
 
 1. 通过 Helm 或者下载 yaml 文件手动安装 FluxCD （包括数个 Controller 和 CRD）
 2. 下载 FluxCD 相关的模块定义文件并安装
@@ -32,6 +32,7 @@ KubeVela 插件（addon）可以方便地扩展 KubeVela 的能力。正如我�
 2. 资源分散：用户需要从所处下载不同的文件，既需要安装 Helm 安装 FluxCD 还需要下载模块定义
 3. 难以分发：用户需要手动下载模块定义就注定了这些资源难以以一个统一的方式分发给用户
 4. 缺少多集群支持：KubeVela 注重多集群交付，而这样的手动安装方式显然是难以维护多集群的环境的
+5. 无版本管理：用户需要手动管理模块定义和 Controller 之间的版本
 
 而 KubeVela 插件就是为了逐一解决这些问题而生。
 
@@ -45,7 +46,9 @@ KubeVela 插件（addon）可以方便地扩展 KubeVela 的能力。正如我�
 
 ## 创建自己的插件
 
-> 注意：以下内容适用于 KubeVela v1.5 及更新的版本
+:::tip
+以下内容适用于 KubeVela v1.5 及更新的版本
+:::
 
 我们将以 Redis 插件为例，讲解如何从头创建一个 KubeVela 插件的实际过程。本次完整的 Redis 插件代码见 [catalog/redis-operator](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator)，在这里我们会避免讨论过深的细节，文档可以参考[自定义插件](https://kubevela.net/zh/docs/platform-engineers/addon/intro)。
 
@@ -53,10 +56,10 @@ KubeVela 插件（addon）可以方便地扩展 KubeVela 的能力。正如我�
 
 那至此我们的大目标就明确了：
 
-- 编写插件的应用描述文件（OAM Application），其中包含了一个 Redis Operator （见完整代码的 template.cue 及 resources 目录）
-- 编写 `redis-failover` 类型的 ComponentDefinition （见完整代码的 definitions 目录）
+- 编写插件的应用描述文件（OAM Application），这将会用于安装 Redis Operator （见完整代码的 `template.cue` 及 `resources` 目录）
+- 编写 `redis-failover` 类型的 [ComponentDefinition](https://kubevela.net/zh/docs/platform-engineers/components/custom-component) （见完整代码的 definitions 目录）
 
-不过在开始编写之前，我们首先需要了解一个 KubeVela 插件的目录结构（ `vela addon int` 可以帮助你创建目录结构）。后续我们会在编写的过程中详细说明每个文件的作用，在这里只需大致了解有哪些文件即可。同时，在插件中我们会大量使用 CUE ，你可能需要先查阅[入门指南](https://kubevela.net/zh/docs/platform-engineers/cue/basic)。
+不过在开始编写之前，我们首先需要了解一个 KubeVela 插件的目录结构（ `vela addon init` 可以帮助你创建目录结构）。后续我们会在编写的过程中详细说明每个文件的作用，在这里只需大致了解有哪些文件即可。
 
 ```shell
 redis-operator/            # 目录名为插件名称
@@ -71,6 +74,10 @@ redis-operator/            # 目录名为插件名称
 ├── README.md              # 提供给用户阅读，包含插件使用指南等
 └── template.cue           # 应用描述文件，包含一个 OAM Application
 ```
+
+:::tip
+同时，在插件中我们会大量使用 CUE ，你可能需要先查阅[入门指南](https://kubevela.net/zh/docs/platform-engineers/cue/basic)。
+:::
 
 ### parameter.cue
 
@@ -93,7 +100,7 @@ parameter: {
 
 ### template.cue 和 resources 目录
 
-这是存放我们应用描述文件的地方，即一个 OAM Application ，我们主要会在这里包含 Redis Operator ，给集群提供管理 Redis 集群的能力。
+这是存放我们应用描述文件的地方，即一个 OAM Application 。这描述了实际的插件安装过程。我们主要会在这里包含 Redis Operator ，给集群提供管理 Redis 集群的能力。
 
 template.cue 和 resource 目录本质上是相同的，他们共同组成一个 Application 。那为什么需要 resources 目录呢？除去历史原因，这主要是为了可读性的考虑，在 Application 中包含大量资源的时候 template.cue 可能变得很长，这时我们可以把资源放置在 resource 中增加可读性。一般来说，我们将 Application 的框架放在 template.cue 中，将 Application 内部的 Components 放在 resource 目录中。
 
@@ -125,7 +132,8 @@ output: {
 		]
 	}
 }
-// 定义资源关联规则，后续详细介绍
+// 定义资源关联规则，用于将资源粘合在一起。后续会着重介绍
+// Documentation: https://kubevela.net/zh/docs/reference/topology-rule
 outputs: topology: resourceTopology // 定义于 resources/topology.cue 中
 ```
 #### resources 资源文件
@@ -154,9 +162,9 @@ redisOperator: {
 }
 ```
 
-#### 其他增强
+#### KubeVela 提供的资源粘合能力
 
-值得注意的一个功能是 [*资源关联规则 (Resource Topology)*](https://kubevela.net/zh/docs/reference/topology-rule) 。虽然它不是必须的，但是它能帮助 KubeVela 建立应用所纳管资源的拓扑关系，这在我们使用了 CR 的时候特别有用。
+值得注意的一个功能是 [*资源关联规则 (Resource Topology)*](https://kubevela.net/zh/docs/reference/topology-rule) 。虽然它不是必须的，但是它能帮助 KubeVela 建立应用所纳管资源的拓扑关系。这就是 KubeVela 如何将各种各样的资源粘合成 Application 的。这在我们使用了 CR 的时候特别有用。
 
 在本例中，`redis-failover` 类型的 Component 会创建一个 CR ，名为 RedisFailover 。但是在没有资源关联规则的情况下，假设在你的 Application 中使用了 RedisFailover ，虽然我们知道 RedisFailover 管控了数个 Redis Deployment ，但是 KubeVela 并不知道 RedisFailover 之下有 Deployment 。这时我们可以通过 *资源关联规则* 将我们对于 RedisFailover 的了解*告诉* KubeVela，这样 KubeVela 可以帮助我们建立起整个应用下面纳管资源的拓扑层级关系。此时你将获得 KubeVela 提供的许多有用功能，例如（效果见 [运行插件](#运行插件) ）：
 
@@ -208,11 +216,12 @@ resourceTopology: {
 	}])
 }
 ```
+
 ### definitions 目录
 
-Definitions 目录存放 KubeVela 模块定义（Definition），包括组件定义（ComponentDefinition）、策略定义（TraitDefinition）等。
+Definitions 目录存放 KubeVela 模块定义（Definition），包括组件定义（ComponentDefinition）、策略定义（TraitDefinition）等。因为这才是真正给用户提供能力的，所以这是一个插件最重要的部分。有了这里定义的模块定义类型，用户就可以在自己的 Application 中使用他们了。
 
-编写 ComponentDefinition 的过程主要参照 KubeVela 文档 [自定义组件](https://kubevela.net/zh/docs/platform-engineers/components/custom-component) 与 [Redis Operator 使用文档](https://github.com/spotahome/redis-operator/blob/master/README.md) ，这与传统编写 ComponentDefinition 的方式并无差异。
+编写 ComponentDefinition 的过程主要参照 KubeVela 文档 [自定义组件](https://kubevela.net/zh/docs/platform-engineers/components/custom-component) 与 [Redis Operator 使用文档](https://github.com/spotahome/redis-operator/blob/master/README.md) ，这与传统编写 ComponentDefinition 的方式并无差异。模块定义包括：[Component Definition](https://kubevela.io/docs/platform-engineers/components/custom-component), [Trait Definition](https://kubevela.io/docs/platform-engineers/traits/customize-trait), [Policy Definition](https://kubevela.io/docs/platform-engineers/policy/custom-policy) 和 [Workflow Step Definition](https://kubevela.io/docs/platform-engineers/workflow/workflow)。
 
 我们要编写的是一个 ComponentDefinition ，名为 `redis-failover`，它会创建一个 RedisFailover 的 CR ，这样刚刚添加的 Redis Operator 就可以帮助创建 Redis 集群，见[完整代码](https://github.com/kubevela/catalog/blob/master/experimental/addons/redis-operator/definitions/redis-failover.cue)。
 
@@ -220,7 +229,9 @@ Definitions 目录存放 KubeVela 模块定义（Definition），包括组件定
 
 这里包含了插件的元数据，即插件的名称、版本、系统要求等，可以参考[文档](https://kubevela.net/zh/docs/platform-engineers/addon/intro#%E6%8F%92%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF%E6%96%87%E4%BB%B6)。需要注意的是，本次介绍的为 KubeVela v1.5 之后的新写法，因此需要避免使用某些不兼容的元数据字段，以下样例中包含了所有的可用元数据。
 
-> 例如传统的 `deployTo.runtimeCluster` （安装至子集群）等元数据在新写法中已有代替，在我们的样例中使用 topology Policy 达到相同目的，可见完整代码中的 template.cue
+:::tip
+例如传统的 `deployTo.runtimeCluster` （安装至子集群）等元数据在新写法中已有代替（使用 topology Policy），应当使用新写法。可见完整代码中的 [`template.cue`](https://github.com/kubevela/catalog/blob/958a770a9adb3268e56ca4ec2ce99d2763617b15/experimental/addons/redis-operator/template.cue#L28)
+:::
 
 ```yaml
 # 插件名称，与目录名一致
@@ -249,7 +260,7 @@ system:
 
 至此我们已经将插件的主要部分编写完成，下载 [完整代码](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator) 补全部分细节后，即可尝试运行。
 
-下载得到 redis-operator 目录后，我们可以通过 `vela addon enable redis-operator` 安装本地的 `redis-operator` 插件。安装完成后就可以参考插件的 [README](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator) 试用我们的 Redis 插件了！
+下载得到 redis-operator 目录后，我们可以通过 `vela addon enable redis-operator` 安装本地的 `redis-operator` 插件。安装完成后就可以参考插件的 [README](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator/README.md) 试用我们的 Redis 插件了！
 
 > 这里也体现出插件的 README 的重要性，其中需要包括插件的作用、详细使用指南等，确保用户可以快速上手
 
@@ -276,7 +287,7 @@ spec:
 
 ![redis-operator-sample-topology-graph](/img/blog-addon/redis-operator-sample-topology-graph.png)
 
-在执行 `vela exec/log/port-forward` 等命令时也可以精确地看到 Application 底层包含的资源（即支撑 Redis 集群的 3 个 Redis Pod 和 3 个 Sentinel Pod）：
+在执行 `vela exec/log/port-forward` 等命令时也可以精确地看到 Application 底层包含的资源（即支撑 Redis 集群的 3 个 Redis Pod 和 3 个 Sentinel Pod）。如果你在使用单集群，乍一看你可能不会觉得 exec 进一个 Pod 是很特殊的功能。但是一旦考虑到多集群，能够在横跨多个集群的资源中进行选择能够极大的节省时间：
 
 ![redis-operator-sample-pod-topology](/img/blog-addon/redis-operator-sample-pod-topology.png)
 
