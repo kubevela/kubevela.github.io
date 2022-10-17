@@ -1,21 +1,20 @@
 ---
-title: Custom Container Delivery
+title: 自定义容器交付
 ---
 
-If the default `webservice` component type is not suitable for your team, and you want to get a more simple way to deploy your business application. This guide will help you. Before, you must have the platform manager's permission.
+如果默认的 `webservice` 组件类型不能满足你的团队，并且你希望获得一种更简单的方式来部署业务应用。 本指南将为你提供帮助。 在此之前，你必须获得平台管理员的权限。
 
-### Simplify the `webservice` type
+### 简化 `webservice` 类型
 
-The default [webservice](../end-user/components/references#webservice) component type has more than 10 properties. Maybe your developer only needs to configure the image path and resource limits. For the other properties, the team could set the default values.
-If so, you could change the `webservice` definition.
+默认的 [webservice](../end-user/components/references#webservice) 组件类型有超过 10 个属性。 也许你的开发者只需要配置镜像路径和资源限制。 对于其他属性，团队可以设置默认值。如果是这样，你可以更改 `webservice` 定义。
 
-1. Change the UI schema to hide some fields
+1. 更改 UI schema 以隐藏某些字段
 
-> This way is only suitable the UI users.
+> 这种方式只适合 UI 用户。
 
 ![image](https://static.kubevela.net/images/1.5/custom-ui-schema.jpg)
 
-On the definition detail page, users could customize the UI schema to setting the UI forms. For example, if you want to hide the ExposeType field, only need to set the disable is `true`.
+在定义详情页面，用户可以自定义 UI schema 来设置 UI 表单。 例如，如果要隐藏 ExposeType 字段，只需要设置 disable 为 `true`。
 
 ```yaml
 ...
@@ -26,29 +25,29 @@ On the definition detail page, users could customize the UI schema to setting th
 ...
 ```
 
-More references: [UI Schema](../reference/ui-schema)
+更多参考: [UI Schema](../reference/ui-schema)
 
-2. Change the definition and remove or add some fields
+2. 更改定义并增删字段
 
-If you want to completely remove or add some fields, you should edit the component definition.
+如果要完全删除或添加某些字段，则应编辑组件定义。
 
-> This guide should learn the CUE language.
+> 本指南需要先学习 CUE 语言。
 
 ```bash
 vela def get webservice > custom-webservice.cue
 ```
 
-Refer to the [CUE Basic](../platform-engineers/cue/basic) and [Component Definition](../platform-engineers/components/custom-component) documents to learn how to custom the `custom-webservice.cue`.
+参考[CUE基础](../platform-engineers/cue/basic)和[组件定义](../platform-engineers/components/custom-component)文档，了解如何自定义 `custom-webservice.cue`。
 
-After edit:
+编辑完成之后:
 
 ```bash
 vela def apply custom-webservice.cue
 ```
 
-### Create a new component type to deploy the war package
+### 创建一个新的组件类型来部署 war 包
 
-If your team uses the war package to deploy the Java application. In KubeVela you could create a new component type to deploy the War package.
+如果你的团队使用 war 包来部署 Java 应用。 在 KubeVela 中，你可以创建一个新的组件类型来部署 War 包。
 
 ```cue
 "java-war": {
@@ -228,13 +227,13 @@ template: {
 }
 ```
 
-Copy the definition and create a file `java-war.cue`, then:
+复制上面的定义来创建一个文件 `java-war.cue`，然后：
 
 ```bash
 vela def apply java-war.cue
 ```
 
-Now, other developers could create the application with a war URL, for example:
+现在，其他开发人员可以使用 war URL 创建应用，例如：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -299,6 +298,6 @@ spec:
 
 ![java-app](https://static.kubevela.net/images/1.5/java-war.jpg)
 
-This example includes three components, and the order service depends on the catalog and the customer services. The developer only needs to care about the war package URL and the tomcat/JRE version, they are familiar to the Java developer. The developer should upload the war package to a repository, such as Jfrog. Get a download URL to assign to the `warURL` field.
+这个例子包括三个组件，order 服务依赖 catalog 和 customer 服务。 开发者只需要关心 war 包 URL 和 tomcat/JRE 版本，Java开发者对此都很熟悉。 开发人员应将 war 包上传到仓库，例如 Jfrog。 获取下载 URL 以分配给 `warURL` 字段。
 
-In the same way, you could create a component type to deploy the Jar package and other's binary packages.
+同样，你可以创建一个组件类型来部署 Jar 包和其他二进制包。

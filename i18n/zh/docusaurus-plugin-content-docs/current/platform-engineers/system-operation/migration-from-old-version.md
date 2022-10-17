@@ -8,7 +8,9 @@ KubeVela 的[发布周期](../../contributor/release-process)定为每隔 2-3 �
 
 ## 从 v1.4.x 版本 到 v1.5.x 版本
 
-> ⚠️ 注意: 升级到 v1.5.4 及以前的版本可能会触发应用重启，升级到 v1.5.5 可以保证已经正常运行的应用不受影响。
+:::caution
+注意: 升级到 v1.5.6 及以前的版本可能会触发应用重启，升级到 v1.5.7+ 可以保证已经正常运行的应用不受影响。
+:::
 
 1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
 
@@ -25,24 +27,26 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.5 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.7 --wait
 ```
 
 3. 下载并升级对应的CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.5
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.7
 ```
 
 4. 升级 VelaUX 或其他插件
 
 ```
-vela addon upgrade velaux --version 1.5.5
+vela addon upgrade velaux --version 1.5.7
 ```
 
 ## 从 v1.3.x 版本 到 v1.4.x 版本
 
-> ⚠️ 注意: 升级到该版本可能会触发应用重启。
+:::danger
+注意: 升级到该版本可能会触发应用重启。
+:::
 
 1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
 
@@ -83,7 +87,9 @@ vela addon upgrade velaux --version 1.4.7
 
 ## 从 v1.2.x 版本 到 v1.3.x 版本
 
-> ⚠️ 注意: 升级到该版本可能会触发应用重启。
+:::danger
+注意: 升级到该版本可能会触发应用重启。
+:::
 
 1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
 
@@ -123,7 +129,9 @@ vela addon upgrade velaux --version 1.3.6
 
 ## 从 v1.1.x 版本到 v1.2.x 版本
 
-> ⚠️ 注意: 升级到该版本会触发应用重启。
+:::danger
+注意: 升级到该版本可能会触发应用重启。
+:::
 
 1. 检查服务是否正常运行
 
@@ -192,9 +200,11 @@ vela addon list
 vela addon enable <addon name>
 ```
 
-⚠️注意: 如果插件在升级前的版本中已经启用并且在使用中，则不需要此步骤
+:::tip
+如果插件在升级前的版本中已经启用并且在使用中，则不需要此步骤.
+:::
 
-5. 更新 Custom Definition 
+1. 更新 Custom Definition 
 
 检查你的 Custom Definition 是否在新版本中正常工作，如果有任何问题，请尝试升级它们。如果你没有定义任何内容，则升级过程已经完成！
 

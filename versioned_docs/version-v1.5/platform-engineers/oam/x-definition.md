@@ -6,7 +6,7 @@ KubeVela is fully programmable via [CUE](https://cuelang.org), while it leverage
 
 You can [manage the definition](../cue/definition-edit) in CUE and the `vela def` command will render it into Kubernetes API with the following protocol.
 
-## Overview
+## Definition API
 
 Essentially, a definition object in KubeVela is a programmable building block. A definition object normally includes several information to model a certain platform capability that would used in further application deployment:
 - **Capability Indicator** 
@@ -25,17 +25,44 @@ apiVersion: core.oam.dev/v1beta1
 kind: XxxDefinition
 metadata:
   name: <definition name>
+  annotations:
+    <map of annotations>
+  labels:
+    <map of labels>
 spec:
   ...
   schematic:
     cue:
       # cue template ...
-    helm:
-      # Helm chart ...
   # ... interoperability fields
 ```
 
-Let's explain them one by one.
+### The convert rule from CUE format to OAM API
+
+Below is a framework of definition in CUE format:
+
+```cue
+<definition name>: {
+    annotations: {}
+    labels: {}    
+    attributes: {}
+    description: ""
+    type: "<definition type>"
+}
+
+template: {
+    ...
+}
+```
+
+- The `"<definition name>"` aligns with the `.metadata.name` in OAM API.
+- The `.annotations` aligns with the `.metadata.annotations` in OAM API.
+- The `.labels` aligns with the `.metadata.labels` in OAM API.
+- The `.attributes.` aligns with the `.spec.` in OAM API except the `.spec.schematic` field.
+- The `template` aligns with the `.spec.schematic.cue` field, only CUE schematic supported in this conversion.
+- The `description` aligns with the `.metadata.annotations["definition.oam.dev/description"]` field.
+
+Let's check the OAM definition API details one by one.
 
 ## ComponentDefinition
 
@@ -478,39 +505,39 @@ spec:
 
 Once the application is created, KubeVela will tag the created resources with a series of tags, which include the version, name, type, etc. of the application. Through these standard protocols, application components, traits and policies can be coordinated. The specific metadata list is as follows:
 
-|                        Label                        |                     Description                     |
-| :-------------------------------------------------: | :-------------------------------------------: |
-|       `workload.oam.dev/type`        | Corresponds to the name of `ComponentDefinition`|
-|       `trait.oam.dev/type`      | Corresponds to the name of `TraitDefinition` |
-|          `app.oam.dev/name`         |        Application name        |
-|      `app.oam.dev/component`        |        Component name                |
-| `trait.oam.dev/resource` |   `outputs.\<resource type\>`in Trait  |
-|   `app.oam.dev/appRevision`    |              Application Revision Name               |
+|           Label           |                   Description                    |
+| :-----------------------: | :----------------------------------------------: |
+|  `workload.oam.dev/type`  | Corresponds to the name of `ComponentDefinition` |
+|   `trait.oam.dev/type`    |   Corresponds to the name of `TraitDefinition`   |
+|    `app.oam.dev/name`     |                 Application name                 |
+|  `app.oam.dev/component`  |                  Component name                  |
+| `trait.oam.dev/resource`  |       `outputs.\<resource type\>`in Trait        |
+| `app.oam.dev/appRevision` |            Application Revision Name             |
 
 ## Definition Runtime Context
 
 In the Definition, some runtime context information can be obtained through the `context` variable. The specific list is as follows, where the scope indicates which module definitions the Context variable can be used in:
 
-|           Context Variable           |                                     Description                                    |               Scope               |
-| :------------------------------: | :------------------------------------------------------------------------------: | :----------------------------------: |
-|      `context.appRevision`       |    The app version name corresponding to the current instance of the application                          |  ComponentDefinition, TraitDefinition      |
-|     `context.appRevisionNum`     |   The app version number corresponding to the current instance of the application.                          |        ComponentDefinition, TraitDefinition        |
-|        `context.appName`         |   The app name corresponding to the current instance of the application.                           |        ComponentDefinition, TraitDefinition          |
+|         Context Variable         |                                      Description                                      |                         Scope                          |
+| :------------------------------: | :-----------------------------------------------------------------------------------: | :----------------------------------------------------: |
+|      `context.appRevision`       |     The app version name corresponding to the current instance of the application     |          ComponentDefinition, TraitDefinition          |
+|     `context.appRevisionNum`     |   The app version number corresponding to the current instance of the application.    |          ComponentDefinition, TraitDefinition          |
+|        `context.appName`         |        The app name corresponding to the current instance of the application.         |          ComponentDefinition, TraitDefinition          |
 |          `context.name`          | component name in ComponentDefinition and TraitDefinition，policy in PolicyDefinition | ComponentDefinition, TraitDefinition, PolicyDefinition |
-|       `context.namespace`        |  The namespace of the current instance of the application                         |        ComponentDefinition, TraitDefinition         |
-|        `context.revision`        |  The version name of the current component instance                            |        ComponentDefinition, TraitDefinition          |
-|       `context.parameter`       | The parameters of the current component instance, it can be obtained in the trait              |           TraitDefinition           |
-|         `context.output`         |       Object structure after instantiation of current component                         |        ComponentDefinition, TraitDefinition         |
-| `context.outputs.<resourceName>` |                       Structure after instantiation of current component and trait                     |        ComponentDefinition, TraitDefinition          |
+|       `context.namespace`        |               The namespace of the current instance of the application                |          ComponentDefinition, TraitDefinition          |
+|        `context.revision`        |                  The version name of the current component instance                   |          ComponentDefinition, TraitDefinition          |
+|       `context.parameter`        |   The parameters of the current component instance, it can be obtained in the trait   |                    TraitDefinition                     |
+|         `context.output`         |               Object structure after instantiation of current component               |          ComponentDefinition, TraitDefinition          |
+| `context.outputs.<resourceName>` |             Structure after instantiation of current component and trait              |          ComponentDefinition, TraitDefinition          |
 
 At the same time, in the Workflow system, because the `context` has to act on the application level, it is very different from the above usage. We introduce it separately:
 
-|           Context Variable           |                                     Description                                     |               Scope               |
-| :------------------------------: | :------------------------------------------------------------------------------: | :----------------------------------: |
-|      `context.name`       |                 The name of the current instance of the application                          |        WorkflowStepDefinition        |
-|     `context.namespace`     |                The namespace of the current instance of the application                           |         WorkflowStepDefinition     |
-|      `context.labels`       |                     The labels of the current instance of the application                        |       WorkflowStepDefinition       |
-|     `context.annotations`     |                   The annotations of the current instance of the application                       |       WorkflowStepDefinition        |
+|   Context Variable    |                        Description                         |         Scope          |
+| :-------------------: | :--------------------------------------------------------: | :--------------------: |
+|    `context.name`     |    The name of the current instance of the application     | WorkflowStepDefinition |
+|  `context.namespace`  |  The namespace of the current instance of the application  | WorkflowStepDefinition |
+|   `context.labels`    |   The labels of the current instance of the application    | WorkflowStepDefinition |
+| `context.annotations` | The annotations of the current instance of the application | WorkflowStepDefinition |
 
 
 Please note that all the Definition concepts introduced in this section only need to be understood by the platform administrator when they want to expand the functions of KubeVela. The end users will learn the schema of above definitions with visualized forms (or the JSON schema of parameters if they prefer) and reference them in application deployment plan. Please check the [Generate Forms from Definitions](../openapi-v3-json-schema) section about how this is achieved.
