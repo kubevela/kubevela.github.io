@@ -128,9 +128,8 @@ You can define any Kubernetes API objects in policies if you want.
 
 ## Special Policy
 
-Not all policies generate resources, there're several [built-in policies](../../end-user/policies/references) which are used to control the whole delivery precess and workflows. These special polices are usually coded in the application controller.
+Not all policies generate resources, there're several [built-in policies](../../end-user/policies/references) which are used to control the whole delivery precess and workflows.
 
-## What's Next
-
-* Learn how to [define health check and custom status](../traits/status) of Trait.
-* Learn how to [define workflow step](../workflow/workflow) in CUE.
+:::tip
+These special polices are usually coded in the application controller.
+:::
