@@ -192,8 +192,14 @@ module.exports = {
           ],
         },
         {
-          'User Management': [
-            'how-to/dashboard/user/user',
+          type: 'category',
+          label: 'User Management',
+          collapsed: true,
+          link: {
+            type: "doc",
+            id: 'how-to/dashboard/user/user',
+          },
+          items: [
             'tutorials/sso',
             'how-to/dashboard/config/dex-connectors',
           ],
@@ -234,8 +240,11 @@ module.exports = {
       type: 'category',
       label: 'Developer Guide',
       collapsed: true,
+      link: {
+        type: "doc",
+        id: 'contributor/overview',
+      },
       items: [
-        'contributor/overview',
         {
           Addons: [
             'platform-engineers/addon/intro',

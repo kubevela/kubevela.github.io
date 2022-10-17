@@ -2,7 +2,7 @@
 title: System Info and Diagnose
 ---
 
-Vela CLI provide a command to diagnose the system and show the system information.
+Vela CLI provide a command to diagnose the system and show the system information. It can help check if the system is running in a health state.
 
 You can:
 
@@ -11,19 +11,32 @@ You can:
 
 ### Vela System Info
 
-1.The system info command displays the cpu and memory metrics, the numbers of ready pods and desired pods.
+1. The system info command displays the cpu and memory metrics, the numbers of ready pods and desired pods.
 
 ```shell
 vela system info
+```
+
+<details>
+<summary>expected output</summary>
+
+```
 NAME                            NAMESPACE       READY PODS      IMAGE                           CPU(cores)      MEMORY(bytes)   ARGS                                                         ENVS
 kubevela-cluster-gateway        vela-system     1/1             oamdev/cluster-gateway:v1.4.0   2m              28Mi            apiserver --secure-port=9443 --secret-namespace=ve...        -
 kubevela-vela-core              vela-system     1/1             oamdev/vela-core:latest         13m             217Mi           --metrics-addr=:8080 --enable-leader-election --op...        -
 ```
+</details>
 
-2.The system info command displays the deployment spec and status
+2. The system info command can displays system component details when you specify it by `-s`.
 
 ```shell
-vela system info -s kubevela-vela-core -n vela-system                                                                                1 ↵
+vela system info -s kubevela-vela-core -n vela-system
+```
+
+<details>
+<summary>expected output</summary>
+
+```
 metadata:
   annotations:
     deployment.kubernetes.io/revision: "2"
@@ -64,13 +77,20 @@ status:
   replicas: 1
   updatedReplicas: 1
 ```
+</details>
 
 ### Vela System Diagnose
 
 `vela system diagnose` will helps you to diagnose the KubeVela's health.
 
 ```shell
- vela system diagnose
+vela system diagnose
+```
+
+<details>
+<summary>expected output</summary>
+
+```
 ------------------------------------------------------
 Diagnosing APIService of cluster-gateway...
 Result: APIService of cluster-gateway is fine~
@@ -80,3 +100,4 @@ Diagnosing health of clusters...
 Result: Clusters are fine~
 ------------------------------------------------------
 ```
+</details>

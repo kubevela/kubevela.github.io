@@ -18,25 +18,27 @@ In VelaUX, you can feel the workflow more intuitively. As shown in the figure: T
 
 In the workflow, all the steps will be executed sequentially and the next step will be executed after the previous one succeeded. If a step is of type `step-group`, it can contain a series of sub-steps, all of which are executed together when the step group is executed.
 
-> In future versions of KubeVela (1.5+), you can explicitly specify the execution mode of steps, such as:
-> ```yaml
-> workflow:
->   mode:
->     steps: StepByStep
->     subSteps: DAG
-> ```
-> There're two modes of execution: StepByStep and DAG.
-> 
-> If you do not explicitly declare the execution mode, by default steps are executed sequentially in StepByStep and subSteps are executed in parallel in DAG.
+In KubeVela 1.5.0+, you can explicitly specify the execution mode of steps, such as:
+
+```yaml
+workflow:
+  mode:
+    steps: StepByStep
+    subSteps: DAG
+```
+
+There're two modes of execution: StepByStep and DAG.
+ 
+If you do not explicitly declare the execution mode, by default steps are executed sequentially in StepByStep and subSteps are executed in parallel in DAG.
 
 ## State of Application and Workflow
 
-|  Application   |  Workflow  |                 Description                  |
-| :-------: | :----: | :-----------------------------------: |
-|    runningWorkflow    | executing |      When the workflow is executing, the status of the application is runningWorkflow      |
-|    workflowSuspending    | suspending |      When the workflow is suspended, the status of the application is workflowSuspending     |
-|    workflowTerminated    | terminated |      When a step in the workflow fails or is terminated, the status of the application is workflowTerminated     |
-|    running    | succeeded |      When all steps in the workflow are executed successfully, the status of the application is running    |
+|    Application     |  Workflow  |                                               Description                                               |
+| :----------------: | :--------: | :-----------------------------------------------------------------------------------------------------: |
+|  runningWorkflow   | executing  |            When the workflow is executing, the status of the application is runningWorkflow             |
+| workflowSuspending | suspending |           When the workflow is suspended, the status of the application is workflowSuspending           |
+| workflowTerminated | terminated | When a step in the workflow fails or is terminated, the status of the application is workflowTerminated |
+|      running       | succeeded  |   When all steps in the workflow are executed successfully, the status of the application is running    |
 
 ## Core features
 

@@ -127,9 +127,8 @@ spec:
 
 ## 特殊策略
 
-并不是所有的策略都可以生成资源, 有几个 [内置策略](../../end-user/policies/references) 用于控制整个交付过程和工作流程。这些特殊策略通常编写在 application controller 中。
+并不是所有的策略都可以生成资源, 有几个 [内置策略](../../end-user/policies/references) 用于控制整个交付过程和工作流程。
 
-## 下一步
-
-* 如何 [自定义 Trait 健康检查和状态](../traits/status) 。
-* 如何基于 CUE [自定义工作流](../workflow/workflow) 。
+:::tip
+这些特殊策略通常编写在 application controller 代码中，无需通过 CUE 自定义。
+:::

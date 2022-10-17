@@ -1,5 +1,5 @@
 ---
-title: Initialize/Destroy Infrastructure of Environment
+title: Initialize Env Infra Resources
 ---
 
 This section will introduce how to initialize and destroy infrastructure of environment with KubeVela easily.
