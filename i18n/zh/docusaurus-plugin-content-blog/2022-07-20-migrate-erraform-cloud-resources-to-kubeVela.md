@@ -13,6 +13,8 @@ hide_table_of_contents: false
 
 有时我们已经有一些 Terraform 云资源，这些资源可能由 Terraform 二进制程序或其他程序创建和管理。 为了获得 [使用 KubeVela 管理云资源的好处](2022-06-27-terraform-integrate-with-vela.md#part-1-glue-terraform-module-as-kubevela-capability) 或者只是在管理云资源的方式上保持一致性，我们可能希望将这些现有的 Terraform 云资源导入 KubeVela 并使用 vela 进行管理。如果我们只是创建一个描述这些云资源的应用，这些云资源将被重新创建并可能导致错误。 为了解决这个问题，我们制作了 [一个简单的 `backup_restore` 工具](https://github.com/kubevela/terraform-controller/tree/master/hack/tool/backup_restore)。 本博客将向你展示如何使用 `backup_restore` 工具将现有的 Terraform 云资源导入 KubeVela。
 
+<!--truncate-->
+
 ## 步骤1：创建 Terraform 云资源
 
 由于我们要演示如何将现有的云资源导入 KubeVela，我们需要先创建一个。 如果你已经拥有此类资源，则可以跳过此步骤。
@@ -23,7 +25,6 @@ hide_table_of_contents: false
 - 获得云服务凭证，在本文中，我们将使用 aws 作为示例。
 - 学习[如何使用terraform](https://www.terraform.io/language)的基础知识。
 
-<!--truncate-->
 
 让我们开始吧！
 

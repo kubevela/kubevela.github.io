@@ -1,5 +1,5 @@
 ---
-title: The Canary Rollout of the Helm Chart Application Is Coming!
+title: 你要的 Helm Chart 应用金丝雀发布终于来了！
 author: 王易可（楚岳）
 author_title: KubeVela Team
 author_url: https://github.com/kubevela/kubevela
