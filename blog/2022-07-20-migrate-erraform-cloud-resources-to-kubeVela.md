@@ -13,6 +13,8 @@ You may have learned from [this blog](2022-06-27-terraform-integrate-with-vela.m
 
 Sometimes we already have some Terraform cloud resources which may be created and managed by the Terraform binary or something else. In order to have [the benefits of using KubeVela to manage the cloud resources](2022-06-27-terraform-integrate-with-vela.md#part-1-glue-terraform-module-as-kubevela-capability) or just maintain consistency in the way you manage cloud resources, we may want to import these existing Terraform cloud resources into KubeVela and use vela to manage them. But if we just create an application which describes these cloud resources, the cloud resources will be recreated and may lead to errors. To fix this problem, we made [a simple `backup_restore` tool](https://github.com/kubevela/terraform-controller/tree/master/hack/tool/backup_restore). This blog will show you how to use the `backup_restore` tool to import your existing Terraform cloud resources into KubeVela.
 
+<!--truncate-->
+
 ## Step 1: Create Terraform Cloud Resources
 
 Since we are going to demonstrate how to import an existing cloud resource into KubeVela, we need to create one first. If you already have such resources, you can skip this step.
@@ -23,7 +25,6 @@ Before start, make sure you have:
 - Have a Cloud Service credentials, in this article, we will use aws as example.
 - Learn the basic knowledge of [how to use terraform](https://www.terraform.io/language).
 
-<!--truncate-->
 
 Let's get started!
 
