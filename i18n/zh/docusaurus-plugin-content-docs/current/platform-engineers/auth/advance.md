@@ -4,9 +4,10 @@ title: 基本机制
 
 KubeVela 从 v1.4 版本引入认证和应用程序交付和管理授权。这篇文章将深入理解根本原理，并展示它如何运作。
 
-> 这一基本机制主要侧重于 KubeVela 的应用。 VelaUX 在它上面构建了自己的认证和授权。
-
-> 这篇文章讨论了范围较广的 KubeVela 认证和授权，包括设计、实现和高级用法。 实际使用并不需要阅读并了解所有材料。
+:::tip
+本文档讨论了范围较广的 KubeVela 认证和授权，包括设计、实现和高级用法。 实际使用并不需要阅读并了解所有材料。
+这一基本机制主要侧重于 KubeVela 的应用。 VelaUX 在它上面构建了自己的认证和授权。
+:::
 
 ## 背景知识
 
@@ -204,11 +205,11 @@ KubeVela 的多集群应用模拟依赖于 ClusterGateway 的 ClientIdentityPene
 
 默认情况下，KubeVela 不会将所有身份信息传递给 Header。 你可以通过控制器起始参数或 helm 值来控制它。
 
-| Controller Flags             | Helm Values                  | Type    | Default            | Explanation                                                                                                 |
-| ---------------------------- | ---------------------------- | ------- | ------------------ | ----------------------------------------------------------------------------------------------------------- |
+| Controller Flags             | Helm Values                  | Type    | Default            | Explanation                                                                                                                                                                                             |
+| ---------------------------- | ---------------------------- | ------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | authentication-with-user     | .authentication.withUser     | boolean | false              | 如果此标志被设置为false，则身份中的用户字段将不会被传递到 Header 中。 只有选定的组才会传递。 在管理集群和控制台由不同的人操作的情况下，控制台操作者可能不想让管理下的集群知道其用户和群之间的对应关系。 |
-| authentication-default-user  | .authentication.defaultUser  | string  | kubevela:vela-core | 如果身份中的用户字段不用于模拟，此字段将作为模拟的用户使用。                                                                              |
-| authentication-group-pattern | .authentication.groupPattern | string  | kubevela:*         | 这个字段定义了从身份的 Header 中传递的组模式。 这将有助于控制台使用者限制哪些组应该传入请求到管理的集群。                                                   |
+| authentication-default-user  | .authentication.defaultUser  | string  | kubevela:vela-core | 如果身份中的用户字段不用于模拟，此字段将作为模拟的用户使用。                                                                                                                                            |
+| authentication-group-pattern | .authentication.groupPattern | string  | kubevela:*         | 这个字段定义了从身份的 Header 中传递的组模式。 这将有助于控制台使用者限制哪些组应该传入请求到管理的集群。                                                                                               |
 
 简而言之， 如果你的身份信息的透明度要求很低（如组集群和管理集群由同一团队操作）， 你可以设置 `--authentication-user=true` 和 `--authentication-group-pattern=*`。 默认配置使用最安全和最不透明的选项。
 
