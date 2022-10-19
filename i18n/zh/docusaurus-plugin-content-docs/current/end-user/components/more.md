@@ -21,9 +21,14 @@ KubeVela 安装时就自带了很多开箱即用的功能，可以查看如下�
 
 KubeVela 官方团队维护了一个默认的插件仓库 (https://addons.kubevela.net) ，默认情况下会从这个仓库实时发现。
 
-
 ```shell
-$ vela addon list
+vela addon list
+```
+
+<details>
+<summary>期望输出</summary>
+
+```
 NAME                            REGISTRY        DESCRIPTION                                                                                             AVAILABLE-VERSIONS              STATUS          
 ocm-gateway-manager-addon       KubeVela        ocm-gateway-manager-addon is the OCM addon automates the cluster-gateway apiserver.                     [1.3.2, 1.3.0, 1.1.11]          disabled        
 rollout                         KubeVela        Provides basic batch publishing capability.                                                             [1.3.0, 1.2.4, 1.2.3]           disabled        
@@ -42,11 +47,18 @@ fluxcd                          KubeVela        Extended workload to do continuo
 velaux                          KubeVela        KubeVela User Experience (UX). An extensible, application-oriented delivery and management Dashboard.   [v1.3.0, v1.3.0-beta.2, 1.2.4]  enabled (v1.3.0)
 terraform-alibaba               KubeVela        Kubernetes Terraform Controller for Alibaba Cloud                                                       [1.0.2, 1.0.1]                  disabled    
 ```
+</details>
 
 ### 安装插件
 
 ```
-$ vela addon enable fluxcd
+vela addon enable fluxcd
+```
+
+<details>
+<summary>期望输出</summary>
+
+```
 I0111 21:45:24.553174   89345 apply.go:106] "creating object" name="addon-fluxcd" resource="core.oam.dev/v1beta1, Kind=Application"
 I0111 21:45:25.258914   89345 apply.go:106] "creating object" name="helm" resource="core.oam.dev/v1beta1, Kind=ComponentDefinition"
 I0111 21:45:25.342731   89345 apply.go:106] "creating object" name="kustomize-json-patch" resource="core.oam.dev/v1beta1, Kind=TraitDefinition"
@@ -56,6 +68,7 @@ I0111 21:45:25.625815   89345 apply.go:106] "creating object" name="kustomize-st
 I0111 21:45:25.660129   89345 apply.go:106] "creating object" name="component-uischema-helm" resource="/v1, Kind=ConfigMap"
 Addon: fluxcd enabled Successfully.
 ```
+</details>
 
 #### 安装特定版本的插件
 
@@ -84,7 +97,13 @@ vela addon enable velaux repo=<your repo address>
 如果你想获取插件的详细信息，或者查看插件支持哪些启用参数等其他信息，你就可以用 `addon status` 的命令。 例如：
 
 ```shell
-$ vela addon enable velaux --verbose
+vela addon enable velaux --verbose
+```
+
+<details>
+<summary>期望输出</summary>
+
+```
 velaux: disabled 
 KubeVela User Experience (UX). An extensible, application-oriented delivery and management Dashboard.
 ==> Registry Name
@@ -115,6 +134,7 @@ KubeVela
         default: "kubevela-vela-core"
         required: ✔
 ```
+</details>
 
 如上所示， 命令结果包含了一个插件的参数详细信息，可用版本，依赖的其他的插件等信息。
 
@@ -122,7 +142,9 @@ KubeVela
 
 ### 删除/卸载已安装的插件
 
-> 删除前请确认插件对应的能力没有被任何应用使用。
+:::caution
+删除前请确认插件对应的能力没有被任何应用使用。
+:::
 
 ```
 $ vela addon disable fluxcd
@@ -132,10 +154,17 @@ Successfully disable addon:fluxcd
 ### 查看插件的下载仓库
 
 ```
-$ vela addon registry list 
+vela addon registry list 
+```
+
+<details>
+<summary>期望输出</summary>
+
+```
 Name            Type    URL                        
 KubeVela        helm    https://addons.kubevela.net
 ```
+</details>
 
 KubeVela 社区在 Github 上维护了一个官方的[正式插件包仓库](https://github.com/kubevela/catalog/tree/master/addons) 和一个[试验阶段插件包仓库](https://github.com/kubevela/catalog/tree/master/experimental) 。你在相应的仓库中找到插件包的定义文件。
 
@@ -146,26 +175,47 @@ KubeVela 社区在 Github 上维护了一个官方的[正式插件包仓库](htt
 你可以添加自己的插件包仓库，目前支持 OSS 和 Github 两种仓库类型。
 
 ```
-$ vela addon registry add experimental --type OSS --endpoint=https://addons.kubevela.net --path=experimental/
+vela addon registry add experimental --type OSS --endpoint=https://addons.kubevela.net --path=experimental/
+```
+
+<details>
+<summary>期望输出</summary>
+
+```
 Successfully add an addon registry experimental
 ```
+</details>
 
 ### 删除一个插件包仓库
 
 ```
-$ vela addon registry delete experimental
+vela addon registry delete experimental
+```
+
+<details>
+<summary>期望输出</summary>
+
+```
 Successfully delete an addon registry experimental
 ```
+</details>
 
 ### 多集群环境中启用插件包
 
 如果你的环境中添加了若干个子集群，启用插件包时会默认在管控集群和所有子集群中安装此插件包。但如果子集群在某个插件包启用之后加入环境当中，则需要通过升级操作在新加入集群中安装此插件包。如下所示
 
 ```
-$ vela addon upgrade velaux
+vela addon upgrade velaux
+```
+
+<details>
+<summary>期望输出</summary>
+
+```
 Addon: 
  enabled Successfully
 ```
+</details>
 
 ### 离线安装插件包
 
@@ -195,7 +245,8 @@ Addon: velaux enabled Successfully
 
 ### 编写自己的插件包
 
-请参考[插件包制作文档](../../platform-engineers/addon/intro)。
+- 参考博客教程[手把手教你制作一个 Redis 插件](/zh/blog/2022/10/18/building-addon-introduction)。
+- 参考[插件包制作文档](../../platform-engineers/addon/intro)了解插件的功能细节。
 
 ## 作为开发者自定义和扩展
 

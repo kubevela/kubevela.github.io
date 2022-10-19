@@ -273,6 +273,11 @@ For enabled addons, if no applications to use definitions, you can click the dis
 
 If you're a system infra or operator, you can refer to extension documents to learn how to [make your own addon and registry](../../platform-engineers/addon/intro), including [extend cloud resources by addon](../../platform-engineers/addon/terraform).
 
+:::tip
+Here's a blog introduces [how to build addon from scratch using redis operator as example](/blog/2022/10/18/building-addon-introduction), you can read it as an end to end tutorial!
+:::
+
+
 ## Extend KubeVela as a Developer
 
 If you're extremely interested in KubeVela, you can also extend more features as a developer.

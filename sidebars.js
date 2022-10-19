@@ -76,7 +76,7 @@ module.exports = {
             {
               type: 'category',
               label: 'Terraform',
-              collapsed: false,
+              collapsed: true,
               link: {
                 type: "doc",
                 id: 'end-user/components/cloud-services/cloud-resource-scenarios',
@@ -246,8 +246,14 @@ module.exports = {
       },
       items: [
         {
-          Addons: [
-            'platform-engineers/addon/intro',
+          type: 'category',
+          label: 'Addons',
+          collapsed: true,
+          link: {
+            type: "doc",
+            id: 'platform-engineers/addon/intro',
+          },
+          items: [
             'platform-engineers/addon/addon-cue',
             'platform-engineers/addon/addon-yaml',
             'reference/topology-rule',
