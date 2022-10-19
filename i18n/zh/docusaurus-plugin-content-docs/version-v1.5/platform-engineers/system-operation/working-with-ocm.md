@@ -11,13 +11,13 @@ title: 使用 OCM
 OCM的安装可以通过命令`vela addon`来完成。但在 KubeVela 的环境下使用 OCM，有两个插件必须要安装。
 
 ```shell
-$ vela addon enable ocm-hub-control-plane
+vela addon enable ocm-hub-control-plane
 `````
 
 这个插件旨在提供 OCM 的基本功能。例如，你可以通过创建 OCM ManifestWorks 来直接分配资源。 但是目前 KubeVela 并不会使用 OCM 来管理应用。
 
 ```shell
-$ vela addon enable ocm-gateway-manager-addon
+vela addon enable ocm-gateway-manager-addon
 ```
 
 安装第二个应用可以让 KubeVela 通过 cluster gateway 来使用 OCM的托管集群。

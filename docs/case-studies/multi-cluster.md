@@ -67,7 +67,13 @@ EOF
 You can check the deploy result by running `vela status`
 
 ```bash
-$ vela status basic-topology -n examples
+vela status basic-topology -n examples
+```
+
+<details>
+<summary>expected output</summary>
+
+```
 About:
 
   Name:         basic-topology               
@@ -103,6 +109,7 @@ Services:
     Traits:
       ✅ expose
 ```
+</details>
 
 ### Debugging Multi-cluster Application
 

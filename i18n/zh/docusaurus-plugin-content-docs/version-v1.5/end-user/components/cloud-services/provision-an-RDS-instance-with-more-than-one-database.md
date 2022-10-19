@@ -2,6 +2,10 @@
 title: RDS 实例创建多数据库
 ---
 
+:::tip
+请确认管理员已经安装了 [Terraform 插件](../../../reference/addons/terraform)。
+:::
+
 指南 [创建和使用云资源](./provision-and-consume-database)和[数据库创建和初始化](./provision-and-initiate-database)里，在一个
 RDS 实例中，只创建了一个数据库。本教程将告诉你如何在一个 RDS 实例中创建多个数据库。
 
@@ -23,14 +27,13 @@ RDS 实例中，只创建了一个数据库。本教程将告诉你如何在一�
   ]
 ```
 
-| 名称            | 描述                                                                                                                                                                                                                                         | 类型                | 是否必须  | 默认值 |
-|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|-------|-----|
-| database_name | Database name                                                                                                                                                                                                                              | string            | false |     |
-| databases     | The database list, each database is a map, the map contains the following attributes: name, character_set, description, like `[{"name":"test","character_set":"utf8","description":"test database"},]`. It conflicts with `database_name`. | list(map(string)) | false |     |
+| 名称          | 描述                                                                                                                                                                                                                                       | 类型              | 是否必须 | 默认值 |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- | -------- | ------ |
+| database_name | Database name                                                                                                                                                                                                                              | string            | false    |        |
+| databases     | The database list, each database is a map, the map contains the following attributes: name, character_set, description, like `[{"name":"test","character_set":"utf8","description":"test database"},]`. It conflicts with `database_name`. | list(map(string)) | false    |        |
 
 执行以下 Yaml 文件可以在 RDS 实例中创建多个数据库。
 
-> ⚠️ 请确认管理员已经安装了 [云资源插件](../../../reference/addons/terraform)。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

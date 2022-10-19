@@ -2,6 +2,10 @@
 title: 数据库创建和初始化
 ---
 
+:::tip
+请确认管理员已经安装了 [Terraform 插件](../../../reference/addons/terraform)。
+:::
+
 本教程将讨论如何为一个关系型数据库导入 SQL 文件完成初始化，并启动一个依赖数据库的应用程序。
 
 [Favorite Links](https://github.com/kubevela-contrib/nodejs-mysql-links)是一个有趣的项目，它可以将所有你最喜欢的网络链接在一个应用程序中。
@@ -18,7 +22,7 @@ title: 数据库创建和初始化
 阿里云 RDS 预览版支持在创建 RDS 实例时导入具有这些属性的SQL文件。
 
 | Name                | Description                                                     | Type   | Required | Default |
-|---------------------|-----------------------------------------------------------------|--------|----------|---------|
+| ------------------- | --------------------------------------------------------------- | ------ | -------- | ------- |
 | sql_file            | The name of SQL file in the bucket, like `db.sql`               | string | false    |         |
 | sql_bucket_name     | The bucket name of the SQL file. like `oss://example`           | string | false    |         |
 | sql_bucket_endpoint | The endpoint of the bucket. like `oss-cn-hangzhou.aliyuncs.com` | string | false    |         |

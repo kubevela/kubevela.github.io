@@ -2,9 +2,11 @@
 title:  创建和使用数据库
 ---
 
-本教程将介绍如何通过 Terraform 部署阿里云 RDS (和 OSS)。
+:::tip
+请确认管理员已经安装了 [Terraform 插件](../../../reference/addons/terraform)。
+:::
 
-> ⚠️ 请确认管理员已经安装了 [云资源插件](../../../reference/addons/terraform)。
+本教程将介绍如何通过 Terraform 部署阿里云 RDS (和 OSS)。
 
 下面我们以阿里云关系型数据库（RDS）的例子，作为示例进行讲解。
 

@@ -11,13 +11,13 @@ This section will introduce how to use OCM with KubeVela.
 The installation of OCM is directly available through `vela addon`. There are two addons you need to install if you want to use KubeVela with OCM.
 
 ```shell
-$ vela addon enable ocm-hub-control-plane
+vela addon enable ocm-hub-control-plane
 ```
 
 This addon allows you to use the basic capabilities provided by OCM. For example, you can create OCM ManifestWorks to dispatch resources directly. But KubeVela will not use OCM for its application management for now.
 
 ```shell
-$ vela addon enable ocm-gateway-manager-addon
+vela addon enable ocm-gateway-manager-addon
 ```
 
 Enabling the second addon will allow you to let KubeVela use the underlying OCM managed clusters through cluster gateway.

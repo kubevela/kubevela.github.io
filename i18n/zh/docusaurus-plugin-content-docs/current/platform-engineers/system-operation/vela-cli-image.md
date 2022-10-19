@@ -24,7 +24,7 @@ Docker version 20.10.13, build a224086
 使用 `docker run` 命令来运行 KubeVela 命令行镜像。
 
 ```
-$ docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli <command>
+docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli <command>
 ```
 
 该命令的作用方式如下：
