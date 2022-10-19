@@ -24,7 +24,7 @@ The official KubeVela CLI Docker image is hosted on DockerHub in the `oamdev/vel
 To run the KubeVela CLI Docker image, use the `docker run` command.
 
 ```
-$ docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli <command>
+docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli <command>
 ```
 
 This is how the command functions:

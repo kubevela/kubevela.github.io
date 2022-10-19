@@ -1,5 +1,5 @@
 ---
-title: 核心概念
+title: OAM 应用（Application）
 ---
 
 KubeVela 围绕着云原生应用交付和管理场景展开，背后的应用交付模型是 [Open Application Model](../platform-engineers/oam/oam-model)，简称 OAM 。
@@ -66,7 +66,3 @@ spec:
 ### 不再配置漂移
 
 除了扩展性和效率以外，许多围绕 IaC 的工具都会引发生产环境和配置中心数据不一致的问题，业界称之为“配置漂移”，引起配置漂移的核心原因往往来自于生产环境的配置修改有多个来源、平台对配置的覆盖不完整等。KubeVela 通过一个 Application 对象涵盖了所有应用涉及的配置、并通过 [Kubernetes 控制循环](https://kubernetes.io/docs/concepts/architecture/controller/) 来维护状态，并基于此始终面向终态维护配置的一致性、消除配置漂移的问题，且保留基于 IaC 模式的扩展性和灵活性。
-
-## 下一步
-
-- 查看 [架构文档](./architecture)，了解 KubeVela 的整体架构。

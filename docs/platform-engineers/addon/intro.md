@@ -2,6 +2,10 @@
 title: Make Your Own Addon
 ---
 
+:::tip
+Here's a blog introduces [how to build addon from scratch using redis operator as example](/blog/2022/10/18/building-addon-introduction), you can read it as an end to end tutorial!
+:::
+
 A KubeVela addon is a collection that can contain the following three types of files；
 * `Basic information file` that contains `metadata.yaml` and `README.md`.
 * `OAM module file` that defines KubeVela extensibility points, including [Definitions](../../getting-started/definition), [UI-Schema](../../reference/ui-schema) or [topology-rules](../../reference/topology-rule).
@@ -38,7 +42,9 @@ Not all of these directories or files are necessary, let's explain them one by o
 
 ### Basic information file
 
-> This type of file is required in an addon.
+:::caution
+This type of file is required in an addon.
+:::
 
 #### metadata.yaml
 
@@ -69,18 +75,18 @@ invisible: false
 
 Here's the usage of every field:
 
-| Field | Required  | Type | Usage  |
-|:----:|:---:|:--:|:------:|
-|  name    |  yes | string | The name of the addon.  |
-|  version    | yes  | string | The version of addon, increase for every change and follow [SemVer](https://semver.org/) rule.  |
-| description     | yes  | string | Description of the addon.  |
-| icon     | no  | string | Icon of the addon, will display in addon dashboard.  |
-| url     | no  | string | The official website of the project behind the addon.  |
-| tags     | no  | []string | The tags to display and organize the addon.  |
-| dependencies     | no  | []{ name: string } | Names of other addons it depends on. KubeVela will make sure these dependencies are enabled before installing this addon.  |
-| system.vela     | no  | string | Required version of vela controller, vela CLI will block the installation if vela controller can't match the requirements.  |
-| system.kubernetes     | no  | string | Required version of Kubernetes, vela CLI will block the installation if Kubernetes cluster can't match the requirements.  |
-| deployTo.runtimeCluster     | no  | bool | By default, the addon will not be installed in the managed clusters. If it's `true`, it will be delivered to all managed clusters automatically. (This field only take effect when application template file is YAML typed) |
+|          Field          | Required |        Type        |                                                                                                            Usage                                                                                                            |
+| :---------------------: | :------: | :----------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|          name           |   yes    |       string       |                                                                                                   The name of the addon.                                                                                                    |
+|         version         |   yes    |       string       |                                                               The version of addon, increase for every change and follow [SemVer](https://semver.org/) rule.                                                                |
+|       description       |   yes    |       string       |                                                                                                  Description of the addon.                                                                                                  |
+|          icon           |    no    |       string       |                                                                                     Icon of the addon, will display in addon dashboard.                                                                                     |
+|           url           |    no    |       string       |                                                                                    The official website of the project behind the addon.                                                                                    |
+|          tags           |    no    |      []string      |                                                                                         The tags to display and organize the addon.                                                                                         |
+|      dependencies       |    no    | []{ name: string } |                                                  Names of other addons it depends on. KubeVela will make sure these dependencies are enabled before installing this addon.                                                  |
+|       system.vela       |    no    |       string       |                                                 Required version of vela controller, vela CLI will block the installation if vela controller can't match the requirements.                                                  |
+|    system.kubernetes    |    no    |       string       |                                                  Required version of Kubernetes, vela CLI will block the installation if Kubernetes cluster can't match the requirements.                                                   |
+| deployTo.runtimeCluster |    no    |        bool        | By default, the addon will not be installed in the managed clusters. If it's `true`, it will be delivered to all managed clusters automatically. (This field only take effect when application template file is YAML typed) |
 
 #### README.md (Required)
 
@@ -95,13 +101,17 @@ There is no restrict rules for an [experimental addon](https://github.com/kubeve
 
 ### OAM module file
 
-> This type of file isn't required in an addon.
+:::tip
+This type of file is optional in an addon.
+:::
 
 #### Definition files (`definitions/` folder)
 
 The `definitions/` folder is used to store `Definition`, which can be a YAML file of ComponentDefinition, TraitDefinitions or WorkflowStepDefinitions Kubernetes CustomResource. It can also be a CUE file that defines KubeVela [Definitions](../../getting-started/definition), which will be rendered into the corresponding Kubernetes objects and applied to the cluster when enabling the addon.
 
-> Please notice: These definitions will only be applied to the control plane.
+:::note
+These definitions will only be applied to the control plane.
+:::
 
 #### UI-Schema (`schemas/` folder)
 
@@ -109,7 +119,9 @@ The `schemas/` folder is used to store the [UI schema](../../reference/ui-schema
 
 ### Application description file
 
-> This type of file isn't required in an addon.
+:::tip
+This type of file is optional in an addon.
+:::
 
 Through the above introduction, we know that the Definition of an addon usually should be supported by a Kubernetes operator. The operator should be defined in a KubeVela application and installed by KubeVela application controller. So the function of application description file is describing this application. Application description file contains two types of file: application template file (template.yaml or template.cue) and resources files which under `resources/` folder.
 
