@@ -1,25 +1,24 @@
 ---
-title: Provision Instance and Database Separately
+title: 分别配置实例和数据库
 ---
 
-In the guide [Provision and Binding Cloud Resources](../../../tutorials/consume-cloud-services) and [Provision a Database and Import a SQL File for initialization](./provision-and-initiate-database),
-We create an RDS instance and a database together. However, you can create an RDS instance and more than one database on it.
-This pattern is useful when you want to save costs of creating multiple instances. 
+在文档[创建和使用云资源](../../../tutorials/consume-cloud-services)和[数据库创建和初始化](./provision-and-initiate-database)中，我们创建了一个 RDS 实例和一个数据库。 但是，你也可以创建一个 RDS 实例，并在上面创建多个数据库。
+当你想节省创建多个实例的成本时，此模式很有用。
 
-This guide will take Alibaba Cloud RDS as an example to show how to create an RDS instance more than one database separately.
+本指南将以阿里云 RDS 为例，介绍如何创建有多个数据库的 RDS 实例。
 
-## Prerequisites
+## 先决条件
 
-1. `terraform` addon has been enabled
-2. `terraform-alibaba` addon has been enabled, version >= 1.0.3 
-3. Credentials have been configured using `vela provider add terraform-alibaba`
-If you have problems, you can follow to this [instruction](../../../reference/addons/terraform) to setup.
+1. `terraform` 插件已经启用
+2. `terraform-alibaba` 插件已经启用，版本 >= 1.0.3 
+3. 已经使用 `vela provider add terraform-alibaba` 配置了证书
+任何问题，可以按照这个[指导](../../../reference/addons/terraform) 进行设置.
 
-## Steps
+## 步骤
 
-### Provision the RDS instance
+### 配置 RDS 实例
 
-Using the following Application to create an RDS instance.
+使用以下应用创建一个 RDS 实例。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -34,22 +33,21 @@ spec:
         instance_name: test_single_instance
 ```
 
-Now you can get the RDS instance ID by running the following command:
+现在你可以通过执行以下命令获取 RDS 实例 ID：
 
 ```shell
 kubectl get configuration -n default rds-instance -ojson | jq -r .status.apply.outputs.instance_id.value
 ```
 
-The result will be like
+结果类似下面这样
     
 ```shell
 rm-bp1du0wif7kXXXXX
 ```
 
+### 配置 RDS 数据库
 
-### Provision the RDS database
-
-Using the following Application to create an RDS database. Remember to replace `<your-region>` and `<your-instance-id>` with the real values.
+使用以下应用来创建 RDS 数据库。记得将 `<your-region>` 和 `<your-instance-id>` 替换为你的实际值。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -68,14 +66,12 @@ spec:
         account_name: first_db_account
 ```
 
-About 2 minutes later, you can check the app status by running `vela status`:
+大约 2 分钟之后，执行 `vela status` 可以检查应用状态：
 
 ```shell
 vela status app-db-1 -n default
 ```
 
-## Conclusion
+## 结论
 
-You have learnt how to create an RDS instance and a database with different applications. As a platform engineer, you can 
-use this pattern to provide database sharing the same instance to your users. When the business is growing, you can migrate
-database to an exclusive instance.
+你已经学习了如何使用不同的应用创建 RDS 实例和数据库。作为平台工程师，你可以使用此模式为你的用户提供共享相同实例的数据库。 当业务增长时，你可以将数据库迁移到独占的实例中。
