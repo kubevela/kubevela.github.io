@@ -6,9 +6,10 @@ In this guide, we want to introduce you how to use the vela top tool in KubeVela
 
 At present, the tool has provided the following feature:
 - Platform information overview
-- Display of resource status information at Application, Managed Resource and Pod levels
-- Application Resource Topology
-- Resource YAML text display
+- Display of resource status information at Application, Managed Resource, Pod and Container levels
+- Display Application Resource Topology
+- Display resource YAML text
+- Display log of pod and container
 
 ### Launch tool
 
@@ -35,7 +36,7 @@ After starting the tool, we will enter the home page: Application view, as shown
 
 The tool is divided into three parts as a whole, as shown in the figure, they are the Header part containing basic information, platform system information, menu and logo, the Body part where the resource view is located, and the Footer part where the breadcrumb component of the resource level is located.
 
-### Platform Information Overview
+### Overview of platform information
 
 ![vela top platform overview](../resources/vela-top-overview.png)
 
@@ -44,11 +45,11 @@ This information panel component will display the performance information of the
 The performance information for the Vela Controller and Vela Gateway here actually comes from the performance information of the Pod where they are located. It should be noted that to collect the performance information of the Pod, you need to install the [metrics server](https://github.com/kubernetes-sigs/metrics-server) in the cluster, otherwise the performance information of the Pod will not be obtained correctly.
 
 
-### Multi-level resource status display
+### Display information and status of multi-level resource
 
 #### Application view
 
-![vela top home page](../resources/vela-top-home-page.png)
+![vela top app view](../resources/vela-top-home-page.png)
 
 This view will display the status information of all Applications under the Namespace in the platform, including:
 - Name
@@ -80,7 +81,7 @@ For Application-managed resources, we display the following information:
 - Kind
 - API Version
 - In which cluster
-- Of component
+- Belong to which component
 - Status
 
 The resources managed by the application are very complex, so in this view, we provide some ways to filter the view. You can filter the resources according to the Namespace and the cluster where the resources are located. The corresponding keys are N and C, as shown below:
@@ -100,10 +101,11 @@ The deployment of Managed Resource results in the deployment of Pod resources, a
 
 - Name
 - Namespace
-- Is it ready
+- Cluster
+- Ready
 - Status
 - CPU usage
-- memory usage
+- Memory usage
 - CPU usage as a percentage of request
 - CPU usage as a percentage of limit
 - Memory usage as a percentage of request
@@ -114,14 +116,33 @@ The deployment of Managed Resource results in the deployment of Pod resources, a
 
 In this view you can still use the Q key to go back to the previous view.
 
-#### Resource level switch
+#### Container View
+
+![vela top container view](../resources/vela-top-container-view.png)
+
+Several containers are running in a pod, the Container View displays the containers' info running in the selected pod. For Container resources, this view shows the following information about the Container:
+- Name
+- Image
+- Ready
+- State
+- CPU usage
+- Memory usage
+- CPU usage as a percentage of request
+- CPU usage as a percentage of limit
+- Memory usage as a percentage of request
+- Memory usage as a percentage of limit
+- Terminate Message
+- Restart Count
+
+
+#### Switch resource level
 
 We have introduced the three views above, and now we will show you how to switch between multiple views to get the resource status information you want.
 
 ![vela top resource switch](../resources/vela-top-resource-switch.gif)
 
 
-### Application resource topology
+### Display Resource topology of application
 
 Maybe you want to know how the complete resource topology of an application is. We have provided such a function in VelaUX. In fact, we also provide you with a similar function in vela top. In the Application view, you can select an Application and press the T key, it will display the resource topology of the Application in two forms:
 
@@ -132,11 +153,20 @@ The application delivery model behind KubeVela is [Open Application Model](https
 In addition, these components will actually eventually be loaded as native resources or CRDs in Kubernetes, and these resources constitute another resource topology. As a user, you must want to know whether the sub-resources of the application are correctly deployed as required, you can get the answer from this topology, which we call the "Resource Topology".
 
 ### General functions
-#### Resource YAML display
+#### Display YAML of resource
 
 ![vela top platform overview](../resources/vela-top-yaml.png)
 
-In the three resource views of Application, Managed Resource, and Pod, you can select a resource and press the Y key to view the YAML text corresponding to the resource, and the text will be highlighted.
+In all kinds of resource views, you can select a resource and press the Y key to view the YAML text corresponding to the resource, and the text will be highlighted.
+
+#### Print log
+
+![vela top log](../resources/vela-top-log.png)
+
+In the Container view, you can use the L key to enter the log view, the log view will print the log of the selected container.
+
+In the Container view, the method of entering the log view is the same as Pod view. What is different is the log are belong to the several containers in the selected pod.
+
 
 #### Help View
 

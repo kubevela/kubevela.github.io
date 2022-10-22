@@ -11,7 +11,7 @@ title: Vela Top
 - Appliation 资源拓扑
 - 资源 YAML 文本展示
 
-### 启动工具
+# 启动工具
 
 在启动工具时我们可以指定首页：Application 视图中所展示 Application 所在的 Namespace。
 
@@ -36,7 +36,7 @@ title: Vela Top
 
 该工具整体分为三个部分，如图所示，分别为包含基础信息、平台系统信息、菜单与 Logo 的 Header 部分，资源视图所在的 Body 部分，指示资源层级的面包屑组件所在的 Footer 部分。
 
-### 平台信息概览
+# 平台信息概览
 
 ![vela top platform overview](../resources/vela-top-overview.png)
 
@@ -45,13 +45,13 @@ title: Vela Top
 这里对于 Vela 控制器与 Vela 网关的性能信息，实际来自于它们所在 Pod 的性能信息。 需要注意的是采集 Pod 的性能信息，需要在集群中安装 [metrics server](https://github.com/kubernetes-sigs/metrics-server)，否则会无法正确获取到 Pod 的性能信息。
 
 
-### 多层级资源状态展示
+# 多层级资源状态展示
 
-#### Application 视图
+## Application 视图
 
 ![vela top home page](../resources/vela-top-home-page.png)
 
-这个视图会展示平台中所在 Namespace 下的全部  Application 的状态信息，这些信息包括：
+这个视图会展示平台中所在 Namespace 下的全部 Application 的状态信息，这些信息包括：
 
 - 名称
 - Namespace
@@ -70,11 +70,11 @@ title: Vela Top
 如果你想要对这个 Application 做资源穿透查看属于他的资源有哪些，可以通过 ENTER 键进入下一资源层级。
 
 
-#### Managed Resource 视图
+## Managed Resource 视图
 
 ![vela top managed resource view](../resources/vela-top-managed-resource-view.png)
 
-Managed Resource 视图展示的是 Application 的下一层资源，该资源视图会展示目标 Application 部署从而产生的资源，包括：Deployment、ConfigMap、Service、Helm Release等，我们称这些资源为应用所管理的资源。
+Managed Resource 视图展示的是 Application 的下一层资源，该资源视图会展示目标 Application 部署从而产生的资源，包括：Deployment、ConfigMap、Service、Helm Release 等，我们称这些资源为应用所管理的资源。
 
 对于 Application 管理的资源，我们会对其展示以下这些信息：
 
@@ -94,7 +94,7 @@ Managed Resource 视图展示的是 Application 的下一层资源，该资源�
 
 此外在该视图你还可以使用 Q 键回退到之前的 Application 视图，以及在选中某个资源后按下 ENTER 键，进入 Pod 视图展示该属于资源的 Pod 资源。
 
-#### Pod 视图
+## Pod 视图
 
 ![vela top pod view](../resources/vela-top-pod-view.png)
 
@@ -104,25 +104,43 @@ Managed Resource 的部署会产生 Pod 资源的部署，Pod 视图展示目标
 - Namespace
 - 是否就绪
 - 状态
-- CPU用量
+- CPU 用量
 - 内存用量
-- CPU使用量占 request 的比例
-- CPU使用量占 limit 的比例
-- 内存使用量占 request 的比例
-- 内存使用量占 limit 的比例
+- CPU 使用量占 Request 的比例
+- CPU 使用量占 Limit 的比例
+- 内存使用量占 Request 的比例
+- 内存使用量占 Limit 的比例
 - IP 地址
 - 所在节点
 - 存活时常
 
 在该视图你依然可以使用 Q 键回退到之前的视图。
 
-#### 资源层级切换
+# 容器视图
+![vela top container view]（../resources/vela top-container view.png）
+在通一个 Pod 中会存在多个容器一同运行的情况，Container 视图显示了在所选 Pod 中运行的容器信息。对于 Container 资源，此视图显示有关 Container 的以下信息：
+- 姓名
+- 镜像
+- 是否就绪
+- 状态
+- CPU 用量
+- 内存用量
+- CPU 使用量占 Request 的比例
+- CPU 使用量占 Limit 的比例
+- 内存使用量占 Request 的比例
+- 内存使用量占 Limit 的比例
+- 终止消息
+- 重新启动次数
+
+在该视图你依然可以使用 Q 键回退到之前的视图。
+
+## 资源层级切换
 
 在上面我们已经对三种视图进行了介绍，下面我们会向你展示如何在多个视图见进行切换，来获取你想要的资源状态信息。
 
 ![vela top resource switch](../resources/vela-top-resource-switch.gif)
 
-### Application 资源拓扑
+# Application 资源拓扑
 
 也许你想了解一个应用完整的资源拓扑是怎样的，在 VelaUX 我们已经提供了这样的功能，实际上在 vela top 中我们也为你提供类似的功能，在 Application 视图中，你可以选中某个应用后按下 T 键，我们就会以两种形式展示该 Application 的资源拓扑：
 
@@ -132,14 +150,23 @@ Managed Resource 的部署会产生 Pod 资源的部署，Pod 视图展示目标
 
 另外这些组成部分实际上最终会被加载为 Kubernetes 中的原生资源或者 CRD，这些资源之间又构成了另外一种资源拓扑结构，作为用户你一定想要了解你的应用是否按照要求正确部署了子资源，从这个拓扑中你就可以获得答案，这个拓扑被我们成为资源拓扑。
 
-### 通用功能
-#### 资源 YAML 展示
+## 通用功能
+### 资源 YAML 展示
 
 ![vela top platform overview](../resources/vela-top-yaml.png)
 
 在 Application、Managed Resource、Pod 三种资源视图中，你都可以通过选中某一资源后按下 Y 键的方式，查看该资源对应的 YAML 文本，文本会以高亮形式展示。
 
-#### 帮助界面
+### 日志
+
+![vela top log](../resources/vela-top-log.png)
+
+
+在 Pod 视图中，你可以使用 L 键进入日志视图，日志视图将打印所选容器的日志。
+在 Container 视图中，进入日志视图的方法与在 Pod 视图相同。不同的是，打印的日志是属于所选 Pod 中的多个容器的。
+
+
+### 帮助界面
 
 在任意一个界面可以通过 ? 键进入帮助界面，该界面会向你简单介绍 vela top 的相关功能与使用方法。
 
