@@ -152,6 +152,7 @@ module.exports = {
             'tutorials/access-application',
             'tutorials/debug-app',
             'tutorials/cloud-shell',
+            'tutorials/vela-top',
           ],
         },
         'end-user/version-control',
