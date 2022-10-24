@@ -4,7 +4,7 @@ title: Built-in WorkflowStep Type
 
 This documentation will walk through all the built-in workflow step types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-24T20:59:39+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-10-10T15:04:28+08:00.
 
 ## Apply-Object
 
@@ -65,7 +65,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- value | Specify Kubernetes native resource object to be applied. | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | true |  
+ value | Specify Kubernetes native resource object to be applied. | map[string]:_ | true |  
  cluster | The cluster you want to apply the resource to, default is the current control plane cluster. | string | false | empty 
 
 
@@ -181,10 +181,10 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
+ auto | If set to false, the workflow will suspend automatically before this step, default to be true. | bool | false | true 
  policies | Declare the policies that used for this deployment. If not specified, the components will be deployed to the hub cluster. | []string | false |  
  parallelism | Maximum number of concurrent delivered components. | int | false | 5 
  ignoreTerraformComponent | If set false, this step will apply the components with the terraform workload. | bool | false | true 
- auto | If set to false, the workflow will suspend automatically before this step, default to be true. | bool | false | true 
 
 
 ## Deploy-Cloud-Resource
@@ -198,8 +198,152 @@ Deploy cloud resource and deliver secret to multi clusters.
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- env | Declare the name of the env in policy. | string | true |  
  policy | Declare the name of the env-binding policy, if empty, the first env-binding policy will be used. | string | false | empty 
+ env | Declare the name of the env in policy. | string | true |  
+
+
+## Export-Data
+
+### Description
+
+Export data to clusters specified by topology.
+
+### Examples (export-data)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: app-collect-service-endpoint-and-export
+spec:
+  components:
+    - type: webservice
+      name: busybox
+      properties:
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        cmd:
+          - sleep
+          - '1000000'
+      traits:
+        - type: expose
+          properties:
+            port: [8080]
+            type: ClusterIP
+  policies:
+    - type: topology
+      name: local
+      properties:
+        clusters: ["local"]
+    - type: topology
+      name: all
+      properties:
+        clusters: ["local", "cluster-worker"]
+  workflow:
+    steps:
+      - type: deploy
+        name: deploy
+        properties:
+          policies: ["local"]
+      - type: collect-service-endpoints
+        name: collect-service-endpoints
+        outputs:
+          - name: host
+            valueFrom: value.endpoint.host
+      - type: export-data
+        name: export-data
+        properties:
+          topology: all
+        inputs:
+          - from: host
+            parameterKey: data.host
+```
+
+### Specification (export-data)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name | Specify the name of the export destination. | string | false |  
+ namespace | Specify the namespace of the export destination. | string | false |  
+ kind | Specify the kind of the export destination. | string | false | ConfigMap 
+ data | Specify the data to export. | struct | true |  
+ topology | Specify the topology to export. | string | false |  
+
+
+## Export-Service
+
+### Description
+
+Export service to clusters specified by topology.
+
+### Examples (export-service)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: app-collect-service-endpoint-and-export
+spec:
+  components:
+    - type: webservice
+      name: busybox
+      properties:
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        cmd:
+          - sleep
+          - '1000000'
+      traits:
+        - type: expose
+          properties:
+            port: [8080]
+            type: LoadBalancer
+  policies:
+    - type: topology
+      name: local
+      properties:
+        clusters: ["local"]
+    - type: topology
+      name: worker
+      properties:
+        clusters: ["cluster-worker"]
+  workflow:
+    steps:
+      - type: deploy
+        name: deploy
+        properties:
+          policies: ["local"]
+      - type: collect-service-endpoints
+        name: collect-service-endpoints
+        outputs:
+          - name: host
+            valueFrom: value.endpoint.host
+          - name: port
+            valueFrom: value.endpoint.port
+      - type: export-service
+        name: export-service
+        properties:
+          name: busybox
+          topology: worker
+        inputs:
+          - from: host
+            parameterKey: ip
+          - from: port
+            parameterKey: port
+```
+
+### Specification (export-service)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name | Specify the name of the export destination. | string | false |  
+ namespace | Specify the namespace of the export destination. | string | false |  
+ ip | Specify the ip to be export. | string | true |  
+ port | Specify the port to be used in service. | int | true |  
+ targetPort | Specify the port to be export. | int | true |  
+ topology | Specify the topology to export. | string | false |  
 
 
 ## Export2config
@@ -248,10 +392,10 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- cluster | Specify the cluster of the config map. | string | false | empty 
- namespace | Specify the namespace of the config map. | string | false |  
- data | Specify the data of config map. | {...} | true |  
  configName | Specify the name of the config map. | string | true |  
+ namespace | Specify the namespace of the config map. | string | false |  
+ data | Specify the data of config map. | struct | true |  
+ cluster | Specify the cluster of the config map. | string | false | empty 
 
 
 ## Export2secret
@@ -300,11 +444,11 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- cluster | Specify the cluster of the secret. | string | false | empty 
+ secretName | Specify the name of the secret. | string | true |  
  namespace | Specify the namespace of the secret. | string | false |  
  type | Specify the type of the secret. | string | false |  
- secretName | Specify the name of the secret. | string | true |  
- data | Specify the data of secret. | {...} | true |  
+ data | Specify the data of secret. | struct | true |  
+ cluster | Specify the cluster of the secret. | string | false | empty 
 
 
 ## Generate-Jdbc-Connection
@@ -361,7 +505,7 @@ spec:
             message:
               msgtype: text
               text:
-                content: Workflow starting...
+                context: Workflow starting...
       - name: application
         type: apply-application
       - name: slack-message
@@ -410,9 +554,9 @@ We can see that before and after the deployment of the application, the messages
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  lark | Please fulfill its url and message if you want to send Lark messages. | [lark](#lark-notification) | false |  
+ dingding | Please fulfill its url and message if you want to send DingTalk messages. | [dingding](#dingding-notification) | false |  
  slack | Please fulfill its url and message if you want to send Slack messages. | [slack](#slack-notification) | false |  
  email | Please fulfill its from, to and content if you want to send email. | [email](#email-notification) | false |  
- dingding | Please fulfill its url and message if you want to send DingTalk messages. | [dingding](#dingding-notification) | false |  
 
 
 #### lark (notification)
@@ -449,8 +593,51 @@ We can see that before and after the deployment of the application, the messages
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- content | content should be json encode string. | string | true |  
  msg_type | msg_type can be text, post, image, interactive, share_chat, share_user, audio, media, file, sticker. | string | true |  
+ content | content should be json encode string. | string | true |  
+
+
+#### dingding (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ url | Specify the the dingding url, you can either sepcify it in value or use secretRef. | [url-option-0](#url-option-0-notification) or [url-option-1](#url-option-1-notification) | true |  
+ message | Specify the message that you want to sent, refer to [dingtalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw). | [message](#message-notification) | true |  
+
+
+##### url-option-0 (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ value | the url address content in string. | string | true |  
+
+
+##### url-option-1 (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ secretRef |  | [secretRef](#secretref-notification) | true |  
+
+
+##### secretRef (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name | name is the name of the secret. | string | true |  
+ key | key is the key in the secret. | string | true |  
+
+
+##### message (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ text | Specify the message content of dingtalk notification. | (null&#124;struct) | false |  
+ msgtype | msgType can be text, link, mardown, actionCard, feedCard. | string | false | text 
+ link |  | (null&#124;struct) | false |  
+ markdown |  | (null&#124;struct) | false |  
+ at |  | (null&#124;struct) | false |  
+ actionCard |  | (null&#124;struct) | false |  
+ feedCard |  | (null&#124;struct) | false |  
 
 
 #### slack (notification)
@@ -488,8 +675,8 @@ We can see that before and after the deployment of the application, the messages
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  text | Specify the message text for slack notification. | string | true |  
- blocks |  | (null\|[...]) | false |  
- attachments |  | (null\|{...}) | false |  
+ blocks |  | null | false |  
+ attachments |  | (null&#124;struct) | false |  
  thread_ts |  | string | false |  
  mrkdwn | Specify the message text format in markdown for slack notification. | bool | false | true 
 
@@ -498,17 +685,9 @@ We can see that before and after the deployment of the application, the messages
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- content | Specify the content of the email. | [content](#content-notification) | true |  
  from | Specify the email info that you want to send from. | [from](#from-notification) | true |  
  to | Specify the email address that you want to send to. | []string | true |  
-
-
-##### content (notification)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- body | Specify the context body of the email. | string | true |  
- subject | Specify the subject of the email. | string | true |  
+ content | Specify the content of the email. | [content](#content-notification) | true |  
 
 
 ##### from (notification)
@@ -544,47 +723,12 @@ We can see that before and after the deployment of the application, the messages
  key | key is the key in the secret. | string | true |  
 
 
-#### dingding (notification)
+##### content (notification)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- url | Specify the the dingding url, you can either sepcify it in value or use secretRef. | [url-option-0](#url-option-0-notification) or [url-option-1](#url-option-1-notification) | true |  
- message | Specify the message that you want to sent, refer to [dingtalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw). | [message](#message-notification) | true |  
-
-
-##### url-option-0 (notification)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- value | the url address content in string. | string | true |  
-
-
-##### url-option-1 (notification)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- secretRef |  | [secretRef](#secretref-notification) | true |  
-
-
-##### secretRef (notification)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- name | name is the name of the secret. | string | true |  
- key | key is the key in the secret. | string | true |  
-
-
-##### message (notification)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- text | Specify the message content of dingtalk notification. | (null\|{...}) | false |  
- msgtype | msgType can be text, link, mardown, actionCard, feedCard. | string | false | text 
- link |  | (null\|{...}) | false |  
- markdown |  | (null\|{...}) | false |  
- at |  | (null\|{...}) | false |  
- actionCard |  | (null\|{...}) | false |  
- feedCard |  | (null\|{...}) | false |  
+ subject | Specify the subject of the email. | string | true |  
+ body | Specify the context body of the email. | string | true |  
 
 
 ## Read-Object
@@ -638,11 +782,11 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- name | Specify the name of the object. | string | true |  
- cluster | The cluster you want to apply the resource to, default is the current control plane cluster. | string | false | empty 
  apiVersion | Specify the apiVersion of the object, defaults to 'core.oam.dev/v1beta1'. | string | false |  
  kind | Specify the kind of the object, defaults to Application. | string | false |  
+ name | Specify the name of the object. | string | true |  
  namespace | The namespace of the resource you want to read. | string | false | default 
+ cluster | The cluster you want to apply the resource to, default is the current control plane cluster. | string | false | empty 
 
 
 ## Share-Cloud-Resource
@@ -656,17 +800,17 @@ Sync secrets created by terraform component to runtime clusters so that runtime 
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- env | Declare the name of the env in policy. | string | true |  
- policy | Declare the name of the env-binding policy, if empty, the first env-binding policy will be used. | string | false | empty 
  placements | Declare the location to bind. | [[]placements](#placements-share-cloud-resource) | true |  
+ policy | Declare the name of the env-binding policy, if empty, the first env-binding policy will be used. | string | false | empty 
+ env | Declare the name of the env in policy. | string | true |  
 
 
 #### placements (share-cloud-resource)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- cluster |  | string | false |  
  namespace |  | string | false |  
+ cluster |  | string | false |  
 
 
 ## Step-Group
@@ -740,9 +884,11 @@ spec:
   workflow:
     steps:
       - name: slack-message
-        type: webhook-notification
+        type: notification
         properties:
           slack:
+            url:
+              value: <your-slack-url>
             # the Slack webhook address, please refer to: https://api.slack.com/messaging/webhooks
             message:
               text: Ready to apply the application, ask the administrator to approve and resume the workflow.
@@ -751,7 +897,9 @@ spec:
         # properties:
         #   duration: "30s"
       - name: express-server
-        type: apply-application
+        type: apply-component
+        properties:
+          component: express-server
 ```
 
 ### Specification (suspend)
@@ -800,7 +948,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  url | Specify the webhook url. | [url-option-0](#url-option-0-webhook) or [url-option-1](#url-option-1-webhook) | true |  
- data | Specify the data you want to send. | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+ data | Specify the data you want to send. | map[string]:_ | false |  
 
 
 #### url-option-0 (webhook)
