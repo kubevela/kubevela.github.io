@@ -4,7 +4,7 @@ title: 内置工作流步骤列表
 
 本文档将**按字典序**展示所有内置工作流步骤的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-24T20:59:39+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-10-10T15:04:28+08:00。
 
 ## Apply-Object
 
@@ -65,7 +65,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- value | Kubernetes 资源对象参数。 | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | true |  
+ value | Kubernetes 资源对象参数。 | map[string]:_ | true |  
  cluster | 需要部署的集群名称。如果不指定，则为当前集群。 | string | false | empty 
 
 
@@ -181,10 +181,10 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
+ auto | 默认为 true。如果为 false，工作流将在执行该步骤前自动暂停。。 | bool | false | true 
  policies | 指定本次部署要使用的策略。如果不指定策略，将自动部署到管控集群。 | []string | false |  
  parallelism | 指定本次部署的并发度。 | int | false | 5 
  ignoreTerraformComponent | 部署时忽略 Terraform 的组件，默认忽略，Terraform 仅需要在管控集群操作云资源，不需要管控信息下发到多集群。 | bool | false | true 
- auto | 默认为 true。如果为 false，工作流将在执行该步骤前自动暂停。。 | bool | false | true 
 
 
 ## Deploy-Cloud-Resource
@@ -198,8 +198,152 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- env | 指定多集群策略中定义的环境名称。 | string | true |  
  policy | Declare the name of the env-binding policy, if empty, the first env-binding policy will be used。 | string | false | empty 
+ env | 指定多集群策略中定义的环境名称。 | string | true |  
+
+
+## Export-Data
+
+### 描述
+
+Export data to clusters specified by topology。
+
+### 示例 (export-data)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: app-collect-service-endpoint-and-export
+spec:
+  components:
+    - type: webservice
+      name: busybox
+      properties:
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        cmd:
+          - sleep
+          - '1000000'
+      traits:
+        - type: expose
+          properties:
+            port: [8080]
+            type: ClusterIP
+  policies:
+    - type: topology
+      name: local
+      properties:
+        clusters: ["local"]
+    - type: topology
+      name: all
+      properties:
+        clusters: ["local", "cluster-worker"]
+  workflow:
+    steps:
+      - type: deploy
+        name: deploy
+        properties:
+          policies: ["local"]
+      - type: collect-service-endpoints
+        name: collect-service-endpoints
+        outputs:
+          - name: host
+            valueFrom: value.endpoint.host
+      - type: export-data
+        name: export-data
+        properties:
+          topology: all
+        inputs:
+          - from: host
+            parameterKey: data.host
+```
+
+### 参数说明 (export-data)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Specify the name of the export destination。 | string | false |  
+ namespace | Specify the namespace of the export destination。 | string | false |  
+ kind | Specify the kind of the export destination。 | string | false | ConfigMap 
+ data | Specify the data to export。 | struct | true |  
+ topology | Specify the topology to export。 | string | false |  
+
+
+## Export-Service
+
+### 描述
+
+Export service to clusters specified by topology。
+
+### 示例 (export-service)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: app-collect-service-endpoint-and-export
+spec:
+  components:
+    - type: webservice
+      name: busybox
+      properties:
+        image: busybox
+        imagePullPolicy: IfNotPresent
+        cmd:
+          - sleep
+          - '1000000'
+      traits:
+        - type: expose
+          properties:
+            port: [8080]
+            type: LoadBalancer
+  policies:
+    - type: topology
+      name: local
+      properties:
+        clusters: ["local"]
+    - type: topology
+      name: worker
+      properties:
+        clusters: ["cluster-worker"]
+  workflow:
+    steps:
+      - type: deploy
+        name: deploy
+        properties:
+          policies: ["local"]
+      - type: collect-service-endpoints
+        name: collect-service-endpoints
+        outputs:
+          - name: host
+            valueFrom: value.endpoint.host
+          - name: port
+            valueFrom: value.endpoint.port
+      - type: export-service
+        name: export-service
+        properties:
+          name: busybox
+          topology: worker
+        inputs:
+          - from: host
+            parameterKey: ip
+          - from: port
+            parameterKey: port
+```
+
+### 参数说明 (export-service)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Specify the name of the export destination。 | string | false |  
+ namespace | Specify the namespace of the export destination。 | string | false |  
+ ip | Specify the ip to be export。 | string | true |  
+ port | Specify the port to be used in service。 | int | true |  
+ targetPort | Specify the port to be export。 | int | true |  
+ topology | Specify the topology to export。 | string | false |  
 
 
 ## Export2config
@@ -248,10 +392,10 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- cluster | 要导出到的集群名称。 | string | false | empty 
- namespace | ConfigMap 的 namespace，默认为当前应用的 namespace。 | string | false |  
- data | 需要导出到 ConfigMap 中的数据，是一个 key-value 的 map。 | {...} | true |  
  configName | ConfigMap 的名称。 | string | true |  
+ namespace | ConfigMap 的 namespace，默认为当前应用的 namespace。 | string | false |  
+ data | 需要导出到 ConfigMap 中的数据，是一个 key-value 的 map。 | struct | true |  
+ cluster | 要导出到的集群名称。 | string | false | empty 
 
 
 ## Export2secret
@@ -300,11 +444,11 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- cluster | 要导出到的集群名称。 | string | false | empty 
+ secretName | Secret 的名称。 | string | true |  
  namespace | secret 的 namespace，默认为当前应用的 namespace。 | string | false |  
  type | 指定导出的 secret 类型。 | string | false |  
- secretName | Secret 的名称。 | string | true |  
- data | 需要导出到 Secret 中的数据。 | {...} | true |  
+ data | 需要导出到 Secret 中的数据。 | struct | true |  
+ cluster | 要导出到的集群名称。 | string | false | empty 
 
 
 ## Generate-Jdbc-Connection
@@ -410,9 +554,9 @@ We can see that before and after the deployment of the application, the messages
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  lark | 发送飞书信息。 | [lark](#lark-notification) | false |  
+ dingding | 发送钉钉信息。 | [dingding](#dingding-notification) | false |  
  slack | 发送 Slack 信息。 | [slack](#slack-notification) | false |  
  email | 发送邮件通知。 | [email](#email-notification) | false |  
- dingding | 发送钉钉信息。 | [dingding](#dingding-notification) | false |  
 
 
 #### lark (notification)
@@ -449,8 +593,51 @@ We can see that before and after the deployment of the application, the messages
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- content | content should be json encode string。 | string | true |  
  msg_type | msg_type can be text, post, image, interactive, share_chat, share_user, audio, media, file, sticker。 | string | true |  
+ content | content should be json encode string。 | string | true |  
+
+
+#### dingding (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ url | Specify the the dingding url, you can either sepcify it in value or use secretRef。 | [url-option-0](#url-option-0-notification) or [url-option-1](#url-option-1-notification) | true |  
+ message | Specify the message that you want to sent, refer to [dingtalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw)。 | [message](#message-notification) | true |  
+
+
+##### url-option-0 (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ value | the url address content in string。 | string | true |  
+
+
+##### url-option-1 (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ secretRef |  | [secretRef](#secretref-notification) | true |  
+
+
+##### secretRef (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Kubernetes Secret 名称。 | string | true |  
+ key | Kubernetes Secret 中的 key。 | string | true |  
+
+
+##### message (notification)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ text | Specify the message content of dingtalk notification。 | (null&#124;struct) | false |  
+ msgtype | msgType can be text, link, mardown, actionCard, feedCard。 | string | false | text 
+ link |  | (null&#124;struct) | false |  
+ markdown |  | (null&#124;struct) | false |  
+ at |  | (null&#124;struct) | false |  
+ actionCard |  | (null&#124;struct) | false |  
+ feedCard |  | (null&#124;struct) | false |  
 
 
 #### slack (notification)
@@ -488,8 +675,8 @@ We can see that before and after the deployment of the application, the messages
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  text | Specify the message text for slack notification。 | string | true |  
- blocks |  | (null\|[...]) | false |  
- attachments |  | (null\|{...}) | false |  
+ blocks |  | null | false |  
+ attachments |  | (null&#124;struct) | false |  
  thread_ts |  | string | false |  
  mrkdwn | Specify the message text format in markdown for slack notification。 | bool | false | true 
 
@@ -498,17 +685,9 @@ We can see that before and after the deployment of the application, the messages
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- content | 指定邮件内容。 | [content](#content-notification) | true |  
  from | 指定邮件发送人信息。 | [from](#from-notification) | true |  
  to | 指定收件人信息。 | []string | true |  
-
-
-##### content (notification)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- body | 指定邮件正文内容。 | string | true |  
- subject | 指定邮件标题。 | string | true |  
+ content | 指定邮件内容。 | [content](#content-notification) | true |  
 
 
 ##### from (notification)
@@ -544,47 +723,12 @@ We can see that before and after the deployment of the application, the messages
  key | Kubernetes Secret 中的 key。 | string | true |  
 
 
-#### dingding (notification)
+##### content (notification)
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- url | Specify the the dingding url, you can either sepcify it in value or use secretRef。 | [url-option-0](#url-option-0-notification) or [url-option-1](#url-option-1-notification) | true |  
- message | Specify the message that you want to sent, refer to [dingtalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw)。 | [message](#message-notification) | true |  
-
-
-##### url-option-0 (notification)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- value | the url address content in string。 | string | true |  
-
-
-##### url-option-1 (notification)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- secretRef |  | [secretRef](#secretref-notification) | true |  
-
-
-##### secretRef (notification)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Kubernetes Secret 名称。 | string | true |  
- key | Kubernetes Secret 中的 key。 | string | true |  
-
-
-##### message (notification)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- text | Specify the message content of dingtalk notification。 | (null\|{...}) | false |  
- msgtype | msgType can be text, link, mardown, actionCard, feedCard。 | string | false | text 
- link |  | (null\|{...}) | false |  
- markdown |  | (null\|{...}) | false |  
- at |  | (null\|{...}) | false |  
- actionCard |  | (null\|{...}) | false |  
- feedCard |  | (null\|{...}) | false |  
+ subject | 指定邮件标题。 | string | true |  
+ body | 指定邮件正文内容。 | string | true |  
 
 
 ## Read-Object
@@ -638,11 +782,11 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- name | Specify the name of the object。 | string | true |  
- cluster | 需要部署的集群名称。如果不指定，则为当前集群。 | string | false | empty 
  apiVersion | Specify the apiVersion of the object, defaults to 'core.oam.dev/v1beta1'。 | string | false |  
  kind | Specify the kind of the object, defaults to Application。 | string | false |  
+ name | Specify the name of the object。 | string | true |  
  namespace | The namespace of the resource you want to read。 | string | false | default 
+ cluster | 需要部署的集群名称。如果不指定，则为当前集群。 | string | false | empty 
 
 
 ## Share-Cloud-Resource
@@ -656,17 +800,17 @@ Sync secrets created by terraform component to runtime clusters so that runtime 
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- env | 指定多集群策略中定义的环境名称。 | string | true |  
- policy | Declare the name of the env-binding policy, if empty, the first env-binding policy will be used。 | string | false | empty 
  placements | Declare the location to bind。 | [[]placements](#placements-share-cloud-resource) | true |  
+ policy | Declare the name of the env-binding policy, if empty, the first env-binding policy will be used。 | string | false | empty 
+ env | 指定多集群策略中定义的环境名称。 | string | true |  
 
 
 #### placements (share-cloud-resource)
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- cluster |  | string | false |  
  namespace |  | string | false |  
+ cluster |  | string | false |  
 
 
 ## Step-Group
@@ -740,9 +884,11 @@ spec:
   workflow:
     steps:
       - name: slack-message
-        type: webhook-notification
+        type: notification
         properties:
           slack:
+            url:
+              value: <your-slack-url>
             # the Slack webhook address, please refer to: https://api.slack.com/messaging/webhooks
             message:
               text: Ready to apply the application, ask the administrator to approve and resume the workflow.
@@ -751,7 +897,9 @@ spec:
         # properties:
         #   duration: "30s"
       - name: express-server
-        type: apply-application
+        type: apply-component
+        properties:
+          component: express-server
 ```
 
 ### 参数说明 (suspend)
@@ -800,7 +948,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  url | 需要发送的 Webhook URL，可以选择直接在 value 填写或从 secretRef 中获取。 | [url-option-0](#url-option-0-webhook) or [url-option-1](#url-option-1-webhook) | true |  
- data | 需要发送的内容。 | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+ data | 需要发送的内容。 | map[string]:_ | false |  
 
 
 #### url-option-0 (webhook)
