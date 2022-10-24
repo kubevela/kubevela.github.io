@@ -3,51 +3,31 @@ title: Workflow Step Definition
 slug: /platform-engineers/workflow/workflow
 ---
 
-## Overview
+:::tip
+Before reading this section, make sure you have understood the concept of [WorkflowStepDefinition](../oam/x-definition#WorkflowStepDefinition) in KubeVela and learned the [basic knowledge of CUE](../cue/basic).
+:::
 
-`Workflow` allows you to customize steps in `Application`, glue together additional delivery processes and specify arbitrary delivery environments. In short, `Workflow` provides customized control flow and flexibility based on the original delivery model of Kubernetes(Apply). For example, `Workflow` can be used to implement complex operations such as pause, manual approval, waiting status, data flow, multi-environment gray release, A/B testing, etc.
 
-`Workflow` is a further exploration and best practice based on OAM model in KubeVela, it obeys the modular concept and reusable characteristics of OAM. Each workflow module is a "super glue" that can combine your arbitrary tools and processes. In modern complex cloud native application delivery environment, you can completely describe all delivery processes through a declarative configuration, ensuring the stability and convenience of the delivery process.
+In this section, we will introduce how to customize the workflow step in Application by using [CUE](../cue/basic) through `WorkflowStepDefinition`.
 
-## Using workflow
+## Deliver a simple workflow step
 
-`Workflow` consists of steps, you can either use KubeVela's [built-in workflow steps], or write their own `WorkflowStepDefinition` to complete the operation.
+We can generate `WorkflowStepDefinition` CUE file with command `vela def <def-name> --type workflow-step > <def-name>.cue`.
 
-We can use `vela def` to define workflow steps by writing `Cue templates`. Let's write an `Application` that apply a Tomcat using Helm chart and automatically send message to Slack when the Tomcat is running.
-
-### Workflow Steps
-
-KubeVela provides several CUE actions for writing workflow steps. These actions are provided by the `vela/op` package. In order to achieve the above scenario, we need to use the following three CUE actions:
-
-| Action | Description | Parameter |
-| :---: | :--: | :-- |
-| [ApplyApplication](./cue-actions#apply) | Apply all the resources in Application. | - |
-| [Read](./cue-actions#read) | Read resources in Kubernetes cluster. | value: the resource metadata to be get. And after successful execution, `value` will be updated with resource definition in cluster.<br /> err: if an error occurs, the `err` will contain the error message. |
-| [ConditionalWait](./cue-actions#conditionalwait) | The workflow step will be blocked until the condition is met. | continue: The workflow step will be blocked until the value becomes `true`. |
-
-> For all the workflow actions, please refer to [Built-in Workflow Operations](./cue-actions) reference docs.
-
-After this, we need two `WorkflowStepDefinitions` to complete the Application：
-
-1. Apply Tomcat and wait till it's status become running. We need to write a custom workflow step for it.
-2. Send Slack notifications, we can use the built-in [webhook-notification] step for it.
-
-#### Step: Apply Tomcat
-
-First, use `vela def init` to generate a `WorkflowStepDefinition` template：
+Let's take a custom step for sending an HTTP request as an example, first, initialize the Definition file:
 
 ```shell
-vela def init my-helm -t workflow-step --desc "Apply helm charts and wait till it's running." -o my-helm.cue
+vela def init request --type workflow-step --desc "Send request to the url" > request.cue
 ```
 
-The result is as follows：
-```cue
-// $ cat my-helm.cue
+After initialization, we can see the following in `request.cue`:
 
-"my-helm": {
+```cue
+request: {
+	alias: ""
 	annotations: {}
 	attributes: {}
-	description: "Apply helm charts and wait till it's running."
+	description: "Send request to the url"
 	labels: {}
 	type: "workflow-step"
 }
@@ -56,93 +36,244 @@ template: {
 }
 ```
 
-Import `vela/op` and complete the Cue code in `template`:
+Inside the `template` is the execution logic for this workflow step. We can define `parameter` in `template` to receive the parameters passed in by the user:
+
+```cue
+template: {
+  parameter: {
+		url:    string
+		method: *"GET" | "POST" | "PUT" | "DELETE"
+		body?: {...}
+		header?: [string]: string
+	}
+}
+```
+
+CUE provides a series of [basic builtin packages](https://cuelang.org/docs/concepts/packages/#builtin-packages), such as: `regexp`, `json`, `strings`, `math`, etc.
+
+At the same time, KubeVela also provides the `vela/op` package by default, which contains a series of built-in workflow [CUE actions](./cue-actions), such as: sending HTTP requests, operating K8s resources, printing logs, etc.
+
+Now we can import KubeVela's built-in `vela/op` package and CUE's official `encoding/json`, use `op.#HTTPDo` to send HTTP requests according to the user's parameters, and use `json.Marshal()` to marshal the data.
 
 ```cue
 import (
-  "vela/op"
+	"vela/op"
+	"encoding/json"
 )
 
-"my-helm": {
+request: {
+	alias: ""
 	annotations: {}
 	attributes: {}
-	description: "Apply helm charts and wait till it's running."
+	description: "Send request to the url"
 	labels: {}
 	type: "workflow-step"
 }
 
 template: {
-  // Apply all the resources in Application
-  apply: op.#ApplyApplication & {}
-
-  resource: op.#Read & {
-     value: {
-       kind: "Deployment"
-       apiVersion: "apps/v1"
-       metadata: {
-         name: "tomcat"
-         // we can use context to get any metadata in Application
-         namespace: context.namespace
-       }
-     }
-  }
-
-  workload: resource.value
-  // wait till it's ready
-  wait: op.#ConditionalWait & {
-    continue: workload.status.readyReplicas == workload.status.replicas && workload.status.observedGeneration == workload.metadata.generation
-  }
+	http: op.#HTTPDo & {
+		method: parameter.method
+		url:    parameter.url
+		request: {
+			if parameter.body != _|_ {
+				body: json.Marshal(parameter.body)
+			}
+			if parameter.header != _|_ {
+				header: parameter.header
+			}
+		}
+	}
+	parameter: {
+		url:    string
+		method: *"GET" | "POST" | "PUT" | "DELETE"
+		body?: {...}
+		header?: [string]: string
+	}
 }
 ```
 
-Apply it to the cluster：
+If the HTTP request returns a status code greater than 400, we expect this step to be failed. Use `op.#Fail` to fail this step, and the definition is like:
 
-```shell
-$ vela def apply my-helm.cue
+```cue
+import (
+	"vela/op"
+	"encoding/json"
+)
 
-WorkflowStepDefinition my-helm in namespace vela-system updated.
+request: {
+	alias: ""
+	annotations: {}
+	attributes: {}
+	description: "Send request to the url"
+	labels: {}
+	type: "workflow-step"
+}
+
+template: {
+	http: op.#HTTPDo & {
+		method: parameter.method
+		url:    parameter.url
+		request: {
+			if parameter.body != _|_ {
+				body: json.Marshal(parameter.body)
+			}
+			if parameter.header != _|_ {
+				header: parameter.header
+			}
+		}
+	}
+	fail: op.#Steps & {
+		if http.response.statusCode > 400 {
+			requestFail: op.#Fail & {
+				message: "request of \(parameter.url) is fail: \(http.response.statusCode)"
+			}
+		}
+	}
+	response: json.Unmarshal(http.response.body)
+	parameter: {
+		url:    string
+		method: *"GET" | "POST" | "PUT" | "DELETE"
+		body?: {...}
+		header?: [string]: string
+	}
+}
 ```
 
-#### Step: Send Slack notifications
+Use `vela def apply -f request.cue` to deploy this Definition to the cluster, then we can use this custom step directly in the Application.
 
-Use the built-in step, [webhook-notification].
+Deploy the following Application: The first step of the workflow will send an HTTP request to get the information of the KubeVela repository; at the same time, this step will use the star number of the KubeVela repository as the Output, the next step will use this Output as a parameter, and sent it as message to the Slack:
 
-### Apply the Application
+:::tip
+Please refer to [Inputs and Outputs](../../end-user/workflow/component-dependency-parameter#inputs-and-outputs) for more information of data passing between steps.
+:::
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: first-vela-workflow
+  name: request-http
   namespace: default
 spec:
-  components:
-  - name: tomcat
-    type: helm
-    properties:
-      repoType: helm
-      url: https://charts.bitnami.com/bitnami
-      chart: tomcat
-      version: "9.2.20"
+  components: []
   workflow:
     steps:
-      - name: tomcat
-        # specify the step type
-        type: my-helm
-        outputs:
-          - name: msg
-            # get value from the deployment status in my-helm
-            valueFrom: resource.value.status.conditions[0].message
-      - name: send-message
-        type: webhook-notification
-        inputs:
-          - from: msg
-            # use the output value in the previous step and pass it into the properties slack.message.text
-            parameterKey: slack.message.text 
-        properties:
-          slack:
-            # the address of your slack webhook, please refer to: https://api.slack.com/messaging/webhooks
-            url: <your slack url>
+    - name: request
+      type: request
+      properties:
+        url: https://api.github.com/repos/kubevela/kubevela
+      outputs:
+        - name: stars
+          valueFrom: |
+            import "strconv"
+            "Current star count: " + strconv.FormatInt(response["stargazers_count"], 10)
+    - name: notification
+      type: notification
+      inputs:
+        - from: stars
+          parameterKey: slack.message.text
+      properties:
+        slack:
+          url:
+            value: <your slack url>
 ```
 
-Apply the Application to the cluster and you can see that all resources have been successfully applied and Slack has received the messages of the Deployment status.
+## Custom Health Checks
+
+If you want to wait a period of time in a workflow step until a certain condition is met, or until the status of a resource becomes ready, you can use `op.#ConditionalWait`.
+
+Take the status of waiting for a Deployment as an example, use `op.#Apply` to deploy a Deployment, and then use `op.#ConditionalWait` to wait for the status of the Deployment to become ready:
+
+```cue
+import (
+	"vela/op"
+)
+
+"apply-deployment": {
+	alias: ""
+	annotations: {}
+	attributes: {}
+	description: ""
+	labels: {}
+	type: "workflow-step"
+}
+
+template: {
+	output: op.#Apply & {
+		value: {
+			apiVersion: "apps/v1"
+			kind:       "Deployment"
+			metadata: {
+				name:      context.stepName
+				namespace: context.namespace
+			}
+			spec: {
+				selector: matchLabels: wr: context.stepName
+				template: {
+					metadata: labels: wr: context.stepName
+					spec: containers: [{
+						name:  context.stepName
+						image: parameter.image
+						if parameter["cmd"] != _|_ {
+							command: parameter.cmd
+						}
+					}]
+				}
+			}
+		}
+	}
+	wait: op.#ConditionalWait & {
+		continue: output.value.status.readyReplicas == 1
+	}
+	parameter: {
+		image: string
+		cmd?: [...string]
+	}
+}
+```
+
+## Full available `context` in Workflow Step
+
+KubeVela allows you to reference some runtime data via the `context` keyword.
+
+In a workflow step definition, you can use the following context data:
+
+|         Context Variable         |                                                                                  Description                                                                                  |    Type    |
+| :------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------: |
+|          `context.name`          |                                                 The name of the Application.                                                  |   string   |
+|        `context.appName`         |                                                    The name of the Application.                                                     |   string   |
+|       `context.namespace`        |          The namespace of the Application.          |   string   |
+|        `context.appRevision`        |                                                              The revision of the Application.                                                              |   string   |
+|       `context.stepName`        |          The name of current step.          |   string   |
+|       `context.stepSessionID`        |          The ID of current step.          |   string   |
+|       `context.spanID`        |          The trace ID of current step in this reconcile. ID          |   string   |
+|      `context.workflowName`      |                                                                  The workflow name specified in annotation.                                                                   |   string   |
+|     `context.publishVersion`     |                                                         The version of application instance specified in annotation.                                                               |   string   |
+
+
+## Kubernetes 中的 WorkflowStepDefinition
+
+KubeVela is fully programmable through CUE, while it leverages Kubernetes as a control plane and is consistent with the API in YAML.
+
+Therefore, the CUE Definition will be translated into the Kubernetes API when applied to the cluster.
+
+Workflow step definitions will be in the following API format:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: WorkflowStepDefinition
+metadata:
+  annotations:
+    definition.oam.dev/description: <Function description>
+spec:
+  schematic:
+    cue: # Details of workflow steps defined by CUE language
+      template: <CUE format template>
+```
+
+
+## More examples to learn
+
+You can check the following resources for more examples:
+
+- Builtin workflow step definitions in the [KubeVela github repo](https://github.com/kubevela/kubevela/tree/master/vela-templates/definitions/internal/workflowstep).
+- Definitions defined in addons in the [catalog repo](https://github.com/kubevela/catalog/tree/master/addons).
