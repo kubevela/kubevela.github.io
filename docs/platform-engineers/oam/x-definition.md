@@ -514,30 +514,12 @@ Once the application is created, KubeVela will tag the created resources with a 
 | `trait.oam.dev/resource`  |       `outputs.\<resource type\>`in Trait        |
 | `app.oam.dev/appRevision` |            Application Revision Name             |
 
-## Definition Runtime Context
+## Runtime Context Data in Definitions
 
-In the Definition, some runtime context information can be obtained through the `context` variable. The specific list is as follows, where the scope indicates which module definitions the Context variable can be used in:
+In the Definitions, some runtime context information can be obtained through the `context` variable, please check out:
 
-|         Context Variable         |                                      Description                                      |                         Scope                          |
-| :------------------------------: | :-----------------------------------------------------------------------------------: | :----------------------------------------------------: |
-|      `context.appRevision`       |     The app version name corresponding to the current instance of the application     |          ComponentDefinition, TraitDefinition          |
-|     `context.appRevisionNum`     |   The app version number corresponding to the current instance of the application.    |          ComponentDefinition, TraitDefinition          |
-|        `context.appName`         |        The app name corresponding to the current instance of the application.         |          ComponentDefinition, TraitDefinition          |
-|          `context.name`          | component name in ComponentDefinition and TraitDefinition，policy in PolicyDefinition | ComponentDefinition, TraitDefinition, PolicyDefinition |
-|       `context.namespace`        |               The namespace of the current instance of the application                |          ComponentDefinition, TraitDefinition          |
-|        `context.revision`        |                  The version name of the current component instance                   |          ComponentDefinition, TraitDefinition          |
-|       `context.parameter`        |   The parameters of the current component instance, it can be obtained in the trait   |                    TraitDefinition                     |
-|         `context.output`         |               Object structure after instantiation of current component               |          ComponentDefinition, TraitDefinition          |
-| `context.outputs.<resourceName>` |             Structure after instantiation of current component and trait              |          ComponentDefinition, TraitDefinition          |
-
-At the same time, in the Workflow system, because the `context` has to act on the application level, it is very different from the above usage. We introduce it separately:
-
-|   Context Variable    |                        Description                         |         Scope          |
-| :-------------------: | :--------------------------------------------------------: | :--------------------: |
-|    `context.name`     |    The name of the current instance of the application     | WorkflowStepDefinition |
-|  `context.namespace`  |  The namespace of the current instance of the application  | WorkflowStepDefinition |
-|   `context.labels`    |   The labels of the current instance of the application    | WorkflowStepDefinition |
-| `context.annotations` | The annotations of the current instance of the application | WorkflowStepDefinition |
-
+- [Context data in Component Definition](../components/custom-component#full-available-context-in-component)
+- [Context data in Trait Definition](../traits/customize-trait#full-available-context-in-trait)
+- [Context data in Workflow Sep Definition](../workflow/workflow#full-available-context-in-workflow-step)
 
 Please note that all the Definition concepts introduced in this section only need to be understood by the platform administrator when they want to expand the functions of KubeVela. The end users will learn the schema of above definitions with visualized forms (or the JSON schema of parameters if they prefer) and reference them in application deployment plan. Please check the [Generate Forms from Definitions](../openapi-v3-json-schema) section about how this is achieved.

@@ -542,7 +542,7 @@ status:
 > Please refer to [this doc](https://github.com/kubevela/kubevela/blob/master/vela-templates/definitions/internal/trait/gateway.cue) for more complete example.
 
 
-## Full available `context` in Component
+## Full available `context` in Trait
 
 
 |         Context Variable         |                                                                         Description                                                                         |    Type    |
