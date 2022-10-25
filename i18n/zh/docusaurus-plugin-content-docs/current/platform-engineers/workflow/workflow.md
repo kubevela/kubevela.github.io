@@ -3,51 +3,30 @@ title:  自定义工作流
 slug: /platform-engineers/workflow/workflow
 ---
 
-## 总览
+:::tip
+在阅读本部分之前，请确保你已经了解 KubeVela 中 [工作流节点定义（WorkflowStepDefinition）](../oam/x-definition#工作流节点定义（WorkflowStepDefinition）) 的概念且学习掌握了 [CUE 的基本知识](../cue/basic)
+:::
 
-KubeVela 的工作流机制允许你自定义应用部署计划中的步骤，粘合额外的交付流程，指定任意的交付环境。简而言之，工作流提供了定制化的控制逻辑，在原有 Kubernetes 模式交付资源（Apply）的基础上，提供了面向过程的灵活性。比如说，使用工作流实现暂停、人工验证、状态等待、数据流传递、多环境灰度、A/B 测试等复杂操作。
+本节将以工作流步骤定义的例子展开说明，介绍如何使用 [CUE](../cue/basic) 通过工作流步骤定义`WorkflowStepDefinition` 来自定义应用部署计划的工作流步骤。
 
-工作流是 KubeVela 实践过程中基于 OAM 模型的进一步探索和最佳实践，充分遵守 OAM 的模块化理念和可复用特性。每一个工作流模块都是一个“超级粘合剂”，可以将你任意的工具和流程都组合起来。使得你在现代复杂云原生应用交付环境中，可以通过一份申明式的配置，完整的描述所有的交付流程，保证交付过程的稳定性和便利性。
+## 交付一个简单的工作流步骤
 
-## 使用工作流
+我们可以通过 `vela def <def-name> --type workflow-step > <def-name>.cue` 来生成一个 `workflow-step` 类型的 Definition CUE 文件。
 
-工作流由步骤组成，你既可以使用 KubeVela 提供的 [内置工作流步骤] 来便利地完成操作，也可以自己来编写 `WorkflowStepDefinition` 来达到想要的效果。
-
-我们可以使用 `vela def` 通过编写 `Cue template` 来定义工作流步骤。下面我们来完成这个场景：使用 Helm 部署一个 Tomcat，并在部署完成后自动向 Slack 发送消息通知。
-
-### 编写工作流步骤
-
-KubeVela 提供了一些 CUE 操作类型用于编写工作流步骤。这些操作均由 `vela/op` 包提供。为了实现上述场景，我们需要使用以下 3 个 CUE 操作：
-
-| 操作名 | 说明 | 参数 |
-| :---: | :--: | :-- |
-| [ApplyApplication](./cue-actions#apply) | 部署应用中的所有资源 | - |
-| [Read](./cue-actions#read) | 读取 Kubernetes 集群中的资源。 | value: 描述需要被读取资源的元数据，比如 kind、name 等，操作完成后，集群中资源的数据会被填充到 `value` 上。<br /> err: 如果读取操作发生错误，这里会以字符串的方式指示错误信息。 |
-| [ConditionalWait](./cue-actions#conditionalwait) | 会让 Workflow Step 处于等待状态，直到条件被满足。 | continue: 当该字段为 true 时，Workflow Step 才会恢复继续执行。 |
-
-> 所有的操作类型可参考 [Cue Actions](./cue-actions)
-
-在此基础上，我们需要两个 `WorkflowStepDefinition`：
-
-1. 部署 Tomcat，并且等待 Deployment 的状态变为 running，这一步需要自定义工作流步骤来实现。
-2. 发送 Slack 通知，这一步可以使用 KubeVela 内置的 [webhook-notification] 步骤来实现。
-
-#### 部署 Tomcat 步骤
-
-首先，通过 `vela def init` 来生成一个 `WorkflowStepDefinition` 模板：
+我们以一个发送 HTTP 请求的自定义步骤为例，首先初始化这个 Definition 文件：
 
 ```shell
-vela def init my-helm -t workflow-step --desc "Apply helm charts and wait till it's running." -o my-helm.cue
+vela def init request --type workflow-step --desc "Send request to the url" > request.cue
 ```
 
-得到如下结果：
-```shell
-$ cat my-helm.cue
+初始化完成后，我们可以在 `request.cue` 中看到如下内容：
 
-"my-helm": {
+```cue
+request: {
+	alias: ""
 	annotations: {}
 	attributes: {}
-	description: "Apply helm charts and wait till it's running."
+	description: "Send request to the url"
 	labels: {}
 	type: "workflow-step"
 }
@@ -56,93 +35,244 @@ template: {
 }
 ```
 
-引用 `vela/op` 包，并将 Cue 代码补充到 `template` 中：
+`template` 中是这个工作流步骤的执行逻辑。我们先在 `template` 中定义 `parameter`，用于接收用户传入的参数：
 
+```cue
+template: {
+  parameter: {
+		url:    string
+		method: *"GET" | "POST" | "PUT" | "DELETE"
+		body?: {...}
+		header?: [string]: string
+	}
+}
 ```
+
+CUE 提供了一系列[基础内置包](https://cuelang.org/docs/concepts/packages/#builtin-packages)，如：`regexp`, `json`, `strings`, `math` 等。
+
+同时，KubeVela 也默认提供了 `vela/op` 包，其中包含了一系列内置的工作流 [CUE 操作符](./cue-actions)，如：发送 HTTP 请求，操作 K8s 资源，打印日志等，来帮助你更好地编写工作流步骤。
+
+我们在这引用 KubeVela 内置的 `vela/op` 包以及 CUE 官方的 `encoding/json`，使用 `op.#HTTPDo` 根据用户的参数发送 HTTP 请求，并使用 `json.Marshal()` 来进行数据类型的转换。
+
+```cue
 import (
-  "vela/op"
+	"vela/op"
+	"encoding/json"
 )
 
-"my-helm": {
+request: {
+	alias: ""
 	annotations: {}
 	attributes: {}
-	description: "Apply helm charts and wait till it's running."
+	description: "Send request to the url"
 	labels: {}
 	type: "workflow-step"
 }
 
 template: {
-  // 部署应用中的所有资源
-  apply: op.#ApplyApplication & {}
-
-  resource: op.#Read & {
-     value: {
-       kind: "Deployment"
-       apiVersion: "apps/v1"
-       metadata: {
-         name: "tomcat"
-         // 可以使用 context 来获取该 Application 的任意元信息
-         namespace: context.namespace
-       }
-     }
-  }
-
-  workload: resource.value
-  // 等待 helm 的 deployment 可用
-  wait: op.#ConditionalWait & {
-    continue: workload.status.readyReplicas == workload.status.replicas && workload.status.observedGeneration == workload.metadata.generation
-  }
+	http: op.#HTTPDo & {
+		method: parameter.method
+		url:    parameter.url
+		request: {
+			if parameter.body != _|_ {
+				body: json.Marshal(parameter.body)
+			}
+			if parameter.header != _|_ {
+				header: parameter.header
+			}
+		}
+	}
+	parameter: {
+		url:    string
+		method: *"GET" | "POST" | "PUT" | "DELETE"
+		body?: {...}
+		header?: [string]: string
+	}
 }
 ```
 
-部署到集群中：
+如果 HTTP 请求返回的状态码大于 400，则我们希望这个步骤的状态是失败的。使用 `op.#Fail` 是步骤的状态变为失败。这样一个发送请求的自定义步骤最终为：
 
-```shell
-$ vela def apply my-helm.cue
+```cue
+import (
+	"vela/op"
+	"encoding/json"
+)
 
-WorkflowStepDefinition my-helm in namespace vela-system updated.
+request: {
+	alias: ""
+	annotations: {}
+	attributes: {}
+	description: "Send request to the url"
+	labels: {}
+	type: "workflow-step"
+}
+
+template: {
+	http: op.#HTTPDo & {
+		method: parameter.method
+		url:    parameter.url
+		request: {
+			if parameter.body != _|_ {
+				body: json.Marshal(parameter.body)
+			}
+			if parameter.header != _|_ {
+				header: parameter.header
+			}
+		}
+	}
+	fail: op.#Steps & {
+		if http.response.statusCode > 400 {
+			requestFail: op.#Fail & {
+				message: "request of \(parameter.url) is fail: \(http.response.statusCode)"
+			}
+		}
+	}
+	response: json.Unmarshal(http.response.body)
+	parameter: {
+		url:    string
+		method: *"GET" | "POST" | "PUT" | "DELETE"
+		body?: {...}
+		header?: [string]: string
+	}
+}
 ```
 
-#### 发送 Slack 通知步骤
+使用 `vela def apply -f request.cue` 将这个 Definition 部署到集群中，接着，我们就可以直接在应用部署计划中使用这个自定义步骤了。
 
-直接使用内置的 [webhook-notification] 步骤。
+部署如下应用部署计划：工作流的第一步会发送一个 HTTP 请求，得到 KubeVela 仓库的信息；同时，这个步骤会将 KubeVela 仓库的 Star 数作为 Output，下一个步骤将使用这个 Output 作为参数，并将其作为消息内容发送到 Slack 消息中：
 
-### 编写应用
+:::tip
+有关于参数传递的更多信息，请参考 [工作流参数传递](../../end-user/workflow/component-dependency-parameter#参数传递)。
+:::
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: first-vela-workflow
+  name: request-http
   namespace: default
 spec:
-  components:
-  - name: tomcat
-    type: helm
-    properties:
-      repoType: helm
-      url: https://charts.bitnami.com/bitnami
-      chart: tomcat
-      version: "9.2.20"
+  components: []
   workflow:
     steps:
-      - name: tomcat
-        # 指定步骤类型
-        type: my-helm
-        outputs:
-          - name: msg
-            # 将 my-helm 中读取到的 deployment status 作为信息导出
-            valueFrom: resource.value.status.conditions[0].message
-      - name: send-message
-        type: webhook-notification
-        inputs:
-          - from: msg
-            # 引用上一步中 outputs 中的值，并传入到 properties 的 slack.message.text 中作为输入
-            parameterKey: slack.message.text 
-        properties:
-          slack:
-            # 你的 slack webhook 地址，请参考：https://api.slack.com/messaging/webhooks
-            url: <your slack url>
+    - name: request
+      type: request
+      properties:
+        url: https://api.github.com/repos/kubevela/kubevela
+      outputs:
+        - name: stars
+          valueFrom: |
+            import "strconv"
+            "Current star count: " + strconv.FormatInt(response["stargazers_count"], 10)
+    - name: notification
+      type: notification
+      inputs:
+        - from: stars
+          parameterKey: slack.message.text
+      properties:
+        slack:
+          url:
+            value: <your slack url>
 ```
 
-将该应用部署到集群中，可以看到所有的资源都已被成功部署，且 Slack 中收到了对应的通知，通知内容为该 Deployment 的状态信息。
+## 自定义健康检查和状态
+
+如果你希望在工作流步骤中等待一段时间，直到某个条件满足，或者直到某个资源的状态变为 Ready，你可以使用 `op.#ConditionalWait`。
+
+以等待 Deployment 的状态为例，先使用 `op.#Apply` 部署一个 Deployment，再使用 `op.#ConditionalWait` 来等待这个 Deployment 的状态变为 Ready：
+
+```cue
+import (
+	"vela/op"
+)
+
+"apply-deployment": {
+	alias: ""
+	annotations: {}
+	attributes: {}
+	description: ""
+	labels: {}
+	type: "workflow-step"
+}
+
+template: {
+	output: op.#Apply & {
+		value: {
+			apiVersion: "apps/v1"
+			kind:       "Deployment"
+			metadata: {
+				name:      context.stepName
+				namespace: context.namespace
+			}
+			spec: {
+				selector: matchLabels: wr: context.stepName
+				template: {
+					metadata: labels: wr: context.stepName
+					spec: containers: [{
+						name:  context.stepName
+						image: parameter.image
+						if parameter["cmd"] != _|_ {
+							command: parameter.cmd
+						}
+					}]
+				}
+			}
+		}
+	}
+	wait: op.#ConditionalWait & {
+		continue: output.value.status.readyReplicas == 1
+	}
+	parameter: {
+		image: string
+		cmd?: [...string]
+	}
+}
+```
+
+## 工作流步骤定义中的 Context 运行时信息
+
+KubeVela 让你可以在运行时，通过 `context` 关键字来引用一些信息。
+
+在工作流步骤定义中，你可以使用如下 Context 信息：
+
+|         Context Variable         |                                                                                  Description                                                                                  |    Type    |
+| :------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------: |
+|          `context.name`          |                                                 应用部署计划的名称                                                  |   string   |
+|        `context.appName`         |                                                    应用部署计划的名称                                                     |   string   |
+|       `context.namespace`        |          应用部署计划的命名空间          |   string   |
+|        `context.appRevision`        |                                                              应用部署计划的版本                                                              |   string   |
+|       `context.stepName`        |          当前步骤的名称          |   string   |
+|       `context.stepSessionID`        |          当前步骤的 ID          |   string   |
+|       `context.spanID`        |          当前步骤此次执行的 Trace ID          |   string   |
+|      `context.workflowName`      |                                                                  应用部署计划 Annotation 中声明的工作流名称                                                                   |   string   |
+|     `context.publishVersion`     |                                                         应用部署计划 Annotation 中声明的版本                                                               |   string   |
+
+
+## Kubernetes 中的 WorkflowStepDefinition
+
+KubeVela 通过 CUE 完全可编程，同时它利用 Kubernetes 作为控制平面并与 YAML 中的 API 保持一致。
+
+因此，CUE Definition 在应用到集群时将被转换为 Kubernetes API。
+
+工作流步骤定义将采用以下 API 格式：
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: WorkflowStepDefinition
+metadata:
+  annotations:
+    definition.oam.dev/description: <Function description>
+spec:
+  schematic:
+    cue: # Details of workflow steps defined by CUE language
+      template: <CUE format template>
+```
+
+
+## 更多例子
+
+你还可以在以下例子中找到更多的工作流步骤定义：
+
+- [KubeVela 仓库](https://github.com/kubevela/kubevela/tree/master/vela-templates/definitions/internal/workflowstep) 中的内置工作流步骤定义。
+- [插件 Catalog 仓库](https://github.com/kubevela/catalog/tree/master/addons) 中的更多例子。
