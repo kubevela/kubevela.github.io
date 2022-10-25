@@ -237,20 +237,20 @@ KubeVela allows you to reference some runtime data via the `context` keyword.
 
 In a workflow step definition, you can use the following context data:
 
-|         Context Variable         |                                                                                  Description                                                                                  |    Type    |
-| :------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------: |
-|          `context.name`          |                                                 The name of the Application.                                                  |   string   |
-|        `context.appName`         |                                                    The name of the Application.                                                     |   string   |
-|       `context.namespace`        |          The namespace of the Application.          |   string   |
-|        `context.appRevision`        |                                                              The revision of the Application.                                                              |   string   |
-|       `context.stepName`        |          The name of current step.          |   string   |
-|       `context.stepSessionID`        |          The ID of current step.          |   string   |
-|       `context.spanID`        |          The trace ID of current step in this reconcile. ID          |   string   |
-|      `context.workflowName`      |                                                                  The workflow name specified in annotation.                                                                   |   string   |
-|     `context.publishVersion`     |                                                         The version of application instance specified in annotation.                                                               |   string   |
+|     Context Variable     |                         Description                          |  Type  |
+| :----------------------: | :----------------------------------------------------------: | :----: |
+|      `context.name`      |                 The name of the Application.                 | string |
+|    `context.appName`     |                 The name of the Application.                 | string |
+|   `context.namespace`    |              The namespace of the Application.               | string |
+|  `context.appRevision`   |               The revision of the Application.               | string |
+|    `context.stepName`    |                  The name of current step.                   | string |
+| `context.stepSessionID`  |                   The ID of current step.                    | string |
+|     `context.spanID`     |      The trace ID of current step in this reconcile. ID      | string |
+|  `context.workflowName`  |          The workflow name specified in annotation.          | string |
+| `context.publishVersion` | The version of application instance specified in annotation. | string |
 
 
-## Kubernetes 中的 WorkflowStepDefinition
+## Kubernetes API for WorkflowStepDefinition
 
 KubeVela is fully programmable through CUE, while it leverages Kubernetes as a control plane and is consistent with the API in YAML.
 
