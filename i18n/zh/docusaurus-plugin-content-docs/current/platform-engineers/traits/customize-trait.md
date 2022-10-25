@@ -421,9 +421,6 @@ template: {
 
 You can also define health check policy and status message when a trait deployed and tell the real status to end users.
 
-:::caution
-Reference `parameter` defined in `template` is not supported now in health check and custom status, they work in different stage with the resource template. While we're going to support this feature in https://github.com/kubevela/kubevela/issues/4863 .
-:::
 
 ### Health Check
 
@@ -461,6 +458,27 @@ my-ingress: {
 		      """#
     	}
   	}
+}
+```
+
+You can also use the `parameter` defined in the template like:
+
+```cue
+mytrait: {
+	type: "trait"
+    ...
+	attributes: {
+		status: {
+			healthPolicy: #"""
+				isHealth: context.outputs."mytrait-\(parameter.name)".status.state == "Available"
+			  """#
+    }
+  }
+template: {
+  parameter: {
+    name: string
+  } 
+  ...
 }
 ```
 
@@ -559,6 +577,43 @@ status:
 |       `context.appLabels`        |                                                       The labels of the current application instance.                                                       | Object Map |
 |     `context.appAnnotations`     |                                                    The annotations of the current application instance.                                                     | Object Map |
 
+
+
+### Cluster Version
+
+|          Context Variable           |                         Description                         |  Type  |
+| :---------------------------------: | :---------------------------------------------------------: | :----: |
+|   `context.clusterVersion.major`    |    The major version of the runtime Kubernetes cluster.     | string |
+| `context.clusterVersion.gitVersion` |      The gitVersion of the runtime Kubernetes cluster.      | string |
+|  `context.clusterVersion.platform`  | The platform information of the runtime Kubernetes cluster. | string |
+|   `context.clusterVersion.minor`    |    The minor version of the runtime Kubernetes cluster.     |  int   |
+
+The cluster version context info can be used for graceful upgrade of definition. For example, you can define different API according to the cluster version.
+
+```
+ outputs: ingress: {
+	if context.clusterVersion.minor < 19 {
+		apiVersion: "networking.k8s.io/v1beta1"
+	}
+	if context.clusterVersion.minor >= 19 {
+		apiVersion: "networking.k8s.io/v1"
+	}
+	kind: "Ingress"
+}
+```
+
+Or use string contain pattern for this usage:
+
+```
+import "strings"
+
+if strings.Contains(context.clusterVersion.gitVersion, "k3s") {
+     provider: "k3s"
+}
+if strings.Contains(context.clusterVersion.gitVersion, "aliyun") {
+     provider: "aliyun"
+}
+```
 
 ## Trait definition in Kubernetes
 

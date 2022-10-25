@@ -26,7 +26,7 @@ vela addon list
 ```
 
 <details>
-<summary>期望输出</summary>
+<summary>该命令会输出所有插件版本以及你安装的版本</summary>
 
 ```
 NAME                            REGISTRY        DESCRIPTION                                                                                             AVAILABLE-VERSIONS              STATUS          
@@ -50,6 +50,10 @@ terraform-alibaba               KubeVela        Kubernetes Terraform Controller 
 </details>
 
 ### 安装插件
+
+#### 命令行安装
+
+最简单的安装命令如下：
 
 ```
 vela addon enable fluxcd
@@ -91,6 +95,130 @@ vela addon enable <addon-name> --clusters={cluster1,cluster2}
 ```shell
 vela addon enable velaux repo=<your repo address>
 ```
+
+#### 离线安装插件
+
+如果因为某些原因，你的环境无法通过访问插件包仓库，你可以通过指定本地的插件包目录来进行离线安装。如下所示：
+
+```
+$ ls
+README.md           fluxcd              ocm-cluster-manager terraform           terraform-alibaba   terraform-aws       terraform-azure     velaux
+
+$ vela addon enable velaux/
+Addon: velaux enabled Successfully
+```
+
+需要注意的是，在安装插件过程当中，仍可能需要从网络中拉取镜像或者 helm chart，如果你的网络环境同样无法访问这些地址，请参考[文档](../../platform-engineers/system-operation/enable-addon-offline)进行完整的离线安装。
+
+#### 通过 UI 安装插件
+
+具有插件管理权限的用户可以进入插件管理页面，进行插件启用/停用等操作。
+
+![addon list](https://static.kubevela.net/images/1.3/addon-list.jpg)
+
+如上图所示，在插件列表中，你可以查看到插件启用状态和其他基础信息。点击插件名称可以进入到插件详情页面，你可以查询到插件的版本列表，提供的扩展类型和介绍信息。
+
+![addon detail](https://static.kubevela.net/images/1.3/addon-detail.jpg)
+
+选择一个部署版本（默认为最新），设置需要部署的集群后，你可以点击 启用 按钮安装该插件。对于已启用的插件，如果没有应用使用该插件提供的扩展，你可以点击禁用按钮来卸载它。
+
+#### 通过 YAML 或 kubectl 命令行安装插件
+
+如果你想通过 Kubernetes YAML 的方式安装插件或者使用 kubectl 命令行安装插件，你可以通过如下命令将 addon 变成 YAML 渲染出来。
+
+```shell
+vela addon enable velaux --dry-run
+```
+
+<details>
+<summary>期望输出</summary>
+
+```
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  creationTimestamp: null
+  labels:
+    addons.oam.dev/name: velaux
+    addons.oam.dev/registry: KubeVela
+    addons.oam.dev/version: v1.5.8
+  name: addon-velaux
+  namespace: vela-system
+spec:
+  components:
+  - name: apiserver
+    properties:
+      cmd:
+      - apiserver
+      - --datastore-type=kubeapi
+      image: oamdev/vela-apiserver:v1.5.8
+      ports:
+      - expose: true
+        port: 8000
+        protocol: TCP
+    traits:
+    - properties:
+        name: kubevela-vela-core
+      type: service-account
+    - properties:
+        replicas: 1
+      type: scaler
+    type: webservice
+  - dependsOn:
+    - apiserver
+    name: velaux
+    properties:
+      env:
+      - name: KUBEVELA_API_URL
+        value: apiserver.vela-system:8000
+      exposeType: ClusterIP
+      image: oamdev/velaux:v1.5.8
+      ports:
+      - expose: true
+        port: 80
+        protocol: TCP
+    traits:
+    - properties:
+        replicas: 1
+      type: scaler
+    type: webservice
+status: {}
+
+
+---
+apiVersion: v1
+data:
+  ui-schema: '[{"jsonKey":"replicas","validate":{"min":0,"required":true}}]'
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: trait-uischema-scaler
+  namespace: vela-system
+
+
+---
+apiVersion: v1
+data:
+  ui-schema: '[{"jsonKey":"selector","sort":100,"uiType":"ComponentSelect"},{"jsonKey":"components","sort":101,"uiType":"ComponentPatches"}]'
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: policy-uischema-override
+  namespace: vela-system
+
+... snip ...
+```
+</details>
+
+可以直接通过下面一行命令直接部署验证：
+
+```
+vela addon enable velaux --dry-run | kubectl apply -f -
+```
+
+:::caution
+使用 dry-run 生成的 YAML 虽然可以直接部署，但是会损失 addon 命令行中对版本的检验和依赖检查等保护，请确保你使用的是合适的插件版本。
+:::
 
 ### 获取插件详情
 
@@ -217,31 +345,7 @@ Addon:
 ```
 </details>
 
-### 离线安装插件包
 
-如果因为某些原因，你的环境无法通过访问插件包仓库，你可以通过指定本地的插件包目录来进行离线安装。如下所示：
-
-```
-$ ls
-README.md           fluxcd              ocm-cluster-manager terraform           terraform-alibaba   terraform-aws       terraform-azure     velaux
-
-$ vela addon enable velaux/
-Addon: velaux enabled Successfully
-```
-
-需要注意的是，在安装插件过程当中，仍可能需要从网络中拉取镜像或者 helm chart，如果你的网络环境同样无法访问这些地址，请参考[文档](../../platform-engineers/system-operation/enable-addon-offline)进行完整的离线安装。
-
-### 通过 UI 管理插件
-
-具有插件管理权限的用户可以进入插件管理页面，进行插件启用/停用等操作。
-
-![addon list](https://static.kubevela.net/images/1.3/addon-list.jpg)
-
-如上图所示，在插件列表中，你可以查看到插件启用状态和其他基础信息。点击插件名称可以进入到插件详情页面，你可以查询到插件的版本列表，提供的扩展类型和介绍信息。
-
-![addon detail](https://static.kubevela.net/images/1.3/addon-detail.jpg)
-
-选择一个部署版本（默认为最新），设置需要部署的集群后，你可以点击 启用 按钮安装该插件。对于已启用的插件，如果没有应用使用该插件提供的扩展，你可以点击禁用按钮来卸载它。
 
 ### 编写自己的插件包
 

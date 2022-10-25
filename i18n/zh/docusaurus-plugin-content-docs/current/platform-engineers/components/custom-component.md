@@ -564,15 +564,12 @@ local     ─── default   ─┬─ Service/hello-webserver-auxiliaryworkloa
 
 ## 自定义健康检查和状态
 
-You can also define health check policy and status message when a component deployed and tell the real status to end users.
+你可以通过自定义健康检查和状态信息，将自定义组件的真实状态反馈给最终用户。
 
-:::caution
-Reference `parameter` defined in `template` is not supported now in health check and custom status, they work in different stage with the resource template. While we're going to support this feature in https://github.com/kubevela/kubevela/issues/4863 .
-:::
 
 ### 健康检查
 
-The spec of health check is `<component-type-name>.attributes.status.healthPolicy`.
+定义健康检查的字段为 `<component-type-name>.attributes.status.healthPolicy`.
 
 如果没有定义，它的值默认是 `true`，意味着在部署完对象后就将对象的状态设置为健康。为了让组件的状态及时、准确，通常你需要为组件定义监控状态，这个过程可以通过一个 CUE 表达式完成。
 
@@ -609,7 +606,28 @@ webserver: {
 }
 ```
 
-The health check result will be recorded into the corresponding component in `.status.services` of `Application` resource.
+你也可以在健康检查中使用 `parameter` 中定义的参数，类似如下：
+
+```
+webserver: {
+	type: "component"
+  ...
+	attributes: {
+		status: {
+			healthPolicy: #"""
+        isHealth: (context.output.status.readyReplicas > 0) && (context.output.status.readyReplicas == parameter.replicas)
+        """#
+    }
+  }
+template: {
+	parameter: {
+    replicas: int
+  } 
+  ...
+}
+```
+
+健康检查的结果会输出到 `Application` 对象的 `.status.services` 字段中。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -623,11 +641,11 @@ status:
   status: running
 ```
 
-> Please refer to [this doc](https://github.com/kubevela/kubevela/blob/master/vela-templates/definitions/internal/component/webservice.cue#L29-L50) for more examples.
+> 请参考[文档](https://github.com/kubevela/kubevela/blob/master/vela-templates/definitions/internal/component/webservice.cue#L29-L50) 查阅更多示例。
 
 ### 自定义状态
 
-The spec of custom status is `<component-type-name>.attributes.status.customStatus`, 自定义状态和健康检查的原理一致。
+自定义状态的字段未 `<component-type-name>.attributes.status.customStatus`, 自定义状态和健康检查的原理一致。
 
 在 CUE 中的关键词是 `message`。同时，CUE 表达式的结果必须是 `string` 类型。
 
@@ -669,7 +687,7 @@ status:
     name: express-server
 ```
 
-> Please refer to [this doc](https://github.com/kubevela/kubevela/blob/master/vela-templates/definitions/internal/component/webservice.cue#L29-L50) for more examples.
+> 请参考[文档](https://github.com/kubevela/kubevela/blob/master/vela-templates/definitions/internal/component/webservice.cue#L29-L50) 查阅更多示例。
 
 
 ## Full available `context` in Component
@@ -692,6 +710,43 @@ status:
 |     `context.appAnnotations`     |                                                             The annotations of the current application instance.                                                              | Object Map |
 |       `context.replicaKey`       | The key of replication in context. Replication is an internal policy, it will replicate resources with different keys specified.  (This feature will be introduced in v1.6+.) |   string   |
 
+
+
+### Cluster Version
+
+|          Context Variable           |                         Description                         |  Type  |
+| :---------------------------------: | :---------------------------------------------------------: | :----: |
+|   `context.clusterVersion.major`    |    The major version of the runtime Kubernetes cluster.     | string |
+| `context.clusterVersion.gitVersion` |      The gitVersion of the runtime Kubernetes cluster.      | string |
+|  `context.clusterVersion.platform`  | The platform information of the runtime Kubernetes cluster. | string |
+|   `context.clusterVersion.minor`    |    The minor version of the runtime Kubernetes cluster.     |  int   |
+
+The cluster version context info can be used for graceful upgrade of definition. For example, you can define different API according to the cluster version.
+
+```
+ outputs: ingress: {
+	if context.clusterVersion.minor < 19 {
+		apiVersion: "networking.k8s.io/v1beta1"
+	}
+	if context.clusterVersion.minor >= 19 {
+		apiVersion: "networking.k8s.io/v1"
+	}
+	kind: "Ingress"
+}
+```
+
+Or use string contain pattern for this usage:
+
+```
+import "strings"
+
+if strings.Contains(context.clusterVersion.gitVersion, "k3s") {
+     provider: "k3s"
+}
+if strings.Contains(context.clusterVersion.gitVersion, "aliyun") {
+     provider: "aliyun"
+}
+```
 
 ## Component definition in Kubernetes
 

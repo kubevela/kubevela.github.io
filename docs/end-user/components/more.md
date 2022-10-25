@@ -26,7 +26,7 @@ vela addon list
 ```
 
 <details>
-<summary>The command will show the basic addon info along with all available versions.</summary>
+<summary>The command will show the basic addon info along with all available versions and installed versions.</summary>
 
 ```console
 NAME                            REGISTRY        DESCRIPTION                                                                                             AVAILABLE-VERSIONS              STATUS          
@@ -44,6 +44,8 @@ terraform-alibaba               KubeVela        Kubernetes Terraform Controller 
 * You can refer to [addon reference docs](../../reference/addons/overview) for more details of these community certificated addons.
 
 ### Install Addon
+
+#### Install with CLI
 
 The simplest command for installing one addon is:
 
@@ -68,6 +70,8 @@ Addon: fluxcd enabled Successfully.
 
 You can also install addons with some advanced flags.
 
+#### Install addon with specified version
+
 * Choose one specific version by adding `--version` flag in this command. e.g:
 
 ```shell
@@ -88,6 +92,146 @@ By default, the place for installation is specified as control plane cluster or 
 vela addon enable velaux repo=<your repo address>
 ```
 
+#### Air-Gapped Installation for Addon
+
+If your cluster network cannot connect to the community addon registry you can: 
+- build your custom addon registry. Please refer to [*Build your Own Registry*](../../platform-engineers/addon/addon-registry) for details.
+- enable an addon from a local directory. Example:
+
+```shell
+$ tree velaux -L 1
+velaux
+├── metadata.yaml
+├── readme_cn.md
+├── readme.md
+├── resources
+├── schemas
+└── template.yaml
+
+2 directories, 4 files
+```
+
+* Enable the addon from local directory.
+
+```
+vela addon enable ./velaux
+```
+
+<details>
+<summary>expected output</summary>
+
+```
+Addon: velaux enabled successfully
+```
+</details>
+
+:::caution
+Please notice that, while an addon is being installed in a cluster, it maybe still need pull some images or Helm Charts. If your cluster cannot reach these resources please refer [docs](../../platform-engineers/system-operation/enable-addon-offline) to complete installation without Internet access.
+:::
+
+#### Install addon with UI Console
+
+If you have installed [VelaUX](../../reference/addons/velaux) which is also one of the addon, you can manage it directly on the UI console with admin privileges.
+
+![addon list](https://static.kubevela.net/images/1.3/addon-list.jpg)
+
+In the addon list, you can get the status of the addon and other info. Click the addon name could open the addon detail page, you can get the version list, definitions provided by the addon, and the readme message.
+
+![addon detail](https://static.kubevela.net/images/1.3/addon-detail.jpg)
+
+Select a version and deployed clusters, you can click the enable button to install this addon. You can check detail information in this section include:
+
+- Definitions: The extension capabilities provided by the addon may include component, trait, etc.
+- README: Addon description, explain the capabilities and related information.
+
+#### Install addon by kubectl
+
+When you want to deploy addon in the format of YAML or using `kubectl` instead of using vela CLI, you can render the yaml out by:
+
+```shell
+vela addon enable velaux --dry-run
+```
+
+
+<details>
+<summary>expected output</summary>
+
+```
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  creationTimestamp: null
+  labels:
+    addons.oam.dev/name: velaux
+    addons.oam.dev/registry: KubeVela
+    addons.oam.dev/version: v1.5.8
+  name: addon-velaux
+  namespace: vela-system
+spec:
+  components:
+  - name: apiserver
+    properties:
+      cmd:
+      - apiserver
+      - --datastore-type=kubeapi
+      image: oamdev/vela-apiserver:v1.5.8
+      ports:
+      - expose: true
+        port: 8000
+        protocol: TCP
+    traits:
+    - properties:
+        name: kubevela-vela-core
+      type: service-account
+    - properties:
+        replicas: 1
+      type: scaler
+    type: webservice
+  - dependsOn:
+    - apiserver
+    name: velaux
+    properties:
+      env:
+      - name: KUBEVELA_API_URL
+        value: apiserver.vela-system:8000
+      exposeType: ClusterIP
+      image: oamdev/velaux:v1.5.8
+      ports:
+      - expose: true
+        port: 80
+        protocol: TCP
+    traits:
+    - properties:
+        replicas: 1
+      type: scaler
+    type: webservice
+status: {}
+
+---
+apiVersion: v1
+data:
+  ui-schema: '[{"jsonKey":"selector","sort":100,"uiType":"ComponentSelect"},{"jsonKey":"components","sort":101,"uiType":"ComponentPatches"}]'
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: policy-uischema-override
+  namespace: vela-system
+
+... snip ...
+
+```
+</details>
+
+You can install the addon by one command like:
+
+```
+vela addon enable velaux --dry-run | kubectl apply -f -
+```
+
+:::caution
+Use dry-run can render YAML results and you will also lose the validation such as vela-core version check, dependency, etc. Make sure the version you used can match to your Kubernetes clusters.
+:::
+
 ### Get addon info
 
 If you want to check the detail status of an addon, or get more available parameters and other useful info of an addon, you can use command `addon status`. For example:
@@ -95,7 +239,6 @@ If you want to check the detail status of an addon, or get more available parame
 ```shell
 vela addon enable velaux --verbose
 ```
-
 
 <details>
 <summary>expected output</summary>
@@ -214,60 +357,6 @@ Successfully delete an addon registry experimental
 * Build custom registry
 
   You can use ChartMuseum to build your custom addon registry. We have a ChartMuseum addon available. Please refer to [*Build your Own Registry*](../../platform-engineers/addon/addon-registry) for details.
-
-### Air-Gapped Installation for Addon
-
-If your cluster network cannot connect to the community addon registry you can: 
-- build your custom addon registry. Please refer to [*Build your Own Registry*](../../platform-engineers/addon/addon-registry) for details.
-- enable an addon from a local directory. Example:
-
-```shell
-$ tree velaux -L 1
-velaux
-├── metadata.yaml
-├── readme_cn.md
-├── readme.md
-├── resources
-├── schemas
-└── template.yaml
-
-2 directories, 4 files
-```
-
-* Enable the addon from local directory.
-
-```
-vela addon enable ./velaux
-```
-
-<details>
-<summary>expected output</summary>
-
-```
-Addon: velaux enabled successfully
-```
-</details>
-
-:::caution
-Please notice that, while an addon is being installed in a cluster, it maybe still need pull some images or Helm Charts. If your cluster cannot reach these resources please refer [docs](../../platform-engineers/system-operation/enable-addon-offline) to complete installation without Internet access.
-:::
-
-### Manage the addon with UI Console
-
-If you have installed [VelaUX](../../reference/addons/velaux) which is also one of the addon, you can manage it directly on the UI console with admin privileges.
-
-![addon list](https://static.kubevela.net/images/1.3/addon-list.jpg)
-
-In the addon list, you can get the status of the addon and other info. Click the addon name could open the addon detail page, you can get the version list, definitions provided by the addon, and the readme message.
-
-![addon detail](https://static.kubevela.net/images/1.3/addon-detail.jpg)
-
-Select a version and deployed clusters, you can click the enable button to install this addon. You can check detail information in this section include:
-
-- Definitions: The extension capabilities provided by the addon may include component, trait, etc.
-- README: Addon description, explain the capabilities and related information.
-
-For enabled addons, if no applications to use definitions, you can click the disable button to uninstall it.
 
 ### Make your own addon
 
