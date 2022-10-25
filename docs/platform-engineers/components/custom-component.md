@@ -541,10 +541,6 @@ local     ─── default   ─┬─ Service/hello-webserver-auxiliaryworkloa
 
 You can also define health check policy and status message when a component deployed and tell the real status to end users.
 
-:::caution
-Reference `parameter` defined in `template` is not supported now in health check and custom status, they work in different stage with the resource template. While we're going to support this feature in https://github.com/kubevela/kubevela/issues/4863 .
-:::
-
 ### Health check
 
 The spec of health check is `<component-type-name>.attributes.status.healthPolicy`.
@@ -582,6 +578,27 @@ webserver: {
         """#
     }
   }
+}
+```
+
+You can also use the `parameter` defined in the template like:
+
+```
+webserver: {
+	type: "component"
+  ...
+	attributes: {
+		status: {
+			healthPolicy: #"""
+        isHealth: (context.output.status.readyReplicas > 0) && (context.output.status.readyReplicas == parameter.replicas)
+        """#
+    }
+  }
+template: {
+	parameter: {
+    replicas: int
+  } 
+  ...
 }
 ```
 
@@ -668,6 +685,42 @@ status:
 |     `context.appAnnotations`     |                                                             The annotations of the current application instance.                                                              | Object Map |
 |       `context.replicaKey`       | The key of replication in context. Replication is an internal policy, it will replicate resources with different keys specified.  (This feature will be introduced in v1.6+.) |   string   |
 
+
+### Cluster Version
+
+|          Context Variable           |                         Description                         |  Type  |
+| :---------------------------------: | :---------------------------------------------------------: | :----: |
+|   `context.clusterVersion.major`    |    The major version of the runtime Kubernetes cluster.     | string |
+| `context.clusterVersion.gitVersion` |      The gitVersion of the runtime Kubernetes cluster.      | string |
+|  `context.clusterVersion.platform`  | The platform information of the runtime Kubernetes cluster. | string |
+|   `context.clusterVersion.minor`    |    The minor version of the runtime Kubernetes cluster.     |  int   |
+
+The cluster version context info can be used for graceful upgrade of definition. For example, you can define different API according to the cluster version.
+
+```
+ outputs: ingress: {
+	if context.clusterVersion.minor < 19 {
+		apiVersion: "networking.k8s.io/v1beta1"
+	}
+	if context.clusterVersion.minor >= 19 {
+		apiVersion: "networking.k8s.io/v1"
+	}
+	kind: "Ingress"
+}
+```
+
+Or use string contain pattern for this usage:
+
+```
+import "strings"
+
+if strings.Contains(context.clusterVersion.gitVersion, "k3s") {
+     provider: "k3s"
+}
+if strings.Contains(context.clusterVersion.gitVersion, "aliyun") {
+     provider: "aliyun"
+}
+```
 
 ## Component definition in Kubernetes
 
