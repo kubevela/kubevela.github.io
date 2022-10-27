@@ -2,7 +2,7 @@
 title: China Merchants Bank's Practice on Offline Installation with KubeVela 
 author: Xiangbo Ma
 author_title: (Cloud platform development team)
-author_url: http://www.cmbchina.com/
+author_url: https://www.cmbchina.com/
 author_image_url: /img/china-merchants-bank.jpg
 tags: [ KubeVela , "use-case"]
 description: ""
