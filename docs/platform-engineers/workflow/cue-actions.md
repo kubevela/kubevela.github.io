@@ -80,7 +80,7 @@ Write message to the workflow step status.
 }
 ```
 
-## DoVar
+### DoVar
 
 Used to save or read user-defined data in the context of workflow.
 
@@ -510,6 +510,7 @@ Create or update resources corresponding to the component in Kubernetes cluster.
 
 **Parameters**
 
+```
 #ApplyComponent: {
 	// +usage=The cluster to use
 	cluster: *"" | string
@@ -524,6 +525,7 @@ Create or update resources corresponding to the component in Kubernetes cluster.
 	// +usage=The patcher that will be applied to the resource, you can define the strategy of list merge through comments. Reference doc here: https://kubevela.io/docs/platform-engineers/traits/patch-trait#patch-in-workflow-step
 	patch?: {...}
 }
+```
 
 **Example**
 
@@ -555,7 +557,7 @@ apply: op.#ApplyApplication & {}
 
 ## Special Operations
 
-## Steps
+### Steps
 
 A combination of a set of operations that can be used to implement complex operation logic.
 
