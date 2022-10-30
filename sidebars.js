@@ -175,6 +175,7 @@ module.exports = {
           ],
         },
         'platform-engineers/operations/observability',
+        'platform-engineers/operations/logging',
         'end-user/components/more',
       ],
     },
