@@ -79,7 +79,7 @@ fail: op.#Fail & {
 }
 ```
 
-## DoVar
+### DoVar
 
 用来在 workflow 的上下文中保存或者读取用户定义的数据
 
@@ -509,6 +509,7 @@ mycomp: load.value["my-comp"]
 
 **参数定义**
 
+```
 #ApplyComponent: {
 	// +usage=The cluster to use
 	cluster: *"" | string
@@ -523,6 +524,7 @@ mycomp: load.value["my-comp"]
 	// +usage=The patcher that will be applied to the resource, you can define the strategy of list merge through comments. Reference doc here: https://kubevela.io/docs/platform-engineers/traits/patch-trait#patch-in-workflow-step
 	patch?: {...}
 }
+```
 
 **用法示例**
 
@@ -554,7 +556,7 @@ apply: op.#ApplyApplication & {}
 
 ## 特殊操作
 
-## Steps
+### Steps
 
 用于一组操作的组合，可以用于实现复杂的操作逻辑。
 
