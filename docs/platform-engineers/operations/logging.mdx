@@ -19,7 +19,7 @@ vela addon enable loki agent=vector
 After the addon is enabled, a [loki](https://github.com/grafana/loki) service will be deployed in the control plane as a log storage data source, and a log collection agent [vector](http://vector.dev/) will be deployed on the nodes of each cluster to collect the stdout of pods on the nodes.
 
 :::tip
-Enableing loki addon by this mode. The stdout of the application can be collected without configuring any traits, and the logs can be transmitted to the loki service of the control plane to storage. The most advantage of this mode is that the configuration is simple.
+Enabling loki addon by this mode. The stdout of the application can be collected without configuring any traits, and the logs can be transmitted to the loki service of the control plane to storage. The most advantage of this mode is that the configuration is simple.
 But the disadvantage are:
 1. Collecting all running pods will cause a lot of pressure on the loki service when there are too many applications. On the one hand, too many logs need to be persisted, wasting a lot of hard disk resources. On the other hand, the vector agents of each cluster need to transmit the collected logs to the loki service, which will consume a lot of bandwidth.
 2. The full collection mode can only collect logs in a unified way, and cannot perform special processing on the log content of different applications.
@@ -62,7 +62,7 @@ After the loki addon is enabled, a component will be installed in each cluster, 
 
     ---
 
-    **Warning Events** The number of `Warning` type events。
+    **Warning Events** The number of `Warning` type events.
 
     ---
 
@@ -74,15 +74,15 @@ After the loki addon is enabled, a component will be installed in each cluster, 
 
     ---
 
-    **Kubernetes Events Source** Pie chart of the controllers producing these events。
+    **Kubernetes Events Source** Pie chart of the controllers producing these events.
 
     ---
 
-    **Kubernetes Events Type** Pie chart of involved resource object types of events。
+    **Kubernetes Events Type** Pie chart of involved resource object types of events.
 
     ---
 
-    **Kubernetes Live Events ** The recent event logs。
+    **Kubernetes Live Events ** The recent event logs.
 
 </details>
 
@@ -140,7 +140,7 @@ spec:
 
 Then a special nginx access log analysis dashboard will be generated as follows:
 
-[nginx-log](../../resources/nginx-log.jpg)
+![nginx-log](../../resources/nginx-log.jpg)
 
 <details>
     KubeVela nginx application dashboard
