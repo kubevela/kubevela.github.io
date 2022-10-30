@@ -10,7 +10,7 @@ title: 概述
 
 ## KubeVela 是否与云对话？
 
-KubeVela 依靠 [Terraform Controller](https://github.com/oam-dev/terraform-controller) 或 [Crossplane](http://crossplane.io/) 作为提供者与云对话。请查看以下文档以了解详细步骤。
+KubeVela 依靠 [Terraform Controller](https://github.com/oam-dev/terraform-controller) 或 [Crossplane](https://crossplane.io/) 作为提供者与云对话。请查看以下文档以了解详细步骤。
 
 - [Terraform](../platform-engineers/components/component-terraform)
 - [Crossplane](./crossplane)

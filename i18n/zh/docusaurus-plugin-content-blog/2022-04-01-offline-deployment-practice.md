@@ -2,7 +2,7 @@
 title: 招商银行 KubeVela 离线部署实践
 author: 马祥博
 author_title: （云平台开发团队）
-author_url: http://www.cmbchina.com/
+author_url: https://www.cmbchina.com/
 author_image_url: /img/china-merchants-bank.jpg
 tags: [ KubeVela ]
 description: ""

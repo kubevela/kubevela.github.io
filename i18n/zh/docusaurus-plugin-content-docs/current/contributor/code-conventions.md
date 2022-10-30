@@ -26,7 +26,7 @@ title: 代码规范
 
 * 代码注释
 
-  * [Go 的注释惯例](http://blog.golang.org/godoc-documenting-go-code)
+  * [Go 的注释惯例](https://go.dev/blog/godoc)
 
   * 在容易让人感到疑惑的代码处写下注释将会带来很大帮助。
 
