@@ -19,10 +19,10 @@ The introduction of bootstrap parameters in KubeVela controller are listed as be
 |  definition-revision-limit  |  int   |                20                 | The maximum number of definition revisions to keep                                                                                      |
 | autogen-workload-definition |  bool  |               true                | Generate WorkloadDefinition for ComponentDefinition automatically                                                                       |
 |         health-addr         | string |               :9440               | The address of health check                                                                                                             |
-|       apply-once-only       | string |               false               | The Workload and Trait will not change after being applied. Used in specific scenario                                                   |
 |        disable-caps         | string |                ""                 | Disable internal capabilities                                                                                                           |
 |       storage-driver        | string |               Local               | The storage driver for applications                                                                                                     |
 |  application-re-sync-period |  time  |                5m                 | Re-sync period for application to re-sync, also known as the state-keep interval.                                                       |
+|    informer-sync-period     |  time  |                10h                | The re-sync period for informer in controller-runtime. This is a system-level configuration.                                            |
 |     reconcile-timeout       |  time  |                3m                 | The timeout for controller reconcile.                                                                                                   |
 | system-definition-namespace | string |            vela-system            | The namespace for storing system definitions                                                                                            |
 |    concurrent-reconciles    |  int   |                 4                 | The number of threads that controller uses to process requests                                                                          |
@@ -31,10 +31,13 @@ The introduction of bootstrap parameters in KubeVela controller are listed as be
 |        oam-spec-var         | string |               v0.3                | The version of OAM spec to use                                                                                                          |
 |         pprof-addr          | string |                ""                 | The address of pprof, default to be emtpy to disable pprof                                                                              |
 |        perf-enabled         |  bool  |               false               | Enable performance logging, working with monitoring tools like Loki and Grafana to discover performance bottleneck                      |
-| enable-cluster-gateway | bool | false | Enable multi cluster feature |
-| max-workflow-wait-backoff-time | int | 60 | the maximal backoff interval for workflow to retry when workflow step is waiting (unit: second) |
-| max-workflow-failed-backoff-time | int | 300 | the maximal backoff interval for workflow to retry when workflow step fails (unit: second) |
-| max-workflow-step-error-retry-times | int | 10 | the maximal retry times for workflow to retry when workflow step fails |
+|    enable-cluster-gateway   |  bool  |               false               | Enable multi cluster feature                                                                                                            |
+| max-workflow-wait-backoff-time | int |                60                 | the maximal backoff interval for workflow to retry when workflow step is waiting (unit: second)                                         |
+| max-workflow-failed-backoff-time | int |              300                | the maximal backoff interval for workflow to retry when workflow step fails (unit: second)                                              |
+| max-workflow-step-error-retry-times | int |           10                 | the maximal retry times for workflow to retry when workflow step fails                                                                  |
+|      reconcile-timeout      |  time  |                3m                 | the timeout for controller reconcile                                                                                                    |
+| reconcile-termination-graceful-period | time |        5s                 | graceful period for terminating reconcile                                                                                               |
+
 
 > Other parameters not listed in the table are old parameters used in previous versions, the latest version ( v1.1 ) does not use them.
 
@@ -47,3 +50,12 @@ The introduction of bootstrap parameters in KubeVela controller are listed as be
 - **perf-enabled**: Use this flag if you would like to check time costs for different stages when reconciling applications. Switch it off to simplify loggings.
 
 > Several sets of recommended parameter configurations are enclosed in section [Performance Fine-tuning](./performance-finetuning).
+
+## Feature Gates
+
+You can use `--feature-gates=XXX=true` to enable feature `XXX`. There are a list of feature gates allow you to enable advanced features or alpha features.
+
+- **AuthenticateApplication**: enable the authentication for application.
+- **ZstdResourceTracker**: enables the zstd compression for ResourceTracker. It can be useful if you have large application that needs to dispatch lots of resources or large resources (like CRD or huge ConfigMap), which at the cost of slower processing speed due to the extra overhead for compression and decompression.
+- **ApplyOnce**: enable the apply-once feature for all applications. If enabled, no StateKeep will be run, ResourceTracker will also disable the storage of all resource data, only metadata will be kept.
+- **MultiStageComponentApply**: enable multi-stage feature for component. If enabled, the dispatch of manifests is performed in batches according to the stage.
