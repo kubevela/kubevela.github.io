@@ -36,8 +36,8 @@ If we want to use some CRD controller like [OpenKruise](https://github.com/openk
 
 We can directly use Application to initialize a kruise environment. The application below will deploy a kruise controller in cluster.
 
-We have to enable `fluxcd` in cluster since we use `Helm` to deploy kruise.
-We can use `depends-on-app` to make sure `fluxcd` is deployed before kruise.
+We have to enable `fluxcd` Addon in cluster since we use `Helm` to deploy kruise.
+We can use `depends-on-app` to make sure `addon-fluxcd` is deployed before kruise, we also use `apply-once` policy here to make sure we'll only apply the application once for initialization.
 
 > `depends-on-app` will check if the cluster has the application with `name` and `namespace` defines in `properties`.
 > If the application exists, the next step will be executed after the application is running.
@@ -65,6 +65,11 @@ spec:
           branch: master
         values:
           featureGates: PreDownloadImageForInPlaceUpdate=true
+  policies:
+    - name: apply-once
+      type: apply-once
+      properties:
+        enable: true
   workflow:
     steps:
     - name: check-flux
