@@ -21,8 +21,12 @@ The reasons for KubeVela supports CUE as a first-class solution to design abstra
 ## Prerequisites
 
 Please make sure below CLIs are present in your environment:
-* [`cue` v0.2.2+](https://cuelang.org/docs/install/), currently KubeVela only supports CUE v0.2.2, we're positively discussing with CUE community for upgrade.
+* [`cue` v0.2.2+](https://cuelang.org/docs/install/).
 * [`vela` v1.0.0+](../../install).
+
+:::caution
+Versions prior to KubeVela 1.6.0 use the v0.2.2 version of CUE, KubeVela 1.6.0+ uses the v0.5.0-alpha.1 version of CUE. Please use the CUE tool that matches your KubeVela version.
+:::
 
 ## CUE CLI Basic
 
@@ -176,6 +180,9 @@ f: {
 	}
 }
 
+// byte
+g: `byte`
+
 // null
 j: null
 ```
@@ -286,6 +293,19 @@ spec:
 
 ## Advanced CUE Schematic
 
+* Using the `(key)` to use the value of the object as the new object name.
+
+```
+hello: "world"
+
+(hello): "world2"
+"my-\(hello)": "world3"
+```
+
+:::caution
+In CUE v0.2.2, you need to use `"\(hello)"` to refer to objects. In high versions of CUE, it can be simplified to `(hello)`.
+:::
+
 * Open struct and list. Using `...` in a list or struct means the object is open.
 
    -  A list like `[...string]` means it can hold multiple string elements.
@@ -320,6 +340,10 @@ spec:
     z ?:float
   }
   ```
+
+:::caution
+Note that `?:` and `*` cannot be used at the same time. If a variable has been specified as an optional variable, its default value will no longer take effect.
+:::
 
 Optional variables can be skipped, that usually works together with conditional logic.
 Specifically, if some field does not exist, the CUE grammar is `if _variable_ != _|_`, the example is like below:
