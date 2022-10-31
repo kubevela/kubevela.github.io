@@ -10,7 +10,7 @@ draft: true
 一个应用开发团队通常需要做一些初始化工作来满足应用部署时方方面面的需要，即“初始化环境”。
 这里的环境是一个逻辑概念，既可以表示应用部署时依赖的公共资源，也可以表示应用运行必要的准备工作。
 
-KubeVela 同样是 Application 对象做环境的初始化，可以初始化的资源类型包括但不限于下列类型：
+KubeVela 可以使用 Application 对象做环境的初始化，可以初始化的资源类型包括但不限于下列类型：
 
 1. 一个或多个 Kubernetes 集群，不同的环境可能需要不同规模和不同版本的 Kubernetes 集群。同时环境初始化还可以将多个 Kubernetes 集群注册到一个中央集群进行统一的多集群管控。
 
@@ -55,20 +55,23 @@ metadata:
   namespace: vela-system
 spec:
   components:
-  - name: kruise
-    type: helm
-    properties:
-      branch: master
-      chart: ./charts/kruise/v0.9.0
-      version: "*"
-      repoType: git
-      url: https://github.com/openkruise/kruise
+    - name: kruise
+      type: helm
+      properties:
+        repoType: helm
+        url: https://openkruise.github.io/charts/
+        chart: kruise
+        version: 1.2.0
+        git:
+          branch: master
+        values:
+          featureGates: PreDownloadImageForInPlaceUpdate=true
   workflow:
     steps:
     - name: check-flux
       type: depends-on-app
       properties:
-        name: fluxcd
+        name: addon-fluxcd
         namespace: vela-system
     - name: apply-kruise
       type: apply-component
@@ -80,11 +83,45 @@ EOF
 查看集群中应用的状态：
 
 ```shell
-$ vela ls -n vela-system
-APP                	COMPONENT     	TYPE      	TRAITS 	PHASE  	HEALTHY	STATUS	CREATED-TIME
-kruise        	    ...           	raw 	      running	        healthy	      	2021-09-24 20:59:06 +0800 CST
-fluxcd        	    ...           	raw 	      running	        healthy	      	2021-09-24 20:59:06 +0800 CST
+vela status kruise -n vela-system
 ```
+
+<details>
+<summary>期望输出</summary>
+
+```console
+About:
+
+  Name:      	kruise
+  Namespace: 	vela-system
+  Created at:	2022-10-31 18:10:27 +0800 CST
+  Status:    	running
+
+Workflow:
+
+  mode: StepByStep-DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id: l6apfsi5c2
+    name: check-flux
+    type: depends-on-app
+    phase: succeeded
+  - id: p2nqell47w
+    name: apply-kruise
+    type: apply-component
+    phase: succeeded
+
+Services:
+
+  - Name: kruise
+    Cluster: local  Namespace: vela-system
+    Type: helm
+    Healthy Fetch repository successfully, Create helm release successfully
+    No trait applied
+```
+</details>
 
 kruise 已经成功运行！之后，你可以在环境中使用 kruise 的能力。如果需要配置新的环境初始化，也只需要类似的定义一个部署计划。 
 
@@ -155,71 +192,141 @@ spec:
             - key: test-key
               path: test-key
 
+  policies:
+    - name: my-policy
+      properties:
+        clusters:
+        - local
+      type: topology
+
   workflow:
     steps:
       - name: apply-pvc
         type: apply-object
         properties:
-          apiVersion: v1
-          kind: PersistentVolumeClaim
-          metadata:
-            name: my-claim
-            namespace: default
-          spec:
-            accessModes:
-            - ReadWriteOnce
-            resources:
-              requests:
-                storage: 8Gi
-            storageClassName: standard
+          value:
+            apiVersion: v1
+            kind: PersistentVolumeClaim
+            metadata:
+              name: my-claim
+              namespace: default
+            spec:
+              accessModes:
+              - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 8Gi
+              storageClassName: standard
       - name: apply-cm
         type: apply-object
         properties:
-          apiVersion: v1
-          kind: ConfigMap
-          metadata:
-            name: my-cm
-            namespace: default
-          data:
-            test-key: test-value
-      - name: apply-remaining
-        type: apply-remaining
+          value:
+            apiVersion: v1
+            kind: ConfigMap
+            metadata:
+              name: my-cm
+              namespace: default
+            data:
+              test-key: test-value
+      - name: deploy-comp
+        properties:
+          policies:
+          - my-policy
+        type: deploy
 ```
 
 查看集群中的 PVC 以及 ConfigMap：
 
 ```shell
-$ kubectl get pvc
-NAME       STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-my-claim   Bound    pvc-2621d7d7-453c-41df-87fb-58e6b3a8e136   8Gi        RWO            standard       2m53s
-
-$ kubectl get cm
-NAME                                      DATA   AGE
-my-cm                                     1      3m8s
+vela status server-with-pvc-and-cm --detail --tree
 ```
+
+<details>
+<summary>期望输出</summary>
+
+```console
+CLUSTER       NAMESPACE     RESOURCE                       STATUS    APPLY_TIME          DETAIL
+local     ─── default   ─┬─ ConfigMap/my-cm                updated   2022-10-31 18:00:52 Data: 1  Age: 57s
+                         ├─ PersistentVolumeClaim/my-claim updated   2022-10-31 10:00:52 Status: Bound  Volume: pvc-b6f88ada-af98-468d-8cdd-31ca110c5e1a  Capacity: 8Gi  Access Modes: RWO  StorageClass: standard  Age: 57s
+                         ├─ Deployment/log-gen-worker      updated   2022-10-31 10:00:52 Ready: 1/1  Up-to-date: 1  Available: 1  Age: 57s
+                         └─ Deployment/log-read-worker     updated   2022-10-31 10:00:52 Ready: 1/1  Up-to-date: 1  Available: 1  Age: 57s
+```
+</details>
 
 查看集群中应用的状态：
 
 ```shell
-$ vela ls
-APP                   	COMPONENT      	TYPE  	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
-server-with-pvc-and-cm	log-gen-worker 	worker	      	running	healthy	      	2021-10-11 20:42:38 +0800 CST
-└─                  	log-read-worker	worker	      	running	       	      	2021-10-11 20:42:38 +0800 CST
+vela status server-with-pvc-and-cm
 ```
+
+<details>
+<summary>期望输出</summary>
+
+```console
+$ vela status server-with-pvc-and-cm
+About:
+
+  Name:      	server-with-pvc-and-cm
+  Namespace: 	default
+  Created at:	2022-10-31 18:00:51 +0800 CST
+  Status:    	running
+
+Workflow:
+
+  mode: StepByStep-DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id: xboizfjo28
+    name: apply-pvc
+    type: apply-object
+    phase: succeeded
+  - id: 4ngx25mrx8
+    name: apply-cm
+    type: apply-object
+    phase: succeeded
+  - id: 1gzzt3mfw1
+    name: deploy-comp
+    type: deploy
+    phase: succeeded
+
+Services:
+
+  - Name: log-gen-worker
+    Cluster: local  Namespace: default
+    Type: worker
+    Healthy Ready:1/1
+    No trait applied
+
+  - Name: log-read-worker
+    Cluster: local  Namespace: default
+    Type: worker
+    Healthy Ready:1/1
+    No trait applied
+```
+</details>
 
 检查第二个组件的日志输出：
 
 ```shell
-$ kubectl logs -f log-read-worker-774b58f565-ch8ch
-0: Mon Oct 11 12:43:01 UTC 2021
-1: Mon Oct 11 12:43:02 UTC 2021
-2: Mon Oct 11 12:43:03 UTC 2021
-3: Mon Oct 11 12:43:04 UTC 2021
-4: Mon Oct 11 12:43:05 UTC 2021
-5: Mon Oct 11 12:43:06 UTC 2021
-6: Mon Oct 11 12:43:07 UTC 2021
-7: Mon Oct 11 12:43:08 UTC 2021
+vela logs server-with-pvc-and-cm --component log-read-worker
 ```
+
+<details>
+<summary>期望输出</summary>
+
+```console
++ log-read-worker-7f4bc9d9b5-kb5l6 › log-read-worker
+log-read-worker 2022-10-31T10:01:15.606903716Z 0: Mon Oct 31 10:01:13 UTC 2022
+log-read-worker 2022-10-31T10:01:15.606939383Z 1: Mon Oct 31 10:01:14 UTC 2022
+log-read-worker 2022-10-31T10:01:15.606941883Z 2: Mon Oct 31 10:01:15 UTC 2022
+log-read-worker 2022-10-31T10:01:16.607006425Z 3: Mon Oct 31 10:01:16 UTC 2022
+log-read-worker 2022-10-31T10:01:17.607184925Z 4: Mon Oct 31 10:01:17 UTC 2022
+log-read-worker 2022-10-31T10:01:18.607304426Z 5: Mon Oct 31 10:01:18 UTC 2022
+...
+```
+</details>
 
 可以看到，应用中的两个组件均已正常运行。同时，这两个组件共享同一个 PVC，并使用相同的 ConfigMap 进行配置。
 
