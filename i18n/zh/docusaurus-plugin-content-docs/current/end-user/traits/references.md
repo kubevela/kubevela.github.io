@@ -4,7 +4,7 @@ title: 内置运维特征列表
 
 本文档将**按字典序**展示所有内置运维特征的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-07-28T17:57:01+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-10-31T11:57:05+08:00。
 
 ## Affinity
 
@@ -48,17 +48,17 @@ title: 内置运维特征列表
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  labelSelector |  | [labelSelector](#labelselector-affinity) | false |  
+ namespaces |  | []string | false |  
  topologyKey |  | string | true |  
  namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  
- namespaces |  | []string | false |  
 
 
 ##### labelSelector (affinity)
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -74,8 +74,8 @@ title: 内置运维特征列表
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -100,17 +100,17 @@ title: 内置运维特征列表
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  labelSelector |  | [labelSelector](#labelselector-affinity) | false |  
+ namespaces |  | []string | false |  
  topologyKey |  | string | true |  
  namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  
- namespaces |  | []string | false |  
 
 
 ##### labelSelector (affinity)
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -126,8 +126,8 @@ title: 内置运维特征列表
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -152,17 +152,17 @@ title: 内置运维特征列表
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  labelSelector |  | [labelSelector](#labelselector-affinity) | false |  
+ namespaces |  | []string | false |  
  topologyKey |  | string | true |  
  namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  
- namespaces |  | []string | false |  
 
 
 ##### labelSelector (affinity)
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -178,8 +178,8 @@ title: 内置运维特征列表
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -204,17 +204,17 @@ title: 内置运维特征列表
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  labelSelector |  | [labelSelector](#labelselector-affinity) | false |  
+ namespaces |  | []string | false |  
  topologyKey |  | string | true |  
  namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  
- namespaces |  | []string | false |  
 
 
 ##### labelSelector (affinity)
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -230,8 +230,8 @@ title: 内置运维特征列表
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -323,9 +323,9 @@ title: 内置运维特征列表
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  key |  | string | false |  
- effect |  | string | false |  
- value |  | string | false |  
  operator |  | string | false | Equal 
+ value |  | string | false |  
+ effect |  | string | false |  
  tolerationSeconds | 指定 toleration 的时间周期。 | int | false |  
 
 
@@ -334,8 +334,6 @@ title: 内置运维特征列表
 ### 描述
 
 Add annotations on your workload. if it generates pod, add same annotations for generated pods。
-
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
 
 ### 适用于组件类型
 
@@ -378,8 +376,6 @@ spec:
 ### 描述
 
 为 pod 添加命令，它遵循路径“spec.template”中的 pod 规范。
-
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
 
 ### 适用于组件类型
 
@@ -426,7 +422,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- -- | Composition type。 | parameter: cannot use value C{containerName: (*"" \| string), command: (*null \| [, ...string]), args: (*null \| [, ...string]), addArgs: (*null \| [, ...string]), delArgs: (*null \| [, ...string])} (type struct) as string | false |  
+ -- | Composition type。 | parameter: cannot use value {containerName:*"" &#124; string,command:*null &#124; [],args:*null &#124; [],addArgs:*null &#124; [],delArgs:*null &#124; []} (type struct) as string | false |  
 
 
 ## Container-Image
@@ -434,8 +430,6 @@ spec:
 ### 描述
 
 Set the image of the container。
-
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
 
 ### 适用于组件类型
 
@@ -483,7 +477,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- -- | Composition type。 | parameter: cannot use value C{containerName: (*"" \| string), image: string, imagePullPolicy: (*"" \| "IfNotPresent" \| "Always" \| "Never")} (type struct) as string | false |  
+ -- | Composition type。 | parameter: cannot use value {containerName:*"" &#124; string,image:string,imagePullPolicy:*"" &#124; "IfNotPresent" &#124; "Always" &#124; "Never"} (type struct) as string | false |  
 
 
 ## Cpuscaler
@@ -491,8 +485,6 @@ spec:
 ### 描述
 
 Automatically scale the component based on CPU usage。
-
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
 
 ### 适用于组件类型
 
@@ -528,11 +520,11 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- targetAPIVersion | Specify the apiVersion of scale target。 | string | false | apps/v1 
- targetKind | Specify the kind of scale target。 | string | false | Deployment 
  min | 能够将工作负载缩容到的最小副本个数。 | int | false | 1 
  max | 能够将工作负载扩容到的最大副本个数。 | int | false | 10 
  cpuUtil | 每个容器的平均 CPU 利用率 例如, 50 意味者 CPU 利用率为 50%。 | int | false | 50 
+ targetAPIVersion | Specify the apiVersion of scale target。 | string | false | apps/v1 
+ targetKind | Specify the kind of scale target。 | string | false | Deployment 
 
 
 ## Env
@@ -540,8 +532,6 @@ spec:
 ### 描述
 
 Add env on K8s pod for your workload which follows the pod spec in path 'spec.template'。
-
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
 
 ### 适用于组件类型
 
@@ -592,7 +582,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- -- | Composition type。 | parameter: cannot use value C{env: {[]: (_: string)->string, }, containerName: (*"" \| string), replace: (*false \| bool), unset: (*[] \| [, ...string])} (type struct) as string | false |  
+ -- | Composition type。 | parameter: cannot use value {containerName:*"" &#124; string,replace:*false &#124; bool,env:{},unset:*[] &#124; []} (type struct) as string | false |  
 
 
 ## Expose
@@ -600,8 +590,6 @@ spec:
 ### 描述
 
 为组件暴露端口，以便能够通过 web 进行访问。
-
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
 
 ### 适用于组件类型
 
@@ -635,8 +623,8 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- annotations | Specify the annotaions of the exposed service。 | map[string]:string | true |  
  port | 指定要暴露的端口。 | []int | true |  
+ annotations | Specify the annotaions of the exposed service。 | map[string]:string | true |  
  type | 指定要创建的服务类型，可选值："ClusterIP","NodePort","LoadBalancer","ExternalName"。 | string | false | ClusterIP 
 
 
@@ -682,12 +670,12 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- http | 定义一组网关路径到 Pod 服务端口的映射关系。 | map[string]:int | true |  
- classInSpec | 在 kubernetes ingress 的 '.spec.ingressClassName' 定义 ingress class 而不是在 'kubernetes.io/ingress.class' 注解中定义。 | bool | false | false 
- class | 所使用的 kubernetes ingress class。 | string | false | nginx 
- gatewayHost | 指定 Ingress 网关的主机名，当为空时，会自动生成主机名。 | string | false |  
- secretName | Specify the secret name you want to quote to use tls。 | string | false |  
  domain | 暴露服务所绑定的域名。 | string | false |  
+ http | 定义一组网关路径到 Pod 服务端口的映射关系。 | map[string]:int | true |  
+ class | 所使用的 kubernetes ingress class。 | string | false | nginx 
+ classInSpec | 在 kubernetes ingress 的 '.spec.ingressClassName' 定义 ingress class 而不是在 'kubernetes.io/ingress.class' 注解中定义。 | bool | false | false 
+ secretName | Specify the secret name you want to quote to use tls。 | string | false |  
+ gatewayHost | 指定 Ingress 网关的主机名，当为空时，会自动生成主机名。 | string | false |  
 
 
 ## Hostalias
@@ -695,8 +683,6 @@ spec:
 ### 描述
 
 Add host aliases on K8s pod for your workload which follows the pod spec in path 'spec.template'。
-
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
 
 ### 适用于组件类型
 
@@ -750,39 +736,11 @@ spec:
  hostnames |  | []string | true |  
 
 
-## Import-Grafana-Dashboard
-
-### 描述
-
-导入 Grafana 仪表盘。
-
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
-
-### 适用于组件类型
-
-基于以下资源的组件：
-
-
-
-### 参数说明 (import-grafana-dashboard)
-
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- grafanaServiceName |  | string | true |  
- grafanaServiceNamespace |  | string | false | default 
- credentialSecret |  | string | true |  
- credentialSecretNamespace |  | string | false | default 
- urls |  | []string | true |  
-
-
 ## Init-Container
 
 ### 描述
 
 为 pod 添加初始化容器，并使用共享卷。
-
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
 
 ### 适用于组件类型
 
@@ -824,12 +782,13 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  name | 指定初始化容器的名称。 | string | true |  
+ image | 指定初始化容器的镜像。 | string | true |  
+ imagePullPolicy | 镜像拉取策略。 | string | false | IfNotPresent 
  cmd | 指定初始化容器的命令。 | []string | false |  
+ args | 指定初始化容器的参数。 | []string | false |  
  env | 指定初始化容器的环境变量。 | [[]env](#env-init-container) | false |  
  mountName | 指定共享卷的挂载名。 | string | false | workdir 
  appMountPath | 指定共享卷在应用容器的挂载路径。 | string | true |  
- image | 指定初始化容器的镜像。 | string | true |  
- args | 指定初始化容器的参数。 | []string | false |  
  initMountPath | 指定共享卷初始化容器的挂载路径。 | string | true |  
  extraVolumeMounts | 指定初始化容器的额外挂载卷。 | [[]extraVolumeMounts](#extravolumemounts-init-container) | true |  
 
@@ -893,7 +852,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- \- |  | map[string]:(null&#124;bool&#124;string&#124;bytes&#124;{...}&#124;[...]&#124;number) | true |  
+ \- |  | {} | true |  
 
 
 ## Json-Patch
@@ -921,7 +880,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- \- |  | map[string]:(null&#124;bool&#124;string&#124;bytes&#124;{...}&#124;[...]&#124;number) | true |  
+ \- |  | {} | true |  
 
 
 ## Labels
@@ -929,8 +888,6 @@ spec:
 ### 描述
 
 Add labels on your workload. if it generates pod, add same label for generated pods。
-
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
 
 ### 适用于组件类型
 
@@ -973,8 +930,6 @@ spec:
 ### 描述
 
 为 pod 添加生命周期钩子，它遵循路径“spec.template”中的 pod 规范。
-
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
 
 ### 适用于组件类型
 
@@ -1188,7 +1143,6 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- env |  | [[]env](#env-nocalhost) | false |  
  port |  | int | true |  
  serviceType |  | string | false | deployment 
  gitUrl |  | string | false |  
@@ -1196,13 +1150,38 @@ spec:
  shell |  | string | false | bash 
  workDir |  | string | false | /home/nocalhost-dev 
  storageClass |  | string | false |  
- resources |  | [resources](#resources-nocalhost) | true |  
- persistentVolumeDirs |  | [[]persistentVolumeDirs](#persistentvolumedirs-nocalhost) | false |  
  command |  | [command](#command-nocalhost) | true |  
  debug |  | [debug](#debug-nocalhost) | false |  
  hotReload |  | bool | false | true 
  sync |  | [sync](#sync-nocalhost) | true |  
+ env |  | [[]env](#env-nocalhost) | false |  
  portForward |  | []string | false |  
+ persistentVolumeDirs |  | [[]persistentVolumeDirs](#persistentvolumedirs-nocalhost) | false |  
+ resources |  | [resources](#resources-nocalhost) | true |  
+
+
+#### command (nocalhost)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ run |  | []string | true |  
+ debug |  | []string | true |  
+
+
+#### debug (nocalhost)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ remoteDebugPort |  | int | false |  
+
+
+#### sync (nocalhost)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ type |  | string | false | send 
+ filePattern |  | []string | true |  
+ ignoreFilePattern |  | []string | true |  
 
 
 #### env (nocalhost)
@@ -1211,6 +1190,14 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  value |  | string | true |  
+
+
+#### persistentVolumeDirs (nocalhost)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path |  | string | true |  
+ capacity |  | string | true |  
 
 
 #### resources (nocalhost)
@@ -1237,45 +1224,11 @@ spec:
  cpu |  | string | false | 0.5 
 
 
-#### persistentVolumeDirs (nocalhost)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- path |  | string | true |  
- capacity |  | string | true |  
-
-
-#### command (nocalhost)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- debug |  | [...] | true |  
- run |  | [...] | true |  
-
-
-#### debug (nocalhost)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- remoteDebugPort |  | int | false |  
-
-
-#### sync (nocalhost)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | false | send 
- filePattern |  | [...] | true |  
- ignoreFilePattern |  | [...] | true |  
-
-
 ## Resource
 
 ### 描述
 
 为 pod 添加资源请求和限制，它遵循路径“spec.template”中的 pod 规范。
-
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
 
 ### 适用于组件类型
 
@@ -1576,11 +1529,13 @@ Deploy this YAML and the Secret `db-conn-example` will be binding into environme
 
 为 pod 添加 sidecar 容器，它遵循路径“spec.template”中的 pod 规范。
 
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
-
 ### 适用于组件类型
 
 基于以下资源的组件：
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
 
 
 
@@ -1629,10 +1584,10 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  name | 容器名称。 | string | true |  
- cmd | 容器的执行命令。 | []string | false |  
- env | 指定 sidecar 中的环境变量。 | [[]env](#env-sidecar) | false |  
  image | 容器镜像。 | string | true |  
+ cmd | 容器的执行命令。 | []string | false |  
  args | 指定 sidecar 中的参数。 | []string | false |  
+ env | 指定 sidecar 中的环境变量。 | [[]env](#env-sidecar) | false |  
  volumes | 挂载卷。 | [[]volumes](#volumes-sidecar) | false |  
  livenessProbe | 判断容器是否存活的探针。 | [livenessProbe](#livenessprobe-sidecar) | false |  
  readinessProbe | 判断容器是否就绪，能够接受用户流量的探针。 | [readinessProbe](#readinessprobe-sidecar) | false |  
@@ -1683,8 +1638,8 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- path |  | string | true |  
  name |  | string | true |  
+ path |  | string | true |  
 
 
 #### livenessProbe (sidecar)
@@ -1860,12 +1815,12 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
- mountPath |  | string | true |  
- volumeMode |  | string | false | Filesystem 
- subPath |  | string | false |  
  mountOnly |  | bool | false | false 
- accessModes |  | [...] | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ volumeMode |  | string | false | Filesystem 
  volumeName |  | string | false |  
+ accessModes |  | []string | true |  
  storageClassName |  | string | false |  
  resources |  | [resources](#resources-storage) | false |  
  dataSourceRef |  | [dataSourceRef](#datasourceref-storage) | false |  
@@ -1935,24 +1890,15 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
- mountPath |  | string | false |  
- defaultMode |  | int | false | 420 
- items |  | [[]items](#items-storage) | false |  
- subPath |  | string | false |  
+ mountOnly |  | bool | false | false 
  mountToEnv |  | [mountToEnv](#mounttoenv-storage) | false |  
  mountToEnvs |  | [[]mountToEnvs](#mounttoenvs-storage) | false |  
- mountOnly |  | bool | false | false 
- data |  | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+ mountPath |  | string | false |  
+ subPath |  | string | false |  
+ defaultMode |  | int | false | 420 
  readOnly |  | bool | false | false 
-
-
-##### items (storage)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- path |  | string | true |  
- key |  | string | true |  
- mode |  | int | false | 511 
+ data |  | map[string]:_ | false |  
+ items |  | [[]items](#items-storage) | false |  
 
 
 ##### mountToEnv (storage)
@@ -1969,6 +1915,15 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  envName |  | string | true |  
  configMapKey |  | string | true |  
+
+
+##### items (storage)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ key |  | string | true |  
+ path |  | string | true |  
+ mode |  | int | false | 511 
 
 
 #### secret (storage)
@@ -1976,25 +1931,16 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
- mountPath |  | string | false |  
- defaultMode |  | int | false | 420 
- items |  | [[]items](#items-storage) | false |  
- subPath |  | string | false |  
+ mountOnly |  | bool | false | false 
  mountToEnv |  | [mountToEnv](#mounttoenv-storage) | false |  
  mountToEnvs |  | [[]mountToEnvs](#mounttoenvs-storage) | false |  
- mountOnly |  | bool | false | false 
- data |  | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
- stringData |  | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+ mountPath |  | string | false |  
+ subPath |  | string | false |  
+ defaultMode |  | int | false | 420 
  readOnly |  | bool | false | false 
-
-
-##### items (storage)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- path |  | string | true |  
- key |  | string | true |  
- mode |  | int | false | 511 
+ stringData |  | map[string]:_ | false |  
+ data |  | map[string]:_ | false |  
+ items |  | [[]items](#items-storage) | false |  
 
 
 ##### mountToEnv (storage)
@@ -2011,6 +1957,15 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  envName |  | string | true |  
  secretKey |  | string | true |  
+
+
+##### items (storage)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ key |  | string | true |  
+ path |  | string | true |  
+ mode |  | int | false | 511 
 
 
 #### emptyDir (storage)
@@ -2019,7 +1974,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- medium |  | string | false | empty 
  subPath |  | string | false |  
+ medium |  | string | false | empty 
 
 

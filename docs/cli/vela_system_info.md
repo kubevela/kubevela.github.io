@@ -15,9 +15,9 @@ vela system info [flags]
 ### Options
 
 ```
-  -h, --help               help for info
-  -n, --namespace string   Specify the namespace of the deployment to check detail information. If empty, it will prints deployments information of all namespaces. Default to be empty. An empty namespace may not be can when a resource name is provided. 
-  -s, --specify string     Specify the name of the deployment to check detail information. If empty, it will print all deployments information. Default to be empty.
+  -h, --help             help for info
+  -o, --output string    Specifies the output format. One of: (wide | yaml)
+  -s, --specify string   Specify the name of the deployment to check detail information. If empty, it will print all deployments information. Default to be empty.
 ```
 
 ### Options inherited from parent commands

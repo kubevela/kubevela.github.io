@@ -4,7 +4,7 @@ title: Built-in Component Type
 
 This documentation will walk through all the built-in component types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-08-19T17:50:10+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-10-31T11:57:05+08:00.
 
 ## Cron-Task
 
@@ -812,6 +812,7 @@ spec:
  name | Name of the port. | string | false |  
  protocol | Protocol for port. Must be UDP, TCP, or SCTP. | string | false | TCP 
  expose | Specify if the port should be exposed. | bool | false | false 
+ nodePort | exposed node port. Only Valid when exposeType is NodePort. | int | false |  
 
 
 #### env (webservice)

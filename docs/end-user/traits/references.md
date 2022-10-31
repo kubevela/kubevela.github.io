@@ -4,7 +4,7 @@ title: Built-in Trait Type
 
 This documentation will walk through all the built-in trait types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-07-28T17:57:01+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-10-31T11:57:05+08:00.
 
 ## Affinity
 
@@ -48,17 +48,17 @@ Component based on the following kinds of resources:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  labelSelector |  | [labelSelector](#labelselector-affinity) | false |  
+ namespaces |  | []string | false |  
  topologyKey |  | string | true |  
  namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  
- namespaces |  | []string | false |  
 
 
 ##### labelSelector (affinity)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -74,8 +74,8 @@ Component based on the following kinds of resources:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -100,17 +100,17 @@ Component based on the following kinds of resources:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  labelSelector |  | [labelSelector](#labelselector-affinity) | false |  
+ namespaces |  | []string | false |  
  topologyKey |  | string | true |  
  namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  
- namespaces |  | []string | false |  
 
 
 ##### labelSelector (affinity)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -126,8 +126,8 @@ Component based on the following kinds of resources:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -152,17 +152,17 @@ Component based on the following kinds of resources:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  labelSelector |  | [labelSelector](#labelselector-affinity) | false |  
+ namespaces |  | []string | false |  
  topologyKey |  | string | true |  
  namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  
- namespaces |  | []string | false |  
 
 
 ##### labelSelector (affinity)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -178,8 +178,8 @@ Component based on the following kinds of resources:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -204,17 +204,17 @@ Component based on the following kinds of resources:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  labelSelector |  | [labelSelector](#labelselector-affinity) | false |  
+ namespaces |  | []string | false |  
  topologyKey |  | string | true |  
  namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  
- namespaces |  | []string | false |  
 
 
 ##### labelSelector (affinity)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -230,8 +230,8 @@ Component based on the following kinds of resources:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
  matchLabels |  | map[string]:string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
 ##### matchExpressions (affinity)
@@ -323,9 +323,9 @@ Component based on the following kinds of resources:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  key |  | string | false |  
- effect |  | string | false |  
- value |  | string | false |  
  operator |  | string | false | Equal 
+ value |  | string | false |  
+ effect |  | string | false |  
  tolerationSeconds | Specify the period of time the toleration. | int | false |  
 
 
@@ -334,8 +334,6 @@ Component based on the following kinds of resources:
 ### Description
 
 Add annotations on your workload. if it generates pod, add same annotations for generated pods.
-
-> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -378,8 +376,6 @@ spec:
 ### Description
 
 Add command on K8s pod for your workload which follows the pod spec in path 'spec.template'.
-
-> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -426,7 +422,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- -- | Composition type. | parameter: cannot use value C{containerName: (*"" \| string), command: (*null \| [, ...string]), args: (*null \| [, ...string]), addArgs: (*null \| [, ...string]), delArgs: (*null \| [, ...string])} (type struct) as string | false |  
+ -- | Composition type. | parameter: cannot use value {containerName:*"" &#124; string,command:*null &#124; [],args:*null &#124; [],addArgs:*null &#124; [],delArgs:*null &#124; []} (type struct) as string | false |  
 
 
 ## Container-Image
@@ -434,8 +430,6 @@ spec:
 ### Description
 
 Set the image of the container.
-
-> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -483,7 +477,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- -- | Composition type. | parameter: cannot use value C{containerName: (*"" \| string), image: string, imagePullPolicy: (*"" \| "IfNotPresent" \| "Always" \| "Never")} (type struct) as string | false |  
+ -- | Composition type. | parameter: cannot use value {containerName:*"" &#124; string,image:string,imagePullPolicy:*"" &#124; "IfNotPresent" &#124; "Always" &#124; "Never"} (type struct) as string | false |  
 
 
 ## Cpuscaler
@@ -491,8 +485,6 @@ spec:
 ### Description
 
 Automatically scale the component based on CPU usage.
-
-> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -528,11 +520,11 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- targetAPIVersion | Specify the apiVersion of scale target. | string | false | apps/v1 
- targetKind | Specify the kind of scale target. | string | false | Deployment 
  min | Specify the minimal number of replicas to which the autoscaler can scale down. | int | false | 1 
  max | Specify the maximum number of of replicas to which the autoscaler can scale up. | int | false | 10 
  cpuUtil | Specify the average cpu utilization, for example, 50 means the CPU usage is 50%. | int | false | 50 
+ targetAPIVersion | Specify the apiVersion of scale target. | string | false | apps/v1 
+ targetKind | Specify the kind of scale target. | string | false | Deployment 
 
 
 ## Env
@@ -540,8 +532,6 @@ spec:
 ### Description
 
 Add env on K8s pod for your workload which follows the pod spec in path 'spec.template'.
-
-> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -592,7 +582,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- -- | Composition type. | parameter: cannot use value C{env: {[]: (_: string)->string, }, containerName: (*"" \| string), replace: (*false \| bool), unset: (*[] \| [, ...string])} (type struct) as string | false |  
+ -- | Composition type. | parameter: cannot use value {containerName:*"" &#124; string,replace:*false &#124; bool,env:{},unset:*[] &#124; []} (type struct) as string | false |  
 
 
 ## Expose
@@ -600,8 +590,6 @@ spec:
 ### Description
 
 Expose port to enable web traffic for your component.
-
-> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -635,8 +623,8 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- annotations | Specify the annotaions of the exposed service. | map[string]:string | true |  
  port | Specify the exposion ports. | []int | true |  
+ annotations | Specify the annotaions of the exposed service. | map[string]:string | true |  
  type | Specify what kind of Service you want. options: "ClusterIP","NodePort","LoadBalancer","ExternalName". | string | false | ClusterIP 
 
 
@@ -682,12 +670,12 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- http | Specify the mapping relationship between the http path and the workload port. | map[string]:int | true |  
- classInSpec | Set ingress class in '.spec.ingressClassName' instead of 'kubernetes.io/ingress.class' annotation. | bool | false | false 
- class | Specify the class of ingress to use. | string | false | nginx 
- gatewayHost | Specify the host of the ingress gateway, which is used to generate the endpoints when the host is empty. | string | false |  
- secretName | Specify the secret name you want to quote to use tls. | string | false |  
  domain | Specify the domain you want to expose. | string | false |  
+ http | Specify the mapping relationship between the http path and the workload port. | map[string]:int | true |  
+ class | Specify the class of ingress to use. | string | false | nginx 
+ classInSpec | Set ingress class in '.spec.ingressClassName' instead of 'kubernetes.io/ingress.class' annotation. | bool | false | false 
+ secretName | Specify the secret name you want to quote to use tls. | string | false |  
+ gatewayHost | Specify the host of the ingress gateway, which is used to generate the endpoints when the host is empty. | string | false |  
 
 
 ## Hostalias
@@ -695,8 +683,6 @@ spec:
 ### Description
 
 Add host aliases on K8s pod for your workload which follows the pod spec in path 'spec.template'.
-
-> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -750,39 +736,11 @@ spec:
  hostnames |  | []string | true |  
 
 
-## Import-Grafana-Dashboard
-
-### Description
-
-Import dashboards to Grafana.
-
-> For now this trait is hidden from the VelaUX. Available when using CLI
-
-### Apply To Component Types
-
-Component based on the following kinds of resources:
-
-
-
-### Specification (import-grafana-dashboard)
-
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- grafanaServiceName |  | string | true |  
- grafanaServiceNamespace |  | string | false | default 
- credentialSecret |  | string | true |  
- credentialSecretNamespace |  | string | false | default 
- urls |  | []string | true |  
-
-
 ## Init-Container
 
 ### Description
 
 add an init container and use shared volume with pod.
-
-> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -824,12 +782,13 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  name | Specify the name of init container. | string | true |  
+ image | Specify the image of init container. | string | true |  
+ imagePullPolicy | Specify image pull policy for your service. | string | false | IfNotPresent 
  cmd | Specify the commands run in the init container. | []string | false |  
+ args | Specify the args run in the init container. | []string | false |  
  env | Specify the env run in the init container. | [[]env](#env-init-container) | false |  
  mountName | Specify the mount name of shared volume. | string | false | workdir 
  appMountPath | Specify the mount path of app container. | string | true |  
- image | Specify the image of init container. | string | true |  
- args | Specify the args run in the init container. | []string | false |  
  initMountPath | Specify the mount path of init container. | string | true |  
  extraVolumeMounts | Specify the extra volume mounts for the init container. | [[]extraVolumeMounts](#extravolumemounts-init-container) | true |  
 
@@ -893,7 +852,7 @@ All Component Types
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- \- |  | map[string]:(null&#124;bool&#124;string&#124;bytes&#124;{...}&#124;[...]&#124;number) | true |  
+ \- |  | {} | true |  
 
 
 ## Json-Patch
@@ -921,7 +880,7 @@ All Component Types
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- \- |  | map[string]:(null&#124;bool&#124;string&#124;bytes&#124;{...}&#124;[...]&#124;number) | true |  
+ \- |  | {} | true |  
 
 
 ## Labels
@@ -929,8 +888,6 @@ All Component Types
 ### Description
 
 Add labels on your workload. if it generates pod, add same label for generated pods.
-
-> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -973,8 +930,6 @@ spec:
 ### Description
 
 Add lifecycle hooks for every container of K8s pod for your workload which follows the pod spec in path 'spec.template'.
-
-> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -1188,7 +1143,6 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- env |  | [[]env](#env-nocalhost) | false |  
  port |  | int | true |  
  serviceType |  | string | false | deployment 
  gitUrl |  | string | false |  
@@ -1196,13 +1150,38 @@ spec:
  shell |  | string | false | bash 
  workDir |  | string | false | /home/nocalhost-dev 
  storageClass |  | string | false |  
- resources |  | [resources](#resources-nocalhost) | true |  
- persistentVolumeDirs |  | [[]persistentVolumeDirs](#persistentvolumedirs-nocalhost) | false |  
  command |  | [command](#command-nocalhost) | true |  
  debug |  | [debug](#debug-nocalhost) | false |  
  hotReload |  | bool | false | true 
  sync |  | [sync](#sync-nocalhost) | true |  
+ env |  | [[]env](#env-nocalhost) | false |  
  portForward |  | []string | false |  
+ persistentVolumeDirs |  | [[]persistentVolumeDirs](#persistentvolumedirs-nocalhost) | false |  
+ resources |  | [resources](#resources-nocalhost) | true |  
+
+
+#### command (nocalhost)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ run |  | []string | true |  
+ debug |  | []string | true |  
+
+
+#### debug (nocalhost)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ remoteDebugPort |  | int | false |  
+
+
+#### sync (nocalhost)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | false | send 
+ filePattern |  | []string | true |  
+ ignoreFilePattern |  | []string | true |  
 
 
 #### env (nocalhost)
@@ -1211,6 +1190,14 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  value |  | string | true |  
+
+
+#### persistentVolumeDirs (nocalhost)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ path |  | string | true |  
+ capacity |  | string | true |  
 
 
 #### resources (nocalhost)
@@ -1237,45 +1224,11 @@ spec:
  cpu |  | string | false | 0.5 
 
 
-#### persistentVolumeDirs (nocalhost)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- path |  | string | true |  
- capacity |  | string | true |  
-
-
-#### command (nocalhost)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- debug |  | [...] | true |  
- run |  | [...] | true |  
-
-
-#### debug (nocalhost)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- remoteDebugPort |  | int | false |  
-
-
-#### sync (nocalhost)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- type |  | string | false | send 
- filePattern |  | [...] | true |  
- ignoreFilePattern |  | [...] | true |  
-
-
 ## Resource
 
 ### Description
 
 Add resource requests and limits on K8s pod for your workload which follows the pod spec in path 'spec.template.'.
-
-> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### Apply To Component Types
 
@@ -1576,11 +1529,13 @@ Deploy this YAML and the Secret `db-conn-example` will be binding into environme
 
 Inject a sidecar container to K8s pod for your workload which follows the pod spec in path 'spec.template'.
 
-> For now this trait is hidden from the VelaUX. Available when using CLI
-
 ### Apply To Component Types
 
 Component based on the following kinds of resources:
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
 
 
 
@@ -1629,10 +1584,10 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  name | Specify the name of sidecar container. | string | true |  
- cmd | Specify the commands run in the sidecar. | []string | false |  
- env | Specify the env in the sidecar. | [[]env](#env-sidecar) | false |  
  image | Specify the image of sidecar container. | string | true |  
+ cmd | Specify the commands run in the sidecar. | []string | false |  
  args | Specify the args in the sidecar. | []string | false |  
+ env | Specify the env in the sidecar. | [[]env](#env-sidecar) | false |  
  volumes | Specify the shared volume path. | [[]volumes](#volumes-sidecar) | false |  
  livenessProbe | Instructions for assessing whether the container is alive. | [livenessProbe](#livenessprobe-sidecar) | false |  
  readinessProbe | Instructions for assessing whether the container is in a suitable state to serve traffic. | [readinessProbe](#readinessprobe-sidecar) | false |  
@@ -1683,8 +1638,8 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- path |  | string | true |  
  name |  | string | true |  
+ path |  | string | true |  
 
 
 #### livenessProbe (sidecar)
@@ -1860,12 +1815,12 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
- mountPath |  | string | true |  
- volumeMode |  | string | false | Filesystem 
- subPath |  | string | false |  
  mountOnly |  | bool | false | false 
- accessModes |  | [...] | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ volumeMode |  | string | false | Filesystem 
  volumeName |  | string | false |  
+ accessModes |  | []string | true |  
  storageClassName |  | string | false |  
  resources |  | [resources](#resources-storage) | false |  
  dataSourceRef |  | [dataSourceRef](#datasourceref-storage) | false |  
@@ -1935,24 +1890,15 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
- mountPath |  | string | false |  
- defaultMode |  | int | false | 420 
- items |  | [[]items](#items-storage) | false |  
- subPath |  | string | false |  
+ mountOnly |  | bool | false | false 
  mountToEnv |  | [mountToEnv](#mounttoenv-storage) | false |  
  mountToEnvs |  | [[]mountToEnvs](#mounttoenvs-storage) | false |  
- mountOnly |  | bool | false | false 
- data |  | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+ mountPath |  | string | false |  
+ subPath |  | string | false |  
+ defaultMode |  | int | false | 420 
  readOnly |  | bool | false | false 
-
-
-##### items (storage)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- path |  | string | true |  
- key |  | string | true |  
- mode |  | int | false | 511 
+ data |  | map[string]:_ | false |  
+ items |  | [[]items](#items-storage) | false |  
 
 
 ##### mountToEnv (storage)
@@ -1969,6 +1915,15 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  envName |  | string | true |  
  configMapKey |  | string | true |  
+
+
+##### items (storage)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ key |  | string | true |  
+ path |  | string | true |  
+ mode |  | int | false | 511 
 
 
 #### secret (storage)
@@ -1976,25 +1931,16 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
- mountPath |  | string | false |  
- defaultMode |  | int | false | 420 
- items |  | [[]items](#items-storage) | false |  
- subPath |  | string | false |  
+ mountOnly |  | bool | false | false 
  mountToEnv |  | [mountToEnv](#mounttoenv-storage) | false |  
  mountToEnvs |  | [[]mountToEnvs](#mounttoenvs-storage) | false |  
- mountOnly |  | bool | false | false 
- data |  | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
- stringData |  | map[string]:(null\|bool\|string\|bytes\|{...}\|[...]\|number) | false |  
+ mountPath |  | string | false |  
+ subPath |  | string | false |  
+ defaultMode |  | int | false | 420 
  readOnly |  | bool | false | false 
-
-
-##### items (storage)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- path |  | string | true |  
- key |  | string | true |  
- mode |  | int | false | 511 
+ stringData |  | map[string]:_ | false |  
+ data |  | map[string]:_ | false |  
+ items |  | [[]items](#items-storage) | false |  
 
 
 ##### mountToEnv (storage)
@@ -2011,6 +1957,15 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  envName |  | string | true |  
  secretKey |  | string | true |  
+
+
+##### items (storage)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ key |  | string | true |  
+ path |  | string | true |  
+ mode |  | int | false | 511 
 
 
 #### emptyDir (storage)
@@ -2019,7 +1974,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- medium |  | string | false | empty 
  subPath |  | string | false |  
+ medium |  | string | false | empty 
 
 

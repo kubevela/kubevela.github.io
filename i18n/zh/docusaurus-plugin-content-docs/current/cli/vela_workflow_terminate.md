@@ -2,11 +2,11 @@
 title: vela workflow terminate
 ---
 
-Terminate an application workflow.
+Terminate an workflow.
 
 ### Synopsis
 
-Terminate an application workflow in cluster.
+Terminate an workflow in cluster.
 
 ```
 vela workflow terminate [flags]
@@ -15,7 +15,7 @@ vela workflow terminate [flags]
 ### Examples
 
 ```
-vela workflow terminate <application-name>
+vela workflow terminate <workflow-name>
 ```
 
 ### Options
@@ -24,6 +24,7 @@ vela workflow terminate <application-name>
   -e, --env string         specify environment name for application
   -h, --help               help for terminate
   -n, --namespace string   specify the Kubernetes namespace to use
+  -t, --type string        the type of the resource, support: [app, workflow]
 ```
 
 ### Options inherited from parent commands
