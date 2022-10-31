@@ -21,11 +21,11 @@ The reasons for KubeVela supports CUE as a first-class solution to design abstra
 ## Prerequisites
 
 Please make sure below CLIs are present in your environment:
-* [`cue` v0.2.2+](https://cuelang.org/docs/install/), currently KubeVela only supports CUE v0.2.2, we're positively discussing with CUE community for upgrade.
+* [`cue` v0.2.2+](https://cuelang.org/docs/install/).
 * [`vela` v1.0.0+](../../install).
 
 :::caution
-Versions prior to KubeVela 1.6.0 use the v0.2.2 version of CUE, KubeVela 1.6.0+ uses the v0.5.0-alpha.1 version of CUE. Please use the CUE that matches your KubeVela version.
+Versions prior to KubeVela 1.6.0 use the v0.2.2 version of CUE, KubeVela 1.6.0+ uses the v0.5.0-alpha.1 version of CUE. Please use the CUE tool that matches your KubeVela version.
 :::
 
 ## CUE CLI Basic
