@@ -4,7 +4,7 @@ title: 内置组件列表
 
 本文档将**按字典序**展示所有内置组件的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-08-19T17:50:10+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-10-31T11:57:05+08:00。
 
 ## Cron-Task
 
@@ -812,6 +812,7 @@ spec:
  name | 端口名称。 | string | false |  
  protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | string | false | TCP 
  expose | 端口是否需要暴露。 | bool | false | false 
+ nodePort | exposed node port. Only Valid when exposeType is NodePort。 | int | false |  
 
 
 #### env (webservice)
