@@ -35,9 +35,9 @@ $ vela show alibaba-oss
 
 你也可以使用 `--web` 参数来在本地浏览器中查看使用说明。
 
-- 阅读 [官网文档](http://kubevela.net/docs/end-user/components/cloud-services/cloud-resources-list).
+- 阅读 [官网文档](https://kubevela.net/docs/end-user/components/cloud-services/cloud-resources-list).
 
-比如，你可以在[这里](http://kubevela.net/docs/end-user/components/cloud-services/terraform/alibaba-oss)查看阿里云 OSS 的使用参数。
+比如，你可以在[这里](https://kubevela.net/docs/end-user/components/cloud-services/terraform/alibaba-oss)查看阿里云 OSS 的使用参数。
 
 
 For different vendors, these parameters update accordingly. All cloud resources have the following common parameters.
