@@ -4,37 +4,61 @@ title: 应用日志可观测
 
 应用日志对于发现和排查线上问题至关重要，KubeVela 提供了专门的日志收集插件，帮助用户快速地构建应用的日志可观测的能力。本文档将介绍如何对应用日志进行采集，并在 grafana 大盘中对日志进行查看和分析。
 
+:::tip
+本文档将更聚焦于日志采集并用于实时分析。如果你想实时的获取日志排查问题，可以直接使用 `vela logs` 命令行或通过 `velaux` 插件提供的 UI 控制台查看。
+:::
+
 ## 快速开始
 
-日志收集插件可以通过默认全部应用采集和指定应用采集两种方式进行启用。
+你需要开启 `loki` 和 `grafana` 两个插件来获得本节描述的能力。
 
 ### 启用日志收集插件
 
-#### 默认全部采集模式（全采模式）
+日志收集插件可以通过两种模式启用：
+
+- 定向采集：指定日志采集运维特征（Trait）使用。
+- 全部采集：容器 stdout 日志自动化全部采集。
+
+
+#### 定向采集模式
+
+指定 `agent=vector` 参数启动 loki 插件。
 
 ```shell
 vela addon enable loki agent=vector
 ```
 
-启用该插件后会在管控集群部署一个 [loki](https://github.com/grafana/loki) 服务作为日志存储数据源，并会在各个集群的节点上部署日志采集 agent [vector](https://vector.dev/) 用以采集宿主机上实例的标准输出日志。
-
-:::tip
-这种方式启用的日志收集服务。不需要应用配置任何运维特征，即可对应用的标准输出日志进行采集，并将日志到汇总到控集群的 loki 服务当中。优点是配置简单。
-而这种方式的缺点是：
-1. 对所有运行的容器进行采集，当应用很多时会对运行在管控集群的 loki 服务造成很大的压力。一方面太多的日志需要被持久化，占用大量硬盘资源。另一方面各个集群的 vector agent 都需要把采集到的日志传输至 loki 服务，会消耗大量系统带宽。
-2. 全采模式只能以统一的方式对日志进行收集，无法对不同应用的日志内容做特殊的处理。
+:::caution
+如果不指定 `agent=vector` 参数，默认 loki 插件只安装 loki 日志仓库，不做日志采集。
 :::
 
-#### 定向采集模式
+启用该插件后会在管控集群部署一个 [loki](https://github.com/grafana/loki) 服务作为日志存储数据仓库，并会在当前各被管控集群的节点上部署日志采集 agent [vector](https://vector.dev/) 。
 
-指定 `agent=vector-controller` 参数启动 loki 插件。
+:::note
+如果你只想指定部分集群安装 loki 插件，可以指定 `clusters` 参数启动插件。另外，新的集群被加入以后，你要重新运行一下插件启动命令来让这个集群生效。
+:::
+
+启动日志收集之后，默认不会对应用的日志进行采集，需要应用配置专门的运维特征来开启。系统中会增加以下两个日志收集运维特征：
+
+- `file-logs`
+- `stdout-logs`
+
+你需要为应用组件配置上述特征，同时该运维特征也支持配置 vector 处理脚本（VRL）对日志内容做自定义解析处理，下面的章节将详细介绍这部分内容。
+
+#### 默认全部采集模式（全采模式）
 
 ```shell
-vela addon enable loki agent=vector-controller
+vela addon enable loki agent=vector stdout=all
 ```
 
-:::tip
-指定 `agent=vector-controller` 参数启动日志收集插件之后，默认不会对应用的日志进行采集，需要应用配置专门的运维特征来开启。并且该运维特征支持配置 vector VRL 处理脚本对日志内容做特定处理，下面的章节将详细介绍这部分内容。
+启用该插件后，日志采集 agent [vector](https://vector.dev/) 会自动采集宿主机上实例的标准输出日志。收集的日志会被传输到管控集群的 loki 数据仓库。
+
+这种方式启用的日志收集服务。不需要应用配置任何运维特征，即可对应用的标准输出日志进行采集，并将日志到汇总到控集群的 loki 服务当中。优点是配置简单。
+
+:::caution
+请注意，日志全采的方式也存在如下缺点：
+1. 对所有运行的容器进行采集，当应用很多时会对运行在管控集群的 loki 服务造成很大的压力。一方面太多的日志需要被持久化，占用大量硬盘资源。另一方面各个集群的 vector agent 都需要把采集到的日志传输至 loki 服务，会消耗大量系统带宽。
+2. 全采模式只能以统一的方式对日志进行收集，无法对不同应用的日志内容做特殊的处理。
 :::
 
 
@@ -44,7 +68,7 @@ vela addon enable loki agent=vector-controller
 vela addon enable grafana
 ```
 
-:::tip
+:::caution
 即使你已经按照 [自动化可观测性文档](./observability) 的介绍启用过了 grafana 插件，仍需要重新启用一次 grafana 插件从而让 loki 插件的数据源注册到 grafana 中。
 :::
 
@@ -91,7 +115,7 @@ loki 插件开启后会在各个集群装中安装一个专门的组件，负责
 
 上面已经提到如果在启用插件时选择的是全采模式，不需要应用做任何特殊配置，即可完成对容器的标准输出日志的采集。本节主要介绍，日志收集插件开启定向采集的模式下如何完成标准输出日志的采集。
 
-在组件中配置 `stdout-logs-collector` 运维特征完成对组件容器日志的收集，如下所示：
+在组件中配置 `stdout-logs` 运维特征完成对组件容器日志的收集，如下所示：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -108,7 +132,7 @@ spec:
           - flog
         image: mingrammer/flog
       traits:
-        type: stdout-logs-collector
+      - type: stdout-logs
 ```
 
 应用创建之后你可以在对应 grafana 应用大盘中找到该应用创建的 deployment 资源，从而点击跳转到 deployment 资源大盘，并在下面找到采集上来的日志数据。如下：
@@ -117,7 +141,7 @@ spec:
 
 ### nginx 网关日志日志分析
 
-如果你的应用是一个 nginx 网关应用，`stdout-logs-collector` 运维特征所提供的 parser 能力可以将 nginx 日志输出 [combined](https://docs.nginx.com/nginx/admin-guide/monitoring/logging/) 格式的日志文件转换成 json 格式，并提供专门的分析大盘对 nginx 的网关访问请求进行进一步的分析。如下：
+如果你的应用是一个 nginx 网关应用，`stdout-logs` 运维特征所提供的 parser 能力可以将 nginx 日志输出 [combined](https://docs.nginx.com/nginx/admin-guide/monitoring/logging/) 格式的日志文件转换成 json 格式，并提供专门的分析大盘对 nginx 的网关访问请求进行进一步的分析。如下：
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -134,7 +158,7 @@ spec:
           - port: 80
             expose: true
       traits:
-        - type: stdout-logs-collector
+        - type: stdout-logs
           properties:
             parser: nginx
 ```
@@ -180,7 +204,7 @@ spec:
           - port: 80
             expose: true
       traits:
-        - type: stdout-logs-collector
+        - type: stdout-logs
           properties:
             parser: customize
             VRL: |
@@ -219,7 +243,7 @@ spec:
       traits:
         - properties:
             path: "/data/daily.log"
-          type: file-logs-collector
+          type: file-logs
 ```
 
 在上面的例子中，我们把 `my-biz` 组件的业务日志输出到了容器内的 `/data/daily.log` 路径下。应用创建之后，你就可以通过应用下的 `deployment` 大盘查看到对应的文件日志结果。
