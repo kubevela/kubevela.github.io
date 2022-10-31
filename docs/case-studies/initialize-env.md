@@ -203,6 +203,10 @@ spec:
         clusters:
         - local
       type: topology
+    - name: apply-once
+      type: apply-once
+      properties:
+        enable: true
 
   workflow:
     steps:
