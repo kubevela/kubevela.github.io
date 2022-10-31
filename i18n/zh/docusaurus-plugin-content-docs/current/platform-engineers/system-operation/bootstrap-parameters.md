@@ -23,7 +23,9 @@ KubeVela 控制器的各项启动参数及其说明如下。
 |         disable-caps        | string |                 ""                | 禁用内置的能力                                                                 |
 |        storage-driver       | string |               Local               | 应用文件的存储驱动                                                             |
 |  application-re-sync-period |  time  |                5m                 | 无变更情况下，控制器维护应用资源的周期                                         |
+|    informer-sync-period     |  time  |                10h                | 系统参数，用于配置 controller-runtime 基础库中的轮询同步间隔。 |
 |     reconcile-timeout       |  time  |                3m                 | 控制器单轮轮询的超时时间 |
+| reconcile-termination-graceful-period | time |        5s                 | 当单次应用处理超时时，用于记录状态的额外允许时间。|
 | system-definition-namespace | string |            vela-system            | 系统级特征定义的命名空间                                                       |
 |    concurrent-reconciles    |   int  |                 4                 | 控制器处理请求的并发线程数                                                     |
 |         kube-api-qps        |   int  |                 50                | 控制器访问 apiserver 的速率                                                    |
@@ -47,3 +49,13 @@ KubeVela 控制器的各项启动参数及其说明如下。
 - **perf-enabled**: 启用时可以在日志中看到 KubeVela 控制器管理应用时各个阶段的时间开销，关闭可以简化日志记录
 
 > [性能调优](./performance-finetuning)章节中包含了若干组不同场景下的推荐参数配置。
+
+
+## 可选能力
+
+你可以为控制器配置 `--feature-gates=XXX=true` 来启用 `XXX` 能力。下列配置默认不启用，你可以通过开启这些参数来配置控制器的能力。
+
+- **AuthenticateApplication**: 对应用进行鉴权。
+- **ZstdResourceTracker**: 对 ResourceTracker 的存储使用 Zstd 压缩。当你的系统中有较大应用并需要管控较多资源时，启用这个能力可以大幅节约你的系统存储开销（并略微增加运算开销）。
+- **ApplyOnce**: 为所有应用都启用 ApplyOnce 能力，禁用全部状态维持。ResourceTracker 将不会存储资源的详细信息，进而大幅节约系统存储开销。
+- **MultiStageComponentApply**: 启用多阶段组件资源部署能力。当启用时，组件内的资源下发可分不同批次下发。
