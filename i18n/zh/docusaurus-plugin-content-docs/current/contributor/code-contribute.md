@@ -16,7 +16,7 @@ This guide helps you get started developing KubeVela.
 
 ### Prerequisites
 
-1. Golang version 1.17+
+1. Golang version 1.19+
 2. Kubernetes version v1.20+ with `~/.kube/config` configured. (Don't have a test cluster? Try [VelaD](https://github.com/kubevela/velad/blob/main/docs/06.develop_kubevela.md) to develop KubeVela)
 3. ginkgo 1.14.0+ (just for [E2E test](#e2e-test))
 4. golangci-lint 1.38.0+, it will install automatically if you run `make`, you can [install it manually](https://golangci-lint.run/usage/install/#local-installation) if the installation is too slow.
@@ -49,6 +49,19 @@ For other OS or system architecture, please refer to https://storage.googleapis.
 </details>
 
 You may also be interested with KubeVela's [design](https://github.com/oam-dev/kubevela/tree/master/design/vela-core) before diving into its code.
+
+:::tip
+KubeVela v1.6 upgrades some develop tools. You need to upgrade your local development environment with the following guide.
+
+1. Install go1.19 from [official site](https://go.dev/dl/). If you want to keep multiple golang version in your local develop environment, you can download the package and unfold it into some place, like `~/go/go1.19.1`.
+2. Set environment variables. `export PATH=~/go/go1.19.1/bin/:$PATH; export GOROOT=~/go/go1.19.1`. Add the go1.19 binary folder to the `PATH` environment (let it to be the primary choice for go), and set the `GOROOT` environment to your latest version go folder.
+3. Install the tools for running `make reviewable` in KubeVela.
+```shell
+cd ~/go/go1.19.1/ && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.49.0
+go install honnef.co/go/tools/cmd/staticcheck@2022.1
+go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.6.2
+```
+:::
 
 ### Build
 
