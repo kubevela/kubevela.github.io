@@ -23,6 +23,7 @@ Manage KubeVela Application Revisions
 ### SEE ALSO
 
 
+* [vela revision get](vela_revision_get)	 - get specific revision of application
 * [vela revision list](vela_revision_list)	 - list application revisions
 
 #### Go Back to [CLI Commands](vela) Homepage.
