@@ -35,7 +35,7 @@ KubeVela 可以使用 Application 对象做环境的初始化，可以初始化�
 
 我们可以直接使用 KubeVela 的应用部署计划来初始化 kruise 的环境，该应用会帮你在集群中部署一个 OpenKruise 的控制器，给集群提供 kruise 的各种能力。
 
-由于我们使用 Helm 组件完成 kruise 的部署，我们首先要在集群中使用 `fluxcd` 插件开启 helm 功能。
+由于我们使用 Helm 组件完成 kruise 的部署，我们首先要在集群中使用 [`FluxCD` 插件](https://kubevela.net/docs/reference/addons/fluxcd)开启 helm 功能。
 当环境初始化具备多个模块时，可以对初始化的内容进行拆分，同时使用工作流的 `depends-on-app` 步骤，描述不同初始化模块的依赖关系。
 比如我们可以在这个例子里，使用 `depends-on-app` 表示环境初始化 kruise 依赖环境初始化 `addon-fluxcd` 提供的能力。同时，使用 `apply-once` 策略来确保资源只会部署一次来完成初始化。
 
