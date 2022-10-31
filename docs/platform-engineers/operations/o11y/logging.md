@@ -1,5 +1,5 @@
 ---
-title: Application Logs
+title: Logging
 ---
 
 The application logs are very important for users to find and locate problems especially in production environment.
@@ -72,14 +72,14 @@ vela addon enable grafana
 ```
 
 :::caution
-Even if you have enabled the grafana addon as described in the ["Automated Observability Documentation"](./observability), you still need to re-enable the addon to register the loki data source to grafana.
+Even if you have enabled the grafana addon as described in the ["Automated Observability Documentation"](../observability), you still need to re-enable the addon to register the loki data source to grafana.
 :::
 
 ## Kubernetes system events logs
 
 After the loki addon enabled, a component will be installed in each cluster, which is responsible for collecting Kubernetes events and converting them to logs transmit to loki. You can also view and analyze the events of the system through the Kubernetes events dashboard in the grafana addon.
 
-![event-log](../../resources/event-log.jpg)
+![event-log](../../../resources/event-log.jpg)
 
 <details>
     KubeVela Events dashboard
@@ -140,7 +140,7 @@ spec:
 
 After the application is created, you can find the deployment resource created by the application in the application dashboard of grafana, click `Detail` button to jump to the deployment resource dashboard, and find the log data below. as follows:
 
-![normal-log](../../resources/normal-log.jpg)
+![normal-log](../../../resources/normal-log.jpg)
 
 ### nginx access log analysis
 
@@ -168,7 +168,7 @@ spec:
 
 Then a special nginx access log analysis dashboard will be generated as follows:
 
-![nginx-log](../../resources/nginx-log.jpg)
+![nginx-log](../../../resources/nginx-log.jpg)
 
 <details>
     KubeVela nginx application dashboard
@@ -217,7 +217,7 @@ spec:
 
 In this example, we transform nginx `combinded` format logs to json format, and adding a `new_field` json key to each log, the json value is `new value`. Please refer to [document](https://vector.dev/docs/reference/vrl/) for how to write vector VRL.
 
-If you have a special log analysis dashboard for this processing method, you can refer to [document](./observability) to import it into grafana.
+If you have a special log analysis dashboard for this processing method, you can refer to [document](../observability) to import it into grafana.
 
 ## Collecting file log
 
