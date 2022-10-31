@@ -21,15 +21,16 @@ vela addon registry update <registry-name> --type OSS --endpoint=<URL> --bucket=
 ### Options
 
 ```
-      --bucket string     specify the OSS bucket name
-      --endpoint string   specify the addon registry endpoint
-      --gitToken string   specify the github repo token
-  -h, --help              help for update
-      --insecureSkipTLS   specify the Helm addon registry skip tls verify
-      --password string   specify the Helm addon registry password
-      --path string       specify the addon registry OSS path
-      --type string       specify the addon registry type
-      --username string   specify the Helm addon registry username
+      --bucket string           specify the OSS bucket name
+      --endpoint string         specify the addon registry endpoint
+      --gitToken string         specify the github repo token
+      --gitlabRepoName string   specify the gitlab addon registry repoName
+  -h, --help                    help for update
+      --insecureSkipTLS         specify the Helm addon registry skip tls verify
+      --password string         specify the Helm addon registry password
+      --path string             specify the addon registry OSS path
+      --type string             specify the addon registry type
+      --username string         specify the Helm addon registry username
 ```
 
 ### Options inherited from parent commands

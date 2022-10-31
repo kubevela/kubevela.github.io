@@ -152,7 +152,7 @@
     "description": "The label for category case studies in sidebar docs"
   },
   "sidebar.docs.category.Observability": {
-    "message": "新增可观测性",
+    "message": "可观测性",
     "description": "The label for category Observability in sidebar docs"
   },
   "sidebar.docs.category.Scaling": {
@@ -336,5 +336,8 @@
   },
   "sidebar.docs.category.Multi Environment Delivery": {
     "message": "多环境交付"
+  },
+  "sidebar.docs.category.Automated Observability": {
+    "message": "自动化可观测"
   }
 }

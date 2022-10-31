@@ -174,8 +174,15 @@ module.exports = {
             'end-user/workflow/timeout',
           ],
         },
-        'platform-engineers/operations/observability',
-        'platform-engineers/operations/logging',
+        {
+          type: 'category',
+          label: 'Automated Observability',
+          collapsed: true,
+          items: [
+            'platform-engineers/operations/observability',
+            'platform-engineers/operations/logging',
+          ],
+        },
         'end-user/components/more',
       ],
     },

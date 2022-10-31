@@ -23,8 +23,6 @@ Authenticate Terraform Cloud Providers by managing Terraform Controller Provider
 ### SEE ALSO
 
 
-* [vela provider add](vela_provider_add)	 - Authenticate Terraform Cloud Provider
-* [vela provider delete](vela_provider_delete)	 - Delete Terraform Cloud Provider
 * [vela provider list](vela_provider_list)	 - List Terraform Cloud Providers
 
 #### Go Back to [CLI Commands](vela) Homepage.

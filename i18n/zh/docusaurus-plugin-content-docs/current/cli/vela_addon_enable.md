@@ -32,6 +32,7 @@ vela addon enable [flags]
 
 ```
   -c, --clusters string           specify the runtime-clusters to enable
+      --dry-run                   render all yaml files out without real execute it
   -h, --help                      help for enable
       --override-definitions      override existing definitions if conflict with those contained in this addon
   -s, --skip-version-validating   skip validating system version requirement

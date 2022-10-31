@@ -29,6 +29,10 @@ vela show [flags]
 > vela show webservice --location zh --i18n https://kubevela.io/reference-i18n.json
 6. Show doc for a specified revision, it must exist in control plane cluster:
 > vela show webservice --revision v1
+7. Generate docs for all capabilities into folder $HOME/.vela/reference/docs/
+> vela show
+8. Generate all docs and start a doc server
+> vela show --web
 
 ```
 
