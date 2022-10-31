@@ -28,6 +28,7 @@ module.exports = {
           label: "Talks in English",
           collapsed: false,
           items: [
+            "talks/en/kubecon-na-2022-office-hour",
             "talks/en/saiyam-cncf-minutes",
             "talks/en/application-centric-platform",
             "talks/en/devops-toolkit-2",
