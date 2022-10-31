@@ -28,6 +28,7 @@ title: CLI Commands
 		vela ql --query "inner-view-name{param1=value1,param2=value2}"
 		vela ql --file ./ql.cue
 * [vela live-diff](vela_live-diff)	 - Compare application and revisions
+* [vela top](vela_top)	 - Launch UI to display platform overview information and diagnose the status for any specific application.
 * [vela ls](vela_ls)	 - List all vela applications.
 * [vela dry-run](vela_dry-run)	 - Dry-run application locally, render the Kubernetes resources as result to stdout.
 	vela dry-run -d /definition/directory/or/file/ -f /path/to/app.yaml
@@ -41,8 +42,9 @@ You can also specify a remote url for app:
 
 * [vela auth](vela_auth)	 - 
 * [vela cluster](vela_cluster)	 - Manage Kubernetes Clusters for Continuous Delivery.
+* [vela config](vela_config)	 - Manage the configs, such as the terraform provider, image registry, helm repository, etc.
 * [vela kube](vela_kube)	 - 
-* [vela workflow](vela_workflow)	 - Operate the Workflow during Application Delivery.
+* [vela workflow](vela_workflow)	 - Operate the Workflow during Application Delivery. Note that workflow command is both valid for Application Workflow and WorkflowRun(expect for [restart, rollout] command, they're only valid for Application Workflow). The command will try to find the Application first, if not found, it will try to find WorkflowRun. You can also specify the resource type by using --type flag.
 
 ## Managing Extension
 
@@ -51,6 +53,7 @@ You can also specify a remote url for app:
 * [vela registry](vela_registry)	 - Manage Registry of X-Definitions for extension.
 * [vela provider](vela_provider)	 - Authenticate Terraform Cloud Providers by managing Terraform Controller Providers with its credential secret
 * [vela component](vela_component)	 - List component types installed and discover more in registry.
+* [vela config-template](vela_config-template)	 - 
 * [vela trait](vela_trait)	 - List trait types installed and discover more in registry.
 
 ## Others

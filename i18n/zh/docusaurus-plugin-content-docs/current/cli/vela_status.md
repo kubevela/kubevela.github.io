@@ -40,7 +40,7 @@ vela status APP_NAME [flags]
 ```
       --cluster string         filter the endpoints or pods by cluster name
   -c, --component string       filter the endpoints or pods by component name
-  -d, --detail                 display the realtime details of application resources, must be used with --tree
+  -d, --detail                 display more details in the application like input/output data in context. Note that if you want to show the realtime details of application resources, please use it with --tree
       --detail-format string   the format for displaying details, must be used with --detail. Can be one of inline, wide, list, table, raw. (default "inline")
   -p, --endpoint               show all service endpoints of the application
   -e, --env string             specify environment name for application

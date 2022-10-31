@@ -24,6 +24,7 @@ vela workflow restart <application-name>
   -e, --env string         specify environment name for application
   -h, --help               help for restart
   -n, --namespace string   specify the Kubernetes namespace to use
+  -t, --type string        the type of the resource, support: [app, workflow]
 ```
 
 ### Options inherited from parent commands
