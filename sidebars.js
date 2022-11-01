@@ -178,9 +178,15 @@ module.exports = {
           type: 'category',
           label: 'Automated Observability',
           collapsed: true,
+          link: {
+            type: "doc",
+            id: 'platform-engineers/operations/observability'
+          },
           items: [
-            'platform-engineers/operations/observability',
-            'platform-engineers/operations/logging',
+            'platform-engineers/operations/o11y/metrics',
+            'platform-engineers/operations/o11y/logging',
+            'platform-engineers/operations/o11y/visualization',
+            'platform-engineers/operations/o11y/integration',
           ],
         },
         'end-user/components/more',

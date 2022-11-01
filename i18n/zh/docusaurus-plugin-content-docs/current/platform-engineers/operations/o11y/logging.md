@@ -1,5 +1,5 @@
 ---
-title: 应用日志可观测
+title: 日志
 ---
 
 应用日志对于发现和排查线上问题至关重要，KubeVela 提供了专门的日志收集插件，帮助用户快速地构建应用的日志可观测的能力。本文档将介绍如何对应用日志进行采集，并在 grafana 大盘中对日志进行查看和分析。
@@ -69,14 +69,14 @@ vela addon enable grafana
 ```
 
 :::caution
-即使你已经按照 [自动化可观测性文档](./observability) 的介绍启用过了 grafana 插件，仍需要重新启用一次 grafana 插件从而让 loki 插件的数据源注册到 grafana 中。
+即使你已经按照 [自动化可观测性文档](../observability) 的介绍启用过了 grafana 插件，仍需要重新启用一次 grafana 插件从而让 loki 插件的数据源注册到 grafana 中。
 :::
 
 ## Kubernetes 系统事件日志
 
 loki 插件开启后会在各个集群装中安装一个专门的组件，负责采集各个集群中的 Kubernetes 事件并转换成日志的形式存储在 loki 中。你还可以通过 grafana 插件中专门的 Kubernetes 事件分析大盘对系统的事件进行汇总分析。
 
-![event-log](../../resources/event-log.jpg)
+![event-log](../../../resources/event-log.jpg)
 
 <details>
     KubeVela Events dashboard 系统中各个集群的 Kubernetes 事件日志
@@ -137,7 +137,7 @@ spec:
 
 应用创建之后你可以在对应 grafana 应用大盘中找到该应用创建的 deployment 资源，从而点击跳转到 deployment 资源大盘，并在下面找到采集上来的日志数据。如下：
 
-![normal-log](../../resources/normal-log.jpg)
+![normal-log](../../../resources/normal-log.jpg)
 
 ### nginx 网关日志日志分析
 
@@ -165,7 +165,7 @@ spec:
 
 我们可以通过 grafana 中的应用大盘跳转到专门的 nginx 日志分析大盘。如下：
 
-![nginx-log](../../resources/nginx-log.jpg)
+![nginx-log](../../../resources/nginx-log.jpg)
 
 <details>
     KubeVela nginx application dashboard nginx 网关应用的访问日志分析大盘
@@ -213,7 +213,7 @@ spec:
 ```
 
 该例子中，除了将 nginx 输出的 `combinded` 日志转换成 json 格式，并为每条日志增加一个 `new_field` 的 json key ，json value 的值为 `new value`。具体 vector VRL 如何编写请参考[文档](https://vector.dev/docs/reference/vrl/)。
-如果你针对这种处理方式，专门了特殊的日志分析大盘，可以参考 [文档](./observability) 将其导入到 grafana 中。
+如果你针对这种处理方式，专门了特殊的日志分析大盘，可以参考 [文档](../observability) 将其导入到 grafana 中。
 
 ## 应用文件日志
 
