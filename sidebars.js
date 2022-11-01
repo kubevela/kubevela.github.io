@@ -159,13 +159,14 @@ module.exports = {
         'end-user/workflow/component-dependency-parameter',
         {
           type: 'category',
-          label: 'Declarative Workflow',
+          label: 'Application Workflow',
           collapsed: true,
           link: {
             type: "doc",
             id: 'end-user/workflow/overview',
           },
           items: [
+            'end-user/workflow/operations',
             'end-user/workflow/suspend',
             'end-user/workflow/step-group',
             'end-user/workflow/dependency',
