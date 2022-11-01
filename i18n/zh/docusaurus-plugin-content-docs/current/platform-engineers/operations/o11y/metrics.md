@@ -1,5 +1,5 @@
 ---
-title: Metrics
+title: 指标
 ---
 
 ## Customized Prometheus Installation
