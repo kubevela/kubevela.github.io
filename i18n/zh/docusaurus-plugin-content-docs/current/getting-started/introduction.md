@@ -7,7 +7,7 @@ slug: /
 
 KubeVela 是一个开箱即用的现代化应用交付与管理平台，它使得应用在面向混合云环境中的交付更简单、快捷。使用 KubeVela 的软件开发团队，可以按需使用云原生能力构建应用，随着团队规模的发展、业务场景的变化扩展其功能，一次构建应用，随处运行。
 
-![](../resources/what-is-kubevela.png)
+![](../resources/what-is-kubevela.jpg)
 
 
 ## 为什么要用 KubeVela？
