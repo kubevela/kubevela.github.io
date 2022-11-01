@@ -1,4 +1,6 @@
-# Addon terraform-ec
+---
+title: Terraform-ec
+---
 
 This addon contains Terraform provider for Elastic Cloud.
 

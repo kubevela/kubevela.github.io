@@ -1,16 +1,19 @@
-
-# Mysql Exporter
+---
+title: Mysql Exporter
+---
 
 Prometheus exporter for MySQL server metrics.
 
 Supported versions:
 
-MySQL >= 5.6.
-MariaDB >= 10.3
+- MySQL >= 5.6
+- MariaDB >= 10.3
 
-> NOTE: Not all collection methods are supported on MySQL/MariaDB < 5.6
+:::note
+Not all collection methods are supported on MySQL/MariaDB < 5.6
+:::
 
-## Use case example
+## Usecases
 
 * Work as a trait.
 
@@ -54,7 +57,7 @@ spec:
 
 * Work as a component.
 
-> This mode also is suitable the mysql server is not managed by KubeVela.
+> This mode also is suitable to the mysql serve that not managed by KubeVela.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
