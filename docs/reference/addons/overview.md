@@ -22,6 +22,15 @@ There's an community addon registry (https://addons.kubevela.net) maintained by 
 * [dex](./dex) Provide [dex](https://github.com/dexidp/dex) login for VelaUX.
 * [Kruise Rollout](./kruise-rollout): [OpenKruise rollout](https://github.com/openkruise/rollouts) supports canary rollout for native deployment, stateful-set and OpenKruise [cloneset](https://openkruise.io/docs/user-manuals/cloneset/).
 * [ingress-nginx](./nginx-ingress-controller): An Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer.
-* [ChartMuseum](./chartmuseum): an open-source and easy to deploy Helm Chart Repository server.
-
+* [ChartMuseum](./chartmuseum): An open-source and easy to deploy Helm Chart Repository server.
+* [trivy-operator](./trivy-operator): Provides a vulnerability scanner that continuously scans containers deployed in a Kubernetes cluster.
+* [prometheus-server](../../platform-engineers/operations/observability): Collects metrics from configured targets at given intervals, evaluates rule expressions, displays the results, and can trigger alerts if some condition is observed to be true.
+* [node-exporter](../../platform-engineers/operations/observability): Prometheus exporter for hardware and OS metrics exposed by *NIX kernels, written in Go with pluggable metric collectors.
+* [mysql-exporter](./mysql-exporter): Prometheus exporter for MySQL server metrics.
+* [grafana](../../platform-engineers/operations/observability): Grafana is an open source, feature rich metrics dashboard and graph editor for Graphite, Elasticsearch, OpenTSDB, Prometheus and InfluxDB.
+* [loki](../../platform-engineers/operations/o11y/logging): A log aggregation system designed to store and query logs from all your applications and infrastructure.
+* [kube-state-metrics](../../platform-engineers/operations/observability): A simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
+* [netlify](./netlify): Netlify is a SaaS platform that can serve website especially for frontend service, it provides free allowances that was pretty cool to be used for demo and test.
+* [cloudshell](../../tutorials/cloud-shell): Set up a web terminal and cloud shell intended for a kubernetes-native environment.
+* [terraform-ec](./terraform-ec) Terraform provider addon for Elastic Cloud.
 **If you want to make your own addon please refer to [doc](../../platform-engineers/addon/intro.md).**
