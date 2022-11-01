@@ -124,18 +124,28 @@ Configure the `stdout-logs` trait in the component, as follows:
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: app-collect-stdout
+  name: app-stdout-log
   namespace: default
 spec:
   components:
-    - name: flog
-      type: webservice
+    - type: webservice
+      name: comp-stdout-log
       properties:
-        cmd:
-          - flog
-        image: mingrammer/flog
+        image: busybox
       traits:
-      - type: stdout-logs
+        - type: command
+          properties:
+            command:
+              - sh
+              - -c
+              - |
+                while :
+                do
+                  now=$(date +"%T")
+                  echo "stdout: $now"
+                  sleep 10
+                done
+        - type: stdout-logs
 ```
 
 After the application is created, you can find the deployment resource created by the application in the application dashboard of grafana, click `Detail` button to jump to the deployment resource dashboard, and find the log data below. as follows:
@@ -217,37 +227,40 @@ spec:
 
 In this example, we transform nginx `combinded` format logs to json format, and adding a `new_field` json key to each log, the json value is `new value`. Please refer to [document](https://vector.dev/docs/reference/vrl/) for how to write vector VRL.
 
-If you have a special log analysis dashboard for this processing method, you can refer to [document](../observability) to import it into grafana.
+If you have a special log analysis dashboard for this processing method, you can refer to [document](./visualization#dashboard-customization) to import it into grafana.
 
 ## Collecting file log
 
-The loki addon also support to collect file logs of containers. It doesn't matter with which mode you're enabling the loki addon, it work for all modes. Use the trait as follows:
+The loki addon also support to collect file logs of containers. It doesn't matter with which mode you're enabling the loki addon, it works for all modes. Use the trait as follows:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: app-vector
+  name: app-file
   namespace: default
 spec:
   components:
-    - name: my-biz
-      type: webservice
+    - type: webservice
+      name: file-log-comp
       properties:
-        cmd:
-          - flog
-          - -t
-          - log
-          - -o
-          - /data/daily.log
-          - -d
-          - 10s
-          - -w
-        image: mingrammer/flog
+        image: busybox
       traits:
-        - properties:
-            path: "/data/daily.log"
-          type: file-logs
+        - type: command
+          properties:
+            command:
+              - sh
+              - -c
+              - |
+                while :
+                do
+                  now=$(date +"%T")
+                  echo "file: $now" >> /root/verbose.log
+                  sleep 10
+                done
+        - type: file-logs
+          properties:
+            path: /root/verbose.log
 ```
 
 In the example, we let business log of the `my-biz` component write to the `/data/daily.log` path in the container. After the application is created, you can view the corresponding file log results through the `deployment` dashboard.
