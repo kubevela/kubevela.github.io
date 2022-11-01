@@ -20,7 +20,7 @@ title:  核心概念
 
 这种基于模板的工作流使得平台团队能够在一系列的 Kubernetes CRD 之上，引导用户遵守他们构建的最佳实践和 部署经验，并且可以很自然地为业务用户提供 PaaS 级别的体验（比如：“以应用为中心”，“高层次的抽象”，“自助式运维操作”等等）。
 
-![alt](resources/what-is-kubevela.png)
+![alt](resources/what-is-kubevela.jpg)
 
 下面开始介绍 KubeVela 的核心概念
 
