@@ -69,12 +69,15 @@ You will see several pre-installed dashboards and use them to view your system a
 
 ![kubevela-application-dashboard](../../resources/kubevela-application-dashboard.jpg)
 
-:::tip
+:::caution
 **Resource**: The observability suite includes several addons which requires some computation resources to work properly. The recommended installation resources for you cluster are 2 cores + 4 Gi memory.
 
 **Version**: We recommend you to use KubeVela (>= v1.6.0) to use the observability addons. For version v1.5.0, logging is not supported.
 :::
 
+:::tip
+**Addon Suite**: If you want to enable these addons in one command, you can use [WorkflowRun](https://github.com/kubevela/workflow) to orchestrate the install process. It allows you to manage the addon enable process as code and make it reusable across different systems.
+:::
 
 ## Multi-cluster Installation
 
