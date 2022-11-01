@@ -53,11 +53,6 @@ vela workflow terminate <name>
 vela workflow restart my-app
 ```
 
-:::caution
-我们不推荐你重新运行已经执行完毕的工作流，因为这意味可能会在运行的过程引入新的风险。
-如果你还是希望重新运行已经执行完毕的工作流，`vela workflow restart` 会使用 [Publish Version](./../version-control) 的方式为应用发布新版本来重新运行工作流。
-:::
-
 ## 查看工作流日志
 
 如果你想查看工作流的日志，你可以使用 `vela workflow logs` 命令来查看工作流的日志。

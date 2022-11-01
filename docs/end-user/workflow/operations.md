@@ -53,11 +53,6 @@ You can use `vela workflow restart` to restart an executing workflow.
 vela workflow restart my-app
 ```
 
-:::caution
-We do not recommend that you re-run a workflow that has already been completed, as this means that new risks may be introduced in the running process.
-If you still want to re-run a completed workflow, `vela workflow restart` will use [Publish Version](./../version-control) to publish a new version of the application to re-run the workflow.
-:::
-
 ## Check the logs of the workflow
 
 You can use `vela workflow logs` to check the logs of the workflow.
