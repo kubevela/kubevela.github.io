@@ -81,3 +81,4 @@ vela workflow debug <name>
 
 :::tip
 Please checkout the [Debug doc](../../platform-engineers/debug/debug#applications-with-workflow) for more examples.
+:::
