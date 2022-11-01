@@ -173,32 +173,6 @@ Services:
 
 As you can see, the workflow has continued to execute.
 
-### Terminate Manually
-
-If you want to terminate a workflow while it is suspended, you can use the `vela workflow terminate` command to terminate the workflow.
-
-* Terminate the application workflow
-
-```bash
-vela workflow terminate my-app
-```
-
-:::tip
-Different from suspend, the terminated application workflow can't be resumed, you can only restart the workflow. This means restart the workflow will execute the workflow steps from scratch while resume workflow only continue the unfinished steps.
-:::
-
-* Restart the application workflow
-
-```bash
-vela workflow restart my-app
-```
-
-:::caution
-Once application is terminated, KubeVela controller won't reconcile the application resources. It can also be used in some cases when you want to manually operate the underlying resources, please caution the configuration drift.
-:::
-
-Once application come into `running` status, it can't be terminated or restarted. 
-
 ### Resume the Workflow Automatically
 
 If you want the workflow to be continued automatically after a period of time has passed. Then, you can add a `duration` parameter to the `suspend` step. When the `duration` time elapses, the workflow will automatically continue execution.

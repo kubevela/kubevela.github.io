@@ -33,17 +33,19 @@ If you do not explicitly declare the execution mode, by default steps are execut
 
 ## State of Application and Workflow
 
-|    Application     |  Workflow  |                                               Description                                               |
-| :----------------: | :--------: | :-----------------------------------------------------------------------------------------------------: |
-|  runningWorkflow   | executing  |            When the workflow is executing, the status of the application is runningWorkflow             |
-| workflowSuspending | suspending |           When the workflow is suspended, the status of the application is workflowSuspending           |
-| workflowTerminated | terminated | When a step in the workflow fails or is terminated, the status of the application is workflowTerminated |
-|      running       | succeeded  |   When all steps in the workflow are executed successfully, the status of the application is running    |
+|    Application     |  Workflow  |                                               Description                                                        |
+| :----------------: | :--------: | :--------------------------------------------------------------------------------------------------------------: |
+|  runningWorkflow   | executing  |            When the workflow is executing, the status of the application is runningWorkflow                      |
+| workflowSuspending | suspending |           When the workflow is suspended, the status of the application is workflowSuspending                    |
+| workflowTerminated | terminated |           When the workflow is terminated, the status of the application is workflowTerminated                   |
+| workflowFailed     | failed     | When a step in the workflow fails and the workflow is completed, the status of the application is workflowFailed |
+|      running       | succeeded  |   When all steps in the workflow are executed successfully, the status of the application is running             |
 
 ## Core features
 
 Workflow has powerful process control capabilities, including:
 
+- View [Workflow Operations](./operations) to learn how to operate the workflow.
 - View [Suspend and Resume Workflow](./suspend) to learn how to suspend and resume a workflow.
 - View [Sub Steps](./step-group) to learn how to use sub-steps in the workflow.
 - View [Dependency](./dependency) to learn how to specify dependencies for workflow steps.
