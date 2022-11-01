@@ -16,7 +16,7 @@ title: 总览
 
 在工作流中，所有的步骤将顺序执行，下一个步骤将在上一个步骤成功后执行。如果一个步骤的类型为步骤组，那么它可以包含一系列子步骤，在执行这个步骤组时，所有子步骤都会一起执行。
 
-> 在 KubeVela 未来的版本（1.5+）中，你可以显示地指定步骤的执行方式来控制并发或者单步执行，如：
+> 在 KubeVela v1.5+ 中，你可以显示地指定步骤的执行方式来控制并发或者单步执行，如：
 > ```yaml
 > workflow:
 >   mode:
@@ -33,13 +33,15 @@ title: 总览
 | :-------: | :----: | :-----------------------------------: |
 |    runningWorkflow    | executing |      当工作流正在执行时，应用的状态为 runningWorkflow      |
 |    workflowSuspending    | suspending |      当工作流暂停时，应用的状态为 workflowSuspending     |
-|    workflowTerminated    | terminated |      当工作流中有步骤失败或者被终止时，应用的状态为 workflowTerminated     |
+|    workflowTerminated    | terminated |      当工作流被终止时，应用的状态为 workflowTerminated     |
+|    workflowFailed    | failed |      当工作流执行完成，且有步骤失败时，应用的状态为 workflowFailed     |
 |    running    | succeeded |      当工作流中所有步骤都成功执行后，应用的状态为  running     |
 
 ## 核心功能
 
 工作流拥有丰富的流程控制能力，包括：
 
+- 查看 [操作工作流](./operations)，了解如何在 CLI 命令行中操作工作流。
 - 查看 [暂停和继续工作流](./suspend)，了解如何在工作流中使用暂停步骤完成人工审核，自动继续等功能。
 - 查看 [子步骤](./step-group)，了解如何在工作流中使用子步骤完成一组步骤的执行。
 - 查看 [依赖关系](./dependency)，了解如何指定工作流步骤间的依赖关系。
