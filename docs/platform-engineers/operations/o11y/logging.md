@@ -227,7 +227,7 @@ spec:
 
 In this example, we transform nginx `combinded` format logs to json format, and adding a `new_field` json key to each log, the json value is `new value`. Please refer to [document](https://vector.dev/docs/reference/vrl/) for how to write vector VRL.
 
-If you have a special log analysis dashboard for this processing method, you can refer to [document](../observability) to import it into grafana.
+If you have a special log analysis dashboard for this processing method, you can refer to [document](./visualization#dashboard-customization) to import it into grafana.
 
 ## Collecting file log
 
