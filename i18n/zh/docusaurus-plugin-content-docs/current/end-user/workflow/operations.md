@@ -79,5 +79,5 @@ vela workflow debug <name>
 ```
 
 :::tip
-请查看 [Debug 文档](../../platform-engineers/debug#使用工作流的应用) 来获得更多例子。
+请查看 [Debug 文档](../../platform-engineers/debug/debug#使用工作流的应用) 来获得更多例子。
 :::
