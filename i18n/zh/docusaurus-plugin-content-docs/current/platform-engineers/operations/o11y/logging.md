@@ -121,18 +121,28 @@ loki 插件开启后会在各个集群装中安装一个专门的组件，负责
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: app-collect-stdout
+  name: app-stdout-log
   namespace: default
 spec:
   components:
-    - name: flog
-      type: webservice
+    - type: webservice
+      name: comp-stdout-log
       properties:
-        cmd:
-          - flog
-        image: mingrammer/flog
+        image: busybox
       traits:
-      - type: stdout-logs
+        - type: command
+          properties:
+            command:
+              - sh
+              - -c
+              - |
+                while :
+                do
+                  now=$(date +"%T")
+                  echo "stdout: $now"
+                  sleep 10
+                done
+        - type: stdout-logs
 ```
 
 应用创建之后你可以在对应 grafana 应用大盘中找到该应用创建的 deployment 资源，从而点击跳转到 deployment 资源大盘，并在下面找到采集上来的日志数据。如下：
@@ -213,7 +223,7 @@ spec:
 ```
 
 该例子中，除了将 nginx 输出的 `combinded` 日志转换成 json 格式，并为每条日志增加一个 `new_field` 的 json key ，json value 的值为 `new value`。具体 vector VRL 如何编写请参考[文档](https://vector.dev/docs/reference/vrl/)。
-如果你针对这种处理方式，专门了特殊的日志分析大盘，可以参考 [文档](../observability) 将其导入到 grafana 中。
+如果你针对这种处理方式，制作了专门的日志分析大盘，可以参考 [文档](../observability) 将其导入到 grafana 中。
 
 ## 应用文件日志
 
@@ -223,27 +233,30 @@ spec:
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: app-vector
+  name: app-file
   namespace: default
 spec:
   components:
-    - name: my-biz
-      type: webservice
+    - type: webservice
+      name: file-log-comp
       properties:
-        cmd:
-          - flog
-          - -t
-          - log
-          - -o
-          - /data/daily.log
-          - -d
-          - 10s
-          - -w
-        image: mingrammer/flog
+        image: busybox
       traits:
-        - properties:
-            path: "/data/daily.log"
-          type: file-logs
+        - type: command
+          properties:
+            command:
+              - sh
+              - -c
+              - |
+                while :
+                do
+                  now=$(date +"%T")
+                  echo "file: $now" >> /root/verbose.log
+                  sleep 10
+                done
+        - type: file-logs
+          properties:
+            path: /root/verbose.log
 ```
 
 在上面的例子中，我们把 `my-biz` 组件的业务日志输出到了容器内的 `/data/daily.log` 路径下。应用创建之后，你就可以通过应用下的 `deployment` 大盘查看到对应的文件日志结果。
