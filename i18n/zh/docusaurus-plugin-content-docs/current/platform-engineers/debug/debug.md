@@ -1,5 +1,6 @@
 ---
 title:  在环境中调试
+slug: /platform-engineers/debug/debug
 ---
 
 > 该功能需要安装至少 KubeVela v1.4 及以上版本.

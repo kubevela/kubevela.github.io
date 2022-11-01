@@ -1,5 +1,6 @@
 ---
 title:  Debug in the environment
+slug: /platform-engineers/debug/debug
 ---
 
 > This feature is available in KubeVela v1.4.
