@@ -154,7 +154,7 @@ After the application is created, you can find the deployment resource created b
 
 ### nginx access log analysis
 
-If your application is a nginx gateway, the `stdout-logs` trait provide the capability to parse nginx [combined](https://docs.nginx.com/nginx/admin-guide/monitoring/logging/) format log to json format as follows:
+If your application is an nginx gateway, the `stdout-logs` trait provide the capability to parse nginx [combined](https://docs.nginx.com/nginx/admin-guide/monitoring/logging/) format log to json format as follows:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
