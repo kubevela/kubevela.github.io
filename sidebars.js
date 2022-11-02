@@ -1,4 +1,4 @@
-const { Component } = require('react');
+const {Component} = require('react');
 
 module.exports = {
   docs: [
@@ -190,6 +190,7 @@ module.exports = {
             'platform-engineers/operations/o11y/integration',
           ],
         },
+        'case-studies/deploy-to-edge',
         'end-user/components/more',
       ],
     },
