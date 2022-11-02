@@ -125,6 +125,24 @@
         },
         {
           "type": "category",
+          "label": "Application Workflow",
+          "collapsed": true,
+          "link": {
+            "type": "doc",
+            "id": "end-user/workflow/overview"
+          },
+          "items": [
+            "end-user/workflow/operations",
+            "end-user/workflow/suspend",
+            "end-user/workflow/step-group",
+            "end-user/workflow/dependency",
+            "end-user/workflow/inputs-outputs",
+            "end-user/workflow/if-condition",
+            "end-user/workflow/timeout"
+          ]
+        },
+        {
+          "type": "category",
           "label": "GitOps",
           "collapsed": true,
           "link": {
@@ -133,13 +151,6 @@
           },
           "items": [
             "end-user/gitops/fluxcd"
-          ]
-        },
-        {
-          "CD Policies": [
-            "end-user/policies/shared-resource",
-            "end-user/policies/apply-once",
-            "end-user/policies/gc"
           ]
         },
         {
@@ -157,6 +168,8 @@
         },
         {
           "Day-2 Operations": [
+            "end-user/workflow/component-dependency-parameter",
+            "end-user/version-control",
             "tutorials/dry-run",
             "tutorials/access-application",
             "tutorials/debug-app",
@@ -164,24 +177,11 @@
             "tutorials/vela-top"
           ]
         },
-        "end-user/version-control",
-        "end-user/workflow/component-dependency-parameter",
         {
-          "type": "category",
-          "label": "Application Workflow",
-          "collapsed": true,
-          "link": {
-            "type": "doc",
-            "id": "end-user/workflow/overview"
-          },
-          "items": [
-            "end-user/workflow/operations",
-            "end-user/workflow/suspend",
-            "end-user/workflow/step-group",
-            "end-user/workflow/dependency",
-            "end-user/workflow/inputs-outputs",
-            "end-user/workflow/if-condition",
-            "end-user/workflow/timeout"
+          "Application Policies": [
+            "end-user/policies/shared-resource",
+            "end-user/policies/apply-once",
+            "end-user/policies/gc"
           ]
         },
         {

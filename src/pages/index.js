@@ -5,9 +5,10 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import ThemedImage from '@theme/ThemedImage';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import GitHubButton from 'react-github-btn';
-import FeatureList from '../components/FeatureList'
-import Button from '../components/button'
-import WhatIs from "../components/WhatIs";
+import FeatureList from '../components/FeatureList';
+import Button from '../components/button';
+import WhatIs from '../components/WhatIs';
+import Integration from '../components/Integration';
 
 export default function Home() {
   const context = useDocusaurusContext();
@@ -33,16 +34,20 @@ export default function Home() {
             data-icon="octicon-star"
             data-size="large"
             data-show-count="true"
-            aria-label="Star facebook/metro on GitHub">
+            aria-label="Star facebook/metro on GitHub"
+          >
             Star
           </GitHubButton>
           <p className="hero__subtitle">
             <Translate>Make shipping applications more enjoyable.</Translate>
           </p>
-          <div
-            className="heroButtons">
-            <Button href={useBaseUrl('docs/quick-start')}><Translate>Get Started</Translate></Button>
-            <Button href={useBaseUrl('docs/')}><Translate>Learn More</Translate></Button>
+          <div className="heroButtons">
+            <Button href={useBaseUrl('docs/quick-start')}>
+              <Translate>Get Started</Translate>
+            </Button>
+            <Button href={useBaseUrl('docs/')}>
+              <Translate>Learn More</Translate>
+            </Button>
           </div>
         </div>
       </header>
@@ -51,10 +56,16 @@ export default function Home() {
 
       <FeatureList />
 
+      <Integration />
+
       <div className="hero">
         <div className="container text--center">
           <h3 className="hero__subtitle">
-            <Translate>KubeVela is a</Translate> <a href="https://cncf.io/">CNCF (Cloud Native Computing Foundation)</a> <Translate>project.</Translate>
+            <Translate>KubeVela is a</Translate>{' '}
+            <a href="https://cncf.io/">
+              CNCF (Cloud Native Computing Foundation)
+            </a>{' '}
+            <Translate>project.</Translate>
           </h3>
           <div className="cncf-Logo" />
         </div>
