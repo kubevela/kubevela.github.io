@@ -218,6 +218,9 @@
   "Natively supports multi-cluster/hybrid-cloud scenarios such as progressive rollout across test/staging/production environments, automatic canary, blue-green and continuous verification, rich placement strategy across clusters and clouds, along with automated cloud environments provision.": {
     "message": "原生支持丰富的多集群/混合环境持续交付策略，包括金丝雀、蓝绿、多环境差异化配置等，同样也支持跨环境交付。这些交付策略为你的分布式交付流程提供了充足的效率和安全保证。KubeVela 提供的中心化管控能力也减轻了到每一个集群（云）去排查问题的负担，针对不同的平台提供统一的体验，让你享受自动化交付的便利。"
   },
+  "Integrated with all your tools": {
+    "message": "与云原生工具有效集成"
+  },
   "KubeVela is a": {
     "message": "KubeVela 是一个"
   },
