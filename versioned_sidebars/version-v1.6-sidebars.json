@@ -193,9 +193,11 @@
             "id": "platform-engineers/operations/observability"
           },
           "items": [
+            "platform-engineers/operations/o11y/installation",
+            "platform-engineers/operations/o11y/out-of-the-box",
             "platform-engineers/operations/o11y/metrics",
             "platform-engineers/operations/o11y/logging",
-            "platform-engineers/operations/o11y/visualization",
+            "platform-engineers/operations/o11y/dashboard",
             "platform-engineers/operations/o11y/integration"
           ]
         },
