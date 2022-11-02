@@ -94,10 +94,6 @@ For more details, you can refer to [vela-prism](https://github.com/kubevela/pris
 
 It is also possible to make integrations through KubeVela's configuration management system, no matter you are using CLI or VelaUX.
 
-### Prometheus
-
-You can read the Configuration Management documentation for more details.
-
 ## Integrate Other Tools or Systems
 
 There are a wide range of community tools or eco-systems that users can leverage for building their observability system, such as prometheus-operator or DataDog. By far, KubeVela does not have existing best practices for those integration. We may integrate with those popular projects through KubeVela addons in the future. We are also welcome to community contributions for broader explorations and more connections.

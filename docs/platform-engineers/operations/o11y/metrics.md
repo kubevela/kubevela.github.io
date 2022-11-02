@@ -2,6 +2,47 @@
 title: Metrics
 ---
 
+## Exposing Metrics in your Application
+
+In your application, if you want to expose the metrics of your component (like webservice) to Prometheus, you just need to add the `prometheus-scrape` trait as follows.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: my-app
+spec:
+  components:
+    - name: my-app
+      type: webservice
+      properties:
+        image: somefive/prometheus-client-example:new
+      traits:
+        - type: prometheus-scrape
+```
+
+You can also explicitly specify which port and which path to expose metrics.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: my-app
+spec:
+  components:
+    - name: my-app
+      type: webservice
+      properties:
+        image: somefive/prometheus-client-example:new
+      traits:
+        - type: prometheus-scrape
+          properties:
+            port: 8080
+            path: /metrics
+```
+
+This will let your application be scrapable by the prometheus server. If you want to see those metrics on Grafana, you need to create Grafana dashboard further. Go to [Dashboard](./dashboard) for learning the following steps.
+
 ## Customized Prometheus Installation
 
 If you want to make customization to your prometheus-server installation, you can put your configuration into an individual ConfigMap, like `my-prom` in namespace o11y-system. To distribute your custom config to all clusters, you can also use a KubeVela Application to do the job.
@@ -78,45 +119,3 @@ vela addon enable prometheus-server storage=1G
 ```
 
 This will create PersistentVolumeClaims and let the addon use the provided storage. The storage will not be automatically recycled even if the addon is disabled. You need to clean up the storage manually.
-
-
-## Exposing Metrics in your Application
-
-In your application, if you want to expose the metrics of your component (like webservice) to Prometheus, you just need to add the `prometheus-scrape` trait as follows.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: my-app
-spec:
-  components:
-    - name: my-app
-      type: webservice
-      properties:
-        image: somefive/prometheus-client-example:new
-      traits:
-        - type: prometheus-scrape
-```
-
-You can also explicitly specify which port and which path to expose metrics.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: my-app
-spec:
-  components:
-    - name: my-app
-      type: webservice
-      properties:
-        image: somefive/prometheus-client-example:new
-      traits:
-        - type: prometheus-scrape
-          properties:
-            port: 8080
-            path: /metrics
-```
-
-This will let your application be scrapable by the prometheus server. If you want to see those metrics on Grafana, you need to create Grafana dashboard further. Go to [Visualization](./visualization#dashboard-customization) for learning the following steps.
