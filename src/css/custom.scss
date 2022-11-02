@@ -326,3 +326,44 @@ article {
 iframe {
   max-width: 100%;
 }
+
+.section {
+  .title {
+    width: 100%;
+    text-align: center;
+    margin: 32px 16px;
+    font-size: 2rem;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+}
+
+.rotating-tools-wrapper {
+  width: 90%;
+  
+  .span3 {
+    width: calc(3 / 24 * 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  @media screen and (max-width: 768px)  {
+    .span3 {
+      width: calc(1 / 4 * 100%);
+    }
+  }
+  .tool-circle-item {
+    display: flex;
+    width: 5rem;
+    height: 5rem;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    border-radius: 1000px;
+    box-shadow: 2px 2px 0 3px #e7f2fe;
+    img {
+      width: 65%;
+    }
+  }
+}
