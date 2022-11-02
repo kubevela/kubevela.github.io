@@ -6,33 +6,36 @@ module.exports = {
       type: 'category',
       label: 'Getting Started',
       collapsed: false,
-      items: [{
-        type: "doc",
-        id: 'getting-started/introduction'
-      }, {
-        type: "category",
-        collapsed: true,
-        label: "Installation",
-        link: {
-          type: "doc",
-          id: 'install'
+      items: [
+        {
+          type: 'doc',
+          id: 'getting-started/introduction',
         },
-        items: [
-          {
-            type: "doc",
-            label: "Standalone",
-            id: 'installation/standalone'
+        {
+          type: 'category',
+          collapsed: true,
+          label: 'Installation',
+          link: {
+            type: 'doc',
+            id: 'install',
           },
-          {
-            type: "doc",
-            label: "Kubernetes",
-            id: 'installation/kubernetes'
-          }
-        ]
-      }, {
-        type: "doc",
-        id: 'quick-start'
-      }
+          items: [
+            {
+              type: 'doc',
+              label: 'Standalone',
+              id: 'installation/standalone',
+            },
+            {
+              type: 'doc',
+              label: 'Kubernetes',
+              id: 'installation/kubernetes',
+            },
+          ],
+        },
+        {
+          type: 'doc',
+          id: 'quick-start',
+        },
       ],
     },
     {
@@ -78,7 +81,7 @@ module.exports = {
               label: 'Terraform',
               collapsed: true,
               link: {
-                type: "doc",
+                type: 'doc',
                 id: 'end-user/components/cloud-services/cloud-resource-scenarios',
               },
               items: [
@@ -111,58 +114,14 @@ module.exports = {
           type: 'category',
           label: 'Multi Environment Delivery',
           collapsed: true,
-          items: [
-            'case-studies/initialize-env',
-            'tutorials/multi-env'
-          ],
+          items: ['case-studies/initialize-env', 'tutorials/multi-env'],
         },
-        {
-          type: 'category',
-          label: 'GitOps',
-          collapsed: true,
-          link: {
-            type: "doc",
-            id: 'case-studies/gitops',
-          },
-          items: ['end-user/gitops/fluxcd'],
-        },
-        {
-          'CD Policies': [
-            'end-user/policies/shared-resource',
-            'end-user/policies/apply-once',
-            'end-user/policies/gc',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'CI Integration',
-          collapsed: true,
-          link: {
-            type: "doc",
-            id: 'how-to/dashboard/trigger/overview',
-          },
-          items: [
-            'tutorials/jenkins',
-            'tutorials/trigger',
-          ],
-        },
-        {
-          'Day-2 Operations': [
-            'tutorials/dry-run',
-            'tutorials/access-application',
-            'tutorials/debug-app',
-            'tutorials/cloud-shell',
-            'tutorials/vela-top',
-          ],
-        },
-        'end-user/version-control',
-        'end-user/workflow/component-dependency-parameter',
         {
           type: 'category',
           label: 'Application Workflow',
           collapsed: true,
           link: {
-            type: "doc",
+            type: 'doc',
             id: 'end-user/workflow/overview',
           },
           items: [
@@ -177,11 +136,49 @@ module.exports = {
         },
         {
           type: 'category',
+          label: 'GitOps',
+          collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'case-studies/gitops',
+          },
+          items: ['end-user/gitops/fluxcd'],
+        },
+        {
+          type: 'category',
+          label: 'CI Integration',
+          collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'how-to/dashboard/trigger/overview',
+          },
+          items: ['tutorials/jenkins', 'tutorials/trigger'],
+        },
+        {
+          'Day-2 Operations': [
+            'end-user/workflow/component-dependency-parameter',
+            'end-user/version-control',
+            'tutorials/dry-run',
+            'tutorials/access-application',
+            'tutorials/debug-app',
+            'tutorials/cloud-shell',
+            'tutorials/vela-top',
+          ],
+        },
+        {
+          'Application Policies': [
+            'end-user/policies/shared-resource',
+            'end-user/policies/apply-once',
+            'end-user/policies/gc',
+          ],
+        },
+        {
+          type: 'category',
           label: 'Automated Observability',
           collapsed: true,
           link: {
-            type: "doc",
-            id: 'platform-engineers/operations/observability'
+            type: 'doc',
+            id: 'platform-engineers/operations/observability',
           },
           items: [
             'platform-engineers/operations/o11y/metrics',
@@ -212,13 +209,10 @@ module.exports = {
           label: 'User Management',
           collapsed: true,
           link: {
-            type: "doc",
+            type: 'doc',
             id: 'how-to/dashboard/user/user',
           },
-          items: [
-            'tutorials/sso',
-            'how-to/dashboard/config/dex-connectors',
-          ],
+          items: ['tutorials/sso', 'how-to/dashboard/config/dex-connectors'],
         },
         {
           'Registry Integration': [
@@ -257,7 +251,7 @@ module.exports = {
       label: 'Developer Guide',
       collapsed: true,
       link: {
-        type: "doc",
+        type: 'doc',
         id: 'contributor/overview',
       },
       items: [
@@ -266,7 +260,7 @@ module.exports = {
           label: 'Addons',
           collapsed: true,
           link: {
-            type: "doc",
+            type: 'doc',
             id: 'platform-engineers/addon/intro',
           },
           items: [
@@ -338,8 +332,8 @@ module.exports = {
           type: 'category',
           label: 'Community Verified Addons',
           link: {
-            type: "doc",
-            id: 'reference/addons/overview'
+            type: 'doc',
+            id: 'reference/addons/overview',
           },
           items: [
             'reference/addons/velaux',
