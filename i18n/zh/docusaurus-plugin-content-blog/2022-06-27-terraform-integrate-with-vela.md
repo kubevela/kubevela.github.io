@@ -155,8 +155,18 @@ vela addon enable terraform-alibaba
 * 添加授权信息
 
 ```bash
+vela config create terraform-alibaba-default -t terraform-alibaba ALICLOUD_ACCESS_KEY=<"your-accesskey-id"> ALICLOUD_SECRET_KEY="your-accesskey-secret" ALICLOUD_REGION=<your-region> 
+```
+
+:::warning
+
+如果是 1.6.0 之前的版本:
+
+```shell
 vela provider add terraform-alibaba --ALICLOUD_ACCESS_KEY <"your-accesskey-id"> --ALICLOUD_SECRET_KEY "your-accesskey-secret" --ALICLOUD_REGION <your-region> --name terraform-alibaba-default
 ```
+
+:::
 
 查看 [此文档](https://kubevela.net/docs/reference/addons/terraform) 以获取有关其他云的更多详细信息。
 

@@ -3,9 +3,10 @@ title: 云资源插件
 ---
 
 ## Terraform 插件
-  ```shell
-  vela addon enable terraform
-  ```
+
+```shell
+vela addon enable terraform
+```
 
 ## 启用 Terraform Provider 插件
 
@@ -25,7 +26,7 @@ terraform-ucloud         	KubeVela	Kubernetes Terraform Controller Provider for 
 要启用其中之一，请使用以下命令：
 
 ```shell
-$ vela addon enable terraform-xxx
+vela addon enable terraform-xxx
 ```
 
 您还可以通过命令 `vela addon` 卸载、升级、检查插件的状态。
@@ -34,7 +35,7 @@ $ vela addon enable terraform-xxx
 
 ### 介绍
 
-每个 Terraform provider 都可以通过以下命令进行云资源的授权。
+每个 Terraform Provider 都可以通过以下命令进行云资源的授权。
 
 ```shell
 $ vela provider add -h

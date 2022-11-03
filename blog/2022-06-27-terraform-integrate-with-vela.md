@@ -158,11 +158,22 @@ vela addon enable terraform
 vela addon enable terraform-alibaba
 ```
 
-* Add credentials as provider
+* Add credentials as a provider
 
+```bash
+vela config create terraform-alibaba-default -t terraform-alibaba ALICLOUD_ACCESS_KEY=<"your-accesskey-id"> ALICLOUD_SECRET_KEY="your-accesskey-secret" ALICLOUD_REGION=<your-region> 
 ```
+
+:::warning
+
+Before the 1.6.0 version:
+
+```shell
 vela provider add terraform-alibaba --ALICLOUD_ACCESS_KEY <"your-accesskey-id"> --ALICLOUD_SECRET_KEY "your-accesskey-secret" --ALICLOUD_REGION <your-region> --name terraform-alibaba-default
 ```
+
+:::
+
 
 Check [this doc](https://kubevela.net/docs/reference/addons/terraform) for more details about other clouds.
 
