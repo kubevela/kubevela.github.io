@@ -40,33 +40,12 @@ Then, enable Terraform provider addon for Elastic Cloud.
 vela addon enable terraform-ec
 ```
 
-You can also disable, upgrade, check status of an addon by `vela addon` command.
+You can also disable, upgrade, and check the status of an addon by `vela addon` command.
 
-After that, you can create credential for the provider. Find supported flags using following command:
-
-```shell
-$ vela provider add terraform-ec -h
-Authenticate Terraform Cloud Provider terraform-ec by creating a credential secret and a Terraform Controller Provider
-
-Usage:
-  vela provider add terraform-ec [flags]
-
-Examples:
-vela provider add terraform-ec
-
-Flags:
-      --EC_API_KEY string   Get EC_API_KEY per this guide https://registry.terraform.io/providers/elastic/ec/latest/docs
-  -h, --help                help for terraform-ec
-      --name string         The name of Terraform Provider for Elastic Cloud (default "ec")
-
-Global Flags:
-  -y, --yes   Assume yes for all user prompts
-```
-
-Now, you can authenticate the Terraform provider with `--EC_API_KEY`.
+After that, you can create credentials for the provider. Refer to the following command:
 
 ```shell
-vela provider add terraform-ec --EC_API_KEY=<your-ec-api-key>
+vela config create -t terraform-ec name=<Name> EC_API_KEY=<KEY>
 ```
 
 ## Find supported components

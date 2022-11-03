@@ -59,6 +59,18 @@ For different vendors, these parameters update accordingly. All cloud resources 
 
 ### Provision by Creating Application
 
+First, Prepare a available cloud provider. Let's list the exist configs, If exist you could ignore this step.
+
+```bash
+vela config list -t terraform-alibaba
+```
+
+If not exist, you can refer to this command to create a default provider:
+
+```bash
+vela config create -t terraform-alibaba name=default ALICLOUD_REGION=<Region> ALICLOUD_SECRET_KEY=<Secret> ALICLOUD_ACCESS_KEY=<AccessKey>
+```
+
 Use the following Application to provision an OSS bucket:
 
 ```yaml

@@ -53,7 +53,19 @@ For different vendors, these parameters update accordingly. All cloud resources 
 
 ### 部署云资源
 
-我们以 OSS bucket 为例展示如何部署云资源。
+首先，我们需要准备一个可用的提供商配置，通过下述命令可以查询是否存在，如果已有则忽略该步骤。
+
+```bash
+vela config list -t terraform-alibaba
+```
+
+如果不存在，可以参考下述命令创建一个默认的可以提供商配置，在这之前你需要获取云厂商的 Access Key 和 Secret Key。
+
+```bash
+vela config create -t terraform-alibaba name=default ALICLOUD_REGION=<Region> ALICLOUD_SECRET_KEY=<Secret> ALICLOUD_ACCESS_KEY=<AccessKey>
+```
+
+接下来，我们以 OSS bucket 为例展示如何部署云资源。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
