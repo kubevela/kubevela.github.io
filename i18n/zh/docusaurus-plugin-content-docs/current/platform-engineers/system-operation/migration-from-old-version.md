@@ -6,6 +6,38 @@ title: 从旧版本进行迁移
 
 KubeVela 的[发布周期](../../contributor/release-process)定为每隔 2-3 个月发布一个版本，我们将维护最近的 2 个版本。所以，我们强烈推荐你跟着社区的节奏一同升级，我们会严格遵循 [semver 版本](https://semver.org/)定义的兼容性规则。 
 
+## 从 v1.5.x 版本 到 v1.6.x 版本
+
+1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
+
+```
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+```
+
+2. 升级 kubevela chart
+
+```
+helm repo add kubevela https://charts.kubevela.net/core
+helm repo update
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.0 --wait
+```
+
+3. 下载并升级对应的CLI
+
+```
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.0
+```
+
+4. 升级 VelaUX 或其他插件
+
+```
+vela addon upgrade velaux --version 1.6.0
+```
+
 ## 从 v1.4.x 版本 到 v1.5.x 版本
 
 :::caution
