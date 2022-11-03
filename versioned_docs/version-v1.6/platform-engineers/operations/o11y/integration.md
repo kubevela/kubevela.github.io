@@ -1,5 +1,5 @@
 ---
-title: Integration
+title: Integration O11y Service
 ---
 
 Sometimes, you might already have Prometheus & Grafana instances. They might be built by other tools, or come from cloud providers. Follow the below guide to integrate with existing systems.
