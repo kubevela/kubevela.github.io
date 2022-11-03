@@ -1,16 +1,16 @@
 ---
-title: 组件复制
+title: 组件分裂
 ---
 
 ## 背景
 
 在 KubeVela 中，我们可以使用 `deploy` 工作流步骤和 `override`， `topology` 策略。但是例如[OpenYurt](https://openyurt.io)
 的项目中，有对集群具有更细粒度划分，例如"节点池"。需要将一些类似的资源下发到同一集群。这些资源称为replication。回到 OpenYurt
-的例子，它可以集成 KubeVela 并复制 K8s 资源，然后将它们下发到不同的节点池。
+的例子，它可以集成 KubeVela，并将分裂出的多个相似 K8s 资源下发到不同的节点池。
 
 ## 用途
 
-为了复制组件，我们添加了一个内置策略 `replication`。它只能与 `deploy` 工作流步骤一起使用。如果在 `deploy`
+为了将一个组件分裂为多个，我们添加了一个内置策略 `replication`。它只能与 `deploy` 工作流步骤一起使用。如果在 `deploy`
 工作流步骤中使用 `replication` 策略，则在渲染组件时将向上下文添加一个新字段 `context.replicaKey`
 。可以向下发一些资源到集群中，他们带有不同的 `replicaKey`。
 
@@ -200,16 +200,16 @@ local  ─── default─┬─ Service/hello-rep-beijing     updated   2022-1
 
 ## 注意事项
 
-在步骤中可以使用三种策略 `deploy`： `topology`、 `override` 和 `replication`。它们可以一起用于复制组件和将组件下发到不同的集群。下面是它们一起使用时的规则：
+在步骤中可以使用三种策略 `deploy`： `topology`、 `override` 和 `replication`。它们可以一起用于分裂组件和将组件下发到不同的集群。下面是它们一起使用时的规则：
 
 1. 策略的应用顺序为 `topology` -> `override` -> `replication`
    。更多详细信息，可以参阅[多集群应用](../../case-studies/multi-cluster)
    - `topology` 选择要下发集群。如果不使用，则默认情况下应用程序将资源部署到 Local 群集。
    - `override` 修改组件 Properties。如果不使用，则不会更改任何属性。
-   - `replication` 将一个组件复制为多个组件。
+   - `replication` 将一个组件分裂为多个组分裂
 
 :::note
 默认情况下，KubeVela 所在的控制集群被注册为本地集群。你可以像使用管控集群一样使用它，但是你无法 detach 或 modify 这个集群。
 :::
 
-2. `override` 并且 `replication` 可以一起使用。但 `override` 会影响所有复制的组件。`override` 的主要用意是修改不同群集中的同一个组件的属性。
+2. `override` 并且 `replication` 可以一起使用。但 `override` 会影响所有分裂的组件。`override` 的主要用意是修改不同群集中的同一个组件的属性。
