@@ -1,5 +1,5 @@
 ---
-title: Installation
+title: Enable O11y Addons
 ---
 
 :::tip

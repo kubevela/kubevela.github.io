@@ -1,5 +1,5 @@
 ---
-title: Metrics
+title: Metrics Collection
 ---
 
 ## Exposing Metrics in your Application

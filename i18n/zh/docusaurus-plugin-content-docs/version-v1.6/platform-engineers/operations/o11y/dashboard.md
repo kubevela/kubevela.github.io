@@ -1,5 +1,5 @@
 ---
-title: 监控大盘
+title: 自定义监控大盘
 ---
 
 在 KubeVela 中，借助 Kubernetes 原生的 Aggregated API Layer，KubeVela 用户可以比较轻易地在集群中操作修改 Grafana 上的监控大盘。

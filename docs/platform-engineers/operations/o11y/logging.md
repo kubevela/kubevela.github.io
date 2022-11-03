@@ -1,5 +1,5 @@
 ---
-title: Logging
+title: Log Collection
 ---
 
 The application logs are very important for users to find and locate problems especially in production environment.
