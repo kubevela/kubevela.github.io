@@ -145,7 +145,7 @@ func (i18n I18N) createTitle() {
 	var title string
 	switch i18n.Language {
 	case En:
-		title = "---\ntitle: Supported Cloud Resource list\n---\n\n"
+		title = "---\ntitle: Supported Cloud Resource List\n---\n\n"
 	case Zh:
 		title = "---\ntitle: 云资源列表\n---\n\n"
 	}
