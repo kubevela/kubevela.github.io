@@ -10,9 +10,10 @@ title: 分别配置实例和数据库
 ## 先决条件
 
 1. `terraform` 插件已经启用
-2. `terraform-alibaba` 插件已经启用，版本 >= 1.0.3 
-3. 已经使用 `vela provider add terraform-alibaba` 配置了证书
-任何问题，可以按照这个[指导](../../../reference/addons/terraform) 进行设置.
+2. `terraform-alibaba` 插件已经启用，版本 >= 1.0.3
+3. 已经使用 `vela config create -t terraform-alibaba` 配置了云厂商账号。
+
+如有疑问，可以按照这个[指导](../../../reference/addons/terraform) 进行设置。
 
 ## 步骤
 
