@@ -1,5 +1,5 @@
 ---
-title: Supported Cloud Resource list
+title: Supported Cloud Resource List
 ---
 
 | Orchestration Type |    Cloud Provider     |                                                    Cloud Resource                                                     |                                                                              Description                                                                              | Verified |
