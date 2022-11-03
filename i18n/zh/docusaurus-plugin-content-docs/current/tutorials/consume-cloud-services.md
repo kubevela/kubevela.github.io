@@ -62,7 +62,7 @@ vela config list -t terraform-alibaba
 如果不存在，可以参考下述命令创建一个默认的可以提供商配置，在这之前你需要获取云厂商的 Access Key 和 Secret Key。
 
 ```bash
-vela config create -t terraform-alibaba name=default ALICLOUD_REGION=<Region> ALICLOUD_SECRET_KEY=<Secret> ALICLOUD_ACCESS_KEY=<AccessKey>
+vela config create default -t terraform-alibaba ALICLOUD_REGION=<Region> ALICLOUD_SECRET_KEY=<Secret> ALICLOUD_ACCESS_KEY=<AccessKey>
 ```
 
 接下来，我们以 OSS bucket 为例展示如何部署云资源。
