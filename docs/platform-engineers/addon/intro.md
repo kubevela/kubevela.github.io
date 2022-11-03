@@ -30,6 +30,10 @@ Typically, the directory hierarchy is as follows:
 │   └── xxx.yaml
 ├── definitions/
 ├── schemas/
+├── config-templates/
+│   ├── xxx.cue
+├── views/
+│   ├── xxx.cue
 ├── README.md
 ├── metadata.yaml
 ├── parameter.cue
@@ -134,6 +138,16 @@ The content of a YAML typed file must be a Kubernetes object manifest, so you ca
 [CUE application description file](./addon-cue) will introduce how to use CUE define the application of addon.
 
 The above is a complete introduction to how to make an addon, you can find the complete description of the above-mentioned addon in [catalog](https://github.com/kubevela/catalog/tree/master/experimental/addons/example).
+
+### Other description file
+
+#### Views (`views/` folder)
+
+The `views/` folder is used to store the [VelaQL View](../system-operation/velaql) files.
+
+#### Config Templates (`config-templates/` folder)
+
+The `views/` folder is used to store the [Config Template](../../reference/config-template) files.
 
 ## Install Addon Locally
 

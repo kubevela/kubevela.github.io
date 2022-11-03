@@ -362,6 +362,7 @@ module.exports = {
           ],
         },
         'end-user/components/cloud-services/cloud-resources-list',
+        'reference/config-template',
         'reference/user-improvement-plan',
         'platform-engineers/openapi/overview',
       ],
