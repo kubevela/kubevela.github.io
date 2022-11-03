@@ -167,7 +167,7 @@ vela provider add terraform-alibaba --ALICLOUD_ACCESS_KEY <"your-accesskey-id"> 
 After the 1.6.0 version, you can create with the following command:
 
 ```bash
-vela config create -t terraform-alibaba ALICLOUD_ACCESS_KEY=<"your-accesskey-id"> ALICLOUD_SECRET_KEY="your-accesskey-secret" ALICLOUD_REGION=<your-region> name=terraform-alibaba-default
+vela config create terraform-alibaba-default -t terraform-alibaba ALICLOUD_ACCESS_KEY=<"your-accesskey-id"> ALICLOUD_SECRET_KEY="your-accesskey-secret" ALICLOUD_REGION=<your-region> 
 ```
 
 Check [this doc](https://kubevela.net/docs/reference/addons/terraform) for more details about other clouds.

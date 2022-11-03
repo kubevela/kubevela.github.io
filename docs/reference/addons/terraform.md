@@ -46,7 +46,7 @@ vela config-template list | grep terraform
 For example to create a provider config for AWS.
 
 ```shell
-vela config create -t terraform-aws name=aws AWS_ACCESS_KEY_ID=xxx AWS_SECRET_ACCESS_KEY=yyy AWS_DEFAULT_REGION=us-east-1
+vela config create aws -t terraform-aws AWS_ACCESS_KEY_ID=xxx AWS_SECRET_ACCESS_KEY=yyy AWS_DEFAULT_REGION=us-east-1
 ```
 
 ### Provision cloud resources

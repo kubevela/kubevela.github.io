@@ -68,7 +68,7 @@ vela config list -t terraform-alibaba
 If not exist, you can refer to this command to create a default provider:
 
 ```bash
-vela config create -t terraform-alibaba name=default ALICLOUD_REGION=<Region> ALICLOUD_SECRET_KEY=<Secret> ALICLOUD_ACCESS_KEY=<AccessKey>
+vela config create default -t terraform-alibaba ALICLOUD_REGION=<Region> ALICLOUD_SECRET_KEY=<Secret> ALICLOUD_ACCESS_KEY=<AccessKey>
 ```
 
 Use the following Application to provision an OSS bucket:

@@ -45,7 +45,7 @@ You can also disable, upgrade, and check the status of an addon by `vela addon` 
 After that, you can create credentials for the provider. Refer to the following command:
 
 ```shell
-vela config create -t terraform-ec name=<Name> EC_API_KEY=<KEY>
+vela config create <Name> -t terraform-ec EC_API_KEY=<KEY>
 ```
 
 ## Find supported components
