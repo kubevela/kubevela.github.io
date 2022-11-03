@@ -43,6 +43,7 @@ module.exports = {
       label: 'Core Concepts',
       collapsed: false,
       items: [
+        'getting-started/separate-of-concern',
         'getting-started/core-concept',
         'getting-started/definition',
         'getting-started/architecture',
