@@ -1,5 +1,5 @@
 ---
-title: Dashboard
+title: Customize Dashboard
 ---
 
 In KubeVela, leveraging the power of Kubernetes Aggregated API layer, it is easy for users to manipulate dashboards on Grafana and make customizations to application visualizations.
