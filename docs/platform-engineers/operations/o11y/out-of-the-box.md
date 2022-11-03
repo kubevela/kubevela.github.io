@@ -1,5 +1,5 @@
 ---
-title: Out of the Box
+title: Out-of-Box Dashboards
 ---
 
 By default, a series of dashboards are pre-installed with the `grafana` addon and provide basic panels for viewing observability data. If you follow the [installation guide](./installation), you should be able to use these dashboards without further configurations.
