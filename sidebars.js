@@ -1,4 +1,4 @@
-const { Component } = require('react');
+const {Component} = require('react');
 
 module.exports = {
   docs: [
@@ -171,6 +171,7 @@ module.exports = {
             'end-user/policies/shared-resource',
             'end-user/policies/apply-once',
             'end-user/policies/gc',
+            'end-user/policies/replication',
           ],
         },
         {
