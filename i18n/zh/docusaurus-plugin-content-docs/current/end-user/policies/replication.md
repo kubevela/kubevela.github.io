@@ -15,7 +15,7 @@ title: 组件分裂
 。可以向下发一些资源到集群中，他们带有不同的 `replicaKey`。
 
 :::note
-`replication` 策略仅在 KubeVela 1.6.0 以上版本中受支持。
+`replication` 策略仅在 KubeVela 1.6.0+ 版本中支持。
 :::
 
 :::tip
