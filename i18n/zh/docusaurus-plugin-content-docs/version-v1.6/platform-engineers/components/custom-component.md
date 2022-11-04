@@ -249,7 +249,7 @@ ComponentDefinition task created in namespace vela-system.
 然后把它们编写到应用部署计划中，如下所示：
 
   ```yaml
-  apiVersion: core.oam.dev/v1alpha2
+  apiVersion: core.oam.dev/v1beta1
   kind: Application
   metadata:
     name: website
