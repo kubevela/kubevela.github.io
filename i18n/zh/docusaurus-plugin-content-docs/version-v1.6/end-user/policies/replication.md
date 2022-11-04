@@ -15,7 +15,7 @@ title: 组件分裂
 。可以向下发一些资源到集群中，他们带有不同的 `replicaKey`。
 
 :::note
-`replication` 策略仅在 KubeVela 1.6.0 以上版本中受支持。
+`replication` 策略仅在 KubeVela 1.6.0+ 版本中支持。
 :::
 
 :::tip
@@ -204,9 +204,9 @@ local  ─── default─┬─ Service/hello-rep-beijing     updated   2022-1
 
 1. 策略的应用顺序为 `topology` -> `override` -> `replication`
    。更多详细信息，可以参阅[多集群应用](../../case-studies/multi-cluster)
-    - `topology` 选择要下发集群。如果不使用，则默认情况下应用程序将资源部署到 Local 群集。
-    - `override` 修改组件 Properties。如果不使用，则不会更改任何属性。
-    - `replication` 将一个组件分裂为多个组分裂
+   - `topology` 选择要下发集群。如果不使用，则默认情况下应用程序将资源部署到 Local 群集。
+   - `override` 修改组件 Properties。如果不使用，则不会更改任何属性。
+   - `replication` 将一个组件分裂为多个组分裂
 
 :::note
 默认情况下，KubeVela 所在的控制集群被注册为本地集群。你可以像使用管控集群一样使用它，但是你无法 detach 或 modify 这个集群。
