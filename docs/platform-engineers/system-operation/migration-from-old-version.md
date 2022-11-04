@@ -6,6 +6,38 @@ This doc aims to provide a migration guide from old versions to the new ones wit
 
 KubeVela has [release cadence](../../contributor/release-process) for every 2-3 months, we'll only maintain for the last 2 releases. As a result, you're highly recommended to upgrade along with the community. We'll strictly align with the [semver version rule](https://semver.org/) for compatibility.
 
+## From v1.5.x to v1.6.x
+
+1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
+
+```
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+```
+
+2. Upgrade your kubevela chart
+
+```
+helm repo add kubevela https://charts.kubevela.net/core
+helm repo update
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.0 --wait
+```
+
+3. Download and upgrade to the corresponding CLI
+
+```
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.0
+```
+
+4. Upgrade VelaUX or other addon
+
+```
+vela addon upgrade velaux --version 1.6.0
+```
+
 ## From v1.4.x to v1.5.x
 
 :::caution
