@@ -156,7 +156,7 @@ spec:
 现在用户只需要，声明他们希望增加一个节点亲和性的规则到组件实例当中：
 
 ```yaml
-apiVersion: core.oam.dev/v1alpha2
+apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: testapp
@@ -206,7 +206,7 @@ spec:
 我们可以部署如下应用来查看：
 
 ```yaml
-apiVersion: core.oam.dev/v1alpha2
+apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: testapp

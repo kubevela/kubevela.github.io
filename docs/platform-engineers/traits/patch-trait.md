@@ -159,7 +159,7 @@ to tell users that applying this trait will cause the pod to restart.
 Now the users could declare they want to add node affinity rules to the component instance as below:
 
 ```yaml
-apiVersion: core.oam.dev/v1alpha2
+apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: testapp
@@ -214,7 +214,7 @@ The patch trait above assumes that the component it binds has other traits which
 We can deploy the following application:
 
 ```yaml
-apiVersion: core.oam.dev/v1alpha2
+apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: testapp
