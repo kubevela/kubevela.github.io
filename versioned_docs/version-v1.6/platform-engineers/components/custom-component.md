@@ -246,7 +246,7 @@ Now let's use the `stateless` and `task` component type.
 The `ComponentDefinition` can be instantiated in `Application` abstraction as below:
 
   ```yaml
-  apiVersion: core.oam.dev/v1alpha2
+  apiVersion: core.oam.dev/v1beta1
   kind: Application
   metadata:
     name: website
