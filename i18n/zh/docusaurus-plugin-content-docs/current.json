@@ -322,6 +322,9 @@
   "sidebar.docs.category.Application Workflow": {
     "message": "应用工作流"
   },
+  "sidebar.docs.category.K8S API for Pipeline": {
+    "message": "流水线的 K8S API"
+  },
   "sidebar.docs.category.Multi Cluster Delivery": {
     "message": "多集群交付"
   },

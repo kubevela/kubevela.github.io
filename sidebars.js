@@ -137,6 +137,14 @@ module.exports = {
         },
         {
           type: 'category',
+          label: 'Pipeline',
+          collapsed: true,
+          items: [
+            'end-user/pipeline/workflowrun',
+          ],
+        },
+        {
+          type: 'category',
           label: 'GitOps',
           collapsed: true,
           link: {
