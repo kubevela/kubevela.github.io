@@ -26,35 +26,35 @@ WorkflowRun 为流水线执行的 K8S API。你可以选择在 WorkflowRun 里�
 apiVersion: core.oam.dev/v1alpha1
 kind: WorkflowRun
 metadata:
-  name: <name>
-  namespace: <namespace>
+  name: <名称>
+  namespace: <命名空间>
 spec:
-  mode: <optional execute mode for the workflowRun, default execute mode is StepByStep for steps, DAG for subSteps>
-    steps: <DAG or StepByStep>
-    subSteps: <DAG or StepByStep>
+  mode: <可选项，WorkflowRun 的执行模式，默认步骤的执行模式是 StepByStep，子步骤为 DAG>
+    steps: <DAG 或者 StepByStep>
+    subSteps: <DAG 或者 StepByStep>
   context:
-    <optional custom contest values>
-  workflowRef: <optional external workflow template to run>
-  workflowSpec: <optional workflow spec to run>
+    <可选项，自定义上下文参数>
+  workflowRef: <可选项，用于运行的外部 Workflow 模板>
+  workflowSpec: <可选项，用于运行的配置>
     steps:
-    - name: <name>
-      type: <type>
+    - name: <名称>
+      type: <类型>
       dependsOn:
-        <optional array of step names, specify the dependency for the step>
-      meta: <optional meta data for the step>
-        alias: <optional alias of the step>  
+        <可选项，该步骤需要依赖的步骤名称数组>
+      meta: <可选项，该步骤的额外信息>
+        alias: <可选项，该步骤的别名>  
       properties:
-        <parameter values>
-      if: <optional if condition to decide whether this step should be executed>
-      timeout: <optional timeout for the step>
-      outputs: <optional outputs value>
-        - name: <name>
-          valueFrom: <value source of the output>
-      inputs: <optional inputs value>
-        - name: <name>
-          parameterKey: <optional set the inputs data to the steps'parameter>
+        <步骤参数值>
+      if: <可选项，用于判断该步骤是否要被执行>
+      timeout: <可选项，该步骤的超时时间>
+      outputs: <可选项，该步骤的输出>
+        - name: <输出名>
+          valueFrom: <输出来源>
+      inputs: <可选项，该步骤的输入>
+        - name: <输入来源名>
+          parameterKey: <可选项，该输入要被设置为步骤的某个参数名>
       subSteps:
-        <optional sub steps if the type of this step is step-group>
+        <可选项，如果步骤类型为 step-group，可在这里声明子步骤>
 ```
 
 ## 状态
@@ -79,7 +79,7 @@ WorkflowRun 步骤拥有以下几种状态：
 | :-------:  |  :-----------------------------------: |
 | running    |   该步骤正在执行                       |
 | succeeded  |   该步骤执行完成，且状态为成功                               |
-| failed     |   该步骤执行失败。执行失败的步骤会有以下几种失败原因：Execute（执行出错），Terminate（步骤被终止），Output（步骤的输出报错），FailedAfterRetries（步骤执行失败达到重试上限），Timeout（步骤超时）， Action（步骤定义中执行了 op.#Fail）                              |
+| failed     |   该步骤执行失败                              |
 | skipped    |   该步骤被跳过，没有被执行                   |
 | pending    |   步骤等待某些条件来执行，如：等待 inputs 的输入  |
 
@@ -300,7 +300,7 @@ step1 将在 step2 和 step3 执行完成后执行。
 
 ### 数据传递
 
-可以通过 `inputs` 和 `outputs` 完成步骤间的数据传递，具体介绍请参考 [步骤间的输入输出](../workflow/inputs-outputs#outputs)。
+你可以通过 `inputs` 和 `outputs` 完成步骤间的数据传递，具体介绍请参考 [步骤间的输入输出](../workflow/inputs-outputs#outputs)。
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha1
@@ -335,7 +335,7 @@ spec:
 
 ### 超时
 
-你可以为步骤指定`timeout` 来表示该步骤的超时时间。
+你可以为步骤指定 `timeout` 来表示该步骤的超时时间。
 
 `timeout` 遵循 `duration` 格式，例如 `30s`, `1m` 等。你可以参考 Golang 的 [parseDuration](https://pkg.go.dev/time#ParseDuration)。
 
