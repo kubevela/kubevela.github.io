@@ -47,8 +47,8 @@ The following definitions will be enabled after the installation of fluxcd addon
 | values          | optional, override the Values.yaml inchart, using for the rendering of Helm                                                                                                                                                                                                                                                                                              |                                    |
 | installTimeout  | optional, the timeout for operation `helm install`, and 10 minutes by default                                                                                                                                                                                                                                                                                            | 20m                                |
 | interval        | optional, the  Interval at which to reconcile the Helm release, default to 30s                                                                                                                                                                                                                                                                                           | 1m                                 |
-| oss             | optional, The [oss](#OSS) source configuration                                                                                                        |                             |
-| git             | optional, The [git](#OSS) source configuration                                                                                                        | dev                         |
+| oss             | optional, The [oss](#oss) source configuration                                                                                                        |                             |
+| git             | optional, The [git](#git) source configuration                                                                                                        | dev                         |
 
 ##### OSS
 
