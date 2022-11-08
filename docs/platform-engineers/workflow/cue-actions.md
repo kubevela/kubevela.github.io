@@ -67,6 +67,53 @@ fail: op.#Fail & {
 }
 ```
 
+## Data Control
+
+### Log
+
+Output the log  or configure the log source for this step. If `op.#Log` is used in a step definition, then you can use `vela workflow logs <name>` to view the log for that step.
+
+**Parameters**
+
+```
+#Log: {
+	// +usage=The data to print in the controller logs
+	data?: {...} | string
+	// +usage=The log level of the data
+	level: *3 | int
+	// +usage=The log source of this step. You can specify it from a url or resources. Note that if you set source in multiple op.#Log, only the latest one will work
+	source?: close({
+		// +usage=Specify the log source url of this step
+		url: string
+	}) | close({
+		// +usage=Specify the log resources of this step
+		resources?: [...{
+			// +usage=Specify the name of the resource
+			name?:      string
+			// +usage=Specify the cluster of the resource
+			cluster?:   string
+			// +usage=Specify the namespace of the resource
+			namespace?: string
+			// +usage=Specify the label selector of the resource
+			labelSelector?: {...}
+		}]
+	})
+}
+```
+
+**Example**
+
+```
+import "vela/op"
+
+myLog: op.#Log & {
+  data: "my custom log"
+	resources: [{
+		labelsSelector: {"test-key": "test-value"}
+	}]
+}
+```
+
 ### Message
 
 Write message to the workflow step status.
@@ -77,6 +124,16 @@ Write message to the workflow step status.
 #Message: {
 	// +usage=Optional message that will be shown in workflow step status, note that the message might be override by other actions.
 	message?: string
+}
+```
+
+**Example**
+
+```
+import "vela/op"
+
+msg: op.#Message & {
+  message: "custom message"
 }
 ```
 
