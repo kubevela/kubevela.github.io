@@ -9,7 +9,7 @@ Compared with the Application Workflow, the standalone pipeline has the followin
 3. It is **one-time** and does not manage resources. Even if the pipeline is deleted, the created resources will not be deleted.
 4. It uses the same execution engine as the Application Workflow, which completely inherits the features of KubeVela's lightweight workflow. Compared with the traditional container-based CI pipeline, KubeVela's pipeline does not depend on containers, No additional computing resources are required.
 
-:::note
+:::tip
 In order to better reuse the existing capabilities and ensure technical consistency, we split the workflow engine part of the original application workflow. Both in-application workflow and pipeline use this [workflow engine](https://github.com/kubevela/workflow) as the underlying technology implementation. The application workflow is represented by the `Workflow` field in the application, and the pipeline is represented by the [WorkflowRun](https://github.com/kubevela/workflow) resource.
 
 This means that most of the workflow steps are common between the two, such as: suspend, notification, send HTTP request, read configuration, etc.
@@ -17,7 +17,7 @@ This means that most of the workflow steps are common between the two, such as: 
 However, in WorkflowRun, there is only the configuration of steps, and **no configuration of components, traits, and policies**. Therefore, steps related to components/traits/policy can only be used in in-app workflows, such as: deploying/updating components, traits, etc.
 :::
 
-# WorkflowRun
+## WorkflowRun
 
 WorkflowRun is the K8S API for pipeline. You can choose to execute an external Workflow template in the WorkflowRun or execute the steps in the WorkflowRun spec (if you declare both, the step in the WorkflowRun spec will override the content in the template). A WorkflowRun consists of the following:
 
@@ -374,7 +374,7 @@ You can also write your own judgment logic to determine whether the step should 
 * `inputs`：`inputs` contains all the inputs parameters of the step. You can use `inputs.<input-name> == "value"` to get input for the step.
 * `context`: `context` contains all the context data of WorkflowRun. You can use `context.<context-name> == "value"` to get the context of the WorkflowRun.
 
-:::note
+:::tip
 Note that if your step name or inputs name is not a valid CUE variable name (eg: contains `-`, or starts with a number, etc.), you can refer to it as follows: `status["invalid-name"].failed`.
 :::
 
@@ -408,7 +408,7 @@ In the above WorkflowRun, if the suspend step fails due to a timeout, then the m
 
 Steps in WorkflowRun have some built-in context data, and you can also declare your custom context parameters in `context`.
 
-:::note
+:::tip
 If your custom context data has the same name as a built-in context data, the built-in context parameter will be overridden by the custom parameter.
 :::
 
