@@ -9,7 +9,7 @@ title: 流水线的 K8S API
 3. 它是**一次性**的，不对资源做管理，即使删除流水线也不会删除创建出来的资源。
 4. 它与应用流水线的执行引擎是同源的，这也完全继承了 KubeVela 轻量级工作流的特性，相较于传统的基于容器的 CI 流水线，KubeVela 的流水线在执行各类资源操作时不依赖容器、无需额外的计算资源。
 
-:::note
+:::tip
 为了更好地复用已有的能力及保证技术一致性，我们将原本应用工作流中的工作流引擎部分进行了拆分。
 应用内工作流和应用间流水线都使用了这个 [工作流引擎](https://github.com/kubevela/workflow) 作为底层的技术实现。应用工作流体现为应用中的 `Workflow` 字段，而流水线则体现为 [WorkflowRun](https://github.com/kubevela/workflow) 资源。
 
@@ -18,7 +18,7 @@ title: 流水线的 K8S API
 但 WorkflowRun 中只有步骤的配置，**没有**组件、运维特征、策略的配置。因此，与组件等相关的步骤只能在应用内工作流中使用，如：部署/更新组件、运维特征等。
 :::
 
-# WorkflowRun
+## WorkflowRun
 
 WorkflowRun 为流水线执行的 K8S API。你可以选择在 WorkflowRun 里执行一个外部的 Workflow 模板或者执行直接在里面配置要执行的步骤（如果你同时声明了二者，WorkflowRun 里的步骤配置会覆盖模板中的内容）。一个 WorkflowRun 的组成如下：
 
@@ -375,7 +375,7 @@ spec:
 * `inputs`：inputs 中包含了该步骤的所有 inputs 参数。你可以使用 `inputs.<input-name> == "value"` 来获取判断步骤的输入。
 * `context`：context 中包含了 WorkflowRun 的所有 context 参数。你可以使用 `context.<context-name> == "value"` 来获取判断 WorkflowRun 的 context。
 
-:::note
+:::tip
 注意，如果你的步骤名、inputs 名或者 context 名并不是一个有效的 CUE 变量名（如：包含 `-`，或者以数字开头等），你可以用如下方式引用：`status["invalid-name"].failed`。
 :::
 
@@ -409,7 +409,7 @@ spec:
 
 WorkflowRun 中的步骤拥有一些内置的上下文参数，你也可以在 `context` 中声明你自己的上下文参数。
 
-:::note
+:::tip
 如果你的自定义上下文参数与内置上下文参数重名，那么内置上下文参数将会被自定义参数覆盖。
 :::
 
