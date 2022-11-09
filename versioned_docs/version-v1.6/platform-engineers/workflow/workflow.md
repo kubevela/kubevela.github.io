@@ -245,7 +245,7 @@ In a workflow step definition, you can use the following context data:
 |  `context.appRevision`   |               The revision of the Application.               | string |
 |    `context.stepName`    |                  The name of current step.                   | string |
 | `context.stepSessionID`  |                   The ID of current step.                    | string |
-|     `context.spanID`     |      The trace ID of current step in this reconcile. ID      | string |
+|     `context.spanID`     |      The trace ID of current step in this reconcile.      | string |
 |  `context.workflowName`  |          The workflow name specified in annotation.          | string |
 | `context.publishVersion` | The version of application instance specified in annotation. | string |
 
