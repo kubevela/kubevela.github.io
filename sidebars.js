@@ -1,4 +1,4 @@
-const {Component} = require('react');
+const { Component } = require('react');
 
 module.exports = {
   docs: [
@@ -214,6 +214,7 @@ module.exports = {
             'platform-engineers/system-operation/enable-addon-offline',
             'platform-engineers/system-operation/migration-from-old-version',
             'platform-engineers/system-operation/system-info-diagnose',
+            'platform-engineers/system-operation/high-availability'
           ],
         },
         {

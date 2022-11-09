@@ -23,19 +23,19 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.0 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.1 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.0
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.1
 ```
 
 4. Upgrade VelaUX or other addon
 
 ```
-vela addon upgrade velaux --version 1.6.0
+vela addon upgrade velaux --version 1.6.1
 ```
 
 ## From v1.4.x to v1.5.x
