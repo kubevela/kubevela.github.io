@@ -3,7 +3,7 @@ title: Build flexible abstraction for any Kubernetes Resources with CUE and Kube
 author: Jianbo Sun
 author_title: KubeVela Team
 author_url: https://github.com/kubevela/KubeVela
-author_image_url: https://KubeVela.io/img/logo.svg
+author_image_url: https://avatars.githubusercontent.com/u/2173670
 tags: [ KubeVela, Abstraction]
 description: ""
 image: https://raw.githubusercontent.com/oam-dev/KubeVela.io/main/docs/resources/KubeVela-03.png
