@@ -3,7 +3,7 @@ title: Helm Chart Delivery in Multi-Cluster
 author: Jianbo Sun
 author_title: KubeVela Team
 author_url: https://github.com/kubevela/kubevela
-author_image_url: https://KubeVela.io/img/logo.svg
+author_image_url: https://avatars.githubusercontent.com/u/2173670
 tags: [ KubeVela, "use-case", "helm chart", "multi-cluster" ]
 description: ""
 image: https://raw.githubusercontent.com/oam-dev/KubeVela.io/main/docs/resources/KubeVela-03.png

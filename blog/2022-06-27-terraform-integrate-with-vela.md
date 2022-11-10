@@ -3,7 +3,7 @@ title: Glue Terraform Ecosystem into Kubernetes World
 author: Jianbo Sun
 author_title: KubeVela Team
 author_url: https://github.com/kubevela/KubeVela
-author_image_url: https://KubeVela.io/img/logo.svg
+author_image_url: https://avatars.githubusercontent.com/u/2173670
 tags: [ KubeVela, Terraform, Kubernetes, DevOps, CNCF, CI/CD, Application delivery]
 description: "This article discusses how to Integrate terraform ecosystem with KubeVela."
 image: https://raw.githubusercontent.com/oam-dev/KubeVela.io/main/docs/resources/KubeVela-03.png
@@ -222,20 +222,20 @@ EOF
 
 This application will deploy an ECS instance with a public ip, explanation of some useful fields:
 
-| Field | Usage  |
-|:----:|:---:|
-| providerRef | reference to the provider credentials we added |
-| writeConnectionSecretToRef | the outputs of terraform module will be written into the secret |
-| name | name of the ecs instance |
-| instance_type | ecs instance type |
-| host_name | hostname of the ecs |
-| password | password of the ecs instance, you can connect by `ssh` |
-| internet_max_bandwidth_out | internet bandwidth of the ecs instance |
-| associate_public_ip_address | create public IP or not |
-| instance_charge_type | the charge way of the resource |
-| user_data_url | the installation script after the ecs instance created, we have installed the frp server in the script |
-| ports | ports that will be allowd in the VPC and security group, 9090/9091 is must for frp server while others are preserved for client usage |
-| tags | tags of the ECS instance |
+|            Field            |                                                                 Usage                                                                 |
+| :-------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------: |
+|         providerRef         |                                            reference to the provider credentials we added                                             |
+| writeConnectionSecretToRef  |                                    the outputs of terraform module will be written into the secret                                    |
+|            name             |                                                       name of the ecs instance                                                        |
+|        instance_type        |                                                           ecs instance type                                                           |
+|          host_name          |                                                          hostname of the ecs                                                          |
+|          password           |                                        password of the ecs instance, you can connect by `ssh`                                         |
+| internet_max_bandwidth_out  |                                                internet bandwidth of the ecs instance                                                 |
+| associate_public_ip_address |                                                        create public IP or not                                                        |
+|    instance_charge_type     |                                                    the charge way of the resource                                                     |
+|        user_data_url        |                the installation script after the ecs instance created, we have installed the frp server in the script                 |
+|            ports            | ports that will be allowd in the VPC and security group, 9090/9091 is must for frp server while others are preserved for client usage |
+|            tags             |                                                       tags of the ECS instance                                                        |
 
 You can learn more fields by:
 

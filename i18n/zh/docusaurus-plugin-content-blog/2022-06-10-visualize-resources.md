@@ -2,7 +2,7 @@
 title: 追踪和可视化多集群 Kubernetes 资源拓扑
 author: Qingguo Zeng
 author_url: https://github.com/barnettZQG
-author_image_url: https://avatars.githubusercontent.com/u/18493394?v=4
+author_image_url: https://avatars.githubusercontent.com/u/18493394
 tags: [ KubeVela, Observable]
 description: ""
 image: https://raw.githubusercontent.com/oam-dev/KubeVela.io/main/docs/resources/KubeVela-03.png
