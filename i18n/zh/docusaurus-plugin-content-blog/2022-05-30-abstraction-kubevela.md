@@ -2,8 +2,8 @@
 title: 使用 CUE 和 KubeVela 为任意的 Kubernetes 资源构建灵活的抽象
 author: 孙健波（天元）
 author_title: KubeVela Team
-author_url: https://github.com/kubevela/KubeVela
-author_image_url: https://KubeVela.io/img/logo.svg
+author_url: https://github.com/wonderflow
+author_image_url: https://avatars.githubusercontent.com/u/2173670
 tags: [ KubeVela, Abstraction]
 description: ""
 image: https://raw.githubusercontent.com/oam-dev/KubeVela.io/main/docs/resources/KubeVela-03.png
