@@ -255,3 +255,56 @@ spec:
             strategy: never
 ```
 
+## 按依赖顺序回收资源
+
+如果你期望按照资源的依赖顺序删除资源，也可以使用本策略，添加 `order: dependency` 即可。
+
+:::note
+本策略只会按顺序删除在 Component 中声明的资源，在 Workflow 步骤中自定义创建的资源不包括。
+:::
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: gc-dependency
+  namespace: default
+spec:
+  components:
+  - name: test1
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+    dependsOn:
+      - "test2"
+  - name: test2
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+    inputs:
+      - from: test3-output
+        parameterKey: test
+  - name: test3
+    type: webservice
+    properties:
+      image: crccheck/hello-world
+      port: 8000
+    outputs:
+      - name: test3-output
+        valueFrom: output.metadata.name
+  
+  policies:
+    - name: gc-dependency
+      type: garbage-collect
+      properties:
+        order: dependency
+```
+
+在上述例子中，我们有三个组件，依赖关系是 `test1` 依赖 `test2`， `test2` 依赖 `test3` 的输出。
+
+所以组件的部署顺序为：`test3 -> test2 -> test1`.
+
+当我们在资源回收策略（`garbage-collect`）中指定 `order: dependency` 时，资源的删除顺序为： `test1 -> test2 -> test3`。
+
