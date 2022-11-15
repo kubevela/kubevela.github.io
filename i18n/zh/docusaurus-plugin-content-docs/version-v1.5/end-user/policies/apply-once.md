@@ -59,11 +59,10 @@ spec:
       properties:
         enable: true
         rules:
-        - path:
-          - spec.replicas
+        - strategy:
+            path: ["spec.replicas"]
           selector:
-            resourceTypes:
-            - Deployment
+            resourceTypes: ["Deployment"]
 
 ```
 
