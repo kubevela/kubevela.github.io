@@ -1,9 +1,13 @@
 ---
-title:  Debug in the environment
+title:  Debug Workflow
 slug: /platform-engineers/debug/debug
 ---
 
-> This feature is available in KubeVela v1.4.
+:::caution
+Debug workflow will run workflow in the real environment, make sure you're debugging in the test environment.
+
+The debugging process also requires the knowledge of the Kubernetes infrastructure, you may need the help of the platform team if you're the app developer.
+:::
 
 When you deploy your application in a test environment and find problems with the application, you may want to debug the application in the environment. KubeVela provides the `vela debug` command to help you debug your application in the environment.
 

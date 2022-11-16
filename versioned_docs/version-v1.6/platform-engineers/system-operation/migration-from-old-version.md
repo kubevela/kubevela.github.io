@@ -8,6 +8,24 @@ KubeVela has [release cadence](../../contributor/release-process) for every 2-3 
 
 ## From v1.5.x to v1.6.x
 
+:::caution
+KubeVela had upgraded the CUE version from v0.2.2 to v0.5.0-alpha1 in v1.6.x, and some usages are deprecated.
+
+If you used an input in Application with a invalid CUE variable `parameterKey` (eg: contains `-`, or starts with a number, etc.), like:
+```
+inputs:
+   - from: output
+     parameterKey: data.my-input
+```
+
+Please modify it to:
+```
+inputs:
+   - from: output
+     parameterKey: data["my-input"]
+```
+:::
+
 1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
 
 ```

@@ -28,8 +28,7 @@ go run ./hack/docgen/cli/gen.go
 3. Update more docs such as i18n zh
 
 ```shell
-$ go run ./hack/docgen/cli/gen.go ../kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
-scanning rootPath of CLI docs for replace:  ../kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
+go run ./hack/docgen/cli/gen.go ../kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
 ```
 
 4. Then you can check the difference in kubevela.io.

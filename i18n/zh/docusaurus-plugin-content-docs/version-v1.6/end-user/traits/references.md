@@ -4,7 +4,7 @@ title: 内置运维特征列表
 
 本文档将**按字典序**展示所有内置运维特征的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-10-31T11:57:05+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-11-16T14:46:36+08:00。
 
 ## Affinity
 
@@ -512,7 +512,7 @@ spec:
           properties:
             min: 1
             max: 10
-            cpuPercent: 60
+            cpuUtil: 60
 ```
 
 ### 参数说明 (cpuscaler)

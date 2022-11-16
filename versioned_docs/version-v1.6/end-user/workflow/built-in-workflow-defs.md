@@ -4,7 +4,52 @@ title: Built-in WorkflowStep Type
 
 This documentation will walk through all the built-in workflow step types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-10-31T11:57:05+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-11-16T14:46:36+08:00.
+
+## Apply-Component
+
+### Description
+
+Apply a specific component and its corresponding traits in application.
+
+### Examples (apply-component)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-workflow
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: oamdev/hello-world
+      port: 8000
+    traits:
+    - type: ingress
+      properties:
+        domain: testsvc.example.com
+        http:
+          /: 8000
+  workflow:
+    steps:
+      - name: express-server
+        type: apply-component
+        properties:
+          component: express-server
+          # cluster: <your cluster name>
+```
+
+### Specification (apply-component)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ component | Specify the component name to apply. | string | true |  
+ cluster | Specify the cluster. | string | false | empty 
+
 
 ## Apply-Object
 
@@ -840,6 +885,47 @@ We can see that before and after the deployment of the application, the messages
  ---- | ----------- | ---- | -------- | ------- 
  subject | Specify the subject of the email. | string | true |  
  body | Specify the context body of the email. | string | true |  
+
+
+## Print-Message-In-Status
+
+### Description
+
+print message in workflow step status.
+
+### Examples (print-message-in-status)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: print-message-in-status
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: oamdev/hello-world
+      port: 8000
+  workflow:
+    steps:
+      - name: express-server
+        type: apply-component
+        properties:
+          component: express-server
+      - name: message
+        type: print-message-in-status
+        properties:
+          message: "All addons have been enabled successfully, you can use 'vela addon list' to check them."
+```
+
+### Specification (print-message-in-status)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ message |  | string | true |  
 
 
 ## Read-Config
