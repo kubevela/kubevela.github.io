@@ -133,6 +133,7 @@ module.exports = {
             'end-user/workflow/inputs-outputs',
             'end-user/workflow/if-condition',
             'end-user/workflow/timeout',
+            'platform-engineers/debug/debug',
           ],
         },
         {
@@ -211,7 +212,6 @@ module.exports = {
             'platform-engineers/system-operation/bootstrap-parameters',
             'platform-engineers/advanced-install',
             'platform-engineers/system-operation/vela-cli-image',
-            'platform-engineers/system-operation/enable-addon-offline',
             'platform-engineers/system-operation/migration-from-old-version',
             'platform-engineers/system-operation/system-info-diagnose',
             'platform-engineers/system-operation/high-availability'
@@ -281,18 +281,13 @@ module.exports = {
             'platform-engineers/addon/addon-yaml',
             'reference/topology-rule',
             'platform-engineers/addon/addon-registry',
+            'platform-engineers/system-operation/enable-addon-offline',
           ],
         },
         {
           'Cloud Resources': [
             'platform-engineers/addon/terraform',
             'platform-engineers/components/component-terraform',
-          ],
-        },
-        {
-          Debugging: [
-            'platform-engineers/debug/dry-run',
-            'platform-engineers/debug/debug',
           ],
         },
         {
@@ -328,6 +323,7 @@ module.exports = {
             'contributor/principle-of-test',
           ],
         },
+        'platform-engineers/debug/dry-run',
       ],
     },
     {
