@@ -21,6 +21,16 @@ valueFrom: |
 
 inputs 由 `from` 和 `parameterKey` 组成。`from` 声明了这个 input 从哪个 output 中取值，`parameterKey` 为一个表达式，将会把 input 取得的值赋给对应的字段。
 
+:::caution
+如果你想在 `parameterKey` 中使用一个非法的 CUE 变量名（如，含有 `-` 或者以数字开头），你可以用 `[]` 指定，如：
+
+```
+inputs:
+   - from: output
+     parameterKey: data["my-input"]
+```
+:::
+
 如：
 1. 指定 inputs:
 

@@ -33,13 +33,13 @@ If you do not explicitly declare the execution mode, by default steps are execut
 
 ## State of Application and Workflow
 
-|    Application     |  Workflow  |                                               Description                                                        |
+|    Application     |  Workflow  |                                                   Description                                                    |
 | :----------------: | :--------: | :--------------------------------------------------------------------------------------------------------------: |
-|  runningWorkflow   | executing  |            When the workflow is executing, the status of the application is runningWorkflow                      |
-| workflowSuspending | suspending |           When the workflow is suspended, the status of the application is workflowSuspending                    |
-| workflowTerminated | terminated |           When the workflow is terminated, the status of the application is workflowTerminated                   |
-| workflowFailed     | failed     | When a step in the workflow fails and the workflow is completed, the status of the application is workflowFailed |
-|      running       | succeeded  |   When all steps in the workflow are executed successfully, the status of the application is running             |
+|  runningWorkflow   | executing  |                 When the workflow is executing, the status of the application is runningWorkflow                 |
+| workflowSuspending | suspending |               When the workflow is suspended, the status of the application is workflowSuspending                |
+| workflowTerminated | terminated |               When the workflow is terminated, the status of the application is workflowTerminated               |
+|   workflowFailed   |   failed   | When a step in the workflow fails and the workflow is completed, the status of the application is workflowFailed |
+|      running       | succeeded  |        When all steps in the workflow are executed successfully, the status of the application is running        |
 
 ## Core features
 
@@ -52,3 +52,4 @@ Workflow has powerful process control capabilities, including:
 - View [Pass data between steps](./inputs-outputs) to learn how to use `inputs`, `outputs` to pass data between steps.
 - View [If Conditions](./if-condition) to learn how to use `if` to determine whether the step should be executed.
 - View [Timeout Steps](./timeout) to learn how to set `timeout` for steps.
+- View [Debug Workflow](../../platform-engineers/debug/debug) to learn how to debug workflow in the real environment.
