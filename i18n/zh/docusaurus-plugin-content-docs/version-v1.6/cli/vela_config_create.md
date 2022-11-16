@@ -18,7 +18,7 @@ vela config create [flags]
   vela config create test-config --template=image-registry  -f config.yaml
   
   # Generate a config without the template
-  vela config create --name test-vela -f config.yaml
+  vela config create test-vela -f config.yaml
 ```
 
 ### Options

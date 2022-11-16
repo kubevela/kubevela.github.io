@@ -29,13 +29,13 @@ title: 总览
 
 ## 工作流与应用的状态对应
 
-|  应用   |  工作流  |                 说明                  |
-| :-------: | :----: | :-----------------------------------: |
-|    runningWorkflow    | executing |      当工作流正在执行时，应用的状态为 runningWorkflow      |
-|    workflowSuspending    | suspending |      当工作流暂停时，应用的状态为 workflowSuspending     |
-|    workflowTerminated    | terminated |      当工作流被终止时，应用的状态为 workflowTerminated     |
-|    workflowFailed    | failed |      当工作流执行完成，且有步骤失败时，应用的状态为 workflowFailed     |
-|    running    | succeeded |      当工作流中所有步骤都成功执行后，应用的状态为  running     |
+|        应用        |   工作流   |                             说明                              |
+| :----------------: | :--------: | :-----------------------------------------------------------: |
+|  runningWorkflow   | executing  |       当工作流正在执行时，应用的状态为 runningWorkflow        |
+| workflowSuspending | suspending |        当工作流暂停时，应用的状态为 workflowSuspending        |
+| workflowTerminated | terminated |       当工作流被终止时，应用的状态为 workflowTerminated       |
+|   workflowFailed   |   failed   | 当工作流执行完成，且有步骤失败时，应用的状态为 workflowFailed |
+|      running       | succeeded  |     当工作流中所有步骤都成功执行后，应用的状态为  running     |
 
 ## 核心功能
 
@@ -48,3 +48,4 @@ title: 总览
 - 查看 [数据传递](./inputs-outputs)，了解如何通过 `inputs`、`outputs` 来进行步骤间的数据传递。
 - 查看 [使用条件判断](./if-condition)，了解如何使用条件判断来控制工作流步骤的执行。
 - 查看 [步骤的超时](./timeout)，了解如何指定工作流步骤的超时时间。
+- 查看 [调试工作流](../../platform-engineers/debug/debug) 了解如何在真实运行环境中排查工作流的问题。

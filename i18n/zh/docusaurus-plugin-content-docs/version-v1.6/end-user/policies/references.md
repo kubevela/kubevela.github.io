@@ -4,7 +4,7 @@ title: 内置策略列表
 
 本文档将**按字典序**展示所有内置策略的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-10-31T11:57:05+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-11-16T14:46:36+08:00。
 
 ## Apply-Once
 
@@ -71,6 +71,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
+ affect | When the strategy takes effect,e.g. onUpdate、onStateKeep。 | string | false |  
  path | 指定资源的路径。 | []string | true |  
 
 

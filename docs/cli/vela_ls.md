@@ -21,10 +21,12 @@ vela ls
 ### Options
 
 ```
-  -A, --all-namespaces     If true, check the specified action in all namespaces.
-  -e, --env string         specify environment name for application
-  -h, --help               help for ls
-  -n, --namespace string   specify the Kubernetes namespace to use
+  -A, --all-namespaces          If true, check the specified action in all namespaces.
+  -e, --env string              specify environment name for application
+      --field-selector string   Selector (field query) to filter on, supports '=', '==', and '!='.(e.g. --field-selector key1=value1,key2=value2).
+  -h, --help                    help for ls
+  -n, --namespace string        specify the Kubernetes namespace to use
+  -l, --selector string         Selector (label query) to filter on, supports '=', '==', and '!='.(e.g. -l key1=value1,key2=value2).
 ```
 
 ### Options inherited from parent commands
