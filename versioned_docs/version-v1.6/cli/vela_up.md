@@ -46,6 +46,8 @@ vela up
   -n, --namespace string         If present, the namespace scope for this CLI request
   -v, --publish-version string   The publish version for deploying application.
   -r, --revision string          The revision to use for deploying the application, if empty, the current application configuration will be used.
+      --timeout string           Set the timout for wait app to be healthy, if not specified, the default duration is 300s. (default "300s")
+  -w, --wait                     Wait app to be healthy until timout, if no timeout specified, the default duration is 300s.
 ```
 
 ### Options inherited from parent commands

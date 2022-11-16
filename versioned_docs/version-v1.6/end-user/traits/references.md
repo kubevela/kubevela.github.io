@@ -4,7 +4,7 @@ title: Built-in Trait Type
 
 This documentation will walk through all the built-in trait types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-10-31T11:57:05+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-11-16T14:46:36+08:00.
 
 ## Affinity
 
@@ -512,7 +512,7 @@ spec:
           properties:
             min: 1
             max: 10
-            cpuPercent: 60
+            cpuUtil: 60
 ```
 
 ### Specification (cpuscaler)

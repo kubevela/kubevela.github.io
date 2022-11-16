@@ -4,7 +4,52 @@ title: 内置工作流步骤列表
 
 本文档将**按字典序**展示所有内置工作流步骤的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-10-31T11:57:05+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-11-16T14:46:36+08:00。
+
+## Apply-Component
+
+### 描述
+
+Apply a specific component and its corresponding traits in application。
+
+### 示例 (apply-component)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-workflow
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: oamdev/hello-world
+      port: 8000
+    traits:
+    - type: ingress
+      properties:
+        domain: testsvc.example.com
+        http:
+          /: 8000
+  workflow:
+    steps:
+      - name: express-server
+        type: apply-component
+        properties:
+          component: express-server
+          # cluster: <your cluster name>
+```
+
+### 参数说明 (apply-component)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ component | Specify the component name to apply。 | string | true |  
+ cluster | Specify the cluster。 | string | false | empty 
+
 
 ## Apply-Object
 
@@ -840,6 +885,47 @@ We can see that before and after the deployment of the application, the messages
  ------ | ------ | ------ | ------------ | --------- 
  subject | 指定邮件标题。 | string | true |  
  body | 指定邮件正文内容。 | string | true |  
+
+
+## Print-Message-In-Status
+
+### 描述
+
+print message in workflow step status。
+
+### 示例 (print-message-in-status)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: print-message-in-status
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: oamdev/hello-world
+      port: 8000
+  workflow:
+    steps:
+      - name: express-server
+        type: apply-component
+        properties:
+          component: express-server
+      - name: message
+        type: print-message-in-status
+        properties:
+          message: "All addons have been enabled successfully, you can use 'vela addon list' to check them."
+```
+
+### 参数说明 (print-message-in-status)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ message |  | string | true |  
 
 
 ## Read-Config
