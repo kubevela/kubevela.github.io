@@ -4,7 +4,7 @@ title: Built-in Policy Type
 
 This documentation will walk through all the built-in policy types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-10-31T11:57:05+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-11-16T14:46:36+08:00.
 
 ## Apply-Once
 
@@ -71,6 +71,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
+ affect | When the strategy takes effect,e.g. onUpdate、onStateKeep. | string | false |  
  path | Specify the path of the resource that allow configuration drift. | []string | true |  
 
 
