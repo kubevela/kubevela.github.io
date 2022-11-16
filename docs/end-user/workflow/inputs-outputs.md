@@ -22,6 +22,16 @@ valueFrom: |
 
 Inputs is made of `from` and `parameterKey`. Input uses `from` to reference output, `parameterKey` is a expression that assigns the value of the input to the corresponding field.
 
+:::caution
+If you want to set the parameterKey with a invalid CUE variable name (eg: contains `-`, or starts with a number, etc.), you can refer to it with `[]` like:
+
+```
+inputs:
+   - from: output
+     parameterKey: data["my-input"]
+```
+:::
+
 eg. Specify inputs:
 
 ```yaml
