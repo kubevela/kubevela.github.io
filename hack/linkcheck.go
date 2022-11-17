@@ -58,6 +58,9 @@ func main() {
 						if _, err3 := os.Stat(targetFilePath + ".md"); err3 != nil {
 							if _, err4 := os.Stat(targetFilePath + ".mdx"); err4 != nil {
 								fmt.Println("file:", path, "refer to a non-existent doc:", subStr, "search path:", targetFilePath)
+								if strings.Contains(targetFilePath, "reference/addons/") {
+									continue
+								}
 								os.Exit(1)
 							}
 						}
