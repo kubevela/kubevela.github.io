@@ -6,9 +6,11 @@ title: 使用 OpenKruiseGame 与 KubeVela 在 Kubernetes 集群上进行游戏�
 
 [Open Kruise Game](https://github.com/openkruise/kruise-game): Kruise-Game is a subproject of OpenKruise for solving the problem of game server landing in Kubernetes.
 
-- Material Downloads: [OpenKruiseGame+KubeVela-20221115.pdf](https://kubevelacharts.oss-accelerate.aliyuncs.com/docs/openkruisegame%2Bkubevela.pdf)
+- 社区会议录播: [使用 OpenKruiseGame 与 KubeVela 在 Kubernetes 集群上进行游戏负载管理](https://www.bilibili.com/video/BV1yv4y117co/?share_source=copy_web)
+- 材料下载: [OpenKruiseGame+KubeVela-20221115.pdf](https://kubevelacharts.oss-accelerate.aliyuncs.com/docs/openkruisegame%2Bkubevela.pdf)
 
 
+<iframe src="//player.bilibili.com/player.html?aid=562847494&bvid=BV1yv4y117co&cid=895271350&page=1" scrolling="no" border="0" width="720" height="480" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
 <object data="https://kubevelacharts.oss-accelerate.aliyuncs.com/docs/openkruisegame%2Bkubevela.pdf" type="application/pdf" width="720" height="480">
   <p>Open Kruise Game + KubeVela</p>
 </object>
