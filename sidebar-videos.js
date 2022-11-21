@@ -52,6 +52,7 @@ module.exports = {
             "talks/cn/app-platform",
             "talks/cn/oam-manage-app",
             "talks/cn/oam-application",
+            "talks/cn/open-kruise-game",
           ],
         },
       ],
