@@ -198,7 +198,7 @@ my-app      	my-app      	webservice	      	running       	healthy	 Ready:1/1	20
 
 ### 如何在 GitOps 中配合使用 PublishVersion
 
-如果你希望在 GitOps 中使用 [Publish Version](../version-control) 控制你的应用发布，你可以配置如下的 CI 流水线：
+如果你希望在 GitOps 中使用 [Publish Version](../version-control) 控制你的应用发布，你可以参考[示例仓库](https://github.com/FogDong/auto-commit)或者配置如下的 CI 流水线：
 
 ```
 name: Auto Commit

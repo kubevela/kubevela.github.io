@@ -1,12 +1,10 @@
 ---
-title:  Version Control for Definition
+title:  Version Control for Definitions
 ---
 
-When the capabilities(Component or Trait) changes, KubeVela will generate a definition revision automatically.
+When an [OAM definition](../getting-started/definition) is updated, KubeVela will automatically generate a new revision of this definition.
 
-* Check ComponentDefinition Revision
-
-> Note: there are only one revision of definition if you never update it.
+To list the revisions of the `webservice` Component, run:
 
 ```bash
 $ vela def get webservice --revisions
@@ -15,7 +13,8 @@ webservice	1       	Component	dfa072dac5088ed8
 webservice	2       	Component	519e11eb7cbe9cdd
 ```
 
-* Check TraitDefinition Revision
+
+To list the revisions of the `affinity` Trait, run:
 
 ```shell
 $ vela def get affinity --revisions  
@@ -24,7 +23,7 @@ affinity        1               Trait   9db54dd8d5314bd5
 affinity        2               Trait   8bf3e82a6884db2c
 ```
 
-* Check PolicyDefinition Revision
+To list the revisions of the `override` Policy, run:
 
 ```shell
 $ vela def get override --revisions
@@ -32,7 +31,9 @@ NAME            REVISION        TYPE    HASH
 override        1               Policy  f6f87a5eb2271b8a
 ```
 
-* Check WorkflowStepDefinition Revision
+> Note: there is only one revision of a definition if the definition has never been updated
+
+To list the revisions of the `deploy` WorkflowStep, run:
 
 ```shell
 $ vela def get deploy --revisions
@@ -40,13 +41,12 @@ NAME    REVISION        TYPE            HASH
 deploy  1               WorkflowStep    2ea741dae457850b
 ```
 
-The best way to control version is using a new name for every definition version.
+## Specifing a Specific Definition Revision in an Application
 
-## Specify Component/Trait Capability Revision in Application
+Users can specify the revision of a definition they would like to use by specifying definition types in the form `<definition-name>@<definition-revision>`.
 
-Users can specify the revision with `@version` approach, for example, if a user want to stick to using the `v1` revision of `webservice` component.
-
-System admin can also write a webhook to inject the version automatically.
+For example, if a user wanted to use the `v3` revision of `webservice` Component, they would use `webservice@v3` as the `type` in their
+component specification.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -56,11 +56,17 @@ metadata:
 spec:
   components:
   - name: express-server
-    type: webservice@v1
+    type: webservice@v3
     properties:
       image: stefanprodan/podinfo:4.0.3
 ```
 
-In this way, if system admin changes the ComponentDefinition, it won't affect your application. 
+This ensures that if an administrator of your KubeVela instance modifies the `webservice` definition, your application will not be
+affected.
 
-If no revision specified, KubeVela will always use the latest revision when you upgrade your application.
+If no revision is specified for a definition, KubeVela will use the latest revision available at evaluation time.
+This will usually be the next time you upgrade your application.
+
+:::tip
+Cluster administrators can create admission webhooks that will set a definition revision if the field is not set
+:::

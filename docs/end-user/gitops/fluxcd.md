@@ -198,7 +198,7 @@ Re-check the Application in cluster, we can see that the image of the `my-app` h
 
 ### How to use Publish Version in GitOps
 
-If you want to use [Publish Version](../version-control) to control the publish of the Application with GitOps, you can setup a CI workflow like below:
+If you want to use [Publish Version](../version-control) to control the publish of the Application with GitOps, you can checkout the [example repo](https://github.com/FogDong/auto-commit) or setup a CI workflow like below:
 
 ```
 name: Auto Commit
