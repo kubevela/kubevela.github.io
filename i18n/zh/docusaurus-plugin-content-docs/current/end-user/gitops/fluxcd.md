@@ -194,6 +194,48 @@ my-app      	my-app      	webservice	      	running       	healthy	 Ready:1/1	20
 > * 当 Git 仓库中的配置文件被更新时，KubeVela 将根据最新的配置更新集群中的应用。
 > * 当镜像仓库中多了新的 Tag 时，KubeVela 将根据你配置的 policy 规则，筛选出最新的镜像 Tag，并更新到 Git 仓库中。而当代码仓库中的文件被更新后，KubeVela 将重复第一步，更新集群中的文件，从而达到了自动部署的效果。
 
+## FAQ
+
+### 如何在 GitOps 中配合使用 PublishVersion
+
+如果你希望在 GitOps 中使用 [Publish Version](../version-control) 控制你的应用发布，你可以配置如下的 CI 流水线：
+
+```
+name: Auto Commit
+on:
+  push:
+    branches:
+    - '*'
+
+jobs:
+  run:
+    name: Auto Commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Update publish version
+        id: update
+        run: |
+          VERSION=${GITHUB_SHA::8}
+          echo ::set-output name=VERSION::${VERSION}
+          # 将 app.yaml 替换成你的应用文件名
+          sed -i "s|app.oam.dev/publishVersion: .*|app.oam.dev/publishVersion: $VERSION|" app.yaml
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          default_author: github_actions
+          add: '.'
+          message: "[ci skip] deploy from ${{ steps.update.outputs.VERSION }}"
+          signoff: true
+          # 设置 branch
+          # branch: main
+```
+
+这个 CI 会使用 GitHub SHA 作为版本号来更新应用的 PublishVersion。上述 CI 是一个 GitHub Action 的例子，如果你在使用别的 CI 工具，可以参考上述的逻辑来实现。
+
 ## 获取更多
 
 你还可以查看 GitOps [博客](https://kubevela.io/blog/2021/10/10/kubevela-gitops) 以及 [视频实践](https://kubevela.io/videos/best-practice/gitops) 来更好地体验以及使用 GitOps 功能。
