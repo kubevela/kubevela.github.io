@@ -196,9 +196,27 @@ my-app      	my-app      	webservice	      	running       	healthy	 Ready:1/1	20
 
 ## FAQ
 
-### 如何在 GitOps 中配合使用 PublishVersion
+### 如何在 GitOps 中控制应用版本
 
-如果你希望在 GitOps 中使用 [Publish Version](../version-control) 控制你的应用发布，你可以参考[示例仓库](https://github.com/FogDong/auto-commit)或者配置如下的 CI 流水线：
+当应用的 Spec 变化时，应用将重新运行其工作流以进行部署。如果你希望严格控制应用的版本和部署，你可以使用 [Publish Version](../version-control)。有了它，你还可以浏览应用的历史版本、进行跨版本配置比对、版本回滚以及版本重新发布。
+
+:::note
+如果你在应用中使用了外置策略或工作流，那么当你的外置策略或工作流变化时，你的应用 Spec 不一定会变化。此时，你可以使用 `PublishVersion` 来强制应用进行重新部署。
+:::
+
+如果你希望在 GitOps 中控制应用版本，那么你需要在 CI 中更新应用的 `PublishVersion`，从而控制应用的版本和部署。
+
+:::note
+在更新 `PublishVersion` 前，请确保你的应用中有一个初始版本：
+```yaml
+metadata:
+  name: my-app
+  annotations:
+    app.oam.dev/publishVersion: <initial version>
+```
+:::
+
+你可以参考[示例仓库](https://github.com/FogDong/auto-commit)或者配置如下的 CI 流水线来进行版本的更新：
 
 ```
 name: Auto Commit
@@ -234,7 +252,7 @@ jobs:
           # branch: main
 ```
 
-这个 CI 会使用 GitHub SHA 作为版本号来更新应用的 PublishVersion。上述 CI 是一个 GitHub Action 的例子，如果你在使用别的 CI 工具，可以参考上述的逻辑来实现。
+这个 CI 会使用 GitHub SHA 作为版本号来更新应用的 `PublishVersion`。上述 CI 是一个 GitHub Action 的例子，如果你在使用别的 CI 工具，可以参考上述的逻辑来实现。
 
 ## 获取更多
 

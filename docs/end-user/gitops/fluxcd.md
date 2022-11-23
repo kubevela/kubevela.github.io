@@ -196,9 +196,27 @@ Re-check the Application in cluster, we can see that the image of the `my-app` h
 
 ## FAQ
 
-### How to use Publish Version in GitOps
+### How to control Application version in GitOps
 
-If you want to use [Publish Version](../version-control) to control the publish of the Application with GitOps, you can checkout the [example repo](https://github.com/FogDong/auto-commit) or setup a CI workflow like below:
+Every time the spec of Application differs, the Application will re-run its workflow to deploy. If you want to strictly control the Application runs with your expected version, you can use [Publish Version](../version-control). With it, you can also viewing the history revisions, checking the differences across revisions, rolling back to the latest succeeded revision and re-publishing past revisions.
+
+:::note
+If you're using external policy or workflow in your Application, then your Application spec may not change if you have updated your policy or workflow. In this case, you can also use `Publish Version` to force re-trigger the deploy. 
+:::
+
+If you want to control the Application version in GitOps, you need to update the `Publish Version` in the Application in your CI to trigger the deploy. 
+
+:::note
+Before update the `PublishVersion`, you need to setup a initial `PublishVersion` in your Application like:
+```yaml
+metadata:
+  name: my-app
+  annotations:
+    app.oam.dev/publishVersion: <initial version>
+```
+:::
+
+You can checkout the [example repo](https://github.com/FogDong/auto-commit) or setup the CI workflow to update it automatically like below:
 
 ```
 name: Auto Commit
@@ -234,7 +252,7 @@ jobs:
           # branch: main
 ```
 
-This CI will use GitHub SHA as the PublishVersion and update it every time when you push to the branch. Note that this is an example of updating PublishVersion in GitHub Action, if you're using other CI tools, you can setup the CI like above.
+This CI will use GitHub SHA as the `PublishVersion` and update it every time when you push to the branch. Note that this is an example of updating PublishVersion in GitHub Action, if you're using other CI tools, you can setup the CI like above.
 
 ## More
 
