@@ -4,7 +4,7 @@ title: 内置运维特征列表
 
 本文档将**按字典序**展示所有内置运维特征的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-11-16T14:46:36+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-11-24T12:21:19+08:00。
 
 ## Affinity
 
@@ -23,6 +23,38 @@ title: 内置运维特征列表
 - jobs.batch
 
 
+
+### 示例 (affinity)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: busybox
+spec:
+  components:
+    - name: busybox
+      type: webservice
+      properties:
+        image: busybox
+        cmd: ["sleep", "86400"]
+        labels:
+          label-key: label-value
+          to-delete-label-key: to-delete-label-value
+      traits:
+        - type: affinity
+          properties:
+            podAffinity:
+              preferred:
+                - weight: 1
+                  podAffinityTerm:
+                    labelSelector:
+                      matchExpressions:
+                        - key: "secrity"
+                          values: ["S1"]
+                    namespaces: ["default"]
+                    topologyKey: "kubernetes.io/hostname"
+```
 
 ### 参数说明 (affinity)
 
@@ -847,6 +879,50 @@ spec:
 所有组件类型。
 
 
+### 示例 (json-merge-patch)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: busybox
+spec:
+  components:
+    - name: busybox
+      type: webservice
+      properties:
+        image: busybox
+        cmd: ["sleep", "86400"]
+        labels:
+          pod-label-key: pod-label-value
+          to-delete-label-key: to-delete-label-value
+      traits:
+        # the json merge patch can be used to add, replace and delete fields
+        # the following part will
+        # 1. add `deploy-label-key` to deployment labels
+        # 2. set deployment replicas to 3
+        # 3. set `pod-label-key` to `pod-label-modified-value` in pod labels
+        # 4. delete `to-delete-label-key` in pod labels
+        # 5. reset `containers` for pod
+        - type: json-merge-patch
+          properties:
+            metadata:
+              labels:
+                deploy-label-key: deploy-label-added-value
+            spec:
+              replicas: 3
+              template:
+                metadata:
+                  labels:
+                    pod-label-key: pod-label-modified-value
+                    to-delete-label-key: null
+                spec:
+                  containers:
+                    - name: busybox-new
+                      image: busybox:1.34
+                      command: ["sleep", "864000"]
+```
+
 ### 参数说明 (json-merge-patch)
 
 
@@ -867,6 +943,50 @@ spec:
 
 所有组件类型。
 
+
+### 示例 (json-patch)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: busybox
+spec:
+  components:
+    - name: busybox
+      type: webservice
+      properties:
+        image: busybox
+        cmd: ["sleep", "86400"]
+        labels:
+          pod-label-key: pod-label-value
+          to-delete-label-key: to-delete-label-value
+      traits:
+        # the json patch can be used to add, replace and delete fields
+        # the following part will
+        # 1. add `deploy-label-key` to deployment labels
+        # 2. set deployment replicas to 3
+        # 3. set `pod-label-key` to `pod-label-modified-value` in pod labels
+        # 4. delete `to-delete-label-key` in pod labels
+        # 5. add sidecar container for pod
+        - type: json-patch
+          properties:
+            operations:
+              - op: add
+                path: "/spec/replicas"
+                value: 3
+              - op: replace
+                path: "/spec/template/metadata/labels/pod-label-key"
+                value: pod-label-modified-value
+              - op: remove
+                path: "/spec/template/metadata/labels/to-delete-label-key"
+              - op: add
+                path: "/spec/template/spec/containers/1"
+                value:
+                  name: busybox-sidecar
+                  image: busybox:1.34
+                  command: ["sleep", "864000"]
+```
 
 ### 参数说明 (json-patch)
 
