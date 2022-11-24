@@ -194,6 +194,66 @@ my-app      	my-app      	webservice	      	running       	healthy	 Ready:1/1	20
 > * 当 Git 仓库中的配置文件被更新时，KubeVela 将根据最新的配置更新集群中的应用。
 > * 当镜像仓库中多了新的 Tag 时，KubeVela 将根据你配置的 policy 规则，筛选出最新的镜像 Tag，并更新到 Git 仓库中。而当代码仓库中的文件被更新后，KubeVela 将重复第一步，更新集群中的文件，从而达到了自动部署的效果。
 
+## FAQ
+
+### 如何在 GitOps 中控制应用版本
+
+当应用的 Spec 变化时，应用将重新运行其工作流以进行部署。如果你希望严格控制应用的版本和部署，你可以使用 [Publish Version](../version-control)。有了它，你还可以浏览应用的历史版本、进行跨版本配置比对、版本回滚以及版本重新发布。
+
+:::note
+如果你在应用中使用了外置策略或工作流，那么当你的外置策略或工作流变化时，你的应用 Spec 不一定会变化。此时，你可以使用 `PublishVersion` 来强制应用进行重新部署。
+:::
+
+如果你希望在 GitOps 中控制应用版本，那么你需要在 CI 中更新应用的 `PublishVersion`，从而控制应用的版本和部署。
+
+:::note
+在更新 `PublishVersion` 前，请确保你的应用中有一个初始版本：
+```yaml
+metadata:
+  name: my-app
+  annotations:
+    app.oam.dev/publishVersion: <initial version>
+```
+:::
+
+你可以参考[示例仓库](https://github.com/FogDong/auto-commit)或者配置如下的 CI 流水线来进行版本的更新：
+
+```
+name: Auto Commit
+on:
+  push:
+    branches:
+    - '*'
+
+jobs:
+  run:
+    name: Auto Commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Update publish version
+        id: update
+        run: |
+          VERSION=${GITHUB_SHA::8}
+          echo ::set-output name=VERSION::${VERSION}
+          # 将 app.yaml 替换成你的应用文件名
+          sed -i "s|app.oam.dev/publishVersion: .*|app.oam.dev/publishVersion: $VERSION|" app.yaml
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          default_author: github_actions
+          add: '.'
+          message: "[ci skip] deploy from ${{ steps.update.outputs.VERSION }}"
+          signoff: true
+          # 设置 branch
+          # branch: main
+```
+
+这个 CI 会使用 GitHub SHA 作为版本号来更新应用的 `PublishVersion`。上述 CI 是一个 GitHub Action 的例子，如果你在使用别的 CI 工具，可以参考上述的逻辑来实现。
+
 ## 获取更多
 
 你还可以查看 GitOps [博客](https://kubevela.io/blog/2021/10/10/kubevela-gitops) 以及 [视频实践](https://kubevela.io/videos/best-practice/gitops) 来更好地体验以及使用 GitOps 功能。
