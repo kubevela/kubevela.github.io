@@ -4,7 +4,7 @@ title: Built-in WorkflowStep Type
 
 This documentation will walk through all the built-in workflow step types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-11-16T14:46:36+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-11-24T12:21:19+08:00.
 
 ## Apply-Component
 
@@ -180,6 +180,41 @@ This capability has no arguments.
 
 Create or update a config.
 
+### Examples (create-config)
+
+```yaml
+kind: Application
+apiVersion: core.oam.dev/v1beta1
+metadata:
+  name: test-config
+  namespace: "config-e2e-test"
+spec:
+  components: []
+  workflow:
+    steps:
+    - name: write-config
+      type: create-config
+      properties:
+        name: test
+        config: 
+          key1: value1
+          key2: 2
+          key3: true
+          key4: 
+            key5: value5
+    - name: read-config
+      type: read-config
+      properties:
+        name: test
+      outputs:
+      - fromKey: config
+        name: read-config
+    - name: delete-config
+      type: delete-config
+      properties:
+        name: test
+```
+
 ### Specification (create-config)
 
 
@@ -196,6 +231,34 @@ Create or update a config.
 ### Description
 
 Delete a config.
+
+### Examples (delete-config)
+
+```yaml
+kind: Application
+apiVersion: core.oam.dev/v1beta1
+metadata:
+  name: test-config
+  namespace: "config-e2e-test"
+spec:
+  components: []
+  workflow:
+    steps:
+    - name: write-config
+      type: create-config
+      properties:
+        name: test
+        config: 
+          key1: value1
+          key2: 2
+          key3: true
+          key4: 
+            key5: value5
+    - name: delete-config
+      type: delete-config
+      properties:
+        name: test
+```
 
 ### Specification (delete-config)
 
@@ -329,6 +392,89 @@ spec:
 ### Description
 
 Deploy cloud resource and deliver secret to multi clusters.
+
+### Examples (deploy-cloud-resource)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: rds-app
+  namespace: project-1
+spec:
+  components:
+    - name: db
+      type: alibaba-rds
+      properties:
+        instance_name: db
+        account_name: kubevela
+        password: my-password
+        writeConnectionSecretToRef:
+          name: project-1-rds-conn-credential
+  policies:
+    - name: env-policy
+      type: env-binding
+      properties:
+        envs:
+          # 部署 RDS 给杭州集群
+          - name: hangzhou
+            placement:
+              clusterSelector:
+                name: cluster-hangzhou
+            patch:
+              components:
+                - name: db
+                  type: alibaba-rds
+                  properties:
+                    # region: hangzhou
+                    instance_name: hangzhou_db
+          # 部署 RDS 给香港集群
+          - name: hongkong
+            placement:
+              clusterSelector:
+                name: cluster-hongkong
+              namespaceSelector:
+                name: hk-project-1
+            patch:
+              components:
+                - name: db
+                  type: alibaba-rds
+                  properties:
+                    # region: hongkong
+                    instance_name: hongkong_db
+                    writeConnectionSecretToRef:
+                      name: hk-project-rds-credential
+
+  workflow:
+    steps:
+      # 部署 RDS 给杭州区用
+      - name: deploy-hangzhou-rds
+        type: deploy-cloud-resource
+        properties:
+          env: hangzhou
+      # 将给杭州区用的 RDS 共享给北京区
+      - name: share-hangzhou-rds-to-beijing
+        type: share-cloud-resource
+        properties:
+          env: hangzhou
+          placements:
+            - cluster: cluster-beijing
+      # 部署 RDS 给香港区用
+      - name: deploy-hongkong-rds
+        type: deploy-cloud-resource
+        properties:
+          env: hongkong
+      # 将给香港区用的 RDS 共享给香港区其他项目用
+      - name: share-hongkong-rds-to-other-namespace
+        type: share-cloud-resource
+        properties:
+          env: hongkong
+          placements:
+            - cluster: cluster-hongkong
+              namespace: hk-project-2
+            - cluster: cluster-hongkong
+              namespace: hk-project-3
+```
 
 ### Specification (deploy-cloud-resource)
 
@@ -598,6 +744,51 @@ spec:
 
 Generate a JDBC connection based on Component of alibaba-rds.
 
+### Examples (generate-jdbc-connection)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: jdbc
+spec:
+  components:
+    - name: db
+      type: alibaba-rds
+      properties:
+        instance_name: favorite-links
+        database_name: db1
+        account_name: oamtest
+        password: U34rfwefwefffaked
+        security_ips: [ "0.0.0.0/0" ]
+        privilege: ReadWrite
+        writeConnectionSecretToRef:
+          name: db-conn
+    - name: express-server
+      type: webservice
+      properties:
+        image: crccheck/hello-world
+        port: 8000
+
+  workflow:
+    steps:
+      - name: jdbc
+        type: generate-jdbc-connection
+        outputs:
+          - name: jdbc
+            valueFrom: jdbc
+        properties:
+          name: db-conn
+          namespace: default
+      - name: apply
+        type: apply-component
+        inputs:
+          - from: jdbc
+            parameterKey: env
+        properties:
+          component: express-server
+```
+
 ### Specification (generate-jdbc-connection)
 
 
@@ -612,6 +803,59 @@ Generate a JDBC connection based on Component of alibaba-rds.
 ### Description
 
 List the configs.
+
+### Examples (list-config)
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: observability
+  namespace: vela-system
+spec:
+  context:
+    readConfig: true
+  mode: 
+  workflowSpec:
+    steps:
+      - name: Enable Prism
+        type: addon-operation
+        properties:
+          addonName: vela-prism
+      
+      - name: Enable o11y
+        type: addon-operation
+        properties:
+          addonName: o11y-definitions
+          operation: enable
+          args:
+          - --override-definitions
+
+      - name: Prepare Prometheus
+        type: step-group
+        subSteps: 
+        - name: get-exist-prometheus
+          type: list-config
+          properties:
+            template: prometheus-server
+          outputs:
+          - name: prometheus
+            valueFrom: "output.configs"
+
+        - name: prometheus-server
+          inputs:
+          - from: prometheus
+            # TODO: Make it is not required
+            parameterKey: configs
+          if: "!context.readConfig || len(inputs.prometheus) == 0"
+          type: addon-operation
+          properties:
+            addonName: prometheus-server
+            operation: enable
+            args:
+            - memory=4096Mi
+            - serviceType=LoadBalancer
+```
 
 ### Specification (list-config)
 
@@ -934,6 +1178,27 @@ spec:
 
 Read a config.
 
+### Examples (read-config)
+
+```yaml
+kind: Application
+apiVersion: core.oam.dev/v1beta1
+metadata:
+  name: test-config
+  namespace: "config-e2e-test"
+spec:
+  components: []
+  workflow:
+    steps:
+    - name: read-config
+      type: read-config
+      properties:
+        name: test
+      outputs:
+      - fromKey: config
+        name: read-config
+```
+
 ### Specification (read-config)
 
 
@@ -1006,6 +1271,89 @@ spec:
 ### Description
 
 Sync secrets created by terraform component to runtime clusters so that runtime clusters can share the created cloud resource.
+
+### Examples (share-cloud-resource)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: rds-app
+  namespace: project-1
+spec:
+  components:
+    - name: db
+      type: alibaba-rds
+      properties:
+        instance_name: db
+        account_name: kubevela
+        password: my-password
+        writeConnectionSecretToRef:
+          name: project-1-rds-conn-credential
+  policies:
+    - name: env-policy
+      type: env-binding
+      properties:
+        envs:
+          # 部署 RDS 给杭州集群
+          - name: hangzhou
+            placement:
+              clusterSelector:
+                name: cluster-hangzhou
+            patch:
+              components:
+                - name: db
+                  type: alibaba-rds
+                  properties:
+                    # region: hangzhou
+                    instance_name: hangzhou_db
+          # 部署 RDS 给香港集群
+          - name: hongkong
+            placement:
+              clusterSelector:
+                name: cluster-hongkong
+              namespaceSelector:
+                name: hk-project-1
+            patch:
+              components:
+                - name: db
+                  type: alibaba-rds
+                  properties:
+                    # region: hongkong
+                    instance_name: hongkong_db
+                    writeConnectionSecretToRef:
+                      name: hk-project-rds-credential
+
+  workflow:
+    steps:
+      # 部署 RDS 给杭州区用
+      - name: deploy-hangzhou-rds
+        type: deploy-cloud-resource
+        properties:
+          env: hangzhou
+      # 将给杭州区用的 RDS 共享给北京区
+      - name: share-hangzhou-rds-to-beijing
+        type: share-cloud-resource
+        properties:
+          env: hangzhou
+          placements:
+            - cluster: cluster-beijing
+      # 部署 RDS 给香港区用
+      - name: deploy-hongkong-rds
+        type: deploy-cloud-resource
+        properties:
+          env: hongkong
+      # 将给香港区用的 RDS 共享给香港区其他项目用
+      - name: share-hongkong-rds-to-other-namespace
+        type: share-cloud-resource
+        properties:
+          env: hongkong
+          placements:
+            - cluster: cluster-hongkong
+              namespace: hk-project-2
+            - cluster: cluster-hongkong
+              namespace: hk-project-3
+```
 
 ### Specification (share-cloud-resource)
 
