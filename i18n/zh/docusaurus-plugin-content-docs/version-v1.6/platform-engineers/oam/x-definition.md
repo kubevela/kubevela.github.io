@@ -198,7 +198,7 @@ spec:
 
 * 其中 `definition.oam.dev/description` 对应的字段就描述了这个组件类型的功能是启动一个 helm chart。
 *  `.spec.workload` 字段，填写的是`autodetects.core.oam.dev`表示让用户自动发现这个 helm chart 组件背后的工作负载。
-*  `.spec.schematic.cue.template`字段描述了基于 CUE 的抽象模板，输出包含2个对象，其中一个输出是根据 helm repo 托管的制品形态决定的，如果是用的helm官方的模式托管的则是生成 `HelmRepository` 对象，git模式推广的就是生成`GitRepository` 对象，另一个输出的对象是 `HelmRelease` 包含了这个 helm 的具体参数。 其中 `parameter` 列表则是暴露给用户填写的全部参数。
+*  `.spec.schematic.cue.template`字段描述了基于 CUE 的抽象模板，输出包含2个对象，其中一个输出是根据 helm repo 托管的制品形态决定的，如果是用的helm官方的模式托管的则是生成 `HelmRepository` 对象，git模式托管的就是生成`GitRepository` 对象，另一个输出的对象是 `HelmRelease` 包含了这个 helm 的具体参数。 其中 `parameter` 列表则是暴露给用户填写的全部参数。
 
 
 ## 运维特征定义（TraitDefinition）
