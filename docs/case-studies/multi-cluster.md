@@ -13,6 +13,12 @@ There are many scenarios that developers or system operators need to deploy and 
 * For stability/availability, one single application can be deployed in multiple clusters for backup, which provides more stability and availability.
 * For security, application might need to be deployed in different zones/areas as government policy requires.
 
+## Architecture
+
+![](../resources/multi-cluster-sys-arch.jpg)
+
+KubeVela leverages the [Cluster-Gateway](https://github.com/oam-dev/cluster-gateway) for multi-cluster, it's installed automatically along with KubeVela chart. By default, it will directly connect to the clusters by using the `kubeconfig` as secret. You can also enable the [Open Cluster Management](../platform-engineers/system-operation/working-with-ocm) for the PULL mode.
+
 The following guide will introduce how to manage applications across clusters on KubeVela.
 
 ## Preparation
