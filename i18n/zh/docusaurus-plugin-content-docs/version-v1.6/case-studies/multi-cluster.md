@@ -12,6 +12,12 @@ title:  多集群应用交付
 * 考虑到稳定性及高可用性，同一个应用可以部署在多个集群中，以实现容灾、异地多活等需求。
 * 应用可能需要部署在不同的区域来满足不同政府对于数据安全性的政策需求。
 
+## 架构
+
+![](../resources/multi-cluster-sys-arch.jpg)
+
+KubeVela 的多集群依赖于 [Cluster-Gateway](https://github.com/oam-dev/cluster-gateway) 组件，在 KubeVela 的 Helm Chart 中自动安装。 默认情况下，KubeVela 管理多集群的方式是通过 `kubeconfig` 直连集群，你也可以使用 [Open Cluster Management](../platform-engineers/system-operation/working-with-ocm) 组件来使用拉取（PULL）模式。
+
 下文将会介绍如何在 KubeVela 中进行使用管理多集群应用。
 
 ## 准备工作
@@ -181,7 +187,7 @@ Handling connection for 8080
 
 策略主要负责描述资源的位置以及它们应该如何被差异化配置。资源下发真正的执行者是工作流。在工作流中，`deploy` 步骤会根据引用的策略对资源进行差异化配置，然后再将它们分发到对应的集群中。
 
-![multi-cluster-arch](../../../../../docs/resources/multi-cluster-arch.jpg)
+![multi-cluster-arch](../resources/multi-cluster-arch.jpg)
 
 
 
