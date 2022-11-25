@@ -188,7 +188,11 @@ output: {
 If you execute the command to enable the addon as follows:
 
 ```shell
-$ vela addon enable <addon-name> clusters=local,cluser1
+$ vela addon enable <addon-name> --clusters=local,cluster1
+```
+or:
+```shell
+$ vela addon enable <addon-name> clusters="{local,cluster1}"
 ```
 
 The rendering result will be:
