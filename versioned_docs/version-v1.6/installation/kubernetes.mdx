@@ -28,6 +28,7 @@ KubeVela CLI provides an easy to engage and manage your application delivery in 
       {label: 'Script', value: 'script'},
       {label: 'Homebrew', value: 'homebrew'},
       {label: 'Download directly from releases', value: 'download'},
+      {label: 'Asdf-vm', value: 'asdf-vm'},
       {label: 'Docker', value: 'docker'},
     ]}>
 <TabItem value="script">
@@ -51,7 +52,7 @@ powershell -Command "iwr -useb https://kubevela.net/script/install.ps1 | iex"
 </TabItem>
 <TabItem value="homebrew">
 
-**macOS/Linux**
+**MacOS/Linux**
 
 Update your brew first. Please note that the brew method only supports the installation of the official release version.
 
@@ -81,6 +82,29 @@ sudo mv ./vela /usr/local/bin/vela
 - MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
 :::
 </TabItem>
+
+<TabItem value="asdf-vm">
+
+** MacOS/Linux **
+
+If you are using the [asdf version manager](https://asdf-vm.com/), you can install `vela` with:
+
+```shell script
+# Add the vela plugin for asdf
+asdf plugin add vela
+
+# List all installable versions
+asdf list-all vela
+
+# Install the desired version (could be "latest")
+asdf install vela <version>
+
+# set it as the global version, unless a project declares it otherwise locally
+asdf global vela <version>
+```
+
+</TabItem>
+
 <TabItem value="docker">
 
 If you have docker environment, you can easily run CLI with the vela CLI docker image called `oamdev/vela-cli`:
