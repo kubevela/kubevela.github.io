@@ -58,6 +58,7 @@ KubeVela v1.6 upgrades some develop tools. You need to upgrade your local develo
 cd ~/go/go1.19.1/ && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.49.0
 go install honnef.co/go/tools/cmd/staticcheck@2022.1
 go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.6.2
+go install golang.org/x/tools/cmd/goimports@latest
 ```
 :::
 
