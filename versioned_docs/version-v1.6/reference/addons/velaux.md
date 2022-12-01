@@ -70,7 +70,7 @@ The expected output:
 If you have ingress and domain available in your cluster, you can also deploy VelaUX by specify a domain like below:
 
 ```bash
-vela addon enable velaux domain=example.doamin.com
+vela addon enable velaux domain=example.domain.com
 ```
 
 The expected output:
@@ -83,7 +83,7 @@ Please access the velaux from the following endpoints:
 +----------------------------+---------------------------+
 |  REF(KIND/NAMESPACE/NAME)  |         ENDPOINT          |
 +----------------------------+---------------------------+
-| Ingress/vela-system/velaux | http://example.doamin.com |
+| Ingress/vela-system/velaux | http://example.domain.com |
 +----------------------------+---------------------------+
 ```
 
