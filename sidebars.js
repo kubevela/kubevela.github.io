@@ -140,9 +140,7 @@ module.exports = {
           type: 'category',
           label: 'Pipeline',
           collapsed: true,
-          items: [
-            'end-user/pipeline/workflowrun',
-          ],
+          items: ['end-user/pipeline/workflowrun'],
         },
         {
           type: 'category',
@@ -171,6 +169,18 @@ module.exports = {
             'tutorials/dry-run',
             'tutorials/access-application',
             'tutorials/debug-app',
+            {
+              type: 'category',
+              label: 'Config Management',
+              collapsed: false,
+              items: [
+                'how-to/dashboard/config/helm-repo',
+                'how-to/dashboard/config/image-registry',
+                'how-to/dashboard/config/read-write-config-in-pipeline',
+                'how-to/dashboard/config/nacos',
+                'how-to/dashboard/config/config-template',
+              ],
+            },
             'tutorials/cloud-shell',
             'tutorials/vela-top',
           ],
@@ -214,7 +224,7 @@ module.exports = {
             'platform-engineers/system-operation/vela-cli-image',
             'platform-engineers/system-operation/migration-from-old-version',
             'platform-engineers/system-operation/system-info-diagnose',
-            'platform-engineers/system-operation/high-availability'
+            'platform-engineers/system-operation/high-availability',
           ],
         },
         {
@@ -226,12 +236,6 @@ module.exports = {
             id: 'how-to/dashboard/user/user',
           },
           items: ['tutorials/sso', 'how-to/dashboard/config/dex-connectors'],
-        },
-        {
-          'Registry Integration': [
-            'how-to/dashboard/config/helm-repo',
-            'how-to/dashboard/config/image-registry',
-          ],
         },
         'how-to/dashboard/user/project',
         {

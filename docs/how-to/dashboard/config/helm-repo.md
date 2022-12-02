@@ -3,23 +3,57 @@ title: Connect Helm Repository
 description: Configure a helm repository
 ---
 
-In this guide, we will introduce how to use Integration create a private helm repository and create a helm type application to use this repo.
+In this guide, we will introduce how to use Config to connect a private helm repository and create an application with Helm type to use this repository.
 
-:::note
-You must enable the `fluxcd` addon firstly.
+:::info
+You must enable the [fluxcd](../../../reference/addons/fluxcd) addon first.
 :::
 
-## Create a helm repo
+Check the [config template](./config-template) is exist with the following command:
 
-You can set the url of your private repository in `url` field. If your repo have set up the HTTP basic authentication , you can set the `username` and `password` for it.
+```bash
+vela config-template list | grep helm-repository
+```
 
-In this image we use the [azure](https://marketplace.azurecr.io/helm/v1/repo) helm repo.
+## Create a Helm Repository config
 
-![config](../../../resources/helm-config.jpg)
+There are two ways to create the config. On the Configs page, you could create the configs that belong to the system scope. Then, the Helm Repository could be used for all projects. If you only want to use it for one project, let's create the config on the Project summary page.
 
-If your helm repo's certificate is self-signed, you can set the `caFile` field with your own certificate.
+You can set the URL of your private repository in the `URL` field. If your repository has set up the HTTP basic authentication, you can set the `Username` and `Password` for it.
 
-## Use the helm repo
+BTW, If your helm repository's certificate is self-signed, you can set the `CaFile` field with the certificate content.
+
+![config](https://static.kubevela.net/images/1.6/create-config.jpg)
+
+Also, you could create the config via CLI:
+
+```bash
+vela config create <Config Name> -t helm-repository url=<Repo URL> username=<Username> password=<password>
+```
+
+List all Helm Repositories:
+
+```bash
+vela config list -t helm-repository
+```
+
+## Distribute the config
+
+After creating a config, it only saves as a Secret in the system namespace in the hub cluster. But the Helm application will generate the HelmRepository resource that depends on this Secret. So, we should distribute the Secret to all namespaces that we could use and include managed clusters. The config distribution could help you.
+
+Let's go to the project summary page for which you want to create the Application.
+
+![project summary](https://static.kubevela.net/images/1.6/project-summary.jpg)
+
+Click the `Distribute` button and select the targets that you want to distribute the config.
+
+Also, you could distribute the config via CLI:
+
+```bash
+vela config distribute <Config Name> --target <cluster/namespace>
+```
+
+## Create an application with this repository
 
 You can follow the [application creation guide](../application/create-application) to create a helm type application in project `default`. eg:
 
