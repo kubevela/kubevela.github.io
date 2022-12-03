@@ -348,5 +348,8 @@
   },
   "sidebar.docs.category.Automated Observability": {
     "message": "自动化可观测"
+  },
+  "sidebar.docs.category.Config Management": {
+    "message": "配置管理"
   }
 }
