@@ -57,7 +57,7 @@ A `metadata.yaml` describes the basic information of an addon, such as the name,
 ```yaml
 name: example
 version: 1.0.0
-description: Example adddon.
+description: Example addon.
 icon: xxx
 url: xxx
 
@@ -69,6 +69,7 @@ deployTo:
 
 dependencies:
 - name: addon_name
+  version: addon_version
 
 system:
   vela: ">=v1.4.0"
@@ -79,18 +80,18 @@ invisible: false
 
 Here's the usage of every field:
 
-|          Field          | Required |        Type        |                                                                                                            Usage                                                                                                            |
-| :---------------------: | :------: | :----------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|          name           |   yes    |       string       |                                                                                                   The name of the addon.                                                                                                    |
-|         version         |   yes    |       string       |                                                               The version of addon, increase for every change and follow [SemVer](https://semver.org/) rule.                                                                |
-|       description       |   yes    |       string       |                                                                                                  Description of the addon.                                                                                                  |
-|          icon           |    no    |       string       |                                                                                     Icon of the addon, will display in addon dashboard.                                                                                     |
-|           url           |    no    |       string       |                                                                                    The official website of the project behind the addon.                                                                                    |
-|          tags           |    no    |      []string      |                                                                                         The tags to display and organize the addon.                                                                                         |
-|      dependencies       |    no    | []{ name: string } |                                                  Names of other addons it depends on. KubeVela will make sure these dependencies are enabled before installing this addon.                                                  |
-|       system.vela       |    no    |       string       |                                                 Required version of vela controller, vela CLI will block the installation if vela controller can't match the requirements.                                                  |
-|    system.kubernetes    |    no    |       string       |                                                  Required version of Kubernetes, vela CLI will block the installation if Kubernetes cluster can't match the requirements.                                                   |
-| deployTo.runtimeCluster |    no    |        bool        | By default, the addon will not be installed in the managed clusters. If it's `true`, it will be delivered to all managed clusters automatically. (This field only take effect when application template file is YAML typed) |
+|          Field          | Required |                Type                 |                                                                                                                   Usage                                                                                                                    |
+| :---------------------: | :------: |:-----------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|          name           |   yes    |               string                |                                                                                                           The name of the addon.                                                                                                           |
+|         version         |   yes    |               string                |                                                                       The version of addon, increase for every change and follow [SemVer](https://semver.org/) rule.                                                                       |
+|       description       |   yes    |               string                |                                                                                                         Description of the addon.                                                                                                          |
+|          icon           |    no    |               string                |                                                                                            Icon of the addon, will display in addon dashboard.                                                                                             |
+|           url           |    no    |               string                |                                                                                           The official website of the project behind the addon.                                                                                            |
+|          tags           |    no    |              []string               |                                                                                                The tags to display and organize the addon.                                                                                                 |
+|      dependencies       |    no    | []{ name: string, version: string } | Infos of other addons it depends on. You can specify the version of dependency addon by defining the `version` filed, otherwise would use latest one. KubeVela will make sure these dependencies are enabled before installing this addon. |
+|       system.vela       |    no    |               string                |                                                         Required version of vela controller, vela CLI will block the installation if vela controller can't match the requirements.                                                         |
+|    system.kubernetes    |    no    |               string                |                                                          Required version of Kubernetes, vela CLI will block the installation if Kubernetes cluster can't match the requirements.                                                          |
+| deployTo.runtimeCluster |    no    |                bool                 |        By default, the addon will not be installed in the managed clusters. If it's `true`, it will be delivered to all managed clusters automatically. (This field only take effect when application template file is YAML typed)         |
 
 #### README.md (Required)
 
