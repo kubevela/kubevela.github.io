@@ -4,7 +4,7 @@ title: Built-in WorkflowStep Type
 
 This documentation will walk through all the built-in workflow step types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-11-24T12:21:19+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-12-06T16:17:10+08:00.
 
 ## Apply-Component
 
@@ -97,7 +97,7 @@ spec:
                 requests:
                   storage: 8Gi
               storageClassName: standard
-            # the cluster you want to apply the resource to, default is the current cluster
+          # the cluster you want to apply the resource to, default is the current cluster
           cluster: <your cluster name>  
       - name: apply-server
         type: apply-component
@@ -110,7 +110,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- value | Specify Kubernetes native resource object to be applied. | map[string]:_ | true |  
+ value | Specify Kubernetes native resource object to be applied. | map[string]_ | true |  
  cluster | The cluster you want to apply the resource to, default is the current control plane cluster. | string | false | empty 
 
 
@@ -223,7 +223,7 @@ spec:
  name | Specify the name of the config. | string | true |  
  namespace | Specify the namespace of the config. | string | false |  
  template | Specify the template of the config. | string | false |  
- config | Specify the content of the config. | map[string]:_ | true |  
+ config | Specify the content of the config. | map[string]_ | true |  
 
 
 ## Delete-Config
@@ -549,7 +549,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name | Specify the name of the export destination. | string | false |  
  namespace | Specify the namespace of the export destination. | string | false |  
- kind | Specify the kind of the export destination. | string | false | ConfigMap 
+ kind | Specify the kind of the export destination. | "ConfigMap" or "Secret" | false | ConfigMap 
  data | Specify the data to export. | struct | true |  
  topology | Specify the topology to export. | string | false |  
 
@@ -963,18 +963,18 @@ We can see that before and after the deployment of the application, the messages
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- url | Specify the the lark url, you can either sepcify it in value or use secretRef. | [url-option-0](#url-option-0-notification) or [url-option-1](#url-option-1-notification) | true |  
+ url | Specify the the lark url, you can either sepcify it in value or use secretRef. | [type-option-1](#type-option-1-notification) or [type-option-2](#type-option-2-notification) | true |  
  message | Specify the message that you want to sent, refer to [Lark messaging](https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN#8b0f2a1b). | [message](#message-notification) | true |  
 
 
-##### url-option-0 (notification)
+##### type-option-1 (notification)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  value | the url address content in string. | string | true |  
 
 
-##### url-option-1 (notification)
+##### type-option-2 (notification)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
@@ -1001,18 +1001,18 @@ We can see that before and after the deployment of the application, the messages
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- url | Specify the the dingding url, you can either sepcify it in value or use secretRef. | [url-option-0](#url-option-0-notification) or [url-option-1](#url-option-1-notification) | true |  
+ url | Specify the the dingding url, you can either sepcify it in value or use secretRef. | [type-option-1](#type-option-1-notification) or [type-option-2](#type-option-2-notification) | true |  
  message | Specify the message that you want to sent, refer to [dingtalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw). | [message](#message-notification) | true |  
 
 
-##### url-option-0 (notification)
+##### type-option-1 (notification)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  value | the url address content in string. | string | true |  
 
 
-##### url-option-1 (notification)
+##### type-option-2 (notification)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
@@ -1031,31 +1031,31 @@ We can see that before and after the deployment of the application, the messages
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- text | Specify the message content of dingtalk notification. | (null&#124;struct) | false |  
- msgtype | msgType can be text, link, mardown, actionCard, feedCard. | string | false | text 
- link |  | (null&#124;struct) | false |  
- markdown |  | (null&#124;struct) | false |  
- at |  | (null&#124;struct) | false |  
- actionCard |  | (null&#124;struct) | false |  
- feedCard |  | (null&#124;struct) | false |  
+ text | Specify the message content of dingtalk notification. | null | false |  
+ msgtype | msgType can be text, link, mardown, actionCard, feedCard. | "text" or "link" or "markdown" or "actionCard" or "feedCard" | false | text 
+ link |  | null | false |  
+ markdown |  | null | false |  
+ at |  | null | false |  
+ actionCard |  | null | false |  
+ feedCard |  | null | false |  
 
 
 #### slack (notification)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- url | Specify the the slack url, you can either sepcify it in value or use secretRef. | [url-option-0](#url-option-0-notification) or [url-option-1](#url-option-1-notification) | true |  
+ url | Specify the the slack url, you can either sepcify it in value or use secretRef. | [type-option-1](#type-option-1-notification) or [type-option-2](#type-option-2-notification) | true |  
  message | Specify the message that you want to sent, refer to [slack messaging](https://api.slack.com/reference/messaging/payload). | [message](#message-notification) | true |  
 
 
-##### url-option-0 (notification)
+##### type-option-1 (notification)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  value | the url address content in string. | string | true |  
 
 
-##### url-option-1 (notification)
+##### type-option-2 (notification)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
@@ -1076,7 +1076,7 @@ We can see that before and after the deployment of the application, the messages
  ---- | ----------- | ---- | -------- | ------- 
  text | Specify the message text for slack notification. | string | true |  
  blocks |  | null | false |  
- attachments |  | (null&#124;struct) | false |  
+ attachments |  | null | false |  
  thread_ts |  | string | false |  
  mrkdwn | Specify the message text format in markdown for slack notification. | bool | false | true 
 
@@ -1096,19 +1096,19 @@ We can see that before and after the deployment of the application, the messages
  ---- | ----------- | ---- | -------- | ------- 
  address | Specify the email address that you want to send from. | string | true |  
  alias | The alias is the email alias to show after sending the email. | string | false |  
- password | Specify the password of the email, you can either sepcify it in value or use secretRef. | [password-option-0](#password-option-0-notification) or [password-option-1](#password-option-1-notification) | true |  
+ password | Specify the password of the email, you can either sepcify it in value or use secretRef. | [type-option-1](#type-option-1-notification) or [type-option-2](#type-option-2-notification) | true |  
  host | Specify the host of your email. | string | true |  
  port | Specify the port of the email host, default to 587. | int | false | 587 
 
 
-##### password-option-0 (notification)
+##### type-option-1 (notification)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  value | the password content in string. | string | true |  
 
 
-##### password-option-1 (notification)
+##### type-option-2 (notification)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
@@ -1507,18 +1507,18 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- url | Specify the webhook url. | [url-option-0](#url-option-0-webhook) or [url-option-1](#url-option-1-webhook) | true |  
- data | Specify the data you want to send. | map[string]:_ | false |  
+ url | Specify the webhook url. | [type-option-1](#type-option-1-webhook) or [type-option-2](#type-option-2-webhook) | true |  
+ data | Specify the data you want to send. | map[string]_ | false |  
 
 
-#### url-option-0 (webhook)
+#### type-option-1 (webhook)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  value |  | string | true |  
 
 
-#### url-option-1 (webhook)
+#### type-option-2 (webhook)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
