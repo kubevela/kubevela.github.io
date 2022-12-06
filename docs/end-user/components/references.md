@@ -4,7 +4,7 @@ title: Built-in Component Type
 
 This documentation will walk through all the built-in component types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-11-24T12:21:19+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-12-06T16:17:10+08:00.
 
 ## Cron-Task
 
@@ -39,17 +39,17 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- labels | Specify the labels in the workload. | map[string]:string | false |  
- annotations | Specify the annotations in the workload. | map[string]:string | false |  
+ labels | Specify the labels in the workload. | map[string]string | false |  
+ annotations | Specify the annotations in the workload. | map[string]string | false |  
  schedule | Specify the schedule in Cron format, see https://en.wikipedia.org/wiki/Cron. | string | true |  
  startingDeadlineSeconds | Specify deadline in seconds for starting the job if it misses scheduled. | int | false |  
  suspend | Suspend subsequent executions. | bool | false | false 
- concurrencyPolicy | Specifies how to treat concurrent executions of a Job. | string | false | Allow 
+ concurrencyPolicy | Specifies how to treat concurrent executions of a Job. | "Allow" or "Forbid" or "Replace" | false | Allow 
  successfulJobsHistoryLimit | The number of successful finished jobs to retain. | int | false | 3 
  failedJobsHistoryLimit | The number of failed finished jobs to retain. | int | false | 1 
  count | Specify number of tasks to run in parallel. | int | false | 1 
  image | Which image would you like to use for your service. | string | true |  
- imagePullPolicy | Specify image pull policy for your service. | string | false |  
+ imagePullPolicy | Specify image pull policy for your service. | "Always" or "Never" or "IfNotPresent" | false |  
  imagePullSecrets | Specify image pull secrets for your service. | []string | false |  
  restart | Define the job restart policy, the value can only be Never or OnFailure. By default, it's Never. | string | false | Never 
  cmd | Commands to run in the container. | []string | false |  
@@ -104,8 +104,8 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- medium |  | string | false | empty 
- type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir. | string | false | emptyDir 
+ medium |  | "" or "Memory" | false | empty 
+ type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir. | "emptyDir" or "pvc" or "configMap" or "secret" | false | emptyDir 
 
 
 #### hostAliases (cron-task)
@@ -272,10 +272,10 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- labels | Specify the labels in the workload. | map[string]:string | false |  
- annotations | Specify the annotations in the workload. | map[string]:string | false |  
+ labels | Specify the labels in the workload. | map[string]string | false |  
+ annotations | Specify the annotations in the workload. | map[string]string | false |  
  image | Which image would you like to use for your service. | string | true |  
- imagePullPolicy | Specify image pull policy for your service. | string | false |  
+ imagePullPolicy | Specify image pull policy for your service. | "Always" or "Never" or "IfNotPresent" | false |  
  imagePullSecrets | Specify image pull secrets for your service. | []string | false |  
  ports | Which ports do you want customer traffic sent to, defaults to 80. | [[]ports](#ports-daemon) | false |  
  cmd | Commands to run in the container. | []string | false |  
@@ -295,7 +295,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  port | Number of port to expose on the pod's IP address. | int | true |  
  name | Name of the port. | string | false |  
- protocol | Protocol for port. Must be UDP, TCP, or SCTP. | string | false | TCP 
+ protocol | Protocol for port. Must be UDP, TCP, or SCTP. | "TCP" or "UDP" or "SCTP" | false | TCP 
  expose | Specify if the port should be exposed. | bool | false | false 
 
 
@@ -398,7 +398,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- medium |  | string | false | empty 
+ medium |  | "" or "Memory" | false | empty 
 
 
 ##### hostPath (daemon)
@@ -407,7 +407,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- mountPropagation |  | string | false |  
+ mountPropagation |  | "None" or "HostToContainer" or "Bidirectional" | false |  
  path |  | string | true |  
  readOnly |  | bool | false |  
 
@@ -418,8 +418,8 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- medium |  | string | false | empty 
- type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir. | string | false | emptyDir 
+ medium |  | "" or "Memory" | false | empty 
+ type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir. | "emptyDir" or "pvc" or "configMap" or "secret" | false | emptyDir 
 
 
 #### livenessProbe (daemon)
@@ -595,11 +595,11 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- labels | Specify the labels in the workload. | map[string]:string | false |  
- annotations | Specify the annotations in the workload. | map[string]:string | false |  
+ labels | Specify the labels in the workload. | map[string]string | false |  
+ annotations | Specify the annotations in the workload. | map[string]string | false |  
  count | Specify number of tasks to run in parallel. | int | false | 1 
  image | Which image would you like to use for your service. | string | true |  
- imagePullPolicy | Specify image pull policy for your service. | string | false |  
+ imagePullPolicy | Specify image pull policy for your service. | "Always" or "Never" or "IfNotPresent" | false |  
  imagePullSecrets | Specify image pull secrets for your service. | []string | false |  
  restart | Define the job restart policy, the value can only be Never or OnFailure. By default, it's Never. | string | false | Never 
  cmd | Commands to run in the container. | []string | false |  
@@ -650,8 +650,8 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- medium |  | string | false | empty 
- type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir. | string | false | emptyDir 
+ medium |  | "" or "Memory" | false | empty 
+ type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir. | "emptyDir" or "pvc" or "configMap" or "secret" | false | emptyDir 
 
 
 #### livenessProbe (task)
@@ -787,10 +787,10 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- labels | Specify the labels in the workload. | map[string]:string | false |  
- annotations | Specify the annotations in the workload. | map[string]:string | false |  
+ labels | Specify the labels in the workload. | map[string]string | false |  
+ annotations | Specify the annotations in the workload. | map[string]string | false |  
  image | Which image would you like to use for your service. | string | true |  
- imagePullPolicy | Specify image pull policy for your service. | string | false |  
+ imagePullPolicy | Specify image pull policy for your service. | "Always" or "Never" or "IfNotPresent" | false |  
  imagePullSecrets | Specify image pull secrets for your service. | []string | false |  
  ports | Which ports do you want customer traffic sent to, defaults to 80. | [[]ports](#ports-webservice) | false |  
  cmd | Commands to run in the container. | []string | false |  
@@ -810,7 +810,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  port | Number of port to expose on the pod's IP address. | int | true |  
  name | Name of the port. | string | false |  
- protocol | Protocol for port. Must be UDP, TCP, or SCTP. | string | false | TCP 
+ protocol | Protocol for port. Must be UDP, TCP, or SCTP. | "TCP" or "UDP" or "SCTP" | false | TCP 
  expose | Specify if the port should be exposed. | bool | false | false 
  nodePort | exposed node port. Only Valid when exposeType is NodePort. | int | false |  
 
@@ -918,7 +918,7 @@ spec:
  name |  | string | true |  
  mountPath |  | string | true |  
  subPath |  | string | false |  
- medium |  | string | false | empty 
+ medium |  | "" or "Memory" | false | empty 
 
 
 ##### hostPath (webservice)
@@ -937,8 +937,8 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name |  | string | true |  
  mountPath |  | string | true |  
- medium |  | string | false | empty 
- type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir. | string | false | emptyDir 
+ medium |  | "" or "Memory" | false | empty 
+ type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir. | "emptyDir" or "pvc" or "configMap" or "secret" | false | emptyDir 
 
 
 #### livenessProbe (webservice)

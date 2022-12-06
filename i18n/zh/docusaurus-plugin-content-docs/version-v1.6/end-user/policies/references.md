@@ -4,7 +4,7 @@ title: 内置策略列表
 
 本文档将**按字典序**展示所有内置策略的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-11-16T14:46:36+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-12-06T16:17:10+08:00。
 
 ## Apply-Once
 
@@ -150,7 +150,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  selector | 指定资源筛选目标规则。 | [[]selector](#selector-garbage-collect) | true |  
- strategy | 目标资源循环利用的策略。 可用值：never、onAppDelete、onAppUpdate。 | string | false | onAppUpdate 
+ strategy | 目标资源循环利用的策略。 可用值：never、onAppDelete、onAppUpdate。 | "onAppUpdate" or "onAppDelete" or "never" | false | onAppUpdate 
 
 
 ##### selector (garbage-collect)
@@ -170,6 +170,32 @@ spec:
 ### 描述
 
 Apply periodical health checking to the application。
+
+### 示例 (health)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: example-app-rollout
+  namespace: default
+spec:
+  components:
+    - name: hello-world-server
+      type: webservice
+      properties:
+        image: crccheck/hello-world
+        ports: 
+        - port: 8000
+          expose: true
+        type: webservice
+  policies:
+    - name: health-policy-demo
+      type: health
+      properties:
+        probeInterval: 5
+        probeTimeout: 10
+```
 
 ### 参数说明 (health)
 
@@ -306,7 +332,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name | 要覆盖的组件的名称。 如果未设置，它将匹配具有指定类型的所有组件。 可以与通配符 * 一起使用以进行模糊匹配。。 | string | false |  
  type | 要覆盖的组件的类型。 如果未设置，将匹配所有组件类型。 | string | false |  
- properties | 要覆盖的配置属性，未填写配置会与原先的配置合并。 | map[string]:_ | false |  
+ properties | 要覆盖的配置属性，未填写配置会与原先的配置合并。 | map[string]_ | false |  
  traits | 要覆盖的 trait 配置列表。 | [[]traits](#traits-override) | false |  
 
 
@@ -315,7 +341,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  type | 要做参数覆盖的 trait 类型。 | string | true |  
- properties | 要覆盖的配置属性，未填写配置会与原先的配置合并。 | map[string]:_ | false |  
+ properties | 要覆盖的配置属性，未填写配置会与原先的配置合并。 | map[string]_ | false |  
  disable | 如果为 true，该 trait 将被删除，默认 false。 | bool | false | false 
 
 
@@ -672,9 +698,9 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  clusters | 要选择的集群的名称。 | []string | false |  
- clusterLabelSelector | 根据集群标签选择。 | map[string]:string | false |  
+ clusterLabelSelector | 根据集群标签选择。 | map[string]string | false |  
  allowEmpty | Ignore empty cluster error。 | bool | false |  
- clusterSelector | Deprecated: Use clusterLabelSelector instead。 | map[string]:string | false |  
+ clusterSelector | Deprecated: Use clusterLabelSelector instead。 | map[string]string | false |  
  namespace | 要在选定集群中部署的目标命名空间。 如果未设置，组件将继承原始命名空间。 | string | false |  
 
 

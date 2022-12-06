@@ -4,7 +4,7 @@ title: Built-in Policy Type
 
 This documentation will walk through all the built-in policy types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-11-16T14:46:36+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-12-06T16:17:10+08:00.
 
 ## Apply-Once
 
@@ -150,7 +150,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  selector | Specify how to select the targets of the rule. | [[]selector](#selector-garbage-collect) | true |  
- strategy | Specify the strategy for target resource to recycle. | string | false | onAppUpdate 
+ strategy | Specify the strategy for target resource to recycle. | "onAppUpdate" or "onAppDelete" or "never" | false | onAppUpdate 
 
 
 ##### selector (garbage-collect)
@@ -170,6 +170,32 @@ spec:
 ### Description
 
 Apply periodical health checking to the application.
+
+### Examples (health)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: example-app-rollout
+  namespace: default
+spec:
+  components:
+    - name: hello-world-server
+      type: webservice
+      properties:
+        image: crccheck/hello-world
+        ports: 
+        - port: 8000
+          expose: true
+        type: webservice
+  policies:
+    - name: health-policy-demo
+      type: health
+      properties:
+        probeInterval: 5
+        probeTimeout: 10
+```
 
 ### Specification (health)
 
@@ -306,7 +332,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name | Specify the name of the patch component, if empty, all components will be merged. | string | false |  
  type | Specify the type of the patch component. | string | false |  
- properties | Specify the properties to override. | map[string]:_ | false |  
+ properties | Specify the properties to override. | map[string]_ | false |  
  traits | Specify the traits to override. | [[]traits](#traits-override) | false |  
 
 
@@ -315,7 +341,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  type | Specify the type of the trait to be patched. | string | true |  
- properties | Specify the properties to override. | map[string]:_ | false |  
+ properties | Specify the properties to override. | map[string]_ | false |  
  disable | Specify if the trait should be remove, default false. | bool | false | false 
 
 
@@ -672,9 +698,9 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  clusters | Specify the names of the clusters to select. | []string | false |  
- clusterLabelSelector | Specify the label selector for clusters. | map[string]:string | false |  
+ clusterLabelSelector | Specify the label selector for clusters. | map[string]string | false |  
  allowEmpty | Ignore empty cluster error. | bool | false |  
- clusterSelector | Deprecated: Use clusterLabelSelector instead. | map[string]:string | false |  
+ clusterSelector | Deprecated: Use clusterLabelSelector instead. | map[string]string | false |  
  namespace | Specify the target namespace to deploy in the selected clusters, default inherit the original namespace. | string | false |  
 
 

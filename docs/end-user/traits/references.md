@@ -4,7 +4,7 @@ title: Built-in Trait Type
 
 This documentation will walk through all the built-in trait types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-11-24T12:21:19+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-12-06T16:17:10+08:00.
 
 ## Affinity
 
@@ -89,7 +89,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -98,7 +98,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -106,7 +106,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -115,7 +115,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -141,7 +141,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -150,7 +150,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -158,7 +158,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -167,7 +167,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -193,7 +193,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -202,7 +202,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -210,7 +210,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -219,7 +219,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -245,7 +245,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -254,7 +254,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -262,7 +262,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -271,7 +271,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -303,7 +303,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In 
  values |  | []string | false |  
 
 
@@ -312,7 +312,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In 
  values |  | []string | false |  
 
 
@@ -337,7 +337,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In 
  values |  | []string | false |  
 
 
@@ -346,7 +346,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In 
  values |  | []string | false |  
 
 
@@ -355,9 +355,9 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  key |  | string | false |  
- operator |  | string | false | Equal 
+ operator |  | "Equal" or "Exists" | false | Equal 
  value |  | string | false |  
- effect |  | string | false |  
+ effect |  | "NoSchedule" or "PreferNoSchedule" or "NoExecute" | false |  
  tolerationSeconds | Specify the period of time the toleration. | int | false |  
 
 
@@ -454,7 +454,36 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- -- | Composition type. | parameter: cannot use value {containerName:*"" &#124; string,command:*null &#124; [],args:*null &#124; [],addArgs:*null &#124; [],delArgs:*null &#124; []} (type struct) as string | false |  
+  |  | [PatchParams](#patchparams-command) or [type-option-2](#type-option-2-command) | false |  
+
+
+#### PatchParams (command)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containerName | Specify the name of the target container, if not set, use the component name. | string | false | empty 
+ command | Specify the command to use in the target container, if not set, it will not be changed. | null | true |  
+ args | Specify the args to use in the target container, if set, it will override existing args. | null | true |  
+ addArgs | Specify the args to add in the target container, existing args will be kept, cannot be used with `args`. | null | true |  
+ delArgs | Specify the existing args to delete in the target container, cannot be used with `args`. | null | true |  
+
+
+#### type-option-2 (command)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containers | Specify the commands for multiple containers. | [[]containers](#containers-command) | true |  
+
+
+##### containers (command)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containerName | Specify the name of the target container, if not set, use the component name. | string | false | empty 
+ command | Specify the command to use in the target container, if not set, it will not be changed. | null | true |  
+ args | Specify the args to use in the target container, if set, it will override existing args. | null | true |  
+ addArgs | Specify the args to add in the target container, existing args will be kept, cannot be used with `args`. | null | true |  
+ delArgs | Specify the existing args to delete in the target container, cannot be used with `args`. | null | true |  
 
 
 ## Container-Image
@@ -509,7 +538,32 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- -- | Composition type. | parameter: cannot use value {containerName:*"" &#124; string,image:string,imagePullPolicy:*"" &#124; "IfNotPresent" &#124; "Always" &#124; "Never"} (type struct) as string | false |  
+  |  | [PatchParams](#patchparams-container-image) or [type-option-2](#type-option-2-container-image) | false |  
+
+
+#### PatchParams (container-image)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containerName | Specify the name of the target container, if not set, use the component name. | string | false | empty 
+ image | Specify the image of the container. | string | true |  
+ imagePullPolicy | Specify the image pull policy of the container. | "" or "IfNotPresent" or "Always" or "Never" | false | empty 
+
+
+#### type-option-2 (container-image)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containers | Specify the container image for multiple containers. | [[]containers](#containers-container-image) | true |  
+
+
+##### containers (container-image)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containerName | Specify the name of the target container, if not set, use the component name. | string | false | empty 
+ image | Specify the image of the container. | string | true |  
+ imagePullPolicy | Specify the image pull policy of the container. | "" or "IfNotPresent" or "Always" or "Never" | false | empty 
 
 
 ## Cpuscaler
@@ -544,7 +598,7 @@ spec:
           properties:
             min: 1
             max: 10
-            cpuUtil: 60
+            cpuPercent: 60
 ```
 
 ### Specification (cpuscaler)
@@ -609,12 +663,65 @@ spec:
                   key_for_nginx_second: value_second
 ```
 
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: busybox
+spec:
+  components:
+    - name: busybox
+      type: webservice
+      properties:
+        image: busybox
+        cmd: ["sleep", "86400"]
+      traits:
+        - type: sidecar
+          properties:
+            name: sidecar-nginx
+            image: nginx
+        - type: env
+          properties:
+            # you can use env to control one container, if containerName not specified, it will patch on the first index container 
+            containerName: busybox
+            env:
+              key_for_busybox_first: value_first
+              key_for_busybox_second: value_second
+```
+
 ### Specification (env)
 
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- -- | Composition type. | parameter: cannot use value {containerName:*"" &#124; string,replace:*false &#124; bool,env:{},unset:*[] &#124; []} (type struct) as string | false |  
+  |  | [PatchParams](#patchparams-env) or [type-option-2](#type-option-2-env) | false |  
+
+
+#### PatchParams (env)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containerName | Specify the name of the target container, if not set, use the component name. | string | false | empty 
+ replace | Specify if replacing the whole environment settings for the container. | bool | false | false 
+ env | Specify the  environment variables to merge, if key already existing, override its value. | map[string]string | true |  
+ unset | Specify which existing environment variables to unset. | []string | true |  
+
+
+#### type-option-2 (env)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containers | Specify the environment variables for multiple containers. | [[]containers](#containers-env) | true |  
+
+
+##### containers (env)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containerName | Specify the name of the target container, if not set, use the component name. | string | false | empty 
+ replace | Specify if replacing the whole environment settings for the container. | bool | false | false 
+ env | Specify the  environment variables to merge, if key already existing, override its value. | map[string]string | true |  
+ unset | Specify which existing environment variables to unset. | []string | true |  
 
 
 ## Expose
@@ -656,8 +763,8 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  port | Specify the exposion ports. | []int | true |  
- annotations | Specify the annotaions of the exposed service. | map[string]:string | true |  
- type | Specify what kind of Service you want. options: "ClusterIP","NodePort","LoadBalancer","ExternalName". | string | false | ClusterIP 
+ annotations | Specify the annotaions of the exposed service. | map[string]string | true |  
+ type | Specify what kind of Service you want. options: "ClusterIP","NodePort","LoadBalancer","ExternalName". | "ClusterIP" or "NodePort" or "LoadBalancer" or "ExternalName" | false | ClusterIP 
 
 
 ## Gateway
@@ -703,7 +810,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  domain | Specify the domain you want to expose. | string | false |  
- http | Specify the mapping relationship between the http path and the workload port. | map[string]:int | true |  
+ http | Specify the mapping relationship between the http path and the workload port. | map[string]int | true |  
  class | Specify the class of ingress to use. | string | false | nginx 
  classInSpec | Set ingress class in '.spec.ingressClassName' instead of 'kubernetes.io/ingress.class' annotation. | bool | false | false 
  secretName | Specify the secret name you want to quote to use tls. | string | false |  
@@ -815,7 +922,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name | Specify the name of init container. | string | true |  
  image | Specify the image of init container. | string | true |  
- imagePullPolicy | Specify image pull policy for your service. | string | false | IfNotPresent 
+ imagePullPolicy | Specify image pull policy for your service. | "IfNotPresent" or "Always" or "Never" | false | IfNotPresent 
  cmd | Specify the commands run in the init container. | []string | false |  
  args | Specify the args run in the init container. | []string | false |  
  env | Specify the env run in the init container. | [[]env](#env-init-container) | false |  
@@ -1124,7 +1231,7 @@ spec:
  path |  | string | false |  
  port |  | int | true |  
  host |  | string | false |  
- scheme |  | string | false | HTTP 
+ scheme |  | "HTTP" or "HTTPS" | false | HTTP 
  httpHeaders |  | [[]httpHeaders](#httpheaders-lifecycle) | false |  
 
 
@@ -1167,7 +1274,7 @@ spec:
  path |  | string | false |  
  port |  | int | true |  
  host |  | string | false |  
- scheme |  | string | false | HTTP 
+ scheme |  | "HTTP" or "HTTPS" | false | HTTP 
  httpHeaders |  | [[]httpHeaders](#httpheaders-lifecycle) | false |  
 
 
@@ -1526,7 +1633,7 @@ spec:
  resources | Specify the resources to be allowed. | []string | false |  
  resourceNames | Specify the resourceNames to be allowed. | []string | false |  
  nonResourceURLs | Specify the resource url to be allowed. | []string | false |  
- scope | Specify the scope of the privileges, default to be namespace scope. | string | false | namespace 
+ scope | Specify the scope of the privileges, default to be namespace scope. | "namespace" or "cluster" | false | namespace 
 
 
 ## Service-Binding
@@ -1640,7 +1747,15 @@ Deploy this YAML and the Secret `db-conn-example` will be binding into environme
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- envMappings | The mapping of environment variables to secret. | map[string]:#KeySecret | true |  
+ envMappings | The mapping of environment variables to secret. | map[string]KeySecret(#keysecret-service-binding) | true |  
+
+
+#### KeySecret (service-binding)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ key |  | string | false |  
+ secret |  | string | true |  
 
 
 ## Sidecar
@@ -1992,7 +2107,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [matchExpressions](#matchexpressions-storage) | false |  
 
 
@@ -2017,7 +2132,7 @@ spec:
  subPath |  | string | false |  
  defaultMode |  | int | false | 420 
  readOnly |  | bool | false | false 
- data |  | map[string]:_ | false |  
+ data |  | map[string]_ | false |  
  items |  | [[]items](#items-storage) | false |  
 
 
@@ -2058,8 +2173,8 @@ spec:
  subPath |  | string | false |  
  defaultMode |  | int | false | 420 
  readOnly |  | bool | false | false 
- stringData |  | map[string]:_ | false |  
- data |  | map[string]:_ | false |  
+ stringData |  | map[string]_ | false |  
+ data |  | map[string]_ | false |  
  items |  | [[]items](#items-storage) | false |  
 
 
@@ -2095,6 +2210,6 @@ spec:
  name |  | string | true |  
  mountPath |  | string | true |  
  subPath |  | string | false |  
- medium |  | string | false | empty 
+ medium |  | "" or "Memory" | false | empty 
 
 

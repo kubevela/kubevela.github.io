@@ -168,7 +168,10 @@ module.exports = {
             'end-user/version-control',
             'tutorials/dry-run',
             'tutorials/access-application',
+            'tutorials/auto-scaler',
             'tutorials/debug-app',
+            'tutorials/cloud-shell',
+            'tutorials/vela-top',
             {
               type: 'category',
               label: 'Config Management',
@@ -181,8 +184,6 @@ module.exports = {
                 'how-to/dashboard/config/config-template',
               ],
             },
-            'tutorials/cloud-shell',
-            'tutorials/vela-top',
           ],
         },
         {
