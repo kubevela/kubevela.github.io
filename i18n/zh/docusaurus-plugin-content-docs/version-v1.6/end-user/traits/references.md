@@ -4,7 +4,7 @@ title: 内置运维特征列表
 
 本文档将**按字典序**展示所有内置运维特征的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-11-24T12:21:19+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-12-06T16:17:10+08:00。
 
 ## Affinity
 
@@ -89,7 +89,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -98,7 +98,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -106,7 +106,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -115,7 +115,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -141,7 +141,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -150,7 +150,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -158,7 +158,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -167,7 +167,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -193,7 +193,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -202,7 +202,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -210,7 +210,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -219,7 +219,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -245,7 +245,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -254,7 +254,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -262,7 +262,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
 
 
@@ -271,7 +271,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
  values |  | []string | false |  
 
 
@@ -303,7 +303,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In 
  values |  | []string | false |  
 
 
@@ -312,7 +312,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In 
  values |  | []string | false |  
 
 
@@ -337,7 +337,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In 
  values |  | []string | false |  
 
 
@@ -346,7 +346,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  key |  | string | true |  
- operator |  | string | false | In 
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In 
  values |  | []string | false |  
 
 
@@ -355,9 +355,9 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  key |  | string | false |  
- operator |  | string | false | Equal 
+ operator |  | "Equal" or "Exists" | false | Equal 
  value |  | string | false |  
- effect |  | string | false |  
+ effect |  | "NoSchedule" or "PreferNoSchedule" or "NoExecute" | false |  
  tolerationSeconds | 指定 toleration 的时间周期。 | int | false |  
 
 
@@ -454,7 +454,36 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- -- | Composition type。 | parameter: cannot use value {containerName:*"" &#124; string,command:*null &#124; [],args:*null &#124; [],addArgs:*null &#124; [],delArgs:*null &#124; []} (type struct) as string | false |  
+  |  | [PatchParams](#patchparams-command) or [type-option-2](#type-option-2-command) | false |  
+
+
+#### PatchParams (command)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
+ command | Specify the command to use in the target container, if not set, it will not be changed。 | null | true |  
+ args | Specify the args to use in the target container, if set, it will override existing args。 | null | true |  
+ addArgs | Specify the args to add in the target container, existing args will be kept, cannot be used with `args`。 | null | true |  
+ delArgs | Specify the existing args to delete in the target container, cannot be used with `args`。 | null | true |  
+
+
+#### type-option-2 (command)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containers | Specify the commands for multiple containers。 | [[]containers](#containers-command) | true |  
+
+
+##### containers (command)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
+ command | Specify the command to use in the target container, if not set, it will not be changed。 | null | true |  
+ args | Specify the args to use in the target container, if set, it will override existing args。 | null | true |  
+ addArgs | Specify the args to add in the target container, existing args will be kept, cannot be used with `args`。 | null | true |  
+ delArgs | Specify the existing args to delete in the target container, cannot be used with `args`。 | null | true |  
 
 
 ## Container-Image
@@ -509,7 +538,32 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- -- | Composition type。 | parameter: cannot use value {containerName:*"" &#124; string,image:string,imagePullPolicy:*"" &#124; "IfNotPresent" &#124; "Always" &#124; "Never"} (type struct) as string | false |  
+  |  | [PatchParams](#patchparams-container-image) or [type-option-2](#type-option-2-container-image) | false |  
+
+
+#### PatchParams (container-image)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
+ image | Specify the image of the container。 | string | true |  
+ imagePullPolicy | Specify the image pull policy of the container。 | "" or "IfNotPresent" or "Always" or "Never" | false | empty 
+
+
+#### type-option-2 (container-image)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containers | Specify the container image for multiple containers。 | [[]containers](#containers-container-image) | true |  
+
+
+##### containers (container-image)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
+ image | Specify the image of the container。 | string | true |  
+ imagePullPolicy | Specify the image pull policy of the container。 | "" or "IfNotPresent" or "Always" or "Never" | false | empty 
 
 
 ## Cpuscaler
@@ -544,7 +598,7 @@ spec:
           properties:
             min: 1
             max: 10
-            cpuUtil: 60
+            cpuPercent: 60
 ```
 
 ### 参数说明 (cpuscaler)
@@ -609,12 +663,65 @@ spec:
                   key_for_nginx_second: value_second
 ```
 
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: busybox
+spec:
+  components:
+    - name: busybox
+      type: webservice
+      properties:
+        image: busybox
+        cmd: ["sleep", "86400"]
+      traits:
+        - type: sidecar
+          properties:
+            name: sidecar-nginx
+            image: nginx
+        - type: env
+          properties:
+            # you can use env to control one container, if containerName not specified, it will patch on the first index container 
+            containerName: busybox
+            env:
+              key_for_busybox_first: value_first
+              key_for_busybox_second: value_second
+```
+
 ### 参数说明 (env)
 
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- -- | Composition type。 | parameter: cannot use value {containerName:*"" &#124; string,replace:*false &#124; bool,env:{},unset:*[] &#124; []} (type struct) as string | false |  
+  |  | [PatchParams](#patchparams-env) or [type-option-2](#type-option-2-env) | false |  
+
+
+#### PatchParams (env)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
+ replace | Specify if replacing the whole environment settings for the container。 | bool | false | false 
+ env | Specify the  environment variables to merge, if key already existing, override its value。 | map[string]string | true |  
+ unset | Specify which existing environment variables to unset。 | []string | true |  
+
+
+#### type-option-2 (env)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containers | Specify the environment variables for multiple containers。 | [[]containers](#containers-env) | true |  
+
+
+##### containers (env)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
+ replace | Specify if replacing the whole environment settings for the container。 | bool | false | false 
+ env | Specify the  environment variables to merge, if key already existing, override its value。 | map[string]string | true |  
+ unset | Specify which existing environment variables to unset。 | []string | true |  
 
 
 ## Expose
@@ -656,8 +763,8 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  port | 指定要暴露的端口。 | []int | true |  
- annotations | Specify the annotaions of the exposed service。 | map[string]:string | true |  
- type | 指定要创建的服务类型，可选值："ClusterIP","NodePort","LoadBalancer","ExternalName"。 | string | false | ClusterIP 
+ annotations | Specify the annotaions of the exposed service。 | map[string]string | true |  
+ type | 指定要创建的服务类型，可选值："ClusterIP","NodePort","LoadBalancer","ExternalName"。 | "ClusterIP" or "NodePort" or "LoadBalancer" or "ExternalName" | false | ClusterIP 
 
 
 ## Gateway
@@ -703,7 +810,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  domain | 暴露服务所绑定的域名。 | string | false |  
- http | 定义一组网关路径到 Pod 服务端口的映射关系。 | map[string]:int | true |  
+ http | 定义一组网关路径到 Pod 服务端口的映射关系。 | map[string]int | true |  
  class | 所使用的 kubernetes ingress class。 | string | false | nginx 
  classInSpec | 在 kubernetes ingress 的 '.spec.ingressClassName' 定义 ingress class 而不是在 'kubernetes.io/ingress.class' 注解中定义。 | bool | false | false 
  secretName | Specify the secret name you want to quote to use tls。 | string | false |  
@@ -815,7 +922,7 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name | 指定初始化容器的名称。 | string | true |  
  image | 指定初始化容器的镜像。 | string | true |  
- imagePullPolicy | 镜像拉取策略。 | string | false | IfNotPresent 
+ imagePullPolicy | 镜像拉取策略。 | "IfNotPresent" or "Always" or "Never" | false | IfNotPresent 
  cmd | 指定初始化容器的命令。 | []string | false |  
  args | 指定初始化容器的参数。 | []string | false |  
  env | 指定初始化容器的环境变量。 | [[]env](#env-init-container) | false |  
@@ -1124,7 +1231,7 @@ spec:
  path |  | string | false |  
  port |  | int | true |  
  host |  | string | false |  
- scheme |  | string | false | HTTP 
+ scheme |  | "HTTP" or "HTTPS" | false | HTTP 
  httpHeaders |  | [[]httpHeaders](#httpheaders-lifecycle) | false |  
 
 
@@ -1167,7 +1274,7 @@ spec:
  path |  | string | false |  
  port |  | int | true |  
  host |  | string | false |  
- scheme |  | string | false | HTTP 
+ scheme |  | "HTTP" or "HTTPS" | false | HTTP 
  httpHeaders |  | [[]httpHeaders](#httpheaders-lifecycle) | false |  
 
 
@@ -1526,7 +1633,7 @@ spec:
  resources | 指定允许的资源。 | []string | false |  
  resourceNames | 指定允许的资源名称。 | []string | false |  
  nonResourceURLs | 指定允许的资源 URL。 | []string | false |  
- scope | 指定权限的范围，默认为 namespace 范围。 | string | false | namespace 
+ scope | 指定权限的范围，默认为 namespace 范围。 | "namespace" or "cluster" | false | namespace 
 
 
 ## Service-Binding
@@ -1640,7 +1747,15 @@ Deploy this YAML and the Secret `db-conn-example` will be binding into environme
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- envMappings | 环境变量到密钥的映射。 | map[string]:#KeySecret | true |  
+ envMappings | 环境变量到密钥的映射。 | map[string]KeySecret(#keysecret-service-binding) | true |  
+
+
+#### KeySecret (service-binding)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ key |  | string | false |  
+ secret |  | string | true |  
 
 
 ## Sidecar
@@ -1992,7 +2107,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]:string | false |  
+ matchLabels |  | map[string]string | false |  
  matchExpressions |  | [matchExpressions](#matchexpressions-storage) | false |  
 
 
@@ -2017,7 +2132,7 @@ spec:
  subPath |  | string | false |  
  defaultMode |  | int | false | 420 
  readOnly |  | bool | false | false 
- data |  | map[string]:_ | false |  
+ data |  | map[string]_ | false |  
  items |  | [[]items](#items-storage) | false |  
 
 
@@ -2058,8 +2173,8 @@ spec:
  subPath |  | string | false |  
  defaultMode |  | int | false | 420 
  readOnly |  | bool | false | false 
- stringData |  | map[string]:_ | false |  
- data |  | map[string]:_ | false |  
+ stringData |  | map[string]_ | false |  
+ data |  | map[string]_ | false |  
  items |  | [[]items](#items-storage) | false |  
 
 
@@ -2095,6 +2210,6 @@ spec:
  name |  | string | true |  
  mountPath |  | string | true |  
  subPath |  | string | false |  
- medium |  | string | false | empty 
+ medium |  | "" or "Memory" | false | empty 
 
 
