@@ -75,18 +75,18 @@ invisible: false
 
 所有的字段及其作用如下：
 
-|          Field          | Required |        Type        |                                     Usage                                     |
-| :---------------------: | :------: | :----------------: |:-----------------------------------------------------------------------------:|
-|          name           |   yes    |       string       |                                      名称                                       |
-|         version         |   yes    |       string       |                 版本，每次变更递增且符合 [SemVer](https://semver.org/) 规范                 |
-|       description       |   yes    |       string       |                                      描述                                       |
-|          icon           |    no    |       string       |                            图标，图标将在 VelaUX 的插件页面展示                             |
-|           url           |    no    |       string       |                                 插件所包含项目的官网地址                                  |
-|          tags           |    no    |      []string      |                                      标签                                       |
-|      dependencies       |    no    | []{ name: string } | 依赖的其他插件。你可以通过设置 `version` 字段来指定所依赖插件的版本，如果不设置将依赖最新版本。安装时 KubeVela 会保证依赖插件均已安装 |
-|       system.vela       |    no    |       string       |                      环境中所要求的 KubeVela 的版本，如果不满足，安装将会被拒绝                       |
-|    system.kubernetes    |    no    |       string       |                            环境中所要求的 Kubernetes 的版本                             |
-| deployTo.runtimeCluster |    no    |        bool        |            插件是否可以安装到子集群，默认不设置该字段插件不会安装在任何子集群中 （只在 YAML 描述插件应用时生效）             |
+|          Field          | Required |                Type                |                                     Usage                                     |
+| :---------------------: | :------: |:----------------------------------:|:-----------------------------------------------------------------------------:|
+|          name           |   yes    |               string               |                                      名称                                       |
+|         version         |   yes    |               string               |                 版本，每次变更递增且符合 [SemVer](https://semver.org/) 规范                 |
+|       description       |   yes    |               string               |                                      描述                                       |
+|          icon           |    no    |               string               |                            图标，图标将在 VelaUX 的插件页面展示                             |
+|           url           |    no    |               string               |                                 插件所包含项目的官网地址                                  |
+|          tags           |    no    |              []string              |                                      标签                                       |
+|      dependencies       |    no    | []{ name: string, version: string} | 依赖的其他插件。你可以通过设置 `version` 字段来指定所依赖插件的版本，如果不设置将依赖最新版本。安装时 KubeVela 会保证依赖插件均已安装 |
+|       system.vela       |    no    |               string               |                      环境中所要求的 KubeVela 的版本，如果不满足，安装将会被拒绝                       |
+|    system.kubernetes    |    no    |               string               |                            环境中所要求的 Kubernetes 的版本                             |
+| deployTo.runtimeCluster |    no    |                bool                |            插件是否可以安装到子集群，默认不设置该字段插件不会安装在任何子集群中 （只在 YAML 描述插件应用时生效）             |
 
 #### 介绍文档 (README.md)
 
