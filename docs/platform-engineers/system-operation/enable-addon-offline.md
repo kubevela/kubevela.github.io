@@ -90,3 +90,12 @@ $ helm pull https://charts.kubevela.net/addons/terraform-controller-0.3.5.tgz
 3. Extract the chart and modify the `values.yaml` change `image.repository` to your own image registry.Then push it to your helm chart museum.
 4. Modify the addon file `terraform/resources/terraform-controller.cue` change `output.properties.url` to your chart museum's url.
 
+### 5. Rollout
+
+1. Sync the image `oamdev/vela-rollout:v1.6.4` to your own images registry.
+2. Dowload the rollout helm chart.
+```yaml
+$ helm pull https://charts.kubevela.net/core/vela-rollout-1.3.0.tgz
+```
+3. Extract the chart and modify the `values.yaml` change `image.repository` to your own image registry.Then push it to your helm chart museum.
+4. Modify the addon file `rollout/resources/rollout-controller.cue` change `output.properties.url` to your chart museum's url.
