@@ -392,7 +392,7 @@ curl -fsSl https://static.kubevela.net/script/install.sh | bash
 设置 kubeconfig 并列出所有内置的组件定义:
 
 ```shell
-export KUBECONFIG=$(velad kubeconfig --host)
+export KUBECONFIG=~/.kube/velad-config
 vela comp
 ```
 
