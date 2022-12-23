@@ -117,8 +117,9 @@ Managed Resource 的部署会产生 Pod 资源的部署，Pod 视图展示目标
 在该视图你依然可以使用 Q 键回退到之前的视图。
 
 #### 容器视图
-![vela top container view]（../resources/vela top-container view.png）
-在通一个 Pod 中会存在多个容器一同运行的情况，Container 视图显示了在所选 Pod 中运行的容器信息。对于 Container 资源，此视图显示有关 Container 的以下信息：
+![vela top container view](../resources/vela top-container view.png)
+
+通常一个 Pod 中会存在多个容器一同运行的情况，Container 视图显示了在所选 Pod 中运行的容器信息。对于 Container 资源，此视图显示有关 Container 的以下信息：
 - 姓名
 - 镜像
 - 是否就绪
@@ -165,6 +166,85 @@ Managed Resource 的部署会产生 Pod 资源的部署，Pod 视图展示目标
 在 Pod 视图中，你可以使用 L 键进入日志视图，日志视图将打印所选容器的日志。
 在 Container 视图中，进入日志视图的方法与在 Pod 视图相同。不同的是，打印的日志是属于所选 Pod 中的多个容器的。
 
+#### 主题切换
+
+![vela top theme switch](../resources/vela-top-theme-switch.gif)
+
+为了解决默认配色在不同终端显示效果存在差异的问题，我们提供了主题切换功能，你可以通过按下 Ctrl + T 键来切换主题，切换主题后为了使主题生效，你需要重启 vela top。
+
+vela top 目前内置了十余种主题，你可以根据自己的喜好进行选择。但为了满足不同用户的需求，我们也提供了自定义主题的功能，你可以按照以下格式编辑你的主题文件：
+
+```yaml
+# 平台信息组件
+info:
+  # 标题颜色
+  title: "#69d9ed"
+  # 信息颜色
+  text: "#c3eff7"
+# 菜单组件
+menu:
+  # 描述颜色
+  description: "#6b7f7f"
+  # 键位信息颜色
+  key: "#a7e24c"
+# Logo 组件
+logo:
+  # 文本颜色
+  text: "#f72972"
+# 面包屑组件 
+crumbs:
+  # 前景文本颜色
+  foreground: "#e0e0e0"
+  # 背景颜色
+  background: "#5fd7ff"
+# 表格组件
+table:
+  # 表格标题颜色
+  title: "#ffffff"
+  # 表格头部颜色
+  header: "#ffffff"
+  # 表格内容颜色
+  body: "#5fd7ff"
+# 状态指示色
+status:
+  starting: "#69d9ed"
+  healthy: "#a7e24c"
+  unhealthy: "#f72972"
+  waiting: "#e47c20"
+  succeeded: "#3174a2"
+  failed: "#a7e24c"
+  unknown: gray
+# YAML 高亮
+yaml:
+  # 关键字颜色
+  key: "#e47c20"
+  # 冒号颜色
+  colon: "#e47c20"
+  # 值颜色
+  value: "#ffffff"
+# 拓扑视图
+topology:
+  # 拓扑树连线颜色
+  line: "#69d9ed"
+  # app 节点颜色
+  app: "#f72972"
+  # workload 节点颜色
+  workflow: "#5fd7ff"
+  # component 节点颜色
+  component: "#a7e24c"
+  # policy 节点颜色
+  policy: "#e47c20"
+  # trait 节点颜色
+  trait: "#f72972"
+  # resource 拓扑视图中，资源类型节点颜色
+  kind: "#5fd7ff"
+```
+
+![vela top custom theme](../resources/vela-top-custom-theme.gif)
+
+通过将编辑好的主题配置文件置于`~/.vela/theme/themes`文件夹中，再次启动 vela top 进入主题切换界面，即可看到可选择的主题中包含了刚刚编辑好的自定义主题。
+
+> 注意：自定义主题文件的文件名不可与内置主题文件的文件名重复，否则会覆盖内置主题。
 
 #### 帮助界面
 
