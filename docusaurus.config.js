@@ -21,12 +21,16 @@ module.exports = {
       },
     },
   },
+  markdown: {
+    mermaid: true,
+  },
+  themes: ['@docusaurus/theme-mermaid'],
   themeConfig: {
     announcementBar: {
       id: 'start',
       content:
         '<div class="header-item">⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>!⭐️</div>' +
-        '<div class="header-item"><span>KubeVela v1.6.3 is now available.(2022-11-09)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/v1.6.3">Read Release Note</a></div>',
+        '<div class="header-item"><span>KubeVela v1.6.6 is now available.(2023-01-04)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/v1.6.6">Read Release Note</a></div>',
     },
     algolia: {
       appId: 'PXMFHFWUGZ',

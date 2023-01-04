@@ -41,25 +41,25 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.1 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.6 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.1
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.6
 ```
 
 4. Upgrade VelaUX or other addon
 
 ```
-vela addon upgrade velaux --version 1.6.1
+vela addon upgrade velaux --version 1.6.6
 ```
 
 ## From v1.4.x to v1.5.x
 
 :::caution
-Note: Please upgrade to v1.5.7+ to avoid application workflow rerun when controller upgrade.
+Note: Please upgrade to v1.5.10+ to avoid application workflow rerun when controller upgrade.
 :::
 
 1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
@@ -77,13 +77,13 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.7 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.10 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.7
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.10
 ```
 
 4. Upgrade VelaUX or other addon
@@ -113,12 +113,12 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.11 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.14 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.11
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.14
 ```
 
 4. Upgrade VelaUX or other addon

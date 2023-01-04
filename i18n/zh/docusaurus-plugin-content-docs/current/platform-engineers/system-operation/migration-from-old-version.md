@@ -41,25 +41,25 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.0 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.6 --wait
 ```
 
 3. 下载并升级对应的CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.0
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.6
 ```
 
 4. 升级 VelaUX 或其他插件
 
 ```
-vela addon upgrade velaux --version 1.6.0
+vela addon upgrade velaux --version 1.6.6
 ```
 
 ## 从 v1.4.x 版本 到 v1.5.x 版本
 
 :::caution
-注意: 升级到 v1.5.6 及以前的版本可能会触发应用重启，升级到 v1.5.7+ 可以保证已经正常运行的应用不受影响。
+注意: 升级到 v1.5.6 及以前的版本可能会触发应用重启，升级到 v1.5.10+ 可以保证已经正常运行的应用不受影响。
 :::
 
 1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
@@ -77,19 +77,19 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.7 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.10 --wait
 ```
 
 3. 下载并升级对应的CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.7
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.10
 ```
 
 4. 升级 VelaUX 或其他插件
 
 ```
-vela addon upgrade velaux --version 1.5.7
+vela addon upgrade velaux --version 1.5.6
 ```
 
 ## 从 v1.3.x 版本 到 v1.4.x 版本
@@ -113,13 +113,13 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.11 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.14 --wait
 ```
 
 3. 下载并升级对应的CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.11
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.14
 ```
 
 4. 升级 VelaUX 或其他插件
