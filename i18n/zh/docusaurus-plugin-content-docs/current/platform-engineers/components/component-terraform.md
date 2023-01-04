@@ -171,7 +171,7 @@ $ vela show alibaba-eip
 
 ## 生成文档
 
-我们鼓励你为你的 ComponentDefinition 生成文档并提交给 [KubeVela官方网站]（https://github.com/kubevela/kubevela.io）。
+我们鼓励你为你的 ComponentDefinition 生成文档并提交给 [KubeVela官方网站](https://github.com/kubevela/kubevela.io)。
 
 通过运行 `vela def doc-gen` 命令，我们可以基于已经应用在kubernetes集群上的ComponentDefinition生成相关文档，也可以基于本地ComponentDefinition文件生成相关文档。
 
