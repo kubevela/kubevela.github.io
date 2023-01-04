@@ -6,7 +6,7 @@ KubeVela is being developed using the following process:
 
 * Maintainers commit to work on set of features and enhancements and create GitHub milestone to track the work.
 * We are trying to avoid delaying release and prefer moving the feature into the next release if we cannot complete it on time.
-* The new release is published every **2 month**.
+* The new release is published every **2~3 month**.
 * Critical bug-fixes are cherry-picked into the release branch and delivered using patch releases as frequently as needed, we will maintain the last **2 releases**.
 
 ![develop-flow](../resources/develop-code-flow.jpg)
@@ -31,3 +31,24 @@ We receive a lot of contributions from our awesome community, and we're very gra
 We have a code freeze period two weeks before the release until the release branch is created. During code freeze no feature PR should be merged and it is ok to merge bug fixes.
 
 Maintainers should drive testing and work on fixing last-minute issues before every release. 
+
+## Release SOP
+
+The maintainers are responsible to drive releases and follow the standard operating procedure to make sure the quality of this release.
+
+> We're following the `major.minor.patch` version. The `major` version is incremented when there are incompatible API changes. The `minor` version is incremented when there are new features. The `patch` version is incremented when there are bug fixes.
+
+1. Write a clear release note including:
+   * New Features, Enhancement and Bugfixes.
+   * Deprecation and Breaking Changes.
+   * Brief notes about how to install and upgrade.
+2. Create a new release branch from the `release-x.y` branch when release a new `minor` release.
+3. Create new `patch` releases corresponding to the release branch.
+4. Make sure the release materials are generated successfully from the Github actions:
+   * Images from [Registry Pipeline](https://github.com/kubevela/kubevela/actions/workflows/registry.yml).
+   * Helm Charts from [Publish Chart Pipeline](https://github.com/kubevela/kubevela/actions/workflows/chart.yml).
+   * CLI binaries from [Release Pipeline](https://github.com/kubevela/kubevela/actions/workflows/release.yml).
+5. Update docs and examples to use the new release.
+   * Create a new docs version for the new `minor` release.
+   * Update the [migration doc](../platform-engineers/system-operation/migration-from-old-version) when release a new `minor` release.
+   * Update the `top tip` in `docusaurus.config.js` for every `patch` release.
