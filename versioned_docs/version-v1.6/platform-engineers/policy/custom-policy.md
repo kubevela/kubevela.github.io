@@ -69,7 +69,7 @@ template: {
 }
 ```
 
-Apply to our control plane to make this trait work:
+Apply to our control plane to make this Policy work:
 
 ```
 vela def apply myroute.cue
