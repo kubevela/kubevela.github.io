@@ -31,3 +31,24 @@ KubeVela 的开发流程遵循以下规范：
 在 release 分支创建前，我们将有 2 个星期的代码冻结期。在代码冻结期间，我们将不会合并任何功能性 PR 而只会修复错误。
 
 Maintainer 将在每次发布前进行测试并修复这些最后的 issue 。
+
+## Release SOP
+
+The maintainers are responsible to drive releases and follow the standard operating procedure to make sure the quality of this release.
+
+> We're following the `major.minor.patch` version. The `major` version is incremented when there are incompatible API changes. The `minor` version is incremented when there are new features. The `patch` version is incremented when there are bug fixes.
+
+1. Write a clear release note including:
+   * New Features, Enhancement and Bugfixes.
+   * Deprecation and Breaking Changes.
+   * Brief notes about how to install and upgrade.
+2. Create a new release branch from the `release-x.y` branch when release a new `minor` release.
+3. Create new `patch` releases corresponding to the release branch.
+4. Make sure the release materials are generated successfully from the Github actions:
+   * Images from [Registry Pipeline](https://github.com/kubevela/kubevela/actions/workflows/registry.yml).
+   * Helm Charts from [Publish Chart Pipeline](https://github.com/kubevela/kubevela/actions/workflows/chart.yml).
+   * CLI binaries from [Release Pipeline](https://github.com/kubevela/kubevela/actions/workflows/release.yml).
+5. Update docs and examples to use the new release.
+   * Create a new docs version for the new `minor` release.
+   * Update the [migration doc](../platform-engineers/system-operation/migration-from-old-version) when release a new `minor` release.
+   * Update the `top tip` in `docusaurus.config.js` for every `patch` release.
