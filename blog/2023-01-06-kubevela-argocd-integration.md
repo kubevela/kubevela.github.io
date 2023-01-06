@@ -226,6 +226,7 @@ In this example, ArgoCD tracks native Kubevela application resources and its rev
    - We can use all the features of Kubevela.
    - No need depends on anything.
 
+
 Reference: https://gokhan-karadas1992.medium.com/argocd-kubevela-integration-eb88dc0484e0
 
 Big thanks to [Erkan Zileli](https://github.com/erkanzileli) 🎉🎉🎉
