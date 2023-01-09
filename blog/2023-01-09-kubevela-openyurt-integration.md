@@ -10,6 +10,8 @@ image: https://raw.githubusercontent.com/oam-dev/KubeVela.io/main/docs/resources
 hide_table_of_contents: false
 ---
 
+This article will focus on KubeVela and OpenYurt (two open-source projects of CNCF) and introduce the solution of cloud-edge collaboration in a practical Helm application delivery scenario.
+
 ## Background
 
 With the popularization of the Internet of Everything scenario, the computing power of edge devices is increasing. It is a new technological challenge to use the advantages of cloud computing to meet complex and diversified edge application scenarios and extend cloud-native technology to the end and edge. **Cloud-Edge Collaboration** is becoming a new technological focus. This article will focus on KubeVela and OpenYurt (two open-source projects of CNCF) and introduce the solution of cloud-edge collaboration in a practical Helm application delivery scenario.
@@ -33,6 +35,8 @@ KubeVela and OpenYurt can complement each other at the application layer to meet
 We will use the Ingress controller as an example to show how to use KubeVela to deploy applications to the edge. We want to deploy the Nginx Ingress controller to multiple NodePools to access the services provided by the specified NodePool through the edge Ingress. An Ingress can only be handled by the Ingress controller in the NodePool.
 
 The cluster in the schematic diagram contains two NodePools: Beijing and Shanghai. The networks between them are not interconnected. We want to deploy an Nginx Ingress Controller, which can act as the network traffic ingress for each NodePool. A client close to Beijing can access the services provided in the Beijing NodePool by accessing the Ingress Controller of the Beijing NodePool and does not access the services provided in the Shanghai NodePool.
+
+![NodePool Structure](/img/blog/yurt/nodepool.png)
 
 ### Basic Environment of Demo
 
@@ -194,6 +198,8 @@ If you need an intuitive understanding of the application, KubeVela officials pr
 vela addon enable velaux
 ```
 Visit the Resource Topology page of VelaUX:
+
+![Resource Topology in VelaUX](/img/blog/yurt/velaux.png)
 
 As you can see, KubeVela creates two `HelmRelease` to deliver the Nginx Ingress Controller Helm chart to two NodePools. `HelmRelease` resources are processed by the preceding FluxCD addon, and NGINX Ingress is installed in the **two NodePools** of the cluster. Run the following command to check whether pods of the Ingress controller are created in the Beijing NodePool. The same is true for the shanghai NodePool.
 
