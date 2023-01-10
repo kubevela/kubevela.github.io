@@ -213,3 +213,87 @@ wordpress-with-mysql	mysql    	helm	running	                healthy	        2021
 ```
 
 WordPress 已被成功部署，且与 MySQL 正常连接。
+
+## 多集群组件编排
+
+在多集群场景中，我们仍然可以使用依赖关系和参数传递来编排组件。使用方法与单集群场景相同。这里直接给出一个例子。这里是一个参数传递的例子，依赖关系也是可用的。
+
+### 如何使用
+
+:::note
+
+示例中的环境有一个名为“cluster-worker”的托管集群。
+
+:::
+
+部署如下应用部署计划，该 app 将部署一个 Deployment 和一个 Service，并把一些状态信息写入 ConfigMap。
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: cm-with-message
+spec:
+  components:
+    - name: podinfo
+      outputs:
+        - name: message
+          valueFrom: output.status.conditions[0].message
+        - name: ip
+          valueFrom: outputs.service.spec.clusterIP
+      properties:
+        image: stefanprodan/podinfo:4.0.3
+      type: webservice
+      traits:
+        - type: expose
+          properties:
+            port: [ 80 ]
+    - name: configmap
+      properties:
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: deployment-msg
+      type: raw
+      inputs:
+        - from: message
+          parameterKey: data.msg
+        - from: ip
+          parameterKey: data.ip
+  policies:
+    - name: topo
+      properties:
+        clusters: [ "local","cluster-worker" ]
+      type: topology
+    - name: override
+      properties:
+        selector:
+          - configmap
+          - podinfo
+      type: override
+```
+
+### 期望输出
+
+```shell
+$ vela status cm-with-message --tree                  
+CLUSTER            NAMESPACE     RESOURCE                 STATUS    
+cluster-worker─── default    ─┬─ ConfigMap/deployment-msg updated   
+                              ├─ Service/podinfo          updated   
+                              └─ Deployment/podinfo       updated   
+local       ─── default      ─┬─ ConfigMap/deployment-msg updated   
+                              ├─ Service/podinfo          updated   
+                              └─ Deployment/podinfo       updated   
+
+```
+
+检查集群中的 ConfigMap，这里仅检测了一个集群，在另一个集群中相同。
+
+```shell
+$ kubectl get cm deployment-msg -oyaml |grep -C3 ^data
+apiVersion: v1
+data:
+  ip: 10.43.223.14
+  msg: Deployment has minimum availability.
+kind: ConfigMap
+```
