@@ -117,7 +117,8 @@ Managed Resource 的部署会产生 Pod 资源的部署，Pod 视图展示目标
 在该视图你依然可以使用 Q 键回退到之前的视图。
 
 #### 容器视图
-![vela top container view]（../resources/vela top-container view.png）
+![vela top container view](../resources/vela-top-container-view.png)
+
 在通一个 Pod 中会存在多个容器一同运行的情况，Container 视图显示了在所选 Pod 中运行的容器信息。对于 Container 资源，此视图显示有关 Container 的以下信息：
 - 姓名
 - 镜像
