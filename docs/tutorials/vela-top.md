@@ -167,6 +167,85 @@ In the Container view, you can use the L key to enter the log view, the log view
 
 In the Container view, the method of entering the log view is the same as Pod view. What is different is the log are belong to the several containers in the selected pod.
 
+#### Switch Theme
+
+![vela top theme switch](../resources/vela-top-theme-switch.gif)
+
+In order to solve the problem that the display effect of the default color matching is different on different terminals, we provide the theme switching function. You can press Ctrl+T to switch themes. After the theme switching, you need to restart vela top to make the theme take effect.
+
+
+At present, vela top has more than ten built-in themes, which you can choose according to your own preferences. However, to meet the needs of different users, we also provide the function of customizing themes. You can edit your theme file in the following format:
+
+
+```yaml
+# platform information component
+info:
+  # title color
+  title: "#69d9ed"
+  # text color
+  text: "#c3eff7"
+# menu component
+menu:
+  # description text color
+  description: "#6b7f7f"
+  # key text color
+  key: "#a7e24c"
+# Logo component
+logo:
+  # logo text color
+  text: "#f72972"
+# crumbs component
+crumbs:
+  # text color
+  foreground: "#e0e0e0"
+  # background color
+  background: "#5fd7ff"
+# table component
+table:
+  # table title color
+  title: "#ffffff"
+  # table header color
+  header: "#ffffff"
+  # table body color
+  body: "#5fd7ff"
+# resource status color
+status:
+  starting: "#69d9ed"
+  healthy: "#a7e24c"
+  unhealthy: "#f72972"
+  waiting: "#e47c20"
+  succeeded: "#3174a2"
+  failed: "#a7e24c"
+  unknown: gray
+# YAML 
+yaml:
+  # YAML key color
+  key: "#e47c20"
+  # YAML colon color
+  colon: "#e47c20"
+  # YAML value color
+  value: "#ffffff"
+# topology view
+topology:
+  # topology tree line color
+  line: "#69d9ed"
+  # app node text color
+  app: "#f72972"
+  # workload node text color
+  workflow: "#5fd7ff"
+  # component node text color
+  component: "#a7e24c"
+  # policy node text color
+  policy: "#e47c20"
+  # trait node text color
+  trait: "#f72972"
+  # kind text color in resource topology 
+  kind: "#5fd7ff"
+```
+
+![vela top custom theme](../resources/vela-top-custom-theme.gif)
+
+Place the edited theme configuration file in the `~/.vela/theme/themes` folder, and then start vela top again to enter the theme switching interface. You can see that the theme you can select contains the newly edited custom theme.
 
 #### Help View
 
