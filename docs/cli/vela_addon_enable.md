@@ -25,6 +25,8 @@ vela addon enable [flags]
 	vela addon enable <your-local-addon-path>
   Enable addon with specified args (the args should be defined in addon's parameters):
 	vela addon enable <addon-name> <my-parameter-of-addon>=<my-value>
+  Enable addon with specified registry:
+    vela addon enable <registryName>/<addonName>
 
 ```
 
@@ -37,12 +39,7 @@ vela addon enable [flags]
       --override-definitions      override existing definitions if conflict with those contained in this addon
   -s, --skip-version-validating   skip validating system version requirement
   -v, --version string            specify the addon version to enable
-```
-
-### Options inherited from parent commands
-
-```
-  -y, --yes   Assume yes for all user prompts
+  -y, --yes                       all checks will be skipped and the default answer is yes for all validation check.
 ```
 
 ### SEE ALSO

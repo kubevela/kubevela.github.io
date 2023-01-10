@@ -4,7 +4,7 @@ title: 内置策略列表
 
 本文档将**按字典序**展示所有内置策略的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-12-06T16:17:10+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2023-01-10T21:14:25+08:00。
 
 ## Apply-Once
 
@@ -345,6 +345,64 @@ spec:
  disable | 如果为 true，该 trait 将被删除，默认 false。 | bool | false | false 
 
 
+## Read-Only
+
+### 描述
+
+Configure the resources to be read-only in the application (no update / state-keep)。
+
+### 示例 (read-only)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: read-only
+spec:
+  components:
+    - name: busybox
+      type: worker
+      properties:
+        image: busybox
+        cmd:
+          - sleep
+          - '1000000'
+  policies:
+    - type: read-only
+      name: read-only
+      properties:
+        rules:
+          - selector:
+              resourceTypes: ["Deployment"]
+```
+
+### 参数说明 (read-only)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ rules | Specify the list of rules to control read only strategy at resource level。 | [[]rules](#rules-read-only) | false |  
+
+
+#### rules (read-only)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ selector | 指定资源筛选目标规则。 | [[]selector](#selector-read-only) | true |  
+
+
+##### selector (read-only)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ componentNames | 按组件名称选择目标资源。 | []string | false |  
+ componentTypes | 按组件类型选择目标资源。 | []string | false |  
+ oamTypes | 按 OAM 概念，组件(COMPONENT) 或 运维特征(TRAIT) 筛选。 | []string | false |  
+ traitTypes | 按 trait 类型选择目标资源。 | []string | false |  
+ resourceTypes | 按资源类型选择。 | []string | false |  
+ resourceNames | 按资源名称选择。 | []string | false |  
+
+
 ## Replication
 
 ### 描述
@@ -614,6 +672,65 @@ spec:
 
 
 ##### selector (shared-resource)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ componentNames | 按组件名称选择目标资源。 | []string | false |  
+ componentTypes | 按组件类型选择目标资源。 | []string | false |  
+ oamTypes | 按 OAM 概念，组件(COMPONENT) 或 运维特征(TRAIT) 筛选。 | []string | false |  
+ traitTypes | 按 trait 类型选择目标资源。 | []string | false |  
+ resourceTypes | 按资源类型选择。 | []string | false |  
+ resourceNames | 按资源名称选择。 | []string | false |  
+
+
+## Take-Over
+
+### 描述
+
+Configure the resources to be able to take over when it belongs to no application。
+
+### 示例 (take-over)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: take-over
+spec:
+  components:
+    - name: busybox
+      type: k8s-objects
+      properties:
+        objects:
+          - apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: busybox-ref
+  policies:
+    - type: take-over
+      name: take-over
+      properties:
+        rules:
+          - selector:
+              resourceTypes: ["Deployment"]
+```
+
+### 参数说明 (take-over)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ rules | Specify the list of rules to control take over strategy at resource level。 | [[]rules](#rules-take-over) | false |  
+
+
+#### rules (take-over)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ selector | 指定资源筛选目标规则。 | [[]selector](#selector-take-over) | true |  
+
+
+##### selector (take-over)
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 

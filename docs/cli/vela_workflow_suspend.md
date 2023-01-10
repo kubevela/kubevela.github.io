@@ -2,11 +2,11 @@
 title: vela workflow suspend
 ---
 
-Suspend an application workflow.
+Suspend a workflow.
 
 ### Synopsis
 
-Suspend an application workflow in cluster.
+Suspend a workflow in cluster.
 
 ```
 vela workflow suspend [flags]
@@ -15,7 +15,7 @@ vela workflow suspend [flags]
 ### Examples
 
 ```
-vela workflow suspend <application-name>
+vela workflow suspend <workflow-name>
 ```
 
 ### Options

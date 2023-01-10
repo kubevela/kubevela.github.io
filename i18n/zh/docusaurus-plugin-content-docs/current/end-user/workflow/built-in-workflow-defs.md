@@ -4,7 +4,7 @@ title: 内置工作流步骤列表
 
 本文档将**按字典序**展示所有内置工作流步骤的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-12-06T16:17:10+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2023-01-10T21:14:25+08:00。
 
 ## Apply-Component
 
@@ -49,6 +49,48 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  component | Specify the component name to apply。 | string | true |  
  cluster | Specify the cluster。 | string | false | empty 
+
+
+## Apply-Deployment
+
+### 描述
+
+Apply deployment with specified image and cmd。
+
+### 示例 (apply-deployment)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: apply-deploy
+  namespace: default
+spec:
+  components:
+  - name: express-server
+    type: webservice
+    properties:
+      image: oamdev/hello-world
+      port: 8000
+  workflow:
+    steps:
+      - name: apply-comp
+        type: apply-component
+        properties:
+          component: express-server
+      - name: apply-deploy
+        type: apply-deployment
+        properties:
+          image: nginx
+```
+
+### 参数说明 (apply-deployment)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ image |  | string | true |  
+ cmd |  | []string | false |  
 
 
 ## Apply-Object
@@ -112,6 +154,403 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  value | Kubernetes 资源对象参数。 | map[string]_ | true |  
  cluster | 需要部署的集群名称。如果不指定，则为当前集群。 | string | false | empty 
+
+
+## Apply-Terraform-Config
+
+### 描述
+
+Apply terraform configuration in the step。
+
+### 示例 (apply-terraform-config)
+
+apiVersion: core.oam.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: apply-terraform-resource
+  namespace: default
+spec:
+  workflowSpec:
+    steps:
+    - name: provider
+      type: apply-terraform-provider
+      properties:
+        type: alibaba
+        name: my-alibaba-provider
+        accessKey: <accessKey>
+        secretKey: <secretKey>
+        region: cn-hangzhou
+    - name: configuration
+      type: apply-terraform-config
+      properties:
+        source:
+          path: alibaba/cs/dedicated-kubernetes
+          remote: https://github.com/FogDong/terraform-modules
+        providerRef:
+          name: my-alibaba-provider
+        writeConnectionSecretToRef:
+            name: my-terraform-secret
+            namespace: vela-system
+        variable:
+          name: regular-check-ack
+          new_nat_gateway: true
+          vpc_name: "tf-k8s-vpc-regular-check"
+          vpc_cidr: "10.0.0.0/8"
+          vswitch_name_prefix: "tf-k8s-vsw-regualr-check"
+          vswitch_cidrs: [ "10.1.0.0/16", "10.2.0.0/16", "10.3.0.0/16" ]
+          k8s_name_prefix: "tf-k8s-regular-check"
+          k8s_version: 1.24.6-aliyun.1
+          k8s_pod_cidr: "192.168.5.0/24"
+          k8s_service_cidr: "192.168.2.0/24"
+          k8s_worker_number: 2
+          cpu_core_count: 4
+          memory_size: 8
+          tags:
+            created_by: "Terraform-of-KubeVela"
+            created_from: "module-tf-alicloud-ecs-instance"
+    - name: add-cluster
+      type: vela-cli
+      if: always
+      properties:
+        storage:
+          secret:
+            - name: secret-mount
+              secretName: my-terraform-secret
+              mountPath: /kubeconfig/ack
+        command:
+          - vela
+          - cluster
+          - join
+          - /kubeconfig/ack/KUBECONFIG
+          - --name=ack
+    - name: clean-cli-jobs
+      type: clean-jobs
+      properties:
+        namespace: vela-system
+        labelSelector:
+          "workflow.oam.dev/step-name": apply-terraform-resource-add-cluster
+    - name: distribute-config
+      type: apply-object
+      properties:
+        cluster: ack
+        value:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: my-cm
+            namespace: default
+          data:
+            test-key: test-value
+
+### 参数说明 (apply-terraform-config)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ source | specify the source of the terraform configuration。 | [type-option-1](#type-option-1-apply-terraform-config) or [type-option-2](#type-option-2-apply-terraform-config) | true |  
+ deleteResource | whether to delete resource。 | bool | false | true 
+ variable | the variable in the configuration。 | map[string]_ | true |  
+ writeConnectionSecretToRef | this specifies the namespace and name of a secret to which any connection details for this managed resource should be written。 | [writeConnectionSecretToRef](#writeconnectionsecrettoref-apply-terraform-config) | false |  
+ providerRef | providerRef specifies the reference to Provider。 | [providerRef](#providerref-apply-terraform-config) | false |  
+ region | region is cloud provider's region. It will override the region in the region field of providerRef。 | string | false |  
+ jobEnv | the envs for job。 | map[string]_ | false |  
+ forceDelete |  | bool | false | false 
+
+
+#### type-option-1 (apply-terraform-config)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ hcl | directly specify the hcl of the terraform configuration。 | string | true |  
+
+
+#### type-option-2 (apply-terraform-config)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ remote | specify the remote url of the terraform configuration。 | string | false | https://github.com/kubevela-contrib/terraform-modules.git 
+ path | specify the path of the terraform configuration。 | string | false |  
+
+
+#### writeConnectionSecretToRef (apply-terraform-config)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ namespace |  | _&#124;_ | true |  
+
+
+#### providerRef (apply-terraform-config)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ namespace |  | _&#124;_ | true |  
+
+
+## Apply-Terraform-Provider
+
+### 描述
+
+Apply terraform provider config。
+
+### 示例 (apply-terraform-provider)
+
+apiVersion: core.oam.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: apply-terraform-resource
+  namespace: default
+spec:
+  workflowSpec:
+    steps:
+    - name: provider
+      type: apply-terraform-provider
+      properties:
+        type: alibaba
+        name: my-alibaba-provider
+        accessKey: <accessKey>
+        secretKey: <secretKey>
+        region: cn-hangzhou
+    - name: configuration
+      type: apply-terraform-config
+      properties:
+        source:
+          path: alibaba/cs/dedicated-kubernetes
+          remote: https://github.com/FogDong/terraform-modules
+        providerRef:
+          name: my-alibaba-provider
+        writeConnectionSecretToRef:
+            name: my-terraform-secret
+            namespace: vela-system
+        variable:
+          name: regular-check-ack
+          new_nat_gateway: true
+          vpc_name: "tf-k8s-vpc-regular-check"
+          vpc_cidr: "10.0.0.0/8"
+          vswitch_name_prefix: "tf-k8s-vsw-regualr-check"
+          vswitch_cidrs: [ "10.1.0.0/16", "10.2.0.0/16", "10.3.0.0/16" ]
+          k8s_name_prefix: "tf-k8s-regular-check"
+          k8s_version: 1.24.6-aliyun.1
+          k8s_pod_cidr: "192.168.5.0/24"
+          k8s_service_cidr: "192.168.2.0/24"
+          k8s_worker_number: 2
+          cpu_core_count: 4
+          memory_size: 8
+          tags:
+            created_by: "Terraform-of-KubeVela"
+            created_from: "module-tf-alicloud-ecs-instance"
+    - name: add-cluster
+      type: vela-cli
+      if: always
+      properties:
+        storage:
+          secret:
+            - name: secret-mount
+              secretName: my-terraform-secret
+              mountPath: /kubeconfig/ack
+        command:
+          - vela
+          - cluster
+          - join
+          - /kubeconfig/ack/KUBECONFIG
+          - --name=ack
+    - name: clean-cli-jobs
+      type: clean-jobs
+      properties:
+        namespace: vela-system
+        labelSelector:
+          "workflow.oam.dev/step-name": apply-terraform-resource-add-cluster
+    - name: distribute-config
+      type: apply-object
+      properties:
+        cluster: ack
+        value:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: my-cm
+            namespace: default
+          data:
+            test-key: test-value
+
+### 参数说明 (apply-terraform-provider)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+  |  | [AlibabaProvider](#alibabaprovider-apply-terraform-provider) or [AWSProvider](#awsprovider-apply-terraform-provider) or [AzureProvider](#azureprovider-apply-terraform-provider) or [BaiduProvider](#baiduprovider-apply-terraform-provider) or [ECProvider](#ecprovider-apply-terraform-provider) or [GCPProvider](#gcpprovider-apply-terraform-provider) or [TencentProvider](#tencentprovider-apply-terraform-provider) or [UCloudProvider](#ucloudprovider-apply-terraform-provider) | false |  
+
+
+#### AlibabaProvider (apply-terraform-provider)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ type |  | string | true |  
+ accessKey |  | string | true |  
+ secretKey |  | string | true |  
+ name |  | string | false | alibaba-provider 
+ region |  | string | true |  
+
+
+#### AWSProvider (apply-terraform-provider)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ token |  | string | false | empty 
+ type |  | string | true |  
+ accessKey |  | string | true |  
+ secretKey |  | string | true |  
+ name |  | string | false | aws-provider 
+ region |  | string | true |  
+
+
+#### AzureProvider (apply-terraform-provider)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ subscriptionID |  | string | true |  
+ tenantID |  | string | true |  
+ clientID |  | string | true |  
+ clientSecret |  | string | true |  
+ name |  | string | false | azure-provider 
+
+
+#### BaiduProvider (apply-terraform-provider)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ type |  | string | true |  
+ accessKey |  | string | true |  
+ secretKey |  | string | true |  
+ name |  | string | false | baidu-provider 
+ region |  | string | true |  
+
+
+#### ECProvider (apply-terraform-provider)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ type |  | string | true |  
+ apiKey |  | string | false | empty 
+ name |  | string | true |  
+
+
+#### GCPProvider (apply-terraform-provider)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ credentials |  | string | true |  
+ region |  | string | true |  
+ project |  | string | true |  
+ type |  | string | true |  
+ name |  | string | false | gcp-provider 
+
+
+#### TencentProvider (apply-terraform-provider)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ secretID |  | string | true |  
+ secretKey |  | string | true |  
+ region |  | string | true |  
+ type |  | string | true |  
+ name |  | string | false | tencent-provider 
+
+
+#### UCloudProvider (apply-terraform-provider)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ publicKey |  | string | true |  
+ privateKey |  | string | true |  
+ projectID |  | string | true |  
+ region |  | string | true |  
+ type |  | string | true |  
+ name |  | string | false | ucloud-provider 
+
+
+## Build-Push-Image
+
+### 描述
+
+Build and push image from git url。
+
+### 示例 (build-push-image)
+
+404: Not Found
+
+### 参数说明 (build-push-image)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ kanikoExecutor | Specify the kaniko executor image, default to oamdev/kaniko-executor:v1.9.1。 | string | false | oamdev/kaniko-executor:v1.9.1 
+ context | Specify the context to build image, you can use context with git and branch or directly specify the context, please refer to https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts。 | string | true |  
+ dockerfile | Specify the dockerfile。 | string | false | ./Dockerfile 
+ image | Specify the image。 | string | true |  
+ platform | Specify the platform to build。 | string | false |  
+ buildArgs | Specify the build args。 | []string | false |  
+ credentials | Specify the credentials to access git and image registry。 | [credentials](#credentials-build-push-image) | false |  
+ verbosity | Specify the verbosity level。 | "info" or "panic" or "fatal" or "error" or "warn" or "debug" or "trace" | false | info 
+
+
+#### credentials (build-push-image)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ git | Specify the credentials to access git。 | [git](#git-build-push-image) | false |  
+ image | Specify the credentials to access image registry。 | [image](#image-build-push-image) | false |  
+
+
+##### git (build-push-image)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Specify the secret name。 | string | true |  
+ key | Specify the secret key。 | string | true |  
+
+
+##### image (build-push-image)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Specify the secret name。 | string | true |  
+ key | Specify the secret key。 | string | false | .dockerconfigjson 
+
+
+## Clean-Jobs
+
+### 描述
+
+clean applied jobs in the cluster。
+
+### 示例 (clean-jobs)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: clean-jobs
+  namespace: default
+spec:
+  components: []
+  workflow:
+    steps:
+    - name: clean-cli-jobs
+      type: clean-jobs
+      properties:
+        labelSelector:
+          "my-label": my-value
+```
+
+### 参数说明 (clean-jobs)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ labelselector |  | map[string]_ | false |  
+ namespace |  | _&#124;_ | true |  
 
 
 ## Collect-Service-Endpoints
@@ -736,6 +1175,17 @@ spec:
  type | 指定导出的 secret 类型。 | string | false |  
  data | 需要导出到 Secret 中的数据。 | struct | true |  
  cluster | 要导出到的集群名称。 | string | false | empty 
+ kind | Specify the kind of the secret。 | "generic" or "docker-registry" | false | generic 
+ dockerRegistry | Specify the docker data。 | [dockerRegistry](#dockerregistry-export2secret) | false |  
+
+
+#### dockerRegistry (export2secret)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ username | Specify the username of the docker registry。 | string | true |  
+ password | Specify the password of the docker registry。 | string | true |  
+ server | Specify the server of the docker registry。 | string | false | https://index.docker.io/v1/ 
 
 
 ## Generate-Jdbc-Connection
@@ -1266,6 +1716,62 @@ spec:
  cluster | 需要部署的集群名称。如果不指定，则为当前集群。 | string | false | empty 
 
 
+## Request
+
+### 描述
+
+Send request to the url。
+
+### 示例 (request)
+
+apiVersion: core.oam.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: request-http
+  namespace: default
+spec:
+  workflowSpec:
+    steps:
+    - name: request
+      type: request
+      properties:
+        url: https://api.github.com/repos/kubevela/notfound
+      outputs:
+        - name: stars
+          valueFrom: |
+            import "strconv"
+            "Current star count: " + strconv.FormatInt(response["stargazers_count"], 10)
+    - name: notification
+      type: notification
+      inputs:
+        - from: stars
+          parameterKey: slack.message.text
+      properties:
+        slack:
+          url:
+            value: <your slack url>
+    - name: failed-notification
+      type: notification
+      if: status.request.failed
+      properties:
+        slack:
+          url:
+            value: <your slack url>
+          message:
+            text: "Failed to request github"
+            
+
+### 参数说明 (request)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ url |  | string | true |  
+ method |  | "GET" or "POST" or "PUT" or "DELETE" | false | GET 
+ body |  | map[string]_ | false |  
+ header |  | map[string]string | false |  
+
+
 ## Share-Cloud-Resource
 
 ### 描述
@@ -1468,6 +1974,143 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  duration | 指定工作流暂停的时长，超过该时间后工作流将自动继续，如："30s"， "1min"， "2m15s"。 | string | false |  
+
+
+## Vela-Cli
+
+### 描述
+
+Run a vela command。
+
+### 示例 (vela-cli)
+
+apiVersion: core.oam.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: apply-terraform-resource
+  namespace: default
+spec:
+  workflowSpec:
+    steps:
+    - name: provider
+      type: apply-terraform-provider
+      properties:
+        type: alibaba
+        name: my-alibaba-provider
+        accessKey: <accessKey>
+        secretKey: <secretKey>
+        region: cn-hangzhou
+    - name: configuration
+      type: apply-terraform-config
+      properties:
+        source:
+          path: alibaba/cs/dedicated-kubernetes
+          remote: https://github.com/FogDong/terraform-modules
+        providerRef:
+          name: my-alibaba-provider
+        writeConnectionSecretToRef:
+            name: my-terraform-secret
+            namespace: vela-system
+        variable:
+          name: regular-check-ack
+          new_nat_gateway: true
+          vpc_name: "tf-k8s-vpc-regular-check"
+          vpc_cidr: "10.0.0.0/8"
+          vswitch_name_prefix: "tf-k8s-vsw-regualr-check"
+          vswitch_cidrs: [ "10.1.0.0/16", "10.2.0.0/16", "10.3.0.0/16" ]
+          k8s_name_prefix: "tf-k8s-regular-check"
+          k8s_version: 1.24.6-aliyun.1
+          k8s_pod_cidr: "192.168.5.0/24"
+          k8s_service_cidr: "192.168.2.0/24"
+          k8s_worker_number: 2
+          cpu_core_count: 4
+          memory_size: 8
+          tags:
+            created_by: "Terraform-of-KubeVela"
+            created_from: "module-tf-alicloud-ecs-instance"
+    - name: add-cluster
+      type: vela-cli
+      if: always
+      properties:
+        storage:
+          secret:
+            - name: secret-mount
+              secretName: my-terraform-secret
+              mountPath: /kubeconfig/ack
+        command:
+          - vela
+          - cluster
+          - join
+          - /kubeconfig/ack/KUBECONFIG
+          - --name=ack
+    - name: clean-cli-jobs
+      type: clean-jobs
+      properties:
+        namespace: vela-system
+        labelSelector:
+          "workflow.oam.dev/step-name": apply-terraform-resource-add-cluster
+    - name: distribute-config
+      type: apply-object
+      properties:
+        cluster: ack
+        value:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: my-cm
+            namespace: default
+          data:
+            test-key: test-value
+
+### 参数说明 (vela-cli)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ addonName | Specify the name of the addon。 | string | true |  
+ command | Specify the vela command。 | []string | true |  
+ image | Specify the image。 | string | false | oamdev/vela-cli:v1.6.4 
+ serviceAccountName | specify serviceAccountName want to use。 | string | false | kubevela-vela-core 
+ storage |  | [storage](#storage-vela-cli) | false |  
+
+
+#### storage (vela-cli)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ secret | Mount Secret type storage。 | [[]secret](#secret-vela-cli) | false |  
+ hostPath | Declare host path type storage。 | [[]hostPath](#hostpath-vela-cli) | false |  
+
+
+##### secret (vela-cli)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ defaultMode |  | int | false | 420 
+ secretName |  | string | true |  
+ items |  | [[]items](#items-vela-cli) | false |  
+
+
+##### items (vela-cli)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ key |  | string | true |  
+ path |  | string | true |  
+ mode |  | int | false | 511 
+
+
+##### hostPath (vela-cli)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ path |  | string | true |  
+ mountPath |  | string | true |  
+ type |  | "Directory" or "DirectoryOrCreate" or "FileOrCreate" or "File" or "Socket" or "CharDevice" or "BlockDevice" | false | Directory 
 
 
 ## Webhook

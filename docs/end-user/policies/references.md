@@ -4,7 +4,7 @@ title: Built-in Policy Type
 
 This documentation will walk through all the built-in policy types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-12-06T16:17:10+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-01-10T21:14:25+08:00.
 
 ## Apply-Once
 
@@ -345,6 +345,64 @@ spec:
  disable | Specify if the trait should be remove, default false. | bool | false | false 
 
 
+## Read-Only
+
+### Description
+
+Configure the resources to be read-only in the application (no update / state-keep).
+
+### Examples (read-only)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: read-only
+spec:
+  components:
+    - name: busybox
+      type: worker
+      properties:
+        image: busybox
+        cmd:
+          - sleep
+          - '1000000'
+  policies:
+    - type: read-only
+      name: read-only
+      properties:
+        rules:
+          - selector:
+              resourceTypes: ["Deployment"]
+```
+
+### Specification (read-only)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ rules | Specify the list of rules to control read only strategy at resource level. | [[]rules](#rules-read-only) | false |  
+
+
+#### rules (read-only)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ selector | Specify how to select the targets of the rule. | [[]selector](#selector-read-only) | true |  
+
+
+##### selector (read-only)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ componentNames | Select resources by component names. | []string | false |  
+ componentTypes | Select resources by component types. | []string | false |  
+ oamTypes | Select resources by oamTypes (COMPONENT or TRAIT). | []string | false |  
+ traitTypes | Select resources by trait types. | []string | false |  
+ resourceTypes | Select resources by resource types (like Deployment). | []string | false |  
+ resourceNames | Select resources by their names. | []string | false |  
+
+
 ## Replication
 
 ### Description
@@ -614,6 +672,65 @@ spec:
 
 
 ##### selector (shared-resource)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ componentNames | Select resources by component names. | []string | false |  
+ componentTypes | Select resources by component types. | []string | false |  
+ oamTypes | Select resources by oamTypes (COMPONENT or TRAIT). | []string | false |  
+ traitTypes | Select resources by trait types. | []string | false |  
+ resourceTypes | Select resources by resource types (like Deployment). | []string | false |  
+ resourceNames | Select resources by their names. | []string | false |  
+
+
+## Take-Over
+
+### Description
+
+Configure the resources to be able to take over when it belongs to no application.
+
+### Examples (take-over)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: take-over
+spec:
+  components:
+    - name: busybox
+      type: k8s-objects
+      properties:
+        objects:
+          - apiVersion: apps/v1
+            kind: Deployment
+            metadata:
+              name: busybox-ref
+  policies:
+    - type: take-over
+      name: take-over
+      properties:
+        rules:
+          - selector:
+              resourceTypes: ["Deployment"]
+```
+
+### Specification (take-over)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ rules | Specify the list of rules to control take over strategy at resource level. | [[]rules](#rules-take-over) | false |  
+
+
+#### rules (take-over)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ selector | Specify how to select the targets of the rule. | [[]selector](#selector-take-over) | true |  
+
+
+##### selector (take-over)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
