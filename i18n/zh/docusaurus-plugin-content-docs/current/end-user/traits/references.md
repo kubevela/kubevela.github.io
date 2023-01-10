@@ -4,7 +4,7 @@ title: 内置运维特征列表
 
 本文档将**按字典序**展示所有内置运维特征的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-12-06T16:17:10+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2023-01-10T21:14:25+08:00。
 
 ## Affinity
 
@@ -598,7 +598,7 @@ spec:
           properties:
             min: 1
             max: 10
-            cpuPercent: 60
+            cpuUtil: 60
 ```
 
 ### 参数说明 (cpuscaler)
@@ -873,6 +873,116 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  ip |  | string | true |  
  hostnames |  | []string | true |  
+
+
+## Hpa
+
+### 描述
+
+Configure k8s HPA for Deployment or Statefulsets。
+
+### 适用于组件类型
+
+基于以下资源的组件：
+- deployments.apps
+- statefulsets.apps
+
+
+
+### 示例 (hpa)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: helloworld
+spec:
+  components:
+    - name: helloworld
+      type: webservice
+      properties:
+        cpu: "0.5"
+        exposeType: ClusterIP
+        image: oamdev/hello-world
+        memory: 1024Mi
+        ports:
+          - expose: true
+            port: 80
+            protocol: TCP
+      traits:
+        - type: scaler
+          properties:
+            replicas: 1
+        - type: hpa
+          properties:
+            targetAPIVersion: apps/v1
+            targetKind: Deployment
+            max: 10
+            min: 1
+            cpu:
+              type: Utilization
+              value: 80
+            mem:
+              type: AverageValue
+              value: 90
+            podCustomMetrics:
+              # here are custom metric names and values. Please replace them to be your metrics
+              - name: pod_net_received_rate
+                value: "77"
+              - name: pod_net_transmitted_rate
+                value: "88"
+              - name: pod_net_received_packets_rate
+                value: "95"
+              - name: pod_net_transmitted_packets_rate
+                value: "99"
+  policies:
+    - name: apply-once
+      type: apply-once
+      properties:
+        enable: true
+        rules:
+          - strategy:
+              path: ["spec.replicas"]
+            selector:
+              resourceTypes: ["Deployment","StatefulSet"]
+```
+
+### 参数说明 (hpa)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ min | 能够将工作负载缩容到的最小副本个数。 | int | false | 1 
+ max | 能够将工作负载扩容到的最大副本个数。 | int | false | 10 
+ targetAPIVersion | Specify the apiVersion of scale target。 | string | false | apps/v1 
+ targetKind | Specify the kind of scale target。 | string | false | Deployment 
+ cpu |  | [cpu](#cpu-hpa) | true |  
+ mem |  | [mem](#mem-hpa) | false |  
+ podCustomMetrics | Specify custom metrics of pod type。 | [[]podCustomMetrics](#podcustommetrics-hpa) | false |  
+
+
+#### cpu (hpa)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ type | Specify resource metrics in terms of percentage("Utilization") or direct value("AverageValue")。 | "Utilization" or "AverageValue" | false | Utilization 
+ value | Specify the value of CPU utilization or averageValue。 | int | false | 50 
+
+
+#### mem (hpa)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ type | Specify resource metrics in terms of percentage("Utilization") or direct value("AverageValue")。 | "Utilization" or "AverageValue" | false | Utilization 
+ value | Specify  the value of MEM utilization or averageValue。 | int | false | 50 
+
+
+#### podCustomMetrics (hpa)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Specify name of custom metrics。 | string | true |  
+ value | Specify target value of custom metrics。 | string | true |  
 
 
 ## Init-Container
@@ -1967,6 +2077,199 @@ spec:
  port | 指定健康检查的 TCP socket。 | int | true |  
 
 
+## Startup-Probe
+
+### 描述
+
+Add startup probe hooks for the specified container of K8s pod for your workload which follows the pod spec in path 'spec.template'。
+
+### 适用于组件类型
+
+基于以下资源的组件：
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
+
+
+### 示例 (startup-probe)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: application-with-startup-probe
+spec:
+  components:
+    - name: busybox-runner
+      type: worker
+      properties:
+        image: busybox
+        cmd:
+          - sleep
+          - '1000'
+      traits:
+      - type: sidecar
+        properties:
+          name: nginx
+          image: nginx
+      # This startup-probe is blocking the startup of the main container 
+      # as the URL has a typo '.comm' vs '.com'
+      - type: startup-probe
+        properties:
+          containerName: "busybox-runner"
+          httpGet:
+            host: "www.guidewire.comm"
+            scheme: "HTTPS"
+            port: 443
+          periodSeconds: 4
+          failureThreshold: 4  
+      # This startup probe targets the nginx sidecar
+      - type: startup-probe
+        properties:
+          containerName: nginx
+          httpGet:
+            host: "www.guidewire.com"
+            scheme: "HTTPS"
+            port: 443
+          periodSeconds: 5
+          failureThreshold: 5           
+```
+
+### 参数说明 (startup-probe)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+  |  | [StartupProbeParams](#startupprobeparams-startup-probe) or [type-option-2](#type-option-2-startup-probe) | false |  
+
+
+#### StartupProbeParams (startup-probe)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
+ initialDelaySeconds | Number of seconds after the container has started before liveness probes are initiated. Minimum value is 0。 | int | false | 0 
+ periodSeconds | How often, in seconds, to execute the probe. Minimum value is 1。 | int | false | 10 
+ timeoutSeconds | Number of seconds after which the probe times out. Minimum value is 1。 | int | false | 1 
+ successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.  Minimum value is 1。 | int | false | 1 
+ failureThreshold | Minimum consecutive failures for the probe to be considered failed after having succeeded. Minimum value is 1。 | int | false | 3 
+ terminationGracePeriodSeconds | Optional duration in seconds the pod needs to terminate gracefully upon probe failure. Set this value longer than the expected cleanup time for your process。 | int | false |  
+ exec | Instructions for assessing container startup status by executing a command. Either this attribute or the httpGet attribute or the grpc attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with the httpGet attribute and the tcpSocket attribute and the gRPC attribute。 | [exec](#exec-startup-probe) | false |  
+ httpGet | Instructions for assessing container startup status by executing an HTTP GET request. Either this attribute or the exec attribute or the grpc attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the tcpSocket attribute and the gRPC attribute。 | [httpGet](#httpget-startup-probe) | false |  
+ grpc | Instructions for assessing container startup status by probing a gRPC service. Either this attribute or the exec attribute or the grpc attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the httpGet attribute and the tcpSocket attribute。 | [grpc](#grpc-startup-probe) | false |  
+ tcpSocket | Instructions for assessing container startup status by probing a TCP socket. Either this attribute or the exec attribute or the tcpSocket attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the httpGet attribute and the gRPC attribute。 | [tcpSocket](#tcpsocket-startup-probe) | false |  
+
+
+##### exec (startup-probe)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+
+
+##### httpGet (startup-probe)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path | 定义服务端点请求的路径。 | string | false |  
+ port | The port numer to access on the host or container。 | int | true |  
+ host | The hostname to connect to, defaults to the pod IP. You probably want to set "Host" in httpHeaders instead。 | string | false |  
+ scheme | The Scheme to use for connecting to the host。 | "HTTP" or "HTTPS" | false | HTTP 
+ httpHeaders | Custom headers to set in the request. HTTP allows repeated headers。 | [[]httpHeaders](#httpheaders-startup-probe) | false |  
+
+
+##### httpHeaders (startup-probe)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | The header field name。 | string | true |  
+ value | The header field value。 | string | true |  
+
+
+##### grpc (startup-probe)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | The port number of the gRPC service。 | int | true |  
+ service | The name of the service to place in the gRPC HealthCheckRequest。 | string | false |  
+
+
+##### tcpSocket (startup-probe)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | Number or name of the port to access on the container。 | string | true |  
+ host | Host name to connect to, defaults to the pod IP。 | string | false |  
+
+
+#### type-option-2 (startup-probe)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ probes | Specify the startup probe for multiple containers。 | [[]probes](#probes-startup-probe) | true |  
+
+
+##### probes (startup-probe)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
+ initialDelaySeconds | Number of seconds after the container has started before liveness probes are initiated. Minimum value is 0。 | int | false | 0 
+ periodSeconds | How often, in seconds, to execute the probe. Minimum value is 1。 | int | false | 10 
+ timeoutSeconds | Number of seconds after which the probe times out. Minimum value is 1。 | int | false | 1 
+ successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.  Minimum value is 1。 | int | false | 1 
+ failureThreshold | Minimum consecutive failures for the probe to be considered failed after having succeeded. Minimum value is 1。 | int | false | 3 
+ terminationGracePeriodSeconds | Optional duration in seconds the pod needs to terminate gracefully upon probe failure. Set this value longer than the expected cleanup time for your process。 | int | false |  
+ exec | Instructions for assessing container startup status by executing a command. Either this attribute or the httpGet attribute or the grpc attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with the httpGet attribute and the tcpSocket attribute and the gRPC attribute。 | [exec](#exec-startup-probe) | false |  
+ httpGet | Instructions for assessing container startup status by executing an HTTP GET request. Either this attribute or the exec attribute or the grpc attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the tcpSocket attribute and the gRPC attribute。 | [httpGet](#httpget-startup-probe) | false |  
+ grpc | Instructions for assessing container startup status by probing a gRPC service. Either this attribute or the exec attribute or the grpc attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the httpGet attribute and the tcpSocket attribute。 | [grpc](#grpc-startup-probe) | false |  
+ tcpSocket | Instructions for assessing container startup status by probing a TCP socket. Either this attribute or the exec attribute or the tcpSocket attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the httpGet attribute and the gRPC attribute。 | [tcpSocket](#tcpsocket-startup-probe) | false |  
+
+
+##### exec (startup-probe)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+
+
+##### httpGet (startup-probe)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path | 定义服务端点请求的路径。 | string | false |  
+ port | The port numer to access on the host or container。 | int | true |  
+ host | The hostname to connect to, defaults to the pod IP. You probably want to set "Host" in httpHeaders instead。 | string | false |  
+ scheme | The Scheme to use for connecting to the host。 | "HTTP" or "HTTPS" | false | HTTP 
+ httpHeaders | Custom headers to set in the request. HTTP allows repeated headers。 | [[]httpHeaders](#httpheaders-startup-probe) | false |  
+
+
+##### httpHeaders (startup-probe)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | The header field name。 | string | true |  
+ value | The header field value。 | string | true |  
+
+
+##### grpc (startup-probe)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | The port number of the gRPC service。 | int | true |  
+ service | The name of the service to place in the gRPC HealthCheckRequest。 | string | false |  
+
+
+##### tcpSocket (startup-probe)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | Number or name of the port to access on the container。 | string | true |  
+ host | Host name to connect to, defaults to the pod IP。 | string | false |  
+
+
 ## Storage
 
 ### 描述
@@ -2043,6 +2346,7 @@ spec:
  configMap | 声明 ConfigMap 类型存储。 | [[]configMap](#configmap-storage) | false |  
  secret | 声明 Secret 类型存储。 | [[]secret](#secret-storage) | false |  
  emptyDir | 声明 EmptyDir 类型存储。 | [[]emptyDir](#emptydir-storage) | false |  
+ hostPath | Declare host path type storage。 | [[]hostPath](#hostpath-storage) | false |  
 
 
 #### pvc (storage)
@@ -2211,5 +2515,113 @@ spec:
  mountPath |  | string | true |  
  subPath |  | string | false |  
  medium |  | "" or "Memory" | false | empty 
+
+
+#### hostPath (storage)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ path |  | string | true |  
+ mountPath |  | string | true |  
+ type |  | "Directory" or "DirectoryOrCreate" or "FileOrCreate" or "File" or "Socket" or "CharDevice" or "BlockDevice" | false | Directory 
+
+
+## Topologyspreadconstraints
+
+### 描述
+
+Add topology spread constraints hooks for every container of K8s pod for your workload which follows the pod spec in path 'spec.template'。
+
+### 适用于组件类型
+
+基于以下资源的组件：
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
+
+
+### 示例 (topologyspreadconstraints)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: application-with-topologyspreadconstraints
+spec:
+  components:
+    - name: busybox-runner
+      type: worker
+      properties:
+        image: busybox
+        cmd:
+          - sleep
+          - '1000'
+      traits:
+      - type: topologyspreadconstraints
+        properties:
+          constraints: 
+          - topologyKey: zone
+            labelSelector:
+              matchLabels: 
+                zone: us-east-1a
+            maxSkew: 1
+            whenUnsatisfiable: DoNotSchedule
+            minDomains: 1
+            nodeAffinityPolicy: Ignore
+            nodeTaintsPolicy: Ignore
+          - topologyKey: node
+            labelSelector:
+              matchExpressions:
+                - key: foo 
+                  operator: In
+                  values: 
+                  - abc
+            maxSkew: 1
+            whenUnsatisfiable: ScheduleAnyway 
+            minDomains: 1
+            nodeAffinityPolicy: Ignore
+            nodeTaintsPolicy: Ignore
+```
+
+### 参数说明 (topologyspreadconstraints)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ constraints |  | [[]constraints](#constraints-topologyspreadconstraints) | true |  
+
+
+#### constraints (topologyspreadconstraints)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ maxSkew | Describe the degree to which Pods may be unevenly distributed。 | int | true |  
+ topologyKey | Specify the key of node labels。 | string | true |  
+ whenUnsatisfiable | Indicate how to deal with a Pod if it doesn't satisfy the spread constraint。 | "DoNotSchedule" or "ScheduleAnyway" | false | DoNotSchedule 
+ labelSelector |  | [labelSelector](#labelselector-topologyspreadconstraints) | true |  
+ minDomains | Indicate a minimum number of eligible domains。 | int | false |  
+ matchLabelKeys | A list of pod label keys to select the pods over which spreading will be calculated。 | []string | false |  
+ nodeAffinityPolicy | Indicate how we will treat Pod's nodeAffinity/nodeSelector when calculating pod topology spread skew。 | "Honor" or "Ignore" | false | Honor 
+ nodeTaintsPolicy | Indicate how we will treat node taints when calculating pod topology spread skew。 | "Honor" or "Ignore" | false | Honor 
+
+
+##### labelSelector (topologyspreadconstraints)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ matchLabels |  | map[string]string | false |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-topologyspreadconstraints) | false |  
+
+
+##### matchExpressions (topologyspreadconstraints)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ key |  | string | true |  
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
+ values |  | []string | false |  
 
 

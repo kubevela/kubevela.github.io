@@ -4,7 +4,7 @@ title: 内置组件列表
 
 本文档将**按字典序**展示所有内置组件的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2022-12-06T16:17:10+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2023-01-10T21:14:25+08:00。
 
 ## Cron-Task
 
@@ -794,6 +794,7 @@ spec:
  imagePullSecrets | 容器的镜像拉取密钥。 | []string | false |  
  ports | 指定业务流量进入的端口（多个），默认为 80。 | [[]ports](#ports-webservice) | false |  
  cmd | 容器的启动命令。 | []string | false |  
+ args | Arguments to the entrypoint。 | []string | false |  
  env | 容器中的环境变量。 | [[]env](#env-webservice) | false |  
  cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
  memory | 所需要的内存大小。 | string | false |  
