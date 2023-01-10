@@ -15,8 +15,8 @@ KubeVela 控制器的各项启动参数及其说明如下。
 |        log-file-path        | string |                 ""                | 日志文件路径                                                                 |
 |      log-file-max-size      |   int  |                1024               | 日志文件的最大量，单位为 MB                                                  |
 |          log-debug          |  bool  |               false               | 将日志级别设为调试，开发环境下使用                                           |
-|  application-revision-limit |   int  |                 10                | 最大维护的应用历史版本数量，当应用版本数超过此数值时，较早的版本会被丢弃    |
-|  definition-revision-limit  |   int  |                 20                | 最大维护的模块定义历史版本数量                                                 |
+|  application-revision-limit |   int  |                 2                | 最大维护的应用历史版本数量，当应用版本数超过此数值时，较早的版本会被丢弃    |
+|  definition-revision-limit  |   int  |                 2                | 最大维护的模块定义历史版本数量                                                 |
 | autogen-workload-definition |  bool  |                true               | 自动为 组件定义 生成 工作负载定义                                              |
 |         health-addr         | string |               :9440               | 健康检查监听地址                                                               |
 |       apply-once-only       | string |               false               | 工作负载及特征在生成后不再变更，在特定需求环境下使用                           |
@@ -56,6 +56,9 @@ KubeVela 控制器的各项启动参数及其说明如下。
 你可以为控制器配置 `--feature-gates=XXX=true` 来启用 `XXX` 能力。下列配置默认不启用，你可以通过开启这些参数来配置控制器的能力。
 
 - **AuthenticateApplication**: 对应用进行鉴权。
-- **ZstdResourceTracker**: 对 ResourceTracker 的存储使用 Zstd 压缩。当你的系统中有较大应用并需要管控较多资源时，启用这个能力可以大幅节约你的系统存储开销（并略微增加运算开销）。
+- **ZstdResourceTracker**: 对 ResourceTracker 的存储使用 Zstd 压缩。当你的系统中有较大应用并需要管控较多资源时，启用这个能力可以大幅节约你的系统存储开销（并略微增加运算开销）。默认开启。
+- **ZstdApplicationRevision**: 对 ApplicationRevision 的存储使用 Zstd 压缩。效果类似于**ZstdResourceTracker**。默认开启
 - **ApplyOnce**: 为所有应用都启用 ApplyOnce 能力，禁用全部状态维持。ResourceTracker 将不会存储资源的详细信息，进而大幅节约系统存储开销。
 - **MultiStageComponentApply**: 启用多阶段组件资源部署能力。当启用时，组件内的资源下发可分不同批次下发。
+- **ApplyResourceByUpdate**: 对资源的修改使用 Update 而非  Patch。启用该功能的副作用是增加网络通信量以及更多的潜在冲突。如果启用该功能，KubeVela 控制器将会对管控的资源施加强限制，不允许任何外界系统直接修改底层被管控资源，即 KubeVela 应用保存了对于目标资源的完整描述。
+- **PreDispatchDryRun**: 在下发资源之前进行 DryRun 校验。启用该能力有助于阻止不合法请求的资源被记录进 ResourceTracker，从而优化垃圾回收的体验。代价是增加下发请求的网络通信量。默认开启。
