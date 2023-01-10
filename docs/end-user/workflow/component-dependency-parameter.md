@@ -27,7 +27,7 @@ components:
 
 In this case, KubeVela will deploy B first, and then deploy A when the component B is running.
 
-### How to use
+### How to Use
 
 If we want to apply a MySQL cluster, we need:
 
@@ -153,7 +153,7 @@ Which means the input value will be passed into the below properties:
         host: <input value>
 ```
 
-### How to use
+### How to Use
 
 In the following we will apply a WordPress server with the MySQL address passed from a MySQL component:
 
@@ -213,3 +213,85 @@ wordpress-with-mysql	mysql    	helm	running	                healthy	        2021
 ```
 
 The WordPress with MySQL has been successfully applied.
+
+## Multi-cluster Orchestration
+
+In multi-cluster scenario, we can still make use of Dependency and Inputs/Outputs to orchestrate the components. The usage is the same as in the single-cluster scenario. Here's a direct example. Here is a Inputs/Outpus example and Dependency is also available.
+
+### How to Use
+
+:::note
+The environment in example have one managed cluster named `cluster-worker`.
+:::
+
+Deploy the following application, which will dispatch a Deployment and a Service. Then deploy a ConfigMap with some status information. 
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: cm-with-message
+spec:
+  components:
+    - name: podinfo
+      outputs:
+        - name: message
+          valueFrom: output.status.conditions[0].message
+        - name: ip
+          valueFrom: outputs.service.spec.clusterIP
+      properties:
+        image: stefanprodan/podinfo:4.0.3
+      type: webservice
+      traits:
+        - type: expose
+          properties:
+            port: [ 80 ]
+    - name: configmap
+      properties:
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: deployment-msg
+      type: raw
+      inputs:
+        - from: message
+          parameterKey: data.msg
+        - from: ip
+          parameterKey: data.ip
+  policies:
+    - name: topo
+      properties:
+        clusters: [ "local","cluster-worker" ]
+      type: topology
+    - name: override
+      properties:
+        selector:
+          - configmap
+          - podinfo
+      type: override
+```
+
+### Expected Outcome
+
+```shell
+$ vela status cm-with-message --tree                  
+CLUSTER            NAMESPACE     RESOURCE                 STATUS    
+cluster-worker─── default    ─┬─ ConfigMap/deployment-msg updated   
+                              ├─ Service/podinfo          updated   
+                              └─ Deployment/podinfo       updated   
+local       ─── default      ─┬─ ConfigMap/deployment-msg updated   
+                              ├─ Service/podinfo          updated   
+                              └─ Deployment/podinfo       updated   
+```
+
+
+Check the ConfigMap in the cluster. The same to the other cluster.
+
+```shell
+$ kubectl get cm deployment-msg -oyaml |grep -C3 ^data
+apiVersion: v1
+data:
+  ip: 10.43.223.14
+  msg: Deployment has minimum availability.
+kind: ConfigMap
+```
