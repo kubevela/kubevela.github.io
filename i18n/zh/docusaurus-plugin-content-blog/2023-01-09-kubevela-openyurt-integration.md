@@ -148,7 +148,7 @@ spec:
 3. `deploy` 工作流步骤。它描述了如何部署应用程序。它指定 `replication` 策略执行复制工作的策略。
 > 注意：
 > 1. 如果你希望此应用程序正常工作，请先在集群下发在下文介绍的 `edge-ingress` 特性。
-> 2. `deploy` 是一个 KubeVela 内置的工作流程步骤。它还可以在[多集群场景](../case-studies/multi-cluster)中与`override`、`topology` 策略一起使用 。
+> 2. `deploy` 是一个 KubeVela 内置的工作流程步骤。它还可以在[多集群场景](https://kubevela.net/zh/docs/case-studies/multi-cluster)中与`override`、`topology` 策略一起使用 。
 
 现在，我们可以将应用下发到集群。
 ```shell
