@@ -4,7 +4,7 @@ title: Built-in Component Type
 
 This documentation will walk through all the built-in component types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2022-12-06T16:17:10+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-01-10T21:14:25+08:00.
 
 ## Cron-Task
 
@@ -794,6 +794,7 @@ spec:
  imagePullSecrets | Specify image pull secrets for your service. | []string | false |  
  ports | Which ports do you want customer traffic sent to, defaults to 80. | [[]ports](#ports-webservice) | false |  
  cmd | Commands to run in the container. | []string | false |  
+ args | Arguments to the entrypoint. | []string | false |  
  env | Define arguments by using environment variables. | [[]env](#env-webservice) | false |  
  cpu | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core). | string | false |  
  memory | Specifies the attributes of the memory resource required for the container. | string | false |  
