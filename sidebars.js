@@ -226,6 +226,7 @@ module.exports = {
             'platform-engineers/system-operation/migration-from-old-version',
             'platform-engineers/system-operation/system-info-diagnose',
             'platform-engineers/system-operation/high-availability',
+            'platform-engineers/system-operation/controller-grayscale-release',
           ],
         },
         {
