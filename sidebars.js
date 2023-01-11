@@ -189,6 +189,7 @@ module.exports = {
         {
           'Application Policies': [
             'end-user/policies/shared-resource',
+            'end-user/policies/resource-adoption',
             'end-user/policies/apply-once',
             'end-user/policies/gc',
             'end-user/policies/replication',
