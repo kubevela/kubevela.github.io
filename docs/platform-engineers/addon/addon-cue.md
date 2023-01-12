@@ -154,6 +154,34 @@ spec:
 
 We just use namespace as example here, other resources of an operator can also be defined in KubeVela application in the same way. This also gives your addon re-usability and validation capability powered by the CUE.
 
+## Notes info (`NOTES.cue`)
+
+The `NOTES.cue` file allows you to display dynamic notifications once the addon has been enabled, based on specified parameters.
+
+For example, you can write the `NOTES.cue` as shown below:
+
+```cue
+info: parameter.message
+
+notes: (info)
+```
+
+and `parameter.cue` as shown below:
+
+```cue
+paramters: {
+	message: *"Welcome to use this addon!" | string 
+}
+```
+
+Once the addon is enabled using the CLI, you will see this information in your console:
+
+```text
+Welcome to use this addon!
+```
+
+A real-world example of how to use `NOTES.cue` can be found in the backstage addon. For more information, please refer to this [link](https://github.com/kubevela/catalog/tree/master/experimental/addons/backstage).
+
 ## Features
 
 This section will introduce the way of writing application description file to implement several core features of addon.

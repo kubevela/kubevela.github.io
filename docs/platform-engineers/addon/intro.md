@@ -150,6 +150,30 @@ The `views/` folder is used to store the [VelaQL View](../system-operation/velaq
 
 The `views/` folder is used to store the [Config Template](../../reference/config-template) files.
 
+## Initializing an Addon Structure
+
+We provided the vela CLI tool to help you quickly create an addon structure based on an existing helm chart .
+
+For instance, to create an addon using version 12.1.6 of the MongoDB helm chart from the repository https://marketplace.azurecr.io/helm/v1/repo, use the following command:
+
+```shell
+vela addon init mongodb --helm-repo https://marketplace.azurecr.io/helm/v1/repo --chart mongodb --chart-version 12.1.16
+```
+
+Running this command will generate a basic addon directory in your local path:
+
+```shell
+$ ls mongondb   
+NOTES.cue     README.md     definitions   metadata.yaml parameter.cue resources     schemas       template.cue  views
+```
+
+You can still use this CLI tool to create an addon from a helm chart stored in an OCI registry. Here's an example:
+
+```shell
+vela addon init podinfo --helmrepo oci://ghcr.io/stefanprodan/charts --chart podinfo --chart-version 6.1.*
+```
+
+
 ## Install Addon Locally
 
 You can install the addon from local to debug your own addon:

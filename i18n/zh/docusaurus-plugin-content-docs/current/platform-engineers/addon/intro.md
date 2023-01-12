@@ -127,6 +127,29 @@ YAML 格式的应用描述文件的特点是编写简单，你只需要编写一
 文档[使用 YAML 描述插件应用](./addon-yaml) 详细介绍了 YAML 格式的应用描述文件的编写方法。
 文档[使用 CUE 描述插件应用](./addon-cue) 详细介绍了 CUE 格式的应用描述文件的编写方法。
 
+## 快速初始化插件文件
+
+我们提供了 vela CLI 工具来帮助您快速基于已有的 helm chart 生成插件文件。
+
+例如，如果你想使用存储在仓库地址为：https://marketplace.azurecr.io/helm/v1/repo 中的 MongoDB 12.1.6 版本的 helm chart 来创建一个插件，你就可以执行下面的命令：
+
+```shell
+vela addon init mongodb --helm-repo https://marketplace.azurecr.io/helm/v1/repo --chart mongodb --chart-version 12.1.16
+```
+
+运行此命令将会在您的本地路径中生成插件的基本目录：
+
+```shell
+$ ls mongondb   
+NOTES.cue     README.md     definitions   metadata.yaml parameter.cue resources     schemas       template.cue  views
+```
+
+您也可以使用此工具基于一个存储在 OCI 仓库中的 helm chart 来生成插件文件。示例如下：
+
+```shell
+vela addon init podinfo --helmrepo oci://ghcr.io/stefanprodan/charts --chart podinfo --chart-version 6.1.*
+```
+
 ## 本地安装（离线安装）
 
 你可以通过本地安装的方式调试你的 addon，命令如下：

@@ -159,6 +159,35 @@ spec:
 
 你也可以在本地使用 `cue eval *.cue resources/*.cue -e output -d yaml` 命令查看资源渲染的效果。
 
+## 提示信息 (`NOTES.cue`)
+
+`NOTES.cue` 文件允许您在启用插件后根据指定参数显示动态提示信息。
+
+例如，您可以按照下面的方式编写 `NOTES.cue`:
+
+```cue
+info: parameter.message
+
+notes: (info)
+```
+
+以及参数定义文件 `parameter.cue`:
+
+```cue
+paramters: {
+	message: *"Welcome to use this addon!" | string 
+}
+```
+
+通过 vela CLI 插件启用后，你将会在控制台看到以下提示信息：
+
+```text
+Welcome to use this addon!
+```
+
+一个用到此项特性的例子是 `backstage` [插件](https://github.com/kubevela/catalog/tree/master/experimental/addons/backstage)。
+
+
 ## 场景和功能
 
 下面将会介绍几个核心的插件功能所对应的应用描述文件的编写方法。
@@ -353,8 +382,6 @@ kustomize: {
 		 "addon.oam.dev/ignore-without-component": "fluxcd-kustomize-controller"
    }
 }
-
-...
 ```
 
 可见这个 definition 与插件应用中的 `fluxcd-kustomize-controller` 组件相关联。
