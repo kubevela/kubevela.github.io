@@ -1,29 +1,27 @@
 ---
-title: 触发器
-description: 使用触发器对接 CI 自动部署
+title: 对接 CI 自动部署
+description: 对接 CI 自动部署
 ---
 
-You can use triggers from [VelaUX addon](../../../reference/addons/velaux) to integrate with different CI systems, the architecture and supported platforms are described in the following picture, they're:
+在 KubeVela 中，你可以选择使用声明式工作流直接对接 CI 步骤，如：代码构建，镜像推送等。或者，你可以选择使用触发器对接外部的 CI 系统，如：对接 Jenkins，镜像仓库等。
 
-- [Custom](#custom-trigger), refer to [Jenkins CI](../../../tutorials/jenkins) guide for a real world use case
-- [ACR](#ACR-trigger)
-- [Harbor](#Harbor-trigger), refer to [Harbor Integration](../../../tutorials/trigger) guide for a real world use case
-- [DockerHub](#DockerHub-trigger)
-- [JFrog](#JFrog-trigger)
+## 使用声明式工作流对接 CI 步骤
+
+KubeVela v1.7+ 中默认提供了构建镜像的内置步骤，具体请参考 [镜像构建集成](../../../tutorials/s2i)
+
+## 使用触发器对接 CI 系统
+
+你可以使用 [VelaUX addon](../../../reference/addons/velaux) 的触发器来和不同 CI 系统进行集成，在 ValueUX 中，每个应用在创建完成后，都会自动创建一个默认触发器，你可以删除或者创建新的不同类型的触发器。下图描述了架构体系和支持对接的平台：
+
+- [自定义触发器](#custom-trigger), 你可以参考 [Jenkins CI 对接](../../../tutorials/jenkins) 作为自定义触发器的实际案例。
+- [ACR 镜像仓库](#ACR-trigger)
+- [Harbor 镜像仓库](#Harbor-trigger), 你可以参考 [Harbor 镜像仓库](../../../tutorials/trigger) 获得更详细的用例。
+- [DockerHub 镜像仓库](#DockerHub-trigger)
+- [JFrog 镜像仓库](#JFrog-trigger)
 
 ![trigger](../../../resources/trigger.jpg)
 
-## 如何使用
-
-应用在创建完成后，会自动创建一个默认触发器，你可以删除或者创建新的触发器。
-
-![default-trigger](../../../resources/default-trigger.png)
-
-KubeVela 触发器可以对接不同类型的 CI 系统，在 CI 系统中添加触发器以此实现应用的自动部署。比如从制品仓库的镜像更新触发，通过 Jenkins Pipeline 触发等。
-
-目前可以创建五种不同类型的触发器：Custom、ACR、Harbor、DockerHub、JFrog，我们将分别介绍。
-
-## Custom 触发器
+### Custom 触发器
 
 Custom 为自定义类型的触发器，它提供一个 Webhook URL 以及指定的请求体格式，你可以用它来对接任意 CI 系统。
 
@@ -72,25 +70,13 @@ webhook-request:
 
 ![gitlab-trigger](../../../resources/gitlab-trigger.png)
 
-## Harbor 触发器
+你还可以参考 [Jenkins CI 对接](../../../tutorials/jenkins) 作为自定义触发器的实际案例。
 
-Harbor 触发器可以对接 Harbor 镜像仓库。
+### Harbor 触发器
 
-首先来创建一个 Harbor 触发器，Payload Type 选择 Harbor，Execution Workflow 选择触发器需要触发的工作流：
+请参考 [Harbor 镜像仓库](../../../tutorials/trigger)。
 
-![alt](../../../resources/harbor-trigger-newtrigger.png)
-
-新建完毕后，在 Harbor 中配置该触发器：
-
-![alt](../../../resources/harbor-trigger.png)
-
-配置完成后，当 Harbor 中被推送了新镜像时，VelaUX 中会收到对应的触发请求，从而完成自动部署。
-
-![alt](../../../resources/harbor-trigger-harborrecord.png)
-
-![alt](../../../resources/harbor-trigger-revisions.png)
-
-## ACR 触发器
+### ACR 触发器
 
 ACR 触发器可以对接 ACR 镜像仓库。
 
@@ -108,7 +94,7 @@ ACR 触发器可以对接 ACR 镜像仓库。
 
 ![alt](../../../resources/acr-trigger-revisions.png)
 
-## DockerHub 触发器
+### DockerHub 触发器
 
 DockerHub 触发器可以对接 DockerHub 仓库。
 
@@ -126,7 +112,7 @@ DockerHub 触发器可以对接 DockerHub 仓库。
 
 ![alt](../../../resources/dockerhub-trigger-revisions.png)
 
-## JFrog 触发器
+### JFrog 触发器
 
 JFrog 触发器可以对接 JFrog Artifactory。
 

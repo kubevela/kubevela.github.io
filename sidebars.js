@@ -160,7 +160,7 @@ module.exports = {
             type: 'doc',
             id: 'how-to/dashboard/trigger/overview',
           },
-          items: ['tutorials/jenkins', 'tutorials/trigger'],
+          items: ['tutorials/s2i', 'tutorials/jenkins', 'tutorials/trigger'],
         },
         {
           'Day-2 Operations': [
