@@ -166,8 +166,20 @@ spec:
 例如，您可以按照下面的方式编写 `NOTES.cue`:
 
 ```cue
-info: parameter.message
+iinfo: string
 
+if !parameter.pluginOnly {
+	info: """
+		By default, the backstage app is strictly serving in the domain `127.0.0.1:7007`, check it by:
+		            
+		    vela port-forward addon-backstage -n vela-system
+		
+		You can build your own backstage app if you want to use it in other domains. 
+		"""
+}
+if parameter.pluginOnly {
+	info: "You can use the endpoint of 'backstage-plugin-vela' in your own backstage app by configuring the 'vela.host', refer to example https://github.com/wonderflow/vela-backstage-demo."
+}
 notes: (info)
 ```
 
@@ -175,14 +187,18 @@ notes: (info)
 
 ```cue
 paramters: {
-	message: *"Welcome to use this addon!" | string 
+	pluginOnly: *false | string 
 }
 ```
 
 通过 vela CLI 插件启用后，你将会在控制台看到以下提示信息：
 
 ```text
-Welcome to use this addon!
+By default, the backstage app is strictly serving in the domain `127.0.0.1:7007`, check it by:
+		            
+		vela port-forward addon-backstage -n vela-system
+		
+You can build your own backstage app if you want to use it in other domains. 
 ```
 
 一个用到此项特性的例子是 `backstage` [插件](https://github.com/kubevela/catalog/tree/master/experimental/addons/backstage)。

@@ -161,8 +161,20 @@ The `NOTES.cue` file allows you to display dynamic notifications once the addon 
 For example, you can write the `NOTES.cue` as shown below:
 
 ```cue
-info: parameter.message
+info: string
 
+if !parameter.pluginOnly {
+	info: """
+		By default, the backstage app is strictly serving in the domain `127.0.0.1:7007`, check it by:
+		            
+		    vela port-forward addon-backstage -n vela-system
+		
+		You can build your own backstage app if you want to use it in other domains. 
+		"""
+}
+if parameter.pluginOnly {
+	info: "You can use the endpoint of 'backstage-plugin-vela' in your own backstage app by configuring the 'vela.host', refer to example https://github.com/wonderflow/vela-backstage-demo."
+}
 notes: (info)
 ```
 
@@ -170,17 +182,21 @@ and `parameter.cue` as shown below:
 
 ```cue
 paramters: {
-	message: *"Welcome to use this addon!" | string 
+	pluginOnly: *false | string 
 }
 ```
 
 Once the addon is enabled using the CLI, you will see this information in your console:
 
 ```text
-Welcome to use this addon!
+By default, the backstage app is strictly serving in the domain `127.0.0.1:7007`, check it by:
+		            
+		vela port-forward addon-backstage -n vela-system
+		
+You can build your own backstage app if you want to use it in other domains. 
 ```
 
-A real-world example of how to use `NOTES.cue` can be found in the backstage addon. For more information, please refer to this [link](https://github.com/kubevela/catalog/tree/master/experimental/addons/backstage).
+This example is from the backstage addon, you can find more information by visiting this [link](https://github.com/kubevela/catalog/tree/master/experimental/addons/backstage).
 
 ## Features
 

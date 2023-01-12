@@ -152,7 +152,7 @@ The `views/` folder is used to store the [Config Template](../../reference/confi
 
 ## Initializing an Addon Structure
 
-We provided the vela CLI tool to help you quickly create an addon structure based on an existing helm chart .
+We provided the vela CLI tool to help you quickly create an addon structure with examples. Optionally, it can be based on existing Helm Charts or online resources using [reference objects](https://kubevela.io/docs/end-user/components/ref-objects).
 
 For instance, to create an addon using version 12.1.6 of the MongoDB helm chart from the repository https://marketplace.azurecr.io/helm/v1/repo, use the following command:
 
@@ -172,6 +172,13 @@ You can still use this CLI tool to create an addon from a helm chart stored in a
 ```shell
 vela addon init podinfo --helmrepo oci://ghcr.io/stefanprodan/charts --chart podinfo --chart-version 6.1.*
 ```
+
+You can also base your addon on Kubernetes objects from remote URLs. For example, you can directly include multiple CRDs in this way:
+```shell
+vela addon init my-addon --url https://domain.com/crd1.yaml --url https://domain.com/crd2.yaml
+```
+The commands we introduced above can also be used together, e.g., you can base your addon on both Helm Charts and reference objects.
+
 
 
 ## Install Addon Locally

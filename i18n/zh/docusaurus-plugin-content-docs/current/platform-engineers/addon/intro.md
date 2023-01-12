@@ -129,7 +129,7 @@ YAML 格式的应用描述文件的特点是编写简单，你只需要编写一
 
 ## 快速初始化插件文件
 
-我们提供了 vela CLI 工具来帮助您快速基于已有的 helm chart 生成插件文件。
+我们提供了 vela CLI 工具来帮助您快速生成含有样例的插件目录结构。另外，它也可以基于已有的 Helm Chart 或使用 [引用资源](https://kubevela.io/zh/docs/end-user/components/ref-objects) 来引用在线资源生成插件。
 
 例如，如果你想使用存储在仓库地址为：https://marketplace.azurecr.io/helm/v1/repo 中的 MongoDB 12.1.6 版本的 helm chart 来创建一个插件，你就可以执行下面的命令：
 
@@ -149,6 +149,13 @@ NOTES.cue     README.md     definitions   metadata.yaml parameter.cue resources 
 ```shell
 vela addon init podinfo --helmrepo oci://ghcr.io/stefanprodan/charts --chart podinfo --chart-version 6.1.*
 ```
+
+你也可以基于在线的 Kubernetes 对象创建插件，例如你可以这样直接引用数个在线 CRD ：
+
+```shell
+vela addon init my-addon --url https://domain.com/crd1.yaml --url https://domain.com/crd2.yaml
+```
+上述的命令也可以组合使用，例如你可以同时基于 Helm Chart 和引用对象创建插件框架。
 
 ## 本地安装（离线安装）
 
