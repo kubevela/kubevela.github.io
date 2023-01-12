@@ -345,7 +345,7 @@ Get resource in Kubernetes cluster.
 }
 ```
 
-### Usage
+#### Usage
 
 ```cue
 // You can use configmap.value.data after this action.
