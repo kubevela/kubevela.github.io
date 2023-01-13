@@ -4,7 +4,7 @@ title: 内置运维特征列表
 
 本文档将**按字典序**展示所有内置运维特征的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2023-01-13T17:08:03+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2023-01-13T18:00:08+08:00。
 
 ## Affinity
 
@@ -1218,6 +1218,142 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  \- |  | {} | true |  
+
+
+## K8s-Update-Strategy
+
+### 描述
+
+Set k8s update strategy for Deployment/DaemonSet/StatefulSet。
+
+### 适用于组件类型
+
+基于以下资源的组件：
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+
+
+
+### 示例 (k8s-update-strategy)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: application-with-update-strategy
+spec:
+  components:
+    - name: helloworld
+      type: webservice
+      properties:
+        cpu: "0.5"
+        exposeType: ClusterIP
+        image: oamdev/hello-world:latest
+        memory: 1024Mi
+        ports:
+          - expose: true
+            port: 80
+            protocol: TCP
+      traits:
+        - type: scaler
+          properties:
+            replicas: 5
+        - type: k8s-update-strategy
+          properties:
+            targetAPIVersion: apps/v1
+            targetKind: Deployment
+            strategy:
+              type: RollingUpdate
+              rollingStrategy:
+                maxSurge: 20%
+                maxUnavailable: 30%
+---
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: application-node-exporter
+spec:
+  components:
+    - name: node-exporter
+      type: daemon
+      properties:
+        image: prom/node-exporter
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          hostPath:
+            - mountPath: /host/sys
+              mountPropagation: HostToContainer
+              name: sys
+              path: /sys
+              readOnly: true
+            - mountPath: /host/root
+              mountPropagation: HostToContainer
+              name: root
+              path: /
+              readOnly: true
+      traits:
+        - properties:
+            args:
+              - --path.sysfs=/host/sys
+              - --path.rootfs=/host/root
+              - --no-collector.wifi
+              - --no-collector.hwmon
+              - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)
+              - --collector.netclass.ignored-devices=^(veth.*)$
+          type: command
+        - properties:
+            annotations:
+              prometheus.io/path: /metrics
+              prometheus.io/port: "8080"
+              prometheus.io/scrape: "true"
+            port:
+              - 9100
+          type: expose
+        - properties:
+            cpu: 0.1
+            memory: 250Mi
+          type: resource
+        - type: k8s-update-strategy
+          properties:
+            targetAPIVersion: apps/v1
+            targetKind: DaemonSet
+            strategy:
+              type: RollingUpdate
+              rollingStrategy:
+                maxSurge: 20%
+                maxUnavailable: 30%
+
+
+
+
+```
+
+### 参数说明 (k8s-update-strategy)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ targetAPIVersion | Specify the apiVersion of target。 | string | false | apps/v1 
+ targetKind | Specify the kind of target。 | "Deployment" or "StatefulSet" or "DaemonSet" | false | Deployment 
+ strategy | Specify the strategy of update。 | [strategy](#strategy-k8s-update-strategy) | true |  
+
+
+#### strategy (k8s-update-strategy)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ type | Specify the strategy type。 | "RollingUpdate" or "Recreate" or "OnDelete" | false | RollingUpdate 
+ rollingStrategy | Specify the parameters of rollong update strategy。 | [rollingStrategy](#rollingstrategy-k8s-update-strategy) | false |  
+
+
+##### rollingStrategy (k8s-update-strategy)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ maxSurge |  | string | false | 25% 
+ maxUnavailable |  | string | false | 25% 
+ partition |  | int | false | 0 
 
 
 ## Labels
