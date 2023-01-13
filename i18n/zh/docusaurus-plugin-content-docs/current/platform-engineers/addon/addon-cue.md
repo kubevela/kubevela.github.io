@@ -159,6 +159,65 @@ spec:
 
 你也可以在本地使用 `cue eval *.cue resources/*.cue -e output -d yaml` 命令查看资源渲染的效果。
 
+## 提示信息 (`NOTES.cue`)
+
+`NOTES.cue` 文件允许您在启用插件后根据指定参数显示动态提示信息。
+
+例如，您可以按照下面的方式编写 `NOTES.cue`:
+
+```cue
+iinfo: string
+
+if !parameter.pluginOnly {
+	info: """
+		By default, the backstage app is strictly serving in the domain `127.0.0.1:7007`, check it by:
+		            
+		    vela port-forward addon-backstage -n vela-system
+		
+		You can build your own backstage app if you want to use it in other domains. 
+		"""
+}
+if parameter.pluginOnly {
+	info: "You can use the endpoint of 'backstage-plugin-vela' in your own backstage app by configuring the 'vela.host', refer to example https://github.com/wonderflow/vela-backstage-demo."
+}
+notes: (info)
+```
+
+以及参数定义文件 `parameter.cue`:
+
+```cue
+paramters: {
+	pluginOnly: *false | string 
+}
+```
+
+当通过 vela cli 启用插件后，根据不同的启动参数你将会在控制台看到不同的提示信息：
+
+当通过下面的命令的启用插件时；
+
+```shell
+$ vela addon enable experimental/backstage
+```
+
+你将会看到以下提示信息：
+
+```text
+By default, the backstage app is strictly serving in the domain `127.0.0.1:7007`, check it by:
+		            
+		vela port-forward addon-backstage -n vela-system
+		
+You can build your own backstage app if you want to use it in other domains. 
+```
+
+当在启时设置 `parameter.pluginOnly=true` 参数，启用成功之后，你则会看到下面的信息：
+
+```text
+You can use the endpoint of 'backstage-plugin-vela' in your own backstage app by configuring the 'vela.host', refer to example https://github.com/wonderflow/vela-backstage-demo.
+```
+
+一个用到此项特性的例子是 `backstage` [插件](https://github.com/kubevela/catalog/tree/master/experimental/addons/backstage)。
+
+
 ## 场景和功能
 
 下面将会介绍几个核心的插件功能所对应的应用描述文件的编写方法。
@@ -353,8 +412,6 @@ kustomize: {
 		 "addon.oam.dev/ignore-without-component": "fluxcd-kustomize-controller"
    }
 }
-
-...
 ```
 
 可见这个 definition 与插件应用中的 `fluxcd-kustomize-controller` 组件相关联。

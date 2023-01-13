@@ -154,6 +154,62 @@ spec:
 
 We just use namespace as example here, other resources of an operator can also be defined in KubeVela application in the same way. This also gives your addon re-usability and validation capability powered by the CUE.
 
+## Notes info (`NOTES.cue`)
+
+The `NOTES.cue` file allows you to display dynamic notifications once the addon has been enabled, based on specified parameters.
+
+For example, you can write the `NOTES.cue` as shown below:
+
+```cue
+info: string
+
+if !parameter.pluginOnly {
+	info: """
+		By default, the backstage app is strictly serving in the domain `127.0.0.1:7007`, check it by:
+		            
+		    vela port-forward addon-backstage -n vela-system
+		
+		You can build your own backstage app if you want to use it in other domains. 
+		"""
+}
+if parameter.pluginOnly {
+	info: "You can use the endpoint of 'backstage-plugin-vela' in your own backstage app by configuring the 'vela.host', refer to example https://github.com/wonderflow/vela-backstage-demo."
+}
+notes: (info)
+```
+
+and `parameter.cue` as shown below:
+
+```cue
+paramters: {
+	pluginOnly: *false | string 
+}
+```
+
+When you enable the addon using the CLI, the information displayed in your console will vary depending on the specified parameter. For example, running the command:
+
+```shell
+$ vela addon enable experimental/backstage
+```
+
+Once the addon has been enabled, you will see the following notice::
+
+```text
+By default, the backstage app is strictly serving in the domain `127.0.0.1:7007`, check it by:
+		            
+		vela port-forward addon-backstage -n vela-system
+		
+You can build your own backstage app if you want to use it in other domains. 
+```
+
+If you enable the addon with the `parameter.pluginOnly=true` setting, you will see this information:
+
+```text
+You can use the endpoint of 'backstage-plugin-vela' in your own backstage app by configuring the 'vela.host', refer to example https://github.com/wonderflow/vela-backstage-demo.
+```
+
+This example is from the backstage addon, you can find more information by visiting this [link](https://github.com/kubevela/catalog/tree/master/experimental/addons/backstage).
+
 ## Features
 
 This section will introduce the way of writing application description file to implement several core features of addon.

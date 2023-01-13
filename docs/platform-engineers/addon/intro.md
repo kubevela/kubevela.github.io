@@ -4,6 +4,8 @@ title: Make Your Own Addon
 
 :::tip
 Here's a blog introduces [how to build addon from scratch using redis operator as example](/blog/2022/10/18/building-addon-introduction), you can read it as an end to end tutorial!
+
+If you want to create an addon using an existing helm chart, you can refer to this [section](#initializing-an-addon-structure) to quickly get started without going through a detailed introduction.
 :::
 
 A KubeVela addon is a collection that can contain the following three types of files；
@@ -149,6 +151,37 @@ The `views/` folder is used to store the [VelaQL View](../system-operation/velaq
 #### Config Templates (`config-templates/` folder)
 
 The `views/` folder is used to store the [Config Template](../../reference/config-template) files.
+
+## Initializing an Addon Structure
+
+We provided the vela CLI tool to help you quickly create an addon structure with examples. Optionally, it can be based on existing Helm Charts or online resources using [reference objects](https://kubevela.io/docs/end-user/components/ref-objects).
+
+For instance, to create an addon using version 12.1.6 of the MongoDB helm chart from the repository https://marketplace.azurecr.io/helm/v1/repo, use the following command:
+
+```shell
+vela addon init mongodb --helm-repo https://marketplace.azurecr.io/helm/v1/repo --chart mongodb --chart-version 12.1.16
+```
+
+Running this command will generate a basic addon directory in your local path:
+
+```shell
+$ ls mongondb   
+NOTES.cue     README.md     definitions   metadata.yaml parameter.cue resources     schemas       template.cue  views
+```
+
+You can still use this CLI tool to create an addon from a helm chart stored in an OCI registry. Here's an example:
+
+```shell
+vela addon init podinfo --helmrepo oci://ghcr.io/stefanprodan/charts --chart podinfo --chart-version 6.1.*
+```
+
+You can also base your addon on Kubernetes objects from remote URLs. For example, you can directly include multiple CRDs in this way:
+```shell
+vela addon init my-addon --url https://domain.com/crd1.yaml --url https://domain.com/crd2.yaml
+```
+The commands we introduced above can also be used together, e.g., you can base your addon on both Helm Charts and reference objects.
+
+
 
 ## Install Addon Locally
 
