@@ -4,7 +4,7 @@ title: 内置工作流步骤列表
 
 本文档将**按字典序**展示所有内置工作流步骤的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2023-01-13T17:08:03+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2023-01-13T18:00:08+08:00。
 
 ## Apply-Component
 
@@ -164,13 +164,15 @@ Apply terraform configuration in the step。
 
 ### 示例 (apply-terraform-config)
 
-apiVersion: core.oam.dev/v1alpha1
-kind: WorkflowRun
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
 metadata:
   name: apply-terraform-resource
   namespace: default
 spec:
-  workflowSpec:
+  components: []
+  workflow:
     steps:
     - name: provider
       type: apply-terraform-provider
@@ -208,39 +210,7 @@ spec:
           tags:
             created_by: "Terraform-of-KubeVela"
             created_from: "module-tf-alicloud-ecs-instance"
-    - name: add-cluster
-      type: vela-cli
-      if: always
-      properties:
-        storage:
-          secret:
-            - name: secret-mount
-              secretName: my-terraform-secret
-              mountPath: /kubeconfig/ack
-        command:
-          - vela
-          - cluster
-          - join
-          - /kubeconfig/ack/KUBECONFIG
-          - --name=ack
-    - name: clean-cli-jobs
-      type: clean-jobs
-      properties:
-        namespace: vela-system
-        labelSelector:
-          "workflow.oam.dev/step-name": apply-terraform-resource-add-cluster
-    - name: distribute-config
-      type: apply-object
-      properties:
-        cluster: ack
-        value:
-          apiVersion: v1
-          kind: ConfigMap
-          metadata:
-            name: my-cm
-            namespace: default
-          data:
-            test-key: test-value
+```
 
 ### 参数说明 (apply-terraform-config)
 
@@ -296,13 +266,15 @@ Apply terraform provider config。
 
 ### 示例 (apply-terraform-provider)
 
-apiVersion: core.oam.dev/v1alpha1
-kind: WorkflowRun
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
 metadata:
-  name: apply-terraform-resource
+  name: apply-terraform-provider
   namespace: default
 spec:
-  workflowSpec:
+  components: []
+  workflow:
     steps:
     - name: provider
       type: apply-terraform-provider
@@ -312,67 +284,7 @@ spec:
         accessKey: <accessKey>
         secretKey: <secretKey>
         region: cn-hangzhou
-    - name: configuration
-      type: apply-terraform-config
-      properties:
-        source:
-          path: alibaba/cs/dedicated-kubernetes
-          remote: https://github.com/FogDong/terraform-modules
-        providerRef:
-          name: my-alibaba-provider
-        writeConnectionSecretToRef:
-            name: my-terraform-secret
-            namespace: vela-system
-        variable:
-          name: regular-check-ack
-          new_nat_gateway: true
-          vpc_name: "tf-k8s-vpc-regular-check"
-          vpc_cidr: "10.0.0.0/8"
-          vswitch_name_prefix: "tf-k8s-vsw-regualr-check"
-          vswitch_cidrs: [ "10.1.0.0/16", "10.2.0.0/16", "10.3.0.0/16" ]
-          k8s_name_prefix: "tf-k8s-regular-check"
-          k8s_version: 1.24.6-aliyun.1
-          k8s_pod_cidr: "192.168.5.0/24"
-          k8s_service_cidr: "192.168.2.0/24"
-          k8s_worker_number: 2
-          cpu_core_count: 4
-          memory_size: 8
-          tags:
-            created_by: "Terraform-of-KubeVela"
-            created_from: "module-tf-alicloud-ecs-instance"
-    - name: add-cluster
-      type: vela-cli
-      if: always
-      properties:
-        storage:
-          secret:
-            - name: secret-mount
-              secretName: my-terraform-secret
-              mountPath: /kubeconfig/ack
-        command:
-          - vela
-          - cluster
-          - join
-          - /kubeconfig/ack/KUBECONFIG
-          - --name=ack
-    - name: clean-cli-jobs
-      type: clean-jobs
-      properties:
-        namespace: vela-system
-        labelSelector:
-          "workflow.oam.dev/step-name": apply-terraform-resource-add-cluster
-    - name: distribute-config
-      type: apply-object
-      properties:
-        cluster: ack
-        value:
-          apiVersion: v1
-          kind: ConfigMap
-          metadata:
-            name: my-cm
-            namespace: default
-          data:
-            test-key: test-value
+```
 
 ### 参数说明 (apply-terraform-provider)
 
@@ -478,7 +390,60 @@ Build and push image from git url。
 
 ### 示例 (build-push-image)
 
-404: Not Found
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: build-push-image
+  namespace: default
+spec:
+  components:
+  - name: my-web
+    type: webservice
+    properties:
+      image: fogdong/simple-web-demo:v1
+      ports:
+        - port: 80
+          expose: true
+  workflow:
+    steps:
+    - name: create-git-secret
+      type: export2secret
+      properties:
+        secretName: git-secret
+        data:
+          token: <git token>
+    - name: create-image-secret
+      type: export2secret
+      properties:
+        secretName: image-secret
+        kind: docker-registry
+        dockerRegistry:
+          username: <docker username>
+          password: <docker password>
+    - name: build-push
+      type: build-push-image
+      properties:
+        # use your kaniko executor image like below, if not set, it will use default image oamdev/kaniko-executor:v1.9.1
+        # kanikoExecutor: gcr.io/kaniko-project/executor:latest
+        # you can use context with git and branch or directly specify the context, please refer to https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts
+        context:
+          git: github.com/FogDong/simple-web-demo
+          branch: main
+        image: fogdong/simple-web-demo:v1
+        # specify your dockerfile, if not set, it will use default dockerfile ./Dockerfile
+        # dockerfile: ./Dockerfile
+        credentials:
+          image:
+            name: image-secret
+        # buildArgs:
+        #   - key="value"
+        # platform: linux/arm
+    - name: apply-comp
+      type: apply-component
+      properties:
+        component: my-web
+```
 
 ### 参数说明 (build-push-image)
 
@@ -1724,18 +1689,20 @@ Send request to the url。
 
 ### 示例 (request)
 
-apiVersion: core.oam.dev/v1alpha1
-kind: WorkflowRun
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
 metadata:
   name: request-http
   namespace: default
 spec:
-  workflowSpec:
+  components: []
+  workflow:
     steps:
     - name: request
       type: request
       properties:
-        url: https://api.github.com/repos/kubevela/notfound
+        url: https://api.github.com/repos/kubevela/workflow
       outputs:
         - name: stars
           valueFrom: |
@@ -1759,7 +1726,7 @@ spec:
             value: <your slack url>
           message:
             text: "Failed to request github"
-            
+```
 
 ### 参数说明 (request)
 
@@ -1984,83 +1951,23 @@ Run a vela command。
 
 ### 示例 (vela-cli)
 
-apiVersion: core.oam.dev/v1alpha1
-kind: WorkflowRun
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
 metadata:
-  name: apply-terraform-resource
+  name: vela-cli
   namespace: default
 spec:
-  workflowSpec:
+  components: []
+  workflow:
     steps:
-    - name: provider
-      type: apply-terraform-provider
-      properties:
-        type: alibaba
-        name: my-alibaba-provider
-        accessKey: <accessKey>
-        secretKey: <secretKey>
-        region: cn-hangzhou
-    - name: configuration
-      type: apply-terraform-config
-      properties:
-        source:
-          path: alibaba/cs/dedicated-kubernetes
-          remote: https://github.com/FogDong/terraform-modules
-        providerRef:
-          name: my-alibaba-provider
-        writeConnectionSecretToRef:
-            name: my-terraform-secret
-            namespace: vela-system
-        variable:
-          name: regular-check-ack
-          new_nat_gateway: true
-          vpc_name: "tf-k8s-vpc-regular-check"
-          vpc_cidr: "10.0.0.0/8"
-          vswitch_name_prefix: "tf-k8s-vsw-regualr-check"
-          vswitch_cidrs: [ "10.1.0.0/16", "10.2.0.0/16", "10.3.0.0/16" ]
-          k8s_name_prefix: "tf-k8s-regular-check"
-          k8s_version: 1.24.6-aliyun.1
-          k8s_pod_cidr: "192.168.5.0/24"
-          k8s_service_cidr: "192.168.2.0/24"
-          k8s_worker_number: 2
-          cpu_core_count: 4
-          memory_size: 8
-          tags:
-            created_by: "Terraform-of-KubeVela"
-            created_from: "module-tf-alicloud-ecs-instance"
-    - name: add-cluster
+    - name: list-app
       type: vela-cli
-      if: always
       properties:
-        storage:
-          secret:
-            - name: secret-mount
-              secretName: my-terraform-secret
-              mountPath: /kubeconfig/ack
         command:
           - vela
-          - cluster
-          - join
-          - /kubeconfig/ack/KUBECONFIG
-          - --name=ack
-    - name: clean-cli-jobs
-      type: clean-jobs
-      properties:
-        namespace: vela-system
-        labelSelector:
-          "workflow.oam.dev/step-name": apply-terraform-resource-add-cluster
-    - name: distribute-config
-      type: apply-object
-      properties:
-        cluster: ack
-        value:
-          apiVersion: v1
-          kind: ConfigMap
-          metadata:
-            name: my-cm
-            namespace: default
-          data:
-            test-key: test-value
+          - ls
+```
 
 ### 参数说明 (vela-cli)
 
