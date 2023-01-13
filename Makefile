@@ -1,6 +1,9 @@
 update-version:
 	sh ./hack/version.sh $(version)
 
+remove-version:
+	sh ./hack/remove_version.sh $(version)
+
 check-link:
 	go run ./hack/linkcheck.go
 
