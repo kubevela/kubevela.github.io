@@ -30,7 +30,7 @@ module.exports = {
       id: 'start',
       content:
         '<div class="header-item">⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>!⭐️</div>' +
-        '<div class="header-item"><span>KubeVela v1.6.6 is now available.(2023-01-04)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/v1.6.6">Read Release Note</a></div>',
+        '<div class="header-item"><span>KubeVela v1.7.0 is now available.(2023-01-13)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/v1.7.0">Read Release Note</a></div>',
     },
     algolia: {
       appId: 'PXMFHFWUGZ',
@@ -172,74 +172,74 @@ module.exports = {
   },
   headTags: [
     {
-      tagName: "link",
+      tagName: 'link',
       attributes: {
-        rel: "apple-touch-icon",
-        sizes: "180x180",
-        href: "/img/favicons/apple-touch-icon.png",
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: '/img/favicons/apple-touch-icon.png',
       },
     },
     {
-      tagName: "link",
+      tagName: 'link',
       attributes: {
-        rel: "icon",
-        type: "image/png",
-        sizes: "32x32",
-        href: "/img/favicons/favicon-32x32.png",
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        href: '/img/favicons/favicon-32x32.png',
       },
     },
     {
-      tagName: "link",
+      tagName: 'link',
       attributes: {
-        rel: "icon",
-        type: "image/png",
-        sizes: "16x16",
-        href: "/img/favicons/favicon-16x16.png",
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        href: '/img/favicons/favicon-16x16.png',
       },
     },
     {
-      tagName: "link",
+      tagName: 'link',
       attributes: {
-        rel: "icon",
-        type: "image/svg+xml",
-        href: "/img/favicons/favicon.svg",
+        rel: 'icon',
+        type: 'image/svg+xml',
+        href: '/img/favicons/favicon.svg',
       },
     },
     {
-      tagName: "link",
+      tagName: 'link',
       attributes: {
-        rel: "icon",
-        type: "image/png",
-        href: "/img/favicons/favicon.png",
+        rel: 'icon',
+        type: 'image/png',
+        href: '/img/favicons/favicon.png',
       },
     },
     {
-      tagName: "link",
+      tagName: 'link',
       attributes: {
-        rel: "manifest",
-        href: "/img/favicons/site.webmanifest",
+        rel: 'manifest',
+        href: '/img/favicons/site.webmanifest',
       },
     },
     {
-      tagName: "link",
+      tagName: 'link',
       attributes: {
-        rel: "mask-icon",
-        color: "#ffffff",
-        href: "/img/favicons/safari-pinned-tab.svg",
+        rel: 'mask-icon',
+        color: '#ffffff',
+        href: '/img/favicons/safari-pinned-tab.svg',
       },
     },
     {
-      tagName: "meta",
+      tagName: 'meta',
       attributes: {
-        name: "theme-color",
-        content: "#ffffff",
+        name: 'theme-color',
+        content: '#ffffff',
       },
     },
     {
-      tagName: "meta",
+      tagName: 'meta',
       attributes: {
-        name: "msapplication-config",
-        content: "/img/favicons/browserconfig.xml",
+        name: 'msapplication-config',
+        content: '/img/favicons/browserconfig.xml',
       },
     },
   ],
