@@ -4,7 +4,7 @@ title: Built-in WorkflowStep Type
 
 This documentation will walk through all the built-in workflow step types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-01-10T21:14:25+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-01-13T17:08:03+08:00.
 
 ## Apply-Component
 

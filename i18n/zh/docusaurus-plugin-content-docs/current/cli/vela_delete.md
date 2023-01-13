@@ -6,26 +6,55 @@ Delete an application
 
 ### Synopsis
 
-Delete an application.
+Delete applications
+
+ Delete KubeVela applications. KubeVela application deletion is associated with the recycle of underlying resources. By default, the resources created by the KubeVela application will be deleted once it is not in use or the application is deleted. There is garbage-collect policy in KubeVela application that you can use to configure customized recycle rules.
+
+ This command supports delete application in various modes. Natively, you can use it like "kubectl delete app [app-name] ". In the cases you only want to delete the application but leave the resources there, you can use the --orphan parameter. In the cases the server-side controller is uninstalled, or you want to manually skip some errors in the deletion process (like lack privileges or handle cluster disconnection), you can use the --force parameter.
 
 ```
-vela delete APP_NAME1 [APP_NAME2 APP_NAME3...]
+vela delete
 ```
 
 ### Examples
 
 ```
-vela delete frontend
+  # Delete an application
+  vela delete my-app
+  
+  # Delete multiple applications in a namespace
+  vela delete app-1 app-2 -n example
+  
+  # Delete all applications in one namespace
+  vela delete -n example --all
+  
+  # Delete application without waiting to be deleted
+  vela delete my-app --wait=false
+  
+  # Delete application without confirmation
+  vela delete my-app -y
+  
+  # Force delete application at client-side
+  vela delete my-app -f
+  
+  # Delete application by orphaning resources and skip recycling them
+  vela delete my-app --orphan
+  
+  # Delete application interactively
+  vela delete my-app -i
 ```
 
 ### Options
 
 ```
-  -e, --env string         specify environment name for application
-  -f, --force              force to delete the application
+      --all                delete all the application under the given namespace
+  -e, --env string         The environment name for the CLI request
+  -f, --force              force delete the application
   -h, --help               help for delete
-  -n, --namespace string   specify the Kubernetes namespace to use
-  -w, --wait               wait util the application is deleted completely
+  -i, --interactive        delete the application interactively
+  -n, --namespace string   If present, the namespace scope for this CLI request
+  -o, --orphan             delete the application and orphan managed resources
+  -w, --wait               wait util the application is deleted completely (default true)
 ```
 
 ### Options inherited from parent commands

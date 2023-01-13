@@ -34,6 +34,7 @@ non-empty new arg
 ### Options
 
 ```
+  -c, --clusters string           specify the runtime-clusters to upgrade
   -h, --help                      help for upgrade
       --override-definitions      override existing definitions if conflict with those contained in this addon
   -s, --skip-version-validating   skip validating system version requirement

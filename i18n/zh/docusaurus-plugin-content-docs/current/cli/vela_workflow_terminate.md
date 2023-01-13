@@ -2,11 +2,11 @@
 title: vela workflow terminate
 ---
 
-Terminate an workflow.
+Terminate a workflow.
 
 ### Synopsis
 
-Terminate an workflow in cluster.
+Terminate a workflow in cluster.
 
 ```
 vela workflow terminate [flags]
