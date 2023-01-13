@@ -44,6 +44,7 @@ success "update versions.json"
 rm -rf ./i18n/zh/docusaurus-plugin-content-docs/version-"${version}".json
 cp -r ./i18n/zh/docusaurus-plugin-content-docs/current.json ./i18n/zh/docusaurus-plugin-content-docs/version-"${version}".json
 sed -i.bak "s/预览版/${version}/g" ./i18n/zh/docusaurus-plugin-content-docs/version-"${version}".json
+rm -rf ./i18n/zh/docusaurus-plugin-content-docs/version-"${version}".json.bak
 success "update version-${version}.json"
 
 # 5 generate versioned docs
