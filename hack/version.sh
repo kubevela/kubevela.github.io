@@ -40,9 +40,11 @@ sed -i.bak "/${version}/d" versions.json
 rm -rf versions.json.bak
 success "update versions.json"
 
-# 4 update docusaurus.config.js
-# sed -i.bak "/${version}/d" docusaurus.config.js
-# success "update docusaurus.config.js"
+# 4 update ./i18n/zh/docusaurus-plugin-content-docs/version-"${version}".json
+rm -rf ./i18n/zh/docusaurus-plugin-content-docs/version-"${version}".json
+cp -r ./i18n/zh/docusaurus-plugin-content-docs/current.json ./i18n/zh/docusaurus-plugin-content-docs/version-"${version}".json
+sed -i.bak "s/预览版/${version}/g" ./i18n/zh/docusaurus-plugin-content-docs/version-"${version}".json
+success "update version-${version}.json"
 
 # 5 generate versioned docs
 yarn run docusaurus docs:version "${version}"
