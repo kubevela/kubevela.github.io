@@ -6,6 +6,64 @@ title: 从旧版本进行迁移
 
 KubeVela 的[发布周期](../../contributor/release-process)定为每隔 2-3 个月发布一个版本，我们将维护最近的 2 个版本。所以，我们强烈推荐你跟着社区的节奏一同升级，我们会严格遵循 [semver 版本](https://semver.org/)定义的兼容性规则。 
 
+## 从 v1.6.x 版本到 v1.7.x 版本
+
+在 v1.6.x 版本中，我们升级了 CUE 引擎对应 v0.5.x，如果你从低于 v1.6.0 的版本直接升级到 v1.7.x，请确保你的自定义 Definition 已经完成了 CUE 的适配。
+
+:::danger
+⚠️ 对于 1.7.x 的升级，第一步确保更新 CRD 到最新版本尤为重要。
+:::
+
+1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
+
+```
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.7/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.7/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.7/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.7/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.7/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+```
+
+2. 升级 kubevela chart
+
+
+```
+helm repo add kubevela https://charts.kubevela.net/core
+helm repo update
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.0 --wait
+```
+
+:::caution
+由于我们在 1.7 版本中将原先仅在 workflow 插件中使用的工作流步骤转变为了 KubeVela 内置的步骤类型，所以如果你之前装过 `workflow` 插件，可能在使用 helm 升级时会遇到如下报错：
+
+>Error: Could not install KubeVela control plane installation: error when installing/upgrading Helm Chart kubevela in namespace vela-system: rendered manifests contain a resource that already exists. Unable to continue with update: WorkflowStepDefinition "apply-deployment" in namespace "vela-system" exists and cannot be imported into the current release: invalid ownership metadata; label validation error: missing key "app.kubernetes.io/managed-by": must be set to "Helm"; annotation validation error: missing key "meta.helm.sh/release-name": must be set to "kubevela"; annotation validation error: missing key "meta.helm.sh/release-namespace": must be set to "vela-system"
+
+你可以执行下列脚本修复：
+
+```
+curl -fsSl https://kubevela.net/script/checklegacy.sh | bash
+```
+
+这个脚本就是在帮你自动添加 Helm 的注解，你也可以通过如下命令手动修复：
+
+```
+kubectl patch -n vela-system workflowstepdefinition <item> --type=merge -p '{"metadata":{"annotations":{"meta.helm.sh/release-name":"kubevela","meta.helm.sh/release-namespace":"vela-system"},"labels":{"app.kubernetes.io/managed-by":"Helm"}}}'
+kubectl patch -n vela-system configMap <item> --type=merge -p '{"metadata":{"annotations":{"meta.helm.sh/release-name":"kubevela","meta.helm.sh/release-namespace":"vela-system"},"labels":{"app.kubernetes.io/managed-by":"Helm"}}}'
+```
+:::
+
+3. 下载并升级对应的CLI
+
+```
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.7.0
+```
+
+4. 升级 VelaUX 或其他插件
+
+```
+vela addon upgrade velaux --version 1.7.0
+```
+
 ## 从 v1.5.x 版本 到 v1.6.x 版本
 
 :::caution

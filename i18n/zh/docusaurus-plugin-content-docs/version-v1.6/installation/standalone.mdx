@@ -50,7 +50,7 @@ VelaD 支持在这些操作系统中安装 KubeVela：Linux, macOS, Windows。
 
 在安装过程中你可能需要 root 权限。 如果你不需要 root 权限和自动化，你可以从[发布页面](https://github.com/kubevela/velad/releases)下载并手动解压缩。
 ```shell
-curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
+curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash -s 1.6.7
 ```
 
 检查 `velad` 安装到 `/usr/local/bin/`
@@ -240,7 +240,7 @@ velad uninstall
 如果你不需要root权限和自动化，你可以从[发布页面](https://github.com/kubevela/velad/releases)下载并手动解压缩。
 
 ```shell
-curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
+curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash -s 1.6.7
 ```
 
 检查 `velad` 已经安装到 `/usr/local/bin/`
@@ -384,7 +384,7 @@ cat $(velad kubeconfig --external)
 要访问集群，还需要在本地机器上安装 vela CLI (`vela`)。
 
 ```shell
-curl -fsSl https://static.kubevela.net/script/install.sh | bash
+curl -fsSl https://static.kubevela.net/script/install.sh | bash -s v1.6.7
 ```
 
 #### 验证安装
