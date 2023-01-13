@@ -2,11 +2,11 @@
 title: vela workflow resume
 ---
 
-Resume a suspend application workflow.
+Resume a suspend workflow.
 
 ### Synopsis
 
-Resume a suspend application workflow in cluster.
+Resume a suspend workflow in cluster.
 
 ```
 vela workflow resume [flags]
@@ -15,7 +15,7 @@ vela workflow resume [flags]
 ### Examples
 
 ```
-vela workflow resume <application-name>
+vela workflow resume <workflow-name>
 ```
 
 ### Options

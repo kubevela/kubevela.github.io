@@ -43,7 +43,7 @@ vela def init DEF_NAME [flags]
       --path string            Specify which path the configuration(HCL) is stored in the Git repository. Valid when --git is set.
   -p, --provider alibaba       Specify which provider the cloud resource definition belongs to. Only alibaba, `aws`, `azure`, `gcp`, `baidu`, `tencent`, `elastic`, `ucloud`, `vsphere` are supported.
   -f, --template-yaml string   Specify the template yaml file that definition will use to build the schema. If empty, a default template for the given definition type will be used.
-  -t, --type string            Specify the type of the new definition. Valid types: workflow-step, component, trait, policy, workload, scope
+  -t, --type string            Specify the type of the new definition. Valid types: policy, workload, scope, workflow-step, component, trait
 ```
 
 ### Options inherited from parent commands

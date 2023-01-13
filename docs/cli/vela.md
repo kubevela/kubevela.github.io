@@ -24,7 +24,7 @@ title: CLI Commands
 
  Delete KubeVela applications. KubeVela application deletion is associated with the recycle of underlying resources. By default, the resources created by the KubeVela application will be deleted once it is not in use or the application is deleted. There is garbage-collect policy in KubeVela application that you can use to configure customized recycle rules.
 
- This command supports delete application in various modes. Natively, you can use it like "kubectl delete app [app-name]". In the cases you only want to delete the application but leave the resources there, you can use the --orphan parameter. In the cases the server-side controller is uninstalled, or you want to manually skip some errors in the deletion process (like lack privileges or handle cluster disconnection), you can use the --force parameter.
+ This command supports delete application in various modes. Natively, you can use it like "kubectl delete app [app-name] ". In the cases you only want to delete the application but leave the resources there, you can use the --orphan parameter. In the cases the server-side controller is uninstalled, or you want to manually skip some errors in the deletion process (like lack privileges or handle cluster disconnection), you can use the --force parameter.
 * [vela exec](vela_exec)	 - Execute command inside container based vela application.
 * [vela port-forward](vela_port-forward)	 - Forward local ports to container/service port of vela application.
 * [vela logs](vela_logs)	 - Tail logs for vela application.

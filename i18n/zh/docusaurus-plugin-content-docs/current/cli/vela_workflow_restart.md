@@ -2,11 +2,11 @@
 title: vela workflow restart
 ---
 
-Restart an application workflow.
+Restart a workflow.
 
 ### Synopsis
 
-Restart an application workflow in cluster.
+Restart a workflow in cluster.
 
 ```
 vela workflow restart [flags]
@@ -15,7 +15,7 @@ vela workflow restart [flags]
 ### Examples
 
 ```
-vela workflow restart <application-name>
+vela workflow restart <workflow-name>
 ```
 
 ### Options
@@ -24,6 +24,7 @@ vela workflow restart <application-name>
   -e, --env string         specify environment name for application
   -h, --help               help for restart
   -n, --namespace string   specify the Kubernetes namespace to use
+  -s, --step string        specify the step name in the workflow
   -t, --type string        the type of the resource, support: [app, workflow]
 ```
 
