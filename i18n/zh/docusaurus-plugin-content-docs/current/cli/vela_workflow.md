@@ -25,11 +25,11 @@ Operate the Workflow during Application Delivery. Note that workflow command is 
 
 * [vela workflow debug](vela_workflow_debug)	 - Debug workflow steps
 * [vela workflow logs](vela_workflow_logs)	 - Tail logs for workflow steps
-* [vela workflow restart](vela_workflow_restart)	 - Restart an application workflow.
-* [vela workflow resume](vela_workflow_resume)	 - Resume a suspend application workflow.
+* [vela workflow restart](vela_workflow_restart)	 - Restart a workflow.
+* [vela workflow resume](vela_workflow_resume)	 - Resume a suspend workflow.
 * [vela workflow rollback](vela_workflow_rollback)	 - Rollback an application workflow to the latest revision.
-* [vela workflow suspend](vela_workflow_suspend)	 - Suspend an application workflow.
-* [vela workflow terminate](vela_workflow_terminate)	 - Terminate an workflow.
+* [vela workflow suspend](vela_workflow_suspend)	 - Suspend a workflow.
+* [vela workflow terminate](vela_workflow_terminate)	 - Terminate a workflow.
 
 #### Go Back to [CLI Commands](vela) Homepage.
 
