@@ -1,27 +1,27 @@
 ---
-title: Triggers
+title: Integrate with CI system
 description: Integrate with CI system by Triggers
 ---
 
-You can use triggers from [VelaUX addon](../../../reference/addons/velaux) to integrate with different CI systems, the architecture and supported platforms are described in the following picture, they're:
+In KubeVela, you can choose to directly use declarative workflow with CI steps, such as: build code, push image, etc. Alternatively, you can choose to use triggers to integrate with external CI systems, such as Jenkins, image registry, etc.
 
-- [Custom](#custom-trigger), refer to [Jenkins CI](../../../tutorials/jenkins) guide for a real world use case
+## Use declarative workflow with CI steps
+
+KubeVela v1.7+ provide built-in step for image building, please refer to [Integration with image build & push](../../../tutorials/s2i) for details.
+
+## Use triggers to integrated with CI system.
+
+You can use triggers from [VelaUX addon](../../../reference/addons/velaux) to integrate with different CI systems. In VelaUX, a default trigger will be automatically generated after an application created, you can also delete it and create a new one. The architecture and supported platforms are described in the following picture, they're:
+
+- [Custom](#custom-trigger), refer to [Jenkins CI](../../../tutorials/jenkins) guide for a real world use case.
 - [ACR](#ACR-trigger)
-- [Harbor](#Harbor-trigger), refer to [Harbor Integration](../../../tutorials/trigger) guide for a real world use case
+- [Harbor](#Harbor-trigger), refer to [Harbor Integration](../../../tutorials/trigger) guide for a real world use case.
 - [DockerHub](#DockerHub-trigger)
 - [JFrog](#JFrog-trigger)
 
 ![trigger](../../../resources/trigger.jpg)
 
-## How to use
-
-A default trigger will be automatically generated after an application created. You can also delete it and create a new one.
-
-![default-trigger](../../../resources/default-trigger.png)
-
-KubeVela triggers can integrate with any CI tool like Gitlab CI, Jenkins Pipeline or image registry like Harbor or ACR.
-
-## Custom Trigger
+### Custom Trigger
 
 Custom triggers will provide a webhook URL, which you can use to integrate with your CI tool using the specified request body.
 
@@ -72,13 +72,13 @@ After CI have executed this step, we can see that application is deployed succes
 
 You can refer to [Jenkins CI](../../../tutorials/jenkins) guide for a real use case about custom trigger.
 
-## Harbor Trigger
+### Harbor Trigger
 
 Harbor Trigger can be integrated with Harbor image registry.
 
 You can refer to [Harbor Image Registry](../../../tutorials/trigger) guide for the end to end tutorial.
 
-## ACR Trigger
+### ACR Trigger
 
 ACR Trigger can be integrated with ACR image registry.
 
@@ -96,7 +96,7 @@ After configuring the trigger, we can see the new deploy revisions when a new im
 
 ![alt](../../../resources/acr-trigger-revisions.png)
 
-## DockerHub Trigger
+### DockerHub Trigger
 
 DockerHub Trigger can be integrated with DockerHub.
 
@@ -114,7 +114,7 @@ After configuring the trigger, we can see the new deploy revisions when a new im
 
 ![alt](../../../resources/dockerhub-trigger-revisions.png)
 
-## JFrog Trigger
+### JFrog Trigger
 
 jFrog Trigger can be integrated with JFrog Artifactory.
 
