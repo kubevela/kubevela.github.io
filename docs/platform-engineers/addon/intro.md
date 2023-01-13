@@ -4,6 +4,8 @@ title: Make Your Own Addon
 
 :::tip
 Here's a blog introduces [how to build addon from scratch using redis operator as example](/blog/2022/10/18/building-addon-introduction), you can read it as an end to end tutorial!
+
+If you want to create an addon using an existing helm chart, you can refer to this [section](#initializing-an-addon-structure) to quickly get started without going through a detailed introduction.
 :::
 
 A KubeVela addon is a collection that can contain the following three types of files；

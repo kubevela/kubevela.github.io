@@ -186,7 +186,13 @@ paramters: {
 }
 ```
 
-Once the addon is enabled using the CLI, you will see this information in your console:
+When you enable the addon using the CLI, the information displayed in your console will vary depending on the specified parameter. For example, running the command:
+
+```shell
+$ vela addon enable experimental/backstage
+```
+
+Once the addon has been enabled, you will see the following notice::
 
 ```text
 By default, the backstage app is strictly serving in the domain `127.0.0.1:7007`, check it by:
@@ -194,6 +200,12 @@ By default, the backstage app is strictly serving in the domain `127.0.0.1:7007`
 		vela port-forward addon-backstage -n vela-system
 		
 You can build your own backstage app if you want to use it in other domains. 
+```
+
+If you enable the addon with the `parameter.pluginOnly=true` setting, you will see this information:
+
+```text
+You can use the endpoint of 'backstage-plugin-vela' in your own backstage app by configuring the 'vela.host', refer to example https://github.com/wonderflow/vela-backstage-demo.
 ```
 
 This example is from the backstage addon, you can find more information by visiting this [link](https://github.com/kubevela/catalog/tree/master/experimental/addons/backstage).

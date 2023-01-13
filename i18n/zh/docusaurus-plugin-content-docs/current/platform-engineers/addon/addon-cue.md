@@ -191,7 +191,15 @@ paramters: {
 }
 ```
 
-通过 vela CLI 插件启用后，你将会在控制台看到以下提示信息：
+当通过 vela cli 启用插件后，根据不同的启动参数你将会在控制台看到不同的提示信息：
+
+当通过下面的命令的启用插件时；
+
+```shell
+$ vela addon enable experimental/backstage
+```
+
+你将会看到以下提示信息：
 
 ```text
 By default, the backstage app is strictly serving in the domain `127.0.0.1:7007`, check it by:
@@ -199,6 +207,12 @@ By default, the backstage app is strictly serving in the domain `127.0.0.1:7007`
 		vela port-forward addon-backstage -n vela-system
 		
 You can build your own backstage app if you want to use it in other domains. 
+```
+
+当在启时设置 `parameter.pluginOnly=true` 参数，启用成功之后，你则会看到下面的信息：
+
+```text
+You can use the endpoint of 'backstage-plugin-vela' in your own backstage app by configuring the 'vela.host', refer to example https://github.com/wonderflow/vela-backstage-demo.
 ```
 
 一个用到此项特性的例子是 `backstage` [插件](https://github.com/kubevela/catalog/tree/master/experimental/addons/backstage)。
