@@ -351,5 +351,8 @@
   },
   "sidebar.docs.category.Config Management": {
     "message": "配置管理"
+  },
+  "sidebar.docs.category.Production Precautions": {
+    "message": "生产使用注意点"
   }
 }

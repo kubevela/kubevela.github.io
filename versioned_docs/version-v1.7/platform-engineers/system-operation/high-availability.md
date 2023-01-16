@@ -1,5 +1,5 @@
 ---
-title: High Availability
+title: High Availability Deploy
 ---
 
 If you're using KubeVela in production, make sure they're deployed in high availability mode like the architecture below.

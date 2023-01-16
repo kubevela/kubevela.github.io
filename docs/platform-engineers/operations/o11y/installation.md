@@ -1,5 +1,5 @@
 ---
-title: Enable O11y Addons
+title: Enable Observability Addons
 ---
 
 :::tip

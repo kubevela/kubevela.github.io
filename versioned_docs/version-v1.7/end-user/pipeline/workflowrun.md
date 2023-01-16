@@ -17,6 +17,13 @@ This means that most of the workflow steps are common between the two, such as: 
 However, in WorkflowRun, there is only the configuration of steps, and **no configuration of components, traits, and policies**. Therefore, steps related to components/traits/policy can only be used in in-app workflows, such as: deploying/updating components, traits, etc.
 :::
 
+## Before starting
+
+Please make sure that you have enabled workflow addon:
+```
+vela addon enable vela-workflow
+```
+
 ## WorkflowRun
 
 WorkflowRun is the K8S API for pipeline. You can choose to execute an external Workflow template in the WorkflowRun or execute the steps in the WorkflowRun spec (if you declare both, the step in the WorkflowRun spec will override the content in the template). A WorkflowRun consists of the following:
@@ -62,38 +69,38 @@ spec:
 
 WorkflowRun has the following status:
 
-|  WorkflowRun State  |                 Description                  |
-| :-------:  |  :-----------------------------------: |
-| executing  |   When a step in a WorkflowRun is executing, its status is executing                        |
-| suspending |  When a step in a WorkflowRun is suspended, its status is suspending                                |
-| terminated |  When a WorkflowRun is terminated, its status is terminated                               |
-| failed     |      When the WorkflowRun is executed completely and a step fails, its status is failed                   |
-| succeeded  |   When the WorkflowRun is executed completely and the status of all steps is successful or skipped, its status is succeeded  |
+| WorkflowRun State |                                                        Description                                                        |
+| :---------------: | :-----------------------------------------------------------------------------------------------------------------------: |
+|     executing     |                            When a step in a WorkflowRun is executing, its status is executing                             |
+|    suspending     |                            When a step in a WorkflowRun is suspended, its status is suspending                            |
+|    terminated     |                                When a WorkflowRun is terminated, its status is terminated                                 |
+|      failed       |                    When the WorkflowRun is executed completely and a step fails, its status is failed                     |
+|     succeeded     | When the WorkflowRun is executed completely and the status of all steps is successful or skipped, its status is succeeded |
 
 ### WorkflowRun Step Status
 
 WorkflowRun steps have the following status:
 
-|  Step Status   |                 Description                 |
-| :-------:  |  :-----------------------------------: |
-| running    |   This step is being executed                       |
-| succeeded  |   The step is executed successfully                              |
-| failed     |   The step failed                              |
-| skipped    |   The step is skipped and not executed                   |
-| pending    |   The step is wait for certain conditions to execute, such as: waiting for the inputs  |
+| Step Status |                                     Description                                     |
+| :---------: | :---------------------------------------------------------------------------------: |
+|   running   |                             This step is being executed                             |
+|  succeeded  |                          The step is executed successfully                          |
+|   failed    |                                   The step failed                                   |
+|   skipped   |                        The step is skipped and not executed                         |
+|   pending   | The step is wait for certain conditions to execute, such as: waiting for the inputs |
 
 #### The Failed Reason of WorkflowRun Step
 
 For steps that fail to execute, the `message` of the step status will display the failed message, and the `reason` will display the failed reason, which is divided into the following types:
 
-|  Step Failed Reason  |                 Description                  |
-| :-------:  |  :-----------------------------------: |
-| Execute    |   The step fails in execution                       |
-| Terminate  |   The step is terminated                               |
-| Output     |   The step has an error when outputting the Output                              |
-| FailedAfterRetries    |   The Step fails in execution and the retry limit is reached                   |
-| Timeout   |   The step is timeout  |
-| Action    |   [op.#Fail](../../platform-engineers/workflow/cue-actions#fail) is used in the step's definition  |
+| Step Failed Reason |                                           Description                                           |
+| :----------------: | :---------------------------------------------------------------------------------------------: |
+|      Execute       |                                   The step fails in execution                                   |
+|     Terminate      |                                     The step is terminated                                      |
+|       Output       |                        The step has an error when outputting the Output                         |
+| FailedAfterRetries |                   The Step fails in execution and the retry limit is reached                    |
+|      Timeout       |                                       The step is timeout                                       |
+|       Action       | [op.#Fail](../../platform-engineers/workflow/cue-actions#fail) is used in the step's definition |
 
 ## Execution Mode
 
@@ -450,10 +457,10 @@ The above WorkflowRun will refer to the `deploy-template` Workflow as the execut
 
 The built-in context data in WorkflowRun are as follows:
 
-|         Context Variable         |                                                                                  Description                                                                                  |    Type    |
-| :------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------: |
-|          `context.name`          |            The name of the WorkflowRun                                                 |   string   |
-|       `context.namespace`        |          The namespace of the WorkflowRun          |   string   |
-|       `context.stepName`        |          The name of the current step          |   string   |
-|       `context.stepSessionID`        |          The ID of the current step          |   string   |
-|       `context.spanID`        |         The trace ID of current step in this reconcile         |   string   |
+|    Context Variable     |                  Description                   |  Type  |
+| :---------------------: | :--------------------------------------------: | :----: |
+|     `context.name`      |          The name of the WorkflowRun           | string |
+|   `context.namespace`   |        The namespace of the WorkflowRun        | string |
+|   `context.stepName`    |          The name of the current step          | string |
+| `context.stepSessionID` |           The ID of the current step           | string |
+|    `context.spanID`     | The trace ID of current step in this reconcile | string |
