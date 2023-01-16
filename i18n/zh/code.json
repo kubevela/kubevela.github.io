@@ -203,7 +203,7 @@
   "Deployment as Code": {
     "message": "应用部署即代码（Deployment as Code），完整定义全交付流程"
   },
-  "Declare your deployment plan as workflow, run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with CUE. Glue and orchestrate all your infrastructure capabilities as reusable modules and share the large growing community addons. No add-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by Open Application Model.": {
+  "Declare your deployment plan as workflow, run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with CUE. Glue and orchestrate all your infrastructure capabilities as reusable modules and share the large growing community addons. No ad-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by Open Application Model.": {
     "message": "用声明式的方式描述你的应用交付工作流，自动化的集成 CI/CD 或 GitOps 体系，通过 CUE 轻松扩展或重新编写你的交付过程。再也没有难以维护的脚本和复杂的衔接代码，将你的基础设施能力变成可编排、可复用的模块，或者直接使用社区丰富的插件，无需关注任何基础设施细节，专注于定义和部署应用！KubeVela 部署工作流的背后就是 OAM 模型，帮助你一次编排、随处运行！"
   },
   "Built-in security, compliance and observability building blocks": {

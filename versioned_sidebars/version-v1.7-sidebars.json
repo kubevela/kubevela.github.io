@@ -239,10 +239,18 @@
             "platform-engineers/system-operation/bootstrap-parameters",
             "platform-engineers/advanced-install",
             "platform-engineers/system-operation/vela-cli-image",
-            "platform-engineers/system-operation/migration-from-old-version",
-            "platform-engineers/system-operation/system-info-diagnose",
+            "platform-engineers/system-operation/system-info-diagnose"
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Production Precautions",
+          "collapsed": true,
+          "items": [
+            "platform-engineers/system-operation/performance-finetuning",
+            "platform-engineers/system-operation/controller-grayscale-release",
             "platform-engineers/system-operation/high-availability",
-            "platform-engineers/system-operation/controller-grayscale-release"
+            "platform-engineers/system-operation/migration-from-old-version"
           ]
         },
         {
@@ -274,7 +282,6 @@
             "platform-engineers/system-operation/working-with-ocm"
           ]
         },
-        "platform-engineers/system-operation/performance-finetuning",
         "platform-engineers/workflow/working-mechanism",
         {
           "UX Customization": [

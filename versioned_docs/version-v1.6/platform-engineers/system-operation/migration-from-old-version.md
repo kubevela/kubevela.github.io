@@ -53,7 +53,7 @@ curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.6
 4. Upgrade VelaUX or other addon
 
 ```
-vela addon upgrade velaux --version 1.6.6
+vela addon upgrade velaux --version=v1.6.6
 ```
 
 ## From v1.4.x to v1.5.x
@@ -89,7 +89,7 @@ curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.10
 4. Upgrade VelaUX or other addon
 
 ```
-vela addon upgrade velaux --version 1.5.6
+vela addon upgrade velaux --version=v1.5.6
 ```
 
 ## From v1.3.x to v1.4.x
@@ -124,7 +124,7 @@ curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.14
 4. Upgrade VelaUX or other addon
 
 ```
-vela addon upgrade velaux --version 1.4.7
+vela addon upgrade velaux --version=v1.4.7
 ```
 
 Please note if you're using terraform addon, you should upgrade the `terraform` addon to version `1.0.6+` along with the vela-core upgrade, you can follow the following steps:
@@ -167,7 +167,7 @@ curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.3.6
 4. Upgrade VelaUX or other addon
 
 ```
-vela addon upgrade velaux --version 1.3.6
+vela addon upgrade velaux --version=v1.3.6
 ```
 
 Please note if you're using terraform addon, you should upgrade the `terraform` addon to version `1.0.6+` along with the vela-core upgrade, you can follow the following steps:
