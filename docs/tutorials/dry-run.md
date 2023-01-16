@@ -2,18 +2,14 @@
 title: Dry Run
 ---
 
-The dry run is a very useful way to check the application configuration and the definitions. The dry run will render the application and print the output resources that check passed on the service side. If the definitions(component, trait) is invalid, the dry run will print the error message.
+The dry run feature is a very useful way to check the correctness of the application configuration and definitions. It will render the application and print the output resources that checked on the service side. If the definitions(component, trait) is invalid, the dry run will print the error message.
 
-> Override/topology Policies and deploy workflow are supported now!    
-> Limitation: Only support one object per file(yaml) for "-f" flag. More support will be added in the future improvement.  
-	
-
-When you do the following things please must pass dry run.
+When you do the following things, you'd better use `dry-run`.
 
 * Create or update an application.
 * Create or update the definition, and dry run some example applications.
 
-### Dry run via CLI
+## Dry run via CLI
 
 There is a simple application:
 
@@ -38,13 +34,14 @@ spec:
             replicas: 1
 ```
 
-Copy it and write a file `app.yaml`
+Copy it and write a file `app.yaml`, execute the following command, and then the resources will be printed.
 
 ```bash
 vela dry-run app.yaml
 ```
 
-The outputs:
+<details>
+<summary>expected output</summary>
 
 ```yaml
 ---
@@ -114,6 +111,8 @@ spec:
 ---
 ```
 
+</details>
+
 If we set the expose field of the port as false, the output resources do not include the `Service`. If we set the replicas field as "1", the output will be an error message:
 
 ```bash
@@ -125,8 +124,13 @@ This means the replicas field is int type but we provide a string value, this ap
 
 
 ### Dry run with policy and workflow via CLI
-Let's take the following application for example.  
-The application explicitly specify override,topology policies and deploy workflow.
+
+:::tip
+Override/topology Policies and deploy workflow are supported in v1.7.0+ now. While there're still some limitation that `dry-run` with policy and workflow will only take `override`, `topology` policies and `deploy` workflow step into considerations. Other workflow steps will be ignored.
+:::	
+
+Let's take the following application as example, the application explicitly specify `override`, `topology` policies and `deploy` workflow step.
+
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -179,7 +183,11 @@ spec:
           policies: ["target-prod", "deploy-ha"]
 ```
 
-Dry run will produce 
+Dry run will produce rendered results for both `deploy2default` and `deploy2prod` deploy steps as below:
+
+<details>
+<summary>expected output</summary>
+
 ```yaml
 ---
 # Application(first-vela-app with topology target-default) -- Component(express-server) 
@@ -307,69 +315,92 @@ spec:
 
 ---
 ```
+
+</details>
+
 Each deploy workflow step with topology policy will render individual result.
 
-Also, the application can use external workflow.
-```yaml
-# target-prod.yaml
-apiVersion: core.oam.dev/v1alpha1
-kind: Policy
-metadata:
-  name: target-prod
-type: topology
-properties:
-  clusters: ["local"]
-  namespace: "prod"
-```
-```yaml
-# ha.yaml
-apiVersion: core.oam.dev/v1alpha1
-kind: Policy
-metadata:
-  name: ha
-type: override
-properties:
-  components:
-  - type: webservice
-    traits:
-    - type: scaler
-      properties:
-        replicas: 5
-```
-```yaml
-# workflow.yaml
-apiVersion: core.oam.dev/v1alpha1
-kind: Workflow
-metadata:
-  name: deploy-demo
-steps:
-  - type: deploy
-    name: deploy-prod
-    properties:
-      policies: ["ha", "target-prod"]
-```
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-vela-app
-spec:
-  components:
-    - name: express-server
-      type: webservice
-      properties:
-        image: oamdev/hello-world
-        ports:
-         - port: 8000
-           expose: true
+It can be a bit redundant for you as you may just need to dry run for one environment at a time. The, you can use the external workflow feature like below.
+
+Firstly, define policy and workflow as below in individual files:
+
+* The `target-prod.yaml` and `ha.yaml` corresponding to the `production` environment.
+  ```yaml
+  # target-prod.yaml
+  apiVersion: core.oam.dev/v1alpha1
+  kind: Policy
+  metadata:
+    name: target-prod
+  type: topology
+  properties:
+    clusters: ["local"]
+    namespace: "prod"
+  ```
+
+  ```yaml
+  # ha.yaml
+  apiVersion: core.oam.dev/v1alpha1
+  kind: Policy
+  metadata:
+    name: ha
+  type: override
+  properties:
+    components:
+    - type: webservice
       traits:
-        - type: scaler
-          properties:
-            replicas: 1
-  workflow:
-    ref: deploy-demo
+      - type: scaler
+        properties:
+          replicas: 5
+  ```
+
+* The `prod-workflow.yaml` can glue them together.
+  ```yaml
+  # prod-workflow.yaml
+  apiVersion: core.oam.dev/v1alpha1
+  kind: Workflow
+  metadata:
+    name: deploy-prod
+  steps:
+    - type: deploy
+      name: deploy-prod
+      properties:
+        policies: ["ha", "target-prod"]
+  ```
+
+* Then the application can reference the workflow as below.
+  ```yaml
+  apiVersion: core.oam.dev/v1beta1
+  kind: Application
+  metadata:
+    name: first-vela-app
+  spec:
+    components:
+      - name: express-server
+        type: webservice
+        properties:
+          image: oamdev/hello-world
+          ports:
+          - port: 8000
+            expose: true
+        traits:
+          - type: scaler
+            properties:
+              replicas: 1
+    workflow:
+      ref: deploy-prod
+  ```
+
+The dry run command can be:
+
 ```
-Dry run will produce 
+vela dry-run -f app.yaml -f target-prod.yaml -f ha.yaml -f prod-workflow.yaml 
+```
+
+Then, the dry-run results will only contain resources in the `production` environment.
+
+<details>
+<summary>expected output</summary>
+
 ```yaml
 ---
 # Application(first-vela-app with topology target-prod) -- Component(express-server) 
@@ -435,9 +466,36 @@ spec:
 ---
 ```
 
-Moreover, dry run can take standalone policies and workflow as consideration by using "merge" flag.
+</details>
 
-For example, 
+Moreover, you can use `--merge` flag to merge external policies and workflow when application file is not reference to them.
+
+For example, you can define the application as below, the only difference is there's no `workflow` field.
+
+```yaml
+# app.yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-app
+spec:
+  components:
+    - name: express-server
+      type: webservice
+      properties:
+        image: oamdev/hello-world
+        ports:
+         - port: 8000
+           expose: true
+      traits:
+        - type: scaler
+          properties:
+            replicas: 1
+```
+
+<details>
+<summary>the workflow and policy can be defined the same way</summary>
+
 ```yaml
 # workflow.yaml
 apiVersion: core.oam.dev/v1alpha1
@@ -461,30 +519,18 @@ properties:
   clusters: ["local"]
   namespace: "prod"
 ```
-```yaml
-# app.yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-vela-app
-spec:
-  components:
-    - name: express-server
-      type: webservice
-      properties:
-        image: oamdev/hello-world
-        ports:
-         - port: 8000
-           expose: true
-      traits:
-        - type: scaler
-          properties:
-            replicas: 1
-```
+
+</details>
+
+If you don't use `--merge` flag in this way, it will report warnings as below.
+
 ```
 vela dry-run -f app.yaml -f target-prod.yaml -f workflow.yaml
 ```
-will produce 
+
+<details>
+<summary>result with warning messages</summary>
+
 ```yaml
 WARNING: workflow deploy-demo not referenced by application
 
@@ -554,13 +600,22 @@ spec:
 ---
 
 ```
-In this case, warning messages show up and the policy and workflow do not take effect. Because those are not referenced by the application and being viewed as standalone files and being ignored.  
 
-So to make those take effect, please provide "merge" flag with the command:
+</details>
+
+In this case, the policy and workflow do not take effect. Because those are not referenced by the application and being viewed as standalone files and ignored.  
+
+So to make those external files work, please provide "--merge" flag as below:
+
 ```
 vela dry-run -f app.yaml -f target-prod.yaml -f workflow.yaml --merge
 ```
-will produce 
+
+Then the application will be glued with external policies and workflows even no reference exists.
+
+<details>
+<summary>expected ouput</summary>
+
 ```yaml
 ---
 # Application(first-vela-app with topology target-prod) -- Component(express-server) 
@@ -626,9 +681,11 @@ spec:
 ---
 ```
 
-More use cases refer to the [Dry run command](../cli/vela_dry-run)  
+</details>
 
-### Dry run via UI
+You can refer to the [Dry run command](../cli/vela_dry-run) for more command line use cases.
+
+## Dry run via UI
 
 ![dry-run](https://static.kubevela.net/images/1.5/dry-run.jpg)
 

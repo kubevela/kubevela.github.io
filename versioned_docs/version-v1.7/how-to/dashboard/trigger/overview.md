@@ -7,7 +7,7 @@ In KubeVela, you can choose to directly use declarative workflow with CI steps, 
 
 ## Use declarative workflow with CI steps
 
-KubeVela v1.7+ provide built-in step for image building, please refer to [Integration with image build & push](../../../tutorials/s2i) for details.
+KubeVela v1.7+ provide built-in step for image building, please refer to [Unified Declarative CI/CD](../../../tutorials/s2i) for details.
 
 ## Use triggers to integrated with CI system.
 

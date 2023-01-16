@@ -18,6 +18,13 @@ title: 流水线的 K8S API
 但 WorkflowRun 中只有步骤的配置，**没有**组件、运维特征、策略的配置。因此，与组件等相关的步骤只能在应用内工作流中使用，如：部署/更新组件、运维特征等。
 :::
 
+## 开始之前
+
+确保你已经开启了独立的 workflow  插件。
+```
+vela addon enable vela-workflow
+```
+
 ## WorkflowRun
 
 WorkflowRun 为流水线执行的 K8S API。你可以选择在 WorkflowRun 里执行一个外部的 Workflow 模板或者执行直接在里面配置要执行的步骤（如果你同时声明了二者，WorkflowRun 里的步骤配置会覆盖模板中的内容）。一个 WorkflowRun 的组成如下：
@@ -63,38 +70,38 @@ spec:
 
 WorkflowRun 拥有以下几种状态：
 
-|  WorkflowRun 状态  |                 说明                  |
-| :-------:  |  :-----------------------------------: |
-| executing  |   当 WorkflowRun 中的步骤正在执行时，其状态为 executing                        |
-| suspending |  当 WorkflowRun 被暂停时，其状态为 suspending                                |
-| terminated |  当 WorkflowRun 被终止时，其状态为 terminated                                |
-| failed     |      当 WorkflowRun 执行完成，且有步骤失败时，其状态为 failed                   |
-| succeeded  |   当 WorkflowRun 执行完成，且所有步骤的状态均为成功或者跳过时，其状态为 succeeded  |
+| WorkflowRun 状态 |                                      说明                                       |
+| :--------------: | :-----------------------------------------------------------------------------: |
+|    executing     |              当 WorkflowRun 中的步骤正在执行时，其状态为 executing              |
+|    suspending    |                  当 WorkflowRun 被暂停时，其状态为 suspending                   |
+|    terminated    |                  当 WorkflowRun 被终止时，其状态为 terminated                   |
+|      failed      |            当 WorkflowRun 执行完成，且有步骤失败时，其状态为 failed             |
+|    succeeded     | 当 WorkflowRun 执行完成，且所有步骤的状态均为成功或者跳过时，其状态为 succeeded |
 
 ### WorkflowRun 步骤状态
 
 WorkflowRun 步骤拥有以下几种状态：
 
-|  步骤状态   |                 说明                  |
-| :-------:  |  :-----------------------------------: |
-| running    |   该步骤正在执行                       |
-| succeeded  |   该步骤执行完成，且状态为成功                               |
-| failed     |   该步骤执行失败                              |
-| skipped    |   该步骤被跳过，没有被执行                   |
-| pending    |   步骤等待某些条件来执行，如：等待 inputs 的输入  |
+| 步骤状态  |                      说明                      |
+| :-------: | :--------------------------------------------: |
+|  running  |                 该步骤正在执行                 |
+| succeeded |          该步骤执行完成，且状态为成功          |
+|  failed   |                 该步骤执行失败                 |
+|  skipped  |            该步骤被跳过，没有被执行            |
+|  pending  | 步骤等待某些条件来执行，如：等待 inputs 的输入 |
 
 #### WorkflowRun 步骤失败原因
 
 对于执行失败的步骤，步骤状态的 Message 中会显示报错信息，步骤状态的 Reason 会显示失败原因，分为以下几种：
 
-|  步骤失败原因   |                 说明                  |
-| :-------:  |  :-----------------------------------: |
-| Execute    |   步骤执行出错                       |
-| Terminate  |   步骤被终止                               |
-| Output     |   步骤在输出 Output 时出错                              |
-| FailedAfterRetries    |   步骤执行失败达到重试上限                   |
-| Timeout   |   步骤因超时出错  |
-| Action    |   步骤定义中执行了 [op.#Fail](../../platform-engineers/workflow/cue-actions#fail)  |
+|    步骤失败原因    |                                      说明                                       |
+| :----------------: | :-----------------------------------------------------------------------------: |
+|      Execute       |                                  步骤执行出错                                   |
+|     Terminate      |                                   步骤被终止                                    |
+|       Output       |                            步骤在输出 Output 时出错                             |
+| FailedAfterRetries |                            步骤执行失败达到重试上限                             |
+|      Timeout       |                                 步骤因超时出错                                  |
+|       Action       | 步骤定义中执行了 [op.#Fail](../../platform-engineers/workflow/cue-actions#fail) |
 
 ## 执行模式
 
@@ -451,10 +458,10 @@ steps:
 
 WorkflowRun 中的内置上下文参数如下：
 
-|         Context Variable         |                                                                                  Description                                                                                  |    Type    |
-| :------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------: |
-|          `context.name`          |                                                 WorkflowRun 的名称                                                  |   string   |
-|       `context.namespace`        |          WorkflowRun 的命名空间          |   string   |
-|       `context.stepName`        |          当前步骤的名称          |   string   |
-|       `context.stepSessionID`        |          当前步骤的 ID          |   string   |
-|       `context.spanID`        |          当前步骤此次执行的 Trace ID          |   string   |
+|    Context Variable     |         Description         |  Type  |
+| :---------------------: | :-------------------------: | :----: |
+|     `context.name`      |     WorkflowRun 的名称      | string |
+|   `context.namespace`   |   WorkflowRun 的命名空间    | string |
+|   `context.stepName`    |       当前步骤的名称        | string |
+| `context.stepSessionID` |        当前步骤的 ID        | string |
+|    `context.spanID`     | 当前步骤此次执行的 Trace ID | string |
