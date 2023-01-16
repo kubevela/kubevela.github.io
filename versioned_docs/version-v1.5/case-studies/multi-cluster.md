@@ -515,4 +515,4 @@ If you already have applications running in production environment and do not wa
 
 In this section, we introduced how KubeVela delivering micro services in multiple clusters, the whole process can be easily modeled as a declarative deployment plan.
 
-No more add-hoc scripts or glue code, KubeVela will get the application delivery workflow done with full automation and determinism. Most importantly, KubeVela expects you keep using the CI solutions you are already familiar with and KubeVela is fully complementary to them as the CD control plane.
+No more ad-hoc scripts or glue code, KubeVela will get the application delivery workflow done with full automation and determinism. Most importantly, KubeVela expects you keep using the CI solutions you are already familiar with and KubeVela is fully complementary to them as the CD control plane.

@@ -35,7 +35,7 @@ curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.4.2
 4. 升级 VelaUX 或其他插件
 
 ```
-vela addon upgrade velaux --version 1.4.2
+vela addon upgrade velaux --version=v1.4.2
 ```
 
 请注意，如果你使用的是 terraform 插件，你应该将 `terraform` 插件升级到 `1.0.6+` 版本以及 vela-core 升级，你可以按照以下步骤进行操作：
@@ -74,7 +74,7 @@ curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.3.6
 4. 升级 VelaUX 或其他插件
 
 ```
-vela addon upgrade velaux --version 1.3.6
+vela addon upgrade velaux --version=v1.3.6
 ```
 
 请注意，如果你使用的是 terraform 插件，你应该将 `terraform` 插件升级到 `1.0.6+` 版本以及 vela-core 升级，你可以按照以下步骤操作： 

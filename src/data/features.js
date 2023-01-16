@@ -8,7 +8,7 @@ const features = [
     description: (
       <p>
         <Translate>
-          Declare your deployment plan as workflow, run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with CUE. Glue and orchestrate all your infrastructure capabilities as reusable modules and share the large growing community addons. No add-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by Open Application Model.
+          Declare your deployment plan as workflow, run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with CUE. Glue and orchestrate all your infrastructure capabilities as reusable modules and share the large growing community addons. No ad-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by Open Application Model.
         </Translate>
       </p>
     ),

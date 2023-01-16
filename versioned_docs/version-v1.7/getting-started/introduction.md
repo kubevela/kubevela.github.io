@@ -14,7 +14,7 @@ KubeVela is a modern software delivery and management control plane. The goal is
 
 * **Deployment as Code**
 
-    Declare your deployment plan as [workflow](./getting-started/core-concept), run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with [CUE](https://cuelang.org/). Glue and orchestrate all your infrastructure capabilities as reusable modules and share the large growing community [addons](./reference/addons/overview). No add-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by [Open Application Model](https://oam.dev/).
+    Declare your deployment plan as [workflow](./getting-started/core-concept), run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with [CUE](https://cuelang.org/). Glue and orchestrate all your infrastructure capabilities as reusable modules and share the large growing community [addons](./reference/addons/overview). No ad-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by [Open Application Model](https://oam.dev/).
 
 * **Built-in security, compliance and observability building blocks**
 

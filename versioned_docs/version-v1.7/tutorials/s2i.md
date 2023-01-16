@@ -1,5 +1,5 @@
 ---
-title:  Integration with image build & push
+title: Unified Declarative CI/CD
 ---
 
 ## Overview
