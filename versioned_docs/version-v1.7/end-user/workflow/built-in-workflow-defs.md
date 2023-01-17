@@ -4,13 +4,243 @@ title: Built-in WorkflowStep Type
 
 This documentation will walk through all the built-in workflow step types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-01-13T18:00:08+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-01-16T19:19:03+08:00.
+
+## Addon-Operation
+
+### Description
+
+Enable a KubeVela addon.
+
+### Scope
+
+This step type is only valid in WorkflowRun.
+
+### Examples (addon-operation)
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: observability
+  namespace: vela-system
+spec:
+  context:
+    readConfig: true
+  mode: 
+  workflowSpec:
+    steps:
+      - name: Enable Prism
+        type: addon-operation
+        properties:
+          addonName: vela-prism
+      
+      - name: Enable o11y
+        type: addon-operation
+        properties:
+          addonName: o11y-definitions
+          operation: enable
+          args:
+          - --override-definitions
+
+      - name: Prepare Prometheus
+        type: step-group
+        subSteps: 
+        - name: get-exist-prometheus
+          type: list-config
+          properties:
+            template: prometheus-server
+          outputs:
+          - name: prometheus
+            valueFrom: "output.configs"
+
+        - name: prometheus-server
+          inputs:
+          - from: prometheus
+            # TODO: Make it is not required
+            parameterKey: configs
+          if: "!context.readConfig || len(inputs.prometheus) == 0"
+          type: addon-operation
+          properties:
+            addonName: prometheus-server
+            operation: enable
+            args:
+            - memory=4096Mi
+            - serviceType=LoadBalancer
+
+      - name: Prepare Loki
+        type: addon-operation
+        properties:
+          addonName: loki
+          operation: enable
+          args:
+            - --version=v0.1.4
+            - agent=vector
+            - serviceType=LoadBalancer
+            
+      - name: Prepare Grafana
+        type: step-group
+        subSteps: 
+        
+        - name: get-exist-grafana
+          type: list-config
+          properties:
+            template: grafana
+          outputs:
+          - name: grafana
+            valueFrom: "output.configs"
+        
+        - name: Install Grafana & Init Dashboards
+          inputs:
+          - from: grafana
+            parameterKey: configs
+          if: "!context.readConfig || len(inputs.grafana) == 0"
+          type: addon-operation
+          properties:
+            addonName: grafana
+            operation: enable
+            args:
+              - serviceType=LoadBalancer
+        
+        - name: Init Dashboards
+          inputs:
+          - from: grafana
+            parameterKey: configs
+          if: "len(inputs.grafana) != 0"
+          type: addon-operation
+          properties:
+            addonName: grafana
+            operation: enable
+            args:
+              - install=false
+
+      - name: Clean
+        type: clean-jobs
+  
+      - name: print-message
+        type: print-message-in-status
+        properties:
+          message: "All addons have been enabled successfully, you can use 'vela addon list' to check them."
+
+```
+
+### Specification (addon-operation)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ addonName | Specify the name of the addon. | string | true |  
+ args | Specify addon enable args. | []string | false |  
+ image | Specify the image. | string | false | oamdev/vela-cli:v1.6.4 
+ operation | operation for the addon. | "enable" or "upgrade" or "disable" | false | enable 
+ serviceAccountName | specify serviceAccountName want to use. | string | false | kubevela-vela-core 
+
+
+## Apply-App
+
+### Description
+
+Apply application from data or ref to the cluster.
+
+### Scope
+
+This step type is only valid in WorkflowRun.
+
+### Examples (apply-app)
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: apply-applications
+  namespace: default
+  annotations:
+    workflowrun.oam.dev/debug: "true"
+spec:
+  workflowSpec:
+    steps:
+      - name: check-app-exist
+        type: read-app
+        properties:
+          name: webservice-app
+      - name: apply-app1
+        type: apply-app
+        if: status["check-app-exist"].message == "Application not found"
+        properties:
+          data:
+            apiVersion: core.oam.dev/v1beta1
+            kind: Application
+            metadata:
+              name: webservice-app
+            spec:
+              components:
+                - name: express-server
+                  type: webservice
+                  properties:
+                    image: crccheck/hello-world
+                    ports:
+                      - port: 8000
+      - name: suspend
+        type: suspend
+        timeout: 24h
+      - name: apply-app2
+        type: apply-app
+        properties:
+          ref:
+            name: my-app
+            key: application
+            type: configMap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-app
+  namespace: default
+data:
+  application: |
+    apiVersion: core.oam.dev/v1beta1
+    kind: Application
+    metadata:
+      name: webservice-app2
+    spec:
+      components:
+        - name: express-server2
+          type: webservice
+          properties:
+            image: crccheck/hello-world
+            ports:
+              - port: 8000
+        
+```
+
+### Specification (apply-app)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ data |  | map[string]_ | false |  
+ ref |  | [ref](#ref-apply-app) | false |  
+
+
+#### ref (apply-app)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ namespace |  | _&#124;_ | true |  
+ type |  | string | false | configMap 
+ key |  | string | false | application 
+
 
 ## Apply-Component
 
 ### Description
 
 Apply a specific component and its corresponding traits in application.
+
+### Scope
+
+This step type is only valid in Application.
 
 ### Examples (apply-component)
 
@@ -57,6 +287,10 @@ spec:
 
 Apply deployment with specified image and cmd.
 
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
 ### Examples (apply-deployment)
 
 ```yaml
@@ -98,6 +332,10 @@ spec:
 ### Description
 
 Apply raw kubernetes objects for your workflow steps.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
 
 ### Examples (apply-object)
 
@@ -161,6 +399,10 @@ spec:
 ### Description
 
 Apply terraform configuration in the step.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
 
 ### Examples (apply-terraform-config)
 
@@ -263,6 +505,10 @@ spec:
 ### Description
 
 Apply terraform provider config.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
 
 ### Examples (apply-terraform-provider)
 
@@ -388,6 +634,10 @@ spec:
 
 Build and push image from git url.
 
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
 ### Examples (build-push-image)
 
 ```yaml
@@ -490,6 +740,10 @@ spec:
 
 clean applied jobs in the cluster.
 
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
 ### Examples (clean-jobs)
 
 ```yaml
@@ -523,6 +777,10 @@ spec:
 ### Description
 
 Collect service endpoints for the application.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
 
 ### Examples (collect-service-endpoints)
 
@@ -584,6 +842,10 @@ This capability has no arguments.
 
 Create or update a config.
 
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
 ### Examples (create-config)
 
 ```yaml
@@ -636,6 +898,10 @@ spec:
 
 Delete a config.
 
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
 ### Examples (delete-config)
 
 ```yaml
@@ -678,6 +944,10 @@ spec:
 ### Description
 
 Wait for the specified Application to complete.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
 
 ### Examples (depends-on-app)
 
@@ -741,6 +1011,10 @@ data:
 
 A powerful and unified deploy step for components multi-cluster delivery with policies.
 
+### Scope
+
+This step type is only valid in Application.
+
 ### Examples (deploy)
 
 ```yaml
@@ -796,6 +1070,10 @@ spec:
 ### Description
 
 Deploy cloud resource and deliver secret to multi clusters.
+
+### Scope
+
+This step type is only valid in Application.
 
 ### Examples (deploy-cloud-resource)
 
@@ -895,6 +1173,10 @@ spec:
 
 Export data to clusters specified by topology.
 
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
 ### Examples (export-data)
 
 ```yaml
@@ -963,6 +1245,10 @@ spec:
 ### Description
 
 Export service to clusters specified by topology.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
 
 ### Examples (export-service)
 
@@ -1039,6 +1325,10 @@ spec:
 
 Export data to specified Kubernetes ConfigMap in your workflow.
 
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
 ### Examples (export2config)
 
 ```yaml
@@ -1092,6 +1382,10 @@ spec:
 ### Description
 
 Export data to Kubernetes Secret in your workflow.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
 
 ### Examples (export2secret)
 
@@ -1159,6 +1453,10 @@ spec:
 
 Generate a JDBC connection based on Component of alibaba-rds.
 
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
 ### Examples (generate-jdbc-connection)
 
 ```yaml
@@ -1218,6 +1516,10 @@ spec:
 ### Description
 
 List the configs.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
 
 ### Examples (list-config)
 
@@ -1286,6 +1588,10 @@ spec:
 ### Description
 
 Send notifications to Email, DingTalk, Slack, Lark or webhook in your workflow.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
 
 ### Examples (notification)
 
@@ -1552,6 +1858,10 @@ We can see that before and after the deployment of the application, the messages
 
 print message in workflow step status.
 
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
 ### Examples (print-message-in-status)
 
 ```yaml
@@ -1587,11 +1897,101 @@ spec:
  message |  | string | true |  
 
 
+## Read-App
+
+### Description
+
+Read application from the cluster.
+
+### Scope
+
+This step type is only valid in WorkflowRun.
+
+### Examples (read-app)
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: apply-applications
+  namespace: default
+  annotations:
+    workflowrun.oam.dev/debug: "true"
+spec:
+  workflowSpec:
+    steps:
+      - name: check-app-exist
+        type: read-app
+        properties:
+          name: webservice-app
+      - name: apply-app1
+        type: apply-app
+        if: status["check-app-exist"].message == "Application not found"
+        properties:
+          data:
+            apiVersion: core.oam.dev/v1beta1
+            kind: Application
+            metadata:
+              name: webservice-app
+            spec:
+              components:
+                - name: express-server
+                  type: webservice
+                  properties:
+                    image: crccheck/hello-world
+                    ports:
+                      - port: 8000
+      - name: suspend
+        type: suspend
+        timeout: 24h
+      - name: apply-app2
+        type: apply-app
+        properties:
+          ref:
+            name: my-app
+            key: application
+            type: configMap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-app
+  namespace: default
+data:
+  application: |
+    apiVersion: core.oam.dev/v1beta1
+    kind: Application
+    metadata:
+      name: webservice-app2
+    spec:
+      components:
+        - name: express-server2
+          type: webservice
+          properties:
+            image: crccheck/hello-world
+            ports:
+              - port: 8000
+        
+```
+
+### Specification (read-app)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ namespace |  | _&#124;_ | true |  
+
+
 ## Read-Config
 
 ### Description
 
 Read a config.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
 
 ### Examples (read-config)
 
@@ -1628,6 +2028,10 @@ spec:
 ### Description
 
 Read Kubernetes objects from cluster for your workflow steps.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
 
 ### Examples (read-object)
 
@@ -1687,6 +2091,10 @@ spec:
 
 Send request to the url.
 
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
 ### Examples (request)
 
 ```yaml
@@ -1744,6 +2152,10 @@ spec:
 ### Description
 
 Sync secrets created by terraform component to runtime clusters so that runtime clusters can share the created cloud resource.
+
+### Scope
+
+This step type is only valid in Application.
 
 ### Examples (share-cloud-resource)
 
@@ -1852,6 +2264,10 @@ spec:
 
 A special step that you can declare 'subSteps' in it, 'subSteps' is an array containing any step type whose valid parameters do not include the `step-group` step type itself. The sub steps were executed in parallel.
 
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
 ### Examples (step-group)
 
 ```yaml
@@ -1896,6 +2312,10 @@ This capability has no arguments.
 ### Description
 
 Suspend the current workflow, it can be resumed by 'vela workflow resume' command.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
 
 ### Examples (suspend)
 
@@ -1948,6 +2368,10 @@ spec:
 ### Description
 
 Run a vela command.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
 
 ### Examples (vela-cli)
 
@@ -2025,6 +2449,10 @@ spec:
 ### Description
 
 Send a request to the specified Webhook URL. If no request body is specified, the current Application body will be sent by default.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
 
 ### Examples (webhook)
 
