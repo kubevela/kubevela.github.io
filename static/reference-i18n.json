@@ -952,5 +952,14 @@
   },
   "Underlying Kubernetes Resources": {
     "Chinese": "底层 Kubernetes 资源"
+  },
+  "This step type is valid in both Application and WorkflowRun": {
+    "Chinese": "该步骤类型适用于 Application 和 WorkflowRun"
+  },
+  "This step type is only valid in Application": {
+    "Chinese": "该步骤类型只适用于 Application"
+  },
+  "This step type is only valid in WorkflowRun": {
+    "Chinese": "该步骤类型只适用于 WorkflowRun"
   }
 }
