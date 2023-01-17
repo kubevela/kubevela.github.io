@@ -4,13 +4,243 @@ title: 内置工作流步骤列表
 
 本文档将**按字典序**展示所有内置工作流步骤的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2023-01-13T18:00:08+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2023-01-16T19:19:03+08:00。
+
+## Addon-Operation
+
+### 描述
+
+Enable a KubeVela addon。
+
+### 适用范围
+
+该步骤类型只适用于 WorkflowRun。
+
+### 示例 (addon-operation)
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: observability
+  namespace: vela-system
+spec:
+  context:
+    readConfig: true
+  mode: 
+  workflowSpec:
+    steps:
+      - name: Enable Prism
+        type: addon-operation
+        properties:
+          addonName: vela-prism
+      
+      - name: Enable o11y
+        type: addon-operation
+        properties:
+          addonName: o11y-definitions
+          operation: enable
+          args:
+          - --override-definitions
+
+      - name: Prepare Prometheus
+        type: step-group
+        subSteps: 
+        - name: get-exist-prometheus
+          type: list-config
+          properties:
+            template: prometheus-server
+          outputs:
+          - name: prometheus
+            valueFrom: "output.configs"
+
+        - name: prometheus-server
+          inputs:
+          - from: prometheus
+            # TODO: Make it is not required
+            parameterKey: configs
+          if: "!context.readConfig || len(inputs.prometheus) == 0"
+          type: addon-operation
+          properties:
+            addonName: prometheus-server
+            operation: enable
+            args:
+            - memory=4096Mi
+            - serviceType=LoadBalancer
+
+      - name: Prepare Loki
+        type: addon-operation
+        properties:
+          addonName: loki
+          operation: enable
+          args:
+            - --version=v0.1.4
+            - agent=vector
+            - serviceType=LoadBalancer
+            
+      - name: Prepare Grafana
+        type: step-group
+        subSteps: 
+        
+        - name: get-exist-grafana
+          type: list-config
+          properties:
+            template: grafana
+          outputs:
+          - name: grafana
+            valueFrom: "output.configs"
+        
+        - name: Install Grafana & Init Dashboards
+          inputs:
+          - from: grafana
+            parameterKey: configs
+          if: "!context.readConfig || len(inputs.grafana) == 0"
+          type: addon-operation
+          properties:
+            addonName: grafana
+            operation: enable
+            args:
+              - serviceType=LoadBalancer
+        
+        - name: Init Dashboards
+          inputs:
+          - from: grafana
+            parameterKey: configs
+          if: "len(inputs.grafana) != 0"
+          type: addon-operation
+          properties:
+            addonName: grafana
+            operation: enable
+            args:
+              - install=false
+
+      - name: Clean
+        type: clean-jobs
+  
+      - name: print-message
+        type: print-message-in-status
+        properties:
+          message: "All addons have been enabled successfully, you can use 'vela addon list' to check them."
+
+```
+
+### 参数说明 (addon-operation)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ addonName | Specify the name of the addon。 | string | true |  
+ args | Specify addon enable args。 | []string | false |  
+ image | Specify the image。 | string | false | oamdev/vela-cli:v1.6.4 
+ operation | operation for the addon。 | "enable" or "upgrade" or "disable" | false | enable 
+ serviceAccountName | specify serviceAccountName want to use。 | string | false | kubevela-vela-core 
+
+
+## Apply-App
+
+### 描述
+
+Apply application from data or ref to the cluster。
+
+### 适用范围
+
+该步骤类型只适用于 WorkflowRun。
+
+### 示例 (apply-app)
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: apply-applications
+  namespace: default
+  annotations:
+    workflowrun.oam.dev/debug: "true"
+spec:
+  workflowSpec:
+    steps:
+      - name: check-app-exist
+        type: read-app
+        properties:
+          name: webservice-app
+      - name: apply-app1
+        type: apply-app
+        if: status["check-app-exist"].message == "Application not found"
+        properties:
+          data:
+            apiVersion: core.oam.dev/v1beta1
+            kind: Application
+            metadata:
+              name: webservice-app
+            spec:
+              components:
+                - name: express-server
+                  type: webservice
+                  properties:
+                    image: crccheck/hello-world
+                    ports:
+                      - port: 8000
+      - name: suspend
+        type: suspend
+        timeout: 24h
+      - name: apply-app2
+        type: apply-app
+        properties:
+          ref:
+            name: my-app
+            key: application
+            type: configMap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-app
+  namespace: default
+data:
+  application: |
+    apiVersion: core.oam.dev/v1beta1
+    kind: Application
+    metadata:
+      name: webservice-app2
+    spec:
+      components:
+        - name: express-server2
+          type: webservice
+          properties:
+            image: crccheck/hello-world
+            ports:
+              - port: 8000
+        
+```
+
+### 参数说明 (apply-app)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ data |  | map[string]_ | false |  
+ ref |  | [ref](#ref-apply-app) | false |  
+
+
+#### ref (apply-app)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ namespace |  | _&#124;_ | true |  
+ type |  | string | false | configMap 
+ key |  | string | false | application 
+
 
 ## Apply-Component
 
 ### 描述
 
 Apply a specific component and its corresponding traits in application。
+
+### 适用范围
+
+该步骤类型只适用于 Application。
 
 ### 示例 (apply-component)
 
@@ -57,6 +287,10 @@ spec:
 
 Apply deployment with specified image and cmd。
 
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
+
 ### 示例 (apply-deployment)
 
 ```yaml
@@ -98,6 +332,10 @@ spec:
 ### 描述
 
 在工作流中部署 Kubernetes 资源对象。
+
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
 
 ### 示例 (apply-object)
 
@@ -161,6 +399,10 @@ spec:
 ### 描述
 
 Apply terraform configuration in the step。
+
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
 
 ### 示例 (apply-terraform-config)
 
@@ -263,6 +505,10 @@ spec:
 ### 描述
 
 Apply terraform provider config。
+
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
 
 ### 示例 (apply-terraform-provider)
 
@@ -388,6 +634,10 @@ spec:
 
 Build and push image from git url。
 
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
+
 ### 示例 (build-push-image)
 
 ```yaml
@@ -490,6 +740,10 @@ spec:
 
 clean applied jobs in the cluster。
 
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
+
 ### 示例 (clean-jobs)
 
 ```yaml
@@ -523,6 +777,10 @@ spec:
 ### 描述
 
 Collect service endpoints for the application。
+
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
 
 ### 示例 (collect-service-endpoints)
 
@@ -584,6 +842,10 @@ This capability has no arguments.
 
 Create or update a config。
 
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
+
 ### 示例 (create-config)
 
 ```yaml
@@ -636,6 +898,10 @@ spec:
 
 Delete a config。
 
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
+
 ### 示例 (delete-config)
 
 ```yaml
@@ -678,6 +944,10 @@ spec:
 ### 描述
 
 等待指定的 Application 完成。
+
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
 
 ### 示例 (depends-on-app)
 
@@ -741,6 +1011,10 @@ data:
 
 功能丰富且统一的用于多集群部署的步骤，可以指定多集群差异化配置策略。
 
+### 适用范围
+
+该步骤类型只适用于 Application。
+
 ### 示例 (deploy)
 
 ```yaml
@@ -796,6 +1070,10 @@ spec:
 ### 描述
 
 将云资源生成的秘钥部署到多集群。
+
+### 适用范围
+
+该步骤类型只适用于 Application。
 
 ### 示例 (deploy-cloud-resource)
 
@@ -895,6 +1173,10 @@ spec:
 
 Export data to clusters specified by topology。
 
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
+
 ### 示例 (export-data)
 
 ```yaml
@@ -963,6 +1245,10 @@ spec:
 ### 描述
 
 Export service to clusters specified by topology。
+
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
 
 ### 示例 (export-service)
 
@@ -1039,6 +1325,10 @@ spec:
 
 在工作流中导出数据到 Kubernetes ConfigMap 对象。
 
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
+
 ### 示例 (export2config)
 
 ```yaml
@@ -1092,6 +1382,10 @@ spec:
 ### 描述
 
 在工作流中导出数据到 Kubernetes Secret 对象。
+
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
 
 ### 示例 (export2secret)
 
@@ -1159,6 +1453,10 @@ spec:
 
 Generate a JDBC connection based on Component of alibaba-rds。
 
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
+
 ### 示例 (generate-jdbc-connection)
 
 ```yaml
@@ -1218,6 +1516,10 @@ spec:
 ### 描述
 
 List the configs。
+
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
 
 ### 示例 (list-config)
 
@@ -1286,6 +1588,10 @@ spec:
 ### 描述
 
 向指定的 Webhook 发送信息，支持邮件、钉钉、Slack 和飞书。
+
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
 
 ### 示例 (notification)
 
@@ -1552,6 +1858,10 @@ We can see that before and after the deployment of the application, the messages
 
 print message in workflow step status。
 
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
+
 ### 示例 (print-message-in-status)
 
 ```yaml
@@ -1587,11 +1897,101 @@ spec:
  message |  | string | true |  
 
 
+## Read-App
+
+### 描述
+
+Read application from the cluster。
+
+### 适用范围
+
+该步骤类型只适用于 WorkflowRun。
+
+### 示例 (read-app)
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: apply-applications
+  namespace: default
+  annotations:
+    workflowrun.oam.dev/debug: "true"
+spec:
+  workflowSpec:
+    steps:
+      - name: check-app-exist
+        type: read-app
+        properties:
+          name: webservice-app
+      - name: apply-app1
+        type: apply-app
+        if: status["check-app-exist"].message == "Application not found"
+        properties:
+          data:
+            apiVersion: core.oam.dev/v1beta1
+            kind: Application
+            metadata:
+              name: webservice-app
+            spec:
+              components:
+                - name: express-server
+                  type: webservice
+                  properties:
+                    image: crccheck/hello-world
+                    ports:
+                      - port: 8000
+      - name: suspend
+        type: suspend
+        timeout: 24h
+      - name: apply-app2
+        type: apply-app
+        properties:
+          ref:
+            name: my-app
+            key: application
+            type: configMap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-app
+  namespace: default
+data:
+  application: |
+    apiVersion: core.oam.dev/v1beta1
+    kind: Application
+    metadata:
+      name: webservice-app2
+    spec:
+      components:
+        - name: express-server2
+          type: webservice
+          properties:
+            image: crccheck/hello-world
+            ports:
+              - port: 8000
+        
+```
+
+### 参数说明 (read-app)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ namespace |  | _&#124;_ | true |  
+
+
 ## Read-Config
 
 ### 描述
 
 Read a config。
+
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
 
 ### 示例 (read-config)
 
@@ -1628,6 +2028,10 @@ spec:
 ### 描述
 
 在工作流中读取 Kubernetes 资源对象。
+
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
 
 ### 示例 (read-object)
 
@@ -1687,6 +2091,10 @@ spec:
 
 Send request to the url。
 
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
+
 ### 示例 (request)
 
 ```yaml
@@ -1744,6 +2152,10 @@ spec:
 ### 描述
 
 Sync secrets created by terraform component to runtime clusters so that runtime clusters can share the created cloud resource。
+
+### 适用范围
+
+该步骤类型只适用于 Application。
 
 ### 示例 (share-cloud-resource)
 
@@ -1852,6 +2264,10 @@ spec:
 
 A special step that you can declare 'subSteps' in it, 'subSteps' is an array containing any step type whose valid parameters do not include the `step-group` step type itself. The sub steps were executed in parallel。
 
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
+
 ### 示例 (step-group)
 
 ```yaml
@@ -1896,6 +2312,10 @@ This capability has no arguments.
 ### 描述
 
 暂停当前工作流，可以通过 'vela workflow resume' 继续已暂停的工作流。
+
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
 
 ### 示例 (suspend)
 
@@ -1948,6 +2368,10 @@ spec:
 ### 描述
 
 Run a vela command。
+
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
 
 ### 示例 (vela-cli)
 
@@ -2025,6 +2449,10 @@ spec:
 ### 描述
 
 向指定 Webhook URL 发送请求，若不指定请求体，则默认发送当前 Application。
+
+### 适用范围
+
+该步骤类型适用于 Application 和 WorkflowRun。
 
 ### 示例 (webhook)
 
