@@ -157,18 +157,25 @@ The expected output should be like this:
 
 ## API Document
 
-### 1.3
+There is the latest swagger config file: [https://github.com/kubevela/kubevela/blob/master/docs/apidoc/swagger.json](https://github.com/kubevela/kubevela/blob/master/docs/apidoc/swagger.json)
 
-Refer to [Kubevela API 1.3](https://kubevela.stoplight.io/docs/kubevela/1d086db94299e-kube-vela-api-1-3)
+### 1.7
 
-### 1.4
+Refer to [Kubevela API 1.7](https://kubevela.stoplight.io/docs/kubevela/b8aer09sc4q9e-kube-vela-api-1-7)
 
-Refer to [Kubevela API 1.4](https://kubevela.stoplight.io/docs/kubevela/uz7fzdxthv175-kube-vela-api-1-4)
+### 1.6
+
+Refer to [KubeVela API 1.6](https://kubevela.stoplight.io/docs/kubevela/178jb51mk763f-kube-vela-api-1-6)
 
 ### 1.5
 
 Refer to [KubeVela API 1.5](https://kubevela.stoplight.io/docs/kubevela/pi1st0zdzoejp-kube-vela-api-1-5)
 
-### 1.6
 
-Refer to [KubeVela API 1.6](https://kubevela.stoplight.io/docs/kubevela/178jb51mk763f-kube-vela-api-1-6)
+### 1.4
+
+Refer to [Kubevela API 1.4](https://kubevela.stoplight.io/docs/kubevela/uz7fzdxthv175-kube-vela-api-1-4)
+
+### 1.3
+
+Refer to [Kubevela API 1.3](https://kubevela.stoplight.io/docs/kubevela/1d086db94299e-kube-vela-api-1-3)
