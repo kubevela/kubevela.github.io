@@ -20,4 +20,4 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Check Install Script
-        run: static/script/install.ps1 v1.8.0-alpha.1
+        run: static/script/install.ps1
