@@ -4,9 +4,39 @@ title: 自定义插件
 
 :::tip
 如果你喜欢手把手教程，你可以阅读[这篇博客](/zh/blog/2022/10/18/building-addon-introduction)，它以 Redis Operator 为例教你如何制作一个插件并介绍用户的使用体验。
-
-如果你已经有了一个 helm chart，并想基于它快速制作一个插件，同时省去了解全部的插件制作的细节，你也可以选择直接阅读这个[章节](#快速初始化插件文件)。
 :::
+
+## 快速开始
+
+我们提供了 vela CLI 工具来帮助您快速生成含有样例的插件目录结构。另外，它也可以基于已有的 Helm Chart 或使用 [引用资源](https://kubevela.io/zh/docs/end-user/components/ref-objects) 来引用在线资源生成插件。
+
+例如，如果你想使用存储在仓库地址为：https://marketplace.azurecr.io/helm/v1/repo 中的 MongoDB 12.1.6 版本的 helm chart 来创建一个插件，你就可以执行下面的命令：
+
+```shell
+vela addon init mongodb --helm-repo https://marketplace.azurecr.io/helm/v1/repo --chart mongodb --chart-version 12.1.16
+```
+
+运行此命令将会在您的本地路径中生成插件的基本目录：
+
+```shell
+$ ls mongondb   
+NOTES.cue     README.md     definitions   metadata.yaml parameter.cue resources     schemas       template.cue  views
+```
+
+您也可以使用此工具基于一个存储在 OCI 仓库中的 helm chart 来生成插件文件。示例如下：
+
+```shell
+vela addon init podinfo --helmrepo oci://ghcr.io/stefanprodan/charts --chart podinfo --chart-version 6.1.*
+```
+
+你也可以基于在线的 Kubernetes 对象创建插件，例如你可以这样直接引用数个在线 CRD ：
+
+```shell
+vela addon init my-addon --url https://domain.com/crd1.yaml --url https://domain.com/crd2.yaml
+```
+上述的命令也可以组合使用，例如你可以同时基于 Helm Chart 和引用对象创建插件框架。
+
+## 基础概念
 
 一个 KubeVela 插件就是一个主要包含了以下三类文件的集合:
 * 插件的`基本信息文件` 包括元数据文件（metadata.yaml）和插件介绍文档（README.md）。
@@ -21,8 +51,6 @@ title: 自定义插件
 * 接下来运行在管控集群的 KubeVela 控制器完全按照应用（Application）的执行流程交付资源，与 KubeVela 其他的应用执行没有差别。
 
 ![alt](../../resources/addon-mechanism.jpg)
-
-## 制作插件 (Make an Addon)
 
 接下来将介绍如何制作一个自己的插件。
 
@@ -55,7 +83,7 @@ title: 自定义插件
 ```yaml
 name: example
 version: 1.0.0
-description: Example adddon.
+description: Example addon.
 icon: xxx
 url: xxx
 
@@ -129,36 +157,6 @@ YAML 格式的应用描述文件的特点是编写简单，你只需要编写一
 文档[使用 YAML 描述插件应用](./addon-yaml) 详细介绍了 YAML 格式的应用描述文件的编写方法。
 文档[使用 CUE 描述插件应用](./addon-cue) 详细介绍了 CUE 格式的应用描述文件的编写方法。
 
-## 快速初始化插件文件
-
-我们提供了 vela CLI 工具来帮助您快速生成含有样例的插件目录结构。另外，它也可以基于已有的 Helm Chart 或使用 [引用资源](https://kubevela.io/zh/docs/end-user/components/ref-objects) 来引用在线资源生成插件。
-
-例如，如果你想使用存储在仓库地址为：https://marketplace.azurecr.io/helm/v1/repo 中的 MongoDB 12.1.6 版本的 helm chart 来创建一个插件，你就可以执行下面的命令：
-
-```shell
-vela addon init mongodb --helm-repo https://marketplace.azurecr.io/helm/v1/repo --chart mongodb --chart-version 12.1.16
-```
-
-运行此命令将会在您的本地路径中生成插件的基本目录：
-
-```shell
-$ ls mongondb   
-NOTES.cue     README.md     definitions   metadata.yaml parameter.cue resources     schemas       template.cue  views
-```
-
-您也可以使用此工具基于一个存储在 OCI 仓库中的 helm chart 来生成插件文件。示例如下：
-
-```shell
-vela addon init podinfo --helmrepo oci://ghcr.io/stefanprodan/charts --chart podinfo --chart-version 6.1.*
-```
-
-你也可以基于在线的 Kubernetes 对象创建插件，例如你可以这样直接引用数个在线 CRD ：
-
-```shell
-vela addon init my-addon --url https://domain.com/crd1.yaml --url https://domain.com/crd2.yaml
-```
-上述的命令也可以组合使用，例如你可以同时基于 Helm Chart 和引用对象创建插件框架。
-
 ## 本地安装（离线安装）
 
 你可以通过本地安装的方式调试你的 addon，命令如下：
@@ -173,24 +171,23 @@ $ vela addon enable ./your-addon-dir/
 
 ## 贡献 Addon
 
-除了将插件资源文件上传到自己的插件仓库中，你也可以通过提交 pull request 向 KubeVela [官方插件仓库](https://github.com/kubevela/catalog/tree/master/addons) 和 [试验阶段插件仓库](https://github.com/kubevela/catalog/tree/master/experimental/addons) 添加新的插件，pr 合并之后你的插件就可以被其他 KubeVela 用户发现并使用了。
-
-如果你根据本文档制作了新的插件，非常欢迎贡献到社区。 同时，如果你发现了某个插件的 bug，也欢迎帮助社区修复此 bug。
+如果你根据本文档制作了新的插件，除了将插件资源文件上传到自己的插件仓库中，你也可以通过提交 pull request 向 KubeVela [官方插件仓库](https://github.com/kubevela/catalog/tree/master/addons) 和 [试验阶段插件仓库](https://github.com/kubevela/catalog/tree/master/experimental/addons) 添加新的插件，pr 合并之后你的插件就可以被其他 KubeVela 用户发现并使用了。
 
 在为社区贡献插件时请留意以下规则：
 
-- 一个新的插件默认应该先提交到 `experimental` 目录，作为试验阶段的插件。如果你的插件已经在生产环境中经过了大量的测试和验证，并被多数维护者评审通过，也可以直接作为正式阶段的插件。
+- 新插件应首先被接受为实验性插件，需要以下必要信息。
+
+  - 在插件的 metadata.yaml 中定义的可访问图标 URL 和 source URL。
+  
+  - `README.md` 中详细介绍了插件的使用方法和作用。
+  
+  - 如果在[示例目录](https://github.com/kubevela/catalog/examples/)中如果包含该插件的 KubeVela 应用的使用例子，则更容易被接受。
   
 - 一个试验阶段的插件具备以下条件可以提升为正式插件：
   
   - 该插件被添加到了仓库的 [e2e-test](https://github.com/kubevela/catalog/tree/master/test/e2e-test/addon-test) 中，从而保证插件能够被正常启用。
+  
+  - KubeVela 的插件[文档站](../../reference/addons/overview) 中有关于该插件的详细介绍文档。
+  
+- 如果在使用插件的过程中，发现了插件的任何问题，欢迎在仓库中提交 issue 或者直接提交 pull request 修复此问题。在更新插件时，请注意务必修改对应插件的 `metadata.yaml` 文件中的 `version` 字段以升级插件版本。 
     
-  - 插件必须包含以下基本的信息：
-     
-    - 元数据文件中（`metadata.yaml`）中包含了一个可访问的图标链接和插件来源链接。
-    
-    - `README.md` 中详细介绍了插件的使用方法和作用。
-    
-    - KubeVela 的插件[文档站](../../reference/addons/overview) 中有关于该插件的详细介绍文档。
-    
-    - [案例中](https://github.com/kubevela/catalog/tree/master/examples) 如果包含了丰富的关于此插件的使用案例，插件将会更容易被提升至正式阶段。

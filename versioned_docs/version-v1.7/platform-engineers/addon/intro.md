@@ -8,6 +8,37 @@ Here's a blog introduces [how to build addon from scratch using redis operator a
 If you want to create an addon using an existing helm chart, you can refer to this [section](#initializing-an-addon-structure) to quickly get started without going through a detailed introduction.
 :::
 
+## Quick start
+
+We provided the vela CLI tool to help you quickly create an addon structure with examples. Optionally, it can be based on existing Helm Charts or online resources using [reference objects](https://kubevela.io/docs/end-user/components/ref-objects).
+
+For instance, to create an addon using version 12.1.6 of the MongoDB helm chart from the repository https://marketplace.azurecr.io/helm/v1/repo, use the following command:
+
+```shell
+vela addon init mongodb --helm-repo https://marketplace.azurecr.io/helm/v1/repo --chart mongodb --chart-version 12.1.16
+```
+
+Running this command will generate a basic addon directory in your local path:
+
+```shell
+$ ls mongondb   
+NOTES.cue     README.md     definitions   metadata.yaml parameter.cue resources     schemas       template.cue  views
+```
+
+You can still use this CLI tool to create an addon from a helm chart stored in an OCI registry. Here's an example:
+
+```shell
+vela addon init podinfo --helmrepo oci://ghcr.io/stefanprodan/charts --chart podinfo --chart-version 6.1.*
+```
+
+You can also base your addon on Kubernetes objects from remote URLs. For example, you can directly include multiple CRDs in this way:
+```shell
+vela addon init my-addon --url https://domain.com/crd1.yaml --url https://domain.com/crd2.yaml
+```
+The commands we introduced above can also be used together, e.g., you can base your addon on both Helm Charts and reference objects.
+
+## Basic Concept 
+
 A KubeVela addon is a collection that can contain the following three types of files；
 * `Basic information file` that contains `metadata.yaml` and `README.md`.
 * `OAM module file` that defines KubeVela extensibility points, including [Definitions](../../getting-started/definition), [UI-Schema](../../reference/ui-schema) or [topology-rules](../../reference/topology-rule).
@@ -19,8 +50,6 @@ The picture below shows what KubeVela does when an addon is enabled. There are m
 * Finally, the KubeVela controller take care the rest things and deliver the addon as a normal application to the clusters.
 
 ![alt](../../resources/addon-mechanism.jpg)
-
-## Make an addon
 
 To make an addon, you should follow some basic rules. You need to create an addon directory to place addon resource files.
 
@@ -152,36 +181,6 @@ The `views/` folder is used to store the [VelaQL View](../system-operation/velaq
 
 The `views/` folder is used to store the [Config Template](../../reference/config-template) files.
 
-## Initializing an Addon Structure
-
-We provided the vela CLI tool to help you quickly create an addon structure with examples. Optionally, it can be based on existing Helm Charts or online resources using [reference objects](https://kubevela.io/docs/end-user/components/ref-objects).
-
-For instance, to create an addon using version 12.1.6 of the MongoDB helm chart from the repository https://marketplace.azurecr.io/helm/v1/repo, use the following command:
-
-```shell
-vela addon init mongodb --helm-repo https://marketplace.azurecr.io/helm/v1/repo --chart mongodb --chart-version 12.1.16
-```
-
-Running this command will generate a basic addon directory in your local path:
-
-```shell
-$ ls mongondb   
-NOTES.cue     README.md     definitions   metadata.yaml parameter.cue resources     schemas       template.cue  views
-```
-
-You can still use this CLI tool to create an addon from a helm chart stored in an OCI registry. Here's an example:
-
-```shell
-vela addon init podinfo --helmrepo oci://ghcr.io/stefanprodan/charts --chart podinfo --chart-version 6.1.*
-```
-
-You can also base your addon on Kubernetes objects from remote URLs. For example, you can directly include multiple CRDs in this way:
-```shell
-vela addon init my-addon --url https://domain.com/crd1.yaml --url https://domain.com/crd2.yaml
-```
-The commands we introduced above can also be used together, e.g., you can base your addon on both Helm Charts and reference objects.
-
-
 
 ## Install Addon Locally
 
@@ -201,24 +200,17 @@ vela addon enable ./your-addon-dir/
 
 ## Contribution
 
-In addition to uploading the addon resource files to your addon repository, you can also submit a pull request to KubeVela [community addon repository](https://github.com/kubevela/catalog/tree/master/addons) and [experimental addon repository](https://github.com/kubevela/catalog/tree/master/experimental/addons) to addon new addons. After pr merged your addons can be discovered and used by other KubeVela users.
+Besides uploading the addon resource files to your addon repository, you can also submit a pull request to KubeVela [community addon repository](https://github.com/kubevela/catalog/tree/master/addons) and [experimental addon repository](https://github.com/kubevela/catalog/tree/master/experimental/addons) to contribute your addons to the community. Once your pull request is merged, other KubeVela users will be able to discover and utilize your addons.
 
-Meanwhile, any bug fix of existing addons are welcomed. Just make a pull request to [this](https://github.com/kubevela/catalog) repo.
+Please abide by the following rules when making a contribution:
 
-Please be aware of these contribution rules when contribute addons:
-
-- A new addon added in this repo should be put in as an experimental one unless you have test for a long time in your product environment and be approved by most maintainers.
+- A new addon should be accepted as experimental one first with the following necessary information:
+    - An accessible icon url and source url defined in addon's `metadata.yaml`.
+    - A detail introduction include a basic example about how to use and what's the benefit of this addon in `README.md`.
+    - It's more likely to be accepted if useful examples are provided in example [dir](https://github.com/kubevela/catalog/examples/).
 
 - An experimental addon must meet these conditions to be promoted as a verified one.
+    - This addon must be tested by addon's [e2e-test](https://github.com/kubevela/catalog/test/e2e-test/addon-test) to guarantee this addon can be enabled successfully.
+    - Provide an introduction in KubeVela [official addon documentation](../../reference/addons/overview).
 
-    - This addon must be tested by addon's [e2e-test](https://github.com/kubevela/catalog/tree/master/test/e2e-test/addon-test) to guarantee this addon can be enabled successfully.
-
-    - This addon must have some basic but necessary information.
-
-        - An accessible icon url and source url defined in addon's `metadata.yaml`.
-
-        - A detail introduction include a basic example about how to use and what's the benefit of this addon in `README.md`.
-
-        - Also provide an introduction in KubeVela [documentation](../../reference/addons/overview).
-
-        - It's more likely to be accepted if useful examples are provided in example [dir](https://github.com/kubevela/catalog/tree/master/examples).
+- If you come across with any addon problems, feel free to raise a github issue or just send pull requests to fix them. Please make sure to update the addon version in your pull request.
