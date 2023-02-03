@@ -197,6 +197,7 @@ vela delete first-vela-app
 
 <details>
 <summary>期望输出</summary>
+
 ```console
 Deleting Application "first-vela-app"
 app "first-vela-app" deleted from namespace "prod"
