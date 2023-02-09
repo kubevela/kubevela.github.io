@@ -559,17 +559,17 @@ Below is an example that use `strings.Join` to `concat` string list to one strin
 import ("strings")
 
 parameter: {
-	outputs: [{ip: "1.1.1.1", hostname: "xxx.com"}, {ip: "2.2.2.2", hostname: "yyy.com"}]
+    outputs: [{ip: "1.1.1.1", hostname: "xxx.com"}, {ip: "2.2.2.2", hostname: "yyy.com"}]
 }
 output: {
-	spec: {
-		if len(parameter.outputs) > 0 {
-			_x: [ for _, v in parameter.outputs {
-				"\(v.ip) \(v.hostname)"
-			}]
-			message: "Visiting URL: " + strings.Join(_x, "")
-		}
-	}
+    spec: {
+        if len(parameter.outputs) > 0 {
+            _x: [ for _, v in parameter.outputs {
+                "\(v.ip) \(v.hostname)"
+            }]
+            message: "Visiting URL:\n" + strings.Join(_x, "\n")
+        }
+    }
 }
 ```
 
