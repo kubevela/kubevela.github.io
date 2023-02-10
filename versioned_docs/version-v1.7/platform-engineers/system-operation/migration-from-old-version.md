@@ -32,7 +32,7 @@ Then you can upgrade the helm chart now:
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.0 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.3 --wait
 ```
 
 :::caution
@@ -57,13 +57,13 @@ kubectl patch -n vela-system configMap <item> --type=merge -p '{"metadata":{"ann
 3. Download and upgrade to the corresponding CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.7.0
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.7.3
 ```
 
 4. Upgrade VelaUX or other addon
 
 ```
-vela addon upgrade velaux --version=v1.7.0
+vela addon upgrade velaux --version=v1.7.2
 ```
 
 ## From v1.5.x to v1.6.x
