@@ -83,7 +83,7 @@ vela addon init my-addon --url https://domain.com/crd1.yaml --url https://domain
 ```yaml
 name: example
 version: 1.0.0
-description: Example adddon.
+description: Example addon.
 icon: xxx
 url: xxx
 
