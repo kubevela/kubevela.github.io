@@ -9,12 +9,18 @@ KubeVela is a modern software delivery and management control plane. The goal is
 
 ![](../resources/what-is-kubevela.jpg)
 
+## Why KubeVela?
+
+* The modern application should be able to deploy across hybrid environments including Kubernetes, cloud, or even IoT devices in a simple and robust way.
+* The app delivery control plane should be able to adapt to any existing infrastructure or extend with modular and reusable building blocks per users’ needs.
+* The developers should have an application platform that is vendor agnostic, consistent experience, and has a large number of reusable building blocks and best practices.
+
 
 ## Key Features
 
 * **Deployment as Code**
 
-    Declare your deployment plan as [workflow](./getting-started/core-concept), run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with [CUE](https://cuelang.org/). Glue and orchestrate all your infrastructure capabilities as reusable modules and share the large growing community [addons](./reference/addons/overview). No ad-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by [Open Application Model](https://oam.dev/).
+    Declare your deployment plan as [workflow](./getting-started/core-concept), run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with [CUE](https://cuelang.org/). No ad-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by [Open Application Model](https://oam.dev/).
 
 * **Built-in security, compliance and observability building blocks**
 
@@ -23,6 +29,10 @@ KubeVela is a modern software delivery and management control plane. The goal is
 * **Multi-cloud/hybrid-environments app delivery as first-class citizen**
 
     Natively supports multi-cluster/hybrid-cloud scenarios such as progressive rollout across test/staging/production environments, automatic canary, blue-green and continuous verification, rich placement strategy across clusters and clouds, along with automated cloud environments provision.
+
+* **Lightweight but highly extensible architecture**
+
+    Minimize your control plane deployment with only one pod and 0.5c1g resources to handle thousands of application delivery. Glue and orchestrate all your infrastructure capabilities as reusable modules and share the large growing community [addons](./reference/addons/overview).
 
 
 ## KubeVela vs. Other Software

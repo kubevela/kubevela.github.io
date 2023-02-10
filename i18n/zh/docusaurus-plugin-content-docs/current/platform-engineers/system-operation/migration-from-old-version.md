@@ -30,7 +30,7 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.7/
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.0 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.3 --wait
 ```
 
 :::caution
@@ -55,13 +55,13 @@ kubectl patch -n vela-system configMap <item> --type=merge -p '{"metadata":{"ann
 3. 下载并升级对应的CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.7.0
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.7.3
 ```
 
 4. 升级 VelaUX 或其他插件
 
 ```
-vela addon upgrade velaux --version=v1.7.0
+vela addon upgrade velaux --version=v1.7.2
 ```
 
 ## 从 v1.5.x 版本 到 v1.6.x 版本

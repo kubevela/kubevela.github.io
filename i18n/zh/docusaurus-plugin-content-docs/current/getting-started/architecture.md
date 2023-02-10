@@ -18,12 +18,17 @@ KubeVela 本身是一个的应用交付与管理控制平面，它架在 Kuberne
 
 在具体实现上，KubeVela 依赖一个独立的 Kubernetes 集群来运行。这其实是一个“有意为之”的设计：云原生社区中大量的实践已经证明“构建一个科学的、健壮的控制平面系统”，正是 Kubernetes 项目最擅长的工作。所以，依赖 Kubernetes 作为控制平面集群这个选择，虽然会增加一定的部署难度，却能够让我们以最原生的方式为大规模应用交付带来至关重要的“确定性”、“收敛性”和“自动化能力”。
 
-具体来说，KubeVela 本身主要由如下几个部分组成:
+具体来说，KubeVela 主要由如下几个部分组成:
 
-- **核心控制器** 为整个系统提供核心控制逻辑，完成诸如编排应用和工作流、修订版本快照、垃圾回收等等基础逻辑
-- **模块化能力控制器** 负责对 X-Definitions 对象进行注册和管理。
-- **插件控制器** 负责注册和管理 KubeVela 运行所需要的第三方插件，比如 VelaUX、 Flux、Terraform 组件等等。
-- **UI 控制台和 CLI** UI 控制台服务于希望开箱即用的开发者用户，CLI 适用于集成 KubeVela 和终端管理的用户。
+- _KubeVela 核心控制器_ 为整个系统提供核心控制逻辑，完成诸如编排应用和工作流、修订版本快照、垃圾回收等等基础逻辑。
+- [_Cluster Gateway 控制器_](https://github.com/oam-dev/cluster-gateway)，提供统一的多集群访问接口和操作。
+- [_插件体系_](../reference/addons/overview) 注册和管理 KubeVela 的扩展功能，包括 CRD 控制器和相关模块定义。例如，下面列出了几个常用的插件：
+   * [_VelaUX_](https://github.com/kubevela/velaux) 插件是 KubeVela 的 Web UI。 此外，它在架构中更像是一个功能齐全的 “应用交付平台”，将业务逻辑耦合在起特定的 API 中，并为不了解 k8s 的业务开发者提供开箱即用的平台体验。
+   * [_Workflow_](https://github.com/kubevela/workflow) 插件是一个独立的工作流引擎，可以作为统一的 Pipeline 运行以部署多个应用程序或其他操作。与传统 Pipeline 相比，它主要使用 CUE 驱动基于 IaC 的 API，而不是每一步都运行容器（或 pod）。 它与 KubeVela 核心控制器的应用工作流使用相同的机制。
+   * [_Vela Prism_](https://github.com/kubevela/prism) 插件是 KubeVela 的扩展 API 服务器，基于 Kubernetes Aggregated API 机制构建。它可以将诸如 Grafana 创建仪表盘等第三方服务 API 映射为 Kubernetes API，方便用户将第三方资源作为 Kubernetes 原生资源进行IaC 化管理。
+   * [_Terraform_](https://github.com/kubevela/terraform-controller) 插件允许用户使用 Terraform 通过 Kubernetes 自定义资源管理云资源。
+   * 此外，KubeVela 有一个不断增长的[插件目录](https://github.com/kubevela/catalog)，其中已经包含 50 多个用于集成的社区插件，包括 ArgoCD、FluxCD、Backstage、OpenKruise、Dapr、Crossplane、Terraform、OpenYurt 等等。
+- 如果你还没有任何 Kubernetes 集群，构建在 k3s 和 k3d 之上的 [_VelaD_](https://github.com/kubevela/velad) 工具可以帮助你一键启动所有这些东西。它将 KubeVela 与 Kubernetes 控制平面集成在一起，这对于构建开发/测试环境非常有帮助。
 
 ### 运行时基础设施
 

@@ -195,6 +195,7 @@ vela adopt deployment/example service/example configmap/example secret/example
 
 <details>
 <summary>expected output</summary>
+
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
