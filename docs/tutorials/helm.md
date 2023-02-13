@@ -53,7 +53,7 @@ spec:
         repoType: "helm"
         url: "https://charts.bitnami.com/bitnami"
         chart: "redis"
-        version: "16.8.5"
+        version: "17.7.3"
         values: 
           master:
             persistence:
