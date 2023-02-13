@@ -12,6 +12,7 @@ description: 本文介绍通过 KubeVela 交付 Helm Chart
 ## 开始之前
 
 - 选择一个你希望交付的 Chart 包，本文我们以 [bitnami/redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) 为例。
+- 如果你在使用 [bitnami/redis](https://github.com/bitnami/charts/tree/master/bitnami/redis)，看一下[这里](https://artifacthub.io/packages/helm/bitnami/redis)是否官方还在提供你使用的版本.
 - 确保你交付的集群具有可用的默认 StorageClass，我们交付中间件大多需要数据持久化，需要默认的 StorageClass 来分配 PV。
 
 ## 启用 fluxcd 插件
@@ -77,7 +78,7 @@ spec:
         repoType: "helm"
         url: "https://charts.bitnami.com/bitnami"
         chart: "redis"
-        version: "16.8.5"
+        version: "17.7.3"
         values:
           master:
             persistence:
