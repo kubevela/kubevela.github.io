@@ -4,7 +4,7 @@ title: Built-in WorkflowStep Type
 
 This documentation will walk through all the built-in workflow step types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-01-16T19:19:03+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-02-21T16:35:18+08:00.
 
 ## Addon-Operation
 
@@ -732,6 +732,70 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name | Specify the secret name. | string | true |  
  key | Specify the secret key. | string | false | .dockerconfigjson 
+
+
+## Build-Source-Code
+
+### Description
+
+Init storage, clone git repo, build source code and persist generated folder in pvc.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
+### Examples (build-source-code)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: build-source-code
+  namespace: default
+spec:
+  components: []
+  workflow:
+    steps:
+      - name: build
+        type: build-source-code
+        properties:
+          image: node:14.17
+          cmd: "yarn install && yarn build"
+          repo:
+            url: https://github.com/open-gitops/website.git
+            branch: main
+          pvc:
+            name: my-pvc
+            storageClassName: my-storage
+            mountPath: /generated
+```
+
+### Specification (build-source-code)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ image | Specify the base image where source code to be built. | string | true |  
+ cmd | Specify the commands to build source code. | string | true |  
+ repo | Specify the git repo for your source code. | [repo](#repo-build-source-code) | true |  
+ pvc | Specify the pvc to create for generated files storage. | [pvc](#pvc-build-source-code) | true |  
+
+
+#### repo (build-source-code)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ url | Specify the url. | string | true |  
+ branch | Specify the branch, default to master. | string | false | master 
+
+
+#### pvc (build-source-code)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name | Specify the pvc name. | string | true |  
+ storageClassName | Specify which storageclass that pvc will use. | string | true |  
+ mountPath | Specify the pvc mountPath. | string | true |  
 
 
 ## Clean-Jobs
@@ -2361,6 +2425,97 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  duration | Specify the wait duration time to resume workflow such as "30s", "1min" or "2m15s". | string | false |  
+
+
+## Upload-To-Bucket
+
+### Description
+
+Get files from pvc, upload it to object storage bucket.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
+### Examples (upload-to-bucket)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: upload-to-bucket
+  namespace: default
+spec:
+  components: []
+  workflow:
+    steps:
+      - name: upload
+        type: upload-to-bucket
+        properties:
+          oss:
+            accessKey:
+              # User can either use plaintext as input parameters `id` and `secret` or `secretRef` to specify the credentials.
+              id: <your_alibaba_accesskey_id>
+              secret: <your_alibaba_accesskey_secret>
+              # secretRef:
+              #   name: my-secret
+              #   keyId: ALICLOUD_ACCESS_KEY
+              #   keySecret: ALICLOUD_SECRET_KEY
+            bucket: example-doc
+            endpoint: oss-cn-hangzhou.aliyuncs.com
+          pvc:
+            name: my-pvc
+            mountPath: /generated
+```
+
+### Specification (upload-to-bucket)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ pvc | Specify the pvc to get generated files. | [pvc](#pvc-upload-to-bucket) | true |  
+ oss | Specify the alibaba oss bucket as backend. | [oss](#oss-upload-to-bucket) | true |  
+
+
+#### pvc (upload-to-bucket)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name | Specify the pvc name. | string | true |  
+ mountPath | Specify the pvc mountPath. | string | true |  
+
+
+#### oss (upload-to-bucket)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ accessKey | Specify the credentials to access alibaba oss. | [type-option-1](#type-option-1-upload-to-bucket) or [type-option-2](#type-option-2-upload-to-bucket) | true |  
+ bucket | Specify the target oss bucket. | string | true |  
+ endpoint | Specify the target oss endpoint. | string | true |  
+
+
+##### type-option-1 (upload-to-bucket)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ id |  | string | true |  
+ secret |  | string | true |  
+
+
+##### type-option-2 (upload-to-bucket)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ secretRef |  | [secretRef](#secretref-upload-to-bucket) | true |  
+
+
+##### secretRef (upload-to-bucket)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name | name is the name of the secret. | string | true |  
+ keyId | keyId is the key of oss access id in the secret. | string | true |  
+ keySecret | keySecret is the key of oss access secret in the secret. | string | true |  
 
 
 ## Vela-Cli
