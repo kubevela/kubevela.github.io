@@ -153,8 +153,8 @@ By default, the definition don't contain any examples, maintainers can specify e
 The docs folder will be embedded into CLI binary, you must write into the following hierarchy:
 
 ```console
-$ tree references/plugins/def-doc
-references/plugins/def-doc
+$ tree references/docgen/def-doc
+references/docgen/def-doc
 ├── component
 │   ├── webservice.eg.md
 │   ├── webservice.param.md
