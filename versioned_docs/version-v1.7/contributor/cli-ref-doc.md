@@ -54,11 +54,12 @@ Most of the steps are done by script automatically. You need to follow this guid
 By default, the following steps will update for all definition reference at a time.
 Just follow these steps.
 
-1. step up these two projects in the same folder.
+1. step up these three projects in the same folder.
 
 ```shell
 $ tree -L 1
 .
+├── catalog
 ├── kubevela
 └── kubevela.io
 ```
@@ -81,7 +82,7 @@ git status
 
 That's finished for the general update.
 
-### Update for Specific 
+### Update for Specific
 
 You can specify some args for more flexible usage.
 
