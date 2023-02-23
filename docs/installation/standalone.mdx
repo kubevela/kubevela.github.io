@@ -347,6 +347,19 @@ Later we will access KubeVela on local machine, we will install vela CLI on loca
 
 </details>
 
+</details>
+
+<details>
+  <summary>possible error and troubleshooting</summary>
+
+  ```
+ Installing VelaD:
+  Error: "velad: command not found" - This may occur if the velad binary is not in your system PATH. To resolve this, make sure that the binary is in your system PATH by following the installation instructions carefully.
+  Error: "velad is not executable" - This may occur if the velad binary does not have the correct permissions. To resolve this, make sure that the binary has executable permissions by running the following command: "chmod +x velad".
+  ```
+
+</details>
+
 ### 3. Install VelaUX
 
 VelaUX is a dashboard for KubeVela. It is a web application that runs in your cluster. You can access it with your browser.
@@ -395,6 +408,17 @@ For more VelaUX options, refer to [VelaUX addon](../reference/addons/velaux) doc
 VelaUX needs authentication. The default username is `admin` and the password is **`VelaUX12345`**.
 
 It requires you to override with a new password for the first login, please make sure to remember the new password.
+
+<details>
+  <summary>possible error and troubleshooting</summary>
+
+  ```
+ Installing VelaUX:
+  Error: "unable to find velaux addon" - This may occur if there is an issue with locating the velaux addon. To resolve this, make sure that the velaux addon is installed properly by running the "vela addon enable ~/.vela/addons/velaux" command. If the issue persists, check the advanced installation arguments for the velaux addon.
+  Error: "vela port-forward: command not found" - This may occur if the vela CLI is not properly installed or added to your system PATH. To resolve this, make sure that the vela CLI is installed and added to your system PATH by running the "velad install" command.
+  ```
+
+</details>
 
 ### 4. Access cluster From Local (Optional)
 
