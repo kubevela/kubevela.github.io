@@ -154,7 +154,7 @@ nginx-basic-dfb6dcf8d-km5vk nginx-basic 2022-04-08T06:38:10.540430392Z /docker-e
 nginx-basic-dfb6dcf8d-km5vk nginx-basic 2022-04-08T06:38:10.540742240Z /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
 ```
 
-- `vela port-forward` 将子集群中的 Pod 或者 Service 通过端口映射到本地使其可以在本地被访问。
+- `vela exec` 帮助你在子集群的 Pod 里执行命令。
 
 ```bash
 $ vela exec basic-topology -n examples -it -- ls 
@@ -164,7 +164,7 @@ boot  docker-entrypoint.sh  lib    mnt    root  srv   usr
 dev   etc                   lib64  opt    run   sys   var
 ```
 
-- `vela exec` 帮助你在子集群的 Pod 里执行命令。
+- `vela port-forward` 将子集群中的 Pod 或者 Service 通过端口映射到本地使其可以在本地被访问。
 
 ```bash
 $ vela port-forward basic-topology -n examples 8080:80
