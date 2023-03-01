@@ -123,7 +123,7 @@ Please make sure the certificate matches the domain.
 2. Enable VelaUX with domain
 
 ```shell
-vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik secretName=velaux-cert
+vela addon enable velaux domain=example.domain.com gatewayDriver=traefik secretName=velaux-cert
 ```
 
 ## Setup with MongoDB database
