@@ -16,7 +16,7 @@ When you deploy your application in a test environment and find problems with th
 If your application uses workflow, make sure your app has the `debug` policy before using the `vela debug` command:
 
 ```yaml
-polices:
+policies:
   - name: debug
     type: debug
 ```
