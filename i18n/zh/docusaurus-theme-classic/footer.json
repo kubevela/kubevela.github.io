@@ -47,6 +47,10 @@
     "message": "视频资料",
     "description": "The label of footer link with label=Video linking to video resources"
   },
+  "link.item.label.Microservice": {
+    "message": "微服务",
+    "description": "Microservice Ecosystem Landscape"
+  },
   "copyright": {
     "message": "\n        <br />\n        <strong>© KubeVela Authors 2022 | Documentation Distributed under <a herf=\"https://creativecommons.org/licenses/by/4.0\">CC-BY-4.0</a> </strong> \n        <br />\n      ",
     "description": "The footer copyright"

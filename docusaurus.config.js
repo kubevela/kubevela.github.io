@@ -143,6 +143,10 @@ module.exports = {
               label: 'Videos',
               to: 'videos/best-practice/jenkins',
             },
+            {
+              to: '/micro',
+              label: 'Microservice',
+            },
           ],
         },
       ],
@@ -299,6 +303,14 @@ module.exports = {
     {
       src: '/custom.js',
       async: true,
+    },
+    {
+      src: '//g.alicdn.com/mamba/assets/0.0.15/mse-arc-ui.min.js',
+    },
+  ],
+  stylesheets: [
+    {
+      href: '//g.alicdn.com/mamba/assets/0.0.15/mse-arc-ui.min.css',
     },
   ],
 };
