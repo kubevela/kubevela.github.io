@@ -224,8 +224,8 @@
   "KubeVela is a": {
     "message": "KubeVela 是一个"
   },
-  "project.": {
-    "message": "项目。"
+  "incubation project.": {
+    "message": "孵化项目。"
   },
   "KubeVela is a modern software delivery platform that makes deploying and operating applications across today's hybrid, multi-cloud environments": {
     "message": "KubeVela 是一个现代化的软件交付平台，它可以让你的应用交付在当今流行的混合、多云环境中变得更加"
