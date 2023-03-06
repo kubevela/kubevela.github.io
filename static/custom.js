@@ -7,10 +7,10 @@ function appendVersionList() {
     link.innerText = version + '(Archived)';
     link.classList = ['dropdown__link'];
     versionItem.appendChild(link);
-    document
-      .getElementsByClassName('dropdown__menu')
-      .item(0)
-      .appendChild(versionItem);
+    const element = document.getElementsByClassName('dropdown__menu').item(0);
+    if (element) {
+      element.appendChild(versionItem);
+    }
   });
 }
 

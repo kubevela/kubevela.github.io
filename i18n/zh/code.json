@@ -280,5 +280,8 @@
   "theme.SearchBar.label": {
     "message": "搜索",
     "description": "The ARIA label and placeholder for search button"
+  },
+  "Microservice Ecosystem Landscape": {
+    "message": "微服务生态全景图"
   }
 }
