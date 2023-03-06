@@ -65,7 +65,7 @@ export default function Home() {
             <a href="https://cncf.io/">
               CNCF (Cloud Native Computing Foundation)
             </a>{' '}
-            <Translate>project.</Translate>
+            <Translate>incubation project.</Translate>
           </h3>
           <div className="cncf-Logo" />
         </div>
