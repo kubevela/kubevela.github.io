@@ -26,5 +26,9 @@
   "item.label.Mirror": {
     "message": "国内加速",
     "description": "Navbar item with label Mirror"
+  },
+  "item.label.Microservice": {
+    "message": "微服务",
+    "description": "Microservice Ecosystem Landscape"
   }
 }

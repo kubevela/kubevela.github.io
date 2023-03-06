@@ -78,6 +78,11 @@ module.exports = {
           position: 'left',
         },
         {
+          href: '/micro',
+          label: 'Microservice',
+          position: 'left',
+        },
+        {
           href: 'https://kubevela.net',
           label: 'Mirror',
           position: 'right',
@@ -299,6 +304,14 @@ module.exports = {
     {
       src: '/custom.js',
       async: true,
+    },
+    {
+      src: '//g.alicdn.com/mamba/assets/0.0.14/mse-arc-ui.min.js',
+    },
+  ],
+  stylesheets: [
+    {
+      href: '//g.alicdn.com/mamba/assets/0.0.14/mse-arc-ui.min.css',
     },
   ],
 };
