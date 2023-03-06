@@ -305,12 +305,12 @@ module.exports = {
       async: true,
     },
     {
-      src: '//g.alicdn.com/mamba/assets/0.0.14/mse-arc-ui.min.js',
+      src: '//g.alicdn.com/mamba/assets/0.0.15/mse-arc-ui.min.js',
     },
   ],
   stylesheets: [
     {
-      href: '//g.alicdn.com/mamba/assets/0.0.14/mse-arc-ui.min.css',
+      href: '//g.alicdn.com/mamba/assets/0.0.15/mse-arc-ui.min.css',
     },
   ],
 };
