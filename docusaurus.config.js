@@ -78,11 +78,6 @@ module.exports = {
           position: 'left',
         },
         {
-          href: '/micro',
-          label: 'Microservice',
-          position: 'left',
-        },
-        {
           href: 'https://kubevela.net',
           label: 'Mirror',
           position: 'right',
@@ -147,6 +142,10 @@ module.exports = {
             {
               label: 'Videos',
               to: 'videos/best-practice/jenkins',
+            },
+            {
+              to: '/micro',
+              label: 'Microservice',
             },
           ],
         },
