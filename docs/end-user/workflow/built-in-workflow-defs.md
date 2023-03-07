@@ -836,6 +836,14 @@ spec:
 ### Specification (collect-service-endpoints)
 This capability has no arguments.
 
+Output:
+ 
+   Name | Description | Type |
+   ---- | ----------- | ---- |
+   host | the first endpoint host of current application  | string
+   port | the first endpoint port of current application | string
+   endpoints | all endpoints of current application  | list
+
 ## Create-Config
 
 ### Description
