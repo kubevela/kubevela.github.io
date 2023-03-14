@@ -3741,10 +3741,10 @@ asap@~2.0.3:
   resolved "https://registry.npmjs.org/asap/-/asap-2.0.6.tgz"
   integrity sha1-5QNHYR1+aQlDIIu9r+vLwvuGbUY=
 
-asciinema-player@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/asciinema-player/-/asciinema-player-3.1.2.tgz#8ee5459ca813c49e468ebf9166dfe8426645b411"
-  integrity sha512-47RE1EFcRUXH8qGSbIf5fyz8nt4sYnDfi6rzWO4GPTeaZDkIr3V9el2C8rqkymjVOe9YI2oDu1Z1L7qMP3FBhQ==
+asciinema-player@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/asciinema-player/-/asciinema-player-3.2.0.tgz#9db608a2d81ff4ac235d50a88b498258bf7087fb"
+  integrity sha512-fV3Coe/UGieUy+5KCrh1qZf1lFWkuj12a6KcKrr84b61UFfUOpAZfyem4UnpczuP6cjrV3w5t0u8Wd1kTz/e7g==
   dependencies:
     "@babel/runtime" "^7.15.4"
     solid-js "^1.3.0"
@@ -8527,10 +8527,10 @@ sass-loader@^10.1.1:
     schema-utils "^3.0.0"
     semver "^7.3.2"
 
-sass@^1.58.3:
-  version "1.58.3"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.58.3.tgz#2348cc052061ba4f00243a208b09c40e031f270d"
-  integrity sha512-Q7RaEtYf6BflYrQ+buPudKR26/lH+10EmO9bBqbmPh/KeLqv8bjpTNqxe71ocONqXq+jYiCbpPUmQMS+JJPk4A==
+sass@^1.59.3:
+  version "1.59.3"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.59.3.tgz#a1ddf855d75c70c26b4555df4403e1bbf8e4403f"
+  integrity sha512-QCq98N3hX1jfTCoUAsF3eyGuXLsY7BCnCEg9qAact94Yc21npG2/mVOqoDvE0fCbWDqiM4WlcJQla0gWG2YlxQ==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
