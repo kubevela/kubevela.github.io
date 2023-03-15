@@ -41,7 +41,7 @@ Notice that since the CI pipeline in this example is based on Docker and GitHub,
 
 Besides, you also need to configure Docker environment for Jenkins to use (*Dashboard > Manage Jenkins > Configure System > Docker Builder*). If Docker has already been installed, you can set Docker URL as `unix:///var/run/docker.sock`.
 
-Since the docker image will be pushed to image repo during the running of CI pipelines, you also need to store image repo accounts in Jenkins Credintial (*Dashboard > Manage Jenkins > Manage Credentials > Add Credentials*), such as DockerHub username and password.
+Since the docker image will be pushed to image repo during the running of CI pipelines, you also need to store image repo accounts in Jenkins Credential (*Dashboard > Manage Jenkins > Manage Credentials > Add Credentials*), such as DockerHub username and password.
 
 ![jenkins-credential](/img/jenkins-cicd/jenkins-credential.png)
 
