@@ -410,7 +410,7 @@ mysql   default         1               2023-01-11 14:34:36.653778 +0800 CST    
 2. Run `vela adopt` command to adopt resources from existing release. Similar to native resource adoption, you can get a KubeVela application with `read-only` policy.
 
 ```bash
-vela adopt helm --type helm
+vela adopt mysql --type helm
 ```
 
 <details>
