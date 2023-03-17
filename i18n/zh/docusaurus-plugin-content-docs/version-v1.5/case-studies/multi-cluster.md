@@ -231,7 +231,7 @@ spec:
         namespace: examples-alternative
 ```
 
-> 有时，出于安全考虑，你可能希望限制应用使其只能在自己的命名空间中部署资源。你可以通过在 KubeVela 控制器的启动参数中配置 `--allow-cross-namespace-resource=false` 来禁用跨集群部署。
+> 有时，出于安全考虑，你可能希望限制应用使其只能在自己的命名空间中部署资源。你可以通过在 KubeVela 控制器的启动参数中配置 `--allow-cross-namespace-resource=false` 来禁用跨命名空间部署。
 
 
 ### 控制部署工作流
