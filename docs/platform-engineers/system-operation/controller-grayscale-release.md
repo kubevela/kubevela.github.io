@@ -2,6 +2,10 @@
 title: Controller GrayScale Release
 ---
 
+:::tip
+If you are using KubeVela >= v1.8.0, [controller sharding](./controller-sharding.md) is supported. If you need to run multiple version of KubeVela controllers (all have version >= v1.8.0), you can refer to controller sharding.
+:::
+
 System upgrades can always be a dangerous operation for system operators. As a control plane operator, KubeVela controller also faces similar challenges. The introduction of new features or function reconstruction could bring potential risks for running higher version controllers on low version applications.
 
 To help system operators overcome such difficulties, KubeVela provide **controller grayscale release** mechanism which allow multiple version controllers to run concurrently. When applications are annotated with key `app.oam.dev/controller-version-require`, only the controller with matched version number will be able to handle it.
