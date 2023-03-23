@@ -6,7 +6,7 @@ This document will give a brief introduction to the core mechanisms of KubeVela 
 
 ## Running Mode
 
-The execution of workflow has two different running modes: **DAG** mode and **StepByStep** mode. In DAG mode, all steps in the workflow will execute concurrently. They will form a dependency graph for running according to the Input/Output in the step configuration automatically. If one workflow step has not met all its dependencies, it will wait for the conditions. In StepByStep mode, all steps will be executed in order. In KubeVela v1.2+, the defaut running mode is StepByStep. Currently, we do not support using DAG mode explicitly.
+The execution of workflow has two different running modes: **DAG** mode and **StepByStep** mode. In DAG mode, all steps in the workflow will execute concurrently. They will form a dependency graph for running according to the Input/Output in the step configuration automatically. If one workflow step has not met all its dependencies, it will wait for the conditions. In StepByStep mode, all steps will be executed in order. In KubeVela v1.2+, the defaut running mode is StepByStep. Using DAG mode is not supported in version before KubeVela v1.5.
 
 ## Suspend and Retry
 
