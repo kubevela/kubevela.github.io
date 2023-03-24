@@ -237,6 +237,11 @@ The UI console shares a different metadata layer with the controller. It's more 
 
 By default, if you're using CLI to manage the applications directly from Kubernetes API, we will sync the metadata to UI backend automatically. Once you deployed the application from the UI console, the automatic sync process will be stopped as the source of truth may be changed.
 
+:::tip
+If the namespace of the application operated by CLI has already been associated with the corresponding environment in UI, then the application will be automatically synchronized to the project associated with that environment in UI. Otherwise, the application will be synchronized to the default project.
+If you want to specify which project in UI console an application should be synchronized to, please refer to [Creating environments for the project](how-to/dashboard/user/project#creating-environments-for-the-project).
+:::
+
 If there're any changes happen from CLI after that, the UI console will detect the difference and show it for you. However, it's not recommended to modify the application properties from both sides.
 
 In conclusion, if you're a CLI/YAML/GitOps user, you'd better just use CLI to manage the application CRD and just use the UI console (velaux) as a dashboard. Once you've managed the app from the UI console, you need to align the behavior and manage apps from UI, API, or Webhook provided by velaux.

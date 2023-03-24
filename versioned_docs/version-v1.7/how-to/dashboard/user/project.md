@@ -20,6 +20,12 @@ Users with project management permissions can go to `Platform/Projects` page for
 
 Click the `New Project` button for creating a project. Each project should set name and owner, the owner user will be granted the project admin role automatically after the project created.
 
+### Creating Environments for the Project
+
+A project can have multiple associated environments. An environment is a logical concept that points to a namespace in the cluster. By default, if not specified, the namespace of an environment has the same name as the environment itself. When creating an environment, you need to associate it with a project.
+
+![](../../../resources/env-project.png)
+
 ## Updating Projects
 
 Project owner, alias, and description fields can be updated. Click the project name and go to the project detail page, you can manage the members and roles in this project.
