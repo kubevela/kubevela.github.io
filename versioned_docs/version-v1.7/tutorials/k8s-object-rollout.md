@@ -110,7 +110,7 @@ spec:
                 # The second batch of Canary releases 90% Pods, and 90% traffic imported to the new version.
                 - weight: 90
               trafficRoutings:
-                - type: nginx
+                - type: ingress
 EOF
 ```
 
@@ -221,7 +221,7 @@ spec:
                 # The second batch of Canary releases 90% Pods, and 90% traffic imported to the new version.
                 - weight: 90
               trafficRoutings:
-                - type: nginx
+                - type: ingress
 EOF
 ```
 
