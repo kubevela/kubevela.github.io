@@ -1,22 +1,22 @@
 ---
-title: Resource Adoption
+title: 资源接管
 ---
 
-There are times that you might want to use KubeVela application to adopt existing resources or from other sources like Helm release. In this case, you can leverage the capability of resource adoption in KubeVela.
+有时您可能希望使用 KubeVela 应用程序来接管现有资源，或者从其他来源（如 Helm 包）获取资源。在这种情况下，您可以利用 KubeVela 中的资源接管功能。
 
-## Use in Application
+## 在 Application 中使用
 
-By default, when KubeVela application tries to dispatch (create or update) one resource, it will first check if this resource belongs to itself. This check is done by comparing the label values of `app.oam.dev/name` & `app.oam.dev/namespace` and see whether they are equal to the application's name & namespace.
+默认情况下，当 KubeVela 应用尝试调度（创建或更新）某个资源时，它首先会检查这个资源是否属于自己。通过比较 `app.oam.dev/name` 和 `app.oam.dev/namespace` 标签值，看它们是否等于应用的名称和命名空间来进行检查。
 
-If this resource does not belongs to the application itself (belongs to no one or some other application), the application will stop the dispatch operation and report an error. This mechanism is designed to prevent unintended edits to resources managed by other operators or systems.
+如果此资源不属于当前应用本身（属于其他应用或被其他人创建），应用将停止调度操作并报告错误。这个机制旨在防止对由其他操作员或系统管理的资源进行无意编辑。
 
-If the resource is currently managed by other applications, you can refer to [shared-resource](./shared-resource) policy and read more about sharing resources across multiple applications.
+如果资源当前由其他应用程序管理，您可以参考 [资源共享](./shared-resource) 策略，并详细了解如何在多个应用之间共享资源。
 
-If the resource is managed by no one, to allow KubeVela application to manage the resource, you can leverage the `read-only` policy or `take-over` policy to enforce resource adoption on these resources.
+如果资源没有被任何人管理，要允许 KubeVela 应用程序管理资源，您可以利用 `read-only` 策略或 `take-over` 策略来强制执行这些资源的接管。
 
 ### ReadOnly Policy
 
-With `read-only` policy, you can select resources that could be adopted by the current application. For example, in the below application, Deployment typed resources are treated as read-only resources and are able to be adopted by the given application.
+通过使用 `read-only` 策略，您可以选择可以被当前应用程序接管的资源。例如，在下面的应用程序中，部署类型的资源被视为只读资源，并能够被给定的应用程序接管。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -38,21 +38,21 @@ spec:
               resourceTypes: ["Deployment"]
 ```
 
-The `read-only` policy allows application to read the selected resources but will skip all edits to the target resource. Error will be reported if the target resource does not exist.
+`read-only` 策略允许应用程序读取所选资源，但会跳过对目标资源的所有写操作。如果目标资源不存在，则会报告错误。
 
-The target resource will **NOT** be attached with the application's label. It is possible for multiple applications to use the same resource with `read-only` policy concurrently. The deletion of the application will also skip the recycle process of the target resources.
+目标资源将**不会**附带应用的标签，即多个应用程序可以同时使用具有 `read-only` 只读策略的相同资源，删除应用本身也不会影响目标资源，将跳过目标资源的回收流程。
 
-Although the resources selected in the `read-only` policy will not be editable through application, both health check and resource topology graph can work normally. Therefore, you can use KubeVela application with `read-only` policy to build "monitoring group" for underlying resources and leverage tools such as `vela top` or `velaux` to observe them, without any modification.
+尽管在 `read-only` 只读策略中选择的资源无法通过应用程序进行编辑，但健康检查和资源拓扑图仍可以正常工作。因此，您可以使用具有只读策略的 KubeVela 应用构建底层资源的“监控组”，并利用像 `vela top` 或 VelaUX 之类的工具来观察它们，而无需进行任何修改。
 
 <details>
-<summary>practice</summary>
+<summary>实践举例</summary>
 
-1. First create the nginx deployment.
+1. 创建 nginx K8s Deployment 资源。
 ```bash
 kubectl create deploy nginx --image=nginx
 ```
 
-2. Deploy the application with `read-only` policy.
+1. 部署一个 `read-only` 策略的应用选中这个 nginx Deployment。
 ```bash
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
@@ -75,22 +75,22 @@ spec:
 EOF
 ```
 
-3. Check the running status of the application.
+1. 查看应用状态。
 ```bash
 vela status read-only
 ```
 
-4. Use `vela top` to see the resource topology of the application.
+1. 使用 `vela top` 查看资源状态和拓扑。
 ![read-only-vela-top](../../resources/read-only-vela-top.jpg)
 
-5. Use `velaux` to see the resource topology graph of the application.
+1. 使用 `velaux` 查看资源状态和拓扑。
 ![read-only-velaux](../../resources/read-only-velaux.jpg)
 
 </details>
 
-### TakeOver Policy
+### 接管策略
 
-In the case you not only want KubeVela application to observe underlying resource but also want the application to be able to edit them, you can use the `take-over` policy in replace of the `read-only` policy.
+如果您不仅希望 KubeVela 应用能观察底层资源，还希望该应用能够管理它们的生命周期，则可以使用 `take-over` 策略来替换 `read-only` 策略。
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -120,20 +120,21 @@ spec:
               resourceTypes: ["Deployment"]
 ```
 
-In the above application, the `nginx` deployment will be added with owner labels and marked as belonged to the current app. The attached `scaler` trait in the application will modify the replica number of the target deployment to 3, while keeping all other fields untouched.
- 
-After the resource is taken over by the application, the application will control the upgrades and deletion of the target resource. Therefore, differ from `read-only` policy, each resource can only be managed by one application with `take-over` policy.
+在上述应用程序中，nginx Deployment 将被添加 KubeVela 标识的标签（Labels）并标记为属于当前应用程序。应用程序中附加的 `scaler` trait 将修改目标部署的副本数为3 ，同时保留所有其他字段不变。
 
-The `take-over` policy is helpful when you want to let the application to take the complete control for the given resources.
+资源被应用接管后，应用将控制目标资源的升级和删除。因此，与 `take-over` 策略不同，每个资源只能由一个使用 `take-over` 策略的应用程序进行管理。
+
+`take-over` 策略在您希望应用完全控制给定资源时非常有用。
 
 <details>
-<summary>practice</summary>
+<summary>实践举例</summary>
 
-1. First create the nginx deployment
+1. 创建 nginx K8s Deployment 资源。
 ```bash
 kubectl create deploy nginx --image=nginx
 ```
-2. Deploy the application with `take-over` policy.
+
+1. 部署 `take-over` 策略的应用接管这个 Deployment。
 ```bash
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
@@ -164,22 +165,22 @@ spec:
 EOF
 ```
 
-3. Check the application running status.
+1. 检查应用的运行状态。其他操作同 `read-only` 策略。
 ```bash
 vela status take-over
 ```
 </details>
 
 
-## Use in CLI
+## 在命令行中使用
 
-The `read-only` policy and `take-over` policy provide a way for users to directly adopt resources within KubeVela application api. If you prefer directly build KubeVela application by existing resources from scratch, you can use the `vela adopt` CLI command.
+`read-only` 策略和 `take-over` 策略为用户提供了一种在 KubeVela 应用 API 中直接采用资源的方式。如果您喜欢直接从头开始使用现有资源构建KubeVela 应用程序，则可以使用 `vela adopt` CLI命令。
 
-### Adopt Native Resource
+### 接管原生资源
 
-By providing a list of native Kubernetes resources, `vela adopt` command can help you automatically adopt those resources in an application. You can follow the below procedure to try it out.
+通过提供一组本地 Kubernetes 资源，`vela adopt` 命令可以帮助您自动将这些资源纳入一个应用中。您可以按照以下步骤来尝试它：
 
-1. Create some resources for adoption.
+1. 创建用于接管的原生资源。
 
 ```bash
 kubectl create deploy example --image=nginx
@@ -188,13 +189,13 @@ kubectl create configmap example
 kubectl create secret generic example
 ```
 
-2. Run `vela adopt` command to create an application that contains all the resource mentioned above.
+1. 运行 `vela adopt` 命令自动创建接管的应用。
 ```bash
 vela adopt deployment/example service/example configmap/example secret/example
 ```
 
 <details>
-<summary>expected output</summary>
+<summary>期望输出</summary>
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -300,25 +301,26 @@ status: {}
 ```
 </details>
 
-By default, the application first embeds all the given resources in its components. Then it attaches the `read-only` policy. You can edit the returned configuration and make your own adoption application. Or you can directly apply this application with the `--apply` arg.
+默认情况下，应用程序首先将所有给定的资源嵌入其组件中。然后，它会附加`read-only`策略。您可以编辑返回的配置并创建自己的采用应用程序。或者，您可以直接使用 `--apply` 参数应用此应用程序。
 
 ```bash
 vela adopt deployment/example service/example configmap/example secret/example --apply
 ```
 
-You can also set the application name you would like to use.
+您还可以设置您想要使用的应用程序名称。
+
 ```bash
 vela adopt deployment/example service/example configmap/example secret/example --apply --app-name=adopt-example
 ```
 
-Now if you can use `vela status` and `vela status -t -d` command show the status the applied application.
+现在，您可以使用 `vela status` 和 `vela status -t -d` 命令来显示已应用的应用程序的状态。
 
 ```bash
 vela status adopt-example
 ```
 
 <details>
-<summary>expected output</summary>
+<summary>期望输出</summary>
 
 ```bash
 About:                                
@@ -407,14 +409,14 @@ NAME    NAMESPACE       REVISION        UPDATED                                 
 mysql   default         1               2023-01-11 14:34:36.653778 +0800 CST    deployed        mysql-9.4.6     8.0.31  
 ```
 
-2. Run `vela adopt` command to adopt resources from existing release. Similar to native resource adoption, you can get a KubeVela application with `read-only` policy.
+1. 运行vela adopt命令，从现有的发布中采用资源。与本机资源采用类似，您可以获得一个带有 `read-only` 策略的 KubeVela 应用程序。
 
 ```bash
 vela adopt mysql --type helm
 ```
 
 <details>
-<summary>expected output</summary>
+<summary>期望输出</summary>
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -658,7 +660,7 @@ status: {}
 
 </details>
 
-3. You can similarly use `--apply` parameter to apply the application into cluster and use `--mode=take-over` to allow modifications by enforcing `take-over` policy. In addition to that, if you want to completely adopt resources in helm chart into KubeVela application and disable the management of that helm chart (prevent multiple sources), you can add `--recycle` flag to remove the helm release secret after the application has entered running status.
+1. 您可以类似地使用 `--apply` 参数将应用程序应用到群集中，并使用 `--mode=take-over` 允许强制执行 `take-over` 策略进行修改。除此之外，如果您想完全将 Helm Chart 中的资源采用到 KubeVela 应用程序中，并禁用对该 Helm Chart 的管理（防止多个操控源），则可以添加 `--recycle` 标志，在应用程序进入运行状态后删除 Helm Release 信息。
 
 ```bash
 vela adopt mysql --type helm --mode take-over --apply --recycle
@@ -668,14 +670,14 @@ resources adopted in app default/mysql
 successfully clean up old helm release
 ```
 
-4. You can check the application status using `vela status` and `vela status -t -d`.
+1. 你可以用 `vela status` 和 `vela status -t -d` 查看应用状态。
 
 ```bash
 vela status mysql
 ```
 
 <details>
-<summary>expected output</summary>
+<summary>期望输出</summary>
 
 ```bash
 About:
@@ -761,7 +763,7 @@ local     ─── default   ─┬─ ConfigMap/mysql        updated   2023-01
                          └─ StatefulSet/mysql      updated   2023-01-11 14:40:16 Ready: 1/1  Age: 7m41s
 ```
 
-5. If you run `helm ls` you will not be able to find the original mysql helm release since the records have been recycled.
+5. 如果运行 `helm ls` 命令，您将无法找到原始的 MySQL Helm 发布，因为记录已被回收。
 
 ```bash
 helm ls
@@ -772,16 +774,20 @@ NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
 ```
 
 :::tip
-There are multiple ways to use KubeVela together with Helm.
+有多种方式可以将 KubeVela 与 Helm 结合使用。
 
-If you want to use Helm to control the release process of charts and use KubeVela to monitor those resources, you can use the default mode (`read-only`) and do not recycle the helm release secret. In this case, you will be able to monitor resources dispatched by Helm Chart with KubeVela tools or eco-system (like viewing on Grafana).
+如果您想要使用 Helm Chart 的发布流程并使用 KubeVela 监控这些资源，则可以使用默认模式（`read-only`），并且不回收 Helm 发布密钥。在这种情况下，您将能够使用 KubeVela 工具或生态系统（例如在 Grafana 上查看）监视由 Helm Chart 分派的资源。
 
-If you want to migrate existing resources from Helm Chart to KubeVela application, you can use the `take-over` mode and use the `--apply` flag to recycle helm release records.
+如果您想将现有资源从 Helm Chart 迁移到 KubeVela 应用模式来完整的管理资源的生命周期，则可以使用 `take-over` 模式，并使用 `--apply` 标志回收 Helm 发布记录。
 :::
 
-### Customized Adoption
+### 自定义接管策略
 
-By default, `vela adopt` will take resources from given source (native resource list or helm chart) and group them into different components. For resources like Deployments or Statefulsets, the original spec will be reserved. For other resources like ConfigMap or Secret, the data will not be recorded in the adoption application (which means the application does not care for the content in them). For special resources (CustomResourceDefinition), the `garbage-collect` and `apply-once` policy will be additionally attached in the application.
+默认情况下，`vela adopt` 将从给定源（本机资源列表或 Helm Chart）中获取资源并将其分组到不同的组件中。对于像 Deployment 或 StatefulSet 这样的资源，原始的字段将被保留。对于其他资源，如 ConfigMap 或 Secret，接管时应用不会保存其中的数据（这也意味着 vela application 不会对其中的内容做终态保持）。对于特殊资源（CustomResourceDefinition），`garbage-collect` 和 `apply-once`应用策略将附加到应用程序中。
+
+将资源转换为应用程序是通过使用 CUE 模板来实现的。您可以参考 GitHub 查看默认模板。
+
+您还可以使用 CUE 构建自己的采用规则，并将 --adopt-template 添加到 vela adopt 命令中。
 
 The conversion from resources into application is achieved by using the CUE template. You can refer to [GitHub](https://github.com/kubevela/kubevela/blob/master/references/cli/adopt-templates/default.cue) to see the default template.
 
@@ -918,201 +924,3 @@ status: {}
 ```
 
 With this capability, you can make your own rules for building application from existing resources or helm charts.
-
-### Adopt All Resources
-
-#### Adopt All Native Resources
-
-If you want to adopt all resources in a namespace, you can use `--all` flag.
-
-```bash
-vela adopt --all
-```
-
-By default, it will adopt all Deployment/StatefulSet/DaemonSet resources in the namespace. You can also specify a Custom Resource to adopt.
-
-```bash
-vela adopt mycrd --all
-```
-
-This command will first try to list all specified resources in the namespace, and find the related resources (like ConfigMap, Secret, Service, etc.) with resource topology rule and adopt them together.
-
-The resource topology rule is written in CUE template, the default template is in [GitHub](https://github.com/kubevela/kubevela/blob/master/references/cli/resource-topology/builtin-rule.cue). With this default rule, the related resources(ConfigMap, Secret, Service, Ingress) will be adopted together with the Deployment/StatefulSet/DaemonSet.
-
-For example, if you have following resources in the cluster:
-
-<details>
-<summary>Resources(Deployment, ConfigMap, Service, Ingress)</summary>
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: test1
-  namespace: default
-spec:
-  progressDeadlineSeconds: 600
-  replicas: 1
-  revisionHistoryLimit: 10
-  selector:
-    matchLabels:
-      myapp: test1
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        myapp: test1
-    spec:
-      containers:
-      - image: crccheck/hello-world
-        imagePullPolicy: Always
-        name: test1
-        ports:
-        - containerPort: 8000
-          name: port-8000
-          protocol: TCP
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-        volumeMounts:
-        - mountPath: /test
-          name: configmap-my-test
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      terminationGracePeriodSeconds: 30
-      volumes:
-      - configMap:
-          defaultMode: 420
-          name: my-test1
-        name: configmap-my-test
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: my-test1
-  namespace: default
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: test1
-spec:
-  ports:
-  - port: 8000
-    protocol: TCP
-    targetPort: 8000
-  selector:
-    myapp: test1
-  type: ClusterIP
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  annotations:
-    kubernetes.io/ingress.class: nginx
-  name: test1
-  namespace: default
-spec:
-  rules:
-  - host: testsvc.example.com
-    http:
-      paths:
-      - backend:
-          service:
-            name: test1
-            port:
-              number: 8000
-        path: /
-        pathType: ImplementationSpecific
-status:
-  loadBalancer: {}
-</details>
-
-With `vela adopt --all`, these resources will be adopted as an Application like below:
-
-<details>
-<summary>Adopted Application</summary>
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: test1
-  namespace: default
-spec:
-  components:
-  - name: test1.Deployment.test1
-    properties:
-      objects:
-      - apiVersion: apps/v1
-        kind: Deployment
-        metadata:
-          name: test1
-          namespace: default
-        spec:
-          ...
-    type: k8s-objects
-  - name: test1.Service.test1
-    properties:
-      objects:
-      - apiVersion: v1
-        kind: Service
-        metadata:
-          name: test1
-          namespace: default
-        spec:
-          ...
-    type: k8s-objects
-  - name: test1.Ingress.test1
-    properties:
-      objects:
-      - apiVersion: networking.k8s.io/v1
-        kind: Ingress
-        metadata:
-          name: test1
-          namespace: default
-        spec:
-          ...
-    type: k8s-objects
-  - name: test1.config
-    properties:
-      objects:
-      - apiVersion: v1
-        kind: ConfigMap
-        metadata:
-          name: record-event
-          namespace: default
-    type: k8s-objects
-  policies:
-  - name: read-only
-    properties:
-      rules:
-      - selector:
-          componentNames:
-          - test1.Deployment.test1
-          - test1.Service.test1
-          - test1.Ingress.test1
-          - test1.config
-    type: read-only
-</details>
-
-You can also build your own resource topology rule to find custom resource relations using CUE and add `--resource-topology-rule` to `vela adopt` command.
-
-```
-vela adopt --all --resource-topology-rule=my-rule.cue
-```
-
-After adopting all resources and applying them to the cluster, you can checkout all the adopted applications with `vela ls` or in the dashboard.
-
-![](https://static.kubevela.net/images/1.8/adopt-all.gif)
-
-#### Adopt All Helm Releases
-
-If you want to adopt all helm releases in a namespace, you can use `--all` flag with `--type=helm`.
-
-```bash
-vela adopt --all --type helm
-```
