@@ -1116,3 +1116,5 @@ If you want to adopt all helm releases in a namespace, you can use `--all` flag 
 ```bash
 vela adopt --all --type helm
 ```
+
+That's all about the adoption feature. We hope that KubeVela can help you deliver your applications with ease and confidence.
