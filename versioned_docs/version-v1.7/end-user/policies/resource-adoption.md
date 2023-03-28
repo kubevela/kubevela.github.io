@@ -918,3 +918,201 @@ status: {}
 ```
 
 With this capability, you can make your own rules for building application from existing resources or helm charts.
+
+### Adopt All Resources
+
+#### Adopt All Native Resources
+
+If you want to adopt all resources in a namespace, you can use `--all` flag.
+
+```bash
+vela adopt --all
+```
+
+By default, it will adopt all Deployment/StatefulSet/DaemonSet resources in the namespace. You can also specify a Custom Resource to adopt.
+
+```bash
+vela adopt mycrd --all
+```
+
+This command will first try to list all specified resources in the namespace, and find the related resources (like ConfigMap, Secret, Service, etc.) with resource topology rule and adopt them together.
+
+The resource topology rule is written in CUE template, the default template is in [GitHub](https://github.com/kubevela/kubevela/blob/master/references/cli/resource-topology/builtin-rule.cue). With this default rule, the related resources(ConfigMap, Secret, Service, Ingress) will be adopted together with the Deployment/StatefulSet/DaemonSet.
+
+For example, if you have following resources in the cluster:
+
+<details>
+<summary>Resources(Deployment, ConfigMap, Service, Ingress)</summary>
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test1
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      myapp: test1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        myapp: test1
+    spec:
+      containers:
+      - image: crccheck/hello-world
+        imagePullPolicy: Always
+        name: test1
+        ports:
+        - containerPort: 8000
+          name: port-8000
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /test
+          name: configmap-my-test
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: my-test1
+        name: configmap-my-test
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-test1
+  namespace: default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test1
+spec:
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: 8000
+  selector:
+    myapp: test1
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: test1
+  namespace: default
+spec:
+  rules:
+  - host: testsvc.example.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: test1
+            port:
+              number: 8000
+        path: /
+        pathType: ImplementationSpecific
+status:
+  loadBalancer: {}
+</details>
+
+With `vela adopt --all`, these resources will be adopted as an Application like below:
+
+<details>
+<summary>Adopted Application</summary>
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: test1
+  namespace: default
+spec:
+  components:
+  - name: test1.Deployment.test1
+    properties:
+      objects:
+      - apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: test1
+          namespace: default
+        spec:
+          ...
+    type: k8s-objects
+  - name: test1.Service.test1
+    properties:
+      objects:
+      - apiVersion: v1
+        kind: Service
+        metadata:
+          name: test1
+          namespace: default
+        spec:
+          ...
+    type: k8s-objects
+  - name: test1.Ingress.test1
+    properties:
+      objects:
+      - apiVersion: networking.k8s.io/v1
+        kind: Ingress
+        metadata:
+          name: test1
+          namespace: default
+        spec:
+          ...
+    type: k8s-objects
+  - name: test1.config
+    properties:
+      objects:
+      - apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: record-event
+          namespace: default
+    type: k8s-objects
+  policies:
+  - name: read-only
+    properties:
+      rules:
+      - selector:
+          componentNames:
+          - test1.Deployment.test1
+          - test1.Service.test1
+          - test1.Ingress.test1
+          - test1.config
+    type: read-only
+</details>
+
+You can also build your own resource topology rule to find custom resource relations using CUE and add `--resource-topology-rule` to `vela adopt` command.
+
+```
+vela adopt --all --resource-topology-rule=my-rule.cue
+```
+
+After adopting all resources and applying them to the cluster, you can checkout all the adopted applications with `vela ls` or in the dashboard.
+
+![](https://static.kubevela.net/images/1.8/adopt-all.gif)
+
+#### Adopt All Helm Releases
+
+If you want to adopt all helm releases in a namespace, you can use `--all` flag with `--type=helm`.
+
+```bash
+vela adopt --all --type helm
+```
