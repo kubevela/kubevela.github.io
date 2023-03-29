@@ -20,6 +20,8 @@ CNCF TOC（Technical Oversight Committee，技术监督委员会）已经投票�
 
 KubeVela 项目的前身是 [oam-kubernetes-runtime](https://github.com/crossplane/oam-kubernetes-runtime) 项目，它由来自八家不同组织的[开发者](https://github.com/kubevela/community/blob/main/OWNERS.md#bootstrap-contributors)一同在社区发起，包括阿里云、微软、Upbound 等。它于 2020 年 11 月发布正式对外开源，2021 年 4 月发布了 v1.0，2021 年 6 月加入 CNCF 成为沙箱项目。该项目目前的贡献者来自世界各地，有超过 260 多名[贡献者](https://kubevela.devstats.cncf.io/d/22/prs-authors-table?orgId=1)，包括招商银行、滴滴、京东、极狐 GitLab、SHEIN 等。
 
+<!--truncate-->
+
 “KubeVela 开创了一条跨多云/多集群环境交付应用程序的道路，具有统一且可扩展的抽象。”CNCF TOC Sponsor 张磊表示： “这项创新开启了下一代软件交付体验，填补了现有社区生态应用交付的‘最后一公里’，该实践专注于更简单的‘部署’而不是复杂‘编排’。我们很高兴在 CNCF 社区中能涌现出更多以应用为中心的工具/平台，并期待看到 KubeVela 的采用在快速发展的应用交付生态系统中发展到一个新的水平。”
 
 KubeVela 目前已被多家公司所采纳，被用于大部分的公共云以及内部部署的生产中。大多数用户采用 KubeVela 作为他们的内部“PaaS ”，作为 CI/CD 流水线的一部分，或者作为一个可扩展的 DevOps 内核来构建他们自己的 IDP。公开[采用者](https://github.com/kubevela/community/blob/main/ADOPTERS.md)包括阿里巴巴，使用 KubeVela 作为核心，进行跨混合环境交付和管理应用；字节跳动，使用 KubeVela 和 Crossplane 提供进阶的游戏 PaaS 能力；招商银行，利用 KubeVela 搭建混合云应用平台，统一从搭建、发布、运行的全流程；以及其他更多行业的公司。

@@ -18,6 +18,8 @@ The CNCF Technical Oversight Committee (TOC) has voted to accept KubeVela as a C
 
 ![image.png](/img/what-is-kubevela.png)
 
+<!--truncate-->
+
 The KubeVela project evolved from [oam-kubernetes-runtime](https://github.com/crossplane/oam-kubernetes-runtime) and developed with [bootstrap contributions](https://github.com/kubevela/community/blob/main/OWNERS.md#bootstrap-contributors) from more than eight different organizations, including Alibaba Cloud, Microsoft, Upbound and more. It was publicly announced as an open source project in November 2020, released as v1.0 in April 2021, and accepted as a CNCF sandbox project in June 2021. The project has more than [260 contributors](https://kubevela.devstats.cncf.io/d/22/prs-authors-table?orgId=1) and committers across multiple continents from organizations like Didi, JD.com, JiHu GitLab, SHEIN, and more.
 
 “KubeVela pioneered a path for delivering applications across multi-cloud/multi-cluster environments with unified yet extensible abstractions,” said Lei Zhang, CNCF TOC sponsor. “This innovation unlocked the next-generation software delivery experience and filled the ‘last mile’ gap in existing practices which focus on the ‘deploy’ stage rather than ‘orchestrating’. We are excited to welcome more app-centric tools/platforms in the CNCF community and look forward to watching the adoption of KubeVela grow to a new level in the fast-growing application delivery ecosystem.”

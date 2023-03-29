@@ -13,7 +13,11 @@ hide_table_of_contents: false
 [Serverless Application Engine (SAE)](https://www.alibabacloud.com/product/severless-application-engine) is a Kubernetes-based cloud product that combines the Serverless architecture and the microservice model. As an iterative cloud product, it has encountered many challenges in the process of rapid development. **How can we solve these challenges in the booming cloud-native era and perform reliable and fast upgrades for architecture?** The SAE team and the KubeVela community worked closely to address these challenges and came up with a replicable open-source solution, KubeVela Workflow. 
 
 This article describes how to use KubeVela Workflow to upgrade the architecture of SAE and interprets multiple practice scenarios. 
+
+<!--truncate-->
+
 ## Challenges in the Serverless Era
+
 SAE is an application hosting platform for business application architecture and microservices. It is a Kubernetes-based cloud product that combines the Serverless architecture and the microservice model. 
 
 ![image.png](/img/blog/workflow-sae/en/wf-sae-1.png)

@@ -21,7 +21,10 @@ Serverless 应用引擎（SAE）是面向业务应用架构、微服务架构的
 ![image.png](/img/blog/workflow-sae/zh/wf-sae-1.png)
 
 如上架构图，SAE 的用户可以将多种不同类型的业务应用托管在 SAE 之上。而在 SAE 底层，则会通过 JAVA 业务层处理相关的业务逻辑，以及与 Kubernetes 资源进行交互。在最底层，则依靠高可用，免运维，按需付费的弹性资源池。
+
 在这个架构下，SAE 主要依托其 JAVA 业务层为用户提供功能。这样的架构在帮助用户一键式部署应用的同时，也带来了不少挑战。
+
+<!--truncate-->
 
 在 Serverless 持续发展的当下，SAE 主要遇到了三大挑战：
 
