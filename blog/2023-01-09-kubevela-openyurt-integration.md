@@ -24,6 +24,8 @@ Incubated in the OAM model, KubeVela focuses on helping enterprises build unifie
 
 As mentioned before, OpenYurt supports the access of edge nodes, allowing users to manage edge nodes by operating native Kubernetes. "Edge nodes" are used to represent computing resources closer to users (such as virtual machines or physical servers in a nearby data center). After you add them through OpenYurt, these edge nodes are converted into nodes that can be used in Kubernetes. OpenYurt uses NodePool to describe a group of edge nodes in the same region. After basic resource management is met, we have the following core requirements for how to orchestrate and deploy applications to different NodePools in a cluster.
 
+<!--truncate-->
+
 1. **Unified Configuration:** If you manually modify each resource to be distributed, there are many manual interventions, which are prone to errors. We need a unified way to configure parameters, which can not only facilitate batch management operations, but also connect security and audit to meet enterprise risk control and compliance requirements.
 2. **Differential Deployment:** Most workloads deployed to different NodePools have the same attributes, but there are still personalized configuration differences. The key is how to set the parameters related to node selection. For example, `NodeSelector` can instruct the Kubernetes scheduler to schedule workloads to different NodePools.
 3. **Scalability:** The cloud-native ecosystem is booming. Both workload types and different O&M functions are growing. We need the overall application architecture to be scalable so that we can fully benefit from the dividends of the cloud-native ecosystem and meet business needs flexibly.
