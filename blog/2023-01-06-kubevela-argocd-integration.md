@@ -20,6 +20,8 @@ KubeVela is infrastructure agnostic and **application-centric**. It allows you t
 
 Open Application Model (OAM) is a set of standard yet higher-level abstractions for modeling cloud-native applications on top of today’s hybrid and multi-cloud environments. You can find more conceptual details here.
 
+<!--truncate-->
+
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application

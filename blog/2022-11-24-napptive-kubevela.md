@@ -16,6 +16,8 @@ The cloud-native landscape is formed by a fast-growing ecosystem of tools with t
 
 Kubernetes offers a comprehensive set of entities that enables any potential application to be deployed into it, independent of its complexity. This however has a significant impact from the point of view of its adoption. Kubernetes is becoming as complex as it is powerful, and that translates into a steep learning curve for newcomers into the ecosystem. Thus, this has generated a new trend focused on providing developers with tools that improve their day-to-day activities without losing the underlying capabilities of the underlying system.
 
+<!--truncate-->
+
 ## Napptive Application Platform
 
 The NAPPTIVE Playground offers a cloud native application platform focused on providing a simplified method to operate on Kubernetes clusters and deploy complex applications without needing to work with low-level Kubernetes entities. This is especially important to be able to accommodate non-developer users' personas as the computing resources of a company are being consolidated in multi-purpose, multi-tenant clusters. Data scientists, business analysts, modeling experts and many more can benefit from simple solutions that do not require any type of knowledge of cloud computing infrastructures, or orchestration systems such as Kubernetes, which enable them to run their applications with ease in the existing infrastructure.
