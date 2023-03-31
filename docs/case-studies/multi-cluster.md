@@ -507,6 +507,80 @@ spec:
     ref: make-release-in-hangzhou
 ```
 
+### Multi-cluster scheduling with customized workflow steps
+
+The multi-cluster feature and combine with the [customized workflow steps](../end-user/workflow/overview) to provide a powerful way for multi-cluster scheduling.
+
+In the following example, we'll deploy the task first into the `local` cluster and `default` namespace, then check the deploy status by `read-object` step, after that we'll deploy the task into the `prod` namespace according the status.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: deploy-with-override
+spec:
+  components:
+    - name: mytask
+      type: task
+      properties:
+        image: bash
+        count: 1
+        cmd: ["echo",  "hello world"]
+  policies:
+    - name: target-default
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: "default"
+    - name: target-prod
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: "prod"
+    - name: override-annotations-1
+      type: override
+      properties:
+        components:
+          - type: task
+            traits:
+            - type: annotations
+              properties:
+                "description": "01 cron task - 1"
+    - name: override-annotations-2
+      type: override
+      properties:
+        components:
+          - type: task          
+            traits:
+            - type: annotations
+              properties:
+                "description": "02 cron task - 2"                
+  workflow:
+    steps:
+      - type: deploy
+        name: deploy-01
+        properties:
+          policies: ["target-default", "override-annotations-1"]
+      - name: read-object
+        type: read-object
+        outputs:
+          - name: ready
+            valueFrom: output.value.status["ready"]
+        properties:
+          apiVersion: batch/v1
+          kind: Job
+          name: mytask
+          namespace: default
+          cluster: local        
+      - type: deploy
+        name: deploy-02
+        inputs:
+          - from: ready      
+        if: inputs["ready"] == 0
+        properties:
+          policies: ["target-prod", "override-annotations-2"]
+```
+
 ## Backward Compatibility
 
 KubeVela Application v1.3 uses different policies and workflow steps to configure and managing multi-cluster applications.
