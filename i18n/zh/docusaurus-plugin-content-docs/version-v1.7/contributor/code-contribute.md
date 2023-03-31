@@ -16,12 +16,79 @@ This guide helps you get started developing KubeVela.
 
 ### Prerequisites
 
-1. Golang version 1.19+
-2. Kubernetes version v1.20+ with `~/.kube/config` configured. (Don't have a test cluster? Try [VelaD](https://github.com/kubevela/velad/blob/main/docs/06.develop_kubevela.md) to develop KubeVela)
-3. ginkgo 1.14.0+ (just for [E2E test](#e2e-test))
-4. golangci-lint 1.38.0+, it will install automatically if you run `make`, you can [install it manually](https://golangci-lint.run/usage/install/#local-installation) if the installation is too slow.
-5. kubebuilder v3.1.0+ and you need to manually install the dependency tools for unit test.
-6. [CUE binary](https://github.com/cue-lang/cue/releases) v0.3.0+
+* Golang version 1.19+
+
+<details>
+  <summary>Install Golang</summary>
+
+1. Install go1.19 from [official site](https://go.dev/dl/). Unpack the binary and place it somewhere, assume it's in the home path `~/go/`, below is an example command, you should choose the right binary according to your system.
+  ```
+  wget https://go.dev/dl/go1.20.2.linux-amd64.tar.gz
+  tar xzf go1.20.2.linux-amd64.tar.gz
+  ```
+
+If you want to keep multiple golang version in your local develop environment, you can download the package and unfold it into some place, like `~/go/go1.19.1`, then the following commands should also change according to the path.
+
+1. Set environment variables for Golang
+
+  ```
+  export PATH=~/go/bin/:$PATH
+  export GOROOT=~/go/
+  export GOPATH=~/gopath/
+  ```
+
+  Create a gopath folder if not exist `mkdir ~/gopath`. These commands will add the go binary folder to the `PATH` environment (let it to be the primary choice for go), and set the `GOROOT` environment to this go folder. Please add these lines to your `~/.bashrc` or `~/.zshrc` file, so that you don't need to set these environment variables every time you open a new terminal.
+
+1. (Optional) Some area like China may be too slow to connect to the default go registry, you can configure GOPROXY to speed up the download process. 
+  ```
+  go env -w GOPROXY=https://goproxy.cn,direct
+  ```
+
+
+</details>
+
+
+* Kubernetes version v1.20+ with `~/.kube/config` configured. (Don't have a test cluster? Try [VelaD](https://github.com/kubevela/velad/blob/main/docs/06.develop_kubevela.md) to develop KubeVela)
+
+
+* golangci-lint 1.49.0+, it will install automatically if you run `make`, you can install it manually if the installation broken.
+
+<details>
+  <summary>Install golangci-lint manually</summary>
+
+You can install it manually follow [the guide](https://golangci-lint.run/usage/install/#local-installation) or the following command:
+
+```
+cd ~/go/ && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.49.0
+```
+
+</details>
+
+* kustomize 4.5.4+, it will install automatically if you run `make reviewable`, you can install it manually if the installation broken.
+
+<details>
+  <summary>Install kustomize manually</summary>
+
+You can install it manually follow [the guide](https://kubectl.docs.kubernetes.io/installation/kustomize/) or the following commands:
+
+```
+curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+```
+
+Move kustomize binary to your KubeVela repo folder:
+
+```shell
+mv kustomize ~/kubevela/bin/
+```
+
+</details>
+
+* ginkgo 1.14.0+ (just for [E2E test](#e2e-test))
+  ```
+  go install github.com/onsi/ginkgo/v2/ginkgo@latest
+  ```
+
+* kubebuilder v3.1.0+ and you need to manually install the dependency tools for unit test.
 
 <details>
   <summary>Install Kubebuilder manually</summary>
@@ -48,19 +115,21 @@ For other OS or system architecture, please refer to https://storage.googleapis.
 
 </details>
 
-You may also be interested with KubeVela's [design](https://github.com/oam-dev/kubevela/tree/master/design/vela-core) before diving into its code.
+
+* [CUElang](https://github.com/cue-lang/cue/blob/master/doc/install.md) v0.4.3+
+  ```
+  go install cuelang.org/go/cmd/cue@latest
+  ```
+
+* Other tools for running `make reviewable` in KubeVela.
+  ```shell
+  go install honnef.co/go/tools/cmd/staticcheck@2022.1
+  go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.6.2
+  go install golang.org/x/tools/cmd/goimports@latest
+  ```
 
 :::tip
-KubeVela v1.6 upgrades some develop tools. You need to upgrade your local development environment with the following guide.
-
-1. Install go1.19 from [official site](https://go.dev/dl/). If you want to keep multiple golang version in your local develop environment, you can download the package and unfold it into some place, like `~/go/go1.19.1`.
-2. Set environment variables. `export PATH=~/go/go1.19.1/bin/:$PATH; export GOROOT=~/go/go1.19.1`. Add the go1.19 binary folder to the `PATH` environment (let it to be the primary choice for go), and set the `GOROOT` environment to your latest version go folder.
-3. Install the tools for running `make reviewable` in KubeVela.
-```shell
-cd ~/go/go1.19.1/ && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.49.0
-go install honnef.co/go/tools/cmd/staticcheck@2022.1
-go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.6.2
-```
+You may also be interested with KubeVela's [design](https://github.com/oam-dev/kubevela/tree/master/design/vela-core) before diving into its code.
 :::
 
 ### Build
@@ -68,7 +137,7 @@ go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.6.2
 - Clone this project
 
 ```shell script
-git clone git@github.com:oam-dev/kubevela.git
+git clone git@github.com:kubevela/kubevela.git
 ```
 
 KubeVela includes two parts, `vela core` and `vela cli`.
@@ -122,7 +191,7 @@ make core-run
 ```
 
 This command will run controller locally, it will use your local KubeConfig which means you need to have a k8s cluster
-locally. If you don't have one, try [VelaD](https://github.com/kubevela/velad/blob/main/docs/06.develop_kubevela.md)
+locally. If you don't have one, try [VelaD](https://github.com/kubevela/velad/blob/main/docs/06.develop_kubevela.md) 
 to develop KubeVela.
 
 When you're developing `vela-core`, make sure the controller installed by helm chart is not running.
@@ -180,7 +249,9 @@ To run vela-core locally for debugging with kubevela installed in the remote clu
 
 Finally, you can use the commands in the above [Build](#build) and [Testing](#Testing) sections, such as `make run`, to code and debug in your local machine.
 
-> Note you will not be able to test features relate with validating/mutating webhooks in this way.
+:::caution
+Note you will not be able to test features relate with validating/mutating webhooks in this way.
+:::
 
 ## Run VelaUX Locally
 
