@@ -522,6 +522,80 @@ spec:
     ref: make-release-in-hangzhou
 ```
 
+### 通过自定义工作流步骤实现多集群调度
+
+多集群部署的功能可以结合[自定义工作流步骤](../end-user/workflow/overview) 实现功能多样的多集群调度能力.
+
+如下示例所示，我们会部署一个任务到 `local` 集群的 `default` 命名空间，然后通过 `read-object` 步骤检查部署状态，最后根据状态将任务部署到 `prod` 命名空间。
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: deploy-with-override
+spec:
+  components:
+    - name: mytask
+      type: task
+      properties:
+        image: bash
+        count: 1
+        cmd: ["echo",  "hello world"]
+  policies:
+    - name: target-default
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: "default"
+    - name: target-prod
+      type: topology
+      properties:
+        clusters: ["local"]
+        namespace: "prod"
+    - name: override-annotations-1
+      type: override
+      properties:
+        components:
+          - type: task
+            traits:
+            - type: annotations
+              properties:
+                "description": "01 cron task - 1"
+    - name: override-annotations-2
+      type: override
+      properties:
+        components:
+          - type: task          
+            traits:
+            - type: annotations
+              properties:
+                "description": "02 cron task - 2"                
+  workflow:
+    steps:
+      - type: deploy
+        name: deploy-01
+        properties:
+          policies: ["target-default", "override-annotations-1"]
+      - name: read-object
+        type: read-object
+        outputs:
+          - name: ready
+            valueFrom: output.value.status["ready"]
+        properties:
+          apiVersion: batch/v1
+          kind: Job
+          name: mytask
+          namespace: default
+          cluster: local        
+      - type: deploy
+        name: deploy-02
+        inputs:
+          - from: ready      
+        if: inputs["ready"] == 0
+        properties:
+          policies: ["target-prod", "override-annotations-2"]
+```
+
 ## 兼容性
 
 KubeVela 的 v1.3 应用相较于之前的版本使用了不同的策略和工作流步骤来分发、管理多集群应用。
