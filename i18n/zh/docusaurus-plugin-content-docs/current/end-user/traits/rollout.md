@@ -254,13 +254,13 @@ Demo: V1
 
 需要注意的是，任何在应用处于发布中状态时的回滚操作，都会回滚到应用最后一次成功发布的版本，所以如果你已经成功部署了 `v1` 并且升级到 `v2`， 但是如果 `v2` 失败了但是你又继续更新到 `v3`。那么从 `v3` 回滚会自动到 `v1`，这是因为 `v2` 并不是成功发布的版本。
 
-## 在 velaUX 上执行金丝雀发布
+## 在 VelaUX 上做金丝雀发布
 
-你也可以在 velaUX 上对应用进行金丝雀方式的升级。
+你也可以在 VelaUX 上对应用进行金丝雀方式的升级。
 
 ### 首次部署
 
-首先在 velaUX 界面上创建一个应用，其中包含了一个 `webservice` 类型的组件，并且将组件的镜像设置为 `wangyikewyk/canarydemo:v1` 如下图所示：
+首先在 VelaUX 界面上创建一个应用，其中包含了一个 `webservice` 类型的组件，并且将组件的镜像设置为 `wangyikewyk/canarydemo:v1` 如下图所示：
 
 ![image](../../resources/kruise-rollout-velaux-v1-component.jpg)
 

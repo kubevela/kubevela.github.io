@@ -257,7 +257,7 @@ Demo: V1
 
 Any rollback operation in middle of a runningWorkflow will rollback to the latest succeeded revision of this application. So, if you deploy a successful `v1` and upgrade to `v2`, but this version didn't succeed while you continue to upgrade to `v3`. The rollback of `v3` will automatically to `v1`, because release `v2` is not a succeeded one.
 
-## Perform canary rollout process on velaUX
+## Perform canary rollout process on VelaUX
 
 You can also execute a Canary Rollout process on VelaUX.
 
