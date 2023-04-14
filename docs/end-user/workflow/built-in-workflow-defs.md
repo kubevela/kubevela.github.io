@@ -759,7 +759,7 @@ spec:
     - name: clean-cli-jobs
       type: clean-jobs
       properties:
-        labelSelector:
+        labelselector:
           "my-label": my-value
 ```
 
