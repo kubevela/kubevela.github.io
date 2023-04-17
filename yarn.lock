@@ -5141,10 +5141,10 @@ dns-packet@^5.2.2:
   dependencies:
     "@leichtgewicht/ip-codec" "^2.0.1"
 
-docusaurus-plugin-image-zoom@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/docusaurus-plugin-image-zoom/-/docusaurus-plugin-image-zoom-0.1.2.tgz#d1262f7e486bad1902c3e87a9a5f40120aeb3b03"
-  integrity sha512-FrTYk8wNot5YlQdrdRcEgHzQWsEnkusCJuuL+numDJoavWjevPO5Pc31qG8kMcoxLacfiJgI9GP0A68ZAXEZvw==
+docusaurus-plugin-image-zoom@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/docusaurus-plugin-image-zoom/-/docusaurus-plugin-image-zoom-0.1.4.tgz#9b5fd06e3a79d84979265b7e74881a65bb3e1872"
+  integrity sha512-Fc16FUUVKgvF0OuMapsau0GFopSAH99t+FCRtTpF8n2Wt8toi5Et3xHKPNvuCb85PTtDuNfFUp5m9eCij0dXlw==
   dependencies:
     medium-zoom "^1.0.6"
 
