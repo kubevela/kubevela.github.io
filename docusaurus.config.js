@@ -30,7 +30,7 @@ module.exports = {
       id: 'start',
       content:
         '<div class="header-item">⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>!⭐️</div>' +
-        '<div class="header-item"><span>KubeVela v1.7.7 is now available.(2023-02-08)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/tag/v1.7.7">Read Release Note</a></div>',
+        '<div class="header-item"><span>KubeVela v1.8.0 is now available.(2023-04-20)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/tag/v1.8.0">Read Release Note</a></div>',
     },
     algolia: {
       appId: 'PXMFHFWUGZ',
