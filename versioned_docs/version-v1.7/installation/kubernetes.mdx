@@ -36,7 +36,7 @@ KubeVela CLI provides an easy way to engage and manage your application delivery
 ** MacOS/Linux **
 
 ```shell script
-curl -fsSl https://kubevela.net/script/install.sh | bash
+curl -fsSl https://kubevela.net/script/install.sh | bash -s v1.7.7
 ```
 
 **Windows**
@@ -77,10 +77,13 @@ sudo mv ./vela /usr/local/bin/vela
 ```
 
 :::note
+
 - [Installation Tips](https://github.com/kubevela/kubevela/issues/625):
 - If you are using a Mac system, it will pop up a warning that "vela" cannot be opened because the package from the developer cannot be verified.
 - MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
+
 :::
+
 </TabItem>
 
 <TabItem value="asdf-vm">
@@ -136,33 +139,34 @@ Refer to [using Vela CLI docker image](../platform-engineers/system-operation/ve
 ```shell script
 $ vela install
 ```
+
 <details>
   <summary> check out the outcome </summary>
 
-  ```shell
-  ...
-  Watching for changes to Job kubevela-vela-core-cluster-gateway-tls-secret-patch with timeout of 18m0s
-  Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: ADDED
-  kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 0, jobs failed: 0, jobs succeeded: 0
-  Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
-  kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
-  Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
-  kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
-  Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
-  Starting delete for "kubevela-vela-core-admission" ServiceAccount
-  Starting delete for "kubevela-vela-core-admission" ClusterRole
-  Starting delete for "kubevela-vela-core-admission" ClusterRoleBinding
-  Starting delete for "kubevela-vela-core-admission" Role
-  Starting delete for "kubevela-vela-core-admission" RoleBinding
-  Starting delete for "kubevela-vela-core-admission-patch" Job
-  Starting delete for "kubevela-vela-core-cluster-gateway-admission" ServiceAccount
-  Starting delete for "kubevela-vela-core-cluster-gateway-admission" Role
-  Starting delete for "kubevela-vela-core-cluster-gateway-admission" RoleBinding
-  Starting delete for "kubevela-vela-core-cluster-gateway-tls-secret-patch" Job
+```shell
+...
+Watching for changes to Job kubevela-vela-core-cluster-gateway-tls-secret-patch with timeout of 18m0s
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: ADDED
+kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 0, jobs failed: 0, jobs succeeded: 0
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
+kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
+kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
+Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
+Starting delete for "kubevela-vela-core-admission" ServiceAccount
+Starting delete for "kubevela-vela-core-admission" ClusterRole
+Starting delete for "kubevela-vela-core-admission" ClusterRoleBinding
+Starting delete for "kubevela-vela-core-admission" Role
+Starting delete for "kubevela-vela-core-admission" RoleBinding
+Starting delete for "kubevela-vela-core-admission-patch" Job
+Starting delete for "kubevela-vela-core-cluster-gateway-admission" ServiceAccount
+Starting delete for "kubevela-vela-core-cluster-gateway-admission" Role
+Starting delete for "kubevela-vela-core-cluster-gateway-admission" RoleBinding
+Starting delete for "kubevela-vela-core-cluster-gateway-tls-secret-patch" Job
 
-  KubeVela control plane has been successfully set up on your cluster.
-  If you want to enable dashboard, please run "vela addon enable velaux"
-  ```
+KubeVela control plane has been successfully set up on your cluster.
+If you want to enable dashboard, please run "vela addon enable velaux"
+```
 
   </details>
 

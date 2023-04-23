@@ -9,7 +9,7 @@ VelaUX provides the UI console of KubeVela.
 ## Install
 
 ```shell script
-vela addon enable velaux
+vela addon enable velaux --version v1.7.6
 ```
 
 expected output:
