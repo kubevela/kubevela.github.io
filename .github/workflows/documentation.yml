@@ -38,5 +38,5 @@ jobs:
         run: yarn set version berry
       - name: Test Build
         run: |
-          yarn install --production=false
+          yarn install
           yarn build
