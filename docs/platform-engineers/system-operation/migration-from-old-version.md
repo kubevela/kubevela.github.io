@@ -6,6 +6,18 @@ This doc aims to provide a migration guide from old versions to the new ones wit
 
 KubeVela has [release cadence](../../contributor/release-process) for every 2-3 months, we'll only maintain for the last 2 releases. As a result, you're highly recommended to upgrade along with the community. We'll strictly align with the [semver version rule](https://semver.org/) for compatibility.
 
+## From v1.7.x to v1.8.x
+
+These isn't too much work to be done for upgrading from v1.7.x to v1.8.x for usage.
+
+1. Upgrade your kubevela chart
+
+```
+helm repo add kubevela https://charts.kubevela.net/core
+helm repo update
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.8.0 --wait
+```
+
 ## From v1.6.x to v1.7.x
 
 In v1.6.x, we've upgraded the CUE engine to v0.5.x, please make sure your customized CUE definition has the compatibility when you upgrade to v1.7.x from versions lower than v1.6.0.
