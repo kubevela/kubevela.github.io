@@ -16,8 +16,10 @@ vela addon registry add [flags]
 
 ```
 add a helm repo registry: vela addon registry add --type=helm my-repo --endpoint=<URL>
-add a github registry: vela addon registry add my-repo --type git --endpoint=<URL> --path=<ptah> --token=<git token>" 
+add a github registry: vela addon registry add my-repo --type git --endpoint=<URL> --path=<path> --gitToken=<git token>
+add a specified github registry: vela addon registry add my-repo --type git --endpoint=https://github.com/kubevela/catalog --path=addons --gitToken=<git token>
 add a gitlab registry: vela addon registry add my-repo --type gitlab --endpoint=<URL> --gitlabRepoName=<repoName> --path=<path> --token=<git token>
+addon a specified gitlab registry: vela addon registry add my-repo --type gitlab --endpoint=http://gitlab.cmss.com/xxx/catalog --path=addons --gitlabRepoName=catalog --gitToken=<git token>
 ```
 
 ### Options
@@ -26,11 +28,11 @@ add a gitlab registry: vela addon registry add my-repo --type gitlab --endpoint=
       --bucket string           specify the OSS bucket name
       --endpoint string         specify the addon registry endpoint
       --gitToken string         specify the github repo token
-      --gitlabRepoName string   specify the gitlab addon registry repoName
+      --gitlabRepoName string   specify the gitlab addon registry repoName, this option must be set when registry is gitlab
   -h, --help                    help for add
       --insecureSkipTLS         specify the Helm addon registry skip tls verify
       --password string         specify the Helm addon registry password
-      --path string             specify the addon registry OSS path
+      --path string             specify the addon registry path, this option must be set when addons are not in root of registry
       --type string             specify the addon registry type
       --username string         specify the Helm addon registry username
 ```
