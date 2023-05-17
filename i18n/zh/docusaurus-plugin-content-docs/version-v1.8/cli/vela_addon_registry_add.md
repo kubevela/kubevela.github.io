@@ -19,7 +19,7 @@ add a helm repo registry: vela addon registry add --type=helm my-repo --endpoint
 add a github registry: vela addon registry add my-repo --type git --endpoint=<URL> --path=<path> --gitToken=<git token>
 add a specified github registry: vela addon registry add my-repo --type git --endpoint=https://github.com/kubevela/catalog --path=addons --gitToken=<git token>
 add a gitlab registry: vela addon registry add my-repo --type gitlab --endpoint=<URL> --gitlabRepoName=<repoName> --path=<path> --token=<git token>
-addon a specified gitlab registry: vela addon registry add my-repo --type gitlab --endpoint=http://gitlab.cmss.com/xxx/catalog --path=addons --gitlabRepoName=catalog --gitToken=<git token>
+add a specified gitlab registry: vela addon registry add my-repo --type gitlab --endpoint=http://gitlab.xxx.com/xxx/catalog --path=addons --gitlabRepoName=catalog --gitToken=<git token>
 ```
 
 ### Options
