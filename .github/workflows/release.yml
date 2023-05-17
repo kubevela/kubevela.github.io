@@ -14,8 +14,6 @@ jobs:
         with:
           node-version: "16.x"
           cache: "yarn"
-      - name: upgrade yarn
-        run: yarn set version berry
       - name: Build Static Files
         env:
           USE_SSH: true
