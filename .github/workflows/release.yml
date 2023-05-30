@@ -7,6 +7,12 @@ on:
 
 jobs:
   gh-release:
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -26,13 +32,13 @@ jobs:
           git config --global user.name "gh-actions"
           yarn install
           yarn build
-      - name: Install ossutil
-        run: wget http://gosspublic.alicdn.com/ossutil/1.7.0/ossutil64 && chmod +x ossutil64 && mv ossutil64 ossutil
-      - name: Configure Alibaba Cloud OSSUTIL
-        run: ./ossutil --config-file .ossutilconfig config -i ${{ secrets.ACCESS_KEY_ID }} -k ${{ secrets.ACCESS_KEY_SECRET }} -e oss-us-west-1.aliyuncs.com -c .ossutilconfig
-      - name: Deply To OSS for kubevela.io
-        run: ./ossutil --config-file .ossutilconfig sync -f build oss://kubevela-io
-      - name: Configure Alibaba Cloud OSSUTIL
-        run: ./ossutil --config-file .ossutilconfig config -i ${{ secrets.ACCESS_KEY_ID }} -k ${{ secrets.ACCESS_KEY_SECRET }} -e oss-accelerate.aliyuncs.com -c .ossutilconfig
-      - name: Deply To OSS for kubevela.net
-        run: ./ossutil --config-file .ossutilconfig sync -f build oss://kubevela-docs
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: build/
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
