@@ -41,11 +41,11 @@ It is worth mentioning that in March, KubeVela was promoted to a CNCF incubation
 
 **Project Description:** In KubeVela's provider system, we can use our defined Go functions in CUE schema. The Go providers usually have a parameter and return. Fields in Go providers are the same as fields in CUE schema, so it is possible and important to support automatic generation of CUE schemas and documents from Go structs.
 
-Project Outcome: Auto-generators of CUE schemas and docs from Go structs, the capabilities should be wrapped in vela cli command.
+**Project Outcome:** Auto-generators of CUE schemas and docs from Go structs, the capabilities should be wrapped in vela cli command.
 
-Project Mentors: [Fog Dong](https://github.com/FogDong), [Da Yin](https://github.com/Somefive)
+**Project Mentors:** [Fog Dong](https://github.com/FogDong), [Da Yin](https://github.com/Somefive)
 
-Project Link: https://mentorship.lfx.linuxfoundation.org/project/85f61cae-02d7-4931-8d87-d3da3128060e
+**Project Link:** https://mentorship.lfx.linuxfoundation.org/project/85f61cae-02d7-4931-8d87-d3da3128060e
 
 
 ## Application and Development
