@@ -100,7 +100,7 @@ deployTo:
 
 dependencies:
 - name: addon_name
-  version: addon_version
+  version: ">= 1.0.0, < 2.0.0"
 
 system:
   vela: ">=v1.4.0"
@@ -119,7 +119,9 @@ Here's the usage of every field:
 |          icon           |    no    |               string                |                                                                                            Icon of the addon, will display in addon dashboard.                                                                                             |
 |           url           |    no    |               string                |                                                                                           The official website of the project behind the addon.                                                                                            |
 |          tags           |    no    |              []string               |                                                                                                The tags to display and organize the addon.                                                                                                 |
-|      dependencies       |    no    | []{ name: string, version: string } | Infos of other addons it depends on. You can specify the version of dependency addon by defining the `version` filed, otherwise would use latest one. KubeVela will make sure these dependencies are enabled before installing this addon. |
+|      dependencies[]     |    no    |          array of objects           | Addons which this addon depends upon. KubeVela will make sure these dependencies are enabled before installing this addon.                                                                                                                 |
+|   dependencies[].name   |   yes    |               string                | Name of the addon dependency.                                                                                                                                                                                                              |
+| dependencies[].version  |    no    |               string                | Required version constraints for the dependency. You can specify a range like ">= 1.0.0, < 2.0.0". KubeVela will select the latest version matching the constraints. If no constraint is given, KubeVela will select the latest version.   |
 |       system.vela       |    no    |               string                |                                                         Required version of vela controller, vela CLI will block the installation if vela controller can't match the requirements.                                                         |
 |    system.kubernetes    |    no    |               string                |                                                          Required version of Kubernetes, vela CLI will block the installation if Kubernetes cluster can't match the requirements.                                                          |
 | deployTo.runtimeCluster |    no    |                bool                 |        By default, the addon will not be installed in the managed clusters. If it's `true`, it will be delivered to all managed clusters automatically. (This field only take effect when application template file is YAML typed)         |
