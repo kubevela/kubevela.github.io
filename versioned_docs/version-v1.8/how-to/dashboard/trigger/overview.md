@@ -72,6 +72,68 @@ After CI have executed this step, we can see that application is deployed succes
 
 You can refer to [Jenkins CI](../../../tutorials/jenkins) guide for a real use case about custom trigger.
 
+Apart from this, Custom Triggers also supports some other type of actions, they are :
+
+#### Execute workflow
+
+Integrate Custom Triggers into your CI tool to execute a workflow. This action behaves the same as the default custom trigger with no action provided. The request body for executing a workflow using Custom Triggers is as follows:
+
+```json
+  {
+    "action":"execute"
+    // required, the upgrade of this deployment
+    "upgrade": {
+      // key is the name of application
+      "<application-name>": {
+        // the fields that need to be patched
+        "image": "<image-name>"
+      }
+    },
+    // optional, the code info of this deployment
+    "codeInfo": {
+      "commit": "<commit-id>",
+      "branch": "<branch>",
+      "user": "<user>",
+    }
+  }
+```
+
+#### Approve workflow
+
+During the `suspending` phase of a workflow step, the CI tool can approve the workflow by calling the Custom Trigger with the following request body:
+
+```json
+  {
+    "action":"approve",
+    // optional, name of the suspending step
+    "step":"suspend"
+  }
+```
+
+#### Terminate workflow
+
+If a workflow step is in the `suspending` phase, the CI tool can terminate the workflow by calling the Custom Trigger with the following request body:
+
+```json
+  {
+    "action":"terminate",
+    // optional, name of the suspending step
+    "step":"suspend"
+  }
+```
+
+#### Rollback workflow
+
+If a workflow step is in the `suspending` phase, the CI tool can initiate a rollback of an application workflow to the latest revision by calling the Custom Trigger with the following request body:
+
+```json
+  {
+    "action":"rollback",
+    // optional, name of the suspending step
+    "step":"suspend"
+  }
+```
+
 ### Harbor Trigger
 
 Harbor Trigger can be integrated with Harbor image registry.

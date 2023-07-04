@@ -11,6 +11,7 @@ Starting from here, you will learn to use the KubeVela Addons to install plug-in
 ## Before starting
 
 - Choose a Helm Chart you want to deploy. In the tutorial, we take [bitnami/redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) as an example.
+- If you are using [bitnami/redis](https://github.com/bitnami/charts/tree/master/bitnami/redis), check if the chart version you specified is still listed [here](https://artifacthub.io/packages/helm/bitnami/redis) and available.
 - Ensure that the cluster you deliver has a usable default StorageClass. Most of our delivery middleware requires data persistence, and the default StorageClass is needed to allocate PV.
 - Make sure you have VelaUX addon enabled for UI console. If you are only CLI users, you can skip to [Deploy via CLI](#deploy-via-cli)
   ```
@@ -52,7 +53,7 @@ spec:
         repoType: "helm"
         url: "https://charts.bitnami.com/bitnami"
         chart: "redis"
-        version: "16.8.5"
+        version: "17.7.3"
         values: 
           master:
             persistence:
