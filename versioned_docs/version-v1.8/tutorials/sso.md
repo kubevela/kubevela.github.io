@@ -16,10 +16,13 @@ After the platform is initialized, local login is used by default. Platform admi
 
 ![alt](https://static.kubevela.net/images/1.3/dex-addon.png)
 
+2. After enabling the Dex Addon, we also need to upgrade the VelaUX addon and open its Dex option:
+
+![alt](https://static.kubevela.net/images/1.5/enable-dex-in-velaux.png)
+
 ## Configure Dex Connectors
 
 Next, we need to configure the Dex Connectors. 
-
 ### Configure GitHub Connector
 
 Take GitHub Connector as an example, if you don't have a GitHub Oauth App, you need to create an OAuth App on GitHub's Developer settings first, and set the App's Authorization callback URL to `[Vela UX address]/dex/callback`.

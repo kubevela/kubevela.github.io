@@ -62,13 +62,29 @@ APP                 	COMPONENT     	TYPE       	TRAITS 	PHASE  	HEALTHY	STATUS	C
 vela-app-with-sidecar	log-gen-worker	worker     	sidecar           	running	healthy	      	2021-08-29 22:07:07 +0800 CST
 ```
 
-
 成功后，查看 Sidecar 所输出的日志
 
 
-```
-vela logs vela-app-with-sidecar -c count-log
+```shell
+vela logs vela-app-with-sidecar --container count-log
 ```
 
 从输出的日志可以看到读取日志的 sidecar 已经生效。
 
+<details>
+<summary>expected output</summary>
+
+```console
+0: Fri Apr 16 11:08:45 UTC 2021
+1: Fri Apr 16 11:08:46 UTC 2021
+2: Fri Apr 16 11:08:47 UTC 2021
+3: Fri Apr 16 11:08:48 UTC 2021
+4: Fri Apr 16 11:08:49 UTC 2021
+5: Fri Apr 16 11:08:50 UTC 2021
+6: Fri Apr 16 11:08:51 UTC 2021
+7: Fri Apr 16 11:08:52 UTC 2021
+8: Fri Apr 16 11:08:53 UTC 2021
+9: Fri Apr 16 11:08:54 UTC 2021 
+```
+
+</details>
