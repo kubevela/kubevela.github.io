@@ -65,7 +65,7 @@ vela-app-with-sidecar	log-gen-worker	worker     	sidecar           	running	heal
 And check the logging output of sidecar. 
 
 ```shell
-vela logs vela-app-with-sidecar -c count-log
+vela logs vela-app-with-sidecar --container count-log
 ```
 
 <details>

@@ -24,9 +24,19 @@ KubeVela natively support Crossplane as they're already CRDs, while terraform wa
 
 ## Common Issues
 
-### The document website is very slow to access.
+### Why things of https://*.kubevela.net is out of date?
 
-You can use https://kubevela.net/ as a faster alternative.
+Recently, we're removing the dependency of the domain `kubevela.net` due to some compliance issues, so things are migrated. Please check the following lists to find the new address:
+
+Content | old | new
+--- | --- | ---
+Documentation | https://kubevela.net | https://kubevela.io
+Image Hub | "hub.kubevela.net" | "docker.io" or "ghcr.io/kubevela" 
+Helm charts | https://charts.kubevela.net/core | https://kubevela.github.io/charts
+Official Addon Registry | https://addons.kubevela.net | https://kubevela.github.io/catalog/official
+Experimental Addon Registry | - | https://kubevela.github.io/catalog/experimental
+CLI | https://kubevela.net/script/install.sh | download from [release page](https://github.com/kubevela/kubevela/releases)
+VelaD | - | migrating 
 
 ### You have reached rate limit for Docker Image Registry 
 
@@ -37,9 +47,7 @@ By default, the community use images from docker registry for installation. You 
 * Before v1.4.1, the image format is `ghcr.io/<git-repo>/vela-core:<version>`, e.g. "ghcr.io/kubevela/kubevela/vela-core:latest".
 * After v1.4.1, the image format has changed to `ghcr.io/kubevela/<align with docker hub>`, e.g. "ghcr.io/kubevela/oamdev/vela-core:latest".
 
-2. Alibaba Container Registry also sponsor KubeVela community, you can use `acr.kubevela.net/` as prefix for the docker registry, acr has a sync for each KubeVela official images. Use it like `acr.kubevela.net/oamdev/vela-core:latest`.
-
-3. If you insist on using Docker registry, you may increase the limit by authenticating and upgrading: https://www.docker.com/increase-rate-limit .
+2. If you insist on using Docker registry, you may increase the limit by authenticating and upgrading: https://www.docker.com/increase-rate-limit .
  
 ### SchemaError of ApplicationRevision CRD
 

@@ -26,9 +26,11 @@ By default, VelaUX didn't have any exposed port.
 
 Port forward will work as a proxy to allow visiting VelaUX dashboard by local port.
 
-```bash
-vela port-forward addon-velaux -n vela-system 8000:8000
 ```
+vela port-forward addon-velaux -n vela-system
+```
+
+Choose `> local | velaux | velaux` for visit.
 
 ## Setup with Specified Service Type
 
@@ -49,23 +51,23 @@ If you want to expose your VelaUX dashboard for convenience, you can specify the
 
 After the service type specified to `LoadBalancer` or `NodePort`, you can obtain the access address through `vela status`:
 
-```bash
+```
 vela status addon-velaux -n vela-system --endpoint
 ```
 
 The expected output:
 
-```bash
-+---------+---------------+-----------------------------------+--------------------------------+-------+
-| CLUSTER |   COMPONENT   |     REF(KIND/NAMESPACE/NAME)      |            ENDPOINT            | INNER |
-+---------+---------------+-----------------------------------+--------------------------------+-------+
-| local   | velaux-server | Service/vela-system/velaux-server | velaux-server.vela-system:8000 | true  |
-+---------+---------------+-----------------------------------+--------------------------------+-------+
+```
++----------------------------+----------------------+
+|  REF(KIND/NAMESPACE/NAME)  |       ENDPOINT       |
++----------------------------+----------------------+
+| Service/vela-system/velaux | http://<IP address> |
++----------------------------+----------------------+
 ```
 
 ## Setup with Ingress domain
 
-If you have ingress and domain available in your cluster, you can also deploy VelaUX by specifying a domain like below:
+If you have ingress and domain available in your cluster, you can also deploy VelaUX by specify a domain like below:
 
 ```bash
 vela addon enable velaux domain=example.domain.com
@@ -73,16 +75,16 @@ vela addon enable velaux domain=example.domain.com
 
 The expected output:
 
-```bash
+```
 I0112 15:23:40.428364   34884 apply.go:106] "patching object" name="addon-velaux" resource="core.oam.dev/v1beta1, Kind=Application"
 I0112 15:23:40.676894   34884 apply.go:106] "patching object" name="addon-secret-velaux" resource="/v1, Kind=Secret"
 Addon: velaux enabled Successfully.
 Please access the velaux from the following endpoints:
-+-----------------------------------+---------------------------+
-|  REF(KIND/NAMESPACE/NAME)         |         ENDPOINT          |
-+-----------------------------------+---------------------------+
-| Ingress/vela-system/velaux-server | http://example.domain.com |
-+-----------------------------------+---------------------------+
++----------------------------+---------------------------+
+|  REF(KIND/NAMESPACE/NAME)  |         ENDPOINT          |
++----------------------------+---------------------------+
+| Ingress/vela-system/velaux | http://example.domain.com |
++----------------------------+---------------------------+
 ```
 
 If you enabled the traefik addon, you can set the `gatewayDriver` parameter to use the Gateway API.
@@ -170,13 +172,13 @@ spec:
         type: deploy
 ```
 
-After deployment, let's get the root password from the secret `vela-system/velaux-db-mongodb`.
+After deployed, let's get the root password from the secret `vela-system/velaux-db-mongodb`.
 
 ## Specify the addon image
 
 By default the image repo is docker hub, you can specify the image repo by the `repo` parameter:
 
-```bash
+```
 vela addon enable velaux repo=acr.kubevela.net
 ```
 
