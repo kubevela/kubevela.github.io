@@ -2,22 +2,22 @@
 
 # Implemented based on Dapr Cli https://github.com/dapr/cli/tree/master/install
 
-# Vela CLI location
-: ${VELA_INSTALL_DIR:="/usr/local/bin"}
+# VelaD location
+: ${VELAD_INSTALL_DIR:="/usr/local/bin"}
 
-# sudo is required to copy binary to VELA_INSTALL_DIR for linux
+# sudo is required to copy binary to VELAD_INSTALL_DIR for linux
 : ${USE_SUDO:="false"}
 
 # Http request CLI
-VELA_HTTP_REQUEST_CLI=curl
+VELAD_HTTP_REQUEST_CLI=curl
 
-# Vela CLI filename
-VELA_CLI_FILENAME=vela
+# VelaD filename
+VELAD_CLI_FILENAME=velad
 
-VELA_CLI_FILE="${VELA_INSTALL_DIR}/${VELA_CLI_FILENAME}"
+VELAD_CLI_FILE="${VELAD_INSTALL_DIR}/${VELAD_CLI_FILENAME}"
 
-VERSION_CHECK_BASE="https://api.github.com/repos/kubevela/kubevela"
-DOWNLOAD_BASE="https://github.com/kubevela/kubevela/releases/download"
+VERSION_CHECK_BASE="https://api.github.com/repos/kubevela/velad"
+DOWNLOAD_BASE="https://github.com/kubevela/velad/releases/download"
 
 getSystemInfo() {
     ARCH=$(uname -m)
@@ -31,14 +31,14 @@ getSystemInfo() {
 
     # Most linux distro needs root permission to copy the file to /usr/local/bin
     if [ "$OS" == "linux" ] || [ "$OS" == "darwin" ]; then
-        if [ "$VELA_INSTALL_DIR" == "/usr/local/bin" ]; then
+        if [ "$VELAD_INSTALL_DIR" == "/usr/local/bin" ]; then
             USE_SUDO="true"
         fi
     fi
 }
 
 verifySupported() {
-    local supported=(darwin-amd64 darwin-arm64 linux-amd64 linux-arm linux-arm64)
+    local supported=(darwin-amd64 linux-amd64 darwin-arm64 linux-arm64)
     local current_osarch="${OS}-${ARCH}"
 
     for osarch in "${supported[@]}"; do
@@ -64,36 +64,37 @@ runAsRoot() {
 
 checkHttpRequestCLI() {
     if type "curl" > /dev/null; then
-        VELA_HTTP_REQUEST_CLI=curl
+        VELAD_HTTP_REQUEST_CLI=curl
     elif type "wget" > /dev/null; then
-        VELA_HTTP_REQUEST_CLI=wget
+        VELAD_HTTP_REQUEST_CLI=wget
     else
         echo "Either curl or wget is required"
         exit 1
     fi
 }
 
-checkExistingVela() {
-    if [ -f "$VELA_CLI_FILE" ]; then
-        echo -e "\nVela CLI is detected:"
-        $VELA_CLI_FILE version
-        echo -e "Reinstalling Vela CLI - ${VELA_CLI_FILE}...\n"
+checkExistingVelaD() {
+    if [ -f "$VELAD_CLI_FILE" ]; then
+        echo -e "\nVelaD is detected:"
+        $VELAD_CLI_FILE version
+        echo -e "Reinstalling VelaD - ${VELAD_CLI_FILE}...\n"
     else
-        echo -e "Installing Vela CLI...\n"
+        echo -e "Installing VelaD ...\n"
     fi
 }
 
 getLatestRelease() {
-    local velaReleaseUrl="${VERSION_CHECK_BASE}/releases/latest"
     local latest_release=""
     local response=""
 
-    if [ "$VELA_HTTP_REQUEST_CLI" == "curl" ]; then
-        response=$(curl -s $velaReleaseUrl)
+    if [ "$VELAD_HTTP_REQUEST_CLI" == "curl" ]; then
+        response=$(curl -s "${VERSION_CHECK_BASE}/releases/latest")
     else
-        response=$(wget -q -O - $velaReleaseUrl)
+        latest_release=$(wget -q -O - $velaReleaseUrl)
+        response=$(wget -q -O - "${VERSION_CHECK_BASE}/releases/latest")
     fi
-    
+
+    # Check for errors in the response
     if [[ "$response" == *"Not Found"* ]]; then
         echo "Error: Repository or release not found."
         return 1
@@ -101,6 +102,7 @@ getLatestRelease() {
 
     latest_release=$(echo "$response" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
+    # Check if the latest version is empty
     if [ -z "$latest_release" ]; then
         echo "Error: Unable to retrieve the latest version."
         return 1
@@ -112,19 +114,19 @@ getLatestRelease() {
 downloadFile() {
     LATEST_RELEASE_TAG=$1
 
-    VELA_CLI_ARTIFACT="${VELA_CLI_FILENAME}-${LATEST_RELEASE_TAG}-${OS}-${ARCH}.tar.gz"
+    VELA_CLI_ARTIFACT="${VELAD_CLI_FILENAME}-${LATEST_RELEASE_TAG}-${OS}-${ARCH}.tar.gz"
     # convert `-` to `_` to let it work
     DOWNLOAD_URL="${DOWNLOAD_BASE}/${LATEST_RELEASE_TAG}/${VELA_CLI_ARTIFACT}"
 
     # Create the temp directory
-    VELA_TMP_ROOT=$(mktemp -dt vela-install-XXXXXX)
-    ARTIFACT_TMP_FILE="$VELA_TMP_ROOT/$VELA_CLI_ARTIFACT"
+    VELAD_TMP_ROOT=$(mktemp -dt velad-install-XXXXXX)
+    ARTIFACT_TMP_FILE="$VELAD_TMP_ROOT/$VELA_CLI_ARTIFACT"
 
     echo "Downloading $DOWNLOAD_URL ..."
-    if [ "$VELA_HTTP_REQUEST_CLI" == "curl" ]; then
-        curl -SsL "$DOWNLOAD_URL" -o "$ARTIFACT_TMP_FILE"
+    if [ "$VELAD_HTTP_REQUEST_CLI" == "curl" ]; then
+        curl -SL "$DOWNLOAD_URL" -o "$ARTIFACT_TMP_FILE"
     else
-        wget -q -O "$ARTIFACT_TMP_FILE" "$DOWNLOAD_URL"
+        wget -O "$ARTIFACT_TMP_FILE" "$DOWNLOAD_URL"
     fi
 
     if [ ! -f "$ARTIFACT_TMP_FILE" ]; then
@@ -134,23 +136,23 @@ downloadFile() {
 }
 
 installFile() {
-    tar xf "$ARTIFACT_TMP_FILE" -C "$VELA_TMP_ROOT"
-    local tmp_root_vela_cli="$VELA_TMP_ROOT/${OS}-${ARCH}/$VELA_CLI_FILENAME"
+    tar xf "$ARTIFACT_TMP_FILE" -C "$VELAD_TMP_ROOT"
+    local tmp_root_velad="$VELAD_TMP_ROOT/${OS}-${ARCH}/$VELAD_CLI_FILENAME"
 
-    if [ ! -f "$tmp_root_vela_cli" ]; then
-        echo "Failed to unpack Vela CLI executable."
+    if [ ! -f "$tmp_root_velad" ]; then
+        echo "Failed to unpack VelaD executable."
         exit 1
     fi
 
-    chmod o+x $tmp_root_vela_cli
-    runAsRoot cp "$tmp_root_vela_cli" "$VELA_INSTALL_DIR"
+    chmod o+x "$tmp_root_velad"
+    runAsRoot mv "$tmp_root_velad" "$VELAD_INSTALL_DIR"
 
-    if [ $? -eq 0 ] && [ -f "$VELA_CLI_FILE" ]; then
-        echo "$VELA_CLI_FILENAME installed into $VELA_INSTALL_DIR successfully."
-
-        $VELA_CLI_FILE version
+    if [ $? -eq 0 ] && [ -f "$VELAD_CLI_FILE" ]; then
+        echo "VelaD installed into $VELAD_INSTALL_DIR/$VELAD_CLI_FILENAME successfully."
+        echo ""
+        $VELAD_CLI_FILE version
     else
-        echo "Failed to install $VELA_CLI_FILENAME"
+        echo "Failed to install $VELAD_CLI_FILENAME"
         exit 1
     fi
 }
@@ -158,21 +160,22 @@ installFile() {
 fail_trap() {
     result=$?
     if [ "$result" != "0" ]; then
-        echo "Failed to install Vela CLI"
-        echo "For support, go to https://kubevela.io"
+        echo "Failed to install VelaD"
+        echo "Go to https://kubevela.io for more support."
     fi
     cleanup
     exit $result
 }
 
 cleanup() {
-    if [[ -d "${VELA_TMP_ROOT:-}" ]]; then
-        rm -rf "$VELA_TMP_ROOT"
+    if [[ -d "${VELAD_TMP_ROOT:-}" ]]; then
+        rm -rf "$VELAD_TMP_ROOT"
     fi
 }
 
 installCompleted() {
-    echo -e "\nTo get started with KubeVela, please visit https://kubevela.io"
+    echo -e "\nFor more information on how to started, please visit:"
+    echo -e "  https://kubevela.io"
 }
 
 # -----------------------------------------------------------------------------
@@ -182,20 +185,18 @@ trap "fail_trap" EXIT
 
 getSystemInfo
 verifySupported
-checkExistingVela
+checkExistingVelaD
 checkHttpRequestCLI
 
 
 if [ -z "$1" ]; then
-    echo "Getting the latest Vela CLI..."
+    echo "Getting the latest VelaD..."
     getLatestRelease
 elif [[ $1 == v* ]]; then
     ret_val=$1
 else
     ret_val=v$1
 fi
-
-echo "Installing $ret_val Vela CLI..."
 
 downloadFile $ret_val
 installFile

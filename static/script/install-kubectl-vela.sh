@@ -12,7 +12,7 @@
 KUBECTL_VELA_HTTP_REQUEST_CLI=curl
 
 # GitHub Organization and repo name to download release
-GITHUB_ORG=oam-dev
+GITHUB_ORG=kubevela
 GITHUB_REPO=kubevela
 
 # Kubectl-Vela CLI filename
