@@ -16,7 +16,8 @@ VELA_CLI_FILENAME=vela
 
 VELA_CLI_FILE="${VELA_INSTALL_DIR}/${VELA_CLI_FILENAME}"
 
-DOWNLOAD_BASE="https://static.kubevela.net/binary/vela"
+VERSION_CHECK_BASE="https://api.github.com/repos/kubevela/kubevela"
+DOWNLOAD_BASE="https://github.com/kubevela/kubevela/releases/download"
 
 getSystemInfo() {
     ARCH=$(uname -m)
@@ -83,13 +84,26 @@ checkExistingVela() {
 }
 
 getLatestRelease() {
-    local velaReleaseUrl="${DOWNLOAD_BASE}/latest_version"
+    local velaReleaseUrl="${VERSION_CHECK_BASE}/releases/latest"
     local latest_release=""
+    local response=""
 
     if [ "$VELA_HTTP_REQUEST_CLI" == "curl" ]; then
-        latest_release=$(curl -s $velaReleaseUrl)
+        response=$(curl -s $velaReleaseUrl)
     else
-        latest_release=$(wget -q -O - $velaReleaseUrl)
+        response=$(wget -q -O - $velaReleaseUrl)
+    fi
+    
+    if [[ "$response" == *"Not Found"* ]]; then
+        echo "Error: Repository or release not found."
+        return 1
+    fi
+
+    latest_release=$(echo "$response" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+
+    if [ -z "$latest_release" ]; then
+        echo "Error: Unable to retrieve the latest version."
+        return 1
     fi
 
     ret_val=$latest_release
