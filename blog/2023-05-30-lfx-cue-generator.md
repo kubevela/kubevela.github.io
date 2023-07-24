@@ -14,6 +14,8 @@ Hello, I am Junyu Liu (GitHub: iyear), currently a sophomore majoring in softwar
 
 In the spring of 2023, I was accepted as a CNCF student under the KubeVela project through LFX Mentorship. In this project, I am responsible for developing a CUE code and documentation generator based on Golang from scratch, laying the foundation for the infrastructure part of KubeVela's future extensibility.
 
+<!--truncate-->
+
 ## What is LFX Mentorship?
 
 ![LFX Mentorship](/img/blog/lfx-cue-generator/lfx-mentorship.svg)
