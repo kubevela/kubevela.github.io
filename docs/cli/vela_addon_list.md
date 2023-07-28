@@ -12,16 +12,28 @@ List addons in KubeVela
 vela addon list [flags]
 ```
 
+### Examples
+
+```
+  List addon by:
+	vela addon ls
+  List addons in a specific registry, useful to reveal addons with duplicated names:
+    vela addon ls --registry <registry-name>
+
+```
+
 ### Options
 
 ```
-  -h, --help   help for list
+  -h, --help              help for list
+  -r, --registry string   specify the registry name to list
 ```
 
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO

@@ -2,19 +2,21 @@
 title: vela exec
 ---
 
-Execute command in a container
+Execute command in a container.
 
 ### Synopsis
 
 Execute command inside container based vela application.
 
 ```
-vela exec [flags] APP_NAME -- COMMAND [args...]
+vela exec [flags]
 ```
 
 ### Examples
 
 ```
+
+		exec [flags] APP_NAME -- COMMAND [args...]
 
 		# Get output from running 'date' command from app pod, using the first container by default
 		vela exec my-app -- date
@@ -43,7 +45,8 @@ vela exec [flags] APP_NAME -- COMMAND [args...]
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO

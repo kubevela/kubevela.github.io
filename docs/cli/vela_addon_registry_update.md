@@ -24,11 +24,11 @@ vela addon registry update <registry-name> --type OSS --endpoint=<URL> --bucket=
       --bucket string           specify the OSS bucket name
       --endpoint string         specify the addon registry endpoint
       --gitToken string         specify the github repo token
-      --gitlabRepoName string   specify the gitlab addon registry repoName
+      --gitlabRepoName string   specify the gitlab addon registry repoName, must be set when registry is gitlab
   -h, --help                    help for update
       --insecureSkipTLS         specify the Helm addon registry skip tls verify
       --password string         specify the Helm addon registry password
-      --path string             specify the addon registry OSS path
+      --path string             specify the addon registry path, must be set when addons are not in root of registry
       --type string             specify the addon registry type
       --username string         specify the Helm addon registry username
 ```
@@ -36,7 +36,8 @@ vela addon registry update <registry-name> --type OSS --endpoint=<URL> --bucket=
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO

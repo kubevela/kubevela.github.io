@@ -4,7 +4,7 @@ title: Built-in Trait Type
 
 This documentation will walk through all the built-in trait types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-01-16T19:19:03+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-07-28T09:33:26+08:00.
 
 ## Affinity
 
@@ -566,6 +566,112 @@ spec:
  imagePullPolicy | Specify the image pull policy of the container. | "" or "IfNotPresent" or "Always" or "Never" | false | empty 
 
 
+## Container-Ports
+
+### Description
+
+Expose on the host and bind the external port to host to enable web traffic for your component.
+
+### Apply To Component Types
+
+Component based on the following kinds of resources:
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
+
+
+### Examples (container-ports)
+
+It's used to define Pod networks directly. hostPort routes the container's port directly to the port on the scheduled node, so that you can access the Pod through the host's IP plus hostPort.
+Don't specify a hostPort for a Pod unless it is absolutely necessary(run `DaemonSet` service). When you bind a Pod to a hostPort, it limits the number of places the Pod can be scheduled, because each <hostIP, hostPort, protocol> combination must be unique. If you don't specify the hostIP and protocol explicitly, Kubernetes will use 0.0.0.0 as the default hostIP and TCP as the default protocol.
+If you explicitly need to expose a Pod's port on the node, consider using `expose` or `gateway` trait, or exposeType and ports parameter of `webservice` component before resorting to `container-ports` trait.
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: busybox
+spec:
+  components:
+    - name: busybox
+      type: webservice
+      properties:
+        cpu: "0.5"
+        exposeType: ClusterIP
+        image: busybox
+        memory: 1024Mi
+        ports:
+          - expose: false
+            port: 80
+            protocol: TCP
+          - expose: false
+            port: 801
+            protocol: TCP
+      traits:
+        - type: container-ports
+          properties:
+            # you can use container-ports to control multiple containers by filling `containers`
+            # NOTE: in containers, you must set the container name for each container
+            containers:
+              - containerName: busybox
+                ports:
+                  - containerPort: 80
+                    protocol: TCP
+                    hostPort: 8080
+```
+
+### Specification (container-ports)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+  |  | [PatchParams](#patchparams-container-ports) or [type-option-2](#type-option-2-container-ports) | false |  
+
+
+#### PatchParams (container-ports)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containerName | Specify the name of the target container, if not set, use the component name. | string | false | empty 
+ ports | Specify ports you want customer traffic sent to. | [[]ports](#ports-container-ports) | true |  
+
+
+##### ports (container-ports)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containerPort | Number of port to expose on the pod's IP address. | int | true |  
+ protocol | Protocol for port. Must be UDP, TCP, or SCTP. | "TCP" or "UDP" or "SCTP" | false | TCP 
+ hostPort | Number of port to expose on the host. | int | false |  
+ hostIP | What host IP to bind the external port to. | string | false |  
+
+
+#### type-option-2 (container-ports)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containers | Specify the container ports for multiple containers. | [[]containers](#containers-container-ports) | true |  
+
+
+##### containers (container-ports)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containerName | Specify the name of the target container, if not set, use the component name. | string | false | empty 
+ ports | Specify ports you want customer traffic sent to. | [[]ports](#ports-container-ports) | true |  
+
+
+##### ports (container-ports)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containerPort | Number of port to expose on the pod's IP address. | int | true |  
+ protocol | Protocol for port. Must be UDP, TCP, or SCTP. | "TCP" or "UDP" or "SCTP" | false | TCP 
+ hostPort | Number of port to expose on the host. | int | false |  
+ hostIP | What host IP to bind the external port to. | string | false |  
+
+
 ## Cpuscaler
 
 ### Description
@@ -762,9 +868,21 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- port | Specify the exposion ports. | []int | true |  
- annotations | Specify the annotaions of the exposed service. | map[string]string | true |  
+ port | Deprecated, the old way to specify the exposion ports. | []int | false |  
+ ports | Specify portsyou want customer traffic sent to. | [[]ports](#ports-expose) | false |  
+ annotations | Specify the annotations of the exposed service. | map[string]string | true |  
+ matchLabels |  | map[string]string | false |  
  type | Specify what kind of Service you want. options: "ClusterIP","NodePort","LoadBalancer","ExternalName". | "ClusterIP" or "NodePort" or "LoadBalancer" or "ExternalName" | false | ClusterIP 
+
+
+#### ports (expose)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ port | Number of port to expose on the pod's IP address. | int | true |  
+ name | Name of the port. | string | false |  
+ protocol | Protocol for port. Must be UDP, TCP, or SCTP. | "TCP" or "UDP" or "SCTP" | false | TCP 
+ nodePort | exposed node port. Only Valid when exposeType is NodePort. | int | false |  
 
 
 ## Gateway
@@ -815,6 +933,8 @@ spec:
  classInSpec | Set ingress class in '.spec.ingressClassName' instead of 'kubernetes.io/ingress.class' annotation. | bool | false | false 
  secretName | Specify the secret name you want to quote to use tls. | string | false |  
  gatewayHost | Specify the host of the ingress gateway, which is used to generate the endpoints when the host is empty. | string | false |  
+ name | Specify a unique name for this gateway, required to support multiple gateway traits on a component. | string | false |  
+ pathType | Specify a pathType for the ingress rules, defaults to "ImplementationSpecific". | "ImplementationSpecific" or "Prefix" or "Exact" | false | ImplementationSpecific 
 
 
 ## Hostalias
@@ -2609,7 +2729,7 @@ spec:
  mountOnly |  | bool | false | false 
  mountToEnv |  | [mountToEnv](#mounttoenv-storage) | false |  
  mountToEnvs |  | [[]mountToEnvs](#mounttoenvs-storage) | false |  
- mountPath |  | string | false |  
+ mountPath |  | string | true |  
  subPath |  | string | false |  
  defaultMode |  | int | false | 420 
  readOnly |  | bool | false | false 
@@ -2737,7 +2857,7 @@ spec:
  maxSkew | Describe the degree to which Pods may be unevenly distributed. | int | true |  
  topologyKey | Specify the key of node labels. | string | true |  
  whenUnsatisfiable | Indicate how to deal with a Pod if it doesn't satisfy the spread constraint. | "DoNotSchedule" or "ScheduleAnyway" | false | DoNotSchedule 
- labelSelector |  | [labelSelector](#labelselector-topologyspreadconstraints) | true |  
+ labelSelector | labelSelector to find matching Pods. | [labelSelector](#labelselector-topologyspreadconstraints) | true |  
  minDomains | Indicate a minimum number of eligible domains. | int | false |  
  matchLabelKeys | A list of pod label keys to select the pods over which spreading will be calculated. | []string | false |  
  nodeAffinityPolicy | Indicate how we will treat Pod's nodeAffinity/nodeSelector when calculating pod topology spread skew. | "Honor" or "Ignore" | false | Honor 

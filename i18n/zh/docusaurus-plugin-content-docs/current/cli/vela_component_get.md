@@ -30,12 +30,13 @@ vela comp get <component>
       --registry string   specify the registry name (default "default")
       --token string      specify token when using --url to specify registry url
       --url string        specify the registry URL
+  -V, --verbosity Level   number for the log level verbosity
   -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO
 
-* [vela component](vela_component)	 - List/get components
+* [vela component](vela_component)	 - List/get components.
 
 #### Go Back to [CLI Commands](vela) Homepage.
 

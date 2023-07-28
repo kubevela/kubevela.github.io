@@ -2,7 +2,7 @@
 title: vela adopt
 ---
 
-Adopt resources into new application
+Adopt resources into new application.
 
 ### Synopsis
 
@@ -16,6 +16,8 @@ Adopt resources into applications
 
  The adopted application can be customized. You can provide a CUE template file to the command and make your own assemble rules for the adoption application. You can refer to https://github.com/kubevela/kubevela/blob/master/references/cli/adopt-templates/default.cue to see the default implementation of adoption rules.
 
+ If you want to adopt all resources with resource topology rule to Applications, you can use: 'vela adopt --all'. The resource topology rule can be customized by '--resource-topology-rule' flag.
+
 ```
 vela adopt [flags]
 ```
@@ -26,7 +28,13 @@ vela adopt [flags]
   # Native Resources Adoption
   
   ## Adopt resources into new application
-  ## Use: vela adopt <resources-type>[/<resource-namespace>]/<resource-name> <resources-type>[/<resource-namespace>]/<resource-name> ...
+  
+  ## Adopt all resources to Applications with resource topology rule
+  ## Use: vela adopt <resources-type> --all
+  vela adopt --all
+  vela adopt deployment --all --resource-topology-rule myrule.cue
+  
+  ## Use: vela adopt <resources-type>[/<resource-cluster>][/<resource-namespace>]/<resource-name> <resources-type>[/<resource-cluster>][/<resource-namespace>]/<resource-name> ...
   vela adopt deployment/my-app configmap/my-app
   
   ## Adopt resources into new application with specified app name
@@ -47,6 +55,11 @@ vela adopt [flags]
   -----------------------------------------------------------
   
   # Helm Chart Adoption
+  
+  ## Adopt all helm releases to Applications with resource topology rule
+  ## Use: vela adopt <resources-type> --all
+  vela adopt --all --type helm
+  vela adopt my-chart --all --resource-topology-rule myrule.cue --type helm
   
   ## Adopt resources in a deployed helm chart
   vela adopt my-chart -n my-namespace --type helm
@@ -69,22 +82,25 @@ vela adopt [flags]
 ### Options
 
 ```
-      --adopt-template string   The CUE template for adoption. If not provided, the default template will be used when --auto is switched on.
-      --app-name string         The name of application for adoption. If empty for helm type adoption, it will inherit the helm chart's name.
-      --apply                   If true, the application for adoption will be applied. Otherwise, it will only be printed.
-  -d, --driver string           The storage backend of helm adoption. Only take effect when --type=helm.
-  -e, --env string              The environment name for the CLI request
-  -h, --help                    help for adopt
-  -m, --mode string             The mode of adoption. Available values: [read-only, take-over] (default "read-only")
-  -n, --namespace string        If present, the namespace scope for this CLI request
-      --recycle                 If true, when the adoption application is successfully applied, the old storage (like Helm secret) will be recycled.
-  -t, --type string             The type of adoption. Available values: [native, helm] (default "native")
+      --adopt-template string           The CUE template for adoption. If not provided, the default template will be used when --auto is switched on.
+      --all                             Adopt all resources in the namespace
+      --app-name string                 The name of application for adoption. If empty for helm type adoption, it will inherit the helm chart's name.
+      --apply                           If true, the application for adoption will be applied. Otherwise, it will only be printed.
+  -d, --driver string                   The storage backend of helm adoption. Only take effect when --type=helm.
+  -e, --env string                      The environment name for the CLI request
+  -h, --help                            help for adopt
+  -m, --mode string                     The mode of adoption. Available values: [read-only, take-over] (default "read-only")
+  -n, --namespace string                If present, the namespace scope for this CLI request
+      --recycle                         If true, when the adoption application is successfully applied, the old storage (like Helm secret) will be recycled.
+      --resource-topology-rule string   The CUE template for specify the rule of the resource topology. If not provided, the default rule will be used.
+  -t, --type string                     The type of adoption. Available values: [native, helm] (default "native")
+  -y, --yes                             Skip confirmation prompt
 ```
 
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
 ```
 
 ### SEE ALSO

@@ -9,7 +9,7 @@ Show status of an application.
 Show status of vela application.
 
 ```
-vela status APP_NAME [flags]
+vela status [flags]
 ```
 
 ### Examples
@@ -33,6 +33,9 @@ vela status APP_NAME [flags]
 
   # Get raw Application status using jsonpath
   vela status first-vela-app -o jsonpath='{.status}'
+  
+  # Get Application metrics status
+  vela status first-vela-app --metrics
 ```
 
 ### Options
@@ -45,6 +48,7 @@ vela status APP_NAME [flags]
   -p, --endpoint               show all service endpoints of the application
   -e, --env string             specify environment name for application
   -h, --help                   help for status
+  -m, --metrics                show resource quota and consumption metrics of the application
   -n, --namespace string       specify the Kubernetes namespace to use
   -o, --output string          raw Application output format. One of: (json, yaml, jsonpath)
       --pod                    show pod list of the application
@@ -55,7 +59,8 @@ vela status APP_NAME [flags]
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO

@@ -2,10 +2,16 @@
 title: vela help
 ---
 
-Help about any command
+Help about any command.
 
 ```
-vela help [command] 
+vela help
+```
+
+### Examples
+
+```
+help [command] | STRING_TO_SEARCH
 ```
 
 ### Options
@@ -17,7 +23,8 @@ vela help [command]
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO

@@ -2,7 +2,7 @@
 title: vela completion
 ---
 
-Output shell completion code for the specified shell (bash or zsh)
+Output shell completion code for the specified shell (bash or zsh).
 
 ### Synopsis
 
@@ -18,7 +18,8 @@ The shell code must be evaluated to provide interactive completion of vela comma
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO

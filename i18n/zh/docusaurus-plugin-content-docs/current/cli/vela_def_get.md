@@ -28,18 +28,19 @@ vela def get NAME [flags]
   -n, --namespace string   Specify which namespace the definition locates. (default "vela-system")
   -r, --revision string    Get the specified version of a definition.
       --revisions          List revisions of the specified definition.
-  -t, --type string        Specify which definition type to get. If empty, all types will be searched. Valid types: scope, workflow-step, component, trait, policy, workload
+  -t, --type string        Specify which definition type to get. If empty, all types will be searched. Valid types: component, trait, policy, workload, workflow-step
 ```
 
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO
 
-* [vela def](vela_def)	 - Manage Definitions
+* [vela def](vela_def)	 - Manage definitions.
 
 #### Go Back to [CLI Commands](vela) Homepage.
 

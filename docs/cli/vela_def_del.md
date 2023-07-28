@@ -24,18 +24,19 @@ vela def del DEFINITION_NAME [flags]
 ```
   -h, --help               help for del
   -n, --namespace string   Specify which namespace the definition locates. (default "vela-system")
-  -t, --type string        Specify the definition type of target. Valid types: component, trait, policy, workload, scope, workflow-step
+  -t, --type string        Specify the definition type of target. Valid types: policy, workload, workflow-step, component, trait
 ```
 
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO
 
-* [vela def](vela_def)	 - Manage Definitions
+* [vela def](vela_def)	 - Manage definitions.
 
 #### Go Back to [CLI Commands](vela) Homepage.
 

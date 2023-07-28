@@ -2,11 +2,11 @@
 title: vela live-diff
 ---
 
-Compare application and revisions
+Compare application and revisions.
 
 ### Synopsis
 
-Compare application and revisions
+Compare application and revisions.
 
 ```
 vela live-diff
@@ -40,7 +40,8 @@ vela live-diff
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO

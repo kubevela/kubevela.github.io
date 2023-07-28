@@ -6,7 +6,7 @@ Manage system.
 
 ### Synopsis
 
-Manage system, incluing printing the system deployment information in vela-system namespace and diagnosing the system's health.
+Manage system, including printing the system deployment information in vela-system namespace and diagnosing the system's health.
 
 ### Examples
 
@@ -29,7 +29,8 @@ Manage system, incluing printing the system deployment information in vela-syste
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO

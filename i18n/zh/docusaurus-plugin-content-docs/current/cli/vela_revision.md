@@ -2,7 +2,7 @@
 title: vela revision
 ---
 
-Manage Application Revisions
+Manage Application Revisions.
 
 ### Synopsis
 
@@ -17,7 +17,8 @@ Manage KubeVela Application Revisions
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO

@@ -24,13 +24,15 @@ vela workflow suspend <workflow-name>
   -e, --env string         specify environment name for application
   -h, --help               help for suspend
   -n, --namespace string   specify the Kubernetes namespace to use
+  -s, --step string        specify the step name in the workflow
   -t, --type string        the type of the resource, support: [app, workflow]
 ```
 
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO

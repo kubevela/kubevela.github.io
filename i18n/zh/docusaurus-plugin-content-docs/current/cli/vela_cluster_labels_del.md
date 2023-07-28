@@ -2,11 +2,11 @@
 title: vela cluster labels del
 ---
 
-delete labels for managed cluster
+Delete labels for managed cluster.
 
 ### Synopsis
 
-delete labels for managed cluster
+Delete labels for managed cluster.
 
 ```
 vela cluster labels del CLUSTER_NAME LABELS [flags]
@@ -27,12 +27,13 @@ vela cluster labels del my-cluster project,owner
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO
 
-* [vela cluster labels](vela_cluster_labels)	 - Manage Kubernetes Cluster Labels
+* [vela cluster labels](vela_cluster_labels)	 - Manage Kubernetes Cluster Labels.
 
 #### Go Back to [CLI Commands](vela) Homepage.
 

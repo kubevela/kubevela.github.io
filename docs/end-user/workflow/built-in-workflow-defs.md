@@ -4,7 +4,7 @@ title: Built-in WorkflowStep Type
 
 This documentation will walk through all the built-in workflow step types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-01-16T19:19:03+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-07-28T09:33:26+08:00.
 
 ## Addon-Operation
 
@@ -131,7 +131,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  addonName | Specify the name of the addon. | string | true |  
  args | Specify addon enable args. | []string | false |  
- image | Specify the image. | string | false | oamdev/vela-cli:v1.6.4 
+ image | Specify the image. | string | false | oamdev/vela-cli:v1.7.2 
  operation | operation for the addon. | "enable" or "upgrade" or "disable" | false | enable 
  serviceAccountName | specify serviceAccountName want to use. | string | false | kubevela-vela-core 
 
@@ -270,6 +270,7 @@ spec:
         properties:
           component: express-server
           # cluster: <your cluster name>
+          # namespace: <your namespace name>
 ```
 
 ### Specification (apply-component)
@@ -279,6 +280,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  component | Specify the component name to apply. | string | true |  
  cluster | Specify the cluster. | string | false | empty 
+ namespace | Specify the namespace. | string | false | empty 
 
 
 ## Apply-Deployment
@@ -324,6 +326,8 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  image |  | string | true |  
+ replicas |  | int | false | 1 
+ cluster |  | string | false | empty 
  cmd |  | []string | false |  
 
 
@@ -466,7 +470,7 @@ spec:
  providerRef | providerRef specifies the reference to Provider. | [providerRef](#providerref-apply-terraform-config) | false |  
  region | region is cloud provider's region. It will override the region in the region field of providerRef. | string | false |  
  jobEnv | the envs for job. | map[string]_ | false |  
- forceDelete |  | bool | false | false 
+ forceDelete | forceDelete will force delete Configuration no matter which state it is or whether it has provisioned some resources. | bool | false | false 
 
 
 #### type-option-1 (apply-terraform-config)
@@ -591,7 +595,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  type |  | string | true |  
  apiKey |  | string | false | empty 
- name |  | string | true |  
+ name |  | string | false | ec-provider 
 
 
 #### GCPProvider (apply-terraform-provider)
@@ -732,6 +736,172 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name | Specify the secret name. | string | true |  
  key | Specify the secret key. | string | false | .dockerconfigjson 
+
+
+## Chat-Gpt
+
+### Description
+
+Send request to chat-gpt.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
+### Examples (chat-gpt)
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: chat-gpt
+  namespace: default
+spec:
+  workflowSpec:
+    steps:
+    # apply a deployment with invalid image, this step will fail because of timeout
+    # the resource will be passed to chat-gpt step to anaylze
+    - name: apply
+      type: apply-deployment
+      timeout: 3s
+      outputs:
+        - name: resource
+          valueFrom: output.value
+      properties:
+        image: invalid
+
+    # if apply step failed, send the resource to chat-gpt to diagnose
+    - name: chat-diagnose
+      if: status.apply.failed
+      type: chat-gpt
+      inputs:
+        - from: resource
+          parameterKey: prompt.content
+      properties:
+        token: 
+          # specify your token
+          value: <your token>
+        prompt:
+          type: diagnose
+
+    # if apply step succeeded, send the resource to chat-gpt to audit
+    - name: chat-audit
+      if: status.apply.succeeded
+      type: chat-gpt
+      inputs:
+        - from: resource
+          parameterKey: prompt.content
+      properties:
+        token: 
+          # or read your token from secret
+          secretRef:
+            name: chat-gpt-token-secret
+            key: token
+        prompt:
+          type: audit
+          lang: Chinese
+```
+
+### Specification (chat-gpt)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ token |  | [type-option-1](#type-option-1-chat-gpt) or [type-option-2](#type-option-2-chat-gpt) | true |  
+ model | the model name. | string | false | gpt-3.5-turbo 
+ prompt | the prompt to use. | [prompt](#prompt-chat-gpt) | true |  
+ timeout |  | string | false | 30s 
+
+
+#### type-option-1 (chat-gpt)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ value | the token value. | string | true |  
+
+
+#### type-option-2 (chat-gpt)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ secretRef |  | [secretRef](#secretref-chat-gpt) | true |  
+
+
+##### secretRef (chat-gpt)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name | name is the name of the secret. | string | true |  
+ key | key is the token key in the secret. | string | true |  
+
+
+#### prompt (chat-gpt)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | "custom" or "diagnose" or "audit" or "quality-gate" | false | custom 
+ lang |  | "English" or "Chinese" | false | English 
+ content |  | string | true |  
+
+
+## Check-Metrics
+
+### Description
+
+Verify application's metrics.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
+### Examples (check-metrics)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: canary-demo
+  annotations:
+    app.oam.dev/publishVersion: v2
+spec:
+  components:
+    - name: canary-demo
+      type: webservice
+      properties:
+        image: wangyikewyk/canarydemo:v2
+        ports:
+          - port: 8090
+      traits:
+        - type: scaler
+          properties:
+            replicas: 5
+        - type: gateway
+          properties:
+            domain: canary-demo.com
+            http:
+              "/version": 8090
+  workflow:
+    steps:
+      - name: 200-status-percent-2-phase
+        type: check-metrics
+        timeout: 3m
+        properties:
+          query: sum(irate(nginx_ingress_controller_requests{host="canary-demo.com",status="200"}[5m]))/sum(irate(nginx_ingress_controller_requests{host="canary-demo.com"}[2m]))
+          promAddress: "http://prometheus-server.o11y-system.svc:9090"
+          condition: ">=0.95"
+          duration: 2m
+```
+
+### Specification (check-metrics)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ query | Query is a raw prometheus query to perform. | string | true |  
+ metricEndpoint | The HTTP address and port of the prometheus server. | string | false |  
+ condition | Condition is an expression which determines if a measurement is considered successful. eg: >=0.95. | string | true |  
+ duration | Duration defines the duration of time required for this step to be considered successful. | string | false | 5m 
+ failDuration | FailDuration is the duration of time that, if the check fails, will result in the step being marked as failed. | string | false | 2m 
 
 
 ## Clean-Jobs
@@ -1060,7 +1230,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  auto | If set to false, the workflow will suspend automatically before this step, default to be true. | bool | false | true 
- policies | Declare the policies that used for this deployment. If not specified, the components will be deployed to the hub cluster. | []string | false |  
+ policies | Declare the policies that used for this deployment. If not specified, the components will be deployed to the hub cluster. | []string | true |  
  parallelism | Maximum number of concurrent delivered components. | int | false | 5 
  ignoreTerraformComponent | If set false, this step will apply the components with the terraform workload. | bool | false | true 
 
@@ -1175,7 +1345,7 @@ Export data to clusters specified by topology.
 
 ### Scope
 
-This step type is valid in both Application and WorkflowRun.
+This step type is only valid in Application.
 
 ### Examples (export-data)
 
@@ -1248,7 +1418,7 @@ Export service to clusters specified by topology.
 
 ### Scope
 
-This step type is valid in both Application and WorkflowRun.
+This step type is only valid in Application.
 
 ### Examples (export-service)
 
@@ -1752,13 +1922,84 @@ We can see that before and after the deployment of the application, the messages
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- text | Specify the message content of dingtalk notification. | null | false |  
+ text | Specify the message content of dingtalk notification. | [text](#text-notification) | false |  
  msgtype | msgType can be text, link, mardown, actionCard, feedCard. | "text" or "link" or "markdown" or "actionCard" or "feedCard" | false | text 
- link |  | null | false |  
- markdown |  | null | false |  
- at |  | null | false |  
- actionCard |  | null | false |  
- feedCard |  | null | false |  
+ link |  | [link](#link-notification) | false |  
+ markdown |  | [markdown](#markdown-notification) | false |  
+ at |  | [at](#at-notification) | false |  
+ actionCard |  | [actionCard](#actioncard-notification) | false |  
+ feedCard |  | [feedCard](#feedcard-notification) | false |  
+
+
+##### text (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ content |  | string | true |  
+
+
+##### link (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ text |  | string | false |  
+ title |  | string | false |  
+ messageUrl |  | string | false |  
+ picUrl |  | string | false |  
+
+
+##### markdown (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ text |  | string | true |  
+ title |  | string | true |  
+
+
+##### at (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ atMobiles |  | []string | false |  
+ isAtAll |  | bool | false |  
+
+
+##### actionCard (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ text |  | string | true |  
+ title |  | string | true |  
+ hideAvatar |  | string | true |  
+ btnOrientation |  | string | true |  
+ singleTitle |  | string | true |  
+ singleURL |  | string | true |  
+ btns |  | [[]btns](#btns-notification) | false |  
+
+
+##### btns (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ title |  | string | true |  
+ actionURL |  | string | true |  
+
+
+##### feedCard (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ links |  | [[]links](#links-notification) | true |  
+
+
+##### links (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ text |  | string | false |  
+ title |  | string | false |  
+ messageUrl |  | string | false |  
+ picUrl |  | string | false |  
 
 
 #### slack (notification)
@@ -1796,10 +2037,426 @@ We can see that before and after the deployment of the application, the messages
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  text | Specify the message text for slack notification. | string | true |  
- blocks |  | null | false |  
- attachments |  | null | false |  
+ blocks |  | [[]blocks](#blocks-notification) | false |  
+ attachments |  | [attachments](#attachments-notification) | false |  
  thread_ts |  | string | false |  
  mrkdwn | Specify the message text format in markdown for slack notification. | bool | false | true 
+
+
+##### blocks (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ block_id |  | string | false |  
+ elements |  | [[]elements](#elements-notification) | false |  
+
+
+##### elements (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ action_id |  | string | false |  
+ url |  | string | false |  
+ value |  | string | false |  
+ style |  | string | false |  
+ text |  | [text](#text-notification) | false |  
+ confirm |  | [confirm](#confirm-notification) | false |  
+ options |  | [[]options](#options-notification) | false |  
+ initial_options |  | [[]initial_options](#initial_options-notification) | false |  
+ placeholder |  | [placeholder](#placeholder-notification) | false |  
+ initial_date |  | string | false |  
+ image_url |  | string | false |  
+ alt_text |  | string | false |  
+ option_groups |  | [[]option_groups](#option_groups-notification) | false |  
+ max_selected_items |  | int | false |  
+ initial_value |  | string | false |  
+ multiline |  | bool | false |  
+ min_length |  | int | false |  
+ max_length |  | int | false |  
+ dispatch_action_config |  | [dispatch_action_config](#dispatch_action_config-notification) | false |  
+ initial_time |  | string | false |  
+
+
+##### text (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### confirm (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ title |  | [title](#title-notification) | true |  
+ text |  | [text](#text-notification) | true |  
+ confirm |  | [confirm](#confirm-notification) | true |  
+ deny |  | [deny](#deny-notification) | true |  
+ style |  | string | false |  
+
+
+##### title (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### text (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### confirm (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### deny (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### options (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ text |  | [text](#text-notification) | true |  
+ value |  | string | true |  
+ description |  | [description](#description-notification) | false |  
+ url |  | string | false |  
+
+
+##### text (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### description (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### initial_options (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ text |  | [text](#text-notification) | true |  
+ value |  | string | true |  
+ description |  | [description](#description-notification) | false |  
+ url |  | string | false |  
+
+
+##### text (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### description (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### placeholder (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### option_groups (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ text |  | [text](#text-notification) | true |  
+ value |  | string | true |  
+ description |  | [description](#description-notification) | false |  
+ url |  | string | false |  
+
+
+##### text (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### description (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### dispatch_action_config (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ trigger_actions_on |  | []string | false |  
+
+
+##### attachments (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ blocks |  | [[]blocks](#blocks-notification) | false |  
+ color |  | string | false |  
+
+
+##### blocks (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ block_id |  | string | false |  
+ elements |  | [[]elements](#elements-notification) | false |  
+
+
+##### elements (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ action_id |  | string | false |  
+ url |  | string | false |  
+ value |  | string | false |  
+ style |  | string | false |  
+ text |  | [text](#text-notification) | false |  
+ confirm |  | [confirm](#confirm-notification) | false |  
+ options |  | [[]options](#options-notification) | false |  
+ initial_options |  | [[]initial_options](#initial_options-notification) | false |  
+ placeholder |  | [placeholder](#placeholder-notification) | false |  
+ initial_date |  | string | false |  
+ image_url |  | string | false |  
+ alt_text |  | string | false |  
+ option_groups |  | [[]option_groups](#option_groups-notification) | false |  
+ max_selected_items |  | int | false |  
+ initial_value |  | string | false |  
+ multiline |  | bool | false |  
+ min_length |  | int | false |  
+ max_length |  | int | false |  
+ dispatch_action_config |  | [dispatch_action_config](#dispatch_action_config-notification) | false |  
+ initial_time |  | string | false |  
+
+
+##### text (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### confirm (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ title |  | [title](#title-notification) | true |  
+ text |  | [text](#text-notification) | true |  
+ confirm |  | [confirm](#confirm-notification) | true |  
+ deny |  | [deny](#deny-notification) | true |  
+ style |  | string | false |  
+
+
+##### title (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### text (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### confirm (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### deny (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### options (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ text |  | [text](#text-notification) | true |  
+ value |  | string | true |  
+ description |  | [description](#description-notification) | false |  
+ url |  | string | false |  
+
+
+##### text (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### description (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### initial_options (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ text |  | [text](#text-notification) | true |  
+ value |  | string | true |  
+ description |  | [description](#description-notification) | false |  
+ url |  | string | false |  
+
+
+##### text (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### description (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### placeholder (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### option_groups (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ text |  | [text](#text-notification) | true |  
+ value |  | string | true |  
+ description |  | [description](#description-notification) | false |  
+ url |  | string | false |  
+
+
+##### text (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### description (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | string | true |  
+ text |  | string | true |  
+ emoji |  | bool | false |  
+ verbatim |  | bool | false |  
+
+
+##### dispatch_action_config (notification)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ trigger_actions_on |  | []string | false |  
 
 
 #### email (notification)
@@ -2361,6 +3018,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  duration | Specify the wait duration time to resume workflow such as "30s", "1min" or "2m15s". | string | false |  
+ message | The suspend message to show. | string | false |  
 
 
 ## Vela-Cli
@@ -2448,7 +3106,7 @@ spec:
 
 ### Description
 
-Send a request to the specified Webhook URL. If no request body is specified, the current Application body will be sent by default.
+Send a POST request to the specified Webhook URL. If no request body is specified, the current Application body will be sent by default.
 
 ### Scope
 
