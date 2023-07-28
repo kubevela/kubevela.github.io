@@ -21,12 +21,13 @@ vela provider list [flags]
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO
 
-* [vela provider](vela_provider)	 - Authenticate Terraform Cloud Providers
+* [vela provider](vela_provider)	 - Authenticate terraform cloud providers.
 
 #### Go Back to [CLI Commands](vela) Homepage.
 

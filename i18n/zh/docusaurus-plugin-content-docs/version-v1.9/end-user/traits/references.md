@@ -4,7 +4,7 @@ title: 内置运维特征列表
 
 本文档将**按字典序**展示所有内置运维特征的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2023-01-16T19:19:03+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2023-07-28T09:33:26+08:00。
 
 ## Affinity
 
@@ -566,6 +566,112 @@ spec:
  imagePullPolicy | Specify the image pull policy of the container。 | "" or "IfNotPresent" or "Always" or "Never" | false | empty 
 
 
+## Container-Ports
+
+### 描述
+
+Expose on the host and bind the external port to host to enable web traffic for your component。
+
+### 适用于组件类型
+
+基于以下资源的组件：
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
+
+
+### 示例 (container-ports)
+
+It's used to define Pod networks directly. hostPort routes the container's port directly to the port on the scheduled node, so that you can access the Pod through the host's IP plus hostPort.
+Don't specify a hostPort for a Pod unless it is absolutely necessary(run `DaemonSet` service). When you bind a Pod to a hostPort, it limits the number of places the Pod can be scheduled, because each <hostIP, hostPort, protocol> combination must be unique. If you don't specify the hostIP and protocol explicitly, Kubernetes will use 0.0.0.0 as the default hostIP and TCP as the default protocol.
+If you explicitly need to expose a Pod's port on the node, consider using `expose` or `gateway` trait, or exposeType and ports parameter of `webservice` component before resorting to `container-ports` trait.
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: busybox
+spec:
+  components:
+    - name: busybox
+      type: webservice
+      properties:
+        cpu: "0.5"
+        exposeType: ClusterIP
+        image: busybox
+        memory: 1024Mi
+        ports:
+          - expose: false
+            port: 80
+            protocol: TCP
+          - expose: false
+            port: 801
+            protocol: TCP
+      traits:
+        - type: container-ports
+          properties:
+            # you can use container-ports to control multiple containers by filling `containers`
+            # NOTE: in containers, you must set the container name for each container
+            containers:
+              - containerName: busybox
+                ports:
+                  - containerPort: 80
+                    protocol: TCP
+                    hostPort: 8080
+```
+
+### 参数说明 (container-ports)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+  |  | [PatchParams](#patchparams-container-ports) or [type-option-2](#type-option-2-container-ports) | false |  
+
+
+#### PatchParams (container-ports)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
+ ports | Specify ports you want customer traffic sent to。 | [[]ports](#ports-container-ports) | true |  
+
+
+##### ports (container-ports)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containerPort | 要暴露的 IP 端口号。 | int | true |  
+ protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | "TCP" or "UDP" or "SCTP" | false | TCP 
+ hostPort | Number of port to expose on the host。 | int | false |  
+ hostIP | What host IP to bind the external port to。 | string | false |  
+
+
+#### type-option-2 (container-ports)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containers | Specify the container ports for multiple containers。 | [[]containers](#containers-container-ports) | true |  
+
+
+##### containers (container-ports)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
+ ports | Specify ports you want customer traffic sent to。 | [[]ports](#ports-container-ports) | true |  
+
+
+##### ports (container-ports)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containerPort | 要暴露的 IP 端口号。 | int | true |  
+ protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | "TCP" or "UDP" or "SCTP" | false | TCP 
+ hostPort | Number of port to expose on the host。 | int | false |  
+ hostIP | What host IP to bind the external port to。 | string | false |  
+
+
 ## Cpuscaler
 
 ### 描述
@@ -762,9 +868,21 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- port | 指定要暴露的端口。 | []int | true |  
- annotations | Specify the annotaions of the exposed service。 | map[string]string | true |  
+ port | Deprecated, the old way to specify the exposion ports。 | []int | false |  
+ ports | Specify portsyou want customer traffic sent to。 | [[]ports](#ports-expose) | false |  
+ annotations | 指定暴露的服务的注解。 | map[string]string | true |  
+ matchLabels |  | map[string]string | false |  
  type | 指定要创建的服务类型，可选值："ClusterIP","NodePort","LoadBalancer","ExternalName"。 | "ClusterIP" or "NodePort" or "LoadBalancer" or "ExternalName" | false | ClusterIP 
+
+
+#### ports (expose)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | 要暴露的 IP 端口号。 | int | true |  
+ name | 端口名称。 | string | false |  
+ protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | "TCP" or "UDP" or "SCTP" | false | TCP 
+ nodePort | exposed node port. Only Valid when exposeType is NodePort。 | int | false |  
 
 
 ## Gateway
@@ -815,6 +933,8 @@ spec:
  classInSpec | 在 kubernetes ingress 的 '.spec.ingressClassName' 定义 ingress class 而不是在 'kubernetes.io/ingress.class' 注解中定义。 | bool | false | false 
  secretName | Specify the secret name you want to quote to use tls。 | string | false |  
  gatewayHost | 指定 Ingress 网关的主机名，当为空时，会自动生成主机名。 | string | false |  
+ name | Specify a unique name for this gateway, required to support multiple gateway traits on a component。 | string | false |  
+ pathType | Specify a pathType for the ingress rules, defaults to "ImplementationSpecific"。 | "ImplementationSpecific" or "Prefix" or "Exact" | false | ImplementationSpecific 
 
 
 ## Hostalias
@@ -2609,7 +2729,7 @@ spec:
  mountOnly |  | bool | false | false 
  mountToEnv |  | [mountToEnv](#mounttoenv-storage) | false |  
  mountToEnvs |  | [[]mountToEnvs](#mounttoenvs-storage) | false |  
- mountPath |  | string | false |  
+ mountPath |  | string | true |  
  subPath |  | string | false |  
  defaultMode |  | int | false | 420 
  readOnly |  | bool | false | false 
@@ -2737,7 +2857,7 @@ spec:
  maxSkew | Describe the degree to which Pods may be unevenly distributed。 | int | true |  
  topologyKey | Specify the key of node labels。 | string | true |  
  whenUnsatisfiable | Indicate how to deal with a Pod if it doesn't satisfy the spread constraint。 | "DoNotSchedule" or "ScheduleAnyway" | false | DoNotSchedule 
- labelSelector |  | [labelSelector](#labelselector-topologyspreadconstraints) | true |  
+ labelSelector | labelSelector to find matching Pods。 | [labelSelector](#labelselector-topologyspreadconstraints) | true |  
  minDomains | Indicate a minimum number of eligible domains。 | int | false |  
  matchLabelKeys | A list of pod label keys to select the pods over which spreading will be calculated。 | []string | false |  
  nodeAffinityPolicy | Indicate how we will treat Pod's nodeAffinity/nodeSelector when calculating pod topology spread skew。 | "Honor" or "Ignore" | false | Honor 

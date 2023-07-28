@@ -4,7 +4,7 @@ title: Built-in Policy Type
 
 This documentation will walk through all the built-in policy types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-01-16T19:19:03+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-07-28T09:33:26+08:00.
 
 ## Apply-Once
 
@@ -141,7 +141,9 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
+ applicationRevisionLimit | If set, it will override the default revision limit number and customize this number for the current application. | int | false |  
  keepLegacyResource | If is set, outdated versioned resourcetracker will not be recycled automatically, outdated resources will be kept until resourcetracker be deleted manually. | bool | false | false 
+ continueOnFailure | If is set, continue to execute gc when the workflow fails, by default gc will be executed only after the workflow succeeds. | bool | false | false 
  rules | Specify the list of rules to control gc strategy at resource level, if one resource is controlled by multiple rules, first rule will be used. | [[]rules](#rules-garbage-collect) | false |  
 
 
@@ -149,8 +151,9 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- selector | Specify how to select the targets of the rule. | [[]selector](#selector-garbage-collect) | true |  
+ selector | Specify how to select the targets of the rule. | [selector](#selector-garbage-collect) | true |  
  strategy | Specify the strategy for target resource to recycle. | "onAppUpdate" or "onAppDelete" or "never" | false | onAppUpdate 
+ propagation | Specify the deletion propagation strategy for target resource to delete. | "orphan" or "cascading" | false |  
 
 
 ##### selector (garbage-collect)
@@ -163,47 +166,6 @@ spec:
  traitTypes | Select resources by trait types. | []string | false |  
  resourceTypes | Select resources by resource types (like Deployment). | []string | false |  
  resourceNames | Select resources by their names. | []string | false |  
-
-
-## Health
-
-### Description
-
-Apply periodical health checking to the application.
-
-### Examples (health)
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: example-app-rollout
-  namespace: default
-spec:
-  components:
-    - name: hello-world-server
-      type: webservice
-      properties:
-        image: crccheck/hello-world
-        ports: 
-        - port: 8000
-          expose: true
-        type: webservice
-  policies:
-    - name: health-policy-demo
-      type: health
-      properties:
-        probeInterval: 5
-        probeTimeout: 10
-```
-
-### Specification (health)
-
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- probeTimeout | Specify health checking timeout(seconds), default 10s. | int | false | 10 
- probeInterval | Specify health checking interval(seconds), default 30s. | int | false | 30 
 
 
 ## Override
@@ -388,7 +350,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- selector | Specify how to select the targets of the rule. | [[]selector](#selector-read-only) | true |  
+ selector | Specify how to select the targets of the rule. | [selector](#selector-read-only) | true |  
 
 
 ##### selector (read-only)
@@ -435,6 +397,8 @@ metadata:
   name: replica-webservice
   namespace: vela-system
 spec:
+  workload:
+    type: autodetects.core.oam.dev
   schematic:
     cue:
       template: |
@@ -575,6 +539,112 @@ hello-rep-beijing    ClusterIP   10.43.24.116   <none>        80/TCP    12s
  selector | Specify the components which will be replicated. | []string | false |  
 
 
+## Resource-Update
+
+### Description
+
+Configure the update strategy for selected resources.
+
+### Examples (resource-update)
+
+`resource-update` policy can allow users to customize the update behavior for selected resources.
+
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: recreate
+spec:
+  components:
+    - type: k8s-objects
+      name: recreate
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: Secret
+            metadata:
+              name: recreate
+            data:
+              key: dgo=
+            immutable: true
+  policies:
+    - type: resource-update
+      name: resource-update
+      properties:
+        rules:
+          - selector:
+              resourceTypes: ["Secret"]
+            strategy:
+              recreateFields: ["data.key"]
+```
+By specifying `recreateFields`, the application will recreate the target resource (**Secret** here) when the field changes (`data.key` here). If the field is not changed, the application will use the normal update (**patch** here).
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: recreate
+spec:
+  components:
+    - type: k8s-objects
+      name: recreate
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: ConfigMap
+            metadata:
+              name: recreate
+            data:
+              key: val
+  policies:
+    - type: resource-update
+      name: resource-update
+      properties:
+        rules:
+          - selector:
+              resourceTypes: ["ConfigMap"]
+            strategy:
+              op: replace
+```
+By specifying `op` to `replace`, the application will update the given resource (ConfigMap here) by replace. Compared to **patch**, which leverages three-way merge patch to only modify the fields managed by KubeVela application, "replace" will update the object as a whole and wipe out other fields even if it is not managed by the KubeVela application. It can be seen as an "application-level" *ApplyResourceByReplace*.
+
+### Specification (resource-update)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ rules | Specify the list of rules to control resource update strategy at resource level. | [[]rules](#rules-resource-update) | false |  
+
+
+#### rules (resource-update)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ selector | Specify how to select the targets of the rule. | [selector](#selector-resource-update) | true |  
+ strategy | The update strategy for the target resources. | [strategy](#strategy-resource-update) | true |  
+
+
+##### selector (resource-update)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ componentNames | Select resources by component names. | []string | false |  
+ componentTypes | Select resources by component types. | []string | false |  
+ oamTypes | Select resources by oamTypes (COMPONENT or TRAIT). | []string | false |  
+ traitTypes | Select resources by trait types. | []string | false |  
+ resourceTypes | Select resources by resource types (like Deployment). | []string | false |  
+ resourceNames | Select resources by their names. | []string | false |  
+
+
+##### strategy (resource-update)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ op | Specify the op for updating target resources. | "patch" or "replace" | false | patch 
+ recreateFields | Specify which fields would trigger recreation when updated. | []string | false |  
+
+
 ## Shared-Resource
 
 ### Description
@@ -668,7 +738,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- selector | Specify how to select the targets of the rule. | [[]selector](#selector-shared-resource) | true |  
+ selector | Specify how to select the targets of the rule. | [selector](#selector-shared-resource) | true |  
 
 
 ##### selector (shared-resource)
@@ -727,7 +797,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- selector | Specify how to select the targets of the rule. | [[]selector](#selector-take-over) | true |  
+ selector | Specify how to select the targets of the rule. | [selector](#selector-take-over) | true |  
 
 
 ##### selector (take-over)

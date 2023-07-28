@@ -4,17 +4,13 @@ title: Built-in Component Type
 
 This documentation will walk through all the built-in component types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-01-16T19:19:03+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-07-28T09:33:26+08:00.
 
 ## Cron-Task
 
 ### Description
 
 Describes cron jobs that run code or a script to completion.
-
-### Underlying Kubernetes Resources (cron-task)
-
-- cronjobs.batch
 
 ### Examples (cron-task)
 

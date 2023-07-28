@@ -2,7 +2,7 @@
 title: vela debug
 ---
 
-Debug running application
+Debug running application.
 
 ### Synopsis
 
@@ -31,7 +31,8 @@ vela debug <application-name>
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO

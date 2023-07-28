@@ -2,11 +2,11 @@
 title: vela cluster labels add
 ---
 
-add labels to managed cluster
+add labels to managed cluster.
 
 ### Synopsis
 
-add labels to managed cluster
+add labels to managed cluster.
 
 ```
 vela cluster labels add CLUSTER_NAME LABELS [flags]
@@ -27,12 +27,13 @@ vela cluster labels add my-cluster project=kubevela,owner=oam-dev
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO
 
-* [vela cluster labels](vela_cluster_labels)	 - Manage Kubernetes Cluster Labels
+* [vela cluster labels](vela_cluster_labels)	 - Manage Kubernetes Cluster Labels.
 
 #### Go Back to [CLI Commands](vela) Homepage.
 

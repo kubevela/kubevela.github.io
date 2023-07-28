@@ -4,7 +4,7 @@ title: 内置策略列表
 
 本文档将**按字典序**展示所有内置策略的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2023-01-16T19:19:03+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2023-07-28T09:33:26+08:00。
 
 ## Apply-Once
 
@@ -141,7 +141,9 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
+ applicationRevisionLimit | If set, it will override the default revision limit number and customize this number for the current application。 | int | false |  
  keepLegacyResource | 如果为 true，过时的版本化 resource tracker 将不会自动回收。 过时的资源将被保留，直到手动删除 resource tracker。 | bool | false | false 
+ continueOnFailure | If is set, continue to execute gc when the workflow fails, by default gc will be executed only after the workflow succeeds。 | bool | false | false 
  rules | 在资源级别控制垃圾回收策略的规则列表，如果一个资源由多个规则控制，将使用第一个规则。 | [[]rules](#rules-garbage-collect) | false |  
 
 
@@ -149,8 +151,9 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- selector | 指定资源筛选目标规则。 | [[]selector](#selector-garbage-collect) | true |  
+ selector | 指定资源筛选目标规则。 | [selector](#selector-garbage-collect) | true |  
  strategy | 目标资源循环利用的策略。 可用值：never、onAppDelete、onAppUpdate。 | "onAppUpdate" or "onAppDelete" or "never" | false | onAppUpdate 
+ propagation | Specify the deletion propagation strategy for target resource to delete。 | "orphan" or "cascading" | false |  
 
 
 ##### selector (garbage-collect)
@@ -163,47 +166,6 @@ spec:
  traitTypes | 按 trait 类型选择目标资源。 | []string | false |  
  resourceTypes | 按资源类型选择。 | []string | false |  
  resourceNames | 按资源名称选择。 | []string | false |  
-
-
-## Health
-
-### 描述
-
-Apply periodical health checking to the application。
-
-### 示例 (health)
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: example-app-rollout
-  namespace: default
-spec:
-  components:
-    - name: hello-world-server
-      type: webservice
-      properties:
-        image: crccheck/hello-world
-        ports: 
-        - port: 8000
-          expose: true
-        type: webservice
-  policies:
-    - name: health-policy-demo
-      type: health
-      properties:
-        probeInterval: 5
-        probeTimeout: 10
-```
-
-### 参数说明 (health)
-
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- probeTimeout | Specify health checking timeout(seconds), default 10s。 | int | false | 10 
- probeInterval | Specify health checking interval(seconds), default 30s。 | int | false | 30 
 
 
 ## Override
@@ -388,7 +350,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- selector | 指定资源筛选目标规则。 | [[]selector](#selector-read-only) | true |  
+ selector | 指定资源筛选目标规则。 | [selector](#selector-read-only) | true |  
 
 
 ##### selector (read-only)
@@ -435,6 +397,8 @@ metadata:
   name: replica-webservice
   namespace: vela-system
 spec:
+  workload:
+    type: autodetects.core.oam.dev
   schematic:
     cue:
       template: |
@@ -575,6 +539,112 @@ hello-rep-beijing    ClusterIP   10.43.24.116   <none>        80/TCP    12s
  selector | Specify the components which will be replicated。 | []string | false |  
 
 
+## Resource-Update
+
+### 描述
+
+Configure the update strategy for selected resources。
+
+### 示例 (resource-update)
+
+`resource-update` policy can allow users to customize the update behavior for selected resources.
+
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: recreate
+spec:
+  components:
+    - type: k8s-objects
+      name: recreate
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: Secret
+            metadata:
+              name: recreate
+            data:
+              key: dgo=
+            immutable: true
+  policies:
+    - type: resource-update
+      name: resource-update
+      properties:
+        rules:
+          - selector:
+              resourceTypes: ["Secret"]
+            strategy:
+              recreateFields: ["data.key"]
+```
+By specifying `recreateFields`, the application will recreate the target resource (**Secret** here) when the field changes (`data.key` here). If the field is not changed, the application will use the normal update (**patch** here).
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: recreate
+spec:
+  components:
+    - type: k8s-objects
+      name: recreate
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: ConfigMap
+            metadata:
+              name: recreate
+            data:
+              key: val
+  policies:
+    - type: resource-update
+      name: resource-update
+      properties:
+        rules:
+          - selector:
+              resourceTypes: ["ConfigMap"]
+            strategy:
+              op: replace
+```
+By specifying `op` to `replace`, the application will update the given resource (ConfigMap here) by replace. Compared to **patch**, which leverages three-way merge patch to only modify the fields managed by KubeVela application, "replace" will update the object as a whole and wipe out other fields even if it is not managed by the KubeVela application. It can be seen as an "application-level" *ApplyResourceByReplace*.
+
+### 参数说明 (resource-update)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ rules | Specify the list of rules to control resource update strategy at resource level。 | [[]rules](#rules-resource-update) | false |  
+
+
+#### rules (resource-update)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ selector | 指定资源筛选目标规则。 | [selector](#selector-resource-update) | true |  
+ strategy | The update strategy for the target resources。 | [strategy](#strategy-resource-update) | true |  
+
+
+##### selector (resource-update)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ componentNames | 按组件名称选择目标资源。 | []string | false |  
+ componentTypes | 按组件类型选择目标资源。 | []string | false |  
+ oamTypes | 按 OAM 概念，组件(COMPONENT) 或 运维特征(TRAIT) 筛选。 | []string | false |  
+ traitTypes | 按 trait 类型选择目标资源。 | []string | false |  
+ resourceTypes | 按资源类型选择。 | []string | false |  
+ resourceNames | 按资源名称选择。 | []string | false |  
+
+
+##### strategy (resource-update)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ op | Specify the op for updating target resources。 | "patch" or "replace" | false | patch 
+ recreateFields | Specify which fields would trigger recreation when updated。 | []string | false |  
+
+
 ## Shared-Resource
 
 ### 描述
@@ -668,7 +738,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- selector | 指定资源筛选目标规则。 | [[]selector](#selector-shared-resource) | true |  
+ selector | 指定资源筛选目标规则。 | [selector](#selector-shared-resource) | true |  
 
 
 ##### selector (shared-resource)
@@ -727,7 +797,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- selector | 指定资源筛选目标规则。 | [[]selector](#selector-take-over) | true |  
+ selector | 指定资源筛选目标规则。 | [selector](#selector-take-over) | true |  
 
 
 ##### selector (take-over)

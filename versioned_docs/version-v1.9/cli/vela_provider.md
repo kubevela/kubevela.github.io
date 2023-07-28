@@ -2,11 +2,11 @@
 title: vela provider
 ---
 
-Authenticate Terraform Cloud Providers
+Authenticate terraform cloud providers.
 
 ### Synopsis
 
-Authenticate Terraform Cloud Providers by managing Terraform Controller Providers with its credential secret
+Authenticate terraform cloud providers by managing terraform controller providers with its credential secret.
 
 ### Options
 
@@ -17,7 +17,8 @@ Authenticate Terraform Cloud Providers by managing Terraform Controller Provider
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO

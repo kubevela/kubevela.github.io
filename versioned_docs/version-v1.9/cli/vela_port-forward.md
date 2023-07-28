@@ -9,7 +9,7 @@ Forward local ports to container/service port of vela application.
 Forward local ports to container/service port of vela application.
 
 ```
-vela port-forward APP_NAME [flags]
+vela port-forward [flags]
 ```
 
 ### Examples
@@ -35,7 +35,8 @@ port-forward APP_NAME [options] [LOCAL_PORT:]REMOTE_PORT [...[LOCAL_PORT_N:]REMO
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO

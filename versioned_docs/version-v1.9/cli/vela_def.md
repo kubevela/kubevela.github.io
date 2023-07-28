@@ -2,7 +2,7 @@
 title: vela def
 ---
 
-Manage Definitions
+Manage definitions.
 
 ### Synopsis
 
@@ -17,7 +17,8 @@ Manage X-Definitions for extension.
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO
@@ -26,7 +27,9 @@ Manage X-Definitions for extension.
 * [vela def apply](vela_def_apply)	 - Apply X-Definition.
 * [vela def del](vela_def_del)	 - Delete X-Definition.
 * [vela def edit](vela_def_edit)	 - Edit X-Definition.
-* [vela def gen-api](vela_def_gen-api)	 - Generate Go struct of Parameter from X-Definition.
+* [vela def gen-api](vela_def_gen-api)	 - Generate SDK from X-Definition.
+* [vela def gen-cue](vela_def_gen-cue)	 - Generate CUE schema from Go code.
+* [vela def gen-doc](vela_def_gen-doc)	 - Generate documentation for non component, trait, policy and workflow definitions
 * [vela def get](vela_def_get)	 - Get definition
 * [vela def init](vela_def_init)	 - Init a new definition
 * [vela def list](vela_def_list)	 - List definitions.
