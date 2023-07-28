@@ -15,7 +15,7 @@ These isn't too much work to be done for upgrading from v1.7.x to v1.8.x for usa
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.8.0 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.8.2 --wait
 ```
 
 ## From v1.6.x to v1.7.x

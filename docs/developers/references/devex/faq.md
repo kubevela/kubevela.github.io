@@ -35,7 +35,7 @@ Image Hub | "hub.kubevela.net" | "docker.io" or "ghcr.io/kubevela"
 Helm charts | https://charts.kubevela.net/core | https://kubevela.github.io/charts
 Official Addon Registry | https://addons.kubevela.net | https://kubevela.github.io/catalog/official
 Experimental Addon Registry | - | https://kubevela.github.io/catalog/experimental
-CLI | https://kubevela.net/script/install.sh | download from [release page](https://github.com/kubevela/kubevela/releases)
+CLI | https://kubevela.io/script/install.sh | download from [release page](https://github.com/kubevela/kubevela/releases)
 VelaD | - | migrating 
 
 ### You have reached rate limit for Docker Image Registry 
