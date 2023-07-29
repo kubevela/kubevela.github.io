@@ -16,6 +16,8 @@ Now the question is, can we leverage ChatGPT to transform the way we deliver app
 
 In this article, we will explore how to integrate ChatGPT into your DevOps workflow to deliver applications.
 
+<!--truncate-->
+
 ## Integrate ChatGPT into Your DevOps Workflow
 
 When it comes to integrating ChatGPT into DevOps workflows, many developers are faced with the challenge of managing extra resources and writing complicated shells. However, there is a better way - [KubeVela Workflow](https://github.com/kubevela/workflow). This open-source cloud-native workflow project offers a streamlined solution that eliminates the need for pods or complex scripting.
