@@ -6,6 +6,32 @@ This doc aims to provide a migration guide from old versions to the new ones wit
 
 KubeVela has [release cadence](../../contributor/release-process) for every 2-3 months, we'll only maintain for the last 2 releases. As a result, you're highly recommended to upgrade along with the community. We'll strictly align with the [semver version rule](https://semver.org/) for compatibility.
 
+## From v1.8.x to v1.9.x
+
+:::caution
+1. Legacy code removal. Basically you will not be able to use EnvBinding, HealthScope, ScopeDefinition and other objects in old KubeVela (<1.0), like ApplicationConfiguration.
+2. Registry migrated from kubevela.net OSS storage to GitHub pages.
+> Notice: the "hub.kubevela.net", "charts.kubevela.net" and "addons.kubevela.net" will not be served in the future.
+> 1. For docker images in "hub.kubevela.net", replace it with "docker.io" or "ghcr.io/kubevela".
+> 2. For helm charts in "charts.kubevela.net", replace it with "kubevela.github.io/charts".
+> 3. For addons in "addons.kubevela.net", replace it with "kubevela.github.io/catalog/official".
+> 
+> You can run the following command to update your addon registry.
+> ```shell
+> vela addon registry delete KubeVela
+> vela addon registry add KubeVela --type helm --endpoint=https://kubevela.github.io/catalog/official
+> vela addon registry add experimental --type helm --endpoint=https://kubevela.github.io/catalog/experimental
+> ```
+:::
+
+1. Upgrade your kubevela chart
+
+```
+helm repo add kubevela https://kubevela.github.io/charts
+helm repo update
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.9.5 --wait
+```
+
 ## From v1.7.x to v1.8.x
 
 These isn't too much work to be done for upgrading from v1.7.x to v1.8.x for usage.
@@ -15,7 +41,7 @@ These isn't too much work to be done for upgrading from v1.7.x to v1.8.x for usa
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.8.0 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.8.2 --wait
 ```
 
 ## From v1.6.x to v1.7.x
@@ -55,7 +81,7 @@ Since we have migrated some workflow step definitions and views from workflow ad
 You can execute this script to solve it before upgrade helm chart:
 
 ```
-curl -fsSl https://kubevela.net/script/checklegacy.sh | bash
+curl -fsSl https://kubevela.io/script/checklegacy.sh | bash
 ```
 
 The script will just help patch helm annotations for you, you can also do that manually one by one like:

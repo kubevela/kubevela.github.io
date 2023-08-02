@@ -42,3 +42,4 @@ success "update versions.json"
 
 # 4 remove ./i18n/zh/docusaurus-plugin-content-docs/version-"${version}".json
 rm -rf ./i18n/zh/docusaurus-plugin-content-docs/version-"${version}".json
+rm -rf ./i18n/zh/docusaurus-plugin-content-docs/version-"${version}"

@@ -42,6 +42,12 @@ vela addon enable [flags]
   -y, --yes                       all checks will be skipped and the default answer is yes for all validation check.
 ```
 
+### Options inherited from parent commands
+
+```
+  -V, --verbosity Level   number for the log level verbosity
+```
+
 ### SEE ALSO
 
 * [vela addon](vela_addon)	 - Manage addons for extension.

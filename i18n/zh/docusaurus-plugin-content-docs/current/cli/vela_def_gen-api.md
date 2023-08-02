@@ -2,11 +2,12 @@
 title: vela def gen-api
 ---
 
-Generate Go struct of Parameter from X-Definition.
+Generate SDK from X-Definition.
 
 ### Synopsis
 
-Generate Go struct of Parameter from definition file.
+Generate SDK from X-definition file.
+* This command leverage openapi-generator project. Therefore demands "docker" exist in PATH
 * Currently, this function is still working in progress and not all formats of parameter in X-definition are supported yet.
 
 ```
@@ -16,28 +17,45 @@ vela def gen-api DEFINITION.cue [flags]
 ### Examples
 
 ```
-# Command below will generate the Go struct for the my-def.cue file.
-> vela def gen-api my-def.cue
+# Generate SDK for golang with scaffold initialized
+> vela def gen-api --init --language go -f /path/to/def -o /path/to/sdk
+# Generate incremental definition files to existing sdk directory
+> vela def gen-api --language go -f /path/to/def -o /path/to/sdk
+# Generate definitions to a sub-module
+> vela def gen-api --language go -f /path/to/def -o /path/to/sdk --submodule --api-dir path/relative/to/output --language-args arg1=val1,arg2=val2
+
 ```
 
 ### Options
 
 ```
-  -h, --help                  help for gen-api
-      --package-name string   Specify the package name in generated Go code. (default "main")
-      --prefix string         Specify the prefix of the generated Go struct.
-      --skip-package-name     Skip package name in generated Go code.
+      --api-dir string          API directory path to put definition API files, relative to output directory. Default value: go: pkg/apis
+  -f, --file strings            File name of definitions, can be specified multiple times, or use comma to separate multiple files. If directory specified, all files found recursively in the directory will be used
+  -h, --help                    help for gen-api
+      --init                    Init the whole SDK project, if not set, only the API file will be generated
+  -g, --language string         Language to generate code. Valid languages: go (default "go")
+      --language-args strings   language-specific arguments to pass to the go generator, available options: 
+                                go: 
+                                	MainModuleVersion: MainModuleVersion(default: cd431bb25a9a)
+                                	GoProxy: GoProxy(default: https://goproxy.cn,direct)
+                                
+  -o, --output string           Output directory path (default "./apis")
+  -p, --package string          Package name of generated code (default "github.com/kubevela/vela-go-sdk")
+      --submodule api-dir       Whether the generated code is a submodule of the project. If set, the directory specified by api-dir will be treated as a submodule of the project
+  -t, --template string         Template file path, if not specified, the default template will be used
+  -v, --verbose                 Print verbose logs
 ```
 
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO
 
-* [vela def](vela_def)	 - Manage Definitions
+* [vela def](vela_def)	 - Manage definitions.
 
 #### Go Back to [CLI Commands](vela) Homepage.
 

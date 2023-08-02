@@ -54,7 +54,7 @@ You may be required for root privilege during the installation process if not us
 If you don't need the automation with root access, you can download from the [release page](https://github.com/kubevela/velad/releases) and uncompress manually.
 
 ```shell
-curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
+curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash -s 1.8.2
 ```
 
 Check `velad` installed in `/usr/local/bin/`
@@ -265,7 +265,7 @@ so you may be required for root privilege during the installation process.
 If you don't need the automation with root access, you can download from the [release page](https://github.com/kubevela/velad/releases) and uncompress manually.
 
 ```shell
-curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
+curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash -s 1.8.2
 ```
 
 Check `velad` installed in `/usr/local/bin/`
@@ -416,7 +416,7 @@ Then you need to copy this kubeconfig to your local machine. Let's say you savin
 To access the cluster, you also need to install `vela` CLI in your local machine.
 
 ```shell
-curl -fsSl https://static.kubevela.net/script/install.sh | bash
+curl -fsSl https://static.kubevela.net/script/install.sh | bash -s 1.8.2
 ```
 
 #### Access KubeVela
