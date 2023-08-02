@@ -21,12 +21,13 @@ vela cluster rename [OLD_NAME] [NEW_NAME] [flags]
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO
 
-* [vela cluster](vela_cluster)	 - Manage Kubernetes Clusters
+* [vela cluster](vela_cluster)	 - Manage Kubernetes clusters.
 
 #### Go Back to [CLI Commands](vela) Homepage.
 

@@ -9,7 +9,7 @@ Tail logs for application.
 Tail logs for vela application.
 
 ```
-vela logs APP_NAME [flags]
+vela logs [flags]
 ```
 
 ### Options
@@ -28,7 +28,8 @@ vela logs APP_NAME [flags]
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO
