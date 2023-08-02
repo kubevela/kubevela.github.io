@@ -4,7 +4,7 @@ module.exports = {
   tagline: 'Make shipping applications more enjoyable.',
   url: 'https://kubevela.io',
   baseUrl: '/',
-  trailingSlash: false,
+  trailingSlash: true,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'throw',
   favicon: 'img/favicons/favicon.ico',
