@@ -12,8 +12,8 @@ title: 概述
 
 KubeVela 依靠 [Terraform Controller](https://github.com/oam-dev/terraform-controller) 或 [Crossplane](https://crossplane.io/) 作为提供者与云对话。请查看以下文档以了解详细步骤。
 
-- [Terraform](../platform-engineers/components/component-terraform)
-- [Crossplane](./crossplane)
+- [Terraform](../platform-engineers/components/component-terraform.md)
+- [Crossplane](./crossplane.md)
 
 ## 一个云服务实例可以被多个应用程序共享吗？
 

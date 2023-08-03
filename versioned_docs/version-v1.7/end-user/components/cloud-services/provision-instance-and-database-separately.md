@@ -2,7 +2,7 @@
 title: Provision Instance and Database Separately
 ---
 
-In the guide [Provision and Binding Cloud Resources](../../../tutorials/consume-cloud-services) and [Provision a Database and Import a SQL File for initialization](./provision-and-initiate-database),
+In the guide [Provision and Binding Cloud Resources](../../../tutorials/consume-cloud-services.md) and [Provision a Database and Import a SQL File for initialization](./provision-and-initiate-database.md),
 We create an RDS instance and a database together. However, you can create an RDS instance and more than one database on it.
 This pattern is useful when you want to save costs of creating multiple instances. 
 
@@ -13,7 +13,7 @@ This guide will take Alibaba Cloud RDS as an example to show how to create an RD
 1. `terraform` addon has been enabled
 2. `terraform-alibaba` addon has been enabled, version >= 1.0.3 
 3. Credentials have been configured using `vela provider add terraform-alibaba`
-If you have problems, you can follow to this [instruction](../../../reference/addons/terraform) to setup.
+If you have problems, you can follow to this [instruction](../../../reference/addons/terraform.md) to setup.
 
 ## Steps
 

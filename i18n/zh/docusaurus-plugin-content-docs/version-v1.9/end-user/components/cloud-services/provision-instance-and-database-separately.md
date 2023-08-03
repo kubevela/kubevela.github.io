@@ -2,7 +2,7 @@
 title: 分别配置实例和数据库
 ---
 
-在文档[创建和使用云资源](../../../tutorials/consume-cloud-services)和[数据库创建和初始化](./provision-and-initiate-database)中，我们创建了一个 RDS 实例和一个数据库。 但是，你也可以创建一个 RDS 实例，并在上面创建多个数据库。
+在文档[创建和使用云资源](../../../tutorials/consume-cloud-services.md)和[数据库创建和初始化](./provision-and-initiate-database.md)中，我们创建了一个 RDS 实例和一个数据库。 但是，你也可以创建一个 RDS 实例，并在上面创建多个数据库。
 当你想节省创建多个实例的成本时，此模式很有用。
 
 本指南将以阿里云 RDS 为例，介绍如何创建有多个数据库的 RDS 实例。
@@ -13,7 +13,7 @@ title: 分别配置实例和数据库
 2. `terraform-alibaba` 插件已经启用，版本 >= 1.0.3
 3. 已经使用 `vela config create -t terraform-alibaba` 配置了云厂商账号。
 
-如有疑问，可以按照这个[指导](../../../reference/addons/terraform) 进行设置。
+如有疑问，可以按照这个[指导](../../../reference/addons/terraform.md) 进行设置。
 
 ## 步骤
 

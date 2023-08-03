@@ -22,7 +22,7 @@ KubeVela 本身是一个的应用交付与管理控制平面，它架在 Kuberne
 
 - _KubeVela 核心控制器_ 为整个系统提供核心控制逻辑，完成诸如编排应用和工作流、修订版本快照、垃圾回收等等基础逻辑。
 - [_Cluster Gateway 控制器_](https://github.com/oam-dev/cluster-gateway)，提供统一的多集群访问接口和操作。
-- [_插件体系_](../reference/addons/overview) 注册和管理 KubeVela 的扩展功能，包括 CRD 控制器和相关模块定义。例如，下面列出了几个常用的插件：
+- [_插件体系_](../reference/addons/overview.md) 注册和管理 KubeVela 的扩展功能，包括 CRD 控制器和相关模块定义。例如，下面列出了几个常用的插件：
    * [_VelaUX_](https://github.com/kubevela/velaux) 插件是 KubeVela 的 Web UI。 此外，它在架构中更像是一个功能齐全的 “应用交付平台”，将业务逻辑耦合在起特定的 API 中，并为不了解 k8s 的业务开发者提供开箱即用的平台体验。
    * [_Workflow_](https://github.com/kubevela/workflow) 插件是一个独立的工作流引擎，可以作为统一的 Pipeline 运行以部署多个应用程序或其他操作。与传统 Pipeline 相比，它主要使用 CUE 驱动基于 IaC 的 API，而不是每一步都运行容器（或 pod）。 它与 KubeVela 核心控制器的应用工作流使用相同的机制。
    * [_Vela Prism_](https://github.com/kubevela/prism) 插件是 KubeVela 的扩展 API 服务器，基于 Kubernetes Aggregated API 机制构建。它可以将诸如 Grafana 创建仪表盘等第三方服务 API 映射为 Kubernetes API，方便用户将第三方资源作为 Kubernetes 原生资源进行IaC 化管理。
@@ -40,7 +40,7 @@ KubeVela 本身是一个的应用交付与管理控制平面，它架在 Kuberne
 
 ![kernel](../resources/kernel.png)
 
-如果要详细学习 KubeVela 的可编程文档，欢迎查看文档网站中 [自定义扩展](../platform-engineers/oam/oam-model) 部分。
+如果要详细学习 KubeVela 的可编程文档，欢迎查看文档网站中 [自定义扩展](../platform-engineers/oam/oam-model.md) 部分。
 
 
 ## 谁会使用 KubeVela？
@@ -49,7 +49,7 @@ KubeVela 本身是一个的应用交付与管理控制平面，它架在 Kuberne
 - 云原生应用平台的构建者、PaaS、Serverless 平台工程师、基础设施平台管理员：
   - KubeVela 是一个普适的、高可扩展的应用交付引擎与内核，它以极简的架构实现了原生 Kubernetes 多集群控制平面的能力，能够将 OAM 应用引擎直接植入企业已有的 PaaS 平台之中并不破坏已有的能力，从而实现标准化应用交付。
 - 第三方软件供应商（ISV）、垂直领域软件开发者、架构师：
-  - KubeVela 提供的充分的可扩展和集成能力，可以允许你[自定义插件](../platform-engineers/addon/intro) 完成复杂应用的构建和分发，是一个 Kubernetes 和云平台之上的应用商店（App Store）。
+  - KubeVela 提供的充分的可扩展和集成能力，可以允许你[自定义插件](../platform-engineers/addon/intro.md) 完成复杂应用的构建和分发，是一个 Kubernetes 和云平台之上的应用商店（App Store）。
 - 云原生时代的应用研发、运维人员、DevOps 工程师：
   - VelaUX 是一个基于 Vela Addon 机制构建的扩展能力集，安装这个插件后，你就拥有了一个开箱即用的现代化持续交付（CD）和应用管理平台。
 
@@ -64,4 +64,4 @@ KubeVela 团队将主要聚焦在核心控制器层面，面向所有用户提�
 
 ## 下一步
 
-- 查看 [用户手册](../tutorials/webservice)，了解更多使用场景和最佳实践。
+- 查看 [用户手册](../tutorials/webservice.mdx)，了解更多使用场景和最佳实践。

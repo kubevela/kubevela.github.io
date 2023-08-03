@@ -3,10 +3,10 @@ title:  自定义组件
 ---
 
 :::tip
-在阅读本部分之前，请确保你已经了解 KubeVela 中 [组件定义（ComponentDefinition)](../oam/x-definition#组件定义（ComponentDefinition）) 的概念且学习掌握了 [CUE 的基本知识](../cue/basic)
+在阅读本部分之前，请确保你已经了解 KubeVela 中 [组件定义（ComponentDefinition)](../oam/x-definition.md#组件定义（ComponentDefinition）) 的概念且学习掌握了 [CUE 的基本知识](../cue/basic.md)
 :::
 
-本节将以组件定义的例子展开说明，介绍如何使用 [CUE](../cue/basic) 通过组件定义 `ComponentDefinition` 来自定义应用部署计划的组件。
+本节将以组件定义的例子展开说明，介绍如何使用 [CUE](../cue/basic.md) 通过组件定义 `ComponentDefinition` 来自定义应用部署计划的组件。
 
 ## 交付一个简单的自定义组件
 
@@ -319,7 +319,7 @@ spec:
 
 </details>
 
-You can also use [dry run](../debug/dry-run) to show what the yaml results will be rendered for debugging.
+You can also use [dry run](../debug/dry-run.md) to show what the yaml results will be rendered for debugging.
 
 
 ## 使用 CUE `Context` 获取运行时信息
@@ -366,7 +366,7 @@ output: {
 除了上面这个例子外，一个组件的定义通常也会由多个 Kubernetes API 资源组成。例如，一个由 `Deployment` 和 `Service` 组成的 `webserver` 组件。CUE 同样能很好的满足这种自定义复合组件的需求。
 
 :::tip
-Compare to [using Helm](../../tutorials/helm), this approach gives your more flexibility as you can control the abstraction any time and integrate with traits, workflows in KubeVela better.
+Compare to [using Helm](../../tutorials/helm.md), this approach gives your more flexibility as you can control the abstraction any time and integrate with traits, workflows in KubeVela better.
 :::
 
 我们会使用 `output` 这个字段来定义工作负载类型的模板，而其他剩下的资源模板，都在 `outputs` 这个字段里进行声明，格式如下：
@@ -772,7 +772,7 @@ spec:
       template: <CUE format template>
 ```
 
-You can check the detail of this format [here](../oam/x-definition).
+You can check the detail of this format [here](../oam/x-definition.md).
 
 ## More examples to learn
 

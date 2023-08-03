@@ -32,4 +32,4 @@ description: 通过 UI 设置应用访问方式，获取应用的访问地址并
 
 ### 下一步
 
-* [查看应用部署的资源列表](./view-application-resource)
+* [查看应用部署的资源列表](./view-application-resource.md)

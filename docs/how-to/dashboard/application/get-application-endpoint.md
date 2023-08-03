@@ -39,4 +39,4 @@ After the application deployed with service exposed configuration, you can see a
 
 ### Next Step
 
-* [View Resources List Created](./view-application-resource)
+* [View Resources List Created](./view-application-resource.md)

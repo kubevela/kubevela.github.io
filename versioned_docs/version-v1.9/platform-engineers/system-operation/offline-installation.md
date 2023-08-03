@@ -2,7 +2,7 @@
 title: Air-gapped Installation
 ---
 
-`velad` provides the air-gapped installation experience, it's now the [default installation guide](../../install#1-install-velad).
+`velad` provides the air-gapped installation experience, it's now the [default installation guide](../../install.mdx#1-install-velad).
 
 
 ## Addon

@@ -43,14 +43,14 @@ In the following documents, we will expand the above in detail one by one.
 
 ## What's Next
 
-- [**Enable Observability Addons**](./o11y/installation): Guide for how to install observability addons in your KubeVela system.
+- [**Enable Observability Addons**](./o11y/installation.md): Guide for how to install observability addons in your KubeVela system.
 
-- [**Out-of-Box Dashboards**](./o11y/out-of-the-box): Guide for how to use pre-installed dashboards to monitor your system and applications.
+- [**Out-of-Box Dashboards**](./o11y/out-of-the-box.md): Guide for how to use pre-installed dashboards to monitor your system and applications.
 
-- [**Metrics Collection**](./o11y/metrics): Guide for customizing the process of collecting metrics for your application.
+- [**Metrics Collection**](./o11y/metrics.md): Guide for customizing the process of collecting metrics for your application.
 
-- [**Log Collection**](./o11y/logging): Guide for how to customize the log collecting rules for your application.
+- [**Log Collection**](./o11y/logging.md): Guide for how to customize the log collecting rules for your application.
 
-- [**Customize Dashboard**](./o11y/dashboard): Guide for creating your customized dashboards for applications.
+- [**Customize Dashboard**](./o11y/dashboard.md): Guide for creating your customized dashboards for applications.
 
-- [**Integration Existing Observability Service**](./o11y/integration): Guide for integrating your existing infrastructure to KubeVela, when you already have Prometheus or Grafana before installing addons.
+- [**Integration Existing Observability Service**](./o11y/integration.md): Guide for integrating your existing infrastructure to KubeVela, when you already have Prometheus or Grafana before installing addons.

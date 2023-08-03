@@ -35,4 +35,4 @@ You can upgrade the application in any state, as KubeVela is a declarative syste
 
 ### Next Step
 
-* [Check Application State](./get-application-instance)
+* [Check Application State](./get-application-instance.md)

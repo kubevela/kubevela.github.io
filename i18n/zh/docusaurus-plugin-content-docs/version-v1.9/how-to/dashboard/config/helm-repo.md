@@ -6,10 +6,10 @@ description: 配置 Helm 仓库以便于部署 Helm 应用。
 本文介绍如何配置 Helm 仓库，以帮助用户从私服仓库创建 Helm 类型的应用。
 
 :::info
-你应该先启用 [fluxcd](../../../reference/addons/fluxcd) 插件。
+你应该先启用 [fluxcd](../../../reference/addons/fluxcd.md) 插件。
 :::
 
-通过下述命令可以检查 Helm 仓库的 [配置模版](./config-template) 是否存在：
+通过下述命令可以检查 Helm 仓库的 [配置模版](./config-template.md) 是否存在：
 
 ```bash
 vela config-template list | grep helm-repository
@@ -55,7 +55,7 @@ vela config distribute <Config Name> --target <cluster/namespace>
 
 ## 使用 Helm 仓库创建应用
 
-你可以参考 [创建应用](../application/create-application) 创建一个 Helm 类型的应用:
+你可以参考 [创建应用](../application/create-application.md) 创建一个 Helm 类型的应用:
 
 ![helm-type-app](../../../resources/new-helm-type-app.jpg)
 

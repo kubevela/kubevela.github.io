@@ -198,7 +198,7 @@ my-app      	my-app      	webservice	      	running       	healthy	 Ready:1/1	20
 
 ### 如何在 GitOps 中控制应用版本
 
-当应用的 Spec 变化时，应用将重新运行其工作流以进行部署。如果你希望严格控制应用的版本和部署，你可以使用 [Publish Version](../version-control)。有了它，你还可以浏览应用的历史版本、进行跨版本配置比对、版本回滚以及版本重新发布。
+当应用的 Spec 变化时，应用将重新运行其工作流以进行部署。如果你希望严格控制应用的版本和部署，你可以使用 [Publish Version](../version-control.md)。有了它，你还可以浏览应用的历史版本、进行跨版本配置比对、版本回滚以及版本重新发布。
 
 :::note
 如果你在应用中使用了外置策略或工作流，那么当你的外置策略或工作流变化时，你的应用 Spec 不一定会变化。此时，你可以使用 `PublishVersion` 来强制应用进行重新部署。

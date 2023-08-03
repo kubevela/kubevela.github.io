@@ -75,7 +75,7 @@ duration before checking timeout (default is 10s).
 ...
 ```
 
-To learn about defining health checking rules, please refer to **[Status Write Back](../../platform-engineers/traits/status)**.
+To learn about defining health checking rules, please refer to **[Status Write Back](../../platform-engineers/traits/status.md)**.
 
 Finally we can observe application health status from its `status.services`.
 Here is a snippet of health status.

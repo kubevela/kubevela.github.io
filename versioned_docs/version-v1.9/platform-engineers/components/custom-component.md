@@ -2,7 +2,7 @@
 title:  Component Definition
 ---
 
-In this section, we will introduce how to use [CUE](../cue/basic) to customize components via `ComponentDefinition`. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition) and [how to manage definition](../cue/definition-edit).
+In this section, we will introduce how to use [CUE](../cue/basic.md) to customize components via `ComponentDefinition`. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition.md) and [how to manage definition](../cue/definition-edit.md).
 
 ## Declare `ComponentDefinition`
 
@@ -314,7 +314,7 @@ spec:
 ```  
 </details>
 
-You can also use [dry run](../debug/dry-run) to show what the yaml results will be rendered for debugging.
+You can also use [dry run](../debug/dry-run.md) to show what the yaml results will be rendered for debugging.
 
 
 ## CUE `Context` for runtime information
@@ -359,7 +359,7 @@ The list of [all available context variables](#full-available-context-in-compone
 It's common that a component definition is composed by multiple API resources, for example, a `webserver` component that is composed by a Deployment and a Service. CUE is a great solution to achieve this in simplified primitives.
 
 :::tip
-Compare to [using Helm](../../tutorials/helm), this approach gives your more flexibility as you can control the abstraction any time and integrate with traits, workflows in KubeVela better.
+Compare to [using Helm](../../tutorials/helm.md), this approach gives your more flexibility as you can control the abstraction any time and integrate with traits, workflows in KubeVela better.
 :::
 
 KubeVela requires you to define the template of main workload in `output` section, and leave all the other resource templates in `outputs` section with format as below:
@@ -746,7 +746,7 @@ spec:
       template: <CUE format template>
 ```
 
-You can check the detail of this format [here](../oam/x-definition).
+You can check the detail of this format [here](../oam/x-definition.md).
 
 ## More examples to learn
 

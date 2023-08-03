@@ -212,7 +212,7 @@ together to both replicate component and dispatch them to different clusters. He
 together:
 
 1. The applying order of policies is `topology` -> `override` -> `replication`. More information can be found
-   in [Multi cluster Application](../../case-studies/multi-cluster)
+   in [Multi cluster Application](../../case-studies/multi-cluster.md)
     - `topology` pick up which cluster to dispatch. If not used, application deploy resources to local cluster by
       default.
     - `override` modifies the component properties. If not used, no properties will be changed.

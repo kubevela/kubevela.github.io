@@ -111,7 +111,7 @@ NAME          COMPONENT            TYPE         PHASE     HEALTHY   STATUS   AGE
 example-app   hello-world-server   webservice   running                      25s
 ```
 
-If you want to learn more about `env-binding`, please refer to **[Multi Cluster Deployment](../../case-studies/multi-cluster)**.
+If you want to learn more about `env-binding`, please refer to **[Multi Cluster Deployment](../../case-studies/multi-cluster.md)**.
 
 ## Appendix: Parameter List
 

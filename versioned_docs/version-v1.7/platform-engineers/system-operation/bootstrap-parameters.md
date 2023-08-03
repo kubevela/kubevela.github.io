@@ -49,7 +49,7 @@ The introduction of bootstrap parameters in KubeVela controller are listed as be
 - **pprof-addr**: The pprof address to enable controller performance debugging.
 - **perf-enabled**: Use this flag if you would like to check time costs for different stages when reconciling applications. Switch it off to simplify loggings.
 
-> Several sets of recommended parameter configurations are enclosed in section [Performance Fine-tuning](./performance-finetuning).
+> Several sets of recommended parameter configurations are enclosed in section [Performance Fine-tuning](./performance-finetuning.md).
 
 ## Feature Gates
 

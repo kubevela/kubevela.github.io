@@ -16,4 +16,4 @@ After the application instance recycled, there will be a `Delete` button, click 
 
 ### Next Step
 
-* [Delete Application](./delete-application)
+* [Delete Application](./delete-application.md)

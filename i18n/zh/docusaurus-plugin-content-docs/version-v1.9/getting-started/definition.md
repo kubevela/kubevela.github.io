@@ -10,18 +10,18 @@ title: 模块定义（Definition）
 
 为了更好的理解模块定义，上图给出了以 `helm` 为例的原理示意图。平台构建者可以基于 [FluxCD](https://fluxcd.io/) 或者 [ArgoCD](https://argo-cd.readthedocs.io/) 编写模块定义并注册为 `helm` 模块，最终用户可以自动发现这个模块并在应用中定义 `helm` 模块暴露的参数。模块定义的编写基于 [CUE](https://cuelang.org/) 语言，在本节的最后你也将了解到如何制作自定义模块。
 
-目前 KubeVela 一共有四种不同类型的模块定义，分别是组件定义（ComponentDefinition）、运维特征定义（TraitDefinition）、策略定义（PolicyDefinition）以及工作流步骤定义（WorkflowStepDefinition），对应了构成[应用](./core-concept)的四个基本概念。
+目前 KubeVela 一共有四种不同类型的模块定义，分别是组件定义（ComponentDefinition）、运维特征定义（TraitDefinition）、策略定义（PolicyDefinition）以及工作流步骤定义（WorkflowStepDefinition），对应了构成[应用](./core-concept.md)的四个基本概念。
 
 ## 如何获取现成的模块定义？
 
 除了自己编写模块定义以外，你可以通过以下两大途径获得社区已有的模块定义：
 
 * KubeVela 安装时自动就会安装内置的模块定义，你可以在下面这些参考文档中查看有哪些现成的能力：
-    - [组件定义列表](../end-user/components/references)
-    - [运维特征定义列表](../end-user/traits/references)
-    - [策略定义列表](../end-user/policies/references)
-    - [工作流步骤定义列表](../end-user/workflow/built-in-workflow-defs)
-* [扩展插件列表](../reference/addons/overview)，作为 KubeVela 的扩展，每一个插件都包含一组模块定义以及支撑其功能的 CRD Controller。
+    - [组件定义列表](../end-user/components/references.md)
+    - [运维特征定义列表](../end-user/traits/references.md)
+    - [策略定义列表](../end-user/policies/references.md)
+    - [工作流步骤定义列表](../end-user/workflow/built-in-workflow-defs.md)
+* [扩展插件列表](../reference/addons/overview.md)，作为 KubeVela 的扩展，每一个插件都包含一组模块定义以及支撑其功能的 CRD Controller。
     - 社区有一个[插件注册中心](https://github.com/kubevela/catalog)包含了大量开箱即用的插件，由 KubeVela 核心维护者负责认证和维护。
 
 ## 模块定义的生命周期
@@ -84,9 +84,9 @@ vela show webservice
 vela show webservice --web
 ```
 
-* 在 KubeVela 的 UI 控制台（ [velaux 插件](../reference/addons/velaux)）
+* 在 KubeVela 的 UI 控制台（ [velaux 插件](../reference/addons/velaux.md)）
 
-模块定义在 UI 控制台上可以比较方便的查看和使用，更重要的是，你还可以[自定义 UI 展示](../reference/ui-schema)来优化 UI 控制台上模块定义的参数展示。
+模块定义在 UI 控制台上可以比较方便的查看和使用，更重要的是，你还可以[自定义 UI 展示](../reference/ui-schema.md)来优化 UI 控制台上模块定义的参数展示。
 
 ![alt](../resources/customize-def.jpg)
 
@@ -169,7 +169,7 @@ Application 也是一种 Kubernetes 的 CRD，你可以通过 `kubectl` 工具�
 在多数情况下，你不需要编写自定义模块，除非你的目的是扩展 KubeVela 的系统能力。在此之前，我们建议你先查看 KubeVela 内置的模块定义以及扩展插件，可能它们已经足够满足你的需求。
 :::
 
-KubeVela 使用 [CUE 配置语言](https://cuelang.org/)来编写自定义模块，如果你对 CUE 语言还不熟悉也不必担心，可以查看 [CUE 入门指南](../platform-engineers/cue/basic)，花 15 分钟即可了解基本的实用操作。
+KubeVela 使用 [CUE 配置语言](https://cuelang.org/)来编写自定义模块，如果你对 CUE 语言还不熟悉也不必担心，可以查看 [CUE 入门指南](../platform-engineers/cue/basic.md)，花 15 分钟即可了解基本的实用操作。
 
 一个模块定义包含输入、输出、操作以及这三者之间的衔接关系，一个简单的组件模块定义如下所示：
 
@@ -197,4 +197,4 @@ template: {
 }
 ```
 
-`type` 字段定义了这个模块是哪种类型（组件、运维特征、策略或者工作流步骤）， `parameter` 定义了模块的输入，`output` 定义了模块的输出。还有一些高级的操作你可以通过了解[如何管理、编写模块定义](../platform-engineers/cue/definition-edit)以及[模块定义与 Kubernetes 的交互协议](../platform-engineers/oam/x-definition) 等章节文档了解更多细节。
+`type` 字段定义了这个模块是哪种类型（组件、运维特征、策略或者工作流步骤）， `parameter` 定义了模块的输入，`output` 定义了模块的输出。还有一些高级的操作你可以通过了解[如何管理、编写模块定义](../platform-engineers/cue/definition-edit.md)以及[模块定义与 Kubernetes 的交互协议](../platform-engineers/oam/x-definition.md) 等章节文档了解更多细节。

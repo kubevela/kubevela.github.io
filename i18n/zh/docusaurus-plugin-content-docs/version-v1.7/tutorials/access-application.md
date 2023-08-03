@@ -64,9 +64,9 @@ This way required installed the traefik addon firstly.
 $ vela addon enable traefik
 ```
 
-Get more info about this addon, refer to [Traefik Addon](../reference/addons/traefik)
+Get more info about this addon, refer to [Traefik Addon](../reference/addons/traefik.md)
 
-This addon provides three traits, including [http-route](../reference/addons/traefik#http-routetrait), [https-route](../reference/addons/traefik#https-routetrait) and [tcp-route](../reference/addons/traefik#tcp-routetrait).
+This addon provides three traits, including [http-route](../reference/addons/traefik.md#http-routetrait), [https-route](../reference/addons/traefik.md#https-routetrait) and [tcp-route](../reference/addons/traefik.md#tcp-routetrait).
 
 ### HTTP/HTTPS
 

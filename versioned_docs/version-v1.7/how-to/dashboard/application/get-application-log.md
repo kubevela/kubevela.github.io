@@ -21,4 +21,4 @@ Select a workload could view the logs.
 
 ### Next Step
 
-* [Expose Application for Public Access](./get-application-endpoint)
+* [Expose Application for Public Access](./get-application-endpoint.md)

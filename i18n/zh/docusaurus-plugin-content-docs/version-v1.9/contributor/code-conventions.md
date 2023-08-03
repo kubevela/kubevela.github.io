@@ -82,7 +82,7 @@ title: 代码规范
 
   * 测试代码需要覆盖新的 vela cli 命令和现有命令的主要功能。
 
-更多细节请参考[测试原理](./principle-of-test)。
+更多细节请参考[测试原理](./principle-of-test.md)。
 
 ## 目录和文件规范
 

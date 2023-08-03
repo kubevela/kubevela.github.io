@@ -4,7 +4,7 @@ title: 金丝雀发布
 
 ## 准备工作
 
-1. 请确保你已经阅读过关于 [helm chart的基本部署](./helm) 的文档。
+1. 请确保你已经阅读过关于 [helm chart的基本部署](./helm.md) 的文档。
 
 2. 确认你已经启用了 [`kruise-rollout`](../reference/addons/kruise-rollout.md) 插件，我们的金丝雀发布依赖于 [rollouts from OpenKruise](https://github.com/openkruise/rollouts)，可通过如下命令启用插件。
    

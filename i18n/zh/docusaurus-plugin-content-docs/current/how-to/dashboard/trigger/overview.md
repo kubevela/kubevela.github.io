@@ -7,15 +7,15 @@ description: 对接 CI 自动部署
 
 ## 使用声明式工作流对接 CI 步骤
 
-KubeVela v1.7+ 中默认提供了构建镜像的内置步骤，具体请参考 [镜像构建集成](../../../tutorials/s2i)
+KubeVela v1.7+ 中默认提供了构建镜像的内置步骤，具体请参考 [镜像构建集成](../../../tutorials/s2i.md)
 
 ## 使用触发器对接 CI 系统
 
-你可以使用 [VelaUX addon](../../../reference/addons/velaux) 的触发器来和不同 CI 系统进行集成，在 ValueUX 中，每个应用在创建完成后，都会自动创建一个默认触发器，你可以删除或者创建新的不同类型的触发器。下图描述了架构体系和支持对接的平台：
+你可以使用 [VelaUX addon](../../../reference/addons/velaux.md) 的触发器来和不同 CI 系统进行集成，在 ValueUX 中，每个应用在创建完成后，都会自动创建一个默认触发器，你可以删除或者创建新的不同类型的触发器。下图描述了架构体系和支持对接的平台：
 
-- [自定义触发器](#custom-trigger), 你可以参考 [Jenkins CI 对接](../../../tutorials/jenkins) 作为自定义触发器的实际案例。
+- [自定义触发器](#custom-trigger), 你可以参考 [Jenkins CI 对接](../../../tutorials/jenkins.md) 作为自定义触发器的实际案例。
 - [ACR 镜像仓库](#ACR-trigger)
-- [Harbor 镜像仓库](#Harbor-trigger), 你可以参考 [Harbor 镜像仓库](../../../tutorials/trigger) 获得更详细的用例。
+- [Harbor 镜像仓库](#Harbor-trigger), 你可以参考 [Harbor 镜像仓库](../../../tutorials/trigger.md) 获得更详细的用例。
 - [DockerHub 镜像仓库](#DockerHub-trigger)
 - [JFrog 镜像仓库](#JFrog-trigger)
 
@@ -70,11 +70,11 @@ webhook-request:
 
 ![gitlab-trigger](../../../resources/gitlab-trigger.png)
 
-你还可以参考 [Jenkins CI 对接](../../../tutorials/jenkins) 作为自定义触发器的实际案例。
+你还可以参考 [Jenkins CI 对接](../../../tutorials/jenkins.md) 作为自定义触发器的实际案例。
 
 ### Harbor 触发器
 
-请参考 [Harbor 镜像仓库](../../../tutorials/trigger)。
+请参考 [Harbor 镜像仓库](../../../tutorials/trigger.md)。
 
 ### ACR 触发器
 

@@ -6,10 +6,10 @@ description: Configure a helm repository
 In this guide, we will introduce how to use Config to connect a private helm repository and create an application with Helm type to use this repository.
 
 :::info
-You must enable the [fluxcd](../../../reference/addons/fluxcd) addon first.
+You must enable the [fluxcd](../../../reference/addons/fluxcd.md) addon first.
 :::
 
-Check the [config template](./config-template) is exist with the following command:
+Check the [config template](./config-template.md) is exist with the following command:
 
 ```bash
 vela config-template list | grep helm-repository
@@ -55,7 +55,7 @@ vela config distribute <Config Name> --target <cluster/namespace>
 
 ## Create an application with this repository
 
-You can follow the [application creation guide](../application/create-application) to create a helm type application in project `default`. eg:
+You can follow the [application creation guide](../application/create-application.md) to create a helm type application in project `default`. eg:
 
 ![helm-type-app](../../../resources/new-helm-type-app.jpg)
 

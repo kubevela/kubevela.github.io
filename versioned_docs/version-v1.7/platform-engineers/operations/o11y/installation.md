@@ -3,7 +3,7 @@ title: Enable Observability Addons
 ---
 
 :::tip
-Before installing observability addons, we recommend you to start from the [introduction of the observability feature](../observability).
+Before installing observability addons, we recommend you to start from the [introduction of the observability feature](../observability.md).
 :::
 
 ## Quick Start
@@ -50,7 +50,7 @@ Now you can access your grafana by access `http://localhost:8080` in your browse
 
 > You can change it by adding `adminUser=super-user adminPassword=PASSWORD` to step 6.
 
-You will see several pre-installed dashboards and use them to view your system and applications. For more details of those pre-installed dashboards, see [Out-of-the-Box](./out-of-the-box) section.
+You will see several pre-installed dashboards and use them to view your system and applications. For more details of those pre-installed dashboards, see [Out-of-the-Box](./out-of-the-box.md) section.
 
 ![kubevela-application-dashboard](../../../resources/kubevela-application-dashboard.png)
 

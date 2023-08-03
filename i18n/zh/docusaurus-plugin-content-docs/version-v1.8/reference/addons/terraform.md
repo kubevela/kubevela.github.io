@@ -101,4 +101,4 @@ $ vela provider add terraform-aws --name aws-dev --AWS_ACCESS_KEY_ID=xxx --AWS_S
 
 ### 部署云资源
 
-在 Terraform provider 授权后，您可以[创建和消费云资源](../../end-user/components/cloud-services/provision-and-consume-database)。
+在 Terraform provider 授权后，您可以[创建和消费云资源](../../end-user/components/cloud-services/provision-and-consume-database.md)。

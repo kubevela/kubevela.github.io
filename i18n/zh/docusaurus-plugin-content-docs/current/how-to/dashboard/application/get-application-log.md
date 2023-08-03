@@ -21,4 +21,4 @@ $ vela logs <app_name> -n <namespace>
 
 ### 下一步
 
-* [暴露访问地址](./get-application-endpoint)
+* [暴露访问地址](./get-application-endpoint.md)

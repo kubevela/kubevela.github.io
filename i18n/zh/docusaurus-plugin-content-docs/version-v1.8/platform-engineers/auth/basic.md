@@ -18,7 +18,7 @@ KubeVela 1.4 开始，我们加入了认证和授权的功能，这使得控制�
   helm upgrade --install kubevela kubevela/vela-core --create-namespace -n vela-system --set authentication.enabled=true --set authentication.withUser=true --wait
   ```
 
-3. 确保命令行工具 Vela CLI 版本为 v1.4.1+，参考[安装文档](../../install#2-install-kubevela-cli).
+3. 确保命令行工具 Vela CLI 版本为 v1.4.1+，参考[安装文档](../../install.mdx#2-install-kubevela-cli).
 
 4. (可选) 安装 [vela-prism](https://github.com/kubevela/prism) 组件，开启高级的权限管理能力。
     ```bash
@@ -31,7 +31,7 @@ KubeVela 1.4 开始，我们加入了认证和授权的功能，这使得控制�
 
 ### 准备好集群
 
-在我们开始之前，请确保你已经有 2 个集群添加到管控中，假设命名为 `c2` 和 `c3`。你可以参考[多集群管理文档](../system-operation/managing-clusters#manage-the-cluster-via-cli) 查看如何添加集群。
+在我们开始之前，请确保你已经有 2 个集群添加到管控中，假设命名为 `c2` 和 `c3`。你可以参考[多集群管理文档](../system-operation/managing-clusters.md#manage-the-cluster-via-cli) 查看如何添加集群。
 
 ```bash
 $ vela cluster list
@@ -314,6 +314,6 @@ local     ─── dev       ─── Deployment/podinfo updated   2022-05-31 
 
 ## 扩展阅读
 
-这个文档提供了系统授权的基本操作说明，事实上 KubeVela 支持更细粒度的权限管理，并与 Kubernetes RBAC 权限一致，你可以阅读[底层实现原理](./advance)文档了解更多详情。
+这个文档提供了系统授权的基本操作说明，事实上 KubeVela 支持更细粒度的权限管理，并与 Kubernetes RBAC 权限一致，你可以阅读[底层实现原理](./advance.md)文档了解更多详情。
 
-> 如果你是平台管理员，你可以阅读[系统集成](./integration)文档了解更多与 Kubernetes RBAC 集成的细节。
+> 如果你是平台管理员，你可以阅读[系统集成](./integration.md)文档了解更多与 Kubernetes RBAC 集成的细节。

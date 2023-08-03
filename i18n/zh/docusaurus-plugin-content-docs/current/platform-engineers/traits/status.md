@@ -131,4 +131,4 @@ spec:
 
 ## 下一步
 
-* 了解如何基于 CUE  [自定义工作流](../workflow/workflow)。
+* 了解如何基于 CUE  [自定义工作流](../workflow/workflow.md)。

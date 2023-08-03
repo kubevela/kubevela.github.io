@@ -4,7 +4,7 @@ title:  创建和使用云资源
 
 KubeVela 可以帮助开发者集成、编排不同类型的云资源，涵盖混合多云环境，让你用统一地方式去使用不同厂商的云资源。
 
-本教程将主要集中在通过 Terraform 插件创建云资源，KubeVela 也支持使用 [Crossplane](https://crossplane.io/)，你可以参考[这个教程](../end-user/components/cloud-services/provision-cloud-resources-by-crossplane)。
+本教程将主要集中在通过 Terraform 插件创建云资源，KubeVela 也支持使用 [Crossplane](https://crossplane.io/)，你可以参考[这个教程](../end-user/components/cloud-services/provision-cloud-resources-by-crossplane.md)。
 
 ## 通过 Vela CLI 创建云资源
 
@@ -13,7 +13,7 @@ KubeVela 可以帮助开发者集成、编排不同类型的云资源，涵盖�
 
 ### 熟悉云资源的使用参数
 
-KubeVela 支持的所有由 Terraform 编排的云资源请见[列表](../end-user/components/cloud-services/cloud-resources-list)，你也可以通过命令 `vela components --label type=terraform` 查看。
+KubeVela 支持的所有由 Terraform 编排的云资源请见[列表](../end-user/components/cloud-services/cloud-resources-list.md)，你也可以通过命令 `vela components --label type=terraform` 查看。
 
 你可以使用一下任意方式来检查云资源的使用参数：
 
@@ -101,15 +101,15 @@ provision-cloud-resource-sample	sample-oss	alibaba-oss	      	running	healthy	Cl
 
 ### 开始之前
 
-- Enable [VelaUX](../reference/addons/velaux) addon.
+- Enable [VelaUX](../reference/addons/velaux.md) addon.
 
-- Enable [Terraform](../reference/addons/terraform) addon, just like the prerequisites in CLI part above. VelaUX can also enable these addons in UI console.
+- Enable [Terraform](../reference/addons/terraform.md) addon, just like the prerequisites in CLI part above. VelaUX can also enable these addons in UI console.
 
 ![addon-alibaba](../resources/addon-alibaba.jpg)
 
 ### Creating your cloud service
 
-The UI console operations are the same, you can refer to [this guide](../how-to/dashboard/application/create-application).
+The UI console operations are the same, you can refer to [this guide](../how-to/dashboard/application/create-application.md).
 
 Firstly, Create an application and choose the type of your cloud service, they will always has a prefix of vendor such as `aws-`, `azure` or `alibaba-`.
 
@@ -154,4 +154,4 @@ Set the above parameters according to your needs to complete creating the applic
 
 # 更多
 
-更多云资源使用方法，比如如何使用和消费云资源，请参见[云资源管理场景](../end-user/components/cloud-services/cloud-resource-scenarios)。
+更多云资源使用方法，比如如何使用和消费云资源，请参见[云资源管理场景](../end-user/components/cloud-services/cloud-resource-scenarios.md)。

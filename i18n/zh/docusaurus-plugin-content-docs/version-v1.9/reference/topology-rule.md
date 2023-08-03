@@ -170,7 +170,7 @@ clone-set 2022-08-22T11:53:46.005267600Z {"level":"info","ts":"2022-08-22T11:53:
 
 ## 集成在插件当中
 
-经过上面的介绍相信你应该已经想到，如果一个 KubeVela [插件](../platform-engineers/addon/intro)中安装了某种自定义资源，你就可以通过在插件中添加一个这样的 configmap 来建立这个它与其他资源的关联规则。 具体方法是在插件的应用模版文件中的 `outputs` 定义一个资源关联规则的 configmap。例如：
+经过上面的介绍相信你应该已经想到，如果一个 KubeVela [插件](../platform-engineers/addon/intro.md)中安装了某种自定义资源，你就可以通过在插件中添加一个这样的 configmap 来建立这个它与其他资源的关联规则。 具体方法是在插件的应用模版文件中的 `outputs` 定义一个资源关联规则的 configmap。例如：
 
 ```cue
 package main
@@ -201,4 +201,4 @@ outputs: resourceTree: {
 _rules: {...}
 ```
 
-具体请参考[文档](../platform-engineers/addon/addon-cue#auxiliary-resources) 。
+具体请参考[文档](../platform-engineers/addon/addon-cue.md#auxiliary-resources) 。

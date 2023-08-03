@@ -10,7 +10,7 @@ By default, when KubeVela application tries to dispatch (create or update) one r
 
 If this resource does not belongs to the application itself (belongs to no one or some other application), the application will stop the dispatch operation and report an error. This mechanism is designed to prevent unintended edits to resources managed by other operators or systems.
 
-If the resource is currently managed by other applications, you can refer to [shared-resource](./shared-resource) policy and read more about sharing resources across multiple applications.
+If the resource is currently managed by other applications, you can refer to [shared-resource](./shared-resource.md) policy and read more about sharing resources across multiple applications.
 
 If the resource is managed by no one, to allow KubeVela application to manage the resource, you can leverage the `read-only` policy or `take-over` policy to enforce resource adoption on these resources.
 

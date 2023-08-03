@@ -165,7 +165,7 @@ Hello KubeVela! Make shipping applications more enjoyable.
 
 ## 基于 UI 管理应用
 
-如果你已完成 [VelaUX 安装](./install#2-install-velaux)， 你可以通过 UI 来管理和可视化应用。
+如果你已完成 [VelaUX 安装](./install.mdx#2-install-velaux)， 你可以通过 UI 来管理和可视化应用。
 
 本地测试模式下通过下述命令即可打开 UI 界面。
 
@@ -189,7 +189,7 @@ KubeVela 的 UI 控制台跟底层的控制器使用了不同的元数据存储�
 
 :::tip
 如果 CLI 操作的应用的命名空间已经在 UI 中指向了对应的环境，那么该应用被会自动同步到 UI 中环境关联的项目中。否则，应用会被同步到默认项目中。
-如果你希望指定应用被同步到 UI 控制台的哪个项目中，请参考 [创建项目关联的环境](how-to/dashboard/user/project#创建项目关联的环境)。
+如果你希望指定应用被同步到 UI 控制台的哪个项目中，请参考 [创建项目关联的环境](how-to/dashboard/user/project.md#创建项目关联的环境)。
 :::
 
 总体而言，如果你的场景更倾向于使用 CLI/YAML/GitOps，那么我们建议你直接管理 application CRD，将 UI 控制台当成看板使用。如果你喜欢通过 UI 控制台管理，那就保持行为的一致，基于 UI 提供的方式：界面、API 和 Webhook 来执行部署。
@@ -213,5 +213,5 @@ app "first-vela-app" deleted from namespace "prod"
 
 ## 下一步
 
-- 阅读 [核心概念](./getting-started/core-concept) 文档获取核心概念解读。
-- 阅读 [用户手册](./tutorials/webservice) 获取更多特性玩法。
+- 阅读 [核心概念](./getting-started/core-concept.md) 文档获取核心概念解读。
+- 阅读 [用户手册](./tutorials/webservice.mdx) 获取更多特性玩法。

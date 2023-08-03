@@ -4,7 +4,7 @@ title: Customize Dashboard
 
 In KubeVela, leveraging the power of Kubernetes Aggregated API layer, it is easy for users to manipulate dashboards on Grafana and make customizations to application visualizations.
 
-Except for the pre-defined dashboards provided by the `grafana` addon as mentioned in the [Out-of-the-box](./out-of-the-box) chapter, KubeVela users can deploy customized dashboards to their system as well.
+Except for the pre-defined dashboards provided by the `grafana` addon as mentioned in the [Out-of-the-box](./out-of-the-box.md) chapter, KubeVela users can deploy customized dashboards to their system as well.
 
 :::tip
 If you do not know how to build Grafana dashboards and export them as json data, you can refer to the following Grafana docs for details.

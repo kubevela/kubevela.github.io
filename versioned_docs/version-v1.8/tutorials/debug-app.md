@@ -178,4 +178,4 @@ You can curl this app by `curl http://127.0.0.1:8001/`.
 
 ## More CLI Details
 
-Please refer to the [CLI docs](../cli/vela).
+Please refer to the [CLI docs](../cli/vela.md).

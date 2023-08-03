@@ -2,7 +2,7 @@
 title: CUE based Addon Application
 ---
 
-[Previous tutorial](./intro) introduces the basic structure of an addon and illustrate that any Kubernetes operator to be installed of an addon should be defined in a KubeVela application. Document [YAML application description file](./addon-yaml) explains the way of using YAML define the addon application. If you use CUE to write application description file, the addon will be able to have these abilities:
+[Previous tutorial](./intro.md) introduces the basic structure of an addon and illustrate that any Kubernetes operator to be installed of an addon should be defined in a KubeVela application. Document [YAML application description file](./addon-yaml.md) explains the way of using YAML define the addon application. If you use CUE to write application description file, the addon will be able to have these abilities:
 
 * Utilize the flexible and concise syntax of the CUE language, rich built-in functions and its parameter verification capabilities, to render and deploy the application and auxiliary resources with parameters and metadata of addon.
 * An addon may contain multiple Definitions and CRD Operators. They can be selectively installed according to parameters of the addon.
@@ -60,7 +60,7 @@ spec:
               name: my-namespace
 ```
 
-You can refer to the [CUE basic](../cue/basic) to learn language details.
+You can refer to the [CUE basic](../cue/basic.md) to learn language details.
 
 > Please notice: The name of Application in template file will be replaced by the addon name in `metadata.yaml`. The application will always have a unified name in the format of `addon-<addon_name>`.
 
@@ -328,7 +328,7 @@ outputs: resourceTree: {
 _rules: {...}
 ```
 
-In this example, we define a configmap `resourceTree` as an auxiliary resource, this configmap is actually a [resource topology rule](../../reference/topology-rule) . The function of this resource is to establish the relationship of CustomResources in the cluster, so that it can be displayed in the topology graph. It only needs to be applied to control-plane.
+In this example, we define a configmap `resourceTree` as an auxiliary resource, this configmap is actually a [resource topology rule](../../reference/topology-rule.md) . The function of this resource is to establish the relationship of CustomResources in the cluster, so that it can be displayed in the topology graph. It only needs to be applied to control-plane.
 
 You can also run the `cue eval *.cue resources/*.cue -e output -d yaml` command from local to see the result of resource rendering.
 
@@ -378,7 +378,7 @@ spec:
         image: "oamdev/vela-apiserver:v1.2.4"
 ```
 
-The image tag becomes the addon's version which the `context.metadata.version` field points to. The real example is [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue). Other available fields of metadata please refer to [metadata](./intro).
+The image tag becomes the addon's version which the `context.metadata.version` field points to. The real example is [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue). Other available fields of metadata please refer to [metadata](./intro.md).
 
 When the addon is enabled, `template.cue`, `parameter.cue` and the resource files will be gathered  with the addon metadata in `metadata.yaml` to render out the resources and apply them.
 

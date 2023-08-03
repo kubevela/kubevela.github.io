@@ -2,7 +2,7 @@
 title: Policy Definition
 ---
 
-In this section we will introduce how to define a custom policy with CUE. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition) and [how to manage definition](../cue/definition-edit).
+In this section we will introduce how to define a custom policy with CUE. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition.md) and [how to manage definition](../cue/definition-edit.md).
 
 ## Generate Resources by Policy
 
@@ -128,7 +128,7 @@ You can define any Kubernetes API objects in policies if you want.
 
 ## Special Policy
 
-Not all policies generate resources, there're several [built-in policies](../../end-user/policies/references) which are used to control the whole delivery precess and workflows.
+Not all policies generate resources, there're several [built-in policies](../../end-user/policies/references.md) which are used to control the whole delivery precess and workflows.
 
 :::tip
 These special polices are usually coded in the application controller.

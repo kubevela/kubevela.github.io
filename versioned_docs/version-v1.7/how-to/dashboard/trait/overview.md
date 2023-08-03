@@ -30,4 +30,4 @@ Open the component configuration page, and click the trash icon of the trait to 
 
 ## More
 
-For more information about all traits, please refer to [Traits](../../../end-user/traits/references).
+For more information about all traits, please refer to [Traits](../../../end-user/traits/references.md).

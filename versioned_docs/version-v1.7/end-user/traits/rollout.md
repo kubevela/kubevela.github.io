@@ -6,17 +6,17 @@ In this section, we will introduce how to canary rollout a container service.
 
 ## Before starting
 
-1. Enable [`kruise-rollout`](../../reference/addons/kruise-rollout) addon, our canary rollout capability relies on the [rollouts from OpenKruise](https://github.com/openkruise/rollouts).
+1. Enable [`kruise-rollout`](../../reference/addons/kruise-rollout.md) addon, our canary rollout capability relies on the [rollouts from OpenKruise](https://github.com/openkruise/rollouts).
   ```shell
   vela addon enable kruise-rollout
   ```
 
 2. Please make sure one of the [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/) is available in your cluster.
-   You can also enable the [`ingress-nginx`](../../reference/addons/nginx-ingress-controller) addon if you don't have any:
+   You can also enable the [`ingress-nginx`](../../reference/addons/nginx-ingress-controller.md) addon if you don't have any:
   ```shell
   vela addon enable ingress-nginx
   ```
-  Please refer to [the addon doc](../../reference/addons/nginx-ingress-controller) to get the access address of gateway.
+  Please refer to [the addon doc](../../reference/addons/nginx-ingress-controller.md) to get the access address of gateway.
 
 3. Some of the commands such as `rollback` relies on vela-cli `>=1.5.0-alpha.1`, please upgrade the command line for convenience. You don't need to upgrade the controller.
 
@@ -67,7 +67,7 @@ EOF
 Here's an **overview about what will happen** when upgrade under this `kruise-rollout` trait configuration, the whole process will be divided into 3 steps:
 
 1. When the upgrade start, a new canary deployment will be created with `20%` of the total replicas. In our example, we have 5 total replicas, it will keep all the old ones and create `5 * 20% = 1` for the new canary, and serve for `20%` of the traffic. It will wait for a manual approval when everything gets ready.
-   - By default, the percent of replicas are aligned with the traffic, you can also configure the replicas individually according to [this doc](../../reference/addons/kruise-rollout).
+   - By default, the percent of replicas are aligned with the traffic, you can also configure the replicas individually according to [this doc](../../reference/addons/kruise-rollout.md).
 2. After the manual approval, the second batch starts. It will create `5 * 90% = 4.5` which is actually `5` replicas of new version in the system with the `90%` traffic. As a result, the system will totally have `10` replicas now. It will wait for a second manual approval.
 3. After the second approval, it will update the workload which means leverage the rolling update mechanism of the workload itself for upgrade. After the workload finished the upgrade, all the traffic will route to that workload and the canary deployment will be destroyed.
 
@@ -96,7 +96,7 @@ Services:
 
 ```
 
-If you have enabled [velaux](../../reference/addons/velaux) addon, you can view the application topology graph that all `v1` pods are ready now.
+If you have enabled [velaux](../../reference/addons/velaux.md) addon, you can view the application topology graph that all `v1` pods are ready now.
 
 ![image](../../resources/kruise-rollout-v1.jpg)
 

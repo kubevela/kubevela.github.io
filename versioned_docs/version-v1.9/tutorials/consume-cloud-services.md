@@ -8,19 +8,19 @@ You can use the integrated cloud resources as out-of-box components or integrate
 With the help of KubeVela, you can use cloud resources from various providers in a unified way.
 
 This tutorial will mainly focus on talking about how to provision cloud resources by [Terraform](https://github.com/kubevela/terraform-controller).
-If you'd like to know more about cloud resources from [Crossplane](https://crossplane.io/), please refer to [this guide](../end-user/components/cloud-services/provision-cloud-resources-by-crossplane).
+If you'd like to know more about cloud resources from [Crossplane](https://crossplane.io/), please refer to [this guide](../end-user/components/cloud-services/provision-cloud-resources-by-crossplane.md).
 
 ## Provision Cloud Resources
 
 ### Prerequisites
 
-* Enable Terraform addon and authenticate the target cloud provider per the [instruction](../reference/addons/terraform).
+* Enable Terraform addon and authenticate the target cloud provider per the [instruction](../reference/addons/terraform.md).
 
 Let's take Alibaba Cloud as an example.
 
 ### Familiar with cloud resources specification
 
-All supported Terraform cloud resources can be seen in the [list](../end-user/components/cloud-services/cloud-resources-list). You can also filter them by
+All supported Terraform cloud resources can be seen in the [list](../end-user/components/cloud-services/cloud-resources-list.md). You can also filter them by
 command `vela components --label type=terraform`.
 
 You can use any of the following ways to check the specification of one cloud resource.
@@ -43,9 +43,9 @@ $ vela show alibaba-oss
 
 You can also add flag `--web` to view the usage by a local browser.
 
-- Reading [official docs](../end-user/components/cloud-services/cloud-resources-list).
+- Reading [official docs](../end-user/components/cloud-services/cloud-resources-list.md).
 
-For example, you can check the specification for Alibaba OSS at [here](../end-user/components/cloud-services/terraform/alibaba-oss). 
+For example, you can check the specification for Alibaba OSS at [here](../end-user/components/cloud-services/terraform/alibaba-oss.md). 
 
 For different vendors, these parameters update accordingly. All cloud resources have the following common parameters.
 
@@ -108,9 +108,9 @@ Provision cloud resources from UI Console can be more appropriate.
 
 ### Before starting
 
-- Enable [VelaUX](../reference/addons/velaux) addon.
+- Enable [VelaUX](../reference/addons/velaux.md) addon.
 
-- Enable [Terraform](../reference/addons/terraform) addon, just like the prerequisites in CLI part above. VelaUX can also enable these addons in UI console.
+- Enable [Terraform](../reference/addons/terraform.md) addon, just like the prerequisites in CLI part above. VelaUX can also enable these addons in UI console.
 
 ![addon-alibaba](../resources/addon-alibaba.jpg)
 
@@ -120,7 +120,7 @@ Provision cloud resources from UI Console can be more appropriate.
 
 ### Creating your cloud service
 
-The UI console operations are the same, you can refer to [this guide](../how-to/dashboard/application/create-application).
+The UI console operations are the same, you can refer to [this guide](../how-to/dashboard/application/create-application.md).
 
 Firstly, Create an application and choose the type of your cloud service, they will always has a prefix of vendor such as `aws-`, `azure` or `alibaba-`.
 
@@ -168,4 +168,4 @@ In the last section `Component Status`, the health status and the message of the
 
 ## More
 
-For more usages of cloud resources, like how to provision and consume cloud resources, please refer to [Scenarios of Cloud Resources Management](./../end-user/components/cloud-services/cloud-resource-scenarios).
+For more usages of cloud resources, like how to provision and consume cloud resources, please refer to [Scenarios of Cloud Resources Management](./../end-user/components/cloud-services/cloud-resource-scenarios.md).

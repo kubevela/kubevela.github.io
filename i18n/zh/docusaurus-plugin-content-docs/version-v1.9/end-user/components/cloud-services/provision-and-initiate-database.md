@@ -3,7 +3,7 @@ title: 数据库创建和初始化
 ---
 
 :::tip
-请确认管理员已经安装了 [Terraform 插件](../../../reference/addons/terraform)。
+请确认管理员已经安装了 [Terraform 插件](../../../reference/addons/terraform.md)。
 :::
 
 本教程将讨论如何为一个关系型数据库导入 SQL 文件完成初始化，并启动一个依赖数据库的应用程序。
@@ -32,9 +32,9 @@ RDS 数据库创建后，OSS 中的 SQL 文件将通过 Terraform 的[`local-exe
 
 ### 先决条件
 
-- 启用插件 [terraform-alibaba](../../../reference/addons/terraform)
+- 启用插件 [terraform-alibaba](../../../reference/addons/terraform.md)
 
-- 记得将 SQL 文件存储在[阿里云 OSS](./terraform/alibaba-oss)
+- 记得将 SQL 文件存储在[阿里云 OSS](./terraform/alibaba-oss.md)
 
 假设我们有一个OSS bucket `oss://favorite-links`，其中包含一个SQL文件 `db.sql`，而 bucket的访问地址是 `oss-cn-hongkong.aliyuncs.com`。
 

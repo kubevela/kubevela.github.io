@@ -84,7 +84,7 @@ NAME      STATE   AGE
 tencent   ready   1d
 ```
 
-我们鼓励你通过[部署云资源](../../tutorials/consume-cloud-services)进一步验证提供商。
+我们鼓励你通过[部署云资源](../../tutorials/consume-cloud-services.md)进一步验证提供商。
 
 ## 提交 Terraform 插件
 
@@ -92,4 +92,4 @@ tencent   ready   1d
 
 ## 贡献官网文档
 
-为你的云供应商编写[Terraform Addon启用文档](../../reference/addons/terraform)，并将其添加到[所有支持的云供应商](../../tutorials/consume-cloud-services#enabling-cloud-vendor-addons)。
+为你的云供应商编写[Terraform Addon启用文档](../../reference/addons/terraform.md)，并将其添加到[所有支持的云供应商](../../tutorials/consume-cloud-services.md#enabling-cloud-vendor-addons)。

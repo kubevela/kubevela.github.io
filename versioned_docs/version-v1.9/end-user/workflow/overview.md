@@ -4,9 +4,9 @@ title: Overview
 
 Workflows, as part of the Application, can glue together additional delivery processes and specify arbitrary delivery environments. In short, `Workflow` provides customized control flow and flexibility based on the original delivery model of Kubernetes(Apply). For example, `Workflow` can be used to implement complex operations such as pause, manual approval, if conditions, waiting status, data flow, multi-environment gray release, A/B testing, etc.
 
-A workflow consists of multiple steps, and typical workflow steps include step groups (containing a series of sub-steps), human review, multi-cluster publishing, notifications, etc. You can view all built-in workflow steps provided by default in KubeVela in [built-in workflow steps](./built-in-workflow-defs). If the built-in workflow steps don't meet your needs, you can also [custom workflow steps](../../platform-engineers/workflow/workflow).
+A workflow consists of multiple steps, and typical workflow steps include step groups (containing a series of sub-steps), human review, multi-cluster publishing, notifications, etc. You can view all built-in workflow steps provided by default in KubeVela in [built-in workflow steps](./built-in-workflow-defs.md). If the built-in workflow steps don't meet your needs, you can also [custom workflow steps](../../platform-engineers/workflow/workflow.md).
 
-`Workflow` consists of steps, you can either use KubeVela's [built-in workflow steps](./built-in-workflow-defs) like `suspend`, `notification`, `deploy`, `step-group` etc, or [customize your own `WorkflowStepDefinition`](../../platform-engineers/workflow/workflow).
+`Workflow` consists of steps, you can either use KubeVela's [built-in workflow steps](./built-in-workflow-defs.md) like `suspend`, `notification`, `deploy`, `step-group` etc, or [customize your own `WorkflowStepDefinition`](../../platform-engineers/workflow/workflow.md).
 
 In fact, if you only use components in the Application and do not declare a workflow, KubeVela will automatically create a default workflow for deploying the components when running the Application.
 
@@ -45,11 +45,11 @@ If you do not explicitly declare the execution mode, by default steps are execut
 
 Workflow has powerful process control capabilities, including:
 
-- View [Workflow Operations](./operations) to learn how to operate the workflow.
-- View [Suspend and Resume Workflow](./suspend) to learn how to suspend and resume a workflow.
-- View [Sub Steps](./step-group) to learn how to use sub-steps in the workflow.
-- View [Dependency](./dependency) to learn how to specify dependencies for workflow steps.
-- View [Pass data between steps](./inputs-outputs) to learn how to use `inputs`, `outputs` to pass data between steps.
-- View [If Conditions](./if-condition) to learn how to use `if` to determine whether the step should be executed.
-- View [Timeout Steps](./timeout) to learn how to set `timeout` for steps.
-- View [Debug Workflow](../../platform-engineers/debug/debug) to learn how to debug workflow in the real environment.
+- View [Workflow Operations](./operations.md) to learn how to operate the workflow.
+- View [Suspend and Resume Workflow](./suspend.md) to learn how to suspend and resume a workflow.
+- View [Sub Steps](./step-group.md) to learn how to use sub-steps in the workflow.
+- View [Dependency](./dependency.md) to learn how to specify dependencies for workflow steps.
+- View [Pass data between steps](./inputs-outputs.md) to learn how to use `inputs`, `outputs` to pass data between steps.
+- View [If Conditions](./if-condition.md) to learn how to use `if` to determine whether the step should be executed.
+- View [Timeout Steps](./timeout.md) to learn how to set `timeout` for steps.
+- View [Debug Workflow](../../platform-engineers/debug/debug.md) to learn how to debug workflow in the real environment.

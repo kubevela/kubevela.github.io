@@ -10,7 +10,7 @@ title:  镜像构建集成
 
 ### 使用独立工作流
 
-KubeVela 在 v1.6 版本中引入了[独立的工作流](../end-user/pipeline/workflowrun)，可以用于串联 CI 步骤与应用部署间的流程。与 KubeVela 应用内的工作流不同的是，独立工作流的发布是**一次性**的，它不对资源做管理，即使删除流水线也不会删除创建出来的资源。
+KubeVela 在 v1.6 版本中引入了[独立的工作流](../end-user/pipeline/workflowrun.md)，可以用于串联 CI 步骤与应用部署间的流程。与 KubeVela 应用内的工作流不同的是，独立工作流的发布是**一次性**的，它不对资源做管理，即使删除流水线也不会删除创建出来的资源。
 
 :::tip
 请确保你已经使用 `vela addon enable vela-workflow` 开启了独立工作流插件。

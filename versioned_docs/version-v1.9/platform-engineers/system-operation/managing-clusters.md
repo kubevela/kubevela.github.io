@@ -81,4 +81,4 @@ $ vela cluster rename cluster-prod cluster-production
 
 ## Next
 
-- Manage cluster with [UI console](../../how-to/dashboard/target/overview).
+- Manage cluster with [UI console](../../how-to/dashboard/target/overview.md).

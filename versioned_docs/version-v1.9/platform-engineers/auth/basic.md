@@ -18,7 +18,7 @@ To enable Authentication & Authorization in your KubeVela system, you need to do
   helm upgrade --install kubevela kubevela/vela-core --create-namespace -n vela-system --set authentication.enabled=true --set authentication.withUser=true --wait
   ```
 
-3. Make sure your version Vela CLI v1.4.1+, refer to [the installation guide](../../install#2-install-kubevela-cli).
+3. Make sure your version Vela CLI v1.4.1+, refer to [the installation guide](../../install.mdx#2-install-kubevela-cli).
 
 4. (Optional) Install [vela-prism](https://github.com/kubevela/prism) through running the following commands, which will allow you to enjoy the advanced API extensions in KubeVela.
   ```bash
@@ -29,7 +29,7 @@ To enable Authentication & Authorization in your KubeVela system, you need to do
 
 ## Usage
 
-0. Before we start, assume we already have two managed clusters joined in KubeVela, called `c2` and `c3`. You can refer to the [multi-cluster document](../system-operation/managing-clusters#manage-the-cluster-via-cli) and see how to join managed clusters into KubeVela control plane.
+0. Before we start, assume we already have two managed clusters joined in KubeVela, called `c2` and `c3`. You can refer to the [multi-cluster document](../system-operation/managing-clusters.md#manage-the-cluster-via-cli) and see how to join managed clusters into KubeVela control plane.
 
 ```bash
 $ vela cluster list
@@ -308,6 +308,6 @@ local     ─── dev       ─── Deployment/podinfo updated   2022-05-31 
 
 ## Extension Reading
 
-The guide above demonstrates how system operators can grant limited privileges for users and therefore restrict the access of their created applications. For more detail explanation on how this capability is achieved, read the [Underlying Mechanism](./advance) article.
+The guide above demonstrates how system operators can grant limited privileges for users and therefore restrict the access of their created applications. For more detail explanation on how this capability is achieved, read the [Underlying Mechanism](./advance.md) article.
 
-> As the platform builder, you may want to bind KubeVela application with your customized identity. For example, using a manual specified ServiceAccount for the application. If you want to do so, it is not mandatory to enable the Authentication feature flag in KubeVela. Read the [System Integration](./integration) for more details.
+> As the platform builder, you may want to bind KubeVela application with your customized identity. For example, using a manual specified ServiceAccount for the application. If you want to do so, it is not mandatory to enable the Authentication feature flag in KubeVela. Read the [System Integration](./integration.md) for more details.

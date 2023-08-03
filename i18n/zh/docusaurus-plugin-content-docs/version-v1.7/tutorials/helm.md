@@ -47,12 +47,12 @@ vela addon enable fluxcd
 参考上图，需要做如下配置：
 
 - Repo Type: 仓库类型，目前支持 Git 和 Helm，本例我们选择 Helm 类型。
-- Repo URL: 仓库地址，基于不同的仓库类型填写仓库地址，这里我们填写：https://charts.bitnami.com/bitnami。另外，如果你在 [配置集成](../how-to/dashboard/config/helm-repo) 里配置了 helm 仓库，这里可以直接在下拉框中进行选择。
+- Repo URL: 仓库地址，基于不同的仓库类型填写仓库地址，这里我们填写：https://charts.bitnami.com/bitnami。另外，如果你在 [配置集成](../how-to/dashboard/config/helm-repo.md) 里配置了 helm 仓库，这里可以直接在下拉框中进行选择。
 - Chart: 填写仓库地址之后，这里会自动列举出所有可用的 Helm chart，这里我们选择: redis
 - Version: 选择 chart 之后，这里的下拉框会展示出所有当前 chart 所有可用的版本，这里我们选择 16.8.5  
 - Values: 确定 chart 和版本之后，这里的下来框会展出当前 chart 的自定义配置参数，这里由于我们使用的是 ACK 集群，PV 有最小容量要求，这里填写 15Gi。同理，其他配置参数也可以通过该方式进行配置，你需要根据你的集群情况进行配置。
 
-如上参数填写完成后，点击 `Create` 完成应用创建进入应用管理页面。后续的部署流程与你在 [交付第一个应用](../quick-start) 的学习内容就一致了。
+如上参数填写完成后，点击 `Create` 完成应用创建进入应用管理页面。后续的部署流程与你在 [交付第一个应用](../quick-start.md) 的学习内容就一致了。
 
 ## 修改部署参数
 

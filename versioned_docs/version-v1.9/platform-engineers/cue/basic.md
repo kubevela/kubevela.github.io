@@ -4,7 +4,7 @@ title: CUE Basic
 
 In this section, we will explain more about how KubeVela use CUE to encapsulate and abstract a given capability in Kubernetes in detail.
 
-We'll start from some basic CUE knowledge first, if you don't have any idea of [KubeVela Concept](../../getting-started/core-concept), don't worry! This doc is available for anyone who want to learn how to use CUE in practice quickly.
+We'll start from some basic CUE knowledge first, if you don't have any idea of [KubeVela Concept](../../getting-started/core-concept.md), don't worry! This doc is available for anyone who want to learn how to use CUE in practice quickly.
 
 ## Overview
 
@@ -22,7 +22,7 @@ The reasons for KubeVela supports CUE as a first-class solution to design abstra
 
 Please make sure below CLIs are present in your environment:
 * [`cue` v0.2.2+](https://cuelang.org/docs/install/).
-* [`vela` v1.0.0+](../../install).
+* [`vela` v1.0.0+](../../install.mdx).
 
 :::caution
 Versions prior to KubeVela 1.6.0 use the v0.2.2 version of CUE, KubeVela 1.6.0+ uses the v0.5.0-alpha.1 version of CUE. Please use the CUE tool that matches your KubeVela version.
@@ -578,8 +578,8 @@ Great, now you've learned all of the basic skills and best practices about how t
 If you want to learn more details of CUE, you can refer to [the CUE official documentation](https://cuelang.org/) or [the well documented tutorials](https://cuetorials.com/introduction/).
 
 
-In the following sections, we'll start to learn how KubeVela use CUE to glue resources. Make sure you have learned the [core concepts](../../getting-started/core-concept) of KubeVela before that.
+In the following sections, we'll start to learn how KubeVela use CUE to glue resources. Make sure you have learned the [core concepts](../../getting-started/core-concept.md) of KubeVela before that.
 
 ## Next
 
-* Learn how to use CUE to extend KubeVela by [Managing Definition](./definition-edit).
+* Learn how to use CUE to extend KubeVela by [Managing Definition](./definition-edit.md).
