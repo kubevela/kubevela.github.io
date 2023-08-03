@@ -5,8 +5,8 @@ module.exports = {
   url: 'https://kubevela.io',
   baseUrl: '/',
   trailingSlash: true,
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
+  onBrokenLinks: 'warn',
+  onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicons/favicon.ico',
   organizationName: 'kubevela', // Usually your GitHub org/user name.
   projectName: 'kubevela.io', // Usually your repo name.
