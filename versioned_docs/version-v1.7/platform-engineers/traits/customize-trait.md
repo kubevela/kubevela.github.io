@@ -2,7 +2,7 @@
 title:  Trait Definition
 ---
 
-In this section we will introduce how to define a custom trait with CUE. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition) and [how to manage definition](../cue/definition-edit).
+In this section we will introduce how to define a custom trait with CUE. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition.md) and [how to manage definition](../cue/definition-edit.md).
 
 ## Generate a Trait scaffold
 
@@ -418,7 +418,7 @@ There're several reasons:
 1. The component could be defined by another person, for separation of concern, the operator can attach an operational trait to change that data.
 2. The component could be defined by third party which is not controlled by the one who use it.
 
-So KubeVela allow patch or override in this case, please refer to [patch trait](./patch-trait) for more details. As trait and workflow step can both patch, so we write them together.
+So KubeVela allow patch or override in this case, please refer to [patch trait](./patch-trait.md) for more details. As trait and workflow step can both patch, so we write them together.
 
 ## Define Health for Definition
 
@@ -649,7 +649,7 @@ spec:
       template: <CUE format template>
 ```
 
-You can check the detail of this format [here](../oam/x-definition).
+You can check the detail of this format [here](../oam/x-definition.md).
 
 ## More examples to learn
 

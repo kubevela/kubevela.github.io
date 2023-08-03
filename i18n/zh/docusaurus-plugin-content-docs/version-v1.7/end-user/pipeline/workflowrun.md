@@ -101,7 +101,7 @@ WorkflowRun 步骤拥有以下几种状态：
 |       Output       |                            步骤在输出 Output 时出错                             |
 | FailedAfterRetries |                            步骤执行失败达到重试上限                             |
 |      Timeout       |                                 步骤因超时出错                                  |
-|       Action       | 步骤定义中执行了 [op.#Fail](../../platform-engineers/workflow/cue-actions#fail) |
+|       Action       | 步骤定义中执行了 [op.#Fail](../../platform-engineers/workflow/cue-actions.md#fail) |
 
 ## 执行模式
 
@@ -121,14 +121,14 @@ mode:
 
 ## 内置步骤
 
-你可以在 WorkflowRun 中使用**不带有**label: `custom.definition.oam.dev/scope: Application` 的 KubeVela [内置步骤](../workflow/built-in-workflow-defs)。
+你可以在 WorkflowRun 中使用**不带有**label: `custom.definition.oam.dev/scope: Application` 的 KubeVela [内置步骤](../workflow/built-in-workflow-defs.md)。
 
 ## 自定义步骤
 
-你可以参考 [自定义步骤文档](../../platform-engineers/workflow/workflow) 来自定义你的步骤。
+你可以参考 [自定义步骤文档](../../platform-engineers/workflow/workflow.md) 来自定义你的步骤。
 
 :::caution
-在自定义 WorkflowRun 的步骤过程中，你无法使用[对当前应用的操作](../../platform-engineers/workflow/cue-actions#对当前应用的操作)
+在自定义 WorkflowRun 的步骤过程中，你无法使用[对当前应用的操作](../../platform-engineers/workflow/cue-actions.md#对当前应用的操作)
 :::
 
 ## 核心功能
@@ -174,7 +174,7 @@ vela workflow terminate <name>
 如果你想查看 WorkflowRun 的日志，你可以使用 `vela workflow logs` 命令来查看日志。
 
 :::tip
-只有配置了 [op.#Log](../../platform-engineers/workflow/cue-actions#log) 的步骤才会有日志输出。
+只有配置了 [op.#Log](../../platform-engineers/workflow/cue-actions.md#log) 的步骤才会有日志输出。
 :::
 
 ```bash
@@ -307,7 +307,7 @@ step1 将在 step2 和 step3 执行完成后执行。
 
 ### 数据传递
 
-你可以通过 `inputs` 和 `outputs` 完成步骤间的数据传递，具体介绍请参考 [步骤间的输入输出](../workflow/inputs-outputs#outputs)。
+你可以通过 `inputs` 和 `outputs` 完成步骤间的数据传递，具体介绍请参考 [步骤间的输入输出](../workflow/inputs-outputs.md#outputs)。
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha1

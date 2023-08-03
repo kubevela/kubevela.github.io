@@ -2,7 +2,7 @@
 title: Crossplane
 ---
 
-The guide [Deploy Cloud Services](../../../tutorials/consume-cloud-services) shows how to provision cloud resources by Terraform in
+The guide [Deploy Cloud Services](../../../tutorials/consume-cloud-services.md) shows how to provision cloud resources by Terraform in
 CLI and VelaUX. This tutorial will talk about how to provision Cloud Resources by [Crossplane](https://crossplane.io/).
 
 Let's take cloud provider AWS as an example.
@@ -66,7 +66,7 @@ $ aws s3 ls
 
 ## More
 
-All Crossplane cloud resources are defined as [ComponentDefinitions](../../../getting-started/definition) and are about
+All Crossplane cloud resources are defined as [ComponentDefinitions](../../../getting-started/definition.md) and are about
 to be delivered in Crossplane provider addons, like [crossplane-aws](https://github.com/kubevela/catalog/tree/master/experimental/addons/crossplane-aws).
 If your requirements are not met by the addons, you can define your own component type per the instructions on 
-[how to define customized component](../../../platform-engineers/components/custom-component).
+[how to define customized component](../../../platform-engineers/components/custom-component.md).

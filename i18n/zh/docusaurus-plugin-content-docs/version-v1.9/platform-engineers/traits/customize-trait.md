@@ -3,7 +3,7 @@ title:  自定义运维特征
 ---
 
 
-本节介绍如何自定义运维特征，为用户的组件增添任何需要的运维特征能力。开始这一部分之前，请确保你已经对[核心概念](../../getting-started/definition) 以及 [如何管理模块定义](../cue/definition-edit)有了基本的了解。
+本节介绍如何自定义运维特征，为用户的组件增添任何需要的运维特征能力。开始这一部分之前，请确保你已经对[核心概念](../../getting-started/definition.md) 以及 [如何管理模块定义](../cue/definition-edit.md)有了基本的了解。
 
 ## 通过 Trait 生成资源对象
 
@@ -415,7 +415,7 @@ template: {
 1. 组件由其他人定义，运维人员对参数做修改。
 2. 组件由第三方组织定义，我们不拥有修改能力（不维护），只在部署时使用。
 
-针对上述场景，KubeVela 通过 patch 功能来支撑，因为 Patch 的能力针对 Trait 和 Workflow 均适用，我们通过[这篇 Patch 文档](./patch-trait)统一介绍。
+针对上述场景，KubeVela 通过 patch 功能来支撑，因为 Patch 的能力针对 Trait 和 Workflow 均适用，我们通过[这篇 Patch 文档](./patch-trait.md)统一介绍。
 
 ## Define Health for Definition
 
@@ -648,7 +648,7 @@ spec:
       template: <CUE format template>
 ```
 
-You can check the detail of this format [here](../oam/x-definition).
+You can check the detail of this format [here](../oam/x-definition.md).
 
 ## More examples to learn
 

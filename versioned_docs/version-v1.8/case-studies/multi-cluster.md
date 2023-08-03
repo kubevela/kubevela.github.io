@@ -17,14 +17,14 @@ There are many scenarios that developers or system operators need to deploy and 
 
 ![](../resources/multi-cluster-sys-arch.jpg)
 
-KubeVela leverages the [Cluster-Gateway](https://github.com/oam-dev/cluster-gateway) for multi-cluster, it's installed automatically along with KubeVela chart. By default, it will directly connect to the clusters by using the `kubeconfig` as secret. You can also enable the [Open Cluster Management](../platform-engineers/system-operation/working-with-ocm) for the PULL mode.
+KubeVela leverages the [Cluster-Gateway](https://github.com/oam-dev/cluster-gateway) for multi-cluster, it's installed automatically along with KubeVela chart. By default, it will directly connect to the clusters by using the `kubeconfig` as secret. You can also enable the [Open Cluster Management](../platform-engineers/system-operation/working-with-ocm.md) for the PULL mode.
 
 The following guide will introduce how to manage applications across clusters on KubeVela.
 
 ## Preparation
 
 Please make sure you have clusters in your control plane, in general, this work should be done by operator engineers.
-If you're a DevOps engineer or trying KubeVela, you can refer to [manage cluster docs](../platform-engineers/system-operation/managing-clusters) to learn how to join clusters.
+If you're a DevOps engineer or trying KubeVela, you can refer to [manage cluster docs](../platform-engineers/system-operation/managing-clusters.md) to learn how to join clusters.
 
 For the rest docs, we assume you have clusters with the following names:
 
@@ -213,7 +213,7 @@ spec:
 ```
 
 :::tip
-Sometimes, for security issues, you might want to disable this behavior and retrict the resources to be deployed within the same namespace of the application. This can be done by setting `--allow-cross-namespace-resource=false` in the [bootstrap parameter](../platform-engineers/system-operation/bootstrap-parameters) of the KubeVela controller.
+Sometimes, for security issues, you might want to disable this behavior and retrict the resources to be deployed within the same namespace of the application. This can be done by setting `--allow-cross-namespace-resource=false` in the [bootstrap parameter](../platform-engineers/system-operation/bootstrap-parameters.md) of the KubeVela controller.
 :::
 
 ### Control the deploy workflow
@@ -509,7 +509,7 @@ spec:
 
 ### Multi-cluster scheduling with customized workflow steps
 
-The multi-cluster feature and combine with the [customized workflow steps](../end-user/workflow/overview) to provide a powerful way for multi-cluster scheduling.
+The multi-cluster feature and combine with the [customized workflow steps](../end-user/workflow/overview.md) to provide a powerful way for multi-cluster scheduling.
 
 In the following example, we'll deploy the task first into the `local` cluster and `default` namespace, then check the deploy status by `read-object` step, after that we'll deploy the task into the `prod` namespace according the status.
 

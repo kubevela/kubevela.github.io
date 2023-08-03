@@ -138,7 +138,7 @@ The expected output should be like this:
 }
 ```
 
-For more use cases about VelaQL, Please refer to [VelaQL](../system-operation/velaql)
+For more use cases about VelaQL, Please refer to [VelaQL](../system-operation/velaql.md)
 
 ### Refresh the token
 

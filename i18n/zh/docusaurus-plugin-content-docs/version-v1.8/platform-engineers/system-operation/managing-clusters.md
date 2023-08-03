@@ -27,7 +27,7 @@ ask-beijing	     	X509Certificate	https://*.*.*.*:6443	    true
 
 ### vela cluster join
 
-该命令可将已有的子集群通过 kubeconfig 文件加入到 KubeVela 中，并将其命名为 cluster-prod，供[多环境部署](../../end-user/policies/envbinding)使用。
+该命令可将已有的子集群通过 kubeconfig 文件加入到 KubeVela 中，并将其命名为 cluster-prod，供[多环境部署](../../end-user/policies/envbinding.md)使用。
 
 ```shell script
 $ vela cluster join example-cluster.kubeconfig --name cluster-prod

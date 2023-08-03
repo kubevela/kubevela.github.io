@@ -22,7 +22,7 @@ title: 应用版本管理
 
 我们以一个带有外置工作流和策略的应用为例，该应用将会将 podinfo 服务部署在子集群中。
 
-> 对于外置工作流和策略，请参考 [多集群应用交付](../case-studies/multi-cluster) 以获取更多信息。
+> 对于外置工作流和策略，请参考 [多集群应用交付](../case-studies/multi-cluster.md) 以获取更多信息。
 
 
 ```yaml

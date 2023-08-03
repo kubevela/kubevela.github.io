@@ -45,32 +45,36 @@ func main() {
 				d := strings.Index(s, ")")
 				subStr := s[:d]
 				targetFilePath := filepath.Clean(targetDir + "/" + subStr)
-				if _, err1 := os.Stat(targetFilePath); err1 != nil {
-					if _, err2 := os.Stat(targetFilePath + ".md"); err2 != nil {
-						ss := strings.LastIndex(targetFilePath, "#")
-						if ss != -1 {
-							targetFilePath = targetFilePath[:ss]
-						}
-						ww := strings.LastIndex(targetFilePath, "?")
-						if ww != -1 {
-							targetFilePath = targetFilePath[:ww]
-						}
-						if _, err3 := os.Stat(targetFilePath + ".md"); err3 != nil {
-							if _, err4 := os.Stat(targetFilePath + ".mdx"); err4 != nil {
-								fmt.Println("file:", path, "refer to a non-existent doc:", subStr, "search path:", targetFilePath)
-								if strings.Contains(targetFilePath, "reference/addons/") {
-									continue
-								}
-								os.Exit(1)
-							}
-						}
-					}
-				}
-			}
 
+				targetFilePath = trimSuffix(targetFilePath, "#")
+				targetFilePath = trimSuffix(targetFilePath, "?")
+
+				if _, err = os.Stat(targetFilePath); err == nil {
+					continue
+				}
+				if _, err = os.Stat(targetFilePath + ".md"); err == nil {
+					continue
+				}
+				if _, err = os.Stat(targetFilePath + ".mdx"); err == nil {
+					continue
+				}
+				fmt.Println("file:", path, "refer to a non-existent doc:", subStr, "search path:", targetFilePath)
+				if strings.Contains(targetFilePath, "reference/addons/") {
+					continue
+				}
+				os.Exit(1)
+			}
 		}
 		cnt++
 		return nil
 	})
 	fmt.Printf("%d total files checked\n", cnt)
+}
+
+func trimSuffix(s string, targetChar string) string {
+	ss := strings.LastIndex(s, targetChar)
+	if ss != -1 {
+		return s[:ss]
+	}
+	return s
 }

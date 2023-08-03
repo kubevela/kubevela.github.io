@@ -22,4 +22,4 @@ $ vela status <app_name> -n <namespace> --tree
 
 ### 下一步
 
-* [查看应用部署版本](./get-application-revision)
+* [查看应用部署版本](./get-application-revision.md)

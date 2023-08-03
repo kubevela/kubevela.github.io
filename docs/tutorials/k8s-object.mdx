@@ -101,8 +101,8 @@ spec:
         type: deploy
 ```
 
-- More about the topology policy, refer to [the detail guide](../end-user/policies/references#topology).
-- More about the deploy workflow step, refer to [the detail guide](../end-user/workflow/built-in-workflow-defs#deploy).
+- More about the topology policy, refer to [the detail guide](../end-user/policies/references.md#topology).
+- More about the deploy workflow step, refer to [the detail guide](../end-user/workflow/built-in-workflow-defs.md#deploy).
 
 Deploy this application by the following command:
 
@@ -133,23 +133,23 @@ vela workflow resume app-with-k8s-objects
 ```
 
 KubeVela also allows referring Kubernetes objects from Kubernetes cluster or remote URL links, so that you do not need to write Kubernetes objects inside Application directly.
-Read more about it in [ref-objects](../end-user/components/ref-objects).
+Read more about it in [ref-objects](../end-user/components/ref-objects.md).
 
 ## Deploy with UI Console
 
-We can do the same process in KubeVela UI Console if you have enabled [`velaux`](../reference/addons/velaux) addon.
+We can do the same process in KubeVela UI Console if you have enabled [`velaux`](../reference/addons/velaux.md) addon.
 
 ### Create Delivery Target
 
-In VelaUX, we use [Delivery Target](../reference/addons/velaux#delivery-target) to describe the space where the application resources actually delivered.
+In VelaUX, we use [Delivery Target](../reference/addons/velaux.md#delivery-target) to describe the space where the application resources actually delivered.
 It's like syntax sugar to `topology policy` in UI console.
 
-Refer to [targets management doc](../how-to/dashboard/target/overview#manage-delivery-target) for details and make sure
+Refer to [targets management doc](../how-to/dashboard/target/overview.md#manage-delivery-target) for details and make sure
 you have 3 targets: 1 for test and 2 for prod environments for our below example.
 
 ### Creating Kubernetes application
 
-After Target was created, we begin to create an application. Same to [Deploy First Application](../quick-start), we need to submit basic Infos:
+After Target was created, we begin to create an application. Same to [Deploy First Application](../quick-start.md), we need to submit basic Infos:
 
 (1) Select type: k8s-objects; NOTE that in one application please maintain at most one Workload type of resource, meaning without more than a Deployment or Statefulset.
 
@@ -211,4 +211,4 @@ If continued, the deployment goes on. In the list of instances, you can check ou
 
 Now you've learned how to deploy Kubernetes objects.
 
-If you want to learn how to distribute resources across multi-clusters, you can refer to [this doc](../end-user/components/ref-objects).
+If you want to learn how to distribute resources across multi-clusters, you can refer to [this doc](../end-user/components/ref-objects.md).

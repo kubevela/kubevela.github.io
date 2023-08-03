@@ -13,7 +13,7 @@ description: 管理应用的工作流
 
 ![edit-workflow](../../../resources/edit-workflow.png)
 
-关于所有工作流步骤的详细信息，请参考 [内置工作流步骤](../../../end-user/workflow/built-in-workflow-defs)。
+关于所有工作流步骤的详细信息，请参考 [内置工作流步骤](../../../end-user/workflow/built-in-workflow-defs.md)。
 
 ## 创建工作流
 

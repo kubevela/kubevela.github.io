@@ -147,7 +147,7 @@ sample-addon  localcm    An addon for KubeVela.  [1.0.0]             disabled
 
 ## 在离线环境中同步 Addon 到 ChartMuseum
 
-就像 [*Addon的离线安装*](../system-operation/enable-addon-offline) 里描述的，你可以从本地文件系统安装 addon。但是有些 addon 中需要 Helm Chart ，那么你将需要为此构建 Chart 仓库，这部分内容将解决这一问题。你也可以学习到如何从 [addon catalog](https://github.com/kubevela/catalog) 同步 addon 到自建的 ChartMuseum 实例上，这样你可以直接从自建 registry 安装 addon，而不用从本地文件系统来安装。
+就像 [*Addon的离线安装*](../system-operation/enable-addon-offline.md) 里描述的，你可以从本地文件系统安装 addon。但是有些 addon 中需要 Helm Chart ，那么你将需要为此构建 Chart 仓库，这部分内容将解决这一问题。你也可以学习到如何从 [addon catalog](https://github.com/kubevela/catalog) 同步 addon 到自建的 ChartMuseum 实例上，这样你可以直接从自建 registry 安装 addon，而不用从本地文件系统来安装。
 
 ### 目标
 

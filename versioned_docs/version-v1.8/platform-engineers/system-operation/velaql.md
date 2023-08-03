@@ -164,7 +164,7 @@ VelaUX has use VelaQL for all it's resources query. You can also integrate in th
 vela addon enable velaux
 ```
 
-You can refer to the [velaux](../../reference/addons/velaux) doc to learn how to expose endpoint.
+You can refer to the [velaux](../../reference/addons/velaux.md) doc to learn how to expose endpoint.
 Assuming we started the apiserver at `http://127.0.0.1:8000`, you can use VelaQL like:
 
 ```shell

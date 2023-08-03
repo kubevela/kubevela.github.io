@@ -47,7 +47,7 @@ If your LDAP does not provide anonymous authentication access, then you need to 
 
 ![alt](https://static.kubevela.net/images/1.3/ldap2.png)
 
-> For more types of Dex Connectors, please refer to [Dex Connectors Configuration](../how-to/dashboard/config/dex-connectors).
+> For more types of Dex Connectors, please refer to [Dex Connectors Configuration](../how-to/dashboard/config/dex-connectors.md).
 
 ## Platform setting
 

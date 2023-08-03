@@ -100,7 +100,7 @@ For steps that fail to execute, the `message` of the step status will display th
 |       Output       |                        The step has an error when outputting the Output                         |
 | FailedAfterRetries |                   The Step fails in execution and the retry limit is reached                    |
 |      Timeout       |                                       The step is timeout                                       |
-|       Action       | [op.#Fail](../../platform-engineers/workflow/cue-actions#fail) is used in the step's definition |
+|       Action       | [op.#Fail](../../platform-engineers/workflow/cue-actions.md#fail) is used in the step's definition |
 
 ## Execution Mode
 
@@ -120,14 +120,14 @@ If you specify the execution mode in both WorkflowRun and Workflow, the mode in 
 
 ## Built-in Steps
 
-You can use KubeVela [built-in steps](../workflow/built-in-workflow-defs) that without label: `custom.definition.oam.dev/scope: Application` in WorkflowRun.
+You can use KubeVela [built-in steps](../workflow/built-in-workflow-defs.md) that without label: `custom.definition.oam.dev/scope: Application` in WorkflowRun.
 
 ## Custom Steps
 
-You can refer to the [custom steps documentation](../../platform-engineers/workflow/workflow) to customize your steps.
+You can refer to the [custom steps documentation](../../platform-engineers/workflow/workflow.md) to customize your steps.
 
 :::caution
-You cannot use [application operations](../../platform-engineers/workflow/cue-actions#application-operations).
+You cannot use [application operations](../../platform-engineers/workflow/cue-actions.md#application-operations).
 :::
 
 ## Core Features
@@ -173,7 +173,7 @@ vela workflow terminate <name>
 If you want to view the WorkflowRun logs, you can use `vela workflow logs` command to view the logs.
 
 :::tip
-Only steps configured with [op.#Log](../../platform-engineers/workflow/cue-actions#log) in its definition will have log output.
+Only steps configured with [op.#Log](../../platform-engineers/workflow/cue-actions.md#log) in its definition will have log output.
 :::
 
 ```bash
@@ -306,7 +306,7 @@ step1 will be executed after step2 and step3 are completed.
 
 ### Data Passing
 
-Data passing between steps can be done through `inputs` and `outputs`. For details, please refer to [Input and output between steps](../workflow/inputs-outputs#outputs).
+Data passing between steps can be done through `inputs` and `outputs`. For details, please refer to [Input and output between steps](../workflow/inputs-outputs.md#outputs).
 
 ```yaml
 apiVersion: core.oam.dev/v1alpha1

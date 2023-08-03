@@ -6,7 +6,7 @@ Welcome to KubeVela! In this guide, we'll walk you through how to install KubeVe
 
 ## Installation
 
-Make sure you have finished and verified KubeVela installation following [this guide](../install).
+Make sure you have finished and verified KubeVela installation following [this guide](../install.mdx).
 
 ## A Simple Application
 
@@ -64,6 +64,6 @@ Great! You have finished deploying your first KubeVela application, the simplest
 
 ## Next Step
 
-* Read from [the introduction](../) to learn more about the project.
-* Learn how to do [Multi-Cluster Application Delivery](../case-studies/multi-cluster). Components and traits are just the beginning of your vela sail, there're more powerful features around Policy and Workflow.
-* Refer to [VelaUX](../quick-start) for UI Console experience.
+* Read from [the introduction](../getting-started/introduction.md) to learn more about the project.
+* Learn how to do [Multi-Cluster Application Delivery](../case-studies/multi-cluster.md). Components and traits are just the beginning of your vela sail, there're more powerful features around Policy and Workflow.
+* Refer to [VelaUX](../quick-start.md) for UI Console experience.

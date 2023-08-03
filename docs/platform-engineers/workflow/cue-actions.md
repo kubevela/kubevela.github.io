@@ -5,7 +5,7 @@ title: Built-in Workflow Operations
 This document introduces the CUE operations that can be used in the workflow step definitions. You need to import the `vela/op` package to use these operations.
 
 :::tip
-Before reading this section, make sure you understand how to [customize workflow](./workflow) and learn the basics of [CUE](../cue/basic)
+Before reading this section, make sure you understand how to [customize workflow](./workflow.md) and learn the basics of [CUE](../cue/basic.md)
 :::
 
 ## Process Control

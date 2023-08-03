@@ -7,15 +7,15 @@ In KubeVela, you can choose to directly use declarative workflow with CI steps, 
 
 ## Use declarative workflow with CI steps
 
-KubeVela v1.7+ provide built-in step for image building, please refer to [Unified Declarative CI/CD](../../../tutorials/s2i) for details.
+KubeVela v1.7+ provide built-in step for image building, please refer to [Unified Declarative CI/CD](../../../tutorials/s2i.md) for details.
 
 ## Use triggers to integrated with CI system.
 
-You can use triggers from [VelaUX addon](../../../reference/addons/velaux) to integrate with different CI systems. In VelaUX, a default trigger will be automatically generated after an application created, you can also delete it and create a new one. The architecture and supported platforms are described in the following picture, they're:
+You can use triggers from [VelaUX addon](../../../reference/addons/velaux.md) to integrate with different CI systems. In VelaUX, a default trigger will be automatically generated after an application created, you can also delete it and create a new one. The architecture and supported platforms are described in the following picture, they're:
 
-- [Custom](#custom-trigger), refer to [Jenkins CI](../../../tutorials/jenkins) guide for a real world use case.
+- [Custom](#custom-trigger), refer to [Jenkins CI](../../../tutorials/jenkins.md) guide for a real world use case.
 - [ACR](#ACR-trigger)
-- [Harbor](#Harbor-trigger), refer to [Harbor Integration](../../../tutorials/trigger) guide for a real world use case.
+- [Harbor](#Harbor-trigger), refer to [Harbor Integration](../../../tutorials/trigger.md) guide for a real world use case.
 - [DockerHub](#DockerHub-trigger)
 - [JFrog](#JFrog-trigger)
 
@@ -70,7 +70,7 @@ After CI have executed this step, we can see that application is deployed succes
 
 ![gitlab-trigger](../../../resources/gitlab-trigger.png)
 
-You can refer to [Jenkins CI](../../../tutorials/jenkins) guide for a real use case about custom trigger.
+You can refer to [Jenkins CI](../../../tutorials/jenkins.md) guide for a real use case about custom trigger.
 
 Apart from this, Custom Triggers also supports some other type of actions, they are :
 
@@ -138,7 +138,7 @@ If a workflow step is in the `suspending` phase, the CI tool can initiate a roll
 
 Harbor Trigger can be integrated with Harbor image registry.
 
-You can refer to [Harbor Image Registry](../../../tutorials/trigger) guide for the end to end tutorial.
+You can refer to [Harbor Image Registry](../../../tutorials/trigger.md) guide for the end to end tutorial.
 
 ### ACR Trigger
 

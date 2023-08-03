@@ -2,7 +2,7 @@
 title: 在工作流中读写配置
 ---
 
-当我们阅读完 [集成 Helm 仓库](./helm-repo) 和 [集成私有镜像仓库](./image-registry) 两篇文章以后，你已经学会了通过 CLI 和 UI 创建和分发使用配置的方式。在本文中，我们将介绍通过流水线或工作流的方式来读写配置。
+当我们阅读完 [集成 Helm 仓库](./helm-repo.md) 和 [集成私有镜像仓库](./image-registry.md) 两篇文章以后，你已经学会了通过 CLI 和 UI 创建和分发使用配置的方式。在本文中，我们将介绍通过流水线或工作流的方式来读写配置。
 
 ## 为什么我们需要在流水线中读写配置？
 
@@ -16,13 +16,13 @@ title: 在工作流中读写配置
 
 ## 相关步骤类型参考
 
-* [Create Config](../../../end-user/workflow/built-in-workflow-defs#create-config)
+* [Create Config](../../../end-user/workflow/built-in-workflow-defs.md#create-config)
 
-* [List Configs](../../../end-user/workflow/built-in-workflow-defs#list-config)
+* [List Configs](../../../end-user/workflow/built-in-workflow-defs.md#list-config)
 
-* [Read Config](../../../end-user/workflow/built-in-workflow-defs#read-config)
+* [Read Config](../../../end-user/workflow/built-in-workflow-defs.md#read-config)
 
-* [Delete Config](../../../end-user/workflow/built-in-workflow-defs#delete-config)
+* [Delete Config](../../../end-user/workflow/built-in-workflow-defs.md#delete-config)
 
 如上所有步骤类型同时适用于应用工作流和独立流水线。
 

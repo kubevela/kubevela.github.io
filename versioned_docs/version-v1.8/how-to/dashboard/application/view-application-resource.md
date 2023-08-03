@@ -16,4 +16,4 @@ $ vela status <app_name> -n <namespace> --tree
 
 ### Next Step
 
-* [List Application Revision](./get-application-revision)
+* [List Application Revision](./get-application-revision.md)

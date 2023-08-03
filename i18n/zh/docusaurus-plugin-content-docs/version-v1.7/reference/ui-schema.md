@@ -37,7 +37,7 @@ template: {
 
 ![ui schema](../resources/ui-schema.jpg)
 
-它的工作流程如上图所示，通过定义的 [CUE 生成 API Schema](../platform-engineers/openapi-v3-json-schema)，然后再通过 API Schema 生成 默认的 UI Schema，如果存在自定义的 UI Schema，使用自定义的配置对默认配置进行更新。UI 基于最终的 UI Schema 渲染出前端页面。
+它的工作流程如上图所示，通过定义的 [CUE 生成 API Schema](../platform-engineers/openapi-v3-json-schema.md)，然后再通过 API Schema 生成 默认的 UI Schema，如果存在自定义的 UI Schema，使用自定义的配置对默认配置进行更新。UI 基于最终的 UI Schema 渲染出前端页面。
 
 UI Schema 包含的字段如下：
 

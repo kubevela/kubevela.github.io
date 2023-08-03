@@ -33,16 +33,16 @@ The backoff time for workflow to retry can be calculated by `int(0.05 * 2^(n-1))
 | 10    | 512     | 25.6         | 25               |
 | ...   | ...     | ...          | ...              |
 
-If the workflow step is waiting, the max backoff time is 60s, you can change it by setting `--max-workflow-wait-backoff-time` in the [bootstrap parameter](../system-operation/bootstrap-parameters) of KubeVela controller.
+If the workflow step is waiting, the max backoff time is 60s, you can change it by setting `--max-workflow-wait-backoff-time` in the [bootstrap parameter](../system-operation/bootstrap-parameters.md) of KubeVela controller.
 
-If the workflow step is failed, the max backoff time is 300s, you can change it by setting`--max-workflow-failed-backoff-time` in the [bootstrap parameter](../system-operation/bootstrap-parameters) of KubeVela controller.
+If the workflow step is failed, the max backoff time is 300s, you can change it by setting`--max-workflow-failed-backoff-time` in the [bootstrap parameter](../system-operation/bootstrap-parameters.md) of KubeVela controller.
 
 ### Maximum Retry Times
 
-For failure case, the workflow will retry at most 10 times by default and enter suspending state after that. You can change the retry times by setting `--max-workflow-step-error-retry-times` in the [bootstrap parameter](../system-operation/bootstrap-parameters) of KubeVela controller.
+For failure case, the workflow will retry at most 10 times by default and enter suspending state after that. You can change the retry times by setting `--max-workflow-step-error-retry-times` in the [bootstrap parameter](../system-operation/bootstrap-parameters.md) of KubeVela controller.
 
 > Note that if the workflow step is unhealthy, the workflow step will be marked as wait but not failed and it will wait for healthy.
 
 ## Avoid Configuration Drift
 
-When workflow enters running state or suspends due to condition wait, KubeVela application will re-apply applied resources to prevent configuration drift routinely. This process is called **State Keep** in KubeVela. By default, the interval of State Keep is 5 minutes, which can be configured in the [bootstrap parameter](../system-operation/bootstrap-parameters) of KubeVela controller by setting `--application-re-sync-period`. If you want to disable the state keep capability, you can also use the [apply-once](https://github.com/kubevela/kubevela/blob/master/docs/examples/app-with-policy/apply-once-policy/apply-once.md) policy in the application.
+When workflow enters running state or suspends due to condition wait, KubeVela application will re-apply applied resources to prevent configuration drift routinely. This process is called **State Keep** in KubeVela. By default, the interval of State Keep is 5 minutes, which can be configured in the [bootstrap parameter](../system-operation/bootstrap-parameters.md) of KubeVela controller by setting `--application-re-sync-period`. If you want to disable the state keep capability, you can also use the [apply-once](https://github.com/kubevela/kubevela/blob/master/docs/examples/app-with-policy/apply-once-policy/apply-once.md) policy in the application.

@@ -2,7 +2,7 @@
 title: Generating OpenAPI Schema
 ---
 
-For any capabilities installed via [Definition Objects](./definition-and-templates),
+For any capabilities installed via [Definition Objects](./definition-and-templates.md),
 KubeVela will automatically generate OpenAPI v3 JSON schema based on its parameter list, and store it in a `ConfigMap` in the same `namespace` with the definition object. 
 
 > The default KubeVela system `namespace` is `vela-system`, the built-in capabilities and schemas are laid there.
@@ -74,4 +74,4 @@ Specifically, this schema is generated based on `parameter` section in capabilit
 
 ## Next
 
-Refer to [UX of Definition](../reference/ui-schema)
+Refer to [UX of Definition](../reference/ui-schema.md)

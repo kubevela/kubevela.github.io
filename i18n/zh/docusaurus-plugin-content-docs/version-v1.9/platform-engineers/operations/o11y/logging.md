@@ -69,7 +69,7 @@ vela addon enable grafana
 ```
 
 :::caution
-即使你已经按照 [自动化可观测性文档](../observability) 的介绍启用过了 grafana 插件，仍需要重新启用一次 grafana 插件从而让 loki 插件的数据源注册到 grafana 中。
+即使你已经按照 [自动化可观测性文档](../observability.md) 的介绍启用过了 grafana 插件，仍需要重新启用一次 grafana 插件从而让 loki 插件的数据源注册到 grafana 中。
 :::
 
 ## Kubernetes 系统事件日志
@@ -223,7 +223,7 @@ spec:
 ```
 
 该例子中，除了将 nginx 输出的 `combinded` 日志转换成 json 格式，并为每条日志增加一个 `new_field` 的 json key ，json value 的值为 `new value`。具体 vector VRL 如何编写请参考[文档](https://vector.dev/docs/reference/vrl/)。
-如果你针对这种处理方式，制作了专门的日志分析大盘，可以参考 [文档](./dashboard) 提供的三种方式将其导入到 grafana 中。
+如果你针对这种处理方式，制作了专门的日志分析大盘，可以参考 [文档](./dashboard.md) 提供的三种方式将其导入到 grafana 中。
 
 ## 应用文件日志
 

@@ -14,7 +14,7 @@ Click the `Edit` button, in addition to modifying the name and description of th
 
 ![edit-workflow](../../../resources/edit-workflow.png)
 
-For more information of workflow steps, please refer to the [built-in workflow steps](../../../end-user/workflow/built-in-workflow-defs) page.
+For more information of workflow steps, please refer to the [built-in workflow steps](../../../end-user/workflow/built-in-workflow-defs.md) page.
 
 ## Create Workflow
 

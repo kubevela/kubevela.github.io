@@ -4,7 +4,7 @@ title: 自定义监控大盘
 
 在 KubeVela 中，借助 Kubernetes 原生的 Aggregated API Layer，KubeVela 用户可以比较轻易地在集群中操作修改 Grafana 上的监控大盘。
 
-除了 [开箱即用](./out-of-the-box) 章节中 `grafana` 插件预置的监控大盘外，KubeVela 用户同样也可以在系统中部署自定义大盘。
+除了 [开箱即用](./out-of-the-box.md) 章节中 `grafana` 插件预置的监控大盘外，KubeVela 用户同样也可以在系统中部署自定义大盘。
 
 :::tip
 如果你还不了解如何在 Grafana 上创建大盘并将它们以 JSON 格式导出，你可以阅读下列 Grafana 官方文档来学习。

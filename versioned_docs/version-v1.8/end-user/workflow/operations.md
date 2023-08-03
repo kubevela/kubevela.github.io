@@ -14,7 +14,7 @@ vela workflow suspend <name>
 
 :::tip
 Nothing will happen if you suspend an application that has a completed workflow, which is in `running` status.
-Please refer to [Suspend and Resume](./suspend) for more examples.
+Please refer to [Suspend and Resume](./suspend.md) for more examples.
 :::
 
 ## Resume Workflow 
@@ -26,7 +26,7 @@ vela workflow resume <name>
 ```
 
 :::tip
-Please refer to [Suspend and Resume](./suspend) for more examples.
+Please refer to [Suspend and Resume](./suspend.md) for more examples.
 :::
 
 ## Terminate Workflow
@@ -58,7 +58,7 @@ vela workflow restart my-app
 You can use `vela workflow logs` to check the logs of the workflow.
 
 :::tip
-Note that only the steps with [op.#Log](../../platform-engineers/workflow/cue-actions#log) in its definition will output logs.
+Note that only the steps with [op.#Log](../../platform-engineers/workflow/cue-actions.md#log) in its definition will output logs.
 :::
 
 ```bash
@@ -75,5 +75,5 @@ vela workflow debug <name>
 ```
 
 :::tip
-Please checkout the [Debug doc](../../platform-engineers/debug/debug#applications-with-workflow) for more examples.
+Please checkout the [Debug doc](../../platform-engineers/debug/debug.md#applications-with-workflow) for more examples.
 :::

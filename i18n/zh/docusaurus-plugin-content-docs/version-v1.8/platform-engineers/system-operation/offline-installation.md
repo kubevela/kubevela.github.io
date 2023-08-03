@@ -10,7 +10,7 @@ KubeVela 离线部署包含 KubeVela Core 和 KubeVela Addon 的离线部署。
 
 - 下载 vela-core Helm Chart 包
 
-通过 [Helm Chart 安装 KubeVela Core](../../install)文档下载您希望的 vela-core Chart 包，并解压。
+通过 [Helm Chart 安装 KubeVela Core](../../install.mdx)文档下载您希望的 vela-core Chart 包，并解压。
 
 - 修改 values 里可配置的镜像
 

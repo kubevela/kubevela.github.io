@@ -3,13 +3,13 @@ title: RDS 实例创建多数据库
 ---
 
 :::tip
-请确认管理员已经安装了 [Terraform 插件](../../../reference/addons/terraform)。
+请确认管理员已经安装了 [Terraform 插件](../../../reference/addons/terraform.md)。
 :::
 
-指南 [创建和使用云资源](./provision-and-consume-database)和[数据库创建和初始化](./provision-and-initiate-database)里，在一个
+指南 [创建和使用云资源](./provision-and-consume-database.md)和[数据库创建和初始化](./provision-and-initiate-database.md)里，在一个
 RDS 实例中，只创建了一个数据库。本教程将告诉你如何在一个 RDS 实例中创建多个数据库。
 
-在[阿里云 RDS 参考文档](./terraform/alibaba-rds)中，如果你想创建一个数据库，请设置`database_name`。 如果你想创建多个数据库，
+在[阿里云 RDS 参考文档](./terraform/alibaba-rds.md)中，如果你想创建一个数据库，请设置`database_name`。 如果你想创建多个数据库，
 设置 `databases`，它是一个数据库列表，每个数据库都是一个 map，包含属性：name、character_set、description。
 
 ```

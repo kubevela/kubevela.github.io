@@ -2,7 +2,7 @@
 title: Manage Clusters on UI Console
 ---
 
-> This docs requires you to have [velaux](../../../reference/addons/velaux) installed.
+> This docs requires you to have [velaux](../../../reference/addons/velaux.md) installed.
 
 
 ## Manage Clusters
@@ -20,7 +20,7 @@ For connecting the ACK clusters, the platform will save some cloud info, Region,
 
 ## Manage Delivery Target
 
-To deploy application components into different places, VelaUX provides a new concept **[Delivery Target](../../../reference/addons/velaux#delivery-target)** for user to manage their deploy destinations not only clusters or namespaces, but also cloud provider information such as region, vpc and so on.
+To deploy application components into different places, VelaUX provides a new concept **[Delivery Target](../../../reference/addons/velaux.md#delivery-target)** for user to manage their deploy destinations not only clusters or namespaces, but also cloud provider information such as region, vpc and so on.
 
 ## Cluster
 

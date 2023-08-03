@@ -6,12 +6,12 @@ description: Deploy the business application by kubevela
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-In this section, we will introduce how to deploy a container-based application with KubeVela. The guide will run the whole process with UI console as it's quite the same with the [quick start](../quick-start) if you're using CLI.
+In this section, we will introduce how to deploy a container-based application with KubeVela. The guide will run the whole process with UI console as it's quite the same with the [quick start](../quick-start.md) if you're using CLI.
 
 ## Before starting
 
 - Containerize your business, you need a container image within your image registry that can be accessed by KubeVela.
-- Make sure you have [VelaUX addon](../reference/addons/velaux) enabled.
+- Make sure you have [VelaUX addon](../reference/addons/velaux.md) enabled.
   ```
   vela addon enable velaux
   ```
@@ -22,7 +22,7 @@ Enter the page of Application on the left, and click `New Application` to create
 
 Click `Next Step` so to the configuration page. You need to set up the Image address and resources limit. If you want to set up a command for the image, open up the row `CMD`.
 
-If you want to deploy the private image, please create the registry integration configuration. refer to: [Image registry configuration](../how-to/dashboard/config/image-registry)
+If you want to deploy the private image, please create the registry integration configuration. refer to: [Image registry configuration](../how-to/dashboard/config/image-registry.md)
 
 After inputting the Image address, the system will load the Image info from the registry. If the image belongs to the private image registry, the `Secret` field will be automatically assigned values.
 
@@ -68,7 +68,7 @@ After all of the environments have been recycled, the application can be deleted
 
 At this point, you have basically mastered the deployment method of Docker image.
 
-You can refer to [how to manage applications](../how-to/dashboard/application/create-application) to learn the details about the UI console operations.
+You can refer to [how to manage applications](../how-to/dashboard/application/create-application.md) to learn the details about the UI console operations.
 
 ## Deploy via CLI
 
@@ -215,6 +215,6 @@ You should allow incoming traffic through the port (30128).
 
 Now, you have finished learning the basic delivery for container images. Then, you could:
 
-* Refer to [webservice details](../end-user/components/references#webservice) to know usage of full fields.
-* Refer to [trait reference](../end-user/traits/references) to know which traits can be used for webservice.
-* Refer to [multi-cluster delivery](../case-studies/multi-cluster) to know how to deploy container image into hybrid environment and multi-clusters.
+* Refer to [webservice details](../end-user/components/references.md#webservice) to know usage of full fields.
+* Refer to [trait reference](../end-user/traits/references.md) to know which traits can be used for webservice.
+* Refer to [multi-cluster delivery](../case-studies/multi-cluster.md) to know how to deploy container image into hybrid environment and multi-clusters.

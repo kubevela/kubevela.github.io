@@ -35,7 +35,7 @@ Under the hood, `Appfile` will build the image from source code, and then genera
 
 ## Schema
 
-> Before learning about Appfile's detailed schema, we recommend you to get familiar with [core concepts](../getting-started/core-concept)) in KubeVela.
+> Before learning about Appfile's detailed schema, we recommend you to get familiar with [core concepts](../getting-started/core-concept.md)) in KubeVela.
 
 
 ```yaml
@@ -225,7 +225,7 @@ spec:
 
 ### [Optional] Configure another workload type
 
-By now we have deployed a *[Web Service](../end-user/components/cue/webservice)*, which is the default workload type in KubeVela. We can also add another service of *[Task](../end-user/components/cue/task)* type in the same app:
+By now we have deployed a *[Web Service](../end-user/components/cue/webservice.md)*, which is the default workload type in KubeVela. We can also add another service of *[Task](../end-user/components/cue/task.md)* type in the same app:
 
 ```yaml
 services:
@@ -249,7 +249,7 @@ Congratulations! You have just deployed an app using `Appfile`.
 ## What's Next?
 
 Play more with your app:
-- [Check Application Logs](./check-logs)
-- [Execute Commands in Application Container](./exec-cmd)
-- [Access Application via Route](./port-forward)
+- [Check Application Logs](./check-logs.md)
+- [Execute Commands in Application Container](./exec-cmd.md)
+- [Access Application via Route](./port-forward.md)
 

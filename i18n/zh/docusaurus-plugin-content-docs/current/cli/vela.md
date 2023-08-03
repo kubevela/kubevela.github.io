@@ -5,28 +5,28 @@ title: CLI Commands
 
 ## Getting Started
 
-* [vela init](vela_init)	 - Create scaffold for vela application.
-* [vela up](vela_up)	 - Deploy one application
+* [vela init](vela_init.md)	 - Create scaffold for vela application.
+* [vela up](vela_up.md)	 - Deploy one application
 
  Deploy one application based on local files or re-deploy an existing application. With the -n/--namespace flag, you can choose the location of the target application.
 
  To apply application from file, use the -f/--file flag to specify the application file location.
 
  To give a particular version to this deploy, use the -v/--publish-version flag. When you are deploying an existing application, the version name must be different from the current name. You can also use a history revision for the deploy and override the current application by using the -r/--revision flag.
-* [vela status](vela_status)	 - Show status of vela application.
-* [vela ls](vela_ls)	 - List all vela applications.
-* [vela delete](vela_delete)	 - Delete applications
+* [vela status](vela_status.md)	 - Show status of vela application.
+* [vela ls](vela_ls.md)	 - List all vela applications.
+* [vela delete](vela_delete.md)	 - Delete applications
 
  Delete KubeVela applications. KubeVela application deletion is associated with the recycle of underlying resources. By default, the resources created by the KubeVela application will be deleted once it is not in use or the application is deleted. There is garbage-collect policy in KubeVela application that you can use to configure customized recycle rules.
 
  This command supports delete application in various modes. Natively, you can use it like "kubectl delete app [app-name]". In the cases you only want to delete the application but leave the resources there, you can use the --orphan parameter. In the cases the server-side controller is uninstalled, or you want to manually skip some errors in the deletion process (like lack privileges or handle cluster disconnection), you can use the --force parameter.
-* [vela env](vela_env)	 - Manage environments for vela applications to run.
-* [vela show](vela_show)	 - Show the reference doc for component, trait, policy or workflow types. 'vela show' equals with 'vela def show'. 
+* [vela env](vela_env.md)	 - Manage environments for vela applications to run.
+* [vela show](vela_show.md)	 - Show the reference doc for component, trait, policy or workflow types. 'vela show' equals with 'vela def show'. 
 
 ## Managing Applications
 
-* [vela addon](vela_addon)	 - Manage addons for extension.
-* [vela dry-run](vela_dry-run)	 - Dry-run application locally, render the Kubernetes resources as result to stdout.
+* [vela addon](vela_addon.md)	 - Manage addons for extension.
+* [vela dry-run](vela_dry-run.md)	 - Dry-run application locally, render the Kubernetes resources as result to stdout.
 	vela dry-run -d /definition/directory/or/file/ -f /path/to/app.yaml
 
 You can also specify a remote url for app:
@@ -44,17 +44,17 @@ Limitation:
 	1. Only support one object per file(yaml) for "-f" flag. More support will be added in the future improvement.
 	2. Dry Run with policy and workflow will only take override/topology policies and deploy workflow step into considerations. Other workflow step will be ignored.
 
-* [vela live-diff](vela_live-diff)	 - Compare application and revisions.
-* [vela logs](vela_logs)	 - Tail logs for vela application.
-* [vela port-forward](vela_port-forward)	 - Forward local ports to container/service port of vela application.
-* [vela exec](vela_exec)	 - Execute command inside container based vela application.
-* [vela revision](vela_revision)	 - Manage KubeVela Application Revisions
-* [vela debug](vela_debug)	 - Debug running application with debug policy.
+* [vela live-diff](vela_live-diff.md)	 - Compare application and revisions.
+* [vela logs](vela_logs.md)	 - Tail logs for vela application.
+* [vela port-forward](vela_port-forward.md)	 - Forward local ports to container/service port of vela application.
+* [vela exec](vela_exec.md)	 - Execute command inside container based vela application.
+* [vela revision](vela_revision.md)	 - Manage KubeVela Application Revisions
+* [vela debug](vela_debug.md)	 - Debug running application with debug policy.
 
 ## Continuous Delivery
 
-* [vela workflow](vela_workflow)	 - Operate the Workflow during Application Delivery. Note that workflow command is both valid for Application Workflow and WorkflowRun(expect for [restart, rollout] command, they're only valid for Application Workflow). The command will try to find the Application first, if not found, it will try to find WorkflowRun. You can also specify the resource type by using --type flag.
-* [vela adopt](vela_adopt)	 - Adopt resources into applications
+* [vela workflow](vela_workflow.md)	 - Operate the Workflow during Application Delivery. Note that workflow command is both valid for Application Workflow and WorkflowRun(expect for [restart, rollout] command, they're only valid for Application Workflow). The command will try to find the Application first, if not found, it will try to find WorkflowRun. You can also specify the resource type by using --type flag.
+* [vela adopt](vela_adopt.md)	 - Adopt resources into applications
 
  Adopt resources into a KubeVela application. This command is useful when you already have resources applied in your Kubernetes cluster. These resources could be applied natively or with other tools, such as Helm. This command will automatically find out the resources to be adopted and assemble them into a new application which won't trigger any damage such as restart on the adoption.
 
@@ -68,16 +68,16 @@ Limitation:
 
 ## Managing Extensions
 
-* [vela uischema](vela_uischema)	 - Manage UI schema for addons.
-* [vela component](vela_component)	 - List component types installed and discover more in registry.
-* [vela trait](vela_trait)	 - List trait types installed and discover more in registry.
-* [vela def](vela_def)	 - Manage X-Definitions for extension.
+* [vela uischema](vela_uischema.md)	 - Manage UI schema for addons.
+* [vela component](vela_component.md)	 - List component types installed and discover more in registry.
+* [vela trait](vela_trait.md)	 - List trait types installed and discover more in registry.
+* [vela def](vela_def.md)	 - Manage X-Definitions for extension.
 
 ## System Tools
 
-* [vela install](vela_install)	 - The Kubevela CLI allows installing Kubevela on any Kubernetes derivative to which your kube config is pointing to.
-* [vela uninstall](vela_uninstall)	 - Uninstalls KubeVela from a Kubernetes cluster.
-* [vela system](vela_system)	 - Manage system, including printing the system deployment information in vela-system namespace and diagnosing the system's health.
-* [vela version](vela_version)	 - Prints vela build version information.
+* [vela install](vela_install.md)	 - The Kubevela CLI allows installing Kubevela on any Kubernetes derivative to which your kube config is pointing to.
+* [vela uninstall](vela_uninstall.md)	 - Uninstalls KubeVela from a Kubernetes cluster.
+* [vela system](vela_system.md)	 - Manage system, including printing the system deployment information in vela-system namespace and diagnosing the system's health.
+* [vela version](vela_version.md)	 - Prints vela build version information.
 
 ###### Auto generated by [script in KubeVela](https://github.com/kubevela/kubevela/tree/master/hack/docgen).

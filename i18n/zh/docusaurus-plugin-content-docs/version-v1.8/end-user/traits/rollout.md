@@ -6,7 +6,7 @@ title: 金丝雀发布
 
 ## 准备工作
 
-通过如下命令启用 [`kruise-rollout`](../../reference/addons/kruise-rollout) 插件，金丝雀发布依赖于 [rollouts from OpenKruise](https://github.com/openkruise/rollouts).
+通过如下命令启用 [`kruise-rollout`](../../reference/addons/kruise-rollout.md) 插件，金丝雀发布依赖于 [rollouts from OpenKruise](https://github.com/openkruise/rollouts).
    
 ```shell
 vela addon enable kruise-rollout
@@ -77,7 +77,7 @@ Services:
       ✅ scaler      ✅ gateway: No loadBalancer found, visiting by using 'vela port-forward canary-demo'
 ```
 
-如果你已经启用了 [velaux](../../reference/addons/velaux) 插件，你可以通过拓扑图来观察到所有的 `v1`  都处于 ready 状态。
+如果你已经启用了 [velaux](../../reference/addons/velaux.md) 插件，你可以通过拓扑图来观察到所有的 `v1`  都处于 ready 状态。
 
 ![image](../../resources/kruise-rollout-v1.jpg)
 

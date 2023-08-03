@@ -4,7 +4,7 @@ title: OAM Definition Protocol
 
 KubeVela is fully programmable via [CUE](https://cuelang.org), while it leverage Kubernetes as control plane and align with the API in yaml.
 
-You can [manage the definition](../cue/definition-edit) in CUE and the `vela def` command will render it into Kubernetes API with the following protocol.
+You can [manage the definition](../cue/definition-edit.md) in CUE and the `vela def` command will render it into Kubernetes API with the following protocol.
 
 ## Definition API
 
@@ -219,7 +219,7 @@ spec:
 ```
 </details>
 
-The specification of `schematic` is explained in the [CUE with KubeVela](../cue/basic) documentations.
+The specification of `schematic` is explained in the [CUE with KubeVela](../cue/basic.md) documentations.
 
 ## TraitDefinition
 
@@ -518,8 +518,8 @@ Once the application is created, KubeVela will tag the created resources with a 
 
 In the Definitions, some runtime context information can be obtained through the `context` variable, please check out:
 
-- [Context data in Component Definition](../components/custom-component#full-available-context-in-component)
-- [Context data in Trait Definition](../traits/customize-trait#full-available-context-in-trait)
-- [Context data in Workflow Sep Definition](../workflow/workflow#full-available-context-in-workflow-step)
+- [Context data in Component Definition](../components/custom-component.md#full-available-context-in-component)
+- [Context data in Trait Definition](../traits/customize-trait.md#full-available-context-in-trait)
+- [Context data in Workflow Sep Definition](../workflow/workflow.md#full-available-context-in-workflow-step)
 
-Please note that all the Definition concepts introduced in this section only need to be understood by the platform administrator when they want to expand the functions of KubeVela. The end users will learn the schema of above definitions with visualized forms (or the JSON schema of parameters if they prefer) and reference them in application deployment plan. Please check the [Generate Forms from Definitions](../openapi-v3-json-schema) section about how this is achieved.
+Please note that all the Definition concepts introduced in this section only need to be understood by the platform administrator when they want to expand the functions of KubeVela. The end users will learn the schema of above definitions with visualized forms (or the JSON schema of parameters if they prefer) and reference them in application deployment plan. Please check the [Generate Forms from Definitions](../openapi-v3-json-schema.md) section about how this is achieved.

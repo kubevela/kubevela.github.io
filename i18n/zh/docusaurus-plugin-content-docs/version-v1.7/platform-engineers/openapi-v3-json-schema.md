@@ -2,7 +2,7 @@
 title:  Definition 生成 OpenAPI 描述
 ---
 
-对于任何通过[定义对象](./definition-and-templates) 安装的 capability, KubeVela 会自动根据 OpenAPI v3 JSON schema 的参数列表来生成 OpenAPI v3 JSON schema，并把它储存到一个和定义对象处于同一个 `namespace` 的 `ConfigMap` 中。
+对于任何通过[定义对象](./definition-and-templates.md) 安装的 capability, KubeVela 会自动根据 OpenAPI v3 JSON schema 的参数列表来生成 OpenAPI v3 JSON schema，并把它储存到一个和定义对象处于同一个 `namespace` 的 `ConfigMap` 中。
 
 > 默认的 KubeVela 系统 `namespace` 是 `vela-system`，内置的 capability 和 schema 位于此处。
 
@@ -53,4 +53,4 @@ data:
 
 ## 下一步
 
-参考 [UI 扩展](../reference/ui-schema)。
+参考 [UI 扩展](../reference/ui-schema.md)。

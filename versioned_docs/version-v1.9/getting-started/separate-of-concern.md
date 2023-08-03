@@ -5,11 +5,11 @@ title: Separation of Concerns
 KubeVela designs for separation of concerns, as a result, there're two roles of users:
 
 - **Platform Team**
-  - The platform engineers initialize the deployment environments, provide stable infrastructure capabilities (e.g. mysql-operator) and register them as reusable templates using [KubeVela Definitions](./definition) into the control plane. They should be experienced and skillful with the infrastructure.
+  - The platform engineers initialize the deployment environments, provide stable infrastructure capabilities (e.g. mysql-operator) and register them as reusable templates using [KubeVela Definitions](./definition.md) into the control plane. They should be experienced and skillful with the infrastructure.
 - **End Users**
-  - The end users are usually app developers. They choose target environment, and choose capability templates, fill in values and finally assemble them as a [KubeVela Application](./core-concept). They don't need to understand the infrastructure details.
+  - The end users are usually app developers. They choose target environment, and choose capability templates, fill in values and finally assemble them as a [KubeVela Application](./core-concept.md). They don't need to understand the infrastructure details.
 
-The KubeVela community has also maintained a bundle of infrastructure capabilities, they are called [addons](../reference/addons/overview).
+The KubeVela community has also maintained a bundle of infrastructure capabilities, they are called [addons](../reference/addons/overview.md).
 
 The work flow is shown as below:
 

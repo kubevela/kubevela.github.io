@@ -42,7 +42,7 @@ We can use `depends-on-app` to make sure `addon-fluxcd` is deployed before kruis
 > `depends-on-app` will check if the cluster has the application with `name` and `namespace` defines in `properties`.
 > If the application exists, the next step will be executed after the application is running.
 > If the application do not exists, KubeVela will check the ConfigMap with the same name, and read the config of the Application and apply to cluster.
-> For more information, please refer to [depends-on-app](../end-user/workflow/built-in-workflow-defs#depends-on-app).
+> For more information, please refer to [depends-on-app](../end-user/workflow/built-in-workflow-defs.md#depends-on-app).
 
 
 ```shell

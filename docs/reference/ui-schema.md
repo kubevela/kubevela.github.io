@@ -37,7 +37,7 @@ In the UI we want the user to be able to set the number of replicas via a number
 
 ![ui schema](../resources/ui-schema.jpg)
 
-Its workflow is in the figure above. The API Schema is [generated through the defined CUE](../platform-engineers/openapi-v3-json-schema), and then the default UI Schema is generated through the API Schema. If there is a custom UI Schema, the default configuration is patched with the custom configuration. The UI renders the front-end page based on the final UI Schema.
+Its workflow is in the figure above. The API Schema is [generated through the defined CUE](../platform-engineers/openapi-v3-json-schema.md), and then the default UI Schema is generated through the API Schema. If there is a custom UI Schema, the default configuration is patched with the custom configuration. The UI renders the front-end page based on the final UI Schema.
 
 The spec are as follows:
 

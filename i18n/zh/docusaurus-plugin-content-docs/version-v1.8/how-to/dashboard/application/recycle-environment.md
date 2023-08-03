@@ -17,4 +17,4 @@ description: 操作应用从某个环境回收，释放占用的资源。
 
 ### 下一步
 
-* [删除应用](./delete-application)
+* [删除应用](./delete-application.md)

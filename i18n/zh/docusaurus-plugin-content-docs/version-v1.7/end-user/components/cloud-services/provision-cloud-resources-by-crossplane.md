@@ -2,7 +2,7 @@
 title: 通过 Crossplane 部署云资源
 ---
 
-教程 [部署云服务](../../../tutorials/consume-cloud-services)展示了如何通过 Terraform 在 CLI 和 VelaUX 上部署云服务。
+教程 [部署云服务](../../../tutorials/consume-cloud-services.md)展示了如何通过 Terraform 在 CLI 和 VelaUX 上部署云服务。
 本教程将讨论如何通过 [Crossplane](https://crossplane.io/) 部署云资源。
 
 让我们以云供应商AWS为例。
@@ -66,6 +66,6 @@ $ aws s3 ls
 
 ## 更多
 
-所有的 Crossplane 云资源都被定义为[ComponentDefinitions](../../../getting-started/definition)，并且即将在 Crossplane provider
+所有的 Crossplane 云资源都被定义为[ComponentDefinitions](../../../getting-started/definition.md)，并且即将在 Crossplane provider
 插件中交付，如 [crossplan-aws](https://github.com/kubevela/catalog/tree/master/experimental/addons/crossplane-aws)。
-如果已有的插件不满足你的需求，你可以根据以下说明定义自己的组件类型 [how to define customized component](../../../platform-engineers/components/custom-component)。
+如果已有的插件不满足你的需求，你可以根据以下说明定义自己的组件类型 [how to define customized component](../../../platform-engineers/components/custom-component.md)。

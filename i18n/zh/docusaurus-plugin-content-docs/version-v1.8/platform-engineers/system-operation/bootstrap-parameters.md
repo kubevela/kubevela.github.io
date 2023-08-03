@@ -48,7 +48,7 @@ KubeVela 控制器的各项启动参数及其说明如下。
 - **pprof-addr**: 开启该地址可以启用 pprof 进行控制器性能调试
 - **perf-enabled**: 启用时可以在日志中看到 KubeVela 控制器管理应用时各个阶段的时间开销，关闭可以简化日志记录
 
-> [性能调优](./performance-finetuning)章节中包含了若干组不同场景下的推荐参数配置。
+> [性能调优](./performance-finetuning.md)章节中包含了若干组不同场景下的推荐参数配置。
 
 
 ## 可选能力
