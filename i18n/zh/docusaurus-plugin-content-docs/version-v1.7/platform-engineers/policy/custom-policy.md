@@ -2,7 +2,7 @@
 title: 自定义策略
 ---
 
-本节将介绍通过 CUE 实现自定义策略，在开始之前，你要学习 [模块定义](../../getting-started/definition) 的基本概念和 [如何管理模块定义](../cue/definition-edit)。
+本节将介绍通过 CUE 实现自定义策略，在开始之前，你要学习 [模块定义](../../getting-started/definition.md) 的基本概念和 [如何管理模块定义](../cue/definition-edit.md)。
 
 ## 通过策略生成资源
 
@@ -127,7 +127,7 @@ spec:
 
 ## 特殊策略
 
-并不是所有的策略都可以生成资源, 有几个 [内置策略](../../end-user/policies/references) 用于控制整个交付过程和工作流程。
+并不是所有的策略都可以生成资源, 有几个 [内置策略](../../end-user/policies/references.md) 用于控制整个交付过程和工作流程。
 
 :::tip
 这些特殊策略通常编写在 application controller 代码中，无需通过 CUE 自定义。

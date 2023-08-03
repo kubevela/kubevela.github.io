@@ -3,7 +3,7 @@ title: Provision and Binding Database
 ---
 
 :::tip
-This section requires your platform engineers have already enabled [terraform addon](../../../reference/addons/terraform).
+This section requires your platform engineers have already enabled [terraform addon](../../../reference/addons/terraform.md).
 :::
 
 This tutorial will talk about how to provision and consume Alibaba Cloud RDS (and OSS) by Terraform.
@@ -58,9 +58,9 @@ spec:
           name: oss-conn
 ```
 
-The component `sample-db` will generate secret `db-conn` with [these keys](./terraform/alibaba-rds#outputs), and the component
+The component `sample-db` will generate secret `db-conn` with [these keys](./terraform/alibaba-rds.md#outputs), and the component
 `sample-oss` will generate secret `oss-conn`. These secrets are binded to the Envs of component `express-server` by trait
-[Service Binding](../../traits/service-binding). Then the component can consume instances of OSS and RDS.
+[Service Binding](../../traits/service-binding.md). Then the component can consume instances of OSS and RDS.
 
 Deploy and verify the application.
 

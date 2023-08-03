@@ -4,7 +4,7 @@ title:  How-to
 
 In this section, it will introduce how to use simple template to declare Kubernetes API resource into a component.
 
-> Before reading this part, please make sure you've learned [the definition and template concepts](../definition-and-templates).
+> Before reading this part, please make sure you've learned [the definition and template concepts](../definition-and-templates.md).
 
 ## Declare `ComponentDefinition`
 

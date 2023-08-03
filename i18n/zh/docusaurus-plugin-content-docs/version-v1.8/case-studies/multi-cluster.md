@@ -16,7 +16,7 @@ title:  多集群应用交付
 
 ![](../resources/multi-cluster-sys-arch.jpg)
 
-KubeVela 的多集群依赖于 [Cluster-Gateway](https://github.com/oam-dev/cluster-gateway) 组件，在 KubeVela 的 Helm Chart 中自动安装。 默认情况下，KubeVela 管理多集群的方式是通过 `kubeconfig` 直连集群，你也可以使用 [Open Cluster Management](../platform-engineers/system-operation/working-with-ocm) 组件来使用拉取（PULL）模式。
+KubeVela 的多集群依赖于 [Cluster-Gateway](https://github.com/oam-dev/cluster-gateway) 组件，在 KubeVela 的 Helm Chart 中自动安装。 默认情况下，KubeVela 管理多集群的方式是通过 `kubeconfig` 直连集群，你也可以使用 [Open Cluster Management](../platform-engineers/system-operation/working-with-ocm.md) 组件来使用拉取（PULL）模式。
 
 下文将会介绍如何在 KubeVela 中进行使用管理多集群应用。
 
@@ -524,7 +524,7 @@ spec:
 
 ### 通过自定义工作流步骤实现多集群调度
 
-多集群部署的功能可以结合[自定义工作流步骤](../end-user/workflow/overview) 实现功能多样的多集群调度能力.
+多集群部署的功能可以结合[自定义工作流步骤](../end-user/workflow/overview.md) 实现功能多样的多集群调度能力.
 
 如下示例所示，我们会部署一个任务到 `local` 集群的 `default` 命名空间，然后通过 `read-object` 步骤检查部署状态，最后根据状态将任务部署到 `prod` 命名空间。
 

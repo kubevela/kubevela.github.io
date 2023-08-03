@@ -41,11 +41,11 @@ The commands we introduced above can also be used together, e.g., you can base y
 
 A KubeVela addon is a collection that can contain the following three types of files；
 * `Basic information file` that contains `metadata.yaml` and `README.md`.
-* `OAM module file` that defines KubeVela extensibility points, including [Definitions](../../getting-started/definition), [UI-Schema](../../reference/ui-schema) or [topology-rules](../../reference/topology-rule).
-* `Application description file` that defines a KubeVela [application](../../getting-started/core-concept). Typically, a `Definition` of addon should be supported by a Kubernetes operator. The Kubernetes objects of this operator should be defined in a KubeVela application. After the addon is enabled, these resources will be dispatched to the clusters by KubeVela application controller.
+* `OAM module file` that defines KubeVela extensibility points, including [Definitions](../../getting-started/definition.md), [UI-Schema](../../reference/ui-schema.md) or [topology-rules](../../reference/topology-rule.md).
+* `Application description file` that defines a KubeVela [application](../../getting-started/core-concept.md). Typically, a `Definition` of addon should be supported by a Kubernetes operator. The Kubernetes objects of this operator should be defined in a KubeVela application. After the addon is enabled, these resources will be dispatched to the clusters by KubeVela application controller.
 
 The picture below shows what KubeVela does when an addon is enabled. There are mainly three process:
-* [Addon Registry](./addon-registry) store addons which can be used to share and distribute addons anywhere, it can be any git repo or helm chart repository.
+* [Addon Registry](./addon-registry.md) store addons which can be used to share and distribute addons anywhere, it can be any git repo or helm chart repository.
 * When an addon is enabled through UX/CLI, it will pull these resource files from the Addon Registry, assemble them into a KubeVela application and apply it.
 * Finally, the KubeVela controller take care the rest things and deliver the addon as a normal application to the clusters.
 
@@ -145,7 +145,7 @@ This type of file is optional in an addon.
 
 #### Definition files (`definitions/` folder)
 
-The `definitions/` folder is used to store `Definition`, which can be a YAML file of ComponentDefinition, TraitDefinitions or WorkflowStepDefinitions Kubernetes CustomResource. It can also be a CUE file that defines KubeVela [Definitions](../../getting-started/definition), which will be rendered into the corresponding Kubernetes objects and applied to the cluster when enabling the addon.
+The `definitions/` folder is used to store `Definition`, which can be a YAML file of ComponentDefinition, TraitDefinitions or WorkflowStepDefinitions Kubernetes CustomResource. It can also be a CUE file that defines KubeVela [Definitions](../../getting-started/definition.md), which will be rendered into the corresponding Kubernetes objects and applied to the cluster when enabling the addon.
 
 :::note
 These definitions will only be applied to the control plane.
@@ -153,7 +153,7 @@ These definitions will only be applied to the control plane.
 
 #### UI-Schema (`schemas/` folder)
 
-The `schemas/` folder is used to store the [UI schema](../../reference/ui-schema) files corresponding to `Definition`, which is used to enhance the display effect when displaying the parameters required by `Definition` in UX.
+The `schemas/` folder is used to store the [UI schema](../../reference/ui-schema.md) files corresponding to `Definition`, which is used to enhance the display effect when displaying the parameters required by `Definition` in UX.
 
 ### Application description file
 
@@ -168,8 +168,8 @@ The content of a YAML typed file must be a Kubernetes object manifest, so you ca
 * Utilize the flexible and concise syntax of the CUE language, rich built-in functions and its parameter verification capabilities, to render and deploy the application and auxiliary resources with parameters and metadata of addon.
 * An addon may contain multiple Definitions and CRD Operators, they can be selectively installed according to parameters of addon.
 
-[YAML application description file](./addon-yaml) will introduce how to use YAML define application of addon.
-[CUE application description file](./addon-cue) will introduce how to use CUE define the application of addon.
+[YAML application description file](./addon-yaml.md) will introduce how to use YAML define application of addon.
+[CUE application description file](./addon-cue.md) will introduce how to use CUE define the application of addon.
 
 The above is a complete introduction to how to make an addon, you can find the complete description of the above-mentioned addon in [catalog](https://github.com/kubevela/catalog/tree/master/experimental/addons/example).
 
@@ -177,11 +177,11 @@ The above is a complete introduction to how to make an addon, you can find the c
 
 #### Views (`views/` folder)
 
-The `views/` folder is used to store the [VelaQL View](../system-operation/velaql) files.
+The `views/` folder is used to store the [VelaQL View](../system-operation/velaql.md) files.
 
 #### Config Templates (`config-templates/` folder)
 
-The `views/` folder is used to store the [Config Template](../../reference/config-template) files.
+The `views/` folder is used to store the [Config Template](../../reference/config-template.md) files.
 
 
 ## Install Addon Locally
@@ -198,7 +198,7 @@ vela addon enable ./your-addon-dir/
 
 ## Extend Terraform Addon
 
-*  We have built some tools to extend cloud resource as addons  for convenience, you can refer to the [extend terraform addon docs](./terraform).
+*  We have built some tools to extend cloud resource as addons  for convenience, you can refer to the [extend terraform addon docs](./terraform.md).
 
 ## Contribution
 
@@ -213,6 +213,6 @@ Please abide by the following rules when making a contribution:
 
 - An experimental addon must meet these conditions to be promoted as a verified one.
     - This addon must be tested by addon's [e2e-test](https://github.com/kubevela/catalog/test/e2e-test/addon-test) to guarantee this addon can be enabled successfully.
-    - Provide an introduction in KubeVela [official addon documentation](../../reference/addons/overview).
+    - Provide an introduction in KubeVela [official addon documentation](../../reference/addons/overview.md).
 
 - If you come across with any addon problems, feel free to raise a github issue or just send pull requests to fix them. Please make sure to update the addon version in your pull request.

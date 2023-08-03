@@ -488,9 +488,9 @@ spec:
 
 在模块、运维特征、工作流步骤定义中可以通过 `context` 变量获得一些运行时的上下文信息，具体请参考：
 
-- [组件定义中的 context 上下文](../components/custom-component#full-available-context-in-component)
-- [运维特征定义中的 context 上下文](../traits/customize-trait#full-available-context-in-trait)
-- [工作流步骤定义中的 context 上下文](../workflow/workflow#工作流步骤定义中的-context-运行时信息)
+- [组件定义中的 context 上下文](../components/custom-component.md#full-available-context-in-component)
+- [运维特征定义中的 context 上下文](../traits/customize-trait.md#full-available-context-in-trait)
+- [工作流步骤定义中的 context 上下文](../workflow/workflow.md#工作流步骤定义中的-context-运行时信息)
 
 最后请注意，在本节介绍的所有的模块化定义概念，都只需要平台的管理员在希望对 KubeVela 进行功能扩展时了解，最终用户对这些概念不需要有任何感知。
 

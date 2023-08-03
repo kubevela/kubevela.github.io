@@ -3,10 +3,10 @@ title: Deploy to Multi Environments
 ---
 
 :::tip
-This section will mainly focus on UI operation on multi-environments delivery, if you want to deploy with YAML, just refer to [multi-cluster delivery doc](../case-studies/multi-cluster), just compose the topology policy with different clusters and namespaces to make them work as environment. 
+This section will mainly focus on UI operation on multi-environments delivery, if you want to deploy with YAML, just refer to [multi-cluster delivery doc](../case-studies/multi-cluster.md), just compose the topology policy with different clusters and namespaces to make them work as environment. 
 :::
 
-Environments represent your deployment targets logically ( develop, test, production, etc). VelaUX (the UI of KubeVela) provides [some new concepts, the environment and delivery target](../reference/addons/velaux#concept-of-velaux) for more flexible deployments on UI operations.
+Environments represent your deployment targets logically ( develop, test, production, etc). VelaUX (the UI of KubeVela) provides [some new concepts, the environment and delivery target](../reference/addons/velaux.md#concept-of-velaux) for more flexible deployments on UI operations.
 
 You can place multi targets to the same environment as you need.
 In KubeVela, the environment bond a namespace in the control plane cluster. The application instance will be deployed into the Kubernetes namespace bond with the specified environment. Actually, the application created in VelaUX is an application template before bound with environment. As a result, VelaUX allow you to easily deploy the same app into different environments.
@@ -46,10 +46,10 @@ We usually need to set different configurations for different environments, such
 
 ![override-policy](https://static.kubevela.net/images/1.5/override-policy.jpg)
 
-You can refer to [override policy](../end-user/policies/references#override) documentation for parameter spec details.
+You can refer to [override policy](../end-user/policies/references.md#override) documentation for parameter spec details.
 
 ### 4. Deploy
 
-By default, all environments are independent with each other. When you deploy an application, you need to select the environment to be deployed. You can also leverage the [custom trigger](../how-to/dashboard/trigger/overview) to connect deploy actions between environments.
+By default, all environments are independent with each other. When you deploy an application, you need to select the environment to be deployed. You can also leverage the [custom trigger](../how-to/dashboard/trigger/overview.md) to connect deploy actions between environments.
 
 For example, if you want to deploy the production environment  only after the test environment is completed successfully. You can create a trigger with the custom type for the production environment, and get a webhook URL. Then, edit the workflow of the test environment, add a webhook workflow step at the end. 

@@ -61,5 +61,5 @@ Hello World
 
 ## 下一步
 
-* 学习[多集群应用部署](../case-studies/multi-cluster)，除了组件和运维特征，了解策略系统和工作流带来的更丰富能力。
-* 想要开箱即用的图形化交互体验？查看 [VelaUX](../quick-start) 了解图形化控制台的使用方式。
+* 学习[多集群应用部署](../case-studies/multi-cluster.md)，除了组件和运维特征，了解策略系统和工作流带来的更丰富能力。
+* 想要开箱即用的图形化交互体验？查看 [VelaUX](../quick-start.md) 了解图形化控制台的使用方式。

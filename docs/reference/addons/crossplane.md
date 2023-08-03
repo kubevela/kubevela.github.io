@@ -49,4 +49,4 @@ spec:
 
 ### Provision cloud resources
 
-After a Crossplane provider is authenticated, you can [provision and/or consume cloud resources](../../tutorials/consume-cloud-services).
+After a Crossplane provider is authenticated, you can [provision and/or consume cloud resources](../../tutorials/consume-cloud-services.md).

@@ -84,4 +84,4 @@ Hello World
 
 ## What's Next
 
-- Learn details about [`Appfile`](./developers/learn-appfile) and know how it works.
+- Learn details about [`Appfile`](./developers/learn-appfile.md) and know how it works.

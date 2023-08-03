@@ -41,4 +41,4 @@ For existing users supports updating alias and platform role information. If a u
 
 ## SSO
 
-SSO is our recommended way, please refer to [SSO login](../../../tutorials/sso) document.
+SSO is our recommended way, please refer to [SSO login](../../../tutorials/sso.md) document.

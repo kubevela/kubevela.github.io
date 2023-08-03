@@ -206,7 +206,7 @@ helm uninstall -n vela-system kubevela
 
 ### Testing
 
-It's necessary to write tests for good code quality, please refer to [the principle of test](./principle-of-test) before you start.
+It's necessary to write tests for good code quality, please refer to [the principle of test](./principle-of-test.md) before you start.
 
 #### Unit test
 
@@ -308,7 +308,7 @@ This document guides you through the process of creating a [pull request](https:
 
 ### Before you begin
 
-We know you're excited to create your first pull request. Before we get started, make sure your code follows the relevant [code conventions](./code-conventions).
+We know you're excited to create your first pull request. Before we get started, make sure your code follows the relevant [code conventions](./code-conventions.md).
 
 ### Your first pull request
 
@@ -469,6 +469,6 @@ If your pull request merged and this is a new feature or enhancement, it's neces
 Learn how to write the docs by the following guide:
 
 * [kubevela.io Developer Guide](https://github.com/kubevela/kubevela.io/blob/main/README.md)
-* [Update KubeVela.io CLI Reference Doc](./cli-ref-doc)
+* [Update KubeVela.io CLI Reference Doc](./cli-ref-doc.md)
 
 Great, you have complete the lifecycle of code contribution, try to [join the community as a member](https://github.com/kubevela/community/blob/main/community-membership.md) if you're interested.

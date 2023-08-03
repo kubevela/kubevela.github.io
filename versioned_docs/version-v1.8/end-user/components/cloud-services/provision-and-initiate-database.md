@@ -31,9 +31,9 @@ which is referenced by [Alibaba Cloud RDS Preview ComponentDefinition](https://g
 
 ### Prerequisites
 
-- Enable addon [terraform-alibaba](../../../reference/addons/terraform)
+- Enable addon [terraform-alibaba](../../../reference/addons/terraform.md)
 
-- Remember to store the SQL file in an [Alibaba Cloud OSS bucket](./terraform/alibaba-oss)
+- Remember to store the SQL file in an [Alibaba Cloud OSS bucket](./terraform/alibaba-oss.md)
 
 Let's say we have an OSS bucket `oss://favorite-links` which contains a SQL file `db.sql` in it, and the bucket endpoint
 is `oss-cn-hongkong.aliyuncs.com`.

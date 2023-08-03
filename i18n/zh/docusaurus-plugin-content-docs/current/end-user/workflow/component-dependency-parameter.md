@@ -103,7 +103,7 @@ mysql	mysql-secret    	raw 	      	running	healthy	      	2021-10-14 12:09:55 +0
 可以看到，所有组件都已成功运行.其中 `mysql-cluster` 组件的部署依赖于 `mysql-controller` 和 `mysql-secret` 部署状态达到 `healthy`。
 
 > `dependsOn` 会根据组件是否 `healthy` 来确定状态，若已 `healthy`，则表示该组件已成功运行，可以部署下一个组件。
-> 如果你向自定义组件的健康状态，请查看 [状态回写](../../platform-engineers/traits/status)
+> 如果你向自定义组件的健康状态，请查看 [状态回写](../../platform-engineers/traits/status.md)
 
 
 ## 参数传递

@@ -363,4 +363,4 @@ template: {
 
 ## 分享模版
 
-模版配置作为 [插件](../platform-engineers/addon/intro) 的一部分. 你可以在安装插件时获得已有的配置模版，也可以通过制作插件来分享配置模版。
+模版配置作为 [插件](../platform-engineers/addon/intro.md) 的一部分. 你可以在安装插件时获得已有的配置模版，也可以通过制作插件来分享配置模版。

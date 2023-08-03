@@ -56,7 +56,7 @@ spec:
 
 在实际使用时，用户通过上述 Application 对象来引用预置的组件、运维特征、应用策略、以及工作流节点模块，填写这些模块暴露的用户参数即可完成一次对应用交付的建模。
 
-> 注意：上述可插拔模块在 OAM 中称为 X-Definitions，Application 对象负责引用 X-Definitions 并对用户输入进行校验，而各模块具体的可填写参数则是约束在相应的 X-Definition 文件当中的。具体请参考： [模块定义（Definition）](./x-definition) 章节。
+> 注意：上述可插拔模块在 OAM 中称为 X-Definitions，Application 对象负责引用 X-Definitions 并对用户输入进行校验，而各模块具体的可填写参数则是约束在相应的 X-Definition 文件当中的。具体请参考： [模块定义（Definition）](./x-definition.md) 章节。
 
 ## 组件（Component）
 
@@ -92,4 +92,4 @@ KubeVela 当前内置的工作流步骤节点包括了创建资源、条件判�
 
 ## 下一步
 
-- [X-Definition](x-definition) 对接标准化模型：在这些概念的背后，平台管理员可以利用 OAM 的扩展功能，通过自定义的方式对接自己的基础设施能力到开发模型中，以统一的方式暴露用户功能。而这些扩展的对接方式，就是[X-Definition](x-definition)。
+- [X-Definition](x-definition.md) 对接标准化模型：在这些概念的背后，平台管理员可以利用 OAM 的扩展功能，通过自定义的方式对接自己的基础设施能力到开发模型中，以统一的方式暴露用户功能。而这些扩展的对接方式，就是[X-Definition](x-definition.md)。

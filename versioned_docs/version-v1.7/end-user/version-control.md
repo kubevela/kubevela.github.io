@@ -24,7 +24,7 @@ During the running of workflow, all related data are retrieved from the Applicat
 Fo example, let's start with an application with external workflow and policies to deploy podinfo in managed clusters.
 
 :::tip
-We use reference of external workflow and policies, it works the same. You can refer to [Multi-cluster Application Delivery](../case-studies/multi-cluster) for more details.
+We use reference of external workflow and policies, it works the same. You can refer to [Multi-cluster Application Delivery](../case-studies/multi-cluster.md) for more details.
 :::
 
 ```yaml
@@ -319,5 +319,5 @@ podinfo-v4      beta1           true            65844934c2d07288        2022-04-
 You can find that the *beta1* version shares the same hash with *alpha1* version.
 
 :::info
-By default, application will hold at most 10 revisions. If you want to modify this number, you can set it in the `--application-revision-limit` [bootstrap parameter](../platform-engineers/system-operation/bootstrap-parameters) of KubeVela controller.
+By default, application will hold at most 10 revisions. If you want to modify this number, you can set it in the `--application-revision-limit` [bootstrap parameter](../platform-engineers/system-operation/bootstrap-parameters.md) of KubeVela controller.
 :::

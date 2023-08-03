@@ -4,11 +4,11 @@ slug: /platform-engineers/workflow/workflow
 ---
 
 :::tip
-Before reading this section, make sure you have understood the concept of [WorkflowStepDefinition](../oam/x-definition#WorkflowStepDefinition) in KubeVela and learned the [basic knowledge of CUE](../cue/basic).
+Before reading this section, make sure you have understood the concept of [WorkflowStepDefinition](../oam/x-definition.md#WorkflowStepDefinition) in KubeVela and learned the [basic knowledge of CUE](../cue/basic.md).
 :::
 
 
-In this section, we will introduce how to customize the workflow step in Application by using [CUE](../cue/basic) through `WorkflowStepDefinition`.
+In this section, we will introduce how to customize the workflow step in Application by using [CUE](../cue/basic.md) through `WorkflowStepDefinition`.
 
 ## Deliver a simple workflow step
 
@@ -51,7 +51,7 @@ template: {
 
 CUE provides a series of [basic builtin packages](https://cuelang.org/docs/concepts/packages/#builtin-packages), such as: `regexp`, `json`, `strings`, `math`, etc.
 
-At the same time, KubeVela also provides the `vela/op` package by default, which contains a series of built-in workflow [CUE actions](./cue-actions), such as: sending HTTP requests, operating K8s resources, printing logs, etc.
+At the same time, KubeVela also provides the `vela/op` package by default, which contains a series of built-in workflow [CUE actions](./cue-actions.md), such as: sending HTTP requests, operating K8s resources, printing logs, etc.
 
 Now we can import KubeVela's built-in `vela/op` package and CUE's official `encoding/json`, use `op.#HTTPDo` to send HTTP requests according to the user's parameters, and use `json.Marshal()` to marshal the data.
 
@@ -144,7 +144,7 @@ Use `vela def apply -f request.cue` to deploy this Definition to the cluster, th
 Deploy the following Application: The first step of the workflow will send an HTTP request to get the information of the KubeVela repository; at the same time, this step will use the star number of the KubeVela repository as the Output, the next step will use this Output as a parameter, and sent it as message to the Slack:
 
 :::tip
-Please refer to [Inputs and Outputs](../../end-user/workflow/component-dependency-parameter#inputs-and-outputs) for more information of data passing between steps.
+Please refer to [Inputs and Outputs](../../end-user/workflow/component-dependency-parameter.md#inputs-and-outputs) for more information of data passing between steps.
 :::
 
 ```yaml

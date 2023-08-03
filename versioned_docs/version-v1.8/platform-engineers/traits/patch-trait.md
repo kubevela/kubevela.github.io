@@ -89,7 +89,7 @@ spec:
 
 KubeVela provides a series of patching strategies to help resolve conflicting issues. When writing patch traits and workflow steps, you can use these patch strategies to solve conflicting values. Note that the patch strategy is not an official capability provided by CUE, but an extension developed by KubeVela.
 
-For the usage of all patch strategies, please refer to [Patch Strategy](../cue/patch-strategy).
+For the usage of all patch strategies, please refer to [Patch Strategy](../cue/patch-strategy.md).
 
 ## Patch in Traits
 

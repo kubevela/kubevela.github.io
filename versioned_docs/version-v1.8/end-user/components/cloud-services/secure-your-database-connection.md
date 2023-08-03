@@ -2,7 +2,7 @@
 title: Secure your Database Connection
 ---
 
-In the guide [Provision and Binding Cloud Resources](../../../tutorials/consume-cloud-services) and [Provision a Database and Import a SQL File for initialization](./provision-and-initiate-database),
+In the guide [Provision and Binding Cloud Resources](../../../tutorials/consume-cloud-services.md) and [Provision a Database and Import a SQL File for initialization](./provision-and-initiate-database.md),
 a database's public host `DB_PUBLIC_HOS` is used to connect by business component. It's necessary when you want to have
 a try, create a PoC, or use the database outside a cloud provider. But it's not secure for production use of database.
 
@@ -10,7 +10,7 @@ This tutorial will talk about how to secure your database connection.
 
 ## Provision a database
 
-In the [reference doc for Alibaba Cloud RDS](./terraform/alibaba-rds), these two properties are essential.
+In the [reference doc for Alibaba Cloud RDS](./terraform/alibaba-rds.md), these two properties are essential.
 
 | Name                       | Description                                                                                                                    | Type   | Required | Default |
 |----------------------------|--------------------------------------------------------------------------------------------------------------------------------|--------|----------|---------|

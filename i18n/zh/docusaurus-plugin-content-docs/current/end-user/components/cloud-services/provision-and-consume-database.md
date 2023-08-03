@@ -3,7 +3,7 @@ title:  创建和使用数据库
 ---
 
 :::tip
-请确认管理员已经安装了 [Terraform 插件](../../../reference/addons/terraform)。
+请确认管理员已经安装了 [Terraform 插件](../../../reference/addons/terraform.md)。
 :::
 
 本教程将介绍如何通过 Terraform 部署阿里云 RDS (和 OSS)。
@@ -96,5 +96,5 @@ EOF
 
 ## 自定义云资源
 
-如果我们提供的开箱即用云资源没有覆盖你的研发需求，你依然可以通过灵活的[Terraform 组件](../../../platform-engineers/components/component-terraform)去自定义业务所需要的云资源。
+如果我们提供的开箱即用云资源没有覆盖你的研发需求，你依然可以通过灵活的[Terraform 组件](../../../platform-engineers/components/component-terraform.md)去自定义业务所需要的云资源。
 

@@ -10,7 +10,7 @@ From code to application, one of the indispensable step is to build image. This 
 
 ### Use standalone workflow
 
-KubeVela introduced [standalone workflow](../end-user/pipeline/workflowrun) in version v1.6 that can be used **independently**, which can be used to orchestrate the process between CI steps and application delivery. Different from the workflow in the KubeVela application, it is **one-time** and does not manage resources. Even if the workflow is deleted, the created resources will not be deleted.
+KubeVela introduced [standalone workflow](../end-user/pipeline/workflowrun.md) in version v1.6 that can be used **independently**, which can be used to orchestrate the process between CI steps and application delivery. Different from the workflow in the KubeVela application, it is **one-time** and does not manage resources. Even if the workflow is deleted, the created resources will not be deleted.
 
 :::tip
 Please make sure that you have enabled workflow addon with `vela addon enable vela-workflow`.

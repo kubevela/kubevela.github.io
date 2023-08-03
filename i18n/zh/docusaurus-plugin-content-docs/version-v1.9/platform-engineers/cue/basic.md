@@ -2,7 +2,7 @@
 title:  基础入门
 ---
 
-从这一部分开始，我们会介绍 KubeVela 是如何基于 CUE 来实现抽象和扩展的。本节将主要介绍一些 CUE 的基础知识，如果你对 KubeVela 的[核心概念](../../getting-started/core-concept)还不了解也没有关系，对于那些想要快速了解 CUE 并做一些实践的读者，本节也同样适用。
+从这一部分开始，我们会介绍 KubeVela 是如何基于 CUE 来实现抽象和扩展的。本节将主要介绍一些 CUE 的基础知识，如果你对 KubeVela 的[核心概念](../../getting-started/core-concept.md)还不了解也没有关系，对于那些想要快速了解 CUE 并做一些实践的读者，本节也同样适用。
 
 ## 概述
 
@@ -18,7 +18,7 @@ KubeVela 将 CUE 作为应用交付核心依赖和扩展方式的原因如下：
 
 请确保你的环境中已经安装如下命令行：
 * [`cue` v0.2.2+](https://cuelang.org/docs/install/)。
-* [`vela` >= v1.1.0](../../install#3-get-kubevela-cli)。
+* [`vela` >= v1.1.0](../../install.mdx#3-get-kubevela-cli)。
 
 :::caution
 KubeVela 1.6.0 之前的版本使用 v0.2.2 版本的 CUE，KubeVela 1.6.0+ 使用 v0.5.0-alpha.1 版本的 CUE。请使用与你 KubeVela 版本相匹配的 CUE。
@@ -569,8 +569,8 @@ output: {
 
 至此，你已经学会了基础的 CUE 知识，如果你还想了解更多的 CUE 实践细节，可以参考其[官方文档](https://cuelang.org/)。
 
-在本部分接下来的章节里，我们会开始介绍 KubeVela 如何使用 CUE 像胶水一样衔接不同的资源，请确保你对 KubeVela 的[核心概念](../../getting-started/core-concept)有所了解。
+在本部分接下来的章节里，我们会开始介绍 KubeVela 如何使用 CUE 像胶水一样衔接不同的资源，请确保你对 KubeVela 的[核心概念](../../getting-started/core-concept.md)有所了解。
 
 ## 下一步
 
-* 了解如何统一使用 CUE 来[管理自定义 OAM 模块](./definition-edit)。
+* 了解如何统一使用 CUE 来[管理自定义 OAM 模块](./definition-edit.md)。

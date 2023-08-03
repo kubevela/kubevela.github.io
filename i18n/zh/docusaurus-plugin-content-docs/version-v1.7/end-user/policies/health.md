@@ -65,7 +65,7 @@ spec:
 ...
 ```
 
-关于如何定义组件的健康检查规则，请参考 **[Status Write Back](../../platform-engineers/traits/status)**.
+关于如何定义组件的健康检查规则，请参考 **[Status Write Back](../../platform-engineers/traits/status.md)**.
 
 最后我们可以从应用状态中观测应用的健康状态。
 

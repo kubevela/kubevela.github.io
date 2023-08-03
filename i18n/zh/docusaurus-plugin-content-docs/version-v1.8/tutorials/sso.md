@@ -48,7 +48,7 @@ title: 单点登录
 
 ![alt](https://static.kubevela.net/images/1.3/ldap2.png)
 
-> 关于更多类型的 Dex Connectors 配置，请查阅 [Dex Connectors 配置](../how-to/dashboard/config/dex-connectors)
+> 关于更多类型的 Dex Connectors 配置，请查阅 [Dex Connectors 配置](../how-to/dashboard/config/dex-connectors.md)
 
 ### 平台配置
 

@@ -4,7 +4,7 @@ title:  GitOps with FluxCD
 
 In this section, we will introduce how to use KubeVela to deliver in GitOps mode.
 
-> Please make sure you have enabled the [fluxcd](../../reference/addons/fluxcd) addon.
+> Please make sure you have enabled the [fluxcd](../../reference/addons/fluxcd.md) addon.
 
 ## Watch the Git repositories and sync automatically
 
@@ -198,7 +198,7 @@ Re-check the Application in cluster, we can see that the image of the `my-app` h
 
 ### How to control Application version in GitOps
 
-Every time the spec of Application differs, the Application will re-run its workflow to deploy. If you want to strictly control the Application runs with your expected version, you can use [Publish Version](../version-control). With it, you can also viewing the history revisions, checking the differences across revisions, rolling back to the latest succeeded revision and re-publishing past revisions.
+Every time the spec of Application differs, the Application will re-run its workflow to deploy. If you want to strictly control the Application runs with your expected version, you can use [Publish Version](../version-control.md). With it, you can also viewing the history revisions, checking the differences across revisions, rolling back to the latest succeeded revision and re-publishing past revisions.
 
 :::note
 If you're using external policy or workflow in your Application, then your Application spec may not change if you have updated your policy or workflow. In this case, you can also use `Publish Version` to force re-trigger the deploy. 

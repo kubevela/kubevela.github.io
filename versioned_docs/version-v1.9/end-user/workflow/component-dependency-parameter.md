@@ -102,7 +102,7 @@ mysql	mysql-secret    	raw 	      	running	healthy	      	2021-10-14 12:09:55 +0
 After a while, all components is running successfully. The `mysql-cluster` will be deployed after `mysql-controller` and `mysql-secret` is `healthy`.
 
 :::info
-`dependsOn` use `healthy` to check status. If the component is `healthy`, then KubeVela will deploy the next component. If you want to customize the healthy status of the component, please refer to [Status Write Back](../../platform-engineers/traits/status)
+`dependsOn` use `healthy` to check status. If the component is `healthy`, then KubeVela will deploy the next component. If you want to customize the healthy status of the component, please refer to [Status Write Back](../../platform-engineers/traits/status.md)
 :::
 
 ## Inputs and Outputs

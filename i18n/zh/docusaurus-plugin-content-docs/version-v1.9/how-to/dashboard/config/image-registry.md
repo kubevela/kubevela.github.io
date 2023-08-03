@@ -5,7 +5,7 @@ description: 配置一个私有镜像仓库进行应用交付。
 
 本文介绍如何配置一个私有的镜像仓库，同时使用仓库中的镜像创建应用。
 
-首先通过下述命令检查 [配置模版](./config-template) 是否已经存在，正常情况下它随着 VelaUX 一起安装。
+首先通过下述命令检查 [配置模版](./config-template.md) 是否已经存在，正常情况下它随着 VelaUX 一起安装。
 
 ```bash
 vela config-template list | grep image-registry
@@ -68,4 +68,4 @@ vela config distribute <Config Name> --target <cluster/namespace>
 
 ## 如何使用私有镜像仓库
 
-让我们参考 [部署容器镜像](../../../tutorials/webservice) 创建应用。当我们输入属于私有镜像仓库的镜像名称后，KubeVela UX 会自动加载该镜像信息，同时根据镜像名称匹配对应的镜像仓库。如果镜像信息加载正常，则代表该镜像仓库可以正常访问了。请注意，应用交付的目标命名空间需要在配置分发环节选中并完成分发。
+让我们参考 [部署容器镜像](../../../tutorials/webservice.mdx) 创建应用。当我们输入属于私有镜像仓库的镜像名称后，KubeVela UX 会自动加载该镜像信息，同时根据镜像名称匹配对应的镜像仓库。如果镜像信息加载正常，则代表该镜像仓库可以正常访问了。请注意，应用交付的目标命名空间需要在配置分发环节选中并完成分发。

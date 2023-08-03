@@ -41,7 +41,7 @@ spec:
             path: /metrics
 ```
 
-This will let your application be scrapable by the prometheus server. If you want to see those metrics on Grafana, you need to create Grafana dashboard further. Go to [Dashboard](./dashboard) for learning the following steps.
+This will let your application be scrapable by the prometheus server. If you want to see those metrics on Grafana, you need to create Grafana dashboard further. Go to [Dashboard](./dashboard.md) for learning the following steps.
 
 ## Customized Prometheus Installation
 

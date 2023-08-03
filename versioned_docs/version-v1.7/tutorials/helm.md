@@ -19,7 +19,7 @@ Starting from here, you will learn to use the KubeVela Addons to install plug-in
 
 ## Enable fluxcd addon
 
-Helm Chart delivery relies on addon in KubeVela, you need to enable `fluxcd` addon before start. You can refer to [addon management doc](../end-user/components/more) for more detail information about addon.
+Helm Chart delivery relies on addon in KubeVela, you need to enable `fluxcd` addon before start. You can refer to [addon management doc](../end-user/components/more.md) for more detail information about addon.
 
 ```shell
 vela addon enable fluxcd
@@ -35,7 +35,7 @@ After `fluxcd` addon enabled, there's a `helm` definition added, you can check t
 vela show helm
 ```
 
-You can also check the [fluxcd addon](../reference/addons/fluxcd) docs for details.
+You can also check the [fluxcd addon](../reference/addons/fluxcd.md) docs for details.
 
 Let's take the `redis` chart as example, you can deploy by the following application:
 
@@ -108,7 +108,7 @@ Services:
 
 ## Deploy Helm Chart from UI Console
 
-The experience on UI console is quite the same with [container image delivery](../tutorials/webservice). When it comes to deploying Helm Chart, all you need is to select type as `helm`.
+The experience on UI console is quite the same with [container image delivery](../tutorials/webservice.mdx). When it comes to deploying Helm Chart, all you need is to select type as `helm`.
 
 >The `helm` component type will automatically discovered after fluxcd addon enabled.
 
@@ -119,12 +119,12 @@ Then select the Target which has the default StorageClass that provides PV, and 
 As shown, you need to do the following configuration:
 
 - Repo Type: Git and Helm are supported. In this example, we choose Helm.
-- Repo URL: Fill in the repo address you needed. we type in: https://charts.bitnami.com/bitnami. If you have configured the helm repo in [Integration](../how-to/dashboard/config/helm-repo) you can choose the repo directly.
+- Repo URL: Fill in the repo address you needed. we type in: https://charts.bitnami.com/bitnami. If you have configured the helm repo in [Integration](../how-to/dashboard/config/helm-repo.md) you can choose the repo directly.
 - Chart: After fill Helm repo URL, will list all available charts in this field. You can choose one from the list, here we choose: redis.
 - Version: After choosing the helm chart, will list all available versions in this field. Choose one version of this chart, here we choose: 16.8.5.
 - Values: After choosing the version, will list all parameters of this helm Chart. Since we are using ACK cluster in the example, PV has a minimum capacity requirement, 15Gi. In the same way, other parameters can also be configured according to your cluster's status.
 
-After filling in the above parameters, click `Create` to complete the application creation and enter the application configuration page. The following steps will stay the same as you've learned in [Deploy First Application](../quick-start).
+After filling in the above parameters, click `Create` to complete the application creation and enter the application configuration page. The following steps will stay the same as you've learned in [Deploy First Application](../quick-start.md).
 
 ### Modify deployment parameters
 

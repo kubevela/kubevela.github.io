@@ -2,7 +2,7 @@
 title: OAM 应用（Application）
 ---
 
-KubeVela 围绕着云原生应用交付和管理场景展开，背后的应用交付模型是 [Open Application Model](../platform-engineers/oam/oam-model)，简称 OAM 。
+KubeVela 围绕着云原生应用交付和管理场景展开，背后的应用交付模型是 [Open Application Model](../platform-engineers/oam/oam-model.md)，简称 OAM 。
 
 
 ## 应用部署计划
@@ -55,7 +55,7 @@ spec:
 
 * **工作流步骤（Workflow Step）**: 工作流由多个步骤组成，允许用户自定义应用在某个环境的交付过程。典型的工作流步骤包括人工审核、数据传递、多集群发布、通知等。
 
-以上这些概念的背后都是由一组称为[模块定义（Definitions）](../platform-engineers/oam/x-definition)的可编程模块提供具体功能。KubeVela 会像胶水一样基于 Kubernetes API 定义基础设施定义的抽象并将不同的能力组合起来。下图描述了概念间的关系：
+以上这些概念的背后都是由一组称为[模块定义（Definitions）](../platform-engineers/oam/x-definition.md)的可编程模块提供具体功能。KubeVela 会像胶水一样基于 Kubernetes API 定义基础设施定义的抽象并将不同的能力组合起来。下图描述了概念间的关系：
 
 ![alt](../resources/oam-concept.png)
 

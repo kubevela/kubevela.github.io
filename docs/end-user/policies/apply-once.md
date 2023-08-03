@@ -68,4 +68,4 @@ spec:
 
 In this case, only support changing the replicas field by other controllers, such as HPA. The selector rule support: `componentNames`,`componentTypes`,`oamTypes`,`resourceNames`,`resourceTypes` and `traitTypes`.
 
-The configuration drift check will be launched every 5 minutes after the application enters the running state or the suspending state without errors. You can configure the time by setting the `application-re-sync-period` bootstrap parameter in the controller. See [bootstrap parameters](../../platform-engineers/system-operation/bootstrap-parameters) for details.
+The configuration drift check will be launched every 5 minutes after the application enters the running state or the suspending state without errors. You can configure the time by setting the `application-re-sync-period` bootstrap parameter in the controller. See [bootstrap parameters](../../platform-engineers/system-operation/bootstrap-parameters.md) for details.

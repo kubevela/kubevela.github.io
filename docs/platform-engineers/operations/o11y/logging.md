@@ -72,7 +72,7 @@ vela addon enable grafana
 ```
 
 :::caution
-Even if you have enabled the grafana addon as described in the ["Automated Observability Documentation"](../observability), you still need to re-enable the addon to register the loki data source to grafana.
+Even if you have enabled the grafana addon as described in the ["Automated Observability Documentation"](../observability.md), you still need to re-enable the addon to register the loki data source to grafana.
 :::
 
 ## Kubernetes system events logs
@@ -227,7 +227,7 @@ spec:
 
 In this example, we transform nginx `combinded` format logs to json format, and adding a `new_field` json key to each log, the json value is `new value`. Please refer to [document](https://vector.dev/docs/reference/vrl/) for how to write vector VRL.
 
-If you have a special log analysis dashboard for this processing method, you can refer to [document](./dashboard) to import it into grafana.
+If you have a special log analysis dashboard for this processing method, you can refer to [document](./dashboard.md) to import it into grafana.
 
 ## Collecting file log
 

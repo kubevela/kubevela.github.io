@@ -51,4 +51,4 @@ vela config create aws -t terraform-aws AWS_ACCESS_KEY_ID=xxx AWS_SECRET_ACCESS_
 
 ### Provision cloud resources
 
-After a Terraform provider is authenticated, you can [provision and/or consume cloud resources](../../tutorials/consume-cloud-services).
+After a Terraform provider is authenticated, you can [provision and/or consume cloud resources](../../tutorials/consume-cloud-services.md).

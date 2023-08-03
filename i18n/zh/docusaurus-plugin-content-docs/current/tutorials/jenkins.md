@@ -6,7 +6,7 @@ title: 集成 Jenkins 进行持续交付
 
 KubeVela 应用的工作流可以通过 Webhook 触发器触发。这使得诸如 Jenkins 或是 Gitlab 之类的持续集成系统对接 KubeVela 非常简单。
 
-在 KubeVela 1.2 中，[VelaUX](../install#2-install-velaux) 提供了便捷的应用触发器。只需要在 Jenkins 的流水线中添加一条简单的 Curl 命令就可以对接 CI 和 CD 系统。
+在 KubeVela 1.2 中，[VelaUX](../install.mdx#2-install-velaux) 提供了便捷的应用触发器。只需要在 Jenkins 的流水线中添加一条简单的 Curl 命令就可以对接 CI 和 CD 系统。
 
 本文将详细介绍如何对接 KubeVela 与 Jenkins。
 

@@ -29,4 +29,4 @@ description: 指定用户将创建的应用部署到指定的环境。
 
 ### 下一步
 
-* [查看应用运行实例](./get-application-instance)
+* [查看应用运行实例](./get-application-instance.md)

@@ -6,7 +6,7 @@ In this section, we will introduce how to canary rollout a container service.
 
 ## Before starting
 
-Enable [`kruise-rollout`](../../reference/addons/kruise-rollout) addon, our canary rollout capability relies on the [rollouts from OpenKruise](https://github.com/openkruise/rollouts).
+Enable [`kruise-rollout`](../../reference/addons/kruise-rollout.md) addon, our canary rollout capability relies on the [rollouts from OpenKruise](https://github.com/openkruise/rollouts).
 ```shell
 vela addon enable kruise-rollout
  ```
@@ -76,7 +76,7 @@ Services:
       ✅ scaler      ✅ gateway: No loadBalancer found, visiting by using 'vela port-forward canary-demo'
 ```
 
-If you have enabled [velaux](../../reference/addons/velaux) addon, you can view the application topology graph that all `v1` pods are ready now.
+If you have enabled [velaux](../../reference/addons/velaux.md) addon, you can view the application topology graph that all `v1` pods are ready now.
 
 ![image](../../resources/kruise-rollout-v1.jpg)
 

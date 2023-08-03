@@ -8,10 +8,10 @@ KubeVela 是可编程的，你可以通过自定义模块轻松地扩展它，�
 
 KubeVela 安装时就自带了很多开箱即用的功能，可以查看如下手册了解详情：
 
-  - [内置组件](./references)
-  - [内置运维特征](../traits/references)
-  - [内置策略](../policies/references)
-  - [内置工作流步骤](../workflow/built-in-workflow-defs)
+  - [内置组件](./references.md)
+  - [内置运维特征](../traits/references.md)
+  - [内置策略](../policies/references.md)
+  - [内置工作流步骤](../workflow/built-in-workflow-defs.md)
 
 ## 管理插件
 
@@ -108,7 +108,7 @@ $ vela addon enable velaux/
 Addon: velaux enabled Successfully
 ```
 
-需要注意的是，在安装插件过程当中，仍可能需要从网络中拉取镜像或者 helm chart，如果你的网络环境同样无法访问这些地址，请参考[文档](../../platform-engineers/system-operation/enable-addon-offline)进行完整的离线安装。
+需要注意的是，在安装插件过程当中，仍可能需要从网络中拉取镜像或者 helm chart，如果你的网络环境同样无法访问这些地址，请参考[文档](../../platform-engineers/system-operation/enable-addon-offline.md)进行完整的离线安装。
 
 #### 通过 UI 安装插件
 
@@ -266,7 +266,7 @@ KubeVela
 
 如上所示， 命令结果包含了一个插件的参数详细信息，可用版本，依赖的其他的插件等信息。
 
-安装完成后，插件中的功能会以组件，运维特征，工作流步骤等形式呈现，你可以通过 `vela component`，`vela trait` 等命令查看新增的能力，也可以在[插件的参考文档](../../reference/addons/overview)中查看每个官方插件对应的能力.
+安装完成后，插件中的功能会以组件，运维特征，工作流步骤等形式呈现，你可以通过 `vela component`，`vela trait` 等命令查看新增的能力，也可以在[插件的参考文档](../../reference/addons/overview.md)中查看每个官方插件对应的能力.
 
 ### 删除/卸载已安装的插件
 
@@ -350,11 +350,11 @@ Addon:
 ### 编写自己的插件包
 
 - 参考博客教程[手把手教你制作一个 Redis 插件](/zh/blog/2022/10/18/building-addon-introduction)。
-- 参考[插件包制作文档](../../platform-engineers/addon/intro)了解插件的功能细节。
+- 参考[插件包制作文档](../../platform-engineers/addon/intro.md)了解插件的功能细节。
 
 ## 作为开发者自定义和扩展
 
-如果你对 KubeVela 扩展很感兴趣，你也可以了解 [CUE 体系](../../platform-engineers/cue/basic)开始自定义扩展能力，KubeVela 具备非常灵活的扩展能力。
+如果你对 KubeVela 扩展很感兴趣，你也可以了解 [CUE 体系](../../platform-engineers/cue/basic.md)开始自定义扩展能力，KubeVela 具备非常灵活的扩展能力。
 
-非常欢迎广大开发者们阅读[开发者手册](../../contributor/overview)，了解更多的 KubeVela 细节，参与到社区的贡献中来。
+非常欢迎广大开发者们阅读[开发者手册](../../contributor/overview.md)，了解更多的 KubeVela 细节，参与到社区的贡献中来。
  

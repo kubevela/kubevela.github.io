@@ -683,7 +683,7 @@ spec:
 
 </details>
 
-You can refer to the [Dry run command](../cli/vela_dry-run) for more command line use cases.
+You can refer to the [Dry run command](../cli/vela_dry-run.md) for more command line use cases.
 
 ## Dry run via UI
 

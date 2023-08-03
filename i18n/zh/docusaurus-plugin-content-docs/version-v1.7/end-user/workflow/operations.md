@@ -14,7 +14,7 @@ vela workflow suspend <name>
 
 :::tip
 如果工作流已经执行完毕，对应用使用 `vela workflow suspend` 命令不会产生任何效果。
-请查看 [工作流的暂停和继续](./suspend) 来获得更多例子。
+请查看 [工作流的暂停和继续](./suspend.md) 来获得更多例子。
 :::
 
 ## 继续工作流
@@ -26,7 +26,7 @@ vela workflow resume <name>
 ```
 
 :::tip
-请查看 [工作流的暂停和继续](./suspend) 来获得更多例子。
+请查看 [工作流的暂停和继续](./suspend.md) 来获得更多例子。
 :::
 
 ## 终止工作流
@@ -58,7 +58,7 @@ vela workflow restart my-app
 如果你想查看工作流的日志，你可以使用 `vela workflow logs` 命令来查看工作流的日志。
 
 :::tip
-只有配置了 [op.#Log](../../platform-engineers/workflow/cue-actions#log) 的步骤才会有日志输出。
+只有配置了 [op.#Log](../../platform-engineers/workflow/cue-actions.md#log) 的步骤才会有日志输出。
 :::
 
 ```bash
@@ -74,5 +74,5 @@ vela workflow debug <name>
 ```
 
 :::tip
-请查看 [Debug 文档](../../platform-engineers/debug/debug#使用工作流的应用) 来获得更多例子。
+请查看 [Debug 文档](../../platform-engineers/debug/debug.md#使用工作流的应用) 来获得更多例子。
 :::

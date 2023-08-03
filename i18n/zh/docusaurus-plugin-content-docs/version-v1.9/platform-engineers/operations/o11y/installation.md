@@ -50,7 +50,7 @@ kubectl port-forward svc/grafana -n o11y-system 8080:3000
 
 > 你可以通过在步骤 6 中添加 `adminUser=super-user adminPassword=PASSWORD` 参数来改变默认的 Grafana 用户名及密码。
 
-安装完成后，你可以在 Grafana 上看到若干预置的监控大盘，它们可以帮助你查看整个系统及各个应用的运行状态。你可以参考 [监控大盘](./dashboard) 章节来了解这些预置监控大盘的详细信息。
+安装完成后，你可以在 Grafana 上看到若干预置的监控大盘，它们可以帮助你查看整个系统及各个应用的运行状态。你可以参考 [监控大盘](./dashboard.md) 章节来了解这些预置监控大盘的详细信息。
 
 ![kubevela-application-dashboard](../../../resources/kubevela-application-dashboard.png)
 

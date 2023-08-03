@@ -151,4 +151,4 @@ Version: 0.1.2
 
 ## 下一步
 
-- 学习 KubeVela 在 [GitOps](./gitops) 场景下的对接和使用方式。
+- 学习 KubeVela 在 [GitOps](./gitops.md) 场景下的对接和使用方式。

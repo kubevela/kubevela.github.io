@@ -2,16 +2,16 @@
 title:  Needs More Capabilities？
 ---
 
-KubeVela is programmable, it can be extended easily with [definition](../../getting-started/definition). You have the following ways to discover and extend the platform.
+KubeVela is programmable, it can be extended easily with [definition](../../getting-started/definition.md). You have the following ways to discover and extend the platform.
 
 ## Learn more built-in capabilities
 
 There're many out-of-box capabilities installed along with KubeVela controller, refer to the following links to learn more details:
 
-  - [Built-in Component Reference](./references)
-  - [Built-in Trait Reference](../traits/references)
-  - [Built-in Policy Reference](../policies/references)
-  - [Built-in Workflow Step Reference](../workflow/built-in-workflow-defs)
+  - [Built-in Component Reference](./references.md)
+  - [Built-in Trait Reference](../traits/references.md)
+  - [Built-in Policy Reference](../policies/references.md)
+  - [Built-in Workflow Step Reference](../workflow/built-in-workflow-defs.md)
 
 ## Extend by Managing Addons
 
@@ -41,7 +41,7 @@ terraform-alibaba               KubeVela        Kubernetes Terraform Controller 
 ```
 </details>
 
-* You can refer to [addon reference docs](../../reference/addons/overview) for more details of these community certificated addons.
+* You can refer to [addon reference docs](../../reference/addons/overview.md) for more details of these community certificated addons.
 
 ### Install Addon
 
@@ -95,7 +95,7 @@ vela addon enable velaux repo=<your repo address>
 #### Air-Gapped Installation for Addon
 
 If your cluster network cannot connect to the community addon registry you can: 
-- build your custom addon registry. Please refer to [*Build your Own Registry*](../../platform-engineers/addon/addon-registry) for details.
+- build your custom addon registry. Please refer to [*Build your Own Registry*](../../platform-engineers/addon/addon-registry.md) for details.
 - enable an addon from a local directory. Example:
 
 ```shell
@@ -126,12 +126,12 @@ Addon: velaux enabled successfully
 </details>
 
 :::caution
-Please notice that, while an addon is being installed in a cluster, it maybe still need pull some images or Helm Charts. If your cluster cannot reach these resources please refer [docs](../../platform-engineers/system-operation/enable-addon-offline) to complete installation without Internet access.
+Please notice that, while an addon is being installed in a cluster, it maybe still need pull some images or Helm Charts. If your cluster cannot reach these resources please refer [docs](../../platform-engineers/system-operation/enable-addon-offline.md) to complete installation without Internet access.
 :::
 
 #### Install addon with UI Console
 
-If you have installed [VelaUX](../../reference/addons/velaux) which is also one of the addon, you can manage it directly on the UI console with admin privileges.
+If you have installed [VelaUX](../../reference/addons/velaux.md) which is also one of the addon, you can manage it directly on the UI console with admin privileges.
 
 ![addon list](https://static.kubevela.net/images/1.3/addon-list.jpg)
 
@@ -284,9 +284,9 @@ As above shows, these infos contain the available parameters, available versions
 Once addon installed, end user can discover and use these capabilities immediately.
 :::
 
-* Generally, end user can list the new component or trait types added by `vela component` or `vela trait`. Refer to [Lifecycle of a Definition](../../getting-started/definition#lifecycle-of-a-definition) for more usage details.
+* Generally, end user can list the new component or trait types added by `vela component` or `vela trait`. Refer to [Lifecycle of a Definition](../../getting-started/definition.md#lifecycle-of-a-definition) for more usage details.
 
-* You can also check the capability details of [community addon docs](../../reference/addons/overview).
+* You can also check the capability details of [community addon docs](../../reference/addons/overview.md).
 
 ### Uninstall Addon
 
@@ -356,11 +356,11 @@ Successfully delete an addon registry experimental
 
 * Build custom registry
 
-  You can use ChartMuseum to build your custom addon registry. We have a ChartMuseum addon available. Please refer to [*Build your Own Registry*](../../platform-engineers/addon/addon-registry) for details.
+  You can use ChartMuseum to build your custom addon registry. We have a ChartMuseum addon available. Please refer to [*Build your Own Registry*](../../platform-engineers/addon/addon-registry.md) for details.
 
 ### Make your own addon
 
-If you're a system infra or operator, you can refer to extension documents to learn how to [make your own addon and registry](../../platform-engineers/addon/intro), including [extend cloud resources by addon](../../platform-engineers/addon/terraform).
+If you're a system infra or operator, you can refer to extension documents to learn how to [make your own addon and registry](../../platform-engineers/addon/intro.md), including [extend cloud resources by addon](../../platform-engineers/addon/terraform.md).
 
 :::tip
 Here's a blog introduces [how to build addon from scratch using redis operator as example](/blog/2022/10/18/building-addon-introduction), you can read it as an end to end tutorial!
@@ -371,7 +371,7 @@ Here's a blog introduces [how to build addon from scratch using redis operator a
 
 If you're extremely interested in KubeVela, you can also extend more features as a developer.
 
-- KubeVela use CUE as it's core engine, [learn Manage Definition with CUE](../../platform-engineers/cue/basic) and try to extend capabilities with definitions.
-- Read the [developer guide](../../contributor/overview) to learn how to contribute and extend capabilities for KubeVela.
+- KubeVela use CUE as it's core engine, [learn Manage Definition with CUE](../../platform-engineers/cue/basic.md) and try to extend capabilities with definitions.
+- Read the [developer guide](../../contributor/overview.md) to learn how to contribute and extend capabilities for KubeVela.
 
 Welcome to join the KubeVela community! We're eager to see you to contribute your extension.

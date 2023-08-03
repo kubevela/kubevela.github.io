@@ -2,7 +2,7 @@
 title: 使用 CUE 描述插件应用
 ---
 
-文档 [自定义插件](./intro) 介绍了插件的基本目录结构和原理。此外，文档 [YAML 描述插件应用](./addon-yaml) 也介绍了通过最简单的 YAML 格式如何定义应用描述文件。如果你希望插件具备以下能力，你也可以选择使用 CUE 格式定义插件的应用描述文件：
+文档 [自定义插件](./intro.md) 介绍了插件的基本目录结构和原理。此外，文档 [YAML 描述插件应用](./addon-yaml.md) 也介绍了通过最简单的 YAML 格式如何定义应用描述文件。如果你希望插件具备以下能力，你也可以选择使用 CUE 格式定义插件的应用描述文件：
 
 * 利用 CUE 语言灵活简洁的语法、丰富的内置函数及其参数校验能力，根据启动参数和插件元数据渲染和部署插件应用和[附属资源](#部署附属资源) 。
 * 插件中可能包含多个模块定义（Definition）文件及其背后支撑的 CRD Operator，他们能够根据启动参数被选择性安装。
@@ -61,7 +61,7 @@ spec:
             metadata:
               name: my-namespace
 ```
-如果你对 CUE 语言还不了解，可以通过 [CUE 基础入门文档](../cue/basic) 了解 CUE 的具体语法。
+如果你对 CUE 语言还不了解，可以通过 [CUE 基础入门文档](../cue/basic.md) 了解 CUE 的具体语法。
 
 > 需要注意的是，即使你在应用模版文件中设置了应用的名称，该设置也不会生效，在启用时应用会统一以 addon-{addonName} 的格式自动命名。
 
@@ -224,7 +224,7 @@ You can use the endpoint of 'backstage-plugin-vela' in your own backstage app by
 
 ### 实现根据参数选择安装集群
 
-如果你希望插件中的 Kubernetes 资源能够不止被安装在管控集群，同时也能够安装在其他的子集群中， 并且具体安装在哪些集群需要由用户在启用插件时设置 `clusters` 启动参数来指定。 你就可以在插件应用中添加一个根据参数渲染的 [topology 策略](../../end-user/policies/references#topology) 来实现，应用模版文件如下所示：
+如果你希望插件中的 Kubernetes 资源能够不止被安装在管控集群，同时也能够安装在其他的子集群中， 并且具体安装在哪些集群需要由用户在启用插件时设置 `clusters` 启动参数来指定。 你就可以在插件应用中添加一个根据参数渲染的 [topology 策略](../../end-user/policies/references.md#topology) 来实现，应用模版文件如下所示：
 
 ```cue
 package main
@@ -345,7 +345,7 @@ outputs: resourceTree: {
 _rules: {...}
 ```
 
-这个例子中我们定义了一个 `resourceTree` 的 configmap ，这个 configmap 其实是一个[拓扑树资源关系规则](../../reference/topology-rule)，这个资源的作用是建立集群中自定义类型资源的关联关系，从而使这些能够被在资源拓扑图中展示。这个 configmap 就只需要在管控集群中部署。
+这个例子中我们定义了一个 `resourceTree` 的 configmap ，这个 configmap 其实是一个[拓扑树资源关系规则](../../reference/topology-rule.md)，这个资源的作用是建立集群中自定义类型资源的关联关系，从而使这些能够被在资源拓扑图中展示。这个 configmap 就只需要在管控集群中部署。
 
 
 ### 使用 context 中的变量渲染组件
@@ -395,7 +395,7 @@ spec:
         image: "oamdev/vela-apiserver:v1.2.4"
 ```
 
-这个例子中，使用了插件的版本来填充镜像的 tag。一个例子是 [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue) 插件。 其他字段请参考插件的[元数据文件](./intro) 定义。
+这个例子中，使用了插件的版本来填充镜像的 tag。一个例子是 [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/apiserver.cue) 插件。 其他字段请参考插件的[元数据文件](./intro.md) 定义。
 
 在启用插件时 `template.cue`, `parameter.cue` 以及 `resources/` 目录下的 CUE 资源文件会连同 `metadata.yaml` 中记录的插件元信息在同一个上下文中渲染得到结果并下发。
 

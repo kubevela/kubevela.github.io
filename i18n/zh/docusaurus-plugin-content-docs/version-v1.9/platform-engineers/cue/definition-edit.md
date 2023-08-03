@@ -3,7 +3,7 @@ title:  编辑管理模块定义
 ---
 
 :::tip
-开始之前，请确保你已经阅读了[模块定义](../../getting-started/definition)相关概念。
+开始之前，请确保你已经阅读了[模块定义](../../getting-started/definition.md)相关概念。
 :::
 
 在 KubeVela CLI 工具中，`vela def` 命令组为开发者提供了一系列便捷的模块定义 X-Definition 编写工具，使得扩展模块的编写可以全部在 CUE 文件中进行，避免将 Template CUE 与 Kubernetes 的 YAML 格式进行混合，方便进行格式化与校验。
@@ -420,5 +420,5 @@ spec:
 
 ## 下一步
 
-* 了解如何使用 CUE [自定义组件](../components/custom-component)。
-* 了解如何使用 CUE [自定义运维特征](../traits/customize-trait)。
+* 了解如何使用 CUE [自定义组件](../components/custom-component.md)。
+* 了解如何使用 CUE [自定义运维特征](../traits/customize-trait.md)。

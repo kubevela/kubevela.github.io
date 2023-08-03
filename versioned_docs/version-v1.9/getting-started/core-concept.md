@@ -53,7 +53,7 @@ This `Application` entity will reference `component`, `trait`, `policy` and `wor
 
 * **Workflow Step**: Workflow step allows you to define every steps in the delivery process, typical steps are manual approval, partial deploy, notification.
 
-The modules that make up the application are all extensible, they are defined by a bunch of programmable configurations called [Definitions](../platform-engineers/oam/x-definition). Under the hood, KubeVela will glue and leverage Kubernetes API to drive the infrastructure capabilities. You can check the following picture to see their relationships:
+The modules that make up the application are all extensible, they are defined by a bunch of programmable configurations called [Definitions](../platform-engineers/oam/x-definition.md). Under the hood, KubeVela will glue and leverage Kubernetes API to drive the infrastructure capabilities. You can check the following picture to see their relationships:
 
 ![alt](../resources/oam-concept.png)
 
@@ -72,5 +72,5 @@ Hence, KubeVela is designed to maintain all these programmable capabilities with
 
 ## Next Step
 
-- Learn [Definition](./definition) concept to understand how the extension mechanism works.
-- View [Architecture](./architecture) to learn the overall architecture of KubeVela.
+- Learn [Definition](./definition.md) concept to understand how the extension mechanism works.
+- View [Architecture](./architecture.md) to learn the overall architecture of KubeVela.

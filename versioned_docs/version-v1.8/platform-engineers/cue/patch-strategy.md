@@ -6,7 +6,7 @@ By default, KubeVela will merge patched values with CUE's merge. However, CUE ca
 
 KubeVela provides a series of patching strategies to help resolve conflicting issues. When writing patch traits and workflow steps, you can use these patch strategies to solve conflicting values. Note that the patch strategy is not an official capability provided by CUE, but an extension developed by KubeVela.
 
-> For more information about how to patch definitions, please refer to [Patch in the Definitions](../traits/patch-trait).
+> For more information about how to patch definitions, please refer to [Patch in the Definitions](../traits/patch-trait.md).
 
 Let's write an env-patch trait to show how to use these patch strategies.
 

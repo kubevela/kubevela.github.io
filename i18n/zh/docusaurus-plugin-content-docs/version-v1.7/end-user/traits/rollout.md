@@ -6,20 +6,20 @@ title: 金丝雀发布
 
 ## 准备工作
 
-1. 通过如下命令启用 [`kruise-rollout`](../../reference/addons/kruise-rollout) 插件，金丝雀发布依赖于 [rollouts from OpenKruise](https://github.com/openkruise/rollouts).
+1. 通过如下命令启用 [`kruise-rollout`](../../reference/addons/kruise-rollout.md) 插件，金丝雀发布依赖于 [rollouts from OpenKruise](https://github.com/openkruise/rollouts).
    
    ```shell
    vela addon enable kruise-rollout
    ```
 
 2. 请确保在集群中至少安装一种 [ingress controllers](https://kubernetes.github.io/ingress-nginx/deploy/)。
-   如果没有你也可以通过如下命令启用 [`ingress-nginx`](../../reference/addons/nginx-ingress-controller) 安装一个：
+   如果没有你也可以通过如下命令启用 [`ingress-nginx`](../../reference/addons/nginx-ingress-controller.md) 安装一个：
    
    ```shell
    vela addon enable ingress-nginx
    ```
    
-   参考 [the addon doc](../../reference/addons/nginx-ingress-controller) 获取网关的访问地址。
+   参考 [the addon doc](../../reference/addons/nginx-ingress-controller.md) 获取网关的访问地址。
 
 3. 一些指令例如 `rollback` 依赖 vela-cli 版本 `>=1.5.0-alpha.1`，请升级cli到最新版本，不用升级Controller。
 
@@ -69,7 +69,7 @@ EOF
 下面解释了在使用了 `kruise-rollout` 运维特征之后，下次升级应用时，是如何进行金丝雀发布的，整个发布过程会分成3步：
 
 1. 当升级到第一个批次时，会产生 `20%` 的实例数量。在我们的示例中， 我们一共设置了5个实例，它会保留所有的老的版本并创建 `5 * 20% = 1` 个金丝雀实例版本，并且导入了 `20%` 的流量。在所有都准备好后，它会等待手工批准。
-   - 实例数量和导入流量的百分比默认是一致的，你可以根据 [文档](../../reference/addons/kruise-rollout) 配置比例。
+   - 实例数量和导入流量的百分比默认是一致的，你可以根据 [文档](../../reference/addons/kruise-rollout.md) 配置比例。
 2. 在手工批准后，会进入到第二个阶段，它会创建 `5 * 90% = 4.5` 实际上是 `5` 个实例的新版本，并且导入 `90%` 的流量。这样一来，目前系统一共有 `10` 个实例，它需要等待下一步的手工批准。
 3. 在批准后，它就会利用滚动更新的机制来更新实例，在实例完成升级后，所有的流量路由都指向新的版本的实例，金丝雀发布也会被销毁。
 
@@ -97,7 +97,7 @@ Services:
       ✅ kruise-rollout: rollout is healthy
 ```
 
-如果你已经启用了 [velaux](../../reference/addons/velaux) 插件，你可以通过拓扑图来观察到所有的 `v1` pods 都处于 ready状态。
+如果你已经启用了 [velaux](../../reference/addons/velaux.md) 插件，你可以通过拓扑图来观察到所有的 `v1` pods 都处于 ready状态。
 
 ![image](../../resources/kruise-rollout-v1.jpg)
 

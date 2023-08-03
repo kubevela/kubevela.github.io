@@ -41,7 +41,7 @@ spec:
             path: /metrics
 ```
 
-上述配置将会帮助你让 Prometheus 采集到应用组件的指标。如果你想要在 Grafana 上看到这些指标，你需要在 Grafana 上创建相应的监控大盘。详见 [监控大盘](./dashboard) 章节来了解后续步骤。
+上述配置将会帮助你让 Prometheus 采集到应用组件的指标。如果你想要在 Grafana 上看到这些指标，你需要在 Grafana 上创建相应的监控大盘。详见 [监控大盘](./dashboard.md) 章节来了解后续步骤。
 
 ## 自定义 Prometheus 配置
 

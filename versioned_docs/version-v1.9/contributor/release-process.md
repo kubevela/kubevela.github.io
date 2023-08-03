@@ -50,5 +50,5 @@ The maintainers are responsible to drive releases and follow the standard operat
    * CLI binaries from [Release Pipeline](https://github.com/kubevela/kubevela/actions/workflows/release.yml).
 5. Update docs and examples to use the new release.
    * Create a new docs version for the new `minor` release.
-   * Update the [migration doc](../platform-engineers/system-operation/migration-from-old-version) when release a new `minor` release.
+   * Update the [migration doc](../platform-engineers/system-operation/migration-from-old-version.md) when release a new `minor` release.
    * Update the `top tip` in `docusaurus.config.js` for every `patch` release.

@@ -40,8 +40,8 @@ vela addon init my-addon --url https://domain.com/crd1.yaml --url https://domain
 
 一个 KubeVela 插件就是一个主要包含了以下三类文件的集合:
 * 插件的`基本信息文件` 包括元数据文件（metadata.yaml）和插件介绍文档（README.md）。
-* 定义 KubeVela 的`OAM 模型文件`。包括[模块化能力](../../getting-started/definition), [UI 扩展](../../reference/ui-schema)，[资源拓扑规则](../../reference/topology-rule)等。
-* 描述一个 KubeVela [应用（Application）](../../getting-started/core-concept) 的 `应用描述文件`。通常插件中的模块化能力（Definition）背后需要一个 Kubernetes operator 的支撑，而应用描述文件的作用就是，定义一个包含相应的 Kubernetes 资源的 KubeVela 应用（application），进而由 KubeVela 控制器把 operator 安装到各个集群当中。
+* 定义 KubeVela 的`OAM 模型文件`。包括[模块化能力](../../getting-started/definition.md), [UI 扩展](../../reference/ui-schema.md)，[资源拓扑规则](../../reference/topology-rule.md)等。
+* 描述一个 KubeVela [应用（Application）](../../getting-started/core-concept.md) 的 `应用描述文件`。通常插件中的模块化能力（Definition）背后需要一个 Kubernetes operator 的支撑，而应用描述文件的作用就是，定义一个包含相应的 Kubernetes 资源的 KubeVela 应用（application），进而由 KubeVela 控制器把 operator 安装到各个集群当中。
 
 后面的章节会分别介绍这三类文件的作用和编写规则。
 
@@ -135,13 +135,13 @@ invisible: false
 
 #### 模块化能力定义文件 (definitions/ 目录) 
 
-这个目录包含了插件所提供的模块化能力（Definition），安装插件之后这些能力就会被用户看到并使用。 该目录中的文件可以是一个 YAML 类型的 ComponentDefinition，TraitDefinitions 或 WorkflowStepDefinitions Kubernetes 资源对象（CustomResource）。也可以是 CUE 格式的 KubeVela [def](../../getting-started/definition) 文件，这类文件在启用时会被渲染成对应的 Kubernetes 资源对象再下发到集群。
+这个目录包含了插件所提供的模块化能力（Definition），安装插件之后这些能力就会被用户看到并使用。 该目录中的文件可以是一个 YAML 类型的 ComponentDefinition，TraitDefinitions 或 WorkflowStepDefinitions Kubernetes 资源对象（CustomResource）。也可以是 CUE 格式的 KubeVela [def](../../getting-started/definition.md) 文件，这类文件在启用时会被渲染成对应的 Kubernetes 资源对象再下发到集群。
 
 > 需要注意的是，这些 Definition 只会被下发到管控集群。
 
 #### 模块化能力参数展示增强文件 (schema/ 目录)
 
-该目录用于存放模块化能力（Definition）所对应的 [UI-schema](../../reference/ui-schema) 文件，用于在 UX 中展示模块化能力（Definition）所需要填写参数时增强显示效果。需要注意的是，和模块化能力定义文件一样，这些文件仅会被下发到管控集群。
+该目录用于存放模块化能力（Definition）所对应的 [UI-schema](../../reference/ui-schema.md) 文件，用于在 UX 中展示模块化能力（Definition）所需要填写参数时增强显示效果。需要注意的是，和模块化能力定义文件一样，这些文件仅会被下发到管控集群。
 
 ### 应用描述文件
 
@@ -154,8 +154,8 @@ YAML 格式的应用描述文件的特点是编写简单，你只需要编写一
 * 利用 CUE 语言灵活简洁的语法、丰富的内置函数及其参数校验能力，根据启动参数和插件元数据渲染和部署插件应用和附属资源。
 * 插件中可能包含多个模块化能力（Definition）及其背后支撑的 CRD Operator，他们能够根据启动参数被选择性安装。
 
-文档[使用 YAML 描述插件应用](./addon-yaml) 详细介绍了 YAML 格式的应用描述文件的编写方法。
-文档[使用 CUE 描述插件应用](./addon-cue) 详细介绍了 CUE 格式的应用描述文件的编写方法。
+文档[使用 YAML 描述插件应用](./addon-yaml.md) 详细介绍了 YAML 格式的应用描述文件的编写方法。
+文档[使用 CUE 描述插件应用](./addon-cue.md) 详细介绍了 CUE 格式的应用描述文件的编写方法。
 
 ## 本地安装（离线安装）
 
@@ -187,7 +187,7 @@ $ vela addon enable ./your-addon-dir/
   
   - 该插件被添加到了仓库的 [e2e-test](https://github.com/kubevela/catalog/tree/master/test/e2e-test/addon-test) 中，从而保证插件能够被正常启用。
   
-  - KubeVela 的插件[文档站](../../reference/addons/overview) 中有关于该插件的详细介绍文档。
+  - KubeVela 的插件[文档站](../../reference/addons/overview.md) 中有关于该插件的详细介绍文档。
   
 - 如果在使用插件的过程中，发现了插件的任何问题，欢迎在仓库中提交 issue 或者直接提交 pull request 修复此问题。在更新插件时，请注意务必修改对应插件的 `metadata.yaml` 文件中的 `version` 字段以升级插件版本。 
     

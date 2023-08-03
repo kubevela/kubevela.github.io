@@ -6,9 +6,9 @@ The config template is defined with CUE language. To describe the config paramet
 
 ## When you need to custom the template
 
-1. Create multiple configs with the same type. Such as the [Image Registry](./image-registry) and the [Helm Repository](./helm-repo).
+1. Create multiple configs with the same type. Such as the [Image Registry](./image-registry.md) and the [Helm Repository](./helm-repo.md).
 2. Define certain parameters and check the validity.
-3. Write the config to the Nacos server. [Reference](./nacos)
+3. Write the config to the Nacos server. [Reference](./nacos.md)
 4. Render and generate the Secret or Other resources by the parameters. Such as the Grafana template.
 5. Need to classify the configs and list them.
 

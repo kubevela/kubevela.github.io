@@ -6,9 +6,9 @@ title: 配置模版
 
 ## 什么时候需要自定义模版
 
-1. 创建多个同类型的配置，例如 [镜像仓库集成](./image-registry) 和 [Helm 仓库集成](./helm-repo)
+1. 创建多个同类型的配置，例如 [镜像仓库集成](./image-registry.md) 和 [Helm 仓库集成](./helm-repo.md)
 2. 需要确定配置的输入参数结构并需要进行校验。
-3. 需要将配置同时写往 Nacos 配置中心。[参考](./nacos)
+3. 需要将配置同时写往 Nacos 配置中心。[参考](./nacos.md)
 4. 需要根据用户输入按需渲染 Secret 或其他资源。例如 Grafana 配置可以输出 Secret 和 Grafana CR。
 5. 需要对配置进行分类支持 list 查询。
 

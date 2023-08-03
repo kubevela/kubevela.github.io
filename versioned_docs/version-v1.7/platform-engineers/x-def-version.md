@@ -2,7 +2,7 @@
 title:  Version Control for Definitions
 ---
 
-When an [OAM definition](../getting-started/definition) is updated, KubeVela will automatically generate a new revision of this definition.
+When an [OAM definition](../getting-started/definition.md) is updated, KubeVela will automatically generate a new revision of this definition.
 
 To list the revisions of the `webservice` Component, run:
 

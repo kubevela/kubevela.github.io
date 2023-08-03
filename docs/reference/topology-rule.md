@@ -152,7 +152,7 @@ As the same, if your CustomResource contains a Kubernetes service as sub-resourc
 
 ## Built inside with Addon
 
-A KubeVela [addon](../platform-engineers/addon/intro) may install some Kubernetes CRD operators. By default, KubeVela cannot know what types of sub-resources this CRD can have, so you may encounter that the resources under the CRD cannot be displayed in the topology graph or cannot check the container logs of the application. Then you can add a configmap that define the relationship of resource type to solve this problem. You can define the configmap in `outputs` field in application template file of the addon. An example is as follows:
+A KubeVela [addon](../platform-engineers/addon/intro.md) may install some Kubernetes CRD operators. By default, KubeVela cannot know what types of sub-resources this CRD can have, so you may encounter that the resources under the CRD cannot be displayed in the topology graph or cannot check the container logs of the application. Then you can add a configmap that define the relationship of resource type to solve this problem. You can define the configmap in `outputs` field in application template file of the addon. An example is as follows:
 
 ```cue
 package main
@@ -183,4 +183,4 @@ outputs: resourceTree: {
 _rules: {...}
 ```
 
-Please refer to [doc](../platform-engineers/addon/addon-cue#auxiliary-resources) for more details.
+Please refer to [doc](../platform-engineers/addon/addon-cue.md#auxiliary-resources) for more details.
