@@ -9,6 +9,7 @@ You will learn the following things in the code contribution guide:
 - [How to Create a pull request](#create-a-pull-request)
 - [Code Review Guide](#code-review)
 - [Formatting guidelines of pull request](#formatting-guidelines)
+- [Troubleshooting](#troubleshooting)
 
 ## Run KubeVela Locally
 
@@ -105,7 +106,7 @@ sudo mv kubebuilder/bin/* /usr/local/kubebuilder/bin
 macOS:
 
 ```
-wget https://storage.googleapis.com/kubebuilder-tools/kubebuilder-tools-1.21.2-darwin-amd64.tar.gz
+curl -O https://storage.googleapis.com/kubebuilder-tools/kubebuilder-tools-1.21.2-darwin-amd64.tar.gz
 tar -zxvf  kubebuilder-tools-1.21.2-darwin-amd64.tar.gz
 mkdir -p /usr/local/kubebuilder/bin
 sudo mv kubebuilder/bin/* /usr/local/kubebuilder/bin
@@ -263,7 +264,7 @@ Before start, please make sure you have already started the vela controller envi
 make run-apiserver
 ```
 
-By default, the apiserver will serving at "0.0.0.0:8000".
+By default, the apiserver will be serving at "0.0.0.0:8000".
 
 Get the VelaUX code by:
 
@@ -472,3 +473,24 @@ Learn how to write the docs by the following guide:
 * [Update KubeVela.io CLI Reference Doc](./cli-ref-doc.md)
 
 Great, you have complete the lifecycle of code contribution, try to [join the community as a member](https://github.com/kubevela/community/blob/main/community-membership.md) if you're interested.
+
+## Troubleshooting
+
+* Errors executing `make core-run`
+
+The `core-run` target uses the `fmt` target to check the format of the files. This step also make use of goimports which
+may not have the same version as the base golang installation. For older versions of goimports, you may see the following
+error:
+
+````bash
+$ make core-run
+go fmt ./...
+/<your_go_binary_path>/go/bin/goimports -local github.com/oam-dev/kubevela -w $(go list -f {{.Dir}} ./...)
+/<kubevela_clone_path>/kubevela/pkg/cache/informer.go:46:25: expected ']', found any
+````
+
+To solve this issue, execute:
+
+```bash
+go install golang.org/x/tools/cmd/goimports@latest
+```
