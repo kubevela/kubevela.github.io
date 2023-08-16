@@ -9,22 +9,22 @@ The developer guide including two parts:
 
 ## Extension Guide
 
-This part is a guide to help you extend capabilities for KubeVela. Make sure you have already understand the [**core concepts**](../getting-started/core-concept) before you start.
+This part is a guide to help you extend capabilities for KubeVela. Make sure you have already understand the [**core concepts**](../getting-started/core-concept.md) before you start.
 
 ### Extend Addons
 
 Building or installing addons is the most important way to extend KubeVela, there's a growing [catalog](https://github.com/kubevela/catalog) of addons you can choose for installation. You can also share your platform extension by KubeVela addon registry.
 
-* [Build Your Own Addon](../platform-engineers/addon/intro).
-* [Build Your Addon Registry](../platform-engineers/addon/addon-registry).
-* [Extend Cloud Resources by Addon](../platform-engineers/addon/terraform).
+* [Build Your Own Addon](../platform-engineers/addon/intro.md).
+* [Build Your Addon Registry](../platform-engineers/addon/addon-registry.md).
+* [Extend Cloud Resources by Addon](../platform-engineers/addon/terraform.md).
 
 ### Learn CUE to extend more powerful features
 
 KubeVela use CUE as it's core engine, and you can use CUE and CRD controller to glue almost every infrastructure capabilities.
 As a result, you can extend more powerful features for your platform.
 
-- Start to [Learn Manage Definition with CUE](../platform-engineers/cue/basic).
+- Start to [Learn Manage Definition with CUE](../platform-engineers/cue/basic.md).
 - Learn what is [CRD Controller](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) in Kubernetes.
 
 ## Contribution Guide
@@ -49,7 +49,7 @@ we appreciate every effort you contribute to the community. Here are some exampl
 
 The Apache way says "Community Over Code". Although KubeVela is a CNCF/Linux project, we possess a strong resonance to it. To second and stretch this merit deeper, we regard non-coding contribution as equally important with code contribution for the community's very existence and its future growth.
 
-- Refer to [Non-code Contribution Guide](./non-code-contribute) to know how you could help.
+- Refer to [Non-code Contribution Guide](./non-code-contribute.md) to know how you could help.
 
 ### Code contribution
 
@@ -57,9 +57,9 @@ Unsure where to begin contributing to KubeVela codebase? Start by browsing issue
 
 - [Good first issue](https://github.com/kubevela/kubevela/labels/good%20first%20issue) issues are generally straightforward to complete.
 - [Help wanted](https://github.com/kubevela/kubevela/labels/help%20wanted) issues are problems we would like the community to help us with regardless of complexity.
-- Refer to [Code Contribution Guide](./code-contribute) for more details.
+- Refer to [Code Contribution Guide](./code-contribute.md) for more details.
 
-Learn the [Release Process And Cadence](./release-process) to know when your code changes will be released.
+Learn the [Release Process And Cadence](./release-process.md) to know when your code changes will be released.
 
 ### Become a community member
 

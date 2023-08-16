@@ -355,4 +355,4 @@ template: {
 
 ## Share the Template
 
-The Config Template is part of the [Addon](../platform-engineers/addon/intro). You could get or share the templates via addons.
+The Config Template is part of the [Addon](../platform-engineers/addon/intro.md). You could get or share the templates via addons.

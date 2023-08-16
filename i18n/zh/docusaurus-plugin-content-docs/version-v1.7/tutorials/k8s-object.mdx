@@ -98,8 +98,8 @@ spec:
         type: deploy
 ```
 
-- 关于 Topology 策略参考: [Topology](../end-user/policies/references#topology)
-- 关于 Deploy 步骤参考: [Deploy](../end-user/workflow/built-in-workflow-defs#deploy)
+- 关于 Topology 策略参考: [Topology](../end-user/policies/references.md#topology)
+- 关于 Deploy 步骤参考: [Deploy](../end-user/workflow/built-in-workflow-defs.md#deploy)
 
 通过下述命令来部署该应用：
 
@@ -123,17 +123,17 @@ $ vela workflow resume app-with-k8s-objects
 
 ## 通过 UI 控制台部署
 
-如果你开启了 [`velaux`](../reference/addons/velaux) 插件，你可以直接在 UI 控制台完成 Kubernetes 对象的部署。
+如果你开启了 [`velaux`](../reference/addons/velaux.md) 插件，你可以直接在 UI 控制台完成 Kubernetes 对象的部署。
 
 ### 规划并创建交付目标
 
-[交付目标(Target)](../getting-started/core-concept#交付目标（target）) 定义了应用交付的运行时集群和命名空间，创建交付目标的同时完成运行时集群的命名空间创建。
+[交付目标(Target)](../getting-started/core-concept.md#交付目标（target）) 定义了应用交付的运行时集群和命名空间，创建交付目标的同时完成运行时集群的命名空间创建。
 
 点击 `New Target` 按钮进入创建流程，填写必要的信息，选择集群、命名空间即可完成创建。我们使用 2 个集群来创建交付目标，当然如果你暂无多个集群，也可以使用一个集群的多个命名空间来创建多个交付目标。我们最少准备 3 个交付目标，1 个用于测试环境，2 个或更多用于生产环境。
 
 ### 创建 Kubernetes 应用
 
-完成交付目标创建后，我们开始创建应用。与 [交付第一个应用](../quick-start) 一样，首先我们需要填写应用的基础信息，这里有三个不同点：
+完成交付目标创建后，我们开始创建应用。与 [交付第一个应用](../quick-start.md) 一样，首先我们需要填写应用的基础信息，这里有三个不同点：
 
 （1）选择部署类型 k8s-objects; 该类型用于部署多个 Kubernetes 原生资源，请注意，同一个应用请尽量保持只有一个 Workload 资源，即不要出现多个 Deployment 或者 Statefulset。
 
@@ -195,4 +195,4 @@ $ vela workflow resume app-with-k8s-objects
 
 至此，你已经完成了基本的 Kubernetes 对象的交付过程。
 
-如果你想了解如何将 Kubernetes 对象分发至多集群，可以参考[多集群部分](../end-user/components/ref-objects)文档。
+如果你想了解如何将 Kubernetes 对象分发至多集群，可以参考[多集群部分](../end-user/components/ref-objects.md)文档。

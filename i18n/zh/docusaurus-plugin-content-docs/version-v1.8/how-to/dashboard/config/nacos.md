@@ -172,4 +172,4 @@ port = 3306
 username = root
 ```
 
-当命令执行成功后，你可以在 Nacos 的 Dashboard 中确认配置是否正常写入。如果配置的 Nacos 服务无法连接，执行命令时将报错。同理我们可以参考 [在流水线中读写配置](./read-write-config-in-pipeline) 使用 nacos-config 模版写入配置。
+当命令执行成功后，你可以在 Nacos 的 Dashboard 中确认配置是否正常写入。如果配置的 Nacos 服务无法连接，执行命令时将报错。同理我们可以参考 [在流水线中读写配置](./read-write-config-in-pipeline.md) 使用 nacos-config 模版写入配置。

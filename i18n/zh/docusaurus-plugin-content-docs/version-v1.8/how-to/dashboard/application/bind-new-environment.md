@@ -17,4 +17,4 @@ description: 发布应用到新的环境
 
 ### 下一步
 
-* [管理应用工作流](../../../tutorials/workflows)
+* [管理应用工作流](../../../tutorials/workflows.md)

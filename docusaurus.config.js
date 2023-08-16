@@ -4,8 +4,9 @@ module.exports = {
   tagline: 'Make shipping applications more enjoyable.',
   url: 'https://kubevela.io',
   baseUrl: '/',
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
+  trailingSlash: true,
+  onBrokenLinks: 'warn',
+  onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicons/favicon.ico',
   organizationName: 'kubevela', // Usually your GitHub org/user name.
   projectName: 'kubevela.io', // Usually your repo name.
@@ -29,8 +30,8 @@ module.exports = {
     announcementBar: {
       id: 'start',
       content:
-        '<div class="header-item">⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>!⭐️</div>' +
-        '<div class="header-item"><span>KubeVela v1.8.0 is now available.(2023-04-20)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/tag/v1.8.0">Read Release Note</a></div>',
+          '<div class="header-item">⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>!⭐️</div>' +
+          '<div class="header-item"><span>KubeVela v1.8.0 is now available.(2023-04-20)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/tag/v1.8.0">Read Release Note</a></div>',
     },
     algolia: {
       appId: 'PXMFHFWUGZ',
@@ -259,7 +260,7 @@ module.exports = {
         },
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: function ({ locale, docPath }) {
+          editUrl: function ({locale, docPath}) {
             return `https://github.com/kubevela/kubevela.io/edit/main/docs/${docPath}`;
           },
           showLastUpdateAuthor: true,

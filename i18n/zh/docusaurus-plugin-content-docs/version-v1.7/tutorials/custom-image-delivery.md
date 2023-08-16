@@ -6,7 +6,7 @@ title: 自定义容器交付
 
 ### 简化 `webservice` 类型
 
-默认的 [webservice](../end-user/components/references#webservice) 组件类型有超过 10 个属性。 也许你的开发者只需要配置镜像路径和资源限制。 对于其他属性，团队可以设置默认值。如果是这样，你可以更改 `webservice` 定义。
+默认的 [webservice](../end-user/components/references.md#webservice) 组件类型有超过 10 个属性。 也许你的开发者只需要配置镜像路径和资源限制。 对于其他属性，团队可以设置默认值。如果是这样，你可以更改 `webservice` 定义。
 
 1. 更改 UI schema 以隐藏某些字段
 
@@ -25,7 +25,7 @@ title: 自定义容器交付
 ...
 ```
 
-更多参考: [UI Schema](../reference/ui-schema)
+更多参考: [UI Schema](../reference/ui-schema.md)
 
 2. 更改定义并增删字段
 
@@ -37,7 +37,7 @@ title: 自定义容器交付
 vela def get webservice > custom-webservice.cue
 ```
 
-参考[CUE基础](../platform-engineers/cue/basic)和[组件定义](../platform-engineers/components/custom-component)文档，了解如何自定义 `custom-webservice.cue`。
+参考[CUE基础](../platform-engineers/cue/basic.md)和[组件定义](../platform-engineers/components/custom-component.md)文档，了解如何自定义 `custom-webservice.cue`。
 
 编辑完成之后:
 

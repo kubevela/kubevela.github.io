@@ -4,10 +4,10 @@ slug: /platform-engineers/workflow/workflow
 ---
 
 :::tip
-在阅读本部分之前，请确保你已经了解 KubeVela 中 [工作流节点定义（WorkflowStepDefinition）](../oam/x-definition#工作流节点定义（WorkflowStepDefinition）) 的概念且学习掌握了 [CUE 的基本知识](../cue/basic)
+在阅读本部分之前，请确保你已经了解 KubeVela 中 [工作流节点定义（WorkflowStepDefinition）](../oam/x-definition.md#工作流节点定义（WorkflowStepDefinition）) 的概念且学习掌握了 [CUE 的基本知识](../cue/basic.md)
 :::
 
-本节将以工作流步骤定义的例子展开说明，介绍如何使用 [CUE](../cue/basic) 通过工作流步骤定义`WorkflowStepDefinition` 来自定义应用部署计划的工作流步骤。
+本节将以工作流步骤定义的例子展开说明，介绍如何使用 [CUE](../cue/basic.md) 通过工作流步骤定义`WorkflowStepDefinition` 来自定义应用部署计划的工作流步骤。
 
 ## 交付一个简单的工作流步骤
 
@@ -50,7 +50,7 @@ template: {
 
 CUE 提供了一系列[基础内置包](https://cuelang.org/docs/concepts/packages/#builtin-packages)，如：`regexp`, `json`, `strings`, `math` 等。
 
-同时，KubeVela 也默认提供了 `vela/op` 包，其中包含了一系列内置的工作流 [CUE 操作符](./cue-actions)，如：发送 HTTP 请求，操作 K8s 资源，打印日志等，来帮助你更好地编写工作流步骤。
+同时，KubeVela 也默认提供了 `vela/op` 包，其中包含了一系列内置的工作流 [CUE 操作符](./cue-actions.md)，如：发送 HTTP 请求，操作 K8s 资源，打印日志等，来帮助你更好地编写工作流步骤。
 
 我们在这引用 KubeVela 内置的 `vela/op` 包以及 CUE 官方的 `encoding/json`，使用 `op.#HTTPDo` 根据用户的参数发送 HTTP 请求，并使用 `json.Marshal()` 来进行数据类型的转换。
 
@@ -143,7 +143,7 @@ template: {
 部署如下应用部署计划：工作流的第一步会发送一个 HTTP 请求，得到 KubeVela 仓库的信息；同时，这个步骤会将 KubeVela 仓库的 Star 数作为 Output，下一个步骤将使用这个 Output 作为参数，并将其作为消息内容发送到 Slack 消息中：
 
 :::tip
-有关于参数传递的更多信息，请参考 [工作流参数传递](../../end-user/workflow/component-dependency-parameter#参数传递)。
+有关于参数传递的更多信息，请参考 [工作流参数传递](../../end-user/workflow/component-dependency-parameter.md#参数传递)。
 :::
 
 ```yaml

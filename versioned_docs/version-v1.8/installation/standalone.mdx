@@ -54,7 +54,7 @@ You may be required for root privilege during the installation process if not us
 If you don't need the automation with root access, you can download from the [release page](https://github.com/kubevela/velad/releases) and uncompress manually.
 
 ```shell
-curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
+curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash -s 1.8.2
 ```
 
 Check `velad` installed in `/usr/local/bin/`
@@ -227,7 +227,7 @@ vela port-forward addon-velaux -n vela-system 8080:80
 Choose `> local | velaux | velaux` for visit.
 
 :::note
-For more VelaUX options, refer to [VelaUX addon](../reference/addons/velaux) document for other advanced installation arguments.
+For more VelaUX options, refer to [VelaUX addon](../reference/addons/velaux.md) document for other advanced installation arguments.
 :::
 
 VelaUX needs authentication. The default username is `admin` and the password is **`VelaUX12345`**.
@@ -236,7 +236,7 @@ It requires you to override with a new password for the first login, please make
 
 ### 4. Cleanup
 
-This command will clean up KubeVela controllers along with the Kubernetes cluster, refer to [the advanced guide](../platform-engineers/advanced-install#uninstall) for more detailed steps.
+This command will clean up KubeVela controllers along with the Kubernetes cluster, refer to [the advanced guide](../platform-engineers/advanced-install.mdx#uninstall) for more detailed steps.
 
 ```
 velad uninstall
@@ -265,7 +265,7 @@ so you may be required for root privilege during the installation process.
 If you don't need the automation with root access, you can download from the [release page](https://github.com/kubevela/velad/releases) and uncompress manually.
 
 ```shell
-curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
+curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash -s 1.8.2
 ```
 
 Check `velad` installed in `/usr/local/bin/`
@@ -389,7 +389,7 @@ It will show URL like `http://PUBLIC-IP:PORT` access that URL with your browser.
 If you are using a cloud server, please open this port in secure group.
 :::
 :::note
-For more VelaUX options, refer to [VelaUX addon](../reference/addons/velaux) document for other advanced installation arguments.
+For more VelaUX options, refer to [VelaUX addon](../reference/addons/velaux.md) document for other advanced installation arguments.
 :::
 
 VelaUX needs authentication. The default username is `admin` and the password is **`VelaUX12345`**.
@@ -416,7 +416,7 @@ Then you need to copy this kubeconfig to your local machine. Let's say you savin
 To access the cluster, you also need to install `vela` CLI in your local machine.
 
 ```shell
-curl -fsSl https://static.kubevela.net/script/install.sh | bash
+curl -fsSl https://static.kubevela.net/script/install.sh | bash -s 1.8.2
 ```
 
 #### Access KubeVela
@@ -432,7 +432,7 @@ vela comp
 
 Run following command on remote server.
 
-This command will clean up KubeVela controllers along with the Kubernetes cluster, refer to [the advanced guide](../platform-engineers/advanced-install#uninstall) for more detailed steps.
+This command will clean up KubeVela controllers along with the Kubernetes cluster, refer to [the advanced guide](../platform-engineers/advanced-install.mdx#uninstall) for more detailed steps.
 
 ```shell
 velad uninstall

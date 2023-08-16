@@ -5,7 +5,7 @@ remove-version:
 	sh ./hack/remove_version.sh $(version)
 
 check-link:
-	go run ./hack/linkcheck.go
+	go run ./hack/linkcheck/linkcheck.go
 
 check-sort:
 	go run ./hack/sortcheck.go

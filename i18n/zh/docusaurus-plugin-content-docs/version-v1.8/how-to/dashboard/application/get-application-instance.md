@@ -19,5 +19,5 @@ description: 通过 Dashboard 查看应用运行实例，掌握应用运行状�
 
 ### 下一步
 
-* [调整应用副本数量](../../../tutorials/scaler)
-* [查看应用运行日志](./get-application-log)
+* [调整应用副本数量](../../../tutorials/scaler.md)
+* [查看应用运行日志](./get-application-log.md)

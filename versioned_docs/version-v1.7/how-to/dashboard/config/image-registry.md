@@ -5,7 +5,7 @@ description: Configure an image registry
 
 In this guide, we will introduce how to create a private image registry and how to create an application whose image locates in the registry.
 
-Check the [config template](./config-template) is exist with the following command:
+Check the [config template](./config-template.md) is exist with the following command:
 
 ```bash
 vela config-template list | grep image-registry
@@ -65,4 +65,4 @@ vela config distribute <Config Name> --target <cluster/namespace>
 
 ## How to use the image registry
 
-Let's follow the [Deploy Container Image](../../../tutorials/webservice) to create an application. After you input the image name, KubeVela will automatically identify the matched registries.
+Let's follow the [Deploy Container Image](../../../tutorials/webservice.mdx) to create an application. After you input the image name, KubeVela will automatically identify the matched registries.

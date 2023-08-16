@@ -4,7 +4,7 @@ title: Migrate from Old Versions
 
 This doc aims to provide a migration guide from old versions to the new ones without disturb the running business. However scenarios are different from each other, we strongly recommend you to test the migration with a simulation environment before real migration for your production.
 
-KubeVela has [release cadence](../../contributor/release-process) for every 2-3 months, we'll only maintain for the last 2 releases. As a result, you're highly recommended to upgrade along with the community. We'll strictly align with the [semver version rule](https://semver.org/) for compatibility.
+KubeVela has [release cadence](../../contributor/release-process.md) for every 2-3 months, we'll only maintain for the last 2 releases. As a result, you're highly recommended to upgrade along with the community. We'll strictly align with the [semver version rule](https://semver.org/) for compatibility.
 
 ## From v1.7.x to v1.8.x
 
@@ -15,7 +15,7 @@ These isn't too much work to be done for upgrading from v1.7.x to v1.8.x for usa
 ```
 helm repo add kubevela https://charts.kubevela.net/core
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.8.0 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.8.2 --wait
 ```
 
 ## From v1.6.x to v1.7.x

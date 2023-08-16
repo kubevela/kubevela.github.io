@@ -3,7 +3,7 @@ title: Distribute Reference Objects
 ---
 
 :::note
-This section requires you to know the basics about how to deploy [multi-cluster application](../../case-studies/multi-cluster) with policy and workflow.
+This section requires you to know the basics about how to deploy [multi-cluster application](../../case-studies/multi-cluster.md) with policy and workflow.
 :::
 
 You can reference and distribute existing Kubernetes objects with KubeVela in the following scenarios:
@@ -96,7 +96,7 @@ spec:
 
 ## Override Configuration for Reference Objects
 
-The [override policy](../../case-studies/multi-cluster#override-default-configurations-in-clusters) can be used to override properties defined in component and traits while the reference objects don't have those properties.
+The [override policy](../../case-studies/multi-cluster.md#override-default-configurations-in-clusters) can be used to override properties defined in component and traits while the reference objects don't have those properties.
 
 If you want to override configuration for the *ref-objects* typed component, you can use traits. The implicit main workload is the first referenced object and trait patch will be applied on it. The following example demonstrate how to set the replica number for the referenced deployment while deploying it in hangzhou clusters.
 

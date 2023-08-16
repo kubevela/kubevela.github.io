@@ -6,7 +6,7 @@ If the default `webservice` component type is not suitable for your team, and yo
 
 ### Simplify the `webservice` type
 
-The default [webservice](../end-user/components/references#webservice) component type has more than 10 properties. Maybe your developer only needs to configure the image path and resource limits. For the other properties, the team could set the default values.
+The default [webservice](../end-user/components/references.md#webservice) component type has more than 10 properties. Maybe your developer only needs to configure the image path and resource limits. For the other properties, the team could set the default values.
 If so, you could change the `webservice` definition.
 
 1. Change the UI schema to hide some fields
@@ -26,7 +26,7 @@ On the definition detail page, users could customize the UI schema to setting th
 ...
 ```
 
-More references: [UI Schema](../reference/ui-schema)
+More references: [UI Schema](../reference/ui-schema.md)
 
 2. Change the definition and remove or add some fields
 
@@ -38,7 +38,7 @@ If you want to completely remove or add some fields, you should edit the compone
 vela def get webservice > custom-webservice.cue
 ```
 
-Refer to the [CUE Basic](../platform-engineers/cue/basic) and [Component Definition](../platform-engineers/components/custom-component) documents to learn how to custom the `custom-webservice.cue`.
+Refer to the [CUE Basic](../platform-engineers/cue/basic.md) and [Component Definition](../platform-engineers/components/custom-component.md) documents to learn how to custom the `custom-webservice.cue`.
 
 After edit:
 

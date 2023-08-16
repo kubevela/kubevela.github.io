@@ -203,7 +203,7 @@ local  ─── default─┬─ Service/hello-rep-beijing     updated   2022-1
 在步骤中可以使用三种策略 `deploy`： `topology`、 `override` 和 `replication`。它们可以一起用于分裂组件和将组件下发到不同的集群。下面是它们一起使用时的规则：
 
 1. 策略的应用顺序为 `topology` -> `override` -> `replication`
-   。更多详细信息，可以参阅[多集群应用](../../case-studies/multi-cluster)
+   。更多详细信息，可以参阅[多集群应用](../../case-studies/multi-cluster.md)
    - `topology` 选择要下发集群。如果不使用，则默认情况下应用程序将资源部署到 Local 群集。
    - `override` 修改组件 Properties。如果不使用，则不会更改任何属性。
    - `replication` 将一个组件分裂为多个组分裂

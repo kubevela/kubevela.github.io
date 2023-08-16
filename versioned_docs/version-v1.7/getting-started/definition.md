@@ -17,11 +17,11 @@ There're mainly four types of definitions in KubeVela, they're `ComponentDefinit
 There're two sources to get out-of-box definitions:
 
 * Built-in definitions will be installed along with KubeVela helm chart. You can refer to the following links to learn more about built-in definitions.
-    - [Component Definition](../end-user/components/references)
-    - [Trait Definition](../end-user/traits/references)
-    - [Policy Definition](../end-user/policies/references)
-    - [Workflow Step Definition](../end-user/workflow/built-in-workflow-defs)
-* Install [Addons](../reference/addons/overview), they're scenario-oriented system extensions of KubeVela, each addon contains a bunch of definitions along its CRD controllers.
+    - [Component Definition](../end-user/components/references.md)
+    - [Trait Definition](../end-user/traits/references.md)
+    - [Policy Definition](../end-user/policies/references.md)
+    - [Workflow Step Definition](../end-user/workflow/built-in-workflow-defs.md)
+* Install [Addons](../reference/addons/overview.md), they're scenario-oriented system extensions of KubeVela, each addon contains a bunch of definitions along its CRD controllers.
     - The community has a [verified addon registry](https://github.com/kubevela/catalog) which contains a large catalog of addons, the registry is maintained by the KubeVela team.
 
 ## Lifecycle of a Definition
@@ -85,9 +85,9 @@ You can also view the details from documentation website, the following command 
 vela show webservice --web
 ```
 
-* Discover in UI console ([`velaux`](../reference/addons/velaux))
+* Discover in UI console ([`velaux`](../reference/addons/velaux.md))
 
-Once installed, these definitions can be discovered and generated with forms by the UI console automatically. More than that, you can even customize the layout by defining the [ui schema](../reference/ui-schema) like below.
+Once installed, these definitions can be discovered and generated with forms by the UI console automatically. More than that, you can even customize the layout by defining the [ui schema](../reference/ui-schema.md) like below.
 
 ![alt](../resources/customize-def.jpg)
 
@@ -168,7 +168,7 @@ Application is also one kind of Kubernetes CRD, you can also use `kubectl apply`
 In most cases, you don't need to customize any definitions **unless you're going to extend the capability of KubeVela**. Before that, you should check the built-in definitions and addons to confirm if they can fit your needs.
 :::
 
-A new definition is built in a declarative template in [CUE configuration language](https://cuelang.org/). If you're not familiar with CUE, you can refer to [CUE Basic](../platform-engineers/cue/basic) for some knowledge. 
+A new definition is built in a declarative template in [CUE configuration language](https://cuelang.org/). If you're not familiar with CUE, you can refer to [CUE Basic](../platform-engineers/cue/basic.md) for some knowledge. 
 
 A definition describes the module's inputs, outputs, operations, and the wiring between them. Here is an example of a simple component definition:
 
@@ -197,5 +197,5 @@ template: {
 ```
 
 The `type` defines what kind of definition it is, the `parameter` defines the inputs, while the `output` section defines the outputs.
-You can refer to detail docs about [how to manage definition](../platform-engineers/cue/definition-edit) or learn the [definition protocol](../platform-engineers/oam/x-definition).
+You can refer to detail docs about [how to manage definition](../platform-engineers/cue/definition-edit.md) or learn the [definition protocol](../platform-engineers/oam/x-definition.md).
 

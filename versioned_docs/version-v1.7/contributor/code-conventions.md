@@ -87,7 +87,7 @@ In this section, you will find the code conventions for all kinds of code KubeVe
 
 - Including new vela cli commands and major features of existing commands
 
-Please refer to [the principle of test](./principle-of-test) for more details.
+Please refer to [the principle of test](./principle-of-test.md) for more details.
 
 ## Directory and file Conventions
 

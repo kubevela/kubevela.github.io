@@ -4,7 +4,7 @@ title: Built-in Component Type
 
 This documentation will walk through all the built-in component types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2023-01-16T19:19:03+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2023-01-16T19:19:03+08:00.
 
 ## Cron-Task
 

@@ -20,9 +20,9 @@ vela addon disable kruise-rollout
 
 ## Usage
 
-Kurise rollout addon help to canary rollout your workload no matter defined with [webservice](../../tutorials/webservice) or contained in a [helm](../../tutorials/helm).
+Kurise rollout addon help to canary rollout your workload no matter defined with [webservice](../../tutorials/webservice.mdx) or contained in a [helm](../../tutorials/helm.md).
 
-If your workload is in a helm chart please refer to [doc](../../tutorials/helm-rollout) for more usage info, otherwise please refer to usage of webservice [component](../../end-user/traits/rollout).
+If your workload is in a helm chart please refer to [doc](../../tutorials/helm-rollout.md) for more usage info, otherwise please refer to usage of webservice [component](../../end-user/traits/rollout.md).
 
 ### Properties
 

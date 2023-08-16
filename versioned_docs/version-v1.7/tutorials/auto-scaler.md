@@ -19,7 +19,7 @@ Keda supports lots of triggers such as `cron`, `cpu`, etc, let's check some exam
  it works in KubeVela.
 
 :::caution
-When you're using HPA, you must specify the [`apply-once`](../end-user/policies/apply-once) policy to let the HPA control the replica field.
+When you're using HPA, you must specify the [`apply-once`](../end-user/policies/apply-once.md) policy to let the HPA control the replica field.
 :::
 
 ## How it works with Trigger?

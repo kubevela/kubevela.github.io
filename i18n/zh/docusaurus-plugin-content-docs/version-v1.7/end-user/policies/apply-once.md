@@ -75,4 +75,4 @@ spec:
 * resourceTypes: 通过资源类型选择
 * traitTypes: 通过 Trait 类型选择
 
-配置漂移检查会在应用进入 running 状态或者是 suspending 状态（没有错误的情况下）每隔 5 分钟进行一次。你可以通过设置控制器启动参数中的 `application-re-sync-period` 来修改时间间隔。你可以在[启动参数](../../platform-engineers/system-operation/bootstrap-parameters)章节中了解更多。
+配置漂移检查会在应用进入 running 状态或者是 suspending 状态（没有错误的情况下）每隔 5 分钟进行一次。你可以通过设置控制器启动参数中的 `application-re-sync-period` 来修改时间间隔。你可以在[启动参数](../../platform-engineers/system-operation/bootstrap-parameters.md)章节中了解更多。

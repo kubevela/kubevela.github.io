@@ -2,7 +2,7 @@
 title: Out-of-Box System Observability
 ---
 
-By default, a series of dashboards are pre-installed with the `grafana` addon and provide basic panels for viewing observability data. If you follow the [installation guide](./installation), you should be able to use these dashboards without further configurations.
+By default, a series of dashboards are pre-installed with the `grafana` addon and provide basic panels for viewing observability data. If you follow the [installation guide](./installation.md), you should be able to use these dashboards without further configurations.
 
 ## Dashboards
 

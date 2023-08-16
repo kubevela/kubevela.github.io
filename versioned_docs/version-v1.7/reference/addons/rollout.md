@@ -21,7 +21,7 @@ vela addon enable rollout
 
 ### First Deployment
 
-Apply the Application YAML below which includes a webservice-type workload with Rollout Trait, and [control version](../../end-user/version-control)
+Apply the Application YAML below which includes a webservice-type workload with Rollout Trait, and [control version](../../end-user/version-control.md)
 of component name to be express-server-v1.
 
 ```shell
