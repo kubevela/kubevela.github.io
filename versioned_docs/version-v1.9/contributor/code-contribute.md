@@ -264,7 +264,7 @@ Before start, please make sure you have already started the vela controller envi
 make run-apiserver
 ```
 
-By default, the apiserver will serving at "0.0.0.0:8000".
+By default, the apiserver will be serving at "0.0.0.0:8000".
 
 Get the VelaUX code by:
 
