@@ -109,8 +109,41 @@ The spec are as follows:
 
 ### Example
 
-Ref：[https://github.com/kubevela/catalog/tree/master/addons/velaux/schemas](https://github.com/kubevela/catalog/tree/master/addons/velaux/schemas)
+KubeVela store UISchema config in a ConfigMap in the same namespace with the definition object.
+> The default KubeVela system namespace is vela-system, the built-in capabilities and uischemas are laid there.
+
+You can use the following command to get the ConfigMap list of Custom UISchema.
+```bash 
+kubectl get configmap -n vela-system | grep uischema
+```
+```bash
+NAME                                                   DATA   AGE
+addon-uischema-velaux                                  1      25h
+component-uischema-helm                                1      25h
+component-uischema-k8s-objects                         1      25h
+component-uischema-kustomize                           1      25h
+component-uischema-task                                1      25h
+config-uischema-helm-repository                        1      25h
+config-uischema-image-registry                         1      25h
+```
+The ConfigMap name is in the format of `<your-definition-type>-uischema-<your-definition-name>`, and the data key is `ui-schema`.
+
+For example, we can use the following command to get the UISchema of `k8s-objects` which tpe is `component`.
+```bash
+kubectl get configmap -n vela-system component-uischema-k8s-objects -oyaml
+```
+```bash
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: component-uischema-k8s-objects
+  namespace: vela-system
+data:
+  ui-schema: '[{"jsonKey":"objects","uiType":"K8sObjectsCode"}]'
+```
+
+For more examples, please refer to the following links：[https://github.com/kubevela/catalog/tree/master/addons/velaux/schemas](https://github.com/kubevela/catalog/tree/master/addons/velaux/schemas)
 
 ### How to expand
 
-UI-Schema mainly extends front-end react components, refer to [https://github.com/kubevela/velaux/tree/main/src/extends](https://github.com/kubevela/velaux/tree/main/src/extends)
+UI-Schema mainly extends front-end react components, refer to [https://github.com/kubevela/velaux/tree/main/packages/velaux-ui/src/extends](https://github.com/kubevela/velaux/tree/main/packages/velaux-ui/src/extends)
