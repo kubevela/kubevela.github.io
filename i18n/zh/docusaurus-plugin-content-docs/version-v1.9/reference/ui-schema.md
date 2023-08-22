@@ -112,8 +112,42 @@ UI Schema 包含的字段如下：
 
 ### 配置案例
 
-参考：[https://github.com/kubevela/catalog/tree/master/addons/velaux/schemas](https://github.com/kubevela/catalog/tree/master/addons/velaux/schemas)
+KubeVela 会将自定义 UISchema 配置存储在与定义对象相同的 namespace 下的 ConfigMap 里。
+> 默认的 KubeVela 系统 namespace 是 vela-system，内置的 capability 和 schema 位于此处。
+
+你可以使用以下命令找到自定义 UISchema 的 ConfigMap 列表：
+```bash 
+kubectl get configmap -n vela-system | grep uischema
+```
+```bash
+NAME                                                   DATA   AGE
+addon-uischema-velaux                                  1      25h
+component-uischema-helm                                1      25h
+component-uischema-k8s-objects                         1      25h
+component-uischema-kustomize                           1      25h
+component-uischema-task                                1      25h
+config-uischema-helm-repository                        1      25h
+config-uischema-image-registry                         1      25h
+```
+
+`ConfigMap` 命名的格式为 `<your-definition-type>-uischema-<your-definition-name>`, 数据键为 `ui-schema`。
+
+举个例子, 我们可以使用下面的命令来获取名为 `k8s-objects` 的 `component` 类型组件的自定义 UISchema 配置:
+```bash
+kubectl get configmap -n vela-system component-uischema-k8s-objects -oyaml
+```
+```bash
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: component-uischema-k8s-objects
+  namespace: vela-system
+data:
+  ui-schema: '[{"jsonKey":"objects","uiType":"K8sObjectsCode"}]'
+```
+
+更多配置案例：[https://github.com/kubevela/catalog/tree/master/addons/velaux/schemas](https://github.com/kubevela/catalog/tree/master/addons/velaux/schemas)
 
 ### 如何扩展
 
-UI-Schema 主要扩展的是前端组件，参考 [https://github.com/kubevela/velaux/tree/main/src/extends](https://github.com/kubevela/velaux/tree/main/src/extends)
+UI-Schema 主要扩展的是前端组件，参考  [https://github.com/kubevela/velaux/tree/main/packages/velaux-ui/src/extends](https://github.com/kubevela/velaux/tree/main/packages/velaux-ui/src/extends)
