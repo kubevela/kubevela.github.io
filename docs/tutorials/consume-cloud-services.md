@@ -68,7 +68,34 @@ vela config list -t terraform-alibaba
 If not exist, you can refer to this command to create a default provider:
 
 ```bash
-vela config create default -t terraform-alibaba ALICLOUD_REGION=<Region> ALICLOUD_SECRET_KEY=<Secret> ALICLOUD_ACCESS_KEY=<AccessKey>
+vela config create default -t terraform-alibaba name=default ALICLOUD_REGION=<Region> ALICLOUD_SECRET_KEY=<Secret> ALICLOUD_ACCESS_KEY=<AccessKey>
+```
+You can use the following command to get the template of the provider configuration:
+
+```bash
+$ vela config-template list
+NAME             	ALIAS                               	SCOPE  	SENSITIVE	CREATED-TIME
+helm-repository  	Helm Repository                     	project	false    	2023-08-24 19:21:03 +0800 CST
+terraform-alibaba	Terraform Provider for Alibaba Cloud	system 	true     	2023-08-24 19:32:19 +0800 CST
+```
+and use the following command to show the args of specify provider:
+
+```bash
+$ vela config-template show terraform-alibaba
+
++---------------------+--------+--------------------------------------------------------+----------+---------+---------+
+|        NAME         |  TYPE  |                      DESCRIPTION                       | REQUIRED | OPTIONS | DEFAULT |
++---------------------+--------+--------------------------------------------------------+----------+---------+---------+
+| ALICLOUD_ACCESS_KEY | string | Get ALICLOUD_ACCESS_KEY per this guide                 | true     |         |         |
+|                     |        | https://help.aliyun.com/knowledge_detail/38738.html    |          |         |         |
+| ALICLOUD_REGION     | string | Get ALICLOUD_REGION by picking one                     | true     |         |         |
+|                     |        | RegionId from Alibaba Cloud region list                |          |         |         |
+|                     |        | https://www.alibabacloud.com/help/doc-detail/72379.htm |          |         |         |
+| ALICLOUD_SECRET_KEY | string | Get ALICLOUD_SECRET_KEY per this guide                 | true     |         |         |
+|                     |        | https://help.aliyun.com/knowledge_detail/38738.html    |          |         |         |
+| name                | string | The name of Terraform Provider                         | true     |         |         |
+|                     |        | for Alibaba Cloud                                      |          |         |         |
++---------------------+--------+--------------------------------------------------------+----------+---------+---------+
 ```
 
 Use the following Application to provision an OSS bucket:
