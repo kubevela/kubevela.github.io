@@ -40,16 +40,14 @@ $ vela show alibaba-oss
 比如，你可以在[这里](https://kubevela.net/docs/end-user/components/cloud-services/terraform/alibaba-oss)查看阿里云 OSS 的使用参数。
 
 
-For different vendors, these parameters update accordingly. All cloud resources have the following common parameters.
-
-- `writeConnectionSecretToRef`: `struct` Type, represents the outputs of Terraform will become key/values in the secret with the name specified here.
-  - `name`, specifies the name of the secret.
-  - `namespace`, specifies the namespace of the secret.
-- `providerRef`: `struct` Type, represents the Provider which is referenced by a cloud service.
-  - `name`, specifies the name of the provider.
-- `deleteResource`: `bool` Type, specify whether to delete the corresponding cloud service when the app is deleted. By Default it's `true`.
-- `customRegion`: `string` Type, specify region for resources, it will override the default region from `providerRef`.
-
+对于不同的提供商，这些参数会有所不同。所有的云资源都有以下共同的参数：
+- `writeConnectionSecretToRef`: `struct` 类型，表示 Terraform 的输出将以 key/values 格式写入指定名称的 secret。
+  - `name`, secret 名称
+  - `namespace`, secret 命名空间
+- `providerRef`: `struct` 类型，代表引用的云提供商。
+  - `name`, 提供商名字
+- `deleteResource`: `bool` 类型,指定删除应用时是否删除云资源，默认为 `true`。
+- `customRegion`: `string` 类型,指定资源所在区域，它会覆盖 `providerRef` 中的默认区域。
 
 ### 部署云资源
 
@@ -62,7 +60,35 @@ vela config list -t terraform-alibaba
 如果不存在，可以参考下述命令创建一个默认的可以提供商配置，在这之前你需要获取云厂商的 Access Key 和 Secret Key。
 
 ```bash
-vela config create default -t terraform-alibaba ALICLOUD_REGION=<Region> ALICLOUD_SECRET_KEY=<Secret> ALICLOUD_ACCESS_KEY=<AccessKey>
+vela config create default -t terraform-alibaba name=default ALICLOUD_REGION=<Region> ALICLOUD_SECRET_KEY=<Secret> ALICLOUD_ACCESS_KEY=<AccessKey>
+```
+
+你可以使用以下命令来获取所有可用的提供商配置模板列表：
+
+```bash
+$ vela config-template list
+NAME             	ALIAS                               	SCOPE  	SENSITIVE	CREATED-TIME
+helm-repository  	Helm Repository                     	project	false    	2023-08-24 19:21:03 +0800 CST
+terraform-alibaba	Terraform Provider for Alibaba Cloud	system 	true     	2023-08-24 19:32:19 +0800 CST
+```
+然后使用以下命令来查看指定提供商配置的详细信息：
+
+```bash
+$ vela config-template show terraform-alibaba
+
++---------------------+--------+--------------------------------------------------------+----------+---------+---------+
+|        NAME         |  TYPE  |                      DESCRIPTION                       | REQUIRED | OPTIONS | DEFAULT |
++---------------------+--------+--------------------------------------------------------+----------+---------+---------+
+| ALICLOUD_ACCESS_KEY | string | Get ALICLOUD_ACCESS_KEY per this guide                 | true     |         |         |
+|                     |        | https://help.aliyun.com/knowledge_detail/38738.html    |          |         |         |
+| ALICLOUD_REGION     | string | Get ALICLOUD_REGION by picking one                     | true     |         |         |
+|                     |        | RegionId from Alibaba Cloud region list                |          |         |         |
+|                     |        | https://www.alibabacloud.com/help/doc-detail/72379.htm |          |         |         |
+| ALICLOUD_SECRET_KEY | string | Get ALICLOUD_SECRET_KEY per this guide                 | true     |         |         |
+|                     |        | https://help.aliyun.com/knowledge_detail/38738.html    |          |         |         |
+| name                | string | The name of Terraform Provider                         | true     |         |         |
+|                     |        | for Alibaba Cloud                                      |          |         |         |
++---------------------+--------+--------------------------------------------------------+----------+---------+---------+
 ```
 
 接下来，我们以 OSS bucket 为例展示如何部署云资源。
@@ -101,21 +127,21 @@ provision-cloud-resource-sample	sample-oss	alibaba-oss	      	running	healthy	Cl
 
 ### 开始之前
 
-- Enable [VelaUX](../reference/addons/velaux.md) addon.
+- 启用 [VelaUX](../reference/addons/velaux.md) 插件.
 
-- Enable [Terraform](../reference/addons/terraform.md) addon, just like the prerequisites in CLI part above. VelaUX can also enable these addons in UI console.
+- 启用 [Terraform](../reference/addons/terraform.md) 插件, 就像上面 CLI 部分的先决条件一样。不过启用 VelaUX 后还可以在 UI 控制台中启用这些插件。
 
 ![addon-alibaba](../resources/addon-alibaba.jpg)
 
-### Creating your cloud service
+### 创建你的云资源
 
-The UI console operations are the same, you can refer to [this guide](../how-to/dashboard/application/create-application.md).
+UI 界面的操作是一样的，你可以参考 [操作指南](../how-to/dashboard/application/create-application.md)。  
 
-Firstly, Create an application and choose the type of your cloud service, they will always has a prefix of vendor such as `aws-`, `azure` or `alibaba-`.
+首先，创建一个应用程序并选择云服务的类型，它们的前缀一般是厂商的名字，比如 `aws-`, `azure` 或者 `alibaba-`。 
 
-Set the above parameters according to your needs to complete creating the application, and then deploy the application. The resources will be provisioned after the application become ready.
+根据您的需要设置以上参数即可完成应用的创建，然后部署应用。 对应的资源会在应用程序就绪之后自动创建。  
 
-### Viewing cloud resource creation status
+### 查看资源状态
 
 - 查看云实例列表
 
