@@ -39,7 +39,7 @@ kubectl scale deploy -n vela-system kubevela-cluster-gateway --replicas=3
 
 VelaUX is an addon, it composed by 3 major parts: nginx for frontend, APIServer as backend, and its database.
 
-We strongly recommend to use high availability mongodb, mysql or postgresql cluster as the database driver. The frontend and backend are both stateless services, just configure multiple replicas for them. As a result, the high availability installation command just like below:
+We strongly recommend to use high availability mongodb, mysql(beta) or postgresql(beta) cluster as the database driver. The frontend and backend are both stateless services, just configure multiple replicas for them. As a result, the high availability installation command just like below:
 
 ```
 vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_PASSWORD>@<MONGODB_URL> replicas=3
