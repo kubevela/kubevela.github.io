@@ -2,6 +2,9 @@
 title: VelaUX
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 VelaUX provides the UI console of KubeVela.
 
 ![alt](../../resources/velaux-view.jpg)
@@ -126,9 +129,12 @@ Please make sure the certificate matches the domain.
 vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik secretName=velaux-cert
 ```
 
-## Setup with MongoDB database
+## Setup with the database
 
-VelaUX supports Kubernetes and MongoDB as the database. the default is Kubernetes. We strongly advise using the MongoDB database to power your production environment.
+VelaUX supports Kubernetes, MongoDB, MySQL and PostgreSQL as the database. the default is Kubernetes. We strongly advise using the databases other than Kubernetes to power your production environment.
+
+<Tabs className="unique-tabs" groupId="os">
+<TabItem label="MongoDB" value="mongodb">
 
 ```shell script
 vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_PASSWORD>@<MONGODB_URL>
@@ -173,6 +179,104 @@ spec:
 ```
 
 After deployed, let's get the root password from the secret `vela-system/velaux-db-mongodb`.
+</TabItem>
+
+<TabItem label="MySQL" value="mysql">
+
+```shell script
+vela addon enable velaux dbType=mysql dbURL=mysql://<MYSQL_USER>:<MYSQL_PASSWORD>@<MYSQL_HOST>:<MYSQL_PORT>/<MYSQL_DB_NAME>
+```
+> It's necessary to create the specified database in advance. You can find the relevant connection string parameters [here](https://github.com/go-sql-driver/mysql#parameters)
+
+You can also deploy the MySQL with this application configuration:
+
+> Your cluster must have a default storage class.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: velaux-db
+  namespace: vela-system
+spec:
+  components:
+    - name: velaux-db
+      properties:
+        chart: mysql
+        repoType: helm
+        url: https://charts.bitnami.com/bitnami
+        values:
+          persistence:
+            size: 20Gi
+        version: 12.1.12
+      type: helm
+  policies:
+    - name: vela-system
+      properties:
+        clusters:
+          - local
+        namespace: vela-system
+      type: topology
+  workflow:
+    steps:
+      - name: vela-system
+        properties:
+          policies:
+            - vela-system
+        type: deploy
+```
+
+After deployed, let's get the root password from the secret `vela-system/velaux-db-mysql`.
+</TabItem>
+
+<TabItem label="PostgreSQL" value="postgresql">
+
+```shell script
+vela addon enable velaux dbType=postgresql dbURL=postgres://<POSTGRESQL_USER>:<POSTGRESQL_PASSWORD>@<POSTGRESQL_HOST>:<POSTGRESQL_PORT>/<POSTGRESQL_DB_NAME>
+```
+> It's necessary to create the specified database in advance.
+
+You can also deploy the PostgreSQL with this application configuration:
+
+> Your cluster must have a default storage class.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: velaux-db
+  namespace: vela-system
+spec:
+  components:
+    - name: velaux-db
+      properties:
+        chart: postgresql
+        repoType: helm
+        url: https://charts.bitnami.com/bitnami
+        values:
+          persistence:
+            size: 20Gi
+        version: 12.1.12
+      type: helm
+  policies:
+    - name: vela-system
+      properties:
+        clusters:
+          - local
+        namespace: vela-system
+      type: topology
+  workflow:
+    steps:
+      - name: vela-system
+        properties:
+          policies:
+            - vela-system
+        type: deploy
+```
+
+After deployed, let's get the root password from the secret `vela-system/velaux-db-postgresql`.
+</TabItem>
+</Tabs>
 
 ## Specify the addon image
 
