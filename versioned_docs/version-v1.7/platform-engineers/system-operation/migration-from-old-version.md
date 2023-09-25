@@ -43,7 +43,7 @@ Since we have migrated some workflow step definitions and views from workflow ad
 You can execute this script to solve it before upgrade helm chart:
 
 ```
-curl -fsSl https://kubevela.net/script/checklegacy.sh | bash
+curl -fsSl https://kubevela.io/script/checklegacy.sh | bash
 ```
 
 The script will just help patch helm annotations for you, you can also do that manually one by one like:

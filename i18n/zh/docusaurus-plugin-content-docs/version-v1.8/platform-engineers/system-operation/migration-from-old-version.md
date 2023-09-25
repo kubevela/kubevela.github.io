@@ -41,7 +41,7 @@ helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.
 你可以执行下列脚本修复：
 
 ```
-curl -fsSl https://kubevela.net/script/checklegacy.sh | bash
+curl -fsSl https://kubevela.io/script/checklegacy.sh | bash
 ```
 
 这个脚本就是在帮你自动添加 Helm 的注解，你也可以通过如下命令手动修复：
