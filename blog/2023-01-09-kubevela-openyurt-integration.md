@@ -63,7 +63,7 @@ git clone https://github.com/openyurtio/yurt-app-managercd yurt-app-manager && h
 Install the Vela command-line tool and install KubeVela in the cluster:
 
 ```shell
-curl -fsSl https://kubevela.net/script/install.sh | bash
+curl -fsSl https://kubevela.io/script/install.sh | bash
 vela install
 ```
 We want to reuse the mature Helm charts provided by the community, so we use Helm-type components to install the Nginx Ingress Controller. In KubeVela with microkernel design, Helm components are provided by the FluxCD addon. The following enables the [FluxCD addon](https://kubevela.net/zh/docs/reference/addons/fluxcd).
