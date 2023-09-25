@@ -55,7 +55,7 @@ cd yurt-app-manager && helm install yurt-app-manager -n kube-system ./charts/yur
 
 安装 Vela 命令行工具，并在集群中安装 KubeVela。
 ```yaml
-curl -fsSl https://kubevela.net/script/install.sh | bash
+curl -fsSl https://kubevela.io/script/install.sh | bash
 vela install
 ```
 在本案例中，为了复用社区提供的成熟的 Helm Chart，我们用 Helm 类型的组件来安装 Nginx Ingress Controller。在微内核设计的 KubeVela 中，Helm 类型的组件是由 FluxCD 插件提供的，下面启用 [FluxCD 插件](https://kubevela.net/zh/docs/reference/addons/fluxcd)。
