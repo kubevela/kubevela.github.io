@@ -90,6 +90,7 @@ module.exports = {
         {
           href: 'https://github.com/kubevela/kubevela',
           className: 'header-github-link',
+          'aria-label': 'GitHub repository',
           position: 'right',
         },
       ],
