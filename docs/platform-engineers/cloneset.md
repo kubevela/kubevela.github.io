@@ -41,7 +41,7 @@ workload:
 This is how you register OpenKruise Cloneset's API resource (`fapps.kruise.io/v1alpha1.CloneSet`) as the workload type.
 KubeVela uses Kubernetes API resource discovery mechanism to manage all registered capabilities.
 
-#### 4. Define Template
+#### 3. Define Template
 
 ```yaml
 ...
