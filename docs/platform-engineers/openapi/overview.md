@@ -157,7 +157,7 @@ The expected output should be like this:
 
 ## API Document
 
-There is the latest swagger config file: [https://github.com/kubevela/kubevela/blob/master/docs/apidoc/swagger.json](https://github.com/kubevela/kubevela/blob/master/docs/apidoc/swagger.json)
+There is the latest swagger config file: [https://github.com/kubevela/velaux/blob/main/docs/apidoc/swagger.json](https://github.com/kubevela/velaux/blob/main/docs/apidoc/swagger.json)
 
 ### 1.7
 
