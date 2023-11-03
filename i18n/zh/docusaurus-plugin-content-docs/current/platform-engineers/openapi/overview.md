@@ -2,25 +2,25 @@
 title: VelaUX OpenAPI
 ---
 
-This section will introduce how to integrate VelaUX OpenAPI, please make sure you have enabled the `velaux` addon. Let's use port-forward to expose the endpoint for the following demo.
+本节将介绍如何集成 VelaUX OpenAPI，请确保您已启用 `velaux` 插件。 让我们使用端口转发来公开以下演示的端点。
 
 ```bash
 vela port-forward addon-velaux -n vela-system 8000:80
 ```
 
-## Authentication and API Example
+## 身份验证和 API 示例
 
-### Login and get the token
+### 登录并获取令牌
 
-VelaUX has introduced [Json Web Token](https://jwt.io/) for authorization. As a result, you need to call the login API to complete the authentication and get the token. The following example is with the default admin account.
+VelaUX 引入了 [Json Web Token](https://jwt.io/) 进行授权。 因此，您需要调用登录接口来完成认证并获取token。 以下示例使用默认管理员帐户。
 
 ```bash
 curl -H Content-Type:application/json -X POST -d '{"username": "admin", "password":"VelaUX12345"}' http://127.0.0.1:8000/api/v1/auth/login
 ```
 
-> `http://127.0.0.1:8000` This is demo address, you should replace it with the real address. If you changed the password, replace it with the real password.
+> `http://127.0.0.1:8000` 这是演示地址，您应该将其替换为真实地址。 如果您更改了密码，请将其替换为真实密码。
 
-The expected output should be like this:
+预期的输出应该是这样的：
 
 ```json
 {
@@ -36,20 +36,20 @@ The expected output should be like this:
 }
 ```
 
-* accessToken: This is the token to request other APIs, which will expire in an hour.
-* refreshToken: This is the token to refresh the access token.
+* accessToken: 这是请求其他API的token，一个小时后就会过期。
+* refreshToken: 这是刷新访问令牌的令牌。
 
-### Request other APIs
+### 请求其他API
 
-* Create an application
+* 创建一个应用程序
 
 ```bash
 curl -H Content-Type:application/json -H "Authorization: Bearer <accessToken>" -X POST -d '{"name":"first-vela-app", "project": "default", "alias": "Demo App", "envBinding": [{"name": "default"}], "component": {"name":"express-server","componentType":"webservice", "properties": "{\"image\":\"oamdev/hello-world\"}"}}' http://127.0.0.1:8000/api/v1/applications
 ```
 
-> Please replace `<accessToken>` with the response from the previous step.
+> 请将 `<accessToken>` 替换为上一步的响应。
 
-The expected output should be like this:
+预期的输出应该是这样的：
 
 ```json
 {
@@ -73,13 +73,13 @@ The expected output should be like this:
 }
 ```
 
-* Deploy an application
+* 部署应用程序
 
 ```bash
 curl -H Content-Type:application/json -H "Authorization: Bearer <accessToken>" -X POST -d '{"workflowName":"workflow-default","triggerType":"api"}' http://127.0.0.1:8000/api/v1/applications/first-vela-app/deploy
 ```
 
-The expected output should be like this:
+预期的输出应该是这样的：
 
 ```json
 {
@@ -96,7 +96,7 @@ The expected output should be like this:
 }
 ```
 
-* Using VelaQL to Query the application pod list
+* 使用VelaQL查询应用程序pod列表
 
 ```bash
 curl -H "Authorization: Bearer <accessToken>" -G \
@@ -104,7 +104,7 @@ curl -H "Authorization: Bearer <accessToken>" -G \
     --data-urlencode 'velaql=component-pod-view{appNs=default,appName=first-vela-app}.status'
 ```
 
-The expected output should be like this:
+预期的输出应该是这样的：
 
 ```json
 {
@@ -138,15 +138,15 @@ The expected output should be like this:
 }
 ```
 
-For more use cases about VelaQL, Please refer to [VelaQL](../system-operation/velaql.md)
+更多关于 VelaQL 的使用案例，请参考 [VelaQL](../system-operation/velaql.md)
 
-### Refresh the token
+### 刷新令牌
 
 ```bash
 curl -H Content-Type:application/json -X GET -H RefreshToken:<refreshToken> http://127.0.0.1:8000/api/v1/auth/refresh_token
 ```
 
-The expected output should be like this:
+预期的输出应该是这样的：
 
 ```json
 {
@@ -157,25 +157,25 @@ The expected output should be like this:
 
 ## API Document
 
-There is the latest swagger config file: [https://github.com/kubevela/kubevela/blob/master/docs/apidoc/swagger.json](https://github.com/kubevela/kubevela/blob/master/docs/apidoc/swagger.json)
+最新的swagger配置文件： [https://github.com/kubevela/velaux/blob/main/docs/apidoc/swagger.json](https://github.com/kubevela/velaux/blob/main/docs/apidoc/swagger.json)
 
 ### 1.7
 
-Refer to [Kubevela API 1.7](https://kubevela.stoplight.io/docs/kubevela/b8aer09sc4q9e-kube-vela-api-1-7)
+参考 [KubeVela API 1.7](https://kubevela.stoplight.io/docs/kubevela/b8aer09sc4q9e-kube-vela-api-1-7)
 
 ### 1.6
 
-Refer to [KubeVela API 1.6](https://kubevela.stoplight.io/docs/kubevela/178jb51mk763f-kube-vela-api-1-6)
+参考 [KubeVela API 1.6](https://kubevela.stoplight.io/docs/kubevela/178jb51mk763f-kube-vela-api-1-6)
 
 ### 1.5
 
-Refer to [KubeVela API 1.5](https://kubevela.stoplight.io/docs/kubevela/pi1st0zdzoejp-kube-vela-api-1-5)
+参考 [KubeVela API 1.5](https://kubevela.stoplight.io/docs/kubevela/pi1st0zdzoejp-kube-vela-api-1-5)
 
 
 ### 1.4
 
-Refer to [Kubevela API 1.4](https://kubevela.stoplight.io/docs/kubevela/uz7fzdxthv175-kube-vela-api-1-4)
+参考 [KubeVela API 1.4](https://kubevela.stoplight.io/docs/kubevela/uz7fzdxthv175-kube-vela-api-1-4)
 
 ### 1.3
 
-Refer to [Kubevela API 1.3](https://kubevela.stoplight.io/docs/kubevela/1d086db94299e-kube-vela-api-1-3)
+参考 [KubeVela API 1.3](https://kubevela.stoplight.io/docs/kubevela/1d086db94299e-kube-vela-api-1-3)
