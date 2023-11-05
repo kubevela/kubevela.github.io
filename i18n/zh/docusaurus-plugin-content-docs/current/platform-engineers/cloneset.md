@@ -1,21 +1,21 @@
 ---
-title:  Extend CRD Operator as Component Type
+title:  将 CRD Operator 扩展为组件
 ---
 
-Let's use [OpenKruise](https://github.com/openkruise/kruise) as example of extend CRD as KubeVela Component.
-**The mechanism works for all CRD Operators**.
+让我们使用 [OpenKruise](https://github.com/openkruise/kruise) 演示如何将 CRD 扩展为 KubeVela 组件。
+**该机制适用于所有 CRD Operator**。
 
-### Step 1: Install the CRD controller
+### 第 1 步：安装 CRD 控制器
 
-You need to [install the CRD controller](https://github.com/openkruise/kruise#quick-start) into your K8s system.
+您需要 [安装 CRD 控制器](https://github.com/openkruise/kruise#quick-start) 到您的 K8s 系统中。
 
-### Step 2: Create Component Definition
+### 第 2 步：创建组件定义
 
-To register Cloneset(one of the OpenKruise workloads) as a new workload type in KubeVela, the only thing needed is to create an `ComponentDefinition` object for it.
-A full example can be found in this [cloneset.yaml](https://github.com/kubevela/catalog/blob/master/registry/cloneset.yaml).
-Several highlights are list below.
+要将 Cloneset（OpenKruise 工作负载之一）注册为 KubeVela 中的新工作负载类型，唯一需要做的就是为其创建一个 `ComponentDefinition` 对象。
+完整的示例可以在这个 [cloneset.yaml](https://github.com/kubevela/catalog/blob/master/registry/cloneset.yaml) 中找到。
+下面列出几个重点。
 
-#### 1. Describe The Workload Type
+#### 1. 描述工作负载类型
 
 ```yaml
 ...
@@ -24,9 +24,9 @@ Several highlights are list below.
 ...
 ```
 
-A one line description of this component type. It will be shown in helper commands such as `$ vela components`.
+该组件类型的一行描述。 它将显示在辅助命令中，例如 `$ vela Components`。
 
-#### 2. Register it's underlying CRD
+#### 2.注册其底层CRD
 
 ```yaml
 ...
@@ -37,10 +37,10 @@ workload:
 ...
 ```
 
-This is how you register OpenKruise Cloneset's API resource (`fapps.kruise.io/v1alpha1.CloneSet`) as the workload type.
-KubeVela uses Kubernetes API resource discovery mechanism to manage all registered capabilities.
+这是将 OpenKruise Cloneset 的 API 资源 (`fapps.kruise.io/v1alpha1.CloneSet`) 注册为工作负载类型的方法。
+KubeVela使用Kubernetes API资源发现机制来管理所有注册的能力。
 
-#### 4. Define Template
+#### 3. 定义模板
 
 ```yaml
 ...
@@ -81,12 +81,12 @@ schematic:
       }
  ```
 
-### Step 3: Register New Component Type to KubeVela
+### 第 3 步：向 KubeVela 注册新组件类型
 
-As long as the definition file is ready, you just need to apply it to Kubernetes.
+只要定义文件准备好了，你只需要把它应用到 Kubernetes 上就可以了。
 
 ```bash
 $ kubectl apply -f https://raw.githubusercontent.com/oam-dev/catalog/master/registry/cloneset.yaml
 ```
 
-And the new component type will immediately become available for developers to use in KubeVela.
+新的组件类型将立即可供开发人员在 KubeVela 中使用。
