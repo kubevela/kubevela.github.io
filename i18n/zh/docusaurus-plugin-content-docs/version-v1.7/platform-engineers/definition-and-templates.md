@@ -2,7 +2,7 @@
 title:  定义CRD
 ---
 
-This documentation has been merged into [Definition Protocol](./oam/x-definition.md).
+该文档已合并到[定义协议](./oam/x-definition.md)中。
 
 
-The definition revision part has been migrated to [here](./x-def-version.md).
+定义修订部分已迁移到[此处](./x-def-version.md)。
