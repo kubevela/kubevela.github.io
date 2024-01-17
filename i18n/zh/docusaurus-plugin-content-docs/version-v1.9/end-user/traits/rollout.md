@@ -81,7 +81,7 @@ Services:
 
 ![image](../../resources/kruise-rollout-v1.jpg)
 
-如果你的集群中已经按转了一个 ingress controller （或者你也可以通过启用 [ingress-nginx](../../reference/addons/nginx-ingress-controller.md) 插件来为你的集群安装一个，你就可以通过下面的命令来访问你的应用的网关入口：
+如果你的集群中已经安装了一个 ingress controller （或者你也可以通过启用 [ingress-nginx](../../reference/addons/nginx-ingress-controller.md) 插件来为你的集群安装一个，你就可以通过下面的命令来访问你的应用的网关入口：
 
 ```shell
 $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
