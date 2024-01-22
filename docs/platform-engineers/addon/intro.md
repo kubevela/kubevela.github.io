@@ -21,7 +21,7 @@ vela addon init mongodb --helm-repo https://marketplace.azurecr.io/helm/v1/repo 
 Running this command will generate a basic addon directory in your local path:
 
 ```shell
-$ ls mongondb   
+$ ls mongodb   
 NOTES.cue     README.md     definitions   metadata.yaml parameter.cue resources     schemas       template.cue  views
 ```
 
