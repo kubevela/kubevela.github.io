@@ -155,8 +155,8 @@ Export kubeconfig and list all built-in ComponentDefinition:
 </Tabs>
 
 :::tip
-- When executing `velad install`, vela CLI (`vela`) is already installed and add to `PATH` automatically. So you can use it directly.
-- A file uesd to configure access to clusters is called *kubeconfig file*
+- When executing `velad install`, vela CLI (`vela`) is already installed and added to `PATH` automatically. So you can use it directly.
+- The file used to configure access to clusters is called the *kubeconfig* file
 :::
 
 <details>
@@ -218,10 +218,10 @@ This is optional if you don't use UI console of KubeVela.
 
 </details>
 
-By default, velaux don't have any exposed port, you can view it by:
+By default, velaux doesn't have any exposed port, you can view it by:
 
 ```shell
-vela port-forward addon-velaux -n vela-system 8080:80
+vela port-forward addon-velaux -n vela-system 8080:8000
 ```
 
 Choose `> local | velaux | velaux` for visit.
@@ -244,24 +244,24 @@ velad uninstall
 
 ## Install on a remote Linux server {#remote}
 
-This documents show you how to install KubeVela on a remote Linux server (e.g. aws EC2 or aliyun ECS) in standalone mode.
+This document shows you how to install KubeVela on a remote Linux server (e.g. aws EC2 or aliyun ECS) in standalone mode.
 
 ### 1. Prepare a machine
 
-Prepare a Linux server, make sure it meets the following requirements:
+Prepare a Linux server and make sure it meets the following requirements:
 
 **Requirements**
 
-1. Make sure your machine have `curl` installed.
+1. Make sure your machine has `curl` installed.
 2. This server has a public IP, or you can access the server's IP if it's a on-premise server.
-3. If you are using a cloud server, make sure you have opened the port 6443 in secure group.
+3. If you are using a cloud server, make sure you have opened the port 6443 in a secure group.
 
 ### 2. Install VelaD and Setup KubeVela
 
 #### Download VelaD
 
-Following script will download and place the binary in your system `PATH`,
-so you may be required for root privilege during the installation process.
+The following script will download and place the binary in your system `PATH`,
+so you may need root privilege during the installation process.
 If you don't need the automation with root access, you can download from the [release page](https://github.com/kubevela/velad/releases) and uncompress manually.
 
 ```shell
@@ -317,7 +317,7 @@ vela comp
 :::tip
 - When executing `velad install`, vela CLI (`vela`) is already installed and add to `PATH` automatically. So you can use it directly.
 Later we will access KubeVela on local machine, we will install vela CLI on local machine again.
-- A file uesd to configure access to clusters is called *kubeconfig file*. Vela CLI also use this file to access KubeVela.
+- The file used to configure access to clusters is called the *kubeconfig* file. Vela CLI also uses this file to access KubeVela.
 :::
 
 <details>
