@@ -287,9 +287,9 @@ vela def init {ModuleName} --type component --provider {providerName} --git {git
 
 Several items to be filled in the instruction are passed in from the parsed Module structure.
 
-* gitURL: 	{Module.Attributes.Source}.git
+* gitURL: 	\{Module.Attributes.Source\}.git
 * description: If there are elements in `Included` which have the same ID with relationship.latest-version.ID, set the description as the corresponding description in `Included` elements, otherwise set the description as providerName+ModuleName. 
-* yamlFileName：terraform-{providerName}-{Module.Attributes.Name}.yaml
+* yamlFileName：terraform-\{providerName\}-\{Module.Attributes.Name\}.yaml
 
 
 

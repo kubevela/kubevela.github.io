@@ -20,10 +20,13 @@ Let's start the journey by using the [Kubernetes StatefulSet](https://kubernetes
 
 Save the YAML example of StatefulSet in the official document locally and name it as `my-stateful.yaml`, then execute command as below:
 
+```
 	 vela def init my-stateful -t component --desc "My StatefulSet component." --template-yaml ./my-stateful.yaml -o my-stateful.cue
+```
 
 View the generated "my-stateful.cue" file:
 
+```
 	$ cat my-stateful.cue
 	"my-stateful": {
 		annotations: {}
@@ -50,6 +53,8 @@ View the generated "my-stateful.cue" file:
 		parameter: {}
 	}
 
+```
+
 Modify the generated file as follows:
 
 1. The example of the official StatefulSet website is a composite component composed of two objects `StatefulSet` and `Service`. According to KubeVela [Rules for customize component](https://kubevela.io/docs/platform-engineers/components/custom-component), in composite components, one of the resources such (StatefulSet in our example) need to be represented by the `template.output` field as a core workload, and other auxiliary objects are represented by `template.outputs`, so we make some adjustments and all the automatically generated output and outputs are switched.
@@ -57,11 +62,14 @@ Modify the generated file as follows:
 
 After modification, you can use `vela def vet` to do format check and verification.
 
+```
 	$ vela def vet my-stateful.cue
 	Validation succeed.
+```
 
 The file after two steps of changes is as follows:
 
+```
 	$ cat my-stateful.cue
 	"my-stateful": {
 		annotations: {}
@@ -129,22 +137,28 @@ The file after two steps of changes is as follows:
 		}
 		parameter: {}
 	}
+```
 
 Install ComponentDefinition into the Kubernetes cluster:
 
+```
 	$ vela def apply my-stateful.cue
 	ComponentDefinition my-stateful created in namespace vela-system.
+```
 
 You can see that a `my-stateful` component  via `vela components` command:
 
+```
 	$ vela components
 	NAME       	NAMESPACE  	WORKLOAD                             	DESCRIPTION
 	...
 	my-stateful	vela-system	statefulsets.apps                    	My StatefulSet component.
 	... 
+```
 
 When you put this customized component into `Application`, it looks like:
 
+```
 	cat <<EOF | vela up -f -
 	apiVersion: core.oam.dev/v1beta1
 	kind: Application
@@ -155,7 +169,7 @@ When you put this customized component into `Application`, it looks like:
 	    - name: my-component
 	      type: my-stateful
 	EOF
-
+```
 
 
 ## Define Customized Parameters For Component
@@ -167,7 +181,7 @@ In this example, we expose the following parameters to the user:
 * Image name, allowing users to customize the image
 * Instance name, allowing users to customize the instance name of the generated StatefulSet object and Service object
 
-
+```
 		... # Omit other unmodified fields
 		template: {
 			output: {
@@ -207,11 +221,14 @@ In this example, we expose the following parameters to the user:
 				name: string
 			}
 		}
+```
 
 After modification, use `vela def apply` to install to the cluster:
 
+```
 	$ vela def apply my-stateful.cue
 	ComponentDefinition my-stateful in namespace vela-system updated.
+```
 
 Then as a platform builder, you have finished your setup. Let's see what's the developer experience now.
 
@@ -230,6 +247,7 @@ my-stateful                     ComponentDefinition     vela-system My StatefulS
 ...snip...
 ```
 
+```
 	$ vela show my-stateful
 	# Properties
 	+----------+-------------+--------+----------+---------+
@@ -238,6 +256,7 @@ my-stateful                     ComponentDefinition     vela-system My StatefulS
 	| name     |             | string | true     |         |
 	| image    |             | string | true     |         |
 	+----------+-------------+--------+----------+---------+
+```
 
 Updating the ComponentDefinition will not affect existing Applications. It will take effect only after updating the Applications next time.
 
@@ -362,7 +381,7 @@ In our example above, the field `name` in the properties and the field `name` of
 
 Just modify the definition file (my-stateful.cue) as the following 
 
-
+```
 	... # Omit other unmodified fields
 	template: {
 		output: {
@@ -379,6 +398,7 @@ Just modify the definition file (my-stateful.cue) as the following
 			image: string
 		}
 	}
+```
 
 Then deploy the changes by the following:
 
@@ -419,6 +439,7 @@ The customized process works the same with the component, they both use CUE but 
 
 There're already some built-in traits after KubeVela installed. The operator can use `vela traits` to view, the traits marked with `*` are general traits, which can operate on common Kubernetes resource objects.
 
+```
 	$ vela traits
 	NAME                    	NAMESPACE  	APPLIES-TO      	CONFLICTS-WITH	POD-DISRUPTIVE	DESCRIPTION
 	annotations             	vela-system	*               	              	true          	Add annotations on K8s pod for your workload which follows
@@ -432,9 +453,11 @@ There're already some built-in traits after KubeVela installed. The operator can
 	sidecar                 	vela-system	*               	              	true          	Inject a sidecar container to K8s pod for your workload
 	                        	           	                	              	              	which follows the pod spec in path 'spec.template'.
 	...snip...
+```
 
 Taking sidecar as an example, you can check the usage of sidecar:
 
+```
 	$ vela show sidecar
 	# Properties
 	+---------+-----------------------------------------+-----------------------+----------+---------+
@@ -454,9 +477,11 @@ Taking sidecar as an example, you can check the usage of sidecar:
 	| path |             | string | true     |         |
 	| name |             | string | true     |         |
 	+------+-------------+--------+----------+---------+
+```
 
 Use the sidecar directly to inject a container, the application description is as follows:
 
+```
 	apiVersion: core.oam.dev/v1beta1
 	kind: Application
 	metadata:
@@ -473,6 +498,7 @@ Use the sidecar directly to inject a container, the application description is a
 	        properties:
 	          name: my-sidecar
 	          image: saravak/fluentd:elastic
+```
 
 Deploy and run the application, and you can see that a fluentd sidecar has been deployed and running in the StatefulSet.
 
