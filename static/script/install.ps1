@@ -16,7 +16,8 @@ $VelaCliBuildNameLegacy = "vela"
 $VelaCliBuildName = "vela.exe"
 $VelaCliFileName = "vela.exe"
 $VelaCliFilePath = "${VelaRoot}\${VelaCliFileName}"
-$RemoteURL = "https://static.kubevela.net/binary/vela"
+$VersionCheckURL = "https://api.github.com/repos/kubevela/kubevela"
+$RemoteURL = "https://github.com/kubevela/kubevela/releases/download"
 
 if ((Get-ExecutionPolicy) -gt 'RemoteSigned' -or (Get-ExecutionPolicy) -eq 'ByPass') {
     Write-Output "PowerShell requires an execution policy of 'RemoteSigned'."
@@ -49,12 +50,19 @@ if (!(Test-Path $VelaRoot -PathType Container)) {
 $os_arch = "windows-amd64"
 $vela_cli_filename = "vela"
 if (!$Version) {
-    $Version = Invoke-RestMethod -Headers $githubHeader -Uri "${RemoteURL}/latest_version" -Method Get
-    $Version = $Version.Trim()
+    $response = Invoke-RestMethod -Headers $githubHeader -Uri "${VersionCheckURL}/releases/latest" -Method Get
+    $latestRelease = $response.tag_name
+    if (!$latestRelease) {
+        Write-Error "Error: Unable to retrieve the latest version."
+        exit 1
+    }
+
+    if (!$latestRelease.StartsWith("v")) {
+        $latestRelease = "v" + $latestRelease
+    }
+    $Version = $latestRelease
 }
-if (!$Version.startswith("v")) {
-    $Version = "v" + $Version
-}
+
 
 $assetName = "${vela_cli_filename}-${Version}-${os_arch}.zip"
 $zipFileUrl = "${RemoteURL}/${Version}/${assetName}"
