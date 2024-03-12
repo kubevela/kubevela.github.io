@@ -7,7 +7,7 @@ Show result of executing velaQL.
 ### Synopsis
 
 Show result of executing velaQL, use it like:
-		vela ql --query "inner-view-name{param1=value1,param2=value2}"
+		vela ql --query "inner-view-name\{param1=value1,param2=value2\}"
 		vela ql --file ./ql.cue
 
 ```
