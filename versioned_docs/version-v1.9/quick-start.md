@@ -81,7 +81,7 @@ environment prod with namespace prod created
 ```
 </details>
 
-* Starting deploy the application
+* Starting to deploy the application
 
 ```
 vela up -f https://kubevela.net/example/applications/first-app.yaml
@@ -103,7 +103,7 @@ Application prod/first-vela-app applied.
 ```
 </details>
 
-* View the process and status of the application deploy
+* View the process and status of the application deployment
 
 ```bash
 vela status first-vela-app
@@ -135,7 +135,7 @@ Services:
 ```
 </details>
 
-The application will become a `workflowSuspending` status, it means the workflow has finished the first two steps and waiting for manual approval as the step specified.
+The application status will change to `workflowSuspending`, means the workflow has finished the first two steps and waiting for manual approval as per the step specified.
 
 * Access the application
 
@@ -216,7 +216,7 @@ Great! You have finished deploying your first KubeVela application, you can also
 
 ## Manage application with UI Console
 
-After finished [the installation of VelaUX](./install.mdx#2-install-velaux), you can view and manage the application created.
+After finishing [the installation of VelaUX](./install.mdx#2-install-velaux), you can view and manage the application created.
 
 * Port forward the UI if you don't have endpoint for access:
   ```
