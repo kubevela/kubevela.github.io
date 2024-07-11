@@ -128,6 +128,9 @@ For other OS or system architecture, please refer to https://storage.googleapis.
   go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.6.2
   go install golang.org/x/tools/cmd/goimports@latest
   ```
+  :::caution
+  Note: For macOS, you may need to install [diffutils](https://www.gnu.org/software/diffutils/).
+  :::
 
 :::tip
 You may also be interested with KubeVela's [design](https://github.com/oam-dev/kubevela/tree/master/design/vela-core) before diving into its code.
