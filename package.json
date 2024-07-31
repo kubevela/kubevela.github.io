@@ -23,7 +23,7 @@
     "@docusaurus/preset-classic": "2.4.3",
     "@docusaurus/theme-mermaid": "^2.4.3",
     "@mdx-js/react": "1.6.22",
-    "asciinema-player": "^3.7.1",
+    "asciinema-player": "^3.8.0",
     "clsx": "^1.2.1",
     "docusaurus-plugin-image-zoom": "^1.0.1",
     "docusaurus-plugin-sass": "^0.2.5",
@@ -33,7 +33,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-github-btn": "^1.4.0",
-    "sass": "^1.77.5"
+    "sass": "^1.77.6"
   },
   "browserslist": {
     "production": [
