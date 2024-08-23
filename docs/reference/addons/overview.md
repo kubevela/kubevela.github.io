@@ -10,7 +10,7 @@ Source code of this addon are all here: https://github.com/kubevela/catalog/tree
 
 ## KubeVela Platform
 
-* [VelaUX](./velaux.md): The KubeVela User Experience (UX ) addon. It will launch a dashboard and an APIServer for better user experience.
+* [VelaUX](./velaux.md): The KubeVela User Experience (UX) addon. It will launch a dashboard and an APIServer for better user experience.
 * [Vela Prism](./vela-prism.md) Provide API Extensions to the core [KubeVela](https://github.com/kubevela/kubevela).
 * [KubeVela Website](./kubevela-io.md) Help you to read the KubeVela document in your cluster which can be air-gaped environment.
 * [Cloud Shell](../../tutorials/cloud-shell.md): Set up a web terminal and cloud shell intended for a kubernetes-native environment.
