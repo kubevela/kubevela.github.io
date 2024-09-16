@@ -4,7 +4,7 @@ title:  阿里云 DEPLOY-WEBSITE
 
 ## 描述
 
-部署一个静态网站到对象存储服务，比如 ASW S3 或 阿里云 OSS。
+部署一个静态网站到阿里云 OSS。
 
 ## 示例
 
@@ -18,9 +18,12 @@ spec:
     - name: deploy-website-example
       type: deploy-website
       properties:
-        bucket: deploy-website-example
+        bucket: static-website-example
         endpoint: oss-cn-hangzhou.aliyuncs.com
-        static_web_url: 'https://github.com/cloudflare/cloudflare.github.io.git'
+        src_url: https://github.com/open-gitops/website.git
+        prerequisite_cmd: apk add nodejs npm && npm install --global yarn
+        build_cmd: yarn install && yarn build
+        generated_dir: public
 ```
 
 ## 参数说明
@@ -30,10 +33,12 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值
 ------------|------------|------------|------------|------------
  bucket | OSS bucket name | string | false |
+ build_cmd | Commands for building website source code | string | false |
  endpoint | OSS bucket endpoint | string | true |
- static_web_url | The URL of the static website | string | false |
+ generated_dir | Directory name of generated static content | string | true |
+ prerequisite_cmd | Prerequisite commands to setup building env, support Alpine `apk` package manager | string | true |
+ src_url | The URL of the website source code repository | string | true |
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |
-
 
 #### writeConnectionSecretToRef
 
