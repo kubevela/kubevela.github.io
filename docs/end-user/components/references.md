@@ -1,10 +1,10 @@
 ---
-title: Built-in Component Type
+title: Built-in ParsedComponents Type
 ---
 
 This documentation will walk through all the built-in component types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2023-07-28T09:33:26+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2024-10-10T15:56:12-07:00.
 
 ## Cron-Task
 
@@ -52,7 +52,8 @@ spec:
  env | Define arguments by using environment variables. | [[]env](#env-cron-task) | false |  
  cpu | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core). | string | false |  
  memory | Specifies the attributes of the memory resource required for the container. | string | false |  
- volumes | Declare volumes and volumeMounts. | [[]volumes](#volumes-cron-task) | false |  
+ volumeMounts |  | [volumeMounts](#volumemounts-cron-task) | false |  
+ volumes | Deprecated field, use volumeMounts instead. | [[]volumes](#volumes-cron-task) | false |  
  hostAliases | An optional list of hosts and IPs that will be injected into the pod's hosts file. | [[]hostAliases](#hostaliases-cron-task) | false |  
  ttlSecondsAfterFinished | Limits the lifetime of a Job that has finished. | int | false |  
  activeDeadlineSeconds | The duration in seconds relative to the startTime that the job may be continuously active before the system tries to terminate it. | int | false |  
@@ -92,6 +93,89 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name | The name of the config map in the pod's namespace to select from. | string | true |  
  key | The key of the config map to select from. Must be a valid secret key. | string | true |  
+
+
+#### volumeMounts (cron-task)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ pvc | Mount PVC type volume. | [[]pvc](#pvc-cron-task) | false |  
+ configMap | Mount ConfigMap type volume. | [[]configMap](#configmap-cron-task) | false |  
+ secret | Mount Secret type volume. | [[]secret](#secret-cron-task) | false |  
+ emptyDir | Mount EmptyDir type volume. | [[]emptyDir](#emptydir-cron-task) | false |  
+ hostPath | Mount HostPath type volume. | [[]hostPath](#hostpath-cron-task) | false |  
+
+
+##### pvc (cron-task)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ claimName | The name of the PVC. | string | true |  
+
+
+##### configMap (cron-task)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ defaultMode |  | int | false | 420 
+ cmName |  | string | true |  
+ items |  | [[]items](#items-cron-task) | false |  
+
+
+##### items (cron-task)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ key |  | string | true |  
+ path |  | string | true |  
+ mode |  | int | false | 511 
+
+
+##### secret (cron-task)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ defaultMode |  | int | false | 420 
+ secretName |  | string | true |  
+ items |  | [[]items](#items-cron-task) | false |  
+
+
+##### items (cron-task)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ key |  | string | true |  
+ path |  | string | true |  
+ mode |  | int | false | 511 
+
+
+##### emptyDir (cron-task)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ medium |  | "" or "Memory" | false | empty 
+
+
+##### hostPath (cron-task)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ path |  | string | true |  
 
 
 #### volumes (cron-task)
@@ -559,6 +643,322 @@ spec:
 |---------|-------------|-----------------------|----------|---------|
 | objects | A slice of Kubernetes resource manifests   | [][Kubernetes-Objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) | true     |         |
 
+## Statefulset
+
+### Description
+
+Describes long-running, scalable, containerized services used to manage stateful application, like database.
+
+### Underlying Kubernetes Resources (statefulset)
+
+- statefulsets.apps
+
+### Examples (statefulset)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: postgres
+spec:
+  components:
+    - name: postgres
+      type: statefulset
+      properties:
+        cpu: "1"
+        exposeType: ClusterIP
+        # see https://hub.docker.com/_/postgres
+        image: docker.io/library/postgres:16.4
+        memory: 2Gi
+        ports:
+          - expose: true
+            port: 5432
+            protocol: TCP
+        env:
+        - name: POSTGRES_DB
+          value: mydb
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: kvsecretpwd123
+      traits:
+        - type: scaler
+          properties:
+            replicas: 1
+        - type: storage
+          properties:
+            pvc:
+              - name: "postgresdb-pvc"
+                storageClassName: local-path
+                resources:
+                  requests:
+                    storage: "2Gi"
+                mountPath: "/var/lib/postgresql/data"
+```
+
+### Specification (statefulset)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ labels | Specify the labels in the workload. | map[string]string | false |  
+ annotations | Specify the annotations in the workload. | map[string]string | false |  
+ image | Which image would you like to use for your service. | string | true |  
+ imagePullPolicy | Specify image pull policy for your service. | "Always" or "Never" or "IfNotPresent" | false |  
+ imagePullSecrets | Specify image pull secrets for your service. | []string | false |  
+ ports | Which ports do you want customer traffic sent to, defaults to 80. | [[]ports](#ports-statefulset) | false |  
+ cmd | Commands to run in the container. | []string | false |  
+ args | Arguments to the entrypoint. | []string | false |  
+ env | Define arguments by using environment variables. | [[]env](#env-statefulset) | false |  
+ cpu | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core). | string | false |  
+ memory | Specifies the attributes of the memory resource required for the container. | string | false |  
+ volumeMounts |  | [volumeMounts](#volumemounts-statefulset) | false |  
+ volumes | Deprecated field, use volumeMounts instead. | [[]volumes](#volumes-statefulset) | false |  
+ livenessProbe | Instructions for assessing whether the container is alive. | [livenessProbe](#livenessprobe-statefulset) | false |  
+ readinessProbe | Instructions for assessing whether the container is in a suitable state to serve traffic. | [readinessProbe](#readinessprobe-statefulset) | false |  
+ hostAliases | Specify the hostAliases to add. | [[]hostAliases](#hostaliases-statefulset) | false |  
+
+
+#### ports (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ port | Number of port to expose on the pod's IP address. | int | true |  
+ containerPort | Number of container port to connect to, defaults to port. | int | false |  
+ name | Name of the port. | string | false |  
+ protocol | Protocol for port. Must be UDP, TCP, or SCTP. | "TCP" or "UDP" or "SCTP" | false | TCP 
+ expose | Specify if the port should be exposed. | bool | false | false 
+ nodePort | exposed node port. Only Valid when exposeType is NodePort. | int | false |  
+
+
+#### env (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name | Environment variable name. | string | true |  
+ value | The value of the environment variable. | string | false |  
+ valueFrom | Specifies a source the value of this var should come from. | [valueFrom](#valuefrom-statefulset) | false |  
+
+
+##### valueFrom (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ secretKeyRef | Selects a key of a secret in the pod's namespace. | [secretKeyRef](#secretkeyref-statefulset) | false |  
+ configMapKeyRef | Selects a key of a config map in the pod's namespace. | [configMapKeyRef](#configmapkeyref-statefulset) | false |  
+
+
+##### secretKeyRef (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name | The name of the secret in the pod's namespace to select from. | string | true |  
+ key | The key of the secret to select from. Must be a valid secret key. | string | true |  
+
+
+##### configMapKeyRef (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name | The name of the config map in the pod's namespace to select from. | string | true |  
+ key | The key of the config map to select from. Must be a valid secret key. | string | true |  
+
+
+#### volumeMounts (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ pvc | Mount PVC type volume. | [[]pvc](#pvc-statefulset) | false |  
+ configMap | Mount ConfigMap type volume. | [[]configMap](#configmap-statefulset) | false |  
+ secret | Mount Secret type volume. | [[]secret](#secret-statefulset) | false |  
+ emptyDir | Mount EmptyDir type volume. | [[]emptyDir](#emptydir-statefulset) | false |  
+ hostPath | Mount HostPath type volume. | [[]hostPath](#hostpath-statefulset) | false |  
+
+
+##### pvc (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ claimName | The name of the PVC. | string | true |  
+
+
+##### configMap (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ defaultMode |  | int | false | 420 
+ cmName |  | string | true |  
+ items |  | [[]items](#items-statefulset) | false |  
+
+
+##### items (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ key |  | string | true |  
+ path |  | string | true |  
+ mode |  | int | false | 511 
+
+
+##### secret (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ defaultMode |  | int | false | 420 
+ secretName |  | string | true |  
+ items |  | [[]items](#items-statefulset) | false |  
+
+
+##### items (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ key |  | string | true |  
+ path |  | string | true |  
+ mode |  | int | false | 511 
+
+
+##### emptyDir (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ medium |  | "" or "Memory" | false | empty 
+
+
+##### hostPath (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ path |  | string | true |  
+
+
+#### volumes (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ medium |  | "" or "Memory" | false | empty 
+ type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir. | "emptyDir" or "pvc" or "configMap" or "secret" | false | emptyDir 
+
+
+#### livenessProbe (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ exec | Instructions for assessing container health by executing a command. Either this attribute or the httpGet attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the httpGet attribute and the tcpSocket attribute. | [exec](#exec-statefulset) | false |  
+ httpGet | Instructions for assessing container health by executing an HTTP GET request. Either this attribute or the exec attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the tcpSocket attribute. | [httpGet](#httpget-statefulset) | false |  
+ tcpSocket | Instructions for assessing container health by probing a TCP socket. Either this attribute or the exec attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the httpGet attribute. | [tcpSocket](#tcpsocket-statefulset) | false |  
+ initialDelaySeconds | Number of seconds after the container is started before the first probe is initiated. | int | false | 0 
+ periodSeconds | How often, in seconds, to execute the probe. | int | false | 10 
+ timeoutSeconds | Number of seconds after which the probe times out. | int | false | 1 
+ successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed. | int | false | 1 
+ failureThreshold | Number of consecutive failures required to determine the container is not alive (liveness probe) or not ready (readiness probe). | int | false | 3 
+
+
+##### exec (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ command | A command to be executed inside the container to assess its health. Each space delimited token of the command is a separate array element. Commands exiting 0 are considered to be successful probes, whilst all other exit codes are considered failures. | []string | true |  
+
+
+##### httpGet (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ path | The endpoint, relative to the port, to which the HTTP GET request should be directed. | string | true |  
+ port | The TCP socket within the container to which the HTTP GET request should be directed. | int | true |  
+ host |  | string | false |  
+ scheme |  | string | false | HTTP 
+ httpHeaders |  | [[]httpHeaders](#httpheaders-statefulset) | false |  
+
+
+##### httpHeaders (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ value |  | string | true |  
+
+
+##### tcpSocket (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ port | The TCP socket within the container that should be probed to assess container health. | int | true |  
+
+
+#### readinessProbe (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ exec | Instructions for assessing container health by executing a command. Either this attribute or the httpGet attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the httpGet attribute and the tcpSocket attribute. | [exec](#exec-statefulset) | false |  
+ httpGet | Instructions for assessing container health by executing an HTTP GET request. Either this attribute or the exec attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the tcpSocket attribute. | [httpGet](#httpget-statefulset) | false |  
+ tcpSocket | Instructions for assessing container health by probing a TCP socket. Either this attribute or the exec attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the httpGet attribute. | [tcpSocket](#tcpsocket-statefulset) | false |  
+ initialDelaySeconds | Number of seconds after the container is started before the first probe is initiated. | int | false | 0 
+ periodSeconds | How often, in seconds, to execute the probe. | int | false | 10 
+ timeoutSeconds | Number of seconds after which the probe times out. | int | false | 1 
+ successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed. | int | false | 1 
+ failureThreshold | Number of consecutive failures required to determine the container is not alive (liveness probe) or not ready (readiness probe). | int | false | 3 
+
+
+##### exec (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ command | A command to be executed inside the container to assess its health. Each space delimited token of the command is a separate array element. Commands exiting 0 are considered to be successful probes, whilst all other exit codes are considered failures. | []string | true |  
+
+
+##### httpGet (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ path | The endpoint, relative to the port, to which the HTTP GET request should be directed. | string | true |  
+ port | The TCP socket within the container to which the HTTP GET request should be directed. | int | true |  
+ host |  | string | false |  
+ scheme |  | string | false | HTTP 
+ httpHeaders |  | [[]httpHeaders](#httpheaders-statefulset) | false |  
+
+
+##### httpHeaders (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name |  | string | true |  
+ value |  | string | true |  
+
+
+##### tcpSocket (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ port | The TCP socket within the container that should be probed to assess container health. | int | true |  
+
+
+#### hostAliases (statefulset)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ ip |  | string | true |  
+ hostnames |  | []string | true |  
+
+
 ## Task
 
 ### Description
@@ -806,6 +1206,7 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  port | Number of port to expose on the pod's IP address. | int | true |  
+ containerPort | Number of container port to connect to, defaults to port. | int | false |  
  name | Name of the port. | string | false |  
  protocol | Protocol for port. Must be UDP, TCP, or SCTP. | "TCP" or "UDP" or "SCTP" | false | TCP 
  expose | Specify if the port should be exposed. | bool | false | false 
