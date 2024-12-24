@@ -386,7 +386,7 @@ spec:
       - name: apply-server
         type: apply-component
         properties:
-          component: express-serve
+          component: express-server
 ```
 
 ### Specification (apply-object)
