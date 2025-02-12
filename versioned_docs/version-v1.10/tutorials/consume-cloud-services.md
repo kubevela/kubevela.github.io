@@ -141,13 +141,13 @@ Provision cloud resources from UI Console can be more appropriate.
 
 ![addon-alibaba](../resources/addon-alibaba.jpg)
 
-- Bind the cloud provider to the [target](../how-to/dashboard/target/overview.md). You can do that in `Resources/Targets` page. Edit the `Shared Variables`, select provider you want to bind to this target.
+- Bind the cloud provider to the [target](../../../docs/how-to/dashboard/target/overview.md). You can do that in `Resources/Targets` page. Edit the `Shared Variables`, select provider you want to bind to this target.
 
 ![bind-target](../resources/bind-cloud-provider.jpg)
 
 ### Creating your cloud service
 
-The UI console operations are the same, you can refer to [this guide](../how-to/dashboard/application/create-application.md).
+The UI console operations are the same, you can refer to [this guide](../../../docs/how-to/dashboard/application/create-application.md).
 
 Firstly, Create an application and choose the type of your cloud service, they will always has a prefix of vendor such as `aws-`, `azure` or `alibaba-`.
 
