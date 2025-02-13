@@ -1,0 +1,24 @@
+---
+title: Installation Overview
+---
+
+Here are two installation methods available according to your environment:
+
+### Don't have Kubernetes cluster yet?
+
+For those who are new to KubeVela and Kubernetes, installing KubeVela in standalone mode is the best choice. It doesn't require you to have any Kubernetes knowledge to experience KubeVela features.
+We developed [VelaD](https://github.com/kubevela/velad) for this purpose, which packages KubeVela along its dependencies including Kubernetes into a single binary.
+Please follow the document linked below to install KubeVela.
+
+- [Standalone Installation](./installation/standalone.mdx): Install KubeVela on a local machine or a remote server(Public Cloud or On-premise) based on Linux, macOS or Windows operating system.
+
+:::info
+VelaD suits great for local development and quick demos, it leverages [K3s](https://github.com/k3s-io/k3s) to manage Kubernetes. We strongly recommend you to [install KubeVela with managed Kubernetes services](./installation/kubernetes.mdx) for production usage.
+:::
+
+### Already have Kubernetes cluster
+- [Kubernetes Cluster](./installation/kubernetes.mdx): Install KubeVela in existing Kubernetes cluster.
+
+:::tip
+- For upgrading from existing KubeVela control plane, please read the [upgrade guide](./platform-engineers/advanced-install.mdx#upgrade).
+:::

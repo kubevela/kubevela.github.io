@@ -1,0 +1,358 @@
+{
+  "version.label": {
+    "message": "v1.10",
+    "description": "The label for version current"
+  },
+  "sidebar.docs.category.Getting Started": {
+    "message": "快速开始",
+    "description": "The label for category Getting Started in sidebar docs"
+  },
+  "sidebar.docs.category.Core Concepts": {
+    "message": "核心概念",
+    "description": "The label for Core Concepts in sidebar docs"
+  },
+  "sidebar.docs.category.Manage Definition with CUE": {
+    "message": "使用 CUE 扩展模块定义",
+    "description": "The label for category Learning CUE in sidebar docs"
+  },
+  "sidebar.docs.category.Helm": {
+    "message": "Helm",
+    "description": "The label for category Helm in sidebar docs"
+  },
+  "sidebar.docs.category.Raw Template": {
+    "message": "Raw Template",
+    "description": "The label for category Raw Template in sidebar docs"
+  },
+  "sidebar.docs.category.Traits System": {
+    "message": "运维特征系统",
+    "description": "The label for category Traits System in sidebar docs"
+  },
+  "sidebar.docs.category.Defining Cloud Service": {
+    "message": "定义 Cloud Service",
+    "description": "The label for category Defining Cloud Service in sidebar docs"
+  },
+  "sidebar.docs.category.Hands-on Lab": {
+    "message": "实践实验室",
+    "description": "The label for category Hands-on Lab in sidebar docs"
+  },
+  "sidebar.docs.category.Authentication and Authorization": {
+    "message": "认证和授权",
+    "description": "The label for category Authentication and Authorization in sidebar docs"
+  },
+  "sidebar.docs.category.Conventions": {
+    "message": "开发规约",
+    "description": "KubeVela developer Conventions"
+  },
+  "sidebar.docs.category.Application Deployment": {
+    "message": "Application Deployment",
+    "description": "The label for category Application Deployment in sidebar docs"
+  },
+  "sidebar.docs.category.More Operations": {
+    "message": "更多操作",
+    "description": "The label for category More Operations in sidebar docs"
+  },
+  "sidebar.docs.category.Platform Operation Guide": {
+    "message": "Platform Operation Guide",
+    "description": "The label for category Platform Operation Guide in sidebar docs"
+  },
+  "sidebar.docs.category.Using KubeVela CLI": {
+    "message": "使用命令行工具",
+    "description": "The label for category Using KubeVela CLI in sidebar docs"
+  },
+  "sidebar.docs.category.Managing Applications": {
+    "message": "管理应用",
+    "description": "The label for category Managing Applications in sidebar docs"
+  },
+  "sidebar.docs.category.References": {
+    "message": "参考手册",
+    "description": "The label for category References in sidebar docs"
+  },
+  "sidebar.docs.category.Learning OAM": {
+    "message": "开放应用模型",
+    "description": "The label for category Learning OAM in sidebar docs"
+  },
+  "sidebar.docs.category.Environment System": {
+    "message": "交付环境系统",
+    "description": "The label for category Environment System in sidebar docs"
+  },
+  "sidebar.docs.category.Designing Workflow": {
+    "message": "设计交付工作流",
+    "description": "The label for category Workflow End User in sidebar docs"
+  },
+  "sidebar.docs.category.Install": {
+    "message": "安装",
+    "description": "The label for category Install in sidebar docs"
+  },
+  "sidebar.docs.doc.Deliver First Application": {
+    "message": "交付第一个应用",
+    "description": "The label for doc deliver-first-app in sidebar docs"
+  },
+  "sidebar.docs.category.Continuous Delivery": {
+    "message": "持续交付",
+    "description": "The label for category Continuous Delivery in sidebar docs"
+  },
+  "sidebar.docs.category.Manage Your Application": {
+    "message": "管理你的应用",
+    "description": "The label for category Manage Your Application in sidebar docs"
+  },
+  "sidebar.docs.category.Workflow System": {
+    "message": "工作流系统",
+    "description": "The label for category Workflow System in sidebar docs"
+  },
+  "sidebar.docs.category.Patch and Override": {
+    "message": "配置覆盖",
+    "description": "The label for category Patch and Override in sidebar docs"
+  },
+  "sidebar.docs.category.Operator Manual": {
+    "message": "运维手册",
+    "description": "The label for category Operator Manual in sidebar docs"
+  },
+  "sidebar.docs.category.Customize Traits": {
+    "message": "自定义运维特征",
+    "description": "The label for category Customize Traits in sidebar docs"
+  },
+  "sidebar.docs.category.Customize Components": {
+    "message": "自定义组件",
+    "description": "The label for category Customize Traits in sidebar docs"
+  },
+  "sidebar.docs.category.CLI": {
+    "message": "CLI 命令行",
+    "description": "The label for category CLI in sidebar docs"
+  },
+  "sidebar.docs.category.Capabilities": {
+    "message": "Capabilities",
+    "description": "The label for category Capabilities in sidebar docs"
+  },
+  "sidebar.docs.category.Appendix": {
+    "message": "附录",
+    "description": "The label for category Appendix in sidebar docs"
+  },
+  "sidebar.docs.category.Component System": {
+    "message": "组件系统",
+    "description": "The label for category Component System in sidebar docs"
+  },
+  "sidebar.docs.category.Vela CLI Manuals": {
+    "message": "Vela CLI 手册",
+    "description": "The label for category Vela CLI Manuals in sidebar docs"
+  },
+  "sidebar.docs.category.Deploying Components": {
+    "message": "选择待交付组件",
+    "description": "The label for category Components in sidebar docs"
+  },
+  "sidebar.docs.category.Attaching Traits": {
+    "message": "绑定运维特征",
+    "description": "The label for category Traits in sidebar docs"
+  },
+  "sidebar.docs.category.Defining Policies": {
+    "message": "设定应用策略",
+    "description": "The label for category Policies in sidebar docs"
+  },
+  "sidebar.docs.category.Best Practices": {
+    "message": "最佳实践",
+    "description": "The label for category case studies in sidebar docs"
+  },
+  "sidebar.docs.category.Observability": {
+    "message": "可观测性",
+    "description": "The label for category Observability in sidebar docs"
+  },
+  "sidebar.docs.category.Scaling": {
+    "message": "扩缩容",
+    "description": "The label for category Scaler in sidebar docs"
+  },
+  "sidebar.docs.category.Debugging": {
+    "message": "调试指南",
+    "description": "The label for category Debugging in sidebar docs"
+  },
+  "sidebar.docs.category.Extension": {
+    "message": "平台扩展",
+    "description": "平台扩展参考文档"
+  },
+  "sidebar.docs.category.Contribution Guide": {
+    "message": "贡献指南",
+    "description": "平台扩展参考文档"
+  },
+  "sidebar.docs.category.Simple Template": {
+    "message": "Simple Template",
+    "description": "The label for category Simple Template in sidebar docs"
+  },
+  "sidebar.docs.category.Cloud Services": {
+    "message": "云服务组件",
+    "description": "The label for category Cloud Services in sidebar docs"
+  },
+  "sidebar.docs.category.CUE": {
+    "message": "CUE 组件",
+    "description": "The label for category CUE Components in sidebar docs"
+  },
+  "sidebar.docs.category.Addons": {
+    "message": "插件系统",
+    "description": "The extended add-ons"
+  },
+  "sidebar.docs.category.Tutorials": {
+    "message": "实践教程",
+    "description": "KubeVela 实践教程"
+  },
+  "sidebar.docs.category.How-to Guides": {
+    "message": "操作手册",
+    "description": "CLI 和 Dashboard 的操作指导手册"
+  },
+  "sidebar.docs.category.Deploy applications": {
+    "message": "交付应用",
+    "description": "通过 Dashboard 对应用的管理操作说明"
+  },
+  "sidebar.docs.category.Manage traits": {
+    "message": "运维特征管理",
+    "description": "通过 Dashboard 对应用的运维特征管理操作说明"
+  },
+  "sidebar.docs.category.Manage workflows": {
+    "message": "工作流管理",
+    "description": "通过 Dashboard 对应用的工作流管理操作说明"
+  },
+  "sidebar.docs.category.Manage triggers": {
+    "message": "触发器管理",
+    "description": "通过 Dashboard 对应用触发器的管理操作说明"
+  },
+  "sidebar.docs.category.Manage Config of Integration": {
+    "message": "集成配置管理",
+    "description": "外部系统集成相关配置的管理说明"
+  },
+  "sidebar.docs.category.Cluster Management": {
+    "message": "资源管理",
+    "description": "管理集群和交付目标等资源"
+  },
+  "sidebar.docs.category.Community Verified Addons": {
+    "message": "社区认证插件",
+    "description": "内置插件说明"
+  },
+  "sidebar.docs.category.Cloud Resources": {
+    "message": "云资源",
+    "description": "云资源"
+  },
+  "sidebar.docs.category.Supported Cloud Resource": {
+    "message": "支持的云资源",
+    "description": "支持的云资源列表"
+  },
+  "sidebar.docs.category.Built-in Component Type": {
+    "message": "内置组件",
+    "description": "内置组件列表"
+  },
+  "sidebar.docs.category.Built-in Trait Type": {
+    "message": "内置运维特征",
+    "description": "内置运维特征列表"
+  },
+  "sidebar.docs.category.Built-in Policy Type": {
+    "message": "内置策略",
+    "description": "内置策略列表"
+  },
+  "sidebar.docs.category.Custom Addons": {
+    "message": "自定义插件",
+    "description": "自定义插件"
+  },
+  "sidebar.docs.category.Multi-Cluster Delivery": {
+    "message": "多集群交付",
+    "description": "多集群交付"
+  },
+  "sidebar.docs.category.Day-2 Operations": {
+    "message": "应用运维",
+    "description": "应用运维"
+  },
+  "sidebar.docs.category.Advanced Features": {
+    "message": "其他高级功能",
+    "description": "其他高级功能"
+  },
+  "sidebar.docs.category.Artifacts": {
+    "message": "交付制品",
+    "description": "多样化交付制品"
+  },
+  "sidebar.docs.category.User Guide": {
+    "message": "用户手册",
+    "description": "引导用户学习使用 KubeVela 各项特性"
+  },
+  "sidebar.docs.category.Install or upgrade": {
+    "message": "平台安装或升级手册",
+    "description": "详细解读平台的各种部署方式"
+  },
+  "sidebar.docs.category.How-to manage the cloud resources": {
+    "message": "云服务管理",
+    "description": "提供云服务的使用和管理相关能力说明"
+  },
+  "sidebar.docs.category.How-to manage the applications": {
+    "message": "应用基础管理",
+    "description": "提供基础管理能力说明"
+  },
+  "sidebar.docs.category.CI Integration": {
+    "message": "CI 集成",
+    "description": "CI 集成"
+  },
+  "sidebar.docs.category.Developer Guide": {
+    "message": "开发者手册",
+    "description": "developer guide for sidebar"
+  },
+  "sidebar.docs.category.User Management": {
+    "message": "用户管理",
+    "description": "User management for sidebar"
+  },
+  "sidebar.docs.category.Advanced Installation": {
+    "message": "高级安装",
+    "description": "Advanced Installation for sidebar"
+  },
+  "sidebar.docs.category.Helm Chart CD": {
+    "message": "Helm Chart 交付"
+  },
+  "sidebar.docs.category.Container Image CD": {
+    "message": "容器镜像交付"
+  },
+  "sidebar.docs.category.Cloud Resources CD": {
+    "message": "云资源交付"
+  },
+  "sidebar.docs.category.Manage Database": {
+    "message": "数据库管理"
+  },
+  "sidebar.docs.category.Kubernetes Manifest CD": {
+    "message": "Kubernetes 资源交付"
+  },
+  "sidebar.docs.category.Application Policies": {
+    "message": "应用管理策略"
+  },
+  "sidebar.docs.category.UX Customization": {
+    "message": "定制 UI"
+  },
+  "sidebar.docs.category.Declarative Workflow": {
+    "message": "声明式工作流"
+  },
+  "sidebar.docs.category.Application Workflow": {
+    "message": "应用工作流"
+  },
+  "sidebar.docs.category.Pipeline": {
+    "message": "流水线"
+  },
+  "sidebar.docs.category.K8S API for Pipeline": {
+    "message": "流水线的 K8S API"
+  },
+  "sidebar.docs.category.Multi Cluster Delivery": {
+    "message": "多集群交付"
+  },
+  "sidebar.docs.doc.Standalone": {
+    "message": "无依赖独立安装"
+  },
+  "sidebar.docs.category.Installation": {
+    "message": "安装"
+  },
+  "sidebar.docs.doc.Kubernetes": {
+    "message": "基于 Kubernetes 安装"
+  },
+  "sidebar.docs.category.Registry Integration": {
+    "message": "注册中心集成"
+  },
+  "sidebar.docs.category.Multi Environment Delivery": {
+    "message": "多环境交付"
+  },
+  "sidebar.docs.category.Automated Observability": {
+    "message": "自动化可观测"
+  },
+  "sidebar.docs.category.Config Management": {
+    "message": "配置管理"
+  },
+  "sidebar.docs.category.Production Precautions": {
+    "message": "生产使用注意点"
+  }
+}
