@@ -3,7 +3,7 @@ title: Definition Version Control
 ---
 
 ## Introduction
-KubeVela supports Semantic Versioning for all types of [Definitions](../getting-started/definition), providing control over which versions of Definitions are used in Applications. This feature enables to specify exact version or version range for Definitions, enforce Semantic Versioning, and manage automatic upgrades of Definitions within KubeVela Applications.
+KubeVela supports Semantic Versioning for all types of [Definitions](../../../docs/getting-started/definition), providing control over which versions of Definitions are used in Applications. This feature enables to specify exact version or version range for Definitions, enforce Semantic Versioning, and manage automatic upgrades of Definitions within KubeVela Applications.
 
 ## Feature Overview
 1. Semantic Versioning for Definition
