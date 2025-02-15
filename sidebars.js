@@ -321,6 +321,7 @@ module.exports = {
             },
             'platform-engineers/system-operation/velaql',
             'platform-engineers/x-def-version',
+            'platform-engineers/cue/external-packages'
           ],
         },
         {
