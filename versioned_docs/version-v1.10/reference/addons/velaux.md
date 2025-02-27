@@ -232,7 +232,7 @@ After deployed, let's get the root password from the secret `vela-system/velaux-
 <TabItem label="PostgreSQL" value="postgresql">
 
 ```shell script
-vela addon enable velaux dbType=postgresql dbURL=postgres://<POSTGRESQL_USER>:<POSTGRESQL_PASSWORD>@<POSTGRESQL_HOST>:<POSTGRESQL_PORT>/<POSTGRESQL_DB_NAME>
+vela addon enable velaux dbType=postgres dbURL=postgres://<POSTGRESQL_USER>:<POSTGRESQL_PASSWORD>@<POSTGRESQL_HOST>:<POSTGRESQL_PORT>/<POSTGRESQL_DB_NAME>
 ```
 > It's necessary to create the specified database in advance.
 
