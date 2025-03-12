@@ -40,7 +40,6 @@ Specifies where CueX should send function calls.
 - `spec.provider.protocol`: Defines the communication method (currently only `"http"`).
 - `spec.provider.endpoint`: The root endpoint of the function provider (e.g. http://my-cuex-server:8443/api/v1)
     >   e.g. If `#do: "api/example-fn-name"` is defined in a function, CueX will send `POST {provider_endpoint}/api/example-fn-name`.
-- `spec.provider.header`: Optional headers to send with the request in string map format. 
 
 #### spec.templates
 - Defines CUE function templates that describe available functions.
@@ -61,8 +60,6 @@ spec:
   provider:
     protocol: http                        # Currently, only `http` is supported
     endpoint: http://my-cuex-server:8443  # Root endpoint of the provider service
-    header:
-      User-Agent: CueX                    # Custom headers to send to the Provider service
   templates:
     utils.cue: |                          # The filename inside the package
       package example                     // Recommended to match the final segment of the {spec.path} value
@@ -234,7 +231,7 @@ spec:
 With the Package registered, the `utils.#Sum` function is now available for use with WorkflowStepDefinition templates by importing the `ext/utils` provider. 
 
 ```cue
-import (
+ˇimport (
 	"ext/utils"                                             // The external provider
 	"vela/op"
 )
