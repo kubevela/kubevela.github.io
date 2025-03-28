@@ -4,6 +4,8 @@ title: Distribute Reference Objects
 
 :::note
 This section requires you to know the basics about how to deploy [multi-cluster application](../../case-studies/multi-cluster.md) with policy and workflow.
+
+⚠️ **Important:** Since KubeVela v1.10, when referencing Kubernetes resources in `ref-objects`, you must explicitly specify the `group` field for resources outside the default groups (`core.oam.dev` and the empty group). Resources like `Deployment`, which belong to the `apps` group, require the `group` field to be explicitly declared.
 :::
 
 You can reference and distribute existing Kubernetes objects with KubeVela in the following scenarios:
@@ -81,6 +83,7 @@ spec:
       properties:
         objects:
           - resource: deployment
+            group: apps
             cluster: hangzhou-1
             # select all deployment in the `examples` namespace in cluster `hangzhou-1` that matches the labelSelector
             labelSelector:
@@ -113,6 +116,7 @@ spec:
       properties:
         objects:
           - resource: deployment
+            group: apps
           - resource: service
       traits:
         - type: scaler
