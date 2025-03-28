@@ -4,6 +4,8 @@ title: 引用资源做多集群分发
 
 :::tip
 开始这部分之前需要你先了解使用如何进行多集群应用的部署。你可以参考 [多集群应用交付](../../case-studies/multi-cluster.md) 章节了解相关基础细节.
+
+⚠️ 重要： 自 KubeVela v1.10 起，在 ref-objects 中引用 Kubernetes 资源时，必须显式指定非默认组（core.oam.dev 和空组）资源的 group 字段。例如，属于 apps 组的 Deployment 资源，需要显式声明 group 字段。
 :::
 
 你可以使用 KubeVela 引用已有的 Kubernetes 对象并将它们分发到其他位置来完成以下场景：
@@ -77,6 +79,7 @@ spec:
       properties:
         objects:
           - resource: deployment
+            group: apps
             cluster: hangzhou-1
             # select all deployment in the `examples` namespace in cluster `hangzhou-1` that matches the labelSelector
             labelSelector:
@@ -107,6 +110,7 @@ spec:
       properties:
         objects:
           - resource: deployment
+            group: apps
           - resource: service
       traits:
         - type: scaler
@@ -139,6 +143,7 @@ spec:
       properties:
         objects:
           - resource: deployment
+            group: apps
           - resource: service
       traits:
         - type: scaler
