@@ -767,7 +767,11 @@ spec:
         ports:
           - port: 8080
             expose: true
-        cpu: "0.1"
+        cpu: "2"
+        memory: "500Mi"
+        limit:
+          cpu: "5"
+          memory: "1000Mi"
         env:
           - name: FOO
             value: bar
@@ -794,6 +798,7 @@ spec:
  env | Define arguments by using environment variables. | [[]env](#env-webservice) | false |  
  cpu | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core). | string | false |  
  memory | Specifies the attributes of the memory resource required for the container. | string | false |  
+ limit | Specifies the limit of CPU and memory for resources | [limit](#limit-webservice)| false |
  volumeMounts |  | [volumeMounts](#volumemounts-webservice) | false |  
  volumes | Deprecated field, use volumeMounts instead. | [[]volumes](#volumes-webservice) | false |  
  livenessProbe | Instructions for assessing whether the container is alive. | [livenessProbe](#livenessprobe-webservice) | false |  
@@ -1038,5 +1043,12 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  ip |  | string | true |  
  hostnames |  | []string | true |  
+
+#### limit (webservice)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ cpu | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core).       | string                                       | false |
+ memory | Specifies the attributes of the memory resource required for the container.             | string                                       | false |
 
 
