@@ -340,7 +340,8 @@
             },
             "platform-engineers/system-operation/velaql",
             "platform-engineers/x-def-version",
-            "platform-engineers/cue/external-packages"
+            "platform-engineers/cue/external-packages",
+            "platform-engineers/cue/cue-validation"
           ]
         },
         {
