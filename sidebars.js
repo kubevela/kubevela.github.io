@@ -317,6 +317,7 @@ module.exports = {
             {
               'Patch and Override': [
                 'platform-engineers/traits/patch-trait',
+                'platform-engineers/traits/organisation-trait',
                 'platform-engineers/cue/patch-strategy',
               ],
             },
