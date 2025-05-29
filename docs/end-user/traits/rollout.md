@@ -81,7 +81,7 @@ Services:
       ✅ scaler      ✅ gateway: No loadBalancer found, visiting by using 'vela port-forward canary-demo'
 ```
 
-If you have enabled [velaux](../../reference/addons/velaux.md) addon, you can view the application topology graph that all `v1` pods are ready now.
+If you have enabled [velaux](../../reference/addons/velaux.md) addon, you can view the application topology graph that all `v1` pods are ready now by navigating to canary-demo->Workflows->Status. 
 
 ![image](../../resources/kruise-rollout-v1.jpg)
 
