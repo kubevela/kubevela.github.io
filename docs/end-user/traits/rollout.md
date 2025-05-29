@@ -47,6 +47,11 @@ The first deployment is a default way to deploy an application. You can check th
 
 ```shell
 $ vela status canary-demo
+```
+
+The expected output:
+
+```shell
 About:
 
   Name:         canary-demo                  
