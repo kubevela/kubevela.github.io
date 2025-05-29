@@ -11,7 +11,7 @@ If so, you could change the `webservice` definition.
 
 1. Change the UI schema to hide some fields
 
-> This way is only suitable the UI users.
+> This way is only suitable for the UI users.
 
 ![image](https://static.kubevela.net/images/1.5/custom-ui-schema.jpg)
 
@@ -38,7 +38,7 @@ If you want to completely remove or add some fields, you should edit the compone
 vela def get webservice > custom-webservice.cue
 ```
 
-Refer to the [CUE Basic](../platform-engineers/cue/basic.md) and [Component Definition](../platform-engineers/components/custom-component.md) documents to learn how to custom the `custom-webservice.cue`.
+Refer to the [CUE Basic](../platform-engineers/cue/basic.md) and [Component Definition](../platform-engineers/components/custom-component.md) documents to learn how to customise the `custom-webservice.cue`.
 
 After edit:
 
