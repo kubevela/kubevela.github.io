@@ -147,7 +147,7 @@ my-component-v2.5.0                2          e61e9b5e55b01c2b   Component
 ````
 
 ## Adding a `version` Field in CUE-based Definitions
-Include the version field immediately below the attributes section in your .cue file to enable semantic versioning. If you do not require semantic versioning, you may omit the version field.
+Include the version field inside the attributes section in your .cue file to enable semantic versioning. If you do not require semantic versioning, you may omit the version field.
 Example:
 ```
 "configmap-creater": {
