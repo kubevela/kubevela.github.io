@@ -147,7 +147,7 @@ my-component-v2.5.0                2          e61e9b5e55b01c2b   Component
 ````
 
 ## Adding a `version` Field in CUE-based Definitions
-The version field should be placed directly under the spec section (i.e., spec.version). To enable semantic versioning in CUE based definitions, specify the version field under the attributes section in the .cue file.
+The version field should be placed directly under the attributes section. To enable semantic versioning in CUE based definitions, specify the version field under the attributes section in the .cue file.
 
 Example:
 ```
