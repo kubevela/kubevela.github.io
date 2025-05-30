@@ -56,7 +56,8 @@ spec:
 ```
 
 2. Create a `configmap-component` ComponentDefinition with `2.0.5` version
-```apiVersion: core.oam.dev/v1beta1
+```
+apiVersion: core.oam.dev/v1beta1
 kind: ComponentDefinition
 metadata:
   name: configmap-component
@@ -90,7 +91,8 @@ my-component-v2.5.0                2          e61e9b5e55b01c2b   Component
 ```
 
 4. Create Application using `configmap-component@v1.2` version and enable the Auto Update using `app.oam.dev/autoUpdate` annotation.
-```apiVersion: core.oam.dev/v1beta1
+```
+apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: test-app
@@ -143,3 +145,38 @@ my-component-v1.2.5                1          1a4f3ac77e4fcfef   Component
 my-component-v1.2.7                3          86d7fb1a36566dea   Component
 my-component-v2.5.0                2          e61e9b5e55b01c2b   Component
 ````
+
+## Adding a `version` Field in CUE-based Definitions
+Include the version field inside the attributes section in your .cue file to enable semantic versioning. If you do not require semantic versioning, you may omit the version field.
+Example:
+```
+"configmap-creater": {
+    type: "component"
+    attributes: {
+        workload: definition: {
+            apiVersion: "v1"
+            kind:       "ConfigMap"
+        }
+        version: "1.1.1"
+    }
+}
+
+template: {
+    output: {
+        apiVersion: "v1"
+        kind:       "ConfigMap"
+        metadata: {
+            name: parameter.name
+            namespace: context.namespace
+        }
+        data: parameter.data
+    }
+
+    parameter: {
+        // +usage=Name of the ConfigMap.
+        name: string
+        // +usage=Data to be stored in the ConfigMap.
+        data: [string]: string
+    }
+}
+```
