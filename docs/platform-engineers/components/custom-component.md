@@ -354,6 +354,12 @@ Note that `context` information are auto-injected before resources are applied t
 
 The list of [all available context variables](#full-available-context-in-component) are listed at last of this doc.
 
+## Reading Configuration
+Components can read Kubevela configuration via the `$config` parameter. 
+This allows for configuration to be shared across components, traits & applications without requiring parameters be explicitly provided. 
+
+See [Config Template](../../reference/config-template.md) for details.
+
 ## Compose resources in one component
 
 It's common that a component definition is composed by multiple API resources, for example, a `webserver` component that is composed by a Deployment and a Service. CUE is a great solution to achieve this in simplified primitives.
