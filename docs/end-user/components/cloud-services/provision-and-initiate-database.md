@@ -93,6 +93,11 @@ After the application is successfully deployed, you can access the web applicati
 
 ```shell
 $ vela ls
+```
+
+The output would look like the below: 
+
+```shell
 APP           	COMPONENT	TYPE               	TRAITS         	PHASE  	HEALTHY	STATUS                                       	CREATED-TIME
 favorite-links	web      	webservice         	service-binding	running	healthy	Ready:1/1                                    	2022-02-21 14:15:45 +0800 CST
 └─            	db       	alibaba-rds-preview	               	running	healthy	Cloud resources are deployed and ready to use	2022-02-21 14:15:45 +0800 CST
@@ -101,6 +106,10 @@ favorite-links	web      	webservice         	service-binding	running	healthy	Rea
 
 ```shell
 $ vela port-forward favorite-links 4000:4000
+```
+The output would look like the below: 
+
+```shell
 Forwarding from 127.0.0.1:4000 -> 4000
 Forwarding from [::1]:4000 -> 4000
 
