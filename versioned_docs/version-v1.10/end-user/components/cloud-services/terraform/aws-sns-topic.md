@@ -29,7 +29,16 @@ Terraform Module to Provide an Amazon Simple Notification Service (SNS)
  sqs_dlq_message_retention_seconds | The number of seconds Amazon SQS retains a message. Integer representing seconds, from 60 (1 minute) to 1209600 (14 days). | number | false |  
  sqs_queue_kms_data_key_reuse_period_seconds | The length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again | number | false |  
  sqs_queue_kms_master_key_id | The ID of an AWS-managed customer master key (CMK) for Amazon SQS Queue or a custom CMK | string | false |  
- subscribers | Required configuration for subscibres to SNS topic. | map(object({\n    protocol = string\n    # The protocol to use. The possible values for this are: sqs, sms, lambda, application. (http or https are partially supported, see below) (email is an option but is unsupported, see below).\n    endpoint = string\n    # The endpoint to send data to, the contents will vary with the protocol. (see below for more information)\n    endpoint_auto_confirms = bool\n    # Boolean indicating whether the end point is capable of auto confirming subscription e.g., PagerDuty (default is false)\n    raw_message_delivery = bool\n    # Boolean indicating whether or not to enable raw message delivery (the original message is directly passed, not wrapped in JSON with the original message in the message property) (default is false)\n  })) | false |  
+ subscribers | Required configuration for subscribers to SNS topic. | map(object({
+    protocol = string
+    # The protocol to use. The possible values for this are: sqs, sms, lambda, application. (http or https are partially supported, see below) (email is an option but is unsupported, see below).
+    endpoint = string
+    # The endpoint to send data to, the contents will vary with the protocol. (see below for more information)
+    endpoint_auto_confirms = bool
+    # Boolean indicating whether the end point is capable of auto confirming subscription e.g., PagerDuty (default is false)
+    raw_message_delivery = bool
+    # Boolean indicating whether or not to enable raw message delivery (the original message is directly passed, not wrapped in JSON with the original message in the message property) (default is false)
+  })) | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
