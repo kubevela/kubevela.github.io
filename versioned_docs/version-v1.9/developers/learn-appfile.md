@@ -35,7 +35,7 @@ Under the hood, `Appfile` will build the image from source code, and then genera
 
 ## Schema
 
-> Before learning about Appfile's detailed schema, we recommend you to get familiar with [core concepts](../getting-started/core-concept.md)) in KubeVela.
+> Before learning about Appfile's detailed schema, we recommend you to get familiar with [core concepts](../getting-started/core-concept.md) in KubeVela.
 
 
 ```yaml
@@ -81,7 +81,7 @@ In the following workflow, we will build and deploy an example NodeJS app under 
 ### Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) installed on the host
-- KubeVela] installed and configured
+- KubeVela installed and configured
 
 ### 1. Download test app code
 
@@ -186,7 +186,9 @@ Then deploy the app to kind:
 vela up
 ```
 
-<details><summary>(Advanced) Check rendered manifests</summary>
+<details>
+
+<summary>(Advanced) Check rendered manifests</summary>
 
 By default, Vela renders the final manifests in `.vela/deploy.yaml`:
 
@@ -221,6 +223,7 @@ metadata:
 spec:
   ...
 ```
+
 </details>
 
 ### [Optional] Configure another workload type

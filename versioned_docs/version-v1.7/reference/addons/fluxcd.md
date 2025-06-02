@@ -196,7 +196,7 @@ spec:
 | ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------- |
 | alphabetical.order     | optional     | Order specifies the sorting order of the tags. Given the letters of the alphabet as tags, ascending order would select Z, and descending order would select A                                                                                                                                                 | asc                                             |
 | numerical.order     | optional      | Given the integer values from 0 to 9 as tags, ascending order would select 9, and descending order would select 0                                                                                                                                               | asc                                             |
-| semver.range     | optional      | Range gives a semver range for the image tag; the highest version within the range that's a tag yields the latest image                                                                                                                                                 | '>=1.0.0 <2.0.0'                                             |
+| semver.range     | optional      | Range gives a semver range for the image tag; the highest version within the range that's a tag yields the latest image                                                                                                                                                 | '&gt;=1.0.0 &lt;2.0.0'                                             |
 
 
 ###### FilterTags
