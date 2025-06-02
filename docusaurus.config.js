@@ -278,6 +278,7 @@ module.exports = {
           blogSidebarCount: 'ALL',
           showReadingTime: true,
           editUrl: 'https://github.com/kubevela/kubevela.io/tree/main/',
+          onInlineAuthors: 'ignore',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.scss'),
