@@ -12,9 +12,9 @@ https://github.com/kubevela/kubevela/issues/1662
 
 Refer to the [comparison details](https://kubevela.io/docs/#kubevela-vs-other-software).
 
-### Do yo support Crossplane? What's the difference between terraform and Corssplane in KubeVela?
+### Do you support Crossplane? What's the difference between terraform and Crossplane in KubeVela?
 
-KubeVela natively support Crossplane as they're already CRDs, while terraform was not a CRD controller, so the KubeVela community author a [terraform controller](https://github.com/kubevela/terraform-controller) for integration. You can choose any of them as you wish. 
+KubeVela natively supports Crossplane as they're already CRDs, while terraform was not a CRD controller, so the KubeVela community authored a [terraform controller](https://github.com/kubevela/terraform-controller) for integration. You can choose any of them as you wish. 
 
 
 ### What's the relationship between KubeVela and OAM? What will KubeVela mainly focus?
@@ -94,6 +94,6 @@ There are several common possible reasons for slow multi-cluster requests.
 
 1. Your managed cluster is far from your hub cluster. For example, one in Beijing and another one in London. This is hard to speed up. You might need to find methods to build stable network connections between them. KubeVela currently cannot help it.
 
-2. Your cluster-gateway uses version <= 1.3.2. There is a rate limiter in cluster-gateway in old versions. Therefore, if you have lots of multi-cluster requests, they will be blocked at cluster-gateway. Upgrade cluster-gateway to newer version could solve it.
+2. Your cluster-gateway uses version &lt;= 1.3.2. There is a rate limiter in cluster-gateway in old versions. Therefore, if you have lots of multi-cluster requests, they will be blocked at cluster-gateway. Upgrading cluster-gateway to a newer version could solve it.
 
 3. Your cluster-gateway hits the resource limits. For example, the CPU/Memory usage is high. This could happen if you have lots of clusters. You can raise the resource configuration for the cluster-gateway.
