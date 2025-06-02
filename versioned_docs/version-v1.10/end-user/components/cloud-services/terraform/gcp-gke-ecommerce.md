@@ -29,7 +29,7 @@ Google Kubernetes Engine starter kit to bootstrap an e-commerce site based on mi
  gke_max_unavailable | The number of nodes that can be simultaneously unavailable during an upgrade. Increasing max_unavailable raises the number of nodes that can be upgraded in parallel. Can be set to 0 or greater. | string | false |  
  gke_preemptible | GKE Preemtible nodes | bool | false |  
  icmp_idle_timeout_sec | Timeout (in seconds) for ICMP connections. Defaults to 30s if not set. | string | false |  
- kubelet_config | Node kubelet configuration. Possible values can be found at https://cloud.google.com/kubernetes-engine/docs/how-to/node-system-config#kubelet-options | object({\n    cpu_manager_policy   = string,\n    cpu_cfs_quota        = bool,\n    cpu_cfs_quota_period = string\n  }) | false |  
+ kubelet_config | Node kubelet configuration. Example: `{cpu_manager_policy: 'static', cpu_cfs_quota: true, cpu_cfs_quota_period: '100ms'}`. Possible values can be found at [GKE Node System Config](https://cloud.google.com/kubernetes-engine/docs/how-to/node-system-config#kubelet-options). | `{cpu_manager_policy: string, cpu_cfs_quota: bool, cpu_cfs_quota_period: string}` | false |  
  master_ipv4_cidr_block | IPv4 CIDR Block for Master Nodes | string | false |  
  min_kubernetes_version | The Kubernetes MINIMUM version of the masters. GCP can perform upgrades, there is no max_version field. If set to 'latest' it will pull latest available version in the selected region. | string | false |  
  min_ports_per_vm | Max number of concurrent outgoing request to IP:PORT_PROTOCOL per VM | string | false |  

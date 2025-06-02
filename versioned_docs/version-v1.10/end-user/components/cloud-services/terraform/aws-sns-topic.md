@@ -29,16 +29,45 @@ Terraform Module to Provide an Amazon Simple Notification Service (SNS)
  sqs_dlq_message_retention_seconds | The number of seconds Amazon SQS retains a message. Integer representing seconds, from 60 (1 minute) to 1209600 (14 days). | number | false |  
  sqs_queue_kms_data_key_reuse_period_seconds | The length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again | number | false |  
  sqs_queue_kms_master_key_id | The ID of an AWS-managed customer master key (CMK) for Amazon SQS Queue or a custom CMK | string | false |  
- subscribers | Required configuration for subscribers to SNS topic. | map(object({
-    protocol = string
-    # The protocol to use. The possible values for this are: sqs, sms, lambda, application. (http or https are partially supported, see below) (email is an option but is unsupported, see below).
-    endpoint = string
-    # The endpoint to send data to, the contents will vary with the protocol. (see below for more information)
-    endpoint_auto_confirms = bool
-    # Boolean indicating whether the end point is capable of auto confirming subscription e.g., PagerDuty (default is false)
-    raw_message_delivery = bool
-    # Boolean indicating whether or not to enable raw message delivery (the original message is directly passed, not wrapped in JSON with the original message in the message property) (default is false)
-  })) | false |  
+ subscribers | Required configuration for subscribers to SNS topic. Each subscriber should be an object with:
+
+```typescript
+{
+  protocol: 'sqs' | 'sms' | 'lambda' | 'application' | 'http' | 'https',
+  endpoint: string,
+  endpoint_auto_confirms: boolean,
+  raw_message_delivery: boolean
+}
+```
+
+- `protocol`: The protocol to use. Supported values: `sqs`, `sms`, `lambda`, `application`, `http`, `https` (http/https have partial support, email is not supported).
+- `endpoint`: The endpoint to send data to (format varies by protocol).
+- `endpoint_auto_confirms`: Whether the endpoint can auto-confirm subscriptions e.g., PagerDuty (default: `false`).
+- `raw_message_delivery`: Whether to enable raw message delivery (the original message is directly passed, not wrapped in JSON with the original message in the message property) (default: `false`).
+
+Example:
+```json
+{
+  "email-subscription": {
+    "protocol": "email-json",
+    "endpoint": "user@example.com",
+    "endpoint_auto_confirms": false,
+    "raw_message_delivery": false
+  },
+  "sqs-subscription": {
+    "protocol": "sqs",
+    "endpoint": "arn:aws:sqs:us-west-2:123456789012:my-queue",
+    "endpoint_auto_confirms": true,
+    "raw_message_delivery": true
+  }
+}
+```
+ | `map<{
+  protocol: string,
+  endpoint: string,
+  endpoint_auto_confirms: boolean,
+  raw_message_delivery: boolean
+}>` | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
 
 
