@@ -94,6 +94,6 @@ There are several common possible reasons for slow multi-cluster requests.
 
 1. Your managed cluster is far from your hub cluster. For example, one in Beijing and another one in London. This is hard to speed up. You might need to find methods to build stable network connections between them. KubeVela currently cannot help it.
 
-2. Your cluster-gateway uses version <= 1.3.2. There is a rate limiter in cluster-gateway in old versions. Therefore, if you have lots of multi-cluster requests, they will be blocked at cluster-gateway. Upgrading cluster-gateway to a newer version could solve it.
+2. Your cluster-gateway uses version &lt;= 1.3.2. There is a rate limiter in cluster-gateway in old versions. Therefore, if you have lots of multi-cluster requests, they will be blocked at cluster-gateway. Upgrading cluster-gateway to a newer version could solve it.
 
 3. Your cluster-gateway hits the resource limits. For example, the CPU/Memory usage is high. This could happen if you have lots of clusters. You can raise the resource configuration for the cluster-gateway.
