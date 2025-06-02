@@ -5,6 +5,25 @@ title: Crossplane
 The guide [Deploy Cloud Services](../../../tutorials/consume-cloud-services.md) shows how to provision cloud resources by Terraform in
 CLI and VelaUX. This tutorial will talk about how to provision Cloud Resources by [Crossplane](https://crossplane.io/).
 
+At present, considering the Crossplane Addon is still in experimental stage, please execute the below statement to activate addon registry by vela cli and use them. 
+
+```shell
+vela addon registry add experimental --type helm --endpoint=https://kubevela.github.io/catalog/experimental/
+```
+
+You can view the registry added by executing: 
+
+```shell
+vela addon registry list
+```
+
+The output would look like the below: 
+
+```shell
+Name            Type    URL                                                                                                      
+experimental    helm    https://kubevela.github.io/catalog/experimental/ 
+```
+
 Let's take cloud provider AWS as an example.
 
 ## Enable addon `crossplane-aws`
