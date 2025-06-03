@@ -40,24 +40,62 @@ const baseFiles = [
   {
     path: 'docs/end-user/components/cloud-services/terraform/gcp-gke-ecommerce.md',
     fixes: [
-      // Order is important: specific complex types first, then general simple types.
-      { from: 'object({ state = string, key_name = string })', to: '`object({ state = string, key_name = string })`' },
-      { from: 'map(any)', to: '`map(any)`' }, // Assuming this might appear without backticks
+      // Specific problematic patterns from file content - most specific first
+      { from: 'object({ state = \\{`string`\\}, key_name = \\{`string`\\} })', to: '`object({ state = `string`, key_name = `string` })`' },
+      { from: '\\{\\{`number`\\}\\}', to: '`number`' }, 
+      { from: '\\{\\{`bool`\\}\\}',   to: '`bool`'   },
+      { from: '\\{\\{`string`\\}\\}', to: '`string`' }, // In case this variant exists
+
+      // Singly-braced with inner backtick (e.g. \{`string`\})
+      { from: '\\{`string`\\}', to: '`string`' },
+      { from: '\\{`bool`\\}',   to: '`bool`'   },
+      { from: '\\{`number`\\}', to: '`number`' },
+
+      // Complex types that might still be un-backticked (idempotency)
+      { from: 'map(any)', to: '`map(any)`' },
+      // Fallback for object type if it was plain
+      { from: 'object({ state = string, key_name = string })', to: '`object({ state = `string`, key_name = `string` })`' },
+
+      // Simple types: singly-braced (no inner backtick)
+      { from: '\\{string\\}', to: '`string`' },
+      { from: '\\{bool\\}',   to: '`bool`'   },
+      { from: '\\{number\\}', to: '`number`' },
+
+      // Simple types: plain (no braces, no backticks)
       { from: 'string', to: '`string`' },
-      { from: 'bool', to: '`bool`' },
+      { from: 'bool',   to: '`bool`'   },
       { from: 'number', to: '`number`' }
-      // Note: If 'map(any)' was already '`map(any)`' in the source, this rule for it won't match, which is fine.
     ]
   },
   // GCP Network
   {
     path: 'docs/end-user/components/cloud-services/terraform/gcp-network.md',
     fixes: [
-      // Order is important: specific complex types first.
-      { from: 'map(list(object({ range_name = string, ip_cidr_range = string })))', to: '`map(list(object({ range_name = string, ip_cidr_range = string })))`' },
+      // Assume similar specific patterns, and for its known complex type with internal issues
+      { from: 'map(list(object({ range_name = \\{`string`\\}, ip_cidr_range = \\{`string`\\} })))', to: '`map(list(object({ range_name = `string`, ip_cidr_range = `string` })))`' },
+      { from: '\\{\\{`number`\\}\\}', to: '`number`' },
+      { from: '\\{\\{`bool`\\}\\}',   to: '`bool`'   },
+      { from: '\\{\\{`string`\\}\\}', to: '`string`' },
+
+      // Fallback for the complex type if inner strings were plain
+      { from: 'map(list(object({ range_name = string, ip_cidr_range = string })))', to: '`map(list(object({ range_name = `string`, ip_cidr_range = `string` })))`'},
+
+      // Singly-braced with inner backtick
+      { from: '\\{`string`\\}', to: '`string`' },
+      { from: '\\{`bool`\\}',   to: '`bool`'   },
+      { from: '\\{`number`\\}', to: '`number`' },
+
+      // Other complex types (idempotency)
       { from: 'list(map(string))', to: '`list(map(string))`' },
+
+      // Simple types: singly-braced (no inner backtick)
+      { from: '\\{string\\}', to: '`string`' },
+      { from: '\\{bool\\}',   to: '`bool`'   },
+      { from: '\\{number\\}', to: '`number`' },
+
+      // Simple types: plain (no braces, no backticks)
       { from: 'string', to: '`string`' },
-      { from: 'bool', to: '`bool`' },
+      { from: 'bool',   to: '`bool`'   },
       { from: 'number', to: '`number`' }
     ]
   },
