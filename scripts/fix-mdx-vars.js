@@ -26,7 +26,7 @@ const baseFiles = [
   {
     path: 'docs/end-user/components/cloud-services/terraform/aws-bridgecrew-read-only.md',
     fixes: [
-      { from: '{org_name}', to: '\\{org_name\\}' }
+      { from: '{org_name}', to: '\\{org_name\\}' } // Example: keep as is if this syntax is intended for non-MDX variables
     ]
   },
   // AWS ECS Container Definition
@@ -40,63 +40,63 @@ const baseFiles = [
   {
     path: 'docs/end-user/components/cloud-services/terraform/gcp-gke-ecommerce.md',
     fixes: [
-      // Specific problematic patterns from file content - most specific first
-      { from: 'object({ state = \\{`string`\\}, key_name = \\{`string`\\} })', to: '`object({ state = `string`, key_name = `string` })`' },
-      { from: '\\{\\{`number`\\}\\}', to: '`number`' }, 
+      // Clean up doubly-escaped/wrapped backticked simple types
+      { from: '\\{\\{`string`\\}\\}', to: '`string`' },
       { from: '\\{\\{`bool`\\}\\}',   to: '`bool`'   },
-      { from: '\\{\\{`string`\\}\\}', to: '`string`' }, // In case this variant exists
-
-      // Singly-braced with inner backtick (e.g. \{`string`\})
+      { from: '\\{\\{`number`\\}\\}', to: '`number`' },
+      // Clean up singly-escaped/wrapped backticked simple types
       { from: '\\{`string`\\}', to: '`string`' },
       { from: '\\{`bool`\\}',   to: '`bool`'   },
       { from: '\\{`number`\\}', to: '`number`' },
+      
+      // Complex type: object({ state = ..., key_name = ... })
+      // Case 1: Inner types are \\{`type`\\}
+      { from: 'object({ state = \\{`string`\\}, key_name = \\{`string`\\} })', to: '`object({ state = `string`, key_name = `string` })`' },
+      // Case 2: Inner types are `type` (already good)
+      { from: 'object({ state = `string`, key_name = `string` })', to: '`object({ state = `string`, key_name = `string` })`' }, // Idempotent
+      // Case 3: Inner types are plain string
+      { from: 'object({ state = string, key_name = string })', to: '`object({ state = `string`, key_name = `string` })`', useWordBoundaries: false },
 
-      // Complex types that might still be un-backticked (idempotency)
-      { from: 'map(any)', to: '`map(any)`' },
-      // Fallback for object type if it was plain
-      { from: 'object({ state = string, key_name = string })', to: '`object({ state = `string`, key_name = `string` })`' },
+      // Complex type: map(any)
+      { from: '\\{\\{`map(any)`\\}\\}', to: '`map(any)`' }, // if map(any) was already backticked and wrapped
+      { from: '\\{`map(any)`\\}', to: '`map(any)`' },
+      { from: 'map(any)', to: '`map(any)`', useWordBoundaries: false },
 
-      // Simple types: singly-braced (no inner backtick)
-      { from: '\\{string\\}', to: '`string`' },
-      { from: '\\{bool\\}',   to: '`bool`'   },
-      { from: '\\{number\\}', to: '`number`' },
-
-      // Simple types: plain (no braces, no backticks)
-      { from: 'string', to: '`string`' },
-      { from: 'bool',   to: '`bool`'   },
-      { from: 'number', to: '`number`' }
+      // Simple types: ensure they are correctly backticked (use word boundaries for plain types)
+      { from: '\\{string\\}', to: '`string`' }, { from: 'string', to: '`string`', useWordBoundaries: true },
+      { from: '\\{bool\\}',   to: '`bool`'   }, { from: 'bool',   to: '`bool`',   useWordBoundaries: true },
+      { from: '\\{number\\}', to: '`number`' }, { from: 'number', to: '`number`', useWordBoundaries: true },
+      { from: '\\{any\\}',    to: '`any`'    }, { from: 'any',    to: '`any`',    useWordBoundaries: true }
     ]
   },
   // GCP Network
   {
     path: 'docs/end-user/components/cloud-services/terraform/gcp-network.md',
     fixes: [
-      // Assume similar specific patterns, and for its known complex type with internal issues
-      { from: 'map(list(object({ range_name = \\{`string`\\}, ip_cidr_range = \\{`string`\\} })))', to: '`map(list(object({ range_name = `string`, ip_cidr_range = `string` })))`' },
-      { from: '\\{\\{`number`\\}\\}', to: '`number`' },
-      { from: '\\{\\{`bool`\\}\\}',   to: '`bool`'   },
+      // Clean up doubly-escaped/wrapped backticked simple types
       { from: '\\{\\{`string`\\}\\}', to: '`string`' },
-
-      // Fallback for the complex type if inner strings were plain
-      { from: 'map(list(object({ range_name = string, ip_cidr_range = string })))', to: '`map(list(object({ range_name = `string`, ip_cidr_range = `string` })))`'},
-
-      // Singly-braced with inner backtick
+      { from: '\\{\\{`bool`\\}\\}',   to: '`bool`'   },
+      { from: '\\{\\{`number`\\}\\}', to: '`number`' },
+      // Clean up singly-escaped/wrapped backticked simple types
       { from: '\\{`string`\\}', to: '`string`' },
       { from: '\\{`bool`\\}',   to: '`bool`'   },
       { from: '\\{`number`\\}', to: '`number`' },
 
-      // Other complex types (idempotency)
-      { from: 'list(map(string))', to: '`list(map(string))`' },
+      // Complex type: list(map(string))
+      { from: '\\{list(map(``string``))\\}', to: '`list(map(`string`))`' }, // Inner string was ``string``
+      { from: '\\{list(map(string))\\}',   to: '`list(map(`string`))`' }, // Inner string was plain
+      { from: 'list(map(string))',       to: '`list(map(`string`))`', useWordBoundaries: false },
 
-      // Simple types: singly-braced (no inner backtick)
-      { from: '\\{string\\}', to: '`string`' },
-      { from: '\\{bool\\}',   to: '`bool`'   },
-      { from: '\\{number\\}', to: '`number`' },
-
-      // Simple types: plain (no braces, no backticks)
-      { from: 'string', to: '`string`' },
-      { from: 'bool',   to: '`bool`'   },
-      { from: 'number', to: '`number`' }
+      // Complex type: map(list(object({ range_name = ..., ip_cidr_range = ... })))
+      { from: 'map(list(object({ range_name = \\{`string`\\}, ip_cidr_range = \\{`string`\\} })))', to: '`map(list(object({ range_name = `string`, ip_cidr_range = `string` })))`' },
+      { from: 'map(list(object({ range_name = `string`, ip_cidr_range = `string` })))', to: '`map(list(object({ range_name = `string`, ip_cidr_range = `string` })))`' }, // Idempotent
+      { from: 'map(list(object({ range_name = string, ip_cidr_range = string })))', to: '`map(list(object({ range_name = `string`, ip_cidr_range = `string` })))`', useWordBoundaries: false },
+      
+      // Simple types: ensure they are correctly backticked (use word boundaries for plain types)
+      { from: '\\{string\\}', to: '`string`' }, { from: 'string', to: '`string`', useWordBoundaries: true },
+      { from: '\\{bool\\}',   to: '`bool`'   }, { from: 'bool',   to: '`bool`',   useWordBoundaries: true },
+      { from: '\\{number\\}', to: '`number`' }, { from: 'number', to: '`number`', useWordBoundaries: true },
+      { from: '\\{any\\}',    to: '`any`'    }, { from: 'any',    to: '`any`',    useWordBoundaries: true }
     ]
   },
   // CUE External Packages
@@ -138,9 +138,8 @@ const filesToFix = [...baseFiles, ...versionedFiles];
 
 function fixFile(filePath, fixes) {
   const fullPath = path.join(process.cwd(), filePath);
-  
+
   if (!fs.existsSync(fullPath)) {
-    // Skip logging for versioned files that don't exist
     if (!filePath.includes('version-')) {
       console.log(`File not found: ${filePath}`);
     }
@@ -148,29 +147,42 @@ function fixFile(filePath, fixes) {
   }
 
   let content = fs.readFileSync(fullPath, 'utf8');
-  let modified = false;
+  let originalContent = content; // Keep a copy for final check
   const changes = [];
 
-  fixes.forEach(({ from, to }) => {
-    if (content.includes(from)) {
-      const before = content;
-      content = content.replace(new RegExp(escapeRegExp(from), 'g'), to);
-      if (before !== content) {
-        modified = true;
-        changes.push(`Replaced ${from} with ${to}`);
+  fixes.forEach(({ from, to, isRegex, useWordBoundaries }) => {
+    let regex;
+    // Store 'from' representation for logging. If 'from' is a RegExp, its .source gives the string version.
+    const fromForLogging = isRegex ? from.source : from;
+
+    if (isRegex) {
+      regex = from;
+    } else {
+      const pattern = escapeRegExp(from);
+      // Use word boundaries if specified and applicable (from is a 'word' character suitable for \b)
+      const wordBoundaryPattern = /^\w+$/.test(from) && useWordBoundaries;
+      regex = wordBoundaryPattern ? new RegExp(`\\b${pattern}\\b`, 'g') : new RegExp(pattern, 'g');
+    }
+
+    // Test before replacing to avoid unnecessary operations and ensure 'from' pattern actually exists.
+    if (regex.test(content)) {
+      const tempContent = content.replace(regex, to);
+      if (content !== tempContent) {
+        content = tempContent;
+        changes.push(`Replaced ${fromForLogging} with ${to}`);
       }
     }
   });
 
-  if (modified) {
+  if (content !== originalContent) { // Check if any change was made overall
     fs.writeFileSync(fullPath, content, 'utf8');
     console.log(`✅ Fixed ${filePath}`);
     changes.forEach(change => console.log(`   ${change}`));
+    return true;
   } else {
     console.log(`ℹ️  No changes needed for: ${filePath}`);
+    return false;
   }
-  
-  return modified;
 }
 
 function escapeRegExp(string) {
