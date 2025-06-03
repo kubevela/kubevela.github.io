@@ -40,21 +40,25 @@ const baseFiles = [
   {
     path: 'docs/end-user/components/cloud-services/terraform/gcp-gke-ecommerce.md',
     fixes: [
-      { from: 'string', to: '\\{string\\}' },
-      { from: 'bool', to: '\\{bool\\}' },
-      { from: 'number', to: '\\{number\\}' },
-      { from: 'map\(any\)', to: '\\{map(any)\\}' }
+      // Order is important: specific complex types first, then general simple types.
+      { from: 'object({ state = string, key_name = string })', to: '`object({ state = string, key_name = string })`' },
+      { from: 'map(any)', to: '`map(any)`' }, // Assuming this might appear without backticks
+      { from: 'string', to: '`string`' },
+      { from: 'bool', to: '`bool`' },
+      { from: 'number', to: '`number`' }
+      // Note: If 'map(any)' was already '`map(any)`' in the source, this rule for it won't match, which is fine.
     ]
   },
   // GCP Network
   {
     path: 'docs/end-user/components/cloud-services/terraform/gcp-network.md',
     fixes: [
-      { from: 'string', to: '\\{string\\}' },
-      { from: 'bool', to: '\\{bool\\}' },
-      { from: 'number', to: '\\{number\\}' },
-      { from: 'list\(map\(string\)\)', to: '\\{list(map(string))\\}' },
-      { from: 'map\(list\(object\(\{[^}]*\}\)\)\)', to: '\\{map(list(object(...)))\\}' }
+      // Order is important: specific complex types first.
+      { from: 'map(list(object({ range_name = string, ip_cidr_range = string })))', to: '`map(list(object({ range_name = string, ip_cidr_range = string })))`' },
+      { from: 'list(map(string))', to: '`list(map(string))`' },
+      { from: 'string', to: '`string`' },
+      { from: 'bool', to: '`bool`' },
+      { from: 'number', to: '`number`' }
     ]
   },
   // CUE External Packages
