@@ -40,14 +40,21 @@ const baseFiles = [
   {
     path: 'docs/end-user/components/cloud-services/terraform/gcp-gke-ecommerce.md',
     fixes: [
-      { from: '{string}', to: '\\{string\\}' }
+      { from: '{string}', to: '\\{string\\}' },
+      { from: 'bool', to: '\\{bool\\}' },
+      { from: 'number', to: '\\{number\\}' },
+      { from: 'map\(any\)', to: '\\{map(any)\\}' }
     ]
   },
   // GCP Network
   {
     path: 'docs/end-user/components/cloud-services/terraform/gcp-network.md',
     fixes: [
-      { from: '{string}', to: '\\{string\\}' }
+      { from: '{string}', to: '\\{string\\}' },
+      { from: 'bool', to: '\\{bool\\}' },
+      { from: 'number', to: '\\{number\\}' },
+      { from: 'list\(map\(string\)\)', to: '\\{list(map(string))\\}' },
+      { from: 'map\(list\(object\(\{[^}]*\}\)\)\)', to: '\\{map(list(object(...)))\\}' }
     ]
   },
   // CUE External Packages
