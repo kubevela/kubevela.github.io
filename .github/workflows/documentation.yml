@@ -35,6 +35,8 @@ jobs:
           node-version: "22.x"
           cache: "yarn"
       - name: Test Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn install
           yarn build
