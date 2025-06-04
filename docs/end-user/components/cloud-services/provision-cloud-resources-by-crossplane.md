@@ -28,6 +28,10 @@ Let's take cloud provider AWS as an example.
 
 ## Enable addon `crossplane-aws`
 
+:::note
+Enabling the Crossplane AWS add-on may override your Terraform definition if the Terraform add-on was already enabled. 
+:::
+
 ```shell
 vela addon enable crossplane-aws
 ```
@@ -65,7 +69,7 @@ metadata:
 spec:
   components:
     - name: dev
-      type: crossplane-aws-s3
+      type: aws-s3
       properties:
         name: kubevela-test-0714
         acl: private
@@ -77,7 +81,7 @@ After the application gets `running`, you can check the bucket by AWS [cli](http
 ```shell
 $ vela ls
 APP   	COMPONENT	TYPE  	             TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
-s3-poc	dev      	crossplane-aws-s3	      	running	healthy	      	2022-06-16 15:37:15 +0800 CST
+s3-poc	dev      	aws-s3	      	     running	      healthy	      	2022-06-16 15:37:15 +0800 CST
 
 $ aws s3 ls
 2022-06-16 15:37:17 kubevela-test-0714
