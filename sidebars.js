@@ -166,6 +166,7 @@ module.exports = {
           'Day-2 Operations': [
             'end-user/workflow/component-dependency-parameter',
             'end-user/version-control',
+            'end-user/definition-version-control',
             'tutorials/dry-run',
             'tutorials/access-application',
             'tutorials/auto-scaler',
@@ -321,6 +322,7 @@ module.exports = {
             },
             'platform-engineers/system-operation/velaql',
             'platform-engineers/x-def-version',
+            'platform-engineers/cue/external-packages'
           ],
         },
         {

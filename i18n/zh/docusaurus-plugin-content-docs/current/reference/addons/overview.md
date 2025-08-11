@@ -20,7 +20,7 @@ Source code of this addon are all here: https://github.com/kubevela/catalog/tree
 
 * [Prometheus Server](../../platform-engineers/operations/observability.md): Collects metrics from configured targets at given intervals, evaluates rule expressions, displays the results, and can trigger alerts if some condition is observed to be true.
 * [Node Exporter](../../platform-engineers/operations/observability.md): Prometheus exporter for hardware and OS metrics exposed by *NIX kernels, written in Go with pluggable metric collectors.
-* [Mysql Exporter](./mysql-exporter): Prometheus exporter for MySQL server metrics.
+* [Mysql Exporter](../../../../../../docs/reference/addons/mysql-exporter): Prometheus exporter for MySQL server metrics.
 * [Grafana](../../platform-engineers/operations/observability.md): Grafana is an open source, feature rich metrics dashboard and graph editor for Graphite, Elasticsearch, OpenTSDB, Prometheus and InfluxDB.
 * [Loki](../../platform-engineers/operations/o11y/logging.md): A log aggregation system designed to store and query logs from all your applications and infrastructure.
 * [Kube State Metrics](../../platform-engineers/operations/observability.md): A simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
@@ -62,11 +62,11 @@ Source code of this addon are all here: https://github.com/kubevela/catalog/tree
 
 ## Storage
 
-* [ChartMuseum](./chartmuseum): An open-source and easy to deploy Helm Chart Repository server.
+* [ChartMuseum](../../../../../../docs/reference/addons/chartmuseum): An open-source and easy to deploy Helm Chart Repository server.
 
 ## SaaS Workload
 
-* [netlify](./netlify): Netlify is a SaaS platform that can serve website especially for frontend service, it provides free allowances that was pretty cool to be used for demo and test.
+* [netlify](../../../../../../docs/reference/addons/netlify): Netlify is a SaaS platform that can serve website especially for frontend service, it provides free allowances that was pretty cool to be used for demo and test.
 
 ## Developer Tools
 

@@ -11,9 +11,9 @@ If so, you could change the `webservice` definition.
 
 1. Change the UI schema to hide some fields
 
-> This way is only suitable the UI users.
+> This way is only suitable for the UI users.
 
-![image](https://static.kubevela.net/images/1.5/custom-ui-schema.jpg)
+![image](../resources/custom-ui-schema.jpg)
 
 On the definition detail page, users could customize the UI schema to setting the UI forms. For example, if you want to hide the ExposeType field, only need to set the disable is `true`.
 
@@ -38,7 +38,7 @@ If you want to completely remove or add some fields, you should edit the compone
 vela def get webservice > custom-webservice.cue
 ```
 
-Refer to the [CUE Basic](../platform-engineers/cue/basic.md) and [Component Definition](../platform-engineers/components/custom-component.md) documents to learn how to custom the `custom-webservice.cue`.
+Refer to the [CUE Basic](../platform-engineers/cue/basic.md) and [Component Definition](../platform-engineers/components/custom-component.md) documents to learn how to customise the `custom-webservice.cue`.
 
 After edit:
 
@@ -297,7 +297,7 @@ spec:
       type: deploy
 ```
 
-![java-app](https://static.kubevela.net/images/1.5/java-war.jpg)
+![java-app](../resources/java-war.jpg)
 
 This example includes three components, and the order service depends on the catalog and the customer services. The developer only needs to care about the war package URL and the tomcat/JRE version, they are familiar to the Java developer. The developer should upload the war package to a repository, such as Jfrog. Get a download URL to assign to the `warURL` field.
 
