@@ -18,7 +18,7 @@ vela ql [flags]
 
 ```
   Users can query with a query statement:
-		vela ql --query "inner-view-name{param1=value1,param2=value2}"
+		vela ql --query "inner-view-name\{param1=value1,param2=value2\}"
 
   Query by a ql file:
 		vela ql --file ./ql.cue

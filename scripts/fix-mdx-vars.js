@@ -26,77 +26,62 @@ const baseFiles = [
   {
     path: 'docs/end-user/components/cloud-services/terraform/aws-bridgecrew-read-only.md',
     fixes: [
-      { from: '{org_name}', to: '\\{org_name\\}' } // Example: keep as is if this syntax is intended for non-MDX variables
-    ]
-  },
-  // AWS ECS Container Definition
-  {
-    path: 'docs/end-user/components/cloud-services/terraform/aws-ecs-container-definition.md',
-    fixes: [
-      { from: '{namespace}', to: '\\{namespace\\}' }
+      { from: '{org_name}', to: '\\{org_name\\}' }
     ]
   },
   // GCP GKE Ecommerce
   {
     path: 'docs/end-user/components/cloud-services/terraform/gcp-gke-ecommerce.md',
     fixes: [
-      // Clean up doubly-escaped/wrapped backticked simple types
-      { from: '\\{\\{`string`\\}\\}', to: '`string`' },
-      { from: '\\{\\{`bool`\\}\\}',   to: '`bool`'   },
-      { from: '\\{\\{`number`\\}\\}', to: '`number`' },
-      // Clean up singly-escaped/wrapped backticked simple types
-      { from: '\\{`string`\\}', to: '`string`' },
-      { from: '\\{`bool`\\}',   to: '`bool`'   },
-      { from: '\\{`number`\\}', to: '`number`' },
-      
-      // Complex type: object({ state = ..., key_name = ... })
-      // Case 1: Inner types are \\{`type`\\}
+      // Specific problematic patterns first
       { from: 'object({ state = \\{`string`\\}, key_name = \\{`string`\\} })', to: '`object({ state = `string`, key_name = `string` })`' },
-      // Case 2: Inner types are `type` (already good)
-      { from: 'object({ state = `string`, key_name = `string` })', to: '`object({ state = `string`, key_name = `string` })`' }, // Idempotent
-      // Case 3: Inner types are plain string
-      { from: 'object({ state = string, key_name = string })', to: '`object({ state = `string`, key_name = `string` })`', useWordBoundaries: false },
+      { from: 'object({ state = string, key_name = string })', to: '`object({ state = `string`, key_name = `string` })`' },
+      { from: 'object({ state = `string`, key_name = `string` })', to: '`object({ state = `string`, key_name = `string` })`' }, // Idempotent for correctly formed
 
-      // Complex type: map(any)
-      { from: '\\{\\{`map(any)`\\}\\}', to: '`map(any)`' }, // if map(any) was already backticked and wrapped
-      { from: '\\{`map(any)`\\}', to: '`map(any)`' },
-      { from: 'map(any)', to: '`map(any)`', useWordBoundaries: false },
+      // Clean up doubly-escaped/wrapped backticked simple types
+      { from: '\\{\\{`string`\\}\\}', to: '`string`' }, { from: '\\{\\{`bool`\\}\\}', to: '`bool`' }, { from: '\\{\\{`number`\\}\\}', to: '`number`' },  { from: '\\{\\{`any`\\}\\}', to: '`any`' },
+      // Clean up singly-escaped/wrapped backticked simple types
+      { from: '\\{`string`\\}', to: '`string`' }, { from: '\\{`bool`\\}', to: '`bool`' }, { from: '\\{`number`\\}', to: '`number`' }, { from: '\\{`any`\\}', to: '`any`' },
+      // Convert simple {type} (escaped brace, plain type) to `type`
+      { from: '\\{string\\}', to: '`string`' }, { from: '\\{bool\\}', to: '`bool`' }, { from: '\\{number\\}', to: '`number`' }, { from: '\\{any\\}', to: '`any`' },
 
-      // Simple types: ensure they are correctly backticked (use word boundaries for plain types)
-      { from: '\\{string\\}', to: '`string`' }, { from: 'string', to: '`string`', useWordBoundaries: true },
-      { from: '\\{bool\\}',   to: '`bool`'   }, { from: 'bool',   to: '`bool`',   useWordBoundaries: true },
-      { from: '\\{number\\}', to: '`number`' }, { from: 'number', to: '`number`', useWordBoundaries: true },
-      { from: '\\{any\\}',    to: '`any`'    }, { from: 'any',    to: '`any`',    useWordBoundaries: true }
+      // Convert plain map(any) to `map(any)`
+      { from: 'map(any)', to: '`map(any)`' },
+
+      // Plain simple type conversions - these should apply last and only to whole words
+      { from: 'string', to: '`string`', useWordBoundaries: true },
+      { from: 'bool',   to: '`bool`',   useWordBoundaries: true },
+      { from: 'number', to: '`number`', useWordBoundaries: true },
+      { from: 'any',    to: '`any`',    useWordBoundaries: true },
     ]
   },
   // GCP Network
   {
     path: 'docs/end-user/components/cloud-services/terraform/gcp-network.md',
     fixes: [
-      // Clean up doubly-escaped/wrapped backticked simple types
-      { from: '\\{\\{`string`\\}\\}', to: '`string`' },
-      { from: '\\{\\{`bool`\\}\\}',   to: '`bool`'   },
-      { from: '\\{\\{`number`\\}\\}', to: '`number`' },
-      // Clean up singly-escaped/wrapped backticked simple types
-      { from: '\\{`string`\\}', to: '`string`' },
-      { from: '\\{`bool`\\}',   to: '`bool`'   },
-      { from: '\\{`number`\\}', to: '`number`' },
+      // Correct specific malformed complex types first
+      { from: '\\{list(map(``string``))\\}', to: '`list(map(`string`))`' },
+      { from: 'list(map(``string``))', to: '`list(map(`string`))`' },
+      { from: 'list(map(`string`))', to: '`list(map(`string`))`' }, // Idempotent
+      { from: 'list(map(string))', to: '`list(map(`string`))`' },
 
-      // Complex type: list(map(string))
-      { from: '\\{list(map(``string``))\\}', to: '`list(map(`string`))`' }, // Inner string was ``string``
-      { from: '\\{list(map(string))\\}',   to: '`list(map(`string`))`' }, // Inner string was plain
-      { from: 'list(map(string))',       to: '`list(map(`string`))`', useWordBoundaries: false },
-
-      // Complex type: map(list(object({ range_name = ..., ip_cidr_range = ... })))
-      { from: 'map(list(object({ range_name = \\{`string`\\}, ip_cidr_range = \\{`string`\\} })))', to: '`map(list(object({ range_name = `string`, ip_cidr_range = `string` })))`' },
-      { from: 'map(list(object({ range_name = `string`, ip_cidr_range = `string` })))', to: '`map(list(object({ range_name = `string`, ip_cidr_range = `string` })))`' }, // Idempotent
-      { from: 'map(list(object({ range_name = string, ip_cidr_range = string })))', to: '`map(list(object({ range_name = `string`, ip_cidr_range = `string` })))`', useWordBoundaries: false },
+      { from: 'map(list(object({ range_name = ```string```, ip_cidr_range = ```string``` })))', to: '`map(list(object({ range_name = `string`, ip_cidr_range = `string` })))`' },
+      { from: 'map(list(object({ range_name = ``string``, ip_cidr_range = ``string`` })))',   to: '`map(list(object({ range_name = `string`, ip_cidr_range = `string` })))`' },
+      { from: 'map(list(object({ range_name = `string`, ip_cidr_range = `string` })))',     to: '`map(list(object({ range_name = `string`, ip_cidr_range = `string` })))`' }, // Idempotent
+      { from: 'map(list(object({ range_name = string, ip_cidr_range = string })))',       to: '`map(list(object({ range_name = `string`, ip_cidr_range = `string` })))`' },
       
-      // Simple types: ensure they are correctly backticked (use word boundaries for plain types)
-      { from: '\\{string\\}', to: '`string`' }, { from: 'string', to: '`string`', useWordBoundaries: true },
-      { from: '\\{bool\\}',   to: '`bool`'   }, { from: 'bool',   to: '`bool`',   useWordBoundaries: true },
-      { from: '\\{number\\}', to: '`number`' }, { from: 'number', to: '`number`', useWordBoundaries: true },
-      { from: '\\{any\\}',    to: '`any`'    }, { from: 'any',    to: '`any`',    useWordBoundaries: true }
+      // Clean up doubly-escaped/wrapped backticked simple types
+      { from: '\\{\\{`string`\\}\\}', to: '`string`' }, { from: '\\{\\{`bool`\\}\\}', to: '`bool`' }, { from: '\\{\\{`number`\\}\\}', to: '`number`' }, { from: '\\{\\{`any`\\}\\}', to: '`any`' },
+      // Clean up singly-escaped/wrapped backticked simple types
+      { from: '\\{`string`\\}', to: '`string`' }, { from: '\\{`bool`\\}', to: '`bool`' }, { from: '\\{`number`\\}', to: '`number`' }, { from: '\\{`any`\\}', to: '`any`' },
+      // Convert simple {type} (escaped brace, plain type) to `type`
+      { from: '\\{string\\}', to: '`string`' }, { from: '\\{bool\\}', to: '`bool`' }, { from: '\\{number\\}', to: '`number`' }, { from: '\\{any\\}', to: '`any`' },
+
+      // Plain simple type conversions - these should apply last and only to whole words
+      { from: 'string', to: '`string`', useWordBoundaries: true },
+      { from: 'bool',   to: '`bool`',   useWordBoundaries: true },
+      { from: 'number', to: '`number`', useWordBoundaries: true },
+      { from: 'any',    to: '`any`',    useWordBoundaries: true },
     ]
   },
   // CUE External Packages
@@ -106,10 +91,11 @@ const baseFiles = [
       { from: '{endpoint}', to: '\\{endpoint\\}' }
     ]
   },
-  // CLI vela_ql
+  // CLI vela_ql - fix inconsistent escaping
   {
     path: 'docs/cli/vela_ql.md',
     fixes: [
+      { from: '{param1=value1,param2=value2}', to: '\\{param1=value1,param2=value2\\}' },
       { from: '{value1}', to: '\\{value1\\}' }
     ]
   },
@@ -117,6 +103,7 @@ const baseFiles = [
   {
     path: 'docs/cli/vela.md',
     fixes: [
+      { from: '{param1=value1,param2=value2}', to: '\\{param1=value1,param2=value2\\}' },
       { from: '{value1}', to: '\\{value1\\}' }
     ]
   }
