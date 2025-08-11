@@ -142,4 +142,4 @@ spec:
 my-component-v1.2.5                1          1a4f3ac77e4fcfef   Component
 my-component-v1.2.7                3          86d7fb1a36566dea   Component
 my-component-v2.5.0                2          e61e9b5e55b01c2b   Component
-````
+`
