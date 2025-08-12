@@ -19,7 +19,7 @@ Terraform module to create an Elastic Kubernetes (EKS) cluster and associated wo
  cluster_additional_security_group_ids | List of additional, externally created security group IDs to attach to the cluster control plane | list(string) | false |  
  cluster_addons | Map of cluster addon configurations to enable for the cluster. Addon name can be the map keys or set with `name` | any | false |  
  cluster_enabled_log_types | A list of the desired control plane logs to enable. For more information, see Amazon EKS Control Plane Logging documentation (https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html) | list(string) | false |  
- cluster_encryption_config | Configuration block with encryption configuration for the cluster | list(object({\n    provider_key_arn = string\n    resources        = list(string)\n  })) | false |  
+ cluster_encryption_config | Configuration block with encryption configuration for the cluster | `list(object({ provider_key_arn = string, resources = list(string) }))` | false |  
  cluster_encryption_policy_description | Description of the cluster encryption policy created | string | false |  
  cluster_encryption_policy_name | Name to use on cluster encryption policy created | string | false |  
  cluster_encryption_policy_path | Cluster encryption policy path | string | false |  

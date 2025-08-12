@@ -2,7 +2,7 @@
 title: vela uischema apply
 ---
 
-apply <ui schema file/dir path>
+apply \<ui schema file/dir path\>
 
 ### Synopsis
 
@@ -21,7 +21,8 @@ vela uischema apply [flags]
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO
