@@ -18,6 +18,11 @@ KubeVela can support the following cloud providers by enabling the Terraform pro
 
 ```shell
 $ vela addon list | grep terraform-
+```
+
+The output would look like the below:
+
+```shell
 terraform-alibaba        	KubeVela	Kubernetes Terraform Controller for Alibaba Cloud                                                    	[1.0.2, 1.0.1]                      	enabled (1.0.2)
 terraform-tencent        	KubeVela	Kubernetes Terraform Controller Provider for Tencent Cloud                                           	[1.0.0, 1.0.1]                      	enabled (1.0.0)
 terraform-aws            	KubeVela	Kubernetes Terraform Controller for AWS                                                              	[1.0.0, 1.0.1]                      	enabled (1.0.0)
