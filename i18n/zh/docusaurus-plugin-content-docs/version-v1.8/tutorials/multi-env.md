@@ -25,7 +25,7 @@ In the following sections, we'll guide you how to manage application to deploy i
 
 Create environment on VelaUX is very straight forward.
 
-![create-env](https://static.kubevela.net/images/1.5/create-env.jpg)
+![create-env](../resources/create-env.jpg)
 
 One environment could includes multi targets. The environment belongs to a project, One project could include multi environments. Only the application belonging to this project could bond this environment.
 
