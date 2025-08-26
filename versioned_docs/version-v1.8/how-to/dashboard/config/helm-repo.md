@@ -23,7 +23,7 @@ You can set the URL of your private repository in the `URL` field. If your repos
 
 BTW, If your helm repository's certificate is self-signed, you can set the `CaFile` field with the certificate content.
 
-![config](https://static.kubevela.net/images/1.6/create-config.jpg)
+![config](../../../../../docs/resources/kubevela-net/images/1.6/create-config.jpg)
 
 Also, you could create the config via CLI:
 
@@ -43,7 +43,7 @@ After creating a config, it only saves as a Secret in the system namespace in th
 
 Let's go to the project summary page for which you want to create the Application.
 
-![project summary](https://static.kubevela.net/images/1.6/project-summary.jpg)
+![project summary](../../../../../docs/resources/kubevela-net/images/1.6/project-summary.jpg)
 
 Click the `Distribute` button and select the targets that you want to distribute the config.
 

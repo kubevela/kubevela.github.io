@@ -130,7 +130,7 @@ For cloud resources, there will be a link to the cloud console for management.
 
 ## View Application Logs
 
-![pod log](https://static.kubevela.net/images/1.3/pod-log.jpg)
+![pod log](../../../resources/kubevela-net/images/1.3/pod-log.jpg)
 
 You can view the logs of application in the environment tab.
 
@@ -183,7 +183,7 @@ After the application deployed with service exposed configuration, you can see a
 
 If you want to learn the resources created by the applications, you can open the environment status page.
 
-![app-resources](https://static.kubevela.net/images/1.3/app-resources.jpg)
+![app-resources](../../../resources/kubevela-net/images/1.3/app-resources.jpg)
 
 There're three kinds of information including `Applied Resources`,`Conditions` and `Component Status`. The `Applied Resources` are all resources created by the applications.
 

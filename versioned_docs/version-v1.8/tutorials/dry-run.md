@@ -687,10 +687,10 @@ You can refer to the [Dry run command](../cli/vela_dry-run.md) for more command 
 
 ## Dry run via UI
 
-![dry-run](https://static.kubevela.net/images/1.5/dry-run.jpg)
+![dry-run](../../../docs/resources/kubevela-net/images/1.5/dry-run.jpg)
 
 Clicking the `Deploy` button to open the workflow selector dialog. You could select a workflow(every workflow corresponding to an environment) and click the `DryRun` button to execute a dry run. If passed, the result is like this
 
-![dry-run-successfully](https://static.kubevela.net/images/1.5/dry-run-success.jpg)
+![dry-run-successfully](../../../docs/resources/kubevela-net/images/1.5/dry-run-success.jpg)
 
 The result report is different from the CLI, there is a complete application configuration that is generated from the application metadata, you could check it. Different environments may have different application configurations.

@@ -13,7 +13,7 @@ If so, you could change the `webservice` definition.
 
 > This way is only suitable the UI users.
 
-![image](https://static.kubevela.net/images/1.5/custom-ui-schema.jpg)
+![image](../../../docs/resources/kubevela-net/images/1.5/custom-ui-schema.jpg)
 
 On the definition detail page, users could customize the UI schema to setting the UI forms. For example, if you want to hide the ExposeType field, only need to set the disable is `true`.
 
@@ -248,13 +248,13 @@ spec:
     properties:
       envVersion: 8-jdk8
       replicas: 1
-      warURL: https://static.kubevela.net/example/java-example/nanoservice/catalog.war
+      warURL: ../../../docs/resources/kubevela-net/example/java-example/nanoservice/catalog.war
     type: java-war
   - name: customer
     properties:
       envVersion: 8-jdk8
       replicas: 1
-      warURL: https://static.kubevela.net/example/java-example/nanoservice/customer.war
+      warURL: ../../../docs/resources/kubevela-net/example/java-example/nanoservice/customer.war
     type: java-war
   - dependsOn:
     - catalog
@@ -269,7 +269,7 @@ spec:
       envVersion: 8-jdk8
       javaOpts: -Xms512m -Xmx512m -Xss256K
       replicas: 1
-      warURL: https://static.kubevela.net/example/java-example/nanoservice/order.war
+      warURL: ../../../docs/resources/kubevela-net/example/java-example/nanoservice/order.war
     traits:
     - properties:
         domains:
@@ -297,7 +297,7 @@ spec:
       type: deploy
 ```
 
-![java-app](https://static.kubevela.net/images/1.5/java-war.jpg)
+![java-app](../../../docs/resources/kubevela-net/images/1.5/java-war.jpg)
 
 This example includes three components, and the order service depends on the catalog and the customer services. The developer only needs to care about the war package URL and the tomcat/JRE version, they are familiar to the Java developer. The developer should upload the war package to a repository, such as Jfrog. Get a download URL to assign to the `warURL` field.
 

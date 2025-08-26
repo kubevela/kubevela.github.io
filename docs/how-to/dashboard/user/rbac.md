@@ -41,7 +41,7 @@ You can customize the list of roles for a platform or project based on your busi
 
 Go to `Platform/Roles` page，you can get all platform-scope roles。
 
-![role list](https://static.kubevela.net/images/1.3/role-dashboard.jpg)
+![role list](../../../resources/kubevela-net/images/1.3/role-dashboard.jpg)
 
 Click the `New Role` button, you can open the drawer page for creating a role, you should input some required info, such as the role's name, alias and permissions. Click the `Create` button then complete.
 
@@ -49,11 +49,11 @@ Click the `New Role` button, you can open the drawer page for creating a role, y
 
 First you need to go to the project details page, If users with project list query permission can enter through the project list, If not, you can enter through the application detail page.
 
-![role list](https://static.kubevela.net/images/1.3/project-dashboard.jpg)
+![role list](../../../resources/kubevela-net/images/1.3/project-dashboard.jpg)
 
 Switch to the role management page on the project details page to add or modify role information under the project.
 
-![role list](https://static.kubevela.net/images/1.3/project-role.jpg)
+![role list](../../../resources/kubevela-net/images/1.3/project-role.jpg)
 
 ## User bound role
 

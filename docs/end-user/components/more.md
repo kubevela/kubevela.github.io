@@ -133,11 +133,11 @@ Please notice that, while an addon is being installed in a cluster, it maybe sti
 
 If you have installed [VelaUX](../../reference/addons/velaux.md) which is also one of the addon, you can manage it directly on the UI console with admin privileges.
 
-![addon list](https://static.kubevela.net/images/1.3/addon-list.jpg)
+![addon list](../../resources/kubevela-net/images/1.3/addon-list.jpg)
 
 In the addon list, you can get the status of the addon and other info. Click the addon name could open the addon detail page, you can get the version list, definitions provided by the addon, and the readme message.
 
-![addon detail](https://static.kubevela.net/images/1.3/addon-detail.jpg)
+![addon detail](../../resources/kubevela-net/images/1.3/addon-detail.jpg)
 
 Select a version and deployed clusters, you can click the enable button to install this addon. You can check detail information in this section include:
 

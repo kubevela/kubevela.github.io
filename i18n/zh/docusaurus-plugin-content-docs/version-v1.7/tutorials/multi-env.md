@@ -25,7 +25,7 @@ In the following sections, we'll guide you how to manage application to deploy i
 
 Create environment on VelaUX is very straight forward.
 
-![create-env](https://static.kubevela.net/images/1.5/create-env.jpg)
+![create-env](../../../../../docs/resources/kubevela-net/images/1.5/create-env.jpg)
 
 One environment could includes multi targets. The environment belongs to a project, One project could include multi environments. Only the application belonging to this project could bond this environment.
 
@@ -38,13 +38,13 @@ You could create an environment with command ( `vela env init prod --namespace p
 
 You could select multi environments when you create an application, or modify the application later to bind more environments. The UI will automatically generate a workflow when the application bond to an environment, that includes some `deploy` type steps. You can manually modify the workflow later. The default behavior is to deploy targets one by one in workflow steps. You could add other steps such as `suspend` between two `deploy` steps.
 
-![env workflow](https://static.kubevela.net/images/1.5/env-workflow.jpg)
+![env workflow](../../../../../docs/resources/kubevela-net/images/1.5/env-workflow.jpg)
 
 ### 3. Set the different configuration
 
 We usually need to set different configurations for different environments, such as environment variables, replicas or resource limits. In this case, we can create some override policies. When we create an override policy, we need to choose affected environment or targets through selecting workflow and steps.
 
-![override-policy](https://static.kubevela.net/images/1.5/override-policy.jpg)
+![override-policy](../../../../../docs/resources/kubevela-net/images/1.5/override-policy.jpg)
 
 You can refer to [override policy](../end-user/policies/references.md#override) documentation for parameter spec details.
 

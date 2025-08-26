@@ -46,7 +46,7 @@ Let's take you through a practical example (using Deployment Workload as an exam
 - Install KubeVela
 
 ```shell
-$ curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
+$ curl -fsSl ../docs/resources/kubevela-net/script/install-velad.sh | bash
 velad install
 ```
 

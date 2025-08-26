@@ -5,7 +5,7 @@ description: View an application log by KubeVela dashboard
 
 ## View logs via UI
 
-![pod log](https://static.kubevela.net/images/1.3/pod-log.jpg)
+![pod log](../../../../../docs/resources/kubevela-net/images/1.3/pod-log.jpg)
 
 You can view the logs of application in the environment tab.
 

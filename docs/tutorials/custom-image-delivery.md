@@ -248,13 +248,13 @@ spec:
     properties:
       envVersion: 8-jdk8
       replicas: 1
-      warURL: https://static.kubevela.net/example/java-example/nanoservice/catalog.war
+      warURL: ../resources/kubevela-net/example/java-example/nanoservice/catalog.war
     type: java-war
   - name: customer
     properties:
       envVersion: 8-jdk8
       replicas: 1
-      warURL: https://static.kubevela.net/example/java-example/nanoservice/customer.war
+      warURL: ../resources/kubevela-net/example/java-example/nanoservice/customer.war
     type: java-war
   - dependsOn:
     - catalog
@@ -269,7 +269,7 @@ spec:
       envVersion: 8-jdk8
       javaOpts: -Xms512m -Xmx512m -Xss256K
       replicas: 1
-      warURL: https://static.kubevela.net/example/java-example/nanoservice/order.war
+      warURL: ../resources/kubevela-net/example/java-example/nanoservice/order.war
     traits:
     - properties:
         domains:

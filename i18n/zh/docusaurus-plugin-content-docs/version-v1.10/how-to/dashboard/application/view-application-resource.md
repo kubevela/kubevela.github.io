@@ -8,7 +8,7 @@ title: 查看应用部署的资源列表
 
 进入应用部署环境视图，默认进入状态展示页面，在该页面中即可查询到应用实际分发的资源列表，如果应用在更新过程中，资源列表会包括历史和当前版本。
 
-![app-resources](https://static.kubevela.net/images/1.3/app-resources.jpg)
+![app-resources](../../../../../../../docs/resources/kubevela-net/images/1.3/app-resources.jpg)
 
 在该页面中同时展示了组件状态和整体的交付状态。
 
