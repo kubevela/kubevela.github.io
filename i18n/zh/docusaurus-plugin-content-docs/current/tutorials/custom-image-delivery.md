@@ -296,7 +296,7 @@ spec:
       type: deploy
 ```
 
-![java-app](../../../../../docs/resources/kubevela-net/images/1.5/java-war.jpg)
+![java-app](https://static.kubevela.net/images/1.5/java-war.jpg)
 
 这个例子包括三个组件，order 服务依赖 catalog 和 customer 服务。 开发者只需要关心 war 包 URL 和 tomcat/JRE 版本，Java开发者对此都很熟悉。 开发人员应将 war 包上传到仓库，例如 Jfrog。 获取下载 URL 以分配给 `warURL` 字段。
 
