@@ -257,6 +257,7 @@ module.exports = {
             'platform-engineers/auth/basic',
             'platform-engineers/auth/advance',
             'platform-engineers/auth/integration',
+            'platform-engineers/auth/definition-rbac',
           ],
         },
         {
