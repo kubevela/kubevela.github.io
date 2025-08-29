@@ -164,7 +164,7 @@ ab -n 300000 -c 200  http://test.my.domain/
 We can use `vela top` to check the replica changing during the ab test.
 
 <iframe 
-src={require('../resources/kubevela-net/images/1.6/cpu_based_trigger_demo.mp4').default} 
+src={require('../../../docs/resources/kubevela-net/images/1.6/cpu_based_trigger_demo.mp4').default} 
 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="true" width="1000" height="550"> </iframe>
 
 
