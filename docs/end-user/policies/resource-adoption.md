@@ -1107,7 +1107,7 @@ vela adopt --all --resource-topology-rule=my-rule.cue
 
 After adopting all resources and applying them to the cluster, you can checkout all the adopted applications with `vela ls` or in the dashboard.
 
-![](https://static.kubevela.net/images/1.8/adopt-all.gif)
+![](../../resources/kubevela-net/images/1.8/adopt-all.gif)
 
 #### Adopt All Helm Releases
 

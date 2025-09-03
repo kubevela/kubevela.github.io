@@ -54,7 +54,7 @@ This means accessing the component service by domain `testsvc.example.com`, ther
 
 In VelaUX, you can click the `Add Trait` button and select the `gateway` trait type. refer to follow configuration:
 
-![gateway trait](https://static.kubevela.net/images/1.4/gateway-trait.jpg)
+![gateway trait](../../../docs/resources/kubevela-net/images/1.4/gateway-trait.jpg)
 
 ## Use Traefik
 
@@ -72,7 +72,7 @@ This addon provides three traits, including [http-route](../reference/addons/tra
 
 For HTTP, you can click the `Add Trait` button and select the `http-route` trait type. refer to follow configuration:
 
-![http route trait](https://static.kubevela.net/images/1.4/http-route-trait.jpg)
+![http route trait](../../../docs/resources/kubevela-net/images/1.4/http-route-trait.jpg)
 
 ```yaml
 traits:
@@ -90,13 +90,13 @@ There must be one route rule. The port is the same as the service port, the rout
 
 For HTTPS, you must create the TLS certificate firstly. In VelaUX, open the Integrations page, there is a `TLS Certificate` type. Click the New button, You need to provide the certificate public and private keys and encoded the content by base64.
 
-![new tls](https://static.kubevela.net/images/1.4/new-tls.jpg)
+![new tls](../../../docs/resources/kubevela-net/images/1.4/new-tls.jpg)
 
 This will generate the secret and distribute to managed clusters with the application.
 
 Then open the application configuration page and click the `Add Trait` button and select the `https-route` trait type. refer to follow configuration:
 
-![https route trait](https://static.kubevela.net/images/1.4/https-route-trait.jpg)
+![https route trait](../../../docs/resources/kubevela-net/images/1.4/https-route-trait.jpg)
 
 ```yaml
 traits:
@@ -119,7 +119,7 @@ This way is suitable for the service with the stream protocol, reusing the same 
 
 You can click the `Add Trait` button and select the `tcp-route` trait type. refer to follow configuration:
 
-![tcp route trait](https://static.kubevela.net/images/1.4/tcp-route.jpg)
+![tcp route trait](../../../docs/resources/kubevela-net/images/1.4/tcp-route.jpg)
 
 ```yaml
 traits:

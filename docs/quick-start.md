@@ -231,7 +231,7 @@ It requires you to override with a new password for the first login, please make
 
 Click the application card, then you can view the details of the application.
 
-![first-app-graph](https://static.kubevela.net/images/1.5/first-app-graph.jpg)
+![first-app-graph](resources/kubevela-net/images/1.5/first-app-graph.jpg)
 
 The UI console shares a different metadata layer with the controller. It's more like a PaaS architecture of a company which choose a database as the source of truth instead of relying on the etcd of Kubernetes.
 

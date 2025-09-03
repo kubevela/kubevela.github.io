@@ -19,7 +19,7 @@ The local users/accounts feature serves two main use-cases:
 
 If the logged-in user has the list user permission, he can switch to the `Platforms/Users` page and get the full list of users.
 
-![user list](https://static.kubevela.net/images/1.3/user-dashboard.jpg)
+![user list](../../../resources/kubevela-net/images/1.3/user-dashboard.jpg)
 
 As shown in the picture above， there are user's name、alias, and platform roles in tables. we will record the user's last login time and show it.
 

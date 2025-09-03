@@ -23,7 +23,7 @@ Helm 仓库配置主要有三个参数，你可以设置 `URL` 参数提供仓�
 
 同时说一句，如果你的仓库使用了自签名的证书，你想要将 CA 证书填写到 `CaFile` 字段中，点击提交即可完成配置创建。
 
-![config](https://static.kubevela.net/images/1.6/create-config.jpg)
+![config](../../../../../../../docs/resources/kubevela-net/images/1.6/create-config.jpg)
 
 另外你也可以通过 CLI 来创建配置:
 
@@ -43,7 +43,7 @@ vela config list -t helm-repository
 
 我们需要进入到需要创建应用的项目概览页面。
 
-![project summary](https://static.kubevela.net/images/1.6/project-summary.jpg)
+![project summary](../../../../../../../docs/resources/kubevela-net/images/1.6/project-summary.jpg)
 
 点击配置列表中的分发按钮并选择会使用的目标集合，即可将配置分发到这些交付目标对应的命名空间中。
 

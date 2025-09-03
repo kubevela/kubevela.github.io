@@ -20,11 +20,11 @@ vela addon enable cloudshell
 
 ### Open the cloud shell environment
 
-![open-cloud-shell](https://static.kubevela.net/images/1.5/cloud-shell.jpg)
+![open-cloud-shell](../../../../../docs/resources/kubevela-net/images/1.5/cloud-shell.jpg)
 
 On the UI top right, there is a cloud shell button. Users can open the cloud shell environment by clicking it. By default, all users have permission to open the cloud shell. If you want to disable this feature for some users, you could create a new platform role that has `Disable CloudShell` permission. Bind this role to the user, who you want to disable.
 
-![cloud shell environment](https://static.kubevela.net/images/1.5/cloud-shell-environment.jpg)
+![cloud shell environment](../../../../../docs/resources/kubevela-net/images/1.5/cloud-shell-environment.jpg)
 
 After connected to the cloud shell environment, you could exec `vela --help` to get the help message. In the console, users have some permissions(Kubernetes RBAC) that auto-grant base the permission in the UI. there are some rules:
 
@@ -34,6 +34,6 @@ After connected to the cloud shell environment, you could exec `vela --help` to 
 
 ### Open the console of the application containers
 
-![container](https://static.kubevela.net/images/1.5/container-console.jpg)
+![container](../../../../../docs/resources/kubevela-net/images/1.5/container-console.jpg)
 
 When you want to debug the application runtime, using the container console could be pretty helpful. In KubeVela, this feature is one of the common use cases of the cloud shell. After clicking the button, you will open a dialog window and see the command line. You can copy the commands and execute them in the cloud shell.

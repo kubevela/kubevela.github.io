@@ -32,3 +32,6 @@ _tmp/
 package-lock.json
 
 .yarn
+
+# Java artifacts
+*.class

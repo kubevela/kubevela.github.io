@@ -12,7 +12,7 @@ title: 自定义容器交付
 
 > 这种方式只适合 UI 用户。
 
-![image](https://static.kubevela.net/images/1.5/custom-ui-schema.jpg)
+![image](../../../../../docs/resources/kubevela-net/images/1.5/custom-ui-schema.jpg)
 
 在定义详情页面，用户可以自定义 UI schema 来设置 UI 表单。 例如，如果要隐藏 ExposeType 字段，只需要设置 disable 为 `true`。
 

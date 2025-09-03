@@ -33,7 +33,7 @@ If your registry with the HTTP protocol to provide the service, you should enabl
 
 If your registry needs authentication, you need must set the username and password. KubeVela will generate the secret and distribute it to all clusters.
 
-![config](https://static.kubevela.net/images/1.4/create-image-registry.jpg)
+![config](../../../../../docs/resources/kubevela-net/images/1.4/create-image-registry.jpg)
 
 Also, we could create the image registry config via CLI:
 
@@ -53,7 +53,7 @@ After creating a config, it only saves as a Secret in the system namespace in th
 
 Let's go to the project summary page for which you want to create the Application.
 
-![project summary](https://static.kubevela.net/images/1.6/project-summary.jpg)
+![project summary](../../../../../docs/resources/kubevela-net/images/1.6/project-summary.jpg)
 
 Click the `Distribute` button and select the targets that you want to distribute the config.
 
