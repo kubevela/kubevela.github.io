@@ -2376,7 +2376,7 @@ spec:
         properties:
           containerName: "busybox-runner"
           httpGet:
-            host: "www.guidewire.comm"
+            host: "www.guidewire.com"
             scheme: "HTTPS"
             port: 443
           periodSeconds: 4
