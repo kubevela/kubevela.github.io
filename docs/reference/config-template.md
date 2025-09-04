@@ -435,7 +435,7 @@ $config.<alias>.output.<field>
 ### Namespace Resolution
 If the namespace field is not specified in $config, the system will resolve it in the following order:
 
-1. Use the namespace specified in $config.{_alias_}.namespace, if provided.
+1. Use the namespace specified in `$config.{_alias_}.namespace`, if provided.
 2. Use the app's namespace (**$current**).
 3. If marked as required, the absence of a namespace will cause a validation error.
 4. Special keywords:
