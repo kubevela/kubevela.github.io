@@ -537,8 +537,7 @@ kubevela/kubevela
     - `oam-dev/terraform-config-inspect`
 
 3. When upgrading a downstream repo that depends on one you just merged and which is not tagged yet, temporarily reference the upstream commit:
-    - `go get github.com/kubevela/pkg@<commit-sha>` (creates a pseudo-version) OR
-    - Add a `replace` directive pointing to that commit, then remove it after a tag is cut.
+    - `go get github.com/kubevela/pkg@<commit-sha>` (creates a pseudo-version)
 
 4. Only AFTER all other repositories are merged upgrade `kubevela/kubevela`
     - Create the upgrade PR from a branch named `chore/upgrade-k8s-*` (e.g. `chore/upgrade-k8s-1.29-to-1.30`). This naming convention triggers the upgrade verification pipelines.
@@ -570,15 +569,12 @@ Use this template in each PR description:
 
 ```
 ### Upgrade Checklist
-- [ ] Go version set to 1.xx in go.mod
-- [ ] CI workflows use actions/setup-go with 1.xx
-- [ ] Dockerfile base image updated
-- [ ] k8s.io/* deps bumped to v1.yy.z
+- [ ] Go version set to x.y.z in go.mod
+- [ ] CI workflows use actions/setup-go with the same version: x.y.z
+- [ ] Dockerfile base image updated (based on compatibility with the new Go version)
+- [ ] k8s.io/* dependencies bumped to va.b.c
 - [ ] controller-runtime compatible version used
+- [ ] All the tests running Kubevela on a Kubernetes cluster (Kind/K3D) use the correct Kubernetes version
 - [ ] go mod tidy run cleanly
 - [ ] Generated code & CRDs regenerated
-- [ ] Unit tests pass
-- [ ] (If applicable) E2E / integration tests pass
-- [ ] Lint passes (golangci-lint)
-- [ ] Docs updated (README / contribution / install)
 ```
