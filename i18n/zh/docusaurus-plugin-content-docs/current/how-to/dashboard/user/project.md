@@ -16,7 +16,7 @@ VelaUX 安装后会默认生成一个`Default`的项目空间，授权给管理�
 
 具有项目管理权限的用户可查看到 `Platform/Projects` 页面，进入该页面即可创建项目。
 
-![project-list](https://static.kubevela.net/images/1.3/project-list.jpg)
+![project-list](https://kubevela.io/images/1.3/project-list.jpg)
 
 点击右上方的`创建项目` 按钮即可进入项目创建页面，每一个项目需要设置一个负责人，项目创建后负责人自动授予项目管理员角色。
 

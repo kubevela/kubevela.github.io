@@ -13,7 +13,7 @@ hide_table_of_contents: false
 
 <!--truncate-->
 
-![resource graph](https://static.kubevela.net/images/1.4/resource-graph.jpg)
+![resource graph](https://kubevela.io/images/1.4/resource-graph.jpg)
 
 如上图所示，KubeVela 已经发布了针对应用的实时观测资源拓扑图功能，进一步完善了 KubeVela 以应用为中心的交付体验。开发者在发起应用交付时只需要关心简单一致的 API ，需要排查问题或者关注交付过程时，可以通过资源拓扑功能，快速获取资源在不同集群的编排关系，从应用一直追踪到 Pod 实例运行状态，自动化地获取资源的关联关系，包括复杂且黑盒化的 Helm Chart。
 
@@ -122,7 +122,7 @@ data:
 
 如果仅有资源关系，还不能解决我们的困难，我们还需要能够将异常直接体现出来，让开发者可以在排查错误时具有 O(1) 的复杂度。不同的资源其状态计算略有不同，但一般资源状态中都具有代表其最终状态的 Condition 字段。以此为基础再加上特定资源的状态计算方法形成资源状态计算逻辑，我们将资源状态分为正常，进行中和异常，在拓扑图中分别以蓝色，黄色和红色来代表，方便用户分辨。
 
-![multiple-cluster-graph](https://static.kubevela.net/images/1.4/multiple-cluster-graph.jpg)
+![multiple-cluster-graph](https://kubevela.io/images/1.4/multiple-cluster-graph.jpg)
 
 另外不同的资源有不同的关键信息，比如 PVC 是否绑定，Pod 实例使用启动完成，Service 资源是否已关联外网 IP 等等，这些信息我们称为关键信息，对于关键信息通过资源节点挂件或者鼠标移动到其上方时显示。这些信息来帮助用户快速判断该资源的配置是否正确，状态是否正常。
 

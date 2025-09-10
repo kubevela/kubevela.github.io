@@ -114,11 +114,11 @@ Addon: velaux enabled Successfully
 
 具有插件管理权限的用户可以进入插件管理页面，进行插件启用/停用等操作。
 
-![addon list](https://static.kubevela.net/images/1.3/addon-list.jpg)
+![addon list](https://kubevela.io/images/1.3/addon-list.jpg)
 
 如上图所示，在插件列表中，你可以查看到插件启用状态和其他基础信息。点击插件名称可以进入到插件详情页面，你可以查询到插件的版本列表，提供的扩展类型和介绍信息。
 
-![addon detail](https://static.kubevela.net/images/1.3/addon-detail.jpg)
+![addon detail](https://kubevela.io/images/1.3/addon-detail.jpg)
 
 选择一个部署版本（默认为最新），设置需要部署的集群后，你可以点击 启用 按钮安装该插件。对于已启用的插件，如果没有应用使用该插件提供的扩展，你可以点击禁用按钮来卸载它。
 
