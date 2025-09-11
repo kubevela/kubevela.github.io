@@ -25,11 +25,11 @@ polices:
 
 对于使用了工作流的应用，`vela debug` 会首先列出工作流中的所有步骤，你可以选择指定的步骤进行调试。选择完步骤后，你可以分别查看该步骤中的所有 CUE 变量内容。其中：黄色标明的 `do` 和 `provider` 是本次使用的 CUE action，错误的内容将以红色标志。
 
-![](https://static.kubevela.net/images/1.4/debug-workflow.gif)
+![](https://kubevela.io/images/1.4/debug-workflow.gif)
 
 你也可以使用 `vela debug <application-name> -s <step-name> -f <variable>` 来查看单个 步骤中的指定变量的内容。
 
-![](https://static.kubevela.net/images/1.4/debug-workflow-focus.gif)
+![](https://kubevela.io/images/1.4/debug-workflow-focus.gif)
 
 ## 仅使用组件的应用
 
@@ -68,8 +68,8 @@ spec:
 
 部署完应用后，你可以使用 `vela debug <application-name>` 命令分组件来查看该应用渲染出来的所有资源。
 
-![](https://static.kubevela.net/images/1.4/debug-application.gif)
+![](https://kubevela.io/images/1.4/debug-application.gif)
 
 你也可以使用 `vela debug <application-name> -s <component-name>` 来查看单个组件中被渲染出来的所有资源。
 
-![](https://static.kubevela.net/images/1.4/debug-application-comp.gif)
+![](https://kubevela.io/images/1.4/debug-application-comp.gif)
