@@ -14,7 +14,7 @@ Currently, VelaUX support manage two kinds of clusters:
 
 Users with cluster management permissions can enter the cluster management page to add or detach managed clusters.
 
-![cluster-management](https://static.kubevela.net/images/1.3/cluster-management.jpg)
+![cluster-management](https://kubevela.io/images/1.3/cluster-management.jpg)
 
 For connecting the ACK clusters, the platform will save some cloud info, Region, VPC, Dashboard Address, etc. When users use the cluster to create a Target, the cloud information is automatically assigned to the Target, which the cloud service applications can use.
 

@@ -25,11 +25,11 @@ You can also use `vela up -f <application yaml> --debug` to automatically add de
 
 For applications that use workflows, `vela debug` will first list all the steps in the workflow, and you can select the specified steps to debug. After selecting a step, you can view the contents of all CUE variables in that step individually. Among them: `do` and `provider` marked in yellow are the CUE actions used this time, and the error content will be marked in red.
 
-![](https://static.kubevela.net/images/1.4/debug-workflow.gif)
+![](https://kubevela.io/images/1.4/debug-workflow.gif)
 
 You can also use `vela debug <application-name> -s <step-name> -f <variable>` to view the contents of specified variables in a single step.
 
-![](https://static.kubevela.net/images/1.4/debug-workflow-focus.gif)
+![](https://kubevela.io/images/1.4/debug-workflow-focus.gif)
 
 ## Applications with components only
 
@@ -68,8 +68,8 @@ spec:
 
 After the application is deployed, you can use the `vela debug <application-name>` command to view all the resources rendered by the application.
 
-![](https://static.kubevela.net/images/1.4/debug-application.gif)
+![](https://kubevela.io/images/1.4/debug-application.gif)
 
 You can also use `vela debug <application-name> -s <component-name>` to see all resources rendered in a single component.
 
-![](https://static.kubevela.net/images/1.4/debug-application-comp.gif)
+![](https://kubevela.io/images/1.4/debug-application-comp.gif)

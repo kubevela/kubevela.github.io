@@ -1109,7 +1109,7 @@ vela adopt --all --resource-topology-rule=my-rule.cue
 
 在采用所有资源并将其应用于集群之后，您可以使用 `vela ls` 或仪表板查看所有采用的应用程序。
 
-![](https://static.kubevela.net/images/1.8/adopt-all.gif)
+![](https://kubevela.io/images/1.8/adopt-all.gif)
 
 #### 批量接管 Helm 部署
 

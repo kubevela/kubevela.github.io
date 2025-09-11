@@ -12,7 +12,7 @@ title: 自定义容器交付
 
 > 这种方式只适合 UI 用户。
 
-![image](https://static.kubevela.net/images/1.5/custom-ui-schema.jpg)
+![image](https://kubevela.io/images/1.5/custom-ui-schema.jpg)
 
 在定义详情页面，用户可以自定义 UI schema 来设置 UI 表单。 例如，如果要隐藏 ExposeType 字段，只需要设置 disable 为 `true`。
 
@@ -247,13 +247,13 @@ spec:
     properties:
       envVersion: 8-jdk8
       replicas: 1
-      warURL: https://static.kubevela.net/example/java-example/nanoservice/catalog.war
+      warURL: https://kubevela.io/example/java-example/nanoservice/catalog.war
     type: java-war
   - name: customer
     properties:
       envVersion: 8-jdk8
       replicas: 1
-      warURL: https://static.kubevela.net/example/java-example/nanoservice/customer.war
+      warURL: https://kubevela.io/example/java-example/nanoservice/customer.war
     type: java-war
   - dependsOn:
     - catalog
@@ -268,7 +268,7 @@ spec:
       envVersion: 8-jdk8
       javaOpts: -Xms512m -Xmx512m -Xss256K
       replicas: 1
-      warURL: https://static.kubevela.net/example/java-example/nanoservice/order.war
+      warURL: https://kubevela.io/example/java-example/nanoservice/order.war
     traits:
     - properties:
         domains:
@@ -296,7 +296,7 @@ spec:
       type: deploy
 ```
 
-![java-app](https://static.kubevela.net/images/1.5/java-war.jpg)
+![java-app](https://kubevela.io/images/1.5/java-war.jpg)
 
 这个例子包括三个组件，order 服务依赖 catalog 和 customer 服务。 开发者只需要关心 war 包 URL 和 tomcat/JRE 版本，Java开发者对此都很熟悉。 开发人员应将 war 包上传到仓库，例如 Jfrog。 获取下载 URL 以分配给 `warURL` 字段。
 

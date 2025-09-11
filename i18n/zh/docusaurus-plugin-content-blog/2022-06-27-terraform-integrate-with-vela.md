@@ -139,7 +139,7 @@ vela show alibaba-ecs --web
 * 安装 KubeVela
 
 ```bash
-curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
+curl -fsSl https://kubevela.io/script/install-velad.sh | bash
 velad install
 ```
 

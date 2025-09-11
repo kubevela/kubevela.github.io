@@ -109,7 +109,7 @@ description: 本文介绍在 KubeVela Dashboard 中创建应用的操作方法�
 
 ### 通过 UI 查看应用日志
 
-![pod log](https://static.kubevela.net/images/1.3/pod-log.jpg)
+![pod log](https://kubevela.io/images/1.3/pod-log.jpg)
 
 如上图所示，交付到 Kubernetes 集群的应用支持查询容器运行日志，切换到指定环境视图下，选择日志页面，即可通过组件/实例/容器的筛选查看对应的运行日志。
 
@@ -160,7 +160,7 @@ $ vela logs <app_name> -n <namespace>
 
 进入应用部署环境视图，默认进入状态展示页面，在该页面中即可查询到应用实际分发的资源列表，如果应用在更新过程中，资源列表会包括历史和当前版本。
 
-![app-resources](https://static.kubevela.net/images/1.3/app-resources.jpg)
+![app-resources](https://kubevela.io/images/1.3/app-resources.jpg)
 
 在该页面中同时展示了组件状态和整体的交付状态。
 
