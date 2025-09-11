@@ -145,7 +145,7 @@ In this part, we will introduce a solution that you can expose any of your Kuber
 * Install KubeVela
 
 ```
-curl -fsSl https://kubevela.io/script/install-velad.sh | bash
+curl -fsSL https://kubevela.io/script/install-velad.sh | bash
 velad install
 ```
 
