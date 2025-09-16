@@ -12,17 +12,14 @@ Definition Permission Validation ensures users can only reference X-Definitions 
 
 ## Enabling the Feature
 
-The feature requires two flags when installing or upgrading KubeVela:
+The feature requires the `authorization.definitionValidationEnabled` flag to be enabled when installing or upgrading KubeVela:
 
 ```bash
 helm upgrade --install kubevela kubevela/vela-core \
   --namespace vela-system \
-  --set authentication.enabled=true \
-  --set authentication.definitions.enabled=true \
+  --set authorization.definitionValidationEnabled=true \
   --wait
 ```
-
-Both `authentication.enabled` and `authentication.definitions.enabled` must be true.
 
 > **Note:** This feature is disabled by default. Before enabling, ensure your users have appropriate RBAC permissions to access the definitions they need.
 
@@ -179,10 +176,8 @@ kubectl auth can-i get componentdefinitions.core.oam.dev/custom-component -n my-
 ### Helm Values
 
 ```yaml
-authentication:
-  enabled: true        # Enable authentication framework (required)
-  definitions:
-    enabled: true      # Enable definition permission validation
+authorization:
+  definitionValidationEnabled: true
 ```
 
 ### Controller Flags
@@ -190,7 +185,6 @@ authentication:
 For non-Helm deployments:
 
 ```bash
---authentication-with-user=true
 --feature-gates=ValidateDefinitionPermissions=true
 ```
 
