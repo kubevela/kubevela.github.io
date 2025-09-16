@@ -49,7 +49,7 @@ Helm 设计之初就为了保证其简单易用，放弃了复杂的组件编排
 - 安装 KubeVela
 
 ```shell
-$ curl -fsSl https://static.kubevela.net/script/install-velad.sh | bash
+$ curl -fsSl https://kubevela.io/script/install-velad.sh | bash
 velad install
 ```
 

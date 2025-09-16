@@ -181,7 +181,7 @@ UI 控制台需要用户认证，默认的账号是： `admin` 密码是： **`V
 
 通过 CLI 部署的应用会自动同步到 UI 侧，你可以进入应用页面查看到应用的相关可视化状态，比如：资源拓扑图，实例等。
 
-![first-app-graph](https://static.kubevela.net/images/1.5/first-app-graph.jpg)
+![first-app-graph](https://kubevela.io/images/1.5/first-app-graph.jpg)
 
 KubeVela 的 UI 控制台跟底层的控制器使用了不同的元数据存储，它的架构类似企业的 PaaS 模式，UI 控制台（velaux）在上层使用数据库作为元数据存储而非依赖底层集群的 etcd。
 

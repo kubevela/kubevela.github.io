@@ -146,7 +146,7 @@ After modifying the deployment parameters, the workflow of the environment must 
 
 For a helm chart, users often don't know what resources they will create, making it difficult to troubleshoot. In VelaUX, users can visualize the resources created by Helm Release. via the resource graph, users could know the relationships between the resources and the status of all resources. Click the `Detail` action button could view the resource YAML.
 
-![resource-graph](https://static.kubevela.net/images/1.4/helm-graph.jpg)
+![resource-graph](https://kubevela.io/images/1.4/helm-graph.jpg)
 
 You can hover your mouse on it to check the health status, by clicking the icon on the right, you can even get the yaml details for debug.
 

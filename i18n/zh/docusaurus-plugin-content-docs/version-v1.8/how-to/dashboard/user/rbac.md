@@ -41,7 +41,7 @@ RBAC 功能可以限制对 KubeVela 资源的访问。UI 和 API 都会进行严
 
 进入 Platform/Roles 页面，即可查询和管理平台级角色。
 
-![role list](https://static.kubevela.net/images/1.3/role-dashboard.jpg)
+![role list](https://kubevela.io/images/1.3/role-dashboard.jpg)
 
 点击右上方的 `添加角色` 按钮即可进入添加页面，填写角色名称选择包含的权限即可。
 
@@ -49,11 +49,11 @@ RBAC 功能可以限制对 KubeVela 资源的访问。UI 和 API 都会进行严
 
 首先需要进入项目的详情页面，如果有项目列表查询权限的用户可通过项目列表进入，如果没有列表查询权限的用户可通过应用页面中所属项目入口进入到项目详情页面。
 
-![role list](https://static.kubevela.net/images/1.3/project-dashboard.jpg)
+![role list](https://kubevela.io/images/1.3/project-dashboard.jpg)
 
 在项目详情页面中切换到角色管理页面，即可添加或修改项目下的角色信息。
 
-![role list](https://static.kubevela.net/images/1.3/project-role.jpg)
+![role list](https://kubevela.io/images/1.3/project-role.jpg)
 
 ## 用户绑定角色
 

@@ -11,7 +11,7 @@ hide_table_of_contents: false
 
 One of the biggest requests from KubeVela community is to provide a transparent delivery process for resources in the application. For example, many users prefer to use Helm Chart to package a lot of complex YAML, but once there is any issue during the deployment, such as the underlying storage can not be provided normally, the associated resources are not created normally, or the underlying configuration is incorrect, etc., even a small problem will be a huge threshold for troubleshooting due to the black box of Helm chart. Especially in the modern hybrid multi-cluster environment, there is a wide range of resources, how to obtain effective information and solve the problem? This can be a very big challenge.
 
-![resource graph](https://static.kubevela.net/images/1.4/resource-graph.jpg)
+![resource graph](https://kubevela.io/images/1.4/resource-graph.jpg)
 
 As shown in the figure above, KubeVela has offered a real-time observation resource topology graph for applications, which further improves KubeVela's application-centric delivery experience. Developers only need to care about simple and consistent APIs when initiating application delivery. When they need to troubleshoot problems or pay attention to the delivery process, they can use the resource topology graph to quickly obtain the arrangement relationship of resources in different clusters, from the application to the running status of the Pod instance. Automatically obtain resource relationships, including complex and black-box Helm Charts.
 
@@ -124,7 +124,7 @@ For example, if we need to pay attention to whether the Service is correctly ass
 
 If there is only a resource relationship, it cannot solve our difficulties. We also need to be able to directly reflect exceptions, so that developers can have O(1) complexity when troubleshooting errors. Different resources have slightly different state calculations, but the general resource state has a Condition field that represents its final state. Based on this, the resource state calculation logic is formed by adding the state calculation method of a specific resource. We divide the resource state into normal, in-progress and abnormal, which are represented by blue, yellow and red border colors on the topology graph node, which is convenient for users to distinguish.
 
-![multiple-cluster-graph](https://static.kubevela.net/images/1.4/multiple-cluster-graph.jpg)
+![multiple-cluster-graph](https://kubevela.io/images/1.4/multiple-cluster-graph.jpg)
 
 In addition, different resources have different key information, such as whether PVC is bound, whether Pod instance is started, whether Service resource is associated with external IP and so on. These are called key information, and some information is displayed on the resource node bottom, others display when the mouse moves over the node. The information helps you quickly determine whether the resource configuration is correct and its status is normal.
 

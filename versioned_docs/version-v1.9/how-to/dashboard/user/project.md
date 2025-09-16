@@ -16,7 +16,7 @@ Once installed VelaUX has one default project with name `Default` owned by the `
 
 Users with project management permissions can go to `Platform/Projects` page for settings，in this page you could create and delete project.
 
-![project-list](https://static.kubevela.net/images/1.3/project-list.jpg)
+![project-list](https://kubevela.io/images/1.3/project-list.jpg)
 
 Click the `New Project` button for creating a project. Each project should set name and owner, the owner user will be granted the project admin role automatically after the project created.
 

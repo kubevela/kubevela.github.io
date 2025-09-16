@@ -33,7 +33,7 @@ vela config-template list | grep image-registry
 
 如果仓库具有用户认证，同时需要设置账号和密码。
 
-![config](https://static.kubevela.net/images/1.4/create-image-registry.jpg)
+![config](https://kubevela.io/images/1.4/create-image-registry.jpg)
 
 另外你也可以直接使用 CLI 创建仓库配置:
 
@@ -56,7 +56,7 @@ After creating a config, it only saves as a Secret in the system namespace in th
 
 我们需要进入到需要创建应用的项目概览页面。
 
-![project summary](https://static.kubevela.net/images/1.6/project-summary.jpg)
+![project summary](https://kubevela.io/images/1.6/project-summary.jpg)
 
 点击配置列表中的分发按钮并选择会使用的目标集合，即可将配置分发到这些交付目标对应的命名空间中。
 
