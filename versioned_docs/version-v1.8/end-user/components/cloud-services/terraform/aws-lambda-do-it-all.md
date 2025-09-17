@@ -13,7 +13,7 @@ Terraform module to provision a lambda with full permissions
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- additional_assume_role_policies | List of objects defining additional non-Lambda IAM trust relationship statements | list(object({\n    Action = list(string)\n    Principal = object({\n      Service = string\n    })\n    Effect = string\n  })) | false |  
+ additional_assume_role_policies | List of objects defining additional non-Lambda IAM trust relationship statements. See [AWS IAM Policy Elements](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html) for details. | `list(map(any))` | false |  
  alias | Lambda alias name | string | false |  
  architecture | The CPU architecture to use |  | false |  
  aws_profile | The account profile to deploy the lamnda function within | string | true |  
@@ -32,7 +32,7 @@ Terraform module to provision a lambda with full permissions
  log_retention | Time in days to retain logs for | number | false |  
  memory_size | Memory allocation for the lambda function | number | false |  
  name | The name to give to the lambda function | string | true |  
- policies | List of objects defining IAM policy statements | list(object({\n    Action   = list(string)\n    Resource = list(string)\n    Effect   = string\n  })) | false |  
+ policies | List of IAM policy statements. See [AWS IAM Policy Elements](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements.html) for details. | `list(map(list(string)))` | false |  
  publish | Should this be published as a version | bool | false |  
  s3_bucket | The S3 bucket your lambda artifact is stored in | string | true |  
  s3_key | The name of the lambda artifact in the bucket | string | true |  

@@ -90,7 +90,7 @@ result: example.#ExampleFunctionName & {
 
 It will:
 1. Look up the `#provider` (_"external-package"_).
-2. Identify that `#do: "api/example-fn-name"` maps to the provider’s POST _{endpoint}/api/example-fn-name_.
+2. Identify that `#do: "api/example-fn-name"` maps to the provider’s POST _\{endpoint\}/api/example-fn-name_.
 3. Send a POST _http://my-cuex-server:8443/api/example-fn-name_ request with this payload:
    ```json
    { "example_param":  "A string value.." }

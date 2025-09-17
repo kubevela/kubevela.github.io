@@ -14,7 +14,7 @@ A Terraform module that creates IAM role with provided JSON IAM polices document
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
  assume_role_actions | The IAM action to be granted by the AssumeRole policy | list(string) | false |  
- assume_role_conditions | List of conditions for the assume role policy | list(object({\n    test     = string\n    variable = string\n    values   = list(string)\n  })) | false |  
+ assume_role_conditions | List of conditions for the assume role policy. See [AWS IAM Policy Conditions](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition.html) for details. | `list(map(list(string)))` | false |  
  instance_profile_enabled | Create EC2 Instance Profile for the role | bool | false |  
  managed_policy_arns | List of managed policies to attach to created role | set(string) | false |  
  max_session_duration | The maximum session duration (in seconds) for the role. Can have a value from 1 hour to 12 hours | number | false |  

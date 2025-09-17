@@ -9,7 +9,7 @@ KubeVela has [release cadence](../../contributor/release-process.md) for every 2
 ## From v1.8.x to v1.9.x
 
 :::caution
-1. Legacy code removal. Basically you will not be able to use EnvBinding, HealthScope, ScopeDefinition and other objects in old KubeVela (<1.0), like ApplicationConfiguration.
+1. Legacy code removal. Basically you will not be able to use EnvBinding, HealthScope, ScopeDefinition and other objects in old KubeVela (`&lt;1.0`), like ApplicationConfiguration.
 2. Registry migrated from kubevela.net OSS storage to GitHub pages.
 > Notice: the "hub.kubevela.net", "charts.kubevela.net" and "addons.kubevela.net" will not be served in the future.
 > 1. For docker images in "hub.kubevela.net", replace it with "docker.io" or "ghcr.io/kubevela".
