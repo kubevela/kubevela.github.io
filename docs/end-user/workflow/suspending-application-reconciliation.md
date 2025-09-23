@@ -12,6 +12,7 @@ KubeVela can **temporarily ignore** an `Application` when you add the label:
 metadata:
   labels:
     controller.core.oam.dev/pause: "true"
+```
 
 This is useful when you need to:
 
