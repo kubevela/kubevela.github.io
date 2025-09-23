@@ -29,13 +29,17 @@ Availability: controller.core.oam.dev/pause is supported in KubeVela v1.9+. Olde
 
 Pause reconciliation
 
+```yaml
 kubectl label application <app-name> \
   controller.core.oam.dev/pause=true -n <namespace> --overwrite
+```
 
 Resume reconciliation
 
+```yaml
 # Remove the label
 kubectl label application <app-name> controller.core.oam.dev/pause- -n <namespace>
+```
 
 Full YAML example
 
