@@ -76,7 +76,7 @@ When you remove the label (or set it to something other than "true"), the contro
 **Reminder:** Because reconcile is paused, any manual edits you make can drift from the desired spec. They will be reconciled back once you resume.
 
 
-### Differences vs. other controls
+## Differences vs. other controls
 
 | Control                                   | Scope                     | Reconcile / State-Keep                       | Typical use case                                                                                     |
 | ----------------------------------------- | ------------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
@@ -88,7 +88,7 @@ When you remove the label (or set it to something other than "true"), the contro
 
 
 
-### Best practices
+## Best practices
 - Use labels intentionally: Add the pause label only when you need a hands-off window; remove it as soon as you’re done.
 
 - Audit & visibility: Label changes are regular Kubernetes metadata updates—monitor via Events/audit logs.
