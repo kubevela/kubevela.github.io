@@ -173,7 +173,7 @@ module.exports = {
             'tutorials/debug-app',
             'tutorials/cloud-shell',
             'tutorials/vela-top',
-            'end-user/workflow/component-dependency-parameter.md',
+            'end-user/workflow/suspending-application-reconciliation',
             {
               type: 'category',
               label: 'Config Management',
