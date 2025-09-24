@@ -6,7 +6,7 @@ description: How to temporarily stop KubeVela from reconciling an Application us
 
 ## Dependency
 
-KubeVela can **temporarily ignore** an `Application` when you add the label:
+KubeVela will not reconcile an `Application` when you add the label. Reconciling will only resume after the label is removed. 
 
 ```yaml
 metadata:
