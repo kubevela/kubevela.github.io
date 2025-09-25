@@ -188,6 +188,14 @@ you can run the command:
 make def-install
 ```
 
+:::caution A Note on this Local Setup
+The steps above (`core-install` and `def-install`) only install KubeVela's CRDs and definitions. They do **not** create a complete control plane, and resources like the `kubevela-vela-core` ServiceAccount and its associated RBAC permissions will be missing.
+
+The `make core-run` command in the next step will still function without error, because it uses your personal `~/.kube/config` file, which likely has admin privileges.
+
+This setup is useful for a quick start, but it is **not a complete or realistic environment**. For a more comprehensive development setup that mirrors a real deployment, please see the [Debugging Locally with Remote KubeVela Environment](#debugging-locally-with-remote-kubevela-environment) section, which involves installing the full Helm chart first.
+:::
+
 And then run locally:
 
 ```shell script
@@ -240,21 +248,47 @@ make e2e-test
 
 ### Debugging Locally with Remote KubeVela Environment
 
-To run vela-core locally for debugging with kubevela installed in the remote cluster:
-- Firstly, scaling the replicas of `kubevela-vela-core` to 0 for leader election of `controller-manager`:
-  ```shell
-  kubectl scale deploy -n vela-system kubevela-vela-core --replicas=0
-  ```
-- Secondly, removing the `WebhookConfiguration`, otherwise an error will be reported when applying your application using `vela-cli` or `kubectl`:
-  ```shell
-  kubectl delete ValidatingWebhookConfiguration kubevela-vela-core-admission -n vela-system
-  kubectl delete MutatingWebhookConfiguration kubevela-vela-core-admission -n vela-system
-  ```
+This approach creates a complete and realistic development environment. It involves installing the full KubeVela control plane in your cluster via Helm, and then running the controller code locally to connect to it.
 
-Finally, you can use the commands in the above [Build](#build) and [Testing](#Testing) sections, such as `make run`, to code and debug in your local machine.
+1.  **Install KubeVela using Helm**
+
+    First, ensure any previous KubeVela installation is removed to avoid conflicts.
+    ```shell
+    helm uninstall kubevela -n vela-system
+    ```
+
+    Then, install KubeVela from the source code. This command installs the CRDs, ServiceAccount, RBAC rules, and the controller deployment itself.
+    ```shell
+    # Note: This assumes you are in the root of the 'kubevela/kubevela' repository
+    helm install kubevela ./charts/vela-core -n vela-system --create-namespace
+    ```
+
+2.  **Prepare for Local Debugging**
+
+    To run the controller from your local machine and avoid conflicts with the one you just installed, you need to scale down the in-cluster controller and remove its webhooks.
+
+    - Scale down the controller replicas:
+      ```shell
+      kubectl scale deploy -n vela-system kubevela-vela-core --replicas=0
+      ```
+    - Remove the admission webhooks:
+      ```shell
+      kubectl delete ValidatingWebhookConfiguration kubevela-vela-core-admission
+      kubectl delete MutatingWebhookConfiguration kubevela-vela-core-admission
+      ```
+      :::info
+      The `*-admission` webhooks might not exist in all configurations. It is safe to ignore `(Not Found)` errors from these commands.
+      :::
+
+3.  **Run the Controller Locally**
+
+    Finally, you can use the `make core-run` command to run the controller from your local machine. It will connect to the cluster using your `kubeconfig` and take over from the scaled-down controller.
+    ```shell
+    make core-run
+    ```
 
 :::caution
-Note you will not be able to test features relate with validating/mutating webhooks in this way.
+By removing the webhooks, you will not be able to test features that rely on the admission controller (like some definition validation or pod injection features) in this mode.
 :::
 
 ## Run VelaUX Locally
