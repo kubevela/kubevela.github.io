@@ -13,8 +13,8 @@ Terraform module creating a SecretsManager for Rollbar project access tokens
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- name_prefix | Name prefix for the SecretsManager. The full name will be ${var.name_prefix}.rollbar_access_tokens. | string | true |  
- rollbar_access_token_names | List of name of Rollbar access tokens which shall be loaded into the SecretsManager. | list(string) | false |  
+ name_prefix | Name prefix for the SecretsManager. The full name will be `$`&#123;var.name_prefix&#125;.rollbar_access_tokens. | string | true |  
+ rollbar_access_token_names | List of Rollbar access token names to load into SecretsManager. | `list` | false |  
  rollbar_project_name | Name of the Rollbar project to load the project access tokens from. | string | true |  
  tags | Tags which will be assigned to all resources. | map(string) | false |  
  writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  

@@ -9,10 +9,10 @@ generate autocompletions script for zsh
 Generate the autocompletion script for Vela for the zsh shell.
 
 To load completions in your current shell session:
-$ source <(vela completion zsh)
+$ source \<(vela completion zsh)
 
 To load completions for every new session, execute once:
-$ vela completion zsh > "${fpath[1]}/_vela"
+$ vela completion zsh > "$\{fpath[1]\}/_vela"
 
 
 ```

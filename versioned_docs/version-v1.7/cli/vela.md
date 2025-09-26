@@ -29,7 +29,7 @@ title: CLI Commands
 * [vela port-forward](vela_port-forward.md)	 - Forward local ports to container/service port of vela application.
 * [vela logs](vela_logs.md)	 - Tail logs for vela application.
 * [vela ql](vela_ql.md)	 - Show result of executing velaQL, use it like:
-		vela ql --query "inner-view-name{param1=value1,param2=value2}"
+		vela ql --query "inner-view-name\{param1=value1,param2=value2\}"
 		vela ql --file ./ql.cue
 * [vela live-diff](vela_live-diff.md)	 - Compare application and revisions
 * [vela top](vela_top.md)	 - Launch UI to display platform overview information and diagnose the status for any specific application.

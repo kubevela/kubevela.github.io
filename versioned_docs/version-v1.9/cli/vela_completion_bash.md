@@ -9,7 +9,7 @@ generate autocompletions script for bash
 Generate the autocompletion script for Vela for the bash shell.
 
 To load completions in your current shell session:
-$ source <(vela completion bash)
+$ source \<(vela completion bash)
 
 To load completions for every new session, execute once:
 Linux:
