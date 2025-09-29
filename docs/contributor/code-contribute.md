@@ -254,14 +254,17 @@ This approach creates a complete and realistic development environment. It invol
 
     First, ensure any previous KubeVela installation is removed to avoid conflicts.
     ```shell
-    helm uninstall kubevela -n vela-system
+    vela uninstall
     ```
 
-    Then, install KubeVela from the source code. This command installs the CRDs, ServiceAccount, RBAC rules, and the controller deployment itself.
+    Then, install KubeVela from the source code using the Vela CLI. This command installs the CRDs, ServiceAccount, RBAC rules, and the controller deployment itself.
     ```shell
-    # Note: This assumes you are in the root of the 'kubevela/kubevela' repository
-    helm install kubevela ./charts/vela-core -n vela-system --create-namespace
+    vela install
     ```
+    :::tip
+    Alternatively, you can use Helm directly:
+    `helm install kubevela ./charts/vela-core -n vela-system --create-namespace`
+    :::
 
 2.  **Prepare for Local Debugging**
 
@@ -286,6 +289,19 @@ This approach creates a complete and realistic development environment. It invol
     ```shell
     make core-run
     ```
+
+    <details>
+      <summary>Running from an IDE (for Debugging)</summary>
+
+      For a richer debugging experience, you can run the KubeVela controller directly from your IDE.
+
+      1.  Open the `kubevela/kubevela` project in your Go-compatible IDE (like GoLand or VSCode with the Go extension).
+      2.  Locate the main entrypoint file: `cmd/core/main.go`.
+      3.  Run or Debug this file directly from your IDE. Most IDEs will automatically detect the `main` function.
+
+      This will start the controller locally, similar to `make core-run`. You can now set breakpoints, inspect variables, and step through the code. You can also add arguments to your IDE's launch configuration, such as `--log-debug=true` to get more verbose logs.
+
+    </details>
 
 :::caution
 By removing the webhooks, you will not be able to test features that rely on the admission controller (like some definition validation or pod injection features) in this mode.
