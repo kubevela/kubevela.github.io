@@ -2,7 +2,7 @@
 title: vela uischema apply
 ---
 
-apply <ui schema file/dir path>
+apply \<ui schema file/dir path\>
 
 ### Synopsis
 

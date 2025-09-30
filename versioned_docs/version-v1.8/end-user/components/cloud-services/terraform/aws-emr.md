@@ -15,7 +15,15 @@ Terraform module which creates EMR on AWS
  additional_master_security_group | The name of the existing additional security group that will be used for EMR master node. If empty, a new security group will be created | string | false |  
  additional_slave_security_group | The name of the existing additional security group that will be used for EMR core & task nodes. If empty, a new security group will be created | string | false |  
  applications | A list of applications for the cluster. Valid values are: Flink, Ganglia, Hadoop, HBase, HCatalog, Hive, Hue, JupyterHub, Livy, Mahout, MXNet, Oozie, Phoenix, Pig, Presto, Spark, Sqoop, TensorFlow, Tez, Zeppelin, and ZooKeeper (as of EMR 5.25.0). Case insensitive | list(string) | true |  
- bootstrap_action | List of bootstrap actions that will be run before Hadoop is started on the cluster nodes | list(object({\n    path = string\n    name = string\n    args = list(string)\n  })) | false |  
+ bootstrap_action | List of bootstrap actions that will be run before Hadoop is started on the cluster nodes. Each action should be an object with `path`, `name`, and `args` fields. Example:
+```json
+{
+  "path": "s3://my-bucket/my-script.sh",
+  "name": "SetupHadoop",
+  "args": ["--arg1", "value1"]
+}
+```
+ | `list<{path: string, name: string, args: list<string>}>` | false |  
  configurations_json | A JSON string for supplying list of configurations for the EMR cluster. See https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html for more details | string | false |  
  core_instance_group_autoscaling_policy | String containing the EMR Auto Scaling Policy JSON for the Core instance group | string | false |  
  core_instance_group_bid_price | Bid price for each EC2 instance in the Core instance group, expressed in USD. By setting this attribute, the instance group is being declared as a Spot Instance, and will implicitly create a Spot request. Leave this blank to use On-Demand Instances | string | false |  
@@ -68,7 +76,29 @@ Terraform module which creates EMR on AWS
  slave_allowed_cidr_blocks | List of CIDR blocks to be allowed to access the slave instances | list(string) | false |  
  slave_allowed_security_groups | List of security groups to be allowed to connect to the slave instances | list(string) | false |  
  step_concurrency_level | The number of steps that can be executed concurrently. You can specify a maximum of 256 steps. Only valid for EMR clusters with release_label 5.28.0 or greater. | number | false |  
- steps | List of steps to run when creating the cluster. | list(object({\n    name              = string\n    action_on_failure = string\n    hadoop_jar_step = object({\n      args       = list(string)\n      jar        = string\n      main_class = string\n      properties = map(string)\n    })\n  })) | false |  
+ steps | List of steps to run when creating the cluster. Each step should be an object with `name`, `action_on_failure`, and `hadoop_jar_step` fields. Example:
+```json
+{
+  "name": "WordCount",
+  "action_on_failure": "CONTINUE",
+  "hadoop_jar_step": {
+    "jar": "command-runner.jar",
+    "args": ["spark-submit", "--class", "org.apache.spark.examples.SparkPi", "/usr/lib/spark/examples/jars/spark-examples.jar"],
+    "main_class": "",
+    "properties": {}
+  }
+}
+```
+ | `list<{
+  name: string,
+  action_on_failure: string,
+  hadoop_jar_step: {
+    args: list<string>,
+    jar: string,
+    main_class: string,
+    properties: map<string>
+  }
+}>` | false |  
  subnet_id | VPC subnet ID where you want the job flow to launch. Cannot specify the `cc1.4xlarge` instance type for nodes of a job flow launched in a Amazon VPC | string | true |  
  subnet_type | Type of VPC subnet ID where you want the job flow to launch. Supported values are `private` or `public` | string | false |  
  task_instance_group_autoscaling_policy | String containing the EMR Auto Scaling Policy JSON for the Task instance group | string | false |  
