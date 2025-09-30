@@ -525,7 +525,7 @@ kubevela/velaux
 
 1. Pick target Go and Kubernetes minor. Confirm a compatible `sigs.k8s.io/controller-runtime`.
 
-2. Upgrade ALL repositories EXCEPT `kubevela/kubevela` first. Do them sequentially respecting real import dependencies (see [Interdependencies example](#interdependencies-example)):
+2. Upgrade ALL repositories EXCEPT `kubevela/kubevela` first. Do them sequentially respecting real import dependencies (see [Interdependencies example](#interdependencies-example)). The core `kubevela/kubevela` repository MUST be upgraded only after every repo below is merged; `kubevela/velaux` is upgraded last, only after the `kubevela/kubevela` upgrade is complete.
 
     - `oam-dev/cluster-register`
     - `oam-dev/cluster-gateway`
@@ -543,7 +543,7 @@ kubevela/velaux
 4. Only AFTER all other repositories are merged upgrade `kubevela/kubevela`
     - Create the upgrade PR from a branch named `chore/upgrade-k8s-*` (e.g. `chore/upgrade-k8s-1.29-to-1.30`). This naming convention triggers the upgrade verification pipelines.
 
-5. After merge of `kubevela/kubevela` update release notes & docs with new minimum Go / supported Kubernetes versions.
+5. After `kubevela/kubevela` is merged, update the release notes and documentation with the new minimum Go version and supported Kubernetes versions, then upgrade `kubevela/velaux`.
 
 ### Interdependencies Example
 
@@ -573,7 +573,7 @@ Use this template in each PR description:
 - [ ] Go version set to x.y.z in go.mod
 - [ ] CI workflows use actions/setup-go with the same version: x.y.z
 - [ ] Dockerfile base image updated (based on compatibility with the new Go version)
-- [ ] k8s.io/* dependencies bumped to va.b.c
+- [ ] k8s.io/* dependencies bumped to vx.y.z
 - [ ] controller-runtime compatible version used
 - [ ] All the tests running Kubevela on a Kubernetes cluster (Kind/K3D) use the correct Kubernetes version
 - [ ] go mod tidy run cleanly
