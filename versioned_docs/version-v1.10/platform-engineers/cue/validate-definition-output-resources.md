@@ -274,59 +274,6 @@ output: {
 }
 ```
 
-## Summary
-
-1. **Early Detection**: Catches missing resource types at definition creation time
-   ```bash
-   # Immediate feedback when applying definition
-   kubectl apply -f definition.yaml
-   ```
-
-2. **Cluster-Specific**: Validation is based on the actual cluster state
-   - Different clusters may have different CRDs installed
-   - Validation results may vary between environments
-
-3. **Addon Exemption**: Addon definitions are automatically skipped
-   ```yaml
-   # This is allowed for addon definitions even if CRD doesn't exist yet
-   ownerReferences:
-   - apiVersion: core.oam.dev/v1beta1
-     kind: Application
-     name: addon-istio
-   ```
-
-4. **Clear Error Messages**: Shows exact resource type that's missing
-   ```
-   resource type not found on cluster: custom.io/v1/MyResource
-   ```
-
-## Troubleshooting
-
-| Symptom | Solution |
-|---------|----------|
-| Resource type not found | Verify CRD is installed: `kubectl get crd` |
-| Validation for addon fails | Check owner references and labels |
-| Old API version rejected | Update to current API version for your K8s version |
-| Can't create definition | Install required CRDs before definitions |
-
-**Debug Commands**:
-
-```bash
-# Check if CRD exists
-kubectl get crd <crd-name>
-
-# List all available API resources
-kubectl api-resources
-
-# Check specific API version
-kubectl api-versions | grep <group>
-
-# View webhook logs
-kubectl -n vela-system logs -l app.kubernetes.io/name=vela-core --tail=100
-```
-
-
 ## Related Features
 
 - [CUE Validation](./cue-validation.md): Validates parameter requirements and types
-- [Definition Edit](./definition-edit.md): Guidelines for editing definitions safely
