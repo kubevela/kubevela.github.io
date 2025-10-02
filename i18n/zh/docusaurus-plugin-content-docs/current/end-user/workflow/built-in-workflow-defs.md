@@ -3056,7 +3056,6 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- addonName | Specify the name of the addon。 | string | true |  
  command | Specify the vela command。 | []string | true |  
  image | Specify the image。 | string | false | oamdev/vela-cli:v1.6.4 
  serviceAccountName | specify serviceAccountName want to use。 | string | false | kubevela-vela-core 
