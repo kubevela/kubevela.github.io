@@ -12,14 +12,14 @@ module.exports = {
   projectName: 'kubevela.io', // Usually your repo name.
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'zh'],
+    locales: ['en'], // Temporarily disabled Chinese locale during Docusaurus upgrade
     localeConfigs: {
       en: {
         label: 'English',
       },
-      zh: {
-        label: '简体中文',
-      },
+      // zh: {
+      //   label: '简体中文',
+      // },
     },
   },
   markdown: {
@@ -163,7 +163,7 @@ module.exports = {
       `,
     },
     prism: {
-      theme: require('prism-react-renderer/themes/dracula'),
+      theme: require('prism-react-renderer').themes.dracula,
       additionalLanguages: ['cue', 'powershell'],
     },
     zoom: {
@@ -278,6 +278,7 @@ module.exports = {
           blogSidebarCount: 'ALL',
           showReadingTime: true,
           editUrl: 'https://github.com/kubevela/kubevela.io/tree/main/',
+          onInlineAuthors: 'ignore',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.scss'),
