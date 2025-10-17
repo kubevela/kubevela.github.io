@@ -124,7 +124,7 @@ vela up -f https://kubevela.io/example/applications/app-with-k8s-objects.yaml
 vela status app-with-k8s-objects
 ```
 
-You can also check the deployment and service with the `kubectl` or any other tools you familiar to check the deployment.
+You can also check the deployment and service with the `kubectl` or any other tools you are familiar with to check the deployment.
 
 - Approve the workflow if everything looks good.
 
@@ -181,7 +181,7 @@ As for the test environment, it sure can be updated at any time. When we update 
 
 ### Deploying prod environment
 
-Let's switch to the Tab of the prod environment. It shows that it's not deployed yet. So now you can understand one basic thing for KubeVela, different environments in one application are completely dependant on each other, of each is an individual Application CR.
+Let's switch to the Tab of the prod environment. It shows that it's not deployed yet. So now you can understand one basic thing for KubeVela, different environments in one application are completely independent of each other, as each is an individual Application CR.
 
 As we have two targets for the prod environment, it'll execute in sequence. If you hope to set up a manual approval before it gets into the second target, this is where workflow comes in.
 
