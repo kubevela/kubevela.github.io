@@ -9,7 +9,7 @@ title: 集群管理
 
 具有集群管理权限的用户可以进入集群管理页面，添加或移除托管的集群。
 
-![cluster-management](https://static.kubevela.net/images/1.3/cluster-management.jpg)
+![cluster-management](https://kubevela.io/images/1.3/cluster-management.jpg)
 从 ACK 添加的集群平台会获取并记录集群所在的区域、VPC、Dashboard地址等信息，用户使用该集群创建交付目标时将自动引用，这些信息用以辅助云服务的创建。
 
 ## 通过 CLI 管理集群

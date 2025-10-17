@@ -13,7 +13,19 @@ Terraform module creating a Lambda function with inline code
 
  Name | Description | Type | Required | Default 
  ------------ | ------------- | ------------- | ------------- | ------------- 
- archive_file | An instance of the `archive_file` data source containing the code of the Lambda function. Conflicts with `source_dir`. | object({\n    output_path         = string\n    output_base64sha256 = string\n  }) | false |  
+ archive_file | An instance of the `archive_file` data source containing the code of the Lambda function. Conflicts with `source_dir`.
+
+Example:
+```hcl
+archive_file = {
+  output_path = "lambda_function_payload.zip"
+  output_base64sha256 = "h4sIAAAAAAAAA+..."
+}
+```
+ | `{
+  output_path: string,
+  output_base64sha256: string
+}` | false |  
  cloudwatch_log_group_retention_in_days | The number of days to retain the log of the Lambda function. | number | false |  
  description | Description of the Lambda function. | string | true |  
  environment_variables | Environment variable key-value pairs. | map(string) | false |  

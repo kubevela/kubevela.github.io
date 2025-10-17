@@ -37,7 +37,7 @@ Terraform module to provision an ElastiCache Redis Cluster
  multi_az_enabled | Multi AZ (Automatic Failover must also be enabled.  If Cluster Mode is enabled, Multi AZ is on by default, and this setting is ignored) | bool | false |  
  notification_topic_arn | Notification topic arn | string | false |  
  ok_actions | The list of actions to execute when this alarm transitions into an OK state from any other state. Each action is specified as an Amazon Resource Number (ARN) | list(string) | false |  
- parameter | A list of Redis parameters to apply. Note that parameters may differ from one Redis family to another | list(object({\n    name  = string\n    value = string\n  })) | false |  
+ parameter | A list of Redis parameters to apply. Note that parameters may differ from one Redis family to another | `list(object({ name = string, value = string }))` | false |  
  parameter_group_description | Managed by Terraform | string | false |  
  port | Redis port | number | false |  
  replication_group_id | Replication group ID with the following constraints: \nA name must contain from 1 to 20 alphanumeric characters or hyphens. \n The first character must be a letter. \n A name cannot end with a hyphen or contain two consecutive hyphens. | string | false |  

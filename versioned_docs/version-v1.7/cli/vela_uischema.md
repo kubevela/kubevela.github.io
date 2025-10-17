@@ -17,13 +17,14 @@ Manage UI schema for addons.
 ### Options inherited from parent commands
 
 ```
-  -y, --yes   Assume yes for all user prompts
+  -V, --verbosity Level   number for the log level verbosity
+  -y, --yes               Assume yes for all user prompts
 ```
 
 ### SEE ALSO
 
 
-* [vela uischema apply](vela_uischema_apply.md)	 - apply <ui schema file/dir path>
+* [vela uischema apply](vela_uischema_apply.md)	 - apply \<ui schema file/dir path\>
 
 #### Go Back to [CLI Commands](vela.md) Homepage.
 
