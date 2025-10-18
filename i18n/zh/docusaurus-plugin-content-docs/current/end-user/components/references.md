@@ -4,7 +4,7 @@ title: 内置组件列表
 
 本文档将**按字典序**展示所有内置组件的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2024-10-10T15:56:12-07:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc)自动生成，请勿手动修改，上次更新于 2025-10-18T02:39:31Z。
 
 ## Cron-Task
 
@@ -291,10 +291,6 @@ spec:
 ### 描述
 
 定义一个同 Kubernetes 每个机器 Node 都运行的服务。
-
-### 底层 Kubernetes 资源 (daemon)
-
-- daemonsets.apps
 
 ### 示例 (daemon)
 
@@ -639,19 +635,15 @@ spec:
 ```
 
 ### 参数说明 (k8s-objects)
-|  NAME   | DESCRIPTION  |        TYPE          | REQUIRED | DEFAULT |
-|---------|-------------|-----------------------|----------|---------|
-| objects | A slice of Kubernetes resource manifests   | [][Kubernetes-Objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) | true     |         |
+ Name | Description | Type | Required | Default
+ ---- | ----------- | ---- | -------- | -------
+ objects | A slice of Kubernetes resource manifests | [][Kubernetes-Objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) | true |
 
 ## Statefulset
 
 ### 描述
 
 Describes long-running, scalable, containerized services used to manage stateful application, like database。
-
-### 底层 Kubernetes 资源 (statefulset)
-
-- statefulsets.apps
 
 ### 示例 (statefulset)
 
@@ -965,10 +957,6 @@ spec:
 
 定义一个只执行一次代码或者脚本的任务。
 
-### 底层 Kubernetes 资源 (task)
-
-- jobs.batch
-
 ### 示例 (task)
 
 ```yaml
@@ -1146,10 +1134,6 @@ spec:
 
 定义一个长期运行的，可伸缩的容器化的服务，并且会暴露一个服务端点用来接受来自客户的外部流量。
 
-### 底层 Kubernetes 资源 (webservice)
-
-- deployments.apps
-
 ### 示例 (webservice)
 
 ```yaml
@@ -1194,6 +1178,7 @@ spec:
  env | 容器中的环境变量。 | [[]env](#env-webservice) | false |  
  cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
  memory | 所需要的内存大小。 | string | false |  
+ limit |  | [limit](#limit-webservice) | false |  
  volumeMounts |  | [volumeMounts](#volumemounts-webservice) | false |  
  volumes | Deprecated field, use volumeMounts instead。 | [[]volumes](#volumes-webservice) | false |  
  livenessProbe | 判断容器是否存活的探针。 | [livenessProbe](#livenessprobe-webservice) | false |  
@@ -1244,6 +1229,14 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name | 环境变量的名称。 | string | true |  
  key | configmap 中的键名。 | string | true |  
+
+
+#### limit (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ cpu |  | string | false |  
+ memory |  | string | false |  
 
 
 #### volumeMounts (webservice)

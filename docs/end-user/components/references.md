@@ -1,10 +1,10 @@
 ---
-title: Built-in ParsedComponents Type
+title: Built-in Components Type
 ---
 
 This documentation will walk through all the built-in component types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2024-10-10T15:56:12-07:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc), please don't update manually, last updated at 2025-10-18T02:39:31Z.
 
 ## Cron-Task
 
@@ -291,10 +291,6 @@ spec:
 ### Description
 
 Describes daemonset services in Kubernetes.
-
-### Underlying Kubernetes Resources (daemon)
-
-- daemonsets.apps
 
 ### Examples (daemon)
 
@@ -639,19 +635,15 @@ spec:
 ```
 
 ### Specification (k8s-objects)
-|  NAME   | DESCRIPTION  |        TYPE          | REQUIRED | DEFAULT |
-|---------|-------------|-----------------------|----------|---------|
-| objects | A slice of Kubernetes resource manifests   | [][Kubernetes-Objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) | true     |         |
+ Name | Description | Type | Required | Default
+ ---- | ----------- | ---- | -------- | -------
+ objects | A slice of Kubernetes resource manifests | [][Kubernetes-Objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) | true |
 
 ## Statefulset
 
 ### Description
 
 Describes long-running, scalable, containerized services used to manage stateful application, like database.
-
-### Underlying Kubernetes Resources (statefulset)
-
-- statefulsets.apps
 
 ### Examples (statefulset)
 
@@ -965,10 +957,6 @@ spec:
 
 Describes jobs that run code or a script to completion.
 
-### Underlying Kubernetes Resources (task)
-
-- jobs.batch
-
 ### Examples (task)
 
 ```yaml
@@ -1146,10 +1134,6 @@ spec:
 
 Describes long-running, scalable, containerized services that have a stable network endpoint to receive external network traffic from customers.
 
-### Underlying Kubernetes Resources (webservice)
-
-- deployments.apps
-
 ### Examples (webservice)
 
 ```yaml
@@ -1194,6 +1178,7 @@ spec:
  env | Define arguments by using environment variables. | [[]env](#env-webservice) | false |  
  cpu | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core). | string | false |  
  memory | Specifies the attributes of the memory resource required for the container. | string | false |  
+ limit |  | [limit](#limit-webservice) | false |  
  volumeMounts |  | [volumeMounts](#volumemounts-webservice) | false |  
  volumes | Deprecated field, use volumeMounts instead. | [[]volumes](#volumes-webservice) | false |  
  livenessProbe | Instructions for assessing whether the container is alive. | [livenessProbe](#livenessprobe-webservice) | false |  
@@ -1244,6 +1229,14 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  name | The name of the config map in the pod's namespace to select from. | string | true |  
  key | The key of the config map to select from. Must be a valid secret key. | string | true |  
+
+
+#### limit (webservice)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ cpu |  | string | false |  
+ memory |  | string | false |  
 
 
 #### volumeMounts (webservice)
