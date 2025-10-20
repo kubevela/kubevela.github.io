@@ -1,0 +1,181 @@
+.notificationBanner {
+  background: linear-gradient(135deg, #10a6fa 0%, #0476b6 100%);
+  padding: 24px 0;
+  position: sticky;
+  top: 60px;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.notificationContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 50px 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  color: white;
+  font-size: 15px;
+  position: relative;
+}
+
+.conferenceLogo {
+  height: 90px;
+  width: auto;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+}
+
+.messageContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+
+.message {
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+.message strong {
+  color: #ffd700;
+  font-weight: 600;
+}
+
+.dateTime {
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffd700;
+  margin: 6px 0;
+}
+
+.title {
+  font-size: 16px;
+  margin: 4px 0;
+}
+
+.title strong {
+  color: white;
+  font-weight: 700;
+}
+
+.description {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+.ctaButton {
+  background: white;
+  color: #0476b6;
+  padding: 8px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.ctaButton:hover {
+  background: #f8f9fa;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  color: #10a6fa;
+}
+
+.closeButton {
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  color: white;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Dark theme adjustments */
+[data-theme='dark'] .notificationBanner {
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+}
+
+[data-theme='dark'] .conferenceLogo {
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+[data-theme='dark'] .ctaButton {
+  background: #edf2f7;
+  color: #2d3748;
+}
+
+[data-theme='dark'] .ctaButton:hover {
+  background: white;
+  color: #1a202c;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .notificationContent {
+    flex-direction: column;
+    padding: 20px 40px 20px 16px;
+    gap: 12px;
+  }
+  
+  .conferenceLogo {
+    height: 70px;
+  }
+  
+  .messageContainer {
+    width: 100%;
+  }
+  
+  .message {
+    font-size: 13px;
+  }
+  
+  .dateTime {
+    font-size: 14px;
+  }
+  
+  .title {
+    font-size: 14px;
+  }
+  
+  .description {
+    font-size: 12px;
+  }
+  
+  .ctaButton {
+    width: auto;
+    margin: 0 auto;
+  }
+  
+  .closeButton {
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
+    top: -8px;
+    right: 10px;
+  }
+}
