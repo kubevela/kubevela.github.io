@@ -562,13 +562,13 @@ template: {
             labels: {
                 "config.oam.dev/cluster-name":  $config.cluster.output.clusterName
                 "config.oam.dev/cluster-owner": $config.cluster.output.clusterOwner
-                "config.oam.dev/dev-team":      $config.application.output.teamName
-                "config.oam.dev/department":    $config.application.output.department
+                "config.oam.dev/dev-team":      $config.developer.output.teamName
+                "config.oam.dev/department":    $config.developer.output.department
             }
         }
         data: {
             clusterName:    $config.cluster.output.clusterName
-            devTeam:        $config.application.output.teamName
+            devTeam:        $config.developer.output.teamName
         }
     }
 }

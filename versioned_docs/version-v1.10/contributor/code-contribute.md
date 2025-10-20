@@ -486,12 +486,12 @@ The `core-run` target uses the `fmt` target to check the format of the files. Th
 may not have the same version as the base golang installation. For older versions of goimports, you may see the following
 error:
 
-`bash
+```bash
 $ make core-run
 go fmt ./...
 /<your_go_binary_path>/go/bin/goimports -local github.com/oam-dev/kubevela -w $(go list -f {{.Dir}} ./...)
 /<kubevela_clone_path>/kubevela/pkg/cache/informer.go:46:25: expected ']', found any
-`
+```
 
 To solve this issue, execute:
 
