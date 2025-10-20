@@ -163,7 +163,7 @@ module.exports = {
       `,
     },
     prism: {
-      theme: require('prism-react-renderer').themes.dracula,
+      theme: require('prism-react-renderer/themes/dracula'),
       additionalLanguages: ['cue', 'powershell'],
     },
     zoom: {
@@ -277,8 +277,7 @@ module.exports = {
           blogSidebarTitle: 'All posts',
           blogSidebarCount: 'ALL',
           showReadingTime: true,
-          editUrl: 'https://github.com/kubevela/kubevela.io/tree/main/',
-          onInlineAuthors: 'ignore',
+          editUrl: 'https://github.com/kubevela/kubevela.io/tree/main/'
         },
         theme: {
           customCss: require.resolve('./src/css/custom.scss'),
