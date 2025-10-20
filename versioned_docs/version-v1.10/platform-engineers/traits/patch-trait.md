@@ -185,6 +185,11 @@ spec:
               server-owner: "old-owner"
 ```
 
+#### An organisation trait to patch default behaviours to components
+
+See the example [organisation trait](./organisation-trait.md)
+
+
 ### Patch to traits
 
 > Note: it's available after KubeVela v1.4.

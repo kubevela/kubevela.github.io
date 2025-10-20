@@ -84,7 +84,7 @@ environment prod with namespace prod created
 * Starting to deploy the application
 
 ```
-vela up -f https://kubevela.net/example/applications/first-app.yaml
+vela up -f https://kubevela.io/example/applications/first-app.yaml
 ```
 
 <details>

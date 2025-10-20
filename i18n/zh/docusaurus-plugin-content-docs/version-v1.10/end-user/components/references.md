@@ -4,7 +4,7 @@ title: 内置组件列表
 
 本文档将**按字典序**展示所有内置组件的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc.md)自动生成，请勿手动修改，上次更新于 2023-07-28T09:33:26+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc.md)自动生成，请勿手动修改，上次更新于 2025-10-18T11:52:31-07:00。
 
 ## Cron-Task
 
@@ -52,7 +52,8 @@ spec:
  env | 容器中的环境变量。 | [[]env](#env-cron-task) | false |  
  cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
  memory | 所需要的内存大小。 | string | false |  
- volumes | Declare volumes and volumeMounts。 | [[]volumes](#volumes-cron-task) | false |  
+ volumeMounts |  | [volumeMounts](#volumemounts-cron-task) | false |  
+ volumes | Deprecated field, use volumeMounts instead。 | [[]volumes](#volumes-cron-task) | false |  
  hostAliases | An optional list of hosts and IPs that will be injected into the pod's hosts file。 | [[]hostAliases](#hostaliases-cron-task) | false |  
  ttlSecondsAfterFinished | Limits the lifetime of a Job that has finished。 | int | false |  
  activeDeadlineSeconds | The duration in seconds relative to the startTime that the job may be continuously active before the system tries to terminate it。 | int | false |  
@@ -92,6 +93,89 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name | 环境变量的名称。 | string | true |  
  key | configmap 中的键名。 | string | true |  
+
+
+#### volumeMounts (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ pvc | 挂载一个 PVC 卷。 | [[]pvc](#pvc-cron-task) | false |  
+ configMap | 挂载一个 configmap 卷。 | [[]configMap](#configmap-cron-task) | false |  
+ secret | 挂载一个 secret 卷。 | [[]secret](#secret-cron-task) | false |  
+ emptyDir | 挂载一个 emptyDir 的卷。 | [[]emptyDir](#emptydir-cron-task) | false |  
+ hostPath | 挂载主机目录卷。 | [[]hostPath](#hostpath-cron-task) | false |  
+
+
+##### pvc (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ claimName | PVC 名称。 | string | true |  
+
+
+##### configMap (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ defaultMode |  | int | false | 420 
+ cmName |  | string | true |  
+ items |  | [[]items](#items-cron-task) | false |  
+
+
+##### items (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ key |  | string | true |  
+ path |  | string | true |  
+ mode |  | int | false | 511 
+
+
+##### secret (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ defaultMode |  | int | false | 420 
+ secretName |  | string | true |  
+ items |  | [[]items](#items-cron-task) | false |  
+
+
+##### items (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ key |  | string | true |  
+ path |  | string | true |  
+ mode |  | int | false | 511 
+
+
+##### emptyDir (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ medium |  | "" or "Memory" | false | empty 
+
+
+##### hostPath (cron-task)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ path |  | string | true |  
 
 
 #### volumes (cron-task)
@@ -207,10 +291,6 @@ spec:
 ### 描述
 
 定义一个同 Kubernetes 每个机器 Node 都运行的服务。
-
-### 底层 Kubernetes 资源 (daemon)
-
-- daemonsets.apps
 
 ### 示例 (daemon)
 
@@ -559,15 +639,323 @@ spec:
 |---------|-------------|-----------------------|----------|---------|
 | objects | A slice of Kubernetes resource manifests   | [][Kubernetes-Objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) | true     |         |
 
+## Statefulset
+
+### 描述
+
+Describes long-running, scalable, containerized services used to manage stateful application, like database。
+
+### 示例 (statefulset)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: postgres
+spec:
+  components:
+    - name: postgres
+      type: statefulset
+      properties:
+        cpu: "1"
+        exposeType: ClusterIP
+        # see https://hub.docker.com/_/postgres
+        image: docker.io/library/postgres:16.4
+        memory: 2Gi
+        ports:
+          - expose: true
+            port: 5432
+            protocol: TCP
+        env:
+        - name: POSTGRES_DB
+          value: mydb
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: kvsecretpwd123
+      traits:
+        - type: scaler
+          properties:
+            replicas: 1
+        - type: storage
+          properties:
+            pvc:
+              - name: "postgresdb-pvc"
+                storageClassName: local-path
+                resources:
+                  requests:
+                    storage: "2Gi"
+                mountPath: "/var/lib/postgresql/data"
+```
+
+### 参数说明 (statefulset)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ labels | 工作负载的标签。 | map[string]string | false |  
+ annotations | 工作负载的注解。 | map[string]string | false |  
+ image | 容器使用的镜像。 | string | true |  
+ imagePullPolicy | 镜像拉取策略。 | "Always" or "Never" or "IfNotPresent" | false |  
+ imagePullSecrets | 容器的镜像拉取密钥。 | []string | false |  
+ ports | 指定业务流量进入的端口（多个），默认为 80。 | [[]ports](#ports-statefulset) | false |  
+ cmd | 容器的启动命令。 | []string | false |  
+ args | Arguments to the entrypoint。 | []string | false |  
+ env | 容器中的环境变量。 | [[]env](#env-statefulset) | false |  
+ cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
+ memory | 所需要的内存大小。 | string | false |  
+ volumeMounts |  | [volumeMounts](#volumemounts-statefulset) | false |  
+ volumes | Deprecated field, use volumeMounts instead。 | [[]volumes](#volumes-statefulset) | false |  
+ livenessProbe | 判断容器是否存活的探针。 | [livenessProbe](#livenessprobe-statefulset) | false |  
+ readinessProbe | 判断容器是否就绪，能够接受用户流量的探针。 | [readinessProbe](#readinessprobe-statefulset) | false |  
+ hostAliases | 定义容器内的 hostAliases。 | [[]hostAliases](#hostaliases-statefulset) | false |  
+
+
+#### ports (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | 要暴露的 IP 端口号。 | int | true |  
+ containerPort | Number of container port to connect to, defaults to port。 | int | false |  
+ name | 端口名称。 | string | false |  
+ protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | "TCP" or "UDP" or "SCTP" | false | TCP 
+ expose | 端口是否需要暴露。 | bool | false | false 
+ nodePort | exposed node port. Only Valid when exposeType is NodePort。 | int | false |  
+
+
+#### env (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | 环境变量名称。 | string | true |  
+ value | 环境变量的值。 | string | false |  
+ valueFrom | 从哪个资源中读取环境变量的定义。 | [valueFrom](#valuefrom-statefulset) | false |  
+
+
+##### valueFrom (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ secretKeyRef | secret 键的引用。 | [secretKeyRef](#secretkeyref-statefulset) | false |  
+ configMapKeyRef | configmap 键的引用。 | [configMapKeyRef](#configmapkeyref-statefulset) | false |  
+
+
+##### secretKeyRef (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | Secret 名称。 | string | true |  
+ key | 选择 Secret 中存在的 key。 | string | true |  
+
+
+##### configMapKeyRef (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name | 环境变量的名称。 | string | true |  
+ key | configmap 中的键名。 | string | true |  
+
+
+#### volumeMounts (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ pvc | 挂载一个 PVC 卷。 | [[]pvc](#pvc-statefulset) | false |  
+ configMap | 挂载一个 configmap 卷。 | [[]configMap](#configmap-statefulset) | false |  
+ secret | 挂载一个 secret 卷。 | [[]secret](#secret-statefulset) | false |  
+ emptyDir | 挂载一个 emptyDir 的卷。 | [[]emptyDir](#emptydir-statefulset) | false |  
+ hostPath | 挂载主机目录卷。 | [[]hostPath](#hostpath-statefulset) | false |  
+
+
+##### pvc (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ claimName | PVC 名称。 | string | true |  
+
+
+##### configMap (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ defaultMode |  | int | false | 420 
+ cmName |  | string | true |  
+ items |  | [[]items](#items-statefulset) | false |  
+
+
+##### items (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ key |  | string | true |  
+ path |  | string | true |  
+ mode |  | int | false | 511 
+
+
+##### secret (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ defaultMode |  | int | false | 420 
+ secretName |  | string | true |  
+ items |  | [[]items](#items-statefulset) | false |  
+
+
+##### items (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ key |  | string | true |  
+ path |  | string | true |  
+ mode |  | int | false | 511 
+
+
+##### emptyDir (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ medium |  | "" or "Memory" | false | empty 
+
+
+##### hostPath (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ subPath |  | string | false |  
+ path |  | string | true |  
+
+
+#### volumes (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ mountPath |  | string | true |  
+ medium |  | "" or "Memory" | false | empty 
+ type | Specify volume type, options: "pvc","configMap","secret","emptyDir", default to emptyDir。 | "emptyDir" or "pvc" or "configMap" or "secret" | false | emptyDir 
+
+
+#### livenessProbe (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-statefulset) | false |  
+ httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-statefulset) | false |  
+ tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-statefulset) | false |  
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | false | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | false | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | false | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | false | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | false | 3 
+
+
+##### exec (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+
+
+##### httpGet (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path | 定义服务端点请求的路径。 | string | true |  
+ port | 定义服务端点的端口号。 | int | true |  
+ host |  | string | false |  
+ scheme |  | string | false | HTTP 
+ httpHeaders |  | [[]httpHeaders](#httpheaders-statefulset) | false |  
+
+
+##### httpHeaders (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ value |  | string | true |  
+
+
+##### tcpSocket (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | 指定健康检查的 TCP socket。 | int | true |  
+
+
+#### readinessProbe (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-statefulset) | false |  
+ httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-statefulset) | false |  
+ tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-statefulset) | false |  
+ initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | false | 0 
+ periodSeconds | 定义每次检查之间的时间间隔。 | int | false | 10 
+ timeoutSeconds | 定义检查的超时时间。 | int | false | 1 
+ successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | false | 1 
+ failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | false | 3 
+
+
+##### exec (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+
+
+##### httpGet (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ path | 定义服务端点请求的路径。 | string | true |  
+ port | 定义服务端点的端口号。 | int | true |  
+ host |  | string | false |  
+ scheme |  | string | false | HTTP 
+ httpHeaders |  | [[]httpHeaders](#httpheaders-statefulset) | false |  
+
+
+##### httpHeaders (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ name |  | string | true |  
+ value |  | string | true |  
+
+
+##### tcpSocket (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ port | 指定健康检查的 TCP socket。 | int | true |  
+
+
+#### hostAliases (statefulset)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ ip |  | string | true |  
+ hostnames |  | []string | true |  
+
+
 ## Task
 
 ### 描述
 
 定义一个只执行一次代码或者脚本的任务。
-
-### 底层 Kubernetes 资源 (task)
-
-- jobs.batch
 
 ### 示例 (task)
 
@@ -746,10 +1134,6 @@ spec:
 
 定义一个长期运行的，可伸缩的容器化的服务，并且会暴露一个服务端点用来接受来自客户的外部流量。
 
-### 底层 Kubernetes 资源 (webservice)
-
-- deployments.apps
-
 ### 示例 (webservice)
 
 ```yaml
@@ -794,6 +1178,7 @@ spec:
  env | 容器中的环境变量。 | [[]env](#env-webservice) | false |  
  cpu | CPU 核数 `0.5` (0.5 CPU 核), `1` (1 CPU 核)。 | string | false |  
  memory | 所需要的内存大小。 | string | false |  
+ limit |  | [limit](#limit-webservice) | false |  
  volumeMounts |  | [volumeMounts](#volumemounts-webservice) | false |  
  volumes | Deprecated field, use volumeMounts instead。 | [[]volumes](#volumes-webservice) | false |  
  livenessProbe | 判断容器是否存活的探针。 | [livenessProbe](#livenessprobe-webservice) | false |  
@@ -806,6 +1191,7 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  port | 要暴露的 IP 端口号。 | int | true |  
+ containerPort | Number of container port to connect to, defaults to port。 | int | false |  
  name | 端口名称。 | string | false |  
  protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | "TCP" or "UDP" or "SCTP" | false | TCP 
  expose | 端口是否需要暴露。 | bool | false | false 
@@ -843,6 +1229,14 @@ spec:
  ------ | ------ | ------ | ------------ | --------- 
  name | 环境变量的名称。 | string | true |  
  key | configmap 中的键名。 | string | true |  
+
+
+#### limit (webservice)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ cpu |  | string | false |  
+ memory |  | string | false |  
 
 
 #### volumeMounts (webservice)

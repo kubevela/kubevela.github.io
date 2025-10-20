@@ -31,7 +31,7 @@ module.exports = {
       id: 'start',
       content:
           '<div class="header-item">⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>!⭐️</div>' +
-          '<div class="header-item"><span>KubeVela v1.10.0 is now available.(2025-02-06)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/tag/v1.10.0">Read Release Note</a></div>',
+          '<div class="header-item"><span>KubeVela v1.10.4 is now available.(2024-10-01)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/tag/v1.10.4">Read Release Note</a></div>',
     },
     algolia: {
       appId: 'PXMFHFWUGZ',

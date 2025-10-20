@@ -486,12 +486,12 @@ The `core-run` target uses the `fmt` target to check the format of the files. Th
 may not have the same version as the base golang installation. For older versions of goimports, you may see the following
 error:
 
-````bash
+`bash
 $ make core-run
 go fmt ./...
 /<your_go_binary_path>/go/bin/goimports -local github.com/oam-dev/kubevela -w $(go list -f {{.Dir}} ./...)
 /<kubevela_clone_path>/kubevela/pkg/cache/informer.go:46:25: expected ']', found any
-````
+`
 
 To solve this issue, execute:
 
@@ -518,13 +518,14 @@ kubevela/prism
 oam-dev/stern
 oam-dev/terraform-config-inspect
 kubevela/kubevela
+kubevela/velaux
 ```
 
 ### Process
 
 1. Pick target Go and Kubernetes minor. Confirm a compatible `sigs.k8s.io/controller-runtime`.
 
-2. Upgrade ALL repositories EXCEPT `kubevela/kubevela` first. Do them sequentially respecting real import dependencies (see [Interdependencies example](#interdependencies-example)):
+2. Upgrade ALL repositories EXCEPT `kubevela/kubevela` first. Do them sequentially respecting real import dependencies (see [Interdependencies example](#interdependencies-example)). The core `kubevela/kubevela` repository MUST be upgraded only after every repo below is merged; `kubevela/velaux` is upgraded last, only after the `kubevela/kubevela` upgrade is complete.
 
     - `oam-dev/cluster-register`
     - `oam-dev/cluster-gateway`
@@ -537,13 +538,12 @@ kubevela/kubevela
     - `oam-dev/terraform-config-inspect`
 
 3. When upgrading a downstream repo that depends on one you just merged and which is not tagged yet, temporarily reference the upstream commit:
-    - `go get github.com/kubevela/pkg@<commit-sha>` (creates a pseudo-version) OR
-    - Add a `replace` directive pointing to that commit, then remove it after a tag is cut.
+    - `go get github.com/kubevela/pkg@<commit-sha>` (creates a pseudo-version)
 
 4. Only AFTER all other repositories are merged upgrade `kubevela/kubevela`
     - Create the upgrade PR from a branch named `chore/upgrade-k8s-*` (e.g. `chore/upgrade-k8s-1.29-to-1.30`). This naming convention triggers the upgrade verification pipelines.
 
-5. After merge of `kubevela/kubevela` update release notes & docs with new minimum Go / supported Kubernetes versions.
+5. After `kubevela/kubevela` is merged, update the release notes and documentation with the new minimum Go version and supported Kubernetes versions, then upgrade `kubevela/velaux`.
 
 ### Interdependencies Example
 
@@ -570,15 +570,12 @@ Use this template in each PR description:
 
 ```
 ### Upgrade Checklist
-- [ ] Go version set to 1.xx in go.mod
-- [ ] CI workflows use actions/setup-go with 1.xx
-- [ ] Dockerfile base image updated
-- [ ] k8s.io/* deps bumped to v1.yy.z
+- [ ] Go version set to x.y.z in go.mod
+- [ ] CI workflows use actions/setup-go with the same version: x.y.z
+- [ ] Dockerfile base image updated (based on compatibility with the new Go version)
+- [ ] k8s.io/* dependencies bumped to vx.y.z
 - [ ] controller-runtime compatible version used
+- [ ] All the tests running Kubevela on a Kubernetes cluster (Kind/K3D) use the correct Kubernetes version
 - [ ] go mod tidy run cleanly
 - [ ] Generated code & CRDs regenerated
-- [ ] Unit tests pass
-- [ ] (If applicable) E2E / integration tests pass
-- [ ] Lint passes (golangci-lint)
-- [ ] Docs updated (README / contribution / install)
 ```
