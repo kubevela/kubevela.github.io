@@ -30,8 +30,8 @@ kubectl -n vela-system get deploy kubevela-controller \
 
 ```yaml
 # Helm values for vela-core
-features:
-  ValidateResourcesExist: true  # Default: false (Alpha)
+featureGates:
+  validateResourcesExist: true  # Default: false (Alpha)
 ```
 
 > 

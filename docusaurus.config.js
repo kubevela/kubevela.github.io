@@ -27,6 +27,9 @@ module.exports = {
   },
   themes: ['@docusaurus/theme-mermaid'],
   themeConfig: {
+    mermaid: {
+      theme: { light: 'neutral', dark: 'dark' },
+    },
     announcementBar: {
       id: 'start',
       content:
@@ -79,12 +82,9 @@ module.exports = {
           position: 'left',
         },
         {
-          href: 'https://kubevela.net',
-          label: 'Mirror',
-          position: 'right',
-        },
-        {
-          type: 'localeDropdown',
+          href: 'https://cloud-native.slack.com/archives/C01BLQ3HTJA',
+          className: 'header-slack-link',
+          'aria-label': 'Slack community',
           position: 'right',
         },
         {
@@ -145,10 +145,6 @@ module.exports = {
               label: 'Videos',
               to: 'videos/best-practice/jenkins',
             },
-            {
-              to: '/micro',
-              label: 'Microservice',
-            },
           ],
         },
       ],
@@ -157,7 +153,9 @@ module.exports = {
         <strong>© KubeVela Authors ${new Date().getFullYear()} | Documentation Distributed under <a href="https://creativecommons.org/licenses/by/4.0">CC-BY-4.0</a> </strong> 
         <br />
         <br />
-        © ${new Date().getFullYear()} The Linux Foundation. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage/"> Trademark Usage</a> page.
+        © ${new Date().getFullYear()} The Linux Foundation. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks.
+        <br />
+        For a list of trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage/"> Trademark Usage</a> page.
         <br />
         <a href="https://zzlz.gsxt.gov.cn/businessCheck/verifKey.do?showType=p&serial=913301105865146816-SAIC_SHOW_1000009133011058651468161661997004982&signData=MEYCIQDV2SEwsPqwXWkyqyF/+schpsqmPrjT8uEplDrD7xfdhgIhAKoSoKR6iR+YPF4q4CCLYvm8ruB1nFKRkibUx1A5n/Kn" target="_blank"><img alt="license" style="width: 20px;margin-bottom: -5px;" src="/img/beian/license.gif"/></a> <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33011002016698" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="" style="float:left;"/><p style="height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">浙公网安备 33011002016698号</p></a> <a href="https://beian.miit.gov.cn/" target="_blank">浙ICP备12022327号-975</a>
       `,

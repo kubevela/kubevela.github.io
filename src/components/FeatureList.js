@@ -8,7 +8,7 @@ const FeatureBlock = () => {
       <div className="container">
         <section className="features section">
           <h2 className="title">
-            <Translate>Highlights</Translate>
+            <Translate>Features</Translate>
           </h2>
           <div className="container">
             {HomePageFeatures.map(
