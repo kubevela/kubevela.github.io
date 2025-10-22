@@ -31,7 +31,7 @@ module.exports = {
       id: 'start',
       content:
           '<div class="header-item">⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>!⭐️</div>' +
-          '<div class="header-item"><span>KubeVela v1.10.0 is now available.(2025-02-06)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/tag/v1.10.0">Read Release Note</a></div>',
+          '<div class="header-item"><span>KubeVela v1.10.4 is now available.(2025-10-01)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/tag/v1.10.4">Read Release Note</a></div>',
     },
     algolia: {
       appId: 'PXMFHFWUGZ',
@@ -86,6 +86,11 @@ module.exports = {
         {
           type: 'localeDropdown',
           position: 'right',
+        },
+        {
+          type: 'html',
+          position: 'right',
+          value: '<a href="https://deepwiki.com/kubevela/kubevela" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-deepwiki-link" title="AI Search" aria-label="Ask Devin AI Search" style="display: flex; align-items: center; gap: 6px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="17" r="1.5" fill="currentColor"/></svg><span>Ask Devin</span></a>',
         },
         {
           href: 'https://github.com/kubevela/kubevela',

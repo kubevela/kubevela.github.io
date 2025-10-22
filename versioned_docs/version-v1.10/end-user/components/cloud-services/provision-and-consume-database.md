@@ -66,6 +66,11 @@ Deploy and verify the application.
 
 ```shell
 $ vela ls
+```
+
+The output would look like the below: 
+
+```shell
 APP   	COMPONENT     	TYPE       	TRAITS         	PHASE         	HEALTHY  	STATUS	CREATED-TIME
 webapp	express-server	webservice 	service-binding	running     	healthy  	      	2021-09-08 16:50:41 +0800 CST
 ├─    	sample-db     	alibaba-rds	               	running     	healthy  	      	2021-09-08 16:50:41 +0800 CST
@@ -74,6 +79,11 @@ webapp	express-server	webservice 	service-binding	running     	healthy  	      	
 
 ```shell
 $ vela port-forward webapp
+```
+
+The output would look like the below: 
+
+```shell
 Forwarding from 127.0.0.1:8080 -> 80
 Forwarding from [::1]:8080 -> 80
 

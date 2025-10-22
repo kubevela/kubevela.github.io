@@ -4,7 +4,7 @@ title: 内置运维特征列表
 
 本文档将**按字典序**展示所有内置运维特征的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc.md)自动生成，请勿手动修改，上次更新于 2023-07-28T09:33:26+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc.md)自动生成，请勿手动修改，上次更新于 2025-10-18T11:52:31-07:00。
 
 ## Affinity
 
@@ -365,7 +365,7 @@ spec:
 
 ### 描述
 
-Add annotations on your workload. if it generates pod, add same annotations for generated pods。
+Add annotations on your workload. If it generates pod or job, add same annotations for generated pods。
 
 ### 适用于组件类型
 
@@ -935,6 +935,9 @@ spec:
  gatewayHost | 指定 Ingress 网关的主机名，当为空时，会自动生成主机名。 | string | false |  
  name | Specify a unique name for this gateway, required to support multiple gateway traits on a component。 | string | false |  
  pathType | Specify a pathType for the ingress rules, defaults to "ImplementationSpecific"。 | "ImplementationSpecific" or "Prefix" or "Exact" | false | ImplementationSpecific 
+ annotations | Specify the annotations to be added to the ingress。 | map[string]string | false |  
+ labels | Specify the labels to be added to the ingress。 | map[string]string | false |  
+ existingServiceName | If specified, use an existing Service rather than creating one。 | string | false |  
 
 
 ## Hostalias
@@ -1817,6 +1820,78 @@ spec:
  cpu |  | string | false | 0.5 
 
 
+## Podsecuritycontext
+
+### 描述
+
+Adds security context to the pod spec in path 'spec.template.spec.securityContext'。
+
+### 适用于组件类型
+
+基于以下资源的组件：
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
+
+
+### 示例 (podsecuritycontext)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: podtato-head
+spec:
+  components:
+    - name: podtato-head-frontend
+      type: webservice
+      properties:
+        image: ghcr.io/podtato-head/podtato-server:v0.3.1
+        ports:
+          - port: 8080
+            expose: true
+        cpu: "0.1"
+        memory: "32Mi"
+      traits:
+        - type: podsecuritycontext
+          properties:
+            # runs pod as non-root user
+            runAsNonRoot: true
+            # runs the pod as user with uid 65532
+            runAsUser: 65532
+```
+
+### 参数说明 (podsecuritycontext)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ appArmorProfile | Specify the AppArmor profile for the pod。 | [appArmorProfile](#apparmorprofile-podsecuritycontext) | false |  
+ fsGroup |  | int | false |  
+ runAsGroup |  | int | false |  
+ runAsUser | Specify the UID to run the entrypoint of the container process。 | int | false |  
+ runAsNonRoot | Specify if the container runs as a non-root user。 | bool | false | true 
+ seccompProfile | Specify the seccomp profile for the pod。 | [seccompProfile](#seccompprofile-podsecuritycontext) | false |  
+
+
+#### appArmorProfile (podsecuritycontext)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ type |  | "RuntimeDefault" or "Unconfined" or "Localhost" | true |  
+ localhostProfile |  | string | false |  
+
+
+#### seccompProfile (podsecuritycontext)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ type |  | "RuntimeDefault" or "Unconfined" or "Localhost" | true |  
+ localhostProfile |  | string | false |  
+
+
 ## Resource
 
 ### 描述
@@ -1830,6 +1905,7 @@ spec:
 - statefulsets.apps
 - daemonsets.apps
 - jobs.batch
+- cronjobs.batch
 
 
 
@@ -1938,6 +2014,99 @@ spec:
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
  replicas | 工作负载的 Pod 个数。 | int | false | 1 
+
+
+## Securitycontext
+
+### 描述
+
+Adds security context to the container spec in path 'spec.template.spec.containers.[].securityContext'。
+
+### 适用于组件类型
+
+基于以下资源的组件：
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
+
+
+### 示例 (securitycontext)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: podtato-head
+spec:
+  components:
+    - name: podtato-head-frontend
+      type: webservice
+      properties:
+        image: ghcr.io/podtato-head/podtato-server:v0.3.1
+        ports:
+          - port: 8080
+            expose: true
+        cpu: "0.1"
+        memory: "32Mi"
+      traits:
+        - type: securitycontext
+          properties:
+            # drops all capabilities
+            dropCapabilities:
+              - ALL
+            # runs container as non-root user
+            runAsNonRoot: true
+            # ensures that the container runs unprivileged
+            privileged: false
+            # runs container in read-only mode
+            readOnlyRootFilesystem: false
+```
+
+### 参数说明 (securitycontext)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+  |  | [PatchParams](#patchparams-securitycontext) or [type-option-2](#type-option-2-securitycontext) | false |  
+
+
+#### PatchParams (securitycontext)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
+ addCapabilities |  | []string | false |  
+ allowPrivilegeEscalation |  | bool | false | false 
+ dropCapabilities |  | []string | false |  
+ privileged |  | bool | false | false 
+ readOnlyRootFilesystem |  | bool | false | false 
+ runAsNonRoot |  | bool | false | true 
+ runAsUser |  | int | false |  
+ runAsGroup |  | int | false |  
+
+
+#### type-option-2 (securitycontext)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containers | Specify the container image for multiple containers。 | [[]containers](#containers-securitycontext) | true |  
+
+
+##### containers (securitycontext)
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 
+ ------ | ------ | ------ | ------------ | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
+ addCapabilities |  | []string | false |  
+ allowPrivilegeEscalation |  | bool | false | false 
+ dropCapabilities |  | []string | false |  
+ privileged |  | bool | false | false 
+ readOnlyRootFilesystem |  | bool | false | false 
+ runAsNonRoot |  | bool | false | true 
+ runAsUser |  | int | false |  
+ runAsGroup |  | int | false |  
 
 
 ## Service-Account
@@ -2456,7 +2625,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- port | Number or name of the port to access on the container。 | string | true |  
+ port | Number or name of the port to access on the container。 | int | true |  
  host | Host name to connect to, defaults to the pod IP。 | string | false |  
 
 
@@ -2522,7 +2691,7 @@ spec:
 
  名称 | 描述 | 类型 | 是否必须 | 默认值 
  ------ | ------ | ------ | ------------ | --------- 
- port | Number or name of the port to access on the container。 | string | true |  
+ port | Number or name of the port to access on the container。 | int | true |  
  host | Host name to connect to, defaults to the pod IP。 | string | false |  
 
 

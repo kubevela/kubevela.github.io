@@ -4,7 +4,7 @@ title: Built-in Trait Type
 
 This documentation will walk through all the built-in trait types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2023-07-28T09:33:26+08:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2025-10-18T11:52:31-07:00.
 
 ## Affinity
 
@@ -365,7 +365,7 @@ spec:
 
 ### Description
 
-Add annotations on your workload. if it generates pod, add same annotations for generated pods.
+Add annotations on your workload. If it generates pod or job, add same annotations for generated pods.
 
 ### Apply To Component Types
 
@@ -585,7 +585,7 @@ Component based on the following kinds of resources:
 ### Examples (container-ports)
 
 It's used to define Pod networks directly. hostPort routes the container's port directly to the port on the scheduled node, so that you can access the Pod through the host's IP plus hostPort.
-Don't specify a hostPort for a Pod unless it is absolutely necessary(run `DaemonSet` service). When you bind a Pod to a hostPort, it limits the number of places the Pod can be scheduled, because each `&lt;hostIP, hostPort, protocol&gt;` combination must be unique. If you don't specify the hostIP and protocol explicitly, Kubernetes will use 0.0.0.0 as the default hostIP and TCP as the default protocol.
+Don't specify a hostPort for a Pod unless it is absolutely necessary(run `DaemonSet` service). When you bind a Pod to a hostPort, it limits the number of places the Pod can be scheduled, because each `<hostIP, hostPort, protocol>` combination must be unique. If you don't specify the hostIP and protocol explicitly, Kubernetes will use 0.0.0.0 as the default hostIP and TCP as the default protocol.
 If you explicitly need to expose a Pod's port on the node, consider using `expose` or `gateway` trait, or exposeType and ports parameter of `webservice` component before resorting to `container-ports` trait.
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -935,6 +935,9 @@ spec:
  gatewayHost | Specify the host of the ingress gateway, which is used to generate the endpoints when the host is empty. | string | false |  
  name | Specify a unique name for this gateway, required to support multiple gateway traits on a component. | string | false |  
  pathType | Specify a pathType for the ingress rules, defaults to "ImplementationSpecific". | "ImplementationSpecific" or "Prefix" or "Exact" | false | ImplementationSpecific 
+ annotations | Specify the annotations to be added to the ingress. | map[string]string | false |  
+ labels | Specify the labels to be added to the ingress. | map[string]string | false |  
+ existingServiceName | If specified, use an existing Service rather than creating one. | string | false |  
 
 
 ## Hostalias
@@ -1817,6 +1820,78 @@ spec:
  cpu |  | string | false | 0.5 
 
 
+## Podsecuritycontext
+
+### Description
+
+Adds security context to the pod spec in path 'spec.template.spec.securityContext'.
+
+### Apply To Component Types
+
+Component based on the following kinds of resources:
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
+
+
+### Examples (podsecuritycontext)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: podtato-head
+spec:
+  components:
+    - name: podtato-head-frontend
+      type: webservice
+      properties:
+        image: ghcr.io/podtato-head/podtato-server:v0.3.1
+        ports:
+          - port: 8080
+            expose: true
+        cpu: "0.1"
+        memory: "32Mi"
+      traits:
+        - type: podsecuritycontext
+          properties:
+            # runs pod as non-root user
+            runAsNonRoot: true
+            # runs the pod as user with uid 65532
+            runAsUser: 65532
+```
+
+### Specification (podsecuritycontext)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ appArmorProfile | Specify the AppArmor profile for the pod. | [appArmorProfile](#apparmorprofile-podsecuritycontext) | false |  
+ fsGroup |  | int | false |  
+ runAsGroup |  | int | false |  
+ runAsUser | Specify the UID to run the entrypoint of the container process. | int | false |  
+ runAsNonRoot | Specify if the container runs as a non-root user. | bool | false | true 
+ seccompProfile | Specify the seccomp profile for the pod. | [seccompProfile](#seccompprofile-podsecuritycontext) | false |  
+
+
+#### appArmorProfile (podsecuritycontext)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | "RuntimeDefault" or "Unconfined" or "Localhost" | true |  
+ localhostProfile |  | string | false |  
+
+
+#### seccompProfile (podsecuritycontext)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type |  | "RuntimeDefault" or "Unconfined" or "Localhost" | true |  
+ localhostProfile |  | string | false |  
+
+
 ## Resource
 
 ### Description
@@ -1830,6 +1905,7 @@ Component based on the following kinds of resources:
 - statefulsets.apps
 - daemonsets.apps
 - jobs.batch
+- cronjobs.batch
 
 
 
@@ -1938,6 +2014,99 @@ spec:
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  replicas | Specify the number of workload. | int | false | 1 
+
+
+## Securitycontext
+
+### Description
+
+Adds security context to the container spec in path 'spec.template.spec.containers.[].securityContext'.
+
+### Apply To Component Types
+
+Component based on the following kinds of resources:
+- deployments.apps
+- statefulsets.apps
+- daemonsets.apps
+- jobs.batch
+
+
+
+### Examples (securitycontext)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: podtato-head
+spec:
+  components:
+    - name: podtato-head-frontend
+      type: webservice
+      properties:
+        image: ghcr.io/podtato-head/podtato-server:v0.3.1
+        ports:
+          - port: 8080
+            expose: true
+        cpu: "0.1"
+        memory: "32Mi"
+      traits:
+        - type: securitycontext
+          properties:
+            # drops all capabilities
+            dropCapabilities:
+              - ALL
+            # runs container as non-root user
+            runAsNonRoot: true
+            # ensures that the container runs unprivileged
+            privileged: false
+            # runs container in read-only mode
+            readOnlyRootFilesystem: false
+```
+
+### Specification (securitycontext)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+  |  | [PatchParams](#patchparams-securitycontext) or [type-option-2](#type-option-2-securitycontext) | false |  
+
+
+#### PatchParams (securitycontext)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containerName | Specify the name of the target container, if not set, use the component name. | string | false | empty 
+ addCapabilities |  | []string | false |  
+ allowPrivilegeEscalation |  | bool | false | false 
+ dropCapabilities |  | []string | false |  
+ privileged |  | bool | false | false 
+ readOnlyRootFilesystem |  | bool | false | false 
+ runAsNonRoot |  | bool | false | true 
+ runAsUser |  | int | false |  
+ runAsGroup |  | int | false |  
+
+
+#### type-option-2 (securitycontext)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containers | Specify the container image for multiple containers. | [[]containers](#containers-securitycontext) | true |  
+
+
+##### containers (securitycontext)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ containerName | Specify the name of the target container, if not set, use the component name. | string | false | empty 
+ addCapabilities |  | []string | false |  
+ allowPrivilegeEscalation |  | bool | false | false 
+ dropCapabilities |  | []string | false |  
+ privileged |  | bool | false | false 
+ readOnlyRootFilesystem |  | bool | false | false 
+ runAsNonRoot |  | bool | false | true 
+ runAsUser |  | int | false |  
+ runAsGroup |  | int | false |  
 
 
 ## Service-Account
@@ -2456,7 +2625,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- port | Number or name of the port to access on the container. | string | true |  
+ port | Number or name of the port to access on the container. | int | true |  
  host | Host name to connect to, defaults to the pod IP. | string | false |  
 
 
@@ -2522,7 +2691,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- port | Number or name of the port to access on the container. | string | true |  
+ port | Number or name of the port to access on the container. | int | true |  
  host | Host name to connect to, defaults to the pod IP. | string | false |  
 
 

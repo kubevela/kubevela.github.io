@@ -420,150 +420,14 @@ There're several reasons:
 
 So KubeVela allow patch or override in this case, please refer to [patch trait](./patch-trait.md) for more details. As trait and workflow step can both patch, so we write them together.
 
-## Define Health for Definition
-
-You can also define health check policy and status message when a trait deployed and tell the real status to end users.
-
-### Health Check
-
-The spec of health check is `<trait-type-name>.attributes.status.healthPolicy`, it's similar to component definition.
-
-If not defined, the health result will always be `true`, which means it will be marked as healthy immediately after resources applied to Kubernetes. You can define a CUE expression in it to notify if the trait is healthy or not.
-
-The keyword in CUE is `isHealth`, the result of CUE expression must be `bool` type.
-
-KubeVela runtime will evaluate the CUE expression periodically until it becomes healthy. Every time the controller will get all the Kubernetes resources and fill them into the `context` variables.
-
-So the context will contain following information:
-
-```cue
-context:{
-  name: <component name>
-  appName: <app name>
-  outputs: {
-    <resource1>: <K8s trait resource1>
-    <resource2>: <K8s trait resource2>
-  }
-}
-```
-
-The example of health check likes below:
-
-```cue
-my-ingress: {
-	type: "trait"
-	...
-	attributes: {
-		status: {
-			healthPolicy: #"""
-              isHealth: len(context.outputs.service.spec.clusterIP) > 0
-		      """#
-    	}
-  	}
-}
-```
-
-You can also use the `parameter` defined in the template like:
-
-```cue
-mytrait: {
-	type: "trait"
-    ...
-	attributes: {
-		status: {
-			healthPolicy: #"""
-				isHealth: context.outputs."mytrait-\(parameter.name)".status.state == "Available"
-			  """#
-    }
-  }
-template: {
-  parameter: {
-    name: string
-  } 
-  ...
-}
-```
-
-The health check result will be recorded into the corresponding trait in `.status.services` of `Application` resource.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-status:
-  ...
-  services:
-  - healthy: true
-    ...
-    name: myweb
-    traits:
-    - healthy: true
-      type: my-ingress
-  status: running
-```
-
-> Please refer to [this doc](https://github.com/kubevela/kubevela/blob/master/vela-templates/definitions/internal/trait/gateway.cue) for more complete example.
-
-
-### Custom Status
-
-The spec of custom status is `<trait-type-name>.attributes.status.customStatus`, it shares the same mechanism with the health check.
-
-The keyword in CUE is `message`, the result of CUE expression must be `string` type.
-
-Application CRD controller will evaluate the CUE expression after the health check succeed.
-
-The example of custom status likes below:
-
-```cue
-my-service: {
-	type: "trait"
-	...
-	attributes: {
-		status: {
-			customStatus: #"""
-				if context.outputs.ingress.status.loadBalancer.ingress != _|_ {
-					let igs = context.outputs.ingress.status.loadBalancer.ingress
-				  if igs[0].ip != _|_ {
-				  	if igs[0].host != _|_ {
-					    message: "Visiting URL: " + context.outputs.ingress.spec.rules[0].host + ", IP: " + igs[0].ip
-				  	}
-				  	if igs[0].host == _|_ {
-					    message: "Host not specified, visit the cluster or load balancer in front of the cluster with IP: " + igs[0].ip
-				  	}
-				  }
-				}
-				"""#
-    	}
-  	}
-}
-```
-
-The message will be recorded into the corresponding trait in `.status.services` of `Application` resource.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-status:
-  ...
-  services:
-  - healthy: true
-    ...
-    name: myweb
-    traits:
-    - healthy: true
-      message: 'Visiting URL: www.example.com, IP: 47.111.233.220'
-      type: my-ingress
-  status: running
-```
-
-> Please refer to [this doc](https://github.com/kubevela/kubevela/blob/master/vela-templates/definitions/internal/trait/gateway.cue) for more complete example.
-
+## Define Health for Trait
+> **MOVED**: Please refer to [Definition Health & Status](../status/definition_health_status.md).
 
 ## Full available `context` in Trait
 
 
 |         Context Variable         |                                                                         Description                                                                         |    Type    |
-| :------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------: |
+|:--------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------:|
 |        `context.appName`         |                                           The app name corresponding to the current instance of the application.                                            |   string   |
 |       `context.namespace`        | The target namespace of the current resource is going to be deployed, it can be different with the namespace of application if overridden by some policies. |   string   |
 |        `context.cluster`         |  The target cluster of the current resource is going to be deployed, it can be different with the namespace of application if overridden by some policies.  |   string   |
@@ -582,7 +446,7 @@ status:
 ### Cluster Version
 
 |          Context Variable           |                         Description                         |  Type  |
-| :---------------------------------: | :---------------------------------------------------------: | :----: |
+|:-----------------------------------:|:-----------------------------------------------------------:|:------:|
 |   `context.clusterVersion.major`    |    The major version of the runtime Kubernetes cluster.     | string |
 | `context.clusterVersion.gitVersion` |      The gitVersion of the runtime Kubernetes cluster.      | string |
 |  `context.clusterVersion.platform`  | The platform information of the runtime Kubernetes cluster. | string |
