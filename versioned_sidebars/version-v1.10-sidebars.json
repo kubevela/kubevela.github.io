@@ -31,8 +31,36 @@
           ]
         },
         {
-          "type": "doc",
-          "id": "quick-start"
+          "type": "category",
+          "label": "Getting Started with KubeVela",
+          "collapsed": false,
+          "items": [
+            {
+              "type": "doc",
+              "id": "quick-start",
+              "label": "Overview"
+            },
+            {
+              "type": "doc",
+              "id": "getting-started/quick-install",
+              "label": "Quick Install"
+            },
+            {
+              "type": "doc",
+              "id": "getting-started/first-application",
+              "label": "Deploy Your First App"
+            },
+            {
+              "type": "doc",
+              "id": "getting-started/advanced-application",
+              "label": "Deploy an Advanced App"
+            },
+            {
+              "type": "doc",
+              "id": "getting-started/first-component",
+              "label": "Creating Your First Component"
+            }
+          ]
         }
       ]
     },
