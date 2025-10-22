@@ -354,6 +354,12 @@ Note that `context` information are auto-injected before resources are applied t
 
 The list of [all available context variables](#full-available-context-in-component) are listed at last of this doc.
 
+## Reading Configuration
+Components can read Kubevela configuration via the `$config` parameter. 
+This allows for configuration to be shared across components, traits & applications without requiring parameters be explicitly provided. 
+
+See [Config Template](../../reference/config-template.md) for details.
+
 ## Compose resources in one component
 
 It's common that a component definition is composed by multiple API resources, for example, a `webserver` component that is composed by a Deployment and a Service. CUE is a great solution to achieve this in simplified primitives.
@@ -537,139 +543,14 @@ local     ─── default   ─┬─ Service/hello-webserver-auxiliaryworkloa
 </details>
 
 
-## Define health check and status message for component
-
-You can also define health check policy and status message when a component deployed and tell the real status to end users.
-
-### Health check
-
-The spec of health check is `<component-type-name>.attributes.status.healthPolicy`.
-
-If not defined, the health result will always be `true`, which means it will be marked as healthy immediately after resources applied to Kubernetes. You can define a CUE expression in it to notify if the component is healthy or not.
-
-The keyword is `isHealth`, the result of CUE expression must be `bool` type.
-
-KubeVela runtime will evaluate the CUE expression periodically until it becomes healthy. Every time the controller will get all the Kubernetes resources and fill them into the `context` variables.
-
-So the context will contain following information:
-
-```cue
-context:{
-  name: <component name>
-  appName: <app name>
-  output: <K8s workload resource>
-  outputs: {
-    <resource1>: <K8s trait resource1>
-    <resource2>: <K8s trait resource2>
-  }
-}
-```
-
-The example of health check likes below:
-
-```cue
-webserver: {
-	type: "component"
-  ...
-	attributes: {
-		status: {
-			healthPolicy: #"""
-        isHealth: (context.output.status.readyReplicas > 0) && (context.output.status.readyReplicas == context.output.status.replicas)
-        """#
-    }
-  }
-}
-```
-
-You can also use the `parameter` defined in the template like:
-
-```
-webserver: {
-	type: "component"
-  ...
-	attributes: {
-		status: {
-			healthPolicy: #"""
-        isHealth: (context.output.status.readyReplicas > 0) && (context.output.status.readyReplicas == parameter.replicas)
-        """#
-    }
-  }
-template: {
-	parameter: {
-    replicas: int
-  } 
-  ...
-}
-```
-
-The health check result will be recorded into the corresponding component in `.status.services` of `Application` resource.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-status:
-  ...
-  services:
-  - healthy: true
-    name: myweb
-    ...
-  status: running
-```
-
-> Please refer to [this doc](https://github.com/kubevela/kubevela/blob/master/vela-templates/definitions/internal/component/webservice.cue#L29-L50) for more examples.
-
-### Custom Status
-
-The spec of custom status is `<component-type-name>.attributes.status.customStatus`, it shares the same mechanism with the health check.
-
-The keyword in CUE expression is `message`, the result must be `string` type.
-
-Application CRD controller will evaluate the CUE expression after the health check succeed.
-
-The example of custom status likes below:
-
-```cue
-webserver: {
-	type: "component"
-  ...
-	attributes: {
-		status: {
-			customStatus: #"""
-				ready: {
-					readyReplicas: *0 | int
-				} & {
-					if context.output.status.readyReplicas != _|_ {
-						readyReplicas: context.output.status.readyReplicas
-					}
-				}
-				message: "Ready:\(ready.readyReplicas)/\(context.output.spec.replicas)"
-				"""#
-    }
-  }
-}
-```
-
-The message will be recorded into the corresponding component in `.status.services` of `Application` resource like below.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-status:
-  ...
-  services:
-  - healthy: false
-    message: Ready:1/1
-    name: express-server
-```
-
-> Please refer to [this doc](https://github.com/kubevela/kubevela/blob/master/vela-templates/definitions/internal/component/webservice.cue#L29-L50) for more examples.
-
+## Define Health Check and Status of Components
+> **MOVED**: Please refer to [Definition Health & Status](../status/definition_health_status.md).
 
 ## Full available `context` in Component
 
 
 |         Context Variable         |                                                                                  Description                                                                                  |    Type    |
-| :------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------: |
+|:--------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------:|
 |        `context.appName`         |                                                    The app name corresponding to the current instance of the application.                                                     |   string   |
 |       `context.namespace`        |          The target namespace of the current resource is going to be deployed, it can be different with the namespace of application if overridden by some policies.          |   string   |
 |        `context.cluster`         |           The target cluster of the current resource is going to be deployed, it can be different with the namespace of application if overridden by some policies.           |   string   |
@@ -689,7 +570,7 @@ status:
 ### Cluster Version
 
 |          Context Variable           |                         Description                         |  Type  |
-| :---------------------------------: | :---------------------------------------------------------: | :----: |
+|:-----------------------------------:|:-----------------------------------------------------------:|:------:|
 |   `context.clusterVersion.major`    |    The major version of the runtime Kubernetes cluster.     | string |
 | `context.clusterVersion.gitVersion` |      The gitVersion of the runtime Kubernetes cluster.      | string |
 |  `context.clusterVersion.platform`  | The platform information of the runtime Kubernetes cluster. | string |

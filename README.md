@@ -1,5 +1,7 @@
 # KubeVela Docs & Website
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/kubevela/kubevela)
+
 This repo contains the source code of [Kubevela website](http://kubevela.io/) and all of the docs for KubeVela.
 It's built by [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 
