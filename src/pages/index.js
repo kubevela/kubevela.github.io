@@ -28,19 +28,24 @@ export default function Home() {
               }}
             />
           </div>
-          <h2 className="hero__title">{siteConfig.title}</h2>
+          <h1 className="hero__title">
+            <span className="hero__title--black">Kube</span><span className="hero__title--blue">Vela</span>
+          </h1>
+          <p className="hero__tagline">
+            <Translate>The Modern Application Platform</Translate>
+          </p>
+          <p className="hero__subtitle">
+            <Translate>Simplify deployments and platform complexity with powerful abstractions</Translate>
+          </p>
           <GitHubButton
             href="https://github.com/kubevela/kubevela"
             data-icon="octicon-star"
             data-size="large"
             data-show-count="true"
-            aria-label="Star facebook/metro on GitHub"
+            aria-label="Star KubeVela on GitHub"
           >
             Star
           </GitHubButton>
-          <p className="hero__subtitle">
-            <Translate>Make shipping applications more enjoyable.</Translate>
-          </p>
           <div className="heroButtons">
             <Button href={useBaseUrl('docs/quick-start')}>
               <Translate>Get Started</Translate>

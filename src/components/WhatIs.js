@@ -1,26 +1,17 @@
 import React from 'react';
 import Translate, { translate } from '@docusaurus/Translate';
 import useBaseUrl from '@docusaurus/useBaseUrl';
+import Mermaid from '@theme/Mermaid';
 
 const WhatIs = () => (
     <div className="hero">
         <div className="container">
             <div className="row">
-                <div className="col col--6">
+                <div className="col col--5">
                     <h1><Translate>What is KubeVela?</Translate></h1>
-                    <p className="hero__subtitle">
-                        <small>
-                            <Translate>
-                                KubeVela is a modern software delivery platform that makes deploying and operating applications across today's hybrid, multi-cloud environments
-                            </Translate><i><Translate> easier, faster and more reliable.</Translate></i>
-                            <br />
-                            <br />
-                            <Translate>
-                                KubeVela is infrastructure agnostic, programmable, yet most importantly,
-                            </Translate><i><b> <Translate>application-centric.</Translate></b></i>
-                            <Translate> It allows you to build powerful software, and deliver them anywhere!</Translate>
-                        </small>
-                    </p>
+                    <p><Translate>KubeVela is a modern application platform that transforms how you deploy and operate applications across hybrid and multi-cloud environments. Built for speed, reliability, and simplicity.</Translate></p>
+                    <p><Translate>Infrastructure agnostic and fully programmable, KubeVela puts applications first. Focus on building powerful software while KubeVela handles the complexity of delivering it anywhere.</Translate></p>
+                    <p><Translate>Build comprehensive interfaces to your underlying platform and expose them to users in a controlled and easy-to-use manner. Build governance and best practices directly into your components, creating golden paths that scale across your entire organization.</Translate></p>
                 </div>
                 <div className="col">
                     <img
