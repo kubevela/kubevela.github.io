@@ -9,6 +9,7 @@ import FeatureList from '../components/FeatureList';
 import Button from '../components/button';
 import WhatIs from '../components/WhatIs';
 import Integration from '../components/Integration';
+import KubeConNotification from '../components/KubeConNotification';
 
 export default function Home() {
   const context = useDocusaurusContext();
@@ -16,6 +17,7 @@ export default function Home() {
 
   return (
     <Layout title={siteConfig.tagline} description={siteConfig.tagline}>
+      <KubeConNotification />
       <header className="hero">
         <div className="container text--center">
           <div className="heroLogoWrapper">
