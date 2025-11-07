@@ -9,6 +9,7 @@ Definition Permission Validation ensures users can only reference X-Definitions 
 - **Multi-tenancy** - Teams can only use definitions they're authorized for
 - **Compliance** - Enforce organizational policies on which components can be used
 - **Access control** - Prevent unauthorized use of privileged or sensitive definitions
+- **Namespace isolation** - Users with broad namespace permissions cannot bypass isolation to access system definitions without explicit authorization
 
 ## Enabling the Feature
 
@@ -42,10 +43,23 @@ When a user creates or updates an Application, the validating webhook checks if 
 
 KubeVela checks for definitions in two locations:
 
-1. **System namespace** (`vela-system`) - Checked first as most definitions reside here
-2. **Application namespace** - For custom or team-specific definitions
+1. **Application namespace** - Checked first for custom or team-specific definitions
+2. **System namespace** (`vela-system`) - Checked second for standard definitions
 
-Permission in either namespace allows the reference.
+**Important:** Permission to access a definition requires both:
+- RBAC permission (via `get` verb) for the definition type
+- The definition must actually exist in the namespace where you have permissions
+
+This prevents users with broad namespace permissions (e.g., wildcard RBAC) from accessing system definitions without explicit authorization.
+
+### Namespace Isolation
+
+The validation enforces strict namespace isolation:
+
+- **Existence Check**: Having RBAC permissions alone is not sufficient. The definition must actually exist in the namespace where you have permissions.
+- **Wildcard Protection**: Users with wildcard permissions (e.g., `apiGroups: ["*"]`, `resources: ["*"]`, `verbs: ["*"]`) in their namespace cannot automatically access definitions in `vela-system`. They need explicit permissions to `vela-system`.
+- **Precedence**: If a definition exists in both the application namespace and `vela-system`, the application namespace takes precedence.
+
 
 ### Multi-Cluster Considerations
 
@@ -156,6 +170,8 @@ error validating data: ValidationError(Application):
   spec.components[0].traits[0].type: Forbidden: user "alice" cannot get TraitDefinition "privileged-trait" in namespace "my-namespace" or "vela-system"
 ```
 
+**Common Cause:** Having namespace-level wildcard permissions does not grant access to `vela-system` definitions. You need explicit ClusterRole or ClusterRoleBinding to access system definitions.
+
 ### Verifying Permissions
 
 Users can check their access:
@@ -169,6 +185,10 @@ kubectl get componentdefinitions.core.oam.dev -n vela-system
 
 # Check custom definitions in app namespace
 kubectl auth can-i get componentdefinitions.core.oam.dev/custom-component -n my-namespace
+
+# Verify a definition exists in a specific namespace
+kubectl get componentdefinition webservice -n vela-system
+kubectl get componentdefinition webservice -n my-namespace
 ```
 
 ## Configuration Reference
