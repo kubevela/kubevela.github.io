@@ -247,6 +247,252 @@ volumes := defkit.FromFields(volumeMounts, "pvc", "configMap", "secret").
 | `.Pick(fields...)` | Select specific fields from all sources |
 | `.Dedupe(key)` | Remove duplicates based on a key field |
 
+## Array Builder
+
+The Array Builder constructs CUE arrays where items have different inclusion rules -- some are always present, some are conditional, and some come from iteration. This is distinct from the Collections API, which *transforms* existing arrays. The Array Builder *constructs* new arrays from scratch.
+
+### Item -- Always-Present Entry
+
+```go title="static_item.go"
+cpuMetric := defkit.NewArrayElement().
+    Set("type", defkit.Lit("Resource")).
+    Set("resource", defkit.NewArrayElement().
+        Set("name", defkit.Lit("cpu")))
+
+metrics := defkit.NewArray().Item(cpuMetric)
+```
+
+<details>
+<summary>Generated CUE output</summary>
+
+```cue
+metrics: [{
+    type: "Resource"
+    resource: name: "cpu"
+}]
+```
+
+</details>
+
+### ItemIf -- Conditional Entry
+
+Include an item only when a condition is true:
+
+```go title="conditional_item.go"
+mem := defkit.Struct("mem").Fields(...).Optional()
+
+memMetric := defkit.NewArrayElement().
+    Set("type", defkit.Lit("Resource")).
+    Set("resource", defkit.NewArrayElement().
+        Set("name", defkit.Lit("memory")))
+
+metrics := defkit.NewArray().
+    Item(cpuMetric).
+    ItemIf(mem.IsSet(), memMetric)
+```
+
+<details>
+<summary>Generated CUE output</summary>
+
+```cue
+metrics: [
+    { type: "Resource", resource: name: "cpu" },
+    if parameter.mem != _|_ {
+        { type: "Resource", resource: name: "memory" }
+    },
+]
+```
+
+</details>
+
+### ForEach -- Iterated Entries
+
+Produce one item per element in a source array:
+
+```go title="foreach_item.go"
+customMetric := defkit.NewArrayElement().
+    Set("type", defkit.Lit("Pods")).
+    Set("pods", defkit.NewArrayElement().
+        Set("metric", defkit.NewArrayElement().
+            Set("name", defkit.Reference("m.name"))))
+
+metrics := defkit.NewArray().
+    ForEach(podCustomMetrics, customMetric)
+```
+
+<details>
+<summary>Generated CUE output</summary>
+
+```cue
+metrics: [
+    for m in parameter.podCustomMetrics {
+        type: "Pods"
+        pods: metric: name: m.name
+    },
+]
+```
+
+</details>
+
+### ForEachGuarded -- Guarded Iteration
+
+When the source array is optional, wrap the `for` loop with an existence check to avoid iterating over bottom (`_|_`):
+
+```go title="guarded_item.go"
+metrics := defkit.NewArray().
+    ForEachGuarded(podCustomMetrics.IsSet(), podCustomMetrics, customMetric)
+```
+
+<details>
+<summary>Generated CUE output</summary>
+
+```cue
+metrics: [
+    if parameter.podCustomMetrics != _|_ for m in parameter.podCustomMetrics {
+        type: "Pods"
+        pods: metric: name: m.name
+    },
+]
+```
+
+</details>
+
+### ForEachWith -- Complex Per-Item Logic
+
+When iterated items need conditionals, let bindings, or default values internally, use `ForEachWith` with a callback:
+
+```go title="complex_foreach.go"
+ports := defkit.Array("ports").WithFields(...)
+
+modernPorts := defkit.NewArray().ForEachWith(ports, func(item *defkit.ItemBuilder) {
+    v := item.Var()
+    item.Set("port", v.Field("port"))
+    item.Set("targetPort", v.Field("port"))
+
+    // If user provided a name, use it
+    item.IfSet("name", func() {
+        item.Set("name", v.Field("name"))
+    })
+
+    // Otherwise, generate a name with a CUE default
+    item.IfNotSet("name", func() {
+        nameRef := item.Let("_name",
+            defkit.Plus(defkit.Lit("port-"), defkit.StrconvFormatInt(v.Field("port"), 10)))
+        item.SetDefault("name", nameRef, "string")
+    })
+})
+```
+
+<details>
+<summary>Generated CUE output</summary>
+
+```cue
+ports: [for v in parameter.ports {
+    port:       v.port
+    targetPort: v.port
+    if v.name != _|_ {
+        name: v.name
+    }
+    if v.name == _|_ {
+        _name: "port-" + strconv.FormatInt(v.port, 10)
+        name:  *_name | string
+    }
+}]
+```
+
+</details>
+
+#### ItemBuilder Methods
+
+| Method | Description |
+|:-------|:-----------|
+| `item.Var()` | Get an `IterVarBuilder` to reference the iteration variable |
+| `item.Var().Field("name")` | Reference a field on the iteration variable (`v.name`) |
+| `item.Var().Ref()` | Reference the iteration variable itself (`v`) |
+| `item.Set(field, value)` | Unconditional field assignment |
+| `item.If(cond, fn)` | Conditional block with arbitrary condition |
+| `item.IfSet(field, fn)` | Conditional block: `if v.field != _|_` |
+| `item.IfNotSet(field, fn)` | Conditional block: `if v.field == _|_` |
+| `item.Let(name, value)` | Private binding (`_name: expr`), returns a reference |
+| `item.SetDefault(field, value, type)` | CUE default: `field: *value \| type` |
+| `item.FieldExists(field)` | Condition: `v.field != _|_` |
+| `item.FieldNotExists(field)` | Condition: `v.field == _|_` |
+
+### Combining Entry Types
+
+The real power of `ArrayBuilder` is mixing all entry types in a single array. Here is the HPA trait's metrics array:
+
+```go title="hpa.go"
+metrics := defkit.NewArray().
+    Item(cpuMetric).                                                         // always present
+    ItemIf(mem.IsSet(), memMetric).                                          // only if mem param is set
+    ForEachGuarded(podCustomMetrics.IsSet(), podCustomMetrics, customMetric)  // one per custom metric
+```
+
+<details>
+<summary>Generated CUE output</summary>
+
+```cue
+metrics: [
+    {
+        type: "Resource"
+        resource: { name: "cpu", target: { ... } }
+    },
+    if parameter.mem != _|_ {
+        {
+            type: "Resource"
+            resource: { name: "memory", target: { ... } }
+        }
+    },
+    if parameter.podCustomMetrics != _|_ for m in parameter.podCustomMetrics {
+        type: "Pods"
+        pods: { metric: name: m.name, target: { ... } }
+    },
+]
+```
+
+</details>
+
+### ArrayConcat -- Concatenate Arrays
+
+Concatenate a built array with a parameter reference using `+`:
+
+```go title="array_concat.go"
+mounts := defkit.ArrayConcat(
+    defkit.NewArray().Item(
+        defkit.NewArrayElement().
+            Set("name", defkit.Lit("data")).
+            Set("mountPath", defkit.Lit("/data")),
+    ),
+    defkit.ParamRef("extraVolumeMounts"),
+)
+```
+
+<details>
+<summary>Generated CUE output</summary>
+
+```cue
+volumeMounts: [{
+    name:      "data"
+    mountPath: "/data"
+}] + parameter.extraVolumeMounts
+```
+
+</details>
+
+### Array Builder Methods Summary
+
+| Method | Description |
+|:-------|:-----------|
+| `NewArray()` | Create a new array builder |
+| `.Item(elem)` | Add an always-present item |
+| `.ItemIf(cond, elem)` | Add a conditional item |
+| `.ForEach(source, elem)` | Add iterated items |
+| `.ForEachGuarded(guard, source, elem)` | Add guarded iterated items |
+| `.ForEachWith(source, fn)` | Add iterated items with complex per-item logic |
+| `.ForEachWithVar(varName, source, fn)` | Same as `ForEachWith` with custom iteration variable name |
+| `ArrayConcat(left, right)` | Concatenate two array values with `+` |
+
 ## CUE Import Functions
 
 defkit wraps common CUE standard library functions. These auto-detect the needed import:
