@@ -330,6 +330,20 @@ module.exports = {
           ],
         },
         {
+          'Manage Definitions with Go (defkit)': [
+            'platform-engineers/defkit/overview',
+            'platform-engineers/defkit/components',
+            'platform-engineers/defkit/traits',
+            'platform-engineers/defkit/policies',
+            'platform-engineers/defkit/workflow-steps',
+            'platform-engineers/defkit/parameters',
+            'platform-engineers/defkit/templates-and-resources',
+            'platform-engineers/defkit/health-and-status',
+            'platform-engineers/defkit/placement',
+            'platform-engineers/defkit/testing',
+          ],
+        },
+        {
           'Contribution Guide': [
             'contributor/non-code-contribute',
             'contributor/code-contribute',
