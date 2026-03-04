@@ -312,6 +312,7 @@ module.exports = {
         {
           'Manage Definition with CUE': [
             'platform-engineers/cue/basic',
+            'platform-engineers/cue/parameter-markers',
             'platform-engineers/cue/definition-edit',
             'platform-engineers/components/custom-component',
             'platform-engineers/traits/customize-trait',

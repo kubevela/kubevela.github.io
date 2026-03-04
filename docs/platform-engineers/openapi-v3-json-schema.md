@@ -74,4 +74,4 @@ Specifically, this schema is generated based on `parameter` section in capabilit
 
 ## Next
 
-Refer to [UX of Definition](../reference/ui-schema.md)
+* Refer to [UX of Definition](../reference/ui-schema.md)
