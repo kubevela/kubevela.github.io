@@ -315,6 +315,7 @@ module.exports = {
             'platform-engineers/components/custom-component',
             'platform-engineers/traits/customize-trait',
             'platform-engineers/policy/custom-policy',
+            'platform-engineers/policy/application-scoped-policy',
             'platform-engineers/workflow/workflow',
             {
               'Patch and Override': [
