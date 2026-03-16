@@ -401,7 +401,6 @@ module.exports = {
         'platform-engineers/openapi/overview',
       ],
     },
-    'roadmap/README',
     {
       type: 'doc',
       id: 'developers/references/devex/faq',

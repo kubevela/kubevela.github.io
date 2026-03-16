@@ -27,6 +27,6 @@ They're aligned with the roadmap direction for the next three years. As for the 
 - [2021 Spring Roadmap](./2021-03-roadmap)
 - [2020 Winter Roadmap](./2020-12-roadmap)
 
-KubeVela follows the [release process and cadence guide](../contributor/release-process) that actions may not be strictly consistent with the roadmap. 
+KubeVela follows the [release process and cadence guide](/docs/contributor/release-process) that actions may not be strictly consistent with the roadmap.
 
 We may adjust the milestone according to the input from [community meeting](https://github.com/kubevela/community#community-meetings) and [github issues](https://github.com/kubevela/kubevela/issues), all community members are expected to join the discussion. You can refer to the [github milestones](https://github.com/kubevela/kubevela/milestones) for the final decisions.
