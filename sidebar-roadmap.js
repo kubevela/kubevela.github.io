@@ -1,0 +1,20 @@
+module.exports = {
+  roadmap: [
+    'README',
+    '2026-12-roadmap',
+    '2026-09-roadmap',
+    '2026-06-roadmap',
+    '2026-03-roadmap',
+    '2023-06-roadmap',
+    '2023-03-roadmap',
+    '2022-12-roadmap',
+    '2022-09-roadmap',
+    '2022-06-roadmap',
+    '2022-03-roadmap',
+    '2021-12-roadmap',
+    '2021-09-roadmap',
+    '2021-06-roadmap',
+    '2021-03-roadmap',
+    '2020-12-roadmap',
+  ],
+};

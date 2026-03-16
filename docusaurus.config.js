@@ -65,6 +65,12 @@ module.exports = {
           position: 'left',
         },
         {
+          to: 'roadmap/',
+          activeBasePath: 'roadmap',
+          label: 'Roadmap',
+          position: 'left',
+        },
+        {
           to: 'videos/best-practice/jenkins',
           activeBasePath: 'videos',
           label: 'Videos',
@@ -302,6 +308,18 @@ module.exports = {
         routeBasePath: 'videos',
         include: ['**/*.md'],
         sidebarPath: require.resolve('./sidebar-videos.js'),
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'roadmap',
+        path: 'roadmap',
+        routeBasePath: 'roadmap',
+        include: ['**/*.md'],
+        sidebarPath: require.resolve('./sidebar-roadmap.js'),
         showLastUpdateAuthor: true,
         showLastUpdateTime: true,
       },

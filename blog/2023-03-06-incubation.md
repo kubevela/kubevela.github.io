@@ -54,7 +54,7 @@ Since joining the CNCF Sandbox, KubeVela has released seven minor versions to v1
 
 “KubeVela improved the developer experience when it comes to complex multi-cloud environments with their modern open source software delivery control plane,” said Chris Aniszczyk, CNCF CTO. “We look forward to supporting the community in its growth and maturity towards a graduated project.”
 
-Looking forward, the community plans to improve the user experience for cloud resource provisioning and consumption with delivery workflow, enhance the security for the whole CI/CD delivery process in hybrid/multi-cluster scenarios, support the KubeVela Dynamic API that allows users to make integration with third-party APIs easily, and more. Visit the [roadmap](https://kubevela.io/docs/roadmap/) to learn more.
+Looking forward, the community plans to improve the user experience for cloud resource provisioning and consumption with delivery workflow, enhance the security for the whole CI/CD delivery process in hybrid/multi-cluster scenarios, support the KubeVela Dynamic API that allows users to make integration with third-party APIs easily, and more. Visit the [roadmap](https://kubevela.io/roadmap/) to learn more.
 
 <iframe width="720" height="480" src="https://www.youtube.com/embed/p6rB3qQ2zn4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
