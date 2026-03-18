@@ -74,10 +74,10 @@ logLevel := defkit.Enum("logLevel").
                Default("info").
                Description("Allowed log levels")
 
-cpu      := defkit.String("cpu").
+cpu      := defkit.String("cpu").Optional().
                Description(`CPU request, e.g. "500m"`)
 
-env := defkit.List("env").
+env := defkit.List("env").Optional().
     Description("Environment variables").
     WithFields(
         defkit.String("name"),
@@ -92,7 +92,7 @@ ports := defkit.Array("ports").Optional().
         defkit.Bool("expose").Default(false),
     )
 
-labels := defkit.StringKeyMap("labels").
+labels := defkit.StringKeyMap("labels").Optional().
     Description("Extra labels to add")
 ```
 

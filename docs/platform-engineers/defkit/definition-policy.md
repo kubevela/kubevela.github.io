@@ -32,24 +32,19 @@ func init() { defkit.Register(ApplyOnce()) }
 ```
 
 ```cue title="CUE — generated"
-// Generated — apply-once PolicyDefinition
-#ApplyOncePolicyRule: {
-  selector?: #ResourcePolicyRuleSelector
-  strategy:  #ApplyOnceStrategy
-}
-#ApplyOnceStrategy: {
-  affect?: string
-  path: [...string]
-}
 parameter: {
-  enable: *true | bool
-  rules?: [...#ApplyOncePolicyRule]
+    // Disable KubeVela from re-applying components on every reconcile
+    enable: *true | bool
+
+    rules?: [...{
+        selector?: [...string]
+    }]
 }
 ```
 
 ## Policy API Group
 
-PolicyDefinitions are registered under `core.oam.dev/v1alpha1`. Users reference policies by name in the `policies` section of an Application:
+PolicyDefinitions are registered under `core.oam.dev/v1beta1`. Users reference policies by name in the `policies` section of an Application:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

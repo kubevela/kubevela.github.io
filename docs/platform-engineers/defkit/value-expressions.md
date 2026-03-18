@@ -200,7 +200,7 @@ if parameter.privileges != _|_ &&
 
 ### `defkit.StrconvFormatInt(v Value, base int)`
 
-Converts an integer value to a string using CUE's `strconv.FormatInt(v, base)`. Requires `"strconv"` import via `.WithImports("strconv")`.
+Converts an integer value to a string using CUE's `strconv.FormatInt(v, base)`. The `strconv` import is detected automatically — no explicit `.WithImports("strconv")` call is needed.
 
 ```go title="Go — defkit"
 protocal := defkit.String("protocal").Default("http")

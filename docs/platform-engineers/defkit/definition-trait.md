@@ -11,7 +11,7 @@ title: TraitDefinition
 | `.Description(text)` | Human-readable description of the trait's purpose. |
 | `.AppliesTo(workloads...)` | Restricts which component types this trait can attach to (e.g., `"webservice"`, `"daemon"`). Omit for universal traits. |
 | `.ConflictsWith(traits...)` | Declares mutual exclusion with other named traits. |
-| `.WorkloadRefPath(path)` | Specifies the JSONPath to the workload object reference within the trait's resource. Pass an empty string to disable workload ref tracking for this trait. |
+| `.WorkloadRefPath(path)` | Specifies the field path (e.g. `"spec.workloadRef"`) to the workload object reference within the trait's resource. Pass an empty string to disable workload ref tracking for this trait. |
 | `.PodDisruptive(bool)` | Marks the trait as pod-disruptive (triggers pod restart when changed). |
 | `.Stage(stage)` | Sets the dispatch stage for ordering trait application. |
 | `.Labels(map)` | Attaches metadata labels to the TraitDefinition CRD. |

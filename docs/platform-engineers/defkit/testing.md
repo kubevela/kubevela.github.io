@@ -2,7 +2,7 @@
 title: Testing Definitions
 ---
 
-Write Go unit tests for your definitions using defkit's test helpers and Gomega matchers. All tests use standard Go testing with Ginkgo/Gomega — no cluster is needed, tests run entirely in-process.
+Write Go unit tests for your definitions using defkit's test helpers and Gomega matchers. Unit tests run entirely in-process and do not require a cluster; E2E tests require a live KubeVela cluster.
 
 ## Unit Testing
 

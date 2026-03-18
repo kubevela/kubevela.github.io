@@ -91,7 +91,7 @@ let _namespacePrivileges = [
 
 ## `defkit.LetVariable(name)`
 
-References a previously registered let binding by name. Use the string returned from `tpl.Helper().Build()` or the name passed to `tpl.AddLetBinding()` as the argument.
+References a previously registered let binding by name. `tpl.Helper("name")...Build()` returns a `Value` you can use directly in `.Set()` calls. Use `defkit.LetVariable("name")` when you need to reference the same let binding at a different point in the code by its string name.
 
 ```go title="Go — defkit"
 mountsArray := tpl.Helper("mountsArray"). /* ... */ .Build()

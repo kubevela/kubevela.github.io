@@ -37,15 +37,19 @@ func Webservice() *defkit.ComponentDefinition {
                 Description("The value of the environment variable"),
         )
 
-    cpu    := defkit.String("cpu").Optional().Description("CPU units, e.g. `0.5`, `1`")
-    memory := defkit.String("memory").Optional().Description("Memory size, e.g. `128Mi`, `1Gi`")
+    cpu        := defkit.String("cpu").Optional().Description("CPU units, e.g. `0.5`, `1`")
+    memory     := defkit.String("memory").Optional().Description("Memory size, e.g. `128Mi`, `1Gi`")
+    exposeType := defkit.Enum("exposeType").
+        Values("ClusterIP", "NodePort", "LoadBalancer").
+        Default("ClusterIP").
+        Description(`Specify what kind of Service you want. options: "ClusterIP", "NodePort", "LoadBalancer"`)
 
     return defkit.NewComponent("webservice").
         Description("Long-running, scalable containerized service with a stable network endpoint.").
         Workload("apps/v1", "Deployment").
         CustomStatus(defkit.DeploymentStatus().Build()).
         HealthPolicy(defkit.DeploymentHealth().Build()).
-        Params(image, ports, env, cpu, memory).
+        Params(image, ports, env, cpu, memory, exposeType).
         Template(webserviceTemplate)
 }
 
@@ -208,7 +212,8 @@ func Env() *defkit.TraitDefinition {
 name:    _params.containerName
 _delKeys: {for k in _params.unset {(k): ""}}
 _baseContainers: context.output.spec.template.spec.containers
-_matchContainers_: [for _c_ in _baseContainers if _c_.name == name {_c_}]
+_matchContainers_: [for _container_ in _baseContainers if _container_.name == name {_container_}]
+_baseContainer: *_|_ | {...}
 if len(_matchContainers_) == 0 {
     err: "container \(name) not found"
 }
@@ -216,21 +221,28 @@ if len(_matchContainers_) > 0 {
     _baseContainer: _matchContainers_[0]
     _baseEnv:       _baseContainer.env
     if _baseEnv == _|_ {
-        env: [for k, v in _params.env if _delKeys[k] == _|_ {name: k, value: v}]
+        // +patchStrategy=replace
+        env: [for k, v in _params.env if _delKeys[k] == _|_ {
+            name:  k
+            value: v
+        }]
     }
     if _baseEnv != _|_ {
-        env: [for e in _baseEnv
-              if _delKeys[e.name] == _|_ && !_params.replace {
-                  name: e.name
-                  if _params.env[e.name] != _|_ { value: _params.env[e.name] }
-                  if _params.env[e.name] == _|_ {
-                      if e.value != _|_ { value: e.value }
-                      if e.valueFrom != _|_ { valueFrom: e.valueFrom }
-                  }
-              }] + [for k, v in _params.env
-              if _delKeys[k] == _|_ && (_params.replace || _baseEnvMap[k] == _|_) {
-                  name: k, value: v
-              }]
+        _baseEnvMap: {for envVar in _baseEnv {(envVar.name): envVar}}
+        // +patchStrategy=replace
+        env: [for envVar in _baseEnv if _delKeys[envVar.name] == _|_ && !_params.replace {
+            name: envVar.name
+            if _params.env[envVar.name] != _|_ {
+                value: _params.env[envVar.name]
+            }
+            if _params.env[envVar.name] == _|_ {
+                if envVar.value != _|_ { value: envVar.value }
+                if envVar.valueFrom != _|_ { valueFrom: envVar.valueFrom }
+            }
+        }] + [for k, v in _params.env if _delKeys[k] == _|_ && (_params.replace || _baseEnvMap[k] == _|_) {
+            name:  k
+            value: v
+        }]
     }
 }`,
             })
