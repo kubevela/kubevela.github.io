@@ -93,6 +93,11 @@ cpuMetric := defkit.NewArrayElement().
             Set("type", defkit.Lit("Utilization")).
             Set("averageUtilization", defkit.Reference("parameter.cpu.value"))))
 
+memMetric := defkit.NewArrayElement().
+    Set("type", defkit.Lit("Resource")).
+    Set("resource", defkit.NewArrayElement().
+        Set("name", defkit.Lit("memory")))
+
 customElem := defkit.NewArrayElement().
     Set("name", defkit.Reference("m.name")).
     Set("value", defkit.Reference("m.value"))
@@ -147,7 +152,7 @@ tpl.SetRawPatchBlock(`patch: spec: template: spec: {
 
 ```cue title="CUE — generated"
 // Fluent builder output
-patchStrategy: retainKeys
+patchStrategy: "retainKeys"
 patch: {
     spec: template: spec: {
         serviceAccountName: parameter.serviceAccountName

@@ -139,6 +139,7 @@ defkit.NewArray().Item(
     defkit.NewArrayElement().Set("kind", defkit.Lit("ServiceAccount")),
 )
 
+vela := defkit.VelaCtx()
 defkit.NewArrayElement().
     Set("name", vela.Name()).
     Set("namespace", vela.Namespace())

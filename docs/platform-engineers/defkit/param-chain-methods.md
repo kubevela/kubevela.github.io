@@ -124,8 +124,8 @@ slug := defkit.String("slug").MinLen(1).MaxLen(63)
 ```
 
 ```cue title="CUE — generated"
-name?: =~"^[a-z]+$"
-slug?: string & strings.MinRunes(1) & strings.MaxRunes(63)
+name: =~"^[a-z]+$"
+slug: string & strings.MinRunes(1) & strings.MaxRunes(63)
 ```
 
 ## Arithmetic Expressions: `.Add()` / `.Sub()` / `.Mul()` / `.Div()`

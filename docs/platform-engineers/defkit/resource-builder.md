@@ -150,6 +150,11 @@ cpuMetric := defkit.NewArrayElement().
             Set("type", defkit.Lit("Utilization")).
             Set("averageUtilization", defkit.Reference("parameter.cpu.value"))))
 
+memMetric := defkit.NewArrayElement().
+    Set("type", defkit.Lit("Resource")).
+    Set("resource", defkit.NewArrayElement().
+        Set("name", defkit.Lit("memory")))
+
 customElem := defkit.NewArrayElement().
     Set("name", defkit.Reference("m.name")).
     Set("value", defkit.Reference("m.value"))
@@ -213,7 +218,7 @@ The real power of `ArrayBuilder` is mixing all entry types in a single array:
 metrics := defkit.NewArray().
     Item(cpuMetric).
     ItemIf(mem.IsSet(), memMetric).
-    ForEachGuarded(podCustomMetrics.IsSet(), podCustomMetrics, customMetric)
+    ForEachGuarded(podCustomMetrics.IsSet(), podCustomMetrics, customElem)
 ```
 
 ```cue title="CUE — generated"

@@ -165,6 +165,10 @@ It("should be eligible on AWS EKS clusters", func() {
 })
 
 It("should be ineligible on GCP clusters", func() {
+    comp := defkit.NewComponent("aws-only").
+        RunOn(placement.Label("provider").Eq("aws"))
+
+    spec := comp.GetPlacement()
     result := placement.Evaluate(spec, map[string]string{
         "provider": "gcp",
     })

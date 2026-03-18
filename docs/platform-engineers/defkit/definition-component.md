@@ -55,6 +55,7 @@ output: {
   kind: "Deployment"
   metadata: name: context.name
   spec: {
+    selector: matchLabels: "app.oam.dev/component": context.name
     replicas: parameter.replicas
     template: spec: containers: [{
       image: parameter.image
