@@ -89,23 +89,21 @@ annotations?: {...}
 
 ## `defkit.OneOf()`
 
-A discriminated union — the parameter must match exactly one of the declared variant schemas. Use `.Discriminator(field)` to specify the distinguishing field name and `.Variants()` to list the variant schemas. Generates a CUE enum field for the discriminator plus conditional `if` blocks for each variant's fields.
+A discriminated union — the parameter must match exactly one of the declared variant schemas. The **param name** becomes the CUE enum field; `.Variants()` lists the allowed values and their associated fields. Generates a CUE enum field plus conditional `if` blocks for each variant's fields at the same schema level.
+
+`.Discriminator(field)` is available for tooling/metadata purposes but does not affect CUE output — the param name is always used as the enum field name.
 
 ```go title="Go — defkit"
-// With Discriminator
-storage := defkit.OneOf("storage").
-    Discriminator("type").
-    Variants(
-        defkit.Variant("pvc").WithFields(
-            defkit.Field("size", defkit.ParamTypeString),
-            defkit.Field("storageClass", defkit.ParamTypeString).Optional(),
-        ),
-        defkit.Variant("emptyDir").WithFields(
-            defkit.Field("sizeLimit", defkit.ParamTypeString).Optional(),
-        ),
-    )
+storage := defkit.OneOf("storage").Variants(
+    defkit.Variant("pvc").WithFields(
+        defkit.Field("size", defkit.ParamTypeString),
+        defkit.Field("storageClass", defkit.ParamTypeString).Optional(),
+    ),
+    defkit.Variant("emptyDir").WithFields(
+        defkit.Field("sizeLimit", defkit.ParamTypeString).Optional(),
+    ),
+)
 
-// Simple variant union
 source := defkit.OneOf("source").Variants(
     defkit.Variant("git").WithFields(
         defkit.Field("url", defkit.ParamTypeString),
@@ -118,7 +116,6 @@ source := defkit.OneOf("source").Variants(
 ```
 
 ```cue title="CUE — generated"
-// With Discriminator — generates enum disjunction + conditional blocks
 storage?: "pvc" | "emptyDir"
 if storage == "pvc" {
     size?:         string
@@ -128,7 +125,6 @@ if storage == "emptyDir" {
     sizeLimit?: string
 }
 
-// Simple variant union
 source?: "git" | "image"
 if source == "git" {
     url?:    string
