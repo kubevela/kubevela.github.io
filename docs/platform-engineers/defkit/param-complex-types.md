@@ -2,17 +2,36 @@
 title: Complex Parameter Types
 ---
 
-Complex types compose multiple fields or variant shapes into a single parameter. They cover nested objects, discriminated unions, and closed struct disjunctions.
+Complex types compose multiple fields or variant shapes into a single parameter. They cover nested objects and discriminated unions.
 
 ## `defkit.Struct()`
 
-An inline struct type with named fields. Conventionally used as the element type inside `Array.Of()`. Can nest other parameter types including other Structs.
+A named struct parameter with typed fields. Use `.WithFields()` with `defkit.Field()` constructors to specify the schema. Commonly used as a named top-level parameter for structured sub-objects.
+
+```go title="Go — defkit"
+resources := defkit.Struct("resources").WithFields(
+    defkit.Field("cpu",    defkit.ParamTypeString).Default("100m"),
+    defkit.Field("memory", defkit.ParamTypeString).Default("128Mi"),
+    defkit.Field("gpu",    defkit.ParamTypeInt).Optional(),
+).Description("Resource requirements")
+```
+
+```cue title="CUE — generated"
+// +usage=Resource requirements
+resources?: {
+    cpu:    *"100m"  | string
+    memory: *"128Mi" | string
+    gpu?:   int
+}
+```
+
+To create an **array of structs**, use `Array.WithFields()` directly — pass `Param` constructors (not `Field()`):
 
 ```go title="Go — defkit"
 ports := defkit.Array("ports").Optional().WithFields(
-    defkit.Field("containerPort", defkit.ParamTypeInt),
-    defkit.Field("protocol", defkit.ParamTypeString).Values("TCP", "UDP").Default("TCP"),
-    defkit.Field("name", defkit.ParamTypeString).Optional(),
+    defkit.Int("containerPort"),
+    defkit.String("protocol").Values("TCP", "UDP").Default("TCP"),
+    defkit.String("name").Optional(),
 )
 ```
 
@@ -70,7 +89,7 @@ annotations?: {...}
 
 ## `defkit.OneOf()`
 
-A discriminated union — the parameter must match exactly one of the declared variant schemas. Use `.Discriminator(field)` to specify the distinguishing field name and `.Variants()` to list the variant schemas. Maps to a CUE disjunction of struct types.
+A discriminated union — the parameter must match exactly one of the declared variant schemas. Use `.Discriminator(field)` to specify the distinguishing field name and `.Variants()` to list the variant schemas. Generates a CUE enum field for the discriminator plus conditional `if` blocks for each variant's fields.
 
 ```go title="Go — defkit"
 // With Discriminator
@@ -132,12 +151,6 @@ if source == "image" {
 | `defkit.ParamTypeFloat` | `float` |
 
 ```go title="Go — defkit"
-resources := defkit.Struct("resources").WithFields(
-    defkit.Field("cpu",    defkit.ParamTypeString).Default("100m"),
-    defkit.Field("memory", defkit.ParamTypeString).Default("128Mi"),
-    defkit.Field("gpu",    defkit.ParamTypeInt).Optional(),
-).Description("Resource requirements")
-
 // Field also supports modifiers:
 defkit.Field("name",  defkit.ParamTypeString)
 defkit.Field("port",  defkit.ParamTypeInt).Default(8080)
@@ -145,14 +158,7 @@ defkit.Field("debug", defkit.ParamTypeBool).Default(false)
 ```
 
 ```cue title="CUE — generated"
-// +usage=Resource requirements
-resources?: {
-    cpu:    *"100m"  | string
-    memory: *"128Mi" | string
-    gpu?:   int
-}
-
-name:   string
+name?:  string
 port:   *8080  | int
 debug:  *false | bool
 ```

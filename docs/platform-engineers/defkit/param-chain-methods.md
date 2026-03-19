@@ -58,7 +58,7 @@ defkit.String("image").
 ```cue title="CUE — generated annotation"
 // +usage=Container image reference (e.g. nginx:1.25)
 // +short=i
-image: string
+image?: string
 ```
 
 ## `.Values()`
