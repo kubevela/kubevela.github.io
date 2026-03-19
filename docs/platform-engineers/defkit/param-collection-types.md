@@ -9,11 +9,10 @@ Collection parameters represent multi-value fields — lists, arrays, and maps. 
 A typed list where every element matches the given parameter type. Chain `.Of()` with any scalar, struct, or complex type. Use when items have a defined schema.
 
 ```go title="Go — defkit"
-envItem := defkit.Struct("envItem").WithFields(
+envs := defkit.Array("env").Optional().WithFields(
     defkit.String("name"),
     defkit.String("value").Optional(),
 )
-envs := defkit.Array("env").Of(envItem)
 ```
 
 ```cue title="CUE — generated"
@@ -27,15 +26,13 @@ For arrays of scalars, pass a scalar param as the element type:
 
 ```go title="Go — defkit"
 // Array of strings
-tags := defkit.Array("tags").Of(defkit.String(""))
+tags := defkit.Array("tags").Of(defkit.ParamTypeString)
 
-// Array of structs
-mounts := defkit.Array("volumeMounts").Of(
-    defkit.Struct("").WithFields(
-        defkit.String("name"),
-        defkit.String("mountPath"),
-        defkit.Bool("readOnly").Default(false),
-    ),
+// Array of structs — use .WithFields() with Param constructors
+mounts := defkit.Array("volumeMounts").Optional().WithFields(
+    defkit.String("name"),
+    defkit.String("mountPath"),
+    defkit.Bool("readOnly").Default(false),
 )
 ```
 
@@ -72,7 +69,7 @@ objects := defkit.List("objects")
 ```
 
 ```cue title="CUE — generated"
-objects: [...]
+objects?: [...]
 ```
 
 ## `defkit.StringKeyMap()`
@@ -89,32 +86,40 @@ labels?:      [string]: string
 annotations?: [string]: string
 ```
 
-## `defkit.Map()` with `.ValueType()` / `.ValueTypeUnion()`
+## `defkit.Map()` with `.Of()`
 
-A generic map parameter with configurable value types. Use `StringKeyMap` for the common string-to-string case. `.ValueType()` sets a single value type; `.ValueTypeUnion()` specifies a union of allowed value types.
+A generic map parameter with a configurable value type. Use `StringKeyMap` for the common string-to-string case. Use `.Of(paramType)` to set the value type.
 
 ```go title="Go — defkit"
 // String-valued map
-defkit.Map("labels").ValueType("string")
+defkit.Map("labels").Of(defkit.ParamTypeString)
 
-// Mixed-type values
-defkit.Map("annotations").ValueTypeUnion("string", "int")
-
-// DynamicMap convenience
-defkit.DynamicMap("env").ValueType("string")
-defkit.DynamicMap("mixed").ValueTypeUnion("string", "null")
+// Open map (no typed value)
+defkit.Map("annotations")
 ```
 
 ```cue title="CUE — generated"
 labels?:      [string]: string
-annotations?: [string]: string | int
-env?:         [string]: string
-mixed?:       [string]: string | null
+annotations?: {...}
 ```
 
 :::info
-`defkit.Map()` without `.ValueType()` generates `{...}` — an open struct with any fields. Prefer `StringKeyMap` or `Map().ValueType()` for more specific CUE constraints.
+`defkit.Map()` without `.Of()` generates `{...}` — an open struct with any fields. Prefer `StringKeyMap` or `Map().Of()` for more specific CUE constraints.
 :::
+
+## `defkit.DynamicMap()`
+
+A special map type that replaces the **entire** `parameter` block with a dynamic map. Unlike `Map()`, it is not a named field — it sets the whole parameter schema to `[string]: T`. Use `.ValueType()` for a single type or `.ValueTypeUnion()` for a union string.
+
+```go title="Go — defkit"
+defkit.DynamicMap().ValueType(defkit.ParamTypeString)
+defkit.DynamicMap().ValueTypeUnion("string | null")
+```
+
+```cue title="CUE — generated"
+parameter: [string]: string
+parameter: [string]: string | null
+```
 
 ## Array Constraints
 
@@ -125,5 +130,5 @@ ports := defkit.Array("ports").MinItems(1).MaxItems(10)
 ```
 
 ```cue title="CUE — generated"
-ports?: [...] & list.MinItems(1) & list.MaxItems(10)
+ports?: list.MinItems(1) & list.MaxItems(10) & [...]
 ```

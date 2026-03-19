@@ -75,17 +75,13 @@ namespacePrivsRef := defkit.LetVariable("_namespacePrivileges")
 ```cue title="CUE — generated"
 // Injected at template header
 let _clusterPrivileges = [
-    if parameter.privileges != _|_ {
-        for p in parameter.privileges
-        if p.scope == "cluster" { p }
-    }
+    if parameter["privileges"] != _|_ for p in parameter.privileges
+    if p.scope == "cluster" { p }
 ]
 
 let _namespacePrivileges = [
-    if parameter.privileges != _|_ {
-        for p in parameter.privileges
-        if p.scope == "namespace" { p }
-    }
+    if parameter["privileges"] != _|_ for p in parameter.privileges
+    if p.scope == "namespace" { p }
 ]
 ```
 

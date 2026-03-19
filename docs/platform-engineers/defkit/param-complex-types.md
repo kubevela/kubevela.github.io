@@ -9,19 +9,18 @@ Complex types compose multiple fields or variant shapes into a single parameter.
 An inline struct type with named fields. Conventionally used as the element type inside `Array.Of()`. Can nest other parameter types including other Structs.
 
 ```go title="Go — defkit"
-portStruct := defkit.Struct("port").WithFields(
-    defkit.Int("containerPort"),
-    defkit.Enum("protocol").Values("TCP", "UDP").Default("TCP"),
-    defkit.String("name").Optional(),
+ports := defkit.Array("ports").Optional().WithFields(
+    defkit.Field("containerPort", defkit.ParamTypeInt),
+    defkit.Field("protocol", defkit.ParamTypeString).Values("TCP", "UDP").Default("TCP"),
+    defkit.Field("name", defkit.ParamTypeString).Optional(),
 )
-ports := defkit.Array("ports").Of(portStruct)
 ```
 
 ```cue title="CUE — generated"
 ports?: [...{
-    containerPort: int
-    protocol:      *"TCP" | "TCP" | "UDP"
-    name?:         string
+    containerPort?: int
+    protocol:       *"TCP" | "UDP"
+    name?:          string
 }]
 ```
 
@@ -78,79 +77,52 @@ A discriminated union — the parameter must match exactly one of the declared v
 storage := defkit.OneOf("storage").
     Discriminator("type").
     Variants(
-        defkit.Variant("pvc").Fields(
+        defkit.Variant("pvc").WithFields(
             defkit.Field("size", defkit.ParamTypeString),
-            defkit.Field("storageClass", defkit.ParamTypeString),
+            defkit.Field("storageClass", defkit.ParamTypeString).Optional(),
         ),
-        defkit.Variant("emptyDir").Fields(
-            defkit.Field("sizeLimit", defkit.ParamTypeString),
+        defkit.Variant("emptyDir").WithFields(
+            defkit.Field("sizeLimit", defkit.ParamTypeString).Optional(),
         ),
     )
 
 // Simple variant union
 source := defkit.OneOf("source").Variants(
     defkit.Variant("git").WithFields(
-        defkit.String("url"),
-        defkit.String("branch").Default("main"),
+        defkit.Field("url", defkit.ParamTypeString),
+        defkit.Field("branch", defkit.ParamTypeString).Default("main"),
     ),
     defkit.Variant("image").WithFields(
-        defkit.String("ref"),
+        defkit.Field("ref", defkit.ParamTypeString),
     ),
 )
 ```
 
 ```cue title="CUE — generated"
-// With Discriminator
-storage?: {
-    type: "pvc"
-    size: string
+// With Discriminator — generates enum disjunction + conditional blocks
+storage?: "pvc" | "emptyDir"
+if storage == "pvc" {
+    size?:         string
     storageClass?: string
-} | {
-    type: "emptyDir"
+}
+if storage == "emptyDir" {
     sizeLimit?: string
 }
 
 // Simple variant union
-source?: {
-    url:    string
-    branch: *"main" | string
-} | {
-    ref: string
+source?: "git" | "image"
+if source == "git" {
+    url?:    string
+    branch:  *"main" | string
 }
-```
-
-## `defkit.ClosedUnion()`
-
-A closed struct disjunction — the parameter must match exactly one of the declared closed struct shapes. Unlike `OneOf`, there is no discriminator field; shapes are matched structurally. Generates a CUE `close({...}) | close({...})` disjunction, ensuring no extra fields are allowed in any branch.
-
-```go title="Go — defkit"
-url := defkit.ClosedUnion("url").Options(
-    defkit.ClosedStruct().WithFields(
-        defkit.String("value"),
-    ),
-    defkit.ClosedStruct().WithFields(
-        defkit.Struct("secretRef").WithFields(
-            defkit.String("name"),
-            defkit.String("key"),
-        ),
-    ),
-)
-```
-
-```cue title="CUE — generated"
-url?: close({
-    value: string
-}) | close({
-    secretRef: {
-        name: string
-        key:  string
-    }
-})
+if source == "image" {
+    ref?: string
+}
 ```
 
 ## ParamType Constants and `defkit.Field()`
 
-`defkit.Field(name, paramType)` creates a named field for use inside `Struct.Fields()`. `paramType` is one of the `ParamType*` constants. This is an alternative to calling constructors like `defkit.String(name)` directly and is useful when building struct schemas programmatically.
+`defkit.Field(name, paramType)` creates a named field for use inside `Struct.WithFields()`. `paramType` is one of the `ParamType*` constants. This is an alternative to calling constructors like `defkit.String(name)` directly and is useful when building struct schemas programmatically.
 
 | Constant | CUE Type |
 |---|---|
@@ -160,7 +132,7 @@ url?: close({
 | `defkit.ParamTypeFloat` | `float` |
 
 ```go title="Go — defkit"
-resources := defkit.Struct("resources").Fields(
+resources := defkit.Struct("resources").WithFields(
     defkit.Field("cpu",    defkit.ParamTypeString).Default("100m"),
     defkit.Field("memory", defkit.ParamTypeString).Default("128Mi"),
     defkit.Field("gpu",    defkit.ParamTypeInt).Optional(),

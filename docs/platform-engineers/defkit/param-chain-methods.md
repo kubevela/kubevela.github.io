@@ -8,27 +8,26 @@ All parameter constructors return `*Param` — chain these methods to configure 
 
 Controls the CUE field presence marker. defkit uses a three-state model:
 
-- **Bare param (no call)** — emits `field: type`. Non-optional; must have a value (defaults or merging can satisfy it).
-- **`.Optional()`** — emits `field?: type`. The field may be absent.
+- **Bare param (no call)** — emits `field?: type`. Optional by default; the field may be absent.
+- **`.Optional()`** — emits `field?: type`. Identical to bare param — use for readability.
+- **`.Mandatory()`** — emits `field: type`. Non-optional; must have a value (defaults or merging can satisfy it).
 - **`.Required()`** — emits `field!: type`. The user must explicitly provide the value; it cannot be satisfied by defaults or merging.
 
 ```go title="Go — defkit"
-defkit.String("image")                   // non-optional (default)
+defkit.String("image")                   // optional by default — has ?
+defkit.String("image").Mandatory()       // non-optional — no ?, no !
 defkit.String("token").Required()        // user must explicitly set this
-defkit.String("tag").Optional()          // explicitly optional — may be absent
+defkit.String("tag").Optional()          // same as bare param — has ?
 defkit.String("tag").Default("latest")   // non-optional with default value
 ```
 
 ```cue title="CUE — generated"
-image:  string          // non-optional — no ?, no !
-token!: string          // required — must be explicitly set
-tag?:   string          // optional  — has ?
-tag:    *"latest" | string  // non-optional with default
+image?:  string             // optional by default — has ?
+image:   string             // .Mandatory() — non-optional, no ?, no !
+token!:  string             // required — must be explicitly set
+tag?:    string             // optional  — has ?
+tag:     *"latest" | string // non-optional with default
 ```
-
-:::caution Breaking change
-Previously, a bare parameter (no method call) emitted `field?: type` (optional). It now emits `field: type` (non-optional). If you need a field to be optional and absent-capable, you must call `.Optional()` explicitly.
-:::
 
 ## `.Default(value)`
 
@@ -73,7 +72,7 @@ defkit.Enum("policy").
 ```
 
 ```cue title="CUE — generated"
-policy: *"Retain" | "Retain" | "Delete" | "Recycle"
+policy: *"Retain" | "Delete" | "Recycle"
 ```
 
 ## `.Min()` / `.Max()`
@@ -86,8 +85,8 @@ defkit.Int("timeout").Default(30).Min(5)
 ```
 
 ```cue title="CUE — generated"
-replicas: *1  | int >=1 & <=100
-timeout:  *30 | int >=5
+replicas: *1  | int & >=1 & <=100
+timeout:  *30 | int & >=5
 ```
 
 ## `.Ignore()`
@@ -108,7 +107,7 @@ return defkit.NewComponent("webservice").
 ```cue title="CUE — generated"
 // Only non-ignored params appear:
 parameter: {
-    image: string
+    image?: string
     ports?: [...]
     // port is omitted from schema
 }
@@ -124,8 +123,8 @@ slug := defkit.String("slug").MinLen(1).MaxLen(63)
 ```
 
 ```cue title="CUE — generated"
-name: =~"^[a-z]+$"
-slug: string & strings.MinRunes(1) & strings.MaxRunes(63)
+name?: string & =~"^[a-z]+$"
+slug?: string & strings.MinRunes(1) & strings.MaxRunes(63)
 ```
 
 ## Arithmetic Expressions: `.Add()` / `.Sub()` / `.Mul()` / `.Div()`
@@ -199,12 +198,12 @@ deploy.If(defkit.And(volumes.IsSet(), mounts.NotSet())).
 
 ```cue title="CUE — generated"
 // IsSet guard
-if parameter.tag != _|_ {
+if parameter["tag"] != _|_ {
     spec: template: spec: containers: [{image: parameter.image + ":" + parameter.tag}]
 }
 
 // NotSet guard (combined And)
-if parameter.volumes != _|_ && parameter.volumeMounts == _|_ {
+if parameter["volumes"] != _|_ && parameter["volumeMounts"] == _|_ {
     spec: template: spec: volumeMounts: []
 }
 ```
@@ -214,7 +213,7 @@ if parameter.volumes != _|_ && parameter.volumeMounts == _|_ {
 Access nested fields within struct parameters for use in conditions or `.Set()` calls. Returns a `Value` that references the nested field path. Supports chained condition methods like `.IsSet()`, `.Eq()`, etc.
 
 ```go title="Go — defkit"
-config := defkit.Struct("config").Fields(
+config := defkit.Struct("config").WithFields(
     defkit.Field("enabled", defkit.ParamTypeBool).Default(true),
     defkit.Field("port", defkit.ParamTypeInt).Default(8080),
 )

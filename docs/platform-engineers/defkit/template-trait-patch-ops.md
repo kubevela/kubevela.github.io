@@ -42,7 +42,7 @@ tpl.Patch().Passthrough()
 // SpreadIf — spreads user labels INSIDE the labels block
 // (block always exists from other Set() calls; user labels are merged in conditionally)
 patch: spec: template: metadata: labels: {
-    if parameter.labels != _|_ {
+    if parameter["labels"] != _|_ {
         parameter.labels
     }
 }

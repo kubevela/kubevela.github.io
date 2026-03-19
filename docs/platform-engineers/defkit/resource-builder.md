@@ -84,10 +84,10 @@ job := defkit.NewResource("batch/v1", "Job").
 spec: template: spec: containers: [{
     image: parameter.image
 }]
-if parameter.annotations != _|_ {
+if parameter["annotations"] != _|_ {
     spec: template: metadata: annotations: parameter.annotations
 }
-if parameter.labels != _|_ {
+if parameter["labels"] != _|_ {
     spec: template: metadata: labels: parameter.labels
 }
 ```
@@ -112,7 +112,7 @@ job := defkit.NewResource("batch/v1", "Job").
 ```
 
 ```cue title="CUE — generated"
-if parameter.cpu != _|_ {
+if parameter["cpu"] != _|_ {
     spec: template: spec: containers: [{
         resources: {
             limits:   { cpu: parameter.cpu }
@@ -120,7 +120,7 @@ if parameter.cpu != _|_ {
         }
     }]
 }
-if parameter.memory != _|_ {
+if parameter["memory"] != _|_ {
     spec: template: spec: containers: [{
         resources: {
             limits:   { memory: parameter.memory }
@@ -177,11 +177,13 @@ metrics := defkit.NewArray().
             }
         }
     },
-    if parameter.mem != _|_ { { type: "Resource", resource: { name: "memory" } } },
-    if parameter.podCustomMetrics != _|_ {
-        for m in parameter.podCustomMetrics {
-            { name: m.name, value: m.value }
-        }
+    if parameter["mem"] != _|_ {
+        type: "Resource"
+        resource: { name: "memory" }
+    },
+    if parameter["podCustomMetrics"] != _|_ for m in parameter.podCustomMetrics {
+        name: m.name
+        value: m.value
     },
 ]
 ```
@@ -227,15 +229,13 @@ metrics: [
         type: "Resource"
         resource: { name: "cpu", target: { ... } }
     },
-    if parameter.mem != _|_ {
-        {
-            type: "Resource"
-            resource: { name: "memory", target: { ... } }
-        }
+    if parameter["mem"] != _|_ {
+        type: "Resource"
+        resource: { name: "memory" }
     },
-    if parameter.podCustomMetrics != _|_ for m in parameter.podCustomMetrics {
-        type: "Pods"
-        pods: { metric: name: m.name, target: { ... } }
+    if parameter["podCustomMetrics"] != _|_ for m in parameter.podCustomMetrics {
+        name: m.name
+        value: m.value
     },
 ]
 ```
@@ -282,7 +282,7 @@ rules := defkit.ForEachIn(privRef).MapFields(defkit.FieldMap{
 }]
 
 // defkit.From with filter + guard
-if parameter.privileges != _|_ {
+if parameter["privileges"] != _|_ {
     [for p in parameter.privileges if p.scope == "cluster" { p }]
 }
 
@@ -389,16 +389,12 @@ namespacePrivsRef := defkit.LetVariable("_namespacePrivileges")
 
 ```cue title="CUE — generated"
 let _clusterPrivileges = [
-    if parameter.privileges != _|_ {
-        for p in parameter.privileges
-        if p.scope == "cluster" { p }
-    }
+    if parameter["privileges"] != _|_ for p in parameter.privileges
+    if p.scope == "cluster" { p }
 ]
 
 let _namespacePrivileges = [
-    if parameter.privileges != _|_ {
-        for p in parameter.privileges
-        if p.scope == "namespace" { p }
-    }
+    if parameter["privileges"] != _|_ for p in parameter.privileges
+    if p.scope == "namespace" { p }
 ]
 ```

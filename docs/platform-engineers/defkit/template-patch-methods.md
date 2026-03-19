@@ -27,10 +27,10 @@ job := defkit.NewResource("batch/v1", "Job").
 spec: template: spec: containers: [{
     image: parameter.image
 }]
-if parameter.annotations != _|_ {
+if parameter["annotations"] != _|_ {
     spec: template: metadata: annotations: parameter.annotations
 }
-if parameter.labels != _|_ {
+if parameter["labels"] != _|_ {
     spec: template: metadata: labels: parameter.labels
 }
 ```
@@ -57,7 +57,7 @@ job := defkit.NewResource("batch/v1", "Job").
 ```
 
 ```cue title="CUE — generated"
-if parameter.cpu != _|_ {
+if parameter["cpu"] != _|_ {
     spec: template: spec: containers: [{
         resources: {
             limits:   { cpu: parameter.cpu }
@@ -65,7 +65,7 @@ if parameter.cpu != _|_ {
         }
     }]
 }
-if parameter.memory != _|_ {
+if parameter["memory"] != _|_ {
     spec: template: spec: containers: [{
         resources: {
             limits:   { memory: parameter.memory }
@@ -120,11 +120,13 @@ metrics := defkit.NewArray().
             }
         }
     },
-    if parameter.mem != _|_ { { type: "Resource", resource: { name: "memory" } } },
-    if parameter.podCustomMetrics != _|_ {
-        for m in parameter.podCustomMetrics {
-            { name: m.name, value: m.value }
-        }
+    if parameter["mem"] != _|_ {
+        type: "Resource"
+        resource: { name: "memory" }
+    },
+    if parameter["podCustomMetrics"] != _|_ for m in parameter.podCustomMetrics {
+        name: m.name
+        value: m.value
     },
 ]
 ```

@@ -121,7 +121,7 @@ Chain methods on `*Param` that produce condition values.
 
 | Method | CUE output | Usage |
 |---|---|---|
-| `.IsSet()` | `parameter.x != _\|_` | Parameter has been supplied |
+| `.IsSet()` | `parameter["x"] != _\|_` | Parameter has been supplied |
 | `.IsTrue()` | `parameter.x` | Bool parameter equals `true` |
 | `.Field(name)` | `parameter.x.name` | Named field of a Struct/Object parameter |
 | `.Eq(v)` | `parameter.x == v` | Equality condition on the parameter value |
@@ -144,7 +144,7 @@ cpuValue := cpu.Field("value")
 ```
 
 ```cue title="CUE — generated"
-if parameter.cmd != _|_ {
+if parameter["cmd"] != _|_ {
     spec: template: spec: containers: [{
         command: parameter.cmd
     }]
@@ -189,7 +189,7 @@ if parameter.targetKind == "Deployment" &&
 }
 
 // LenGt with OutputsGroupIf
-if parameter.privileges != _|_ &&
+if parameter["privileges"] != _|_ &&
    len(_clusterPrivileges) > 0 {
     outputs: "cluster-role":         { ... }
     outputs: "cluster-role-binding": { ... }
@@ -268,9 +268,8 @@ tpl.OutputsGroupIf(
 
 ```cue title="CUE — generated"
 let _clusterPrivileges = [
-    if parameter.privileges != _|_ {
-        for p in parameter.privileges if p.scope == "cluster" { p }
-    }
+    if parameter["privileges"] != _|_ for p in parameter.privileges
+    if p.scope == "cluster" { p }
 ]
 
 rules: [for r in _clusterPrivileges { ... }]

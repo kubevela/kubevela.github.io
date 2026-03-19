@@ -165,14 +165,14 @@ items: [...{...}]
 
 ### `defkit.DynamicMap()`
 
-Creates a map parameter with a custom value type union. Used for label-style params where values can be mixed types.
+Replaces the entire `parameter` block with a dynamic map. When a definition uses `DynamicMap`, the `parameter` schema becomes `[string]: T` rather than a named-field struct.
 
 ```go title="Go — defkit"
 defkit.DynamicMap().ValueTypeUnion("string | null")
 ```
 
 ```cue title="CUE — generated"
-[string]: string | null
+parameter: [string]: string | null
 ```
 
 ## Field Reference & Transformation
@@ -200,7 +200,7 @@ Inside a `ForEachIn` / `From` iteration context, references a field of the curre
 Applies to: **Template**
 
 ```go title="Go — defkit"
-defkit.ForEachIn(constraints).Map(map[string]defkit.Expr{
+defkit.ForEachIn(constraints).MapFields(defkit.FieldMap{
     "maxSkew": defkit.FieldRef("maxSkew"),
 })
 ```
@@ -218,7 +218,7 @@ Transforms an array parameter by mapping each element's fields. Returns a CUE li
 Applies to: **Template**
 
 ```go title="Go — defkit"
-defkit.ForEachIn(constraints).Map(map[string]defkit.Expr{
+defkit.ForEachIn(constraints).MapFields(defkit.FieldMap{
     "maxSkew":           defkit.FieldRef("maxSkew"),
     "topologyKey":       defkit.FieldRef("topologyKey"),
     "whenUnsatisfiable": defkit.FieldRef("whenUnsatisfiable"),
@@ -246,7 +246,7 @@ defkit.From(privileges).
 ```
 
 ```cue title="CUE — generated"
-if parameter.privileges != _|_ {
+if parameter["privileges"] != _|_ {
     [for v in parameter.privileges
      if v.scope == "cluster" { v }]
 }

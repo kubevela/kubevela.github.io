@@ -6,16 +6,16 @@ Scalar parameters define single-value fields in a definition's parameter schema.
 
 ## `defkit.String()`
 
-A UTF-8 string parameter. Non-optional by default — the field is emitted as `field: string`. Use `.Optional()` to make the field absent-capable (`field?: string`).
+A UTF-8 string parameter. Optional by default — the field is emitted as `field?: string`. Use `.Default(v)` to emit a non-optional field with a default (`field: *v | string`), or `.Mandatory()` for a non-optional field without a default (`field: string`).
 
 ```go title="Go — defkit"
-image   := defkit.String("image")              // non-optional (default)
+image   := defkit.String("image")              // optional by default
 tag     := defkit.String("tag").Default("latest")
 comment := defkit.String("comment").Optional() // explicitly optional
 ```
 
 ```cue title="CUE — generated"
-image:    string
+image?:   string
 tag:      *"latest" | string
 comment?: string
 ```
@@ -30,8 +30,8 @@ port     := defkit.Int("port")
 ```
 
 ```cue title="CUE — generated"
-replicas: *1 | int >=1 & <=50
-port:     int
+replicas: *1 | int & >=1 & <=50
+port?:    int
 ```
 
 ## `defkit.Bool()`
@@ -50,7 +50,7 @@ debug:  *false | bool
 
 ## `defkit.Float()`
 
-A floating-point number parameter. Supports `.Min(f)` and `.Max(f)` for range constraints. Generates the CUE `float` type.
+A floating-point number parameter. Supports `.Min(f)` and `.Max(f)` for range constraints. Generates the CUE `number` type.
 
 ```go title="Go — defkit"
 ratio  := defkit.Float("ratio").Default(0.5).Min(0.0).Max(1.0)
@@ -58,8 +58,8 @@ weight := defkit.Float("weight")
 ```
 
 ```cue title="CUE — generated"
-ratio:  *0.5 | float >=0 & <=1
-weight: float
+ratio:   *0.5 | number & >=0 & <=1
+weight?: number
 ```
 
 ## `defkit.Enum()`
@@ -74,7 +74,7 @@ pullPolicy := defkit.Enum("imagePullPolicy").
 ```
 
 ```cue title="CUE — generated"
-imagePullPolicy: *"IfNotPresent" | "Always" | "Never" | "IfNotPresent"
+imagePullPolicy: *"IfNotPresent" | "Always" | "Never"
 ```
 
 :::tip

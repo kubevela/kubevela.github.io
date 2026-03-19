@@ -118,52 +118,153 @@ func init() {
 }
 ```
 
-```cue title="CUE — generated output (simplified)"
-output: {
-    apiVersion: "apps/v1"
-    kind:       "Deployment"
-    metadata: {
-        name: context.name
-        labels: "app.oam.dev/name": context.appName
-    }
-    spec: {
-        selector: matchLabels: "app.oam.dev/component": context.name
-        template: {
-            metadata: labels: "app.oam.dev/component": context.name
-            spec: containers: [{
-                name:  context.name
-                image: parameter.image
-                if parameter.ports != _|_ {
-                    ports: [for v in parameter.ports {
-                        containerPort: v.port
-                        protocol:      v.protocol
-                        if v.name != _|_ { name: v.name }
-                    }]
-                }
-                if parameter.env != _|_ { env: parameter.env }
-                if parameter.cpu != _|_ {
-                    resources: {
-                        limits:   { cpu: parameter.cpu }
-                        requests: { cpu: parameter.cpu }
-                    }
-                }
-            }]
+```yaml title="Generated — ComponentDefinition (vela def apply-module --dry-run)"
+apiVersion: core.oam.dev/v1beta1
+kind: ComponentDefinition
+metadata:
+  annotations:
+    definition.oam.dev/description: Long-running, scalable containerized service with a stable network endpoint.
+  labels: {}
+  name: webservice
+  namespace: vela-system
+spec:
+  schematic:
+    cue:
+      template: |
+        output: {
+        	apiVersion: "apps/v1"
+        	kind:       "Deployment"
+        	metadata: {
+        		name: context.name
+        		labels: "app.oam.dev/name": context.appName
+        	}
+        	spec: {
+        		selector: matchLabels: "app.oam.dev/component": context.name
+        		template: {
+        			metadata: labels: "app.oam.dev/component": context.name
+        			spec: containers: [{
+        				name:  context.name
+        				image: parameter.image
+        				if parameter["cpu"] != _|_ {
+        					resources: {
+        						limits: cpu:   parameter.cpu
+        						requests: cpu: parameter.cpu
+        					}
+        				}
+        				if parameter["memory"] != _|_ {
+        					resources: {
+        						limits: memory:   parameter.memory
+        						requests: memory: parameter.memory
+        					}
+        				}
+        				if parameter["ports"] != _|_ {
+        					ports: [
+        						for v in parameter.ports {
+        							containerPort: v.port
+        							protocol:      v.protocol
+        							if v.name != _|_ {
+        								name: v.name
+        							}
+        						},
+        					]
+        				}
+        				if parameter["env"] != _|_ {
+        					env: parameter.env
+        				}
+        			}]
+        		}
+        	}
         }
-    }
-}
-
-if len(exposePorts) > 0 {
-    outputs: webserviceExpose: {
-        apiVersion: "v1"
-        kind:       "Service"
-        metadata: name: context.name
-        spec: {
-            selector: "app.oam.dev/component": context.name
-            ports:    exposePorts
-            type:     parameter.exposeType
+        exposePorts: [
+        	if parameter["ports"] != _|_ for v in parameter.ports if v.expose == true {
+        		port:       v.port
+        		targetPort: v.port
+        	},
+        ]
+        outputs: {
+        	if len(exposePorts) != 0 {
+        		webserviceExpose: {
+        			apiVersion: "v1"
+        			kind:       "Service"
+        			metadata: name: context.name
+        			spec: {
+        				selector: "app.oam.dev/component": context.name
+        				ports: exposePorts
+        				type:  parameter.exposeType
+        			}
+        		}
+        	}
         }
-    }
-}
+        parameter: {
+        	// +usage=Which image would you like to use for your service
+        	// +short=i
+        	image?: string
+        	// +usage=Which ports do you want customer traffic sent to, defaults to 80
+        	ports?: [...{
+        		// +usage=Number of port to expose on the pod's IP address
+        		port?: int
+        		// +usage=Name of the port
+        		name?:    string
+        		protocol: *"TCP" | "UDP" | "SCTP"
+        		// +usage=Specify if the port should be exposed
+        		expose: *false | bool
+        	}]
+        	// +usage=Define arguments by using environment variables
+        	env?: [...{
+        		// +usage=Environment variable name
+        		name?: string
+        		// +usage=The value of the environment variable
+        		value?: string
+        	}]
+        	// +usage=CPU units, e.g. `0.5`, `1`
+        	cpu?: string
+        	// +usage=Memory size, e.g. `128Mi`, `1Gi`
+        	memory?: string
+        	// +usage=Specify what kind of Service you want. options: "ClusterIP", "NodePort", "LoadBalancer"
+        	exposeType: *"ClusterIP" | "NodePort" | "LoadBalancer"
+        }
+  status:
+    customStatus: |-
+      ready: {
+      	readyReplicas: *0 | int
+      } & {
+      	if context.output.status.readyReplicas != _|_ {
+      		readyReplicas: context.output.status.readyReplicas
+      	}
+      }
+      message: "Ready:\(ready.readyReplicas)/\(context.output.spec.replicas)"
+    healthPolicy: |-
+      ready: {
+      	updatedReplicas:    *0 | int
+      	readyReplicas:      *0 | int
+      	replicas:           *0 | int
+      	observedGeneration: *0 | int
+      } & {
+      	if context.output.status.updatedReplicas != _|_ {
+      		updatedReplicas: context.output.status.updatedReplicas
+      	}
+      	if context.output.status.readyReplicas != _|_ {
+      		readyReplicas: context.output.status.readyReplicas
+      	}
+      	if context.output.status.replicas != _|_ {
+      		replicas: context.output.status.replicas
+      	}
+      	if context.output.status.observedGeneration != _|_ {
+      		observedGeneration: context.output.status.observedGeneration
+      	}
+      }
+      _isHealth: (context.output.spec.replicas == ready.readyReplicas) && (context.output.spec.replicas == ready.updatedReplicas) && (context.output.spec.replicas == ready.replicas) && (ready.observedGeneration == context.output.metadata.generation || ready.observedGeneration > context.output.metadata.generation)
+      isHealth: *_isHealth | bool
+      if context.output.metadata.annotations != _|_ {
+      	if context.output.metadata.annotations["app.oam.dev/disable-health-check"] != _|_ {
+      		isHealth: true
+      	}
+      }
+  workload:
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+    type: deployments.apps
 ```
 
 ## Trait Definition — Env
@@ -254,36 +355,110 @@ func init() {
 }
 ```
 
-```cue title="CUE — generated patchSets/patch structure"
-#PatchParams: {
-    containerName?: *context.name | string
-    containers?: [...{
-        containerName?: string
-        replace:  *false | bool
-        env:      [string]: string
-        unset:    *[] | [...string]
-    }]
-    replace:  *false | bool
-    env:      [string]: string
-    unset:    *[] | [...string]
-}
+```yaml title="Generated — TraitDefinition (vela def apply-module --dry-run)"
+apiVersion: core.oam.dev/v1beta1
+kind: TraitDefinition
+metadata:
+  annotations:
+    definition.oam.dev/description: Add env on K8s pod for your workload which follows the pod spec in path 'spec.template'
+  labels: {}
+  name: env
+  namespace: vela-system
+spec:
+  appliesToWorkloads:
+    - deployments.apps
+    - statefulsets.apps
+    - daemonsets.apps
+    - jobs.batch
+  podDisruptive: false
+  schematic:
+    cue:
+      template: |
+        import "list"
 
-patchSets: [{
-    name: "container-patch"
-    patches: [{
-        path:  "spec/template/spec/containers/*"
-        op:    "add"
-        value: _
-    }]
-}]
-
-patch: spec: template: spec: {
-    containers: [_params: #PatchParams
-        name:     _params.containerName
-        _delKeys: {for k in _params.unset {(k): ""}}
-        ...
-    ]
-}
+        #PatchParams: {
+        	// +usage=Specify the name of the target container, if not set, use the component name
+        	containerName: *"" | string
+        	// +usage=Specify if replacing the whole environment settings for the container
+        	replace: *false | bool
+        	// +usage=Specify the environment variables to merge
+        	env: [string]: string
+        	// +usage=Specify which existing environment variables to unset
+        	unset: *[] | [...string]
+        }
+        PatchContainer: {
+        	_params: #PatchParams
+        	name:    _params.containerName
+        	_delKeys: {for k in _params.unset {(k): ""}}
+        	_baseContainers: context.output.spec.template.spec.containers
+        	_matchContainers_: [for _container_ in _baseContainers if _container_.name == name {_container_}]
+        	_baseContainer: *_|_ | {...}
+        	if len(_matchContainers_) == 0 {
+        		err: "container \(name) not found"
+        	}
+        	if len(_matchContainers_) > 0 {
+        		_baseContainer: _matchContainers_[0]
+        		_baseEnv:       _baseContainer.env
+        		if _baseEnv == _|_ {
+        			// +patchStrategy=replace
+        			env: [for k, v in _params.env if _delKeys[k] == _|_ {
+        				name:  k
+        				value: v
+        			}]
+        		}
+        		if _baseEnv != _|_ {
+        			_baseEnvMap: {for envVar in _baseEnv {(envVar.name): envVar}}
+        			// +patchStrategy=replace
+        			env: list.Concat([[for envVar in _baseEnv if _delKeys[envVar.name] == _|_ && !_params.replace {
+        				name: envVar.name
+        				if _params.env[envVar.name] != _|_ {
+        					value: _params.env[envVar.name]
+        				}
+        				if _params.env[envVar.name] == _|_ {
+        					if envVar.value != _|_ {value: envVar.value}
+        					if envVar.valueFrom != _|_ {valueFrom: envVar.valueFrom}
+        				}
+        			}], [for k, v in _params.env if _delKeys[k] == _|_ && (_params.replace || _baseEnvMap[k] == _|_) {
+        				name:  k
+        				value: v
+        			}]])
+        		}
+        	}
+        }
+        patch: spec: template: spec: {
+        	if parameter.containers == _|_ {
+        		// +patchKey=name
+        		containers: [{
+        			PatchContainer & {_params: {
+        				if parameter.containerName == "" {
+        					containerName: context.name
+        				}
+        				if parameter.containerName != "" {
+        					containerName: parameter.containerName
+        				}
+        				replace: parameter.replace
+        				env:     parameter.env
+        				unset:   parameter.unset
+        			}}
+        		}]
+        	}
+        	if parameter.containers != _|_ {
+        		// +patchKey=name
+        		containers: [for c in parameter.containers {
+        			if c.containerName == "" {
+        				err: "containerName must be set for containers"
+        			}
+        			if c.containerName != "" {
+        				PatchContainer & {_params: c}
+        			}
+        		}]
+        	}
+        }
+        parameter: *#PatchParams | close({
+        	// +usage=Specify the environment variables for multiple containers
+        	containers: [...#PatchParams]
+        })
+        errs: [for c in patch.spec.template.spec.containers if c.err != _|_ {c.err}]
 ```
 
 ## Policy Definition — Apply Once
@@ -342,47 +517,45 @@ func init() {
 }
 ```
 
-```cue title="CUE — generated parameter schema"
-#ApplyOnceStrategy: {
-    affect?: string
-    path:    [...string]
-}
-
-#ApplyOncePolicyRule: {
-    selector?: #ResourcePolicyRuleSelector
-    strategy:  #ApplyOnceStrategy
-}
-
-#ResourcePolicyRuleSelector: {
-    componentNames?: [...string]
-    componentTypes?: [...string]
-    oamTypes?:       [...string]
-    traitTypes?:     [...string]
-    resourceTypes?:  [...string]
-    resourceNames?:  [...string]
-}
-
-parameter: {
-    // Whether to enable apply-once for the whole application
-    enable: *false | bool
-
-    // Resource-level rules (optional)
-    rules?: [...#ApplyOncePolicyRule]
-}
-
-// Example usage in an Application manifest:
-//
-// policies:
-//   - name: my-apply-once
-//     type: apply-once
-//     properties:
-//       enable: true
-//       rules:
-//         - selector:
-//             componentNames: ["my-db"]
-//           strategy:
-//             affect: onUpdate
-//             path: ["spec.replicas"]
+```yaml title="Generated — PolicyDefinition (vela def apply-module --dry-run)"
+apiVersion: core.oam.dev/v1beta1
+kind: PolicyDefinition
+metadata:
+  annotations:
+    definition.oam.dev/description: Allow configuration drift for applied resources, delivery the resource without continuously reconciliation.
+  labels: {}
+  name: apply-once
+  namespace: vela-system
+spec:
+  schematic:
+    cue:
+      template: |
+        #ApplyOnceStrategy: {
+        	// +usage=When the strategy takes effect, e.g. onUpdate, onStateKeep
+        	affect?: string
+        	// +usage=Specify the path of the resource that allow configuration drift
+        	path!: [...string]
+        }
+        #ApplyOncePolicyRule: {
+        	// +usage=Specify how to select the targets of the rule
+        	selector?: #ResourcePolicyRuleSelector
+        	// +usage=Strategy for resource level configuration drift behaviour
+        	strategy!: #ApplyOnceStrategy
+        }
+        #ResourcePolicyRuleSelector: {
+        	componentNames?: [...string]
+        	componentTypes?: [...string]
+        	oamTypes?: [...string]
+        	traitTypes?: [...string]
+        	resourceTypes?: [...string]
+        	resourceNames?: [...string]
+        }
+        parameter: {
+        	// +usage=Whether to enable apply-once for the whole application
+        	enable: *false | bool
+        	// +usage=Rules for configuring apply-once policy in resource level
+        	rules?: [...#ApplyOncePolicyRule]
+        }
 ```
 
 :::info
@@ -423,38 +596,29 @@ func init() {
 }
 ```
 
-```cue title="CUE — generated parameter schema"
-parameter: {
-    // Specify the component name to apply (required)
-    component: string
-
-    // Specify the cluster (defaults to local cluster)
-    cluster: *"" | string
-
-    // Specify the namespace (defaults to application namespace)
-    namespace: *"" | string
-}
-
-// Example usage in an Application workflow:
-//
-// workflow:
-//   steps:
-//     - name: deploy-backend
-//       type: apply-component
-//       properties:
-//         component: backend
-//
-//     - name: deploy-frontend
-//       type: apply-component
-//       properties:
-//         component: frontend
-//         cluster:   prod-cluster
-//         namespace: production
-//
-// The step executor reads parameter.component, parameter.cluster,
-// and parameter.namespace to locate and apply the component.
-// No template function is needed because the built-in executor
-// handles the apply logic.
+```yaml title="Generated — WorkflowStepDefinition (vela def apply-module --dry-run)"
+apiVersion: core.oam.dev/v1beta1
+kind: WorkflowStepDefinition
+metadata:
+  annotations:
+    custom.definition.oam.dev/category: Application Delivery
+    definition.oam.dev/description: Apply a specific component and its corresponding traits in application
+  labels:
+    custom.definition.oam.dev/scope: Application
+  name: apply-component
+  namespace: vela-system
+spec:
+  schematic:
+    cue:
+      template: |
+        parameter: {
+        	// +usage=Specify the component name to apply
+        	component!: string
+        	// +usage=Specify the cluster
+        	cluster: *"" | string
+        	// +usage=Specify the namespace
+        	namespace: *"" | string
+        }
 ```
 
 :::tip Key patterns per type

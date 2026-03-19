@@ -72,12 +72,14 @@ func Webservice() *defkit.ComponentDefinition {
 func init() { defkit.Register(Webservice()) }
 
 // Generate output programmatically
-comp := Webservice()
+func main() {
+    comp := Webservice()
 
-cue         := comp.ToCue()               // CUE definition string
-cueWithImps := comp.ToCueWithImports("strconv", "strings")
-yamlBytes, err := comp.ToYAML()           // Kubernetes YAML manifest
-schema      := comp.ToParameterSchema()   // parameter block only
+    cue         := comp.ToCue()               // CUE definition string
+    cueWithImps := comp.ToCueWithImports("strconv", "strings")
+    yamlBytes, err := comp.ToYAML()           // Kubernetes YAML manifest
+    schema      := comp.ToParameterSchema()   // parameter block only
+}
 ```
 
 ```cue title="Output context"

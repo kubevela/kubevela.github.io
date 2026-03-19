@@ -123,7 +123,7 @@ exposePorts := defkit.NewArray().ForEachWithGuardedFiltered(
 ```
 
 ```cue title="CUE — generated"
-if parameter.ports != _|_ {
+if parameter["ports"] != _|_ {
     exposePorts: [
         for v in parameter.ports
         if v.expose == true {
