@@ -267,91 +267,44 @@ spec:
     type: deployments.apps
 ```
 
-## Trait Definition — Env
+## Trait Definition — CPUScaler
 
-A complete env trait that injects and merges environment variables into running containers. Uses `tpl.UsePatchContainer` for the full patchSets/patch CUE structure and `CustomPatchContainerBlock` for complex merge logic.
+A complete cpuscaler trait that creates an HPA resource to automatically scale the component based on CPU usage. Demonstrates `tpl.Outputs()` for emitting a secondary resource from a trait.
 
-```go title="Go — traits/env.go"
+```go title="Go — traits/cpuscaler.go"
 package traits
 
 import "github.com/oam-dev/kubevela/pkg/definition/defkit"
 
-func Env() *defkit.TraitDefinition {
-    return defkit.NewTrait("env").
-        Description("Add env on K8s pod for your workload which follows the pod spec in path 'spec.template'").
-        AppliesTo("deployments.apps", "statefulsets.apps", "daemonsets.apps", "jobs.batch").
+func CPUScaler() *defkit.TraitDefinition {
+    min      := defkit.Int("min").Description("Specify the minimal number of replicas to which the autoscaler can scale down").Default(1)
+    max      := defkit.Int("max").Description("Specify the maximum number of of replicas to which the autoscaler can scale up").Default(10)
+    cpuUtil  := defkit.Int("cpuUtil").Description("Specify the average CPU utilization, for example, 50 means the CPU usage is 50%").Default(50)
+    targetAPIVersion := defkit.String("targetAPIVersion").Description("Specify the apiVersion of scale target").Default("apps/v1")
+    targetKind       := defkit.String("targetKind").Description("Specify the kind of scale target").Default("Deployment")
+
+    return defkit.NewTrait("cpuscaler").
+        Description("Automatically scale the component based on CPU usage.").
+        AppliesTo("deployments.apps", "statefulsets.apps").
+        Params(min, max, cpuUtil, targetAPIVersion, targetKind).
         Template(func(tpl *defkit.Template) {
-            tpl.UsePatchContainer(defkit.PatchContainerConfig{
-                ContainerNameParam:    "containerName",
-                DefaultToContextName:  true,
-                AllowMultiple:         true,
-                ContainersParam:       "containers",
-                ContainersDescription: "Specify the environment variables for multiple containers",
-                PatchFields: []defkit.PatchContainerField{
-                    {
-                        ParamName:    "replace",
-                        TargetField:  "replace",
-                        ParamType:    "bool",
-                        ParamDefault: "false",
-                        Description:  "Specify if replacing the whole environment settings for the container",
-                    },
-                    {
-                        ParamName:   "env",
-                        TargetField: "env",
-                        ParamType:   "[string]: string",
-                        Description: "Specify the environment variables to merge",
-                    },
-                    {
-                        ParamName:    "unset",
-                        TargetField:  "unset",
-                        ParamType:    "[...string]",
-                        ParamDefault: "[]",
-                        Description:  "Specify which existing environment variables to unset",
-                    },
-                },
-                CustomPatchContainerBlock: `_params: #PatchParams
-name:    _params.containerName
-_delKeys: {for k in _params.unset {(k): ""}}
-_baseContainers: context.output.spec.template.spec.containers
-_matchContainers_: [for _container_ in _baseContainers if _container_.name == name {_container_}]
-_baseContainer: *_|_ | {...}
-if len(_matchContainers_) == 0 {
-    err: "container \(name) not found"
-}
-if len(_matchContainers_) > 0 {
-    _baseContainer: _matchContainers_[0]
-    _baseEnv:       _baseContainer.env
-    if _baseEnv == _|_ {
-        // +patchStrategy=replace
-        env: [for k, v in _params.env if _delKeys[k] == _|_ {
-            name:  k
-            value: v
-        }]
-    }
-    if _baseEnv != _|_ {
-        _baseEnvMap: {for envVar in _baseEnv {(envVar.name): envVar}}
-        // +patchStrategy=replace
-        env: [for envVar in _baseEnv if _delKeys[envVar.name] == _|_ && !_params.replace {
-            name: envVar.name
-            if _params.env[envVar.name] != _|_ {
-                value: _params.env[envVar.name]
-            }
-            if _params.env[envVar.name] == _|_ {
-                if envVar.value != _|_ { value: envVar.value }
-                if envVar.valueFrom != _|_ { valueFrom: envVar.valueFrom }
-            }
-        }] + [for k, v in _params.env if _delKeys[k] == _|_ && (_params.replace || _baseEnvMap[k] == _|_) {
-            name:  k
-            value: v
-        }]
-    }
-}`,
-            })
+            vela := defkit.VelaCtx()
+
+            hpa := defkit.NewResource("autoscaling/v1", "HorizontalPodAutoscaler").
+                Set("metadata.name", vela.Name()).
+                Set("spec.scaleTargetRef.apiVersion", targetAPIVersion).
+                Set("spec.scaleTargetRef.kind", targetKind).
+                Set("spec.scaleTargetRef.name", vela.Name()).
+                Set("spec.minReplicas", min).
+                Set("spec.maxReplicas", max).
+                Set("spec.targetCPUUtilizationPercentage", cpuUtil)
+
+            tpl.Outputs("cpuscaler", hpa)
         })
 }
 
 func init() {
-    defkit.Register(Env())
+    defkit.Register(CPUScaler())
 }
 ```
 
@@ -360,105 +313,45 @@ apiVersion: core.oam.dev/v1beta1
 kind: TraitDefinition
 metadata:
   annotations:
-    definition.oam.dev/description: Add env on K8s pod for your workload which follows the pod spec in path 'spec.template'
+    definition.oam.dev/description: Automatically scale the component based on CPU usage.
   labels: {}
-  name: env
+  name: cpuscaler
   namespace: vela-system
 spec:
   appliesToWorkloads:
     - deployments.apps
     - statefulsets.apps
-    - daemonsets.apps
-    - jobs.batch
   podDisruptive: false
   schematic:
     cue:
       template: |
-        import "list"
-
-        #PatchParams: {
-        	// +usage=Specify the name of the target container, if not set, use the component name
-        	containerName: *"" | string
-        	// +usage=Specify if replacing the whole environment settings for the container
-        	replace: *false | bool
-        	// +usage=Specify the environment variables to merge
-        	env: [string]: string
-        	// +usage=Specify which existing environment variables to unset
-        	unset: *[] | [...string]
-        }
-        PatchContainer: {
-        	_params: #PatchParams
-        	name:    _params.containerName
-        	_delKeys: {for k in _params.unset {(k): ""}}
-        	_baseContainers: context.output.spec.template.spec.containers
-        	_matchContainers_: [for _container_ in _baseContainers if _container_.name == name {_container_}]
-        	_baseContainer: *_|_ | {...}
-        	if len(_matchContainers_) == 0 {
-        		err: "container \(name) not found"
-        	}
-        	if len(_matchContainers_) > 0 {
-        		_baseContainer: _matchContainers_[0]
-        		_baseEnv:       _baseContainer.env
-        		if _baseEnv == _|_ {
-        			// +patchStrategy=replace
-        			env: [for k, v in _params.env if _delKeys[k] == _|_ {
-        				name:  k
-        				value: v
-        			}]
+        outputs: cpuscaler: {
+        	apiVersion: "autoscaling/v1"
+        	kind:       "HorizontalPodAutoscaler"
+        	metadata: name: context.name
+        	spec: {
+        		scaleTargetRef: {
+        			apiVersion: parameter.targetAPIVersion
+        			kind:       parameter.targetKind
+        			name:       context.name
         		}
-        		if _baseEnv != _|_ {
-        			_baseEnvMap: {for envVar in _baseEnv {(envVar.name): envVar}}
-        			// +patchStrategy=replace
-        			env: list.Concat([[for envVar in _baseEnv if _delKeys[envVar.name] == _|_ && !_params.replace {
-        				name: envVar.name
-        				if _params.env[envVar.name] != _|_ {
-        					value: _params.env[envVar.name]
-        				}
-        				if _params.env[envVar.name] == _|_ {
-        					if envVar.value != _|_ {value: envVar.value}
-        					if envVar.valueFrom != _|_ {valueFrom: envVar.valueFrom}
-        				}
-        			}], [for k, v in _params.env if _delKeys[k] == _|_ && (_params.replace || _baseEnvMap[k] == _|_) {
-        				name:  k
-        				value: v
-        			}]])
-        		}
+        		minReplicas:                    parameter.min
+        		maxReplicas:                    parameter.max
+        		targetCPUUtilizationPercentage: parameter.cpuUtil
         	}
         }
-        patch: spec: template: spec: {
-        	if parameter.containers == _|_ {
-        		// +patchKey=name
-        		containers: [{
-        			PatchContainer & {_params: {
-        				if parameter.containerName == "" {
-        					containerName: context.name
-        				}
-        				if parameter.containerName != "" {
-        					containerName: parameter.containerName
-        				}
-        				replace: parameter.replace
-        				env:     parameter.env
-        				unset:   parameter.unset
-        			}}
-        		}]
-        	}
-        	if parameter.containers != _|_ {
-        		// +patchKey=name
-        		containers: [for c in parameter.containers {
-        			if c.containerName == "" {
-        				err: "containerName must be set for containers"
-        			}
-        			if c.containerName != "" {
-        				PatchContainer & {_params: c}
-        			}
-        		}]
-        	}
+        parameter: {
+        	// +usage=Specify the minimal number of replicas to which the autoscaler can scale down
+        	min: *1 | int
+        	// +usage=Specify the maximum number of of replicas to which the autoscaler can scale up
+        	max: *10 | int
+        	// +usage=Specify the average CPU utilization, for example, 50 means the CPU usage is 50%
+        	cpuUtil: *50 | int
+        	// +usage=Specify the apiVersion of scale target
+        	targetAPIVersion: *"apps/v1" | string
+        	// +usage=Specify the kind of scale target
+        	targetKind: *"Deployment" | string
         }
-        parameter: *#PatchParams | close({
-        	// +usage=Specify the environment variables for multiple containers
-        	containers: [...#PatchParams]
-        })
-        errs: [for c in patch.spec.template.spec.containers if c.err != _|_ {c.err}]
 ```
 
 ## Policy Definition — Apply Once
@@ -477,8 +370,7 @@ func ApplyOnce() *defkit.PolicyDefinition {
             Optional(),
         defkit.Field("path", defkit.ParamTypeArray).
             Of(defkit.ParamTypeString).
-            Description("Specify the path of the resource that allow configuration drift").
-            Required(),
+            Description("Specify the path of the resource that allow configuration drift"),
     )
 
     applyOncePolicyRule := defkit.Struct("rule").WithFields(
@@ -487,9 +379,8 @@ func ApplyOnce() *defkit.PolicyDefinition {
             Optional().
             WithSchemaRef("ResourcePolicyRuleSelector"),
         defkit.Field("strategy", defkit.ParamTypeStruct).
-            Description("Strategy for resource level configuration drift behaviour").
-            WithSchemaRef("ApplyOnceStrategy").
-            Required(),
+            Description("Specify the strategy for configuring the resource level configuration drift behaviour").
+            WithSchemaRef("ApplyOnceStrategy"),
     )
 
     resourcePolicyRuleSelector := defkit.Struct("selector").
@@ -506,7 +397,7 @@ func ApplyOnce() *defkit.PolicyDefinition {
                 Description("Whether to enable apply-once for the whole application").
                 Default(false),
             defkit.Array("rules").
-                Description("Rules for configuring apply-once policy in resource level").
+                Description("Specify the rules for configuring apply-once policy in resource level").
                 WithSchemaRef("ApplyOncePolicyRule").
                 Optional(),
         )
@@ -534,20 +425,26 @@ spec:
         	// +usage=When the strategy takes effect, e.g. onUpdate, onStateKeep
         	affect?: string
         	// +usage=Specify the path of the resource that allow configuration drift
-        	path!: [...string]
+        	path: [...string]
         }
         #ApplyOncePolicyRule: {
         	// +usage=Specify how to select the targets of the rule
         	selector?: #ResourcePolicyRuleSelector
         	// +usage=Strategy for resource level configuration drift behaviour
-        	strategy!: #ApplyOnceStrategy
+        	strategy: #ApplyOnceStrategy
         }
         #ResourcePolicyRuleSelector: {
+        	// +usage=Select resources by component names
         	componentNames?: [...string]
+        	// +usage=Select resources by component types
         	componentTypes?: [...string]
+        	// +usage=Select resources by oamTypes (COMPONENT or TRAIT)
         	oamTypes?: [...string]
+        	// +usage=Select resources by trait types
         	traitTypes?: [...string]
+        	// +usage=Select resources by resource types (like Deployment)
         	resourceTypes?: [...string]
+        	// +usage=Select resources by their names
         	resourceNames?: [...string]
         }
         parameter: {
@@ -625,7 +522,7 @@ spec:
 
 **Component** — use preset health/status builders (`DeploymentHealth`, `DeploymentStatus`), `ForEachWith` for per-element logic, and `tpl.OutputsIf` for optional secondary resources.
 
-**Trait** — `tpl.UsePatchContainer(config)` generates the full `#PatchParams`, `patchSets`, and `patch` blocks automatically. Use `CustomPatchContainerBlock` only when list comprehensions or complex merge logic is needed.
+**Trait** — use `tpl.Outputs(name, resource)` to emit secondary resources (HPA, Service, etc.). Use `tpl.UsePatchContainer(config)` when the trait needs to mutate container specs (env vars, resource limits, volume mounts).
 
 **Policy** — parameters only; use `.Helper("TypeName", struct)` for reusable named CUE types and `.WithSchemaRef()` to reference them in array element schemas.
 
