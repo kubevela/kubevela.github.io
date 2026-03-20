@@ -62,7 +62,7 @@ For traits that need to modify container specs (inject env vars, add volume moun
 
 ## WorkloadRefPath
 
-`.WorkloadRefPath(path)` specifies the JSONPath to the workload object reference within the trait's resource. This is used by the KubeVela controller for resource tracking. Pass an empty string to disable workload ref tracking:
+`.WorkloadRefPath(path)` specifies the dot-notation field path to the workload object reference within the trait's resource. This is used by the KubeVela controller for resource tracking. Pass an empty string to disable workload ref tracking:
 
 ```go
 return defkit.NewTrait("my-trait").

@@ -57,9 +57,12 @@ output: {
   spec: {
     selector: matchLabels: "app.oam.dev/component": context.name
     replicas: parameter.replicas
-    template: spec: containers: [{
-      image: parameter.image
-    }]
+    template: {
+      metadata: labels: "app.oam.dev/component": context.name
+      spec: containers: [{
+        image: parameter.image
+      }]
+    }
   }
 }
 ```
