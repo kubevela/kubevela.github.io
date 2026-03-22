@@ -309,6 +309,69 @@ module.exports = {
           ],
         },
         {
+          'Manage Definition with Go (defkit)': [
+            {
+              type: 'category',
+              label: 'Introduction',
+              items: [
+                'platform-engineers/defkit/overview',
+                'platform-engineers/defkit/quick-start',
+                'platform-engineers/defkit/architecture',
+                'platform-engineers/defkit/integration',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Definition Builders',
+              items: [
+                'platform-engineers/defkit/definition-component',
+                'platform-engineers/defkit/definition-trait',
+                'platform-engineers/defkit/definition-policy',
+                'platform-engineers/defkit/definition-workflowstep',
+                'platform-engineers/defkit/definition-register',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Parameter Types',
+              items: [
+                'platform-engineers/defkit/param-scalar-types',
+                'platform-engineers/defkit/param-collection-types',
+                'platform-engineers/defkit/param-complex-types',
+                'platform-engineers/defkit/param-chain-methods',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Template Methods',
+              items: [
+                'platform-engineers/defkit/template-output-methods',
+                'platform-engineers/defkit/template-patch-methods',
+                'platform-engineers/defkit/template-trait-patch-ops',
+                'platform-engineers/defkit/template-helper-builder',
+                'platform-engineers/defkit/template-raw-cue',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Resource Builders',
+              items: [
+                'platform-engineers/defkit/resource-builder',
+                'platform-engineers/defkit/foreach-item-builder',
+                'platform-engineers/defkit/collections-api',
+                'platform-engineers/defkit/value-expressions',
+                'platform-engineers/defkit/velactx',
+                'platform-engineers/defkit/health-status-dsl',
+              ],
+            },
+            'platform-engineers/defkit/advanced-api',
+            'platform-engineers/defkit/cluster-placement',
+            'platform-engineers/defkit/testing',
+            'platform-engineers/defkit/examples',
+            'platform-engineers/defkit/migration',
+          ],
+        },
+        {
           'Manage Definition with CUE': [
             'platform-engineers/cue/basic',
             'platform-engineers/cue/definition-edit',
