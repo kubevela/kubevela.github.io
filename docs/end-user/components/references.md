@@ -600,6 +600,113 @@ spec:
  hostnames |  | []string | true |  
 
 
+## Helmchart
+
+> **Note:** This component is still under development. The Helm pre-delete and post-delete hooks doesn't work with this.
+
+### Description
+
+Deploy Helm charts natively in KubeVela
+
+### Examples (helmchart)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: sample-helmchart
+spec:
+  components:
+    - name: my-chart
+      type: helmchart
+      properties:
+        chart:
+          source: oci://ghcr.io/org/charts/app
+          version: "1.0.0"
+```
+
+### Specification (helmchart)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ chart | Chart source configuration | [chart](#chart-helmchart) | true |  
+ release | Release configuration (optional - uses context defaults) | [release](#release-helmchart) | false |  
+ values | Inline values (highest priority) | map[string]interface{} | false |  
+ healthStatus | Health status criteria - defines when the Helm deployment is considered healthy | [[]healthStatus](#healthstatus-helmchart) | false |  
+ options | Rendering options | [options](#options-helmchart) | false |  
+
+
+#### chart (helmchart)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ source | Chart location - automatically detected based on format (OCI, Direct URL, Repo chart) | string | true |  
+ repoURL | Repository URL for repository-based charts | string | false |  
+ version | Version/tag for repository and OCI charts (ignored for direct URLs) | string | false | "latest" 
+
+
+#### release (helmchart)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name | Release name (defaults to component name) | string | false |  
+ namespace | Target namespace (defaults to Application namespace) | string | false |  
+
+
+#### healthStatus (helmchart)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ resource | Resource to check | [resource](#resource-helmchart) | true |  
+ condition | Health condition to verify | [condition](#condition-helmchart) | true |  
+
+
+##### resource (helmchart)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ kind | Resource kind (e.g., "Deployment", "StatefulSet", "Job", "Service") | string | true |  
+ name | Optional: specific resource name (if not specified, checks first of kind) | string | false |  
+
+
+##### condition (helmchart)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ type | The type must match an actual Kubernetes .status.conditions[].type value | string | true |  
+ status | Expected status (default: "True", use "False" for conditions like Progressing) | string | false | "True" 
+
+
+#### options (helmchart)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ includeCRDs | Install CRDs from chart | bool | false | true 
+ skipTests | Skip test resources | bool | false | true 
+ skipHooks | Skip hook resources | bool | false | false 
+ createNamespace | Create namespace if it doesn't exist | bool | false | true 
+ timeout | Rendering timeout | string | false | "5m" 
+ maxHistory | Revisions to keep | int | false | 10 
+ atomic | Rollback on failure | bool | false | false 
+ wait | Wait for resources | bool | false | false 
+ waitTimeout | Wait timeout | string | false | "10m" 
+ force | Force resource updates | bool | false | false 
+ recreatePods | Recreate pods on upgrade | bool | false | false 
+ cleanupOnFail | Cleanup on failure | bool | false | false 
+ cache | Cache configuration | [cache](#cache-helmchart) | false |  
+
+
+##### cache (helmchart)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ key | Cache key prefix (defaults to "{context.appName}-{context.name}") | string | false |  
+ ttl | TTL for this specific chart (overrides automatic detection) | string | false |  
+ immutableTTL | TTL for semantic versions (1.2.3, v2.0.0) | string | false | "24h" 
+ mutableTTL | TTL for mutable tags (latest, dev, main) | string | false | "5m" 
+
+
 ## K8s-Objects
 
 ### Description
