@@ -701,7 +701,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- key | Cache key prefix (defaults to "{context.appName}-{context.name}") | string | false |  
+ key | Cache key prefix (defaults to `"{context.appName}-{context.name}"`) | string | false |  
  ttl | TTL for this specific chart (overrides automatic detection) | string | false |  
  immutableTTL | TTL for semantic versions (1.2.3, v2.0.0) | string | false | "24h" 
  mutableTTL | TTL for mutable tags (latest, dev, main) | string | false | "5m" 
