@@ -633,7 +633,6 @@ spec:
  chart | Chart source configuration | [chart](#chart-helmchart) | true |  
  release | Release configuration (optional - uses context defaults) | [release](#release-helmchart) | false |  
  values | Inline values (highest priority) | map[string]interface{} | false |  
- healthStatus | Health status criteria - defines when the Helm deployment is considered healthy | [[]healthStatus](#healthstatus-helmchart) | false |  
  options | Rendering options | [options](#options-helmchart) | false |  
 
 
@@ -654,35 +653,10 @@ spec:
  namespace | Target namespace (defaults to Application namespace) | string | false |  
 
 
-#### healthStatus (helmchart)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- resource | Resource to check | [resource](#resource-helmchart) | true |  
- condition | Health condition to verify | [condition](#condition-helmchart) | true |  
-
-
-##### resource (helmchart)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- kind | Resource kind (e.g., "Deployment", "StatefulSet", "Job", "Service") | string | true |  
- name | Optional: specific resource name (if not specified, checks first of kind) | string | false |  
-
-
-##### condition (helmchart)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- type | The type must match an actual Kubernetes .status.conditions[].type value | string | true |  
- status | Expected status (default: "True", use "False" for conditions like Progressing) | string | false | "True" 
-
-
 #### options (helmchart)
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- includeCRDs | Install CRDs from chart | bool | false | true 
  skipTests | Skip test resources | bool | false | true 
  skipHooks | Skip hook resources | bool | false | false 
  createNamespace | Create namespace if it doesn't exist | bool | false | true 
@@ -690,21 +664,9 @@ spec:
  maxHistory | Revisions to keep | int | false | 10 
  atomic | Rollback on failure | bool | false | false 
  wait | Wait for resources | bool | false | false 
- waitTimeout | Wait timeout | string | false | "10m" 
  force | Force resource updates | bool | false | false 
  recreatePods | Recreate pods on upgrade | bool | false | false 
  cleanupOnFail | Cleanup on failure | bool | false | false 
- cache | Cache configuration | [cache](#cache-helmchart) | false |  
-
-
-##### cache (helmchart)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- key | Cache key prefix (defaults to `"{context.appName}-{context.name}"`) | string | false |  
- ttl | TTL for this specific chart (overrides automatic detection) | string | false |  
- immutableTTL | TTL for semantic versions (1.2.3, v2.0.0) | string | false | "24h" 
- mutableTTL | TTL for mutable tags (latest, dev, main) | string | false | "5m" 
 
 
 ## K8s-Objects
