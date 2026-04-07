@@ -278,7 +278,6 @@ For negative regex constraints (CUE `!~`), use a [Validator](#validators) with `
 defkit.Array("ports").MinItems(1).MaxItems(10)
 defkit.StringList("origins").NotEmpty()                                        // [...(string & !="")]
 defkit.Array("methods").OfEnum("GET", "POST", "PUT", "DELETE")                 // [...("GET" | "POST" | ...)]
-defkit.Array("methods").OfEnum("GET", "POST").NonEmpty("at least one method")  // + if len == 0 { error }
 ```
 
 | Generated CUE | Go Definition |
@@ -287,8 +286,20 @@ defkit.Array("methods").OfEnum("GET", "POST").NonEmpty("at least one method")  /
 | `methods?: [...("GET" \| "POST")]` | `Array("methods").OfEnum("GET", "POST")` |
 
 - **`NotEmpty()`** -- constrains each *element* to be non-empty (`!=""`). Same as `StringParam.NotEmpty()` but applied at the element level.
-- **`NonEmpty(msg)`** -- validates the *array itself* has at least one item. Named `NonEmpty` (not `NotEmpty`) because `NotEmpty()` is already taken for the element constraint and Go does not support method overloading.
 - **`OfEnum(values...)`** -- constrains each element to one of the given values.
+
+:::tip
+To validate that an array itself has at least one item, use a [Validator](#validators) on the parent struct or array:
+```go
+defkit.Array("corsRules").WithFields(
+    defkit.Array("allowedMethods").OfEnum("GET", "POST"),
+).Validators(
+    defkit.Validate("at least one method required").
+        FailWhen(defkit.LocalField("allowedMethods").IsEmpty()),
+)
+```
+This keeps the framework generic — any validation logic can be expressed through `Validators()` without needing a dedicated method for each pattern.
+:::
 
 ### Map Constraints
 
