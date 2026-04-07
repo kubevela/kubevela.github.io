@@ -260,12 +260,218 @@ defkit.Float("ratio").Min(0.0).Max(1.0)
 ```go
 defkit.String("name").Pattern("^[a-z]+$")
 defkit.String("name").MinLen(1).MaxLen(63)
+defkit.String("name").NotEmpty()                    // string & !=""
 ```
+
+| Generated CUE | Go Definition |
+|:-------------|:-------------|
+| `name: string & =~"^[a-z]+$"` | `String("name").Pattern("^[a-z]+$")` |
+| `name: string & !=""` | `String("name").NotEmpty()` |
+
+:::tip
+For negative regex constraints (CUE `!~`), use a [Validator](#validators) with `LocalField().Matches()` instead of an inline type constraint. For example, to reject strings ending with a hyphen: `Validate("must not end with -").FailWhen(LocalField("region").Matches(".*-$"))`.
+:::
 
 ### Array Constraints
 
 ```go
 defkit.Array("ports").MinItems(1).MaxItems(10)
+defkit.StringList("origins").NotEmpty()                                        // [...(string & !="")]
+defkit.Array("methods").OfEnum("GET", "POST", "PUT", "DELETE")                 // [...("GET" | "POST" | ...)]
+defkit.Array("methods").OfEnum("GET", "POST").NonEmpty("at least one method")  // + if len == 0 { error }
+```
+
+| Generated CUE | Go Definition |
+|:-------------|:-------------|
+| `origins?: [...(string & !="")]` | `StringList("origins").NotEmpty()` |
+| `methods?: [...("GET" \| "POST")]` | `Array("methods").OfEnum("GET", "POST")` |
+
+- **`NotEmpty()`** -- constrains each *element* to be non-empty (`!=""`). Same as `StringParam.NotEmpty()` but applied at the element level.
+- **`NonEmpty(msg)`** -- validates the *array itself* has at least one item. Named `NonEmpty` (not `NotEmpty`) because `NotEmpty()` is already taken for the element constraint and Go does not support method overloading.
+- **`OfEnum(values...)`** -- constrains each element to one of the given values.
+
+### Map Constraints
+
+```go
+defkit.Object("governance").Closed()  // close({...}) -- rejects extra fields
+```
+
+## Validators
+
+Validators express cross-field validation rules using the CUE `_validate*` block pattern. They can be attached at three levels: component-level, inside structs (`MapParam`), or inside array elements (`ArrayParam`).
+
+### Basic Validator
+
+```go title="governance_validators.go"
+governance := defkit.Object("governance").Closed().
+    WithFields(
+        defkit.String("tenantName").NotEmpty(),
+        defkit.String("departmentCode").NotEmpty(),
+    ).
+    Validators(
+        defkit.Validate("tenantName must not end with a hyphen").
+            WithName("_validateTenantName").
+            FailWhen(defkit.LocalField("tenantName").Matches(".*-$")),
+    )
+```
+
+<details>
+<summary>Generated CUE</summary>
+
+```cue
+governance: close({
+    tenantName: string & !=""
+    departmentCode: string & !=""
+    _validateTenantName: {
+        "tenantName must not end with a hyphen": true
+        if tenantName =~ ".*-$" {
+            "tenantName must not end with a hyphen": false
+        }
+    }
+})
+```
+
+</details>
+
+### Guarded Validator
+
+Use `OnlyWhen()` to make a validator active only when a condition is true:
+
+```go title="conditional_validator.go"
+defkit.Validate("versioningEnabled must be true when replication is set").
+    WithName("_validateVersioning").
+    OnlyWhen(defkit.LocalField("replicationConfiguration").IsSet()).
+    FailWhen(defkit.LocalField("versioningEnabled").Eq(false))
+```
+
+### LocalField References
+
+`LocalField(name)` creates a reference to a sibling field in the current struct scope -- without the `parameter.` prefix that normal parameter references use. It supports dot-paths and array indexing:
+
+```go
+defkit.LocalField("tenantName").Matches(".*-$")            // tenantName =~ ".*-$"
+defkit.LocalField("tenantName").IsSet()                     // tenantName != _|_
+defkit.LocalField("tenantName").NotSet()                    // tenantName == _|_
+defkit.LocalField("tenantName").Eq("admin")                 // tenantName == "admin"
+defkit.LocalField("Principal.AWS").IsEmpty()                 // len(Principal.AWS) == 0
+defkit.LocalField("expiration[0].date").IsSet()             // expiration[0].date != _|_
+defkit.LocalField("days").Gte(defkit.LocalField("other"))   // days >= other
+```
+
+:::caution
+`LocalField` is for use inside validators attached to `MapParam.Validators()` or `ArrayParam.Validators()`. For template-level conditions (in `SetIf`, `If/EndIf`), use normal parameter references like `defkit.Bool("enabled").IsSet()`.
+:::
+
+### Validator on Array Elements
+
+Validators on `ArrayParam` are emitted inside each element struct:
+
+```go title="lifecycle_validators.go"
+defkit.Array("lifecycleRules").Optional().
+    WithFields(
+        defkit.Enum("status").Default("Enabled").Values("Enabled", "Disabled"),
+        defkit.Array("expiration").Optional().WithFields(...),
+        defkit.Array("transition").Optional().WithFields(...),
+    ).
+    Validators(
+        defkit.Validate("at least one sub-rule is required").
+            WithName("_validateLifecycleRules").
+            FailWhen(defkit.And(
+                defkit.LocalField("expiration").NotSet(),
+                defkit.LocalField("transition").NotSet(),
+            )),
+    )
+```
+
+### Component-Level Validators
+
+Validators can also be attached directly to the component definition:
+
+```go title="component_validators.go"
+defkit.NewComponent("my-component").
+    Params(name, region).
+    Validators(
+        defkit.Validate("name is too long").
+            WithName("_validateNameLength").
+            FailWhen(defkit.LenOf(defkit.Plus(
+                defkit.Lit("prefix-"), name,
+            )).Gt(63)),
+    )
+```
+
+### Expression Helpers for Validators
+
+| Helper | Description | Example |
+|:-------|:-----------|:--------|
+| `LenOf(value).Gt(n)` | Length of an expression > n | `LenOf(Plus(Lit("a"), name)).Gt(63)` |
+| `LenOf(value).Eq(n)` | Length of an expression == n | `LenOf(list).Eq(0)` |
+| `TimeParse(layout, field).Gte(other)` | Compare parsed dates | `TimeParse("2006-...", LocalField("date")).Gte(...)` |
+| `CUEExpr(raw)` | Raw CUE expression (escape hatch) | `CUEExpr("len(x) > 0")` |
+
+## Conditional Parameters
+
+Parameters can change shape -- different fields, different defaults, different optionality -- based on a discriminator value. Use `ConditionalParams` for top-level blocks and `MapParam.ConditionalFields()` for fields inside a struct.
+
+### Top-Level Conditional Blocks
+
+```go title="conditional_params.go"
+existingResources := defkit.Bool("existingResources").Default(false)
+
+comp := defkit.NewComponent("my-component").
+    Params(existingResources, name).
+    ConditionalParams(defkit.ConditionalParams(
+        defkit.WhenParam(existingResources.Eq(false)).Params(
+            defkit.Bool("forceDestroy").Default(false),
+            defkit.Enum("encryption").Default("AES256").Values("AES256", "aws:kms"),
+        ).Validators(
+            defkit.Validate("invalid encryption config").
+                FailWhen(someCondition),
+        ),
+        defkit.WhenParam(existingResources.Eq(true)).Params(
+            defkit.Bool("forceDestroy").Optional(),
+            defkit.Enum("encryption").Optional().Values("AES256", "aws:kms"),
+        ),
+    ))
+```
+
+<details>
+<summary>Generated CUE</summary>
+
+```cue
+parameter: {
+    existingResources: *false | bool
+    name?: string
+    if existingResources == false {
+        forceDestroy: *false | bool
+        encryption: *"AES256" | "aws:kms"
+        _validateEncryption: { ... }
+    }
+    if existingResources == true {
+        forceDestroy?: bool
+        encryption?: "AES256" | "aws:kms"
+    }
+}
+```
+
+</details>
+
+### Conditional Fields Inside a Struct
+
+Use `MapParam.ConditionalFields()` when the conditional fields are inside an optional struct:
+
+```go title="conditional_fields.go"
+objectLock := defkit.Object("objectLock").Optional().
+    ConditionalFields(
+        defkit.WhenParam(existingResources.Eq(false)).Params(
+            defkit.Int("retentionDays").Optional().Default(45).Min(1),
+            defkit.Enum("retentionMode").Optional().Default("GOVERNANCE").
+                Values("GOVERNANCE", "COMPLIANCE"),
+        ),
+        defkit.WhenParam(existingResources.Eq(true)).Params(
+            defkit.Int("retentionDays").Min(1),
+            defkit.Enum("retentionMode").Values("GOVERNANCE", "COMPLIANCE"),
+        ),
+    )
 ```
 
 ## Parameters as Expressions

@@ -132,6 +132,56 @@ deploy := defkit.NewResourceWithConditionalVersion("CronJob").
     )
 ```
 
+### ConditionalStruct -- Conditional Output Block
+
+Emit an entire named sub-struct only when a condition is true, with complex conditional fields inside. This is needed when `If/EndIf` would still emit an empty struct `{}`:
+
+```go title="conditional_struct.go"
+replConfig := defkit.Object("replicationConfiguration")
+
+output := defkit.NewResource("v1alpha1", "S3").
+    Set("spec.region", region).
+    ConditionalStruct(replConfig.IsSet(), "spec.replicationConfiguration", func(b *defkit.OutputStructBuilder) {
+        b.SetIf(defkit.PathExists("parameter.replicationConfiguration.role"),
+            "role",
+            defkit.Reference("parameter.replicationConfiguration.role"))
+        b.SetIf(existingResources.Eq(false),
+            "destinationBucket",
+            defkit.Plus(nameWithPrefix, defkit.Lit("-replica")))
+    })
+```
+
+<details>
+<summary>Generated CUE</summary>
+
+```cue
+output: {
+    apiVersion: "v1alpha1"
+    kind: "S3"
+    spec: {
+        region: parameter.region
+    }
+}
+if parameter["replicationConfiguration"] != _|_ {
+    output: spec: {
+        replicationConfiguration: {
+            if parameter.replicationConfiguration.role != _|_ {
+                role: parameter.replicationConfiguration.role
+            }
+            if parameter.existingResources == false {
+                destinationBucket: "tenant-" + parameter.governance.tenantName + "-" + parameter.name + "-replica"
+            }
+        }
+    }
+}
+```
+
+</details>
+
+:::caution
+Use `ConditionalStruct` instead of `If/EndIf` when the entire struct should be absent from the output when the condition is false. `If/EndIf` guards individual fields but still emits the parent struct as an empty `{}`.
+:::
+
 ## Expression Types
 
 Expressions are used in conditions and comparisons.

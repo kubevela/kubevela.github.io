@@ -67,6 +67,14 @@ The workload type is automatically inferred for common resources:
 | batch/v1 | Job | jobs.batch |
 | batch/v1 | CronJob | cronjobs.batch |
 
+For custom resource types (e.g., Crossplane claims), defkit auto-generates a `workload.type` field. If your CUE source does not include this field, suppress it with `OmitWorkloadType()`:
+
+```go
+comp := defkit.NewComponent("my-claim").
+    Workload("database.example.com/v1alpha1", "PostgreSQL").
+    OmitWorkloadType()
+```
+
 ## Adding a Template
 
 A template defines what Kubernetes resources the component creates. Use `NewResource` to build resources and `.Set()` to assign fields:
