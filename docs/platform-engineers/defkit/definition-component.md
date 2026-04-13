@@ -67,6 +67,16 @@ output: {
 }
 ```
 
+## OmitWorkloadType
+
+For custom resource types (e.g., Crossplane claims), defkit auto-generates a `workload.type` field. If your CUE source does not include this field, suppress it with `OmitWorkloadType()`:
+
+```go
+comp := defkit.NewComponent("my-claim").
+    Workload("database.example.com/v1alpha1", "PostgreSQL").
+    OmitWorkloadType()
+```
+
 ## AutodetectWorkload
 
 Use `.AutodetectWorkload()` instead of `.Workload()` when the component template can produce different resource kinds depending on parameters (e.g., `k8s-objects` accepts arbitrary manifests, `ref-objects` references existing resources).
