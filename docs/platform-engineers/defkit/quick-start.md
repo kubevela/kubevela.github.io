@@ -6,7 +6,7 @@ From zero to a working KubeVela ComponentDefinition in 4 steps.
 
 ## Prerequisites
 
-- Go 1.21 or later
+- Go 1.23.8 or later
 - A running KubeVela cluster with the `vela` CLI installed
 
 ## Step 1: Initialize a definition module
@@ -52,29 +52,6 @@ func webserviceTemplate(tpl *defkit.Template) {
 func init() { defkit.Register(Webservice()) }
 ```
 
-```cue title="CUE — generated"
-webservice: {
-  type: "component"
-  description: "Web service component"
-  attributes: workload: definition: {
-    apiVersion: "apps/v1"
-    kind:       "Deployment"
-  }
-}
-template: {
-  output: {
-    apiVersion: "apps/v1"
-    kind: "Deployment"
-    metadata: name: context.name
-    spec: replicas: parameter.replicas
-  }
-  parameter: {
-    // +usage=Container image
-    image:    string
-    replicas: *1 | int
-  }
-}
-```
 
 :::tip
 See [ComponentDefinition](./definition-component.md) for the full list of chain methods and parameter types.
@@ -90,6 +67,42 @@ vela def list-module ./my-platform
 
 # Generate raw CUE files (optional — for inspection)
 vela def gen-module ./my-platform -o ./generated-cue
+```
+The Generated Cue Definition should look like below
+
+```cue title="CUE — generated"
+webservice: {
+  type: "component"
+  annotations: {}
+  labels: {}
+  description: "Web service component"
+  attributes: {
+    workload: {
+      definition: {
+        apiVersion: "apps/v1"
+        kind: "Deployment"
+      }
+      type: "deployments.apps"
+    }
+  }
+}
+
+template: {
+  output: {
+    apiVersion: "apps/v1"
+    kind: "Deployment"
+    metadata: {
+      name: context.name
+    }
+    spec: {
+      replicas: replicas
+    }
+  }
+  parameter: {
+    image: string
+    replicas: *1 | int
+  }
+}
 ```
 
 ## Step 4: Apply to cluster
