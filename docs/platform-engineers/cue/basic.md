@@ -583,3 +583,4 @@ In the following sections, we'll start to learn how KubeVela use CUE to glue res
 ## Next
 
 * Learn how to use CUE to extend KubeVela by [Managing Definition](./definition-edit.md).
+* Learn how to use [Parameter Markers](./parameter-markers.md) such as `+usage` and `+immutable` to control parameter behaviour.
