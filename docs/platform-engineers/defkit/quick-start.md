@@ -95,7 +95,7 @@ template: {
       name: context.name
     }
     spec: {
-      replicas: replicas
+      replicas: parameter.replicas
     }
   }
   parameter: {
