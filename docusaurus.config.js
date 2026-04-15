@@ -32,8 +32,9 @@ module.exports = {
     announcementBar: {
       id: 'start',
       content:
-          '<div class="header-item">⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>!⭐️</div>' +
-          '<div class="header-item"><span>KubeVela v1.10.5 is now available.(2025-11-06)</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/tag/v1.10.5">Read Release Note</a></div>',
+          '<div class="header-item">⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>! ⭐️</div>' +
+          '<div class="header-item"><span>KubeVela v1.10.8 is now available!</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/tag/v1.10.8">Read Release Note</a></div>' +
+          '<div class="header-item"><span>KubeVela v1.11 is now available in alpha - try it out!</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/tag/v1.11.0-alpha.3">Read Release Note</a></div>',
     },
     algolia: {
       appId: 'PXMFHFWUGZ',

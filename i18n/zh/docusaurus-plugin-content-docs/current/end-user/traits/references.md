@@ -4,19 +4,19 @@ title: 内置运维特征列表
 
 本文档将**按字典序**展示所有内置运维特征的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc.md)自动生成，请勿手动修改，上次更新于 2025-10-18T11:52:31-07:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc.md)自动生成，请勿手动修改，上次更新于 2026-04-16T11:50:12+01:00。
 
 ## Affinity
 
 ### 描述
 
-为 pod 添加 affinity 和 toleration，它遵循路径“spec.template”中的 pod 规范。
+Affinity specifies affinity and toleration K8s pod for your workload which follows the pod spec in path 'spec.template'。
 
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -59,306 +59,310 @@ spec:
 ### 参数说明 (affinity)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- podAffinity | 指定 pod 的亲和性调度规则。 | [podAffinity](#podaffinity-affinity) | false |  
- podAntiAffinity | 指定 pod 的反亲和性调度规则。 | [podAntiAffinity](#podantiaffinity-affinity) | false |  
- nodeAffinity | 指定 pod 的节点亲和性调度规则。 | [nodeAffinity](#nodeaffinity-affinity) | false |  
- tolerations | Specify tolerant taint。 | [[]tolerations](#tolerations-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ podAffinity | Specify the pod affinity scheduling rules。 | [podAffinity](#podaffinity-affinity) | false |  |  
+ podAntiAffinity | Specify the pod anti-affinity scheduling rules。 | [podAntiAffinity](#podantiaffinity-affinity) | false |  |  
+ nodeAffinity | Specify the node affinity scheduling rules for the pod。 | [nodeAffinity](#nodeaffinity-affinity) | false |  |  
+ tolerations | Specify tolerant taint。 | [[]tolerations](#tolerations-affinity) | false |  |  
 
 
 #### podAffinity (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- required | 指定 `requiredDuringSchedulingIgnoredDuringExecution` 字段，只有规则被满足时才执行调度。 | [[]required](#required-affinity) | false |  
- preferred | 指定 `preferredDuringSchedulingIgnoredDuringExecution` 字段，调度器会尝试寻找满足对应规则的节点。如果找不到匹配的节点，调度器仍然会调度该 Pod。 | [[]preferred](#preferred-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ required | Specify the required during scheduling ignored during execution。 | [[]required](#required-affinity) | false |  |  
+ preferred | Specify the preferred during scheduling ignored during execution。 | [[]preferred](#preferred-affinity) | false |  |  
 
 
 ##### required (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- labelSelector |  | [labelSelector](#labelselector-affinity) | false |  
- namespaces |  | []string | false |  
- topologyKey |  | string | true |  
- namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ labelSelector |  | [labelSelector](#labelselector-affinity) | false |  |  
+ namespace |  | string | false |  |  
+ namespaces |  | []string | false |  |  
+ topologyKey |  | string | true |  |  
+ namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  |  
 
 
 ##### labelSelector (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]string | false |  
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ matchLabels |  | map[string]string | false |  |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  |  
 
 
 ##### matchExpressions (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
- values |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In |  
+ values |  | []string | false |  |  
 
 
 ##### namespaceSelector (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]string | false |  
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ matchLabels |  | map[string]string | false |  |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  |  
 
 
 ##### matchExpressions (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
- values |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In |  
+ values |  | []string | false |  |  
 
 
 ##### preferred (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- weight | 指定对应 podAffinityTerm 的权重。 | int | true |  
- podAffinityTerm | 指定一组 pod。 | [podAffinityTerm](#podaffinityterm-affinity) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ weight | Specify weight associated with matching the corresponding podAffinityTerm。 | int | true |  |  
+ podAffinityTerm | Specify a set of pods。 | [podAffinityTerm](#podaffinityterm-affinity) | true |  |  
 
 
 ##### podAffinityTerm (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- labelSelector |  | [labelSelector](#labelselector-affinity) | false |  
- namespaces |  | []string | false |  
- topologyKey |  | string | true |  
- namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ labelSelector |  | [labelSelector](#labelselector-affinity) | false |  |  
+ namespace |  | string | false |  |  
+ namespaces |  | []string | false |  |  
+ topologyKey |  | string | true |  |  
+ namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  |  
 
 
 ##### labelSelector (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]string | false |  
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ matchLabels |  | map[string]string | false |  |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  |  
 
 
 ##### matchExpressions (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
- values |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In |  
+ values |  | []string | false |  |  
 
 
 ##### namespaceSelector (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]string | false |  
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ matchLabels |  | map[string]string | false |  |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  |  
 
 
 ##### matchExpressions (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
- values |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In |  
+ values |  | []string | false |  |  
 
 
 #### podAntiAffinity (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- required | 指定 `requiredDuringSchedulingIgnoredDuringExecution` 字段，只有规则被满足时才执行调度。 | [[]required](#required-affinity) | false |  
- preferred | 指定 `preferredDuringSchedulingIgnoredDuringExecution` 字段，调度器会尝试寻找满足对应规则的节点。如果找不到匹配的节点，调度器仍然会调度该 Pod。 | [[]preferred](#preferred-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ required | Specify the required during scheduling ignored during execution。 | [[]required](#required-affinity) | false |  |  
+ preferred | Specify the preferred during scheduling ignored during execution。 | [[]preferred](#preferred-affinity) | false |  |  
 
 
 ##### required (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- labelSelector |  | [labelSelector](#labelselector-affinity) | false |  
- namespaces |  | []string | false |  
- topologyKey |  | string | true |  
- namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ labelSelector |  | [labelSelector](#labelselector-affinity) | false |  |  
+ namespace |  | string | false |  |  
+ namespaces |  | []string | false |  |  
+ topologyKey |  | string | true |  |  
+ namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  |  
 
 
 ##### labelSelector (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]string | false |  
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ matchLabels |  | map[string]string | false |  |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  |  
 
 
 ##### matchExpressions (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
- values |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In |  
+ values |  | []string | false |  |  
 
 
 ##### namespaceSelector (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]string | false |  
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ matchLabels |  | map[string]string | false |  |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  |  
 
 
 ##### matchExpressions (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
- values |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In |  
+ values |  | []string | false |  |  
 
 
 ##### preferred (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- weight | 指定对应 podAffinityTerm 的权重。 | int | true |  
- podAffinityTerm | 指定一组 pod。 | [podAffinityTerm](#podaffinityterm-affinity) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ weight | Specify weight associated with matching the corresponding podAffinityTerm。 | int | true |  |  
+ podAffinityTerm | Specify a set of pods。 | [podAffinityTerm](#podaffinityterm-affinity) | true |  |  
 
 
 ##### podAffinityTerm (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- labelSelector |  | [labelSelector](#labelselector-affinity) | false |  
- namespaces |  | []string | false |  
- topologyKey |  | string | true |  
- namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ labelSelector |  | [labelSelector](#labelselector-affinity) | false |  |  
+ namespace |  | string | false |  |  
+ namespaces |  | []string | false |  |  
+ topologyKey |  | string | true |  |  
+ namespaceSelector |  | [namespaceSelector](#namespaceselector-affinity) | false |  |  
 
 
 ##### labelSelector (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]string | false |  
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ matchLabels |  | map[string]string | false |  |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  |  
 
 
 ##### matchExpressions (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
- values |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In |  
+ values |  | []string | false |  |  
 
 
 ##### namespaceSelector (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]string | false |  
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ matchLabels |  | map[string]string | false |  |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  |  
 
 
 ##### matchExpressions (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
- values |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In |  
+ values |  | []string | false |  |  
 
 
 #### nodeAffinity (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- required | 指定 `requiredDuringSchedulingIgnoredDuringExecution` 字段，只有规则被满足时才执行调度。 | [required](#required-affinity) | false |  
- preferred | 指定 `preferredDuringSchedulingIgnoredDuringExecution` 字段，调度器会尝试寻找满足对应规则的节点。如果找不到匹配的节点，调度器仍然会调度该 Pod。 | [[]preferred](#preferred-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ required | Specify the required during scheduling ignored during execution。 | [required](#required-affinity) | false |  |  
+ preferred | Specify the preferred during scheduling ignored during execution。 | [[]preferred](#preferred-affinity) | false |  |  
 
 
 ##### required (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- nodeSelectorTerms | 指定一组节点选择器。 | [[]nodeSelectorTerms](#nodeselectorterms-affinity) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ nodeSelectorTerms | Specify a list of node selector。 | [[]nodeSelectorTerms](#nodeselectorterms-affinity) | true |  |  
 
 
 ##### nodeSelectorTerms (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
- matchFields |  | [[]matchFields](#matchfields-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  |  
+ matchFields |  | [[]matchFields](#matchfields-affinity) | false |  |  
 
 
 ##### matchExpressions (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In 
- values |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In |  
+ values |  | []string | false |  |  
 
 
 ##### matchFields (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In 
- values |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In |  
+ values |  | []string | false |  |  
 
 
 ##### preferred (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- weight | Specify weight associated with matching the corresponding nodeSelector。 | int | true |  
- preference | Specify a node selector。 | [preference](#preference-affinity) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ weight | Specify weight associated with matching the corresponding nodeSelector。 | int | true |  |  
+ preference | Specify a node selector。 | [preference](#preference-affinity) | true |  |  
 
 
 ##### preference (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  
- matchFields |  | [[]matchFields](#matchfields-affinity) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-affinity) | false |  |  
+ matchFields |  | [[]matchFields](#matchfields-affinity) | false |  |  
 
 
 ##### matchExpressions (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In 
- values |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In |  
+ values |  | []string | false |  |  
 
 
 ##### matchFields (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In 
- values |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" or "Gt" or "Lt" | false | In |  
+ values |  | []string | false |  |  
 
 
 #### tolerations (affinity)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | false |  
- operator |  | "Equal" or "Exists" | false | Equal 
- value |  | string | false |  
- effect |  | "NoSchedule" or "PreferNoSchedule" or "NoExecute" | false |  
- tolerationSeconds | 指定 toleration 的时间周期。 | int | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | false |  |  
+ operator |  | "Equal" or "Exists" | false | Equal |  
+ value |  | string | false |  |  
+ effect |  | "NoSchedule" or "PreferNoSchedule" or "NoExecute" | false |  |  
+ tolerationSeconds | Specify the period of time the toleration。 | int | false |  |  
 
 
 ## Annotations
@@ -369,7 +373,7 @@ Add annotations on your workload. If it generates pod or job, add same annotatio
 
 ### 适用于组件类型
 
-所有组件类型。
+All Component Types
 
 
 ### 示例 (annotations)
@@ -398,20 +402,20 @@ spec:
 ### 参数说明 (annotations)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- \- |  | map[string]:(null&#124;string) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ \- |  | map[string]:(null&#124;string) | true |  |  
 
 
 ## Command
 
 ### 描述
 
-为 pod 添加命令，它遵循路径“spec.template”中的 pod 规范。
+Add command on K8s pod for your workload which follows the pod spec in path 'spec.template'。
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -452,38 +456,38 @@ spec:
 ### 参数说明 (command)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
-  |  | [PatchParams](#patchparams-command) or [type-option-2](#type-option-2-command) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+  |  | [PatchParams](#patchparams-command) or [type-option-2](#type-option-2-command) | false |  |  
 
 
 #### PatchParams (command)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
- command | Specify the command to use in the target container, if not set, it will not be changed。 | null | true |  
- args | Specify the args to use in the target container, if set, it will override existing args。 | null | true |  
- addArgs | Specify the args to add in the target container, existing args will be kept, cannot be used with `args`。 | null | true |  
- delArgs | Specify the existing args to delete in the target container, cannot be used with `args`。 | null | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty |  
+ command | Specify the command to use in the target container, if not set, it will not be changed。 | null | true |  |  
+ args | Specify the args to use in the target container, if set, it will override existing args。 | null | true |  |  
+ addArgs | Specify the args to add in the target container, existing args will be kept, cannot be used with `args`。 | null | true |  |  
+ delArgs | Specify the existing args to delete in the target container, cannot be used with `args`。 | null | true |  |  
 
 
 #### type-option-2 (command)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containers | Specify the commands for multiple containers。 | [[]containers](#containers-command) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containers | Specify the commands for multiple containers。 | [[]containers](#containers-command) | true |  |  
 
 
 ##### containers (command)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
- command | Specify the command to use in the target container, if not set, it will not be changed。 | null | true |  
- args | Specify the args to use in the target container, if set, it will override existing args。 | null | true |  
- addArgs | Specify the args to add in the target container, existing args will be kept, cannot be used with `args`。 | null | true |  
- delArgs | Specify the existing args to delete in the target container, cannot be used with `args`。 | null | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty |  
+ command | Specify the command to use in the target container, if not set, it will not be changed。 | null | true |  |  
+ args | Specify the args to use in the target container, if set, it will override existing args。 | null | true |  |  
+ addArgs | Specify the args to add in the target container, existing args will be kept, cannot be used with `args`。 | null | true |  |  
+ delArgs | Specify the existing args to delete in the target container, cannot be used with `args`。 | null | true |  |  
 
 
 ## Container-Image
@@ -494,7 +498,7 @@ Set the image of the container。
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -536,34 +540,34 @@ spec:
 ### 参数说明 (container-image)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
-  |  | [PatchParams](#patchparams-container-image) or [type-option-2](#type-option-2-container-image) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+  |  | [PatchParams](#patchparams-container-image) or [type-option-2](#type-option-2-container-image) | false |  |  
 
 
 #### PatchParams (container-image)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
- image | Specify the image of the container。 | string | true |  
- imagePullPolicy | Specify the image pull policy of the container。 | "" or "IfNotPresent" or "Always" or "Never" | false | empty 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty |  
+ image | Specify the image of the container。 | string | true |  |  
+ imagePullPolicy | Specify the image pull policy of the container。 | "" or "IfNotPresent" or "Always" or "Never" | false | empty |  
 
 
 #### type-option-2 (container-image)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containers | Specify the container image for multiple containers。 | [[]containers](#containers-container-image) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containers | Specify the container image for multiple containers。 | [[]containers](#containers-container-image) | true |  |  
 
 
 ##### containers (container-image)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
- image | Specify the image of the container。 | string | true |  
- imagePullPolicy | Specify the image pull policy of the container。 | "" or "IfNotPresent" or "Always" or "Never" | false | empty 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty |  
+ image | Specify the image of the container。 | string | true |  |  
+ imagePullPolicy | Specify the image pull policy of the container。 | "" or "IfNotPresent" or "Always" or "Never" | false | empty |  
 
 
 ## Container-Ports
@@ -574,7 +578,7 @@ Expose on the host and bind the external port to host to enable web traffic for 
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -585,7 +589,7 @@ Expose on the host and bind the external port to host to enable web traffic for 
 ### 示例 (container-ports)
 
 It's used to define Pod networks directly. hostPort routes the container's port directly to the port on the scheduled node, so that you can access the Pod through the host's IP plus hostPort.
-Don't specify a hostPort for a Pod unless it is absolutely necessary(run `DaemonSet` service). When you bind a Pod to a hostPort, it limits the number of places the Pod can be scheduled, because each <hostIP, hostPort, protocol> combination must be unique. If you don't specify the hostIP and protocol explicitly, Kubernetes will use 0.0.0.0 as the default hostIP and TCP as the default protocol.
+Don't specify a hostPort for a Pod unless it is absolutely necessary(run `DaemonSet` service). When you bind a Pod to a hostPort, it limits the number of places the Pod can be scheduled, because each `<hostIP, hostPort, protocol>` combination must be unique. If you don't specify the hostIP and protocol explicitly, Kubernetes will use 0.0.0.0 as the default hostIP and TCP as the default protocol.
 If you explicitly need to expose a Pod's port on the node, consider using `expose` or `gateway` trait, or exposeType and ports parameter of `webservice` component before resorting to `container-ports` trait.
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -624,52 +628,32 @@ spec:
 ### 参数说明 (container-ports)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
-  |  | [PatchParams](#patchparams-container-ports) or [type-option-2](#type-option-2-container-ports) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+  |  | [PatchParams](#patchparams-container-ports) or [type-option-2](#type-option-2-container-ports) | false |  |  
 
 
 #### PatchParams (container-ports)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
- ports | Specify ports you want customer traffic sent to。 | [[]ports](#ports-container-ports) | true |  
-
-
-##### ports (container-ports)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containerPort | 要暴露的 IP 端口号。 | int | true |  
- protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | "TCP" or "UDP" or "SCTP" | false | TCP 
- hostPort | Number of port to expose on the host。 | int | false |  
- hostIP | What host IP to bind the external port to。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty |  
+ ports | Specify ports you want customer traffic sent to。 | list | true |  |  
 
 
 #### type-option-2 (container-ports)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containers | Specify the container ports for multiple containers。 | [[]containers](#containers-container-ports) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containers | Specify the container ports for multiple containers。 | [[]containers](#containers-container-ports) | true |  |  
 
 
 ##### containers (container-ports)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
- ports | Specify ports you want customer traffic sent to。 | [[]ports](#ports-container-ports) | true |  
-
-
-##### ports (container-ports)
-
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containerPort | 要暴露的 IP 端口号。 | int | true |  
- protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | "TCP" or "UDP" or "SCTP" | false | TCP 
- hostPort | Number of port to expose on the host。 | int | false |  
- hostIP | What host IP to bind the external port to。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty |  
+ ports | Specify ports you want customer traffic sent to。 | list | true |  |  
 
 
 ## Cpuscaler
@@ -680,7 +664,7 @@ Automatically scale the component based on CPU usage。
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 
@@ -710,13 +694,13 @@ spec:
 ### 参数说明 (cpuscaler)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- min | 能够将工作负载缩容到的最小副本个数。 | int | false | 1 
- max | 能够将工作负载扩容到的最大副本个数。 | int | false | 10 
- cpuUtil | 每个容器的平均 CPU 利用率 例如, 50 意味者 CPU 利用率为 50%。 | int | false | 50 
- targetAPIVersion | Specify the apiVersion of scale target。 | string | false | apps/v1 
- targetKind | Specify the kind of scale target。 | string | false | Deployment 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ min | Specify the minimal number of replicas to which the autoscaler can scale down。 | int | false | 1 |  
+ max | Specify the maximum number of of replicas to which the autoscaler can scale up。 | int | false | 10 |  
+ cpuUtil | Specify the average CPU utilization, for example, 50 means the CPU usage is 50%。 | int | false | 50 |  
+ targetAPIVersion | Specify the apiVersion of scale target。 | string | false | apps/v1 |  
+ targetKind | Specify the kind of scale target。 | string | false | Deployment |  
 
 
 ## Env
@@ -727,7 +711,7 @@ Add env on K8s pod for your workload which follows the pod spec in path 'spec.te
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -798,47 +782,47 @@ spec:
 ### 参数说明 (env)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
-  |  | [PatchParams](#patchparams-env) or [type-option-2](#type-option-2-env) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+  |  | [PatchParams](#patchparams-env) or [type-option-2](#type-option-2-env) | false |  |  
 
 
 #### PatchParams (env)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
- replace | Specify if replacing the whole environment settings for the container。 | bool | false | false 
- env | Specify the  environment variables to merge, if key already existing, override its value。 | map[string]string | true |  
- unset | Specify which existing environment variables to unset。 | []string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty |  
+ replace | Specify if replacing the whole environment settings for the container。 | bool | false | false |  
+ env | Specify the  environment variables to merge, if key already existing, override its value。 | map[string]string | true |  |  
+ unset | Specify which existing environment variables to unset。 | list | true |  |  
 
 
 #### type-option-2 (env)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containers | Specify the environment variables for multiple containers。 | [[]containers](#containers-env) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containers | Specify the environment variables for multiple containers。 | [[]containers](#containers-env) | true |  |  
 
 
 ##### containers (env)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
- replace | Specify if replacing the whole environment settings for the container。 | bool | false | false 
- env | Specify the  environment variables to merge, if key already existing, override its value。 | map[string]string | true |  
- unset | Specify which existing environment variables to unset。 | []string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty |  
+ replace | Specify if replacing the whole environment settings for the container。 | bool | false | false |  
+ env | Specify the  environment variables to merge, if key already existing, override its value。 | map[string]string | true |  |  
+ unset | Specify which existing environment variables to unset。 | list | true |  |  
 
 
 ## Expose
 
 ### 描述
 
-为组件暴露端口，以便能够通过 web 进行访问。
+Expose port to enable web traffic for your component。
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 
@@ -866,34 +850,34 @@ spec:
 ### 参数说明 (expose)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- port | Deprecated, the old way to specify the exposion ports。 | []int | false |  
- ports | Specify portsyou want customer traffic sent to。 | [[]ports](#ports-expose) | false |  
- annotations | 指定暴露的服务的注解。 | map[string]string | true |  
- matchLabels |  | map[string]string | false |  
- type | 指定要创建的服务类型，可选值："ClusterIP","NodePort","LoadBalancer","ExternalName"。 | "ClusterIP" or "NodePort" or "LoadBalancer" or "ExternalName" | false | ClusterIP 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ port | Deprecated, the old way to specify the exposion ports。 | []int | false |  |  
+ ports | Specify portsyou want customer traffic sent to。 | [[]ports](#ports-expose) | false |  |  
+ annotations | Specify the annotations of the exposed service。 | map[string]string | true |  |  
+ matchLabels |  | map[string]string | false |  |  
+ type | Specify what kind of Service you want. options: "ClusterIP","NodePort","LoadBalancer","ExternalName"。 | "ClusterIP" or "NodePort" or "LoadBalancer" or "ExternalName" | false | ClusterIP |  
 
 
 #### ports (expose)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- port | 要暴露的 IP 端口号。 | int | true |  
- name | 端口名称。 | string | false |  
- protocol | 端口协议类型 UDP， TCP， 或者 SCTP。 | "TCP" or "UDP" or "SCTP" | false | TCP 
- nodePort | exposed node port. Only Valid when exposeType is NodePort。 | int | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ port | Number of port to expose on the pod's IP address。 | int | true |  |  
+ name | Name of the port。 | string | false |  |  
+ protocol | Protocol for port. Must be UDP, TCP, or SCTP。 | "TCP" or "UDP" or "SCTP" | false | TCP |  
+ nodePort | exposed node port. Only Valid when exposeType is NodePort。 | int | false |  |  
 
 
 ## Gateway
 
 ### 描述
 
-为组件启用公网访问，使用 K8s v1.20+ 的 Ingress API。
+Enable public web traffic for the component, the ingress API matches K8s v1.20+。
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 
@@ -925,19 +909,19 @@ spec:
 ### 参数说明 (gateway)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- domain | 暴露服务所绑定的域名。 | string | false |  
- http | 定义一组网关路径到 Pod 服务端口的映射关系。 | map[string]int | true |  
- class | 所使用的 kubernetes ingress class。 | string | false | nginx 
- classInSpec | 在 kubernetes ingress 的 '.spec.ingressClassName' 定义 ingress class 而不是在 'kubernetes.io/ingress.class' 注解中定义。 | bool | false | false 
- secretName | Specify the secret name you want to quote to use tls。 | string | false |  
- gatewayHost | 指定 Ingress 网关的主机名，当为空时，会自动生成主机名。 | string | false |  
- name | Specify a unique name for this gateway, required to support multiple gateway traits on a component。 | string | false |  
- pathType | Specify a pathType for the ingress rules, defaults to "ImplementationSpecific"。 | "ImplementationSpecific" or "Prefix" or "Exact" | false | ImplementationSpecific 
- annotations | Specify the annotations to be added to the ingress。 | map[string]string | false |  
- labels | Specify the labels to be added to the ingress。 | map[string]string | false |  
- existingServiceName | If specified, use an existing Service rather than creating one。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ domain | Specify the domain you want to expose。 | string | false |  |  
+ http | Specify the mapping relationship between the http path and the workload port。 | map[string]int | true |  |  
+ class | Specify the class of ingress to use。 | string | false | nginx |  
+ classInSpec | Set ingress class in '.spec.ingressClassName' instead of 'kubernetes.io/ingress.class' annotation。 | bool | false | false |  
+ secretName | Specify the secret name you want to quote to use tls。 | string | false |  |  
+ gatewayHost | Specify the host of the ingress gateway, which is used to generate the endpoints when the host is empty。 | string | false |  |  
+ name | Specify a unique name for this gateway, required to support multiple gateway traits on a component。 | string | false |  |  
+ pathType | Specify a pathType for the ingress rules, defaults to "ImplementationSpecific"。 | "ImplementationSpecific" or "Prefix" or "Exact" | false | ImplementationSpecific |  
+ annotations | Specify the annotations to be added to the ingress。 | map[string]string | false |  |  
+ labels | Specify the labels to be added to the ingress。 | map[string]string | false |  |  
+ existingServiceName | If specified, use an existing Service rather than creating one。 | string | false |  |  
 
 
 ## Hostalias
@@ -948,7 +932,7 @@ Add host aliases on K8s pod for your workload which follows the pod spec in path
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -985,17 +969,17 @@ spec:
 ### 参数说明 (hostalias)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- hostAliases | 定义容器内的 hostAliases。 | [[]hostAliases](#hostaliases-hostalias) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ hostAliases | Specify the hostAliases to add。 | [[]hostAliases](#hostaliases-hostalias) | true |  |  
 
 
 #### hostAliases (hostalias)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- ip |  | string | true |  
- hostnames |  | []string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ ip |  | string | true |  |  
+ hostnames |  | []string | true |  |  
 
 
 ## Hpa
@@ -1006,7 +990,7 @@ Configure k8s HPA for Deployment or Statefulsets。
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 
@@ -1073,50 +1057,50 @@ spec:
 ### 参数说明 (hpa)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- min | 能够将工作负载缩容到的最小副本个数。 | int | false | 1 
- max | 能够将工作负载扩容到的最大副本个数。 | int | false | 10 
- targetAPIVersion | Specify the apiVersion of scale target。 | string | false | apps/v1 
- targetKind | Specify the kind of scale target。 | string | false | Deployment 
- cpu |  | [cpu](#cpu-hpa) | true |  
- mem |  | [mem](#mem-hpa) | false |  
- podCustomMetrics | Specify custom metrics of pod type。 | [[]podCustomMetrics](#podcustommetrics-hpa) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ min | Specify the minimal number of replicas to which the autoscaler can scale down。 | int | false | 1 |  
+ max | Specify the maximum number of of replicas to which the autoscaler can scale up。 | int | false | 10 |  
+ targetAPIVersion | Specify the apiVersion of scale target。 | string | false | apps/v1 |  
+ targetKind | Specify the kind of scale target。 | string | false | Deployment |  
+ cpu |  | [cpu](#cpu-hpa) | true |  |  
+ mem |  | [mem](#mem-hpa) | false |  |  
+ podCustomMetrics | Specify custom metrics of pod type。 | [[]podCustomMetrics](#podcustommetrics-hpa) | false |  |  
 
 
 #### cpu (hpa)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type | Specify resource metrics in terms of percentage("Utilization") or direct value("AverageValue")。 | "Utilization" or "AverageValue" | false | Utilization 
- value | Specify the value of CPU utilization or averageValue。 | int | false | 50 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type | Specify resource metrics in terms of percentage("Utilization") or direct value("AverageValue")。 | "Utilization" or "AverageValue" | false | Utilization |  
+ value | Specify the value of CPU utilization or averageValue。 | int | false | 50 |  
 
 
 #### mem (hpa)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type | Specify resource metrics in terms of percentage("Utilization") or direct value("AverageValue")。 | "Utilization" or "AverageValue" | false | Utilization 
- value | Specify  the value of MEM utilization or averageValue。 | int | false | 50 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type | Specify resource metrics in terms of percentage("Utilization") or direct value("AverageValue")。 | "Utilization" or "AverageValue" | false | Utilization |  
+ value | Specify  the value of MEM utilization or averageValue。 | int | false | 50 |  
 
 
 #### podCustomMetrics (hpa)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Specify name of custom metrics。 | string | true |  
- value | Specify target value of custom metrics。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify name of custom metrics。 | string | true |  |  
+ value | Specify target value of custom metrics。 | string | true |  |  
 
 
 ## Init-Container
 
 ### 描述
 
-为 pod 添加初始化容器，并使用共享卷。
+add an init container and use shared volume with pod。
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1151,72 +1135,72 @@ spec:
 ### 参数说明 (init-container)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | 指定初始化容器的名称。 | string | true |  
- image | 指定初始化容器的镜像。 | string | true |  
- imagePullPolicy | 镜像拉取策略。 | "IfNotPresent" or "Always" or "Never" | false | IfNotPresent 
- cmd | 指定初始化容器的命令。 | []string | false |  
- args | 指定初始化容器的参数。 | []string | false |  
- env | 指定初始化容器的环境变量。 | [[]env](#env-init-container) | false |  
- mountName | 指定共享卷的挂载名。 | string | false | workdir 
- appMountPath | 指定共享卷在应用容器的挂载路径。 | string | true |  
- initMountPath | 指定共享卷初始化容器的挂载路径。 | string | true |  
- extraVolumeMounts | 指定初始化容器的额外挂载卷。 | [[]extraVolumeMounts](#extravolumemounts-init-container) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify the name of init container。 | string | true |  |  
+ image | Specify the image of init container。 | string | true |  |  
+ imagePullPolicy | Specify image pull policy for your service。 | "IfNotPresent" or "Always" or "Never" | false | IfNotPresent |  
+ cmd | Specify the commands run in the init container。 | []string | false |  |  
+ args | Specify the args run in the init container。 | []string | false |  |  
+ env | Specify the env run in the init container。 | [[]env](#env-init-container) | false |  |  
+ mountName | Specify the mount name of shared volume。 | string | false | workdir |  
+ appMountPath | Specify the mount path of app container。 | string | true |  |  
+ initMountPath | Specify the mount path of init container。 | string | true |  |  
+ extraVolumeMounts | Specify the extra volume mounts for the init container。 | [[]extraVolumeMounts](#extravolumemounts-init-container) | true |  |  
 
 
 #### env (init-container)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | 环境变量名称。 | string | true |  
- value | 环境变量的值。 | string | false |  
- valueFrom | 从哪个资源中读取环境变量的定义。 | [valueFrom](#valuefrom-init-container) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Environment variable name。 | string | true |  |  
+ value | The value of the environment variable。 | string | false |  |  
+ valueFrom | Specifies a source the value of this var should come from。 | [valueFrom](#valuefrom-init-container) | false |  |  
 
 
 ##### valueFrom (init-container)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- secretKeyRef | secret 键的引用。 | [secretKeyRef](#secretkeyref-init-container) | false |  
- configMapKeyRef | configmap 键的引用。 | [configMapKeyRef](#configmapkeyref-init-container) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ secretKeyRef | Selects a key of a secret in the pod's namespace。 | [secretKeyRef](#secretkeyref-init-container) | false |  |  
+ configMapKeyRef | Selects a key of a config map in the pod's namespace。 | [configMapKeyRef](#configmapkeyref-init-container) | false |  |  
 
 
 ##### secretKeyRef (init-container)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Secret 名称。 | string | true |  
- key | 选择 Secret 中存在的 key。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | The name of the secret in the pod's namespace to select from。 | string | true |  |  
+ key | The key of the secret to select from. Must be a valid secret key。 | string | true |  |  
 
 
 ##### configMapKeyRef (init-container)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | 环境变量的名称。 | string | true |  
- key | configmap 中的键名。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | The name of the config map in the pod's namespace to select from。 | string | true |  |  
+ key | The key of the config map to select from. Must be a valid secret key。 | string | true |  |  
 
 
 #### extraVolumeMounts (init-container)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | 挂载的卷名。 | string | true |  
- mountPath | 初始化容器中的挂载路径。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | The name of the volume to be mounted。 | string | true |  |  
+ mountPath | The mountPath for mount in the init container。 | string | true |  |  
 
 
 ## Json-Merge-Patch
 
 ### 描述
 
-使用 JSON Merge Patch 策略，遵循 RFC 7396。
+Patch the output following Json Merge Patch strategy, following RFC 7396。
 
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### 适用于组件类型
 
-所有组件类型。
+All Component Types
 
 
 ### 示例 (json-merge-patch)
@@ -1266,22 +1250,22 @@ spec:
 ### 参数说明 (json-merge-patch)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- \- |  | {} | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ \- |  | {} | true |  |  
 
 
 ## Json-Patch
 
 ### 描述
 
-使用 JSON Patch 策略，遵循 RFC 6902。
+Patch the output following Json Patch strategy, following RFC 6902。
 
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### 适用于组件类型
 
-所有组件类型。
+All Component Types
 
 
 ### 示例 (json-patch)
@@ -1331,16 +1315,16 @@ spec:
 ### 参数说明 (json-patch)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- operations |  | [[]operations](#operations-json-patch) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ operations |  | [[]operations](#operations-json-patch) | true |  |  
 
 
 #### operations (json-patch)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- \- |  | {} | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ \- |  | {} | true |  |  
 
 
 ## K8s-Update-Strategy
@@ -1351,7 +1335,7 @@ Set k8s update strategy for Deployment/DaemonSet/StatefulSet。
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1455,28 +1439,28 @@ spec:
 ### 参数说明 (k8s-update-strategy)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- targetAPIVersion | Specify the apiVersion of target。 | string | false | apps/v1 
- targetKind | Specify the kind of target。 | "Deployment" or "StatefulSet" or "DaemonSet" | false | Deployment 
- strategy | Specify the strategy of update。 | [strategy](#strategy-k8s-update-strategy) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ targetAPIVersion | Specify the apiVersion of target。 | string | false | apps/v1 |  
+ targetKind | Specify the kind of target。 | "Deployment" or "StatefulSet" or "DaemonSet" | false | Deployment |  
+ strategy | Specify the strategy of update。 | [strategy](#strategy-k8s-update-strategy) | true |  |  
 
 
 #### strategy (k8s-update-strategy)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type | Specify the strategy type。 | "RollingUpdate" or "Recreate" or "OnDelete" | false | RollingUpdate 
- rollingStrategy | Specify the parameters of rollong update strategy。 | [rollingStrategy](#rollingstrategy-k8s-update-strategy) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type | Specify the strategy type。 | "RollingUpdate" or "Recreate" or "OnDelete" | false | RollingUpdate |  
+ rollingStrategy | Specify the parameters of rollong update strategy。 | [rollingStrategy](#rollingstrategy-k8s-update-strategy) | false |  |  
 
 
 ##### rollingStrategy (k8s-update-strategy)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- maxSurge |  | string | false | 25% 
- maxUnavailable |  | string | false | 25% 
- partition |  | int | false | 0 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ maxSurge |  | string | false | 25% |  
+ maxUnavailable |  | string | false | 25% |  
+ partition |  | int | false | 0 |  
 
 
 ## Labels
@@ -1487,7 +1471,7 @@ Add labels on your workload. if it generates pod, add same label for generated p
 
 ### 适用于组件类型
 
-所有组件类型。
+All Component Types
 
 
 ### 示例 (labels)
@@ -1516,20 +1500,20 @@ spec:
 ### 参数说明 (labels)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- \- |  | map[string]:(null&#124;string) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ \- |  | map[string]:(null&#124;string) | true |  |  
 
 
 ## Lifecycle
 
 ### 描述
 
-为 pod 添加生命周期钩子，它遵循路径“spec.template”中的 pod 规范。
+Add lifecycle hooks for every container of K8s pod for your workload which follows the pod spec in path 'spec.template'。
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1571,109 +1555,109 @@ spec:
 ### 参数说明 (lifecycle)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- postStart |  | [postStart](#poststart-lifecycle) | false |  
- preStop |  | [preStop](#prestop-lifecycle) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ postStart |  | [postStart](#poststart-lifecycle) | false |  |  
+ preStop |  | [preStop](#prestop-lifecycle) | false |  |  
 
 
 #### postStart (lifecycle)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- exec |  | [exec](#exec-lifecycle) | false |  
- httpGet |  | [httpGet](#httpget-lifecycle) | false |  
- tcpSocket |  | [tcpSocket](#tcpsocket-lifecycle) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ exec |  | [exec](#exec-lifecycle) | false |  |  
+ httpGet |  | [httpGet](#httpget-lifecycle) | false |  |  
+ tcpSocket |  | [tcpSocket](#tcpsocket-lifecycle) | false |  |  
 
 
 ##### exec (lifecycle)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- command |  | []string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ command |  | []string | true |  |  
 
 
 ##### httpGet (lifecycle)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- path |  | string | false |  
- port |  | int | true |  
- host |  | string | false |  
- scheme |  | "HTTP" or "HTTPS" | false | HTTP 
- httpHeaders |  | [[]httpHeaders](#httpheaders-lifecycle) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ path |  | string | false |  |  
+ port |  | int | true |  |  
+ host |  | string | false |  |  
+ scheme |  | "HTTP" or "HTTPS" | false | HTTP |  
+ httpHeaders |  | [[]httpHeaders](#httpheaders-lifecycle) | false |  |  
 
 
 ##### httpHeaders (lifecycle)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- value |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ value |  | string | true |  |  
 
 
 ##### tcpSocket (lifecycle)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- port |  | int | true |  
- host |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ port |  | int | true |  |  
+ host |  | string | false |  |  
 
 
 #### preStop (lifecycle)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- exec |  | [exec](#exec-lifecycle) | false |  
- httpGet |  | [httpGet](#httpget-lifecycle) | false |  
- tcpSocket |  | [tcpSocket](#tcpsocket-lifecycle) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ exec |  | [exec](#exec-lifecycle) | false |  |  
+ httpGet |  | [httpGet](#httpget-lifecycle) | false |  |  
+ tcpSocket |  | [tcpSocket](#tcpsocket-lifecycle) | false |  |  
 
 
 ##### exec (lifecycle)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- command |  | []string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ command |  | []string | true |  |  
 
 
 ##### httpGet (lifecycle)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- path |  | string | false |  
- port |  | int | true |  
- host |  | string | false |  
- scheme |  | "HTTP" or "HTTPS" | false | HTTP 
- httpHeaders |  | [[]httpHeaders](#httpheaders-lifecycle) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ path |  | string | false |  |  
+ port |  | int | true |  |  
+ host |  | string | false |  |  
+ scheme |  | "HTTP" or "HTTPS" | false | HTTP |  
+ httpHeaders |  | [[]httpHeaders](#httpheaders-lifecycle) | false |  |  
 
 
 ##### httpHeaders (lifecycle)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- value |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ value |  | string | true |  |  
 
 
 ##### tcpSocket (lifecycle)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- port |  | int | true |  
- host |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ port |  | int | true |  |  
+ host |  | string | false |  |  
 
 
 ## Nocalhost
 
 ### 描述
 
-使用 nocalhost 作为开发环境的配置。
+nocalhost develop configuration。
 
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1737,87 +1721,87 @@ spec:
 ### 参数说明 (nocalhost)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- port |  | int | true |  
- serviceType |  | string | false | deployment 
- gitUrl |  | string | false |  
- image |  | string | true |  
- shell |  | string | false | bash 
- workDir |  | string | false | /home/nocalhost-dev 
- storageClass |  | string | false |  
- command |  | [command](#command-nocalhost) | true |  
- debug |  | [debug](#debug-nocalhost) | false |  
- hotReload |  | bool | false | true 
- sync |  | [sync](#sync-nocalhost) | true |  
- env |  | [[]env](#env-nocalhost) | false |  
- portForward |  | []string | false |  
- persistentVolumeDirs |  | [[]persistentVolumeDirs](#persistentvolumedirs-nocalhost) | false |  
- resources |  | [resources](#resources-nocalhost) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ port |  | int | true |  |  
+ serviceType |  | string | false | deployment |  
+ gitUrl |  | string | false |  |  
+ image |  | string | true |  |  
+ shell |  | string | false | bash |  
+ workDir |  | string | false | /home/nocalhost-dev |  
+ storageClass |  | string | false |  |  
+ command |  | [command](#command-nocalhost) | true |  |  
+ debug |  | [debug](#debug-nocalhost) | false |  |  
+ hotReload |  | bool | false | true |  
+ sync |  | [sync](#sync-nocalhost) | true |  |  
+ env |  | [[]env](#env-nocalhost) | false |  |  
+ portForward |  | []string | false |  |  
+ persistentVolumeDirs |  | [[]persistentVolumeDirs](#persistentvolumedirs-nocalhost) | false |  |  
+ resources |  | [resources](#resources-nocalhost) | true |  |  
 
 
 #### command (nocalhost)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- run |  | []string | true |  
- debug |  | []string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ run |  | list | true |  |  
+ debug |  | list | true |  |  
 
 
 #### debug (nocalhost)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- remoteDebugPort |  | int | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ remoteDebugPort |  | int | false |  |  
 
 
 #### sync (nocalhost)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | false | send 
- filePattern |  | []string | true |  
- ignoreFilePattern |  | []string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | false | send |  
+ filePattern |  | list | true |  |  
+ ignoreFilePattern |  | list | true |  |  
 
 
 #### env (nocalhost)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- value |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ value |  | string | true |  |  
 
 
 #### persistentVolumeDirs (nocalhost)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- path |  | string | true |  
- capacity |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ path |  | string | true |  |  
+ capacity |  | string | true |  |  
 
 
 #### resources (nocalhost)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- limits |  | [limits](#limits-nocalhost) | true |  
- requests |  | [requests](#requests-nocalhost) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ limits |  | [limits](#limits-nocalhost) | true |  |  
+ requests |  | [requests](#requests-nocalhost) | true |  |  
 
 
 ##### limits (nocalhost)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- memory |  | string | false | 2Gi 
- cpu |  | string | false | 2 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ memory |  | string | false | 2Gi |  
+ cpu |  | string | false | 2 |  
 
 
 ##### requests (nocalhost)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- memory |  | string | false | 512Mi 
- cpu |  | string | false | 0.5 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ memory |  | string | false | 512Mi |  
+ cpu |  | string | false | 0.5 |  
 
 
 ## Podsecuritycontext
@@ -1828,7 +1812,7 @@ Adds security context to the pod spec in path 'spec.template.spec.securityContex
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1866,41 +1850,41 @@ spec:
 ### 参数说明 (podsecuritycontext)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- appArmorProfile | Specify the AppArmor profile for the pod。 | [appArmorProfile](#apparmorprofile-podsecuritycontext) | false |  
- fsGroup |  | int | false |  
- runAsGroup |  | int | false |  
- runAsUser | Specify the UID to run the entrypoint of the container process。 | int | false |  
- runAsNonRoot | Specify if the container runs as a non-root user。 | bool | false | true 
- seccompProfile | Specify the seccomp profile for the pod。 | [seccompProfile](#seccompprofile-podsecuritycontext) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ appArmorProfile | Specify the AppArmor profile for the pod。 | [appArmorProfile](#apparmorprofile-podsecuritycontext) | false |  |  
+ fsGroup |  | int | false |  |  
+ runAsGroup |  | int | false |  |  
+ runAsUser | Specify the UID to run the entrypoint of the container process。 | int | false |  |  
+ runAsNonRoot | Specify if the container runs as a non-root user。 | bool | false | true |  
+ seccompProfile | Specify the seccomp profile for the pod。 | [seccompProfile](#seccompprofile-podsecuritycontext) | false |  |  
 
 
 #### appArmorProfile (podsecuritycontext)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | "RuntimeDefault" or "Unconfined" or "Localhost" | true |  
- localhostProfile |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | "RuntimeDefault" or "Unconfined" or "Localhost" | true |  |  
+ localhostProfile |  | string | false |  |  
 
 
 #### seccompProfile (podsecuritycontext)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | "RuntimeDefault" or "Unconfined" or "Localhost" | true |  
- localhostProfile |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | "RuntimeDefault" or "Unconfined" or "Localhost" | true |  |  
+ localhostProfile |  | string | false |  |  
 
 
 ## Resource
 
 ### 描述
 
-为 pod 添加资源请求和限制，它遵循路径“spec.template”中的 pod 规范。
+Add resource requests and limits on K8s pod for your workload which follows the pod spec in path 'spec.template.'。
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -1940,39 +1924,39 @@ spec:
 ### 参数说明 (resource)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- cpu | 指定 cpu 请求和限制的大小。 | number | false | 1 
- memory | 指定内存请求和限制的大小。 | string | false | 2048Mi 
- requests | 指定请求的资源。 | [requests](#requests-resource) | false |  
- limits | 指定限制的资源。 | [limits](#limits-resource) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ cpu | Specify the amount of cpu for requests and limits。 | number | false | 1 |  
+ memory | Specify the amount of memory for requests and limits。 | string | false | 2048Mi |  
+ requests | Specify the resources in requests。 | [requests](#requests-resource) | false |  |  
+ limits | Specify the resources in limits。 | [limits](#limits-resource) | false |  |  
 
 
 #### requests (resource)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- cpu | 指定 cpu 请求的大小。 | number | false | 1 
- memory | 指定内存请求的大小。 | string | false | 2048Mi 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ cpu | Specify the amount of cpu for requests。 | number | false | 1 |  
+ memory | Specify the amount of memory for requests。 | string | false | 2048Mi |  
 
 
 #### limits (resource)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- cpu | 指定 cpu 限制的大小。 | number | false | 1 
- memory | 指定内存限制的大小。 | string | false | 2048Mi 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ cpu | Specify the amount of cpu for limits。 | number | false | 1 |  
+ memory | Specify the amount of memory for limits。 | string | false | 2048Mi |  
 
 
 ## Scaler
 
 ### 描述
 
-调整 pod 的副本数，它遵循路径“spec.template”中的 pod 规范。
+Manually scale K8s pod for your workload which follows the pod spec in path 'spec.template'。
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 
@@ -2011,9 +1995,9 @@ spec:
 ### 参数说明 (scaler)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- replicas | 工作负载的 Pod 个数。 | int | false | 1 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ replicas | Specify the number of workload。 | int | false | 1 |  
 
 
 ## Securitycontext
@@ -2024,7 +2008,7 @@ Adds security context to the container spec in path 'spec.template.spec.containe
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -2067,57 +2051,57 @@ spec:
 ### 参数说明 (securitycontext)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
-  |  | [PatchParams](#patchparams-securitycontext) or [type-option-2](#type-option-2-securitycontext) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+  |  | [PatchParams](#patchparams-securitycontext) or [type-option-2](#type-option-2-securitycontext) | false |  |  
 
 
 #### PatchParams (securitycontext)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
- addCapabilities |  | []string | false |  
- allowPrivilegeEscalation |  | bool | false | false 
- dropCapabilities |  | []string | false |  
- privileged |  | bool | false | false 
- readOnlyRootFilesystem |  | bool | false | false 
- runAsNonRoot |  | bool | false | true 
- runAsUser |  | int | false |  
- runAsGroup |  | int | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty |  
+ addCapabilities |  | []string | false |  |  
+ allowPrivilegeEscalation |  | bool | false | false |  
+ dropCapabilities |  | []string | false |  |  
+ privileged |  | bool | false | false |  
+ readOnlyRootFilesystem |  | bool | false | false |  
+ runAsNonRoot |  | bool | false | true |  
+ runAsUser |  | int | false |  |  
+ runAsGroup |  | int | false |  |  
 
 
 #### type-option-2 (securitycontext)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containers | Specify the container image for multiple containers。 | [[]containers](#containers-securitycontext) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containers | Specify the container image for multiple containers。 | [[]containers](#containers-securitycontext) | true |  |  
 
 
 ##### containers (securitycontext)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
- addCapabilities |  | []string | false |  
- allowPrivilegeEscalation |  | bool | false | false 
- dropCapabilities |  | []string | false |  
- privileged |  | bool | false | false 
- readOnlyRootFilesystem |  | bool | false | false 
- runAsNonRoot |  | bool | false | true 
- runAsUser |  | int | false |  
- runAsGroup |  | int | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty |  
+ addCapabilities |  | []string | false |  |  
+ allowPrivilegeEscalation |  | bool | false | false |  
+ dropCapabilities |  | []string | false |  |  
+ privileged |  | bool | false | false |  
+ readOnlyRootFilesystem |  | bool | false | false |  
+ runAsNonRoot |  | bool | false | true |  
+ runAsUser |  | int | false |  |  
+ runAsGroup |  | int | false |  |  
 
 
 ## Service-Account
 
 ### 描述
 
-为 pod 指定 serviceAccount，它遵循路径“spec.template”中的 pod 规范。
+Specify serviceAccount for your workload which follows the pod spec in path 'spec.template'。
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -2152,36 +2136,36 @@ spec:
 ### 参数说明 (service-account)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | 指定 ServiceAccount 名称。 | string | true |  
- create | 指定是否创建新的 ServiceAccount。 | bool | false | false 
- privileges | 指定 ServiceAccount 的权限，若不为空，则会创建 RoleBinding 及 ClusterRoleBindings。 | [[]privileges](#privileges-service-account) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify the name of ServiceAccount。 | string | true |  |  
+ create | Specify whether to create new ServiceAccount or not。 | bool | false | false |  
+ privileges | Specify the privileges of the ServiceAccount, if not empty, RoleBindings(ClusterRoleBindings) will be created。 | [[]privileges](#privileges-service-account) | false |  |  
 
 
 #### privileges (service-account)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- verbs | 指定资源允许的动作。 | []string | true |  
- apiGroups | 指定资源的 apiGroups。 | []string | false |  
- resources | 指定允许的资源。 | []string | false |  
- resourceNames | 指定允许的资源名称。 | []string | false |  
- nonResourceURLs | 指定允许的资源 URL。 | []string | false |  
- scope | 指定权限的范围，默认为 namespace 范围。 | "namespace" or "cluster" | false | namespace 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ verbs | Specify the verbs to be allowed for the resource。 | []string | true |  |  
+ apiGroups | Specify the apiGroups of the resource。 | []string | false |  |  
+ resources | Specify the resources to be allowed。 | []string | false |  |  
+ resourceNames | Specify the resourceNames to be allowed。 | []string | false |  |  
+ nonResourceURLs | Specify the resource url to be allowed。 | []string | false |  |  
+ scope | Specify the scope of the privileges, default to be namespace scope。 | "namespace" or "cluster" | false | namespace |  
 
 
 ## Service-Binding
 
 ### 描述
 
-绑定云资源的密钥到组件环境变量中，该定义已废弃，请使用 'storage' 定义。
+Binding secrets of cloud resources to component env. This definition is DEPRECATED, please use 'storage' instead。
 
-> 目前这个运维特征默认在 VelaUX 处隐藏，你可以在 CLI 侧使用。
+> For now this trait is hidden from the VelaUX. Available when using CLI
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -2280,28 +2264,28 @@ Deploy this YAML and the Secret `db-conn-example` will be binding into environme
 ### 参数说明 (service-binding)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- envMappings | 环境变量到密钥的映射。 | map[string]KeySecret(#keysecret-service-binding) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ envMappings | The mapping of environment variables to secret。 | map[string]KeySecret(#keysecret-service-binding) | true |  |  
 
 
 #### KeySecret (service-binding)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | false |  
- secret |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | false |  |  
+ secret |  | string | true |  |  
 
 
 ## Sidecar
 
 ### 描述
 
-为 pod 添加 sidecar 容器，它遵循路径“spec.template”中的 pod 规范。
+Inject a sidecar container to K8s pod for your workload which follows the pod spec in path 'spec.template'。
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -2351,155 +2335,155 @@ spec:
 ### 参数说明 (sidecar)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | 容器名称。 | string | true |  
- image | 容器镜像。 | string | true |  
- cmd | 容器的执行命令。 | []string | false |  
- args | 指定 sidecar 中的参数。 | []string | false |  
- env | 指定 sidecar 中的环境变量。 | [[]env](#env-sidecar) | false |  
- volumes | 挂载卷。 | [[]volumes](#volumes-sidecar) | false |  
- livenessProbe | 判断容器是否存活的探针。 | [livenessProbe](#livenessprobe-sidecar) | false |  
- readinessProbe | 判断容器是否就绪，能够接受用户流量的探针。 | [readinessProbe](#readinessprobe-sidecar) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify the name of sidecar container。 | string | true |  |  
+ image | Specify the image of sidecar container。 | string | true |  |  
+ cmd | Specify the commands run in the sidecar。 | []string | false |  |  
+ args | Specify the args in the sidecar。 | []string | false |  |  
+ env | Specify the env in the sidecar。 | [[]env](#env-sidecar) | false |  |  
+ volumes | Specify the shared volume path。 | [[]volumes](#volumes-sidecar) | false |  |  
+ livenessProbe | Instructions for assessing whether the container is alive。 | [livenessProbe](#livenessprobe-sidecar) | false |  |  
+ readinessProbe | Instructions for assessing whether the container is in a suitable state to serve traffic。 | [readinessProbe](#readinessprobe-sidecar) | false |  |  
 
 
 #### env (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | 环境变量名称。 | string | true |  
- value | 环境变量的值。 | string | false |  
- valueFrom | 从哪个资源中读取环境变量的定义。 | [valueFrom](#valuefrom-sidecar) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Environment variable name。 | string | true |  |  
+ value | The value of the environment variable。 | string | false |  |  
+ valueFrom | Specifies a source the value of this var should come from。 | [valueFrom](#valuefrom-sidecar) | false |  |  
 
 
 ##### valueFrom (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- secretKeyRef | secret 键的引用。 | [secretKeyRef](#secretkeyref-sidecar) | false |  
- configMapKeyRef | configmap 键的引用。 | [configMapKeyRef](#configmapkeyref-sidecar) | false |  
- fieldRef | 指定要用于环境变量的字段。 | [fieldRef](#fieldref-sidecar) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ secretKeyRef | Selects a key of a secret in the pod's namespace。 | [secretKeyRef](#secretkeyref-sidecar) | false |  |  
+ configMapKeyRef | Selects a key of a config map in the pod's namespace。 | [configMapKeyRef](#configmapkeyref-sidecar) | false |  |  
+ fieldRef | Specify the field reference for env。 | [fieldRef](#fieldref-sidecar) | false |  |  
 
 
 ##### secretKeyRef (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Secret 名称。 | string | true |  
- key | 选择 Secret 中存在的 key。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | The name of the secret in the pod's namespace to select from。 | string | true |  |  
+ key | The key of the secret to select from. Must be a valid secret key。 | string | true |  |  
 
 
 ##### configMapKeyRef (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | 环境变量的名称。 | string | true |  
- key | configmap 中的键名。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | The name of the config map in the pod's namespace to select from。 | string | true |  |  
+ key | The key of the config map to select from. Must be a valid secret key。 | string | true |  |  
 
 
 ##### fieldRef (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- fieldPath | 指定要用于环境变量的字段路径。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ fieldPath | Specify the field path for env。 | string | true |  |  
 
 
 #### volumes (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- path |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ path |  | string | true |  |  
 
 
 #### livenessProbe (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-sidecar) | false |  
- httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-sidecar) | false |  
- tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-sidecar) | false |  
- initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | false | 0 
- periodSeconds | 定义每次检查之间的时间间隔。 | int | false | 10 
- timeoutSeconds | 定义检查的超时时间。 | int | false | 1 
- successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | false | 1 
- failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | false | 3 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ exec | Instructions for assessing container health by executing a command. Either this attribute or the httpGet attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the httpGet attribute and the tcpSocket attribute。 | [exec](#exec-sidecar) | false |  |  
+ httpGet | Instructions for assessing container health by executing an HTTP GET request. Either this attribute or the exec attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the tcpSocket attribute。 | [httpGet](#httpget-sidecar) | false |  |  
+ tcpSocket | Instructions for assessing container health by probing a TCP socket. Either this attribute or the exec attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the httpGet attribute。 | [tcpSocket](#tcpsocket-sidecar) | false |  |  
+ initialDelaySeconds | Number of seconds after the container is started before the first probe is initiated。 | int | false | 0 |  
+ periodSeconds | How often, in seconds, to execute the probe。 | int | false | 10 |  
+ timeoutSeconds | Number of seconds after which the probe times out。 | int | false | 1 |  
+ successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed。 | int | false | 1 |  
+ failureThreshold | Number of consecutive failures required to determine the container is not alive (liveness probe) or not ready (readiness probe)。 | int | false | 3 |  
 
 
 ##### exec (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ command | A command to be executed inside the container to assess its health. Each space delimited token of the command is a separate array element. Commands exiting 0 are considered to be successful probes, whilst all other exit codes are considered failures。 | []string | true |  |  
 
 
 ##### httpGet (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- path | 定义服务端点请求的路径。 | string | true |  
- port | 定义服务端点的端口号。 | int | true |  
- httpHeaders |  | [[]httpHeaders](#httpheaders-sidecar) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ path | The endpoint, relative to the port, to which the HTTP GET request should be directed。 | string | true |  |  
+ port | The TCP socket within the container to which the HTTP GET request should be directed。 | int | true |  |  
+ httpHeaders |  | [[]httpHeaders](#httpheaders-sidecar) | false |  |  
 
 
 ##### httpHeaders (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- value |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ value |  | string | true |  |  
 
 
 ##### tcpSocket (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- port | 指定健康检查的 TCP socket。 | int | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ port | The TCP socket within the container that should be probed to assess container health。 | int | true |  |  
 
 
 #### readinessProbe (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- exec | 通过在容器中执行一条命令判断是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [exec](#exec-sidecar) | false |  
- httpGet | 通过发送 httpGet 请求判断容器是否就绪。 请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [httpGet](#httpget-sidecar) | false |  
- tcpSocket | 通过 tcpSocket 是否开启判断容器是否就绪。请注意就绪性检查必须并且也只能定义 httpGet，tcpSocket 或者 exec 中的一个。 | [tcpSocket](#tcpsocket-sidecar) | false |  
- initialDelaySeconds | 定义容器启动多少秒之后开始第一次检查。 | int | false | 0 
- periodSeconds | 定义每次检查之间的时间间隔。 | int | false | 10 
- timeoutSeconds | 定义检查的超时时间。 | int | false | 1 
- successThreshold | 定义检查成功多少次之后判断容器已经就绪。 | int | false | 1 
- failureThreshold | 定义检查失败多少次之后判断容器已经不健康。 | int | false | 3 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ exec | Instructions for assessing container health by executing a command. Either this attribute or the httpGet attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the httpGet attribute and the tcpSocket attribute。 | [exec](#exec-sidecar) | false |  |  
+ httpGet | Instructions for assessing container health by executing an HTTP GET request. Either this attribute or the exec attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the tcpSocket attribute。 | [httpGet](#httpget-sidecar) | false |  |  
+ tcpSocket | Instructions for assessing container health by probing a TCP socket. Either this attribute or the exec attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with both the exec attribute and the httpGet attribute。 | [tcpSocket](#tcpsocket-sidecar) | false |  |  
+ initialDelaySeconds | Number of seconds after the container is started before the first probe is initiated。 | int | false | 0 |  
+ periodSeconds | How often, in seconds, to execute the probe。 | int | false | 10 |  
+ timeoutSeconds | Number of seconds after which the probe times out。 | int | false | 1 |  
+ successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed。 | int | false | 1 |  
+ failureThreshold | Number of consecutive failures required to determine the container is not alive (liveness probe) or not ready (readiness probe)。 | int | false | 3 |  
 
 
 ##### exec (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ command | A command to be executed inside the container to assess its health. Each space delimited token of the command is a separate array element. Commands exiting 0 are considered to be successful probes, whilst all other exit codes are considered failures。 | []string | true |  |  
 
 
 ##### httpGet (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- path | 定义服务端点请求的路径。 | string | true |  
- port | 定义服务端点的端口号。 | int | true |  
- httpHeaders |  | [[]httpHeaders](#httpheaders-sidecar) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ path | The endpoint, relative to the port, to which the HTTP GET request should be directed。 | string | true |  |  
+ port | The TCP socket within the container to which the HTTP GET request should be directed。 | int | true |  |  
+ httpHeaders |  | [[]httpHeaders](#httpheaders-sidecar) | false |  |  
 
 
 ##### httpHeaders (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- value |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ value |  | string | true |  |  
 
 
 ##### tcpSocket (sidecar)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- port | 指定健康检查的 TCP socket。 | int | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ port | The TCP socket within the container that should be probed to assess container health。 | int | true |  |  
 
 
 ## Startup-Probe
@@ -2510,7 +2494,7 @@ Add startup probe hooks for the specified container of K8s pod for your workload
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -2565,134 +2549,134 @@ spec:
 ### 参数说明 (startup-probe)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
-  |  | [StartupProbeParams](#startupprobeparams-startup-probe) or [type-option-2](#type-option-2-startup-probe) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+  |  | [StartupProbeParams](#startupprobeparams-startup-probe) or [type-option-2](#type-option-2-startup-probe) | false |  |  
 
 
 #### StartupProbeParams (startup-probe)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
- initialDelaySeconds | Number of seconds after the container has started before liveness probes are initiated. Minimum value is 0。 | int | false | 0 
- periodSeconds | How often, in seconds, to execute the probe. Minimum value is 1。 | int | false | 10 
- timeoutSeconds | Number of seconds after which the probe times out. Minimum value is 1。 | int | false | 1 
- successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.  Minimum value is 1。 | int | false | 1 
- failureThreshold | Minimum consecutive failures for the probe to be considered failed after having succeeded. Minimum value is 1。 | int | false | 3 
- terminationGracePeriodSeconds | Optional duration in seconds the pod needs to terminate gracefully upon probe failure. Set this value longer than the expected cleanup time for your process。 | int | false |  
- exec | Instructions for assessing container startup status by executing a command. Either this attribute or the httpGet attribute or the grpc attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with the httpGet attribute and the tcpSocket attribute and the gRPC attribute。 | [exec](#exec-startup-probe) | false |  
- httpGet | Instructions for assessing container startup status by executing an HTTP GET request. Either this attribute or the exec attribute or the grpc attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the tcpSocket attribute and the gRPC attribute。 | [httpGet](#httpget-startup-probe) | false |  
- grpc | Instructions for assessing container startup status by probing a gRPC service. Either this attribute or the exec attribute or the grpc attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the httpGet attribute and the tcpSocket attribute。 | [grpc](#grpc-startup-probe) | false |  
- tcpSocket | Instructions for assessing container startup status by probing a TCP socket. Either this attribute or the exec attribute or the tcpSocket attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the httpGet attribute and the gRPC attribute。 | [tcpSocket](#tcpsocket-startup-probe) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty |  
+ initialDelaySeconds | Number of seconds after the container has started before liveness probes are initiated. Minimum value is 0。 | int | false | 0 |  
+ periodSeconds | How often, in seconds, to execute the probe. Minimum value is 1。 | int | false | 10 |  
+ timeoutSeconds | Number of seconds after which the probe times out. Minimum value is 1。 | int | false | 1 |  
+ successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.  Minimum value is 1。 | int | false | 1 |  
+ failureThreshold | Minimum consecutive failures for the probe to be considered failed after having succeeded. Minimum value is 1。 | int | false | 3 |  
+ terminationGracePeriodSeconds | Optional duration in seconds the pod needs to terminate gracefully upon probe failure. Set this value longer than the expected cleanup time for your process。 | int | false |  |  
+ exec | Instructions for assessing container startup status by executing a command. Either this attribute or the httpGet attribute or the grpc attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with the httpGet attribute and the tcpSocket attribute and the gRPC attribute。 | [exec](#exec-startup-probe) | false |  |  
+ httpGet | Instructions for assessing container startup status by executing an HTTP GET request. Either this attribute or the exec attribute or the grpc attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the tcpSocket attribute and the gRPC attribute。 | [httpGet](#httpget-startup-probe) | false |  |  
+ grpc | Instructions for assessing container startup status by probing a gRPC service. Either this attribute or the exec attribute or the grpc attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the httpGet attribute and the tcpSocket attribute。 | [grpc](#grpc-startup-probe) | false |  |  
+ tcpSocket | Instructions for assessing container startup status by probing a TCP socket. Either this attribute or the exec attribute or the tcpSocket attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the httpGet attribute and the gRPC attribute。 | [tcpSocket](#tcpsocket-startup-probe) | false |  |  
 
 
 ##### exec (startup-probe)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ command | A command to be executed inside the container to assess its health. Each space delimited token of the command is a separate array element. Commands exiting 0 are considered to be successful probes, whilst all other exit codes are considered failures。 | []string | true |  |  
 
 
 ##### httpGet (startup-probe)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- path | 定义服务端点请求的路径。 | string | false |  
- port | The port numer to access on the host or container。 | int | true |  
- host | The hostname to connect to, defaults to the pod IP. You probably want to set "Host" in httpHeaders instead。 | string | false |  
- scheme | The Scheme to use for connecting to the host。 | "HTTP" or "HTTPS" | false | HTTP 
- httpHeaders | Custom headers to set in the request. HTTP allows repeated headers。 | [[]httpHeaders](#httpheaders-startup-probe) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ path | The endpoint, relative to the port, to which the HTTP GET request should be directed。 | string | false |  |  
+ port | The port numer to access on the host or container。 | int | true |  |  
+ host | The hostname to connect to, defaults to the pod IP. You probably want to set "Host" in httpHeaders instead。 | string | false |  |  
+ scheme | The Scheme to use for connecting to the host。 | "HTTP" or "HTTPS" | false | HTTP |  
+ httpHeaders | Custom headers to set in the request. HTTP allows repeated headers。 | [[]httpHeaders](#httpheaders-startup-probe) | false |  |  
 
 
 ##### httpHeaders (startup-probe)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | The header field name。 | string | true |  
- value | The header field value。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | The header field name。 | string | true |  |  
+ value | The header field value。 | string | true |  |  
 
 
 ##### grpc (startup-probe)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- port | The port number of the gRPC service。 | int | true |  
- service | The name of the service to place in the gRPC HealthCheckRequest。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ port | The port number of the gRPC service。 | int | true |  |  
+ service | The name of the service to place in the gRPC HealthCheckRequest。 | string | false |  |  
 
 
 ##### tcpSocket (startup-probe)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- port | Number or name of the port to access on the container。 | int | true |  
- host | Host name to connect to, defaults to the pod IP。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ port | Number or name of the port to access on the container。 | int | true |  |  
+ host | Host name to connect to, defaults to the pod IP。 | string | false |  |  
 
 
 #### type-option-2 (startup-probe)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- probes | Specify the startup probe for multiple containers。 | [[]probes](#probes-startup-probe) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ probes | Specify the startup probe for multiple containers。 | [[]probes](#probes-startup-probe) | true |  |  
 
 
 ##### probes (startup-probe)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty 
- initialDelaySeconds | Number of seconds after the container has started before liveness probes are initiated. Minimum value is 0。 | int | false | 0 
- periodSeconds | How often, in seconds, to execute the probe. Minimum value is 1。 | int | false | 10 
- timeoutSeconds | Number of seconds after which the probe times out. Minimum value is 1。 | int | false | 1 
- successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.  Minimum value is 1。 | int | false | 1 
- failureThreshold | Minimum consecutive failures for the probe to be considered failed after having succeeded. Minimum value is 1。 | int | false | 3 
- terminationGracePeriodSeconds | Optional duration in seconds the pod needs to terminate gracefully upon probe failure. Set this value longer than the expected cleanup time for your process。 | int | false |  
- exec | Instructions for assessing container startup status by executing a command. Either this attribute or the httpGet attribute or the grpc attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with the httpGet attribute and the tcpSocket attribute and the gRPC attribute。 | [exec](#exec-startup-probe) | false |  
- httpGet | Instructions for assessing container startup status by executing an HTTP GET request. Either this attribute or the exec attribute or the grpc attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the tcpSocket attribute and the gRPC attribute。 | [httpGet](#httpget-startup-probe) | false |  
- grpc | Instructions for assessing container startup status by probing a gRPC service. Either this attribute or the exec attribute or the grpc attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the httpGet attribute and the tcpSocket attribute。 | [grpc](#grpc-startup-probe) | false |  
- tcpSocket | Instructions for assessing container startup status by probing a TCP socket. Either this attribute or the exec attribute or the tcpSocket attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the httpGet attribute and the gRPC attribute。 | [tcpSocket](#tcpsocket-startup-probe) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ containerName | Specify the name of the target container, if not set, use the component name。 | string | false | empty |  
+ initialDelaySeconds | Number of seconds after the container has started before liveness probes are initiated. Minimum value is 0。 | int | false | 0 |  
+ periodSeconds | How often, in seconds, to execute the probe. Minimum value is 1。 | int | false | 10 |  
+ timeoutSeconds | Number of seconds after which the probe times out. Minimum value is 1。 | int | false | 1 |  
+ successThreshold | Minimum consecutive successes for the probe to be considered successful after having failed.  Minimum value is 1。 | int | false | 1 |  
+ failureThreshold | Minimum consecutive failures for the probe to be considered failed after having succeeded. Minimum value is 1。 | int | false | 3 |  
+ terminationGracePeriodSeconds | Optional duration in seconds the pod needs to terminate gracefully upon probe failure. Set this value longer than the expected cleanup time for your process。 | int | false |  |  
+ exec | Instructions for assessing container startup status by executing a command. Either this attribute or the httpGet attribute or the grpc attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with the httpGet attribute and the tcpSocket attribute and the gRPC attribute。 | [exec](#exec-startup-probe) | false |  |  
+ httpGet | Instructions for assessing container startup status by executing an HTTP GET request. Either this attribute or the exec attribute or the grpc attribute or the tcpSocket attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the tcpSocket attribute and the gRPC attribute。 | [httpGet](#httpget-startup-probe) | false |  |  
+ grpc | Instructions for assessing container startup status by probing a gRPC service. Either this attribute or the exec attribute or the grpc attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the httpGet attribute and the tcpSocket attribute。 | [grpc](#grpc-startup-probe) | false |  |  
+ tcpSocket | Instructions for assessing container startup status by probing a TCP socket. Either this attribute or the exec attribute or the tcpSocket attribute or the httpGet attribute MUST be specified. This attribute is mutually exclusive with the exec attribute and the httpGet attribute and the gRPC attribute。 | [tcpSocket](#tcpsocket-startup-probe) | false |  |  
 
 
 ##### exec (startup-probe)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- command | 容器中执行的命令，命令返回 0 则为正常，否则则为失败。 | []string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ command | A command to be executed inside the container to assess its health. Each space delimited token of the command is a separate array element. Commands exiting 0 are considered to be successful probes, whilst all other exit codes are considered failures。 | []string | true |  |  
 
 
 ##### httpGet (startup-probe)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- path | 定义服务端点请求的路径。 | string | false |  
- port | The port numer to access on the host or container。 | int | true |  
- host | The hostname to connect to, defaults to the pod IP. You probably want to set "Host" in httpHeaders instead。 | string | false |  
- scheme | The Scheme to use for connecting to the host。 | "HTTP" or "HTTPS" | false | HTTP 
- httpHeaders | Custom headers to set in the request. HTTP allows repeated headers。 | [[]httpHeaders](#httpheaders-startup-probe) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ path | The endpoint, relative to the port, to which the HTTP GET request should be directed。 | string | false |  |  
+ port | The port numer to access on the host or container。 | int | true |  |  
+ host | The hostname to connect to, defaults to the pod IP. You probably want to set "Host" in httpHeaders instead。 | string | false |  |  
+ scheme | The Scheme to use for connecting to the host。 | "HTTP" or "HTTPS" | false | HTTP |  
+ httpHeaders | Custom headers to set in the request. HTTP allows repeated headers。 | [[]httpHeaders](#httpheaders-startup-probe) | false |  |  
 
 
 ##### httpHeaders (startup-probe)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | The header field name。 | string | true |  
- value | The header field value。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | The header field name。 | string | true |  |  
+ value | The header field value。 | string | true |  |  
 
 
 ##### grpc (startup-probe)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- port | The port number of the gRPC service。 | int | true |  
- service | The name of the service to place in the gRPC HealthCheckRequest。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ port | The port number of the gRPC service。 | int | true |  |  
+ service | The name of the service to place in the gRPC HealthCheckRequest。 | string | false |  |  
 
 
 ##### tcpSocket (startup-probe)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- port | Number or name of the port to access on the container。 | int | true |  
- host | Host name to connect to, defaults to the pod IP。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ port | Number or name of the port to access on the container。 | int | true |  |  
+ host | Host name to connect to, defaults to the pod IP。 | string | false |  |  
 
 
 ## Storage
@@ -2703,7 +2687,7 @@ Add storages on K8s pod for your workload which follows the pod spec in path 'sp
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -2765,191 +2749,191 @@ spec:
 ### 参数说明 (storage)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- pvc | 声明 pvc 类型存储。 | [[]pvc](#pvc-storage) | false |  
- configMap | 声明 ConfigMap 类型存储。 | [[]configMap](#configmap-storage) | false |  
- secret | 声明 Secret 类型存储。 | [[]secret](#secret-storage) | false |  
- emptyDir | 声明 EmptyDir 类型存储。 | [[]emptyDir](#emptydir-storage) | false |  
- hostPath | Declare host path type storage。 | [[]hostPath](#hostpath-storage) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ pvc | Declare pvc type storage。 | [[]pvc](#pvc-storage) | false |  |  
+ configMap | Declare config map type storage。 | [[]configMap](#configmap-storage) | false |  |  
+ secret | Declare secret type storage。 | [[]secret](#secret-storage) | false |  |  
+ emptyDir | Declare empty dir type storage。 | [[]emptyDir](#emptydir-storage) | false |  |  
+ hostPath | Declare host path type storage。 | [[]hostPath](#hostpath-storage) | false |  |  
 
 
 #### pvc (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- mountOnly |  | bool | false | false 
- mountPath |  | string | true |  
- subPath |  | string | false |  
- volumeMode |  | string | false | Filesystem 
- volumeName |  | string | false |  
- accessModes |  | []string | true |  
- storageClassName |  | string | false |  
- resources |  | [resources](#resources-storage) | false |  
- dataSourceRef |  | [dataSourceRef](#datasourceref-storage) | false |  
- dataSource |  | [dataSource](#datasource-storage) | false |  
- selector |  | [selector](#selector-storage) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ mountOnly |  | bool | false | false |  
+ mountPath |  | string | true |  |  
+ subPath |  | string | false |  |  
+ volumeMode |  | string | false | Filesystem |  
+ volumeName |  | string | false |  |  
+ accessModes |  | list | true |  |  
+ storageClassName |  | string | false |  |  
+ resources |  | [resources](#resources-storage) | false |  |  
+ dataSourceRef |  | [dataSourceRef](#datasourceref-storage) | false |  |  
+ dataSource |  | [dataSource](#datasource-storage) | false |  |  
+ selector |  | [selector](#selector-storage) | false |  |  
 
 
 ##### resources (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- requests |  | [requests](#requests-storage) | true |  
- limits |  | [limits](#limits-storage) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ requests |  | [requests](#requests-storage) | true |  |  
+ limits |  | [limits](#limits-storage) | false |  |  
 
 
 ##### requests (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- storage |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ storage |  | string | true |  |  
 
 
 ##### limits (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- storage |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ storage |  | string | true |  |  
 
 
 ##### dataSourceRef (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- kind |  | string | true |  
- apiGroup |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ kind |  | string | true |  |  
+ apiGroup |  | string | true |  |  
 
 
 ##### dataSource (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- kind |  | string | true |  
- apiGroup |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ kind |  | string | true |  |  
+ apiGroup |  | string | true |  |  
 
 
 ##### selector (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]string | false |  
- matchExpressions |  | [matchExpressions](#matchexpressions-storage) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ matchLabels |  | map[string]string | false |  |  
+ matchExpressions |  | [matchExpressions](#matchexpressions-storage) | false |  |  
 
 
 ##### matchExpressions (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- values |  | []string | true |  
- operator |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ values |  | []string | true |  |  
+ operator |  | string | true |  |  
 
 
 #### configMap (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- mountOnly |  | bool | false | false 
- mountToEnv |  | [mountToEnv](#mounttoenv-storage) | false |  
- mountToEnvs |  | [[]mountToEnvs](#mounttoenvs-storage) | false |  
- mountPath |  | string | false |  
- subPath |  | string | false |  
- defaultMode |  | int | false | 420 
- readOnly |  | bool | false | false 
- data |  | map[string]_ | false |  
- items |  | [[]items](#items-storage) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ mountOnly |  | bool | false | false |  
+ mountToEnv |  | [mountToEnv](#mounttoenv-storage) | false |  |  
+ mountToEnvs |  | [[]mountToEnvs](#mounttoenvs-storage) | false |  |  
+ mountPath |  | string | false |  |  
+ subPath |  | string | false |  |  
+ defaultMode |  | int | false | 420 |  
+ readOnly |  | bool | false | false |  
+ data |  | map[string]_ | false |  |  
+ items |  | [[]items](#items-storage) | false |  |  
 
 
 ##### mountToEnv (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- envName |  | string | true |  
- configMapKey |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ envName |  | string | true |  |  
+ configMapKey |  | string | true |  |  
 
 
 ##### mountToEnvs (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- envName |  | string | true |  
- configMapKey |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ envName |  | string | true |  |  
+ configMapKey |  | string | true |  |  
 
 
 ##### items (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- path |  | string | true |  
- mode |  | int | false | 511 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ path |  | string | true |  |  
+ mode |  | int | false | 511 |  
 
 
 #### secret (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- mountOnly |  | bool | false | false 
- mountToEnv |  | [mountToEnv](#mounttoenv-storage) | false |  
- mountToEnvs |  | [[]mountToEnvs](#mounttoenvs-storage) | false |  
- mountPath |  | string | true |  
- subPath |  | string | false |  
- defaultMode |  | int | false | 420 
- readOnly |  | bool | false | false 
- stringData |  | map[string]_ | false |  
- data |  | map[string]_ | false |  
- items |  | [[]items](#items-storage) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ mountOnly |  | bool | false | false |  
+ mountToEnv |  | [mountToEnv](#mounttoenv-storage) | false |  |  
+ mountToEnvs |  | [[]mountToEnvs](#mounttoenvs-storage) | false |  |  
+ mountPath |  | string | true |  |  
+ subPath |  | string | false |  |  
+ defaultMode |  | int | false | 420 |  
+ readOnly |  | bool | false | false |  
+ stringData |  | map[string]_ | false |  |  
+ data |  | map[string]_ | false |  |  
+ items |  | [[]items](#items-storage) | false |  |  
 
 
 ##### mountToEnv (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- envName |  | string | true |  
- secretKey |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ envName |  | string | true |  |  
+ secretKey |  | string | true |  |  
 
 
 ##### mountToEnvs (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- envName |  | string | true |  
- secretKey |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ envName |  | string | true |  |  
+ secretKey |  | string | true |  |  
 
 
 ##### items (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- path |  | string | true |  
- mode |  | int | false | 511 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ path |  | string | true |  |  
+ mode |  | int | false | 511 |  
 
 
 #### emptyDir (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- mountPath |  | string | true |  
- subPath |  | string | false |  
- medium |  | "" or "Memory" | false | empty 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ mountPath |  | string | true |  |  
+ subPath |  | string | false |  |  
+ medium |  | "" or "Memory" | false | empty |  
 
 
 #### hostPath (storage)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- path |  | string | true |  
- mountPath |  | string | true |  
- type |  | "Directory" or "DirectoryOrCreate" or "FileOrCreate" or "File" or "Socket" or "CharDevice" or "BlockDevice" | false | Directory 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ path |  | string | true |  |  
+ mountPath |  | string | true |  |  
+ type |  | "Directory" or "DirectoryOrCreate" or "FileOrCreate" or "File" or "Socket" or "CharDevice" or "BlockDevice" | false | Directory |  
 
 
 ## Topologyspreadconstraints
@@ -2960,7 +2944,7 @@ Add topology spread constraints hooks for every container of K8s pod for your wo
 
 ### 适用于组件类型
 
-基于以下资源的组件：
+Component based on the following kinds of resources:
 - deployments.apps
 - statefulsets.apps
 - daemonsets.apps
@@ -3014,39 +2998,39 @@ spec:
 ### 参数说明 (topologyspreadconstraints)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- constraints |  | [[]constraints](#constraints-topologyspreadconstraints) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ constraints |  | [[]constraints](#constraints-topologyspreadconstraints) | true |  |  
 
 
 #### constraints (topologyspreadconstraints)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- maxSkew | Describe the degree to which Pods may be unevenly distributed。 | int | true |  
- topologyKey | Specify the key of node labels。 | string | true |  
- whenUnsatisfiable | Indicate how to deal with a Pod if it doesn't satisfy the spread constraint。 | "DoNotSchedule" or "ScheduleAnyway" | false | DoNotSchedule 
- labelSelector | labelSelector to find matching Pods。 | [labelSelector](#labelselector-topologyspreadconstraints) | true |  
- minDomains | Indicate a minimum number of eligible domains。 | int | false |  
- matchLabelKeys | A list of pod label keys to select the pods over which spreading will be calculated。 | []string | false |  
- nodeAffinityPolicy | Indicate how we will treat Pod's nodeAffinity/nodeSelector when calculating pod topology spread skew。 | "Honor" or "Ignore" | false | Honor 
- nodeTaintsPolicy | Indicate how we will treat node taints when calculating pod topology spread skew。 | "Honor" or "Ignore" | false | Honor 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ maxSkew | Describe the degree to which Pods may be unevenly distributed。 | int | true |  |  
+ topologyKey | Specify the key of node labels。 | string | true |  |  
+ whenUnsatisfiable | Indicate how to deal with a Pod if it doesn't satisfy the spread constraint。 | "DoNotSchedule" or "ScheduleAnyway" | false | DoNotSchedule |  
+ labelSelector | labelSelector to find matching Pods。 | [labelSelector](#labelselector-topologyspreadconstraints) | true |  |  
+ minDomains | Indicate a minimum number of eligible domains。 | int | false |  |  
+ matchLabelKeys | A list of pod label keys to select the pods over which spreading will be calculated。 | []string | false |  |  
+ nodeAffinityPolicy | Indicate how we will treat Pod's nodeAffinity/nodeSelector when calculating pod topology spread skew。 | "Honor" or "Ignore" | false | Honor |  
+ nodeTaintsPolicy | Indicate how we will treat node taints when calculating pod topology spread skew。 | "Honor" or "Ignore" | false | Honor |  
 
 
 ##### labelSelector (topologyspreadconstraints)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- matchLabels |  | map[string]string | false |  
- matchExpressions |  | [[]matchExpressions](#matchexpressions-topologyspreadconstraints) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ matchLabels |  | map[string]string | false |  |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-topologyspreadconstraints) | false |  |  
 
 
 ##### matchExpressions (topologyspreadconstraints)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In 
- values |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ operator |  | "In" or "NotIn" or "Exists" or "DoesNotExist" | false | In |  
+ values |  | []string | false |  |  
 
 
