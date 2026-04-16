@@ -4,7 +4,7 @@ title: 内置工作流步骤列表
 
 本文档将**按字典序**展示所有内置工作流步骤的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc.md)自动生成，请勿手动修改，上次更新于 2023-07-28T09:33:26+08:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc.md)自动生成，请勿手动修改，上次更新于 2026-04-16T11:50:12+01:00。
 
 ## Addon-Operation
 
@@ -14,7 +14,7 @@ Enable a KubeVela addon。
 
 ### 适用范围
 
-该步骤类型只适用于 WorkflowRun。
+This step type is only valid in WorkflowRun。
 
 ### 示例 (addon-operation)
 
@@ -127,13 +127,13 @@ spec:
 ### 参数说明 (addon-operation)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- addonName | Specify the name of the addon。 | string | true |  
- args | Specify addon enable args。 | []string | false |  
- image | Specify the image。 | string | false | oamdev/vela-cli:v1.7.2 
- operation | operation for the addon。 | "enable" or "upgrade" or "disable" | false | enable 
- serviceAccountName | specify serviceAccountName want to use。 | string | false | kubevela-vela-core 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ addonName | Specify the name of the addon。 | string | true |  |  
+ args | Specify addon enable args。 | []string | false |  |  
+ image | Specify the image。 | string | false | oamdev/vela-cli:v1.7.2 |  
+ operation | operation for the addon。 | "enable" or "upgrade" or "disable" | false | enable |  
+ serviceAccountName | specify serviceAccountName want to use。 | string | false | kubevela-vela-core |  
 
 
 ## Apply-App
@@ -144,7 +144,7 @@ Apply application from data or ref to the cluster。
 
 ### 适用范围
 
-该步骤类型只适用于 WorkflowRun。
+This step type is only valid in WorkflowRun。
 
 ### 示例 (apply-app)
 
@@ -216,20 +216,20 @@ data:
 ### 参数说明 (apply-app)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- data |  | map[string]_ | false |  
- ref |  | [ref](#ref-apply-app) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ data |  | map[string]_ | false |  |  
+ ref |  | [ref](#ref-apply-app) | false |  |  
 
 
 #### ref (apply-app)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- namespace |  | _&#124;_ | true |  
- type |  | string | false | configMap 
- key |  | string | false | application 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ namespace |  | _&#124;_ | true |  |  
+ type |  | string | false | configMap |  
+ key |  | string | false | application |  
 
 
 ## Apply-Component
@@ -240,7 +240,7 @@ Apply a specific component and its corresponding traits in application。
 
 ### 适用范围
 
-该步骤类型只适用于 Application。
+This step type is only valid in Application。
 
 ### 示例 (apply-component)
 
@@ -276,11 +276,11 @@ spec:
 ### 参数说明 (apply-component)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- component | Specify the component name to apply。 | string | true |  
- cluster | Specify the cluster。 | string | false | empty 
- namespace | Specify the namespace。 | string | false | empty 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ component | Specify the component name to apply。 | string | true |  |  
+ cluster | Specify the cluster。 | string | false | empty |  
+ namespace | Specify the namespace。 | string | false | empty |  
 
 
 ## Apply-Deployment
@@ -291,7 +291,7 @@ Apply deployment with specified image and cmd。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (apply-deployment)
 
@@ -323,23 +323,23 @@ spec:
 ### 参数说明 (apply-deployment)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- image |  | string | true |  
- replicas |  | int | false | 1 
- cluster |  | string | false | empty 
- cmd |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ image |  | string | true |  |  
+ replicas |  | int | false | 1 |  
+ cluster |  | string | false | empty |  
+ cmd |  | []string | false |  |  
 
 
 ## Apply-Object
 
 ### 描述
 
-在工作流中部署 Kubernetes 资源对象。
+Apply raw kubernetes objects for your workflow steps。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (apply-object)
 
@@ -392,10 +392,10 @@ spec:
 ### 参数说明 (apply-object)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- value | Kubernetes 资源对象参数。 | map[string]_ | true |  
- cluster | 需要部署的集群名称。如果不指定，则为当前集群。 | string | false | empty 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ value | Specify Kubernetes native resource object to be applied。 | map[string]_ | true |  |  
+ cluster | The cluster you want to apply the resource to, default is the current control plane cluster。 | string | false | empty |  
 
 
 ## Apply-Terraform-Config
@@ -406,7 +406,7 @@ Apply terraform configuration in the step。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (apply-terraform-config)
 
@@ -461,47 +461,47 @@ spec:
 ### 参数说明 (apply-terraform-config)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- source | specify the source of the terraform configuration。 | [type-option-1](#type-option-1-apply-terraform-config) or [type-option-2](#type-option-2-apply-terraform-config) | true |  
- deleteResource | whether to delete resource。 | bool | false | true 
- variable | the variable in the configuration。 | map[string]_ | true |  
- writeConnectionSecretToRef | this specifies the namespace and name of a secret to which any connection details for this managed resource should be written。 | [writeConnectionSecretToRef](#writeconnectionsecrettoref-apply-terraform-config) | false |  
- providerRef | providerRef specifies the reference to Provider。 | [providerRef](#providerref-apply-terraform-config) | false |  
- region | region is cloud provider's region. It will override the region in the region field of providerRef。 | string | false |  
- jobEnv | the envs for job。 | map[string]_ | false |  
- forceDelete | forceDelete will force delete Configuration no matter which state it is or whether it has provisioned some resources。 | bool | false | false 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ source | specify the source of the terraform configuration。 | [type-option-1](#type-option-1-apply-terraform-config) or [type-option-2](#type-option-2-apply-terraform-config) | true |  |  
+ deleteResource | whether to delete resource。 | bool | false | true |  
+ variable | the variable in the configuration。 | map[string]_ | true |  |  
+ writeConnectionSecretToRef | this specifies the namespace and name of a secret to which any connection details for this managed resource should be written。 | [writeConnectionSecretToRef](#writeconnectionsecrettoref-apply-terraform-config) | false |  |  
+ providerRef | providerRef specifies the reference to Provider。 | [providerRef](#providerref-apply-terraform-config) | false |  |  
+ region | region is cloud provider's region. It will override the region in the region field of providerRef。 | string | false |  |  
+ jobEnv | the envs for job。 | map[string]_ | false |  |  
+ forceDelete | forceDelete will force delete Configuration no matter which state it is or whether it has provisioned some resources。 | bool | false | false |  
 
 
 #### type-option-1 (apply-terraform-config)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- hcl | directly specify the hcl of the terraform configuration。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ hcl | directly specify the hcl of the terraform configuration。 | string | true |  |  
 
 
 #### type-option-2 (apply-terraform-config)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- remote | specify the remote url of the terraform configuration。 | string | false | https://github.com/kubevela-contrib/terraform-modules.git 
- path | specify the path of the terraform configuration。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ remote | specify the remote url of the terraform configuration。 | string | false | https://github.com/kubevela-contrib/terraform-modules.git |  
+ path | specify the path of the terraform configuration。 | string | false |  |  
 
 
 #### writeConnectionSecretToRef (apply-terraform-config)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- namespace |  | _&#124;_ | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ namespace |  | _&#124;_ | true |  |  
 
 
 #### providerRef (apply-terraform-config)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- namespace |  | _&#124;_ | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ namespace |  | _&#124;_ | true |  |  
 
 
 ## Apply-Terraform-Provider
@@ -512,7 +512,7 @@ Apply terraform provider config。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (apply-terraform-provider)
 
@@ -539,97 +539,97 @@ spec:
 ### 参数说明 (apply-terraform-provider)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
-  |  | [AlibabaProvider](#alibabaprovider-apply-terraform-provider) or [AWSProvider](#awsprovider-apply-terraform-provider) or [AzureProvider](#azureprovider-apply-terraform-provider) or [BaiduProvider](#baiduprovider-apply-terraform-provider) or [ECProvider](#ecprovider-apply-terraform-provider) or [GCPProvider](#gcpprovider-apply-terraform-provider) or [TencentProvider](#tencentprovider-apply-terraform-provider) or [UCloudProvider](#ucloudprovider-apply-terraform-provider) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+  |  | [AlibabaProvider](#alibabaprovider-apply-terraform-provider) or [AWSProvider](#awsprovider-apply-terraform-provider) or [AzureProvider](#azureprovider-apply-terraform-provider) or [BaiduProvider](#baiduprovider-apply-terraform-provider) or [ECProvider](#ecprovider-apply-terraform-provider) or [GCPProvider](#gcpprovider-apply-terraform-provider) or [TencentProvider](#tencentprovider-apply-terraform-provider) or [UCloudProvider](#ucloudprovider-apply-terraform-provider) | false |  |  
 
 
 #### AlibabaProvider (apply-terraform-provider)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- accessKey |  | string | true |  
- secretKey |  | string | true |  
- name |  | string | false | alibaba-provider 
- region |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ accessKey |  | string | true |  |  
+ secretKey |  | string | true |  |  
+ region |  | string | true |  |  
+ type |  | string | true |  |  
+ name |  | string | false | alibaba-provider |  
 
 
 #### AWSProvider (apply-terraform-provider)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- token |  | string | false | empty 
- type |  | string | true |  
- accessKey |  | string | true |  
- secretKey |  | string | true |  
- name |  | string | false | aws-provider 
- region |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ accessKey |  | string | true |  |  
+ secretKey |  | string | true |  |  
+ region |  | string | true |  |  
+ token |  | string | false | empty |  
+ type |  | string | true |  |  
+ name |  | string | false | aws-provider |  
 
 
 #### AzureProvider (apply-terraform-provider)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- subscriptionID |  | string | true |  
- tenantID |  | string | true |  
- clientID |  | string | true |  
- clientSecret |  | string | true |  
- name |  | string | false | azure-provider 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ subscriptionID |  | string | true |  |  
+ tenantID |  | string | true |  |  
+ clientID |  | string | true |  |  
+ clientSecret |  | string | true |  |  
+ name |  | string | false | azure-provider |  
 
 
 #### BaiduProvider (apply-terraform-provider)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- accessKey |  | string | true |  
- secretKey |  | string | true |  
- name |  | string | false | baidu-provider 
- region |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ accessKey |  | string | true |  |  
+ secretKey |  | string | true |  |  
+ region |  | string | true |  |  
+ type |  | string | true |  |  
+ name |  | string | false | baidu-provider |  
 
 
 #### ECProvider (apply-terraform-provider)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- apiKey |  | string | false | empty 
- name |  | string | false | ec-provider 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ apiKey |  | string | false | empty |  
+ name |  | string | false | ec-provider |  
 
 
 #### GCPProvider (apply-terraform-provider)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- credentials |  | string | true |  
- region |  | string | true |  
- project |  | string | true |  
- type |  | string | true |  
- name |  | string | false | gcp-provider 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ credentials |  | string | true |  |  
+ region |  | string | true |  |  
+ project |  | string | true |  |  
+ type |  | string | true |  |  
+ name |  | string | false | gcp-provider |  
 
 
 #### TencentProvider (apply-terraform-provider)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- secretID |  | string | true |  
- secretKey |  | string | true |  
- region |  | string | true |  
- type |  | string | true |  
- name |  | string | false | tencent-provider 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ secretID |  | string | true |  |  
+ secretKey |  | string | true |  |  
+ region |  | string | true |  |  
+ type |  | string | true |  |  
+ name |  | string | false | tencent-provider |  
 
 
 #### UCloudProvider (apply-terraform-provider)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- publicKey |  | string | true |  
- privateKey |  | string | true |  
- projectID |  | string | true |  
- region |  | string | true |  
- type |  | string | true |  
- name |  | string | false | ucloud-provider 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ publicKey |  | string | true |  |  
+ privateKey |  | string | true |  |  
+ projectID |  | string | true |  |  
+ region |  | string | true |  |  
+ type |  | string | true |  |  
+ name |  | string | false | ucloud-provider |  
 
 
 ## Build-Push-Image
@@ -640,7 +640,7 @@ Build and push image from git url。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (build-push-image)
 
@@ -702,40 +702,40 @@ spec:
 ### 参数说明 (build-push-image)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- kanikoExecutor | Specify the kaniko executor image, default to oamdev/kaniko-executor:v1.9.1。 | string | false | oamdev/kaniko-executor:v1.9.1 
- context | Specify the context to build image, you can use context with git and branch or directly specify the context, please refer to https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts。 | string | true |  
- dockerfile | Specify the dockerfile。 | string | false | ./Dockerfile 
- image | Specify the image。 | string | true |  
- platform | Specify the platform to build。 | string | false |  
- buildArgs | Specify the build args。 | []string | false |  
- credentials | Specify the credentials to access git and image registry。 | [credentials](#credentials-build-push-image) | false |  
- verbosity | Specify the verbosity level。 | "info" or "panic" or "fatal" or "error" or "warn" or "debug" or "trace" | false | info 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ kanikoExecutor | Specify the kaniko executor image, default to oamdev/kaniko-executor:v1.9.1。 | string | false | oamdev/kaniko-executor:v1.9.1 |  
+ context | Specify the context to build image, you can use context with git and branch or directly specify the context, please refer to https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts。 | string | true |  |  
+ dockerfile | Specify the dockerfile。 | string | false | ./Dockerfile |  
+ image | Specify the image。 | string | true |  |  
+ platform | Specify the platform to build。 | string | false |  |  
+ buildArgs | Specify the build args。 | []string | false |  |  
+ credentials | Specify the credentials to access git and image registry。 | [credentials](#credentials-build-push-image) | false |  |  
+ verbosity | Specify the verbosity level。 | "info" or "panic" or "fatal" or "error" or "warn" or "debug" or "trace" | false | info |  
 
 
 #### credentials (build-push-image)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- git | Specify the credentials to access git。 | [git](#git-build-push-image) | false |  
- image | Specify the credentials to access image registry。 | [image](#image-build-push-image) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ git | Specify the credentials to access git。 | [git](#git-build-push-image) | false |  |  
+ image | Specify the credentials to access image registry。 | [image](#image-build-push-image) | false |  |  
 
 
 ##### git (build-push-image)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Specify the secret name。 | string | true |  
- key | Specify the secret key。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify the secret name。 | string | true |  |  
+ key | Specify the secret key。 | string | true |  |  
 
 
 ##### image (build-push-image)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Specify the secret name。 | string | true |  
- key | Specify the secret key。 | string | false | .dockerconfigjson 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify the secret name。 | string | true |  |  
+ key | Specify the secret key。 | string | false | .dockerconfigjson |  
 
 
 ## Chat-Gpt
@@ -746,7 +746,7 @@ Send request to chat-gpt。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (chat-gpt)
 
@@ -805,43 +805,43 @@ spec:
 ### 参数说明 (chat-gpt)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- token |  | [type-option-1](#type-option-1-chat-gpt) or [type-option-2](#type-option-2-chat-gpt) | true |  
- model | the model name。 | string | false | gpt-3.5-turbo 
- prompt | the prompt to use。 | [prompt](#prompt-chat-gpt) | true |  
- timeout |  | string | false | 30s 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ token |  | [type-option-1](#type-option-1-chat-gpt) or [type-option-2](#type-option-2-chat-gpt) | true |  |  
+ model | the model name。 | string | false | gpt-3.5-turbo |  
+ prompt | the prompt to use。 | [prompt](#prompt-chat-gpt) | true |  |  
+ timeout |  | string | false | 30s |  
 
 
 #### type-option-1 (chat-gpt)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- value | the token value。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ value | the token value。 | string | true |  |  
 
 
 #### type-option-2 (chat-gpt)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- secretRef |  | [secretRef](#secretref-chat-gpt) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ secretRef |  | [secretRef](#secretref-chat-gpt) | true |  |  
 
 
 ##### secretRef (chat-gpt)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Kubernetes Secret 名称。 | string | true |  
- key | key is the token key in the secret。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | name is the name of the secret。 | string | true |  |  
+ key | key is the token key in the secret。 | string | true |  |  
 
 
 #### prompt (chat-gpt)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | "custom" or "diagnose" or "audit" or "quality-gate" | false | custom 
- lang |  | "English" or "Chinese" | false | English 
- content |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | "custom" or "diagnose" or "audit" or "quality-gate" | false | custom |  
+ lang |  | "English" or "Chinese" | false | English |  
+ content |  | string | true |  |  
 
 
 ## Check-Metrics
@@ -852,7 +852,7 @@ Verify application's metrics。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (check-metrics)
 
@@ -895,13 +895,13 @@ spec:
 ### 参数说明 (check-metrics)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- query | Query is a raw prometheus query to perform。 | string | true |  
- metricEndpoint | The HTTP address and port of the prometheus server。 | string | false |  
- condition | Condition is an expression which determines if a measurement is considered successful. eg: >=0.95。 | string | true |  
- duration | Duration defines the duration of time required for this step to be considered successful。 | string | false | 5m 
- failDuration | FailDuration is the duration of time that, if the check fails, will result in the step being marked as failed。 | string | false | 2m 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ query | Query is a raw prometheus query to perform。 | string | true |  |  
+ metricEndpoint | The HTTP address and port of the prometheus server。 | string | false |  |  
+ condition | Condition is an expression which determines if a measurement is considered successful. eg: >=0.95。 | string | true |  |  
+ duration | Duration defines the duration of time required for this step to be considered successful。 | string | false | 5m |  
+ failDuration | FailDuration is the duration of time that, if the check fails, will result in the step being marked as failed。 | string | false | 2m |  
 
 
 ## Clean-Jobs
@@ -912,7 +912,7 @@ clean applied jobs in the cluster。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (clean-jobs)
 
@@ -936,10 +936,10 @@ spec:
 ### 参数说明 (clean-jobs)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- labelselector |  | map[string]_ | false |  
- namespace |  | _&#124;_ | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ labelselector |  | map[string]_ | false |  |  
+ namespace |  | _&#124;_ | true |  |  
 
 
 ## Collect-Service-Endpoints
@@ -950,7 +950,7 @@ Collect service endpoints for the application。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (collect-service-endpoints)
 
@@ -1004,7 +1004,18 @@ spec:
 ```
 
 ### 参数说明 (collect-service-endpoints)
-This capability has no arguments.
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify the name of the application。 | string | true |  |  
+ namespace | Specify the namespace of the application。 | _&#124;_ | true |  |  
+ components | Filter the component of the endpoints。 | []string | false |  |  
+ port | Filter the port of the endpoints。 | int | false |  |  
+ portName | Filter the port name of the endpoints。 | string | false |  |  
+ outer | Filter the endpoint that are only outer。 | bool | false |  |  
+ protocal | The protocal of endpoint url。 | "http" or "https" | false | http |  
+
 
 ## Create-Config
 
@@ -1014,7 +1025,7 @@ Create or update a config。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (create-config)
 
@@ -1054,12 +1065,12 @@ spec:
 ### 参数说明 (create-config)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Specify the name of the config。 | string | true |  
- namespace | Specify the namespace of the config。 | string | false |  
- template | Specify the template of the config。 | string | false |  
- config | Specify the content of the config。 | map[string]_ | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify the name of the config。 | string | true |  |  
+ namespace | Specify the namespace of the config。 | _&#124;_ | true |  |  
+ template | Specify the template of the config。 | string | false |  |  
+ config | Specify the content of the config。 | map[string]_ | true |  |  
 
 
 ## Delete-Config
@@ -1070,7 +1081,7 @@ Delete a config。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (delete-config)
 
@@ -1103,21 +1114,21 @@ spec:
 ### 参数说明 (delete-config)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Specify the name of the config。 | string | true |  
- namespace | Specify the namespace of the config。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify the name of the config。 | string | true |  |  
+ namespace | Specify the namespace of the config。 | _&#124;_ | true |  |  
 
 
 ## Depends-On-App
 
 ### 描述
 
-等待指定的 Application 完成。
+Wait for the specified Application to complete。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (depends-on-app)
 
@@ -1169,21 +1180,21 @@ data:
 ### 参数说明 (depends-on-app)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | 需要等待的 Application 名称。 | string | true |  
- namespace | 需要等待的 Application 所在的命名空间。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify the name of the dependent Application。 | string | true |  |  
+ namespace | Specify the namespace of the dependent Application。 | string | true |  |  
 
 
 ## Deploy
 
 ### 描述
 
-功能丰富且统一的用于多集群部署的步骤，可以指定多集群差异化配置策略。
+A powerful and unified deploy step for components multi-cluster delivery with policies。
 
 ### 适用范围
 
-该步骤类型只适用于 Application。
+This step type is only valid in Application。
 
 ### 示例 (deploy)
 
@@ -1227,23 +1238,23 @@ spec:
 ### 参数说明 (deploy)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- auto | 默认为 true。如果为 false，工作流将在执行该步骤前自动暂停。。 | bool | false | true 
- policies | 指定本次部署要使用的策略。如果不指定策略，将自动部署到管控集群。 | []string | true |  
- parallelism | 指定本次部署的并发度。 | int | false | 5 
- ignoreTerraformComponent | 部署时忽略 Terraform 的组件，默认忽略，Terraform 仅需要在管控集群操作云资源，不需要管控信息下发到多集群。 | bool | false | true 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ auto | If set to false, the workflow will suspend automatically before this step, default to be true。 | bool | false | true |  
+ policies | Declare the policies that used for this deployment. If not specified, the components will be deployed to the hub cluster。 | list | true |  |  
+ parallelism | Maximum number of concurrent delivered components。 | int | false | 5 |  
+ ignoreTerraformComponent | If set false, this step will apply the components with the terraform workload。 | bool | false | true |  
 
 
 ## Deploy-Cloud-Resource
 
 ### 描述
 
-将云资源生成的秘钥部署到多集群。
+Deploy cloud resource and deliver secret to multi clusters。
 
 ### 适用范围
 
-该步骤类型只适用于 Application。
+This step type is only valid in Application。
 
 ### 示例 (deploy-cloud-resource)
 
@@ -1331,10 +1342,10 @@ spec:
 ### 参数说明 (deploy-cloud-resource)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- policy | Declare the name of the env-binding policy, if empty, the first env-binding policy will be used。 | string | false | empty 
- env | 指定多集群策略中定义的环境名称。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ policy | Declare the name of the env-binding policy, if empty, the first env-binding policy will be used。 | string | false | empty |  
+ env | Declare the name of the env in policy。 | string | true |  |  
 
 
 ## Export-Data
@@ -1345,7 +1356,7 @@ Export data to clusters specified by topology。
 
 ### 适用范围
 
-该步骤类型只适用于 Application。
+This step type is only valid in Application。
 
 ### 示例 (export-data)
 
@@ -1401,13 +1412,13 @@ spec:
 ### 参数说明 (export-data)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Specify the name of the export destination。 | string | false |  
- namespace | Specify the namespace of the export destination。 | string | false |  
- kind | Specify the kind of the export destination。 | "ConfigMap" or "Secret" | false | ConfigMap 
- data | Specify the data to export。 | struct | true |  
- topology | Specify the topology to export。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify the name of the export destination。 | string | false |  |  
+ namespace | Specify the namespace of the export destination。 | string | false |  |  
+ kind | Specify the kind of the export destination。 | "ConfigMap" or "Secret" | false | ConfigMap |  
+ data | Specify the data to export。 | struct | true |  |  
+ topology | Specify the topology to export。 | string | false |  |  
 
 
 ## Export-Service
@@ -1418,7 +1429,7 @@ Export service to clusters specified by topology。
 
 ### 适用范围
 
-该步骤类型只适用于 Application。
+This step type is only valid in Application。
 
 ### 示例 (export-service)
 
@@ -1479,25 +1490,25 @@ spec:
 ### 参数说明 (export-service)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Specify the name of the export destination。 | string | false |  
- namespace | Specify the namespace of the export destination。 | string | false |  
- ip | Specify the ip to be export。 | string | true |  
- port | Specify the port to be used in service。 | int | true |  
- targetPort | Specify the port to be export。 | int | true |  
- topology | Specify the topology to export。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify the name of the export destination。 | string | false |  |  
+ namespace | Specify the namespace of the export destination。 | string | false |  |  
+ ip | Specify the ip to be export。 | string | true |  |  
+ port | Specify the port to be used in service。 | int | true |  |  
+ targetPort | Specify the port to be export。 | int | true |  |  
+ topology | Specify the topology to export。 | string | false |  |  
 
 
 ## Export2config
 
 ### 描述
 
-在工作流中导出数据到 Kubernetes ConfigMap 对象。
+Export data to specified Kubernetes ConfigMap in your workflow。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (export2config)
 
@@ -1539,23 +1550,23 @@ spec:
 ### 参数说明 (export2config)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- configName | ConfigMap 的名称。 | string | true |  
- namespace | ConfigMap 的 namespace，默认为当前应用的 namespace。 | string | false |  
- data | 需要导出到 ConfigMap 中的数据，是一个 key-value 的 map。 | struct | true |  
- cluster | 要导出到的集群名称。 | string | false | empty 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ configName | Specify the name of the config map。 | string | true |  |  
+ namespace | Specify the namespace of the config map。 | string | false |  |  
+ data | Specify the data of config map。 | struct | true |  |  
+ cluster | Specify the cluster of the config map。 | string | false | empty |  
 
 
 ## Export2secret
 
 ### 描述
 
-在工作流中导出数据到 Kubernetes Secret 对象。
+Export data to Kubernetes Secret in your workflow。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (export2secret)
 
@@ -1597,24 +1608,24 @@ spec:
 ### 参数说明 (export2secret)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- secretName | Secret 的名称。 | string | true |  
- namespace | secret 的 namespace，默认为当前应用的 namespace。 | string | false |  
- type | 指定导出的 secret 类型。 | string | false |  
- data | 需要导出到 Secret 中的数据。 | struct | true |  
- cluster | 要导出到的集群名称。 | string | false | empty 
- kind | Specify the kind of the secret。 | "generic" or "docker-registry" | false | generic 
- dockerRegistry | Specify the docker data。 | [dockerRegistry](#dockerregistry-export2secret) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ secretName | Specify the name of the secret。 | string | true |  |  
+ namespace | Specify the namespace of the secret。 | string | false |  |  
+ type | Specify the type of the secret。 | string | false |  |  
+ data | Specify the data of secret。 | struct | true |  |  
+ cluster | Specify the cluster of the secret。 | string | false | empty |  
+ kind | Specify the kind of the secret。 | "generic" or "docker-registry" | false | generic |  
+ dockerRegistry | Specify the docker data。 | [dockerRegistry](#dockerregistry-export2secret) | false |  |  
 
 
 #### dockerRegistry (export2secret)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- username | Specify the username of the docker registry。 | string | true |  
- password | Specify the password of the docker registry。 | string | true |  
- server | Specify the server of the docker registry。 | string | false | https://index.docker.io/v1/ 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ username | Specify the username of the docker registry。 | string | true |  |  
+ password | Specify the password of the docker registry。 | string | true |  |  
+ server | Specify the server of the docker registry。 | string | false | https://index.docker.io/v1/ |  
 
 
 ## Generate-Jdbc-Connection
@@ -1625,7 +1636,7 @@ Generate a JDBC connection based on Component of alibaba-rds。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (generate-jdbc-connection)
 
@@ -1675,10 +1686,10 @@ spec:
 ### 参数说明 (generate-jdbc-connection)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Specify the name of the secret generated by database component。 | string | true |  
- namespace | Specify the namespace of the secret generated by database component。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify the name of the secret generated by database component。 | string | true |  |  
+ namespace | Specify the namespace of the secret generated by database component。 | string | false |  |  
 
 
 ## List-Config
@@ -1689,7 +1700,7 @@ List the configs。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (list-config)
 
@@ -1747,21 +1758,21 @@ spec:
 ### 参数说明 (list-config)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- template | Specify the template of the config。 | string | true |  
- namespace | Specify the namespace of the config。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ template | Specify the template of the config。 | string | true |  |  
+ namespace | Specify the namespace of the config。 | _&#124;_ | true |  |  
 
 
 ## Notification
 
 ### 描述
 
-向指定的 Webhook 发送信息，支持邮件、钉钉、Slack 和飞书。
+Send notifications to Email, DingTalk, Slack, Lark or webhook in your workflow。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (notification)
 
@@ -1842,671 +1853,671 @@ We can see that before and after the deployment of the application, the messages
 ### 参数说明 (notification)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- lark | 发送飞书信息。 | [lark](#lark-notification) | false |  
- dingding | 发送钉钉信息。 | [dingding](#dingding-notification) | false |  
- slack | 发送 Slack 信息。 | [slack](#slack-notification) | false |  
- email | 发送邮件通知。 | [email](#email-notification) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ lark | Please fulfill its url and message if you want to send Lark messages。 | [lark](#lark-notification) | false |  |  
+ dingding | Please fulfill its url and message if you want to send DingTalk messages。 | [dingding](#dingding-notification) | false |  |  
+ slack | Please fulfill its url and message if you want to send Slack messages。 | [slack](#slack-notification) | false |  |  
+ email | Please fulfill its from, to and content if you want to send email。 | [email](#email-notification) | false |  |  
 
 
 #### lark (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- url | Specify the the lark url, you can either sepcify it in value or use secretRef。 | [type-option-1](#type-option-1-notification) or [type-option-2](#type-option-2-notification) | true |  
- message | Specify the message that you want to sent, refer to [Lark messaging](https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN#8b0f2a1b)。 | [message](#message-notification) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ url | Specify the the lark url, you can either sepcify it in value or use secretRef。 | [type-option-1](#type-option-1-notification) or [type-option-2](#type-option-2-notification) | true |  |  
+ message | Specify the message that you want to sent, refer to [Lark messaging](https://open.feishu.cn/document/ukTMukTMukTM/ucTM5YjL3ETO24yNxkjN#8b0f2a1b)。 | [message](#message-notification) | true |  |  
 
 
 ##### type-option-1 (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- value | the url address content in string。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ value | the url address content in string。 | string | true |  |  
 
 
 ##### type-option-2 (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- secretRef |  | [secretRef](#secretref-notification) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ secretRef |  | [secretRef](#secretref-notification) | true |  |  
 
 
 ##### secretRef (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Kubernetes Secret 名称。 | string | true |  
- key | Kubernetes Secret 中的 key。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | name is the name of the secret。 | string | true |  |  
+ key | key is the key in the secret。 | string | true |  |  
 
 
 ##### message (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- msg_type | msg_type can be text, post, image, interactive, share_chat, share_user, audio, media, file, sticker。 | string | true |  
- content | content should be json encode string。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ msg_type | msg_type can be text, post, image, interactive, share_chat, share_user, audio, media, file, sticker。 | string | true |  |  
+ content | content should be json encode string。 | string | true |  |  
 
 
 #### dingding (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- url | Specify the the dingding url, you can either sepcify it in value or use secretRef。 | [type-option-1](#type-option-1-notification) or [type-option-2](#type-option-2-notification) | true |  
- message | Specify the message that you want to sent, refer to [dingtalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw)。 | [message](#message-notification) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ url | Specify the the dingding url, you can either sepcify it in value or use secretRef。 | [type-option-1](#type-option-1-notification) or [type-option-2](#type-option-2-notification) | true |  |  
+ message | Specify the message that you want to sent, refer to [dingtalk messaging](https://developers.dingtalk.com/document/robots/custom-robot-access/title-72m-8ag-pqw)。 | [message](#message-notification) | true |  |  
 
 
 ##### type-option-1 (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- value | the url address content in string。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ value | the url address content in string。 | string | true |  |  
 
 
 ##### type-option-2 (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- secretRef |  | [secretRef](#secretref-notification) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ secretRef |  | [secretRef](#secretref-notification) | true |  |  
 
 
 ##### secretRef (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Kubernetes Secret 名称。 | string | true |  
- key | Kubernetes Secret 中的 key。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | name is the name of the secret。 | string | true |  |  
+ key | key is the key in the secret。 | string | true |  |  
 
 
 ##### message (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- text | Specify the message content of dingtalk notification。 | [text](#text-notification) | false |  
- msgtype | msgType can be text, link, mardown, actionCard, feedCard。 | "text" or "link" or "markdown" or "actionCard" or "feedCard" | false | text 
- link |  | [link](#link-notification) | false |  
- markdown |  | [markdown](#markdown-notification) | false |  
- at |  | [at](#at-notification) | false |  
- actionCard |  | [actionCard](#actioncard-notification) | false |  
- feedCard |  | [feedCard](#feedcard-notification) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ text | Specify the message content of dingtalk notification。 | [text](#text-notification) | false |  |  
+ msgtype | msgType can be text, link, mardown, actionCard, feedCard。 | "text" or "link" or "markdown" or "actionCard" or "feedCard" | false | text |  
+ link |  | [link](#link-notification) | false |  |  
+ markdown |  | [markdown](#markdown-notification) | false |  |  
+ at |  | [at](#at-notification) | false |  |  
+ actionCard |  | [actionCard](#actioncard-notification) | false |  |  
+ feedCard |  | [feedCard](#feedcard-notification) | false |  |  
 
 
 ##### text (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- content |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ content |  | string | true |  |  
 
 
 ##### link (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- text |  | string | false |  
- title |  | string | false |  
- messageUrl |  | string | false |  
- picUrl |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ text |  | string | false |  |  
+ title |  | string | false |  |  
+ messageUrl |  | string | false |  |  
+ picUrl |  | string | false |  |  
 
 
 ##### markdown (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- text |  | string | true |  
- title |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ text |  | string | true |  |  
+ title |  | string | true |  |  
 
 
 ##### at (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- atMobiles |  | []string | false |  
- isAtAll |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ atMobiles |  | []string | false |  |  
+ isAtAll |  | bool | false |  |  
 
 
 ##### actionCard (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- text |  | string | true |  
- title |  | string | true |  
- hideAvatar |  | string | true |  
- btnOrientation |  | string | true |  
- singleTitle |  | string | true |  
- singleURL |  | string | true |  
- btns |  | [[]btns](#btns-notification) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ text |  | string | true |  |  
+ title |  | string | true |  |  
+ hideAvatar |  | string | true |  |  
+ btnOrientation |  | string | true |  |  
+ singleTitle |  | string | true |  |  
+ singleURL |  | string | true |  |  
+ btns |  | [[]btns](#btns-notification) | false |  |  
 
 
 ##### btns (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- title |  | string | true |  
- actionURL |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ title |  | string | true |  |  
+ actionURL |  | string | true |  |  
 
 
 ##### feedCard (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- links |  | [[]links](#links-notification) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ links |  | [[]links](#links-notification) | true |  |  
 
 
 ##### links (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- text |  | string | false |  
- title |  | string | false |  
- messageUrl |  | string | false |  
- picUrl |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ text |  | string | false |  |  
+ title |  | string | false |  |  
+ messageUrl |  | string | false |  |  
+ picUrl |  | string | false |  |  
 
 
 #### slack (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- url | Slack 的 Webhook 地址，可以选择直接在 value 填写或从 secretRef 中获取。 | [type-option-1](#type-option-1-notification) or [type-option-2](#type-option-2-notification) | true |  
- message | Specify the message that you want to sent, refer to [slack messaging](https://api.slack.com/reference/messaging/payload)。 | [message](#message-notification) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ url | Specify the the slack url, you can either sepcify it in value or use secretRef。 | [type-option-1](#type-option-1-notification) or [type-option-2](#type-option-2-notification) | true |  |  
+ message | Specify the message that you want to sent, refer to [slack messaging](https://api.slack.com/reference/messaging/payload)。 | [message](#message-notification) | true |  |  
 
 
 ##### type-option-1 (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- value | the url address content in string。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ value | the url address content in string。 | string | true |  |  
 
 
 ##### type-option-2 (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- secretRef |  | [secretRef](#secretref-notification) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ secretRef |  | [secretRef](#secretref-notification) | true |  |  
 
 
 ##### secretRef (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Kubernetes Secret 名称。 | string | true |  
- key | Kubernetes Secret 中的 key。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | name is the name of the secret。 | string | true |  |  
+ key | key is the key in the secret。 | string | true |  |  
 
 
 ##### message (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- text | Specify the message text for slack notification。 | string | true |  
- blocks |  | [[]blocks](#blocks-notification) | false |  
- attachments |  | [attachments](#attachments-notification) | false |  
- thread_ts |  | string | false |  
- mrkdwn | Specify the message text format in markdown for slack notification。 | bool | false | true 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ text | Specify the message text for slack notification。 | string | true |  |  
+ blocks |  | [[]blocks](#blocks-notification) | false |  |  
+ attachments |  | [attachments](#attachments-notification) | false |  |  
+ thread_ts |  | string | false |  |  
+ mrkdwn | Specify the message text format in markdown for slack notification。 | bool | false | true |  
 
 
 ##### blocks (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- block_id |  | string | false |  
- elements |  | [[]elements](#elements-notification) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ block_id |  | string | false |  |  
+ elements |  | [[]elements](#elements-notification) | false |  |  
 
 
 ##### elements (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- action_id |  | string | false |  
- url |  | string | false |  
- value |  | string | false |  
- style |  | string | false |  
- text |  | [text](#text-notification) | false |  
- confirm |  | [confirm](#confirm-notification) | false |  
- options |  | [[]options](#options-notification) | false |  
- initial_options |  | [[]initial_options](#initial_options-notification) | false |  
- placeholder |  | [placeholder](#placeholder-notification) | false |  
- initial_date |  | string | false |  
- image_url |  | string | false |  
- alt_text |  | string | false |  
- option_groups |  | [[]option_groups](#option_groups-notification) | false |  
- max_selected_items |  | int | false |  
- initial_value |  | string | false |  
- multiline |  | bool | false |  
- min_length |  | int | false |  
- max_length |  | int | false |  
- dispatch_action_config |  | [dispatch_action_config](#dispatch_action_config-notification) | false |  
- initial_time |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ action_id |  | string | false |  |  
+ url |  | string | false |  |  
+ value |  | string | false |  |  
+ style |  | string | false |  |  
+ text |  | [text](#text-notification) | false |  |  
+ confirm |  | [confirm](#confirm-notification) | false |  |  
+ options |  | [[]options](#options-notification) | false |  |  
+ initial_options |  | [[]initial_options](#initial_options-notification) | false |  |  
+ placeholder |  | [placeholder](#placeholder-notification) | false |  |  
+ initial_date |  | string | false |  |  
+ image_url |  | string | false |  |  
+ alt_text |  | string | false |  |  
+ option_groups |  | [[]option_groups](#option_groups-notification) | false |  |  
+ max_selected_items |  | int | false |  |  
+ initial_value |  | string | false |  |  
+ multiline |  | bool | false |  |  
+ min_length |  | int | false |  |  
+ max_length |  | int | false |  |  
+ dispatch_action_config |  | [dispatch_action_config](#dispatch_action_config-notification) | false |  |  
+ initial_time |  | string | false |  |  
 
 
 ##### text (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### confirm (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- title |  | [title](#title-notification) | true |  
- text |  | [text](#text-notification) | true |  
- confirm |  | [confirm](#confirm-notification) | true |  
- deny |  | [deny](#deny-notification) | true |  
- style |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ title |  | [title](#title-notification) | true |  |  
+ text |  | [text](#text-notification) | true |  |  
+ confirm |  | [confirm](#confirm-notification) | true |  |  
+ deny |  | [deny](#deny-notification) | true |  |  
+ style |  | string | false |  |  
 
 
 ##### title (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### text (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### confirm (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### deny (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### options (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- text |  | [text](#text-notification) | true |  
- value |  | string | true |  
- description |  | [description](#description-notification) | false |  
- url |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ text |  | [text](#text-notification) | true |  |  
+ value |  | string | true |  |  
+ description |  | [description](#description-notification) | false |  |  
+ url |  | string | false |  |  
 
 
 ##### text (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### description (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### initial_options (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- text |  | [text](#text-notification) | true |  
- value |  | string | true |  
- description |  | [description](#description-notification) | false |  
- url |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ text |  | [text](#text-notification) | true |  |  
+ value |  | string | true |  |  
+ description |  | [description](#description-notification) | false |  |  
+ url |  | string | false |  |  
 
 
 ##### text (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### description (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### placeholder (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### option_groups (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- text |  | [text](#text-notification) | true |  
- value |  | string | true |  
- description |  | [description](#description-notification) | false |  
- url |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ text |  | [text](#text-notification) | true |  |  
+ value |  | string | true |  |  
+ description |  | [description](#description-notification) | false |  |  
+ url |  | string | false |  |  
 
 
 ##### text (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### description (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### dispatch_action_config (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- trigger_actions_on |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ trigger_actions_on |  | []string | false |  |  
 
 
 ##### attachments (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- blocks |  | [[]blocks](#blocks-notification) | false |  
- color |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ blocks |  | [[]blocks](#blocks-notification) | false |  |  
+ color |  | string | false |  |  
 
 
 ##### blocks (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- block_id |  | string | false |  
- elements |  | [[]elements](#elements-notification) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ block_id |  | string | false |  |  
+ elements |  | [[]elements](#elements-notification) | false |  |  
 
 
 ##### elements (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- action_id |  | string | false |  
- url |  | string | false |  
- value |  | string | false |  
- style |  | string | false |  
- text |  | [text](#text-notification) | false |  
- confirm |  | [confirm](#confirm-notification) | false |  
- options |  | [[]options](#options-notification) | false |  
- initial_options |  | [[]initial_options](#initial_options-notification) | false |  
- placeholder |  | [placeholder](#placeholder-notification) | false |  
- initial_date |  | string | false |  
- image_url |  | string | false |  
- alt_text |  | string | false |  
- option_groups |  | [[]option_groups](#option_groups-notification) | false |  
- max_selected_items |  | int | false |  
- initial_value |  | string | false |  
- multiline |  | bool | false |  
- min_length |  | int | false |  
- max_length |  | int | false |  
- dispatch_action_config |  | [dispatch_action_config](#dispatch_action_config-notification) | false |  
- initial_time |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ action_id |  | string | false |  |  
+ url |  | string | false |  |  
+ value |  | string | false |  |  
+ style |  | string | false |  |  
+ text |  | [text](#text-notification) | false |  |  
+ confirm |  | [confirm](#confirm-notification) | false |  |  
+ options |  | [[]options](#options-notification) | false |  |  
+ initial_options |  | [[]initial_options](#initial_options-notification) | false |  |  
+ placeholder |  | [placeholder](#placeholder-notification) | false |  |  
+ initial_date |  | string | false |  |  
+ image_url |  | string | false |  |  
+ alt_text |  | string | false |  |  
+ option_groups |  | [[]option_groups](#option_groups-notification) | false |  |  
+ max_selected_items |  | int | false |  |  
+ initial_value |  | string | false |  |  
+ multiline |  | bool | false |  |  
+ min_length |  | int | false |  |  
+ max_length |  | int | false |  |  
+ dispatch_action_config |  | [dispatch_action_config](#dispatch_action_config-notification) | false |  |  
+ initial_time |  | string | false |  |  
 
 
 ##### text (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### confirm (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- title |  | [title](#title-notification) | true |  
- text |  | [text](#text-notification) | true |  
- confirm |  | [confirm](#confirm-notification) | true |  
- deny |  | [deny](#deny-notification) | true |  
- style |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ title |  | [title](#title-notification) | true |  |  
+ text |  | [text](#text-notification) | true |  |  
+ confirm |  | [confirm](#confirm-notification) | true |  |  
+ deny |  | [deny](#deny-notification) | true |  |  
+ style |  | string | false |  |  
 
 
 ##### title (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### text (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### confirm (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### deny (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### options (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- text |  | [text](#text-notification) | true |  
- value |  | string | true |  
- description |  | [description](#description-notification) | false |  
- url |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ text |  | [text](#text-notification) | true |  |  
+ value |  | string | true |  |  
+ description |  | [description](#description-notification) | false |  |  
+ url |  | string | false |  |  
 
 
 ##### text (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### description (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### initial_options (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- text |  | [text](#text-notification) | true |  
- value |  | string | true |  
- description |  | [description](#description-notification) | false |  
- url |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ text |  | [text](#text-notification) | true |  |  
+ value |  | string | true |  |  
+ description |  | [description](#description-notification) | false |  |  
+ url |  | string | false |  |  
 
 
 ##### text (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### description (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### placeholder (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### option_groups (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- text |  | [text](#text-notification) | true |  
- value |  | string | true |  
- description |  | [description](#description-notification) | false |  
- url |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ text |  | [text](#text-notification) | true |  |  
+ value |  | string | true |  |  
+ description |  | [description](#description-notification) | false |  |  
+ url |  | string | false |  |  
 
 
 ##### text (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### description (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type |  | string | true |  
- text |  | string | true |  
- emoji |  | bool | false |  
- verbatim |  | bool | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type |  | string | true |  |  
+ text |  | string | true |  |  
+ emoji |  | bool | false |  |  
+ verbatim |  | bool | false |  |  
 
 
 ##### dispatch_action_config (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- trigger_actions_on |  | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ trigger_actions_on |  | []string | false |  |  
 
 
 #### email (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- from | 指定邮件发送人信息。 | [from](#from-notification) | true |  
- to | 指定收件人信息。 | []string | true |  
- content | 指定邮件内容。 | [content](#content-notification) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ from | Specify the email info that you want to send from。 | [from](#from-notification) | true |  |  
+ to | Specify the email address that you want to send to。 | []string | true |  |  
+ content | Specify the content of the email。 | [content](#content-notification) | true |  |  
 
 
 ##### from (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- address | 发件人邮件地址。 | string | true |  
- alias | The alias is the email alias to show after sending the email。 | string | false |  
- password | Specify the password of the email, you can either sepcify it in value or use secretRef。 | [type-option-1](#type-option-1-notification) or [type-option-2](#type-option-2-notification) | true |  
- host | Specify the host of your email。 | string | true |  
- port | Specify the port of the email host, default to 587。 | int | false | 587 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ address | Specify the email address that you want to send from。 | string | true |  |  
+ alias | The alias is the email alias to show after sending the email。 | string | false |  |  
+ password | Specify the password of the email, you can either sepcify it in value or use secretRef。 | [type-option-1](#type-option-1-notification) or [type-option-2](#type-option-2-notification) | true |  |  
+ host | Specify the host of your email。 | string | true |  |  
+ port | Specify the port of the email host, default to 587。 | int | false | 587 |  
 
 
 ##### type-option-1 (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- value | the password content in string。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ value | the password content in string。 | string | true |  |  
 
 
 ##### type-option-2 (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- secretRef |  | [secretRef](#secretref-notification) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ secretRef |  | [secretRef](#secretref-notification) | true |  |  
 
 
 ##### secretRef (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Kubernetes Secret 名称。 | string | true |  
- key | Kubernetes Secret 中的 key。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | name is the name of the secret。 | string | true |  |  
+ key | key is the key in the secret。 | string | true |  |  
 
 
 ##### content (notification)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- subject | 指定邮件标题。 | string | true |  
- body | 指定邮件正文内容。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ subject | Specify the subject of the email。 | string | true |  |  
+ body | Specify the context body of the email。 | string | true |  |  
 
 
 ## Print-Message-In-Status
@@ -2517,7 +2528,7 @@ print message in workflow step status。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (print-message-in-status)
 
@@ -2549,9 +2560,9 @@ spec:
 ### 参数说明 (print-message-in-status)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- message |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ message |  | string | true |  |  
 
 
 ## Read-App
@@ -2562,7 +2573,7 @@ Read application from the cluster。
 
 ### 适用范围
 
-该步骤类型只适用于 WorkflowRun。
+This step type is only valid in WorkflowRun。
 
 ### 示例 (read-app)
 
@@ -2634,10 +2645,10 @@ data:
 ### 参数说明 (read-app)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- namespace |  | _&#124;_ | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ namespace |  | _&#124;_ | true |  |  
 
 
 ## Read-Config
@@ -2648,7 +2659,7 @@ Read a config。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (read-config)
 
@@ -2674,21 +2685,21 @@ spec:
 ### 参数说明 (read-config)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Specify the name of the config。 | string | true |  
- namespace | Specify the namespace of the config。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify the name of the config。 | string | true |  |  
+ namespace | Specify the namespace of the config。 | _&#124;_ | true |  |  
 
 
 ## Read-Object
 
 ### 描述
 
-在工作流中读取 Kubernetes 资源对象。
+Read Kubernetes objects from cluster for your workflow steps。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (read-object)
 
@@ -2733,13 +2744,13 @@ spec:
 ### 参数说明 (read-object)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- apiVersion | Specify the apiVersion of the object, defaults to 'core.oam.dev/v1beta1'。 | string | false |  
- kind | Specify the kind of the object, defaults to Application。 | string | false |  
- name | Specify the name of the object。 | string | true |  
- namespace | The namespace of the resource you want to read。 | string | false | default 
- cluster | 需要部署的集群名称。如果不指定，则为当前集群。 | string | false | empty 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ apiVersion | Specify the apiVersion of the object, defaults to 'core.oam.dev/v1beta1'。 | string | false | core.oam.dev/v1beta1 |  
+ kind | Specify the kind of the object, defaults to Application。 | string | false | Application |  
+ name | Specify the name of the object。 | string | true |  |  
+ namespace | The namespace of the resource you want to read。 | string | false | default |  
+ cluster | The cluster you want to apply the resource to, default is the current control plane cluster。 | string | false | empty |  
 
 
 ## Request
@@ -2750,7 +2761,7 @@ Send request to the url。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (request)
 
@@ -2796,12 +2807,116 @@ spec:
 ### 参数说明 (request)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- url |  | string | true |  
- method |  | "GET" or "POST" or "PUT" or "DELETE" | false | GET 
- body |  | map[string]_ | false |  
- header |  | map[string]string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ url |  | string | true |  |  
+ method |  | "GET" or "POST" or "PUT" or "DELETE" | false | GET |  
+ body |  | map[string]_ | false |  |  
+ header |  | map[string]string | false |  |  
+
+
+## Restart-Workflow
+
+### 描述
+
+Schedule the current Application's workflow to restart at a specific time, after a duration, or at recurring intervals。
+
+### 适用范围
+
+This step type is only valid in Application。
+
+### 示例 (restart-workflow)
+
+Schedule workflow restarts to enable periodic tasks, delayed execution, or time-based orchestration. The step uses exactly one of three timing modes: `at` for a specific timestamp, `after` for a relative delay, or `every` for recurring intervals.
+
+```yaml
+# Example 1: Fixed timestamp - restart at specific time
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: scheduled-app
+  namespace: default
+spec:
+  components:
+    - name: my-component
+      type: webservice
+      properties:
+        image: nginx:latest
+        port: 80
+  workflow:
+    steps:
+      - name: deploy
+        type: apply-component
+        properties:
+          component: my-component
+      - name: schedule-restart
+        type: restart-workflow
+        properties:
+          at: "2025-01-20T15:00:00Z"
+---
+# Example 2: Relative delay - restart after duration
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: delayed-restart-app
+  namespace: default
+spec:
+  components:
+    - name: batch-processor
+      type: webservice
+      properties:
+        image: myapp/batch-processor:v1
+        port: 8080
+  workflow:
+    steps:
+      - name: deploy
+        type: apply-component
+        properties:
+          component: batch-processor
+      - name: schedule-restart-after
+        type: restart-workflow
+        properties:
+          after: "1h"
+---
+# Example 3: Recurring - restart every interval
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: periodic-sync-app
+  namespace: default
+spec:
+  components:
+    - name: data-sync
+      type: webservice
+      properties:
+        image: myapp/data-sync:v1
+        port: 8080
+  workflow:
+    steps:
+      - name: deploy
+        type: apply-component
+        properties:
+          component: data-sync
+      - name: schedule-recurring-restart
+        type: restart-workflow
+        properties:
+          every: "24h"
+```
+
+**Use cases:**
+
+- **Periodic tasks**: Schedule recurring workflow execution for data synchronization, batch processing, or scheduled maintenance
+- **Delayed deployment**: Add a delay after initial deployment before triggering workflow restart
+- **Time-based orchestration**: Coordinate workflows to run at specific times across multiple applications
+
+### 参数说明 (restart-workflow)
+
+
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ at | Schedule restart at a specific RFC3339 timestamp (e.g., "2025-01-15T14:30:00Z")。 | string | false |  |  
+ after | Schedule restart after a relative duration from now (e.g., "5m", "1h", "2d")。 | string | false |  |  
+ every | Schedule recurring restarts every specified duration (e.g., "5m", "1h", "24h")。 | string | false |  |  
 
 
 ## Share-Cloud-Resource
@@ -2812,7 +2927,7 @@ Sync secrets created by terraform component to runtime clusters so that runtime 
 
 ### 适用范围
 
-该步骤类型只适用于 Application。
+This step type is only valid in Application。
 
 ### 示例 (share-cloud-resource)
 
@@ -2900,19 +3015,19 @@ spec:
 ### 参数说明 (share-cloud-resource)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- placements | Declare the location to bind。 | [[]placements](#placements-share-cloud-resource) | true |  
- policy | Declare the name of the env-binding policy, if empty, the first env-binding policy will be used。 | string | false | empty 
- env | 指定多集群策略中定义的环境名称。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ placements | Declare the location to bind。 | [[]placements](#placements-share-cloud-resource) | true |  |  
+ policy | Declare the name of the env-binding policy, if empty, the first env-binding policy will be used。 | string | false | empty |  
+ env | Declare the name of the env in policy。 | string | true |  |  
 
 
 #### placements (share-cloud-resource)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- namespace |  | string | false |  
- cluster |  | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ namespace |  | string | false |  |  
+ cluster |  | string | false |  |  
 
 
 ## Step-Group
@@ -2923,7 +3038,7 @@ A special step that you can declare 'subSteps' in it, 'subSteps' is an array con
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (step-group)
 
@@ -2968,11 +3083,11 @@ This capability has no arguments.
 
 ### 描述
 
-暂停当前工作流，可以通过 'vela workflow resume' 继续已暂停的工作流。
+Suspend the current workflow, it can be resumed by 'vela workflow resume' command。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (suspend)
 
@@ -3015,10 +3130,10 @@ spec:
 ### 参数说明 (suspend)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- duration | 指定工作流暂停的时长，超过该时间后工作流将自动继续，如："30s"， "1min"， "2m15s"。 | string | false |  
- message | The suspend message to show。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ duration | Specify the wait duration time to resume workflow such as "30s", "1min" or "2m15s"。 | string | false |  |  
+ message | The suspend message to show。 | string | false |  |  
 
 
 ## Vela-Cli
@@ -3029,7 +3144,7 @@ Run a vela command。
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (vela-cli)
 
@@ -3054,51 +3169,51 @@ spec:
 ### 参数说明 (vela-cli)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- command | Specify the vela command。 | []string | true |  
- image | Specify the image。 | string | false | oamdev/vela-cli:v1.6.4 
- serviceAccountName | specify serviceAccountName want to use。 | string | false | kubevela-vela-core 
- storage |  | [storage](#storage-vela-cli) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ command | Specify the vela command。 | []string | true |  |  
+ image | Specify the image。 | string | false | oamdev/vela-cli:v1.6.4 |  
+ serviceAccountName | specify serviceAccountName want to use。 | string | false | kubevela-vela-core |  
+ storage |  | [storage](#storage-vela-cli) | false |  |  
 
 
 #### storage (vela-cli)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- secret | Mount Secret type storage。 | [[]secret](#secret-vela-cli) | false |  
- hostPath | Declare host path type storage。 | [[]hostPath](#hostpath-vela-cli) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ secret | Mount Secret type storage。 | [[]secret](#secret-vela-cli) | false |  |  
+ hostPath | Declare host path type storage。 | [[]hostPath](#hostpath-vela-cli) | false |  |  
 
 
 ##### secret (vela-cli)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- mountPath |  | string | true |  
- subPath |  | string | false |  
- defaultMode |  | int | false | 420 
- secretName |  | string | true |  
- items |  | [[]items](#items-vela-cli) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ mountPath |  | string | true |  |  
+ subPath |  | string | false |  |  
+ defaultMode |  | int | false | 420 |  
+ secretName |  | string | true |  |  
+ items |  | [[]items](#items-vela-cli) | false |  |  
 
 
 ##### items (vela-cli)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- key |  | string | true |  
- path |  | string | true |  
- mode |  | int | false | 511 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ key |  | string | true |  |  
+ path |  | string | true |  |  
+ mode |  | int | false | 511 |  
 
 
 ##### hostPath (vela-cli)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name |  | string | true |  
- path |  | string | true |  
- mountPath |  | string | true |  
- type |  | "Directory" or "DirectoryOrCreate" or "FileOrCreate" or "File" or "Socket" or "CharDevice" or "BlockDevice" | false | Directory 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name |  | string | true |  |  
+ path |  | string | true |  |  
+ mountPath |  | string | true |  |  
+ type |  | "Directory" or "DirectoryOrCreate" or "FileOrCreate" or "File" or "Socket" or "CharDevice" or "BlockDevice" | false | Directory |  
 
 
 ## Webhook
@@ -3109,7 +3224,7 @@ Send a POST request to the specified Webhook URL. If no request body is specifie
 
 ### 适用范围
 
-该步骤类型适用于 Application 和 WorkflowRun。
+This step type is valid in both Application and WorkflowRun。
 
 ### 示例 (webhook)
 
@@ -3140,31 +3255,31 @@ spec:
 ### 参数说明 (webhook)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- url | 需要发送的 Webhook URL，可以选择直接在 value 填写或从 secretRef 中获取。 | [type-option-1](#type-option-1-webhook) or [type-option-2](#type-option-2-webhook) | true |  
- data | 需要发送的内容。 | map[string]_ | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ url | Specify the webhook url。 | [type-option-1](#type-option-1-webhook) or [type-option-2](#type-option-2-webhook) | true |  |  
+ data | Specify the data you want to send。 | map[string]_ | false |  |  
 
 
 #### type-option-1 (webhook)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- value |  | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ value |  | string | true |  |  
 
 
 #### type-option-2 (webhook)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- secretRef |  | [secretRef](#secretref-webhook) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ secretRef |  | [secretRef](#secretref-webhook) | true |  |  
 
 
 ##### secretRef (webhook)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | Kubernetes Secret 名称。 | string | true |  
- key | Kubernetes Secret 中的 key。 | string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | name is the name of the secret。 | string | true |  |  
+ key | key is the key in the secret。 | string | true |  |  
 
 

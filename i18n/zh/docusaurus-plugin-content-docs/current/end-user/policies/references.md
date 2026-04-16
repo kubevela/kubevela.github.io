@@ -4,13 +4,13 @@ title: 内置策略列表
 
 本文档将**按字典序**展示所有内置策略的参数列表。
 
-> 本文档由[脚本](../../contributor/cli-ref-doc.md)自动生成，请勿手动修改，上次更新于 2025-10-18T11:52:31-07:00。
+> 本文档由[脚本](../../contributor/cli-ref-doc.md)自动生成，请勿手动修改，上次更新于 2026-04-16T11:50:12+01:00。
 
 ## Apply-Once
 
 ### 描述
 
-只交付部署资源，不保证终态一致、允许配置漂移。适用于与其他控制器协作的轻量级交付场景。
+Allow configuration drift for applied resources, delivery the resource without continuously reconciliation。
 
 ### 示例 (apply-once)
 
@@ -41,45 +41,45 @@ spec:
 ### 参数说明 (apply-once)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- enable | 当设置为 true 时，表示只交付部署、不保证终态一致、允许配置漂移。 | bool | false | false 
- rules | 指定交付一次的资源规则。 | [[]rules](#rules-apply-once) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ enable | Whether to enable apply-once for the whole application。 | bool | false | false |  
+ rules | Specify the rules for configuring apply-once policy in resource level。 | [[]rules](#rules-apply-once) | false |  |  
 
 
 #### rules (apply-once)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- selector | 指定资源筛选目标规则。 | [selector](#selector-apply-once) | false |  
- strategy | Specify the strategy for configuring the resource level configuration drift behaviour。 | [strategy](#strategy-apply-once) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ selector | Specify how to select the targets of the rule。 | [selector](#selector-apply-once) | false |  |  
+ strategy | Specify the strategy for configuring the resource level configuration drift behaviour。 | [strategy](#strategy-apply-once) | true |  |  
 
 
 ##### selector (apply-once)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- componentNames | 按组件名称选择目标资源。 | []string | false |  
- componentTypes | 按组件类型选择目标资源。 | []string | false |  
- oamTypes | 按 OAM 概念，组件(COMPONENT) 或 运维特征(TRAIT) 筛选。 | []string | false |  
- traitTypes | 按 trait 类型选择目标资源。 | []string | false |  
- resourceTypes | 按资源类型选择。 | []string | false |  
- resourceNames | 按资源名称选择。 | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ componentNames | Select resources by component names。 | []string | false |  |  
+ componentTypes | Select resources by component types。 | []string | false |  |  
+ oamTypes | Select resources by oamTypes (COMPONENT or TRAIT)。 | []string | false |  |  
+ traitTypes | Select resources by trait types。 | []string | false |  |  
+ resourceTypes | Select resources by resource types (like Deployment)。 | []string | false |  |  
+ resourceNames | Select resources by their names。 | []string | false |  |  
 
 
 ##### strategy (apply-once)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- affect | When the strategy takes effect,e.g. onUpdate、onStateKeep。 | string | false |  
- path | 指定资源的路径。 | []string | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ affect | When the strategy takes effect,e.g. onUpdate、onStateKeep。 | string | false |  |  
+ path | Specify the path of the resource that allow configuration drift。 | []string | true |  |  
 
 
 ## Garbage-Collect
 
 ### 描述
 
-为应用配置资源回收策略。 如配置资源不回收。
+Configure the garbage collect behaviour for the application。
 
 ### 示例 (garbage-collect)
 
@@ -139,40 +139,40 @@ spec:
 ### 参数说明 (garbage-collect)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- applicationRevisionLimit | If set, it will override the default revision limit number and customize this number for the current application。 | int | false |  
- keepLegacyResource | 如果为 true，过时的版本化 resource tracker 将不会自动回收。 过时的资源将被保留，直到手动删除 resource tracker。 | bool | false | false 
- continueOnFailure | If is set, continue to execute gc when the workflow fails, by default gc will be executed only after the workflow succeeds。 | bool | false | false 
- rules | 在资源级别控制垃圾回收策略的规则列表，如果一个资源由多个规则控制，将使用第一个规则。 | [[]rules](#rules-garbage-collect) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ applicationRevisionLimit | If set, it will override the default revision limit number and customize this number for the current application。 | int | false |  |  
+ keepLegacyResource | If is set, outdated versioned resourcetracker will not be recycled automatically, outdated resources will be kept until resourcetracker be deleted manually。 | bool | false | false |  
+ continueOnFailure | If is set, continue to execute gc when the workflow fails, by default gc will be executed only after the workflow succeeds。 | bool | false | false |  
+ rules | Specify the list of rules to control gc strategy at resource level, if one resource is controlled by multiple rules, first rule will be used。 | [[]rules](#rules-garbage-collect) | false |  |  
 
 
 #### rules (garbage-collect)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- selector | 指定资源筛选目标规则。 | [selector](#selector-garbage-collect) | true |  
- strategy | 目标资源循环利用的策略。 可用值：never、onAppDelete、onAppUpdate。 | "onAppUpdate" or "onAppDelete" or "never" | false | onAppUpdate 
- propagation | Specify the deletion propagation strategy for target resource to delete。 | "orphan" or "cascading" | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ selector | Specify how to select the targets of the rule。 | [selector](#selector-garbage-collect) | true |  |  
+ strategy | Specify the strategy for target resource to recycle。 | "onAppUpdate" or "onAppDelete" or "never" | false | onAppUpdate |  
+ propagation | Specify the deletion propagation strategy for target resource to delete。 | "orphan" or "cascading" | false |  |  
 
 
 ##### selector (garbage-collect)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- componentNames | 按组件名称选择目标资源。 | []string | false |  
- componentTypes | 按组件类型选择目标资源。 | []string | false |  
- oamTypes | 按 OAM 概念，组件(COMPONENT) 或 运维特征(TRAIT) 筛选。 | []string | false |  
- traitTypes | 按 trait 类型选择目标资源。 | []string | false |  
- resourceTypes | 按资源类型选择。 | []string | false |  
- resourceNames | 按资源名称选择。 | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ componentNames | Select resources by component names。 | []string | false |  |  
+ componentTypes | Select resources by component types。 | []string | false |  |  
+ oamTypes | Select resources by oamTypes (COMPONENT or TRAIT)。 | []string | false |  |  
+ traitTypes | Select resources by trait types。 | []string | false |  |  
+ resourceTypes | Select resources by resource types (like Deployment)。 | []string | false |  |  
+ resourceNames | Select resources by their names。 | []string | false |  |  
 
 
 ## Override
 
 ### 描述
 
-描述部署资源时要覆盖的配置，需要配合工作流的 `deploy` 步骤一起使用才能生效。
+Describe the configuration to override when deploying resources, it only works with specified `deploy` step in workflow。
 
 ### 示例 (override)
 
@@ -282,29 +282,29 @@ spec:
 ### 参数说明 (override)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- components | 要覆盖的组件配置列表。 | [[]components](#components-override) | true |  
- selector | 要使用的组件名称列表。 如果未设置，将使用所有组件。 | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ components | Specify the overridden component configuration。 | [[]components](#components-override) | true |  |  
+ selector | Specify a list of component names to use, if empty, all components will be selected。 | []string | false |  |  
 
 
 #### components (override)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- name | 要覆盖的组件的名称。 如果未设置，它将匹配具有指定类型的所有组件。 可以与通配符 * 一起使用以进行模糊匹配。。 | string | false |  
- type | 要覆盖的组件的类型。 如果未设置，将匹配所有组件类型。 | string | false |  
- properties | 要覆盖的配置属性，未填写配置会与原先的配置合并。 | map[string]_ | false |  
- traits | 要覆盖的 trait 配置列表。 | [[]traits](#traits-override) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ name | Specify the name of the patch component, if empty, all components will be merged。 | string | false |  |  
+ type | Specify the type of the patch component。 | string | false |  |  
+ properties | Specify the properties to override。 | map[string]_ | false |  |  
+ traits | Specify the traits to override。 | [[]traits](#traits-override) | false |  |  
 
 
 ##### traits (override)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- type | 要做参数覆盖的 trait 类型。 | string | true |  
- properties | 要覆盖的配置属性，未填写配置会与原先的配置合并。 | map[string]_ | false |  
- disable | 如果为 true，该 trait 将被删除，默认 false。 | bool | false | false 
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ type | Specify the type of the trait to be patched。 | string | true |  |  
+ properties | Specify the properties to override。 | map[string]_ | false |  |  
+ disable | Specify if the trait should be remove, default false。 | bool | false | false |  
 
 
 ## Read-Only
@@ -341,28 +341,28 @@ spec:
 ### 参数说明 (read-only)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- rules | Specify the list of rules to control read only strategy at resource level。 | [[]rules](#rules-read-only) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ rules | Specify the list of rules to control read only strategy at resource level。 | [[]rules](#rules-read-only) | false |  |  
 
 
 #### rules (read-only)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- selector | 指定资源筛选目标规则。 | [selector](#selector-read-only) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ selector | Specify how to select the targets of the rule。 | [selector](#selector-read-only) | true |  |  
 
 
 ##### selector (read-only)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- componentNames | 按组件名称选择目标资源。 | []string | false |  
- componentTypes | 按组件类型选择目标资源。 | []string | false |  
- oamTypes | 按 OAM 概念，组件(COMPONENT) 或 运维特征(TRAIT) 筛选。 | []string | false |  
- traitTypes | 按 trait 类型选择目标资源。 | []string | false |  
- resourceTypes | 按资源类型选择。 | []string | false |  
- resourceNames | 按资源名称选择。 | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ componentNames | Select resources by component names。 | []string | false |  |  
+ componentTypes | Select resources by component types。 | []string | false |  |  
+ oamTypes | Select resources by oamTypes (COMPONENT or TRAIT)。 | []string | false |  |  
+ traitTypes | Select resources by trait types。 | []string | false |  |  
+ resourceTypes | Select resources by resource types (like Deployment)。 | []string | false |  |  
+ resourceNames | Select resources by their names。 | []string | false |  |  
 
 
 ## Replication
@@ -533,10 +533,10 @@ hello-rep-beijing    ClusterIP   10.43.24.116   <none>        80/TCP    12s
 ### 参数说明 (replication)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- keys | Spicify the keys of replication. Every key coresponds to a replication components。 | []string | true |  
- selector | Specify the components which will be replicated。 | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ keys | Spicify the keys of replication. Every key coresponds to a replication components。 | []string | true |  |  
+ selector | Specify the components which will be replicated。 | []string | false |  |  
 
 
 ## Resource-Update
@@ -612,37 +612,37 @@ By specifying `op` to `replace`, the application will update the given resource 
 ### 参数说明 (resource-update)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- rules | Specify the list of rules to control resource update strategy at resource level。 | [[]rules](#rules-resource-update) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ rules | Specify the list of rules to control resource update strategy at resource level。 | [[]rules](#rules-resource-update) | false |  |  
 
 
 #### rules (resource-update)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- selector | 指定资源筛选目标规则。 | [selector](#selector-resource-update) | true |  
- strategy | The update strategy for the target resources。 | [strategy](#strategy-resource-update) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ selector | Specify how to select the targets of the rule。 | [selector](#selector-resource-update) | true |  |  
+ strategy | The update strategy for the target resources。 | [strategy](#strategy-resource-update) | true |  |  
 
 
 ##### selector (resource-update)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- componentNames | 按组件名称选择目标资源。 | []string | false |  
- componentTypes | 按组件类型选择目标资源。 | []string | false |  
- oamTypes | 按 OAM 概念，组件(COMPONENT) 或 运维特征(TRAIT) 筛选。 | []string | false |  
- traitTypes | 按 trait 类型选择目标资源。 | []string | false |  
- resourceTypes | 按资源类型选择。 | []string | false |  
- resourceNames | 按资源名称选择。 | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ componentNames | Select resources by component names。 | []string | false |  |  
+ componentTypes | Select resources by component types。 | []string | false |  |  
+ oamTypes | Select resources by oamTypes (COMPONENT or TRAIT)。 | []string | false |  |  
+ traitTypes | Select resources by trait types。 | []string | false |  |  
+ resourceTypes | Select resources by resource types (like Deployment)。 | []string | false |  |  
+ resourceNames | Select resources by their names。 | []string | false |  |  
 
 
 ##### strategy (resource-update)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- op | Specify the op for updating target resources。 | "patch" or "replace" | false | patch 
- recreateFields | Specify which fields would trigger recreation when updated。 | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ op | Specify the op for updating target resources。 | "patch" or "replace" | false | patch |  
+ recreateFields | Specify which fields would trigger recreation when updated。 | []string | false |  |  
 
 
 ## Shared-Resource
@@ -729,28 +729,28 @@ spec:
 ### 参数说明 (shared-resource)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- rules | Specify the list of rules to control shared-resource strategy at resource level。 | [[]rules](#rules-shared-resource) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ rules | Specify the list of rules to control shared-resource strategy at resource level。 | [[]rules](#rules-shared-resource) | false |  |  
 
 
 #### rules (shared-resource)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- selector | 指定资源筛选目标规则。 | [selector](#selector-shared-resource) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ selector | Specify how to select the targets of the rule。 | [selector](#selector-shared-resource) | true |  |  
 
 
 ##### selector (shared-resource)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- componentNames | 按组件名称选择目标资源。 | []string | false |  
- componentTypes | 按组件类型选择目标资源。 | []string | false |  
- oamTypes | 按 OAM 概念，组件(COMPONENT) 或 运维特征(TRAIT) 筛选。 | []string | false |  
- traitTypes | 按 trait 类型选择目标资源。 | []string | false |  
- resourceTypes | 按资源类型选择。 | []string | false |  
- resourceNames | 按资源名称选择。 | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ componentNames | Select resources by component names。 | []string | false |  |  
+ componentTypes | Select resources by component types。 | []string | false |  |  
+ oamTypes | Select resources by oamTypes (COMPONENT or TRAIT)。 | []string | false |  |  
+ traitTypes | Select resources by trait types。 | []string | false |  |  
+ resourceTypes | Select resources by resource types (like Deployment)。 | []string | false |  |  
+ resourceNames | Select resources by their names。 | []string | false |  |  
 
 
 ## Take-Over
@@ -788,35 +788,35 @@ spec:
 ### 参数说明 (take-over)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- rules | Specify the list of rules to control take over strategy at resource level。 | [[]rules](#rules-take-over) | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ rules | Specify the list of rules to control take over strategy at resource level。 | [[]rules](#rules-take-over) | false |  |  
 
 
 #### rules (take-over)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- selector | 指定资源筛选目标规则。 | [selector](#selector-take-over) | true |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ selector | Specify how to select the targets of the rule。 | [selector](#selector-take-over) | true |  |  
 
 
 ##### selector (take-over)
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- componentNames | 按组件名称选择目标资源。 | []string | false |  
- componentTypes | 按组件类型选择目标资源。 | []string | false |  
- oamTypes | 按 OAM 概念，组件(COMPONENT) 或 运维特征(TRAIT) 筛选。 | []string | false |  
- traitTypes | 按 trait 类型选择目标资源。 | []string | false |  
- resourceTypes | 按资源类型选择。 | []string | false |  
- resourceNames | 按资源名称选择。 | []string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ componentNames | Select resources by component names。 | []string | false |  |  
+ componentTypes | Select resources by component types。 | []string | false |  |  
+ oamTypes | Select resources by oamTypes (COMPONENT or TRAIT)。 | []string | false |  |  
+ traitTypes | Select resources by trait types。 | []string | false |  |  
+ resourceTypes | Select resources by resource types (like Deployment)。 | []string | false |  |  
+ resourceNames | Select resources by their names。 | []string | false |  |  
 
 
 ## Topology
 
 ### 描述
 
-描述组件应该部署到的集群环境。
+Describe the destination where components should be deployed to。
 
 ### 示例 (topology)
 
@@ -882,12 +882,12 @@ spec:
 ### 参数说明 (topology)
 
 
- 名称 | 描述 | 类型 | 是否必须 | 默认值 
- ------ | ------ | ------ | ------------ | --------- 
- clusters | 要选择的集群的名称。 | []string | false |  
- clusterLabelSelector | 根据集群标签选择。 | map[string]string | false |  
- allowEmpty | Ignore empty cluster error。 | bool | false |  
- clusterSelector | Deprecated: Use clusterLabelSelector instead。 | map[string]string | false |  
- namespace | 要在选定集群中部署的目标命名空间。 如果未设置，组件将继承原始命名空间。 | string | false |  
+ 名称 | 描述 | 类型 | 是否必须 | 默认值 | 不可变 
+ ------ | ------ | ------ | ------------ | --------- | --------- 
+ clusters | Specify the names of the clusters to select。 | []string | false |  |  
+ clusterLabelSelector | Specify the label selector for clusters。 | map[string]string | false |  |  
+ allowEmpty | Ignore empty cluster error。 | bool | false |  |  
+ clusterSelector | Deprecated: Use clusterLabelSelector instead。 | map[string]string | false |  |  
+ namespace | Specify the target namespace to deploy in the selected clusters, default inherit the original namespace。 | string | false |  |  
 
 
