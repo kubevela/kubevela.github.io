@@ -602,7 +602,7 @@ spec:
 
 ## Helmchart
 
-> **Note:** This component is still under development. The Helm pre-delete and post-delete hooks doesn't work with this.
+> **Note:** There is a known limitation with pre-delete and post-delete hook functionality that will be addressed in later releases. Currently, only public chart repositories are supported — authentication for private repositories is on the roadmap.
 
 ### Description
 
