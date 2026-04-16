@@ -600,6 +600,75 @@ spec:
  hostnames |  | []string | true |  
 
 
+## Helmchart
+
+> **Note:** There is a known limitation with pre-delete and post-delete hook functionality that will be addressed in later releases. Currently, only public chart repositories are supported — authentication for private repositories is on the roadmap.
+
+### Description
+
+Deploy Helm charts natively in KubeVela
+
+### Examples (helmchart)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: sample-helmchart
+spec:
+  components:
+    - name: my-chart
+      type: helmchart
+      properties:
+        chart:
+          source: oci://ghcr.io/org/charts/app
+          version: "1.0.0"
+```
+
+### Specification (helmchart)
+
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ chart | Chart source configuration | [chart](#chart-helmchart) | true |  
+ release | Release configuration (optional - uses context defaults) | [release](#release-helmchart) | false |  
+ values | Inline values (highest priority) | map[string]interface{} | false |  
+ options | Rendering options | [options](#options-helmchart) | false |  
+
+
+#### chart (helmchart)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ source | Chart location - automatically detected based on format (OCI, Direct URL, Repo chart) | string | true |  
+ repoURL | Repository URL for repository-based charts | string | false |  
+ version | Version/tag for repository and OCI charts (ignored for direct URLs) | string | false | "latest" 
+
+
+#### release (helmchart)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ name | Release name (defaults to component name) | string | false |  
+ namespace | Target namespace (defaults to Application namespace) | string | false |  
+
+
+#### options (helmchart)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ skipTests | Skip test resources | bool | false | true 
+ skipHooks | Skip hook resources | bool | false | false 
+ createNamespace | Create namespace if it doesn't exist | bool | false | true 
+ timeout | Rendering timeout | string | false | "5m" 
+ maxHistory | Revisions to keep | int | false | 10 
+ atomic | Rollback on failure | bool | false | false 
+ wait | Wait for resources | bool | false | false 
+ force | Force resource updates | bool | false | false 
+ recreatePods | Recreate pods on upgrade | bool | false | false 
+ cleanupOnFail | Cleanup on failure | bool | false | false 
+
+
 ## K8s-Objects
 
 ### Description
