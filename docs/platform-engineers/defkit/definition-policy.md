@@ -6,11 +6,44 @@ title: PolicyDefinition
 
 ## Chain Methods
 
+### Policy-specific
+
 | Method | Description |
 |---|---|
-| `.Description(text)` | Human-readable description of the policy behavior. |
-| `.Params(params...)` | Registers typed parameter definitions for the policy. |
-| `.Helper(name, param)` | Registers a named helper type definition (emitted as `#Name: { ... }` in the CUE template). |
+| `.Template(fn func(tpl *PolicyTemplate))` | Provides the policy template closure. Unlike component/trait templates, a `PolicyTemplate` doesn't create Kubernetes resources — it defines computed fields using `Set(name, value)` that KubeVela's policy engine evaluates (e.g. topology selection, override rules). |
+| `.ManageHealthCheck()` | Declares that this policy manages health checking for the application. When set, KubeVela delegates health evaluation to this policy's health policy expression instead of using the default per-component health checks. |
+
+### Shared base methods
+
+These methods are the same shape as on `ComponentDefinition`. See the [ComponentDefinition page](./definition-component.md) for the longer descriptions.
+
+| Method | Description |
+|---|---|
+| `.Description(desc string)` | Human-readable description shown in `vela show` and the KubeVela dashboard. |
+| `.Annotations(map[string]string)` | Annotations on the PolicyDefinition CR itself. |
+| `.Labels(map[string]string)` | Labels on the PolicyDefinition CR. |
+| `.Version(v string)` | Definition version string for versioned selection. |
+| `.Params(params ...Param)` | Adds parameter definitions that become the `parameter: { ... }` block (insertion order preserved). |
+| `.Param(param Param)` | Adds a single parameter — incremental equivalent of `Params()`. |
+| `.Helper(name string, param Param)` | Registers a named CUE helper type definition emitted as `#Name: { ... }` before the `parameter` block. Other params reference helpers via `.WithSchemaRef("Name")`. |
+| `.CustomStatus(expr string)` | Raw CUE expression for the `status: customStatus:` block. |
+| `.HealthPolicy(expr string)` | Raw CUE expression for the `status: healthPolicy:` block. |
+| `.HealthPolicyExpr(expr HealthExpression)` | Type-safe `HealthExpression` DSL alternative to `HealthPolicy()`. |
+| `.StatusDetails(details string)` | Raw CUE expression for the `status: details:` block. |
+| `.RunOn(conditions ...placement.Condition)` | Restricts this policy to clusters whose labels match the given conditions. |
+| `.NotRunOn(conditions ...placement.Condition)` | Excludes this policy from clusters whose labels match the given conditions. |
+| `.RawCUE(cue string)` | Escape hatch: bypasses the entire builder and emits the raw CUE string as the whole definition. |
+| `.WithImports(imports ...string)` | Adds CUE import statements (e.g. `"strings"`, `"strconv"`) to the generated template. |
+| `.ToCue() string` | Compiles the policy into a complete CUE string ready to apply as a KubeVela X-Definition. |
+| `.ToYAML() ([]byte, error)` | Generates the Kubernetes YAML manifest for the PolicyDefinition CR. |
+
+### PolicyTemplate (closure argument)
+
+`.Template()` passes a `*PolicyTemplate`. It exposes a single method — policies don't produce resources, so there's no `Output()` or `Patch()`:
+
+| Method | Description |
+|---|---|
+| `.Set(name string, value Value)` | Assigns a value to a named computed field in the policy's template body. The policy engine reads these fields when it evaluates the policy (e.g. topology selection, override rules). |
 
 ## Example
 
