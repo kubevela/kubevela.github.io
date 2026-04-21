@@ -4,6 +4,38 @@ title: Helper Builder
 
 The helper builder allows you to compute derived CUE `let` variables from array parameters — filtering, picking fields, and applying conditionals — without writing raw CUE strings.
 
+### HelperBuilder Chain Methods
+
+| Method | Description |
+|---|---|
+| `.From(source Value)` | Sets the source collection to iterate over (e.g. a parameter array). |
+| `.FromFields(source, fields...)` | Uses multiple named fields from a single source object. Each field is iterated separately and results combined. |
+| `.FromArray(ab *ArrayBuilder)` | Uses an ArrayBuilder directly as the helper's collection. |
+| `.FromHelper(helper *HelperVar)` | Chains from another helper's output for multi-step transformations. |
+| `.Guard(cond)` | Adds a guard prefix: `[if cond for v in source { ... }]`. Evaluates to empty when false. |
+| `.Each(fn func(Value) Value)` | Applies a transformation function to each item. |
+| `.Pick(fields...)` | Selects only the named fields from each item. |
+| `.PickIf(cond, field)` | Conditionally includes a field when the condition is true. |
+| `.Map(mappings FieldMap)` | Transforms each item using a field mapping. |
+| `.MapBySource(map[string]FieldMap)` | Applies different mappings depending on which source field the item came from (used with `FromFields()`). |
+| `.Filter(pred)` / `.FilterCond(cond)` | Filters items using a predicate or general condition. |
+| `.Wrap(key)` | Wraps each item under a new key name. |
+| `.Rename(from, to)` | Renames a field in each item. |
+| `.Dedupe(keyField)` | Removes duplicate items based on a key field. |
+| `.DefaultField(field, default)` | Provides a default value for a field that might be missing. |
+| `.AfterOutput()` | Places this helper after the `output:` block in generated CUE. Use when the helper references `context.output`. |
+| `.Build() *HelperVar` | Finalizes the helper, registers it with the template, and returns a reference. |
+
+### Helper Construction Helpers
+
+| Function | Description |
+|---|---|
+| `HelperStruct(fields ...StructFieldDef)` | Constructs a CUE struct value for use inside helper `Each()` callbacks. |
+| `HelperField(name, value Value)` | Defines an unconditional field within a `HelperStruct()`. |
+| `HelperFieldIf(cond, name, value)` | Defines a conditional field. Generates `if cond { name: value }` inside the struct. |
+| `Item() *ItemValue` | References the current iteration item inside `Each()`. Chain `.Get(field)` to access a field. |
+| `ItemFieldIsSet(field) Condition` | Returns a condition checking if a field exists on the current item. Generates `v.field != _\|_`. |
+
 ## `tpl.Helper(name)`
 
 Builds a CUE `let` variable by transforming an array parameter into a derived list. The helper variable is injected into the template header block and can be referenced in resource `.Set()` calls as `defkit.LetVariable(name)`.

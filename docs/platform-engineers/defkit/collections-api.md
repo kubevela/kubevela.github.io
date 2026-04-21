@@ -12,13 +12,17 @@ The Collections API transforms list parameters into Kubernetes resource arrays u
 
 | Method | Description |
 |---|---|
-| `.Filter(pred)` | Keep only items matching a predicate |
-| `.Map(fieldMap)` | Transform each item using a `FieldMap` |
-| `.Pick(fields...)` | Select specific fields from each item |
-| `.Rename(old, new)` | Rename a field |
-| `.Wrap(key)` | Wrap each scalar value in an object |
-| `.Flatten()` | Flatten nested arrays |
-| `.DefaultField(name, val)` | Add a default field to each item |
+| `.Guard(cond)` | Adds a guard prefix to the list comprehension: `[if cond for v in source { ... }]`. The comprehension evaluates to empty when the guard is false. Use to skip iteration when the source parameter is not set. |
+| `.Filter(pred Predicate)` | Filters items using a for-comprehension filter clause. Generates `for v in source if v.field == val { ... }`. Build predicates with `FieldEquals()` or `FieldExists()`. |
+| `.FilterCond(cond Condition)` | Filters items using a general Condition instead of a Predicate. The condition can reference parameters or context rather than the iteration variable. |
+| `.Map(mappings FieldMap)` | Transforms each item by mapping source fields to output fields. FieldMap maps output field names to FieldValues (`F("sourceName")`, `LitField("constant")`, `Nested(subMap)`). |
+| `.MapVariant(discriminator, name, mappings)` | Adds a variant-specific mapping block — only applies when the discriminator field equals the variant name. Chain multiple calls for each variant. |
+| `.Pick(fields ...string)` | Selects only the named fields from each item, dropping everything else. |
+| `.Rename(from, to)` | Renames a field in the output: items with field `from` get it emitted as `to`. |
+| `.Wrap(key)` | Wraps each item under a new key. E.g. `Each(secrets).Wrap("name")` transforms `"mysecret"` into `{ name: "mysecret" }`. |
+| `.DefaultField(field, default)` | Provides a default value for a field that may be missing. For CUE defaults in generated output, use `FieldRef.Or(fallback)` instead. |
+| `.Flatten()` | Flattens nested arrays — items containing sub-arrays are expanded into the parent list. |
+| `.Dedupe(keyField)` | Removes duplicate items based on a key field. If two items have the same `keyField` value, only the first is kept. |
 
 ```go title="Go — defkit"
 ports := defkit.List("ports")
@@ -103,6 +107,23 @@ volumes := defkit.FromFields(volumeMounts, "pvc", "configMap", "secret").
 ```
 
 ## Field Reference Helpers in Collections
+
+### FieldMap Helpers Summary
+
+| Function | Description |
+|---|---|
+| `F(name string)` / `FieldRef(name)` | References a field on the current iteration variable. Inside `for v in source`, `F("port")` becomes `v.port`. |
+| `LitField(val)` | Creates a literal constant value in a field mapping. Unlike `Lit()` (for Set), `LitField()` is for use inside `Map()` FieldMaps. |
+| `Nested(mapping FieldMap)` | Creates a nested struct in the output mapping. Generates `{ outerField: { innerField: v.source } }`. |
+| `Optional(field)` | References an optional field that may not exist on every item. Generates a conditional field assignment. |
+| `OptionalFieldWithCond(field, cond)` | Like `Optional()` but with an additional condition — field is only included when both it exists and the condition is true. |
+| `Format(format, args ...FieldValue)` | Creates a formatted string value. Generates CUE string concatenation. Auto-imports `strconv` for numeric args. |
+| `FieldEquals(field, value) Predicate` | Creates a predicate for `Filter()`. Generates `if v.field == value`. |
+| `FieldExists(field) Predicate` | Creates a predicate for `Filter()`. Generates `if v.field != _\|_`. |
+| `ConcatExpr(source, fields...)` | Concatenates arrays from a StructArrayHelper's named fields into a single list. |
+| `FromFields(source, fields...)` | Starts a multi-source collection iterating over multiple named fields. Chain `.MapBySource()` for per-field mappings. |
+| `FieldRef.Or(fallback)` | Provides a fallback value when a field is undefined. Generates CUE `*v.field \| fallback`. |
+| `FieldRef.OrConditional(fallback)` | Provides a fallback using if/else blocks instead of CUE default syntax. |
 
 ### `defkit.Nested(fieldMap)`
 

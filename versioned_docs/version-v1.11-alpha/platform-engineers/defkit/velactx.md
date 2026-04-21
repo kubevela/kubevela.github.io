@@ -30,11 +30,24 @@ vela.ClusterVersion().Minor() → context.clusterVersion.minor
 
 | Go method | CUE path | Description |
 |---|---|---|
-| `vela.Name()` | `context.name` | Component instance name |
-| `vela.AppName()` | `context.appName` | Parent Application name |
-| `vela.Namespace()` | `context.namespace` | Deployment namespace |
-| `vela.Revision()` | `context.revision` | App revision string |
-| `vela.ClusterVersion().Minor()` | `context.clusterVersion.minor` | Kubernetes minor version (int) |
+| `vela.Name()` | `context.name` | Component or trait instance name as declared in the Application YAML. |
+| `vela.Namespace()` | `context.namespace` | Namespace where the Application is deployed. |
+| `vela.AppName()` | `context.appName` | The Application CR's name. Different from `Name()` which is the component name. |
+| `vela.AppRevision()` | `context.appRevision` | The Application's current revision string (e.g. `"myapp-v3"`). |
+| `vela.AppRevisionNum()` | `context.appRevisionNum` | The numeric revision counter. |
+| `vela.Revision()` | `context.revision` | The component's own revision string. Tracks individual component changes. |
+| `vela.ClusterVersion()` | `context.clusterVersion` | Returns a `*ClusterVersionRef` for the target cluster's K8s version. |
+| `vela.Output()` | `context.output` | References the primary output resource. Use in traits to read the component's output or in status expressions. |
+| `vela.Outputs(name)` | `context.outputs.<name>` | References a named auxiliary output. Use to read status of secondary resources. |
+
+### ClusterVersionRef Methods
+
+| Method | CUE path | Description |
+|---|---|---|
+| `.Major()` | `context.clusterVersion.major` | K8s major version. |
+| `.Minor()` | `context.clusterVersion.minor` | K8s minor version — most commonly used for feature gating. |
+| `.Patch()` | `context.clusterVersion.patch` | K8s patch version. |
+| `.GitVersion()` | `context.clusterVersion.gitVersion` | Full git version string. |
 
 ## Usage in Resource Fields
 

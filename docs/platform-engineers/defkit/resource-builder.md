@@ -4,6 +4,40 @@ title: Resource Builder
 
 Resource builders are the fluent API for constructing Kubernetes resource manifests in Go. Path syntax supports dot-notation (`spec.replicas`), array indices (`containers[0]`), and bracket notation (`labels[app.oam.dev/name]`).
 
+### Resource Builder Methods
+
+| Method | Description |
+|---|---|
+| `.Set(path string, value Value)` | Sets a field at the given dot-path to the given value. Supports dot notation (`"metadata.name"`), array indexing (`"spec.containers[0].image"`), and bracket notation. |
+| `.SetIf(cond, path, value)` | Conditionally sets a field only when the condition is true. Generates CUE `if cond { path: value }`. |
+| `.SpreadIf(cond, path, value)` | Conditionally merges a value into a path. The condition is placed inside the target struct. Use for merging user-provided maps. |
+| `.If(cond)` / `.EndIf()` | Opens/closes a conditional block. All `Set()` calls between are wrapped in a single `if cond { ... }`. |
+| `.Directive(path, directive)` | Adds a CUE directive comment at the given path (e.g. `Directive("spec.containers", "patchKey=name")`). |
+| `.VersionIf(cond, apiVersion)` | Sets the API version conditionally. Use with `NewResourceWithConditionalVersion()` for K8s version differences. |
+| `.ConditionalStruct(cond, path, fn)` | Creates a conditional struct block. The closure receives an `*OutputStructBuilder` with `Set()` and `SetIf()`. |
+
+### ArrayBuilder Methods
+
+**Constructor:** `NewArray() *ArrayBuilder`
+
+| Method | Description |
+|---|---|
+| `.Item(elem)` / `.ItemIf(cond, elem)` | Adds a static / conditional element to the array. |
+| `.ForEach(source, elem)` | For-comprehension over a source collection. |
+| `.ForEachGuarded(guard, source, elem)` | Guarded comprehension — skips when guard is false. |
+| `.ForEachWith(source, fn func(item *ItemBuilder))` | Callback iteration with access to item builder methods. |
+| `.ForEachWithVar(varName, source, fn)` | Named variable iteration — access iteration variable by name. |
+| `.ForEachWithGuardedFiltered(guard, filter, source, fn)` | Full combo: guarded + filtered comprehension. |
+| `.ForEachWithGuardedFilteredVar(varName, guard, filter, source, fn)` | Full combo with named variable. |
+
+**ItemBuilder** (9 methods): `Var()` (access iteration variable via `.Ref()`, `.Field(name)`), `Set(field, value)`, `If(cond, fn)`, `IfSet(field, fn)`, `IfNotSet(field, fn)`, `Let(name, value)`, `SetDefault(field, defValue, typeName)`, `FieldExists(field)`, `FieldNotExists(field)`.
+
+**NewArrayElement**: `.Set(key, value)`, `.SetIf(cond, key, value)`, `.PatchKeyField(field, key, value)`.
+
+**ArrayConcat**: `ArrayConcat(left, right Value)` — CUE list concatenation.
+
+**FromTyped**: `FromTyped(obj runtime.Object) (*Resource, error)`, `MustFromTyped(obj) *Resource` — convert Go K8s objects to Resources.
+
 ## Constructors
 
 ### `defkit.NewResource(apiVersion, kind string)`

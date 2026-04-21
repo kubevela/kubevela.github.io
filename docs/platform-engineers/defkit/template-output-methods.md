@@ -4,6 +4,27 @@ title: Template Output Methods
 
 The `*defkit.Template` context object is passed to the template function of a component or trait definition. It manages which Kubernetes resources the definition emits as outputs.
 
+### Template Builder Methods
+
+| Method | Description |
+|---|---|
+| `tpl.Output(r ...*Resource) *Resource` | Sets the primary output resource — the main Kubernetes object this component creates. Generates the `output: { ... }` block. |
+| `tpl.Outputs(name string, r ...*Resource) *Resource` | Adds a named auxiliary output resource. Generates `outputs: { name: { ... } }`. |
+| `tpl.OutputsIf(cond, name, r)` | Adds an auxiliary output that only exists when the condition is true. |
+| `tpl.OutputsGroupIf(cond, fn func(g *OutputGroup))` | Groups multiple auxiliary outputs under a single condition. |
+| `tpl.Patch() *PatchResource` | Gets or creates the patch block for trait definitions. Returns a `*PatchResource` for chaining `Set()`, `SetIf()`, `SpreadIf()`. |
+| `tpl.PatchStrategy(strategy string)` | Sets the patch merge strategy. Common values: `"retainKeys"`, `"jsonMergePatch"`, `"jsonPatch"`. |
+| `tpl.Helper(name string) *HelperBuilder` | Starts building a named helper variable in the template. Helpers compute intermediate values referenced in outputs. |
+| `tpl.StructArrayHelper(name, source)` | Creates a helper that splits a source object's fields into separate typed arrays. |
+| `tpl.ConcatHelper(name, source)` | Creates a helper that concatenates arrays from a `StructArrayHelper`. Chain `.Fields(...)` to specify which fields to join. |
+| `tpl.DedupeHelper(name, source)` | Creates a helper that deduplicates items by a key field. Chain `.ByKey("name")`. |
+| `tpl.AddLetBinding(name string, expr Value)` | Adds a CUE `let` binding: `let name = expr`. Reference with `LetVariable("name")`. |
+| `tpl.UsePatchContainer(config PatchContainerConfig)` | Activates the container mutation pattern for trait definitions. |
+| `tpl.SetRawPatchBlock(block string)` | Escape hatch: replaces the builder-generated `patch:` block with raw CUE. |
+| `tpl.SetRawParameterBlock(block string)` | Escape hatch: replaces the builder-generated `parameter:` block with raw CUE. |
+| `tpl.SetRawOutputsBlock(block string)` | Escape hatch: replaces the builder-generated `outputs:` block with raw CUE. |
+| `tpl.SetRawHeaderBlock(block string)` | Escape hatch: injects raw CUE at the top of the template block, before output/parameter/patch. |
+
 ## `tpl.Output(resource)`
 
 Sets the primary output resource of the template. In CUE this becomes the top-level `output: { ... }` block. Every component template calls this exactly once.
