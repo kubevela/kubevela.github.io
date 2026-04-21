@@ -4,11 +4,12 @@ title: Quick Start
 
 From zero to a working KubeVela ComponentDefinition in 4 steps.
 
-## Prerequisites
-
+:::warning **Prerequisites**
 - Go 1.23.8 or later
 - CUE v0.14.1 or later
-- A running KubeVela cluster with the `vela` CLI installed
+- A Kubernetes cluster with KubeVela v1.11.0 or later installed
+- The `vela` CLI installed locally
+:::
 
 ## Step 1: Initialize a definition module
 
