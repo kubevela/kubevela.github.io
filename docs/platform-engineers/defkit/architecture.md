@@ -26,6 +26,9 @@ When an end user submits an Application YAML:
 
 ## Module Structure
 
+<details>
+<summary>Module directory layout</summary>
+
 ```shell
 my-platform/
 ├── module.yaml              # Module metadata (name, description, version)
@@ -48,14 +51,19 @@ my-platform/
     └── apply-object.go      # WorkflowStepDefinition — apply K8s object
 ```
 
+</details>
+
 ## Registration Pattern
 
 Each definition file self-registers via `init()`. The `cmd/register/main.go` entry point uses blank imports to trigger all `init()` calls, then calls `defkit.ToJSON()` to export all registered definitions.
 
+<details>
+<summary>Definition file example</summary>
+
 ```go title="definition file"
 package components
 
-import "github.com/.../defkit"
+import "github.com/oam-dev/kubevela/pkg/definition/defkit"
 
 func Webservice() *defkit.ComponentDefinition {
     return defkit.NewComponent("webservice").
@@ -70,12 +78,17 @@ func init() {
 }
 ```
 
+</details>
+
+<details>
+<summary>cmd/register/main.go</summary>
+
 ```go title="cmd/register/main.go"
 package main
 
 import (
     "fmt"
-    "github.com/.../defkit"
+    "github.com/oam-dev/kubevela/pkg/definition/defkit"
 
     // Blank imports trigger init() in each package,
     // registering all definitions automatically
@@ -90,6 +103,8 @@ func main() {
     fmt.Println(defkit.ToJSON())
 }
 ```
+
+</details>
 
 ## Related
 
