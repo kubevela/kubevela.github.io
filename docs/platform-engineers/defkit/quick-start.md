@@ -7,6 +7,7 @@ From zero to a working KubeVela ComponentDefinition in 4 steps.
 ## Prerequisites
 
 - Go 1.23.8 or later
+- CUE v0.14.1 or later
 - A running KubeVela cluster with the `vela` CLI installed
 
 ## Step 1: Initialize a definition module
