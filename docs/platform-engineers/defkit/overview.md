@@ -20,44 +20,24 @@ defkit eliminates these friction points by providing a **fluent Go API** that co
 
 ## Benefits
 
-### Type Safety
+- **Type Safety** — Catch configuration errors at Go compile time, not at Kubernetes deploy time. Full type inference for all parameter types.
+- **IDE Support** — Full autocompletion, inline documentation, and refactoring in any Go IDE. No CUE plugin required.
+- **Testable** — Unit-test definitions with standard `go test` and Gomega matchers. No cluster needed for unit tests.
+- **Distributable** — Share definitions as standard Go packages via `go get`. Version-controlled alongside your platform code.
+- **CUE Compatible** — Produces the same CUE output consumed by the KubeVela controller. Mix Go-authored and CUE-authored definitions freely.
+- **Fluent API** — Method-chaining builder pattern makes definitions readable and concise. No YAML, no CUE schema wrestling.
 
-Catch configuration errors at Go compile time, not at Kubernetes deploy time. Full type inference for all parameter types.
-
-### IDE Support
-
-Full autocompletion, inline documentation, and refactoring in any Go IDE. No CUE plugin required.
-
-### Testable
-
-Unit-test definitions with standard `go test` and Gomega matchers. No cluster needed for unit tests.
-
-### Distributable
-
-Share definitions as standard Go packages via `go get`. Version-controlled alongside your platform code.
-
-### CUE Compatible
-
-Produces the same CUE output consumed by the KubeVela controller. Mix Go-authored and CUE-authored definitions freely.
-
-### Fluent API
-
-Method-chaining builder pattern makes definitions readable and concise. No YAML, no CUE schema wrestling.
-
-:::info
-Both defkit (Go) and the native CUE approach produce identical output consumed by the KubeVela controller. Choose defkit when your team is Go-proficient or when definitions require complex conditional logic and unit testing.
+:::tip **Choose Go (defkit)** when
+Your definitions have complex conditional logic, your team is already Go-proficient, or you need to unit-test and distribute definitions as packages.
 :::
 
-## When to Use Go vs CUE
+:::note **Choose CUE** when
+You're writing simple definitions with few parameters or doing quick one-off experiments where minimal setup matters.
+:::
 
-| Scenario | Go (defkit) | CUE |
-|---|---|---|
-| Team already proficient in Go | Recommended | Works too |
-| Complex conditional template logic | Clearer structure | Possible, verbose |
-| Unit testing without a cluster | go test + Gomega | No native support |
-| Share definitions as packages | go get | Manual copying |
-| Simple definitions, few parameters | Works fine | Simpler to start |
-| Quick one-off experiments | Slightly more setup | Less boilerplate |
+:::info
+Both approaches produce identical output — the KubeVela controller sees no difference. You can mix Go-authored and CUE-authored definitions in the same cluster.
+:::
 
 ## Related
 
