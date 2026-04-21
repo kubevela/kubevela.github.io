@@ -15,15 +15,23 @@ From zero to a working KubeVela ComponentDefinition in 4 steps.
 
 Use the `vela` CLI to scaffold the Go module with the correct directory structure.
 
+<details>
+<summary>CLI command</summary>
+
 ```shell
 vela def init-module --name my-platform \
   --components webservice,worker \
   --traits scaler
 ```
 
+</details>
+
 ## Step 2: Write a definition in Go
 
 Open the scaffolded file and use the defkit fluent API to define parameters and template.
+
+<details>
+<summary>Go source</summary>
 
 ```go title="Go — defkit"
 package components
@@ -54,6 +62,8 @@ func webserviceTemplate(tpl *defkit.Template) {
 func init() { defkit.Register(Webservice()) }
 ```
 
+</details>
+
 
 :::tip
 See [ComponentDefinition](./definition-component.md) for the full list of chain methods and parameter types.
@@ -63,6 +73,9 @@ See [ComponentDefinition](./definition-component.md) for the full list of chain 
 
 Validate the module compiles and generates valid CUE. Optionally generate raw CUE files for inspection.
 
+<details>
+<summary>CLI commands</summary>
+
 ```shell
 vela def validate-module ./my-platform
 vela def list-module ./my-platform
@@ -70,7 +83,11 @@ vela def list-module ./my-platform
 # Generate raw CUE files (optional — for inspection)
 vela def gen-module ./my-platform -o ./generated-cue
 ```
-The Generated Cue Definition should look like below
+
+</details>
+
+<details>
+<summary>Generated CUE output</summary>
 
 ```cue title="CUE — generated"
 webservice: {
@@ -107,9 +124,14 @@ template: {
 }
 ```
 
+</details>
+
 ## Step 4: Apply to cluster
 
 Deploy all definitions to your KubeVela cluster in one command.
+
+<details>
+<summary>CLI commands</summary>
 
 ```shell
 # Dry-run first
@@ -118,6 +140,8 @@ vela def apply-module ./my-platform --dry-run
 # Apply (overwrite if definitions already exist)
 vela def apply-module ./my-platform --conflict overwrite
 ```
+
+</details>
 
 ## Next Steps
 
