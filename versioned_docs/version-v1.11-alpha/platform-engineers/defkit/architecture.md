@@ -24,90 +24,27 @@ When an end user submits an Application YAML:
 4. **ResourceTracker** — The controller tracks all rendered resources for lifecycle management (garbage collection, updates).
 5. **Health Check** — Status is evaluated against the health policy to determine if the component is `Healthy`, `DispatchHealthy`, or `Unhealthy`.
 
-## Module Structure
+## What defkit Generates
 
-<details>
-<summary>Module directory layout</summary>
+Every definition built with defkit implements the `Definition` interface — the contract between your Go code and the KubeVela CLI/controller:
 
-```shell
-my-platform/
-├── module.yaml              # Module metadata (name, description, version)
-├── go.mod
-├── go.sum
-├── cmd/register/main.go     # Registry entry point — imports all packages
-├── components/
-│   ├── webservice.go        # ComponentDefinition — Deployment workload
-│   ├── worker.go            # ComponentDefinition — background worker
-│   └── statefulset.go       # ComponentDefinition — StatefulSet workload
-├── traits/
-│   ├── env.go               # TraitDefinition — environment variables
-│   ├── scaler.go            # TraitDefinition — replica scaling
-│   └── hpa.go               # TraitDefinition — HPA autoscaling
-├── policies/
-│   ├── override.go          # PolicyDefinition — parameter override
-│   └── garbage-collect.go   # PolicyDefinition — GC policies
-└── workflowsteps/
-    ├── deploy.go             # WorkflowStepDefinition — deploy step
-    └── apply-object.go      # WorkflowStepDefinition — apply K8s object
-```
+| Method | Purpose |
+|---|---|
+| `DefName()` | The definition's name (e.g. `"webservice"`, `"scaler"`). Used as the Kubernetes CR name. |
+| `DefType()` | The definition type: `component`, `trait`, `policy`, or `workflow-step`. |
+| `ToCue()` | Generates the complete CUE template string consumed by the controller. |
+| `ToYAML()` | Generates the full Kubernetes CR YAML (`ComponentDefinition`, `TraitDefinition`, etc.). |
+| `GetPlacement()` | Returns cluster placement constraints (RunOn / NotRunOn). |
+| `HasPlacement()` | Whether the definition has any placement constraints. |
 
-</details>
+The CLI command `vela def apply-module` compiles your Go module, calls `ToJSON()` on all registered definitions, and applies the resulting CRs to the cluster — you never invoke these methods directly.
 
-## Registration Pattern
+## Health Evaluation
 
-Each definition file self-registers via `init()`. The `cmd/register/main.go` entry point uses blank imports to trigger all `init()` calls, then calls `defkit.ToJSON()` to export all registered definitions.
-
-<details>
-<summary>Definition file example</summary>
-
-```go title="definition file"
-package components
-
-import "github.com/oam-dev/kubevela/pkg/definition/defkit"
-
-func Webservice() *defkit.ComponentDefinition {
-    return defkit.NewComponent("webservice").
-        Description("...").
-        Workload("apps/v1", "Deployment").
-        Params(...)
-}
-
-// init() is called automatically on import
-func init() {
-    defkit.Register(Webservice())
-}
-```
-
-</details>
-
-<details>
-<summary>cmd/register/main.go</summary>
-
-```go title="cmd/register/main.go"
-package main
-
-import (
-    "fmt"
-    "github.com/oam-dev/kubevela/pkg/definition/defkit"
-
-    // Blank imports trigger init() in each package,
-    // registering all definitions automatically
-    _ "my-platform/components"
-    _ "my-platform/traits"
-    _ "my-platform/policies"
-    _ "my-platform/workflowsteps"
-)
-
-func main() {
-    // Exports all registered definitions as JSON
-    fmt.Println(defkit.ToJSON())
-}
-```
-
-</details>
+defkit's Health DSL generates `status.healthPolicy` and `status.customStatus` CUE blocks. At runtime, the controller evaluates these against the deployed resource to determine component health. Use preset builders like `DeploymentHealth()` for common workloads or compose custom expressions with the [Health & Status DSL](./health-status-dsl.md).
 
 ## Related
 
-- [Integration](./integration.md) — go.mod setup and package structure
+- [Integration](./integration.md) — go.mod setup, module structure, CLI commands
 - [Register & Output](./definition-register.md) — `defkit.Register()` and output methods
 - [Quick Start](./quick-start.md) — get started in 4 steps
