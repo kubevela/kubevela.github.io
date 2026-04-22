@@ -2,6 +2,9 @@
 title: TraitDefinition
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 `defkit.NewTrait(name string) *TraitDefinition` creates a TraitDefinition builder. Traits patch or augment existing component workloads. They can target specific workload types and optionally mutate container specs.
 
 ## Chain Methods
@@ -49,53 +52,143 @@ These methods are the same shape as on `ComponentDefinition`. See the [Component
 
 ## Example
 
-```go title="Go — defkit"
-func Env() *defkit.TraitDefinition {
-    envs := defkit.Array("env").Of(defkit.Struct("envItem").
-        WithFields(
-            defkit.String("name"),
-            defkit.String("value").Optional(),
-        )).Description("Environment variables to inject")
+Let's build a `resource-limits` trait — a reusable patch that sets CPU and memory **requests** and **limits** on the primary container of the workload it attaches to. Users only need to supply the four resource values (or accept the sensible defaults); the trait targets `Deployment` and `StatefulSet` workloads, is declared mutually exclusive with autoscaling traits (`hpa`, `cpuscaler`), and runs before dispatch so that patched pods are created with the right limits from the start.
 
-    return defkit.NewTrait("env").
-        Description("Inject environment variables into containers").
-        AppliesTo("webservice", "daemon", "worker").
-        PodDisruptive(true).
-        Params(envs).
-        Template(envTemplate)
-}
+Behind the scenes the trait exercises most chain methods in a single definition — metadata (`Description`, `Labels`), trait scope (`AppliesTo`, `ConflictsWith`), rollout hints (`PodDisruptive`, `Stage`, `RevisionEnabled`), and a `Template(...)` that uses defkit's container-mutation helper `tpl.UsePatchContainer(...)` to generate the grouped `resources.requests` / `resources.limits` patch on the target container. Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/traits/`.
 
-func init() { defkit.Register(Env()) }
-```
-
-```cue title="CUE — generated"
-// Generated — env TraitDefinition
-#PatchParams: {
-  containerName: *"" | string
-  replace:       *false | bool
-  env: [string]: string
-  unset: *[] | [...string]
-}
-parameter: {
-  env?: [...{
-    name:   string
-    value?: string
-  }]
-}
-```
-
-## Container Mutation
-
-For traits that need to modify container specs (inject env vars, add volume mounts, set resource limits), use `defkit.PatchContainer(...)` combined with `tpl.UsePatchContainer(config)` inside the template function. This generates the correct CUE patch semantics.
-
-## WorkloadRefPath
-
-`.WorkloadRefPath(path)` specifies the dot-notation field path to the workload object reference within the trait's resource. This is used by the KubeVela controller for resource tracking. Pass an empty string to disable workload ref tracking:
+<Tabs groupId="defkit-example">
+<TabItem value="go" label="Go — defkit">
 
 ```go
-return defkit.NewTrait("my-trait").
-    WorkloadRefPath("spec.workloadRef").
-    // ...
+package traits
+
+import "github.com/oam-dev/kubevela/pkg/definition/defkit"
+
+func ResourceLimits() *defkit.TraitDefinition {
+    return defkit.NewTrait("resource-limits").
+        Description("Set Kubernetes container CPU/memory requests and limits").
+        Labels(map[string]string{"tier": "platform"}).
+        AppliesTo("deployments.apps", "statefulsets.apps").
+        ConflictsWith("hpa", "cpuscaler").
+        PodDisruptive(true).
+        Stage("PreDispatch").
+        RevisionEnabled().
+        Template(resourceLimitsTemplate)
+}
+
+func resourceLimitsTemplate(tpl *defkit.Template) {
+    tpl.UsePatchContainer(defkit.PatchContainerConfig{
+        ContainerNameParam:   "containerName",
+        DefaultToContextName: true,
+        Groups: []defkit.PatchContainerGroup{
+            {
+                TargetField: "resources",
+                SubGroups: []defkit.PatchContainerGroup{
+                    {
+                        TargetField: "requests",
+                        Fields: defkit.PatchFields(
+                            defkit.PatchField("cpuRequest").Target("cpu").Str().Default(`"100m"`),
+                            defkit.PatchField("memRequest").Target("memory").Str().Default(`"128Mi"`),
+                        ),
+                    },
+                    {
+                        TargetField: "limits",
+                        Fields: defkit.PatchFields(
+                            defkit.PatchField("cpuLimit").Target("cpu").Str().Default(`"500m"`),
+                            defkit.PatchField("memLimit").Target("memory").Str().Default(`"512Mi"`),
+                        ),
+                    },
+                },
+            },
+        },
+    })
+}
+
+func init() { defkit.Register(ResourceLimits()) }
+```
+
+</TabItem>
+<TabItem value="cue" label="CUE — generated">
+
+```cue
+"resource-limits": {
+  type: "trait"
+  annotations: {}
+  labels: tier: "platform"
+  description: "Set Kubernetes container CPU/memory requests and limits"
+  attributes: {
+    podDisruptive:   true
+    revisionEnabled: true
+    stage:           "PreDispatch"
+    appliesToWorkloads: ["deployments.apps", "statefulsets.apps"]
+    conflictsWith: ["hpa", "cpuscaler"]
+  }
+}
+template: {
+  #PatchParams: {
+    // +usage=Specify the name of the target container, if not set, use the component name
+    containerName: *"" | string
+    // +usage=Specify the cpuRequest of the container
+    cpuRequest: *"100m" | string
+    // +usage=Specify the memRequest of the container
+    memRequest: *"128Mi" | string
+    // +usage=Specify the cpuLimit of the container
+    cpuLimit: *"500m" | string
+    // +usage=Specify the memLimit of the container
+    memLimit: *"512Mi" | string
+  }
+  PatchContainer: {
+    _params:         #PatchParams
+    name:            _params.containerName
+    _baseContainers: context.output.spec.template.spec.containers
+    _matchContainers_: [for _container_ in _baseContainers if _container_.name == name {_container_}]
+    _baseContainer: *_|_ | {...}
+    if len(_matchContainers_) == 0 {
+      err: "container \(name) not found"
+    }
+    if len(_matchContainers_) > 0 {
+      resources: {
+        requests: {
+          cpu:    _params.cpuRequest
+          memory: _params.memRequest
+        }
+        limits: {
+          cpu:    _params.cpuLimit
+          memory: _params.memLimit
+        }
+      }
+    }
+  }
+  patch: spec: template: spec: {
+    // +patchKey=name
+    containers: [{
+      PatchContainer & {_params: {
+        if parameter.containerName == "" {
+          containerName: context.name
+        }
+        if parameter.containerName != "" {
+          containerName: parameter.containerName
+        }
+        cpuRequest: parameter.cpuRequest
+        memRequest: parameter.memRequest
+        cpuLimit:   parameter.cpuLimit
+        memLimit:   parameter.memLimit
+      }}
+    }]
+  }
+  parameter: #PatchParams
+  errs: [for c in patch.spec.template.spec.containers if c.err != _|_ {c.err}]
+}
+```
+
+</TabItem>
+</Tabs>
+
+Reproduce the CUE on the right with:
+
+```shell
+vela def validate-module ./my-platform
+vela def gen-module ./my-platform -o ./generated-cue
 ```
 
 ## Related
