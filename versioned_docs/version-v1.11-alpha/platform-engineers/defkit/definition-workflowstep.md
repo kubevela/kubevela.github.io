@@ -2,6 +2,9 @@
 title: WorkflowStepDefinition
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 `defkit.NewWorkflowStep(name string) *WorkflowStepDefinition` creates a WorkflowStepDefinition builder. Workflow steps describe actions in application delivery pipelines — deploying components, running builds, applying Terraform configs, or checking metrics.
 
 ## Chain Methods
@@ -40,7 +43,7 @@ These methods are the same shape as on `ComponentDefinition`. See the [Component
 | `.ToCue() string` | Compiles the step into a complete CUE string ready to apply as a KubeVela X-Definition. |
 | `.ToYAML() ([]byte, error)` | Generates the Kubernetes YAML manifest for the WorkflowStepDefinition CR. |
 
-## WorkflowStepTemplate
+### WorkflowStepTemplate (closure argument)
 
 `.Template()` passes a `*WorkflowStepTemplate`. Use it to assemble the actions the workflow engine runs.
 
@@ -53,7 +56,7 @@ These methods are the same shape as on `ComponentDefinition`. See the [Component
 | `.Suspend(message string)` | Adds a suspend action that pauses the workflow and displays the message. The workflow waits for manual approval (via `vela workflow resume`) before continuing. |
 | `.SuspendIf(cond Condition, message string)` | Conditionally suspends the workflow only when the condition is true. For example, suspend for manual approval only when `auto` is false: `SuspendIf(Not(auto.IsTrue()), "Waiting for approval")`. |
 
-## BuiltinActionBuilder
+### BuiltinActionBuilder
 
 Returned by `WorkflowStepTemplate.Builtin()`. Configure the builtin's parameters and finalize with `.Build()`.
 
@@ -67,32 +70,101 @@ Returned by `WorkflowStepTemplate.Builtin()`. Configure the builtin's parameters
 
 ## Example
 
-```go title="Go — defkit"
-func ApplyComponent() *defkit.WorkflowStepDefinition {
-    comp := defkit.String("component").
-        Description("Name of the component to apply")
+Let's build a `deploy-with-gate` workflow step — a reusable pipeline action that dispatches the Application's components to one or more clusters, with an optional manual-approval gate before the dispatch happens. Users supply a list of policy names to honor, a parallelism limit, and a boolean `auto` flag: when `auto: false` the step suspends before dispatching so an operator can review and resume via `vela workflow resume`; when `auto: true` the step deploys immediately.
 
-    return defkit.NewWorkflowStep("apply-component").
-        Description("Apply a single component from the Application").
-        Category("Deploy").
+Behind the scenes the step exercises most chain methods in a single definition — metadata (`Description`, `Labels`), step-specific (`Category`, `Scope`), `WithImports("vela/multicluster")` to bring in the `multicluster.#Deploy` action, `Params` with `Bool` / `StringList` / `Int`, and a `Template(...)` that combines `SuspendIf(...)` with `Builtin("deploy", "multicluster.#Deploy").WithParams(...).Build()`. Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/workflowsteps/`.
+
+<Tabs groupId="defkit-example">
+<TabItem value="go" label="Go — defkit">
+
+```go
+package workflowsteps
+
+import "github.com/oam-dev/kubevela/pkg/definition/defkit"
+
+func DeployWithGate() *defkit.WorkflowStepDefinition {
+    auto := defkit.Bool("auto").Default(true).
+        Description("If false, pause the workflow for manual approval before dispatch")
+    policies := defkit.StringList("policies").
+        Description("Names of policies to apply for this deploy")
+    parallelism := defkit.Int("parallelism").Default(5).
+        Description("Max number of parallel dispatches")
+
+    return defkit.NewWorkflowStep("deploy-with-gate").
+        Description("Deploy components, optionally pausing for manual approval first").
+        Labels(map[string]string{"tier": "platform"}).
+        Category("Application Delivery").
         Scope("Application").
-        Params(comp).
-        Template(applyComponentTemplate)
+        WithImports("vela/multicluster").
+        Params(auto, policies, parallelism).
+        Template(func(tpl *defkit.WorkflowStepTemplate) {
+            tpl.SuspendIf(
+                defkit.Not(auto.IsTrue()),
+                "Waiting for manual approval before deploy")
+            tpl.Builtin("deploy", "multicluster.#Deploy").
+                WithParams(map[string]defkit.Value{
+                    "policies":    policies,
+                    "parallelism": parallelism,
+                }).
+                Build()
+        })
 }
 
-func init() { defkit.Register(ApplyComponent()) }
+func init() { defkit.Register(DeployWithGate()) }
 ```
 
-```cue title="CUE — generated"
-// Generated — apply-component WorkflowStepDefinition
-parameter: {
-  // +usage=Specify the component name to apply
-  component: string
-  // +usage=Specify the cluster
-  cluster: *"" | string
-  // +usage=Specify the namespace
-  namespace: *"" | string
+</TabItem>
+<TabItem value="cue" label="CUE — generated">
+
+```cue
+import (
+  "vela/multicluster"
+)
+
+"deploy-with-gate": {
+  type: "workflow-step"
+  annotations: {
+    "category": "Application Delivery"
+  }
+  labels: {
+    "tier": "platform"
+    "scope": "Application"
+  }
+  description: "Deploy components, optionally pausing for manual approval first"
 }
+template: {
+  if !(parameter.auto) {
+    suspend: builtin.#Suspend & {
+      $params: {
+        message: "Waiting for manual approval before deploy"
+      }
+    }
+  }
+  deploy: multicluster.#Deploy & {
+    $params: {
+      parallelism: parameter.parallelism
+      policies: parameter.policies
+    }
+  }
+  parameter: {
+    // +usage=If false, pause the workflow for manual approval before dispatch
+    auto: *true | bool
+    // +usage=Names of policies to apply for this deploy
+    policies: [...string]
+    // +usage=Max number of parallel dispatches
+    parallelism: *5 | int
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+Reproduce the CUE on the right with:
+
+```shell
+vela def validate-module ./my-platform
+vela def gen-module ./my-platform -o ./generated-cue
 ```
 
 ## Workflow Step Execution
@@ -109,17 +181,6 @@ spec:
         type: apply-component
         properties:
           component: frontend
-```
-
-## WithImports
-
-Like ComponentDefinition, WorkflowStepDefinition supports `.WithImports()` for steps whose CUE templates reference CUE standard library packages:
-
-```go
-return defkit.NewWorkflowStep("my-step").
-    WithImports("strings", "strconv").
-    Params(comp).
-    Template(myStepTemplate)
 ```
 
 ## Related
