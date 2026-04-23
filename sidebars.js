@@ -318,6 +318,7 @@ module.exports = {
                 'platform-engineers/defkit/quick-start',
                 'platform-engineers/defkit/architecture',
                 'platform-engineers/defkit/integration',
+                'platform-engineers/defkit/definition-register',
               ],
             },
             {
@@ -328,7 +329,6 @@ module.exports = {
                 'platform-engineers/defkit/definition-trait',
                 'platform-engineers/defkit/definition-policy',
                 'platform-engineers/defkit/definition-workflowstep',
-                'platform-engineers/defkit/definition-register',
               ],
             },
             {
