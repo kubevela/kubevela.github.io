@@ -36,6 +36,19 @@ The helper builder allows you to compute derived CUE `let` variables from array 
 | `Item() *ItemValue` | References the current iteration item inside `Each()`. Chain `.Get(field)` to access a field. |
 | `ItemFieldIsSet(field) Condition` | Returns a condition checking if a field exists on the current item. Generates `v.field != _\|_`. |
 
+### Helper Entry Points on `*Template`
+
+Besides `tpl.Helper(name)` (the general-purpose builder detailed below), `*defkit.Template` exposes three specialized helper constructors for common transformation patterns:
+
+| Method | Description |
+|---|---|
+| `tpl.Helper(name) *HelperBuilder` | General-purpose helper. Returns a `*HelperBuilder` you configure with the chain methods above, then finalize with `.Build()`. |
+| `tpl.StructArrayHelper(name, source)` | Creates a helper that splits a struct parameter's fields into separate typed arrays — one array per field, named by the field. Use when the source parameter has heterogeneous typed sub-arrays (e.g. `volumeMounts: { pvc: [...], configMap: [...] }`). |
+| `tpl.ConcatHelper(name, source)` | Creates a helper that concatenates arrays extracted from a `StructArrayHelper` (or similar multi-field source). Chain `.Fields(...)` to specify which fields to join. |
+| `tpl.DedupeHelper(name, source)` | Creates a helper that deduplicates items from another helper by a key field. Chain `.ByKey("name")` to pick the dedup key. |
+
+`StructArrayHelper` / `ConcatHelper` / `DedupeHelper` are compositional — typical usage is `StructArrayHelper` to split, `ConcatHelper` to recombine the subset you want, then `DedupeHelper` to collapse duplicates.
+
 ## `tpl.Helper(name)`
 
 Builds a CUE `let` variable by transforming an array parameter into a derived list. The helper variable is injected into the template header block and can be referenced in resource `.Set()` calls as `defkit.LetVariable(name)`.

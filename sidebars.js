@@ -348,6 +348,7 @@ module.exports = {
                 'platform-engineers/defkit/template-output-methods',
                 'platform-engineers/defkit/template-patch-methods',
                 'platform-engineers/defkit/template-trait-patch-ops',
+                'platform-engineers/defkit/template-workflowstep-actions',
                 'platform-engineers/defkit/template-helper-builder',
                 'platform-engineers/defkit/template-raw-cue',
               ],
