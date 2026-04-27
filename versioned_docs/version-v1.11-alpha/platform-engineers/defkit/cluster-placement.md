@@ -23,6 +23,18 @@ Import: `"github.com/oam-dev/kubevela/pkg/definition/defkit/placement"`
 
 Applies to: **All Definition Types**
 
+### Label & LabelConditionBuilder
+
+| Function / Method | Description |
+|---|---|
+| `placement.Label(key string)` | Starts a condition based on a cluster label key. Chain with comparison methods below. |
+| `.Eq(value)` | Label must equal value. |
+| `.Ne(value)` | Label must not equal value. |
+| `.In(values...)` | Label must be one of the listed values. |
+| `.NotIn(values...)` | Label must not be any of the listed values. |
+| `.Exists()` | Label key must be present (any value). |
+| `.NotExists()` | Label key must not be present. |
+
 ```go title="Go — defkit"
 import "github.com/oam-dev/kubevela/pkg/definition/defkit/placement"
 
@@ -45,6 +57,14 @@ placement.Label("deprecated").NotExists()
 Combine conditions with logical operators. `All` requires every condition to match. `Any` requires at least one. `Not` negates a condition. Combinators can be nested to express complex placement rules.
 
 Applies to: **All Definition Types**
+
+### Combinator Functions
+
+| Function | Description |
+|---|---|
+| `placement.All(conditions...)` | All conditions must match (AND). |
+| `placement.Any(conditions...)` | At least one must match (OR). |
+| `placement.Not(condition)` | Invert a condition. |
 
 ```go title="Go — defkit"
 // All conditions must match
@@ -128,6 +148,11 @@ trait := defkit.NewTrait("gpu-resource").
 `placement.Evaluate(spec, labels)` programmatically checks whether a cluster (given its label map) satisfies a `PlacementSpec`. Returns a result with `.Eligible` bool and `.Reason` string. `placement.ValidatePlacement(spec)` detects logically conflicting constraints (e.g., same label in RunOn and NotRunOn) at definition-build time.
 
 Applies to: **All Definition Types**
+
+| Function | Description |
+|---|---|
+| `placement.Evaluate(spec, labels) PlacementResult` | Programmatically checks if a cluster satisfies a `PlacementSpec`. Returns `.Eligible` bool and `.Reason` string. |
+| `placement.ValidatePlacement(spec) error` | Detects logically conflicting constraints at definition-build time. |
 
 ```go title="Go — defkit"
 spec := placement.PlacementSpec{

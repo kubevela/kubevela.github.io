@@ -4,6 +4,25 @@ title: Template Patch Methods
 
 Resource builder methods for constructing and mutating Kubernetes resource manifests. Path syntax supports dot-notation, array indices (`[0]`), and bracket notation.
 
+### Resource & Patch Builder Methods
+
+| Method | Description |
+|---|---|
+| `.Set(path string, value Value)` | Sets a field at the given dot-path. Supports dot notation, array indices, and bracket notation. |
+| `.SetIf(cond, path, value)` | Conditionally sets a field only when the condition is true. Generates CUE `if cond { path: value }`. |
+| `.SpreadIf(cond, path, value)` | Conditionally merges a value into a path. Use for merging user-provided maps (labels, annotations). |
+| `.If(cond)` / `.EndIf()` | Opens/closes a conditional block. All `Set()` calls between are wrapped in a single `if cond { ... }`. |
+| `tpl.Patch() *PatchResource` | Gets or creates the patch block for trait definitions. Returns a builder for chaining `Set()`, `SetIf()`, `SpreadIf()`. |
+| `tpl.PatchStrategy(strategy)` | Sets the patch merge strategy: `"retainKeys"`, `"jsonMergePatch"`, `"jsonPatch"`. |
+| `tpl.SetRawPatchBlock(block)` | Escape hatch: replaces the builder-generated `patch:` block with raw CUE. |
+| `NewArray().Item(elem)` | Adds an always-present element to a CUE list literal. |
+| `NewArray().ItemIf(cond, elem)` | Adds a conditional element. |
+| `NewArray().ForEachGuarded(cond, source, template)` | Appends elements for each value in an array parameter, guarded by a condition. |
+| `NewArrayElement().Set(key, value)` | Sets a field on a single array element object. |
+| `NewResourceWithConditionalVersion(kind)` | Creates a resource whose `apiVersion` is determined at runtime. Chain `.VersionIf(cond, apiVersion)`. |
+
+See [Resource Builder](./resource-builder.md) for the full Resource Builder and ArrayBuilder API reference.
+
 ## `.Set()` / `.SetIf()` / `.SpreadIf()`
 
 `.Set()` always sets the field. `.SetIf()` wraps the assignment in an `if cond` guard. `.SpreadIf()` spreads a map value (e.g., labels object) into a path conditionally.

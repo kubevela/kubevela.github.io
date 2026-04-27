@@ -14,6 +14,19 @@ Both are optional. If omitted, the controller uses built-in defaults based on th
 
 The fastest way to add health and status to common workload types.
 
+| Preset | Type | Description |
+|---|---|---|
+| `DeploymentHealth()` | Health | Checks replicas == readyReplicas == updatedReplicas |
+| `DeploymentStatus()` | Status | Shows "Ready: X/Y Updated: Z" |
+| `StatefulSetHealth()` | Health | Checks replicas == readyReplicas |
+| `StatefulSetStatus()` | Status | Shows "Ready: X/Y" for StatefulSets |
+| `DaemonSetHealth()` | Health | Checks numberReady == desiredNumberScheduled |
+| `DaemonSetStatus()` | Status | Shows "Ready: X Desired: Y" |
+| `JobHealth()` | Health | Checks succeeded > 0 |
+| `CronJobHealth()` | Health | Checks active Jobs and last schedule time |
+
+String helpers: `StatusEq(left, right)`, `StatusGte(left, right)`, `StatusOr(conditions...)`, `StatusAnd(conditions...)`.
+
 ### `defkit.DeploymentHealth()` / `defkit.DaemonSetHealth()` / `defkit.JobHealth()`
 
 Pre-built health policy builders for the three common workload types.
@@ -84,6 +97,21 @@ customStatus: {
 
 The `defkit.Health()` DSL provides two styles: the low-level `IntField/HealthyWhen` API and the higher-level composable expression API.
 
+### Health Builder Methods
+
+| Method | Description |
+|---|---|
+| `.IntField(name, sourcePath, defaultVal)` | Extracts an integer field from the output resource's status and stores it as a CUE variable for use in health conditions. The `sourcePath` is relative to `context.output`. |
+| `.StringField(name, sourcePath, defaultVal)` | Same as `IntField` but for string values. |
+| `.MetadataField(name, sourcePath)` | Extracts a field from the output resource's metadata rather than from status. |
+| `.HealthyWhen(conditions ...string)` | Sets the `isHealth` expression from raw CUE condition strings. Each condition is ANDed together. Use string helpers like `StatusEq()`, `StatusGte()`. |
+| `.HealthyWhenExpr(expr HealthExpression)` | Sets the `isHealth` expression from the type-safe HealthExpression DSL. |
+| `.WithDefault()` | Enables the `_isHealth` intermediate pattern allowing the health result to be overridden via CUE unification. |
+| `.WithDisableAnnotation(annotation)` | Allows the health check to be disabled via an annotation on the workload. |
+| `.Build() string` | Compiles the health builder into a CUE string for the `status: healthPolicy:` block. |
+| `.Policy(expr HealthExpression) string` | Generates a complete health policy CUE string directly from a HealthExpression, bypassing builder state. |
+| `.RawCUE(cue)` | Escape hatch: replaces the entire health policy with raw CUE. |
+
 ### Low-level: `IntField` / `HealthyWhen`
 
 ```go title="Go — defkit"
@@ -124,6 +152,25 @@ isHealth: {
 ## Composable Health API
 
 An alternative higher-level API using condition-based chaining. Wire into definitions with `.HealthPolicyExpr()`.
+
+### HealthExpression DSL
+
+| Method | Description |
+|---|---|
+| `.Condition(type string) *ConditionExpr` | Checks a Kubernetes status condition by type name (e.g. `"Ready"`). Returns a `*ConditionExpr` for chaining with `.IsTrue()`, `.IsFalse()`, etc. |
+| `.Field(path) *HealthFieldExpr` | Checks a field value on the output resource. Path is relative to `context.output`. Returns a `*HealthFieldExpr` for comparison chains. |
+| `.FieldRef(path) *HealthFieldRefExpr` | Creates a reference to a field for use in compound expressions (e.g. comparing two fields). |
+| `.Phase(phases ...string)` | Checks if `context.output.status.phase` matches any of the listed phases. |
+| `.PhaseField(path, phases...)` | Like `Phase()` but checks a custom field path instead of the default `status.phase`. |
+| `.Exists(path)` / `.NotExists(path)` | Checks whether a path exists (or doesn't) on the output resource. Generates `path != _\|_`. |
+| `.And(exprs...)` / `.Or(exprs...)` / `.Not(expr)` | Logical combinators for composing multiple HealthExpressions. |
+| `.Always()` | Returns a HealthExpression that always evaluates to healthy. |
+| `.AllTrue(condTypes ...string)` | Checks that all listed condition types have status `"True"`. The most common health pattern for CRDs. |
+| `.AnyTrue(condTypes ...string)` | Checks that at least one of the listed condition types has status `"True"`. |
+
+**ConditionExpr**: `.IsTrue()` — status is `"True"`. `.IsFalse()` — status is `"False"`. `.Is(status)` — exact match. `.Exists()` — condition type exists. `.ReasonIs(reason)` — reason field matches.
+
+**HealthFieldExpr**: `.Eq(val)`, `.Ne(val)`, `.Gt(val)`, `.Gte(val)`, `.Lt(val)`, `.Lte(val)` — comparison operators. `.In(values...)` — field matches any listed value. `.Contains(substr)` — string field contains substring.
 
 ### Condition Checks
 
@@ -212,6 +259,40 @@ isHealth: (len(_readyCond) > 0 && _readyCond[0].status == "True") &&
 ```
 
 ## Status DSL — `defkit.Status()`
+
+### Status Builder Methods
+
+| Method | Description |
+|---|---|
+| `.IntField(name, sourcePath, defaultVal)` | Extracts an integer from the output resource and stores it as a CUE variable for the status message. |
+| `.StringField(name, sourcePath, defaultVal)` | Extracts a string from the output resource for the status message. |
+| `.Message(msg)` | Sets the status message template. Can reference variables using CUE interpolation. |
+| `.Build() string` | Compiles into CUE for the `customStatus:` block. |
+| `.RawCUE(cue)` | Escape hatch: replaces the status with raw CUE. |
+
+### StatusExpression DSL
+
+| Method | Description |
+|---|---|
+| `.Field(path) *StatusFieldExpr` | References a field relative to `context.output`. Returns a `*StatusFieldExpr` for chaining `.Default(val)` or comparison methods. |
+| `.SpecField(path) *StatusFieldExpr` | Same as `Field()` — references a field relative to `context.output`. Functionally identical. |
+| `.Condition(type) *StatusConditionAccessor` | Accesses a Kubernetes status condition by type name. Chain with `.StatusValue()`, `.Message()`, `.Reason()`, or `.Is(status)`. |
+| `.Exists(path)` / `.NotExists(path)` | Checks whether a path exists (or doesn't) on the output resource. |
+| `.Literal(value string)` | Creates a static string status expression. |
+| `.Concat(parts ...any)` | Concatenates strings, field references, and other expressions into a single status message. |
+| `.Format(template, args...)` | Creates a formatted status string using a template with positional arguments. |
+| `.Case(condition, message)` | Creates a case for use in `Switch()`. |
+| `.Default(message)` | Creates the default/fallback case for a `Switch()`. |
+| `.Switch(casesAndDefault ...any)` | Evaluates cases in order. Generates CUE `if cond1 { msg1 } if cond2 { msg2 }`. |
+| `.HealthAware(healthyMsg, unhealthyMsg)` | Creates a status message that varies based on `context.status.healthy`. |
+| `.Detail(key, value)` | Creates a key-value detail entry for structured status reporting. |
+| `.WithDetails(message, details...)` | Creates a status expression with both a message and structured key-value details. |
+
+**StatusFieldExpr**: `.Default(val)` provides a fallback. `.Eq(val)`/`.Ne(val)`/`.Gt(val)`/`.Gte(val)`/`.Lt(val)`/`.Lte(val)` create StatusConditions for `Case()`/`Switch()`.
+
+**StatusConditionAccessor**: `.StatusValue()` accesses `.status`. `.Message()` accesses `.message`. `.Reason()` accesses `.reason`. `.Is(status)` checks equality.
+
+**Standalone**: `StatusPolicy(expr)` wraps a StatusExpression into the full `customStatus:` CUE block. `HealthPolicy(expr)` wraps a HealthExpression into the `healthPolicy:` block.
 
 ### Low-level: `IntField` / `Message`
 

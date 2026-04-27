@@ -318,6 +318,7 @@ module.exports = {
                 'platform-engineers/defkit/quick-start',
                 'platform-engineers/defkit/architecture',
                 'platform-engineers/defkit/integration',
+                'platform-engineers/defkit/definition-register',
               ],
             },
             {
@@ -328,7 +329,6 @@ module.exports = {
                 'platform-engineers/defkit/definition-trait',
                 'platform-engineers/defkit/definition-policy',
                 'platform-engineers/defkit/definition-workflowstep',
-                'platform-engineers/defkit/definition-register',
               ],
             },
             {
@@ -348,6 +348,7 @@ module.exports = {
                 'platform-engineers/defkit/template-output-methods',
                 'platform-engineers/defkit/template-patch-methods',
                 'platform-engineers/defkit/template-trait-patch-ops',
+                'platform-engineers/defkit/template-workflowstep-actions',
                 'platform-engineers/defkit/template-helper-builder',
                 'platform-engineers/defkit/template-raw-cue',
               ],

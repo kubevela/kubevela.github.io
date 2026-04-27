@@ -146,3 +146,25 @@ if parameter["ports"] != _|_ {
 :::tip
 Use `ForEachWithGuardedFiltered` when you need *both* a whole-expression guard (the source param is optional) and an element-level filter (only include items matching a condition). The common case is optional array params where you also want to filter elements.
 :::
+
+## `ForEachWithGuardedFilteredVar`
+
+The same as `ForEachWithGuardedFiltered` but lets you specify the loop variable name (default is `v`). Use when you need to reference the iteration variable by a specific name in the generated CUE.
+
+```go title="Go — defkit"
+result := defkit.NewArray().ForEachWithGuardedFilteredVar("p",
+    ports.IsSet(),
+    defkit.FieldEquals("expose", true),
+    ports,
+    func(item *defkit.ItemBuilder) {
+        v := item.Var()
+        item.Set("port", v.Field("port"))
+    },
+)
+```
+
+```cue title="CUE — generated"
+[if parameter["ports"] != _|_ for p in parameter.ports if p.expose == true {
+    port: p.port
+}]
+```

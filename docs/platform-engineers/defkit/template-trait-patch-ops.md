@@ -12,10 +12,15 @@ Applies to: **Trait**
 
 | Method | Description |
 |---|---|
-| `.SpreadIf(cond, path, param)` | Spreads all key-value pairs from a map parameter into a field conditionally |
-| `.ForEach(param, path)` | Iterates a map parameter and applies each key-value pair |
-| `.PatchKey(path, key, elem)` | Patches array elements matched by a key field (e.g., sidecar injection) |
-| `.Passthrough()` | Forwards the entire parameter object as the patch |
+| `.Set(path, value)` | Sets a field in the patch. Generates `patch: path: value`. |
+| `.SetIf(cond, path, value)` | Conditionally sets a patch field. Generates `if cond { patch: path: value }`. |
+| `.SpreadIf(cond, path, value)` | Conditionally spreads a map value into a path. Use for merging labels, annotations. |
+| `.If(cond)` / `.EndIf()` | Opens/closes a conditional block where all enclosed patch operations share the same condition. |
+| `.ForEach(source, path)` | Iterates over a map and spreads each key-value pair into the path. Generates `for k, v in source { (k): v }`. |
+| `.PatchKey(path, key, elements...)` | Adds `// +patchKey=key` directive and array elements. For strategic merge patch by key field (e.g. `name` for containers). |
+| `.SpreadAll(path, elements...)` | Applies each element as a spread constraint on every item in the target array. |
+| `.PatchStrategyAnnotation(path, strategy)` | Adds `// +patchStrategy=strategy` comment at the given path. |
+| `.Passthrough()` | Generates `patch: parameter` — the entire parameter becomes the patch. |
 
 ```go title="Go — defkit"
 labels := defkit.Object("labels")
@@ -66,6 +71,25 @@ patch: parameter
 ```
 
 ## `defkit.PatchContainer()` + `tpl.UsePatchContainer()`
+
+### Context Introspection
+
+| Function | Description |
+|---|---|
+| `ContextOutput() *ContextOutputRef` | Returns a reference to the primary output resource (`context.output`). Chain with `.Field(path)` to access fields or `.HasPath(path)` for existence conditions. |
+
+### PatchField Chain Methods
+
+`PatchField(name)` defines a single patch field for container mutation. Chain methods: `.Target(t)` sets target field, `.Default(val)` sets CUE default, `.Type(t)`/`.Int()`/`.Bool()`/`.Str()`/`.StringArray()` set param type, `.Strategy(s)` sets patch strategy, `.IsSet()`/`.NotEmpty()` set conditions, `.Eq(val)`/`.Ne(val)`/`.Gt(val)`/`.Gte(val)`/`.Lt(val)`/`.Lte(val)` set comparisons, `.RawCondition(c)` sets raw CUE condition, `.Description(d)` sets description, `.Build()` finalizes.
+
+### Convenience Conditions
+
+| Function | Description |
+|---|---|
+| `ParamIsSet(name)` | Standalone condition: true when the named parameter is provided. Generates `parameter["name"] != _\|_`. |
+| `ParamNotSet(name)` | Standalone condition: true when the named parameter is not provided. |
+| `ContextOutputExists(path)` | Condition checking if a path exists on the primary output resource. Generates `context.output.path != _\|_`. |
+| `AllConditions(conditions...)` | Combines multiple conditions with logical AND. |
 
 High-level helper for traits that patch individual containers. Generates the full `patchSets` / `patch` CUE block with container targeting, optional multi-container support, and field declarations. Use when your trait mutates container fields (env, resources, image, ports, security context, etc.).
 

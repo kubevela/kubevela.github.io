@@ -4,6 +4,23 @@ title: Parameter Chain Methods
 
 All parameter constructors return `*Param` — chain these methods to configure validation, defaults, and metadata. Methods are composable in any order.
 
+### Common Methods (all param types)
+
+Inherited from `baseParam` — available on every parameter type:
+
+| Method | Description |
+|---|---|
+| `.Required()` | Marks the parameter as required. Users must explicitly provide a value. Generates CUE `name!: type`. |
+| `.Optional()` | Marks the parameter as explicitly optional. The field can be omitted. Generates CUE `name?: type`. |
+| `.Default(value)` | Sets a default value. Generates CUE `*value \| type`. Does not set the optional flag — parameters with defaults are implicitly optional at the CUE level. |
+| `.Description(desc)` | Sets the human-readable description shown in `vela show`. Generates `// +usage=desc`. |
+| `.Short(s)` | Sets a short alias (e.g. `"i"` for `"image"`). Generates `// +short=s`. |
+| `.Ignore()` | Marks the parameter as ignored — appears in CUE schema but not in `vela show`. Generates `// +ignore`. |
+| `.IsSet() Condition` | Returns a condition that is true when the user provided this parameter. Generates CUE `parameter["name"] != _\|_`. |
+| `.NotSet() Condition` | Returns a condition that is true when the parameter was omitted. Generates CUE `parameter["name"] == _\|_`. |
+| `.Eq(val) Condition` | Returns a condition comparing this parameter's value to a literal. Generates CUE `parameter.name == val`. |
+| `.Ne(val)`, `.Gt(val)`, `.Gte(val)`, `.Lt(val)`, `.Lte(val)` | Additional comparison conditions generating `!=`, `>`, `>=`, `<`, `<=` respectively. |
+
 ## `.Optional()` / `.Required()`
 
 Controls the CUE field presence marker. defkit uses a three-state model:
