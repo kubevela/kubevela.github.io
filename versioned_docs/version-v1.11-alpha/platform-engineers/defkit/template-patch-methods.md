@@ -1,108 +1,190 @@
 ---
-title: Template Patch Methods
+title: Resource & Patch Builder Methods
 ---
 
-Resource builder methods for constructing and mutating Kubernetes resource manifests. Path syntax supports dot-notation, array indices (`[0]`), and bracket notation.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-### Resource & Patch Builder Methods
+Builder methods for constructing and mutating Kubernetes resource manifests inside a definition template. This page covers the resource and array builders used from any `*defkit.Template` (component / trait), plus the trait-only `tpl.Patch()` family. Path syntax supports dot notation, `[0]` array indices, and bracket notation.
 
-| Method | Description |
-|---|---|
-| `.Set(path string, value Value)` | Sets a field at the given dot-path. Supports dot notation, array indices, and bracket notation. |
-| `.SetIf(cond, path, value)` | Conditionally sets a field only when the condition is true. Generates CUE `if cond { path: value }`. |
-| `.SpreadIf(cond, path, value)` | Conditionally merges a value into a path. Use for merging user-provided maps (labels, annotations). |
-| `.If(cond)` / `.EndIf()` | Opens/closes a conditional block. All `Set()` calls between are wrapped in a single `if cond { ... }`. |
-| `tpl.Patch() *PatchResource` | Gets or creates the patch block for trait definitions. Returns a builder for chaining `Set()`, `SetIf()`, `SpreadIf()`. |
-| `tpl.PatchStrategy(strategy)` | Sets the patch merge strategy: `"retainKeys"`, `"jsonMergePatch"`, `"jsonPatch"`. |
-| `tpl.SetRawPatchBlock(block)` | Escape hatch: replaces the builder-generated `patch:` block with raw CUE. |
-| `NewArray().Item(elem)` | Adds an always-present element to a CUE list literal. |
-| `NewArray().ItemIf(cond, elem)` | Adds a conditional element. |
-| `NewArray().ForEachGuarded(cond, source, template)` | Appends elements for each value in an array parameter, guarded by a condition. |
-| `NewArrayElement().Set(key, value)` | Sets a field on a single array element object. |
-| `NewResourceWithConditionalVersion(kind)` | Creates a resource whose `apiVersion` is determined at runtime. Chain `.VersionIf(cond, apiVersion)`. |
+## Method Reference
 
-See [Resource Builder](./resource-builder.md) for the full Resource Builder and ArrayBuilder API reference.
+| Method | Applies to | Description |
+|---|---|---|
+| `defkit.NewResource(apiVersion, kind)` | Component, Trait | Creates a resource builder. Chain `.Set()`, `.SetIf()`, `.SpreadIf()`, `.If()/.EndIf()`. |
+| `defkit.NewResourceWithConditionalVersion(kind)` | Component, Trait | Creates a resource whose `apiVersion` is selected at runtime. Chain `.VersionIf(cond, apiVersion)`. |
+| `.Set(path, value)` | Component, Trait | Always sets a field at the given path. |
+| `.SetIf(cond, path, value)` | Component, Trait | Sets a field only when `cond` is true. Generates `if cond { path: value }`. |
+| `.SpreadIf(cond, path, value)` | Component, Trait | Merges a struct value into a path when `cond` is true. Requires at least one sibling field at the same path — see note below. |
+| `.If(cond) / .EndIf()` | Component, Trait | Opens and closes a block; every `.Set()` between the two shares one generated `if cond { ... }` block. |
+| `defkit.NewArray()` | Component, Trait | Builds a CUE list literal. Chain `.Item(elem)`, `.ItemIf(cond, elem)`, `.ForEachGuarded(cond, source, elem)`. |
+| `defkit.NewArrayElement()` | Component, Trait | Builds a struct value (used as an array element or nested object). Chain `.Set(key, value)` and `.SetIf(cond, key, value)`. |
+| `tpl.Patch() *PatchResource` | **Trait** | Returns or creates the trait's `patch:` block builder. |
+| `tpl.PatchStrategy(strategy)` | **Trait** | Sets the patch merge strategy comment: `"retainKeys"`, `"jsonMergePatch"`, or `"jsonPatch"`. |
+| `Patch().PatchKey(path, key, elems...)` | **Trait** | Adds a `// +patchKey=<key>` annotated array patch at `path`. |
+| `Patch().Passthrough()` | **Trait** | Emits `patch: parameter` — the entire `parameter` block becomes the patch. |
+| `tpl.SetRawPatchBlock(block)` | **Trait** | Escape hatch: replaces the builder-generated patch output with raw CUE. The string must start with `patch:`. |
 
-## `.Set()` / `.SetIf()` / `.SpreadIf()`
+:::note
+`.SpreadIf()` only renders when it has at least one sibling field at the same path (e.g., a static `.Set()` into the same struct). A lone `.SpreadIf()` with nothing to spread into is silently skipped by the code generator. Pair it with a static field or use `.SetIf()` if you want the path to exist only when the condition is true.
+:::
 
-`.Set()` always sets the field. `.SetIf()` wraps the assignment in an `if cond` guard. `.SpreadIf()` spreads a map value (e.g., labels object) into a path conditionally.
+See also [Resource Builder](./resource-builder.md) for the full `*Resource` / `*ArrayBuilder` API reference.
 
-Applies to: **All Definition Types**
+## Building resources with `.Set()` / `.SetIf()` / `.SpreadIf()`
 
-```go title="Go — defkit"
-image       := defkit.String("image")
-annotations := defkit.StringKeyMap("annotations")
-labels      := defkit.StringKeyMap("labels")
+The three field setters differ in how they handle presence:
 
-job := defkit.NewResource("batch/v1", "Job").
-    Set("spec.template.spec.containers[0].image", image).
-    SetIf(annotations.IsSet(),
-        "spec.template.metadata.annotations", annotations).
-    SpreadIf(labels.IsSet(),
-        "spec.template.metadata.labels", labels)
+- `.Set()` always emits the field.
+- `.SetIf(cond, ...)` wraps a single assignment in `if cond { ... }`.
+- `.SpreadIf(cond, ...)` merges a struct value into an existing struct at the path; only the contents are inlined, not a new `path: { ... }` block.
+
+**Applies to:** Component, Trait.
+
+<Tabs groupId="defkit-example">
+<TabItem value="go" label="Go — defkit">
+
+```go
+image := defkit.String("image")
+annotations := defkit.StringKeyMap("annotations").Optional()
+labels := defkit.StringKeyMap("labels").Optional()
+
+comp := defkit.NewComponent("ex-set").
+    Workload("batch/v1", "Job").
+    Params(image, annotations, labels).
+    Template(func(tpl *defkit.Template) {
+        tpl.Output(defkit.NewResource("batch/v1", "Job").
+            Set("spec.template.spec.containers[0].image", image).
+            SetIf(annotations.IsSet(),
+                "spec.template.metadata.annotations", annotations).
+            // Static sibling so SpreadIf has a struct to spread into.
+            Set("spec.template.metadata.labels.component", defkit.VelaCtx().Name()).
+            SpreadIf(labels.IsSet(),
+                "spec.template.metadata.labels", labels))
+    })
 ```
 
-```cue title="CUE — generated"
-spec: template: spec: containers: [{
-    image: parameter.image
-}]
-if parameter["annotations"] != _|_ {
-    spec: template: metadata: annotations: parameter.annotations
-}
-if parameter["labels"] != _|_ {
-    spec: template: metadata: labels: parameter.labels
-}
-```
+</TabItem>
+<TabItem value="cue" label="CUE — generated">
 
-## `.If()` / `.EndIf()`
-
-Wraps multiple consecutive `.Set()` calls in a single CUE `if cond { ... }` block. Use when several fields should only be set together under the same condition, avoiding repetitive `.SetIf()` calls.
-
-Applies to: **All Definition Types**
-
-```go title="Go — defkit"
-cpu    := defkit.String("cpu")
-memory := defkit.String("memory")
-
-job := defkit.NewResource("batch/v1", "Job").
-    If(cpu.IsSet()).
-        Set("spec.template.spec.containers[0].resources.limits.cpu", cpu).
-        Set("spec.template.spec.containers[0].resources.requests.cpu", cpu).
-    EndIf().
-    If(memory.IsSet()).
-        Set("spec.template.spec.containers[0].resources.limits.memory", memory).
-        Set("spec.template.spec.containers[0].resources.requests.memory", memory).
-    EndIf()
-```
-
-```cue title="CUE — generated"
-if parameter["cpu"] != _|_ {
-    spec: template: spec: containers: [{
-        resources: {
-            limits:   { cpu: parameter.cpu }
-            requests: { cpu: parameter.cpu }
+```cue
+template: {
+    output: {
+        apiVersion: "batch/v1"
+        kind:       "Job"
+        spec: {
+            template: {
+                spec: {
+                    containers: {
+                        [0]: {
+                            image: parameter.image
+                        }
+                    }
+                }
+                metadata: {
+                    if parameter["annotations"] != _|_ {
+                        annotations: parameter.annotations
+                    }
+                    labels: {
+                        if parameter["labels"] != _|_ {
+                            parameter.labels
+                        }
+                        component: context.name
+                    }
+                }
+            }
         }
-    }]
-}
-if parameter["memory"] != _|_ {
-    spec: template: spec: containers: [{
-        resources: {
-            limits:   { memory: parameter.memory }
-            requests: { memory: parameter.memory }
-        }
-    }]
+    }
 }
 ```
 
-## `defkit.NewArray()` / `defkit.NewArrayElement()`
+</TabItem>
+</Tabs>
 
-`defkit.NewArray()` builds a CUE list literal. Chain `.Item(elem)` for always-present elements, `.ItemIf(cond, elem)` for conditional elements, and `.ForEachGuarded(cond, param, template)` to append elements for each value in an array parameter. `defkit.NewArrayElement()` builds one element object using `.Set()` and `.SetIf()`.
+Two things worth noting in the output above:
 
-Applies to: **All Definition Types**
+- `containers: { [0]: { ... } }` is the code generator's representation of an indexed path when no list literal is present. It is syntactically valid CUE but visually unusual; if you need a traditional list literal, build the element with `NewArrayElement()` and assign via `Set("...containers", defkit.NewArray().Item(elem))`.
+- `.IsSet()` on a parameter renders as `parameter["name"] != _|_` (bracket form). Non-presence conditions such as `.Eq()`, `.Lt()` render as `parameter.name == X` (dot form).
 
-```go title="Go — defkit"
+## Grouping fields with `.If()` / `.EndIf()`
+
+Use `.If(cond)` when several fields should be set together under the same condition. `.EndIf()` closes the block. All `.Set()` calls between the two compile into a single `if cond { ... }` rather than one per field.
+
+**Applies to:** Component, Trait.
+
+<Tabs groupId="defkit-example">
+<TabItem value="go" label="Go — defkit">
+
+```go
+cpu := defkit.String("cpu").Optional()
+memory := defkit.String("memory").Optional()
+
+comp := defkit.NewComponent("ex-ifendif").
+    Workload("batch/v1", "Job").
+    Params(cpu, memory).
+    Template(func(tpl *defkit.Template) {
+        tpl.Output(defkit.NewResource("batch/v1", "Job").
+            If(cpu.IsSet()).
+            Set("spec.template.spec.containers[0].resources.limits.cpu", cpu).
+            Set("spec.template.spec.containers[0].resources.requests.cpu", cpu).
+            EndIf().
+            If(memory.IsSet()).
+            Set("spec.template.spec.containers[0].resources.limits.memory", memory).
+            Set("spec.template.spec.containers[0].resources.requests.memory", memory).
+            EndIf())
+    })
+```
+
+</TabItem>
+<TabItem value="cue" label="CUE — generated">
+
+```cue
+template: {
+    output: {
+        apiVersion: "batch/v1"
+        kind:       "Job"
+        if parameter["cpu"] != _|_ {
+            spec: template: spec: containers: {
+                [0]: resources: {
+                    limits:   { cpu: parameter.cpu }
+                    requests: { cpu: parameter.cpu }
+                }
+            }
+        }
+        if parameter["memory"] != _|_ {
+            spec: template: spec: containers: {
+                [0]: resources: {
+                    limits:   { memory: parameter.memory }
+                    requests: { memory: parameter.memory }
+                }
+            }
+        }
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Array literals: `NewArray()` / `NewArrayElement()`
+
+`NewArray()` builds a CUE list. Chain:
+
+- `.Item(elem)` — always-present element,
+- `.ItemIf(cond, elem)` — conditional element,
+- `.ForEachGuarded(cond, source, elem)` — append one element per value in an array parameter, guarded by a condition.
+
+`NewArrayElement()` builds a struct value. It is used both as an array element and as any nested struct value inside a resource.
+
+**Applies to:** Component, Trait.
+
+<Tabs groupId="defkit-example">
+<TabItem value="go" label="Go — defkit">
+
+```go
+cpuP := defkit.Struct("cpu")
 mem := defkit.Struct("mem").Optional()
-podCustomMetrics := defkit.Array("podCustomMetrics").Optional()
+podCustomMetrics := defkit.List("podCustomMetrics").Optional()
 
 cpuMetric := defkit.NewArrayElement().
     Set("type", defkit.Lit("Resource")).
@@ -125,87 +207,274 @@ metrics := defkit.NewArray().
     Item(cpuMetric).
     ItemIf(mem.IsSet(), memMetric).
     ForEachGuarded(podCustomMetrics.IsSet(), podCustomMetrics, customElem)
+
+comp := defkit.NewComponent("ex-hpa").
+    Workload("autoscaling/v2", "HorizontalPodAutoscaler").
+    Params(cpuP, mem, podCustomMetrics).
+    Template(func(tpl *defkit.Template) {
+        tpl.Output(defkit.NewResource("autoscaling/v2", "HorizontalPodAutoscaler").
+            Set("spec.metrics", metrics))
+    })
 ```
 
-```cue title="CUE — generated"
-[
-    {
-        type: "Resource"
-        resource: {
-            name: "cpu"
-            target: {
-                type: "Utilization"
-                averageUtilization: parameter.cpu.value
-            }
-        }
-    },
-    if parameter["mem"] != _|_ {
-        type: "Resource"
-        resource: { name: "memory" }
-    },
-    if parameter["podCustomMetrics"] != _|_ for m in parameter.podCustomMetrics {
-        name: m.name
-        value: m.value
-    },
-]
-```
+</TabItem>
+<TabItem value="cue" label="CUE — generated">
 
-## `tpl.Patch()` / `tpl.PatchStrategy()` / `tpl.SetRawPatchBlock()`
-
-`tpl.Patch()` returns a resource builder whose `.Set()` calls build the CUE `patch: { ... }` block. `tpl.PatchStrategy()` sets the merge strategy (e.g., `"retainKeys"`, `"jsonMergePatch"`, `"jsonPatch"`). `tpl.SetRawPatchBlock()` injects a raw CUE string as the entire patch block — use when the fluent builder can't express the needed structure.
-
-Applies to: **Trait**
-
-```go title="Go — defkit"
-// Fluent patch builder
-name := defkit.String("serviceAccountName")
-tpl.PatchStrategy("retainKeys")
-tpl.Patch().Set("spec.template.spec.serviceAccountName", name)
-
-// Raw CUE patch block (for complex cases)
-tpl.SetRawPatchBlock(`patch: spec: template: spec: {
-    containers: [{
-        name: parameter.containerName
-        env: parameter.env
-    }]
-}`)
-```
-
-```cue title="CUE — generated"
-// Fluent builder output
-patchStrategy: "retainKeys"
-patch: {
-    spec: template: spec: {
-        serviceAccountName: parameter.serviceAccountName
+```cue
+template: {
+    output: {
+        apiVersion: "autoscaling/v2"
+        kind:       "HorizontalPodAutoscaler"
+        spec: metrics: [
+            {
+                resource: {
+                    name: "cpu"
+                    target: {
+                        averageUtilization: parameter.cpu.value
+                        type:               "Utilization"
+                    }
+                }
+                type: "Resource"
+            },
+            if parameter["mem"] != _|_ {
+                {
+                    resource: { name: "memory" }
+                    type:     "Resource"
+                }
+            },
+            if parameter["podCustomMetrics"] != _|_ for m in parameter.podCustomMetrics {
+                {
+                    name:  m.name
+                    value: m.value
+                }
+            },
+        ]
     }
 }
-
-// Raw block output (verbatim)
-patch: spec: template: spec: {
-    containers: [{...}]
-}
 ```
 
-## `defkit.NewResourceWithConditionalVersion()`
+</TabItem>
+</Tabs>
 
-Creates a resource whose `apiVersion` is determined at runtime based on cluster version. Chain `.VersionIf(condition, apiVersion)` clauses to map version ranges to the correct API group.
+## Conditional API version: `NewResourceWithConditionalVersion()`
 
-```go title="Go — defkit"
+When the API group for a resource depends on cluster version (common for HPAs, CronJobs during Kubernetes upgrades), build the resource with `NewResourceWithConditionalVersion(kind)` and chain `.VersionIf(condition, apiVersion)` clauses. The generator emits conditional `apiVersion` assignments inside the resource block.
+
+**Applies to:** Component, Trait.
+
+<Tabs groupId="defkit-example">
+<TabItem value="go" label="Go — defkit">
+
+```go
 vela := defkit.VelaCtx()
 
 hpa := defkit.NewResourceWithConditionalVersion("HorizontalPodAutoscaler").
     VersionIf(defkit.Lt(vela.ClusterVersion().Minor(), defkit.Lit(23)), "autoscaling/v2beta2").
     VersionIf(defkit.Ge(vela.ClusterVersion().Minor(), defkit.Lit(23)), "autoscaling/v2").
     Set("metadata.name", vela.Name())
+
+comp := defkit.NewComponent("ex-conditional-version").
+    Workload("apps/v1", "Deployment").
+    Template(func(tpl *defkit.Template) {
+        tpl.Output(defkit.NewResource("apps/v1", "Deployment").
+            Set("metadata.name", vela.Name()))
+        tpl.Outputs("hpa", hpa)
+    })
 ```
 
-```cue title="CUE — generated"
-outputs: hpa: {
-    apiVersion: {
-        if context.clusterVersion.minor < 23 { "autoscaling/v2beta2" }
-        if context.clusterVersion.minor >= 23 { "autoscaling/v2" }
+</TabItem>
+<TabItem value="cue" label="CUE — generated">
+
+```cue
+template: {
+    output: {
+        apiVersion: "apps/v1"
+        kind:       "Deployment"
+        metadata: name: context.name
     }
-    kind: "HorizontalPodAutoscaler"
-    metadata: name: context.name
+    outputs: {
+        hpa: {
+            if context.clusterVersion.minor < 23 {
+                apiVersion: "autoscaling/v2beta2"
+            }
+            if context.clusterVersion.minor >= 23 {
+                apiVersion: "autoscaling/v2"
+            }
+            kind: "HorizontalPodAutoscaler"
+            metadata: name: context.name
+        }
+    }
 }
 ```
+
+</TabItem>
+</Tabs>
+
+Any resource — primary via `tpl.Output(...)` or auxiliary via `tpl.Outputs(name, ...)` — can use conditional versioning. The example above wraps it as an auxiliary HPA alongside the Deployment workload.
+
+## Trait patches: `tpl.Patch()`
+
+Traits mutate an already-rendered workload by emitting a `patch:` block rather than a new `output:`. `tpl.Patch()` returns a `*PatchResource` builder with the same `.Set()` / `.SetIf()` / `.SpreadIf()` / `.If()` / `.EndIf()` methods as a plain resource, plus patch-specific helpers described below.
+
+**Applies to:** **Trait** only — components render via `tpl.Output(...)`.
+
+### Basic patch + merge strategy
+
+`tpl.PatchStrategy(strategy)` emits a `// +patchStrategy=...` comment consumed by the KubeVela runtime. Common values: `"retainKeys"`, `"jsonMergePatch"`, `"jsonPatch"`.
+
+<Tabs groupId="defkit-example">
+<TabItem value="go" label="Go — defkit">
+
+```go
+saName := defkit.String("serviceAccountName")
+
+tr := defkit.NewTrait("ex-patch").
+    AppliesTo("deployments.apps").
+    Params(saName).
+    Template(func(tpl *defkit.Template) {
+        tpl.PatchStrategy("retainKeys")
+        tpl.Patch().Set("spec.template.spec.serviceAccountName", saName)
+    })
+```
+
+</TabItem>
+<TabItem value="cue" label="CUE — generated">
+
+```cue
+template: {
+    // +patchStrategy=retainKeys
+    patch: spec: template: spec: serviceAccountName: parameter.serviceAccountName
+}
+```
+
+</TabItem>
+</Tabs>
+
+### Array merges: `Patch().PatchKey()`
+
+When patching into a list where Kubernetes needs a merge key (e.g., `containers` by `name`), use `PatchKey(path, key, elems...)`. The generator emits a `// +patchKey=<key>` directive so the strategic-merge controller merges by that key instead of replacing.
+
+<Tabs groupId="defkit-example">
+<TabItem value="go" label="Go — defkit">
+
+```go
+containerName := defkit.String("containerName")
+
+extraEnv := defkit.NewArrayElement().
+    Set("name", defkit.Reference(`"EXTRA"`)).
+    Set("value", defkit.Reference(`"true"`))
+
+tr := defkit.NewTrait("ex-patch-key").
+    AppliesTo("deployments.apps").
+    Params(containerName).
+    Template(func(tpl *defkit.Template) {
+        tpl.Patch().PatchKey(
+            "spec.template.spec.containers", "name",
+            defkit.NewArrayElement().
+                Set("name", containerName).
+                Set("env", defkit.NewArray().Item(extraEnv)),
+        )
+    })
+```
+
+</TabItem>
+<TabItem value="cue" label="CUE — generated">
+
+```cue
+template: {
+    patch: spec: {
+        template: {
+            spec: {
+                // +patchKey=name
+                containers: [{
+                    env: [
+                        {
+                            name:  "EXTRA"
+                            value: "true"
+                        },
+                    ]
+                    name: parameter.containerName
+                }]
+            }
+        }
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+### Pass-through patches: `Patch().Passthrough()`
+
+When a trait's parameter schema already matches the patch shape verbatim, `Passthrough()` emits `patch: parameter`, promoting the entire parameter block to be the patch.
+
+<Tabs groupId="defkit-example">
+<TabItem value="go" label="Go — defkit">
+
+```go
+tr := defkit.NewTrait("ex-passthrough").
+    AppliesTo("deployments.apps").
+    Params(defkit.Struct("patch").Optional()).
+    Template(func(tpl *defkit.Template) {
+        tpl.Patch().Passthrough()
+    })
+```
+
+</TabItem>
+<TabItem value="cue" label="CUE — generated">
+
+```cue
+template: {
+    patch: parameter
+}
+```
+
+</TabItem>
+</Tabs>
+
+### Raw CUE: `tpl.SetRawPatchBlock()`
+
+Escape hatch for patches the fluent builder can't express cleanly (nested patchKeys, custom strategic merge, complex comprehensions). The string you pass is dropped into the template verbatim — it **must** begin with `patch:`.
+
+<Tabs groupId="defkit-example">
+<TabItem value="go" label="Go — defkit">
+
+```go
+containerName := defkit.String("containerName")
+env := defkit.List("env").Optional()
+
+tr := defkit.NewTrait("ex-raw-patch").
+    AppliesTo("deployments.apps").
+    Params(containerName, env).
+    Template(func(tpl *defkit.Template) {
+        tpl.SetRawPatchBlock(`patch: spec: template: spec: {
+    containers: [{
+        name: parameter.containerName
+        env:  parameter.env
+    }]
+}`)
+    })
+```
+
+</TabItem>
+<TabItem value="cue" label="CUE — generated">
+
+```cue
+template: {
+    patch: spec: template: spec: {
+        containers: [{
+            name: parameter.containerName
+            env:  parameter.env
+        }]
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Related
+
+- [Template Output Methods](./template-output-methods.md) — `tpl.Output()` / `tpl.Outputs()` / `tpl.OutputsIf()` / `tpl.OutputsGroupIf()`
+- [Resource Builder](./resource-builder.md) — full `*Resource` and `*ArrayBuilder` API reference
+- [TraitDefinition](./definition-trait.md) — full trait example combining `Patch()` with `Outputs()`
