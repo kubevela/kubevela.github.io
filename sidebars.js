@@ -343,18 +343,6 @@ module.exports = {
             },
             {
               type: 'category',
-              label: 'Template Methods',
-              items: [
-                'platform-engineers/defkit/template-output-methods',
-                'platform-engineers/defkit/template-patch-methods',
-                'platform-engineers/defkit/template-trait-patch-ops',
-                'platform-engineers/defkit/template-workflowstep-actions',
-                'platform-engineers/defkit/template-helper-builder',
-                'platform-engineers/defkit/template-raw-cue',
-              ],
-            },
-            {
-              type: 'category',
               label: 'Resource Builders',
               items: [
                 'platform-engineers/defkit/resource-builder',
@@ -363,6 +351,17 @@ module.exports = {
                 'platform-engineers/defkit/value-expressions',
                 'platform-engineers/defkit/velactx',
                 'platform-engineers/defkit/health-status-dsl',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'Template Methods',
+              items: [
+                'platform-engineers/defkit/template-output-methods',
+                'platform-engineers/defkit/template-patch-methods',
+                'platform-engineers/defkit/template-workflowstep-actions',
+                'platform-engineers/defkit/template-helper-builder',
+                'platform-engineers/defkit/template-raw-cue',
               ],
             },
             'platform-engineers/defkit/advanced-api',
