@@ -278,7 +278,7 @@ The following `*defkit.Template` methods are documented on other pages:
 | Method(s) | See |
 |---|---|
 | `tpl.Patch()`, `tpl.PatchStrategy()` | [Template Patch Methods](./template-patch-methods.md) |
-| `tpl.UsePatchContainer(config)` | [Trait Patch Operations](./template-trait-patch-ops.md) |
+| `tpl.UsePatchContainer(config)` | [Trait Patch Methods](./template-patch-methods.md) |
 | `tpl.Helper(name)`, `tpl.AddLetBinding(name, value)`, `tpl.StructArrayHelper`, `tpl.ConcatHelper`, `tpl.DedupeHelper` | [Helper Builder](./template-helper-builder.md) |
 | `tpl.SetRawHeaderBlock()`, `tpl.SetRawOutputsBlock()`, `tpl.SetRawPatchBlock()`, `tpl.SetRawParameterBlock()` | [Raw CUE Blocks](./template-raw-cue.md) |
 | `tpl.Suspend()`, `tpl.SuspendIf()`, `tpl.Builtin()`, workflow-step `tpl.Set` / `SetIf` / `SetGuardedBlock` — these live on a different Go type (`*defkit.WorkflowStepTemplate`) | [Workflow Step Actions](./template-workflowstep-actions.md) |
