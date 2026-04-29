@@ -629,6 +629,65 @@ spec:
           version: "1.0.0"
 ```
 
+Merge values from a ConfigMap and a Secret, with inline values taking precedence over both:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: podinfo-base
+  namespace: default
+data:
+  values.yaml: |
+    replicaCount: 3
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: podinfo-overrides
+  namespace: default
+stringData:
+  values.yaml: |
+    resources:
+      limits:
+        memory: 512Mi
+---
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: podinfo-layered
+spec:
+  components:
+    - name: podinfo
+      type: helmchart
+      properties:
+        chart:
+          source: podinfo
+          repoURL: https://stefanprodan.github.io/podinfo
+          version: "6.11.1"
+        release:
+          name: podinfo
+          namespace: default
+        values:
+          # Inline values win over everything in valuesFrom.
+          replicaCount: 5
+        valuesFrom:
+          - kind: ConfigMap
+            name: podinfo-base
+          - kind: Secret
+            name: podinfo-overrides
+            # key defaults to "values.yaml"; optional defaults to false.
+        options:
+          createNamespace: true
+          skipTests: true
+```
+
+The rendered chart sees `replicaCount: 5` (from inline), `resources.limits.memory: 512Mi` (Secret overlay wins over the ConfigMap on the conflict), and `resources.limits.cpu: 100m` (preserved from the ConfigMap — the Secret didn't touch it).
+
 ### Specification (helmchart)
 
 
@@ -636,7 +695,8 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  chart | Chart source configuration | [chart](#chart-helmchart) | true |  
  release | Release configuration (optional - uses context defaults) | [release](#release-helmchart) | false |  
- values | Inline values (highest priority) | map[string]interface{} | false |  
+ values | Inline values merged with the highest priority; override everything in valuesFrom. | map[string]interface{} | false |  
+ valuesFrom | Additional values sources merged in array order. Later entries override earlier ones on conflict, and inline `values` override everything in valuesFrom. Deep-merges map keys; arrays are replaced (not concatenated); null is preserved. Sources are read once per reconcile — editing a referenced ConfigMap/Secret does NOT trigger a new reconcile, so bump the Application spec to roll out new values. | [[]valuesFrom](#valuesfrom-helmchart) | false |  
  options | Rendering options | [options](#options-helmchart) | false |  
 
 
@@ -647,6 +707,17 @@ spec:
  source | Chart location - automatically detected based on format (OCI, Direct URL, Repo chart) | string | true |  
  repoURL | Repository URL for repository-based charts | string | false |  
  version | Version/tag for repository and OCI charts (ignored for direct URLs) | string | false | "latest" 
+
+
+#### valuesFrom (helmchart)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ kind | Source kind. Only `Secret` and `ConfigMap` are supported; `OCIRepository` is reserved for a future release. | "Secret" or "ConfigMap" | true |  
+ name | Name of the Secret or ConfigMap. | string | true |  
+ namespace | Namespace of the Secret or ConfigMap. Defaults to the release namespace. An explicit value must match either the release namespace or the Application's own namespace — other namespaces are rejected to prevent cross-tenant reads via the controller's cluster-wide RBAC. | string | false |  
+ key | Key inside `.data` whose value is parsed as YAML. | string | false | "values.yaml" 
+ optional | If true, a missing Secret/ConfigMap or missing key is skipped silently. Parse errors and permission errors still fail the render. | bool | false | false 
 
 
 #### release (helmchart)
