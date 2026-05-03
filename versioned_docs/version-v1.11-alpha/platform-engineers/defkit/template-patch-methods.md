@@ -34,212 +34,213 @@ These methods are available on the `*PatchResource` returned by `tpl.Patch()`.
 | `.PatchStrategyAnnotation(path, strategy)` | Adds `// +patchStrategy=strategy` comment at the given path. |
 | `.Passthrough()` | Generates `patch: parameter` — the entire parameter becomes the patch. |
 
-## Basic Patch
+## Working Example 1 — `pod-metadata` Trait
 
-`tpl.Patch()` returns a `*PatchResource` builder. `tpl.PatchStrategy(strategy)` emits a `// +patchStrategy=...` comment consumed by the KubeVela runtime. Common values: `"retainKeys"`, `"jsonMergePatch"`, `"jsonPatch"`.
+The `pod-metadata` trait demonstrates `tpl.PatchStrategy()`, `.SetIf()`, and `.If()` / `.ForEach()` / `.EndIf()` in a single coherent trait:
+
+- **Always** — emits `// +patchStrategy=retainKeys` on the patch block.
+- **`serviceAccountName` provided** — sets `spec.template.spec.serviceAccountName` via `.SetIf()`.
+- **`labels` provided** — iterates each key-value pair into `spec.template.metadata.labels` via `.If()` / `.ForEach()` / `.EndIf()`.
+
+The Go on the left and the CUE on the right are byte-for-byte what `vela def gen-module ./my-platform` produces for this trait. Verified by running `vela def validate-module ./my-platform` against KubeVela v1.11.0-alpha.3.
 
 <Tabs groupId="defkit-example">
 <TabItem value="go" label="Go — defkit">
 
 ```go
-saName := defkit.String("serviceAccountName")
+package traits
 
-tr := defkit.NewTrait("ex-patch").
-    AppliesTo("deployments.apps").
-    Params(saName).
-    Template(func(tpl *defkit.Template) {
-        tpl.PatchStrategy("retainKeys")
-        tpl.Patch().Set("spec.template.spec.serviceAccountName", saName)
-    })
+import "github.com/oam-dev/kubevela/pkg/definition/defkit"
+
+func PodMetadata() *defkit.TraitDefinition {
+	serviceAccountName := defkit.String("serviceAccountName").Optional().
+		Description("Service account to bind to the pod")
+	labels := defkit.StringKeyMap("labels").Optional().
+		Description("Labels to merge into the pod template")
+
+	return defkit.NewTrait("pod-metadata").
+		Description("Merge labels into the pod template and optionally bind a service account").
+		AppliesTo("deployments.apps").
+		PodDisruptive(false).
+		Params(serviceAccountName, labels).
+		Template(podMetadataTemplate)
+}
+
+func podMetadataTemplate(tpl *defkit.Template) {
+	serviceAccountName := defkit.String("serviceAccountName").Optional()
+	labels             := defkit.StringKeyMap("labels").Optional()
+
+	tpl.PatchStrategy("retainKeys")
+	tpl.Patch().
+		SetIf(serviceAccountName.IsSet(),
+			"spec.template.spec.serviceAccountName", serviceAccountName).
+		If(labels.IsSet()).
+		ForEach(labels, "spec.template.metadata.labels").
+		EndIf()
+}
+
+func init() { defkit.Register(PodMetadata()) }
 ```
 
 </TabItem>
 <TabItem value="cue" label="CUE — generated">
 
 ```cue
+"pod-metadata": {
+	type: "trait"
+	annotations: {}
+	labels: {}
+	description: "Merge labels into the pod template and optionally bind a service account"
+	attributes: {
+		podDisruptive: false
+		appliesToWorkloads: ["deployments.apps"]
+	}
+}
 template: {
-    // +patchStrategy=retainKeys
-    patch: spec: template: spec: serviceAccountName: parameter.serviceAccountName
+	// +patchStrategy=retainKeys
+	patch: spec: template: {
+		if parameter["serviceAccountName"] != _|_ {
+			spec: serviceAccountName: parameter.serviceAccountName
+		}
+		if parameter["labels"] != _|_ {
+			metadata: labels: {
+				for k, v in parameter.labels {
+					(k): v
+				}
+			}
+		}
+	}
+	parameter: {
+		// +usage=Service account to bind to the pod
+		serviceAccountName?: string
+		// +usage=Labels to merge into the pod template
+		labels?: [string]: string
+	}
 }
 ```
 
 </TabItem>
 </Tabs>
 
-## Field Setters: `.SetIf()` / `.SpreadIf()`
+**`serviceAccountName` provided** (`serviceAccountName: my-sa`): the `if` guard evaluates true and `spec.template.spec.serviceAccountName: my-sa` is written into the patch. **Omitted**: the field is absent from the patch — `retainKeys` leaves it untouched on the workload.
 
-`.Set()` always emits a patch field. `.SetIf()` wraps the assignment in an `if cond` guard. `.SpreadIf()` merges a map value (such as a labels map) into an existing struct at the path — only the contents are inlined, not a new `path: { ... }` block.
+**`labels` provided** (`labels: {team: backend}`): the `ForEach` emits `team: backend` into `spec.template.metadata.labels`. **Omitted**: the `if` guard collapses to nothing — no labels are patched.
 
-:::note
-`.SpreadIf()` only renders when it has at least one sibling field at the same path (e.g., a static `.Set()` into the same struct). A lone `.SpreadIf()` with nothing to spread into is silently skipped by the code generator. Pair it with a static field or use `.SetIf()` if you want the path to exist only when the condition is true.
-:::
+## Working Example 2 — `inject-env` Trait
+
+The `inject-env` trait demonstrates `PatchKey`, `NewArray().ForEach()`, and `.If()` / `.Set()` / `.EndIf()` in a single coherent trait:
+
+- **Always** — merges env vars into a named container via `PatchKey` (strategic-merge by `name`).
+- **`debug: true`** — additionally sets `spec.template.metadata.annotations.debug: "enabled"` via an `.If()` / `.Set()` / `.EndIf()` block.
+
+The Go on the left and the CUE on the right are byte-for-byte what `vela def gen-module ./my-platform` produces for this trait.
 
 <Tabs groupId="defkit-example">
 <TabItem value="go" label="Go — defkit">
 
 ```go
-labels := defkit.StringKeyMap("labels").Optional()
+package traits
 
-tpl.Patch().
-    // Static sibling so SpreadIf has a struct to spread into
-    Set("spec.template.metadata.labels.managed-by", defkit.Lit("vela")).
-    SpreadIf(labels.IsSet(), "spec.template.metadata.labels", labels)
-```
+import "github.com/oam-dev/kubevela/pkg/definition/defkit"
 
-</TabItem>
-<TabItem value="cue" label="CUE — generated">
+func InjectEnv() *defkit.TraitDefinition {
+	containerName := defkit.String("containerName").
+		Description("Name of the target container")
+	env := defkit.Array("env").
+		Description("Environment variables to inject — list of {name, value} pairs")
+	debug := defkit.Bool("debug").Default(false).
+		Description("Add debug: enabled annotation to the pod")
 
-```cue
-patch: spec: template: metadata: labels: {
-    "managed-by": "vela"
-    if parameter["labels"] != _|_ {
-        parameter.labels
-    }
+	return defkit.NewTrait("inject-env").
+		Description("Inject env vars into a named container, with optional debug annotation").
+		AppliesTo("deployments.apps").
+		PodDisruptive(false).
+		Params(containerName, env, debug).
+		Template(injectEnvTemplate)
 }
-```
 
-</TabItem>
-</Tabs>
+func injectEnvTemplate(tpl *defkit.Template) {
+	containerName := defkit.String("containerName")
+	env           := defkit.Array("env")
+	debug         := defkit.Bool("debug")
 
-## Conditional Block: `.If()` / `.EndIf()`
+	envElem := defkit.NewArrayElement().
+		Set("name", defkit.Reference("m.name")).
+		Set("value", defkit.Reference("m.value"))
 
-Use `.If(cond)` when several fields should be set together under the same condition. All `.Set()` calls between `.If()` and `.EndIf()` compile into a single `if cond { ... }` block.
+	containerElem := defkit.NewArrayElement().
+		Set("name", containerName).
+		Set("env", defkit.NewArray().ForEach(env, envElem))
 
-<Tabs groupId="defkit-example">
-<TabItem value="go" label="Go — defkit">
+	tpl.Patch().
+		PatchKey("spec.template.spec.containers", "name", containerElem).
+		If(debug.IsTrue()).
+		Set("spec.template.metadata.annotations.debug", defkit.Lit("enabled")).
+		EndIf()
+}
 
-```go
-cpu    := defkit.String("cpu").Optional()
-memory := defkit.String("memory").Optional()
-
-tr := defkit.NewTrait("ex-resource-limits").
-    AppliesTo("deployments.apps").
-    Params(cpu, memory).
-    Template(func(tpl *defkit.Template) {
-        tpl.Patch().
-            If(cpu.IsSet()).
-            Set("spec.template.spec.containers[0].resources.limits.cpu", cpu).
-            Set("spec.template.spec.containers[0].resources.requests.cpu", cpu).
-            EndIf().
-            If(memory.IsSet()).
-            Set("spec.template.spec.containers[0].resources.limits.memory", memory).
-            Set("spec.template.spec.containers[0].resources.requests.memory", memory).
-            EndIf()
-    })
+func init() { defkit.Register(InjectEnv()) }
 ```
 
 </TabItem>
 <TabItem value="cue" label="CUE — generated">
 
 ```cue
+"inject-env": {
+	type: "trait"
+	annotations: {}
+	labels: {}
+	description: "Inject env vars into a named container, with optional debug annotation"
+	attributes: {
+		podDisruptive: false
+		appliesToWorkloads: ["deployments.apps"]
+	}
+}
 template: {
-    if parameter["cpu"] != _|_ {
-        patch: spec: template: spec: containers: {
-            [0]: resources: {
-                limits:   { cpu: parameter.cpu }
-                requests: { cpu: parameter.cpu }
-            }
-        }
-    }
-    if parameter["memory"] != _|_ {
-        patch: spec: template: spec: containers: {
-            [0]: resources: {
-                limits:   { memory: parameter.memory }
-                requests: { memory: parameter.memory }
-            }
-        }
-    }
+	patch: spec: template: {
+		spec: {
+			// +patchKey=name
+			containers: [{
+				env: [
+					for m in parameter.env {
+						{
+							name:  m.name
+							value: m.value
+						}
+					},
+				]
+				name: parameter.containerName
+			}]
+		}
+		if parameter.debug {
+			metadata: annotations: debug: "enabled"
+		}
+	}
+	parameter: {
+		// +usage=Name of the target container
+		containerName: string
+		// +usage=Environment variables to inject — list of {name, value} pairs
+		env: [...]
+		// +usage=Add debug: enabled annotation to the pod
+		debug: *false | bool
+	}
 }
 ```
 
 </TabItem>
 </Tabs>
 
-## Map Iteration: `.ForEach()`
+**`debug: false`** (default): the `if parameter.debug` block evaluates away — only the `PatchKey` containers merge is emitted. **`debug: true`**: same containers merge, plus `debug: enabled` annotation on the pod.
 
-`.ForEach(source, path)` iterates over a map parameter and spreads each key-value pair into the path. Use when the user provides a map of labels, annotations, or other key-value data. Generates `for k, v in source { (k): v }`.
+**`PatchKey` behaviour**: the `// +patchKey=name` directive tells the KubeVela strategic-merge engine to match by `name`. It finds the container named `parameter.containerName` and merges the `env` list into it — the rest of the container spec is left untouched.
 
-<Tabs groupId="defkit-example">
-<TabItem value="go" label="Go — defkit">
+## Reproduce
 
-```go
-labels := defkit.Object("labels")
-
-tr := defkit.NewTrait("ex-foreach").
-    AppliesTo("deployments.apps").
-    Params(labels).
-    Template(func(tpl *defkit.Template) {
-        tpl.Patch().ForEach(labels, "spec.template.metadata.labels")
-    })
+```shell
+vela def validate-module ./my-platform
+vela def gen-module ./my-platform -o ./generated-cue
+vela def apply-module ./my-platform --conflict overwrite
 ```
-
-</TabItem>
-<TabItem value="cue" label="CUE — generated">
-
-```cue
-template: {
-    patch: spec: template: metadata: labels: {
-        for k, v in parameter.labels { (k): v }
-    }
-}
-```
-
-</TabItem>
-</Tabs>
-
-## Array Merge: `Patch().PatchKey()`
-
-When patching into a list where Kubernetes needs a merge key (e.g., `containers` by `name`), use `PatchKey(path, key, elems...)`. The generator emits a `// +patchKey=<key>` directive so the strategic-merge controller merges by that key instead of replacing the entire list.
-
-<Tabs groupId="defkit-example">
-<TabItem value="go" label="Go — defkit">
-
-```go
-containerName := defkit.String("containerName")
-
-extraEnv := defkit.NewArrayElement().
-    Set("name", defkit.Reference(`"EXTRA"`)).
-    Set("value", defkit.Reference(`"true"`))
-
-tr := defkit.NewTrait("ex-patch-key").
-    AppliesTo("deployments.apps").
-    Params(containerName).
-    Template(func(tpl *defkit.Template) {
-        tpl.Patch().PatchKey(
-            "spec.template.spec.containers", "name",
-            defkit.NewArrayElement().
-                Set("name", containerName).
-                Set("env", defkit.NewArray().Item(extraEnv)),
-        )
-    })
-```
-
-</TabItem>
-<TabItem value="cue" label="CUE — generated">
-
-```cue
-template: {
-    patch: spec: {
-        template: {
-            spec: {
-                // +patchKey=name
-                containers: [{
-                    env: [
-                        {
-                            name:  "EXTRA"
-                            value: "true"
-                        },
-                    ]
-                    name: parameter.containerName
-                }]
-            }
-        }
-    }
-}
-```
-
-</TabItem>
-</Tabs>
 
 ## Pass-through: `Patch().Passthrough()`
 
@@ -320,9 +321,20 @@ High-level helper for traits that patch individual containers. Generates the ful
 |---|---|
 | `ContextOutput() *ContextOutputRef` | Returns a reference to the primary output resource (`context.output`). Chain with `.Field(path)` to access fields or `.HasPath(path)` for existence conditions. |
 
-### PatchField Chain Methods
+### PatchField Methods
 
-`PatchField(name)` defines a single patch field for container mutation. Chain methods: `.Target(t)` sets target field, `.Default(val)` sets CUE default, `.Type(t)`/`.Int()`/`.Bool()`/`.Str()`/`.StringArray()` set param type, `.Strategy(s)` sets patch strategy, `.IsSet()`/`.NotEmpty()` set conditions, `.Eq(val)`/`.Ne(val)`/`.Gt(val)`/`.Gte(val)`/`.Lt(val)`/`.Lte(val)` set comparisons, `.RawCondition(c)` sets raw CUE condition, `.Description(d)` sets description, `.Build()` finalizes.
+| Method | Description |
+|---|---|
+| `PatchField(name)` | Defines a single patch field for container mutation. Returns a builder — chain the methods below, call `.Build()` to finalise. |
+| `.Target(t)` | Sets the target container field name. |
+| `.Default(val)` | Sets the CUE default value. |
+| `.Type(t)` / `.Int()` / `.Bool()` / `.Str()` / `.StringArray()` | Sets the parameter type. |
+| `.Strategy(s)` | Sets a patch strategy on the field. |
+| `.IsSet()` / `.NotEmpty()` | Adds a presence or non-empty condition. |
+| `.Eq(val)` / `.Ne(val)` / `.Gt(val)` / `.Gte(val)` / `.Lt(val)` / `.Lte(val)` | Adds a value-comparison condition. |
+| `.RawCondition(c)` | Sets an arbitrary raw CUE condition string. |
+| `.Description(d)` | Sets the `+usage` description. |
+| `.Build()` | Finalises the field and returns the `PatchContainerField`. |
 
 ### Convenience Conditions
 
@@ -333,58 +345,23 @@ High-level helper for traits that patch individual containers. Generates the ful
 | `ContextOutputExists(path)` | Condition checking if a path exists on the primary output resource. Generates `context.output.path != _\|_`. |
 | `AllConditions(conditions...)` | Combines multiple conditions with logical AND. |
 
-```go title="Go — defkit"
-tpl.UsePatchContainer(defkit.PatchContainerConfig{
-    ContainerNameParam:    "containerName",
-    DefaultToContextName:  true,   // use context.name if unset
-    AllowMultiple:         true,   // allow multi-container
-    ContainersParam:       "containers",
-    ContainersDescription: "Specify containers to patch",
-    PatchFields: []defkit.PatchContainerField{
-        {
-            ParamName:    "replace",
-            TargetField:  "replace",
-            ParamType:    "bool",
-            ParamDefault: "false",
-            Description:  "Replace all env vars",
-        },
-        {
-            ParamName:   "env",
-            TargetField: "env",
-            ParamType:   "[string]: string",
-            Description: "Env vars to merge",
-        },
-    },
-    // Optional: inject raw CUE body for complex logic
-    CustomPatchContainerBlock: `_params: #PatchParams
-name: _params.containerName
-env: [for k, v in _params.env { name: k, value: v }]`,
-})
-```
+<Tabs groupId="defkit-example">
+<TabItem value="go" label="Go — defkit">
 
-```cue title="CUE — generated"
-#PatchParams: {
-    containerName?: *context.name | string
-    containers?: [...{
-        containerName?: string
-        replace: *false | bool
-        env: [string]: string
-    }]
+```go
+package traits
+
+import "github.com/oam-dev/kubevela/pkg/definition/defkit"
+
+func EnvPatch() *defkit.TraitDefinition {
+    return defkit.NewTrait("env-patch").
+        Description("Inject environment variables into a named container").
+        AppliesTo("deployments.apps").
+        PodDisruptive(false).
+        Template(envPatchTemplate)
 }
 
-patchSets: [{
-    name: "container-patch"
-    patches: [...]
-}]
-patch: { ... }
-```
-
-### Complete Env Injection Trait Example
-
-A typical env-injection trait uses `UsePatchContainer` to inject environment variables into a targeted container:
-
-```go title="Go — defkit"
-func envTemplate(tpl *defkit.Template) {
+func envPatchTemplate(tpl *defkit.Template) {
     tpl.UsePatchContainer(defkit.PatchContainerConfig{
         ContainerNameParam:   "containerName",
         DefaultToContextName: true,
@@ -401,7 +378,28 @@ name: _params.containerName
 env: [for k, v in _params.env { name: k, value: v }]`,
     })
 }
+
+func init() { defkit.Register(EnvPatch()) }
 ```
+
+</TabItem>
+<TabItem value="cue" label="CUE — generated (illustrative)">
+
+```cue
+#PatchParams: {
+    containerName?: *context.name | string
+    env: [string]: string
+}
+
+patchSets: [{
+    name: "container-patch"
+    patches: [...]
+}]
+patch: { ... }
+```
+
+</TabItem>
+</Tabs>
 
 :::info
 `UsePatchContainer` handles the boilerplate of container selection, multi-container iteration, and patchSets generation. Reserve `tpl.Patch().PatchKey()` for cases where you need direct control over the patch structure.
