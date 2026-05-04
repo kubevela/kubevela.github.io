@@ -38,7 +38,7 @@ These methods are available on the `*PatchResource` returned by `tpl.Patch()`.
 
 The `pod-metadata` trait demonstrates `tpl.PatchStrategy()`, `.SetIf()`, and `.If()` / `.ForEach()` / `.EndIf()` in a single coherent trait:
 
-- **Always** — emits `// +patchStrategy=retainKeys` on the patch block.
+- **Always** — emits `// +patchStrategy=jsonMergePatch` on the patch block.
 - **`serviceAccountName` provided** — sets `spec.template.spec.serviceAccountName` via `.SetIf()`.
 - **`labels` provided** — iterates each key-value pair into `spec.template.metadata.labels` via `.If()` / `.ForEach()` / `.EndIf()`.
 
@@ -70,7 +70,7 @@ func podMetadataTemplate(tpl *defkit.Template) {
 	serviceAccountName := defkit.String("serviceAccountName").Optional()
 	labels             := defkit.StringKeyMap("labels").Optional()
 
-	tpl.PatchStrategy("retainKeys")
+	tpl.PatchStrategy("jsonMergePatch")
 	tpl.Patch().
 		SetIf(serviceAccountName.IsSet(),
 			"spec.template.spec.serviceAccountName", serviceAccountName).
@@ -97,7 +97,7 @@ func init() { defkit.Register(PodMetadata()) }
 	}
 }
 template: {
-	// +patchStrategy=retainKeys
+	// +patchStrategy=jsonMergePatch
 	patch: spec: template: {
 		if parameter["serviceAccountName"] != _|_ {
 			spec: serviceAccountName: parameter.serviceAccountName
@@ -122,7 +122,7 @@ template: {
 </TabItem>
 </Tabs>
 
-**`serviceAccountName` provided** (`serviceAccountName: my-sa`): the `if` guard evaluates true and `spec.template.spec.serviceAccountName: my-sa` is written into the patch. **Omitted**: the field is absent from the patch — `retainKeys` leaves it untouched on the workload.
+**`serviceAccountName` provided** (`serviceAccountName: my-sa`): the `if` guard evaluates true and `spec.template.spec.serviceAccountName: my-sa` is written into the patch. **Omitted**: the field is absent from the patch — it is left untouched on the workload.
 
 **`labels` provided** (`labels: {team: backend}`): the `ForEach` emits `team: backend` into `spec.template.metadata.labels`. **Omitted**: the `if` guard collapses to nothing — no labels are patched.
 

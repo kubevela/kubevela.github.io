@@ -37,7 +37,6 @@ The `deploy-and-notify` step covers all `WorkflowStepTemplate` methods in a sing
 - **`SuspendIf`** — pauses for manual approval when `auto: false`.
 - **`Set` + `KubeRead`** — always reads a ConfigMap before the deploy runs.
 - **`Builtin` + `WithParams`** — dispatches `multicluster.#Deploy` with individual param bindings.
-- **`Builtin` + `WithDirectFields`** — passes fields directly to `op.#ShareCloudResource` (no `$params` wrapper).
 - **`Builtin` + `If(cond)`** — conditionally invokes `builtin.#Fail` when `auto: false` and no policies are given.
 - **`SetIf`** — adds a `wait` field only when `policies` are provided.
 - **`SetGuardedBlock`** — `notifyStatus` block always exists; its contents are populated only when `notifyUrl` is set.
@@ -68,7 +67,7 @@ func DeployAndNotify() *defkit.WorkflowStepDefinition {
 		Description("Gate, read config, deploy multicluster, and optionally webhook-notify").
 		Category("Application Delivery").
 		Scope("Application").
-		WithImports("vela/multicluster", "vela/builtin", "vela/kube", "vela/http", "vela/op").
+		WithImports("vela/multicluster", "vela/builtin", "vela/kube").
 		Params(auto, policies, parallelism, notifyUrl, configName).
 		Template(deployAndNotifyTemplate)
 }
@@ -92,16 +91,7 @@ func deployAndNotifyTemplate(tpl *defkit.WorkflowStepTemplate) {
 	// Builtin + WithParams — individual parameter bindings into $params
 	tpl.Builtin("deploy", "multicluster.#Deploy").
 		WithParams(map[string]defkit.Value{
-			"policies":    policies,
 			"parallelism": parallelism,
-		}).Build()
-
-	// Builtin + WithDirectFields — direct struct fields, no $params wrapper
-	tpl.Builtin("share", "op.#ShareCloudResource").
-		WithDirectFields().
-		WithParams(map[string]defkit.Value{
-			"application": defkit.Reference("context.name"),
-			"namespace":   defkit.Reference("context.namespace"),
 		}).Build()
 
 	// Builtin + If(cond) — conditional builtin; do NOT call .Build() after .If()
@@ -135,8 +125,6 @@ import (
 	"vela/multicluster"
 	"vela/builtin"
 	"vela/kube"
-	"vela/http"
-	"vela/op"
 )
 
 "deploy-and-notify": {
@@ -170,12 +158,7 @@ template: {
 	deploy: multicluster.#Deploy & {
 		$params: {
 			parallelism: parameter.parallelism
-			policies:    parameter.policies
 		}
-	}
-	share: op.#ShareCloudResource & {
-		application: context.name
-		namespace:   context.namespace
 	}
 	if !(parameter.auto) && parameter["policies"] == _|_ {
 		abort: builtin.#Fail & {
@@ -215,11 +198,19 @@ template: {
 </TabItem>
 </Tabs>
 
-**`auto: true`** (default): the `SuspendIf` guard collapses — deploy proceeds immediately. The `config` read and the `deploy` and `share` builtins always run. **`auto: false`**: the step pauses for approval first; if `policies` is also absent, `abort` fires with the `builtin.#Fail` message.
+**`auto: true`** (default): the `SuspendIf` guard collapses — deploy proceeds immediately. The `config` read and the `deploy` builtin always run. **`auto: false`**: the step pauses for approval first; if `policies` is also absent, `abort` fires with the `builtin.#Fail` message.
 
 **`policies` provided**: the `if parameter["policies"] != _|_` guard evaluates true, emitting the `wait: builtin.#ConditionalWait` block that polls `deploy.status.phase`. **`policies` absent**: the `wait` field is not emitted.
 
 **`notifyUrl` provided**: the `notifyStatus` block (always present) has its contents populated — `url` and `sent: true`. **`notifyUrl` absent**: `notifyStatus` exists but is empty `{}`.
+
+:::note `WithDirectFields()` — when to use it
+`WithDirectFields()` emits bound values as top-level struct fields on the action (no `$params` wrapper). All standard KubeVela built-in providers (`vela/multicluster`, `vela/builtin`, `vela/kube`, `vela/http`, `vela/op`) use the `$params` convention in v1.11.x and later, so `WithDirectFields()` does **not** apply to them. Use it only for custom CUE workflow providers that you author yourself and that expose fields at the top level rather than under `$params`.
+:::
+
+:::note `multicluster.#Deploy` requires multicluster setup
+`multicluster.#Deploy` dispatches to remote clusters using KubeVela multicluster policies. On a single local cluster without multicluster configuration, the step reaches the deploy action and fails because there are no cluster targets. The `SuspendIf`, `Set`, `SetIf`, `SetGuardedBlock`, and conditional `builtin.#Fail` behaviors all work on any cluster — only the actual cross-cluster dispatch needs a multicluster environment.
+:::
 
 ## Working Example 2 — `manual-gate` Step
 
