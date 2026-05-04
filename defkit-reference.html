@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DefKit API Reference — KubeVela Go SDK</title>
+<style>
+  :root {
+    --bg: #0d1117; --surface: #161b22; --border: #30363d;
+    --text: #c9d1d9; --heading: #f0f6fc; --accent: #58a6ff;
+    --accent2: #3fb950; --accent3: #d2a8ff; --accent4: #f78166;
+    --code-bg: #1c2128; --nav-w: 270px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6; display: flex; }
+  nav { position: fixed; top: 0; left: 0; width: var(--nav-w); height: 100vh;
+    overflow-y: auto; background: var(--surface); border-right: 1px solid var(--border);
+    padding: 16px 0; z-index: 100; font-size: 13px; }
+  nav::-webkit-scrollbar { width: 6px; }
+  nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  nav .logo { padding: 8px 16px 16px; font-size: 18px; font-weight: 700; color: var(--heading);
+    border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+  nav .logo span { color: var(--accent); }
+  nav ul { list-style: none; }
+  nav > ul > li > a { display: block; padding: 6px 16px; color: var(--accent); font-weight: 600; text-decoration: none; margin-top: 8px; }
+  nav > ul > li > ul > li > a { display: block; padding: 3px 16px 3px 28px; color: var(--text); text-decoration: none; font-size: 12px; }
+  nav a:hover { color: var(--heading); background: rgba(88,166,255,0.08); }
+  #search-box { width: calc(100% - 32px); margin: 8px 16px; padding: 6px 10px;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text); font-size: 13px; outline: none; }
+  #search-box:focus { border-color: var(--accent); }
+  main { margin-left: var(--nav-w); flex: 1; max-width: 960px; padding: 32px 40px 80px; }
+  h1 { font-size: 32px; color: var(--heading); margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+  h2 { font-size: 24px; color: var(--heading); margin: 48px 0 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  h3 { font-size: 18px; color: var(--accent); margin: 32px 0 12px; }
+  h4 { font-size: 15px; color: var(--accent3); margin: 20px 0 8px; }
+  p, li { margin-bottom: 8px; }
+  ul { margin-left: 20px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: var(--accent4); }
+  pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 16px; overflow-x: auto; margin: 12px 0 20px; line-height: 1.5; }
+  pre code { background: none; padding: 0; color: var(--text); font-size: 13px; }
+  .kw { color: var(--accent3); } .fn { color: var(--accent); } .s { color: var(--accent2); } .c { color: #8b949e; font-style: italic; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 12px; border: 1px solid var(--border); }
+  th { background: var(--surface); color: var(--heading); font-weight: 600; white-space: nowrap; }
+  tr:nth-child(even) { background: rgba(22,27,34,0.5); }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; margin-left: 6px; vertical-align: middle; }
+  .b1 { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .b2 { background: rgba(63,185,80,0.15); color: var(--accent2); }
+  .b3 { background: rgba(210,168,255,0.15); color: var(--accent3); }
+  .b4 { background: rgba(247,129,102,0.15); color: var(--accent4); }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin: 12px 0 20px; }
+  .pair > div { overflow-x: auto; }
+  .pair > div:first-child pre { border-radius: 8px 0 0 8px; border-right: none; }
+  .pair > div:last-child pre { border-radius: 0 8px 8px 0; }
+  .pair .lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; padding: 4px 16px; }
+  .lbl-go { color: var(--accent); background: rgba(88,166,255,0.08); border-radius: 8px 0 0 0; border: 1px solid var(--border); border-bottom: none; }
+  .lbl-cue { color: var(--accent2); background: rgba(63,185,80,0.08); border-radius: 0 8px 0 0; border: 1px solid var(--border); border-bottom: none; border-left: none; }
+  @media (max-width: 900px) {
+    .pair { grid-template-columns: 1fr; }
+    .pair > div:first-child pre { border-radius: 8px 8px 0 0; border-right: 1px solid var(--border); border-bottom: none; }
+    .pair > div:last-child pre { border-radius: 0 0 8px 8px; }
+    .lbl-go { border-radius: 8px 8px 0 0; } .lbl-cue { border-radius: 0; border-left: 1px solid var(--border); }
+  }
+  .count { font-size: 12px; color: #8b949e; font-weight: normal; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><span>Def</span>Kit <small style="color:#8b949e">Author API</small></div>
+  <input type="text" id="search-box" placeholder="Search APIs..." oninput="filterNav(this.value)">
+  <ul id="nav-list">
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#quick-start">Quick Start</a></li>
+    <li><a href="#definitions">Definition Builders</a>
+      <ul>
+        <li><a href="#component">ComponentDefinition</a></li>
+        <li><a href="#trait">TraitDefinition</a></li>
+        <li><a href="#policy">PolicyDefinition</a></li>
+        <li><a href="#workflowstep">WorkflowStepDefinition</a></li>
+      </ul>
+    </li>
+    <li><a href="#params">Parameters</a>
+      <ul>
+        <li><a href="#param-constructors">Constructors (22)</a></li>
+        <li><a href="#param-common">Common Methods</a></li>
+        <li><a href="#param-string">String</a></li>
+        <li><a href="#param-int">Int</a></li>
+        <li><a href="#param-bool">Bool</a></li>
+        <li><a href="#param-float">Float</a></li>
+        <li><a href="#param-array">Array / List</a></li>
+        <li><a href="#param-map">Map / Object</a></li>
+        <li><a href="#param-struct">Struct / Field</a></li>
+        <li><a href="#param-enum">Enum / OneOf / ClosedUnion</a></li>
+      </ul>
+    </li>
+    <li><a href="#templates">Template &amp; Resource</a>
+      <ul>
+        <li><a href="#tpl-builder">Template</a></li>
+        <li><a href="#res-builder">Resource</a></li>
+        <li><a href="#arr-builder">ArrayBuilder</a></li>
+      </ul>
+    </li>
+    <li><a href="#expressions">Expressions</a></li>
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#helpers">Helpers</a></li>
+    <li><a href="#patches">Patches</a></li>
+    <li><a href="#validators">Validators</a></li>
+    <li><a href="#health">Health &amp; Status</a></li>
+    <li><a href="#context">Context</a></li>
+    <li><a href="#placement">Placement</a></li>
+    <li><a href="#workflow-ops">Workflow Ops</a></li>
+    <li><a href="#registry">Registry</a></li>
+    <li><a href="#testing">Testing</a></li>
+  </ul>
+</nav>
+
+<main>
+
+<!-- ═══════════════════ OVERVIEW ═══════════════════ -->
+<h1 id="overview">DefKit Author API Reference</h1>
+<p><code>github.com/oam-dev/kubevela/pkg/definition/defkit</code></p>
+<p>Fluent Go SDK for authoring KubeVela X-Definitions. This reference covers only the <strong>~450 consumer-facing builder methods</strong> that definition authors use to chain-build definitions. Internal getters, CUE generator plumbing, and condition accessor methods are excluded.</p>
+
+<table>
+<tr><th>Category</th><th>Methods</th><th>What you build</th></tr>
+<tr><td>Definition Builders</td><td>95</td><td>Component, Trait, Policy, WorkflowStep</td></tr>
+<tr><td>Parameters</td><td>~159</td><td>22 constructors + type-specific chain methods</td></tr>
+<tr><td>Template &amp; Resource</td><td>41</td><td>Outputs, patches, arrays, conditional structs</td></tr>
+<tr><td>Expressions</td><td>28</td><td>Literals, refs, comparisons, logic, CUE funcs, regex</td></tr>
+<tr><td>Collections</td><td>27</td><td>Each/From pipelines, field mapping</td></tr>
+<tr><td>Helpers</td><td>23</td><td>Named intermediate variables</td></tr>
+<tr><td>Patches</td><td>29</td><td>PatchResource, PatchContainer</td></tr>
+<tr><td>Validators</td><td>~30</td><td>Cross-field validation, conditional params, mutual exclusion</td></tr>
+<tr><td>Health &amp; Status</td><td>63</td><td>Health policies, status details DSLs</td></tr>
+<tr><td>Context</td><td>13</td><td>Runtime references (context.name, etc.)</td></tr>
+<tr><td>Placement</td><td>11</td><td>Cluster label conditions</td></tr>
+<tr><td>Workflow Ops</td><td>17</td><td>KubeRead, HTTPPost, WaitUntil, Fail</td></tr>
+<tr><td>Registry + Testing</td><td>12</td><td>Register, TestContext</td></tr>
+</table>
+
+<!-- ═══════════════════ QUICK START ═══════════════════ -->
+<h2 id="quick-start">Quick Start</h2>
+
+<div class="pair">
+<div>
+  <div class="lbl lbl-go">Go (defkit)</div>
+  <pre><code>image := defkit.<span class="fn">String</span>(<span class="s">"image"</span>).<span class="fn">Description</span>(<span class="s">"Container image"</span>)
+replicas := defkit.<span class="fn">Int</span>(<span class="s">"replicas"</span>).<span class="fn">Default</span>(1)
+port := defkit.<span class="fn">Int</span>(<span class="s">"port"</span>).<span class="fn">Default</span>(80)
+
+comp := defkit.<span class="fn">NewComponent</span>(<span class="s">"webservice"</span>).
+    <span class="fn">Description</span>(<span class="s">"Long-running web service"</span>).
+    <span class="fn">Workload</span>(<span class="s">"apps/v1"</span>, <span class="s">"Deployment"</span>).
+    <span class="fn">Params</span>(image, replicas, port).
+    <span class="fn">Template</span>(<span class="kw">func</span>(tpl *defkit.Template) {
+        vela := defkit.<span class="fn">VelaCtx</span>()
+        tpl.<span class="fn">Output</span>(
+            defkit.<span class="fn">NewResource</span>(<span class="s">"apps/v1"</span>, <span class="s">"Deployment"</span>).
+                <span class="fn">Set</span>(<span class="s">"metadata.name"</span>, vela.<span class="fn">Name</span>()).
+                <span class="fn">Set</span>(<span class="s">"spec.replicas"</span>, replicas).
+                <span class="fn">Set</span>(<span class="s">"spec.template.spec.containers[0].image"</span>, image).
+                <span class="fn">Set</span>(<span class="s">"spec.template.spec.containers[0].ports[0].containerPort"</span>, port),
+        )
+    })
+
+fmt.Println(comp.<span class="fn">ToCue</span>())</code></pre>
+</div>
+<div>
+  <div class="lbl lbl-cue">Generated CUE</div>
+  <pre><code>webservice: {
+    type: <span class="s">"component"</span>
+    annotations: {}
+    labels: {}
+    description: <span class="s">"Long-running web service"</span>
+    attributes: {
+        workload: {
+            definition: {
+                apiVersion: <span class="s">"apps/v1"</span>
+                kind:       <span class="s">"Deployment"</span>
+            }
+            type: <span class="s">"deployments.apps"</span>
+        }
+    }
+}
+template: {
+    output: {
+        apiVersion: <span class="s">"apps/v1"</span>
+        kind:       <span class="s">"Deployment"</span>
+        metadata: name: context.name
+        spec: {
+            replicas: parameter.replicas
+            template: spec: containers: [{
+                image: parameter.image
+                ports: [{containerPort: parameter.port}]
+            }]
+        }
+    }
+    parameter: {
+        <span class="c">// +usage=Container image</span>
+        image: string
+        port: *80 | int
+        replicas: *1 | int
+    }
+}</code></pre>
+</div>
+</div>
+
+<!-- ═══════════════════ DEFINITION BUILDERS ═══════════════════ -->
+<h2 id="definitions">Definition Builders <span class="count">95 methods</span></h2>
+
+<h3 id="component">NewComponent(name) <span class="badge b1">27 methods</span></h3>
+<table>
+<tr><th>Builder Method</th><th>Description</th></tr>
+<tr><td><code>Description(desc string)</code></td><td>Sets the human-readable description shown in <code>vela show</code> and the KubeVela dashboard. Generates CUE <code>description: "..."</code> in the definition header.</td></tr>
+<tr><td><code>Workload(apiVersion, kind string)</code></td><td>Declares the primary Kubernetes workload this component creates (e.g. <code>"apps/v1", "Deployment"</code>). KubeVela uses this to understand what resource the component manages and to wire up traits that patch it. Generates <code>attributes: workload: { definition: {apiVersion, kind}, type: "deployments.apps" }</code> — the <code>type</code> field is auto-inferred from the GVK (suppress with <code>OmitWorkloadType()</code>).</td></tr>
+<tr><td><code>AutodetectWorkload()</code></td><td>Sets the workload type to the special sentinel <code>"autodetects.core.oam.dev"</code>, telling KubeVela to infer the workload type from the primary <code>output</code> resource at runtime instead of declaring it statically. Use when the output apiVersion or kind varies — e.g. CronJob switching between <code>batch/v1beta1</code> and <code>batch/v1</code> by cluster version, or <code>k8s-objects</code> where the kind is user-provided.</td></tr>
+<tr><td><code>Params(params ...Param)</code></td><td>Adds one or more parameter definitions that become the <code>parameter: { ... }</code> block in the generated CUE. These are the user-facing inputs shown in <code>vela show</code> and validated at apply time. Parameters are rendered in insertion order (the order you pass them).</td></tr>
+<tr><td><code>Param(param Param)</code></td><td>Adds a single parameter. Same as <code>Params()</code> but for one at a time when building incrementally.</td></tr>
+<tr><td><code>Template(fn func(tpl *Template))</code></td><td>Provides the template closure where you define output resources, patches, helpers, and let-bindings. The closure receives a <code>*Template</code> you populate with <code>Output()</code>, <code>Outputs()</code>, <code>Patch()</code>, etc. This becomes the entire <code>template: { ... }</code> block in CUE.</td></tr>
+<tr><td><code>CustomStatus(expr string)</code></td><td>Sets a raw CUE expression for the <code>status: customStatus:</code> block. This controls the user-visible status message (e.g. <code>"Ready: 3/3"</code>) shown in <code>vela status</code>. For a builder-based approach, use the <code>Status()</code> DSL instead.</td></tr>
+<tr><td><code>HealthPolicy(expr string)</code></td><td>Sets a raw CUE expression for the <code>status: healthPolicy:</code> block. This must evaluate to <code>isHealth: true/false</code> and determines whether KubeVela considers the component healthy. For a builder-based approach, use <code>HealthPolicyExpr()</code>.</td></tr>
+<tr><td><code>HealthPolicyExpr(expr HealthExpression)</code></td><td>Sets the health policy using the type-safe <code>HealthExpression</code> DSL (from <code>Health().Condition("Ready").IsTrue()</code> etc.) instead of raw CUE strings. The DSL generates the condition-filtering preamble and <code>isHealth</code> expression automatically.</td></tr>
+<tr><td><code>StatusDetails(details string)</code></td><td>Sets a raw CUE expression for the <code>status: details:</code> block, which provides structured status information beyond the simple message. Used for rich status reporting in the KubeVela dashboard.</td></tr>
+<tr><td><code>Annotations(map[string]string)</code></td><td>Sets annotations on the X-Definition Kubernetes resource itself (not on the workload). These are metadata annotations on the <code>ComponentDefinition</code> CR, used for UI hints, categorization, or custom tooling.</td></tr>
+<tr><td><code>Labels(map[string]string)</code></td><td>Sets labels on the X-Definition Kubernetes resource. Common labels include <code>ui-hidden: "true"</code> to hide from the dashboard or custom labels for filtering definitions.</td></tr>
+<tr><td><code>Version(v string)</code></td><td>Sets the definition version string. Used when multiple versions of the same definition coexist, allowing version-based selection during application deployment.</td></tr>
+<tr><td><code>Helper(name string, param Param)</code></td><td>Registers a named CUE helper type definition (<code>#Name</code>) with the given parameter schema. Helpers appear as reusable type definitions at the top of the template block (e.g. <code>#HealthProbe: { path: string, port: int }</code>) and can be referenced from parameters or outputs.</td></tr>
+<tr><td><code>ChildResourceKind(apiVersion, kind, selector)</code></td><td>Declares a child resource kind that this component creates besides its primary output. KubeVela uses this to track ownership and garbage-collect child resources. The selector map filters which instances belong to this component.</td></tr>
+<tr><td><code>PodSpecPath(path string)</code></td><td>Tells KubeVela where to find the PodSpec within the output resource (e.g. <code>"spec.template.spec"</code> for Deployments). Traits that modify containers, volumes, or other pod-level fields use this path to locate the correct spec to patch.</td></tr>
+<tr><td><code>RawCUE(cue string)</code></td><td>Escape hatch: bypasses the entire builder pipeline and uses the provided raw CUE string verbatim as the definition output. When set, all other builder methods are ignored. Use this for definitions too complex for the builder API or when migrating existing CUE.</td></tr>
+<tr><td><code>WithImports(imports ...string)</code></td><td>Adds CUE import statements to the generated definition (e.g. <code>"strings"</code>, <code>"strconv"</code>). The generator also auto-detects required imports from expressions like <code>StringsToLower()</code>, but use this for imports the auto-detection misses or for custom packages.</td></tr>
+<tr><td><code>RunOn(conditions ...placement.Condition)</code></td><td>Restricts this definition to only run on clusters whose identity labels match the given conditions. The definition is skipped during <code>vela def apply-module</code> if the target cluster doesn't match. Build conditions with <code>placement.Label("key").Eq("value")</code>.</td></tr>
+<tr><td><code>NotRunOn(conditions ...placement.Condition)</code></td><td>Excludes this definition from clusters whose labels match the given conditions. The inverse of <code>RunOn</code> — if any NotRunOn condition matches, the definition is skipped even if RunOn conditions also match.</td></tr>
+<tr><td><code>Validators(validators ...*Validator)</code></td><td>Attaches cross-field validation rules that generate CUE <code>_validate*</code> blocks. These enforce constraints across multiple parameters (e.g. mutual exclusion, "if A is set then B must also be set"). Build validators with <code>Validate(msg).FailWhen(cond)</code>.</td></tr>
+<tr><td><code>ConditionalParams(block *ConditionalParamBlock)</code></td><td>Adds parameter fields that appear conditionally based on other parameter values. For example, showing <code>strategy</code> and <code>maxSurge</code> only when <code>kind == "Deployment"</code>. Generates CUE <code>if parameter.kind == "Deployment" { ... }</code> blocks inside the parameter schema.</td></tr>
+<tr><td><code>OmitWorkloadType()</code></td><td>Suppresses the auto-inferred <code>type:</code> field from the <code>workload:</code> block while keeping the <code>definition: {apiVersion, kind}</code>. Use with <code>Workload()</code> when the GVK is a custom CRD that the generator can't infer a type for — e.g. Crossplane claims like <code>"objectstore.atmos.guidewire.com/v1alpha1", "S3"</code> or <code>"database.atmos.guidewire.com/v1alpha1", "AWSAuroraCluster"</code>. Without this, the generator would produce an incorrect <code>type:</code> value.</td></tr>
+<tr><td><code>ToCue() string</code></td><td>Compiles the entire definition into a complete CUE string ready to be applied as a KubeVela X-Definition. This is the main output method — it runs the CUE generator, which processes all parameters, templates, outputs, health policies, validators, and placement constraints into valid CUE.</td></tr>
+<tr><td><code>ToCueWithImports(imports ...string) string</code></td><td>Same as <code>ToCue()</code> but prepends additional CUE import statements. Useful when you need imports beyond what the generator auto-detects, without modifying the definition itself.</td></tr>
+<tr><td><code>ToParameterSchema() string</code></td><td>Generates only the <code>parameter: { ... }</code> CUE block without the full definition wrapper. Useful for documentation generation, schema validation tooling, or embedding the parameter schema in other contexts.</td></tr>
+<tr><td><code>ToYAML() ([]byte, error)</code></td><td>Generates the definition as a Kubernetes YAML manifest (<code>ComponentDefinition</code> CR) ready to be applied with <code>kubectl apply</code>. The CUE template is embedded in the <code>.spec.schematic.cue.template</code> field of the YAML.</td></tr>
+</table>
+
+<h3 id="trait">NewTrait(name) <span class="badge b1">27 methods</span></h3>
+<p>Shares the same base builder methods as Component (Description, Params, Param, Template, HealthPolicy, HealthPolicyExpr, CustomStatus, StatusDetails, Annotations, Labels, Version, Helper, RawCUE, WithImports, RunOn, NotRunOn) but does NOT have Component-specific methods (Workload, AutodetectWorkload, ChildResourceKind, PodSpecPath, OmitWorkloadType, Validators, ConditionalParams, ToCueWithImports, ToParameterSchema). Trait-specific methods:</p>
+<table>
+<tr><th>Builder Method</th><th>Description</th></tr>
+<tr><td><code>AppliesTo(workloads ...string)</code></td><td>Restricts which workload types this trait can attach to. Values use <code>pluralKind.group</code> format: <code>"deployments.apps"</code>, <code>"statefulsets.apps"</code>, <code>"jobs.batch"</code>. Use <code>"*"</code> to apply to all workload types. If omitted, the trait can apply to any workload. Generates <code>appliesToWorkloads: [...]</code>.</td></tr>
+<tr><td><code>ConflictsWith(traits ...string)</code></td><td>Declares that this trait cannot be used alongside the listed traits on the same component. KubeVela rejects applications where conflicting traits are both attached (e.g. <code>"scaler"</code> conflicts with <code>"hpa"</code>). Generates <code>conflictsWith: [...]</code>.</td></tr>
+<tr><td><code>PodDisruptive(bool)</code></td><td>Indicates whether applying this trait may cause pod restarts or disruption. When <code>true</code>, KubeVela can warn users or enforce approval workflows before rolling out changes. Always emitted in CUE as <code>podDisruptive: true/false</code>.</td></tr>
+<tr><td><code>ManageWorkload()</code></td><td>Marks this trait as a workload manager — it takes ownership of the entire workload resource rather than just patching it. Workload-managing traits generate the primary resource instead of the component, allowing traits to replace the default output entirely.</td></tr>
+<tr><td><code>ControlPlaneOnly()</code></td><td>Marks this trait to execute only on the control plane cluster, even in multi-cluster deployments. The trait's template runs once centrally rather than being dispatched to each managed cluster.</td></tr>
+<tr><td><code>RevisionEnabled()</code></td><td>Enables revision tracking for this trait, causing KubeVela to create a new revision each time the trait configuration changes. This supports canary deployments and rollback scenarios where trait state needs to be versioned.</td></tr>
+<tr><td><code>Stage(stage string)</code></td><td>Controls when this trait executes relative to other traits. Common values: <code>"PreDispatch"</code> (before resources are sent to clusters), <code>"PostDispatch"</code> (after deployment, e.g. for creating Services). Generates <code>stage: "..."</code>.</td></tr>
+<tr><td><code>WorkloadRefPath(path string)</code></td><td>Specifies a custom path within the trait's output where KubeVela should inject the workload reference. The default path is auto-detected, but complex traits may need to explicitly declare where the workload object reference goes.</td></tr>
+<tr><td><code>TemplateBlock(cue string)</code></td><td>Escape hatch for the template section only: provides raw CUE for the <code>template: { ... }</code> block while still using the builder for the definition header (description, appliesToWorkloads, etc.). Unlike <code>RawCUE()</code>, this only replaces the template, not the entire definition.</td></tr>
+</table>
+
+<div class="pair">
+<div>
+  <div class="lbl lbl-go">Go — Scaler Trait</div>
+  <pre><code>replicas := defkit.<span class="fn">Int</span>(<span class="s">"replicas"</span>).<span class="fn">Default</span>(1)
+
+defkit.<span class="fn">NewTrait</span>(<span class="s">"scaler"</span>).
+    <span class="fn">Description</span>(<span class="s">"Manually scale K8s pod."</span>).
+    <span class="fn">AppliesTo</span>(<span class="s">"deployments.apps"</span>).
+    <span class="fn">PodDisruptive</span>(false).
+    <span class="fn">Params</span>(replicas).
+    <span class="fn">Template</span>(<span class="kw">func</span>(tpl *defkit.Template) {
+        tpl.<span class="fn">Patch</span>().<span class="fn">Set</span>(<span class="s">"spec.replicas"</span>, replicas)
+    })</code></pre>
+</div>
+<div>
+  <div class="lbl lbl-cue">Generated CUE</div>
+  <pre><code>scaler: {
+    type: <span class="s">"trait"</span>
+    annotations: {}
+    labels: {}
+    description: <span class="s">"Manually scale K8s pod."</span>
+    attributes: {
+        podDisruptive: false
+        appliesToWorkloads: [<span class="s">"deployments.apps"</span>]
+    }
+}
+template: {
+    patch: spec: replicas: parameter.replicas
+    parameter: replicas: *1 | int
+}</code></pre>
+</div>
+</div>
+
+<h3 id="policy">NewPolicy(name) <span class="badge b1">19 methods</span></h3>
+<p>Shares the same base builder methods as Trait (Description, Params, Param, Template, HealthPolicy, HealthPolicyExpr, CustomStatus, StatusDetails, Annotations, Labels, Version, Helper, RawCUE, WithImports, RunOn, NotRunOn) plus:</p>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Template(fn func(tpl *PolicyTemplate))</code></td><td>Provides the policy template closure. Unlike component/trait templates, a <code>PolicyTemplate</code> doesn't create Kubernetes resources — it defines computed fields using <code>Set(name, value)</code> that KubeVela's policy engine evaluates (e.g. topology selection, override rules).</td></tr>
+<tr><td><code>ManageHealthCheck()</code></td><td>Declares that this policy manages health checking for the application. When set, KubeVela delegates health evaluation to this policy's health policy expression instead of using the default per-component health checks.</td></tr>
+</table>
+
+<h3 id="workflowstep">NewWorkflowStep(name) <span class="badge b1">22 methods</span></h3>
+<p>Shares the same base builder methods as Trait (Description, Params, Param, Template, HealthPolicy, HealthPolicyExpr, CustomStatus, StatusDetails, Annotations, Labels, Version, Helper, RawCUE, WithImports, RunOn, NotRunOn) plus:</p>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Category(string)</code></td><td>Groups the step for display in the UI and CLI. Common categories: <code>"Application Delivery"</code>, <code>"Resource Management"</code>, <code>"Process Control"</code>, <code>"Terraform"</code>, <code>"External Integration"</code>. Shown in <code>vela show --type workflow-step</code>.</td></tr>
+<tr><td><code>Scope(string)</code></td><td>Defines the execution scope of the step — whether it runs at the application level or per-component. Affects how the step interacts with multi-component applications.</td></tr>
+<tr><td><code>Alias(string)</code></td><td>Sets an alternative name users can use to reference this step type in their workflow YAML. Allows shorter or more intuitive names alongside the canonical definition name.</td></tr>
+<tr><td><code>Template(fn func(tpl *WorkflowStepTemplate))</code></td><td>Provides the workflow step template closure. Inside, you define actions (builtins, suspend, field assignments) that KubeVela's workflow engine executes. Unlike component templates that produce resources, step templates orchestrate operations.</td></tr>
+<tr><td><code>TemplateBody(body string)</code></td><td>Escape hatch: provides raw CUE for the template body while still using the builder for the definition header and parameters. Use when the step logic is too complex for the builder API.</td></tr>
+</table>
+<h4>WorkflowStepTemplate <span class="count">6 methods</span></h4>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Builtin(name, builtinRef string)</code></td><td>Invokes a builtin workflow action (e.g. <code>"deploy", "multicluster.#Deploy"</code>). Returns a <code>*BuiltinActionBuilder</code> to configure parameters. The <code>builtinRef</code> is a CUE reference to the action's schema from an imported package.</td></tr>
+<tr><td><code>Set(name string, value Value)</code></td><td>Assigns a value to a named field in the step's template body. Used for steps that compute values (e.g. reading from K8s, calling HTTP endpoints) and storing results for later steps.</td></tr>
+<tr><td><code>SetIf(cond, name, value)</code></td><td>Conditionally assigns a value only when the condition is true. Generates <code>if cond { name: value }</code> in the template body.</td></tr>
+<tr><td><code>SetGuardedBlock(cond, name, value)</code></td><td>Creates a named field whose contents are conditional. Generates <code>name: { if cond { ...value... } }</code> — the field always exists, but its contents are guarded. Opposite of <code>SetIf</code> which wraps the field itself: <code>if cond { name: value }</code>.</td></tr>
+<tr><td><code>Suspend(message string)</code></td><td>Adds a suspend action that pauses the workflow and displays the message. The workflow waits for manual approval (via <code>vela workflow resume</code>) before continuing to the next step.</td></tr>
+<tr><td><code>SuspendIf(cond Condition, message string)</code></td><td>Conditionally suspends the workflow only when the condition is true. For example, suspend for manual approval only when <code>auto</code> parameter is false: <code>SuspendIf(Not(auto.IsTrue()), "Waiting for approval")</code>.</td></tr>
+</table>
+<h4>BuiltinActionBuilder <span class="count">5 methods</span></h4>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>WithParams(map[string]Value)</code></td><td>Passes specific parameter values to the builtin action. Each key maps to a field in the action's <code>$params</code> block — for example, <code>{"policies": policies, "parallelism": parallelism}</code> for a deploy action.</td></tr>
+<tr><td><code>WithFullParameter()</code></td><td>Passes the entire <code>parameter</code> block from the step definition directly to the builtin action. Use when the step's parameters are a 1:1 match with the action's expected inputs.</td></tr>
+<tr><td><code>WithDirectFields()</code></td><td>Passes parameters as direct fields (not nested under <code>$params</code>) to the builtin action. Some builtins expect flat field inputs rather than a nested params block.</td></tr>
+<tr><td><code>If(cond Condition)</code></td><td>Makes the entire builtin action conditional — it only executes when the condition is true. Generates <code>if cond { actionName: builtin.#Action &amp; { ... } }</code>.</td></tr>
+<tr><td><code>Build()</code></td><td>Finalizes the builtin action configuration and adds it to the workflow step template. Must be called as the last method in the chain.</td></tr>
+</table>
+
+<!-- ═══════════════════ PARAMETERS ═══════════════════ -->
+<h2 id="params">Parameters <span class="count">~159 methods</span></h2>
+
+<h3 id="param-constructors">Constructors <span class="badge b2">22</span></h3>
+<table>
+<tr><th>Constructor</th><th>CUE Type</th><th>Notes</th></tr>
+<tr><td><code>String(name)</code></td><td><code>string</code></td><td></td></tr>
+<tr><td><code>Int(name)</code></td><td><code>int</code></td><td></td></tr>
+<tr><td><code>Bool(name)</code></td><td><code>bool</code></td><td></td></tr>
+<tr><td><code>Float(name)</code></td><td><code>float</code></td><td></td></tr>
+<tr><td><code>Array(name)</code></td><td><code>[...]</code></td><td>Generic, use <code>.Of(type)</code></td></tr>
+<tr><td><code>StringList(name)</code></td><td><code>[...string]</code></td><td>Shorthand</td></tr>
+<tr><td><code>IntList(name)</code></td><td><code>[...int]</code></td><td>Shorthand</td></tr>
+<tr><td><code>List(name)</code></td><td><code>[...]</code></td><td>Untyped open array</td></tr>
+<tr><td><code>Map(name)</code></td><td><code>[string]: T</code></td><td>Use <code>.Of(type)</code></td></tr>
+<tr><td><code>Object(name)</code></td><td><code>{...}</code></td><td>Open struct</td></tr>
+<tr><td><code>StringKeyMap(name)</code></td><td><code>[string]: string</code></td><td>Shorthand</td></tr>
+<tr><td><code>DynamicMap()</code></td><td><code>[string]: T</code></td><td>Dynamic value type</td></tr>
+<tr><td><code>Struct(name)</code></td><td><code>{ named fields }</code></td><td>Open struct with named fields via <code>.WithFields()</code></td></tr>
+<tr><td><code>Field(name, type)</code></td><td>&mdash;</td><td>Struct field builder</td></tr>
+<tr><td><code>Enum(name)</code></td><td><code>"a" | "b"</code></td><td>Use <code>.Values()</code></td></tr>
+<tr><td><code>OneOf(name)</code></td><td>Discriminated union</td><td>Use <code>.Discriminator().Variants()</code></td></tr>
+<tr><td><code>Variant(name)</code></td><td>&mdash;</td><td>OneOf variant builder</td></tr>
+<tr><td><code>ClosedUnion(name)</code></td><td>Closed struct disjunction</td><td>Use <code>.Options()</code></td></tr>
+<tr><td><code>ClosedStruct()</code></td><td>&mdash;</td><td>ClosedUnion option builder</td></tr>
+<tr><td><code>OpenStruct()</code></td><td><code>{...}</code></td><td>Open struct param</td></tr>
+<tr><td><code>OpenArray(name)</code></td><td><code>[...{...}]</code></td><td>Array of open structs</td></tr>
+<tr><td><code>ParamPath(path)</code></td><td>&mdash;</td><td>Nested param path reference</td></tr>
+</table>
+
+<h3 id="param-common">Common Methods (all param types) <span class="badge b2">10</span></h3>
+<p>Inherited from <code>baseParam</code> — available on every parameter type:</p>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Required()</code></td><td>Marks the parameter as required. Users must explicitly provide a value — omitting it is a validation error. Generates CUE <code>name!: type</code>. A parameter with both <code>Required()</code> and <code>Default()</code> emits <code>name!: *default | type</code> — the default applies when the field is present but empty, not when it's omitted.</td></tr>
+<tr><td><code>Optional()</code></td><td>Marks the parameter as explicitly optional. The field can be omitted entirely from the application YAML without error. Generates CUE <code>name?: type</code>. Parameters without Required/Optional/Default are bare (no marker), meaning they're required by CUE's type system.</td></tr>
+<tr><td><code>Default(value)</code></td><td>Sets a default value that applies when the user doesn't provide one. Generates CUE <code>*value | type</code> (e.g. <code>*80 | int</code>). Note: <code>Default()</code> does not set the optional flag on the parameter itself — the CUE generator treats parameters with defaults as implicitly optional at the CUE level. Users see the default in <code>vela show</code> and can override it.</td></tr>
+<tr><td><code>Description(desc)</code></td><td>Sets the human-readable description shown in <code>vela show</code> and documentation. Generates a <code>// +usage=desc</code> comment above the parameter in CUE.</td></tr>
+<tr><td><code>Short(s)</code></td><td>Sets a short alias for the parameter (e.g. <code>"i"</code> for <code>"image"</code>). Generates a <code>// +short=s</code> annotation. Used by CLI tooling for shorter flags.</td></tr>
+<tr><td><code>Ignore()</code></td><td>Marks the parameter as ignored — it appears in the CUE schema for documentation but is not exposed in <code>vela show</code> or validated. Generates <code>// +ignore</code>. Useful for internal or deprecated parameters.</td></tr>
+<tr><td><code>IsSet() Condition</code></td><td>Returns a condition that is true when the user provided this parameter. Generates CUE <code>parameter["name"] != _|_</code> (bottom-value check). Use this for conditional logic: <code>SetIf(image.IsSet(), "spec.image", image)</code>.</td></tr>
+<tr><td><code>NotSet() Condition</code></td><td>Returns a condition that is true when the parameter was omitted. Generates CUE <code>parameter["name"] == _|_</code>. The inverse of <code>IsSet()</code>.</td></tr>
+<tr><td><code>Eq(val) Condition</code></td><td>Returns a condition comparing this parameter's value to a literal. Generates CUE <code>parameter.name == val</code>. Works with any comparable type. Use in <code>If()</code> blocks, <code>SetIf()</code>, or <code>MapVariant()</code>.</td></tr>
+<tr><td><code>Ne(val)</code>, <code>Gt(val)</code>, <code>Gte(val)</code>, <code>Lt(val)</code>, <code>Lte(val)</code></td><td>Additional comparison conditions generating <code>!=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code> respectively. Useful for numeric range checks (e.g. <code>replicas.Gt(0)</code>) or string ordering.</td></tr>
+</table>
+
+<h3 id="param-string">StringParam <span class="badge b2">23 chain</span></h3>
+<p>Type-specific methods beyond the common ones above:</p>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Values(values ...string)</code></td><td>Restricts the parameter to a fixed set of allowed values (closed enum). Generates CUE <code>"first" | "second" | "third"</code>. To set a default, chain <code>.Default("first")</code> separately — <code>Values()</code> alone does not set a default. Users see the allowed values in <code>vela show</code>.</td></tr>
+<tr><td><code>OpenEnum()</code></td><td>Used after <code>Values()</code> to allow any string in addition to the listed values. Generates <code>*"info" | "debug" | string</code>. Without this, only the exact values are accepted.</td></tr>
+<tr><td><code>Pattern(regex)</code></td><td>Adds a regex constraint that the string must match. Generates a CUE regex validation. Use for formats like IP addresses, DNS names, or semantic versions.</td></tr>
+<tr><td><code>MinLen(n)</code> / <code>MaxLen(n)</code></td><td>Sets minimum/maximum length constraints on the string value. Enforced at CUE validation time. Use for fields like names that must be between 1-63 characters.</td></tr>
+<tr><td><code>NotEmpty()</code></td><td>Adds a constraint that the string must not be the empty string <code>""</code>. Stricter than <code>Required()</code> which only ensures the field is present — <code>NotEmpty()</code> also rejects explicitly-set empty strings.</td></tr>
+<tr><td><code>Concat(suffix) Value</code></td><td>Returns a Value expression that appends a suffix to this parameter's runtime value. Generates CUE <code>parameter.name + "suffix"</code>. Use in <code>Set()</code> calls to build derived strings (e.g. <code>image.Concat(":latest")</code>).</td></tr>
+<tr><td><code>Prepend(prefix) Value</code></td><td>Returns a Value expression that prepends a prefix to this parameter's runtime value. Generates CUE <code>"prefix" + parameter.name</code>. Use for building qualified names or paths.</td></tr>
+<tr><td><code>Contains(substr) Condition</code></td><td>Returns a condition that checks if the parameter value contains the substring. Generates <code>strings.Contains(parameter.name, "substr")</code>. Auto-imports the CUE <code>strings</code> package.</td></tr>
+<tr><td><code>Matches(pattern) Condition</code></td><td>Returns a condition that checks if the parameter value matches a regex pattern. Generates CUE <code>parameter.name =~ "pattern"</code>.</td></tr>
+<tr><td><code>StartsWith(prefix)</code> / <code>EndsWith(suffix)</code></td><td>Returns conditions checking if the value starts/ends with the given string. Generates <code>strings.HasPrefix(...)</code> / <code>strings.HasSuffix(...)</code>. Auto-imports the CUE strings package.</td></tr>
+<tr><td><code>In(values ...string) Condition</code></td><td>Returns a condition that checks if the parameter value is one of the listed strings. Generates <code>parameter.name == "a" || parameter.name == "b"</code>. Unlike <code>Values()</code> which constrains the schema, <code>In()</code> creates a runtime condition for use in <code>If()</code>/<code>SetIf()</code>.</td></tr>
+<tr><td><code>LenEq(n)</code> / <code>LenGt(n)</code> / <code>LenGte(n)</code> / <code>LenLt(n)</code> / <code>LenLte(n)</code></td><td>Returns conditions on the string's length. Generates <code>len(parameter.name) == n</code>, <code>&gt; n</code>, etc. Use for conditional logic based on string size (e.g. truncation decisions).</td></tr>
+</table>
+
+<h3 id="param-int">IntParam <span class="badge b2">13 chain</span></h3>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Min(n int)</code> / <code>Max(n int)</code></td><td>Sets minimum/maximum value constraints. Generates CUE <code>&gt;=n</code> / <code>&lt;=n</code> bounds. Use for parameters like <code>replicas</code> where negative values are invalid, or ports that must be in 1-65535.</td></tr>
+<tr><td><code>In(values ...int) Condition</code></td><td>Returns a condition checking if the parameter equals any of the listed values. Generates an OR chain: <code>parameter.name == 1 || parameter.name == 2</code>. Use in conditional logic, not schema constraints.</td></tr>
+<tr><td><code>Add(val int)</code> / <code>Sub(val int)</code> / <code>Mul(val int)</code> / <code>Div(val int)</code></td><td>Returns a Value expression performing arithmetic on this parameter's runtime value. Generates CUE <code>parameter.name + val</code>, <code>- val</code>, <code>* val</code>, <code>/ val</code>. Use in <code>Set()</code> calls for computed fields (e.g. <code>maxReplicas: replicas.Add(1)</code>).</td></tr>
+</table>
+
+<h3 id="param-bool">BoolParam <span class="badge b2">8 chain</span></h3>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>IsTrue() Condition</code></td><td>Returns a condition that is true when this boolean parameter is <code>true</code>. Generates CUE <code>parameter.name</code> (truthy check, not <code>== true</code>). The most common way to branch on a boolean flag: <code>SetIf(debug.IsTrue(), ...)</code>.</td></tr>
+<tr><td><code>IsFalse() Condition</code></td><td>Returns a condition that is true when this boolean parameter is <code>false</code>. Generates CUE <code>!parameter.name</code> (negation prefix, not <code>== false</code>).</td></tr>
+</table>
+
+<h3 id="param-float">FloatParam <span class="badge b2">11 chain</span></h3>
+<p>Same pattern as IntParam: <code>Min(n float64)</code> sets a lower bound, <code>Max(n float64)</code> sets an upper bound, <code>In(values ...float64)</code> creates a membership condition. Use for parameters like ratios, thresholds, or percentages.</p>
+
+<h3 id="param-array">Array / List <span class="badge b2">20 chain</span></h3>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Of(elemType ParamType)</code></td><td>Sets the element type for the array. Generates CUE <code>[...string]</code>, <code>[...int]</code>, etc. Without this, the array is untyped (<code>[..._]</code>). Use the shorthand constructors <code>StringList()</code>/<code>IntList()</code> instead of <code>Array().Of()</code> for common cases.</td></tr>
+<tr><td><code>WithFields(fields ...Param)</code></td><td>Defines the array as an array of structs with named fields. Each element must conform to the struct schema. Generates CUE <code>[...{ port: int, name?: string }]</code>. Build fields with <code>Int("port")</code>, <code>String("name").Optional()</code>, etc.</td></tr>
+<tr><td><code>WithSchema(schema string)</code></td><td>Sets a raw CUE string as the element schema. Escape hatch for complex element types that can't be expressed with the builder (e.g. recursive types or CUE-specific constraints).</td></tr>
+<tr><td><code>WithSchemaRef(ref string)</code></td><td>References an external CUE schema definition for elements (e.g. <code>"#VolumeSpec"</code>). The referenced type must be defined elsewhere in the CUE context — typically via a <code>Helper()</code> definition.</td></tr>
+<tr><td><code>MinItems(n)</code> / <code>MaxItems(n)</code></td><td>Sets minimum/maximum array length as schema constraints. Enforced at CUE validation time. Use for fields that require at least one port or cap the number of replicas.</td></tr>
+<tr><td><code>LenEq(n)</code> / <code>LenGt(n)</code> / <code>LenGte(n)</code> / <code>LenLt(n)</code> / <code>LenLte(n)</code></td><td>Returns conditions on the array's length. Unlike <code>MinItems()</code>/<code>MaxItems()</code> which are schema constraints, these create runtime conditions for use in <code>If()</code>/<code>SetIf()</code> blocks.</td></tr>
+<tr><td><code>Contains(val any) Condition</code></td><td>Returns a condition that checks if the array contains a specific value. Use for conditional logic like "if ports include 443, enable TLS".</td></tr>
+<tr><td><code>IsEmpty()</code> / <code>IsNotEmpty()</code></td><td>Returns conditions checking if the array has zero / non-zero elements. Use for conditional blocks that only apply when the user provides items.</td></tr>
+<tr><td><code>NotEmpty()</code></td><td>Adds a non-empty constraint to each <strong>string element</strong> of the array. Changes <code>[...string]</code> to <code>[...(string &amp; !="")]</code>. Prevents empty strings within elements — does NOT enforce minimum array length (use <code>MinItems(1)</code> for that). Only applies to string-typed arrays.</td></tr>
+<tr><td><code>OfEnum(values ...string)</code></td><td>Creates an array where each element must be one of the listed string values. Generates CUE <code>[...("value1" | "value2")]</code>. Use for arrays of well-known strings like protocol lists or environment names.</td></tr>
+<tr><td><code>Validators(validators ...*Validator)</code></td><td>Attaches cross-field validation rules to the array's element struct. The validators run against each element and can reference fields within the element using <code>LocalField()</code>.</td></tr>
+</table>
+
+<pre><code>ports := defkit.<span class="fn">Array</span>(<span class="s">"ports"</span>).<span class="fn">Optional</span>().<span class="fn">WithFields</span>(
+    defkit.<span class="fn">Int</span>(<span class="s">"port"</span>),
+    defkit.<span class="fn">String</span>(<span class="s">"protocol"</span>).<span class="fn">Default</span>(<span class="s">"TCP"</span>).<span class="fn">Values</span>(<span class="s">"TCP"</span>, <span class="s">"UDP"</span>),
+)
+<span class="c">// CUE: ports?: [...{ port: int, protocol: *"TCP" | "UDP" }]</span></code></pre>
+
+<h3 id="param-map">Map / Object <span class="badge b2">15 chain</span></h3>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Of(valueType ParamType)</code></td><td>Sets the value type for map entries. Generates CUE <code>[string]: string</code>, <code>[string]: int</code>, etc. Use <code>StringKeyMap()</code> as a shorthand for <code>Map().Of(ParamTypeString)</code>.</td></tr>
+<tr><td><code>WithFields(fields ...Param)</code></td><td>Defines the map as a structured object with named fields instead of free-form key-value pairs. Generates CUE with specific field names and types. Use when the object has a known schema (e.g. <code>resources: { cpu: string, memory: string }</code>).</td></tr>
+<tr><td><code>Field(fieldPath string)</code></td><td>Returns a <code>*ParamFieldRef</code> for accessing a nested field within this map parameter. The ref can be used in conditions (<code>.IsSet()</code>, <code>.Eq(val)</code>) and as values in <code>Set()</code> calls, allowing cross-field references like <code>config.Field("mode").Eq("debug")</code>.</td></tr>
+<tr><td><code>HasKey(key string) Condition</code></td><td>Returns a condition that checks whether a specific key exists in the map at runtime. Use for conditional logic that depends on optional map entries.</td></tr>
+<tr><td><code>LenEq(n)</code> / <code>LenGt(n)</code> / <code>IsEmpty()</code> / <code>IsNotEmpty()</code></td><td>Returns conditions on the number of entries in the map. Use for conditional logic (e.g. "if labels are provided, apply them").</td></tr>
+<tr><td><code>Closed()</code></td><td>Closes the map so only the declared fields are allowed — no additional keys can be added by the user. Generates a closed CUE struct. Without this, maps are open by default and accept any key.</td></tr>
+<tr><td><code>Validators(validators ...*Validator)</code></td><td>Attaches cross-field validation rules that run against the map's fields. Validators can reference fields within the map using <code>LocalField()</code> for constraints like "if field A is set, field B must also be set".</td></tr>
+<tr><td><code>ConditionalFields(branches ...*ConditionalBranch)</code></td><td>Adds fields to the map that appear conditionally based on other field values. For example, showing <code>claimName</code> only when <code>type == "pvc"</code>. Build branches with <code>WhenParam(cond).Params(...)</code>.</td></tr>
+</table>
+
+<h3 id="param-struct">Struct / Field <span class="badge b2">16 chain</span></h3>
+<h4>StructParam</h4>
+<p><code>WithFields(fields ...*StructField)</code> defines the struct's fields. <code>Required()</code>/<code>Optional()</code>/<code>Description(desc)</code> work as usual. <code>WithSchemaRef(ref)</code> references an external CUE type. <code>Field(fieldPath)</code> returns a <code>*ParamFieldRef</code> for nested access in conditions.</p>
+<h4>StructField (via <code>Field(name, type)</code>)</h4>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Required()</code> / <code>Optional()</code></td><td>Marks the field within the struct as required (<code>field!: type</code>) or optional (<code>field?: type</code>). Required fields must be provided when the parent struct is present.</td></tr>
+<tr><td><code>Default(value)</code></td><td>Sets a default value for the field. Generates <code>*value | type</code>. When the struct is present but this field is omitted, the default applies.</td></tr>
+<tr><td><code>Description(desc)</code></td><td>Sets the field's description shown in <code>vela show</code>. Generates <code>// +usage=desc</code> above the field in CUE.</td></tr>
+<tr><td><code>Nested(s *StructParam)</code></td><td>Makes this field's type a nested struct. The nested struct is defined inline with its own fields, creating hierarchical parameter schemas (e.g. <code>resources: { limits: { cpu: string } }</code>).</td></tr>
+<tr><td><code>WithSchemaRef(ref)</code></td><td>References an external CUE type definition for this field (e.g. <code>"#VolumeConfig"</code>). The referenced type must be defined via a <code>Helper()</code> or in an imported CUE package.</td></tr>
+<tr><td><code>Values(values ...string)</code></td><td>Restricts this string field to a fixed set of enum values. Generates <code>field: "a" | "b"</code>. Use for fields within structs that need constrained options.</td></tr>
+<tr><td><code>Of(elemType ParamType)</code></td><td>Sets the element type when this field is an array type. Generates <code>field: [...string]</code>. Use when a struct field contains a typed list.</td></tr>
+</table>
+
+<pre><code>resources := defkit.<span class="fn">Struct</span>(<span class="s">"resources"</span>).<span class="fn">WithFields</span>(
+    defkit.<span class="fn">Field</span>(<span class="s">"cpu"</span>, defkit.ParamTypeString).<span class="fn">Required</span>().<span class="fn">Default</span>(<span class="s">"100m"</span>),
+    defkit.<span class="fn">Field</span>(<span class="s">"memory"</span>, defkit.ParamTypeString).<span class="fn">Default</span>(<span class="s">"128Mi"</span>),
+).<span class="fn">Optional</span>()
+<span class="c">// CUE: resources?: { cpu: *"100m" | string, memory: *"128Mi" | string }</span></code></pre>
+
+<h3 id="param-enum">Enum / OneOf / ClosedUnion <span class="badge b2">~20 chain</span></h3>
+<h4>EnumParam</h4>
+<p>Dedicated enum type (alternative to <code>String().Values()</code>). <code>Values(values...)</code> sets the allowed strings. Standard modifiers: <code>Default()</code>, <code>Required()</code>, <code>Optional()</code>, <code>Description()</code>, <code>Short()</code>, <code>Ignore()</code>.</p>
+<h4>OneOfParam (discriminated union)</h4>
+<p>Models a parameter whose structure changes based on a discriminator field. <code>Discriminator(field)</code> names the field that selects the variant (e.g. <code>"type"</code>). <code>Variants(variants...)</code> defines the possible shapes, each built with <code>Variant(name).WithFields(...)</code>. CUE generates <code>if type == "http" { path: string, port: int }</code> blocks for each variant. Standard modifiers: <code>Default()</code>, <code>Required()</code>, <code>Optional()</code>, <code>Description()</code>.</p>
+<h4>Variant</h4>
+<p><code>Variant(name string)</code> starts a variant definition. <code>WithFields(fields ...*StructField)</code> sets the fields visible when this variant is selected.</p>
+<h4>ClosedUnionParam</h4>
+<p>Models a parameter that must match one of several fixed struct shapes (without a discriminator). <code>Options(options ...*ClosedStructOption)</code> defines the allowed shapes, each built with <code>ClosedStruct().WithFields(...)</code>. CUE generates a closed struct disjunction: <code>close({a: string}) | close({b: int})</code>. Standard modifiers: <code>Required()</code>, <code>Optional()</code>, <code>Description()</code>.</p>
+<h4>DynamicMapParam</h4>
+<p>A map parameter where the value type is specified at build time. <code>ValueType(t ParamType)</code> sets a simple value type. <code>ValueTypeUnion(union string)</code> sets a raw CUE union type string for complex cases. <code>Description()</code> sets the description.</p>
+
+<pre><code><span class="c">// Discriminated union</span>
+probe := defkit.<span class="fn">OneOf</span>(<span class="s">"probe"</span>).<span class="fn">Discriminator</span>(<span class="s">"type"</span>).<span class="fn">Variants</span>(
+    defkit.<span class="fn">Variant</span>(<span class="s">"http"</span>).<span class="fn">WithFields</span>(
+        defkit.<span class="fn">Field</span>(<span class="s">"path"</span>, defkit.ParamTypeString).<span class="fn">Required</span>(),
+        defkit.<span class="fn">Field</span>(<span class="s">"port"</span>, defkit.ParamTypeInt).<span class="fn">Required</span>(),
+    ),
+    defkit.<span class="fn">Variant</span>(<span class="s">"tcp"</span>).<span class="fn">WithFields</span>(
+        defkit.<span class="fn">Field</span>(<span class="s">"port"</span>, defkit.ParamTypeInt).<span class="fn">Required</span>(),
+    ),
+)</code></pre>
+
+<!-- ═══════════════════ TEMPLATE & RESOURCE ═══════════════════ -->
+<h2 id="templates">Template &amp; Resource <span class="count">41 methods</span></h2>
+
+<h3 id="tpl-builder">Template Builder <span class="badge b1">16</span></h3>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Output(r ...*Resource) *Resource</code></td><td>Sets the primary output resource — the main Kubernetes object this component/trait creates (e.g. a Deployment). Generates the <code>output: { apiVersion, kind, ... }</code> block. Call with a <code>*Resource</code> to set it, or without args to retrieve the existing one for further chaining.</td></tr>
+<tr><td><code>Outputs(name string, r ...*Resource) *Resource</code></td><td>Adds a named auxiliary output resource. Components that create multiple resources (e.g. a Deployment + Service) use this for the secondary ones. Generates <code>outputs: { name: { ... } }</code>. The name is used for reference via <code>context.outputs.name</code>.</td></tr>
+<tr><td><code>OutputsIf(cond, name, r)</code></td><td>Adds an auxiliary output that only exists when the condition is true. The condition is placed inside the <code>outputs:</code> block: <code>outputs: { if cond { name: { ... } } }</code>. Use for optional resources like "create a Service only if expose ports are non-empty".</td></tr>
+<tr><td><code>OutputsGroupIf(cond, fn func(g *OutputGroup))</code></td><td>Groups multiple auxiliary outputs under a single condition. The closure receives an <code>*OutputGroup</code> where you call <code>g.Add(name, resource)</code> for each. All grouped outputs appear or disappear together based on the condition.</td></tr>
+<tr><td><code>Patch() *PatchResource</code></td><td>Gets or creates the patch block for trait definitions. Traits patch the workload resource instead of creating new ones. Returns a <code>*PatchResource</code> where you chain <code>Set()</code>, <code>SetIf()</code>, <code>SpreadIf()</code> etc. to modify the workload.</td></tr>
+<tr><td><code>PatchStrategy(strategy string)</code></td><td>Sets the patch merge strategy for the patch block. Common values: <code>"retainKeys"</code> (retain only specified keys, remove others at that level), <code>"jsonMergePatch"</code> (RFC 7386 merge), <code>"jsonPatch"</code> (RFC 6902 operations). Generates a <code>// +patchStrategy=strategy</code> annotation.</td></tr>
+<tr><td><code>Helper(name string) *HelperBuilder</code></td><td>Starts building a named helper variable that appears as <code>helperName: [...]</code> in the template (no underscore prefix — the name is emitted verbatim). Helpers compute intermediate values (e.g. filtered/mapped collections) referenced in outputs. Returns a <code>*HelperBuilder</code> for chaining.</td></tr>
+<tr><td><code>StructArrayHelper(name, source)</code></td><td>Creates a specialized helper that splits a source object's fields into separate typed arrays. Used in volume-mounting patterns where <code>volumeMounts: { pvc: [...], configMap: [...] }</code> needs to be flattened into separate arrays for the K8s spec.</td></tr>
+<tr><td><code>ConcatHelper(name, source)</code></td><td>Creates a helper that concatenates arrays from a <code>StructArrayHelper</code>. Chain <code>.Fields("pvc", "configMap")</code> to specify which struct array fields to join. Generates CUE list concatenation (<code>list.Concat</code>).</td></tr>
+<tr><td><code>DedupeHelper(name, source)</code></td><td>Creates a helper that deduplicates items in a collection by a key field. Chain <code>.ByKey("name")</code> to set the dedup key. Used after <code>ConcatHelper</code> to remove duplicate volumes/mounts that appear in multiple sources.</td></tr>
+<tr><td><code>AddLetBinding(name string, expr Value)</code></td><td>Adds a CUE <code>let</code> binding to the template: <code>let name = expr</code>. Use for computed values that are referenced multiple times — avoids duplicating complex expressions. Reference the binding with <code>LetVariable("name")</code>.</td></tr>
+<tr><td><code>UsePatchContainer(config PatchContainerConfig)</code></td><td>Activates the container mutation pattern for trait definitions. Generates the boilerplate for finding containers by name, supporting multi-container params, and patching individual container fields. See the Patches section for <code>PatchContainerConfig</code> details.</td></tr>
+<tr><td><code>SetRawPatchBlock(block string)</code></td><td>Escape hatch: <strong>replaces</strong> the builder-generated <code>patch:</code> block with raw CUE. When any SetRaw*Block is set, ALL builder-generated patches, outputs, and let bindings are skipped.</td></tr>
+<tr><td><code>SetRawParameterBlock(block string)</code></td><td>Escape hatch: <strong>replaces</strong> the builder-generated <code>parameter:</code> block with raw CUE. Combined with other SetRaw*Block methods for full template control.</td></tr>
+<tr><td><code>SetRawOutputsBlock(block string)</code></td><td>Escape hatch: <strong>replaces</strong> the builder-generated <code>outputs:</code> block with raw CUE.</td></tr>
+<tr><td><code>SetRawHeaderBlock(block string)</code></td><td>Escape hatch: injects raw CUE at the top of the template block, before output/parameter/patch. Use for <code>let</code> bindings and helper variables that the builder doesn't model (not for import statements — use <code>WithImports()</code> for those).</td></tr>
+</table>
+
+<h3 id="res-builder">Resource Builder <span class="badge b1">8</span></h3>
+<p><strong>Constructors:</strong> <code>NewResource(apiVersion, kind)</code> creates a resource with a fixed API version. <code>NewResourceWithConditionalVersion(kind)</code> creates one where the API version varies by condition (e.g. different K8s versions).</p>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Set(path string, value Value)</code></td><td>Sets a field at the given dot-path to the given value. The path supports dot notation (<code>"metadata.name"</code>) and array indexing (<code>"spec.containers[0].image"</code>). The value can be a param reference, literal, context ref, or any expression. Generates CUE <code>path: value</code>.</td></tr>
+<tr><td><code>SetIf(cond, path, value)</code></td><td>Conditionally sets a field only when the condition is true. Generates CUE <code>if cond { path: value }</code>. Use for optional fields: <code>SetIf(debug.IsTrue(), "metadata.annotations.debug", Lit("true"))</code>.</td></tr>
+<tr><td><code>SpreadIf(cond, path, value)</code></td><td>Conditionally merges a value into a path when the condition is true. The condition is placed inside the target struct: <code>path: { if cond { value } }</code>. CUE unification handles the merge. Use for merging user-provided maps: <code>SpreadIf(labels.IsSet(), "metadata.labels", labels)</code>.</td></tr>
+<tr><td><code>If(cond)</code> / <code>EndIf()</code></td><td>Opens/closes a conditional block. All <code>Set()</code> calls between <code>If()</code> and <code>EndIf()</code> are wrapped in a single <code>if cond { ... }</code> in the generated CUE. More efficient than individual <code>SetIf()</code> calls when multiple fields share the same condition.</td></tr>
+<tr><td><code>Directive(path, directive)</code></td><td>Adds a CUE directive comment at the given path. Pass the directive without the <code>+</code> prefix — e.g. <code>Directive("spec.containers", "patchKey=name")</code> generates <code>// +patchKey=name</code>. Common: <code>"patchKey=name"</code>, <code>"patchKey=containerPort"</code>.</td></tr>
+<tr><td><code>VersionIf(cond, apiVersion)</code></td><td>Sets the API version conditionally. Use with <code>NewResourceWithConditionalVersion()</code> to handle K8s version differences (e.g. CronJob is <code>batch/v1beta1</code> before K8s 1.25, <code>batch/v1</code> after). Chain multiple <code>VersionIf()</code> calls for each version range.</td></tr>
+<tr><td><code>ConditionalStruct(cond, path, fn func(b *OutputStructBuilder))</code></td><td>Creates a conditional struct block inside the resource. The closure receives an <code>*OutputStructBuilder</code> with <code>Set(field, value)</code> and <code>SetIf(cond, field, value)</code>. Generates <code>if cond { path: { field: value } }</code>. Use for complex conditional sub-structures.</td></tr>
+</table>
+<p><strong>OutputStructBuilder</strong> (inside <code>ConditionalStruct</code>): <code>.Set(field, value)</code> sets a field unconditionally within the struct. <code>.SetIf(cond, field, value)</code> adds a conditional field within the struct.</p>
+
+<h3 id="arr-builder">ArrayBuilder <span class="badge b1">17</span></h3>
+<p><strong>Constructor:</strong> <code>NewArray() *ArrayBuilder</code></p>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Item(elem)</code> / <code>ItemIf(cond, elem)</code></td><td>Static / conditional element</td></tr>
+<tr><td><code>ForEach(source, elem)</code></td><td>For-comprehension</td></tr>
+<tr><td><code>ForEachGuarded(guard, source, elem)</code></td><td>Guarded comprehension</td></tr>
+<tr><td><code>ForEachWith(source, fn func(item *ItemBuilder))</code></td><td>Callback iteration</td></tr>
+<tr><td><code>ForEachWithVar(varName, source, fn)</code></td><td>Named variable iteration</td></tr>
+<tr><td><code>ForEachWithGuardedFiltered(guard, filter, source, fn)</code></td><td>Full combo</td></tr>
+<tr><td><code>ForEachWithGuardedFilteredVar(varName, guard, filter, source, fn)</code></td><td>Full combo + named var</td></tr>
+</table>
+<h4>ItemBuilder <span class="count">9 methods</span></h4>
+<p><code>Var() *IterVarBuilder</code> (access iteration variable: <code>.Ref()</code> for the variable, <code>.Field(name)</code> for a field), <code>Set(field, value)</code>, <code>If(cond, fn)</code>, <code>IfSet(field, fn)</code>, <code>IfNotSet(field, fn)</code>, <code>Let(name, value)</code>, <code>SetDefault(field, defValue, typeName)</code>, <code>FieldExists(field)</code>, <code>FieldNotExists(field)</code></p>
+<h4>NewArrayElement</h4>
+<p><code>Set(key, value)</code>, <code>SetIf(cond, key, value)</code>, <code>PatchKeyField(field, key, value)</code></p>
+<h4>ArrayConcat</h4>
+<p><code>ArrayConcat(left, right Value)</code> — CUE list concatenation</p>
+<h4>FromTyped</h4>
+<p><code>FromTyped(obj runtime.Object) (*Resource, error)</code>, <code>MustFromTyped(obj) *Resource</code> — convert Go K8s objects to Resources</p>
+
+<!-- ═══════════════════ EXPRESSIONS ═══════════════════ -->
+<h2 id="expressions">Expressions <span class="count">28 constructors</span></h2>
+
+<h4>Values &amp; References</h4>
+<table>
+<tr><th>Constructor</th><th>Description</th></tr>
+<tr><td><code>Lit(v any)</code></td><td>Creates a literal value from any Go value. Strings generate <code>"hello"</code>, ints generate <code>42</code>, bools generate <code>true</code>/<code>false</code>. The most basic value type — use it anywhere a Value is expected.</td></tr>
+<tr><td><code>Reference(path string)</code></td><td>Creates a raw CUE path reference that is emitted verbatim. Use for referencing CUE expressions that the builder doesn't model — e.g. <code>Reference("context.output.status.phase")</code> or imported types like <code>Reference("kube.#Read &amp; {}")</code>.</td></tr>
+<tr><td><code>ParamRef(field string)</code></td><td>Creates a reference to a parameter field: <code>parameter.field</code>. Shorthand for when you don't have the param variable in scope — if you do, just pass the param variable directly as a Value.</td></tr>
+<tr><td><code>Parameter()</code></td><td>References the entire <code>parameter</code> block as a value. Use when passing the whole parameter object to a builtin action or helper.</td></tr>
+<tr><td><code>ParameterField(field)</code></td><td>Creates <code>parameter.field</code> reference. <code>ParamRef()</code> is a convenience alias that calls this.</td></tr>
+<tr><td><code>Interpolation(parts ...Value)</code></td><td>Creates a CUE string interpolation expression. Each part is interpolated into a string: <code>"\(part1)-\(part2)"</code>. Use for building dynamic strings from mixed references and literals.</td></tr>
+<tr><td><code>Plus(parts ...Value)</code></td><td>Creates an addition/concatenation expression. Generates <code>a + b + c</code> in CUE. For strings this is concatenation, for numbers this is addition. Use when <code>Interpolation</code> doesn't fit (e.g. numeric addition).</td></tr>
+<tr><td><code>PathExists(path string)</code></td><td>Creates a condition that checks whether a CUE path resolves to a value (is not bottom). Generates <code>path != _|_</code>. Use for checking if optional nested fields exist in the parameter or context.</td></tr>
+<tr><td><code>InlineArray(fields map[string]Value)</code></td><td>Creates an inline single-element array literal. Generates CUE <code>[{field: value, ...}]</code>. Use when you need to construct a literal array inline within a <code>Set()</code> call.</td></tr>
+<tr><td><code>NewArrayElement()</code></td><td>Creates a blank array element struct that you populate with <code>.Set(key, value)</code> and <code>.SetIf(cond, key, value)</code>. Used with <code>ArrayBuilder.ForEach()</code> or <code>ArrayBuilder.Item()</code> to define what each array element looks like.</td></tr>
+<tr><td><code>RegexMatch(source Value, pattern string)</code></td><td>Creates a condition that checks if a value matches a regex pattern. Generates CUE <code>source =~"pattern"</code> (the source value is included in the output). Use in validators or conditional logic for pattern matching beyond what <code>StringParam.Matches()</code> offers (works on any Value, not just params).</td></tr>
+<tr><td><code>CUEExpr(rawExpr string)</code></td><td>Escape hatch: wraps a raw CUE expression string as a Condition. The string is emitted verbatim in generated CUE. Use for CUE-specific constraints or expressions that the builder API doesn't model.</td></tr>
+</table>
+<h4>Comparisons</h4>
+<table>
+<tr><th>Constructor</th><th>CUE</th></tr>
+<tr><td><code>Eq(left, right Expr)</code></td><td><code>==</code></td></tr>
+<tr><td><code>Ne</code>, <code>Lt</code>, <code>Le</code>, <code>Gt</code>, <code>Ge</code></td><td><code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code></td></tr>
+</table>
+<h4>Logical</h4>
+<table>
+<tr><th>Constructor</th><th>CUE</th></tr>
+<tr><td><code>And(conditions ...Condition)</code></td><td><code>cond1 && cond2</code></td></tr>
+<tr><td><code>Or(conditions ...Condition)</code></td><td><code>cond1 || cond2</code></td></tr>
+<tr><td><code>Not(cond Condition)</code></td><td><code>!cond</code></td></tr>
+</table>
+<h4>Value-level Length</h4>
+<p><code>LenGt(source, n)</code>, <code>LenGe(source, n)</code>, <code>LenEq(source, n)</code></p>
+<h4>CUE Standard Library</h4>
+<table>
+<tr><th>Function</th><th>CUE</th></tr>
+<tr><td><code>StringsToLower(v)</code> / <code>StringsToUpper(v)</code></td><td><code>strings.ToLower(v)</code> / <code>strings.ToUpper(v)</code></td></tr>
+<tr><td><code>StringsHasPrefix(s, prefix)</code> / <code>StringsHasSuffix(s, suffix)</code></td><td><code>strings.HasPrefix(s, prefix)</code> / <code>strings.HasSuffix(s, suffix)</code></td></tr>
+<tr><td><code>StrconvFormatInt(v, base)</code></td><td><code>strconv.FormatInt(v, base)</code></td></tr>
+<tr><td><code>ListConcat(lists ...Value)</code></td><td><code>list.Concat([...])</code></td></tr>
+</table>
+<h4>Map Iteration</h4>
+<p><code>ForEachMap()</code> — iterates over a map value. Chain <code>.Over(source)</code> to set the map to iterate, <code>.WithVars(k, v)</code> to name the key/value variables, <code>.WithBody(ops...)</code> to define the body operations. Generates CUE <code>{for k, v in source { (k): v }}</code> (wrapped in outer braces).</p>
+
+<!-- ═══════════════════ COLLECTIONS ═══════════════════ -->
+<h2 id="collections">Collections <span class="count">27 methods</span></h2>
+<p><strong>Entry:</strong> <code>Each(source Value)</code> or <code>From(source Value)</code> — returns <code>*CollectionOp</code></p>
+
+<h4>Pipeline Chain <span class="count">11</span></h4>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Guard(cond)</code></td><td>Adds a guard prefix to the list comprehension. The guard is placed inline: <code>[if cond for v in source { ... }]</code>. The entire comprehension evaluates to empty when the guard is false. Use to skip iteration when the source parameter is not set: <code>Each(ports).Guard(ports.IsSet())</code>.</td></tr>
+<tr><td><code>Filter(pred Predicate)</code></td><td>Filters items using a for-comprehension filter clause. Generates <code>for v in source if v.field == val { ... }</code> — the <code>if</code> is part of the for-expression, not a block inside the loop body. Build predicates with <code>FieldEquals()</code> or <code>FieldExists()</code>.</td></tr>
+<tr><td><code>FilterCond(cond Condition)</code></td><td>Filters items using a general Condition instead of a Predicate. Same CUE mechanism as <code>Filter()</code> but the condition can reference parameters or context rather than the iteration variable.</td></tr>
+<tr><td><code>Map(mappings FieldMap)</code></td><td>Transforms each item by mapping source fields to output fields. The FieldMap maps output field names to FieldValues (<code>F("sourceName")</code>, <code>LitField("constant")</code>, <code>Nested(subMap)</code>). Generates the field assignments inside the comprehension.</td></tr>
+<tr><td><code>MapVariant(discriminator, name, mappings)</code></td><td>Adds a variant-specific mapping block — only applies when the discriminator field equals the variant name. Generates <code>if v.type == "name" { mappings }</code>. Chain multiple <code>MapVariant()</code> calls for each variant (e.g. "pvc", "emptyDir", "configMap").</td></tr>
+<tr><td><code>Pick(fields ...string)</code></td><td>Selects only the named fields from each item, dropping everything else. Generates output with only the listed fields: <code>{ name: v.name, port: v.port }</code>.</td></tr>
+<tr><td><code>Rename(from, to)</code></td><td>Renames a field in the output: items with field <code>from</code> get it emitted as <code>to</code>. Generates <code>to: v.from</code>.</td></tr>
+<tr><td><code>Wrap(key)</code></td><td>Wraps each item (scalar or struct) under a new key. E.g. <code>Each(secrets).Wrap("name")</code> transforms <code>"mysecret"</code> into <code>{ name: "mysecret" }</code>. Works on both string scalars and struct items.</td></tr>
+<tr><td><code>DefaultField(field, default)</code></td><td>Provides a default value for a field that may be missing from source items. This is a runtime-only operation used in Go test iteration — for CUE default values in generated output, use <code>FieldRef.Or(fallback)</code> instead.</td></tr>
+<tr><td><code>Flatten()</code></td><td>Flattens nested arrays in the output — items that contain sub-arrays are expanded into the parent list.</td></tr>
+<tr><td><code>Dedupe(keyField)</code></td><td>Removes duplicate items based on a key field. If two items have the same <code>keyField</code> value, only the first is kept. Use after concatenating collections from multiple sources.</td></tr>
+</table>
+
+<h4>FieldMap Helpers <span class="count">12</span></h4>
+<table>
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><code>F(name string) FieldRef</code></td><td>References a field on the current iteration variable. Inside a <code>for v in source</code>, <code>F("port")</code> becomes <code>v.port</code>. Alternatively use <code>defkit.FieldRef("port")</code> as a type conversion (more common in practice — 162 vs 12 usages). Both forms are equivalent.</td></tr>
+<tr><td><code>LitField(val)</code></td><td>Creates a literal constant value in a field mapping. Unlike <code>Lit()</code> (which creates a Value for Set), <code>LitField()</code> creates a FieldValue for use inside <code>Map()</code> FieldMaps.</td></tr>
+<tr><td><code>Nested(mapping FieldMap)</code></td><td>Creates a nested struct in the output mapping. The inner FieldMap defines the nested object's fields. Generates <code>{ outerField: { innerField: v.source } }</code>.</td></tr>
+<tr><td><code>Optional(field)</code></td><td>References an optional field that may not exist on every item. If the field is missing, it's omitted from the output rather than causing a CUE error. Generates a conditional field assignment.</td></tr>
+<tr><td><code>OptionalFieldWithCond(field, cond)</code></td><td>Like <code>Optional()</code> but with an additional condition — the field is only included when both the field exists and the condition is true.</td></tr>
+<tr><td><code>Format(format, args ...FieldValue)</code></td><td>Creates a formatted string value in a field mapping. Generates CUE string concatenation with <code>strconv.FormatInt</code> for numeric args (e.g. <code>"port-" + strconv.FormatInt(v.port, 10)</code>). Auto-imports <code>strconv</code> when needed.</td></tr>
+<tr><td><code>FieldEquals(field, value) Predicate</code></td><td>Creates a predicate that checks if an iteration item's field equals a value. Use in <code>Filter()</code>: <code>Filter(FieldEquals("expose", true))</code> generates <code>if v.expose == true</code>.</td></tr>
+<tr><td><code>FieldExists(field) Predicate</code></td><td>Creates a predicate that checks if a field exists on the iteration item. Use in <code>Filter()</code>: <code>Filter(FieldExists("optional"))</code> generates <code>if v.optional != _|_</code>.</td></tr>
+<tr><td><code>ConcatExpr(source, fields...)</code></td><td>Creates a value that concatenates arrays from a StructArrayHelper's named fields. Used when building output that merges multiple struct array categories into a single list.</td></tr>
+<tr><td><code>FromFields(source, fields...)</code></td><td>Starts a multi-source collection that iterates over multiple named fields from a single source object. Chain <code>.MapBySource()</code> to apply different mappings per field. Use for parameters like <code>volumeMounts: { pvc: [...], configMap: [...] }</code>.</td></tr>
+<tr><td><code>FieldRef.Or(fallback)</code></td><td>Provides a fallback value when a field is undefined. Generates CUE <code>*v.field | fallback</code> — uses CUE's default syntax where the field value takes priority if it exists.</td></tr>
+<tr><td><code>FieldRef.OrConditional(fallback)</code></td><td>Provides a fallback using if/else blocks instead of CUE default syntax. Generates <code>if v.field != _|_ { v.field }</code> / <code>if v.field == _|_ { fallback }</code>. Use when CUE default syntax doesn't work for your case (e.g. nested optionals).</td></tr>
+</table>
+
+<div class="pair">
+<div>
+  <div class="lbl lbl-go">Go — Collection</div>
+  <pre><code>defkit.<span class="fn">Each</span>(volumes).
+    <span class="fn">MapVariant</span>(<span class="s">"type"</span>, <span class="s">"pvc"</span>, defkit.FieldMap{
+        <span class="s">"name"</span>: defkit.<span class="fn">F</span>(<span class="s">"name"</span>),
+        <span class="s">"pvc"</span>:  defkit.<span class="fn">Nested</span>(defkit.FieldMap{
+            <span class="s">"claimName"</span>: defkit.<span class="fn">F</span>(<span class="s">"claimName"</span>),
+        }),
+    }).
+    <span class="fn">MapVariant</span>(<span class="s">"type"</span>, <span class="s">"emptyDir"</span>, defkit.FieldMap{
+        <span class="s">"name"</span>:     defkit.<span class="fn">F</span>(<span class="s">"name"</span>),
+        <span class="s">"emptyDir"</span>: defkit.<span class="fn">Nested</span>(defkit.FieldMap{
+            <span class="s">"medium"</span>: defkit.<span class="fn">F</span>(<span class="s">"medium"</span>),
+        }),
+    })</code></pre>
+</div>
+<div>
+  <div class="lbl lbl-cue">Generated CUE</div>
+  <pre><code>[for v in parameter.volumes {
+    {
+        if v.type == <span class="s">"pvc"</span> {
+            name: v.name
+            pvc: { claimName: v.claimName }
+        }
+        if v.type == <span class="s">"emptyDir"</span> {
+            name: v.name
+            emptyDir: { medium: v.medium }
+        }
+    }
+}]</code></pre>
+</div>
+</div>
+
+<!-- ═══════════════════ HELPERS ═══════════════════ -->
+<h2 id="helpers">Helpers <span class="count">23 methods</span></h2>
+<p><strong>Entry:</strong> <code>tpl.Helper(name string) *HelperBuilder</code></p>
+
+<h4>HelperBuilder Chain <span class="count">17</span></h4>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>From(source Value)</code></td><td>Sets the source collection to iterate over (e.g. a parameter array). The helper will generate a CUE for-comprehension over this source.</td></tr>
+<tr><td><code>FromFields(source, fields...)</code></td><td>Uses multiple named fields from a single source object. Each field is iterated separately and results are combined. Use for parameters like <code>volumeMounts: { pvc: [...], configMap: [...] }</code>.</td></tr>
+<tr><td><code>FromArray(ab *ArrayBuilder)</code></td><td>Uses an ArrayBuilder directly as the helper's collection. The ArrayBuilder's CUE output becomes the helper's value — the CUE generator calls <code>arrayBuilderToCUE()</code> on it directly.</td></tr>
+<tr><td><code>FromHelper(helper *HelperVar)</code></td><td>Chains from another helper's output — the new helper processes the results of a previous helper. Creates a pipeline of helpers for multi-step transformations.</td></tr>
+<tr><td><code>Guard(cond)</code></td><td>Adds a guard prefix to the helper's list comprehension: <code>[if cond for v in source { ... }]</code>. The helper evaluates to empty when the guard is false. Use when the source parameter is optional.</td></tr>
+<tr><td><code>Each(fn func(Value) Value)</code></td><td>Applies a transformation function to each item. The function receives the current item and returns the transformed value.</td></tr>
+<tr><td><code>Pick(fields...)</code></td><td>Selects only the named fields from each item, discarding everything else.</td></tr>
+<tr><td><code>PickIf(cond, field)</code></td><td>Conditionally includes a field — only picks it when the condition is true. Use for fields that should only appear in certain parameter configurations.</td></tr>
+<tr><td><code>Map(mappings FieldMap)</code></td><td>Transforms each item using a field mapping. Same semantics as the Collection <code>Map()</code> — maps source fields to output fields.</td></tr>
+<tr><td><code>MapBySource(map[string]FieldMap)</code></td><td>Applies different field mappings depending on which source field the item came from (used with <code>FromFields()</code>). Each key in the map corresponds to a source field name.</td></tr>
+<tr><td><code>Filter(pred)</code> / <code>FilterCond(cond)</code></td><td>Filters items using a predicate on the iteration variable or a general condition. Only matching items appear in the helper's output.</td></tr>
+<tr><td><code>Wrap(key)</code></td><td>Wraps each item under a new key name in the output.</td></tr>
+<tr><td><code>Rename(from, to)</code></td><td>Renames a field from <code>from</code> to <code>to</code> in each item.</td></tr>
+<tr><td><code>Dedupe(keyField)</code></td><td>Removes duplicate items based on a key field value.</td></tr>
+<tr><td><code>DefaultField(field, default)</code></td><td>Provides a default value for a field that might be missing from source items.</td></tr>
+<tr><td><code>AfterOutput()</code></td><td>Places this helper after the <code>output:</code> block in the generated CUE instead of before it. Some helpers reference <code>context.output</code> and must be positioned after the output is defined.</td></tr>
+<tr><td><code>Build() *HelperVar</code></td><td>Finalizes the helper definition, registers it with the template, and returns a <code>*HelperVar</code> reference. The returned reference can be used in <code>Set()</code> calls or as input to other helpers (<code>FromHelper()</code>). Call <code>.NotEmpty()</code> on the result to create a condition checking if the helper produced any items.</td></tr>
+</table>
+
+<h4>Helper Construction Helpers <span class="count">5</span></h4>
+<table>
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><code>HelperStruct(fields ...StructFieldDef)</code></td><td>Constructs a CUE struct value for use inside helper <code>Each()</code> callbacks. Build fields with <code>HelperField()</code> and <code>HelperFieldIf()</code>.</td></tr>
+<tr><td><code>HelperField(name, value Value)</code></td><td>Defines an unconditional field within a <code>HelperStruct()</code>. Always present in the output struct.</td></tr>
+<tr><td><code>HelperFieldIf(cond, name, value)</code></td><td>Defines a conditional field within a <code>HelperStruct()</code>. Only present when the condition is true. Generates <code>if cond { name: value }</code> inside the struct.</td></tr>
+<tr><td><code>Item() *ItemValue</code></td><td>References the current iteration item inside a helper's <code>Each()</code> callback. Chain <code>.Get(field)</code> to access a specific field on the item. Generates <code>v</code> or <code>v.field</code> in the CUE for-comprehension.</td></tr>
+<tr><td><code>ItemFieldIsSet(field) Condition</code></td><td>Returns a condition checking if a field exists on the current iteration item. Generates <code>v.field != _|_</code>. Use inside <code>HelperFieldIf()</code> for fields that are optional on the source items.</td></tr>
+</table>
+
+<!-- ═══════════════════ PATCHES ═══════════════════ -->
+<h2 id="patches">Patches <span class="count">29 methods</span></h2>
+
+<h4>PatchResource <span class="count">10 chain</span></h4>
+<p>Accessed via <code>tpl.Patch()</code> or <code>NewPatchResource()</code>. Used in traits to modify the workload resource created by the component.</p>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Set(path, value)</code></td><td>Sets a field in the patch. The path is merged into the workload resource using CUE unification. Generates <code>patch: path: value</code>. Example: <code>Set("spec.replicas", replicas)</code>.</td></tr>
+<tr><td><code>SetIf(cond, path, value)</code></td><td>Conditionally sets a patch field only when the condition is true. Generates <code>if cond { patch: path: value }</code>. Use for optional trait parameters: <code>SetIf(cpu.IsSet(), "spec.resources.limits.cpu", cpu)</code>.</td></tr>
+<tr><td><code>SpreadIf(cond, path, value)</code></td><td>Conditionally spreads (merges) a value into a path. Generates <code>if cond { ...value }</code>. Use for merging user-provided maps: <code>SpreadIf(labels.IsSet(), "metadata.labels", labels)</code>.</td></tr>
+<tr><td><code>If(cond)</code> / <code>EndIf()</code></td><td>Opens/closes a conditional block where all enclosed patch operations share the same condition. More readable than individual <code>SetIf()</code> when multiple fields share a condition.</td></tr>
+<tr><td><code>ForEach(source, path)</code></td><td>Iterates over a map and spreads each key-value pair into the path. Generates <code>for k, v in source { (k): v }</code>. Used for traits like labels/annotations that dynamically spread map keys into the workload.</td></tr>
+<tr><td><code>PatchKey(path, key, elements...)</code></td><td>Adds a <code>// +patchKey=key</code> directive and array elements at the path. Tells KubeVela to use strategic merge patch with the given key field to identify array elements (e.g. <code>name</code> for containers, <code>containerPort</code> for ports).</td></tr>
+<tr><td><code>SpreadAll(path, elements...)</code></td><td>Applies each element as a spread constraint on every item in the target array. Generates <code>path: [...{element}]</code>. Used for applying the same patch fields to every existing array element.</td></tr>
+<tr><td><code>PatchStrategyAnnotation(path, strategy)</code></td><td>Adds a <code>// +patchStrategy=strategy</code> comment at the given path. Common strategies: <code>"retainKeys"</code> (replace entire subtree), <code>"replace"</code> (replace the field entirely). Controls how CUE merges the patch with the original resource.</td></tr>
+<tr><td><code>Passthrough()</code></td><td>Generates <code>patch: parameter</code>, where the entire parameter value becomes the patch to apply. Used for json-patch and json-merge-patch traits where the user provides the patch object directly as the parameter.</td></tr>
+</table>
+
+<h4>Context Introspection</h4>
+<table>
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><code>ContextOutput() *ContextOutputRef</code></td><td>Returns a reference to the primary output resource (<code>context.output</code>) for use in patch conditions. Chain with <code>.Field(path)</code> to access nested fields or <code>.HasPath(path)</code> to create an existence condition. <code>.IsSet()</code> checks if the output itself exists.</td></tr>
+</table>
+<pre><code>ctx := defkit.<span class="fn">ContextOutput</span>()
+ctx.<span class="fn">Field</span>(<span class="s">"spec.replicas"</span>)  <span class="c">// context.output.spec.replicas</span>
+ctx.<span class="fn">HasPath</span>(<span class="s">"status"</span>)      <span class="c">// Condition: context.output.status != _|_</span></code></pre>
+
+<h4>PatchContainer <span class="count">19 chain via PatchField</span></h4>
+<pre><code>tpl.<span class="fn">UsePatchContainer</span>(defkit.PatchContainerConfig{
+    ContainerNameParam:   <span class="s">"containerName"</span>,
+    DefaultToContextName: true,
+    PatchFields: defkit.<span class="fn">PatchFields</span>(
+        defkit.<span class="fn">PatchField</span>(<span class="s">"cpu"</span>).<span class="fn">Str</span>().<span class="fn">IsSet</span>().<span class="fn">Default</span>(<span class="s">"100m"</span>),
+        defkit.<span class="fn">PatchField</span>(<span class="s">"memory"</span>).<span class="fn">Str</span>().<span class="fn">IsSet</span>().<span class="fn">Default</span>(<span class="s">"128Mi"</span>),
+    ),
+})</code></pre>
+<p><strong>PatchField chain:</strong> <code>Target(t)</code> sets the target field in the container to patch. <code>Default(val)</code> sets the CUE default. <code>Type(t)</code>/<code>Int()</code>/<code>Bool()</code>/<code>Str()</code>/<code>StringArray()</code> set the param type. <code>Strategy(s)</code> sets the patch strategy for this field. <code>IsSet()</code>/<code>NotEmpty()</code> set the condition under which the patch applies. <code>Eq(val)</code>/<code>Ne(val)</code>/<code>Gt(val)</code>/<code>Gte(val)</code>/<code>Lt(val)</code>/<code>Lte(val)</code> set comparison conditions. <code>RawCondition(c)</code> sets a raw CUE condition string. <code>Description(d)</code> sets the param description. <code>Build()</code> finalizes and returns the field definition.</p>
+
+<h4>Convenience Conditions</h4>
+<table>
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><code>ParamIsSet(name)</code></td><td>Standalone condition constructor: returns true when the named parameter is provided. Generates <code>parameter["name"] != _|_</code>. Equivalent to creating a param and calling <code>.IsSet()</code> but works when you only have the name as a string.</td></tr>
+<tr><td><code>ParamNotSet(name)</code></td><td>Standalone condition: returns true when the named parameter is not provided. Generates <code>parameter["name"] == _|_</code>.</td></tr>
+<tr><td><code>ContextOutputExists(path)</code></td><td>Condition that checks whether a path exists on the primary output resource at runtime. Generates <code>context.output.path != _|_</code>. Use in patches that should only apply when the workload has a specific field.</td></tr>
+<tr><td><code>AllConditions(conditions...)</code></td><td>Combines multiple conditions with logical AND. Generates <code>cond1 && cond2 && ...</code>. Equivalent to <code>And()</code> but takes a variadic list and returns a specialized type.</td></tr>
+</table>
+
+<h4>Let Bindings</h4>
+<p><code>NewLetBinding(name, expr Value)</code> creates a CUE <code>let</code> binding: <code>let name = expr</code>. Computed values that are referenced multiple times should be let-bound to avoid duplication. <code>LetVariable(name) *LetRef</code> creates a reference to a previously-defined let binding for use in <code>Set()</code> calls.</p>
+
+<h4>ListComprehension</h4>
+<p><code>ForEachIn(source)</code> starts a list comprehension builder. Chain <code>.WithFilter(pred)</code> to filter items, <code>.MapFields(mappings)</code> to transform fields, and <code>.WithOptionalFields(fields...)</code> to mark certain output fields as conditional. Generates a CUE list comprehension: <code>[ for v in source if pred { mappings } ]</code>.</p>
+
+<!-- ═══════════════════ VALIDATORS ═══════════════════ -->
+<h2 id="validators">Validators &amp; Conditional Params <span class="count">~30 methods</span></h2>
+<p>Cross-field validation, mutual exclusion, and dynamic parameter schemas. Added in PR #7092.</p>
+
+<h3>Validator Builder</h3>
+<p><strong>Constructor:</strong> <code>Validate(message string) *Validator</code></p>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>FailWhen(cond Condition)</code></td><td>Condition that triggers validation failure</td></tr>
+<tr><td><code>OnlyWhen(guard Condition)</code></td><td>Guard: only run this validator when guard is true</td></tr>
+<tr><td><code>WithName(name string)</code></td><td>Custom CUE name (<code>_validateName</code>)</td></tr>
+</table>
+
+<p>Attach to definitions via <code>.Validators(...)</code> on Component, ArrayParam, or MapParam.</p>
+
+<pre><code><span class="c">// Mutual exclusion: cpu and memory can't both be set</span>
+cpu := defkit.<span class="fn">String</span>(<span class="s">"cpu"</span>).<span class="fn">Optional</span>()
+mem := defkit.<span class="fn">String</span>(<span class="s">"memory"</span>).<span class="fn">Optional</span>()
+
+comp := defkit.<span class="fn">NewComponent</span>(<span class="s">"test"</span>).
+    <span class="fn">Params</span>(cpu, mem).
+    <span class="fn">Validators</span>(
+        defkit.<span class="fn">Validate</span>(<span class="s">"cpu and memory are mutually exclusive"</span>).
+            <span class="fn">FailWhen</span>(defkit.<span class="fn">And</span>(cpu.<span class="fn">IsSet</span>(), mem.<span class="fn">IsSet</span>())),
+    )</code></pre>
+
+<h3>LocalField (struct-scoped references) <span class="count">9 chain</span></h3>
+<p><strong>Constructor:</strong> <code>LocalField(name string) *LocalFieldRef</code></p>
+<p>References a field within the current struct scope — used inside validators and conditional params for cross-field comparisons.</p>
+<table>
+<tr><th>Method</th><th>CUE</th></tr>
+<tr><td><code>Eq(val any) Condition</code></td><td><code>field == val</code></td></tr>
+<tr><td><code>Ne(val any) Condition</code></td><td><code>field != val</code></td></tr>
+<tr><td><code>Matches(pattern string) Condition</code></td><td><code>=~"pattern"</code></td></tr>
+<tr><td><code>IsSet() Condition</code></td><td><code>field != _|_</code></td></tr>
+<tr><td><code>NotSet() Condition</code></td><td><code>field == _|_</code></td></tr>
+<tr><td><code>LenEq(n int) Condition</code></td><td><code>len(field) == n</code></td></tr>
+<tr><td><code>LenGt(n int) Condition</code></td><td><code>len(field) > n</code></td></tr>
+<tr><td><code>IsEmpty() Condition</code></td><td><code>len(field) == 0</code></td></tr>
+<tr><td><code>Gte(other *LocalFieldRef) Condition</code></td><td><code>field >= other</code> (cross-field)</td></tr>
+</table>
+
+<h3>LenOf (length expression builder) <span class="count">3 chain</span></h3>
+<p><strong>Constructor:</strong> <code>LenOf(v Value) *LenOfExpr</code></p>
+<p><code>.Gt(n)</code>, <code>.Gte(n)</code>, <code>.Eq(n)</code> — conditions on the length of a value.</p>
+
+<h3>TimeParse (time comparison) <span class="count">1 chain</span></h3>
+<p><strong>Constructor:</strong> <code>TimeParse(layout string, field *LocalFieldRef) *TimeParseExpr</code></p>
+<p><code>.Gte(other *TimeParseExpr)</code> — compare parsed time fields (e.g. <code>startDate &lt;= endDate</code>).</p>
+
+<pre><code><span class="c">// Ensure endDate >= startDate</span>
+start := defkit.<span class="fn">LocalField</span>(<span class="s">"startDate"</span>)
+end := defkit.<span class="fn">LocalField</span>(<span class="s">"endDate"</span>)
+
+defkit.<span class="fn">Validate</span>(<span class="s">"endDate must be after startDate"</span>).
+    <span class="fn">FailWhen</span>(defkit.<span class="fn">Not</span>(
+        defkit.<span class="fn">TimeParse</span>(<span class="s">"2006-01-02"</span>, end).<span class="fn">Gte</span>(
+            defkit.<span class="fn">TimeParse</span>(<span class="s">"2006-01-02"</span>, start),
+        ),
+    ))</code></pre>
+
+<h3>Conditional Params <span class="count">4 chain</span></h3>
+<p>Show different parameters depending on other parameter values.</p>
+<table>
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><code>ConditionalParams(branches ...*ConditionalBranch)</code></td><td>Create conditional param block</td></tr>
+<tr><td><code>WhenParam(cond Condition) *ConditionalBranch</code></td><td>Start a branch</td></tr>
+<tr><td><code>.Params(params ...Param)</code></td><td>Params visible when condition is true</td></tr>
+<tr><td><code>.Validators(validators ...*Validator)</code></td><td>Validators active when condition is true</td></tr>
+</table>
+
+<pre><code>kind := defkit.<span class="fn">String</span>(<span class="s">"kind"</span>).<span class="fn">Default</span>(<span class="s">"Deployment"</span>).<span class="fn">Values</span>(<span class="s">"Deployment"</span>, <span class="s">"StatefulSet"</span>)
+
+comp.<span class="fn">ConditionalParams</span>(defkit.<span class="fn">ConditionalParams</span>(
+    defkit.<span class="fn">WhenParam</span>(kind.<span class="fn">Eq</span>(<span class="s">"Deployment"</span>)).
+        <span class="fn">Params</span>(
+            defkit.<span class="fn">String</span>(<span class="s">"strategy"</span>).<span class="fn">Default</span>(<span class="s">"RollingUpdate"</span>),
+            defkit.<span class="fn">String</span>(<span class="s">"maxSurge"</span>).<span class="fn">Default</span>(<span class="s">"25%"</span>),
+        ),
+    defkit.<span class="fn">WhenParam</span>(kind.<span class="fn">Eq</span>(<span class="s">"StatefulSet"</span>)).
+        <span class="fn">Params</span>(
+            defkit.<span class="fn">Int</span>(<span class="s">"partition"</span>).<span class="fn">Default</span>(0),
+        ),
+))</code></pre>
+
+<!-- ═══════════════════ HEALTH & STATUS ═══════════════════ -->
+<h2 id="health">Health &amp; Status <span class="count">63 methods</span></h2>
+
+<h3>Health Builder <span class="count">24 chain</span></h3>
+<p><strong>Constructor:</strong> <code>Health() *HealthBuilder</code> — creates a builder for the <code>status: healthPolicy:</code> block that determines whether KubeVela considers the component healthy.</p>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>IntField(name, sourcePath, defaultVal)</code></td><td>Extracts an integer field from the output resource's status and stores it as a CUE variable (<code>_name</code>) for use in health conditions. The <code>sourcePath</code> is relative to <code>context.output</code> (e.g. <code>"status.readyReplicas"</code>). The default value is used when the field doesn't exist yet.</td></tr>
+<tr><td><code>StringField(name, sourcePath, defaultVal)</code></td><td>Same as <code>IntField</code> but for string values. Extracts a string from the output status for use in health conditions.</td></tr>
+<tr><td><code>MetadataField(name, sourcePath)</code></td><td>Extracts a field from the output resource's metadata (labels, annotations, name, etc.) rather than from status. The path is relative to <code>context.output</code>.</td></tr>
+<tr><td><code>HealthyWhen(conditions ...string)</code></td><td>Sets the <code>isHealth</code> expression from raw CUE condition strings. Each condition is ANDed together. The strings can reference variables defined by <code>IntField()</code>/<code>StringField()</code> above. Use string helpers like <code>StatusEq()</code>, <code>StatusGte()</code>, <code>StatusAnd()</code> to compose them.</td></tr>
+<tr><td><code>HealthyWhenExpr(expr HealthExpression)</code></td><td>Sets the <code>isHealth</code> expression from the type-safe HealthExpression DSL. Use <code>h.Condition("Ready").IsTrue()</code>, <code>h.Phase("Running")</code>, etc. The DSL generates both the preamble (condition filtering) and the expression automatically.</td></tr>
+<tr><td><code>WithDefault()</code></td><td>Enables the <code>_isHealth</code> intermediate pattern: generates <code>_isHealth: expr</code> + <code>isHealth: *_isHealth | bool</code>. This allows the health result to be overridden via CUE unification (e.g. by <code>WithDisableAnnotation()</code>).</td></tr>
+<tr><td><code>WithDisableAnnotation(annotation)</code></td><td>Allows the health check to be disabled via an annotation on the workload. When the annotation key is <strong>present</strong> (any value, not just <code>"true"</code>), the health check always returns healthy. Generates <code>if annotations[key] != _|_ { isHealth: true }</code>. Use for debugging or exempting specific instances.</td></tr>
+<tr><td><code>Build() string</code></td><td>Compiles the health builder (fields, conditions, WithDefault, WithDisableAnnotation) into a CUE string for the <code>status: healthPolicy:</code> block. Call manually and pass the result: <code>comp.HealthPolicy(h.Build())</code>. Not related to <code>Policy()</code> which takes a HealthExpression directly.</td></tr>
+<tr><td><code>Policy(expr HealthExpression) string</code></td><td>Generates a complete health policy CUE string directly from a HealthExpression, bypassing all builder state (IntField, HealthyWhen, etc.). Calls <code>HealthPolicy(expr)</code> internally. Usage: <code>comp.HealthPolicy(h.Policy(h.AllTrue("Ready")))</code>.</td></tr>
+<tr><td><code>RawCUE(cue)</code></td><td>Escape hatch: replaces the entire health policy with raw CUE. Ignores all other builder configuration.</td></tr>
+</table>
+
+<h4>HealthExpression DSL (via HealthBuilder) <span class="count">13</span></h4>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Condition(type string) *ConditionExpr</code></td><td>Starts checking a Kubernetes status condition by type name (e.g. <code>"Ready"</code>, <code>"Available"</code>). Returns a <code>*ConditionExpr</code> that you chain with <code>.IsTrue()</code>, <code>.IsFalse()</code>, etc. Generates a preamble that filters <code>context.output.status.conditions</code> to find the matching condition.</td></tr>
+<tr><td><code>Field(path) *HealthFieldExpr</code></td><td>Checks a field value on the output resource. The path is relative to <code>context.output</code>. Returns a <code>*HealthFieldExpr</code> for comparison chains like <code>.Eq(value)</code>, <code>.Gt(value)</code>.</td></tr>
+<tr><td><code>FieldRef(path) *HealthFieldRefExpr</code></td><td>Creates a reference to a field for use in compound expressions. Unlike <code>Field()</code> which returns a comparison builder, <code>FieldRef()</code> is used when you need the value itself as part of a larger expression.</td></tr>
+<tr><td><code>Phase(phases ...string)</code></td><td>Checks if <code>context.output.status.phase</code> matches any of the listed phases. Generates <code>phase == "Running" || phase == "Succeeded"</code>. Common for Pods and Jobs.</td></tr>
+<tr><td><code>PhaseField(path, phases...)</code></td><td>Like <code>Phase()</code> but checks a custom field path instead of the default <code>status.phase</code>. Use when the phase field is at a non-standard location.</td></tr>
+<tr><td><code>Exists(path)</code> / <code>NotExists(path)</code></td><td>Checks whether a path exists (or doesn't) on the output resource. Generates <code>path != _|_</code>. Use for resources that may not have status fields populated yet.</td></tr>
+<tr><td><code>And(exprs...)</code> / <code>Or(exprs...)</code> / <code>Not(expr)</code></td><td>Logical combinators for composing multiple HealthExpressions. <code>And</code> requires all to be healthy, <code>Or</code> requires at least one, <code>Not</code> inverts. Generates <code>&amp;&amp;</code>, <code>||</code>, <code>!</code> in the <code>isHealth</code> expression.</td></tr>
+<tr><td><code>Always()</code></td><td>Returns a HealthExpression that always evaluates to healthy. Generates <code>isHealth: true</code>. Use for resources that don't have meaningful health semantics.</td></tr>
+<tr><td><code>AllTrue(condTypes ...string)</code></td><td>Checks that all listed condition types have status <code>"True"</code>. Generates the preamble to filter each condition type and ANDs their status checks. The most common health pattern for CRDs with standard conditions.</td></tr>
+<tr><td><code>AnyTrue(condTypes ...string)</code></td><td>Checks that at least one of the listed condition types has status <code>"True"</code>. Generates the preamble and ORs the status checks.</td></tr>
+</table>
+
+<h4>ConditionExpr <span class="count">5</span></h4>
+<p><code>.IsTrue()</code> — condition status is <code>"True"</code> (healthy). <code>.IsFalse()</code> — condition status is <code>"False"</code>. <code>.Is(status)</code> — condition status matches exact value. <code>.Exists()</code> — condition type exists in the conditions array. <code>.ReasonIs(reason)</code> — condition reason field matches the given string.</p>
+
+<h4>HealthFieldExpr <span class="count">8</span></h4>
+<p><code>.Eq(val)</code>, <code>.Ne(val)</code>, <code>.Gt(val)</code>, <code>.Gte(val)</code>, <code>.Lt(val)</code>, <code>.Lte(val)</code> — comparison operators on the field value. <code>.In(values...)</code> — field matches any listed value. <code>.Contains(substr)</code> — string field contains substring.</p>
+
+<div class="pair">
+<div>
+  <div class="lbl lbl-go">Go — Health</div>
+  <pre><code>h := defkit.<span class="fn">Health</span>()
+policy := h.<span class="fn">Policy</span>(
+    h.<span class="fn">AllTrue</span>(<span class="s">"Ready"</span>, <span class="s">"Synced"</span>),
+)</code></pre>
+</div>
+<div>
+  <div class="lbl lbl-cue">Generated CUE</div>
+  <pre><code>healthPolicy: {
+    _readyCond: [for c in context.output.status.conditions
+        if c.type == <span class="s">"Ready"</span> {c}]
+    _syncedCond: [for c in context.output.status.conditions
+        if c.type == <span class="s">"Synced"</span> {c}]
+    isHealth:
+        (len(_readyCond) > 0 &&
+        _readyCond[0].status == <span class="s">"True"</span>) &&
+        (len(_syncedCond) > 0 &&
+        _syncedCond[0].status == <span class="s">"True"</span>)
+}</code></pre>
+</div>
+</div>
+
+<h4>Pre-built Health/Status Policies <span class="count">8</span></h4>
+<p><code>DeploymentHealth()</code> / <code>DeploymentStatus()</code>, <code>StatefulSetHealth()</code> / <code>StatefulSetStatus()</code>, <code>DaemonSetHealth()</code> / <code>DaemonSetStatus()</code>, <code>JobHealth()</code>, <code>CronJobHealth()</code></p>
+<p>Helpers: <code>StatusEq(left, right)</code>, <code>StatusGte(left, right)</code>, <code>StatusOr(conditions...)</code>, <code>StatusAnd(conditions...)</code></p>
+
+<h3>Status Builder <span class="count">15 chain</span></h3>
+<p><strong>Constructor:</strong> <code>Status() *StatusBuilder</code> — creates a builder for the <code>status: customStatus:</code> block that controls the user-visible message in <code>vela status</code>.</p>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>IntField(name, sourcePath, defaultVal)</code></td><td>Extracts an integer from the output resource (e.g. <code>"status.readyReplicas"</code>, default <code>0</code>) and stores it as a CUE variable for use in the status message. Groups fields by common parent paths for clean CUE output.</td></tr>
+<tr><td><code>StringField(name, sourcePath, defaultVal)</code></td><td>Extracts a string from the output resource for the status message. Example: <code>StringField("phase", "status.phase", "Pending")</code>.</td></tr>
+<tr><td><code>Message(msg)</code></td><td>Sets the status message template. Can reference variables from <code>IntField()</code>/<code>StringField()</code> using CUE interpolation. Example: <code>Message("Ready: \\(_ready)/\\(_replicas)")</code>.</td></tr>
+<tr><td><code>Build() string</code></td><td>Compiles into CUE for the <code>customStatus:</code> block.</td></tr>
+<tr><td><code>RawCUE(cue)</code></td><td>Escape hatch: replaces the status with raw CUE.</td></tr>
+</table>
+
+<h4>StatusExpression DSL (via Status()) <span class="count">15</span></h4>
+<p>The DSL provides a more expressive way to build status messages using builder patterns instead of raw CUE strings.</p>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Field(path) *StatusFieldExpr</code></td><td>References a field relative to <code>context.output</code>. You must include the full subpath: <code>Field("status.readyReplicas")</code> becomes <code>context.output.status.readyReplicas</code>. Returns a <code>*StatusFieldExpr</code> for chaining <code>.Default(val)</code> or comparison methods.</td></tr>
+<tr><td><code>SpecField(path) *StatusFieldExpr</code></td><td>Same as <code>Field()</code> — references a field relative to <code>context.output</code>. You must include <code>spec.</code> in the path: <code>SpecField("spec.replicas")</code>. Functionally identical to <code>Field()</code>.</td></tr>
+<tr><td><code>Condition(type) *StatusConditionAccessor</code></td><td>Accesses a Kubernetes status condition by type name. Chain with <code>.StatusValue()</code> to get the condition's status field, <code>.Message()</code> for the message, <code>.Reason()</code> for the reason, or <code>.Is(status)</code> to check if the condition matches a status value.</td></tr>
+<tr><td><code>Exists(path)</code> / <code>NotExists(path)</code></td><td>Checks whether a path exists (or doesn't) on the output resource. Dual-purpose: implements both <code>StatusExpression</code> (generates a conditional string in CUE) and <code>StatusCondition</code> (generates a boolean check). Use as a condition in <code>Case()</code>/<code>Switch()</code> to handle resources whose status fields may not exist yet.</td></tr>
+<tr><td><code>Literal(value string)</code></td><td>Creates a static string status expression. Use as a fallback or for simple status messages that don't reference resource fields.</td></tr>
+<tr><td><code>Concat(parts ...any)</code></td><td>Concatenates strings, field references, and other expressions into a single status message. Accepts <code>StatusExpression</code>, <code>string</code>, and <code>*StatusFieldExpr</code> as parts. Generates string concatenation in CUE.</td></tr>
+<tr><td><code>Format(template, args...)</code></td><td>Creates a formatted status string using a template with positional arguments. Each argument is a StatusExpression that fills a placeholder in the template.</td></tr>
+<tr><td><code>Case(condition, message)</code></td><td>Creates a case for use in <code>Switch()</code>. When the condition (a <code>StatusCondition</code>) is true, the message is shown. The message can be a string or a StatusExpression.</td></tr>
+<tr><td><code>Default(message)</code></td><td>Creates the default/fallback case for a <code>Switch()</code> when no other case matches.</td></tr>
+<tr><td><code>Switch(casesAndDefault ...any)</code></td><td>Creates a switch expression that evaluates cases in order. Generates CUE <code>if cond1 { msg1 } if cond2 { msg2 }</code>. The last argument should be a <code>Default()</code>. Use for status messages that vary based on resource state.</td></tr>
+<tr><td><code>HealthAware(healthyMsg, unhealthyMsg)</code></td><td>Creates a status message that varies based on the <code>context.status.healthy</code> boolean. When healthy, shows <code>healthyMsg</code>; otherwise shows <code>unhealthyMsg</code> as the default. Generates CUE <code>message: *unhealthyMsg | string</code> with <code>if context.status.healthy { message: healthyMsg }</code>.</td></tr>
+<tr><td><code>Detail(key, value)</code></td><td>Creates a key-value detail entry for structured status reporting. Used with <code>WithDetails()</code> to provide machine-readable status alongside the human-readable message.</td></tr>
+<tr><td><code>WithDetails(message, details...)</code></td><td>Creates a status expression that includes both a message and structured key-value details. The details are emitted as additional fields in the CUE <code>customStatus</code> block for dashboard consumption.</td></tr>
+</table>
+
+<p><strong>StatusFieldExpr:</strong> <code>.Default(val)</code> provides a fallback when the field doesn't exist. <code>.Eq(val)</code>/<code>.Ne(val)</code>/<code>.Gt(val)</code>/<code>.Gte(val)</code>/<code>.Lt(val)</code>/<code>.Lte(val)</code> create StatusConditions for use in <code>Case()</code> and <code>Switch()</code>.</p>
+<p><strong>StatusConditionAccessor:</strong> <code>.StatusValue()</code> accesses the <code>.status</code> field of the condition. <code>.Message()</code> accesses <code>.message</code>. <code>.Reason()</code> accesses <code>.reason</code>. <code>.Is(status)</code> checks if the condition's status equals the value.</p>
+<p><strong>Standalone:</strong> <code>StatusPolicy(expr)</code> wraps a StatusExpression into the full <code>customStatus:</code> CUE block. <code>CustomStatusExpr(expr)</code> is an alias. <code>HealthPolicy(expr)</code> wraps a HealthExpression into the <code>healthPolicy:</code> block.</p>
+
+<!-- ═══════════════════ CONTEXT ═══════════════════ -->
+<h2 id="context">Context <span class="count">13 methods</span></h2>
+<p><strong>Constructor:</strong> <code>VelaCtx() *VelaContext</code> — provides access to KubeVela runtime context values that are populated at deploy time. These generate <code>context.*</code> CUE path references.</p>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>Name()</code></td><td>The component or trait instance name as declared in the Application YAML. Generates <code>context.name</code>. Use for setting <code>metadata.name</code> on output resources.</td></tr>
+<tr><td><code>Namespace()</code></td><td>The namespace where the Application is deployed. Generates <code>context.namespace</code>. Use for setting <code>metadata.namespace</code> on output resources.</td></tr>
+<tr><td><code>AppName()</code></td><td>The Application CR's name. Generates <code>context.appName</code>. Different from <code>Name()</code> which is the component name — an Application can have many components.</td></tr>
+<tr><td><code>AppRevision()</code></td><td>The Application's current revision string (e.g. <code>"myapp-v3"</code>). Generates <code>context.appRevision</code>. Use for labels or annotations that track which revision deployed a resource.</td></tr>
+<tr><td><code>AppRevisionNum()</code></td><td>The numeric revision counter. Generates <code>context.appRevisionNum</code>. Use for ordering or comparison logic.</td></tr>
+<tr><td><code>Revision()</code></td><td>The component's own revision string. Generates <code>context.revision</code>. Different from <code>AppRevision()</code> — this tracks individual component changes.</td></tr>
+<tr><td><code>ClusterVersion()</code></td><td>Returns a <code>*ClusterVersionRef</code> for accessing the target cluster's Kubernetes version. Use for API version conditionals (e.g. CronJob v1beta1 vs v1).</td></tr>
+<tr><td><code>Output()</code></td><td>References the primary output resource after it's created. Generates <code>context.output</code>. Use in traits to read the component's output, or in status expressions to inspect the deployed resource's status.</td></tr>
+<tr><td><code>Outputs(name)</code></td><td>References a named auxiliary output. Generates <code>context.outputs.&lt;name&gt;</code>. Use to read the status of secondary resources created by the component.</td></tr>
+</table>
+<h4>ClusterVersionRef <span class="count">4</span></h4>
+<p><code>.Major()</code> — K8s major version. <code>.Minor()</code> — K8s minor version (most commonly used for feature gating). <code>.Patch()</code> — K8s patch version. <code>.GitVersion()</code> — full git version string.</p>
+
+<pre><code><span class="c">// Version-conditional API version</span>
+vela := defkit.<span class="fn">VelaCtx</span>()
+defkit.<span class="fn">NewResourceWithConditionalVersion</span>(<span class="s">"CronJob"</span>).
+    <span class="fn">VersionIf</span>(defkit.<span class="fn">Lt</span>(vela.<span class="fn">ClusterVersion</span>().<span class="fn">Minor</span>(), defkit.<span class="fn">Lit</span>(25)), <span class="s">"batch/v1beta1"</span>).
+    <span class="fn">VersionIf</span>(defkit.<span class="fn">Ge</span>(vela.<span class="fn">ClusterVersion</span>().<span class="fn">Minor</span>(), defkit.<span class="fn">Lit</span>(25)), <span class="s">"batch/v1"</span>)</code></pre>
+
+<!-- ═══════════════════ PLACEMENT ═══════════════════ -->
+<h2 id="placement">Placement <span class="count">11 methods</span></h2>
+<p><strong>Package:</strong> <code>pkg/definition/defkit/placement</code> — Controls which clusters a definition is deployed to during <code>vela def apply-module</code>. Conditions are evaluated against cluster identity labels stored in the <code>vela-cluster-identity</code> ConfigMap.</p>
+<table>
+<tr><th>Function</th><th>Description</th></tr>
+<tr><td><code>Label(key string) *LabelConditionBuilder</code></td><td>Starts a condition based on a cluster label key. Chain with <code>.Eq()</code>, <code>.In()</code>, etc. to specify the match criteria. The key is a Kubernetes label key on the cluster identity (e.g. <code>"topology.kubernetes.io/zone"</code>, <code>"environment"</code>).</td></tr>
+</table>
+<h4>LabelConditionBuilder <span class="count">6</span></h4>
+<p><code>.Eq(value)</code> — label must equal value. <code>.Ne(value)</code> — label must not equal value. <code>.In(values...)</code> — label must be one of the listed values. <code>.NotIn(values...)</code> — label must not be any of the listed values. <code>.Exists()</code> — label key must be present (any value). <code>.NotExists()</code> — label key must not be present.</p>
+<h4>Combinators <span class="count">3</span></h4>
+<p><code>All(conditions...)</code> — all conditions must match (AND). <code>Any(conditions...)</code> — at least one must match (OR). <code>Not(condition)</code> — invert a condition.</p>
+<h4>Evaluation <span class="count">1</span></h4>
+<p><code>Evaluate(spec PlacementSpec, labels map[string]string) PlacementResult</code> — programmatically evaluates placement conditions against a set of labels. Returns <code>PlacementResult</code> with <code>.Eligible</code> bool and <code>.Reason</code> string. Use in tests to verify placement logic.</p>
+
+<pre><code>comp := defkit.<span class="fn">NewComponent</span>(<span class="s">"edge-service"</span>).
+    <span class="fn">RunOn</span>(
+        placement.<span class="fn">Label</span>(<span class="s">"topology.kubernetes.io/zone"</span>).<span class="fn">In</span>(<span class="s">"us-east-1"</span>, <span class="s">"us-west-2"</span>),
+    ).
+    <span class="fn">NotRunOn</span>(
+        placement.<span class="fn">Label</span>(<span class="s">"environment"</span>).<span class="fn">Eq</span>(<span class="s">"dev"</span>),
+    )</code></pre>
+
+<!-- ═══════════════════ WORKFLOW OPS ═══════════════════ -->
+<h2 id="workflow-ops">Workflow Op Builders <span class="count">17 methods</span></h2>
+<p>Pre-built builders for common workflow step actions. Each generates the appropriate CUE action block with the correct import.</p>
+<table>
+<tr><th>Constructor</th><th>Chain Methods</th><th>Description</th></tr>
+<tr><td><code>KubeRead(apiVersion, kind)</code></td><td><code>.Name(v)</code>, <code>.Namespace(v)</code>, <code>.NamespaceIf(cond, v)</code>, <code>.Cluster(v)</code></td><td>Reads a Kubernetes resource by GVK and name. Generates <code>kube.#Read</code>. The result can be referenced in subsequent template fields. <code>.NamespaceIf()</code> sets namespace only when a condition holds (e.g. only specify namespace in multi-cluster mode).</td></tr>
+<tr><td><code>KubeApply(objectValue)</code></td><td><code>.Cluster(v)</code></td><td>Applies (creates/updates) a Kubernetes resource. Generates <code>kube.#Apply</code>. The <code>objectValue</code> is the resource to apply. <code>.Cluster(v)</code> targets a specific managed cluster.</td></tr>
+<tr><td><code>HTTPPost(url Value)</code></td><td><code>.Body(v)</code>, <code>.Header(key, value)</code></td><td>Makes an HTTP POST request. Generates <code>http.#HTTPDo</code> with method POST. Use for webhook notifications, API calls, or external integrations in workflows. <code>.Body()</code> sets the request body, <code>.Header()</code> adds headers.</td></tr>
+<tr><td><code>ConvertString(input)</code></td><td>&mdash;</td><td>Converts a value to a string. Generates <code>util.#ConvertString</code>. Use when you need to pass a numeric or boolean value as a string to another action.</td></tr>
+<tr><td><code>WaitUntil(continueExpr)</code></td><td><code>.Guard(guards...)</code>, <code>.MessageIf(cond, val)</code></td><td>Pauses the workflow until a condition becomes true. Generates <code>builtin.#ConditionalWait</code>. The <code>continueExpr</code> is the condition to wait for. <code>.Guard()</code> adds pre-conditions that must hold before waiting. <code>.MessageIf()</code> shows a message while waiting when a condition holds.</td></tr>
+<tr><td><code>Fail(message Value)</code></td><td>&mdash;</td><td>Fails the workflow step with an error message. Generates <code>builtin.#Fail</code>. Use for error handling when a step detects an invalid state.</td></tr>
+</table>
+
+<!-- ═══════════════════ REGISTRY ═══════════════════ -->
+<h2 id="registry">Registry <span class="count">1 author-facing</span></h2>
+<pre><code><span class="kw">func</span> <span class="fn">init</span>() {
+    defkit.<span class="fn">Register</span>(myComponent())
+    defkit.<span class="fn">Register</span>(myTrait())
+}
+<span class="c">// Discovered by `vela def apply-module`</span></code></pre>
+<p><code>Register(def Definition)</code> is the only method authors call. The CLI uses <code>All()</code>, <code>Components()</code>, etc. internally.</p>
+
+<!-- ═══════════════════ TESTING ═══════════════════ -->
+<h2 id="testing">Testing <span class="count">11 methods</span></h2>
+<p>DefKit definitions can be tested with <code>go test</code> by rendering them against a mock context — no cluster required. You build a test context with the runtime values your definition expects, render it, and assert on the output.</p>
+<h4>TestContextBuilder <span class="count">10 chain</span></h4>
+<p><strong>Constructor:</strong> <code>TestContext() *TestContextBuilder</code></p>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td><code>WithName(name)</code></td><td>Sets <code>context.name</code> — the component/trait name. Use the name you'd put in an Application YAML.</td></tr>
+<tr><td><code>WithNamespace(ns)</code></td><td>Sets <code>context.namespace</code>. Defaults to <code>"default"</code> if not set.</td></tr>
+<tr><td><code>WithAppName(name)</code></td><td>Sets <code>context.appName</code>. Use when your template references the application name.</td></tr>
+<tr><td><code>WithAppRevision(rev)</code></td><td>Sets <code>context.appRevision</code>. Use when your template uses revision labels.</td></tr>
+<tr><td><code>WithParam(name, value)</code></td><td>Sets a single parameter value. The value should match the parameter's Go type (string for StringParam, int for IntParam, etc.). Parameters not set here use their defaults.</td></tr>
+<tr><td><code>WithParams(map[string]any)</code></td><td>Sets all parameters at once from a map. Useful when you want to test with a specific parameter configuration.</td></tr>
+<tr><td><code>WithClusterVersion(major, minor)</code></td><td>Sets the Kubernetes cluster version. Use when testing version-conditional resources (e.g. CronJob API version switching).</td></tr>
+<tr><td><code>WithOutputStatus(status)</code></td><td>Sets the primary output resource's status. Use when testing health policies or status expressions that read from <code>context.output.status</code>.</td></tr>
+<tr><td><code>WithOutputsStatus(name, status)</code></td><td>Sets a named auxiliary output's status. Use when testing status expressions that reference secondary resources.</td></tr>
+<tr><td><code>WithWorkload(workload)</code></td><td>Sets the workload resource for trait testing. Traits reference <code>context.output</code> to read the component's workload.</td></tr>
+</table>
+<h4>Rendering <span class="count">2</span></h4>
+<p><code>comp.Render(ctx) *RenderedResource</code> — renders the primary output resource with all parameter values, context references, and conditional logic resolved. Use <code>.Get(path string) any</code> to assert on specific fields in the rendered output.</p>
+<p><code>comp.RenderAll(ctx) *RenderedOutputs</code> — renders all outputs (primary + all named auxiliaries). Use when your component creates multiple resources and you need to verify all of them.</p>
+
+<pre><code>rendered := comp.<span class="fn">Render</span>(
+    defkit.<span class="fn">TestContext</span>().
+        <span class="fn">WithName</span>(<span class="s">"my-svc"</span>).
+        <span class="fn">WithParam</span>(<span class="s">"image"</span>, <span class="s">"nginx:1.21"</span>).
+        <span class="fn">WithParam</span>(<span class="s">"replicas"</span>, 3),
+)
+Expect(rendered.<span class="fn">Get</span>(<span class="s">"spec.replicas"</span>)).To(Equal(3))</code></pre>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<div style="margin-top:64px; padding-top:24px; border-top:1px solid var(--border); color:#8b949e; font-size:13px;">
+  <p>~450 consumer-facing builder methods from <code>pkg/definition/defkit/</code> (25 source files + placement/testing packages)</p>
+  <p>KubeVela DefKit — <code>github.com/oam-dev/kubevela</code></p>
+</div>
+
+</main>
+
+<script>
+function filterNav(q) {
+  q = q.toLowerCase().trim();
+  document.querySelectorAll('#nav-list a').forEach(a => {
+    const li = a.closest('li');
+    if (!q) { li.style.display = ''; return; }
+    const m = a.textContent.toLowerCase().includes(q);
+    li.style.display = m ? '' : 'none';
+    if (m) { let p = li.parentElement.closest('li'); while (p) { p.style.display = ''; p = p.parentElement.closest('li'); } }
+  });
+}
+</script>
+</body>
+</html>

@@ -8,6 +8,18 @@ Complex types compose multiple fields or variant shapes into a single parameter.
 
 A named struct parameter with typed fields. Use `.WithFields()` with `defkit.Field()` constructors to specify the schema. Commonly used as a named top-level parameter for structured sub-objects.
 
+### StructField Methods (via `Field(name, type)`)
+
+| Method | Description |
+|---|---|
+| `.Required()` / `.Optional()` | Marks the field within the struct as required (`field!: type`) or optional (`field?: type`). |
+| `.Default(value)` | Sets a default value for the field. Generates `*value \| type`. |
+| `.Description(desc)` | Sets the field's description shown in `vela show`. Generates `// +usage=desc`. |
+| `.Nested(s *StructParam)` | Makes this field's type a nested struct with its own fields, creating hierarchical parameter schemas. |
+| `.WithSchemaRef(ref)` | References an external CUE type definition for this field (e.g. `"#VolumeConfig"`). |
+| `.Values(values ...string)` | Restricts this string field to a fixed set of enum values. Generates `field: "a" \| "b"`. |
+| `.Of(elemType ParamType)` | Sets the element type when this field is an array type. Generates `field: [...string]`. |
+
 ```go title="Go — defkit"
 resources := defkit.Struct("resources").WithFields(
     defkit.Field("cpu",    defkit.ParamTypeString).Default("100m"),
@@ -92,6 +104,16 @@ annotations?: {...}
 A discriminated union — the parameter must match exactly one of the declared variant schemas. The **param name** becomes the CUE enum field; `.Variants()` lists the allowed values and their associated fields. Generates a CUE enum field plus conditional `if` blocks for each variant's fields at the same schema level.
 
 `.Discriminator(field)` is available for tooling/metadata purposes but does not affect CUE output — the param name is always used as the enum field name.
+
+### OneOf / Variant / ClosedUnion / DynamicMap
+
+**OneOfParam** (discriminated union): `.Discriminator(field)` names the field that selects the variant. `.Variants(variants...)` defines the possible shapes, each built with `Variant(name).WithFields(...)`. Standard modifiers: `Default()`, `Required()`, `Optional()`, `Description()`.
+
+**Variant**: `Variant(name string)` starts a variant definition. `.WithFields(fields ...*StructField)` sets the fields visible when this variant is selected.
+
+**ClosedUnionParam**: Models a parameter that must match one of several fixed struct shapes (without a discriminator). `.Options(options ...*ClosedStructOption)` defines the allowed shapes, each built with `ClosedStruct().WithFields(...)`. Generates a closed struct disjunction: `close({a: string}) | close({b: int})`.
+
+**DynamicMapParam**: A map parameter where the value type is specified at build time. `.ValueType(t ParamType)` sets a simple value type. `.ValueTypeUnion(union string)` sets a raw CUE union type string for complex cases.
 
 ```go title="Go — defkit"
 storage := defkit.OneOf("storage").Variants(

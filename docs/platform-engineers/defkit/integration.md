@@ -17,50 +17,67 @@ defkit integrates with the KubeVela ecosystem through well-defined extension poi
 
 Add defkit as a dependency using the KubeVela module:
 
+<details>
+<summary>go get command</summary>
+
 ```shell
 go get github.com/oam-dev/kubevela/pkg/definition/defkit
 ```
 
-A typical `go.mod` for a definition module:
+</details>
+
+<details>
+<summary>Example go.mod</summary>
 
 ```go
 module my-platform
 
-go 1.21
+go 1.23.8
 
 require (
-    github.com/oam-dev/kubevela v1.9.0
+    github.com/oam-dev/kubevela v1.11.0
 )
 ```
 
-:::info
-The repository uses a replace directive in `go.mod` pointing to a custom KubeVela fork when working from the `vela-go-definitions` reference implementation. Check the upstream module's `go.mod` for the exact version pin.
-:::
+</details>
 
 ## Package Structure
 
 Organize definitions by type in separate packages. Each package registers its definitions via `init()`:
 
+<details>
+<summary>Module directory layout</summary>
+
 ```shell
 my-platform/
-├── module.yaml
+├── module.yaml              # Module metadata (name, description, version)
 ├── go.mod
-├── cmd/
-│   └── register/
-│       └── main.go      # Entry point — blank-imports all packages
+├── go.sum
+├── cmd/register/main.go     # Registry entry point — imports all packages
 ├── components/
-│   └── webservice.go    # package components
+│   ├── webservice.go        # ComponentDefinition — Deployment workload
+│   ├── worker.go            # ComponentDefinition — background worker
+│   └── statefulset.go       # ComponentDefinition — StatefulSet workload
 ├── traits/
-│   └── env.go           # package traits
+│   ├── env.go               # TraitDefinition — environment variables
+│   ├── scaler.go            # TraitDefinition — replica scaling
+│   └── hpa.go               # TraitDefinition — HPA autoscaling
 ├── policies/
-│   └── apply-once.go    # package policies
+│   ├── override.go          # PolicyDefinition — parameter override
+│   └── garbage-collect.go   # PolicyDefinition — GC policies
 └── workflowsteps/
-    └── deploy.go        # package workflowsteps
+    ├── deploy.go             # WorkflowStepDefinition — deploy step
+    └── apply-object.go      # WorkflowStepDefinition — apply K8s object
 ```
+
+</details>
 
 ## The cmd/register/main.go Pattern
 
 The entry point binary aggregates all definitions by blank-importing each package. Blank imports trigger the `init()` function in each package, which calls `defkit.Register()`. The `main()` function then calls `defkit.ToJSON()` to emit all registered definitions as JSON for the `vela def apply-module` command to consume.
+
+<details>
+<summary>cmd/register/main.go</summary>
 
 ```go title="cmd/register/main.go"
 package main
@@ -83,9 +100,56 @@ func main() {
 }
 ```
 
-## Health Evaluation
+</details>
 
-defkit's Health DSL generates `status.customStatus` and `status.healthPolicy` CUE blocks. The controller determines component health from these. Use preset builders like `DeploymentHealth()` or provide a custom health policy expression.
+:::warning
+`Register()` validates placement constraints at init time. If a definition has conflicting placement (e.g. the same label condition in both `RunOn` and `NotRunOn`), `Register()` **panics** to catch the error early during initialization rather than at deploy time.
+:::
+
+## Registry Query Functions
+
+The registry provides query functions for filtering registered definitions. These are used internally by the CLI but are also useful in tests and tooling.
+
+| Function | Returns | Description |
+|---|---|---|
+| `defkit.All()` | `[]Definition` | All registered definitions. |
+| `defkit.Components()` | `[]*ComponentDefinition` | Only ComponentDefinitions. |
+| `defkit.Traits()` | `[]*TraitDefinition` | Only TraitDefinitions. |
+| `defkit.Policies()` | `[]*PolicyDefinition` | Only PolicyDefinitions. |
+| `defkit.WorkflowSteps()` | `[]*WorkflowStepDefinition` | Only WorkflowStepDefinitions. |
+| `defkit.Count()` | `int` | Number of registered definitions. |
+| `defkit.Clear()` | — | Resets the registry. Use in tests to isolate test cases. |
+
+## ToJSON() Output Schema
+
+`defkit.ToJSON()` serializes all registered definitions into a JSON payload that `vela def apply-module` consumes:
+
+<details>
+<summary>JSON schema</summary>
+
+```json
+{
+  "definitions": [
+    {
+      "name": "webservice",
+      "type": "component",
+      "cue": "webservice: {\n  type: \"component\"\n  ...\n}\ntemplate: { ... }",
+      "placement": {
+        "runOn": [
+          { "key": "provider", "operator": "Eq", "values": ["aws"] }
+        ],
+        "notRunOn": [
+          { "key": "cluster-type", "operator": "Eq", "values": ["vcluster"] }
+        ]
+      }
+    }
+  ]
+}
+```
+
+</details>
+
+The `placement` field is only present when the definition has `RunOn` or `NotRunOn` constraints. Definitions without placement constraints omit the field entirely.
 
 ## vela CLI Integration
 

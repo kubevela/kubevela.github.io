@@ -6,6 +6,23 @@ Value expressions are deferred-evaluation constructors and condition builders. V
 
 ## Value Constructors
 
+### Constructors Summary
+
+| Constructor | Description |
+|---|---|
+| `Lit(v any)` | Creates a literal value (string, int, bool). The most basic value type. |
+| `Reference(path string)` | Creates a raw CUE path reference emitted verbatim. Use for expressions the builder doesn't model. |
+| `ParamRef(field string)` | Creates a reference to `parameter.field`. Shorthand when you don't have the param variable in scope. |
+| `Parameter()` | References the entire `parameter` block as a value. |
+| `ParameterField(field)` | Creates `parameter.field` reference. `ParamRef()` is a convenience alias. |
+| `Interpolation(parts ...Value)` | Creates a CUE string interpolation: `"\(part1)-\(part2)"`. |
+| `Plus(parts ...Value)` | Creates an addition/concatenation expression: `a + b + c`. |
+| `PathExists(path string)` | Creates a condition checking if a CUE path resolves (is not bottom). Generates `path != _\|_`. |
+| `InlineArray(fields map[string]Value)` | Creates an inline single-element array literal: `[{field: value}]`. |
+| `NewArrayElement()` | Creates a blank array element struct. Populate with `.Set(key, value)` and `.SetIf(cond, key, value)`. |
+| `RegexMatch(source Value, pattern string)` | Creates a condition checking regex match. Generates `source =~ "pattern"`. |
+| `CUEExpr(rawExpr string)` | Escape hatch: wraps a raw CUE expression string as a Condition. |
+
 ### `defkit.Lit(v)` — Literal Values
 
 Produces a CUE literal value (string, int, or bool).
@@ -278,6 +295,38 @@ if len(_clusterPrivileges) > 0 {
     outputs: role: { ... }
 }
 ```
+
+## Comparison Constructors
+
+| Constructor | CUE |
+|---|---|
+| `Eq(left, right Expr)` | `==` |
+| `Ne(left, right Expr)` | `!=` |
+| `Lt(left, right Expr)` | `<` |
+| `Le(left, right Expr)` | `<=` |
+| `Gt(left, right Expr)` | `>` |
+| `Ge(left, right Expr)` | `>=` |
+
+## Logical Constructors
+
+| Constructor | CUE |
+|---|---|
+| `And(conditions ...Condition)` | `cond1 && cond2` |
+| `Or(conditions ...Condition)` | `cond1 \|\| cond2` |
+| `Not(cond Condition)` | `!cond` |
+
+Value-level length: `LenGt(source, n)`, `LenGe(source, n)`, `LenEq(source, n)`.
+
+## CUE Standard Library Functions
+
+| Function | CUE |
+|---|---|
+| `StringsToLower(v)` / `StringsToUpper(v)` | `strings.ToLower(v)` / `strings.ToUpper(v)` |
+| `StringsHasPrefix(s, prefix)` / `StringsHasSuffix(s, suffix)` | `strings.HasPrefix(...)` / `strings.HasSuffix(...)` |
+| `StrconvFormatInt(v, base)` | `strconv.FormatInt(v, base)` |
+| `ListConcat(lists ...Value)` | `list.Concat([...])` |
+
+`ForEachMap()` iterates over a map value. Chain `.Over(source)`, `.WithVars(k, v)`, `.WithBody(ops...)`. Generates CUE `{for k, v in source { (k): v }}`.
 
 :::tip
 `defkit.LetVariable(name)` is just a reference — it does not create the binding. Always pair it with `tpl.AddLetBinding()` or `tpl.Helper().Build()` to establish the CUE `let` variable first.

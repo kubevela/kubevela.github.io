@@ -63,6 +63,35 @@ tpl.SetRawPatchBlock(`patch: spec: template: spec: {
 }`)
 ```
 
+## `tpl.SetRawParameterBlock()`
+
+Injects a raw CUE string as the entire `parameter` block, replacing the one defkit would otherwise build from `Params(...)`. Use when the parameter schema needs CUE constructs the param builder can't express — disjunctions across struct shapes, complex conditional schemas, cross-field `if` guards, or importing a schema defined elsewhere.
+
+Applies to: **All Definition Types**
+
+```go title="Go — defkit"
+tpl.SetRawParameterBlock(`parameter: {
+    // Either a remote config via URL OR inline content — not both.
+    source: *{ url: string } | { content: string }
+
+    // Conditional field that only exists for URL sources.
+    if source.url != _|_ {
+        authSecret?: string
+    }
+}`)
+```
+
+```cue title="CUE — generated"
+// The string is placed verbatim in place of the
+// builder-generated parameter block.
+parameter: {
+    source: *{ url: string } | { content: string }
+    if source.url != _|_ {
+        authSecret?: string
+    }
+}
+```
+
 ## `defkit.Reference(cueExpr string)`
 
 Embeds a raw CUE expression as a `Value` that can be passed to `.Set()`, `.SetIf()`, or any other method accepting a `Value`. Use when you need to reference a CUE path, variable, or expression that defkit does not model as a typed `*Param`.

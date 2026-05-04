@@ -24,15 +24,24 @@ ctx := defkit.TestContext().
 
 | Method | Description |
 |---|---|
-| `.WithName(name)` | Component name |
-| `.WithNamespace(ns)` | Application namespace |
-| `.WithParam(key, value)` | Set a parameter value |
-| `.WithAppRevision(rev)` | App revision string |
-| `.WithClusterVersion(maj, min)` | Kubernetes version |
+| `.WithName(name)` | Sets `context.name` — the component/trait name. |
+| `.WithNamespace(ns)` | Sets `context.namespace`. Defaults to `"default"` if not set. |
+| `.WithAppName(name)` | Sets `context.appName`. Use when your template references the application name. |
+| `.WithAppRevision(rev)` | Sets `context.appRevision`. Use when your template uses revision labels. |
+| `.WithParam(name, value)` | Sets a single parameter value. Parameters not set here use their defaults. |
+| `.WithParams(map[string]any)` | Sets all parameters at once from a map. |
+| `.WithClusterVersion(major, minor)` | Sets the Kubernetes cluster version. Use for version-conditional resources. |
+| `.WithOutputStatus(status)` | Sets the primary output resource's status. Use for testing health policies or status expressions. |
+| `.WithOutputsStatus(name, status)` | Sets a named auxiliary output's status. |
+| `.WithWorkload(workload)` | Sets the workload resource for trait testing. Traits reference `context.output` to read the workload. |
 
 ### `comp.Render(ctx)`
 
 Renders a component definition against a test context, producing the concrete Kubernetes resource map.
+
+`comp.Render(ctx) *RenderedResource` renders the primary output with all parameter values, context references, and conditional logic resolved. Use `.Get(path string) any` to assert on specific fields. `.APIVersion()`, `.Kind()`, `.Data()` access top-level fields.
+
+`comp.RenderAll(ctx) *RenderedOutputs` renders all outputs (primary + auxiliaries). Use when your component creates multiple resources.
 
 ```go title="Go — defkit"
 rendered := comp.Render(

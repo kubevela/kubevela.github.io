@@ -265,3 +265,30 @@ defkit.LenGt(clusterPrivsRef, 0)
 ```cue title="CUE — generated"
 len(_clusterPrivileges) > 0
 ```
+
+## Workflow Op Builders
+
+Pre-built builders for common workflow step actions. Each generates the appropriate CUE action block with the correct import.
+
+| Constructor | Chain Methods | Description |
+|---|---|---|
+| `KubeRead(apiVersion, kind)` | `.Name(v)`, `.Namespace(v)`, `.NamespaceIf(cond, v)`, `.Cluster(v)` | Reads a Kubernetes resource by GVK and name. Generates `kube.#Read`. |
+| `KubeApply(objectValue)` | `.Cluster(v)` | Applies (creates/updates) a Kubernetes resource. Generates `kube.#Apply`. |
+| `HTTPPost(url Value)` | `.Body(v)`, `.Header(key, value)` | Makes an HTTP POST request. Generates `http.#HTTPDo` with method POST. |
+| `ConvertString(input)` | — | Converts a value to a string. Generates `util.#ConvertString`. |
+| `WaitUntil(continueExpr)` | `.Guard(guards...)`, `.MessageIf(cond, val)` | Pauses the workflow until a condition becomes true. Generates `builtin.#ConditionalWait`. |
+| `Fail(message Value)` | — | Fails the workflow step with an error message. Generates `builtin.#Fail`. |
+
+### Validators & Conditional Params
+
+**Validator Builder**: `Validate(message string) *Validator`
+
+| Method | Description |
+|---|---|
+| `.FailWhen(cond Condition)` | Condition that triggers validation failure. |
+| `.OnlyWhen(guard Condition)` | Guard: only run this validator when guard is true. |
+| `.WithName(name string)` | Custom CUE name (`_validateName`). |
+
+Attach to definitions via `.Validators(...)` on Component, ArrayParam, or MapParam.
+
+**ConditionalParams**: `ConditionalParams(branches...)` with `WhenParam(cond).Params(...)` and `.Validators(...)` for conditional parameter visibility.

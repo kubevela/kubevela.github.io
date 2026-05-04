@@ -2,101 +2,454 @@
 title: Helper Builder
 ---
 
-The helper builder allows you to compute derived CUE `let` variables from array parameters — filtering, picking fields, and applying conditionals — without writing raw CUE strings.
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-## `tpl.Helper(name)`
+The helper builder computes derived CUE array variables from array parameters — filtering, renaming fields, and applying conditionals — without writing raw CUE strings. Helpers are emitted as named list comprehensions at the top of the `template:` block and can be referenced by name in resource `.Set()` calls.
 
-Builds a CUE `let` variable by transforming an array parameter into a derived list. The helper variable is injected into the template header block and can be referenced in resource `.Set()` calls as `defkit.LetVariable(name)`.
+## Method Reference
 
-Chain:
-1. `.FromFields(param, keys...)` — source parameter and discriminator field values to filter on
-2. `.Pick(fields...)` — always include these fields in each output element
-3. `.PickIf(cond, field)` — conditionally include a field per element
-4. `.Build()` — finalize and register the let binding
+### HelperBuilder Chain Methods
 
-Applies to: **Component**
+| Method | Description |
+|---|---|
+| `.From(source Value)` | Sets a single source collection (e.g. a parameter list). |
+| `.FromFields(source, fields...)` | Uses multiple named sub-fields of a single source object. Each sub-field is iterated separately; results are combined. Use with `Pick`, `PickIf`, `MapBySource`. |
+| `.FromArray(ab *ArrayBuilder)` | Uses a pre-built `ArrayBuilder` as the helper source. Enables guard+filter patterns not expressible via the standard pipeline. |
+| `.FromHelper(helper *HelperVar)` | Chains from another helper's output for multi-step transformations. |
+| `.Guard(cond)` | Wraps the for comprehension in an outer `if cond` guard. Evaluates to empty when the condition is false. |
+| `.Filter(pred)` | Keeps only items where the predicate matches. Generates `if v.field == value` in the for loop. |
+| `.FilterCond(cond)` | Keeps only items where the condition holds. Generates a CUE condition expression in the for loop. |
+| `.Map(mappings FieldMap)` | Transforms each item using field mappings. Use `FieldRef("f")`, `Optional("f")`, `FieldRef("f").Or(...)` as values. |
+| `.Pick(fields...)` | Selects only the named fields from each item. Works with `FromFields` (MultiSource). |
+| `.PickIf(cond, field)` | Conditionally includes a field when the condition is true. Works with `FromFields` (MultiSource). |
+| `.MapBySource(map[string]FieldMap)` | Applies different field mappings per source field. Works with `FromFields`. |
+| `.Wrap(key)` | Wraps each item under a new key. Transforms `"val"` → `{key: "val"}`. |
+| `.Rename(from, to)` | Renames a field in each item. |
+| `.Dedupe(keyField)` | Removes duplicate items based on a key field. |
+| `.DefaultField(field, default)` | Provides a default value for a potentially missing field. |
+| `.AfterOutput()` | Places this helper after the `output:` block in generated CUE. Use when the helper feeds `outputs:` (auxiliary resources) rather than the primary `output:`. |
+| `.Build() *HelperVar` | Finalizes the helper, registers it with the template, and returns a `*HelperVar` reference. |
 
-```go title="Go — defkit"
-volumeMounts := defkit.Object("volumeMounts")
+### FieldMap Value Constructors
 
-// Build a derived array picking only mount-relevant fields
-mountsArray := tpl.Helper("mountsArray").
-    FromFields(volumeMounts, "pvc", "configMap", "secret", "emptyDir", "hostPath").
-    Pick("name", "mountPath").
-    PickIf(defkit.ItemFieldIsSet("subPath"), "subPath").
-    Build()
+| Function | Description |
+|---|---|
+| `defkit.FieldRef("field")` | References `v.field` from the current item. |
+| `defkit.FieldRef("f").Or(fallback)` | Emits `*v.f \| fallback` — CUE default syntax for absent fields. |
+| `defkit.Optional("field")` | Generates `if v.field != _\|_ { name: v.field }` — conditional inclusion. |
+| `defkit.Format("port-%v", FieldRef("port"))` | Formats a string value using item fields. Generates `strconv.FormatInt(...)` for numeric args. |
 
-// Use the helper result in a resource Set call
-deployment.Set("spec.template.spec.containers[0].volumeMounts", mountsArray)
+### Helper Construction Helpers
+
+| Function | Description |
+|---|---|
+| `HelperStruct(fields ...StructFieldDef)` | Constructs a CUE struct value for use inside `Each()` callbacks. |
+| `HelperField(name, value Value)` | Defines an unconditional field within a `HelperStruct()`. |
+| `HelperFieldIf(cond, name, value)` | Defines a conditional field within a `HelperStruct()`. |
+| `Item() *ItemValue` | References the current iteration item inside `Each()`. Chain `.Get(field)` to access a field. |
+| `ItemFieldIsSet(field) Condition` | Returns a condition checking if a field exists on the current item. Generates `v.field != _\|_`. |
+
+### Specialized Helper Entry Points on `*Template`
+
+| Method | Description |
+|---|---|
+| `tpl.Helper(name) *HelperBuilder` | General-purpose helper. Returns a `*HelperBuilder` you configure with the chain methods above, then finalize with `.Build()`. |
+| `tpl.StructArrayHelper(name, source)` | Splits a struct parameter's sub-fields into separate typed arrays — one per sub-field, named by the field. |
+| `tpl.ConcatHelper(name, source)` | Concatenates arrays from a `StructArrayHelper` into one flat list via `list.Concat`. Chain `.Fields(...)` to specify which sub-arrays to join. |
+| `tpl.DedupeHelper(name, source)` | Deduplicates items from another helper by a key field. Chain `.ByKey("name")` to pick the dedup key. |
+
+`StructArrayHelper` → `ConcatHelper` → `DedupeHelper` is the canonical pipeline for heterogeneous volume mount patterns: split by type, join into one list, remove duplicates.
+
+### `*HelperVar` Methods
+
+| Method | Description |
+|---|---|
+| `helper.NotEmpty() Condition` | Returns a condition that checks `len(helper) != 0`. Use with `tpl.OutputsIf` to emit an auxiliary resource only when the helper is non-empty. |
+
+## Working Example 1 — `port-service` Component
+
+Demonstrates `tpl.Helper()` with a single-source `From()` pipeline:
+
+- **`From` + `Guard`** — source `parameter.ports`, guard against the param being absent.
+- **`Map` + `FieldRef` + `Optional`** — rename `port → containerPort`; include `name` and `protocol` only when set.
+- **`Filter(FieldEquals(...))`** — keep only items where `v.expose == true`.
+- **`FieldRef("name").Or(Format(...))`** — service port name falls back to `"port-<N>"` when absent.
+- **`AfterOutput()`** — `exposedPorts` helper is placed after `output:` because it feeds `outputs:`.
+- **`helper.NotEmpty()`** — emit the `Service` only when at least one port is exposed.
+
+Verified with `vela def validate-module ./my-platform` against KubeVela v1.11.0-alpha.3.
+
+<Tabs groupId="defkit-example">
+<TabItem value="go" label="Go — defkit">
+
+```go
+package components
+
+import "github.com/oam-dev/kubevela/pkg/definition/defkit"
+
+func PortService() *defkit.ComponentDefinition {
+	image := defkit.String("image").
+		Description("Container image")
+	replicas := defkit.Int("replicas").Default(1).
+		Description("Replica count")
+	ports := defkit.List("ports").Optional().
+		Description("Port list. Set expose:true on a port to include it in the Service")
+
+	return defkit.NewComponent("port-service").
+		Description("Deployment with a companion Service for every exposed port").
+		Workload("apps/v1", "Deployment").
+		Params(image, replicas, ports).
+		Template(portServiceTemplate)
+}
+
+func portServiceTemplate(tpl *defkit.Template) {
+	vela     := defkit.VelaCtx()
+	image    := defkit.String("image")
+	replicas := defkit.Int("replicas")
+	ports    := defkit.List("ports").Optional()
+
+	// From+Guard+Map: all ports → container port shape.
+	// Optional("field") generates `if v.field != _|_ { field: v.field }`.
+	containerPorts := tpl.Helper("containerPorts").
+		From(ports).
+		Guard(ports.IsSet()).
+		Map(defkit.FieldMap{
+			"containerPort": defkit.FieldRef("port"),
+			"protocol":      defkit.Optional("protocol"),
+			"name":          defkit.Optional("name"),
+		}).
+		Build()
+
+	// From+Guard+Filter+Map: expose:true ports only → Service port shape.
+	// Filter(Predicate): generates `if v.expose == true` in the for loop.
+	// FieldRef.Or(Format(...)): name falls back to "port-<N>" when absent.
+	// AfterOutput: placed after output: because it feeds outputs:.
+	exposedPorts := tpl.Helper("exposedPorts").
+		From(ports).
+		Guard(ports.IsSet()).
+		Filter(defkit.FieldEquals("expose", true)).
+		Map(defkit.FieldMap{
+			"port":       defkit.FieldRef("port"),
+			"targetPort": defkit.FieldRef("port"),
+			"name":       defkit.FieldRef("name").Or(defkit.Format("port-%v", defkit.FieldRef("port"))),
+		}).
+		AfterOutput().
+		Build()
+
+	dep := defkit.NewResource("apps/v1", "Deployment").
+		Set("metadata.name", vela.Name()).
+		Set("spec.replicas", replicas).
+		Set("spec.selector.matchLabels[app.oam.dev/component]", vela.Name()).
+		Set("spec.template.metadata.labels[app.oam.dev/component]", vela.Name()).
+		Set("spec.template.spec.containers[0].name", vela.Name()).
+		Set("spec.template.spec.containers[0].image", image).
+		SetIf(ports.IsSet(), "spec.template.spec.containers[0].ports", containerPorts)
+	tpl.Output(dep)
+
+	// OutputsIf + NotEmpty: emit Service only when len(exposedPorts) != 0.
+	svc := defkit.NewResource("v1", "Service").
+		Set("metadata.name", vela.Name()).
+		Set("spec.selector[app.oam.dev/component]", vela.Name()).
+		Set("spec.ports", exposedPorts)
+	tpl.OutputsIf(exposedPorts.NotEmpty(), "service", svc)
+}
+
+func init() { defkit.Register(PortService()) }
 ```
 
-```cue title="CUE — generated"
-// Helper injected as let binding in header
-let mountsArray = [
-    for _, v in parameter.volumeMounts
-    if v.type == "pvc" || v.type == "configMap" || ... {
-        name:      v.name
-        mountPath: v.mountPath
-        if v.subPath != _|_ { subPath: v.subPath }
-    }
-]
+</TabItem>
+<TabItem value="cue" label="CUE — generated">
 
-// Resource field using the helper
-spec: template: spec: containers: [{
-    volumeMounts: mountsArray
-}]
+```cue
+import (
+	"strconv"
+)
+
+"port-service": {
+	type: "component"
+	annotations: {}
+	labels: {}
+	description: "Deployment with a companion Service for every exposed port"
+	attributes: {
+		workload: {
+			definition: {
+				apiVersion: "apps/v1"
+				kind:       "Deployment"
+			}
+			type: "deployments.apps"
+		}
+	}
+}
+template: {
+	containerPorts: [
+		if parameter["ports"] != _|_ for v in parameter.ports {
+			containerPort: v.port
+			if v.name != _|_ {
+				name: v.name
+			}
+			if v.protocol != _|_ {
+				protocol: v.protocol
+			}
+		},
+	]
+	output: {
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+		metadata: {
+			name: context.name
+		}
+		spec: {
+			replicas: parameter.replicas
+			selector: matchLabels: "app.oam.dev/component": context.name
+			template: {
+				metadata: labels: "app.oam.dev/component": context.name
+				spec: containers: [{
+					name:  context.name
+					image: parameter.image
+					if parameter["ports"] != _|_ {
+						ports: containerPorts
+					}
+				}]
+			}
+		}
+	}
+	exposedPorts: [
+		if parameter["ports"] != _|_ for v in parameter.ports if v.expose == true {
+			name:       *v.name | "port-" + strconv.FormatInt(v.port, 10)
+			port:       v.port
+			targetPort: v.port
+		},
+	]
+	outputs: {
+		if len(exposedPorts) != 0 {
+			service: {
+				apiVersion: "v1"
+				kind:       "Service"
+				metadata: name: context.name
+				spec: {
+					selector: "app.oam.dev/component": context.name
+					ports: exposedPorts
+				}
+			}
+		}
+	}
+	parameter: {
+		// +usage=Container image
+		image: string
+		// +usage=Replica count
+		replicas: *1 | int
+		// +usage=Port list. Set expose:true on a port to include it in the Service
+		ports?: [..._]
+	}
+}
 ```
 
-## `tpl.AddLetBinding(name, value)`
+</TabItem>
+</Tabs>
 
-Injects a CUE `let name = expr` binding directly into the template header. Use when the computation is based on a `defkit.From()` pipeline (filter, map, dedupe) and you want to reference the result multiple times via `defkit.LetVariable(name)`.
+**`ports` absent**: `containerPorts` and `exposedPorts` evaluate to `[]`; the Deployment has no `ports:` field; the `if len(exposedPorts) != 0` guard collapses and no Service is emitted.
 
-Applies to: **Component**, **Trait**
+**`ports` present, none with `expose:true`**: `containerPorts` is populated and set on the Deployment; `exposedPorts` is `[]`; the `len` guard collapses and no Service is emitted.
 
-```go title="Go — defkit"
-privileges := defkit.Array("privileges").Optional()
+**`ports` present, some with `expose:true`**: `containerPorts` populates all container ports; `exposedPorts` contains only the exposed subset; the `len` guard passes and the Service is emitted with those ports. Each exposed port's `name` defaults to `"port-<N>"` when not explicitly set.
 
-// Add let bindings for filtered sub-lists
-tpl.AddLetBinding("_clusterPrivileges",
-    defkit.From(privileges).
-        Filter(defkit.FieldEquals("scope", "cluster")).
-        Guard(privileges.IsSet()))
+## Working Example 2 — `volume-worker` Component
 
-tpl.AddLetBinding("_namespacePrivileges",
-    defkit.From(privileges).
-        Filter(defkit.FieldEquals("scope", "namespace")).
-        Guard(privileges.IsSet()))
+Demonstrates the `StructArrayHelper` → `ConcatHelper` → `DedupeHelper` compositional pipeline:
 
-// Reference the bindings later
-clusterPrivsRef := defkit.LetVariable("_clusterPrivileges")
-namespacePrivsRef := defkit.LetVariable("_namespacePrivileges")
+- **`StructArrayHelper` + `Field(FieldMap)`** — splits `parameter.volumeMounts` into typed sub-arrays (`pvc`, `configMap`, `secret`). Each sub-array generates `fieldName: *[for v in source.field { mapping }] | []`; the `*[...] | []` default means an absent sub-field safely yields `[]`.
+- **`Optional("field")` in FieldMap** — `subPath` is included only when set on the item.
+- **`ConcatHelper` + `Fields(...)`** — joins the typed sub-arrays into one flat list via `list.Concat`.
+- **`DedupeHelper` + `ByKey("name")`** — removes duplicate entries using CUE's double-loop `_ignore` pattern; earlier entries win.
+
+Verified with `vela def validate-module ./my-platform` against KubeVela v1.11.0-alpha.3.
+
+<Tabs groupId="defkit-example">
+<TabItem value="go" label="Go — defkit">
+
+```go
+package components
+
+import "github.com/oam-dev/kubevela/pkg/definition/defkit"
+
+func VolumeWorker() *defkit.ComponentDefinition {
+	image := defkit.String("image").
+		Description("Container image")
+	volumeMounts := defkit.Object("volumeMounts").Optional().
+		Description("Volume mounts keyed by type (pvc, configMap, secret)")
+
+	return defkit.NewComponent("volume-worker").
+		Description("Deployment with heterogeneous volume mounts deduped by name").
+		Workload("apps/v1", "Deployment").
+		Params(image, volumeMounts).
+		Template(volumeWorkerTemplate)
+}
+
+func volumeWorkerTemplate(tpl *defkit.Template) {
+	vela         := defkit.VelaCtx()
+	image        := defkit.String("image")
+	volumeMounts := defkit.Object("volumeMounts").Optional()
+
+	// StructArrayHelper: expands each type-keyed sub-array into a typed output array.
+	// Each Field() call generates: name: *[for v in source.name { mapping }] | []
+	// Optional("subPath") generates: if v.subPath != _|_ { subPath: v.subPath }
+	mountsArray := tpl.StructArrayHelper("mountsArray", volumeMounts).
+		Field("pvc", defkit.FieldMap{
+			"name":      defkit.FieldRef("name"),
+			"mountPath": defkit.FieldRef("mountPath"),
+			"subPath":   defkit.Optional("subPath"),
+		}).
+		Field("configMap", defkit.FieldMap{
+			"name":      defkit.FieldRef("name"),
+			"mountPath": defkit.FieldRef("mountPath"),
+		}).
+		Field("secret", defkit.FieldMap{
+			"name":      defkit.FieldRef("name"),
+			"mountPath": defkit.FieldRef("mountPath"),
+		}).
+		Build()
+
+	// ConcatHelper: joins the typed sub-arrays into one flat list.
+	// Generates: mountsList: list.Concat([mountsArray.pvc, mountsArray.configMap, mountsArray.secret])
+	mountsList := tpl.ConcatHelper("mountsList", mountsArray).
+		Fields("pvc", "configMap", "secret").
+		Build()
+
+	// DedupeHelper: removes duplicates by name. Earlier entries win.
+	// Generates the double-loop _ignore pattern for CUE-native deduplication.
+	uniqueMounts := tpl.DedupeHelper("uniqueMounts", mountsList).
+		ByKey("name").
+		Build()
+
+	tpl.Output(
+		defkit.NewResource("apps/v1", "Deployment").
+			Set("metadata.name", vela.Name()).
+			Set("spec.template.spec.containers[0].name", vela.Name()).
+			Set("spec.template.spec.containers[0].image", image).
+			SetIf(volumeMounts.IsSet(), "spec.template.spec.containers[0].volumeMounts", uniqueMounts),
+	)
+}
+
+func init() { defkit.Register(VolumeWorker()) }
 ```
 
-```cue title="CUE — generated"
-// Injected at template header
-let _clusterPrivileges = [
-    if parameter["privileges"] != _|_ for p in parameter.privileges
-    if p.scope == "cluster" { p }
-]
+</TabItem>
+<TabItem value="cue" label="CUE — generated">
 
-let _namespacePrivileges = [
-    if parameter["privileges"] != _|_ for p in parameter.privileges
-    if p.scope == "namespace" { p }
-]
+```cue
+import (
+	"list"
+)
+
+"volume-worker": {
+	type: "component"
+	annotations: {}
+	labels: {}
+	description: "Deployment with heterogeneous volume mounts deduped by name"
+	attributes: {
+		workload: {
+			definition: {
+				apiVersion: "apps/v1"
+				kind:       "Deployment"
+			}
+			type: "deployments.apps"
+		}
+	}
+}
+template: {
+	mountsArray: {
+		pvc: *[
+			for v in parameter.volumeMounts.pvc {
+			{
+				mountPath: v.mountPath
+				name:      v.name
+				if v.subPath != _|_ {
+					subPath: v.subPath
+				}
+			}
+			},
+		] | []
+
+		configMap: *[
+			for v in parameter.volumeMounts.configMap {
+			{
+				mountPath: v.mountPath
+				name:      v.name
+			}
+			},
+		] | []
+
+		secret: *[
+			for v in parameter.volumeMounts.secret {
+			{
+				mountPath: v.mountPath
+				name:      v.name
+			}
+			},
+		] | []
+	}
+	mountsList: list.Concat([mountsArray.pvc, mountsArray.configMap, mountsArray.secret])
+	uniqueMounts: [
+		for val in [
+			for i, vi in mountsList {
+				for j, vj in mountsList if j < i && vi.name == vj.name {
+					_ignore: true
+				}
+				vi
+			},
+		] if val._ignore == _|_ {
+			val
+		},
+	]
+	output: {
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+		metadata: name: context.name
+		spec: template: spec: containers: [{
+			name:  context.name
+			image: parameter.image
+			if parameter["volumeMounts"] != _|_ {
+				volumeMounts: uniqueMounts
+			}
+		}]
+	}
+	parameter: {
+		// +usage=Container image
+		image: string
+		// +usage=Volume mounts keyed by type (pvc, configMap, secret)
+		volumeMounts?: {...}
+	}
+}
 ```
 
-## `defkit.LetVariable(name)`
+</TabItem>
+</Tabs>
 
-References a previously registered let binding by name. `tpl.Helper("name")...Build()` returns a `Value` you can use directly in `.Set()` calls. Use `defkit.LetVariable("name")` when you need to reference the same let binding at a different point in the code by its string name.
+**`volumeMounts` absent**: `parameter["volumeMounts"] != _|_` is false; `volumeMounts:` is not emitted on the container.
 
-```go title="Go — defkit"
-mountsArray := tpl.Helper("mountsArray"). /* ... */ .Build()
+**`volumeMounts` present, some sub-fields absent**: The `*[...] | []` default on each `mountsArray` sub-field means `parameter.volumeMounts.secret` not being set still yields `mountsArray.secret = []`, so `list.Concat` never sees `_|_`.
 
-// Reference the let variable in any Set call
-deployment.Set("spec.template.spec.containers[0].volumeMounts",
-    defkit.LetVariable("mountsArray"))
-```
+**Duplicate names across sub-fields**: If a PVC and a ConfigMap mount both use the name `"data"`, the `uniqueMounts` double-loop suppresses the later occurrence. Earlier entries in `mountsList` win.
 
-:::tip
-Use `tpl.Helper()` when transforming an array parameter by type discriminator (e.g., volume types). Use `tpl.AddLetBinding()` with `defkit.From()` when filtering by a field value (e.g., scope, category).
+:::note Pattern example — pod volumes not included
+This component sets `volumeMounts` on the container but does **not** define the corresponding `spec.template.spec.volumes` entries in the Deployment. Kubernetes requires every `volumeMount.name` to match a volume in `spec.template.spec.volumes`, so the Deployment above cannot be applied as-is.
+
+The example is intentionally scoped to demonstrating the `StructArrayHelper → ConcatHelper → DedupeHelper` pipeline. In production use, wire up the pod-level volumes by either:
+- Extending this component template with additional `.Set("spec.template.spec.volumes[...]", ...)` calls for each volume type, or
+- Using a companion trait that injects the volume specs alongside the mounts.
 :::
+
+## Reproduce
+
+```shell
+vela def validate-module ./my-platform
+vela def gen-module ./my-platform -o ./generated-cue
+vela def apply-module ./my-platform --conflict overwrite
+```
+
+## Related
+
+- [Template Output Methods](./template-output-methods.md) — `tpl.Output` / `tpl.Outputs` / `tpl.OutputsIf` for emitting resources
+- [Template Patch Methods](./template-patch-methods.md) — `tpl.Patch()` / `tpl.PatchStrategy()` for trait patch templates
+- [WorkflowStep Actions](./template-workflowstep-actions.md) — `tpl.Builtin` / `tpl.SuspendIf` for workflow step templates
