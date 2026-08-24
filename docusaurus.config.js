@@ -129,11 +129,10 @@ module.exports = {
               href: 'https://cloud-native.slack.com/archives/C01BLQ3HTJA',
             },
             {
-              label: 'DingTalk (23310022)',
-              href: '.',
+              html: '<span>DingTalk (23310022)</span>',
             },
             {
-                html: '<div class="wechat"> <a class="wechat-label">Wechat Group(Scan code to request joining)</a> <a class="wechat-img" rel="noreferrer noopener" aria-label="Wechat Group"><img src="https://kubevela.io/images/barnett-wechat.jpg" alt="Broker wechat to add you into the user group."></a></div>',
+              html: '<div class="wechat"> <a class="wechat-label">Wechat Group(Scan code to request joining)</a> <a class="wechat-img" rel="noreferrer noopener" aria-label="Wechat Group"><img src="https://kubevela.io/images/barnett-wechat.jpg" alt="Broker wechat to add you into the user group."></a></div>',
             },
           ],
         },
