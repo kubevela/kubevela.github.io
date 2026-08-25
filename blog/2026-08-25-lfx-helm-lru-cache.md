@@ -16,25 +16,17 @@ My mentorship project, **LRU Cache Eviction for the Native Helm Provider**, focu
 
 <!-- truncate -->
 
-## What is LFX Mentorship?
+## Helm Components in KubeVela
 
-[LFX Mentorship](https://lfx.linuxfoundation.org/) is a mentorship program by the Linux Foundation that provides contributors with an opportunity to work with open-source communities and experienced maintainers.
+Helm is widely used in the Kubernetes ecosystem to package and distribute applications. A Helm chart packages the Kubernetes resources and configuration required to deploy an application.
 
-I was selected as an LFX Mentee for the **2026 Term 2** program under the KubeVela project, where I worked on improving the caching mechanism of its native Helm provider.
+KubeVela allows applications to be composed using different **Component** types, where each component forms part of an application.
 
-## What is KubeVela?
+Historically, KubeVela's `helm` Component was provided through the **FluxCD addon**. The addon included the Helm ComponentDefinition and the FluxCD controllers required for Helm chart delivery. Users who wanted to deploy a Helm chart through KubeVela therefore had to enable the FluxCD addon first.
 
-[KubeVela](https://kubevela.io/) is an application delivery and management platform built on top of Kubernetes. It provides higher-level abstractions for defining, deploying, and operating applications without requiring users to manage every underlying Kubernetes resource individually.
+With the introduction of KubeVela's **native Helm provider**, Helm charts can be handled directly by KubeVela without relying on the FluxCD addon. The native provider can fetch and process charts from sources such as Helm repositories, OCI registries, and chart URLs.
 
-One of the core concepts in KubeVela is the **Component**. A component represents a workload or capability that forms part of an application.
-
-KubeVela supports different types of components, including a native **Helm Component**, which allows users to deploy applications packaged as Helm charts.
-
-## Project Details
-
-[Helm](https://helm.sh/) is widely used in the Kubernetes ecosystem to package and distribute applications. A Helm chart contains the Kubernetes resources and configuration required to deploy an application.
-
-KubeVela's **helm chart component** allows a Helm chart to be used as a component of a KubeVela Application.
+This also means that Helm chart fetching and processing happen directly as part of KubeVela's application reconciliation.
 
 ```
 apiVersion: core.oam.dev/v1beta1
@@ -59,6 +51,8 @@ spec:
             type: ClusterIP
 
 ```
+
+## Project Details
 
 During reconciliation, the _*helm chart component*_ fetches the chart from sources such as a Helm repository, URL, or OCI registry, processes it, and renders the resulting Kubernetes resources.
 
