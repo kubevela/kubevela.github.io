@@ -1017,6 +1017,14 @@ spec:
  protocal | The protocal of endpoint url. | "http" or "https" | false | http |  
 
 
+Output:
+ 
+   Name | Description | Type |
+   ---- | ----------- | ---- |
+   host | the first endpoint host of current application  | string
+   port | the first endpoint port of current application | string
+   endpoints | all endpoints of current application  | list
+
 ## Create-Config
 
 ### Description
