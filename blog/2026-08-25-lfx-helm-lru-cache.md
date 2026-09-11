@@ -16,7 +16,7 @@ My mentorship project, **LRU Cache Eviction for the Native Helm Provider**, focu
 
 <!-- truncate -->
 
-## Helm Components in KubeVela
+## Helm Component in KubeVela
 
 Helm is widely used in the Kubernetes ecosystem to package and distribute applications. A Helm chart packages the Kubernetes resources and configuration required to deploy an application.
 
@@ -28,7 +28,7 @@ With the introduction of KubeVela's **native Helm provider**, Helm charts can be
 
 This also means that Helm chart fetching and processing happen directly as part of KubeVela's application reconciliation.
 
-```
+```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -49,7 +49,6 @@ spec:
           replicaCount: 1
           service:
             type: ClusterIP
-
 ```
 
 ## Project Details
@@ -108,13 +107,15 @@ The new cache was then integrated into KubeVela's Helm provider while keeping He
 
 ## Project Outcomes
 
-The project resulted in a reusable, memory-bounded cache implementation for KubeVela.
+The mentorship resulted in a reusable, memory-bounded caching foundation for KubeVela, with the native Helm provider as the primary use case.
+
+The implementation addressed the original problem of unbounded cache growth by combining LRU eviction with byte-based capacity and TTL-based expiration. This allows the cache to retain frequently used entries while keeping its memory consumption within a configurable limit.
 
 The main capabilities include:
 
 #### 1. Generic LRU caching with configurable byte limits.
 
-```
+```go
 type LRUStore[K comparable, V any] struct {
 	store *hashicorp.Cache[K, *lruCache[V]]
 	// maximumMemory Maximum Memory byte size of the cache
@@ -136,7 +137,7 @@ type LRUStore[K comparable, V any] struct {
 
 #### 2. Per-entry TTL support.
 
-```
+```go
 type lruCache[V any] struct {
 	data           V
 	cacheDuration  time.Duration
@@ -148,11 +149,12 @@ type lruCache[V any] struct {
 
 #### 3. Byte-pressure eviction based on the configured memory budget.
 
-#### 4. Lazy expiration of expired entries.
+![Byte Pressure Eviction](/img/blog/lfx-helm-lru-cache/byte-pressure-eviction.png)
 
-#### 5. Periodic background cleanup.
+#### 4. Periodic background cleanup.
 
-```
+
+```go
 func (l *LRUStore[K, V]) run(ctx context.Context) {
 	ticker := time.NewTicker(l.sweepInterval)
 	defer ticker.Stop()
@@ -175,12 +177,22 @@ func (l *LRUStore[K, V]) run(ctx context.Context) {
 	}
 }
 ```
+![Background sweep](/img/blog/lfx-helm-lru-cache/background-sweep.png)
 
-#### 6. Prometheus metrics for cache hits, misses, and current cache memory.
+#### 5. Observability
+Making the cache memory-bounded was only part of the problem; it was also important to make its behavior visible. Prometheus metrics were added to track cache hits, misses, evictions and eviction reasons, along with current memory usage. This provides visibility into how the cache behaves during reconciliation and how much memory it is actually retaining.
 
-The Helm caching strategy also moves toward storing compressed chart archives instead of keeping large parsed chart objects in memory. This is expected to significantly reduce the memory footprint of cached Helm charts.
+These capabilities together make the cache more predictable and easier to operate: frequently used entries can remain cached, stale entries can expire, memory pressure can trigger eviction, and the resulting behavior can be observed through metrics.
 
-The cache has also been placed in KubeVela's central `pkg` repository, providing a common foundation that can be reused by other components instead of maintaining separate cache implementations.
+For the Helm provider, the caching strategy also moves toward storing compressed chart archives rather than retaining large parsed chart objects in memory. This adds another layer of memory optimization by reducing the amount of data that needs to remain resident in the controller.
+
+The cache has also been placed in KubeVela's central `pkg` repository, making it a reusable building block for other components instead of maintaining separate cache implementations across the project.
+
+## Cache in Action
+<video controls width="700" align="center">
+  <source src="/img/blog/lfx-helm-lru-cache/lru-cache-demo.mp4" type="video/mp4"/>
+  Your browser does not support the video tag.
+</video>
 
 ## Future Outlook
 
@@ -192,8 +204,12 @@ As more components adopt the shared cache, it can become a common building block
 
 ## Conclusion
 
-Over the course of this mentorship, I had the opportunity to work on a real scalability and resource-management problem in a Kubernetes-based project.
+What started as a problem of unbounded Helm chart caching turned into an opportunity to understand a much larger part of KubeVela's architecture.
 
-The project took me from understanding KubeVela's reconciliation and Helm provider to designing and integrating a reusable, memory-bounded cache. It also gave me hands-on experience working with Go, Kubernetes, Helm, concurrency, caching, and Prometheus observability in a production-oriented open-source codebase.
+Throughout the mentorship, I worked across the reconciliation flow, native Helm provider, shared caching infrastructure, concurrency, memory management, and Prometheus observability. More importantly, I experienced how an open-source engineering problem evolves from an issue into a design, implementation, review, and integration within an existing project.
 
-I am grateful to my mentors and the KubeVela community for their guidance and reviews throughout the mentorship. Participating in LFX Mentorship has been a great opportunity to contribute to a CNCF project and become more involved in the cloud-native open-source community.
+The final result was a reusable LRU cache with a configurable memory boundary that can be used beyond the Helm provider, while providing the foundation for more predictable cache behavior across KubeVela.
+
+Working on KubeVela also gave me a better understanding of the engineering challenges involved in building infrastructure around Kubernetes. Instead of solving a problem in isolation, I had to consider existing abstractions, compatibility with other components, maintainability, and how the solution could be useful to the wider project.
+
+I am grateful to my mentors [Ayush Kumar](https://github.com/roguepikachu) and [Vishal Kumar](https://github.com/vishal210893) and the KubeVela community for their guidance and reviews throughout the mentorship. Participating in LFX Mentorship has been a great opportunity to contribute to a CNCF project and become more involved in the cloud-native open-source community.
