@@ -10,9 +10,9 @@ image: https://raw.githubusercontent.com/oam-dev/KubeVela.io/main/docs/resources
 hide_table_of_contents: false
 ---
 
-Hello, I'm Kavish Parikh (GitHub: [kash2104](https://github.com/kash2104)). In this blog, I want to share my experience participating as an LFX Mentee under the KubeVela project.
+Hello, I'm [Kavish Parikh](https://github.com/kash2104). In this blog, I want to share my experience participating as an LFX Mentee under the KubeVela project.
 
-My mentorship project, **LRU Cache Eviction for the Native Helm Provider**, focused on improving how KubeVela caches Helm charts during application reconciliation. Over the course of the mentorship, I worked on designing a memory-bounded LRU cache, integrating it into KubeVela, and making the cache reusable across different components of the project.
+My mentorship project, [**LRU Cache Eviction for the Native Helm Provider**](https://mentorship.lfx.linuxfoundation.org/project/e103d436-d906-413c-ae93-8aa4bffff377), focused on improving how KubeVela caches Helm charts during application reconciliation. Over the course of the mentorship, I worked on designing a memory-bounded LRU cache, integrating it into KubeVela, and making the cache reusable across different components of the project.
 
 <!-- truncate -->
 
@@ -20,13 +20,13 @@ My mentorship project, **LRU Cache Eviction for the Native Helm Provider**, focu
 
 Helm is widely used in the Kubernetes ecosystem to package and distribute applications. A Helm chart packages the Kubernetes resources and configuration required to deploy an application.
 
-KubeVela allows applications to be composed using different **Component** types, where each component forms part of an application.
+KubeVela allows applications to be composed using different **Component** types, where each component forms part of an application. In addition to components, an application can include Traits, Policies, and Workflow Steps to define its behavior, configuration, and deployment process.
 
-Historically, KubeVela's `helm` Component was provided through the **FluxCD addon**. The addon included the Helm ComponentDefinition and the FluxCD controllers required for Helm chart delivery. Users who wanted to deploy a Helm chart through KubeVela therefore had to enable the FluxCD addon first.
+Historically, helm charts were deployed through the **FluxCD addon**. The addon included the Helm ComponentDefinition and the FluxCD controllers required for Helm chart delivery. Users who wanted to deploy a Helm chart through KubeVela therefore had to enable the FluxCD addon first. The dedicated `helmchart` component was introduced later.
 
-With the introduction of KubeVela's **native Helm provider**, Helm charts can be handled directly by KubeVela without relying on the FluxCD addon. The native provider can fetch and process charts from sources such as Helm repositories, OCI registries, and chart URLs.
+KubeVela later introduced the native [helmchart component]( https://kubevela.io/docs/end-user/components/references#helmchart), bringing Helm chart support directly into KubeVela through CueX providers. Instead of relying on FluxCD, the native component can fetch and render Helm charts directly from sources such as Helm repositories, OCI registries, and chart URLs.
 
-This also means that Helm chart fetching and processing happen directly as part of KubeVela's application reconciliation.
+This makes Helm chart processing part of KubeVela's own application delivery workflow, allowing charts to be handled directly during application reconciliation without requiring an external Helm delivery controller.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -53,7 +53,7 @@ spec:
 
 ## Project Details
 
-During reconciliation, the _*helm chart component*_ fetches the chart from sources such as a Helm repository, URL, or OCI registry, processes it, and renders the resulting Kubernetes resources.
+During reconciliation, the _*helmchart component*_ fetches the chart from sources such as a Helm repository, URL, or OCI registry, processes it, and renders the resulting Kubernetes resources.
 
 KubeVela continuously reconciles applications, so without caching, the Helm component could repeatedly download the same chart during each reconciliation, resulting in unnecessary requests and processing.
 
@@ -69,11 +69,21 @@ This created a risk of the controller eventually running out of memory.
 
 The goal of the project was therefore to introduce an **LRU cache with a configurable byte limit**, allowing frequently used charts to remain cached while reclaiming memory when the cache reaches its configured capacity.
 
-**Project Link** : https://mentorship.lfx.linuxfoundation.org/project/e103d436-d906-413c-ae93-8aa4bffff377
+**Project Link** : [**CNCF - KubeVela: LRU Cache Eviction for the Native Helm Provider (2026 Term 2)**](https://mentorship.lfx.linuxfoundation.org/project/e103d436-d906-413c-ae93-8aa4bffff377)
 
 **Project Mentors** : [Ayush Kumar](https://github.com/roguepikachu), [Vishal Kumar](https://github.com/vishal210893)
 
-**Tracking Issue** : https://github.com/kubevela/kubevela/issues/7106
+**Tracking Issue** : [**[Feature][LFX Mentorship] Helm Chart LRU Cache Eviction Strategy for Native Helm Provider**](https://github.com/kubevela/kubevela/issues/7106)
+
+**Pull Requests**
+- [Introduce generic cache interface](https://github.com/kubevela/pkg/pull/131)
+- [Introduce configurable LRU cache](https://github.com/kubevela/pkg/pull/138)
+- [Use generalized cache for StepStatusCache](https://github.com/kubevela/workflow/pull/240)
+- [Use LRU for rate limiter cache](https://github.com/kubevela/workflow/pull/249)
+- [Update StepStatusCache implementation](https://github.com/kubevela/kubevela/pull/7246)
+- [Update provider cache to use LRU for Helm charts](https://github.com/kubevela/kubevela/pull/7326)
+
+**Testing** : [How was caching tested?](https://gist.github.com/kash2104/8afd32c18c71bc13712a52834e275aa9)
 
 ## Application and Development
 
@@ -81,7 +91,7 @@ The first step was understanding how caching was already being used across KubeV
 
 Different parts of the project had their own cache implementations based on `sync.Map`. Since the main goal was to introduce a reusable LRU cache, it made sense to first establish a common cache abstraction that could be shared by different KubeVela components.
 
-Generic cache package was introduced in the central `pkg` repository. This provided a common interface for cache consumers while keeping the underlying implementation separate from the components using it.
+Generic cache package was introduced in the central [`pkg`](https://github.com/kubevela/pkg) repository. This provided a common interface for cache consumers while keeping the underlying implementation separate from the components using it.
 
 With this foundation in place, the existing workflow cache could be migrated to use the shared abstraction, along with its consumers in the main KubeVela repository.
 
@@ -179,20 +189,29 @@ func (l *LRUStore[K, V]) run(ctx context.Context) {
 ```
 ![Background sweep](/img/blog/lfx-helm-lru-cache/background-sweep.png)
 
-#### 5. Observability
+#### 5. Configurable Cache Settings
+The Vela core also exposes CLI flags to configure the cache without changing the implementation. These settings allow operators to control the cache memory budget, cleanup frequency, and TTLs for different types of Helm chart versions.
+
+| Flag | Description |
+|------|-------------|
+| `--helm-cache-max-bytes` | Maximum memory available for the Helm chart cache. |
+| `--helm-cache-sweep-interval` | Interval at which expired cache entries are cleaned up. |
+| `--helm-cache-immutable-ttl` | TTL for immutable (SemVer) chart versions. |
+| `--helm-cache-mutable-ttl` | TTL for mutable chart tags. |
+
+This makes the cache behavior configurable based on the deployment's workload and resource constraints, while still allowing individual components to provide their own cache TTL settings where needed.
+
+#### 6. Observability
 Making the cache memory-bounded was only part of the problem; it was also important to make its behavior visible. Prometheus metrics were added to track cache hits, misses, evictions and eviction reasons, along with current memory usage. This provides visibility into how the cache behaves during reconciliation and how much memory it is actually retaining.
 
 These capabilities together make the cache more predictable and easier to operate: frequently used entries can remain cached, stale entries can expire, memory pressure can trigger eviction, and the resulting behavior can be observed through metrics.
 
 For the Helm provider, the caching strategy also moves toward storing compressed chart archives rather than retaining large parsed chart objects in memory. This adds another layer of memory optimization by reducing the amount of data that needs to remain resident in the controller.
 
-The cache has also been placed in KubeVela's central `pkg` repository, making it a reusable building block for other components instead of maintaining separate cache implementations across the project.
+The cache has also been placed in KubeVela's central [`pkg`](https://github.com/kubevela/pkg) repository which contains shared libraries and utilities for writing KubeVela ecosystem controllers, making it a reusable building block for other components instead of maintaining separate cache implementations across the project.
 
 ## Cache in Action
-<video controls width="700" align="center">
-  <source src="/img/blog/lfx-helm-lru-cache/lru-cache-demo.mp4" type="video/mp4"/>
-  Your browser does not support the video tag.
-</video>
+<iframe width="720" height="480" src="https://www.youtube.com/embed/01Cm4P3B2Xs" title="Youtube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Future Outlook
 
