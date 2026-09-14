@@ -6,7 +6,7 @@ title:  Overview of GitOps
 This section will introduce how to use KubeVela in GitOps area and why.
 :::
 
-GitOps is a continuous delivery method that allows developers to automatically deploy applications by changing code and declarative configurations in a Git repository, with "git-centric" operations such as PR and commit. For detailed benefits of GitOps, you can refer to [this blog](https://www.weave.works/blog/what-is-gitops-really).
+GitOps is a continuous delivery method that allows developers to automatically deploy applications by changing code and declarative configurations in a Git repository, with "git-centric" operations such as PR and commit. For detailed benefits of GitOps, you can refer to [this blog](https://web.archive.org/web/20231124194854/https://www.weave.works/blog/what-is-gitops-really).
 
 KubeVela as a declarative application delivery control plane can be naturally used in GitOps approach, and this will provide below extra bonus to end users alongside with GitOps benefits:
 
