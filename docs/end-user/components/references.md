@@ -865,6 +865,33 @@ The chart cache is in-memory and scoped to the vela-core controller pod. It rese
  immutableTTL | TTL for pinned (immutable) versions such as `1.2.3` or `v2.0.0`. | string | false | "24h" 
  mutableTTL | TTL for floating versions such as `latest`, `dev`, or `-SNAPSHOT`. | string | false | "5m" 
 
+The Helm chart cache can also be configured at the `vela-core` controller level using the following CLI flags:
+
+ Name | Description | Type | Default 
+ ---- | ----------- | ---- | -------- 
+ `--helm-cache-max-bytes` | Maximum number of bytes that can be used by the Helm chart cache. Set to `0` to allow the cache to grow without a byte limit. | int64 | `256MB` 
+ `--helm-cache-sweep-interval` | Interval at which the cache sweeps expired entries. | duration | `60s` 
+ `--helm-cache-immutable-ttl` | Default TTL for immutable (SemVer) chart versions when `immutableTTL` is not specified by the component. | duration | `24h` 
+ `--helm-cache-mutable-ttl` | Default TTL for mutable chart tags when `mutableTTL` is not specified by the component. | duration | `5m`
+
+The `--helm-cache-max-bytes` flag sets the maximum memory budget for the Helm chart cache. When the configured limit is reached, the least-recently-used entries are evicted to make room for new entries.
+
+The `--helm-cache-sweep-interval` flag controls how frequently expired entries are removed from the cache. Expired entries are also checked when accessed, so an expired chart is not returned even if the next background sweep has not occurred yet.
+
+For the helm charts, the cache is configured to use byte-based capacity. The provider stores compressed chart data as `[]byte`, so the size of each cached entry is calculated from the length of its byte representation:
+
+```go
+func chartCacheOptions() cache.Options[string, []byte] {
+	return cache.Options[string, []byte]{
+		MaxSize:  0,
+		MaxBytes: 256 << 20, // 256MB
+		SizeOf: func(key string, value []byte) int64 {
+			return int64(len(value))
+		},
+		SweepInterval: 60 * time.Second,
+	}
+}
+```
 
 ### Known limitations (helmchart)
 
