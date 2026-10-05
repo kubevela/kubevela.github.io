@@ -47,7 +47,7 @@ The spec are as follows:
   description: string     The help info in UI
   uiType: string          The react component type in UI
   sort: int               The sort number
-  disabled: bool          Disable this field.
+  disable: bool          Disable this field.
   style:  
     colSpan: int          Defines the number of grids for the form, with 24 representing 100% width.
   conditions:             Control whether fields are enabled or disabled by certain conditions.
