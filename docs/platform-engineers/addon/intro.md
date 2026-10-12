@@ -8,6 +8,10 @@ Here's a blog introduces [how to build addon from scratch using redis operator a
 If you want to create an addon using an existing helm chart, you can refer to this [section](#initializing-an-addon-structure) to quickly get started without going through a detailed introduction.
 :::
 
+:::note
+Looking to install an existing addon declaratively, for example from Git? See [Install an Addon as a Component](./addon-as-component.md).
+:::
+
 ## Quick start
 
 We provided the vela CLI tool to help you quickly create an addon structure with examples. Optionally, it can be based on existing Helm Charts or online resources using [reference objects](https://kubevela.io/docs/end-user/components/ref-objects).
