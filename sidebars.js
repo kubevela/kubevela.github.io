@@ -306,6 +306,19 @@ module.exports = {
           ],
         },
         {
+          type: 'category',
+          label: 'Modules',
+          collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'platform-engineers/module/intro',
+          },
+          items: [
+            'platform-engineers/module/module-as-component',
+            'platform-engineers/module/addon-with-modules',
+          ],
+        },
+        {
           'Cloud Resources': [
             'platform-engineers/addon/terraform',
             'platform-engineers/components/component-terraform',

@@ -183,14 +183,9 @@ Set `skipVersionValidation: true` to bypass the check. Use it only when a declar
 
 ## Install modules with an addon
 
-An addon can reference external modules with a `modules/_imports.cue` file. When the addon is rendered through the `addon` component, each enabled import is added to the inner `addon-<name>` Application as a `type: module` component, with the module name and, when set, the registry and exact version of the import.
+An addon can import [modules](../module/intro.md) with a `modules/_imports.cue` file. When the addon is rendered through the `addon` component, each enabled import is added to the inner `addon-<name>` Application as a `type: module` component that depends on the addon's own `resources/` components. The module's CRDs and definitions are therefore applied only after those components are healthy. This also needs the `EnableModuleComponent` feature gate.
 
-The module components depend on the addon's own `resources/` components. The module's CRDs and compositions are therefore applied only after the addon's operators are healthy. A `type: module` component that the addon already declares in its own `template.cue` is used as it is.
-
-Two limits apply today:
-
-- An import must declare exactly one entry in `sources`.
-- The `versions` filter of a source is not enforced. Every enabled API line in the fetched module is installed.
+See [Use Modules in an Addon](../module/addon-with-modules.md).
 
 ## Use it next to `vela addon enable`
 
