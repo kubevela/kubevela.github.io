@@ -300,7 +300,22 @@ module.exports = {
             'platform-engineers/addon/addon-yaml',
             'reference/topology-rule',
             'platform-engineers/addon/addon-registry',
+            'platform-engineers/addon/addon-oci-registry',
+            'platform-engineers/addon/addon-as-component',
             'platform-engineers/system-operation/enable-addon-offline',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Modules',
+          collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'platform-engineers/module/intro',
+          },
+          items: [
+            'platform-engineers/module/module-as-component',
+            'platform-engineers/module/addon-with-modules',
           ],
         },
         {
