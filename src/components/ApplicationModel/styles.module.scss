@@ -1,0 +1,127 @@
+// The homepage drawings' palette, so this diagram matches them.
+.figure {
+  --dg-ink: #0f172a;
+  --dg-accent: #3b82f6;
+  --dg-card: #ffffff;
+  margin: 8px 0 28px;
+  padding: 16px 16px 4px;
+  overflow-x: auto;
+  background: color-mix(in srgb, var(--dg-ink) 2%, var(--dg-card));
+  border: 1px solid var(--kv-line);
+  border-radius: 12px;
+  :global(html[data-theme='dark']) & {
+    --dg-ink: #f1f5f9;
+    --dg-card: #0f172a;
+  }
+}
+
+.dg {
+  display: block;
+  width: 100%;
+  min-width: 640px;
+  height: auto;
+  text {
+    font-family: var(--ifm-font-family-monospace);
+  }
+}
+
+.panel,
+.card {
+  fill: var(--dg-card);
+  stroke: color-mix(in srgb, var(--dg-ink) 14%, transparent);
+}
+
+.bar {
+  stroke: color-mix(in srgb, var(--dg-ink) 10%, transparent);
+}
+
+.dot {
+  fill: color-mix(in srgb, var(--dg-ink) 14%, transparent);
+}
+
+.file {
+  fill: color-mix(in srgb, var(--dg-ink) 50%, transparent);
+  font-size: 11px;
+}
+
+.band {
+  fill: color-mix(in srgb, var(--dg-accent) 6%, transparent);
+}
+
+.edge {
+  fill: color-mix(in srgb, var(--dg-accent) 60%, transparent);
+}
+
+.code {
+  fill: var(--dg-ink);
+  font-size: 11px;
+  white-space: pre;
+}
+
+.key {
+  fill: color-mix(in srgb, var(--dg-accent) 75%, var(--dg-ink));
+}
+
+.read {
+  fill: var(--dg-accent);
+  font-weight: 700;
+}
+
+.num {
+  fill: color-mix(in srgb, var(--dg-ink) 30%, transparent);
+  font-size: 10px;
+}
+
+.mark {
+  fill: var(--dg-accent);
+}
+
+.markSoft {
+  fill: color-mix(in srgb, var(--dg-accent) 50%, transparent);
+}
+
+.tick {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.title {
+  fill: var(--dg-ink);
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.what {
+  fill: color-mix(in srgb, var(--dg-accent) 80%, var(--dg-ink));
+  font-size: 10px;
+}
+
+.body {
+  fill: color-mix(in srgb, var(--dg-ink) 60%, transparent);
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: 11px;
+}
+
+.flow,
+.reads {
+  fill: none;
+  stroke: var(--dg-accent);
+  stroke-width: 1.5;
+}
+
+.reads {
+  stroke-dasharray: 3 3;
+}
+
+.readsLabel {
+  fill: var(--dg-accent);
+  font-size: 9.5px;
+  font-weight: 700;
+}
+
+.head {
+  fill: var(--dg-accent);
+}

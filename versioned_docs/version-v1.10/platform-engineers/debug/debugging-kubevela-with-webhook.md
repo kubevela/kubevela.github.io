@@ -135,7 +135,7 @@ If you're using Rancher Desktop or other tools that occupy port 9443, change `We
 ![Webhook Config Code](/img/1.10/debug/webhook-config-code.png)
 ## Step 3: Start the Controller in Debug Mode
 
-Configure your IDE to run the controller in debug mode. See [Debugging KubeVela Controllers](./debugging-kubevela-controllers) for detailed IDE setup instructions.
+Configure your IDE to run the controller in debug mode. See [Debugging KubeVela Controllers](./debugging-kubevela-controllers.md) for detailed IDE setup instructions.
 
 ### Verify Webhook Server is Running
 

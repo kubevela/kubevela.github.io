@@ -2,9 +2,11 @@
 title: Application Version Control
 ---
 
+import ApplicationRevisionArch from '@site/src/components/ApplicationRevisionArch';
+
 ## Introduction
 
-![overall-arch](../resources/application-revision-arch.jpg)
+<ApplicationRevisionArch />
 
 In KubeVela, ApplicationRevision keeps the snapshot of the application and all its runtime dependencies such as ComponentDefinition, external Policy or referred objects.
 This revision can be used to review the application changes and rollback to past configurations.

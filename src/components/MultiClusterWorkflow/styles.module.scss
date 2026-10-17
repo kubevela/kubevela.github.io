@@ -1,0 +1,164 @@
+// The homepage drawings' palette, so this diagram matches them.
+.figure {
+  --dg-ink: #0f172a;
+  --dg-accent: #3b82f6;
+  --dg-card: #ffffff;
+  margin: 8px 0 28px;
+  padding: 16px 16px 8px;
+  overflow-x: auto;
+  background: color-mix(in srgb, var(--dg-ink) 2%, var(--dg-card));
+  border: 1px solid var(--kv-line);
+  border-radius: 12px;
+  :global(html[data-theme='dark']) & {
+    --dg-ink: #f1f5f9;
+    --dg-card: #0f172a;
+  }
+}
+
+.dg {
+  display: block;
+  width: 100%;
+  min-width: 640px;
+  height: auto;
+  text {
+    font-family: var(--ifm-font-family-monospace);
+  }
+}
+
+.card,
+.chip {
+  fill: var(--dg-card);
+  stroke: color-mix(in srgb, var(--dg-ink) 14%, transparent);
+}
+
+// A box drawn behind others, or a group that holds cards.
+.group {
+  fill: color-mix(in srgb, var(--dg-accent) 5%, var(--dg-card));
+  stroke: color-mix(in srgb, var(--dg-accent) 30%, transparent);
+}
+
+.app {
+  fill: var(--dg-card);
+  stroke: color-mix(in srgb, var(--dg-accent) 65%, transparent);
+  stroke-width: 1.5;
+}
+
+// Something outside the Application, referred to rather than owned.
+.external {
+  fill: var(--dg-card);
+  stroke: color-mix(in srgb, var(--dg-ink) 35%, transparent);
+  stroke-dasharray: 4 3;
+}
+
+.optional {
+  fill: none;
+  stroke: color-mix(in srgb, var(--dg-accent) 55%, transparent);
+  stroke-dasharray: 3 3;
+}
+
+.divider {
+  stroke: color-mix(in srgb, var(--dg-ink) 20%, transparent);
+  stroke-dasharray: 4 4;
+}
+
+.title {
+  fill: var(--dg-ink);
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.big {
+  fill: var(--dg-ink);
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.chipText {
+  fill: color-mix(in srgb, var(--dg-ink) 85%, transparent);
+  font-size: 11.5px;
+}
+
+.note {
+  fill: color-mix(in srgb, var(--dg-ink) 60%, transparent);
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: 11px;
+}
+
+.italic {
+  fill: color-mix(in srgb, var(--dg-ink) 55%, transparent);
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: 10.5px;
+  font-style: italic;
+}
+
+.label {
+  fill: color-mix(in srgb, var(--dg-ink) 50%, transparent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.flowLabel {
+  fill: var(--dg-accent);
+  font-size: 10.5px;
+  font-weight: 700;
+  // A halo in the figure's colour, so a label reads cleanly across a line.
+  stroke: color-mix(in srgb, var(--dg-ink) 2%, var(--dg-card));
+  stroke-width: 5px;
+  paint-order: stroke;
+}
+
+.flow,
+.dashed {
+  fill: none;
+  stroke: var(--dg-accent);
+  stroke-width: 1.5;
+}
+
+.dashed {
+  stroke-dasharray: 4 4;
+}
+
+.head {
+  fill: var(--dg-accent);
+}
+
+.mark {
+  fill: var(--dg-accent);
+}
+
+.markSoft {
+  fill: color-mix(in srgb, var(--dg-accent) 50%, transparent);
+}
+
+.tick {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.sail {
+  color: var(--dg-ink);
+}
+
+.device {
+  fill: color-mix(in srgb, var(--dg-accent) 30%, var(--dg-card));
+  stroke: color-mix(in srgb, var(--dg-accent) 60%, transparent);
+}
+
+// Logos sit on light tiles, which only show in dark mode, so dark marks stay
+// legible.
+.tile {
+  fill: transparent;
+  :global(html[data-theme='dark']) & {
+    fill: #e2e8f0;
+  }
+}
+
+// The workflow drawn as a broad arrow behind its steps.
+.band {
+  fill: color-mix(in srgb, var(--dg-accent) 8%, var(--dg-card));
+}

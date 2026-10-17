@@ -2,9 +2,11 @@
 title: High Availability Deploy
 ---
 
+import HaDeploy from '@site/src/components/HaDeploy';
+
 If you're using KubeVela in production, make sure they're deployed in high availability mode like the architecture below.
 
-![](../../resources/ha-deploy.jpg)
+<HaDeploy />
 
 
 ## KubeVela Core Controller

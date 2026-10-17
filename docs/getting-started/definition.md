@@ -2,11 +2,13 @@
 title: Definition
 ---
 
+import DefinitionCapabilities from '@site/src/components/DefinitionCapabilities';
+
 OAM Definitions are basic building blocks of the KubeVela platform. A definition encapsulates an arbitrarily complex automation as a lego style module, then safely shared, discovered and be used to compose an Application delivered by any KubeVela engine.
 
 With the help of OAM definitions, the platform builder can easily adopt infrastructure capabilities from ecosystem, hide complexity with their best practices without losing any extensibility, the most important is the application won't be affected even if we change the capability providers.
 
-![alt](../resources/definition-cap.png)
+<DefinitionCapabilities />
 
 The picture above is an example of `helm` definition, we can use [FluxCD](https://fluxcd.io/) or [ArgoCD](https://argo-cd.readthedocs.io/) as Helm capability provider. Once the platform builder registered the definition written by [CUE](https://cuelang.org/), the end user can discover the helm capability and define application by referring to the type.
 
