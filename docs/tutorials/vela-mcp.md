@@ -89,7 +89,8 @@ restrict the server to one namespace:
 vela mcp config --namespace team-a
 ```
 
-For clients that register servers with their own command, print a command line instead:
+For clients that register servers with their own `mcp add` command, print the server
+command and arguments that go after it:
 
 ```shell
 vela mcp config --format command

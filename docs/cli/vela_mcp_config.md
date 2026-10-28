@@ -6,7 +6,7 @@ Print the server entry an AI client needs to start vela mcp.
 
 ### Synopsis
 
-Print the server entry an AI client needs to start vela mcp. Nothing is written: each client keeps its own configuration format, so the entry is printed either as the mcpServers JSON block most clients accept, or as a command line for a client's own "mcp add" command.
+Print the server entry an AI client needs to start vela mcp. Nothing is written: each client keeps its own configuration format, so the entry is printed either as the mcpServers JSON block most clients accept, or as the server's own command and arguments, which go after a client's "mcp add".
 
  The entry points at the absolute path of this vela binary and carries the server flags given here. The server uses the kubeconfig and context of the client process that starts it, so start the client from a shell pointed at the cluster you mean.
 
@@ -33,7 +33,7 @@ vela mcp config [flags]
       --allow-resume                   Register resume_workflow, which continues a workflow paused for approval. Off by default.
       --allow-write                    Register apply_application. Without --direct-namespace it only returns YAML for a pull request. Off by default.
       --direct-namespace stringArray   Allow direct mode, confirmed by the user in their client, in this namespace. Repeat for more than one. Refused at start if it matches --production-pattern.
-      --format string                  Output format: json for an mcpServers block, or command for a client's own mcp add command. (default "json")
+      --format string                  Output format: json for an mcpServers block, or command for the server command and arguments a client's mcp add takes. (default "json")
   -h, --help                           help for config
       --name string                    Server name in the JSON block. (default "kubevela")
       --namespace stringArray          Restrict Application, resource and log reads to this namespace, including resources an Application manages elsewhere. Repeat for more than one; empty means any namespace RBAC allows. Definitions, addons and clusters in the system namespace stay readable.

@@ -90,8 +90,8 @@ document and the running revision, and returns:
 
 - is valid for 15 minutes and works once;
 - is bound to the exact document bytes, the revision it was compared with, and the live
-  Application's generation and labels and annotations. If any of them changes, the agent
-  has to diff again.
+  Application's UID, generation, labels and annotations. If any of them changes, including
+  a delete and recreate under the same name, the agent has to diff again.
 
 ### 2. Risk classes
 
@@ -135,7 +135,8 @@ A direct write needs your explicit confirmation:
   without asking.
 - **One prompt, one write.** Each prompt is tied to a single use and expires with the token.
 - **No lost updates.** The write only succeeds if the Application has not changed since
-  the diff.
+  the diff. A status write by the controller during the apply is retried, but only after
+  the same checks pass again.
 
 Never let an agent answer the prompt for you. It exists so that a person approves the change.
 
