@@ -15,7 +15,7 @@ Availability: `app.oam.dev/reconcile-interval` is supported in KubeVela v1.11+.
 
 - Faster drift detection for critical production Applications
 - Slower reconciliation for low-priority or rarely changing Applications, to reduce API server load
-- Keeping a short interval on selected Applications even when the cluster-wide period is raised (for example under `ApplyOnce`)
+- Keeping a shorter requeue interval on selected Applications when the cluster-wide `--application-re-sync-period` is raised
 
 ## Annotation format
 
@@ -30,13 +30,13 @@ Invalid values (empty string, malformed text, negative durations) are also ignor
 
 ## Precedence
 
-The annotation always takes priority over the global `--application-re-sync-period`, including when the `ApplyOnce` feature gate raises that global period (for example to 10 hours). An opted-in Application can therefore keep fast drift detection on an `ApplyOnce` cluster.
+The annotation always takes priority over the global `--application-re-sync-period`. When the annotation is absent, the Application uses the global default as before.
 
-When the annotation is absent, the Application uses the global default as before.
+Enabling the `ApplyOnce` feature gate sets that global period to `--informer-sync-period` (default `10h`) and disables State Keep for the cluster. The annotation can still shorten the requeue interval for an opted-in Application, but it does not turn State Keep back on. See [bootstrap parameters](../../platform-engineers/system-operation/bootstrap-parameters.md) for the gate and related flags. This is separate from the per-Application [`apply-once` policy](../policies/apply-once.md), which skips selected fields while State Keep continues.
 
 ## Scope
 
-The annotation only changes the post-reconcile requeue interval (the periodic State Keep cadence). Other reconcile triggers still fire immediately:
+The annotation only changes the post-reconcile requeue interval used for periodic State Keep when State Keep is enabled. Other reconcile triggers still fire immediately:
 
 - Application spec changes
 - Events on owned resources
