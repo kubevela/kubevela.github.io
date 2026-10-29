@@ -12,7 +12,7 @@ KubeVela periodically reconciles Applications to keep resources in sync (State K
 
 ## Pause reconciliation
 
-KubeVela will not reconcile an `Application` when you add the label. Reconciling will only resume after the label is removed.
+KubeVela skips reconciliation for an `Application` while the label is set to `"true"`. Reconciliation resumes when the label is removed or set to another value.
 
 ```yaml
 metadata:
