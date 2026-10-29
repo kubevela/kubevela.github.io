@@ -113,7 +113,7 @@ Enabling the `ApplyOnce` feature gate sets that global period to `--informer-syn
 
 ### Scope
 
-The annotation only changes the post-reconcile requeue interval used for periodic State Keep when State Keep is enabled. Other reconcile triggers still fire immediately:
+The annotation only changes the post-reconcile requeue interval. Periodic State Keep uses that interval only when State Keep is enabled. Other reconcile triggers still fire immediately:
 
 - Application spec changes
 - Events on owned resources
