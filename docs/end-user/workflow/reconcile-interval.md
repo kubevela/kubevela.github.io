@@ -89,12 +89,3 @@ kubectl annotate application prod-checkout \
 kubectl annotate application prod-checkout \
   app.oam.dev/reconcile-interval- -n <namespace>
 ```
-
-## Related controls
-
-| Control | Effect on reconciliation |
-| --- | --- |
-| `app.oam.dev/reconcile-interval` | Changes how often periodic State Keep requeues this Application |
-| [`controller.core.oam.dev/pause`](./suspending-application-reconciliation.md) | Stops reconciliation for the Application entirely |
-| [`apply-once` policy](../policies/apply-once.md) | Reconciliation continues, but selected fields are not reverted |
-| `--application-re-sync-period` | Cluster-wide default interval; see [bootstrap parameters](../../platform-engineers/system-operation/bootstrap-parameters.md) |
