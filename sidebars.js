@@ -173,7 +173,6 @@ module.exports = {
             'tutorials/cloud-shell',
             'tutorials/vela-top',
             'end-user/workflow/suspending-application-reconciliation',
-            'end-user/workflow/reconcile-interval',
             {
               type: 'category',
               label: 'Config Management',
