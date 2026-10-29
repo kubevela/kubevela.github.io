@@ -12,7 +12,7 @@ KubeVela periodically reconciles Applications to keep resources in sync (State K
 
 ## Pause reconciliation
 
-Add the pause label to stop the controller from reconciling an Application. Reconciliation resumes when the label is removed.
+KubeVela will not reconcile an `Application` when you add the label. Reconciling will only resume after the label is removed.
 
 ```yaml
 metadata:
@@ -20,30 +20,31 @@ metadata:
     controller.core.oam.dev/pause: "true"
 ```
 
-Use this when you need to:
+This is useful when you need to:
 
-- Perform manual operations on underlying resources (for example debug or triage in staging) without KubeVela reverting your changes
-- Quiet non-critical services during off-hours
-- Prevent State Keep from overwriting temporary changes while you investigate an incident
+- Perform manual operations on underlying resources (e.g., debug/triage in staging) without KubeVela reverting your changes.
+- Downscale or quiet non-critical services during weekends/off-hours.
+- Prevent State Keep (periodic re-apply) from overwriting temporary/manual changes while you investigate incidents.
 
-Availability: `controller.core.oam.dev/pause` is supported in KubeVela v1.9+. Older releases (v1.8 and earlier) do not support this label.
+Availability: `controller.core.oam.dev/pause` is supported in KubeVela v1.9+. Older releases (≤ v1.8) do not support this label.
 
 ### How to use
 
-Pause reconciliation:
+Pause reconciliation
 
 ```bash
 kubectl label application <app-name> \
   controller.core.oam.dev/pause=true -n <namespace> --overwrite
 ```
 
-Resume reconciliation:
+Resume reconciliation
 
 ```bash
+# Remove the label
 kubectl label application <app-name> controller.core.oam.dev/pause- -n <namespace>
 ```
 
-Full YAML example:
+Full YAML example
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -64,7 +65,7 @@ spec:
 
 ### Expected outcome
 
-While the label is `"true"`, the Application is ignored by the controller:
+While the label is set to `"true"`, the Application is ignored by the controller:
 
 - No reconcile loop for that Application
 - No State Keep (drift correction)
@@ -72,13 +73,25 @@ While the label is `"true"`, the Application is ignored by the controller:
 
 When you remove the label (or set it to something other than `"true"`), the controller resumes reconciliation and brings actual state back in line with the Application spec.
 
-Because reconcile is paused, any manual edits can drift from the desired spec. They will be reconciled back once you resume.
+**Reminder:** Because reconcile is paused, any manual edits you make can drift from the desired spec. They will be reconciled back once you resume.
 
-### Pause best practices
+### Differences vs. other controls
 
-- Add the pause label only for a hands-off window; remove it as soon as you are done
-- Prefer pausing in staging or non-prod first
-- Pausing happens at the control plane where the Application lives; no further changes are pushed to registered target clusters while paused
+| Control | Scope | Reconcile / State-Keep | Typical use case |
+| --- | --- | --- | --- |
+| **`controller.core.oam.dev/pause` label** | Whole Application | **Stopped** | Temporary, explicit hands-off period for the entire app (e.g., staging triage, maintenance) |
+| **`app.oam.dev/reconcile-interval` annotation** | Whole Application | Runs on a **custom** State Keep cadence | Faster or slower periodic drift checks per app without changing the global `--application-re-sync-period` |
+| **Workflow `suspend`** | Workflow engine only | **Continues** | Pause an in-progress workflow step (e.g., manual approval) while still maintaining desired state |
+| **Workflow `terminate`** | Workflow engine only | Stops workflow; be careful with drift | Abort an executing workflow and later `restart` to re-run from the beginning |
+| **Policy: `apply-once`** | Selected fields/resources | Runs, but **skips** chosen fields | Let other controllers (HPA/KEDA/Istio) mutate fields like `spec.replicas` without Vela fighting back |
+| **Policy: `read-only`** | Selected resources | Runs, does **not** update selected resources | Freeze updates to specific resources while keeping the Application active |
+
+### Best practices
+
+- Use labels intentionally: Add the pause label only when you need a hands-off window; remove it as soon as you're done.
+- Audit & visibility: Label changes are regular Kubernetes metadata updates. Monitor via Events/audit logs.
+- Staging first: Prefer pausing in staging or non-prod contexts. In production, consider safer alternatives (e.g., apply-once on replicas + KEDA/CronHPA) unless you fully understand the operational impact.
+- Multi-cluster: Pausing happens at the control plane (where the Application lives). No further changes will be pushed to registered target clusters while paused.
 
 ## Per-application reconcile interval
 
