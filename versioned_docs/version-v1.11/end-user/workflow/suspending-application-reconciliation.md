@@ -86,6 +86,7 @@ When you remove the label (or set it to something other than "true"), the contro
 | **Workflow `terminate`**                  | Workflow engine only      | Stops workflow; be careful with drift        | Abort an executing workflow and later `restart` to re-run from the beginning                         |
 | **Policy: `apply-once`**                  | Selected fields/resources | Runs, but **skips** chosen fields            | Let other controllers (HPA/KEDA/Istio) mutate fields like `spec.replicas` without Vela fighting back |
 | **Policy: `read-only`**                   | Selected resources        | Runs, does **not** update selected resources | Freeze updates to specific resources while keeping the Application active                            |
+| **[`app.oam.dev/reconcile-interval`](./reconcile-interval.md)** | Whole Application | Runs on a **custom** State Keep cadence | Faster or slower periodic drift checks per app without changing the global `--application-re-sync-period` |
 
 
 
