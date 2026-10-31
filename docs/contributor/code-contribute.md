@@ -19,18 +19,18 @@ This guide helps you get started developing KubeVela.
 
 ### Prerequisites
 
-* Golang version 1.19+
+* Go 1.27+, the version in KubeVela's `go.mod`
 
 <details>
   <summary>Install Golang</summary>
 
-1. Install go1.19 from [official site](https://go.dev/dl/). Unpack the binary and place it somewhere, assume it's in the home path `~/go/`, below is an example command, you should choose the right binary according to your system.
+1. Install Go 1.27 or later from the [official site](https://go.dev/dl/). Unpack the binary and place it somewhere, assume it's in the home path `~/go/`, below is an example command, you should choose the right binary according to your system.
   ```
-  wget https://go.dev/dl/go1.20.2.linux-amd64.tar.gz
-  tar xzf go1.20.2.linux-amd64.tar.gz
+  wget https://go.dev/dl/go1.27.1.linux-amd64.tar.gz
+  tar xzf go1.27.1.linux-amd64.tar.gz
   ```
 
-If you want to keep multiple golang version in your local develop environment, you can download the package and unfold it into some place, like `~/go/go1.19.1`, then the following commands should also change according to the path.
+If you want to keep multiple golang version in your local develop environment, you can download the package and unfold it into some place, like `~/go/go1.27.1`, then the following commands should also change according to the path.
 
 1. Set environment variables for Golang
 
@@ -86,7 +86,7 @@ mv kustomize ~/kubevela/bin/
 
 </details>
 
-* ginkgo 1.14.0+ (just for [E2E test](#e2e-test))
+* Ginkgo v2 (just for [E2E test](#e2e-test))
   ```
   go install github.com/onsi/ginkgo/v2/ginkgo@latest
   ```

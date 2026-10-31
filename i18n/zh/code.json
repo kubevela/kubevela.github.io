@@ -155,9 +155,6 @@
     "message": "Skip to main content",
     "description": "The skip to content label used for accessibility, allowing to rapidly navigate to main content with keyboard tab/enter navigation"
   },
-  "Make shipping applications more enjoyable.": {
-    "message": "让应用部署和管理更轻松！"
-  },
   "KubeVela models platform features (such as workloads, operational behaviors, and cloud services) as reusable": {
     "message": "KubeVela 将平台功能（如工作负载、运维操作行为和云服务）抽象建模为可重用的"
   },
@@ -281,7 +278,214 @@
     "message": "搜索",
     "description": "The ARIA label and placeholder for search button"
   },
-  "Microservice Ecosystem Landscape": {
-    "message": "微服务生态全景图"
+  "home.tagline": {
+    "message": "平台工程，化繁为简。"
+  },
+  "home.hero.cncf": {
+    "message": "CNCF 孵化项目"
+  },
+  "home.hero.title": {
+    "message": "平台工程，"
+  },
+  "home.hero.titleAccent": {
+    "message": "化繁为简。"
+  },
+  "home.hero.lead": {
+    "message": "构建内部平台的开源工具集。构建块只需定义一次；团队用它们组合应用和基础设施，KubeVela 负责交付并运行在每个集群和云上。"
+  },
+  "home.what.title": {
+    "message": "工作原理"
+  },
+  "home.what.lead": {
+    "message": "平台团队决定如何运行，应用团队决定运行什么，其余交给 KubeVela。"
+  },
+  "home.what.define.title": {
+    "message": "定义"
+  },
+  "home.what.define.who": {
+    "message": "平台工程师"
+  },
+  "home.what.define.body": {
+    "message": "每个构建块只需以 KubeVela 定义描述一次：数据源、组件、运维特征、策略和工作流步骤，用 CUE 或基于 defkit 的 Go 编写，并沉淀你的规范。"
+  },
+  "home.what.compose.title": {
+    "message": "组合"
+  },
+  "home.what.compose.who": {
+    "message": "应用团队"
+  },
+  "home.what.compose.body": {
+    "message": "用这些构建块在一份简短的描述中组装应用，只填写与自己相关的参数。"
+  },
+  "home.what.deliver.title": {
+    "message": "交付"
+  },
+  "home.what.deliver.who": {
+    "message": "KubeVela"
+  },
+  "home.what.deliver.body": {
+    "message": "运行应用的工作流，交付到它面向的每个集群和云，并持续保持其声明的状态。"
+  },
+  "home.readMore": {
+    "message": "了解更多"
+  },
+  "home.showcase.title": {
+    "message": "纵览整个平台"
+  },
+  "home.showcase.lead": {
+    "message": "VelaUX 是 KubeVela 的控制台，展示每个应用、它运行在哪里以及由什么组成，细至每个 Kubernetes 资源及其健康状态。"
+  },
+  "home.showcase.link": {
+    "message": "安装 VelaUX"
+  },
+  "home.showcase.resourceGraph": {
+    "message": "资源拓扑"
+  },
+  "home.showcase.applications": {
+    "message": "应用列表"
+  },
+  "home.showcase.applicationGraph": {
+    "message": "应用拓扑"
+  },
+  "home.integrations.title": {
+    "message": "与你已有的工具协同工作"
+  },
+  "home.integrations.delivery": {
+    "message": "交付"
+  },
+  "home.integrations.observability": {
+    "message": "可观测性"
+  },
+  "home.cncf": {
+    "message": "KubeVela 是云原生计算基金会（CNCF）的孵化项目。"
+  },
+  "home.toolkit.title": {
+    "message": "平台所需，一应俱全"
+  },
+  "home.toolkit.lead": {
+    "message": "一个开源工具集覆盖完整路径：从平台提供的构建块，到它们运行的集群。"
+  },
+  "home.toolkit.blocks.title": {
+    "message": "你的构建块"
+  },
+  "home.toolkit.blocks.body": {
+    "message": "将数据源、组件、运维特征、策略和工作流步骤以 KubeVela 定义一次性定义，使用 CUE 或 Go。像代码一样测试它们并进行版本管理，让每个团队都基于同一套经过验证的构建块，规范已内置其中。"
+  },
+  "home.toolkit.selfService.title": {
+    "message": "每个团队都能自助服务"
+  },
+  "home.toolkit.selfService.body": {
+    "message": "用 CUE 或基于 defkit 的 Go 编写构建块，其参数会生成 OpenAPI 模式。团队只需填写这些参数，可以用 YAML、命令行，或 VelaUX 根据该模式生成的表单。"
+  },
+  "home.toolkit.deliver.title": {
+    "message": "交付到任何地方"
+  },
+  "home.toolkit.deliver.body": {
+    "message": "工作流逐步发布，支持审批和条件判断，一份描述即可交付到任意数量的集群和云。"
+  },
+  "home.toolkit.infra.title": {
+    "message": "基础设施一并纳入"
+  },
+  "home.toolkit.infra.body": {
+    "message": "数据库、存储桶和队列同样是组件，由你的平台已在使用的工具创建，例如 Terraform、Crossplane、云厂商 Operator 或你自己的定义，并与使用它们的服务连接起来。"
+  },
+  "home.toolkit.operate.title": {
+    "message": "健康状态一目了然"
+  },
+  "home.toolkit.operate.body": {
+    "message": "按组件、按资源了解每个应用是否健康，覆盖它运行的每个集群。"
+  },
+  "home.toolkit.addons.title": {
+    "message": "通过插件扩展"
+  },
+  "home.toolkit.addons.body": {
+    "message": "从插件仓库安装插件，为你的平台带来新的 KubeVela 定义：用于 GitOps、云资源、可观测性或你自己能力的数据源、组件、运维特征、策略和工作流步骤。"
+  },
+  "home.toolkit.oam.title": {
+    "message": "基于开放应用模型（OAM）"
+  },
+  "home.toolkit.oam.body": {
+    "message": "KubeVela 实现了 {oam}，这一以组件、运维特征、策略和工作流描述应用的开放标准，并以数据源对其进行了扩展。你的平台 API 建立在可移植、厂商中立的模型之上，而不是绑定于某一个云或工具。"
+  },
+  "home.hero.try": {
+    "message": "试用 KubeVela"
+  },
+  "home.hero.docs": {
+    "message": "阅读文档"
+  },
+  "home.hero.star": {
+    "message": "在 GitHub 上加星"
+  },
+  "home.hero.stars": {
+    "message": "星标"
+  },
+  "home.community.title": {
+    "message": "加入社区"
+  },
+  "home.community.lead": {
+    "message": "KubeVela 由来自众多公司的贡献者共同打造，随时欢迎新朋友加入。"
+  },
+  "home.community.slack.title": {
+    "message": "在 Slack 上交流"
+  },
+  "home.community.slack.body": {
+    "message": "在 CNCF Slack 的 #kubevela 频道与用户和维护者一起提问、分享你正在构建的内容。"
+  },
+  "home.community.slack.join": {
+    "message": "加入 #kubevela"
+  },
+  "home.community.slack.invite": {
+    "message": "获取邀请"
+  },
+  "home.community.calls.title": {
+    "message": "社区会议"
+  },
+  "home.community.calls.body": {
+    "message": "社区每月举行会议，展示新功能、回顾路线图并解答问题，欢迎所有人参加。"
+  },
+  "home.community.calls.upcoming": {
+    "message": "近期会议"
+  },
+  "home.community.calls.recordings": {
+    "message": "观看录像"
+  },
+  "home.community.contribute.title": {
+    "message": "参与贡献"
+  },
+  "home.community.contribute.body": {
+    "message": "KubeVela 以开放的方式构建。认领一个 issue、提出新功能，或改进这些文档。"
+  },
+  "home.community.contribute.start": {
+    "message": "开始贡献"
+  },
+  "home.community.contribute.issues": {
+    "message": "适合新手的 issue"
+  },
+  "home.hero.slack": {
+    "message": "Slack 上的 #kubevela"
+  },
+  "home.community.calls.next": {
+    "message": "下次会议"
+  },
+  "home.community.calls.join": {
+    "message": "通过 Zoom 加入"
+  },
+  "home.integrations.clouds": {
+    "message": "云资源"
+  },
+  "home.integrations.security": {
+    "message": "安全与身份认证"
+  },
+  "home.integrations.registries": {
+    "message": "镜像仓库"
+  },
+  "home.integrations.clusters": {
+    "message": "集群与流量"
+  },
+  "home.toolkit.cuex.title": {
+    "message": "用 CueX 连接你自己的服务"
+  },
+  "home.toolkit.cuex.body": {
+    "message": "CueX 让定义突破模板的边界。内置包可以读取并操作 Kubernetes API，你自己的服务也能以包的形式加入：只需描述一次服务，所有定义都能调用它，由 CueX 转发请求并返回响应。"
   }
 }

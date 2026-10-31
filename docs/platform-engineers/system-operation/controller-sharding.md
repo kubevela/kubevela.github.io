@@ -2,6 +2,8 @@
 title: Controller Sharding
 ---
 
+import ControllerSharding from '@site/src/components/ControllerSharding';
+
 ## Background
 
 As many adopters start to choose KubeVela to manage large scale applications in their production, we have more and more scenarios and experiences on performance issue.
@@ -19,7 +21,7 @@ Therefore, KubeVela core controller supports sharding since v1.8 which allows ho
 
 ## Architecture
 
-![image](../../resources/vela-core-sharding-arch.jpg)
+<ControllerSharding />
 
 When KuebVela controller is running in sharding mode, multiple core controllers can work concurrently. Each one will focus on a specific subset of the applications, identified by `shard-id`. There will be one master controller and multiple slave controllers.
 

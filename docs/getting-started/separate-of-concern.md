@@ -2,6 +2,8 @@
 title: Separation of Concerns
 ---
 
+import HowItWorks from '@site/src/components/HowItWorks';
+
 KubeVela designs for separation of concerns, as a result, there're two roles of users:
 
 - **Platform Team**
@@ -13,7 +15,7 @@ The KubeVela community has also maintained a bundle of infrastructure capabiliti
 
 The work flow is shown as below:
 
-![alt](../resources/how-it-works.jpg)
+<HowItWorks />
 
 ## What's benefit?
 

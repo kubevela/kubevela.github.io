@@ -86,6 +86,6 @@ Docusaurus website is running at: http://localhost:3000/zh/
 - 不会翻译的词汇可以不翻译，可以在 PR 中说明，review 的时候会查看/修正。
 - 注意中英文标点符号。
 - 注意链接，中文的文档里对应的链接也用中文链接。
-  * 一般国外访问 https://kubevela.io ， 国内访问 https://kubevela.net 更快。
-  * 中文的文档有 `/zh` 后缀，如 `https://kubevela.net/zh/blog/2022/06/27/terraform-integrate-with-vela`。
+  * 文档站点为 https://kubevela.io 。
+  * 中文的文档有 `/zh` 后缀，如 `https://kubevela.io/zh/blog/2022/06/27/terraform-integrate-with-vela`。
 - `PR` 命名规范 `Translate <翻译文件相对路径>`，如 `Translate i18n/zh/docusaurus-plugin-content-docs/current/introduction.md`。

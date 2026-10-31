@@ -3,11 +3,16 @@ title: Introduction
 slug: /
 ---
 
+import DocCards from '@site/src/components/DocCards';
+import WhatIsKubeVela from '@site/src/components/WhatIsKubeVela';
+
+<DocCards />
+
 ## What is KubeVela?
 
 KubeVela is a modern software delivery and management control plane. The goal is to make deploying and operating applications across today's hybrid, multi-cloud environments easier, faster and more reliable. Welcome onboard and sail Vela!
 
-![](../resources/what-is-kubevela.jpg)
+<WhatIsKubeVela />
 
 ## Why KubeVela?
 

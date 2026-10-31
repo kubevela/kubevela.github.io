@@ -11,7 +11,7 @@ This guide provides comprehensive instructions for configuring remote debugging 
 Before you begin, ensure you have:
 
 - KubeVela source code cloned from [github.com/kubevela/kubevela](https://github.com/kubevela/kubevela)
-- [Go 1.19](https://go.dev/dl/) or later installed
+- [Go 1.27](https://go.dev/dl/) or later installed
 - A running Kubernetes cluster accessible via `~/.kube/config`
 - Docker installed for building container images
 - Access to a container registry (e.g., Docker Hub)
@@ -397,5 +397,5 @@ Do not modify the source code while debugging. The running container was built f
 
 - Learn about [Debugging KubeVela Controllers](./debugging-kubevela-controllers.md) for local debugging
 - Explore [Debugging with Webhook Integration](./debugging-kubevela-with-webhook.md) for webhook debugging
-- Check the [KubeVela Contributor Guide](../../contributor/overview) for more development resources
+- Check the [KubeVela Contributor Guide](../../contributor/overview.md) for more development resources
 

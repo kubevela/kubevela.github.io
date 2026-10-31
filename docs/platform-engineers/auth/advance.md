@@ -2,6 +2,8 @@
 title: Underlying Mechanism
 ---
 
+import ImpersonationArch from '@site/src/components/ImpersonationArch';
+
 KubeVela introduces Authentication & Authorization for application delivery and management from v1.4. This article will deep dives in the underlying mechanism and demonstrates how it works.
 
 > This underlying mechanism mainly focuses on the KubeVela application. VelaUX builds additional authentication and authorization layer on top of it.
@@ -128,7 +130,7 @@ Notice that Vela CLI only provides coarse-grained privileges management. If you 
 
 When Application Authentication is enabled in KubeVela, applications will not use KubeVela Controller's privileges to dispatch resources anymore. Instead, it will use the privileges of the identity who lastly created or modified it. It will prevent users to escalate their privileges through creating applications that manage resources outside their own privileges.
 
-![impersonation-arch](../../resources/impersonation-arch.jpg)
+<ImpersonationArch />
 
 The whole implementation process is based on the Kubernetes [impersonation mechanism](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#user-impersonation).
 

@@ -1,0 +1,1292 @@
+// The homepage's palette follows VelaUX: its slate neutrals, its primary blue
+// for actions, its graph blue for drawings and its status colours, in the
+// site's light or dark theme. The logo's own blue marks only the brand.
+
+.home {
+  --home-accent: #1b58f4;
+  --home-accent-text: #1b58f4;
+  --home-ink: #0f172a;
+  --home-text: #334155;
+  --home-muted: #64748b;
+  --home-surface: #ffffff;
+  --home-tint: #f8fafc;
+  --home-border: #e2e8f0;
+  --home-code-bg: #0f172a;
+  --home-ok: #16a34a;
+  --home-wait: #b45309;
+  --home-brand: #006fff;
+  --dg-ink: #0f172a;
+  --dg-accent: #3b82f6;
+  --dg-ok: #22c55e;
+  --dg-card: #ffffff;
+}
+
+:global(html[data-theme='dark']) .home {
+  --home-accent: #5b8cff;
+  --home-accent-text: #5b8cff;
+  --home-ink: #f1f5f9;
+  --home-text: #cbd5e1;
+  --home-muted: #94a3b8;
+  --home-surface: #111827;
+  --home-tint: #0b1220;
+  --home-border: #1f2937;
+  --home-code-bg: #020617;
+  --home-ok: #22c55e;
+  --home-wait: #f59e0b;
+  --home-brand: #3d8bff;
+  --dg-ink: #f1f5f9;
+  --dg-card: #0f172a;
+}
+
+// Hero
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 72px 0 88px;
+  text-align: center;
+  background: var(--home-surface);
+  &::before {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(38% 46% at 50% 26%, color-mix(in srgb, var(--dg-accent) 16%, transparent), transparent 70%);
+    content: '';
+    pointer-events: none;
+  }
+}
+
+.heroInner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.heroLogo {
+  display: block;
+  width: 220px;
+  height: auto;
+  margin-bottom: 8px;
+  color: var(--home-ink);
+  animation: heroRise 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroLogo {
+    animation: none;
+  }
+}
+
+// The name in the logo's colours: the hull's ink, then the sail's blue.
+.heroName {
+  margin: 0 0 18px;
+  color: var(--home-ink);
+  font-size: clamp(56px, 8vw, 96px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.heroBrand {
+  color: var(--home-brand);
+}
+
+.heroTitle {
+  margin: 0 0 18px;
+  color: var(--home-ink);
+  font-size: clamp(26px, 3.4vw, 40px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.heroLead {
+  max-width: 40em;
+  margin: 0 0 32px;
+  color: var(--home-muted);
+  font-size: 19px;
+  line-height: 1.6;
+  text-wrap: balance;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.buttonPrimary,
+.buttonGhost {
+  display: inline-flex;
+  align-items: center;
+  height: 46px;
+  padding: 0 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.buttonPrimary {
+  color: #fff;
+  background: #1b58f4;
+  &:hover {
+    color: #fff;
+    background: #1d4ed8;
+  }
+}
+
+.buttonGhost {
+  color: var(--home-ink);
+  border: 1px solid var(--home-border);
+  &:hover {
+    color: var(--home-ink);
+    border-color: var(--home-muted);
+  }
+}
+
+
+// The badge under the hero's buttons: the CNCF logo and the project's
+// standing, then its GitHub stars and Slack channel, each part its own link. The colour CNCF
+// logo shows on light and the white one on dark.
+.heroBadge {
+  // Equal parts, each as wide as the widest.
+  display: inline-grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 32px;
+  overflow: hidden;
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  border-radius: 999px;
+  box-shadow: 0 8px 24px -14px rgba(15, 23, 42, 0.35);
+}
+
+.heroBadgePart {
+  display: inline-flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  color: var(--home-ink);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: background 0.15s;
+  & + & {
+    border-left: 1px solid var(--home-border);
+  }
+  img {
+    display: block;
+    height: 30px;
+    width: auto;
+  }
+  strong {
+    font-weight: 800;
+  }
+  &:hover {
+    color: var(--home-ink);
+    text-decoration: none;
+    background: color-mix(in srgb, var(--home-brand) 7%, transparent);
+  }
+}
+
+// The GitHub and Slack marks in the badge.
+.githubMark {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+// CNCF's incubating project mark, its logo over an Incubating Project bar.
+.heroBadgePart img.cncfIncubating {
+  height: 46px;
+  margin: -6px 0;
+}
+
+.cncfDivider {
+  width: 1px;
+  height: 26px;
+  background: var(--home-border);
+}
+
+.cncfDark {
+  display: none !important;
+}
+
+:global(html[data-theme='dark']) {
+  .cncfLight {
+    display: none !important;
+  }
+  .cncfDark {
+    display: block !important;
+  }
+}
+
+// Drawings, shared by the delivery drawing and each feature's.
+.home :global {
+  .dg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dg *,
+    .dg-instance {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+  .dg * {
+    transition:
+      fill 0.3s ease,
+      stroke 0.3s ease,
+      stroke-dashoffset 0.45s ease-in-out,
+      opacity 0.4s ease;
+  }
+  .dg-card > rect:first-child {
+    fill: color-mix(in srgb, var(--dg-ink) 4%, var(--dg-card));
+    stroke: color-mix(in srgb, var(--dg-ink) 14%, transparent);
+  }
+  .dg-app.on > rect:first-child {
+    stroke: color-mix(in srgb, var(--dg-accent) 65%, transparent);
+  }
+  .dg-component {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition:
+      opacity 0.25s ease,
+      transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.35);
+    &.on {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .dg-block {
+    fill: color-mix(in srgb, var(--dg-ink) 6%, var(--dg-card));
+    stroke: color-mix(in srgb, var(--dg-ink) 20%, transparent);
+  }
+  .dg-type {
+    fill: var(--dg-accent);
+  }
+  .dg-component:nth-of-type(2) .dg-type {
+    fill: color-mix(in srgb, var(--dg-accent) 75%, var(--dg-ink) 10%);
+  }
+  .dg-component:nth-of-type(3) .dg-type {
+    fill: color-mix(in srgb, var(--dg-accent) 55%, var(--dg-ink) 15%);
+  }
+  .dg-trait,
+  .dg-trait-badge {
+    fill: color-mix(in srgb, var(--dg-accent) 50%, transparent);
+  }
+  .dg-trait {
+    opacity: 0;
+    transform: translateX(-6px);
+    transform-box: fill-box;
+    transition:
+      opacity 0.25s ease 0.15s,
+      transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.35) 0.15s;
+  }
+  .dg-component.on .dg-trait.on {
+    opacity: 1;
+    transform: none;
+  }
+  .dg-line {
+    fill: color-mix(in srgb, var(--dg-ink) 16%, transparent);
+    &.strong {
+      fill: color-mix(in srgb, var(--dg-ink) 34%, transparent);
+    }
+  }
+  .dg-text {
+    fill: color-mix(in srgb, var(--dg-ink) 78%, transparent);
+    font-family: var(--ifm-font-family-monospace);
+    font-size: 9.5px;
+    &.strong {
+      fill: var(--dg-ink);
+      font-weight: 600;
+    }
+    &.muted {
+      fill: color-mix(in srgb, var(--dg-ink) 50%, transparent);
+      font-size: 8px;
+    }
+    &.title {
+      fill: var(--dg-ink);
+      font-family: var(--ifm-font-family-base);
+      font-size: 12px;
+      font-weight: 700;
+    }
+  }
+  .dg-edge,
+  .dg-flow {
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  .dg-edge {
+    stroke: color-mix(in srgb, var(--dg-ink) 12%, transparent);
+  }
+  // A line is hidden until it draws: undrawn, its round cap would show as a
+  // dot.
+  .dg-flow {
+    stroke: var(--dg-accent);
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 0;
+    &.on {
+      stroke-dashoffset: 0;
+      opacity: 1;
+      transition:
+        stroke-dashoffset 0.45s ease-in-out,
+        opacity 0s;
+    }
+  }
+  .dg-step {
+    circle {
+      fill: var(--dg-card);
+      stroke: color-mix(in srgb, var(--dg-ink) 26%, transparent);
+      stroke-width: 2;
+    }
+    path {
+      fill: none;
+      stroke: #fff;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0;
+    }
+    &.on {
+      circle {
+        fill: var(--dg-accent);
+        stroke: var(--dg-accent);
+      }
+      path {
+        opacity: 1;
+      }
+    }
+  }
+  .dg-dot,
+  .dg-pod {
+    fill: color-mix(in srgb, var(--dg-ink) 16%, transparent);
+  }
+  .dg-cluster.on,
+  .dg-resource.on {
+    .dg-dot,
+    .dg-pod {
+      fill: var(--dg-ok);
+    }
+  }
+  .dg-cluster.on > rect:first-child,
+  .dg-resource.on > rect:first-child {
+    stroke: color-mix(in srgb, var(--dg-ok) 50%, transparent);
+  }
+  .dg-resource {
+    > rect:first-child {
+      stroke-dasharray: 4 3;
+    }
+    &.on > rect:first-child {
+      stroke-dasharray: none;
+    }
+    .dg-cloud {
+      fill: color-mix(in srgb, #f59e0b 22%, transparent);
+      stroke: color-mix(in srgb, #f59e0b 60%, transparent);
+    }
+  }
+
+  // How it works: definitions are written, then the ones the application
+  // uses are marked and the rest fade.
+  .dg-def {
+    opacity: 0;
+    transform: translateX(-8px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.35s ease;
+    &.on {
+      opacity: 1;
+      transform: none;
+    }
+    &.used > rect:first-child {
+      stroke: color-mix(in srgb, var(--dg-accent) 60%, transparent);
+    }
+    &.unused {
+      opacity: 0.4;
+    }
+  }
+  // An instance appears over its definition, lifted, then moves into the
+  // application's dashed slot.
+  .dg-instance {
+    opacity: 0;
+    transition:
+      transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+      opacity 0.25s ease,
+      filter 0.3s ease;
+    &.spawned {
+      opacity: 1;
+      filter: drop-shadow(0 6px 8px rgba(15, 23, 42, 0.22));
+    }
+    &.placed {
+      filter: none;
+    }
+  }
+  .dg-step-icon path {
+    stroke-width: 1.4;
+  }
+  .dg-slot {
+    fill: none;
+    stroke: color-mix(in srgb, var(--dg-ink) 16%, transparent);
+    stroke-dasharray: 4 3;
+    transition: opacity 0.2s ease 0.45s;
+    &.filled {
+      opacity: 0;
+    }
+  }
+  // In How it works, a step appears as the line reaches it, and a cluster
+  // starts empty: its database comes up, then its pods scale in.
+  .dg-how {
+    .dg-step {
+      opacity: 0;
+      transition: opacity 0.2s ease 0.3s;
+      circle {
+        transition-delay: 0.3s;
+      }
+      &.on {
+        opacity: 1;
+      }
+    }
+    .dg-pod {
+      fill: var(--dg-ok);
+      opacity: 0;
+      transform: scale(0.2);
+      transform-box: fill-box;
+      transform-origin: center;
+      transition:
+        opacity 0.2s ease,
+        transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.4);
+    }
+    .dg-cluster.on .dg-pod {
+      opacity: 1;
+      transform: none;
+    }
+    .dg-db {
+      opacity: 0;
+      transform: translateY(4px);
+      transition:
+        opacity 0.25s ease,
+        transform 0.3s ease;
+      path,
+      ellipse {
+        fill: color-mix(in srgb, var(--dg-ok) 22%, var(--dg-card));
+        stroke: var(--dg-ok);
+        stroke-width: 1.4;
+      }
+    }
+    .dg-cluster.on .dg-db {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .dg-code-line {
+    fill: color-mix(in srgb, var(--dg-ink) 18%, transparent);
+    transform: scaleX(0);
+    transform-box: fill-box;
+    transform-origin: left center;
+    transition: transform 0.35s ease;
+  }
+  .dg-def.on .dg-code-line {
+    transform: none;
+  }
+  .dg-text.stage.dg-row-label {
+    font-size: 7.5px;
+  }
+  .dg-text.muted.dg-row-what {
+    font-size: 7.2px;
+  }
+  // The KubeVela sail in the Application's corner: its hull takes the ink.
+  .dg-sail {
+    color: var(--dg-ink);
+  }
+  // The OAM Spec links to oam.dev.
+  .dg-spec-link:hover .dg-spec > path:first-child {
+    stroke: var(--dg-accent);
+  }
+  // The OAM Spec, a page with a folded corner.
+  .dg-spec {
+    path {
+      fill: color-mix(in srgb, var(--dg-ink) 4%, var(--dg-card));
+      stroke: color-mix(in srgb, var(--dg-ink) 18%, transparent);
+    }
+    .dg-fold {
+      fill: color-mix(in srgb, var(--dg-ink) 10%, var(--dg-card));
+    }
+  }
+  // The plus on KubeVela's additions to the spec.
+  .dg-kv-tag {
+    fill: color-mix(in srgb, var(--dg-accent) 14%, transparent);
+    stroke: color-mix(in srgb, var(--dg-accent) 45%, transparent);
+  }
+  // An arrow from the spec to the Application, gone once its pieces arrive.
+  .dg-carry {
+    transition: opacity 0.4s ease;
+    &.gone {
+      opacity: 0;
+    }
+  }
+  .dg-carry-head {
+    fill: var(--dg-accent);
+    opacity: 0;
+    transition: opacity 0.2s ease 0.35s;
+    &.on {
+      opacity: 1;
+    }
+  }
+  // A trait's badge on the corner of the component it is attached to.
+  .dg-trait-corner {
+    fill: color-mix(in srgb, var(--dg-accent) 50%, var(--dg-card));
+    stroke: var(--dg-card);
+    stroke-width: 1.5;
+  }
+  .dg-flow.dg-trait-link {
+    stroke-width: 1.5;
+  }
+  .dg-kv-plus {
+    stroke: var(--dg-accent);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+  }
+  .dg-text.stage {
+    fill: color-mix(in srgb, var(--dg-ink) 50%, transparent);
+    font-family: var(--ifm-font-family-base);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .dg-codecard {
+    rect {
+      fill: #0f172a;
+      stroke: rgba(148, 163, 184, 0.2);
+    }
+  }
+  // A definition's slot for a value it is waiting on, filled when it arrives.
+  .dg-slot-fill {
+    fill: none;
+    stroke: color-mix(in srgb, var(--dg-ink) 18%, transparent);
+    stroke-dasharray: 4 3;
+    &.on {
+      fill: color-mix(in srgb, var(--dg-ok) 16%, var(--dg-card));
+      stroke: color-mix(in srgb, var(--dg-ok) 55%, transparent);
+      stroke-dasharray: none;
+    }
+  }
+  // A response on its way back, drawn in the healthy green.
+  .dg-flow.dg-return {
+    stroke: var(--dg-ok);
+  }
+  // The self-service drawing's editor: its tabs, typed code and cursor.
+  .dg-tab {
+    // Tabs switch at once, with the code they show.
+    rect,
+    text {
+      transition: none;
+    }
+    rect {
+      fill: rgba(148, 163, 184, 0.12);
+    }
+    text {
+      fill: #94a3b8;
+      font-family: var(--ifm-font-family-base);
+      font-size: 8px;
+      font-weight: 600;
+    }
+    &.on {
+      rect {
+        fill: var(--dg-accent);
+      }
+      text {
+        fill: #fff;
+      }
+    }
+  }
+  .dg-code.dg-code-typed {
+    font-size: 7.4px;
+  }
+  // The generated CUE fades in when its tab shows.
+  .dg-generated {
+    animation: dgFadeIn 0.4s ease both;
+  }
+  .dg-code.dg-note {
+    fill: #64748b;
+    font-style: italic;
+  }
+  // A pointer glides onto Deploy and presses it.
+  .dg-pointer {
+    opacity: 0;
+    transition:
+      transform 0.5s cubic-bezier(0.3, 0.7, 0.2, 1),
+      opacity 0.2s ease;
+    &.shown {
+      opacity: 1;
+    }
+    path {
+      fill: #0f172a;
+      stroke: #fff;
+      stroke-width: 1;
+      stroke-linejoin: round;
+    }
+  }
+  .dg-button.pressed rect {
+    transform: scale(0.94);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .dg-button.on.done text {
+    font-size: 9px;
+  }
+  .dg-button.on.done rect {
+    fill: var(--home-ok);
+    transform: none;
+  }
+  .dg-cursor {
+    fill: #e2e8f0;
+    animation: dgPulse 0.8s step-end infinite;
+  }
+  .dg-code {
+    fill: #94a3b8;
+    font-family: var(--ifm-font-family-monospace);
+    font-size: 9.5px;
+    white-space: pre;
+    .k {
+      fill: #93c5fd;
+    }
+    .t {
+      fill: #fbbf24;
+    }
+  }
+  .dg-input {
+    fill: var(--dg-card);
+    stroke: color-mix(in srgb, var(--dg-ink) 20%, transparent);
+  }
+  .dg-value {
+    opacity: 0;
+    &.on {
+      opacity: 1;
+    }
+  }
+  .dg-button {
+    rect {
+      fill: color-mix(in srgb, var(--dg-ink) 10%, transparent);
+    }
+    text {
+      fill: color-mix(in srgb, var(--dg-ink) 50%, transparent);
+      font-family: var(--ifm-font-family-base);
+      font-size: 10px;
+      font-weight: 600;
+    }
+    &.on {
+      rect {
+        fill: var(--dg-accent);
+      }
+      text {
+        fill: #fff;
+      }
+    }
+  }
+  .dg-panel > rect:first-child {
+    fill: var(--dg-card);
+  }
+  .dg-pill {
+    rect {
+      fill: color-mix(in srgb, var(--dg-ink) 8%, transparent);
+    }
+    .dg-pill-dot {
+      fill: color-mix(in srgb, var(--dg-ink) 30%, transparent);
+    }
+    text {
+      fill: color-mix(in srgb, var(--dg-ink) 55%, transparent);
+      font-family: var(--ifm-font-family-base);
+      font-size: 9px;
+      font-weight: 600;
+    }
+    &.wait {
+      rect {
+        fill: color-mix(in srgb, var(--home-wait) 16%, transparent);
+      }
+      .dg-pill-dot {
+        fill: var(--home-wait);
+        animation: dgPulse 1.4s ease-in-out infinite;
+      }
+      text {
+        fill: var(--home-wait);
+      }
+    }
+    &.ok {
+      rect {
+        fill: color-mix(in srgb, var(--dg-ok) 16%, transparent);
+      }
+      .dg-pill-dot {
+        fill: var(--dg-ok);
+      }
+      text {
+        fill: var(--home-ok);
+      }
+    }
+  }
+  .dg-row {
+    &.installed .dg-block {
+      stroke: color-mix(in srgb, var(--dg-ok) 45%, transparent);
+    }
+    .dg-dot {
+      &.ok {
+        fill: var(--dg-ok);
+      }
+      &.wait {
+        fill: var(--home-wait);
+        animation: dgPulse 1.4s ease-in-out infinite;
+      }
+    }
+  }
+}
+
+.howGraph {
+  max-width: 900px;
+  margin: 0 auto 56px;
+}
+
+// The drawings' keyframes are global: the drawings' classes are, and name them
+// unscoped.
+@keyframes :global(dgFadeIn) {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes :global(dgPulse) {
+  50% {
+    opacity: 0.6;
+  }
+}
+
+// Sections
+
+.section {
+  padding: 88px 0;
+  color: var(--home-text);
+  background: var(--home-surface);
+}
+
+.sectionTinted {
+  background: var(--home-tint);
+  border-top: 1px solid var(--home-border);
+  border-bottom: 1px solid var(--home-border);
+}
+
+.sectionHead {
+  max-width: 720px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.sectionTitle {
+  margin: 0 0 12px;
+  color: var(--home-ink);
+  font-size: clamp(28px, 3.4vw, 38px);
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.sectionLead {
+  margin: 0;
+  color: var(--home-muted);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.more {
+  color: var(--home-accent-text);
+  font-size: 15px;
+  font-weight: 600;
+  &::after {
+    content: ' \2192';
+  }
+}
+
+// How it works
+
+// The three steps sit on one track, numbered in order, running from the
+// brand blue of what is defined to the green of what is running.
+.track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  &::before {
+    position: absolute;
+    top: 21px;
+    right: 16.6%;
+    left: 16.6%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--home-brand), var(--dg-ok));
+    content: '';
+    opacity: 0.55;
+  }
+}
+
+.trackStep {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  text-align: center;
+  h3 {
+    margin: 0 0 8px;
+    color: var(--home-ink);
+    font-size: 24px;
+    letter-spacing: -0.01em;
+  }
+  p {
+    max-width: 30ch;
+    margin: 12px 0 10px;
+    font-size: 15.5px;
+    line-height: 1.6;
+  }
+  .more {
+    margin-top: auto;
+  }
+}
+
+.trackNode {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--home-brand);
+  font-weight: 800;
+  font-size: 17px;
+  background: var(--home-tint);
+  border: 2px solid var(--home-brand);
+  border-radius: 50%;
+  .trackStep:last-child & {
+    color: var(--home-ok);
+    border-color: var(--dg-ok);
+  }
+}
+
+.trackGlyph {
+  width: 168px;
+  margin: 20px 0 18px;
+  padding: 14px 16px;
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px -18px rgba(15, 23, 42, 0.35);
+}
+
+.trackWho {
+  padding: 3px 10px;
+  color: var(--home-brand);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--home-brand) 10%, transparent);
+  border-radius: 999px;
+  .trackStep:last-child & {
+    color: var(--home-ok);
+    background: color-mix(in srgb, var(--dg-ok) 12%, transparent);
+  }
+}
+
+// Toolkit
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  border-radius: 14px;
+}
+
+// A wide card with its drawing on the right.
+.featureWide.featureReverse {
+  flex-direction: row-reverse;
+  .featureVisual {
+    border-right: none;
+    border-left: 1px solid var(--home-border);
+  }
+}
+
+// The OAM and CueX cards span the row, each drawing beside its text.
+.featureWide {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  .featureVisual {
+    flex: 0 0 46%;
+    border-right: 1px solid var(--home-border);
+    border-bottom: none;
+  }
+  .featureText {
+    align-self: center;
+    padding: 28px 36px;
+    h3 {
+      font-size: 24px;
+    }
+    p {
+      max-width: 52ch;
+      font-size: 16px;
+    }
+  }
+}
+
+.featureVisual {
+  padding: 22px 20px 18px;
+  background: var(--home-tint);
+  border-bottom: 1px solid var(--home-border);
+}
+
+.featureText {
+  padding: 20px 22px 22px;
+  h3 {
+    margin: 0 0 8px;
+    color: var(--home-ink);
+    font-size: 19px;
+  }
+  p {
+    margin: 0 0 12px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+}
+
+// Showcase
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 8px 16px;
+  color: var(--home-muted);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  background: transparent;
+  border: 1px solid var(--home-border);
+  border-radius: 999px;
+  cursor: pointer;
+  &:hover {
+    color: var(--home-ink);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--home-accent);
+    outline-offset: 2px;
+  }
+}
+
+.tabOn {
+  color: #fff;
+  background: var(--home-accent);
+  border-color: var(--home-accent);
+  &:hover {
+    color: #fff;
+  }
+}
+
+.browser {
+  max-width: 1100px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  border-radius: 12px;
+  box-shadow: 0 24px 60px -24px rgba(15, 23, 42, 0.35);
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
+.browserBar {
+  display: flex;
+  gap: 6px;
+  padding: 10px 14px;
+  background: var(--home-tint);
+  border-bottom: 1px solid var(--home-border);
+  i {
+    width: 10px;
+    height: 10px;
+    background: var(--home-border);
+    border-radius: 50%;
+  }
+}
+
+// Integrations
+
+.groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.group {
+  padding: 22px 24px;
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  border-radius: 12px;
+}
+
+.groupTitle {
+  margin: 0 0 14px;
+  color: var(--home-muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tools {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tool {
+  white-space: nowrap;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 0;
+  padding: 8px 10px;
+  color: var(--home-ink);
+  font-size: 14.5px;
+  font-weight: 500;
+  border-radius: 8px;
+  img {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+  }
+}
+
+// Community
+
+.ways {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.way {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 26px 24px;
+  background: var(--home-surface);
+  border: 1px solid var(--home-border);
+  border-radius: 14px;
+  h3 {
+    margin: 16px 0 8px;
+    color: var(--home-ink);
+    font-size: 20px;
+  }
+  p {
+    margin: 0 0 18px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+}
+
+.wayIcon {
+  width: 36px;
+  height: 36px;
+  color: var(--home-ink);
+}
+
+// The next community call, in the calls card.
+.nextCall {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: -6px 0 18px !important;
+  padding: 10px 14px;
+  background: var(--home-tint);
+  border: 1px solid var(--home-border);
+  border-radius: 10px;
+  span {
+    color: var(--home-muted);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  a,
+  strong {
+    color: var(--home-ink);
+    font-size: 16px;
+    font-weight: 700;
+  }
+}
+
+.wayLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  align-items: center;
+  margin-top: auto;
+}
+
+.wayPrimary {
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 16px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  background: #1b58f4;
+  border-radius: 8px;
+  &:hover {
+    color: #fff;
+    text-decoration: none;
+    background: #1d4ed8;
+  }
+}
+
+// CNCF
+
+.cncf {
+  padding: 64px 0 72px;
+  border-top: 1px solid var(--home-border);
+  text-align: center;
+  background: var(--home-surface);
+  p {
+    margin: 0 0 20px;
+    color: var(--home-muted);
+    font-size: 16px;
+  }
+}
+
+// Narrow screens
+
+@media (max-width: 996px) {
+  .track,
+  .groups,
+  .ways {
+    grid-template-columns: 1fr;
+  }
+  .track::before {
+    display: none;
+  }
+  .features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  // On a phone each tool stacks its logo over its name, keeping rows of three.
+  .groups .group {
+    padding: 18px 12px;
+  }
+  .tool {
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px 2px;
+    font-size: 12.5px;
+    text-align: center;
+    white-space: normal;
+  }
+  .featureWide,
+  .featureWide.featureReverse {
+    flex-direction: column;
+    .featureVisual {
+      border-left: none;
+      border-right: none;
+      border-bottom: 1px solid var(--home-border);
+    }
+    .featureText {
+      padding: 20px 22px 22px;
+      h3 {
+        font-size: 19px;
+      }
+      p {
+        font-size: 15px;
+      }
+    }
+  }
+  .hero {
+    padding: 48px 0 64px;
+  }
+  .heroLogo {
+    width: 150px;
+  }
+  // On a phone the CNCF part takes the top row, GitHub and Slack the next.
+  .heroBadge {
+    grid-template-columns: 1fr 1fr;
+    border-radius: 18px;
+  }
+  .heroBadgePart {
+    gap: 8px;
+    justify-content: center;
+    padding: 8px 10px;
+    font-size: 13px;
+    white-space: nowrap;
+    &:first-child {
+      grid-column: 1 / -1;
+      border-bottom: 1px solid var(--home-border);
+    }
+    &:nth-child(2) {
+      border-left: none;
+    }
+    img {
+      height: 22px;
+    }
+    img.cncfIncubating {
+      height: 40px;
+      margin: -4px 0;
+    }
+  }
+  .section {
+    padding: 64px 0;
+  }
+  .heroLead {
+    font-size: 17px;
+  }
+  .features {
+    grid-template-columns: 1fr;
+  }
+}

@@ -293,7 +293,7 @@ This field defines the field path of the trait which is used to store the refere
 
 If this field is set, KubeVela core will automatically fill the workload reference into target field of the trait. Then the trait controller can get the workload reference from the trait latter. So this field usually accompanies with the traits whose controllers relying on the workload reference at runtime. 
 
-For example, when this field set in the following custom trait:
+For example, when this field is set in the following custom trait, whose `Scaler` resource is served by a controller of your own:
   ```yaml
   apiVersion: core.oam.dev/v1beta1
   kind: TraitDefinition
@@ -305,8 +305,8 @@ For example, when this field set in the following custom trait:
       cue:
         template: |
           outputs: scaler: {
-            apiVersion: "core.oam.dev/v1alpha2"
-            kind:       "ManualScalerTrait"
+            apiVersion: "scaling.example.com/v1"
+            kind:       "Scaler"
             spec: {
               replicaCount: parameter.replicas
             }
@@ -320,8 +320,8 @@ For example, when this field set in the following custom trait:
 
 The controller will automatically inject the apiVersion/Kind/Name of the workload defined in the component into the field specified in `workloadRefPath`, the result of the trait object in the app can be something like below, assume the workload is a Kubernetes Deployment:
   ```yaml
-  apiVersion: "core.oam.dev/v1alpha2"
-  kind:       "ManualScalerTrait"
+  apiVersion: "scaling.example.com/v1"
+  kind:       "Scaler"
   spec:
     workloadRef:
       apiVersion: apps/v1
