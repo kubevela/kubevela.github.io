@@ -80,7 +80,10 @@ gets `apply_application`, and every apply follows the same path.
 ### 1. Plan: diff first, always
 
 The agent calls `diff_application` with the Application document. The server renders the
-document and the running revision, and returns:
+document with today's definitions and the running revision with the definitions that
+revision recorded, so the comparison shows everything an apply would change. If a
+definition changed since the revision, its effect is part of the change set and a warning
+names the definition. The result has:
 
 - every resource that would be added, modified or removed, with the fields that differ;
 - a risk class, with every rule that fired;
