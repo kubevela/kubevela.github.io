@@ -115,7 +115,7 @@ Return one KubeVela definition's parameter schema as JSON Schema, with required 
 
 | Field | Type | Description |
 |---|---|---|
-| `default` | boolean | True when this is the platform default for the namespace in the request. Use it and name the alternatives; ask the user only when no option is default and they differ materially. |
+| `default` | boolean | True when this is the platform default for the namespace in the request. Use it and name the alternatives; when several fit and none is default, ask the user to choose. |
 | `defaultFor` | array of string | Namespaces where the platform made this the default among definitions providing the same capability; * means every namespace. |
 | `description` | string | One-line description the definition declares. |
 | `latestRevision` | string | Name of the definition's latest DefinitionRevision. |
@@ -288,7 +288,7 @@ Explain one KubeVela definition from its live object: what kinds its template pr
 | `abstract` | boolean | True when the definition is abstract and is only extended, never used directly. |
 | `alias` | string | Short alias the definition declares. |
 | `consumers` | object | Applications that use this definition, within the namespaces the server may read. |
-| `default` | boolean | True when this is the platform default for the namespace in the request. Use it and name the alternatives; ask the user only when no option is default and they differ materially. |
+| `default` | boolean | True when this is the platform default for the namespace in the request. Use it and name the alternatives; when several fit and none is default, ask the user to choose. |
 | `defaultFor` | array of string | Namespaces where the platform made this the default among definitions providing the same capability; * means every namespace. |
 | `deprecated` | boolean | True when the definition is marked deprecated. |
 | `description` | string | One-line description the definition declares. |

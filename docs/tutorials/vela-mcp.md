@@ -105,11 +105,17 @@ vela mcp config --format command
 ### Claude Code
 
 ```shell
-claude mcp add kubevela -- $(vela mcp config --format command)
+eval "claude mcp add --scope user kubevela -- $(vela mcp config --format command)"
 ```
 
-Run it in a shell pointed at the right cluster. Add `--scope user` to make the server
-available in every project. Inside a session, `/mcp` shows whether `kubevela` connected.
+`--format command` prints the server command shell-quoted, and `eval` keeps a `vela` path
+with spaces in it as one argument. `--scope user` makes the server available in every
+project; drop it to register it for the current repository only.
+
+Claude Code starts the server with its own environment, so the cluster is whichever one
+the shell that started Claude Code points at, not the one you ran `claude mcp add` from.
+To pin a kubeconfig, add `-e KUBECONFIG=/absolute/path` before `kubevela`. Inside a
+session, `/mcp` shows whether `kubevela` connected.
 
 ### Cursor
 
@@ -118,12 +124,13 @@ Merge the `kubevela` entry printed by `vela mcp config` into the `mcpServers` ob
 
 ### Codex
 
-Put the printed `command` and `args` into `~/.codex/config.toml`:
+Put the printed `command` and `args` into `~/.codex/config.toml`, copying `args` exactly
+as printed, including every server flag. For `vela mcp config --namespace team-a`:
 
 ```toml
 [mcp_servers.kubevela]
 command = "/usr/local/bin/vela"
-args = ["mcp"]
+args = ["mcp", "--namespace", "team-a"]
 ```
 
 ### Gemini CLI
@@ -252,8 +259,8 @@ The server talks to one control plane: the one in its kubeconfig context. To swi
 control planes, register one server entry per context, each with its own name and kubeconfig:
 
 ```shell
-claude mcp add kubevela-staging -e KUBECONFIG=$HOME/.kube/staging -- $(vela mcp config --format command)
-claude mcp add kubevela-prod -e KUBECONFIG=$HOME/.kube/prod -- $(vela mcp config --format command --namespace team-a)
+eval "claude mcp add --scope user -e KUBECONFIG=$HOME/.kube/staging kubevela-staging -- $(vela mcp config --format command)"
+eval "claude mcp add --scope user -e KUBECONFIG=$HOME/.kube/prod kubevela-prod -- $(vela mcp config --format command --namespace team-a)"
 ```
 
 For JSON-configured clients, use `vela mcp config --name kubevela-staging` and add an `env`
