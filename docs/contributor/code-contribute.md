@@ -402,7 +402,10 @@ This document guides you through the process of creating a [pull request](https:
 
 ### Before you begin
 
-We know you're excited to create your first pull request. Before we get started, make sure your code follows the relevant [code conventions](./code-conventions.md).
+We know you're excited to create your first pull request. Before we get started:
+
+- If you are working on an existing issue (or a new issue you filed), **first comment on the issue to request assignment and wait for a maintainer to assign it to you** before raising a pull request. This prevents duplicate effort and ensures maintainers agree on the approach.
+- Make sure your code follows the relevant [code conventions](./code-conventions.md).
 
 ### Your first pull request
 
@@ -417,7 +420,7 @@ To increase the chance of having your pull request accepted, make sure your pull
 
 - Title and description matches the implementation.
 - Commits within the pull request follow the [Formatting guidelines](#Formatting-guidelines).
-- The pull request closes one related issue.
+- The pull request closes one related issue that has been assigned to you by a maintainer.
 - The pull request contains necessary tests that verify the intended behavior.
 - If your pull request has conflicts, rebase your branch onto the main branch.
 
