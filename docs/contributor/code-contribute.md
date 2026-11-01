@@ -404,7 +404,7 @@ This document guides you through the process of creating a [pull request](https:
 
 We know you're excited to create your first pull request. Before we get started:
 
-- If you are working on an existing issue (or a new issue you filed), **first comment on the issue to request assignment and wait for a maintainer to assign it to you** before raising a pull request. This prevents duplicate effort and ensures maintainers agree on the approach.
+- If you are working on an existing issue (or a new issue you filed), **first comment on the issue to request assignment and wait for a maintainer to assign it to you** before starting work or raising a pull request. This prevents duplicate effort and ensures maintainers agree on the approach.
 - Make sure your code follows the relevant [code conventions](./code-conventions.md).
 
 ### Your first pull request
