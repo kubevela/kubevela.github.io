@@ -74,7 +74,8 @@ Findings keep the server's own sentence (`message`) apart from the text the clus
 
 ## How writes work
 
-Without `--allow-write`, the server has no tool that changes the cluster. With it, the agent
+Without `--allow-write`, the server has no tool that changes the cluster; it is the only
+flag that adds a write tool in this release. With it, the agent
 gets `apply_application`, and every apply follows the same path.
 
 ### 1. Plan: diff first, always
@@ -112,7 +113,7 @@ The class is the highest of every rule that fired. HIGH applies even in a new Ap
 |---|---|
 | `gitops` | Nothing is written. The result carries the Application YAML for you to commit to your delivery repository and review as a pull request. |
 | `direct` | The server writes the Application to the cluster after you confirm in your client. |
-| `gated` | Planned: write the change but hold it for an approval in the workflow. This release returns `gitops` instead, because the controller hold it needs does not exist yet. |
+| `gated` | Planned: write the change but hold it for an approval in the workflow. This release returns `gitops` instead, because the controller support that holds the change does not exist yet. |
 
 The agent asks for a mode, `gated` by default. The server then applies policy, which can
 only make the mode **stricter**, never looser:
@@ -159,8 +160,10 @@ renders.
 
 ## Production namespaces
 
-Direct writes are never allowed in production. `--production-pattern` is a regular
-expression for production namespace names. The default,
+Direct writes are refused in every namespace that matches `--production-pattern`, a regular
+expression for production namespace names. The protection is only as complete as the
+pattern: a production namespace it does not match is not protected, so make it cover every
+production name you use. The default,
 `(?i)(^|[-_.])prod(uction)?($|[-_.])`, matches names such as `prod`, `team-prod`,
 `prod.eu` and `production`, but not `product`. If a `--direct-namespace` matches the
 pattern, the server refuses to start, and `vela mcp config` refuses to print the entry.
@@ -183,8 +186,9 @@ server flags:
 | `definition.oam.dev/provides` | Definition label | The capability a definition provides, such as `postgres`. Definitions with the same value are alternatives, and `list_definitions` can filter by it. |
 | `definition.oam.dev/default-for` | Definition annotation | Comma-separated namespaces where this definition is the default among those with the same `provides`, or `*` for every namespace. Agents use the default and name the alternatives, and only ask you to choose when there is no default. |
 
-For example, to offer two Postgres components and make CloudNativePG the default for
-`team-a`:
+For example, to mark a CloudNativePG component as a Postgres provider and the default for
+`team-a`; an Aurora component labelled `provides: postgres` would then be offered as the
+alternative:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

@@ -114,7 +114,7 @@ project; drop it to register it for the current repository only.
 
 Claude Code starts the server with its own environment, so the cluster is whichever one
 the shell that started Claude Code points at, not the one you ran `claude mcp add` from.
-To pin a kubeconfig, add `-e KUBECONFIG=/absolute/path` before `kubevela`. Inside a
+To pin a kubeconfig, add `--env KUBECONFIG=/absolute/path` before `kubevela`. Inside a
 session, `/mcp` shows whether `kubevela` connected.
 
 ### Cursor
@@ -168,8 +168,9 @@ Ask your agent:
 > What version of KubeVela is this cluster running?
 
 The agent calls `get_platform_info` and answers with the vela CLI, vela-core and Kubernetes
-versions, the feature gates set on the controller, and any version skew. If the versions
-are the ones you expect, you are connected to the right cluster.
+versions, the feature gates set on the controller, and any version skew. Versions alone do
+not identify a cluster, so also check the context the server uses with
+`kubectl config current-context` and that `vela ls -A` lists the Applications you expect.
 
 ## Step 5: Put it to work
 
@@ -249,7 +250,6 @@ Server flags go after `vela mcp config` so they are part of the printed entry:
 | `--allow-write` | Add `apply_application`. On its own it never writes: it returns the Application YAML for you to commit to your delivery repository. |
 | `--allow-write --direct-namespace dev` | Also allow writes straight to the cluster in `dev`, each one confirmed by you in the client. |
 | `--production-pattern <regex>` | Namespaces that match never allow direct writes. The default matches names such as `prod`, `team-prod` and `production`. |
-| `--allow-resume` | Reserved for `resume_workflow`, which is not available yet. It has no effect in this release. |
 
 See [vela mcp](../cli/vela_mcp.md) and [vela mcp config](../cli/vela_mcp_config.md) for the
 full flag reference.
@@ -260,8 +260,8 @@ The server talks to one control plane: the one in its kubeconfig context. To swi
 control planes, register one server entry per context, each with its own name and kubeconfig:
 
 ```shell
-eval "claude mcp add --scope user -e KUBECONFIG=$HOME/.kube/staging kubevela-staging -- $(vela mcp config --format command)"
-eval "claude mcp add --scope user -e KUBECONFIG=$HOME/.kube/prod kubevela-prod -- $(vela mcp config --format command --namespace team-a)"
+eval "claude mcp add --scope user --env KUBECONFIG=$HOME/.kube/staging kubevela-staging -- $(vela mcp config --format command)"
+eval "claude mcp add --scope user --env KUBECONFIG=$HOME/.kube/prod kubevela-prod -- $(vela mcp config --format command --namespace team-a)"
 ```
 
 For JSON-configured clients, use `vela mcp config --name kubevela-staging` and add an `env`
@@ -307,7 +307,7 @@ yourself. Use a client that supports it, or let the server return YAML for a pul
 
 **The server refuses to start with a `--direct-namespace` error.**
 Either `--allow-write` is missing, or the namespace matches `--production-pattern`. Direct
-writes are never allowed in production namespaces.
+writes are refused in every namespace the pattern matches.
 
 **Results from a managed cluster carry an identity warning.**
 cluster-gateway is not forwarding your identity, so reads in that cluster run as the

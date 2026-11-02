@@ -30,7 +30,6 @@ vela mcp config [flags]
 ### Options
 
 ```
-      --allow-resume                   Register resume_workflow, which continues a workflow paused for approval. Off by default.
       --allow-write                    Register apply_application. Without --direct-namespace it only returns YAML for a pull request. Off by default.
       --direct-namespace stringArray   Allow direct mode, confirmed by the user in their client, in this namespace. Repeat for more than one. Refused at start if it matches --production-pattern.
       --format string                  Output format: json for an mcpServers block, or command for the server command and arguments a client's mcp add takes. (default "json")

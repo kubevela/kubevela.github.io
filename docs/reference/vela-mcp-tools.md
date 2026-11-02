@@ -119,6 +119,7 @@ Return one KubeVela definition's parameter schema as JSON Schema, with required 
 | `defaultFor` | array of string | Namespaces where the platform made this the default among definitions providing the same capability; * means every namespace. |
 | `description` | string | One-line description the definition declares. |
 | `latestRevision` | string | Name of the definition's latest DefinitionRevision. |
+| `matchedBy` | string | How a provides filter matched: label when the definition carries the provides label, name or description when it has no label but mentions the capability there. Confirm the latter from its description before relying on it. |
 | `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
 | `name` | string | Name of the object this result describes. |
 | `namespace` | string | Namespace of the object this result describes. |
@@ -298,14 +299,16 @@ Explain one KubeVela definition from its live object: what kinds its template pr
 | `hidden` | boolean | True when the definition asks to be hidden from listings. |
 | `inspectionError` | string | Set when the template could not be parsed; the schema and metadata are still valid. |
 | `latestRevision` | string | Name of the definition's latest DefinitionRevision. |
+| `matchedBy` | string | How a provides filter matched: label when the definition carries the provides label, name or description when it has no label but mentions the capability there. Confirm the latter from its description before relying on it. |
 | `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
 | `name` | string | Name of the object this result describes. |
 | `namespace` | string | Namespace of the object this result describes. |
 | `parameterUsage` | array of object | Which template fields each parameter flows into. |
 | `parameters` | object | JSON Schema of the parameter block. |
-| `produces` | array of object | Kinds the template emits, read from the template without rendering. |
+| `produces` | array of object | Kinds the template emits or patches, read from the template without rendering. An entry with no kind is built by an expression and is known only at render. |
 | `provides` | string | Capability the platform labels this definition as providing, such as postgres. Definitions with the same value are alternatives. |
 | `required` | array of string | Top-level parameters with no default, which must be supplied. |
+| `restrictedBySelector` | string | Label selector that namespaces must match to use the definition, when the platform restricts it that way. |
 | `restrictedToNamespaces` | array of string | Namespaces the definition may be used in, when the platform restricts it. |
 | `revisions` | array of object | DefinitionRevisions, newest first. |
 | `trait` | object | For traits: the workloads it applies to, what it conflicts with, and whether it restarts pods or manages the workload. |
@@ -400,7 +403,7 @@ Render an Application document the way vela dry-run does, without saving it: eve
 | `application` | string | yes | The Application as YAML or JSON, exactly as it would be applied. |
 | `definitions` | array of string | no | Optional local definitions, one per entry, used instead of the cluster's copy of the same name. Each is a CUE definition as vela def gen-module writes it for a defkit module, or a definition object as YAML. |
 | `namespace` | string | no | Namespace to render in when the document has none. The document's own namespace wins. |
-| `serverCheck` | boolean | no | Also send each rendered object to the API server as a dry run with strict field validation, so it is checked against the installed CRDs and admission. Nothing is stored. Needs the CRDs installed and permission to create the objects. |
+| `serverCheck` | boolean | no | Also send each rendered object to the API server as a dry run with strict field validation, so it is checked against the installed CRDs and admission. Nothing is stored. Needs the CRDs installed and permission to create the objects. Acceptance means this API server accepted the request now; RBAC, admission and live state at apply time can still differ. |
 
 ### Result
 
@@ -413,7 +416,7 @@ Render an Application document the way vela dry-run does, without saving it: eve
 | `namespace` | string | Namespace of the object this result describes. |
 | `policies` | array of object | Objects rendered by policies. |
 | `resources` | array of object | Every object the components and traits would create. |
-| `serverCheck` | object | The API server's verdict on each rendered object, when serverCheck was requested. A render that passes this can be applied to a cluster with the same CRDs. |
+| `serverCheck` | object | The API server's verdict on each rendered object, when serverCheck was requested. Acceptance means the checked API server accepted the dry-run request; it is strong evidence the shape is right, not a promise that a later apply succeeds. |
 
 
 ## diff_application
@@ -458,7 +461,7 @@ Deliver an Application after diff_application, using the token it returned for t
 |---|---|---|---|
 | `application` | string | yes | The same Application document that was passed to diff_application, byte for byte. |
 | `token` | string | yes | The token diff_application returned for this document. |
-| `mode` | string | no | Requested write mode: gitops, gated or direct. Default gated. Policy may make it stricter, never looser. |
+| `mode` | string | no | Requested write mode: gitops, gated or direct. Default gated, which this release applies as gitops because the controller hold gated mode needs does not exist yet. Policy may make the mode stricter, never looser. |
 | `namespace` | string | no | Namespace when the document has none, as for diff_application. |
 
 ### Result
