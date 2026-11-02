@@ -86,7 +86,7 @@ List the KubeVela definitions (components, traits, policies, workflow steps) ava
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `namespace` | string | no | Namespace to list in addition to the system namespace. Empty lists every namespace the caller can read. Also decides which definition is marked default. |
-| `provides` | string | no | Keep only definitions the platform labels as providing this capability, such as postgres, to compare alternatives. |
+| `provides` | string | no | Keep definitions that provide this capability, such as postgres, to compare alternatives: those the platform labels with it, and unlabelled ones whose name or description mentions it, which matchedBy marks. |
 | `type` | string | no | Limit to one definition type: component, trait, policy or workflow-step. Empty lists all four. |
 
 ### Result
@@ -119,7 +119,7 @@ Return one KubeVela definition's parameter schema as JSON Schema, with required 
 | `defaultFor` | array of string | Namespaces where the platform made this the default among definitions providing the same capability; * means every namespace. |
 | `description` | string | One-line description the definition declares. |
 | `latestRevision` | string | Name of the definition's latest DefinitionRevision. |
-| `matchedBy` | string | How a provides filter matched: label when the definition carries the provides label, name or description when it has no label but mentions the capability there. Confirm the latter from its description before relying on it. |
+| `matchedBy` | string | Set by list_definitions when it filters by provides: label when the definition carries the provides label, name or description when it has no label but mentions the capability there. Confirm the latter from its description before relying on it. |
 | `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
 | `name` | string | Name of the object this result describes. |
 | `namespace` | string | Namespace of the object this result describes. |
@@ -299,7 +299,7 @@ Explain one KubeVela definition from its live object: what kinds its template pr
 | `hidden` | boolean | True when the definition asks to be hidden from listings. |
 | `inspectionError` | string | Set when the template could not be parsed; the schema and metadata are still valid. |
 | `latestRevision` | string | Name of the definition's latest DefinitionRevision. |
-| `matchedBy` | string | How a provides filter matched: label when the definition carries the provides label, name or description when it has no label but mentions the capability there. Confirm the latter from its description before relying on it. |
+| `matchedBy` | string | Set by list_definitions when it filters by provides: label when the definition carries the provides label, name or description when it has no label but mentions the capability there. Confirm the latter from its description before relying on it. |
 | `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
 | `name` | string | Name of the object this result describes. |
 | `namespace` | string | Namespace of the object this result describes. |

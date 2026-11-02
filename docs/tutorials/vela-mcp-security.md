@@ -183,12 +183,12 @@ server flags:
 |---|---|---|
 | `app.oam.dev/agent-write-mode` | Namespace label, or Application annotation | `gitops`, `gated` or `direct`. Tightens the write mode; it can never loosen it. Use `gitops` on a namespace to make sure agents only ever produce pull requests there. |
 | `app.oam.dev/delivery-default` | Namespace label | `kubevela` or `kubernetes`. The declared way to deliver new work in the namespace. Agents use it instead of asking the user on a blank start. |
-| `definition.oam.dev/provides` | Definition label | The capability a definition provides, such as `postgres`. Definitions with the same value are alternatives, and `list_definitions` can filter by it. |
+| `definition.oam.dev/provides` | Definition label | The capability a definition provides, such as `postgres`. Definitions with the same value are alternatives, and `list_definitions` can filter by it. The filter also returns unlabelled definitions whose name or description mentions the capability, marked so agents confirm them. |
 | `definition.oam.dev/default-for` | Definition annotation | Comma-separated namespaces where this definition is the default among those with the same `provides`, or `*` for every namespace. Agents use the default and name the alternatives, and only ask you to choose when there is no default. |
 
-For example, to mark a CloudNativePG component as a Postgres provider and the default for
-`team-a`; an Aurora component labelled `provides: postgres` would then be offered as the
-alternative:
+For example, this marks a CloudNativePG component as a Postgres provider and the default for
+`team-a`. An Aurora component labelled `definition.oam.dev/provides: postgres` would then be
+offered as the alternative.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
