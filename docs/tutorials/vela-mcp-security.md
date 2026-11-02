@@ -38,8 +38,10 @@ vela mcp config --namespace team-a --namespace team-b
 
 ## What it never returns
 
-- **Secrets:** metadata only, never data. Cluster credentials listed by `list_clusters`
-  come back as a credential type, never as the credential.
+- **Secrets:** metadata only, never data. A Secret that a definition renders comes back
+  from `dryrun_application` as its key names, and `diff_application` only says its values
+  changed. Cluster credentials listed by `list_clusters` come back as a credential type,
+  never as the credential.
 - **ConfigMaps:** key names only, never values.
 - **Annotations that embed a serialized object** (such as
   `kubectl.kubernetes.io/last-applied-configuration`) are dropped.
@@ -62,6 +64,10 @@ Every result is bounded, and `meta.truncated` is `true` whenever a bound cut the
 | One message, reason or other text field | 2048 characters |
 | Log lines per pod | 200 by default, at most 2000 |
 | Pods per `get_logs` call | 5 |
+| Events listed by `explain_application` | The 20 newest, from at most 2000 read per namespace |
+| Revisions listed by `explain_definition` | The 10 newest |
+| Local definitions in one plan call | 20, at most 256 KiB each and 1 MiB together |
+| Cluster and namespace pairs given resource trees under `--namespace` | 10; resources elsewhere are listed without a tree |
 | Time per call | 60 seconds |
 
 ## Cluster text is data, not instructions
@@ -102,8 +108,8 @@ names the definition. The result has:
 | Class | Fires on |
 |---|---|
 | LOW | An image tag change only, a replica count change, or a new Application with nothing in the HIGH list |
-| MEDIUM | Config or env changes, or a resource added to an existing Application. Any change no rule recognizes is MEDIUM, never LOW |
-| HIGH | Any deletion or replacement, a placement or topology change, a stateful resource (StatefulSet, PersistentVolumeClaim, PersistentVolume, StorageClass), a security-related resource (RBAC, NetworkPolicy, Ingress, Gateway, HTTPRoute, ServiceAccount, Secret, certificates), or a removed approval gate |
+| MEDIUM | Config or env changes; a resource or component added to an existing Application; a policy, workflow or sources change; a component change that renders the same objects; any image digest change. Any change no rule recognizes is MEDIUM, never LOW |
+| HIGH | Any deletion or replacement, a removed component, a placement or topology change, a stateful resource (StatefulSet, PersistentVolumeClaim, PersistentVolume, StorageClass), a security-related resource (RBAC, NetworkPolicy, Ingress, Gateway, HTTPRoute, ServiceAccount, Secret, certificates), or a removed approval gate |
 
 The class is the highest of every rule that fired. HIGH applies even in a new Application.
 
@@ -132,8 +138,15 @@ The result reports the mode that was used and one line for every rule that chang
 
 A direct write needs your explicit confirmation:
 
+- **Only for a change the diff could fully see.** Direct is refused, and nothing is
+  written, when the diff used local definitions (the token does not bind them), when the
+  Application renders objects into a namespace outside `--namespace`, or, on a server with
+  `--namespace`, when the workflow runs steps whose writes the diff cannot see, such as
+  `apply-object` or `webhook`. Use `gitops` for those.
 - **The server writes the prompt.** It is built from the same change set the token was
   issued for, so the agent cannot describe the change differently from what will happen.
+  Besides each resource change, it lists components, policies, placement, workflow,
+  approval steps and sources that change.
 - **Your client shows it to you.** This uses MCP elicitation. Clients that do not support
   elicitation get an error and nothing is written; the server never falls back to writing
   without asking.
