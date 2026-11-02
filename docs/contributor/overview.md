@@ -67,11 +67,12 @@ The Apache way says "Community Over Code". Although KubeVela is a CNCF/Linux pro
 
 ### Code contribution
 
-Unsure where to begin contributing to KubeVela codebase? Start by browsing issues labeled `good first issue` or `help wanted`.
+Unsure where to begin contributing to KubeVela codebase? Start by browsing issues labeled `good first issue`, `help wanted` or `triage/accepted`.
 
 - [Good first issue](https://github.com/kubevela/kubevela/labels/good%20first%20issue) issues are generally straightforward to complete.
 - [Help wanted](https://github.com/kubevela/kubevela/labels/help%20wanted) issues are problems we would like the community to help us with regardless of complexity.
-- Once you find an issue you want to work on (or after filing a new issue), leave a comment on the issue and get it assigned to you by a maintainer before starting work and creating a pull request.
+- [Triage/accepted](https://github.com/kubevela/kubevela/labels/triage%2Faccepted) issues are ready to be actively worked on.
+- Once you find an issue you want to work on (or after filing a new issue), leave a comment on the issue and get it assigned to you by a maintainer before starting work or raising a pull request. Unless you are a maintainer, a pull request without an assigned issue will not be picked up and may be closed.
 - Refer to [Code Contribution Guide](./code-contribute.md) for more details.
 
 Learn the [Release Process And Cadence](./release-process.md) to know when your code changes will be released.
