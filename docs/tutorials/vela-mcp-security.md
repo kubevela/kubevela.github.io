@@ -67,7 +67,7 @@ Every result is bounded, and `meta.truncated` is `true` whenever a bound cut the
 | Events listed by `explain_application` | The 20 newest, from at most 2000 read per namespace |
 | Revisions listed by `explain_definition` | The 10 newest |
 | Local definitions in one plan call | 20, at most 256 KiB each and 1 MiB together |
-| Cluster and namespace pairs given resource trees under `--namespace` | 10; resources elsewhere are listed without a tree |
+| Cluster and namespace pairs whose resource trees are read under `--namespace` | 10. Resources in further allowed pairs are listed but not traced, and say so; resources outside the allowed namespaces stay withheld |
 | Time per call | 60 seconds |
 
 ## Cluster text is data, not instructions
