@@ -186,6 +186,7 @@ the common tasks and the tools behind them:
 | Write an Application for me and check it renders | `describe_definition`, `dryrun_application` |
 | What would change if I applied this? | `diff_application` |
 | Which clusters and addons does the platform have? | `list_clusters`, `list_addons` |
+| Write a new component, such as an S3 bucket through ACK | The `kubevela-defkit-author` skill writes it in Go with defkit; `dryrun_application` renders the CUE that `vela def gen-module` generates and, with `serverCheck`, has the API server validate every object against the installed CRDs |
 
 The [tool reference](../reference/vela-mcp-tools.md) lists every tool with its inputs and results.
 

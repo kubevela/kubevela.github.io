@@ -391,15 +391,16 @@ This tool takes no input.
 
 Plan. Always registered; renders and compares without writing.
 
-Render an Application document the way vela dry-run does, without saving it: every Kubernetes object each component and trait would produce, plus policy objects. Pass local definitions to render against definitions not yet on the cluster. Use it until the draft renders clean, then diff_application.
+Render an Application document the way vela dry-run does, without saving it: every Kubernetes object each component and trait would produce, plus policy objects. Pass local definitions to render against definitions not yet on the cluster, such as the CUE vela def gen-module generates from a defkit module. Set serverCheck to have the API server validate every rendered object against the installed CRDs without storing it. Use it until the draft renders clean, then diff_application.
 
 ### Input
 
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `application` | string | yes | The Application as YAML or JSON, exactly as it would be applied. |
-| `definitions` | array of string | no | Optional local definitions as YAML, each one document, used instead of the cluster's copy of the same name. |
+| `definitions` | array of string | no | Optional local definitions, one per entry, used instead of the cluster's copy of the same name. Each is a CUE definition as vela def gen-module writes it for a defkit module, or a definition object as YAML. |
 | `namespace` | string | no | Namespace to render in when the document has none. The document's own namespace wins. |
+| `serverCheck` | boolean | no | Also send each rendered object to the API server as a dry run with strict field validation, so it is checked against the installed CRDs and admission. Nothing is stored. Needs the CRDs installed and permission to create the objects. |
 
 ### Result
 
@@ -412,6 +413,7 @@ Render an Application document the way vela dry-run does, without saving it: eve
 | `namespace` | string | Namespace of the object this result describes. |
 | `policies` | array of object | Objects rendered by policies. |
 | `resources` | array of object | Every object the components and traits would create. |
+| `serverCheck` | object | The API server's verdict on each rendered object, when serverCheck was requested. A render that passes this can be applied to a cluster with the same CRDs. |
 
 
 ## diff_application
@@ -425,7 +427,7 @@ Compare an Application document with what runs: renders both, lists every resour
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `application` | string | yes | The Application as YAML or JSON, exactly as it would be applied. |
-| `definitions` | array of string | no | Optional local definitions as YAML, each one document, used instead of the cluster's copy of the same name. |
+| `definitions` | array of string | no | Optional local definitions, one per entry, used instead of the cluster's copy of the same name. Each is a CUE definition as vela def gen-module writes it for a defkit module, or a definition object as YAML. |
 | `namespace` | string | no | Namespace to render in when the document has none. The document's own namespace wins. |
 | `revision` | string | no | ApplicationRevision to compare against. Empty uses the latest revision; a missing Application compares against nothing. |
 
