@@ -421,13 +421,13 @@ To increase the chance of having your pull request accepted, make sure your pull
 
 - Title and description matches the implementation.
 - Commits within the pull request follow the [Formatting guidelines](#Formatting-guidelines).
-- The pull request is associated with one issue, and is raised only once a maintainer has assigned that issue to you.
+- Unless the pull request is exempt, it is associated with one issue and raised only once a maintainer has assigned that issue to you.
 - The pull request contains necessary tests that verify the intended behavior.
 - If your pull request has conflicts, rebase your branch onto the main branch.
 
 If the pull request fixes a bug:
 
-- Unless the pull request is exempt (see [Before you begin](#before-you-begin)), the description must include `Closes #<issue number>` or `Fixes #<issue number>`.
+- Unless the pull request is exempt (see [Before you begin](#before-you-begin)), the description must include `Closes #<issue number>` or `Fixes #<issue number>`, or `Related to #<issue number>` if it only fixes part of the issue.
 - To avoid regressions, the pull request should include tests that replicate the fixed bug.
 - Generally, we will maintain the last 2 releases for bugfix. You should add `backport release-x.x` label or comment `/backport release-x.y` for the releases contained the bug, github bot will automatically backport this PR to the specified release branch after PR merged. If there're any conflicts, you should cherry-pick it manually.
 
