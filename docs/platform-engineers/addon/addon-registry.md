@@ -96,6 +96,10 @@ Name    	Type	URL
 localcm 	helm	http://localhost:8080 
 ```
 
+### Add an OCI registry
+
+Registries of type `oci`, such as Amazon ECR, GitHub Container Registry or Docker Hub, are also supported. See [Use an OCI Registry for Addons](./addon-oci-registry.md).
+
 ### Push an addon to your registry
 
 > Note: you need to upgrade your CLI to v1.5.0+ for this feature.
