@@ -41,6 +41,7 @@ vela def upgrade my-definition.cue --target-version=v1.11
 ### Options
 
 ```
+      --enable-all              Enable all upgrade passes for this command invocation.
   -h, --help                    help for upgrade
   -o, --output string           Output file path. If not specified, outputs to stdout.
   -q, --quiet                   Suppress output in validate mode, only return exit code
