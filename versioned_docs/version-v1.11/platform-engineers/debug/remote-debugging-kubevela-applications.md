@@ -397,5 +397,5 @@ Do not modify the source code while debugging. The running container was built f
 
 - Learn about [Debugging KubeVela Controllers](./debugging-kubevela-controllers.md) for local debugging
 - Explore [Debugging with Webhook Integration](./debugging-kubevela-with-webhook.md) for webhook debugging
-- Check the [KubeVela Contributor Guide](../../contributor/overview) for more development resources
+- Check the [KubeVela Contributor Guide](../../contributor/overview.md) for more development resources
 

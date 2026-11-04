@@ -100,7 +100,7 @@ template: {
 	}
 
 	outputs: ingress: {
-		apiVersion: "networking.k8s.io/v1beta1"
+		apiVersion: "networking.k8s.io/v1"
 		kind:       "Ingress"
 		metadata:
 			name: context.name
@@ -110,10 +110,11 @@ template: {
 				http: {
 					paths: [
 						for k, v in parameter.http {
-							path: k
-							backend: {
-								serviceName: context.name
-								servicePort: v
+							path:     k
+							pathType: "ImplementationSpecific"
+							backend: service: {
+								name: context.name
+								port: number: v
 							}
 						},
 					]
@@ -378,20 +379,22 @@ template: {
 		}
 	}
 	outputs: ingress: {
-		apiVersion: "networking.k8s.io/v1beta1"
+		apiVersion: "networking.k8s.io/v1"
 		kind:       "Ingress"
-		metadata:
-				name: context.name
-		labels: config: context.outputs.gameconfig.data.enemies
+		metadata: {
+			name: context.name
+			labels: config: context.outputs.gameconfig.data.enemies
+		}
 		spec: {
 			rules: [{
 				host: parameter.domain
 				http: {
 					paths: [{
-						path: parameter.path
-						backend: {
-							serviceName: context.name
-							servicePort: parameter.exposePort
+						path:     parameter.path
+						pathType: "ImplementationSpecific"
+						backend: service: {
+							name: context.name
+							port: number: parameter.exposePort
 						}
 					}]
 				}
@@ -760,7 +763,7 @@ When this Application is applied:
 
 ### Available Context in PostDispatch Traits
 
-In addition to the [standard trait context fields](customize-trait#full-available-context-in-trait), PostDispatch traits have access to `context.output`, which is the full live Kubernetes resource object of the parent component at the time the trait is dispatched.
+In addition to the [standard trait context fields](customize-trait.md#full-available-context-in-trait), PostDispatch traits have access to `context.output`, which is the full live Kubernetes resource object of the parent component at the time the trait is dispatched.
 
 | Field | Description |
 |---|---|

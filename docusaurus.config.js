@@ -1,11 +1,13 @@
+const { fromGitHub } = require('./scripts/announcement');
+
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
-module.exports = {
+const config = {
   title: 'KubeVela',
-  tagline: 'Make shipping applications more enjoyable.',
+  tagline: 'Platform Engineering. Simplified.',
   url: 'https://kubevela.io',
   baseUrl: '/',
   trailingSlash: true,
-  onBrokenLinks: 'warn',
+  onBrokenLinks: 'throw',
   favicon: 'img/favicons/favicon.ico',
   organizationName: 'kubevela', // Usually your GitHub org/user name.
   projectName: 'kubevela.io', // Usually your repo name.
@@ -29,12 +31,8 @@ module.exports = {
   },
   themes: ['@docusaurus/theme-mermaid'],
   themeConfig: {
-    announcementBar: {
-      id: 'start',
-      content:
-          '<div class="header-item">⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>! ⭐️</div>' +
-          '<div class="header-item"><span>KubeVela v1.11 is now available!</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/tag/v1.11.0">Read Release Note</a></div>',
-    },
+    // The card shown when a page is shared on Slack, social sites and the like.
+    image: 'img/social-card.png',
     algolia: {
       appId: 'PXMFHFWUGZ',
       apiKey: '2d1f4924c15d2cc0947820c01e65521f',
@@ -52,6 +50,13 @@ module.exports = {
         {
           type: 'docsVersionDropdown',
           position: 'right',
+          className: 'kv-version',
+          // Archived versions are separate static builds outside the docs plugin.
+          dropdownItemsAfter: ['v1.5', 'v1.4', 'v1.3', 'v1.2', 'v1.1', 'v1.0'].map((v) => ({
+            href: `pathname:///docs/${v}`,
+            label: `${v} (Archived)`,
+            className: 'kv-archived-version',
+          })),
         },
         {
           to: 'docs/',
@@ -65,10 +70,20 @@ module.exports = {
           position: 'left',
         },
         {
-          to: 'videos/best-practice/jenkins',
-          activeBasePath: 'videos',
-          label: 'Videos',
+          type: 'dropdown',
+          label: 'Resources',
           position: 'left',
+          items: [
+            {
+              to: 'videos/best-practice/jenkins',
+              activeBasePath: 'videos',
+              label: 'Videos',
+            },
+            {
+              href: 'https://github.com/kubevela/samples',
+              label: 'Examples',
+            },
+          ],
         },
         {
           href: 'https://github.com/kubevela/community',
@@ -76,23 +91,19 @@ module.exports = {
           position: 'left',
         },
         {
-          href: 'https://github.com/kubevela/samples',
-          label: 'Examples',
-          position: 'left',
-        },
-        {
-          href: 'https://kubevela.net',
-          label: 'Mirror',
-          position: 'right',
-        },
-        {
           type: 'localeDropdown',
           position: 'right',
+        },
+        // Search and Ask Devin sit together as one control.
+        {
+          type: 'search',
+          position: 'right',
+          className: 'kv-search',
         },
         {
           type: 'html',
           position: 'right',
-          value: '<a href="https://deepwiki.com/kubevela/kubevela" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-deepwiki-link" title="AI Search" aria-label="Ask Devin AI Search" style="display: flex; align-items: center; gap: 6px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="17" r="1.5" fill="currentColor"/></svg><span>Ask Devin</span></a>',
+          value: '<a href="https://deepwiki.com/kubevela/kubevela" target="_blank" rel="noopener noreferrer" class="navbar__link header-deepwiki-link" title="AI Search" aria-label="Ask Devin AI Search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="17" r="1.5" fill="currentColor"/></svg><span>Ask Devin</span></a>',
         },
         {
           href: 'https://github.com/kubevela/kubevela',
@@ -100,9 +111,16 @@ module.exports = {
           'aria-label': 'GitHub repository',
           position: 'right',
         },
+        {
+          href: 'https://cloud-native.slack.com/archives/C01BLQ3HTJA',
+          className: 'header-slack-link',
+          'aria-label': 'KubeVela on the CNCF Slack',
+          position: 'right',
+        },
       ],
     },
     footer: {
+      style: 'light',
       links: [
         {
           title: 'Documentation',
@@ -129,11 +147,17 @@ module.exports = {
               href: 'https://cloud-native.slack.com/archives/C01BLQ3HTJA',
             },
             {
+              label: 'GitHub',
+              href: 'https://github.com/kubevela/kubevela',
+            },
+            // The Chinese community's channels show on the Chinese site only.
+            {
               label: 'DingTalk (23310022)',
               href: '.',
+              className: 'kv-zh-only',
             },
             {
-                html: '<div class="wechat"> <a class="wechat-label">Wechat Group(Scan code to request joining)</a> <a class="wechat-img" rel="noreferrer noopener" aria-label="Wechat Group"><img src="https://kubevela.io/images/barnett-wechat.jpg" alt="Broker wechat to add you into the user group."></a></div>',
+                html: '<div class="wechat kv-zh-only"> <a class="wechat-label">Wechat Group(Scan code to request joining)</a> <a class="wechat-img" rel="noreferrer noopener" aria-label="Wechat Group"><img src="https://kubevela.io/images/barnett-wechat.jpg" alt="Broker wechat to add you into the user group."></a></div>',
             },
           ],
         },
@@ -141,20 +165,12 @@ module.exports = {
           title: 'More',
           items: [
             {
-              label: 'GitHub',
-              href: 'https://github.com/kubevela/kubevela',
-            },
-            {
               label: 'Blog',
               to: 'blog',
             },
             {
               label: 'Videos',
               to: 'videos/best-practice/jenkins',
-            },
-            {
-              to: '/micro',
-              label: 'Microservice',
             },
           ],
         },
@@ -165,20 +181,25 @@ module.exports = {
         <br />
         <br />
         © ${new Date().getFullYear()} The Linux Foundation. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage/"> Trademark Usage</a> page.
-        <br />
-        <a href="https://zzlz.gsxt.gov.cn/businessCheck/verifKey.do?showType=p&serial=913301105865146816-SAIC_SHOW_1000009133011058651468161661997004982&signData=MEYCIQDV2SEwsPqwXWkyqyF/+schpsqmPrjT8uEplDrD7xfdhgIhAKoSoKR6iR+YPF4q4CCLYvm8ruB1nFKRkibUx1A5n/Kn" target="_blank"><img alt="license" style="width: 20px;margin-bottom: -5px;" src="/img/beian/license.gif"/></a> <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33011002016698" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="" style="float:left;"/><p style="height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">浙公网安备 33011002016698号</p></a> <a href="https://beian.miit.gov.cn/" target="_blank">浙ICP备12022327号-975</a>
       `,
     },
+    // Diagrams in the site's neutrals rather than mermaid's default colours.
+    mermaid: {
+      theme: { light: 'neutral', dark: 'dark' },
+    },
     prism: {
-      theme: require('prism-react-renderer').themes.dracula,
+      // GitHub's code colours on light, One Dark on dark, both on the site's
+      // slate backgrounds.
+      theme: require('prism-react-renderer').themes.github,
+      darkTheme: require('prism-react-renderer').themes.oneDark,
       additionalLanguages: ['cue', 'powershell'],
     },
     zoom: {
       selector: '.markdown :not(em) > img',
       config: {
         background: {
-          light: 'rgb(255, 255, 255)',
-          dark: 'rgb(50, 50, 50)',
+          light: 'rgba(248, 250, 252, 0.97)',
+          dark: 'rgba(11, 18, 32, 0.97)',
         },
       },
     },
@@ -269,12 +290,11 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: function ({locale, docPath}) {
-            return `https://github.com/kubevela/kubevela.io/edit/main/docs/${docPath}`;
+            return `https://github.com/kubevela/kubevela.github.io/edit/main/docs/${docPath}`;
           },
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           includeCurrentVersion: true,
-          remarkPlugins: [require('mdx-mermaid')],
         },
         gtag: {
           trackingID: 'G-5GLR1Y52M7',
@@ -284,7 +304,7 @@ module.exports = {
           blogSidebarTitle: 'All posts',
           blogSidebarCount: 'ALL',
           showReadingTime: true,
-          editUrl: 'https://github.com/kubevela/kubevela.io/tree/main/',
+          editUrl: 'https://github.com/kubevela/kubevela.github.io/tree/main/',
           onInlineAuthors: 'ignore',
         },
         theme: {
@@ -309,18 +329,22 @@ module.exports = {
     'docusaurus-plugin-sass',
     require.resolve('docusaurus-plugin-image-zoom'),
   ],
-  scripts: [
-    {
-      src: '/custom.js',
-      async: true,
-    },
-    {
-      src: '//g.alicdn.com/mamba/assets/0.0.15/mse-arc-ui.min.js',
-    },
-  ],
-  stylesheets: [
-    {
-      href: '//g.alicdn.com/mamba/assets/0.0.15/mse-arc-ui.min.css',
-    },
-  ],
+  // callTime shows the community call in the announcement bar in the reader's
+  // own time zone.
+  clientModules: [require.resolve('./src/clientModules/callTime.js'), require.resolve('./src/clientModules/konami.js')],
+};
+
+// The announcement bar and the next community call are read from GitHub at
+// build time; with nothing to announce the site has no bar.
+module.exports = async function createConfig() {
+  // The language menu appears once the site has more than one language.
+  if (config.i18n.locales.length < 2) {
+    config.themeConfig.navbar.items = config.themeConfig.navbar.items.filter((i) => i.type !== 'localeDropdown');
+  }
+  const { announcementBar, nextCall } = await fromGitHub();
+  if (announcementBar) {
+    config.themeConfig.announcementBar = announcementBar;
+  }
+  config.customFields = { ...config.customFields, nextCall };
+  return config;
 };

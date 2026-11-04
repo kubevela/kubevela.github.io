@@ -698,7 +698,7 @@ The result report is different from the CLI, there is a complete application con
 ## Related Documentation
 
 - [Debugging Workflow](../platform-engineers/debug/debug.md)
-- [Debugging KubeVela Controllers](../platform-engineers/debug/debugging-kubevela-controllers)
+- [Debugging KubeVela Controllers](../platform-engineers/debug/debugging-kubevela-controllers.md)
 - [Debugging with Webhook Integration](../platform-engineers/debug/debugging-kubevela-with-webhook.md)
 - [Debugging Definition](../platform-engineers/cue/definition-edit.md#debug-with-applications)
 

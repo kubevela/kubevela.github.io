@@ -11,7 +11,7 @@ This guide demonstrates how to set up a local debugging environment for KubeVela
 Before you begin, ensure you have:
 
 - KubeVela source code cloned from [github.com/kubevela/kubevela](https://github.com/kubevela/kubevela)
-- [Go 1.19](https://go.dev/dl/) or later installed
+- [Go 1.27](https://go.dev/dl/) or later installed
 - A running Kubernetes cluster accessible via `~/.kube/config`
 - `kubectl` and `openssl` installed
 - An IDE with Go debugger support (VS Code or IntelliJ IDEA / GoLand)

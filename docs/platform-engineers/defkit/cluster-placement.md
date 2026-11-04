@@ -375,5 +375,5 @@ kubectl delete componentdefinition placement-demo -n vela-system --ignore-not-fo
 - [ComponentDefinition](./definition-component.md) — define workload types
 - [TraitDefinition](./definition-trait.md) — patch workloads with traits
 - [PolicyDefinition](./definition-policy.md) — define application policies
-- [WorkflowStepDefinition](./definition-workflow-step.md) — define workflow steps
+- [WorkflowStepDefinition](./definition-workflowstep.md) — define workflow steps
 - [Quick Start](./quick-start.md) — scaffolding a `my-platform` module

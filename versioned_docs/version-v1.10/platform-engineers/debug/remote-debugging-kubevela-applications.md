@@ -19,7 +19,7 @@ Before you begin, ensure you have:
 - [Delve](https://github.com/go-delve/delve) debugger (will be installed in the container)
 
 :::note
-For local debugging without containers, see [Debugging KubeVela Controllers](./debugging-kubevela-controllers).
+For local debugging without containers, see [Debugging KubeVela Controllers](./debugging-kubevela-controllers.md).
 :::
 
 ## Overview
@@ -395,7 +395,7 @@ Do not modify the source code while debugging. The running container was built f
 
 ## Next Steps
 
-- Learn about [Debugging KubeVela Controllers](./debugging-kubevela-controllers) for local debugging
+- Learn about [Debugging KubeVela Controllers](./debugging-kubevela-controllers.md) for local debugging
 - Explore [Debugging with Webhook Integration](./debugging-kubevela-with-webhook.md) for webhook debugging
-- Check the [KubeVela Contributor Guide](../../contributor/overview) for more development resources
+- Check the [KubeVela Contributor Guide](../../contributor/overview.md) for more development resources
 
