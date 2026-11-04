@@ -129,6 +129,7 @@ module.exports = {
             'end-user/workflow/operations',
             'end-user/workflow/suspend',
             'end-user/workflow/step-group',
+            'end-user/workflow/for-each',
             'end-user/workflow/dependency',
             'end-user/workflow/inputs-outputs',
             'end-user/workflow/if-condition',
