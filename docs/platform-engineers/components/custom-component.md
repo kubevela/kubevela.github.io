@@ -4,6 +4,10 @@ title:  Component Definition
 
 In this section, we will introduce how to use [CUE](../cue/basic.md) to customize components via `ComponentDefinition`. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition.md) and [how to manage definition](../cue/definition-edit.md).
 
+:::tip
+To build a component on top of an existing one, such as `webservice`, instead of copying its template, see [Definition Inheritance](../cue/definition-inheritance.md).
+:::
+
 ## Declare `ComponentDefinition`
 
 First, generate `ComponentDefinition` scaffolds via `vela def init` with existed YAML file.

@@ -385,6 +385,7 @@ module.exports = {
             'platform-engineers/cue/definition-edit',
             'platform-engineers/components/custom-component',
             'platform-engineers/traits/customize-trait',
+            'platform-engineers/cue/definition-inheritance',
             'platform-engineers/policy/custom-policy',
             'platform-engineers/policy/application-scoped-policy',
             'platform-engineers/workflow/workflow',
