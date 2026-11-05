@@ -51,19 +51,22 @@ Every result carries a `meta` block that says which system the data came from an
 
 Read. Always registered.
 
-Report the KubeVela versions and configuration this session runs against: vela CLI version, vela-core version and health, Kubernetes server version, enabled feature gates, and any version skew. Call once per session before other tools so explanations match the running system. Pass the namespace the user is working in to learn how it delivers workloads today, so new work follows that practice.
+Report the KubeVela versions and configuration this session runs against: vela CLI version, vela-core version and health, Kubernetes server version, enabled feature gates, and any version skew. Call once per session before other tools so explanations match the running system. Pass the namespace the user is working in to learn how it delivers workloads today, so new work follows that practice. Before writing a definition for an AWS service, pass the service, and the kind you will emit: the result names the provisioner to build on (ACK first, then Crossplane) with the installed CRD's spec schema, or says that neither is installed and what to install.
 
 ### Input
 
 | Field | Type | Required | Description |
 |---|---|---|---|
+| `kind` | string | no | Resource kind of that service, such as Table or Bucket. When set, the result includes the installed CRD's spec schema. |
 | `namespace` | string | no | Namespace the user is about to work in. When set, the result reports how that namespace delivers workloads today. |
+| `service` | string | no | AWS service to find a provisioner for, as AWS names it in lower case, such as dynamodb, s3 or rds. ACK is chosen first, then Crossplane. |
 
 ### Result
 
 | Field | Type | Description |
 |---|---|---|
 | `addons` | array of object | Enabled addons with their versions and health, as list_addons reports them. |
+| `cloudProvisioners` | object | AWS services that ACK and Crossplane can create on this cluster, from the installed CRDs. |
 | `clusterGateway` | object | Whether cluster-gateway was found and whether it forwards the caller's identity to other clusters. |
 | `controller` | object | Whether the vela-core Deployment was found, with its image and ready replicas. |
 | `featureGates` | object | Feature gates set on the vela-core controller's --feature-gates flag, with their values. |
@@ -71,6 +74,7 @@ Report the KubeVela versions and configuration this session runs against: vela C
 | `kubernetes` | object | Kubernetes API server version per cluster name. |
 | `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
 | `practice` | object | How the namespace delivers workloads today. Follow it: keep existing workloads in their form and match it for new work unless the user asks otherwise. |
+| `provisioner` | object | For the service in the request: the provisioner to build on, its kinds, and the schema of the kind asked for; or why the service cannot be provisioned. |
 | `servedData` | string | Where tool descriptions and risk rules come from: builtin means this vela binary. |
 | `velaCLI` | string | Version of the vela binary serving this session. |
 | `velaCore` | string | vela-core controller version found on the cluster, or unknown. |
