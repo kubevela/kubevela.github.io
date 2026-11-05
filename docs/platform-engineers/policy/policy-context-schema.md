@@ -54,6 +54,7 @@ output: ctx: {
 
 - **Keys are required unless marked `?`.** Here the policy promises to set `team` and `costCentre`. `meshDomain?` is optional, so a template must not rely on it. If the policy is conditional (its `config.enabled` is anything but the literal `true`), admission treats every key it declares as optional, so each must be guarded.
 - **`close({...})` makes the schema the whole contract.** The policy supplies nothing it doesn't declare, so admission can also refuse a template that reads an undeclared key. An open schema still types the keys it declares, but other keys may exist.
+- **The schema must be a struct literal**, `schema: ctx: {...}` or `schema: ctx: close({...})`. A `schema` field of any other shape, such as `schema: #Shape`, is not read as a context schema, and the policy counts as having none.
 - **The schema must stand on its own.** Admission reads it without the rest of the template. The CUE standard library (`strings`, `list`, `net`, ...) is fine; provider packages and references to other fields are not.
 - **A default is a fallback the policy gives.** With `team: *"platform" | string`, an output that leaves `team` out passes the check, and components receive `team: "platform"`. A value the output sets wins. A default on an optional key fills nothing.
 
@@ -140,7 +141,7 @@ Template errors:
 
 ## What the render catches
 
-Admission trusts the schema; the render checks that the policy keeps it. If a namespace is labelled `platform.io/team=Payments` and `platform.io/cost-centre=cc`, the policy's output breaks its schema and the policy fails to render. A mandatory global then stops the Application before anything is applied, rather than deploying it with bad identity tags. Its failed condition reads:
+Admission trusts the schema; the render checks that the policy keeps it. If a namespace is labelled `platform.io/team=Payments` and `platform.io/cost-centre=cc`, the policy's output breaks its schema and the policy fails to render. Its failed condition reads:
 
 ```
 failed to render global policy "tenant-identity", which is mandatory: output.ctx does not match schema.ctx: output.ctx.costCentre: invalid value "cc" (does not satisfy strings.MinRunes(3)); output.ctx.team: invalid value "Payments" (out of bound =~"^[a-z][a-z0-9-]*$")
@@ -149,6 +150,13 @@ failed to render global policy "tenant-identity", which is mandatory: output.ctx
 Every mismatch is reported at once, in `output.ctx` terms. The other mismatches read:
 - **a required key the output doesn't set:** `output.ctx.costCentre: required by schema.ctx (string), not set`
 - **a key a closed schema doesn't declare:** `output.ctx.region: not declared by schema.ctx, which is closed`
+
+What a failing policy does to the Application depends on the policy:
+
+- **A global policy is mandatory** (unless the controller allows skipping). An Application that already has a revision is **held** at it: it keeps running, cuts no new revision, and reports a `GlobalPolicies` condition naming the policy. An Application with no revision yet fails. See [Mandatory Global Policies](./application-scoped-policy.md#mandatory-global-policies).
+- **An explicit policy** in `spec.policies` fails the Application's reconcile.
+
+Either way, nothing is deployed with context that breaks the schema.
 
 ## What the PolicyDefinition webhook catches
 
