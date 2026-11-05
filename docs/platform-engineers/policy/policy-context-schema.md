@@ -2,7 +2,7 @@
 title: Typed Policy Context
 ---
 
-An [application-scoped policy](./application-scoped-policy.md) can put data in `output.ctx`, which components, traits and workflow steps read as `context.custom.<key>`. A policy can declare the shape of that data in a `schema: ctx` block. KubeVela then checks both ends:
+An [Application-scoped policy](./application-scoped-policy.md) can put data in `output.ctx`, which components, traits and workflow steps read as `context.custom.<key>`. A policy can declare the shape of that data in a `schema: ctx` block. KubeVela then checks both ends:
 
 | When | Who checks | Against what |
 |---|---|---|
@@ -15,7 +15,7 @@ Without a schema, a definition that reads a key no policy sets, or uses a key as
 Typed policy context is available from v1.12.
 :::
 
-## Declaring a schema
+## Declaring a Schema
 
 This global policy reads the team and cost centre from labels on the Application's namespace, and hands them to every Application in it:
 
@@ -58,7 +58,7 @@ output: ctx: {
 - **The schema must stand on its own.** Admission reads it without the rest of the template. The CUE standard library (`strings`, `list`, `net`, ...) is fine; provider packages and references to other fields are not.
 - **A default is a fallback the policy gives.** With `team: *"platform" | string`, an output that leaves `team` out passes the check, and components receive `team: "platform"`. A value the output sets wins. A default on an optional key fills nothing.
 
-## Reading the context in a definition
+## Reading the Context in a Definition
 
 A definition author has two patterns:
 
@@ -90,7 +90,7 @@ output: {
 | `labels: team: context.custom.team` (direct) | the value is governance: identity, cost, compliance | the policy. The Application has no way to set it |
 | `owner: *context.custom.team \| string` (parameter default) | the policy suggests a value | the Application may override it in `properties` |
 
-## Seeing a policy's schema
+## Seeing a Policy's Schema
 
 `vela policy view <app> --details` and `vela policy dry-run --details` print, under each policy, the schema its definition declares next to the context it set:
 
@@ -106,7 +106,7 @@ output: {
 
 The schema is read from the definition revision the policy rendered with. If that revision no longer exists, it is read from the live PolicyDefinition, and the header says so. JSON and YAML output carry it as `ctxSchema`.
 
-## What admission catches
+## What Admission Catches
 
 An Application using a definition that reads the context in a way the schema says will fail is refused at `kubectl apply`. `kubectl` prints each message after its usual `admission webhook "validating.core.oam.dev.v1beta1.applications" denied the request:`.
 
@@ -139,7 +139,7 @@ Template errors:
   output.spec.replicas: conflicting values int and strings.MinRunes(3) (mismatched types int and string).
 ```
 
-## What the render catches
+## What the Render Catches
 
 Admission trusts the schema; the render checks that the policy keeps it. If a namespace is labelled `platform.io/team=Payments` and `platform.io/cost-centre=cc`, the policy's output breaks its schema and the policy fails to render. Its failed condition reads:
 
@@ -158,7 +158,7 @@ What a failing policy does to the Application depends on the policy:
 
 Either way, nothing is deployed with context that breaks the schema.
 
-## What the PolicyDefinition webhook catches
+## What the PolicyDefinition Webhook Catches
 
 **A schema leaning on the rest of the template is refused.** For `schema: ctx: close({team: _teamPattern})`, where `_teamPattern` is defined elsewhere in the template:
 
@@ -198,7 +198,7 @@ defkit.NewPolicy("tenant-identity").ApplicationScoped().Global().Priority(10).
   defkit: invalid definition 'tenant-identity-typo': Output().Ctx("teem") is not declared by the closed CtxSchema
   ```
 
-## Rules of thumb
+## Rules of Thumb
 
 For **policy** authors:
 - **Declare `schema: ctx`** for anything you put in `output.ctx`.

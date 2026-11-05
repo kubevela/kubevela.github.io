@@ -6,7 +6,7 @@ An [Application-scoped policy](./application-scoped-policy.md) is rendered again
 
 Make sure you have read [Application-Scoped Policies](./application-scoped-policy.md) first.
 
-## Three kinds of change
+## Three Kinds of Change
 
 | Change | Example | Controlled by |
 |---|---|---|
@@ -26,7 +26,7 @@ When a setting lets a change through:
 With the defaults, a running Application keeps the policy versions and data it was deployed with until its next revision. The newer version or data is reported as **pending**, not applied. Turn a setting on per policy, per Application or for the whole controller, as described below, when you want changes to reach running Applications.
 :::
 
-## Where a setting comes from
+## Where a Setting Comes From
 
 | Setting | Template field | Application annotation | Chart value (controller flag) | Default |
 |---|---|---|---|---|
@@ -36,13 +36,15 @@ With the defaults, a running Application keeps the policy versions and data it w
 
 Each setting is resolved **per policy**, for each Application, in this order:
 
-1. **The Application's annotation**, if it is set and valid.
+1. **The Application's annotation**, if it is set and valid. A list decides for every policy: a policy it names is on, and a policy it leaves out is off. Neither falls back to the template or the default.
 2. **The policy template's `config` field**, if the template sets it.
 3. **The controller default** from the chart value.
 
-So an Application author has the last word over the policy, and the policy over the platform-wide default.
+:::caution A platform team cannot push a change past an Application's annotation
+An Application whose annotation turns a setting off for a policy (`"false"`, or a list that leaves the policy out) holds the changes that setting covers (new versions, or data changes) between revisions, whatever the template or the controller default says. That includes a security fix in a new policy version: it reaches that Application only at its next revision, when its owner edits it or bumps `app.oam.dev/publishVersion`. If a policy change must reach every Application at once, check which Applications carry these annotations first.
+:::
 
-### Template fields
+### Template Fields
 
 The settings sit next to `config.enabled`. They are evaluated with the Application's context, so a template can decide per Application:
 
@@ -77,7 +79,7 @@ The new version's own `applyPolicyUpdates` decides whether that version is adopt
 
 A value that is not a boolean is ignored, and the Application gets a `PolicySettingIgnored` Warning event naming the field. A rollout setting never makes a policy fail.
 
-### Annotation values
+### Annotation Values
 
 Each annotation takes `"true"` (every policy), `"false"` (no policy) or a comma-separated list of PolicyDefinition names (only those):
 
@@ -101,7 +103,7 @@ spec:
 
 Use the PolicyDefinition name in a list, without any `@version` suffix. An annotation that cannot be read (empty, or a name that cannot be a PolicyDefinition) is ignored for that setting, which falls back to the template and the default. A listed name that matches no policy applied to the Application is reported but harmless. Both give a `PolicySettingIgnored` Warning event.
 
-### Controller defaults
+### Controller Defaults
 
 ```bash
 helm upgrade --install kubevela kubevela/vela-core -n vela-system \
@@ -109,7 +111,7 @@ helm upgrade --install kubevela kubevela/vela-core -n vela-system \
   --set controllerArgs.defaultApplyDataChanges=true
 ```
 
-## New policy versions
+## New Policy Versions
 
 Between revisions, on each reconcile, KubeVela compares the live PolicyDefinitions with the versions pinned in the Application's latest revision. A policy that was edited, added or deleted is a **changed** policy.
 
@@ -120,7 +122,7 @@ Between revisions, on each reconcile, KubeVela compares the live PolicyDefinitio
 
 A few rules apply whatever the setting:
 
-- **A new version that fails to render is held**, not applied. The pinned version keeps the Application running, and the update is retried. KubeVela remembers a held update for ten minutes per live version, so it is not rendered again on every reconcile.
+- **A new version that fails to render is held**, not applied, and the pinned version keeps the Application running. If it failed because of something it reads, such as a missing ConfigMap, fixing that can take up to ten minutes to reach the Application: KubeVela remembers a held update for that long, rather than rendering it on every reconcile. Publishing a corrected version, or any change to the Application, decides again straight away.
 - **Adoption is decided in sequence.** Policies run as a chain (see [Priority](./application-scoped-policy.md#priority)), so a new version is tried in its place in that chain, after the policies before it. A new version that only fails next to the others is held.
 - **A new version that rewrites the spec stays pinned until the next revision**, even with `applyPolicyUpdates` on. Spec rewrites are covered by `autoRevision` below.
 - **A deleted policy is a changed policy too.** Its removal follows the settings its own template last set (they are recorded when it renders), then the annotation and the default. Until the removal is adopted, the deleted policy keeps applying from the pinned revision.
@@ -132,7 +134,7 @@ A held update shows in three places:
 - a `PolicyUpdatePending` event on the Application;
 - `vela policy view <app> --details`, which prints each policy's effective settings.
 
-## Data changes
+## Data Changes
 
 A policy that reads the cluster or an external API can produce different output without changing its template: a Namespace label is edited, a ConfigMap value changes. That is a **data change**.
 
@@ -145,25 +147,29 @@ KubeVela records each policy's applied output in the Application's policy Config
 
 A `publishVersion` pin holds data changes too, until it moves.
 
+With `applyDataChanges` on, a refresh writes a policy's new label or annotation value onto every dispatched resource that already carries that key, even where a trait set the key to something else on that resource.
+
 :::caution A held policy's data can still reach a later policy
 Holding swaps a policy's output for its last applied output **after** the policy chain has rendered. A later policy in the chain that reads the held policy's results during render (for example through `context.appLabels`) sees the new data, and its own output is built from it. If a later policy derives values from an earlier one, give both the same `applyDataChanges` setting.
 :::
 
-## Spec rewrites
+## Spec Rewrites
 
 A policy that sets `output.components`, `output.workflow` or `output.policies` rewrites the Application spec. With `autoRevision` on for that policy, a rewrite that differs from the latest revision cuts a new revision and is deployed. With it off, the Application keeps the components, workflow and policies stored in its latest revision, and the rewrite takes effect at the next revision.
 
-A policy that rewrites the spec the same way on every reconcile does not cut a revision each time, and does not hold another policy's update.
+A rewrite only counts when it differs from what the latest revision stores. A policy that rewrites the spec the same way on every reconcile cuts no revision, and does not stop another policy's update from being adopted.
 
-## What holds a change back
+## What Holds a Change Back
 
-- **The settings above.** When `applyPolicyUpdates` holds a newer version of a policy, the Application gets a `PolicyUpdatePending` event naming the policies. The held version is adopted at the Application's next revision.
-- **A `publishVersion` pin** (`app.oam.dev/publishVersion`) holds both new policy versions and data changes until the pin moves.
-- **A `@version` reference** in `spec.policies` (`type: add-team-labels@v2`) is a hard pin. It never moves to another version on its own.
-- **A new version that fails to render, or that rewrites the spec,** stays pinned whatever the settings. See [New policy versions](#new-policy-versions).
-- **A failing mandatory global policy** holds the whole Application at its current revision. See [Mandatory Global Policies](./application-scoped-policy.md#mandatory-global-policies).
+A change waits for the Application's next revision when:
 
-## Removing what a policy stops setting
+- **its setting is off** for that policy: see [New Policy Versions](#new-policy-versions), [Data Changes](#data-changes) and [Spec Rewrites](#spec-rewrites);
+- **a `publishVersion` pin** has not moved;
+- **an explicit policy is pinned with `@version`** in `spec.policies` (`type: add-team-labels@v2`). That is a hard pin: it moves only when the author changes the reference;
+- **a new version fails to render, or rewrites the spec:** see [New Policy Versions](#new-policy-versions);
+- **a mandatory global policy fails**, which holds the whole Application: see [Mandatory Global Policies](./application-scoped-policy.md#mandatory-global-policies).
+
+## Removing What a Policy Stops Setting
 
 When a policy stops setting a label or annotation (a new version drops it, the data no longer yields it, or the policy is deleted and its removal is adopted), KubeVela takes the key off the Application and off its dispatched resources.
 
@@ -179,17 +185,15 @@ It only removes what it knows the policies put there:
 - **ConfigMaps, Secrets and CRDs keep removed keys.** KubeVela records no last-applied configuration for those kinds, so the three-way merge that removes a key from other resources cannot remove it from them. The key stays on the resource until something else removes it.
 :::
 
-A label a policy sets on the Application wins over a trait that patches the same key on a resource.
-
 :::caution Revoking a bad global policy
 Deleting a global policy is itself a policy change. With `applyPolicyUpdates` off (the default), the deleted policy's labels stay on existing Applications until their next revision. If you may need to pull a policy back quickly, decide on `applyPolicyUpdates` before you need it.
 :::
 
-## Rolling back
+## Rolling Back
 
-Rolling an Application back to an earlier revision's spec reuses that revision, and renders it with the policies' **current** data. A rollback restores what the author wrote, not a snapshot of the data the policies read at the time.
+Rolling an Application back to an earlier revision's spec is an edit like any other: it renders with the **live** policy versions and their **current** data, not the versions pinned in that revision. A rollback restores what the author wrote, not the policies or the data of the time.
 
-## Seeing what happened
+## Seeing What Happened
 
 | Where | What it shows |
 |---|---|
@@ -207,7 +211,7 @@ The policy ConfigMap holds the record KubeVela works from. Its entries:
 | `metadata` | The labels, annotations and context the policies set, used to work out removals. |
 | `applied_outputs` | Each policy's last applied output, used to hold data changes. |
 | `pending_removals` | Removals still to be applied to resources. |
-| `NNN-<policy>` | One entry per policy, in render order, with its output, settings and the settings its template set. |
+| `NNN-<policy>` | One entry per policy, prefixed with its zero-padded render order, with its output, settings and the settings its template set. |
 
 ### Previewing with `vela policy dry-run`
 
@@ -219,7 +223,7 @@ vela policy dry-run my-app \
   --allow-skip-global-policies=false
 ```
 
-Both flags default to the chart's defaults. The output starts with the values it assumed:
+Both flags default to `false`, as the chart does. The output starts with the values it assumed:
 
 ```
 Assumed controller flags: --allow-namespace-global-policies=false --allow-skip-global-policies=false
@@ -227,7 +231,7 @@ Assumed controller flags: --allow-namespace-global-policies=false --allow-skip-g
 
 With `-o json` or `-o yaml` the same values are in `assumedControllerFlags`.
 
-## Choosing settings
+## Choosing Settings
 
 - **Informational tags** (team, cost centre, managed-by): `applyPolicyUpdates` and `applyDataChanges` on in the template. Changes reach every Application within a resync, with no change to the Application: a new version cuts a revision, and changed data doesn't.
 - **Policies that change behaviour:** leave the settings off and let each Application adopt the new version at its next revision. Owners who want it sooner opt in with the annotation.
@@ -235,14 +239,14 @@ With `-o json` or `-o yaml` the same values are in `assumedControllerFlags`.
 
 ## Reference
 
-### Annotations and labels
+### Annotations and Labels
 
 | Key | Set on | Set by | Values | Effect |
 |---|---|---|---|---|
 | `policy.oam.dev/skip-global` | Application | Application author | `"true"` | Opts the Application out of global policies, only while the controller runs with `--allow-skip-global-policies`. Otherwise it is ignored with a `GlobalPolicySkipIgnored` event, and adding it is refused. See [Opting Out of Global Policies](./application-scoped-policy.md#opting-out-of-global-policies). |
-| `policy.oam.dev/apply-policy-updates` | Application | Application author | `"true"`, `"false"`, or PolicyDefinition names | Whether the Application adopts new versions of the policies it runs. See [New policy versions](#new-policy-versions). |
-| `policy.oam.dev/apply-data-changes` | Application | Application author | `"true"`, `"false"`, or PolicyDefinition names | Whether changed output from an unchanged policy version reaches the Application without a new revision. See [Data changes](#data-changes). |
-| `policy.oam.dev/auto-revision` | Application | Application author | `"true"`, `"false"`, or PolicyDefinition names | Whether a policy's spec rewrite cuts a new revision. See [Spec rewrites](#spec-rewrites). |
+| `policy.oam.dev/apply-policy-updates` | Application | Application author | `"true"`, `"false"`, or PolicyDefinition names | Whether the Application adopts new versions of the policies it runs. See [New Policy Versions](#new-policy-versions). |
+| `policy.oam.dev/apply-data-changes` | Application | Application author | `"true"`, `"false"`, or PolicyDefinition names | Whether changed output from an unchanged policy version reaches the Application without a new revision. See [Data Changes](#data-changes). |
+| `policy.oam.dev/auto-revision` | Application | Application author | `"true"`, `"false"`, or PolicyDefinition names | Whether a policy's spec rewrite cuts a new revision. See [Spec Rewrites](#spec-rewrites). |
 | `app.oam.dev/publishVersion` | Application | Application author | any version string | Pins the Application: policy updates and data changes are held until the value changes, and a new value takes the live policies. See [Version Control](../../end-user/version-control.md). |
 | `filter.oam.dev/label-keys`, `filter.oam.dev/annotation-keys` | Application | Application author | comma-separated keys | Keys not copied from the Application to its resources. A policy refresh leaves them alone on resources. |
 | `app.oam.dev/policy-context-hash` | ResourceTracker | KubeVela | JSON map of policy instance (`global:<name>`, or the `spec.policies` name) to hash | The hash of each policy's context output when the components were last applied. Used to detect data changes in `output.ctx`. |
@@ -250,9 +254,9 @@ With `-o json` or `-o yaml` the same values are in `assumedControllerFlags`.
 | `app.oam.dev/application-policies` | ConfigMap | KubeVela | `"true"` | Marks an Application's policy ConfigMap, with `app.oam.dev/name`, `app.oam.dev/namespace` and `app.oam.dev/uid` naming the Application. |
 | `policydefinition.oam.dev/name` | DefinitionRevision | KubeVela | PolicyDefinition name | Links a PolicyDefinition's revisions to it, for [versioning](./application-scoped-policy.md#versioning-policydefinitions). |
 
-The policy template's `context.appLabels` and `context.appAnnotations` leave out keys with internal prefixes (`app.oam.dev/`, `oam.dev/`, `owner.oam.dev/`, `modules.oam.dev/`, `kubernetes.io/`, `k8s.io/`, `kubectl.kubernetes.io/`, `app.kubernetes.io/`, `helm.sh/`), so a policy cannot read KubeVela's own bookkeeping, including the annotations above.
+A policy template cannot read any of the KubeVela-managed keys above: `context.appLabels` and `context.appAnnotations` leave out internal prefixes. See [Context Variables](./application-scoped-policy.md#context-variables) for the list.
 
-### Controller flags and chart values
+### Controller Flags and Chart Values
 
 | Chart value | Controller flag | Default | Effect |
 |---|---|---|---|
@@ -271,7 +275,7 @@ The policy template's `context.appLabels` and `context.appAnnotations` leave out
 | `GlobalPolicyApplied` / `PolicyApplied` | Normal | A global or explicit policy applied. |
 | `GlobalPolicySkipped` / `PolicySkipped` | Normal | A policy was skipped, for example with `config.enabled: false`. |
 | `GlobalPolicyFailed` / `PolicyFailed` | Warning | A policy failed to render. |
-| `GlobalPolicyHeld` | Warning | A mandatory global policy fails, and the Application is held at its current revision. See [Mandatory global policies](./application-scoped-policy.md#mandatory-global-policies). |
+| `GlobalPolicyHeld` | Warning | A mandatory global policy fails, and the Application is held at its current revision. See [Mandatory Global Policies](./application-scoped-policy.md#mandatory-global-policies). |
 | `GlobalPolicyIgnored` | Warning | A global policy in the Application's namespace does not apply, because global policies must be in `vela-system`. |
 | `GlobalPolicySkipIgnored` | Warning | The Application carries `policy.oam.dev/skip-global`, but global policies are mandatory. |
 | `PolicyUpdatePending` | Normal | Newer versions of the named policies are held by `apply-policy-updates` or a `publishVersion` pin. |
@@ -284,7 +288,7 @@ The policy template's `context.appLabels` and `context.appAnnotations` leave out
 | `GlobalPolicies` | `False` | A mandatory global policy fails to load or render; the message names it and the error. The Application is held at its current revision. |
 | `GlobalPolicies` | `True` | Set when a held Application's global policies render again. An Application that was never held has no `GlobalPolicies` condition. |
 
-## Upgrading from an earlier release
+## Upgrading from an Earlier Release
 
 - **Global policies outside `vela-system` stop applying**, and **`policy.oam.dev/skip-global` is ignored**, unless the controller runs with `--allow-namespace-global-policies` and `--allow-skip-global-policies`. Before upgrading, find global PolicyDefinitions outside `vela-system` and Applications carrying `skip-global`. Then either move the policies to `vela-system` and check each such Application is fine taking the global policies, or set both chart values to `true` to keep the earlier behaviour.
 - **A namespace global that stops applying is a deleted policy** for the Applications it covered. Its labels come off when its removal is adopted, following the [rollout settings](#new-policy-versions).
