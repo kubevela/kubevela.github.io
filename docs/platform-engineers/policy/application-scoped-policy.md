@@ -303,7 +303,7 @@ template: {
 }
 ```
 
-Apply it to `vela-system`, where it covers every Application in the cluster:
+Apply it to `vela-system`, where it is considered for every Application in the cluster (`config.enabled`, the controller flags and opt-outs decide which ones it applies to):
 
 ```bash
 vela def apply platform-labels.cue -n vela-system

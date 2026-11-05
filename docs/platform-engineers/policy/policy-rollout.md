@@ -221,7 +221,7 @@ Set the cluster-wide defaults (the controller flags, Helm `controllerArgs.*`) on
 
 ## Upgrading from an Earlier Release
 
-Global policies outside `vela-system` stop applying, and `policy.oam.dev/skip-global` is ignored, unless the controller runs with `--allow-namespace-global-policies` and `--allow-skip-global-policies`. Before upgrading, find global PolicyDefinitions outside `vela-system` and Applications carrying `skip-global`. Then either move the policies to `vela-system` and check each such Application is fine taking the global policies, or set both chart values to `true` to keep the earlier behaviour.
+Global policies outside `vela-system` stop applying unless the controller runs with `--allow-namespace-global-policies`, and `policy.oam.dev/skip-global` is ignored unless it runs with `--allow-skip-global-policies`. The two are independent. Before upgrading, find global PolicyDefinitions outside `vela-system` and Applications carrying `skip-global`. For each, either move the policies to `vela-system` (and check the Applications are fine taking them), or set the matching chart value to `true` to keep the earlier behaviour.
 
 A namespace global that stops applying is a deleted policy for the Applications it covered. Its labels come off when its removal is adopted, following the [rollout settings](#new-policy-versions).
 

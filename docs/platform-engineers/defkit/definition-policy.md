@@ -42,7 +42,7 @@ These methods are the same shape as on `ComponentDefinition`. See the [Component
 
 ### PolicyTemplate (closure argument)
 
-`.Template()` passes a `*PolicyTemplate`. It exposes a single method — policies don't produce resources, so there's no `Output()` or `Patch()`:
+`.Template()` passes a `*PolicyTemplate`. For a policy that isn't Application-scoped it exposes a single method, since such a policy doesn't produce resources, so there's no `Output()` or `Patch()` (an Application-scoped policy's template also has `Output()`; see [Typed Policy Context](../policy/policy-context-schema.md#in-defkit)):
 
 | Method | Description |
 |---|---|

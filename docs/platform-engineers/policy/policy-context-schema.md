@@ -185,7 +185,7 @@ A policy like that works as before. The keys it might supply are unknown to admi
 
 ## In defkit
 
-If you author definitions in Go with defkit, declare the schema with `CtxSchema` or `ClosedCtxSchema`:
+If you author definitions in Go with defkit, declare the schema with `CtxSchema` or `ClosedCtxSchema` (new in v1.12). An Application-scoped policy's `PolicyTemplate` also has `Output()`, whose `Ctx`, `Label` and `Annotation` write the policy's `output`:
 
 ```go
 defkit.NewPolicy("tenant-identity").ApplicationScoped().Global().Priority(10).
