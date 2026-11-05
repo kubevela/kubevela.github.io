@@ -141,7 +141,7 @@ Labels and annotations are always merged with existing values. The `components`,
 For most use cases, prefer `output.labels`, `output.annotations`, and `output.ctx` which safely merge with or extend existing values.
 :::
 
-### Example — Add Annotations
+### Example: Add Annotations
 
 ```cue
 "inject-backup-config": {
@@ -206,12 +206,20 @@ Inside the CUE template, the `context` object provides read access to the curren
 | `context.appComponents` | Application components array |
 | `context.appWorkflow` | Application workflow object |
 | `context.appPolicies` | Application policies array |
+| `context.appName` | Application name (same as `context.name`) |
+| `context.appRevision` | The Application revision being rendered |
+| `context.publishVersion` | The Application's `app.oam.dev/publishVersion`, if set |
 | `context.policyName` | Name of the currently executing policy instance |
+| `context.policyType` | The policy's type, as written in `spec.policies` or the global's name |
 | `context.policyRevision` | Policy definition revision number (if versioned) |
 | `context.policyRevisionName` | Policy DefinitionRevision resource name (if versioned) |
 | `context.policyRevisionHash` | Policy template content hash (if versioned) |
 
-Example — conditionally applying based on a label:
+`context.appLabels` and `context.appAnnotations` leave out keys with internal prefixes (`app.oam.dev/`, `oam.dev/`, `owner.oam.dev/`, `modules.oam.dev/`, `kubernetes.io/`, `k8s.io/`, `kubectl.kubernetes.io/`, `app.kubernetes.io/`, `helm.sh/`), so a policy cannot read or key off KubeVela's own bookkeeping.
+
+The PolicyDefinition webhook refuses a template that reads a `context` field a policy render does not supply, such as a misspelt `context.namesapce`. A field that does not exist would fail the render of every Application the policy applies to.
+
+Example: conditionally applying based on a label:
 
 ```cue
 config: {
@@ -221,7 +229,8 @@ config: {
 
 ## Passing Context to Workflow Steps
 
-Use `output.ctx` to pass computed values from the policy to workflow steps. These values are available as `context.custom.<key>` within workflow step CUE templates.
+Use `output.ctx` to pass computed values from the policy to the Application's components, traits and workflow steps. These values are available as `context.custom.<key>` in their CUE templates.
+
 
 In this example, a global policy detects tenant namespaces and makes the tenant name available to workflow steps without developers needing to declare it themselves:
 
@@ -254,11 +263,13 @@ template: {
 }
 ```
 
-Workflow steps can then reference `context.custom.tenant` to drive tenant-specific behaviour such as selecting a target cluster or looking up configuration — without any change to the Application definition.
+Workflow steps can then reference `context.custom.tenant` to drive tenant-specific behaviour, such as selecting a target cluster or looking up configuration, without any change to the Application definition.
 
 ## Global Policies
 
-A **global policy** is automatically evaluated against every Application — no need for developers to declare it in `spec.policies`. Whether it actually applies to a given Application is still controlled by `config.enabled` in the CUE template, so global policies can be selective. This is the primary way platform teams enforce organisation-wide standards. Add `global: true` to the definition attributes and apply the definition to `vela-system` for cluster-wide coverage, or to a specific namespace for namespace-scoped coverage.
+A **global policy** is evaluated against every Application without developers declaring it in `spec.policies`. Whether it applies to a given Application is still controlled by `config.enabled` in the CUE template, so global policies can be selective. This is the primary way platform teams enforce organisation-wide standards.
+
+Add `global: true` to the definition attributes and apply the definition to `vela-system`:
 
 ```cue
 "platform-labels": {
@@ -283,42 +294,37 @@ template: {
 }
 ```
 
-Apply it to `vela-system` for cluster-wide coverage:
-
 ```bash
 vela def apply platform-labels.cue -n vela-system
 ```
 
-:::tip Namespace-scoped overrides
-Global policies in `vela-system` apply cluster-wide as a baseline. A global policy deployed to a specific namespace with the same name will override the `vela-system` version for Applications in that namespace only.
+Two controller flags decide how far a platform's global policies reach. Both are on by default in KubeVela 1.11, which keeps global policies as they have always behaved. An operator can turn either off to tighten them:
 
-This makes namespaces a natural unit of policy customisation. Platform teams can define cluster-wide defaults in `vela-system` and then let individual teams or environments override specific policies in their own namespace. For example:
+| Chart value (controller flag) | On (default) | Off |
+|---|---|---|
+| `controllerArgs.allowNamespaceGlobalPolicies` (`--allow-namespace-global-policies`) | A global policy in any namespace applies to the Applications in that namespace, and a `vela-system` one applies cluster-wide. See [Namespace Override Pattern](#namespace-override-pattern). | Only global policies in `vela-system` apply. |
+| `controllerArgs.allowSkipGlobalPolicies` (`--allow-skip-global-policies`) | An Application can opt out with `policy.oam.dev/skip-global`, and a global policy that fails is skipped for that render. | Global policies are mandatory. An Application cannot opt out, and a global policy that fails holds the Applications it covers. See [Mandatory Global Policies](#mandatory-global-policies). |
 
-- A `compliance` policy in `vela-system` enforces production security standards cluster-wide
-- The `dev` namespace overrides `compliance` with a relaxed version suited to development
-- The `team-a` namespace overrides `platform-labels` to add team-specific labelling
-
-This pattern means a single cluster can serve multiple teams and environments with consistent baseline governance while still allowing controlled namespace-level customisation.
-:::
+How changes to a global policy reach Applications that are already running is covered in [Rolling Out Policy Changes](./policy-rollout.md).
 
 ### Priority
 
 When multiple global policies apply, `priority` controls execution order. **Lower values run first** (priority `1` runs before priority `100`). Policies with the same priority execute alphabetically by name.
 
-Policies execute in a chain — each policy receives the Application as it was left by the previous policy. This means `output.labels` and `output.annotations` accumulate across policies, while `output.components`, `output.workflow`, and `output.policies` set by an earlier policy will be what later policies see in `context.appComponents`, `context.appWorkflow`, and `context.appPolicies`.
+Policies execute in a chain: each policy receives the Application as it was left by the previous policy. This means `output.labels` and `output.annotations` accumulate across policies, while `output.components`, `output.workflow`, and `output.policies` set by an earlier policy will be what later policies see in `context.appComponents`, `context.appWorkflow`, and `context.appPolicies`.
 
 This allows policies to be stacked and composed, but platform teams must be deliberate about execution order:
 
-- **Foundation policies** (low priority, e.g. `1`–`10`) should establish baseline values — security annotations, required labels, compliance markers
+- **Foundation policies** (low priority, e.g. `1`–`10`) should establish baseline values: security annotations, required labels, compliance markers
 - **Specialisation policies** (higher priority, e.g. `50`–`100`) can build on or refine those values for specific teams or environments
-- When two policies set the same label or annotation, the **last policy to run wins** — use priority to make this deterministic
+- When two policies set the same label or annotation, the **last policy to run wins**, so use priority to make this deterministic
 
 ```cue
 "security-hardening": {
   attributes: {
     scope:    "Application"
     global:   true
-    priority: 1   // Runs first — establishes security baseline
+    priority: 1   // Runs first: establishes the security baseline
   }
   description: "Enforce security annotations on all Applications."
   type: "policy"
@@ -326,10 +332,24 @@ This allows policies to be stacked and composed, but platform teams must be deli
 ```
 
 :::caution
-Avoid having two global policies at the same priority level modify the same fields. The alphabetical tiebreaker makes this technically deterministic but fragile — a policy rename could silently change the outcome. Use distinct priority values to make ordering explicit.
+Avoid having two global policies at the same priority level modify the same fields. The alphabetical tiebreaker makes this technically deterministic but fragile: a policy rename could silently change the outcome. Use distinct priority values to make ordering explicit.
 :::
 
 ### Namespace Override Pattern
+
+:::warning Turned off by `--allow-namespace-global-policies=false`
+This pattern works with the default, `controllerArgs.allowNamespaceGlobalPolicies=true`. If an operator sets it to `false`:
+
+- creating a global PolicyDefinition outside `vela-system`, or switching `global` on for one, is refused by the webhook;
+- a global PolicyDefinition that already exists outside `vela-system` does not apply. Updates to it are admitted with a warning saying so, and each Application in its namespace gets a `GlobalPolicyIgnored` Warning event;
+- for the Applications it used to cover, it counts as a deleted policy, and its labels come off following the [rollout settings](./policy-rollout.md#new-policy-versions).
+:::
+
+A namespace is then a unit of policy customisation. Platform teams define cluster-wide defaults in `vela-system`, and individual teams or environments override specific policies in their own namespace:
+
+- A `compliance` policy in `vela-system` enforces production security standards cluster-wide
+- The `dev` namespace overrides `compliance` with a relaxed version suited to development
+- The `team-a` namespace overrides `platform-labels` to add team-specific labelling
 
 Create a definition with the **same name** in a specific namespace to override the cluster-wide version for Applications in that namespace:
 
@@ -356,7 +376,7 @@ template: {
 
 ```cue
 // Namespace override: vela def apply environment-config.cue -n dev
-// The definition name matches the vela-system version — it takes precedence for the dev namespace
+// The definition name matches the vela-system version, so it takes precedence for the dev namespace
 "environment-config": {
   attributes: {
     scope:    "Application"
@@ -378,17 +398,40 @@ template: {
 
 Applications in the `dev` namespace get `environment: development`; all other namespaces get `environment: production`.
 
+## Mandatory Global Policies
+
+By default in KubeVela 1.11 (`controllerArgs.allowSkipGlobalPolicies=true`), a global policy that fails to render is skipped for that render, with a `GlobalPolicyFailed` Warning event, and the Application deploys without it.
+
+With `controllerArgs.allowSkipGlobalPolicies` set to `false`, every global policy that applies to an Application is mandatory: rendering on without it would deploy resources missing what it adds, such as identity labels. So when a global policy fails to load or render, for example because a ConfigMap it reads has gone missing:
+
+- **An Application that already has a revision is held at it.** It keeps running and reconciling (health, resync, its current workflow), but cuts no new revision: an author's edit waits until the policy renders again. Its `GlobalPolicies` condition is `False`, with a message naming the policy and the error, and it gets a `GlobalPolicyHeld` Warning event on each reconcile.
+- **An Application with no revision yet fails** to reconcile, with an error naming the policy, until the policy renders.
+
+Once the policy renders again, the held Application picks up where it was: the waiting edit is deployed with the policy's current output, and the condition returns to `True`.
+
+```bash
+kubectl get application payments -o jsonpath='{.status.conditions[?(@.type=="GlobalPolicies")]}'
+```
+
+```json
+{"type":"GlobalPolicies","status":"False","reason":"ReconcileError","message":"failed to render global policy \"tenant-identity\", which is mandatory: ..."}
+```
+
+:::warning With global policies mandatory, one broken global policy holds every Application it covers
+A global policy in `vela-system` usually applies to every Application in the cluster. If it reads something that disappears, or its template fails for some Application shapes, all of those Applications stop taking changes until it is fixed. Test a global policy change before applying it, keep what it reads highly available, and use `config.enabled` to limit it to the Applications that need it.
+:::
+
 ## Using CueX in Policies
 
-Policy templates have full access to [CueX](../cue/external-packages.md) providers, enabling them to read Kubernetes resources or call external APIs as part of policy evaluation. This makes it possible to enrich the Application context with data sourced from outside the Application itself.
+Policy templates have access to [CueX](../cue/external-packages.md) providers, such as `vela/kube` (`kube.#Get`, `kube.#List`) and `vela/http` (`http.#Do`), enabling them to read Kubernetes resources or call external APIs as part of policy evaluation. This makes it possible to enrich the Application context with data sourced from outside the Application itself.
 
 :::note
-Global policies cannot accept `parameter` values — there is no `spec.policies` entry where a developer can supply `properties`. Any configuration a global policy needs must come from the policy template itself, from Kubernetes resources read via `kube.#Read`, or derived from context variables such as `context.namespace` or `context.appLabels`.
+Global policies cannot accept `parameter` values: there is no `spec.policies` entry where a developer can supply `properties`. Any configuration a global policy needs must come from the policy template itself, from Kubernetes resources read via `kube.#Get`, or derived from context variables such as `context.namespace` or `context.appLabels`.
 :::
 
 ### Security Considerations
 
-Policy templates execute with the KubeVela controller's service account, which typically has broad cluster access. This gives platform teams a powerful tool for abstracting infrastructure concerns — policies can read Secrets, ConfigMaps, custom resources, and external APIs on behalf of every Application in the cluster.
+Policy templates execute with the KubeVela controller's service account, which typically has broad cluster access. This gives platform teams a powerful tool for abstracting infrastructure concerns: policies can read Secrets, ConfigMaps, custom resources, and external APIs on behalf of every Application in the cluster.
 
 With this power comes responsibility:
 
@@ -417,7 +460,7 @@ template: {
   parameter: {}
 
   // Read the namespace the Application is deployed into
-  _ns: kube.#Read & {
+  _ns: kube.#Get & {
     $params: {
       resource: {
         apiVersion: "v1"
@@ -431,11 +474,11 @@ template: {
 
   output: {
     // Propagate namespace labels as Application labels
-    labels: _ns.$returns.value.metadata.labels
+    labels: _ns.$returns.metadata.labels
 
     // Make namespace labels available to workflow steps
     ctx: {
-      namespaceLabels: _ns.$returns.value.metadata.labels
+      namespaceLabels: _ns.$returns.metadata.labels
     }
   }
 }
@@ -465,7 +508,7 @@ template: {
   parameter: {}
 
   // Read Backstage URL from a platform ConfigMap in vela-system
-  _config: kube.#Read & {
+  _config: kube.#Get & {
     $params: {
       resource: {
         apiVersion: "v1"
@@ -478,7 +521,7 @@ template: {
     }
   }
 
-  _backstageURL: _config.$returns.value.data["backstageURL"]
+  _backstageURL: _config.$returns.data["backstageURL"]
 
   // Look up the component in the Backstage catalog by Application name
   _entity: http.#Do & {
@@ -507,14 +550,14 @@ template: {
 ```
 
 :::caution
-When calling external APIs or reading Kubernetes resources from a policy, ensure the endpoint is highly available. A failed or slow call will delay reconciliation for the Applications the policy applies to. Consider using `config.enabled` to restrict the policy to only Applications where the call is expected to succeed.
+A failed call fails the policy's render. For a global policy, the Applications it covers deploy without it by default, or are held if global policies are mandatory (see [Mandatory Global Policies](#mandatory-global-policies)); for an explicit policy it fails the Application's reconcile. A slow call delays reconciliation for every Application the policy applies to. Make sure the endpoint or resource is highly available, and use `config.enabled` to restrict the policy to the Applications where the call is expected to succeed.
 
-KubeVela includes a built-in policy result cache that prevents CueX actions from being re-evaluated on every reconciliation loop. Policy outputs are cached and only re-evaluated when the Application spec changes or the cache TTL expires, keeping reconciliation performance predictable even with external API calls.
+KubeVela caches policy results, so CueX actions are not re-evaluated on every reconcile. A policy is rendered again when the Application changes or the cache entry expires (after one minute). A changed result is a data change, which reaches running Applications as described in [Rolling Out Policy Changes](./policy-rollout.md#data-changes).
 :::
 
 ## Opting Out of Global Policies
 
-An Application can opt out of all global policies with the annotation `policy.oam.dev/skip-global: "true"`:
+An Application can opt out of all global policies with the annotation `policy.oam.dev/skip-global: "true"`. This works with the default, `controllerArgs.allowSkipGlobalPolicies=true`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -532,7 +575,16 @@ spec:
         image: nginx:latest
 ```
 
-Only explicitly declared policies in `spec.policies` will be processed for this Application.
+Only the policies declared in its `spec.policies` are then processed for this Application.
+
+If an operator sets it to `false`, global policies are mandatory:
+
+- **The controller ignores the annotation.** The Application takes the global policies at its next revision, and gets a `GlobalPolicySkipIgnored` Warning event.
+- **Any create or update of an Application carrying the annotation is refused** while Application-scoped and global policies are enabled: `global platform policies are mandatory; applications cannot opt out of them`. In KubeVela 1.11 this includes Applications that carried it before the flag changed: their owners must remove the annotation before they can change anything else.
+
+:::caution Check opted-out Applications before turning skips off
+An Application carrying `skip-global` when an operator turns `allowSkipGlobalPolicies` off starts receiving every global policy (labels, context, spec rewrites) at its next revision, with no action from its owner, and cannot be updated until the annotation is removed. Find them first: `kubectl get applications -A -o json | jq -r '.items[] | select(.metadata.annotations["policy.oam.dev/skip-global"] == "true") | "\(.metadata.namespace)/\(.metadata.name)"'`.
+:::
 
 ## Inspecting Applied Policies
 
@@ -553,7 +605,7 @@ vela policy view my-app
 +---+----------------+----------------+-------------+----------+---------+
 ```
 
-Include per-policy details — labels, annotations, context, and spec diffs injected by each policy:
+Include per-policy details: the labels, annotations, context and spec changes each policy injected:
 
 ```bash
 vela policy view my-app --details
@@ -591,11 +643,19 @@ vela policy dry-run -f my-app.yaml
 
 Both `view` and `dry-run` support the same `--details`, `--outcome`, `-p`, and `-o` flags for consistent output across live and simulated policy inspection.
 
+Which global policies apply depends on the controller's `--allow-namespace-global-policies` and `--allow-skip-global-policies` flags, which the CLI cannot read. Pass the controller's values to `dry-run`, or its result can differ from the controller's:
+
+```bash
+vela policy dry-run my-app --allow-skip-global-policies=false
+```
+
+The output starts with the values it assumed (`Assumed controller flags: ...`), and `-o json` or `-o yaml` includes them as `assumedControllerFlags`.
+
 ## Versioning PolicyDefinitions
 
-Application-scoped policies support [definition versioning](../x-def-version.md). Once an ApplicationRevision is created, the PolicyDefinition version resolved at that point is locked for the lifetime of that revision. Updating the PolicyDefinition will not affect existing ApplicationRevisions — only new revisions (triggered by an Application spec change) will pick up the latest definition.
+Application-scoped policies support [definition versioning](../x-def-version.md). Each ApplicationRevision records the PolicyDefinition versions it was rendered with. A new revision (an Application spec change, its first deployment, or a `publishVersion` bump) takes the latest versions. Between revisions, whether a running Application adopts a new version is decided by its [rollout settings](./policy-rollout.md#new-policy-versions); with the defaults, it keeps the recorded version and reports the newer one as pending.
 
-For production use cases, it is strongly recommended to pin explicit policies to a specific version using the `@version` suffix. This prevents a PolicyDefinition update from silently changing the behaviour of a deployed Application:
+For production use cases, pin explicit policies to a specific version with the `@version` suffix. A pinned explicit policy is not changed by updates to its PolicyDefinition:
 
 ```yaml
 policies:
@@ -605,11 +665,7 @@ policies:
       team: platform-team
 ```
 
-:::note Global policy versioning
-Global policies always resolve to the latest available PolicyDefinition version; since they represent universal governance standards, pinning is not supported. This means updating a global PolicyDefinition will take effect on the next new ApplicationRevision for any Application it applies to.
-
-As with explicit policies, the resolved version is locked for the duration of an ApplicationRevision. Platform Engineers should treat global policy updates with the same care as any breaking change — updating a global policy affects every Application in its scope, so changes should be tested and rolled out deliberately.
-:::
+Global policies always resolve to the latest PolicyDefinition version; pinning is not supported, since they represent universal governance standards. An update to a global policy reaches every Application in its scope, at each Application's next revision or sooner if its rollout settings adopt it. Treat global policy updates with the same care as any breaking change: test them, and roll them out deliberately.
 
 ## Summary
 
@@ -622,5 +678,7 @@ As with explicit policies, the resolved version is locked for the duration of an
 | `output.labels` / `output.annotations` | Merged into Application metadata |
 | `output.components` / `output.workflow` / `output.policies` | Replace corresponding spec fields |
 | `output.ctx` | Passed to workflow steps as `context.custom` |
-| `policy.oam.dev/skip-global: "true"` | Annotation to opt an Application out of all global policies |
-| `policy.oam.dev/auto-revision: "true"` | When set on an Application, policy-driven spec changes (via `output.components`, `output.workflow`, or `output.policies`) will automatically create a new ApplicationRevision. Without this, spec changes from policies are ignored until the next deployment of the Application |
+| `config.applyPolicyUpdates` / `config.applyDataChanges` / `config.autoRevision` | Per-policy [rollout settings](./policy-rollout.md#the-rollout-settings) |
+| `policy.oam.dev/skip-global: "true"` | Opts an Application out of all global policies, unless the controller runs with `--allow-skip-global-policies=false` |
+| `policy.oam.dev/apply-policy-updates` / `policy.oam.dev/apply-data-changes` / `policy.oam.dev/auto-revision` | Application annotations that override the rollout settings; see the [annotation reference](./policy-rollout.md#annotations-and-labels) |
+| `--allow-namespace-global-policies` / `--allow-skip-global-policies` | Controller flags (on by default) that let global policies live outside `vela-system`, and let Applications opt out |
