@@ -219,7 +219,7 @@ Inside the CUE template, the `context` object provides read access to the curren
 
 The PolicyDefinition webhook refuses a template that reads a `context` field a policy render does not supply, such as a misspelt `context.namesapce`. A field that does not exist would fail the render of every Application the policy applies to.
 
-Example: conditionally applying based on a label. Read a label through a default, since in CUE comparing a missing key is an error, not `false`, and an Application without the label would fail the policy's render:
+To apply a policy based on an Application's label, read the label through a default. In CUE, comparing a missing key is an error rather than `false`, so without the default an Application that doesn't carry the label would fail the policy's render:
 
 ```cue
 _env: *context.appLabels["env"] | ""
@@ -270,7 +270,7 @@ Workflow steps can then reference `context.custom.tenant` to drive tenant-specif
 
 A **global policy** is evaluated against every Application without developers declaring it in `spec.policies`. Whether it applies to a given Application is still controlled by `config.enabled` in the CUE template, so global policies can be selective. This is the primary way platform teams enforce organisation-wide standards.
 
-Add `global: true` to the definition attributes and apply the definition to `vela-system`:
+To make a policy global, add `global: true` to the definition attributes and apply the definition to `vela-system`:
 
 ```cue
 "platform-labels": {
@@ -295,6 +295,8 @@ template: {
 }
 ```
 
+Apply it to `vela-system`, where it covers every Application in the cluster:
+
 ```bash
 vela def apply platform-labels.cue -n vela-system
 ```
@@ -306,7 +308,7 @@ Two controller flags decide how far a platform's global policies reach. Both are
 | `controllerArgs.allowNamespaceGlobalPolicies` (`--allow-namespace-global-policies`) | A global policy in any namespace applies to the Applications in that namespace, and a `vela-system` one applies cluster-wide. See [Namespace Override Pattern](#namespace-override-pattern). | Only global policies in `vela-system` apply. |
 | `controllerArgs.allowSkipGlobalPolicies` (`--allow-skip-global-policies`) | An Application can opt out with `policy.oam.dev/skip-global`, and a global policy that fails is skipped for that render. | Global policies are mandatory. An Application cannot opt out, and a global policy that fails holds the Applications it covers. See [Mandatory Global Policies](#mandatory-global-policies). |
 
-How changes to a global policy reach Applications that are already running is covered in [Rolling Out Policy Changes](./policy-rollout.md).
+When you change a global policy later, how that change reaches Applications that are already running is covered in [Rolling Out Policy Changes](./policy-rollout.md).
 
 ### Priority
 
@@ -339,11 +341,7 @@ Avoid having two global policies at the same priority level modify the same fiel
 ### Namespace Override Pattern
 
 :::warning Turned off by `--allow-namespace-global-policies=false`
-This pattern works with the default, `controllerArgs.allowNamespaceGlobalPolicies=true`. If an operator sets it to `false`:
-
-- creating a global PolicyDefinition outside `vela-system`, or switching `global` on for one, is refused by the webhook;
-- a global PolicyDefinition that already exists outside `vela-system` does not apply. Updates to it are admitted with a warning saying so, and each Application in its namespace gets a `GlobalPolicyIgnored` Warning event;
-- for the Applications it used to cover, it counts as a deleted policy, and its labels come off following the [rollout settings](./policy-rollout.md#new-policy-versions).
+This pattern works with the default, `controllerArgs.allowNamespaceGlobalPolicies=true`. If an operator sets it to `false`, the webhook refuses to create a global PolicyDefinition outside `vela-system`, or to switch `global` on for one. A global PolicyDefinition that already exists outside `vela-system` stops applying: updates to it are admitted with a warning saying so, and each Application in its namespace gets a `GlobalPolicyIgnored` Warning event. For the Applications it used to cover, it counts as a deleted policy, and its labels come off following the [rollout settings](./policy-rollout.md#new-policy-versions).
 :::
 
 A namespace is then a unit of policy customisation. Platform teams define cluster-wide defaults in `vela-system`, and individual teams or environments override specific policies in their own namespace:
@@ -403,12 +401,11 @@ Applications in the `dev` namespace get `environment: development`; all other na
 
 By default in KubeVela 1.11 (`controllerArgs.allowSkipGlobalPolicies=true`), a global policy that fails to render is skipped for that render, with a `GlobalPolicyFailed` Warning event, and the Application deploys without it.
 
-With `controllerArgs.allowSkipGlobalPolicies` set to `false`, every global policy that applies to an Application is mandatory: rendering on without it would deploy resources missing what it adds, such as identity labels. So when a global policy fails to load or render, for example because a ConfigMap it reads has gone missing:
+With `controllerArgs.allowSkipGlobalPolicies` set to `false`, every global policy that applies to an Application is mandatory. Rendering on without it would deploy resources missing what it adds, such as identity labels, so KubeVela won't.
 
-- **An Application that already has a revision is held at it.** It keeps running and reconciling (health, resync, its current workflow), but cuts no new revision: an author's edit waits until the policy renders again. Its `GlobalPolicies` condition is `False`, with a message naming the policy and the error, and it gets a `GlobalPolicyHeld` Warning event on each reconcile.
-- **An Application with no revision yet fails** to reconcile, with an error naming the policy, until the policy renders.
+That matters when a global policy fails to load or render, for example because a ConfigMap it reads has gone missing. An Application that already has a revision is **held** at it. It keeps running and reconciling (health, resync, its current workflow), but cuts no new revision, so an author's edit waits until the policy renders again. Its `GlobalPolicies` condition is `False`, with a message naming the policy and the error, and it gets a `GlobalPolicyHeld` Warning event on each reconcile. An Application with no revision yet fails to reconcile, with an error naming the policy, until the policy renders.
 
-Once the policy renders again, the held Application picks up where it was: the waiting edit is deployed with the policy's current output, and the condition returns to `True`.
+Once the policy renders again, the held Application picks up where it was: the waiting edit is deployed with the policy's current output, and the condition returns to `True`. To check whether an Application is held:
 
 ```bash
 kubectl get application payments -o jsonpath='{.status.conditions[?(@.type=="GlobalPolicies")]}'
@@ -556,7 +553,7 @@ KubeVela caches policy results, so CueX actions are not re-evaluated on every re
 
 ## Opting Out of Global Policies
 
-An Application can opt out of all global policies with the annotation `policy.oam.dev/skip-global: "true"`. This works with the default, `controllerArgs.allowSkipGlobalPolicies=true`:
+Sometimes a particular Application needs to stay out of the platform's global policies. It can opt out of all of them with the annotation `policy.oam.dev/skip-global: "true"`, which works with the default, `controllerArgs.allowSkipGlobalPolicies=true`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -576,10 +573,9 @@ spec:
 
 Only the policies declared in its `spec.policies` are then processed for this Application.
 
-If an operator sets it to `false`, global policies are mandatory:
+If an operator sets it to `false`, global policies are mandatory. The controller ignores the annotation: the Application takes the global policies at its next revision, and gets a `GlobalPolicySkipIgnored` Warning event.
 
-- **The controller ignores the annotation.** The Application takes the global policies at its next revision, and gets a `GlobalPolicySkipIgnored` Warning event.
-- **Any create or update of an Application carrying the annotation is refused** while Application-scoped and global policies are enabled: `global platform policies are mandatory; applications cannot opt out of them`. In KubeVela 1.11 this includes Applications that carried it before the flag changed: their owners must remove the annotation before they can change anything else.
+Any create or update of an Application carrying the annotation is refused too, while Application-scoped and global policies are enabled: `global platform policies are mandatory; applications cannot opt out of them`. In KubeVela 1.11 this includes Applications that carried it before the flag changed, so their owners must remove the annotation before they can change anything else.
 
 :::caution Check opted-out Applications before turning skips off
 An Application carrying `skip-global` when an operator turns `allowSkipGlobalPolicies` off starts receiving every global policy (labels, context, spec rewrites) at its next revision, with no action from its owner, and cannot be updated until the annotation is removed. Find them first:
