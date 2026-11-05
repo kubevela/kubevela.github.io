@@ -10,7 +10,9 @@ cluster. To set the server up, start with [AI agents with vela mcp](./vela-mcp.m
 
 - **Your identity, your RBAC.** The server runs as a child process of your MCP client and
   uses that process's kubeconfig context, exactly like the rest of the `vela` CLI. It can
-  read and change only what that identity can. Kubernetes RBAC is the boundary.
+  read and change only what that identity can. Kubernetes RBAC is the boundary. With
+  `--as` and `--as-group` it impersonates another user and groups instead, and the API
+  server applies their RBAC.
 - **No network listener.** The server speaks MCP over stdin and stdout only. Nothing else
   can connect to it.
 - **Managed clusters go through cluster-gateway.** Reads in other clusters carry your
@@ -119,7 +121,7 @@ The class is the highest of every rule that fired. HIGH applies even in a new Ap
 |---|---|
 | `gitops` | Nothing is written. The result carries the Application YAML for you to commit to your delivery repository and review as a pull request. |
 | `direct` | The server writes the Application to the cluster after you confirm in your client. |
-| `gated` | Planned: write the change but hold it for an approval in the workflow. This release returns `gitops` instead, because the controller support that holds the change does not exist yet. |
+| `gated` | Applied as `gitops`: the result carries the Application YAML for a pull request. vela-core has no hold that keeps a written change waiting for approval. |
 
 The agent asks for a mode, `gated` by default. The server then applies policy, which can
 only make the mode **stricter**, never looser:

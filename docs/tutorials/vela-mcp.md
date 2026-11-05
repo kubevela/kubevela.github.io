@@ -180,10 +180,11 @@ the common tasks and the tools behind them:
 | You ask | The agent uses |
 |---|---|
 | Which applications are running, and are they healthy? | `list_applications` |
+| Where can I reach this application? | `get_application`, which lists its endpoints |
 | Why is this application not working? | `explain_application`, then `get_logs` and `get_managed_resource` |
 | Where is my workflow stuck? | `get_workflow` |
 | Which components, traits and policies can I use? | `list_definitions` |
-| What does this definition do and which parameters does it take? | `explain_definition`, `describe_definition` |
+| What does this definition do and which parameters does it take? | `explain_definition`, `describe_definition`, which includes a minimal example |
 | Write an Application for me and check it renders | `describe_definition`, `dryrun_application` |
 | What would change if I applied this? | `diff_application` |
 | Which clusters and addons does the platform have? | `list_clusters`, `list_addons` |
@@ -217,8 +218,9 @@ DB_URL not set
 From that it can tell you the container exits because `DB_URL` is missing, the workflow is
 waiting for the component to become healthy, and which property to set to fix it.
 
-`explain_application` also returns a `handles` block: the exact clusters, namespace, pod
-names, label selector and time window of the latest deployment. If your client also has
+`explain_application`, `get_application` and `get_logs` also return a `handles` block: the
+exact clusters, namespace, pod names, label selector and time window of the latest
+deployment. If your client also has
 an observability MCP server, such as Grafana or Datadog, the agent can use those handles to
 query the matching metrics and traces without guessing label names.
 
@@ -249,6 +251,7 @@ Server flags go after `vela mcp config` so they are part of the printed entry:
 | `--namespace team-a` | Read Applications, resources and logs only in `team-a`. Repeat the flag for more namespaces. Definitions, addons and clusters stay readable. |
 | `--allow-write` | Add `apply_application`. On its own it never writes: it returns the Application YAML for you to commit to your delivery repository. |
 | `--allow-write --direct-namespace dev` | Also allow writes straight to the cluster in `dev`, each one confirmed by you in the client. |
+| `--as jane@example.com --as-group team-a` | Act as that user and group, as `kubectl --as` does, to see what their agent could read. Your own identity needs RBAC to impersonate them. |
 | `--production-pattern <regex>` | Namespaces that match never allow direct writes. The default matches names such as `prod`, `team-prod` and `production`. |
 
 See [vela mcp](../cli/vela_mcp.md) and [vela mcp config](../cli/vela_mcp_config.md) for the

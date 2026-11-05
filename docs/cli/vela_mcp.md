@@ -10,7 +10,7 @@ Serve KubeVela to AI agents over the Model Context Protocol (MCP).
 
  The server exposes the vela CLI's code paths as tools an agent can call: platform version and feature gates, the definitions a cluster publishes and their parameter schemas, Applications with their recorded status, workflow state, the live resource tree behind each component, a bounded, redacted tail of pod logs, explanations of definitions and Applications with every finding tied to an object, and the clusters and addons the control plane knows. Every response states the vela-core version and the time the data was read, so an agent explains the running system rather than a remembered one.
 
- Tools are grouped into read, plan and write classes. Only read and plan tools are available unless --allow-write is set. On the control plane the server acts with the caller's kubeconfig identity. Reads in other clusters go through cluster-gateway, which forwards that identity only when its ClientIdentityPenetration gate is on; results read from other clusters say which identity applied.
+ Tools are grouped into read, plan and write classes. Only read and plan tools are available unless --allow-write is set. On the control plane the server acts with the caller's kubeconfig identity, or impersonates the user and groups given with --as and --as-group, as kubectl does. Reads in other clusters go through cluster-gateway, which forwards that identity only when its ClientIdentityPenetration gate is on; results read from other clusters say which identity applied.
 
  The default transport is stdio, which is what desktop agents and coding assistants spawn directly. Standard output carries the protocol, so nothing else is printed there while the server runs.
 
@@ -27,6 +27,9 @@ vela mcp [flags]
   # Restrict Application, resource and log reads to two namespaces
   vela mcp --namespace team-a --namespace team-b
   
+  # Act as a developer would, to see what their agent can read
+  vela mcp --as jane@example.com --as-group team-a
+  
   # Allow writes: pull-request YAML everywhere, direct writes confirmed in
   # the client only in the dev namespace
   vela mcp --allow-write --direct-namespace dev
@@ -39,6 +42,8 @@ vela mcp [flags]
 
 ```
       --allow-write                    Register apply_application. Without --direct-namespace it only returns YAML for a pull request. Off by default.
+      --as string                      Username to impersonate for every request, as kubectl --as does. Your kubeconfig identity needs RBAC to impersonate it.
+      --as-group stringArray           Group to impersonate, with --as. Repeat for more than one.
       --direct-namespace stringArray   Allow direct mode, confirmed by the user in their client, in this namespace. Repeat for more than one. Refused at start if it matches --production-pattern.
   -h, --help                           help for mcp
       --namespace stringArray          Restrict Application, resource and log reads to this namespace, including resources an Application manages elsewhere. Repeat for more than one; empty means any namespace RBAC allows. Definitions, addons and clusters in the system namespace stay readable.
