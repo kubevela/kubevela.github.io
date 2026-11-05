@@ -25,34 +25,46 @@ import (
 	"vela/kube"
 )
 
-schema: ctx: close({
-	team:        =~"^[a-z][a-z0-9-]*$"
-	costCentre:  strings.MinRunes(3)
-	// Only tenants opted into the mesh have one.
-	meshDomain?: string
-})
-
-parameter: {}
-
-_ns: kube.#Get & {
-	$params: resource: {
-		apiVersion: "v1"
-		kind:       "Namespace"
-		metadata: name: context.namespace
+"tenant-identity": {
+	attributes: {
+		scope:    "Application"
+		global:   true
+		priority: 10
 	}
+	description: "Team and cost centre from the namespace, for every Application in it."
+	type:        "policy"
 }
-_labels: _ns.$returns.metadata.labels
 
-output: ctx: {
-	team:       _labels["platform.io/team"]
-	costCentre: _labels["platform.io/cost-centre"]
-	if _labels["platform.io/mesh-domain"] != _|_ {
-		meshDomain: _labels["platform.io/mesh-domain"]
+template: {
+	schema: ctx: close({
+		team:        =~"^[a-z][a-z0-9-]*$"
+		costCentre:  strings.MinRunes(3)
+		// Only tenants opted into the mesh have one.
+		meshDomain?: string
+	})
+
+	parameter: {}
+
+	_ns: kube.#Get & {
+		$params: resource: {
+			apiVersion: "v1"
+			kind:       "Namespace"
+			metadata: name: context.namespace
+		}
+	}
+	_labels: _ns.$returns.metadata.labels
+
+	output: ctx: {
+		team:       _labels["platform.io/team"]
+		costCentre: _labels["platform.io/cost-centre"]
+		if _labels["platform.io/mesh-domain"] != _|_ {
+			meshDomain: _labels["platform.io/mesh-domain"]
+		}
 	}
 }
 ```
 
-- **Keys are required unless marked `?`.** Here the policy promises to set `team` and `costCentre`. `meshDomain?` is optional, so a template must not rely on it. If the policy is conditional (its `config.enabled` is anything but the literal `true`), admission treats every key it declares as optional, so each must be guarded.
+- **Keys are required unless marked `?`.** Here the policy promises to set `team` and `costCentre`. `meshDomain?` is optional, so a template must not rely on it. If the policy is conditional (it sets `config.enabled` to anything but the literal `true`), admission treats every key it declares as optional, so each must be guarded. A policy with no `config.enabled`, like this one, always applies.
 - **`close({...})` makes the schema the whole contract.** The policy supplies nothing it doesn't declare, so admission can also refuse a template that reads an undeclared key. An open schema still types the keys it declares, but other keys may exist.
 - **The schema must be a struct literal**, `schema: ctx: {...}` or `schema: ctx: close({...})`. A `schema` field of any other shape, such as `schema: #Shape`, is not read as a context schema, and the policy counts as having none.
 - **The schema must stand on its own.** Admission reads it without the rest of the template. The CUE standard library (`strings`, `list`, `net`, ...) is fine; provider packages and references to other fields are not.
@@ -120,7 +132,7 @@ annotations: "platform.io/mesh-url": "https://\(context.custom.meshDomain)/\(con
 1) "schematic": component "gateway": context.custom.meshDomain is optional in policy "tenant-identity"'s schema.ctx; guard it (if context.custom.meshDomain != _|_ {...}) or give it a default.
 ```
 
-**A key no policy supplies.** This check only runs when **every** applicable policy that may set `output.ctx` declares a closed schema without pattern fields, and no applicable policy may set `output.policies`. Otherwise another policy could supply the key, and admission lets the read through. The check is also off when a policy's template can't be read or loaded.
+**A key no policy supplies.** This check only runs when **every** applicable policy that may set `output.ctx` declares a closed schema without pattern constraints (a field like `[string]: string` that admits any key; a regex on a declared key, like `team` above, is fine), and no applicable policy may set `output.policies`. Otherwise another policy could supply the key, and admission lets the read through. The check is also off when a policy's template can't be read or loaded.
 
 ```
 1) "schematic": component "regional": reads context.custom.region, but no applicable policy declares it in schema.ctx; guard it (if context.custom.region != _|_ {...}) or give it a default.

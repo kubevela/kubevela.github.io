@@ -124,7 +124,7 @@ A held update shows in three places:
 
 - the policy's entry in `status.appliedApplicationPolicies`, whose message starts `update pending: a newer version of this policy is held by policy.oam.dev/apply-policy-updates or a publishVersion pin`;
 - a `PolicyUpdatePending` event on the Application;
-- `vela policy view <app> --details`, which prints each policy's effective settings.
+- the policy's entry in the policy ConfigMap, which records its effective settings (see [Seeing What Happened](#seeing-what-happened)).
 
 ## Data Changes
 
