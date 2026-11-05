@@ -575,10 +575,10 @@ Only the policies declared in its `spec.policies` are then processed for this Ap
 
 If an operator sets it to `false`, global policies are mandatory. The controller ignores the annotation: the Application takes the global policies at its next revision, and gets a `GlobalPolicySkipIgnored` Warning event.
 
-Any create or update of an Application carrying the annotation is refused too, while Application-scoped and global policies are enabled: `global platform policies are mandatory; applications cannot opt out of them`. In KubeVela 1.11 this includes Applications that carried it before the flag changed, so their owners must remove the annotation before they can change anything else.
+Adding the annotation is refused too, while Application-scoped and global policies are enabled: `global platform policies are mandatory; applications cannot opt out of them`. An Application that already carries it stays updatable; the annotation is just ignored.
 
 :::caution Check opted-out Applications before turning skips off
-An Application carrying `skip-global` when an operator turns `allowSkipGlobalPolicies` off starts receiving every global policy (labels, context, spec rewrites) at its next revision, with no action from its owner, and cannot be updated until the annotation is removed. Find them first:
+An Application carrying `skip-global` when an operator turns `allowSkipGlobalPolicies` off starts receiving every global policy (labels, context, spec rewrites) at its next revision, with no action from its owner. Find them first:
 
 ```bash
 kubectl get applications -A -o json | jq -r '.items[] | select(.metadata.annotations["policy.oam.dev/skip-global"] == "true") | "\(.metadata.namespace)/\(.metadata.name)"'
