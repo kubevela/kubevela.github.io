@@ -66,7 +66,7 @@ template: {
 
 - **Keys are required unless marked `?`.** Here the policy promises to set `team` and `costCentre`. `meshDomain?` is optional, so a template must not rely on it. If the policy is conditional (it sets `config.enabled` to anything but the literal `true`), admission treats every key it declares as optional, so each must be guarded. A policy with no `config.enabled`, like this one, always applies.
 - **`close({...})` makes the schema the whole contract.** The policy supplies nothing it doesn't declare, so admission can also refuse a template that reads an undeclared key. An open schema still types the keys it declares, but other keys may exist.
-- **The schema must be a struct literal**, `schema: ctx: {...}` or `schema: ctx: close({...})`. A `schema` field of any other shape, such as `schema: #Shape`, is not read as a context schema, and the policy counts as having none.
+- **The schema must be a struct literal**, `schema: ctx: {...}` or `schema: ctx: close({...})`. Admission can't read a `schema` of any other shape, such as `schema: #Shape`, or one built under a comprehension. It counts that policy as unknown: none of its keys are checked, and the undeclared-key check is off for every Application it applies to. The render still checks the policy's `output.ctx` against it.
 - **The schema must stand on its own.** Admission reads it without the rest of the template. The CUE standard library (`strings`, `list`, `net`, ...) is fine; provider packages and references to other fields are not.
 - **A default is a fallback the policy gives.** With `team: *"platform" | string`, an output that leaves `team` out passes the check, and components receive `team: "platform"`. A value the output sets wins. A default on an optional key fills nothing.
 
