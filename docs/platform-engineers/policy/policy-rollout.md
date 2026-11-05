@@ -10,7 +10,7 @@ Make sure you have read [Application-Scoped Policies](./application-scoped-polic
 
 | Change | Example | Controlled by |
 |---|---|---|
-| **A new policy version** | A platform engineer edits, adds or deletes a PolicyDefinition | `applyPolicyUpdates` |
+| **A new policy version** | A platform engineer edits, adds or deletes a PolicyDefinition | `applyPolicyUpdates` (a new version that rewrites the spec waits for the next revision) |
 | **A data change** | The policy is unchanged, but what it reads (a Namespace label, a ConfigMap, an API) now returns something else, so its `output` differs | `applyDataChanges` |
 | **A spec rewrite** | The policy's `output.components`, `output.workflow` or `output.policies` replaces part of the Application spec | `autoRevision` |
 
@@ -75,7 +75,7 @@ template: {
 }
 ```
 
-The new version's own `applyPolicyUpdates` decides whether that version is adopted, so publishing a version that sets `applyPolicyUpdates: true` rolls it out.
+The new version's own `applyPolicyUpdates` decides whether that version is adopted, so publishing a version that sets `applyPolicyUpdates: true` rolls it out, except to an Application whose `policy.oam.dev/apply-policy-updates` annotation says otherwise.
 
 A value that is not a boolean is ignored, and the Application gets a `PolicySettingIgnored` Warning event naming the field. A rollout setting never makes a policy fail.
 
@@ -165,7 +165,7 @@ A change waits for the Application's next revision when:
 
 - **its setting is off** for that policy: see [New Policy Versions](#new-policy-versions), [Data Changes](#data-changes) and [Spec Rewrites](#spec-rewrites);
 - **a `publishVersion` pin** has not moved;
-- **an explicit policy is pinned with `@version`** in `spec.policies` (`type: add-team-labels@v2`). That is a hard pin: it moves only when the author changes the reference;
+- **an explicit policy is pinned with `@version`** in `spec.policies` (`type: add-team-labels@v2`). `@v2` names DefinitionRevision `add-team-labels-v2` when one exists, which is a hard pin; for a definition with semantic versions (`spec.version`), `@v2` resolves to the newest `2.x`, so pin the full version (`@v2.1.0`) to hold it;
 - **a new version fails to render, or rewrites the spec:** see [New Policy Versions](#new-policy-versions);
 - **a mandatory global policy fails**, which holds the whole Application: see [Mandatory Global Policies](./application-scoped-policy.md#mandatory-global-policies).
 
