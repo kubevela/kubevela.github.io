@@ -2,14 +2,14 @@
 title: Typed Policy Context
 ---
 
-An [Application-scoped policy](./application-scoped-policy.md) can put data in `output.ctx`, which components, traits and workflow steps read as `context.custom.<key>`. A policy can declare the shape of that data in a `schema: ctx` block. KubeVela then checks both ends:
+An [Application-scoped policy](./application-scoped-policy.md) can put data in `output.ctx`, which components, traits and workflow steps read as `context.custom.<key>`. That makes the policy and the definitions that read its context two halves of a contract, and without anything describing it, a mistake on either side only shows up when an Application renders. A definition that reads a key no policy sets, or uses a key as the wrong type, is admitted and only fails at render.
+
+A policy can declare the shape of its context in a `schema: ctx` block. KubeVela then checks both ends:
 
 | When | Who checks | Against what |
 |---|---|---|
 | `kubectl apply` of an Application | the Application webhook | the schemas of the policies that apply. No policy is evaluated, so no provider (`kube.#Get`, `http`) is called during admission |
 | every render | the controller | each policy's actual `output.ctx` against its own schema |
-
-Without a schema, a definition that reads a key no policy sets, or uses a key as the wrong type, is admitted and only fails at render.
 
 :::note
 Typed policy context is available from v1.12.
@@ -17,7 +17,7 @@ Typed policy context is available from v1.12.
 
 ## Declaring a Schema
 
-This global policy reads the team and cost centre from labels on the Application's namespace, and hands them to every Application in it:
+Here is a global policy that reads the team and cost centre from labels on the Application's namespace, and hands them to every Application in it. The `schema: ctx` block says what it promises to supply:
 
 ```cue
 import (
@@ -64,15 +64,19 @@ template: {
 }
 ```
 
-- **Keys are required unless marked `?`.** Here the policy promises to set `team` and `costCentre`. `meshDomain?` is optional, so a template must not rely on it. If the policy is conditional (it sets `config.enabled` to anything but the literal `true`), admission treats every key it declares as optional, so each must be guarded. A policy with no `config.enabled`, like this one, always applies.
-- **`close({...})` makes the schema the whole contract.** The policy supplies nothing it doesn't declare, so admission can also refuse a template that reads an undeclared key. An open schema still types the keys it declares, but other keys may exist.
-- **The schema must be a struct literal**, `schema: ctx: {...}` or `schema: ctx: close({...})`. Admission can't read a `schema` of any other shape, such as `schema: #Shape`, or one built under a comprehension. It counts that policy as unknown: none of its keys are checked, and the undeclared-key check is off for every Application it applies to. The render still checks the policy's `output.ctx` against it.
-- **The schema must stand on its own.** Admission reads it without the rest of the template. The CUE standard library (`strings`, `list`, `net`, ...) is fine; provider packages and references to other fields are not.
-- **A default is a fallback the policy gives.** With `team: *"platform" | string`, an output that leaves `team` out passes the check, and components receive `team: "platform"`. A value the output sets wins. A default on an optional key fills nothing.
+Keys are required unless marked `?`. Here the policy promises to set `team` and `costCentre`, while `meshDomain?` is optional, so a template must not rely on it. If the policy is conditional (it sets `config.enabled` to anything but the literal `true`), admission treats every key it declares as optional, so each must be guarded. A policy with no `config.enabled`, like this one, always applies.
+
+Wrapping the schema in `close({...})` makes it the whole contract: the policy supplies nothing it doesn't declare, so admission can also refuse a template that reads an undeclared key. An open schema still types the keys it declares, but other keys may exist.
+
+A few rules for the block itself:
+
+- It must be a struct literal, `schema: ctx: {...}` or `schema: ctx: close({...})`. Admission can't read a `schema` of any other shape, such as `schema: #Shape`, or one built under a comprehension. It counts that policy as unknown: none of its keys are checked, and the undeclared-key check is off for every Application it applies to. The render still checks the policy's `output.ctx` against it.
+- It must stand on its own, because admission reads it without the rest of the template. The CUE standard library (`strings`, `list`, `net`, ...) is fine; provider packages and references to other fields are not.
+- A default is a fallback the policy gives. With `team: *"platform" | string`, an output that leaves `team` out passes the check, and components receive `team: "platform"`. A value the output sets wins. A default on an optional key fills nothing.
 
 ## Reading the Context in a Definition
 
-A definition author has two patterns:
+On the other side of the contract, a definition reads the context as `context.custom`. There are two patterns, and which one you pick decides who gets the final say over the value:
 
 ```cue
 parameter: {
@@ -99,12 +103,12 @@ output: {
 
 | Pattern | Use it when | Who decides |
 |---|---|---|
-| `labels: team: context.custom.team` (direct) | the value is governance: identity, cost, compliance | the policy. The Application has no way to set it |
+| `labels: team: context.custom.team` (direct) | the value is governance: identity, cost, compliance | the policy. The Application can't set it through `properties`, though a trait it attaches can still patch the label |
 | `owner: *context.custom.team \| string` (parameter default) | the policy suggests a value | the Application may override it in `properties` |
 
 ## Seeing a Policy's Schema
 
-`vela policy view <app> --details` and `vela policy dry-run --details` print, under each policy, the schema its definition declares next to the context it set:
+To check what a policy promises, `vela policy view <app> --details` and `vela policy dry-run --details` print, under each policy, the schema its definition declares next to the context it set:
 
 ```
   Context schema:
@@ -120,9 +124,9 @@ The schema is read from the definition revision the policy rendered with. If tha
 
 ## What Admission Catches
 
-An Application using a definition that reads the context in a way the schema says will fail is refused at `kubectl apply`. `kubectl` prints each message after its usual `admission webhook "validating.core.oam.dev.v1beta1.applications" denied the request:`.
+With schemas in place, an Application using a definition that reads the context in a way the schema says will fail is refused at `kubectl apply`, before anything is deployed. `kubectl` prints each message after its usual `admission webhook "validating.core.oam.dev.v1beta1.applications" denied the request:`. There are three kinds of mistake it catches.
 
-**An optional key read without a guard,** in a component or a trait:
+The first is an optional key read without a guard, in a component or a trait:
 
 ```cue
 annotations: "platform.io/mesh-url": "https://\(context.custom.meshDomain)/\(context.name)"
@@ -132,13 +136,13 @@ annotations: "platform.io/mesh-url": "https://\(context.custom.meshDomain)/\(con
 1) "schematic": component "gateway": context.custom.meshDomain is optional in policy "tenant-identity"'s schema.ctx; guard it (if context.custom.meshDomain != _|_ {...}) or give it a default.
 ```
 
-**A key no policy supplies.** This check only runs when **every** applicable policy that may set `output.ctx` declares a closed schema without pattern constraints (a field like `[string]: string` that admits any key; a regex on a declared key, like `team` above, is fine), and no applicable policy may set `output.policies`. Otherwise another policy could supply the key, and admission lets the read through. The check is also off when a policy's template can't be read or loaded.
+The second is a key no policy supplies. This check only runs when **every** applicable policy that may set `output.ctx` declares a closed schema without pattern constraints (a field like `[string]: string` that admits any key; a regex on a declared key, like `team` above, is fine), and no applicable policy may set `output.policies`. Otherwise another policy could supply the key, and admission lets the read through. The check is also off when a policy's template can't be read or loaded.
 
 ```
 1) "schematic": component "regional": reads context.custom.region, but no applicable policy declares it in schema.ctx; guard it (if context.custom.region != _|_ {...}) or give it a default.
 ```
 
-**A key used against its type:**
+The third is a key used against its type:
 
 ```cue
 replicas: int & context.custom.costCentre
@@ -159,26 +163,19 @@ Admission trusts the schema; the render checks that the policy keeps it. If a na
 failed to render global policy "tenant-identity", which is mandatory: output.ctx does not match schema.ctx: output.ctx.costCentre: invalid value "cc" (does not satisfy strings.MinRunes(3)); output.ctx.team: invalid value "Payments" (out of bound =~"^[a-z][a-z0-9-]*$")
 ```
 
-Every mismatch is reported at once, in `output.ctx` terms. The other mismatches read:
-- **a required key the output doesn't set:** `output.ctx.costCentre: required by schema.ctx (string), not set`
-- **a key a closed schema doesn't declare:** `output.ctx.region: not declared by schema.ctx, which is closed`
+Every mismatch is reported at once, in `output.ctx` terms. A required key the output doesn't set reads `output.ctx.costCentre: required by schema.ctx (string), not set`, and a key a closed schema doesn't declare reads `output.ctx.region: not declared by schema.ctx, which is closed`.
 
-What a failing policy does to the Application depends on the policy:
-
-- **A global policy is mandatory** (unless the controller allows skipping). An Application that already has a revision is **held** at it: it keeps running, cuts no new revision, and reports a `GlobalPolicies` condition naming the policy. An Application with no revision yet fails. See [Mandatory Global Policies](./application-scoped-policy.md#mandatory-global-policies).
-- **An explicit policy** in `spec.policies` fails the Application's reconcile.
-
-Either way, nothing is deployed with context that breaks the schema.
+What a failing policy does to the Application depends on the policy. A global policy is mandatory (unless the controller allows skipping), so an Application that already has a revision is **held** at it: it keeps running, cuts no new revision, and reports a `GlobalPolicies` condition naming the policy. An Application with no revision yet fails. See [Mandatory Global Policies](./application-scoped-policy.md#mandatory-global-policies). An explicit policy in `spec.policies` fails the Application's reconcile. Either way, nothing is deployed with context that breaks the schema.
 
 ## What the PolicyDefinition Webhook Catches
 
-**A schema leaning on the rest of the template is refused.** For `schema: ctx: close({team: _teamPattern})`, where `_teamPattern` is defined elsewhere in the template:
+The PolicyDefinition webhook checks the schema itself when a policy is applied. A schema leaning on the rest of the template is refused. For `schema: ctx: close({team: _teamPattern})`, where `_teamPattern` is defined elsewhere in the template:
 
 ```
 invalid PolicyDefinition: [schema.ctx must stand on its own, using at most the CUE standard library and nothing else of the template, so that admission can read it: schema.ctx: ctx.team: reference "_teamPattern" not found]
 ```
 
-**Context without a schema is admitted, with a warning:**
+Context without a schema is admitted, with a warning:
 
 ```
 Warning: output.ctx is set without a schema.ctx declaring it, so Applications cannot be checked against it at admission; declare schema: ctx (and close() it to make it the whole contract)
@@ -187,6 +184,8 @@ Warning: output.ctx is set without a schema.ctx declaring it, so Applications ca
 A policy like that works as before. The keys it might supply are unknown to admission: any read of them is let through, and the undeclared-key check is off for every Application it applies to.
 
 ## In defkit
+
+If you author definitions in Go with defkit, declare the schema with `CtxSchema` or `ClosedCtxSchema`:
 
 ```go
 defkit.NewPolicy("tenant-identity").ApplicationScoped().Global().Priority(10).
@@ -202,31 +201,25 @@ defkit.NewPolicy("tenant-identity").ApplicationScoped().Global().Priority(10).
 	})
 ```
 
-- **Required by default:** a schema field is required unless it is `Optional()`. `CtxSchema(...)` declares an open schema; `ClosedCtxSchema(...)` a closed one.
-- **Imports are added for you:** a field using `MinLen` pulls in `"strings"`.
-- **Register catches typos** in a closed schema's outputs:
+A schema field is required unless it is `Optional()`. `CtxSchema(...)` declares an open schema, and `ClosedCtxSchema(...)` a closed one. Imports are added for you: a field using `MinLen` pulls in `"strings"`. Register also catches typos in a closed schema's outputs:
 
-  ```
-  defkit: invalid definition 'tenant-identity-typo': Output().Ctx("teem") is not declared by the closed CtxSchema
-  ```
+```
+defkit: invalid definition 'tenant-identity-typo': Output().Ctx("teem") is not declared by the closed CtxSchema
+```
 
 ## Rules of Thumb
 
-For **policy** authors:
-- **Declare `schema: ctx`** for anything you put in `output.ctx`.
-- **`close()` it** for identity and governance data. That gives Applications the strongest checking, including the undeclared-key check.
-- **Mark a key `?`** only if it really can be absent.
-- **Keep the schema self-contained:** the standard library, no references, no providers.
-- **Don't default a key that must fail closed** when the policy can't work it out.
+:::tip
+If you write policies, declare `schema: ctx` for anything you put in `output.ctx`, and `close()` it for identity and governance data, which gives Applications the strongest checking, including the undeclared-key check. Mark a key `?` only if it really can be absent. Keep the schema self-contained: the standard library, no references, no providers. And don't default a key that must fail closed when the policy can't work it out.
 
-For **definition** authors:
-- **Read governance values directly** (`labels: team: context.custom.team`), never through a parameter an Application can override.
-- **Guard optional keys** with `if context.custom.x != _|_ {...}`, or give them a default.
-- **Don't default a governance key in your own template** if it must fail closed. `context: custom: team: *"unknown" | string` means a broken policy quietly tags everything `unknown`.
+If you write definitions, read governance values directly (`labels: team: context.custom.team`), never through a parameter an Application can override. Guard optional keys with `if context.custom.x != _|_ {...}`, or give them a default. Don't default a governance key in your own template if it must fail closed: `context: custom: team: *"unknown" | string` means a broken policy quietly tags everything `unknown`.
+:::
 
 ## Limits
 
-- **Definitions that extend another:** the view of the context is given without types that need an import, and reads in the parent's template are not checked for guards.
-- **Dynamic reads:** `context.custom[k]` with a computed `k` is not checked.
-- **Disjunction schemas:** a schema that is a disjunction (`close({...}) | close({...})`) is not read at admission. That policy counts as unknown.
-- **Spec-rewriting policies:** a plain required parameter that a policy fills by rewriting the Application's spec is not visible to admission.
+Admission checks what it can see without evaluating any policy, so a few cases slip past it and are only caught at render:
+
+- For a definition that extends another, the view of the context is given without types that need an import, and reads in the parent's template are not checked for guards.
+- A dynamic read, `context.custom[k]` with a computed `k`, is not checked.
+- A schema that is a disjunction (`close({...}) | close({...})`) is not read at admission, so that policy counts as unknown.
+- A plain required parameter that a policy fills by rewriting the Application's spec is not visible to admission.
