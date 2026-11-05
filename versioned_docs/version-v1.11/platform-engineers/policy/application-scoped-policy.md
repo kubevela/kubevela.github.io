@@ -401,7 +401,7 @@ Applications in the `dev` namespace get `environment: development`; all other na
 
 By default in KubeVela 1.11 (`controllerArgs.allowSkipGlobalPolicies=true`), a global policy that fails to render is skipped for that render, with a `GlobalPolicyFailed` Warning event, and the Application deploys without it.
 
-With `controllerArgs.allowSkipGlobalPolicies` set to `false`, every global policy that applies to an Application is mandatory. Rendering on without it would deploy resources missing what it adds, such as identity labels, so KubeVela won't.
+With `controllerArgs.allowSkipGlobalPolicies` set to `false`, every global policy that applies to an Application is mandatory. Rendering on without it would deploy resources missing what it adds, such as identity labels, so KubeVela does not deploy a new revision without it.
 
 That matters when a global policy fails to load or render, for example because a ConfigMap it reads has gone missing. An Application that already has a revision is **held** at it. It keeps running and reconciling (health, resync, its current workflow), but cuts no new revision, so an author's edit waits until the policy renders again. Its `GlobalPolicies` condition is `False`, with a message naming the policy and the error, and it gets a `GlobalPolicyHeld` Warning event on each reconcile. An Application with no revision yet fails to reconcile, with an error naming the policy, until the policy renders.
 
