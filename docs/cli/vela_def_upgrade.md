@@ -7,7 +7,7 @@ Upgrade CUE definition for version compatibility
 ### Synopsis
 
 Upgrade CUE definition files to be compatible with a specific KubeVela version.
-This command automatically applies all necessary upgrades to ensure your definitions work with the target KubeVela version.
+This command applies the upgrades that are on by default; --enable-all also applies the opt-in passes, such as the default guards for boolean and generic fields.
 If no version is specified, upgrades to the current CLI version.
 
 Currently supported upgrades:

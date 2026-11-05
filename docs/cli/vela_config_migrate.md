@@ -11,7 +11,8 @@ The template may already be a ConfigTemplate CR or still a legacy ConfigMap; bot
 ConfigTemplate that migration did not create shadows the legacy ConfigMap, which is a conflict. The
 Secret is kept and becomes owned by the Config; a second run skips it. --all does this for
 every legacy config in the namespace, with or without a template. Secrets a GitOps tool applies
-are adopted too; the report says which, and their new Configs belong where the Secrets are kept.
+are adopted too and the report lists them: commit their new Configs to the repository the GitOps
+tool applies the Secrets from, or the tool reverts them.
 
 ```
 vela config migrate [flags]

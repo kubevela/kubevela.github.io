@@ -45,16 +45,16 @@ vela auth revoke-privileges
 ### Options
 
 ```
-  -e, --env string                   The environment name for the CLI request
-      --for-cluster strings          The clusters privileges to revoke. If empty, the control plane will be used.
-      --for-namespace strings        The namespaces privileges to revoke. If empty, cluster-scoped privileges will be revoked.
-  -g, --group strings                The group to revoke privileges from.
-  -h, --help                         help for revoke-privileges
-      --kubeconfig string            The kubeconfig to revoke privileges from. If set, it will override all the other identity flags.
-  -n, --namespace --serviceaccount   The namespace of the serviceaccount. This flag only works when --serviceaccount is set.
-      --readonly                     If set, only the readonly privileges will be revoked. This must match how the privileges were granted.
-      --serviceaccount string        The serviceaccount to revoke privileges from.
-  -u, --user string                  The user to revoke privileges from.
+  -e, --env string              The environment name for the CLI request
+      --for-cluster strings     The clusters privileges to revoke. If empty, the control plane will be used.
+      --for-namespace strings   The namespaces privileges to revoke. If empty, cluster-scoped privileges will be revoked.
+  -g, --group strings           The group to revoke privileges from.
+  -h, --help                    help for revoke-privileges
+      --kubeconfig string       The kubeconfig to revoke privileges from. If set, it will override all the other identity flags.
+  -n, --namespace string        The namespace of the serviceaccount. This flag only works when --serviceaccount is set.
+      --readonly                If set, only the readonly privileges will be revoked. This must match how the privileges were granted.
+      --serviceaccount string   The serviceaccount to revoke privileges from.
+  -u, --user string             The user to revoke privileges from.
 ```
 
 ### Options inherited from parent commands

@@ -9,7 +9,7 @@ Get a module registry.
 Show one module registry by name.
 
 ```
-vela module registry get [flags]
+vela module registry get NAME [flags]
 ```
 
 ### Examples

@@ -9,7 +9,7 @@ Update a module registry.
 Update an existing OCI module registry. Unlike "add", this fails if the registry does not already exist.
 
 ```
-vela module registry update [flags]
+vela module registry update NAME OCI_URL [flags]
 ```
 
 ### Examples

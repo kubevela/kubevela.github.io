@@ -11,7 +11,8 @@ config made from it, in any namespace, into ConfigTemplate and Config CRs. Nothi
 each config Secret becomes owned by its Config, the template ConfigMap is annotated with the
 ConfigTemplate that replaced it, and a second run skips both. --all does this for every legacy
 template in the namespace, then for the legacy configs left there. Objects a GitOps tool applies
-are adopted too; the report says which, and their new CRs belong where the legacy ones are kept.
+are adopted too and the report lists them: commit their new ConfigTemplate and Config CRs to the
+repository the GitOps tool applies them from, next to the legacy objects, or the tool reverts them.
 
 ```
 vela config-template migrate [flags]

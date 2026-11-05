@@ -9,7 +9,7 @@ Add a module registry.
 Add a named OCI registry that modules are published to and fetched from.
 
 ```
-vela module registry add [flags]
+vela module registry add NAME OCI_URL [flags]
 ```
 
 ### Examples

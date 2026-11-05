@@ -9,7 +9,7 @@ Delete a module registry.
 Remove one module registry and its token secret.
 
 ```
-vela module registry delete [flags]
+vela module registry delete NAME [flags]
 ```
 
 ### Examples

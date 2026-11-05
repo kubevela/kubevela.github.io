@@ -37,12 +37,12 @@ vela auth gen-kubeconfig
 ### Options
 
 ```
-  -e, --env string                   The environment name for the CLI request
-  -g, --group --user                 The groups of the generated kubeconfig. This flag only works when --user is set. It will be embedded as the Organization in the X509 certificate.
-  -h, --help                         help for gen-kubeconfig
-  -n, --namespace --serviceaccount   The namespace of the serviceaccount. This flag only works when --serviceaccount is set.
-      --serviceaccount --user        The serviceaccount of the generated kubeconfig. If set, a kubeconfig will be generated based on the secret token of the serviceaccount. Cannot be set when --user presents.
-  -u, --user string                  The user of the generated kubeconfig. If set, an X509-based kubeconfig will be intended to create. It will be embedded as the Subject in the X509 certificate.
+  -e, --env string              The environment name for the CLI request
+  -g, --group --user            The groups of the generated kubeconfig. This flag only works when --user is set. It will be embedded as the Organization in the X509 certificate.
+  -h, --help                    help for gen-kubeconfig
+  -n, --namespace string        The namespace of the serviceaccount. This flag only works when --serviceaccount is set.
+      --serviceaccount --user   The serviceaccount of the generated kubeconfig. If set, a kubeconfig will be generated based on the secret token of the serviceaccount. Cannot be set when --user presents.
+  -u, --user string             The user of the generated kubeconfig. If set, an X509-based kubeconfig will be intended to create. It will be embedded as the Subject in the X509 certificate.
 ```
 
 ### Options inherited from parent commands

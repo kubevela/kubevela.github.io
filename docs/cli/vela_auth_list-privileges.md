@@ -42,14 +42,14 @@ vela auth list-privileges
 ### Options
 
 ```
-  -c, --cluster strings              The cluster to list privileges. If not set, the command will list privileges in the control plane. (default [local])
-  -e, --env string                   The environment name for the CLI request
-  -g, --group strings                The group to list privileges. Can be set together with --user.
-  -h, --help                         help for list-privileges
-      --kubeconfig string            The kubeconfig to list privileges. If set, it will override all the other identity flags.
-  -n, --namespace --serviceaccount   The namespace of the serviceaccount. This flag only works when --serviceaccount is set.
-      --serviceaccount string        The serviceaccount to list privileges. Cannot be set with --user and --group.
-  -u, --user string                  The user to list privileges.
+  -c, --cluster strings         The cluster to list privileges. If not set, the command will list privileges in the control plane. (default [local])
+  -e, --env string              The environment name for the CLI request
+  -g, --group strings           The group to list privileges. Can be set together with --user.
+  -h, --help                    help for list-privileges
+      --kubeconfig string       The kubeconfig to list privileges. If set, it will override all the other identity flags.
+  -n, --namespace string        The namespace of the serviceaccount. This flag only works when --serviceaccount is set.
+      --serviceaccount string   The serviceaccount to list privileges. Cannot be set with --user and --group.
+  -u, --user string             The user to list privileges.
 ```
 
 ### Options inherited from parent commands

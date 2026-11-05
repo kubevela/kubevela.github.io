@@ -37,7 +37,7 @@ add a private ECR registry: aws ecr get-login-password --region <region> | vela 
       --password-stdin          read the Helm or OCI addon registry password from stdin
       --path string             specify the addon registry path, must be set when addons are not in root of registry
       --type string             specify the addon registry type
-      --username string         specify the Helm addon registry username
+      --username string         specify the Helm or OCI addon registry username
 ```
 
 ### Options inherited from parent commands
