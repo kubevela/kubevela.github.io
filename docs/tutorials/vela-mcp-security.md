@@ -83,7 +83,7 @@ Findings keep the server's own sentence (`message`) apart from the text the clus
 ## How writes work
 
 Without `--allow-write`, the server has no tool that changes the cluster; it is the only
-flag that adds a write tool in this release. With it, the agent
+flag that adds a write tool. With it, the agent
 gets `apply_application`, and every apply follows the same path.
 
 ### 1. Plan: diff first, always
@@ -132,7 +132,7 @@ only make the mode **stricter**, never looser:
 3. The same key as an annotation on the live Application, or on the submitted document,
    tightens it for that Application.
 4. HIGH risk changes are never applied directly.
-5. `gated` falls back to `gitops` in this release.
+5. `gated` is applied as `gitops`.
 
 The result reports the mode that was used and one line for every rule that changed it.
 
