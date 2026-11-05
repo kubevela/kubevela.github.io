@@ -307,7 +307,7 @@ template: {
 vela def apply platform-labels.cue -n vela-system
 ```
 
-Two controller flags decide how far a platform's global policies reach. Both are off by default, which makes global policies platform-wide and mandatory.:
+Two controller flags decide how far a platform's global policies reach. Both are off by default, which makes global policies platform-wide and mandatory:
 
 | Chart value (controller flag) | Off (default) | On |
 |---|---|---|
