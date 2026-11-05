@@ -652,7 +652,7 @@ Which global policies apply depends on the controller's `--allow-namespace-globa
 
 Application-scoped policies support [definition versioning](../x-def-version.md). Each ApplicationRevision records the PolicyDefinition versions it was rendered with. A new revision (an Application spec change, its first deployment, or a `publishVersion` bump) takes the latest versions. Between revisions, whether a running Application adopts a new version is decided by its [rollout settings](./policy-rollout.md#new-policy-versions); with the defaults, it keeps the recorded version and reports the newer one as pending.
 
-For production use cases, pin explicit policies to a specific version with the `@version` suffix. `@v2` names the DefinitionRevision `add-team-labels-v2` when one exists; for a definition with semantic versions (`spec.version`), it resolves to the newest `2.x`, so pin the full version (`@v2.1.0`) to hold it. A pinned explicit policy is not changed by updates to its PolicyDefinition:
+For production use cases, pin explicit policies to a specific version with the `@version` suffix. `@v2` names the DefinitionRevision `add-team-labels-v2` when one exists; for a definition with semantic versions (`spec.version`), it resolves to the newest `2.x`, so pin the full version (`@v2.1.0`) to hold it. A policy pinned to an exact DefinitionRevision is not changed by updates to its PolicyDefinition:
 
 ```yaml
 policies:
