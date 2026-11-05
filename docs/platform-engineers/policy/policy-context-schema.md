@@ -66,7 +66,7 @@ template: {
 
 Keys are required unless marked `?`. Here the policy promises to set `team` and `costCentre`, while `meshDomain?` is optional, so a template must not rely on it. If the policy is conditional (it sets `config.enabled` to anything but the literal `true`), admission treats every key it declares as optional, so each must be guarded. A policy with no `config.enabled`, like this one, always applies.
 
-Wrapping the schema in `close({...})` makes it the whole contract: the policy supplies nothing it doesn't declare, so admission can also refuse a template that reads an undeclared key. An open schema still types the keys it declares, but other keys may exist.
+Wrapping the schema in `close({...})` makes it the whole contract: the policy supplies nothing it doesn't declare, so admission can also refuse a template that reads an undeclared key, as long as every applicable policy is closed and none sets `output.policies` (see [What Admission Catches](#what-admission-catches)). An open schema still types the keys it declares, but other keys may exist.
 
 A few rules for the block itself:
 
@@ -201,7 +201,7 @@ defkit.NewPolicy("tenant-identity").ApplicationScoped().Global().Priority(10).
 	})
 ```
 
-A schema field is required unless it is `Optional()`. `CtxSchema(...)` declares an open schema, and `ClosedCtxSchema(...)` a closed one. Imports are added for you: a field using `MinLen` pulls in `"strings"`. Register also catches typos in a closed schema's outputs:
+A schema field is required unless it is `Optional()`. `CtxSchema(...)` declares an open schema, and `ClosedCtxSchema(...)` a closed one. In a context schema, imports are added for you: a field using `MinLen` pulls in `"strings"`, with no `.WithImports` needed. Register also catches typos in a closed schema's outputs:
 
 ```
 defkit: invalid definition 'tenant-identity-typo': Output().Ctx("teem") is not declared by the closed CtxSchema

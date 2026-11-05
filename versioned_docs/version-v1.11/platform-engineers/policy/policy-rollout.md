@@ -52,7 +52,7 @@ An Application whose annotation turns a setting off for a policy (`"false"`, or 
 
 ### In the Policy Template
 
-The settings sit next to `config.enabled` in the policy's template. They are evaluated with the Application's context, so a template can decide per Application. This one rolls out its own new versions straight away, and takes data changes everywhere except in production namespaces:
+The settings sit next to `config.enabled` in the policy's template. They are evaluated with the Application's context, so a template can decide per Application. This one rolls out its own new versions straight away, and takes data changes everywhere except in the `production` namespace:
 
 ```cue
 "platform-labels": {
@@ -71,7 +71,7 @@ template: {
     enabled: true
     // New versions of this policy roll out to running Applications straight away...
     applyPolicyUpdates: true
-    // ...and so do changes in the data it reads, except in production namespaces.
+    // ...and so do changes in the data it reads, except in the production namespace.
     applyDataChanges: context.namespace != "production"
   }
 
