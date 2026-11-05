@@ -221,7 +221,7 @@ Inside the CUE template, the `context` object provides read access to the curren
 | `context.policyRevisionName` | Policy DefinitionRevision resource name (if versioned) |
 | `context.policyRevisionHash` | Policy template content hash (if versioned) |
 
-`context.appLabels` and `context.appAnnotations` leave out keys with internal prefixes (`app.oam.dev/`, `oam.dev/`, `owner.oam.dev/`, `modules.oam.dev/`, `kubernetes.io/`, `k8s.io/`, `kubectl.kubernetes.io/`, `app.kubernetes.io/`, `helm.sh/`), so a policy cannot read or key off KubeVela's own bookkeeping.
+`context.appLabels` and `context.appAnnotations` leave out keys with internal prefixes (`app.oam.dev/`, `oam.dev/`, `owner.oam.dev/`, `modules.oam.dev/`, `kubernetes.io/`, `k8s.io/`, `kubectl.kubernetes.io/`, `app.kubernetes.io/`, `helm.sh/`), so a policy cannot read or key off KubeVela's own bookkeeping. Annotations an author sets, such as `policy.oam.dev/*` and `filter.oam.dev/*`, are visible.
 
 The PolicyDefinition webhook refuses a template that reads a `context` field a policy render does not supply, such as a misspelt `context.namesapce`. A field that does not exist would fail the render of every Application the policy applies to.
 
@@ -670,7 +670,7 @@ Which global policies apply depends on the controller's `--allow-namespace-globa
 
 Application-scoped policies support [definition versioning](../x-def-version.md). Each ApplicationRevision records the PolicyDefinition versions it was rendered with. A new revision (an Application spec change, its first deployment, or a `publishVersion` bump) takes the latest versions. Between revisions, whether a running Application adopts a new version is decided by its [rollout settings](./policy-rollout.md#new-policy-versions); with the defaults, it keeps the recorded version and reports the newer one as pending.
 
-For production use cases, pin explicit policies to a specific version with the `@version` suffix. A pinned explicit policy is not changed by updates to its PolicyDefinition:
+For production use cases, pin explicit policies to a specific version with the `@version` suffix. `@v2` names the DefinitionRevision `add-team-labels-v2` when one exists; for a definition with semantic versions (`spec.version`), it resolves to the newest `2.x`, so pin the full version (`@v2.1.0`) to hold it. A pinned explicit policy is not changed by updates to its PolicyDefinition:
 
 ```yaml
 policies:

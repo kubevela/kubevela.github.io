@@ -10,7 +10,7 @@ Make sure you have read [Application-Scoped Policies](./application-scoped-polic
 
 | Change | Example | Controlled by |
 |---|---|---|
-| **A new policy version** | A platform engineer edits, adds or deletes a PolicyDefinition | `applyPolicyUpdates` |
+| **A new policy version** | A platform engineer edits, adds or deletes a PolicyDefinition | `applyPolicyUpdates` (a new version that rewrites the spec waits for the next revision) |
 | **A data change** | The policy is unchanged, but what it reads (a Namespace label, a ConfigMap, an API) now returns something else, so its `output` differs | `applyDataChanges` |
 | **A spec rewrite** | The policy's `output.components`, `output.workflow` or `output.policies` replaces part of the Application spec | `autoRevision` |
 
