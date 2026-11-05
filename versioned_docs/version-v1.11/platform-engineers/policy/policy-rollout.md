@@ -122,7 +122,7 @@ A few rules apply whatever the setting:
 
 A held update shows in three places:
 
-- the policy's entry in `status.appliedApplicationPolicies`, whose message starts `update pending: a newer version of this policy is held by policy.oam.dev/apply-policy-updates or a publishVersion pin`;
+- the policy's entry in `status.appliedApplicationPolicies`, whose message starts `update pending:` and says why: `a newer version of this policy is held by policy.oam.dev/apply-policy-updates or a publishVersion pin`, or `a newer version of this policy fails to render`;
 - a `PolicyUpdatePending` event on the Application;
 - the policy's entry in the policy ConfigMap, which records its effective settings (see [Seeing What Happened](#seeing-what-happened)).
 
@@ -247,7 +247,7 @@ A policy template cannot read any of the KubeVela-managed keys above: `context.a
 | `GlobalPolicyHeld` | Warning | A mandatory global policy fails (with `--allow-skip-global-policies=false`), and the Application is held at its current revision. See [Mandatory Global Policies](./application-scoped-policy.md#mandatory-global-policies). |
 | `GlobalPolicyIgnored` | Warning | A global policy in the Application's namespace does not apply, because the controller runs with `--allow-namespace-global-policies=false`. |
 | `GlobalPolicySkipIgnored` | Warning | The Application carries `policy.oam.dev/skip-global`, but global policies are mandatory (`--allow-skip-global-policies=false`). |
-| `PolicyUpdatePending` | Normal | Newer versions of the named policies are held by `apply-policy-updates` or a `publishVersion` pin. |
+| `PolicyUpdatePending` | Normal | Newer versions of the named policies are held by `apply-policy-updates`, a `publishVersion` pin, or a render failure. |
 | `PolicySettingIgnored` | Warning | A rollout annotation or template setting could not be read, or names a policy the Application does not run. |
 
 ### Conditions
