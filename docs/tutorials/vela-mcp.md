@@ -188,7 +188,7 @@ the common tasks and the tools behind them:
 | Write an Application for me and check it renders | `describe_definition`, `dryrun_application` |
 | What would change if I applied this? | `diff_application` |
 | Which clusters and addons does the platform have? | `list_clusters`, `list_addons` |
-| Can this cluster create a DynamoDB table, and with which provisioner? | `get_platform_info` with `service: dynamodb`, which picks ACK, then Crossplane, returns the CRD's schema, or says that neither is installed |
+| Can this cluster create a DynamoDB table, and with which provisioner? | `get_platform_info` with `service: dynamodb` and `kind: Table`, which picks ACK, then Crossplane, returns that CRD's schema, or says that neither is installed. Without `kind` it names the provisioner and its kinds only |
 | Write a new component, such as an S3 bucket through ACK | The `kubevela-defkit-author` skill writes it in Go with defkit; `dryrun_application` renders the CUE that `vela def gen-module` generates and, with `serverCheck`, has the API server validate every object against the installed CRDs |
 
 The [tool reference](../reference/vela-mcp-tools.md) lists every tool with its inputs and results.
@@ -219,9 +219,10 @@ DB_URL not set
 From that it can tell you the container exits because `DB_URL` is missing, the workflow is
 waiting for the component to become healthy, and which property to set to fix it.
 
-`explain_application`, `get_application` and `get_logs` also return a `handles` block: the
-exact clusters, namespace, pod names, label selector and time window of the latest
-deployment. If your client also has
+`explain_application` and `get_application` also return a `handles` block: the exact
+clusters, namespace, pod names, label selector and time window of the latest deployment.
+`get_logs` returns the same block for the pods that call read, which can be a subset when it
+selects one pod or reaches its per-call limit. If your client also has
 an observability MCP server, such as Grafana or Datadog, the agent can use those handles to
 query the matching metrics and traces without guessing label names.
 

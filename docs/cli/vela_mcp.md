@@ -42,7 +42,7 @@ vela mcp [flags]
 
 ```
       --allow-write                    Register apply_application. Without --direct-namespace it only returns YAML for a pull request. Off by default.
-      --as string                      Username to impersonate for every request, as kubectl --as does. Your kubeconfig identity needs RBAC to impersonate it.
+      --as string                      Username to impersonate on the control plane, as kubectl --as does. Your kubeconfig identity needs RBAC to impersonate it. Reads in other clusters carry it only when cluster-gateway forwards the caller's identity.
       --as-group stringArray           Group to impersonate, with --as. Repeat for more than one.
       --direct-namespace stringArray   Allow direct mode, confirmed by the user in their client, in this namespace. Repeat for more than one. Refused at start if it matches --production-pattern.
   -h, --help                           help for mcp
