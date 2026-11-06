@@ -402,7 +402,11 @@ This document guides you through the process of creating a [pull request](https:
 
 ### Before you begin
 
-We know you're excited to create your first pull request. Before we get started, make sure your code follows the relevant [code conventions](./code-conventions.md).
+We know you're excited to create your first pull request. Before we get started:
+
+- If you are working on an existing issue (or a new issue you filed), **first comment on the issue to request assignment and wait for a maintainer to assign it to you** before starting work or raising a pull request. This prevents duplicate effort and ensures maintainers agree on the approach.
+- All changes, including simple additions and bug fixes, must have an associated issue assigned by a maintainer. If none exists, open a new issue in the repository you are changing, for example [kubevela/kubevela](https://github.com/kubevela/kubevela/issues/new/choose). A pull request without an assigned issue will not be picked up and may be closed. Automated dependency and backport pull requests are exempt, and maintainers can raise pull requests without an issue if needed. Security vulnerabilities must not be reported in a public issue. Follow the [security policy](https://github.com/kubevela/kubevela/blob/master/SECURITY.md) instead; security fixes handled that way are exempt.
+- Make sure your code follows the relevant [code conventions](./code-conventions.md).
 
 ### Your first pull request
 
@@ -417,13 +421,13 @@ To increase the chance of having your pull request accepted, make sure your pull
 
 - Title and description matches the implementation.
 - Commits within the pull request follow the [Formatting guidelines](#Formatting-guidelines).
-- The pull request closes one related issue.
+- Unless the pull request is exempt, it is associated with one issue and raised only once a maintainer has assigned that issue to you.
 - The pull request contains necessary tests that verify the intended behavior.
 - If your pull request has conflicts, rebase your branch onto the main branch.
 
 If the pull request fixes a bug:
 
-- The pull request description must include `Closes #<issue number>` or `Fixes #<issue number>`.
+- Unless the pull request is exempt (see [Before you begin](#before-you-begin)), the description must include `Closes #<issue number>` or `Fixes #<issue number>`, or `Related to #<issue number>` if it only fixes part of the issue.
 - To avoid regressions, the pull request should include tests that replicate the fixed bug.
 - Generally, we will maintain the last 2 releases for bugfix. You should add `backport release-x.x` label or comment `/backport release-x.y` for the releases contained the bug, github bot will automatically backport this PR to the specified release branch after PR merged. If there're any conflicts, you should cherry-pick it manually.
 
