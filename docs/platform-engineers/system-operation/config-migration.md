@@ -33,17 +33,19 @@ flowchart TD
 
 ## Step 1: Upgrade to v1.12
 
-Helm does not upgrade the CRDs in a chart's `crds/` directory, so apply the two new CRDs first:
+v1.12 adds the `ConfigTemplate`, `Config` and `SourceDefinition` CRDs and changes several
+others. Helm does not upgrade the CRDs in a chart's `crds/` directory, so apply the chart's CRDs
+first:
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.12/charts/vela-core/crds/config.oam.dev_configtemplates.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.12/charts/vela-core/crds/config.oam.dev_configs.yaml
+helm repo update
+helm pull kubevela/vela-core --version 1.12.0 --untar
+kubectl apply --server-side --force-conflicts -f vela-core/crds/
 ```
 
 Then upgrade the chart:
 
 ```bash
-helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.12.0 --wait
 ```
 
@@ -54,10 +56,10 @@ vela config list -n team-a
 ```
 
 ```console
-NAME        	ALIAS	SOURCE	PHASE	DISTRIBUTION     	TEMPLATE      	CREATED-TIME                 	DESCRIPTION
-billing-db  	     	legacy	     	                 	team-a/mysql  	2026-11-06 14:51:36 +0530 IST
-orders-db   	     	legacy	     	local/team-a-prod	team-a/mysql  	2026-11-06 14:51:36 +0530 IST
-payments-key	     	legacy	     	                 	team-a/api-key	2026-11-06 14:51:36 +0530 IST
+NAME         ALIAS SOURCE PHASE DISTRIBUTION      TEMPLATE       CREATED-TIME                  DESCRIPTION
+billing-db         legacy                         team-a/mysql   2026-11-06 14:51:36 +0530 IST
+orders-db          legacy       local/team-a-prod team-a/mysql   2026-11-06 14:51:36 +0530 IST
+payments-key       legacy                         team-a/api-key 2026-11-06 14:51:36 +0530 IST
 ```
 
 New configs and templates you create from now on are `Config` and `ConfigTemplate` resources.
@@ -85,15 +87,15 @@ metadata:
   name: mysql
   namespace: team-a
 ...
-KIND     	NAME      	NAMESPACE	RESULT     	REASON
-ConfigMap	mysql     	team-a   	would adopt	ConfigTemplate mysql created
-Secret   	billing-db	team-a   	would adopt	Config billing-db created
-Secret   	orders-db 	team-a   	would adopt	Config orders-db created
-Secret   	reports-db	team-b   	skipped    	config template team-a/mysql is namespace-scoped: a config
-         	          	         	           	in team-b may use it only if its author can get it (grant
-         	          	         	           	get on configtemplates.config.oam.dev mysql in namespace
-         	          	         	           	team-a); the binding was not recorded when the template was
-         	          	         	           	migrated, and this run has no user to ask
+KIND      NAME       NAMESPACE RESULT      REASON
+ConfigMap mysql      team-a    would adopt ConfigTemplate mysql created
+Secret    billing-db team-a    would adopt Config billing-db created
+Secret    orders-db  team-a    would adopt Config orders-db created
+Secret    reports-db team-b    skipped     config template team-a/mysql is namespace-scoped: a config
+                                           in team-b may use it only if its author can get it (grant
+                                           get on configtemplates.config.oam.dev mysql in namespace
+                                           team-a); the binding was not recorded when the template was
+                                           migrated, and this run has no user to ask
 adopted 3, skipped 1, conflict 0, failed 0
 ```
 
@@ -112,11 +114,11 @@ vela config-template migrate mysql -n team-a
 ```
 
 ```console
-KIND     	NAME      	NAMESPACE	RESULT 	REASON
-ConfigMap	mysql     	team-a   	adopted	ConfigTemplate mysql created
-Secret   	billing-db	team-a   	adopted	Config billing-db created
-Secret   	orders-db 	team-a   	adopted	Config orders-db created
-Secret   	reports-db	team-b   	adopted	Config reports-db created
+KIND      NAME       NAMESPACE RESULT  REASON
+ConfigMap mysql      team-a    adopted ConfigTemplate mysql created
+Secret    billing-db team-a    adopted Config billing-db created
+Secret    orders-db  team-a    adopted Config orders-db created
+Secret    reports-db team-b    adopted Config reports-db created
 adopted 4, skipped 0, conflict 0, failed 0
 ```
 
@@ -127,19 +129,19 @@ vela config-template migrate --all -n team-a
 ```
 
 ```console
-KIND     	NAME        	NAMESPACE	RESULT  	REASON
-ConfigMap	api-key     	team-a   	adopted 	ConfigTemplate api-key created
-Secret   	payments-key	team-a   	adopted 	Config payments-key created
-ConfigMap	legacy-cache	team-a   	skipped 	opted out
-Secret   	old-cache   	team-a   	skipped 	template team-a/legacy-cache opted out
-ConfigMap	mysql       	team-a   	skipped 	already migrated
-Secret   	billing-db  	team-a   	skipped 	already migrated
-Secret   	orders-db   	team-a   	skipped 	already migrated
-Secret   	reports-db  	team-b   	skipped 	already migrated
-ConfigMap	postgres    	team-a   	conflict	ConfigTemplate postgres exists and was not created by
-         	            	         	        	migration
-Secret   	ledger-db   	team-a   	conflict	template team-a/postgres: ConfigTemplate exists and was not
-         	            	         	        	created by migration
+KIND      NAME         NAMESPACE RESULT   REASON
+ConfigMap api-key      team-a    adopted  ConfigTemplate api-key created
+Secret    payments-key team-a    adopted  Config payments-key created
+ConfigMap legacy-cache team-a    skipped  opted out
+Secret    old-cache    team-a    skipped  template team-a/legacy-cache opted out
+ConfigMap mysql        team-a    skipped  already migrated
+Secret    billing-db   team-a    skipped  already migrated
+Secret    orders-db    team-a    skipped  already migrated
+Secret    reports-db   team-b    skipped  already migrated
+ConfigMap postgres     team-a    conflict ConfigTemplate postgres exists and was not created by
+                                          migration
+Secret    ledger-db    team-a    conflict template team-a/postgres: ConfigTemplate exists and was not
+                                          created by migration
 adopted 2, skipped 6, conflict 2, failed 0
 Error: 2 object(s) in conflict; see the table above
 ```
@@ -152,8 +154,8 @@ vela config migrate inventory-db -n team-a
 ```
 
 ```console
-KIND  	NAME        	NAMESPACE	RESULT 	REASON
-Secret	inventory-db	team-a   	adopted	Config inventory-db created
+KIND   NAME         NAMESPACE RESULT  REASON
+Secret inventory-db team-a    adopted Config inventory-db created
 adopted 1, skipped 0, conflict 0, failed 0
 ```
 
@@ -163,7 +165,8 @@ completed.
 
 ### What migration does
 
-- A template ConfigMap becomes a ConfigTemplate of the same name, with `scope: system` in
+- A template ConfigMap `config-template-<name>` becomes a ConfigTemplate `<name>` (the report
+  shows the template name; Events are on the ConfigMap, under its full name), with `scope: system` in
   `vela-system` and `scope: namespace` elsewhere. The ConfigMap is kept, with the annotation
   `config.oam.dev/migrated-to` set to the ConfigTemplate's UID.
 - A config Secret becomes a Config of the same name. The Secret itself is adopted: same name, UID
@@ -194,9 +197,9 @@ completed.
 | Result | Meaning |
 |---|---|
 | `adopted` | The resource was created and the v1.11 object adopted. |
-| `skipped` | Nothing to do: already migrated, opted out, a source cache entry the controller manages, or not readable by you (see below). |
+| `skipped` | Nothing to do, or nothing migration may do: already migrated; opted out; a Secret KubeVela itself uses to cache a source; a template whose Nacos endpoint is in another namespace (apply it with `vela config-template apply` as a user who can read that endpoint); a config in another namespace that its template does not list (see [Configs in other namespaces](#configs-in-other-namespaces)); or not readable by you (see [Permissions](#permissions)). |
 | `conflict` | A resource of that name exists that migration did not create, or the config writes `outputs` into another namespace. Nothing was changed. |
-| `failed` | The v1.11 object could not be read or written, for example a corrupt `objects-reference` key or a missing permission. Nothing was changed. |
+| `failed` | The v1.11 object could not be read or written, for example because data in it is not valid or you lack a permission. Nothing was changed. |
 
 The command exits with status 1 when any row is `conflict` or `failed`, and 0 otherwise.
 
@@ -212,9 +215,9 @@ vela config-template migrate postgres -n team-a
 ```
 
 ```console
-KIND     	NAME     	NAMESPACE	RESULT 	REASON
-ConfigMap	postgres 	team-a   	adopted	ConfigTemplate postgres created
-Secret   	ledger-db	team-a   	adopted	Config ledger-db created
+KIND      NAME      NAMESPACE RESULT  REASON
+ConfigMap postgres  team-a    adopted ConfigTemplate postgres created
+Secret    ledger-db team-a    adopted Config ledger-db created
 adopted 2, skipped 0, conflict 0, failed 0
 ```
 
@@ -245,7 +248,9 @@ $ kubectl -n team-a get configtemplate mysql -o jsonpath='{.metadata.annotations
 
 The list can lose entries, but not gain them. Bindings are recorded when the template is migrated,
 so migrate soon after the upgrade, before new cross-namespace configs are created with an older
-CLI.
+CLI. A config in another namespace that the template does not list is reported as `skipped`, and
+stays a working v1.11 config. To move it, create it again as a Config, as a user who can `get` the
+template.
 
 ### Permissions
 
@@ -254,10 +259,10 @@ and Applications (for distributions) in every namespace it touches. A missing pe
 a `failed` row that names it, and the command exits with status 1:
 
 ```console
-Secret   	e-one	team-e   	failed 	configs.config.oam.dev is forbidden: User
-         	     	         	       	"system:serviceaccount:team-e:noconfigs" cannot create
-         	     	         	       	resource "configs" in API group "config.oam.dev" in the
-         	     	         	       	namespace "team-e"
+Secret    e-one team-e    failed  configs.config.oam.dev is forbidden: User
+                                  "system:serviceaccount:team-e:noconfigs" cannot create
+                                  resource "configs" in API group "config.oam.dev" in the
+                                  namespace "team-e"
 ```
 
 To find the configs that use a template, `migrate` lists config Secrets across the cluster. If you
@@ -265,13 +270,13 @@ may not list Secrets in every namespace, it migrates what you can see and report
 row for the rest, and exits with status 0:
 
 ```console
-KIND     	NAME  	NAMESPACE	RESULT 	REASON
-ConfigMap	mysql 	team-d   	adopted	ConfigTemplate mysql created
-Secret   	d-one 	team-d   	adopted	Config d-one created
-Secret   	*     	*        	skipped	configs in other namespaces were not listed: secrets is
-         	      	         	       	forbidden: User "system:serviceaccount:team-d:limited"
-         	      	         	       	cannot list resource "secrets" in API group "" at the
-         	      	         	       	cluster scope
+KIND      NAME   NAMESPACE RESULT  REASON
+ConfigMap mysql  team-d    adopted ConfigTemplate mysql created
+Secret    d-one  team-d    adopted Config d-one created
+Secret    *      *         skipped configs in other namespaces were not listed: secrets is
+                                   forbidden: User "system:serviceaccount:team-d:limited"
+                                   cannot list resource "secrets" in API group "" at the
+                                   cluster scope
 adopted 2, skipped 1, conflict 0, failed 0
 ```
 
@@ -281,7 +286,8 @@ Run it again later as a user with cluster-wide read access to pick those up.
 
 The `AutoMigrateLegacyConfigs` feature gate (Alpha, off by default) runs the same migration for the
 whole cluster when the controller starts, as if `vela config-template migrate --all` ran in every
-namespace:
+namespace. It runs with the controller's permissions, so nothing is skipped or fails for lack of
+them:
 
 ```bash
 helm upgrade -n vela-system kubevela kubevela/vela-core --version 1.12.0 --reuse-values \
@@ -322,11 +328,11 @@ vela config-template list -n team-a --config-mode legacy
 ```
 
 ```console
-NAME        	ALIAS     	SCOPE  	SENSITIVE	SOURCE           	CREATED-TIME
-api-key     	API key   	project	true     	legacy (migrated)	2026-11-06 14:51:36 +0530 IST
-legacy-cache	Cache     	project	false    	legacy           	2026-11-06 14:52:08 +0530 IST
-mysql       	MySQL     	project	false    	legacy (migrated)	2026-11-06 14:51:36 +0530 IST
-postgres    	PostgreSQL	project	false    	legacy (migrated)	2026-11-06 14:52:08 +0530 IST
+NAME         ALIAS      SCOPE   SENSITIVE SOURCE            CREATED-TIME
+api-key      API key    project true      legacy (migrated) 2026-11-06 14:51:36 +0530 IST
+legacy-cache Cache      project false     legacy            2026-11-06 14:52:08 +0530 IST
+mysql        MySQL      project false     legacy (migrated) 2026-11-06 14:51:36 +0530 IST
+postgres     PostgreSQL project false     legacy (migrated) 2026-11-06 14:52:08 +0530 IST
 ```
 
 The legacy list shows the scope the v1.11 object was created with (`project` here). The resource's
@@ -341,9 +347,9 @@ If a GitOps tool applies your v1.11 objects, migration adopts them the same way.
 objects managed by Argo CD (the `argocd.argoproj.io/tracking-id` annotation), Flux (the
 `kustomize.toolkit.fluxcd.io/name` or `helm.toolkit.fluxcd.io/name` label) and Helm (the
 `app.kubernetes.io/managed-by: Helm` label). An object with only an `app.kubernetes.io/instance`
-label is reported as possibly managed by Argo CD's label tracking or another tool. For each, the report row and a
-`MigratedGitOpsManaged` Event on the new resource name the tool and advise keeping the new resource
-where the tool keeps the old object.
+label is reported as possibly managed by Argo CD's label tracking or another tool. For each, the
+report row and a `MigratedGitOpsManaged` Event on the new resource name the tool and advise keeping
+the new resource where the tool keeps the old object.
 
 Migration writes with its own field manager, `kubevela-config-migration`, and does not change the
 data the tool owns, so the tool shows no diff. After migrating:
@@ -351,8 +357,9 @@ data the tool owns, so the tool shows no diff. After migrating:
 - **Put the new ConfigTemplate and Config resources in git where the v1.11 objects were**, so the
   tool manages them too. Otherwise, pruning the old objects from git leaves resources that no tool
   owns.
-- A directory with both a Config and its ConfigTemplate may need a second sync: a Config applied
-  before its template exists is refused, and the next sync applies it.
+- A Config that uses a template from another namespace, `vela-system` included, is refused until
+  that template exists, so a sync that applies both may need to run twice. A Config whose template
+  is in its own namespace waits for the template instead.
 - Flux and Argo CD report a Config in `Error` as healthy, because the resources have no `Ready`
   condition yet. Check `status.phase` in your own health checks.
 - Deleting a Config through the tool does not delete its entry in Nacos.

@@ -60,26 +60,26 @@ spec:
   description: Connection details for a PostgreSQL database
   template: |
     template: {
-    	parameter: {
-    		// +usage=The database host
-    		host: string
-    		// +usage=The database port
-    		port: *5432 | int
-    		// +usage=The user to connect as
-    		user: string
-    	}
-    	output: {
-    		apiVersion: "v1"
-    		kind:       "Secret"
-    		metadata: name: context.name
-    		stringData: url: "postgres://\(parameter.user)@\(parameter.host):\(parameter.port)"
-    	}
-    	outputs: info: {
-    		apiVersion: "v1"
-    		kind:       "ConfigMap"
-    		metadata: name: context.name + "-info"
-    		data: host: parameter.host
-    	}
+        parameter: {
+            // +usage=The database host
+            host: string
+            // +usage=The database port
+            port: *5432 | int
+            // +usage=The user to connect as
+            user: string
+        }
+        output: {
+            apiVersion: "v1"
+            kind:       "Secret"
+            metadata: name: context.name
+            stringData: url: "postgres://\(parameter.user)@\(parameter.host):\(parameter.port)"
+        }
+        outputs: info: {
+            apiVersion: "v1"
+            kind:       "ConfigMap"
+            metadata: name: context.name + "-info"
+            data: host: parameter.host
+        }
     }
 ```
 
@@ -150,7 +150,8 @@ template: {
 		// The config made from the nacos-server template that holds the server
 		// address. It cannot refer to the parameters.
 		endpoint: {
-			name:       string
+			name: string
+			// Defaults to vela-system, not the template's namespace.
 			namespace?: string
 		}
 		format: "json" | "yaml" | "properties" | "toml"
@@ -175,8 +176,10 @@ template: {
 - `context.name` and `context.namespace` are the Config's name and namespace.
 - `outputs` objects are always created in the Config's namespace, whatever namespace the template
   gives them.
-- A Nacos block without `group` publishes to `DEFAULT_GROUP`. An endpoint `namespace`, when set,
-  must be written as a fixed string, not computed from the parameters.
+- A Nacos block without `group` publishes to `DEFAULT_GROUP`.
+- The Nacos endpoint config is looked up in `vela-system` unless `endpoint.namespace` says
+  otherwise. When set, `endpoint.namespace` must be written as a fixed string, not computed from
+  the parameters or given a default.
 
 When you apply a template from a CUE file with `vela config-template apply`, the file also carries
 a `metadata` block (`name`, `alias`, `description`, `scope`, `sensitive`); see the
@@ -322,7 +325,7 @@ Where a template lives decides who may use it:
 |---|---|
 | In `N` | Always. |
 | `system` scope (a ConfigTemplate in `vela-system` with `scope: system`, or a v1.11 template ConfigMap in `vela-system`) | Always. |
-| `namespace` scope, in another namespace | Only if the user creating or changing the Config can `get` that ConfigTemplate. |
+| `namespace` scope, in another namespace | Only if the user creating the Config can `get` that ConfigTemplate. |
 
 For example, to let `alice` create Configs in her own namespace from the `postgres` template in
 the `shared` namespace:
@@ -334,7 +337,8 @@ kubectl create rolebinding alice-use-postgres-template -n shared \
   --role=use-postgres-template --user=alice
 ```
 
-Without the grant, her Config is refused, and the message names the grant to make:
+Without the grant, her Config is refused, and the message names the grant to make (refusals on
+this page are shown without the `(requestUID=...)` the API server adds at the end):
 
 ```console
 admission webhook "validating.config.oam.dev.v1alpha1.configs" denied the request: config template shared/postgres is namespace-scoped: a config in my-team may use it only if its author can get it (grant get on configtemplates.config.oam.dev postgres in namespace shared); alice may not
@@ -343,8 +347,9 @@ admission webhook "validating.config.oam.dev.v1alpha1.configs" denied the reques
 - `scope: system` is accepted only in `vela-system`.
 - A v1.11 template ConfigMap is system-scoped in `vela-system` and namespace-scoped anywhere else,
   whatever its `config.oam.dev/scope` label says.
-- A template whose `nacos.endpoint` is in another namespace can be created only by a user who can
-  `get` that endpoint's Secret.
+- A template whose Nacos endpoint is outside both its own namespace and `vela-system` can be
+  created only by a user who can `get` that endpoint's Secret.
+- The check runs when a Config is created. A Config's template cannot be changed afterwards.
 - The `create-config` workflow step checks the Application's user when the
   `AuthenticateApplication` feature gate is on. With it off there is no user to check, so the step
   may use only a template in the Application's namespace or a system one.
@@ -367,18 +372,18 @@ spec:
   sensitive: true
   template: |
     template: {
-    	parameter: {
-    		user:     string
-    		password: string
-    	}
-    	output: {
-    		apiVersion: "v1"
-    		kind:       "Secret"
-    		stringData: {
-    			user:     parameter.user
-    			password: parameter.password
-    		}
-    	}
+        parameter: {
+            user:     string
+            password: string
+        }
+        output: {
+            apiVersion: "v1"
+            kind:       "Secret"
+            stringData: {
+                user:     parameter.user
+                password: parameter.password
+            }
+        }
     }
 ```
 
@@ -399,6 +404,9 @@ The rules:
    The ConfigTemplate "postgres-login" is invalid: spec: Invalid value: sensitive cannot be changed from true to false
    ```
 
+   The rule is part of the CRD (Kubernetes 1.25 and later), so it holds even with the admission
+   webhooks off; on older Kubernetes the webhook refuses the change.
+
    Turning it on marks the existing Configs' Secrets sensitive at once. Configs with inline
    `properties` go to `Error` until they are moved to `propertiesFrom`.
 3. **A Config with `propertiesFrom` is always sensitive**, whatever its template says.
@@ -418,8 +426,8 @@ is stored when:
 
 | Resource | Refused when |
 |---|---|
-| ConfigTemplate | `scope: system` outside `vela-system`; `sensitive` turned from `true` to `false`; the `nacos` block has no `endpoint.name` or `metadata.dataId` or an unknown `format`; the Nacos endpoint is in a namespace the user cannot read |
-| Config | `templateRef` changed; both `properties` and `propertiesFrom` set; inline `properties` on a sensitive template; the user may not use the template; the properties do not match the template's schema, or the template fails to render with them; the `propertiesFrom` Secret or key does not exist |
+| ConfigTemplate | `scope: system` outside `vela-system`; `sensitive` turned from `true` to `false` (also refused by the CRD itself); the `nacos` block has no `endpoint.name` or `metadata.dataId`, or an unknown `format`; `nacos.endpoint.namespace` is computed or has a default; the Nacos endpoint is outside the template's namespace and `vela-system`, and the user cannot `get` its Secret; the `config.oam.dev/grandfathered-configs` annotation gains an entry |
+| Config | `templateRef` changed; both `properties` and `propertiesFrom` set; inline `properties` on a sensitive template; the user may not use the template, or a template in another namespace does not exist yet; the properties do not match the template's schema, or the template fails to render with them; the `propertiesFrom` Secret or key does not exist |
 
 For example:
 
@@ -471,10 +479,10 @@ vela config-template list -n my-team
 ```
 
 ```console
-NAME          	ALIAS     	SCOPE    	SENSITIVE	SOURCE	CREATED-TIME
-postgres      	PostgreSQL	namespace	false    	crd   	2026-11-06 13:55:22 +0530 IST
-postgres-login	          	namespace	true     	crd   	2026-11-06 13:55:38 +0530 IST
-redis         	Redis     	project  	false    	legacy	2026-11-06 13:55:54 +0530 IST
+NAME           ALIAS      SCOPE     SENSITIVE SOURCE CREATED-TIME
+postgres       PostgreSQL namespace false     crd    2026-11-06 13:55:22 +0530 IST
+postgres-login            namespace true      crd    2026-11-06 13:55:38 +0530 IST
+redis          Redis      project   false     legacy 2026-11-06 13:55:54 +0530 IST
 ```
 
 ```bash
@@ -482,15 +490,17 @@ vela config list -n my-team
 ```
 
 ```console
-NAME          	ALIAS	SOURCE	PHASE    	DISTRIBUTION      	TEMPLATE              	CREATED-TIME                 	DESCRIPTION
-orders-db     	     	crd   	Available	local/my-team-prod	my-team/postgres      	2026-11-06 13:55:25 +0530 IST
-orders-login  	     	crd   	Available	                  	my-team/postgres-login	2026-11-06 13:55:41 +0530 IST
-orders-replica	     	crd   	Available	                  	my-team/postgres      	2026-11-06 13:55:54 +0530 IST
-cache         	     	legacy	         	                  	my-team/redis         	2026-11-06 13:55:54 +0530 IST
+NAME           ALIAS SOURCE PHASE     DISTRIBUTION       TEMPLATE               CREATED-TIME                  DESCRIPTION
+orders-db            crd    Available local/my-team-prod my-team/postgres       2026-11-06 13:55:25 +0530 IST
+orders-login         crd    Available                    my-team/postgres-login 2026-11-06 13:55:41 +0530 IST
+orders-replica       crd    Available                    my-team/postgres       2026-11-06 13:55:54 +0530 IST
+cache                legacy                              my-team/redis          2026-11-06 13:55:54 +0530 IST
 ```
 
 - `crd` is a ConfigTemplate or Config; `legacy` is a v1.11 object. `legacy (shadowed)` marks a
   v1.11 template that a ConfigTemplate of the same name now overrides.
+- For a v1.11 template, `SCOPE` is the word it was created with, such as `project`. What applies
+  is where it lives: system-scoped in `vela-system`, namespace-scoped anywhere else.
 - `--config-mode crd` or `--config-mode legacy` lists only one kind. In the legacy list, objects
   already migrated show as `legacy (migrated)`.
 - `delete` removes a config or template of either kind. Deleting a config also removes its
@@ -715,6 +725,7 @@ template: {
 			kind:       "Provider"
 			metadata: {
 				name:      parameter.name
+				// Ignored since v1.12: outputs are created in the Config's namespace.
 				namespace: "default"
 				labels:    l
 			}

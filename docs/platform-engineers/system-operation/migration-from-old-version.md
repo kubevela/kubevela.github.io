@@ -14,17 +14,18 @@ v1.12 turns config templates and configs into Kubernetes resources, `ConfigTempl
 reconciled by the controller; see [Config Template](../../reference/config-template.md). Your v1.11
 templates and configs keep working without changes.
 
-1. Apply the two new CRDs. Helm does not upgrade the CRDs in a chart's `crds/` directory:
+1. Upgrade the CRDs first. v1.12 adds the `ConfigTemplate`, `Config` and `SourceDefinition` CRDs
+   and changes several others, and Helm does not upgrade the CRDs in a chart's `crds/` directory:
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.12/charts/vela-core/crds/config.oam.dev_configtemplates.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.12/charts/vela-core/crds/config.oam.dev_configs.yaml
+helm repo update
+helm pull kubevela/vela-core --version 1.12.0 --untar
+kubectl apply --server-side --force-conflicts -f vela-core/crds/
 ```
 
 2. Upgrade your kubevela chart:
 
 ```
-helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.12.0 --wait
 ```
 
@@ -38,6 +39,16 @@ helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.12
 
 Check these changes before you upgrade:
 
+- **Users need permissions on the new resources.** The chart grants `config.oam.dev` permissions
+  only to the controller, and Kubernetes' built-in `edit` and `admin` roles do not include them.
+  Grant the people and service accounts that manage configs (and, with the
+  `AuthenticateApplication` feature gate on, the users Applications run as) permissions on
+  `configtemplates.config.oam.dev` and `configs.config.oam.dev`. In v1.11 they only needed
+  permissions on Secrets and ConfigMaps.
+- **`outputs` objects are created in the Config's namespace.** A template's `outputs` objects are
+  always written into the namespace of the Config, whatever namespace the template gives them. A
+  v1.11 template that wrote objects into another namespace now writes them next to the Config,
+  and migration reports configs made from it as `conflict`.
 - **New configs and templates are resources.** `vela config create` and
   `vela config-template apply` create `Config` and `ConfigTemplate` resources, and fail if the CRDs
   are not installed. The `create-config` workflow step creates a `Config` owned by the Application,
