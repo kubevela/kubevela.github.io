@@ -62,7 +62,8 @@ orders-db          legacy       local/team-a-prod team-a/mysql   2026-11-06 14:5
 payments-key       legacy                         team-a/api-key 2026-11-06 14:51:36 +0530 IST
 ```
 
-New configs and templates you create from now on are `Config` and `ConfigTemplate` resources.
+New configs and templates you create from now on with the v1.12 CLI, workflow steps or manifests
+are `Config` and `ConfigTemplate` resources. An older CLI still writes v1.11 objects.
 See [the v1.12 upgrade notes](./migration-from-old-version.md) for the behaviour changes to check
 before you upgrade.
 
@@ -197,17 +198,19 @@ completed.
 | Result | Meaning |
 |---|---|
 | `adopted` | The resource was created and the v1.11 object adopted. |
-| `skipped` | Nothing to do, or nothing migration may do: already migrated; opted out; a Secret KubeVela itself uses to cache a source; a template whose Nacos endpoint is in another namespace (apply it with `vela config-template apply` as a user who can read that endpoint); a config in another namespace that its template does not list (see [Configs in other namespaces](#configs-in-other-namespaces)); or not readable by you (see [Permissions](#permissions)). |
+| `skipped` | Nothing to do, or nothing migration may do: already migrated; opted out; a Secret KubeVela itself uses to cache a source; a template whose Nacos endpoint is in another namespace (apply it with `vela config-template apply` as a user who can read that endpoint); a config in another namespace that its template does not list (see [Configs in other namespaces](#configs-in-other-namespaces)); or, as one `*` row, configs in other namespaces that you may not list (see [Permissions](#permissions)). |
 | `conflict` | A resource of that name exists that migration did not create, or the config writes `outputs` into another namespace. Nothing was changed. |
-| `failed` | The v1.11 object could not be read or written, for example because data in it is not valid or you lack a permission. Nothing was changed. |
+| `failed` | The v1.11 object could not be read or written, for example because data in it is not valid or you lack a permission on that object (see [Permissions](#permissions)). Nothing was changed. |
 
 The command exits with status 1 when any row is `conflict` or `failed`, and 0 otherwise.
 
 ### Resolving a conflict
 
-A conflict means a resource of that name already exists. In the example, someone created a
-ConfigTemplate `postgres` by hand. Decide which one you want. To keep the v1.11 template, delete
-the existing resource and migrate again:
+There are two kinds of conflict.
+
+**A resource of that name already exists**, and migration did not create it. In the example,
+someone created a ConfigTemplate `postgres` by hand. Decide which one you want. To keep the v1.11
+template, delete the existing resource and migrate again:
 
 ```bash
 kubectl -n team-a delete configtemplate postgres
@@ -220,6 +223,22 @@ ConfigMap postgres  team-a    adopted ConfigTemplate postgres created
 Secret    ledger-db team-a    adopted Config ledger-db created
 adopted 2, skipped 0, conflict 0, failed 0
 ```
+
+**The config has `outputs` objects in another namespace.** A Config creates its `outputs` objects
+in its own namespace, so adopting the config would move them. Migration leaves it as a working
+v1.11 config and reports why:
+
+```console
+KIND      NAME             NAMESPACE RESULT   REASON
+ConfigMap shared-settings  team-a    adopted  ConfigTemplate shared-settings created
+Secret    billing-settings team-a    conflict 1 output object(s) outside team-a would be recreated there
+                                              by the controller: ConfigMap team-b/billing-settings-copy
+adopted 1, skipped 0, conflict 1, failed 0
+Error: 1 object(s) in conflict; see the table above
+```
+
+Keep it as a v1.11 config, or replace it with a new Config once nothing needs the objects in the
+other namespace.
 
 ### Opting out
 

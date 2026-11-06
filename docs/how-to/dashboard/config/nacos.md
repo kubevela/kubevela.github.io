@@ -53,12 +53,14 @@ client
 Then create a config to connect the Nacos server:
 
 ```bash
-vela config create nacos --template nacos-server servers[0].ipAddr=127.0.0.1 servers[0].port=8849
+vela config create nacos --template nacos-server servers[0].ipAddr=nacos.nacos.svc servers[0].port=8848
 ```
+
+Here `nacos.nacos.svc` is a Nacos Service in the cluster; use your server's address.
 
 :::note
 Since v1.12, the KubeVela controller publishes to Nacos, not the CLI. Use an address the
-controller's pods can reach, not one that only works from your machine.
+controller's pods can reach, not one that only works from your machine, such as `127.0.0.1`.
 :::
 
 If the config that holds the server's address and credentials is sensitive, its owner must also
@@ -186,7 +188,8 @@ port = 3306
 username = root
 ```
 
-The Config's `NacosSynced` condition shows the result:
+The Config's `NacosSynced` condition shows the result once the controller has synced it, usually
+within seconds:
 
 ```bash
 kubectl -n vela-system get config db-config \
@@ -197,7 +200,8 @@ kubectl -n vela-system get config db-config \
 True/Published
 ```
 
-Check the config in the Nacos Dashboard as well.
+`True/AlreadyCurrent` also means success: Nacos already held this content, so nothing was
+published. Check the config in the Nacos Dashboard as well.
 
 How the controller keeps Nacos in step (v1.12+):
 

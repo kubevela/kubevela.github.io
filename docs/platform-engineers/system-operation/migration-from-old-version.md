@@ -45,10 +45,11 @@ Check these changes before you upgrade:
   `AuthenticateApplication` feature gate on, the users Applications run as) permissions on
   `configtemplates.config.oam.dev` and `configs.config.oam.dev`. In v1.11 they only needed
   permissions on Secrets and ConfigMaps.
-- **`outputs` objects are created in the Config's namespace.** A template's `outputs` objects are
-  always written into the namespace of the Config, whatever namespace the template gives them. A
-  v1.11 template that wrote objects into another namespace now writes them next to the Config,
-  and migration reports configs made from it as `conflict`.
+- **`outputs` objects are created in the Config's namespace.** A Config writes its template's
+  `outputs` objects into its own namespace, whatever namespace the template gives them. This
+  applies to new Configs, including ones made from a v1.11 template that wrote objects into another
+  namespace. Existing v1.11 configs are not changed, and migration reports one whose `outputs` are
+  in another namespace as `conflict`.
 - **New configs and templates are resources.** `vela config create` and
   `vela config-template apply` create `Config` and `ConfigTemplate` resources, and fail if the CRDs
   are not installed. The `create-config` workflow step creates a `Config` owned by the Application,
