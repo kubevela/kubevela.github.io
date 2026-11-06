@@ -56,6 +56,18 @@ Then create a config to connect the Nacos server:
 vela config create nacos --template nacos-server servers[0].ipAddr=127.0.0.1 servers[0].port=8849
 ```
 
+:::note
+Since v1.12, the KubeVela controller publishes to Nacos, not the CLI. Use an address the
+controller's pods can reach, not one that only works from your machine.
+:::
+
+If the config that holds the server's address and credentials is sensitive, its owner must also
+annotate it to allow its use as an endpoint:
+
+```bash
+kubectl -n vela-system annotate config nacos config.oam.dev/nacos-endpoint=true
+```
+
 ## Define a template
 
 There is a default template to help you publish the config to the Nacos:
@@ -161,7 +173,12 @@ You could refer to this template to custom the scene template. Expose the requir
 vela config create db-config --template nacos-config dataId=db group="DEFAULT_GROUP" contentType="properties" content.host=127.0.0.1 content.port=3306 content.username=root
 ```
 
-Then, the content will be written to the Nacos server.
+```console
+the config db-config applied successfully
+the controller publishes the content to Nacos; see the NacosSynced condition on the Config
+```
+
+The command creates a `Config` resource, and the controller writes the content to the Nacos server:
 
 ```properties
 host = 127.0.0.1
@@ -169,4 +186,27 @@ port = 3306
 username = root
 ```
 
-After the command is executed successfully, let's check the config in the Nacos Dashboard.
+The Config's `NacosSynced` condition shows the result:
+
+```bash
+kubectl -n vela-system get config db-config \
+  -o jsonpath='{range .status.conditions[?(@.type=="NacosSynced")]}{.status}/{.reason}{"\n"}{end}'
+```
+
+```console
+True/Published
+```
+
+Check the config in the Nacos Dashboard as well.
+
+How the controller keeps Nacos in step (v1.12+):
+
+- It publishes again when the Config's properties, its template, or the endpoint config change.
+  Before publishing it reads the current content, and publishes only when it differs.
+- When a publish fails, `NacosSynced` is `False` with the reason (`EndpointNotFound`,
+  `EndpointUnreadable`, `ReadFailed` or `PublishFailed`) and the error, and the controller retries.
+  The Config stays `Available`, because its Secret is in place.
+- A `nacos` block without `group` publishes to `DEFAULT_GROUP`.
+- Deleting the Config does not delete the content from Nacos.
+
+See [Config Template](../../../reference/config-template.md#config-status) for the status fields.
