@@ -309,6 +309,23 @@ module.exports = {
           ],
         },
         {
+          type: 'category',
+          label: 'Modules',
+          collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'platform-engineers/module/intro',
+          },
+          items: [
+            'platform-engineers/module/module-registry',
+            'platform-engineers/module/module-install',
+            'platform-engineers/module/module-author',
+            'platform-engineers/module/module-crossplane',
+            'platform-engineers/module/module-multicluster',
+            'platform-engineers/module/module-addon',
+          ],
+        },
+        {
           'Cloud Resources': [
             'platform-engineers/addon/terraform',
             'platform-engineers/components/component-terraform',
