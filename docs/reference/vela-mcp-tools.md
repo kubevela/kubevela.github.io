@@ -51,18 +51,22 @@ Every result carries a `meta` block that says which system the data came from an
 
 Read. Always registered.
 
-Report the KubeVela versions and configuration this session runs against: vela CLI version, vela-core version and health, Kubernetes server version, enabled feature gates, and any version skew. Call once per session before other tools so explanations match the running system. Pass the namespace the user is working in to learn how it delivers workloads today, so new work follows that practice.
+Report the KubeVela versions and configuration this session runs against: vela CLI version, vela-core version and health, Kubernetes server version, enabled feature gates, and any version skew. Call once per session before other tools so explanations match the running system. Pass the namespace the user is working in to learn how it delivers workloads today, so new work follows that practice. Before writing a definition for an AWS service, pass the service, and the kind you will emit: the result names the installed provisioner to build on with its CRD's spec schema, or says that neither ACK nor Crossplane is installed and what to install. When both serve that service it names ACK and lists Crossplane as an alternative under also; then ask the user which one the platform builds on, or follow the one the user named.
 
 ### Input
 
 | Field | Type | Required | Description |
 |---|---|---|---|
+| `kind` | string | no | Resource kind of that service, such as Table or Bucket. When set, the result includes the installed CRD's spec schema. |
 | `namespace` | string | no | Namespace the user is about to work in. When set, the result reports how that namespace delivers workloads today. |
+| `service` | string | no | AWS service to find a provisioner for, as AWS names it in lower case, such as dynamodb, s3 or rds. ACK is chosen first, then Crossplane. |
 
 ### Result
 
 | Field | Type | Description |
 |---|---|---|
+| `addons` | array of object | Enabled addons with their versions and health, as list_addons reports them. |
+| `cloudProvisioners` | object | AWS services that ACK and Crossplane can create on this cluster, from the installed CRDs. |
 | `clusterGateway` | object | Whether cluster-gateway was found and whether it forwards the caller's identity to other clusters. |
 | `controller` | object | Whether the vela-core Deployment was found, with its image and ready replicas. |
 | `featureGates` | object | Feature gates set on the vela-core controller's --feature-gates flag, with their values. |
@@ -70,6 +74,8 @@ Report the KubeVela versions and configuration this session runs against: vela C
 | `kubernetes` | object | Kubernetes API server version per cluster name. |
 | `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
 | `practice` | object | How the namespace delivers workloads today. Follow it: keep existing workloads in their form and match it for new work unless the user asks otherwise. |
+| `provisioner` | object | For the service in the request: the provisioner to build on, its kinds, and the schema of the kind asked for; or why the service cannot be provisioned. |
+| `servedData` | string | Where tool descriptions and risk rules come from: builtin means this vela binary. |
 | `velaCLI` | string | Version of the vela binary serving this session. |
 | `velaCore` | string | vela-core controller version found on the cluster, or unknown. |
 | `warnings` | array of string | Version skew and other notes about this platform. |
@@ -118,6 +124,7 @@ Return one KubeVela definition's parameter schema as JSON Schema, with required 
 | `default` | boolean | True when this is the platform default for the namespace in the request. Use it and name the alternatives; when several fit and none is default, ask the user to choose. |
 | `defaultFor` | array of string | Namespaces where the platform made this the default among definitions providing the same capability; * means every namespace. |
 | `description` | string | One-line description the definition declares. |
+| `example` | object | Minimal usage generated from the parameter schema, with the parameters that need a real value listed. |
 | `latestRevision` | string | Name of the definition's latest DefinitionRevision. |
 | `matchedBy` | string | Set by list_definitions when it filters by provides: label when the definition carries the provides label, name or description when it has no label but mentions the capability there. Confirm the latter from its description before relying on it. |
 | `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
@@ -170,7 +177,9 @@ Read one Application live: its declared components, traits, policies and workflo
 | `annotations` | object | Application annotations. Values that embed a serialized object are dropped. |
 | `components` | array of object | Components with their types. |
 | `createdAt` | string | When the Application was created, UTC. |
+| `endpoints` | array of object | Addresses the Application serves on, read live from the Services, Ingresses and HTTPRoutes it manages, the way vela status --endpoint reads them. Addresses reachable from outside the cluster come first. |
 | `evidence` | array of string | Objects this answer was derived from. |
+| `handles` | object | Exact identifiers for queries to other tools: clusters, namespace, pods, labels and the time window. Use them verbatim; do not guess label names or time ranges. |
 | `healthy` | boolean | False when the phase or a workflow step failed, or when no service has reported status yet. |
 | `labels` | object | Application labels. |
 | `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
@@ -181,6 +190,7 @@ Read one Application live: its declared components, traits, policies and workflo
 | `spec` | object | Declared components, traits, policies and workflow, with secret-like values removed. |
 | `status` | object | Status as the controller last wrote it: services, conditions, applied resources and workflow. |
 | `statusStale` | boolean | True when the controller has not observed the latest spec, so status describes an older generation. |
+| `unknowns` | array of string | What could not be read, such as endpoints or resources outside the allowed namespaces. Report these as unknown rather than guessing. |
 | `workflow` | object | Workflow progress: mode, phase, and whether it is suspended, terminated or finished. |
 
 
@@ -263,6 +273,7 @@ Return a bounded, redacted tail of container logs for an Application's pods, fou
 |---|---|---|
 | `application` | string | Application name. |
 | `evidence` | array of string | Objects this answer was derived from. |
+| `handles` | object | Exact identifiers for the pods this call selected, their labels and the time window, for an observability server that holds older logs, metrics and traces. Use them verbatim. |
 | `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
 | `namespace` | string | Namespace of the object this result describes. |
 | `pods` | array of object | One entry per pod read, with its lines and whether they were cut. |
@@ -461,7 +472,7 @@ Deliver an Application after diff_application, using the token it returned for t
 |---|---|---|---|
 | `application` | string | yes | The same Application document that was passed to diff_application, byte for byte. |
 | `token` | string | yes | The token diff_application returned for this document. |
-| `mode` | string | no | Requested write mode: gitops, gated or direct. Default gated, which this release applies as gitops because the controller hold gated mode needs does not exist yet. Policy may make the mode stricter, never looser. |
+| `mode` | string | no | Requested write mode: gitops, gated or direct. Default gated, which is applied as gitops: the server does not hold a written change for approval outside the Application's own workflow. Policy may make the mode stricter, never looser. |
 | `namespace` | string | no | Namespace when the document has none, as for diff_application. |
 
 ### Result
