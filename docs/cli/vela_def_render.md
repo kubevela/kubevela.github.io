@@ -36,10 +36,11 @@ vela def render DEFINITION.cue|DEFINITION.go [flags]
 ### Options
 
 ```
-  -f, --format string    Specify the output format: 'yaml' (default) for Kubernetes YAML, or 'cue' for raw CUE template output. (default "yaml")
-  -h, --help             help for render
-      --message string   Specify the header message of the generated file. For example, declaring author information.
-  -o, --output string    Specify the output path of the rendered definition. If empty, the definition will be printed in the console. If input is a directory, the output path is expected to be a directory as well.
+      --cluster-packages   Load CUE packages (Package resources) from the cluster the kubeconfig names, for definitions that import them. Off by default, so rendering does not depend on, or contact, a cluster.
+  -f, --format string      Specify the output format: 'yaml' (default) for Kubernetes YAML, or 'cue' for raw CUE template output. (default "yaml")
+  -h, --help               help for render
+      --message string     Specify the header message of the generated file. For example, declaring author information.
+  -o, --output string      Specify the output path of the rendered definition. If empty, the definition will be printed in the console. If input is a directory, the output path is expected to be a directory as well.
 ```
 
 ### Options inherited from parent commands

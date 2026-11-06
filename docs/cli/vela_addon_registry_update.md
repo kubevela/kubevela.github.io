@@ -27,10 +27,11 @@ vela addon registry update <registry-name> --type OSS --endpoint=<URL> --bucket=
       --gitlabRepoName string   specify the gitlab addon registry repoName, must be set when registry is gitlab
   -h, --help                    help for update
       --insecureSkipTLS         specify the Helm addon registry skip tls verify
-      --password string         specify the Helm addon registry password
+      --password string         specify the Helm or OCI addon registry password
+      --password-stdin          read the Helm or OCI addon registry password from stdin
       --path string             specify the addon registry path, must be set when addons are not in root of registry
       --type string             specify the addon registry type
-      --username string         specify the Helm addon registry username
+      --username string         specify the Helm or OCI addon registry username
 ```
 
 ### Options inherited from parent commands

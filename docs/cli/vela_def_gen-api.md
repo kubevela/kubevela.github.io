@@ -37,7 +37,7 @@ vela def gen-api DEFINITION.cue [flags]
       --language-args strings   language-specific arguments to pass to the go generator, available options: 
                                 go: 
                                 	MainModuleVersion: MainModuleVersion(default: cd431bb25a9a)
-                                	GoProxy: GoProxy(default: https://goproxy.cn,direct)
+                                	GoProxy: GoProxy(default: )
                                 
   -o, --output string           Output directory path (default "./apis")
   -p, --package string          Package name of generated code (default "github.com/kubevela/vela-go-sdk")

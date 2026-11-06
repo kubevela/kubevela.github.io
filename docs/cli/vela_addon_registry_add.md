@@ -20,6 +20,8 @@ add a github registry: vela addon registry add my-repo --type git --endpoint=<UR
 add a specified github registry: vela addon registry add my-repo --type git --endpoint=https://github.com/kubevela/catalog --path=addons --gitToken=<git token>
 add a gitlab registry: vela addon registry add my-repo --type gitlab --endpoint=<URL> --gitlabRepoName=<repoName> --path=<path> --gitToken=<git token>
 add a specified gitlab registry: vela addon registry add my-repo --type gitlab --endpoint=http://gitlab.xxx.com/xxx/catalog --path=addons --gitlabRepoName=catalog --gitToken=<git token>
+add an OCI registry: printf '%s' "$REGISTRY_PASSWORD" | vela addon registry add my-repo --type oci --endpoint=oci://<registry>/<repo> --username=<user> --password-stdin
+add a private ECR registry: aws ecr get-login-password --region <region> | vela addon registry add ecr --type oci --endpoint=oci://<acct>.dkr.ecr.<region>.amazonaws.com/addon --username=AWS --password-stdin
 ```
 
 ### Options
@@ -31,10 +33,11 @@ add a specified gitlab registry: vela addon registry add my-repo --type gitlab -
       --gitlabRepoName string   specify the gitlab addon registry repoName, must be set when registry is gitlab
   -h, --help                    help for add
       --insecureSkipTLS         specify the Helm addon registry skip tls verify
-      --password string         specify the Helm addon registry password
+      --password string         specify the Helm or OCI addon registry password
+      --password-stdin          read the Helm or OCI addon registry password from stdin
       --path string             specify the addon registry path, must be set when addons are not in root of registry
       --type string             specify the addon registry type
-      --username string         specify the Helm addon registry username
+      --username string         specify the Helm or OCI addon registry username
 ```
 
 ### Options inherited from parent commands

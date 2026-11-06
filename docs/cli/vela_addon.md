@@ -29,7 +29,7 @@ Manage addons for extension.
 * [vela addon init](vela_addon_init.md)	 - create an addon scaffold
 * [vela addon list](vela_addon_list.md)	 - List addons
 * [vela addon package](vela_addon_package.md)	 - package an addon directory
-* [vela addon push](vela_addon_push.md)	 - uploads an addon package to ChartMuseum
+* [vela addon push](vela_addon_push.md)	 - uploads an addon package to a Helm or OCI registry
 * [vela addon registry](vela_addon_registry.md)	 - Manage addon registry.
 * [vela addon status](vela_addon_status.md)	 - get an addon's status.
 * [vela addon upgrade](vela_addon_upgrade.md)	 - upgrade an addon

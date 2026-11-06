@@ -28,17 +28,22 @@ vela addon upgrade [flags]
 	vela addon upgrade <addon-name> <my-parameter-of-addon>=<my-value>
   The specified args will be merged with legacy args, what user specified in 'vela addon enable', and non-empty legacy arg will be overridden by
 non-empty new arg
+  Upgrade addon scheduling:
+	vela addon upgrade <addon-name> --nodeSelector disktype=ssd
+	vela addon upgrade <addon-name> --scheduling-file scheduling.yaml
 
 ```
 
 ### Options
 
 ```
-  -c, --clusters string           specify the runtime-clusters to upgrade
-  -h, --help                      help for upgrade
-      --override-definitions      override existing definitions if conflict with those contained in this addon
-  -s, --skip-version-validating   skip validating system version requirement
-  -v, --version string            specify the addon version to upgrade
+  -c, --clusters string               specify the runtime-clusters to upgrade
+  -h, --help                          help for upgrade
+      --nodeSelector stringToString   pod nodeSelector key=value pairs (affinity trait (overlays chart values)) (default [])
+      --override-definitions          override existing definitions if conflict with those contained in this addon
+      --scheduling-file string        YAML file with Kubernetes pod scheduling fields (nodeSelector, affinity, tolerations, ...)
+  -s, --skip-version-validating       skip validating system version requirement
+  -v, --version string                specify the addon version to upgrade
 ```
 
 ### Options inherited from parent commands
