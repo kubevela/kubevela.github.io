@@ -40,14 +40,16 @@ vela policy dry-run [app-name] [flags]
 ### Options
 
 ```
-      --details            Include per-policy output details (context, labels, annotations, spec transforms)
-  -e, --env string         specify environment name for application
-  -f, --file string        Path to a local Application YAML file
-  -h, --help               help for dry-run
-  -n, --namespace string   specify the Kubernetes namespace to use
-      --outcome            Include outcome (final spec, labels, annotations and context) in output
-  -o, --output string      Output format: table, summary, json, yaml (default "table")
-  -p, --policy string      Filter output to policies matching a name or glob pattern (e.g. "add-env-*")
+      --allow-namespace-global-policies   Simulate a controller run with --allow-namespace-global-policies (default true)
+      --allow-skip-global-policies        Simulate a controller run with --allow-skip-global-policies (default true)
+      --details                           Include per-policy output details (context, labels, annotations, spec transforms)
+  -e, --env string                        specify environment name for application
+  -f, --file string                       Path to a local Application YAML file
+  -h, --help                              help for dry-run
+  -n, --namespace string                  specify the Kubernetes namespace to use
+      --outcome                           Include outcome (final spec, labels, annotations and context) in output
+  -o, --output string                     Output format: table, summary, json, yaml (default "table")
+  -p, --policy string                     Filter output to policies matching a name or glob pattern (e.g. "add-env-*")
 ```
 
 ### Options inherited from parent commands

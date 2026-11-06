@@ -387,6 +387,8 @@ module.exports = {
             'platform-engineers/traits/customize-trait',
             'platform-engineers/policy/custom-policy',
             'platform-engineers/policy/application-scoped-policy',
+            'platform-engineers/policy/policy-rollout',
+            'platform-engineers/policy/policy-context-schema',
             'platform-engineers/workflow/workflow',
             {
               'Patch and Override': [
