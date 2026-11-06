@@ -6,6 +6,64 @@ This doc aims to provide a migration guide from old versions to the new ones wit
 
 KubeVela has [release cadence](../../contributor/release-process.md) for every 2-3 months, we'll only maintain for the last 2 releases. As a result, you're highly recommended to upgrade along with the community. We'll strictly align with the [semver version rule](https://semver.org/) for compatibility.
 
+## From v1.11.x to v1.12.x
+
+### Config templates and configs
+
+v1.12 turns config templates and configs into Kubernetes resources, `ConfigTemplate` and `Config`,
+reconciled by the controller; see [Config Template](../../reference/config-template.md). Your v1.11
+templates and configs keep working without changes.
+
+1. Apply the two new CRDs. Helm does not upgrade the CRDs in a chart's `crds/` directory:
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.12/charts/vela-core/crds/config.oam.dev_configtemplates.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubevela/kubevela/release-1.12/charts/vela-core/crds/config.oam.dev_configs.yaml
+```
+
+2. Upgrade your kubevela chart:
+
+```
+helm repo update
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.12.0 --wait
+```
+
+3. Upgrade the `vela` CLI. An older CLI keeps working, but it writes v1.11 objects.
+
+4. (Optional) Move your v1.11 templates and configs to the new resources with
+   `vela config-template migrate`, or once at controller startup with the
+   `AutoMigrateLegacyConfigs` feature gate. See
+   [Migrate Configs to ConfigTemplate and Config](config-migration.md), which also covers rolling
+   back.
+
+Check these changes before you upgrade:
+
+- **New configs and templates are resources.** `vela config create` and
+  `vela config-template apply` create `Config` and `ConfigTemplate` resources, and fail if the CRDs
+  are not installed. The `create-config` workflow step creates a `Config` owned by the Application,
+  waits until it is `Available`, and fails if the Config goes to `Error`.
+- **`system` scope only in `vela-system`.** A template with `scope: "system"` can be applied only
+  in `vela-system`; `vela config-template apply -f <file> -n <other namespace>` is refused. A v1.11
+  template ConfigMap outside `vela-system` is treated as namespace-scoped, whatever its label says.
+- **Using a template from another namespace needs permission.** A new Config may use a
+  namespace-scoped template from another namespace only if the user creating it can `get` that
+  ConfigTemplate. Existing v1.11 configs keep working, and migration records them as allowed. See
+  [Scope](../../reference/config-template.md#scope-who-may-use-a-template).
+- **The controller publishes to Nacos.** For a template with a `nacos` block, the controller, not
+  the CLI, now publishes each Config. The controller's pods must be able to reach the Nacos server
+  at the address in the endpoint config; in v1.11 only the machine running the CLI had to. The
+  result is in the Config's `NacosSynced` condition: a publish the server refuses shows `False`
+  with reason `PublishFailed`. Deleting a Config does not delete its Nacos entry.
+- **Sensitive Nacos endpoints need a mark.** If the config that holds a Nacos server's address and
+  credentials is sensitive, its owner must annotate it `config.oam.dev/nacos-endpoint: "true"`
+  (the Config, or the v1.11 Secret if it was not migrated) before Configs can publish through it.
+- **Sensitive rules are enforced.** A template's `sensitive` can be turned on, but not back off. A
+  sensitive template takes properties only from a Secret (`propertiesFrom`); `vela config create`
+  does this for you. A Config that reads its properties from a Secret is always sensitive, whatever
+  its template says. A sensitive config's properties are never returned by `vela config` reads,
+  the `read-config` and `list-config` workflow steps, or CueX; Applications can still mount its
+  Secret. See [Sensitive templates](../../reference/config-template.md#sensitive-templates).
+
 ## From v1.10.x to v1.11.x
 
 v1.11.x upgrades the underlying CUE engine from v0.9.2 to v0.14.1. CUE v0.14 turns previously-tolerated syntax (list arithmetic, unquoted error field labels) into hard errors, and enables two new experimental evaluator behaviors (`evalv3`, `keepvalidators`) that can change how existing definitions behave.
