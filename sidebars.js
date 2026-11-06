@@ -309,6 +309,14 @@ module.exports = {
           ],
         },
         {
+          type: 'category',
+          label: 'Modules',
+          collapsed: true,
+          items: [
+            'platform-engineers/module/intro',
+          ],
+        },
+        {
           'Cloud Resources': [
             'platform-engineers/addon/terraform',
             'platform-engineers/components/component-terraform',
@@ -434,6 +442,7 @@ module.exports = {
         'cli/vela',
         'platform-engineers/oam/x-definition',
         'end-user/components/references',
+        'end-user/components/module',
         'end-user/traits/references',
         'end-user/policies/references',
         'end-user/workflow/built-in-workflow-defs',
