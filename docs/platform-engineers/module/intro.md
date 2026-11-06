@@ -16,7 +16,7 @@ Definitions are the contract between a platform team and the application teams. 
 
 Without modules, this contract is difficult to change safely:
 
-- An addon upgrade replaces the definitions in place. A breaking change to a parameter applies to every Application at the same time.
+- An addon upgrade replaces the definitions in place. A running Application does not change until its spec changes. After the upgrade, a breaking change to a parameter applies to every new Application and to every Application that you update.
 - To prevent this, teams copy a definition to a new name, such as `bucket-v2`. Over time, the cluster collects many copies with no clear owner and no clear version.
 - A definition often needs other objects to work, such as a Crossplane Composition. You must install those objects separately, and in the necessary order.
 - An Application cannot tell which release of a definition it uses.
