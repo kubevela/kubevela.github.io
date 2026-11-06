@@ -2,172 +2,181 @@
 title: Modules
 ---
 
-A module is a versioned package of KubeVela definitions, plus the auxiliary objects those definitions need at runtime. You publish the package to an OCI registry and install one version of it as an Application component. Consumers then use the definitions by API line (`v1`, `v2`, `v1beta1`), the same way a Kubernetes API group has versions that can exist side by side.
+A module is a versioned package of KubeVela definitions. The package also carries the Kubernetes objects that those definitions need to work. Examples of these objects are Crossplane XRDs, Compositions, ConfigMaps, and RBAC rules.
 
-This is the module system that ships with the `type: module` component. It is alpha and off by default. Turn it on with the `EnableModuleComponent` feature gate, then follow [Install a module](../../end-user/components/module.md).
+You publish a module to an OCI registry, the same type of registry that holds container images and Helm charts. You install the module into a namespace with one component of type `module`. KubeVela then installs the objects in a fixed order and makes the definitions available to the Applications in that namespace.
+
+:::note
+Modules are new in KubeVela v1.12. The first release that contains them is `v1.12.0-alpha.1`. The feature is off by default. To turn it on, see [Turn the feature on](./module-registry.md#turn-the-feature-on).
+:::
 
 ## Why modules
 
-A definition is the contract an Application author binds to: the `type` string and the parameter schema behind it. Shipping that contract as loose files in an addon has two sharp edges.
+Definitions are the contract between a platform team and the application teams. An application team writes `type: bucket` and gives some parameters. The platform team owns the template behind that type.
 
-- An addon upgrade replaces its definitions in place. A new required field, a renamed field, or a changed output lands on every consumer at once. There is no second copy of the contract to migrate toward.
-- An addon version is a release number. It does not say whether `bucket` still accepts the same parameters it accepted last month. Pinning the addon does not give you a name for the contract.
+Without modules, this contract is difficult to change safely:
 
-A module splits those. The **package version** (`1.2.3`, the OCI tag) is what you publish and what an installer pins. The **API line** (`v1`, `v2`) is the contract. Breaking the parameter contract means adding a line, not editing the line consumers already use. `v1` and `v2` of the same capability install together, under different definition names, and an Application moves from one to the other by changing its `type`.
+- An addon upgrade replaces the definitions in place. A breaking change to a parameter applies to every Application at the same time.
+- To prevent this, teams copy a definition to a new name, such as `bucket-v2`. Over time, the cluster collects many copies with no clear owner and no clear version.
+- A definition often needs other objects to work, such as a Crossplane Composition. You must install those objects separately, and in the necessary order.
+- An Application cannot tell which release of a definition it uses.
 
-The module name is the package and the namespace of those names. Two modules can both offer a `v1` of `bucket`. The installed objects are `store-v1-bucket` and `backup-v1-bucket`, and an Application picks one with `store/v1/bucket` or `backup/v1/bucket`.
+A module solves these problems with three ideas:
 
-## Package layout
+1. **API lines.** A module has one or more API lines, for example `v1` and `v2`. Each line is a stable contract. A breaking change goes into a new line. The old line stays installed until all Applications move to the new line.
+2. **One package for each release.** The definitions and the objects that they need are in one package with one version tag. Install a tag, and you receive all the parts of that release.
+3. **Ordered install.** KubeVela installs the supporting objects first and the definitions last.
 
-`vela module init` writes a skeleton that already parses.
+## Inspiration
 
-```shell
-vela module init store
-```
+Modules use patterns that Kubernetes and Go users already know.
+
+| Pattern | Where you know it from | How a module uses it |
+| --- | --- | --- |
+| More than one served version | A CRD can serve more than one version at the same time. Each client selects one. | A module can install API lines `v1` and `v2` at the same time. An Application selects one in its `type`, for example `aws-s3/v1/bucket`. Line names use the Kubernetes version format, for example `v1` or `v1beta1`. |
+| Major version in the import path | A Go module puts a breaking release at a new path, for example `example.com/lib/v2`. | A breaking change goes into a new API line, so the `type` changes from `aws-s3/v1/bucket` to `aws-s3/v2/bucket`. |
+| OCI artifacts | Container images and Helm charts are stored in OCI registries, with tags. | A module release is an OCI artifact. The tag is the package version, for example `1.2.0`. |
+
+## Terms
+
+| Term | Meaning |
+| --- | --- |
+| Module | A package with a name, for example `aws-s3`. The name is a DNS-1123 label. |
+| Package version | The release of the package, for example `1.2.0`. It is the OCI tag. It tells you which files are in the package. |
+| API line | A stable contract in the module. A line name has the form `vN`, `vNalphaN`, or `vNbetaN`, for example `v1` or `v2beta1`. Applications bind to an API line, not to a package version. |
+| Capability | One definition in an API line, for example `bucket`. |
+| Auxiliary object | A Kubernetes object that the module installs to support its definitions. Examples are an XRD, a Composition, or a ConfigMap. |
+| Module registry | A name for an OCI location that holds modules. You add it with `vela module registry add`. |
+| Installer Application | The Application that contains the `type: module` component. You create it with YAML or with `vela module deploy`. Its namespace is the install namespace. |
+| Owned Application | The Application `module-<name>` in `vela-system`. KubeVela creates it from the installer Application. It installs the objects of the module. |
+
+The package version and the API line are different numbers. Package `1.0.0` of `aws-s3` contains lines `v1` and `v2`. Package `1.0.1` can fix a bug in line `v1`. Applications that use `aws-s3/v1/bucket` receive the fix and do not change.
+
+## How a module is deployed
+
+The diagram shows the path of the `aws-s3` module from the source directory to the Applications that use it. The module has two API lines, `v1` and `v2`. Purple boxes are objects that the module installs, green boxes are definitions, and blue boxes are Applications.
+
+![How a module is deployed. KubeVela installs the shared tier first, then the tiers of lines v1 and v2. Two Applications use the two lines](../../resources/module/module-deploy-flow.png)
+
+1. The module author runs `vela module publish`. The CLI parses the directory and pushes it to the registry as one OCI artifact. The tag is the `version` in `_module.cue`.
+2. You create the installer Application in a namespace, for example `team-a`. You can write the YAML, or run `vela module deploy`.
+3. KubeVela fetches the package tag from the registry. It renders the owned Application `module-aws-s3` in `vela-system`.
+4. The owned Application applies the objects in tiers:
+   - `<module>-aux`: the objects that all API lines share, from `auxiliary/`. For `aws-s3`, these are the Crossplane provider, the functions, the XRD, and the EnvironmentConfig.
+   - `<module>-<line>-aux`: the objects for one API line, from `v1/auxiliary/` or `v2/auxiliary/`. For `aws-s3`, each line has its own Composition.
+   - `<module>-<line>-defs`: the definitions of that line.
+5. Applications in `team-a` can now use `type: aws-s3/v1/bucket` and `type: aws-s3/v2/bucket`.
+
+Each tier starts after KubeVela applies the tier before it. The two lines do not wait for each other. KubeVela does not wait until the objects in a tier are ready. For example, the definitions can be available before Crossplane installs the provider.
+
+KubeVela creates the definitions in the install namespace. An auxiliary object that does not set `metadata.namespace` also goes into the install namespace.
+
+The owned Application keeps the state of the installed objects. If a person deletes one of these objects, KubeVela applies it again at the next reconcile.
+
+A cluster holds one install of each module name. To install the module in a different namespace, uninstall it first. See [Change the namespace of an install](./module-install.md#change-the-namespace-of-an-install).
+
+## What a module can contain
+
+A module can carry any Kubernetes object and any type of KubeVela definition. These are some typical modules:
+
+| Module | Auxiliary objects | Definitions |
+| --- | --- | --- |
+| Cloud resources with Crossplane | Provider, Functions, XRD, Composition, EnvironmentConfig | A component that creates a composite resource, for example a bucket or a database |
+| Resource graphs with KRO | ResourceGraphDefinition | A component that creates an instance of the graph |
+| Team conventions | ConfigMaps with defaults, RBAC rules | Traits that add labels or annotations, and policies |
+| Delivery steps | Secrets or ConfigMaps for an external system | Workflow steps that call that system |
+
+## Example: S3 buckets with Crossplane
+
+The next pages use this example. A platform team gives application teams an S3 bucket. Crossplane creates the bucket in AWS. The module has two API lines, and one cluster serves both lines at the same time:
+
+- Line `v1` takes an optional `region` and some tags.
+- Line `v2` changes the name of `region` to `location`, and it adds the required parameter `owner`. These are breaking changes, so they are in a new line.
 
 ```text
-store/
-  _module.cue
-  README.md
-  auxiliary/                 # objects shared by every API line
+aws-s3/
+  _module.cue                  module: "aws-s3", version: "1.0.0"
+  auxiliary/                   Objects that both lines share
+    packages.yaml              Crossplane Provider and Functions
+    xrd.yaml                   Crossplane XRD: the ObjectBucket API
+    settings.yaml              EnvironmentConfig: default region and tags
   v1/
-    _version.cue
-    auxiliary/               # objects used only by this line
+    _version.cue               apiVersion: "v1"
+    auxiliary/
+      composition.yaml         Composition aws-s3-v1
     definitions/
-      example.cue
+      bucket.cue               ComponentDefinition: region, tags
+  v2/
+    _version.cue               apiVersion: "v2"
+    auxiliary/
+      composition.yaml         Composition aws-s3-v2
+    definitions/
+      bucket.cue               ComponentDefinition: location, owner, tags
 ```
 
-`_module.cue` has two parsed fields. Anything else in the file is kept in the artifact for people reading the source and is not interpreted.
-
-```cue
-module:  "store"     // DNS-1123 label. Becomes the OCI repo name and the name prefix.
-version: "1.0.0"     // strict semver, no leading v. This is the OCI tag.
-```
-
-Each directory at the module root whose name starts with `v` is an API line, and it must contain `_version.cue`.
-
-```cue
-apiVersion: "v1"     // ^v\d+(alpha\d+|beta\d+)?$  so v1, v2, v1beta1, v1alpha2
-enabled:    true     // false: the line is packaged, and nothing from it is installed
-```
-
-`apiVersion` should match the directory name. Two directories that resolve to the same `apiVersion` are a parse error.
-
-A definition file has a capability key and a `template`. The key is the capability name. The installed object is `<module>-<apiVersion>-<key>`.
-
-```cue
-"bucket": {
-  type: "component"   // component, trait, policy, workflow-step, or workload
-  attributes: workload: type: "autodetects.core.oam.dev"
-  description: "Object storage bucket."
-}
-
-template: {
-  parameter: bucketName: string
-  output: {
-    apiVersion: "v1"
-    kind:       "ConfigMap"
-    metadata: name: context.name
-    data: bucket: parameter.bucketName
-  }
-}
-```
-
-`auxiliary/` holds plain YAML or CUE that the module needs beside its definitions: a ConfigMap, a Secret, a ServiceAccount, RBAC. Objects under the module-level `auxiliary/` install once for the whole module. Objects under `v1/auxiliary/` install only with the v1 line. CUE auxiliary is evaluated when the module is rendered.
-
-A line with `enabled: false` still travels in the published artifact. Turning it on later is a new package version with that flag flipped. The render skips it until then, so a preview line can ship without becoming a type anyone can use.
-
-## Publish
-
-```shell
-vela module registry add catalog oci://ghcr.io/myorg/modules
-
-# Tag is the version field in _module.cue.
-vela module publish ./store --registry catalog
-
-# Show the target and the annotations, and do not push.
-vela module publish ./store --registry catalog --dry-run
-```
-
-You can also pass the repository prefix directly:
-
-```shell
-vela module publish ./store oci://ghcr.io/myorg/modules
-vela module publish ./store http://127.0.0.1:5000/modules
-```
-
-A published tag is immutable. The next change gets a new `version` in `_module.cue` and a new publish. `--version` on the command retags the push for a throwaway build and does not rewrite the version inside the artifact. `--force` overwrites a tag that is already there.
-
-The registry record is cluster configuration, the same idea as an addon registry. `vela module registry` supports `add`, `update`, `list`, `get`, and `delete`. Use `oci://` for a TLS registry. Use `http://` only for a registry served without TLS. Credentials are stored for `oci://` registries (`--username` and `--password`, or `--password-stdin`) and are refused for `http://`.
-
-An Application that names a registry is checked at apply against that list. An unknown name is rejected on `properties.registry`, and the message lists the registries that are configured (`is not a configured module registry; configured: [...]`). A Git-backed entry is rejected the same way, because a module package is an OCI artifact. Leaving `registry` empty skips that check. The fetch then uses the only configured registry, or the one named `catalog` when more than one exists.
-
-## Install
-
-An installer is an Application. `vela module deploy store --registry catalog --version 1.0.0 -n team-a` is the short form. The Application it writes is the form to commit:
+Two application teams in `team-a` use the two lines at the same time. Each Application selects its line in `type`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: module-store-deploy
+  name: photos
   namespace: team-a
 spec:
   components:
-    - name: store
-      type: module
+    - name: photos
+      type: aws-s3/v1/bucket
       properties:
-        module: store
-        registry: catalog
-        version: "1.0.0"
+        region: eu-west-1
+        tags:
+          team: photos
+---
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: invoices
+  namespace: team-a
+spec:
+  components:
+    - name: invoices
+      type: aws-s3/v2/bucket
+      properties:
+        location: eu-central-1
+        owner: team-billing
+        tags:
+          team: invoices
 ```
 
-That component fetches the package and renders an owned Application named `module-store` in `vela-system`. The owned Application applies auxiliary objects first and definitions last, per enabled line. Definitions are created in `team-a`, the namespace of the Application that installed the module, not in a namespace chosen by a property.
+Each definition selects the Composition of its line, so each Application receives its own bucket. Later, the `photos` team can move to `v2`. When no Application uses `v1`, the platform team retires `v1` in a new package version.
 
-Consumers in `team-a` bind a line explicitly:
+The full module, with every file and each of these steps, is in [Example: S3 Buckets with Crossplane](./module-crossplane.md).
 
-```yaml
-type: store/v1/bucket
+## Quick start
+
+These commands publish a module, install it, and use it. The next pages explain each command.
+
+```shell
+# Register the OCI location of your modules. Do this one time for each cluster.
+vela module registry add catalog oci://ghcr.io/myorg/modules
+
+# Create a module. Edit the files, and set version: "1.0.0" in _module.cue.
+vela module init aws-s3
+vela module publish ./aws-s3 --registry catalog
+
+# Install the module into the namespace team-a. The namespace must exist.
+kubectl create namespace team-a
+vela module deploy aws-s3 --registry catalog --version 1.0.0 -n team-a
+
+# Check the install.
+vela status module-aws-s3-deploy -n team-a
 ```
 
-`store/v2/bucket` is a different definition and can be installed at the same time. A trait from another line of the same module is a normal trait reference, `type: store/v1/labeler`. Changing `version` on the installer moves the cluster to that package: newly enabled lines appear, and definitions the new package does not contain are removed.
+## Next steps
 
-The full install, status, and type-reference rules are in [Module component](../../end-user/components/module.md).
-
-## Modules and addons
-
-An addon can carry modules. The addon is still the thing an operator enables. The module is the package of definitions inside it. Both forms live under the addon's `modules/` directory, and both need `EnableModuleComponent`.
-
-An inline module is authored in the addon. The directory is the same layout as a published module, and nothing is fetched:
-
-```text
-my-addon/
-  metadata.yaml
-  resources/
-  modules/
-    store/
-      _module.cue
-      v1/
-        _version.cue
-        definitions/
-          bucket.cue
-```
-
-An imported module points at a package you already published. `modules/_imports.cue` lists one entry per module. Each entry becomes its own `type: module` component on the addon's Application.
-
-```cue
-imports: [{
-  module: "store"
-  sources: [{registry: "catalog", version: "1.0.0"}]
-}, {
-  module: "backup"
-  enabled: false
-  sources: [{registry: "catalog", version: "1.0.0"}]
-}]
-```
-
-`enabled: false` skips that module. `registry` is a module registry name from `vela module registry add`. Omit `registry` when the cluster has a single module registry. `version` is the package tag.
-
-The addon's own Application runs in `vela-system`. For an imported or inline module, the definitions still install into the namespace of the Application that enabled the addon. The addon renderer records that namespace, and the module component honors it only on an addon-owned Application.
-
-Inline directories and `_imports.cue` can both be present. Every immediate subdirectory of `modules/` is an inline module and must contain `_module.cue`.
+- [Module Registries](./module-registry.md): turn on the feature, install the CLI, add a registry, and set publish credentials.
+- [Install and Use a Module](./module-install.md): install with the CLI or with YAML, use the definitions, upgrade, and uninstall.
+- [Build and Publish a Module](./module-author.md): the package layout, the files, and the publish rules.
+- [Example: S3 Buckets with Crossplane](./module-crossplane.md): a full module, from files to a bucket.
+- [Module Multi-Cluster Placement](./module-multicluster.md): send the supporting objects to managed clusters.
+- [Modules in Addons](./module-addon.md): include modules in an addon.
+- The `module` component fields: [built-in components](../../end-user/components/references.md#module).

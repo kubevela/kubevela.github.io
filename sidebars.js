@@ -312,8 +312,17 @@ module.exports = {
           type: 'category',
           label: 'Modules',
           collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'platform-engineers/module/intro',
+          },
           items: [
-            'platform-engineers/module/intro',
+            'platform-engineers/module/module-registry',
+            'platform-engineers/module/module-install',
+            'platform-engineers/module/module-author',
+            'platform-engineers/module/module-crossplane',
+            'platform-engineers/module/module-multicluster',
+            'platform-engineers/module/module-addon',
           ],
         },
         {
@@ -442,7 +451,6 @@ module.exports = {
         'cli/vela',
         'platform-engineers/oam/x-definition',
         'end-user/components/references',
-        'end-user/components/module',
         'end-user/traits/references',
         'end-user/policies/references',
         'end-user/workflow/built-in-workflow-defs',
