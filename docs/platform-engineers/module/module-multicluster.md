@@ -47,7 +47,9 @@ Definitions always install on the hub. Hub objects always install on the hub.
    vela cluster list
    ```
 
-3. Make sure that each managed cluster has the infrastructure that the runtime objects need. For the Crossplane example, install Crossplane and the AWS credentials Secret on each managed cluster. The module sends the provider and the functions. After the provider is healthy on a cluster, create the `ClusterProviderConfig` there. See [Add the AWS credentials](./module-crossplane.md#add-the-aws-credentials).
+   The hub must be able to open the server URL in that kubeconfig. A raw k3d kubeconfig failed until the hub could reach the API server address in the file.
+
+3. Install Crossplane on each managed cluster before you install the module. The module sends the provider and the functions. After the provider is Healthy, create the credentials Secret and the `ClusterProviderConfig` on that cluster. See [Add the AWS credentials](./module-crossplane.md#add-the-aws-credentials).
 4. Create the namespaces on each managed cluster. KubeVela does not create them:
    - The install namespace, if the runtime objects include namespaced objects.
    - The namespace of each Application that sends workloads to the cluster.
@@ -82,17 +84,34 @@ If you run `vela module deploy` again with the same flags, the failed step does 
 
 ## Mark the objects in a module
 
-KubeVela finds the class of each auxiliary object with these rules. The first rule that matches sets the class.
+KubeVela sets the class of each object with these rules. The first rule that matches sets the class.
 
-1. The annotation `resource.oam.dev/placement` on the object.
-2. The file is directly in `auxiliary/hub/` or `<line>/auxiliary/hub/`. The directory makes the object a hub object.
-3. The `placement` field in `<line>/_version.cue`.
-4. The `placement` field in `_module.cue`.
-5. No rule matches. The object is a hub object.
+1. A definition stays on the hub. A runtime annotation on the definition does not move it.
+2. The annotation `resource.oam.dev/placement` on the object. The value `hub` or `runtime` wins. This includes a file inside `hub/`.
+3. The file is directly in `auxiliary/hub/` or in a line `auxiliary/hub/` directory. The object stays on the hub.
+4. The `placement` field in `<line>/_version.cue`.
+5. The `placement` field in `_module.cue`.
+6. No earlier rule matches. The object stays on the hub.
+
+![Placement decision order for one module object](../../resources/module/module-placement-decision.png)
+
+Yellow is a decision, green stays on the hub, and blue uses the annotation, the line field, or the module field.
 
 The only values are `hub` and `runtime`.
 
-With rule 5, a module with no marks keeps all objects on the hub. Modules that you published before this feature continue to install on the hub only.
+With rule 6, a module with no marks keeps all objects on the hub. Modules that you published before this feature continue to install on the hub only.
+
+The check used package `pr7516demo` `0.1.3` with `--clusters east-1`. These rows are the objects from that package:
+
+| Object | Marks | Where it went |
+| --- | --- | --- |
+| ComponentDefinition `pr7516demo-v1-permnote` | Annotation `runtime` | Hub |
+| ConfigMap `pr7516-ann-runtime-hubmod` | Annotation `runtime`, and `_module.cue` placement `hub` | `east-1` |
+| ConfigMap `pr7516-hubdir-ann-hub` | Annotation `hub`, and the file is in `auxiliary/hub/` | Hub |
+| ConfigMap `pr7516-mod-unmarked` | No annotation. `_module.cue` placement `hub`. The line placement is `runtime`. | Hub |
+| ConfigMap `pr7516-line-unmarked` | No annotation. The line placement is `runtime`. `_module.cue` placement `hub`. | `east-1` |
+
+The line field won for `pr7516-line-unmarked`. The module field kept `pr7516-mod-unmarked` on the hub. The annotation `runtime` sent `pr7516-ann-runtime-hubmod` to `east-1` while the module field was `hub`. Both runtime objects went to `east-1`. `west-1` received none. All runtime objects of one install go to the same clusters.
 
 ### Example: the aws-s3 module for managed clusters
 
@@ -120,6 +139,8 @@ aws-s3/
     definitions/
       bucket.cue               hub. Definitions always install on the hub.
 ```
+
+The list above is the full order. This example uses the module field and a `hub/` directory. It does not show every row.
 
 `_module.cue`. Package `1.1.0` is package `1.0.1` of the Crossplane example, with the new `placement` field:
 
@@ -180,15 +201,17 @@ A definition with a placement annotation is accepted. The annotation stays on th
 
 ### With the CLI
 
+`--registry` names a module registry you already added. See [Add a registry](./module-registry.md#add-a-registry). These commands use `ghcr`.
+
 ```shell
 # Send the runtime objects to two clusters by name.
-vela module deploy aws-s3 --registry catalog --version 1.1.0 --clusters east-1,east-2
+vela module deploy aws-s3 --registry ghcr --version 1.1.0 --clusters east-1,east-2
 
 # Send them to all clusters with a label.
-vela module deploy aws-s3 --registry catalog --version 1.1.0 --cluster-selector region=east
+vela module deploy aws-s3 --registry ghcr --version 1.1.0 --cluster-selector region=east
 
 # Succeed when no cluster has the label yet.
-vela module deploy aws-s3 --registry catalog --version 1.1.0 --cluster-selector tier=gpu --allow-empty
+vela module deploy aws-s3 --registry ghcr --version 1.1.0 --cluster-selector tier=gpu --allow-empty
 ```
 
 `--cluster-selector` takes one or more `key=value` pairs, separated by commas. A cluster must have all the labels.
@@ -196,7 +219,7 @@ vela module deploy aws-s3 --registry catalog --version 1.1.0 --cluster-selector 
 `--dry-run` shows the `placement` property:
 
 ```shell
-vela module deploy aws-s3 --registry catalog --version 1.1.0 --cluster-selector region=east -n platform --dry-run
+vela module deploy aws-s3 --registry ghcr --version 1.1.0 --cluster-selector region=east -n platform --dry-run
 ```
 
 ```yaml
@@ -213,7 +236,7 @@ spec:
       placement:
         clusterLabelSelector:
           region: east
-      registry: catalog
+      registry: ghcr
       version: 1.1.0
     type: module
 status: {}
@@ -240,7 +263,7 @@ spec:
     - name: aws-s3
       type: module
       properties:
-        registry: catalog
+        registry: ghcr
         version: "1.1.0"
         placement:
           clusterLabelSelector:
@@ -270,8 +293,8 @@ Admission rejects a wrong `placement`. The error ends with one of these messages
 | `clusters: [east-1, east-2]` | `east-1` and `east-2` only |
 | `clusterLabelSelector: {region: east}` | All clusters with the label `region=east` |
 | `clusterLabelSelector: {}` | All clusters, including the hub |
-| A selector that matches no cluster | No cluster. The runtime step fails. |
-| A selector that matches no cluster, with `allowEmpty: true` | No cluster. The install succeeds. |
+| A selector that matches no cluster | The runtime step fails. Objects already placed stay. |
+| A selector that matches no cluster, with `allowEmpty: true` | The install succeeds. KubeVela deletes the runtime objects already placed. The tier shows `Not placed` and `no cluster selected`. |
 | A cluster name that does not exist | No cluster. The runtime step fails. |
 
 All runtime objects of one install go to the same clusters. To send different objects to different clusters, use two modules.
@@ -314,11 +337,13 @@ vela status module-aws-s3 -n vela-system
 | `module-runtime` | Topology with the `placement` of the installer, with no changes |
 | `module-runtime-override` | Selects the runtime tiers |
 
-`vela status module-aws-s3 -n vela-system` shows the cluster of each tier.
+`vela status module-aws-s3 -n vela-system` shows the cluster of each tier. The Namespace column prints `vela-system` for every tier. The catalog ConfigMap and the definitions are in the install namespace. The column does not print the install namespace.
 
 ### Command output
 
-`vela module deploy` waits for both steps. It shows one row for each tier, with no cluster column. With `--allow-empty`, a runtime tier that went to no cluster shows `Not placed` with the message `no cluster selected`.
+`vela module deploy` waits for both steps. It shows one row for each tier, with no cluster column. With `--allow-empty`, a runtime tier that went to no cluster shows `Not placed` with the message `no cluster selected`. KubeVela also deletes the runtime objects already placed. A failed selector does not delete those objects.
+
+Run `vela workflow restart module-<name> -n vela-system` to retry a failed runtime step. A second `vela module deploy` with the same flags does not run the failed step again.
 
 If the runtime step fails, the command shows the failed step and returns an error:
 
@@ -372,7 +397,7 @@ Use the same selector for the module and for the Applications. If an Application
 Change `placement` on the installer Application, or run `vela module deploy` again with new flags:
 
 ```shell
-vela module deploy aws-s3 --registry catalog --version 1.1.0 --cluster-selector region=west
+vela module deploy aws-s3 --registry ghcr --version 1.1.0 --cluster-selector region=west
 ```
 
 KubeVela installs the runtime objects on the new clusters. It deletes them from the clusters that the new placement does not select.

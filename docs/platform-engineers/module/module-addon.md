@@ -18,7 +18,12 @@ If you do not know addons, read [Make Your Own Addon](../addon/intro.md) first.
     --set featureGates.enableAddonComponent=true
   ```
 
-- Publish the addon to an addon registry, and add the registry with `vela addon registry add`. See [Make Your Own Addon](../addon/intro.md).
+- Read [Make Your Own Addon](../addon/intro.md) for the addon layout.
+- Follow the addon `crossplane-storage` on this page. It imports the module `aws-s3`.
+
+An OCI addon registry looks for a catalog index. `vela addon registry add` for an OCI registry requested `kubevela-addon-catalog`, logged HTTP 404, and did not finish. The registry was not saved. The GHCR URL in the [module registry example](./module-registry.md#example-private-packages-on-ghcr) does not provide that index. This page does not show a completed OCI addon registry add.
+
+`vela addon enable` on a local addon directory ignores `modules/`. Use a local directory only for those ignored parts. This page does not show a completed `type: addon` install.
 
 :::caution
 Only a `type: addon` component installs the modules of an addon. `vela addon enable` installs the other parts of the addon, but it ignores `modules/`. This is true for an addon from a registry and for an addon in a local directory.

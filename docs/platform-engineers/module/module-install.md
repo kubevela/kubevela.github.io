@@ -49,7 +49,7 @@ Module "aws-s3" (version 1.0.0) is installed in namespace "team-a"
 | Flag | Meaning | Default |
 | --- | --- | --- |
 | `--registry` | The registry name. | The only registry, or `catalog` when there are two or more |
-| `--version` | The package version, which is the OCI tag. It is not the API line. | The highest published semver tag |
+| `--version` | The package version, which is the OCI tag. It is not the API line. | On a first install, the highest semver tag. The Application stores an empty version. A later deploy with an empty version keeps that package. |
 | `-n`, `--namespace` | The install namespace. | `vela-system` |
 | `--timeout` | How long to wait for a healthy install. | `5m0s` |
 | `--dry-run` | Print the installer Application. Do not apply it. | `false` |
@@ -88,7 +88,11 @@ spec:
 status: {}
 ```
 
-`--dry-run` connects to the registry to find the package. It does not change the cluster. If you do not set `--version`, the output contains `version: ""`, and KubeVela selects the tag when it installs.
+`--dry-run` connects to the registry to find the package. It does not change the cluster. If you do not set `--version`, the output contains `version: ""`.
+
+On a first install, KubeVela selects the highest semver tag, for example `1.10.0` before `1.2.0`, and stores `version` as `""`. A later deploy with no `--version` leaves that empty value. The installed package stays. A tag you publish later stays unused until you pass `--version`.
+
+If the Application already stores a version, a deploy with no `--version` writes `""` over that version. KubeVela then selects the highest semver tag.
 
 ## Install with an Application
 
@@ -111,23 +115,27 @@ spec:
 
 `module` is the module name. If you do not set it, KubeVela uses the component name. The fields are in the [module component reference](../../end-user/components/references.md#module).
 
-Set `version` in production. If you do not set it, KubeVela installs the highest published semver tag, for example `1.10.0` before `1.2.0`. A new publish can then change your cluster.
+Set `version` in production. If you leave it empty, a first install selects the highest semver tag, for example `1.10.0` before `1.2.0`, and stores `version` as `""`. A package you publish later stays unused until you set `version`.
 
 ## Check the install
 
-To check the install, read the status of the installer Application:
+`vela module deploy` prints a tier table. The install is complete when every row in that table is `Healthy` and the command prints the installed package version.
+
+To see the same tiers later, read the owned Application. Its name is `module-<name>` in `vela-system`:
+
+```shell
+vela status module-aws-s3 -n vela-system
+```
+
+The installer Application is `module-<name>-deploy` in the install namespace:
 
 ```shell
 vela status module-aws-s3-deploy -n team-a
 ```
 
-The `module` component shows the number of healthy tiers, for example `Ready:5/5`. The install is complete when the phase is `running` and all tiers are ready.
+The `Ready:N/N` message on that installer can stay at an old count after the tiers change. Use the tier table and `vela status` on `module-aws-s3` as the completion check. Those two show the installed tiers.
 
-To see each tier, read the status of the owned Application:
-
-```shell
-vela status module-aws-s3 -n vela-system
-```
+This count stayed old on two installs. After you retire line `v2`, `vela status` on the installer can still show `Ready:5/5` while three `v1` tiers remain. For `notes`, package `1.2.0` had two healthy tiers and the installer stayed `Ready:1/1`. Package `1.10.0` had one tier and the installer stayed `Ready:2/2`.
 
 | Tier | Contents |
 | --- | --- |
@@ -216,19 +224,23 @@ Do this one Application at a time. The module author can delete `v1` from a late
 
 ## Upgrade the package
 
-Set a new `version` on the installer Application, or run `vela module deploy` again:
+Set a new `version` on the installer Application, or run `vela module deploy` with that tag:
 
 ```shell
 vela module deploy aws-s3 --registry catalog --version 1.0.1 -n team-a
 ```
 
-KubeVela fetches the new tag and changes the owned Application:
+Pass `--version`. A deploy with no `--version` leaves an empty `version` as it is. The installed package stays. A tag you publish later stays unused until you pass `--version`.
+
+If the Application already stores a version, a deploy with no `--version` writes `""` over that version. KubeVela then selects the highest semver tag.
+
+After you install the new tag, KubeVela fetches that tag and changes the owned Application:
 
 - KubeVela installs the API lines that the new package enables.
 - KubeVela updates the objects and definitions that changed.
 - KubeVela deletes the definitions and objects that the new package does not contain.
 
-After the phase is `running` again, read the `definition.oam.dev/module-version` annotation on `module-aws-s3`. During the upgrade, `vela module deploy` and `vela status` can first show the tiers of the previous version as healthy.
+After `vela module deploy` prints the new tiers as `Healthy`, read the `definition.oam.dev/module-version` annotation on `module-aws-s3`. During the upgrade, `vela module deploy` and `vela status` can first show the tiers of the previous version as healthy.
 
 :::caution
 If the new package does not contain an API line, or disables it, KubeVela deletes the definitions and the auxiliary objects of that line. The objects that Applications already created from the line stay. But admission rejects every change to an Application that uses the line, and the Application stops with a `Parsed` condition that is false. The error names the missing definition, for example `trait definition of notes/v1/note not found` for a trait, or `WorkloadDefinition.core.oam.dev "aws-s3-v1-bucket" not found` for a component. Move all Applications to the new line before you install such a package. For an example, see [Retire line v1](./module-crossplane.md#retire-line-v1).

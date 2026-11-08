@@ -43,7 +43,7 @@ In the diagram, the module installs the purple objects. The green objects are th
 The module installs the provider, the functions, and the Crossplane objects. You must supply two items that the module cannot carry:
 
 - Crossplane v2 on the cluster. See [Install Crossplane](https://docs.crossplane.io/latest/get-started/install/). Crossplane serves the `Provider` and `Function` APIs, so it must be on the cluster before the module.
-- AWS credentials for the provider. The credentials are secret and are different for each cluster, so do not put them in the module. You add them after the module installs the provider. See [Add the AWS credentials](#add-the-aws-credentials).
+- AWS credentials for the provider. The credentials are secret and are different for each cluster, so do not put them in the module. You add them after the provider is Healthy. See [Add the AWS credentials](#add-the-aws-credentials).
 
 To install Crossplane and the module together, put Crossplane in the `resources/` directory of an addon, and put the module in the same addon. See [Modules in Addons](./module-addon.md).
 
@@ -346,10 +346,22 @@ Both lines write the same XRD version, `v1alpha1`. An API line is the contract o
 
 ## Publish and install
 
-Check the package first. The dry run shows that the package contains both lines and enables both lines:
+Add a module registry before these commands. `--registry` names a registry you added. See [Add a registry](./module-registry.md#add-a-registry).
+
+These commands use the name `ghcr`.
+
+Do not treat the name `catalog` as that registry. On the cluster used to check this page, `catalog` was `http://modreg.localhost:5055/modules`. Nothing listened on that port. Deploy with `--registry catalog` failed with `connection refused`. Deploy with `--registry ghcr` succeeded. That registry URL is `oci://ghcr.io/roguepikachu/vela-modules`.
+
+Create the install namespace before you deploy:
 
 ```shell
-vela module publish ./aws-s3 --registry catalog --dry-run
+kubectl create namespace team-a
+```
+
+Check the package first. The dry run lists both lines, and both lines are enabled:
+
+```shell
+vela module publish ./aws-s3 --registry ghcr --dry-run
 ```
 
 ```text
@@ -359,16 +371,17 @@ Would publish ghcr.io/myorg/modules/aws-s3:1.0.0
   modules.oam.dev/module: aws-s3
 ```
 
+The host in that output is the URL of the registry you added. The name in the command and that host are the same registry.
+
 Publish the package and install it in `team-a`:
 
 ```shell
-vela module publish ./aws-s3 --registry catalog
-vela module deploy aws-s3 --registry catalog --version 1.0.0 -n team-a
+vela module publish ./aws-s3 --registry ghcr
+vela module deploy aws-s3 --registry ghcr --version 1.0.0 -n team-a
 ```
 
 ```text
 Applied Application team-a/module-aws-s3-deploy
-Rendering module (install tiers are not known yet)...
 TIER          	STATUS 	MESSAGE
 aws-s3-aux    	Healthy
 aws-s3-v1-aux 	Healthy
@@ -418,14 +431,26 @@ Crossplane also installs `crossplane-contrib-provider-family-aws`, a dependency 
 
 ## Add the AWS credentials
 
-A namespaced `Bucket` uses the `ClusterProviderConfig` named `default` when it does not name a provider config. The provider installs the `ClusterProviderConfig` CRD, so create this object after the provider is healthy.
+A namespaced `Bucket` uses the `ClusterProviderConfig` named `default` when the `Bucket` does not name a provider config.
 
-Put the AWS credentials in a Secret:
+Create the Secret and the `ClusterProviderConfig` after the provider is Healthy. The provider installs the `ClusterProviderConfig` CRD. Create both objects after that CRD exists.
+
+`./aws-credentials.ini` is an AWS shared credentials file. It has one profile and two keys. A real cluster uses real credentials. This page does not give a working key pair. The key names are in the [AWS credentials file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html). The provider reads the file from the Secret key `credentials`.
+
+```ini
+[default]
+aws_access_key_id = <access-key-id>
+aws_secret_access_key = <secret-access-key>
+```
 
 ```shell
 kubectl -n crossplane-system create secret generic aws-creds \
   --from-file=credentials=./aws-credentials.ini
 ```
+
+Apply one `ClusterProviderConfig`. Do not merge the two specs below.
+
+For AWS, save this spec as `cluster-provider-config.yaml`:
 
 ```yaml
 apiVersion: aws.m.upbound.io/v1beta1
@@ -441,12 +466,25 @@ spec:
       key: credentials
 ```
 
+```shell
+kubectl apply -f cluster-provider-config.yaml
+```
+
 :::tip
-To test the module with no AWS account, use [LocalStack](https://docs.localstack.cloud/). Point the provider to LocalStack with the `endpoint` field and skip the AWS account checks:
+To test the module with no AWS account, use [LocalStack](https://docs.localstack.cloud/). Save this spec instead. It is the full object. It includes the Secret reference and the LocalStack endpoint:
 
 ```yaml
+apiVersion: aws.m.upbound.io/v1beta1
+kind: ClusterProviderConfig
+metadata:
+  name: default
 spec:
-  # credentials as above, with test keys
+  credentials:
+    source: Secret
+    secretRef:
+      namespace: crossplane-system
+      name: aws-creds
+      key: credentials
   endpoint:
     hostnameImmutable: true
     url:
@@ -459,7 +497,11 @@ spec:
   s3_use_path_style: true
 ```
 
-The provider calls S3 Control at `<account-id>.<endpoint host>`. Use a DNS name that resolves every subdomain to LocalStack, not an IP address. For example, add a CoreDNS zone `localstack.internal` that answers all names with the LocalStack IP.
+```shell
+kubectl apply -f cluster-provider-config.yaml
+```
+
+The cluster that runs the provider must resolve `localstack.internal`. Resolve that hostname, not an IP address. On this page the provider runs on the hub. On managed clusters, each cluster that runs the provider must resolve it. The provider calls S3 Control at `<account-id>.<endpoint host>`. The `services` list must include `s3control`. This page does not include a CoreDNS manifest.
 :::
 
 ## Use both lines at the same time
@@ -501,7 +543,14 @@ spec:
           team: invoices
 ```
 
-Apply both Applications. Each definition writes an `ObjectBucket` that selects the Composition of its line:
+Save the first Application as `photos.yaml`. Save the second Application as `invoices.yaml`. Apply both files:
+
+```shell
+kubectl apply -f photos.yaml
+kubectl apply -f invoices.yaml
+```
+
+Each definition writes an `ObjectBucket` that selects the Composition of its line:
 
 ```shell
 kubectl -n team-a get objectbuckets -o custom-columns=NAME:.metadata.name,COMPOSITION:.spec.crossplane.compositionRef.name,REGION:.spec.region,TAGS:.spec.tags
@@ -544,8 +593,8 @@ data:
 ```
 
 ```shell
-vela module publish ./aws-s3 --registry catalog
-vela module deploy aws-s3 --registry catalog --version 1.0.1 -n team-a
+vela module publish ./aws-s3 --registry ghcr
+vela module deploy aws-s3 --registry ghcr --version 1.0.1 -n team-a
 ```
 
 The Applications do not change. Crossplane applies the new tag to the buckets of both lines, including the buckets that exist.
@@ -585,7 +634,13 @@ spec:
           team: photos
 ```
 
-Apply the Application. KubeVela renders the component with `aws-s3-v2-bucket`. The `ObjectBucket` keeps its name, and it now selects the Composition `aws-s3-v2`:
+Apply the file again:
+
+```shell
+kubectl apply -f photos.yaml
+```
+
+KubeVela renders the component with `aws-s3-v2-bucket`. The `ObjectBucket` keeps its name, and it now selects the Composition `aws-s3-v2`:
 
 ```text
 NAME       COMPOSITION   REGION         TAGS
@@ -623,7 +678,7 @@ When no Application uses line `v1`, the platform team can retire it.
 3. Set `version: "2.0.0"` in `_module.cue`. A retired line is a major change. Check the package and publish it:
 
    ```shell
-   vela module publish ./aws-s3 --registry catalog --dry-run
+   vela module publish ./aws-s3 --registry ghcr --dry-run
    ```
 
    ```text
@@ -634,13 +689,13 @@ When no Application uses line `v1`, the platform team can retire it.
    ```
 
    ```shell
-   vela module publish ./aws-s3 --registry catalog
+   vela module publish ./aws-s3 --registry ghcr
    ```
 
 4. Install the new package version:
 
    ```shell
-   vela module deploy aws-s3 --registry catalog --version 2.0.0 -n team-a
+   vela module deploy aws-s3 --registry ghcr --version 2.0.0 -n team-a
    ```
 
    ```text

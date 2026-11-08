@@ -114,6 +114,8 @@ Use `enabled: false` for two purposes:
 - To ship a line before it is ready. A later package version sets `enabled: true`.
 - To retire a line. The files stay in the package, and KubeVela deletes the installed definitions and auxiliary objects of the line. For an example, see [Retire line v1](./module-crossplane.md#retire-line-v1).
 
+Install that later package with `--version`. The command is in [Select a package version](#select-a-package-version).
+
 ## Definitions
 
 Each file in `<line>/definitions/` is one definition. A line must have one or more definitions.
@@ -210,14 +212,23 @@ If a namespaced object does not set `metadata.namespace`, KubeVela creates it in
 
 `vela module publish` parses the directory, checks it, and pushes it. The tag is the `version` field in `_module.cue`.
 
+Add the registry before you publish. The URL is a positional argument. There is no `--url` flag. Read the password from stdin. For GitHub Container Registry, the password is a GitHub token with the `read:packages` scope or the `write:packages` scope. Use your GitHub user name as the username.
+
 ```shell
-vela module publish ./aws-s3 --registry catalog
+printf '%s' "$GITHUB_TOKEN" | vela module registry add ghcr oci://ghcr.io/myorg/modules \
+  --username my-github-user --password-stdin
+```
+
+The registry page documents the Secret and a private package. See [Example: private packages on GHCR](./module-registry.md#example-private-packages-on-ghcr). For publish with no cluster connection, see [Publish credentials](./module-registry.md#publish-credentials).
+
+```shell
+vela module publish ./aws-s3 --registry ghcr
 ```
 
 Check the target and the package annotations first. `--dry-run` does not push:
 
 ```shell
-vela module publish ./aws-s3 --registry catalog --dry-run
+vela module publish ./aws-s3 --registry ghcr --dry-run
 ```
 
 ```text
@@ -227,9 +238,11 @@ Would publish ghcr.io/myorg/modules/aws-s3:1.0.0
   modules.oam.dev/module: aws-s3
 ```
 
-`lines` lists all lines in the package. `enabled-lines` lists the lines that KubeVela installs. After a line is retired with `enabled: false`, the line is in `lines` but not in `enabled-lines`.
+The registry name in the command and the host in that output are the same registry. Here both are `ghcr`.
 
-For registry credentials and for publish with no cluster connection, see [Publish credentials](./module-registry.md#publish-credentials).
+An omitted `--registry` uses the selected default. That default is the wrong registry when you publish somewhere else. Pass `--registry` with the registry you publish to. The rules are in [How KubeVela selects the registry](./module-registry.md#how-kubevela-selects-the-registry).
+
+`lines` lists all lines in the package. `enabled-lines` lists the lines that KubeVela installs. After a line is retired with `enabled: false`, the line is in `lines` but not in `enabled-lines`.
 
 ### Version rules
 
@@ -257,18 +270,91 @@ Use the package version to show the operator what changed:
 
 An API line is a promise to Application teams. Do not make a breaking change to a line that you published. KubeVela does not check that a change to a line is compatible.
 
+When you publish a new package version, install that version with `--version`. This includes a package that sets `enabled: false` on a line.
+
+A first install with no `--version` selects the highest semver tag, for example `1.10.0` before `1.2.0`, and stores `version` as `""`. A later deploy with no `--version` leaves that empty value. The installed package stays. A tag you publish later stays unused until you pass `--version`.
+
+If the Application already stores a version, a deploy with no `--version` writes `""` over that version. KubeVela then selects the highest semver tag.
+
+```shell
+vela module deploy aws-s3 --registry ghcr --version 2.0.0 -n module-test
+```
+
 ## Test a module
 
-1. Publish to a test registry, for example a registry in a local cluster with an `http://` URL.
-2. Install the module with `vela module deploy` into a test namespace.
-3. Apply an Application that uses each definition.
-4. Run `vela status` on the installer Application and on your Application.
+1. Add the registry with the command in [Publish](#publish).
+2. Publish the package to that registry.
+3. Install the module with `vela module deploy` into a test namespace.
+4. Apply an Application that uses the `bucket` definition.
+5. Run `vela status` on your Application, on the installer, and on the owned Application.
+
+A first install can omit `--version`. KubeVela selects the highest semver tag and stores `version` as `""`. To install a later package, pass `--version`, as in [Select a package version](#select-a-package-version).
+
+```shell
+printf '%s' "$GITHUB_TOKEN" | vela module registry add ghcr oci://ghcr.io/myorg/modules \
+  --username my-github-user --password-stdin
+vela module publish ./aws-s3 --registry ghcr
+kubectl create namespace module-test
+vela module deploy aws-s3 --registry ghcr -n module-test
+```
+
+For a registry with no TLS, pass an `http://` URL and no password:
 
 ```shell
 vela module registry add dev http://registry.local:5000/modules
 vela module publish ./aws-s3 --registry dev
-kubectl create namespace module-test
 vela module deploy aws-s3 --registry dev -n module-test
 ```
 
 The registry URL must work from your workstation and from the cluster. See [A registry URL must work from two places](./module-registry.md#a-registry-url-must-work-from-two-places).
+
+An omitted `--registry` uses the selected default. That default is the wrong registry when you publish somewhere else. See [How KubeVela selects the registry](./module-registry.md#how-kubevela-selects-the-registry).
+
+The `bucket` definition takes a `region` property. Apply this Application in the install namespace:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: photos
+  namespace: module-test
+spec:
+  components:
+    - name: photos
+      type: aws-s3/v1/bucket
+      properties:
+        region: eu-west-1
+```
+
+Pass `-n` on each `vela status` command. The CLI prints the Application name and the namespace.
+
+```shell
+vela status photos -n module-test
+vela status module-aws-s3-deploy -n module-test
+vela status module-aws-s3 -n vela-system
+```
+
+`photos` is your Application in `module-test`. The installer name is `module-aws-s3-deploy` in that same namespace. The owned Application name is `module-aws-s3` in `vela-system`.
+
+```text
+About:
+
+  Name:      	photos
+  Namespace: 	module-test
+```
+
+```text
+About:
+
+  Name:      	module-aws-s3-deploy
+  Namespace: 	module-test
+```
+
+```text
+About:
+
+  Name:      	module-aws-s3
+  Namespace: 	vela-system
+```
+
+Read the tiers from the owned Application and from the tier table that `vela module deploy` prints. The `Ready:N/N` message on the installer can stay at an old count. Use the tier table and the owned Application as the completion check. See [Check the install](./module-install.md#check-the-install).
