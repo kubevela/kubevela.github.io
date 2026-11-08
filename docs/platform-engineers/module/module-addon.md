@@ -21,7 +21,7 @@ If you do not know addons, read [Make Your Own Addon](../addon/intro.md) first.
 - Read [Make Your Own Addon](../addon/intro.md) for the addon layout.
 - Follow the addon `crossplane-storage` on this page. It imports the module `aws-s3`.
 
-An OCI addon registry looks for a catalog index. `vela addon registry add` for an OCI registry requested `kubevela-addon-catalog`, logged HTTP 404, and did not finish. The registry was not saved. The GHCR URL in the [module registry example](./module-registry.md#example-private-packages-on-ghcr) does not provide that index. This page does not show a completed OCI addon registry add.
+An OCI addon registry looks for a catalog index. `vela addon registry add` for an OCI registry requested `kubevela-addon-catalog`, logged HTTP 404, and did not finish. Stopping it after 90 seconds left only the default Helm registry in `vela addon registry list`. The registry was not saved. The GHCR URL in the [module registry example](./module-registry.md#example-private-packages-on-ghcr) does not provide that index. This page does not show a completed OCI addon registry add.
 
 `vela addon enable` on a local addon directory ignores `modules/`. Use a local directory only for those ignored parts. This page does not show a completed `type: addon` install.
 

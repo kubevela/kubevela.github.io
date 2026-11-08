@@ -735,7 +735,7 @@ If an Application still uses line `v1` when you install `2.0.0`, these things oc
 
 - The `ObjectBucket` of the Application stays. Crossplane cannot reconcile it, because the Composition `aws-s3-v1` does not exist. The `Synced` condition of the `ObjectBucket` is false, with the message `cannot fetch Composition: cannot get Composition: Composition.apiextensions.crossplane.io "aws-s3-v1" not found`.
 - Admission rejects every change to the Application. The error contains `WorkloadDefinition.core.oam.dev "aws-s3-v1-bucket" not found`.
-- The Application shows a `Parsed` condition that is false, with the same message.
+- The Application shows a `Parsed` condition that is false, with the same message. `Ready` is false too. `vela status` shows Healthy with a red cross and phase `rendering`.
 
 To recover, install a package version that enables `v1`, for example `1.0.1`. KubeVela installs the definition and the Composition of `v1` again. Then move the Application to `v2`, and install `2.0.0` again.
 :::

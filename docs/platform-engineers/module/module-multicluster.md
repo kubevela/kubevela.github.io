@@ -382,6 +382,8 @@ spec:
 
 KubeVela renders the `ObjectBucket` on the hub with `aws-s3-v1-bucket`. Then it sends the `ObjectBucket` to the `region=east` clusters. Crossplane on those clusters uses the Composition that the module installed there, and creates the S3 bucket in `us-east-2`.
 
+Crossplane creates the S3 bucket only when the function packages are Healthy. A function pod can be Running while its package stays Unhealthy, because the package registry TLS check fails (`x509: certificate signed by unknown authority`). The `ObjectBucket` then stays `Ready=False` with the message `Unready resources: bucket`.
+
 The namespace `platform` must exist on each selected cluster. If it does not exist, the workflow step fails:
 
 ```text
