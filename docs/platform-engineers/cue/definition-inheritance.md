@@ -6,12 +6,12 @@ Definition inheritance lets a `ComponentDefinition` or `TraitDefinition` build o
 
 This is useful when you run a platform for many teams:
 
-- **Paved-road definitions.** Wrap the built-in `webservice` in a `tenant-webservice` that fixes resource requests and stamps tenant labels, without forking the 600-line `webservice` template.
+- **Paved-road definitions.** Wrap the built-in `webservice` in a `tenant-webservice` that fixes resource requests and limits and stamps tenant labels, without forking the 600-line `webservice` template.
 - **One change, many definitions.** When the parent changes, every child picks up the change at its next render. You don't have to apply the same fix to each copy.
 - **Abstract bases.** Mark a base definition as `abstract` so Applications can't use it directly, only through the definitions that extend it.
 
 :::caution
-Definition inheritance is an **alpha** feature, introduced in KubeVela v1.12. It is behind the `EnableDefinitionInheritance` feature gate, which is off by default.
+Definition inheritance is an **alpha** feature, first available in KubeVela v1.12.0-alpha.1. It is behind the `EnableDefinitionInheritance` feature gate, which is off by default.
 :::
 
 ## Before you begin
@@ -22,6 +22,7 @@ Enable the gate on the KubeVela controller. With Helm:
 
 ```shell
 helm upgrade --install kubevela kubevela/vela-core -n vela-system \
+  --reuse-values \
   --set featureGates.enableDefinitionInheritance=true
 ```
 
@@ -40,7 +41,7 @@ start the controller with --feature-gates=EnableDefinitionInheritance=true to us
 
 ## Your first child definition
 
-The following child extends the built-in `webservice`. It accepts three parameters, forwards the image and port to `webservice` along with fixed resource requests, adds a tenant label to the Deployment, and renders a ConfigMap of its own.
+The following child extends the built-in `webservice`. It accepts four parameters, forwards the image, port, and optional image pull policy to `webservice` along with fixed resource requests, adds a tenant label to the Deployment, and renders a ConfigMap of its own.
 
 ```cue title="tenant-webservice.cue"
 "tenant-webservice": {
@@ -57,6 +58,7 @@ template: {
 		port:   parameter.port
 		cpu:    "250m"
 		memory: "256Mi"
+		imagePullPolicy: parameter.imagePullPolicy
 	}
 
 	// Merged onto the Deployment that webservice renders.
@@ -75,6 +77,8 @@ template: {
 		image: string
 		// +usage=Port the service listens on
 		port: *8080 | int
+		// +usage=Image pull policy
+		imagePullPolicy?: "Always" | "Never" | "IfNotPresent"
 		// +usage=Owning tenant
 		tenant: string
 	}
@@ -87,7 +91,7 @@ Apply it into the parent's namespace:
 vela def apply tenant-webservice.cue -n vela-system
 ```
 
-You can write `extends` at the top level, as above, or under `attributes`. Both set `spec.extends`. Writing it in both places is an error. The child declares no workload, so it takes the parent's `apps/v1` Deployment; see [Workload and other spec fields](#workload-and-other-spec-fields).
+You can write `extends` at the top level, as above, or under `attributes`. Both set `spec.extends`. Writing it in both places is an error. The child declares no workload, so on releases containing [kubevela/kubevela#7510](https://github.com/kubevela/kubevela/pull/7510) it takes the parent's `apps/v1` Deployment; on earlier releases, declare that workload in the child explicitly. See [Workload and other spec fields](#workload-and-other-spec-fields).
 
 The equivalent `ComponentDefinition` YAML:
 
@@ -107,6 +111,7 @@ spec:
           port:   parameter.port
           cpu:    "250m"
           memory: "256Mi"
+          imagePullPolicy: parameter.imagePullPolicy
         }
         output: metadata: labels: "tenant.example.com/name": parameter.tenant
         outputs: "tenant-info": {
@@ -118,11 +123,12 @@ spec:
         parameter: {
           image:  string
           port:   *8080 | int
+          imagePullPolicy?: "Always" | "Never" | "IfNotPresent"
           tenant: string
         }
 ```
 
-Application developers use the child like any other component type. They only see the three parameters it declares:
+Application developers use the child like any other component type. They only see the four parameters it declares:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -138,7 +144,7 @@ spec:
         tenant: payments
 ```
 
-The Application renders a Deployment from `webservice`, with the `tenant.example.com/name: payments` label, 250m CPU, 256Mi memory, and port 8080, plus a `checkout-tenant` ConfigMap. Health and status come from `webservice`, because the child doesn't declare its own.
+The Application renders a Deployment from `webservice`, with the `tenant.example.com/name: payments` label, 250m CPU and 256Mi memory requests and limits, and port 8080, plus a `checkout-tenant` ConfigMap. Health and status come from `webservice`, because the child doesn't declare its own.
 
 ## How a child works with its parent
 
@@ -150,9 +156,9 @@ Rendering happens in two passes. First, properties travel **up** the chain: the 
 
 ```cue
 $super: properties: {
-	image:    parameter.image      // forward a parameter
-	cpu:      "250m"               // decide a value for your users
-	replicas: parameter.replicas   // forward an optional parameter
+	image:           parameter.image           // forward a parameter
+	cpu:             "250m"                    // decide a value for your users
+	imagePullPolicy: parameter.imagePullPolicy // forward an optional parameter
 }
 ```
 
@@ -161,7 +167,7 @@ A few rules apply:
 - **Every child must call its parent.** A child without a `$super` block is refused at admission.
 - **Required parameters must be passed.** If the parent has a parameter with no default that isn't optional, the child must pass it. In the example above, `webservice` requires `image`.
 - **Optional parameters that nobody set are left out.** If the child forwards an optional parameter that the Application didn't set, the field is dropped and the parent's own default applies.
-- **`$super.properties` can only read `parameter` and `context`.** It is computed before the parent renders, so it can't depend on `$super.output` or any other parent result.
+- **`$super.properties` can't depend on parent results.** It can use `parameter`, `context`, constants, and local helper fields, but it is computed before the parent renders, so it can't read `$super.output` or any other parent result.
 
 ### Declare the parameters you publish
 
@@ -194,7 +200,7 @@ Because the merge is unification, not replacement:
 
 ### Read what the parent rendered
 
-The parent's results are readable in the child as `$super.output` and `$super.outputs` (and `$super.patch` and `$super.patchOutputs` for traits). For example, a child that renders a Service pointing at the parent's pods:
+The parent's results are readable in the child as `$super.output` and `$super.outputs` (and `$super.patch`, `$super.patchOutputs`, and `$super.processing` for traits). For example, a child that renders a Service pointing at the parent's pods:
 
 ```cue
 outputs: service: {
@@ -222,11 +228,15 @@ $inherit: false
 $inherit: output: false
 ```
 
-`$inherit` accepts a boolean or a struct of booleans. Any other value is refused. A child that replaces `output` must still call its parent through `$super`, and can still read `$super.output` to build its own resource from the parent's.
+`$inherit` accepts a boolean or a struct of booleans. Any other value is refused when an Application renders the child. A child that replaces `output` must still call its parent through `$super`, and can still read `$super.output` to build its own resource from the parent's.
 
 ## Workload and other spec fields
 
 Only the template is composed by rendering. The rest of a definition's spec describes the workload, and for those fields an empty value in the child means "use the parent's".
+
+:::caution
+The output-aware workload rules below require the fix in [kubevela/kubevela#7510](https://github.com/kubevela/kubevela/pull/7510). Until that fix is included in your release, a child stored with `workload.type: autodetects.core.oam.dev` does not inherit the parent's workload metadata; declare the parent's workload explicitly.
+:::
 
 For a `ComponentDefinition`:
 
@@ -261,7 +271,7 @@ checkout	{"apiVersion":"apps/v1","kind":"Deployment"}
 The full rules:
 
 - **A child with no workload takes its parent's.** "No workload" means no `apiVersion` or `kind`, and a `type` that is empty or `autodetects.core.oam.dev`.
-- **A child that declares a workload keeps it.** Setting even part of the workload, such as only `apiVersion`, counts as declaring one.
+- **A child that declares a workload keeps it.** Declare either a workload type or a complete `apiVersion` and `kind`; an incomplete GVK is rejected at admission.
 - **A child that replaces `output` doesn't take the parent's workload.** With `$inherit: false` or `$inherit: output: false`, the child renders its own resource, so the parent's workload no longer describes it. If such a child renders something other than the parent's kind, declare its workload explicitly:
 
   ```cue
@@ -289,7 +299,7 @@ The full rules:
 - **In a longer chain, the nearest ancestor that declares a workload wins.** A level in the middle that declares nothing passes its parent's workload down. A level in the middle that replaces `output` stops the chain there: neither it nor anything below it takes the workload from further up. If that middle level declares its own workload, children below it take that one.
 
 :::note
-Before [kubevela/kubevela#7510](https://github.com/kubevela/kubevela/pull/7510), a child with no workload never received its parent's. The rendered resources were still correct, but the component's `workloadDefinition` in the Application status was empty, and anything that read the child's workload type got the wrong answer. Definitions written with [Defkit](#write-child-definitions-with-defkit) always hit this, because Defkit writes no workload for a child that doesn't name one. On a release without that fix, declare the parent's workload in the child explicitly. See [kubevela/kubevela#7508](https://github.com/kubevela/kubevela/issues/7508) for details.
+The fix for a child stored with the automatic `autodetects.core.oam.dev` workload is tracked by [kubevela/kubevela#7510](https://github.com/kubevela/kubevela/pull/7510). Without that fix, the rendered resources are correct but `status.services[].workloadDefinition` is empty, and anything that reads the child's workload type gets the wrong answer. Definitions written with [Defkit](#write-child-definitions-with-defkit) always hit this when they don't name a workload. Until the fix is included in your KubeVela release, declare the parent's workload in the child explicitly. See [kubevela/kubevela#7508](https://github.com/kubevela/kubevela/issues/7508) for details.
 :::
 
 ### Trait spec fields
@@ -302,13 +312,15 @@ The boolean fields `podDisruptive`, `revisionEnabled`, `manageWorkload`, and `co
 
 Health and status compose along the chain instead of being replaced:
 
-| Field | A child that says nothing | A child that declares it | With `$inherit: false` |
+| Field | A child that says nothing | A child that declares it | With `$inherit: false` in that status field |
 | --- | --- | --- | --- |
 | `healthPolicy` | Uses the parent's policy | Both the parent's and the child's policy must pass | Only the child's policy counts |
 | `customStatus` | Uses the parent's message | The child's message replaces the parent's | Same as declaring it |
 | `details` | Uses the parent's details | The child's entries are added to the parent's | Only the child's entries |
 
 The parent's verdict and message are readable as `$super.isHealth` and `$super.message`, so a child can build on them. Add a `status` block to the child's attributes; the template stays as before:
+
+The `$inherit` directive in the template does not affect status. Put `$inherit: false` inside the individual `healthPolicy`, `customStatus`, or `details` CUE snippet that should stop inheriting.
 
 ```cue
 "tenant-webservice": {
@@ -319,7 +331,7 @@ The parent's verdict and message are readable as `$super.isHealth` and `$super.m
 		healthPolicy: #"""
 			isHealth: context.output.spec.replicas > 0
 			"""#
-		// Extends webservice's status line instead of replacing it.
+		// Reuses webservice's status text through $super.message.
 		customStatus: #"""
 			message: "\($super.message) (tenant: \(parameter.tenant))"
 			"""#
@@ -344,6 +356,25 @@ Mark a definition as `abstract` when it exists to be extended, not used directly
 		kind:       "Deployment"
 	}
 }
+
+template: {
+	output: {
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+		metadata: name: context.name
+		spec: {
+			selector: matchLabels: "app.oam.dev/component": context.name
+			template: {
+				metadata: labels: "app.oam.dev/component": context.name
+				spec: containers: [{
+					name:  context.name
+					image: parameter.image
+				}]
+			}
+		}
+	}
+	parameter: image: string
+}
 ```
 
 The YAML equivalent is `spec.abstract: true`.
@@ -366,7 +397,7 @@ vela def list --include-abstract
 
 ### Multi-level chains
 
-A child can extend a definition that itself extends another, up to **8 levels** deep. Each level compiles on its own, with its own imports. A chain that loops back on itself is refused, naming the definitions in the loop.
+A child can have up to **8 ancestors** (9 definitions total). Each level compiles on its own, with its own imports. A chain that loops back on itself is refused, naming the definitions in the loop.
 
 Spec fields are resolved for the definition being rendered, so the nearest ancestor that sets a field wins. A leaf that declares `Deployment` keeps it, even if its grandparent declares `CronJob`.
 
@@ -384,11 +415,11 @@ By default, `extends: webservice` tracks whatever `webservice` currently is. To 
 
 ### Revisions keep Applications stable
 
-When an Application renders a child, KubeVela records every ancestor it resolved in the ApplicationRevision. A revision replays exactly as it rendered, even if a parent has changed since. A new revision picks up the current parent (unless the child pins one).
+When an Application renders a child, KubeVela records every ancestor it resolved in the ApplicationRevision. Replaying that revision, for example through `app.oam.dev/publishVersion`, uses exactly what it recorded even if a parent has changed since. A new revision picks up the current parent (unless the child pins one).
 
 ### Who can use a child
 
-The Application permission check covers the definitions an Application names, not the definitions those extend. You can grant a team access to `tenant-webservice` without granting access to `webservice` itself, which is the point of building an abstraction.
+When `ValidateDefinitionPermissions` is enabled, the Application permission check covers the definitions an Application names, not the definitions those extend. You can grant a team access to `tenant-webservice` without granting access to `webservice` itself, which is the point of building an abstraction. The gate is disabled by default; the chart value is `authorization.definitionValidationEnabled`.
 
 ## Extend a trait
 
@@ -438,7 +469,7 @@ tenantWeb := defkit.NewComponent("tenant-webservice").
 	Template(func(tpl *defkit.Template) {
 		tpl.Super().Set("image", defkit.ParamRef("image"))
 		tpl.Output(defkit.NewResource("apps/v1", "Deployment").
-			Set("metadata.labels[tenant.oam.dev/name]", defkit.ParamRef("tenant")))
+			Set("metadata.labels[tenant.example.com/name]", defkit.ParamRef("tenant")))
 	})
 ```
 
@@ -446,13 +477,13 @@ tenantWeb := defkit.NewComponent("tenant-webservice").
 - `Abstract()` marks a component or trait as abstract.
 - `tpl.Inherit(false)` and `tpl.InheritField("output", false)` write `$inherit`.
 - `defkit.SuperOutput(path)`, `defkit.SuperOutputs(name, path)`, and `defkit.SuperPatch(path)` read what the parent rendered.
-- A child that doesn't name a workload writes none, so it takes its parent's.
+- A child that doesn't name a workload writes none. On releases containing [kubevela/kubevela#7510](https://github.com/kubevela/kubevela/pull/7510), it then takes its parent's workload metadata.
 
-Defkit runs the same call check as admission when you register a child, so a child that never calls its parent, or omits a required parameter, fails at build time with the same message. `vela def apply-module` applies parents before the definitions that extend them.
+When Defkit has the parent's CUE—because the parent is defined in the same program or a reference uses `WithCUE`—it runs the same call check as admission when you register a child. A child that never calls its parent, or omits a required parameter, then fails at build time with the same message. Otherwise the cluster performs that check when the definition is applied. `vela def apply-module` applies parents before the definitions that extend them.
 
 ## Validation and troubleshooting
 
-KubeVela checks a child when you apply it, and refuses it if the chain is broken. The table lists the errors you're most likely to see.
+KubeVela checks a child when you apply it and checks the composed result when an Application renders it. The table lists the errors you're most likely to see at either stage.
 
 | Error contains | Cause | Fix |
 | --- | --- | --- |
@@ -463,11 +494,11 @@ KubeVela checks a child when you apply it, and refuses it if the chain is broken
 | `calls <parent> with parameters it will not accept` | A passed value has the wrong type, or the parent's schema is closed to it | Fix the value in `$super.properties` |
 | `may only extend one in its own namespace` | The parent is in another namespace | Put the child in the parent's namespace, or copy the parent |
 | `only CUE definitions can be extended` | The parent isn't a CUE definition | Extend a CUE definition |
-| `deeper than 8` | The chain is more than 8 levels deep | Flatten the chain |
+| `deeper than 8` | The chain has more than 8 ancestors | Flatten the chain |
 | `already in its own inheritance chain` | The chain loops | Remove the cycle |
-| `its $super block depends on what <parent> produced` | `$super.properties` reads `$super.output` or another parent result | Only use `parameter` and `context` in `$super.properties` |
+| ``its `$super` block depends on what <parent> produced`` | `$super.properties` reads `$super.output` or another parent result | Compute it without parent results |
 | `merging its output onto <parent>'s` | The child sets a field the parent set to a concrete value | Pass a different parameter, or use `$inherit: {output: false}` |
-| `must be a boolean or a struct of booleans` | `$inherit` has an invalid value | Use `false`, or a struct such as `{output: false}` |
+| `true or false` | `$inherit` has an invalid value at render time | Use `false`, or a struct such as `{output: false}` |
 | `is abstract and cannot be used directly` | An Application names an abstract definition | Use a definition that extends it |
 
 Two problems produce warnings instead of errors:
