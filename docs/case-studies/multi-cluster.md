@@ -417,8 +417,10 @@ spec:
 Sometimes, you may want to use the same policy across multiple applications or reuse previous workflow to deploy different resources.
 To reduce the repeated code, you can leverage the external policies and workflow and refer to them in your applications.
 
-:::caution
-You can only refer to Policy and Workflow within your application's namespace.
+:::note
+A Policy is looked up in your application's namespace only. A Workflow is looked up there first, then in the system definition namespace (`vela-system` unless the controller sets `--system-definition-namespace`), so a platform team can share one Workflow with every namespace. A Workflow of the same name in your application's namespace takes precedence, and the application's `status.workflow.ref` shows which one it ran.
+
+Where definition permissions or `AuthenticateApplication` are enforced, the application's author needs `get` on the Workflow it refers to, in whichever namespace it is found.
 :::
 
 ```yaml
