@@ -6,6 +6,8 @@ Date: 2027-10-01 to 2027-12-31
 
 ## Core Platform
 
+The items below let KubeVela manage the clusters themselves, not only the Applications running on them. They build on the multi-cluster work planned for Summer 2027. Design: [Cluster Infrastructure KEP](https://github.com/kubevela/kubevela/blob/master/design/vela-core/kep-cluster-infrastructure.md).
+
 - Clusters built from team-owned layers
   * Describe a cluster as a blueprint made of layers, such as networking, security and monitoring, each owned and versioned by a different team.
   * Blueprints are versioned, so every change is recorded and a cluster can always be traced back to the exact blueprint it runs.
