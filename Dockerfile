@@ -4,7 +4,7 @@ COPY package.json package.json
 COPY yarn.lock yarn.lock
 RUN yarn install
 COPY . /workspace
-RUN NODE_OPTIONS="--openssl-legacy-provider --max-old-space-size=4096" yarn docusaurus build
+RUN NODE_OPTIONS="--openssl-legacy-provider --max-old-space-size=4096" yarn docusaurus build && node scripts/llms-postprocess.js
 
 FROM nginx:1.21
 WORKDIR /
