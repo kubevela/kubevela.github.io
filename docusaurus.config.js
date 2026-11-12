@@ -308,6 +308,21 @@ module.exports = {
     ],
     'docusaurus-plugin-sass',
     require.resolve('docusaurus-plugin-image-zoom'),
+    [
+      'docusaurus-plugin-llms',
+      {
+        title: 'KubeVela',
+        description:
+          'KubeVela is a modern software delivery platform that makes deploying and operating applications across hybrid, multi-cloud environments easier, faster and more reliable.',
+        // Write a markdown copy of every doc next to its HTML page so agents
+        // can fetch <page-url>.md; llms.txt links point at these copies.
+        generateMarkdownFiles: true,
+        // Generate per-version output matching the site's routing: the latest
+        // released version (served at /docs/) gets the root llms.txt, while
+        // next and older versions get their own under /docs/<version>/.
+        versions: 'auto',
+      },
+    ],
   ],
   scripts: [
     {
