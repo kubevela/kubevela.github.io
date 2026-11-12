@@ -10,7 +10,7 @@ what it gets back. To set the server up, see [AI agents with vela mcp](../tutori
 Tools come in three classes:
 
 - **Read** tools are always registered and never change the cluster.
-- **Plan** tools render or compare an Application without saving it.
+- **Plan** tools prepare a change without writing: they render or compare an Application, or stage an input for later calls.
 - **Write** tools exist only when the server is started with a flag that enables them.
 
 | Tool | Class | Summary |
@@ -25,10 +25,13 @@ Tools come in three classes:
 | [`get_logs`](#get_logs) | read | Return a bounded, redacted tail of container logs for an Application's pods, found through its managed resources. |
 | [`explain_definition`](#explain_definition) | read | Explain one KubeVela definition from its live object: what kinds its template produces, which parameters flow into which fields, its parameter schema, health and custom status rules, trait behaviour and restrictions, revision history, and how many Applications use it. |
 | [`explain_application`](#explain_application) | read | Explain an Application end to end: each component with its definition, declared dependencies and data flow, recorded status per cluster, live managed resources with unhealthy descendants and pod phases, workflow state, recent events, and a list of findings ordered by severity, each citing the object it came from. |
+| [`diagnose_application`](#diagnose_application) | read | Root-cause an unhealthy Application: reads provisioner-owned resources live, a bounded number per call, and interprets their conditions by the conventions of the family that owns their API group — ACK (ResourceSynced and Terminal, including the convergence-loop signature of a field the cloud service computes differently), Config Connector (Ready with reason UpToDate), Crossplane (Ready and Synced). |
 | [`list_clusters`](#list_clusters) | read | List the clusters KubeVela can deploy to, with alias, credential type, endpoint and labels. |
 | [`list_addons`](#list_addons) | read | List the addons enabled on this control plane with version, registry, phase, health and the clusters they reach, read from the Applications the addons installed. |
+| [`stage_definition`](#stage_definition) | plan | Parse and stage a local definition — CUE as vela def gen-module writes it for a defkit module, or a definition object as YAML — and get back a content-hash handle that dryrun_application, diff_application and diff_definition_impact accept wherever they accept inline definitions. |
 | [`dryrun_application`](#dryrun_application) | plan | Render an Application document the way vela dry-run does, without saving it: every Kubernetes object each component and trait would produce, plus policy objects. |
 | [`diff_application`](#diff_application) | plan | Compare an Application document with what runs: renders both, lists every resource added, modified or removed with the fields that differ, flags placement, policy, component and approval-gate changes, and classifies risk LOW, MEDIUM or HIGH with every rule that fired. |
+| [`diff_definition_impact`](#diff_definition_impact) | plan | Blast radius of a definition change before vela def apply: scans the allowed namespaces for Applications using the definition, renders the first consumers found — a bounded number per call, with the result marked truncated when more exist — against the cluster's current copy and against a proposed copy supplied the way dryrun_application accepts local definitions, and returns a per-Application result: a change set and risk class when both renders succeed, an unchanged marker, or a render error. |
 | [`apply_application`](#apply_application) | write | Deliver an Application after diff_application, using the token it returned for the same document. |
 
 ## The meta block
@@ -40,7 +43,7 @@ Every result carries a `meta` block that says which system the data came from an
 | `featureGates` | object | vela-core feature gates set to a value other than their default. Absent gates are at their defaults; get_platform_info lists every gate set on the controller. |
 | `kubernetes` | object | Kubernetes API server version per cluster name. |
 | `observedAt` | string | When the data in this response was read, UTC. |
-| `source` | string | live for an API server read, rendered for dry-run or diff output, cached for served data. |
+| `source` | string | live for an API server read, rendered for dry-run or diff output, cached for served data, mixed when a live read and a render both contributed; the evidence says which parts are which. |
 | `truncated` | boolean | True when a size or count limit cut the data; narrow the request to see the rest. |
 | `velaCLI` | string | Version of the vela binary serving this session. |
 | `velaCore` | string | vela-core controller version found on the cluster, or unknown. |
@@ -363,6 +366,37 @@ Explain an Application end to end: each component with its definition, declared 
 | `workflow` | object | Workflow state with suspended and failed steps and the next command. |
 
 
+## diagnose_application
+
+Read. Always registered.
+
+Root-cause an unhealthy Application: reads provisioner-owned resources live, a bounded number per call, and interprets their conditions by the conventions of the family that owns their API group — ACK (ResourceSynced and Terminal, including the convergence-loop signature of a field the cloud service computes differently), Config Connector (Ready with reason UpToDate), Crossplane (Ready and Synced). Plain Kubernetes resources keep the resource tree's pod-corrected health without a live read; Secrets are never diagnosed and, as with every tool here, their content is never returned. Adds recent events and findings that each cite the object they came from; anything unread is named in unknowns. The resource tree defaults unknown kinds to Healthy, so use this, not explain_application alone, when a cloud resource looks fine but the application is not.
+
+### Input
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | string | yes | Application name. |
+| `namespace` | string | yes | Application namespace. |
+| `component` | string | no | Only diagnose resources created by this component. |
+
+### Result
+
+| Field | Type | Description |
+|---|---|---|
+| `application` | string | Application name. |
+| `events` | array of object | Recent events on the Application or its resources, newest first. |
+| `evidence` | array of string | Objects this answer was derived from. |
+| `findings` | array of object | Observations ordered error, warning, info, each citing an object. |
+| `healthy` | boolean | True only when the controller reports the Application healthy, the managed-resource inventory was read completely, and every diagnosed resource is ready. |
+| `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
+| `namespace` | string | Namespace of the object this result describes. |
+| `nextChecks` | array of string | Where to look next when the findings are not conclusive, such as the owning controller's logs. Suggestions, not commands to run blindly. |
+| `phase` | string | Application phase the controller recorded. |
+| `resources` | array of object | One verdict per managed resource, from its live conditions interpreted by its provisioner's conventions. |
+| `unknowns` | array of string | What could not be read. Report these as unknown rather than guessing. |
+
+
 ## list_clusters
 
 Read. Always registered.
@@ -401,9 +435,34 @@ This tool takes no input.
 | `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
 
 
+## stage_definition
+
+Plan. Always registered; prepares a change without writing: renders, compares, or stages an input for later calls.
+
+Parse and stage a local definition — CUE as vela def gen-module writes it for a defkit module, or a definition object as YAML — and get back a content-hash handle that dryrun_application, diff_application and diff_definition_impact accept wherever they accept inline definitions. Stage once per edit and pass the handle on every later call, so the definition's text does not travel with each request; restage after any edit, since the handle names the exact content. Handles expire and the result says when. Nothing is sent to the cluster.
+
+### Input
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `definition` | string | yes | The definition to stage, as CUE the way vela def gen-module writes it for a defkit module, or as a definition object in YAML. Validated exactly as the plan tools validate inline definitions. |
+
+### Result
+
+| Field | Type | Description |
+|---|---|---|
+| `apiVersion` | string | API version of the staged definition object. |
+| `evidence` | array of string | What was parsed and staged. |
+| `expiresAt` | string | When the handle stops resolving, UTC. Stage the definition again after an edit or after expiry. |
+| `handle` | string | Content-hash handle the plan tools accept wherever they accept an inline definition. The same content stages to the same handle. |
+| `kind` | string | Definition kind that was staged, such as ComponentDefinition. |
+| `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
+| `name` | string | Name of the staged definition. |
+
+
 ## dryrun_application
 
-Plan. Always registered; renders and compares without writing.
+Plan. Always registered; prepares a change without writing: renders, compares, or stages an input for later calls.
 
 Render an Application document the way vela dry-run does, without saving it: every Kubernetes object each component and trait would produce, plus policy objects. Pass local definitions to render against definitions not yet on the cluster, such as the CUE vela def gen-module generates from a defkit module. Set serverCheck to have the API server validate every rendered object against the installed CRDs without storing it. Use it until the draft renders clean, then diff_application.
 
@@ -412,7 +471,7 @@ Render an Application document the way vela dry-run does, without saving it: eve
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `application` | string | yes | The Application as YAML or JSON, exactly as it would be applied. |
-| `definitions` | array of string | no | Optional local definitions, one per entry, used instead of the cluster's copy of the same name. Each is a CUE definition as vela def gen-module writes it for a defkit module, or a definition object as YAML. |
+| `definitions` | array of string | no | Optional local definitions, one per entry, used instead of the cluster's copy of the same name. Each is a CUE definition as vela def gen-module writes it for a defkit module, a definition object as YAML, or a handle from stage_definition. |
 | `namespace` | string | no | Namespace to render in when the document has none. The document's own namespace wins. |
 | `serverCheck` | boolean | no | Also send each rendered object to the API server as a dry run with strict field validation, so it is checked against the installed CRDs and admission. Nothing is stored. Needs the CRDs installed and permission to create the objects. Acceptance means this API server accepted the request now; RBAC, admission and live state at apply time can still differ. |
 
@@ -432,7 +491,7 @@ Render an Application document the way vela dry-run does, without saving it: eve
 
 ## diff_application
 
-Plan. Always registered; renders and compares without writing.
+Plan. Always registered; prepares a change without writing: renders, compares, or stages an input for later calls.
 
 Compare an Application document with what runs: renders both, lists every resource added, modified or removed with the fields that differ, flags placement, policy, component and approval-gate changes, and classifies risk LOW, MEDIUM or HIGH with every rule that fired. Returns a token that apply_application requires, so show this result to the user before any apply.
 
@@ -441,7 +500,7 @@ Compare an Application document with what runs: renders both, lists every resour
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `application` | string | yes | The Application as YAML or JSON, exactly as it would be applied. |
-| `definitions` | array of string | no | Optional local definitions, one per entry, used instead of the cluster's copy of the same name. Each is a CUE definition as vela def gen-module writes it for a defkit module, or a definition object as YAML. |
+| `definitions` | array of string | no | Optional local definitions, one per entry, used instead of the cluster's copy of the same name. Each is a CUE definition as vela def gen-module writes it for a defkit module, a definition object as YAML, or a handle from stage_definition. |
 | `namespace` | string | no | Namespace to render in when the document has none. The document's own namespace wins. |
 | `revision` | string | no | ApplicationRevision to compare against. Empty uses the latest revision; a missing Application compares against nothing. |
 
@@ -458,6 +517,33 @@ Compare an Application document with what runs: renders both, lists every resour
 | `namespace` | string | Namespace of the object this result describes. |
 | `risk` | object | Risk class with the rules that fired. Show it to the user with the change set. |
 | `token` | string | Required by apply_application. Binds this exact document to the base revision; it does not record that anyone reviewed the diff. |
+
+
+## diff_definition_impact
+
+Plan. Always registered; prepares a change without writing: renders, compares, or stages an input for later calls.
+
+Blast radius of a definition change before vela def apply: scans the allowed namespaces for Applications using the definition, renders the first consumers found — a bounded number per call, with the result marked truncated when more exist — against the cluster's current copy and against a proposed copy supplied the way dryrun_application accepts local definitions, and returns a per-Application result: a change set and risk class when both renders succeed, an unchanged marker, or a render error. The consumer scan is bounded too and its count says when it stopped early. A consumer the proposed definition no longer renders is reported as that Application's render error and carries no risk class; that absence is blocking, not safe. With no proposed copy it lists the consumers without rendering. Nothing is applied.
+
+### Input
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | string | yes | Definition name whose change is being assessed. |
+| `definition` | string | no | Optional proposed definition, as CUE the way vela def gen-module writes it, as a definition object in YAML, or as a handle from stage_definition. Its kind and name must match type and name. When set, every consumer is rendered against the cluster's current copy and against this one, and the diffs are returned. When empty, consumers are listed without rendering. |
+| `type` | string | no | Definition type: component, trait, policy or workflow-step. Empty means component. |
+
+### Result
+
+| Field | Type | Description |
+|---|---|---|
+| `consumers` | object | Applications using the definition across the scanned namespaces: the count, the first consumers by name, and what was scanned. |
+| `definition` | string | Definition name that was assessed. |
+| `definitionChanged` | boolean | True when the proposed definition's spec differs from the cluster's current copy, false when they are identical. Absent when the cluster's copy could not be read, so the comparison is unknown; a warning says why. |
+| `evidence` | array of string | What was scanned and rendered to produce this answer. |
+| `impacts` | array of object | Per-Application impact for the assessed consumers, in the order they were found. |
+| `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
+| `type` | string | Definition type that was assessed. |
 
 
 ## apply_application
