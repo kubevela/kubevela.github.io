@@ -8,6 +8,10 @@ KubeVela has [release cadence](../../contributor/release-process.md) for every 2
 
 ## From v1.11.x to v1.12.x
 
+v1.12.x adds the `SourceDefinition`, `Config` and `ConfigTemplate` CRDs, validates more on admission, and changes several builtin definitions. Some steps must happen before `helm upgrade`, and a plain `helm rollback` to v1.11 fails while the v1.12 admission webhooks are installed; the scripted downgrade takes care of that and the rest.
+
+Follow [Upgrading to v1.12](upgrade-to-v1.12.md) for the full procedure, what changes after the upgrade, and the scripted downgrade.
+
 ### Config templates and configs
 
 v1.12 turns config templates and configs into Kubernetes resources, `ConfigTemplate` and `Config`,
