@@ -242,6 +242,7 @@ module.exports = {
             'platform-engineers/system-operation/controller-sharding',
             'platform-engineers/system-operation/controller-grayscale-release',
             'platform-engineers/system-operation/high-availability',
+            'platform-engineers/system-operation/upgrade-to-v1.12',
             'platform-engineers/system-operation/migration-from-old-version',
             'platform-engineers/system-operation/config-migration',
             'platform-engineers/system-operation/cue-compatibility-layer',
