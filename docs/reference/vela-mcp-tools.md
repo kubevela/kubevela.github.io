@@ -54,7 +54,7 @@ Every result carries a `meta` block that says which system the data came from an
 
 Read. Always registered.
 
-Report the KubeVela versions and configuration this session runs against: vela CLI version, vela-core version and health, Kubernetes server version, enabled feature gates, and any version skew. Call once per session before other tools so explanations match the running system. Pass the namespace the user is working in to learn how it delivers workloads today, so new work follows that practice. Before writing a definition for an AWS service, pass the service, and the kind you will emit: the result names the installed provisioner to build on with its CRD's spec schema, or says that neither ACK nor Crossplane is installed and what to install. When both serve that service it names ACK and lists Crossplane as an alternative under also; then ask the user which one the platform builds on, or follow the one the user named.
+Report the KubeVela versions and configuration this session runs against: vela CLI version, vela-core version and health, Kubernetes server version, enabled feature gates, and any version skew. Call once per session before other tools so explanations match the running system. Pass the namespace the user is working in to learn how it delivers workloads today, so new work follows that practice. Before writing a definition for a cloud service, pass the provider (aws, gcp or azure; aws is the default), the service, and the kind you will emit: the result names the installed provisioner to build on with its CRD's spec schema, or says that nothing serves the service and what to install. The cloud's own controller is chosen first — ACK on AWS, Config Connector on GCP, Azure Service Operator on Azure — and when Crossplane also serves the service it is listed under also; then ask the user which one the platform builds on, or follow the one the user named.
 
 ### Input
 
@@ -62,14 +62,15 @@ Report the KubeVela versions and configuration this session runs against: vela C
 |---|---|---|---|
 | `kind` | string | no | Resource kind of that service, such as Table or Bucket. When set, the result includes the installed CRD's spec schema. |
 | `namespace` | string | no | Namespace the user is about to work in. When set, the result reports how that namespace delivers workloads today. |
-| `service` | string | no | AWS service to find a provisioner for, as AWS names it in lower case, such as dynamodb, s3 or rds. ACK is chosen first, then Crossplane. |
+| `provider` | string | no | Cloud of the service: aws, gcp or azure. Defaults to aws. |
+| `service` | string | no | Cloud service to find a provisioner for, in the cloud's own lower-case naming: dynamodb, s3 or rds on AWS, sql or storage on GCP, sql or dbforpostgresql on Azure. The cloud's own controller is chosen first, then Crossplane. |
 
 ### Result
 
 | Field | Type | Description |
 |---|---|---|
 | `addons` | array of object | Enabled addons with their versions and health, as list_addons reports them. |
-| `cloudProvisioners` | object | AWS services that ACK and Crossplane can create on this cluster, from the installed CRDs. |
+| `cloudProvisioners` | object | Cloud services that the installed provisioners can create on this cluster, per cloud and family, from the installed CRDs. |
 | `clusterGateway` | object | Whether cluster-gateway was found and whether it forwards the caller's identity to other clusters. |
 | `controller` | object | Whether the vela-core Deployment was found, with its image and ready replicas. |
 | `featureGates` | object | Feature gates set on the vela-core controller's --feature-gates flag, with their values. |
