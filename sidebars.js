@@ -310,6 +310,21 @@ module.exports = {
           ],
         },
         {
+          type: 'category',
+          label: 'Sources',
+          collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'platform-engineers/source/intro',
+          },
+          items: [
+            'platform-engineers/source/using-sources',
+            'platform-engineers/source/built-in-sources',
+            'platform-engineers/source/authoring-source-definition',
+            'platform-engineers/source/caching-and-operations',
+          ],
+        },
+        {
           'Cloud Resources': [
             'platform-engineers/addon/terraform',
             'platform-engineers/components/component-terraform',
