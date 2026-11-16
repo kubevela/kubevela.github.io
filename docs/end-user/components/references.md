@@ -692,7 +692,7 @@ The rendered chart sees `replicaCount: 5` (from inline), `resources.limits.memor
 
 #### Authenticating with private chart registries
 
-Add `chart.auth.secretRef` to point at a Secret in the vela-core namespace (`vela-system` by default). The Secret type controls how credentials are extracted:
+Add `chart.auth.secretRef` to point at a Secret in the Application's own namespace; a Secret in any other namespace, the release namespace included, is refused. The Secret type controls how credentials are extracted:
 
 | Secret type | Keys read | Use case |
 |---|---|---|
@@ -770,7 +770,7 @@ The same `auth` block works for HTTPS repos (`source` + `repoURL`) and direct `.
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  name | Name of the Secret | string | true |  
- namespace | Namespace of the Secret. Defaults to the release namespace, which itself defaults to the Application namespace when `release.namespace` is unset. Must be either the release namespace or the Application namespace; cross-namespace references are rejected. | string | false |  
+ namespace | Namespace of the Secret. Defaults to, and must be, the Application's own namespace; any other is refused, the release namespace included. | string | false |  
 
 Supported Secret types:
 
@@ -793,7 +793,7 @@ An `Opaque` Secret can also include these optional TLS fields: `caFile` (custom 
  ---- | ----------- | ---- | -------- | ------- 
  kind | Source kind. Only `Secret` and `ConfigMap` are supported. `OCIRepository` is not yet supported. | "Secret" or "ConfigMap" | true |  
  name | Name of the Secret or ConfigMap. | string | true |  
- namespace | Namespace of the Secret or ConfigMap. Defaults to the release namespace. An explicit value must match either the release namespace or the Application's own namespace; other namespaces are rejected to prevent cross-tenant reads via the controller's cluster-wide RBAC. | string | false |  
+ namespace | Namespace of the Secret or ConfigMap. Defaults to, and must be, the Application's own namespace; any other is refused, the release namespace included. | string | false |  
  key | Key inside `.data` whose value is parsed as YAML. Only `.data` is read; `ConfigMap.binaryData` is rejected. | string | false | "values.yaml" 
  optional | If true, a missing Secret/ConfigMap or missing key is skipped silently. Parse errors and permission errors still fail the render. | bool | false | false 
 
