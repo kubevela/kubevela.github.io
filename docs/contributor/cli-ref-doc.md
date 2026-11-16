@@ -15,7 +15,7 @@ The whole process was done by script automatically. You need to follow this guid
 $ tree -L 1
 .
 ├── kubevela
-└── kubevela.io
+└── kubevela.github.io
 ```
 
 2. Run generate command in kubevela root dir.
@@ -28,17 +28,25 @@ go run ./hack/docgen/cli/gen.go
 3. Update more docs such as i18n zh
 
 ```shell
-go run ./hack/docgen/cli/gen.go ../kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
+go run ./hack/docgen/cli/gen.go ../kubevela.github.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
 ```
 
 4. Then you can check the difference in kubevela.io.
 
 ```shell
-cd ../kubevela.io
+cd ../kubevela.github.io
 git status
 ```
 
 5. Check in the changes and send pull request.
+
+## vela mcp Tool Reference
+
+The [vela mcp tool reference](../reference/vela-mcp-tools.md) is built from the tool descriptions and schemas that the MCP server publishes. Change those in `pkg/mcp` in the KubeVela repository, not the page. Then run this in the kubevela root dir. It writes `docs/reference/vela-mcp-tools.md` in a `kubevela.github.io` checkout next to it, or in the path you pass as the first argument.
+
+```shell
+go run ./hack/docgen/mcp
+```
 
 ## Built-in Definition Reference
 
@@ -61,7 +69,7 @@ $ tree -L 1
 .
 ├── catalog
 ├── kubevela
-└── kubevela.io
+└── kubevela.github.io
 ```
 
 2. Run generate command in kubevela root dir.
@@ -74,7 +82,7 @@ go run hack/docgen/def/gen.go
 3. Then you can check the difference in kubevela.io.
 
 ```shell
-cd ../kubevela.io
+cd ../kubevela.github.io
 git status
 ```
 
@@ -188,7 +196,7 @@ Most of the steps are done by script automatically. You need to follow this guid
 $ tree -L 1
 .
 ├── kubevela
-└── kubevela.io
+└── kubevela.github.io
 ```
 
 2. Run generate command in kubevela root dir.
@@ -205,7 +213,7 @@ go run ./hack/docgen/terraform/generate.go --i18n ../kubevela.io/static/referenc
 4. Then you can check the difference in kubevela.io.
 
 ```shell
-cd ../kubevela.io
+cd ../kubevela.github.io
 git status
 ```
 

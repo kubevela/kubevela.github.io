@@ -4,6 +4,21 @@ title: Attaching Sidecar Container
 
 The `sidecar` trait allows you to attach a sidecar container to the component.
 
+## Expose ports from the sidecar
+
+Use `ports` to declare the ports the sidecar container listens on. `containerPort` is required. `protocol` defaults to `TCP`.
+
+```yaml
+      traits:
+        - type: sidecar
+          properties:
+            name: metrics-exporter
+            image: prom/node-exporter
+            ports:
+              - containerPort: 9100
+                name: metrics
+```
+
 ## How to use
 
 In this Application, component `log-gen-worker` and sidecar share the data volume that saves the logs.

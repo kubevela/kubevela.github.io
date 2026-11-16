@@ -23,18 +23,27 @@ vela module deploy <module> [flags]
 
   Print the Application without applying it, capturing it for GitOps:
 	vela module deploy s3 --dry-run > s3-module.yaml
+
+  Put the module's runtime objects on two managed clusters:
+	vela module deploy s3 --clusters spoke-a,spoke-b
+
+  Put them on every cluster with a label, even when none match yet:
+	vela module deploy s3 --cluster-selector tier=runtime --allow-empty
 ```
 
 ### Options
 
 ```
-      --dry-run            Print the Application without applying it.
-  -e, --env string         specify environment name for application
-  -h, --help               help for deploy
-  -n, --namespace string   specify the Kubernetes namespace to use
-      --registry string    The module registry to deploy from. Empty means the configured default.
-      --timeout duration   How long to wait for the module to become healthy. (default 5m0s)
-      --version string     The module package version (OCI/ECR tag) to install. Empty installs the latest published version.
+      --allow-empty                       Do not fail when --clusters or --cluster-selector selects no cluster.
+      --cluster-selector stringToString   Put the module's runtime objects on the clusters with these labels, as k=v[,k=v]. Cannot be used with --clusters. (default [])
+      --clusters strings                  The clusters to put the module's runtime objects on. Hub objects and definitions stay on the local cluster.
+      --dry-run                           Print the Application without applying it.
+  -e, --env string                        specify environment name for application
+  -h, --help                              help for deploy
+  -n, --namespace string                  specify the Kubernetes namespace to use
+      --registry string                   The module registry to deploy from. Empty means the configured default.
+      --timeout duration                  How long to wait for the module to become healthy. (default 5m0s)
+      --version string                    The module package version (OCI/ECR tag) to install. Empty installs the latest published version.
 ```
 
 ### Options inherited from parent commands

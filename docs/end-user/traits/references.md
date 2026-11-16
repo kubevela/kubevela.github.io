@@ -2345,6 +2345,7 @@ spec:
  volumes | Specify the shared volume path. | [[]volumes](#volumes-sidecar) | false |  |  
  livenessProbe | Instructions for assessing whether the container is alive. | [livenessProbe](#livenessprobe-sidecar) | false |  |  
  readinessProbe | Instructions for assessing whether the container is in a suitable state to serve traffic. | [readinessProbe](#readinessprobe-sidecar) | false |  |  
+ ports | Specify the ports of the sidecar container. | [[]ports](#ports-sidecar) | false |  |  
 
 
 #### env (sidecar)
@@ -2484,6 +2485,15 @@ spec:
  Name | Description | Type | Required | Default | Immutable 
  ---- | ----------- | ---- | -------- | ------- | --------- 
  port | The TCP socket within the container that should be probed to assess container health. | int | true |  |  
+
+#### ports (sidecar)
+
+ Name | Description | Type | Required | Default | Immutable 
+ ---- | ----------- | ---- | -------- | ------- | --------- 
+ containerPort | The port that the container exposes. | int | true |  |  
+ protocol | The protocol for the port. | "TCP" or "UDP" or "SCTP" | true | TCP |  
+ name | The name for the port. | string | false |  |  
+ hostPort | The host port to map to the container port. | int | false |  |  
 
 
 ## Startup-Probe

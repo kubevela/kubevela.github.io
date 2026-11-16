@@ -19,7 +19,7 @@ This guide helps you get started developing KubeVela.
 
 ### Prerequisites
 
-* Golang version 1.19+
+* Golang version 1.27.1+ (see `go.mod` in the KubeVela repository)
 
 <details>
   <summary>Install Golang</summary>

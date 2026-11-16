@@ -97,6 +97,42 @@ Please make sure you already upgraded the Vela CLI to latest stable version.
 vela install
 ```
 
+#### Changes when upgrading to 1.12
+
+Read these before you upgrade from 1.11 or earlier.
+
+**Runtime certificates.** vela-core now creates or reuses the serving certificate Secrets for the admission webhook (`<fullname>-admission`) and the cluster-gateway when it starts. It sets the `caBundle` of the cluster-gateway `APIService` and of the webhook configurations, and it checks and renews the certificates every minute. The `kube-webhook-certgen` Jobs are gone. This removes the deadlock that `helm install --wait` hit on Kubernetes 1.36, where Helm waited for vela-core and vela-core waited for an `APIService` whose `caBundle` a post-install Job had yet to set. On upgrade, vela-core reuses the Secrets that the old Jobs created, so the CA stays the same. This applies when `admissionWebhooks.enabled` and `admissionWebhooks.patch.enabled` are on and cert-manager is off, and, for the cluster-gateway, when `multicluster.enabled` and `multicluster.clusterGateway.secureTLS.enabled` are on. If you set `admissionWebhooks.patch.enabled=false` without cert-manager, you must supply the Secret and the `caBundle` yourself. Of the `admissionWebhooks.patch.*` values, only `enabled` is still read. Tools that render without cluster access, such as Argo CD, render `failurePolicy: Ignore` and let vela-core set it. In Argo CD, add an `ignoreDifferences` entry with `jqPathExpressions: [".webhooks[].failurePolicy"]`.
+
+**Built-in definitions.** Helm no longer owns the built-in definitions. Hook Jobs apply them after the new controller finishes rolling out, so the new webhook validates them:
+
+- During an upgrade, a pre-upgrade Job annotates the existing built-in definitions with `helm.sh/resource-policy=keep`, so Helm does not delete them or their `DefinitionRevision`s while it moves ownership to the hook Job.
+- A post-install, post-upgrade and post-rollback Job waits for the rollout and applies the definitions with server-side apply, retrying on failure.
+- A pre-delete Job removes the built-in definitions on `helm uninstall`.
+
+You can tune the Jobs with these chart values:
+
+| Value | Default | Description |
+| ----- | ------- | ----------- |
+| `builtinDefinitions.job.image.repository` | `alpine/k8s` | Image the Jobs run `kubectl` from. It only needs a shell and `kubectl`. |
+| `builtinDefinitions.job.image.tag` | `1.31.13` | Image tag. |
+| `builtinDefinitions.job.image.pullPolicy` | `IfNotPresent` | Image pull policy. |
+| `builtinDefinitions.job.rolloutTimeoutSeconds` | `300` | How long the apply Job waits for the controller rollout before it fails. With cert-manager, it also waits this long for the webhook `caBundle`. |
+| `builtinDefinitions.job.applyRetries` | `6` | How many times the apply Job tries to apply the definitions before it fails. |
+
+In an air-gapped cluster, mirror the Job image and set `builtinDefinitions.job.image.repository`.
+
+**Trait conflicts are enforced.** Admission now rejects an Application that attaches traits when a `TraitDefinition` lists one of them in `spec.conflictsWith`. Before 1.12, the Application was accepted and the conflict was ignored. Check existing Applications for conflicting traits before you upgrade. Otherwise, the next update to such an Application is denied.
+
+**Built-in definitions render differently.** The built-in definitions were corrected in 1.12, so these resources can change when an Application is next reconciled:
+
+- Components: `task` and `cron-task` now render their probes. `daemon` renders hostPath `readOnly` and `mountPropagation`.
+- Traits: `storage` writes the PVC `selector`, skips the mount for a block PVC, and renders ConfigMap and Secret volumes as `readOnly`. `hostalias` merges hostnames for the same IP into one entry instead of failing. `resource` renders CPU or memory alone. `k8s-update-strategy` and `securitycontext` apply their defaults when you give no parameters. `startup-probe` reads `containerName` in its `probes` form. `container-ports` keeps a port that has no protocol or name. `init-container` keeps the pod's volumes. `expose`, `pure-ingress` and `gateway` evaluate their status before a load balancer exists.
+- Workflow steps: `notification` now passes the email password. `clean-jobs` defaults to the step's namespace. `check-metrics` applies its documented defaults. `vela-cli` mounts a hostPath as a hostPath. `request` sets its wait message. `apply-terraform-provider` accepts `azure`. `webhook` without `url` and `apply-terraform-config` without `source` fail before they make any call. `apply-deployment` and `depends-on-app` wait for a status that is not yet reported.
+
+Pods can restart if a changed render alters the pod template. Review them in a test cluster first.
+
+**Application status.** The Application `Ready` condition is now `False` when a reconcile fails. It no longer keeps the `True` value from the last successful reconcile.
+
 ### 3. Upgrade VelaUX
 
 ```shell
@@ -133,7 +169,7 @@ kubectl get crd |grep oam | awk '{print $1}' | xargs kubectl delete crd
 
 ## Install KubeVela with cert-manager
 
-By default, KubeVela will use a self-signed certificate provided by [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen) for admissionWebhooks.
+By default, vela-core generates a self-signed certificate for admissionWebhooks at startup and renews it. See [Changes when upgrading to 1.12](#changes-when-upgrading-to-112).
 You can also use cert-manager if it's available. Note that you need to install cert-manager **before** the KubeVela chart.
 
 ```shell script
@@ -147,6 +183,18 @@ Install kubevela with enabled certmanager:
 ```shell script
 vela install --set admissionWebhooks.certManager.enabled=true
 ```
+
+## Admission webhook timeout
+
+The `admissionWebhookTimeout` chart value sets the timeout, in seconds, of KubeVela's admission webhooks. The default is `10`. Raise it if validation of large Applications times out, for example:
+
+```shell script
+vela install --set admissionWebhookTimeout=20
+```
+
+## Feature gates ConfigMap
+
+When the controller starts, it writes its feature gates to the `kubevela-feature-gates` ConfigMap in its namespace. It has one key per gate, with the value `true` or `false`. Tools that run beside the controller, such as VelaUX, read it to behave as the controller does.
 
 ## Install Pre-release
 

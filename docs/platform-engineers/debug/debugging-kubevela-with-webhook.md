@@ -11,13 +11,19 @@ This guide demonstrates how to set up a local debugging environment for KubeVela
 Before you begin, ensure you have:
 
 - KubeVela source code cloned from [github.com/kubevela/kubevela](https://github.com/kubevela/kubevela)
-- [Go 1.19](https://go.dev/dl/) or later installed
+- [Go 1.27.1](https://go.dev/dl/) or later installed
 - A running Kubernetes cluster accessible via `~/.kube/config`
 - `kubectl` and `openssl` installed
 - An IDE with Go debugger support (VS Code or IntelliJ IDEA / GoLand)
 
 :::note
 For basic controller debugging without webhooks, see [Debugging KubeVela Controllers](./debugging-kubevela-controllers.md).
+:::
+
+:::note
+**In-cluster installs work differently.** When vela-core runs from the Helm chart, it creates its own webhook certificate at startup (`--webhook-tls-secret`), stores it in the `<fullname>-admission` Secret, and sets the `caBundle` of both webhook configurations. That certificate covers only the in-cluster webhook Service. Local debugging points the webhooks at a URL on your host, so this guide uses certificates you generate.
+
+Do not pass the chart's TLS-management flags (`--webhook-tls-secret`, `--webhook-configuration`, `--webhook-failure-policy` and `--webhook-conversion-crds`) to a controller you run from your IDE. Keep `--webhook-cert-dir` and `--webhook-port`. The debug webhooks have no Service, so with those flags vela-core retries for two minutes and then fails to start.
 :::
 
 ## Overview
