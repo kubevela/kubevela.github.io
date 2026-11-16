@@ -1835,6 +1835,10 @@ spec:
 
 Send notifications to Email, DingTalk, Slack, Lark or webhook in your workflow.
 
+:::note
+Outbound calls to cloud metadata and link-local destinations are blocked by default. A blocked call fails the step. You can extend the denylist or make it stricter. See [Workflow Outbound HTTP Protection](../../platform-engineers/system-operation/workflow-http-protection.md).
+:::
+
 ### Scope
 
 This step type is valid in both Application and WorkflowRun.
@@ -2824,6 +2828,10 @@ spec:
 
 Send request to the url.
 
+:::note
+Outbound calls to cloud metadata and link-local destinations are blocked by default. A blocked call fails the step. You can extend the denylist or make it stricter. See [Workflow Outbound HTTP Protection](../../platform-engineers/system-operation/workflow-http-protection.md).
+:::
+
 ### Scope
 
 This step type is valid in both Application and WorkflowRun.
@@ -3286,6 +3294,10 @@ spec:
 ### Description
 
 Send a POST request to the specified Webhook URL. If no request body is specified, the current Application body will be sent by default.
+
+:::note
+Outbound calls to cloud metadata and link-local destinations are blocked by default. A blocked call fails the step. You can extend the denylist or make it stricter. See [Workflow Outbound HTTP Protection](../../platform-engineers/system-operation/workflow-http-protection.md).
+:::
 
 ### Scope
 

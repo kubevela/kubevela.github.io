@@ -438,3 +438,26 @@ This command will clean up KubeVela controllers along with the Kubernetes cluste
 ```shell
 velad uninstall
 ```
+
+## Install the standalone vela-workflow chart {#vela-workflow-chart}
+
+If you only need the workflow engine, you can install the `vela-workflow` chart without `vela-core`:
+
+```shell
+helm repo add kubevela https://kubevela.github.io/charts
+helm repo update
+helm install workflow kubevela/vela-workflow --namespace vela-system --create-namespace
+```
+
+The chart blocks workflow HTTP calls to cloud metadata and link-local destinations by default. These values control the protection. They are all under `workflow`:
+
+| Value | Default | Description |
+| ----- | ------- | ----------- |
+| `workflow.disableWorkflowHTTP` | `false` | Block all outbound HTTP from workflow steps. |
+| `workflow.blockPrivateHTTPAddresses` | `false` | Block RFC 1918 and ULA destinations. This breaks most calls to ClusterIP Services. |
+| `workflow.httpDeny.configTemplateName` | `vela-workflow-http-deny` | Config template name and discovery label. Empty turns discovery off. |
+| `workflow.httpDeny.installConfigTemplate` | `true` | Install the config template. |
+| `workflow.httpDeny.defaultConfig.enabled` | `true` | Install the default denylist ConfigMap. |
+| `workflow.httpDeny.defaultConfig.name` | `vela-workflow-http-deny-default` | Name of the default ConfigMap. |
+
+See [Workflow Outbound HTTP Protection](../platform-engineers/system-operation/workflow-http-protection.md) for the defaults, how to extend the denylist, and how to install this chart together with `vela-core`.
