@@ -2,7 +2,7 @@
 title: vela-core Chart Internals
 ---
 
-This page explains how the `vela-core` Helm chart installs certificates and the built-in definitions in KubeVela 1.12. Read it before you change `charts/vela-core` or debug an install or upgrade. For the operator view, see [Changes when upgrading to 1.12](../platform-engineers/advanced-install.mdx#changes-when-upgrading-to-112).
+This page explains how the `vela-core` Helm chart installs certificates and the built-in definitions in KubeVela 1.12. Read it before you change `charts/vela-core` or debug an install or upgrade. For the operator view, see the [KubeVela 1.12 upgrade notes](../platform-engineers/system-operation/upgrade-notes-1.12.md).
 
 ## Runtime serving certificates
 
@@ -24,7 +24,7 @@ Behavior to keep in mind:
 - Tools that render without cluster access (`helm template`, Argo CD) render `failurePolicy: Ignore`. vela-core sets the real value at runtime.
 - With `admissionWebhooks.patch.enabled=false` and no cert-manager, the operator supplies the Secret and `caBundle`.
 
-When you run the controller from your IDE, follow [Debugging KubeVela with Webhook Integration](../platform-engineers/debug/debugging-kubevela-with-webhook.md) and [Multicluster Debugging](../platform-engineers/debug/multicluster-debugging.md). They explain which of these flags to pass and which to leave out.
+When you run the controller from your IDE, follow [Debugging KubeVela webhooks](../platform-engineers/debug/debugging-kubevela-with-webhook.md) and [Multicluster Debugging](../platform-engineers/debug/multicluster-debugging.md). They explain which of these flags to pass and which to leave out.
 
 ## Built-in definitions as hook Jobs
 

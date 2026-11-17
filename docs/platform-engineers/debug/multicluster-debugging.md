@@ -47,22 +47,23 @@ make def-install
 
 ## Part 2: Configure Webhook Debugger
 
-### Step 4: Update Debugger Script
+### Step 4: Create Debugger Script
 
-Edit the `setup-webhook-debugger.sh` script and update the kubeconfig location:
+Copy `setup-debugger.sh` from [Debugging KubeVela webhooks](./debugging-kubevela-with-webhook.md#configure-local-webhook-access) into the root of the KubeVela repository and make it executable:
 
 ```bash
-#--- STEP 10: Export KUBECONFIG ------------------------------------------------
-echo "==> STEP 10: Export KUBECONFIG"
-export KUBECONFIG="${HOME}/.kube/hub.yaml"
-echo "Using KUBECONFIG=${KUBECONFIG}"
+chmod +x setup-debugger.sh
 ```
 
 ### Step 5: Run Debugger Setup
 
+Run the script against your hub kubeconfig:
+
 ```bash
-./setup-webhook-debugger.sh
+KUBECONFIG=~/.kube/hub.yaml ./setup-debugger.sh
 ```
+
+In Step 6, include the webhook flags printed by the script (`--use-webhook=true`, `--webhook-port=9445`, and `--webhook-cert-dir=<repo>/k8s-webhook-server/serving-certs`) in your IDE arguments alongside the Cluster Gateway flags below.
 
 ## Part 3: IDE Configuration
 

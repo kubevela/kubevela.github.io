@@ -4,12 +4,28 @@ title: KubeVela 1.12 upgrade notes
 
 Read these notes before upgrading from KubeVela 1.11 or earlier.
 
+## CRDs
+
+KubeVela 1.12 adds required CRDs (`configs.config.oam.dev`,
+`configtemplates.config.oam.dev`, and `sourcedefinitions.core.oam.dev`) and
+updates existing CRD schemas.
+
+`vela install` updates CRDs automatically. `helm upgrade` never installs or
+updates CRDs from a chart's `crds/` directory, so apply them before running
+`helm upgrade`:
+
+```shell
+helm pull kubevela/vela-core --version <1.12-version> --untar
+kubectl apply -f vela-core/crds/
+```
+
 ## Runtime certificates
 
 vela-core now manages the serving certificates for admission webhooks and
 cluster-gateway. At startup, it:
 
-- creates or reuses the certificate Secrets;
+- creates or reuses the certificate Secrets (`<fullname>-admission` and
+  `<fullname>-cluster-gateway-tls-v2`);
 - sets the `caBundle` on webhook configurations and the cluster-gateway
   `APIService`;
 - checks the certificates every minute and renews them when needed.
@@ -21,24 +37,35 @@ This change prevents a deadlock with `helm install --wait` on Kubernetes 1.36.
 Previously, vela-core could wait for the `APIService` while Helm waited to run
 the Job that set its `caBundle`.
 
-vela-core manages certificates when cert-manager is off and these values are
-enabled:
+vela-core manages each certificate when these chart values are set:
 
-- admission webhook: `admissionWebhooks.enabled` and
-  `admissionWebhooks.patch.enabled`;
-- cluster-gateway: `multicluster.enabled` and
-  `multicluster.clusterGateway.secureTLS.enabled`.
+- admission webhook: `admissionWebhooks.enabled=true`,
+  `admissionWebhooks.patch.enabled=true`, and
+  `admissionWebhooks.certManager.enabled=false`;
+- cluster-gateway: `multicluster.enabled=true`,
+  `multicluster.clusterGateway.secureTLS.enabled=true`, and
+  `multicluster.clusterGateway.secureTLS.certManager.enabled=false`.
 
-If `admissionWebhooks.patch.enabled=false` and cert-manager is off, provide the
-Secret and `caBundle` yourself. Other `admissionWebhooks.patch.*` settings only
-remain for compatibility with existing values files.
+If `admissionWebhooks.patch.enabled=false` and
+`admissionWebhooks.certManager.enabled=false`, provide the
+`<fullname>-admission` Secret and the webhook `caBundle` yourself. Other
+`admissionWebhooks.patch.*` settings only remain for compatibility with
+existing values files.
 
-Argo CD renders the webhook `failurePolicy` as `Ignore`. vela-core sets the
-configured value at runtime. Add this rule to Argo CD:
+Tools that render without cluster access, such as Argo CD, render the webhook
+`failurePolicy` as `Ignore`. vela-core sets the configured policy at runtime.
+Add `ignoreDifferences` entries in Argo CD so it does not report drift:
 
 ```yaml
-jqPathExpressions:
-  - .webhooks[].failurePolicy
+ignoreDifferences:
+  - group: admissionregistration.k8s.io
+    kind: MutatingWebhookConfiguration
+    jqPathExpressions:
+      - .webhooks[].failurePolicy
+  - group: admissionregistration.k8s.io
+    kind: ValidatingWebhookConfiguration
+    jqPathExpressions:
+      - .webhooks[].failurePolicy
 ```
 
 ## Built-in definitions
@@ -84,11 +111,12 @@ Components:
 
 - `task` and `cron-task` render their probes.
 - `daemon` renders hostPath `readOnly` and `mountPropagation`.
+- `helmchart` health criteria without `name` match any resource of that kind.
 
 Traits:
 
 - `storage` renders the PVC `selector`, skips the mount for a block PVC, and
-  marks ConfigMap and Secret volumes as `readOnly`.
+  honors `readOnly: true` on ConfigMap and Secret volume mounts.
 - `hostalias` combines hostnames that use the same IP.
 - `resource` can render CPU or memory by itself.
 - `k8s-update-strategy` and `securitycontext` apply their defaults when no

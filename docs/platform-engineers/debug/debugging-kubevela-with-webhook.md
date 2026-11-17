@@ -38,8 +38,8 @@ make manifests
 kubectl apply -f charts/vela-core/crds/
 ```
 
-The setup script checks for the Application and ComponentDefinition CRDs. It
-stops with an error if they are missing.
+The setup script checks for all required KubeVela CRDs. It stops with an error
+if any of them are missing.
 
 ## Configure local webhook access
 
@@ -134,9 +134,25 @@ check_prerequisites() {
         fi
         die "fix kubeconfig and re-run"
     fi
-    for crd in applications.core.oam.dev componentdefinitions.core.oam.dev; do
-        k get crd "${crd}" &> /dev/null || die "required CRD ${crd} is missing; run 'make manifests && kubectl apply -f charts/vela-core/crds/'"
-    done
+    local required_crds=(
+        applications.core.oam.dev
+        applicationrevisions.core.oam.dev
+        resourcetrackers.core.oam.dev
+        componentdefinitions.core.oam.dev
+        traitdefinitions.core.oam.dev
+        policydefinitions.core.oam.dev
+        workflowstepdefinitions.core.oam.dev
+        sourcedefinitions.core.oam.dev
+        definitionrevisions.core.oam.dev
+        workloaddefinitions.core.oam.dev
+        policies.core.oam.dev
+        workflows.core.oam.dev
+        configs.config.oam.dev
+        configtemplates.config.oam.dev
+    )
+    if ! k get crd "${required_crds[@]}" &> /dev/null; then
+        die "one or more required CRDs are missing; run 'make manifests && kubectl --context ${KUBE_CONTEXT} apply -f charts/vela-core/crds/'"
+    fi
     ok "Prerequisites OK"
 }
 
@@ -299,18 +315,24 @@ verify_served_cert() {
         ok "vela-core is serving the new certificate"
     else
         echo -e "${RED}vela-core is serving a different certificate than ${CERT_DIR}/tls.crt.${NC}"
-        echo "Restart the debug session, and check that --webhook-cert-dir (or CertDir in"
-        echo "cmd/core/app/config/webhook.go) points at $(pwd)/${CERT_DIR}"
+        echo "Restart the debug session and check that --webhook-cert-dir points at $(pwd)/${CERT_DIR}"
     fi
 }
 
 show_next_steps() {
+    local active_ctx
+    active_ctx=$(kubectl config current-context 2>/dev/null || true)
     echo
     ok "========================================="
     ok "Webhook debugging setup complete"
     ok "========================================="
     echo "Webhook URL: https://${HOST_IP}:${WEBHOOK_PORT}"
     echo "Cert dir:    $(pwd)/${CERT_DIR}"
+    if [[ -n "${active_ctx}" && "${active_ctx}" != "${KUBE_CONTEXT}" ]]; then
+        echo
+        echo "Note: current kubectl context is '${active_ctx}', while webhooks were applied to '${KUBE_CONTEXT}'."
+        echo "Switch context before starting vela-core: kubectl config use-context ${KUBE_CONTEXT}"
+    fi
     echo
     echo "Debug cmd/core/main.go with:"
     echo "  --use-webhook=true"
@@ -362,11 +384,16 @@ Pass an address and port when automatic detection is not correct:
 ./setup-debugger.sh 192.168.1.20 9445
 ```
 
-To target a context without changing the current context:
+To target a specific context during setup:
 
 ```shell
 KUBE_CONTEXT=k3d-kubevela ./setup-debugger.sh
 ```
+
+`vela-core` connects to the `current-context` in `KUBECONFIG`, not
+`KUBE_CONTEXT`. If you override `KUBE_CONTEXT`, switch the active context with
+`kubectl config use-context <context>` or point `KUBECONFIG` at a dedicated file
+for that cluster before starting the debugger.
 
 The generated certificate includes these SANs:
 
@@ -506,8 +533,11 @@ Secrets created by those Jobs are reused during an upgrade.
 Stop vela-core, then run:
 
 ```shell
-KUBE_CONTEXT=k3d-kubevela ./setup-debugger.sh --cleanup
+./setup-debugger.sh --cleanup
 ```
+
+If you used `KUBE_CONTEXT` during setup, pass the same `KUBE_CONTEXT` value to
+`--cleanup`.
 
 This removes both webhook configurations and the debug TLS Secret. It leaves
 the local certificate files for inspection. Running the setup script again
