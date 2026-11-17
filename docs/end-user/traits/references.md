@@ -4,7 +4,7 @@ title: Built-in Trait Type
 
 This documentation will walk through all the built-in trait types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2026-04-16T11:50:12+01:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2026-11-17T15:13:58+05:30.
 
 ## Affinity
 
@@ -2330,6 +2330,10 @@ spec:
             volumes:
               - name: varlog
                 path: /var/log
+            ports:
+              - containerPort: 8080
+                protocol: TCP
+                name: http
 ```
 
 ### Specification (sidecar)
@@ -2486,12 +2490,13 @@ spec:
  ---- | ----------- | ---- | -------- | ------- | --------- 
  port | The TCP socket within the container that should be probed to assess container health. | int | true |  |  
 
+
 #### ports (sidecar)
 
  Name | Description | Type | Required | Default | Immutable 
  ---- | ----------- | ---- | -------- | ------- | --------- 
  containerPort | The port that the container exposes. | int | true |  |  
- protocol | The protocol for the port. | "TCP" or "UDP" or "SCTP" | true | TCP |  
+ protocol | The protocol for the port. | "TCP" or "UDP" or "SCTP" | false | TCP |  
  name | The name for the port. | string | false |  |  
  hostPort | The host port to map to the container port. | int | false |  |  
 
@@ -2539,7 +2544,7 @@ spec:
         properties:
           containerName: "busybox-runner"
           httpGet:
-            host: "www.guidewire.comm"
+            host: "www.example.comm"
             scheme: "HTTPS"
             port: 443
           periodSeconds: 4
@@ -2549,7 +2554,7 @@ spec:
         properties:
           containerName: nginx
           httpGet:
-            host: "www.guidewire.com"
+            host: "www.example.com"
             scheme: "HTTPS"
             port: 443
           periodSeconds: 5
@@ -2831,7 +2836,7 @@ spec:
  Name | Description | Type | Required | Default | Immutable 
  ---- | ----------- | ---- | -------- | ------- | --------- 
  matchLabels |  | map[string]string | false |  |  
- matchExpressions |  | [matchExpressions](#matchexpressions-storage) | false |  |  
+ matchExpressions |  | [[]matchExpressions](#matchexpressions-storage) | false |  |  
 
 
 ##### matchExpressions (storage)
@@ -2839,8 +2844,8 @@ spec:
  Name | Description | Type | Required | Default | Immutable 
  ---- | ----------- | ---- | -------- | ------- | --------- 
  key |  | string | true |  |  
- values |  | []string | true |  |  
  operator |  | string | true |  |  
+ values |  | []string | false |  |  
 
 
 #### configMap (storage)

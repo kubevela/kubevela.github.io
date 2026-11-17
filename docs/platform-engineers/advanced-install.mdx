@@ -1,5 +1,5 @@
 ---
-title: Custom Installation/Upgrade
+title: Custom Installation
 ---
 
 import Tabs from '@theme/Tabs';
@@ -7,112 +7,7 @@ import TabItem from '@theme/TabItem';
 
 ## Upgrade
 
-:::caution
-If you're trying to upgrade from a big version later (e.g. from 1.2.x to 1.4.x), please refer to [version migration](./system-operation/migration-from-old-version.md) for more guides.
-:::
-
-### 1. Upgrade CLI
-
-<Tabs
-    className="unique-tabs"
-    defaultValue="script"
-    values={[
-        {label: 'Script', value: 'script'},
-        {label: 'Homebrew', value: 'homebrew'},
-        {label: 'Download directly from releases', value: 'download'},
-        {label: 'Docker', value: 'docker'},
-    ]}>
-<TabItem value="script">
-
-** MacOS/Linux **
-
-```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash
-```
-
-**Windows**
-
-:::tip
-Pre-release versions will not be listed.
-:::
-
-```shell script
-powershell -Command "iwr -useb https://kubevela.io/script/install.ps1 | iex"
-```
-
-</TabItem>
-<TabItem value="homebrew">
-
-**macOS/Linux**
-
-Update your brew first. Please note that the brew method only supports the installation of the official release version.
-
-```shell script
-brew update
-```
-
-Then install KubeVela CLI
-
-```shell script
-brew install kubevela
-```
-
-</TabItem>
-<TabItem value="download">
-
-- Download the latest `vela` binary file via [release log](https://github.com/kubevela/kubevela/releases).
-- Unzip the binary file, and configure the environment variables in `$PATH`, and you're done.
-
-```shell script
-sudo mv ./vela /usr/local/bin/vela
-```
-
-:::caution
-[Installation Tips](https://github.com/kubevela/kubevela/issues/625):
-If you are using a Mac system, it will pop up a warning that "vela" cannot be opened because the package from the developer cannot be verified.
-
-MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
-:::
-
-</TabItem>
-
-<TabItem value="docker">
-
-Pull the latest image from the docker registry, or specify a version as tag:
-
-```shell script
-docker pull oamdev/vela-cli:latest
-```
-
-</TabItem>
-</Tabs>
-
-### 2. Upgrade Vela Core
-
-:::note
-Please make sure you already upgraded the Vela CLI to latest stable version.
-:::
-
-```shell
-vela install
-```
-
-:::caution
-Before upgrading from 1.11 or earlier, read the
-[KubeVela 1.12 upgrade notes](./system-operation/upgrade-notes-1.12.md).
-The release changes certificate management, built-in definitions, trait
-conflict validation, and Application status.
-:::
-
-### 3. Upgrade VelaUX
-
-```shell
-vela addon enable velaux
-```
-
-:::tip
-You can use advanced parameters provided by [addons](../reference/addons/overview.md).
-:::
+The upgrade steps have moved to [Upgrade KubeVela](../upgrade/overview.mdx), which also links the guide for each version.
 
 ## Uninstall
 
@@ -140,13 +35,13 @@ kubectl get crd |grep oam | awk '{print $1}' | xargs kubectl delete crd
 
 ## Install KubeVela with cert-manager
 
-By default, vela-core generates a self-signed certificate for admissionWebhooks at startup and renews it. See the [KubeVela 1.12 upgrade notes](./system-operation/upgrade-notes-1.12.md#runtime-certificates).
+By default, vela-core generates a self-signed certificate for admissionWebhooks at startup and renews it. See [Runtime certificates](../release-notes/v1.12/v1.12.0.md#runtime-certificates) in the v1.12.0 release notes.
 You can also use cert-manager if it's available. Note that you need to install cert-manager **before** the KubeVela chart.
 
 ```shell script
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
-helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.2.0 --create-namespace --set installCRDs=true
+helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set crds.enabled=true
 ```
 
 Install kubevela with enabled certmanager:
@@ -174,7 +69,7 @@ When the controller starts, it writes its feature gates to the `kubevela-feature
 vela version list -a
 
 # Install the specified version.
-vela install --version 1.3.0-beta.2
+vela install --version 1.12.0-alpha.1
 ```
 
 ## Install Kubectl Vela Plugin

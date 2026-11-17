@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 ### 1. Kubernetes Requirements:
 
-- Kubernetes cluster `>= v1.25`. KubeVela 1.12 is built on the Kubernetes v0.37 libraries and tested with Kubernetes v1.37. The `ConfigTemplate` validation rules use CEL and need Kubernetes 1.25 or later.
+- Kubernetes cluster `>= v1.25`. KubeVela 1.12 is built on the Kubernetes v0.37 libraries and tested with Kubernetes v1.37. The `ConfigTemplate` validation rules use CEL and need Kubernetes 1.25 or later. The Kubernetes versions each release supports are in the [release notes](../release-notes/overview.md#supported-versions).
 
 KubeVela relies on Kubernetes as a control plane. The control plane could be any managed Kubernetes offering or your own clusters, such as:
 
@@ -112,9 +112,9 @@ If you have docker environment, you can easily run CLI with the vela CLI docker 
 ```
 $ docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli version
 CLI Version: master
-Core Version: v1.3.4
-GitRevision: git-1d823780
-GolangVersion: go1.17.10
+Core Version: v1.11.1
+GitRevision: git-9e5043b4
+GolangVersion: go1.23.8
 ```
 
 Refer to [using Vela CLI docker image](../platform-engineers/system-operation/vela-cli-image.md) for more usage.

@@ -64,7 +64,7 @@ payments-key       legacy                         team-a/api-key 2026-11-06 14:5
 
 New configs and templates you create from now on with the v1.12 CLI, workflow steps or manifests
 are `Config` and `ConfigTemplate` resources. An older CLI still writes v1.11 objects.
-See [the v1.12 upgrade notes](./migration-from-old-version.md) for the behaviour changes to check
+See [the v1.12 upgrade notes](./index.md) for the behaviour changes to check
 before you upgrade.
 
 ## Step 2: Preview the migration

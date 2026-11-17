@@ -38,6 +38,8 @@ Experimental Addon Registry | - | https://kubevela.github.io/catalog/experimenta
 CLI | https://kubevela.io/script/install.sh | download from [release page](https://github.com/kubevela/kubevela/releases)
 VelaD | - | migrating 
 
+The move happened in v1.9; the [v1.8 to v1.9 upgrade guide](../../../upgrade/v1.9/index.md) has the commands to update your addon registry.
+
 ### You have reached rate limit for Docker Image Registry 
 
 By default, the community use images from docker registry for installation. You can use the following alternatives:

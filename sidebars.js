@@ -12,29 +12,152 @@ module.exports = {
           id: 'getting-started/introduction',
         },
         {
-          type: 'category',
-          collapsed: true,
-          label: 'Installation',
-          link: {
-            type: 'doc',
-            id: 'install',
-          },
-          items: [
-            {
-              type: 'doc',
-              label: 'Standalone',
-              id: 'installation/standalone',
-            },
-            {
-              type: 'doc',
-              label: 'Kubernetes',
-              id: 'installation/kubernetes',
-            },
-          ],
+          type: 'doc',
+          id: 'quick-start',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Installation',
+      collapsed: true,
+      link: {
+        type: 'doc',
+        id: 'install',
+      },
+      items: [
+        {
+          type: 'doc',
+          label: 'Standalone',
+          id: 'installation/standalone',
         },
         {
           type: 'doc',
-          id: 'quick-start',
+          label: 'Kubernetes',
+          id: 'installation/kubernetes',
+        },
+        'platform-engineers/advanced-install',
+        'platform-engineers/system-operation/bootstrap-parameters',
+        'platform-engineers/system-operation/offline-installation',
+        'platform-engineers/system-operation/vela-cli-image',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Upgrade',
+      collapsed: true,
+      link: {
+        type: 'doc',
+        id: 'upgrade/overview',
+      },
+      items: [
+        {
+          type: 'category',
+          label: 'v1.11 to v1.12',
+          link: {
+            type: 'doc',
+            id: 'upgrade/v1.12/index',
+          },
+          items: ['upgrade/v1.12/config-migration'],
+        },
+        {
+          type: 'category',
+          label: 'v1.10 to v1.11',
+          link: {
+            type: 'doc',
+            id: 'upgrade/v1.11/index',
+          },
+          items: ['upgrade/v1.11/cue-compatibility-layer'],
+        },
+        'upgrade/v1.10/index',
+        'upgrade/v1.9/index',
+        {
+          type: 'category',
+          label: 'Older versions',
+          collapsed: true,
+          items: [
+            'upgrade/v1.8/index',
+            'upgrade/v1.7/index',
+            'upgrade/v1.6/index',
+            'upgrade/v1.5/index',
+            'upgrade/v1.4/index',
+            'upgrade/v1.3/index',
+            'upgrade/v1.2/index',
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Release Notes',
+      collapsed: true,
+      link: {
+        type: 'doc',
+        id: 'release-notes/overview',
+      },
+      items: [
+        {
+          type: 'category',
+          label: 'v1.12.x',
+          link: {
+            type: 'doc',
+            id: 'release-notes/v1.12/index',
+          },
+          items: ['release-notes/v1.12/v1.12.0'],
+        },
+        {
+          type: 'category',
+          label: 'v1.11.x',
+          link: {
+            type: 'doc',
+            id: 'release-notes/v1.11/index',
+          },
+          items: ['release-notes/v1.11/v1.11.1', 'release-notes/v1.11/v1.11.0'],
+        },
+        {
+          type: 'category',
+          label: 'v1.10.x',
+          link: {
+            type: 'doc',
+            id: 'release-notes/v1.10/index',
+          },
+          items: [
+            'release-notes/v1.10/v1.10.9',
+            'release-notes/v1.10/v1.10.8',
+            'release-notes/v1.10/v1.10.7',
+            'release-notes/v1.10/v1.10.6',
+            'release-notes/v1.10/v1.10.5',
+            'release-notes/v1.10/v1.10.4',
+            'release-notes/v1.10/v1.10.3',
+            'release-notes/v1.10/v1.10.2',
+            'release-notes/v1.10/v1.10.1',
+            'release-notes/v1.10/v1.10.0',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'v1.9.x',
+          link: {
+            type: 'doc',
+            id: 'release-notes/v1.9/index',
+          },
+          items: [
+            'release-notes/v1.9/v1.9.14',
+            'release-notes/v1.9/v1.9.13',
+            'release-notes/v1.9/v1.9.12',
+            'release-notes/v1.9/v1.9.11',
+            'release-notes/v1.9/v1.9.10',
+            'release-notes/v1.9/v1.9.9',
+            'release-notes/v1.9/v1.9.8',
+            'release-notes/v1.9/v1.9.7',
+            'release-notes/v1.9/v1.9.6',
+            'release-notes/v1.9/v1.9.5',
+            'release-notes/v1.9/v1.9.4',
+            'release-notes/v1.9/v1.9.3',
+            'release-notes/v1.9/v1.9.2',
+            'release-notes/v1.9/v1.9.1',
+            'release-notes/v1.9/v1.9.0',
+          ],
         },
       ],
     },
@@ -226,26 +349,15 @@ module.exports = {
       label: 'Operator Manual',
       items: [
         {
-          'Advanced Installation': [
-            'platform-engineers/system-operation/bootstrap-parameters',
-            'platform-engineers/advanced-install',
-            'platform-engineers/system-operation/vela-cli-image',
-            'platform-engineers/system-operation/system-info-diagnose',
-          ],
-        },
-        {
           type: 'category',
-          label: 'Production Precautions',
+          label: 'Production Operations',
           collapsed: true,
           items: [
-            'platform-engineers/system-operation/upgrade-notes-1.12',
             'platform-engineers/system-operation/performance-finetuning',
             'platform-engineers/system-operation/controller-sharding',
             'platform-engineers/system-operation/controller-grayscale-release',
             'platform-engineers/system-operation/high-availability',
-            'platform-engineers/system-operation/migration-from-old-version',
-            'platform-engineers/system-operation/config-migration',
-            'platform-engineers/system-operation/cue-compatibility-layer',
+            'platform-engineers/system-operation/system-info-diagnose',
           ],
         },
         {

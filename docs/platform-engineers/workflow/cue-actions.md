@@ -650,9 +650,13 @@ app: op.#Steps & {
 
 ## Deprecated Operations
 
+:::caution
+`#Slack`, `#DingTalk` and `#Lark` are no longer provided by the `vela/op` package in this version. Use `#HTTPPost` instead, as shown below. The sections are kept for reference when migrating old definitions.
+:::
+
 ### Slack
 
-Send a request to the specified Slack URL. `#Slack` is actually a secondary wrapper for `#HTTPPost`, we will deprecate this operation in the next version. You can use `#HTTPPost` instead, like:
+Send a request to the specified Slack URL. `#Slack` is actually a secondary wrapper for `#HTTPPost`. You can use `#HTTPPost` instead, like:
 
 ```
 import (
@@ -700,7 +704,7 @@ myRequest: op.#Slack & {
 
 ### DingTalk
 
-Send a request to the specified DingTalk URL. `#DingTalk` is actually a secondary wrapper of `#HTTPPost`, we will deprecate this operation in the next version. You can use `#HTTPPost` instead, please refer to the example in Slack action.
+Send a request to the specified DingTalk URL. `#DingTalk` is actually a secondary wrapper of `#HTTPPost`. You can use `#HTTPPost` instead, please refer to the example in Slack action.
 
 **Parameters**
 
@@ -729,7 +733,7 @@ myRequest: op.#DingTalk & {
 
 ### Lark
 
-Send a request to the specified Lark URL. `#Lark` is actually a secondary wrapper of `#HTTPPost`, we will deprecate this operation in the next version. You can use `#HTTPPost` instead, please refer to the example in Slack action.
+Send a request to the specified Lark URL. `#Lark` is actually a secondary wrapper of `#HTTPPost`. You can use `#HTTPPost` instead, please refer to the example in Slack action.
 
 **Parameters**
 

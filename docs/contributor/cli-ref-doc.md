@@ -4,6 +4,10 @@ title: Update Reference Docs
 
 This guide is an introduction of how to generate docs automatically from Golang scripts.
 
+:::tip
+Regenerate the CLI and definition reference docs from the release branch for every `minor` release, before the docs version is cut; see the [Release SOP](./release-process.md#release-sop). The generator overwrites the whole page, so put longer examples for a definition in its `.eg.md` file in the KubeVela repository rather than editing the generated page. Generating the workflow step docs also needs a checkout of [kubevela/catalog](https://github.com/kubevela/catalog) next to `kubevela`.
+:::
+
 ## CLI Reference
 
 This section introduce how to update [CLI reference doc](../cli/vela.md) in the website.
