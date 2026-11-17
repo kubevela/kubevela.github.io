@@ -238,6 +238,7 @@ module.exports = {
           label: 'Production Precautions',
           collapsed: true,
           items: [
+            'platform-engineers/system-operation/upgrade-notes-1.12',
             'platform-engineers/system-operation/performance-finetuning',
             'platform-engineers/system-operation/controller-sharding',
             'platform-engineers/system-operation/controller-grayscale-release',
