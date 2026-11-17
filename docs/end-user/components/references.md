@@ -920,6 +920,74 @@ spec:
 |---------|-------------|-----------------------|----------|---------|
 | objects | A slice of Kubernetes resource manifests   | [][Kubernetes-Objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) | true     |         |
 
+## Module
+
+### Description
+
+Fetch a module package from an OCI registry and install its definitions and auxiliary objects. The package version is the OCI tag. It is not the API line (`v1`, `v2`). Definitions are created in the namespace of the Application that contains this component.
+
+`EnableModuleComponent` must be true. See [Modules](../../platform-engineers/module/intro.md) for what a module is. See [Install and Use a Module](../../platform-engineers/module/module-install.md) for the CLI and for the definitions that a module adds.
+
+### Examples (module)
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: module-aws-s3-deploy
+  namespace: team-a
+spec:
+  components:
+    - name: aws-s3
+      type: module
+      properties:
+        module: aws-s3
+        registry: catalog
+        version: "1.0.0"
+```
+
+Send the runtime objects of the module to managed clusters. Definitions and hub objects stay on the control plane.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: module-aws-s3-deploy
+  namespace: team-a
+spec:
+  components:
+    - name: aws-s3
+      type: module
+      properties:
+        registry: catalog
+        version: "1.1.0"
+        placement:
+          clusterLabelSelector:
+            region: east
+```
+
+### Specification (module)
+
+ Name | Description | Type | Required | Default | Immutable 
+ ---- | ----------- | ---- | -------- | ------- | --------- 
+ module | Module name. Must match `module` in the package `_module.cue`. | string | false | the component name |  
+ registry | Name from `vela module registry add`. With an unknown name, the workflow step fails with `module registry "<name>" not found`. Empty selects the only configured registry, or the registry named `catalog` when several exist. | string | false |  |  
+ version | Package version (OCI tag). Empty selects the highest published semver tag. This is not the API line. | string | false |  |  
+ placement | Clusters that receive the objects that the module marks `runtime`. Without `placement`, all objects install on the control plane. See [placement](#placement-module). | [placement](#placement-module) | false |  |  
+
+`namespace` is not a property. If you set it, admission rejects the Application. The definitions install into the namespace of this Application. That namespace must exist. On a managed cluster, a runtime object with no namespace also goes into this namespace, and the namespace must exist there too. KubeVela does not create it.
+
+#### placement (module)
+
+Set `clusters` or `clusterLabelSelector`. Do not set both. See [Module Multi-Cluster Placement](../../platform-engineers/module/module-multicluster.md).
+
+ Name | Description | Type | Required | Default | Immutable 
+ ---- | ----------- | ---- | -------- | ------- | --------- 
+ clusters | Names of the clusters, as `vela cluster list` shows them. The list must contain one or more names. `local` is the control plane. | []string | false |  |  
+ clusterLabelSelector | Cluster labels to match. All labels must match. An empty map `{}` matches every cluster, including `local`. | map[string]string | false |  |  
+ allowEmpty | If true, the install succeeds when no cluster matches. If false, the runtime step fails. | bool | false | false |  
+
+
 ## Statefulset
 
 ### Description
