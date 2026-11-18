@@ -81,7 +81,7 @@ kubectl annotate componentdefinition internal-db -n vela-system \
   definition.oam.dev/restrict-namespaces="vela-system,tenant-*"
 ```
 
-The annotation accepts names and globs only. Restricting by namespace label is `spec.restrictions.namespaceSelector` and nothing else. If both channels name namespaces, the spec wins.
+The annotation accepts names and globs only. Restricting by namespace label is `spec.restrictions.namespaceSelector` and nothing else. If the spec names namespaces or sets a `namespaceSelector`, it replaces the annotation. A spec that holds only a `quota` leaves the annotation in force, so adding a quota never widens who may use the definition.
 
 #### For built-in definitions
 
@@ -103,7 +103,7 @@ definitionRestrictions:
 `default` applies to every built-in definition. An entry under `overrides` replaces the default for the definition it names. Both take the same shape as `spec.restrictions`.
 
 :::warning
-A `default` that excludes `vela-system` breaks addon installation. Addons install their own Applications into `vela-system` using the built-in definitions, so keep `vela-system` in any `default` you set.
+A `default` that excludes the namespace where addon Applications are created breaks addon installation. Addons install their own Applications there using the built-in definitions. That namespace is `vela-system` unless you point the `vela` CLI at another one, so keep it in any `default` you set.
 :::
 
 ### What Users See
@@ -119,7 +119,7 @@ The message does not say which namespaces or labels the restriction allows. Some
 
 ### Behavior to Know About
 
-- Restrictions are checked at admission, not at render time. An Application admitted before a restriction existed keeps reconciling and keeps its workloads, because breaking a running Application over a policy change its author did not make would be the worse failure. Restrictions are also checked on update, so such an Application is frozen: edits to it are rejected until it moves to a namespace the definition allows, or the restriction is changed to allow its namespace.
+- Restrictions are checked at admission, not at render time. An Application admitted before a restriction existed keeps reconciling and keeps its workloads, because breaking a running Application over a policy change its author did not make would be the worse failure. Restrictions are also checked on update, so such an Application is frozen: edits to it are rejected until the restriction is changed to allow its namespace. An Application cannot change namespace, so to use it in another namespace, delete it and create it again there.
 - The restriction is always read from the live definition, never from a `DefinitionRevision`. A pinned `webservice@v1` still renders from its frozen revision, but adding a restriction to `webservice` applies to it immediately, and removing one lifts it immediately.
 - Invalid restrictions are rejected when the definition is written. A glob that `path.Match` rejects or a selector that does not compile fails at write time rather than silently matching nothing.
 
@@ -176,7 +176,7 @@ A namespace that matches no entry has no quota.
 - A pinned version counts against its definition. `webservice@v1` counts as a use of `webservice`.
 - Updating an Application does not count its stored copy alongside the new one, so an Application at the limit can still be edited.
 - Only `ComponentDefinition` and `TraitDefinition` are counted. A quota on a policy, workflow step or source definition is rejected when the definition is written, because a quota that silently does nothing is worse than one that will not apply.
-- The system namespace (`vela-system`) is never subject to a quota. Addons install their own Applications there using these definitions.
+- The system namespaces are never subject to a quota. These are `vela-system`, where addon Applications are created by default, and the namespace the chart is released into, which the controller takes from `--system-definition-namespace`. They are the same namespace unless you release the chart elsewhere. Addons install their own Applications there using these definitions. The exemption covers quota only. Restrictions still apply in those namespaces.
 
 ### What Users See
 
