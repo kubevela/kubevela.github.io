@@ -737,7 +737,7 @@ The Application and the Secret are both in `default`, which is also the release 
 
 #### Multicluster
 
-When the Application has a [topology policy](../policies/references.md#topology), KubeVela installs the Helm release on each target cluster, not on the hub cluster. It reaches the managed cluster through cluster-gateway and acts as the Application's user, as it does for the Application's other resources.
+When the Application has a [topology policy](../policies/references.md#topology), KubeVela installs the Helm release on each selected target cluster. The hub cluster is skipped unless it is one of the targets (for example `clusters: ["local"]`). It reaches the managed cluster through cluster-gateway, as it does for the Application's other resources.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -766,7 +766,7 @@ spec:
 - **Release location.** `helm list -n podinfo` on the managed cluster shows the release. The hub cluster has no release for the component.
 - **Hooks.** A chart hook that sets no namespace goes to the release namespace.
 - **What stays on the hub cluster.** KubeVela reads `valuesFrom` sources and chart credentials (`chart.auth.secretRef`) on the hub cluster, not on the managed cluster. Create those ConfigMaps and Secrets on the hub cluster. When you leave out `namespace`, KubeVela looks in the release namespace on the hub cluster. That namespace usually exists only on the managed cluster. Set `namespace` to the Application's namespace, or the render fails with `ConfigMap <release-namespace>/<name> not found`.
-- **Permissions.** The `helmchart` component installs with the permissions of the Application's user, not the controller's ServiceAccount. When you run the controller with `--authentication-with-user`, that user must have the RBAC for every resource in the chart. See [Underlying Mechanism](../../platform-engineers/auth/advance.md) for the identity flags.
+- **Permissions.** By default the `helmchart` component installs with the controller's own permissions. When application authentication is enabled, it installs with the Application's identity instead. With `--authentication-with-user`, that identity is the Application's user, and the user needs RBAC for every resource in the chart. This includes creating the release namespace, unless you set `options.createNamespace` to `false`. Without that flag, KubeVela uses the identity from `--authentication-default-user`, so grant RBAC to that identity. See [Underlying Mechanism](../../platform-engineers/auth/advance.md) for the identity settings.
 
 :::note
 Before this behavior, a `helmchart` component with a topology policy installed its release on the hub cluster and only the chart's resources reached the managed cluster. After you upgrade, the release is installed on the managed cluster. The old release on the hub cluster is not removed. Remove it with `helm uninstall` on the hub cluster.
