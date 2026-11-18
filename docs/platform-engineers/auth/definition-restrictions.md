@@ -119,7 +119,7 @@ The message does not say which namespaces or labels the restriction allows. Some
 
 ### Behavior to Know About
 
-- Restrictions are checked at admission, not at render time. An Application admitted before a restriction existed keeps reconciling and keeps its workloads, because breaking a running Application over a policy change its author did not make would be the worse failure. Restrictions are also checked on update, so such an Application is frozen: the next edit to it is rejected.
+- Restrictions are checked at admission, not at render time. An Application admitted before a restriction existed keeps reconciling and keeps its workloads, because breaking a running Application over a policy change its author did not make would be the worse failure. Restrictions are also checked on update, so such an Application is frozen: edits to it are rejected until it moves to a namespace the definition allows, or the restriction is changed to allow its namespace.
 - The restriction is always read from the live definition, never from a `DefinitionRevision`. A pinned `webservice@v1` still renders from its frozen revision, but adding a restriction to `webservice` applies to it immediately, and removing one lifts it immediately.
 - Invalid restrictions are rejected when the definition is written. A glob that `path.Match` rejects or a selector that does not compile fails at write time rather than silently matching nothing.
 
@@ -171,7 +171,7 @@ A namespace that matches no entry has no quota.
 
 ### What Is Counted
 
-- Components are counted per definition type. A namespace's count is the number of uses of that definition across all Applications in the namespace.
+- Quota counts uses, not Applications. A namespace's count is the number of uses of that definition across all Applications in the namespace.
 - A trait counts once for each component it is attached to. One trait on two components counts twice, and so do two components of the same type in one Application.
 - A pinned version counts against its definition. `webservice@v1` counts as a use of `webservice`.
 - Updating an Application does not count its stored copy alongside the new one, so an Application at the limit can still be edited.
