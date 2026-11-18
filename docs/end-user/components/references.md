@@ -692,7 +692,7 @@ The rendered chart sees `replicaCount: 5` (from inline), `resources.limits.memor
 
 #### Authenticating with private chart registries
 
-Add `chart.auth.secretRef` to point at a Secret in the vela-core namespace (`vela-system` by default). The Secret type controls how credentials are extracted:
+Add `chart.auth.secretRef` to point at a Secret. When `secretRef.namespace` is not set, KubeVela reads the Secret from the release namespace. The Secret must be in the release namespace or in the Application's namespace. A Secret in any other namespace is refused. For example, a Secret in `vela-system` is refused when the Application and the release are in another namespace. The Secret type controls how credentials are extracted:
 
 | Secret type | Keys read | Use case |
 |---|---|---|
@@ -706,7 +706,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: registry-creds
-  namespace: vela-system
+  namespace: default
 type: kubernetes.io/basic-auth
 stringData:
   username: my-username
@@ -716,6 +716,7 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: private-chart
+  namespace: default
 spec:
   components:
     - name: my-app
@@ -727,13 +728,50 @@ spec:
           auth:
             secretRef:
               name: registry-creds
-              namespace: vela-system
         release:
           name: my-app
           namespace: default
 ```
 
-The same `auth` block works for HTTPS repos (`source` + `repoURL`) and direct `.tgz` URLs. When you rotate the Secret, the cache key updates automatically and the next reconcile pulls a fresh copy of the chart.
+The Application and the Secret are both in `default`, which is also the release namespace, so `secretRef.namespace` can be left out. The same `auth` block works for HTTPS repos (`source` + `repoURL`) and direct `.tgz` URLs. When you rotate the Secret, the cache key updates automatically and the next reconcile pulls a fresh copy of the chart.
+
+#### Multicluster
+
+When the Application has a [topology policy](../policies/references.md#topology), KubeVela installs the Helm release on each target cluster, not on the hub cluster. It reaches the managed cluster through cluster-gateway and acts as the Application's user, as it does for the Application's other resources.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: podinfo-on-worker
+spec:
+  components:
+    - name: podinfo
+      type: helmchart
+      properties:
+        chart:
+          source: podinfo
+          repoURL: https://stefanprodan.github.io/podinfo
+          version: "6.7.1"
+        release:
+          name: podinfo
+          namespace: podinfo
+  policies:
+    - name: topology-worker
+      type: topology
+      properties:
+        clusters: ["cluster-worker"]
+```
+
+- **Release location.** `helm list -n podinfo` on the managed cluster shows the release. The hub cluster has no release for the component.
+- **Hooks.** A chart hook that sets no namespace goes to the release namespace.
+- **What stays on the hub cluster.** KubeVela reads `valuesFrom` sources and chart credentials (`chart.auth.secretRef`) on the hub cluster, not on the managed cluster. Create those ConfigMaps and Secrets on the hub cluster. When you leave out `namespace`, KubeVela looks in the release namespace on the hub cluster. That namespace usually exists only on the managed cluster. Set `namespace` to the Application's namespace, or the render fails with `ConfigMap <release-namespace>/<name> not found`.
+- **Permissions.** The `helmchart` component installs with the permissions of the Application's user, not the controller's ServiceAccount. When you run the controller with `--authentication-with-user`, that user must have the RBAC for every resource in the chart. See [Underlying Mechanism](../../platform-engineers/auth/advance.md) for the identity flags.
+
+:::note
+Before this behavior, a `helmchart` component with a topology policy installed its release on the hub cluster and only the chart's resources reached the managed cluster. After you upgrade, the release is installed on the managed cluster. The old release on the hub cluster is not removed. Remove it with `helm uninstall` on the hub cluster.
+:::
+
 
 ### Specification (helmchart)
 
@@ -864,6 +902,39 @@ The chart cache is in-memory and scoped to the vela-core controller pod. It rese
  ttl | TTL for all versions, overriding the automatic immutable/mutable detection. Set to `"0"` to disable caching entirely. | string | false |  
  immutableTTL | TTL for pinned (immutable) versions such as `1.2.3` or `v2.0.0`. | string | false | "24h" 
  mutableTTL | TTL for floating versions such as `latest`, `dev`, or `-SNAPSHOT`. | string | false | "5m" 
+
+
+#### Cluster-wide cache
+
+The component-level `options.cache` settings apply to one component. An operator can also set cache defaults for the whole cluster. Set them as vela-core chart values, or pass the matching flags to the controller. A value of `0` selects the built-in default.
+
+| vela-core chart value | Controller flag | Default | Description |
+|---|---|---|---|
+| `helmCache.maxBytes` | `--helm-cache-max-bytes` | `268435456` (256MiB) | Maximum size of the chart cache. When the cache is full, KubeVela evicts the least recently used charts. Lower it on controllers with little memory. |
+| `helmCache.sweepInterval` | `--helm-cache-sweep-interval` | `60s` | How often the cache removes expired entries. A very small interval increases lock contention. |
+| `helmCache.immutableTTL` | `--helm-cache-immutable-ttl` | `24h` | Default TTL for pinned (immutable) chart versions. |
+| `helmCache.mutableTTL` | `--helm-cache-mutable-ttl` | `5m` | Default TTL for floating (mutable) chart tags. |
+
+The component's `options.cache` values override the cluster-wide TTLs. The cluster-wide `immutableTTL` and `mutableTTL` apply only to components that do not set their own.
+
+```shell
+helm upgrade kubevela kubevela/vela-core -n vela-system --reuse-values \
+  --set helmCache.maxBytes=134217728 \
+  --set helmCache.mutableTTL=1m
+```
+
+#### Cache metrics
+
+The controller exposes these Prometheus metrics for the chart cache:
+
+| Metric | Type | Description |
+|---|---|---|
+| `kubevela_helm_chart_cache_hits_total` | Counter | Chart fetches served from the cache. |
+| `kubevela_helm_chart_cache_misses_total` | Counter | Chart fetches that missed the cache. The `reason` label is `absent`, `expired`, `evicted` or `corrupt`. |
+| `kubevela_helm_chart_cache_evictions_total` | Counter | Entries removed from the cache. The `reason` label is `capacity`, `ttl`, `delete`, `replace`, `purge` or `unknown`. |
+| `kubevela_helm_chart_cache_bytes` | Gauge | Bytes now stored in the cache. |
+
+A value of `kubevela_helm_chart_cache_bytes` that stays near `helmCache.maxBytes`, together with a rising count of `capacity` evictions, means the charts in use are larger than the cache. Raise `helmCache.maxBytes`.
 
 
 ### Known limitations (helmchart)
