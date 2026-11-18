@@ -4,7 +4,42 @@ title: Built-in Components Type
 
 This documentation will walk through all the built-in component types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2026-04-16T11:50:12+01:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2026-11-17T15:13:44+05:30.
+
+## Addon
+
+### Description
+
+Install an addon as a component; the addon's Application is tracked by this Application.
+
+### Examples (addon)
+
+Requires the `EnableAddonComponent` feature gate. Install or upgrade the chart with
+`--set featureGates.enableAddonComponent=true`. With the gate disabled the
+ComponentDefinition is still installed, but rendering a `type: addon` component fails
+with a message naming the gate.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: comp-fluxcd
+  namespace: vela-system
+spec:
+  components:
+    - name: fluxcd
+      type: addon
+      properties:
+        # addon: fluxcd        # optional, defaults to the component name
+        version: "3.0.2"       # optional, empty means the latest stable version
+        registry: KubeVela     # optional, empty means the configured default registry
+        skipVersionValidation: false
+        properties:            # optional, the addon's own parameters
+          {}
+```
+
+### Specification (addon)
+This capability has no arguments.
 
 ## Cron-Task
 
@@ -919,6 +954,41 @@ spec:
 |  NAME   | DESCRIPTION  |        TYPE          | REQUIRED | DEFAULT |
 |---------|-------------|-----------------------|----------|---------|
 | objects | A slice of Kubernetes resource manifests   | [][Kubernetes-Objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) | true     |         |
+
+## Module
+
+### Description
+
+Install a module: fetch it and render its owned Application.
+
+### Examples (module)
+
+Requires the `EnableModuleComponent` feature gate. Install or upgrade the chart with
+`--set featureGates.enableModuleComponent=true`. With the gate disabled the
+ComponentDefinition is still installed and the `vela/module` package still compiles,
+but no render service is registered, so rendering a `type: module` component fails.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: comp-s3
+  namespace: vela-system
+spec:
+  components:
+    - name: s3
+      type: module
+      properties:
+        # module: s3          # optional, defaults to the component name
+        registry: modules      # optional, empty means the configured default registry
+        version: "1.0.0"       # optional, empty means the latest published version
+        # placement:           # optional, clusters for objects marked runtime
+        #   clusters:
+        #     - spoke
+```
+
+### Specification (module)
+This capability has no arguments.
 
 ## Statefulset
 

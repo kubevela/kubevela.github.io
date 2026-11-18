@@ -47,22 +47,23 @@ make def-install
 
 ## Part 2: Configure Webhook Debugger
 
-### Step 4: Update Debugger Script
+### Step 4: Create Debugger Script
 
-Edit the `setup-webhook-debugger.sh` script and update the kubeconfig location:
+Copy `setup-debugger.sh` from [Debugging KubeVela webhooks](./debugging-kubevela-with-webhook.md#configure-local-webhook-access) into the root of the KubeVela repository and make it executable:
 
 ```bash
-#--- STEP 10: Export KUBECONFIG ------------------------------------------------
-echo "==> STEP 10: Export KUBECONFIG"
-export KUBECONFIG="${HOME}/.kube/hub.yaml"
-echo "Using KUBECONFIG=${KUBECONFIG}"
+chmod +x setup-debugger.sh
 ```
 
 ### Step 5: Run Debugger Setup
 
+Run the script against your hub kubeconfig:
+
 ```bash
-./setup-webhook-debugger.sh
+KUBECONFIG=~/.kube/hub.yaml ./setup-debugger.sh
 ```
+
+In Step 6, include the webhook flags printed by the script (`--use-webhook=true`, `--webhook-port=9445`, and `--webhook-cert-dir=<repo>/k8s-webhook-server/serving-certs`) in your IDE arguments alongside the Cluster Gateway flags below.
 
 ## Part 3: IDE Configuration
 
@@ -83,6 +84,18 @@ Replace the path with the actual location of your hub cluster's kubeconfig file.
 **Why is this needed?**
 
 When the core controller runs in your IDE, it needs to know which cluster to connect to. The KUBECONFIG environment variable tells the controller to use the hub cluster's configuration.
+
+Also add these program arguments to the same run configuration, after the existing ones:
+
+```bash
+--enable-cluster-gateway
+--cluster-gateway-tls-secret=vela-system/kubevela-vela-core-cluster-gateway-tls-v2
+--cluster-gateway-service=vela-system/kubevela-cluster-gateway-service
+```
+
+**Why are these needed?**
+
+vela-core creates the Cluster Gateway serving certificate at startup. It stores the certificate in the Secret named by `--cluster-gateway-tls-secret` and sets the `caBundle` of the `v1alpha1.cluster.core.oam.dev` APIService. When the chart runs vela-core in the cluster, the chart passes these flags. Because you removed the in-cluster controller, your IDE controller must do it. The Secret name is `<release-name>-vela-core-cluster-gateway-tls-v2`, so it is `kubevela-vela-core-...` for the release name `kubevela` used in Step 9.
 
 ### Step 7: Start the IDE in Debug Mode
 
@@ -194,9 +207,12 @@ helm install kubevela ./charts/vela-core \
   --set devLogs=true \
   --create-namespace \
   --namespace vela-system \
-  --wait \
   --debug
 ```
+
+:::caution
+Do not add `--wait`. The Cluster Gateway pod mounts the serving certificate Secret, and your IDE controller creates that Secret when it starts. Until the controller runs, the pod stays in `ContainerCreating`, and `--wait` would time out.
+:::
 
 ### Step 10: Verify Installation
 
@@ -204,7 +220,13 @@ helm install kubevela ./charts/vela-core \
 kubectl get all -n vela-system
 ```
 
-Expected output:
+Once the IDE controller from Step 7 is running, the Cluster Gateway pod starts and the APIService becomes `Available`:
+
+```bash
+kubectl get apiservice v1alpha1.cluster.core.oam.dev
+```
+
+Expected output of `kubectl get all`:
 
 ```
 NAME                                            READY   STATUS    RESTARTS   AGE
@@ -469,6 +491,11 @@ You should see the podinfo pods and related resources running in both clusters, 
 
 - Verify the `KUBECONFIG` environment variable is set correctly in the IDE
 - Check that `hub.yaml` is accessible from the path specified
+
+### Issue: Cluster Gateway pod stays in ContainerCreating
+
+- The pod waits for the `kubevela-vela-core-cluster-gateway-tls-v2` Secret. Start the controller from your IDE.
+- Check that the IDE run configuration has `--enable-cluster-gateway` and `--cluster-gateway-tls-secret`, and that the Secret name matches your Helm release name.
 
 ### Issue: Spoke cluster not reachable
 

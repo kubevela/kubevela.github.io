@@ -306,6 +306,36 @@ module.exports = {
         showLastUpdateTime: true,
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'release-notes',
+        path: 'release-notes',
+        routeBasePath: 'release-notes',
+        sidebarPath: require.resolve('./sidebar-release-notes.js'),
+        editUrl: function ({docPath}) {
+          return `https://github.com/kubevela/kubevela.io/edit/main/release-notes/${docPath}`;
+        },
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'upgrade',
+        path: 'upgrade',
+        routeBasePath: 'upgrade-guides',
+        include: ['**/*.md', '**/*.mdx'],
+        sidebarPath: require.resolve('./sidebar-upgrade.js'),
+        editUrl: function ({docPath}) {
+          return `https://github.com/kubevela/kubevela.io/edit/main/upgrade/${docPath}`;
+        },
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+        remarkPlugins: [require('mdx-mermaid')],
+      },
+    ],
     'docusaurus-plugin-sass',
     require.resolve('docusaurus-plugin-image-zoom'),
     [

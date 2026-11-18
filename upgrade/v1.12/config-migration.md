@@ -4,7 +4,7 @@ title: Migrate Configs to ConfigTemplate and Config
 
 In v1.11 and earlier, the `vela` CLI stored each config template as a `config-template-<name>`
 ConfigMap and each config as a labelled Secret. Since v1.12 they are `ConfigTemplate` and `Config`
-resources, reconciled by the controller; see [Config Template](../../reference/config-template.md).
+resources, reconciled by the controller; see [Config Template](/docs/next/reference/config-template/).
 
 This guide covers upgrading a cluster that has v1.11 configs, moving them to the new resources, and
 rolling back.
@@ -64,7 +64,7 @@ payments-key       legacy                         team-a/api-key 2026-11-06 14:5
 
 New configs and templates you create from now on with the v1.12 CLI, workflow steps or manifests
 are `Config` and `ConfigTemplate` resources. An older CLI still writes v1.11 objects.
-See [the v1.12 upgrade notes](./migration-from-old-version.md) for the behaviour changes to check
+See [the v1.12 upgrade notes](./index.md) for the behaviour changes to check
 before you upgrade.
 
 ## Step 2: Preview the migration
@@ -255,7 +255,7 @@ Opted-out objects keep working as before and are reported as `skipped`.
 
 v1.11 let a config in any namespace use a template from another namespace. Since v1.12, a Config
 may use a namespace-scoped template from another namespace only if its author can `get` that
-template; see [Scope](../../reference/config-template.md#scope-who-may-use-a-template).
+template; see [Scope](/docs/next/reference/config-template/#scope-who-may-use-a-template).
 
 Migration keeps the uses that already exist: the new ConfigTemplate lists them in its
 `config.oam.dev/grandfathered-configs` annotation, and those Configs keep working.

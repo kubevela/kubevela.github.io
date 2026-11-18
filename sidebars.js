@@ -30,6 +30,10 @@ module.exports = {
               label: 'Kubernetes',
               id: 'installation/kubernetes',
             },
+            'platform-engineers/advanced-install',
+            'platform-engineers/system-operation/bootstrap-parameters',
+            'platform-engineers/system-operation/offline-installation',
+            'platform-engineers/system-operation/vela-cli-image',
           ],
         },
         {
@@ -37,6 +41,16 @@ module.exports = {
           id: 'quick-start',
         },
       ],
+    },
+    {
+      type: 'link',
+      label: 'Release Notes',
+      href: '/release-notes/overview/',
+    },
+    {
+      type: 'link',
+      label: 'Upgrade Guides',
+      href: '/upgrade-guides/overview/',
     },
     {
       type: 'category',
@@ -226,25 +240,15 @@ module.exports = {
       label: 'Operator Manual',
       items: [
         {
-          'Advanced Installation': [
-            'platform-engineers/system-operation/bootstrap-parameters',
-            'platform-engineers/advanced-install',
-            'platform-engineers/system-operation/vela-cli-image',
-            'platform-engineers/system-operation/system-info-diagnose',
-          ],
-        },
-        {
           type: 'category',
-          label: 'Production Precautions',
+          label: 'Production Operations',
           collapsed: true,
           items: [
             'platform-engineers/system-operation/performance-finetuning',
             'platform-engineers/system-operation/controller-sharding',
             'platform-engineers/system-operation/controller-grayscale-release',
             'platform-engineers/system-operation/high-availability',
-            'platform-engineers/system-operation/migration-from-old-version',
-            'platform-engineers/system-operation/config-migration',
-            'platform-engineers/system-operation/cue-compatibility-layer',
+            'platform-engineers/system-operation/system-info-diagnose',
           ],
         },
         {
@@ -408,6 +412,7 @@ module.exports = {
             'contributor/non-code-contribute',
             'contributor/code-contribute',
             'contributor/cli-ref-doc',
+            'contributor/vela-core-chart-internals',
             'contributor/fig-auto-complete',
           ],
         },

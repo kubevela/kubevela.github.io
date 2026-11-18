@@ -8,6 +8,8 @@ Preview what policies would do to an Application without applying changes.
 
 Simulates the full policy application using the same code path as the controller. No changes are made to the cluster.
 
+Which policies apply depends on two controller flags. Pass the controller's values with --allow-namespace-global-policies and --allow-skip-global-policies, or the result can differ from the controller's.
+
 ```
 vela policy dry-run [app-name] [flags]
 ```
@@ -40,14 +42,16 @@ vela policy dry-run [app-name] [flags]
 ### Options
 
 ```
-      --details            Include per-policy output details (context, labels, annotations, spec transforms)
-  -e, --env string         specify environment name for application
-  -f, --file string        Path to a local Application YAML file
-  -h, --help               help for dry-run
-  -n, --namespace string   specify the Kubernetes namespace to use
-      --outcome            Include outcome (final spec, labels, annotations and context) in output
-  -o, --output string      Output format: table, summary, json, yaml (default "table")
-  -p, --policy string      Filter output to policies matching a name or glob pattern (e.g. "add-env-*")
+      --allow-namespace-global-policies   Simulate a controller run with --allow-namespace-global-policies
+      --allow-skip-global-policies        Simulate a controller run with --allow-skip-global-policies
+      --details                           Include per-policy output details (context, labels, annotations, spec transforms)
+  -e, --env string                        specify environment name for application
+  -f, --file string                       Path to a local Application YAML file
+  -h, --help                              help for dry-run
+  -n, --namespace string                  specify the Kubernetes namespace to use
+      --outcome                           Include outcome (final spec, labels, annotations and context) in output
+  -o, --output string                     Output format: table, summary, json, yaml (default "table")
+  -p, --policy string                     Filter output to policies matching a name or glob pattern (e.g. "add-env-*")
 ```
 
 ### Options inherited from parent commands
