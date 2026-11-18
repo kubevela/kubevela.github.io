@@ -255,7 +255,7 @@ For non-Helm deployments:
 
 `vela def list`, `vela components` and `vela traits` leave out definitions that the namespace you are working in cannot use. There is no flag to show them. This reduces noise and is not a secrecy boundary: definitions and their restrictions remain readable with `kubectl` for anyone with the RBAC. `vela def get <name>` is unchanged, since hiding something asked for by name reads as a bug rather than a policy.
 
-`vela def list` also looks in a different place by default. With no `--namespace`, it used to list the system namespace. It now looks where a definition is resolved from at render time: the namespace you are working in (`default` if none is set), then the system namespace. `--type`, `--from` and `--namespace` are unchanged, and `--namespace` still scopes the listing to one namespace. To keep the previous behavior in a script, pin it with `-n vela-system`.
+`vela def list` also looks in a different place by default. With no `--namespace`, it used to list the system namespace. It now looks where a definition is resolved from at render time: the namespace you are working in (`default` if none is set), then the system namespace. `--type`, `--from` and `--namespace` are unchanged, and `--namespace` still scopes the listing to one namespace. To keep the previous scope in a script, pin it with `-n vela-system`. The listing is still filtered, so definitions that restrict the namespace you are working in out of use stay hidden. Use `kubectl get componentdefinitions -n vela-system` to see every definition.
 
 ## Related Documentation
 
