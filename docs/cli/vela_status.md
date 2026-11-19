@@ -43,6 +43,7 @@ vela status [flags]
 ```
       --cluster string         filter the endpoints or pods by cluster name
   -c, --component string       filter the endpoints or pods by component name
+      --dependencies           show what each component depends on: dependsOn, inputs, and the components its property expressions read
   -d, --detail                 display more details in the application like input/output data in context. Note that if you want to show the realtime details of application resources, please use it with --tree
       --detail-format string   the format for displaying details, must be used with --detail. Can be one of inline, wide, list, table, raw. (default "inline")
   -p, --endpoint               show all service endpoints of the application
@@ -50,8 +51,9 @@ vela status [flags]
   -h, --help                   help for status
   -m, --metrics                show resource quota and consumption metrics of the application
   -n, --namespace string       specify the Kubernetes namespace to use
-  -o, --output string          raw Application output format. One of: (json, yaml, jsonpath)
+  -o, --output string          output format, also applies to --sources. One of: (json, yaml, jsonpath)
       --pod                    show pod list of the application
+      --sources                show what the application read from its declared sources, and which component, trait or workflow step used each value
   -s, --svc string             service name
   -t, --tree                   display the application resources into tree structure
 ```

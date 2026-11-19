@@ -172,6 +172,11 @@ module.exports = {
             'tutorials/debug-app',
             'tutorials/cloud-shell',
             'tutorials/vela-top',
+            {
+              type: 'category',
+              label: 'AI Agents (vela mcp)',
+              items: ['tutorials/vela-mcp', 'tutorials/vela-mcp-security', 'reference/vela-mcp-tools'],
+            },
             'end-user/workflow/suspending-application-reconciliation',
             {
               type: 'category',
@@ -238,6 +243,7 @@ module.exports = {
             'platform-engineers/system-operation/controller-grayscale-release',
             'platform-engineers/system-operation/high-availability',
             'platform-engineers/system-operation/migration-from-old-version',
+            'platform-engineers/system-operation/config-migration',
             'platform-engineers/system-operation/cue-compatibility-layer',
           ],
         },

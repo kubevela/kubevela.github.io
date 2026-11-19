@@ -16,9 +16,9 @@ $ source <(vela completion bash)
 
 To load completions for every new session, execute once:
 Linux:
-  $ vela completion bash > /etc/bash_completion.d/vela
+  $ vela completion bash &gt; /etc/bash_completion.d/vela
 MacOS:
-  $ vela completion bash > /usr/local/etc/bash_completion.d/vela
+  $ vela completion bash &gt; /usr/local/etc/bash_completion.d/vela
 
 
 ```

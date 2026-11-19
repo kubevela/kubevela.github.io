@@ -41,7 +41,7 @@ If you're contributing code for the first time, work through these in order:
 
 1. Read the CNCF Community [Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md).
 2. Set up your local development environment by following [Run KubeVela Locally](./code-contribute.md#run-kubevela-locally).
-3. Pick up something to work on from the [good first issue](https://github.com/kubevela/kubevela/labels/good%20first%20issue) list.
+3. Pick up something to work on from the [good first issue](https://github.com/kubevela/kubevela/labels/good%20first%20issue) list, comment on the issue to request assignment, and wait for a maintainer to assign it to you before starting work or raising a pull request.
 4. Sign off your commits with `git commit -s`, see [Sign Your Commits (DCO)](./code-contribute.md#sign-your-commits-dco).
 5. Run `make reviewable` before you open the pull request, see [Your first pull request](./code-contribute.md#your-first-pull-request).
 
@@ -67,10 +67,12 @@ The Apache way says "Community Over Code". Although KubeVela is a CNCF/Linux pro
 
 ### Code contribution
 
-Unsure where to begin contributing to KubeVela codebase? Start by browsing issues labeled `good first issue` or `help wanted`.
+Unsure where to begin contributing to KubeVela codebase? Start by browsing issues labeled `good first issue`, `help wanted` or `triage/accepted`.
 
 - [Good first issue](https://github.com/kubevela/kubevela/labels/good%20first%20issue) issues are generally straightforward to complete.
 - [Help wanted](https://github.com/kubevela/kubevela/labels/help%20wanted) issues are problems we would like the community to help us with regardless of complexity.
+- [Triage/accepted](https://github.com/kubevela/kubevela/labels/triage%2Faccepted) issues are ready to be actively worked on.
+- Once you find an issue you want to work on (or after filing a new issue), leave a comment on the issue and get it assigned to you by a maintainer before starting work or raising a pull request. Unless you are a maintainer, a pull request without an assigned issue will not be picked up and may be closed.
 - Refer to [Code Contribution Guide](./code-contribute.md) for more details.
 
 Learn the [Release Process And Cadence](./release-process.md) to know when your code changes will be released.

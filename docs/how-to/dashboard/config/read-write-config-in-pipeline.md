@@ -64,6 +64,35 @@ spec:
       properties:
         name: test
       outputs:
-      - fromKey: config
-        name: read-config
+      - name: read-config
+        valueFrom: output.config
 ```
+
+## How the steps work with Config resources
+
+Since v1.12, the steps work with `Config` resources and still read configs created by v1.11:
+
+- `create-config` creates a `Config` in the Application's namespace, or the `namespace` you give.
+  The Application owns it: it is updated when the step runs again and deleted with the
+  Application. The step waits until the Config is `Available` for the latest change, and fails
+  with the controller's reason if the Config goes to `Error`. For example, the step's message in
+  the Application's status when a Secret of that name already exists:
+
+  ```console
+  failed function call error for deploy: config my-team/db: secret my-team/db already exists and is not owned by this Config
+  ```
+
+- If a v1.11 config of the same name exists, `create-config` adopts it in place, unless another
+  Application manages it, which is refused.
+- `read-config` and `list-config` return Config resources and v1.11 configs, each config once.
+  `read-config` waits for a Config that is not `Available` yet, and fails on one in `Error`.
+- A sensitive config can be written, but never read: `read-config` fails with
+  `the config is sensitive`. See
+  [Sensitive templates](../../../reference/config-template.md#sensitive-templates).
+- `delete-config` deletes the Config. To delete a Config another Application created, delete it
+  through that Application; otherwise that Application creates it again the next time it
+  reconciles.
+- A template from another namespace may be used only as the
+  [Scope](../../../reference/config-template.md#scope-who-may-use-a-template) rules allow. The step
+  checks the Application's user when the `AuthenticateApplication` feature gate is on; with it off,
+  it may use only a template in the Application's namespace or a system template.

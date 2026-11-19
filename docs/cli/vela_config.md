@@ -28,6 +28,7 @@ Manage the configs, such as the terraform provider, image registry, helm reposit
 * [vela config delete](vela_config_delete.md)	 - Delete a config.
 * [vela config distribute](vela_config_distribute.md)	 - Distribute a config
 * [vela config list](vela_config_list.md)	 - List the configs.
+* [vela config migrate](vela_config_migrate.md)	 - Adopt a legacy config into a Config CR.
 
 #### Go Back to [CLI Commands](vela.md) Homepage.
 

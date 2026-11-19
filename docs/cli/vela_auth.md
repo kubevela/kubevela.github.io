@@ -23,6 +23,7 @@ Manage identity and authorizations.
 * [vela auth gen-kubeconfig](vela_auth_gen-kubeconfig.md)	 - Generate kubeconfig for user
 * [vela auth grant-privileges](vela_auth_grant-privileges.md)	 - Grant privileges for user/group/serviceaccount
 * [vela auth list-privileges](vela_auth_list-privileges.md)	 - List privileges for user/group/serviceaccount
+* [vela auth revoke-privileges](vela_auth_revoke-privileges.md)	 - Revoke privileges for user/group/serviceaccount
 
 #### Go Back to [CLI Commands](vela.md) Homepage.
 

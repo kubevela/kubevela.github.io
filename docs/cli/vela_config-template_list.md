@@ -17,9 +17,10 @@ vela config template list [-A]
 ### Options
 
 ```
-  -A, --all-namespaces     If true, check the specified action in all namespaces.
-  -h, --help               help for list
-  -n, --namespace string   specify the namespace of the template (default "vela-system")
+  -A, --all-namespaces       If true, check the specified action in all namespaces.
+      --config-mode string   Show only one backend: legacy (ConfigMaps/Secrets) or crd (ConfigTemplate/Config CRs). Default shows both.
+  -h, --help                 help for list
+  -n, --namespace string     specify the namespace of the template (default "vela-system")
 ```
 
 ### Options inherited from parent commands
