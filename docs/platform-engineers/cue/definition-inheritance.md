@@ -35,7 +35,7 @@ If you start the controller yourself, pass the flag:
 --feature-gates=EnableDefinitionInheritance=true
 ```
 
-When the gate is off, a definition that sets `spec.extends` cannot render. The error names the flag:
+When the gate is off, a definition that sets `spec.extends` is refused when you apply it. The error names the flag:
 
 ```
 definition team-web sets spec.extends: base-web, but definition inheritance is disabled; start the controller with --feature-gates=EnableDefinitionInheritance=true to use it
@@ -198,7 +198,7 @@ A child adds to its parent. It never replaces or changes what the parent renders
 
 ### A child does not change parent fields
 
-A child cannot change a field that the parent already set. This applies to constants, to fields from a parameter with a default, and to fields from a required parameter. Writing the same value again also counts as a change, except for a constant such as `kind: "Deployment"`.
+A child cannot change a field that the parent already set. This applies to constants, to fields from a parameter with a default, and to fields from a required parameter. Writing the same value again counts as a change when the parent's value is a default, whether it comes from a parameter or is written in the template, because writing it would pin the field. Writing the same value as a constant, such as `kind: "Deployment"`, or the same value a required parameter gives at render, is not a change.
 
 In this version of `team-web`, the child tries to set `replicas`, which `base-web` sets from its defaulted `replicas` parameter:
 
@@ -219,7 +219,7 @@ To change a value that the parent sets from a parameter, pass the value through 
 $super: properties: {image: parameter.image, replicas: 3}
 ```
 
-A field that the parent sets to a constant cannot be changed at all. The error tells you to write a separate definition:
+A child cannot change a field that the parent sets to a constant in place. The error tells you to write a separate definition, or, for a field inside one of the parent's outputs, to replace that output (see below):
 
 ```
 component team-web sets output.kind, but base-web fixes it to "Deployment" and a child cannot change it; to use another value, write a definition that does not extend base-web
@@ -293,6 +293,8 @@ outputs: netpol: {
 
 For a trait, use `$inherit: {patchOutputs: {<name>: false}}`.
 
+An output that a child leaves out is the child's own from then on. The parent's markers inside it, such as a `// +final` field, no longer apply to it. To keep an output and everything in it, the parent marks the output `// +required`, so no child can leave it out.
+
 That is all `$inherit` does. These forms are refused:
 
 | Form | Error |
@@ -300,7 +302,10 @@ That is all `$inherit` does. These forms are refused:
 | `$inherit: false` | `` `$inherit: false` is not allowed in <child>: a definition that extends another adds to what its parent renders and cannot replace it `` |
 | `$inherit: {output: false}`, `{patch: false}` | `` `$inherit: {output: false}` is not allowed in <child>: a definition that extends another adds to its parent's output and cannot replace it `` |
 | `$inherit: {outputs: false}`, `{patchOutputs: false}` | `` `$inherit: {outputs: false}` is not allowed in <child>: leave out one output at a time with `$inherit: {outputs: {<name>: false}}` `` |
+| `$inherit: {processing: false}` on a trait | `` `$inherit: {processing: false}` is not allowed in <child>: a definition that extends another adds to its parent's processing and cannot replace it `` |
 | `$inherit: {spec: false}` | `$inherit in <child>: unknown field spec; only outputs and patchOutputs take per-output drops` |
+| `$inherit: {outputs: {[string]: false}}`, or a computed or empty label | `` $inherit in <child>: each entry of outputs must name one output, for example `$inherit: {outputs: {ingress: false}}`; a pattern or computed label names none `` |
+| `$inherit: {patchOutputs: {<name>: false}}` on a component | `$inherit in <child>: a component has no patchOutputs to drop from; only outputs take per-output drops` |
 | `$inherit: {outputs: {svc: "no"}}` | `$inherit in <child>: outputs.svc must be true or false` |
 
 ### Mark fields `+final` and outputs `+required`
@@ -448,6 +453,15 @@ spec:
 
 If `labels-base` patches the label `managed: "true"`, a workload with the `labels-team` trait gets both labels.
 
+### Definition attributes
+
+Fields of the definition other than the template are inherited too. A child that leaves one of these empty gets the parent's:
+
+- ComponentDefinition: `workload`, `podSpecPath`, `revisionLabel` and `childResourceKinds`.
+- TraitDefinition: `appliesToWorkloads`, `conflictsWith`, `workloadRefPath` and `stage`.
+
+The trait flags `podDisruptive`, `revisionEnabled`, `manageWorkload` and `controlPlaneOnly` are on for the child when either the child or the parent turns them on, so a child cannot turn one off. `status` composes as described in [Health and status](#health-and-status).
+
 ## Abstract definitions
 
 Set `spec.abstract: true` on a base that is not complete on its own. An Application cannot use an abstract definition directly, only through a definition that extends it:
@@ -469,7 +483,7 @@ component base-web is abstract and cannot be used directly; name a component tha
 
 ### Chains and the depth limit
 
-A child can be the parent of another definition. Each level passes properties up through `$super` and adds to what the level above renders. A chain can be at most 8 definitions deep.
+A child can be the parent of another definition. Each level passes properties up through `$super` and adds to what the level above renders. A chain can have at most 8 `extends` steps: a definition and up to 8 definitions above it.
 
 A definition cannot extend itself, directly or through other definitions:
 
