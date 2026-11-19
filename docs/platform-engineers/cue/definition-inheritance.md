@@ -225,6 +225,12 @@ A field that the parent sets to a constant cannot be changed at all. The error t
 component team-web sets output.kind, but base-web fixes it to "Deployment" and a child cannot change it; to use another value, write a definition that does not extend base-web
 ```
 
+A default written directly in the parent, with no parameter behind it, such as `strategy: type: *"RollingUpdate" | string`, is treated the same way. No parameter can change it, so there is nothing to pass through `$super`:
+
+```
+component team-web sets output.spec.strategy.type, but base-web sets it to the default "RollingUpdate" and has no parameter for it; to use another value, write a definition that does not extend base-web
+```
+
 When the constant is inside one of the parent's `outputs`, there is a smaller step: leave that output out and write your own, starting from the parent's version if you like. The error says so:
 
 ```
