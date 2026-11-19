@@ -225,6 +225,14 @@ A field that the parent sets to a constant cannot be changed at all. The error t
 component team-web sets output.kind, but base-web fixes it to "Deployment" and a child cannot change it; to use another value, write a definition that does not extend base-web
 ```
 
+When the constant is inside one of the parent's `outputs`, there is a smaller step: leave that output out and write your own, starting from the parent's version if you like. The error says so:
+
+```
+component team-web sets outputs.svc.spec.ports[0].port, but base-web fixes it to 8080; to write your own svc, leave base-web's out with `$inherit: {outputs: {svc: false}}` and build it from `$super.outputs.svc`
+```
+
+If the parent marks that output `// +required`, it cannot be left out, and the error keeps the advice to write a separate definition.
+
 A field that comes from a required parameter, such as the container `image` in `base-web`, is only known when an Application renders. A child that overwrites it is accepted when you apply it. An Application that uses it is refused at render:
 
 ```
