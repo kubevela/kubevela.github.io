@@ -239,7 +239,7 @@ component team-web sets outputs.svc.spec.ports[0].port, but base-web fixes it to
 
 If the parent marks that output `// +required`, it cannot be left out, and the error keeps the advice to write a separate definition.
 
-A field that comes from a required parameter, such as the container `image` in `base-web`, is only known when an Application renders. A child that overwrites it is accepted when you apply it. An Application that uses it is refused at render:
+A field that comes from a required parameter, such as the container `image` in `base-web`, is only known when an Application renders. A child that writes it is accepted when you apply it. At render, an Application whose value differs from the child's is refused; one that gives the same value renders:
 
 ```
 component checkout (type team-web) sets output.spec.template.spec.containers[0].image, which base-web already sets; pass a value to base-web through `$super: properties` instead
@@ -264,12 +264,14 @@ A child that writes that field would work for some Applications and fail for oth
 component team-web sets output.spec.template.spec.containers[0].resources.limits.cpu, which base-web sets only when `if parameter.cpu != _|_`; an Application that meets that condition would be refused. Pass a value to base-web through `$super: properties` instead
 ```
 
-To give the field a value of your own, pass a default up:
+When the condition depends on a parameter, give the field a value of your own by passing a default up:
 
 ```cue
 parameter: cpu: *"250m" | string
 $super: properties: cpu: parameter.cpu
 ```
+
+When the condition depends on something a child cannot pass, such as `context`, write a separate definition instead.
 
 A child can still add fields beside the conditional one, such as `resources: limits: memory`. When the conditional field is filled from a map parameter, such as the annotations of `webservice`, a child can add its own keys to it. Only a key that the Application also passes clashes, and that is refused at render.
 
@@ -455,7 +457,7 @@ If `labels-base` patches the label `managed: "true"`, a workload with the `label
 
 ### Definition attributes
 
-Fields of the definition other than the template are inherited too. A child that leaves one of these empty gets the parent's:
+These fields of the definition are inherited as well. A child that leaves one of them empty gets the parent's:
 
 - ComponentDefinition: `workload`, `podSpecPath`, `revisionLabel` and `childResourceKinds`.
 - TraitDefinition: `appliesToWorkloads`, `conflictsWith`, `workloadRefPath` and `stage`.
