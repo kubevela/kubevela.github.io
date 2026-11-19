@@ -395,7 +395,7 @@ spec:
     cue:
       template: |
         $super: properties: {}
-        patch: metadata: labels: team: "h"
+        patch: metadata: labels: team: "payments"
 ```
 
 If `labels-base` patches the label `managed: "true"`, a workload with the `labels-team` trait gets both labels.
