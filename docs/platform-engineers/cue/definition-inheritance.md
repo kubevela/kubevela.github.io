@@ -604,6 +604,22 @@ func TeamWeb(parent *defkit.ComponentDefinition) *defkit.ComponentDefinition {
 }
 ```
 
+## Upgrade from v1.12.0-alpha.1
+
+v1.12.0-alpha.1 let a child replace what its parent rendered and change fields the parent set. Those forms are gone. A definition that still uses one is refused when you apply it, and an Application that uses it stops rendering. What to use instead:
+
+| alpha.1 form | Replacement |
+|---|---|
+| `$inherit: false` | Leave out single outputs by name, `$inherit: {outputs: {<name>: false}}`. A child that renders something else entirely should be its own definition, without `extends`. |
+| `$inherit: {output: false}`, with the child writing its own main resource | A separate definition. |
+| `$inherit: {outputs: false}` | Name each output: `$inherit: {outputs: {svc: false, netpol: false}}`. |
+| `$inherit: {patch: false}` or `{patchOutputs: false}` on a trait | A separate trait, or single entries: `$inherit: {patchOutputs: {<name>: false}}`. |
+| A child writing a field its parent sets, such as `output: spec: replicas: 5` | When the parent takes it from a parameter, pass it: `$super: properties: {replicas: 5}`. A constant inside an output: leave that output out and build it from `$super.outputs.<name>`. Otherwise a separate definition. |
+| A child writing a field its parent sets only under a condition | Pass a default to the parent through `$super: properties`. |
+| A child `spec.workload` that differs from its parent's | Leave `spec.workload` unset to inherit it. |
+| `// +final` on a field inside a list item | Mark the list field itself. |
+| DefKit `Template.Inherit(false)` and `Template.InheritField(field, false)` | Removed. Use `Template.DropOutput(name)` for a component, `Template.DropPatchOutput(name)` for a trait. New: `Template.RequireOutput(name)` and `Resource.Final(path)`. |
+
 ## Troubleshooting
 
 The errors below come from the admission webhook when you apply a definition or an Application, or from the Application status at render. Names in the messages are from the examples on this page.
