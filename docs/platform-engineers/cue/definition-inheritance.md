@@ -285,6 +285,14 @@ component team-web adds to output.spec.template.spec.securityContext, which base
 
 The child can still add fields next to the final one, such as a label on `metadata`. A definition in the middle of a chain can also mark its own fields `+final`. In a trait, `+final` works the same way on `patch` fields.
 
+`+final` works on fields reached through structs. It cannot be put on a field inside a list item, such as one container's `securityContext`, because the check cannot enforce it there. A definition that does this is refused when you apply it:
+
+```
+component base-web marks output.spec.template.spec.containers[0].securityContext +final, but +final cannot be enforced on a field inside a list item; mark the list field, output.spec.template.spec.containers, instead
+```
+
+To lock something inside the containers, mark the `containers` list itself. That locks the whole list, so children can no longer add to any container, for example an environment variable or a memory limit.
+
 `// +required` on an output means that no child can leave it out with `$inherit`:
 
 ```cue
@@ -571,6 +579,7 @@ The errors below come from the admission webhook when you apply a definition or 
 | `but base-web fixes it to "Deployment" and a child cannot change it` | The child changes a constant the parent sets. | Write a separate definition that does not extend the parent. |
 | `` `$inherit: false` is not allowed ``, `` `$inherit: {output: false}` is not allowed ``, `leave out one output at a time` | The child tries to replace the parent. | Use `$inherit: {outputs: {<name>: false}}` for single outputs, or write a separate definition. |
 | `adds to output.spec.template.spec.securityContext, which base-web marks +final` | The child adds to a `+final` field. | Remove the change. If you need it, ask the parent's owner. |
+| `+final cannot be enforced on a field inside a list item` | The definition marks a field inside a list item `+final`. | Mark the list field itself, or move the field out of the list. |
 | `leaves out outputs.svc, which base-web marks +required` | The child drops a `+required` output. | Keep the output. You can add fields to it. |
 | `leaves out outputs.netpol, which the healthPolicy it inherits from base-web reads` | An inherited status reads the dropped output. | Keep the output, or take over the status (`$inherit: false` for `healthPolicy` and `details`, your own `message` for `customStatus`). |
 | `declares workload apps/v1 StatefulSet, but base-web declares apps/v1 Deployment` (or `renders`) | The child declares a different workload. | Leave `spec.workload` unset. |
