@@ -579,7 +579,7 @@ The errors below come from the admission webhook when you apply a definition or 
 | `but base-web fixes it to "Deployment" and a child cannot change it` | The child changes a constant the parent sets. | Write a separate definition that does not extend the parent. |
 | `` `$inherit: false` is not allowed ``, `` `$inherit: {output: false}` is not allowed ``, `leave out one output at a time` | The child tries to replace the parent. | Use `$inherit: {outputs: {<name>: false}}` for single outputs, or write a separate definition. |
 | `adds to output.spec.template.spec.securityContext, which base-web marks +final` | The child adds to a `+final` field. | Remove the change. If you need it, ask the parent's owner. |
-| `+final cannot be enforced on a field inside a list item` | The definition marks a field inside a list item `+final`. | Mark the list field itself, or move the field out of the list. |
+| `+final cannot be enforced on a field inside a list item` | The definition marks a field inside a list item `+final`. | Mark the list field itself. That locks the whole list. |
 | `leaves out outputs.svc, which base-web marks +required` | The child drops a `+required` output. | Keep the output. You can add fields to it. |
 | `leaves out outputs.netpol, which the healthPolicy it inherits from base-web reads` | An inherited status reads the dropped output. | Keep the output, or take over the status (`$inherit: false` for `healthPolicy` and `details`, your own `message` for `customStatus`). |
 | `declares workload apps/v1 StatefulSet, but base-web declares apps/v1 Deployment` (or `renders`) | The child declares a different workload. | Leave `spec.workload` unset. |
