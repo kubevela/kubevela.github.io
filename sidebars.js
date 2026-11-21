@@ -245,6 +245,7 @@ module.exports = {
             'platform-engineers/system-operation/migration-from-old-version',
             'platform-engineers/system-operation/config-migration',
             'platform-engineers/system-operation/cue-compatibility-layer',
+            'platform-engineers/system-operation/workflow-http-protection',
           ],
         },
         {
