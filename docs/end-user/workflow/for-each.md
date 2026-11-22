@@ -55,6 +55,10 @@ difference is in the status: the loop is one step, `scale`, with its items, `sca
 step's parameters, the same way [inputs and outputs](./inputs-outputs.md) pass data
 between any two steps. The step's definition needs no change to be looped.
 
+`forEach` is new in v1.12 and has no feature gate: it needs only the v1.12 CRDs (see
+[Upgrading](#upgrading)). A WorkflowRun needs the vela-workflow release that ships with
+v1.12.
+
 :::note
 `scale-component` and `announce-endpoints` on this page stand for step definitions of
 your own. The other step types are KubeVela's built-ins.
@@ -75,7 +79,9 @@ variable.
 
 ### From a source
 
-Where property expressions are enabled for the Application, `items` can be a single
+Where expressions are turned on (the `EnableCelExpressions` feature gate, and the
+`app.oam.dev/cel-expressions: "true"` annotation on the Application while the platform
+requires opt-in with `RequireCelExpressionOptIn`, the default), `items` can be a single
 expression that reads a source or an earlier step's output:
 
 ```yaml
@@ -90,7 +96,7 @@ spec:
       - name: deploy
         type: apply-component
         forEach:
-          items: '$(source.targets.data.clusters.split(","))'
+          items: '$(has(source.targets.data.clusters) ? source.targets.data.clusters.split(",") : [])'
         properties:
           component: web
         inputs:
@@ -98,17 +104,23 @@ spec:
             parameterKey: cluster
 ```
 
+A ConfigMap key may be missing, so the read needs a `has()` guard and a fallback;
+without one, the Application is refused with `source.targets.data.clusters may be absent
+and feeds forEach.items`.
+
 The expression is resolved once, when the loop starts, and the list is then fixed for
 the run (see below). It can read a source or an earlier step's output,
 `$(steps.discover.outputs.clusters)`; until what it reads is ready, the loop waits.
 Where admission knows the type, a source field for instance, an expression that is not
-a list is refused when you apply. Expressions can also sit inside a literal list, one
-per item: `items: ["$(source.region.primary)", "eu-west-1"]`.
+a list is refused when you apply. `items` is either a list or one expression on its
+own: text around an expression, or two expressions, would resolve to a string. Expressions
+can also sit inside a literal list, one per item:
+`items: ["$(source.region.primary)", "eu-west-1"]`.
 
 A WorkflowRun takes an expression in `items` too, when it is annotated
 `workflowrun.oam.dev/cel-expressions: "true"` and the workflow controller runs with
-`EnableCelExpressions`. It reads `steps` and `context`, since `source` belongs to
-KubeVela; see Standalone WorkflowRun in Expressions in Workflow Steps.
+`EnableCelExpressions` (off by default). It reads `steps` and `context`, since `source`
+belongs to KubeVela.
 
 ### The list is fixed when the loop starts
 
@@ -209,7 +221,8 @@ are [collected into lists](#outputs). The group's own `inputs` are waited on bef
 loop starts, as for any group.
 
 A sub-step's `dependsOn` naming another sub-step means the one in the same item. Only
-top-level steps can have `forEach`; a sub-step cannot loop on its own.
+top-level steps can have `forEach`. On a sub-step the field is not part of the schema, so
+the API server drops it without an error and the sub-step runs once.
 
 ## Order and failure {#order-and-failure}
 
@@ -231,8 +244,7 @@ group, give a sub-step an `if` that reads `each` (see
 With the `EnableSuspendOnFailure` gate on, no step evaluates its `if`, sub-steps included,
 so filtering a loop with `if` leaves nothing out: every item runs, with no error.
 Filtering the list stays reliable, either before the loop or in `items` itself, which is
-not an `if`: `items: '$(source.x.items.filter(i, i.enabled))'`. See Conditions in Expressions in
-Workflow Steps.
+not an `if`: `items: '$(source.x.items.filter(i, i.enabled))'`.
 :::
 
 ## Restarting
@@ -247,7 +259,7 @@ vela workflow restart <app> --step deploy-1
 |---|---|
 | a failed item, `StepByStep` | that item and every item after it, with the same items as before |
 | a failed item, `DAG` | only that item |
-| a failed sub-step of an item in a looped group | that sub-step and the sub-steps that depend on it. The item's succeeded sub-steps are kept: restarting `rollout-1-verify` keeps `rollout-1-deploy` |
+| a failed sub-step of an item in a looped group | that sub-step and what runs after it: its dependents in a `DAG` group, the later sub-steps in a `StepByStep` one. The item's other succeeded sub-steps are kept: restarting `rollout-1-verify` keeps `rollout-1-deploy` |
 | the failed looped step itself | the whole loop, which reads the list again, so a `from` list or a source may give different items. This is the one exception to [the list being fixed](#the-list-is-fixed-when-the-loop-starts) for a run |
 
 In every case the steps after the loop run again as usual. Only a failed item (in a
@@ -268,8 +280,8 @@ No other step may have a name the loop could generate; that is refused at admiss
 ### Naming items by a key {#key}
 
 By default an item's steps are named by its position. Give `key` to name them by the
-item's own values instead, so the status says which item is which. The example reads the item with `$(each.item...)`, which needs
-expressions turned on; without them, pass the same fields with `inputs` as in
+item's own values instead, so the status says which item is which. The example reads
+the item with `$(each.item...)`, which needs expressions turned on; without them, pass the same fields with `inputs` as in
 [Reading the current item](#reading-the-current-item):
 
 ```yaml
@@ -401,24 +413,36 @@ value `workflow.step.forEachMaxItems`.
 
 ## Upgrading {#upgrading}
 
-`forEach` is a new field in the Application, Workflow and WorkflowRun CRDs. Helm does not
-upgrade CRDs, so apply the new ones before relying on it. Against an older CRD the API
-server drops `forEach` without an error. A step reading `each.item` through `inputs`
-then waits, pending on `Pending on Input: each.item`; one that reads nothing from the
-loop runs once.
+`forEach` is a new field in the Application, ApplicationRevision, Workflow and
+WorkflowRun CRDs. Helm does not upgrade CRDs, so apply the new ones before relying on it:
+
+```bash
+helm show crds kubevela/vela-core --version 1.12.0 | kubectl apply --server-side --force-conflicts -f -
+```
+
+Against an older CRD the API server drops `forEach` without an error. A step reading
+`each.item` through `inputs` then waits, pending on `Pending on Input: each.item`; one
+that reads nothing from the loop runs once. vela-core logs a warning at startup when the
+installed Application or Workflow CRD lacks the field: `does not declare forEach on
+workflow steps, so the API server drops it and a looped step runs once`.
 
 ## When something is wrong
 
 | Message | Means |
 |---|---|
 | `needs exactly one of items and from` | give the list one way, not both or neither |
-| `forEach.mode: supported values: "StepByStep", "DAG"` | the modes are `StepByStep` and `DAG`, in that case |
+| `supported values: "StepByStep", "DAG"` on `forEach.mode` | the modes are `StepByStep` and `DAG`, in that case |
 | `must be a list` | `items` is an object, `null`, or a plain string. For `from`, the variable holds one of those |
-| `a $( ) expression here needs expressions turned on` | turn on `EnableCelExpressions` and annotate the Application (`app.oam.dev/cel-expressions`) or WorkflowRun (`workflowrun.oam.dev/cel-expressions`) |
+| `a $( ) expression here needs expressions turned on` | turn on `EnableCelExpressions`, and annotate the Application (`app.oam.dev/cel-expressions`) while `RequireCelExpressionOptIn` is on, or the WorkflowRun (`workflowrun.oam.dev/cel-expressions`) |
+| `must be a list or one $( ) expression that resolves to one` | `items` has text around an expression, or two expressions. Use one expression on its own, or a list |
+| `may be absent and feeds forEach.items; guard it with has(...)` | the expression reads a field that may be missing, such as a ConfigMap key. Guard it: `has(x) ? x : []` |
 | `was not resolved; $( ) expressions are not turned on for this workflow` | the same, caught when the loop runs |
 | `type mismatch: expression ... is string but forEach.items expects list` | the source field is not a list. Check `vela def show <source-type>` |
 | `over the limit of 50` | split the list, or raise `workflow.step.forEachMaxItems` |
 | `clashes with the names forEach step ... generates` | rename the other step |
+| `is named like the passes of forEach step ...` | a looped step is named like another loop's items, such as `scale-0` beside a loop `scale`. Rename it |
+| `clashes with the variables forEach step ... keeps for its passes` | an output elsewhere is named like one of the loop's per-item variables. Rename the output |
+| `is not a path into the item` | a `key` path is empty or malformed, such as `spec.` |
 | `items 0 and 1 have the same key "..."` | the key fields do not tell those items apart. Add a field to `key` |
 | `items 0 and 1 both name a step ...` | a key and a sub-step name join into another item's step name. Rename the sub-step or change the key |
 | `item 0: key <path> must be a string or an integer, got ...` | a key field holds a float, a bool, an object or a list |
