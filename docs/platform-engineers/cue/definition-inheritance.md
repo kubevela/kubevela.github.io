@@ -43,6 +43,14 @@ definition team-web sets spec.extends: base-web, but definition inheritance is d
 
 See [Bootstrap Parameters](../system-operation/bootstrap-parameters.md) for the other feature gates.
 
+:::note
+If you upgraded from v1.11, apply the v1.12 CRDs first (see [Migrate from Old Versions](../system-operation/migration-from-old-version.md#from-v111x-to-v112x)). Helm does not update a chart's CRDs, and the v1.11 `ComponentDefinition` and `TraitDefinition` CRDs have no `extends` or `abstract` field. With the old CRDs the API server drops `spec.extends` and `spec.abstract` without an error, and the child then fails with an unrelated workload or compile error.
+:::
+
+:::caution
+A v1.11 controller does not understand `spec.extends`. Before you roll back to v1.11, remove the Applications that use a definition that extends another.
+:::
+
 ## Write a child definition
 
 This parent renders a `Deployment`, a `Service` and a `NetworkPolicy`. It takes an `image` (required) and `replicas` (default `1`):
@@ -130,7 +138,7 @@ The child does not set `spec.workload`. It inherits the parent's workload.
 
 `$super: properties` is what the parent receives. It works like the `properties` of a component in an Application:
 
-- KubeVela checks it against the parent's `parameter` schema. A value of the wrong type is refused. A field that the parent does not declare gives a warning, because it is usually a typo.
+- KubeVela checks it against the parent's `parameter` schema. A value of the wrong type is refused. A field that the parent does not declare gives a warning, because it is usually a typo. There is no warning when the parent's `parameter` is open (`...`) or when the child forwards `parameter` whole.
 - You must pass every parameter that the parent requires and that has no default. In the example, `base-web` requires `image`, so `team-web` passes it.
 - You can pass fixed values, such as `replicas: 2`, or values from the child's own parameters, such as `image: parameter.image`.
 - `$super: properties` can read `parameter` and `context` only. See [Read what the parent rendered](#read-what-the-parent-rendered) for the reason.
@@ -149,6 +157,12 @@ $super: properties: parameter
 A child does not inherit its parent's parameters. The child's own `parameter` block is the complete list of what an Application user can set, and it is what KubeVela validates the Application against. A parent parameter that the child does not expose and does not pass keeps its default.
 
 In the example, `team-web` publishes `image` (now with a default) and `tenant`. An Application user cannot set `replicas`, because `team-web` fixes it to `2`.
+
+A parameter that the child publishes but neither passes to the parent nor uses itself does nothing, so KubeVela warns about it:
+
+```
+component team-web publishes "region", which is neither passed to base-web nor used by team-web itself, so setting it on a component will do nothing. Forward it in `$super: properties: {...}`, or leave it out of the `parameter` block if this definition decides it on its users' behalf
+```
 
 ### Add to what the parent renders
 
@@ -299,7 +313,7 @@ An output that a child leaves out is the child's own from then on. The parent's 
 
 That is all `$inherit` does. These forms are refused:
 
-| Form | Error |
+| Form | Error contains |
 |---|---|
 | `$inherit: false` | `` `$inherit: false` is not allowed in <child>: a definition that extends another adds to what its parent renders and cannot replace it `` |
 | `$inherit: {output: false}`, `{patch: false}` | `` `$inherit: {output: false}` is not allowed in <child>: a definition that extends another adds to its parent's output and cannot replace it `` |
@@ -432,6 +446,8 @@ A parameter that only had its default can be set one time, as for any `+immutabl
 
 KubeVela checks every rule when you apply a definition and again when an Application renders it. The render check catches a parent that changed after the child was applied, such as a newly added `+final` marker. An Application that would break a rule is refused by the admission webhook, and an existing Application reports the error in its status.
 
+`abstract` is the exception: only the admission webhook checks it, so nothing checks it when the webhook is disabled. See [Abstract definitions](#abstract-definitions).
+
 ## Traits that extend traits
 
 A `TraitDefinition` can extend another `TraitDefinition`. The child's `patch`, `patchOutputs`, `outputs` and `processing` merge onto the parent's, with the same rules as for components:
@@ -481,6 +497,8 @@ component base-web is abstract and cannot be used directly; name a component tha
 
 `abstract` is not inherited. A child of an abstract definition can be used, unless the child also sets `abstract: true`. Both component and trait definitions can be abstract.
 
+The admission webhook checks `abstract` when an Application is created or updated. An Application that already used the definition before it was marked abstract keeps rendering until it is next updated.
+
 ## Chains, revisions and namespaces
 
 ### Chains and the depth limit
@@ -502,7 +520,7 @@ spec:
   extends: base-web@v1
 ```
 
-The revision must exist as a `DefinitionRevision`. The controller keeps a limited number of definition revisions (the `definition-revision-limit` [bootstrap parameter](../system-operation/bootstrap-parameters.md), default `2`). Pin only a revision that the controller still keeps.
+The revision must exist as a `DefinitionRevision`. The controller keeps a limited number of definition revisions (the `definition-revision-limit` [bootstrap parameter](../system-operation/bootstrap-parameters.md), default `2` in the Helm chart). Pin only a revision that the controller still keeps.
 
 ### Application revisions
 
@@ -590,7 +608,7 @@ The component is healthy when the parent's health check passes, and its status m
 
 ## Write inheritance with DefKit
 
-If you write definitions in Go with [DefKit](../defkit/overview.md), these methods produce the same CUE:
+If you write definitions in Go with [DefKit](../defkit/overview.md), these methods produce the CUE above:
 
 | CUE | DefKit |
 |---|---|
@@ -602,6 +620,8 @@ If you write definitions in Go with [DefKit](../defkit/overview.md), these metho
 | `// +required` on an output | `tpl.RequireOutput("svc")` |
 | `// +final` on a field | `Resource.Final("spec.template.spec.securityContext")` |
 | `$super.output.<path>`, `$super.outputs.<name>.<path>`, `$super.patch.<path>` | `defkit.SuperOutput(path)`, `defkit.SuperOutputs(name, path)`, `defkit.SuperPatch(path)` |
+
+A child similar to `team-web`, written with DefKit. It is cut down to show the methods, so it renders less than the CUE `team-web` above:
 
 ```go
 func TeamWeb(parent *defkit.ComponentDefinition) *defkit.ComponentDefinition {
