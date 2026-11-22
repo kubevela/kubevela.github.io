@@ -208,14 +208,14 @@ Inside the CUE template, the `context` object provides read access to the curren
 | `context.appPolicies` | Application policies array |
 | `context.appName` | Application name (same as `context.name`) |
 | `context.appRevision` | The Application revision being rendered |
-| `context.publishVersion` | The Application's `app.oam.dev/publishVersion`, if set |
+| `context.publishVersion` | Always empty in a policy render: a policy is not given the Application's `app.oam.dev/publishVersion` |
 | `context.policyName` | Name of the currently executing policy instance |
 | `context.policyType` | The policy's type, as written in `spec.policies` or the global's name |
 | `context.policyRevision` | Policy definition revision number (if versioned) |
 | `context.policyRevisionName` | Policy DefinitionRevision resource name (if versioned) |
 | `context.policyRevisionHash` | Policy template content hash (if versioned) |
 
-`context.appLabels` and `context.appAnnotations` leave out keys with internal prefixes (`app.oam.dev/`, `oam.dev/`, `owner.oam.dev/`, `modules.oam.dev/`, `kubernetes.io/`, `k8s.io/`, `kubectl.kubernetes.io/`, `app.kubernetes.io/`, `helm.sh/`), so a policy cannot read or key off KubeVela's own bookkeeping. Annotations an author sets, such as `policy.oam.dev/*` and `filter.oam.dev/*`, are visible.
+`context.appLabels` and `context.appAnnotations` leave out keys with internal prefixes (`app.oam.dev/`, `oam.dev/`, `kubernetes.io/`, `k8s.io/`, `kubectl.kubernetes.io/`, `app.kubernetes.io/`, `helm.sh/`), so a policy cannot read or key off KubeVela's own bookkeeping. Annotations an author sets, such as `policy.oam.dev/*` and `filter.oam.dev/*`, are visible.
 
 The PolicyDefinition webhook refuses a template that reads a `context` field a policy render does not supply, such as a misspelt `context.namesapce`. A field that does not exist would fail the render of every Application the policy applies to.
 
