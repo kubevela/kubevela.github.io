@@ -35,7 +35,7 @@ Make sure you've learned the basic knowledge about [Definition Concept](../../ge
 
 When KubeVela reconciles an Application, Application-scoped policies run as a **pre-flight step** before the Application is revisioned and deployed. Each policy renders a CUE template and applies its `output` to the Application specification before it is processed.
 
-Global policies always run before explicit policies. Global policies execute in ascending priority order (lower value first), with alphabetical name as the tiebreaker for determinism. Explicit policies run after all global policies have completed, in the order they are declared in `spec.policies`.
+Policies run in ascending `priority`, lower first. An explicit policy in `spec.policies` has priority `0`. At the same priority, global policies run before explicit ones: globals in alphabetical order by name, explicit policies in the order `spec.policies` lists them. So a global policy with a priority above `0` runs after the explicit policies, and one with a negative priority runs before them.
 
 ## Creating an Application-Scoped PolicyDefinition
 
@@ -88,6 +88,12 @@ template: {
     }
   }
 }
+```
+
+Note that the value of `scope` is case-sensitive. A misspelt scope would never render, so from v1.11.1 the PolicyDefinition webhook refuses anything else:
+
+```
+unknown scope "application": a PolicyDefinition's scope is empty or "Application" (requestUID=...)
 ```
 
 Apply it to the cluster:
@@ -270,7 +276,7 @@ Workflow steps can then reference `context.custom.tenant` to drive tenant-specif
 
 A **global policy** is evaluated against every Application without developers declaring it in `spec.policies`. Whether it applies to a given Application is still controlled by `config.enabled` in the CUE template, so global policies can be selective. This is the primary way platform teams enforce organisation-wide standards.
 
-To make a policy global, add `global: true` to the definition attributes and apply the definition to `vela-system`:
+To make a policy global, add `global: true` to the definition attributes and apply the definition to `vela-system`.:
 
 ```cue
 "platform-labels": {
@@ -301,6 +307,8 @@ Apply it to `vela-system`, where it is considered for every Application in the c
 vela def apply platform-labels.cue -n vela-system
 ```
 
+A global policy cannot also be listed in `spec.policies`: the Application fails to reconcile with `policy '<name>' is marked as Global and cannot be explicitly referenced in Application spec`. The PolicyDefinition webhook refuses a global policy with a required parameter or a `scope` other than `Application`, and warns when its `priority` is unset (`0`) or above `9999`.
+
 Two controller flags decide how far a platform's global policies reach. Both are on by default in KubeVela 1.11, which keeps global policies as they have always behaved. An operator can turn either off to tighten them:
 
 | Chart value (controller flag) | On (default) | Off |
@@ -312,7 +320,7 @@ When you change a global policy later, how that change reaches Applications that
 
 ### Priority
 
-When multiple global policies apply, `priority` controls execution order. **Lower values run first** (priority `1` runs before priority `100`). Policies with the same priority execute alphabetically by name.
+When multiple global policies apply, `priority` controls execution order. **Lower values run first** (priority `1` runs before priority `100`). Policies with the same priority execute alphabetically by name. Explicit policies sit at priority `0`, so every global with a positive priority runs after them; give a global a negative priority to run it before the explicit policies, so that they can build on what it sets.
 
 Policies execute in a chain: each policy receives the Application as it was left by the previous policy. This means `output.labels` and `output.annotations` accumulate across policies, while `output.components`, `output.workflow`, and `output.policies` set by an earlier policy will be what later policies see in `context.appComponents`, `context.appWorkflow`, and `context.appPolicies`.
 
@@ -327,7 +335,7 @@ This allows policies to be stacked and composed, but platform teams must be deli
   attributes: {
     scope:    "Application"
     global:   true
-    priority: 1   // Runs first: establishes the security baseline
+    priority: 1   // Runs first among the globals: establishes the security baseline
   }
   description: "Enforce security annotations on all Applications."
   type: "policy"
@@ -549,7 +557,7 @@ template: {
 A failed call fails the policy's render. For a global policy, the Applications it covers deploy without it by default, or are held if global policies are mandatory (see [Mandatory Global Policies](#mandatory-global-policies)); for an explicit policy it fails the Application's reconcile. A slow call delays reconciliation for every Application the policy applies to. Make sure the endpoint or resource is highly available, and use `config.enabled` to restrict the policy to the Applications where the call is expected to succeed.
 :::
 
-KubeVela caches policy results, so CueX actions are not re-evaluated on every reconcile. A policy is rendered again when the Application changes or the cache entry expires (after one minute). A changed result is a data change, which reaches running Applications as described in [Rolling Out Policy Changes](./policy-rollout.md#data-changes).
+KubeVela caches policy results, so CueX actions are not re-evaluated on every reconcile. A policy is rendered again when the Application changes, its PolicyDefinition changes, the Application's `publishVersion` moves, a label or annotation the template reads changes, or the cache entry expires (after one minute). A changed result is a data change, which reaches running Applications as described in [Rolling Out Policy Changes](./policy-rollout.md#data-changes).
 
 ## Opting Out of Global Policies
 
@@ -599,7 +607,7 @@ vela policy view my-app
 +---+----------------+----------------+-------------+----------+---------+
 | # |     POLICY     |      TYPE      |  NAMESPACE  |  SOURCE  | ENABLED |
 +---+----------------+----------------+-------------+----------+---------+
-| 1 | platform-labels| platform-labels| vela-system | global   | Yes     |
+| 1 | platform-labels | platform-labels | vela-system | global   | Yes     |
 | 2 | team-labels    | add-team-labels| default     | explicit | Yes     |
 +---+----------------+----------------+-------------+----------+---------+
 ```
@@ -648,7 +656,7 @@ Which global policies apply depends on the controller's `--allow-namespace-globa
 
 Application-scoped policies support [definition versioning](../x-def-version.md). Each ApplicationRevision records the PolicyDefinition versions it was rendered with. A new revision (an Application spec change, its first deployment, or a `publishVersion` bump) takes the latest versions. Between revisions, whether a running Application adopts a new version is decided by its [rollout settings](./policy-rollout.md#new-policy-versions); with the defaults, it keeps the recorded version and reports the newer one as pending.
 
-For production use cases, pin explicit policies to a specific version with the `@version` suffix. `@v2` names the DefinitionRevision `add-team-labels-v2` when one exists; for a definition with semantic versions (`spec.version`), it resolves to the newest `2.x`, so pin the full version (`@v2.1.0`) to hold it. A policy pinned to an exact DefinitionRevision is not changed by updates to its PolicyDefinition:
+For production use cases, pin explicit policies to a specific version with the `@version` suffix. `@v2` names the DefinitionRevision `add-team-labels-v2`. For a definition with semantic versions (`spec.version`), name the full version (`@v2.1.0`): `@v2` resolves to the newest `2.x` only on an Application annotated `app.oam.dev/autoUpdate: "true"`. A policy pinned to an exact DefinitionRevision is not changed by updates to its PolicyDefinition:
 
 ```yaml
 policies:
