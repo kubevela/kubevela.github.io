@@ -2,7 +2,7 @@
 title: Overview
 ---
 
-These following out-of-box addons are all verified and maintained by KubeVela community registry (https://addons.kubevela.net).
+These following out-of-box addons are all verified and maintained by KubeVela community registry (https://kubevela.github.io/catalog/official).
 
 :::tip
 Source code of this addon are all here: https://github.com/kubevela/catalog/tree/master/addons .
