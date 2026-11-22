@@ -214,7 +214,7 @@ Inside the CUE template, the `context` object provides read access to the curren
 | `context.appPolicies` | Application policies array |
 | `context.appName` | Application name (same as `context.name`) |
 | `context.appRevision` | The Application revision being rendered |
-| `context.publishVersion` | Always empty in a policy render: a policy is not given the Application's `app.oam.dev/publishVersion` |
+| `context.publishVersion` | The Application's `app.oam.dev/publishVersion` annotation, as components see it (empty when it is not set) |
 | `context.policyName` | Name of the currently executing policy instance |
 | `context.policyType` | The policy's type, as written in `spec.policies` or the global's name |
 | `context.policyRevision` | Policy definition revision number (if versioned) |
