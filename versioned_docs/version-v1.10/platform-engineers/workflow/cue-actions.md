@@ -187,7 +187,7 @@ Send HTTP request to the specified URL.
 	url: string
 	// +usage=The request config
 	request?: {
-		// +usage=The timeout of this request
+		// +usage=The timeout of this request, greater than 0 and at most the controller's maximum (60s by default); 3s when unset
 		timeout?: string
 		// +usage=The request body
 		body?: string
@@ -201,8 +201,11 @@ Send HTTP request to the specified URL.
 			period: string
 		}
 	}
-	// +usgae=The tls config of the request
-	tls_config?: secret: string
+	// +usage=The tls config of the request
+	tls_config?: {
+		secret:     string
+		namespace?: string
+	}
 	// +usage=The response of the request will be filled in this field after the action is executed
 	response: {
 		// +usage=The body of the response
@@ -217,6 +220,10 @@ Send HTTP request to the specified URL.
 }
 
 ```
+
+From v1.10.10, the request is bounded and checked like every outbound request from vela-core: an unset `timeout` is 3s, a `timeout` must be greater than 0 and at most `workflow.http.maxTimeout` (`60s` by default), a response body over `workflow.http.maxResponseBytes` (1 MiB by default) fails the step, and cloud metadata, link-local and loopback destinations are refused. See [Outbound HTTP Protection](../system-operation/workflow-http-protection.md).
+
+`tls_config.secret` names a Secret with `ca.crt`, or `client.crt` and `client.key`, or all three. From v1.10.10 it's read from the step's namespace (the Application's) by default; a Secret in another namespace, given as `tls_config.namespace` or as `<namespace>/<name>`, is read only if the user the Application runs as may get it.
 
 **Example**
 
