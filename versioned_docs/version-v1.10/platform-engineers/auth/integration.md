@@ -141,4 +141,13 @@ Dispatch: Found 1 errors. [(cannot get object: deployments.apps "nginx-server" i
 
 ## Impersonate as User/Groups
 
-If you would like to let the application to impersonate as specific user and group, you can set the annotation `app.oam.dev/username` and `app.oam.dev/group` in the application respectively. 
+If you would like to let the application to impersonate as specific user and group, you can set the annotation `app.oam.dev/username` and `app.oam.dev/group` in the application respectively.
+
+:::note
+These annotations are yours to set only while the `AuthenticateApplication` feature gate is off. With it on, the admission webhook decides who the Application runs as:
+
+- with `authentication.withUser=true`, it overwrites `app.oam.dev/username` with the user who applied the Application;
+- with `authentication.withUser=false`, from v1.10.10, a hand-written `app.oam.dev/username` or `app.oam.dev/service-account-name` is ignored, and the Application runs as `authentication.defaultUser`.
+
+See [Underlying Mechanism](./advance.md).
+::: 
