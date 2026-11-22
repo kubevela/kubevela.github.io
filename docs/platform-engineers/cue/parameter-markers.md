@@ -12,6 +12,8 @@ KubeVela supports special comment markers in CUE `parameter` blocks that control
 | `// +short=<alias>` | Any field | Provides a short alias for the field name |
 | `// +immutable` | Any field | Prevents the field from being changed or removed after the Application is first created |
 
+Definitions that extend another definition have two more markers, `// +final` on a field and `// +required` on an output. See [Definition Inheritance](./definition-inheritance.md#mark-fields-final-and-outputs-required).
+
 ## The `+usage` Marker
 
 The `// +usage=<description>` marker sets the human-readable description for a parameter field. This description is shown in the output of `vela show` and in the VelaUX UI.
