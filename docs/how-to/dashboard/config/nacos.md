@@ -212,7 +212,8 @@ How the controller keeps Nacos in step (v1.12+):
   The Config stays `Available`, because its Secret is in place.
 - A `nacos` block without `group` publishes to `DEFAULT_GROUP`.
 - It does not watch Nacos. Content changed directly in Nacos stays as it is until the Config's
-  content or endpoint changes; to restore it, change the Config (for example, add an annotation).
+  rendered content or its endpoint config changes. A change that leaves both the same, such as an
+  annotation, does not publish again.
 - Deleting the Config does not delete the content from Nacos.
 
 See [Config Template](../../../reference/config-template.md#config-status) for the status fields.
