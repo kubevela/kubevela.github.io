@@ -151,7 +151,6 @@ helm upgrade --install --create-namespace --namespace vela-system \
   --set controllerArgs.reSyncPeriod=1m \
   --set optimize.disableComponentRevision=false \
   --set multicluster.clusterGateway.image.repository=ghcr.io/oam-dev/cluster-gateway \
-  --set admissionWebhooks.patch.image.repository=ghcr.io/oam-dev/kube-webhook-certgen/kube-webhook-certgen \
   --wait kubevela ./charts/vela-core --debug
 ```
 
