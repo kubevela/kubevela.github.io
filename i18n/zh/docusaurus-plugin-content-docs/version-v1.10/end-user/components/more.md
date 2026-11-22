@@ -296,7 +296,7 @@ KubeVela        helm    https://kubevela.github.io/catalog/official
 
 KubeVela 社区在 Github 上维护了一个官方的[正式插件包仓库](https://github.com/kubevela/catalog/tree/master/addons) 和一个[试验阶段插件包仓库](https://github.com/kubevela/catalog/tree/master/experimental) 。你在相应的仓库中找到插件包的定义文件。
 
-同时这些文件会被同步到 [对象存储](https://kubevela.github.io/catalog/official) 当中，以加快下载速度。
+同时这些文件会被同步到 [默认插件仓库](https://kubevela.github.io/catalog/official) 当中。
 
 ### 添加插件包仓库
 
