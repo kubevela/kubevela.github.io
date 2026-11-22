@@ -6,6 +6,30 @@ This doc aims to provide a migration guide from old versions to the new ones wit
 
 KubeVela has [release cadence](../../contributor/release-process.md) for every 2-3 months, we'll only maintain for the last 2 releases. As a result, you're highly recommended to upgrade along with the community. We'll strictly align with the [semver version rule](https://semver.org/) for compatibility.
 
+## Upgrading to v1.11.2
+
+```shell
+helm repo update kubevela
+# Helm never upgrades a chart's CRDs, so apply them first
+helm show crds kubevela/vela-core --version 1.11.2 | kubectl apply --server-side --force-conflicts -f -
+helm upgrade kubevela kubevela/vela-core --version 1.11.2 -n vela-system -f <your values file>
+```
+
+:::caution
+Don't upgrade with `--reuse-values`. Coming from an earlier v1.11 release it fails with a `nil pointer evaluating interface {}...` error (`.configTemplateName` from v1.11.0, `.maxTimeout` from v1.11.1), because the old release lacks the new `workflow.httpDeny` and `workflow.http` values. Even where it renders, it keeps the old release's image values, so the cluster-gateway and the built-in definitions Job stay on the old images. Use your own values file, or `--reset-then-reuse-values` (Helm 3.14+). If you set `multicluster.clusterGateway.image.tag` or `builtinDefinitions.job.image.tag` yourself, update or remove it.
+:::
+
+v1.11.2 is a security release, and some of its fixes change behaviour. Check these before you upgrade:
+
+- **`vela-cli` steps.** The step's Job runs in the Application's namespace, as the ServiceAccount named in `serviceAccountName` (default `default`), instead of in `vela-system` as vela-core. The step fails at once if that account doesn't exist (`service account <name> not found in namespace <namespace>: the vela-cli Job runs as it`). Give the account the RBAC the command needs: `vela ls`, for example, must be able to list Applications. An Application in `vela-system` can still name `kubevela-vela-core`, but an account with only the rights the command uses is safer.
+- **Certificates** (from v1.11.1). vela-core makes its own webhook and cluster-gateway certificates; with Argo CD or Flux, ignore the webhooks' `failurePolicy`. See [Certificates](../advanced-install.mdx#certificates).
+- **Outbound HTTP** (from v1.11.1; bounds and loopback from v1.11.2). Requests to metadata, link-local and loopback addresses are refused, requests are bounded in time and size, HTTP proxies are not used, and the `request` step fails on a 400 but accepts a reply that isn't JSON. See [What may fail after an upgrade](./workflow-http-protection.md#what-may-fail-after-an-upgrade).
+- **Config steps** work only in the Application's namespace, apart from reading shared system configs. See [Which namespace a step works in](../../how-to/dashboard/config/read-write-config-in-pipeline.md#which-namespace-a-step-works-in).
+- **`helmchart`** reads `chart.auth.secretRef` and `valuesFrom` only from the Application's namespace, and refuses a release another Application owns. See [Helmchart](../../end-user/components/references.md#authenticating-with-private-chart-registries).
+- **Remote Terraform modules** read their SSH key Secret only from the definition's namespace. See [Terraform](../components/component-terraform.md).
+- **Impersonation annotations** are ignored with `AuthenticateApplication` on and `authentication.withUser=false`. See [Impersonate as User/Groups](../auth/integration.md#impersonate-as-usergroups).
+- **Air-gapped installs** need new images. See [Images to mirror](./offline-installation.md#images-to-mirror).
+
 ## From v1.10.x to v1.11.x
 
 v1.11.x upgrades the underlying CUE engine from v0.9.2 to v0.14.1. CUE v0.14 turns previously-tolerated syntax (list arithmetic, unquoted error field labels) into hard errors, and enables two new experimental evaluator behaviors (`evalv3`, `keepvalidators`) that can change how existing definitions behave.
