@@ -11,6 +11,8 @@ A policy can declare the shape of its context in a `schema: ctx` block. KubeVela
 | `kubectl apply` of an Application | the Application webhook | the schemas of the policies that apply. No policy is evaluated, so no provider (`kube.#Get`, `http`) is called during admission |
 | every render | the controller | each policy's actual `output.ctx` against its own schema |
 
+The admission check runs only with the `EnableApplicationScopedPolicies` feature gate on, and includes global policies only with `EnableGlobalPolicies` on. If the webhook cannot list the global policies, it admits the Application without the check, and the render still refuses an output that does not match.
+
 :::note
 Typed policy context is available from v1.12.
 :::
@@ -201,7 +203,7 @@ defkit.NewPolicy("tenant-identity").ApplicationScoped().Global().Priority(10).
 	})
 ```
 
-A schema field is required unless it is `Optional()`. `CtxSchema(...)` declares an open schema, and `ClosedCtxSchema(...)` a closed one. In a context schema, imports are added for you: a field using `MinLen` pulls in `"strings"`, with no `.WithImports` needed. Register also catches typos in a closed schema's outputs:
+A schema field is required unless it is `Optional()`. `CtxSchema(...)` declares an open schema, and `ClosedCtxSchema(...)` a closed one. In a context schema, imports are added for you: a field using `MinLen` pulls in `"strings"`, with no `.WithImports` needed. `Register` also catches typos in a closed schema's outputs, by panicking with the error:
 
 ```
 defkit: invalid definition 'tenant-identity-typo': Output().Ctx("teem") is not declared by the closed CtxSchema

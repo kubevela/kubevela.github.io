@@ -5,7 +5,7 @@ title: PolicyDefinition
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-`defkit.NewPolicy(name string) *PolicyDefinition` creates a PolicyDefinition builder. Policies are applied globally to applications and have no workload coupling. They control lifecycle behaviors like garbage collection, apply-once semantics, or override rules.
+`defkit.NewPolicy(name string) *PolicyDefinition` creates a PolicyDefinition builder. Policies have no workload coupling. Most control lifecycle behaviours like garbage collection, apply-once semantics, or override rules; an [Application-scoped policy](../policy/application-scoped-policy.md) instead transforms the Application before it is rendered, and can be global.
 
 ## Chain Methods
 
@@ -15,6 +15,11 @@ import TabItem from '@theme/TabItem';
 |---|---|
 | `.Template(fn func(tpl *PolicyTemplate))` | Provides the policy template closure. Unlike component/trait templates, a `PolicyTemplate` doesn't create Kubernetes resources — it defines computed fields using `Set(name, value)` that KubeVela's policy engine evaluates (e.g. topology selection, override rules). |
 | `.ManageHealthCheck()` | Declares that this policy manages health checking for the application. When set, KubeVela delegates health evaluation to this policy's health policy expression instead of using the default per-component health checks. |
+| `.ApplicationScoped()` | Makes the policy transform the Application before it is rendered, through the template's `Output()`, instead of producing resources. |
+| `.Global()` | Applies the policy to every Application in the namespace it is installed in (every Application when installed in `vela-system`) without being listed in `spec.policies`. A global policy is always Application-scoped. |
+| `.Priority(p int32)` | Orders the policy among the Application-scoped policies that apply: lower runs first, ties in name order. Explicit policies run at `0`. |
+| `.CtxSchema(fields ...Param)` | Declares an open schema for what the policy puts in `ctx`, read by components and traits as `context.custom`. See [Typed Policy Context](../policy/policy-context-schema.md#in-defkit). |
+| `.ClosedCtxSchema(fields ...Param)` | As `CtxSchema`, closed: the policy sets no key it does not declare, and `Register` refuses an `Output().Ctx` it does not declare. |
 
 ### Shared base methods
 
@@ -42,11 +47,13 @@ These methods are the same shape as on `ComponentDefinition`. See the [Component
 
 ### PolicyTemplate (closure argument)
 
-`.Template()` passes a `*PolicyTemplate`. For a policy that isn't Application-scoped it exposes a single method, since such a policy doesn't produce resources, so there's no `Output()` or `Patch()` (an Application-scoped policy's template also has `Enabled()`, which sets `config.enabled`, and `Output()`; see [Typed Policy Context](../policy/policy-context-schema.md#in-defkit)):
+`.Template()` passes a `*PolicyTemplate`. A policy doesn't produce resources, so there's no `Patch()`. `Enabled()` and `Output()` are honoured only on an Application-scoped policy, and `Register` refuses them on any other:
 
 | Method | Description |
 |---|---|
 | `.Set(name string, value Value)` | Assigns a value to a named computed field in the policy's template body. The policy engine reads these fields when it evaluates the policy (e.g. topology selection, override rules). |
+| `.Enabled(cond Condition)` | Turns the policy on only when the condition holds, written as `config.enabled`. |
+| `.Output()` | Returns the builder for what the policy changes on the Application: `Components`, `Workflow`, `Policies`, `Label`, `Annotation` and `Ctx`. See [Typed Policy Context](../policy/policy-context-schema.md#in-defkit). |
 
 ## Example
 
