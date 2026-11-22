@@ -141,7 +141,7 @@ template: {
 }
 ```
 
-Every request times out after 3s unless you set `request.timeout` (a Go duration, at most the controller's maximum, 60s by default). KubeVela ships a fuller `request` step, with `timeout`, `headersFromSecret` and `ratelimiter`, written with the newer `vela/http` package; see [Built-in Workflow Steps](../../end-user/workflow/built-in-workflow-defs.md#request).
+Every request times out after 3s unless you set `request.timeout` (a Go duration, at most the controller's maximum, 60s by default). KubeVela ships a fuller `request` step, with `timeout`, `headersFromSecret` and `ratelimiter`, written with the newer `vela/http` package; see [Built-in Workflow Steps](../../end-user/workflow/built-in-workflow-defs.md#request). Requests go straight to their destination: the controller's `HTTP_PROXY` and `HTTPS_PROXY` settings are not used.
 
 Use `vela def apply -f request.cue` to deploy this Definition to the cluster, then we can use this custom step directly in the Application.
 
