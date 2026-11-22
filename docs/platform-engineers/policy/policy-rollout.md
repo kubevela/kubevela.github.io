@@ -12,7 +12,7 @@ Say your platform team runs a global `platform-labels` policy that stamps every 
 
 With the default settings, nothing happens to the Applications that are already running. Each one keeps rendering the version it was deployed with, and reports the new version as **pending**. The new version reaches an Application at its next revision: when its owner edits it, or bumps `app.oam.dev/publishVersion`. Brand-new Applications take the new version straight away.
 
-If you want the new label everywhere now, set `applyPolicyUpdates: true` in the policy's template and publish it. Each running Application then adopts the new version on its next reconcile: KubeVela cuts a new ApplicationRevision and re-runs the workflow, with no edit to the Application, and the Application and its resources take the new version's labels, annotations and context.
+If you want the new label everywhere now, set `applyPolicyUpdates: true` in the policy's template and publish it. Each running Application then adopts the new version on its next reconcile, within the resync period (`application-re-sync-period`, five minutes by default), since publishing a PolicyDefinition does not trigger one: KubeVela cuts a new ApplicationRevision and re-runs the workflow, with no edit to the Application, and the Application and its resources take the new version's labels, annotations and context.
 
 The rest of this page covers the three kinds of change, where the settings come from, and the cases where a change is held back whatever the settings say.
 
@@ -143,7 +143,7 @@ You can see a held update in three places. The policy's entry in `status.applied
 
 A policy that reads the cluster or an external API can produce different output without changing its template: someone edits a Namespace label, or a ConfigMap value changes. That is a **data change**.
 
-With `applyDataChanges` on for that policy, the changed output reaches the Application **without a new revision and without re-running the workflow**. Changed labels and annotations are written to the Application and its dispatched resources, and a changed `output.ctx` re-applies the components that read it. With it off, the policy keeps contributing the output it last applied. The change is reported as **data change pending** in its status message, and applies at the Application's next revision. A `publishVersion` pin holds data changes too, until it moves.
+With `applyDataChanges` on for that policy, the changed output reaches the Application **without a new revision and without re-running the workflow**. Changed labels and annotations are written to the Application and its dispatched resources, and a changed `output.ctx` re-applies the Application's components, pruning what a component no longer renders. Workflow steps that read `context.custom` keep the old value until the next revision, since the workflow does not run again. With it off, the policy keeps contributing the output it last applied. The change is reported as **data change pending** in its status message, and applies at the Application's next revision. A `publishVersion` pin holds data changes too, until it moves.
 
 To tell a data change from a policy that is simply rendering the same thing again, KubeVela records each policy's applied output in the Application's policy ConfigMap, and a hash of each policy's context output on the Application's current ResourceTracker (`app.oam.dev/policy-context-hash`). An Application deployed before that hash existed records one on its next reconcile, without redeploying.
 
@@ -163,7 +163,7 @@ A rewrite only counts when it differs from what the latest revision stores. A po
 
 Putting the sections above together, a change waits for the Application's next revision when its setting is off for that policy (see [New Policy Versions](#new-policy-versions), [Data Changes](#data-changes) and [Spec Rewrites](#spec-rewrites)), or when a `publishVersion` pin has not moved. A new version that fails to render, or that rewrites the spec, waits too, as described in [New Policy Versions](#new-policy-versions). A mandatory global policy that fails holds the whole Application: see [Mandatory Global Policies](./application-scoped-policy.md#mandatory-global-policies).
 
-An explicit policy pinned with `@version` in `spec.policies` (`type: add-team-labels@v2`) stays where it is pinned. `@v2` names DefinitionRevision `add-team-labels-v2` when one exists, which is a hard pin. For a definition with semantic versions (`spec.version`), `@v2` resolves to the newest `2.x`, so pin the full version (`@v2.1.0`) to hold it.
+An explicit policy pinned with `@version` in `spec.policies` (`type: add-team-labels@v2`) stays where it is pinned. `@v2` names DefinitionRevision `add-team-labels-v2`, which is a hard pin. For a definition with semantic versions (`spec.version`), name the full version (`@v2.1.0`): `@v2` resolves to the newest `2.x` only on an Application annotated `app.oam.dev/autoUpdate: "true"`.
 
 ## Removing What a Policy Stops Setting
 
@@ -274,7 +274,7 @@ These are the events an Application gets from its policies.
 | `GlobalPolicyHeld` | Warning | A mandatory global policy fails, and the Application is held at its current revision. See [Mandatory Global Policies](./application-scoped-policy.md#mandatory-global-policies). |
 | `GlobalPolicyIgnored` | Warning | A global policy in the Application's namespace does not apply, because global policies must be in `vela-system`. |
 | `GlobalPolicySkipIgnored` | Warning | The Application carries `policy.oam.dev/skip-global`, but global policies are mandatory. |
-| `PolicyUpdatePending` | Normal | Newer versions of the named policies are held by `apply-policy-updates`, a `publishVersion` pin, or a render failure. |
+| `PolicyUpdatePending` | Normal | Newer versions of the named policies are held by `apply-policy-updates`, a `publishVersion` pin, a render failure or a spec rewrite. |
 | `PolicySettingIgnored` | Warning | A rollout annotation or template setting could not be read, or names a policy the Application does not run. |
 
 ### Conditions

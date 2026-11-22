@@ -12,7 +12,7 @@ Say your platform team runs a global `platform-labels` policy that stamps every 
 
 With the default settings, nothing happens to the Applications that are already running. Each one keeps rendering the version it was deployed with, and reports the new version as **pending**. The new version reaches an Application at its next revision: when its owner edits it, or bumps `app.oam.dev/publishVersion`. Brand-new Applications take the new version straight away.
 
-If you want the new label everywhere now, set `applyPolicyUpdates: true` in the policy's template and publish it. Each running Application then adopts the new version on its next reconcile: KubeVela cuts a new ApplicationRevision, with no edit to the Application, and the Application and its resources take the new version's labels and annotations.
+If you want the new label everywhere now, set `applyPolicyUpdates: true` in the policy's template and publish it. Each running Application then adopts the new version on its next reconcile, within the resync period (`application-re-sync-period`, five minutes by default), since publishing a PolicyDefinition does not trigger one: KubeVela cuts a new ApplicationRevision, with no edit to the Application, and the Application and its resources take the new version's labels and annotations.
 
 The rest of this page covers the three kinds of change, where the settings come from, and the cases where a change is held back whatever the settings say.
 
@@ -184,13 +184,13 @@ Each Application's `status.appliedApplicationPolicies` has one entry per policy:
 ```bash
 vela policy dry-run my-app \
   --allow-namespace-global-policies=true \
-  --allow-skip-global-policies=false
+  --allow-skip-global-policies=true
 ```
 
 Both flags default to `true`, as the KubeVela 1.11 chart does. The output starts with the values it assumed:
 
 ```
-Assumed controller flags: --allow-namespace-global-policies=true --allow-skip-global-policies=false
+Assumed controller flags: --allow-namespace-global-policies=true --allow-skip-global-policies=true
 ```
 
 With `-o json` or `-o yaml` the same values are in `assumedControllerFlags`.
@@ -253,7 +253,7 @@ These are the events an Application gets from its policies.
 | `GlobalPolicyHeld` | Warning | A mandatory global policy fails (with `--allow-skip-global-policies=false`), and the Application is held at its current revision. See [Mandatory Global Policies](./application-scoped-policy.md#mandatory-global-policies). |
 | `GlobalPolicyIgnored` | Warning | A global policy in the Application's namespace does not apply, because the controller runs with `--allow-namespace-global-policies=false`. |
 | `GlobalPolicySkipIgnored` | Warning | The Application carries `policy.oam.dev/skip-global`, but global policies are mandatory (`--allow-skip-global-policies=false`). |
-| `PolicyUpdatePending` | Normal | Newer versions of the named policies are held by `apply-policy-updates`, a `publishVersion` pin, or a render failure. |
+| `PolicyUpdatePending` | Normal | Newer versions of the named policies are held by `apply-policy-updates`, a `publishVersion` pin, a render failure or a spec rewrite. |
 | `PolicySettingIgnored` | Warning | A rollout annotation or template setting could not be read, or names a policy the Application does not run. |
 
 ### Conditions
