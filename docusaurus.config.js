@@ -160,9 +160,7 @@ const config = {
             },
             // The Chinese community's channels show on the Chinese site only.
             {
-              label: 'DingTalk (23310022)',
-              href: '.',
-              className: 'kv-zh-only',
+              html: '<span class="footer__link-item kv-zh-only">DingTalk (23310022)</span>',
             },
             {
                 html: '<div class="wechat kv-zh-only"> <a class="wechat-label">Wechat Group(Scan code to request joining)</a> <a class="wechat-img" rel="noreferrer noopener" aria-label="Wechat Group"><img src="https://kubevela.io/images/barnett-wechat.jpg" alt="Broker wechat to add you into the user group."></a></div>',
