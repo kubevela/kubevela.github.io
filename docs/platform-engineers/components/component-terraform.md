@@ -132,6 +132,20 @@ spec:
 status: {}
 ```
 
+For a private repository reached over SSH, point `gitCredentialsSecretReference` at a Secret that holds the key KubeVela clones with. The Secret must be in the definition's namespace and have two keys, `ssh-privatekey` and `known_hosts`; the remote's host key is checked against `known_hosts`:
+
+```yaml
+spec:
+  schematic:
+    terraform:
+      configuration: git@github.com:my-org/terraform-alibaba-eip.git
+      type: remote
+      gitCredentialsSecretReference:
+        name: git-ssh
+```
+
+A Secret in another namespace is refused with `git credentials secret <namespace>/<name> must be in the definition's namespace "<namespace>"`.
+
 You are warmly welcome to contribute this extended cloud resource ComponentDefinition to [oam-dev/catalog](https://github.com/kubevela/catalog/tree/master/addons/).
 
 ## Apply ComponentDefinition
