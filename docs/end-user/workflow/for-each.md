@@ -213,24 +213,14 @@ top-level steps can have `forEach`; a sub-step cannot loop on its own.
 
 ## Order and failure {#order-and-failure}
 
-{/* PRODUCT GAP DAGSKIP-SET: on fix, drop the clause after "running" in the DAG row. */}
-
 | Situation | What happens |
 |---|---|
 | `StepByStep`, an item succeeds | the next item starts |
 | `StepByStep`, an item fails | the items after it are skipped, as later steps are after a failed step |
 | `StepByStep`, an item fails but is still being retried | it has not finished, so the loop waits on it |
-| `DAG` | every item starts at once, with no cap on how many beyond the [item limit](#limits). A failed item does not stop the items already running, though today it can cut short the ones after it: see the caution below |
+| `DAG` | every item starts at once, with no cap on how many beyond the [item limit](#limits). A failed item affects only itself: the other items run to the end |
 | the `EnableSuspendOnFailure` gate is on, and an item fails after its retries | the workflow suspends on that item, and the items after it wait rather than being skipped. An item whose step fails outright (a definition's `#Fail`) still ends the workflow |
 | an item suspends | the loop suspends. `vela workflow resume <app> --step <loop>` resumes every suspended item; `--step <loop>-1` resumes one item (in a looped group, the item's sub-step: `--step <loop>-1-<sub-step>`) |
-
-{/* PRODUCT GAP DAGSKIP-SET: remove this caution when a failed DAG item affects only itself. */}
-:::caution
-In `DAG` mode a failed item can cut short items after it in the list: their unfinished
-steps may be skipped, and whether they are depends on timing, so the outcome can vary
-between runs. This is a known bug; the intended behaviour is that a failed item affects
-only itself.
-:::
 
 The looped step's own `if`, `timeout` and `dependsOn` apply to the loop as a whole, not
 to each item. To leave some items out, filter the list before the loop, or, in a looped
@@ -246,19 +236,6 @@ Workflow Steps.
 :::
 
 ## Restarting
-
-{/* PRODUCT GAP RESTARTSTEP-SET: remove this caution when the vela workflow restart fix ships. */}
-:::caution
-On current builds, `vela workflow restart --step` fails on every Application, looped or
-not:
-
-```
-Error: expected pointer, but got nil
-```
-
-A fix is in progress. Until it ships, this section describes what the command will do,
-not what it does today.
-:::
 
 Restart from a failed item by its step name:
 
