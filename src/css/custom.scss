@@ -6,13 +6,14 @@
  */
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #10a6fa;
-  --ifm-color-primary-dark: #0598ea;
-  --ifm-color-primary-darker: #0590dd;
-  --ifm-color-primary-darkest: #0476b6;
-  --ifm-color-primary-light: #2ab0fb;
-  --ifm-color-primary-lighter: #37b5fb;
-  --ifm-color-primary-lightest: #5ec3fc;
+  /* VelaUX's primary blue, from its theme. */
+  --ifm-color-primary: #1b58f4;
+  --ifm-color-primary-dark: #0c4ae6;
+  --ifm-color-primary-darker: #0b46da;
+  --ifm-color-primary-darkest: #093ab3;
+  --ifm-color-primary-light: #3a6ef5;
+  --ifm-color-primary-lighter: #4878f6;
+  --ifm-color-primary-lightest: #6f95f8;
   --ifm-code-font-size: 95%;
   --ifm-font-size-base: 16px;
   --hero-border-color: rgba(0, 0, 0, 0.1);
@@ -21,6 +22,14 @@
 
 :root[data-theme='dark'] {
   --hero-border-color: rgba(255, 255, 255, 0.1);
+  /* A lighter step of the same blue, readable on the dark background. */
+  --ifm-color-primary: #5b8cff;
+  --ifm-color-primary-dark: #3b76ff;
+  --ifm-color-primary-darker: #2b6bff;
+  --ifm-color-primary-darkest: #0050f7;
+  --ifm-color-primary-light: #7ba2ff;
+  --ifm-color-primary-lighter: #8badff;
+  --ifm-color-primary-lightest: #bbcfff;
 
   #banner {
     background: var(--ifm-color-primary-darker);
@@ -45,6 +54,21 @@
     height: 24px;
     display: flex;
     background: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12'/%3E%3C/svg%3E") no-repeat;
+  }
+}
+
+/* The Slack mark keeps its four colours in both themes. */
+.header-slack-link {
+  &:hover {
+    opacity: 0.6;
+  }
+
+  &:before {
+    content: '';
+    display: flex;
+    width: 22px;
+    height: 22px;
+    background: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 54 54' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%2336C5F0' d='M19.7 0a5.4 5.4 0 1 0 0 10.8h5.4V5.4A5.4 5.4 0 0 0 19.7 0m0 14.4H5.4a5.4 5.4 0 1 0 0 10.8h14.3a5.4 5.4 0 1 0 0-10.8'/%3E%3Cpath fill='%232EB67D' d='M54 19.8a5.4 5.4 0 1 0-10.8 0v5.4h5.4a5.4 5.4 0 0 0 5.4-5.4m-14.4 0V5.4a5.4 5.4 0 1 0-10.8 0v14.4a5.4 5.4 0 1 0 10.8 0'/%3E%3Cpath fill='%23ECB22E' d='M34.2 54a5.4 5.4 0 1 0 0-10.8h-5.4v5.4a5.4 5.4 0 0 0 5.4 5.4m0-14.4h14.4a5.4 5.4 0 1 0 0-10.8H34.2a5.4 5.4 0 1 0 0 10.8'/%3E%3Cpath fill='%23E01E5A' d='M0 34.2a5.4 5.4 0 1 0 10.8 0v-5.4H5.4A5.4 5.4 0 0 0 0 34.2m14.4 0v14.4a5.4 5.4 0 1 0 10.8 0V34.2a5.4 5.4 0 1 0-10.8 0'/%3E%3C/svg%3E") no-repeat center / contain;
   }
 }
 
@@ -366,4 +390,714 @@ iframe {
       width: 65%;
     }
   }
+}
+/* Top bar: the announcement line and the navbar, on every page. */
+:root {
+  --kv-ann-bg: #eef5ff;
+  --kv-ann-text: #1e3a5f;
+  --kv-nav-bg: rgba(255, 255, 255, 0.82);
+  --kv-nav-border: rgba(15, 23, 42, 0.08);
+  --kv-nav-link: #475569;
+  --kv-nav-link-hover: #0f172a;
+  --kv-brand: #1b58f4;
+}
+
+html[data-theme='dark'] {
+  --kv-ann-bg: #0f1d33;
+  --kv-ann-text: #cfe0ff;
+  --kv-nav-bg: rgba(17, 24, 39, 0.8);
+  --kv-nav-border: rgba(255, 255, 255, 0.08);
+  --kv-nav-link: #a3adbd;
+  --kv-nav-link-hover: #f1f5f9;
+  --kv-brand: #5b8cff;
+}
+
+div[class*='announcementBar_'] {
+  border-bottom: 1px solid var(--kv-nav-border);
+  font-size: 14px;
+
+  div[class*='announcementBarContent_'] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 0;
+  }
+
+  a {
+    color: var(--kv-brand);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  button[class*='announcementBarClose_'] {
+    color: var(--kv-ann-text);
+    opacity: 0.6;
+  }
+
+  button[class*='announcementBarClose_']:hover {
+    opacity: 1;
+  }
+}
+
+
+.kv-ann-tag {
+  padding: 1px 8px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--kv-brand);
+  border-radius: 999px;
+}
+
+.kv-ann-tag-preview {
+  background: #b45309;
+}
+
+.kv-ann-tag-call {
+  background: #16a34a;
+}
+
+.kv-ann-star {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* The community call is hidden until the browser finds the reader in its
+   build-up; a bar announcing only the call stays hidden with it. */
+.kv-ann-call {
+  display: none;
+  align-items: center;
+  gap: 4px 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+html[data-kv-call='on'] .kv-ann-call {
+  display: inline-flex;
+}
+
+html:not([data-kv-call='on']) div[class*='announcementBar_']:has(.kv-ann-only-call) {
+  display: none;
+}
+
+.kv-ann-sep {
+  width: 1px;
+  height: 14px;
+  margin: 0 6px;
+  background: currentColor;
+  opacity: 0.25;
+}
+
+.navbar {
+  height: 64px;
+  background: var(--kv-nav-bg);
+  border-bottom: 1px solid var(--kv-nav-border);
+  box-shadow: none;
+  backdrop-filter: saturate(180%) blur(12px);
+
+  // A backdrop filter makes the navbar the containing block for its fixed
+  // children, so it is dropped while the phone menu is open, or the menu is
+  // clipped to the bar's height.
+  &.navbar-sidebar--show {
+    backdrop-filter: none;
+  }
+
+  .navbar__brand {
+    margin-right: 28px;
+  }
+
+  .navbar__logo {
+    height: 30px;
+  }
+
+  .navbar__title {
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .navbar__link {
+    color: var(--kv-nav-link);
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .navbar__link:hover,
+  .navbar__link--active {
+    color: var(--kv-nav-link-hover);
+  }
+
+  .navbar__items:not(.navbar__items--right) .navbar__link--active {
+    color: var(--kv-brand);
+  }
+
+  /* Search and Ask Devin are one pill: search on the left, the AI on the
+     right. */
+  .kv-search {
+    padding-right: 0;
+  }
+
+  .kv-search + .navbar__item {
+    padding-left: 0;
+  }
+
+  .DocSearch-Button {
+    box-sizing: border-box;
+    margin: 0;
+    border: 1px solid var(--kv-nav-border);
+    border-radius: 999px;
+    box-shadow: none;
+  }
+
+  /* Ask Devin shares the navbar only on wide screens; on a phone it is in the
+     menu and the search stands alone. */
+  @media (min-width: 997px) {
+    .DocSearch-Button {
+      border-right: none;
+      border-radius: 999px 0 0 999px;
+    }
+  }
+
+  .header-deepwiki-link {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    box-sizing: border-box;
+    height: 36px;
+    margin-right: 8px;
+    padding: 0 14px 0 12px;
+    color: var(--kv-nav-link-hover);
+    font-size: 14px;
+    font-weight: 600;
+    background: color-mix(in srgb, var(--kv-brand) 8%, transparent);
+    border: 1px solid var(--kv-nav-border);
+    border-radius: 0 999px 999px 0;
+  }
+
+  .header-deepwiki-link:hover {
+    color: var(--kv-brand);
+    background: color-mix(in srgb, var(--kv-brand) 14%, transparent);
+  }
+}
+
+/* On a phone the announcement drops the star link and its extra words. These
+   follow the rules above so they take precedence. */
+@media (max-width: 600px) {
+  .kv-ann-star,
+  .kv-ann-wide {
+    display: none;
+  }
+}
+
+/* The language menu shows only its icon in the navbar; the language's name
+   stays for screen readers. Both right-hand menus centre their contents the
+   same way, so their arrows line up. */
+.navbar__items--right .navbar__item.dropdown > .navbar__link {
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+
+  &::after {
+    top: 0;
+    margin-left: 6px;
+    font-size: 15px;
+  }
+}
+
+.navbar__items--right .navbar__item.dropdown > .navbar__link:has(svg[class*='iconLanguage']) {
+  font-size: 0;
+
+  svg {
+    margin-right: 0;
+  }
+}
+
+/* Archived versions are on this site, so they carry no external-link mark. */
+.kv-archived-version svg {
+  display: none;
+}
+
+/* The version menu belongs to the documentation: elsewhere, and in the
+   unversioned videos, it is hidden. */
+html:not(.plugin-docs) .navbar__item:has(> .kv-version),
+html.plugin-id-videos .navbar__item:has(> .kv-version) {
+  display: none;
+}
+
+/* The language menu is the last thing in the navbar, after the theme toggle
+   that Docusaurus places at the end. */
+.navbar__items--right > .navbar__item:has(svg[class*='iconLanguage']) {
+  order: 1;
+}
+
+/* Docs pages in VelaUX's look: wider content, quieter chrome, the site blue
+   for where the reader is. */
+:root {
+  --ifm-container-width-xl: 1440px;
+  --kv-surface: #ffffff;
+  --kv-tint: #f8fafc;
+  --kv-line: #e2e8f0;
+  --kv-ink: #0f172a;
+  --kv-muted: #64748b;
+  --kv-code-bg: #f6f8fa;
+  --prism-background-color: var(--kv-code-bg);
+}
+
+html[data-theme='dark'] {
+  --kv-surface: #111827;
+  --kv-tint: #0b1220;
+  --kv-line: #1f2937;
+  --kv-ink: #f1f5f9;
+  --kv-muted: #94a3b8;
+  --kv-code-bg: #0f172a;
+  --ifm-background-color: #0b1220;
+  --ifm-background-surface-color: #111827;
+}
+
+/* Code blocks: rounded, outlined, on the slate background. */
+div[class*='codeBlockContainer'] {
+  border: 1px solid var(--kv-line);
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+div[class*='codeBlockContent'] pre,
+div[class*='codeBlockTitle'] {
+  background: var(--kv-code-bg) !important;
+}
+
+div[class*='codeBlockTitle'] {
+  color: var(--kv-muted);
+  font-size: 13px;
+  border-bottom: 1px solid var(--kv-line);
+}
+
+/* Admonitions: a tinted card with a coloured edge, rather than a solid bar. */
+.theme-admonition {
+  border: 1px solid color-mix(in srgb, var(--ifm-alert-border-color) 35%, transparent);
+  border-left-width: 4px;
+  border-radius: 10px;
+  box-shadow: none;
+  background: color-mix(in srgb, var(--ifm-alert-border-color) 7%, var(--kv-surface));
+  color: var(--kv-ink);
+}
+
+/* Sidebar: the current page on a tinted pill in the site blue. */
+.menu__link {
+  border-radius: 8px;
+  color: var(--kv-muted);
+}
+
+.menu__link:hover {
+  color: var(--kv-ink);
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  color: var(--kv-brand);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--kv-brand) 10%, transparent);
+}
+
+.menu__list-item-collapsible:hover,
+.menu__link:hover {
+  background: color-mix(in srgb, var(--kv-ink) 5%, transparent);
+}
+
+/* Table of contents: a hairline rail with the current heading marked. */
+.table-of-contents {
+  border-left: 1px solid var(--kv-line);
+}
+
+.table-of-contents__link {
+  color: var(--kv-muted);
+}
+
+.table-of-contents__link--active {
+  color: var(--kv-brand);
+  font-weight: 600;
+}
+
+/* Breadcrumbs: the current page on a tinted pill. */
+.breadcrumbs__item--active .breadcrumbs__link {
+  color: var(--kv-brand);
+  background: color-mix(in srgb, var(--kv-brand) 10%, transparent);
+}
+
+/* Footer: on the page's tint, with quiet headings and links. */
+.footer.theme-layout-footer {
+  --ifm-footer-background-color: var(--kv-tint);
+  --ifm-footer-link-color: var(--kv-muted);
+  --ifm-footer-link-hover-color: var(--kv-brand);
+  --ifm-footer-title-color: var(--kv-ink);
+  border-top: 1px solid var(--kv-line);
+}
+
+.footer.theme-layout-footer .footer__title {
+  color: var(--kv-muted);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.footer.theme-layout-footer .footer__copyright {
+  color: var(--kv-muted);
+  font-size: 13px;
+}
+
+.footer.theme-layout-footer .wechat .wechat-label {
+  color: var(--kv-muted);
+}
+
+/* Footer entries for the Chinese community show on the Chinese site only. */
+html:not([lang^='zh']) .footer__item:has(.kv-zh-only) {
+  display: none;
+}
+
+/* Tables: slate header, hairlines, rounded corners; a wide one scrolls inside
+   its frame. */
+.markdown table {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--kv-line);
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px;
+}
+
+.markdown table th,
+.markdown table td {
+  border: none;
+  border-bottom: 1px solid var(--kv-line);
+  padding: 10px 14px;
+  vertical-align: top;
+}
+
+.markdown table tr:last-child td {
+  border-bottom: none;
+}
+
+.markdown table thead tr {
+  background: var(--kv-tint);
+}
+
+.markdown table th {
+  color: var(--kv-ink);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.markdown table tbody tr,
+.markdown table tbody tr:nth-child(2n) {
+  background: transparent;
+}
+
+.markdown table tbody tr:hover {
+  background: color-mix(in srgb, var(--kv-brand) 4%, transparent);
+}
+
+.markdown table td:first-child code,
+.markdown table td:first-child {
+  font-weight: 600;
+}
+
+/* Inline code: a soft slate pill. */
+.markdown :not(pre) > code {
+  padding: 0.1em 0.4em;
+  color: var(--kv-ink);
+  font-size: 0.88em;
+  background: color-mix(in srgb, var(--kv-ink) 6%, transparent);
+  border: none;
+  border-radius: 5px;
+}
+
+/* Toggles such as "expected output": a quiet slate panel. */
+.markdown details {
+  --ifm-alert-background-color: var(--kv-tint);
+  --ifm-alert-border-color: var(--kv-line);
+  --ifm-alert-foreground-color: var(--kv-ink);
+  --docusaurus-details-decoration-color: var(--kv-muted);
+  background: var(--kv-tint);
+  border: 1px solid var(--kv-line);
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+.markdown details > summary {
+  color: var(--kv-ink);
+  font-weight: 600;
+}
+
+.markdown details > div > div {
+  border-top-color: var(--kv-line) !important;
+}
+
+/* Screenshots and diagrams: framed, with rounded corners. */
+.markdown img:not([class*='emoji']) {
+  border: 1px solid var(--kv-line);
+  border-radius: 10px;
+}
+
+/* Heading anchors in the site blue. */
+.hash-link {
+  color: var(--kv-brand);
+}
+
+.markdown h2 {
+  margin-top: 2.2rem;
+  letter-spacing: -0.01em;
+}
+
+/* Previous / Next: rounded cards with a blue border on hover. */
+.pagination-nav__link {
+  border: 1px solid var(--kv-line);
+  border-radius: 12px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.pagination-nav__link:hover {
+  border-color: var(--kv-brand);
+  background: color-mix(in srgb, var(--kv-brand) 4%, transparent);
+}
+
+.pagination-nav__sublabel {
+  color: var(--kv-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pagination-nav__label {
+  color: var(--kv-ink);
+}
+
+/* Sidebar section titles read as sections, not links. */
+.theme-doc-sidebar-menu > .menu__list-item > .menu__list-item-collapsible > .menu__link--sublist,
+.theme-doc-sidebar-menu > .theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link {
+  color: var(--kv-ink);
+  font-weight: 700;
+}
+
+/* The version badge: a slate pill. */
+.theme-doc-version-badge {
+  padding: 2px 10px;
+  color: var(--kv-muted);
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--kv-tint);
+  border: 1px solid var(--kv-line);
+  border-radius: 999px;
+}
+
+/* Tabs: the selected tab in the site blue with an underline. */
+.tabs__item {
+  color: var(--kv-muted);
+  font-weight: 600;
+  border-radius: 8px 8px 0 0;
+}
+
+.tabs__item:hover {
+  color: var(--kv-ink);
+  background: color-mix(in srgb, var(--kv-ink) 4%, transparent);
+}
+
+.tabs__item--active {
+  color: var(--kv-brand);
+  border-bottom-color: var(--kv-brand);
+}
+
+/* Blog: posts as cards in the list, titles in ink, tags as slate pills. */
+.blog-list-page main article {
+  padding: 28px 32px;
+  border: 1px solid var(--kv-line);
+  border-radius: 14px;
+}
+
+.plugin-blog main article header h1,
+.plugin-blog main article header h2 a {
+  color: var(--kv-ink);
+  letter-spacing: -0.02em;
+}
+
+.plugin-blog main article header h2 a:hover {
+  color: var(--kv-brand);
+  text-decoration: none;
+}
+
+a[class*='tag_'] {
+  color: var(--kv-muted);
+  background: var(--kv-tint);
+  border: 1px solid var(--kv-line);
+  border-radius: 999px;
+}
+
+a[class*='tag_']:hover {
+  color: var(--kv-brand);
+  border-color: var(--kv-brand);
+  text-decoration: none;
+}
+
+aside nav[aria-label*='Blog'] a {
+  color: var(--kv-muted);
+}
+
+aside nav[aria-label*='Blog'] a[aria-current='page'],
+aside nav[aria-label*='Blog'] a:hover {
+  color: var(--kv-brand);
+}
+
+/* Search popup in the site's palette. */
+:root {
+  --docsearch-primary-color: var(--kv-brand);
+  --docsearch-text-color: var(--kv-ink);
+  --docsearch-muted-color: var(--kv-muted);
+  --docsearch-modal-background: #f8fafc;
+  --docsearch-footer-background: #ffffff;
+  --docsearch-hit-background: #ffffff;
+  --docsearch-hit-color: var(--kv-ink);
+  --docsearch-hit-shadow: none;
+  --docsearch-searchbox-focus-background: #ffffff;
+  --docsearch-searchbox-shadow: inset 0 0 0 1.5px var(--kv-brand);
+  --docsearch-modal-shadow: 0 24px 64px rgba(15, 23, 42, 0.25);
+  --docsearch-footer-shadow: 0 -1px 0 var(--kv-line);
+  --docsearch-key-gradient: none;
+  --docsearch-key-shadow: inset 0 0 0 1px var(--kv-line);
+  --docsearch-container-background: rgba(15, 23, 42, 0.45);
+}
+
+html[data-theme='dark'] {
+  --docsearch-modal-background: #0f172a;
+  --docsearch-footer-background: #0b1220;
+  --docsearch-hit-background: #111827;
+  --docsearch-searchbox-focus-background: #111827;
+  --docsearch-modal-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+  --docsearch-container-background: rgba(2, 6, 23, 0.7);
+}
+
+.DocSearch-Modal {
+  border-radius: 14px;
+}
+
+.DocSearch-Hit a {
+  border: 1px solid var(--kv-line);
+  border-radius: 10px;
+}
+
+.DocSearch-Hit-source {
+  color: var(--kv-muted);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: transparent;
+}
+
+.DocSearch-Hit[aria-selected='true'] a {
+  border-color: var(--kv-brand);
+}
+
+/* Keyboard focus and text selection in the site blue. */
+::selection {
+  background: color-mix(in srgb, var(--kv-brand) 22%, transparent);
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--kv-brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Diagrams sit in a frame like code blocks and images. */
+.docusaurus-mermaid-container {
+  padding: 16px;
+  border: 1px solid var(--kv-line);
+  border-radius: 10px;
+}
+
+/* The row under each doc: edit link and last update, quiet and aligned. */
+.theme-doc-footer {
+  margin-top: 2.5rem;
+  padding-top: 16px;
+  border-top: 1px solid var(--kv-line);
+  font-size: 14px;
+}
+
+.theme-edit-this-page {
+  color: var(--kv-muted);
+  font-weight: 600;
+}
+
+.theme-edit-this-page:hover {
+  color: var(--kv-brand);
+  text-decoration: none;
+}
+
+.theme-edit-this-page svg {
+  width: 15px;
+  margin-right: 4px;
+}
+
+.theme-last-updated {
+  color: var(--kv-muted);
+  font-style: normal;
+}
+
+.theme-last-updated b {
+  color: var(--kv-ink);
+  font-weight: 600;
+}
+
+/* Blog posts: a comfortable reading measure and quieter author card. */
+.blog-post-page main article {
+  max-width: 760px;
+}
+
+.blog-post-page main article header h1 {
+  font-size: clamp(2rem, 3.4vw, 2.6rem);
+  line-height: 1.15;
+}
+
+.blog-post-page .markdown {
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.plugin-blog .avatar__photo {
+  border: 1px solid var(--kv-line);
+}
+
+.plugin-blog .avatar__name a {
+  color: var(--kv-ink);
+}
+
+.plugin-blog .avatar__subtitle {
+  color: var(--kv-muted);
+}
+
+/* Videos: embedded players fill the column at 16:9, framed. */
+.plugin-id-videos .markdown iframe {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--kv-line);
+  border-radius: 12px;
+}
+
+.plugin-id-videos .markdown blockquote {
+  color: var(--kv-muted);
+  border-left-color: var(--kv-line);
 }

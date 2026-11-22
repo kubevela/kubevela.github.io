@@ -2,6 +2,8 @@
 title: Make Your Own Addon
 ---
 
+import AddonMechanism from '@site/src/components/AddonMechanism';
+
 :::tip
 Here's a blog introduces [how to build addon from scratch using redis operator as example](/blog/2022/10/18/building-addon-introduction), you can read it as an end to end tutorial!
 
@@ -49,7 +51,7 @@ The picture below shows what KubeVela does when an addon is enabled. There are m
 * When an addon is enabled through UX/CLI, it will pull these resource files from the Addon Registry, assemble them into a KubeVela application and apply it.
 * Finally, the KubeVela controller take care the rest things and deliver the addon as a normal application to the clusters.
 
-![alt](../../resources/addon-mechanism.jpg)
+<AddonMechanism />
 
 To make an addon, you should follow some basic rules. You need to create an addon directory to place addon resource files.
 

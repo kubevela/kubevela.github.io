@@ -86,7 +86,7 @@ mv kustomize ~/kubevela/bin/
 
 </details>
 
-* ginkgo 1.14.0+ (just for [E2E test](#e2e-test))
+* Ginkgo v2 (just for [E2E test](#e2e-test))
   ```
   go install github.com/onsi/ginkgo/v2/ginkgo@latest
   ```

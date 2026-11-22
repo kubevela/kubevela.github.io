@@ -243,7 +243,7 @@ spec:
 And the ingress resource is now like:
 
 ```yaml
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
@@ -251,8 +251,6 @@ metadata:
   name: ingress
 spec:
   rules:
-  spec:
-    rules:
     - host: testsvc.example.com
       http:
         paths:

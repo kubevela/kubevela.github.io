@@ -2,6 +2,9 @@
 title:  Multi Cluster Application
 ---
 
+import MultiClusterSystem from '@site/src/components/MultiClusterSystem';
+import MultiClusterWorkflow from '@site/src/components/MultiClusterWorkflow';
+
 KubeVela is by design a full functional Continuous Delivery (CD) platform with fine grained support for hybrid/multi-cloud/multi-cluster deployment.
 This section will introduce how to deliver multi-cluster application with KubeVela policies and workflow.
 
@@ -15,7 +18,7 @@ There are many scenarios that developers or system operators need to deploy and 
 
 ## Architecture
 
-![](../resources/multi-cluster-sys-arch.jpg)
+<MultiClusterSystem />
 
 KubeVela leverages the [Cluster-Gateway](https://github.com/oam-dev/cluster-gateway) for multi-cluster, it's installed automatically along with KubeVela chart. By default, it will directly connect to the clusters by using the `kubeconfig` as secret. You can also enable the [Open Cluster Management](../platform-engineers/system-operation/working-with-ocm.md) for the PULL mode.
 
@@ -163,7 +166,7 @@ The following figure displays the architecture of a multi-cluster application. A
 
 The policies mainly takes charge of describing the destination of the resources and how they should be overridden. The real executor of the resource dispatch is the workflow. In each `deploy` workflow step, it will refer to some policies, override the default configuration, and dispatch the resources.
 
-![multi-cluster-arch](../resources/multi-cluster-arch.jpg)
+<MultiClusterWorkflow />
 
 ### Configure the deploy destination
 

@@ -599,6 +599,6 @@ kubectl delete configmap vela-cluster-identity -n vela-system
 - [ComponentDefinition](./definition-component.md) — define workload types
 - [TraitDefinition](./definition-trait.md) — patch workloads with traits
 - [PolicyDefinition](./definition-policy.md) — define application policies
-- [WorkflowStepDefinition](./definition-workflow-step.md) — define workflow steps
+- [WorkflowStepDefinition](./definition-workflowstep.md) — define workflow steps
 - [Cluster Placement](./cluster-placement.md) — `placement.Evaluate()` and `placement.ValidatePlacement()` in depth
 - [Quick Start](./quick-start.md) — scaffolding a `my-platform` module

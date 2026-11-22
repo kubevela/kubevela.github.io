@@ -760,7 +760,7 @@ When this Application is applied:
 
 ### Available Context in PostDispatch Traits
 
-In addition to the [standard trait context fields](customize-trait#full-available-context-in-trait), PostDispatch traits have access to `context.output`, which is the full live Kubernetes resource object of the parent component at the time the trait is dispatched.
+In addition to the [standard trait context fields](customize-trait.md#full-available-context-in-trait), PostDispatch traits have access to `context.output`, which is the full live Kubernetes resource object of the parent component at the time the trait is dispatched.
 
 | Field | Description |
 |---|---|

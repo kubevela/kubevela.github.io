@@ -2,6 +2,8 @@
 title: Release Process And Cadence
 ---
 
+import ReleaseFlow from '@site/src/components/ReleaseFlow';
+
 KubeVela is being developed using the following process:
 
 * Maintainers commit to work on set of features and enhancements and create GitHub milestone to track the work.
@@ -9,7 +11,7 @@ KubeVela is being developed using the following process:
 * The new release is published every **2~3 month**.
 * Critical bug-fixes are cherry-picked into the release branch and delivered using patch releases as frequently as needed, we will maintain the last **2 releases**.
 
-![develop-flow](../resources/develop-code-flow.jpg)
+<ReleaseFlow />
 
 ## Release Planning
 
