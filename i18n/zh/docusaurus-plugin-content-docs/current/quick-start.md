@@ -80,7 +80,7 @@ environment prod with namespace prod created
 </details>
 
 ```
-vela up -f https://kubevela.net/example/applications/first-app.yaml
+vela up -f https://kubevela.io/example/applications/first-app.yaml
 ```
 
 > 需要注意的是需要你的部署环境可以正常获取 `oamdev/hello-world` 镜像

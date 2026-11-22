@@ -23,10 +23,10 @@ $ docker push <your repo url>/fluxcd/helm-controller:v0.11.1
 3. 部分插件的安装可能需要依赖一些 helm chats 比如说 terraform 的插件。你需要将这些 charts 同步到你自己 chart 仓库。例如你可以通过下面的命令，同步 terraform 插件中依赖的 charts。
 
 ```yaml
-$ helm repo add vela-charts https://charts.kubevela.net/addons
+$ helm repo add kubevela https://kubevela.github.io/charts
 $ helm repo update
-$ helm pull vela-charts/terraform-controller --version 0.3.5
-$ helm push terraform-controller-0.3.5.tgz <your charts repo url>
+$ helm pull kubevela/terraform-controller --version 0.7.12
+$ helm push terraform-controller-0.7.12.tgz <your charts repo url>
 ```
 
 你可以通过这个 [文档](https://helm.sh/docs/topics/chart_repository/) 了解如何搭建自己的 charts 仓库。
@@ -78,10 +78,10 @@ $ vela addon enable addons/velaux/ repo=<仓库地址>
 
 ### 4. Terraform
 
-1. 将镜像 `oamdev/terraform-controller:0.3.5` 同步到自己的镜像仓库。
-2. 将 terraform 的 helm chart ` https://charts.kubevela.net/addons/terraform-controller-0.3.5.tgz` 下载下来。
+1. 将镜像 `oamdev/terraform-controller:v0.7.12` 同步到自己的镜像仓库。
+2. 将 terraform 的 helm chart ` https://kubevela.github.io/charts/terraform-controller-0.7.12.tgz` 下载下来。
 ```yaml
-$ helm pull https://charts.kubevela.net/addons/terraform-controller-0.3.5.tgz
+$ helm pull https://kubevela.github.io/charts/terraform-controller-0.7.12.tgz
 ```
 3. 解压缩 chart 包，并修改当中的 `values.yaml` 的 `image.repository` 为自己的镜像仓库后，再上传到你自己的 chart 仓库。
 4. 修改 Terraform 插件中 `terraform/resources/terraform-controller.cue` `output.properties.url` 为你的 chart 仓库地址。 

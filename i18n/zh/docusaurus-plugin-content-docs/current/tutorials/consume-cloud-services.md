@@ -35,9 +35,9 @@ $ vela show alibaba-oss
 
 你也可以使用 `--web` 参数来在本地浏览器中查看使用说明。
 
-- 阅读 [官网文档](https://kubevela.net/docs/end-user/components/cloud-services/cloud-resources-list).
+- 阅读 [官网文档](https://kubevela.io/docs/end-user/components/cloud-services/cloud-resources-list).
 
-比如，你可以在[这里](https://kubevela.net/docs/end-user/components/cloud-services/terraform/alibaba-oss)查看阿里云 OSS 的使用参数。
+比如，你可以在[这里](https://kubevela.io/docs/end-user/components/cloud-services/terraform/alibaba-oss)查看阿里云 OSS 的使用参数。
 
 对于不同的提供商，这些参数会有所不同。所有的云资源都有以下共同的参数：
 - `writeConnectionSecretToRef`: `struct` 类型，表示 Terraform 的输出将以 key/values 格式写入指定名称的 secret。

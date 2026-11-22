@@ -2,7 +2,7 @@
 title: kubevela-io
 ---
 
-这个插件是一个文档网站，文档内容与 https://kubevela.io/ 及其镜像 https://kubevela.net/ 是同步更新的。
+这个插件是一个文档网站，文档内容与 https://kubevela.io/ 是同步更新的。
 
 使用此插件可以帮助你在集群中无缝查阅文档。
 

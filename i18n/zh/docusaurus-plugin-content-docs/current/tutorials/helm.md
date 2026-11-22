@@ -123,4 +123,4 @@ Services:
 
 到此，你已经掌握了 Helm 应用的交付能力，快去交付更多的 Helm 应用吧。
 
-如果你想掌握 Helm Chart 的多集群部署，可以参考[这篇博客](https://kubevela.net/zh/blog/2022/07/07/helm-multi-cluster)了解实践细节。
+如果你想掌握 Helm Chart 的多集群部署，可以参考[这篇博客](https://kubevela.io/blog/2022/07/07/helm-multi-cluster)了解实践细节。

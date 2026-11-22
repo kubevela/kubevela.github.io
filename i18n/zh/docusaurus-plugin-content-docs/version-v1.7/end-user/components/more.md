@@ -303,7 +303,7 @@ KubeVela 社区在 Github 上维护了一个官方的[正式插件包仓库](htt
 你可以添加自己的插件包仓库，目前支持 OSS 和 Github 两种仓库类型。
 
 ```
-vela addon registry add experimental --type OSS --endpoint=https://addons.kubevela.net --path=experimental/
+vela addon registry add experimental --type=helm --endpoint=https://kubevela.github.io/catalog/experimental/
 ```
 
 <details>

@@ -22,9 +22,9 @@ KubeVela 1.4 开始，我们加入了认证和授权的功能，这使得控制�
 
 4. (可选) 安装 [vela-prism](https://github.com/kubevela/prism) 组件，开启高级的权限管理能力。
     ```bash
-    helm repo add prism https://charts.kubevela.net/prism
+    helm repo add kubevela https://kubevela.github.io/charts
     helm repo update
-    helm install vela-prism prism/vela-prism -n vela-system
+    helm install vela-prism kubevela/vela-prism -n vela-system
     ```
 
 ## 使用

@@ -101,10 +101,10 @@ vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_
 默认情况下，VelaUX 仓库使用的是 docker hub，你可以通过`repo`参数来改变插件镜像的仓库：
 
 ```shell script
-vela addon enable velaux repo=acr.kubevela.net
+vela addon enable velaux repo=your-registry.com
 ```
 
-你可以尝试指定`acr.kubevela.net` 镜像注册表作为 docker hub 的替换，这个镜像仓库由 KubeVela 团队维护，并且他们会定期上传/同步内建组件到这个仓库。
+以 `repo=your-registry.com` 为例，部署 VelaUX 服务所用的镜像将是 `your-registry.com/oamdev/velaux:<velaux-version>`。
 
 这个特性也同样可以帮助你使用你的私有仓库来完成安装，你仅仅需要将所有镜像都上传到你的私有镜像仓库即可。
 

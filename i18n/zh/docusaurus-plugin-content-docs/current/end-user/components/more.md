@@ -19,7 +19,7 @@ KubeVela 安装时就自带了很多开箱即用的功能，可以查看如下�
 
 ### 查看所有插件
 
-KubeVela 官方团队维护了一个默认的插件仓库 (https://addons.kubevela.net) ，默认情况下会从这个仓库实时发现。
+KubeVela 官方团队维护了一个默认的插件仓库 (https://kubevela.github.io/catalog/official) ，默认情况下会从这个仓库实时发现。
 
 ```shell
 vela addon list
@@ -257,7 +257,7 @@ KubeVela
         default: "false"
         required: ✔
 -> domain: Specify the domain, if set, ingress will be created if the gateway driver is nginx.
--> repo: Specify the image hub of velaux, eg. "acr.kubevela.net"
+-> repo: Specify the image hub of velaux
 -> serviceAccountName: Specify the serviceAccountName for apiserver
         default: "kubevela-vela-core"
         required: ✔
@@ -290,20 +290,20 @@ vela addon registry list
 
 ```
 Name            Type    URL                        
-KubeVela        helm    https://addons.kubevela.net
+KubeVela        helm    https://kubevela.github.io/catalog/official
 ```
 </details>
 
 KubeVela 社区在 Github 上维护了一个官方的[正式插件包仓库](https://github.com/kubevela/catalog/tree/master/addons) 和一个[试验阶段插件包仓库](https://github.com/kubevela/catalog/tree/master/experimental) 。你在相应的仓库中找到插件包的定义文件。
 
-同时这些文件会被同步到 [对象存储](https://addons.kubevela.net) 当中，以加快下载速度。
+同时这些文件会被同步到 [对象存储](https://kubevela.github.io/catalog/official) 当中，以加快下载速度。
 
 ### 添加插件包仓库
 
 你可以添加自己的插件包仓库，目前支持 OSS 和 Github 两种仓库类型。
 
 ```
-vela addon registry add experimental --type OSS --endpoint=https://addons.kubevela.net --path=experimental/
+vela addon registry add experimental --type=helm --endpoint=https://kubevela.github.io/catalog/experimental/
 ```
 
 <details>
