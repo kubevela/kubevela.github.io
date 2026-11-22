@@ -130,7 +130,7 @@ In addition, different resources have different key information, such as whether
 
 Further, if you want to query the detailed configuration of ConfigMap, whether the capacity and access method of PersistentVolumes are correct, whether the RBAC authorization rules are correct, etc., you do not need to leave the VelaUX and manually dig through YAML files. Initiate a query by clicking the Detail button in the node extension area. KubeVela will securely query and display the latest configurations from the target cluster through the cluster gateway.
 
-![resource-detail](https://kubevela.net/assets/images/resouce-detail-0919c787c88e6b38f00ea490d558a927.jpg)
+![resource-detail](https://kubevela.io/assets/images/resouce-detail-0919c787c88e6b38f00ea490d558a927.jpg)
 
 ## What's next?
 

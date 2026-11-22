@@ -284,4 +284,4 @@ Applying an application in vela K8s object format...
 
 以上就是本次的全部分享，感谢你的阅读和试玩。
 
-[欢迎你继续探索 KubeVela v1.3 正式版](https://kubevela.net/zh/docs/install)，这里有更多差异化配置的进阶用法等你发现和使用，比如 `override` 应用策略如何完成资源类型通配还是针对某些特定组件进行覆盖等等，以满足更加复杂的场景需求。
+[欢迎你继续探索 KubeVela v1.3 正式版](https://kubevela.io/docs/install)，这里有更多差异化配置的进阶用法等你发现和使用，比如 `override` 应用策略如何完成资源类型通配还是针对某些特定组件进行覆盖等等，以满足更加复杂的场景需求。

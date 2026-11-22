@@ -39,7 +39,7 @@ Helm 设计之初就为了保证其简单易用，放弃了复杂的组件编排
 
 这两个方案都很复杂，有不小的改造成本，尤其是当你的 Helm Chart 是第三方组件无法修改或自身不具备维护 Helm Chart 能力时，这些方法都是不可行的。即使真的去改造了，相比于原先简单的工作负载模式，也存在不小的稳定性风险。究其原因，还是在于 Helm 本身的定位只是一个包管理工具，设计时并不考虑灰度发布、也不针对工作负载做管理。
 
-事实上，当我们跟社区的大量用户深入交流以后，我们发现大多数用户的应用并不复杂，类别都是诸如 Deployment、StatefulSet 这些经典的类型。所以，我们通过 KubeVela( http://kubevela.net/ ) 强大的插件机制，联合 OpenKruise （https://openkruise.io/）社区做了一款针对这些限定类型的金丝雀发布插件。这款插件帮助你不做任何迁移改造，轻松完成 Helm Chart 的灰度发布。不仅如此，如果你的 Helm Chart 比较复杂，你完全可以针对你的场景定制一个插件，获得同样的体验。
+事实上，当我们跟社区的大量用户深入交流以后，我们发现大多数用户的应用并不复杂，类别都是诸如 Deployment、StatefulSet 这些经典的类型。所以，我们通过 KubeVela( https://kubevela.io/ ) 强大的插件机制，联合 OpenKruise （https://openkruise.io/）社区做了一款针对这些限定类型的金丝雀发布插件。这款插件帮助你不做任何迁移改造，轻松完成 Helm Chart 的灰度发布。不仅如此，如果你的 Helm Chart 比较复杂，你完全可以针对你的场景定制一个插件，获得同样的体验。
    
 下面我们通过一个实际的例子（以 Deployment工作负载为例），手把手带你感受一下完整的流程。
 
@@ -53,7 +53,7 @@ $ curl -fsSl https://kubevela.io/script/install-velad.sh | bash
 velad install
 ```
 
-See [this document](https://kubevela.net/docs/install#1-install-velad) for more installation details.
+See [this document](https://kubevela.io/docs/install#1-install-velad) for more installation details.
 
 - 启用相关的 addon
 
@@ -223,9 +223,9 @@ Demo: V1
 
 如果你将上面的回滚操作改为恢复继续升级，将会继续执行后续的升级过程，完成全量发布。
 
-上述 demo 的完整操作过程请参考 [文档](https://kubevela.net/docs/tutorials/helm) 。
+上述 demo 的完整操作过程请参考 [文档](https://kubevela.io/docs/tutorials/helm) 。
 
-如果你希望直接使用原生的 k8s 资源实现上面过程可以参考 [文档](https://kubevela.net/docs/tutorials/k8s-object-rollout) 。另外，除了 Deployment ，kruise-rollout 插件还支持了 StatefulSet  和 OpenKruise 的 CloneSet ，如果你的 chart 中的工作负载类型是以上三种都可以通过上面的例子实现金丝雀发布。
+如果你希望直接使用原生的 k8s 资源实现上面过程可以参考 [文档](https://kubevela.io/docs/tutorials/k8s-object-rollout) 。另外，除了 Deployment ，kruise-rollout 插件还支持了 StatefulSet  和 OpenKruise 的 CloneSet ，如果你的 chart 中的工作负载类型是以上三种都可以通过上面的例子实现金丝雀发布。
 
 相信你也看注意到，上面的例子我们给出的是基于 nginx-Ingress-controller 的七层流量切分方案，另外我们也支持了 Kubernetes Gateway 的 [API](https://gateway-api.sigs.k8s.io/) 从而能够支持更多的网关类型和四层的流量切分方案。
 
