@@ -133,7 +133,7 @@ A deleted policy is a changed policy too. Its removal follows the settings its o
 
 A `publishVersion` pin holds every update until `app.oam.dev/publishVersion` changes. Bumping it cuts a new revision, which takes the live policies like an author edit does.
 
-You can see a held update in three places. The policy's entry in `status.appliedApplicationPolicies` has a message that starts `update pending:` and says why: `a newer version of this policy is held by policy.oam.dev/apply-policy-updates or a publishVersion pin`, or `a newer version of this policy fails to render`. The Application gets a `PolicyUpdatePending` event. And the policy's entry in the policy ConfigMap records its effective settings (see [The Policy ConfigMap](#the-policy-configmap)).
+You can see a held update in three places. The policy's entry in `status.appliedApplicationPolicies` has a message that starts `update pending:` and says why: `a newer version of this policy is held by policy.oam.dev/apply-policy-updates or a publishVersion pin`, `a newer version of this policy fails to render`, or `a newer version of this policy rewrites the application spec`. The Application gets a `PolicyUpdatePending` event. And the policy's entry in the policy ConfigMap records its effective settings (see [The Policy ConfigMap](#the-policy-configmap)).
 
 ## Data Changes
 
@@ -201,7 +201,7 @@ KubeVela 1.11 keeps global policies as they were: both `allowNamespaceGlobalPoli
 
 Global policies outside `vela-system` stop applying. For the Applications they covered they count as deleted policies, and their labels come off when the removal is adopted, following the [rollout settings](#new-policy-versions).
 
-`policy.oam.dev/skip-global` is ignored, and Applications carrying it can no longer be updated until it is removed. See [Opting Out of Global Policies](./application-scoped-policy.md#opting-out-of-global-policies).
+`policy.oam.dev/skip-global` is ignored, and adding it to an Application is refused. An Application that already carries it stays updatable. See [Opting Out of Global Policies](./application-scoped-policy.md#opting-out-of-global-policies).
 
 A global policy that fails holds the Applications it covers instead of being skipped. See [Mandatory Global Policies](./application-scoped-policy.md#mandatory-global-policies).
 
@@ -215,7 +215,7 @@ These are the annotations and labels the rollout works with. The first six are s
 
 | Key | Set on | Set by | Values | Effect |
 |---|---|---|---|---|
-| `policy.oam.dev/skip-global` | Application | Application author | `"true"` | Opts the Application out of global policies. With `--allow-skip-global-policies=false` it is ignored with a `GlobalPolicySkipIgnored` event, and writes of an Application carrying it are refused. See [Opting Out of Global Policies](./application-scoped-policy.md#opting-out-of-global-policies). |
+| `policy.oam.dev/skip-global` | Application | Application author | `"true"` | Opts the Application out of global policies. With `--allow-skip-global-policies=false` it is ignored with a `GlobalPolicySkipIgnored` event, and adding it is refused. See [Opting Out of Global Policies](./application-scoped-policy.md#opting-out-of-global-policies). |
 | `policy.oam.dev/apply-policy-updates` | Application | Application author | `"true"`, `"false"`, or PolicyDefinition names | Whether the Application adopts new versions of the policies it runs. See [New Policy Versions](#new-policy-versions). |
 | `policy.oam.dev/apply-data-changes` | Application | Application author | `"true"`, `"false"`, or PolicyDefinition names | Whether changed output from an unchanged policy version reaches the Application without a new revision. See [Data Changes](#data-changes). |
 | `policy.oam.dev/auto-revision` | Application | Application author | `"true"`, `"false"`, or PolicyDefinition names | Whether a policy's spec rewrite cuts a new revision. See [Spec Rewrites](#spec-rewrites). |

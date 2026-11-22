@@ -137,7 +137,7 @@ A deleted policy is a changed policy too. Its removal follows the settings its o
 
 A `publishVersion` pin holds every update until `app.oam.dev/publishVersion` changes. Bumping it cuts a new revision, which takes the live policies like an author edit does.
 
-You can see a held update in three places. The policy's entry in `status.appliedApplicationPolicies` has a message that starts `update pending:` and says why: `a newer version of this policy is held by policy.oam.dev/apply-policy-updates or a publishVersion pin`, or `a newer version of this policy fails to render`. The Application gets a `PolicyUpdatePending` event. And `vela policy view <app> --details` prints each policy's effective settings.
+You can see a held update in three places. The policy's entry in `status.appliedApplicationPolicies` has a message that starts `update pending:` and says why: `a newer version of this policy is held by policy.oam.dev/apply-policy-updates or a publishVersion pin`, `a newer version of this policy fails to render`, or `a newer version of this policy rewrites the application spec`. The Application gets a `PolicyUpdatePending` event. And `vela policy view <app> --details` prints each policy's effective settings.
 
 ## Data Changes
 
