@@ -36,6 +36,9 @@ module.exports = {
           type: 'doc',
           id: 'quick-start',
         },
+        'getting-started/advanced-application',
+        'getting-started/sources',
+        'getting-started/first-component',
       ],
     },
     {

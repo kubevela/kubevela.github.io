@@ -170,18 +170,18 @@ Hello KubeVela! Make shipping applications more enjoyable.
 本地测试模式下通过下述命令即可打开 UI 界面。
 
 ```bash
-vela port-forward addon-velaux -n vela-system 8080:80
+vela port-forward addon-velaux -n vela-system 8080:8000
 ```
 
-UI 控制台需要用户认证，默认的账号是： `admin` 密码是： **`VelaUX12345`**。
+UI 控制台需要用户认证。首次访问时，需要为 `admin` 用户设置密码和邮箱，请正确设置你的企业邮箱（后期不可修改）并谨记密码，之后使用 `admin` 和该密码登录。
 
-首次登录后会进入修改密码和设置邮箱流程，请正确设置你的企业邮箱（后期不可修改）和谨记修改后的密码。
+UI 控制台只有在 `admin` 用户创建之后才会同步集群中的应用，因此设置密码后，请在另一个终端（端口转发仍在运行）重新执行一次上面部署应用的 `vela up` 命令。
 
 * 查看第一个应用的部署拓扑图
 
 通过 CLI 部署的应用会自动同步到 UI 侧，你可以进入应用页面查看到应用的相关可视化状态，比如：资源拓扑图，实例等。
 
-![first-app-graph](https://kubevela.io/images/1.5/first-app-graph.jpg)
+![first-app-graph](./resources/first-app-graph.jpg)
 
 KubeVela 的 UI 控制台跟底层的控制器使用了不同的元数据存储，它的架构类似企业的 PaaS 模式，UI 控制台（velaux）在上层使用数据库作为元数据存储而非依赖底层集群的 etcd。
 

@@ -1,25 +1,156 @@
 ---
-title: Deploy First Application
+title: Deploy Your First Application
+sidebar_label: Quick Start
 ---
 
 :::note
-Before starting, please confirm that you've installed KubeVela and enabled the VelaUX addon according to [the installation guide](./install.mdx).
+Before starting, install KubeVela by following [the installation guide](./install.mdx). The UI console section at the end also needs the VelaUX addon.
 :::
 
-Welcome to KubeVela! This section will guide you to deliver your first app.
+This guide deploys a "Hello World" web service with KubeVela, checks on it, scales it with a trait, and then shows it in the UI console. It takes about ten minutes.
 
-## Deploy a classic application
+## Applications, components and traits
 
-Below is a classic KubeVela application which contains one component with one operational trait, basically, it means to deploy a container image as webservice with one replica. Additionally, there are three policies and workflow steps, it means to deploy the application into two different environments with different configurations.
+An **Application** describes everything your service needs to run. It is made of **components**, which say *what* to run (a web service, a worker, a Helm chart), and each component can carry **traits**, which say *how* to run it (scaling, ingress, storage).
+
+```
+Application (online-store)
+├── Component: frontend (webservice)
+│   ├── Trait: scaler (replicas: 3)
+│   └── Trait: gateway (domain: store.example.com)
+└── Component: backend (webservice)
+    └── Trait: scaler (replicas: 2)
+```
+
+Component types and traits are definitions that your platform team can add to, so the same Application shape works for whatever your platform offers. [Core Concepts](./getting-started/core-concept.md) covers the model in full.
+
+## Create the application
+
+Save the following as `hello-world.yaml`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: first-vela-app
+  name: hello-world
 spec:
   components:
-    - name: express-server
+    - name: my-web-app
+      type: webservice
+      properties:
+        image: oamdev/hello-world
+        ports:
+         - port: 8000
+           expose: true
+```
+
+- `type: webservice` uses the built-in [webservice](./end-user/components/references.md#webservice) component type, which runs a container as a Deployment.
+- `image` is the container image to run.
+- `ports` exposes port 8000 through a Service.
+
+## Deploy it
+
+```bash
+vela up -f hello-world.yaml
+```
+
+<details>
+<summary>expected output</summary>
+
+```console
+Applying an application in vela K8s object format...
+✅ App has been deployed 🚀🚀🚀
+    Port forward: vela port-forward hello-world
+             SSH: vela exec hello-world
+         Logging: vela logs hello-world
+      App status: vela status hello-world
+        Endpoint: vela status hello-world --endpoint
+```
+</details>
+
+## Check its status
+
+```bash
+vela status hello-world
+```
+
+<details>
+<summary>expected output</summary>
+
+```console
+About:
+
+  Name:      	hello-world
+  Namespace: 	default
+  Created at:	2026-11-22 22:03:19 +0000 GMT
+  Healthy:   	✅
+  Details:   	running
+
+Workflow:
+
+  mode: DAG-DAG
+  finished: true
+  Suspend: false
+  Terminated: false
+  Steps
+  - id: v2hq5rlmqw
+    name: my-web-app
+    type: apply-component
+    phase: succeeded
+
+Services:
+
+  - Name: my-web-app
+    Cluster: local
+    Namespace: default
+    Type: webservice
+    Health: ✅
+      Message: Ready:1/1
+    No trait applied
+```
+</details>
+
+There's no workflow in `hello-world.yaml`, so KubeVela made one: a step per component, applied in parallel.
+
+## Open it
+
+```bash
+vela port-forward hello-world 8000:8000
+```
+
+This forwards port 8000 to your machine and, where it can, opens your browser. At http://localhost:8000 you'll see:
+
+```
+Hello KubeVela! Make shipping applications more enjoyable.
+```
+
+Press `Ctrl+C` to stop forwarding.
+
+## Look around
+
+```bash
+# Logs from the application's containers
+vela logs hello-world
+
+# Run a command in its container
+vela exec hello-world -- ls
+
+# Every application in the current namespace
+vela ls
+```
+
+## Scale it with a trait
+
+Add the `scaler` trait to the component in `hello-world.yaml`:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: hello-world
+spec:
+  components:
+    - name: my-web-app
       type: webservice
       properties:
         image: oamdev/hello-world
@@ -29,241 +160,118 @@ spec:
       traits:
         - type: scaler
           properties:
-            replicas: 1
-  policies:
-    - name: target-default
-      type: topology
-      properties:
-        # The cluster with name local is installed the KubeVela.
-        clusters: ["local"]
-        namespace: "default"
-    - name: target-prod
-      type: topology
-      properties:
-        clusters: ["local"]
-        # This namespace must be created before deploying.
-        namespace: "prod"
-    - name: deploy-ha
-      type: override
-      properties:
-        components:
-          - type: webservice
-            traits:
-              - type: scaler
-                properties:
-                  replicas: 2
-  workflow:
-    steps:
-      - name: deploy2default
-        type: deploy
-        properties:
-          policies: ["target-default"]
-      - name: manual-approval
-        type: suspend
-      - name: deploy2prod
-        type: deploy
-        properties:
-          policies: ["target-prod", "deploy-ha"]
+            replicas: 3
 ```
 
-* Create an environment for your first app.
+Apply it again and check the status:
 
 ```bash
-# This command will create a namespace in the local cluster
-vela env init prod --namespace prod
+vela up -f hello-world.yaml
+vela status hello-world
 ```
 
 <details>
 <summary>expected output</summary>
 
 ```console
-environment prod with namespace prod created
-```
-</details>
-
-* Starting to deploy the application
-
-```
-vela up -f https://kubevela.io/example/applications/first-app.yaml
-```
-
-<details>
-<summary>expected output</summary>
-
-```console
-Applying an application in vela K8s object format...
-I0516 15:45:18.123356   27156 apply.go:107] "creating object" name="first-vela-app" resource="core.oam.dev/v1beta1, Kind=Application"
-✅ App has been deployed 🚀🚀🚀
-    Port forward: vela port-forward first-vela-app
-             SSH: vela exec first-vela-app
-         Logging: vela logs first-vela-app
-      App status: vela status first-vela-app
-        Endpoint: vela status first-vela-app --endpoint
-Application prod/first-vela-app applied.
-```
-</details>
-
-* View the process and status of the application deployment
-
-```bash
-vela status first-vela-app
-```
-
-<details>
-<summary>expected output</summary>
-
-```console
-About:
-
-  Name:      	first-vela-app
-  Namespace: 	prod
-  Created at:	2022-05-16 15:45:18 +0800 CST
-  Status:    	workflowSuspending
-
-Workflow:
-
-  ...
-
+...
 Services:
 
-  - Name: express-server
-    Cluster: local  Namespace: default
+  - Name: my-web-app
+    Cluster: local
+    Namespace: default
     Type: webservice
-    Healthy Ready:1/1
+    Health: ✅
+      Message: Ready:3/3
     Traits:
-      ✅ scaler
+      Type: scaler
+      Health: ✅
 ```
 </details>
 
-The application status will change to `workflowSuspending`, means the workflow has finished the first two steps and waiting for manual approval as per the step specified.
+The component didn't change; the trait changed how it runs. The [traits reference](./end-user/traits/references.md) lists the rest of the built-in traits.
 
-* Access the application
+## Manage it in the UI console
 
-We can check the application by:
+With [VelaUX installed](./install.mdx), forward its port:
 
 ```bash
-vela port-forward first-vela-app 8000:8000
+vela port-forward addon-velaux -n vela-system 8080:8000
 ```
 
-It will invoke your browser and your can see the website:
+Open http://localhost:8080. The first time, VelaUX asks you to set the password for the `admin` user; after that, you log in as `admin` with that password.
 
-<details>
-<summary>expected output</summary>
-
-```
-<xmp>
-Hello KubeVela! Make shipping applications more enjoyable. 
-
-...snip...
-```
-</details>
-
-* Resume the workflow
-
-After we finished checking the application, we can approve the workflow to continue:
+VelaUX only picks up applications from the cluster once the admin user exists, so apply `hello-world` again after setting the password (from another terminal, as the port-forward keeps running):
 
 ```bash
-vela workflow resume first-vela-app
+vela up -f hello-world.yaml
 ```
 
-<details>
-<summary>expected output</summary>
+Open the `hello-world` application, then its **Default** environment, to see its health and the resources it made:
 
-```console
-Successfully resume workflow: first-vela-app
-```
-</details>
+![first-app-graph](./resources/first-app-graph.jpg)
 
-Then the rest will be delivered in the `prod` namespace:
-
-```bash
-vela status first-vela-app
-```
-
-<details>
-<summary>expected output</summary>
-
-```console
-About:
-
-  Name:      	first-vela-app
-  Namespace: 	prod
-  Created at:	2022-05-16 15:45:18 +0800 CST
-  Status:    	running
-
-Workflow:
-
-  ...snipt...
-
-Services:
-
-  - Name: express-server
-    Cluster: local  Namespace: prod
-    Type: webservice
-    Healthy Ready:2/2
-    Traits:
-      ✅ scaler
-  - Name: express-server
-    Cluster: local  Namespace: default
-    Type: webservice
-    Healthy Ready:1/1
-    Traits:
-      ✅ scaler
-```
-</details>
-
-Great! You have finished deploying your first KubeVela application, you can also view and manage it in UI.
-
-## Manage application with UI Console
-
-After finishing [the installation of VelaUX](./install.mdx#2-install-velaux), you can view and manage the application created.
-
-* Port forward the UI if you don't have endpoint for access:
-  ```
-  vela port-forward addon-velaux -n vela-system 8080:80
-  ```
-
-* VelaUX need authentication, default username is `admin` and the password is **`VelaUX12345`**.
-
-It requires you to override with a new password for the first login, please make sure to remember the new password.
-
-* Check the resources deployed
-
-Click the application card, then you can view the details of the application.
-
-![first-app-graph](https://kubevela.io/images/1.5/first-app-graph.jpg)
-
-The UI console shares a different metadata layer with the controller. It's more like a PaaS architecture of a company which choose a database as the source of truth instead of relying on the etcd of Kubernetes.
-
-By default, if you're using CLI to manage the applications directly from Kubernetes API, we will sync the metadata to UI backend automatically. Once you deployed the application from the UI console, the automatic sync process will be stopped as the source of truth may be changed.
+VelaUX keeps its own record of applications, alongside the controller's. Applications you manage with the CLI are synced into it automatically, and changes made from the CLI afterwards show up as a difference. Once you deploy an application from the UI console, though, that sync stops for it, since the UI is now its source of truth.
 
 :::tip
-If the namespace of the application operated by CLI has already been associated with the corresponding environment in UI, then the application will be automatically synchronized to the project associated with that environment in UI. Otherwise, the application will be synchronized to the default project.
-If you want to specify which project in UI console an application should be synchronized to, please refer to [Creating environments for the project](how-to/dashboard/user/project.md#creating-environments-for-the-project).
+An application synced from the CLI lands in the project whose environment is bound to its namespace, or the default project if there isn't one. See [Creating environments for the project](./how-to/dashboard/user/project.md#creating-environments-for-the-project) to choose which.
 :::
 
-If there're any changes happen from CLI after that, the UI console will detect the difference and show it for you. However, it's not recommended to modify the application properties from both sides.
-
-In conclusion, if you're a CLI/YAML/GitOps user, you'd better just use CLI to manage the application CRD and just use the UI console (velaux) as a dashboard. Once you've managed the app from the UI console, you need to align the behavior and manage apps from UI, API, or Webhook provided by velaux.
+So pick one way to manage each application: if you work with the CLI, YAML or GitOps, keep doing that and use the UI console as a dashboard.
 
 ## Clean up
 
 ```bash
-vela delete first-vela-app
+vela delete hello-world -n default
 ```
 
 <details>
 <summary>expected output</summary>
 
 ```console
-Deleting Application "first-vela-app"
-app "first-vela-app" deleted from namespace "prod"
+Are you sure to delete the application default/hello-world (y/n)y
+Start deleting application default/hello-world
+Delete application default/hello-world succeeded
 ```
 </details>
 
-That's it! You succeed at the first application delivery. Congratulation!
+Add `-y` to skip the prompt.
 
-## Next Step
+## Troubleshooting
 
-- View [Core Concepts](./getting-started/core-concept.md) to learn more about how it works.
-- View [User Guide](./tutorials/webservice.mdx) to look on more of what you can achieve with KubeVela.
+<details>
+<summary>The application isn't healthy</summary>
+
+`vela status hello-world` shows each component's health and message. For the resources behind it:
+
+```bash
+vela status hello-world --tree --detail
+```
+
+A wrong image name shows up here as a Deployment that never becomes ready.
+</details>
+
+<details>
+<summary>Port forwarding doesn't work</summary>
+
+- Check the application is `running` in `vela status hello-world`.
+- The second port must match the one in the application (8000).
+- If something else already uses port 8000 on your machine, pick another local port: `vela port-forward hello-world 8081:8000`.
+</details>
+
+<details>
+<summary>VelaUX isn't there</summary>
+
+```bash
+vela addon list | grep velaux
+```
+
+If it isn't enabled, `vela addon enable velaux`.
+</details>
+
+## Next steps
+
+- [Deploy an Advanced Application](./getting-started/advanced-application.md): two environments, overrides and a manual approval.
+- [Create Your First Component](./getting-started/first-component.md): write your own component type.
+- [Core Concepts](./getting-started/core-concept.md): how it all fits together.
+- [User Guide](./tutorials/webservice.mdx): more of what you can do with KubeVela.
