@@ -69,15 +69,16 @@ If you're using v1.3, the default password is in the secret:
 kubectl get secret admin -n vela-system
 ```
 
-If you're using v1.4+, the default password is `VelaUX12345`. After you first log in, you must change the password. If you forget the password, you could delete the admin user from the database, then restart the API server. The admin user will regenerate.
+From v1.4, there is no default password: the first time you open VelaUX, it asks you to set the password for the `admin` user. To change it later, use the user settings in VelaUX.
+
+If you forget it, delete the admin user and restart VelaUX. The next time you open it, it asks you to set the password again.
 
 ```bash
-
-# Delete the admin user. If you use the MongoDB, you should delete from the MongoDB.
+# Delete the admin user. With MongoDB as the datastore, delete it from MongoDB instead.
 kubectl delete cm usr-admin -n kubevela
 
-# Restart the API server and regenerate the admin user
-kubectl delete pod -l app.oam.dev/component=apiserver -n vela-system
+# Restart VelaUX
+kubectl delete pod -l app.oam.dev/component=velaux-server -n vela-system
 ```
 
 ### How can I build my own addon registry?

@@ -21,7 +21,7 @@ expected output:
 Addon: velaux enabled Successfully.
 ```
 
-VelaUX needs authentication. The default username is `admin` and the password is **`VelaUX12345`**. Please must set and remember the new password after the first login.
+VelaUX needs authentication. The first time you open it, it asks you to set the password for the `admin` user. After that, log in as `admin` with that password.
 
 By default, VelaUX didn't have any exposed port.
 
