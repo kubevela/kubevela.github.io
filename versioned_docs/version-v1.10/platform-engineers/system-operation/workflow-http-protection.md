@@ -54,11 +54,11 @@ An address under the well-known NAT64 prefix `64:ff9b::/96` is judged by the IPv
 
 The metadata entries are built into the controller, and the chart also writes them to a default ConfigMap. Deleting that ConfigMap, or turning discovery off, does not remove them. There is no allowlist mode.
 
-Destinations inside the cluster, such as a Service ClusterIP or `*.svc.cluster.local`, and public destinations stay allowed unless you deny them. To call a Service from a step, use its DNS name, not `localhost`.
+Destinations inside the cluster, such as a Service ClusterIP or `*.svc.cluster.local`, and public destinations stay allowed unless you deny them. [`blockPrivateHTTPAddresses`](#feature-gates) refuses ClusterIPs too, since they are private addresses. To call a Service from a step, use its DNS name, not `localhost`.
 
 ### Adding to the denylist
 
-vela-core reads every ConfigMap in its own namespace (`vela-system` by default) labelled `config.oam.dev/type: vela-core-http-deny`, including the chart's default `vela-core-http-deny-default`, and adds their entries to the built-in ones. It watches them, so a change takes effect without a restart.
+vela-core reads every ConfigMap in its own namespace (`vela-system` by default) labelled `config.oam.dev/type` with the config template's name (`workflow.httpDeny.configTemplateName`, `vela-core-http-deny` by default), including the chart's default `vela-core-http-deny-default`, and adds their entries to the built-in ones. It watches them, so a change takes effect without a restart.
 
 Create one with `vela config create`, which checks the entries before writing:
 
@@ -79,7 +79,7 @@ metadata:
   name: team-http-deny
   namespace: vela-system
   labels:
-    config.oam.dev/type: vela-core-http-deny
+    config.oam.dev/type: vela-core-http-deny # workflow.httpDeny.configTemplateName
 data:
   denyHosts: |
     *.example.com
