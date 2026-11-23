@@ -596,6 +596,7 @@ kubectl delete configmap vela-cluster-identity -n vela-system
 
 ## See Also
 
+- [Testing CUE Definitions](../cue/definition-testing.md): testing definitions written in CUE, with `vela def test`
 - [ComponentDefinition](./definition-component.md) — define workload types
 - [TraitDefinition](./definition-trait.md) — patch workloads with traits
 - [PolicyDefinition](./definition-policy.md) — define application policies

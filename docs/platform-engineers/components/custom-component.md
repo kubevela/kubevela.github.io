@@ -129,6 +129,11 @@ Validation succeed.
 ```
 </details>
 
+:::tip
+`vela def vet` checks that a definition is well formed. To check what it renders from given
+parameters, and its health and status, [write tests for it](../cue/definition-testing.md).
+:::
+
 Apply above `ComponentDefinition` to your Kubernetes cluster to make it work:
 
 ```shell

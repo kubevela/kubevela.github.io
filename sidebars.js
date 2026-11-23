@@ -405,6 +405,17 @@ module.exports = {
             'platform-engineers/cue/basic',
             'platform-engineers/cue/parameter-markers',
             'platform-engineers/cue/definition-edit',
+            {
+              type: 'category',
+              label: 'Testing CUE Definitions',
+              link: {type: 'doc', id: 'platform-engineers/cue/definition-testing'},
+              items: [
+                'platform-engineers/cue/definition-testing-functions',
+                'platform-engineers/cue/definition-testing-expectations',
+                'platform-engineers/cue/definition-testing-mocks-hooks',
+                'platform-engineers/cue/definition-testing-cli',
+              ],
+            },
             'platform-engineers/components/custom-component',
             'platform-engineers/traits/customize-trait',
             'platform-engineers/cue/definition-inheritance',
