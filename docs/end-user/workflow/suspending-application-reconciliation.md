@@ -130,7 +130,7 @@ Enabling the `ApplyOnce` feature gate sets that global period to `--informer-syn
 
 The annotation only changes the post-reconcile requeue interval. Periodic State Keep uses that interval only when State Keep is enabled.
 
-A change to the Application's spec, labels or annotations, or to its ResourceTracker, still triggers a reconcile straight away. A change made directly to a dispatched resource (for example, a hand edit to a Deployment) is not watched: it is corrected at the next periodic reconcile, which is the interval this annotation sets.
+A change to the Application's spec, labels or annotations still triggers a reconcile straight away, and so does deleting its ResourceTracker. Other ResourceTracker changes trigger one only with `--optimize-enable-resource-tracker-delete-only-trigger=false`. A change made directly to a dispatched resource (for example, a hand edit to a Deployment) is not watched: State Keep corrects it on its next periodic pass, at the interval this annotation sets. With State Keep disabled, as the `ApplyOnce` gate does, it is not corrected.
 
 ### Examples
 
