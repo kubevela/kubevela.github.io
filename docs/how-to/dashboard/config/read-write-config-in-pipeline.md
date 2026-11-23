@@ -94,8 +94,9 @@ Since v1.12, the steps work with `Config` resources and still read configs creat
   reconciles.
 - Every config step acts in the Application's namespace unless you set `namespace`. Another
   namespace is refused unless the `AuthenticateApplication` feature gate is on and the
-  Application's user has the step's verb (`get`, `list`, `create` or `delete`) on
-  `configs.config.oam.dev` there. A read or list of a shared system config (one in `vela-system`
+  Application's user has the step's verbs on `configs.config.oam.dev` there: `get` for
+  `read-config`, `list` for `list-config`, both `create` and `update` for `create-config` (checked
+  together on every run, as the step creates or overwrites), and `delete` for `delete-config`. A read or list of a shared system config (one in `vela-system`
   made from a system-scoped template) is always allowed. The refusal names the grant, here with
   the feature gate off:
 
