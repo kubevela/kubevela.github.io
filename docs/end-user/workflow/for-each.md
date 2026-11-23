@@ -55,9 +55,9 @@ difference is in the status: the loop is one step, `scale`, with its items, `sca
 step's parameters, the same way [inputs and outputs](./inputs-outputs.md) pass data
 between any two steps. The step's definition needs no change to be looped.
 
-`forEach` is new in v1.12 and has no feature gate: it needs only the v1.12 CRDs (see
-[Upgrading](#upgrading)). A WorkflowRun needs the vela-workflow release that ships with
-v1.12.
+`forEach` is new in v1.12 and has no feature gate: it needs vela-core v1.12 and its CRDs,
+which a Helm upgrade does not apply for you (see [Upgrading](#upgrading)). A WorkflowRun
+needs the vela-workflow release that ships with v1.12.
 
 :::note
 `scale-component` and `announce-endpoints` on this page stand for step definitions of
@@ -288,7 +288,9 @@ the item with `$(each.item...)`, which needs expressions turned on; without them
       - name: rollout
         type: step-group
         forEach:
-          from: targets            # [{cluster: prod-us, namespace: shop}, ...]
+          items:
+            - {cluster: prod-us, namespace: shop}
+            - {cluster: prod-eu, namespace: shop}
           key: [cluster, namespace]
         subSteps:
           - name: deploy
@@ -414,9 +416,12 @@ value `workflow.step.forEachMaxItems`.
 ## Upgrading {#upgrading}
 
 `forEach` is a new field in the Application, ApplicationRevision, Workflow and
-WorkflowRun CRDs. Helm does not upgrade CRDs, so apply the new ones before relying on it:
+WorkflowRun CRDs, read by the v1.12 controllers. Helm does not upgrade CRDs, so apply the
+new ones when you upgrade vela-core (and vela-workflow, for WorkflowRuns) to v1.12:
 
 ```bash
+helm repo add kubevela https://kubevela.github.io/charts
+helm repo update
 helm show crds kubevela/vela-core --version 1.12.0 | kubectl apply --server-side --force-conflicts -f -
 ```
 
