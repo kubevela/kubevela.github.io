@@ -150,4 +150,4 @@ These annotations are yours to set only while the `AuthenticateApplication` feat
 - with `authentication.withUser=false`, from v1.10.10, a hand-written `app.oam.dev/username` or `app.oam.dev/service-account-name` is ignored, and the Application runs as `authentication.defaultUser`.
 
 See [Underlying Mechanism](./advance.md).
-::: 
+:::
