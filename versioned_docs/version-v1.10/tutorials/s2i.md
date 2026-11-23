@@ -54,8 +54,9 @@ spec:
         - from: context.image
           parameterKey: image
       properties:
-        # use your kaniko executor image like below. If not set, it uses ghcr.io/osscontainertools/kaniko:v1.29.1 (from v1.10.10; oamdev/kaniko-executor:v1.9.1 before)
-        # kanikoExecutor: <your-registry>/kaniko:v1.29.1
+        # if kanikoExecutor is not set, it uses ghcr.io/osscontainertools/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37
+        # (from v1.10.10; oamdev/kaniko-executor:v1.9.1 before). To use your own copy, pin it by digest:
+        # kanikoExecutor: <your-registry>/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37
         # you can use context with git and branch or directly specify the context, please refer to https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts
         context:
           git: github.com/FogDong/simple-web-demo
@@ -130,8 +131,9 @@ spec:
     - name: build-push
       type: build-push-image
       properties:
-        # use your kaniko executor image like below. If not set, it uses ghcr.io/osscontainertools/kaniko:v1.29.1 (from v1.10.10; oamdev/kaniko-executor:v1.9.1 before)
-        # kanikoExecutor: <your-registry>/kaniko:v1.29.1
+        # if kanikoExecutor is not set, it uses ghcr.io/osscontainertools/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37
+        # (from v1.10.10; oamdev/kaniko-executor:v1.9.1 before). To use your own copy, pin it by digest:
+        # kanikoExecutor: <your-registry>/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37
         # you can use context with git and branch or directly specify the context, please refer to https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts
         context:
           git: github.com/FogDong/simple-web-demo
