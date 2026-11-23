@@ -278,7 +278,7 @@ Workflow steps can then reference `context.custom.tenant` to drive tenant-specif
 
 A **global policy** is evaluated against every Application without developers declaring it in `spec.policies`. Whether it applies to a given Application is still controlled by `config.enabled` in the CUE template, so global policies can be selective. This is the primary way platform teams enforce organisation-wide standards.
 
-To make a policy global, add `global: true` to the definition attributes and apply the definition to `vela-system`.:
+To make a policy global, add `global: true` to the definition attributes and apply the definition to `vela-system`:
 
 ```cue
 "platform-labels": {
@@ -337,7 +337,7 @@ This allows policies to be stacked and composed, but platform teams must be deli
   attributes: {
     scope:    "Application"
     global:   true
-    priority: 1   // Runs first among the globals: establishes the security baseline
+    priority: 1   // Runs before any global with a higher priority: the security baseline
   }
   description: "Enforce security annotations on all Applications."
   type: "policy"
