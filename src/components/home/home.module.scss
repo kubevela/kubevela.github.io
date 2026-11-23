@@ -168,7 +168,7 @@
   // Equal parts, each as wide as the widest.
   display: inline-grid;
   grid-template-columns: repeat(3, 1fr);
-  margin-top: 32px;
+  margin-top: 28px;
   overflow: hidden;
   background: var(--home-surface);
   border: 1px solid var(--home-border);
@@ -178,12 +178,12 @@
 
 .heroBadgePart {
   display: inline-flex;
-  gap: 14px;
+  gap: 10px;
   align-items: center;
   justify-content: center;
-  padding: 10px 20px;
+  padding: 6px 16px;
   color: var(--home-ink);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.01em;
   transition: background 0.15s;
@@ -192,7 +192,7 @@
   }
   img {
     display: block;
-    height: 30px;
+    height: 24px;
     width: auto;
   }
   strong {
@@ -208,15 +208,15 @@
 // The GitHub and Slack marks in the badge.
 .githubMark {
   flex: none;
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
   fill: currentColor;
 }
 
 // CNCF's incubating project mark, its logo over an Incubating Project bar.
 .heroBadgePart img.cncfIncubating {
-  height: 46px;
-  margin: -6px 0;
+  height: 36px;
+  margin: -4px 0;
 }
 
 .cncfDivider {
@@ -1276,8 +1276,8 @@
       height: 22px;
     }
     img.cncfIncubating {
-      height: 40px;
-      margin: -4px 0;
+      height: 32px;
+      margin: -3px 0;
     }
   }
   .section {
