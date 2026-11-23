@@ -7,8 +7,9 @@ KubeVela application natively supports impersonation even without the Authentica
 :::note
 This applies only while the `AuthenticateApplication` feature gate is off. With it on, the admission webhook records the requester's identity in the Application's annotations, and a hand-written identity is not used:
 
+- an Application carrying `app.oam.dev/service-account-name` is refused with `service-account annotation is not permitted when authentication enabled`;
 - with `authentication.withUser=true`, the webhook overwrites `app.oam.dev/username` with the requester's name;
-- with `authentication.withUser=false`, a hand-written `app.oam.dev/username` or `app.oam.dev/service-account-name` is ignored, and the Application runs as `authentication.defaultUser`.
+- with `authentication.withUser=false`, a hand-written `app.oam.dev/username` is ignored, and the Application runs as `authentication.defaultUser`.
 
 See [Underlying Mechanism](./advance.md#partial-identity-impersonation).
 :::
