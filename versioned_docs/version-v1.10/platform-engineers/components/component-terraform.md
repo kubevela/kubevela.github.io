@@ -132,7 +132,7 @@ spec:
 status: {}
 ```
 
-If the module's repository is private and reached over SSH, add `gitCredentialsSecretReference` under `schematic.terraform`, naming a Secret with the keys `ssh-privatekey` and `known_hosts`. KubeVela clones the module with it to read the module's variables, and checks the server against `known_hosts`. From v1.10.10 the Secret must be in the definition's own namespace; one in any other namespace is refused (`git credentials secret <namespace>/<name> must be in the definition's namespace "<namespace>"`).
+If the module's repository is private and reached over SSH, add `gitCredentialsSecretReference` under `schematic.terraform`, naming a Secret with the keys `ssh-privatekey` and `known_hosts`. KubeVela clones the module with it to read the module's variables, and checks the server against `known_hosts`. From v1.10.10 the Secret must be in the definition's own namespace; one in any other namespace is refused (`git credentials secret <namespace>/<name> must be in the definition's namespace "<namespace>"`). Give that namespace in the reference as well as the name, since the Terraform controller reads the Secret from exactly the namespace given when it applies the module.
 
 ```yaml
 spec:
@@ -142,6 +142,7 @@ spec:
       type: remote
       gitCredentialsSecretReference:
         name: git-ssh
+        namespace: vela-system
 ```
 
 You are warmly welcome to contribute this extended cloud resource ComponentDefinition to [oam-dev/catalog](https://github.com/kubevela/catalog/tree/master/addons/).
