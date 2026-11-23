@@ -17,6 +17,8 @@ To install the vela-core chart v1.11.2 without internet access, mirror these ima
 | `ghcr.io/osscontainertools/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37` | The default image of the `build-push-image` workflow step; only if you use it without `kanikoExecutor`. |
 | `oamdev/vela-cli:v1.6.4` | The default image of the `vela-cli` workflow step; only if you use it without `image`. |
 
+The two workflow step images are not chart values. Point a step at your copy with its own property, `kanikoExecutor` on `build-push-image` or `image` on `vela-cli`, in each step that uses it.
+
 From v1.11.1 the chart no longer needs `oamdev/kube-webhook-certgen`: vela-core makes its own certificates.
 
 ## Addon
