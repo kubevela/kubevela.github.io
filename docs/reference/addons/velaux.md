@@ -290,6 +290,18 @@ Please note that `acr.kubevela.net` is **no longer maintained** and documented h
 
 This feature can help you to build your private installation, just upload all images to your private image registry.
 
+## Compatibility
+
+VelaUX v1.12.0 runs on KubeVela 1.10, 1.11 and 1.12. A few features need a newer KubeVela. Where the cluster doesn't have them, VelaUX hides them, and its API refuses them with an error naming the version they need.
+
+| Feature | KubeVela |
+| --- | --- |
+| Everything not listed below | 1.10 or later |
+| Resync interval and workflow restart on an application | 1.11 or later |
+| Sources (SourceDefinitions) | 1.12 or later. Earlier versions have no SourceDefinition CRD, so the Sources list is empty. |
+
+VelaUX reads the KubeVela version from the vela-core image tag. If it can't tell (a branch build, or an image pinned by digest), it assumes every feature is there.
+
 ## Concept of VelaUX
 
 VelaUX is an addon on top of KubeVela, it works as UI console for KubeVela, while it's also an out-of-box platform for end-user.
