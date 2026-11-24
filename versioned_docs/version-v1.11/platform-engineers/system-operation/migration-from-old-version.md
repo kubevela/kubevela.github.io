@@ -17,7 +17,8 @@ This upgrade is non-breaking by default. The controller renders legacy definitio
 1. Upgrade your kubevela chart
 
 ```
-helm repo add kubevela https://kubevela.github.io/charts --force-update
+helm repo remove kubevela 2>/dev/null || true
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.11.0 --wait
 ```
@@ -60,7 +61,8 @@ These are neither breaking for end users nor for existing Application/Definition
 1. Upgrade your kubevela chart
 
 ```
-helm repo add kubevela https://kubevela.github.io/charts --force-update
+helm repo remove kubevela 2>/dev/null || true
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.9.5 --wait
 ```
@@ -72,7 +74,8 @@ These isn't too much work to be done for upgrading from v1.7.x to v1.8.x for usa
 1. Upgrade your kubevela chart
 
 ```
-helm repo add kubevela https://kubevela.github.io/charts --force-update
+helm repo remove kubevela 2>/dev/null || true
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.8.2 --wait
 ```
@@ -101,7 +104,8 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.7/
 Then you can upgrade the helm chart now:
 
 ```
-helm repo add kubevela https://kubevela.github.io/charts --force-update
+helm repo remove kubevela 2>/dev/null || true
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.3 --wait
 ```
@@ -170,7 +174,8 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/
 2. Upgrade your kubevela chart
 
 ```
-helm repo add kubevela https://kubevela.github.io/charts --force-update
+helm repo remove kubevela 2>/dev/null || true
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.6 --wait
 ```
@@ -206,7 +211,8 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/
 2. Upgrade your kubevela chart
 
 ```
-helm repo add kubevela https://kubevela.github.io/charts --force-update
+helm repo remove kubevela 2>/dev/null || true
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.10 --wait
 ```
@@ -242,7 +248,8 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/
 2. Upgrade your kubevela chart
 
 ```
-helm repo add kubevela https://kubevela.github.io/charts --force-update
+helm repo remove kubevela 2>/dev/null || true
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.14 --wait
 ```
@@ -285,7 +292,8 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.3/
 2. Upgrade your kubevela chart
 
 ```
-helm repo add kubevela https://kubevela.github.io/charts --force-update
+helm repo remove kubevela 2>/dev/null || true
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.3.6 --wait
 ```
