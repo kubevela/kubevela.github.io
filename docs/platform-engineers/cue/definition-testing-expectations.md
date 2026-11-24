@@ -48,6 +48,6 @@ fine. Any other field is a load error. A case that expects an error expects noth
 | Attribute | Placed | Effect |
 | --- | --- | --- |
 | `@label(a, b:c)` | after a case, inside one, inside a struct it is built from, or at the top of the file | Labels for `--label-filter`. Every case is also labelled with its kind (`component`, `trait`, `policy`, `application-policy`, `addon`, `workflow-step`, `source`), what it does (`render`, `status`, `exec`), and `upgrade` when marked `@upgrade`. |
-| `@pending(reason)` | as `@label` | The case loads but does not run, and is counted as pending. |
-| `@upgrade(reason="...")` | as `@label` | A known dependency on KubeVela's CUE upgrader. A case that fails as written is retried with the controller's default rewrites, plus any named, as in `@upgrade(generic-default-guard, reason="...")`, and counted as upgraded. It fails once it passes as written, until the marker is removed. |
+| `@pending(reason)` | as `@label` | The case loads but does not run, and is counted as pending. Under `--check-pending` it runs, and fails if it passes, since the marker is stale. |
+| `@upgrade(reason="...")` | as `@label` | A known dependency on KubeVela's CUE upgrader. A case that fails as written is retried with the controller's default rewrites, plus any named, as in `@upgrade(generic-default-guard, reason="...")`, and counted as upgraded. It fails once it passes as written, until the marker is removed. Under `--fail-on-upgrade` there is no retry, so a case that fails as written fails. |
 | `@before()`, `@beforeEach()`, `@afterEach()`, `@after()` | on a top-level field, hidden or not | Makes the field a [hook](./definition-testing-mocks-hooks.md#hooks). |

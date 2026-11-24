@@ -30,9 +30,9 @@ is a load error that says why:
 | Field | Determined by |
 | --- | --- |
 | `componentName` | `context.name` |
-| `componentType`, `traitType`, `policyType` | the definition's type |
+| `componentType` for a component, `traitType`, `policyType` | the definition's type; a trait case sets `componentType` to choose the workload it patches |
 | `policyName` | `context.name`, for a policy |
-| `appRevisionNum` | `context.appRevision`, such as `"shop-v3"` |
+| `appRevisionNum` | the number in `context.appRevision`, so `"shop-v3"` gives `3` |
 | `cluster` | always local for a policy, whose objects are dispatched to the hub |
 | `name` in a workflow step | the Application; set `appName` instead |
 | `stepSessionID` | the workflow engine |
@@ -109,7 +109,7 @@ existed are left, as are namespaces, since the test server cannot finish deletin
 Creates objects on the test server, then sets any `status` they carry, as a controller would have.
 `kube.#Apply` cannot do that, since the API server drops `status` on a create or apply. A namespace an
 object names that does not exist is created. Unlike `kube.#Apply`, an object that already exists is an
-error. `vela/test` functions run only in a hook or a check.
+error. `test.#Seed` and `test.#InstallCRDs` run only in a hook or a check, never as a case.
 
 ### test.#InstallCRDs
 

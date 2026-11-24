@@ -224,7 +224,7 @@ mocked; `vela/http` and `vela/registry` must be mocked. Nothing is cached, so ev
 	}
 }
 
-"caches for five minutes and serves stale on failure": test.#SourceExec & {
+"declares a five-minute cache that serves stale on failure": test.#SourceExec & {
 	definition: "settings"
 	parameter: name: "shop-config"
 	resources: [{apiVersion: "v1", kind: "ConfigMap", metadata: name: "shop-config", data: tier: "gold"}]

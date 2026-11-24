@@ -113,8 +113,9 @@ _web: {
 }
 ```
 
-Each top-level field is a **case**. Its name is the description you will see when it fails, and its
-value says three things:
+A top-level field built from a `vela/test` function is a **case** (hidden fields such as `_web`, and
+[hooks](#setting-up-with-hooks), are not). Its name is the description you will see when it fails, and
+its value says three things:
 
 - **which kind of test** it is, by unifying with a function from the `vela/test` package, here
   `test.#ComponentRender`;
@@ -136,7 +137,8 @@ vela def test .
 2 passed, 0 failed
 ```
 
-A failing case names its file, line and description, and says exactly where the result differed:
+Change the second case to expect `replicas: 2` and run it again. A failing case names its file, line and
+description, and says exactly where the result differed:
 
 ```console
 FAIL web_test.cue:21 web / runs one replica by default
@@ -457,6 +459,8 @@ team: kube.#Apply & {$params: value: {apiVersion: "v1", kind: "Namespace", metad
 
 Hook calls run for real and are not counted among a case's calls. What a hook creates is deleted when
 its scope ends, newest first, pass or fail; so is what a case's `resources` and its step create.
+Objects that already existed are left, and so are namespaces, as the
+[hooks reference](./definition-testing-mocks-hooks.md#hooks) explains.
 `test.#Seed` differs from `kube.#Apply` in two ways: it sets `status` as a controller would, which an
 apply cannot, and it fails if the object already exists. The hooks follow Ginkgo's rules: a failing
 `@before` fails every case, a failing `@beforeEach` fails its case without running the step, and the
