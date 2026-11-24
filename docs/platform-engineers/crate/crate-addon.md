@@ -71,7 +71,7 @@ Each directory directly under `crates/` must contain `_crate.cue`. If one does n
 crates/broken: missing _crate.cue; every directory directly under crates/ must be an inline crate (external references belong in crates/_imports.cue instead)
 ```
 
-An inline crate always installs on the hub. A `placement` on the `type: addon` component does not apply to it.
+An inline crate has no placement of its own, because you write it together with the addon. It follows the `placement` on the `type: addon` component: its runtime objects go to the clusters that the addon selects, and its hub objects and definitions stay on the hub. To put a crate on other clusters than its addon, publish the crate and import it. See [Placement on the type: addon component](#3-placement-on-the-type-addon-component).
 
 ## Imported crates
 
@@ -238,7 +238,7 @@ spec:
             region: east
 ```
 
-KubeVela adds the topology policy `addon-placement` to the addon Application. The `resources/` components go to the selected clusters. KubeVela copies the same placement to each imported crate that sets no `placement` of its own. An inline crate in `crates/<name>/` does not follow the addon placement, so its runtime objects and its owned Application stay on the hub.
+KubeVela adds the topology policy `addon-placement` to the addon Application. The `resources/` components go to the selected clusters. KubeVela copies the same placement to each imported crate that sets no `placement` of its own. An inline crate in `crates/<name>/` follows the addon placement too: its runtime objects go to the selected clusters. Its hub objects, its definitions and its owned Application stay on the hub.
 
 KubeVela refuses this `placement` in two cases. The addon decides its own clusters in these cases.
 
