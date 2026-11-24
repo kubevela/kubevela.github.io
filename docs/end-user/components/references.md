@@ -692,7 +692,13 @@ The rendered chart sees `replicaCount: 5` (from inline), `resources.limits.memor
 
 #### Authenticating with private chart registries
 
-Add `chart.auth.secretRef` to point at a Secret. When `secretRef.namespace` is not set, KubeVela reads the Secret from the release namespace. The Secret must be in the release namespace or in the Application's namespace. A Secret in any other namespace is refused. For example, a Secret in `vela-system` is refused when the Application and the release are in another namespace. The Secret type controls how credentials are extracted:
+Add `chart.auth.secretRef` to point at a Secret in the Application's namespace. You can leave out `secretRef.namespace`. If you set it, it must be the Application's namespace. Any other namespace is refused, the release namespace included, so an Application can't read a shared Secret from `vela-system`. The refusal looks like this:
+
+```text
+auth secret reference "<ns>/<name>" rejected: namespace MUST be in the Application namespace "<app-ns>" (the release namespace "<release-ns>" is not a source)
+```
+
+Chart and `oci://` pulls go through the same outbound HTTP guard as workflow steps. A registry on a loopback or link-local address is refused. A private address is refused too when `featureGates.blockPrivateHTTPAddresses` is on. The Secret type controls how credentials are extracted:
 
 | Secret type | Keys read | Use case |
 |---|---|---|
@@ -730,10 +736,10 @@ spec:
               name: registry-creds
         release:
           name: my-app
-          namespace: default
+          namespace: my-app
 ```
 
-The Application and the Secret are both in `default`, which is also the release namespace, so `secretRef.namespace` can be left out. The same `auth` block works for HTTPS repos (`source` + `repoURL`) and direct `.tgz` URLs. When you rotate the Secret, the cache key updates automatically and the next reconcile pulls a fresh copy of the chart.
+The Secret is in the Application's namespace, `default`, so `secretRef.namespace` can be left out. The release goes to `my-app`, but the Secret stays with the Application. The same `auth` block works for HTTPS repos (`source` + `repoURL`) and direct `.tgz` URLs. When you rotate the Secret, the cache key updates and the next reconcile pulls a fresh copy of the chart.
 
 #### Multicluster
 
@@ -765,13 +771,16 @@ spec:
 
 - **Release location.** `helm list -n podinfo` on the managed cluster shows the release. The hub cluster has no release for the component.
 - **Hooks.** A chart hook that sets no namespace goes to the release namespace.
-- **What stays on the hub cluster.** KubeVela reads `valuesFrom` sources and chart credentials (`chart.auth.secretRef`) on the hub cluster, not on the managed cluster. Create those ConfigMaps and Secrets on the hub cluster. When you leave out `namespace`, KubeVela looks in the release namespace on the hub cluster. That namespace usually exists only on the managed cluster. Set `namespace` to the Application's namespace, or the render fails with `ConfigMap <release-namespace>/<name> not found`.
-- **Permissions.** By default the `helmchart` component installs with the controller's own permissions. When application authentication is enabled, it installs with the Application's identity instead. With `--authentication-with-user`, that identity is the Application's user, and the user needs RBAC for every resource in the chart. This includes creating the release namespace, unless you set `options.createNamespace` to `false`. Without that flag, KubeVela uses the identity from `--authentication-default-user`, so grant RBAC to that identity. See [Underlying Mechanism](../../platform-engineers/auth/advance.md) for the identity settings.
+- **What stays on the hub cluster.** KubeVela reads `valuesFrom` sources and chart credentials (`chart.auth.secretRef`) on the hub cluster, not on the managed cluster. Create those ConfigMaps and Secrets on the hub cluster, in the Application's namespace.
+- **Permissions.** The install runs as an identity, and that identity needs RBAC for every resource in the chart. This includes creating the release namespace, unless you set `options.createNamespace` to `false`. The identity depends on the `AuthenticateApplication` feature gate:
+  - **Gate off (the default).** The install uses the controller's own permissions. If the Application sets `app.oam.dev/service-account-name`, it installs as that ServiceAccount instead.
+  - **Gate on.** The install uses the Application's identity: its user when `authentication.withUser` is true (flag `--authentication-with-user`), otherwise the identity from `authentication.defaultUser` (flag `--authentication-default-user`). The chart sets `withUser` to `true` by default. The bare flag defaults to `false`. The Application's groups (`app.oam.dev/group`) are impersonated too, so you can grant RBAC to a group.
+
+  Grant these rights on every cluster the topology places the component on, because the install impersonates on the managed cluster as well. See [Underlying Mechanism](../../platform-engineers/auth/advance.md) for the identity settings.
 
 :::note
-Before this behavior, a `helmchart` component with a topology policy installed its release on the hub cluster and only the chart's resources reached the managed cluster. After you upgrade, the release is installed on the managed cluster. The old release on the hub cluster is not removed. Remove it with `helm uninstall` on the hub cluster.
+In KubeVela v1.11 and earlier, a `helmchart` component with a topology policy installed its release on the hub cluster, and only the chart's resources reached the managed cluster. On the first successful workflow run after the upgrade, KubeVela installs the release on the managed cluster and uninstalls the copy on the hub. An Application you don't edit keeps its hub copy until its next run. To move it now, run `vela workflow restart <app> -n <namespace>`. With authentication enabled, the uninstall runs as the Application's user, who needs rights to delete the chart's resources on the hub.
 :::
-
 
 ### Specification (helmchart)
 
@@ -808,7 +817,7 @@ Before this behavior, a `helmchart` component with a topology policy installed i
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  name | Name of the Secret | string | true |  
- namespace | Namespace of the Secret. Defaults to the release namespace, which itself defaults to the Application namespace when `release.namespace` is unset. Must be either the release namespace or the Application namespace; cross-namespace references are rejected. | string | false |  
+ namespace | Namespace of the Secret. Defaults to the Application's namespace, which is the only namespace allowed. Any other namespace, the release namespace included, is rejected. | string | false |  
 
 Supported Secret types:
 
@@ -831,7 +840,7 @@ An `Opaque` Secret can also include these optional TLS fields: `caFile` (custom 
  ---- | ----------- | ---- | -------- | ------- 
  kind | Source kind. Only `Secret` and `ConfigMap` are supported. `OCIRepository` is not yet supported. | "Secret" or "ConfigMap" | true |  
  name | Name of the Secret or ConfigMap. | string | true |  
- namespace | Namespace of the Secret or ConfigMap. Defaults to the release namespace. An explicit value must match either the release namespace or the Application's own namespace; other namespaces are rejected to prevent cross-tenant reads via the controller's cluster-wide RBAC. | string | false |  
+ namespace | Namespace of the Secret or ConfigMap. Defaults to the Application's namespace, which is the only namespace allowed. Any other namespace, the release namespace included, is rejected, so one tenant can't read another's data through the controller's cluster-wide RBAC. | string | false |  
  key | Key inside `.data` whose value is parsed as YAML. Only `.data` is read; `ConfigMap.binaryData` is rejected. | string | false | "values.yaml" 
  optional | If true, a missing Secret/ConfigMap or missing key is skipped silently. Parse errors and permission errors still fail the render. | bool | false | false 
 
@@ -841,8 +850,15 @@ An `Opaque` Secret can also include these optional TLS fields: `caFile` (custom 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  name | Release name (defaults to component name) | string | false |  
- namespace | Target namespace (defaults to Application namespace) | string | false |  
+ namespace | Target namespace. Defaults to the component's namespace: the Application's namespace, or the topology policy's `namespace` when one is set. | string | false |  
 
+**Release ownership.** A Helm release belongs to the Application that installed it. KubeVela won't take over a release that another Application owns. Two Applications with a component of the same name in one namespace will hit this, and the install fails with:
+
+```text
+helm release <ns>/<name> belongs to Application <ns>/<app> (component <c>); set release.name to give this component its own release
+```
+
+Set `release.name` on one of the components to give it a separate release. If the owning Application no longer exists, KubeVela adopts the release.
 
 #### healthStatus (helmchart)
 
@@ -900,8 +916,8 @@ The chart cache is in-memory and scoped to the vela-core controller pod. It rese
  ---- | ----------- | ---- | -------- | ------- 
  key | Cache key prefix. Defaults to `{appName}-{componentName}`. Set a shared value to reuse a cached chart across multiple components. | string | false |  
  ttl | TTL for all versions, overriding the automatic immutable/mutable detection. Set to `"0"` to disable caching entirely. | string | false |  
- immutableTTL | TTL for pinned (immutable) versions such as `1.2.3` or `v2.0.0`. | string | false | "24h" 
- mutableTTL | TTL for floating versions such as `latest`, `dev`, or `-SNAPSHOT`. | string | false | "5m" 
+ immutableTTL | TTL for pinned (immutable) versions such as `1.2.3` or `v2.0.0`. Falls back to the cluster-wide `immutableTTL` (`24h` by default). | string | false |  
+ mutableTTL | TTL for floating versions such as `latest`, `dev`, or `-SNAPSHOT`. Falls back to the cluster-wide `mutableTTL` (`5m` by default). | string | false |  
 
 
 #### Cluster-wide cache
