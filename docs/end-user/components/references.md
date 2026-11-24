@@ -10,11 +10,13 @@ This documentation will walk through all the built-in component types sorted alp
 
 ### Description
 
-Fetch a crate package from an OCI registry and install its definitions and auxiliary objects. The package version is the OCI tag. It is not the API line (`v1`, `v2`). Definitions are created in the namespace of the Application that contains this component.
+Fetch a crate package from an OCI registry and install its definitions and auxiliary objects. The package version is the OCI tag. It is not the API line (`v1`, `v2`). Definitions are created in the namespace of the Application that contains this component. For a crate that an addon installs, they are created in the namespace of the Application that installs the addon.
 
 `EnableCrateComponent` must be true. See [Crates](../../platform-engineers/crate/intro.md) for what a crate is. See [Install and Use a Crate](../../platform-engineers/crate/crate-install.md) for the CLI and for the definitions that a crate adds.
 
 ### Examples (crate)
+
+The examples read from a crate registry named `catalog`. Add it first with `vela crate registry add catalog <oci-url>`, or leave out `registry` to use the configured default registry.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -56,7 +58,7 @@ spec:
 Name | Description | Type | Required | Default | Immutable 
  ---- | ----------- | ---- | -------- | ------- | --------- 
  crate | Crate name. Must match `crate` in the package `_crate.cue`. | string | false | the component name |  
- registry | Name from `vela crate registry add`. Admission rejects a name that is not configured: `is not a configured crate registry; configured: [...]`. If admission cannot read the registry ConfigMap, it does not check the name, and the workflow step fails with `crate registry "<name>" not found`. Empty is resolved when KubeVela fetches the package: the only configured registry, or the registry named `catalog` when several exist. | string | false |  |  
+ registry | Name from `vela crate registry add`. Admission rejects a name that is not configured: `is not a configured crate registry; configured: [...]`. If admission cannot read the registry ConfigMap, it does not check the name. The workflow step then fails with `crate registry "<name>" not found` for a name that is not configured, or with the read error when the ConfigMap still cannot be read. Empty is resolved when KubeVela fetches the package: the only configured registry, or the registry named `catalog` when several exist. | string | false |  |  
  version | Package version (OCI tag). Empty selects the highest published semver tag when the workflow of the Application runs. A new tag in the registry does not upgrade the installed package, so set `version` on each install and each upgrade. This is not the API line. | string | false |  |  
  placement | Clusters that receive the objects that the crate marks `runtime`. Without `placement`, all objects install on the hub. See [placement](#placement-crate). | [placement](#placement-crate) | false |  |  
 
