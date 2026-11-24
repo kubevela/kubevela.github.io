@@ -12,13 +12,9 @@ This documentation will walk through all the built-in component types sorted alp
 
 Fetch a crate package from an OCI registry and install its definitions and auxiliary objects. The package version is the OCI tag. It is not the API line (`v1`, `v2`). Definitions are created in the namespace of the Application that contains this component.
 
-The `EnableCrateComponent` feature gate must be on. The Crates pages of the platform engineer guide describe what a crate is, the CLI, and the definitions that a crate adds.
+`EnableCrateComponent` must be true. See [Crates](../../platform-engineers/crate/intro.md) for what a crate is. See [Install and Use a Crate](../../platform-engineers/crate/crate-install.md) for the CLI and for the definitions that a crate adds.
 
 ### Examples (crate)
-
-The example reads from a crate registry named `catalog`. Add it first with
-`vela crate registry add catalog <oci-url>`, or leave `registry` empty to use the
-configured default registry.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -56,26 +52,25 @@ spec:
             region: east
 ```
 
-`namespace` is not a property. If you set it, admission rejects the Application. The definitions install into the namespace of this Application, and that namespace must exist. On a managed cluster, a runtime object with no namespace also goes into this namespace, and the namespace must exist there too. KubeVela does not create it.
-
 ### Specification (crate)
-
-
- Name | Description | Type | Required | Default | Immutable 
+Name | Description | Type | Required | Default | Immutable 
  ---- | ----------- | ---- | -------- | ------- | --------- 
- crate | Crate name. It must match `crate` in the `_crate.cue` of the package. Defaults to the component name. | string | true |  |  
- registry | Name of a crate registry added with `vela crate registry add`. Empty selects the only configured registry, or the one named `catalog` when several exist. | string | false | empty |  
- version | Package version, which is the OCI tag that `vela crate publish` writes from the `version` field of `_crate.cue`. Empty selects the highest published semver tag when the workflow of the Application runs. This is not the API line (`v1`, `v2`). | string | false | empty |  
- placement | Clusters that receive the objects that the crate marks `runtime`. Objects with no mark and definitions stay on the hub. Without `placement`, all objects install on the hub. | [placement](#placement-crate) | false |  |  
+ crate | Crate name. Must match `crate` in the package `_crate.cue`. | string | false | the component name |  
+ registry | Name from `vela crate registry add`. Admission rejects a name that is not configured: `is not a configured crate registry; configured: [...]`. If admission cannot read the registry ConfigMap, it does not check the name, and the workflow step fails with `crate registry "<name>" not found`. Empty is resolved when KubeVela fetches the package: the only configured registry, or the registry named `catalog` when several exist. | string | false |  |  
+ version | Package version (OCI tag). Empty selects the highest published semver tag when the workflow of the Application runs. A new tag in the registry does not upgrade the installed package, so set `version` on each install and each upgrade. This is not the API line. | string | false |  |  
+ placement | Clusters that receive the objects that the crate marks `runtime`. Without `placement`, all objects install on the hub. See [placement](#placement-crate). | [placement](#placement-crate) | false |  |  
 
+`namespace` is not a property. If you set it, admission rejects the Application. The definitions install into the namespace of this Application. That namespace must exist. On a managed cluster, a runtime object with no namespace also goes into this namespace, and the namespace must exist there too. KubeVela does not create it.
 
 #### placement (crate)
 
+Set `clusters` or `clusterLabelSelector`. Do not set both. See [Crate Multi-Cluster Placement](../../platform-engineers/crate/crate-multicluster.md).
+
  Name | Description | Type | Required | Default | Immutable 
  ---- | ----------- | ---- | -------- | ------- | --------- 
- clusters | Names of the clusters, as `vela cluster list` shows them. `local` is the hub. Do not set it together with `clusterLabelSelector`. | []string | false |  |  
- clusterLabelSelector | Cluster labels to match. All labels must match. Do not set it together with `clusters`. | map[string]string | false |  |  
- allowEmpty | If true, the install succeeds when `clusterLabelSelector` matches no cluster. A name in `clusters` that is not a cluster always fails. | bool | false |  |  
+ clusters | Names of the clusters, as `vela cluster list` shows them. The list must contain one or more names. `local` is the hub. | []string | false |  |  
+ clusterLabelSelector | Cluster labels to match. All labels must match. An empty map `{}` matches every cluster, including `local`. | map[string]string | false |  |  
+ allowEmpty | If true, the install succeeds when `clusterLabelSelector` matches no cluster. If false, the runtime step fails. A name in `clusters` that is not a cluster always fails. | bool | false | false |
 
 ## Cron-Task
 
