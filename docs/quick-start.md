@@ -223,9 +223,7 @@ After finishing [the installation of VelaUX](./install.mdx#2-install-velaux), yo
   vela port-forward addon-velaux -n vela-system 8080:8000
   ```
 
-* VelaUX need authentication, default username is `admin` and the password is **`VelaUX12345`**.
-
-It requires you to override with a new password for the first login, please make sure to remember the new password.
+* VelaUX needs authentication. The first time you open it, it asks you to set the password for the `admin` user. After that, log in as `admin` with that password.
 
 * Check the resources deployed
 
