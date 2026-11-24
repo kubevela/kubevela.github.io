@@ -283,10 +283,10 @@ After deployed, let's get the root password from the secret `vela-system/velaux-
 By default the image repo is docker hub, you can specify the image repo by the `repo` parameter:
 
 ```
-vela addon enable velaux repo=your-registry.com
+vela addon enable velaux repo=your-registry.example.com
 ```
 
-With `repo=your-registry.com`, the image to deploy velaux server will be `your-registry.com/oamdev/velaux:<velaux-version>`.
+With `repo=your-registry.example.com`, the image to deploy velaux server will be `your-registry.example.com/oamdev/velaux:<velaux-version>`.
 
 This feature can help you to build your private installation, just upload all images to your private image registry.
 
