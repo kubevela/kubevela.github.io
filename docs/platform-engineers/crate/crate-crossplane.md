@@ -2,7 +2,7 @@
 title: "Example: S3 Buckets with Crossplane"
 ---
 
-This example builds the `aws-s3` module with two API lines, `v1` and `v2`. One package installs both lines in the same cluster. Application teams in one namespace can use `aws-s3/v1/bucket` and `aws-s3/v2/bucket` at the same time. They do not need to know Crossplane.
+This example builds the `aws-s3` crate with two API lines, `v1` and `v2`. One package installs both lines in the same cluster. Application teams in one namespace can use `aws-s3/v1/bucket` and `aws-s3/v2/bucket` at the same time. They do not need to know Crossplane.
 
 The two lines are two contracts for the same S3 bucket:
 
@@ -13,7 +13,7 @@ The two lines are two contracts for the same S3 bucket:
 
 Line `v2` changes the name of `region` to `location`, and it adds the required parameter `owner`. These are breaking changes, so they are in a new line. Applications that use `v1` do not change.
 
-The module contains:
+The crate contains:
 
 - The Crossplane packages that the buckets need: the AWS S3 provider and three composition functions. Both lines use them.
 - A Crossplane XRD. It defines the `ObjectBucket` API. Both lines use it.
@@ -23,7 +23,7 @@ The module contains:
 
 ## How the parts work together
 
-![Two API lines in one cluster: the Application photos uses line v1 and the Application invoices uses line v2. Each line has its own definition and Composition. The XRD, the EnvironmentConfig, and the provider are shared](../../resources/module/module-crossplane-path.png)
+![Two API lines in one cluster: the Application photos uses line v1 and the Application invoices uses line v2. Each line has its own definition and Composition. The XRD, the EnvironmentConfig, and the provider are shared](../../resources/crate/crate-crossplane-path.png)
 
 The diagram shows two Applications in the namespace `team-a`. `photos` uses line `v1`, and `invoices` uses line `v2`. Follow each row from left to right:
 
@@ -36,16 +36,16 @@ The diagram shows two Applications in the namespace `team-a`. `photos` uses line
 
 The middle row shows the objects that the two lines share: the XRD, the EnvironmentConfig, and the provider. Each line has its own definition and its own Composition.
 
-In the diagram, the module installs the purple objects. The green objects are the definitions from the module. Crossplane creates the orange objects for each bucket. The blue objects are the Applications of the application teams.
+In the diagram, the crate installs the purple objects. The green objects are the definitions from the crate. Crossplane creates the orange objects for each bucket. The blue objects are the Applications of the application teams.
 
 ## Before you start
 
-The module installs the provider, the functions, and the Crossplane objects. You must supply two items that the module cannot carry:
+The crate installs the provider, the functions, and the Crossplane objects. You must supply two items that the crate cannot carry:
 
-- Crossplane v2 on the cluster. See [Install Crossplane](https://docs.crossplane.io/latest/get-started/install/). Crossplane serves the `Provider` and `Function` APIs, so it must be on the cluster before the module.
-- AWS credentials for the provider. The credentials are secret and are different for each cluster, so do not put them in the module. You add them after the provider is Healthy. See [Add the AWS credentials](#add-the-aws-credentials).
+- Crossplane v2 on the cluster. See [Install Crossplane](https://docs.crossplane.io/latest/get-started/install/). Crossplane serves the `Provider` and `Function` APIs, so it must be on the cluster before the crate.
+- AWS credentials for the provider. The credentials are secret and are different for each cluster, so do not put them in the crate. You add them after the provider is Healthy. See [Add the AWS credentials](#add-the-aws-credentials).
 
-To install Crossplane and the module together, put Crossplane in the `resources/` directory of an addon, and put the module in the same addon. See [Modules in Addons](./module-addon.md).
+To install Crossplane and the crate together, put Crossplane in the `resources/` directory of an addon, and put the crate in the same addon. See [Crates in Addons](./crate-addon.md).
 
 :::note
 We tested this page with Crossplane v2.4, `provider-aws-s3` v2.9.0, and the function versions in `packages.yaml`. Check the fields against the versions that you use.
@@ -55,7 +55,7 @@ We tested this page with Crossplane v2.4, `provider-aws-s3` v2.9.0, and the func
 
 ```text
 aws-s3/
-  _module.cue
+  _crate.cue
   auxiliary/
     packages.yaml
     xrd.yaml
@@ -74,10 +74,10 @@ aws-s3/
       bucket.cue
 ```
 
-### _module.cue
+### _crate.cue
 
 ```cue
-module:  "aws-s3"
+crate:   "aws-s3"
 version: "1.0.0"
 ```
 
@@ -115,7 +115,7 @@ spec:
   package: xpkg.crossplane.io/crossplane-contrib/function-auto-ready:v0.7.3
 ```
 
-To upgrade the provider or a function, change the package tag in this file and publish a new module version. The provider and the functions are cluster-scoped, so they have no namespace.
+To upgrade the provider or a function, change the package tag in this file and publish a new package version. The provider and the functions are cluster-scoped, so they have no namespace.
 
 ### auxiliary/xrd.yaml
 
@@ -346,11 +346,9 @@ Both lines write the same XRD version, `v1alpha1`. An API line is the contract o
 
 ## Publish and install
 
-Add a module registry before these commands. `--registry` names a registry you added. See [Add a registry](./module-registry.md#add-a-registry).
+Add a crate registry before these commands. `--registry` names a registry you added. See [Add a registry](./crate-registry.md#add-a-registry).
 
 These commands use the name `ghcr`.
-
-Do not treat the name `catalog` as that registry. On the cluster used to check this page, `catalog` was `http://modreg.localhost:5055/modules`. Nothing listened on that port. Deploy with `--registry catalog` failed with `connection refused`. Deploy with `--registry ghcr` succeeded. That registry URL is `oci://ghcr.io/roguepikachu/vela-modules`.
 
 Create the install namespace before you deploy:
 
@@ -361,14 +359,14 @@ kubectl create namespace team-a
 Check the package first. The dry run lists both lines, and both lines are enabled:
 
 ```shell
-vela module publish ./aws-s3 --registry ghcr --dry-run
+vela crate publish ./aws-s3 --registry ghcr --dry-run
 ```
 
 ```text
-Would publish ghcr.io/myorg/modules/aws-s3:1.0.0
-  modules.oam.dev/enabled-lines: v1,v2
-  modules.oam.dev/lines: v1,v2
-  modules.oam.dev/module: aws-s3
+Would publish ghcr.io/myorg/crates/aws-s3:1.0.0
+  crates.oam.dev/crate: aws-s3
+  crates.oam.dev/enabled-lines: v1,v2
+  crates.oam.dev/lines: v1,v2
 ```
 
 The host in that output is the URL of the registry you added. The name in the command and that host are the same registry.
@@ -376,19 +374,20 @@ The host in that output is the URL of the registry you added. The name in the co
 Publish the package and install it in `team-a`:
 
 ```shell
-vela module publish ./aws-s3 --registry ghcr
-vela module deploy aws-s3 --registry ghcr --version 1.0.0 -n team-a
+vela crate publish ./aws-s3 --registry ghcr
+vela crate deploy aws-s3 --registry ghcr --version 1.0.0 -n team-a
 ```
 
 ```text
-Applied Application team-a/module-aws-s3-deploy
+Applied Application team-a/crate-aws-s3-deploy
+Rendering crate (install tiers are not known yet)...
 TIER          	STATUS 	MESSAGE
 aws-s3-aux    	Healthy
 aws-s3-v1-aux 	Healthy
 aws-s3-v1-defs	Healthy
 aws-s3-v2-aux 	Healthy
 aws-s3-v2-defs	Healthy
-Module "aws-s3" (version 1.0.0) is installed in namespace "team-a"
+Crate "aws-s3" (version 1.0.0) is installed in namespace "team-a"
 ```
 
 Each line has an auxiliary tier and a definitions tier. Both lines start after `aws-s3-aux`. Line `v2` does not wait for line `v1`.
@@ -401,7 +400,7 @@ kubectl get functions.pkg.crossplane.io
 kubectl get compositeresourcedefinitions objectbuckets.storage.example.org
 kubectl get environmentconfigs aws-s3-settings
 kubectl get compositions
-kubectl -n team-a get componentdefinitions -l definition.oam.dev/module=aws-s3
+kubectl -n team-a get componentdefinitions -l definition.oam.dev/crate=aws-s3
 ```
 
 The last two commands show one Composition and one definition for each line:
@@ -427,7 +426,7 @@ kubectl wait compositeresourcedefinitions objectbuckets.storage.example.org \
   --for=condition=Established --timeout=2m
 ```
 
-Crossplane also installs `crossplane-contrib-provider-family-aws`, a dependency of `provider-aws-s3`. It is not a module object. KubeVela does not delete it when you uninstall the module.
+Crossplane also installs `crossplane-contrib-provider-family-aws`, a dependency of `provider-aws-s3`. It is not a crate object. KubeVela does not delete it when you uninstall the crate.
 
 ## Add the AWS credentials
 
@@ -435,7 +434,7 @@ A namespaced `Bucket` uses the `ClusterProviderConfig` named `default` when the 
 
 Create the Secret and the `ClusterProviderConfig` after the provider is Healthy. The provider installs the `ClusterProviderConfig` CRD. Create both objects after that CRD exists.
 
-`./aws-credentials.ini` is an AWS shared credentials file. It has one profile and two keys. A real cluster uses real credentials. This page does not give a working key pair. The key names are in the [AWS credentials file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html). The provider reads the file from the Secret key `credentials`.
+`./aws-credentials.ini` is an AWS shared credentials file. It has one profile and two keys. A real cluster uses real credentials. The key names are in the [AWS credentials file](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html). The provider reads the file from the Secret key `credentials`.
 
 ```ini
 [default]
@@ -471,7 +470,7 @@ kubectl apply -f cluster-provider-config.yaml
 ```
 
 :::tip
-To test the module with no AWS account, use [LocalStack](https://docs.localstack.cloud/). Save this spec instead. It is the full object. It includes the Secret reference and the LocalStack endpoint:
+To test the crate with no AWS account, use [LocalStack](https://docs.localstack.cloud/). Save this spec instead. It is the full object. It includes the Secret reference and the LocalStack endpoint:
 
 ```yaml
 apiVersion: aws.m.upbound.io/v1beta1
@@ -501,7 +500,7 @@ spec:
 kubectl apply -f cluster-provider-config.yaml
 ```
 
-The cluster that runs the provider must resolve `localstack.internal`. Resolve that hostname, not an IP address. On this page the provider runs on the hub. On managed clusters, each cluster that runs the provider must resolve it. The provider calls S3 Control at `<account-id>.<endpoint host>`. The `services` list must include `s3control`. This page does not include a CoreDNS manifest.
+The cluster that runs the provider must resolve `localstack.internal`. Resolve that hostname, not an IP address. On this page the provider runs on the hub. On managed clusters, each cluster that runs the provider must resolve it. The provider calls S3 Control at `<account-id>.<endpoint host>`. The `services` list must include `s3control`.
 :::
 
 ## Use both lines at the same time
@@ -574,7 +573,10 @@ kubectl -n team-a get buckets.s3.aws.m.upbound.io
 
 Each S3 bucket also has the platform tags `managed-by: kubevela` and `cost-center: platform`. The provider adds `crossplane-*` tags.
 
-If a component on line `v2` does not set `owner`, admission accepts the Application, but the workflow step fails with `Parameter errors`.
+If a component on line `v2` does not set `owner`, the result depends on the feature gate `EnableCueValidation`:
+
+- With the gate off, which is the default, admission accepts the Application. The workflow step of the component then fails with `Parameter errors`, and the message contains `parameter.owner: incomplete value string`.
+- With the gate on, admission rejects the Application. The error contains `missing parameters: owner`.
 
 To delete a bucket, delete its Application. Crossplane then deletes the S3 bucket.
 
@@ -582,7 +584,7 @@ To delete a bucket, delete its Application. Crossplane then deletes the S3 bucke
 
 Both lines read the EnvironmentConfig `aws-s3-settings`. A change to a default applies to the buckets of both lines.
 
-To change a default, edit `auxiliary/settings.yaml`, change `version` in `_module.cue` to `1.0.1`, and publish. For example, change the tag `cost-center` to `storage`:
+To change a default, edit `auxiliary/settings.yaml`, change `version` in `_crate.cue` to `1.0.1`, and publish. For example, change the tag `cost-center` to `storage`:
 
 ```yaml
 data:
@@ -593,8 +595,8 @@ data:
 ```
 
 ```shell
-vela module publish ./aws-s3 --registry ghcr
-vela module deploy aws-s3 --registry ghcr --version 1.0.1 -n team-a
+vela crate publish ./aws-s3 --registry ghcr
+vela crate deploy aws-s3 --registry ghcr --version 1.0.1 -n team-a
 ```
 
 The Applications do not change. Crossplane applies the new tag to the buckets of both lines, including the buckets that exist.
@@ -648,7 +650,7 @@ invoices   aws-s3-v2     eu-central-1   map[owner:team-billing team:invoices]
 photos     aws-s3-v2     eu-west-1      map[owner:team-photos team:photos]
 ```
 
-The Application `invoices` does not change. For the general rules, see [Move to a new API line](./module-install.md#move-to-a-new-api-line).
+The Application `invoices` does not change. For the general rules, see [Move to a new API line](./crate-install.md#move-to-a-new-api-line).
 
 ## Retire line v1
 
@@ -675,31 +677,31 @@ When no Application uses line `v1`, the platform team can retire it.
    enabled:    false
    ```
 
-3. Set `version: "2.0.0"` in `_module.cue`. A retired line is a major change. Check the package and publish it:
+3. Set `version: "2.0.0"` in `_crate.cue`. A retired line is a major change. Check the package and publish it:
 
    ```shell
-   vela module publish ./aws-s3 --registry ghcr --dry-run
+   vela crate publish ./aws-s3 --registry ghcr --dry-run
    ```
 
    ```text
-   Would publish ghcr.io/myorg/modules/aws-s3:2.0.0
-     modules.oam.dev/enabled-lines: v2
-     modules.oam.dev/lines: v1,v2
-     modules.oam.dev/module: aws-s3
+   Would publish ghcr.io/myorg/crates/aws-s3:2.0.0
+     crates.oam.dev/crate: aws-s3
+     crates.oam.dev/enabled-lines: v2
+     crates.oam.dev/lines: v1,v2
    ```
 
    ```shell
-   vela module publish ./aws-s3 --registry ghcr
+   vela crate publish ./aws-s3 --registry ghcr
    ```
 
 4. Install the new package version:
 
    ```shell
-   vela module deploy aws-s3 --registry ghcr --version 2.0.0 -n team-a
+   vela crate deploy aws-s3 --registry ghcr --version 2.0.0 -n team-a
    ```
 
    ```text
-   Applied Application team-a/module-aws-s3-deploy
+   Applied Application team-a/crate-aws-s3-deploy
    TIER          	STATUS 	MESSAGE
    aws-s3-aux    	Healthy
    aws-s3-v1-aux 	Healthy
@@ -710,7 +712,7 @@ When no Application uses line `v1`, the platform team can retire it.
    aws-s3-aux    	Healthy
    aws-s3-v2-aux 	Healthy
    aws-s3-v2-defs	Healthy
-   Module "aws-s3" (version 2.0.0) is installed in namespace "team-a"
+   Crate "aws-s3" (version 2.0.0) is installed in namespace "team-a"
    ```
 
    The first table shows the tiers of the previous version. The second table shows the tiers of `2.0.0`.
@@ -718,7 +720,7 @@ When no Application uses line `v1`, the platform team can retire it.
 KubeVela deletes the definition `aws-s3-v1-bucket` and the Composition `aws-s3-v1`. The objects of line `v2` do not change:
 
 ```shell
-kubectl -n team-a get componentdefinitions -l definition.oam.dev/module=aws-s3
+kubectl -n team-a get componentdefinitions -l definition.oam.dev/crate=aws-s3
 kubectl get compositions
 ```
 
@@ -735,12 +737,12 @@ If an Application still uses line `v1` when you install `2.0.0`, these things oc
 
 - The `ObjectBucket` of the Application stays. Crossplane cannot reconcile it, because the Composition `aws-s3-v1` does not exist. The `Synced` condition of the `ObjectBucket` is false, with the message `cannot fetch Composition: cannot get Composition: Composition.apiextensions.crossplane.io "aws-s3-v1" not found`.
 - Admission rejects every change to the Application. The error contains `WorkloadDefinition.core.oam.dev "aws-s3-v1-bucket" not found`.
-- The Application shows a `Parsed` condition that is false, with the same message. `Ready` is false too. `vela status` shows Healthy with a red cross and phase `rendering`.
+- The Application shows a `Parsed` condition that is false, with the same message. `Ready` is false too. Check `vela status` for `Parsed=False`, not just the Healthy line.
 
 To recover, install a package version that enables `v1`, for example `1.0.1`. KubeVela installs the definition and the Composition of `v1` again. Then move the Application to `v2`, and install `2.0.0` again.
 :::
 
 ## Next steps
 
-- Send the provider, the functions, and the Crossplane objects to managed clusters: [Module Multi-Cluster Placement](./module-multicluster.md).
-- Ship Crossplane and the module together: [Modules in Addons](./module-addon.md).
+- Send the provider, the functions, and the Crossplane objects to managed clusters: [Crate Multi-Cluster Placement](./crate-multicluster.md).
+- Ship Crossplane and the crate together: [Crates in Addons](./crate-addon.md).

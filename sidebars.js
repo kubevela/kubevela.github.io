@@ -310,19 +310,19 @@ module.exports = {
         },
         {
           type: 'category',
-          label: 'Modules',
+          label: 'Crates',
           collapsed: true,
           link: {
             type: 'doc',
-            id: 'platform-engineers/module/intro',
+            id: 'platform-engineers/crate/intro',
           },
           items: [
-            'platform-engineers/module/module-registry',
-            'platform-engineers/module/module-install',
-            'platform-engineers/module/module-author',
-            'platform-engineers/module/module-crossplane',
-            'platform-engineers/module/module-multicluster',
-            'platform-engineers/module/module-addon',
+            'platform-engineers/crate/crate-registry',
+            'platform-engineers/crate/crate-install',
+            'platform-engineers/crate/crate-author',
+            'platform-engineers/crate/crate-crossplane',
+            'platform-engineers/crate/crate-multicluster',
+            'platform-engineers/crate/crate-addon',
           ],
         },
         {
