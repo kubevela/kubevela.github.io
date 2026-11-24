@@ -286,6 +286,10 @@ vela status crate-aws-s3 -n vela-system
 
 The `addon` component of the installing Application can show `Ready` before a crate finishes its install. Read the status of each owned Application `crate-<name>` to see its tiers.
 
+### After a KubeVela upgrade
+
+KubeVela writes the workflow of each addon Application into its spec. The first render after you upgrade from a version that did not do this adds the workflow. Each addon that is installed with the `addon` component then gets one new ApplicationRevision and deploys again once. This applies to all such addons, with or without crates or placement.
+
 ## Uninstall the addon
 
 Delete the installing Application. KubeVela deletes the addon Application, the owned Applications of the crates, the definitions, and the objects on the managed clusters.
