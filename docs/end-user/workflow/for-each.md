@@ -417,12 +417,21 @@ value `workflow.step.forEachMaxItems`.
 
 `forEach` is a new field in the Application, ApplicationRevision, Workflow and
 WorkflowRun CRDs, read by the v1.12 controllers. Helm does not upgrade CRDs, so apply the
-new ones when you upgrade vela-core (and vela-workflow, for WorkflowRuns) to v1.12:
+new ones when you upgrade vela-core to v1.12:
 
 ```bash
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm show crds kubevela/vela-core --version 1.12.0 | kubectl apply --server-side --force-conflicts -f -
+```
+
+The WorkflowRun CRD comes from vela-workflow, not vela-core. The `vela-workflow` addon
+applies its own CRD, so upgrading the addon to the release that ships with v1.12
+(`vela addon upgrade vela-workflow`) is enough. If you installed the vela-workflow Helm
+chart instead, apply its CRDs the same way:
+
+```bash
+helm show crds kubevela/vela-workflow --version <version> | kubectl apply --server-side --force-conflicts -f -
 ```
 
 Against an older CRD the API server drops `forEach` without an error. A step reading
