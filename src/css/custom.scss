@@ -623,11 +623,6 @@ html:not([data-kv-call='on']) div[class*='announcementBar_']:has(.kv-ann-only-ca
   }
 }
 
-/* Archived versions are on this site, so they carry no external-link mark. */
-.kv-archived-version svg {
-  display: none;
-}
-
 /* The version menu belongs to the documentation: elsewhere, and in the
    unversioned videos, it is hidden. */
 html:not(.plugin-docs) .navbar__item:has(> .kv-version),

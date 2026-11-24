@@ -59,12 +59,6 @@ const config = {
           type: 'docsVersionDropdown',
           position: 'right',
           className: 'kv-version',
-          // Archived versions are separate static builds outside the docs plugin.
-          dropdownItemsAfter: ['v1.5', 'v1.4', 'v1.3', 'v1.2', 'v1.1', 'v1.0'].map((v) => ({
-            href: `pathname:///docs/${v}`,
-            label: `${v} (Archived)`,
-            className: 'kv-archived-version',
-          })),
         },
         {
           to: 'docs/',
