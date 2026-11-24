@@ -16,7 +16,7 @@ const defs = [
 const defIndex = Object.fromEntries(defs.map((d, i) => [d.name, i]));
 
 // blocks are the application's source and components: each is an instance
-// of a definition, with instances of trait definitions clipped to it.
+// of a definition, with instances of trait definitions attached to its edge.
 const blocks = [
   { name: 'settings', def: 'config', traits: [] },
   { name: 'api', def: 'webservice', traits: ['scaler', 'gateway'] },
@@ -297,7 +297,6 @@ export default function HowGraph() {
               return (
                 <Instance
                   key={t}
-                  className="dg-clip"
                   from={[tdef.x + 11 - x, tdef.y + 14 - y]}
                   spawned={on(blockPhases[i].traitSpawn)}
                   placed={on(blockPhases[i].traitPlace)}

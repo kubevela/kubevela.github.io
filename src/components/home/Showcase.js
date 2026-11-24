@@ -44,13 +44,12 @@ export default function Showcase() {
             </Link>
           </p>
         </div>
-        <div className={styles.tabs} role="tablist">
+        <div className={styles.tabs} role="group" aria-label={translate({ id: 'home.showcase.screens', message: 'VelaUX screens' })}>
           {shots.map((s) => (
             <button
               key={s.key}
               type="button"
-              role="tab"
-              aria-selected={current === s.key}
+              aria-pressed={current === s.key}
               className={clsx(styles.tab, current === s.key && styles.tabOn)}
               onClick={() => setCurrent(s.key)}
             >

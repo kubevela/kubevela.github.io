@@ -154,10 +154,10 @@ export default function VelaOverview() {
         </text>
 
         {/* ISV and SaaS owners extend it with addons. */}
-        <text className={styles.title} x={944} y={28} textAnchor="end">
+        <text className={styles.title} x={884} y={28} textAnchor="end">
           ISV/SaaS Owners
         </text>
-        <Person x={802} y={8} />
+        <Person x={896} y={8} />
         <path className={styles.flow} d="M 906 38 V 59" markerEnd="url(#vo-head)" />
         <rect className={styles.card} x={866} y={62} width={78} height={300} rx={10} />
         <rect className={styles.addonsHead} x={866} y={62} width={78} height={30} rx={10} />

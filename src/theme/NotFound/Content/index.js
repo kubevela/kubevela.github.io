@@ -44,7 +44,7 @@ export default function NotFoundContent({ className }) {
         </Link>
       </div>
       <p className={styles.hint}>
-        <Translate id="theme.NotFound.search">Or search the docs with ⌘K.</Translate>
+        <Translate id="theme.NotFound.search">Or search the docs with ⌘K or Ctrl+K.</Translate>
       </p>
     </main>
   );

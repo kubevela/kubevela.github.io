@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import Translate from '@docusaurus/Translate';
-import useBaseUrl from '@docusaurus/useBaseUrl';
+import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
 import {
   AddonsDiagram,
   BlocksDiagram,
@@ -116,6 +116,7 @@ function usePlayQueue(count) {
 // Toolkit is what a platform team builds with KubeVela, each part beside a
 // drawing of it. Where the reader can hover, only one drawing moves at a time.
 export default function Toolkit() {
+  const { withBaseUrl } = useBaseUrlUtils();
   const items = [
     {
       title: <Translate id="home.toolkit.oam.title">Built on the Open Application Model</Translate>,
@@ -250,7 +251,7 @@ export default function Toolkit() {
               <div className={styles.featureText}>
                 <h3>{title}</h3>
                 <p>{body}</p>
-                <Link className={styles.more} to={useBaseUrl(to)}>
+                <Link className={styles.more} to={withBaseUrl(to)}>
                   <Translate id="home.readMore">Read more</Translate>
                 </Link>
               </div>

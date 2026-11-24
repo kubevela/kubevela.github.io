@@ -42,12 +42,14 @@ export default function Hero() {
   return (
     <header className={styles.hero}>
       <div className={`container ${styles.heroInner}`}>
-        <Sail className={styles.heroLogo} />
+        <Sail className={styles.heroLogo} aria-hidden="true" />
         <h1 className={styles.heroName}>
           Kube<span className={styles.heroBrand}>Vela</span>
         </h1>
         <p className={styles.heroTitle}>
-          <Translate id="home.hero.title">Platform Engineering.</Translate>{' '}
+          <Translate id="home.hero.title">Platform Engineering.</Translate>
+          {/* Empty in languages written without spaces between sentences. */}
+          {translate({ id: 'home.hero.titleSpace', message: ' ' })}
           <span className={styles.heroBrand}>
             <Translate id="home.hero.titleAccent">Simplified.</Translate>
           </span>
@@ -80,7 +82,7 @@ export default function Hero() {
             />
           </a>
           <a className={styles.heroBadgePart} href="https://github.com/kubevela/kubevela">
-            <GitHubMark className={styles.githubMark} />
+            <GitHubMark className={styles.githubMark} label="GitHub" />
             <Stars />
           </a>
           <a className={styles.heroBadgePart} href="https://cloud-native.slack.com/archives/C01BLQ3HTJA">

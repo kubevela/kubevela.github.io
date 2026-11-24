@@ -97,6 +97,8 @@ function launch() {
   overlay.tabIndex = -1;
   const timers = [];
   const after = (ms, fn) => timers.push(setTimeout(fn, ms));
+  // Focus goes back to where it was when the dialog closes.
+  const opener = document.activeElement;
   // The scene's animations run from when it is added to the page.
   const showScene = () => {
     const sky = document.createElement('div');
@@ -108,6 +110,7 @@ function launch() {
     timers.forEach(clearTimeout);
     overlay.remove();
     document.removeEventListener('keydown', onKey, true);
+    opener?.focus?.();
   };
   const onKey = (e) => {
     if (e.key === 'Escape') close();

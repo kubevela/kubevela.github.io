@@ -400,6 +400,8 @@ iframe {
   --kv-nav-link: #475569;
   --kv-nav-link-hover: #0f172a;
   --kv-brand: #1b58f4;
+  /* Infima offsets sticky sidebars, the TOC and anchors by this. */
+  --ifm-navbar-height: 64px;
 }
 
 html[data-theme='dark'] {
@@ -453,7 +455,8 @@ div[class*='announcementBar_'] {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  background: var(--kv-brand);
+  /* The light theme's brand blue in both themes: white text needs it. */
+  background: #1b58f4;
   border-radius: 999px;
 }
 
@@ -497,7 +500,7 @@ html:not([data-kv-call='on']) div[class*='announcementBar_']:has(.kv-ann-only-ca
 }
 
 .navbar {
-  height: 64px;
+  height: var(--ifm-navbar-height);
   background: var(--kv-nav-bg);
   border-bottom: 1px solid var(--kv-nav-border);
   box-shadow: none;

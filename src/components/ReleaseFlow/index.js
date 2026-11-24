@@ -50,6 +50,16 @@ const PICKS = [
 
 const RADIUS = { fix: 6, feature: 10, pre: 10, release: 10, milestone: 7, idea: 9, design: 9 };
 
+// LEGEND names each kind of commit, at [x, y]; ideas and designs are named by
+// their boxes.
+const LEGEND = [
+  [700, 24, 'fix', 'Fix'],
+  [760, 24, 'feature', 'Feature'],
+  [850, 24, 'milestone', 'Milestone'],
+  [700, 50, 'pre', 'Pre-release'],
+  [810, 50, 'release', 'Release'],
+];
+
 function Lane({ y, x1, x2, name, nameX, anchor = 'end' }) {
   return (
     <g>
@@ -108,6 +118,15 @@ export default function ReleaseFlow() {
             <path className={styles.head} d="M 0 0.5 L 7.5 4 L 0 7.5 Z" />
           </marker>
         </defs>
+
+        {LEGEND.map(([x, y, kind, name]) => (
+          <g key={kind}>
+            <circle className={styles[kind]} cx={x} cy={y} r={RADIUS[kind]} />
+            <text className={styles.chipText} x={x + 16} y={y + 4}>
+              {name}
+            </text>
+          </g>
+        ))}
 
         {/* Where each release branch is cut. */}
         <path className={styles.cut} d={`M 104 40 V ${MASTER + 30}`} />

@@ -71,7 +71,7 @@ export default function MultiClusterWorkflow() {
         className={styles.dg}
         viewBox="0 0 760 500"
         role="img"
-        aria-label="A KubeVela Application in the hub cluster optionally refers to a policy, such as a topology or override policy, and a workflow made of deploy workflow steps. It dispatches a Deployment and a Service to each managed cluster. In its workflow, a deploy step uses a topology policy for cluster-beijing-1 and cluster-beijing-2, a suspend step waits, and a second deploy step uses a topology policy for cluster-hangzhou and an override policy setting replicas to 3.">
+        aria-label="A KubeVela Application in the hub cluster optionally refers to a policy, such as a topology or override policy, and a workflow made of deploy workflow steps. It dispatches a Deployment and a Service to each managed cluster. In its workflow, a deploy step uses a topology policy for cluster-hangzhou-1 and cluster-hangzhou-2, a suspend step waits, and a second deploy step uses a topology policy for cluster-beijing and an override policy setting replicas to 3.">
         <defs>
           <marker id="mcw-head" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path className={styles.head} d="M 0 0.5 L 7.5 4 L 0 7.5 Z" />
@@ -145,8 +145,8 @@ export default function MultiClusterWorkflow() {
           </g>
         ))}
         {[
-          { step: 0, x: 215, label: 'topology', out: 'cluster-beijing-1,', out2: 'cluster-beijing-2' },
-          { step: 2, x: 528, label: 'topology', out: 'cluster-hangzhou' },
+          { step: 0, x: 215, label: 'topology', out: 'cluster-hangzhou-1,', out2: 'cluster-hangzhou-2' },
+          { step: 2, x: 528, label: 'topology', out: 'cluster-beijing' },
           { step: 2, x: 652, label: 'override', out: 'replicas=3' },
         ].map((p) => {
           const s = STEPS[p.step];

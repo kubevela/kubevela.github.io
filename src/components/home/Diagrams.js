@@ -28,6 +28,24 @@ const Label = ({ x, y, children, kind = '', anchor }) => (
   </text>
 );
 
+// Chip is a named instance in the Application, marked with its kind.
+const Chip = ({ x, y, w, kind, name }) => (
+  <>
+    <rect className="dg-block" x={x} y={y} width={w} height="20" rx="6" />
+    <KindIcon kind={kind} x={x + 6} y={y + 5} />
+    <Label x={x + 21} y={y + 13.5}>
+      {name}
+    </Label>
+  </>
+);
+// Plus marks a kind KubeVela adds to the spec, before its row's label.
+const Plus = ({ x, y, show }) => (
+  <g className={clsx('dg-component', { on: show })}>
+    <circle className="dg-kv-tag" cx={x} cy={y + 7} r="5" />
+    <path className="dg-kv-plus" d={`M ${x - 2.5} ${y + 7} h 5 M ${x} ${y + 4.5} v 5`} />
+  </g>
+);
+
 // OamDiagram: the OAM spec and an Application build up side by side. Each
 // kind is written into the spec, then an arrow carries it across and its
 // pieces appear in the Application: components, traits, workflow. Then
@@ -52,22 +70,6 @@ export function OamDiagram() {
     { kind: 'trait', name: 'traits', y: 116, to: [146, 125], at: 5 },
     { kind: 'workflow', name: 'workflow', y: 162, to: [146, 201], at: 9 },
   ];
-  const Chip = ({ x, y, w, kind, name }) => (
-    <>
-      <rect className="dg-block" x={x} y={y} width={w} height="20" rx="6" />
-      <KindIcon kind={kind} x={x + 6} y={y + 5} />
-      <Label x={x + 21} y={y + 13.5}>
-        {name}
-      </Label>
-    </>
-  );
-  // Plus marks a kind KubeVela adds to the spec, before its row's label.
-  const Plus = ({ x, y, show }) => (
-    <g className={clsx('dg-component', { on: show })}>
-      <circle className="dg-kv-tag" cx={x} cy={y + 7} r="5" />
-      <path className="dg-kv-plus" d={`M ${x - 2.5} ${y + 7} h 5 M ${x} ${y + 4.5} v 5`} />
-    </g>
-  );
   return (
     <svg ref={ref} className="dg" viewBox="0 0 440 252" aria-hidden="true">
       {/* The spec links to oam.dev; the card's text carries the same link for

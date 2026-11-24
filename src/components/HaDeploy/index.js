@@ -102,7 +102,7 @@ export default function HaDeploy() {
           KubeVela Controller
         </text>
 
-        {/* What it reaches, each through its own component. */}
+        {/* What it reaches: cloud providers and clusters through a component each, IoT and edge directly. */}
         {[
           { x: 10, chip: 'Terraform Controller', name: 'Cloud providers' },
           { x: 216, chip: 'Cluster Gateway', name: 'Multi Kubernetes clusters' },

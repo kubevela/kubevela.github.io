@@ -34,10 +34,10 @@ This is how the command functions:
     For example, to call the `vela version` command in Docker, you run the following.
     ```
     $ docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli version
-    CLI Version: master
-    Core Version:
-    GitRevision: git-1d823780
-    GolangVersion: go1.17.10
+    CLI Version: v1.11.0
+    Core Version: v1.11.0
+    GitRevision: git-28c8d3dc
+    GolangVersion: go1.23.8
     ```
 
 * `--rm` – Specifies to clean up the container after the command exits.

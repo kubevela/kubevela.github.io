@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
 import Translate from '@docusaurus/Translate';
-import useBaseUrl from '@docusaurus/useBaseUrl';
+import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
 import HowGraph from './HowGraph';
 import { ComposeGlyph, DefineGlyph, DeliverGlyph } from './Glyphs';
 import styles from './home.module.scss';
@@ -9,6 +9,7 @@ import styles from './home.module.scss';
 // WhatIs explains KubeVela as its three steps, in the order they happen, under
 // the drawing that plays them.
 export default function WhatIs() {
+  const { withBaseUrl } = useBaseUrlUtils();
   const steps = [
     {
       title: <Translate id="home.what.define.title">Define</Translate>,
@@ -73,7 +74,7 @@ export default function WhatIs() {
               <h3>{title}</h3>
               <span className={styles.trackWho}>{who}</span>
               <p>{body}</p>
-              <Link className={styles.more} to={useBaseUrl(to)}>
+              <Link className={styles.more} to={withBaseUrl(to)}>
                 <Translate id="home.readMore">Read more</Translate>
               </Link>
             </li>

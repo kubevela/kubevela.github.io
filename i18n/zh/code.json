@@ -287,6 +287,9 @@
   "home.hero.title": {
     "message": "平台工程，"
   },
+  "home.hero.titleSpace": {
+    "message": ""
+  },
   "home.hero.titleAccent": {
     "message": "化繁为简。"
   },
@@ -338,6 +341,9 @@
   "home.showcase.link": {
     "message": "安装 VelaUX"
   },
+  "home.showcase.screens": {
+    "message": "VelaUX 界面"
+  },
   "home.showcase.resourceGraph": {
     "message": "资源拓扑"
   },
@@ -369,7 +375,7 @@
     "message": "你的构建块"
   },
   "home.toolkit.blocks.body": {
-    "message": "将数据源、组件、运维特征、策略和工作流步骤以 KubeVela 定义一次性定义，使用 CUE 或 Go。像代码一样测试它们并进行版本管理，让每个团队都基于同一套经过验证的构建块，规范已内置其中。"
+    "message": "将数据源、组件、运维特征、策略和工作流步骤一次性写成 KubeVela 定义，使用 CUE 或 Go。像代码一样测试它们并进行版本管理，让每个团队都基于同一套经过验证的构建块，规范已内置其中。"
   },
   "home.toolkit.selfService.title": {
     "message": "每个团队都能自助服务"

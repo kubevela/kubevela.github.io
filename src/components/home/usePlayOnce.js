@@ -16,8 +16,9 @@ export const PlayCueContext = createContext(null);
 // PlayCueContext. It returns the ref to put on the drawing, the current phase,
 // whether the drawing is resting on its last phase, and done, which reports
 // that the drawing has played through. A drawing that keeps moving after its
-// last phase passes holdsEnd and calls done itself. With reduced motion the
-// drawing starts on its last phase.
+// last phase passes holdsEnd and calls done itself. Uncued, with reduced
+// motion the drawing starts on its last phase; a parent that cues it checks
+// reduced motion itself.
 export default function usePlayOnce(last, stepMs = 380, holdsEnd = false) {
   const cue = useContext(PlayCueContext);
   const cued = cue !== null;
