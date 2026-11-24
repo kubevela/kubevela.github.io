@@ -38,7 +38,7 @@ VelaD support installing KubeVela on machines based on these OS: Linux, macOS, W
 
 **Requirements**
 
-1. If you are using Linux or macOS, make sure your machine have `curl` installed.
+1. If you are using Linux or macOS, make sure your machine has `curl` installed.
 2. If you are using macOS or Windows, make sure you've already installed [Docker](https://www.docker.com/products/docker-desktop).
 3. Make sure the docker daemon is up and running.
 
@@ -219,7 +219,7 @@ This is optional if you don't use UI console of KubeVela.
 
 </details>
 
-By default, velaux doesn't have any exposed port, you can view it by:
+By default, VelaUX doesn't expose a port. To reach it, run:
 
 ```shell
 vela port-forward addon-velaux -n vela-system 8080:8000
@@ -253,7 +253,7 @@ Prepare a Linux server and make sure it meets the following requirements:
 
 1. Make sure your machine has `curl` installed.
 2. This server has a public IP, or you can access the server's IP if it's a on-premise server.
-3. If you are using a cloud server, make sure you have opened the port 6443 in a secure group.
+3. If you are using a cloud server, make sure you have opened port 6443 in a security group.
 
 ### 2. Install VelaD and Setup KubeVela
 
@@ -314,7 +314,7 @@ vela comp
 ```
 
 :::tip
-- When executing `velad install`, vela CLI (`vela`) is already installed and add to `PATH` automatically. So you can use it directly.
+- When executing `velad install`, vela CLI (`vela`) is already installed and added to `PATH` automatically. So you can use it directly.
 Later we will access KubeVela on local machine, we will install vela CLI on local machine again.
 - The file used to configure access to clusters is called the *kubeconfig* file. Vela CLI also uses this file to access KubeVela.
 :::

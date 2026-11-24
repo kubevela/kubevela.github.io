@@ -220,7 +220,7 @@ After finishing [the installation of VelaUX](./install.mdx#2-install-velaux), yo
 
 * Port forward the UI if you don't have endpoint for access:
   ```
-  vela port-forward addon-velaux -n vela-system 8080:80
+  vela port-forward addon-velaux -n vela-system 8080:8000
   ```
 
 * VelaUX need authentication, default username is `admin` and the password is **`VelaUX12345`**.

@@ -5,7 +5,7 @@ title: VelaUX OpenAPI
 This section will introduce how to integrate VelaUX OpenAPI, please make sure you have enabled the `velaux` addon. Let's use port-forward to expose the endpoint for the following demo.
 
 ```bash
-vela port-forward addon-velaux -n vela-system 8000:80
+vela port-forward addon-velaux -n vela-system 8000:8000
 ```
 
 ## Authentication and API Example
