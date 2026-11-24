@@ -94,7 +94,7 @@ You can customize this module per your needs and push to github of your own.
 
 ### Make the Terraform module as KubeVela Capability
 
-Before start, make sure you have [installed kubevela control plane](https://kubevela.io/docs/install#1-install-velad), don't worry if you don't have Kubernetes cluster, velad is enough for the quick demo.
+Before start, make sure you have [installed kubevela control plane](https://kubevela.io/docs/installation/standalone#2-install-velad-and-setup-kubevela), don't worry if you don't have Kubernetes cluster, velad is enough for the quick demo.
 
 We'll use the terraform module we have already prepared just now.
 
@@ -149,7 +149,7 @@ curl -fsSL https://kubevela.io/script/install-velad.sh | bash
 velad install
 ```
 
-Check [this doc](https://kubevela.io/docs/install#1-install-velad) to learn more details of installation.
+Check [this doc](https://kubevela.io/docs/installation/standalone#2-install-velad-and-setup-kubevela) to learn more details of installation.
 
 * Enable Terraform Addon and Alibaba Provider
 

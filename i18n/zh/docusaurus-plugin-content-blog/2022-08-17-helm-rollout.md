@@ -53,7 +53,7 @@ $ curl -fsSl https://kubevela.io/script/install-velad.sh | bash
 velad install
 ```
 
-See [this document](https://kubevela.io/docs/install#1-install-velad) for more installation details.
+See [this document](https://kubevela.io/docs/installation/standalone#2-install-velad-and-setup-kubevela) for more installation details.
 
 - 启用相关的 addon
 

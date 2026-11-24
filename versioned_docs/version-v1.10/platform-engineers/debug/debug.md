@@ -72,4 +72,4 @@ After the application is deployed, you can use the `vela debug <application-name
 
 You can also use `vela debug <application-name> -s <component-name>` to see all resources rendered in a single component.
 
-![](/images/1.4/debug-application-comp.gif)
+![](https://kubevela.io/images/1.4/debug-application-comp.gif)
