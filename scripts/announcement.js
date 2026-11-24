@@ -81,8 +81,16 @@ function pick(list, now) {
   return { stable, pre: pre || null };
 }
 
+// escape makes a value read from GitHub safe as HTML text or as an attribute:
+// agenda issues can be opened by anyone, and the bar is raw HTML.
+function escape(value) {
+  const entities = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+  return String(value).replace(/[&<>"']/g, (c) => entities[c]);
+}
+
+// link writes a link to href, escaped; text is the bar's own HTML.
 function link(href, text) {
-  return `<a target="_blank" rel="noopener noreferrer" href="${href}">${text}</a>`;
+  return `<a target="_blank" rel="noopener noreferrer" href="${escape(href)}">${text}</a>`;
 }
 
 // callTime writes a call's start as its Pacific day and time, with UTC on
@@ -119,7 +127,7 @@ function bar({ stable, pre, call }) {
   }
   if (stable) {
     // A minor release reads as v1.12; a patch by its full version.
-    const name = stable.v.patch ? stable.tag_name : `v${stable.v.major}.${stable.v.minor}`;
+    const name = escape(stable.v.patch ? stable.tag_name : `v${stable.v.major}.${stable.v.minor}`);
     parts.push(
       `<span class="kv-ann-tag">New</span><span>KubeVela ${name} is out.</span> ` +
         link(stable.html_url, 'Read the release notes &rarr;'),
@@ -128,7 +136,7 @@ function bar({ stable, pre, call }) {
   }
   if (pre) {
     parts.push(
-      `<span class="kv-ann-tag kv-ann-tag-preview">Preview</span><span>Try the upcoming ${pre.tag_name}.</span> ` +
+      `<span class="kv-ann-tag kv-ann-tag-preview">Preview</span><span>Try the upcoming ${escape(pre.tag_name)}.</span> ` +
         link(pre.html_url, 'See what&rsquo;s coming &rarr;'),
     );
     ids.push(pre.tag_name);

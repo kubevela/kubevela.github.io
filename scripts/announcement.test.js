@@ -9,13 +9,15 @@ const rel = (tag, daysAgo, prerelease = false) => ({
   published_at: new Date(now - daysAgo * day).toISOString(),
   html_url: `https://github.com/kubevela/kubevela/releases/tag/${tag}`,
 });
+// A new stable release beside a newer pre-release: the bar announces both.
+const stableAndPre = [rel('v1.13.0-alpha.2', 1, true), rel('v1.13.0-alpha.1', 9, true), rel('v1.12.0', 4)];
 const cases = [
   ['stable 3 days old', [rel('v1.12.0', 3), rel('v1.11.2', 60)], 'release-v1.12.0'],
   ['stable 20 days old', [rel('v1.12.0', 20)], null],
   ['stable exactly 14 days', [rel('v1.12.0', 14)], 'release-v1.12.0'],
   ['patch counts as latest', [rel('v1.12.1', 2), rel('v1.12.0', 30)], 'release-v1.12.1'],
   ['old stable + alpha', [rel('v1.13.0-alpha.1', 5, true), rel('v1.12.0', 40)], 'release-v1.13.0-alpha.1'],
-  ['new stable + alpha', [rel('v1.13.0-alpha.2', 1, true), rel('v1.13.0-alpha.1', 9, true), rel('v1.12.0', 4)], 'release-v1.12.0-v1.13.0-alpha.2'],
+  ['new stable + alpha', stableAndPre, 'release-v1.12.0-v1.13.0-alpha.2'],
   ['alpha whose version shipped', [rel('v1.13.0', 30), rel('v1.13.0-rc.1', 40, true)], null],
   ['rc after beta', [rel('v1.13.0-beta.3', 6, true), rel('v1.13.0-rc.1', 2, true), rel('v1.12.0', 50)], 'release-v1.13.0-rc.1'],
   ['alpha.10 after alpha.9', [rel('v1.13.0-alpha.9', 6, true), rel('v1.13.0-alpha.10', 2, true), rel('v1.12.0', 50)], 'release-v1.13.0-alpha.10'],
@@ -36,7 +38,7 @@ for (const [name, list, want] of cases) {
   if (!ok) fail++;
   console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}: ${got}${ok ? '' : ` (want ${want})`}`);
 }
-const both = bar(pick(cases[5][1], now));
+const both = bar(pick(stableAndPre, now));
 console.log(both.content.includes('KubeVela v1.12 is out') && both.content.includes('Try the upcoming v1.13.0-alpha.2') ? 'ok   both parts present' : 'FAIL both parts');
 console.log(compare(version('v1.13.0-rc.1'), version('v1.13.0')) < 0 ? 'ok   rc before release' : 'FAIL rc order');
 
@@ -76,6 +78,18 @@ const plain = withCall.content.replace(/<[^>]+>/g, '');
 const callText = plain.includes('Join us for the community call, Thu 15 Oct at 08:00 PT (15:00 UTC).') && withCall.content.includes('data-kv-time="2026-10-15T15:00:00.000Z"');
 if (!(callFirst && callText && withCall.id === 'release-call-2026-10-15-v1.12.0')) fail++;
 console.log(`${callFirst && callText ? 'ok  ' : 'FAIL'} call first, worded, id ${withCall.id}`);
+
+
+// Text and links read from GitHub are escaped: an agenda issue anyone can open
+// must not add markup or attributes to the bar.
+const crafted = agenda(4, 'Thursday Oct 15, 2026 08:00 AM Pacific Time', '').body.replace(zoom, 'https://zoom.us/j/1"onmouseover="alert(1)');
+const hostile = bar({
+  ...pick([rel('v1.13.0-<b>x</b>', 1, true), rel('v1.12.0', 50)], now),
+  call: nextCall([{ ...agenda(4, ''), body: crafted }], at('2026-10-15T09:00:00Z')),
+});
+const escaped = !hostile.content.includes('"onmouseover') && !hostile.content.includes('<b>') && hostile.content.includes('&quot;onmouseover') && hostile.content.includes('&lt;b&gt;');
+if (!escaped) fail++;
+console.log(`${escaped ? 'ok  ' : 'FAIL'} GitHub values escaped`);
 
 
 // The call's time in a reader's own time zone.
