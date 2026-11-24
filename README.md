@@ -123,4 +123,6 @@ make update-version version=v1.x
 
 ## Send your pull request
 
+Before you start, make sure your change has an issue assigned to you by a maintainer. See [Before you begin](https://kubevela.io/docs/contributor/code-contribute#before-you-begin) for the rule and its exemptions.
+
 After all changes checked well, please [creating a pull request](https://help.github.com/en/articles/creating-a-pull-request) with [DCO](https://github.com/apps/dco).

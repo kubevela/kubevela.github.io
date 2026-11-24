@@ -11,10 +11,11 @@ vela config list [flags]
 ### Options
 
 ```
-  -A, --all-namespaces     If true, check the specified action in all namespaces.
-  -h, --help               help for list
-  -n, --namespace string   specify the namespace of the config (default "vela-system")
-  -t, --template string    specify the template of the config
+  -A, --all-namespaces       If true, check the specified action in all namespaces.
+      --config-mode string   Show only one backend: legacy (ConfigMaps/Secrets) or crd (ConfigTemplate/Config CRs). Default shows both.
+  -h, --help                 help for list
+  -n, --namespace string     specify the namespace of the config (default "vela-system")
+  -t, --template string      specify the template of the config
 ```
 
 ### Options inherited from parent commands

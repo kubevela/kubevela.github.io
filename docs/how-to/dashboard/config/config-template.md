@@ -140,7 +140,16 @@ nacos: {
 
 This section is not required if you don't want to create a Nacos config template.
 
+The `scope` decides who may use the template: `"system"` templates must be applied in
+`vela-system` and can be used from any namespace; any other value, such as `"project"`, makes a
+template for the namespace it is applied in. See
+[Scope](../../../reference/config-template.md#scope-who-may-use-a-template).
+
 ### Apply to the hub cluster
+
+Since v1.12, `vela config-template apply` creates a `ConfigTemplate` resource, which you can also
+write as YAML and manage with `kubectl` or GitOps; see
+[Config Template](../../../reference/config-template.md).
 
 1. Create or update a template
 
@@ -174,4 +183,4 @@ This is an example:
 │   └── velaux.cue
 ```
 
-When installing this addon, the templates will be applied to the hub cluster.
+When installing this addon, the templates will be applied to the hub cluster, as v1.11-style template ConfigMaps in `vela-system`, which KubeVela reads as system templates.

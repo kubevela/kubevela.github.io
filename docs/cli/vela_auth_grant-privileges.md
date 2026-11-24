@@ -47,17 +47,17 @@ vela auth grant-privileges
 ### Options
 
 ```
-      --create-namespace             If set, non-exist namespace will be created automatically.
-  -e, --env string                   The environment name for the CLI request
-      --for-cluster strings          The clusters privileges to grant. If empty, the control plane will be used.
-      --for-namespace strings        The namespaces privileges to grant. If empty, cluster-scoped privileges will be granted.
-  -g, --group strings                The group to grant privileges.
-  -h, --help                         help for grant-privileges
-      --kubeconfig string            The kubeconfig to grant privileges. If set, it will override all the other identity flags.
-  -n, --namespace --serviceaccount   The namespace of the serviceaccount. This flag only works when --serviceaccount is set.
-      --readonly                     If set, only read privileges of resources will be granted. Otherwise, read/write privileges will be granted.
-      --serviceaccount string        The serviceaccount to grant privileges.
-  -u, --user string                  The user to grant privileges.
+      --create-namespace        If set, non-exist namespace will be created automatically.
+  -e, --env string              The environment name for the CLI request
+      --for-cluster strings     The clusters privileges to grant. If empty, the control plane will be used.
+      --for-namespace strings   The namespaces privileges to grant. If empty, cluster-scoped privileges will be granted.
+  -g, --group strings           The group to grant privileges.
+  -h, --help                    help for grant-privileges
+      --kubeconfig string       The kubeconfig to grant privileges. If set, it will override all the other identity flags.
+  -n, --namespace string        The namespace of the serviceaccount. This flag only works when --serviceaccount is set.
+      --readonly                If set, only read privileges of resources will be granted. Otherwise, read/write privileges will be granted.
+      --serviceaccount string   The serviceaccount to grant privileges.
+  -u, --user string             The user to grant privileges.
 ```
 
 ### Options inherited from parent commands

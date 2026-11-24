@@ -15,10 +15,11 @@ vela def list [flags]
 ### Examples
 
 ```
-# Command below will list all definitions in all namespaces
+# Command below lists the definitions you can use: those in your current
+# namespace and those in the system namespace
 > vela def list
-# Command below will list all definitions in the vela-system namespace
-> vela def get annotations --type trait --namespace vela-system
+# Command below lists the definitions in one namespace
+> vela def list --namespace vela-system
 ```
 
 ### Options
@@ -26,8 +27,9 @@ vela def list [flags]
 ```
       --from string        Filter definitions by which addon installed them.
   -h, --help               help for list
-  -n, --namespace string   Specify which namespace the definition locates. (default "vela-system")
-  -t, --type string        Specify which definition type to list. If empty, all types will be searched. Valid types: component, policy, trait, workflow-step, workload
+      --include-abstract   Include definitions that may only be extended, which are hidden by default.
+  -n, --namespace string   Specify which namespace the definition locates. Defaults to your current namespace and the system namespace.
+  -t, --type string        Specify which definition type to list. If empty, all types will be searched. Valid types: component, policy, source, trait, workflow-step, workload
 ```
 
 ### Options inherited from parent commands

@@ -26,6 +26,7 @@ Manage X-Definitions for extension.
 
 * [vela def apply](vela_def_apply.md)	 - Apply X-Definition.
 * [vela def apply-module](vela_def_apply-module.md)	 - Apply all definitions from a Go module.
+* [vela def compatibility-check](vela_def_compatibility-check.md)	 - Scan for CUE version incompatibilities in definitions and applications
 * [vela def del](vela_def_del.md)	 - Delete X-Definition.
 * [vela def edit](vela_def_edit.md)	 - Edit X-Definition.
 * [vela def gen-api](vela_def_gen-api.md)	 - Generate SDK from X-Definition.
@@ -39,6 +40,7 @@ Manage X-Definitions for extension.
 * [vela def list-module](vela_def_list-module.md)	 - List all definitions in a Go module.
 * [vela def render](vela_def_render.md)	 - Render X-Definition.
 * [vela def show](vela_def_show.md)	 - Show the reference doc for a component, trait, policy or workflow.
+* [vela def test](vela_def_test.md)	 - Run CUE definition tests.
 * [vela def upgrade](vela_def_upgrade.md)	 - Upgrade CUE definition for version compatibility
 * [vela def validate-module](vela_def_validate-module.md)	 - Validate all definitions in a Go module.
 * [vela def vet](vela_def_vet.md)	 - Validate X-Definition.

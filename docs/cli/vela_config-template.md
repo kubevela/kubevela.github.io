@@ -23,6 +23,7 @@ Manage the template of config.
 * [vela config-template apply](vela_config-template_apply.md)	 - Apply a config template.
 * [vela config-template delete](vela_config-template_delete.md)	 - Delete a config template.
 * [vela config-template list](vela_config-template_list.md)	 - List the config templates.
+* [vela config-template migrate](vela_config-template_migrate.md)	 - Adopt a legacy config template and its configs into ConfigTemplate and Config CRs.
 * [vela config-template show](vela_config-template_show.md)	 - Show the documents of the template properties
 
 #### Go Back to [CLI Commands](vela.md) Homepage.
