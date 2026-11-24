@@ -71,6 +71,62 @@ Each directory directly under `crates/` must contain `_crate.cue`. If one does n
 crates/broken: missing _crate.cue; every directory directly under crates/ must be an inline crate (external references belong in crates/_imports.cue instead)
 ```
 
+### When to use an inline crate
+
+| Use an inline crate when | Use an imported crate when |
+| --- | --- |
+| Only this addon uses the crate. | More than one addon, or a user, installs the crate. |
+| The crate and the addon change together and release together. | The crate has its own versions and its own release. |
+| You do not want to run a crate registry. | The crate must go to other clusters than the addon. |
+
+### Install an addon that has an inline crate
+
+An addon with an inline crate installs like any other addon. The feature gates `EnableAddonComponent` and `EnableCrateComponent` must be on. You need an addon registry. You do not need a crate registry, because KubeVela reads the crate from the addon package.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: storage-platform
+  namespace: team-a
+spec:
+  components:
+    - name: crossplane-storage
+      type: addon
+      properties:
+        registry: addons
+        version: "1.0.0"
+```
+
+See [Install the addon](#install-the-addon) for the namespace step that this example needs.
+
+### What KubeVela creates
+
+| Object | Where | Notes |
+| --- | --- | --- |
+| Addon Application `addon-crossplane-storage` | `vela-system` | It has one `k8s-objects` component for each inline crate. The component has the name of the crate, `aws-s3`. |
+| Owned Application `crate-aws-s3` | `vela-system` | The `aws-s3` component contains it. It has the same tiers as a crate that you install with `vela crate deploy`. |
+| Definitions, for example `aws-s3-v1-bucket` | `team-a` | The namespace of the Application that installs the addon. |
+| Crate objects with no `metadata.namespace` | `team-a` | An object that sets a namespace keeps it. |
+
+Each installed definition has the label `definition.oam.dev/crate` and the annotation `definition.oam.dev/crate-version`. The version is the `version` in the `_crate.cue` of the inline crate, not the version of the addon.
+
+```shell
+kubectl -n vela-system get application addon-crossplane-storage -o jsonpath='{.spec.components[*].name}'
+vela status crate-aws-s3 -n vela-system
+kubectl -n team-a get componentdefinitions -l definition.oam.dev/crate=aws-s3
+```
+
+Applications in `team-a` use the definitions in the same way as for a published crate, for example `type: aws-s3/v1/bucket`. See [Use the definitions](./crate-install.md#use-the-definitions).
+
+### Change an inline crate
+
+KubeVela does not fetch an inline crate, so it changes only with the addon. Change the files under `crates/aws-s3/`, set a new `version` in `metadata.yaml` of the addon, push the addon, and set the new addon version in the Application. Set a new `version` in `_crate.cue` too, so that the installed definitions show which crate version they come from.
+
+When you delete the Application that installs the addon, KubeVela deletes the addon Application, the owned Application, the definitions and the crate objects.
+
+### Placement
+
 An inline crate has no placement of its own, because you write it together with the addon. It follows the `placement` on the `type: addon` component: its runtime objects go to the clusters that the addon selects, and its hub objects and definitions stay on the hub. To put a crate on other clusters than its addon, publish the crate and import it. See [Placement on the type: addon component](#3-placement-on-the-type-addon-component).
 
 ## Imported crates
@@ -104,6 +160,20 @@ Declare each crate name one time in an addon. A crate name can come from an impo
 
 ```text
 crate "aws-s3" is declared more than once: crates/_imports.cue, inline crate "crates/aws-s3"
+```
+
+## One owner for each crate
+
+A crate has one owner in a cluster. This is the same for an inline crate and for an imported crate. When a second addon includes a crate that another addon installed, the crate component of the second addon fails with this message:
+
+```text
+existing object Application vela-system/crate-aws-s3 is managed by other application vela-system/addon-crossplane-storage
+```
+
+The other crates of the second addon still install. After you remove the first owner, restart the workflow of the second addon Application:
+
+```shell
+vela workflow restart addon-<second-addon> -n vela-system
 ```
 
 ## Install the addon
