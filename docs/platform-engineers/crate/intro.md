@@ -45,7 +45,7 @@ Crates use patterns that Kubernetes and Go users already know.
 | --- | --- |
 | Crate | A package with a name, for example `aws-s3`. The name is a DNS-1123 label. |
 | Package version | The release of the package, for example `1.2.0`. It is the OCI tag. It tells you which files are in the package. |
-| API line | A stable contract in the crate. A line name has the form `vN`, `vNalphaN`, or `vNbetaN`, for example `v1` or `v2beta1`. Applications bind to an API line, not to a package version. |
+| API line | A contract in the crate. A stable line has a name of the form `vN`, for example `v1`. A preview line has a name of the form `vNalphaN` or `vNbetaN`, for example `v2beta1`. Applications bind to an API line, not to a package version. |
 | Capability | One definition in an API line, for example `bucket`. |
 | Auxiliary object | A Kubernetes object that the crate installs to support its definitions. Examples are an XRD, a Composition, or a ConfigMap. |
 | Crate registry | A name for an OCI location that holds crates. You add it with `vela crate registry add`. |
@@ -60,7 +60,7 @@ The diagram shows the path of the `aws-s3` crate from the source directory to th
 
 ![How a crate is deployed. KubeVela installs the shared tier first, then the tiers of lines v1 and v2. Two Applications use the two lines](../../resources/crate/crate-deploy-flow.png)
 
-1. The crate author runs `vela crate publish`. The CLI parses the directory and pushes it to the registry as one OCI artifact. The tag is the `version` in `_crate.cue`.
+1. The crate author runs `vela crate publish`. The CLI parses the directory and pushes it to the registry as one OCI artifact. By default, the tag is the `version` in `_crate.cue`. The `--version` flag pushes with a different tag.
 2. You create the installer Application in a namespace, for example `team-a`. You can write the YAML, or run `vela crate deploy`.
 3. KubeVela fetches the package tag from the registry. It renders the owned Application `crate-aws-s3` in `vela-system`.
 4. The owned Application applies the objects in tiers:
@@ -155,7 +155,7 @@ The full crate, with every file and each of these steps, is in [Example: S3 Buck
 
 ## Quick start
 
-These commands publish a crate, install it, and use it. The next pages explain each command.
+These commands publish a crate and install it. To use its definitions in an Application, see [Use the definitions](./crate-install.md#use-the-definitions). The next pages explain each command.
 
 ```shell
 # Register the OCI location of your crates. Do this one time for each cluster.

@@ -48,7 +48,7 @@ Crate "aws-s3" (version 1.0.0) is installed in namespace "team-a"
 
 | Flag | Meaning | Default |
 | --- | --- | --- |
-| `--registry` | The registry name. | The only registry, or `catalog` when there are two or more |
+| `--registry` | The registry name. | The only registry, or `catalog` when there are two or more. If there are two or more and none is named `catalog`, the command fails. See [How KubeVela selects the registry](./crate-registry.md#how-kubevela-selects-the-registry). |
 | `--version` | The package version, which is the OCI tag. It is not the API line. | Empty. See [Pin the version](#pin-the-version). |
 | `-n`, `--namespace` | The install namespace. | `vela-system` |
 | `--timeout` | How long to wait for a healthy install. | `5m0s` |
@@ -160,7 +160,7 @@ kubectl -n vela-system get application crate-aws-s3 \
 List the definitions that the crate installed:
 
 ```shell
-kubectl -n team-a get componentdefinitions,traitdefinitions,policydefinitions,workflowstepdefinitions \
+kubectl -n team-a get componentdefinitions,traitdefinitions,policydefinitions,workflowstepdefinitions,workloaddefinitions \
   -l definition.oam.dev/crate=aws-s3
 ```
 
@@ -246,6 +246,8 @@ If the new package does not contain an API line, or disables it, KubeVela delete
 
 ## Change the namespace of an install
 
+This procedure deletes the definitions of the crate until the new install is complete. Before you start, move all Applications away from the definitions, as for [Uninstall a crate](#uninstall-a-crate).
+
 1. Delete the installer Application:
 
    ```shell
@@ -277,7 +279,7 @@ Before you uninstall a crate, move all Applications away from its definitions.
 | `crate-as-component is disabled` | The feature gate is off. | Turn the gate on. See [Turn the feature on](./crate-registry.md#turn-the-feature-on). |
 | `cannot create object: namespaces "team-a" not found` | The install namespace does not exist. | Create the namespace, then install again. |
 | `is not a configured crate registry; configured: [catalog]` | Admission rejected the Application. The `registry` property is not the name of a configured registry. | Use a name from `vela crate registry list`. |
-| `crate registry "photos-store" not found; configured registries: catalog` | `vela crate deploy` has a `--registry` name that is not configured. In a workflow step, the registry was deleted after admission, or admission could not read the registries. See [How KubeVela selects the registry](./crate-registry.md#how-kubevela-selects-the-registry). | Use a name from `vela crate registry list`. |
+| `crate registry "photos-store" not found; configured registries: catalog (crate registry not found)` | `vela crate deploy` has a `--registry` name that is not configured. In a workflow step, the registry was deleted after admission, or admission could not read the registries. See [How KubeVela selects the registry](./crate-registry.md#how-kubevela-selects-the-registry). | Use a name from `vela crate registry list`. |
 | `namespace is no longer accepted` | The component sets `namespace`. | Delete the property. Apply the installer Application in the namespace that you want. |
 | `existing object Application vela-system/crate-aws-s3 is managed by other application team-a/crate-aws-s3-deploy` | The crate is already installed from a different installer Application. | Use the install that exists, or uninstall it first. See [Change the namespace of an install](#change-the-namespace-of-an-install). |
 | `resolves to crate-backed definition` | The Application uses a one-part type. | Use `<crate>/<apiVersion>/<capability>`. |

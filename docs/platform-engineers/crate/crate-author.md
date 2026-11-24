@@ -148,7 +148,7 @@ template: {
 Use `workload: type: "autodetects.core.oam.dev"` when the output kind comes from a CRD that the crate creates. With `workload: definition`, the CRD must exist when KubeVela applies the definition. A CRD that a controller creates later, such as the CRD that Crossplane creates from an XRD, can be absent at that time. The definitions tier then fails with an error like this:
 
 ```text
-admission webhook "mutating.core.oam-dev.v1beta1.componentdefinitions" denied the request: no matches for kind "Ghost" in version "storage.example.org/v1alpha1"
+admission webhook "mutating.core.oam-dev.v1beta1.componentdefinitions" denied the request: no matches for kind "ObjectBucket" in version "storage.example.org/v1alpha1"
 ```
 :::
 
@@ -216,9 +216,9 @@ If a namespaced object does not set `metadata.namespace`, KubeVela creates it in
 
 ## Publish
 
-`vela crate publish` parses the directory, checks it, and pushes it. The tag is the `version` field in `_crate.cue`.
+`vela crate publish` parses the directory, checks it, and pushes it. By default, the tag is the `version` field in `_crate.cue`. To push with a different tag, see [Version rules](#version-rules).
 
-Add the registry before you publish. The URL is a positional argument. There is no `--url` flag. Read the password from stdin. For GitHub Container Registry, the password is a GitHub token with the `read:packages` scope or the `write:packages` scope. Use your GitHub user name as the username.
+Add the registry before you publish. The URL is a positional argument. There is no `--url` flag. Read the password from stdin. For GitHub Container Registry, the password is a GitHub token with the `write:packages` scope. The `read:packages` scope is sufficient only to install a crate. Use your GitHub user name as the username.
 
 ```shell
 printf '%s' "$GITHUB_TOKEN" | vela crate registry add ghcr oci://ghcr.io/myorg/crates \
@@ -244,7 +244,7 @@ Would publish ghcr.io/myorg/crates/aws-s3:1.0.0
   crates.oam.dev/lines: v1,v2
 ```
 
-The registry name in the command and the host in that output are the same registry. Here both are `ghcr`.
+The command gives the registry name, `ghcr`. The output shows the URL of that registry, `ghcr.io/myorg/crates`, then the crate name and the tag.
 
 An omitted `--registry` uses the selected default. That default is the wrong registry when you publish somewhere else. Pass `--registry` with the registry you publish to. The rules are in [How KubeVela selects the registry](./crate-registry.md#how-kubevela-selects-the-registry).
 

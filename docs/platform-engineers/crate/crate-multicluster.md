@@ -70,7 +70,7 @@ Read these rules before you select an install namespace for a crate with runtime
 If the install namespace does not exist on a selected cluster, the runtime step fails. The hub step succeeds, so the definitions are available on the hub:
 
 ```text
-Step deploy-crate-runtime failed: function call error for deploy: Found 1 errors. [(error encountered in cluster west-1: Dispatch: pre-dispatch dryrun failed: Found 1 errors. [(cannot create object: namespaces "platform" not found)])]
+Step deploy-crate-runtime failed: function call error for deploy: Found 1 errors. [(error encountered in cluster east-1: Dispatch: pre-dispatch dryrun failed: Found 1 errors. [(cannot create object: namespaces "platform" not found)])]
 ```
 
 To recover, create the namespace on the managed cluster. Then start the workflow of the owned Application again:
@@ -313,7 +313,7 @@ When the install has a placement, the owned Application `crate-aws-s3` has two d
 1. `deploy-crate-hub` installs the hub objects and the definitions on the hub.
 2. `deploy-crate-runtime` installs the runtime objects on the selected clusters.
 
-Each tier splits by class. The runtime part keeps the tier name. The name of the hub part ends with `-hub`.
+Each auxiliary tier splits by class. The runtime part keeps the tier name. The name of the hub part ends with `-hub`, also when the tier has only hub objects. A definitions tier does not split. It is always a hub tier, and it keeps its name with no `-hub`.
 
 | Tier | Class | Contents in the example |
 | --- | --- | --- |
@@ -364,7 +364,7 @@ Error: application vela-system/crate-aws-s3 is in phase workflowFailed: step dep
 Step deploy-crate-runtime failed: function call error for deploy: failed to get cluster east-9: virtualclusters.cluster.core.oam.dev "east-9" not found
 ```
 
-## Use the definitions from managed clusters
+## Send workloads to the managed clusters
 
 The definitions are on the hub. Write the Application on the hub, in the install namespace, and send the workload with a [topology policy](../../case-studies/multi-cluster.md):
 

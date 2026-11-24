@@ -9,7 +9,7 @@ This page prepares a cluster for crates. You install the CLI, turn on the featur
 The `vela crate` commands are part of the vela CLI. Use a CLI with the same version as vela-core.
 
 ```shell
-curl -fsSl https://kubevela.io/script/install.sh | bash
+curl -fsSL https://kubevela.io/script/install.sh | bash
 vela version
 ```
 

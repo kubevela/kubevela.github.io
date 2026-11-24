@@ -23,7 +23,7 @@ If you do not know addons, read [Make Your Own Addon](../addon/intro.md) first.
   `--reset-then-reuse-values` (Helm 3.14 or later) keeps only the values that you set, so the gates that are already on stay on. `--version` stops Helm from moving the installation to a different chart version.
 
 - Read [Make Your Own Addon](../addon/intro.md) for the addon layout.
-- Follow the addon `crossplane-storage` on this page. It imports the crate `aws-s3`.
+- Follow the addon `crossplane-storage` on this page. It includes the crate `aws-s3`. Most examples import the crate. [Inline crates](#inline-crates) shows the other layout, where the same crate is an inline crate and `crates/_imports.cue` has no entry for it.
 
 :::caution
 Only a `type: addon` component installs the crates of an addon. `vela addon enable` installs the other parts of the addon, but it ignores `crates/`. This is true for an addon from a registry and for an addon in a local directory.
@@ -41,6 +41,8 @@ An addon can use both ways at the same time.
 ## Inline crates
 
 Put the crate directory under `crates/`. It is the same layout as a published crate. See [Build and Publish a Crate](./crate-author.md).
+
+This tree is the addon with `aws-s3` as an inline crate. This addon does not also import `aws-s3`.
 
 ```text
 crossplane-storage/
@@ -210,7 +212,7 @@ imports: [{
           clusters: [east-1, east-2]
 ```
 
-`fromPolicy` copies `clusters`, `clusterLabelSelector`, and `allowEmpty` from the policy. It does not copy `namespace`. The crate objects always use the install namespace.
+`fromPolicy` copies `clusters`, `clusterLabelSelector`, and `allowEmpty` from the policy. It does not copy `namespace`. A crate object that does not set `metadata.namespace` uses the install namespace. An object that sets `metadata.namespace` keeps that namespace.
 
 Do not use `fromPolicy` together with `clusters`, `clusterLabelSelector`, or `allowEmpty` on the same import.
 
