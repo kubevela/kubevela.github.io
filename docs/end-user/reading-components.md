@@ -135,10 +135,11 @@ waiting for component.db.output.status.loadBalancer.ingress: component "db" has 
 To render with a fallback instead of waiting, guard the read. A guard counts only when
 `has()` tests exactly the path you read, so `has(...ingress)` does not cover
 `...ingress[0].ip`. Read below the tested path without naming it, for example with
-`map`:
+`filter` and `map`. The list can be empty, and an entry can carry a `hostname` rather
+than an `ip`, so check there is an entry with an `ip` before taking the first:
 
 ```yaml
-endpoint: '$(has(component.db.output.status.loadBalancer.ingress) ? component.db.output.status.loadBalancer.ingress.map(i, i.ip)[0] : "pending")'
+endpoint: '$(has(component.db.output.status.loadBalancer.ingress) && component.db.output.status.loadBalancer.ingress.exists(i, has(i.ip)) ? component.db.output.status.loadBalancer.ingress.filter(i, has(i.ip)).map(i, i.ip)[0] : "pending")'
 ```
 
 The guard only covers the missing field. The reader still waits for `db` to be healthy.

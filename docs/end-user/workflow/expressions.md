@@ -345,7 +345,7 @@ supports the same expressions in properties, `forEach.items` and `if`, with two 
 | Opt-in annotation | `app.oam.dev/cel-expressions: "true"` | `workflowrun.oam.dev/cel-expressions: "true"` |
 | Gate | KubeVela's `EnableCelExpressions` | the workflow controller's `EnableCelExpressions` (Helm: `workflow.enableCelExpressions`) |
 | Roots | `context`, `source`, `steps`, `each` | `context`, `steps`, `each`. There is **no `source`** |
-| Types checked on apply | yes | no: a wrong type or a missing guard shows up when the step runs |
+| Types checked on apply | yes, where the read's kind is known: not `steps` reads, and `each.item` only from a [literal or source list](#reading-the-loop-item) | no: a wrong type or a missing guard shows up when the step runs |
 
 Each annotation only counts on its own kind: a `WorkflowRun` ignores the Application
 one, and the other way round.

@@ -364,7 +364,7 @@ These apply to every expression. Errors particular to one root are on its page:
 | `empty expression` / `unterminated expression: no closing ')'` | a `$(` with no expression, or no closing bracket, as in `"price $(5"`. Escape it as `$$(` |
 | `undefined field 'stepName'` | that `context` field is not offered here. See [What `context` offers](#what-context-offers) |
 | `undeclared reference to 'quantity'` | that function is not offered. See [What you can write](#what-you-can-write) |
-| `source expressions are not enabled on this cluster` | the platform has not turned expressions on, and the Application declares sources |
+| `source expressions are not enabled on this cluster; an operator enables them with the EnableCelExpressions feature gate` | the platform has not turned expressions on, and the Application declares sources |
 | `this Application has not opted in to source expressions` | add the `app.oam.dev/cel-expressions: "true"` annotation |
 | `may be absent and feeds required ... parameter` | guard it: `has(x) ? x : <fallback>` |
 | `no such key: x` | an unguarded read of something absent, somewhere the guard check does not reach |
