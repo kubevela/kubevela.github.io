@@ -47,21 +47,21 @@ make def-install
 
 ## Part 2: Configure Webhook Debugger
 
-### Step 4: Create Debugger Script
+### Step 4: Find the Debugger Script
 
-Copy `setup-debugger.sh` from [Debugging KubeVela webhooks](./debugging-kubevela-with-webhook.md#configure-local-webhook-access) into the root of the KubeVela repository and make it executable:
-
-```bash
-chmod +x setup-debugger.sh
-```
+The script is `hack/debug-webhook-setup.sh` in the KubeVela repository; see [Debugging KubeVela webhooks](./debugging-kubevela-with-webhook.md#configure-local-webhook-access).
 
 ### Step 5: Run Debugger Setup
 
 Run the script against your hub kubeconfig:
 
 ```bash
-KUBECONFIG=~/.kube/hub.yaml ./setup-debugger.sh
+KUBECONFIG=~/.kube/hub.yaml ./hack/debug-webhook-setup.sh
 ```
+
+:::caution
+The script creates webhook configurations with `failurePolicy: Fail` on the hub cluster. While the IDE controller is stopped, create and update requests for Applications and definitions on the hub fail. When you finish, remove them: `KUBECONFIG=~/.kube/hub.yaml make webhook-clean`.
+:::
 
 In Step 6, include the webhook flags printed by the script (`--use-webhook=true`, `--webhook-port=9445`, and `--webhook-cert-dir=<repo>/k8s-webhook-server/serving-certs`) in your IDE arguments alongside the Cluster Gateway flags below.
 
@@ -142,7 +142,7 @@ The Vela-core Helm chart normally installs:
 
 - Core controller deployment (we DON'T want this - it's running in our IDE)
 - Cluster Gateway deployment (we NEED this for multicluster)
-- Webhooks and other components (we DON'T need these for debugging)
+- Webhook configurations and other components (we DON'T want the chart's: Step 5 already created webhook configurations that point at the controller in your IDE)
 
 By deleting everything except Cluster Gateway components, we ensure:
 
@@ -211,7 +211,7 @@ helm install kubevela ./charts/vela-core \
 ```
 
 :::caution
-Do not add `--wait`. The Cluster Gateway pod mounts the serving certificate Secret, and your IDE controller creates that Secret when it starts. Until the controller runs, the pod stays in `ContainerCreating`, and `--wait` would time out.
+Keep the IDE controller from Step 7 running during this install. The Cluster Gateway pod mounts the serving certificate Secret, and the controller creates that Secret when it starts. If the controller is not running, the pod stays in `ContainerCreating`, and an install with `--wait` times out.
 :::
 
 ### Step 10: Verify Installation

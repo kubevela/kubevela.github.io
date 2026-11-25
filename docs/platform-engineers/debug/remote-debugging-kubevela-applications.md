@@ -37,10 +37,10 @@ Modify the `Dockerfile` in the root of the KubeVela repository to enable remote 
 
 ### Install the Delve Debugger During the Build Stage
 
-Add the following command to install Delve (ensure the version matches your Go version):
+Add the following command to install Delve. Use a Delve release that supports the Go version in KubeVela's `go.mod` (1.27.1 for KubeVela 1.12); `latest` does:
 
 ```dockerfile
-RUN go install github.com/go-delve/delve/cmd/dlv@v1.22.0
+RUN go install github.com/go-delve/delve/cmd/dlv@latest
 ```
 
 :::info
