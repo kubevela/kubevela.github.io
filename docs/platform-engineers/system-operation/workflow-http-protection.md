@@ -14,7 +14,7 @@ These workflow steps and providers make outbound HTTP calls, and the protection 
 
 - the `request` step
 - the `webhook` step
-- the `notification` step
+- the `notification` step, for its DingTalk, Lark and Slack channels (email goes over SMTP and is not checked)
 - the `http` provider that custom workflow steps call: `http.#HTTPDo` from `vela/http`, and the legacy `op.#HTTPDo` from `vela/op`
 
 In `vela-core` the same checks also apply outside workflows:
