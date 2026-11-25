@@ -131,8 +131,10 @@ Two feature gates make the protection stricter. Both are off by default.
 
 | Behavior | Effect | Risk |
 | -------- | ------ | ---- |
-| Block private addresses | Blocks RFC 1918 (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) and ULA (`fc00::/7`) destinations. | Breaks most calls to in-cluster Services, because ClusterIPs are private addresses. |
+| Block private addresses | Blocks RFC 1918 (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) and ULA (`fc00::/7`) destinations. | Breaks most calls to in-cluster Services, because ClusterIPs are private addresses. In vela-core it also refuses Helm repositories, `oci://` registries and `vela/http` calls in definitions on private addresses. |
 | Disable workflow HTTP | Blocks all outbound HTTP from workflow steps. The step fails with `workflow outbound HTTP is disabled by DisableWorkflowHTTP feature gate`. | No workflow step can make an HTTP call. |
+
+`DisableWorkflowHTTP` stops workflow steps and the legacy `processing.http` in definitions. It does not stop `vela/http` in a definition template or Helm chart downloads.
 
 The Helm value names differ between the two charts:
 
@@ -163,13 +165,27 @@ The values are under `workflow.httpDeny` in both charts. The defaults differ in 
 | `workflow.httpDeny.defaultConfig.denyHosts` | `metadata.google.internal` | `metadata.google.internal` | Host names in the default ConfigMap. |
 | `workflow.httpDeny.defaultConfig.denyCIDRs` | the four CIDR and IP defaults | the four CIDR and IP defaults | IP addresses and CIDR ranges in the default ConfigMap. |
 
+### Request limits
+
+The same guard limits how long a call may take and how much it may read. The values are under `workflow.http` in both charts.
+
+| Value | Default | Effect |
+| ----- | ------- | ------ |
+| `workflow.http.maxTimeout` | `60s` | The longest `timeout` a call may set. A longer one, or `0`, fails the step with `timeout <value> must be greater than 0 and at most 1m0s`. A call that sets no `timeout` gets 3 seconds. In `vela-core`, `vela/http` in a definition has no `timeout` parameter and is cut off at this value. |
+| `workflow.http.maxResponseBytes` | `1048576` | The largest response body. A longer one fails the step with `response body exceeds 1048576 bytes`. It is not truncated. |
+| `workflow.http.nat64Prefixes` | `[]` | `vela-workflow` only. Network-specific NAT64 prefixes whose addresses are checked by the IPv4 address they carry. |
+
+### Turn off discovery
+
 Turn off discovery and the default ConfigMap, leaving only the built-in floor:
 
 ```shell
-helm upgrade kubevela kubevela/vela-core -n vela-system --reuse-values \
+helm upgrade kubevela kubevela/vela-core -n vela-system --reset-then-reuse-values \
   --set workflow.httpDeny.configTemplateName="" \
   --set workflow.httpDeny.defaultConfig.enabled=false
 ```
+
+`--reset-then-reuse-values` needs Helm 3.14 or later. Plain `--reuse-values` skips the new chart defaults and can fail on a release that was installed before these values existed.
 
 ## Install both charts together
 
@@ -198,3 +214,7 @@ There is no opt-in step. An upgrade to one of these releases turns the protectio
 - A step that called a cloud metadata endpoint on purpose now fails with `blocked SSRF target` or `blocked SSRF host`. Search your Applications and WorkflowRuns for `169.254.`, `metadata.google.internal`, `fd00:ec2::254` and `100.100.100.200` before you upgrade. For the releases with the loopback block, search for `localhost` and `127.0.0.1` too.
 - You cannot remove a built-in entry. Deleting the default ConfigMap or turning off discovery does not allow metadata destinations.
 - The stricter modes in [Feature gates](#feature-gates) stay off after an upgrade, so calls to in-cluster Services keep working.
+- Guarded calls ignore `HTTP_PROXY`, `HTTPS_PROXY` and `NO_PROXY`. A controller that reaches external services only through a proxy can no longer call them from a workflow step.
+- In the releases with the loopback block, `vela-core` refuses `localhost`, `127.0.0.0/8`, `::1` and the unspecified address.
+- In the releases with request limits, a call that sets no `timeout` is cut off after 3 seconds, a `timeout` above `workflow.http.maxTimeout` fails the step, and a response body above `workflow.http.maxResponseBytes` fails the step. See [Request limits](#request-limits).
+- In the same releases the `request` step fails on any status of 400 or above (a 400 used to pass), and a reply that is empty or not JSON no longer fails the step. The raw body is in `responseBody`.
