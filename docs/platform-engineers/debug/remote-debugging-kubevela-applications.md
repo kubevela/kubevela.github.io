@@ -11,7 +11,7 @@ This guide provides comprehensive instructions for configuring remote debugging 
 Before you begin, ensure you have:
 
 - KubeVela source code cloned from [github.com/kubevela/kubevela](https://github.com/kubevela/kubevela)
-- [Go 1.27.1](https://go.dev/dl/) or later installed
+- [Go 1.19](https://go.dev/dl/) or later installed
 - A running Kubernetes cluster accessible via `~/.kube/config`
 - Docker installed for building container images
 - Access to a container registry (e.g., Docker Hub)
@@ -151,6 +151,7 @@ helm upgrade --install --create-namespace --namespace vela-system \
   --set controllerArgs.reSyncPeriod=1m \
   --set optimize.disableComponentRevision=false \
   --set multicluster.clusterGateway.image.repository=ghcr.io/oam-dev/cluster-gateway \
+  --set admissionWebhooks.patch.image.repository=ghcr.io/oam-dev/kube-webhook-certgen/kube-webhook-certgen \
   --wait kubevela ./charts/vela-core --debug
 ```
 
