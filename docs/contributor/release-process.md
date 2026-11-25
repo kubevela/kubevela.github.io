@@ -50,7 +50,7 @@ The maintainers are responsible to drive releases and follow the standard operat
    * CLI binaries from [Release Pipeline](https://github.com/kubevela/kubevela/actions/workflows/release.yml).
 5. Update docs and examples to use the new release.
    * For every `minor` release, before cutting the docs version:
-     * Add `release-notes/vX.Y/index.md` and `release-notes/vX.Y/vX.Y.0.md` from the templates (see [How to add release notes](#how-to-add-release-notes)), and add a row to the [release notes overview](/release-notes/overview/).
+     * Add `release-notes/vX.Y/vX.Y.0.md` from `release-notes/_template-minor.md` (see [How to add release notes](#how-to-add-release-notes)). Write `release-notes/vX.Y/index.md` by hand, using the previous minor's `index.md` as the model (status, releases table, pre-releases); it has no template. Add a row to the [release notes overview](/release-notes/overview/).
      * Add the upgrade guide `upgrade/vX.Y/index.md`, add it to `sidebar-upgrade.js`, and link it from the [upgrade overview](/upgrade-guides/overview/).
      * Regenerate the definition and CLI reference docs; see [CLI and definition reference docs](./cli-ref-doc.md).
      * Refresh [Controller Flags and Feature Gates](../platform-engineers/system-operation/bootstrap-parameters.md) from `cmd/core/app/config` and `pkg/features/controller_features.go`.
@@ -62,7 +62,7 @@ The maintainers are responsible to drive releases and follow the standard operat
 
 ## How to add release notes
 
-Release notes live in `release-notes/` and upgrade guides in `upgrade/`, both at the repository root and outside `docs/`. They are not versioned: each page has one copy, served at `/release-notes/...` and `/upgrade-guides/...`, and every docs version links to them from its sidebar. Cutting a docs version copies those sidebar links from `sidebars.js`, so nothing needs to be added for a new version, and a note added after a version is cut, such as a patch for an older minor, shows up for every version. Links from these pages to the regular docs use absolute URLs such as `/docs/cli/vela/`, because relative `.md` links only resolve inside one plugin.
+Release notes live in `release-notes/` and upgrade guides in `upgrade/`, both at the repository root and outside `docs/`. They are not versioned: each page has one copy, served at `/release-notes/...` and `/upgrade-guides/...`, and every docs version links to them from its sidebar. Cutting a docs version copies those sidebar links from `sidebars.js`, so nothing needs to be added for a new version, and a note added after a version is cut, such as a patch for an older minor, shows up for every version. Links from these pages to the regular docs use absolute URLs such as `/docs/next/cli/vela/` (`/docs/cli/vela/` once the docs version is cut), because relative `.md` links only resolve inside one plugin.
 
 The release notes have a folder per minor version (`vX.Y/`). The folder has an `index.md` overview (status, patch table, pre-releases) and one page per release: the GA (general availability) release `vX.Y.0` and each patch release `vX.Y.Z`. Pre-releases don't get their own pages; list them in `index.md` and roll their changes into the `.0` page.
 
