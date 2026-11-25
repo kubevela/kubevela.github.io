@@ -21,19 +21,35 @@ templates and configs keep working without changes.
 1. Upgrade the CRDs first. v1.12 adds the `ConfigTemplate`, `Config` and `SourceDefinition` CRDs
    and changes several others, and Helm does not upgrade the CRDs in a chart's `crds/` directory:
 
-```
-helm repo update
-helm pull kubevela/vela-core --version 1.12.0 --untar
-kubectl apply --server-side --force-conflicts -f vela-core/crds/
-```
+   ```shell
+   helm repo add kubevela https://kubevela.github.io/charts
+   helm repo update
+   helm pull kubevela/vela-core --version 1.12.0 --untar
+   kubectl apply --server-side --force-conflicts -f vela-core/crds/
+   ```
 
 2. Upgrade your kubevela chart:
 
-```
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.12.0 --wait
-```
+   ```shell
+   helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.12.0 --wait
+   ```
 
-3. Upgrade the `vela` CLI. An older CLI keeps working, but it writes v1.11 objects.
+   :::caution
+   Don't add `--reuse-values`. With the values of v1.11.0 or v1.11.1 the chart fails to render.
+   With the values of v1.11.2 it renders but keeps the v1.11.2 image values, so the controller is
+   not upgraded. Pass your own values file, or use `--reset-then-reuse-values` (Helm 3.14 and
+   later), and make sure your values don't pin `image.tag`.
+   :::
+
+   Afterwards, check the image the controller runs:
+
+   ```shell
+   kubectl -n vela-system get deployment kubevela-vela-core \
+     -o jsonpath='{.spec.template.spec.containers[0].image}'
+   ```
+
+3. Upgrade the `vela` CLI and VelaUX with the controller. Older clients drop fields new in v1.12
+   when they write, and cannot edit a migrated config.
 
 4. (Optional) Move your v1.11 templates and configs to the new resources with
    `vela config-template migrate`, or once at controller startup with the

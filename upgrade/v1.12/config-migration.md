@@ -309,7 +309,7 @@ namespace. It runs with the controller's permissions, so nothing is skipped or f
 them:
 
 ```bash
-helm upgrade -n vela-system kubevela kubevela/vela-core --version 1.12.0 --reuse-values \
+helm upgrade -n vela-system kubevela kubevela/vela-core --version 1.12.0 --reset-then-reuse-values \
   --set featureGates.autoMigrateLegacyConfigs=true --wait
 ```
 
