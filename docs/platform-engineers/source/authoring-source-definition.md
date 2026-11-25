@@ -4,6 +4,20 @@ title: Authoring a SourceDefinition
 
 This page is for platform engineers. A SourceDefinition holds arbitrary [CueX](../cue/basic.md) logic: it can make HTTP calls and read cluster resources, and its result is stored in the controller's cache. Publishing one is therefore a high-trust operation, comparable to writing a `ComponentDefinition`. An application author can bind a definition and supply its properties. They cannot change its logic or read anything outside its declared schema.
 
+The fetch runs as the vela-core ServiceAccount, not as the Application's author. A definition lends the controller's reach to everyone who can bind it, so decide who may bind it when you publish it, see [Restrict where a definition is usable](#restrict-where-a-definition-is-usable).
+
+A source can import a fixed set of packages, narrower than a component's:
+
+| Package | Gives |
+|---|---|
+| `vela/kube` | `#Get` and `#List` only. There is no `#Apply` or `#Patch` |
+| `vela/http` | HTTP requests, through the controller's [outbound HTTP guard](../system-operation/workflow-http-protection.md) |
+| `vela/registry` | Files from a configured addon registry |
+| `vela/velaconfig` | KubeVela Configs |
+| `vela/base64`, `vela/cue` | Helpers |
+
+`vela/helm`, `vela/addon` and `vela/config` are not available to a source. CUE standard library packages and external packages load as they do elsewhere.
+
 Before writing your own, check whether a [built-in source](./built-in-sources.md) already does the job.
 
 ## A complete example
@@ -68,7 +82,7 @@ vela def apply cluster-lookup.cue
 
 With no `-n`, the definition is installed in `vela-system`, and the controller reads it from there for an Application in any namespace. Applying with `vela def apply` also generates the cache key, see [The cache key is generated](#the-cache-key-is-generated).
 
-You can write the resource as YAML instead, with the CUE under `spec.schematic.cue.template`. A YAML SourceDefinition must already carry the generated `$internal` block and its two `definition.oam.dev/cache-key-rules*` annotations, otherwise admission refuses it:
+You can write the resource as YAML instead, with the CUE under `spec.schematic.cue.template`. A YAML SourceDefinition must already carry the generated `$internal` block, otherwise admission refuses it. `vela def apply` and `vela def render` also record which cache-key rules generated it, in the `definition.oam.dev/cache-key-rules` annotations; keep them, so a later release checks the block against the same rules:
 
 ```text
 SourceDefinition must declare a $internal block with a key field; apply it with `vela def apply` and one will be generated
@@ -106,9 +120,9 @@ schema: {
 }
 ```
 
-Declare optionality accurately. An application author must guard an optional field with `has(...)` wherever it feeds a required parameter, see [Optional fields](./using-sources.md#optional-fields).
+Declare optionality accurately. An application author must guard an optional field with `has(...)` wherever they read it, see [Optional fields](./using-sources.md#optional-fields).
 
-Mark secret fields with `// +sensitive`. They are redacted in Application status. They are still substituted into the workload, so mask them only where leaking them into status is the concern.
+Mark secret fields with `// +sensitive`. They are redacted in Application status and kept out of the workflow context. They are still substituted into whatever reads them, so a sensitive value read into a property lands in the rendered resource. To keep a credential out of the workload, return a reference to its Secret instead.
 
 ### `parameter`
 
@@ -116,7 +130,7 @@ Parameters work as in other definitions. Declare required inputs without `?` and
 
 ```cue
 parameter: {
-	// +usage=Name of the ConfigMap, read from the Application's own namespace
+	// +usage=Name of the ConfigMap, read from the namespace being rendered for
 	name: string
 	// +usage=Fail when the file is absent
 	required: *true | bool
@@ -146,7 +160,7 @@ A template may read only these `context` fields. Reading anything else is reject
 | Group | Fields |
 |---|---|
 | Binding | `name` |
-| Application | `appName`, `namespace`, `appRevision`, `appRevisionNum`, `publishVersion`, `workflowName` |
+| Application | `appName`, `namespace`, `appNamespace`, `appRevision`, `appRevisionNum`, `publishVersion`, `workflowName` |
 | Application metadata | `appLabels` and `appAnnotations`, each read by a literal key, for example `context.appLabels["team"]` |
 | Cluster | `cluster`, `clusterVersion` |
 | Component | `componentName`, `componentType`, `revision`, `replicaKey` |
@@ -154,6 +168,8 @@ A template may read only these `context` fields. Reading anything else is reject
 | Workflow step | `stepName`, `stepType` |
 | Policy | `policyName`, `policyType` |
 | Published policy data | `custom`, when an Application-scoped policy has published `output.ctx`; because its shape and presence are unknown, reads need a type assertion and a default |
+
+`namespace` is the namespace being rendered for. `appNamespace` is the Application's own namespace. They differ when a topology or override policy places a component in another namespace.
 
 `context.name` is the name of the `spec.sources[]` binding, not the consuming component, so it means the same on every surface.
 
@@ -165,7 +181,7 @@ What your template reads decides where it can be consumed. A source that reads `
 SourceDefinition "per-component" reads context.componentName, which is unavailable in workflow steps
 ```
 
-To limit a definition on purpose, add a top-level `consumableFrom` list next to `schema`, for example `consumableFrom: ["component"]`. Leave it out to allow every surface that can resolve sources. An entry that is not such a surface is rejected, and the error lists the valid ones.
+To limit a definition on purpose, add a top-level `consumableFrom` list next to `schema`, for example `consumableFrom: ["component"]`. Leave it out to allow every surface that can resolve sources. An entry that is not such a surface is rejected, and the error lists the valid ones. The SourceDefinition admission webhook makes this check; `vela def vet` does not.
 
 Where the fetch goes is set by the provider. `kube.#Get` takes a `cluster` field. Set it to `context.cluster` to read from the cluster being rendered for, or omit it to read the hub.
 
@@ -174,9 +190,9 @@ Where the fetch goes is set by the provider. `kube.#Get` takes a `cluster` field
 You do not write the cache key. When you run `vela def apply`, `vela def` scans the template for the `context` fields it reads and writes the result into a `$internal` block:
 
 ```cue
-// Generated from the context this template reads - do not edit.
+// Generated from the context this template reads - do not edit. Admission re-derives these and rejects a mismatch.
 $internal: {
-	key:       "tenant-profile-\(context.cluster)-\(context.namespace)"
+	key: "tenant-profile-\(context.cluster)-\(context.namespace)"
 	keyInputs: ["cluster", "namespace"]
 }
 ```
@@ -194,6 +210,8 @@ The effective identity of an entry is the readable key plus a hash of the templa
 
 - Editing a SourceDefinition template stops it from using entries that its previous version wrote. A changed URL behind an unchanged schema cannot serve old data.
 - Different properties give different entries, with no work from you.
+
+With the `AuthenticateApplication` gate on, the identity also includes the user the Application runs as, so a value one user may read is not served to another Application in the same namespace.
 
 This design removes a class of bug where a key left out a discriminating input and a second Application received the first one's data.
 
@@ -220,6 +238,10 @@ A definition receives the output of another source through its parameters, becau
 ```bash
 vela def vet cluster-lookup.cue      # validate the file
 vela def render cluster-lookup.cue   # print the YAML, including the generated $internal block
+vela def test .                      # run *_test.cue cases, test.#SourceExec resolves a source with mocked providers
+vela def show cluster-lookup         # after apply: the generated key, its keyInputs and the consumable surfaces
 ```
+
+`vela def test` starts a local API server for source cases, so it needs the envtest binaries (`--envtest-assets` or `KUBEBUILDER_ASSETS`).
 
 Then bind it from a test Application, and use `vela status <app> --sources` to see the resolution, see [Caching and operations](./caching-and-operations.md).
