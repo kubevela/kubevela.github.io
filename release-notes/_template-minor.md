@@ -5,8 +5,10 @@ description: What changed in KubeVela vX.Y.0.
 ---
 
 <!--
-Copy this file to release-notes/vX.Y/vX.Y.0.md and add the page to
-sidebar-release-notes.js. Keep the sections in this order and leave out any
+Copy this file to release-notes/vX.Y/vX.Y.0.md, add the page to
+sidebar-release-notes.js, add a row to the Releases table in
+release-notes/vX.Y/index.md, and update the two tables in
+release-notes/overview.md. Keep the sections in this order and leave out any
 section that has nothing in it. Don't add other sections or ### subheadings.
 
 Each section has a fixed format, shown by the example below its heading:
@@ -80,7 +82,7 @@ Apply the CRDs before `helm upgrade`.
 
 ## Controller flags and feature gates
 
-<!-- Change is one of: New, New, Alpha / New, Beta, Removed, Renamed from `old`, Default changed. -->
+<!-- Change is one of: "New"; "New, Alpha" or "New, Beta" (feature gates); "Removed"; "Renamed from `old`"; "Default changed". -->
 
 | Name | Change | Default |
 | --- | --- | --- |

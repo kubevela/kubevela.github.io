@@ -6,8 +6,9 @@ description: What changed in KubeVela vX.Y.Z.
 
 <!--
 Copy this file to release-notes/vX.Y/vX.Y.Z.md, add it at the top of the
-vX.Y.x category in sidebar-release-notes.js, and add a row to the patch table
-in release-notes/vX.Y/index.md. Keep the sections in this order and leave out
+vX.Y.x category in sidebar-release-notes.js, add a row to the Releases table
+in release-notes/vX.Y/index.md, and update the Latest release column in
+release-notes/overview.md. Keep the sections in this order and leave out
 any section that has nothing in it. Don't add other sections or ### subheadings.
 
 Each section has a fixed format, shown by the example below its heading:
@@ -50,7 +51,7 @@ Apply the CRDs before `helm upgrade`.
 
 ## Controller flags and feature gates
 
-<!-- Change is one of: New, New, Alpha / New, Beta, Removed, Renamed from `old`, Default changed. -->
+<!-- Change is one of: "New"; "New, Alpha" or "New, Beta" (feature gates); "Removed"; "Renamed from `old`"; "Default changed". -->
 
 | Name | Change | Default |
 | --- | --- | --- |
