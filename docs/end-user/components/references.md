@@ -39,7 +39,23 @@ spec:
 ```
 
 ### Specification (addon)
-This capability has no arguments.
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ addon | Addon name; defaults to the component name. | string | false |  
+ version | Exact version; empty means the latest stable version. | string | false | empty 
+ registry | Registry name; empty means the configured default. | string | false | empty 
+ properties | The addon's own parameters, passed through to its templates. | map[string]_ | false |  
+ skipVersionValidation | Skip the addon's vela and Kubernetes system requirements check. | bool | false | false 
+ placement | Where the addon installs. Set `clusters` or `clusterLabelSelector`. Refused for an addon that defines its own topology policy or workflow. | [placement](#placement-addon) | false |  
+
+
+#### placement (addon)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ clusters | Names of the clusters to install on. | []string | false |  
+ clusterLabelSelector | Labels that select the clusters to install on. | map[string]string | false |  
+ allowEmpty | Allow the selection to match no cluster. | bool | false |  
 
 ## Cron-Task
 
@@ -1075,7 +1091,21 @@ spec:
 ```
 
 ### Specification (module)
-This capability has no arguments.
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ module | Module name; defaults to the component name. | string | false |  
+ registry | Registry name; empty means the configured default. | string | false | empty 
+ version | Module package version, the tag `vela module publish` writes; empty means the latest published version. | string | false | empty 
+ placement | Where objects marked runtime are installed. Unmarked objects and definitions stay on the hub. Set `clusters` or `clusterLabelSelector`. | [placement](#placement-module) | false |  
+
+
+#### placement (module)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ clusters | Names of the clusters to install on. | []string | false |  
+ clusterLabelSelector | Labels that select the clusters to install on. | map[string]string | false |  
+ allowEmpty | Allow the selection to match no cluster. | bool | false |  
 
 ## Statefulset
 
