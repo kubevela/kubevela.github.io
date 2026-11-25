@@ -15,7 +15,7 @@ These workflow steps and providers make outbound HTTP calls, and the protection 
 - the `request` step
 - the `webhook` step
 - the `notification` step, for its DingTalk, Lark and Slack channels (email goes over SMTP and is not checked)
-- the `http` provider that custom workflow steps call: `http.#HTTPDo` from `vela/http`, and the legacy `op.#HTTPDo` from `vela/op`
+- the `http` provider that custom workflow steps call: `http.#HTTPDo` from `vela/http` and the legacy `op.#HTTPDo` from `vela/op`, with their `#HTTPGet`, `#HTTPPost`, `#HTTPPut` and `#HTTPDelete` shorthands
 
 In `vela-core` the same checks also apply outside workflows:
 
@@ -171,8 +171,8 @@ The same guard limits how long a call may take and how much it may read. The val
 
 | Value | Default | Effect |
 | ----- | ------- | ------ |
-| `workflow.http.maxTimeout` | `60s` | The longest `timeout` a call may set. A longer one, or `0`, fails the step with `timeout <value> must be greater than 0 and at most 1m0s`. A call that sets no `timeout` gets 3 seconds. In `vela-core`, `vela/http` in a definition has no `timeout` parameter and is cut off at this value. |
-| `workflow.http.maxResponseBytes` | `1048576` | The largest response body. A longer one fails the step with `response body exceeds 1048576 bytes`. It is not truncated. |
+| `workflow.http.maxTimeout` | `60s` | The longest `timeout` a call may set. A longer one, a negative value, or `0`, fails the step with `timeout <value> must be greater than 0 and at most 1m0s`. A call that sets no `timeout` gets 3 seconds, or the configured maximum when it is lower. In `vela-core`, `vela/http` in a definition has no `timeout` parameter and is cut off at this value. |
+| `workflow.http.maxResponseBytes` | `1048576` | The largest response body. A longer one fails the workflow step or the `vela-core` render with `response body exceeds 1048576 bytes`. It is not truncated. |
 | `workflow.http.nat64Prefixes` | `[]` | `vela-workflow` only. Network-specific NAT64 prefixes whose addresses are checked by the IPv4 address they carry. |
 
 ### Turn off discovery
