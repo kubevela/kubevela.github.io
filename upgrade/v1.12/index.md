@@ -164,7 +164,15 @@ Helm no longer owns the built-in definitions directly. Hook Jobs now manage them
   the definitions with server-side apply.
 - A pre-delete Job removes the definitions during `helm uninstall`.
 
-For an air-gapped cluster, mirror the Job image and set `builtinDefinitions.job.image.repository`.
+For an air-gapped cluster, mirror these images by digest, along with vela-core and vela-cli:
+
+- `alpine/k8s:1.34.13`, the Job image (`builtinDefinitions.job.image.*`);
+- `oamdev/cluster-gateway:v1.10.0-alpha.1` (`multicluster.clusterGateway.image.*`);
+- `ghcr.io/osscontainertools/kaniko:v1.29.1`, the default of the `build-push-image` step.
+
+`oamdev/kube-webhook-certgen` is no longer pulled. These tags are the `release-1.12` values and
+can change before the GA release.
+
 The Job's chart values are listed under
 [Helm chart changes](/release-notes/v1.12/v1.12.0/#helm-chart-changes) in the release notes. This
 change was also backported to v1.11.1 ([#7436](https://github.com/kubevela/kubevela/pull/7436)).
