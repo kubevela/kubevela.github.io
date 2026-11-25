@@ -4,7 +4,7 @@ title: Built-in Trait Type
 
 This documentation will walk through all the built-in trait types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2026-11-17T15:13:58+05:30.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2026-11-25T05:27:01Z.
 
 ## Affinity
 
@@ -1926,8 +1926,8 @@ spec:
 
  Name | Description | Type | Required | Default | Immutable 
  ---- | ----------- | ---- | -------- | ------- | --------- 
- cpu | Specify the amount of cpu for requests and limits. | number | false | 1 |  
- memory | Specify the amount of memory for requests and limits. | string | false | 2048Mi |  
+ cpu | Specify the amount of cpu for requests and limits; set alone, memory is left as the workload sets it. | number | false | 1 |  
+ memory | Specify the amount of memory for requests and limits; set alone, cpu is left as the workload sets it. | string | false | 2048Mi |  
  requests | Specify the resources in requests. | [requests](#requests-resource) | false |  |  
  limits | Specify the resources in limits. | [limits](#limits-resource) | false |  |  
 
