@@ -10,6 +10,10 @@ The goal of KubeVela is to **make deploying and operating applications across to
 
 They're aligned with the roadmap direction for the next three years. As for the detailed roadmap, we'll update and list below.
 
+- [2027 Winter Roadmap](./2027-12-roadmap)
+- [2027 Fall Roadmap](./2027-09-roadmap)
+- [2027 Summer Roadmap](./2027-06-roadmap)
+- [2027 Spring Roadmap](./2027-03-roadmap)
 - [2026 Winter Roadmap](./2026-12-roadmap)
 - [2026 Fall Roadmap](./2026-09-roadmap)
 - [2026 Summer Roadmap](./2026-06-roadmap)

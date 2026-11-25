@@ -245,6 +245,7 @@ module.exports = {
             'platform-engineers/system-operation/migration-from-old-version',
             'platform-engineers/system-operation/config-migration',
             'platform-engineers/system-operation/cue-compatibility-layer',
+            'platform-engineers/system-operation/workflow-http-protection',
           ],
         },
         {
@@ -265,6 +266,7 @@ module.exports = {
             'platform-engineers/auth/advance',
             'platform-engineers/auth/integration',
             'platform-engineers/auth/definition-rbac',
+            'platform-engineers/auth/definition-restrictions',
           ],
         },
         {
@@ -401,6 +403,7 @@ module.exports = {
             'platform-engineers/cue/definition-edit',
             'platform-engineers/components/custom-component',
             'platform-engineers/traits/customize-trait',
+            'platform-engineers/cue/definition-inheritance',
             'platform-engineers/policy/custom-policy',
             'platform-engineers/policy/application-scoped-policy',
             'platform-engineers/workflow/workflow',

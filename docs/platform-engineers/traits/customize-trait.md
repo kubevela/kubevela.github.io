@@ -4,6 +4,10 @@ title:  Trait Definition
 
 In this section we will introduce how to define a custom trait with CUE. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition.md) and [how to manage definition](../cue/definition-edit.md).
 
+:::tip
+To build a trait on top of an existing TraitDefinition instead of copying its template, see [Definition Inheritance](../cue/definition-inheritance.md#traits-that-extend-traits).
+:::
+
 ## Generate a Trait scaffold
 
 A trait can be something similar to component, while they're attached operational resources.

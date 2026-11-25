@@ -181,14 +181,16 @@ the common tasks and the tools behind them:
 |---|---|
 | Which applications are running, and are they healthy? | `list_applications` |
 | Where can I reach this application? | `get_application`, which lists its endpoints |
-| Why is this application not working? | `explain_application`, then `get_logs` and `get_managed_resource` |
+| Why is this application not working? | `explain_application`, then `get_logs` and `get_managed_resource`; for a cloud resource that stays unready, `diagnose_application`, which interprets its conditions by the provisioner's conventions |
 | Where is my workflow stuck? | `get_workflow` |
 | Which components, traits and policies can I use? | `list_definitions` |
 | What does this definition do and which parameters does it take? | `explain_definition`, `describe_definition`, which includes a minimal example |
 | Write an Application for me and check it renders | `describe_definition`, `dryrun_application` |
 | What would change if I applied this? | `diff_application` |
+| Which Applications would this definition change break? | `diff_definition_impact`, which finds the consumers in the namespaces the caller may read, renders a bounded number of them against the current and the proposed definition, and reports a change set and risk class, or a render error, per Application; `meta.truncated` is set when more consumers exist than it rendered |
+| Check a definition I have not applied yet against the Applications that use it | `stage_definition` once, then `dryrun_application`, `diff_application` or `diff_definition_impact` with the handle it returns |
 | Which clusters and addons does the platform have? | `list_clusters`, `list_addons` |
-| Can this cluster create a DynamoDB table, and with which provisioner? | `get_platform_info` with `service: dynamodb` and `kind: Table`, which picks ACK, then Crossplane, returns that CRD's schema, or says that neither is installed. Without `kind` it names the provisioner and its kinds only |
+| Can this cluster create a DynamoDB table, and with which provisioner? | `get_platform_info` with `service: dynamodb` and `kind: Table`, which picks ACK, then Crossplane, returns that CRD's schema, or says that neither is installed. Without `kind` it names the provisioner and its kinds only. The result also says whether that provisioner talks to the cloud API or to an emulator or private endpoint (`provisioner.endpointOverride`, with an `endpoint provenance` warning), and warns when it cannot tell |
 | Write a new component, such as an S3 bucket through ACK | The `kubevela-defkit-author` skill writes it in Go with defkit; `dryrun_application` renders the CUE that `vela def gen-module` generates and, with `serverCheck`, has the API server validate every object against the installed CRDs |
 
 The [tool reference](../reference/vela-mcp-tools.md) lists every tool with its inputs and results.
@@ -218,6 +220,18 @@ DB_URL not set
 
 From that it can tell you the container exits because `DB_URL` is missing, the workflow is
 waiting for the component to become healthy, and which property to set to fix it.
+
+When the unhealthy component is a cloud resource — an ACK table, a Config Connector
+instance, a Crossplane claim — there are no container logs to read. The agent calls
+`diagnose_application` instead. It reads each managed resource's live conditions and
+interprets them by the conventions of the family that owns its API group: ACK
+`ResourceSynced` and `Terminal`, Config Connector `Ready` with reason `UpToDate`,
+Crossplane `Ready` and `Synced`. Each resource comes back with a state and the evidence it
+was read from. When an ACK controller is configured to call an emulator or a private
+endpoint instead of AWS, the diagnosis for its resources carries that endpoint as
+`endpointOverride` and says so in the evidence, so a verdict taken against an emulator is
+never mistaken for the cloud's view; when the controller's configuration cannot be read
+conclusively, the diagnosis notes that provenance is unknown rather than assuming AWS.
 
 `explain_application` and `get_application` also return a `handles` block: the exact
 clusters, namespace, pod names, label selector and time window of the latest deployment.
