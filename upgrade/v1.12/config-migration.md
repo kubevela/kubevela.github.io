@@ -388,23 +388,8 @@ data the tool owns, so the tool shows no diff. After migrating:
 The v1.11 objects are kept by migration, so v1.11 finds every config after a rollback. Configs
 created as resources after the upgrade remain visible to v1.11 through their Secrets.
 
-The first `helm rollback` fails, because the v1.12 chart's admission webhook configuration is still
-installed:
-
-```bash
-helm rollback kubevela -n vela-system --wait
-```
-
-```console
-Error: no ComponentDefinition with the name "cron-task" found
-```
-
-Delete the webhook configuration and roll back again:
-
-```bash
-kubectl delete validatingwebhookconfiguration kubevela-vela-core-admission
-helm rollback kubevela -n vela-system --wait
-```
+Follow [Downgrading](/upgrade-guides/v1.12/#downgrading-to-v111) in the upgrade guide. Do not use
+`helm rollback`, and do not delete the admission webhook configuration by hand.
 
 The CRDs and the ConfigTemplate and Config resources stay, but nothing reconciles them until you
 upgrade again.

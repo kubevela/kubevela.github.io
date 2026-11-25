@@ -180,3 +180,39 @@ change was also backported to v1.11.1 ([#7436](https://github.com/kubevela/kubev
 Some built-in definitions render a different Pod template in v1.12, so Pods of the affected
 Applications restart. Test them before you upgrade; each definition's parameters are in the
 [Reference](/docs/next/end-user/components/references/) pages.
+
+## Downgrading to v1.11
+
+Do not use `helm rollback`: the v1.12 release no longer contains the built-in definitions (a hook
+Job applies them), so the rollback fails on definitions the v1.11 release no longer owns. Do not
+delete the admission webhook configuration by hand either.
+
+Remove Applications that use v1.12-only features first, such as a definition that `extends`
+another, `sources` or `forEach` steps.
+
+Then use `hack/downgrade-from-1.12.sh` from the
+[kubevela repository](https://github.com/kubevela/kubevela), at the tag you are running. It
+downgrades the release to the v1.11 chart (1.11.2 unless you pass `--version`) with your values and
+the v1.11 controller image, removes the admission webhooks only v1.12 serves (for
+`SourceDefinition`, `Config`, `ConfigTemplate` and config Secrets), and checks the result:
+
+```shell
+# see what it would change
+hack/downgrade-from-1.12.sh --dry-run
+# downgrade the release "kubevela" in vela-system to the 1.11.2 chart
+hack/downgrade-from-1.12.sh --version 1.11.2
+```
+
+It takes `--release`, `--namespace`, `--chart` (a chart reference or a local path) and
+`--image-repository` (for a mirror), and needs `helm` and `kubectl` pointed at the cluster.
+
+Without the script, upgrade to the 1.11.2 chart with your values file. Its hook Job puts back the
+v1.11 built-in definitions, and Helm removes the webhooks only v1.12 serves:
+
+```shell
+helm upgrade kubevela kubevela/vela-core --version 1.11.2 -n vela-system -f <your values file> --wait
+```
+
+The CRDs and the `ConfigTemplate` and `Config` resources stay, but nothing reconciles them until
+you upgrade again. For what happens to configs, see
+[Rolling back to v1.11](config-migration.md#rolling-back-to-v111).
