@@ -39,7 +39,7 @@ func main() {
 				if idx < 1 {
 					continue
 				}
-				if strings.HasPrefix(s, "http://") || strings.HasPrefix(s, "https://") || strings.HasPrefix(s, "#") || strings.HasPrefix(s, "/blog") || strings.HasPrefix(s, "/img") || strings.HasPrefix(s, "/zh/blog") {
+				if strings.HasPrefix(s, "http://") || strings.HasPrefix(s, "https://") || strings.HasPrefix(s, "#") || strings.HasPrefix(s, "/blog") || strings.HasPrefix(s, "/img") || strings.HasPrefix(s, "/zh/blog") || strings.HasPrefix(s, "/release-notes/") || strings.HasPrefix(s, "/upgrade-guides/") || strings.HasPrefix(s, "/docs/") {
 					continue
 				}
 				d := strings.Index(s, ")")

@@ -4,7 +4,7 @@ title: Built-in WorkflowStep Type
 
 This documentation will walk through all the built-in workflow step types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2026-04-16T11:50:12+01:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2026-11-25T05:27:01Z.
 
 ## Addon-Operation
 
@@ -575,6 +575,7 @@ spec:
  tenantID |  | string | true |  |  
  clientID |  | string | true |  |  
  clientSecret |  | string | true |  |  
+ type |  | string | true |  |  
  name |  | string | false | azure-provider |  
 
 
@@ -678,8 +679,10 @@ spec:
     - name: build-push
       type: build-push-image
       properties:
-        # use your kaniko executor image like below, if not set, it will use default image oamdev/kaniko-executor:v1.9.1
-        # kanikoExecutor: gcr.io/kaniko-project/executor:latest
+        # if kanikoExecutor is not set, the default image is
+        # ghcr.io/osscontainertools/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37
+        # to use another kaniko executor image, set it, pinned by digest:
+        # kanikoExecutor: <registry>/<kaniko image>:<tag>@sha256:<digest>
         # you can use context with git and branch or directly specify the context, please refer to https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts
         context:
           git: github.com/FogDong/simple-web-demo
@@ -704,7 +707,7 @@ spec:
 
  Name | Description | Type | Required | Default | Immutable 
  ---- | ----------- | ---- | -------- | ------- | --------- 
- kanikoExecutor | Specify the kaniko executor image, default to oamdev/kaniko-executor:v1.9.1. | string | false | oamdev/kaniko-executor:v1.9.1 |  
+ kanikoExecutor | Specify the kaniko executor image, default to ghcr.io/osscontainertools/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37. | string | false | ghcr.io/osscontainertools/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37 |  
  context | Specify the context to build image, you can use context with git and branch or directly specify the context, please refer to https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts. | string | true |  |  
  dockerfile | Specify the dockerfile. | string | false | ./Dockerfile |  
  image | Specify the image. | string | true |  |  
@@ -898,7 +901,7 @@ spec:
  Name | Description | Type | Required | Default | Immutable 
  ---- | ----------- | ---- | -------- | ------- | --------- 
  query | Query is a raw prometheus query to perform. | string | true |  |  
- metricEndpoint | The HTTP address and port of the prometheus server. | string | false |  |  
+ metricEndpoint | The HTTP address and port of the prometheus server. | string | false | http://prometheus-server.o11y-system.svc:9090 |  
  condition | Condition is an expression which determines if a measurement is considered successful. eg: >=0.95. | string | true |  |  
  duration | Duration defines the duration of time required for this step to be considered successful. | string | false | 5m |  
  failDuration | FailDuration is the duration of time that, if the check fails, will result in the step being marked as failed. | string | false | 2m |  
@@ -1021,7 +1024,7 @@ spec:
 
 ### Description
 
-Create or update a config.
+Create or update a config: a Config the Config controller renders into its Secret, written through the application and garbage-collected with it (a legacy Secret where the cluster does not serve the Config kind).
 
 ### Scope
 
@@ -1077,7 +1080,7 @@ spec:
 
 ### Description
 
-Delete a config.
+Delete a config: the Config, and with it its Secret and outputs, or the legacy Secret and its outputs.
 
 ### Scope
 
@@ -1352,7 +1355,7 @@ spec:
 
 ### Description
 
-Deploy each component to the cluster(s) resolved from its own topology policies. Applies are executed sequentially, one at a time unlike "deploy", there is no parallelism setting to configure.
+Deploy each component to the cluster(s) resolved from its own topology policies. Applies are executed sequentially, one at a time -- unlike "deploy", there is no parallelism setting to configure.
 
 ### Scope
 
@@ -1409,8 +1412,8 @@ spec:
 
  Name | Description | Type | Required | Default | Immutable 
  ---- | ----------- | ---- | -------- | ------- | --------- 
- name | The name of the component in the application to apply. | string | true |  |  
- policies | Names of topology policies (declared at the Application level) used to resolve this component's target cluster(s). | []string | true |  |  
+ name | the name of the component in the application to apply. | string | true |  |  
+ policies | names of topology policies (declared at the Application level) used to resolve this component's target cluster(s). | []string | true |  |  
 
 
 ## Export-Data
@@ -1761,7 +1764,7 @@ spec:
 
 ### Description
 
-List the configs.
+List the configs of a template, Config-backed and legacy, each once.
 
 ### Scope
 
@@ -1865,6 +1868,7 @@ spec:
       - name: dingtalk-message
         type: notification
         properties:
+          timeout: 30s
           dingding:
             # the DingTalk webhook address, please refer to: https://developers.dingtalk.com/document/robots/custom-robot-access
             url: 
@@ -1878,6 +1882,7 @@ spec:
       - name: slack-message
         type: notification
         properties:
+          timeout: 30s
           slack:
             # the Slack webhook address, please refer to: https://api.slack.com/messaging/webhooks
             url:
@@ -1924,6 +1929,7 @@ We can see that before and after the deployment of the application, the messages
  dingding | Please fulfill its url and message if you want to send DingTalk messages. | [dingding](#dingding-notification) | false |  |  
  slack | Please fulfill its url and message if you want to send Slack messages. | [slack](#slack-notification) | false |  |  
  email | Please fulfill its from, to and content if you want to send email. | [email](#email-notification) | false |  |  
+ timeout | The timeout of HTTP notifications (Go duration string, e.g. "30s", "2m", "500ms"). Defaults to 3s when omitted; must be greater than 0 and at most the controller's maximum, 60s by default. Invalid values fail when the step runs. | string | false |  |  
 
 
 #### lark (notification)
@@ -2720,7 +2726,7 @@ data:
 
 ### Description
 
-Read a config.
+Read a config, whichever holds it: a Config's Secret or a legacy one.
 
 ### Scope
 
@@ -2844,6 +2850,7 @@ spec:
       type: request
       properties:
         url: https://api.github.com/repos/kubevela/workflow
+        timeout: 30s
       outputs:
         - name: stars
           valueFrom: |
@@ -2878,6 +2885,26 @@ spec:
  method |  | "GET" or "POST" or "PUT" or "DELETE" | false | GET |  
  body |  | map[string]_ | false |  |  
  header |  | map[string]string | false |  |  
+ timeout | The timeout of this request (Go duration string, e.g. "30s", "2m", "500ms"). Defaults to 3s when omitted; must be greater than 0 and at most the controller's maximum, 60s by default. Invalid values fail when the step runs. | string | false |  |  
+ headersFromSecret | Headers whose values are sourced from Kubernetes Secrets. | [[]headersFromSecret](#headersfromsecret-request) | false |  |  
+ ratelimiter | The rate limiter of the request. | [ratelimiter](#ratelimiter-request) | false |  |  
+
+
+#### headersFromSecret (request)
+
+ Name | Description | Type | Required | Default | Immutable 
+ ---- | ----------- | ---- | -------- | ------- | --------- 
+ header | The HTTP header name to set. | string | true |  |  
+ secret | The name of the Kubernetes Secret. | string | true |  |  
+ key | The key within Secret.Data whose value becomes the header value. | string | true |  |  
+
+
+#### ratelimiter (request)
+
+ Name | Description | Type | Required | Default | Immutable 
+ ---- | ----------- | ---- | -------- | ------- | --------- 
+ limit | The maximum number of requests allowed within the period. Must be greater than 0. | int | true |  |  
+ period | The time window for rate limiting (Go duration string, e.g. "1s", "100ms"). | string | true |  |  
 
 
 ## Restart-Workflow
@@ -3214,11 +3241,43 @@ This step type is valid in both Application and WorkflowRun.
 ### Examples (vela-cli)
 
 ```yaml
+# The Job runs in the Application's namespace as this service account, with only the rights the
+# command uses: here, listing Applications. Never give it the controller's account.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vela-cli-runner
+  namespace: vela-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: vela-cli-runner
+  namespace: vela-system
+rules:
+  - apiGroups: ["core.oam.dev"]
+    resources: ["applications"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: vela-cli-runner
+  namespace: vela-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: vela-cli-runner
+subjects:
+  - kind: ServiceAccount
+    name: vela-cli-runner
+    namespace: vela-system
+---
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: vela-cli
-  namespace: default
+  namespace: vela-system
 spec:
   components: []
   workflow:
@@ -3226,9 +3285,12 @@ spec:
     - name: list-app
       type: vela-cli
       properties:
+        serviceAccountName: vela-cli-runner
         command:
           - vela
           - ls
+          - -n
+          - vela-system
 ```
 
 ### Specification (vela-cli)
@@ -3238,7 +3300,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- | --------- 
  command | Specify the vela command. | []string | true |  |  
  image | Specify the image. | string | false | oamdev/vela-cli:v1.6.4 |  
- serviceAccountName | specify serviceAccountName want to use. | string | false | kubevela-vela-core |  
+ serviceAccountName | The service account the Job runs as, in the Application's namespace. | string | false | default |  
  storage |  | [storage](#storage-vela-cli) | false |  |  
 
 
@@ -3315,6 +3377,7 @@ spec:
         properties:
           url:
             value: <your webhook url>
+          timeout: 30s
 ```
 
 ### Specification (webhook)
@@ -3324,6 +3387,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- | --------- 
  url | Specify the webhook url. | [type-option-1](#type-option-1-webhook) or [type-option-2](#type-option-2-webhook) | true |  |  
  data | Specify the data you want to send. | map[string]_ | false |  |  
+ timeout | The timeout of this request (Go duration string, e.g. "30s", "2m", "500ms"). Defaults to 3s when omitted; must be greater than 0 and at most the controller's maximum, 60s by default. Invalid values fail when the step runs. | string | false |  |  
 
 
 #### type-option-1 (webhook)

@@ -1,0 +1,80 @@
+module.exports = {
+  releaseNotes: [
+    {
+      type: 'link',
+      label: '← Back to Documentation',
+      href: '/docs/',
+    },
+    'overview',
+    {
+      type: 'category',
+      label: 'v1.12.x',
+      link: {
+        type: 'doc',
+        id: 'v1.12/index',
+      },
+      items: ['v1.12/v1.12.0'],
+    },
+    {
+      type: 'category',
+      label: 'v1.11.x',
+      link: {
+        type: 'doc',
+        id: 'v1.11/index',
+      },
+      items: ['v1.11/v1.11.2', 'v1.11/v1.11.1', 'v1.11/v1.11.0'],
+    },
+    {
+      type: 'category',
+      label: 'v1.10.x',
+      link: {
+        type: 'doc',
+        id: 'v1.10/index',
+      },
+      items: [
+        'v1.10/v1.10.10',
+        'v1.10/v1.10.9',
+        'v1.10/v1.10.8',
+        'v1.10/v1.10.7',
+        'v1.10/v1.10.6',
+        'v1.10/v1.10.5',
+        'v1.10/v1.10.4',
+        'v1.10/v1.10.3',
+        'v1.10/v1.10.2',
+        'v1.10/v1.10.1',
+        'v1.10/v1.10.0',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'v1.9.x',
+      link: {
+        type: 'doc',
+        id: 'v1.9/index',
+      },
+      items: [
+        'v1.9/v1.9.15',
+        'v1.9/v1.9.14',
+        'v1.9/v1.9.13',
+        'v1.9/v1.9.12',
+        'v1.9/v1.9.11',
+        'v1.9/v1.9.10',
+        'v1.9/v1.9.9',
+        'v1.9/v1.9.8',
+        'v1.9/v1.9.7',
+        'v1.9/v1.9.6',
+        'v1.9/v1.9.5',
+        'v1.9/v1.9.4',
+        'v1.9/v1.9.3',
+        'v1.9/v1.9.2',
+        'v1.9/v1.9.1',
+        'v1.9/v1.9.0',
+      ],
+    },
+    {
+      type: 'link',
+      label: 'Upgrade Guides',
+      href: '/upgrade-guides/overview/',
+    },
+  ],
+};

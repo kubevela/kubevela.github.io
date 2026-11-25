@@ -1,0 +1,133 @@
+---
+title: Upgrade Guides
+sidebar_label: Overview
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+This guide covers how to upgrade KubeVela without disturbing running workloads. Scenarios differ from each other, so we strongly recommend testing the upgrade in a simulation environment before upgrading production.
+
+KubeVela has a [release cadence](/docs/contributor/release-process/) of every 2-3 months, and we only maintain the last 2 releases. As a result, you're highly recommended to upgrade along with the community. We strictly align with the [semver version rule](https://semver.org/) for compatibility.
+
+## Upgrade path
+
+Upgrade one minor version at a time, for example v1.10 to v1.11, then v1.11 to v1.12. Before each step, read the version's [release notes](/release-notes/overview/) and its upgrade guide:
+
+| Upgrade | Guide | Release notes |
+| ------- | ----- | ------------- |
+| v1.11 to v1.12 | [Upgrade from v1.11 to v1.12](./v1.12/index.md) | [v1.12.x](/release-notes/v1.12/) |
+| v1.10 to v1.11 | [Upgrade from v1.10 to v1.11](./v1.11/index.md) | [v1.11.x](/release-notes/v1.11/) |
+| v1.9 to v1.10 | [Upgrade from v1.9 to v1.10](./v1.10/index.md) | [v1.10.x](/release-notes/v1.10/) |
+| v1.8 to v1.9 | [Upgrade from v1.8 to v1.9](./v1.9/index.md) | [v1.9.x](/release-notes/v1.9/) |
+| v1.7 to v1.8 | [Upgrade from v1.7 to v1.8](./v1.8/index.md) | [GitHub release](https://github.com/kubevela/kubevela/releases/tag/v1.8.0) |
+| v1.6 to v1.7 | [Upgrade from v1.6 to v1.7](./v1.7/index.md) | [GitHub release](https://github.com/kubevela/kubevela/releases/tag/v1.7.0) |
+| v1.5 to v1.6 | [Upgrade from v1.5 to v1.6](./v1.6/index.md) | [GitHub release](https://github.com/kubevela/kubevela/releases/tag/v1.6.0) |
+| v1.4 to v1.5 | [Upgrade from v1.4 to v1.5](./v1.5/index.md) | [GitHub release](https://github.com/kubevela/kubevela/releases/tag/v1.5.0) |
+| v1.3 to v1.4 | [Upgrade from v1.3 to v1.4](./v1.4/index.md) | [GitHub release](https://github.com/kubevela/kubevela/releases/tag/v1.4.0) |
+| v1.2 to v1.3 | [Upgrade from v1.2 to v1.3](./v1.3/index.md) | [GitHub release](https://github.com/kubevela/kubevela/releases/tag/v1.3.0) |
+| v1.1 to v1.2 | [Upgrade from v1.1 to v1.2](./v1.2/index.md) | [GitHub release](https://github.com/kubevela/kubevela/releases/tag/v1.2.0) |
+
+A patch upgrade within the same minor version, for example v1.10.3 to v1.10.9, needs only the general procedure below. Check the patch's release notes for any chart or behaviour change.
+
+## General procedure
+
+The version guides above add the steps specific to each version, such as upgrading the CRDs before the chart.
+
+### 1. Upgrade CLI
+
+<Tabs
+    className="unique-tabs"
+    defaultValue="script"
+    values={[
+        {label: 'Script', value: 'script'},
+        {label: 'Homebrew', value: 'homebrew'},
+        {label: 'Download directly from releases', value: 'download'},
+        {label: 'Docker', value: 'docker'},
+    ]}>
+<TabItem value="script">
+
+** MacOS/Linux **
+
+```shell script
+curl -fsSl https://kubevela.io/script/install.sh | bash
+```
+
+**Windows**
+
+:::tip
+Pre-release versions will not be listed.
+:::
+
+```shell script
+powershell -Command "iwr -useb https://kubevela.io/script/install.ps1 | iex"
+```
+
+</TabItem>
+<TabItem value="homebrew">
+
+**macOS/Linux**
+
+Update your brew first. Please note that the brew method only supports the installation of the official release version.
+
+```shell script
+brew update
+```
+
+Then install KubeVela CLI
+
+```shell script
+brew install kubevela
+```
+
+</TabItem>
+<TabItem value="download">
+
+- Download the latest `vela` binary file via [release log](https://github.com/kubevela/kubevela/releases).
+- Unzip the binary file, and configure the environment variables in `$PATH`, and you're done.
+
+```shell script
+sudo mv ./vela /usr/local/bin/vela
+```
+
+:::caution
+[Installation Tips](https://github.com/kubevela/kubevela/issues/625):
+If you are using a Mac system, it will pop up a warning that "vela" cannot be opened because the package from the developer cannot be verified.
+
+MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
+:::
+
+</TabItem>
+
+<TabItem value="docker">
+
+Pull the latest image from the docker registry, or specify a version as tag:
+
+```shell script
+docker pull oamdev/vela-cli:latest
+```
+
+</TabItem>
+</Tabs>
+
+### 2. Upgrade Vela Core
+
+:::note
+Please make sure you already upgraded the Vela CLI to latest stable version.
+:::
+
+```shell
+vela install
+```
+
+`vela install` updates the CRDs for you. If you install with Helm, apply the CRDs yourself before `helm upgrade`, because Helm never updates CRDs in a chart's `crds/` directory; each version guide shows the commands.
+
+### 3. Upgrade VelaUX
+
+```shell
+vela addon upgrade velaux
+```
+
+:::tip
+You can use advanced parameters provided by [addons](/docs/reference/addons/overview/).
+:::

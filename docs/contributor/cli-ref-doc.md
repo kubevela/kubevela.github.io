@@ -4,6 +4,10 @@ title: Update Reference Docs
 
 This guide is an introduction of how to generate docs automatically from Golang scripts.
 
+:::tip
+Regenerate the CLI and definition reference docs from the release branch for every `minor` release, before the docs version is cut; see the [Release SOP](./release-process.md#release-sop). The generator overwrites the whole page, so put longer examples for a definition in its `.eg.md` file in the KubeVela repository rather than editing the generated page. Generating the workflow step docs also needs a checkout of [kubevela/catalog](https://github.com/kubevela/catalog) next to `kubevela`.
+:::
+
 ## CLI Reference
 
 This section introduce how to update [CLI reference doc](../cli/vela.md) in the website.
@@ -15,7 +19,7 @@ The whole process was done by script automatically. You need to follow this guid
 $ tree -L 1
 .
 ├── kubevela
-└── kubevela.io
+└── kubevela.github.io
 ```
 
 2. Run generate command in kubevela root dir.
@@ -28,17 +32,27 @@ go run ./hack/docgen/cli/gen.go
 3. Update more docs such as i18n zh
 
 ```shell
-go run ./hack/docgen/cli/gen.go ../kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
+go run ./hack/docgen/cli/gen.go ../kubevela.github.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
 ```
 
 4. Then you can check the difference in kubevela.io.
 
 ```shell
-cd ../kubevela.io
+cd ../kubevela.github.io
 git status
 ```
 
 5. Check in the changes and send pull request.
+
+The generator does not delete pages. Remove the page of a removed or deprecated command by hand.
+
+## vela mcp Tool Reference
+
+The [vela mcp tool reference](../reference/vela-mcp-tools.md) is built from the tool descriptions and schemas that the MCP server publishes. Change those in `pkg/mcp` in the KubeVela repository, not the page. Then run this in the kubevela root dir. It writes `docs/reference/vela-mcp-tools.md` in a `kubevela.github.io` checkout next to it, or in the path you pass as the first argument.
+
+```shell
+go run ./hack/docgen/mcp
+```
 
 ## Built-in Definition Reference
 
@@ -61,7 +75,7 @@ $ tree -L 1
 .
 ├── catalog
 ├── kubevela
-└── kubevela.io
+└── kubevela.github.io
 ```
 
 2. Run generate command in kubevela root dir.
@@ -74,7 +88,7 @@ go run hack/docgen/def/gen.go
 3. Then you can check the difference in kubevela.io.
 
 ```shell
-cd ../kubevela.io
+cd ../kubevela.github.io
 git status
 ```
 
@@ -100,28 +114,24 @@ go run hack/docgen/def/gen.go --type workflowstep
 > You must choose one of the type generated if path specified.
 
 ```shell
-go run hack/docgen/def/gen.go --type component --path ../kubevela.io/docs/end-user/components/references.md
+go run hack/docgen/def/gen.go --type component --path ../kubevela.github.io/docs/end-user/components/references.md
 ```
 
 * Specify the i18n location with a translation script data for the output
 
 ```shell
-go run hack/docgen/def/gen.go --location zh --i18n ../kubevela.io/static/reference-i18n.json
+go run hack/docgen/def/gen.go --location zh --i18n ../kubevela.github.io/static/reference-i18n.json
 
 go run hack/docgen/def/gen.go --location zh --i18n https://kubevela.io/reference-i18n.json
 
-go run hack/docgen/def/gen.go --type component --path ../kubevela.io/docs/end-user/components/references.md --location zh --i18n ../kubevela.io/static/reference-i18n.json
+go run hack/docgen/def/gen.go --type component --path ../kubevela.github.io/docs/end-user/components/references.md --location zh --i18n ../kubevela.github.io/static/reference-i18n.json
 ```
 
 ### How the docs generated?
 
-1. Load definitions from Kubernetes.
+The generator reads the definitions from the CUE files in `vela-templates/definitions/internal` and, for workflow steps, `../catalog/addons/vela-workflow/definitions`. A kubeconfig file must exist. A reachable cluster is only needed for the "Underlying Kubernetes Resources" block of component definitions.
 
-The script will load all definitions from your Kubernetes Cluster, so you need to apply all built-in definitions before run.
-
-2. Compare the internal definition folder in the project.
-
-Besides the server side definitions, the script will also compare the cue files in the KubeVela project. Only definitions existing in these folders will be generated as reference docs.
+The Addon, Module and Helmchart sections of the component reference are maintained by hand, because the generator prints "This capability has no arguments." for them. Restore them after regenerating the component page (`cd ../kubevela.github.io && git checkout -p -- docs/end-user/components/references.md`).
 
 ```console
 $ tree ./vela-templates/definitions/internal
@@ -188,7 +198,7 @@ Most of the steps are done by script automatically. You need to follow this guid
 $ tree -L 1
 .
 ├── kubevela
-└── kubevela.io
+└── kubevela.github.io
 ```
 
 2. Run generate command in kubevela root dir.
@@ -198,14 +208,16 @@ cd kubevela/
 go run ./hack/docgen/terraform/generate.go --i18n ../kubevela.io/static/reference-i18n.json
 ```
 
+The Terraform generator writes to `../kubevela.io`. Until `hack/docgen/terraform/generate.go` is changed, name the docs checkout `kubevela.io` (or symlink it) for this command.
+
 3. Update the resource catalog list if there're new cloud resources
-  - Resource Catalog(English): `kubevela.io/docs/end-user/components/cloud-services/cloud-resources-list.md`
-  - Resource Catalog(Chinese): `kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/end-user/components/cloud-services/cloud-resources-list.md`
+  - Resource Catalog(English): `kubevela.github.io/docs/end-user/components/cloud-services/cloud-resources-list.md`
+  - Resource Catalog(Chinese): `kubevela.github.io/i18n/zh/docusaurus-plugin-content-docs/current/end-user/components/cloud-services/cloud-resources-list.md`
 
 4. Then you can check the difference in kubevela.io.
 
 ```shell
-cd ../kubevela.io
+cd ../kubevela.github.io
 git status
 ```
 
@@ -215,7 +227,7 @@ git status
 
 You need to translate into this file if you want to contribute for internationalization(i18n):
 
-- File path: `kubevela.io/static/reference-i18n.json`
+- File path: `kubevela.github.io/static/reference-i18n.json`
 - URL for public access: https://kubevela.io/reference-i18n.json
 
 After any translate, run the commands above to update all these reference docs.

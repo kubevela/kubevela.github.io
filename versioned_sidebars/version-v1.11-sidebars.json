@@ -37,6 +37,16 @@
       ]
     },
     {
+      "type": "link",
+      "label": "Release Notes",
+      "href": "/release-notes/overview/"
+    },
+    {
+      "type": "link",
+      "label": "Upgrade Guides",
+      "href": "/upgrade-guides/overview/"
+    },
+    {
       "type": "category",
       "label": "Core Concepts",
       "collapsed": false,
