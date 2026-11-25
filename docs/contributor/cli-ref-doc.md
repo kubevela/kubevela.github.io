@@ -131,7 +131,7 @@ go run hack/docgen/def/gen.go --type component --path ../kubevela.github.io/docs
 
 The generator reads the definitions from the CUE files in `vela-templates/definitions/internal` and, for workflow steps, `../catalog/addons/vela-workflow/definitions`. A kubeconfig file must exist. A reachable cluster is only needed for the "Underlying Kubernetes Resources" block of component definitions.
 
-The Addon, Module and Helmchart sections of the component reference are maintained by hand, because the generator prints "This capability has no arguments." for them. Restore them after regenerating the component page (`git checkout -p docs/end-user/components/references.md`).
+The Addon, Module and Helmchart sections of the component reference are maintained by hand, because the generator prints "This capability has no arguments." for them. Restore them after regenerating the component page (`cd ../kubevela.github.io && git checkout -p -- docs/end-user/components/references.md`).
 
 ```console
 $ tree ./vela-templates/definitions/internal

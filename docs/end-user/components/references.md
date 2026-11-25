@@ -55,7 +55,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  clusters | Names of the clusters to install on. | []string | false |  
  clusterLabelSelector | Labels that select the clusters to install on. | map[string]string | false |  
- allowEmpty | Allow the selection to match no cluster. | bool | false |  
+ allowEmpty | Allow an empty `clusterLabelSelector` result. An unknown name in `clusters` still fails. | bool | false |  
 
 ## Cron-Task
 
@@ -1105,7 +1105,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  clusters | Names of the clusters to install on. | []string | false |  
  clusterLabelSelector | Labels that select the clusters to install on. | map[string]string | false |  
- allowEmpty | Allow the selection to match no cluster. | bool | false |  
+ allowEmpty | Allow an empty `clusterLabelSelector` result. An unknown name in `clusters` still fails. | bool | false |  
 
 ## Statefulset
 
