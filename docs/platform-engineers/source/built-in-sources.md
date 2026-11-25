@@ -69,7 +69,7 @@ Sends a GET request to a URL. The response is parsed when its `Content-Type` is 
 
 Output: `content` (parsed value or string) and `statusCode` (int). Cache: 5m, `use-stale`.
 
-The request is made by the controller process, so the controller needs outbound access to the URL. It goes through the controller's [outbound HTTP guard](../system-operation/workflow-http-protection.md): the deny policy applies, private addresses are blocked when that is enabled, and loopback addresses are always refused. The request is cut at the controller's maximum HTTP timeout (60s by default) and a response body over 1 MiB fails the source. The request carries no credentials.
+The request is made by the controller process, so the controller needs outbound access to the URL. It goes through the controller's [outbound HTTP guard](../system-operation/workflow-http-protection.md): the deny policy applies, private addresses are blocked when that is enabled, and loopback addresses are always refused. The request is cut at the controller's maximum HTTP timeout (60s by default) and a response body over the `workflow.http.maxResponseBytes` limit (1 MiB by default) fails the source. The request carries no credentials.
 
 ## vela-config
 

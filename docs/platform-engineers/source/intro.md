@@ -69,7 +69,7 @@ helm upgrade kubevela kubevela/vela-core \
   --set featureGates.enableCelExpressions=true
 ```
 
-`--reset-then-reuse-values` needs Helm 3.14 or later. It keeps the values you set at install and takes the rest from the chart.
+`--reset-then-reuse-values` needs Helm 3.14 or later. It keeps the user-supplied values from the current release and takes the rest from the chart.
 
 Or pass `--feature-gates=EnableCelExpressions=true` to the controller, see [Feature Gates](../system-operation/bootstrap-parameters.md#feature-gates).
 

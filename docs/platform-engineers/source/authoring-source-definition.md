@@ -242,6 +242,6 @@ vela def test .                      # run *_test.cue cases, test.#SourceExec re
 vela def show cluster-lookup         # after apply: the generated key, its keyInputs and the consumable surfaces
 ```
 
-`vela def test` starts a local API server for source cases, so it needs the envtest binaries (`--envtest-assets` or `KUBEBUILDER_ASSETS`).
+Step and source cases start a local API server, so running them needs the envtest binaries (`--envtest-assets` or `KUBEBUILDER_ASSETS`).
 
 Then bind it from a test Application, and use `vela status <app> --sources` to see the resolution, see [Caching and operations](./caching-and-operations.md).

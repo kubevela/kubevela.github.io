@@ -121,7 +121,7 @@ Deleting an entry does not invalidate the controller's in-memory copy, which may
 | Symptom | Likely cause |
 |---|---|
 | Applying an Application is refused with an `$(...)` error that you did not expect | The Application holds a `$(VAR_NAME)` string meant for Kubernetes, for example in `env` or `args`. Write `$$(VAR_NAME)` to keep it literal |
-| Applying an Application is refused with `source expressions are not enabled on this cluster` or `this Application has not opted in to source expressions` | The Application declares `spec.sources` while expressions are off for it. Turn on `EnableCelExpressions`, or add the `app.oam.dev/cel-expressions: "true"` annotation in opt-in mode |
+| Applying an Application is refused with `source expressions are not enabled on this cluster` or `this Application has not opted in to source expressions` | The Application declares `spec.sources` while expressions are off for it. Set `EnableCelExpressions=true`; in opt-in mode, also add the `app.oam.dev/cel-expressions: "true"` annotation, or set `RequireCelExpressionOptIn=false` after reviewing every Application |
 | Expressions are ignored in an Application with no `spec.sources` | `EnableCelExpressions` is off, or the cluster is in opt-in mode and the Application lacks the annotation |
 | A source is `Failed` with a message about a missing field | The resolved output does not match `schema`. Check the data the definition reads |
 | A source is `Stale` | A refresh is failing. Check the message under `resolutions[]` and whether the data source is reachable |
