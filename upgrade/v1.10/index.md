@@ -19,7 +19,7 @@ WorkflowStepDefinitions still compile, for example with `vela def vet <file>` us
 Also check:
 
 - `ref-objects` components that reference resources outside the `core.oam.dev` group and the empty
-  group must set `group`; see [Distribute Reference Objects](/docs/end-user/components/ref-objects/).
+  group must set `group`; see [Distribute Reference Objects](/docs/v1.10/end-user/components/ref-objects/).
 - If you pass `--leader-election-resource-lock` to the controller, remove it. The flag no longer
   exists and the controller fails to start with it.
 
