@@ -21,10 +21,21 @@ Read the [v1.9.0 release notes](/release-notes/v1.9/v1.9.0/) before you upgrade.
 > ```
 :::
 
-1. Upgrade your kubevela chart
+1. Upgrade the CRDs first. v1.9 drops the legacy fields from the Application and definition CRDs,
+   and Helm does not upgrade the CRDs in a chart's `crds/` directory:
 
 ```
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
+helm pull kubevela/vela-core --version 1.9.5 --untar
+kubectl apply -f vela-core/crds/
+```
+
+   The `healthscopes`, `scopedefinitions` and `rollouts` CRDs are no longer in the chart. `kubectl apply`
+   does not delete them.
+
+2. Upgrade your kubevela chart
+
+```
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.9.5 --wait
 ```
