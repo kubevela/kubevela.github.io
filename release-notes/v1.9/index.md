@@ -16,6 +16,7 @@ Don't use v1.9.10. It has a fatal client bug ([#6493](https://github.com/kubevel
 
 | Version | Date | Summary |
 | ------- | ---- | ------- |
+| [v1.9.15](./v1.9.15.md) | 2026-11-21 | vela-core manages its serving certificates (installs on Kubernetes 1.36 and later), and workflow HTTP refuses cloud-metadata and link-local addresses. |
 | [v1.9.14](./v1.9.14.md) | 2026-06-30 | Security fix for the Terraform remote configuration loader; preserves `last-applied-configuration` for shared resources. |
 | [v1.9.13](./v1.9.13.md) | 2024-09-29 | Workflow v0.6.1, fixing suspend. |
 | [v1.9.12](./v1.9.12.md) | 2024-09-19 | Quieter startup logs and a `vela-cli` volumes fix. |

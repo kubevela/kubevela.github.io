@@ -7,7 +7,7 @@ Read the [v1.10.0 release notes](/release-notes/v1.10/v1.10.0/) before you upgra
 
 :::caution
 Upgrade to v1.10.5 or later, not v1.10.4. v1.10.4 breaks components whose templates use `import`
-statements. The commands below use v1.10.9, the latest v1.10 patch.
+statements. The commands below use v1.10.10, the latest v1.10 patch.
 :::
 
 ## Check your definitions
@@ -31,20 +31,20 @@ Also check:
 ```
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm pull kubevela/vela-core --version 1.10.9 --untar
+helm pull kubevela/vela-core --version 1.10.10 --untar
 kubectl apply -f vela-core/crds/
 ```
 
 2. Upgrade your kubevela chart
 
 ```
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.10.9 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.10.10 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.10.9
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.10.10
 ```
 
 4. Upgrade VelaUX or other addon

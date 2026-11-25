@@ -15,9 +15,9 @@ KubeVela maintains the last two minor releases; see [Release Process and Cadence
 | Version | GA date | Latest release | Status | Kubernetes | Upgrade guide |
 | ------- | ------- | ------------ | ------ | ---------- | ------------- |
 | [v1.12.x](./v1.12/index.md) | Unreleased | v1.12.0-alpha.2 (pre-release) | In development | Tested with v1.37; `>= v1.25` implied by CEL rules, not tested | [v1.11 to v1.12](/upgrade-guides/v1.12/) |
-| [v1.11.x](./v1.11/index.md) | 2026-07-20 | [v1.11.1](./v1.11/v1.11.1.md) | Supported | Tested with v1.31 | [v1.10 to v1.11](/upgrade-guides/v1.11/) |
-| [v1.10.x](./v1.10/index.md) | 2025-02-05 | [v1.10.9](./v1.10/v1.10.9.md) | Supported | Tested with v1.29; from v1.10.4 built on the v1.31 libraries and tested with v1.31 | [v1.9 to v1.10](/upgrade-guides/v1.10/) |
-| [v1.9.x](./v1.9/index.md) | 2023-06-15 | [v1.9.14](./v1.9/v1.9.14.md) | End of life | Tested with v1.26 | [v1.8 to v1.9](/upgrade-guides/v1.9/) |
+| [v1.11.x](./v1.11/index.md) | 2026-07-20 | [v1.11.2](./v1.11/v1.11.2.md) | Supported | Tested with v1.31 | [v1.10 to v1.11](/upgrade-guides/v1.11/) |
+| [v1.10.x](./v1.10/index.md) | 2025-02-05 | [v1.10.10](./v1.10/v1.10.10.md) | Supported | Tested with v1.29; from v1.10.4 built on the v1.31 libraries and tested with v1.31 | [v1.9 to v1.10](/upgrade-guides/v1.10/) |
+| [v1.9.x](./v1.9/index.md) | 2023-06-15 | [v1.9.15](./v1.9/v1.9.15.md) | End of life | Tested with v1.26 | [v1.8 to v1.9](/upgrade-guides/v1.9/) |
 
 Releases before v1.9 are documented only on [GitHub Releases](https://github.com/kubevela/kubevela/releases). Their upgrade steps are listed in the [upgrade path table](/upgrade-guides/overview/#upgrade-path).
 
@@ -26,10 +26,13 @@ Releases before v1.9 are documented only on [GitHub Releases](https://github.com
 | Version | Go | CUE | `k8s.io/client-go` | `controller-runtime` | `kubevela/workflow` |
 | ------- | -- | --- | ------------------ | -------------------- | ------------------- |
 | v1.12.0 (release-1.12) | 1.27.1 | v0.14.1 | v0.37.1 | v0.25 | v0.8.0-alpha.2 |
+| v1.11.2 | 1.23.8 | v0.14.1 | v0.31.10 | v0.19.7 | v0.7.3 |
 | v1.11.1 | 1.23.8 | v0.14.1 | v0.31.10 | v0.19.7 | v0.7.3 (pre-release commit) |
 | v1.11.0 | 1.23.8 | v0.14.1 | v0.31.10 | v0.19.7 | v0.7.2 |
+| v1.10.10 | 1.23.8 | v0.9.2 | v0.31.10 | v0.19.7 | v0.6.5 |
 | v1.10.9 | 1.23.8 | v0.9.2 | v0.31.10 | v0.19.7 | v0.6.3 (pre-release commit) |
 | v1.10.0 | 1.22.0 | v0.9.2 | v0.29.2 | v0.17.6 | v0.6.1 (pre-release commit) |
+| v1.9.15 | 1.19 | v0.5.0 | v0.26.3 | v0.14.6 | v0.6.2 (pre-release commit) |
 | v1.9.14 | 1.19 | v0.5.0 | v0.26.3 | v0.14.6 | v0.6.1 |
 | v1.9.0 | 1.19 | v0.5.0 | v0.26.3 | v0.14.6 | v0.5.1 (pre-release commit) |
 

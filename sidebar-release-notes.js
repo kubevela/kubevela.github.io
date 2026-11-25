@@ -22,7 +22,7 @@ module.exports = {
         type: 'doc',
         id: 'v1.11/index',
       },
-      items: ['v1.11/v1.11.1', 'v1.11/v1.11.0'],
+      items: ['v1.11/v1.11.2', 'v1.11/v1.11.1', 'v1.11/v1.11.0'],
     },
     {
       type: 'category',
@@ -32,6 +32,7 @@ module.exports = {
         id: 'v1.10/index',
       },
       items: [
+        'v1.10/v1.10.10',
         'v1.10/v1.10.9',
         'v1.10/v1.10.8',
         'v1.10/v1.10.7',
@@ -52,6 +53,7 @@ module.exports = {
         id: 'v1.9/index',
       },
       items: [
+        'v1.9/v1.9.15',
         'v1.9/v1.9.14',
         'v1.9/v1.9.13',
         'v1.9/v1.9.12',

@@ -16,6 +16,7 @@ Don't use v1.10.4. It breaks components whose templates use `import` statements;
 
 | Version | Date | Summary |
 | ------- | ---- | ------- |
+| [v1.10.10](./v1.10.10.md) | 2026-11-21 | Security and fix release: images move off the compromised eMudhra CA chains, vela-core manages its serving certificates, workflow HTTP is guarded and limited, and about 45 backported fixes. |
 | [v1.10.9](./v1.10.9.md) | 2026-06-30 | Security fix for the Terraform remote configuration loader; `status.details` imports compile. |
 | [v1.10.8](./v1.10.8.md) | 2026-03-31 | Fixes for `status.details` dynamic keys, apply-once resources and `appliedResources`. |
 | [v1.10.7](./v1.10.7.md) | 2026-02-18 | Component removals are persisted and reflected in status. |
