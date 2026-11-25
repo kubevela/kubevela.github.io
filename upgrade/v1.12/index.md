@@ -5,7 +5,8 @@ sidebar_label: v1.11 to v1.12
 
 :::caution Unreleased
 v1.12.0 is not released yet. This guide tracks the `release-1.12` branch and may change before
-the GA release.
+the GA release. The commands use the latest pre-release, `1.12.0-alpha.2`; use `1.12.0` once it is
+released.
 :::
 
 Read the [v1.12.0 release notes](/release-notes/v1.12/v1.12.0/) before you upgrade. They
@@ -24,14 +25,14 @@ templates and configs keep working without changes.
    ```shell
    helm repo add kubevela https://kubevela.github.io/charts
    helm repo update
-   helm pull kubevela/vela-core --version 1.12.0 --untar
+   helm pull kubevela/vela-core --version 1.12.0-alpha.2 --untar
    kubectl apply --server-side --force-conflicts -f vela-core/crds/
    ```
 
 2. Upgrade your kubevela chart:
 
    ```shell
-   helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.12.0 --wait
+   helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.12.0-alpha.2 --wait
    ```
 
    :::caution

@@ -9,6 +9,11 @@ resources, reconciled by the controller; see [Config Template](/docs/next/refere
 This guide covers upgrading a cluster that has v1.11 configs, moving them to the new resources, and
 rolling back.
 
+:::caution Unreleased
+v1.12.0 is not released yet. The commands use the latest pre-release, `1.12.0-alpha.2`; use `1.12.0`
+once it is released.
+:::
+
 ## Overview
 
 ```mermaid
@@ -39,14 +44,14 @@ first:
 
 ```bash
 helm repo update
-helm pull kubevela/vela-core --version 1.12.0 --untar
+helm pull kubevela/vela-core --version 1.12.0-alpha.2 --untar
 kubectl apply --server-side --force-conflicts -f vela-core/crds/
 ```
 
 Then upgrade the chart:
 
 ```bash
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.12.0 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.12.0-alpha.2 --wait
 ```
 
 Your configs are listed as before, with `SOURCE` showing they are v1.11 objects:
@@ -309,7 +314,7 @@ namespace. It runs with the controller's permissions, so nothing is skipped or f
 them:
 
 ```bash
-helm upgrade -n vela-system kubevela kubevela/vela-core --version 1.12.0 --reset-then-reuse-values \
+helm upgrade -n vela-system kubevela kubevela/vela-core --version 1.12.0-alpha.2 --reset-then-reuse-values \
   --set featureGates.autoMigrateLegacyConfigs=true --wait
 ```
 
