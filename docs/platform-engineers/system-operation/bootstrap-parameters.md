@@ -73,6 +73,8 @@ The generic Kubernetes logging flags (`-v`, `--vmodule`, `--log_dir` and the oth
 | `--max-dispatch-concurrent` | int | `10` | Set the max dispatch concurrent number, default is 10 |
 | `--max-for-each-items` | int | `50` | Set the max number of items a forEach step may iterate, each of which is recorded in the Application's status, default is 50 |
 | `--max-workflow-failed-backoff-time` | int | `300` | Set the max workflow failed backoff time, default is 300 |
+| `--max-workflow-http-response-bytes` | int | `1048576` | Set the largest response body, in bytes, a workflow or definition HTTP request may read |
+| `--max-workflow-http-timeout` | duration | `1m0s` | Set the longest timeout a workflow or definition HTTP request may set; a request holds a reconcile worker for its duration |
 | `--max-workflow-step-error-retry-times` | int | `10` | Set the max workflow step error retry times, default is 10 |
 | `--max-workflow-wait-backoff-time` | int | `60` | Set the max workflow wait backoff time, default is 60 |
 | `--metrics-addr` | string | `":8080"` | The address the metric endpoint binds to. |
