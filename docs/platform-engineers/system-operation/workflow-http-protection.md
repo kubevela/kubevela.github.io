@@ -187,6 +187,18 @@ helm upgrade kubevela kubevela/vela-core -n vela-system --reset-then-reuse-value
 
 `--reset-then-reuse-values` needs Helm 3.14 or later. Plain `--reuse-values` skips the new chart defaults and can fail on a release that was installed before these values existed.
 
+## Install the standalone `vela-workflow` chart
+
+To install only the workflow engine, without `vela-core`:
+
+```shell
+helm repo add kubevela https://kubevela.github.io/charts
+helm repo update
+helm install workflow kubevela/vela-workflow --namespace vela-system --create-namespace
+```
+
+The values in [Chart values](#chart-values) apply to this chart too.
+
 ## Install both charts together
 
 Each chart installs its own config template and default ConfigMap, and its controller reads only the ConfigMaps that carry its own label. Uninstalling one release does not delete the other's template.
