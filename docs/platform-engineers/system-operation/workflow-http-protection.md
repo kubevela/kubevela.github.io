@@ -36,8 +36,8 @@ A blocked call fails the step. The step message contains one of these errors:
 
 | Error | Meaning |
 | ----- | ------- |
-| `blocked SSRF host: <host>` | The host name matches an entry in `denyHosts`. |
-| `blocked SSRF target: <ip>` | The destination IP address matches `denyCIDRs`, or it is a private address while [`blockPrivateHTTPAddresses`](#feature-gates) is on. |
+| `blocked SSRF host: <host>` | The host name matches a host name or wildcard in `denyHosts`. |
+| `blocked SSRF target: <ip>` | The destination IP address matches an IP address or range in `denyCIDRs` or `denyHosts`, or it is one of the addresses `vela-core` always blocks, or it is a private address while [`blockPrivateHTTPAddresses`](#feature-gates) is on. When a host name resolved to the address, the error is wrapped: `dial tcp <ip>:<port>: blocked SSRF target: <ip>`. |
 
 ## Default denylist
 
@@ -67,13 +67,15 @@ KubeVela has no allowlist mode. You can only add entries to the denylist or turn
 
 ## How the denylist is built
 
-The controller combines three layers. Entries in a higher layer add to the entries below. No layer can remove an entry from the built-in floor.
+The controller combines these sources. Every source adds entries. Nothing can remove an entry from the built-in floor.
 
-1. **Helm values** `workflow.httpDeny.defaultConfig.*`. The chart renders them into a labeled default ConfigMap.
-2. **ConfigMaps in the controller namespace** that carry the discovery label `config.oam.dev/type=<configTemplateName>`. The controller reads only the namespace it runs in, which is `vela-system` by default. This includes the editable default ConfigMap from the chart and any ConfigMap that you add.
-3. **The built-in floor** in the controller binary. It holds the five default entries above. It stays on when you delete the default ConfigMap, disable discovery or set `workflow.httpDeny.defaultConfig.enabled=false`.
+1. **The built-in floor** in the controller binary. It holds the five default entries above. It stays on when you delete the default ConfigMap, disable discovery or set `workflow.httpDeny.defaultConfig.enabled=false`.
+2. **The default ConfigMap** that the chart renders from the Helm values `workflow.httpDeny.defaultConfig.*`. Change it through the values. Helm writes the values back over a manual edit on the next upgrade.
+3. **ConfigMaps that you add** in the controller namespace with the discovery label `config.oam.dev/type=<configTemplateName>`. The controller reads only the namespace it runs in, which is `vela-system` by default.
 
-The controller watches these ConfigMaps. A change takes effect without a restart. If a reload fails, the controller keeps the last good denylist.
+The controller watches these ConfigMaps. A change takes effect without a restart.
+
+One invalid entry in any of the ConfigMaps rejects the whole set. A running controller logs `failed to reload workflow HTTP deny ConfigMaps; keeping last good policy` and ignores every change, in any of the ConfigMaps, until the entry is fixed. A controller that starts while the entry is there does not start: the pod crash-loops with `failed to initialize workflow HTTP deny ConfigMaps` (`vela-core`) or `unable to configure workflow HTTP deny policy` (`vela-workflow`). Check the controller log after you edit a ConfigMap by hand. `vela config create` validates the entries before it writes them.
 
 ## Extend the denylist
 
@@ -81,28 +83,30 @@ Add hosts, IP addresses and CIDR ranges with a `Config`, or with a ConfigMap tha
 
 ### With `vela config create`
 
-The chart installs a config template for the denylist. Use the template name for your chart:
+The chart installs a config template for the denylist. `vela config create` needs `vela-core`. Use the template name of the controller that must enforce the entry:
 
 | Chart | Template name |
 | ----- | ------------- |
 | `vela-core` | `vela-core-http-deny` |
-| `vela-workflow` (standalone) | `vela-workflow-http-deny` |
+| `vela-workflow`, installed next to `vela-core` | `vela-workflow-http-deny` |
 
 ```shell
 vela config create team-http-deny \
   --template vela-core-http-deny \
   --namespace vela-system \
   'denyHosts={*.example.com,internal.example.net}' \
-  'denyCIDRs={10.96.0.0/12,203.0.113.7}'
+  'denyCIDRs={198.51.100.0/24,203.0.113.7}'
 ```
 
-For the standalone chart, use `--template vela-workflow-http-deny`. Create the config in the namespace where the controller runs.
+`vela config create` needs the Config CRD that vela-core installs. With the standalone `vela-workflow` chart and no vela-core, write the ConfigMap yourself, see [With a ConfigMap](#with-a-configmap). Create the config in the namespace where the controller runs.
 
 `denyHosts` takes exact host names, IP addresses, and wildcard host names that start with `*.`. A wildcard matches subdomains but not the bare domain. `denyCIDRs` takes IP addresses and CIDR ranges.
 
 ### With a ConfigMap
 
 You can also create the ConfigMap yourself. Put the label that matches your chart on it. Each key holds one entry per line. Blank lines and `#` comments are ignored.
+
+The controller refuses an entry with a port (`example.com:443`), a scheme or a path (`http://example.com/x`), whitespace inside it, a `*` anywhere but a leading `*.`, or a range that is not a valid CIDR. One refused entry rejects all the ConfigMaps, see [How the denylist is built](#how-the-denylist-is-built).
 
 ```yaml
 apiVersion: v1
@@ -117,7 +121,7 @@ data:
     *.example.com
     internal.example.net
   denyCIDRs: |
-    10.96.0.0/12
+    198.51.100.0/24
     203.0.113.7
 ```
 
