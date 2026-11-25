@@ -100,7 +100,7 @@ Check these changes before you upgrade:
 ## Trait conflicts
 
 Admission now rejects an Application when an attached trait conflicts with another trait through
-`TraitDefinition.spec.conflictsWith`. KubeVela 1.11.0 accepted these Applications. An existing
+`TraitDefinition.spec.conflictsWith`. KubeVela 1.11.0 and earlier accepted these Applications. An existing
 Application with conflicting traits keeps working, and an update that leaves its spec alone is
 admitted with a warning. The next change to its spec is refused until one of the conflicting traits
 is removed. Find and fix such Applications before you upgrade.
@@ -120,9 +120,7 @@ startup, it:
 - checks the certificates every minute and renews them when needed.
 
 The old `kube-webhook-certgen` Jobs are no longer used. Existing Secrets from those Jobs are reused
-during an upgrade, so the CA does not change. This also prevents a deadlock with
-`helm install --wait` on Kubernetes 1.36, where vela-core could wait for the `APIService` while Helm
-waited to run the Job that set its `caBundle`.
+during an upgrade, so the CA does not change.
 
 vela-core manages each certificate when these chart values are set:
 
@@ -136,9 +134,10 @@ If `admissionWebhooks.patch.enabled=false` and `admissionWebhooks.certManager.en
 provide the `<fullname>-admission` Secret and the webhook `caBundle` yourself. Other
 `admissionWebhooks.patch.*` settings only remain for compatibility with existing values files.
 
-Tools that render without cluster access, such as Argo CD, render the webhook `failurePolicy` as
-`Ignore`. vela-core sets the configured policy at runtime. Add `ignoreDifferences` entries in Argo CD
-so it does not report drift:
+Tools that render the chart without cluster access, such as `helm template` or a GitOps tool that
+applies rendered manifests, render the webhook `failurePolicy` as `Ignore`. vela-core sets the
+configured policy at runtime, so such a tool can report drift on that field. Tell it to ignore
+`.webhooks[].failurePolicy`. For Argo CD, add these `ignoreDifferences` entries:
 
 ```yaml
 ignoreDifferences:
@@ -152,8 +151,12 @@ ignoreDifferences:
       - .webhooks[].failurePolicy
 ```
 
-This change was also backported to v1.11.1 ([#7477](https://github.com/kubevela/kubevela/pull/7477), backported
-as [#7478](https://github.com/kubevela/kubevela/pull/7478)).
+This change was also backported to v1.11.1, v1.10.10 and v1.9.15
+([#7477](https://github.com/kubevela/kubevela/pull/7477), backported as
+[#7478](https://github.com/kubevela/kubevela/pull/7478),
+[#7479](https://github.com/kubevela/kubevela/pull/7479) and
+[#7480](https://github.com/kubevela/kubevela/pull/7480)). If you upgrade from one of those releases,
+nothing changes here.
 
 ## Built-in definitions
 
