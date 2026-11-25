@@ -249,6 +249,7 @@ module.exports = {
             'platform-engineers/system-operation/controller-grayscale-release',
             'platform-engineers/system-operation/high-availability',
             'platform-engineers/system-operation/system-info-diagnose',
+            'platform-engineers/system-operation/workflow-http-protection',
           ],
         },
         {
@@ -269,6 +270,7 @@ module.exports = {
             'platform-engineers/auth/advance',
             'platform-engineers/auth/integration',
             'platform-engineers/auth/definition-rbac',
+            'platform-engineers/auth/definition-restrictions',
           ],
         },
         {
