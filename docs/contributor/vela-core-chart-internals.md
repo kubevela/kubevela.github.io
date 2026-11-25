@@ -2,7 +2,7 @@
 title: vela-core Chart Internals
 ---
 
-This page explains how the `vela-core` Helm chart installs certificates and the built-in definitions in KubeVela 1.12. Read it before you change `charts/vela-core` or debug an install or upgrade. For the operator view, see the [KubeVela v1.12.0 release notes](../release-notes/v1.12/v1.12.0.md) and the [v1.11 to v1.12 upgrade guide](../upgrade/v1.12/index.md).
+This page explains how the `vela-core` Helm chart installs certificates and the built-in definitions in KubeVela 1.12. Read it before you change `charts/vela-core` or debug an install or upgrade. For the operator view, see the [KubeVela v1.12.0 release notes](/release-notes/v1.12/v1.12.0/) and the [v1.11 to v1.12 upgrade guide](/upgrade-guides/v1.12/).
 
 ## Runtime serving certificates
 
