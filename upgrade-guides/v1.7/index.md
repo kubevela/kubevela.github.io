@@ -25,7 +25,8 @@ kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.c
 Then you can upgrade the helm chart now:
 
 ```
-helm repo add kubevela https://charts.kubevela.net/core
+helm repo remove kubevela 2>/dev/null || true
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.3 --wait
 ```
