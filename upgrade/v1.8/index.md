@@ -9,14 +9,14 @@ There isn't much to do when upgrading from v1.7.x to v1.8.x.
    not upgrade the CRDs in a chart's `crds/` directory:
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.8.2/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.8.2/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.8.2/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.8.2/charts/vela-core/crds/core.oam.dev_applications.yaml
 ```
 
 2. Upgrade your kubevela chart
 
 ```
-helm repo add kubevela https://kubevela.github.io/charts
+helm repo add kubevela https://kubevela.github.io/charts --force-update
 helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.8.2 --wait
 ```

@@ -168,7 +168,7 @@ Helm no longer owns the built-in definitions directly. Hook Jobs now manage them
   the definitions with server-side apply.
 - A pre-delete Job removes the definitions during `helm uninstall`.
 
-For an air-gapped cluster, mirror these images by digest, along with vela-core and vela-cli:
+For an air-gapped cluster, mirror these images, along with vela-core and vela-cli:
 
 - `alpine/k8s:1.34.13`, the Job image (`builtinDefinitions.job.image.*`);
 - `oamdev/cluster-gateway:v1.10.0-alpha.1` (`multicluster.clusterGateway.image.*`);

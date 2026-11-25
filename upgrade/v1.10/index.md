@@ -22,6 +22,10 @@ Also check:
   group must set `group`; see [Distribute Reference Objects](/docs/v1.10/end-user/components/ref-objects/).
 - If you pass `--leader-election-resource-lock` to the controller, remove it. The flag no longer
   exists and the controller fails to start with it.
+- v1.10.10 has breaking changes of its own: `helm upgrade --reuse-values` fails to render, configs
+  and SSH keys must be in the namespace that reads them, and Argo CD and Flux need to ignore the
+  webhook `failurePolicy`. See the
+  [v1.10.10 release notes](/release-notes/v1.10/v1.10.10/#breaking-changes).
 
 ## Upgrade steps
 

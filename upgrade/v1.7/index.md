@@ -12,11 +12,11 @@ In v1.6.x, we've upgraded the CUE engine to v0.5.x, please make sure your custom
 1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_applications.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
 ```
 
 2. Upgrade your kubevela chart
