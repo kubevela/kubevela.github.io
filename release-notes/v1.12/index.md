@@ -4,7 +4,7 @@ sidebar_label: Overview
 description: Status, releases and pre-releases of KubeVela v1.12.
 ---
 
-**Status:** In development. The `release-1.12` branch is cut and v1.12.0-alpha.1 is published; v1.12.0 is not released yet.
+**Status:** In development. The `release-1.12` branch is cut and v1.12.0-alpha.2 is published; v1.12.0 is not released yet.
 
 **Upgrade guide:** [Upgrade from v1.11 to v1.12](/upgrade-guides/v1.12/)
 
@@ -18,4 +18,5 @@ description: Status, releases and pre-releases of KubeVela v1.12.
 
 | Tag | Date |
 | --- | ---- |
+| [v1.12.0-alpha.2](https://github.com/kubevela/kubevela/releases/tag/v1.12.0-alpha.2) | 2026-11-21 |
 | [v1.12.0-alpha.1](https://github.com/kubevela/kubevela/releases/tag/v1.12.0-alpha.1) | 2026-10-20 |
