@@ -3036,8 +3036,9 @@ This step type is valid in both Application and WorkflowRun.
 ### Examples (vela-cli)
 
 ```yaml
-# The Job runs in the Application's namespace as this service account, with only the rights the
-# command uses: here, listing Applications. Never give it the controller's account.
+# The Job runs as this service account in the workflow's namespace (the Application's, or the
+# WorkflowRun's), with only the rights the command uses: here, listing Applications. Never give
+# it the controller's account.
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -3095,7 +3096,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  command | Specify the vela command. | []string | true |  
  image | Specify the image. | string | false | oamdev/vela-cli:v1.6.4 
- serviceAccountName | The service account the Job runs as, in the Application's namespace. | string | false | default 
+ serviceAccountName | The service account the Job runs as, in the workflow's namespace: the Application's, or the WorkflowRun's. | string | false | default 
  storage |  | [storage](#storage-vela-cli) | false |  
 
 
