@@ -153,7 +153,7 @@ spec:
       - RespectIgnoreDifferences=true
 ```
 
-A Flux `HelmRelease` runs Helm against the cluster, so it keeps the live policy as `helm upgrade` does. If you turn on its drift detection, list the field under `spec.driftDetection.ignore` as JSON pointers, one per webhook: `/webhooks/0/failurePolicy` to `/webhooks/6/failurePolicy` on the `ValidatingWebhookConfiguration`, and `/webhooks/0/failurePolicy` and `/webhooks/1/failurePolicy` on the `MutatingWebhookConfiguration`.
+A Flux `HelmRelease` runs Helm against the cluster, so it keeps the live policy as `helm upgrade` does. If you turn on its drift detection, list the field under `spec.driftDetection.ignore` as JSON pointers, one per webhook: `/webhooks/0/failurePolicy` to `/webhooks/4/failurePolicy` on the `ValidatingWebhookConfiguration` (to `/webhooks/6/failurePolicy` when `authorization.definitionValidationEnabled` is on, which adds two webhooks), and `/webhooks/0/failurePolicy` and `/webhooks/1/failurePolicy` on the `MutatingWebhookConfiguration`.
 
 ## Install KubeVela with cert-manager
 
