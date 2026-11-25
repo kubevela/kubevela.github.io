@@ -63,10 +63,13 @@ Expressions are off by default. `$(VAR_NAME)` is also Kubernetes' own syntax for
 Set them through the chart:
 
 ```shell
-helm upgrade --install vela-core kubevela/vela-core \
-  -n vela-system --create-namespace \
+helm upgrade kubevela kubevela/vela-core \
+  -n vela-system \
+  --reset-then-reuse-values \
   --set featureGates.enableCelExpressions=true
 ```
+
+`--reset-then-reuse-values` needs Helm 3.14 or later. It keeps the values you set at install and takes the rest from the chart.
 
 Or pass `--feature-gates=EnableCelExpressions=true` to the controller, see [Feature Gates](../system-operation/bootstrap-parameters.md#feature-gates).
 

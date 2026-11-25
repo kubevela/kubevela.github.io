@@ -121,7 +121,8 @@ Deleting an entry does not invalidate the controller's in-memory copy, which may
 | Symptom | Likely cause |
 |---|---|
 | Applying an Application is refused with an `$(...)` error that you did not expect | The Application holds a `$(VAR_NAME)` string meant for Kubernetes, for example in `env` or `args`. Write `$$(VAR_NAME)` to keep it literal |
-| Expressions are ignored | `EnableCelExpressions` is off, or the cluster is in opt-in mode and the Application lacks the annotation |
+| Applying an Application is refused with `source expressions are not enabled on this cluster` or `this Application has not opted in to source expressions` | The Application declares `spec.sources` while expressions are off for it. Turn on `EnableCelExpressions`, or add the `app.oam.dev/cel-expressions: "true"` annotation in opt-in mode |
+| Expressions are ignored in an Application with no `spec.sources` | `EnableCelExpressions` is off, or the cluster is in opt-in mode and the Application lacks the annotation |
 | A source is `Failed` with a message about a missing field | The resolved output does not match `schema`. Check the data the definition reads |
 | A source is `Stale` | A refresh is failing. Check the message under `resolutions[]` and whether the data source is reachable |
 | `"source" cannot be read here` | The expression is in a built-in policy or an Application-scoped policy, which can read only `context` |
@@ -131,5 +132,5 @@ Deleting an entry does not invalidate the controller's in-memory copy, which may
 
 - When the `ValidateDefinitionPermissions` gate is enabled (chart value `authorization.definitionValidationEnabled=true`), an application author needs `get` on a SourceDefinition to bind it, and admission checks it with a `SubjectAccessReview`. This check is disabled by default.
 - Application authors cannot read anything outside a definition's `schema`.
-- Treat a definition's reach as part of its grant. A definition that reads another namespace gives every binder that reach, so keep definitions narrow, and note that `configmap-local` reads only the Application's own namespace for this reason.
+- Treat a definition's reach as part of its grant. A definition that reads another namespace gives every binder that reach, so keep definitions narrow, and note that `configmap-local` reads only the namespace the component is rendered into for this reason.
 - Status is not a secret store. Mark secret fields `// +sensitive` in the schema, and use `statusPolicy` for values that only the consuming Application considers secret.
