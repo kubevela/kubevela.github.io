@@ -100,10 +100,13 @@ Check these changes before you upgrade:
 
 Admission now rejects an Application when an attached trait conflicts with another trait through
 `TraitDefinition.spec.conflictsWith`. KubeVela 1.11.0 accepted these Applications. An existing
-Application with conflicting traits is denied the next time it is updated, so find and fix such
-Applications before you upgrade.
+Application with conflicting traits keeps working, and an update that leaves its spec alone is
+admitted with a warning. The next change to its spec is refused until one of the conflicting traits
+is removed. Find and fix such Applications before you upgrade.
 
 This change was also backported to v1.11.1 ([#7303](https://github.com/kubevela/kubevela/pull/7303)).
+On v1.11.1 and v1.11.2 every update of such an Application is refused, including label and
+annotation changes.
 
 ## Runtime certificates
 
