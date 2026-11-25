@@ -44,11 +44,15 @@ helm repo update
 helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set crds.enabled=true
 ```
 
+This installs the latest cert-manager. On an older cluster, add `--version <x.y.z>` with a cert-manager release that supports your Kubernetes version; see the [cert-manager supported releases](https://cert-manager.io/docs/releases/). The `crds.enabled` value needs cert-manager v1.15 or later; older releases use `installCRDs=true`.
+
 Install kubevela with enabled certmanager:
 
 ```shell script
 vela install --set admissionWebhooks.certManager.enabled=true
 ```
+
+With cert-manager, the chart renders the webhooks with `admissionWebhooks.failurePolicy` (default `Fail`) from the start. Writes to Applications and definitions are refused until cert-manager has injected the CA bundle, and whenever no vela-core pod is ready. Run two or more replicas (`--set replicaCount=2`) to keep the webhook available during restarts.
 
 ## Admission webhook timeout
 
@@ -69,7 +73,7 @@ When the controller starts, it writes its feature gates to the `kubevela-feature
 vela version list -a
 
 # Install the specified version.
-vela install --version 1.12.0-alpha.1
+vela install --version 1.12.0-alpha.2
 ```
 
 ## Install Kubectl Vela Plugin
