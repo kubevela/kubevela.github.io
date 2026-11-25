@@ -3,12 +3,20 @@ title: Upgrade from v1.7 to v1.8
 sidebar_label: v1.7 to v1.8
 ---
 
-These isn't too much work to be done for upgrading from v1.7.x to v1.8.x for usage.
+There isn't much to do when upgrading from v1.7.x to v1.8.x.
 
-1. Upgrade your kubevela chart
+1. Upgrade the CRDs first. v1.8 changes the Application and ApplicationRevision CRDs, and Helm does
+   not upgrade the CRDs in a chart's `crds/` directory:
 
 ```
-helm repo add kubevela https://charts.kubevela.net/core
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.8.2/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.8.2/charts/vela-core/crds/core.oam.dev_applications.yaml
+```
+
+2. Upgrade your kubevela chart
+
+```
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.8.2 --wait
 ```
