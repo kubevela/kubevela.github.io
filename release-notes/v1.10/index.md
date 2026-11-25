@@ -25,7 +25,7 @@ Don't use v1.10.4. It breaks components whose templates use `import` statements;
 | [v1.10.4](./v1.10.4.md) | 2025-10-01 | **Deprecated.** Kubernetes v0.31 libraries, enhanced status reporting, Application status metrics, definition permission validation. |
 | [v1.10.3](./v1.10.3.md) | 2025-05-12 | Go 1.23.8, StatefulSet component, CueX in component and trait templates, signed releases with SBOMs. |
 | [v1.10.2](./v1.10.2.md) | 2025-03-03 | Controller metrics and ServiceMonitor values; new Helm repository URL. |
-| [v1.10.1](./v1.10.1.md) | 2025-02-12 | Fixes the addon check. |
+| [v1.10.1](./v1.10.1.md) | 2025-02-12 | Fixes VelaQL view validation, which rejected valid views. |
 | [v1.10.0](./v1.10.0.md) | 2025-02-05 | CUE v0.9.2 and the CueX engine, semantic versions for definitions, CUE required fields, Kubernetes v0.29 libraries. |
 
 ## Pre-releases

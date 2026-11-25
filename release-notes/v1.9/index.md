@@ -4,7 +4,7 @@ sidebar_label: Overview
 description: Status, releases and pre-releases of KubeVela v1.9.
 ---
 
-**Status:** End of life. **GA:** 2023-06-15. Later patches (v1.9.12 to v1.9.14) carry only backported security and stability fixes; upgrade to a supported version.
+**Status:** End of life. **GA:** 2023-06-15. Later patches (v1.9.12 to v1.9.15) carry only backported security and stability fixes; upgrade to a supported version.
 
 **Upgrade guide:** [Upgrade from v1.8 to v1.9](/upgrade-guides/v1.9/)
 

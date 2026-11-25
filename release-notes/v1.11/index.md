@@ -12,7 +12,7 @@ description: Status, releases and pre-releases of KubeVela v1.11.
 
 | Version | Date | Summary |
 | ------- | ---- | ------- |
-| [v1.11.2](./v1.11.2.md) | 2026-11-21 | Security patch: images move off the compromised eMudhra CA chains; HTTP request limits, the `vela-cli` step and credentials are confined to the Application's namespace. |
+| [v1.11.2](./v1.11.2.md) | 2026-11-21 | Security patch: images move off the compromised eMudhra CA chains; HTTP requests are capped in timeout and response size, and the `vela-cli` step and credentials are confined to the Application's namespace. |
 | [v1.11.1](./v1.11.1.md) | 2026-11-06 | Large patch: security fix for workflow HTTP (SSRF), vela-core manages its serving certificates, built-in definitions applied by a hook Job, trait `conflictsWith` enforced at admission, and about 50 backported fixes. |
 | [v1.11.0](./v1.11.0.md) | 2026-07-20 | CUE v0.14.1 with a compatibility layer, defkit (definitions in Go), native Helm component, Application-scoped and global policies. |
 
