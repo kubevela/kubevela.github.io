@@ -23,7 +23,7 @@ The master switch and cache size were introduced first; the six per-pass toggles
 | Flag | Default | Purpose |
 |---|---|---|
 | `--enable-cue-version-compatibility` | `true` | Master switch for the whole layer. Set to `false` to render templates exactly as written (fails hard on legacy syntax). |
-| `--cue-compatibility-cache-size` | `2000` | Max number of rewritten templates cached (1h TTL). Set to `0` to disable caching. |
+| `--cue-compatibility-cache-size` | `2000` (the chart sets `512`) | Max number of rewritten templates cached (1h TTL). Set to `0` to disable caching. |
 | `--cue-upgrade-list-concat-enabled` | `true` | Rewrite pass for list-arithmetic syntax. |
 | `--cue-upgrade-error-field-label-enabled` | `true` | Rewrite pass for unquoted error field labels. |
 | `--cue-upgrade-bool-default-guard-enabled` | `false` | Rewrite pass for the `bool \| *false` default-guard hazard under `evalv3`/`keepvalidators`. |
@@ -33,7 +33,7 @@ The master switch and cache size were introduced first; the six per-pass toggles
 
 The two enabled-by-default passes (list concat, error field label) cover the syntax that is now a **hard error**. The four disabled-by-default passes address **behavioral** differences under `evalv3`/`keepvalidators` — turn them on only if you've confirmed you're hitting the specific hazard, since they change evaluation semantics rather than just syntax.
 
-These flags apply to both the main controller (`github.com/oam-dev/kubevela/pkg/cue/upgrade`) and the workflow engine (`github.com/kubevela/workflow` v0.7.0+, `pkg/cue/upgrade`) — WorkflowStepDefinitions are covered by the same switches, not just Component/Trait/Policy definitions.
+These flags apply to both the main controller (`github.com/oam-dev/kubevela/pkg/cue/upgrade`) and the workflow engine (`github.com/kubevela/workflow` v0.7.0+, `pkg/cue/upgrade`) — WorkflowStepDefinitions are covered by the same switches, not just Component/Trait/Policy definitions. With the Helm chart, set them through `workflow.enableCUEVersionCompatibility`, `workflow.cueCompatibilityCacheSize` and the `workflow.cueUpgrade*` values; the chart passes each one to the flag of the same name.
 
 :::note Why these flags matter even though `evalv3`/`keepvalidators` are off by default
 The chart ships with `CUE_EXPERIMENT=evalv3=0,keepvalidators=0` (see below) purely to keep v1.11.0 compatible with definitions written against the older CUE v0.9.2 behavior — it is a temporary bridge for the v0.14.x window, not a permanent setting. If you want to start benefiting from `evalv3`'s stricter, more correct cycle detection now, you can flip `featureGates.enableCueExpVariable` to `false` (or clear `CUE_EXPERIMENT`) to turn it on ahead of time, and use the `--cue-upgrade-bool-default-guard-enabled`, `--cue-upgrade-generic-default-guard-enabled`, `--cue-upgrade-keepvalidators-singleton-enabled`, and `--cue-upgrade-evalv3-selfref-guard-enabled` passes to keep any legacy definitions that hit those specific hazards working while you do.
@@ -64,7 +64,7 @@ extraEnvs:
 
 ```
 helm upgrade -n vela-system --install kubevela kubevela/vela-core \
-  --version 1.11.0 \
+  --version 1.11.2 \
   --set featureGates.enableCueExpVariable=false \
   --set-json 'extraEnvs=[{"name":"CUE_EXPERIMENT","value":"evalv3=0,keepvalidators=0,otherflag=1"}]' \
   --wait
@@ -102,11 +102,12 @@ Once you know a definition needs updating, rewrite it on disk rather than relyin
 # check if a file needs upgrading (exit code 1 if so), without modifying it
 vela def upgrade my-definition.cue --validate
 
-# rewrite in place
+# print the rewritten definition to stdout
 vela def upgrade my-definition.cue
 
-# write the rewritten version to a new file
+# write the rewritten version to a file, then replace the original
 vela def upgrade my-definition.cue -o my-definition.upgraded.cue
+mv my-definition.upgraded.cue my-definition.cue
 
 # target a specific KubeVela version's compatibility rules
 vela def upgrade my-definition.cue --target-version=v1.11
@@ -116,7 +117,7 @@ vela def upgrade my-definition.cue --target-version=v1.11
 
 ## Recommended upgrade path
 
-1. Upgrade the `vela-core` chart to v1.11.0. `featureGates.enableCueExpVariable` defaults to `true` and `--enable-cue-version-compatibility` defaults to `true` on the controller, so existing applications keep working immediately.
+1. Upgrade the `vela-core` chart to the latest v1.11 patch. `featureGates.enableCueExpVariable` defaults to `true` and `--enable-cue-version-compatibility` defaults to `true` on the controller, so existing applications keep working immediately.
 2. Run `vela def compatibility-check definitions` and `vela def compatibility-check applications` to see what's relying on the compatibility layer.
 3. Run `vela def upgrade` against each affected definition file and re-apply it, so the stored definition itself is CUE v0.14-native.
 4. Once nothing is flagged by `vela def compatibility-check`, you can leave the compatibility layer enabled (it's a no-op for compliant definitions) or disable it with `--enable-cue-version-compatibility=false` for stricter enforcement going forward.
