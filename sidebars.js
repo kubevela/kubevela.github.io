@@ -430,7 +430,6 @@ module.exports = {
             'contributor/non-code-contribute',
             'contributor/code-contribute',
             'contributor/cli-ref-doc',
-            'contributor/vela-core-chart-internals',
             'contributor/fig-auto-complete',
           ],
         },
