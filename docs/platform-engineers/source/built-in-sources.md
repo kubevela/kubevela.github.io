@@ -6,8 +6,8 @@ Eight SourceDefinitions are installed in `vela-system` with the `vela-core` char
 
 | Type | Reads |
 |---|---|
-| [`configmap-local`](#configmap-local) | The data of a ConfigMap in the Application's own namespace |
-| [`git-file`](#git-file) | A file from a registry configured in the cluster |
+| [`configmap-local`](#configmap-local) | The data of a ConfigMap in the namespace the component is rendered into |
+| [`git-file`](#git-file) | A file from an addon registry configured in the cluster |
 | [`http-get`](#http-get) | A URL |
 | [`vela-config`](#vela-config) | A KubeVela Config's properties and the references it produced |
 | [`vela-app`](#vela-app) | The status of another Application |
@@ -19,7 +19,7 @@ The tables below list the parameters you put in `spec.sources[].properties`, the
 
 ## configmap-local
 
-Reads a ConfigMap's `data` from the Application's own namespace, on the cluster being rendered for, and nowhere else. Values are strings, as Kubernetes stores them.
+Reads a ConfigMap's `data` from the namespace the component is rendered into, on the cluster being rendered for, and nowhere else. That is the Application's own namespace unless a topology or override policy places the component in another one. Values are strings, as Kubernetes stores them.
 
 | Parameter | Type | Description |
 |---|---|---|
@@ -39,20 +39,20 @@ components:
     properties:
       env:
         - name: LOG_LEVEL
-          value: '$(source.settings.data.logLevel)'
+          value: '$(has(source.settings.data.logLevel) ? source.settings.data.logLevel : "info")'
 ```
 
-A key of `data` may be absent from the ConfigMap, so guard it with `has(...)` where it feeds a required parameter, see [Optional fields](./using-sources.md#optional-fields).
+A key of `data` may be absent from the ConfigMap, and an unguarded read of an absent key fails the render, so guard it with `has(...)` wherever you read it, see [Optional fields](./using-sources.md#optional-fields).
 
 There is deliberately no source that reads a ConfigMap from another namespace or cluster. When definition permission validation is enabled, RBAC on the SourceDefinition controls who may bind it, so the reach of a source belongs in the definition and not in a parameter that an application author can change. A platform that needs cross-namespace reads can write its own definition, starting from `configmap-local`.
 
 ## git-file
 
-Reads a file from a registry configured in this cluster. YAML and JSON files are parsed, and any other file comes back as a string.
+Reads a file from an addon registry configured in this cluster (`vela addon registry list`). YAML and JSON files are parsed, and any other file comes back as a string.
 
 | Parameter | Type | Description |
 |---|---|---|
-| `registry` | string, required | Name of a registry configured in the cluster |
+| `registry` | string, required | Name of an addon registry configured in the cluster |
 | `path` | string, required | Path of the file within the registry |
 | `ref` | string | Branch, tag or commit. Defaults to whatever the registry pinned |
 | `required` | bool, default `true` | When `false`, a missing file resolves with `found: false` and `content: null` instead of failing |
@@ -69,7 +69,7 @@ Sends a GET request to a URL. The response is parsed when its `Content-Type` is 
 
 Output: `content` (parsed value or string) and `statusCode` (int). Cache: 5m, `use-stale`.
 
-The request is made by the controller process, so the controller needs outbound access to the URL. It is also subject to the controller's outbound HTTP deny policy and, when enabled, private-address blocking.
+The request is made by the controller process, so the controller needs outbound access to the URL. It goes through the controller's [outbound HTTP guard](../system-operation/workflow-http-protection.md): the deny policy applies, private addresses are blocked when that is enabled, and loopback addresses are always refused. The request is cut at the controller's maximum HTTP timeout (60s by default) and a response body over 1 MiB fails the source. The request carries no credentials.
 
 ## vela-config
 
@@ -80,7 +80,9 @@ Reads a KubeVela Config: its properties, the ConfigTemplate it satisfies, and re
 | `name` | string, required | Name of the Config |
 | `namespace` | string | Namespace of the Config. Defaults to `vela-system` |
 
-Output: `properties`, `template.name`, `template.namespace`, `output` and `outputs`, where the last two are `{apiVersion, kind, name, namespace}` references. Cache: 5m, `use-stale`.
+Output: `properties`, `template.name`, `template.namespace`, `output` and `outputs`, where the last two are `{apiVersion, kind, name, namespace}` references. Cache: 5m, `use-stale`. The `properties` output field carries the `// +sensitive` marker, so its values show as `***` in the Application status and `vela status --sources`. This is unrelated to a Config's own sensitive flag. The workload still receives the values.
+
+An Application reads Configs in its own namespace, and shared system Configs in `vela-system`. Any other Config is refused, unless the `AuthenticateApplication` gate is on and the Application's user may read it. The value is cached per consuming namespace.
 
 ## vela-app
 
@@ -89,9 +91,9 @@ Reads the **status** of another Application: phase, health, workflow state, and 
 | Parameter | Type | Description |
 |---|---|---|
 | `name` | string, required | Name of the Application |
-| `namespace` | string | Defaults to the consuming Application's namespace |
+| `namespace` | string | Defaults to the namespace being rendered for, normally the Application's own |
 
-Output: `name`, `namespace`, `phase`, `healthy`, optional `revision`, optional `workflow` (`mode`, `phase`, `suspend`, `terminated`, `finished`, `message`), `components`, `clusters`, and `services`, which maps each component to its `healthy` flag and a `clusters` map of `{healthy, message, namespace}`. Cache: 1m, `fail`.
+Output: `name`, `namespace`, `phase`, `healthy`, optional `revision`, optional `workflow` (`mode`, `phase`, `suspend`, `terminated`, `finished`, `message`), `components`, `clusters`, and `services`, which maps each component to its `healthy` flag and a `clusters` map of `{healthy, message, namespace}`. Cache: 1m, `fail`. `healthy` is `false` while the Application reports no services.
 
 ## vela-component
 
@@ -101,10 +103,10 @@ Reads the **status** of one placement of one component: health, message, details
 |---|---|---|
 | `app` | string, required | Name of the Application |
 | `component` | string, required | Name of the component |
-| `namespace` | string | Defaults to the consumer's namespace |
+| `namespace` | string | Defaults to the namespace being rendered for, normally the Application's own |
 | `cluster` | string | Which placement to read. Defaults to the hub (`local`) |
 
-Output: `name`, `healthy`, `workloadHealthy`, `message`, `details`, `cluster`, `namespace`, and `traits`, which maps each trait type to `{healthy, pending, message, details}`. Cache: 1m, `fail`.
+Output: `name`, `healthy`, `workloadHealthy`, `message`, `details`, `cluster`, `namespace`, and `traits`, which maps each trait type to `{healthy, pending, message, details}`. Cache: 1m, `fail`. Traits are keyed by type. When a component carries two traits of one type, only the first is returned.
 
 ## vela-addon
 
@@ -131,10 +133,10 @@ sources:
 
 ## vela-env
 
-Reads the environment the Application is deployed into, from its own namespace only. It takes no parameters.
+Reads the Namespace being rendered for, normally the Application's own. The Namespace is always read from the hub cluster, even when the component is placed on a managed cluster. It takes no parameters.
 
 Output: `name` (the `namespace.oam.dev/env` label if set, otherwise the namespace name), `namespace`, `managed` (whether the namespace is a managed environment), `labels` and `annotations`. Cache: 5m, `use-stale`.
 
 ## Why the application-state sources return status only
 
-A component can reach for the Kubernetes API itself, but that needs credentials, gets no caching and cannot be type-checked at admission. The `vela-app`, `vela-component`, `vela-addon`, and `vela-env` sources give the same answer with all three. They return status, never spec: a spec is its author's intent and can hold properties they never meant to publish, while a status is observable state that anyone with read access can already see. That makes them a health signal and not a way to read someone else's configuration. `vela-config` is different: it deliberately returns a non-sensitive Config's declared properties, while returning only references for resources generated from them.
+A component can reach for the Kubernetes API itself, but that needs credentials, gets no caching and cannot be type-checked at admission. The `vela-app`, `vela-component`, `vela-addon`, and `vela-env` sources give the same answer with all three. They return status, never spec: a spec is its author's intent and can hold properties they never meant to publish, while a status is observable state. That makes them a health signal and not a way to read someone else's configuration. The read is the controller's, not the binder's: `vela-app` and `vela-component` take a `namespace`, so an author can read the status of an Application in a namespace they cannot `kubectl get`. A platform that wants to limit that restricts who may bind these definitions, see [Restrict where a definition is usable](./authoring-source-definition.md#restrict-where-a-definition-is-usable). `vela-config` is different: it deliberately returns a non-sensitive Config's declared properties, while returning only references for resources generated from them.
