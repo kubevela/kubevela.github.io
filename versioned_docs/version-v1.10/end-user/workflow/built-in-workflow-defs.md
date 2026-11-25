@@ -678,8 +678,10 @@ spec:
     - name: build-push
       type: build-push-image
       properties:
-        # use your kaniko executor image like below, if not set, it will use default image oamdev/kaniko-executor:v1.9.1
-        # kanikoExecutor: gcr.io/kaniko-project/executor:latest
+        # if kanikoExecutor is not set, the default image is
+        # ghcr.io/osscontainertools/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37
+        # to use another kaniko executor image, set it, pinned by digest:
+        # kanikoExecutor: <registry>/<kaniko image>:<tag>@sha256:<digest>
         # you can use context with git and branch or directly specify the context, please refer to https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts
         context:
           git: github.com/FogDong/simple-web-demo
@@ -704,7 +706,7 @@ spec:
 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
- kanikoExecutor | Specify the kaniko executor image, default to oamdev/kaniko-executor:v1.9.1. | string | false | oamdev/kaniko-executor:v1.9.1 
+ kanikoExecutor | Specify the kaniko executor image, default to ghcr.io/osscontainertools/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37. | string | false | ghcr.io/osscontainertools/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37 
  context | Specify the context to build image, you can use context with git and branch or directly specify the context, please refer to https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts. | string | true |  
  dockerfile | Specify the dockerfile. | string | false | ./Dockerfile 
  image | Specify the image. | string | true |  
@@ -3034,11 +3036,43 @@ This step type is valid in both Application and WorkflowRun.
 ### Examples (vela-cli)
 
 ```yaml
+# The Job runs in the Application's namespace as this service account, with only the rights the
+# command uses: here, listing Applications. Never give it the controller's account.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vela-cli-runner
+  namespace: vela-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: vela-cli-runner
+  namespace: vela-system
+rules:
+  - apiGroups: ["core.oam.dev"]
+    resources: ["applications"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: vela-cli-runner
+  namespace: vela-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: vela-cli-runner
+subjects:
+  - kind: ServiceAccount
+    name: vela-cli-runner
+    namespace: vela-system
+---
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: vela-cli
-  namespace: default
+  namespace: vela-system
 spec:
   components: []
   workflow:
@@ -3046,9 +3080,12 @@ spec:
     - name: list-app
       type: vela-cli
       properties:
+        serviceAccountName: vela-cli-runner
         command:
           - vela
           - ls
+          - -n
+          - vela-system
 ```
 
 ### Specification (vela-cli)
@@ -3058,7 +3095,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- 
  command | Specify the vela command. | []string | true |  
  image | Specify the image. | string | false | oamdev/vela-cli:v1.6.4 
- serviceAccountName | specify serviceAccountName want to use. | string | false | kubevela-vela-core 
+ serviceAccountName | The service account the Job runs as, in the Application's namespace. | string | false | default 
  storage |  | [storage](#storage-vela-cli) | false |  
 
 
