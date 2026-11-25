@@ -19,7 +19,7 @@ spec:
 
 | Field | Description |
 |---|---|
-| `name` | Local name. Plain identifiers use `source.<name>`. A name with punctuation uses bracket syntax, for example `source["cluster-info"]`. |
+| `name` | Local name, used as `source.<name>`. It must be an identifier (letters, digits and underscores, not starting with a digit), so write `clusterInfo`, not `cluster-info`. |
 | `type` | Name of the SourceDefinition. Pin a revision with `type: cluster-config-reader@v1`, see [Versioning](./authoring-source-definition.md#versioning). |
 | `properties` | Inputs for the definition. They can themselves contain expressions that read earlier sources, see [Chain sources](#chain-sources). |
 | `autoUpdate` | Re-dispatch components when the resolved value changes, see [below](#re-dispatch-when-a-value-changes). |
@@ -31,7 +31,7 @@ You never reference the ConfigMap, URL or API the source reads. That is the defi
 
 ## Write expressions
 
-A property value written as `$( ... )` is an expression in [CEL](https://github.com/google/cel-spec), the same language Kubernetes uses in CRD validation rules and admission policies. Expressions can read two roots: `source` and `context`.
+A property value written as `$( ... )` is an expression in [CEL](https://github.com/google/cel-spec), the same language Kubernetes uses in CRD validation rules and admission policies. This page covers two roots, `source` and `context`. Expressions have three more: `component` reads another component's output and is available in component and trait properties, and `steps` and `each` are available in workflow step properties.
 
 ```yaml
 components:
@@ -52,11 +52,11 @@ components:
 - Write `$$(` to get a literal `$(`.
 - Expressions are found at any depth inside `properties`, including nested objects and list items.
 - The function set is the CEL standard library plus the strings and lists extensions: `has`, `all`, `exists`, `map`, `filter`, `split`, `join`, `replace`, `substring`, `trim`, `indexOf`, `lowerAscii`, list indexing and `slice`, and the `int`, `string`, `double` and `bool` conversions.
-- Any identifier other than `source` and `context` is rejected, so `$(parameter.image)` does not compile.
+- An identifier that is not a root is rejected, so `$(parameter.image)` does not compile. A root the surface does not offer is refused too, see [Where expressions can be used](#where-expressions-can-be-used).
 
 ### Optional fields
 
-A source declares each output field as required or optional. An optional field may be missing at runtime. If it feeds a parameter that is required, you must guard it:
+A source declares each output field as required or optional. An optional field may be missing at runtime. Guard it wherever you read it:
 
 ```yaml
 region: '$(has(source.clusterInfo.region) ? source.clusterInfo.region : "us-east-1")'
@@ -66,7 +66,9 @@ region: '$(has(source.clusterInfo.region) ? source.clusterInfo.region : "us-east
 |---|---|---|
 | Required | Required or optional | No |
 | Optional | Required | **Yes**, admission rejects the Application without one |
-| Optional | Optional | No, an absent field omits the parameter |
+| Optional | Optional | Not checked at admission, but an absent field fails the render with `no such key`. Guard it anyway |
+
+With the `EnableCueValidation` gate on (beta, off by default), a whole-struct read such as `meta: '$(source.x.meta)'` that would fill a required nested parameter from a field the schema marks optional fails with `missing parameters: meta.region; source "x" declares meta.region optional, so it may be unset: ...`. Make the field required in the SourceDefinition schema, or optional in the parameter.
 
 A guard is not a fallback for fetch failures. Those are governed by the definition's [`onStaleFailure`](./caching-and-operations.md#when-a-refresh-fails).
 
@@ -123,7 +125,7 @@ The Application webhook checks every binding before anything is fetched. Nothing
 | `image: '$(source.registry.mirror)'`, where `mirror` is optional | *may be absent and feeds required ... guard it with `has(...) ? ... : <fallback>`* |
 | `image: '$(source.registry.nope)'` | *path "nope" is not declared in schema of SourceDefinition ...* |
 | `image: '$(parameter.image)'` | *undeclared reference to 'parameter'* |
-| `image: '$(source.my-source.x)'` | the dot form parses the hyphens as subtraction; use `$(source["my-source"].x)` |
+| `image: '$(source.my-source.x)'` | *source binding name "my-source" cannot be read in an expression*; rename the binding `mySource` |
 
 Admission also checks that the SourceDefinition exists and that your `properties` match its parameters. When the operator enables the `ValidateDefinitionPermissions` gate (chart value `authorization.definitionValidationEnabled=true`), it also uses a `SubjectAccessReview` to check that you may `get` every SourceDefinition you bind. That permission check is disabled by default.
 
@@ -146,6 +148,8 @@ sources:
 ```
 
 If `autoUpdate` is unset, the controller-wide `EnableSourceAutoUpdate` gate decides. An `app.oam.dev/publishVersion` pin suppresses that gate-derived default, but an explicit `autoUpdate: true` keeps the binding live under the pin. Re-dispatch happens on reconcile, so a change can take until the next reconcile to show.
+
+`autoUpdate` reaches components and traits only. A workflow step resolves each source once per run and keeps that value for the later steps, so a changed source does not re-run steps or repeat an approval.
 
 ## Control what status records
 
