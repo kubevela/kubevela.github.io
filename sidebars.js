@@ -410,6 +410,8 @@ module.exports = {
             'platform-engineers/cue/definition-inheritance',
             'platform-engineers/policy/custom-policy',
             'platform-engineers/policy/application-scoped-policy',
+            'platform-engineers/policy/policy-rollout',
+            'platform-engineers/policy/policy-context-schema',
             'platform-engineers/workflow/workflow',
             {
               'Patch and Override': [
