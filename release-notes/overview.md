@@ -26,12 +26,12 @@ Releases before v1.9 are documented only on [GitHub Releases](https://github.com
 | Version | Go | CUE | `k8s.io/client-go` | `controller-runtime` | `kubevela/workflow` |
 | ------- | -- | --- | ------------------ | -------------------- | ------------------- |
 | v1.12.0 (release-1.12) | 1.27.1 | v0.14.1 | v0.37.1 | v0.25 | v0.8.0-alpha.2 |
-| v1.11.1 | 1.23.8 | v0.14.1 | v0.31.10 | v0.19.7 | v0.7.3 |
+| v1.11.1 | 1.23.8 | v0.14.1 | v0.31.10 | v0.19.7 | v0.7.3 (pre-release commit) |
 | v1.11.0 | 1.23.8 | v0.14.1 | v0.31.10 | v0.19.7 | v0.7.2 |
-| v1.10.9 | 1.23.8 | v0.9.2 | v0.31.10 | v0.19.7 | v0.6.3 |
-| v1.10.0 | 1.22.0 | v0.9.2 | v0.29.2 | v0.17.6 | v0.6.1 |
+| v1.10.9 | 1.23.8 | v0.9.2 | v0.31.10 | v0.19.7 | v0.6.3 (pre-release commit) |
+| v1.10.0 | 1.22.0 | v0.9.2 | v0.29.2 | v0.17.6 | v0.6.1 (pre-release commit) |
 | v1.9.14 | 1.19 | v0.5.0 | v0.26.3 | v0.14.6 | v0.6.1 |
-| v1.9.0 | 1.19 | v0.5.0 | v0.26.3 | v0.14.6 | v0.5.1 |
+| v1.9.0 | 1.19 | v0.5.0 | v0.26.3 | v0.14.6 | v0.5.1 (pre-release commit) |
 
 These matter if you build controllers, providers or addons against KubeVela's Go modules.
 
