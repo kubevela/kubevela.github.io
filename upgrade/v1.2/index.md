@@ -58,7 +58,7 @@ This step will upgrade the system to the new version:
 helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.2.6 --wait
 ```
 
-Upgrade the CLI to v1.2.x corresponding the the core version:
+Upgrade the CLI to v1.2.x corresponding to the core version:
 
 ```
 curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.2.6
@@ -79,7 +79,7 @@ vela addon enable <addon name>
 This step is not required if the addon is already enabled and used in the pre-upgrade version
 :::
 
-1. Update Custom Definition
+5. Update Custom Definition
 
 Check if your custom definition works in the new version, try to upgrade them if there're any issues.
 If you haven't defined any, the normal upgrade process is completed!
@@ -87,6 +87,6 @@ If you haven't defined any, the normal upgrade process is completed!
 6. Common Questions for this migration
 
 - Q: After upgrading from 1.1.x to 1.2.x, the application status becomes `workflowsuspending`, and using `vela workflow resume` doesn't work.
-  - A: There're migration about the resource tracker mechanism. Generally, you can delete the existing resourcetracker, after that you can use `vela workflow resume` command.
+  - A: There're migration about the resource tracker mechanism. Generally, you can delete the Application's legacy ResourceTracker (the one without `spec.type`) and then run `vela workflow resume`. Check first that the workload resources no longer list that ResourceTracker in `metadata.ownerReferences`; if they do, deleting it deletes them.
 - Q: Why the status of my application become suspend after the upgrade?
   - A: Don't worry if your application become suspend after the upgrade, this won't affect the running business application. It will become normal after you deploy the application next time. You can also manually change any annotation of the application to resolve it.

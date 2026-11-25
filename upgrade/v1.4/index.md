@@ -39,6 +39,6 @@ vela addon upgrade velaux --version=v1.4.7
 Please note if you're using terraform addon, you should upgrade the `terraform` addon to version `1.0.6+` along with the vela-core upgrade, you can follow the following steps:
 
 1. upgrading vela-core to v1.3.4+, all existing Terraform typed Applications won't be affected in this process.
-2. upgrade the `terrorform` addon, or the newly provisioned Terraform typed Applications won't become successful. 
-   - 2.1 Manually upgrade CRD Configuration https://github.com/oam-dev/terraform-controller/blob/v0.4.3/chart/crds/terraform.core.oam.dev_configurations.yaml.
+2. upgrade the `terraform` addon, or the newly provisioned Terraform typed Applications won't become successful. 
+   - 2.1 Manually upgrade the Configuration CRD: `kubectl apply -f https://raw.githubusercontent.com/oam-dev/terraform-controller/v0.4.3/chart/crds/terraform.core.oam.dev_configurations.yaml`.
    - 2.2 Upgrade add-on `terraform` to version `1.0.6+`.
