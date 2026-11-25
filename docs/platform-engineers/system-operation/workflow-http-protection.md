@@ -2,10 +2,10 @@
 title: Workflow Outbound HTTP Protection
 ---
 
-Workflow steps that make HTTP calls block cloud metadata and link-local destinations by default. This page explains what is blocked, how to extend the denylist, and how to turn on stricter modes. It applies to KubeVela 1.12 and to the standalone `vela-workflow` chart.
+Workflow steps that make HTTP calls block cloud metadata and link-local destinations by default. This page explains what is blocked, how to extend the denylist, and how to turn on stricter modes. It applies to KubeVela 1.12, to the patch releases listed in the [upgrade note](#upgrade-note), and to the standalone `vela-workflow` chart from 0.6.5 and 0.7.3.
 
 :::caution Upgrade note
-Upgrading to 1.12 turns this protection on. A workflow step that called a cloud metadata endpoint on purpose, for example `http://169.254.169.254/`, now fails. See [Upgrade note](#upgrade-note) before you upgrade.
+The denylist is on from KubeVela 1.11.1, 1.10.10 and 1.9.15. Upgrading from an older release turns it on. A workflow step that called a cloud metadata endpoint on purpose, for example `http://169.254.169.254/`, now fails. See [Upgrade note](#upgrade-note) before you upgrade.
 :::
 
 ## What is protected
@@ -15,12 +15,22 @@ These workflow steps and providers make outbound HTTP calls, and the protection 
 - the `request` step
 - the `webhook` step
 - the `notification` step
-- the `http` provider, which custom workflow steps use through `vela/http` in `op`
+- the `http` provider that custom workflow steps call: `http.#HTTPDo` from `vela/http`, and the legacy `op.#HTTPDo` from `vela/op`
+
+In `vela-core` the same checks also apply outside workflows:
+
+- `vela/http` called from a component, trait, policy or source definition, and the legacy `processing.http`
+- Helm chart downloads, from Helm repositories, chart URLs and `oci://` registries
+- objects fetched from a URL by `ref-objects`
+
+A blocked call there fails the render or the download with the same errors.
 
 Destinations are checked in two places:
 
 1. **When the connection opens.** The check runs on the IP address that the host name resolved to. A host name that points at a blocked address is blocked, even if the name itself is not on the denylist.
-2. **On every redirect.** A call to an allowed host that redirects to a blocked one is stopped at the redirect.
+2. **On every redirect.** A call to an allowed host that redirects to a blocked one is stopped at the redirect. A call follows at most 10 redirects.
+
+These calls do not use `HTTP_PROXY`, `HTTPS_PROXY` or `NO_PROXY`. A proxied connection would only let the controller check the proxy's address, so the controller connects to the destination directly. If the controller can reach the outside only through a proxy, workflow HTTP calls to outside destinations fail after the upgrade.
 
 A blocked call fails the step. The step message contains one of these errors:
 
@@ -39,7 +49,19 @@ A blocked call fails the step. The step message contains one of these errors:
 | IP | `fd00:ec2::254` | AWS IPv6 metadata endpoint |
 | IP | `100.100.100.200` | Alibaba Cloud metadata server |
 
+An IPv6 address under a NAT64 prefix is checked by the IPv4 address it carries, because the gateway connects to that address. `http://[64:ff9b::a9fe:a9fe]/` is `169.254.169.254` behind the well-known prefix `64:ff9b::/96` and is blocked.
+
 Destinations inside the cluster, such as a Service ClusterIP or `*.svc.cluster.local`, and public destinations stay allowed.
+
+`vela-core` also blocks these addresses. They are not part of the denylist, and no ConfigMap or chart value changes them. The standalone `vela-workflow` controller does not add them.
+
+| Entry | Covers |
+| ----- | ------ |
+| `127.0.0.0/8`, `::1` | Loopback: the controller's own metrics, health and webhook ports |
+| `0.0.0.0/8`, `::` | The unspecified address, which reaches the local host |
+| `64:ff9b:1::/48` | The local-use NAT64 prefix |
+
+A `vela-core` that you run outside the cluster, for example while developing, can no longer call `localhost`.
 
 KubeVela has no allowlist mode. You can only add entries to the denylist or turn on one of the stricter [feature gates](#feature-gates).
 
@@ -158,8 +180,17 @@ Keep the default names when you install both charts. To add a denylist entry tha
 
 ## Upgrade note
 
-Upgrading to KubeVela 1.12, or to a `vela-workflow` release that includes this protection, turns it on. There is no opt-in step.
+There is no opt-in step. An upgrade to one of these releases turns the protection on:
 
-- A step that called a cloud metadata endpoint on purpose now fails with `blocked SSRF target` or `blocked SSRF host`. Search your Applications and WorkflowRuns for `169.254.`, `metadata.google.internal`, `fd00:ec2::254` and `100.100.100.200` before you upgrade.
+| Release | Denylist | Loopback block in vela-core | Request limits |
+| ------- | -------- | --------------------------- | -------------- |
+| 1.9.15 | yes | no | no |
+| 1.10.10 | yes | yes | yes |
+| 1.11.1 | yes | no | no |
+| 1.11.2 | yes | yes | yes |
+| 1.12.0 | yes | yes | yes |
+| `vela-workflow` 0.6.5, 0.7.3 and later | yes | not in this controller | yes |
+
+- A step that called a cloud metadata endpoint on purpose now fails with `blocked SSRF target` or `blocked SSRF host`. Search your Applications and WorkflowRuns for `169.254.`, `metadata.google.internal`, `fd00:ec2::254` and `100.100.100.200` before you upgrade. For the releases with the loopback block, search for `localhost` and `127.0.0.1` too.
 - You cannot remove a built-in entry. Deleting the default ConfigMap or turning off discovery does not allow metadata destinations.
 - The stricter modes in [Feature gates](#feature-gates) stay off after an upgrade, so calls to in-cluster Services keep working.
