@@ -12,14 +12,14 @@ Before you upgrade, read the release notes for the version you are moving to, th
 
 KubeVela maintains the last two minor releases; see [Release Process and Cadence](/docs/contributor/release-process/).
 
-| Version | GA date | Latest patch | Status | Kubernetes | Upgrade guide |
+| Version | GA date | Latest release | Status | Kubernetes | Upgrade guide |
 | ------- | ------- | ------------ | ------ | ---------- | ------------- |
-| [v1.12.x](./v1.12/index.md) | Unreleased | v1.12.0-alpha.2 | In development | Tested with v1.37; `>= v1.25` implied by CEL rules, not tested | [v1.11 to v1.12](/upgrade-guides/v1.12/) |
+| [v1.12.x](./v1.12/index.md) | Unreleased | v1.12.0-alpha.2 (pre-release) | In development | Tested with v1.37; `>= v1.25` implied by CEL rules, not tested | [v1.11 to v1.12](/upgrade-guides/v1.12/) |
 | [v1.11.x](./v1.11/index.md) | 2026-07-20 | [v1.11.1](./v1.11/v1.11.1.md) | Supported | `>= v1.19, <= v1.31` | [v1.10 to v1.11](/upgrade-guides/v1.11/) |
 | [v1.10.x](./v1.10/index.md) | 2025-02-05 | [v1.10.9](./v1.10/v1.10.9.md) | Supported | `>= v1.19, <= v1.29`; from v1.10.4 built on the v1.31 libraries | [v1.9 to v1.10](/upgrade-guides/v1.10/) |
 | [v1.9.x](./v1.9/index.md) | 2023-06-15 | [v1.9.14](./v1.9/v1.9.14.md) | End of life | `>= v1.19, <= v1.29` | [v1.8 to v1.9](/upgrade-guides/v1.9/) |
 
-Releases before v1.9 are documented only on [GitHub Releases](https://github.com/kubevela/kubevela/releases). Their upgrade steps are under [Upgrade Guides > Older versions](/upgrade-guides/v1.8/).
+Releases before v1.9 are documented only on [GitHub Releases](https://github.com/kubevela/kubevela/releases). Their upgrade steps are listed in the [upgrade path table](/upgrade-guides/overview/#upgrade-path).
 
 ## Component versions
 
