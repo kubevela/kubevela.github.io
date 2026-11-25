@@ -651,7 +651,7 @@ app: op.#Steps & {
 ## Deprecated Operations
 
 :::caution
-`#Slack`, `#DingTalk` and `#Lark` are no longer provided by the `vela/op` package in this version. Use `#HTTPPost` instead, as shown below. The sections are kept for reference when migrating old definitions.
+`#Slack`, `#DingTalk` and `#Lark` were removed from the `vela/op` package in KubeVela 1.10. Use `#HTTPPost` instead, as shown below. The sections are kept for reference when migrating old definitions.
 :::
 
 ### Slack
