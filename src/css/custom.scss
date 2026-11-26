@@ -1104,3 +1104,6 @@ summary:focus-visible,
 html.plugin-id-addons .navbar__item:has(> .kv-version) {
   display: none;
 }
+html.plugin-id-terraform .navbar__item:has(> .kv-version) {
+  display: none;
+}

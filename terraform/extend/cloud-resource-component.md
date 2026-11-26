@@ -2,15 +2,15 @@
 title: Extend Cloud Resources
 ---
 
-To enable end users to [provision and consume cloud resources](../../tutorials/consume-cloud-services.md),
+To enable end users to [provision and consume cloud resources](../guides/consume-cloud-services.md),
 platform engineers need to prepare ComponentDefinitions for cloud resources if end users' requirements are beyond the
-[built-in capabilities](../../tutorials/consume-cloud-services.md#supported-cloud-resource-list).
+[built-in capabilities](../guides/consume-cloud-services.md#supported-cloud-resource-list).
 
 Here is the guide to create Terraform typed ComponentDefinitions of cloud resources for cloud providers Alibaba Cloud, AWS and Azure.
 
 ## Prerequisites
 
-- [`vela` binary](../advanced-install.mdx#install-vela-cli)
+- [`vela` binary](/docs/platform-engineers/advanced-install#install-vela-cli)
 - The Terraform addon, and the addon for your cloud provider (`terraform-aws` here), which the component needs when it runs:
 
   ```shell
@@ -219,7 +219,7 @@ spec:
 
 Generally, the values in the properties are aligned with the `variables` defined in the terraform module, the terraform controller will help run `terraform init`, `terraform plan` automatically and finally use the parameters defined in the properties of application component to run `terraform apply`.
 
-You can refer to scenario docs such as [Provision cloud resources](../../tutorials/consume-cloud-services.md#provision-cloud-resources) for more real use cases.
+You can refer to scenario docs such as [Provision cloud resources](../guides/consume-cloud-services.md#provision-cloud-resources) for more real use cases.
 
 ## Generate documentation
 

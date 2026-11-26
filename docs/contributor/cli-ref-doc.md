@@ -208,7 +208,7 @@ The file name **MUST** has the same name with the definition, along with the suf
 
 ## Terraform Based Cloud Resource Reference
 
-This section shows how to update the [terraform based cloud resource reference doc](../end-user/components/cloud-services/cloud-resources-list.md) in the website.
+This section shows how to update the [terraform based cloud resource reference doc](/terraform/reference/cloud-resources-list) in the website.
 
 Most of the steps are done by script automatically. You need to follow this guide to build your environment.
 

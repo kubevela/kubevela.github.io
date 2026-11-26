@@ -81,23 +81,7 @@ const sidebars = {
           label: 'Cloud Resources CD',
           collapsed: true,
           items: [
-            'tutorials/consume-cloud-services',
-            {
-              type: 'category',
-              label: 'Terraform',
-              collapsed: true,
-              link: {
-                type: 'doc',
-                id: 'end-user/components/cloud-services/cloud-resource-scenarios',
-              },
-              items: [
-                'end-user/components/cloud-services/provision-and-consume-database',
-                'end-user/components/cloud-services/provision-and-initiate-database',
-                'end-user/components/cloud-services/secure-your-database-connection',
-                'end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database',
-                'end-user/components/cloud-services/provision-instance-and-database-separately',
-              ],
-            },
+            {type: 'link', label: 'Terraform', href: '/terraform/overview'},
             'end-user/components/cloud-services/provision-cloud-resources-by-crossplane',
           ],
         },
@@ -354,10 +338,7 @@ const sidebars = {
           ],
         },
         {
-          'Cloud Resources': [
-            'platform-engineers/addon/terraform',
-            'platform-engineers/components/component-terraform',
-          ],
+          'Cloud Resources': [{type: 'link', label: 'Terraform', href: '/terraform/extend/cloud-resource-component'}],
         },
         {
           'Manage Definition with Go (defkit)': [
@@ -491,10 +472,9 @@ const sidebars = {
           items: [
             {type: 'link', label: 'Addon catalog', href: '/addons/overview'},
             'reference/addons/velaux',
-            'reference/addons/terraform',
           ],
         },
-        'end-user/components/cloud-services/cloud-resources-list',
+        {type: 'link', label: 'Cloud Resource List', href: '/terraform/reference/cloud-resources-list'},
         'reference/config-template',
         'reference/user-improvement-plan',
         'platform-engineers/openapi/overview',

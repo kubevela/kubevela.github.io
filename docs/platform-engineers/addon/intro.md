@@ -112,7 +112,7 @@ The flags combine, so one addon can start from a Helm chart, remote objects and 
 - Write the addon's Application in [CUE](./addon-cue.md) or [YAML](./addon-cue.md#write-it-in-yaml).
 - Look up a file or a `metadata.yaml` field in the [Addon reference](./reference.md).
 - Publish it to an [addon registry](./addon-registry.md).
-- Build addons for cloud resources with the [Terraform addon tooling](./terraform.md).
+- Build addons for cloud resources with the [Terraform addon tooling](/terraform/extend/terraform-addon).
 
 ## Known limits
 

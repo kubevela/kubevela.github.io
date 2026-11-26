@@ -31,6 +31,6 @@ Check the component's parameters:
 vela show elastic-ec-deployment
 ```
 
-Then provision it by [creating an Application](../../tutorials/consume-cloud-services.md#provision-by-creating-application). To see every Terraform component type installed, run `vela components --label type=terraform`, or read the [cloud resources list](../../end-user/components/cloud-services/cloud-resources-list.md).
+Then provision it by [creating an Application](../guides/consume-cloud-services.md#provision-by-creating-application). To see every Terraform component type installed, run `vela components --label type=terraform`, or read the [cloud resources list](../reference/cloud-resources-list.md).
 
-If no component type covers what you need, write your own: see [Extend Cloud Resources](../../platform-engineers/components/component-terraform.md).
+If no component type covers what you need, write your own: see [Extend Cloud Resources](../extend/cloud-resource-component.md).

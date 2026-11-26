@@ -8,6 +8,15 @@ syncReleasePages();
 // /docs/release-notes/..., /docs/upgrade-guides/...: the latest version's copies.
 const RELEASE_DOCS_PATH = new RegExp(`^/docs/(${SECTIONS.map((s) => s.dir).join('|')})/`);
 
+// Pages that moved from the next docs into a section of their own (written by the split tooling). Each new URL
+// redirects from its old /docs/next/ one; released versions keep their own copies, so they need none.
+const MOVED_FROM = Object.fromEntries(
+  Object.entries(require('./moved-docs.json')).map(([from, {section, to}]) => [
+    `/${section}/${to.replace(/(\/index)?\.mdx?$/, '')}`,
+    `/docs/next/${from.replace(/(\/index)?\.mdx?$/, '')}`,
+  ]),
+);
+
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 const config = {
   title: 'KubeVela',
@@ -67,6 +76,7 @@ const config = {
           position: 'left',
           items: [
             {to: 'docs/', label: 'KubeVela'},
+            {to: 'terraform/overview', label: 'Terraform'},
             {to: 'addons/overview', label: 'Addons'},
           ],
         },
@@ -334,6 +344,19 @@ const config = {
     [
       '@docusaurus/plugin-content-docs',
       {
+        // Terraform follows terraform-controller and the cloud resource modules as they are now, so it is not versioned.
+        id: 'terraform',
+        path: 'terraform',
+        routeBasePath: 'terraform',
+        sidebarPath: require.resolve('./sidebar-terraform.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
         // The addon reference pages follow the catalog as it is now, not a KubeVela release, so they are not versioned.
         id: 'addons',
         path: 'addons',
@@ -354,10 +377,7 @@ const config = {
           if (RELEASE_DOCS_PATH.test(existingPath)) {
             return existingPath.slice('/docs'.length);
           }
-          // Addon pages moved from the next docs to their own section. Released versions keep their copies.
-          if (existingPath.startsWith('/addons/')) {
-            return '/docs/next/reference' + existingPath;
-          }
+          return MOVED_FROM[existingPath.replace(/\/$/, '')];
           return undefined;
         },
       },

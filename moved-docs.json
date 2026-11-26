@@ -1,0 +1,838 @@
+{
+ "end-user/components/cloud-services/cloud-resource-scenarios.md": {
+  "section": "terraform",
+  "to": "overview.md"
+ },
+ "end-user/components/cloud-services/cloud-resources-list.md": {
+  "section": "terraform",
+  "to": "reference/cloud-resources-list.md"
+ },
+ "end-user/components/cloud-services/provision-an-RDS-instance-with-more-than-one-database.md": {
+  "section": "terraform",
+  "to": "guides/provision-an-rds-instance-with-more-than-one-database.md"
+ },
+ "end-user/components/cloud-services/provision-and-consume-database.md": {
+  "section": "terraform",
+  "to": "guides/provision-and-consume-database.md"
+ },
+ "end-user/components/cloud-services/provision-and-initiate-database.md": {
+  "section": "terraform",
+  "to": "guides/provision-and-initiate-database.md"
+ },
+ "end-user/components/cloud-services/provision-instance-and-database-separately.md": {
+  "section": "terraform",
+  "to": "guides/provision-instance-and-database-separately.md"
+ },
+ "end-user/components/cloud-services/secure-your-database-connection.md": {
+  "section": "terraform",
+  "to": "guides/secure-your-database-connection.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-ack.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-ack.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-amqp.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-amqp.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-ask.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-ask.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-deploy-website.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-deploy-website.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-dns.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-dns.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-ecs.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-ecs.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-eip-slb-ecs-rds.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-eip-slb-ecs-rds.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-eip.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-eip.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-kms.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-kms.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-kubernetes-networking.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-kubernetes-networking.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-market-tensorflow.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-market-tensorflow.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-mns-queue.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-mns-queue.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-mns-topic.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-mns-topic.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-mongodb-multi.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-mongodb-multi.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-mongodb.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-mongodb.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-mse.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-mse.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-nas.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-nas.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-network-with-nat.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-network-with-nat.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-oss-website.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-oss-website.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-oss.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-oss.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-private-zone.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-private-zone.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-rabbitmq.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-rabbitmq.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-ram-fc.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-ram-fc.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-ram.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-ram.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-rds-preview.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-rds-preview.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-rds.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-rds.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-redis.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-redis.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-remote-backend.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-remote-backend.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-rocketmq.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-rocketmq.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-sae-application.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-sae-application.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-sae-auto-config-application.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-sae-auto-config-application.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-sae-namespace.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-sae-namespace.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-security-group.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-security-group.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-slb-acl.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-slb-acl.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-slb-listener.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-slb-listener.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-slb-rule.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-slb-rule.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-slb.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-slb.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-sls-project.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-sls-project.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-sls-store.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-sls-store.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-vpc-ecs-eip.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-vpc-ecs-eip.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-vpc-privatelink-connection.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-vpc-privatelink-connection.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-vpc.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-vpc.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-vpn-gateway.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-vpn-gateway.md"
+ },
+ "end-user/components/cloud-services/terraform/alibaba-vswitch.md": {
+  "section": "terraform",
+  "to": "reference/alibaba-vswitch.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-acm.md": {
+  "section": "terraform",
+  "to": "reference/aws-acm.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-alb.md": {
+  "section": "terraform",
+  "to": "reference/aws-alb.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-autoscaling.md": {
+  "section": "terraform",
+  "to": "reference/aws-autoscaling.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-bridgecrew-read-only.md": {
+  "section": "terraform",
+  "to": "reference/aws-bridgecrew-read-only.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-cis-alarms.md": {
+  "section": "terraform",
+  "to": "reference/aws-cis-alarms.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-cloudfront-s3-cdn.md": {
+  "section": "terraform",
+  "to": "reference/aws-cloudfront-s3-cdn.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-cloudfront.md": {
+  "section": "terraform",
+  "to": "reference/aws-cloudfront.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-cloudwatch-cis-alarms.md": {
+  "section": "terraform",
+  "to": "reference/aws-cloudwatch-cis-alarms.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-cloudwatch-log-group.md": {
+  "section": "terraform",
+  "to": "reference/aws-cloudwatch-log-group.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-cloudwatch-log-metric-filter.md": {
+  "section": "terraform",
+  "to": "reference/aws-cloudwatch-log-metric-filter.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-cloudwatch-metric-alarm.md": {
+  "section": "terraform",
+  "to": "reference/aws-cloudwatch-metric-alarm.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-cloudwatch-metric-alarms-by-multiple-dimensions.md": {
+  "section": "terraform",
+  "to": "reference/aws-cloudwatch-metric-alarms-by-multiple-dimensions.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-cloudwatch-metric-alarms.md": {
+  "section": "terraform",
+  "to": "reference/aws-cloudwatch-metric-alarms.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-config.md": {
+  "section": "terraform",
+  "to": "reference/aws-config.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-delegation-sets.md": {
+  "section": "terraform",
+  "to": "reference/aws-delegation-sets.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-dynamodb-table.md": {
+  "section": "terraform",
+  "to": "reference/aws-dynamodb-table.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-ec2-instance.md": {
+  "section": "terraform",
+  "to": "reference/aws-ec2-instance.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-ecs.md": {
+  "section": "terraform",
+  "to": "reference/aws-ecs.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-eks-cluster-autoscaler.md": {
+  "section": "terraform",
+  "to": "reference/aws-eks-cluster-autoscaler.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-eks-external-dns.md": {
+  "section": "terraform",
+  "to": "reference/aws-eks-external-dns.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-eks-kube-state-metrics.md": {
+  "section": "terraform",
+  "to": "reference/aws-eks-kube-state-metrics.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-eks-node-problem-detector.md": {
+  "section": "terraform",
+  "to": "reference/aws-eks-node-problem-detector.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-eks.md": {
+  "section": "terraform",
+  "to": "reference/aws-eks.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-elasticache-redis.md": {
+  "section": "terraform",
+  "to": "reference/aws-elasticache-redis.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-elb.md": {
+  "section": "terraform",
+  "to": "reference/aws-elb.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-emr.md": {
+  "section": "terraform",
+  "to": "reference/aws-emr.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-guardduty.md": {
+  "section": "terraform",
+  "to": "reference/aws-guardduty.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-account.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-account.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-assumable-role-with-oidc.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-assumable-role-with-oidc.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-assumable-role-with-saml.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-assumable-role-with-saml.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-assumable-role.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-assumable-role.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-assumable-roles-with-saml.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-assumable-roles-with-saml.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-assumable-roles.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-assumable-roles.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-eks-role.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-eks-role.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-group-with-assumable-roles-policy.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-group-with-assumable-roles-policy.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-group-with-policies.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-group-with-policies.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-nofile.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-nofile.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-policy-document-aggregator.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-policy-document-aggregator.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-policy.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-policy.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-read-only-policy.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-read-only-policy.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-role.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-role.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-s3-user.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-s3-user.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-system-user.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-system-user.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-iam-user.md": {
+  "section": "terraform",
+  "to": "reference/aws-iam-user.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-key-pair.md": {
+  "section": "terraform",
+  "to": "reference/aws-key-pair.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-kms-key.md": {
+  "section": "terraform",
+  "to": "reference/aws-kms-key.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-lambda-do-it-all.md": {
+  "section": "terraform",
+  "to": "reference/aws-lambda-do-it-all.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-lambda-with-inline-code.md": {
+  "section": "terraform",
+  "to": "reference/aws-lambda-with-inline-code.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-lambda.md": {
+  "section": "terraform",
+  "to": "reference/aws-lambda.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-log-group.md": {
+  "section": "terraform",
+  "to": "reference/aws-log-group.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-log-metric-filter.md": {
+  "section": "terraform",
+  "to": "reference/aws-log-metric-filter.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-metric-alarm.md": {
+  "section": "terraform",
+  "to": "reference/aws-metric-alarm.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-metric-alarms-by-multiple-dimensions.md": {
+  "section": "terraform",
+  "to": "reference/aws-metric-alarms-by-multiple-dimensions.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-mq.md": {
+  "section": "terraform",
+  "to": "reference/aws-mq.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-notify-slack.md": {
+  "section": "terraform",
+  "to": "reference/aws-notify-slack.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-rds-aurora.md": {
+  "section": "terraform",
+  "to": "reference/aws-rds-aurora.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-rds.md": {
+  "section": "terraform",
+  "to": "reference/aws-rds.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-records.md": {
+  "section": "terraform",
+  "to": "reference/aws-records.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-route53-alias.md": {
+  "section": "terraform",
+  "to": "reference/aws-route53-alias.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-route53-cluster-hostname.md": {
+  "section": "terraform",
+  "to": "reference/aws-route53-cluster-hostname.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-route53-delegation-sets.md": {
+  "section": "terraform",
+  "to": "reference/aws-route53-delegation-sets.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-route53-records.md": {
+  "section": "terraform",
+  "to": "reference/aws-route53-records.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-route53-zones.md": {
+  "section": "terraform",
+  "to": "reference/aws-route53-zones.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-s3-log-storage.md": {
+  "section": "terraform",
+  "to": "reference/aws-s3-log-storage.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-s3.md": {
+  "section": "terraform",
+  "to": "reference/aws-s3.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-secretsmanager-for-rollbar-access-tokens.md": {
+  "section": "terraform",
+  "to": "reference/aws-secretsmanager-for-rollbar-access-tokens.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-security-group.md": {
+  "section": "terraform",
+  "to": "reference/aws-security-group.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-security-hub.md": {
+  "section": "terraform",
+  "to": "reference/aws-security-hub.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-sns-topic.md": {
+  "section": "terraform",
+  "to": "reference/aws-sns-topic.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-sqs.md": {
+  "section": "terraform",
+  "to": "reference/aws-sqs.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-ssm-parameter-store.md": {
+  "section": "terraform",
+  "to": "reference/aws-ssm-parameter-store.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-subnet.md": {
+  "section": "terraform",
+  "to": "reference/aws-subnet.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-utils.md": {
+  "section": "terraform",
+  "to": "reference/aws-utils.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-vpc.md": {
+  "section": "terraform",
+  "to": "reference/aws-vpc.md"
+ },
+ "end-user/components/cloud-services/terraform/aws-zones.md": {
+  "section": "terraform",
+  "to": "reference/aws-zones.md"
+ },
+ "end-user/components/cloud-services/terraform/azure-database-mariadb.md": {
+  "section": "terraform",
+  "to": "reference/azure-database-mariadb.md"
+ },
+ "end-user/components/cloud-services/terraform/azure-resource-group.md": {
+  "section": "terraform",
+  "to": "reference/azure-resource-group.md"
+ },
+ "end-user/components/cloud-services/terraform/azure-storage-account.md": {
+  "section": "terraform",
+  "to": "reference/azure-storage-account.md"
+ },
+ "end-user/components/cloud-services/terraform/azure-subnet.md": {
+  "section": "terraform",
+  "to": "reference/azure-subnet.md"
+ },
+ "end-user/components/cloud-services/terraform/azure-virtual-network.md": {
+  "section": "terraform",
+  "to": "reference/azure-virtual-network.md"
+ },
+ "end-user/components/cloud-services/terraform/baidu-vpc.md": {
+  "section": "terraform",
+  "to": "reference/baidu-vpc.md"
+ },
+ "end-user/components/cloud-services/terraform/deploy-website.md": {
+  "section": "terraform",
+  "to": "reference/deploy-website.md"
+ },
+ "end-user/components/cloud-services/terraform/elastic-ec-deployment.md": {
+  "section": "terraform",
+  "to": "reference/elastic-ec-deployment.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-appengine.md": {
+  "section": "terraform",
+  "to": "reference/gcp-appengine.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-audit-log.md": {
+  "section": "terraform",
+  "to": "reference/gcp-audit-log.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-backend-service.md": {
+  "section": "terraform",
+  "to": "reference/gcp-backend-service.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-basic-vpc-module.md": {
+  "section": "terraform",
+  "to": "reference/gcp-basic-vpc-module.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-bastion.md": {
+  "section": "terraform",
+  "to": "reference/gcp-bastion.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-bootstrap.md": {
+  "section": "terraform",
+  "to": "reference/gcp-bootstrap.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-cloudfunction.md": {
+  "section": "terraform",
+  "to": "reference/gcp-cloudfunction.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-cloudsql.md": {
+  "section": "terraform",
+  "to": "reference/gcp-cloudsql.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-cluster.md": {
+  "section": "terraform",
+  "to": "reference/gcp-cluster.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-compute-firewall.md": {
+  "section": "terraform",
+  "to": "reference/gcp-compute-firewall.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-compute-forwarding-rule-dcos.md": {
+  "section": "terraform",
+  "to": "reference/gcp-compute-forwarding-rule-dcos.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-compute-forwarding-rule-masters.md": {
+  "section": "terraform",
+  "to": "reference/gcp-compute-forwarding-rule-masters.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-compute-forwarding-rule-public-agents.md": {
+  "section": "terraform",
+  "to": "reference/gcp-compute-forwarding-rule-public-agents.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-compute-forwarding-rule.md": {
+  "section": "terraform",
+  "to": "reference/gcp-compute-forwarding-rule.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-config.md": {
+  "section": "terraform",
+  "to": "reference/gcp-config.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-custom-role.md": {
+  "section": "terraform",
+  "to": "reference/gcp-custom-role.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-dcos.md": {
+  "section": "terraform",
+  "to": "reference/gcp-dcos.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-dns-module.md": {
+  "section": "terraform",
+  "to": "reference/gcp-dns-module.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-elasticsearch.md": {
+  "section": "terraform",
+  "to": "reference/gcp-elasticsearch.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-environment-setup.md": {
+  "section": "terraform",
+  "to": "reference/gcp-environment-setup.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-firewall-rules.md": {
+  "section": "terraform",
+  "to": "reference/gcp-firewall-rules.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-gci.md": {
+  "section": "terraform",
+  "to": "reference/gcp-gci.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-gcs.md": {
+  "section": "terraform",
+  "to": "reference/gcp-gcs.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-gke-regional.md": {
+  "section": "terraform",
+  "to": "reference/gcp-gke-regional.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-googlecomputeinstance.md": {
+  "section": "terraform",
+  "to": "reference/gcp-googlecomputeinstance.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-hashicorp-suite.md": {
+  "section": "terraform",
+  "to": "reference/gcp-hashicorp-suite.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-helmrepo.md": {
+  "section": "terraform",
+  "to": "reference/gcp-helmrepo.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-infrastructure.md": {
+  "section": "terraform",
+  "to": "reference/gcp-infrastructure.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-instance-module.md": {
+  "section": "terraform",
+  "to": "reference/gcp-instance-module.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-instance.md": {
+  "section": "terraform",
+  "to": "reference/gcp-instance.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-kthw.md": {
+  "section": "terraform",
+  "to": "reference/gcp-kthw.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-masters.md": {
+  "section": "terraform",
+  "to": "reference/gcp-masters.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-memorystore-redis.md": {
+  "section": "terraform",
+  "to": "reference/gcp-memorystore-redis.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-mq.md": {
+  "section": "terraform",
+  "to": "reference/gcp-mq.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-network-peering.md": {
+  "section": "terraform",
+  "to": "reference/gcp-network-peering.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-network.md": {
+  "section": "terraform",
+  "to": "reference/gcp-network.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-openwisp.md": {
+  "section": "terraform",
+  "to": "reference/gcp-openwisp.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-private-agents.md": {
+  "section": "terraform",
+  "to": "reference/gcp-private-agents.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-public-agents.md": {
+  "section": "terraform",
+  "to": "reference/gcp-public-agents.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-service-account.md": {
+  "section": "terraform",
+  "to": "reference/gcp-service-account.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-service.md": {
+  "section": "terraform",
+  "to": "reference/gcp-service.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-sfabric.md": {
+  "section": "terraform",
+  "to": "reference/gcp-sfabric.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-statebucket.md": {
+  "section": "terraform",
+  "to": "reference/gcp-statebucket.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-staticip.md": {
+  "section": "terraform",
+  "to": "reference/gcp-staticip.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-storage.md": {
+  "section": "terraform",
+  "to": "reference/gcp-storage.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-subnet.md": {
+  "section": "terraform",
+  "to": "reference/gcp-subnet.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-tested-oses.md": {
+  "section": "terraform",
+  "to": "reference/gcp-tested-oses.md"
+ },
+ "end-user/components/cloud-services/terraform/gcp-vpc.md": {
+  "section": "terraform",
+  "to": "reference/gcp-vpc.md"
+ },
+ "end-user/components/cloud-services/terraform/tencent-subnet.md": {
+  "section": "terraform",
+  "to": "reference/tencent-subnet.md"
+ },
+ "end-user/components/cloud-services/terraform/tencent-vpc.md": {
+  "section": "terraform",
+  "to": "reference/tencent-vpc.md"
+ },
+ "end-user/components/cloud-services/terraform/vsphere-file.md": {
+  "section": "terraform",
+  "to": "reference/vsphere-file.md"
+ },
+ "end-user/components/cloud-services/terraform/vsphere-folder.md": {
+  "section": "terraform",
+  "to": "reference/vsphere-folder.md"
+ },
+ "platform-engineers/addon/terraform.md": {
+  "section": "terraform",
+  "to": "extend/terraform-addon.md"
+ },
+ "platform-engineers/components/component-terraform.md": {
+  "section": "terraform",
+  "to": "extend/cloud-resource-component.md"
+ },
+ "reference/addons/ai.md": {
+  "section": "addons",
+  "to": "ai.md"
+ },
+ "reference/addons/cert-manager.md": {
+  "section": "addons",
+  "to": "cert-manager.md"
+ },
+ "reference/addons/chartmuseum.md": {
+  "section": "addons",
+  "to": "chartmuseum.md"
+ },
+ "reference/addons/dex.md": {
+  "section": "addons",
+  "to": "dex.md"
+ },
+ "reference/addons/flink-kubernetes-operator.md": {
+  "section": "addons",
+  "to": "flink-kubernetes-operator.md"
+ },
+ "reference/addons/fluxcd.md": {
+  "section": "addons",
+  "to": "fluxcd.md"
+ },
+ "reference/addons/kruise-rollout.md": {
+  "section": "addons",
+  "to": "kruise-rollout.md"
+ },
+ "reference/addons/kubevela-io.md": {
+  "section": "addons",
+  "to": "kubevela-io.md"
+ },
+ "reference/addons/mysql-exporter.md": {
+  "section": "addons",
+  "to": "mysql-exporter.md"
+ },
+ "reference/addons/netlify.md": {
+  "section": "addons",
+  "to": "netlify.md"
+ },
+ "reference/addons/nginx-ingress-controller.md": {
+  "section": "addons",
+  "to": "nginx-ingress-controller.md"
+ },
+ "reference/addons/ocm-gateway-manager-addon.md": {
+  "section": "addons",
+  "to": "ocm-gateway-manager-addon.md"
+ },
+ "reference/addons/ocm-hub-control-plane.md": {
+  "section": "addons",
+  "to": "ocm-hub-control-plane.md"
+ },
+ "reference/addons/overview.md": {
+  "section": "addons",
+  "to": "overview.md"
+ },
+ "reference/addons/terraform-ec.md": {
+  "section": "terraform",
+  "to": "install/terraform-ec-addon.md"
+ },
+ "reference/addons/terraform.md": {
+  "section": "terraform",
+  "to": "install/terraform-addon.md"
+ },
+ "reference/addons/traefik.md": {
+  "section": "addons",
+  "to": "traefik.md"
+ },
+ "reference/addons/trivy-operator.md": {
+  "section": "addons",
+  "to": "trivy-operator.md"
+ },
+ "reference/addons/vegeta.md": {
+  "section": "addons",
+  "to": "vegeta.md"
+ },
+ "reference/addons/vela-prism.md": {
+  "section": "addons",
+  "to": "vela-prism.md"
+ },
+ "tutorials/consume-cloud-services.md": {
+  "section": "terraform",
+  "to": "guides/consume-cloud-services.md"
+ }
+}

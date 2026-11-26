@@ -4,19 +4,19 @@ title: Provision Cloud Resources with Terraform
 
 This guide creates an OSS bucket on Alibaba Cloud from an Application and reads its connection details from a Secret. The same flow works for AWS and Azure resources, with that provider's component type, credentials and properties: check each component's parameters with `vela show <type>`.
 
-To provision cloud resources with [Crossplane](https://crossplane.io/) instead, see [this guide](../end-user/components/cloud-services/provision-cloud-resources-by-crossplane.md).
+To provision cloud resources with [Crossplane](https://crossplane.io/) instead, see [this guide](/docs/end-user/components/cloud-services/provision-cloud-resources-by-crossplane).
 
 ## Provision Cloud Resources
 
 ### Prerequisites
 
-* Enable Terraform addon and authenticate the target cloud provider per the [instruction](../reference/addons/terraform.md).
+* Enable Terraform addon and authenticate the target cloud provider per the [instruction](../install/terraform-addon.md).
 
 Let's take Alibaba Cloud as an example.
 
 ### Familiar with cloud resources specification
 
-All supported Terraform cloud resources can be seen in the [list](../end-user/components/cloud-services/cloud-resources-list.md). You can also filter them by
+All supported Terraform cloud resources can be seen in the [list](../reference/cloud-resources-list.md). You can also filter them by
 command `vela components --label type=terraform`.
 
 You can use any of the following ways to check the specification of one cloud resource.
@@ -39,9 +39,9 @@ $ vela show alibaba-oss
 
 You can also add flag `--web` to view the usage by a local browser.
 
-- Reading [official docs](../end-user/components/cloud-services/cloud-resources-list.md).
+- Reading [official docs](../reference/cloud-resources-list.md).
 
-For example, you can check the specification for Alibaba OSS at [here](../end-user/components/cloud-services/terraform/alibaba-oss.md). 
+For example, you can check the specification for Alibaba OSS at [here](../reference/alibaba-oss.md). 
 
 For different vendors, these parameters update accordingly. All cloud resources have the following common parameters.
 
@@ -156,19 +156,19 @@ This deletes the bucket, because `deleteResource` defaults to `true`. Empty it f
 
 ### Before starting
 
-- Enable [VelaUX](../reference/addons/velaux.md) addon.
+- Enable [VelaUX](/docs/reference/addons/velaux) addon.
 
-- Enable [Terraform](../reference/addons/terraform.md) addon, just like the prerequisites in CLI part above. VelaUX can also enable these addons in UI console.
+- Enable [Terraform](../install/terraform-addon.md) addon, just like the prerequisites in CLI part above. VelaUX can also enable these addons in UI console.
 
 ![addon-alibaba](../resources/addon-alibaba.jpg)
 
-- Bind the cloud provider to the [target](../how-to/dashboard/target/overview.md). You can do that in `Resources/Targets` page. Edit the `Shared Variables`, select provider you want to bind to this target.
+- Bind the cloud provider to the [target](/docs/how-to/dashboard/target/overview). You can do that in `Resources/Targets` page. Edit the `Shared Variables`, select provider you want to bind to this target.
 
 ![bind-target](../resources/bind-cloud-provider.jpg)
 
 ### Creating your cloud service
 
-The UI console operations are the same, you can refer to [this guide](../how-to/dashboard/application/create-application.md).
+The UI console operations are the same, you can refer to [this guide](/docs/how-to/dashboard/application/create-application).
 
 Firstly, Create an application and choose the type of your cloud service, they will always has a prefix of vendor such as `aws-`, `azure` or `alibaba-`.
 
@@ -216,4 +216,4 @@ In the last section `Component Status`, the health status and the message of the
 
 ## More
 
-For more usages of cloud resources, like how to provision and consume cloud resources, please refer to [Scenarios of Cloud Resources Management](./../end-user/components/cloud-services/cloud-resource-scenarios.md).
+For more usages of cloud resources, like how to provision and consume cloud resources, please refer to [Scenarios of Cloud Resources Management](../overview.md).

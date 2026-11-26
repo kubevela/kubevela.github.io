@@ -4,7 +4,7 @@ title: Extend Terraform Addon
 
 [Terraform Controller](https://github.com/kubevela/terraform-controller) is the core controller to provision and manage
 cloud resources for KubeVela. It has supported [some cloud providers](https://github.com/oam-dev/terraform-controller#supported-cloud-providers), including AWS, Azure, GCP, Alibaba Cloud,
-Tencent Cloud, etc. But only [a few](../../reference/addons/terraform.md#enable-terraform-provider-addon) has been supported as Terraform Addons in KubeVela.
+Tencent Cloud, etc. But only [a few](../install/terraform-addon.md#enable-terraform-provider-addon) has been supported as Terraform Addons in KubeVela.
 
 This guide will show you how to extend a Terraform Addon to support your cloud provider.
 
@@ -86,7 +86,7 @@ NAME      STATE   AGE
 tencent   ready   1d
 ```
 
-You are encouraged to further verify the provider by [provision a cloud resource of your cloud provider](../../tutorials/consume-cloud-services.md).
+You are encouraged to further verify the provider by [provision a cloud resource of your cloud provider](../guides/consume-cloud-services.md).
 
 ## Submit the Terraform Addon
 
@@ -94,4 +94,4 @@ Push the code generated in `./addons` and make a pull request.
 
 ## Contribute documentation
 
-Write [Terraform Addon enable doc](../../reference/addons/terraform.md) for your cloud provider and add it to the [list of provider addons](../../reference/addons/terraform.md#enable-terraform-provider-addon).
+Write [Terraform Addon enable doc](../install/terraform-addon.md) for your cloud provider and add it to the [list of provider addons](../install/terraform-addon.md#enable-terraform-provider-addon).
