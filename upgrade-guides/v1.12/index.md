@@ -399,7 +399,7 @@ render in v1.11 for some inputs (`container-ports`, `init-container`, `k8s-updat
 - Steps and views that collect Secrets from an Application's resource tree get each Secret's name
   and metadata, never its data.
 
-## Definitions, modules and addons
+## Definitions, crates and addons
 
 - **Definition permission validation** (`authorization.definitionValidationEnabled`) now also
   covers what an Application reaches through references: the steps of the Workflow `workflow.ref`
@@ -408,7 +408,7 @@ render in v1.11 for some inputs (`container-ports`, `init-container`, `k8s-updat
   definition it names.
 - **Definition restrictions and quotas** (new in v1.12) also apply to component types and traits
   that override policies bring in, to steps from a referenced Workflow (`workflow.ref`), and to
-  module types. An update that breaks a restriction is refused. An Application that already breaks
+  [crate](/docs/next/platform-engineers/crate/intro/) types. An update that breaks a restriction is refused. An Application that already breaks
   one keeps running, and shows a `RestrictionViolation` condition and a Warning event until it is
   fixed. A use through an override policy counts against a quota as well, as one more use of that
   type.
@@ -426,8 +426,9 @@ render in v1.11 for some inputs (`container-ports`, `init-container`, `k8s-updat
 - `vela addon disable` checks only inline consumers, and `kubectl delete application addon-<name>`
   checks nothing. Either way the addon's definitions and their revisions are removed. Check for
   consumers first.
-- Uninstalling a module does not check for Applications using its definitions. They keep running,
-  but cannot be updated until it is installed again.
+- [Uninstalling a crate](/docs/next/platform-engineers/crate/crate-install/#uninstall-a-crate) does
+  not check for Applications using its definitions. They keep running, but cannot be updated until
+  it is installed again.
 - `vela delete --orphan` of an addon still deletes its definitions, through their owner references.
 - Two hubs running the same addon with `clusterLabelSelector: {}` on a shared managed cluster adopt
   each other's workloads there, and disabling it on one hub removes the other's. Do not share
@@ -494,7 +495,7 @@ Sources and `$( )` expressions are alpha, behind the `EnableCelExpressions` feat
     `app-developer` roles. Custom roles keep what they had, but need these added to use shared
     workflows and project definitions.
   - The migrations run once per datastore (recorded in `vela_migration`) and log nothing.
-- Definitions installed by modules (alpha) are not listed in VelaUX, and their component types
+- Definitions installed by crates (alpha) are not listed in VelaUX, and their component types
   cannot be used from it yet.
 - The resource tree reads as the project's group. Resources in namespaces no target covers show as
   an empty tree, with no error.
