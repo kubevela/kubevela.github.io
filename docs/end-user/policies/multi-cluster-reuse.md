@@ -5,7 +5,9 @@ title: Reuse Policies and Workflows
 When several Applications deploy to the same clusters in the same way, write the policies and the workflow once, as standalone `Policy` and `Workflow` objects, and refer to them from each Application. It builds on [Deploy to Multiple Clusters](./multi-cluster.md) and [Override Configuration per Cluster](./multi-cluster-override.md).
 
 :::caution
-An Application can only refer to a Policy in its own namespace. A Workflow is looked up in the Application's namespace first, then in the system definition namespace (`vela-system` unless `--system-definition-namespace` sets another).
+An Application can only refer to a Policy in its own namespace. A Workflow is looked up in the Application's namespace first, then in the system definition namespace (`vela-system` unless `--system-definition-namespace` sets another), so a platform team can share one Workflow with every namespace. A Workflow of the same name in the Application's namespace takes precedence, and the Application's `status.workflow.ref` shows which one it ran.
+
+Where definition permissions or `AuthenticateApplication` are enforced, the Application's author needs `get` on the Workflow it refers to, in whichever namespace it is found.
 :::
 
 ## Write the shared objects
