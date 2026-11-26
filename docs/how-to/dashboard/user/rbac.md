@@ -2,66 +2,90 @@
 title: VelaUX RBAC
 ---
 
-The RBAC feature enabled restriction of access to VelaUX resources. The UI and API could strict permission verification. We designed platform-scope roles and project-scope roles, Each role can be bound to a set of permission policies, and users can obtain corresponding permissions when they are bound to the role.
+VelaUX roles decide what each user can see and do in the UI and the API. A role is a set of permissions, and is either platform scope (applies everywhere) or project scope (applies inside one project).
 
-## Built-in permission policies
+:::caution
+By default vela-core runs as `cluster-admin`, so anyone who can create an Application can create anything in any cluster KubeVela manages. Turn on `authentication.enabled` to apply each Application with its submitter's permissions.
+:::
 
-A permission policy consists of resources、action and effect, there are some built-in permission policies, including:
+:::caution
+By default VelaUX reaches Kubernetes as its own service account, and VelaUX roles are the only check. Turn on [impersonation](#working-with-kubernetes-rbac) to have Kubernetes RBAC apply to each user too.
+:::
 
-```
-* Cluster Management （resource:[cluster:*/*] action:* effect:allow scope:platform）
-* Project Management （resource:[project:*] action:* effect:allow scope:platform）
-* Addon Management   （resource:[addon:*,addonRegistry:*] action:* effect:allow scope:platform）
-* Target Management  （resource:[target:*,cluster:*/namespace:*] action:* effect:allow scope:platform）
-* User Management    （resource:[user:*] action:* effect:allow scope:platform）
-* Platform Role Management （resource:[role:*, permission:*] action:* effect:allow scope:platform）
-* Admin              （resource:[*:*] action:* effect:allow scope:platform）
+## Built-in permissions
 
-* Project Read       （resource:[project:{projectName}] action:detail effect:allow scope:project）
-* App Management     （resource:[project:{projectName}/application:*/*, definition:* ] action:* effect:allow scope:platform）
-* Environment Management （resource:[project:{projectName}/environment:*] action:* effect:allow scope:platform）
-* Role Management    （resource:[project:{projectName}/role:*,project:{projectName}/projectUser:*,project:{projectName}/permission:*] action:* effect:allow scope:project)
-```
+A permission allows or denies a set of actions on a set of resources. VelaUX ships these.
 
-Currently, built-in permission policies cover all resources. It is conceivable that these permissions can be flexibly customized, we will provide the API and UI page to manage the custom permission.
+Platform scope:
+
+| Permission | Resources | Allows |
+| --- | --- | --- |
+| Admin | `*` | Everything. |
+| Cluster Management | `cluster:*/*` | Add, change and remove clusters. |
+| Project Management | `project:*` | Create, change and delete any project. |
+| Project List | `project:*` | List every project (`list` only). |
+| Addon Management | `addon:*`, `addonRegistry:*` | Enable and disable addons, and manage addon registries. |
+| Target Management | `target:*`, `cluster:*/namespace:*` | Manage delivery targets and their namespaces. |
+| User Management | `user:*` | Manage users. |
+| Platform Role Management | `role:*`, `permission:*` | Manage platform roles and permissions. |
+| Config Management | `config:*/*` | Manage platform configs. |
+| Disable CloudShell | `cloudshell` | Denies CloudShell. |
+
+Project scope, where `{projectName}` is the project the role belongs to:
+
+| Permission | Resources | Allows |
+| --- | --- | --- |
+| Project View | the project and its configs, providers, roles, members, permissions, environments, applications and pipelines | Read them (`detail` and `list` only). |
+| App Management | `project:{projectName}/application:*/*` | Manage the project's applications. |
+| Environment Management | `project:{projectName}/environment:*` | Manage the project's environments. |
+| Role Management | `project:{projectName}/role:*`, `project:{projectName}/projectUser:*`, `project:{projectName}/permission:*` | Manage the project's roles, members and permissions. |
+| Config Management | `project:{projectName}/config:*`, `project:{projectName}/provider:*` | Manage the project's configs and cloud providers. |
+| Pipeline Management | `project:{projectName}/pipeline:*/*` | Manage the project's pipelines. |
 
 ## Built-in roles
 
-A role consists of a role name and the set of permissions it contains, we have built in some common roles:
+| Role | Scope | Permissions |
+| --- | --- | --- |
+| Admin | platform | Admin. |
+| App Developer | project | Project View, App Management, Environment Management, Config Management, Pipeline Management. |
+| Project Admin | project | Everything App Developer has, plus Role Management. |
+| Project Viewer | project | Project View. |
 
-* Admin：platform scope role，include the `Admin` permission，that all operation rights of all resources。
-* App Developer：project scope role，include permissions required for app development.
-* Project Admin：project scope role，including administrative rights for all resources under the project.
+Every new project gets its own App Developer, Project Admin and Project Viewer roles, and its owner is a Project Admin.
 
 ## Custom roles
 
-You can customize the list of roles for a platform or project based on your business or team needs.
+You can add roles for the platform or for a project to fit your teams.
 
-### platform scope role
+### Platform scope roles
 
-Go to `Platform/Roles` page，you can get all platform-scope roles。
+Go to **Admin Dashboard > Platform Roles** to see all platform scope roles.
 
 ![role list](https://kubevela.io/images/1.3/role-dashboard.jpg)
 
-Click the `New Role` button, you can open the drawer page for creating a role, you should input some required info, such as the role's name, alias and permissions. Click the `Create` button then complete.
+Click `New Role`, fill in the role's name, alias and permissions, and click `Create`.
 
-### project scope role
+### Project scope roles
 
-First you need to go to the project details page, If users with project list query permission can enter through the project list, If not, you can enter through the application detail page.
+Open the project's details page, from the project list if you can list projects, or from one of its applications if not.
 
 ![role list](https://kubevela.io/images/1.3/project-dashboard.jpg)
 
-Switch to the role management page on the project details page to add or modify role information under the project.
+Switch to the role management page to add or change the project's roles.
 
 ![role list](https://kubevela.io/images/1.3/project-role.jpg)
 
-## User bound role
+## Bind roles to users
 
-* Platform-scope roles need to be bound to users on the user management page. One user can be bound to multiple platform-scope roles.
-
-* Project-scope roles need to be set in the project member management page, and roles need to be bound when users are added to the project, or modify the existing users' roles.
-
+* Platform scope roles are bound to users on the user management page. A user can have several.
+* Project scope roles are bound on the project's member page, when you add a user to the project or change an existing member's roles.
 
 ## Working with Kubernetes RBAC
 
-The VelaUX User will be projected into the underlying Kubernetes User when you configured the FeatureGates of the VelaUX apiserver through `--feature-gates=EnableImpersonation=true`. In this way, the application of VelaUX will use the idenity of the Project and the VelaUX User, which means it is possible for system operators to restrict the user's access through Kubernetes RBAC mechanism behind VelaUX.
+To have Kubernetes check each user as well, turn on impersonation in the `velaux` addon:
+
+```shell
+vela addon enable velaux enableImpersonation=true
+```
+
+VelaUX then calls Kubernetes as the logged-in user, in the group of the project the request is for (`kubevela:project:<project>`), so you can restrict what each user and project can do in the cluster with Kubernetes RBAC.
