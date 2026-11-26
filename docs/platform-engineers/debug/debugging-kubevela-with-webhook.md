@@ -197,7 +197,7 @@ vela-core then:
 
 The old `kube-webhook-certgen` Jobs are not used in KubeVela 1.12. Existing
 Secrets created by those Jobs are reused during an upgrade. See
-[Runtime certificates](/upgrade-guides/v1.12/#runtime-certificates) in the v1.11 to v1.12
+[Runtime certificates](../../upgrade-guides/v1.12/index.md#runtime-certificates) in the v1.11 to v1.12
 upgrade guide.
 
 ## Cleanup

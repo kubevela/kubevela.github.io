@@ -1,0 +1,152 @@
+// The homepage drawings' palette, so this diagram matches them.
+.figure {
+  --dg-ink: #0f172a;
+  --dg-accent: #3b82f6;
+  --dg-ok: #22c55e;
+  --dg-warm: #f59e0b;
+  --dg-card: #ffffff;
+  margin: 8px 0 28px;
+  padding: 16px 16px 8px;
+  overflow-x: auto;
+  background: color-mix(in srgb, var(--dg-ink) 2%, var(--dg-card));
+  border: 1px solid var(--kv-line);
+  border-radius: 12px;
+  :global(html[data-theme='dark']) & {
+    --dg-ink: #f1f5f9;
+    --dg-card: #0f172a;
+  }
+}
+
+.dg {
+  display: block;
+  width: 100%;
+  min-width: 680px;
+  height: auto;
+  text {
+    font-family: var(--ifm-font-family-monospace);
+  }
+}
+
+.card {
+  fill: var(--dg-card);
+  stroke: color-mix(in srgb, var(--dg-ink) 14%, transparent);
+}
+
+.region {
+  fill: color-mix(in srgb, var(--dg-accent) 5%, transparent);
+  stroke: color-mix(in srgb, var(--dg-accent) 30%, transparent);
+  stroke-dasharray: 5 4;
+}
+
+.app {
+  fill: var(--dg-card);
+  stroke: color-mix(in srgb, var(--dg-accent) 65%, transparent);
+  stroke-width: 1.5;
+}
+
+.system {
+  fill: color-mix(in srgb, var(--dg-accent) 12%, var(--dg-card));
+  stroke: color-mix(in srgb, var(--dg-accent) 45%, transparent);
+}
+
+.note {
+  fill: none;
+  stroke: color-mix(in srgb, var(--dg-ink) 25%, transparent);
+  stroke-dasharray: 3 3;
+}
+
+.chipText {
+  fill: color-mix(in srgb, var(--dg-ink) 85%, transparent);
+  font-size: 11px;
+}
+
+.strong {
+  fill: var(--dg-ink);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.title {
+  fill: var(--dg-ink);
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.muted {
+  fill: color-mix(in srgb, var(--dg-ink) 55%, transparent);
+  font-size: 10.5px;
+}
+
+.prose {
+  fill: color-mix(in srgb, var(--dg-ink) 65%, transparent);
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: 11px;
+}
+
+.label {
+  fill: color-mix(in srgb, var(--dg-accent) 80%, var(--dg-ink));
+  font-size: 10.5px;
+}
+
+.flow,
+.dashed {
+  fill: none;
+  stroke: var(--dg-accent);
+  stroke-width: 1.5;
+}
+
+.dashed {
+  stroke-dasharray: 4 3;
+}
+
+.link {
+  fill: none;
+  stroke: color-mix(in srgb, var(--dg-ink) 30%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.head {
+  fill: var(--dg-accent);
+}
+
+// Logos sit on light tiles, which only show in dark mode, so dark marks stay
+// legible.
+.tile {
+  fill: transparent;
+  :global(html[data-theme='dark']) & {
+    fill: #e2e8f0;
+  }
+}
+
+.target {
+  fill: var(--dg-card);
+  stroke: color-mix(in srgb, var(--dg-ink) 30%, transparent);
+  stroke-dasharray: 3 3;
+}
+
+.big {
+  fill: var(--dg-ink);
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.header {
+  fill: var(--dg-ok);
+}
+
+.headerText {
+  fill: #ffffff;
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.emph {
+  fill: var(--dg-ink);
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: 11.5px;
+  font-weight: 700;
+}

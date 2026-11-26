@@ -3,6 +3,11 @@ title: Introduction
 slug: /
 ---
 
+import DocCards from '@site/src/components/DocCards';
+import WhatIsKubeVela from '@site/src/components/WhatIsKubeVela';
+
+<DocCards />
+
 ## What is KubeVela?
 
 KubeVela is an application delivery platform that runs on Kubernetes. Your platform team defines the building blocks (a web service, a database, a canary rollout); developers describe their app with those blocks in one YAML file, and KubeVela deploys it, to one cluster or many, and keeps it that way.
@@ -29,7 +34,7 @@ spec:
 
 That's an Application: KubeVela turns it into a Deployment and a Service, runs the delivery workflow and reports health back.
 
-![](../resources/what-is-kubevela.jpg)
+<WhatIsKubeVela />
 
 ## Why KubeVela?
 

@@ -2,9 +2,11 @@
 title: High Availability Deploy
 ---
 
+import HaDeploy from '@site/src/components/HaDeploy';
+
 This page covers what to run, how many of each, and how big, when KubeVela runs real teams' Applications. The defaults in the `vela-core` chart are sized for trying KubeVela out: one replica of each component and a 20Mi memory request.
 
-![](../../resources/ha-deploy.jpg)
+<HaDeploy />
 
 :::note
 Run the control plane on a highly available Kubernetes cluster first. KubeVela keeps its state in the Kubernetes API, so it is only as available as the API server it runs on.

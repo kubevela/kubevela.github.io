@@ -28,7 +28,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const EDIT_URL_BASE = 'https://github.com/kubevela/kubevela.io/edit/main';
+const EDIT_URL_BASE = 'https://github.com/kubevela/kubevela.github.io/edit/main';
 const SIDEBARS_RELEASES = path.join(ROOT, 'sidebars-releases.js');
 
 // Load sidebars-releases.js and the section sidebar files fresh, so edits made
