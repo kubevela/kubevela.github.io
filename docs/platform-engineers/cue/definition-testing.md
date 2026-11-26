@@ -270,6 +270,11 @@ template: {
 		kind:       "HorizontalPodAutoscaler"
 		metadata: name: context.name
 		spec: {
+			scaleTargetRef: {
+				apiVersion: "apps/v1"
+				kind:       "Deployment"
+				name:       context.name
+			}
 			minReplicas: parameter.replicas
 			maxReplicas: parameter.replicas
 		}
