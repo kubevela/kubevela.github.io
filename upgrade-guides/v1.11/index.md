@@ -16,6 +16,7 @@ The CUE engine change is non-breaking by default. The controller renders legacy 
    chart's `crds/` directory:
 
 ```
+helm repo remove kubevela 2>/dev/null || true
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm pull kubevela/vela-core --version 1.11.2 --untar

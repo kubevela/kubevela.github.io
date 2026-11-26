@@ -34,6 +34,7 @@ Also check:
    adds the `packages.cue.oam.dev` CRD.
 
 ```
+helm repo remove kubevela 2>/dev/null || true
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm pull kubevela/vela-core --version 1.10.10 --untar
