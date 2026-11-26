@@ -99,9 +99,7 @@ Finally, we can see that the application's `env` contains two environment variab
 
 ## retainKeys
 
-You can use the `+patchStrategy=retainKeys` annotation if you want to be able to override duplicate values while merging variables.
-
-The strategy of this annotation is similar to the Kubernetes official [retainKeys](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/#use-strategic-merge-patch- to-update-a-deployment-using-the-retainkeys-strategy) strategy.
+With `+patchStrategy=retainKeys`, the patch replaces the base value instead of merging with it. On a list matched by `patchKey`, the whole matching item is replaced, so fields the patch leaves out are dropped from that item.
 
 > In the following example, `+patchKey=name` specifies which container the patch should be applied to, while `+patchStrategy=retainKeys` specifies that when merge environment variables, if a duplicate environment variable name is specified, the environment variable value will be overwritten.
 

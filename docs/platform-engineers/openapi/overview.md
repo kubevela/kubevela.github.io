@@ -1,8 +1,8 @@
 ---
-title: VelaUX OpenAPI
+title: VelaUX REST API
 ---
 
-This section will introduce how to integrate VelaUX OpenAPI, please make sure you have enabled the `velaux` addon. Let's use port-forward to expose the endpoint for the following demo.
+This section will introduce how to integrate with the VelaUX REST API, please make sure you have enabled the `velaux` addon. Let's use port-forward to expose the endpoint for the following demo.
 
 ```bash
 vela port-forward addon-velaux -n vela-system 8000:8000
@@ -28,7 +28,7 @@ The expected output should be like this:
   "createTime": "0001-01-01T00:00:00Z",
   "lastLoginTime": "0001-01-01T00:00:00Z",
   "name": "admin",
-  "email": "barnett.zqg@gmail.com",
+  "email": "admin@example.com",
   "disabled": false
  },
  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZ3JhbnRUeXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU2NTE0ODcyLCJpc3MiOiJ2ZWxhLWlzc3VlciIsIm5iZiI6MTY1NjUxMTI3Mn0.IqRWglW5cYMn8KJcbkoG55os9g-YTo_9UWFvbpZBKiY",
@@ -38,6 +38,10 @@ The expected output should be like this:
 
 * accessToken: This is the token to request other APIs, which will expire in an hour.
 * refreshToken: This is the token to refresh the access token.
+
+:::tip
+The example logs in as `admin` to keep it short. For an integration, create a user with only the project roles it needs, and read its password from a secret store rather than the command line, where it lands in shell history and process lists.
+:::
 
 ### Request other APIs
 

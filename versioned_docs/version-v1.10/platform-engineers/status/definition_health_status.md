@@ -4,6 +4,8 @@ title:  Definition Health & Status
 
 # Monitoring Health of Components & Traits
 
+The examples show a definition's `status` block in the CUE format, where it sits under `attributes`; in Kubernetes YAML the same fields sit under `spec.status`. [The Definition File](../oam/definition-file.md) shows the two formats side by side.
+
 Components and traits in KubeVela can report their operational status and health, giving you real-time visibility into your applications. This guide shows you how to configure health checks, status reporting, and custom messages for your definitions (components & traits).
 
 ## Why Monitor Health and Status?
@@ -64,7 +66,7 @@ attributes: status: details: {
 status:
   services:
     - name: my-service
-      status:
+      details:
         readyReplicas: "3"
         totalReplicas: "3"
         readyPercentage: "100"
@@ -161,80 +163,78 @@ The details status map is particularly valuable when:
 
 ### Example Implementation
 
-  ```cue
-  "<root>": attributes: status: details: {
-      // Component A health check
-      componentAisHealthy: *(context.output.status.isReady == "true") | false
+Here the definition renders a main workload (`context.output`) and an auxiliary Deployment under `outputs` named `frontend` (`context.outputs.frontend`):
 
-      // Component B health check
-      componentBisHealthy: *(context.outputs.frontend.readyReplicas == context.outputs.frontend.replicas) | false
+```cue
+"<root>": attributes: status: details: {
+    // The main workload has all its replicas ready
+    workloadReady: *(context.output.status.readyReplicas == context.output.spec.replicas) | false
 
-      // Component B readiness ratio
-      componentBReadyRatio: *(context.outputs.frontend.readyReplicas / context.outputs.frontend.replicas) | 0.0
-  }
-  ```
+    // The frontend Deployment has all its replicas ready
+    frontendReady: *(context.outputs.frontend.status.readyReplicas == context.outputs.frontend.spec.replicas) | false
+
+    // Share of the frontend's replicas that are ready
+    frontendReadyRatio: *(context.outputs.frontend.status.readyReplicas / context.outputs.frontend.spec.replicas) | 0.0
+}
+```
 
 **Definition Format**: Use either native CUE syntax or CUE string expressions under `attributes.status.details`.
 
 ### Native CUE Format
-Use native CUE to define detailed status as a structured map. Public fields (no prefix) will be exported as strings to the Application’s `.status.services[].details` field in `[string]: string` format.
+Use native CUE to define detailed status as a structured map. Public fields (no prefix) will be exported as strings to the Application's `.status.services[].details` field in `[string]: string` format.
 
 ```cue
 "<root>": attributes: status: details: {
-    details: {
-        readyCount:      *context.output.status.readyReplicas | 0
-        readyPct:        *"\($internal.pctRunning)%" | "0%"
-        unavailablePct:  *"\($internal.pctUnavailable)%" | "0%"
-        degraded:        *$internal.pctRunning < 80 | false    // must be at least 80% of replicas ready
-  
-        // Private fields are supported with `$` prefix
-        $internal: {
-          pctRunning: *((context.output.status.readyReplicas / context.output.spec.replicas) * 100) | 0
-          pctUnavailable: *((context.output.status.unavailableReplicas / context.output.spec.replicas) * 100) | 0
-        }
+    readyCount:     *context.output.status.readyReplicas | 0
+    readyPct:       "\($internal.pctReady)%"
+    unavailablePct: "\($internal.pctUnavailable)%"
+    degraded:       $internal.pctReady < 80 // fewer than 80% of replicas are ready
+
+    // `$` fields are not exported, but the later checks can read them
+    $internal: {
+        pctReady:       *div((*context.output.status.readyReplicas | 0) * 100, context.output.spec.replicas) | 0
+        pctUnavailable: *div((*context.output.status.unavailableReplicas | 0) * 100, context.output.spec.replicas) | 0
     }
 }
 ```
 
 ## Field Visibility Rules
-### Types
-- Public fields are standard fields without annotation and without prefixes (e.g. `readyReplicas`)
-- Local fields are those prefixed with $ or annotated with @local (e.g. `$tempVal : "abc"`, `anotherTempVal: 1 @local`)
-- Private fields are those annotated with @private (e.g. `$privateVal: "abc" @private()`)
 
-### Visibility Rules
-| Field Type | Identification                      | Scoped Access | Context Access | Status Export | Supported Types                  |
-|------------|-------------------------------------|---------------|----------------|---------------|----------------------------------|
-| Public     | No prefix                           | ✓ Yes         | ✓ Yes          | ✓ (as string) | bool, int, string only           |
-| Local      | `$` prefix or `@local()` annotation | ✓ Yes         | ✓ Yes          | ✗ No          | Any type including structs/lists |
-| Private    | `@private()` annotation             | ✓ Yes         | ✗ No           | ✗ No          | Any type including structs/lists |
+Each field in `details` is one of three kinds:
 
+| Field Type   | Identification                                  | In `context.status.details` | In `.status.services[].details` | Supported Types                  |
+|--------------|-------------------------------------------------|-----------------------------|---------------------------------|----------------------------------|
+| Public       | No prefix, no attribute (e.g. `readyReplicas`)  | ✓ Yes                       | ✓ Yes (as a string)             | bool, int, string only           |
+| `$` prefixed | `$` prefix, whatever its attribute (e.g. `$tempVal`) | ✓ Yes                  | ✗ No                            | Any type including structs/lists |
+| Local        | `@local()` or `@private()` attribute, no `$` prefix (e.g. `tempVal: 1 @local()`) | ✗ No | ✗ No                | bool, int, string only           |
+
+Every field can be read by the other fields of the `details` block. Use a `$` field for a value the health check or custom status needs but the Application status shouldn't show; use `@local()` or `@private()` for a value only the `details` block itself needs.
+
+A field whose label is 32 characters or longer is skipped: it appears nowhere, and the only sign is a warning in the controller log.
 
 ### String Expression Format
 Alternatively, you can use a CUE string literal to define the details block.
 
 ```cue
-"<root>": attributes: status: details: {
-    details: #"""
-        readyCount:      *context.output.status.readyReplicas | 0
-        readyPct:        *"\($internal.pctRunning)%" | "0%"
-        unavailablePct:  *"\($internal.pctUnavailable)%" | "0%"
-        degraded:        *$internal.pctRunning < 80 | false    // must be at least 80% of replicas ready
-    
-        // Private fields are supported with `$` prefix
-        $internal: {
-          pctRunning: *((context.output.status.readyReplicas / context.output.spec.replicas) * 100) | 0
-          pctUnavailable: *((context.output.status.unavailableReplicas / context.output.spec.replicas) * 100) | 0
-        }
+"<root>": attributes: status: details: #"""
+    readyCount:     *context.output.status.readyReplicas | 0
+    readyPct:       "\($internal.pctReady)%"
+    unavailablePct: "\($internal.pctUnavailable)%"
+    degraded:       $internal.pctReady < 80 // fewer than 80% of replicas are ready
+
+    // `$` fields are not exported, but the later checks can read them
+    $internal: {
+        pctReady:       *div((*context.output.status.readyReplicas | 0) * 100, context.output.spec.replicas) | 0
+        pctUnavailable: *div((*context.output.status.unavailableReplicas | 0) * 100, context.output.spec.replicas) | 0
+    }
     """#
-}
 ```
 
-String expressions behave identically to native CUE structs and support the same rules regarding public/private fields and type restrictions.
+String expressions behave identically to native CUE structs and support the same rules regarding public and `$` fields and type restrictions.
 
 ### Field Validation
-- Public fields (no `$` prefix or `@local/@private` annotation) will permit **only** fields which can be validated to appropriate string values. That is, structs or array values will be rejected within public fields.
-- Local and Private fields are permitted to use any type. 
+- Fields without a `$` prefix permit **only** values that can be shown as strings: `vela def` rejects a struct or list literal in them.
+- `$` fields can use any type.
 
 ### Outputs
 The results of the evaluation are output to `context.status.details` for use in the Health Check and Custom Status evaluations.
@@ -257,7 +257,7 @@ The results of the evaluation are output to `context.status.details` for use in 
 >```
 
 ### Result in Application Status
-Only public fields appear in .status.services[].status:
+Only public fields appear in `.status.services[].details`:
 ```yaml
 ...
 status:
@@ -265,7 +265,7 @@ status:
     - name: mycomponent
       healthy: true
       message: "Ready:2/2"
-      status:
+      details:
         readyCount:      "2"
         readyPct:        "100%"
         unavailablePct:  "0%"
@@ -283,7 +283,7 @@ status:
 |----------------------|---------------------------------------------------------------|
 | **Location**         | `<definition-root>.attributes.status.healthPolicy`            |
 | **Type**             | `{isHealth: bool}`                                            |
-| **Default Behavior** | Always returns `true` if not defined, or if errors occur      |
+| **Default Behavior** | `true` if not defined. If the policy fails to evaluate (for example it reads a status field the resource doesn't have yet), the error is logged and the component or trait is reported unhealthy; reconciliation carries on. |
 | **Validation**       | See constraints below                                         |
 | **Update Frequency** | Evaluated periodically by KubeVela runtime (during reconcile) |
 | **Output Location**  | `.status.services[].healthy`                                  |
@@ -299,8 +299,6 @@ Both the standard component/trait context and the outputs of the Status Details 
 
 ### Native CUE Format
 Use native CUE to define detailed status as a structured map. The evaluated value of the `isHealth` field will be exported to the Application’s `.status.services[].healthy` field.
-
-**Note:** Native CUE syntax is currently available only on the `attributes.status.details` field and is unsupported for `healthPolicy` and `customStatus`
 
 ```cue
 "<root>": attributes: status: {
@@ -390,28 +388,30 @@ The overall status of an Application is directly linked to the sum of all compon
 | **Output Location**  | `.status.services[].message`                                        |
 
 ### Native CUE Format
-Use native CUE to define detailed status as a structured map. The evaluated value of the `isHealth` field will be exported to the Application’s `.status.services[].healthy` field.
-
-**Note:** Native CUE syntax is currently available only on the `attributes.status.details` field and is unsupported for `healthPolicy` and `customStatus`
+Write `customStatus` as a CUE struct with a `message` string; it is shown as `.status.services[].message`.
 
 ```cue
 "<root>": attributes: status: {
     customStatus: {
-        message: "\(*context.output.status.readyReplicas | 0) of \(context.output.status.replicas | 0) replicas ready!"
+        message: "\(*context.output.status.readyReplicas | 0) of \(*context.output.status.replicas | 0) replicas ready!"
     }
 }
 ```
 
-It is also possible to make use of checks already evaluated in the Detailed Status map and Health Check to reduce repetition in evaluations via `context.status.details.<field>`
+It is also possible to make use of checks already evaluated in the Detailed Status map and Health Check to reduce repetition in evaluations via `context.status.details.<field>`. Here `details` computes `readyReplicaRatio` and `customStatus` reads it:
 ```cue
 "<root>": attributes: status: {
+    details: {
+        readyReplicaRatio: *(context.output.status.readyReplicas / context.output.spec.replicas) | 0.0
+    }
+
     customStatus: {
     	if context.status.healthy {
-    		message: "Healthy - \(context.status.details.readyReplicaRatio * 100)% of replicas ready!"
+    		message: "Healthy, \(context.status.details.readyReplicaRatio * 100)% of replicas ready!"
     	}
-    	
+
     	if !context.status.healthy {
-    		message: "Unhealthy - \(context.status.details.readyReplicaRatio * 100)% of replicas ready!"
+    		message: "Unhealthy, \(context.status.details.readyReplicaRatio * 100)% of replicas ready!"
     	}
     }
 }
@@ -421,7 +421,7 @@ You can also use the `parameter` defined in the template like:
 ```cue
 "<root>": attributes: status: {
     customStatus: {
-        message: "\(*context.output.status.readyReplicas | 0) of \(parameter.replicas | 0) replicas ready!"
+        message: "\(*context.output.status.readyReplicas | 0) of \(parameter.replicas) replicas ready!"
     }
 }
 
@@ -435,9 +435,9 @@ Alternatively, you can use a CUE string literal to define the `customStatus` blo
 
 ```cue
 "<root>": attributes: status: {
-    customStatus: """
-        message: "\(*context.output.status.readyReplicas | 0) of \(parameter.replicas | 0) replicas ready!"
-    """
+    customStatus: #"""
+        message: "\(*context.output.status.readyReplicas | 0) of \(parameter.replicas) replicas ready!"
+    """#
 }
 ```
 

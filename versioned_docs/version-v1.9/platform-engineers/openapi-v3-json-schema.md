@@ -17,14 +17,14 @@ you can find easily by:
 kubectl get configmap -n vela-system -l definition.oam.dev=schema
 ```
 ```console
-NAME                   DATA     AGE
-schema-ingress         1        46m
-schema-scaler          1        50m
-schema-webservice      1        2m26s
-schema-webservice-v1   1        40s
-schema-worker          1        1m45s 
-schema-worker-v1       1        55s
-schema-worker-v2       1        20s
+NAME                             DATA     AGE
+trait-schema-ingress             1        46m
+trait-schema-scaler              1        50m
+component-schema-webservice      1        2m26s
+component-schema-webservice-v1   1        40s
+component-schema-worker          1        1m45s 
+component-schema-worker-v1       1        55s
+component-schema-worker-v2       1        20s
 ```
 For the sack of convenience, we also specify a unified label for the `ConfigMap` which stores the parameter information of the same Definition. 
 And we can list the ConfigMap which stores the parameter of the same Definition by specifying the label like `definition.oam.dev/name=definitionName`, where the `definitionName` is the specific name of your component or trait. 
@@ -32,25 +32,25 @@ And we can list the ConfigMap which stores the parameter of the same Definition 
 kubectl get configmap -l definition.oam.dev/name=worker
 ```
 ```console
-NAME                   DATA     AGE
-schema-worker          1        1m50s
-schema-worker-v1       1        1m
-schema-worker-v2       1        25s
+NAME                             DATA     AGE
+component-schema-worker          1        1m50s
+component-schema-worker-v1       1        1m
+component-schema-worker-v2       1        25s
 ```
 
-The `ConfigMap` name is in the format of `schema-<your-definition-name>`,
+The `ConfigMap` name is in the format of `<type>-schema-<your-definition-name>`, where `<type>` is `component`, `trait`, `policy` or `workflowstep`,
 and the data key is `openapi-v3-json-schema`.
 
 For example, we can use the following command to get the JSON schema of `webservice`.
 
 ```shell
-kubectl get configmap schema-webservice -n vela-system -o yaml
+kubectl get configmap component-schema-webservice -n vela-system -o yaml
 ```
 ```console
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: schema-webservice
+  name: component-schema-webservice
   namespace: vela-system
 data:
   openapi-v3-json-schema: '{"properties":{"cmd":{"description":"Commands to run in
