@@ -61,10 +61,13 @@ const config = {
           className: 'kv-version',
         },
         {
-          to: 'docs/',
-          activeBasePath: 'docs',
+          type: 'dropdown',
           label: 'Documentation',
           position: 'left',
+          items: [
+            {to: 'docs/', label: 'KubeVela'},
+            {to: 'addons/overview', label: 'Addons'},
+          ],
         },
         {
           to: 'blog',
@@ -328,6 +331,19 @@ const config = {
       },
     ],
     [
+      '@docusaurus/plugin-content-docs',
+      {
+        // The addon reference pages follow the catalog as it is now, not a KubeVela release, so they are not versioned.
+        id: 'addons',
+        path: 'addons',
+        routeBasePath: 'addons',
+        sidebarPath: require.resolve('./sidebar-addons.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
       '@docusaurus/plugin-client-redirects',
       {
         // Release Notes and Upgrade Guides used to be served at
@@ -336,6 +352,10 @@ const config = {
         createRedirects(existingPath) {
           if (RELEASE_DOCS_PATH.test(existingPath)) {
             return existingPath.slice('/docs'.length);
+          }
+          // Addon pages moved from the next docs to their own section. Released versions keep their copies.
+          if (existingPath.startsWith('/addons/')) {
+            return '/docs/next/reference' + existingPath;
           }
           return undefined;
         },

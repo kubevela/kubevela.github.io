@@ -41,7 +41,7 @@ terraform-alibaba               KubeVela        Kubernetes Terraform Controller 
 ```
 </details>
 
-* You can refer to [addon reference docs](../../reference/addons/overview.md) for more details of these community verified addons.
+* You can refer to [addon reference docs](/addons/overview) for more details of these community verified addons.
 
 ### Install Addon
 
@@ -286,7 +286,7 @@ Once addon installed, end user can discover and use these capabilities immediate
 
 * Generally, end user can list the new component or trait types added by `vela component` or `vela trait`. Refer to [Lifecycle of a Definition](../../getting-started/definition.md#lifecycle-of-a-definition) for more usage details.
 
-* You can also check the capability details of [community addon docs](../../reference/addons/overview.md).
+* You can also check the capability details of [community addon docs](/addons/overview).
 
 ### Uninstall Addon
 

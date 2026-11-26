@@ -18,19 +18,20 @@ const CARDS = [
   { icon: 'download', title: 'Install', body: 'Standalone, on Kubernetes, or the CLI on its own.', to: 'install' },
   { icon: 'book', title: 'Core concepts', body: 'Applications, components, traits, policies and workflows.', to: 'getting-started/core-concept' },
   { icon: 'blocks', title: 'Definitions', body: "Build your platform's building blocks in CUE or Go.", to: 'platform-engineers/oam/x-definition' },
-  { icon: 'puzzle', title: 'Addons', body: 'Extend KubeVela from the community catalog.', to: 'reference/addons/overview' },
+  { icon: 'puzzle', title: 'Addons', body: 'Extend KubeVela from the community catalog.', to: '/addons/overview' },
   { icon: 'terminal', title: 'CLI reference', body: 'Every vela command and flag.', to: 'cli/vela' },
 ];
 
 // DocCards is the docs' front door: where to start, as a grid of cards that
-// link within the version being read.
+// link within the version being read; a card whose path starts at the root,
+// such as an unversioned section, links there.
 export default function DocCards() {
   const version = useActiveVersion();
   const base = version ? version.path.replace(/\/$/, '') : '/docs';
   return (
     <div className={styles.grid}>
       {CARDS.map((c) => (
-        <Link key={c.to} className={styles.card} to={`${base}/${c.to}/`}>
+        <Link key={c.to} className={styles.card} to={c.to.startsWith('/') ? `${c.to}/` : `${base}/${c.to}/`}>
           <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true">
             <path d={ICONS[c.icon]} />
           </svg>

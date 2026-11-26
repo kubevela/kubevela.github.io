@@ -6,7 +6,7 @@ The `kruise-rollout` addon installs [Kruise Rollout](https://github.com/openkrui
 
 ## When to use it
 
-Use it when you want a canary or batch release of a component, rather than replacing every Pod at once. It works on a workload defined by a [webservice](../../tutorials/webservice.mdx) component or one inside a Helm chart.
+Use it when you want a canary or batch release of a component, rather than replacing every Pod at once. It works on a workload defined by a [webservice](/docs/tutorials/webservice) component or one inside a Helm chart.
 
 ## Install
 
@@ -40,7 +40,7 @@ vela addon disable kruise-rollout
 
 ## Usage
 
-- A canary rollout of a component or a Helm chart with the `kruise-rollout` trait: see [Canary Rollout](../../tutorials/helm-rollout.md).
+- A canary rollout of a component or a Helm chart with the `kruise-rollout` trait: see [Canary Rollout](/docs/tutorials/helm-rollout).
 
 ## kruise-rollout trait
 

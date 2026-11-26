@@ -2,7 +2,7 @@
 title: Overview
 ---
 
-Addons extend KubeVela with components, traits, config templates and the controllers they need. The addons below are in the default registry ([kubevela/catalog](https://github.com/kubevela/catalog/tree/master/addons)) unless marked. Enable one with `vela addon enable <name>`; see [Addons](../../platform-engineers/addon/intro.md) to write your own.
+Addons extend KubeVela with components, traits, config templates and the controllers they need. The addons below are in the default registry ([kubevela/catalog](https://github.com/kubevela/catalog/tree/master/addons)) unless marked. Enable one with `vela addon enable <name>`; see [Addons](/docs/platform-engineers/addon/intro) to write your own.
 
 Many addons install their software from a Helm chart, so they depend on `fluxcd` and enable it for you. Each addon's source and README are in the catalog, under `addons/<name>`.
 
@@ -10,24 +10,24 @@ Many addons install their software from a Helm chart, so they depend on `fluxcd`
 
 | Addon | What it gives you |
 | --- | --- |
-| [velaux](./velaux.md) | VelaUX, the KubeVela web console, and its API server. |
+| [velaux](/docs/reference/addons/velaux) | VelaUX, the KubeVela web console, and its API server. |
 | [vela-prism](./vela-prism.md) | An aggregated API server that serves KubeVela objects, such as application resource trackers and clusters, as Kubernetes APIs. VelaUX and the observability addons use it. |
-| [vela-workflow](../../end-user/pipeline/workflowrun.md) | The standalone workflow controller, for `WorkflowRun` pipelines that run without an Application, plus steps such as `apply-app`, `read-app` and `addon-operation`. |
-| [vela-core-shard-manager](../../platform-engineers/system-operation/controller-sharding.md) | Extra vela-core controllers for sharding, copied from the main controller's configuration. |
+| [vela-workflow](/docs/end-user/pipeline/workflowrun) | The standalone workflow controller, for `WorkflowRun` pipelines that run without an Application, plus steps such as `apply-app`, `read-app` and `addon-operation`. |
+| [vela-core-shard-manager](/docs/platform-engineers/system-operation/controller-sharding) | Extra vela-core controllers for sharding, copied from the main controller's configuration. |
 | [kube-trigger](https://github.com/kubevela/catalog/tree/master/addons/kube-trigger) | The kube-trigger controller and the `trigger-service` component: watch Kubernetes objects and act when they change, for example to update an Application when a ConfigMap it reads changes. |
-| [cloudshell](../../tutorials/cloud-shell.md) | A terminal in the browser, opened from VelaUX, with `vela` and `kubectl` set up. Needs KubeVela 1.11 or later. |
+| [cloudshell](/docs/tutorials/cloud-shell) | A terminal in the browser, opened from VelaUX, with `vela` and `kubectl` set up. Needs KubeVela 1.11 or later. |
 | [kubevela-io](./kubevela-io.md) | A copy of the KubeVela documentation site, served in your cluster for air-gapped environments. |
 
 ## Observability
 
 | Addon | What it gives you |
 | --- | --- |
-| [prometheus-server](../../platform-engineers/operations/observability.md) | Prometheus, and the `prometheus-scrape` trait to have it scrape a component's metrics. |
-| [node-exporter](../../platform-engineers/operations/observability.md) | Host metrics from every node, for Prometheus. |
-| [kube-state-metrics](../../platform-engineers/operations/observability.md) | Metrics on the state of Kubernetes objects, for Prometheus. |
-| [grafana](../../platform-engineers/operations/observability.md) | Grafana, with dashboards for KubeVela and its applications. |
-| [loki](../../platform-engineers/operations/o11y/logging.md) | Loki for log collection, and the `stdout-logs` and `file-logs` traits to collect a component's logs. |
-| [o11y-definitions](../../platform-engineers/operations/observability.md) | Definitions for Grafana dashboards, data sources and access, and config templates for Grafana, Loki and Prometheus. The grafana, loki and prometheus-server addons enable it. |
+| [prometheus-server](/docs/platform-engineers/operations/observability) | Prometheus, and the `prometheus-scrape` trait to have it scrape a component's metrics. |
+| [node-exporter](/docs/platform-engineers/operations/observability) | Host metrics from every node, for Prometheus. |
+| [kube-state-metrics](/docs/platform-engineers/operations/observability) | Metrics on the state of Kubernetes objects, for Prometheus. |
+| [grafana](/docs/platform-engineers/operations/observability) | Grafana, with dashboards for KubeVela and its applications. |
+| [loki](/docs/platform-engineers/operations/o11y/logging) | Loki for log collection, and the `stdout-logs` and `file-logs` traits to collect a component's logs. |
+| [o11y-definitions](/docs/platform-engineers/operations/observability) | Definitions for Grafana dashboards, data sources and access, and config templates for Grafana, Loki and Prometheus. The grafana, loki and prometheus-server addons enable it. |
 | [victoria-metric](https://github.com/kubevela/catalog/tree/master/addons/victoria-metric) | A VictoriaMetrics cluster and agent, in the `vm-system` namespace by default. |
 | [mysql-exporter](./mysql-exporter.md) | A component and trait that export a MySQL server's metrics to Prometheus. |
 
@@ -37,16 +37,16 @@ Many addons install their software from a Helm chart, so they depend on `fluxcd`
 | --- | --- |
 | [fluxcd](./fluxcd.md) | The `helm` and `kustomize` components, the `helm-repository` config template, and patch traits for Kustomize. Most addons on this page depend on it. |
 | [kruise-rollout](./kruise-rollout.md) | OpenKruise Rollouts, with the `kruise-rollout` trait for canary releases of Deployments, StatefulSets and OpenKruise CloneSets. |
-| [keda](../../tutorials/auto-scaler.md) | KEDA, and the `keda-auto-scaler` trait for event-driven autoscaling. |
+| [keda](/docs/tutorials/auto-scaler) | KEDA, and the `keda-auto-scaler` trait for event-driven autoscaling. |
 | [rollout](https://github.com/kubevela/catalog/tree/master/addons/rollout) | **Can't install.** The legacy rollout controller. Its chart is served from `charts.kubevela.net`, which no longer exists. Use kruise-rollout instead. |
 
 ## Cloud resources
 
 | Addon | What it gives you |
 | --- | --- |
-| [terraform](./terraform.md) | The Terraform controller, so components can provision cloud resources. Add a provider addon for each cloud. |
-| [terraform-&lt;provider&gt;](./terraform.md) | Components for one cloud's resources, and a config template for its credentials: `terraform-alibaba`, `terraform-aws`, `terraform-azure`, `terraform-baidu`, `terraform-gcp`, `terraform-tencent`, `terraform-ucloud`. |
-| [terraform-ec](./terraform-ec.md) | The same for Elastic Cloud deployments. |
+| [terraform](/docs/reference/addons/terraform) | The Terraform controller, so components can provision cloud resources. Add a provider addon for each cloud. |
+| [terraform-&lt;provider&gt;](/docs/reference/addons/terraform) | Components for one cloud's resources, and a config template for its credentials: `terraform-alibaba`, `terraform-aws`, `terraform-azure`, `terraform-baidu`, `terraform-gcp`, `terraform-tencent`, `terraform-ucloud`. |
+| [terraform-ec](/docs/reference/addons/terraform-ec) | The same for Elastic Cloud deployments. |
 
 ## Gateway
 

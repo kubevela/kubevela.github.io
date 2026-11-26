@@ -6,7 +6,7 @@ description: Configure a helm repository
 In this guide, we will introduce how to use Config to connect a private helm repository and create an application with Helm type to use this repository.
 
 :::info
-You must enable the [fluxcd](../../../reference/addons/fluxcd.md) addon first.
+You must enable the [fluxcd](/addons/fluxcd) addon first.
 :::
 
 Check that the [config template](../../../reference/config-template.md) exists:

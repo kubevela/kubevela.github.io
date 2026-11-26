@@ -21,7 +21,7 @@ Applying plain manifests from Git declares the end state and stops there. With a
 
 ## Pick your tool
 
-- **FluxCD**: enable the [`fluxcd` addon](../reference/addons/fluxcd.md) and follow [GitOps with FluxCD](../end-user/gitops/fluxcd.md). It covers syncing a configuration repository and updating images automatically.
+- **FluxCD**: enable the [`fluxcd` addon](/addons/fluxcd) and follow [GitOps with FluxCD](../end-user/gitops/fluxcd.md). It covers syncing a configuration repository and updating images automatically.
 - **Argo CD or another tool**: commit the Application YAML to the repository your tool watches. Two things are worth knowing:
   - Each time the Application's spec changes, KubeVela runs its workflow again. To decide exactly when a deploy happens, set the `app.oam.dev/publishVersion` annotation and have your CI change it. See [Publish Version](../end-user/version-control.md) and [Deploy only on a version bump](../end-user/gitops/fluxcd.md#deploy-only-on-a-version-bump).
   - KubeVela writes some annotations onto the Application itself: the controller sets `oam.dev/kubevela-version`, and with [authentication](../platform-engineers/auth/basic.md) on, the webhook sets `app.oam.dev/group`, plus `app.oam.dev/username` when `authentication.withUser` is on. Leave these out of the YAML in Git; KubeVela sets them.

@@ -57,7 +57,7 @@ output: {
 }
 ```
 
-The `helm` component type comes from the [fluxcd](../../reference/addons/fluxcd.md) addon, so the scaffold lists `fluxcd` under `dependencies` in `metadata.yaml`, and enabling `podinfo` enables `fluxcd` first. The addon's version is set to the chart version, `6.11.2`.
+The `helm` component type comes from the [fluxcd](/addons/fluxcd) addon, so the scaffold lists `fluxcd` under `dependencies` in `metadata.yaml`, and enabling `podinfo` enables `fluxcd` first. The addon's version is set to the chart version, `6.11.2`.
 
 The other files (`definitions/mytrait.cue`, `schemas/myschema.yaml`, `views/my-view.cue`, `resources/myresource.cue`) are samples. Edit them or delete them; pass `--no-samples` to leave them out.
 
@@ -128,5 +128,5 @@ Besides publishing an addon in your own registry, you can open a pull request ag
     - Examples in the catalog's [examples directory](https://github.com/kubevela/catalog/tree/master/examples) make it more likely to be accepted.
 - To be promoted to verified, an experimental addon must:
     - Pass the catalog's [addon e2e test](https://github.com/kubevela/catalog/tree/master/test/e2e-test/addon-test), which checks that it enables.
-    - Have a page in the [addon documentation](../../reference/addons/overview.md).
+    - Have a page in the [addon documentation](/addons/overview).
 - If you hit a problem with an addon, open an issue or a pull request to fix it, and bump the addon's version in that pull request.

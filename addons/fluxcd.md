@@ -6,7 +6,7 @@ The `fluxcd` addon installs [FluxCD](https://fluxcd.io/) controllers and adds th
 
 ## When to use it
 
-Since v1.12, KubeVela deploys Helm charts natively with the built-in [`helmchart`](../../end-user/components/references.md#helmchart) component, without FluxCD. Use this addon when you need Kustomize, Git, OSS or OCI sources with polling, image update automation, or you already run Flux.
+Since v1.12, KubeVela deploys Helm charts natively with the built-in [`helmchart`](/docs/end-user/components/references#helmchart) component, without FluxCD. Use this addon when you need Kustomize, Git, OSS or OCI sources with polling, image update automation, or you already run Flux.
 
 ## What it installs
 
@@ -319,7 +319,7 @@ spec:
         path: ./app/prod/
 ```
 
-With image update automation. Flux watches the image, and when a tag matching the policy appears it commits the new tag to the `path` in your repository, then deploys it. The repository needs a Secret with write access, and the image fields in your YAML need Flux's setter marker; see [GitOps with FluxCD](../../end-user/gitops/fluxcd.md) for the full walkthrough.
+With image update automation. Flux watches the image, and when a tag matching the policy appears it commits the new tag to the `path` in your repository, then deploys it. The repository needs a Secret with write access, and the image fields in your YAML need Flux's setter marker; see [GitOps with FluxCD](/docs/end-user/gitops/fluxcd) for the full walkthrough.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

@@ -99,7 +99,7 @@ spec:
 vela up -f example.yaml
 ```
 
-When all three steps have succeeded (`vela status example`), the Slack channel has the image's vulnerability summary and, for each `CRITICAL` vulnerability, its ID, title and link. See [Notification](../../end-user/workflow/built-in-workflow-defs.md#notification) to send it somewhere else.
+When all three steps have succeeded (`vela status example`), the Slack channel has the image's vulnerability summary and, for each `CRITICAL` vulnerability, its ID, title and link. See [Notification](/docs/end-user/workflow/built-in-workflow-defs#notification) to send it somewhere else.
 
 `trivy-check` takes these properties:
 

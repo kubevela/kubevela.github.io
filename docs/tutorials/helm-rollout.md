@@ -11,12 +11,12 @@ This guide rolls out a new version of an application gradually: a canary takes a
 
 1. Know how to deploy the component type you're using: see [Deploy Helm Chart](./helm.md) or [Deploy Kubernetes Objects](./k8s-object.mdx).
 
-2. Enable the [`kruise-rollout`](../reference/addons/kruise-rollout.md) addon. Canary rollout is built on [OpenKruise Rollouts](https://github.com/openkruise/rollouts).
+2. Enable the [`kruise-rollout`](/addons/kruise-rollout) addon. Canary rollout is built on [OpenKruise Rollouts](https://github.com/openkruise/rollouts).
    ```shell
    vela addon enable kruise-rollout
    ```
 
-3. Run ingress-nginx in the cluster. The demo routes traffic with an Ingress of class `nginx` (the Helm chart hard-codes it), so another ingress controller never serves it. If you don't have ingress-nginx, enable the [ingress-nginx](../reference/addons/nginx-ingress-controller.md) addon:
+3. Run ingress-nginx in the cluster. The demo routes traffic with an Ingress of class `nginx` (the Helm chart hard-codes it), so another ingress controller never serves it. If you don't have ingress-nginx, enable the [ingress-nginx](/addons/nginx-ingress-controller) addon:
    ```shell
    vela addon enable ingress-nginx
    ```
@@ -207,7 +207,7 @@ The `gateway` trait creates the Service and an Ingress of class `nginx`, both na
 Here's what happens on the next upgrade with this trait configuration, in 3 steps:
 
 1. A canary Deployment is created with `20%` of the replicas: the 5 old pods stay and `5 * 20% = 1` new pod serves `20%` of the traffic. The workflow then waits for your approval.
-   - By default the share of replicas follows the share of traffic. You can set the replicas separately: see the [kruise-rollout addon](../reference/addons/kruise-rollout.md).
+   - By default the share of replicas follows the share of traffic. You can set the replicas separately: see the [kruise-rollout addon](/addons/kruise-rollout).
 2. After you approve, the second batch starts: `5 * 90% = 4.5`, rounded up to `5` new pods, take `90%` of the traffic, so there are `10` pods in all. The workflow waits for a second approval.
 3. After the second approval, the workload itself is updated with its own rolling update. When that finishes, all the traffic goes to the workload and the canary Deployment is removed.
 

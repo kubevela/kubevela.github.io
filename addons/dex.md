@@ -34,7 +34,7 @@ Enabling the addon is the first step of single sign-on for VelaUX. Dex has nothi
 
 3. **Turn on Dex login.** In VelaUX, open the platform **Settings** page (`/settings`), set **User login mode** to **SSO by dex**, set **VelaUX address** to the address in `github.redirectURI` without `/dex/callback`, and save. VelaUX refuses the change while there is no connector. Before you save, use **Click me to open the dex login page** to check the connector works.
 
-See [Single Sign-On](../../tutorials/sso.md) for the walkthrough, with GitHub and LDAP examples, and [Other connectors](../../tutorials/sso.md#other-connectors) for the other connector types.
+See [Single Sign-On](/docs/tutorials/sso) for the walkthrough, with GitHub and LDAP examples, and [Other connectors](/docs/tutorials/sso#other-connectors) for the other connector types.
 
 ## Uninstall
 
