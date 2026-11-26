@@ -12,7 +12,7 @@ A project is where a team manages its applications and works together. Each proj
 
 ## Environment
 
-An environment is a stage such as development, testing or production, and can hold several delivery targets. Only applications in the same environment can reach and share resources with each other.
+An environment is a stage such as development, testing or production, and groups the delivery targets for that stage. Applications in one environment deploy to the same targets, so they can share resources there, as far as the clusters' network and RBAC allow.
 
 You can bind an application to several environments, and set different parameters for each one.
 

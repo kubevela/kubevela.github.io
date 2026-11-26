@@ -281,13 +281,14 @@ renders, as any other expression does. The full set of rules is in
 Errors common to every expression (escaping, types, `has()`) are on
 [Property Expressions](./cel-expressions.md#when-something-is-wrong). These are
 particular to component reads. The first four are waits rather than failures: the reader
-is held back and tried again, and the first three end on their own:
+is held back and tried again. The first two end once `db` is healthy or placed; the third ends
+only if the field appears, so guard a field that may never be set:
 
 | Message | Means |
 |---|---|
 | `waiting for component "db" in local/default to be healthy` | not an error: `db` is not healthy yet, for a read that names a cluster or namespace |
 | `waiting for component "db" to be placed in ...` | not an error: `db` has not been deployed there yet |
-| `... component "db" has no such field yet` | not an error: the field is not in the live object yet. Guard it to use a fallback |
+| `... component "db" has no such field yet` | not an error: the field is not in the live object yet, and the reader waits until it is. Guard it to use a fallback instead |
 | `component "api" reads "db" beside it in ..., but "db" is placed only in ...; read it there with ...` | a wait that does not end on its own: `db` is not deployed beside the reader. Use the read the message suggests |
 | `... a component whose name has a hyphen is read by index: write ...` | use `component["my-db"]` |
 | `cluster and namespace go straight after component.<name>: component.<name>.cluster("...")` | write `component.db.cluster("east").output...`, not `component.db.output.cluster("east")` |

@@ -194,4 +194,4 @@ To run the sub-steps one after another instead, set the sub-step mode on the wor
       # ...the same steps as above
 ```
 
-The mode applies to every step group in the workflow. Use `DAG` for `steps` to run the top-level steps in parallel too.
+The mode applies to every step group in the workflow that does not set its own `mode`; a group's `mode: StepByStep` or `mode: DAG` overrides it. Use `DAG` for `steps` to run the top-level steps in parallel too.

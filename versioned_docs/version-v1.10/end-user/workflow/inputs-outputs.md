@@ -103,7 +103,7 @@ vela up -f input-output.yaml
 When the workflow has finished, check the copy:
 
 ```bash
-kubectl get configmap copied-config -o jsonpath='{.data.greeting}'
+kubectl get configmap copied-config -n default -o jsonpath='{.data.greeting}'
 ```
 
 ```

@@ -2,7 +2,7 @@
 title: The Definition File
 ---
 
-A definition is a Kubernetes object: a `ComponentDefinition`, `TraitDefinition`, `PolicyDefinition` or `WorkflowStepDefinition`. You can write it in two formats, and the docs use both:
+A definition is a Kubernetes object: a `ComponentDefinition`, `TraitDefinition`, `PolicyDefinition`, `WorkflowStepDefinition` or `WorkloadDefinition`. You can write it in two formats, and the docs use both:
 
 - **Kubernetes YAML**, the object as the cluster stores it, with the CUE template as a string under `spec.schematic.cue.template`. You apply it with `kubectl apply` or `vela def apply`.
 - **The CUE format**, a `.cue` file with the metadata in one block and the template as plain CUE. It's easier to write and to check, since the template is real CUE rather than a string. `vela def` converts it to YAML when you apply it.

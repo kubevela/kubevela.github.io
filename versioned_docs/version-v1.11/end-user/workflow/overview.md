@@ -2,7 +2,7 @@
 title: Overview
 ---
 
-Without a workflow, KubeVela applies every component at once. A workflow lets you choose the order, wait for approval, branch on conditions and pass data from one step to the next.
+Without a workflow, KubeVela applies every component at once, apart from the order components set with `dependsOn`. A workflow lets you choose the order, wait for approval, branch on conditions and pass data from one step to the next.
 
 A workflow consists of multiple steps, and typical workflow steps include step groups (containing a series of sub-steps), human review, multi-cluster publishing, notifications, etc. You can view all built-in workflow steps provided by default in KubeVela in [built-in workflow steps](./built-in-workflow-defs.md). If the built-in workflow steps don't meet your needs, you can also [custom workflow steps](../../platform-engineers/workflow/workflow.md).
 
