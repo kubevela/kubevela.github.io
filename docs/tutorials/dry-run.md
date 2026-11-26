@@ -322,7 +322,7 @@ WARNING: policy target-prod not referenced by application
 ```
 
 :::note
-An Application that references a Workflow with `workflow: ref:` can't be dry-run from local files: the referenced Workflow, and the Policies it names, must already exist in the cluster, and the Workflow must be readable by the user the Application runs as. To dry-run files on disk, use `--merge` as above.
+An Application that references a Workflow with `workflow: ref:` can't be dry-run from local files: the referenced Workflow, and any Policies it names that the Application doesn't define itself, must already exist in the cluster, and the Workflow must be readable by the user the Application runs as. To dry-run files on disk, use `--merge` as above.
 :::
 
 See the [dry-run command reference](../cli/vela_dry-run.md) for every flag.

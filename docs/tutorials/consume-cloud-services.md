@@ -140,7 +140,7 @@ kubectl get secret oss-conn -o yaml
 vela delete provision-cloud-resource-sample
 ```
 
-This deletes the bucket and everything in it, because `deleteResource` defaults to `true`. To keep the bucket, set `deleteResource: false` on the component and apply it before you delete the Application.
+This deletes the bucket, because `deleteResource` defaults to `true`. Empty it first: the `alibaba-oss` module doesn't set `force_destroy`, so Terraform won't delete a bucket that still holds objects. To keep the bucket, set `deleteResource: false` on the component and apply it before you delete the Application.
 
 ## Provision with UI Console
 

@@ -167,7 +167,7 @@ You can also write your own judgment logic to determine whether the step should 
 * `context`: the workflow context, for example `context.name` or `context.namespace`.
 
 :::note
-With the `EnableSuspendOnFailure` feature gate on, a failed step suspends the workflow instead of failing it, and `if` is not evaluated at all: a step with an `if` runs whatever its condition says.
+With the `EnableSuspendOnFailure` feature gate on, a step that fails after its retries run out suspends the workflow instead of failing it, and `if` is not evaluated at all: a step with an `if` runs whatever its condition says.
 :::
 
 > Note that if your step name or inputs name is not a valid CUE variable name (eg: contains `-`, or starts with a number, etc.), you can refer to it as follows: `status["invalid-name"].failed`

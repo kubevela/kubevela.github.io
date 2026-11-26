@@ -59,7 +59,7 @@ This `Application` entity will reference `component`, `trait`, `policy` and `wor
 
 * **Workflow Step**: Workflow step allows you to define every steps in the delivery process, typical steps are manual approval, partial deploy, notification.
 
-* **Source**: A source fetches a value from outside the Application, such as a ConfigMap, a Config, a file in Git or an HTTP endpoint, and components read it with `$(source.<name>)`.
+* **Source**: A source fetches a value from outside the Application, such as a ConfigMap, a Config, a file in Git or an HTTP endpoint, and components read it with `$(source.<name>)`. Expressions are alpha and off by default: see [Enable the feature](../platform-engineers/source/intro.md#enable-the-feature).
 
 The modules that make up the application are all extensible, they are defined by a bunch of programmable configurations called [Definitions](../platform-engineers/oam/x-definition.md). Under the hood, KubeVela will glue and leverage Kubernetes API to drive the infrastructure capabilities. You can check the following picture to see their relationships:
 

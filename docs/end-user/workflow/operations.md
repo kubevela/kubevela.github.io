@@ -4,11 +4,11 @@ title:  Workflow Operations
 
 This section introduces how to use the `vela` CLI to operate workflow.
 
-Each command takes the Application's name, and `-n <namespace>` for its namespace (the current env's namespace if you leave it out). `suspend`, `resume`, `restart`, `logs` and `debug` also take `--step <name>` to act on one step instead of the whole workflow.
+Every command except `list` takes the Application's name, and `-n <namespace>` for its namespace (the current env's namespace if you leave it out). `suspend`, `resume`, `restart`, `logs` and `debug` also take `--step <name>` to act on one step instead of the whole workflow.
 
 ## List Workflows
 
-`vela workflow list` shows the workflow of every Application in the namespace, with its phase, start and end time. Add `-A` for all namespaces.
+`vela workflow list` shows the workflow of every Application in the namespace, and every WorkflowRun, with its phase, start and end time, whether it is running or not. Add `-A` for all namespaces.
 
 ```bash
 vela workflow list -n default
