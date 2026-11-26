@@ -53,7 +53,7 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           # Docusaurus v3 outputs to build/ directory by default
           path: 'build/'
