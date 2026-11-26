@@ -147,7 +147,9 @@ kubectl get applications -A -o json | jq -r '
 It prints `namespace/app: value` for every unescaped `$(` that does not start with an
 expression root, shell substitutions with arguments such as `$(cat /etc/x)` included.
 It reads each Application's `spec` only, so it will not see a value that arrives from
-a Helm chart or a definition's own template.
+a Helm chart or a definition's own template. It also prints real expressions that start
+with a function or a literal, such as `$(has(source.x) ? ...)`, so read each line before
+escaping it.
 
 ## What you can write
 
@@ -159,9 +161,10 @@ a Helm chart or a definition's own template.
 | Lists | indexing, `size`, `slice`, `+`, `sort` `sortBy` `distinct` `flatten` `reverse` `lists.range` |
 | Conversions | `int` `uint` `double` `string` `bool` `bytes` `dyn` `duration` `timestamp` |
 
-Anything else is refused with `undeclared reference`, Kubernetes' CEL libraries
-(`isSorted`, `sum`, `quantity`, `ip`, `sets.*`), `math.*`, `base64.*`, `cel.bind` and
-`optional.*` among them:
+The rest of CEL's standard library works too, such as `type()` and the timestamp and
+duration accessors (`getFullYear`, `getHours`, `getSeconds`). What is not there is refused
+with `undeclared reference`: Kubernetes' CEL libraries (`isSorted`, `sum`, `quantity`,
+`ip`, `sets.*`), `math.*`, `base64.*`, `cel.bind` and `optional.*`:
 
 ```
 ERROR: <input>:1:25: undeclared reference to 'quantity'
@@ -329,7 +332,7 @@ no per-cluster placement.
 
 | Field | Where |
 |---|---|
-| `appName` `namespace` `appLabels` `appAnnotations` `appRevision` `appRevisionNum` | everywhere |
+| `appName` `namespace` `appNamespace` `appLabels` `appAnnotations` `appRevision` `appRevisionNum` | everywhere |
 | `cluster` `publishVersion` `workflowName` | components, traits, workflow steps, rendered policies |
 | `clusterVersion` | those, and Application-scoped policies |
 | `custom` | everywhere but built-in policies: what an Application-scoped policy published |
@@ -339,6 +342,9 @@ no per-cluster placement.
 | `policyName` `policyType` | policies |
 | `policyRevisionName` `policyRevisionHash` `policyRevision` | Application-scoped policies |
 | `name` | components and traits (the component), workflow steps (the step), rendered policies (the policy) |
+
+`namespace` is the namespace being rendered for, so it is the one a topology policy
+places the component in; `appNamespace` is always the Application's own.
 
 A later `spec.sources[]` entry has no context of its own: it is checked against the
 context of each location that consumes it.

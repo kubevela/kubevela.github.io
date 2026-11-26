@@ -231,9 +231,9 @@ you apply, so `if: $(steps.build.phase)` is admitted, and the step
 [fails](#condition-outcomes) when it runs.
 
 :::caution
-With the controller's `EnableSuspendOnFailure` gate on (a workflow gate, so it is not in
-the published ConfigMap; see
-[Workflow gates](../../platform-engineers/system-operation/bootstrap-parameters.md#feature-gates)),
+With the controller's `EnableSuspendOnFailure` gate on (a workflow gate, set with the
+`workflow.enableSuspendOnFailure` Helm value, so it is not in the published ConfigMap; see
+[Feature Gates](../../platform-engineers/system-operation/bootstrap-parameters.md#feature-gates)),
 no step `if` is evaluated, CUE
 or `$( )`: every step runs whatever its `if` says. The `rollback` step above runs even
 after a successful deploy. A failed step suspends the run instead of finishing, so a
