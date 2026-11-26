@@ -325,7 +325,7 @@ Dry-run renders the component with the override policies applied; the topology o
 To dry-run one environment, pass its Policy and Workflow files with `-f` and add `--merge`.
 
 :::note
-An Application that references a Workflow with `workflow: ref:` can't be dry-run from local files: the referenced Workflow, and the Policies it names, must already exist in the cluster. To dry-run files on disk, use `--merge` as below.
+An Application that references a Workflow with `workflow: ref:` can't be dry-run from local files: the referenced Workflow, and any Policies it names that the Application doesn't define itself, must already exist in the cluster. To dry-run files on disk, use `--merge` as below.
 :::
 
 For example, define the application with no `workflow` field:

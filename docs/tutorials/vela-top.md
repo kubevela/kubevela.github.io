@@ -172,7 +172,7 @@ In addition, these components will actually eventually be loaded as native resou
 
 ![vela top platform overview](../resources/vela-top-yaml.png)
 
-In all kinds of resource views, you can select a resource and press the Y key to view the YAML text corresponding to the resource, and the text will be highlighted.
+In the Application, Managed Resource and Pod views, you can select a resource and press the Y key to view the YAML text corresponding to the resource, and the text will be highlighted.
 
 #### Print log
 
