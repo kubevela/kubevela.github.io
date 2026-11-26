@@ -6,7 +6,7 @@ description: Status, releases and pre-releases of KubeVela v1.10.
 
 **Status:** Supported. **GA:** 2025-02-05.
 
-**Upgrade guide:** [Upgrade from v1.9 to v1.10](/upgrade-guides/v1.10/)
+**Upgrade guide:** [Upgrade from v1.9 to v1.10](../../upgrade-guides/v1.10/index.md)
 
 :::caution
 Don't use v1.10.4. It breaks components whose templates use `import` statements; upgrade straight to v1.10.5 or later.

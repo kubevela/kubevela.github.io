@@ -32,3 +32,9 @@ _tmp/
 package-lock.json
 
 .yarn
+
+# Release Notes and Upgrade Guides copies, made by scripts/sync-release-pages.js
+/docs/release-notes/
+/docs/upgrade-guides/
+/versioned_docs/*/release-notes/
+/versioned_docs/*/upgrade-guides/

@@ -3,7 +3,7 @@ title: Upgrade from v1.9 to v1.10
 sidebar_label: v1.9 to v1.10
 ---
 
-Read the [v1.10.0 release notes](/release-notes/v1.10/v1.10.0/) before you upgrade.
+Read the [v1.10.0 release notes](../../release-notes/v1.10/v1.10.0.md) before you upgrade.
 
 :::caution
 Upgrade to v1.10.5 or later, not v1.10.4. v1.10.4 breaks components whose templates use `import`
@@ -26,7 +26,7 @@ Also check:
   steps read configs from the Application's namespace, except shared system configs in
   `vela-system`, and Terraform module SSH keys come from the definition's namespace; Argo CD and
   Flux need to ignore the webhook `failurePolicy`. See the
-  [v1.10.10 release notes](/release-notes/v1.10/v1.10.10/#breaking-changes).
+  [v1.10.10 release notes](../../release-notes/v1.10/v1.10.10.md#breaking-changes).
 
 ## Upgrade steps
 

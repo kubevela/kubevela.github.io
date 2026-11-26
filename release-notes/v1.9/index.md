@@ -6,7 +6,7 @@ description: Status, releases and pre-releases of KubeVela v1.9.
 
 **Status:** End of life. **GA:** 2023-06-15. Later patches (v1.9.12 to v1.9.15) carry backported security and stability fixes; v1.9.15 also has breaking changes, so read its release notes before upgrading. Upgrade to a supported version.
 
-**Upgrade guide:** [Upgrade from v1.8 to v1.9](/upgrade-guides/v1.9/)
+**Upgrade guide:** [Upgrade from v1.8 to v1.9](../../upgrade-guides/v1.9/index.md)
 
 :::caution
 Don't use v1.9.10. It has a fatal client bug ([#6493](https://github.com/kubevela/kubevela/issues/6493)); use v1.9.11 or later.

@@ -393,7 +393,7 @@ data the tool owns, so the tool shows no diff. After migrating:
 The v1.11 objects are kept by migration, so v1.11 finds every config after a rollback. Configs
 created as resources after the upgrade remain visible to v1.11 through their Secrets.
 
-Follow [Downgrading](/upgrade-guides/v1.12/#downgrading-to-v111) in the upgrade guide. Do not use
+Follow [Downgrading](./index.md#downgrading-to-v111) in the upgrade guide. Do not use
 `helm rollback`, and do not delete the admission webhook configuration by hand.
 
 The CRDs and the ConfigTemplate and Config resources stay, but nothing reconciles them until you

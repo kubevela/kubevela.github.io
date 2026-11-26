@@ -3,7 +3,7 @@ title: Controller Flags and Feature Gates
 sidebar_label: Controller Flags and Feature Gates
 ---
 
-This page lists the flags and feature gates of the KubeVela controller (`vela-core`) in this version of KubeVela. Use the version selector to see another version. What changed in each release is in the [release notes](/release-notes/overview/).
+This page lists the flags and feature gates of the KubeVela controller (`vela-core`) in this version of KubeVela. Use the version selector to see another version. What changed in each release is in the [release notes](../../release-notes/overview.md).
 
 Most flags and feature gates are set through the `vela-core` Helm chart values, for example `--set featureGates.enableCelExpressions=true`. The chart's defaults can differ from the controller's own defaults; both are shown below.
 
@@ -153,7 +153,7 @@ You can use `--feature-gates=XXX=true` to enable feature `XXX`, or set the chart
 | `EnableDefinitionInheritance` | Alpha | `false` | `featureGates.enableDefinitionInheritance` | `false` | Allow `spec.extends` on ComponentDefinitions and TraitDefinitions. |
 | `EnableModuleComponent` | Alpha | `false` | `featureGates.enableModuleComponent` | `false` | Install a module as an Application component (`type: module`). |
 | `EnableAddonComponent` | Alpha | `false` | `featureGates.enableAddonComponent` | `false` | Install an addon as an Application component (`type: addon`). |
-| `AutoMigrateLegacyConfigs` | Alpha | `false` | `featureGates.autoMigrateLegacyConfigs` | `false` | Adopt v1.11 config templates and configs into `ConfigTemplate` and `Config` resources once, at startup. See [Migrate Configs to ConfigTemplate and Config](/upgrade-guides/v1.12/config-migration/#migrate-automatically-at-startup). |
+| `AutoMigrateLegacyConfigs` | Alpha | `false` | `featureGates.autoMigrateLegacyConfigs` | `false` | Adopt v1.11 config templates and configs into `ConfigTemplate` and `Config` resources once, at startup. See [Migrate Configs to ConfigTemplate and Config](../../upgrade-guides/v1.12/config-migration.md#migrate-automatically-at-startup). |
 | `DisableWorkflowHTTP` | Alpha | `false` | `featureGates.disableWorkflowHTTP` | `false` | Disable outbound HTTP from workflow `request` and `webhook` steps. |
 | `BlockPrivateHTTPAddresses` | Alpha | `false` | `featureGates.blockPrivateHTTPAddresses` | `false` | Block workflow outbound HTTP to RFC 1918 and ULA addresses. |
 | `EnableSuspendOnFailure` | Alpha | `false` | `workflow.enableSuspendOnFailure` | `false` | Suspend a workflow when a step fails, instead of retrying. |

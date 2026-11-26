@@ -9,9 +9,9 @@ the GA release. The commands use the latest pre-release, `1.12.0-alpha.2`; use `
 released.
 :::
 
-Read the [v1.12.0 release notes](/release-notes/v1.12/v1.12.0/) before you upgrade. They
+Read the [v1.12.0 release notes](../../release-notes/v1.12/v1.12.0.md) before you upgrade. They
 list the CRD, controller, chart and admission changes in this release, including the
-[breaking changes](/release-notes/v1.12/v1.12.0/#breaking-changes).
+[breaking changes](../../release-notes/v1.12/v1.12.0.md#breaking-changes).
 
 ## Config templates and configs
 
@@ -178,7 +178,7 @@ For an air-gapped cluster, mirror these images, along with vela-core and vela-cl
 can change before the GA release.
 
 The Job's chart values are listed under
-[Helm chart changes](/release-notes/v1.12/v1.12.0/#helm-chart-changes) in the release notes. This
+[Helm chart changes](../../release-notes/v1.12/v1.12.0.md#helm-chart-changes) in the release notes. This
 change was also backported to v1.11.1 ([#7436](https://github.com/kubevela/kubevela/pull/7436)).
 
 Some built-in definitions render a different Pod template in v1.12, so Pods of the affected

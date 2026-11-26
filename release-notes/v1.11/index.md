@@ -6,7 +6,7 @@ description: Status, releases and pre-releases of KubeVela v1.11.
 
 **Status:** Supported. **GA:** 2026-07-20.
 
-**Upgrade guide:** [Upgrade from v1.10 to v1.11](/upgrade-guides/v1.11/)
+**Upgrade guide:** [Upgrade from v1.10 to v1.11](../../upgrade-guides/v1.11/index.md)
 
 ## Releases
 

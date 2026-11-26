@@ -3,7 +3,7 @@ title: Upgrade from v1.8 to v1.9
 sidebar_label: v1.8 to v1.9
 ---
 
-Read the [v1.9.0 release notes](/release-notes/v1.9/v1.9.0/) before you upgrade. If you set `--pprof-addr`, `--disable-caps` or the `ApplyResourceByUpdate` feature gate in custom controller arguments, update them first; v1.9 renames or removes them.
+Read the [v1.9.0 release notes](../../release-notes/v1.9/v1.9.0.md) before you upgrade. If you set `--pprof-addr`, `--disable-caps` or the `ApplyResourceByUpdate` feature gate in custom controller arguments, update them first; v1.9 renames or removes them.
 
 :::caution
 1. Legacy code removal. Basically you will not be able to use EnvBinding, HealthScope, ScopeDefinition and other objects in old KubeVela (`&lt;1.0`), like ApplicationConfiguration.

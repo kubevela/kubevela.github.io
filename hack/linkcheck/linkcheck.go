@@ -12,7 +12,7 @@ import (
 func main() {
 	var cnt int
 	filepath.Walk(".", func(path string, info fs.FileInfo, err error) error {
-		if !strings.HasSuffix(path, ".md") || strings.Contains(path, "node_modules/") || strings.Contains(path, "version-v1.0") || strings.HasSuffix(path, "introduction.md") || strings.HasSuffix(path, "README.md") {
+		if !strings.HasSuffix(path, ".md") || strings.HasPrefix(filepath.Base(path), "_") || strings.Contains(path, "node_modules/") || strings.Contains(path, "version-v1.0") || strings.HasSuffix(path, "introduction.md") || strings.HasSuffix(path, "README.md") {
 			return nil
 		}
 		data, err := os.ReadFile(path)

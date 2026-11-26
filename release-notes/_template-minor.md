@@ -18,7 +18,7 @@ Each section has a fixed format, shown by the example below its heading:
 - Every other section is a bullet list.
 
 Keep each bullet to one or two lines. Long explanations, YAML and commands
-belong in the upgrade guide (upgrade/vX.Y/index.md); link to it instead. When
+belong in the upgrade guide (upgrade-guides/vX.Y/index.md); link to it instead. When
 a Reference page already documents the thing that changed (definitions, CLI
 commands, controller flags, feature gates, config templates), link to it
 instead of repeating it here. End a bullet with its PR link when there is one.
@@ -36,7 +36,7 @@ the docs version is cut, change /docs/next/ to /docs/.
 **Released:** YYYY-MM-DD ·
 [GitHub release](https://github.com/kubevela/kubevela/releases/tag/vX.Y.0) ·
 [Full changelog](https://github.com/kubevela/kubevela/compare/vX.(Y-1).0...vX.Y.0) ·
-[Upgrade guide](/upgrade-guides/vX.Y/)
+[Upgrade guide](../../upgrade-guides/vX.Y/index.md)
 
 :::info Backported changes
 These notes list every change since vX.(Y-1).0, so they are complete if you upgrade from any
@@ -56,14 +56,14 @@ One paragraph on the theme of the release and the three to five changes most use
 | Go | 1.NN |
 | CUE | v0.NN.N |
 | Kubernetes client libraries | `k8s.io/client-go` vN.NN.N, `controller-runtime` vN.NN.N |
-| Upgrade from | vX.(Y-1).x; see the [upgrade guide](/upgrade-guides/vX.Y/) |
+| Upgrade from | vX.(Y-1).x; see the [upgrade guide](../../upgrade-guides/vX.Y/index.md) |
 
 ## Breaking changes
 
 <!-- Changes that need action before or during the upgrade. Bold title, what changed, what to do, and a link to the step in the upgrade guide. -->
 
 - **Short title.** What changed and what to do; see
-  [the upgrade guide](/upgrade-guides/vX.Y/#anchor) ([#NNNN](https://github.com/kubevela/kubevela/pull/NNNN)).
+  [the upgrade guide](../../upgrade-guides/vX.Y/index.md#anchor) ([#NNNN](https://github.com/kubevela/kubevela/pull/NNNN)).
 
 ## Behaviour changes
 

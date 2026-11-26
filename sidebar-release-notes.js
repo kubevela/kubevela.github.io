@@ -1,10 +1,5 @@
 module.exports = {
   releaseNotes: [
-    {
-      type: 'link',
-      label: '← Back to Documentation',
-      href: '/docs/',
-    },
     'overview',
     {
       type: 'category',
@@ -70,11 +65,6 @@ module.exports = {
         'v1.9/v1.9.1',
         'v1.9/v1.9.0',
       ],
-    },
-    {
-      type: 'link',
-      label: 'Upgrade Guides',
-      href: '/upgrade-guides/overview/',
     },
   ],
 };
