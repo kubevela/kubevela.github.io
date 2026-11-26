@@ -192,6 +192,7 @@ helm upgrade kubevela kubevela/vela-core -n vela-system --reset-then-reuse-value
 To install only the workflow engine, without `vela-core`:
 
 ```shell
+helm repo remove kubevela 2>/dev/null || true
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm install workflow kubevela/vela-workflow --namespace vela-system --create-namespace

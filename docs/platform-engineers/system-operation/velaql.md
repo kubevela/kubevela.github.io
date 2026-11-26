@@ -39,7 +39,7 @@ Then use the following command to query:
 
 ```console
 $ vela ql -f ql.cue
-{ \"KubeVela\":{ \"name\": \"KubeVela\", \"helm\": { \"url\": \"https://addons.kubevela.net\" } } }
+{ \"KubeVela\":{ \"name\": \"KubeVela\", \"helm\": { \"url\": \"https://kubevela.github.io/catalog/official\" } } }
 ```
 
 It will print the value in the field `status` which is a keyword of VelaQL.

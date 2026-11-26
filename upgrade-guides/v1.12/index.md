@@ -23,6 +23,7 @@ templates and configs keep working without changes.
    and changes several others, and Helm does not upgrade the CRDs in a chart's `crds/` directory:
 
    ```shell
+   helm repo remove kubevela 2>/dev/null || true
    helm repo add kubevela https://kubevela.github.io/charts
    helm repo update
    helm pull kubevela/vela-core --version 1.12.0-alpha.2 --untar

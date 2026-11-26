@@ -7,7 +7,7 @@ title: 非代码贡献手册
 ## 贡献用例和样例
 
 * 如果你正在使用 KubeVela，最简单的贡献就是共建[社区信用](https://github.com/kubevela/kubevela/issues/1662)。
-* 如果你有兴趣，你也可以在 kubevela.io 写一个[博客](https://kubevela.net/blog)来分享更多的用例。
+* 如果你有兴趣，你也可以在 kubevela.io 写一个[博客](https://kubevela.io/blog)来分享更多的用例。
 * 你也可以为 [KubeVela 官方样例](https://github.com/kubevela/samples)做出贡献。
 
 ## 报告 bugs

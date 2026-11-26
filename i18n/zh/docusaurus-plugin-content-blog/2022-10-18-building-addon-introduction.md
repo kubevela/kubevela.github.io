@@ -11,7 +11,7 @@ image: https://raw.githubusercontent.com/oam-dev/KubeVela.io/main/docs/resources
 hide_table_of_contents: false
 ---
 
-KubeVela 插件（addon）可以方便地扩展 KubeVela 的能力。正如我们所知，KubeVela 是一个微内核高度可扩展的平台，用户可以通过 [模块定义（Definition）](https://kubevela.net/zh/docs/platform-engineers/oam/x-definition)扩展 KubeVela 的系统能力，而 KubeVela 插件正是方便将这些**自定义扩展**及其**依赖**打包并分发的核心功能。不仅如此，KubeVela 社区的插件中心也在逐渐壮大，如今已经有超过 50 款插件，涵盖可观测性、微服务、FinOps、云资源、安全等大量场景功能。
+KubeVela 插件（addon）可以方便地扩展 KubeVela 的能力。正如我们所知，KubeVela 是一个微内核高度可扩展的平台，用户可以通过 [模块定义（Definition）](https://kubevela.io/docs/platform-engineers/oam/x-definition)扩展 KubeVela 的系统能力，而 KubeVela 插件正是方便将这些**自定义扩展**及其**依赖**打包并分发的核心功能。不仅如此，KubeVela 社区的插件中心也在逐渐壮大，如今已经有超过 50 款插件，涵盖可观测性、微服务、FinOps、云资源、安全等大量场景功能。
 
 这篇博客将会全方位介绍 KubeVela 插件的核心机制，教你如何编写一个自定义插件。在最后，我们将展示最终用户使用插件的体验，以及插件将如何融入到 KubeVela 平台，为用户提供一致的体验。
 
@@ -64,7 +64,7 @@ KubeVela 的插件主要包含两部分：
 我们将以 Redis 插件为例，讲解如何从头创建一个 KubeVela 插件的实际过程。本次完整的 Redis 插件代码见 [catalog/redis-operator](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator)。
 
 :::tip
-在这里我们会尽可能全面的介绍制作插件中涉及的核心知识，但是作为一个介绍性博客，我们会尽量避免讨论过深的细节以免篇幅过于膨胀，了解完整的功能及细节可以参考[自定义插件文档](https://kubevela.net/zh/docs/platform-engineers/addon/intro)。
+在这里我们会尽可能全面的介绍制作插件中涉及的核心知识，但是作为一个介绍性博客，我们会尽量避免讨论过深的细节以免篇幅过于膨胀，了解完整的功能及细节可以参考[自定义插件文档](https://kubevela.io/docs/platform-engineers/addon/intro)。
 :::
 
 **首先我们需要思考我们要创建的插件有什么作用？** 例如我们假设 Redis 插件可以提供 `redis-failover` 类型的 Component，这样用户只需在 Application 中定义一个 `redis-failover` Component 即可快速创建 Redis 集群。
@@ -74,7 +74,7 @@ KubeVela 的插件主要包含两部分：
 那至此我们的大目标就明确了：
 
 - 编写插件的应用描述文件（OAM Application），这将会用于安装 Redis Operator （完整代码可以到插件中心的[`template.cue`](https://github.com/kubevela/catalog/blob/master/experimental/addons/redis-operator/template.cue) 及 [`resources/`](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator/resources) 目录查看。）
-- 编写 `redis-failover` 类型的 [ComponentDefinition](https://kubevela.net/zh/docs/platform-engineers/components/custom-component) （完整代码请查看 [`definitions/` 目录](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator/definitions)）
+- 编写 `redis-failover` 类型的 [ComponentDefinition](https://kubevela.io/docs/platform-engineers/components/custom-component) （完整代码请查看 [`definitions/` 目录](https://github.com/kubevela/catalog/tree/master/experimental/addons/redis-operator/definitions)）
 
 不过在开始编写之前，我们首先需要了解一个 KubeVela 插件的目录结构。后续我们会在编写的过程中详细说明每个文件的作用，在这里只需大致了解有哪些文件即可。
 
@@ -111,7 +111,7 @@ redis-operator/
 11. `template.cue` 定义插件最终部署时的完整应用形态，包含一个 OAM 应用模板以及对其他资源对象的引用。
 
 :::tip
-在插件中制作中我们会广泛使用 CUE 语言来编排配置，如果对 CUE 不熟悉，可以花 10 分钟快速查阅[入门指南](https://kubevela.net/zh/docs/platform-engineers/cue/basic)有一个基本了解。
+在插件中制作中我们会广泛使用 CUE 语言来编排配置，如果对 CUE 不熟悉，可以花 10 分钟快速查阅[入门指南](https://kubevela.io/docs/platform-engineers/cue/basic)有一个基本了解。
 :::
 
 ### parameter.cue
@@ -171,12 +171,12 @@ output: {
 		// 这里会指定安装插件的 namespace ，是否安装至子集群等
 		// 多为固定写法，无需记忆，可查阅本次样例的完整代码
 		// https://github.com/kubevela/catalog/blob/master/experimental/addons/redis-operator/template.cue
-		// 文档可参照 https://kubevela.net/zh/docs/end-user/policies/references
+		// 文档可参照 https://kubevela.io/docs/end-user/policies/references
 		]
 	}
 }
 // 定义资源关联规则，用于将资源粘合在一起。后续会着重介绍
-// Documentation: https://kubevela.net/zh/docs/reference/topology-rule
+// Documentation: https://kubevela.io/docs/reference/topology-rule
 outputs: topology: resourceTopology // 定义于 resources/topology.cue 中
 ```
 
@@ -197,7 +197,7 @@ package main
 
 redisOperator: {
 	// 这是 OAM Application 中的 Component ，它将会创建一个 Redis Operator
-	// https://kubevela.net/zh/docs/end-user/components/references
+	// https://kubevela.io/docs/end-user/components/references
 	name: "redis-operator"
 	type: "webservice"
 	properties: {
@@ -215,7 +215,7 @@ redisOperator: {
 
 #### KubeVela 提供的资源粘合能力
 
-值得注意的一个功能是 [*资源关联规则 (Resource Topology)*](https://kubevela.net/zh/docs/reference/topology-rule) 。虽然它不是必须的，但是它能帮助 KubeVela 建立应用所纳管资源的拓扑关系。这就是 KubeVela 如何将各种各样的资源粘合成 Application 的。这在我们使用 Kubernetes 自定义资源（CR）的时候特别有用。
+值得注意的一个功能是 [*资源关联规则 (Resource Topology)*](https://kubevela.io/docs/reference/topology-rule) 。虽然它不是必须的，但是它能帮助 KubeVela 建立应用所纳管资源的拓扑关系。这就是 KubeVela 如何将各种各样的资源粘合成 Application 的。这在我们使用 Kubernetes 自定义资源（CR）的时候特别有用。
 
 ```cue
 // resources/topology.cue
@@ -283,11 +283,11 @@ Definitions 目录存放 KubeVela [模块定义（Definition）](https://kubevel
 - [自定义策略 Policy Definition](https://kubevela.io/docs/platform-engineers/policy/custom-policy)
 - [自定义工作流步骤 Workflow Step Definition](https://kubevela.io/docs/platform-engineers/workflow/workflow)。
 
-在本例中，我们编写 Redis 组件类型主要参照 [自定义组件](https://kubevela.net/zh/docs/platform-engineers/components/custom-component) 与 [Redis Operator 使用文档](https://github.com/spotahome/redis-operator/blob/master/README.md) ，我们将组件类型命名为 `redis-failover`，它会创建一个 RedisFailover 的 CR ，这样刚刚添加的 Redis Operator 就可以帮助创建 Redis 集群，见[完整代码](https://github.com/kubevela/catalog/blob/master/experimental/addons/redis-operator/definitions/redis-failover.cue)。
+在本例中，我们编写 Redis 组件类型主要参照 [自定义组件](https://kubevela.io/docs/platform-engineers/components/custom-component) 与 [Redis Operator 使用文档](https://github.com/spotahome/redis-operator/blob/master/README.md) ，我们将组件类型命名为 `redis-failover`，它会创建一个 RedisFailover 的 CR ，这样刚刚添加的 Redis Operator 就可以帮助创建 Redis 集群，见[完整代码](https://github.com/kubevela/catalog/blob/master/experimental/addons/redis-operator/definitions/redis-failover.cue)。
 
 ### metadata.yaml
 
-这里包含了插件的元数据，即插件的名称、版本、系统要求等，可以参考[文档](https://kubevela.net/zh/docs/platform-engineers/addon/intro#%E6%8F%92%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF%E6%96%87%E4%BB%B6)。需要注意的是，本次介绍的为 KubeVela v1.5 之后的新写法，因此需要避免使用某些不兼容的元数据字段，以下样例中包含了所有的可用元数据。
+这里包含了插件的元数据，即插件的名称、版本、系统要求等，可以参考[文档](https://kubevela.io/docs/platform-engineers/addon/intro#%E6%8F%92%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF%E6%96%87%E4%BB%B6)。需要注意的是，本次介绍的为 KubeVela v1.5 之后的新写法，因此需要避免使用某些不兼容的元数据字段，以下样例中包含了所有的可用元数据。
 
 :::tip
 例如传统的 `deployTo.runtimeCluster` （安装至子集群）等元数据在新写法中已有代替（使用 topology Policy），应当使用新写法。可见完整代码中的 [`template.cue`](https://github.com/kubevela/catalog/blob/958a770a9adb3268e56ca4ec2ce99d2763617b15/experimental/addons/redis-operator/template.cue#L28)

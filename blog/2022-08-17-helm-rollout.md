@@ -37,7 +37,7 @@ The image above is a typical canary rollout scenario, *so how do we complete the
 
 The two solutions are complex with considerable modification costs, especially **when your Helm chart is a third-party component that cannot be modified or cannot maintain a Helm chart.** Even if the two are modified, there are still stability risks compared to the original simple workload model. The reason is that **Helm is only a package management tool, and it is incompatible with the canary rollout or workloads management.**
 
-When we have in-depth communication with large number of users in the community, we find that most users' applications are not complicated, among which the most are classic types (such as Deployment and StatefulSet). Therefore, through the powerful addon mechanism of [KubeVela](https://kubevela.net/) and the [OpenKruise](https://openkruise.io/) community, we have made a canary rollout KubeVela Addon for these qualified types. **This addon helps you easily complete the canary rollout of the Helm chart without any migration and modification.** Also, if your Helm chart is more complicated, you can customize an addon for your scenario to get the same experience.
+When we have in-depth communication with large number of users in the community, we find that most users' applications are not complicated, among which the most are classic types (such as Deployment and StatefulSet). Therefore, through the powerful addon mechanism of [KubeVela](https://kubevela.io/) and the [OpenKruise](https://openkruise.io/) community, we have made a canary rollout KubeVela Addon for these qualified types. **This addon helps you easily complete the canary rollout of the Helm chart without any migration and modification.** Also, if your Helm chart is more complicated, you can customize an addon for your scenario to get the same experience.
 Let's take you through a practical example (using Deployment Workload as an example) to get a glimpse of the complete process.
 
 ## Use KubeVela for Canary Rollout
@@ -50,7 +50,7 @@ $ curl -fsSL https://kubevela.io/script/install-velad.sh | bash
 velad install
 ```
 
-See [this document](https://kubevela.net/docs/install#1-install-velad) for more installation details.
+See [this document](https://kubevela.io/docs/installation/standalone#2-install-velad-and-setup-kubevela) for more installation details.
 
 - Enable related addon
 
@@ -217,9 +217,9 @@ At this time, we can see that all pods of the canary version have been deleted t
 
 If you change the rollback operation above to resume the upgrade, the subsequent upgrade process will continue to complete the full rollout.
 
-Please see [this link](https://kubevela.net/docs/tutorials/helm) for the complete operation procedure of the preceding demo.
+Please see [this link](https://kubevela.io/docs/tutorials/helm) for the complete operation procedure of the preceding demo.
 
-Please refer to [this link](https://kubevela.net/docs/tutorials/k8s-object-rollout) if you want to directly use native Kubernetes resources to implement the process above.
+Please refer to [this link](https://kubevela.io/docs/tutorials/k8s-object-rollout) if you want to directly use native Kubernetes resources to implement the process above.
 
 In addition to Deployment, the kruise-rollout addon supports StatefulSet and OpenKruise CloneSet. If the workload types in your chart are one of the three types mentioned above, canary rollout can be implemented through the example above.
 

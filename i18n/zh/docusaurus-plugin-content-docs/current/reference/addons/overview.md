@@ -2,7 +2,7 @@
 title: 内置插件包
 ---
 
-KubeVela 团队维护了一个开箱即用的社区插件库（ https://addons.kubevela.net ），其中的插件列表如下。
+KubeVela 团队维护了一个开箱即用的社区插件库（ https://kubevela.github.io/catalog/official ），其中的插件列表如下。
 
 :::tip
 Source code of this addon are all here: https://github.com/kubevela/catalog/tree/master/addons .

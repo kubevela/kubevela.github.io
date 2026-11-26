@@ -12,7 +12,7 @@ hide_table_of_contents: false
 
 [Helm Charts](https://artifacthub.io/packages/search?kind=0) 如今已是一种非常流行的软件打包方式，在其应用市场中你可以找到接近一万款适用于云原生环境的软件。然后在如今的混合云多集群环境中，业务越来越依赖部署到不同的集群、不同的环境、同时指定不同的配置。再这样的环境下，单纯依赖 Helm 工具可能无法做到灵活的部署和交付。
 
-在本文中，我们将介绍如何通过 [KubeVela](https://kubevela.io/) 解决多集群环境下 Helm Chart 的部署问题。如果你手里没有多集群也不要紧，我们将介绍一种仅依赖于 Docker 或者 Linux 系统的轻量级部署方式，可以让你轻松的体验多集群功能。当然，KubeVela 也完全具备[单集群的 Helm Chart 交付](https://kubevela.net/zh/docs/tutorials/helm)能力。
+在本文中，我们将介绍如何通过 [KubeVela](https://kubevela.io/) 解决多集群环境下 Helm Chart 的部署问题。如果你手里没有多集群也不要紧，我们将介绍一种仅依赖于 Docker 或者 Linux 系统的轻量级部署方式，可以让你轻松的体验多集群功能。当然，KubeVela 也完全具备[单集群的 Helm Chart 交付](https://kubevela.io/docs/tutorials/helm)能力。
 
 <!--truncate-->
 
@@ -24,7 +24,7 @@ hide_table_of_contents: false
 
 ## 准备集群
 
-> 本节是做 KubeVela 以及多集群环境的准备，我们将基于 Docker 或者 Linux 环境从头开始。如果你已经具备了 KubeVela 的环境并且完成了 [集群管理](https://kubevela.net/zh/docs/platform-engineers/system-operation/managing-clusters) ，则可以跳过本节。
+> 本节是做 KubeVela 以及多集群环境的准备，我们将基于 Docker 或者 Linux 环境从头开始。如果你已经具备了 KubeVela 的环境并且完成了 [集群管理](https://kubevela.io/docs/platform-engineers/system-operation/managing-clusters) ，则可以跳过本节。
 
 1. 安装 KubeVela 控制平面
 
@@ -112,7 +112,7 @@ EOF
 ```
 
 `clusters` 字段的 topology 策略是一个切片（slice），此处可以指定多个集群的名称。
-你还可以使用标签选择器或指定命名空间，详情见 [参考文档](https://kubevela.net/zh/docs/end-user/policies/references#topology) 。
+你还可以使用标签选择器或指定命名空间，详情见 [参考文档](https://kubevela.io/docs/end-user/policies/references#topology) 。
 
 部署后，你可以通过以下方式检查已部署的应用程序：
 

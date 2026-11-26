@@ -157,7 +157,7 @@ spec:
 Use the definition in `vela` command line works the same, you can compose the application yaml manually and deploy by `vela up` command.
 
 ```
-vela up -f https://kubevela.net/example/applications/first-app.yaml
+vela up -f https://kubevela.io/example/applications/first-app.yaml
 ```
 
 Application is also one kind of Kubernetes CRD, you can also use `kubectl apply` or invoke Kubernetes API to integrate with vela application.

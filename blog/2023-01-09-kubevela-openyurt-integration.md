@@ -66,7 +66,7 @@ Install the Vela command-line tool and install KubeVela in the cluster:
 curl -fsSl https://kubevela.io/script/install.sh | bash
 vela install
 ```
-We want to reuse the mature Helm charts provided by the community, so we use Helm-type components to install the Nginx Ingress Controller. In KubeVela with microkernel design, Helm components are provided by the FluxCD addon. The following enables the [FluxCD addon](https://kubevela.net/zh/docs/reference/addons/fluxcd).
+We want to reuse the mature Helm charts provided by the community, so we use Helm-type components to install the Nginx Ingress Controller. In KubeVela with microkernel design, Helm components are provided by the FluxCD addon. The following enables the [FluxCD addon](https://kubevela.io/docs/reference/addons/fluxcd).
 ```shell
 vela addon enable fluxcd
 ```
@@ -168,7 +168,7 @@ A KubeVela application has three parts.
 
 :::note
 1.	If you want this application to work properly, please apply the `edge-ingress` trait described below in the cluster first.
-2.	`Deploy` is a KubeVela built-in workflow step. It can be also used with `override` and `topology` strategies in [multi-cluster scenarios](https://kubevela.net/docs/case-studies/multi-cluster).
+2.	`Deploy` is a KubeVela built-in workflow step. It can be also used with `override` and `topology` strategies in [multi-cluster scenarios](https://kubevela.io/docs/case-studies/multi-cluster).
 :::
  
 Now, we can send the application to the cluster.
@@ -194,7 +194,7 @@ local  ─── default─┬─ HelmRelease/ingress-nginx-beijing  updated   2
 ```
 Vela CLI can stand on a higher level to uniformly show the health status of applications. When it's needed, Vela CLI can help you penetrate applications and direct access to the underlying workloads. Also, it offers a rich selection of observability and Debug capability. For example, you can print the application's log through `vela logs`. You can forward the port that deploys applications locally through `vela port-forward`. You can use the `vela exec` command to go deep into the container at the edge and run Shell commands to troubleshoot the problem.
 
-If you need an intuitive understanding of the application, KubeVela officials provide a Web console addon, VelaUX. You can view detailed resource topologies with the [VelaUX addon](https://kubevela.net/zh/docs/reference/addons/velaux) .
+If you need an intuitive understanding of the application, KubeVela officials provide a Web console addon, VelaUX. You can view detailed resource topologies with the [VelaUX addon](https://kubevela.io/docs/reference/addons/velaux) .
 
 ```shell
 vela addon enable velaux

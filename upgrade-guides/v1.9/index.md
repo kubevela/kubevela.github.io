@@ -25,7 +25,8 @@ Read the [v1.9.0 release notes](../../release-notes/v1.9/v1.9.0.md) before you u
    and Helm does not upgrade the CRDs in a chart's `crds/` directory:
 
 ```
-helm repo add kubevela https://kubevela.github.io/charts --force-update
+helm repo remove kubevela 2>/dev/null || true
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
 helm pull kubevela/vela-core --version 1.9.5 --untar
 kubectl apply --server-side --force-conflicts -f vela-core/crds/

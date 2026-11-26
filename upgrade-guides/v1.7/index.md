@@ -12,11 +12,11 @@ In v1.6.x, we've upgraded the CUE engine to v0.5.x, please make sure your custom
 1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
 
 ```
-kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
-kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_applications.yaml
-kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
-kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
-kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.3/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.7/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.7/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.7/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.7/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.7/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
 ```
 
 2. Upgrade your kubevela chart
@@ -25,9 +25,10 @@ kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.c
 Then you can upgrade the helm chart now:
 
 ```
-helm repo add kubevela https://charts.kubevela.net/core
+helm repo remove kubevela 2>/dev/null || true
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.3 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.7 --wait
 ```
 
 :::caution
@@ -52,7 +53,7 @@ kubectl patch -n vela-system configMap <item> --type=merge -p '{"metadata":{"ann
 3. Download and upgrade to the corresponding CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.7.3
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.7.7
 ```
 
 4. Upgrade VelaUX or other addon

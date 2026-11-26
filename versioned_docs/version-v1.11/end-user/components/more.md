@@ -19,7 +19,7 @@ Installing addon from the community is also one of the most important way to dis
 
 ### List Addons
 
-KubeVela community has maintained a growing [catalog of addons](https://github.com/kubevela/catalog) which will be synced to the default addon registry (https://addons.kubevela.net). You can use vela command line to list all available addons by:
+KubeVela community has maintained a growing [catalog of addons](https://github.com/kubevela/catalog) which will be synced to the default addon registry (https://kubevela.github.io/catalog/official). You can use vela command line to list all available addons by:
 
 ```shell
 vela addon list
@@ -269,7 +269,7 @@ KubeVela
         default: "false"
         required: ✔
 -> domain: Specify the domain, if set, ingress will be created if the gateway driver is nginx.
--> repo: Specify the image hub of velaux, eg. "acr.kubevela.net"
+-> repo: Specify the image hub of velaux
 -> serviceAccountName: Specify the serviceAccountName for apiserver
         default: "kubevela-vela-core"
         required: ✔
@@ -322,14 +322,14 @@ vela addon registry list
 
 ```shell
 Name            Type    URL                        
-KubeVela        helm    https://addons.kubevela.net
+KubeVela        helm    https://kubevela.github.io/catalog/official
 ```
 </details>
 
 * Add a new registry
 
 ```
-vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
+vela addon registry add experimental --type=helm --endpoint=https://kubevela.github.io/catalog/experimental/
 ```
 
 <details>
