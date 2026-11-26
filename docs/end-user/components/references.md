@@ -1126,55 +1126,6 @@ spec:
 |---------|-------------|-----------------------|----------|---------|
 | objects | A slice of Kubernetes resource manifests   | [][Kubernetes-Objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) | true     |         |
 
-## Module
-
-### Description
-
-Install a module: fetch it and render its owned Application.
-
-### Examples (module)
-
-Requires the `EnableModuleComponent` feature gate. Install or upgrade the chart with
-`--set featureGates.enableModuleComponent=true`. With the gate disabled the
-ComponentDefinition is still installed and the `vela/module` package still compiles,
-but no render service is registered, so rendering a `type: module` component fails.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: comp-s3
-  namespace: vela-system
-spec:
-  components:
-    - name: s3
-      type: module
-      properties:
-        # module: s3          # optional, defaults to the component name
-        registry: modules      # optional, empty means the configured default registry
-        version: "1.0.0"       # optional, empty means the latest published version
-        # placement:           # optional, clusters for objects marked runtime
-        #   clusters:
-        #     - spoke
-```
-
-### Specification (module)
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- module | Module name; defaults to the component name. | string | false |  
- registry | Registry name; empty means the configured default. | string | false | empty 
- version | Module package version, the tag `vela module publish` writes; empty means the latest published version. | string | false | empty 
- placement | Where objects marked runtime are installed. Unmarked objects and definitions stay on the hub. Set `clusters` or `clusterLabelSelector`. | [placement](#placement-module) | false |  
-
-
-#### placement (module)
-
- Name | Description | Type | Required | Default 
- ---- | ----------- | ---- | -------- | ------- 
- clusters | Names of the clusters to install on. | []string | false |  
- clusterLabelSelector | Labels that select the clusters to install on. | map[string]string | false |  
- allowEmpty | Allow an empty `clusterLabelSelector` result. An unknown name in `clusters` still fails. | bool | false |  
-
 ## Statefulset
 
 ### Description
