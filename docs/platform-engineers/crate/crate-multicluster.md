@@ -52,6 +52,7 @@ Definitions always install on the hub. Hub objects always install on the hub.
 3. Install Crossplane on each managed cluster before you install the crate. The crate sends the provider and the functions. After the provider is Healthy, create the credentials Secret and the `ClusterProviderConfig` on that cluster. See [Add the AWS credentials](./crate-crossplane.md#add-the-aws-credentials).
 4. Create the install namespace on the hub, because `vela crate deploy -n platform` fails when the namespace does not exist. Then create the namespaces on each managed cluster. KubeVela does not create them:
    - The install namespace, if the runtime objects include namespaced objects.
+   - Each namespace that a runtime object sets in `metadata.namespace`.
    - The namespace of each Application that sends workloads to the cluster.
 
    `vela cluster join` creates only `vela-system`. See [The namespace of runtime objects](#the-namespace-of-runtime-objects).

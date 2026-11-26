@@ -13,7 +13,7 @@ The install namespace is the namespace of the installer Application. KubeVela cr
 | `vela-system` | Applications in all namespaces |
 | A different namespace, for example `team-a` | Applications in `team-a` only |
 
-An auxiliary object that does not set `metadata.namespace` also goes into the install namespace. An object that sets `metadata.namespace` keeps that namespace. The owned Application `crate-<name>` is always in `vela-system`.
+A namespaced auxiliary object that does not set `metadata.namespace` also goes into the install namespace. An object that sets `metadata.namespace` keeps that namespace. A cluster-scoped object, such as an XRD, stays cluster-scoped. The owned Application `crate-<name>` is always in `vela-system`.
 
 The install namespace must exist before you install. KubeVela does not create it.
 

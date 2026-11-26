@@ -107,7 +107,7 @@ See [Install the addon](#install-the-addon) for the namespace step that this exa
 | Addon Application `addon-crossplane-storage` | `vela-system` | It has one `k8s-objects` component for each inline crate. The component has the name of the crate, `aws-s3`. |
 | Owned Application `crate-aws-s3` | `vela-system` | The `aws-s3` component contains it. It has the same tiers as a crate that you install with `vela crate deploy`. |
 | Definitions, for example `aws-s3-v1-bucket` | `team-a` | The namespace of the Application that installs the addon. |
-| Crate objects with no `metadata.namespace` | `team-a` | An object that sets a namespace keeps it. |
+| Namespaced crate objects with no `metadata.namespace` | `team-a` | An object that sets a namespace keeps it. A cluster-scoped object, such as an XRD, has no namespace. |
 
 Each installed definition has the label `definition.oam.dev/crate`. The owned Application `crate-aws-s3` has the annotation `definition.oam.dev/crate-version`. The version is the `version` in the `_crate.cue` of the inline crate, not the version of the addon.
 
@@ -282,7 +282,7 @@ imports: [{
           clusters: [east-1, east-2]
 ```
 
-`fromPolicy` copies `clusters`, `clusterLabelSelector`, and `allowEmpty` from the policy. It does not copy `namespace`. A crate object that does not set `metadata.namespace` uses the install namespace. An object that sets `metadata.namespace` keeps that namespace.
+`fromPolicy` copies `clusters`, `clusterLabelSelector`, and `allowEmpty` from the policy. It does not copy `namespace`. A namespaced crate object that does not set `metadata.namespace` uses the install namespace. An object that sets `metadata.namespace` keeps that namespace.
 
 Do not use `fromPolicy` together with `clusters`, `clusterLabelSelector`, or `allowEmpty` on the same import.
 
