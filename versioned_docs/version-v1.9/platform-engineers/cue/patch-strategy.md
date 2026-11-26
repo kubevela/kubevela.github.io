@@ -99,9 +99,9 @@ Finally, we can see that the application's `env` contains two environment variab
 
 ## retainKeys
 
-With `+patchStrategy=retainKeys`, the patch replaces the base value instead of merging with it. On a list matched by `patchKey`, the whole matching item is replaced, so fields the patch leaves out are dropped from that item.
+With `+patchStrategy=retainKeys`, a value the patch matches is replaced instead of merged into. On a list matched by `patchKey`, the whole matching item is replaced, so fields the patch leaves out are dropped from that item. Items the patch doesn't match are kept, as the example below shows.
 
-> In the following example, `+patchKey=name` specifies which container the patch should be applied to, while `+patchStrategy=retainKeys` specifies that when merge environment variables, if a duplicate environment variable name is specified, the environment variable value will be overwritten.
+> In the following example, `+patchKey=name` specifies which container the patch should be applied to, while `+patchStrategy=retainKeys` replaces any environment variable whose name the patch also sets, and keeps the rest.
 
 ```cue
 myenv: {

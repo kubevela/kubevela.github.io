@@ -23,7 +23,7 @@ helm upgrade --install kubevela kubevela/vela-core \
 ```
 
 :::caution
-Turning this on refuses every Application create or update whose submitter can't `get` the definitions it uses. Grant `vela-definition-reader` (below) to your users, to your GitOps controller's ServiceAccount and to any CI ServiceAccount before you enable it. The feature is off by default.
+Turning this on refuses every Application create or update whose submitter can't `get` the definitions it uses. Before you enable it, give your users, your GitOps controller's ServiceAccount and any CI ServiceAccount `get` on the definitions each one uses: the [examples below](#example-restricted-definition-access) show how to grant only some, and `vela-definition-reader` grants all of them. The feature is off by default.
 :::
 
 ## How It Works

@@ -119,16 +119,15 @@ spec:
       version: v0.14.0
     type: mysql-exporter-server
 ```
-```
 
 The component runs the exporter as a Deployment and a Service named after the component, here `mysql-exporter`.
 
 ## See the metrics
 
-The exporter serves metrics on port 9104. Forward the Service and check that it can reach MySQL:
+The exporter serves metrics on port 9104. Forward the Service in the background and check that it can reach MySQL:
 
 ```shell
-kubectl port-forward -n default svc/mysqlexporter 9104:9104
+kubectl port-forward -n default svc/mysql-exporter 9104:9104 &
 curl -s http://127.0.0.1:9104/metrics | grep mysql_up
 ```
 

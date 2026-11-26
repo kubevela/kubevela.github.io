@@ -8,7 +8,7 @@ VelaUX deploys an application in three layers:
 
 - A **cluster** is a Kubernetes cluster joined to KubeVela.
 - A **[delivery target](../concepts.md#delivery-target)** is one namespace in one cluster, plus optional cloud provider details such as region and VPC.
-- An **environment** groups targets, and an application deploys to every target in the environments it uses.
+- An **environment** groups targets. By default, an application deploys to every target in the environments it uses; you can change that in each environment's workflow.
 
 Set them up in that order.
 

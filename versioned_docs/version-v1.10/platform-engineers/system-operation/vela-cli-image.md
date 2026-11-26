@@ -87,7 +87,7 @@ spec:
     spec:
       containers:
       - name: install
-        image: oamdev/vela-cli:latest
+        image: oamdev/vela-cli:v1.10.10
         imagePullPolicy: IfNotPresent
         args:
           - addon

@@ -12,7 +12,7 @@ Once VelaUX is installed, there's a built-in administrator user with full access
 
 The local users/accounts feature serves two main use-cases:
 
-* For scripts and other API clients: create a local user with only the roles it needs, then get a token with `POST /api/v1/auth/login` and `{"username": "...", "password": "..."}`. Send the `accessToken` as `Authorization: Bearer <token>`; it lasts an hour, and `GET /api/v1/auth/refresh_token` with the `RefreshToken` header renews it for up to 24 hours.
+* For scripts and other API clients: create a local user with only the roles it needs, then get a token with `POST /api/v1/auth/login` and `{"username": "...", "password": "..."}`. Send the `accessToken` as `Authorization: Bearer <token>`; it lasts an hour, and `GET /api/v1/auth/refresh_token` with the `RefreshToken` header returns a new one-hour token, until the refresh token expires 24 hours after login.
 * For a small team, where SSO would be overkill, local users can be the only way to sign in.
 
 ### Get full users list

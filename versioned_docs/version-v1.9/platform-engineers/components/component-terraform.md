@@ -18,6 +18,8 @@ Here is the guide to create Terraform typed ComponentDefinitions of cloud resour
   vela addon enable terraform-aws
   ```
 
+  Then give the provider your cloud credentials, as in [Authenticate a Terraform provider](../../reference/addons/terraform.md#authenticate-a-terraform-provider).
+
 ## Develop a Terraform resource or module
 
 Create a Terraform resource or module for a cloud resource.

@@ -16,14 +16,14 @@ In the following tutorial, you will learn to add [KEDA](https://keda.sh/) as a n
 
 To register KEDA as a new capability (i.e. trait) in KubeVela, the only thing needed is to create an `TraitDefinition` object for it.
 
-The [`keda` addon](https://github.com/kubevela/catalog/tree/master/addons/keda) ships a full `keda-scaler` definition.
+The [`keda` addon](https://github.com/kubevela/catalog/tree/master/addons/keda) ships a full `keda-auto-scaler` definition.
 Several highlights are list below.
 
 ### 1. Describe The Trait
 
 ```yaml
 ...
-name: keda-scaler
+name: keda-auto-scaler
 annotations:
   definition.oam.dev/description: "keda supports multiple event to elastically scale applications, this scaler only applies to deployment as example"
 ...
@@ -102,7 +102,7 @@ This is a CUE based template which only exposes `type` and `value` as trait prop
 
 ## Step 3: Register New Trait to KubeVela
 
-As long as the definition file is ready, you just need to apply it to Kubernetes with `vela def apply <file>`. To install KEDA and its `keda-scaler` trait together, enable the addon instead:
+As long as the definition file is ready, you just need to apply it to Kubernetes with `vela def apply <file>`. To install KEDA and its `keda-auto-scaler` trait together, enable the addon instead:
 
 ```bash
 vela addon enable keda

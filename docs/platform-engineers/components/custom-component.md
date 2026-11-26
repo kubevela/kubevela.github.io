@@ -598,7 +598,7 @@ spec:
 
 With the ComponentDefinition applied, check where the Deployment lands before applying the Application: `vela dry-run -f app.yaml` shows it with `namespace: shared`.
 
-The controller flag `--allow-cross-namespace-resource` (default `true`) allows this. Set it to `false` and an Application can only create resources in its own namespace. The Helm chart has no value for it, so add it to the `kubevela-vela-core` Deployment's container args.
+The controller flag `--allow-cross-namespace-resource` (default `true`) allows this. Set it to `false` and an Application can only create resources in its own namespace. The Helm chart has no value for it, so add it to the `kubevela-vela-core` Deployment's container args, and check it is still there after a `helm upgrade`, which can reset them.
 
 ## Component definition in Kubernetes
 

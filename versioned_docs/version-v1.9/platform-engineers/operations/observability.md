@@ -25,7 +25,7 @@ After these addons enabled, out-of-box dashboard will be generated with real tim
 
 ## Application Observability
 
-KubeVela provides traits for application observability. Add one to a component and its metrics or logs are collected and shown on the Grafana dashboards.
+KubeVela provides traits for application observability. Add one to a component and its metrics or logs are collected. Logs show on the built-in Grafana dashboards; custom metrics need a [dashboard](./o11y/dashboard.md) of your own.
 
 ![app-o11y](../../resources/app-o11y.png)
 
