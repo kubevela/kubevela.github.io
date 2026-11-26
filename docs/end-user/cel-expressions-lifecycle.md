@@ -164,7 +164,7 @@ The rule is one-sided: an expression is refused only when its kind is known, fro
 | `outputs` of a component with a `patchOutputs` trait | Not typed: the trait may change them |
 | `each.index` | int |
 | `each.key` | string |
-| `each.item.<path>` | The kind shared by every literal item at `<path>`, or the list schema of the source or component the items are read from |
+| `each.item.<path>` | The kind shared by every literal item at `<path>`, or the list schema of the source the items are read from |
 | A computed expression | Typed when CEL can tell its result type, whatever the read: `component.db.output.spec.replicas * 2` is an int, `component.db.output.metadata.name + "-svc"` a string. Otherwise not typed |
 
 "Not typed" means admitted, and left for the render to judge.
