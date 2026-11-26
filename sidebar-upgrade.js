@@ -1,10 +1,5 @@
 module.exports = {
   upgrade: [
-    {
-      type: 'link',
-      label: '← Back to Documentation',
-      href: '/docs/',
-    },
     'overview',
     {
       type: 'category',
@@ -39,11 +34,6 @@ module.exports = {
         'v1.3/index',
         'v1.2/index',
       ],
-    },
-    {
-      type: 'link',
-      label: 'Release Notes',
-      href: '/release-notes/overview/',
     },
   ],
 };

@@ -1,6 +1,6 @@
-const { Component } = require('react');
+const {withReleases} = require('./sidebars-releases.js');
 
-module.exports = {
+const sidebars = {
   docs: [
     {
       type: 'category',
@@ -41,16 +41,6 @@ module.exports = {
           id: 'quick-start',
         },
       ],
-    },
-    {
-      type: 'link',
-      label: 'Release Notes',
-      href: '/release-notes/overview/',
-    },
-    {
-      type: 'link',
-      label: 'Upgrade Guides',
-      href: '/upgrade-guides/overview/',
     },
     {
       type: 'category',
@@ -506,3 +496,8 @@ module.exports = {
     },
   ],
 };
+
+// Release Notes and Upgrade Guides, grouped under Releases.
+sidebars.docs = withReleases(sidebars.docs);
+
+module.exports = sidebars;

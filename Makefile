@@ -5,6 +5,7 @@ remove-version:
 	sh ./hack/remove_version.sh $(version)
 
 check-link:
+	node scripts/sync-release-pages.js
 	go run ./hack/linkcheck/linkcheck.go
 
 check-sort:

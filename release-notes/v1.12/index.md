@@ -6,7 +6,7 @@ description: Status, releases and pre-releases of KubeVela v1.12.
 
 **Status:** In development. The `release-1.12` branch is cut and v1.12.0-alpha.2 is published; v1.12.0 is not released yet.
 
-**Upgrade guide:** [Upgrade from v1.11 to v1.12](/upgrade-guides/v1.12/)
+**Upgrade guide:** [Upgrade from v1.11 to v1.12](../../upgrade-guides/v1.12/index.md)
 
 ## Releases
 

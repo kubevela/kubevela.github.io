@@ -37,16 +37,6 @@
       ]
     },
     {
-      "type": "link",
-      "label": "Release Notes",
-      "href": "/release-notes/overview/"
-    },
-    {
-      "type": "link",
-      "label": "Upgrade Guides",
-      "href": "/upgrade-guides/overview/"
-    },
-    {
       "type": "category",
       "label": "Core Concepts",
       "collapsed": false,
@@ -379,6 +369,144 @@
             "platform-engineers/debug/debugging-kubevela-with-webhook",
             "platform-engineers/debug/remote-debugging-kubevela-applications",
             "platform-engineers/debug/multicluster-debugging"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Releases",
+      "collapsed": true,
+      "items": [
+        {
+          "type": "category",
+          "label": "Release Notes",
+          "collapsed": true,
+          "link": {
+            "type": "doc",
+            "id": "release-notes/overview"
+          },
+          "items": [
+            {
+              "type": "category",
+              "label": "v1.12.x",
+              "link": {
+                "type": "doc",
+                "id": "release-notes/v1.12/index"
+              },
+              "items": [
+                "release-notes/v1.12/v1.12.0"
+              ]
+            },
+            {
+              "type": "category",
+              "label": "v1.11.x",
+              "link": {
+                "type": "doc",
+                "id": "release-notes/v1.11/index"
+              },
+              "items": [
+                "release-notes/v1.11/v1.11.2",
+                "release-notes/v1.11/v1.11.1",
+                "release-notes/v1.11/v1.11.0"
+              ]
+            },
+            {
+              "type": "category",
+              "label": "v1.10.x",
+              "link": {
+                "type": "doc",
+                "id": "release-notes/v1.10/index"
+              },
+              "items": [
+                "release-notes/v1.10/v1.10.10",
+                "release-notes/v1.10/v1.10.9",
+                "release-notes/v1.10/v1.10.8",
+                "release-notes/v1.10/v1.10.7",
+                "release-notes/v1.10/v1.10.6",
+                "release-notes/v1.10/v1.10.5",
+                "release-notes/v1.10/v1.10.4",
+                "release-notes/v1.10/v1.10.3",
+                "release-notes/v1.10/v1.10.2",
+                "release-notes/v1.10/v1.10.1",
+                "release-notes/v1.10/v1.10.0"
+              ]
+            },
+            {
+              "type": "category",
+              "label": "v1.9.x",
+              "link": {
+                "type": "doc",
+                "id": "release-notes/v1.9/index"
+              },
+              "items": [
+                "release-notes/v1.9/v1.9.15",
+                "release-notes/v1.9/v1.9.14",
+                "release-notes/v1.9/v1.9.13",
+                "release-notes/v1.9/v1.9.12",
+                "release-notes/v1.9/v1.9.11",
+                "release-notes/v1.9/v1.9.10",
+                "release-notes/v1.9/v1.9.9",
+                "release-notes/v1.9/v1.9.8",
+                "release-notes/v1.9/v1.9.7",
+                "release-notes/v1.9/v1.9.6",
+                "release-notes/v1.9/v1.9.5",
+                "release-notes/v1.9/v1.9.4",
+                "release-notes/v1.9/v1.9.3",
+                "release-notes/v1.9/v1.9.2",
+                "release-notes/v1.9/v1.9.1",
+                "release-notes/v1.9/v1.9.0"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Upgrade Guides",
+          "collapsed": true,
+          "link": {
+            "type": "doc",
+            "id": "upgrade-guides/overview"
+          },
+          "items": [
+            {
+              "type": "category",
+              "label": "v1.11 to v1.12",
+              "link": {
+                "type": "doc",
+                "id": "upgrade-guides/v1.12/index"
+              },
+              "items": [
+                "upgrade-guides/v1.12/config-migration"
+              ]
+            },
+            {
+              "type": "category",
+              "label": "v1.10 to v1.11",
+              "link": {
+                "type": "doc",
+                "id": "upgrade-guides/v1.11/index"
+              },
+              "items": [
+                "upgrade-guides/v1.11/cue-compatibility-layer"
+              ]
+            },
+            "upgrade-guides/v1.10/index",
+            "upgrade-guides/v1.9/index",
+            {
+              "type": "category",
+              "label": "Older versions",
+              "collapsed": true,
+              "items": [
+                "upgrade-guides/v1.8/index",
+                "upgrade-guides/v1.7/index",
+                "upgrade-guides/v1.6/index",
+                "upgrade-guides/v1.5/index",
+                "upgrade-guides/v1.4/index",
+                "upgrade-guides/v1.3/index",
+                "upgrade-guides/v1.2/index"
+              ]
+            }
           ]
         }
       ]

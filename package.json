@@ -17,6 +17,7 @@
   "dependencies": {
     "@babel/helper-get-function-arity": "^7.16.7",
     "@docusaurus/core": "^3.9.2",
+    "@docusaurus/plugin-client-redirects": "^3.9.2",
     "@docusaurus/plugin-content-blog": "^3.9.2",
     "@docusaurus/plugin-content-docs": "^3.9.2",
     "@docusaurus/plugin-content-pages": "^3.9.2",

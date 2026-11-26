@@ -25,7 +25,7 @@ Please make sure below CLIs are present in your environment:
 * [`vela` v1.0.0+](../../install.mdx).
 
 :::caution
-KubeVela before 1.6.0 uses CUE v0.2.2. KubeVela 1.6 and 1.7 use v0.5.0-alpha.1, 1.8 uses v0.5.0-beta.5, 1.9 uses v0.5.0, 1.10 uses v0.9.2, and 1.11 and later use v0.14.1. Please use the CUE tool that matches your KubeVela version; the version of each release from v1.9 on is in the [release notes](/release-notes/overview/#component-versions). For the v0.14 changes, see [CUE 0.14 Compatibility Layer](/upgrade-guides/v1.11/cue-compatibility-layer/).
+KubeVela before 1.6.0 uses CUE v0.2.2. KubeVela 1.6 and 1.7 use v0.5.0-alpha.1, 1.8 uses v0.5.0-beta.5, 1.9 uses v0.5.0, 1.10 uses v0.9.2, and 1.11 and later use v0.14.1. Please use the CUE tool that matches your KubeVela version; the version of each release from v1.9 on is in the [release notes](../../release-notes/overview.md#component-versions). For the v0.14 changes, see [CUE 0.14 Compatibility Layer](../../upgrade-guides/v1.11/cue-compatibility-layer.md).
 :::
 
 ## CUE CLI Basic
