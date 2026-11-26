@@ -33,8 +33,8 @@ Available on `*StringParam` (i.e. `defkit.String(...)`). These constraints appea
 | `.Values(values ...string) *StringParam` | `"v1" \| "v2" \| ...` | Restricts the string to a fixed set of allowed values, producing a CUE string disjunction. |
 | `.OpenEnum() *StringParam` | `"v1" \| "v2" \| string` | Like `.Values()` but keeps the enum open — any string is also accepted. Useful for well-known values plus user-defined ones. |
 | `.Pattern(regex string) *StringParam` | `string & =~"regex"` | Requires the value to match a regular expression. |
-| `.MinLen(n int) *StringParam` | `strings.MinRunes(n)` | Minimum UTF-8 rune count. Requires the `"strings"` CUE import (add `.WithImports("strings")` to the definition). |
-| `.MaxLen(n int) *StringParam` | `strings.MaxRunes(n)` | Maximum UTF-8 rune count. Same import requirement. |
+| `.MinLen(n int) *StringParam` | `strings.MinRunes(n)` | Minimum UTF-8 rune count. The `"strings"` import is added to the generated CUE for you. |
+| `.MaxLen(n int) *StringParam` | `strings.MaxRunes(n)` | Maximum UTF-8 rune count. The `"strings"` import is added for you. |
 
 :::caution
 For negative regex constraints (CUE `!~`), use a raw `.WithSchema()` string or a `defkit.CUEExpr` — these are not expressible through the typed chain-method API alone.
@@ -57,8 +57,8 @@ Available on `*ArrayParam`.
 
 | Method | CUE generated | Description |
 |---|---|---|
-| `.MinItems(n int) *ArrayParam` | `list.MinItems(n) & [...]` | Minimum number of array elements. Requires the `"list"` CUE import (add `.WithImports("list")` to the definition). |
-| `.MaxItems(n int) *ArrayParam` | `list.MaxItems(n) & [...]` | Maximum number of array elements. Same import requirement. |
+| `.MinItems(n int) *ArrayParam` | `list.MinItems(n) & [...]` | Minimum number of array elements. The `"list"` import is added to the generated CUE for you. |
+| `.MaxItems(n int) *ArrayParam` | `list.MaxItems(n) & [...]` | Maximum number of array elements. The `"list"` import is added for you. |
 | `.OfEnum(values ...string) *ArrayParam` | `[...("v1" \| "v2" \| ...)]` | Constrains each element to one of the given string values. |
 
 ## Map constraints

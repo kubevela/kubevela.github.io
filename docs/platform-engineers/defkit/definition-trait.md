@@ -15,13 +15,22 @@ import TabItem from '@theme/TabItem';
 |---|---|
 | `.AppliesTo(workloads ...string)` | Restricts which workload types this trait can attach to. Values use `pluralKind.group` format: `"deployments.apps"`, `"statefulsets.apps"`, `"jobs.batch"`. Use `"*"` to apply to all workload types. If omitted, the trait can apply to any workload. Generates `appliesToWorkloads: [...]`. |
 | `.ConflictsWith(traits ...string)` | Declares that this trait cannot be used alongside the listed traits on the same component. KubeVela rejects applications where conflicting traits are both attached (e.g. `"scaler"` conflicts with `"hpa"`). Generates `conflictsWith: [...]`. |
-| `.PodDisruptive(bool)` | Indicates whether applying this trait may cause pod restarts or disruption. When `true`, KubeVela can warn users or enforce approval workflows before rolling out changes. Always emitted in CUE as `podDisruptive: true/false`. |
+| `.PodDisruptive(bool)` | Marks that a change to this trait should restart the workload's pods. When `true` and the trait renders its own resources through `outputs`, KubeVela writes a hash of them into the workload's pod template annotations (`app.oam.dev/trait-restart-hash-<trait>`), so changing the trait rolls the pods. A trait that patches the pod template rolls them without it, and a workload with no `spec.template` is unaffected. Always generates `podDisruptive: true/false`. |
 | `.ManageWorkload()` | Marks this trait as a workload manager — it takes ownership of the entire workload resource rather than just patching it. Workload-managing traits generate the primary resource instead of the component, allowing traits to replace the default output entirely. |
 | `.ControlPlaneOnly()` | Marks this trait to execute only on the control plane cluster, even in multi-cluster deployments. The trait's template runs once centrally rather than being dispatched to each managed cluster. |
 | `.RevisionEnabled()` | Enables revision tracking for this trait, causing KubeVela to create a new revision each time the trait configuration changes. This supports canary deployments and rollback scenarios where trait state needs to be versioned. |
 | `.Stage(stage string)` | Controls when this trait executes relative to other traits. Common values: `"PreDispatch"` (before resources are sent to clusters), `"PostDispatch"` (after deployment, e.g. for creating Services). Generates `stage: "..."`. |
 | `.WorkloadRefPath(path string)` | Specifies a custom path within the trait's output where KubeVela should inject the workload reference. The default path is auto-detected, but complex traits may need to explicitly declare where the workload object reference goes. Pass `""` to disable workload ref tracking. |
 | `.TemplateBlock(cue string)` | Escape hatch for the template section only: provides raw CUE for the `template: { ... }` block while still using the builder for the definition header (description, appliesToWorkloads, etc.). Unlike `RawCUE()`, this only replaces the template, not the entire definition. |
+
+### Namespace restrictions, quota and inheritance
+
+| Method | Description |
+|---|---|
+| `.RestrictNamespaces(namespaces ...string)` | Limits the trait to namespaces matching any of the names or `path.Match` globs. An Application in any other namespace can't use it. |
+| `.RestrictNamespaceSelector(selector *metav1.LabelSelector)` | Limits the trait to namespaces whose labels match the selector; `defkit.MatchLabels(map[string]string)` builds a simple one. With `RestrictNamespaces` as well, a namespace that matches either is allowed. |
+| `.Quota(entries ...*NamespaceQuota)` | Caps how many times each namespace may use the trait, counted across its Applications. Build entries with `defkit.QuotaFor(namespaces...)`, `defkit.QuotaForSelector(selector)` or `defkit.DefaultQuota()` (last), each with `.Warn(n)` and/or `.Limit(n)`. See [ComponentDefinition](./definition-component.md#namespace-restrictions--quota). |
+| `.Extends(parent *TraitDefinition)`, `.Abstract()`, `defkit.TraitRef(name)` | Inheritance: build on another trait, mark a trait as one to extend only, or name an installed trait to extend. See [Write inheritance with DefKit](../cue/definition-inheritance.md#write-inheritance-with-defkit). |
 
 ### Shared base methods
 
@@ -57,7 +66,7 @@ Let's build a `resource-limits` trait — a reusable patch that sets CPU and mem
 Behind the scenes the trait exercises most chain methods in a single definition — metadata (`Description`, `Labels`), trait scope (`AppliesTo`, `ConflictsWith`), rollout hints (`PodDisruptive`, `Stage`, `RevisionEnabled`), and a `Template(...)` that uses defkit's container-mutation helper `tpl.UsePatchContainer(...)` to generate the grouped `resources.requests` / `resources.limits` patch on the target container. Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/traits/`.
 
 <Tabs groupId="defkit-example">
-<TabItem value="go" label="Go — defkit">
+<TabItem value="go" label="Go (defkit)">
 
 ```go
 package traits
@@ -108,7 +117,7 @@ func init() { defkit.Register(ResourceLimits()) }
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated">
+<TabItem value="cue" label="CUE (generated)">
 
 ```cue
 "resource-limits": {
@@ -195,4 +204,4 @@ vela def gen-module ./my-platform -o ./generated-cue
 
 - [ComponentDefinition](./definition-component.md) — define workload types
 - [Register & Output](./definition-register.md) — `defkit.Register()` and output methods
-- [Integration](./integration.md) — KubeVela ecosystem integration points
+- [Definition Modules](./modules.md): module layout, `module.yaml` and the `vela def` commands

@@ -10,7 +10,7 @@ defkit integrates with the KubeVela ecosystem through well-defined extension poi
 |---|---|---|
 | `ComponentDefinition` | `core.oam.dev/v1beta1` | Defines a workload type. Maps Go template to Kubernetes resources (Deployment, StatefulSet, Job, etc.). End users reference by name in Application YAML. |
 | `TraitDefinition` | `core.oam.dev/v1beta1` | Patches or augments a workload. Uses CUE patch semantics to modify the primary output (e.g., inject env vars, set replica count, add sidecars). |
-| `PolicyDefinition` | `core.oam.dev/v1alpha1` | Controls deployment topology and behavior. Used for multi-cluster override, garbage collection rules, and apply-once semantics. |
+| `PolicyDefinition` | `core.oam.dev/v1beta1` | Controls deployment topology and behavior. Used for multi-cluster override, garbage collection rules, and apply-once semantics. |
 | `WorkflowStepDefinition` | `core.oam.dev/v1beta1` | Defines automation steps for the application workflow engine. Steps run sequentially or in parallel as part of Application deployment. |
 
 ## go.mod Setup
@@ -84,6 +84,8 @@ package main
 
 import (
     "fmt"
+    "os"
+
     "github.com/oam-dev/kubevela/pkg/definition/defkit"
 
     // Blank imports trigger init() in each package,
@@ -96,7 +98,12 @@ import (
 
 func main() {
     // Exports all registered definitions as JSON
-    fmt.Println(defkit.ToJSON())
+    output, err := defkit.ToJSON()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "failed to serialize registry: %v\n", err)
+        os.Exit(1)
+    }
+    fmt.Print(string(output))
 }
 ```
 

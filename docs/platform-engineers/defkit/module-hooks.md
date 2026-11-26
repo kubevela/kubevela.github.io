@@ -21,9 +21,9 @@ Module hooks let you encode these steps next to the definitions they support, so
 A module apply is **not** atomic: there is no rollback. Definition failures during the apply phase are recorded but do not halt subsequent `post-apply` hooks, and a `post-apply` hook failure leaves already-applied definitions in place. See [Execution Order](#execution-order) for the exact semantics.
 :::
 
-## `module.yaml` Schema
+## Declare hooks
 
-Hooks are declared under `spec.hooks` in the module's `module.yaml`:
+Hooks are declared under `spec.hooks` in the module's `module.yaml`. For the module's other fields, see [module.yaml](./modules.md#moduleyaml).
 
 ```yaml title="module.yaml"
 apiVersion: core.oam.dev/v1beta1
@@ -73,7 +73,7 @@ Each entry in `pre-apply` / `post-apply` is **either** a path hook **or** a scri
 
 Path hooks read every `.yaml` / `.yml` file under the named directory, parse multi-document YAML, and apply each resource via the Kubernetes API:
 
-```yaml title="module.yaml — path hook"
+```yaml title="module.yaml (path hook)"
 hooks:
   pre-apply:
     - path: hooks/pre        # directory under <module root>
@@ -102,9 +102,13 @@ metadata:
 
 ### Script Hooks — run a shell script
 
-Script hooks execute an arbitrary shell script. The executor injects two environment variables and runs the script with `cwd` set to the module root:
+Script hooks execute an arbitrary shell script. The executor injects two environment variables and runs the script with `cwd` set to the module root.
 
-```yaml title="module.yaml — script hook"
+:::caution
+A script hook runs on the machine that runs `apply-module`, as that user, with their kubeconfig. `apply-module` also accepts remote modules (see [Share and Version a Module](./share-a-module.md)), so review a module's `hooks/` before applying it, or pass `--skip-hooks`.
+:::
+
+```yaml title="module.yaml (script hook)"
 hooks:
   pre-apply:
     - script: hooks/pre/check-cluster.sh
@@ -156,7 +160,7 @@ For the demo's `01-namespace.yaml`, the default check just works: the Namespace 
 
 If `waitFor` matches the regex `^[A-Z][a-zA-Z]*$` (e.g. `Ready`, `Established`, `Available`), the executor looks for a condition with that exact `type` and `status: "True"`:
 
-```yaml title="module.yaml — wait for a CRD to be Established"
+```yaml title="module.yaml (wait for a CRD to be Established)"
 hooks:
   pre-apply:
     - path: hooks/pre/crds
@@ -169,7 +173,7 @@ hooks:
 
 If `waitFor` is anything else (contains spaces, operators, dots, etc.), it is evaluated as a **CUE expression** against the resource's JSON. The resource is the root context, so you can reference any field by path:
 
-```yaml title="module.yaml — wait for replicas to converge"
+```yaml title="module.yaml (wait for replicas to converge)"
 hooks:
   pre-apply:
     - path: hooks/pre/deployment
@@ -178,7 +182,7 @@ hooks:
       timeout: 5m
 ```
 
-```yaml title="module.yaml — wait for a phase"
+```yaml title="module.yaml (wait for a phase)"
 hooks:
   pre-apply:
     - path: hooks/pre/job
@@ -203,7 +207,7 @@ Use Go duration syntax: `s`, `m`, `h`, `ms`, etc. — for example `45s`, `2m`, `
 
 Set `optional: true` to keep the module apply going even if the hook fails:
 
-```yaml title="module.yaml — optional smoke test"
+```yaml title="module.yaml (optional smoke test)"
 hooks:
   post-apply:
     - script: hooks/post/smoke-test.sh
@@ -316,4 +320,4 @@ The path hook `hooks/pre` only picks up `*.yaml` / `*.yml` files. The `check-clu
 ## See Also
 
 - [Cluster Placement](./cluster-placement.md) — filter which definitions run on which clusters (the other module-level concern in `module.yaml`).
-- [Integration](./integration.md) — full module layout, `module.yaml` structure, and CI/CD wiring.
+- [Definition Modules](./modules.md): module layout, `module.yaml` fields and the `vela def` commands.

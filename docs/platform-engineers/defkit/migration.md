@@ -17,14 +17,46 @@ vela def init-module --name my-platform \
   --components webservice,worker \
   --traits scaler,env
 
-go get github.com/oam-dev/kubevela/pkg/definition/defkit@latest
+go get github.com/oam-dev/kubevela@v1.12.0
 ```
+
+Pin the KubeVela release your cluster runs. `@latest` skips pre-releases, so it can resolve to an older release than the one the scaffold pins, and that drops the API this guide uses.
+
+### Start by wrapping your existing CUE
+
+You don't have to rewrite a definition before you can manage it from the module. Wrap the CUE file you already have with `RawCUE`, which passes it through to the generated output unchanged:
+
+```go title="components/webservice.go"
+package components
+
+import (
+	_ "embed"
+
+	"github.com/oam-dev/kubevela/pkg/definition/defkit"
+)
+
+//go:embed webservice.cue
+var webserviceCUE string
+
+func init() {
+	defkit.Register(defkit.NewComponent("webservice").RawCUE(webserviceCUE))
+}
+```
+
+Generate the module and diff it against your originals. A wrapped definition should show no change:
+
+```bash
+vela def gen-module ./my-platform -o ./generated-cue
+diff ./generated-cue/components/webservice.cue ./old-definitions/webservice.cue
+```
+
+Then apply it with `vela def apply-module`, and move one definition at a time from `RawCUE` to the builder using the steps below. Run the same diff after each one, and add a [`Render()` test](./testing.md) once a definition is on the builder, so later changes are checked too.
 
 ## Step 1 — Migrate Parameters
 
 Every field in a CUE `parameter:` block maps directly to a defkit constructor.
 
-```cue title="CUE — parameter block"
+```cue title="CUE (parameter block)"
 parameter: {
     // +usage=Container image
     image: string
@@ -59,7 +91,7 @@ parameter: {
 }
 ```
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 image    := defkit.String("image").
                Description("Container image")
 
@@ -109,7 +141,7 @@ labels := defkit.StringKeyMap("labels").Optional().
 | `[...]` open/heterogeneous list | `defkit.List()` |
 | `// +usage=...` comments | `.Description("...")` |
 
-:::caution Breaking change: bare parameters are mandatory by default
+:::caution Bare parameters are mandatory
 In defkit, a bare parameter (no `.Optional()`, no `.Default()`) emits a CUE field with **no marker** — `field: type`. Without a default, that field must resolve to a value at unification time, so users **must** provide it. This is stricter than the CUE `field?: type` form (which allows the field to be absent). It is NOT the `field!: type` form — that requires `.Required()`, which forces the user to set the field explicitly even if a default exists. In short:
 
 | You write | CUE emits | Meaning |
@@ -124,7 +156,7 @@ You **must** call `.Optional()` for any param that was previously optional (`fie
 
 ## Step 2 — Migrate the Template Body
 
-```cue title="CUE — template body"
+```cue title="CUE (template body)"
 output: {
     apiVersion: "apps/v1"
     kind: "Deployment"
@@ -153,7 +185,7 @@ output: {
 }
 ```
 
-```go title="Go — defkit template"
+```go title="Go (defkit template)"
 func myTemplate(tpl *defkit.Template) {
     vela     := defkit.VelaCtx()
     cpu      := defkit.String("cpu")
@@ -202,7 +234,7 @@ A Deployment is invalid without `spec.selector.matchLabels` matching `spec.templ
 
 ## Step 3 — Migrate Traits
 
-```cue title="CUE — trait template"
+```cue title="CUE (trait template)"
 patch: spec: template: spec: containers: [{
     name: parameter.containerName
     env: [for k, v in parameter.env {
@@ -226,7 +258,7 @@ parameter: {
 }
 ```
 
-```go title="Go — defkit trait"
+```go title="Go (defkit trait)"
 func MyTrait() *defkit.TraitDefinition {
     return defkit.NewTrait("my-trait").
         Description("Inject env vars into a container").
@@ -254,14 +286,14 @@ func init() { defkit.Register(MyTrait()) }
 ```
 
 **Key rules:**
-- `tpl.UsePatchContainer(config)` generates the full `#PatchParams`, `patchSets`, and `patch` blocks — never write them by hand.
+- `tpl.UsePatchContainer(config)` generates the `#PatchParams` helper and the `patch` block; never write them by hand.
 - Simple typed fields → `PatchFields`.
 - List comprehensions or complex merge logic → `CustomPatchContainerBlock` (raw CUE injected verbatim).
 - `AppliesTo("deployments.apps", "statefulsets.apps")` restricts which workload GVKs the trait can attach to.
 
 ## Step 4 — Migrate Health & Status
 
-```cue title="CUE — health and status"
+```cue title="CUE (health and status)"
 isHealth: context.output.status.observedGeneration == context.output.metadata.generation &&
   context.output.status.readyReplicas == context.output.status.replicas &&
   context.output.status.replicas > 0
@@ -273,7 +305,7 @@ The KubeVela controller's healthPolicy CUE evaluator is sensitive to where you b
 
 **Option A — use the built-in preset** (matches Deployment's standard readiness check):
 
-```go title="Go — defkit (preset)"
+```go title="Go (defkit (preset))"
 return defkit.NewComponent("webservice").
     Workload("apps/v1", "Deployment").
     HealthPolicy(defkit.DeploymentHealth().Build()).
@@ -284,7 +316,7 @@ return defkit.NewComponent("webservice").
 
 **Option B — composable health expression** (closest match to the custom CUE above; type-safe, no raw strings):
 
-```go title="Go — defkit (HealthExpr)"
+```go title="Go (defkit (HealthExpr))"
 h := defkit.Health()
 
 return defkit.NewComponent("webservice").
@@ -301,7 +333,7 @@ return defkit.NewComponent("webservice").
 
 **Option C — raw CUE escape hatch** (when you need CUE features the builder doesn't expose):
 
-```go title="Go — defkit (raw)"
+```go title="Go (defkit (raw))"
 return defkit.NewComponent("webservice").
     Workload("apps/v1", "Deployment").
     HealthPolicy(`isHealth: context.output.status.phase == "Running"`).
