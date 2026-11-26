@@ -59,7 +59,7 @@ between any two steps. The step's definition needs no change to be looped.
 
 `forEach` is new in v1.12 and has no feature gate: it needs vela-core v1.12 and its CRDs,
 which a Helm upgrade does not apply for you (see [Upgrading](#upgrading)). A WorkflowRun
-needs the vela-workflow release that ships with v1.12.
+needs vela-workflow v0.8.0.
 
 :::note
 `scale-component` and `announce-endpoints` on this page stand for step definitions of
@@ -440,8 +440,8 @@ helm show crds kubevela/vela-core --version 1.12.0 | kubectl apply --server-side
 ```
 
 The WorkflowRun CRD comes from vela-workflow, not vela-core. The `vela-workflow` addon
-applies its own CRD, so once the addon carries the vela-workflow release that ships with
-v1.12, `vela addon upgrade vela-workflow` is enough. If you installed the vela-workflow Helm
+applies its own CRD, so once the addon carries vela-workflow v0.8.0,
+`vela addon upgrade vela-workflow` is enough. If you installed the vela-workflow Helm
 chart instead, apply its CRDs the same way:
 
 ```bash
