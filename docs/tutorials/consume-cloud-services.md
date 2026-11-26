@@ -2,7 +2,7 @@
 title: Provision Cloud Resources with Terraform
 ---
 
-This guide creates an OSS bucket on Alibaba Cloud from an Application and reads its connection details from a Secret. The same steps work for AWS and Azure resources; only the component type and credentials change.
+This guide creates an OSS bucket on Alibaba Cloud from an Application and reads its connection details from a Secret. The same flow works for AWS and Azure resources, with that provider's component type, credentials and properties: check each component's parameters with `vela show <type>`.
 
 To provision cloud resources with [Crossplane](https://crossplane.io/) instead, see [this guide](../end-user/components/cloud-services/provision-cloud-resources-by-crossplane.md).
 
@@ -57,10 +57,20 @@ For different vendors, these parameters update accordingly. All cloud resources 
 
 1. Check whether a provider config exists: `vela config list -t terraform-alibaba`. If one is listed, skip to step 3.
 
-2. Create one. Set `ALICLOUD_ACCESS_KEY` and `ALICLOUD_SECRET_KEY` in your shell first (for example with `read -rs ALICLOUD_SECRET_KEY`), so the keys are not echoed or saved in your shell history:
+2. Create one from a properties file that only you can read, so the keys are not saved in your shell history or shown in the process list. Create `alibaba-provider.yaml` with your editor after `umask 077`, with these properties:
+
+```yaml title="alibaba-provider.yaml"
+name: default
+ALICLOUD_REGION: <Region>
+ALICLOUD_ACCESS_KEY: <Access Key>
+ALICLOUD_SECRET_KEY: <Secret Key>
+```
+
+Then create the config from it, and delete the file:
 
 ```bash
-vela config create default -t terraform-alibaba name=default ALICLOUD_REGION=<Region> ALICLOUD_ACCESS_KEY="$ALICLOUD_ACCESS_KEY" ALICLOUD_SECRET_KEY="$ALICLOUD_SECRET_KEY"
+vela config create default -t terraform-alibaba -f alibaba-provider.yaml
+rm alibaba-provider.yaml
 ```
 
 To see the available config templates:

@@ -29,7 +29,7 @@ Now you can create a target for deploying your applications. A target identifies
 
 ![new-target](../../../resources/new-target.jpg)
 
-To use cloud resources (such as RDS from Alibaba Cloud), set the target's *Shared Variables* with the provider name and region. Make sure the matching Terraform addon is installed first.
+To use cloud resources (such as RDS from Alibaba Cloud), set the target's *Shared Variables* with the provider name and region. First install the matching Terraform addon and authenticate the provider: see [Terraform](../../../reference/addons/terraform.md).
 
 ## 3. Bind targets to an environment
 

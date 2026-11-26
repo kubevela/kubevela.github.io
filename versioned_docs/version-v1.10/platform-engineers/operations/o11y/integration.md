@@ -37,6 +37,10 @@ spec:
 
 `uid` names the datasource in Grafana, and `data` is the [Grafana datasource model](https://grafana.com/docs/grafana/latest/developers/http_api/data_source/) as a JSON string.
 
+:::caution
+The token is stored in the Application and in every ApplicationRevision, so anyone who can read Applications in that namespace can read it. Keep the Application in a namespace only administrators can read, such as `vela-system`.
+:::
+
 For example, if you are using the Prometheus service on Alibaba Cloud (ARMS), you can go to the Prometheus setting page and find the access url & access token.
 
 ![arms-prometheus](../../../resources/arms-prometheus.jpg)
@@ -96,4 +100,4 @@ For more details, you can refer to [vela-prism](https://github.com/kubevela/pris
 
 ## Integrate Other Tools or Systems
 
-For prometheus-operator, Datadog and others, use their own install, and point the annotations of the `prometheus-scrape` trait (from the `prometheus-server` addon) at them.
+For other tools, use their own install. The `prometheus-scrape` trait (from the `prometheus-server` addon) only sets the `prometheus.io/scrape`, `prometheus.io/port` and `prometheus.io/path` annotations, so it suits a tool that discovers targets from them, such as Datadog with its Prometheus annotation scraping turned on. prometheus-operator does not read those annotations: give it a `ServiceMonitor` or `PodMonitor` instead.

@@ -4,7 +4,7 @@ title: X-Definition Permission Validation
 
 ## Overview
 
-Definition Permission Validation ensures users can only reference X-Definitions (ComponentDefinitions, TraitDefinitions, PolicyDefinitions, and WorkflowStepDefinitions) they have RBAC permissions to access. This enables:
+Definition Permission Validation ensures users can only reference X-Definitions (ComponentDefinitions, TraitDefinitions, PolicyDefinitions, WorkflowStepDefinitions, and the SourceDefinitions an Application's `spec.sources` binds) they have RBAC permissions to access. This enables:
 
 - **Multi-tenancy** - Teams can only use definitions they're authorized for
 - **Compliance** - Enforce organizational policies on which components can be used
@@ -38,6 +38,7 @@ When a user creates or updates an Application, the validating webhook checks if 
 | TraitDefinition | `get traitdefinitions.core.oam.dev` |
 | PolicyDefinition | `get policydefinitions.core.oam.dev` |
 | WorkflowStepDefinition | `get workflowstepdefinitions.core.oam.dev` |
+| SourceDefinition | `get sourcedefinitions.core.oam.dev` |
 
 > **Note:** Only `get` permission is required for validation. The `list` verb in examples below is for user convenience when checking available definitions.
 
@@ -92,6 +93,7 @@ rules:
       - traitdefinitions
       - policydefinitions
       - workflowstepdefinitions
+      - sourcedefinitions
     verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -126,6 +128,23 @@ rules:
     resources: ["traitdefinitions"]
     resourceNames: ["scaler", "expose"]      # Only these traits
     verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: alice-can-use-webservice
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: webservice-user
+subjects:
+  - kind: User
+    name: alice
+    apiGroup: rbac.authorization.k8s.io
+  # Bind your GitOps and CI ServiceAccounts the same way, for example:
+  # - kind: ServiceAccount
+  #   name: argocd-application-controller
+  #   namespace: argocd
 ```
 
 ### Example: Namespace-Scoped Custom Definitions

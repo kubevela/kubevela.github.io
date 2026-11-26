@@ -90,8 +90,8 @@ Since v1.12, the steps work with `Config` resources and still read configs creat
 - `delete-config` deletes the Config. To delete a Config another Application created, delete it
   through that Application; otherwise that Application creates it again the next time it
   reconciles.
-- Every config step acts in the Application's namespace unless you set `namespace`. Another
-  namespace is refused unless the `AuthenticateApplication` feature gate is on and the
+- In an Application's workflow, every config step acts in the Application's namespace unless you
+  set `namespace`. Another namespace is refused unless the `AuthenticateApplication` feature gate is on and the
   Application's user has the step's verbs on `configs.config.oam.dev` there: `get` for
   `read-config`, `list` for `list-config`, both `create` and `update` for `create-config` (checked
   together on every run, as the step creates or overwrites), and `delete` for `delete-config`. A read or list of a shared system config (one in `vela-system`
@@ -101,6 +101,9 @@ Since v1.12, the steps work with `Config` resources and still read configs creat
   ```console
   config other-team/db is outside the application's namespace my-team: it may create it only if its user can (grant create on configs.config.oam.dev in namespace other-team); this application runs with no user to ask for (the AuthenticateApplication feature gate is off)
   ```
+
+  This rule is for Applications only. A Pipeline runs as a WorkflowRun, which has no Application,
+  so its config steps are not held to it.
 
 - A template from another namespace may be used only as the
   [Scope](../../../reference/config-template.md#scope-who-may-use-a-template) rules allow. The step

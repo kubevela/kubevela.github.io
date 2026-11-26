@@ -124,4 +124,4 @@ For more details, see [vela-prism](https://github.com/kubevela/prism#grafana-rel
 
 ## Integrate Other Tools or Systems
 
-For prometheus-operator, Datadog and others, use their own install, and point the annotations of the `prometheus-scrape` trait (from the `prometheus-server` addon) at them.
+For other tools, use their own install. The `prometheus-scrape` trait (from the `prometheus-server` addon) only sets the `prometheus.io/scrape`, `prometheus.io/port` and `prometheus.io/path` annotations, so it suits a tool that discovers targets from them, such as Datadog with its Prometheus annotation scraping turned on. prometheus-operator does not read those annotations: give it a `ServiceMonitor` or `PodMonitor` instead.

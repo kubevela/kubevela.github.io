@@ -105,7 +105,7 @@ metadata:
 Script hooks execute an arbitrary shell script. The executor injects two environment variables and runs the script with `cwd` set to the module root.
 
 :::caution
-A script hook runs on the machine that runs `apply-module`, as that user, with their kubeconfig. `apply-module` also accepts remote modules (see [Share and Version a Module](./share-a-module.md)), so review a module's `hooks/` before applying it, or pass `--skip-hooks`.
+A script hook runs on the machine that runs `apply-module`, as that user, with their kubeconfig. `apply-module` also accepts remote modules (see [Share and Version a Module](./share-a-module.md)), so before applying one, review every script and manifest path its `spec.hooks` lists, wherever in the module they sit, or pass `--skip-hooks`.
 :::
 
 ```yaml title="module.yaml (script hook)"
