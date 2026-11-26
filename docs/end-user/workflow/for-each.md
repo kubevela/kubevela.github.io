@@ -36,6 +36,8 @@ spec:
     steps:
       - name: scale
         type: scale-component          # any step type, unchanged
+        properties:
+          component: web
         forEach:
           items:
             - { cluster: prod-us-east, replicas: 3 }
@@ -77,12 +79,16 @@ Give exactly one of `items` and `from`.
 A step using `from` waits, as a pending step, until an earlier step has produced that
 variable.
 
+An empty list is allowed: the loop runs no items and the step succeeds. A `from`
+variable or an expression that gives `[]` does the same.
+
 ### From a source
 
 Where expressions are turned on (the `EnableCelExpressions` feature gate, and the
 `app.oam.dev/cel-expressions: "true"` annotation on the Application while the platform
 requires opt-in with `RequireCelExpressionOptIn`, the default), `items` can be a single
-expression that reads a source or an earlier step's output:
+expression that reads a [source](../../platform-engineers/source/using-sources.md) or an
+earlier step's output:
 
 ```yaml
 spec:
@@ -104,7 +110,8 @@ spec:
             parameterKey: cluster
 ```
 
-A ConfigMap key may be missing, so the read needs a `has()` guard and a fallback;
+A ConfigMap key may be missing, so the read needs a `has()` guard and a fallback (see
+[Optional fields](../../platform-engineers/source/using-sources.md#optional-fields));
 without one, the Application is refused with `source.targets.data.clusters may be absent
 and feeds forEach.items`.
 
@@ -221,8 +228,11 @@ are [collected into lists](#outputs). The group's own `inputs` are waited on bef
 loop starts, as for any group.
 
 A sub-step's `dependsOn` naming another sub-step means the one in the same item. Only
-top-level steps can have `forEach`. On a sub-step the field is not part of the schema, so
-the API server drops it without an error and the sub-step runs once.
+top-level steps can have `forEach`. On a sub-step the field is not part of the schema:
+`kubectl apply`, which validates fields strictly by default, refuses it with
+`unknown field "spec.workflow.steps[1].subSteps[0].forEach"`. A client that does not ask
+for strict validation, such as `vela up`, gets that as a warning instead: the field is
+dropped and the sub-step runs once.
 
 ## Order and failure {#order-and-failure}
 
@@ -327,7 +337,9 @@ The loop fails, naming the items involved, if a key cannot name a step:
 - two items have the same joined key: `{a: x-y, b: z}` and `{a: x, b: y-z}` both give
   `x-y-z`;
 - a key and a sub-step name together repeat another item's step name: key `a` with
-  sub-step `b-c`, and key `a-b` with sub-step `c`, both name a step `rollout-a-b-c`.
+  sub-step `b-c`, and key `a-b` with sub-step `c`, both name a step `rollout-a-b-c`. Output
+  names are checked the same way, since an item's outputs are kept as variables named
+  `<loop>-<key>-<output>`.
 
 A path that is empty or malformed (`spec.`), or the same path twice, is refused when you
 apply; a path the items do not have fails the loop when it runs.
@@ -389,6 +401,8 @@ with `null` where an item did not produce it:
 ```yaml
       - name: scale
         type: scale-component
+        properties:
+          component: web
         forEach:
           items: [prod-us-east, prod-eu-west]
         inputs:
@@ -426,15 +440,17 @@ helm show crds kubevela/vela-core --version 1.12.0 | kubectl apply --server-side
 ```
 
 The WorkflowRun CRD comes from vela-workflow, not vela-core. The `vela-workflow` addon
-applies its own CRD, so upgrading the addon to the release that ships with v1.12
-(`vela addon upgrade vela-workflow`) is enough. If you installed the vela-workflow Helm
+applies its own CRD, so once the addon carries the vela-workflow release that ships with
+v1.12, `vela addon upgrade vela-workflow` is enough. If you installed the vela-workflow Helm
 chart instead, apply its CRDs the same way:
 
 ```bash
 helm show crds kubevela/vela-workflow --version <version> | kubectl apply --server-side --force-conflicts -f -
 ```
 
-Against an older CRD the API server drops `forEach` without an error. A step reading
+Against an older CRD, `forEach` is an unknown field: `kubectl apply` refuses it, and a
+client without strict field validation, such as `vela up`, has it dropped with only a
+warning. A step reading
 `each.item` through `inputs` then waits, pending on `Pending on Input: each.item`; one
 that reads nothing from the loop runs once. vela-core logs a warning at startup when the
 installed Application or Workflow CRD lacks the field: `does not declare forEach on
@@ -446,7 +462,7 @@ workflow steps, so the API server drops it and a looped step runs once`.
 |---|---|
 | `needs exactly one of items and from` | give the list one way, not both or neither |
 | `supported values: "StepByStep", "DAG"` on `forEach.mode` | the modes are `StepByStep` and `DAG`, in that case |
-| `must be a list` | `items` is an object, `null`, or a plain string. For `from`, the variable holds one of those |
+| `must be a list` | `items` is an object or a plain string. For `from`, the variable holds one of those, or `null` |
 | `a $( ) expression here needs expressions turned on` | turn on `EnableCelExpressions`, and annotate the Application (`app.oam.dev/cel-expressions`) while `RequireCelExpressionOptIn` is on, or the WorkflowRun (`workflowrun.oam.dev/cel-expressions`) |
 | `must be a list or one $( ) expression that resolves to one` | `items` has text around an expression, or two expressions. Use one expression on its own, or a list |
 | `may be absent and feeds forEach.items; guard it with has(...)` | the expression reads a field that may be missing, such as a ConfigMap key. Guard it: `has(x) ? x : []` |
@@ -459,6 +475,7 @@ workflow steps, so the API server drops it and a looped step runs once`.
 | `is not a path into the item` | a `key` path is empty or malformed, such as `spec.` |
 | `items 0 and 1 have the same key "..."` | the key fields do not tell those items apart. Add a field to `key` |
 | `items 0 and 1 both name a step ...` | a key and a sub-step name join into another item's step name. Rename the sub-step or change the key |
+| `items 0 and 1 both name a variable ...` | a key and an output name join into another item's variable name. Rename the output or change the key |
 | `item 0: key <path> must be a string or an integer, got ...` | a key field holds a float, a bool, an object or a list |
 | `item 0: key "..." is over 63 characters` | the joined key is too long to name a step. Key on fewer or shorter fields |
 | `item 0 has no value at key ...` | the item lacks that field, or is not an object |
