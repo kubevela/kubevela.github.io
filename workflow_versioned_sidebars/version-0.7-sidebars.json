@@ -1,0 +1,84 @@
+{
+  "workflow": [
+    {
+      "type": "doc",
+      "id": "overview"
+    },
+    {
+      "type": "doc",
+      "id": "workflowrun"
+    },
+    {
+      "type": "category",
+      "label": "Steps",
+      "collapsed": false,
+      "items": [
+        {
+          "type": "doc",
+          "id": "steps/suspend"
+        },
+        {
+          "type": "doc",
+          "id": "steps/dependency"
+        },
+        {
+          "type": "doc",
+          "id": "steps/step-group"
+        },
+        {
+          "type": "doc",
+          "id": "steps/inputs-outputs"
+        },
+        {
+          "type": "doc",
+          "id": "steps/if-condition"
+        },
+        {
+          "type": "doc",
+          "id": "steps/timeout"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Operate",
+      "collapsed": true,
+      "items": [
+        {
+          "type": "doc",
+          "id": "operate/operations"
+        },
+        {
+          "type": "doc",
+          "id": "operate/working-mechanism"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Authoring Steps",
+      "collapsed": true,
+      "items": [
+        {
+          "type": "doc",
+          "id": "authoring/step-definition"
+        },
+        {
+          "type": "doc",
+          "id": "authoring/cue-actions"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Reference",
+      "collapsed": true,
+      "items": [
+        {
+          "type": "doc",
+          "id": "reference/built-in-steps"
+        }
+      ]
+    }
+  ]
+}

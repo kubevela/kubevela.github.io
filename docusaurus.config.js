@@ -9,10 +9,12 @@ syncReleasePages();
 const RELEASE_DOCS_PATH = new RegExp(`^/docs/(${SECTIONS.map((s) => s.dir).join('|')})/`);
 
 // Pages that moved from the next docs into a section of their own (written by the split tooling). Each new URL
-// redirects from its old /docs/next/ one; released versions keep their own copies, so they need none.
+// redirects from its old /docs/next/ one; released versions keep their own copies, so they need none. A page moved
+// into a versioned section lands in that section's next version.
+const VERSIONED_SECTIONS = ['workflow'];
 const MOVED_FROM = Object.fromEntries(
   Object.entries(require('./moved-docs.json')).map(([from, {section, to}]) => [
-    `/${section}/${to.replace(/(\/index)?\.mdx?$/, '')}`,
+    `/${section}/${VERSIONED_SECTIONS.includes(section) ? 'next/' : ''}${to.replace(/(\/index)?\.mdx?$/, '')}`,
     `/docs/next/${from.replace(/(\/index)?\.mdx?$/, '')}`,
   ]),
 );
@@ -71,11 +73,19 @@ const config = {
           className: 'kv-version',
         },
         {
+          type: 'docsVersionDropdown',
+          docsPluginId: 'workflow',
+          position: 'right',
+          // Workflow's versions; shown only on the Workflow section (custom.scss).
+          className: 'workflow-version-dropdown',
+        },
+        {
           type: 'dropdown',
           label: 'Documentation',
           position: 'left',
           items: [
             {to: 'docs/', label: 'KubeVela'},
+            {to: 'workflow/overview', label: 'Workflow'},
             {to: 'terraform/overview', label: 'Terraform'},
             {to: 'addons/overview', label: 'Addons'},
           ],
@@ -339,6 +349,26 @@ const config = {
         sidebarPath: require.resolve('./sidebar-videos.js'),
         showLastUpdateAuthor: true,
         showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        // Workflow is versioned by the engine, kubevela/workflow, not by KubeVela. next is 0.8, the engine in KubeVela
+        // 1.12; 0.7 (KubeVela 1.11) is served at /workflow/, as /docs/ serves 1.11.
+        id: 'workflow',
+        path: 'workflow',
+        routeBasePath: 'workflow',
+        sidebarPath: require.resolve('./sidebar-workflow.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+        lastVersion: '0.7',
+        versions: {
+          current: {label: '0.8', path: 'next'},
+          '0.7': {label: '0.7'},
+          '0.6': {label: '0.6'},
+        },
       },
     ],
     [

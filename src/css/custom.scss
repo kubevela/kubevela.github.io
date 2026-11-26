@@ -1107,3 +1107,10 @@ html.plugin-id-addons .navbar__item:has(> .kv-version) {
 html.plugin-id-terraform .navbar__item:has(> .kv-version) {
   display: none;
 }
+html.plugin-id-workflow .navbar__item:has(> .kv-version) {
+  display: none;
+}
+// Workflow has versions of its own, which mean nothing outside its section.
+html:not(.plugin-id-workflow) .workflow-version-dropdown {
+  display: none;
+}
