@@ -565,9 +565,10 @@ hack/downgrade-from-1.12.sh --version 1.11.2
 It takes `--release`, `--namespace`, `--chart` (a chart reference or a local path) and
 `--image-repository` (for a mirror), and needs `helm` and `kubectl` pointed at the cluster.
 
-On `v1.12.0-alpha.2` the script handles only v1.11.0. To go back to v1.11.1 or v1.11.2 from it, or
-without the script, upgrade the release to that chart with your values file. Its hook Job puts back
-the v1.11 built-in definitions, and Helm removes the webhooks only v1.12 serves:
+On `v1.12.0-alpha.2` the script handles only v1.11.0. To go back to v1.11.1 or v1.11.2 from it,
+upgrade the release to that chart with your values file. Its hook Job puts back the v1.11 built-in
+definitions, and Helm removes the webhooks only v1.12 serves. This works for v1.11.1 and v1.11.2
+only: going back to v1.11.0 needs the script.
 
 ```shell
 helm upgrade kubevela kubevela/vela-core --version 1.11.2 -n vela-system -f <your values file> --wait

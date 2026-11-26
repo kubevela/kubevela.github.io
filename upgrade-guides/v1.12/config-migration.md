@@ -31,7 +31,7 @@ flowchart TD
   and deletes them, workflow steps read them, and Configs can use v1.11 templates. Applications see
   no change to the Secrets they use.
 - **Migration is a separate, explicit step.** It adopts each v1.11 object in place: the Secret keeps
-  its name, UID and data and gets a Config as its owner. The ConfigMap is kept, so a rollback finds
+  its name, UID and data and gets a Config as its owner. The ConfigMap is kept, so a downgrade finds
   everything where v1.11 expects it.
 - **You can migrate when it suits you**: per template, per namespace, or for the whole cluster at
   controller startup.
