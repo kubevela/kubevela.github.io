@@ -11,7 +11,7 @@ The KubeVela controller (`vela-core`) can be run locally as an **out-of-cluster 
 Before you begin, make sure the following are in place:
 
 - KubeVela source code cloned from [github.com/kubevela/kubevela](https://github.com/kubevela/kubevela)
-- [Go 1.19](https://go.dev/dl/) or later installed (`go version` to verify)
+- [Go 1.27.1](https://go.dev/dl/) or later installed (`go version` to verify)
 - A running Kubernetes cluster accessible via `~/.kube/config` — [k3d](https://k3d.io) is recommended for a fully local setup
 - An IDE with Go debugger support (VS Code or IntelliJ IDEA / GoLand)
 

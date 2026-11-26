@@ -11,7 +11,7 @@ This guide provides comprehensive instructions for configuring remote debugging 
 Before you begin, ensure you have:
 
 - KubeVela source code cloned from [github.com/kubevela/kubevela](https://github.com/kubevela/kubevela)
-- [Go 1.19](https://go.dev/dl/) or later installed
+- [Go 1.27.1](https://go.dev/dl/) or later installed
 - A running Kubernetes cluster accessible via `~/.kube/config`
 - Docker installed for building container images
 - Access to a container registry (e.g., Docker Hub)
@@ -37,10 +37,10 @@ Modify the `Dockerfile` in the root of the KubeVela repository to enable remote 
 
 ### Install the Delve Debugger During the Build Stage
 
-Add the following command to install Delve (ensure the version matches your Go version):
+Add the following command to install Delve. Use a Delve release that supports the Go version in KubeVela's `go.mod` (1.27.1 for KubeVela 1.12); `latest` does:
 
 ```dockerfile
-RUN go install github.com/go-delve/delve/cmd/dlv@v1.22.0
+RUN go install github.com/go-delve/delve/cmd/dlv@latest
 ```
 
 :::info
@@ -151,7 +151,6 @@ helm upgrade --install --create-namespace --namespace vela-system \
   --set controllerArgs.reSyncPeriod=1m \
   --set optimize.disableComponentRevision=false \
   --set multicluster.clusterGateway.image.repository=ghcr.io/oam-dev/cluster-gateway \
-  --set admissionWebhooks.patch.image.repository=ghcr.io/oam-dev/kube-webhook-certgen/kube-webhook-certgen \
   --wait kubevela ./charts/vela-core --debug
 ```
 
