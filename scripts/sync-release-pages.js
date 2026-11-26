@@ -5,7 +5,7 @@
 // repository root. Each folder is copied to the same path in every docs root:
 // docs/ (Next) and versioned_docs/version-<v>/ for each entry in versions.json.
 // The copies are git-ignored. Files and folders whose name starts with "_"
-// (templates) are not copied.
+// (templates) and README.md (the contributor guide) are not copied.
 //
 // Links between these pages are relative .md links, and the folders keep the
 // same layout in every copy, so a link resolves inside the docs version being
@@ -52,17 +52,22 @@ function docsRoots() {
   ];
 }
 
-// All markdown files under dir, as paths relative to dir.
-function listFiles(dir, {skipUnderscore = true} = {}) {
+// Source files that are never published: templates and folders whose name
+// starts with "_", and the contributor guide README.md in each folder.
+const isUnpublished = (name) => name.startsWith('_') || name === 'README.md';
+
+// All markdown files under dir, as paths relative to dir. With
+// sourcesOnly, unpublished files are left out.
+function listFiles(dir, {sourcesOnly = true} = {}) {
   if (!fs.existsSync(dir)) {
     return [];
   }
   return fs.readdirSync(dir, {withFileTypes: true}).flatMap((entry) => {
-    if (skipUnderscore && entry.name.startsWith('_')) {
+    if (sourcesOnly && isUnpublished(entry.name)) {
       return [];
     }
     if (entry.isDirectory()) {
-      return listFiles(path.join(dir, entry.name), {skipUnderscore}).map((f) => path.join(entry.name, f));
+      return listFiles(path.join(dir, entry.name), {sourcesOnly}).map((f) => path.join(entry.name, f));
     }
     return /\.mdx?$/.test(entry.name) ? [entry.name] : [];
   });
@@ -131,7 +136,7 @@ function writeIfChanged(file, content) {
 // dev server only reloads what changed.
 function syncPages(root, sections, pages) {
   for (const {dir} of sections) {
-    for (const relative of listFiles(path.join(root, dir), {skipUnderscore: false})) {
+    for (const relative of listFiles(path.join(root, dir), {sourcesOnly: false})) {
       if (!pages.has(path.join(dir, relative))) {
         fs.rmSync(path.join(root, dir, relative));
       }
