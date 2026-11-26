@@ -17,11 +17,11 @@ vela config-template list | grep helm-repository
 
 ## Create a Helm Repository config
 
-There are two ways to create the config. On the Configs page, you could create the configs that belong to the system scope. Then, the Helm Repository could be used for all projects. If you only want to use it for one project, let's create the config on the Project summary page.
+Create the config in **Admin Dashboard > Global Configs** to share it with every project, or in the **Configs** panel of a project's **Summary** page for that project only.
 
 You can set the URL of your private repository in the `URL` field. If your repository has set up the HTTP basic authentication, you can set the `Username` and `Password` for it.
 
-BTW, If your helm repository's certificate is self-signed, you can set the `CaFile` field with the certificate content.
+For a self-signed certificate, paste the CA into **CaFile**.
 
 ![config](https://kubevela.io/images/1.6/create-config.jpg)
 
