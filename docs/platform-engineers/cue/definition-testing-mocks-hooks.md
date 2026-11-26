@@ -95,7 +95,8 @@ settings: test.#Seed & {$params: objects: [{
 The calls in a hook run in order, so one can use an earlier one's `$returns`. They run for real,
 unmocked, and are not among a case's calls. An object a hook or check names without a namespace is in
 its scope's: the case's around a case, `default` around the file. When no case runs, no hook does. A
-hook mark on a nested field, or two marks on one field, is a load error.
+hook in a file with no step or source case, a hook mark on a nested field, or two marks on one field,
+is a load error.
 
 What hooks create is deleted, newest first, when their scope ends, pass or fail: after the case for
 `@beforeEach` and `@afterEach`, after the file for `@before` and `@after`. So is what a case's own

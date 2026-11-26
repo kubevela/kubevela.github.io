@@ -19,7 +19,7 @@ the current directory.
 | `-v`, `--verbose` | List passing cases as well as failures. |
 | `--json` | Print results as JSON. See [JSON output](#json-output). |
 | `--label-filter` | Run only cases whose labels match this Ginkgo label query, such as `'status && !slow'`. |
-| `--focus` | Run only cases whose full text (`<file> <definition> / <case>`) matches this regular expression. Repeatable. |
+| `--focus` | Run only cases whose full text (`<PATH> <file> <definition> / <case>`) matches this regular expression. Repeatable. |
 | `--skip` | Skip cases whose full text matches this regular expression. Repeatable. |
 | `--focus-file` | Run only cases in files matching this regular expression, optionally with lines: `file:12`, `file:3,9` or `file:1-20`. Repeatable. |
 | `--check-pending` | Run `@pending` cases too, and fail any that now pass, since their marker is stale. |

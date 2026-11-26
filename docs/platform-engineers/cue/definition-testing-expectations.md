@@ -13,7 +13,7 @@ fields it does not name are ignored.
 | Form | Meaning |
 | --- | --- |
 | `f: v` | `f` is present and matches `v`, which may be a CUE constraint such as `=~"^nginx"`, `>2` or `!=3`. |
-| `f?: _|_` | `f` is absent. |
+| `f?: _\|_` | `f` is absent. |
 | `[a, b]` | A list of exactly these elements, in order. |
 | `[a, b, ...]` | A list that starts with these elements. |
 | `f: {...} @exact()` | `f` has no fields beyond those given. |

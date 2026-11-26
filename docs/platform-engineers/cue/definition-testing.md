@@ -167,7 +167,7 @@ A few rules give you finer control:
 | --- | --- |
 | `replicas: 3` | the field is present and equal to 3 |
 | `image: =~"^nginx"`, `replicas: >2`, `replicas: !=3` | the field matches a CUE constraint |
-| `ports?: _|_` | the field is absent |
+| `ports?: _\|_` | the field is absent |
 | `containers: [{...}, {...}]` | the list has exactly these elements, in order |
 | `containers: [{...}, ...]` | the list starts with these elements, and may have more |
 | `labels: {...} @exact()` | the struct has no fields beyond those given |
@@ -251,8 +251,36 @@ adds, typically `status`, merged over what the template rendered:
 
 ## Testing traits
 
+Take a `scaler` trait, `scaler.cue`, which sets the workload's replicas and adds an autoscaler:
+
+```cue title="scaler.cue"
+scaler: {
+	type: "trait"
+	attributes: {
+		appliesToWorkloads: ["deployments.apps"]
+		status: healthPolicy: #"""
+			isHealth: context.outputs.hpa.status.currentReplicas == parameter.replicas
+			"""#
+	}
+}
+template: {
+	patch: spec: replicas: parameter.replicas
+	outputs: hpa: {
+		apiVersion: "autoscaling/v2"
+		kind:       "HorizontalPodAutoscaler"
+		metadata: name: context.name
+		spec: {
+			minReplicas: parameter.replicas
+			maxReplicas: parameter.replicas
+		}
+	}
+	parameter: replicas: int
+}
+```
+
 A trait patches a workload, so `#TraitRender` takes the `workload` it patches. `expect: output` is the
-workload after the patch, and `expect: outputs` holds the trait's own objects:
+workload after the patch, and `expect: outputs` holds the trait's own objects. Its tests go in
+`scaler_test.cue`:
 
 ```cue title="scaler_test.cue"
 import "vela/test"
