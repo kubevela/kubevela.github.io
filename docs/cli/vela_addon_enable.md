@@ -27,19 +27,24 @@ vela addon enable [flags]
 	vela addon enable <addon-name> <my-parameter-of-addon>=<my-value>
   Enable addon with specified registry:
     vela addon enable <registryName>/<addonName>
+  Enable addon with pod scheduling (nodeSelector / affinity / tolerations):
+	vela addon enable <addon-name> --nodeSelector disktype=ssd
+	vela addon enable <addon-name> --scheduling-file scheduling.yaml
 
 ```
 
 ### Options
 
 ```
-  -c, --clusters string           specify the runtime-clusters to enable
-      --dry-run                   render all yaml files out without real execute it
-  -h, --help                      help for enable
-      --override-definitions      override existing definitions if conflict with those contained in this addon
-  -s, --skip-version-validating   skip validating system version requirement
-  -v, --version string            specify the addon version to enable
-  -y, --yes                       all checks will be skipped and the default answer is yes for all validation check.
+  -c, --clusters string               specify the runtime-clusters to enable
+      --dry-run                       render all yaml files out without real execute it
+  -h, --help                          help for enable
+      --nodeSelector stringToString   pod nodeSelector key=value pairs (affinity trait (overlays chart values)) (default [])
+      --override-definitions          override existing definitions if conflict with those contained in this addon
+      --scheduling-file string        YAML file with Kubernetes pod scheduling fields (nodeSelector, affinity, tolerations, ...)
+  -s, --skip-version-validating       skip validating system version requirement
+  -v, --version string                specify the addon version to enable
+  -y, --yes                           all checks will be skipped and the default answer is yes for all validation check.
 ```
 
 ### Options inherited from parent commands

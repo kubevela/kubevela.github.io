@@ -1,31 +1,34 @@
 ---
-title: vela module registry update
+title: vela crate registry add
 ---
 
-Update a module registry.
+Add a crate registry.
 
 ### Synopsis
 
-Update an existing OCI module registry. Unlike "add", this fails if the registry does not already exist.
+Add a named OCI registry that crates are published to and fetched from.
 
 ```
-vela module registry update NAME OCI_URL [flags]
+vela crate registry add NAME OCI_URL [flags]
 ```
 
 ### Examples
 
 ```
-  Update a registry's URL:
-	vela module registry update catalog oci://ghcr.io/org/fork
+  Add an OCI registry:
+	vela crate registry add catalog oci://ghcr.io/kubevela/crates
 
-  Update an OCI registry's credentials, reading the password from stdin:
-	printf '%s' "$PASSWORD" | vela module registry update ghcr oci://ghcr.io/org/modules --username robot --password-stdin
+  Add an OCI registry, reading the password from stdin:
+	printf '%s' "$PASSWORD" | vela crate registry add ghcr oci://ghcr.io/org/crates --username robot --password-stdin
+
+  Re-adding an existing name overwrites it in place, same as vela addon registry add:
+	vela crate registry add catalog oci://ghcr.io/org/fork
 ```
 
 ### Options
 
 ```
-  -h, --help              help for update
+  -h, --help              help for add
       --password string   password for an OCI registry
       --password-stdin    read the OCI registry password from stdin
       --type string       registry type; only "oci" is supported, and it is inferred from the URL when omitted
@@ -41,7 +44,7 @@ vela module registry update NAME OCI_URL [flags]
 
 ### SEE ALSO
 
-* [vela module registry](vela_module_registry.md)	 - Manage module registries.
+* [vela crate registry](vela_crate_registry.md)	 - Manage crate registries.
 
 #### Go Back to [CLI Commands](vela.md) Homepage.
 

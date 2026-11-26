@@ -1,27 +1,27 @@
 ---
-title: vela module registry list
+title: vela crate registry get
 ---
 
-List module registries.
+Get a crate registry.
 
 ### Synopsis
 
-List every configured module registry.
+Show one crate registry by name.
 
 ```
-vela module registry list [flags]
+vela crate registry get NAME [flags]
 ```
 
 ### Examples
 
 ```
-vela module registry list
+vela crate registry get catalog
 ```
 
 ### Options
 
 ```
-  -h, --help   help for list
+  -h, --help   help for get
 ```
 
 ### Options inherited from parent commands
@@ -33,7 +33,7 @@ vela module registry list
 
 ### SEE ALSO
 
-* [vela module registry](vela_module_registry.md)	 - Manage module registries.
+* [vela crate registry](vela_crate_registry.md)	 - Manage crate registries.
 
 #### Go Back to [CLI Commands](vela.md) Homepage.
 

@@ -44,7 +44,7 @@ title: CLI Commands
 * [vela component](vela_component.md)	 - List/get components.
 * [vela trait](vela_trait.md)	 - List/get traits.
 * [vela def](vela_def.md)	 - Manage definitions.
-* [vela module](vela_module.md)	 - Manage KubeVela modules.
+* [vela crate](vela_crate.md)	 - Manage KubeVela crates.
 
 ## System Tools
 

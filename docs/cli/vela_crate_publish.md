@@ -1,34 +1,34 @@
 ---
-title: vela module publish
+title: vela crate publish
 ---
 
-Publish a module to an OCI or ECR registry.
+Publish a crate to an OCI or ECR registry.
 
 ### Synopsis
 
-Validate a module source tree and publish it as an OCI artifact tagged from its own version. A published version is immutable: change the module, bump version in _module.cue, publish again.
+Validate a crate source tree and publish it as an OCI artifact tagged from its own version. A published version is immutable: change the crate, bump version in _crate.cue, publish again.
 
 ```
-vela module publish <dir> [oci-ref] [flags]
+vela crate publish <dir> [oci-ref] [flags]
 ```
 
 ### Examples
 
 ```
   Publish to the configured default registry:
-	vela module publish ./modules/s3
+	vela crate publish ./crates/s3
 
   Publish to a named registry:
-	vela module publish ./modules/s3 --registry ecr
+	vela crate publish ./crates/s3 --registry ecr
 
   Publish straight to an ECR repository prefix:
-	vela module publish ./modules/s3 123456789012.dkr.ecr.us-west-2.amazonaws.com/modules
+	vela crate publish ./crates/s3 123456789012.dkr.ecr.us-west-2.amazonaws.com/crates
 
   Check the target and the annotations without pushing:
-	vela module publish ./modules/s3 --registry ecr --dry-run
+	vela crate publish ./crates/s3 --registry ecr --dry-run
 
   Republish a release candidate over itself while iterating:
-	vela module publish ./modules/s3 --registry ecr --version 1.1.0-rc1 --force
+	vela crate publish ./crates/s3 --registry ecr --version 1.1.0-rc1 --force
 ```
 
 ### Options
@@ -39,9 +39,9 @@ vela module publish <dir> [oci-ref] [flags]
   -h, --help              help for publish
       --password string   Registry password. Empty uses the docker credential chain.
       --password-stdin    Read the registry password from stdin.
-      --registry string   The configured module registry to publish to. Empty means the configured default.
+      --registry string   The configured crate registry to publish to. Empty means the configured default.
       --username string   Registry username. Empty uses the docker credential chain.
-      --version string    Override the artifact tag. Must be semver, and does not bypass version immutability. The module's own version in _module.cue is unchanged inside the artifact.
+      --version string    Override the artifact tag. Must be semver, and does not bypass version immutability. The crate's own version in _crate.cue is unchanged inside the artifact.
 ```
 
 ### Options inherited from parent commands
@@ -53,7 +53,7 @@ vela module publish <dir> [oci-ref] [flags]
 
 ### SEE ALSO
 
-* [vela module](vela_module.md)	 - Manage KubeVela modules.
+* [vela crate](vela_crate.md)	 - Manage KubeVela crates.
 
 #### Go Back to [CLI Commands](vela.md) Homepage.
 

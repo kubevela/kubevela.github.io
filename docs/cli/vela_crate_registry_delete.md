@@ -1,21 +1,21 @@
 ---
-title: vela module registry delete
+title: vela crate registry delete
 ---
 
-Delete a module registry.
+Delete a crate registry.
 
 ### Synopsis
 
-Remove one module registry and its token secret.
+Remove one crate registry and its token secret.
 
 ```
-vela module registry delete NAME [flags]
+vela crate registry delete NAME [flags]
 ```
 
 ### Examples
 
 ```
-vela module registry delete catalog
+vela crate registry delete catalog
 ```
 
 ### Options
@@ -33,7 +33,7 @@ vela module registry delete catalog
 
 ### SEE ALSO
 
-* [vela module registry](vela_module_registry.md)	 - Manage module registries.
+* [vela crate registry](vela_crate_registry.md)	 - Manage crate registries.
 
 #### Go Back to [CLI Commands](vela.md) Homepage.
 
