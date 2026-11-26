@@ -39,7 +39,7 @@ helm upgrade kubevela kubevela/vela-core -n vela-system \
   --wait
 ```
 
-`--reset-then-reuse-values` needs Helm 3.14 or later. It keeps only the values that you set, so the gates that are on stay on. Do not use `--reuse-values`, which can fail or keep the images of an older release. Set `--version` to the chart version that `helm list -n vela-system` shows, so that Helm does not install a different chart.
+`--reset-then-reuse-values` needs Helm 3.14 or later. Helm starts from the default values of the chart, applies the values that you set on the current release, then applies the `--set` flags. The gates that are on stay on. Do not use `--reuse-values`, which can fail or keep the images of an older release. Set `--version` to the chart version that `helm list -n vela-system` shows, so that Helm does not install a different chart.
 
 If you do not use Helm, add this argument to the vela-core controller:
 
@@ -110,7 +110,7 @@ Error: credentials are not supported for http:// crate registries; use oci:// fo
 
 ### Example: private packages on GHCR
 
-A private package on GitHub Container Registry needs a GitHub token with the `read:packages` scope. A token with `write:packages` also has this scope. Use your GitHub user name as the username and the token as the password:
+A private package on GitHub Container Registry needs a GitHub token with the `read:packages` scope to install. To publish with `vela crate publish`, the token needs `write:packages`, which includes `read:packages`. Use your GitHub user name as the username and the token as the password:
 
 ```shell
 printf '%s' "$GITHUB_TOKEN" | vela crate registry add ghcr oci://ghcr.io/myorg/crates \

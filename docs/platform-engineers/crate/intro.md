@@ -52,7 +52,7 @@ Crates use patterns that Kubernetes and Go users already know.
 | Installer Application | The Application that contains the `type: crate` component. You create it with YAML or with `vela crate deploy`. Its namespace is the install namespace. |
 | Owned Application | The Application `crate-<name>` in `vela-system`. KubeVela creates it from the installer Application. It installs the objects of the crate. |
 
-The package version and the API line are different numbers. Package `1.0.0` of `aws-s3` contains lines `v1` and `v2`. Package `1.0.1` can fix a bug in line `v1`. Applications that use `aws-s3/v1/bucket` receive the fix and do not change.
+The package version and the API line are different numbers. Package `1.0.0` of `aws-s3` contains lines `v1` and `v2`. Package `1.0.1` can fix a bug in line `v1`. Publishing `1.0.1` does not change an install. After you upgrade the install to `1.0.1`, Applications that use `aws-s3/v1/bucket` receive the fix, and their YAML does not change.
 
 ## How a crate is deployed
 
@@ -67,11 +67,13 @@ The diagram shows the path of the `aws-s3` crate from the source directory to th
    - `<crate>-aux`: the objects that all API lines share, from `auxiliary/`. For `aws-s3`, these are the Crossplane provider, the functions, the XRD, and the EnvironmentConfig.
    - `<crate>-<line>-aux`: the objects for one API line, from `v1/auxiliary/` or `v2/auxiliary/`. For `aws-s3`, each line has its own Composition.
    - `<crate>-<line>-defs`: the definitions of that line.
+
+   For a crate with placement, KubeVela splits each auxiliary tier. The runtime objects keep the tier name, and the hub objects go into a tier with the suffix `-hub`, for example `aws-s3-aux-hub`. The definitions tiers do not split. See [Crate Multi-Cluster Placement](./crate-multicluster.md).
 5. Applications in `team-a` can now use `type: aws-s3/v1/bucket` and `type: aws-s3/v2/bucket`.
 
 Each tier starts after KubeVela applies the tier before it. The two lines do not wait for each other. KubeVela does not wait until the objects in a tier are ready. For example, the definitions can be available before Crossplane installs the provider.
 
-KubeVela creates the definitions in the install namespace. An auxiliary object that does not set `metadata.namespace` also goes into the install namespace.
+KubeVela creates the definitions in the install namespace. A namespaced auxiliary object that does not set `metadata.namespace` also goes into the install namespace. A cluster-scoped object, for example an XRD, stays cluster-scoped.
 
 The owned Application keeps the state of the installed objects. If a person deletes one of these objects, KubeVela applies it again at the next reconcile.
 

@@ -20,7 +20,7 @@ If you do not know addons, read [Make Your Own Addon](../addon/intro.md) first.
     --set featureGates.enableAddonComponent=true
   ```
 
-  `--reset-then-reuse-values` (Helm 3.14 or later) keeps only the values that you set, so the gates that are already on stay on. `--version` stops Helm from moving the installation to a different chart version.
+  `--reset-then-reuse-values` (Helm 3.14 or later) starts from the default values of the chart, applies the values that you set on the current release, then applies the `--set` flags. The gates that are already on stay on. `--version` stops Helm from moving the installation to a different chart version.
 
 - Read [Make Your Own Addon](../addon/intro.md) for the addon layout.
 - Follow the addon `crossplane-storage` on this page. It includes the crate `aws-s3`. Most examples import the crate. [Inline crates](#inline-crates) shows the other layout, where the same crate is an inline crate and `crates/_imports.cue` has no entry for it.
@@ -109,7 +109,7 @@ See [Install the addon](#install-the-addon) for the namespace step that this exa
 | Definitions, for example `aws-s3-v1-bucket` | `team-a` | The namespace of the Application that installs the addon. |
 | Crate objects with no `metadata.namespace` | `team-a` | An object that sets a namespace keeps it. |
 
-Each installed definition has the label `definition.oam.dev/crate` and the annotation `definition.oam.dev/crate-version`. The version is the `version` in the `_crate.cue` of the inline crate, not the version of the addon.
+Each installed definition has the label `definition.oam.dev/crate`. The owned Application `crate-aws-s3` has the annotation `definition.oam.dev/crate-version`. The version is the `version` in the `_crate.cue` of the inline crate, not the version of the addon.
 
 ```shell
 kubectl -n vela-system get application addon-crossplane-storage -o jsonpath='{.spec.components[*].name}'

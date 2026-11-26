@@ -145,7 +145,7 @@ To check that an install is complete, use the tier table, or `vela status crate-
 | `aws-s3-v2-aux` | Objects from `v2/auxiliary/`. |
 | `aws-s3-v2-defs` | The definitions of line `v2`. |
 
-A tier is not in the list when the package has no objects for it.
+A tier is not in the list when the package has no objects for it. With placement, an auxiliary tier that has hub objects also has a tier with the suffix `-hub`, for example `aws-s3-aux-hub`. See [Crate Multi-Cluster Placement](./crate-multicluster.md).
 
 A tier is healthy when KubeVela applied its objects. Some objects need more time to become ready, for example a Crossplane provider that downloads its package. The crate author tells you what to wait for. For an example, see [Publish and install](./crate-crossplane.md#publish-and-install).
 
@@ -284,5 +284,5 @@ Before you uninstall a crate, move all Applications away from its definitions.
 | `existing object Application vela-system/crate-aws-s3 is managed by other application team-a/crate-aws-s3-deploy` | The crate is already installed from a different installer Application. | Use the install that exists, or uninstall it first. See [Change the namespace of an install](#change-the-namespace-of-an-install). |
 | `resolves to crate-backed definition` | The Application uses a one-part type. | Use `<crate>/<apiVersion>/<capability>`. |
 | `is ambiguous: definitions from crates [...] all match` | The Application uses a one-part type, and two definitions match. | Use `<crate>/<apiVersion>/<capability>`. |
-| `WorkloadDefinition.core.oam.dev "aws-s3-v1-bucket" not found` | The crate is installed in a different namespace. | Install the crate in the namespace of the Application, or in `vela-system`. |
+| `WorkloadDefinition.core.oam.dev "aws-s3-v1-bucket" not found` | The crate is installed in a different namespace, or the installed package no longer contains line `v1`. | Install the crate in the namespace of the Application, or in `vela-system`. For a retired line, see the caution in [Upgrade the package](#upgrade-the-package). |
 | A tier stays unhealthy | KubeVela cannot apply an object in that tier. For example, the CRD of the object is missing. | Run `vela status crate-<name> -n vela-system` and read the message of the tier. |

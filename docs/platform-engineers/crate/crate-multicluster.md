@@ -50,7 +50,7 @@ Definitions always install on the hub. Hub objects always install on the hub.
    The hub must be able to reach the API server address in each joined kubeconfig.
 
 3. Install Crossplane on each managed cluster before you install the crate. The crate sends the provider and the functions. After the provider is Healthy, create the credentials Secret and the `ClusterProviderConfig` on that cluster. See [Add the AWS credentials](./crate-crossplane.md#add-the-aws-credentials).
-4. Create the namespaces on each managed cluster. KubeVela does not create them:
+4. Create the install namespace on the hub, because `vela crate deploy -n platform` fails when the namespace does not exist. Then create the namespaces on each managed cluster. KubeVela does not create them:
    - The install namespace, if the runtime objects include namespaced objects.
    - The namespace of each Application that sends workloads to the cluster.
 
@@ -61,7 +61,7 @@ Definitions always install on the hub. Hub objects always install on the hub.
 :::caution Runtime objects and namespaces
 Read these rules before you select an install namespace for a crate with runtime objects.
 
-- A runtime object that does not set `metadata.namespace` goes into the install namespace. The install namespace is the namespace of the installer Application. KubeVela also creates the definitions of the crate in this namespace. The owned Application `crate-<name>` stays in `vela-system`.
+- A namespaced runtime object that does not set `metadata.namespace` goes into the install namespace. A cluster-scoped object stays cluster-scoped. The install namespace is the namespace of the installer Application. KubeVela also creates the definitions of the crate in this namespace. The owned Application `crate-<name>` stays in `vela-system`.
 - The definitions stay on the hub, in the install namespace.
 - KubeVela does not create the install namespace on a managed cluster. `vela-system` exists on each managed cluster, because `vela cluster join` creates it. Any other install namespace, for example `platform`, must exist on each managed cluster before you install.
 - An object that sets `metadata.namespace` keeps that namespace.
@@ -277,7 +277,8 @@ spec:
             region: east
           # Or select clusters by name:
           # clusters: [east-1, east-2]
-          # Succeed when no cluster matches:
+          # Succeed when clusterLabelSelector matches no cluster.
+          # An unknown name in clusters still fails:
           # allowEmpty: true
 ```
 

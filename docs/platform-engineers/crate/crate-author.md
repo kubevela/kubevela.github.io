@@ -55,6 +55,8 @@ This order gives you two guarantees:
 - Objects in `auxiliary/` exist before the objects of a line that use them. For example, a Crossplane XRD exists before a Composition that refers to it.
 - The objects of a line exist before the definitions of that line.
 
+For a crate with placement, the guarantees cover only the hub objects. The definitions wait for the hub tiers. The runtime tiers install in a later step on the managed clusters, so the definitions can be available before the runtime objects exist. See [Crate Multi-Cluster Placement](./crate-multicluster.md).
+
 KubeVela does not wait until an object is ready. A definition can be available before the objects under it are ready. For example, Crossplane can still download a provider when Application teams can already use the definition. Tell the operators of your crate what to wait for.
 
 ## _crate.cue
@@ -68,7 +70,7 @@ owners: ["team-storage"]
 
 | Field | Rule |
 | --- | --- |
-| `crate` | Required. A DNS-1123 label: lowercase letters, digits, and `-`. |
+| `crate` | Required. A DNS-1123 label: 1 to 63 characters, lowercase letters, digits, and `-`. It must start and end with a letter or a digit. |
 | `version` | Required. `major.minor.patch`, with no `v` in front. It is the OCI tag. |
 | `placement` | Optional. `hub` or `runtime`. See [Crate Multi-Cluster Placement](./crate-multicluster.md). |
 
@@ -290,14 +292,14 @@ vela crate deploy aws-s3 --registry ghcr --version 2.0.0 -n crate-test
 4. Apply an Application that uses the `bucket` definition.
 5. Run `vela status` on your Application, on the installer, and on the owned Application.
 
-A first install can omit `--version`. To install a later package, pass `--version`. See [Pin the version](./crate-install.md#pin-the-version).
+Pass `--version` on each install. See [Pin the version](./crate-install.md#pin-the-version).
 
 ```shell
 printf '%s' "$GITHUB_TOKEN" | vela crate registry add ghcr oci://ghcr.io/myorg/crates \
   --username my-github-user --password-stdin
 vela crate publish ./aws-s3 --registry ghcr
 kubectl create namespace crate-test
-vela crate deploy aws-s3 --registry ghcr -n crate-test
+vela crate deploy aws-s3 --registry ghcr --version 1.0.0 -n crate-test
 ```
 
 For a registry with no TLS, pass an `http://` URL and no password:
