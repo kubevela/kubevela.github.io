@@ -26,8 +26,8 @@ Within one target, the credentials of any cloud resources created are delivered 
 
 An application in VelaUX has a lifecycle on top of the KubeVela Application:
 
-- **Create** records the application's metadata. Nothing runs in a cluster yet.
-- **Deploy** binds the application to an environment and creates its resources in the environment's clusters.
+- **Create** records the application's metadata and binds it to one or more environments. Nothing runs in a cluster yet.
+- **Deploy** creates the application's resources in a bound environment's clusters.
 - **Recycle** deletes the running instance and removes its resources from the clusters.
 - **Delete** removes the application's metadata.
 

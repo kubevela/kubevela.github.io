@@ -68,4 +68,4 @@ The target namespace must already exist.
 
 ## Keep Applications in their own namespace
 
-The controller flag `--allow-cross-namespace-resource` (default `true`) allows this. Set it to `false` and an Application can only create resources in its own namespace. The Helm chart has no value for it, so add it to the `kubevela-vela-core` Deployment's container args.
+The controller flag `--allow-cross-namespace-resource` (default `true`) allows this. Set it to `false` and an Application can only create resources in its own namespace. The Helm chart has no value for it, so add it to the `kubevela-vela-core` Deployment's container args, and check it is still there after a `helm upgrade`, which can reset them.

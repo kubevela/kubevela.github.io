@@ -155,7 +155,7 @@ Finally, we can see that the application's `env` contains two environment variab
 
 ### retainKeys
 
-With `+patchStrategy=retainKeys`, the patch replaces the base value instead of merging with it. On a list matched by `patchKey`, the whole matching item is replaced, so fields the patch leaves out are dropped from that item.
+With `+patchStrategy=retainKeys`, a value the patch matches is replaced instead of merged into. On a list matched by `patchKey`, the whole matching item is replaced, so fields the patch leaves out are dropped from that item. Items the patch doesn't match are kept, as the example below shows.
 
 In the following example, `+patchKey=name` picks the container, and `+patchStrategy=retainKeys` on `env` lets the patch override a variable the workload already sets.
 

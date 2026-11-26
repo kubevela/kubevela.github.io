@@ -18,7 +18,7 @@ These methods are available on every parameter type via `baseParam`. They contro
 | `.Default(value) *T` | `name: *value \| type` | Sets a default. The parameter becomes non-optional at the CUE level (no `?` or `!`) unless combined with `.Optional()` / `.Required()`. |
 | `.Description(desc string) *T` | `// +usage=desc` | Human-readable description shown in `vela show` and generated OpenAPI. |
 | `.Short(s string) *T` | `// +short=s` | Single-letter CLI shorthand flag (e.g. `"i"` → `-i`). Available on `String`, `Int`, `Bool`, `Float`, `Enum`. |
-| `.Ignore() *T` | `// +ignore` | Excludes the field from `vela show` and OpenAPI output. Available on `String`, `Int`, `Bool`, `Float`, `Enum`. |
+| `.Ignore() *T` | `// +ignore` | Hides the field from the CLI (`vela show`, generated docs); it stays in the OpenAPI schema. Available on `String`, `Int`, `Bool`, `Float`, `Enum`. |
 
 :::tip
 A bare param with no modifier emits `name?: type` — the same as `.Optional()`. Use `.Optional()` explicitly to signal intent in code that will be read by others.

@@ -54,7 +54,7 @@ vela config create nacos --template nacos-server servers[0].ipAddr=nacos.nacos.s
 
 Here `nacos.nacos.svc` is a Nacos Service in the cluster; use your server's address.
 
-Nacos 2.x clients talk to the server over two ports: the HTTP port (`8848` here) and the gRPC port, which is the HTTP port plus 1000 (`9848`). Both must be reachable from the KubeVela controller, or publishing fails with `client not connected, current status:STARTING`.
+Nacos 2.x clients talk to the server over two ports: the HTTP port (`8848` here) and the gRPC port, by default the HTTP port plus 1000 (`9848`); set `servers[0].grpcPort` if yours differs. Both must be reachable from the KubeVela controller, or publishing fails with `client not connected, current status:STARTING`.
 
 :::note
 Since v1.12, the KubeVela controller publishes to Nacos, not the CLI. Use an address the

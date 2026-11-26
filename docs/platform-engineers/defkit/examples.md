@@ -767,7 +767,7 @@ spec:
         	componentNames?: [...string]
         	// +usage=Select resources by component types
         	componentTypes?: [...string]
-        	// +usage=Select resources by oamTypes (COMPONENT or TRAIT)
+        	// +usage=Select resources by oamTypes (WORKLOAD or TRAIT)
         	oamTypes?: [...string]
         	// +usage=Select resources by trait types
         	traitTypes?: [...string]

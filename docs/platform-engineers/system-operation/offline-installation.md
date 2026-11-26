@@ -7,7 +7,7 @@ title: Air-gapped Installation
 
 ## Addons
 
-If your environment can't reach the addon registry or `https://github.com/kubevela/catalog`, clone the catalog, point each addon's images and charts at your registry, then enable the addon from its local directory.
+If your environment can't reach the addon registry or `https://github.com/kubevela/catalog`, clone the catalog, point each addon's images and charts at your registry, then enable the addon from its local directory. Run steps 1 to 3 on a machine that can reach the internet and your registries, then carry the catalog over to the air-gapped side.
 
 1. Clone [the catalog repo](https://github.com/kubevela/catalog). Community addons are in `./addons/`, experimental ones in `./experimental/addons/`.
 
@@ -37,8 +37,10 @@ If your environment can't reach the addon registry or `https://github.com/kubeve
 
     ```shell
     helm pull <chart> --repo <url> --version <version>
-    helm push <chart>-<version>.tgz <your chart registry>
+    vela addon push <chart>-<version>.tgz <your chart registry>
     ```
+
+    `<your chart registry>` is a registry added with `vela addon registry add`, a ChartMuseum URL, or an `oci://` URL.
 
     You can use the ChartMuseum addon as that chart registry; see [*Sync Helm Charts to your ChartMuseum instance*](../addon/addon-registry.md#sync-helm-charts-to-your-chartmuseum-instance).
 

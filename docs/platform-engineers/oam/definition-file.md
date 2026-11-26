@@ -56,7 +56,7 @@ spec:
 | CUE format | Kubernetes YAML |
 | --- | --- |
 | The block's name, `"my-labels": {...}` | `metadata.name` |
-| `type` (`component`, `trait`, `policy`, `workflow-step`, `source`) | `kind` (`ComponentDefinition`, `TraitDefinition`, ...) |
+| `type` (`component`, `trait`, `policy`, `workflow-step`, `source`, `workload`) | `kind` (`ComponentDefinition`, `TraitDefinition`, ...) |
 | `description` | `metadata.annotations["definition.oam.dev/description"]` |
 | `alias` | `metadata.annotations["definition.oam.dev/alias"]` |
 | `annotations` | `metadata.annotations`; a key without `oam.dev` in it gets the prefix `custom.definition.oam.dev/` |

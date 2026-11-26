@@ -20,7 +20,7 @@ KubeVela can support following cloud providers by enabling the Crossplane provid
 
 ```shell
 $ vela addon list | grep crossplane-
-crossplane-aws            	KubeVela	Kubernetes Crossplane Controller for AWS                                                              	[0.0.1]                      	enabled (1.0.0)                     	enabled (1.0.1)
+crossplane-aws            	experimental	Kubernetes Crossplane Controller for AWS                                                              	[0.0.1]                      	enabled (1.0.0)                     	enabled (1.0.1)
 ```
 
 To enable one of them, use the following command:

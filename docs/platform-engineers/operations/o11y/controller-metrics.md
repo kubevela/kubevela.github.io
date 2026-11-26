@@ -34,10 +34,17 @@ Port-forward to the controller and fetch the metrics:
 
 ```shell
 kubectl -n vela-system port-forward deploy/kubevela-vela-core 8080
-curl -s localhost:8080/metrics | grep '^kubevela_application'
+curl -s localhost:8080/metrics | grep '^kubevela_app'
 ```
 
 ## What to watch
+
+The three `kubevela_application_*` metrics are off by default. Turn them on with the `EnableApplicationStatusMetrics` feature gate:
+
+```shell
+helm upgrade --install kubevela kubevela/vela-core -n vela-system --reuse-values \
+  --set featureGates.enableApplicationStatusMetrics=true
+```
 
 | Metric | What it tells you |
 | --- | --- |

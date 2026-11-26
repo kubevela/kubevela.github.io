@@ -4,7 +4,7 @@ title: dex
 
 This addon provides Dex login for VelaUX.
 
-[Dex](https://dexidp.io/docs/) is an identity service that uses [OpenID Connect](https://openid.net/connect/) to drive authentication for other apps. It hands the login itself to an identity provider through a [connector](https://dexidp.io/docs/connectors/): GitHub, GitLab, Google, LDAP, SAML, or any OIDC or OAuth provider. VelaUX talks only to Dex, so it supports every provider Dex has a connector for.
+[Dex](https://dexidp.io/docs/) is an identity service that uses [OpenID Connect](https://openid.net/connect/) to drive authentication for other apps. It hands the login itself to an identity provider through a [connector](https://dexidp.io/docs/connectors/): GitHub, GitLab, Google, LDAP, SAML, or any OIDC or OAuth provider. VelaUX talks only to Dex, and the addon's `dex-connector` config template covers those seven connector types.
 
 The addon installs the Dex Helm chart (`dex` 0.15.3) in `vela-system`, and adds the `dex-connector` config template, with a form for it in VelaUX. It depends on the `velaux` and `fluxcd` addons, and enables them if they are not enabled already.
 
