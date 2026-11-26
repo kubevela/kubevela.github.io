@@ -13,9 +13,9 @@ const RELEASE_DOCS_PATH = new RegExp(`^/docs/(${SECTIONS.map((s) => s.dir).join(
 // into a versioned section lands in that section's next version.
 const VERSIONED_SECTIONS = ['workflow'];
 const MOVED_FROM = Object.fromEntries(
-  Object.entries(require('./moved-docs.json')).map(([from, {section, to}]) => [
+  Object.values(require('./moved-docs.json')).map(({section, to, from_url}) => [
     `/${section}/${VERSIONED_SECTIONS.includes(section) ? 'next/' : ''}${to.replace(/(\/index)?\.mdx?$/, '')}`,
-    `/docs/next/${from.replace(/(\/index)?\.mdx?$/, '')}`,
+    from_url,
   ]),
 );
 
@@ -428,7 +428,6 @@ const config = {
             return existingPath.slice('/docs'.length);
           }
           return MOVED_FROM[existingPath.replace(/\/$/, '')];
-          return undefined;
         },
       },
     ],
