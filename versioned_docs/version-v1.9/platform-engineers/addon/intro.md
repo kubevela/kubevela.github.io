@@ -5,49 +5,101 @@ title: Make Your Own Addon
 :::tip
 Here's a blog introduces [how to build addon from scratch using redis operator as example](/blog/2022/10/18/building-addon-introduction), you can read it as an end to end tutorial!
 
-If you want to create an addon using an existing helm chart, you can refer to this [section](#initializing-an-addon-structure) to quickly get started without going through a detailed introduction.
+To build an addon from an existing Helm chart without the detail, start with the [Quick start](#quick-start).
 :::
 
 ## Quick start
 
-We provided the vela CLI tool to help you quickly create an addon structure with examples. Optionally, it can be based on existing Helm Charts or online resources using [reference objects](https://kubevela.io/docs/end-user/components/ref-objects).
+This builds an addon that installs [podinfo](https://github.com/stefanprodan/podinfo) from its Helm chart, published in an OCI registry.
 
-For instance, to create an addon using version 12.1.6 of the MongoDB helm chart from the repository https://marketplace.azurecr.io/helm/v1/repo, use the following command:
-
-```shell
-vela addon init mongodb --helm-repo https://marketplace.azurecr.io/helm/v1/repo --chart mongodb --chart-version 12.1.16
-```
-
-Running this command will generate a basic addon directory in your local path:
+### 1. Create the scaffold
 
 ```shell
-$ ls mongondb   
-NOTES.cue     README.md     definitions   metadata.yaml parameter.cue resources     schemas       template.cue  views
+vela addon init podinfo --helm-repo oci://ghcr.io/stefanprodan/charts --chart podinfo --chart-version 6.11.2
 ```
 
-You can still use this CLI tool to create an addon from a helm chart stored in an OCI registry. Here's an example:
+```console
+Scaffold created in directory podinfo. What to do next:
+- Check out our guide on how to build your own addon: https://kubevela.io/docs/platform-engineers/addon/intro
+- Review and edit what we have generated in podinfo
+- To enable this addon, run: vela addon enable podinfo
+```
+
+The directory holds a starting point for every part of an addon:
 
 ```shell
-vela addon init podinfo --helmrepo oci://ghcr.io/stefanprodan/charts --chart podinfo --chart-version 6.1.*
+$ ls podinfo
+README.md     definitions   metadata.yaml parameter.cue resources     schemas       template.cue  views
 ```
 
-You can also base your addon on Kubernetes objects from remote URLs. For example, you can directly include multiple CRDs in this way:
-```shell
-vela addon init my-addon --url https://domain.com/crd1.yaml --url https://domain.com/crd2.yaml
+The chart is installed by `resources/helm.cue`, a component of the `helm` type:
+
+```cue
+output: {
+	name: "addon-podinfo"
+	type: "helm"
+	properties: {
+		repoType: "oci"
+		url:      "oci://ghcr.io/stefanprodan/charts"
+		chart:    "podinfo"
+		version:  "6.11.2"
+	}
+}
 ```
-The commands we introduced above can also be used together, e.g., you can base your addon on both Helm Charts and reference objects.
+
+The `helm` component type comes from the [fluxcd](../../reference/addons/fluxcd.md) addon, so the scaffold lists `fluxcd` under `dependencies` in `metadata.yaml`, and enabling `podinfo` enables `fluxcd` first. The addon's version is set to the chart version, `6.11.2`.
+
+The other files (`definitions/mytrait.cue`, `schemas/myschema.yaml`, `views/my-view.cue`, `resources/myresource.cue`) are samples. Edit them or delete them; pass `--no-samples` to leave them out.
+
+### 2. Enable it from the local directory
+
+```shell
+vela addon enable ./podinfo
+```
+
+```console
+Addon podinfo enabled successfully.
+```
+
+The CLI prints any endpoints the addon's Application exposes after that line.
+
+### 3. Check it
+
+```shell
+vela addon status podinfo
+```
+
+```console
+podinfo: enabled (6.11.2)
+==> Installed Clusters
+[local]
+==> Registry Name
+local
+```
+
+`local` as the registry means the addon was enabled from a directory. The chart itself is a HelmRelease in `vela-system`, so `vela status addon-podinfo -n vela-system` shows its health like any other Application.
+
+To pick up an edit, run `vela addon enable ./podinfo` again. To remove it, run `vela addon disable podinfo`.
+
+### Other starting points
+
+You can also base an addon on Kubernetes objects at remote URLs, such as CRDs. The scaffold adds a `ref-objects` component that reads them:
+
+```shell
+vela addon init my-addon --url https://example.com/crd1.yaml --url https://example.com/crd2.yaml
+```
+
+The flags combine, so one addon can start from a Helm chart and remote objects together.
 
 ## Basic Concept 
 
-A KubeVela addon is a collection that can contain the following three types of files；
-* `Basic information file` that contains `metadata.yaml` and `README.md`.
-* `OAM module file` that defines KubeVela extensibility points, including [Definitions](../../getting-started/definition.md), [UI-Schema](../../reference/ui-schema.md) or [topology-rules](../../reference/topology-rule.md).
-* `Application description file` that defines a KubeVela [application](../../getting-started/core-concept.md). Typically, a `Definition` of addon should be supported by a Kubernetes operator. The Kubernetes objects of this operator should be defined in a KubeVela application. After the addon is enabled, these resources will be dispatched to the clusters by KubeVela application controller.
+An addon is a directory with three kinds of files: metadata (`metadata.yaml`, `README.md`), definitions and UI schemas, and an Application that installs the operator behind them. The second kind covers [definitions](../../getting-started/definition.md), [UI schemas](../../reference/ui-schema.md) and [topology rules](../../reference/topology-rule.md). The Application is an ordinary KubeVela [Application](../../getting-started/core-concept.md): when the addon is enabled, the Application controller delivers it to your clusters.
 
-The picture below shows what KubeVela does when an addon is enabled. There are mainly three process:
-* [Addon Registry](./addon-registry.md) store addons which can be used to share and distribute addons anywhere, it can be any git repo or helm chart repository.
-* When an addon is enabled through UX/CLI, it will pull these resource files from the Addon Registry, assemble them into a KubeVela application and apply it.
-* Finally, the KubeVela controller take care the rest things and deliver the addon as a normal application to the clusters.
+The picture below shows what happens when an addon is enabled:
+
+* An [addon registry](./addon-registry.md) stores addons so they can be shared. It can be a Git repository or a Helm chart repository.
+* When you enable an addon from the CLI or VelaUX, KubeVela reads its files from the registry, assembles them into an Application and applies it.
+* The Application controller then delivers that Application to the clusters like any other.
 
 ![alt](../../resources/addon-mechanism.jpg)
 
@@ -137,7 +189,7 @@ The README will be displayed in the dashboard for end user who's going to instal
 
 There is no restrict rules for an [experimental addon](https://github.com/kubevela/catalog/tree/master/experimental/addons), but if the addon want to be [verified](https://github.com/kubevela/catalog/tree/master/addons), the README is the most important thing.
 
-### OAM module file
+### Definitions and UI schemas
 
 :::tip
 This type of file is optional in an addon.
@@ -181,7 +233,7 @@ The `views/` folder is used to store the [VelaQL View](../system-operation/velaq
 
 #### Config Templates (`config-templates/` folder)
 
-The `views/` folder is used to store the [Config Template](../../reference/config-template.md) files.
+The `config-templates/` folder is used to store the [Config Template](../../reference/config-template.md) files.
 
 
 ## Install Addon Locally
@@ -194,7 +246,7 @@ vela addon enable ./your-addon-dir/
 
 ## Known Limits
 
-- Cannot only install addon in the sub-clusters. Because of KubeVela need render out every kind of resource in control plane, if an addon contain some [CRD](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/), and these CRDs must be installed in control plane, otherwise Vela-core controller will meet an error of cannot find CRD.
+- An addon can't be installed on managed clusters only. vela-core renders every resource on the hub, so any [CRD](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) the addon's definitions use must also be installed on the hub, or rendering fails with `no matches for kind`.
 
 ## Extend Terraform Addon
 
@@ -209,10 +261,10 @@ Please abide by the following rules when making a contribution:
 - A new addon should be accepted as experimental one first with the following necessary information:
     - An accessible icon url and source url defined in addon's `metadata.yaml`.
     - A detail introduction include a basic example about how to use and what's the benefit of this addon in `README.md`.
-    - It's more likely to be accepted if useful examples are provided in example [dir](https://github.com/kubevela/catalog/examples/).
+    - It's more likely to be accepted if useful examples are provided in example [dir](https://github.com/kubevela/catalog/tree/master/examples/).
 
 - An experimental addon must meet these conditions to be promoted as a verified one.
-    - This addon must be tested by addon's [e2e-test](https://github.com/kubevela/catalog/test/e2e-test/addon-test) to guarantee this addon can be enabled successfully.
+    - This addon must be tested by addon's [e2e-test](https://github.com/kubevela/catalog/tree/master/test/e2e-test/addon-test) to guarantee this addon can be enabled successfully.
     - Provide an introduction in KubeVela [official addon documentation](../../reference/addons/overview.md).
 
 - If you come across with any addon problems, feel free to raise a github issue or just send pull requests to fix them. Please make sure to update the addon version in your pull request.

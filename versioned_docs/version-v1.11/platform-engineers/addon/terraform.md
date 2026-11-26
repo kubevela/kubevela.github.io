@@ -4,7 +4,7 @@ title: Extend Terraform Addon
 
 [Terraform Controller](https://github.com/kubevela/terraform-controller) is the core controller to provision and manage
 cloud resources for KubeVela. It has supported [some cloud providers](https://github.com/oam-dev/terraform-controller#supported-cloud-providers), including AWS, Azure, GCP, Alibaba Cloud,
-Tencent Cloud, etc. But only [a few](../../tutorials/consume-cloud-services.md#enabling-a-cloud-provider-addon) has been supported as Terraform Addons in KubeVela.
+Tencent Cloud, etc. But only [a few](../../reference/addons/terraform.md#enable-terraform-provider-addon) has been supported as Terraform Addons in KubeVela.
 
 This guide will show you how to extend a Terraform Addon to support your cloud provider.
 
@@ -57,17 +57,18 @@ Generate a Terraform Addon for your cloud provider. The generated addon code wil
 
 ```shell
 $ make terraform-addon-gen
-go run hack/addons/terraform/gen.go hack/addons/terraform/provider-sample.yaml
+go run hack/addons/terraform/gen.go
 Generating addon for provider tencent in addons/terraform-tencent
-Rendering hack/addons/terraform/terraform-provider-skaffold/metadata.yaml
-Rendering hack/addons/terraform/terraform-provider-skaffold/readme.md
-Rendering hack/addons/terraform/terraform-provider-skaffold/resources/account-creds.cue
-Rendering hack/addons/terraform/terraform-provider-skaffold/resources/parameter.cue
-Rendering hack/addons/terraform/terraform-provider-skaffold/resources/provider.cue
-Rendering hack/addons/terraform/terraform-provider-skaffold/template.yaml
+Rendering hack/addons/terraform/terraform-provider-scaffold/metadata.yaml
+Rendering hack/addons/terraform/terraform-provider-scaffold/readme.md
+Create directory addons/terraform-tencent/resources
+Rendering hack/addons/terraform/terraform-provider-scaffold/resources/account-creds.cue
+Rendering hack/addons/terraform/terraform-provider-scaffold/resources/parameter.cue
+Rendering hack/addons/terraform/terraform-provider-scaffold/resources/provider.cue
+Rendering hack/addons/terraform/terraform-provider-scaffold/template.yaml
 
 $ ls addons/terraform-tencent
-definitions   metadata.yaml readme.md     resources     template.yaml
+metadata.yaml readme.md     resources     template.yaml
 ```
 
 ## Verify the Terraform Addon
@@ -93,4 +94,4 @@ Push the code generated in `./addons` and make a pull request.
 
 ## Contribute documentation
 
-Write [Terraform Addon enable doc](../../reference/addons/terraform.md) for your cloud provider and add it to [all supported cloud providers](../../tutorials/consume-cloud-services.md#enabling-cloud-vendor-addons).
+Write [Terraform Addon enable doc](../../reference/addons/terraform.md) for your cloud provider and add it to the [list of provider addons](../../reference/addons/terraform.md#enable-terraform-provider-addon).
