@@ -2,44 +2,117 @@
 title: Build your Own Registry
 ---
 
-An addon registry can be used for discovering and distributing addons. Currently, KubeVela supports two kinds of registries:
+An addon registry is where `vela` discovers addons and installs them from. You can build one on whatever already holds your artifacts:
 
-- Git Repo, you just need to push addon artifacts to any git repository to work. This kind relies on git to manage addon version while kubevela can only recognize the latest version.
-- Helm repo, addon registry can share the same infrastructure with your helm charts, the format are strictly aligned. But addon can's be installed by helm, it need render for special files such as CUE. The package version management is aligned with Helm and KubeVela can recognize versions and install with a specified one.
+| Type | `--type` | Versions | `vela addon push` | Credentials | Use it when |
+| --- | --- | --- | --- | --- | --- |
+| OCI registry | `oci` | Yes, each tag is a version | Yes | `--username` with `--password-stdin` (or `--password`) | You already run an OCI registry, such as ECR, GHCR, Harbor or Docker Hub. |
+| Helm repository | `helm` | Yes | ChartMuseum and compatible servers only | `--username` with `--password-stdin` (or `--password`); `--insecureSkipTLS` for a self-signed certificate | You already run a Helm chart repository. |
+| GitHub | `git` | Latest only | No, push with `git` | `--gitToken` | You want addons reviewed and merged like code. |
+| GitLab | `gitlab` | Latest only | No, push with `git` | `--gitToken`, plus `--gitlabRepoName` | As GitHub, on GitLab. |
+| Gitee | `gitee` | Latest only | No, push with `git` | `--gitToken` | As GitHub, on Gitee. |
+| Object storage | `OSS` | Latest only | No, upload the files | None, the bucket must be readable | You serve static files from a bucket, such as Alibaba Cloud OSS. |
+
+"Latest only" means `vela` installs whatever the registry holds now; you can't pick an older version. OCI and Helm registries store versioned addon packages, and `vela addon enable <addon> --version <version>` installs a specific one. A Helm repository stores addons as charts, but Helm itself can't install them, since addons contain CUE that only `vela` renders.
+
+## Build an addon registry with an OCI registry
+
+An OCI registry stores each addon as a Helm chart at `<endpoint>/<addon name>`, tagged with the addon's version. When you don't ask for a version, `vela` installs the highest one.
+
+### Push addons
+
+Push an addon directory or a packaged `.tgz` to an `oci://` URL. `vela addon push` packages a directory for you:
+
+```shell
+printf '%s' "$REGISTRY_PASSWORD" | vela addon push sample-addon oci://registry.example.com/addons --username myuser --password-stdin
+```
+
+This pushes `oci://registry.example.com/addons/sample-addon`, tagged with the version in the addon's `metadata.yaml`. Use `-v` to push a different version.
+
+If you've already logged in with `helm registry login` or `docker login`, leave out `--username` and `--password-stdin`, and `vela` uses those saved credentials:
+
+```shell
+vela addon push sample-addon oci://registry.example.com/addons
+```
+
+The `HELM_REPO_USERNAME` and `HELM_REPO_PASSWORD` environment variables work in place of the flags. Use `--use-http` for a registry that only speaks plain HTTP, such as a local test registry. The ChartMuseum flags (`--access-token`, `--auth-header`, `--ca-file`, `--cert-file`, `--key-file` and `--insecure`) don't apply to OCI and are refused.
+
+Each push also updates a catalog of the addons under the same endpoint, stored as the chart `kubevela-addon-catalog`. That catalog is how `vela addon list` finds the addons, since an OCI registry has no index of its own. If the catalog can't be updated, for example because your credentials can't push to that repository, the addon is still pushed and `vela` prints a warning. `vela addon list` then falls back to listing the registry's repositories, which not every registry allows (Docker Hub doesn't).
+
+### Add the registry
+
+```shell
+printf '%s' "$REGISTRY_PASSWORD" | vela addon registry add my-oci --type oci --endpoint=oci://registry.example.com/addons --username=myuser --password-stdin
+```
+
+The endpoint must use the `oci://` scheme. Give `--username` and a password together, or neither for a registry that allows anonymous pulls. The password is kept in a Secret in `vela-system`, not in the registry's ConfigMap.
+
+Once the registry is added, you can push to it by name, and `vela` uses the credentials stored with it:
+
+```shell
+vela addon push sample-addon my-oci
+```
+
+### Amazon ECR
+
+ECR takes the user `AWS` and a token from the AWS CLI:
+
+```shell
+aws ecr get-login-password --region <region> | vela addon registry add ecr --type oci --endpoint=oci://<account>.dkr.ecr.<region>.amazonaws.com/addon --username=AWS --password-stdin
+```
+
+An ECR token expires after 12 hours. Refresh the stored one with `vela addon registry update`, which takes the same flags:
+
+```shell
+aws ecr get-login-password --region <region> | vela addon registry update ecr --type oci --endpoint=oci://<account>.dkr.ecr.<region>.amazonaws.com/addon --username=AWS --password-stdin
+```
+
+ECR refuses a push to a repository that doesn't exist, unless your registry creates repositories on push. Create one for each addon, such as `addon/sample-addon`, and one named `addon/kubevela-addon-catalog` for the catalog.
 
 ## Build Addon Registry with Git Repository
 
-A directory with some subdirectories stored in a git repository can be used as an addon registry.
+A directory with some subdirectories stored in a git repository can be used as an addon registry. GitHub, GitLab and Gitee are supported.
 
-The git type registry type supports GitHub, GitLab, and Gitee.
+A typical git addon registry is like [catalog](https://github.com/kubevela/catalog/tree/master/addons), whose addons sit in its `addons/` directory. To start from it, clone it and push it to your own git repository:
 
-A typical git addon registry is like [catalog](https://github.com/kubevela/catalog/tree/master/addons). You can clone this repo to your local path and then push to your own git repository.
-
-```yaml
-$ git clone https://github.com/kubevela/catalog/tree/master/addons
-$ git remote add <repoName> <you git server address>
-$ git push -u <repoName> master
+```shell
+git clone https://github.com/kubevela/catalog
+cd catalog
+git remote add <repoName> <your git server address>
+git push -u <repoName> master
 ```
 
-If your repository type is GitHub, you can use this command to add your addon registry.
+If your repository is on GitHub, add it as a registry with:
 
-```yaml
-vela addon registry add my-repo --type git --endpoint=<URL> --path=<ptah> --gitToken=<git token>
+```shell
+vela addon registry add my-repo --type git --endpoint=<URL> --path=<path> --gitToken=<git token>
 ```
 
-If your type is Gitee, you can use:
+For the copy of the catalog above, `--path=addons`.
 
-```yaml
-vela addon registry add my-repo --type gitee --endpoint=<URL> --path=<ptah> --gitToken=<git token>
+If it's on Gitee:
+
+```shell
+vela addon registry add my-repo --type gitee --endpoint=<URL> --path=<path> --gitToken=<git token>
 ```
 
-If your type is GitLab, you can use:
+If it's on GitLab:
 
-```yaml
-vela addon registry add my-repo --type gitlab --gitRepoName=<repoName> --endpoint=<URL> --path=<ptah> --gitToken=<git token>
+```shell
+vela addon registry add my-repo --type gitlab --gitlabRepoName=<repoName> --endpoint=<URL> --path=<path> --gitToken=<git token>
 ```
 
 Push new addons just like checking code into your git repository.
+
+## Build an addon registry with object storage
+
+A bucket that serves its files over HTTP works as a registry too, laid out like the git catalog: one directory per addon. Add it with:
+
+```shell
+vela addon registry add my-bucket --type OSS --endpoint=<URL> --bucket=<bucket name> --path=<path>
+```
+
+The type is written in capitals, `OSS`. There are no credentials, so the bucket must be publicly readable.
 
 ## Build and push to custom Helm Chart repository
 
@@ -83,7 +156,7 @@ Use your newly created ChartMuseum repository (or any other Helm Chart repositor
 
 ```shell
 $ vela addon registry add localcm --type helm --endpoint=http://localhost:8080 
-# If username and password is required, you can specify them with --username and --password
+# If username and password is required, you can specify them with --username and --password (or --password-stdin)
 # If the repo setup with self-signed certificate, you can use flag `--insecureSkipTLS` to add it.
 ```
 
@@ -98,21 +171,27 @@ localcm 	helm	http://localhost:8080
 
 ### Push an addon to your registry
 
-> Note: you need to upgrade your CLI to v1.5.0+ for this feature.
-
 Prepare your addon. We will create a new one named `sample-addon` here:
 
 ```shell
 $ vela addon init sample-addon
 # A conventional addon directory will be created
 # ./sample-addon
+# ├── README.md
 # ├── definitions
+# │   └── mytrait.cue
 # ├── metadata.yaml
-# ├── readme.md
+# ├── parameter.cue
 # ├── resources
+# │   └── myresource.cue
 # ├── schemas
-# └── template.yaml
+# │   └── myschema.yaml
+# ├── template.cue
+# └── views
+#     └── my-view.cue
 ```
+
+The files under `definitions/`, `resources/`, `schemas/` and `views/` are samples; `--no-samples` leaves them out.
 
 (Optional) Package your addon:
 
@@ -153,7 +232,7 @@ sample-addon  localcm    An addon for KubeVela.  [1.0.0]             disabled
 
 ## Sync addons to ChartMuseum in an air-gapped environment
 
-As described in [*Air-gapped Installation for Addon*](../system-operation/enable-addon-offline.md), you can enable an addon from local filesystem. But some addons required a Helm Chart, then you will need to build a Chart repository for that. This section is to tackle that problem. You will also learn how to sync [addon catalog](https://github.com/kubevela/catalog) to your ChartMuseum instance, so that you can directly enable an addon from a registry, instead of enabling it from local filesystem.
+As described in [*Air-gapped Installation for Addon*](../system-operation/offline-installation.md#addons), you can enable an addon from local filesystem. But some addons required a Helm Chart, then you will need to build a Chart repository for that. This section is to tackle that problem. You will also learn how to sync [addon catalog](https://github.com/kubevela/catalog) to your ChartMuseum instance, so that you can directly enable an addon from a registry, instead of enabling it from local filesystem.
 
 ### Goals
 
@@ -200,7 +279,7 @@ Before you continue, you need to make sure you can access your ChartMuseum insta
 
 Inside the repo that you just cloned, navigate to `catalog/addons`. You should see a list of community-verified addons. 
 
-You can sync all of our addons in the catalog to your ChartMuseum instance and use them in your private environment. We will leverage `vela addon push` command (CLI v1.5 or later) to package these and sync them to ChartMuseum.
+You can sync all of our addons in the catalog to your ChartMuseum instance and use them in your private environment. We will use the `vela addon push` command to package these and sync them to ChartMuseum.
 
 As we all know, we can push a single addon to ChartMuseum by:
 
@@ -240,14 +319,14 @@ After you know the right Chart, pull the corresponding Chart:
 # Add the repo
 $ helm repo add dexidp https://charts.dexidp.io
 # Pull the right Chart
-$ helm pull dexidp/dex --version 0.6.5
-# You should see a package named `dex-0.6.5.tgz`
+$ helm pull dexidp/dex --version 0.15.3
+# You should see a package named `dex-0.15.3.tgz`
 ```
 
 Push the Chart to ChartMuseum:
 
 ```shell
-$ vela addon push dex-0.6.5.tgz localcm
+$ vela addon push dex-0.15.3.tgz localcm
 # You can use helm cm-push as well, if you have the Helm plugin installed.
 ```
 
@@ -268,10 +347,11 @@ spec:
       type: helm
       properties:
         chart: dex
-        version: "0.6.5"
+        version: "0.15.3"
         # Put your ChartMuseum URL here
         url: "http://10.2.1.4:8080"
         repoType: helm
+        # Keep the addon's `values` as they are
 ```
 
 Great! After you enable this addon, it will try to fetch the Chart from your ChartMuseum instance. (You should also consider making the images inside the Chart available to you too.)
