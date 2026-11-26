@@ -18,6 +18,11 @@ kind: Application
 metadata:
   name: <name>
 spec:
+  sources:
+    - name: <source name>
+      type: <source type>
+      properties:
+        <source parameter values>
   components:
     - name: <component name>
       type: <component type>
@@ -37,10 +42,11 @@ spec:
     properties:
       <policy parameter values>
   workflow:
-    - name: <step name>
-      type: <step type>
-      properties:
-        <step parameter values>   
+    steps:
+      - name: <step name>
+        type: <step type>
+        properties:
+          <step parameter values>
 ```
 
 This `Application` entity will reference `component`, `trait`, `policy` and `workflow step` types which are essentially programmable modules that are maintained by platform team. Hence, this abstraction is highly extensible and can be customized in-place at ease.
@@ -52,6 +58,8 @@ This `Application` entity will reference `component`, `trait`, `policy` and `wor
 * **Policy**: Policy defines a strategy of certain aspect for application as to multi-cluster topology, configuration overrides, security/firewall rules, SLO and etc. It's a bit similar with traits but take affects to the whole application instead of one component.
 
 * **Workflow Step**: Workflow step allows you to define every steps in the delivery process, typical steps are manual approval, partial deploy, notification.
+
+* **Source**: A source fetches a value from outside the Application, such as a ConfigMap, a Config, a file in Git or an HTTP endpoint, and components read it with `$(source.<name>)`.
 
 The modules that make up the application are all extensible, they are defined by a bunch of programmable configurations called [Definitions](../platform-engineers/oam/x-definition.md). Under the hood, KubeVela will glue and leverage Kubernetes API to drive the infrastructure capabilities. You can check the following picture to see their relationships:
 

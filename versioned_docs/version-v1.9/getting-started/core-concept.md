@@ -37,10 +37,11 @@ spec:
     properties:
       <policy parameter values>
   workflow:
-    - name: <step name>
-      type: <step type>
-      properties:
-        <step parameter values>   
+    steps:
+      - name: <step name>
+        type: <step type>
+        properties:
+          <step parameter values>
 ```
 
 This `Application` entity will reference `component`, `trait`, `policy` and `workflow step` types which are essentially programmable modules that are maintained by platform team. Hence, this abstraction is highly extensible and can be customized in-place at ease.
