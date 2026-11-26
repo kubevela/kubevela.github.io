@@ -664,6 +664,10 @@ Both `view` and `dry-run` support the same `--details`, `--outcome`, `-p`, and `
 
 Which global policies apply depends on the controller's `--allow-namespace-global-policies` and `--allow-skip-global-policies` flags, which the CLI cannot read, so pass the controller's values to `dry-run`. See [Previewing with `vela policy dry-run`](./policy-rollout.md#previewing-with-vela-policy-dry-run).
 
+To pin a policy's behaviour down as the definition changes, write tests for it with
+`#ApplicationPolicyRender`, which renders the policy against a given Application spec without a
+cluster. See [Testing CUE Definitions](../cue/definition-testing.md).
+
 ## Versioning PolicyDefinitions
 
 Application-scoped policies support [definition versioning](../x-def-version.md). Each ApplicationRevision records the PolicyDefinition versions it was rendered with. A new revision (an Application spec change, its first deployment, or a `publishVersion` bump) takes the latest versions. Between revisions, whether a running Application adopts a new version is decided by its [rollout settings](./policy-rollout.md#new-policy-versions); with the defaults, it keeps the recorded version and reports the newer one as pending.

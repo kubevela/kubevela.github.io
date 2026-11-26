@@ -424,6 +424,12 @@ There're several reasons:
 
 So KubeVela allow patch or override in this case, please refer to [patch trait](./patch-trait.md) for more details. As trait and workflow step can both patch, so we write them together.
 
+:::tip
+A patch unifies with whatever workload it meets, so it can conflict with one you did not expect.
+[Test the trait](../cue/definition-testing.md#testing-traits) against the workloads it should patch,
+with `#TraitRender` for the patch and `#TraitStatus` for its health.
+:::
+
 ## Define Health for Trait
 > **MOVED**: Please refer to [Definition Health & Status](../status/definition_health_status.md).
 

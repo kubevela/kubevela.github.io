@@ -170,6 +170,17 @@ vela def vet my-comp.cue
 
 It can be used to detect some simple errors such as missing brackets.
 
+## test
+
+`vela def test` runs the tests in `*_test.cue` files beside your definitions: what a definition
+renders, its health and status, what a workflow step does, and what a source resolves to.
+
+```bash
+vela def test ./definitions
+```
+
+See [Testing CUE Definitions](./definition-testing.md).
+
 ## apply
 
 After confirming the definition file has correct syntax, users can apply this definition into control plane by:

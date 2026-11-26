@@ -126,6 +126,11 @@ spec:
 
 You can define any Kubernetes API objects in policies if you want.
 
+:::tip
+To check what a policy generates from the Application's components, test it with `#PolicyRender`.
+See [Testing CUE Definitions](../cue/definition-testing.md).
+:::
+
 ## Special Policy
 
 Not all policies generate resources, there're several [built-in policies](../../end-user/policies/references.md) which are used to control the whole delivery precess and workflows.
