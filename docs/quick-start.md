@@ -212,7 +212,7 @@ Services:
 ```
 </details>
 
-Great! You have finished deploying your first KubeVela application, you can also view and manage it in UI.
+Great! You have finished deploying your first KubeVela application, you can also view and manage it in UI. To check what an application is doing, and why, see [Debugging Application](./tutorials/debug-app.md).
 
 ## Manage application with UI Console
 

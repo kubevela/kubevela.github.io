@@ -34,6 +34,8 @@ kubectl krew update
 kubectl krew install vela
 ```
 
+The Krew index only carries amd64 builds. On Apple silicon or another arm64 machine, use the release page in the Script tab.
+
 </TabItem>
 <TabItem value="script">
 
@@ -43,8 +45,7 @@ kubectl krew install vela
 curl -fsSl https://kubevela.io/script/install-kubectl-vela.sh | bash
 ```
 
-You can also download the binary from [release pages ( >= v1.0.3)](https://github.com/kubevela/kubevela/releases) manually.
-Kubectl will discover it from your system path automatically.
+The script installs the newest release. While a pre-release is the newest release, it stops with `Failed to get latest release tag`; download the `kubectl-vela` binary from the [release page](https://github.com/kubevela/kubevela/releases) instead and put it on your `PATH`. Kubectl finds it there by itself.
 
 </TabItem>
 </Tabs>

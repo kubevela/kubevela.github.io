@@ -2,7 +2,7 @@
 title: vela uischema apply
 ---
 
-apply `<ui schema file/dir path>`
+Apply UI schemas to the cluster from a file or directory.
 
 ### Synopsis
 

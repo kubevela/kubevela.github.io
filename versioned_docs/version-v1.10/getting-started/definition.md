@@ -2,9 +2,7 @@
 title: Definition
 ---
 
-OAM Definitions are basic building blocks of the KubeVela platform. A definition encapsulates an arbitrarily complex automation as a lego style module, then safely shared, discovered and be used to compose an Application delivered by any KubeVela engine.
-
-With the help of OAM definitions, the platform builder can easily adopt infrastructure capabilities from ecosystem, hide complexity with their best practices without losing any extensibility, the most important is the application won't be affected even if we change the capability providers.
+A definition is a reusable building block. It declares the parameters developers fill in and the Kubernetes resources KubeVela creates from them. The built-in `webservice` component type is one; your platform team can write more.
 
 ![alt](../resources/definition-cap.png)
 
@@ -42,14 +40,16 @@ vela def list
 <summary>expected output</summary>
 
 ```
-NAME                         	TYPE                  	NAMESPACE  	DESCRIPTION
-webservice                   	ComponentDefinition   	vela-system	Describes long-running, scalable, containerized services
-                             	                      	           	that have a stable network endpoint to receive external
-                             	                      	           	network traffic from customers.
-gateway                      	TraitDefinition       	vela-system	Enable public web traffic for the component, the ingress API
-                             	                      	           	matches K8s v1.20+.
-health                       	PolicyDefinition      	vela-system	Apply periodical health checking to the application.
-notification                 	WorkflowStepDefinition	vela-system	Send message to webhook
+NAME        	TYPE                  	NAMESPACE  	DESCRIPTION
+webservice  	ComponentDefinition   	vela-system	Describes long-running, scalable, containerized services
+            	                      	           	that have a stable network endpoint to receive external
+            	                      	           	network traffic from customers.
+gateway     	TraitDefinition       	vela-system	Enable public web traffic for the component, the ingress API
+            	                      	           	matches K8s v1.20+.
+topology    	PolicyDefinition      	vela-system	Describe the destination where components should be deployed
+            	                      	           	to.
+notification	WorkflowStepDefinition	vela-system	Send notifications to Email, DingTalk, Slack, Lark or
+            	                      	           	webhook in your workflow.
 ...snip...
 ```
 </details>
@@ -64,17 +64,28 @@ vela show webservice
 <summary>expected output</summary>
 
 ```
-# Properties
-+------------------+-------------------------------------------------------------------------------------------+-----------------------------------+----------+---------+
-|       NAME       |                                        DESCRIPTION                                        |               TYPE                | REQUIRED | DEFAULT |
-+------------------+-------------------------------------------------------------------------------------------+-----------------------------------+----------+---------+
-| cmd              | Commands to run in the container                                                          | []string                          | false    |         |
-| env              | Define arguments by using environment variables                                           | [[]env](#env)                     | false    |         |
-| labels           | Specify the labels in the workload                                                        | map[string]string                 | false    |         |
-| annotations      | Specify the annotations in the workload                                                   | map[string]string                 | false    |         |
-| image            | Which image would you like to use for your service                                        | string                            | true     |         |
-| ports            | Which ports do you want customer traffic sent to, defaults to 80                          | [[]ports](#ports)                 | false    |         |
-+------------------+-------------------------------------------------------------------------------------------+-----------------------------------+----------+---------+
+# Specification
++------------------+-------------------------------------------------------------------------------------------+---------------------------------------+----------+---------+
+|       NAME       |                                        DESCRIPTION                                        |                 TYPE                  | REQUIRED | DEFAULT |
++------------------+-------------------------------------------------------------------------------------------+---------------------------------------+----------+---------+
+| labels           | Specify the labels in the workload.                                                       | map[string]string                     | false    |         |
+| annotations      | Specify the annotations in the workload.                                                  | map[string]string                     | false    |         |
+| image            | Which image would you like to use for your service.                                       | string                                | true     |         |
+| imagePullPolicy  | Specify image pull policy for your service.                                               | "Always" or "Never" or "IfNotPresent" | false    |         |
+| imagePullSecrets | Specify image pull secrets for your service.                                              | []string                              | false    |         |
+| ports            | Which ports do you want customer traffic sent to, defaults to 80.                         | [[]ports](#ports)                     | false    |         |
+| cmd              | Commands to run in the container.                                                         | []string                              | false    |         |
+| args             | Arguments to the entrypoint.                                                              | []string                              | false    |         |
+| env              | Define arguments by using environment variables.                                          | [[]env](#env)                         | false    |         |
+| cpu              | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core).         | string                                | false    |         |
+| memory           | Specifies the attributes of the memory resource required for the container.               | string                                | false    |         |
+| limit            |                                                                                           | [limit](#limit)                       | false    |         |
+| volumeMounts     |                                                                                           | [volumeMounts](#volumemounts)         | false    |         |
+| volumes          | Deprecated field, use volumeMounts instead.                                               | [[]volumes](#volumes)                 | false    |         |
+| livenessProbe    | Instructions for assessing whether the container is alive.                                | [livenessProbe](#livenessprobe)       | false    |         |
+| readinessProbe   | Instructions for assessing whether the container is in a suitable state to serve traffic. | [readinessProbe](#readinessprobe)     | false    |         |
+| hostAliases      | Specify the hostAliases to add.                                                           | [[]hostAliases](#hostaliases)         | false    |         |
++------------------+-------------------------------------------------------------------------------------------+---------------------------------------+----------+---------+
 ...snip...
 ```
 </details>
@@ -154,10 +165,11 @@ spec:
           policies: ["target-prod", "deploy-ha"]
 ```
 
-Use the definition in `vela` command line works the same, you can compose the application yaml manually and deploy by `vela up` command.
+On the command line it works the same way: save the Application above as `first-app.yaml`, create the `prod` namespace its `target-prod` policy deploys to, and apply it with `vela up`:
 
 ```
-vela up -f https://kubevela.io/example/applications/first-app.yaml
+kubectl create namespace prod
+vela up -f first-app.yaml
 ```
 
 Application is also one kind of Kubernetes CRD, you can also use `kubectl apply` or invoke Kubernetes API to integrate with vela application.
@@ -170,32 +182,6 @@ In most cases, you don't need to customize any definitions **unless you're going
 
 A new definition is built in a declarative template in [CUE configuration language](https://cuelang.org/). If you're not familiar with CUE, you can refer to [CUE Basic](../platform-engineers/cue/basic.md) for some knowledge. 
 
-A definition describes the module's inputs, outputs, operations, and the wiring between them. Here is an example of a simple component definition:
-
-```
-webserver: {
-	type: "component"
-	attributes: {}
-}
-
-template: {
-	parameter: {
-		name:  string
-		image: string
-	}
-	output: {
-		apiVersion: "apps/v1"
-		kind:       "Deployment"
-		spec: {
-			containers: [{
-				name:  parameter.name
-				image: parameter.image
-			}]
-		}
-	}
-}
-```
-
-The `type` defines what kind of definition it is, the `parameter` defines the inputs, while the `output` section defines the outputs.
+A definition declares its inputs (`parameter`) and the resources it creates (`output`). To write one, follow [Component Definition](../platform-engineers/components/custom-component.md).
 You can refer to detail docs about [how to manage definition](../platform-engineers/cue/definition-edit.md) or learn the [definition protocol](../platform-engineers/oam/x-definition.md).
 

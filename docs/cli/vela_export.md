@@ -2,7 +2,7 @@
 title: vela export
 ---
 
-Export deploy manifests from appfile
+Print the Kubernetes manifests an Application would deploy.
 
 ### Synopsis
 
