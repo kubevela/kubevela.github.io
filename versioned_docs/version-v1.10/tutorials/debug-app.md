@@ -4,6 +4,68 @@ title: Debugging Application
 
 KubeVela supports several CLI commands for debugging your applications, they can work on control plane and help you access resources across multi-clusters. Which also means you can play with your pods in managed clusters directly on the hub cluster, without switching KubeConfig context. If you have multiple clusters in on application, the CLI command will ask you to choose one interactively.
 
+## Deploy an example app
+
+The examples on this page use the application from [Quick Start](../quick-start.md). Save it as `first-app.yaml`:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-app
+spec:
+  components:
+    - name: express-server
+      type: webservice
+      properties:
+        image: oamdev/hello-world
+        ports:
+         - port: 8000
+           expose: true
+      traits:
+        - type: scaler
+          properties:
+            replicas: 1
+  policies:
+    - name: target-default
+      type: topology
+      properties:
+        # The cluster with name local is installed the KubeVela.
+        clusters: ["local"]
+        namespace: "default"
+    - name: target-prod
+      type: topology
+      properties:
+        clusters: ["local"]
+        # This namespace must be created before deploying.
+        namespace: "prod"
+    - name: deploy-ha
+      type: override
+      properties:
+        components:
+          - type: webservice
+            traits:
+              - type: scaler
+                properties:
+                  replicas: 2
+  workflow:
+    steps:
+      - name: deploy2default
+        type: deploy
+        properties:
+          policies: ["target-default"]
+      - name: manual-approval
+        type: suspend
+      - name: deploy2prod
+        type: deploy
+        properties:
+          policies: ["target-prod", "deploy-ha"]
+```
+
+```bash
+vela up -f first-app.yaml
+```
+
 ## List Apps
 
 List all your applications.
@@ -14,18 +76,12 @@ vela ls
 
 <details>
 <summary>expected output</summary>
+
 ```
-APP          	COMPONENT   	TYPE      	TRAITS 	PHASE             	HEALTHY	STATUS                                                      	CREATED-TIME
-war          	war         	java-war  	       	running           	healthy	Ready:1/1                                                   	2022-09-30 17:32:29 +0800 CST
-ck-instance  	ck-instance 	clickhouse	       	running           	healthy	                                                            	2022-09-30 17:38:13 +0800 CST
-kubecon-demo 	hello-world 	java-war  	gateway	running           	healthy	Ready:1/1                                                   	2022-10-08 11:32:47 +0800 CST
-ck-app       	my-ck       	clickhouse	gateway	running           	healthy	Host not specified, visit the cluster or load balancer in   	2022-10-08 17:55:20 +0800 CST
-             	            	          	       	                  	       	front of the cluster with IP: 47.251.8.82
-demo2        	catalog     	java-war  	       	workflowSuspending	healthy	Ready:1/1                                                   	2022-10-08 16:22:11 +0800 CST
-├─           	customer    	java-war  	       	workflowSuspending	healthy	Ready:1/1                                                   	2022-10-08 16:22:11 +0800 CST
-└─           	order-web   	java-war  	gateway	workflowSuspending	healthy	Ready:1/1                                                   	2022-10-08 16:22:11 +0800 CST
-kubecon-demo2	hello-world2	java-war  	gateway	workflowSuspending	healthy	Ready:1/1                                                   	2022-10-08 11:48:41 +0800 CST
+APP           	COMPONENT     	TYPE      	TRAITS	PHASE             	HEALTHY	STATUS   	CREATED-TIME
+first-vela-app	express-server	webservice	scaler	workflowSuspending	healthy	Ready:1/1	2022-10-09 12:10:30 +0800 CST
 ```
+
 </details>
 
 ## Show status of app
@@ -33,7 +89,6 @@ kubecon-demo2	hello-world2	java-war  	gateway	workflowSuspending	healthy	Ready:1
 - `vela status` can give you an overview of your deployed multi-cluster application.
 
 ```
-vela up -f https://kubevela.io/example/applications/first-app.yaml
 vela status first-vela-app
 ```
 

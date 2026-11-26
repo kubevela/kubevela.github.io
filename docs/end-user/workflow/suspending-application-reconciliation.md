@@ -23,7 +23,7 @@ metadata:
 This is useful when you need to:
 
 - Perform manual operations on underlying resources (e.g., debug/triage in staging) without KubeVela reverting your changes.
-- Downscale or quiet non-critical services during weekends/off-hours.
+- Scale a non-critical service down by hand over a weekend without KubeVela scaling it back.
 - Prevent State Keep (periodic re-apply) from overwriting temporary/manual changes while you investigate incidents.
 
 Availability: `controller.core.oam.dev/pause` is supported in KubeVela v1.9+. Older releases (≤ v1.8) do not support this label.

@@ -502,6 +502,7 @@
       "label": "References",
       "items": [
         "cli/vela",
+        "platform-engineers/oam/definition-file",
         "platform-engineers/oam/x-definition",
         "end-user/components/references",
         "end-user/traits/references",
@@ -529,7 +530,6 @@
             "reference/addons/traefik",
             "reference/addons/cert-manager",
             "reference/addons/kubevela-io",
-            "reference/addons/pyroscope",
             "reference/addons/vegeta",
             "reference/addons/ocm-gateway-manager-addon",
             "reference/addons/ocm-hub-control-plane",

@@ -135,6 +135,7 @@ import (
 
 func TestingDemo() *defkit.ComponentDefinition {
     image := defkit.String("image").
+        Required().
         Description("Container image")
     replicas := defkit.Int("replicas").
         Default(1).
@@ -191,12 +192,23 @@ import (
     . "github.com/onsi/ginkgo/v2"
     . "github.com/onsi/gomega"
 
-    "my-platform/components"
+    "github.com/myorg/my-platform/components"
 
     "github.com/oam-dev/kubevela/pkg/definition/defkit"
     "github.com/oam-dev/kubevela/pkg/definition/defkit/placement"
     . "github.com/oam-dev/kubevela/pkg/definition/defkit/testing/matchers"
 )
+
+// param returns the parameter the definition declares under name.
+func param(comp *defkit.ComponentDefinition, name string) defkit.Param {
+    for _, p := range comp.GetParams() {
+        if p.Name() == name {
+            return p
+        }
+    }
+    Fail("no parameter named " + name)
+    return nil
+}
 
 var _ = Describe("TestingDemo Component", func() {
 
@@ -242,24 +254,24 @@ var _ = Describe("TestingDemo Component", func() {
     })
 
     Describe("parameter matchers", func() {
-        It("BeRequired matches a required parameter", func() {
-            image := defkit.String("image").Required()
+        var comp *defkit.ComponentDefinition
+
+        BeforeEach(func() {
+            comp = components.TestingDemo()
+        })
+
+        It("requires image", func() {
+            image := param(comp, "image")
             Expect(image).To(BeRequired())
-        })
-
-        It("BeOptional matches an optional parameter", func() {
-            port := defkit.Int("port").Optional()
-            Expect(port).To(BeOptional())
-        })
-
-        It("HaveDefaultValue matches a parameter with a specific default", func() {
-            replicas := defkit.Int("replicas").Default(1)
-            Expect(replicas).To(HaveDefaultValue(1))
-        })
-
-        It("HaveDescription matches the description set on a parameter", func() {
-            image := defkit.String("image").Description("Container image")
             Expect(image).To(HaveDescription("Container image"))
+        })
+
+        It("defaults replicas to 1", func() {
+            Expect(param(comp, "replicas")).To(HaveDefaultValue(1))
+        })
+
+        It("leaves port optional", func() {
+            Expect(param(comp, "port")).To(BeOptional())
         })
     })
 
@@ -433,7 +445,7 @@ var _ = Describe("TestingDemo Component", func() {
         It("ToCue produces valid CUE referencing parameter names", func() {
             cue := components.TestingDemo().ToCue()
             Expect(cue).To(ContainSubstring(`type: "component"`))
-            Expect(cue).To(ContainSubstring(`image: string`))
+            Expect(cue).To(ContainSubstring(`image!: string`))
             Expect(cue).To(ContainSubstring(`replicas: *1 | int`))
             Expect(cue).To(ContainSubstring(`port?: int`))
         })
@@ -497,7 +509,7 @@ template: {
   }
   parameter: {
     // +usage=Container image
-    image: string
+    image!: string
     // +usage=Number of replicas
     replicas: *1 | int
     // +usage=Container port to expose
@@ -537,30 +549,59 @@ vela def gen-module ./my-platform -o ./generated-cue
 
 ### Apply and verify
 
-The `testing-demo` component exercises a purely unit-level testing surface — `comp.Render()`, `comp.RenderAll()`, accessor methods, Gomega matchers, and `placement.Evaluate()` all run in-process. No cluster is required to run the test suite. Use `-v` to see the Ginkgo dots; without it, `go test` prints only the package-level pass line.
+The `testing-demo` component exercises a purely unit-level testing surface: `comp.Render()`, `comp.RenderAll()`, accessor methods, Gomega matchers, and `placement.Evaluate()` all run in-process, with no cluster.
+
+Ginkgo only runs specs in a package that has a suite file, so add one next to the test, as `my-platform/components/components_suite_test.go`. Without it, `go test` finds no specs and passes without running anything.
+
+```go title="components_suite_test.go"
+package components_test
+
+import (
+    "testing"
+
+    . "github.com/onsi/ginkgo/v2"
+    . "github.com/onsi/gomega"
+)
+
+func TestComponents(t *testing.T) {
+    RegisterFailHandler(Fail)
+    RunSpecs(t, "Components Suite")
+}
+```
+
+If you don't use Ginkgo, the same calls work in a plain Go test with Gomega's `NewWithT`:
+
+```go
+func TestTestingDemoImage(t *testing.T) {
+    g := NewWithT(t)
+    rendered := components.TestingDemo().Render(
+        defkit.TestContext().WithParam("image", "nginx:1.25"),
+    )
+    g.Expect(rendered.Get("spec.template.spec.containers[0].image")).To(Equal("nginx:1.25"))
+}
+```
+
+Run the specs from the module root. `-v` shows Ginkgo's progress; without it, `go test` prints only the package line.
 
 ```shell
-go test -v ./components/...
+go test ./components/... -v
 ```
 
 ```
-Running Suite: Components Suite - my-platform/components
-=========================================================
-Random Seed: 1779035494
+=== RUN   TestComponents
+Running Suite: Components Suite - /home/me/my-platform/components
+=================================================================
+Random Seed: 1795540998
 
-Will run 237 of 237 specs
-••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
-••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
-•••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
+Will run 28 of 28 specs
+••••••••••••••••••••••••••••
 
-Ran 237 of 237 Specs in 0.040 seconds
-SUCCESS! -- 237 Passed | 0 Failed | 0 Pending | 0 Skipped
---- PASS: TestComponents (0.05s)
+Ran 28 of 28 Specs in 0.004 seconds
+SUCCESS! -- 28 Passed | 0 Failed | 0 Pending | 0 Skipped
+--- PASS: TestComponents (0.00s)
 PASS
-ok      my-platform/components    0.056s
+ok  	github.com/myorg/my-platform/components	0.624s
 ```
-
-All 237 specs pass, including the `TestingDemo Component` suite that exercises every method in the tables above.
 
 The same definition deploys cleanly against a live cluster — useful as a smoke test that your unit-tested template renders to a valid Kubernetes object the controller accepts:
 
@@ -568,7 +609,7 @@ The same definition deploys cleanly against a live cluster — useful as a smoke
 # placement RunOn requires environment != development
 kubectl create configmap vela-cluster-identity -n vela-system \
   --from-literal=environment=production
-vela def apply ./vela-templates/definitions/component/testing-demo.cue
+vela def apply ./generated-cue/components/testingdemo.cue
 vela up -f testing-demo-app.yaml   # type: testing-demo, properties: image+replicas+port
 ```
 
@@ -599,6 +640,6 @@ kubectl delete configmap vela-cluster-identity -n vela-system
 - [ComponentDefinition](./definition-component.md) — define workload types
 - [TraitDefinition](./definition-trait.md) — patch workloads with traits
 - [PolicyDefinition](./definition-policy.md) — define application policies
-- [WorkflowStepDefinition](./definition-workflow-step.md) — define workflow steps
+- [WorkflowStepDefinition](./definition-workflowstep.md): define workflow steps
 - [Cluster Placement](./cluster-placement.md) — `placement.Evaluate()` and `placement.ValidatePlacement()` in depth
 - [Quick Start](./quick-start.md) — scaffolding a `my-platform` module

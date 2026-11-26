@@ -228,7 +228,7 @@ spec:
 
 ### [Optional] Configure another workload type
 
-By now we have deployed a *[Web Service](../end-user/components/cue/webservice.md)*, which is the default workload type in KubeVela. We can also add another service of *[Task](../end-user/components/cue/task.md)* type in the same app:
+By now we have deployed a *[Web Service](../tutorials/webservice.mdx)*, which is the default workload type in KubeVela. We can also add another service of *[Task](../end-user/components/cue/task.md)* type in the same app:
 
 ```yaml
 services:

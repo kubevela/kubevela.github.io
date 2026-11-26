@@ -72,7 +72,6 @@ Source code of this addon are all here: https://github.com/kubevela/catalog/tree
 
 ## Developer Tools
 
-* [Pyroscope](./pyroscope.md): Pyroscope is an open source continuous profiling platform, consisting of server and agent. It allows the user to collect, store, and query the profiling data in a CPU and disk efficient way.
 * [Vegeta](./vegeta.md) Vegeta is a versatile HTTP load testing tool built out of a need to drill HTTP services with a constant request rate. It can be used both as a command line utility and a library.
 
 

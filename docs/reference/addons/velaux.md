@@ -5,7 +5,11 @@ title: VelaUX
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-VelaUX provides the UI console of KubeVela.
+VelaUX is the UI console for KubeVela.
+
+:::note
+The `velaux` addon in the default registry installs VelaUX v1.9.5 (addon version v1.9.5). That release predates KubeVela 1.12, so its screens don't cover the 1.12 additions: it does not show sources or modules, there is no UI for the ConfigTemplate CRD, the `+ui` parameter markers don't change its forms, and it can't edit a config Secret that 1.12 adopted.
+:::
 
 ![alt](../../resources/velaux-view.jpg)
 
@@ -15,7 +19,7 @@ VelaUX provides the UI console of KubeVela.
 vela addon enable velaux
 ```
 
-expected output:
+Expected output:
 
 ```
 Addon: velaux enabled Successfully.
@@ -23,42 +27,60 @@ Addon: velaux enabled Successfully.
 
 VelaUX needs authentication. The first time you open it, it asks you to create the administrator account: a username, a password and an email. After that, log in with that username and password.
 
-By default, VelaUX didn't have any exposed port.
+By default VelaUX is not exposed outside the cluster.
+
+## Parameters
+
+Pass these to `vela addon enable velaux` as `name=value`.
+
+| Parameter | Default | Description |
+| --- | --- | --- |
+| `serviceType` | `ClusterIP` | Service type: `ClusterIP`, `NodePort` or `LoadBalancer`. |
+| `nodePort` | `30000` | Node port to use when `serviceType=NodePort`; ignored otherwise. |
+| `domain` | | Domain to serve VelaUX on. Creates an Ingress (or a traefik route, see `gatewayDriver`). |
+| `gatewayDriver` | `nginx` | `nginx` or `traefik`. |
+| `secretName` | | Name of the TLS certificate Secret. Set it to serve VelaUX over HTTPS. |
+| `dbType` | `kubeapi` | Where VelaUX stores its data: `kubeapi`, `mongodb`, `mysql` or `postgres`. |
+| `dbURL` | | Connection URL for the database. Not used with `kubeapi`. |
+| `database` | | Database name. With `kubeapi`, the namespace VelaUX stores its data in. |
+| `repo` | | Image registry to pull the VelaUX image from, in place of Docker Hub. |
+| `imagePullSecrets` | | Names of image pull Secrets for a private registry, for example `imagePullSecrets={a,b}`. |
+| `replicas` | `1` | Number of VelaUX server replicas. |
+| `serviceAccountName` | `kubevela-ux` | ServiceAccount the VelaUX server runs as. |
+| `enableImpersonation` | `false` | Send requests to the Kubernetes API as the signed-in user, rather than as VelaUX's ServiceAccount. |
 
 ## Visit VelaUX by port-forward
 
-Port forward will work as a proxy to allow visiting VelaUX dashboard by local port.
+Port forwarding opens VelaUX on a local port, with nothing exposed outside the cluster.
 
 ```
 vela port-forward addon-velaux -n vela-system
 ```
 
-Choose `> local | velaux | velaux` for visit.
+When asked, pick `local | velaux | velaux`.
 
-## Setup with Specified Service Type
+Everything the UI does goes through the VelaUX REST API, which you can call yourself; see [VelaUX REST API](../../platform-engineers/openapi/overview.md).
 
-There are three service types for VelaUX addon which aligned with Kubernetes service, they're `ClusterIP`, `NodePort` and `LoadBalancer`.
+## Expose VelaUX with a Service type
 
-By default the service type is ClusterIP for security.
+The `serviceType` parameter takes the Kubernetes Service types `ClusterIP` (the default), `NodePort` and `LoadBalancer`.
 
-If you want to expose your VelaUX dashboard for convenience, you can specify the service type.
-
-- `LoadBalancer` type requires your cluster has cloud LoadBalancer available.
+- `LoadBalancer` needs a cloud load balancer in your cluster.
   ```shell script
   vela addon enable velaux serviceType=LoadBalancer
   ```
-- `NodePort` type requires you can access the Kubernetes Node IP/Port.
+- `NodePort` needs you to reach the Kubernetes node IPs. VelaUX listens on node port `30000` unless you set `nodePort`.
   ```shell script
   vela addon enable velaux serviceType=NodePort
   ```
 
-After the service type specified to `LoadBalancer` or `NodePort`, you can obtain the access address through `vela status`:
+Then get the address with `vela status`:
 
 ```
 vela status addon-velaux -n vela-system --endpoint
 ```
 
-The expected output:
+Expected output:
 
 ```
 +----------------------------+----------------------+
@@ -68,15 +90,15 @@ The expected output:
 +----------------------------+----------------------+
 ```
 
-## Setup with Ingress domain
+## Expose VelaUX on a domain
 
-If you have ingress and domain available in your cluster, you can also deploy VelaUX by specify a domain like below:
+If your cluster has an ingress controller and a domain pointing at it, set `domain`:
 
 ```bash
 vela addon enable velaux domain=example.domain.com
 ```
 
-The expected output:
+Expected output:
 
 ```
 I0112 15:23:40.428364   34884 apply.go:106] "patching object" name="addon-velaux" resource="core.oam.dev/v1beta1, Kind=Application"
@@ -90,205 +112,73 @@ Please access the velaux from the following endpoints:
 +----------------------------+---------------------------+
 ```
 
-If you enabled the traefik addon, you can set the `gatewayDriver` parameter to use the Gateway API.
+If you enabled the traefik addon, set `gatewayDriver=traefik` to use the Gateway API instead:
 
 ```shell script
-vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik
+vela addon enable velaux domain=example.domain.com gatewayDriver=traefik
 ```
 
-If you want to enable VelaUX with SSL:
+To serve VelaUX over HTTPS:
 
-1. Create the certificate configuration:
+1. Create the certificate configuration. The certificate must match the domain.
 
 ```shell
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  annotations:
-    config.oam.dev/alias: "VelaUX SSL Certificate"
-  labels:
-    app.oam.dev/source-of-truth: from-inner-system
-    config.oam.dev/catalog: velacore-config
-    config.oam.dev/type: config-tls-certificate
-  name: velaux-cert
-  namespace: vela-system
-spec:
-  components:
-  - name: velaux
-    properties:
-      cert: <CERT_BASE64>
-      key: <KEY_BASE64>
-    type: config-tls-certificate
+vela config create velaux-cert -t tls-certificate -n vela-system cert=<CERT_BASE64> key=<KEY_BASE64>
 ```
 
-Please make sure the certificate matches the domain.
+The `tls-certificate` config template comes with the `traefik` addon, which `gatewayDriver=traefik` needs anyway.
 
-2. Enable VelaUX with domain
+2. Enable VelaUX with the domain and the certificate:
 
 ```shell
-vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik secretName=velaux-cert
+vela addon enable velaux domain=example.domain.com gatewayDriver=traefik secretName=velaux-cert
 ```
 
-## Setup with the database
+## Use an external database
 
-VelaUX supports Kubernetes, MongoDB, MySQL and PostgreSQL as the database. the default is Kubernetes. We strongly advise using the databases other than Kubernetes to power your production environment.
+VelaUX stores its data in Kubernetes by default (`dbType=kubeapi`). For production, use a MongoDB, MySQL or PostgreSQL database that you run or rent, and pass its URL in `dbURL`.
 
-<Tabs className="unique-tabs" groupId="os">
+<Tabs className="unique-tabs" groupId="db">
 <TabItem label="MongoDB" value="mongodb">
 
 ```shell script
-vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_PASSWORD>@<MONGODB_URL>
+vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_PASSWORD>@<MONGODB_HOST>:<MONGODB_PORT>
 ```
 
-You can also deploy the MongoDB with this application configuration:
-
-> Your cluster must have a default storage class.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: velaux-db
-  namespace: vela-system
-spec:
-  components:
-    - name: velaux-db
-      properties:
-        chart: mongodb
-        repoType: helm
-        url: https://charts.bitnami.com/bitnami
-        values:
-          persistence:
-            size: 20Gi
-        version: 12.1.12
-      type: helm
-  policies:
-    - name: vela-system
-      properties:
-        clusters:
-          - local
-        namespace: vela-system
-      type: topology
-  workflow:
-    steps:
-      - name: vela-system
-        properties:
-          policies:
-            - vela-system
-        type: deploy
-```
-
-After deployed, let's get the root password from the secret `vela-system/velaux-db-mongodb`.
 </TabItem>
-
 <TabItem label="MySQL" value="mysql">
+
+Create the database first.
 
 ```shell script
 vela addon enable velaux dbType=mysql dbURL=mysql://<MYSQL_USER>:<MYSQL_PASSWORD>@<MYSQL_HOST>:<MYSQL_PORT>/<MYSQL_DB_NAME>
 ```
-> It's necessary to create the specified database in advance. You can find the relevant connection string parameters [here](https://github.com/go-sql-driver/mysql#parameters)
 
-You can also deploy the MySQL with this application configuration:
+The URL takes the [Go MySQL driver's connection parameters](https://github.com/go-sql-driver/mysql#parameters).
 
-> Your cluster must have a default storage class.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: velaux-db
-  namespace: vela-system
-spec:
-  components:
-    - name: velaux-db
-      properties:
-        chart: mysql
-        repoType: helm
-        url: https://charts.bitnami.com/bitnami
-        values:
-          persistence:
-            size: 20Gi
-        version: 12.1.12
-      type: helm
-  policies:
-    - name: vela-system
-      properties:
-        clusters:
-          - local
-        namespace: vela-system
-      type: topology
-  workflow:
-    steps:
-      - name: vela-system
-        properties:
-          policies:
-            - vela-system
-        type: deploy
-```
-
-After deployed, let's get the root password from the secret `vela-system/velaux-db-mysql`.
 </TabItem>
-
 <TabItem label="PostgreSQL" value="postgresql">
+
+Create the database first.
 
 ```shell script
 vela addon enable velaux dbType=postgres dbURL=postgres://<POSTGRESQL_USER>:<POSTGRESQL_PASSWORD>@<POSTGRESQL_HOST>:<POSTGRESQL_PORT>/<POSTGRESQL_DB_NAME>
 ```
-> It's necessary to create the specified database in advance.
 
-You can also deploy the PostgreSQL with this application configuration:
-
-> Your cluster must have a default storage class.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: velaux-db
-  namespace: vela-system
-spec:
-  components:
-    - name: velaux-db
-      properties:
-        chart: postgresql
-        repoType: helm
-        url: https://charts.bitnami.com/bitnami
-        values:
-          persistence:
-            size: 20Gi
-        version: 12.1.12
-      type: helm
-  policies:
-    - name: vela-system
-      properties:
-        clusters:
-          - local
-        namespace: vela-system
-      type: topology
-  workflow:
-    steps:
-      - name: vela-system
-        properties:
-          policies:
-            - vela-system
-        type: deploy
-```
-
-After deployed, let's get the root password from the secret `vela-system/velaux-db-postgresql`.
 </TabItem>
 </Tabs>
 
-## Specify the addon image
+## Pull the image from your own registry
 
-By default the image repo is docker hub, you can specify the image repo by the `repo` parameter:
+The image comes from Docker Hub by default. To pull it from your own registry, copy the image there and set `repo`:
 
 ```
 vela addon enable velaux repo=your-registry.example.com
 ```
 
-With `repo=your-registry.example.com`, the image to deploy velaux server will be `your-registry.example.com/oamdev/velaux:<velaux-version>`.
+The VelaUX image then becomes `your-registry.example.com/oamdev/velaux:<version>`. Add `imagePullSecrets` if the registry needs credentials.
 
-This feature can help you to build your private installation, just upload all images to your private image registry.
+## Next steps
 
 ## Compatibility
 
@@ -302,37 +192,4 @@ VelaUX v1.12.0 runs on KubeVela 1.10, 1.11 and 1.12. A few features need a newer
 
 VelaUX reads the KubeVela version from the vela-core image tag. If it can't tell (a branch build, or an image pinned by digest), it assumes every feature is there.
 
-## Concept of VelaUX
-
-VelaUX is an addon on top of KubeVela, it works as UI console for KubeVela, while it's also an out-of-box platform for end-user.
-
-We add some more concepts for enterprise integration.
-
-![alt](../../resources/velaux-concept.png)
-
-### Project
-
-Project is where you manage all the applications and collaborate with your team member. Project is one stand alone scope that separates it from other project.
-
-### Environment
-
-Environment refers to the environment for development, testing, and production and it can include multiple Delivery Targets. Only applications in the same environment can visit and share resource with each other.
-
-- <b>Bind Application with Environment</b> The application can be bound to multiple Environments, and for each environment, you can set the unique parameter difference for each environment.
-
-### Delivery Target
-
-Delivery Target describes the space where the application resources actually delivered. One target describes one Kubernetes cluster and namespace, it can also describe a region or VPC for cloud providers which includes shared variables and machine resources.
-
-Kubernetes cluster and Cloud resources are currently the main way for KubeVela application delivery. In one target, credentials of cloud resources created will automatically delievered to the Kubernetes cluster.
-
-### Application
-
-An application in VelaUX is a bit different with KubeVela, we add lifecycle includes:
-
-- <b>Create</b> an application is just create a metadata records, it won't run in real cluster.
-- <b>Deploy</b> an application will bind with specified environment and instantiate application resource into Kubernetes clusters.
-- <b>Recycle</b> an application will delete the instance of the application and reclaim its resources from Kubernetes clusters.
-- <b>Delete</b> an application is actually delete the metadata.
-
-The rest concept in VelaUX Application are align with KubeVela Core.
+New to VelaUX? See [VelaUX concepts](../../how-to/dashboard/concepts.md) for projects, environments, delivery targets and the application lifecycle.

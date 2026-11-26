@@ -31,7 +31,7 @@ metadata:
   name: infra-gitops
 spec:
   components:
-  - name: database-config
+  - name: infra-sync
     type: kustomize
     properties:
       repoType: git
@@ -67,14 +67,14 @@ Workflow:
   Terminated: false
   Steps
   - id:dgatat8jag
-    name:database-config
+    name:infra-sync
     type:apply-component
     phase:succeeded
     message:
 
 Services:
 
-  - Name: database-config
+  - Name: infra-sync
     Cluster: local  Namespace: default
     Type: kustomize
     Healthy
@@ -88,7 +88,7 @@ Looking at the resources in the cluster, you can find that the `server` Applicat
 ```bash
 $ vela ls
 APP         	COMPONENT      	TYPE      	TRAITS	PHASE  	HEALTHY	STATUS   	CREATED-TIME
-infra-gitops	database-config	kustomize 	      	running	healthy	         	2022-06-30 14:52:33 +0800 CST
+infra-gitops	infra-sync	kustomize 	      	running	healthy	         	2022-06-30 14:52:33 +0800 CST
 server      	server         	webservice	      	running	healthy	Ready:1/1	2022-06-30 14:52:35 +0800 CST
 
 $ kubectl get configmap
@@ -123,7 +123,7 @@ spec:
         image: nginx # {"$imagepolicy": "default:image-gitops"}
 ```
 
-> Note that there is a `# {"$imagepolicy": "default:image-gitops"}` comment after the image field. KubeVela will update the corresponding image field through this annotation. `default:image-gitops` is the namespace and name of the GitOps application component we will deploy.
+> Note that there is a `# {"$imagepolicy": "default:image-gitops"}` comment after the image field. `default:image-gitops` names the ImagePolicy that the `image-gitops` component below creates (`<namespace>:<component name>`); Flux rewrites the line it is on.
 
 Deploy the following KubeVela GitOps application:
 
@@ -182,7 +182,7 @@ At this point, you can see a commit from `kubevelabot` in the config repository,
 
 > Note that if you want to put the code and config in the same repository, you need to filter out the commit from KubeVela in CI configuration like below to avoid the repeat build of pipeline.
 > 
-> ```shell
+> ```yaml
 > jobs:
 >  publish:
 >    if: "!contains(github.event.head_commit.message, 'Update image automatically')"
@@ -218,7 +218,7 @@ metadata:
 
 You can checkout the [example repo](https://github.com/FogDong/auto-commit) or setup the CI workflow to update it automatically like below:
 
-```
+```yaml
 name: Auto Commit
 on:
   push:
@@ -231,13 +231,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Update publish version
         id: update
         run: |
           VERSION=${GITHUB_SHA::8}
-          echo ::set-output name=VERSION::${VERSION}
+          echo "VERSION=${VERSION}" >> "$GITHUB_OUTPUT"
           # replace app.yaml with your app file name
           sed -i "s|app.oam.dev/publishVersion: .*|app.oam.dev/publishVersion: $VERSION|" app.yaml
 

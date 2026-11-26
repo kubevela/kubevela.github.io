@@ -2,7 +2,9 @@
 title: Out-of-Box System Observability
 ---
 
-By default, a series of dashboards are pre-installed with the `grafana` addon and provide basic panels for viewing observability data. If you follow the [installation guide](./installation.md), you should be able to use these dashboards without further configurations.
+The `grafana` addon comes with a set of dashboards for KubeVela, its Applications and the Kubernetes resources they run. If you followed the [installation guide](./installation.md), they work with no further setup.
+
+The URLs below assume the Grafana port-forward from step 6 of the [installation guide](./installation.md#quick-start) is running (`kubectl port-forward svc/grafana -n o11y-system 8080:3000`).
 
 ## Dashboards
 
@@ -23,7 +25,7 @@ The **Related Resources** section shows those resources that work together with 
 
 :::
 
-### Kubernetes Deployemnt
+### Kubernetes Deployment
 
 This dashboard shows the overview of native deployments. You can navigate deployments across clusters.
 
@@ -46,31 +48,18 @@ There are a list of dashboards for various types of Kubernetes resources, such a
 
 ### KubeVela System
 
-This dashboard shows the overview of the KubeVela system. It can be used to see if KubeVela controller is healthy.
+This dashboard shows the overview of the KubeVela system: the controller and the cluster-gateway. Use it to see if the KubeVela controller is healthy.
 
 URL: http://localhost:8080/d/kubevela-system/kubevela-system
 
 ![kubevela-system](../../../resources/kubevela-system.jpg)
 
 :::info
-  The KubeVela System dashboard gives you the running details of the KubeVela core modules, including the controller and the cluster-gateway. Other modules like velaux or prism are expected to be added in the future.
+The **Computation Resource** section shows the CPU and memory each core module uses. Memory that keeps climbing points to a leak; CPU that stays high means the module is under pressure. A module that hits its memory limit is killed and restarted, which means it needs more CPU or memory.
 
-The **Computation Resource** section shows the usage for core modules. It can be used to track if there is any memory leak (if the memory usage is continuously increasing) or under high pressure (the cpu usage is always very high). If the memory usage hits the resource limit, the corresponding module will be killed and restarted, which indicates the lack of computation resource. You should add more CPU/Memory for them.
+The **Controller** section holds the panels for finding the controller's bottleneck. See [Is the controller healthy?](#is-the-controller-healthy) for how to read them.
 
-The **Controller** section includes a wide range of panels which can help you to diagnose the bottleneck of the KubeVela controller in your scenario.
-
-The **Controller Queue** and **Controller Queue Add Rate** panels show you the controller working queue changes. If the controller queue is increasing continuously, it means there are too much applications or application changes in the system, and the controller is unable to handle them in time. Then it means there is performance issues for KubeVela controller. A temporary increase for the controller queue is tolerable, but keeping for a long time will lead to memory increase which will finally cause Out-Of-Memory problems.
-
-**Reconcile Rate** and **Average Reconcile Time** panels give you the overview of the controller status. If reconcile rate is steady and average reconcile time is reasonable (like under 500ms, depending on your scenario), your KubeVela controller is healthy. If the controller queue add rate is increasing but the reconcile rate does not go up, it will gradually lead to increase for the controller queue and cause troubles. There are various cases that your controller is unhealthy:
-
-1. Reconcile is healthy but there are too much applications, you will find everything is okay except the controller queue metrics increasing. Check your CPU/Memory usage for the controller. You might need to add more computation resources.
-2. Reconcile is not healthy due to too much errors. You will find lots of errors in the **Reconcile Rate** panel. This means your system is continuously facing process errors for application. It could be caused by invalid application configurations or unexpected errors while running workflows. Check application details and see which applications are causing errors.
-3. Reconcile is not healthy due to long reconcile times. You need to check **ApplicationController Reconcile Time** panel and see whether it is a common case (the average reconcile time is high), or only part of your applications have problems (the p95 reconcile time is high). For the former case, usually it is caused by either insufficient CPU (CPU usage is high) or too much requests and rate limited by kube-apiserver (check **ApplicationController Client Request Throughput** and **ApplicationController Client Request Average Time** panel and see which resource requests is slow or excessive). For the later case you need to check which application is large and uses lots of time for reconciliations.
-
-Sometimes you might need refer to **ApplicationController Reconcile Stage Time** and see if there is some special reconcile stages are abnormal. For example, GCResourceTrackers use lots of time means there might be blockings for recycling resource in KubeVela system.
-
-The **Application** section shows the overview of the applications in your whole KubeVela system. It can be used to see the changes of the application numbers and the used workflow steps. The **Workflow Initialize Rate** is an auxiliary panel which can be used to see how frequent new workflow execution is launched. The **Workflow Average Complete Time** can further show how much time it costs to finish the whole workflow.
-
+The **Application** section shows the number of Applications across the system and the workflow steps they use. **Workflow Average Complete Time** shows how long a whole workflow takes to finish.
 :::
 
 ### Kubernetes APIServer
@@ -91,4 +80,22 @@ The **WorkQueue** section shows the process status of the Kubernetes APIServer. 
 The **Watches** section shows the number of watches in your Kubernetes APIServer. Compared to other types of requests, WATCH requests will continuously consume computation resources in Kubernetes APIServer, so it will be helpful to keep the number of watches limited.
 
 :::
+
+## Is the controller healthy?
+
+Four panels on the KubeVela System dashboard tell you most of what you need:
+
+- **Controller Queue** and **Controller Queue Add Rate**: how much work is waiting. A short rise is fine. A queue that keeps growing means Applications are changing faster than the controller can reconcile them, and the queued work holds memory until the controller runs out of it.
+- **Reconcile Rate** and **Average Reconcile Time**: how fast work is done. A steady reconcile rate with an average time under about 500ms (it depends on your Applications) is a healthy controller.
+
+If the queue add rate rises and the reconcile rate does not follow it, the queue grows. Find which case you are in:
+
+| Symptom | Panel to check | Likely cause | Fix |
+| --- | --- | --- | --- |
+| Queue keeps growing; reconciles succeed at a normal speed | Computation Resource (controller CPU and memory) | More Applications than the controller can keep up with | Give the controller more CPU and memory. See [performance fine-tuning](../../system-operation/performance-finetuning.md). |
+| Many errors in **Reconcile Rate** | Reconcile Rate | Applications that fail on every reconcile: invalid configuration, or workflow steps that keep erroring | Find the failing Applications (`vela status <app> -n <namespace>`) and fix them. |
+| Average reconcile time is high for all Applications | **ApplicationController Reconcile Time**, **ApplicationController Client Request Throughput**, **ApplicationController Client Request Average Time** | Not enough CPU, or the kube-apiserver rate limits the controller's requests | Add CPU if usage is high; otherwise see which requests are slow or excessive, and raise the controller's `--kube-api-qps` and `--kube-api-burst`. |
+| p95 reconcile time is high, average is normal | **ApplicationController Reconcile Time** | A few large Applications that take long to reconcile | Find the large Applications. Splitting one into smaller Applications spreads the work. |
+
+To narrow it down further, **ApplicationController Reconcile Stage Time** shows which stage of a reconcile takes the time. For example, a slow `GCResourceTrackers` stage means garbage collection of old resources is blocking.
 

@@ -20,9 +20,9 @@ Vegeta Trait supports following component types: webservice, worker and cloneset
 
 ## How to start
 
-Use a component typed webservice to start, keep the following to show-vegeta.yaml, then vela up -f show-vegeta.yaml
+Save the following as `vegeta-demo.yaml`. It runs nginx as a `webservice` and attaches a `vegeta` trait that load-tests the component's own Service.
 
-```shell
+```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -39,16 +39,22 @@ spec:
         - expose: true
           port: 80
           protocol: TCP
-          ports: 80
       traits:
         - type: vegeta
           properties:
-            dorequest: 'GET http://show-vegeta:80'
+            dorequest: 'GET http://new-vegeta.vegeta:80'
             parallelism: 1
             backofflimit: 10
 ```
 
-Check the app status and trait status
+Create the namespace and deploy it:
+
+```shell
+kubectl create namespace vegeta
+vela up -f vegeta-demo.yaml
+```
+
+Check the app status and trait status:
 
 ```shell
 vela ls app -n vegeta
@@ -84,20 +90,20 @@ Services:
     Healthy Ready:1/1
     Traits:
       ? vegeta
-
-vela logs new-vegeta --name new-vegeta -n vegeta
-? You have 2 deployed resources in your app. Please choose one:  [Use arrows to move, type to filter]
-> Cluster: local | Namespace: vegeta | Kind: Deployment | Name: new-vegeta
-  Cluster: local | Namespace: vegeta | Kind: Job | Name: new-vegeta
-
-Choose the Job to show testing data logs
 ```
 
-- If you want a more nice demo, use the two tools: jaggr and jplot to show the data
+The trait runs Vegeta in a Job named after the component. Read its results, one JSON line per request, with `kubectl logs`:
+
 ```shell
-kubectl logs new-vegeta--1-qrh67  -n vegeta -f | jaggr @count=rps hist\[100,200,300,400,500\]:code p25,p50,p95:latency sum:bytes_in sum:bytes_out | jplot rps+code.hist.100+code.hist.200+code.hist.300+code.hist.400+code.hist.500 latency.p95+latency.p50+latency.p25 bytes_in.sum+bytes_out.sum
+$ kubectl logs -n vegeta job/new-vegeta --tail=2
+{"attack":"","seq":41210,"code":200,"timestamp":"2022-05-31T13:25:02.612Z","latency":1048573,"bytes_out":0,"bytes_in":615,"error":"","body":"PCFET0NUWVBFIGh0bWw+...","method":"GET","url":"http://new-vegeta.vegeta:80","headers":{"Content-Type":["text/html"]}}
+{"attack":"","seq":41211,"code":200,"timestamp":"2022-05-31T13:25:02.812Z","latency":982114,"bytes_out":0,"bytes_in":615,"error":"","body":"PCFET0NUWVBFIGh0bWw+...","method":"GET","url":"http://new-vegeta.vegeta:80","headers":{"Content-Type":["text/html"]}}
 ```
 
-- How to install jplot and jagrr
-    - https://github.com/rs/jplot
-    - https://github.com/rs/jaggr
+The `body` field is shortened here. By default the attack runs at 5000 requests a second for 10000 minutes; set `vegetacli` to change the rate and duration, and delete the Application to stop it.
+
+To plot the results live, pipe the logs through [jaggr](https://github.com/rs/jaggr) and [jplot](https://github.com/rs/jplot):
+
+```shell
+kubectl logs -n vegeta job/new-vegeta -f | jaggr @count=rps hist\[100,200,300,400,500\]:code p25,p50,p95:latency sum:bytes_in sum:bytes_out | jplot rps+code.hist.100+code.hist.200+code.hist.300+code.hist.400+code.hist.500 latency.p95+latency.p50+latency.p25 bytes_in.sum+bytes_out.sum
+```

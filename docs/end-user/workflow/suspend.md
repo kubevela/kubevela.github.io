@@ -10,7 +10,7 @@ In KubeVela, you can choose to use the `vela` command to manually suspend the ex
 
 ### Suspend Manually
 
-If you have an application in `runningWorkflow` state, you want to stop the execution of the workflow, you can use `vela workflow suspend` to stop the workflow and use `vela workflow resume` to continue it.
+To pause a running workflow, run `vela workflow suspend`; `vela workflow resume` continues it.
 
 * Suspend the application
 
@@ -52,6 +52,8 @@ spec:
         component: comp1
     - name: suspend
       type: suspend
+      properties:
+        message: Waiting for QA sign-off
     - name: apply2
       type: apply-component
       properties:
@@ -70,44 +72,48 @@ vela status suspend-demo
 ```
 About:
 
-  Name:      	suspend-demo
-  Namespace: 	default
-  Created at:	2022-06-27 17:36:58 +0800 CST
-  Status:    	workflowSuspending
+  Name:         suspend-demo
+  Namespace:    default
+  Created at:   2026-11-20 17:36:58 +0000 UTC
+  Healthy:      ✅
+  Details:      workflowSuspending
 
 Workflow:
 
-  mode: StepByStep
+  mode: StepByStep-DAG
   finished: false
   Suspend: true
   Terminated: false
   Steps
-  - id:yj9h29uv6v
-    name:apply1
-    type:apply-component
-    phase:succeeded
-  - id:xvmda4he5e
-    name:suspend
-    type:suspend
-    phase:running
+  - id: yj9h29uv6v
+    name: apply1
+    type: apply-component
+    phase: succeeded 
+  - id: xvmda4he5e
+    name: suspend
+    type: suspend
+    phase: suspending 
+    message: Waiting for QA sign-off
 
 Services:
 
-  - Name: comp1
-    Cluster: local  Namespace: default
+  - Name: comp1  
+    Cluster: local
+    Namespace: default
     Type: webservice
-    Healthy Ready:1/1
+    Health: ✅
+      Message: Ready:1/1
     No trait applied
 ```
 </details>
 
-As you can see, when the first step is completed, the `suspend` step will be executed and this step will suspend the workflow.
+When the first step completes, the `suspend` step suspends the workflow. Its phase is `suspending`, and its `message` shows what the workflow is waiting for.
 
 ## Resume the Workflow
 
 ### Resume Manually
 
-Once the workflow is suspended, you can use the `vela workflow resume` command to manually resume the workflow.
+Once the workflow is suspended, use the `vela workflow resume` command to resume it. You can also resume it from the application's workflow view in VelaUX.
 
 Take the above suspended application as an example:
 
@@ -127,46 +133,48 @@ vela status suspend-demo
 ```
 About:
 
-  Name:      	suspend-demo
-  Namespace: 	default
-  Created at:	2022-06-27 17:36:58 +0800 CST
-  Status:    	running
+  Name:         suspend-demo
+  Namespace:    default
+  Created at:   2026-11-20 17:36:58 +0000 UTC
+  Healthy:      ✅
+  Details:      running
 
 Workflow:
 
-  mode: StepByStep
+  mode: StepByStep-DAG
   finished: true
   Suspend: false
   Terminated: false
   Steps
-  - id:yj9h29uv6v
-    name:apply1
-    type:apply-component
-    phase:succeeded
-    message:
-  - id:xvmda4he5e
-    name:suspend
-    type:suspend
-    phase:succeeded
-    message:
-  - id:66jonaxjef
-    name:apply2
-    type:apply-component
-    phase:succeeded
-    message:
+  - id: yj9h29uv6v
+    name: apply1
+    type: apply-component
+    phase: succeeded 
+  - id: xvmda4he5e
+    name: suspend
+    type: suspend
+    phase: succeeded 
+  - id: 66jonaxjef
+    name: apply2
+    type: apply-component
+    phase: succeeded 
 
 Services:
 
-  - Name: comp2
-    Cluster: local  Namespace: default
+  - Name: comp2  
+    Cluster: local
+    Namespace: default
     Type: webservice
-    Healthy Ready:1/1
+    Health: ✅
+      Message: Ready:1/1
     No trait applied
 
-  - Name: comp1
-    Cluster: local  Namespace: default
+  - Name: comp1  
+    Cluster: local
+    Namespace: default
     Type: webservice
-    Healthy Ready:1/1
+    Health: ✅
+      Message: Ready:1/1
     No trait applied
 ```
 </details>
@@ -175,7 +183,7 @@ As you can see, the workflow has continued to execute.
 
 ### Resume the Workflow Automatically
 
-If you want the workflow to be continued automatically after a period of time has passed. Then, you can add a `duration` parameter to the `suspend` step. When the `duration` time elapses, the workflow will automatically continue execution.
+To resume automatically, set `duration` on the `suspend` step. When the `duration` time elapses, the workflow continues.
 
 Apply the following example:
 
@@ -225,46 +233,48 @@ vela status auto-resume
 ```
 About:
 
-  Name:      	auto-resume
-  Namespace: 	default
-  Created at:	2022-06-27 17:57:35 +0800 CST
-  Status:    	running
+  Name:         auto-resume
+  Namespace:    default
+  Created at:   2026-11-20 17:36:58 +0000 UTC
+  Healthy:      ✅
+  Details:      running
 
 Workflow:
 
-  mode: StepByStep
+  mode: StepByStep-DAG
   finished: true
   Suspend: false
   Terminated: false
   Steps
-  - id:q5jhm6mgwv
-    name:apply1
-    type:apply-component
-    phase:succeeded
-    message:
-  - id:3xgfcp3cuj
-    name:suspend
-    type:suspend
-    phase:succeeded
-    message:
-  - id:zjux8ud876
-    name:apply2
-    type:apply-component
-    phase:succeeded
-    message:
+  - id: yj9h29uv6v
+    name: apply1
+    type: apply-component
+    phase: succeeded 
+  - id: xvmda4he5e
+    name: suspend
+    type: suspend
+    phase: succeeded 
+  - id: 66jonaxjef
+    name: apply2
+    type: apply-component
+    phase: succeeded 
 
 Services:
 
-  - Name: comp2
-    Cluster: local  Namespace: default
+  - Name: comp2  
+    Cluster: local
+    Namespace: default
     Type: webservice
-    Healthy Ready:1/1
+    Health: ✅
+      Message: Ready:1/1
     No trait applied
 
-  - Name: comp1
-    Cluster: local  Namespace: default
+  - Name: comp1  
+    Cluster: local
+    Namespace: default
     Type: webservice
-    Healthy Ready:1/1
+    Health: ✅
+      Message: Ready:1/1
     No trait applied
 ```
 </details>

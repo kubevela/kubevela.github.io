@@ -7,8 +7,7 @@ Date: 2026-10-01 to 2026-12-31
 ## Core Platform
 
 - Namespace lifecycle management
-  * Resolve stale GroupVersion discovery issues when deleting namespaces in Gitops plugin scenarios. 
-  * This guarantees that deleting a namespace results in a complete and clean removal of all related KubeVela resources, preventing orphaned components.
+  * Resolve stale GroupVersion discovery so deleting a namespace removes every KubeVela resource in it, even when an API those resources used is no longer served (seen with GitOps tools).
 
 - Workflow debugging for external templates
   * Support debugging workflows that reference external templates. 

@@ -2,44 +2,70 @@
 title: Performance Fine-tuning
 ---
 
-### Recommended Configurations
+This page covers the controller settings that matter as your cluster and the number of Applications grow: how many Applications the controller reconciles at once, how fast it may talk to the API server, and how much CPU and memory it gets. Most of them are Helm values on the `vela-core` chart.
 
-When cluster scale becomes large and more applications are needed for managing, KubeVela controller performance might have bottleneck problems due to inappropriate parameters.
+## Recommended configurations
 
-According to the KubeVela performance test, three sets of parameters are recommended in clusters with different scales as below.
+The KubeVela performance test gives three sets of settings for clusters of different sizes.
 
-| Scale  |  #Nodes |    #Apps |    #Pods | concurrent-reconciles | kube-api-qps | kube-api-burst |  CPU | Memory |
-| :----: | ------: | -------: | -------: | --------------------: | :----------: | -------------: | ---: | -----: |
-| Small  |   < 200 |  < 3,000 | < 18,000 |                     2 |     300      |            500 |  0.5 |    1Gi |
-| Medium |   < 500 |  < 5,000 | < 30,000 |                     4 |     500      |            800 |    1 |    2Gi |
-| Large  | < 1,000 | < 12,000 | < 72,000 |                     4 |     800      |          1,000 |    2 |    4Gi |
+| Scale  |  #Nodes |    #Apps |    #Pods | `--concurrent-reconciles` | `--kube-api-qps` | `--kube-api-burst` |  CPU | Memory |
+| :----: | ------: | -------: | -------: | ------------------------: | ---------------: | -----------------: | ---: | -----: |
+| Small  |   < 200 |  < 3,000 | < 18,000 |                         2 |              300 |                500 |  0.5 |    1Gi |
+| Medium |   < 500 |  < 5,000 | < 30,000 |                         4 |              500 |                800 |    1 |    2Gi |
+| Large  | < 1,000 | < 12,000 | < 72,000 |                         4 |              800 |              1,000 |    2 |    4Gi |
 
-> The above configurations are based on medium size applications (each application contains 2~3 components and 5~6 resources). If the applications in your scenario are generally larger, e.g., containing 20 resources, then you could increase the application number accordingly to find the appropriate configuration and parameters.
+Each flag has a Helm value on the `vela-core` chart:
 
-### Fine-tuning Methods
+| Flag | Helm value | Chart default | Flag default (no chart) |
+| :--- | :--------- | ------------: | ----------------------: |
+| `--concurrent-reconciles` | `concurrentReconciles` | 4 | 4 |
+| `--kube-api-qps` | `kubeClient.qps` | 400 | 50 |
+| `--kube-api-burst` | `kubeClient.burst` | 600 | 100 |
+| CPU | `resources.limits.cpu` | `500m` | |
+| Memory | `resources.limits.memory` | `1Gi` | |
 
-You might encounter various performance bottlenecks. Read the following examples and try to find the proper solution for your problem.
+The chart defaults are already at or above the Small row for reconciles, QPS and burst, so on a small cluster leave them as they are: setting `kubeClient.qps: 300` from the table lowers the limit. For a Medium or Large cluster, set the values from the table when you install or upgrade:
 
-1. Applications could be created. Its managed resources are available but indirect resources are not. For example, Deployments in webservice are successfully created but Pods are not. You could check kube-controller-manager and see if there is performance bottleneck problems with it.
-2. Applications could be created. Its managed resources are not available and there is no rendering problem with the application. Check if apiserver has lots of requests waiting in queue. The mutating requests for managed resources might be blocked at apiserver.
-3. Applications could be found in cluster but no status information could be displayed. If there is no problem with the application content, it might be caused by the KubeVela controller bottleneck, such as limiting requests to apiserver. Increase **kube-api-qps / kube-api-burst** and check if CPU is overloaded. If CPU is not overloaded, check if the thread number is below the number of CPU cores.
-4. KubeVela Controller itself could crash frequently due to Out-Of-Memory. Increase the memory to solve it.
+```bash
+helm upgrade --install kubevela kubevela/vela-core -n vela-system --reuse-values \
+  --set concurrentReconciles=4 \
+  --set kubeClient.qps=500 \
+  --set kubeClient.burst=800 \
+  --set resources.limits.cpu=1 \
+  --set resources.limits.memory=2Gi
+```
 
-### Advanced Optimization
+The numbers assume medium-sized Applications (2 or 3 components, 5 or 6 resources each). If your Applications are generally larger, for example 20 resources each, count each one as several Applications when you pick a row.
 
-Although KubeVela has a bunch of capabilities, users might only use part of them. Some optimization techniques will harm part of the funcationalities but can help improve the performance of the others. For example, you might not need application rollback. Then you can turn off the ApplicationRevision to save the storage and computation. A list of optional optimization parameters are shown below. You can customize your KubeVela controller by setting some of them.
+`--max-dispatch-concurrent` (default 10) caps how many resources one Application dispatches in parallel. The chart has no value for it; add it to the controller's `args` if you need to change it.
 
-| Arg | Default | Explanation |
-| :-- | :-----: | :---------- |
-| optimize-cached-gvks |  | Types of resources to be cached. For example, --optimize-cached-gvks=Deployment.v1.apps,Job.v1.batch . If you have dedicated resources to be managed in your system, you can turn it on to improve performance. NOTE: this optimization only works for single-cluster. It will increase the memory cost of KubeVela controller. |
-| optimize-resource-tracker-list-op | true | Optimize ResourceTracker List Op by adding index. This will increase the use of memory and accelerate the list operation of ResourceTracker. Default to enable it . If you want to reduce the memory use of KubeVela, you can switch it off. |
-| optimize-controller-reconcile-loop-reduction | false | Optimize ApplicationController reconcile by reducing the number of loops to reconcile application. In detail, reconciles after finalizer patching and workflow finished will not return immediately but will continue running. If you do not care about the occasional re-run of workflow, you can switch it on to further improve KubeVela controller performance. |
-| optimize-mark-with-prob | 0.1 | Optimize ResourceTracker GC by only run mark with probability. Side effect: outdated ResourceTracker might not be able to be removed immediately. Default to 0.1. If you want to cleanup outdated resource for keepLegacyResource mode immediately, set it to 1.0 to disable this optimization. |
-| optimize-disable-component-revision | false | Optimize ComponentRevision by disabling the creation and gc. Side effect: rollout cannot be used. If you don't use rollout trait, you can switch it on to reduce the storage and improve performance. |
-| optimize-disable-application-revision | false | Optimize ApplicationRevision by disabling the creation and gc. Side effect: application cannot rollback. If you don't need to rollback applications, you can switch it on to reduce the storage and improve performance. |
-| optimize-disable-workflow-recorder | false | Optimize workflow recorder by disabling the creation and gc. Side effect: workflow will not record application after finished running. If you do not use VelaUX, you can switch it on to improve performance. |
-| optimize-enable-in-memory-workflow-context | false | Optimize workflow by use in-memory context. Side effect: controller crash will lead to workflow run again from scratch and possible to cause mistakes in workflow inputs/outputs. You can use this optimization when you don't use input/output feature of workflow. |
-| optimize-disable-resource-apply-double-check | false | Optimize workflow by ignoring resource double check after apply. Side effect: controller will not wait for resource creation. If you want to use KubeVela to dispatch tons of resources and do not need to double check the creation result, you can enable this optimization. |
-| optimize-enable-resource-tracker-delete-only-trigger | true | Optimize resourcetracker by only trigger reconcile when resourcetracker is deleted. It is enabled by default. If you want to integrate KubeVela with your own operator or allow ResourceTracker manual edit, you can turn it off. |
+## Finding the bottleneck
 
-> Read more details in [KubeVela Performance Test Report](/blog/2021/08/30/kubevela-performance-test)
+Each symptom below names the panel that confirms it. The panels are on the dashboards from the `grafana` addon; see [Out of the box dashboards](../operations/o11y/out-of-the-box.md), and [Is the controller healthy?](../operations/o11y/out-of-the-box.md#is-the-controller-healthy) for reading the controller panels.
+
+| Symptom | Confirm with | What to do |
+| :------ | :----------- | :--------- |
+| The Application's resources exist, but what they create doesn't. For example, the Deployment is there but its Pods are not. | The kube-controller-manager's own metrics; KubeVela is not involved past the Deployment. | Look at kube-controller-manager. |
+| The Application renders without error, but its resources never appear. | [Kubernetes APIServer](../operations/o11y/out-of-the-box.md#kubernetes-apiserver) dashboard: requests queued at the API server. | The API server is the bottleneck, not KubeVela. |
+| The Application exists but its status never fills in. | [KubeVela System](../operations/o11y/out-of-the-box.md#kubevela-system) dashboard: **ApplicationController Client Request Throughput** and **ApplicationController Client Request Average Time** show client-side rate limiting. | Raise `kubeClient.qps` and `kubeClient.burst`. If CPU is not saturated, raise `concurrentReconciles` too, keeping it below the number of CPU cores. |
+| The controller queue keeps growing. | KubeVela System dashboard: **Controller Queue** and **Controller Queue Add Rate**. | Check CPU and memory, then move up a row in the table above. |
+| The controller restarts with `OOMKilled`. | KubeVela System dashboard: **Computation Resource** section, memory at the limit. | Raise `resources.limits.memory`. |
+
+## Advanced optimization
+
+Some flags trade a feature for performance. If you don't use the feature, turning it off saves storage and work. For example, if you never roll back Applications, you can stop creating ApplicationRevisions.
+
+| Flag | Helm value | Flag default | Explanation |
+| :--- | :--------- | :----------: | :---------- |
+| `--optimize-cached-gvks` | `optimize.cachedGvks` | | Types of resources to cache, for example `--optimize-cached-gvks=Deployment.v1.apps,Job.v1.batch`. Turn it on if your system manages a fixed set of resource types. It only works for a single cluster and increases the controller's memory use. |
+| `--optimize-list-op` | none | `true` | Indexes ResourceTracker and ApplicationRevision list operations. It uses more memory and speeds up listing. Switch it off to reduce memory use. |
+| `--optimize-mark-with-prob` | `optimize.markWithProb` | `0.1` | Runs the ResourceTracker GC mark step only with this probability, so an outdated ResourceTracker may not be removed straight away. Set it to `1.0` to clean up outdated resources in `keepLegacyResource` mode immediately. |
+| `--optimize-disable-component-revision` | `optimize.disableComponentRevision` | `false` (chart: `true`) | Stops creating and collecting ComponentRevisions. The rollout trait needs them, so leave this off if you use rollout. |
+| `--optimize-disable-application-revision` | `optimize.disableApplicationRevision` | `false` | Stops creating and collecting ApplicationRevisions. Applications can no longer be rolled back. |
+| `--optimize-enable-in-memory-workflow-context` | `optimize.enableInMemoryWorkflowContext` | `false` | Keeps the workflow context in memory. If the controller crashes, running workflows start again from scratch, which can break step inputs and outputs. Use it only if your workflows don't use inputs and outputs. |
+| `--optimize-disable-resource-apply-double-check` | `optimize.disableResourceApplyDoubleCheck` | `false` | Skips checking a resource after it is applied, so the controller does not wait for it to be created. Useful when you dispatch large numbers of resources and don't need the check. |
+| `--optimize-enable-resource-tracker-delete-only-trigger` | `optimize.enableResourceTrackerDeleteOnlyTrigger` | `true` | Reconciles an Application on a ResourceTracker change only when the tracker is deleted. Turn it off if your own operator edits ResourceTrackers, or you edit them by hand. |
+
+The controller does not start if it is given a flag it doesn't define, so check a flag's name against this table before you add it.
+
+> Read more in the [KubeVela Performance Test Report](/blog/2021/08/30/kubevela-performance-test).

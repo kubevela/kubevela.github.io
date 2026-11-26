@@ -64,7 +64,7 @@ These helpers are for testing and validation, not for production use in definiti
 | `placement.GetEffectivePlacement` | `func GetEffectivePlacement(module, definition PlacementSpec) PlacementSpec` | Returns the effective placement spec: definition constraints override module defaults; if the definition has no constraints, module defaults are inherited. |
 
 :::info
-`vela def apply-module` calls `GetClusterLabels` once per run, logs the labels, and then calls `Evaluate` for each definition. A definition is applied only when `Eligible == true`. Definitions that do not match are skipped silently — no error is raised, and the installed definition is left unchanged.
+`vela def apply-module` calls `GetClusterLabels` once per run, logs the labels, and then calls `Evaluate` for each definition. A definition is applied only when `Eligible == true`. Definitions that don't match are skipped with a line in the output, and the command still succeeds. A copy of the definition already installed on the cluster is left unchanged.
 :::
 
 ## `module.yaml` `placement:` Schema
@@ -375,5 +375,5 @@ kubectl delete componentdefinition placement-demo -n vela-system --ignore-not-fo
 - [ComponentDefinition](./definition-component.md) — define workload types
 - [TraitDefinition](./definition-trait.md) — patch workloads with traits
 - [PolicyDefinition](./definition-policy.md) — define application policies
-- [WorkflowStepDefinition](./definition-workflow-step.md) — define workflow steps
+- [WorkflowStepDefinition](./definition-workflowstep.md): define workflow steps
 - [Quick Start](./quick-start.md) — scaffolding a `my-platform` module

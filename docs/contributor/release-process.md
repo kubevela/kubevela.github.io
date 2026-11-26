@@ -6,8 +6,8 @@ KubeVela is being developed using the following process:
 
 * Maintainers commit to work on set of features and enhancements and create GitHub milestone to track the work.
 * We are trying to avoid delaying release and prefer moving the feature into the next release if we cannot complete it on time.
-* The new release is published every **2~3 month**.
-* Critical bug-fixes are cherry-picked into the release branch and delivered using patch releases as frequently as needed, we will maintain the last **2 releases**.
+* A new release is published every **two to three months**.
+* Critical bug-fixes are cherry-picked into the release branch and delivered using patch releases as frequently as needed. We publish patch releases for the last **two minor versions**; security fixes may go to older ones.
 
 ![develop-flow](../resources/develop-code-flow.jpg)
 
@@ -42,7 +42,7 @@ The maintainers are responsible to drive releases and follow the standard operat
    * New Features, Enhancement and Bugfixes.
    * Deprecation and Breaking Changes.
    * Brief notes about how to install and upgrade.
-2. Create a new release branch from the `release-x.y` branch when release a new `minor` release.
+2. For a new `minor` release, create the `release-x.y` branch from `master`.
 3. Create new `patch` releases corresponding to the release branch.
 4. Make sure the release materials are generated successfully from the Github actions:
    * Images from [Registry Pipeline](https://github.com/kubevela/kubevela/actions/workflows/registry.yml).

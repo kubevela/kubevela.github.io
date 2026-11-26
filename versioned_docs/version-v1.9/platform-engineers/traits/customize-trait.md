@@ -4,6 +4,8 @@ title:  Trait Definition
 
 In this section we will introduce how to define a custom trait with CUE. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition.md) and [how to manage definition](../cue/definition-edit.md).
 
+Most examples on this page are in the CUE format, applied with `vela def apply`; the few in Kubernetes YAML are whole `...Definition` objects. [The Definition File](../oam/definition-file.md) shows the two formats side by side.
+
 ## Generate a Trait scaffold
 
 A trait can be something similar to component, while they're attached operational resources.
@@ -23,10 +25,12 @@ The content of the scaffold expected to be:
 ```cue
 // $ cat myroute.cue
 "my-route": {
+	alias: ""
 	annotations: {}
 	attributes: {
 		appliesToWorkloads: []
 		conflictsWith: []
+		definitionRef: {}
 		podDisruptive:   false
 		workloadRefPath: ""
 	}
@@ -34,16 +38,13 @@ The content of the scaffold expected to be:
 	labels: {}
 	type: "trait"
 }
-
 template: {
 	patch: {}
 	parameter: {}
 }
 ```
 
-:::caution
-There's a bug in vela CLI(`<=1.4.2`), the `vela def init` command will generate `definitionRef: ""` in `attributes` which is wrong, please remove that line.
-:::
+The empty fields are safe to leave in or delete.
 
 ## Define a trait to compose resources
 
@@ -88,8 +89,7 @@ template: {
 		apiVersion: "v1"
 		kind:       "Service"
 		spec: {
-			selector:
-				app: context.name
+			selector: "app.oam.dev/component": context.name
 			ports: [
 				for k, v in parameter.http {
 					port:       v
@@ -100,7 +100,7 @@ template: {
 	}
 
 	outputs: ingress: {
-		apiVersion: "networking.k8s.io/v1beta1"
+		apiVersion: "networking.k8s.io/v1"
 		kind:       "Ingress"
 		metadata:
 			name: context.name
@@ -111,9 +111,10 @@ template: {
 					paths: [
 						for k, v in parameter.http {
 							path: k
-							backend: {
-								serviceName: context.name
-								servicePort: v
+							pathType: "ImplementationSpecific"
+							backend: service: {
+								name: context.name
+								port: number: v
 							}
 						},
 					]
@@ -123,6 +124,8 @@ template: {
 	}
 }
 ```
+
+The Service selects pods by `app.oam.dev/component`, because that is the label the built-in component types such as `webservice` put on the pods they create.
 
 Apply to our control plane to make this trait work:
 
@@ -188,8 +191,7 @@ template: {
 				apiVersion: "v1"
 				kind:       "Service"
 				spec: {
-					selector:
-						app: context.name
+					selector: "app.oam.dev/component": context.name
 					ports: [{
 						port:       v
 						targetPort: v
@@ -237,7 +239,7 @@ Then you can reference the returned data from `processing.output` in `patch` or 
 Below is an example:
 
 ```cue
-"auth-service": {
+"token-annotation": {
 	type: "trait"
 }
 
@@ -247,28 +249,24 @@ template: {
 	}
 
 	processing: {
+		// The service answers with a JSON object such as {"id": "tok-123"}.
 		output: {
-			token?: string
+			id?: string
 		}
-		// The target server will return a JSON data with `token` as key.
 		http: {
 			method: *"GET" | string
 			url:    parameter.serviceURL
 			request: {
-				body?: bytes
-				header: {}
-				trailer: {}
+				header: Accept: "application/json"
 			}
 		}
 	}
 
-	patch: {
-		data: token: processing.output.token
-	}
+	patch: metadata: annotations: "example.com/token-id": processing.output.id
 }
 ```
 
-In above example, this trait definition will send request to get the `token` data, and then patch the data to given component instance.
+This trait looks up a token's ID from the service and records it as an annotation on the component's workload. The response body must be a JSON object.
 
 ## CUE `Context` for runtime information
 
@@ -369,8 +367,7 @@ template: {
 		apiVersion: "v1"
 		kind:       "Service"
 		spec: {
-			selector:
-				app: context.name
+			selector: "app.oam.dev/component": context.name
 			ports: [{
 				port:       parameter.exposePort
 				targetPort: context.output.spec.template.spec.containers[0].ports[0].containerPort
@@ -378,7 +375,7 @@ template: {
 		}
 	}
 	outputs: ingress: {
-		apiVersion: "networking.k8s.io/v1beta1"
+		apiVersion: "networking.k8s.io/v1"
 		kind:       "Ingress"
 		metadata:
 				name: context.name
@@ -389,9 +386,10 @@ template: {
 				http: {
 					paths: [{
 						path: parameter.path
-						backend: {
-							serviceName: context.name
-							servicePort: parameter.exposePort
+						pathType: "ImplementationSpecific"
+						backend: service: {
+							name: context.name
+							port: number: parameter.exposePort
 						}
 					}]
 				}
@@ -627,26 +625,29 @@ The trait definition will be in the following API format:
 apiVersion: core.oam.dev/v1beta1
 kind: TraitDefinition
 metadata:
- name: <TraitDefinition name>
- annotations:
-  definition.oam.dev/description: <function description>
+  name: <TraitDefinition name>
+  annotations:
+    definition.oam.dev/description: <function description>
 spec:
- definition:
-  apiVersion: <corresponding Kubernetes resource group>
-  kind: <corresponding Kubernetes resource type>
- workloadRefPath: <The path to the reference field of the Workload object in the Trait>
- podDisruptive: <whether the parameter update of Trait cause the underlying resource (pod) to restart>
- manageWorkload: <Whether the workload is managed by this Trait>
- skipRevisionAffect: <Whether this Trait is not included in the calculation of version changes>
- appliesToWorkloads:
-  - <Workload that TraitDefinition can adapt to>
- conflictsWith:
-  - <other Traits that conflict with this><>
- revisionEnabled: <whether Trait is aware of changes in component version>
- controlPlaneOnly: <Whether resources generated by trait are dispatched to the hubcluster (local)>
- schematic:  # Abstract
-  cue: # There are many abstracts
-   template: <CUE format template>
+  definitionRef:            # the CRD that provides this trait, if any
+    name: <CRD name, e.g. ingresses.networking.k8s.io>
+  appliesToWorkloads:
+    - <workload types this trait can be attached to>
+  conflictsWith:
+    - <traits that can't sit on the same component as this one>
+  podDisruptive: <true if adding or changing the trait restarts pods>
+  workloadRefPath: <field of the trait object that gets a reference to the workload>
+  revisionEnabled: <true if the trait is aware of component revisions>
+  manageWorkload: <true if the trait is responsible for creating the workload>
+  controlPlaneOnly: <true to dispatch the trait's resources to the hub cluster only>
+  stage: <PreDispatch, DefaultDispatch (the default) or PostDispatch>
+  status:
+    customStatus: <CUE for the status message>
+    healthPolicy: <CUE for the health check>
+  extension: <free-form data for platform builders>
+  schematic:
+    cue:
+      template: <CUE format template>
 ```
 
 You can check the detail of this format [here](../oam/x-definition.md).

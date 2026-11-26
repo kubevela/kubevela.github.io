@@ -6,9 +6,7 @@ title: Query Resources
 
 VelaQL(Vela Query Language) is a resource query language for KubeVela, used to query status of any extended resources in application-level.
 
-KubeVela's Application encapsulates the underlying resources from the infrastructure. It brings the infrastructure agonistic experience to app developers but also makes challenges for platform builders to maintain. For example, the monitoring of the resource status created by KubeVela Application can be hard. Moreover, the status information within Application is not detailed enough for trouble shooting and the real-time feedback is poor.
-
-The purpose of VelaQL is to help users and platform builders to uncover the mysterious of the Application. Users can query application deployment status through VelaQL, or use the extensible interface provided by VelaQL to customize query information to improve the observability of one Application.
+An Application hides the resources it creates. VelaQL queries them: the pods a component runs, the endpoints it exposes, any object a definition created.
 
 ## Usage
 
@@ -57,7 +55,7 @@ You can apply the view to server for re-use, either use `vela ql apply` command 
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: query-config-map
+  name: configmap-key
   namespace: vela-system
 data:
   template: |
@@ -89,10 +87,10 @@ There're two keywords:
 * The `parameter`, indicates which parameters can use in the query.
 * The `status`, indicates which fields of resources will be exported.
 
-Apply the yaml into Kubernetes:
+Save it as `configmap-key.yaml` and apply it:
 
 ```
-vela kube apply -f query-configmap.yaml
+vela kube apply -f configmap-key.yaml
 ```
 
 > `vela kube apply` is the same with `kubectl apply` in case you don't use `kubectl` command line.
@@ -100,7 +98,7 @@ vela kube apply -f query-configmap.yaml
 </details>
 
 
-Create a file named `my-view.cue` with:
+Create a file named `configmap-key.cue` with:
 
 ```cue
 import (
@@ -134,10 +132,10 @@ There're two keywords:
 Create the view in Kubernetes for later use:
 
 ```shell
-$ vela ql apply -f my-view.cue
+$ vela ql apply -f configmap-key.cue
 ```
 
-A view named `my-view` will be created. You can use it later.
+A view named `configmap-key`, taken from the file name, will be created. You can use it later.
 
 ### Query from VelaQL View
 
@@ -150,7 +148,7 @@ Then everyone who has access to the cluster can query by re-use the view, the ba
 In our example, you can query in the following command:
 
 ```
-vela ql -q "query-config-map{name=vela-addon-registry,namespace=vela-system,key=registries}"
+vela ql -q "configmap-key{name=vela-addon-registry,namespace=vela-system,key=registries}"
 ```
 
 The result is the same.

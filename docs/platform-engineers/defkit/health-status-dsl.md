@@ -68,6 +68,8 @@ All methods below are on `*HealthBuilder` and return a `HealthExpression` that c
 | `.Always()` | Returns a `HealthExpression` that always evaluates to `true`. Use when resource existence is the only health criterion. |
 | `.AllTrue(condTypes ...string)` | Shorthand for `And(Condition("A").IsTrue(), Condition("B").IsTrue(), ...)`. |
 | `.AnyTrue(condTypes ...string)` | Shorthand for `Or(Condition("A").IsTrue(), Condition("B").IsTrue(), ...)`. |
+| `.At(ref *ContextRef) *HealthScope` | Roots the expressions that follow at another output, such as `vela.Outputs("securityGroup")`, instead of the primary output. The returned scope has the same `.Condition()`, `.Field()`, `.FieldRef()`, `.Exists()`, `.NotExists()`, `.Phase()` and `.PhaseField()` methods. |
+| `.Every(coll, fn) *EveryExpr` | Healthy when every output in `coll` satisfies the expression `fn` builds for one item. Select the outputs with `defkit.OutputsWithPrefix("name")`. No matching outputs counts as unhealthy unless you chain `.AllowEmpty()`. |
 
 ### ConditionExpr
 
@@ -93,6 +95,32 @@ All methods below are on `*HealthBuilder` and return a `HealthExpression` that c
 |---|---|
 | `defkit.HealthPolicy(expr HealthExpression) string` | Wraps a composed `HealthExpression` into the complete `healthPolicy` CUE block (preamble + `isHealth:` line). Equivalent to `Health().Policy(expr)`. Pass the result to `.HealthPolicy()`. |
 | `defkit.StatusPolicy(expr StatusExpression) string` | Wraps a composed `StatusExpression` into the complete `customStatus` CUE block. Pass the result to `.CustomStatus()`. |
+
+### Check other outputs
+
+A component that creates more than its primary output can make its health depend on them too. Use `.At()` for one named output and `.Every()` for a group of outputs that share a name prefix, such as `accessPoint-0`, `accessPoint-1` and so on:
+
+```go
+h := defkit.Health()
+vela := defkit.VelaCtx()
+
+health := defkit.HealthPolicy(h.And(
+    h.Condition("Ready").IsTrue(),
+    h.At(vela.Outputs("securityGroup")).Condition("Ready").IsTrue(),
+    h.Every(defkit.OutputsWithPrefix("accessPoint"), func(item *defkit.HealthScope) defkit.HealthExpression {
+        return item.Field("status.state").Eq("available")
+    }).AllowEmpty(),
+))
+```
+
+The component is healthy when its primary output and the `securityGroup` output both have a `Ready` condition of `"True"`, and every `accessPoint` output has `status.state: available`. `.AllowEmpty()` keeps it healthy when the user asked for no access points. The generated CUE:
+
+```cue
+_readyCond: [ for c in *context.output.status.conditions | [] if c.type != _|_ if c.type == "Ready" { c } ]
+_securityGroupReadyCond: [ for c in *context.outputs.securityGroup.status.conditions | [] if c.type != _|_ if c.type == "Ready" { c } ]
+_accessPointItems: [ for k, v in (*context.outputs | {}) if k =~ "^accessPoint" { v } ]
+isHealth: (len([ for c in _readyCond if c.status != _|_ if c.status == "True" { c } ]) > 0) && (len([ for c in _securityGroupReadyCond if c.status != _|_ if c.status == "True" { c } ]) > 0) && (len([ for _accessPointItem in _accessPointItems if _accessPointItem.status.state == "available" { _accessPointItem } ]) == len(_accessPointItems))
+```
 
 ## Status DSL — `defkit.Status()`
 
@@ -147,7 +175,7 @@ All methods below are on `*HealthBuilder` and return a `HealthExpression` that c
 Let's build a `health-aware-service` component — a `Deployment` whose `healthPolicy` and `customStatus` blocks together exercise every DSL layer documented above: `Health().And()` / `.Or()` / `.Not()` compositors, `.Field()` with both `.Gte()` and the field-reference form `.Eq(h.FieldRef(...))`, `.Phase()` / `.PhaseField()`, `.Exists()` / `.NotExists()`, `.Condition()` with `.IsTrue()` / `.IsFalse()` / `.Is()` / `.Exists()` / `.ReasonIs()`, `.AllTrue()` / `.AnyTrue()`, `.Always()`, `defkit.HealthPolicy(expr)` and `defkit.StatusPolicy(expr)`, the low-level `IntField` / `HealthyWhen` / `WithDefault` / `WithDisableAnnotation` path, and the status side: `Status().Field().Default()`, `.SpecField()`, `.Format()`, `.Concat()`, `.Literal()`, `.Switch()` / `.Case()` / `.Default()`, `.HealthAware()`, `.Condition().StatusValue()` / `.Message()`, `.Exists()` / `.NotExists()`, `.WithDetails()` / `.Detail()`. Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/components/`.
 
 <Tabs groupId="defkit-example">
-<TabItem value="go" label="Go — defkit">
+<TabItem value="go" label="Go (defkit)">
 
 ```go
 package components
@@ -321,7 +349,7 @@ func init() { defkit.Register(HealthAwareService()) }
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated">
+<TabItem value="cue" label="CUE (generated)">
 
 ```cue
 "health-aware-service": {
@@ -478,4 +506,4 @@ kubectl delete componentdefinition health-aware-service -n vela-system
 
 - [ComponentDefinition](./definition-component.md) — `HealthPolicyExpr`, `CustomStatus`, `HealthPolicy` chain methods
 - [Resource Builder](./resource-builder.md) — building the `output` workload resource
-- [ForEachWith / ItemBuilder](./foreach-item-builder.md) — per-element builder pattern
+- [ForEachWith / ItemBuilder](./collections-api.md#per-item-builder-foreachwith): per-element builder pattern

@@ -24,7 +24,7 @@ The `api-with-extras` component below emits:
 - **one always-present Service** via `tpl.Outputs("service", ...)`,
 - **one conditional HPA** via `tpl.OutputsIf(autoscale.IsTrue(), "hpa", ...)`.
 
-The Go on the left and the CUE on the right are byte-for-byte what `vela def gen-module ./my-platform` produces for this component. Verified by applying the ComponentDefinition to a k3d cluster and confirming each expected Kubernetes resource materializes.
+The CUE tab shows what `vela def gen-module ./my-platform` generates for this component. Verified by applying the ComponentDefinition to a k3d cluster and confirming each expected Kubernetes resource materializes.
 
 <Tabs groupId="defkit-example">
 <TabItem value="go" label="Go — defkit">
@@ -175,10 +175,10 @@ Deploying this with `autoscale: true` produces a Deployment, a Service, **and** 
 
 `OutputsGroupIf` groups multiple auxiliary outputs under a single shared condition so you don't repeat the `if` guard on every `OutputsIf` call. It works on both components and traits.
 
-The `tls-companions` trait below has one always-present `tpl.Outputs("tls-info", ...)` ConfigMap, plus a two-resource group (`tls-secret` + `tls-config`) wrapped in a shared `if parameter.enableTLS { ... }` guard.
+The `tls-companions` trait below has one always-present `tpl.Outputs("tls-info", ...)` ConfigMap, plus a two-resource group (a `tls-cert` cert-manager Certificate and a `tls-config` ConfigMap) wrapped in a shared `if parameter.enableTLS { ... }` guard. Names are built with `defkit.Interpolation`, and the guard uses the `enableTLS` parameter variable itself.
 
 <Tabs groupId="defkit-example">
-<TabItem value="go" label="Go — defkit">
+<TabItem value="go" label="Go (defkit)">
 
 ```go
 package traits
@@ -187,28 +187,39 @@ import "github.com/oam-dev/kubevela/pkg/definition/defkit"
 
 func TLSCompanions() *defkit.TraitDefinition {
     enableTLS := defkit.Bool("enableTLS").Default(false).
-        Description("Provision TLS companion resources (Secret + ConfigMap)")
+        Description("Request a certificate and write the TLS settings")
+    hosts := defkit.StringList("hosts").
+        Description("Host names the certificate is issued for")
+    issuer := defkit.String("issuer").Default("letsencrypt").
+        Description("cert-manager ClusterIssuer that signs the certificate")
 
     return defkit.NewTrait("tls-companions").
         Description("Emit TLS companions alongside the primary workload").
         AppliesTo("deployments.apps").
         PodDisruptive(false).
-        Params(enableTLS).
+        Params(enableTLS, hosts, issuer).
         Template(func(tpl *defkit.Template) {
-            // Always-present auxiliary.
+            vela := defkit.VelaCtx()
+
+            // Always present.
             tpl.Outputs("tls-info",
                 defkit.NewResource("v1", "ConfigMap").
-                    Set("metadata.name", defkit.Reference(`"\(context.name)-tls-info"`)).
-                    Set("data.tlsEnabled", defkit.Reference(`"\(parameter.enableTLS)"`)))
+                    Set("metadata.name", defkit.Interpolation(vela.Name(), defkit.Lit("-tls-info"))).
+                    Set("data.tlsEnabled", defkit.Interpolation(enableTLS)))
 
-            // Grouped conditional — both resources share one `if` guard.
-            tpl.OutputsGroupIf(defkit.Bool("enableTLS").IsTrue(), func(g *defkit.OutputGroup) {
-                g.Add("tls-secret",
-                    defkit.NewResource("v1", "Secret").
-                        Set("metadata.name", defkit.Reference(`"\(context.name)-tls-cert"`)))
+            // Both resources share one `if` guard.
+            tpl.OutputsGroupIf(enableTLS.IsTrue(), func(g *defkit.OutputGroup) {
+                g.Add("tls-cert",
+                    defkit.NewResource("cert-manager.io/v1", "Certificate").
+                        Set("metadata.name", defkit.Interpolation(vela.Name(), defkit.Lit("-tls-cert"))).
+                        Set("spec.secretName", defkit.Interpolation(vela.Name(), defkit.Lit("-tls-cert"))).
+                        Set("spec.dnsNames", hosts).
+                        Set("spec.issuerRef.kind", defkit.Lit("ClusterIssuer")).
+                        Set("spec.issuerRef.name", issuer))
                 g.Add("tls-config",
                     defkit.NewResource("v1", "ConfigMap").
-                        Set("metadata.name", defkit.Reference(`"\(context.name)-tls-config"`)))
+                        Set("metadata.name", defkit.Interpolation(vela.Name(), defkit.Lit("-tls-config"))).
+                        Set("data.secretName", defkit.Interpolation(vela.Name(), defkit.Lit("-tls-cert"))))
             })
         })
 }
@@ -217,11 +228,13 @@ func init() { defkit.Register(TLSCompanions()) }
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated">
+<TabItem value="cue" label="CUE (generated)">
 
 ```cue
 "tls-companions": {
   type: "trait"
+  annotations: {}
+  labels: {}
   description: "Emit TLS companions alongside the primary workload"
   attributes: {
     podDisruptive: false
@@ -237,21 +250,34 @@ template: {
       data: tlsEnabled: "\(parameter.enableTLS)"
     }
     if parameter.enableTLS {
+      "tls-cert": {
+        apiVersion: "cert-manager.io/v1"
+        kind:       "Certificate"
+        metadata: name: "\(context.name)-tls-cert"
+        spec: {
+          secretName: "\(context.name)-tls-cert"
+          dnsNames:   parameter.hosts
+          issuerRef: {
+            kind: "ClusterIssuer"
+            name: parameter.issuer
+          }
+        }
+      }
       "tls-config": {
         apiVersion: "v1"
         kind:       "ConfigMap"
         metadata: name: "\(context.name)-tls-config"
-      }
-      "tls-secret": {
-        apiVersion: "v1"
-        kind:       "Secret"
-        metadata: name: "\(context.name)-tls-cert"
+        data: secretName: "\(context.name)-tls-cert"
       }
     }
   }
   parameter: {
-    // +usage=Provision TLS companion resources (Secret + ConfigMap)
+    // +usage=Request a certificate and write the TLS settings
     enableTLS: *false | bool
+    // +usage=Host names the certificate is issued for
+    hosts: [...string]
+    // +usage=cert-manager ClusterIssuer that signs the certificate
+    issuer: *"letsencrypt" | string
   }
 }
 ```
@@ -259,7 +285,7 @@ template: {
 </TabItem>
 </Tabs>
 
-Attaching this trait with `enableTLS: true` produces three companion resources (`tls-info` ConfigMap + `tls-cert` Secret + `tls-config` ConfigMap). With `enableTLS: false`, only the `tls-info` ConfigMap is created — the `if parameter.enableTLS { ... }` block collapses to nothing.
+Attaching this trait with `enableTLS: true` and a `hosts` list produces three companion resources: the `tls-info` ConfigMap, the `tls-cert` Certificate and the `tls-config` ConfigMap. cert-manager (see the `cert-manager` addon) watches the Certificate, gets it signed by the named ClusterIssuer, and writes the key pair into the Secret `<name>-tls-cert`, which `tls-config` points at. With `enableTLS: false`, only the `tls-info` ConfigMap is created: the `if parameter.enableTLS { ... }` block collapses to nothing.
 
 Prefer `OutputsGroupIf` over repeating `OutputsIf` with the same condition — it makes the shared guard visible in one place and produces a single `if` block in the generated CUE instead of N repeated guards.
 

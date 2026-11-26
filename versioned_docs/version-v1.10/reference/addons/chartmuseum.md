@@ -106,95 +106,55 @@ sample-addon  localcm    An addon for KubeVela.  [1.0.0]             disabled
 
 By default this addon does not have any authentication configured and allows anyone to fetch or upload charts (unless the API is disabled with `disableAPI`).
 
-To enable Basic Auth to protect APIs, configure `basicAuth` parameters:
+To enable Basic Auth to protect APIs, set the `basicAuth` parameters:
 
-```json5
-// +usage=Basic auth settings
-basicAuth: {
-	// +usage=Username for basic http authentication
-	username: "user"
-	// +usage=Password for basic http authentication
-	password: "pswd"
-}
+```shell
+vela addon enable chartmuseum basicAuth.username=user basicAuth.password=pswd
 ```
 
 ### Using with local filesystem storage
 
-By default ChartMuseum uses local filesystem storage.
-But on pod recreation it will lose all charts, to prevent that, enable persistent storage.
+By default ChartMuseum uses local filesystem storage, and loses every chart when its pod is recreated. To keep them, turn on persistence:
 
-```json5
-enablePersistence: true
-persistentSize:    "8Gi"
+```shell
+vela addon enable chartmuseum persistence.enabled=true
 ```
+
+The addon creates a PVC for you and deletes it when you disable the addon. To keep the data after that, create a PVC yourself and pass `persistence.pvcName=<your-pvc>` instead.
 
 ### Using with Alibaba Cloud OSS Storage
 
-Make sure your environment is properly setup to access `my-oss-bucket`.
+Make sure your environment is properly set up to access `my-oss-bucket`.
 
-To do so, you must set the following parameters:
-- `accessKeyID`
-- `accessKeySecret`
-
-```json5
-// +usage=Storage backend, can be one of: local(default), alibaba, amazon, google, microsoft
-storge: "alibaba"
-// +usage=Alibaba Cloud storage backend settings
-alibaba: {
-	// +usage=OSS bucket to store charts for alibaba storage backend, e.g. my-oss-bucket
-	bucket: "my-oss-bucket"
-	// +usage=OSS endpoint to store charts for alibaba storage backend, e.g. oss-cn-beijing.aliyuncs.com
-	endpoint: "oss-cn-beijing.aliyuncs.com"
-	// +usage=Alibaba OSS access key id
-	accessKeyID: "accessKeyID"
-	// +usage=Alibaba OSS access key secret
-	accessKeySecret: "accessKeySecret"
-}
+```shell
+vela addon enable chartmuseum storage=alibaba \
+  alibaba.bucket=my-oss-bucket \
+  alibaba.endpoint=oss-cn-beijing.aliyuncs.com \
+  alibaba.accessKeyID=<access-key-id> \
+  alibaba.accessKeySecret=<access-key-secret>
 ```
 
 ### Using with Microsoft Azure Blob Storage
 
-Make sure your environment is properly setup to access `mycontainer`.
+Make sure your environment is properly set up to access `mycontainer`.
 
-To do so, you must set the following parameters:
-- `account`
-- `accessKey`
-
-Specify `custom.yaml` with such values
-
-```json5
-// +usage=Storage backend, can be one of: local(default), alibaba, amazon, google, microsoft
-storage: "microsoft"
-// +usage=Microsoft Azure storage backend settings
-microsoft: {
-	// +usage=Container to store charts for microsoft storage backend
-	container: "mycontainer"
-	// +usage=Azure storage account
-	account: "account"
-	// +usage=Azure storage account access key
-	accessKey: "key"
-}
+```shell
+vela addon enable chartmuseum storage=microsoft \
+  microsoft.container=mycontainer \
+  microsoft.account=<account> \
+  microsoft.accessKey=<key>
 ```
 
 ### Using with Google Cloud Storage and a Google Service Account
 
-```json5
-// +usage=Storage backend, can be one of: local(default), alibaba, amazon, google, microsoft
-storage: "google"
-// +usage=GCP storage backend settings
-google: {
-	// +usage=GCS bucket to store charts for google storage backend, e.g. my-gcs-bucket
-	bucket: "my-gcs-bucket"
-	// +usage=GCP service account json file
-	googleCredentialsJSON: "json"
-}
-```
+Set `storage` to `google`, `google.bucket` to your bucket (e.g. `my-gcs-bucket`) and `google.googleCredentialsJSON` to the content of your service account's JSON key. The CLI splits values on commas, so a JSON key won't pass cleanly as `key=value`: enter it in the addon's form in VelaUX instead.
 
 ### Using with Amazon S3
-Make sure your environment is properly setup to access `my-s3-bucket`
+
+Make sure your environment is properly set up to access `my-s3-bucket`.
 
 You need at least the following permissions inside your IAM Policy
-```yaml
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -220,22 +180,12 @@ You need at least the following permissions inside your IAM Policy
 }
 ```
 
-#### permissions grant with access keys
+Grant those permissions to a user and pass its access keys:
 
-Grant permissions to `special user` and use it's access keys for auth on aws
-
-```json5
-// +usage=Storage backend, can be one of: local(default), alibaba, amazon, google, microsoft
-storage: "amazon"
-// +usage=AWS storage backend settings
-amazon: {
-	// +usage=S3 bucket to store charts for amazon storage backend, e.g. my-s3-bucket
-	bucket: "my-s3-bucket"
-	// +usage=Region of s3 bucket to store charts, e.g. us-east-1
-	region: "us-east-1"
-	// +usage=AWS access key id
-	accessKeyID: "keyid"
-	// +usage=AWS access key secret
-	accessKeySecret: "secret"
-}
+```shell
+vela addon enable chartmuseum storage=amazon \
+  amazon.bucket=my-s3-bucket \
+  amazon.region=us-east-1 \
+  amazon.accessKeyID=<access-key-id> \
+  amazon.accessKeySecret=<access-key-secret>
 ```

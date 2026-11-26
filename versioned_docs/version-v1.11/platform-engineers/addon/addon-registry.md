@@ -2,10 +2,10 @@
 title: Build your Own Registry
 ---
 
-An addon registry can be used for discovering and distributing addons. Currently, KubeVela supports two kinds of registries:
+An addon registry is where `vela` discovers addons and installs them from. This page covers two kinds:
 
-- Git Repo, you just need to push addon artifacts to any git repository to work. This kind relies on git to manage addon version while kubevela can only recognize the latest version.
-- Helm repo, addon registry can share the same infrastructure with your helm charts, the format are strictly aligned. But addon can's be installed by helm, it need render for special files such as CUE. The package version management is aligned with Helm and KubeVela can recognize versions and install with a specified one.
+- Git repository: push your addons to any git repository. Git manages the versions, and `vela` only sees the latest one.
+- Helm repository: a Helm repository stores versioned addon packages, and can share infrastructure with your Helm charts. Helm itself can't install them, since addons contain CUE that only `vela` renders. `vela` lists the versions and can install a specific one.
 
 ## Build Addon Registry with Git Repository
 
@@ -13,30 +13,33 @@ A directory with some subdirectories stored in a git repository can be used as a
 
 The git type registry type supports GitHub, GitLab, and Gitee.
 
-A typical git addon registry is like [catalog](https://github.com/kubevela/catalog/tree/master/addons). You can clone this repo to your local path and then push to your own git repository.
+A typical git addon registry is like [catalog](https://github.com/kubevela/catalog/tree/master/addons), whose addons sit in its `addons/` directory. To start from it, clone it and push it to your own git repository:
 
-```yaml
-$ git clone https://github.com/kubevela/catalog/tree/master/addons
-$ git remote add <repoName> <you git server address>
-$ git push -u <repoName> master
+```shell
+git clone https://github.com/kubevela/catalog
+cd catalog
+git remote add <repoName> <your git server address>
+git push -u <repoName> master
 ```
+
+When you add your copy as a registry, set `--path=addons`.
 
 If your repository type is GitHub, you can use this command to add your addon registry.
 
-```yaml
-vela addon registry add my-repo --type git --endpoint=<URL> --path=<ptah> --gitToken=<git token>
+```shell
+vela addon registry add my-repo --type git --endpoint=<URL> --path=<path> --gitToken=<git token>
 ```
 
 If your type is Gitee, you can use:
 
-```yaml
-vela addon registry add my-repo --type gitee --endpoint=<URL> --path=<ptah> --gitToken=<git token>
+```shell
+vela addon registry add my-repo --type gitee --endpoint=<URL> --path=<path> --gitToken=<git token>
 ```
 
 If your type is GitLab, you can use:
 
-```yaml
-vela addon registry add my-repo --type gitlab --gitRepoName=<repoName> --endpoint=<URL> --path=<ptah> --gitToken=<git token>
+```shell
+vela addon registry add my-repo --type gitlab --gitlabRepoName=<repoName> --endpoint=<URL> --path=<path> --gitToken=<git token>
 ```
 
 Push new addons just like checking code into your git repository.
@@ -98,20 +101,24 @@ localcm 	helm	http://localhost:8080
 
 ### Push an addon to your registry
 
-> Note: you need to upgrade your CLI to v1.5.0+ for this feature.
-
 Prepare your addon. We will create a new one named `sample-addon` here:
 
 ```shell
 $ vela addon init sample-addon
 # A conventional addon directory will be created
 # ./sample-addon
+# ├── README.md
 # ├── definitions
+# │   └── mytrait.cue
 # ├── metadata.yaml
-# ├── readme.md
+# ├── parameter.cue
 # ├── resources
+# │   └── myresource.cue
 # ├── schemas
-# └── template.yaml
+# │   └── myschema.yaml
+# ├── template.cue
+# └── views
+#     └── my-view.cue
 ```
 
 (Optional) Package your addon:
@@ -200,7 +207,7 @@ Before you continue, you need to make sure you can access your ChartMuseum insta
 
 Inside the repo that you just cloned, navigate to `catalog/addons`. You should see a list of community-verified addons. 
 
-You can sync all of our addons in the catalog to your ChartMuseum instance and use them in your private environment. We will leverage `vela addon push` command (CLI v1.5 or later) to package these and sync them to ChartMuseum.
+You can sync all of our addons in the catalog to your ChartMuseum instance and use them in your private environment. We will use the `vela addon push` command to package these and sync them to ChartMuseum.
 
 As we all know, we can push a single addon to ChartMuseum by:
 
@@ -240,14 +247,14 @@ After you know the right Chart, pull the corresponding Chart:
 # Add the repo
 $ helm repo add dexidp https://charts.dexidp.io
 # Pull the right Chart
-$ helm pull dexidp/dex --version 0.6.5
-# You should see a package named `dex-0.6.5.tgz`
+$ helm pull dexidp/dex --version 0.15.3
+# You should see a package named `dex-0.15.3.tgz`
 ```
 
 Push the Chart to ChartMuseum:
 
 ```shell
-$ vela addon push dex-0.6.5.tgz localcm
+$ vela addon push dex-0.15.3.tgz localcm
 # You can use helm cm-push as well, if you have the Helm plugin installed.
 ```
 
@@ -268,10 +275,11 @@ spec:
       type: helm
       properties:
         chart: dex
-        version: "0.6.5"
+        version: "0.15.3"
         # Put your ChartMuseum URL here
         url: "http://10.2.1.4:8080"
         repoType: helm
+        # Keep the addon's `values` as they are
 ```
 
 Great! After you enable this addon, it will try to fetch the Chart from your ChartMuseum instance. (You should also consider making the images inside the Chart available to you too.)

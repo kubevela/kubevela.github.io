@@ -3,7 +3,7 @@ title: Distribute Reference Objects
 ---
 
 :::note
-This section requires you to know the basics about how to deploy [multi-cluster application](../../case-studies/multi-cluster.md) with policy and workflow.
+This section requires you to know the basics about how to deploy [multi-cluster application](../policies/multi-cluster.md) with policy and workflow.
 
 ⚠️ **Important:** Since KubeVela v1.10, when referencing Kubernetes resources in `ref-objects`, you must explicitly specify the `group` field for resources outside the default groups (`core.oam.dev` and the empty group). Resources like `Deployment`, which belong to the `apps` group, require the `group` field to be explicitly declared.
 :::
@@ -12,9 +12,9 @@ You can reference and distribute existing Kubernetes objects with KubeVela in th
 
 - Copying secrets from the hub cluster into managed clusters.
 - Promote deployments from canary clusters into production clusters.
-- Using Kubernetes apiserver as the control plane and storing all Kubernetes objects data in external databases. Then dispatch those data into real Kuberenetes managed clusters.
+- Using Kubernetes apiserver as the control plane and storing all Kubernetes objects data in external databases. Then dispatch those data into real Kubernetes managed clusters.
 
-Besides, you can also refer to Kubernetes objects from remote URL links.
+You can also refer to Kubernetes objects from remote URLs.
 
 ## Refer to Existing Kubernetes Objects in Component
 
@@ -62,13 +62,19 @@ spec:
       urls: ["https://gist.githubusercontent.com/Somefive/b189219a9222eaa70b8908cf4379402b/raw/e603987b3e0989e01e50f69ebb1e8bb436461326/example-busybox-deployment.yaml"]
 ```
 
+:::note
+The controller fetches URLs by default. To turn them off, start the controller with `--feature-gates=DisableReferObjectsFromURL=true`; an Application with `urls` is then refused.
+
+`vela dry-run` turns on every alpha feature gate, this one included, so it does not fetch URLs: it stops with `referring objects from url is disabled`. Check a URL-based component on the cluster instead.
+:::
+
 ## Details for the *ref-objects* typed component
 
 The most simple way to specify resources is to directly use `resource: secret` or `resource: deployment` to describe the kind of resources. If no `name` or `labelSelector` is set, the application will try to find the resource with the same name as the component name in the application's namespace. You can also explicitly specify `name` and `namespace` for the target resource as well.
 
 In addition to `name` and `namespace`, you can also specify the `cluster` field to let the application component refer to resources in managed clusters. You can also use the `labelSelector` to select resources in replace of finding resources by names.
 
-In the following example, the application will select all deployments in the *hangzhou-1* cluster inside the *examples* namespace, which matches the desided labels. Then the application will copy these deployments into *hangzhou-2* cluster.
+In the following example, the application will select all deployments in the *hangzhou-1* cluster inside the *examples* namespace, which matches the desired labels. Then the application will copy these deployments into *hangzhou-2* cluster.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -95,13 +101,19 @@ spec:
         clusters: ["hangzhou-2"]
 ```
 
-> In some cases, you might want to restrict the scope for the application to access resources. You can set the `--ref-objects-available-scope` to `namespace` or `cluster` in KubeVela controller's bootstrap parameter, to retrict the application to be only able to refer to the resources inside the same namespace or the same cluster.
+> In some cases, you might want to restrict the scope for the application to access resources. You can set the `--ref-objects-available-scope` to `namespace` or `cluster` in KubeVela controller's bootstrap parameter, to restrict the application to be only able to refer to the resources inside the same namespace or the same cluster.
 
 ## Override Configuration for Reference Objects
 
-The [override policy](../../case-studies/multi-cluster.md#override-default-configurations-in-clusters) can be used to override properties defined in component and traits while the reference objects don't have those properties.
+An [`override` policy](../policies/multi-cluster-override.md#change-a-component-in-some-clusters) changes component properties, and a ref-objects component has none you would want to change. To vary a referenced object per cluster, override its **traits** instead (see [below](#distribute-reference-objects-with-different-configuration)).
 
-If you want to override configuration for the *ref-objects* typed component, you can use traits. The implicit main workload is the first referenced object and trait patch will be applied on it. The following example demonstrate how to set the replica number for the referenced deployment while deploying it in hangzhou clusters.
+To change a referenced object, add traits to the ref-objects component.
+
+:::note
+Traits apply to the **first** object in `objects`. Put the Deployment first.
+:::
+
+The following example sets the replica count of the referenced Deployment while deploying it to the hangzhou clusters.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -141,7 +153,7 @@ By default, the `container-image` will replace the original image in the main co
 traits:
 - type: container-image
   properties:
-    image: busybox-1.34.0
+    image: busybox:1.34.0
 ```
 
 You can modify other containers by setting the `containerName` field.
@@ -149,7 +161,7 @@ You can modify other containers by setting the `containerName` field.
 traits:
 - type: container-image
   properties:
-    image: busybox-1.34.0
+    image: busybox:1.34.0
     containerName: sidecar-nginx
 ```
 
@@ -158,7 +170,7 @@ You can also modify the ImagePullPolicy as well.
 traits:
 - type: container-image
   properties:
-    image: busybox-1.34.0
+    image: busybox:1.34.0
     containerName: sidecar-nginx
     imagePullPolicy: IfNotPresent
 ```
@@ -170,10 +182,10 @@ traits:
   properties:
     containers:
       - containerName: busybox
-        image: busybox-1.34.0
+        image: busybox:1.34.0
         imagePullPolicy: IfNotPresent
       - containerName: sidecar-nginx
-        image: nginx-1.20
+        image: nginx:1.20
 ```
 
 ### Override Container Command
@@ -326,7 +338,7 @@ traits:
 Except for the above trait, a more powerful but more complex way to modify the original resources is to use the `json-patch` or `json-merge-patch` trait. They follow the [RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902) and [RFC 7386](https://datatracker.ietf.org/doc/html/rfc7386) respectively. Usage examples are shown below.
 
 ```yaml
- traits:
+traits:
 # the json patch can be used to add, replace and delete fields
 # the following part will
 # 1. add `deploy-label-key` to deployment labels
@@ -337,6 +349,9 @@ Except for the above trait, a more powerful but more complex way to modify the o
 - type: json-patch
   properties:
     operations:
+      - op: add
+        path: "/metadata/labels/deploy-label-key"
+        value: deploy-label-added-value
       - op: add
         path: "/spec/replicas"
         value: 3
@@ -352,6 +367,8 @@ Except for the above trait, a more powerful but more complex way to modify the o
           image: busybox:1.34
           command: ["sleep", "864000"]
 ```
+
+A JSON merge patch replaces lists whole: the following example removes the original container. Use `json-patch` with `op: add` to append one.
 
 ```yaml
 traits:
@@ -438,7 +455,7 @@ Then we can use `override` policy to override with different traits for the refe
 apiVersion: core.oam.dev/v1alpha1
 kind: Policy
 metadata:
-  name: override-replic-beijing
+  name: override-replicas-beijing
   namespace: demo
 type: override
 properties:
@@ -452,7 +469,7 @@ properties:
 apiVersion: core.oam.dev/v1alpha1
 kind: Policy
 metadata:
-  name: override-replic-hangzhou
+  name: override-replicas-hangzhou
   namespace: demo
 type: override
 properties:
@@ -474,13 +491,13 @@ metadata:
   namespace: demo
 steps:
   - type: deploy
-    name: deploy-bejing
+    name: deploy-beijing
     properties:
-      policies: ["override-replic-beijing", "cluster-beijing"]
+      policies: ["override-replicas-beijing", "cluster-beijing"]
   - type: deploy
     name: deploy-hangzhou
     properties:
-      policies: ["override-replic-hangzhou", "cluster-hangzhou"]
+      policies: ["override-replicas-hangzhou", "cluster-hangzhou"]
 ```
 
 As a result, we can combine them and trigger the final deploy by the following application:
@@ -499,8 +516,8 @@ spec:
       type: ref-objects
       properties:
         objects:
-          - apiVersion: apps/v1
-            kind: Deployment
+          - resource: deployment
+            group: apps
             name: demo
   workflow:
     ref: deploy-demo

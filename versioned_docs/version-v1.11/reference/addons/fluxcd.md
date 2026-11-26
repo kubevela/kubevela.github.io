@@ -72,7 +72,7 @@ The following definitions will be enabled after the installation of fluxcd addon
 
 | Parameters     | Description                                                                                                                                           | Example                     |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| branch      | optional, Git branch, master by default                                                                                                               | your-branch                 |
+| branch      | optional, Git branch, main by default                                                                                                                 | your-branch                 |
 
 
 #### Example
@@ -110,11 +110,11 @@ If your helm chart is stored in OCI registry, you can create the application lik
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: oci-app
+  name: podinfo
   namespace: default
 spec:
   components:
-    - name: test-oci
+    - name: podinfo
       type: helm
       properties:
         repoType: "oci"
@@ -129,10 +129,10 @@ If your helm chart is stored in OSS, you can create the application like this:
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: bucket-app
+  name: podinfo-from-oss
 spec:
   components:
-    - name: bucket-comp
+    - name: podinfo
       type: helm
       properties:
         repoType: oss
@@ -160,7 +160,7 @@ spec:
           url: https://github.com/oam-dev/terraform-controller
           chart: ./chart
           git:
-          	branch: master
+            branch: main
 ```
 
 ### kustomize
@@ -169,7 +169,7 @@ spec:
 
 | Parameters     | Description                                                                                                                                           | Example                     |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| repoType       | required, indicates the type of repository, should be "helm","git" or "oss".                                                                          | oss                         |
+| repoType       | required, indicates the type of repository, should be "git", "oss" or "oci", git by default.                                                         | oss                         |
 | pullInterval   | optional, Synchronize with Git repository, and the time interval between tuning helm release. The default value is 5m (5 minutes）                    | 10m                         |
 | url            | required, bucket's endpoint, no need to fill in with scheme                                                                                           | oss-cn-beijing.aliyuncs.com |
 | secretRef      | optional, Save the name of a Secret, which is the credential to read the bucket. Secret contains accesskey and secretkey fields                       | sec-name                    |
@@ -219,7 +219,7 @@ secret/bucket-secret created
 
 Deploy this application:
 
-```shell
+```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -253,8 +253,7 @@ spec:
         repoType: git
         url: https://github.com/<path>/<to>/<repo>
         git:
-          branch: master
-          provider: GitHub
+          branch: main
         path: ./app/dev/
 ```
 
@@ -264,12 +263,19 @@ spec:
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: image-app
+  name: podinfo-image-automation
 spec:
   components:
-    - name: image
+    - name: podinfo-image-automation
       type: kustomize
       properties:
+        repoType: git
+        url: https://github.com/<your-org>/<your-repo>
+        # a Secret with write access to the repository
+        secretRef: git-secret
+        git:
+          branch: main
+        path: ./app/prod/
         imageRepository:
           image: <your image>
           secretRef: imagesecret
@@ -288,7 +294,7 @@ In this addon, there are five controllers to be installed by default
   
 - Source controller
   - The source-controller is a Kubernetes operator, specialised in artifacts acquisition from external sources such as Git, Helm repositories and S3 buckets. The source-controller implements the source.toolkit.fluxcd.io API and is a core component of the GitOps toolkit.
-  - ![overview](https://github.com/fluxcd/source-controller/blob/main/docs/diagrams/source-controller-overview.png)
+  - ![overview](https://raw.githubusercontent.com/fluxcd/source-controller/main/docs/diagrams/source-controller-overview.png)
 
 - Image (metadata) reflector controller
   - This is a controller that reflects container image metadata into a Kubernetes cluster. It pairs with the image update automation controller to drive automated config updates.
@@ -299,9 +305,9 @@ In this addon, there are five controllers to be installed by default
 
 - kustomize-controller
   - The kustomize-controller is a Kubernetes operator, specialized in running continuous delivery pipelines for infrastructure and workloads defined with Kubernetes manifests and assembled with Kustomize.
-  - ![overview](https://github.com/fluxcd/kustomize-controller/blob/main/docs/diagrams/kustomize-controller-overview.png)
+  - ![overview](https://raw.githubusercontent.com/fluxcd/kustomize-controller/main/docs/diagrams/kustomize-controller-overview.png)
 
 - helm-controller
   - The helm-controller is a Kubernetes operator, allowing one to declaratively manage Helm chart releases. It is part of a composable GitOps toolkit and depends on source-controller to acquire the Helm charts from Helm repositories.
   - The desired state of a Helm release is described through a Kubernetes Custom Resource named HelmRelease. Based on the creation, mutation or removal of a HelmRelease resource in the cluster, Helm actions are performed by the operator.
-  - ![overview](https://github.com/fluxcd/helm-controller/blob/main/docs/diagrams/helm-controller-overview.png)
+  - ![overview](https://raw.githubusercontent.com/fluxcd/helm-controller/main/docs/diagrams/helm-controller-overview.png)

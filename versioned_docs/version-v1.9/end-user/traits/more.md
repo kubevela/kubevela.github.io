@@ -4,7 +4,7 @@ title:  Get More Traits
 
 * Refer to [All Trait References](./references.md) for all other trait types.
 
-* Get more from [install addons](../../how-to/cli/addon/addon.md)
+* Get more from [install addons](../components/more.md)
 
 * Extend KubeVela by yourself
 

@@ -26,40 +26,46 @@ If your workload is in a helm chart please refer to [doc](../../tutorials/helm-r
 
 ### Properties
 
-Name | Description | Type | Required | Default
- ------------ | ------------- | ------------- | ------------- | -------------
-canary| Configuration for canary rollout strategy| [Canary](#Canary)| true|
-workloadType| Specify the target worklaod type| [WorkloadType](#WorkloadType)|false
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| canary | The rollout steps and traffic routing. See [canary](#canary). | object | true | |
+| auto | Release every step without pausing between them. | bool | false | `false` |
+| releaseMode | `canary` (an extra canary Deployment) or `batch` (updates the Deployment in place, in batches). | string | false | `canary` |
+| workloadType | The workload to roll out, when it can't be detected. See [workloadType](#workloadtype). | object | false | |
+| stepPartition | Run steps 1 to `stepPartition` without pausing, then pause as usual. When set, `duration` is ignored. | int | false | |
 
-#### Canary
+#### canary
 
-Name | Description | Type | Required | Default
- ------------ | ------------- | ------------- | ------------- | -------------
-steps| Defines the entire rollout process in steps | [CanaryStep](#CanaryStep)|true
-trafficRoutings| Define traffic routing related service, ingress information | [[]TrafficRouting](#TrafficRouting)| true
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| steps | The rollout, as a list of steps. See [steps](#steps). | []object | true | |
+| trafficRoutings | The Service and Ingress or Gateway route that split traffic. See [trafficRoutings](#trafficroutings). | []object | false | |
 
+#### steps
 
-##### CanaryStep
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| weight | Percentage of traffic sent to the new version at this step, for example `20`. | int | false | |
+| replicas | Pods on the new version at this step, as a number (`5`) or a percentage (`"20%"`). | int or string | false | |
+| duration | Seconds to wait before the next step. Without it, the rollout pauses until you resume it. | int | false | |
+| matches | Header rules that send matching requests to the new version. Each entry has `headers`, a list of `{Type, Name, Value}` where `Type` is `Exact` (default) or `RegularExpression`. | []object | false | |
 
-Name | Description | Type | Required | Default
- ------------ | ------------- | ------------- | ------------- | -------------
-weight| Define the percentage of traffic routing to the new version in each step, e.g., 20%, 40%...| int|false
-replicas| Define the replicas of release to the new version in each step, e.g., 5, 10...| int| false
-duration| Define the behavior after release each step, if not filled, the default requires manual determination. If filled, it indicates the time to wait in seconds, e.g., 60| int|false
+#### trafficRoutings
 
-##### TrafficRouting
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| type | The traffic route: `ingress`, `gateway` or `aliyun-alb`. | string | false | `ingress` |
+| service | Service that selects the stable Pods. | string | false | the component name |
+| ingressName | Ingress to split traffic on, when `type` is `ingress`. | string | false | the component name |
+| gatewayHTTPRouteName | Gateway API `HTTPRoute` to split traffic on, when `type` is `gateway`. | string | false | |
+| gracePeriodSeconds | Seconds to wait after changing the route. | int | false | `5` |
 
-Name | Description | Type | Required | Default
- ------------ | ------------- | ------------- | ------------- | -------------
-service| Define service name | stirng | false | context.name
-ingressName| Define ingress name | string | false | context.name
+#### workloadType
 
-##### WorkloadType
-
-Name | Description | Type | Required | Default
- ------------ | ------------- | ------------- | ------------- | -------------
-apiVersion| Target workload's apiVersion| string| true
-kind| Target workload's kind | string | true
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| apiVersion | The workload's apiVersion. | string | true | |
+| kind | The workload's kind. | string | true | |
 
 ## Example
 
@@ -97,6 +103,6 @@ spec:
           # The second batch of Canary releases 90% Pods, and 90% traffic imported to the new version.
           - weight: 90
           trafficRoutings:
-            - type: nginx
+            - type: ingress
 EOF
 ```

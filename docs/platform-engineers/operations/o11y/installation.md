@@ -34,11 +34,13 @@ vela addon enable prometheus-server
 vela addon enable loki
 ```
 
-5. Install the grafana addon
+5. Install the grafana addon, setting the admin password
 
 ```shell
-vela addon enable grafana
+vela addon enable grafana adminPassword=<your-password>
 ```
+
+Without `adminPassword`, Grafana's admin password is `kubevela`. To change the admin username too, add `adminUser=<name>`.
 
 6. Access your grafana through port-forward.
 
@@ -46,9 +48,7 @@ vela addon enable grafana
 kubectl port-forward svc/grafana -n o11y-system 8080:3000
 ```
 
-Now you can access your grafana by access `http://localhost:8080` in your browser. The default username and password are `admin` and `kubevela` respectively.
-
-> You can change it by adding `adminUser=super-user adminPassword=PASSWORD` to step 6.
+Now you can access your grafana by access `http://localhost:8080` in your browser, and log in as `admin` (or the `adminUser` you set) with the password you set in step 5.
 
 You will see several pre-installed dashboards and use them to view your system and applications. For more details of those pre-installed dashboards, see [Out-of-the-Box](./out-of-the-box.md) section.
 
@@ -57,7 +57,18 @@ You will see several pre-installed dashboards and use them to view your system a
 :::caution
 **Resource**: The observability suite includes several addons which requires some computation resources to work properly. The recommended installation resources for you cluster are 2 cores + 4 Gi memory.
 
-**Version**: We recommend you to use KubeVela (>= v1.6.0) to use the observability addons. For version v1.5.0, logging is not supported.
+**Version**: On KubeVela 1.12, `grafana`, `loki` and `prometheus-server` enable only from these addon versions on: grafana v0.4.4, loki v0.3.2 and prometheus-server v0.3.3. If you enabled an older version before upgrading KubeVela, move to the current one with `vela addon upgrade <addon>`.
+:::
+
+:::caution Before production
+`prometheus-server` and `loki` keep their data in an `emptyDir` unless you set `storage`, so a pod restart or reschedule loses every metric and log collected so far. Give them a volume:
+
+```shell
+vela addon enable prometheus-server storage=20Gi
+vela addon enable loki storage=20Gi
+```
+
+Add `storageClassName=<class>` to pick a storage class other than the default.
 :::
 
 :::tip

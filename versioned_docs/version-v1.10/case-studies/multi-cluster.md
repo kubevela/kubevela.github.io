@@ -2,8 +2,8 @@
 title:  Multi Cluster Application
 ---
 
-KubeVela is by design a full functional Continuous Delivery (CD) platform with fine grained support for hybrid/multi-cloud/multi-cluster deployment.
-This section will introduce how to deliver multi-cluster application with KubeVela policies and workflow.
+KubeVela is a Continuous Delivery (CD) platform that deploys to hybrid, multi-cloud and multi-cluster environments.
+This section shows how to deliver a multi-cluster application with KubeVela policies and workflow.
 
 ## Introduction
 
@@ -43,7 +43,7 @@ By default, the hub cluster where KubeVela locates is registered as the `local` 
 
 ## Deliver Application to Clusters
 
-To deliver your application into multiple clusters, you simply need to configure which clusters you want to deploy through the `topology` policy. For example, you can deploy an nginx webservice in hangzhou clusters by running the following commands
+To deliver your application to multiple clusters, list the clusters in a `topology` policy. For example, this deploys an nginx webservice to the hangzhou clusters:
 
 ```bash
 $ cat <<EOF | vela up -f -
@@ -85,7 +85,7 @@ About:
   Name:         basic-topology               
   Namespace:    examples                     
   Created at:   2022-04-08 14:37:54 +0800 CST
-  Status:       workflowFinished             
+  Status:       running                      
 
 Workflow:
 
@@ -119,7 +119,7 @@ Services:
 
 ### Debugging Multi-cluster Application
 
-You can debugging the above deployed nginx webservice by running the following vela CLI commands. You can play with your pods in managed clusters directly on the hub cluster, without switching KubeConfig context. If you have multiple clusters in on application, the CLI command will ask you to choose one interactively.
+You can debug the nginx webservice deployed above with the following vela CLI commands. They work on pods in the managed clusters from the hub cluster, without switching kubeconfig context. If the application runs in more than one cluster, the command asks you to choose one.
 - `vela status` as shown above can give you an overview of your deployed multi-cluster application. Example usage is shown above.
 - `vela status --pod` can list the pod status of your application.
 - `vela logs` shows pod logs in managed clusters.
@@ -213,7 +213,7 @@ spec:
 ```
 
 :::tip
-Sometimes, for security issues, you might want to disable this behavior and retrict the resources to be deployed within the same namespace of the application. This can be done by setting `--allow-cross-namespace-resource=false` in the [bootstrap parameter](../platform-engineers/system-operation/bootstrap-parameters.md) of the KubeVela controller.
+Sometimes, for security issues, you might want to disable this behavior and restrict the resources to be deployed within the same namespace of the application. This can be done by setting `--allow-cross-namespace-resource=false` in the [bootstrap parameter](../platform-engineers/system-operation/bootstrap-parameters.md) of the KubeVela controller.
 :::
 
 ### Control the deploy workflow
@@ -509,15 +509,15 @@ spec:
 
 ### Multi-cluster scheduling with customized workflow steps
 
-The multi-cluster feature and combine with the [customized workflow steps](../end-user/workflow/overview.md) to provide a powerful way for multi-cluster scheduling.
+[Workflow steps](../end-user/workflow/overview.md) such as `read-object` can decide where to deploy next:
 
-In the following example, we'll deploy the task first into the `local` cluster and `default` namespace, then check the deploy status by `read-object` step, after that we'll deploy the task into the `prod` namespace according the status.
+In the following example, we'll deploy the task first into the `local` cluster and `default` namespace, then check the deploy status by `read-object` step, after that we'll deploy the task into the `prod` namespace according to the status.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: deploy-with-override
+  name: staged-task
 spec:
   components:
     - name: mytask
@@ -545,7 +545,7 @@ spec:
             traits:
             - type: annotations
               properties:
-                "description": "01 cron task - 1"
+                "description": "first run"
     - name: override-annotations-2
       type: override
       properties:
@@ -554,7 +554,7 @@ spec:
             traits:
             - type: annotations
               properties:
-                "description": "02 cron task - 2"                
+                "description": "second run"                
   workflow:
     steps:
       - type: deploy
@@ -581,6 +581,8 @@ spec:
           policies: ["target-prod", "override-annotations-2"]
 ```
 
+`deploy-01` waits until the Job has succeeded, so its pods have finished and `status.ready` reads 0. `deploy-02` checks that before running the task in `prod`.
+
 ## Backward Compatibility
 
 KubeVela Application v1.3 uses different policies and workflow steps to configure and managing multi-cluster applications.
@@ -590,9 +592,3 @@ The outdated `env-binding` policy and `deploy2env` workflow step in old versions
 The new policies and workflow steps can cover all the use-cases in old versions so it is possible to upgrade all your applications while maintaining the same capabilities. Upgrade tools are not available now but will come out before deprecation happens.
 
 If you already have applications running in production environment and do not want to change them, KubeVela v1.3 is also compatible for it. It is **NOT** necessary to migrate old multi-cluster applications to new ones.
-
-## Conclusion
-
-In this section, we introduced how KubeVela delivering micro services in multiple clusters, the whole process can be easily modeled as a declarative deployment plan.
-
-No more ad-hoc scripts or glue code, KubeVela will get the application delivery workflow done with full automation and determinism. Most importantly, KubeVela expects you keep using the CI solutions you are already familiar with and KubeVela is fully complementary to them as the CD control plane.

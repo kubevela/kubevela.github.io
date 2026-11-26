@@ -34,7 +34,22 @@ After starting the tool, we will enter the home page: Application view, as shown
 
 ![vela top home page](../resources/vela-top-home-page.png)
 
-The tool is divided into three parts as a whole, as shown in the figure, they are the Header part containing basic information, platform system information, menu and logo, the Body part where the resource view is located, and the Footer part where the breadcrumb component of the resource level is located.
+### Keys
+
+| Key | View | What it does |
+| --- | --- | --- |
+| Enter | Application, Managed Resource, Pod | Open the next level: an application's managed resources, a resource's pods, a pod's containers |
+| N | Application | Choose the namespace to show |
+| T | Application | Show the application's topology |
+| Tab | Topology | Switch between App Topology and Resource Topology |
+| N, C | Managed Resource | Filter by namespace or by cluster |
+| Y | Application, Managed Resource, Pod | Show the resource's YAML |
+| L | Pod, Container | Show the logs |
+| R | Most views | Refresh |
+| Ctrl+T | Any resource view | Switch the theme |
+| Q | Any view | Go back |
+| ? | Any view | Show help |
+| Esc | Application | Exit |
 
 ### Overview of platform information
 
@@ -148,7 +163,7 @@ Maybe you want to know how the complete resource topology of an application is. 
 
 ![vela top topology](../resources/vela-top-topology.png)
 
-The application delivery model behind KubeVela is [Open Application Model](https://kubevela.io/zh/docs/platform-engineers/oam/oam-model). Every application deployment plan can be composed by multiple components with attachable operational behaviors (traits), deployment policy and workflow. For the content of this part, please refer to [KubeVela Core Concepts](https://kubevela.io/zh/docs/getting-started/core-concept), so the first topology we show is to show the four components of the application, this topology is called the "App Topology".
+The application delivery model behind KubeVela is the [Open Application Model](https://oam.dev/). An application is made of components with attachable operational behaviors (traits), deployment policies and a workflow; see [KubeVela Core Concepts](../getting-started/core-concept.md). The first view, App Topology, shows the application's components, traits, policies and workflow.
 
 In addition, these components will actually eventually be loaded as native resources or CRDs in Kubernetes, and these resources constitute another resource topology. As a user, you must want to know whether the sub-resources of the application are correctly deployed as required, you can get the answer from this topology, which we call the "Resource Topology".
 
@@ -157,7 +172,7 @@ In addition, these components will actually eventually be loaded as native resou
 
 ![vela top platform overview](../resources/vela-top-yaml.png)
 
-In all kinds of resource views, you can select a resource and press the Y key to view the YAML text corresponding to the resource, and the text will be highlighted.
+In the Application, Managed Resource and Pod views, you can select a resource and press the Y key to view the YAML text corresponding to the resource, and the text will be highlighted.
 
 #### Print log
 
@@ -165,7 +180,7 @@ In all kinds of resource views, you can select a resource and press the Y key to
 
 In the Container view, you can use the L key to enter the log view, the log view will print the log of the selected container.
 
-In the Container view, the method of entering the log view is the same as Pod view. What is different is the log are belong to the several containers in the selected pod.
+In the Pod view, L shows the logs of every container in the pod.
 
 #### Switch Theme
 

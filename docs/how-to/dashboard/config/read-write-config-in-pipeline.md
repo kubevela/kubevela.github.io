@@ -33,7 +33,6 @@ kind: Application
 apiVersion: core.oam.dev/v1beta1
 metadata:
   name: create-config
-  namespace: "config-e2e-test"
 spec:
   components: []
   workflow:
@@ -54,7 +53,6 @@ kind: Application
 apiVersion: core.oam.dev/v1beta1
 metadata:
   name: read-config
-  namespace: "config-e2e-test"
 spec:
   components: []
   workflow:

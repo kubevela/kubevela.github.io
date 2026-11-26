@@ -219,7 +219,7 @@ If you change the rollback operation above to resume the upgrade, the subsequent
 
 Please see [this link](https://kubevela.io/docs/tutorials/helm) for the complete operation procedure of the preceding demo.
 
-Please refer to [this link](https://kubevela.io/docs/tutorials/k8s-object-rollout) if you want to directly use native Kubernetes resources to implement the process above.
+Please refer to [this link](https://kubevela.io/docs/tutorials/helm-rollout) if you want to directly use native Kubernetes resources to implement the process above.
 
 In addition to Deployment, the kruise-rollout addon supports StatefulSet and OpenKruise CloneSet. If the workload types in your chart are one of the three types mentioned above, canary rollout can be implemented through the example above.
 

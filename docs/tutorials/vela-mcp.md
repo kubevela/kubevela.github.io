@@ -38,7 +38,7 @@ the open standard most AI clients use to call external tools.
 
 ## Before you start
 
-You need:
+`vela mcp` is new in KubeVela 1.12. You need:
 
 - A Kubernetes cluster with KubeVela installed. See [Installation](../installation/kubernetes.mdx).
 - A `vela` CLI that includes the `mcp` command. Check with `vela mcp --help`. Use the same
@@ -187,7 +187,7 @@ the common tasks and the tools behind them:
 | What does this definition do and which parameters does it take? | `explain_definition`, `describe_definition`, which includes a minimal example |
 | Write an Application for me and check it renders | `describe_definition`, `dryrun_application` |
 | What would change if I applied this? | `diff_application` |
-| Which Applications would this definition change break? | `diff_definition_impact`, which finds the consumers in the namespaces the caller may read, renders a bounded number of them against the current and the proposed definition, and reports a change set and risk class, or a render error, per Application; `meta.truncated` is set when more consumers exist than it rendered |
+| Which Applications would this definition change break? | `diff_definition_impact`: renders the Applications that use the definition, before and after the change |
 | Check a definition I have not applied yet against the Applications that use it | `stage_definition` once, then `dryrun_application`, `diff_application` or `diff_definition_impact` with the handle it returns |
 | Which clusters and addons does the platform have? | `list_clusters`, `list_addons` |
 | Can this cluster create a DynamoDB table, and with which provisioner? | `get_platform_info` with `provider: aws` (the default; also `gcp` or `azure`), `service: dynamodb` and `kind: Table`. It names the cloud's own controller first (ACK, Config Connector or Azure Service Operator), lists Crossplane under `also` when it serves the service too, and returns that CRD's schema, or says that nothing serves the service and what to install. Without `kind` it names the provisioner and its kinds only. The result also says whether that provisioner talks to the cloud API or to an emulator or private endpoint (`provisioner.endpointOverride`, with an `endpoint provenance` warning), and warns when it cannot tell |

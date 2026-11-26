@@ -16,7 +16,7 @@ spec:
     - name: my-app
       type: webservice
       properties:
-        image: somefive/prometheus-client-example:new
+        image: quay.io/brancz/prometheus-example-app:v0.6.0
       traits:
         - type: prometheus-scrape
 ```
@@ -33,7 +33,7 @@ spec:
     - name: my-app
       type: webservice
       properties:
-        image: somefive/prometheus-client-example:new
+        image: quay.io/brancz/prometheus-example-app:v0.6.0
       traits:
         - type: prometheus-scrape
           properties:

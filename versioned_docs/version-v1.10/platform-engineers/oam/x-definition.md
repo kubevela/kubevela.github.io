@@ -2,16 +2,16 @@
 title: OAM Definition Protocol
 ---
 
-KubeVela is fully programmable via [CUE](https://cuelang.org), while it leverage Kubernetes as control plane and align with the API in yaml.
+Definitions are Kubernetes objects. You can write them as YAML, or as CUE files that `vela def` converts. [The definition file](./definition-file.md) shows one definition in both formats and how the fields map.
 
-You can [manage the definition](../cue/definition-edit.md) in CUE and the `vela def` command will render it into Kubernetes API with the following protocol.
+You can [manage the definition](../cue/definition-edit.md) in CUE and the `vela def` command renders it into the Kubernetes API described on this page.
 
 ## Definition API
 
 Essentially, a definition object in KubeVela is a programmable building block. A definition object normally includes several information to model a certain platform capability that would used in further application deployment:
 - **Capability Indicator** 
   - `ComponentDefinition` uses `spec.workload` to indicate the workload type of this component.
-  - `TraitDefinition` uses `spec.definition` to indicate the provider of this trait.
+  - `TraitDefinition` uses `spec.definitionRef` to name the CRD that provides this trait.
   - These indicators can be auto detected, so they're not necessary.
 - **Interoperability Fields**
   - they are for the platform to ensure a trait can work with given workload type. Hence only `TraitDefinition` has these fields.
@@ -37,32 +37,11 @@ spec:
   # ... interoperability fields
 ```
 
-### The convert rule from CUE format to OAM API
+### The CUE format
 
-Below is a framework of definition in CUE format:
+The CUE files `vela def` works with put the metadata and `attributes` (the `spec`) in one block, and the CUE template in `template`. [The definition file](./definition-file.md) has the full mapping between the two formats.
 
-```cue
-<definition name>: {
-    annotations: {}
-    labels: {}    
-    attributes: {}
-    description: ""
-    type: "<definition type>"
-}
-
-template: {
-    ...
-}
-```
-
-- The `"<definition name>"` aligns with the `.metadata.name` in OAM API.
-- The `.annotations` aligns with the `.metadata.annotations` in OAM API.
-- The `.labels` aligns with the `.metadata.labels` in OAM API.
-- The `.attributes.` aligns with the `.spec.` in OAM API except the `.spec.schematic` field.
-- The `template` aligns with the `.spec.schematic.cue` field, only CUE schematic supported in this conversion.
-- The `description` aligns with the `.metadata.annotations["definition.oam.dev/description"]` field.
-
-Let's check the OAM definition API details one by one.
+The rest of this page shows each definition kind as a Kubernetes object.
 
 ## ComponentDefinition
 
@@ -113,111 +92,12 @@ spec:
 
 In above example, it claims to leverage Kubernetes Deployment (`apiVersion: apps/v1`, `kind: Deployment`) as the workload type for component.
 
-The programmable template of given capability are defined in `spec.schematic` field. For example, below is the full definition of *Helm* type in KubeVela:
+The programmable template of a capability is defined in the `spec.schematic` field. For a full example, look at the `helm` component type from the `fluxcd` addon. Enable the addon, then print the definition with:
 
-<details>
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: ComponentDefinition
-metadata:
-  name: helm
-  namespace: vela-system
-  annotations:
-    definition.oam.dev/description: "helm release is a group of K8s resources from either git repository or helm repo"
-spec:
-  workload:
-    type: autodetects.core.oam.dev
-  schematic:
-    cue:
-      template: |
-        output: {
-          apiVersion: "source.toolkit.fluxcd.io/v1beta1"
-          metadata: {
-            name: context.name
-          }
-          if parameter.repoType == "git" {
-            kind: "GitRepository"
-            spec: {
-              url: parameter.repoUrl
-              ref:
-                branch: parameter.branch
-              interval: parameter.pullInterval
-            }
-          }
-          if parameter.repoType == "helm" {
-            kind: "HelmRepository"
-            spec: {
-              interval: parameter.pullInterval
-              url:      parameter.repoUrl
-              if parameter.secretRef != _|_ {
-                secretRef: {
-                  name: parameter.secretRef
-                }
-              }
-            }
-          }
-        }
-
-        outputs: release: {
-          apiVersion: "helm.toolkit.fluxcd.io/v2beta1"
-          kind:       "HelmRelease"
-          metadata: {
-            name: context.name
-          }
-          spec: {
-            interval: parameter.pullInterval
-            chart: {
-              spec: {
-                chart:   parameter.chart
-                version: parameter.version
-                sourceRef: {
-                  if parameter.repoType == "git" {
-                    kind: "GitRepository"
-                  }
-                  if parameter.repoType == "helm" {
-                    kind: "HelmRepository"
-                  }
-                  name:      context.name
-                  namespace: context.namespace
-                }
-                interval: parameter.pullInterval
-              }
-            }
-            if parameter.targetNamespace != _|_ {
-              targetNamespace: parameter.targetNamespace
-            }
-            if parameter.values != _|_ {
-              values: parameter.values
-            }
-          }
-        }
-
-        parameter: {
-          repoType: "git" | "helm"
-          // +usage=The Git or Helm repository URL, accept HTTP/S or SSH address as git url.
-          repoUrl: string
-          // +usage=The interval at which to check for repository and relese updates.
-          pullInterval: *"5m" | string
-          // +usage=1.The relative path to helm chart for git source. 2. chart name for helm resource
-          chart: string
-          // +usage=Chart version
-          version?: string
-          // +usage=The Git reference to checkout and monitor for changes, defaults to master branch.
-          branch: *"master" | string
-          // +usage=The name of the secret containing authentication credentials for the Helm repository.
-          secretRef?: string
-          // +usage=The namespace for helm chart
-          targetNamespace?: string
-          // +usage=Chart version
-          value?: #nestedmap
-        }
-
-        #nestedmap: {
-          ...
-        }
+```bash
+vela addon enable fluxcd
+vela def get helm
 ```
-</details>
 
 The specification of `schematic` is explained in the [CUE with KubeVela](../cue/basic.md) documentations.
 
@@ -235,21 +115,26 @@ metadata:
   annotations:
     definition.oam.dev/description: <function description>
 spec:
-  definition:
-    apiVersion: <corresponding Kubernetes resource group>
-    kind: <corresponding Kubernetes resource type>
-  workloadRefPath: <The path to the reference field of the Workload object in the Trait>
-  podDisruptive: <whether the parameter update of Trait cause the underlying resource (pod) to restart>
-  manageWorkload: <Whether the workload is managed by this Trait>
-  skipRevisionAffect: <Whether this Trait is not included in the calculation of version changes>
+  definitionRef:            # the CRD that provides this trait, if any
+    name: <CRD name, e.g. ingresses.networking.k8s.io>
   appliesToWorkloads:
-  - <Workload that TraitDefinition can adapt to>
+    - <workload types this trait can be attached to>
   conflictsWith:
-  - <other Traits that conflict with this><>
-  revisionEnabled: <whether Trait is aware of changes in component version>
-  controlPlaneOnly: <Whether resources generated by trait are dispatched to the hubcluster (local)>
-  schematic:  # Abstract
-    cue: # There are many abstracts
+    - <traits that can't sit on the same component as this one>
+  podDisruptive: <true if adding or changing the trait restarts pods>
+  workloadRefPath: <field of the trait object that gets a reference to the workload>
+  revisionEnabled: <true if the trait is aware of component revisions>
+  manageWorkload: <true if the trait is responsible for creating the workload>
+  controlPlaneOnly: <true to dispatch the trait's resources to the hub cluster only>
+  stage: <PreDispatch, DefaultDispatch (the default) or PostDispatch>
+  version: <semantic version of this definition>
+  status:
+    customStatus: <CUE for the status message>
+    healthPolicy: <CUE for the health check>
+    details: <CUE for status details>
+  extension: <free-form data for platform builders>
+  schematic:
+    cue:
       template: <CUE format template>
 ```
 
@@ -278,7 +163,7 @@ This field defines that constraints that what kinds of traits are conflicting wi
 - It accepts an array of string as value. 
 - Each item in the array refers to one or a group of traits.
 
-There are four approaches to denote one or a group of workload types.
+There are three ways to name one or a group of traits.
 
 - `TraitDefinition` name, e.g., `ingress`
 - Resource group of `TraitDefinition` definition reference prefixed with `*.`, e.g., `*.networking.k8s.io`. This means the trait is conflicting with any traits in this group.
@@ -332,13 +217,11 @@ The controller will automatically inject the apiVersion/Kind/Name of the workloa
 
 ### `.spec.podDisruptive`
 
-This field defines that adding/updating the trait will disruptive the pod or not.
-In this example, the answer is not, so the field is `false`, it will not affect the pod when the trait is added or updated.
-If the field is `true`, then it will cause the pod to disruptive and restart when the trait is added or updated.
-By default, the value is `false` which means this trait will not affect.
-Please take care of this field, it's really important and useful for serious large scale production usage scenarios.
+This field says whether adding or changing the trait restarts the component's pods. It defaults to `false`.
 
-Let's look at a practical example:
+Set it to `true` when the trait changes the pod template, so users know adding or changing it restarts pods.
+
+The `hpa` trait below doesn't touch the pods, so it leaves the field at `false`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -381,7 +264,7 @@ spec:
 
 ## PolicyDefinition
 
-PolicyDefinition is simimarly to TraitDefinition, the difference is that TraitDefinition acts on a single component but PolicyDefinition is to act on the entire application as a whole (multiple components). 
+PolicyDefinition is similar to TraitDefinition, but where a trait acts on a single component, a policy acts on the whole application.
 
 It can provide global policy for applications, commonly including global security policies (such as RBAC permissions, auditing, and key management), application insights (such as application SLO management, etc.).
 
@@ -399,57 +282,34 @@ spec:
     cue: 
       template: <CUE format template>
 ```
-A specific example is shown below:
+The `topology` policy that ships with KubeVela looks like this:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: PolicyDefinition
 metadata:
-  name: env-binding
+  name: topology
   annotations:
-    definition.oam.dev/description: <Provide differentiated configuration and environmental scheduling strategies for applications>
+    definition.oam.dev/description: Describe the destination where components should be deployed to.
 spec:
   schematic:
     cue:
       template: |
-        output: {
-          apiVersion: "core.oam.dev/v1alpha1"
-          kind:       "EnvBinding"
-          spec: {
-            engine: parameter.engine
-            appTemplate: {
-              apiVersion: "core.oam.dev/v1beta1"
-              kind:       "Application"
-              metadata: {
-                name:      context.appName
-                namespace: context.namespace
-              }
-              spec: {
-                components: context.components
-              }
-            }
-            envs: parameter.envs
-          }
-        }
-
-        #Env: {
-          name: string
-          patch: components: [...{
-            name: string
-            type: string
-            properties: {...}
-          }]
-          placement: clusterSelector: {
-            labels?: [string]: string
-            name?: string
-          }
-        }
-
         parameter: {
-          engine: *"ocm" | string
-          envs: [...#Env]
+        	// +usage=Specify the names of the clusters to select.
+        	clusters?: [...string]
+        	// +usage=Specify the label selector for clusters
+        	clusterLabelSelector?: [string]: string
+        	// +usage=Ignore empty cluster error
+        	allowEmpty?: bool
+        	// +usage=Deprecated: Use clusterLabelSelector instead.
+        	clusterSelector?: [string]: string
+        	// +usage=Specify the target namespace to deploy in the selected clusters, default inherit the original namespace.
+        	namespace?: string
         }
 ```
+
+The template only declares parameters: the controller knows `topology` (and `override`, and the other built-in policies) by name and acts on them itself. A policy you write takes effect through its `output`; see [Custom Policy](../policy/custom-policy.md).
 
 ## WorkflowStepDefinition
 
@@ -468,42 +328,37 @@ spec:
       template: <CUE format template>
 ```
 
-An actual WorkflowStepDefinition is as follows:
+The `apply-component` step that ships with KubeVela looks like this:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: WorkflowStepDefinition
 metadata:
   name: apply-component
+  annotations:
+    custom.definition.oam.dev/category: Application Delivery
+    definition.oam.dev/description: Apply a specific component and its corresponding traits in application
+  labels:
+    custom.definition.oam.dev/scope: Application
 spec:
   schematic:
     cue:
       template: |
-        import ("vela/op")
         parameter: {
-           component: string
-        }
-
-        // load component from application
-        component: op.#Load & {
-           component: parameter.component
-        }
-
-        // apply workload to kubernetes cluster
-        apply: op.#ApplyComponent & {
-           component: parameter.name
-        }
-
-        // wait until workload.status equal "Running"
-        wait: op.#ConditionalWait & {
-           continue: apply.status.phase =="Running"
+        	// +usage=Specify the component name to apply
+        	component: string
+        	// +usage=Specify the cluster
+        	cluster: *"" | string
+        	// +usage=Specify the namespace
+        	namespace: *"" | string
         }
 ```
 
+Like the built-in policies, `apply-component` is run by the workflow engine by name, so its template only declares parameters. A step you write does its work in the template, with the `vela/kube`, `vela/http` and other providers; see [Workflow Step Definition](../workflow/workflow.md).
 
 ## The Standard Protocol Behind Abstraction
 
-Once the application is created, KubeVela will tag the created resources with a series of tags, which include the version, name, type, etc. of the application. Through these standard protocols, application components, traits and policies can be coordinated. The specific metadata list is as follows:
+Once the application is created, KubeVela tags the created resources with a series of tags, which include the version, name, type, etc. of the application. Through these standard protocols, application components, traits and policies can be coordinated. The specific metadata list is as follows:
 
 |           Label           |                   Description                    |
 | :-----------------------: | :----------------------------------------------: |

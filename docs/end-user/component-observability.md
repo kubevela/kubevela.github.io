@@ -1,5 +1,0 @@
----
-title:  Component Observability
----
-
-WIP

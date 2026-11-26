@@ -2,17 +2,13 @@
 title: Write Config To Nacos
 ---
 
-Nacos /nɑ:kəʊs/ is the acronym for 'Dynamic Naming and Configuration Service', an easy-to-use dynamic service discovery, configuration and service management platform for building cloud-native applications。
-
-Nacos is committed to help you discover, configure, and manage your microservices. It provides a set of simple and useful features enabling you to realize dynamic service discovery, service configuration, service metadata and traffic management.
-
-Nacos makes it easier and faster to construct, deliver and manage your microservices platform. It is the infrastructure that supports a service-centered modern application architecture with a microservices or cloud-native approach.
+[Nacos](https://nacos.io) is a configuration and service-discovery server. KubeVela can publish a config's content to it.
 
 ## Nacos Integration
 
 By default, KubeVela saves the config as a Secret. We could define the template and write the config to the Nacos server. In this case, the role of KubeVela is to check the config content and generate the configuration in a certain format and synchronize it to Nacos. Then, you could write the config to Nacos in Workflow and Pipeline.
 
-## Connector a Nacos server
+## Connect a Nacos server
 
 Make sure there is a config template named `nacos-server`.
 

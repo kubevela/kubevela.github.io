@@ -1,5 +1,5 @@
 ---
-title:  Needs More Capabilities？
+title: Install and Manage Addons
 ---
 
 KubeVela is programmable, it can be extended easily with [definition](../../getting-started/definition.md). You have the following ways to discover and extend the platform.
@@ -15,7 +15,7 @@ There're many out-of-box capabilities installed along with KubeVela controller, 
 
 ## Extend by Managing Addons
 
-Installing addon from the community is also one of the most important way to discover more capabilities.
+Addons are the main way to add component, trait and step types.
 
 ### List Addons
 
@@ -41,7 +41,7 @@ terraform-alibaba               KubeVela        Kubernetes Terraform Controller 
 ```
 </details>
 
-* You can refer to [addon reference docs](../../reference/addons/overview.md) for more details of these community certificated addons.
+* You can refer to [addon reference docs](../../reference/addons/overview.md) for more details of these community verified addons.
 
 ### Install Addon
 
@@ -78,13 +78,13 @@ You can also install addons with some advanced flags.
 vela addon enable fluxcd --version=1.0.0
 ```
 
-* Choose specific clusters for installation. You can use `--cluster` flag to choose specific clusters. e.g:
+* Choose specific clusters for installation. You can use the `--clusters` (`-c`) flag to choose specific clusters. e.g:
 
 ```shell
 vela addon enable <addon-name> --clusters={cluster1,cluster2}
 ```
 
-By default, the place for installation is specified as control plane cluster or managed cluster inside the metadata of addon. 
+By default an addon installs where its metadata says: the control plane, or managed clusters.
 
 * Some addons support setting parts of parameter while enabling. For example `velaux` addon supports change image repository by setting `repo` parameter, then you can change the repo address to your own. e.g:
 
@@ -126,7 +126,7 @@ Addon: velaux enabled successfully
 </details>
 
 :::caution
-Please notice that, while an addon is being installed in a cluster, it maybe still need pull some images or Helm Charts. If your cluster cannot reach these resources please refer [docs](../../platform-engineers/system-operation/enable-addon-offline.md) to complete installation without Internet access.
+Please notice that, while an addon is being installed in a cluster, it maybe still need pull some images or Helm Charts. If your cluster cannot reach these resources please refer [docs](../../platform-engineers/system-operation/offline-installation.md#addons) to complete installation without Internet access.
 :::
 
 #### Install addon with UI Console
@@ -237,7 +237,7 @@ Use dry-run can render YAML results and you will also lose the validation such a
 If you want to check the detail status of an addon, or get more available parameters and other useful info of an addon, you can use command `addon status`. For example:
 
 ```shell
-vela addon enable velaux --verbose
+vela addon status velaux --verbose
 ```
 
 <details>

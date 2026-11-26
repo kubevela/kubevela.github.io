@@ -73,7 +73,7 @@ Chain methods on typed `*Param` variables that produce `Condition` values.
 | `param.IsSet()` | `parameter["x"] != _\|_` | Parameter has been supplied |
 | `param.IsTrue()` | `parameter.x` | Bool parameter is `true` |
 | `param.Eq(value)` | `parameter.x == value` | Equality check on the parameter value |
-| `param.Lt(n)` | `parameter.x < n` | Numeric less-than (on `IntParam` / `NumberParam`) |
+| `param.Lt(n)` | `parameter.x < n` | Numeric less-than (on `IntParam` / `FloatParam`) |
 | `param.Field(name)` | `parameter.x.name` | Named field of a Struct/Object parameter |
 
 ## Regex Condition
@@ -127,14 +127,37 @@ Auto-import: the generator detects required imports from these constructors and 
 | `.WithVars(keyVar, valueVar string)` | Names the CUE loop variables (e.g. `"k"`, `"v"`). Both are required. |
 | `.WithBody(ops ...Op)` | Adds field-set operations that execute per iteration. Omit to use the default `(k): v` body. |
 
+## Choosing an apiVersion by cluster version
+
+`NewResourceWithConditionalVersion` with `VersionIf` emits the `apiVersion` whose condition holds, for a kind whose API group changed between Kubernetes versions. CronJob moved from `batch/v1beta1` to `batch/v1` in Kubernetes 1.21:
+
+```go
+vela := defkit.VelaCtx()
+cron := defkit.NewResourceWithConditionalVersion("CronJob").
+    VersionIf(defkit.Lt(vela.ClusterVersion().Minor(), defkit.Lit(21)), "batch/v1beta1").
+    VersionIf(defkit.Ge(vela.ClusterVersion().Minor(), defkit.Lit(21)), "batch/v1")
+```
+
+```cue
+output: {
+  if context.clusterVersion.minor < 21 {
+    apiVersion: "batch/v1beta1"
+  }
+  if context.clusterVersion.minor >= 21 {
+    apiVersion: "batch/v1"
+  }
+  kind: "CronJob"
+}
+```
+
 ## Example
 
-Let's build a `namespaced-cache` component that renders a Redis `Deployment` and a `Service`, with the `apiVersion` adapted to the cluster's Kubernetes version via `VersionIf`. Users supply a target namespace, replica count, port, protocol, optional extra labels, and a TLS-disable toggle.
+Let's build a `namespaced-cache` component that renders a Redis `Deployment` and a `Service` in the Application's namespace. Users supply a replica count, port, protocol, optional extra labels, and a TLS-disable toggle.
 
-Behind the scenes the template exercises every category of value expression in a single definition: `Interpolation` to compose the Redis connection URL and a `namespace:name` instance key; `Plus` to build the internal DNS address by string concatenation; `StringsToLower` to lowercase the protocol in the URL and the component name in a label value; `StrconvFormatInt` to convert the integer port to a string inline within the interpolation; `Lt` and `Ge` for cluster-version conditions passed to `VersionIf`; `Gt` with `SetIf` to emit the rolling-update strategy only when `replicas > 1`; `SpreadIf` with `labels.IsSet()` to conditionally merge user-supplied labels; and `Not` with `enableTLS.IsTrue()` inside `NewArray().ItemIf()` to add a `TLS_DISABLED` env var only when TLS is off. Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/components/`.
+Behind the scenes the template exercises every category of value expression in a single definition: `Interpolation` to compose the Redis connection URL from the Service's DNS name and a `namespace:name` instance key; `Plus` to build the internal DNS address by string concatenation; `StringsToLower` to lowercase the component name in a label value; `StrconvFormatInt` to convert the integer port to a string inline within the interpolation; `Gt` with `SetIf` to emit the rolling-update strategy only when `replicas > 1`; `SpreadIf` with `labels.IsSet()` to conditionally merge user-supplied labels; and `Not` with `enableTLS.IsTrue()` inside `NewArray().ItemIf()` to add a `TLS_DISABLED` env var only when TLS is off. Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/components/`.
 
 <Tabs groupId="defkit-example">
-<TabItem value="go" label="Go — defkit">
+<TabItem value="go" label="Go (defkit)">
 
 ```go
 package components
@@ -142,7 +165,6 @@ package components
 import "github.com/oam-dev/kubevela/pkg/definition/defkit"
 
 func NamespacedCache() *defkit.ComponentDefinition {
-    namespace  := defkit.String("namespace").Default("default").Description("Target namespace")
     replicas   := defkit.Int("replicas").Default(1).Description("Number of cache replicas")
     port       := defkit.Int("port").Default(6379).Description("Cache port")
     protocol   := defkit.String("protocol").Default("TCP").Values("TCP", "UDP").Description("Port protocol")
@@ -153,14 +175,13 @@ func NamespacedCache() *defkit.ComponentDefinition {
         Description("Redis-like cache showcasing Value Expression helpers").
         Workload("apps/v1", "Deployment").
         PodSpecPath("spec.template.spec").
-        Params(namespace, replicas, port, protocol, labels, enableTLS).
+        Params(replicas, port, protocol, labels, enableTLS).
         Template(namespacedCacheTemplate).
         WithImports("strconv", "strings")
 }
 
 func namespacedCacheTemplate(tpl *defkit.Template) {
     vela     := defkit.VelaCtx()
-    namespace := defkit.String("namespace")
     replicas  := defkit.Int("replicas")
     port      := defkit.Int("port")
     protocol  := defkit.String("protocol")
@@ -170,40 +191,34 @@ func namespacedCacheTemplate(tpl *defkit.Template) {
     // StrconvFormatInt: convert the integer port to a string inline.
     portStr := defkit.StrconvFormatInt(port, 10)
 
-    // Interpolation + StringsToLower + StrconvFormatInt:
-    // compose the Redis connection URL from mixed literals and expressions.
-    // Use the user-supplied `namespace` parameter, not `context.namespace` —
-    // the Service is deployed into parameter.namespace (see metadata.namespace
-    // below); referencing context.namespace would point the URL at the
-    // Application's namespace when the two differ.
+    // Interpolation + StrconvFormatInt: the Redis URL of the Service below,
+    // which has the component's name in the Application's namespace.
     redisURL := defkit.Interpolation(
-        defkit.StringsToLower(protocol),
-        defkit.Lit("://"),
-        namespace,
+        defkit.Lit("redis://"),
+        vela.Name(),
+        defkit.Lit("."),
+        vela.Namespace(),
         defkit.Lit(".svc:"),
         portStr,
     )
 
     // Interpolation: compose a namespace-scoped instance key.
     instanceKey := defkit.Interpolation(
-        namespace,
+        vela.Namespace(),
         defkit.Lit(":"),
         vela.Name(),
     )
 
     // Plus: build the internal service DNS address by string concatenation.
     internalAddr := defkit.Plus(
-        defkit.Lit("cache."),
-        namespace,
+        vela.Name(),
+        defkit.Lit("."),
+        vela.Namespace(),
         defkit.Lit(".svc"),
     )
 
     // StringsToLower: lowercase the component name for a label value.
     labelValue := defkit.StringsToLower(vela.Name())
-
-    // Lt / Ge: cluster-version conditions for VersionIf.
-    isOldCluster := defkit.Lt(vela.ClusterVersion().Minor(), defkit.Lit(24))
-    isNewCluster := defkit.Ge(vela.ClusterVersion().Minor(), defkit.Lit(24))
 
     // Not: emit TLS_DISABLED env var only when TLS is off.
     noTLS := defkit.Not(enableTLS.IsTrue())
@@ -224,11 +239,8 @@ func namespacedCacheTemplate(tpl *defkit.Template) {
             Set("name", defkit.Lit("TLS_DISABLED")).
             Set("value", defkit.Lit("true")))
 
-    dep := defkit.NewResourceWithConditionalVersion("Deployment").
-        VersionIf(isOldCluster, "apps/v1").
-        VersionIf(isNewCluster, "apps/v1").
+    dep := defkit.NewResource("apps/v1", "Deployment").
         Set("metadata.name", vela.Name()).
-        Set("metadata.namespace", namespace).
         Set("metadata.labels[app.oam.dev/component]", labelValue).
         // SpreadIf + labels.IsSet(): merge user labels when provided.
         SpreadIf(labels.IsSet(), "metadata.labels", labels).
@@ -248,7 +260,6 @@ func namespacedCacheTemplate(tpl *defkit.Template) {
 
     svc := defkit.NewResource("v1", "Service").
         Set("metadata.name", vela.Name()).
-        Set("metadata.namespace", namespace).
         Set("spec.selector[app.oam.dev/component]", vela.Name()).
         Set("spec.ports[0].port", port).
         Set("spec.ports[0].protocol", protocol).
@@ -261,7 +272,7 @@ func init() { defkit.Register(NamespacedCache()) }
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated">
+<TabItem value="cue" label="CUE (generated)">
 
 ```cue
 import (
@@ -286,16 +297,10 @@ import (
 }
 template: {
   output: {
-    if context.clusterVersion.minor < 24 {
-      apiVersion: "apps/v1"
-    }
-    if context.clusterVersion.minor >= 24 {
-      apiVersion: "apps/v1"
-    }
-    kind: "Deployment"
+    apiVersion: "apps/v1"
+    kind:       "Deployment"
     metadata: {
-      name:      context.name
-      namespace: parameter.namespace
+      name: context.name
       labels: {
         if parameter["labels"] != _|_ {
           parameter.labels
@@ -321,15 +326,15 @@ template: {
           env: [
             {
               name:  "REDIS_URL"
-              value: "\(strings.ToLower(parameter.protocol))://\(parameter.namespace).svc:\(strconv.FormatInt(parameter.port, 10))"
+              value: "redis://\(context.name).\(context.namespace).svc:\(strconv.FormatInt(parameter.port, 10))"
             },
             {
               name:  "INSTANCE_KEY"
-              value: "\(parameter.namespace):\(context.name)"
+              value: "\(context.namespace):\(context.name)"
             },
             {
               name:  "INTERNAL_ADDR"
-              value: "cache." + parameter.namespace + ".svc"
+              value: context.name + "." + context.namespace + ".svc"
             },
             if !(parameter.enableTLS) {
               {
@@ -345,10 +350,7 @@ template: {
   outputs: service: {
     apiVersion: "v1"
     kind:       "Service"
-    metadata: {
-      name:      context.name
-      namespace: parameter.namespace
-    }
+    metadata: name: context.name
     spec: {
       selector: "app.oam.dev/component": context.name
       ports: [{
@@ -359,8 +361,6 @@ template: {
     }
   }
   parameter: {
-    // +usage=Target namespace
-    namespace: *"default" | string
     // +usage=Number of cache replicas
     replicas: *1 | int
     // +usage=Cache port
@@ -389,7 +389,6 @@ spec:
     - name: my-cache
       type: namespaced-cache
       properties:
-        namespace: default
         replicas: 2
         port: 6379
         protocol: TCP
@@ -424,7 +423,7 @@ NAME         COMPONENT   TYPE               PHASE     HEALTHY   STATUS   AGE
 cache-demo   my-cache    namespaced-cache   running   true               60s
 ```
 
-Once the Application reaches `running`, inspect the rendered `Deployment` to confirm each value expression. Output below was captured live against a k3d cluster:
+Once the Application reaches `running`, inspect the rendered `Deployment` to confirm each value expression:
 
 ```shell
 $ kubectl get deployment my-cache -n default \
@@ -433,7 +432,7 @@ $ kubectl get deployment my-cache -n default \
 [
     {
         "name": "REDIS_URL",
-        "value": "tcp://default.svc:6379"
+        "value": "redis://my-cache.default.svc:6379"
     },
     {
         "name": "INSTANCE_KEY",
@@ -441,7 +440,7 @@ $ kubectl get deployment my-cache -n default \
     },
     {
         "name": "INTERNAL_ADDR",
-        "value": "cache.default.svc"
+        "value": "my-cache.default.svc"
     },
     {
         "name": "TLS_DISABLED",
@@ -454,7 +453,7 @@ $ kubectl get deployment my-cache -n default \
 replicas=2 strategy=RollingUpdate env-label=staging
 ```
 
-`REDIS_URL` uses `Interpolation` + `StringsToLower` (lowercasing `"TCP"` to `"tcp"`) + `StrconvFormatInt` (rendering `6379` as `"6379"`). `INSTANCE_KEY` is `Interpolation(namespace, ":", name)`. `INTERNAL_ADDR` is `Plus("cache.", namespace, ".svc")`. `TLS_DISABLED` appears because `ItemIf(Not(enableTLS.IsTrue()), ...)` fires when `enableTLS: false`. `strategy.type: RollingUpdate` appears because `SetIf(Gt(replicas, 1), ...)` fires for `replicas: 2`. The `env: staging` label comes from `SpreadIf(labels.IsSet(), ...)`.
+`REDIS_URL` uses `Interpolation` + `StrconvFormatInt` (rendering `6379` as `"6379"`) to point at the Service, `my-cache` in `default`. `INSTANCE_KEY` is `Interpolation(namespace, ":", name)`. `INTERNAL_ADDR` is `Plus(name, ".", namespace, ".svc")`. `TLS_DISABLED` appears because `ItemIf(Not(enableTLS.IsTrue()), ...)` fires when `enableTLS: false`. `strategy.type: RollingUpdate` appears because `SetIf(Gt(replicas, 1), ...)` fires for `replicas: 2`. The `env: staging` label comes from `SpreadIf(labels.IsSet(), ...)`.
 
 Clean up afterwards:
 
@@ -466,7 +465,7 @@ kubectl delete componentdefinition namespaced-cache -n vela-system
 ## Related
 
 - [Resource Builder](./resource-builder.md) — `NewResource`, `Set`, `SetIf`, `SpreadIf`, `If`/`EndIf`, and array builders
-- [ForEachWith / ItemBuilder](./foreach-item-builder.md) — per-element builder pattern for complex array items
+- [ForEachWith / ItemBuilder](./collections-api.md#per-item-builder-foreachwith): per-element builder pattern for complex array items
 - [ComponentDefinition](./definition-component.md) — define workload types
 - [TraitDefinition](./definition-trait.md) — patch workloads with traits
-- [Helper Builder](./template-helper-builder.md) — `tpl.Helper()`, `tpl.AddLetBinding()`, and let-variable APIs
+- [Template helpers](./collections-api.md#template-helpers-tplhelper): `tpl.Helper()`, `tpl.AddLetBinding()`, and let-variable APIs

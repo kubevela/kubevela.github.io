@@ -7,6 +7,10 @@ import TabItem from '@theme/TabItem';
 
 `defkit.NewPolicy(name string) *PolicyDefinition` creates a PolicyDefinition builder. Policies are applied globally to applications and have no workload coupling. They control lifecycle behaviors like garbage collection, apply-once semantics, or override rules.
 
+:::info How a custom policy takes effect
+Only KubeVela's built-in policy names (`garbage-collect`, `apply-once`, `topology`, `override`, `shared-resource` and the rest) are interpreted by the controller. A custom policy takes effect through an `output` in its template, which KubeVela renders and deploys as a resource with the Application, or as an [application-scoped policy](../policy/application-scoped-policy.md). A custom policy that declares parameters and nothing else, like the `gc-control` example below, applies to the cluster, but an Application that uses it fails to render with `field not found: output`. Treat the example as a guide to the builder's parameter and helper methods.
+:::
+
 ## Chain Methods
 
 ### Policy-specific
@@ -151,8 +155,6 @@ vela def validate-module ./my-platform
 vela def gen-module ./my-platform -o ./generated-cue
 ```
 
-> **Heads-up on custom policies at runtime.** KubeVela's built-in policy names (`garbage-collect`, `apply-once`, `topology`, `override`, `shared-resource`, ...) are interpreted by the controller in Go — their CUE schemas serve as user-facing parameter docs, not as the execution path. A custom-named `PolicyDefinition` like `gc-control` applies cleanly and is visible on the cluster, but Applications that reference it will fail policy rendering with `field not found: output` unless (a) the template emits resources via an `output:` field, or (b) a controller or webhook that recognizes the policy name is installed. Treat this example as an authoring-complete, schema-complete policy; runtime enforcement is a platform integration step beyond the `vela def apply-module` flow.
-
 ## Policy API Group
 
 PolicyDefinitions are registered under `core.oam.dev/v1beta1`. Users reference policies by name in the `policies` section of an Application:
@@ -160,7 +162,14 @@ PolicyDefinitions are registered under `core.oam.dev/v1beta1`. Users reference p
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
+metadata:
+  name: my-app
 spec:
+  components:
+    - name: backend
+      type: webservice
+      properties:
+        image: nginx:1.27
   policies:
     - name: my-apply-once
       type: apply-once

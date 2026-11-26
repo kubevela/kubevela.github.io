@@ -158,9 +158,8 @@ spec:
 
 **Expected result:** applying the Application triggers a reconcile loop and execution pauses at the `Reconcile()` breakpoint.
 
-:::tip Network issues on managed laptops
-If Checkpoint 1 passes but Checkpoint 2 does not, the reconciler may be unable to reach the cluster due to network restrictions (common on corporate devices). Checkpoint 1 alone is still sufficient for debugging most controller logic that does not require live cluster interaction.
-
+:::tip
+If Checkpoint 2 never pauses, the controller can't reach the cluster. Check `kubectl get ns` works with the same kubeconfig, and that a proxy isn't intercepting `127.0.0.1`.
 :::
 
 ## Step 5: Run Unit Tests
@@ -218,6 +217,6 @@ make test
 ## Related Documentation 
 
 - [Debugging Workflow](./debug.md)
-- [Debugging Definition](../cue/definition-edit.md#debug-with-applications)
+- [Debugging Definition](../cue/definition-edit.md#test-it-with-an-application)
 - [Debugging with Dry-Run](../../tutorials/dry-run.md)
 - [Debugging with Webhook Integration](./debugging-kubevela-with-webhook.md)

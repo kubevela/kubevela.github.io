@@ -292,7 +292,7 @@ You can refer to the source code [here](https://github.com/kubevela/catalog/blob
 
 ### metadata.yaml
 
-Just the name implies, these are all metadata of an addon, including addon name, version, system requirements, and etc. You can refer to this [documentation](https://kubevela.io/docs/platform-engineers/addon/intro#basic-information-file) for the detail list. The example listed below contains all the fields available.
+Just the name implies, these are all metadata of an addon, including addon name, version, system requirements, and etc. You can refer to this [documentation](https://kubevela.io/docs/platform-engineers/addon/reference#metadatayaml) for the detail list. The example listed below contains all the fields available.
 
 :::tip
 There're some legacy supports, while we are focusing on the new addon format introduced in KubeVela v1.5+. For example, the old `deployTo.runtimeCluster` should be deprecated and using `topology policy define in application` as its alternative. You can refer to [`template.cue`](https://github.com/kubevela/catalog/blob/master/experimental/addons/redis-operator/template.cue#L28) in the full source code.

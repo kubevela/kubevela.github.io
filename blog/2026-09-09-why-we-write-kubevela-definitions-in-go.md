@@ -267,7 +267,7 @@ Two differences from the component are worth tracing back to the CUE.
 
 Everything else maps the way you would now expect. Each `.Description(...)` became a `// +usage=` comment above its field, which is what `vela show` and the dashboard read. Each `.Default(1)` became `*1 | int`. Each `Set` path became a nested CUE field, and `vela.Name()` became `context.name`.
 
-The docs carry a reference page per definition type: [ComponentDefinition](/docs/platform-engineers/defkit/definition-component/), [TraitDefinition](/docs/platform-engineers/defkit/definition-trait/), [PolicyDefinition](/docs/platform-engineers/defkit/definition-policy/) and [WorkflowStepDefinition](/docs/platform-engineers/defkit/definition-workflowstep/), each with the full chain-method list.
+The docs carry a reference page per definition type: [ComponentDefinition](/docs/platform-engineers/defkit/definition-component/), [TraitDefinition](/docs/platform-engineers/defkit/definition-trait/), [PolicyDefinition](/docs/platform-engineers/defkit/definition-policy/) and [WorkflowStepDefinition](/docs/platform-engineers/defkit/template-workflowstep-actions/), each with the full chain-method list.
 
 ## Getting started
 

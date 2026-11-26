@@ -21,162 +21,158 @@ KubeVela allows control over whether Applications automatically upgrade to newer
 
 You can specify either an exact version or a version range for Definition in your application. If a version range is used, KubeVela will select the latest version that fits within the range.
 
-```
-Note: If `app.oam.dev/autoUpdate annotation` is set to `false` or not specified in application, the application will use explicitly specified specified or latest component version. 
-```
+Version ranges (`@v1`, `@v1.2`) only work when the Application sets `app.oam.dev/autoUpdate: "true"`. Without it, KubeVela looks for a revision with exactly that name, so give the full version, such as `configmap-component@v1.2.5`.
 
 ## User Guide
-1. Create a `configmap-component` ComponentDefinition with `1.2.5` version 
-```
-apiVersion: core.oam.dev/v1beta1
-kind: ComponentDefinition
-metadata:
-  name: configmap-component
-  namespace: vela-system
-spec:
-  version: 1.2.5 # Specify the component version using Semantic Versioning
-  schematic:
-    cue:
-      template: |
-        output: {
-        	apiVersion: "v1"
-        	kind:       "ConfigMap"
-        	metadata: {
-        		name:      "comptest"
-        	}
-        	data: {
-            version: "125"
-        	}
-        }
 
-  workload:
-    definition:
-      apiVersion: v1
-      kind: ConfigMap
-```
+This publishes `configmap-component` at three versions and shows which one an Application with `autoUpdate` renders. Each version writes its own number into the ConfigMap, so you can read it back.
 
-2. Create a `configmap-component` ComponentDefinition with `2.0.5` version
-```
-apiVersion: core.oam.dev/v1beta1
-kind: ComponentDefinition
-metadata:
-  name: configmap-component
-  namespace: vela-system
-spec:
-  version: 2.5.0 # Specify the component version using Semantic Versioning
-  schematic:
-    cue:
-      template: |
-        output: {
-        	apiVersion: "v1"
-        	kind:       "ConfigMap"
-        	metadata: {
-        		name:      "comptest"
-        	}
-        	data: {
-            version: "250"
-        	}
-        }
+1. Create the namespace the Application runs in:
 
-  workload:
-    definition:
-      apiVersion: v1
-      kind: ConfigMap
-```
-3. List the DefinitionRevisions. 
-```
-kubectl get definitionrevision -n vela-system | grep -i my-component
-my-component-v1.2.5                1          1a4f3ac77e4fcfef   Component
-my-component-v2.5.0                2          e61e9b5e55b01c2b   Component
-```
+   ```shell
+   kubectl create namespace test
+   ```
 
-4. Create Application using `configmap-component@v1.2` version and enable the Auto Update using `app.oam.dev/autoUpdate` annotation.
-```
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: test-app
-  namespace: test
-  annotations:
-    app.oam.dev/autoUpdate: "true" # Enable automatic upgrades
-spec:
-  components:
-    - name: test-configmap
-      type: my-component@v1 # Use the latest version in the 'v1' range
-```
+2. Save this as `configmap-component-1.2.5.yaml` and apply it with `kubectl apply -f configmap-component-1.2.5.yaml`:
 
-    Expected Behavior:
-    - Application will use `configmap-component@v1.2.5`, as `1.2.5` is highest version in specified range(`1`).
+   ```yaml
+   apiVersion: core.oam.dev/v1beta1
+   kind: ComponentDefinition
+   metadata:
+     name: configmap-component
+     namespace: vela-system
+   spec:
+     version: 1.2.5
+     workload:
+       definition:
+         apiVersion: v1
+         kind: ConfigMap
+     schematic:
+       cue:
+         template: |
+           output: {
+             apiVersion: "v1"
+             kind:       "ConfigMap"
+             metadata: name: context.name
+             data: version: "1.2.5"
+           }
+   ```
 
-6. Create a `configmap-component` ComponentDefinition with `1.2.7` version 
-```
-apiVersion: core.oam.dev/v1beta1
-kind: ComponentDefinition
-metadata:
-  name: configmap-component
-  namespace: vela-system
-spec:
-  version: 1.2.7 # Specify the component version using Semantic Versioning
-  schematic:
-    cue:
-      template: |
-        output: {
-        	apiVersion: "v1"
-        	kind:       "ConfigMap"
-        	metadata: {
-        		name:      "comptest"
-        	}
-        	data: {
-            version: "127"
-        	}
-        }
+3. Publish version `2.5.0`, the breaking release. Apply the same file with `version: 2.5.0` and `data: version: "2.5.0"`:
 
-  workload:
-    definition:
-      apiVersion: v1
-      kind: ConfigMap
-```
-    Expected Behavior:
-    - After the Application is reconciled, it will use `configmap-component@v1.2.7`, as `1.2.7` is the latest version within the specified range (1).
+   ```yaml
+   apiVersion: core.oam.dev/v1beta1
+   kind: ComponentDefinition
+   metadata:
+     name: configmap-component
+     namespace: vela-system
+   spec:
+     version: 2.5.0
+     workload:
+       definition:
+         apiVersion: v1
+         kind: ConfigMap
+     schematic:
+       cue:
+         template: |
+           output: {
+             apiVersion: "v1"
+             kind:       "ConfigMap"
+             metadata: name: context.name
+             data: version: "2.5.0"
+           }
+   ```
 
-7. List the DefinitionRevisions. 
-```kubectl get definitionrevision -n vela-system | grep -i my-component
-my-component-v1.2.5                1          1a4f3ac77e4fcfef   Component
-my-component-v1.2.7                3          86d7fb1a36566dea   Component
-my-component-v2.5.0                2          e61e9b5e55b01c2b   Component
-````
+4. List the revisions:
+
+   ```shell
+   kubectl get definitionrevision -n vela-system | grep configmap-component
+   ```
+
+   ```console
+   configmap-component-v1.2.5   1          1a4f3ac77e4fcfef   Component
+   configmap-component-v2.5.0   2          e61e9b5e55b01c2b   Component
+   ```
+
+5. Deploy an Application that follows the `v1` range:
+
+   ```yaml
+   apiVersion: core.oam.dev/v1beta1
+   kind: Application
+   metadata:
+     name: test-app
+     namespace: test
+     annotations:
+       app.oam.dev/autoUpdate: "true"
+   spec:
+     components:
+       - name: comptest
+         type: configmap-component@v1
+   ```
+
+   It renders `1.2.5`, the highest version in `v1`. `2.5.0` is outside the range:
+
+   ```shell
+   kubectl get cm comptest -n test -o jsonpath='{.data.version}'
+   ```
+
+   ```console
+   1.2.5
+   ```
+
+6. Publish `1.2.7`, a fix inside the `v1` range. Apply the same definition again with `version: 1.2.7` and `data: version: "1.2.7"`.
+
+   The Application moves to `1.2.7` on its next resync, up to 5 minutes later, or as soon as you change it. Then:
+
+   ```shell
+   kubectl get cm comptest -n test -o jsonpath='{.data.version}'
+   ```
+
+   ```console
+   1.2.7
+   ```
+
+7. List the revisions again:
+
+   ```shell
+   kubectl get definitionrevision -n vela-system | grep configmap-component
+   ```
+
+   ```console
+   configmap-component-v1.2.5   1          1a4f3ac77e4fcfef   Component
+   configmap-component-v1.2.7   3          86d7fb1a36566dea   Component
+   configmap-component-v2.5.0   2          e61e9b5e55b01c2b   Component
+   ```
+
+To clean up, run `kubectl delete application test-app -n test` and `kubectl delete componentdefinition configmap-component -n vela-system`.
 
 ## Adding a `version` Field in CUE-based Definitions
-Include the version field inside the attributes section in your .cue file to enable semantic versioning. If you do not require semantic versioning, you may omit the version field.
-Example:
-```
-"configmap-creater": {
-    type: "component"
-    attributes: {
-        workload: definition: {
-            apiVersion: "v1"
-            kind:       "ConfigMap"
-        }
-        version: "1.1.1"
-    }
+
+In a CUE definition, put `version` under `attributes`. Leave it out if you don't need semantic versions, and revisions are numbered instead.
+
+```cue
+"configmap-component": {
+	type: "component"
+	attributes: {
+		workload: definition: {
+			apiVersion: "v1"
+			kind:       "ConfigMap"
+		}
+		version: "1.2.5"
+	}
 }
 
 template: {
-    output: {
-        apiVersion: "v1"
-        kind:       "ConfigMap"
-        metadata: {
-            name: parameter.name
-            namespace: context.namespace
-        }
-        data: parameter.data
-    }
+	output: {
+		apiVersion: "v1"
+		kind:       "ConfigMap"
+		metadata: name: parameter.name
+		data: version: "1.2.5"
+	}
 
-    parameter: {
-        // +usage=Name of the ConfigMap.
-        name: string
-        // +usage=Data to be stored in the ConfigMap.
-        data: [string]: string
-    }
+	parameter: {
+		// +usage=Name of the ConfigMap.
+		name: string
+	}
 }
 ```

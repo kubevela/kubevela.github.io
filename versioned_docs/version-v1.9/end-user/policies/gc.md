@@ -24,14 +24,10 @@ spec:
       type: webservice
       properties:
         image: oamdev/hello-world
-        port: 8000
       traits:
-        - type: gateway
+        - type: expose
           properties:
-            class: traefik
-            domain: 47.251.8.82.nip.io
-            http:
-              "/": 8000
+            port: [8000]
   policies:
     - name: keep-legacy-resource
       type: garbage-collect
@@ -52,8 +48,7 @@ vela status first-vela-app --tree
 ```
 CLUSTER       NAMESPACE     RESOURCE                  STATUS
 local     ─── default   ─┬─ Service/express-server    updated
-                         ├─ Deployment/express-server updated
-                         └─ Ingress/express-server    updated
+                         └─ Deployment/express-server updated
 ```
 </details>
 
@@ -72,14 +67,10 @@ spec:
       type: webservice
       properties:
         image: oamdev/hello-world
-        port: 8000
       traits:
-        - type: gateway
+        - type: expose
           properties:
-            class: traefik
-            domain: 47.251.8.82.nip.io
-            http:
-              "/": 8000
+            port: [8000]
   policies:
     - name: keep-legacy-resource
       type: garbage-collect
@@ -102,9 +93,7 @@ CLUSTER       NAMESPACE     RESOURCE                    STATUS
 local     ─── default   ─┬─ Service/express-server      outdated
                          ├─ Service/express-server-1    updated
                          ├─ Deployment/express-server   outdated
-                         ├─ Deployment/express-server-1 updated
-                         ├─ Ingress/express-server      outdated
-                         └─ Ingress/express-server-1    updated
+                         └─ Deployment/express-server-1 updated
 ```
 </details>
 
@@ -152,18 +141,18 @@ spec:
 EOF
 ```
 
-You can find deployment and service created.
+The Deployment and the Service are both named after the component, `demo-gc`:
 
 ```shell
-$ kubectl get deployment
-NAME          READY   UP-TO-DATE   AVAILABLE   AGE
-hello-world   1/1     1            1           74s
-$ kubectl get service   
-NAME          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-hello-world   ClusterIP   10.96.160.208   <none>        8000/TCP   78s
+$ kubectl get deployment,service -l app.oam.dev/name=garbage-collect-app
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/demo-gc   1/1     1            1           74s
+
+NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/demo-gc   ClusterIP   10.96.160.208   <none>        8000/TCP   78s
 ```
 
-If you upgrade the application and use a different component, you will find the old versioned deployment is deleted but the service is kept.
+Now rename the component. The old Deployment is deleted, but the Service from `expose` stays:
 
 ```shell
 cat <<EOF | vela up -f -
@@ -191,17 +180,19 @@ spec:
                 - expose
             strategy: onAppDelete
 EOF
-
-$ kubectl get deployment
-NAME              READY   UP-TO-DATE   AVAILABLE   AGE
-hello-world-new   1/1     1            1           10s
-$ kubectl get service   
-NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-hello-world       ClusterIP   10.96.160.208   <none>        8000/TCP   5m56s
-hello-world-new   ClusterIP   10.96.20.4      <none>        8000/TCP   13s
 ```
 
-If you want to deploy job-like components, in which cases the resources in the component are not expected to be recycled even after the application is deleted, you can use the component type selector and set strategy to `never` as follows.
+```shell
+$ kubectl get deployment,service -l app.oam.dev/name=garbage-collect-app
+NAME                              READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hello-world-new   1/1     1            1           10s
+
+NAME                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/demo-gc           ClusterIP   10.96.160.208   <none>        8000/TCP   5m56s
+service/hello-world-new   ClusterIP   10.96.20.4      <none>        8000/TCP   13s
+```
+
+To keep a component's resources even after the Application is deleted, select it by component type and set the strategy to `never`. Here every `task` component's Job stays:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -210,8 +201,11 @@ metadata:
   name: garbage-collect-app
 spec:
   components:
-    - name: hello-world-new
-      type: job-like-component
+    - name: init-job
+      type: task
+      properties:
+        image: busybox
+        cmd: ["echo", "done"]
   policies:
     - name: garbage-collect
       type: garbage-collect
@@ -219,7 +213,7 @@ spec:
         rules:
           - selector:
               componentTypes:
-                - webservice
+                - task
             strategy: never
 ```
 

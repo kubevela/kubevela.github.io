@@ -22,7 +22,7 @@ When an end user submits an Application YAML:
 2. **CUE Eval** — The controller injects the Application's component parameters into the CUE template.
 3. **Rendered** — CUE evaluation produces concrete Kubernetes manifests.
 4. **ResourceTracker** — The controller tracks all rendered resources for lifecycle management (garbage collection, updates).
-5. **Health Check** — Status is evaluated against the health policy to determine if the component is `Healthy`, `DispatchHealthy`, or `Unhealthy`.
+5. **Health Check** — Status is evaluated against the health policy to determine whether the component is healthy or unhealthy (the `isHealth` result).
 
 ## What defkit Generates
 
@@ -45,6 +45,6 @@ defkit's Health DSL generates `status.healthPolicy` and `status.customStatus` CU
 
 ## Related
 
-- [Integration](./integration.md) — go.mod setup, module structure, CLI commands
+- [Definition Modules](./modules.md): go.mod setup, module structure, CLI commands
 - [Register & Output](./definition-register.md) — `defkit.Register()` and output methods
 - [Quick Start](./quick-start.md) — get started in 4 steps

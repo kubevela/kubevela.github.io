@@ -2,52 +2,71 @@
 title: OCM Cluster-Gateway Manager
 ---
 
-__TL;DR__: "OCM Cluster-Gateway Manager" addon installs an operator component
-into the hub cluster that help the administrator to easily operate the
-configuration of cluster-gateway instances via "ClusterGatewayConfiguration"
-custom resource. *WARNING* this addon will restart the cluster-gateway
-instances upon the first-time installation.
+The OCM Cluster-Gateway Manager addon runs an operator on the hub cluster that manages KubeVela's cluster-gateway for clusters registered with [Open Cluster Management](https://open-cluster-management.io/) (OCM). You configure cluster-gateway through one `ClusterGatewayConfiguration` resource instead of by hand.
 
-## What does "Cluster-Gateway Manager" do?
+## When to use it
 
-Basically it helps us to sustainably operate the cluster-gateway instances from
-the following aspects:
+Use it when your clusters are OCM `ManagedCluster`s. It gives you:
 
-* Automatic cluster-gateway's server TLS certificate rotation.
-* Automatic cluster discovery.
-* Structurize the component configuration for cluster-gateway.
-* Manages the "egress identity" for cluster-gateway to access each clusters.
+* Automatic rotation of cluster-gateway's server TLS certificate.
+* Automatic discovery of the managed clusters.
+* The cluster-gateway configuration as a single `ClusterGatewayConfiguration` resource.
+* Credentials for cluster-gateway to reach each cluster, created for you through OCM's managed-serviceaccount.
 
-Note that the requests proxied by cluster-gateway will use the identity of
-`open-cluster-management-managed-serviceaccount/cluster-gateway` to access
-the managed clusters, and by default w/ cluster-admin permission, so please
-be mindful of that.
+If you join clusters with `vela cluster join`, you don't need it: the cluster-gateway that comes with KubeVela already handles those.
 
+## Install
 
-### How to confirm if the addon installation is working?
-
-Run the following commands to check the healthiness of the addons:
+The addon needs an OCM hub, for example from the `ocm-hub-control-plane` addon. Then:
 
 ```shell
-$ kubectl -n <cluster> get managedclusteraddon
-kubectl get managedclusteraddon -A
-NAMESPACE   NAME                     AVAILABLE   DEGRADED   PROGRESSING
-<cluster>   cluster-gateway          True                   
-<cluster>   cluster-proxy            True                   
-<cluster>   managed-serviceaccount   True 
+vela addon enable ocm-gateway-manager-addon
 ```
 
-In case you have too many clusters to browse at a time, install the command-line
-binary via:
+To remove it:
+
+```shell
+vela addon disable ocm-gateway-manager-addon
+```
+
+:::warning
+The first install restarts the cluster-gateway instances.
+:::
+
+## Access on the managed clusters
+
+Requests proxied by cluster-gateway reach each managed cluster as the `open-cluster-management-managed-serviceaccount/cluster-gateway` ServiceAccount, which has cluster-admin there by default (the `open-cluster-management:cluster-gateway:default` ClusterRole allows every verb on every resource). Anyone who can use cluster-gateway on the hub is cluster-admin on every managed cluster.
+
+The addon keeps that ClusterRole in place through an OCM ManifestWork, so an edit made on the managed cluster is put back. To grant less, set `spec.secretManagement.type: Manual` in the ClusterGatewayConfiguration: the addon then creates no RBAC, and you provide each cluster's credential Secret yourself, for a ServiceAccount bound to a narrower ClusterRole.
+
+## Check it's working
+
+List the addons on every managed cluster:
+
+```shell
+kubectl get managedclusteraddon -A
+```
+
+```console
+NAMESPACE   NAME                     AVAILABLE   DEGRADED   PROGRESSING
+<cluster>   cluster-gateway          True
+<cluster>   cluster-proxy            True
+<cluster>   managed-serviceaccount   True
+```
+
+With many clusters, OCM's `clusteradm` CLI gives a tree view. Install it:
 
 ```shell
 curl -L https://raw.githubusercontent.com/open-cluster-management-io/clusteradm/main/install.sh | bash
 ```
 
-Then run the following commands to see the details of the addon:
+Then:
 
 ```shell
-$ clusteradm get addon
+clusteradm get addon
+```
+
+```console
 <ManagedCluster>
 └── managed1
     └── cluster-gateway
@@ -72,19 +91,22 @@ $ clusteradm get addon
             └── ...
 ```
 
-### Sample of ClusterGatewayConfiguration API
+## The ClusterGatewayConfiguration
 
-You can read or edit the overall configuration of cluster-gateway deployments
-via the following command:
+Read or edit the cluster-gateway configuration with:
 
 ```shell
-$ kubectl get clustergatewayconfiguration -o yaml
+kubectl get clustergatewayconfiguration -o yaml
+```
+
+```yaml
 apiVersion: v1
 kind: List
 items:
 - apiVersion: proxy.open-cluster-management.io/v1alpha1
   kind: ClusterGatewayConfiguration
-  metadata: ...
+  metadata:
+    name: cluster-gateway
   spec:
     egress:
       clusterProxy:
@@ -95,7 +117,7 @@ items:
         proxyServerHost: proxy-entrypoint.open-cluster-management-addon
         proxyServerPort: 8090
       type: ClusterProxy
-    image: oamdev/cluster-gateway:v1.1.11
+    image: oamdev/cluster-gateway:v1.4.0
     installNamespace: vela-system
     secretManagement:
       managedServiceAccount:

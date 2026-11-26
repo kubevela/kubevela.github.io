@@ -4,46 +4,40 @@ title: Application Version Control
 
 ## Introduction
 
+Set the `app.oam.dev/publishVersion` annotation when you want an Application to deploy only when you bump a version, and to be able to roll back to the last version that succeeded.
+
+With the annotation set, you can:
+
+| To | Run |
+| --- | --- |
+| Publish a new version | `vela up <app> --publish-version <version>` |
+| See what changed since the last published version | `vela live-diff <app>` |
+| Roll back to the last version that succeeded | `vela workflow rollback <app>` |
+| Re-publish an older revision under a new version | `vela up <app> --revision <revision> --publish-version <version>` |
+
 ![overall-arch](../resources/application-revision-arch.jpg)
 
-In KubeVela, ApplicationRevision keeps the snapshot of the application and all its runtime dependencies such as ComponentDefinition, external Policy or referred objects.
-This revision can be used to review the application changes and rollback to past configurations.
+Every published version is stored as an ApplicationRevision: a snapshot of the Application and everything it depends on, such as its ComponentDefinitions, external Policies and referenced objects.
 
-In KubeVela v1.3+, for application which uses the `PublishVersion` feature, we support viewing the history revisions, checking the differences across revisions, rolling back to the latest succeeded revision and re-publishing past revisions.
-
-For application with the `app.oam.dev/publishVersion` annotation, the workflow runs are strictly controlled.
-The annotation, which is noted as *publishVersion* in the following paragraphs, is used to identify a static version of the application and its dependencies.
-
-When the annotation is updated to a new value, the application will generate a new revision no matter if the application spec or the dependencies are changed. 
-It will then trigger a fresh new run of workflow after terminating the previous run.
-
-During the running of workflow, all related data are retrieved from the ApplicationRevision, which means the changes to the application spec or the dependencies will not take effects until a newer `publishVersion` is annotated.
+When you change the annotation to a new value, the Application gets a new revision, whether or not its spec or dependencies changed, and the workflow starts again from the beginning, terminating the run in progress. While the workflow runs, it reads everything from that revision, so changes to the Application spec or its dependencies have no effect until you publish another version.
 
 ## Use Guide
 
-Fo example, let's start with an application with external workflow and policies to deploy podinfo in managed clusters.
+For example, start with an Application that deploys podinfo with an external Workflow and Policies.
 
 :::tip
-We use reference of external workflow and policies, it works the same. You can refer to [Multi-cluster Application Delivery](../case-studies/multi-cluster.md) for more details.
+This example keeps its policies and workflow in separate objects; inline ones work the same way. See [Use policies and workflow outside the application](./policies/multi-cluster-reuse.md).
 :::
 
+Create the namespace:
+
+```shell
+kubectl create namespace examples
+```
+
+Save the following as `podinfo.yaml`. The Policies and the Workflow come first, because the Application is refused until the Workflow it references exists.
+
 ```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: podinfo
-  namespace: examples
-  annotations:
-    app.oam.dev/publishVersion: alpha1
-spec:
-  components:
-    - name: podinfo
-      type: webservice
-      properties:
-        image: stefanprodan/podinfo:6.0.1
-  workflow:
-    ref: make-release-in-hangzhou
----
 apiVersion: core.oam.dev/v1alpha1
 kind: Policy
 metadata:
@@ -61,26 +55,65 @@ properties:
 apiVersion: core.oam.dev/v1alpha1
 kind: Policy
 metadata:
-  name: topology-hangzhou-clusters
+  name: topology-local
+  namespace: examples
+type: topology
+properties:
+  clusters: ["local"]
+---
+apiVersion: core.oam.dev/v1alpha1
+kind: Workflow
+metadata:
+  name: make-release
+  namespace: examples
+steps:
+  - name: deploy-local
+    type: deploy
+    properties:
+      policies: ["topology-local", "override-high-availability"]
+---
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: podinfo
+  namespace: examples
+  annotations:
+    app.oam.dev/publishVersion: alpha1
+spec:
+  components:
+    - name: podinfo
+      type: webservice
+      properties:
+        image: stefanprodan/podinfo:6.0.1
+  workflow:
+    ref: make-release
+```
+
+Apply it:
+
+```shell
+kubectl apply -f podinfo.yaml
+```
+
+:::tip
+To deliver to managed clusters instead, select them in the topology policy, for example by label:
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: Policy
+metadata:
+  name: topology-local
   namespace: examples
 type: topology
 properties:
   clusterLabelSelector:
     region: hangzhou
----
-apiVersion: core.oam.dev/v1alpha1
-kind: Workflow
-metadata:
-  name: make-release-in-hangzhou
-  namespace: examples
-steps:
-  - name: deploy-hangzhou
-    type: deploy
-    properties:
-      policies: ["topology-hangzhou-clusters", "override-high-availability"]
 ```
 
-You can check the application status by:
+See [Multi-cluster Application Delivery](./policies/multi-cluster.md) for joining clusters and choosing where to deploy.
+:::
+
+Check the application status:
 
 ```shell
 vela status podinfo -n examples
@@ -92,44 +125,42 @@ vela status podinfo -n examples
 ```
 About:
 
-  Name:         podinfo                      
-  Namespace:    examples                     
-  Created at:   2022-04-13 19:32:02 +0800 CST
-  Status:       runningWorkflow              
+  Name:         podinfo
+  Namespace:    examples
+  Created at:   2026-11-20 10:15:02 +0000 UTC
+  Healthy:      ❌
+  Details:      runningWorkflow
 
 Workflow:
 
-  mode: DAG
+  mode: StepByStep-DAG
   finished: false
   Suspend: false
   Terminated: false
   Steps
-  - id:auqaxnbix2
-    name:deploy-hangzhou
-    type:deploy
-    phase:running 
-    message:wait healthy
+  - id: auqaxnbix2
+    name: deploy-local
+    type: deploy
+    phase: running 
+    message: wait healthy
 
 Services:
 
   - Name: podinfo  
-    Cluster: velad-003  Namespace: examples
+    Cluster: local
+    Namespace: examples
     Type: webservice
-    Unhealthy Ready:0/3
+    Health: ❌
+      Message: Ready:0/3
     Traits:
-      ✅ scaler
-  - Name: podinfo  
-    Cluster: velad-002  Namespace: examples
-    Type: webservice
-    Unhealthy Ready:0/3
-    Traits:
-      ✅ scaler
+      Type: scaler
+      Health: ✅
 ```
 </details>
 
-View all the related real-time resources by:
+View the resources it created:
 
-```
+```shell
 vela status podinfo -n examples --tree --detail
 ```
 
@@ -137,23 +168,41 @@ vela status podinfo -n examples --tree --detail
 <summary>expected output</summary>
 
 ```
-CLUSTER       NAMESPACE     RESOURCE           STATUS    APPLY_TIME          DETAIL
-hangzhou1 ─── examples  ─── Deployment/podinfo updated   2022-04-13 19:32:03 Ready: 3/3  Up-to-date: 3  Available: 3  Age: 4m16s
-hangzhou2 ─── examples  ─── Deployment/podinfo updated   2022-04-13 19:32:03 Ready: 3/3  Up-to-date: 3  Available: 3  Age: 4m16s
+CLUSTER   NAMESPACE     RESOURCE           STATUS    APPLY_TIME          DETAIL
+local ─── examples  ─── Deployment/podinfo updated   2026-11-20 10:15:03 Ready: 3/3  Up-to-date: 3  Available: 3  Age: 4m16s
 ```
 </details>
 
-This application should be successful after a while. 
+After a while the workflow succeeds.
 
-Now if we edit the component image and set it to an invalid value, such as `stefanprodan/podinfo:6.0.xxx`. 
-The application will not re-run the workflow to make this change take effect automatically.
-But the application spec changes, it means the next workflow run will update the deployment image.
+Now change the component image to one that doesn't exist, `stefanprodan/podinfo:6.0.xxx`, without changing the publish version:
+
+```shell
+kubectl patch application podinfo -n examples --type json \
+  -p '[{"op": "replace", "path": "/spec/components/0/properties/image", "value": "stefanprodan/podinfo:6.0.xxx"}]'
+```
+
+The Deployment keeps the old image, because the workflow doesn't run again until you publish a new version:
+
+```shell
+kubectl get deployment podinfo -n examples -o jsonpath='{.spec.template.spec.containers[0].image}'
+```
+
+<details>
+<summary>expected output</summary>
+
+```
+stefanprodan/podinfo:6.0.1
+```
+</details>
+
+The spec has changed, but nothing is deployed until you publish a new version.
 
 ### Inspect Changes across Revisions
 
-You can run `vela live-diff` to check revision difference:
+Run `vela live-diff` to see what differs from the last published revision:
 
-```
+```shell
 vela live-diff podinfo -n examples
 ```
 
@@ -177,24 +226,22 @@ vela live-diff podinfo -n examples
 +       image: stefanprodan/podinfo:6.0.xxx
       type: webservice
     workflow:
-      ref: make-release-in-hangzhou
+      ref: make-release
   status: {}
   
-* External Policy (topology-hangzhou-clusters) has no change
+* External Policy (topology-local) has no change
 * External Policy (override-high-availability) has no change
-* External Workflow (make-release-in-hangzhou) has no change
+* External Workflow (make-release) has no change
 ```
 </details>
 
-We can see all the changes of the application spec and the dependencies. 
-
-Now let's make this change take effects. 
+The diff covers the Application spec and everything it depends on.
 
 ### Publish a new app with specified revision
 
-There are two ways to publish an app with specified revision. You can choose any one of them.
+There are two ways to publish a new version. Use either one.
 
-1. Update the `publishVersion` annotation in the application to `alpha2` to trigger the re-run of workflow.
+1. Change the `publishVersion` annotation on the Application to `alpha2`, which starts the workflow again.
     ```yaml
     apiVersion: core.oam.dev/v1beta1
     kind: Application
@@ -206,57 +253,57 @@ There are two ways to publish an app with specified revision. You can choose any
     +   app.oam.dev/publishVersion: alpha2
     ...
     ```
-2. Run `vela up --publish-version <revision-name` to publish the new version.
-  ```
-  vela up podinfo -n examples --publish-version alpha2
-  ```
+2. Run `vela up <app> --publish-version <version>`:
+    ```shell
+    vela up podinfo -n examples --publish-version alpha2
+    ```
 
-We will find the application stuck at `runningWorkflow` as the deployment cannot finish the update progress due to the invalid image.
+The Application stays at `runningWorkflow`, because the Deployment can't finish its rollout with the invalid image.
 
-Now we can run `vela revision list` to list all the available revisions.
+List the revisions:
 
-```
+```shell
 vela revision list podinfo -n examples
 ```
 
 <details>
 <summary>expected output</summary>
 
-```bash
-NAME            PUBLISH_VERSION SUCCEEDED       HASH                    BEGIN_TIME              STATUS          SIZE    
-podinfo-v1      alpha1          true            65844934c2d07288        2022-04-13 19:32:02     Succeeded       23.7 KiB
-podinfo-v2      alpha2          false           44124fb1a5146a4d        2022-04-13 19:46:50     Executing       23.7 KiB
+```
+NAME            PUBLISH_VERSION SUCCEEDED       HASH                    BEGIN_TIME              STATUS          SIZE
+podinfo-v1      alpha1          true            65844934c2d07288        2026-11-20 10:15:02     Succeeded       10.5 KiB (Compressed, 34%)
+podinfo-v2      alpha2          false           44124fb1a5146a4d                                NotStart        10.5 KiB (Compressed, 34%)
 ```
 
+A revision whose workflow is still running shows `NotStart` with no `BEGIN_TIME`: its workflow status is written to the revision when the run ends.
 </details>
 
 ### Rollback to Last Successful Revision
 
-Before rolling back, we need to suspend the workflow of the application first.
+Before rolling back, suspend the application's workflow:
 
-```
+```shell
 vela workflow suspend podinfo -n examples
-``` 
-
-After the application workflow is suspended, run `vela workflow rollback podinfo -n examples`, the workflow will be rolled back and the application resources will restore to the succeeded state.
-
 ```
+
+Then roll back. The workflow goes back to the last revision that succeeded, and the application's resources go back to that state:
+
+```shell
 vela workflow rollback podinfo -n examples
 ```
 
 <details>
 <summary>expected output</summary>
 
-```shell
+```
 Find succeeded application revision podinfo-v1 (PublishVersion: alpha1) to rollback.
 Application spec rollback successfully.
 Application status rollback successfully.
-Application rollback completed.
 Application outdated revision cleaned up.
 ```
 </details>
 
-Now if we return back to see all the resources, we will find the resources have been turned back to use the valid image again.
+Check the resources again; the Deployment is back on the valid image:
 
 ```shell
 vela status podinfo -n examples --tree --detail --detail-format wide
@@ -266,23 +313,16 @@ vela status podinfo -n examples --tree --detail --detail-format wide
 <summary>expected output</summary>
 
 ```
-CLUSTER       NAMESPACE     RESOURCE           STATUS    APPLY_TIME          DETAIL
-hangzhou1 ─── examples  ─── Deployment/podinfo updated   2022-04-13 19:32:03 Ready: 3/3  Up-to-date: 3  Available: 3  Age: 17m  Containers: podinfo  Images: stefanprodan/podinfo:6.0.1  Selector: app.oam.dev/component=podinfo
-hangzhou2 ─── examples  ─── Deployment/podinfo updated   2022-04-13 19:32:03 Ready: 3/3  Up-to-date: 3  Available: 3  Age: 17m  Containers: podinfo  Images: stefanprodan/podinfo:6.0.1  Selector: app.oam.dev/component=podinfo
+CLUSTER   NAMESPACE     RESOURCE           STATUS    APPLY_TIME          DETAIL
+local ─── examples  ─── Deployment/podinfo updated   2026-11-20 10:15:03 Ready: 3/3  Up-to-date: 3  Available: 3  Age: 17m  Containers: podinfo  Images: stefanprodan/podinfo:6.0.1  Selector: app.oam.dev/component=podinfo
 ```
 </details>
 
 ### Re-publish a History Revision
 
-:::note
-This feature is introduced after v1.3+.
-:::
+A rollback goes straight back to the last state that succeeded. Re-publishing an old revision instead runs the whole workflow again, and can go back to any revision that is still kept.
 
-Rolling back revision allows you to directly go back to the latest successful state. An alternative way is to re-publish an old revision, which will re-run the workflow but can go back to any revision that is still available. 
-
-For example, you might have 2 successful revisions available to use.
-
-Let's list the history revision by:
+For example, say you have two revisions that succeeded and a third still running:
 
 ```shell
 vela revision list podinfo -n examples
@@ -291,33 +331,32 @@ vela revision list podinfo -n examples
 <details>
 <summary>expected output</summary>
 
-```shell
+```
 NAME            PUBLISH_VERSION SUCCEEDED       HASH                    BEGIN_TIME              STATUS          SIZE
-podinfo-v1      alpha1          true            65844934c2d07288        2022-04-13 20:45:19     Succeeded       23.7 KiB
-podinfo-v2      alpha2          true            4acae1a66013283         2022-04-13 20:45:45     Succeeded       23.7 KiB
-podinfo-v3      alpha3          false           44124fb1a5146a4d        2022-04-13 20:46:28     Executing       23.7 KiB
+podinfo-v1      alpha1          true            65844934c2d07288        2026-11-20 10:45:19     Succeeded       10.5 KiB (Compressed, 34%)
+podinfo-v2      alpha2          true            4acae1a66013283         2026-11-20 10:45:45     Succeeded       10.5 KiB (Compressed, 34%)
+podinfo-v3      alpha3          false           44124fb1a5146a4d                                NotStart        10.5 KiB (Compressed, 34%)
 ```
 
 </details>
 
-Alternatively, you can directly run the following command to rollback to a specified revision:
+To re-publish revision `podinfo-v1` under a new version:
 
-```
+```shell
 vela up podinfo -n examples --revision podinfo-v1 --publish-version beta1
 ```
 
-This process will let the application to use the past revision and re-run the whole workflow. A new revision that is totally same with the specified one will be generated.
+The Application takes the spec of that revision and runs the whole workflow again. It gets a new revision, identical to the one you named:
 
-```shell
+```
 NAME            PUBLISH_VERSION SUCCEEDED       HASH                    BEGIN_TIME              STATUS          SIZE
-podinfo-v1      alpha1          true            65844934c2d07288        2022-04-13 20:45:19     Succeeded       23.7 KiB
-podinfo-v2      alpha2          true            4acae1a66013283         2022-04-13 20:45:45     Succeeded       23.7 KiB
-podinfo-v3      alpha3          false           44124fb1a5146a4d        2022-04-13 20:46:28     Failed          23.7 KiB
-podinfo-v4      beta1           true            65844934c2d07288        2022-04-13 20:46:49     Succeeded       23.7 KiB
+podinfo-v2      alpha2          true            4acae1a66013283         2026-11-20 10:45:45     Succeeded       10.5 KiB (Compressed, 34%)
+podinfo-v3      alpha3          false           44124fb1a5146a4d        2026-11-20 10:46:28     Failed          10.5 KiB (Compressed, 34%)
+podinfo-v4      beta1           true            65844934c2d07288        2026-11-20 10:46:49     Succeeded       10.5 KiB (Compressed, 34%)
 ```
 
-You can find that the *beta1* version shares the same hash with *alpha1* version.
+The *beta1* version has the same hash as *alpha1* in the earlier list. `podinfo-v1` itself is gone: old revisions are garbage collected, as the next section explains.
 
 :::info
-By default, application will hold at most 10 revisions. If you want to modify this number, you can set it in the `--application-revision-limit` [bootstrap parameter](../platform-engineers/system-operation/bootstrap-parameters.md) of KubeVela controller.
+The KubeVela Helm chart keeps 2 unused revisions per Application, besides the one in use, and garbage collects older ones. Change it for the whole controller with the chart's `applicationRevisionLimit` value (the controller's `--application-revision-limit` [bootstrap parameter](../platform-engineers/system-operation/bootstrap-parameters.md)), or for one Application with the `applicationRevisionLimit` property of a [`garbage-collect` policy](./policies/gc.md).
 :::

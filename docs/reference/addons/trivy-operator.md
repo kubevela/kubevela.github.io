@@ -2,14 +2,28 @@
 title: Trivy-operator
 ---
 
-# description
-- This addon provides a vulnerability scanner that continuously scans containers deployed in a Kubernetes cluster.
-- More Info is here: https://github.com/devopstales/trivy-operator/blob/main/README.md
+This addon installs the [Aqua Security Trivy Operator](https://github.com/aquasecurity/trivy-operator), which scans the images of the workloads in your cluster for known vulnerabilities and writes what it finds to `VulnerabilityReport` resources. It also adds a `trivy-check` workflow step, so an application's workflow can read the scan of the component it just deployed and pass the result on, to a notification for example.
+
+The addon deploys the operator's Helm chart (`trivy-operator` 0.9.1, from `https://aquasecurity.github.io/helm-charts`) into the `trivy-system` namespace by default, with `trivy.ignoreUnfixed` on, so only vulnerabilities that have a fix are reported. It depends on the `fluxcd` addon, which installs the chart, and enables it if needed.
 
 ## Install
 
 ```shell
 vela addon enable trivy-operator
+```
+
+### Parameters
+
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| `clusters` | list of strings | all clusters | The clusters to deploy the operator to; set it with `--clusters`. |
+| `namespace` | string | `trivy-system` | The namespace the operator runs in. |
+| `upgradeCRD` | bool | `false` | Upgrade the operator's CRDs when the addon is upgraded. |
+
+For example, to deploy only to the hub cluster:
+
+```shell
+vela addon enable trivy-operator --clusters={local}
 ```
 
 ## Uninstall
@@ -18,31 +32,87 @@ vela addon enable trivy-operator
 vela addon disable trivy-operator
 ```
 
-## Quick start
+## See the scan results
+
+Once the operator is running, it scans every workload in the cluster. Check that the addon is healthy:
+
 ```shell
-$ vela ls -A | grep trivy
-vela-system     addon-trivy-operator    trivy-system-ns         k8s-objects                     running healthy                                                               2022-08-14 11:26:53 +0800 CST
-vela-system     └─                      trivy-system-helm       helm                            running healthy Fetch repository successfully, Create helm release            2022-08-14 11:26:53 +0800 CST
-
-
-
-vela env set vela-system --labels trivy-operator-validation=true
-vela env set vela-system --labels trivy-scan=true
-
-
-$ kubectl get svc -n trivy-system
-NAME                                            TYPE        CLUSTER-IP        EXTERNAL-IP   PORT(S)    AGE
-trivy-image-validator                           ClusterIP   192.168.113.102   <none>        443/TCP    13m
-trivy-system-trivy-system-helm-trivy-operator   ClusterIP   192.168.163.69    <none>        9115/TCP   13m
-
-$ kubectl port-forward service/trivy-system-trivy-system-helm-trivy-operator 9999:9115 -n trivy-system
-Forwarding from 127.0.0.1:9999 -> 9115
-Forwarding from [::1]:9999 -> 9115
-
-
-curl -s http://localhost:9115/metrics | grep trivy_vulnerabilities
-
-curl -s http://localhost:9115/metrics | grep ac_vulnerabilities 
+vela status addon-trivy-operator -n vela-system
 ```
 
-Refer to: https://github.com/devopstales/trivy-operator
+Each scanned workload gets a `VulnerabilityReport` in its own namespace, with a count of the vulnerabilities found at each severity:
+
+```shell
+kubectl get vulnerabilityreports -A
+```
+
+To see the vulnerabilities in one report, with their IDs, the affected package and the fixed version:
+
+```shell
+kubectl get vulnerabilityreports -n <namespace> <name> -o yaml
+```
+
+## Scan an image in a workflow
+
+The `trivy-check` step finds the scan of a workload the application deployed and returns it as `result.message`. This application deploys a component with an image that has known vulnerabilities, scans it, and sends the result to Slack:
+
+```yaml title="example.yaml"
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: example
+  namespace: default
+spec:
+  components:
+    - name: frontend
+      type: webservice
+      properties:
+        port: 8000
+        image: fogdong/simple-web-demo:v1
+  workflow:
+    steps:
+      - name: apply-comp
+        type: apply-component
+        properties:
+          component: frontend
+      - name: image-scan
+        type: trivy-check
+        outputs:
+          - name: image-scan-result
+            valueFrom: result.message
+        properties:
+          resource:
+            name: frontend
+      - name: notification
+        type: notification
+        inputs:
+          - from: image-scan-result
+            parameterKey: slack.message.text
+        if: always
+        properties:
+          slack:
+            url:
+              value: <your Slack webhook URL>
+```
+
+```shell
+vela up -f example.yaml
+```
+
+When all three steps have succeeded (`vela status example`), the Slack channel has the image's vulnerability summary and, for each `CRITICAL` vulnerability, its ID, title and link. See [Notification](../../end-user/workflow/built-in-workflow-defs.md#notification) to send it somewhere else.
+
+`trivy-check` takes these properties:
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `resource.name` | string | | The workload to read the scan for. Required. |
+| `resource.kind` | string | `Deployment` | The workload's kind: `Deployment`, `StatefulSet`, `ReplicaSet`, `Job`, `Pod` or `DaemonSet`. For a `Deployment`, the step waits for the rollout and reads the scan of its current ReplicaSet. |
+| `level` | list of strings | `["CRITICAL"]` | The severities to list in the details. |
+| `showDetail` | bool | `true` | List each vulnerability at those severities, not only the summary. |
+
+The step waits for scan jobs in `trivy-system` to finish, whatever `namespace` the addon was enabled with, so keep the default namespace if you use it.
+
+## Reference
+
+- [Trivy Operator documentation](https://aquasecurity.github.io/trivy-operator/)
+- [The addon's source](https://github.com/kubevela/catalog/tree/master/addons/trivy-operator)

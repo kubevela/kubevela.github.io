@@ -2,48 +2,55 @@
 title: Vela prism
 ---
 
+Vela Prism adds read-only Kubernetes APIs over KubeVela's own objects, so you can grant access with ordinary RBAC:
+
+- `ApplicationResourceTracker`, a namespaced view of ResourceTrackers (`kubectl get apprt`).
+- `Cluster`, the cluster list without credentials (`kubectl get vela-clusters`).
+
+Enable it when you want to let users in a namespace see what their Applications created, or list clusters, without cluster-admin.
+
+It runs as a Kubernetes [aggregated API server](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/apiserver-aggregation/).
+
+![PrismArch](https://raw.githubusercontent.com/kubevela/prism/master/hack/prism-arch.jpg)
+
 ## Install
 
 ```shell
 vela addon enable vela-prism
 ```
 
-## Uninstall
+To remove it:
 
 ```shell
 vela addon disable vela-prism
 ```
 
-## Introduction
+## Parameters
 
-**Prism** provides API Extensions to the core [KubeVela](https://github.com/kubevela/kubevela).
-It works as a Kubernetes [Aggregated API Server](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/apiserver-aggregation/).
+| Parameter | Default | Description |
+| --- | --- | --- |
+| `namespace` | `vela-system` | Namespace vela-prism is installed in, and where it looks for cluster Secrets and OCM ManagedClusters. |
+| `image` | `oamdev/vela-prism:v1.7.0` | vela-prism image. |
+| `imagePullPolicy` | `IfNotPresent` | `IfNotPresent`, `Never` or `Always`. |
+| `cpu` | `0.1` | CPU request and limit. |
+| `memory` | `200Mi` | Memory request and limit. |
 
-![PrismArch](https://raw.githubusercontent.com/kubevela/prism/master/hack/prism-arch.jpg)
+The addon's `namespace` parameter (default `vela-system`) sets where vela-prism looks for cluster Secrets and OCM ManagedClusters; set it to the namespace KubeVela stores clusters in.
 
-## Modules
+## ApplicationResourceTracker
 
-### apiserver
+ResourceTracker is cluster-scoped, so you can't grant access to one namespace's trackers with a Role.
+ApplicationResourceTracker is a namespaced view of the same objects. It stores nothing of its own: each request is served from the underlying ResourceTrackers, so a Role on `applicationresourcetrackers` in a namespace lets a user read the trackers of the Applications in it.
 
-The vela-prism is an apiserver which leverages the Kubernetes Aggregated API capability to provide native interface for users.
+```shell
+kubectl get apprt -n <namespace>
+```
 
-#### ApplicationResourceTracker
+## Cluster
 
-The original ResourceTracker in KubeVela is one kind of cluster-scoped resource (for some history reasons), which makes it hard for cluster administrator to assign privilege.
-The ApplicationResourceTracker is a kind of namespace-scoped resource, which works as a delegator to the original ResourceTracker.
-It does not need extra storages but can project requests to ApplicationResourceTracker to underlying ResourceTrackers.
-Therefore, it is possible for cluster administrator to assign ApplicationResourceTracker permissions to users.
+The ClusterGateway objects that describe clusters carry their credentials, so granting read access to them is dangerous.
+The `Cluster` API shows only the clusters' metadata, so users can list clusters without ever seeing a credential.
 
-After installing vela-prism in your cluster, you can run `kubectl get apprt` to view ResourceTrackers.
-
-#### Cluster
-
-In vela-prism, Cluster API is also introduced which works as a delegator to the ClusterGateway object.
-The original ClusterGateway object contains the credential information.
-This makes the exposure of ClusterGateway access can be dangerous.
-The Cluster object provided in prism, on the other hand, only expose metadata of clusters to accessor.
-Therefore, the credential information will be secured and the user can also use the API to access the cluster list.
-
-After installing vela-prism in your cluster, you can run `kubectl get vela-clusters` to view all the installed clusters.
-
-> Notice that the vela-prism bootstrap parameter contains `--storage-namespace`, which identifies the underlying namespace for storing cluster secrets and the OCM managed cluster.
+```shell
+kubectl get vela-clusters
+```

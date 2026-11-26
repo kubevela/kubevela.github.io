@@ -26,9 +26,19 @@ vela def init-module --name my-platform \
 
 </details>
 
+Then fetch the module's dependencies. Open `my-platform/go.mod` first: the `require` line for `github.com/oam-dev/kubevela` must name a version with a `v` prefix, such as `v1.11.2`. If it reads `1.11.2`, add the `v`, or Go refuses the file with `unknown revision`.
+
+```shell
+cd my-platform
+go mod tidy
+cd ..
+```
+
+Without this step, `vela def validate-module` fails with `... is replaced but not required`.
+
 ## Step 2: Write a definition in Go
 
-Open the scaffolded file and use the defkit fluent API to define parameters and template.
+Open the scaffolded file and use the defkit fluent API to define parameters and template. Declare each parameter once and use the variable inside the `Template` function: `Set("spec.replicas", replicas)` generates `replicas: parameter.replicas`.
 
 <details>
 <summary>Go source</summary>
@@ -46,17 +56,14 @@ func Webservice() *defkit.ComponentDefinition {
         Description("Web service component").
         Workload("apps/v1", "Deployment").
         Params(image, replicas).
-        Template(webserviceTemplate)
-}
-
-func webserviceTemplate(tpl *defkit.Template) {
-    vela := defkit.VelaCtx()
-    tpl.Output(
-        defkit.NewResource("apps/v1", "Deployment").
-            Set("metadata.name", vela.Name()).
-            Set("spec.replicas",
-                defkit.Reference("replicas")),
-    )
+        Template(func(tpl *defkit.Template) {
+            vela := defkit.VelaCtx()
+            tpl.Output(
+                defkit.NewResource("apps/v1", "Deployment").
+                    Set("metadata.name", vela.Name()).
+                    Set("spec.replicas", replicas),
+            )
+        })
 }
 
 func init() { defkit.Register(Webservice()) }

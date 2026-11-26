@@ -4,34 +4,46 @@ title: VelaUX RBAC
 
 The RBAC feature enabled restriction of access to VelaUX resources. The UI and API could strict permission verification. We designed platform-scope roles and project-scope roles, Each role can be bound to a set of permission policies, and users can obtain corresponding permissions when they are bound to the role.
 
-## Built-in permission policies
+## Built-in permissions
 
-A permission policy consists of resources、action and effect, there are some built-in permission policies, including:
+A permission allows or denies a set of actions on a set of resources. VelaUX ships these.
 
-```
-* Cluster Management （resource:[cluster:*/*] action:* effect:allow scope:platform）
-* Project Management （resource:[project:*] action:* effect:allow scope:platform）
-* Addon Management   （resource:[addon:*,addonRegistry:*] action:* effect:allow scope:platform）
-* Target Management  （resource:[target:*,cluster:*/namespace:*] action:* effect:allow scope:platform）
-* User Management    （resource:[user:*] action:* effect:allow scope:platform）
-* Platform Role Management （resource:[role:*, permission:*] action:* effect:allow scope:platform）
-* Admin              （resource:[*:*] action:* effect:allow scope:platform）
+Platform scope:
 
-* Project Read       （resource:[project:{projectName}] action:detail effect:allow scope:project）
-* App Management     （resource:[project:{projectName}/application:*/*, definition:* ] action:* effect:allow scope:platform）
-* Environment Management （resource:[project:{projectName}/environment:*] action:* effect:allow scope:platform）
-* Role Management    （resource:[project:{projectName}/role:*,project:{projectName}/projectUser:*,project:{projectName}/permission:*] action:* effect:allow scope:project)
-```
+| Permission | Resources | Allows |
+| --- | --- | --- |
+| Admin | `*` | Everything. |
+| Cluster Management | `cluster:*/*` | Add, change and remove clusters. |
+| Project Management | `project:*` | Create, change and delete any project. |
+| Project List | `project:*` | List every project (`list` only). |
+| Addon Management | `addon:*`, `addonRegistry:*` | Enable and disable addons, and manage addon registries. |
+| Target Management | `target:*`, `cluster:*/namespace:*` | Manage delivery targets and their namespaces. |
+| User Management | `user:*` | Manage users. |
+| Platform Role Management | `role:*`, `permission:*` | Manage platform roles and permissions. |
+| Config Management | `config:*/*` | Manage platform configs. |
+| Disable CloudShell | `cloudshell` | Denies CloudShell. |
 
-Currently, built-in permission policies cover all resources. It is conceivable that these permissions can be flexibly customized, we will provide the API and UI page to manage the custom permission.
+Project scope, where `{projectName}` is the project the role belongs to:
+
+| Permission | Resources | Allows |
+| --- | --- | --- |
+| Project View | the project and its configs, providers, roles, members, permissions, environments, applications and pipelines | Read them (`detail` and `list` only). |
+| App Management | `project:{projectName}/application:*/*` | Manage the project's applications. |
+| Environment Management | `project:{projectName}/environment:*` | Manage the project's environments. |
+| Role Management | `project:{projectName}/role:*`, `project:{projectName}/projectUser:*`, `project:{projectName}/permission:*` | Manage the project's roles, members and permissions. |
+| Config Management | `project:{projectName}/config:*`, `project:{projectName}/provider:*` | Manage the project's configs and cloud providers. |
+| Pipeline Management | `project:{projectName}/pipeline:*/*` | Manage the project's pipelines. |
 
 ## Built-in roles
 
-A role consists of a role name and the set of permissions it contains, we have built in some common roles:
+| Role | Scope | Permissions |
+| --- | --- | --- |
+| Admin | platform | Admin. |
+| App Developer | project | Project View, App Management, Environment Management, Config Management, Pipeline Management. |
+| Project Admin | project | Everything App Developer has, plus Role Management. |
+| Project Viewer | project | Project View. |
 
-* Admin：platform scope role，include the `Admin` permission，that all operation rights of all resources。
-* App Developer：project scope role，include permissions required for app development.
-* Project Admin：project scope role，including administrative rights for all resources under the project.
+Every new project gets its own App Developer, Project Admin and Project Viewer roles, and its owner is a Project Admin.
 
 ## Custom roles
 

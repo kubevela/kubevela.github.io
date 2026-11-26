@@ -2,7 +2,7 @@
 title:  KEDA as Autoscaling Trait
 ---
 
-> Before continue, make sure you have learned about the concepts of [Definition Objects](definition-and-templates.md) and [Defining Traits with CUE]((./traits/customize-trait) section.
+> Before continue, make sure you have learned about the concepts of [Definition Objects](definition-and-templates.md) and [Defining Traits with CUE](./traits/customize-trait.md) section.
 
 In the following tutorial, you will learn to add [KEDA](https://keda.sh/) as a new autoscaling trait to your KubeVela based platform.
 
@@ -16,14 +16,14 @@ In the following tutorial, you will learn to add [KEDA](https://keda.sh/) as a n
 
 To register KEDA as a new capability (i.e. trait) in KubeVela, the only thing needed is to create an `TraitDefinition` object for it.
 
-A full example can be found in this [keda.yaml](https://github.com/kubevela/catalog/blob/master/registry/keda-scaler.yaml).
+The [`keda` addon](https://github.com/kubevela/catalog/tree/master/addons/keda) ships a full `keda-auto-scaler` definition.
 Several highlights are list below.
 
 ### 1. Describe The Trait
 
 ```yaml
 ...
-name: keda-scaler
+name: keda-auto-scaler
 annotations:
   definition.oam.dev/description: "keda supports multiple event to elastically scale applications, this scaler only applies to deployment as example"
 ...
@@ -100,12 +100,12 @@ This is a CUE based template which only exposes `type` and `value` as trait prop
 
 > Please check the [Defining Trait with CUE](./traits/customize-trait.md) section for more details regarding to CUE templating.
 
-## Step 2: Register New Trait to KubeVela
+## Step 3: Register New Trait to KubeVela
 
-As long as the definition file is ready, you just need to apply it to Kubernetes.
+As long as the definition file is ready, you just need to apply it to Kubernetes with `vela def apply <file>`. To install KEDA and its `keda-auto-scaler` trait together, enable the addon instead:
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/catalog/master/registry/keda-scaler.yaml
+vela addon enable keda
 ```
 
 And the new trait will immediately become available for end users to use in `Application` resource.

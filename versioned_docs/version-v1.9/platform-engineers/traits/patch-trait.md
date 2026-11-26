@@ -4,6 +4,8 @@ title:  Patch in the Definitions
 
 When we are writing the definition, sometimes we need to patch to the corresponding component or traits. We can use the `patch` capability when you're writing trait definitions or workflow step definitions.
 
+Most examples on this page are in the CUE format, applied with `vela def apply`; the few in Kubernetes YAML are whole `...Definition` objects. [The Definition File](../oam/definition-file.md) shows the two formats side by side.
+
 ## Patch Strategy
 
 By default, KubeVela will merge patched values with CUE's merge. However, CUE cannot handle conflicting fields currently.
@@ -189,7 +191,7 @@ spec:
 
 > Note: it's available after KubeVela v1.4.
 
-You can also patch to other traits by using `patchOutputs` in the Definition. Such as:
+You can also patch the objects other traits render, with `patchOutputs` in the definition. Each key under `patchOutputs` is the name an object has in another trait's `outputs`. For example:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -203,13 +205,18 @@ spec:
         patchOutputs: {
           ingress: {
             metadata: annotations: {
-              "kubernetes.io/ingress.class": "istio"
+              "nginx.ingress.kubernetes.io/proxy-read-timeout": parameter.timeout
             }
           }
         }
+
+        parameter: {
+          // +usage=Seconds the ingress controller waits for a response from the service
+          timeout: *"60" | string
+        }
 ```
 
-The patch trait above assumes that the component it binds has other traits which have `ingress` resource. The patch trait will patch an `istio` annotation to the `ingress` resource.
+This trait expects another trait on the same component to render an object called `ingress`, as the `gateway` trait does. It sets the proxy read timeout annotation on that Ingress.
 
 We can deploy the following application:
 
@@ -232,35 +239,36 @@ spec:
               "/": 8000
         - type: "patch-annotation"
           properties:
-            name: "patch-annotation-trait"
+            timeout: "120"
 ```
 
-And the ingress resource is now like:
+The Ingress the `gateway` trait renders now carries the annotation (labels left out):
 
 ```yaml
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.class: istio
-  name: ingress
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+  name: express-server
 spec:
   rules:
-  spec:
-    rules:
-    - host: testsvc.example.com
-      http:
-        paths:
-        - backend:
-            service:
-              name: express-server
-              port:
-                number: 8000
-          path: /
-          pathType: ImplementationSpecific
+  - host: testsvc.example.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: express-server
+            port:
+              number: 8000
+        path: /
+        pathType: ImplementationSpecific
 ```
 
-Note: You need to put this kind of trait at the last place to patch for other traits.
+:::caution
+A trait's `patchOutputs` only sees the objects rendered by traits listed before it on the same component, so list it after the traits it patches. Listed first, it finds nothing to patch, and the Application deploys without the change and without an error.
+:::
 
 You can even write a `for-loop` in patch trait, below is an example that can patch for all resources with specific annotation.
 
@@ -295,119 +303,51 @@ This example solved a [real case](https://github.com/kubevela/kubevela/issues/43
 
 ## Patch in Workflow Step
 
-When you use `op.#ApplyComponent` in a custom workflow step definition, you can patch component or traits in the `patch` field.
+When a custom workflow step applies a component with `op.#ApplyComponent`, it can patch the component's objects in the `patch` field:
 
-For example, when using Istio for canary release, you can add annotations of the release name to the component in `patch: workload` of `op.#ApplyComponent`; meanwhile, you can change the traffic and destination rule in `patch: traits: <trait-name>`.
+- `patch.workload` patches the component's main workload.
+- `patch.traits.<name>` patches the object a trait renders under that name in its `outputs`, for example `ingress` for the `gateway` trait.
 
-Following is a real example of canary rollout in a custom workflow step:
+The step below applies one component and records a release name on its Deployment and its Ingress. Patch strategies work here too, written as comments in the patch.
 
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: WorkflowStepDefinition
-metadata:
-  name: canary-rollout
-  namespace: vela-system
-spec:
-  schematic:
-    cue:
-      template: |-
-        import ("vela/op")
+```cue title="apply-with-release.cue"
+import "vela/op"
 
-        parameter: {
-                batchPartition: int
-                traffic: weightedTargets: [...{
-                        revision: string
-                        weight:   int
-                }]
-        }
+"apply-with-release": {
+	type: "workflow-step"
+	annotations: {}
+	labels: {}
+	description: "Apply one component, with a release annotation on its workload and its Ingress."
+}
 
-        comps__: op.#Load
-        compNames__: [ for name, c in comps__.value {name}]
-        comp__: compNames__[0]
+template: {
+	load: op.#Load
 
-        apply: op.#ApplyComponent & {
-                value: comps__.value[comp__]
-                patch: {
+	apply: op.#ApplyComponent & {
+		value: load.value[parameter.component]
+		patch: {
+			workload: metadata: annotations: "example.com/release": parameter.release
+			traits: ingress: metadata: annotations: "example.com/release": parameter.release
+		}
+	}
 
-                        workload: {
-                                // +patchStrategy=retainKeys
-                                metadata: metadata: annotations: {
-                                        "rollout": context.name
-                                }
-                        }
-
-                        traits: "rollout": {
-                               spec: rolloutPlan: batchPartition: parameter.batchPartition
-                        }
-
-                        traits: "virtualService": {
-                                spec:
-                                   // +patchStrategy=retainKeys
-                                   http: [
-                                        {
-                                                route: [
-                                                        for i, t in parameter.traffic.weightedTargets {
-                                                                destination: {
-                                                                        host:   comp__
-                                                                        subset: t.revision
-                                                                }
-                                                                weight: t.weight
-                                                        }]
-                                        },
-                                ]
-                        }
-
-                        traits: "destinationRule": {
-                                 // +patchStrategy=retainKeys
-                                 spec: {
-                                   host: comp__
-                                   subsets: [
-                                        for i, t in parameter.traffic.weightedTargets {
-                                                name: t.revision
-                                                labels: {"app.oam.dev/revision": t.revision}
-                                        },
-                                ]}
-                        }
-                }
-        }
-
-        applyRemaining: op.#ApplyRemaining & {
-            exceptions: [comp__]
-        }
+	parameter: {
+		// +usage=The component to apply
+		component: string
+		// +usage=The release name to record on its objects
+		release: string
+	}
+}
 ```
 
-After deploying the above definition, you can apply the following workflow to control the canary rollout:
+Use it in an Application's workflow, after `vela def apply apply-with-release.cue`:
 
 ```yaml
-...
   workflow:
     steps:
-      - name: rollout-1st-batch
-        type: canary-rollout
+      - name: apply-express-server
+        type: apply-with-release
         properties:
-          batchPartition: 0
-          traffic:
-            weightedTargets:
-              - revision: reviews-v1
-                weight: 90
-              - revision: reviews-v2
-                weight: 10
-
-      - name: manual-approval
-        type: suspend
-
-      - name: rollout-rest
-        type: canary-rollout
-        properties:
-          batchPartition: 1
-          traffic:
-            weightedTargets:
-              - revision: reviews-v2
-                weight: 100
-...
+          component: express-server
+          release: v2
 ```
-
-In the first and third steps, we declared different revisions and weight in traffic. In the step definition of `canary-rollout`, we will overwrite the revision and weight declared by the user through `patch`, so as to control the progressive rollout in the workflow.
-
-> For more details of using KubeVela with Istio progressive release, please refer to [Progressive Rollout with Istio
-](https://kubevela.io/docs/case-studies/canary-blue-green/).
