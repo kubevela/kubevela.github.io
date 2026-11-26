@@ -59,14 +59,11 @@ spec:
           - apiVersion: v1
             kind: Service
             metadata:
-              annotations:
-                service.beta.kubernetes.io/aws-load-balancer-type: nlb
               labels:
                 app: nginx
               name: nginx
               namespace: default
             spec:
-              externalTrafficPolicy: Local
               ports:
                 - name: http
                   port: 80
@@ -74,7 +71,7 @@ spec:
                   targetPort: 80
               selector:
                 app: nginx
-              type: LoadBalancer
+              type: ClusterIP
       type: k8s-objects
   policies:
     - name: topology-default
@@ -112,10 +109,10 @@ Deploy this application by the following command:
 vela up -f https://kubevela.io/example/applications/create-namespace.yaml
 ```
 
-- Deploy the demo application.
+- Save the application above as `app-with-k8s-objects.yaml` and deploy it.
 
 ```shell
-vela up -f https://kubevela.io/example/applications/app-with-k8s-objects.yaml
+vela up -f app-with-k8s-objects.yaml
 ```
 
 - Check the status of the application.
@@ -124,7 +121,11 @@ vela up -f https://kubevela.io/example/applications/app-with-k8s-objects.yaml
 vela status app-with-k8s-objects
 ```
 
-You can also check the deployment and service with the `kubectl` or any other tools you are familiar with to check the deployment.
+You can also check the Deployment and Service with `kubectl` or any other tool you're used to. The Service is `ClusterIP`, so forward a local port to reach it:
+
+```shell
+vela port-forward app-with-k8s-objects 8080:80
+```
 
 - Approve the workflow if everything looks good.
 
@@ -151,7 +152,7 @@ you have 3 targets: 1 for test and 2 for prod environments for our below example
 
 After Target was created, we begin to create an application. Same to [Deploy First Application](../quick-start.md), we need to submit basic Infos:
 
-(1) Select type: k8s-objects; NOTE that in one application please maintain at most one Workload type of resource, meaning without more than a Deployment or Statefulset.
+(1) Select type: `k8s-objects`. The first object in the list is the component's workload, the one traits such as `scaler` patch, so put the Deployment or StatefulSet first and keep to one per component.
 
 (2) We schedule two environments, test and prod. Test environment links to the target for dev and prod environment select the other two targets.
 
@@ -187,11 +188,11 @@ As we have two targets for the prod environment, it'll execute in sequence. If y
 
 ![](../resources/app-workflow.jpg)
 
-we can see two generated workflow. Now we click the `Edit` in the workflow of the prod environment, drag out the `suspend` into the board at the right. Set up the configuration you needed.
+There are two generated workflows. Open the prod environment's workflow in the workflow studio. To add the approval:
 
-Then we need to orchestrate their sequence. First disconnect existing steps (by clicking the line + delete button), connect the suspend step in the middle. After editing, you need to click the Save button on the upper right to save.
-
-![](../resources/workflow-edit.jpg)
+1. Click the **+** on the line between the two deploy steps.
+2. In the **Select Step Type** dialog, choose `suspend`, give the step a name and confirm. The step goes in where you clicked, so there's nothing to connect.
+3. Click **Save** on the upper right.
 
 Back to the page of prod environment, click Deploy.
 
