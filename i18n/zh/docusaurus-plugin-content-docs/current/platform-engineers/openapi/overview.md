@@ -5,20 +5,20 @@ title: VelaUX OpenAPI
 本节将介绍如何集成 VelaUX OpenAPI，请确保您已启用 `velaux` 插件。 让我们使用端口转发来公开以下演示的端点。
 
 ```bash
-vela port-forward addon-velaux -n vela-system 8000:80
+vela port-forward addon-velaux -n vela-system 8000:8000
 ```
 
 ## 身份验证和 API 示例
 
 ### 登录并获取令牌
 
-VelaUX 引入了 [Json Web Token](https://jwt.io/) 进行授权。 因此，您需要调用登录接口来完成认证并获取token。 以下示例使用默认管理员帐户。
+VelaUX 引入了 [Json Web Token](https://jwt.io/) 进行授权。 因此，您需要调用登录接口来完成认证并获取token。 以下示例使用首次打开 VelaUX 时创建的管理员账号登录。
 
 ```bash
-curl -H Content-Type:application/json -X POST -d '{"username": "admin", "password":"VelaUX12345"}' http://127.0.0.1:8000/api/v1/auth/login
+curl -H Content-Type:application/json -X POST -d '{"username": "<your-username>", "password":"<your-password>"}' http://127.0.0.1:8000/api/v1/auth/login
 ```
 
-> `http://127.0.0.1:8000` 这是演示地址，您应该将其替换为真实地址。 如果您更改了密码，请将其替换为真实密码。
+> `http://127.0.0.1:8000` 是演示地址，请替换为真实地址，并将 `<your-username>` 和 `<your-password>` 替换为管理员的用户名和密码。
 
 预期的输出应该是这样的：
 

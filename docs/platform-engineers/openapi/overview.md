@@ -5,20 +5,20 @@ title: VelaUX OpenAPI
 This section will introduce how to integrate VelaUX OpenAPI, please make sure you have enabled the `velaux` addon. Let's use port-forward to expose the endpoint for the following demo.
 
 ```bash
-vela port-forward addon-velaux -n vela-system 8000:80
+vela port-forward addon-velaux -n vela-system 8000:8000
 ```
 
 ## Authentication and API Example
 
 ### Login and get the token
 
-VelaUX has introduced [Json Web Token](https://jwt.io/) for authorization. As a result, you need to call the login API to complete the authentication and get the token. The following example is with the default admin account.
+VelaUX has introduced [Json Web Token](https://jwt.io/) for authorization. As a result, you need to call the login API to complete the authentication and get the token. The following example logs in with the administrator account created the first time VelaUX was opened.
 
 ```bash
-curl -H Content-Type:application/json -X POST -d '{"username": "admin", "password":"VelaUX12345"}' http://127.0.0.1:8000/api/v1/auth/login
+curl -H Content-Type:application/json -X POST -d '{"username": "<your-username>", "password":"<your-password>"}' http://127.0.0.1:8000/api/v1/auth/login
 ```
 
-> `http://127.0.0.1:8000` This is demo address, you should replace it with the real address. If you changed the password, replace it with the real password.
+> `http://127.0.0.1:8000` is a demo address; replace it with the real address, and `<your-username>` and `<your-password>` with the administrator's username and password.
 
 The expected output should be like this:
 

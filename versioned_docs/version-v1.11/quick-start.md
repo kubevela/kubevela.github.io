@@ -216,16 +216,14 @@ Great! You have finished deploying your first KubeVela application, you can also
 
 ## Manage application with UI Console
 
-After finishing [the installation of VelaUX](./install.mdx#2-install-velaux), you can view and manage the application created.
+After finishing [the installation of VelaUX](./reference/addons/velaux.md#install), you can view and manage the application created.
 
 * Port forward the UI if you don't have endpoint for access:
   ```
-  vela port-forward addon-velaux -n vela-system 8080:80
+  vela port-forward addon-velaux -n vela-system 8080:8000
   ```
 
-* VelaUX need authentication, default username is `admin` and the password is **`VelaUX12345`**.
-
-It requires you to override with a new password for the first login, please make sure to remember the new password.
+* VelaUX needs authentication. The first time you open it, it asks you to create the administrator account: a username, a password and an email. After that, log in with that username and password.
 
 * Check the resources deployed
 

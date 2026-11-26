@@ -128,11 +128,10 @@ I0525 05:47:25.788947       1 apply.go:107] "creating object" name="component-ui
 
 ...snip...
 
-To check the initialized admin user name and password by:
-    vela logs -n vela-system --name apiserver addon-velaux | grep "initialized admin username"
 To open the dashboard directly by port-forward:
-    vela port-forward -n vela-system addon-velaux 9082:80
-Select "Cluster: local | Namespace: vela-system | Kind: Service | Name: velaux" from the prompt.
+
+    vela port-forward -n vela-system addon-velaux 8000:8000
+
 Please refer to https://kubevela.io/docs/reference/addons/velaux for more VelaUX addon installation and visiting method.
 ```
 

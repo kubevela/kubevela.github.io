@@ -198,7 +198,7 @@ VelaUX 是 KubeVela 的仪表板。 它是在你的集群中运行的 Web 应用
 默认情况下，velaux 没有任何暴露的端口，你可以通过以下方式查看：
 
 ```shell
-vela port-forward addon-velaux -n vela-system 8080:80
+vela port-forward addon-velaux -n vela-system 8080:8000
 ```
 
 选择 `> local | velaux | velaux` 来访问 VelaUX
@@ -207,7 +207,7 @@ vela port-forward addon-velaux -n vela-system 8080:80
 如需更多 VelaUX 选项，请参阅 [VelaUX 插件](../reference/addons/velaux.md) 文档了解其他高级安装参数。
 :::
 
-VelaUX 需要身份验证。 默认用户名是 `admin`，密码是 **`VelaUX12345`**。首次登录时需要使用新密码覆盖，请务必记住新密码。
+VelaUX 需要身份验证。首次打开时，它会要求你创建管理员账号：用户名、密码和邮箱。之后使用该用户名和密码登录。
 
 ### 4. 清理
 
@@ -363,7 +363,7 @@ vela status addon-velaux -n vela-system --endpoint
 如需更多 VelaUX 选项，请参阅 [VelaUX 插件](../reference/addons/velaux.md) 文档了解其他高级安装参数。
 :::
 
-VelaUX 需要身份验证。 默认用户名是 `admin`，密码是 **`VelaUX12345`**。首次登录时需要使用新密码覆盖，请务必记住新密码。
+VelaUX 需要身份验证。首次打开时，它会要求你创建管理员账号：用户名、密码和邮箱。之后使用该用户名和密码登录。
 
 ### 4. 从本地访问 KubeVela (可选)
 
