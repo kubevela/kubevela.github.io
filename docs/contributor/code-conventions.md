@@ -73,10 +73,8 @@ In this section, you will find the code conventions for all kinds of code KubeVe
 - Table-driven tests are preferred for testing multiple scenarios/inputs; for
   example, see [TestNamespaceAuthorization](https://git.k8s.io/kubernetes/test/integration/auth/auth_test.go)
   
-- Unit tests must pass on macOS and Windows platforms - if you use Linux
-  specific features, your test case must either be skipped on windows or compiled
-  out (skipped is better when running Linux specific commands, compiled out is
-  required when your code does not compile on Windows).
+- Unit tests must pass on Linux, which is what CI runs. The `vela` CLI must also
+  build on Windows (CI checks it).
 
 - Avoid waiting for a short amount of time (or without waiting) and expect an
   asynchronous thing to happen (e.g. wait for 1 seconds and expect a Pod to be
@@ -89,45 +87,32 @@ In this section, you will find the code conventions for all kinds of code KubeVe
 
 Please refer to [the principle of test](./principle-of-test.md) for more details.
 
-## Directory and file Conventions
+## Directory and File Conventions
 
-- Avoid package sprawl. Find an appropriate subdirectory for new packages.
-  - Libraries with no more appropriate home belong in new package
-    subdirectories of pkg/util
+Where things live in [kubevela/kubevela](https://github.com/kubevela/kubevela):
 
-- Avoid general utility packages. Packages called "util" are suspect. Instead,
-  derive a name that describes your desired function. For example, the utility
-  functions dealing with waiting for operations are in the "wait" package and
-  include functionality like Poll. So the full name is wait.Poll
+| Path | What it holds |
+| --- | --- |
+| `apis/` | The API types (`core.oam.dev` and the others). |
+| `cmd/core/` | The entry point of the core controller. |
+| `pkg/` | The controller's packages: application reconcile, workflow providers, CUE rendering, addons and more. |
+| `pkg/webhook/` | The admission webhooks. |
+| `references/` | The `vela` CLI. |
+| `vela-templates/definitions/` | The built-in X-Definitions, as CUE. |
+| `charts/vela-core/` | The Helm chart, including the CRDs and the definitions generated from `vela-templates/definitions/`. |
+| `test/e2e-*/` | The end-to-end suites, one directory per area. |
 
-- All filenames should be lowercase
+Definitions live in `vela-templates/definitions/`; `make manifests` regenerates `charts/vela-core/definitions` from them, so commit both.
 
-- Go source files and directories use underscores, not dashes
-  - Package directories should generally avoid using separators as much as
-    possible (when packages are multiple words, they usually should be in nested
-    subdirectories).
+- Avoid package sprawl. Find an appropriate subdirectory for new packages, and
+  avoid general utility packages: name a package for what it does.
 
-- Document directories and filenames should use dashes rather than underscores
+- All filenames should be lowercase. Go source files and directories use
+  underscores, not dashes.
 
-- Contrived examples that illustrate system features belong in
-  `/docs/user-guide` or `/docs/admin`, depending on whether it is a feature primarily
-  intended for users that deploy applications or cluster administrators,
-  respectively. Actual application examples belong in /examples.
-  - Examples should also illustrate [best practices for configuration and using the system](https://kubernetes.io/docs/concepts/configuration/overview/)
+- Go dependencies are managed with [Go modules](https://go.dev/ref/mod).
+  Third-party code must include its license.
 
-- Third-party code
-
-  - Go code for normal third-party dependencies is managed using
-    [go modules](https://github.com/golang/go/wiki/Modules)
-
-  - Other third-party code belongs in `/third_party`
-    - forked third party Go code goes in `/third_party/forked`
-    - forked _golang stdlib_ code goes in `/third_party/forked/golang`
-
-  - Third-party code must include licenses
-
-  - This includes modified third-party code and excerpts, as well
-  
 ## Logging Conventions
 
 ### Structured logging

@@ -2,13 +2,13 @@
 title: Non-code Contribution Guide
 ---
 
-You can pick up any of the following ways you're interested to contribute.
+You don't need to write Go to help KubeVela. Pick whichever of these suits you.
 
-## Contribute Use cases and Samples
+## Share how you use KubeVela
 
-* If you're using KubeVela, the easiest thing to contribute is to [credit the community](https://github.com/kubevela/kubevela/issues/1662).
-* If you are interested, you can also write a [kubevela.io blog](https://kubevela.io/blog) to tell more about the use case.
-* You can also contribute to [KubeVela Official Samples](https://github.com/kubevela/samples).
+* If you're using KubeVela, add your organisation to the adopters list ([issue #1662](https://github.com/kubevela/kubevela/issues/1662)). It's the easiest way to help.
+* Write a post for the [KubeVela blog](https://kubevela.io/blog) about your use case.
+* Add an example to [KubeVela Samples](https://github.com/kubevela/samples).
 
 ## Report bugs
 
@@ -35,17 +35,36 @@ If you don't have the knowledge or time to code, consider helping with _issue tr
 
 Read more about the ways you can [Triage issues](https://github.com/kubevela/community/blob/main/ISSUE_TRIAGE.md).
 
-## Answering questions
+## Answer questions
 
 If you have a question and you can't find the answer in the [documentation](https://kubevela.io/docs/),
 the next step is to ask it on the [github discussion](https://github.com/kubevela/kubevela/discussions).
 
 It's important to us to help these users, and we'd love your help. You can help other KubeVela users by answering [their questions](https://github.com/kubevela/kubevela/discussions).
 
-## Contribute to the Docs
+## Contribute to the docs
 
-Contributing to the docs needs to learn some knowledge about how to make a pull request to Github, I think this won't be hard if you follow the guide.
+The docs live in [kubevela/kubevela.github.io](https://github.com/kubevela/kubevela.github.io). To change a page:
 
-* [kubevela.io Developer Guide](https://github.com/kubevela/kubevela.io/blob/main/README.md)
+1. Fork `kubevela/kubevela.github.io` and clone your fork.
+2. Find the page. `docs/` is the next, unreleased version; `versioned_docs/version-vX.Y/` holds the released ones. If a page is wrong in a release, fix it in `docs/` and in each `versioned_docs/` copy it is wrong in.
+3. Preview your change:
+
+   ```shell
+   yarn install
+   yarn start
+   ```
+
+   This opens the site locally and reloads as you edit.
+4. Commit with `git commit -s`. Every commit needs a `Signed-off-by` line ([DCO](./code-contribute.md#sign-your-commits-dco)).
+5. Open a pull request against `main`.
+
+Some pages are generated from the KubeVela code, so change them in [kubevela/kubevela](https://github.com/kubevela/kubevela) instead, then regenerate:
+
+* the CLI reference under `cli/`;
+* the built-in component, trait, policy and workflow step references (see [Update Reference Docs](./cli-ref-doc.md));
+* `reference/vela-mcp-tools.md`, from `hack/docgen/mcp`.
+
+A generated page says so at its top or bottom.
 
 For more ways to contribute, check out the [Open Source Guides](https://opensource.guide/how-to-contribute/).

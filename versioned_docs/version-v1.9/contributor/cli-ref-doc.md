@@ -9,7 +9,7 @@ This guide is an introduction of how to generate docs automatically from Golang 
 This section introduce how to update [CLI reference doc](../cli/vela.md) in the website.
 The whole process was done by script automatically. You need to follow this guide to build your environment.
 
-1. step up these two projects in the same folder.
+1. Check out both repositories side by side:
 
 ```shell
 $ tree -L 1
@@ -42,7 +42,7 @@ git status
 
 ## Built-in Definition Reference
 
-This section introduce how to definition reference docs in the website, including:
+This section shows how to regenerate the definition reference pages:
 
 - [component definition reference doc](../end-user/components/references.md).
 - [trait definition reference doc](../end-user/traits/references.md).
@@ -54,7 +54,7 @@ Most of the steps are done by script automatically. You need to follow this guid
 By default, the following steps will update for all definition reference at a time.
 Just follow these steps.
 
-1. step up these three projects in the same folder.
+1. Check out the three repositories side by side:
 
 ```shell
 $ tree -L 1
@@ -113,7 +113,7 @@ go run hack/docgen/def/gen.go --location zh --i18n https://kubevela.io/reference
 go run hack/docgen/def/gen.go --type component --path ../kubevela.io/docs/end-user/components/references.md --location zh --i18n ../kubevela.io/static/reference-i18n.json
 ```
 
-### How the docs generated?
+### How the generator works
 
 1. Load definitions from Kubernetes.
 
@@ -182,7 +182,7 @@ This section introduce how to update [terraform based cloud resource reference d
 
 Most of the steps are done by script automatically. You need to follow this guide to build your environment.
 
-1. step up these two projects in the same folder.
+1. Check out both repositories side by side:
 
 ```shell
 $ tree -L 1
