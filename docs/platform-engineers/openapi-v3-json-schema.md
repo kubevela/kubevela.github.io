@@ -2,7 +2,7 @@
 title: Generating OpenAPI Schema
 ---
 
-The `parameter` of your definition is what its users fill in. KubeVela turns it into an OpenAPI v3 JSON schema, and VelaUX renders that schema as the definition's form. `vela show` prints the same parameters. So the `// +usage` comments, defaults and constraints you write in `parameter` become the descriptions, default values and validation your users see. See [Parameter Markers](./cue/parameter-markers.md) for the markers you can use, and [UX of Definition](../reference/ui-schema.md) to customize the form further.
+The `parameter` of your definition is what its users fill in. KubeVela turns it into an OpenAPI v3 JSON schema, and VelaUX renders that schema as the definition's form. `vela show` prints the same parameters. So the `// +usage` comments, defaults and constraints you write in `parameter` become the descriptions, default values and validation your users see. See [Parameter Markers](./cue/parameter-markers.md) for the markers you can use, and [UX of Definition](/velaux/extend/ui-schema) to customize the form further.
 
 KubeVela generates the schema whenever you apply a [definition](./oam/x-definition.md), and stores it in a `ConfigMap` in the definition's namespace.
 
@@ -68,4 +68,4 @@ The schema comes from the definition's parameters:
 
 ## Next
 
-* Refer to [UX of Definition](../reference/ui-schema.md)
+* Refer to [UX of Definition](/velaux/extend/ui-schema)

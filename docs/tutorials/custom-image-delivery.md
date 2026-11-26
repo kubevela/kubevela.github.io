@@ -23,7 +23,7 @@ On the definition's detail page in VelaUX, edit its UI schema. For example, to h
   disable: true
 ```
 
-See [UI Schema](../reference/ui-schema.md) for every option.
+See [UI Schema](/velaux/extend/ui-schema) for every option.
 
 ### Remove or add fields in the definition
 

@@ -25,7 +25,7 @@ Click the cloud shell button at the top right of VelaUX to open it.
 
 Every VelaUX user can open Cloud Shell unless a platform role with **Disable CloudShell** is bound to them. The shell's Kubernetes permissions follow the user's VelaUX roles:
 
-| VelaUX permission ([RBAC](../how-to/dashboard/user/rbac.md#built-in-permissions)) | Kubernetes permissions in the shell |
+| VelaUX permission ([RBAC](../users/rbac.md#built-in-permissions)) | Kubernetes permissions in the shell |
 | --- | --- |
 | `admin` | Anything. |
 | **App Management** in a project, or any permission that allows `deploy` on its applications | Full access to Applications in the project's namespaces. |

@@ -4,7 +4,9 @@ title: VelaUX Concepts
 
 VelaUX is the UI console for KubeVela, and a ready-made platform for the people who ship applications on it. On top of KubeVela's own model it adds a few concepts for working as a team: projects, environments and delivery targets, and a lifecycle for applications.
 
-![alt](../../resources/velaux-concept.png)
+These pages describe VelaUX 1.9.5, the version the `velaux` addon installs. To install it, see [Install VelaUX](install.md).
+
+![alt](resources/velaux-concept.png)
 
 ## Project
 

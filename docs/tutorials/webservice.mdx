@@ -11,7 +11,7 @@ This guide uses `oamdev/testapp:v1`, a small Node.js app listening on 8080.
 
 - KubeVela installed, with the `vela` CLI pointing at your cluster.
 - To pull from a private registry, add the registry first: see [Image registry configuration](../how-to/dashboard/config/image-registry.md).
-- For the VelaUX steps, the [VelaUX addon](../reference/addons/velaux.md) enabled:
+- For the VelaUX steps, the [VelaUX addon](/velaux/install) enabled:
   ```shell
   vela addon enable velaux
   ```
@@ -155,7 +155,7 @@ The next VelaUX release replaces this layout with one row of tabs: **Overview**,
 1. Open **Applications** in the left menu and click **New Application**.
 2. Enter a name, for example `webservice-app`, and optionally an alias and a description.
 3. Pick the `webservice` type.
-4. Pick an environment. The `default` environment exists from the start; to add more, see [Environments](../how-to/dashboard/application/create-application.md#bind-environments).
+4. Pick an environment. The `default` environment exists from the start; to add more, see [Environments](/velaux/applications/operations#bind-environments).
 5. Click **Next Step**.
 6. Enter the image, `oamdev/testapp:v1`. VelaUX loads the image details from the registry; for an image in a private registry you added, it fills in the **Secret** field for you.
 7. Set the CPU and memory limits, and under **Service Ports** add port `8080`. To override the image's command, open the **CMD** row.
@@ -191,7 +191,7 @@ To roll back, open **Revisions** and roll back to the revision you want.
 
 ![delete application](../resources/app-delete.jpg)
 
-[How to manage applications](../how-to/dashboard/application/create-application.md) covers the rest of the VelaUX application pages.
+[How to manage applications](/velaux/applications/operations) covers the rest of the VelaUX application pages.
 
 ## What you did
 

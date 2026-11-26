@@ -59,7 +59,7 @@ The default install is the controller and the cluster gateway; see [Performance 
 
 KubeVela is a continuous delivery platform that works at downstream of your CI process. So you will reuse the CI process you already adopted, and KubeVela will take over CD process by empowering it with modern application delivery best practices, such as declarative deployment plan as workflow, hybrid/multi-cloud resource provision/binding, security and compliance, and much more. It natively supports GitOps if you want.
 
-> Feel free to check the [Integrating with Jenkins](../how-to/dashboard/trigger/overview.md#example-jenkins) or [GitOps](../case-studies/gitops.md) documentation for more details.
+> Feel free to check the [Integrating with Jenkins](/velaux/delivery/triggers#example-jenkins) or [GitOps](../case-studies/gitops.md) documentation for more details.
 
 ### KubeVela vs. GitOps (ArgoCD, FluxCD, etc.)
 

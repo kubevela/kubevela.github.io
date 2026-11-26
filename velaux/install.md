@@ -11,7 +11,7 @@ VelaUX is the UI console for KubeVela.
 The `velaux` addon in the default registry installs VelaUX v1.9.5 (addon version v1.9.5). That release predates KubeVela 1.12, so its screens don't cover the 1.12 additions: it does not show sources or modules, there is no UI for the ConfigTemplate CRD, the `+ui` parameter markers don't change its forms, and it can't edit a config Secret that 1.12 adopted.
 :::
 
-![alt](../../resources/velaux-view.jpg)
+![alt](resources/velaux-view.jpg)
 
 ## Install
 
@@ -59,7 +59,7 @@ vela port-forward addon-velaux -n vela-system
 
 When asked, pick `local | velaux | velaux`.
 
-Everything the UI does goes through the VelaUX REST API, which you can call yourself; see [VelaUX REST API](../../platform-engineers/openapi/overview.md).
+Everything the UI does goes through the VelaUX REST API, which you can call yourself; see [VelaUX REST API](reference/rest-api.md).
 
 ## Expose VelaUX with a Service type
 
@@ -192,4 +192,4 @@ VelaUX v1.12.0 runs on KubeVela 1.10, 1.11 and 1.12. A few features need a newer
 
 VelaUX reads the KubeVela version from the vela-core image tag. If it can't tell (a branch build, or an image pinned by digest), it assumes every feature is there.
 
-New to VelaUX? See [VelaUX concepts](../../how-to/dashboard/concepts.md) for projects, environments, delivery targets and the application lifecycle.
+New to VelaUX? See [VelaUX concepts](overview.md) for projects, environments, delivery targets and the application lifecycle.

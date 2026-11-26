@@ -142,7 +142,7 @@ The expected output should be like this:
 }
 ```
 
-For more use cases about VelaQL, Please refer to [VelaQL](../system-operation/velaql.md)
+For more use cases about VelaQL, Please refer to [VelaQL](/docs/platform-engineers/system-operation/velaql)
 
 ### Refresh the token
 

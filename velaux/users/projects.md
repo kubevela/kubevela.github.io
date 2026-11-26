@@ -24,7 +24,7 @@ Click the `New Project` button for creating a project. Each project should set n
 
 A project can have multiple associated environments. An environment is a logical concept that points to a namespace in the cluster. By default, if not specified, the namespace of an environment has the same name as the environment itself. When creating an environment, you need to associate it with a project.
 
-![](../../../resources/env-project.png)
+![](../resources/env-project.png)
 
 ## Updating Projects
 

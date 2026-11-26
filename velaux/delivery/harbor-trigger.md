@@ -4,7 +4,7 @@ title: Deploy When an Image Is Pushed to Harbor
 
 ## Introduction
 
-This guide redeploys an application each time Harbor receives a new tag. It uses a trigger from [VelaUX](../reference/addons/velaux.md#install).
+This guide redeploys an application each time Harbor receives a new tag. It uses a trigger from [VelaUX](../install.md#install).
 
 In this section, we will use GitLab as code repository and Harbor as image repository to integrate with KubeVela triggers, as a result, it will automatically update application when image tags changed.
 
@@ -71,6 +71,6 @@ Looking back at the app page, you can see that the app version has changed to `v
 
 ## Summary
 
-The KubeVela triggers' combination with the image registry is smooth and seamless. Besides Harbor, VelaUX triggers take payloads from ACR, Docker Hub and JFrog, and a custom payload any CI tool can send. See [Integrate with CI system](../how-to/dashboard/trigger/overview.md).
+The KubeVela triggers' combination with the image registry is smooth and seamless. Besides Harbor, VelaUX triggers take payloads from ACR, Docker Hub and JFrog, and a custom payload any CI tool can send. See [Integrate with CI system](triggers.md).
 
 With KubeVela triggers, we can easily apply application based on image tags automatically and complete iterations of application versions.

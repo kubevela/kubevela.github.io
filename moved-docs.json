@@ -771,6 +771,34 @@
   "section": "workflow",
   "to": "steps/timeout.md"
  },
+ "how-to/dashboard/application/create-application.md": {
+  "section": "velaux",
+  "to": "applications/operations.md"
+ },
+ "how-to/dashboard/concepts.md": {
+  "section": "velaux",
+  "to": "overview.md"
+ },
+ "how-to/dashboard/target/overview.md": {
+  "section": "velaux",
+  "to": "delivery/targets.md"
+ },
+ "how-to/dashboard/trigger/overview.md": {
+  "section": "velaux",
+  "to": "delivery/triggers.md"
+ },
+ "how-to/dashboard/user/project.md": {
+  "section": "velaux",
+  "to": "users/projects.md"
+ },
+ "how-to/dashboard/user/rbac.md": {
+  "section": "velaux",
+  "to": "users/rbac.md"
+ },
+ "how-to/dashboard/user/user.md": {
+  "section": "velaux",
+  "to": "users/overview.md"
+ },
  "platform-engineers/addon/terraform.md": {
   "section": "terraform",
   "to": "extend/terraform-addon.md"
@@ -778,6 +806,10 @@
  "platform-engineers/components/component-terraform.md": {
   "section": "terraform",
   "to": "extend/cloud-resource-component.md"
+ },
+ "platform-engineers/openapi/overview.md": {
+  "section": "velaux",
+  "to": "reference/rest-api.md"
  },
  "platform-engineers/workflow/workflow.md": {
   "section": "workflow",
@@ -863,8 +895,32 @@
   "section": "addons",
   "to": "vela-prism.md"
  },
+ "reference/addons/velaux.md": {
+  "section": "velaux",
+  "to": "install.md"
+ },
+ "reference/ui-schema.md": {
+  "section": "velaux",
+  "to": "extend/ui-schema.md"
+ },
+ "reference/user-improvement-plan.md": {
+  "section": "velaux",
+  "to": "reference/user-improvement-plan.md"
+ },
+ "tutorials/cloud-shell.md": {
+  "section": "velaux",
+  "to": "applications/cloud-shell.md"
+ },
  "tutorials/consume-cloud-services.md": {
   "section": "terraform",
   "to": "guides/consume-cloud-services.md"
+ },
+ "tutorials/sso.md": {
+  "section": "velaux",
+  "to": "users/sso.md"
+ },
+ "tutorials/trigger.md": {
+  "section": "velaux",
+  "to": "delivery/harbor-trigger.md"
  }
 }

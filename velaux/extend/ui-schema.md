@@ -26,7 +26,7 @@ template: {
 
 VelaUX turns that into a form in three steps:
 
-1. **The default form.** KubeVela generates the parameter's [OpenAPI schema](../platform-engineers/openapi-v3-json-schema.md) and stores it in the definition's schema ConfigMap (`trait-schema-scaler`). Each field gets a widget from its type: `replicas` is an `int`, so it becomes a `Number` input with `1` filled in. With KubeVela 1.12 the controller also generates the default form itself, `+ui:` markers included, and stores it under the `default-ui-schema` key of the same ConfigMap; an older VelaUX ignores that key and builds the form from the OpenAPI schema.
+1. **The default form.** KubeVela generates the parameter's [OpenAPI schema](/docs/platform-engineers/openapi-v3-json-schema) and stores it in the definition's schema ConfigMap (`trait-schema-scaler`). Each field gets a widget from its type: `replicas` is an `int`, so it becomes a `Number` input with `1` filled in. With KubeVela 1.12 the controller also generates the default form itself, `+ui:` markers included, and stores it under the `default-ui-schema` key of the same ConfigMap; an older VelaUX ignores that key and builds the form from the OpenAPI schema.
 2. **Your UI schema.** If a ConfigMap named `trait-uischema-scaler` exists, VelaUX patches the default form with it, field by field, matched on `jsonKey`.
 3. **Render.** VelaUX draws the result.
 
@@ -68,7 +68,7 @@ The velaux addon ships its own `trait-uischema-scaler`, so applying yours replac
 
 ### Ship a UI schema in an addon
 
-An addon carries its UI schemas in its `schemas/` directory, one file per definition, named `<type>-uischema-<name>.yaml`, for example `schemas/trait-uischema-scaler.yaml`. When the addon is enabled, each file becomes a ConfigMap in `vela-system` named after the file (everything before the first `.`), so a file with any other name produces a ConfigMap VelaUX never reads. `<type>` is `component`, `trait`, `policy`, `workflowstep`, `config` or `addon`. See [Addons](../platform-engineers/addon/intro.md) for the rest of the addon layout.
+An addon carries its UI schemas in its `schemas/` directory, one file per definition, named `<type>-uischema-<name>.yaml`, for example `schemas/trait-uischema-scaler.yaml`. When the addon is enabled, each file becomes a ConfigMap in `vela-system` named after the file (everything before the first `.`), so a file with any other name produces a ConfigMap VelaUX never reads. `<type>` is `component`, `trait`, `policy`, `workflowstep`, `config` or `addon`. See [Addons](/docs/platform-engineers/addon/intro) for the rest of the addon layout.
 
 ## See the UI schemas in your cluster
 

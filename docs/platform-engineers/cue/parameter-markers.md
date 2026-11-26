@@ -163,7 +163,7 @@ template: {
 
 ## UI hints
 
-A `// +ui:<key>=<value>` line tells VelaUX how to render the parameter in the form it builds from the definition. Put one hint per line, next to `+usage`. KubeVela copies the hints into the `x-vela-ui` extension of the parameter's OpenAPI schema, and applies them to the default UI schema it generates for VelaUX. An unknown key is ignored. The hints need KubeVela 1.12 and a VelaUX that reads them; every key is listed in [`+ui:` markers](../../reference/ui-schema.md#ui-markers).
+A `// +ui:<key>=<value>` line tells VelaUX how to render the parameter in the form it builds from the definition. Put one hint per line, next to `+usage`. KubeVela copies the hints into the `x-vela-ui` extension of the parameter's OpenAPI schema, and applies them to the default UI schema it generates for VelaUX. An unknown key is ignored. The hints need KubeVela 1.12 and a VelaUX that reads them; every key is listed in [`+ui:` markers](/velaux/extend/ui-schema#ui-markers).
 
 ```cue
 template: {

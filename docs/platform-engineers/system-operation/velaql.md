@@ -151,7 +151,7 @@ VelaUX uses VelaQL for its own resource queries, and its API server exposes the 
 vela addon enable velaux
 ```
 
-The [VelaUX addon page](../../reference/addons/velaux.md) shows how to expose its endpoint. Assuming the API server is at `http://127.0.0.1:8000`, a query is a GET with the same statement as the CLI:
+The [VelaUX addon page](/velaux/install) shows how to expose its endpoint. Assuming the API server is at `http://127.0.0.1:8000`, a query is a GET with the same statement as the CLI:
 
 ```shell
 http://127.0.0.1:8000/api/v1/query?velaql="configmap-key{name=vela-addon-registry,namespace=vela-system,key=registries}"&project=<project>

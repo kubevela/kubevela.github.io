@@ -95,7 +95,7 @@ invisible: false
 | `deployTo.runtimeCluster` | no | bool | By default the addon is installed on the hub only. Set it to `true` to deliver it to every managed cluster too. Only read when the Application file is `template.yaml`. |
 | `deployTo.disableControlPlane` | no | bool | Accepted in the file, but vela-core 1.12 doesn't read it, so setting it changes nothing. |
 | `needNamespace` | no | []string | Namespaces to create wherever the addon is installed. Each one (other than `vela-system`) becomes a `raw` component of the addon's Application. |
-| `uxPlugins` | no | map[string]string | [VelaUX plugins](../../reference/addons/velaux.md) that come with the addon, as plugin name to download URL. |
+| `uxPlugins` | no | map[string]string | [VelaUX plugins](/velaux/install) that come with the addon, as plugin name to download URL. |
 | `annotations` | no | map[string]string | Free-form annotations for addon maintainers' own tooling. KubeVela doesn't read them. |
 | `invisible` | no | bool | Set to `true` to hide the addon from VelaUX's addon list. It can still be enabled by name. |
 
@@ -120,7 +120,7 @@ Definitions are applied to the hub only, never to managed clusters.
 
 ## UI schemas
 
-`schemas/` holds [UI schema](../../reference/ui-schema.md) files that change how VelaUX shows a definition's parameters. Each file becomes a ConfigMap in `vela-system`, named after the file up to its first `.`, and VelaUX only looks up ConfigMaps named `<type>-uischema-<name>`. So the file name must be:
+`schemas/` holds [UI schema](/velaux/extend/ui-schema) files that change how VelaUX shows a definition's parameters. Each file becomes a ConfigMap in `vela-system`, named after the file up to its first `.`, and VelaUX only looks up ConfigMaps named `<type>-uischema-<name>`. So the file name must be:
 
 ```
 <type>-uischema-<name>.yaml

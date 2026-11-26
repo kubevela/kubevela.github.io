@@ -98,9 +98,9 @@ You can also view the details from documentation website, the following command 
 vela show webservice --web
 ```
 
-* Discover in UI console ([`velaux`](../reference/addons/velaux.md))
+* Discover in UI console ([`velaux`](/velaux/install))
 
-Once installed, these definitions can be discovered and generated with forms by the UI console automatically. More than that, you can even customize the layout by defining the [ui schema](../reference/ui-schema.md) like below.
+Once installed, these definitions can be discovered and generated with forms by the UI console automatically. More than that, you can even customize the layout by defining the [ui schema](/velaux/extend/ui-schema) like below.
 
 ![alt](../resources/customize-def.jpg)
 

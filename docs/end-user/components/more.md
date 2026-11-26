@@ -131,7 +131,7 @@ Please notice that, while an addon is being installed in a cluster, it maybe sti
 
 #### Install addon with UI Console
 
-If you have installed [VelaUX](../../reference/addons/velaux.md) which is also one of the addon, you can manage it directly on the UI console with admin privileges.
+If you have installed [VelaUX](/velaux/install) which is also one of the addon, you can manage it directly on the UI console with admin privileges.
 
 ![addon list](https://kubevela.io/images/1.3/addon-list.jpg)
 

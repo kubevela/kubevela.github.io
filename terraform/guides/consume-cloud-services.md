@@ -156,19 +156,19 @@ This deletes the bucket, because `deleteResource` defaults to `true`. Empty it f
 
 ### Before starting
 
-- Enable [VelaUX](/docs/reference/addons/velaux) addon.
+- Enable [VelaUX](/velaux/install) addon.
 
 - Enable [Terraform](../install/terraform-addon.md) addon, just like the prerequisites in CLI part above. VelaUX can also enable these addons in UI console.
 
 ![addon-alibaba](../resources/addon-alibaba.jpg)
 
-- Bind the cloud provider to the [target](/docs/how-to/dashboard/target/overview). You can do that in `Resources/Targets` page. Edit the `Shared Variables`, select provider you want to bind to this target.
+- Bind the cloud provider to the [target](/velaux/delivery/targets). You can do that in `Resources/Targets` page. Edit the `Shared Variables`, select provider you want to bind to this target.
 
 ![bind-target](../resources/bind-cloud-provider.jpg)
 
 ### Creating your cloud service
 
-The UI console operations are the same, you can refer to [this guide](/docs/how-to/dashboard/application/create-application).
+The UI console operations are the same, you can refer to [this guide](/velaux/applications/operations).
 
 Firstly, Create an application and choose the type of your cloud service, they will always has a prefix of vendor such as `aws-`, `azure` or `alibaba-`.
 
