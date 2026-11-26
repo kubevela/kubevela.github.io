@@ -123,6 +123,19 @@ const sidebars = {
         },
         {
           type: 'category',
+          label: 'Property Expressions',
+          collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'end-user/cel-expressions',
+          },
+          items: [
+            'end-user/reading-components',
+            'end-user/cel-expressions-lifecycle',
+          ],
+        },
+        {
+          type: 'category',
           label: 'Application Workflow',
           collapsed: true,
           link: {
@@ -137,6 +150,7 @@ const sidebars = {
             'end-user/workflow/dependency',
             'end-user/workflow/inputs-outputs',
             'end-user/workflow/if-condition',
+            'end-user/workflow/expressions',
             'end-user/workflow/timeout',
           ],
         },
