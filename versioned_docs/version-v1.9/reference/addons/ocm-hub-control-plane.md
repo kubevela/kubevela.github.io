@@ -33,7 +33,7 @@ clusters configured/discovered.
 extensible, multi-cluster platform providing various multi-cluster 
 functionalities as atomic "building blocks" to orchestrate their multi-cluster 
 control plane. A minimal setup of OCM merely covers the installation of a 
-[registration-operator](https://github.com/open-cluster-management-io/registration-operator)
+[registration-operator](https://github.com/open-cluster-management-io/ocm/tree/main/pkg/operator)
 which is a typical Kubernetes operator that helps install/upgrade OCM components
 for us. 
  
@@ -78,9 +78,7 @@ addon-manager do the automatic synchronization.
 
 ### Syncing up cluster metadata
 
-For clarification, after the successful installation of the addon, sadly the OCM 
-control plane cannot automatically sync up with the previously joined cluster in
-KubeVela, so it's recommended to repeat the cluster joining manually with:
+The addon does not register clusters you joined before it was enabled. Join them again with `-t ocm`:
 
 ```shell
 $ vela cluster join \
@@ -112,7 +110,7 @@ to OCM by installation additional OCM modules including:
 The further installation can be done by the following helm commands:
 
 ```shell
-$ helm repo add ocm https://open-cluster-management.oss-us-west-1.aliyuncs.com
+$ helm repo add ocm https://open-cluster-management.io/helm-charts
 $ helm repo update
 $ # install the addons
 $ helm -n open-cluster-management-addon install cluster-proxy ocm/cluster-proxy --create-namespace
@@ -139,4 +137,4 @@ prepared for you over here:
 
 ## Support
 
-Please reach out to the KubeVela official dev squad for the support.
+Ask in the [`#kubevela` channel on CNCF Slack](https://cloud-native.slack.com/archives/C01BLQ3HTJA), or open an issue on [GitHub](https://github.com/kubevela/kubevela/issues).

@@ -2,172 +2,119 @@
 title: Machine Learning
 ---
 
-Machine learning addon is divided into model-training addon and model-serving addon. Run the following command to install the addon:
+The `model-training` addon runs machine learning training jobs and Jupyter notebooks as KubeVela components. It installs the [Kubeflow training operator](https://github.com/kubeflow/training-operator) and gives you two component types:
+
+- `model-training`: a training job for TensorFlow, PyTorch, MPI, XGBoost or MXNet, run by the training operator (`TFJob`, `PyTorchJob` and so on).
+- `jupyter-notebook`: a Jupyter notebook server, with a Service in front of it.
+
+:::caution
+The `model-serving` addon, which served trained models with Seldon, requires Kubernetes older than 1.22 (`system.kubernetes: <1.22` in its metadata), and `vela addon enable` refuses it on any cluster KubeVela 1.12 supports.
+:::
+
+## Install
+
+The addon installs the training operator with the `helm` component type, so it depends on the [fluxcd](./fluxcd.md) addon, which is enabled with it:
 
 ```shell
 vela addon enable model-training
-vela addon enable model-serving
 ```
 
-## Model-training addon
+To remove it:
 
-In model-training addon, we have two component definitions: `model-training` and `jupyter notebook`.
+```shell
+vela addon disable model-training
+```
+
+## Train a model
+
+This Application trains a small TensorFlow model and saves it to a PersistentVolumeClaim, `my-pvc`, which the component creates from the default storage class:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: training
+  namespace: default
+spec:
+  components:
+    - name: demo-training
+      type: model-training
+      properties:
+        image: fogdong/train-color:v1
+        framework: tensorflow
+        storage:
+          - name: my-pvc
+            mountPath: /model
+```
+
+Save it as `training.yaml` and deploy it:
+
+```shell
+vela up -f training.yaml
+```
+
+The component renders a `TFJob` named after it. Watch it run to completion:
+
+```shell
+kubectl get tfjob demo-training -n default
+```
+
+To train in distributed mode, set `distribution`, for example `distribution: {ps: 1, worker: 2}` for TensorFlow.
+
+## Open a notebook
+
+This Application runs a notebook with the trained model mounted under `/home/jovyan/model`:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: notebook
+  namespace: default
+spec:
+  components:
+    - name: demo-notebook
+      type: jupyter-notebook
+      properties:
+        storage:
+          - name: my-pvc
+            mountPath: /model
+```
+
+The notebook mounts existing PersistentVolumeClaims only, and its template fails to render without `storage`, so give it at least one claim. Deploy it and forward its Service:
+
+```shell
+vela up -f notebook.yaml
+kubectl port-forward -n default svc/demo-notebook 8888:8888
+```
+
+Then open http://127.0.0.1:8888. The notebook runs with no token, so don't expose its Service outside the cluster.
+
+## Parameters
 
 ### model-training
 
-```bash
-$ vela show model-training
-# Properties
-+------------------+----------------------------------------------------------------------------------+-------------------------------+----------+---------+
-|       NAME       |                                   DESCRIPTION                                    |             TYPE              | REQUIRED | DEFAULT |
-+------------------+----------------------------------------------------------------------------------+-------------------------------+----------+---------+
-| env              | Define arguments by using environment variables                                  | [[]env](#env)                 | false    |         |
-| labels           | Specify the labels in the workload                                               | map[string]string             | false    |         |
-| annotations      | Specify the annotations in the workload                                          | map[string]string             | false    |         |
-| framework        | The training framework to use                                                    | string                        | true     |         |
-| image            | Which image would you like to use for your service                               | string                        | true     |         |
-| imagePullPolicy  | Specify image pull policy for your service                                       | string                        | false    |         |
-| cpu              | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core) | string                        | false    |         |
-| memory           | Specifies the attributes of the memory resource required for the container.      | string                        | false    |         |
-| gpu              | Specifies the attributes of the gpu resource required for the container.         | string                        | false    |         |
-| storage          |                                                                                  | [[]storage](#storage)         | false    |         |
-| imagePullSecrets | Specify image pull secrets for your service                                      | []string                      | false    |         |
-| distribution     | If you want to train the model in distributed mode, specify here                 | [distribution](#distribution) | false    |         |
-| restartPolicy    |                                                                                  | string                        | true     | Never   |
-+------------------+----------------------------------------------------------------------------------+-------------------------------+----------+---------+
-
-
-## distribution
-+-----------+---------------------------------------------------------+------+----------+---------+
-|   NAME    |                       DESCRIPTION                       | TYPE | REQUIRED | DEFAULT |
-+-----------+---------------------------------------------------------+------+----------+---------+
-| ps        | The number of PS replicas, suits for tensorflow model   | int  | false    |         |
-| master    | The number of Master replicas, suits for pytorch model  | int  | false    |         |
-| scheduler | The number of Scheduler replicas, suits for mxnet model | int  | false    |         |
-| server    | The number of Server replicas, suits for mxnet model    | int  | false    |         |
-| launcher  | The number of Launcher replicas, suits for mpi model    | int  | false    |         |
-| worker    | The number of Worker replicas                           | int  | false    |         |
-+-----------+---------------------------------------------------------+------+----------+---------+
-
-
-## storage
-+------------------+--------------------------------------------------------------------------+---------------------------------+----------+------------+
-|       NAME       |                               DESCRIPTION                                |              TYPE               | REQUIRED |  DEFAULT   |
-+------------------+--------------------------------------------------------------------------+---------------------------------+----------+------------+
-| name             |                                                                          | string                          | false    |            |
-| resources        |                                                                          | [resources](#resources)         | false    |            |
-| pvcRef           | If you want to use a existed PVC, specify the PVC name and moutPath here | [pvcRef](#pvcRef)               | false    |            |
-| mountPath        |                                                                          | string                          | false    |            |
-| accessModes      |                                                                          | [...]                           | true     |            |
-| volumeMode       |                                                                          | string                          | true     | Filesystem |
-| storageClassName |                                                                          | string                          | false    |            |
-| dataSourceRef    |                                                                          | [dataSourceRef](#dataSourceRef) | false    |            |
-| dataSource       |                                                                          | [dataSource](#dataSource)       | false    |            |
-| selector         |                                                                          | [selector](#selector)           | false    |            |
-+------------------+--------------------------------------------------------------------------+---------------------------------+----------+------------+
-```
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| `framework` | The training framework to use. | `"tensorflow"`, `"pytorch"`, `"mpi"`, `"xgboost"` or `"mxnet"` | false | `"tensorflow"` |
+| `image` | The image that runs the training. | string | true | |
+| `distribution` | Replica counts for distributed training: `ps` (TensorFlow), `master` (PyTorch), `scheduler` and `server` (MXNet), `launcher` (MPI), `worker` (all). Without it, one worker runs. | object | false | |
+| `restartPolicy` | The restart policy of the training pods. | `"Never"`, `"OnFailure"` or `"Always"` | false | `"Never"` |
+| `env` | Environment variables, as in `webservice`. | []object | false | |
+| `cpu` | CPU for the container, such as `0.5`. | string | false | |
+| `memory` | Memory for the container, such as `1Gi`. | string | false | |
+| `gpu` | Number of NVIDIA GPUs (`nvidia.com/gpu`). | string | false | |
+| `storage` | Volumes to mount. Each entry creates a PersistentVolumeClaim (`name`, `mountPath`, and optionally `storageClassName`, `accessModes`, `resources.requests.storage`, default `1Gi`), or mounts an existing one with `pvcRef: {name, mountPath}`. | []object | false | |
+| `labels`, `annotations` | Labels and annotations for the training pods. | map[string]string | false | |
+| `imagePullPolicy` | `Always`, `Never` or `IfNotPresent`. | string | false | |
+| `imagePullSecrets` | Image pull secrets for the training pods. | []string | false | |
 
 ### jupyter-notebook
 
-```bash
-$ vela show jupyter-notebook
-# Properties
-+-------------+------------------------------------------------------------------------------------------------------+-----------------------+----------+-----------+
-|    NAME     |                                             DESCRIPTION                                              |         TYPE          | REQUIRED |  DEFAULT  |
-+-------------+------------------------------------------------------------------------------------------------------+-----------------------+----------+-----------+
-| cpu         | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core)                     | string                | false    |           |
-| memory      | Specifies the attributes of the memory resource required for the container.                          | string                | false    |           |
-| gpu         | Specifies the attributes of the gpu resource required for the container.                             | string                | false    |           |
-| storage     |                                                                                                      | [[]storage](#storage) | false    |           |
-| serviceType | Specify what kind of Service you want. options: "ClusterIP","NodePort","LoadBalancer","ExternalName" | string                | true     | ClusterIP |
-+-------------+------------------------------------------------------------------------------------------------------+-----------------------+----------+-----------+
-
-
-## storage
-+-----------+-------------+--------+----------+---------+
-|   NAME    | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+-----------+-------------+--------+----------+---------+
-| name      |             | string | true     |         |
-| mountPath |             | string | true     |         |
-+-----------+-------------+--------+----------+---------+
-```
-
-## Model-serving addon
-
-In model-serving addon, we have on component definition called `model-serving` to serve the models.
-
-### model-serving
-
-```bash
-$ vela show model-serving
-# Properties
-+---------------+-----------------------------------------------------------------------+---------------------------------+----------+---------+
-|     NAME      |                              DESCRIPTION                              |              TYPE               | REQUIRED | DEFAULT |
-+---------------+-----------------------------------------------------------------------+---------------------------------+----------+---------+
-| timeout       | If you model serving need long time to return, please set the timeout | string                          | false    |         |
-| customRouting | Specify the custom routing of the serving                             | [customRouting](#customRouting) | false    |         |
-| protocol      | Protocol of model serving, default to seldon                          | string                          | false    |         |
-| predictors    | The predictors of the serving                                         | [[]predictors](#predictors)     | true     |         |
-+---------------+-----------------------------------------------------------------------+---------------------------------+----------+---------+
-
-
-## predictors
-+------------+------------------------------------------------------------------------------------+---------------------------+----------+---------+
-|    NAME    |                                    DESCRIPTION                                     |           TYPE            | REQUIRED | DEFAULT |
-+------------+------------------------------------------------------------------------------------+---------------------------+----------+---------+
-| name       | Name of the predictor                                                              | string                    | true     |         |
-| replicas   | Replica of the predictor                                                           | int                       | false    |         |
-| traffic    | If you want to split the traffic to different serving, please set the traffic here | int                       | false    |         |
-| graph      | The graph of the predictor                                                         | [graph](#graph)           | true     |         |
-| resources  | The resources of the serving                                                       | [resources](#resources)   | false    |         |
-| autoscaler | The autoscaler of the serving                                                      | [autoscaler](#autoscaler) | false    |         |
-+------------+------------------------------------------------------------------------------------+---------------------------+----------+---------+
-
-
-### autoscaler
-+-------------+--------------------------------------+-----------------------+----------+---------+
-|    NAME     |             DESCRIPTION              |         TYPE          | REQUIRED | DEFAULT |
-+-------------+--------------------------------------+-----------------------+----------+---------+
-| minReplicas | The min replicas of this auto scaler | int                   | true     |         |
-| maxReplicas | The max replicas of this auto scaler | int                   | true     |         |
-| metrics     | The metrics of this auto scaler      | [[]metrics](#metrics) | true     |         |
-+-------------+--------------------------------------+-----------------------+----------+---------+
-
-
-#### metrics
-+--------------------------+----------------------------------------------------+--------+----------+---------+
-|           NAME           |                    DESCRIPTION                     |  TYPE  | REQUIRED | DEFAULT |
-+--------------------------+----------------------------------------------------+--------+----------+---------+
-| type                     | The type of this auto scaler                       | string | true     |         |
-| targetAverageUtilization | The target average utilization of this auto scaler | int    | true     |         |
-+--------------------------+----------------------------------------------------+--------+----------+---------+
-
-
-### resources
-+--------+----------------------------------------------------------------------------------+--------+----------+---------+
-|  NAME  |                                   DESCRIPTION                                    |  TYPE  | REQUIRED | DEFAULT |
-+--------+----------------------------------------------------------------------------------+--------+----------+---------+
-| cpu    | Number of CPU units for the service, like `0.5` (0.5 CPU core), `1` (1 CPU core) | string | false    |         |
-| memory | Specifies the attributes of the memory resource required for the container.      | string | false    |         |
-| gpu    | Specifies the attributes of the gpu resource required for the container.         | string | false    |         |
-+--------+----------------------------------------------------------------------------------+--------+----------+---------+
-
-
-### graph
-+----------------+-------------------------------------------------------------------------------+--------+----------+---------+
-|      NAME      |                                  DESCRIPTION                                  |  TYPE  | REQUIRED | DEFAULT |
-+----------------+-------------------------------------------------------------------------------+--------+----------+---------+
-| name           | The name of the graph                                                         | string | true     |         |
-| implementation | The implementation of the serving                                             | string | true     |         |
-| modelUri       | The model uri, you can use `pvc://pvc-name/path` or `s3://s3-name/path`, etc. | string | true     |         |
-+----------------+-------------------------------------------------------------------------------+--------+----------+---------+
-
-
-## customRouting
-+-------------+-----------------------------------------------------------------------+--------+----------+---------+
-|    NAME     |                              DESCRIPTION                              |  TYPE  | REQUIRED | DEFAULT |
-+-------------+-----------------------------------------------------------------------+--------+----------+---------+
-| header      | Request with specified header will be routed to the specified service | string | true     |         |
-| serviceName | The service name that will be routed to                               | string | true     |         |
-+-------------+-----------------------------------------------------------------------+--------+----------+---------+
-```
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| `storage` | Existing PersistentVolumeClaims to mount, each as `name` (the claim) and `mountPath` (under `/home/jovyan`). | []object | true in practice | |
+| `serviceType` | The type of the notebook's Service. | `"ClusterIP"`, `"NodePort"`, `"LoadBalancer"` or `"ExternalName"` | false | `"ClusterIP"` |
+| `cpu` | CPU for the container. | string | false | |
+| `memory` | Memory for the container. | string | false | |
+| `gpu` | Number of NVIDIA GPUs (`nvidia.com/gpu`). | string | false | |

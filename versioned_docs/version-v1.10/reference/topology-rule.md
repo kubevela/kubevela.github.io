@@ -2,35 +2,27 @@
 title: Resource Relationships
 ---
 
-`Resource Relationships` mainly specify the relationship between two types of resources. Its main function is to help KubeVela establish the topological relationship of the resources managed by a KubeVela application. For example, the system has a built-in relationship rule: The sub-resources under the [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)  can only be [ReplicaSet ](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/), and the child resource of ReplicaSet can only be [Pod](https://kubernetes.io/docs/concepts/workloads/pods/ ).
+KubeVela finds the Pods and Services behind an Application by walking from each resource it applied to that resource's children, using rules like "a Deployment's children are ReplicaSets". VelaUX's topology view, `vela logs`, `vela exec`, `vela port-forward` and `vela status --endpoint` all depend on these rules. If a workload is a custom resource with no rule, those commands report `no pod found in your application`.
 
-When a KubeVela application with Deployment as the workload is created, then view the topology graph of the application on VelaUX, KubeVela will first list all ReplicaSets in the same namespace with the Deployment, and filter out the results whose OwnerReference don't point to the Deployment, and then find the Pod under the ReplicaSet with the same way. This can help to establish the topology hierarchy of the managed resources under the application.
-
-In general, these `Resource Relationships` are mainly used in the following scenarios:
-
-- Help to display the topology graph of an application on VelaUX. The following is an example of topology graph:
+For each rule, KubeVela lists objects of the child kind in the parent's namespace and keeps the ones that belong to the parent. Here is the topology view of an application in VelaUX, built from these rules:
 
 ![image](../resources/tree.png)
 
-- When using `vela port-forward`, `vela logs`, `vela exec` and `vela status --endpoint` via cli or check the log or access port of an application on VelaUX, it helps KubeVela to discover the pods or services of an application.
-
 ## Add more rules
 
-The built-in `Resource Relationships` in the system are limited. If a Kubernetes CustomResourceDefinition is added to your cluster, you can add new relationship rules to the system by creating a Kubernetes `configmap` to your cluster. 
+The built-in rules cover the common Kubernetes workloads. If you add a CustomResourceDefinition to your cluster, add a rule for it by creating a ConfigMap.
 
-Then we will introduce the details with an example.
-
-You can first enable the [kruise](https://github.com/kubevela/catalog/tree/master/experimental/addons/kruise) addon which is an experimental addon by running follow command:
+The example below uses the [kruise](https://github.com/kubevela/catalog/tree/master/experimental/addons/kruise) addon, an experimental addon. Enable it with:
 
 ```shell
 vela addon registry add experimental --type=helm --endpoint=https://kubevela.github.io/catalog/experimental/
 vela addon enable kruise
 ```
 
-After enable succeed you will see the `cloneset` componentDefinition whose  workload's type  is `clonesets.apps.kruise.io`. The cloneset controller will create pods for application.
+Once it's enabled you have the `cloneset` component type, whose workload type is `clonesets.apps.kruise.io`. The CloneSet controller creates the Pods for the application.
 
 ```shell
-$ vela componets
+$ vela components
 NAME                    DEFINITION                      DESCRIPTION                                                 
 cloneset                autodetects.core.oam.dev        Describes long-running, scalable, containerized services    
                                                         that have a stable network endpoint to receive external     
@@ -39,9 +31,9 @@ cloneset                autodetects.core.oam.dev        Describes long-running, 
                                                         `webservice` type.
 ```
 
-Then, create a `cloneset` application:
+Then create a `cloneset` application:
 
-```yaml
+```shell
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -61,14 +53,14 @@ spec:
 EOF
 ```
 
-When we view the application topology graph on VelaUX, we will find out the clonset resources has not any sub-resource, and the instance list is empty. As following picture shows:
+In VelaUX's topology view the CloneSet has no children, and the instance list is empty:
 
 
 ![image](../resources/cloneset-before.jpg)
 
 ![image](../resources/cloneset-before-pod.jpg)
 
-If we use command `vela logs` and `vela exec` will get error like follows:
+`vela logs` and `vela exec` fail too:
 
 ```shell
 $ vela logs app-cloneset
@@ -80,7 +72,7 @@ $ vela exec app-cloneset
 Error: no pod found in your application
 ```
 
-The reason of these problems is system has not any relationship rule about the new added CustomResource `cloneset`. So KubeVela doesn't know how to lookup the sub-resource of the CustomResource, so you can apply a configmap as follows to solve this problem:
+KubeVela has no rule for the CloneSet kind, so it doesn't know where to look for its children. Apply a ConfigMap that adds one:
 
 ```yaml
 apiVersion: v1
@@ -101,7 +93,7 @@ data:
           kind: Pod
 ```
 
-As the example shows the configmap must contain a special label `"rules.oam.dev/resources": "true"`. Only a configmap containing such a label will be recognized by KubeVela as a configuration of `resource type relationship rule`. At the same time, in this example, we also add a `"rules.oam.dev/resource-format": "yaml"` annotation to specify the rules in `data.rules` field defined with YAML format, except Using YAML format, you can also define these rules with JSON format as follows:
+The ConfigMap must be in the `vela-system` namespace and carry the label `"rules.oam.dev/resources": "true"`; KubeVela ignores ConfigMaps without it. The `"rules.oam.dev/resource-format": "yaml"` label says the rules in `data.rules` are written in YAML. You can write them in JSON instead:
 
 ```yaml
 apiVersion: v1
@@ -114,33 +106,33 @@ metadata:
     "rules.oam.dev/resources": "true"
 data:
   rules: |-
-   [
-     {
-       "parentResourceType": {
-           "group": "apps.kruise.io",
-           "kind": "CloneSet"
-       },
-       "childrenResourceType": [
-           {
-               "apiVersion": "v1",
-               "kind": "Pod"
-           }
-       ]
-     }
-  ]
+    [
+      {
+        "parentResourceType": {
+          "group": "apps.kruise.io",
+          "kind": "CloneSet"
+        },
+        "childrenResourceType": [
+          {
+            "apiVersion": "v1",
+            "kind": "Pod"
+          }
+        ]
+      }
+    ]
 ```
 
-The function of these two `configmap` is totally the same.
+The two ConfigMaps do the same thing.
 
-In the example above, the parent type is `Cloneset` in group `apps.kruise.io`, his child resource type is `v1/Pod`.
+In this example the parent is a `CloneSet` in the `apps.kruise.io` group, and its children are Pods.
 
-Then we check the topology graph and instance list on VelaUX again will see:
+Check the topology view and instance list in VelaUX again:
 
 ![image](../resources/cloneset-after.jpg)
 
 ![image](../resources/cloneset-after-pod.jpg)
 
-Using `vela logs` and `vela exec` command won't meet error neither:
+`vela logs` and `vela exec` now work:
 
 ```shell
 $ vela logs app-cloneset
@@ -148,14 +140,16 @@ $ vela logs app-cloneset
 clone-set 2022-08-22T11:53:46.005267600Z {"level":"info","ts":"2022-08-22T11:53:46.002Z","caller":"podinfo/main.go:123","msg":"Starting podinfo","version":"4.0.3","revision":"a2f9216fe43849c3b4844032771ba632307d8738","port":"9898"}
 ```
 
-As the same, if your CustomResource contains a Kubernetes service as sub-resource, you can also add a relationship rules to support `vela status --endpoints`.
+Do the same for a custom resource whose children include a Service, so `vela status --endpoint` finds it.
 
 ## Built inside with Addon
 
-A KubeVela [addon](../platform-engineers/addon/intro.md) may install some Kubernetes CRD operators. By default, KubeVela cannot know what types of sub-resources this CRD can have, so you may encounter that the resources under the CRD cannot be displayed in the topology graph or cannot check the container logs of the application. Then you can add a configmap that define the relationship of resource type to solve this problem. You can define the configmap in `outputs` field in application template file of the addon. An example is as follows:
+A KubeVela [addon](../platform-engineers/addon/intro.md) may install a CRD operator. KubeVela has no rules for that operator's kinds, so the addon should ship them: put the rule ConfigMap in the `outputs` field of the addon's application template, for example:
 
 ```cue
 package main
+
+import "encoding/json"
 
 output: {
 	apiVersion: "core.oam.dev/v1beta1"
@@ -183,4 +177,4 @@ outputs: resourceTree: {
 _rules: {...}
 ```
 
-Please refer to [doc](../platform-engineers/addon/addon-cue.md#auxiliary-resources) for more details.
+See [auxiliary resources](../platform-engineers/addon/addon-cue.md#auxiliary-resources) for more on `outputs` in an addon.

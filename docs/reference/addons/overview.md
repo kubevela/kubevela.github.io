@@ -2,80 +2,89 @@
 title: Overview
 ---
 
-These following out-of-box addons are all verified and maintained by KubeVela community registry (https://kubevela.github.io/catalog/official).
+Addons extend KubeVela with components, traits, config templates and the controllers they need. The addons below are in the default registry ([kubevela/catalog](https://github.com/kubevela/catalog/tree/master/addons)) unless marked. Enable one with `vela addon enable <name>`; see [Addons](../../platform-engineers/addon/intro.md) to write your own.
 
-:::tip
-Source code of this addon are all here: https://github.com/kubevela/catalog/tree/master/addons .
-:::
+Many addons install their software from a Helm chart, so they depend on `fluxcd` and enable it for you. Each addon's source and README are in the catalog, under `addons/<name>`.
 
-## KubeVela Platform
+## KubeVela platform
 
-* [VelaUX](./velaux.md): The KubeVela User Experience (UX ) addon. It will launch a dashboard and an APIServer for better user experience.
-* [Vela Prism](./vela-prism.md) Provide API Extensions to the core [KubeVela](https://github.com/kubevela/kubevela).
-* [KubeVela Website](./kubevela-io.md) Help you to read the KubeVela document in your cluster which can be air-gaped environment.
-* [Cloud Shell](../../tutorials/cloud-shell.md): Set up a web terminal and cloud shell intended for a kubernetes-native environment.
+| Addon | What it gives you |
+| --- | --- |
+| [velaux](./velaux.md) | VelaUX, the KubeVela web console, and its API server. |
+| [vela-prism](./vela-prism.md) | An aggregated API server that serves KubeVela objects, such as application resource trackers and clusters, as Kubernetes APIs. VelaUX and the observability addons use it. |
+| [vela-workflow](../../end-user/pipeline/workflowrun.md) | The standalone workflow controller, for `WorkflowRun` pipelines that run without an Application, plus steps such as `apply-app`, `read-app` and `addon-operation`. |
+| [vela-core-shard-manager](../../platform-engineers/system-operation/controller-sharding.md) | Extra vela-core controllers for sharding, copied from the main controller's configuration. |
+| [kube-trigger](https://github.com/kubevela/catalog/tree/master/addons/kube-trigger) | The kube-trigger controller and the `trigger-service` component: watch Kubernetes objects and act when they change, for example to update an Application when a ConfigMap it reads changes. |
+| [cloudshell](../../tutorials/cloud-shell.md) | A terminal in the browser, opened from VelaUX, with `vela` and `kubectl` set up. Needs KubeVela 1.11 or later. |
+| [kubevela-io](./kubevela-io.md) | A copy of the KubeVela documentation site, served in your cluster for air-gapped environments. |
 
 ## Observability
 
-* [Prometheus Server](../../platform-engineers/operations/observability.md): Collects metrics from configured targets at given intervals, evaluates rule expressions, displays the results, and can trigger alerts if some condition is observed to be true.
-* [Node Exporter](../../platform-engineers/operations/observability.md): Prometheus exporter for hardware and OS metrics exposed by *NIX kernels, written in Go with pluggable metric collectors.
-* [Mysql Exporter](./mysql-exporter.md): Prometheus exporter for MySQL server metrics.
-* [Grafana](../../platform-engineers/operations/observability.md): Grafana is an open source, feature rich metrics dashboard and graph editor for Graphite, Elasticsearch, OpenTSDB, Prometheus and InfluxDB.
-* [Loki](../../platform-engineers/operations/o11y/logging.md): A log aggregation system designed to store and query logs from all your applications and infrastructure.
-* [Kube State Metrics](../../platform-engineers/operations/observability.md): A simple service that listens to the Kubernetes API server and generates metrics about the state of the objects.
+| Addon | What it gives you |
+| --- | --- |
+| [prometheus-server](../../platform-engineers/operations/observability.md) | Prometheus, and the `prometheus-scrape` trait to have it scrape a component's metrics. |
+| [node-exporter](../../platform-engineers/operations/observability.md) | Host metrics from every node, for Prometheus. |
+| [kube-state-metrics](../../platform-engineers/operations/observability.md) | Metrics on the state of Kubernetes objects, for Prometheus. |
+| [grafana](../../platform-engineers/operations/observability.md) | Grafana, with dashboards for KubeVela and its applications. |
+| [loki](../../platform-engineers/operations/o11y/logging.md) | Loki for log collection, and the `stdout-logs` and `file-logs` traits to collect a component's logs. |
+| [o11y-definitions](../../platform-engineers/operations/observability.md) | Definitions for Grafana dashboards, data sources and access, and config templates for Grafana, Loki and Prometheus. The grafana, loki and prometheus-server addons enable it. |
+| [victoria-metric](https://github.com/kubevela/catalog/tree/master/addons/victoria-metric) | A VictoriaMetrics cluster and agent, in the `vm-system` namespace by default. |
+| [mysql-exporter](./mysql-exporter.md) | A component and trait that export a MySQL server's metrics to Prometheus. |
 
-## GitOps
+## Delivery
 
-* [FluxCD](./fluxcd.md): Provides capability to deliver helm chart and drive GitOps.
+| Addon | What it gives you |
+| --- | --- |
+| [fluxcd](./fluxcd.md) | The `helm` and `kustomize` components, the `helm-repository` config template, and patch traits for Kustomize. Most addons on this page depend on it. |
+| [kruise-rollout](./kruise-rollout.md) | OpenKruise Rollouts, with the `kruise-rollout` trait for canary releases of Deployments, StatefulSets and OpenKruise CloneSets. |
+| [keda](../../tutorials/auto-scaler.md) | KEDA, and the `keda-auto-scaler` trait for event-driven autoscaling. |
+| [rollout](https://github.com/kubevela/catalog/tree/master/addons/rollout) | **Can't install.** The legacy rollout controller. Its chart is served from `charts.kubevela.net`, which no longer exists. Use kruise-rollout instead. |
 
-## Cloud Resources
+## Cloud resources
 
-* [Terraform](./terraform.md) Terraform provider addon to provide the capability to deploy the cloud resource.
-
-
-## Rollout
-
-* [Kruise Rollout](./kruise-rollout.md): [OpenKruise rollout](https://github.com/openkruise/rollouts) supports canary rollout for native deployment, stateful-set and OpenKruise [cloneset](https://openkruise.io/docs/user-manuals/cloneset/).
-* [Vela Rollout](./rollout.md): The legacy rollout addon before kruise rollout exists, provide a capability rollout the application.
+| Addon | What it gives you |
+| --- | --- |
+| [terraform](./terraform.md) | The Terraform controller, so components can provision cloud resources. Add a provider addon for each cloud. |
+| [terraform-&lt;provider&gt;](./terraform.md) | Components for one cloud's resources, and a config template for its credentials: `terraform-alibaba`, `terraform-aws`, `terraform-azure`, `terraform-baidu`, `terraform-gcp`, `terraform-tencent`, `terraform-ucloud`. |
+| [terraform-ec](./terraform-ec.md) | The same for Elastic Cloud deployments. |
 
 ## Gateway
 
-* [Traefik](./traefik.md): Traefik is a modern HTTP reverse proxy and load balancer made to deploy microservices with ease.
-* [Nginx Ingress Controller](./nginx-ingress-controller.md): An Ingress controller for Kubernetes using NGINX as a reverse proxy and load balancer.
-
-## AI
-
-* [Machine Learning Addon](./ai.md): Machine learning addon is divided into model-training addon and model-serving addon.
-
-## Multi-Clusters
-
-* [OCM Cluster-Gateway Manager](./ocm-gateway-manager-addon.md) An operator component into the hub cluster that help the administrator to easily operate the configuration of cluster-gateway instances via "ClusterGatewayConfiguration"custom resource. *WARNING* this addon will restart the cluster-gateway instances upon the first-time installation.
-* [OCM Hub Control Plane](./ocm-hub-control-plane.md) Help you to initiate and install the [cluster manager](https://open-cluster-management.io/getting-started/core/cluster-manager/)(i.e. OCM's control plane) components into the hosting cluster where your KubeVela control plane is running.
+| Addon | What it gives you |
+| --- | --- |
+| [ingress-nginx](./nginx-ingress-controller.md) | The NGINX Ingress controller, so the `gateway` trait has an ingress controller to use. |
+| [traefik](./traefik.md) | **Can't install.** Traefik, with the `http-route`, `https-route` and `tcp-route` traits. Its chart is served from `charts.kubevela.net`, which no longer exists. |
 
 ## Security
 
-* [Cert Manager](./cert-manager.md) Add certificates and certificate issuers as resource types in Kubernetes clusters, and simplifies the process of obtaining, renewing and using those certificates.
-* [Dex](./dex.md) Provide [dex](https://github.com/dexidp/dex) login for VelaUX.
-* [Trivy Operator](./trivy-operator.md): Provides a vulnerability scanner that continuously scans containers deployed in a Kubernetes cluster.
+| Addon | What it gives you |
+| --- | --- |
+| [cert-manager](./cert-manager.md) | cert-manager, to issue and renew TLS certificates. |
+| [dex](./dex.md) | Dex, for single sign-on to VelaUX through GitHub, LDAP, OIDC and other identity providers. |
+| [trivy-operator](./trivy-operator.md) | The Trivy Operator, which scans your workloads' images for vulnerabilities, and the `trivy-check` workflow step. |
 
-## Big Data
+## Workloads
 
-* [Flink Operator](./flink-kubernetes-operator.md) A Kubernetes operator for Apache Flink(https://github.com/apache/flink-kubernetes-operator).
+| Addon | What it gives you |
+| --- | --- |
+| [model-training](./ai.md) | The `model-training` and `jupyter-notebook` components, for training models and working in notebooks. |
+| [model-serving](./ai.md) | **Can't install.** The `model-serving` component. The addon requires Kubernetes earlier than 1.22, which no cluster KubeVela supports meets. |
+| [flink-kubernetes-operator](./flink-kubernetes-operator.md) | The Apache Flink Kubernetes Operator, and the `flink-cluster` component. |
+| [chartmuseum](./chartmuseum.md) | ChartMuseum, a Helm chart repository you run yourself. |
+| [netlify](./netlify.md) | The `netlify` component, to deploy a frontend to Netlify. |
+| [vegeta](./vegeta.md) | The `vegeta` component, for HTTP load tests. |
 
-## Storage
+## Multi-cluster
 
-* [ChartMuseum](./chartmuseum.md): An open-source and easy to deploy Helm Chart Repository server.
+| Addon | What it gives you |
+| --- | --- |
+| [ocm-hub-control-plane](./ocm-hub-control-plane.md) | The Open Cluster Management hub, installed in the KubeVela control plane cluster. |
+| [ocm-gateway-manager-addon](./ocm-gateway-manager-addon.md) | An OCM addon that manages the cluster-gateway configuration. It restarts cluster-gateway the first time it is installed. |
 
-## SaaS Workload
+## Experimental addons
 
-* [netlify](./netlify.md): Netlify is a SaaS platform that can serve website especially for frontend service, it provides free allowances that was pretty cool to be used for demo and test.
+More addons live in the experimental registry, [catalog/experimental/addons](https://github.com/kubevela/catalog/tree/master/experimental/addons). They are less tested and may not install. To use them, add the registry first:
 
-## Developer Tools
-
-* [Pyroscope](./pyroscope.md): Pyroscope is an open source continuous profiling platform, consisting of server and agent. It allows the user to collect, store, and query the profiling data in a CPU and disk efficient way.
-* [Vegeta](./vegeta.md) Vegeta is a versatile HTTP load testing tool built out of a need to drill HTTP services with a constant request rate. It can be used both as a command line utility and a library.
-
-
-:::tip
-If you want to make your own addon, please refer to [this guide](../../platform-engineers/addon/intro.md).
-:::
+```shell
+vela addon registry add experimental --type helm --endpoint=https://kubevela.github.io/catalog/experimental
+```

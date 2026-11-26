@@ -5,8 +5,13 @@ title: Cloud Resources orchestrated by Crossplane
 
 ## Crossplane addon
 
+:::caution
+The `crossplane` and `crossplane-aws` addons are experimental. They are only in the experimental addon registry, so add it before you enable them.
+:::
+
 ```shell
-$ vela addon enable crossplane
+vela addon registry add experimental --type helm --endpoint=https://kubevela.github.io/catalog/experimental
+vela addon enable experimental/crossplane
 ```
 
 ## Enable a Crossplane Provider addon
@@ -21,7 +26,7 @@ crossplane-aws            	KubeVela	Kubernetes Crossplane Controller for AWS    
 To enable one of them, use the following command:
 
 ```shell
-$ vela addon enable crossplane-xxx
+vela addon enable experimental/crossplane-xxx
 ```
 
 You can also disable, upgrade, check status of an addon by command `vela addon`.
@@ -29,6 +34,8 @@ You can also disable, upgrade, check status of an addon by command `vela addon`.
 ## Authenticate Crossplane Provider
 
 Apply the application below. Let's use aws in this example, you can get `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` per [aws secret docs](https://aws.amazon.com/blogs/security/wheres-my-secret-access-key/).
+
+The keys are properties of the Application, so anyone who can read the Application, with `kubectl get application -o yaml` or in VelaUX, can read them. Use a key with only the permissions Crossplane needs.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
