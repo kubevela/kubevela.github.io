@@ -86,6 +86,7 @@ const config = {
           items: [
             {to: 'docs/', label: 'KubeVela'},
             {to: 'workflow/overview', label: 'Workflow'},
+            {to: 'velaux/overview', label: 'VelaUX'},
             {to: 'terraform/overview', label: 'Terraform'},
             {to: 'addons/overview', label: 'Addons'},
           ],
@@ -369,6 +370,24 @@ const config = {
           current: {label: 'Workflow 0.8', path: 'next'},
           '0.7': {label: 'Workflow 0.7'},
           '0.6': {label: 'Workflow 0.6'},
+        },
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        // VelaUX is versioned by its own releases, not by KubeVela's. Its one version for now is 1.9, the release the
+        // velaux addon installs; it is cut as a version when the VelaUX 1.12 docs start.
+        id: 'velaux',
+        path: 'velaux',
+        routeBasePath: 'velaux',
+        sidebarPath: require.resolve('./sidebar-velaux.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+        versions: {
+          // The banner reads "<site title> <label>", so the label carries the product name.
+          current: {label: 'VelaUX 1.9', banner: 'none'},
         },
       },
     ],
