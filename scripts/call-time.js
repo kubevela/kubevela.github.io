@@ -11,6 +11,13 @@ function dayKey(ms, timeZone) {
   );
 }
 
+// nextDayKey is the calendar date after an instant's, in a time zone. It steps
+// the date rather than the clock, as a day across a clock change is not 24 hours.
+function nextDayKey(ms, timeZone) {
+  const [y, m, d] = dayKey(ms, timeZone).split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1, d + 1)).toISOString().slice(0, 10);
+}
+
 // describeCallTime returns the words after "Join us for the community call",
 // including their leading punctuation.
 function describeCallTime(start, now, { timeZone, locale } = {}) {
@@ -23,11 +30,10 @@ function describeCallTime(start, now, { timeZone, locale } = {}) {
       .formatToParts(new Date(start))
       .find((p) => p.type === 'timeZoneName')?.value || '';
   const at = `at ${time}${zone ? ` ${zone}` : ''}`;
-  const day = 24 * 60 * 60 * 1000;
   if (dayKey(start, timeZone) === dayKey(now, timeZone)) {
     return ` today ${at}`;
   }
-  if (dayKey(start, timeZone) === dayKey(now + day, timeZone)) {
+  if (dayKey(start, timeZone) === nextDayKey(now, timeZone)) {
     return ` tomorrow ${at}`;
   }
   const date = ['weekday', 'day', 'month']
@@ -44,11 +50,10 @@ function callDate(start, { timeZone, locale } = {}) {
 // inBuildUp reports whether the time now is the day before a call or its day,
 // by the reader's calendar, and no more than an hour after it starts.
 function inBuildUp(start, now, { timeZone } = {}) {
-  const day = 24 * 60 * 60 * 1000;
   if (now >= start + 60 * 60 * 1000) {
     return false;
   }
-  return dayKey(start, timeZone) === dayKey(now, timeZone) || dayKey(start, timeZone) === dayKey(now + day, timeZone);
+  return dayKey(start, timeZone) === dayKey(now, timeZone) || dayKey(start, timeZone) === nextDayKey(now, timeZone);
 }
 
 module.exports = { describeCallTime, callDate, inBuildUp };

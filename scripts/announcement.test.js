@@ -101,6 +101,7 @@ const timeCases = [
   ['Tokyo, after midnight on the day', describeCallTime(start, at('2026-10-15T00:00:00Z'), { timeZone: 'Asia/Tokyo', locale: 'en-GB' }), ' tomorrow at 00:00 GMT+9'],
   ['started', describeCallTime(start, at('2026-10-15T15:10:00Z'), { timeZone: 'UTC' }), ' now'],
   ['two days ahead', describeCallTime(start, at('2026-10-13T12:00:00Z'), { timeZone: 'UTC', locale: 'en-GB' }), ', Thu 15 Oct at 15:00 UTC'],
+  ['California, late on the night the clocks go forward', describeCallTime(at('2027-03-14T17:00:00Z'), at('2027-03-14T07:30:00Z'), { timeZone: 'America/Los_Angeles', locale: 'en-US' }), ' tomorrow at 10:00 AM PDT'],
 ];
 for (const [name, got, want] of timeCases) {
   const ok = got === want;
@@ -116,6 +117,7 @@ const upCases = [
   ['Dublin, the day before', inBuildUp(start, at('2026-10-14T08:00:00Z'), { timeZone: 'Europe/Dublin' }) === true],
   ['Dublin, the morning of', inBuildUp(start, at('2026-10-15T07:00:00Z'), { timeZone: 'Europe/Dublin' }) === true],
   ['an hour in: over', inBuildUp(start, at('2026-10-15T16:00:00Z'), { timeZone: 'Europe/Dublin' }) === false],
+  ['California: the night before the clocks go forward', inBuildUp(at('2027-03-14T17:00:00Z'), at('2027-03-14T07:30:00Z'), { timeZone: 'America/Los_Angeles' }) === true],
   ['Tokyo: the day before is the 15th', inBuildUp(start, at('2026-10-14T16:00:00Z'), { timeZone: 'Asia/Tokyo' }) === true],
   ['card date', callDate(start, { timeZone: 'Europe/Dublin', locale: 'en-IE' }) === 'Thu 15 Oct at 16:00 IST'],
 ];
