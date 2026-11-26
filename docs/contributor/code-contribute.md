@@ -91,32 +91,7 @@ mv kustomize ~/kubevela/bin/
   go install github.com/onsi/ginkgo/v2/ginkgo@latest
   ```
 
-* kubebuilder v3.1.0+ and you need to manually install the dependency tools for unit test.
-
-<details>
-  <summary>Install Kubebuilder manually</summary>
-
-linux:
-
-```
-wget https://storage.googleapis.com/kubebuilder-tools/kubebuilder-tools-1.21.2-linux-amd64.tar.gz
-tar -zxvf  kubebuilder-tools-1.21.2-linux-amd64.tar.gz
-mkdir -p /usr/local/kubebuilder/bin
-sudo mv kubebuilder/bin/* /usr/local/kubebuilder/bin
-```
-
-macOS:
-
-```
-curl -O https://storage.googleapis.com/kubebuilder-tools/kubebuilder-tools-1.21.2-darwin-amd64.tar.gz
-tar -zxvf  kubebuilder-tools-1.21.2-darwin-amd64.tar.gz
-mkdir -p /usr/local/kubebuilder/bin
-sudo mv kubebuilder/bin/* /usr/local/kubebuilder/bin
-```
-
-For other OS or system architecture, please refer to https://storage.googleapis.com/kubebuilder-tools/
-
-</details>
+* envtest, the Kubernetes API server and etcd binaries the unit tests run against. Run `make envtest` once to install `setup-envtest`; `make unit-test-core` then downloads and uses the version it needs.
 
 
 * [CUElang](https://github.com/cue-lang/cue/blob/master/doc/install.md) v0.4.3+
