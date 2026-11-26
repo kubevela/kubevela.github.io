@@ -29,13 +29,13 @@ Do this before the docs version for vX.Y is cut. The full release checklist is i
 1. Create the folder `vX.Y/`.
 2. Copy `_template-minor.md` to `vX.Y/vX.Y.0.md` and fill it in.
 3. Write `vX.Y/index.md` by hand, using the previous minor's `index.md` as the model (status, Releases table, Pre-releases table). There is no template for it.
-4. In `../sidebar-release-notes.js`, add a `vX.Y.x` category at the top of the list, with `link: {type: 'doc', id: 'vX.Y/index'}` and `items: ['vX.Y/vX.Y.0']`. Copy the shape of the existing categories.
+4. In `../sidebar-release-notes.js`, add a `vX.Y.x` category right after `'overview'`, before the older categories (the list is newest first), with `link: {type: 'doc', id: 'vX.Y/index'}` and `items: ['vX.Y/vX.Y.0']`. Copy the shape of the existing categories.
 5. In `overview.md`, add a row for `vX.Y.x` at the top of the **Supported versions** table, and update the status of older lines.
 6. Add the upgrade guide for vX.Y. See [`../upgrade-guides/README.md`](../upgrade-guides/README.md).
 
 ## Add notes for a release line that has no folder
 
-The site has notes from v1.9 onwards. Older lines (v1.8 and earlier) link to their GitHub releases instead. To add notes for an older line, follow **Add a minor release** for that line: create its folder with an `index.md`, add its category to `../sidebar-release-notes.js` in version order, and add its row to `overview.md`.
+The site has notes from v1.9 onwards. Older lines (v1.8 and earlier) link to their GitHub releases instead. To add notes for an older line, follow **Add a minor release** for that line: create its folder with an `index.md`, add its category to `../sidebar-release-notes.js` in its place in the newest-first list (after the newer lines), and add its row to `overview.md`.
 
 ## Update an existing note
 
@@ -47,7 +47,7 @@ Edit the file in this folder. With `yarn start` running, the change shows in eve
   - another note in the same line: `./vX.Y.(Z-1).md`
   - another line's overview: `../vA.B/index.md`
   - the upgrade guide: `../../upgrade-guides/vX.Y/index.md` (add `#anchor` for a section)
-- To a regular docs page, use an absolute URL: `/docs/next/...` until the vX.Y docs version is cut, then `/docs/...`.
+- To a regular docs page, use an absolute URL. Use `/docs/next/...` while vX.Y is unreleased, because the page exists only in Next. Change it to `/docs/...` when the vX.Y docs version is cut. `/docs/...` always opens the latest docs version, so after a newer release it no longer shows vX.Y. That is usually what a reader wants. When the link must show how vX.Y behaved, use `/docs/vX.Y/...` once vX.Y is no longer the latest version (the latest version has no `/docs/vX.Y/` path).
 - To GitHub (PRs, releases, compare views), use the full `https://github.com/...` URL.
 
 ## Check your change

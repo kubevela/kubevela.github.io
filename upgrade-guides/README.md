@@ -30,7 +30,7 @@ Edit the file in this folder, for example when a patch release changes a step. W
 ## Links
 
 - To a release note or another guide, use a relative `.md` link, so the reader stays in the docs version they are in. From `vX.Y/index.md`: `../../release-notes/vX.Y/vX.Y.0.md`, `./config-migration.md`, `../vA.B/index.md`.
-- To a regular docs page, use an absolute URL: `/docs/next/...` until the vX.Y docs version is cut, then `/docs/...`.
+- To a regular docs page, use an absolute URL: `/docs/next/...` while vX.Y is unreleased, then `/docs/...` once its docs version is cut. `/docs/...` always opens the latest docs version. To show how vX.Y behaved after a newer release, use `/docs/vX.Y/...`. The full rule is in [`../release-notes/README.md`](../release-notes/README.md).
 
 ## Check and commit
 
