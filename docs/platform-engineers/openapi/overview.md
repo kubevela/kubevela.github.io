@@ -12,13 +12,13 @@ vela port-forward addon-velaux -n vela-system 8000:8000
 
 ### Login and get the token
 
-VelaUX has introduced [Json Web Token](https://jwt.io/) for authorization. As a result, you need to call the login API to complete the authentication and get the token. The following example logs in as the `admin` user, with the password set the first time VelaUX was opened.
+VelaUX has introduced [Json Web Token](https://jwt.io/) for authorization. As a result, you need to call the login API to complete the authentication and get the token. The following example logs in with the administrator account created the first time VelaUX was opened.
 
 ```bash
-curl -H Content-Type:application/json -X POST -d '{"username": "admin", "password":"<your-password>"}' http://127.0.0.1:8000/api/v1/auth/login
+curl -H Content-Type:application/json -X POST -d '{"username": "<your-username>", "password":"<your-password>"}' http://127.0.0.1:8000/api/v1/auth/login
 ```
 
-> `http://127.0.0.1:8000` is a demo address; replace it with the real address, and `<your-password>` with the admin password.
+> `http://127.0.0.1:8000` is a demo address; replace it with the real address, and `<your-username>` and `<your-password>` with the administrator's username and password.
 
 The expected output should be like this:
 

@@ -17,7 +17,7 @@ vela addon enable velaux
 Addon: velaux enabled Successfully.
 ```
 
-VelaUX 需要认证访问。默认的用户名是`admin`，默认密码是 **VelaUX12345**。请务必在第一次登录之后重新设置和保管好你的新密码。
+VelaUX 需要身份验证。首次打开时，它会要求你创建管理员账号：用户名、密码和邮箱。之后使用该用户名和密码登录。
 
 默认情况下， VelaUX 没有暴露任何端口。
 

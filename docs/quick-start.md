@@ -223,7 +223,7 @@ After finishing [the installation of VelaUX](./install.mdx#2-install-velaux), yo
   vela port-forward addon-velaux -n vela-system 8080:8000
   ```
 
-* VelaUX needs authentication. The first time you open it, it asks you to set the password for the `admin` user. After that, log in as `admin` with that password.
+* VelaUX needs authentication. The first time you open it, it asks you to create the administrator account: a username, a password and an email. After that, log in with that username and password.
 
 * Check the resources deployed
 

@@ -69,13 +69,20 @@ If you're using v1.3, the default password is in the secret:
 kubectl get secret admin -n vela-system
 ```
 
-From v1.4, there is no default password: the first time you open VelaUX, it asks you to set the password for the `admin` user. To change it later, use the user settings in VelaUX.
+If you're using v1.4 to v1.7, the default password is `VelaUX12345`, and you must change it after the first login.
 
-If you forget it, delete the admin user and restart VelaUX. The next time you open it, it asks you to set the password again.
+From v1.8, there is no default password: the first time you open VelaUX, it asks you to create the administrator account (a username, a password and an email). To change the password later, use the user settings in VelaUX.
+
+If you forget it and another administrator exists, they can reset your password from the Users page.
+
+If the administrator is the only user, you can delete it and restart VelaUX. With no users left, the next time you open VelaUX it asks you to create the administrator account again. Only do this when the administrator is the only user: VelaUX offers the first-visit setup only when there are no users at all, so on an install with other users, deleting the administrator leaves no way to create a new one.
 
 ```bash
-# Delete the admin user. With MongoDB as the datastore, delete it from MongoDB instead.
-kubectl delete cm usr-admin -n kubevela
+# Find the administrator's ConfigMap, named usr-<admin-username>
+kubectl get cm -n kubevela | grep '^usr-'
+
+# Delete the administrator. With MongoDB as the datastore, delete it from MongoDB instead.
+kubectl delete cm usr-<admin-username> -n kubevela
 
 # Restart VelaUX
 kubectl delete pod -l app.oam.dev/component=velaux-server -n vela-system
