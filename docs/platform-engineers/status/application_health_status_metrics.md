@@ -87,16 +87,18 @@ sum by (namespace) (kubevela_application_health_status)
 
 **Phase Mappings**:
 
+The phase is the Application's `status.status`, the string `vela status` and the controller logs show.
+
 | Phase | Numeric Value | Description |
 |-------|---------------|-------------|
 | `starting` | 0 | Application is initializing |
 | `running` | 1 | Application is running normally |
 | `rendering` | 2 | Application is rendering components |
-| `policy_generating` | 3 | Application is generating policies |
-| `running_workflow` | 4 | Application workflow is executing |
-| `workflow_suspending` | 5 | Application workflow is suspended |
-| `workflow_terminated` | 6 | Application workflow was terminated |
-| `workflow_failed` | 7 | Application workflow failed |
+| `generatingPolicy` | 3 | Application is generating policies |
+| `runningWorkflow` | 4 | Application workflow is executing |
+| `workflowSuspending` | 5 | Application workflow is suspended |
+| `workflowTerminated` | 6 | Application workflow was terminated |
+| `workflowFailed` | 7 | Application workflow failed |
 | `unhealthy` | 8 | Application is unhealthy |
 | `deleting` | 9 | Application is being deleted |
 | unknown/other | -1 | Unknown or undefined phase |

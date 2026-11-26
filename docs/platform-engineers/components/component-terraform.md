@@ -8,9 +8,15 @@ platform engineers need to prepare ComponentDefinitions for cloud resources if e
 
 Here is the guide to create Terraform typed ComponentDefinitions of cloud resources for cloud providers Alibaba Cloud, AWS and Azure.
 
-# Prerequisites
+## Prerequisites
 
 - [`vela` binary](../advanced-install.mdx#install-vela-cli)
+- The Terraform addon, and the addon for your cloud provider (`terraform-aws` here), which the component needs when it runs:
+
+  ```shell
+  vela addon enable terraform
+  vela addon enable terraform-aws
+  ```
 
 ## Develop a Terraform resource or module
 
@@ -58,7 +64,7 @@ $ vela def init -h
       --local string           Specify the local path of the configuration(HCL) file. Valid when --provider/-p is set.
 ```
 
-We use `--local` to accept Terraform resource or module from a local file to generate a ComponentDefinition.
+We use `--local` to accept Terraform resource or module from a local file to generate a ComponentDefinition. `--provider` prefixes the name, so `s3` becomes `aws-s3`.
 
 ```shell
 $ vela def init s3 --type component --provider aws --desc "Terraform configuration for AWS S3" --local aws_s3_bucket.tf

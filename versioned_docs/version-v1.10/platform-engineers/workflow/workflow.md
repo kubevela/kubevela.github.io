@@ -4,7 +4,7 @@ slug: /platform-engineers/workflow/workflow
 ---
 
 :::tip
-Before reading this section, make sure you have understood the concept of [WorkflowStepDefinition](../oam/x-definition.md#WorkflowStepDefinition) in KubeVela and learned the [basic knowledge of CUE](../cue/basic.md).
+Before reading this section, make sure you have understood the concept of [WorkflowStepDefinition](../oam/x-definition.md#workflowstepdefinition) in KubeVela and learned the [basic knowledge of CUE](../cue/basic.md).
 :::
 
 
@@ -12,18 +12,18 @@ In this section, we will introduce how to customize the workflow step in Applica
 
 ## Deliver a simple workflow step
 
-We can generate `WorkflowStepDefinition` CUE file with command `vela def <def-name> --type workflow-step > <def-name>.cue`.
+We can generate a `WorkflowStepDefinition` CUE file with the command `vela def init <def-name> --type workflow-step > <def-name>.cue`.
 
-Let's take a custom step for sending an HTTP request as an example, first, initialize the Definition file:
+Let's take a custom step for sending an HTTP request as an example. KubeVela already ships a step called `request`, so we call ours `my-request` to keep from overwriting it. First, initialize the Definition file:
 
 ```shell
-vela def init request --type workflow-step --desc "Send request to the url" > request.cue
+vela def init my-request --type workflow-step --desc "Send request to the url" > my-request.cue
 ```
 
-After initialization, we can see the following in `request.cue`:
+After initialization, we can see the following in `my-request.cue`:
 
 ```cue
-request: {
+"my-request": {
 	alias: ""
 	annotations: {}
 	attributes: {}
@@ -61,7 +61,7 @@ import (
 	"encoding/json"
 )
 
-request: {
+"my-request": {
 	alias: ""
 	annotations: {}
 	attributes: {}
@@ -100,7 +100,7 @@ import (
 	"encoding/json"
 )
 
-request: {
+"my-request": {
 	alias: ""
 	annotations: {}
 	attributes: {}
@@ -139,7 +139,7 @@ template: {
 }
 ```
 
-Use `vela def apply -f request.cue` to deploy this Definition to the cluster, then we can use this custom step directly in the Application.
+Use `vela def apply my-request.cue` to deploy this Definition to the cluster, then we can use this custom step directly in the Application.
 
 Deploy the following Application: The first step of the workflow will send an HTTP request to get the information of the KubeVela repository; at the same time, this step will use the star number of the KubeVela repository as the Output, the next step will use this Output as a parameter, and sent it as message to the Slack:
 
@@ -158,7 +158,7 @@ spec:
   workflow:
     steps:
     - name: request
-      type: request
+      type: my-request
       properties:
         url: https://api.github.com/repos/kubevela/kubevela
       outputs:
@@ -177,29 +177,30 @@ spec:
             value: <your slack url>
 ```
 
-## Custom Health Checks
+## Wait for a condition
 
-If you want to wait a period of time in a workflow step until a certain condition is met, or until the status of a resource becomes ready, you can use `op.#ConditionalWait`.
+If you want to wait in a workflow step until a certain condition is met, or until the status of a resource becomes ready, use `#ConditionalWait`.
 
-Take the status of waiting for a Deployment as an example, use `op.#Apply` to deploy a Deployment, and then use `op.#ConditionalWait` to wait for the status of the Deployment to become ready:
+Take waiting for a Deployment as an example: use `kube.#Apply` from `vela/kube` to deploy a Deployment, then use `builtin.#ConditionalWait` from `vela/builtin` to wait until it is ready. Actions in these packages take their inputs under `$params` and fill in their results under `$returns`:
 
 ```cue
 import (
-	"vela/op"
+	"vela/builtin"
+	"vela/kube"
 )
 
-"apply-deployment": {
+"apply-my-deployment": {
 	alias: ""
 	annotations: {}
 	attributes: {}
-	description: ""
+	description: "Apply a Deployment and wait for it to be ready"
 	labels: {}
 	type: "workflow-step"
 }
 
 template: {
-	output: op.#Apply & {
-		value: {
+	apply: kube.#Apply & {
+		$params: value: {
 			apiVersion: "apps/v1"
 			kind:       "Deployment"
 			metadata: {
@@ -207,9 +208,9 @@ template: {
 				namespace: context.namespace
 			}
 			spec: {
-				selector: matchLabels: wr: context.stepName
+				selector: matchLabels: "app.oam.dev/name": context.appName
 				template: {
-					metadata: labels: wr: context.stepName
+					metadata: labels: "app.oam.dev/name": context.appName
 					spec: containers: [{
 						name:  context.stepName
 						image: parameter.image
@@ -221,8 +222,8 @@ template: {
 			}
 		}
 	}
-	wait: op.#ConditionalWait & {
-		continue: output.value.status.readyReplicas == 1
+	wait: builtin.#ConditionalWait & {
+		$params: continue: apply.$returns.value.status.readyReplicas == 1
 	}
 	parameter: {
 		image: string
@@ -239,8 +240,8 @@ In a workflow step definition, you can use the following context data:
 
 |     Context Variable     |                         Description                          |  Type  |
 | :----------------------: | :----------------------------------------------------------: | :----: |
-|      `context.name`      |                 The name of the Application.                 | string |
 |    `context.appName`     |                 The name of the Application.                 | string |
+|      `context.name`      | The name of the Application, the same as `context.appName`. Prefer `appName`: in component and trait templates `context.name` is the component's name. | string |
 |   `context.namespace`    |              The namespace of the Application.               | string |
 |  `context.appRevision`   |               The revision of the Application.               | string |
 |    `context.stepName`    |                  The name of current step.                   | string |

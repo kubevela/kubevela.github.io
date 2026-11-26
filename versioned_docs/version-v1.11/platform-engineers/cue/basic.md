@@ -4,24 +4,16 @@ title: CUE Basic
 
 In this section, we will explain more about how KubeVela use CUE to encapsulate and abstract a given capability in Kubernetes in detail.
 
-We'll start from some basic CUE knowledge first, if you don't have any idea of [KubeVela Concept](../../getting-started/core-concept.md), don't worry! This doc is available for anyone who want to learn how to use CUE in practice quickly.
+You don't need to know KubeVela's concepts to follow this page; it covers the CUE you need to read and write definitions.
 
 ## Overview
 
-The reasons for KubeVela supports CUE as a first-class solution to design abstraction can be concluded as below:
-
-- **CUE is designed for large scale configuration.** CUE has the ability to understand a
- configuration worked on by engineers across a whole company and to safely change a value that modifies thousands of objects in a configuration. This aligns very well with KubeVela's original goal to define and ship production level applications at web scale.
-- **CUE supports first-class code generation and automation.** CUE can integrate with existing tools and workflows naturally while other tools would have to build complex custom solutions. For example, generate OpenAPI schemas with Go code. This is how KubeVela build developer tools and GUI interfaces based on the CUE templates.
-- **CUE integrates very well with Go.**
- KubeVela is built with GO just like most projects in Kubernetes system. CUE is also implemented in and exposes a rich API in Go. KubeVela integrates with CUE as its core library and works as a Kubernetes controller. With the help of CUE, KubeVela can easily handle data constraint problems.
-
-> Pleas also check [The Configuration Complexity Curse](https://blog.cedriccharly.com/post/20191109-the-configuration-complexity-curse/) and [The Logic of CUE](https://cuelang.org/docs/concepts/logic/) for more details.
+KubeVela uses CUE because it combines schema and values in one language, validates configuration at scale, and is a Go library the controller can embed. For the ideas behind it, see [The Logic of CUE](https://cuelang.org/docs/concepts/logic/).
 
 ## Prerequisites
 
 Please make sure below CLIs are present in your environment:
-* [`cue` v0.2.2+](https://cuelang.org/docs/install/).
+* [`cue` v0.14.1](https://cuelang.org/docs/install/), the version this KubeVela release builds with.
 * [`vela` v1.0.0+](../../install.mdx).
 
 :::caution
@@ -95,7 +87,7 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
     cue export first.cue
     ```
     ```console
-    e: cannot convert incomplete value "string" to JSON:
+    e: incomplete value string:
         ./first.cue:9:4
     ```
   We can complete the value by giving a value to `e`, for example:
@@ -148,7 +140,7 @@ CUE has powerful CLI commands. Let's keep the data in a file named `first.cue` a
     }
     ```
 
-For now, you have learned all useful CUE cli operations.
+Those are the CUE CLI commands you need for the rest of this page.
 
 ## CUE Language Basic
 
@@ -504,7 +496,7 @@ output: {
         }
     }
     ```
-  - If clause in Loop {}
+  - If clause in Loop {}. Save this as `loop.cue`:
   ```cue
   parameter: [
 	{
@@ -522,12 +514,12 @@ output: {
   ```
   the result is:
   ```console
-  cue eval ../blog/a.cue -e dataFrom
+  cue eval loop.cue -e dataFrom
   [{}, {
     name: "xx1"
   }]
   ```
-  - If clause in Loop with condition
+  - If clause in Loop with condition. Replace `loop.cue` with:
   ```cue
   parameter: [
 	{
@@ -543,7 +535,7 @@ output: {
   ```
   the result is:
   ```console
-  cue eval ../blog/a.cue -e dataFrom
+  cue eval loop.cue -e dataFrom
   [{
     name: "xx1"
   }]
@@ -551,7 +543,7 @@ output: {
 
 ## Import CUE Internal Packages
 
-CUE has many [internal packages](https://pkg.go.dev/cuelang.org/go@v0.2.2/pkg) which also can be used in KubeVela.
+CUE has many [internal packages](https://pkg.go.dev/cuelang.org/go@v0.14.1/pkg) which also can be used in KubeVela.
 
 Below is an example that use `strings.Join` to `concat` string list to one string. 
 
@@ -573,7 +565,12 @@ output: {
 }
 ```
 
-Great, now you've learned all of the basic skills and best practices about how to use CUE! 
+## What you can now read
+
+With these basics you can read and write the CUE in:
+
+* a [Component Definition](../components/custom-component.md), whose `output` and `parameter` use the structs, defaults, conditionals and loops above;
+* the [built-in definitions](./definition-edit.md) you get with `vela def get`.
 
 If you want to learn more details of CUE, you can refer to [the CUE official documentation](https://cuelang.org/) or [the well documented tutorials](https://cuetorials.com/introduction/).
 

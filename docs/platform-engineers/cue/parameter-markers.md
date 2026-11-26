@@ -11,6 +11,8 @@ KubeVela supports special comment markers in CUE `parameter` blocks that control
 | `// +usage=<description>` | Any field | Sets the human-readable description shown in the UI and `vela show` output |
 | `// +short=<alias>` | Any field | Provides a short alias for the field name |
 | `// +immutable` | Any field | Prevents the field from being changed or removed after the Application is first created |
+| `// +ignore` | Any field | Hides the field from `vela show`, the generated reference docs and `vela init`'s prompts |
+| `// +ui:<key>=<value>` | Any field | Tells VelaUX how to show the field in its form; see [UI hints](#ui-hints) |
 
 ## The `+usage` Marker
 
@@ -140,6 +142,67 @@ Remove the annotation after the update to re-enable immutability enforcement.
 ### OpenAPI schema extension
 
 When KubeVela generates the OpenAPI v3 schema for a definition (stored in the `schema-<name>` ConfigMap), fields marked `// +immutable` will have the `x-immutable: true` extension set on their schema entry.
+
+## The `+ignore` Marker
+
+The `// +ignore` marker hides a parameter from the CLI: `vela show`, the reference docs `vela def doc-gen` generates, and the prompts of `vela init`. Use it for a field the platform sets and end users shouldn't need to see. The field is still part of the definition: an Application can set it, and it stays in the OpenAPI schema.
+
+```cue
+template: {
+    parameter: {
+        // +usage=Container image to run
+        image: string
+        // +ignore
+        // +usage=Sidecar image, set by the platform team
+        sidecarImage: *"registry.example.com/proxy:1.4" | string
+    }
+}
+```
+
+## UI hints
+
+A `// +ui:<key>=<value>` line tells VelaUX how to render the parameter in the form it builds from the definition. Put one hint per line, next to `+usage`. KubeVela copies the hints into the `x-vela-ui` extension of the parameter's OpenAPI schema, and applies them to the default UI schema it generates for VelaUX. An unknown key is ignored. The hints need KubeVela 1.12 and a VelaUX that reads them; every key is listed in [`+ui:` markers](../../reference/ui-schema.md#ui-markers).
+
+```cue
+template: {
+    parameter: {
+        // +usage=Database password
+        // +ui:type=Password
+        // +ui:section=Database
+        password: string
+
+        // +usage=Ports to expose
+        // +ui:format=table
+        // +ui:rowKey=port
+        ports: [...{
+            port:     int
+            protocol: *"TCP" | "UDP"
+        }]
+
+        // +usage=Extra annotations for the Deployment
+        // +ui:advanced
+        annotations?: [string]: string
+    }
+}
+```
+
+| Hint | Value | Effect |
+| --- | --- | --- |
+| `type` | A VelaUX widget name, such as `Input`, `Password`, `Select`, `Switch` or `KV` | Overrides the widget the field's type implies |
+| `label` | Text | The field's label, in place of its capitalised name |
+| `placeholder` | Text | Shown in an empty input |
+| `error` | Text | The message shown when a value fails the field's constraints, in place of one naming the raw constraint |
+| `section` | A section name | Shows the field in that collapsible section of the form |
+| `advanced` | None, or `true` | Puts the field behind the Advanced toggle. Once any field in a form sets it, only those that do are hidden |
+| `hidden` | None, or `true` | Leaves the field out of the form |
+| `order` | A number | Places the field at that position among its siblings, ahead of declaration order |
+| `colSpan` | A number | The field's width in the form's responsive layout |
+| `format` | `table` | Lays out a list of structs as a table, one row per item |
+| `rowKey` | A field name | For a list, the field that identifies a row: unique, and the row's title |
+| `itemLabel` | A field name | For a list, the field that titles each item |
+| `optionsFrom` | `configs:<template>`, `clusters` or `envs` | Reads the field's choices when the form opens |
+| `suggest` | Comma-separated values | Offers these values without limiting the field to them |
+| `expression` | `never` | The field must be a literal value, even in an Application that uses `$( )` expressions |
 
 ## Next
 

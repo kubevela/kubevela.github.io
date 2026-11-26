@@ -4,11 +4,16 @@ title:  Component Definition
 
 In this section, we will introduce how to use [CUE](../cue/basic.md) to customize components via `ComponentDefinition`. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition.md) and [how to manage definition](../cue/definition-edit.md).
 
+Most examples on this page are in the CUE format, applied with `vela def apply`; the few in Kubernetes YAML are whole `...Definition` objects. [The Definition File](../oam/definition-file.md) shows the two formats side by side.
+
+A component definition is a CUE template that renders Kubernetes objects from what a user writes in an Application. It renders two things:
+
+- `output` is the main workload. Traits patch it, and health checks read it as `context.output`.
+- `outputs` holds everything else the component needs, such as a Service, each under a name unique within the component.
+
 ## Declare `ComponentDefinition`
 
-First, generate `ComponentDefinition` scaffolds via `vela def init` with existed YAML file.
-
-The YAML file:
+Start from YAML you know works. Here is a minimal Deployment:
 
 ```yaml title="stateless.yaml"
 apiVersion: "apps/v1"
@@ -22,12 +27,12 @@ spec:
       labels:
         "app.oam.dev/component": "name"
     spec:
-      containers: 
+      containers:
       - name: "name"
         image: "image"
 ```
 
-Generate `ComponentDefinition` based on the YAML file:
+Generate a `ComponentDefinition` scaffold from it with `vela def init`:
 
 ```shell
 vela def init stateless -t component --template-yaml ./stateless.yaml -o stateless.cue
@@ -68,50 +73,57 @@ template: {
 ```
 
 In detail:
-- The `stateless` is the name of component definition, it can be defined by yourself when initialize the component.
-- `stateless.attributes.workload` indicates the workload type of this component, it can help integrate with traits that apply to this kind of workload.
-- `template` is a CUE template, specifically:
-    * The `output` and `outputs` fields define the resources that the component will be composed.
-    * The `parameter` field defines the parameters of the component, i.e. the configurable properties exposed in the `Application` (and schema will be automatically generated based on them for end users to learn this component).
+- `stateless` is the name of the component definition, the type users write in an Application.
+- `stateless.attributes.workload` names the kind of workload the component renders, so traits can declare which workloads they apply to.
+- `template` is the CUE template:
+    * `output` and `outputs` define the resources the component renders.
+    * `parameter` defines what users can set in the Application's `properties`. KubeVela generates the schema users see from it.
 
-Add parameters in this auto-generated custom component file :
+### Make it a template
 
-```cue
+Now replace the literals. The name comes from the Application: `context.name` is the name of the component, so a component called `hello` renders a Deployment, a container and a selector all called `hello`, and the user never types it twice. The image and replica count are parameters. A `// +usage=` comment above a parameter is the description users see in `vela show` and VelaUX.
+
+```cue title="stateless.cue"
 stateless: {
 	annotations: {}
 	attributes: workload: definition: {
 		apiVersion: "apps/v1"
 		kind:       "Deployment"
 	}
-	description: ""
+	description: "A stateless service run as a Deployment."
 	labels: {}
 	type: "component"
 }
 
 template: {
 	output: {
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
 		spec: {
-			selector: matchLabels: "app.oam.dev/component": parameter.name
+			replicas: parameter.replicas
+			selector: matchLabels: "app.oam.dev/component": context.name
 			template: {
-				metadata: labels: "app.oam.dev/component": parameter.name
+				metadata: labels: "app.oam.dev/component": context.name
 				spec: containers: [{
-					name:  parameter.name
+					name:  context.name
 					image: parameter.image
 				}]
 			}
 		}
-		apiVersion: "apps/v1"
-		kind:       "Deployment"
 	}
 	outputs: {}
 	parameter: {
-    name: string
-    image: string
-  }
+		// +usage=The container image to run
+		image: string
+		// +usage=How many pods to run
+		replicas: *1 | int & >=0
+	}
 }
 ```
 
-You can use `vela def vet` to validate the format:
+`image: string` has no default, so users must set it. `replicas: *1 | int & >=0` defaults to 1 and refuses a negative number.
+
+Check the file with `vela def vet`:
 
 ```shell
 vela def vet stateless.cue
@@ -121,11 +133,11 @@ vela def vet stateless.cue
 <summary>expected output</summary>
 
 ```
-Validation succeed.
+Validation stateless.cue succeed.
 ```
 </details>
 
-Apply above `ComponentDefinition` to your Kubernetes cluster to make it work:
+Apply the `ComponentDefinition` to your cluster:
 
 ```shell
 vela def apply stateless.cue
@@ -139,9 +151,9 @@ ComponentDefinition stateless created in namespace vela-system.
 ```
 </details>
 
-Then the end user can check the schema and use it in an application now:
+Users can now see its schema and use it in an Application:
 
-```
+```shell
 vela show stateless
 ```
 
@@ -150,236 +162,188 @@ vela show stateless
 
 ```
 # Specification
-+-------+-------------+--------+----------+---------+
-| NAME  | DESCRIPTION |  TYPE  | REQUIRED | DEFAULT |
-+-------+-------------+--------+----------+---------+
-| name  |             | string | true     |         |
-| image |             | string | true     |         |
-+-------+-------------+--------+----------+---------+
++----------+-----------------------------+--------+----------+---------+
+|   NAME   |         DESCRIPTION         |  TYPE  | REQUIRED | DEFAULT |
++----------+-----------------------------+--------+----------+---------+
+| image    | The container image to run  | string | true     |         |
+| replicas | How many pods to run        | int    | false    | 1       |
++----------+-----------------------------+--------+----------+---------+
 ```
 </details>
 
-
-Declare another component named `task` which is an abstraction for run-to-completion workload works the same.
+A run-to-completion workload works the same way. The `task` component below renders a Job.
 
 <details>
-<summary>Check the details for another example to define a task based component.</summary>
+<summary>A <code>task</code> component based on a Job</summary>
 
 ```shell
 vela def init task -t component -o task.cue
 ```
 
-It generates a file:
+Edit the generated file:
 
-```cue
-// $ cat task.cue
-task: {
-	annotations: {}
-	attributes: workload: definition: {
-		apiVersion: "<change me> apps/v1"
-		kind:       "<change me> Deployment"
-	}
-	description: ""
-	labels: {}
-	type: "component"
-}
-
-template: {
-	output: {}
-	parameter: {}
-}
-```
-
-Edit the generated component file:
-
-```cue
+```cue title="task.cue"
 task: {
 	annotations: {}
 	attributes: workload: definition: {
 		apiVersion: "batch/v1"
 		kind:       "Job"
 	}
-	description: ""
+	description: "A run-to-completion task run as a Job."
 	labels: {}
 	type: "component"
 }
 
 template: {
-  output: {
-    apiVersion: "batch/v1"
-    kind:       "Job"
-    spec: {
-      parallelism: parameter.count
-      completions: parameter.count
-      template: spec: {
-        restartPolicy: parameter.restart
-        containers: [{
-          image: parameter.image
-          if parameter["cmd"] != _|_ {
-            command: parameter.cmd
-          }
-        }]
-      }
-    }
-  }
+	output: {
+		apiVersion: "batch/v1"
+		kind:       "Job"
+		spec: {
+			parallelism: parameter.count
+			completions: parameter.count
+			template: spec: {
+				restartPolicy: parameter.restart
+				containers: [{
+					name:  context.name
+					image: parameter.image
+					if parameter.cmd != _|_ {
+						command: parameter.cmd
+					}
+				}]
+			}
+		}
+	}
 	parameter: {
-    count:   *1 | int
-    image:   string
-    restart: *"Never" | string
-    cmd?: [...string]
-  }
+		// +usage=How many pods to run, and how many must succeed
+		count: *1 | int
+		// +usage=The container image to run
+		image: string
+		// +usage=The pod restart policy
+		restart: *"Never" | "OnFailure"
+		// +usage=The command to run in the container
+		cmd?: [...string]
+	}
 }
 ```
 
-Apply above `ComponentDefinition` files to your Kubernetes cluster to make it work:
+`cmd?` is optional, so the template only sets `command` when the user gave one: `parameter.cmd != _|_` is true when the field exists. Every container needs a `name`, or the API server refuses the Job.
+
+Apply it:
 
 ```shell
-$ vela def apply task.cue
+vela def apply task.cue
+```
+
+```
 ComponentDefinition task created in namespace vela-system.
 ```
 </details>
 
-Now let's use the `stateless` and `task` component type.
-
 ## Declare an `Application` using this component
 
-The `ComponentDefinition` can be instantiated in `Application` abstraction as below:
+Use the `stateless` and `task` types in an Application:
 
-  ```yaml
-  apiVersion: core.oam.dev/v1beta1
-  kind: Application
-  metadata:
-    name: website
-  spec:
-    components:
-      - name: hello
-        type: stateless
-        properties:
-          image: oamdev/hello-world
-          name: mysvc
-      - name: countdown
-        type: task
-        properties:
-          image: centos:7
-          cmd:
-            - "bin/bash"
-            - "-c"
-            - "for i in 9 8 7 6 5 4 3 2 1 ; do echo $i ; done"
-  ```
+```yaml title="website.yaml"
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: website
+spec:
+  components:
+    - name: hello
+      type: stateless
+      properties:
+        image: oamdev/hello-world
+    - name: countdown
+      type: task
+      properties:
+        image: centos:7
+        cmd:
+          - "bin/bash"
+          - "-c"
+          - "for i in 9 8 7 6 5 4 3 2 1 ; do echo $i ; done"
+```
 
 <details>
-<summary> Learn Details Under The Hood </summary>
+<summary>What the Application renders</summary>
 
-Above application resource will generate and manage following Kubernetes resources in your target cluster based on the `output` in CUE template and user input in `Application` properties.
+KubeVela renders these objects from the templates and the Application's properties. Each object, and each container, takes its name from the component:
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
-  ... # skip tons of metadata info
+  name: hello
+  ... # labels and annotations KubeVela adds
 spec:
-  template:
-    spec:
-      containers:
-        - name: mysvc
-          image: oamdev/hello-world
-    metadata:
-      labels:
-        app.oam.dev/component: mysvc
+  replicas: 1
   selector:
     matchLabels:
-      app.oam.dev/component: mysvc
+      app.oam.dev/component: hello
+  template:
+    metadata:
+      labels:
+        app.oam.dev/component: hello
+    spec:
+      containers:
+        - name: hello
+          image: oamdev/hello-world
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: countdown
-  ... # skip tons of metadata info
+  ... # labels and annotations KubeVela adds
 spec:
   parallelism: 1
   completions: 1
   template:
-    metadata:
-      name: countdown
     spec:
       containers:
         - name: countdown
-          image: 'centos:7'
+          image: centos:7
           command:
             - bin/bash
-            - '-c'
+            - -c
             - for i in 9 8 7 6 5 4 3 2 1 ; do echo $i ; done
       restartPolicy: Never
-```  
+```
 </details>
 
-You can also use [dry run](../debug/dry-run.md) to show what the yaml results will be rendered for debugging.
+Use [dry run](../debug/dry-run.md) to see what an Application renders without deploying it.
 
 
 ## CUE `Context` for runtime information
 
-KubeVela allows you to reference the runtime information of your application via `context` keyword.
-
-The most widely used context is application name(`context.appName`) component name(`context.name`).
+`context` holds what KubeVela knows about the Application at render time. You don't declare it in the template; KubeVela fills it in before it renders. The fields used most are the Application name (`context.appName`) and the component name (`context.name`), which the examples above use for every name:
 
 ```cue
 context: {
-  appName: string
-  name: string
+	appName: string
+	name:    string
 }
 ```
 
-For example, let's say you want to use the component name filled in by users as the container name in the workload instance:
-
-```cue
-parameter: {
-    image: string
-}
-output: {
-  ...
-    spec: {
-        containers: [{
-            name:  context.name
-            image: parameter.image
-        }]
-    }
-  ...
-}
-```
-
-:::tip
-Note that `context` information are auto-injected before resources are applied to target cluster.
-:::
-
-The list of [all available context variables](#full-available-context-in-component) are listed at last of this doc.
+The [full list of context variables](#full-available-context-in-component) is at the end of this page.
 
 ## Compose resources in one component
 
-It's common that a component definition is composed by multiple API resources, for example, a `webserver` component that is composed by a Deployment and a Service. CUE is a great solution to achieve this in simplified primitives.
-
-:::tip
-Compare to [using Helm](../../tutorials/helm.md), this approach gives your more flexibility as you can control the abstraction any time and integrate with traits, workflows in KubeVela better.
-:::
-
-KubeVela requires you to define the template of main workload in `output` section, and leave all the other resource templates in `outputs` section with format as below:
+A component often needs more than one object: a `webserver` is a Deployment and the Service in front of it. Put the main workload in `output` and every other object in `outputs`, each under a name unique within the component:
 
 ```cue
 output: {
-  <template of main workload structural data>
+	<template of the main workload>
 }
 outputs: {
-  <unique-name>: {
-    <template of auxiliary resource structural data>
-  }
+	<unique-name>: {
+		<template of another resource>
+	}
 }
 ```
 
-:::note
-The reason for this requirement is KubeVela needs to know it is currently rendering a workload so it could do some "magic" by traits such like patching annotations/labels or other data during it.
-:::
+`output` is the main workload: traits patch it, and health checks read it as `context.output`.
 
-Below is the example for `webserver` definition, let's use a demo to show how to use it: 
+Here is the `webserver` definition. It sets the Service's `metadata.name` to the component name; an object in `outputs` without a name gets a generated one, which nothing else can address.
 
 ```cue title="webserver.cue"
 webserver: {
@@ -388,93 +352,79 @@ webserver: {
 		apiVersion: "apps/v1"
 		kind:       "Deployment"
 	}
-	description: ""
+	description: "A web server: a Deployment and a Service in front of it."
 	labels: {}
 	type: "component"
 }
 
 template: {
-  output: {
-    apiVersion: "apps/v1"
-    kind:       "Deployment"
-    spec: {
-      selector: matchLabels: {
-        "app.oam.dev/component": context.name
-      }
-      template: {
-        metadata: labels: {
-          "app.oam.dev/component": context.name
-        }
-        spec: {
-          containers: [{
-            name:  context.name
-            image: parameter.image
-
-            if parameter["cmd"] != _|_ {
-              command: parameter.cmd
-            }
-
-            if parameter["env"] != _|_ {
-              env: parameter.env
-            }
-
-            if context["config"] != _|_ {
-              env: context.config
-            }
-
-            ports: [{
-              containerPort: parameter.port
-            }]
-
-            if parameter["cpu"] != _|_ {
-              resources: {
-                limits:
-                  cpu: parameter.cpu
-                requests:
-                  cpu: parameter.cpu
-              }
-            }
-          }]
-        }
-      }
-    }
-  }
-  // an extra template
-  outputs: service: {
-    apiVersion: "v1"
-    kind:       "Service"
-    spec: {
-      selector: {
-        "app.oam.dev/component": context.name
-      }
-      ports: [
-        {
-          port:       parameter.port
-          targetPort: parameter.port
-        },
-      ]
-    }
-  }
+	output: {
+		apiVersion: "apps/v1"
+		kind:       "Deployment"
+		spec: {
+			replicas: parameter.replicas
+			selector: matchLabels: "app.oam.dev/component": context.name
+			template: {
+				metadata: labels: "app.oam.dev/component": context.name
+				spec: containers: [{
+					name:  context.name
+					image: parameter.image
+					ports: [{
+						containerPort: parameter.port
+					}]
+					if parameter.cmd != _|_ {
+						command: parameter.cmd
+					}
+					if parameter.env != _|_ {
+						env: parameter.env
+					}
+					if parameter.cpu != _|_ {
+						resources: {
+							limits: cpu:   parameter.cpu
+							requests: cpu: parameter.cpu
+						}
+					}
+				}]
+			}
+		}
+	}
+	outputs: service: {
+		apiVersion: "v1"
+		kind:       "Service"
+		metadata: name: context.name
+		spec: {
+			selector: "app.oam.dev/component": context.name
+			ports: [{
+				port:       parameter.port
+				targetPort: parameter.port
+			}]
+		}
+	}
 	parameter: {
-    image: string
-    cmd?: [...string]
-    port: *80 | int
-    env?: [...{
-      name:   string
-      value?: string
-      valueFrom?: {
-        secretKeyRef: {
-          name: string
-          key:  string
-        }
-      }
-    }]
-    cpu?: string
-  }
+		// +usage=The container image to run
+		image: string
+		// +usage=How many pods to run
+		replicas: *1 | int & >=0
+		// +usage=The port the container listens on, and the Service exposes
+		port: *80 | int
+		// +usage=The command to run in the container
+		cmd?: [...string]
+		// +usage=Environment variables for the container
+		env?: [...{
+			name:   string
+			value?: string
+			valueFrom?: secretKeyRef: {
+				name: string
+				key:  string
+			}
+		}]
+		// +usage=CPU request and limit, for example 100m
+		cpu?: string
+	}
 }
 ```
 
-Apply to your Kubernetes cluster:
+Apply it to your cluster:
 
 ```shell
 vela def apply webserver.cue
@@ -488,7 +438,7 @@ ComponentDefinition webserver created in namespace vela-system.
 ```
 </details>
 
-The user could now declare an `Application` with it:
+Users can now declare an `Application` with it:
 
 ```yaml title="webserver-app.yaml"
 apiVersion: core.oam.dev/v1beta1
@@ -509,13 +459,13 @@ spec:
         cpu: "100m"
 ```
 
-Create this application by:
+Create the Application:
 
-```
+```shell
 vela up -f webserver-app.yaml
 ```
 
-Then you can check the resources and find the results:
+Then check the resources it created:
 
 ```shell
 vela status webserver-demo --tree --detail
@@ -525,14 +475,14 @@ vela status webserver-demo --tree --detail
 <summary>expected output</summary>
 
 ```console
-CLUSTER       NAMESPACE     RESOURCE                                             STATUS    APPLY_TIME          DETAIL
-local     ─── default   ─┬─ Service/hello-webserver-auxiliaryworkload-685d98b6d9 updated   2022-10-15 21:58:35 Type: ClusterIP
-                         │                                                                                     Cluster-IP: 10.43.255.55
-                         │                                                                                     External-IP: <none>
-                         │                                                                                     Port(s): 8000/TCP
-                         │                                                                                     Age: 66s
-                         └─ Deployment/hello-webserver                           updated   2022-10-15 21:58:35 Ready: 1/1  Up-to-date: 1
-                                                                                                               Available: 1  Age: 66s
+CLUSTER       NAMESPACE     RESOURCE                       STATUS    APPLY_TIME          DETAIL
+local     ─── default   ─┬─ Service/hello-webserver        updated   2022-10-15 21:58:35 Type: ClusterIP
+                         │                                                               Cluster-IP: 10.43.255.55
+                         │                                                               External-IP: <none>
+                         │                                                               Port(s): 8000/TCP
+                         │                                                               Age: 66s
+                         └─ Deployment/hello-webserver     updated   2022-10-15 21:58:35 Ready: 1/1  Up-to-date: 1
+                                                                                         Available: 1  Age: 66s
 ```
 </details>
 

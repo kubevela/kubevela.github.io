@@ -2,35 +2,34 @@
 title:  Trait Definition
 ---
 
-In this section we will introduce how to define a custom trait with CUE. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition.md) and [how to manage definition](../cue/definition-edit.md).
+A trait adds operational behaviour to a component: extra resources such as a Service or an Ingress, or a patch to the component's own workload, such as a sidecar. This page shows how to write a TraitDefinition in CUE. Make sure you know the [definition concept](../../getting-started/definition.md) and [how to manage definitions](../cue/definition-edit.md) first.
+
+Most examples on this page are in the CUE format, applied with `vela def apply`; the few in Kubernetes YAML are whole `...Definition` objects. [The Definition File](../oam/definition-file.md) shows the two formats side by side.
+
+The examples here use the CUE file format that `vela def` reads and converts into a TraitDefinition object; [the last section](#the-traitdefinition-object) shows the object it becomes.
 
 :::tip
 To build a trait on top of an existing TraitDefinition instead of copying its template, see [Definition Inheritance](../cue/definition-inheritance.md#traits-that-extend-traits).
 :::
 
-## Generate a Trait scaffold
+## Generate a trait scaffold
 
-A trait can be something similar to component, while they're attached operational resources.
+Start from a scaffold:
 
-- Kubernetes API resources like ingress, service, rollout.
-- The composition of these operational resources.
-- A patch of data, for example, patch sidecar to workload.
-
-Let's use `vela def init` to create a basic trait scaffold:
-
-```
+```shell
 vela def init my-route -t trait --desc "My ingress route trait." > myroute.cue
 ```
 
-The content of the scaffold expected to be:
+It writes:
 
 ```cue
-// $ cat myroute.cue
 "my-route": {
+	alias: ""
 	annotations: {}
 	attributes: {
 		appliesToWorkloads: []
 		conflictsWith: []
+		definitionRef: {}
 		podDisruptive:   false
 		workloadRefPath: ""
 	}
@@ -38,46 +37,37 @@ The content of the scaffold expected to be:
 	labels: {}
 	type: "trait"
 }
-
 template: {
 	patch: {}
 	parameter: {}
 }
 ```
 
-:::caution
-There's a bug in vela CLI(`<=1.4.2`), the `vela def init` command will generate `definitionRef: ""` in `attributes` which is wrong, please remove that line.
-:::
+The empty fields are safe to leave in or delete.
 
-## Define a trait to compose resources
+## Create resources from a trait
 
-Unlike component definition, KubeVela requires objects in traits **MUST** be defined in `outputs` section (not `output`) in CUE template with format as below:
+A trait declares the resources it creates under `outputs`, one entry per resource, each with a unique name:
 
 ```cue
 outputs: {
-  <unique-name>: {
-    <template of trait resource structural data>
-  }
+	<unique-name>: {
+		<the Kubernetes object>
+	}
 }
 ```
 
-:::tip
-Actually the CUE template of trait here will be evaluated with component CUE template in the same context, so the name can't be conflict. That also explain why the `output` can't be defined in trait.
-:::
+A trait has no `output`. Its template is evaluated together with the component's template, and `output` there is the component's workload, so the trait's names must not clash with it.
 
-Below is an example that we combine `ingress` and `service` of Kubernetes into our `my-route` trait.
+This `my-route` trait creates a Service and an Ingress for its component:
 
 ```cue
 "my-route": {
-	annotations: {}
 	attributes: {
-		appliesToWorkloads: []
-		conflictsWith: []
-		podDisruptive:   false
-		workloadRefPath: ""
+		appliesToWorkloads: ["deployments.apps"]
+		podDisruptive: false
 	}
 	description: "My ingress route trait."
-	labels: {}
 	type: "trait"
 }
 
@@ -87,13 +77,12 @@ template: {
 		http: [string]: int
 	}
 
-	// trait template can have multiple outputs in one trait
 	outputs: service: {
 		apiVersion: "v1"
 		kind:       "Service"
+		metadata: name: context.name
 		spec: {
-			selector:
-				app: context.name
+			selector: "app.oam.dev/component": context.name
 			ports: [
 				for k, v in parameter.http {
 					port:       v
@@ -104,39 +93,35 @@ template: {
 	}
 
 	outputs: ingress: {
-		apiVersion: "networking.k8s.io/v1beta1"
+		apiVersion: "networking.k8s.io/v1"
 		kind:       "Ingress"
-		metadata:
-			name: context.name
-		spec: {
-			rules: [{
-				host: parameter.domain
-				http: {
-					paths: [
-						for k, v in parameter.http {
-							path: k
-							backend: {
-								serviceName: context.name
-								servicePort: v
-							}
-						},
-					]
-				}
-			}]
-		}
+		metadata: name: context.name
+		spec: rules: [{
+			host: parameter.domain
+			http: paths: [
+				for k, v in parameter.http {
+					path:     k
+					pathType: "ImplementationSpecific"
+					backend: service: {
+						name: context.name
+						port: number: v
+					}
+				},
+			]
+		}]
 	}
 }
 ```
 
-Apply to our control plane to make this trait work:
+The Service selects pods by `app.oam.dev/component`, because that is the label the built-in component types such as `webservice` put on the pods they create. `context.name` in a trait is the name of the component it is attached to.
 
-```
+Apply it:
+
+```shell
 vela def apply myroute.cue
 ```
 
-Then our end users can discover it immediately and attach this trait to any component instance in `Application`.
-
-After using `vela up` by the following command:
+Users can now attach it to a component:
 
 ```shell
 cat <<EOF | vela up -f -
@@ -149,10 +134,8 @@ spec:
     - name: express-server
       type: webservice
       properties:
-        cmd:
-          - node
-          - server.js
         image: oamdev/testapp:v1
+        cmd: ["node", "server.js"]
         port: 8080
       traits:
         - type: my-route
@@ -163,19 +146,11 @@ spec:
 EOF
 ```
 
-It will generate Kubernetes resources by KubeVela.
+KubeVela creates the Deployment for the component, then the `express-server` Service and Ingress from the trait.
 
-With the help of CUE, we can achieve many advanced features in trait.
+### Create several resources with a loop
 
-### Render Multiple Resources With a Loop
-
-You can define the for-loop inside the `outputs`.
-
-:::note
-In this case the type of `parameter` field used in the for-loop must be a map. 
-:::
-
-Below is an example that will render multiple Kubernetes Services in one trait:
+A `for` loop inside `outputs` creates one resource per entry. The loop needs a map to range over, so the parameter is a map here:
 
 ```cue
 "expose": {
@@ -191,9 +166,9 @@ template: {
 			"\(k)": {
 				apiVersion: "v1"
 				kind:       "Service"
+				metadata: name: k
 				spec: {
-					selector:
-						app: context.name
+					selector: "app.oam.dev/component": context.name
 					ports: [{
 						port:       v
 						targetPort: v
@@ -205,7 +180,7 @@ template: {
 }
 ```
 
-The usage of this trait could be:
+Each key becomes a Service:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -217,7 +192,10 @@ spec:
     - name: express-server
       type: webservice
       properties:
-        ...
+        image: oamdev/testapp:v1
+        ports:
+          - port: 8080
+          - port: 8081
       traits:
         - type: expose
           properties:
@@ -226,67 +204,13 @@ spec:
               myservice2: 8081
 ```
 
-### Execute HTTP Request in Trait Definition
+## Read the component's resources
 
-The trait definition can send a HTTP request and capture the response to help you rendering the resource with keyword `processing`.
+A trait can read what its component rendered: `context.output` is the component's workload, and `context.outputs.<name>` is each of the component's other resources, by the name the ComponentDefinition gave it in `outputs`.
 
-You can define HTTP request `method`, `url`, `body`, `header` and `trailer` in the `processing.http` section, and the returned data will be stored in `processing.output`.
+KubeVela renders a component before its traits, so these are always there for a trait to read.
 
-:::tip
-Please ensure the target HTTP server returns a **JSON data** as `output`.
-:::
-
-Then you can reference the returned data from `processing.output` in `patch` or `output/outputs`.
-
-Below is an example:
-
-```cue
-"auth-service": {
-	type: "trait"
-}
-
-template: {
-	parameter: {
-		serviceURL: string
-	}
-
-	processing: {
-		output: {
-			token?: string
-		}
-		// The target server will return a JSON data with `token` as key.
-		http: {
-			method: *"GET" | string
-			url:    parameter.serviceURL
-			request: {
-				body?: bytes
-				header: {}
-				trailer: {}
-			}
-		}
-	}
-
-	patch: {
-		data: token: processing.output.token
-	}
-}
-```
-
-In above example, this trait definition will send request to get the `token` data, and then patch the data to given component instance.
-
-## CUE `Context` for runtime information
-
-A trait definition can read the generated resources (rendered from `output` and `outputs`) of given component definition.
-
-:::caution
-Generally, KubeVela will ensure the component definitions are evaluated before its traits. But there're a [stage mechanism](https://github.com/kubevela/kubevela/pull/4570) that allow trait be deployed before component.
-:::
-
-Specifically, the `context.output` contains the rendered workload API resource (whose GVK is indicated by `spec.workload`in component definition), and use `context.outputs.<xx>` to contain all the other rendered API resources.
-
-Let's use an example to see this feature:
-
-1. Let's define a component definition `myworker` like below:
+Take a `myworker` ComponentDefinition that renders a Deployment and a ConfigMap:
 
 ```cue
 "myworker": {
@@ -302,27 +226,20 @@ template: {
 		apiVersion: "apps/v1"
 		kind:       "Deployment"
 		spec: {
-			selector: matchLabels: {
-				"app.oam.dev/component": context.name
-			}
-
+			selector: matchLabels: "app.oam.dev/component": context.name
 			template: {
-				metadata: labels: {
-					"app.oam.dev/component": context.name
-				}
-				spec: {
-					containers: [{
-						name:  context.name
-						image: parameter.image
-						ports: [{containerPort: parameter.port}]
-						envFrom: [{
-							configMapRef: name: context.name + "game-config"
-						}]
-						if parameter["cmd"] != _|_ {
-							command: parameter.cmd
-						}
+				metadata: labels: "app.oam.dev/component": context.name
+				spec: containers: [{
+					name:  context.name
+					image: parameter.image
+					ports: [{containerPort: parameter.port}]
+					envFrom: [{
+						configMapRef: name: context.name + "-game-config"
 					}]
-				}
+					if parameter["cmd"] != _|_ {
+						command: parameter.cmd
+					}
+				}]
 			}
 		}
 	}
@@ -330,9 +247,7 @@ template: {
 	outputs: gameconfig: {
 		apiVersion: "v1"
 		kind:       "ConfigMap"
-		metadata: {
-			name: context.name + "game-config"
-		}
+		metadata: name: context.name + "-game-config"
 		data: {
 			enemies: parameter.enemies
 			lives:   parameter.lives
@@ -352,14 +267,12 @@ template: {
 }
 ```
 
-2. Define a new `myingress` trait that read the port.
+A `myingress` trait for it reads the container port from the Deployment and a value from the ConfigMap:
 
 ```cue
 "myingress": {
 	type: "trait"
-  attributes: {
-		appliesToWorkloads: ["myworker"]
-  }
+	attributes: appliesToWorkloads: ["myworker"]
 }
 
 template: {
@@ -368,61 +281,94 @@ template: {
 		path:       string
 		exposePort: int
 	}
-	// trait template can have multiple outputs in one trait
+
 	outputs: service: {
 		apiVersion: "v1"
 		kind:       "Service"
+		metadata: name: context.name
 		spec: {
-			selector:
-				app: context.name
+			selector: "app.oam.dev/component": context.name
 			ports: [{
 				port:       parameter.exposePort
 				targetPort: context.output.spec.template.spec.containers[0].ports[0].containerPort
 			}]
 		}
 	}
+
 	outputs: ingress: {
-		apiVersion: "networking.k8s.io/v1beta1"
+		apiVersion: "networking.k8s.io/v1"
 		kind:       "Ingress"
-		metadata:
-				name: context.name
-		labels: config: context.outputs.gameconfig.data.enemies
-		spec: {
-			rules: [{
-				host: parameter.domain
-				http: {
-					paths: [{
-						path: parameter.path
-						backend: {
-							serviceName: context.name
-							servicePort: parameter.exposePort
-						}
-					}]
+		metadata: {
+			name: context.name
+			labels: config: context.outputs.gameconfig.data.enemies
+		}
+		spec: rules: [{
+			host: parameter.domain
+			http: paths: [{
+				path:     parameter.path
+				pathType: "ImplementationSpecific"
+				backend: service: {
+					name: context.name
+					port: number: parameter.exposePort
 				}
 			}]
-		}
+		}]
 	}
 }
 ```
 
-In detail, The trait `myingress` can only apply to the specific ComponentDefinition `myworker`:
+`context.output` here is the rendered Deployment, before it is applied, so it has no `status`. To read the live object, such as its ready replicas, run the trait in the [`PostDispatch` stage](./postdispatch-traits.md).
 
-1. the rendered Kubernetes Deployment resource will be stored in the `context.output`,
-2. all other rendered resources will be stored in `context.outputs.<xx>`, with `<xx>` is the unique name in every `template.outputs`.
+## Call an HTTP endpoint while rendering
 
-Thus, in TraitDefinition `myingress`, it can read the rendered API resources (e.g. `context.outputs.gameconfig.data.enemies`) from the `context` and get the `targetPort` and `labels.config`.
+A trait can fetch data over HTTP while it renders and use the answer in its `patch` or `outputs`. Describe the request in `processing.http`; the response body, which must be a JSON object, lands in `processing.output`.
 
-## Patch Trait
+This `token-annotation` trait looks up a token's ID and records it as an annotation on the component's workload:
 
-Besides generate objects from trait, one more important thing we can do in trait is to patch or override the configuration of
- Component. But why do we need to patch or override?
+```cue
+"token-annotation": {
+	type: "trait"
+}
 
-There're several reasons:
+template: {
+	parameter: {
+		serviceURL: string
+	}
 
-1. The component could be defined by another person, for separation of concern, the operator can attach an operational trait to change that data.
-2. The component could be defined by third party which is not controlled by the one who use it.
+	processing: {
+		// The service answers with a JSON object such as {"id": "tok-123"}.
+		output: {
+			id?: string
+		}
+		http: {
+			method: *"GET" | string
+			url:    parameter.serviceURL
+			request: {
+				timeout: "5s"
+				header: Accept: "application/json"
+			}
+		}
+	}
 
-So KubeVela allow patch or override in this case, please refer to [patch trait](./patch-trait.md) for more details. As trait and workflow step can both patch, so we write them together.
+	patch: metadata: annotations: "example.com/token-id": processing.output.id
+}
+```
+
+`processing.http` takes `method`, `url` and an optional `request` with `timeout`, `body`, `header` and `trailer`; header and trailer values are strings. A request with no `header` is sent with `Content-Type: application/json`.
+
+The request runs from the KubeVela controller each time the Application renders, and holds a reconcile worker while it waits, so it is bounded the same way a workflow HTTP request is (see [HTTP limits](../workflow/workflow.md#http-limits)):
+
+| Limit | Default | Set with |
+| --- | --- | --- |
+| Timeout | 3s when `request.timeout` is unset | `request.timeout`, a duration such as `"10s"`, up to the controller's `--max-workflow-http-timeout` (default `60s`). A longer or non-positive value fails the render. |
+| Response size | 1 MiB | The controller's `--max-workflow-http-response-bytes`. A longer body fails the render. |
+| Destinations | Cloud metadata addresses (`169.254.0.0/16`, `metadata.google.internal` and similar) are always refused | Add more with ConfigMaps from the `vela-core-http-deny` ConfigTemplate in the controller's namespace. The `BlockPrivateHTTPAddresses` feature gate also refuses private ranges, and `DisableWorkflowHTTP` turns outbound HTTP off. |
+
+When the request fails, the trait fails to render with `invalid process of trait <name>`, and the Application reports the error.
+
+## Patch the component
+
+Besides creating resources, a trait can patch the component's workload, for example to add a sidecar or set resource limits that the component's author didn't expose. That keeps operational settings with the team that owns them. Patching has its own rules for merging lists and overriding fields; see [Patch Traits](./patch-trait.md), which also covers patching from a workflow step.
 
 :::tip
 A patch unifies with whatever workload it meets, so it can conflict with one you did not expect.
@@ -430,72 +376,29 @@ A patch unifies with whatever workload it meets, so it can conflict with one you
 with `#TraitRender` for the patch and `#TraitStatus` for its health.
 :::
 
-## Define Health for Trait
-> **MOVED**: Please refer to [Definition Health & Status](../status/definition_health_status.md).
+## Choose when a trait is dispatched
 
-## Full available `context` in Trait
+`spec.stage` (`stage` under `attributes` in the CUE format) decides when a trait's resources are applied relative to its component:
 
+| Stage | Applied |
+| --- | --- |
+| `PreDispatch` | First. The component's workload and default-stage traits wait until these resources are healthy. |
+| `DefaultDispatch` | With the component's workload. This is the default when `stage` is unset. |
+| `PostDispatch` | Once the component's workload is healthy, rendered with the live workload in `context.output`. See [PostDispatch Traits](./postdispatch-traits.md). |
 
-|         Context Variable         |                                                                         Description                                                                         |    Type    |
-|:--------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------:|
-|        `context.appName`         |                                           The app name corresponding to the current instance of the application.                                            |   string   |
-|       `context.namespace`        | The target namespace of the current resource is going to be deployed, it can be different with the namespace of application if overridden by some policies. |   string   |
-|        `context.cluster`         |  The target cluster of the current resource is going to be deployed, it can be different with the namespace of application if overridden by some policies.  |   string   |
-|      `context.appRevision`       |                                       The app version name corresponding to the current instance of the application.                                        |   string   |
-|     `context.appRevisionNum`     |                                      The app version number corresponding to the current instance of the application.                                       |    int     |
-|          `context.name`          |                                        The component name corresponding to the current instance of the application.                                         |   string   |
-|        `context.revision`        |                                                     The version name of the current component instance.                                                     |   string   |
-|         `context.output`         |                                               The object structure after instantiation of current component.                                                | Object Map |
-| `context.outputs.<resourceName>` |                                           Structure after instantiation of current component auxiliary resources.                                           | Object Map |
-|      `context.workflowName`      |                                                         The workflow name specified in annotation.                                                          |   string   |
-|     `context.publishVersion`     |                                                The version of application instance specified in annotation.                                                 |   string   |
-|       `context.components`       |                                                The object structure of components spec  in this application.                                                | Object Map |
-|       `context.appLabels`        |                                                       The labels of the current application instance.                                                       | Object Map |
-|     `context.appAnnotations`     |                                                    The annotations of the current application instance.                                                     | Object Map |
+## Context in a trait {#full-available-context-in-trait}
 
-### Cluster Version
+A trait reads the same `context` as its component, plus `context.traitType` and the component's rendered `context.output` and `context.outputs`. `context.name` is the component's name.
 
-|          Context Variable           |                         Description                         |  Type  |
-|:-----------------------------------:|:-----------------------------------------------------------:|:------:|
-|   `context.clusterVersion.major`    |    The major version of the runtime Kubernetes cluster.     | string |
-| `context.clusterVersion.gitVersion` |      The gitVersion of the runtime Kubernetes cluster.      | string |
-|  `context.clusterVersion.platform`  | The platform information of the runtime Kubernetes cluster. | string |
-|   `context.clusterVersion.minor`    |    The minor version of the runtime Kubernetes cluster.     |  int   |
+Every field, and which definition kinds can read it, is in the [Context Reference](../context-reference.md).
 
-The cluster version context info can be used for graceful upgrade of definition. For example, you can define different API according to the cluster version.
+## Health and status
 
-```
- outputs: ingress: {
-	if context.clusterVersion.minor < 19 {
-		apiVersion: "networking.k8s.io/v1beta1"
-	}
-	if context.clusterVersion.minor >= 19 {
-		apiVersion: "networking.k8s.io/v1"
-	}
-	kind: "Ingress"
-}
-```
+A trait can report its own health and a status message. See [Definition Health & Status](../status/definition_health_status.md).
 
-Or use string contain pattern for this usage:
+## The TraitDefinition object
 
-```
-import "strings"
-
-if strings.Contains(context.clusterVersion.gitVersion, "k3s") {
-     provider: "k3s"
-}
-if strings.Contains(context.clusterVersion.gitVersion, "aliyun") {
-     provider: "aliyun"
-}
-```
-
-
-## Trait definition in Kubernetes
-
-KubeVela is fully programmable via CUE, while it leverage Kubernetes as control plane and align with the API in yaml.
-As a result, the CUE definition will be converted as Kubernetes API when applied into cluster.
-
-The trait definition will be in the following API format:
+Definitions are Kubernetes objects. You can write them as YAML, or as CUE files that `vela def` converts. `vela def apply myroute.cue` creates a TraitDefinition like this:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -505,339 +408,37 @@ metadata:
   annotations:
     definition.oam.dev/description: <function description>
 spec:
-  definition:
-    apiVersion: <corresponding Kubernetes resource group>
-    kind: <corresponding Kubernetes resource type>
-  workloadRefPath: <The path to the reference field of the Workload object in the Trait>
-  podDisruptive: <whether the parameter update of Trait cause the underlying resource (pod) to restart>
-  manageWorkload: <Whether the workload is managed by this Trait>
-  skipRevisionAffect: <Whether this Trait is not included in the calculation of version changes>
+  definitionRef:            # the CRD that provides this trait, if any
+    name: <CRD name, e.g. ingresses.networking.k8s.io>
+  extends: <TraitDefinition this one builds on>
+  abstract: <true if the trait may only be extended, never used directly>
   appliesToWorkloads:
-  - <Workload that TraitDefinition can adapt to>
+    - <workload types this trait can be attached to>
   conflictsWith:
-  - <other Traits that conflict with this><>
-  revisionEnabled: <whether Trait is aware of changes in component version>
-  controlPlaneOnly: <Whether resources generated by trait are dispatched to the hubcluster (local)>
-  schematic:  # Abstract
-    cue: # There are many abstracts
+    - <traits that can't sit on the same component as this one>
+  podDisruptive: <true if adding or changing the trait restarts pods>
+  workloadRefPath: <field of the trait object that gets a reference to the workload>
+  revisionEnabled: <true if the trait is aware of component revisions>
+  manageWorkload: <true if the trait is responsible for creating the workload>
+  controlPlaneOnly: <true to dispatch the trait's resources to the hub cluster only>
+  stage: <PreDispatch, DefaultDispatch (the default) or PostDispatch>
+  version: <semantic version of this definition>
+  module: <module this definition was published in>
+  apiVersion: <API line of that module, e.g. v1>
+  restrictions:             # which namespaces may use the trait
+    namespaces: [<namespace>]
+  status:
+    customStatus: <CUE for the status message>
+    healthPolicy: <CUE for the health check>
+    details: <CUE for status details>
+  extension: <free-form data for platform builders>
+  schematic:
+    cue:
       template: <CUE format template>
 ```
 
-You can check the detail of this format [here](../oam/x-definition.md).
+Each field is described in [X-Definition](../oam/x-definition.md#traitdefinition).
 
-## PostDispatch Traits
+## More examples
 
-`PostDispatch` is a trait execution stage that allows a trait to run **after its parent component workload is healthy**. This is useful when a trait needs to read live runtime data from the component — such as replica counts, assigned IPs, or generation metadata — that only becomes available once the workload is up and running.
-
-### How It Works
-
-In a normal trait dispatch flow, traits are rendered and applied alongside their component. PostDispatch traits are different: the controller holds them back until the component's health check passes, then injects the live `context.output` (the component's current Kubernetes resource state) into the trait's CUE rendering context before applying it.
-
-This means your PostDispatch trait template has access to fields like `context.output.status.replicas`, `context.output.status.readyReplicas`, `context.output.metadata.generation`, etc. — values that are only meaningful after the workload exists in the cluster.
-
-**Execution order:**
-
-```
-Component workload applied → health check passes → PostDispatch trait rendered with live output → PostDispatch trait applied
-```
-
-### Defining a PostDispatch Trait
-
-Set `spec.stage: PostDispatch` in your `TraitDefinition`. The trait can then reference `context.output` in its CUE template to access the live state of the component workload.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  name: status-cm-trait
-spec:
-  stage: PostDispatch
-  schematic:
-    cue:
-      template: |
-        outputs: statusConfigMap: {
-          apiVersion: "v1"
-          kind: "ConfigMap"
-          metadata: {
-            name: context.name + "-status"
-            namespace: context.namespace
-            labels: {
-              "replica-count": "\(context.output.status.replicas)"
-            }
-          }
-          data: {
-            replicas:      "\(context.output.status.replicas)"
-            componentName: context.name
-          }
-        }
-```
-
-Notice that `context.output.status.replicas` is used directly — this field is only available at runtime after the workload is deployed, which is why this trait must be `PostDispatch`.
-
-### Health Policy in PostDispatch Traits
-
-PostDispatch traits support `status.healthPolicy`, and the health check runs in the same way as for components. You can reference both the trait's own outputs (`context.outputs.<name>`) and the parent component's live output (`context.output`) in the health policy.
-
-The example below uses a ConfigMap created by the trait, checks its `replicas` data field, and marks the trait unhealthy when replicas equal `"2"` (a custom signal that the workload is in a transitional state):
-
-```yaml
-  status:
-    healthPolicy: |-
-      cm: context.outputs.statusConfigMap
-      isHealth: (cm != _|_ && cm.data != _|_ && cm.data.replicas != _|_ && cm.data.replicas != "2")
-```
-
-### Full Example
-
-The following example defines two `TraitDefinition`s and a `ComponentDefinition`, then wires them together in an `Application`.
-
-**`test-deployment-trait`** is a PostDispatch trait that creates a secondary Deployment seeded from trait parameters. Its health policy checks that the Deployment's replicas are all ready.
-
-**`test-cm-trait`** is a PostDispatch trait that creates a ConfigMap reflecting the live replica count of the parent component. Its health policy validates the ConfigMap's data.
-
-**`test-worker`** is a ComponentDefinition that creates a Deployment with configurable replicas.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  name: test-deployment-trait
-spec:
-  stage: PostDispatch
-  schematic:
-    cue:
-      template: |
-        outputs: statusPod: {
-          apiVersion: "apps/v1"
-          kind: "Deployment"
-          metadata: {
-            name: parameter.name
-          }
-          spec: {
-            replicas: 1
-            selector: matchLabels: {
-              app: parameter.name
-            }
-            template: {
-              metadata: labels: {
-                app: parameter.name
-              }
-              spec: containers: [{
-                name: parameter.name
-                image: parameter.image
-              }]
-            }
-          }
-        }
-
-        parameter: {
-          name:  string
-          image: string
-        }
-  status:
-    healthPolicy: |-
-      pod: context.outputs.statusPod
-      ready: {
-        updatedReplicas:    *0 | int
-        readyReplicas:      *0 | int
-        replicas:           *0 | int
-        observedGeneration: *0 | int
-      } & {
-        if pod.status.updatedReplicas != _|_ {
-            updatedReplicas: pod.status.updatedReplicas
-        }
-        if pod.status.readyReplicas != _|_ {
-            readyReplicas: pod.status.readyReplicas
-        }
-        if pod.status.replicas != _|_ {
-            replicas: pod.status.replicas
-        }
-        if pod.status.observedGeneration != _|_ {
-            observedGeneration: pod.status.observedGeneration
-        }
-      }
-      _isHealth: (pod.spec.replicas == ready.readyReplicas) && (pod.spec.replicas == ready.updatedReplicas) && (pod.spec.replicas == ready.replicas) && (ready.observedGeneration == pod.metadata.generation || ready.observedGeneration > pod.metadata.generation)
-      isHealth: _isHealth
-      if pod.metadata.annotations != _|_ {
-        if pod.metadata.annotations["app.oam.dev/disable-health-check"] != _|_ {
-            isHealth: true
-        }
-      }
----
-apiVersion: core.oam.dev/v1beta1
-kind: TraitDefinition
-metadata:
-  name: test-cm-trait
-spec:
-  stage: PostDispatch
-  schematic:
-    cue:
-      template: |
-        outputs: statusConfigMap: {
-          apiVersion: "v1"
-          kind: "ConfigMap"
-          metadata: {
-            name: context.name + "-status"
-            namespace: context.namespace
-            labels: {
-              "labeltest": "\(context.output.status.replicas)"
-              "hello":     "world"
-            }
-          }
-          data: {
-            replicas:      "\(context.output.status.replicas)"
-            componentName: context.name
-          }
-        }
-  status:
-    healthPolicy: |-
-      cm: context.outputs.statusConfigMap
-      isHealth: (cm != _|_ && cm.data != _|_ && cm.data.replicas != _|_ && cm.data.replicas != "2")
----
-apiVersion: core.oam.dev/v1beta1
-kind: ComponentDefinition
-metadata:
-  name: test-worker
-spec:
-  schematic:
-    cue:
-      template: |
-        output: {
-          apiVersion: "apps/v1"
-          kind: "Deployment"
-          metadata: {
-            name: parameter.name
-            labels: {
-              app: parameter.name
-            }
-          }
-          spec: {
-            replicas: parameter.replicas
-            selector: matchLabels: {
-              app: parameter.name
-            }
-            template: {
-              metadata: labels: {
-                app: parameter.name
-              }
-              spec: containers: [{
-                name:  parameter.name
-                image: parameter.image
-              }]
-            }
-          }
-        }
-
-        parameter: {
-          name:     string
-          image:    string
-          replicas: int
-        }
-  status:
-    healthPolicy: 'isHealth: context.output.status.readyReplicas > 0'
-  workload:
-    definition:
-      apiVersion: apps/v1
-      kind: Deployment
----
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: pdapp
-  namespace: default
-spec:
-  components:
-    - name: test-deployment
-      type: test-worker
-      properties:
-        image: nginx:1.21
-        name: test-deployment
-        replicas: 3
-      traits:
-        - type: test-deployment-trait
-          properties:
-            name:  trait-deployment
-            image: nginx:1.21
-        - type: test-cm-trait
-```
-
-When this Application is applied:
-
-1. The `test-worker` component creates a Deployment with 3 replicas.
-2. Once the Deployment is healthy (at least 1 ready replica), the controller dispatches the two PostDispatch traits.
-3. `test-deployment-trait` creates a second Deployment (`trait-deployment`) using the parameters supplied in the trait.
-4. `test-cm-trait` creates a ConfigMap (`test-deployment-status`) whose `data.replicas` and label reflect the live replica count read from `context.output.status.replicas`.
-
-### Available Context in PostDispatch Traits
-
-In addition to the [standard trait context fields](customize-trait#full-available-context-in-trait), PostDispatch traits have access to `context.output`, which is the full live Kubernetes resource object of the parent component at the time the trait is dispatched.
-
-| Field | Description |
-|---|---|
-| `context.output` | Full live resource object of the parent component workload |
-| `context.output.status` | Status subresource (e.g. `replicas`, `readyReplicas`, `conditions`) |
-| `context.output.metadata` | Metadata of the live resource (e.g. `generation`, `annotations`) |
-| `context.output.spec` | Spec of the live resource |
-
-### Observing PostDispatch Trait Status
-
-PostDispatch traits surface their status eagerly in `Application.status.services[*].traits[*]` — even before the overall workflow finishes — so you can always see an accurate, up-to-date picture of each trait without waiting for all components to be healthy.
-
-#### While the component workload is unhealthy
-
-If the component cannot reach a healthy state (for example, due to a bad image), PostDispatch traits attached to it are held back and will appear in `vela status` with an explicit pending reason rather than being silently absent:
-
-```
-Services:
-  - Name: test-deployment
-    Health: ❌
-    Traits:
-      Type: scaler
-      Health: ✅
-
-      Type: test-deployment-trait
-      Pending: true
-      Message: ⏳ Waiting for component to be healthy
-
-      Type: test-cm-trait
-      Pending: true
-      Message: ⏳ Waiting for component to be healthy
-```
-
-#### During a multi-component workflow
-
-In applications with multiple components, the workflow phase stays `runningWorkflow` until every component is healthy. Before this feature, PostDispatch trait status for already-healthy components could be missing until the entire workflow finished. Now, trait status is surfaced as soon as the trait is dispatched, regardless of what other components are doing:
-
-```
-Workflow:
-  phase: runningWorkflow
-
-Services:
-  - Name: test-deployment1       # still unhealthy
-    Health: ❌
-    Traits:
-      Type: expose
-      Message: ⏳ Waiting for component to be healthy
-
-  - Name: test-deployment        # already healthy — PostDispatch traits visible immediately
-    Traits:
-      Type: scaler
-      Health: ✅
-      Type: test-deployment-trait
-      Health: ✅
-      Type: test-cm-trait
-      Health: ✅
-      Type: expose
-      Health: ✅
-```
-
-#### Pending → healthy transition
-
-When a component that was previously unhealthy becomes healthy, its PostDispatch traits are dispatched and their status transitions automatically from `Pending` to the result of their own health policy evaluation. No manual intervention is required.
-
-## More examples to learn
-
-You can check the following resources for more examples:
-
-- Builtin trait definitions in the [KubeVela github repo](https://github.com/kubevela/kubevela/tree/master/vela-templates/definitions/internal/trait).
-- Definitions defined in addons in the [catalog repo](https://github.com/kubevela/catalog/tree/master/addons).
+The built-in trait definitions are in the [KubeVela repository](https://github.com/kubevela/kubevela/tree/master/vela-templates/definitions/internal/trait).
