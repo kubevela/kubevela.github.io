@@ -216,7 +216,7 @@ Great! You have finished deploying your first KubeVela application, you can also
 
 ## Manage application with UI Console
 
-After finishing [the installation of VelaUX](./install.mdx#2-install-velaux), you can view and manage the application created.
+After finishing [the installation of VelaUX](./reference/addons/velaux.md#install), you can view and manage the application created.
 
 * Port forward the UI if you don't have endpoint for access:
   ```

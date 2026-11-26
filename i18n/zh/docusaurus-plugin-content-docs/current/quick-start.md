@@ -165,7 +165,7 @@ Hello KubeVela! Make shipping applications more enjoyable.
 
 ## 基于 UI 管理应用
 
-如果你已完成 [VelaUX 安装](./install.mdx#2-install-velaux)， 你可以通过 UI 来管理和可视化应用。
+如果你已完成 [VelaUX 安装](./reference/addons/velaux.md#安装插件)， 你可以通过 UI 来管理和可视化应用。
 
 本地测试模式下通过下述命令即可打开 UI 界面。
 
