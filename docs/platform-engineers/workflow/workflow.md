@@ -177,6 +177,12 @@ spec:
             value: <your slack url>
 ```
 
+:::tip
+A workflow step can be tested without an Application or a real cluster: `vela def test` runs it
+against a local API server, with calls that would leave it, such as HTTP, answered by mocks. See
+[Testing workflow steps](../cue/definition-testing.md#testing-workflow-steps).
+:::
+
 ## Custom Health Checks
 
 If you want to wait a period of time in a workflow step until a certain condition is met, or until the status of a resource becomes ready, you can use `op.#ConditionalWait`.

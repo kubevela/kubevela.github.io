@@ -1,6 +1,6 @@
-const { Component } = require('react');
+const {withReleases} = require('./sidebars-releases.js');
 
-module.exports = {
+const sidebars = {
   docs: [
     {
       type: 'category',
@@ -30,6 +30,10 @@ module.exports = {
               label: 'Kubernetes',
               id: 'installation/kubernetes',
             },
+            'platform-engineers/advanced-install',
+            'platform-engineers/system-operation/bootstrap-parameters',
+            'platform-engineers/system-operation/offline-installation',
+            'platform-engineers/system-operation/vela-cli-image',
           ],
         },
         {
@@ -129,6 +133,7 @@ module.exports = {
             'end-user/workflow/operations',
             'end-user/workflow/suspend',
             'end-user/workflow/step-group',
+            'end-user/workflow/for-each',
             'end-user/workflow/dependency',
             'end-user/workflow/inputs-outputs',
             'end-user/workflow/if-condition',
@@ -226,25 +231,16 @@ module.exports = {
       label: 'Operator Manual',
       items: [
         {
-          'Advanced Installation': [
-            'platform-engineers/system-operation/bootstrap-parameters',
-            'platform-engineers/advanced-install',
-            'platform-engineers/system-operation/vela-cli-image',
-            'platform-engineers/system-operation/system-info-diagnose',
-          ],
-        },
-        {
           type: 'category',
-          label: 'Production Precautions',
+          label: 'Production Operations',
           collapsed: true,
           items: [
             'platform-engineers/system-operation/performance-finetuning',
             'platform-engineers/system-operation/controller-sharding',
             'platform-engineers/system-operation/controller-grayscale-release',
             'platform-engineers/system-operation/high-availability',
-            'platform-engineers/system-operation/migration-from-old-version',
-            'platform-engineers/system-operation/config-migration',
-            'platform-engineers/system-operation/cue-compatibility-layer',
+            'platform-engineers/system-operation/system-info-diagnose',
+            'platform-engineers/system-operation/workflow-http-protection',
           ],
         },
         {
@@ -265,6 +261,7 @@ module.exports = {
             'platform-engineers/auth/advance',
             'platform-engineers/auth/integration',
             'platform-engineers/auth/definition-rbac',
+            'platform-engineers/auth/definition-restrictions',
           ],
         },
         {
@@ -324,6 +321,21 @@ module.exports = {
             'platform-engineers/crate/crate-crossplane',
             'platform-engineers/crate/crate-multicluster',
             'platform-engineers/crate/crate-addon',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Sources',
+          collapsed: true,
+          link: {
+            type: 'doc',
+            id: 'platform-engineers/source/intro',
+          },
+          items: [
+            'platform-engineers/source/using-sources',
+            'platform-engineers/source/built-in-sources',
+            'platform-engineers/source/authoring-source-definition',
+            'platform-engineers/source/caching-and-operations',
           ],
         },
         {
@@ -401,11 +413,24 @@ module.exports = {
             'platform-engineers/cue/basic',
             'platform-engineers/cue/parameter-markers',
             'platform-engineers/cue/definition-edit',
+            {
+              type: 'category',
+              label: 'Testing CUE Definitions',
+              link: {type: 'doc', id: 'platform-engineers/cue/definition-testing'},
+              items: [
+                'platform-engineers/cue/definition-testing-functions',
+                'platform-engineers/cue/definition-testing-expectations',
+                'platform-engineers/cue/definition-testing-mocks-hooks',
+                'platform-engineers/cue/definition-testing-cli',
+              ],
+            },
             'platform-engineers/components/custom-component',
             'platform-engineers/traits/customize-trait',
             'platform-engineers/cue/definition-inheritance',
             'platform-engineers/policy/custom-policy',
             'platform-engineers/policy/application-scoped-policy',
+            'platform-engineers/policy/policy-rollout',
+            'platform-engineers/policy/policy-context-schema',
             'platform-engineers/workflow/workflow',
             {
               'Patch and Override': [
@@ -500,3 +525,8 @@ module.exports = {
     },
   ],
 };
+
+// Release Notes and Upgrade Guides, grouped under Releases.
+sidebars.docs = withReleases(sidebars.docs);
+
+module.exports = sidebars;

@@ -49,6 +49,31 @@ The maintainers are responsible to drive releases and follow the standard operat
    * Helm Charts from [Publish Chart Pipeline](https://github.com/kubevela/kubevela/actions/workflows/chart.yml).
    * CLI binaries from [Release Pipeline](https://github.com/kubevela/kubevela/actions/workflows/release.yml).
 5. Update docs and examples to use the new release.
-   * Create a new docs version for the new `minor` release.
-   * Update the [migration doc](../platform-engineers/system-operation/migration-from-old-version.md) when release a new `minor` release.
-   * Update the `top tip` in `docusaurus.config.js` for every `patch` release.
+   * For every `minor` release, before cutting the docs version:
+     * Add `release-notes/vX.Y/vX.Y.0.md` from `release-notes/_template-minor.md` (see [How to add release notes](#how-to-add-release-notes)). Write `release-notes/vX.Y/index.md` by hand, using the previous minor's `index.md` as the model (status, releases table, pre-releases); it has no template. Add a row to the [release notes overview](../release-notes/overview.md).
+     * Add the upgrade guide `upgrade-guides/vX.Y/index.md`, add it to `sidebar-upgrade.js`, and link it from the [upgrade overview](../upgrade-guides/overview.mdx).
+     * Regenerate the definition and CLI reference docs; see [CLI and definition reference docs](./cli-ref-doc.md).
+     * Refresh [Controller Flags and Feature Gates](../platform-engineers/system-operation/bootstrap-parameters.md) from `cmd/core/app/config` and `pkg/features/controller_features.go`.
+     * Create a new docs version for the new `minor` release.
+     * In `release-notes/vX.Y/` and `upgrade-guides/vX.Y/`, change links from `/docs/next/...` to `/docs/...`. Until the version is cut, these pages link to Next because the pages they describe exist only there.
+   * For every `patch` release:
+     * Add `release-notes/vX.Y/vX.Y.Z.md` from the patch template and a row to the patch table in `release-notes/vX.Y/index.md`.
+     * Update the `top tip` in `docusaurus.config.js` to link to the new release notes page.
+
+## How to add release notes
+
+Release notes live in `release-notes/` and upgrade guides in `upgrade-guides/`, both at the repository root. Edit them only there. Each time Docusaurus starts or builds the site, `scripts/sync-release-pages.js` copies both folders into every docs version (`docs/` and each `versioned_docs/version-*/`), so every version shows them in its sidebar under Releases. The copies are git-ignored and get overwritten, so a change made in a copy is lost. `yarn start` copies the folders again when you save a change. A note added after a version is cut, such as a patch for an older minor, shows up in every version. Link between these pages with relative `.md` links, for example `../../upgrade-guides/v1.12/index.md`: the folders have the same layout in every copy, so readers stay in the docs version they are reading. Link to the regular docs with absolute URLs such as `/docs/next/cli/vela/` (`/docs/cli/vela/` once the docs version is cut). The sync also writes the Releases sidebar group into each `versioned_sidebars/*.json` file, so nothing needs to be added for a new version.
+
+Step-by-step instructions for adding or updating a note or a guide, including the files to touch, link rules and checks, are in [`release-notes/README.md`](https://github.com/kubevela/kubevela.io/blob/main/release-notes/README.md) and [`upgrade-guides/README.md`](https://github.com/kubevela/kubevela.io/blob/main/upgrade-guides/README.md). Those README files are not published on the site. If `yarn start` is running when you add a new page, restart it to see the page in the sidebar.
+
+The release notes have a folder per minor version (`vX.Y/`). The folder has an `index.md` overview (status, patch table, pre-releases) and one page per release: the GA (general availability) release `vX.Y.0` and each patch release `vX.Y.Z`. Pre-releases don't get their own pages; list them in `index.md` and roll their changes into the `.0` page.
+
+1. Copy `release-notes/_template-minor.md` (for `vX.Y.0`) or `release-notes/_template-patch.md` (for `vX.Y.Z`). Files starting with `_` are not published.
+2. Fill in the sections from the GitHub release and from the diff against the previous tag:
+   * commits: `git log --no-merges <prev>..<tag>`
+   * CRDs: `git diff <prev> <tag> -- charts/vela-core/crds/`
+   * flags and feature gates: `git diff <prev> <tag> -- cmd/core/app/ pkg/features/`
+   * chart values: `git diff <prev> <tag> -- charts/vela-core/values.yaml`
+   * dependencies: `git diff <prev> <tag> -- go.mod`
+3. Keep entries short. When a Reference page documents the thing that changed (built-in definitions, CLI commands, controller flags, config templates), link to it instead of repeating it. The minor release notes list every change since the previous `.0`, including changes backported to a patch of the previous minor version; mark those "(backported to v1.11.1)" and keep the "Backported changes" note from the template.
+4. Add the page to `sidebar-release-notes.js`, newest first.

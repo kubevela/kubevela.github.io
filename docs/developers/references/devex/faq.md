@@ -38,6 +38,8 @@ Experimental Addon Registry | - | https://kubevela.github.io/catalog/experimenta
 CLI | https://kubevela.io/script/install.sh | download from [release page](https://github.com/kubevela/kubevela/releases)
 VelaD | - | migrating 
 
+The move happened in v1.9; the [v1.8 to v1.9 upgrade guide](../../../upgrade-guides/v1.9/index.md) has the commands to update your addon registry.
+
 ### You have reached rate limit for Docker Image Registry 
 
 By default, the community use images from docker registry for installation. You can use the following alternatives:
@@ -69,15 +71,24 @@ If you're using v1.3, the default password is in the secret:
 kubectl get secret admin -n vela-system
 ```
 
-If you're using v1.4+, the default password is `VelaUX12345`. After you first log in, you must change the password. If you forget the password, you could delete the admin user from the database, then restart the API server. The admin user will regenerate.
+If you're using v1.4 to v1.7, the default password is `VelaUX12345`, and you must change it after the first login.
+
+From v1.8, there is no default password: the first time you open VelaUX, it asks you to create the administrator account (a username, a password and an email). To change the password later, use the user settings in VelaUX.
+
+If you forget it and another administrator exists, they can reset your password from the Users page.
+
+If the administrator is the only user, you can delete it and restart VelaUX. With no users left, the next time you open VelaUX it asks you to create the administrator account again. Only do this when the administrator is the only user: VelaUX offers the first-visit setup only when there are no users at all, so on an install with other users, deleting the administrator leaves no way to create a new one.
 
 ```bash
+# Find the administrator's ConfigMap: usr- followed by the username
+kubectl get cm -n kubevela | grep '^usr-'
 
-# Delete the admin user. If you use the MongoDB, you should delete from the MongoDB.
+# Delete it, here for an administrator called admin: use the name listed above.
+# With MongoDB as the datastore, delete the user from MongoDB instead.
 kubectl delete cm usr-admin -n kubevela
 
-# Restart the API server and regenerate the admin user
-kubectl delete pod -l app.oam.dev/component=apiserver -n vela-system
+# Restart VelaUX
+kubectl delete pod -l app.oam.dev/component=velaux-server -n vela-system
 ```
 
 ### How can I build my own addon registry?

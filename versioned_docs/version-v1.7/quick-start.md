@@ -84,7 +84,7 @@ environment prod with namespace prod created
 * Starting deploy the application
 
 ```
-vela up -f https://kubevela.net/example/applications/first-app.yaml
+vela up -f https://kubevela.io/example/applications/first-app.yaml
 ```
 
 <details>
@@ -216,7 +216,7 @@ Great! You have finished deploying your first KubeVela application, you can also
 
 ## Manage application with UI Console
 
-After finished [the installation of VelaUX](./install.mdx#2-install-velaux), you can view and manage the application created.
+After finished [the installation of VelaUX](./reference/addons/velaux.md#install), you can view and manage the application created.
 
 * Port forward the UI if you don't have endpoint for access:
   ```

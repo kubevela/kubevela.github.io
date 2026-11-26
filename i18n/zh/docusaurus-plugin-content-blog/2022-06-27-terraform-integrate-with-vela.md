@@ -102,7 +102,7 @@ terraform destroy  -var-file=test/test.tfvars
 
 ### 转化 Terrafrom 模块作为 KubeVela 扩展组件类型
 
-这一步是核心，在开始之前，请确保您已经[安装了 Kubevela 控制平面](https://kubevela.net/docs/install#1-install-velad)，如果您没有 Kubernetes 集群也不用担心，快速演示时通过 VelaD 一键安装完成就足够了。
+这一步是核心，在开始之前，请确保您已经[安装了 Kubevela 控制平面](https://kubevela.io/docs/installation/standalone#2-install-velad-and-setup-kubevela)，如果您没有 Kubernetes 集群也不用担心，快速演示时通过 VelaD 一键安装完成就足够了。
 
 我们将使用我们刚刚准备好的 Terraform 模块来进行下述动作。
 
@@ -143,7 +143,7 @@ curl -fsSl https://kubevela.io/script/install-velad.sh | bash
 velad install
 ```
 
-查看 [此文档](https://kubevela.net/docs/install#1-install-velad) 以了解更多安装细节。
+查看 [此文档](https://kubevela.io/docs/installation/standalone#2-install-velad-and-setup-kubevela) 以了解更多安装细节。
 
 * 启用 Terraform Addon 和 Alibaba Provider
 
@@ -168,7 +168,7 @@ vela provider add terraform-alibaba --ALICLOUD_ACCESS_KEY <"your-accesskey-id"> 
 
 :::
 
-查看 [此文档](https://kubevela.net/docs/reference/addons/terraform) 以获取有关其他云的更多详细信息。
+查看 [此文档](https://kubevela.io/docs/reference/addons/terraform) 以获取有关其他云的更多详细信息。
 
 ### 部署带有公网 IP 地址的 ECS 实例并启动 FRP 服务
 

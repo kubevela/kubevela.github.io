@@ -47,7 +47,7 @@ UI Schema 包含的字段如下：
   description: string         描述信息
   uiType: string              UI 组件类型
   sort: int                   排序
-  disabled: bool              是否禁用该字段
+  disable: bool               是否禁用该字段
   style:                      样式定义
     colSpan: int              表单栅格大小，24 代表 100% 宽度
   conditions:                 表单显示行为的条件

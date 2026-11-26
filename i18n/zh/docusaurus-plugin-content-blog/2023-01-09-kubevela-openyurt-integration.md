@@ -58,7 +58,7 @@ cd yurt-app-manager && helm install yurt-app-manager -n kube-system ./charts/yur
 curl -fsSl https://kubevela.io/script/install.sh | bash
 vela install
 ```
-在本案例中，为了复用社区提供的成熟的 Helm Chart，我们用 Helm 类型的组件来安装 Nginx Ingress Controller。在微内核设计的 KubeVela 中，Helm 类型的组件是由 FluxCD 插件提供的，下面启用 [FluxCD 插件](https://kubevela.net/zh/docs/reference/addons/fluxcd)。
+在本案例中，为了复用社区提供的成熟的 Helm Chart，我们用 Helm 类型的组件来安装 Nginx Ingress Controller。在微内核设计的 KubeVela 中，Helm 类型的组件是由 FluxCD 插件提供的，下面启用 [FluxCD 插件](https://kubevela.io/docs/reference/addons/fluxcd)。
 ```shell
 vela addon enable fluxcd
 ```
@@ -154,7 +154,7 @@ spec:
 3. `deploy` 工作流步骤。它描述了如何部署应用程序。它指定 `replication` 策略执行复制工作的策略。
 > 注意：
 > 1. 如果你希望此应用程序正常工作，请先在集群下发在下文介绍的 `edge-ingress` 特性。
-> 2. `deploy` 是一个 KubeVela 内置的工作流程步骤。它还可以在[多集群场景](https://kubevela.net/zh/docs/case-studies/multi-cluster)中与`override`、`topology` 策略一起使用 。
+> 2. `deploy` 是一个 KubeVela 内置的工作流程步骤。它还可以在[多集群场景](https://kubevela.io/docs/case-studies/multi-cluster)中与`override`、`topology` 策略一起使用 。
 
 现在，我们可以将应用下发到集群。
 ```shell
@@ -175,7 +175,7 @@ local  ─── default─┬─ HelmRelease/ingress-nginx-beijing  updated   2
                                                                                          fc6931c19c8995e31638668cb958d4a3486c2'
 ```
 Vela CLI 不仅可以站在较高层次统一汇集展示应用健康状态，当需要的时候，Vela CLI 也可以帮助你穿透应用，直达底层工作负载，并提供丰富的观测和 Debug 能力，例如，你可以通过`vela logs`把打印应用的日志；可以通过`vela port-forward`把部署应用的端口转发到本地；可以通过 `vela exec` 命令，深入到边缘的容器中执行 Shell 命令排查问题。
-如果你想更直观地了解应用去情况，KubeVela 官方还提供了 Web 控制台插件 VelaUX。[启用 VelaUX 插件](https://kubevela.net/zh/docs/reference/addons/velaux)，你可以查看更详细的资源拓扑。
+如果你想更直观地了解应用去情况，KubeVela 官方还提供了 Web 控制台插件 VelaUX。[启用 VelaUX 插件](https://kubevela.io/docs/reference/addons/velaux)，你可以查看更详细的资源拓扑。
 ```shell
 vela addon enable velaux
 ```
@@ -196,7 +196,7 @@ KubeVela 应用交付过程中如何实现了同一个组件的差异化部署�
 
 - 组件分裂 Policy 将组件**拆为两个组件**，带有不同的 `context.replicaKey`。
 - `edge-nginx` Trait 使用不同的 `context.replicaKey` ，将带有不同配置值的 Helm Chart 交付到集群中。让两个 Nginx Ingress Controller 运行在不同的节点池，监听具有不同 ingressClass 的 Ingress 资源。具体的方式是 Patch 了 Helm Chart 的 Values 配置，修改了和**节点选择**、**亲和性**以及 **ingressClass** 相关的字段。
-- 在 Patch 不同字段时，使用了不同的 [Patch 策略](https://kubevela.net/zh/docs/platform-engineers/traits/patch-trait#patch-strategy)（PatchStrategy），例如使用`retainKeys`策略能够覆盖原本的值，使用`jsonMergePatch`策略则会和原本的值合并。
+- 在 Patch 不同字段时，使用了不同的 [Patch 策略](https://kubevela.io/docs/platform-engineers/traits/patch-trait#patch-strategy)（PatchStrategy），例如使用`retainKeys`策略能够覆盖原本的值，使用`jsonMergePatch`策略则会和原本的值合并。
  
 ```json
 "edge-nginx": {
@@ -298,4 +298,4 @@ template: {
 
 这些得益于 KubeVela 在应用交付和管理领域提供的强大功能，KubeVela 除了能在单个集群内部解决应用的定义、交付、运维和可观测问题，还原生支持了**多集群模式**的应用发布和管理。目前适合边缘计算场景的 Kubernetes 部署模式并无定式，无论单集群+边缘节点池的架构，还是多边缘集群架构，KubeVela 都能胜任其中的应用管理任务。
 在 OpenYurt 和 KubeVela 的配合下，云边应用以统一方式部署，共享相同的抽象、运维、可观测能力，避免了在不同场景中割裂的体验。并且云端应用和边端应用都得以使用 KubeVela 以插件形式不断集成的云原生生态的优秀实践。未来 KubeVela 社区还将不断丰富开箱即用的系统插件，持续交付更好用、更易用的应用交付和管理能力。
-如果想了解更多应用部署、管理的能力，可以阅读 [KubeVela 官方文档](https://kubevela.net)，想要了解 KubeVela [社区](https://github.com/kubevela/community)的最新动态，欢迎来到 KubeVela 社区（钉钉群 23310022）参与讨论！若你对 OpenYurt 感兴趣，也欢迎来到 OpenYurt 社区（钉钉群 31993519）参与讨论。
+如果想了解更多应用部署、管理的能力，可以阅读 [KubeVela 官方文档](https://kubevela.io)，想要了解 KubeVela [社区](https://github.com/kubevela/community)的最新动态，欢迎来到 KubeVela 社区（钉钉群 23310022）参与讨论！若你对 OpenYurt 感兴趣，也欢迎来到 OpenYurt 社区（钉钉群 31993519）参与讨论。

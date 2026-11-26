@@ -10,9 +10,11 @@ Adopt a legacy config (a velacore-config Secret) into a Config CR of the same na
 The template may already be a ConfigTemplate CR or still a legacy ConfigMap; both work, unless a
 ConfigTemplate that migration did not create shadows the legacy ConfigMap, which is a conflict. The
 Secret is kept and becomes owned by the Config; a second run skips it. --all does this for
-every legacy config in the namespace, with or without a template. Secrets a GitOps tool applies
-are adopted too and the report lists them: commit their new Configs to the repository the GitOps
-tool applies the Secrets from, or the tool reverts them.
+every legacy config in the namespace, with or without a template. Secrets that carry a GitOps or
+Helm marker are adopted too, and the report lists them. Keep their new Config CRs where the
+legacy Secrets come from: for a GitOps source, commit them to its repository next to the legacy
+Secrets; for a Helm chart or release, add them to the chart. Otherwise the tool's next sync or
+upgrade reapplies the legacy Secrets.
 
 ```
 vela config migrate [flags]

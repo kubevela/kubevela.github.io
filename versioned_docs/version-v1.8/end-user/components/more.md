@@ -329,7 +329,7 @@ KubeVela        helm    https://addons.kubevela.net
 * Add a new registry
 
 ```
-vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
+vela addon registry add experimental --type=helm --endpoint=https://kubevela.github.io/catalog/experimental/
 ```
 
 <details>

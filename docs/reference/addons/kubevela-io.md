@@ -2,7 +2,7 @@
 title: KubeVela.io
 ---
 
-This addon is the document website, align with https://kubevela.io/ and its mirror https://kubevela.net/ .
+This addon is the document website, align with https://kubevela.io/ .
 
 Use this addon can help you to read the document in your cluster which can be air-gaped environment.
 

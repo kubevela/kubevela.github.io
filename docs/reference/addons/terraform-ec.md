@@ -50,10 +50,10 @@ vela config create <Name> -t terraform-ec EC_API_KEY=<KEY>
 
 ## Find supported components
 
-All supported Terraform cloud resources can be seen in the [list](https://kubevela.net/docs/end-user/components/cloud-services/cloud-resources-list). You can also filter them by command `vela components --label type=terraform`.
+All supported Terraform cloud resources can be seen in the [list](https://kubevela.io/docs/end-user/components/cloud-services/cloud-resources-list). You can also filter them by command `vela components --label type=terraform`.
 
-To check the specification of one cloud resource, use `vela show <component-type-name>`. Or just per the [official doc](https://kubevela.net/docs/end-user/components/cloud-services/cloud-resources-list).
+To check the specification of one cloud resource, use `vela show <component-type-name>`. Or just per the [official doc](https://kubevela.io/docs/end-user/components/cloud-services/cloud-resources-list).
 
-Then, you can provision and consume the cloud resource by [creating an application](https://kubevela.net/docs/tutorials/consume-cloud-services#provision-by-creating-application).
+Then, you can provision and consume the cloud resource by [creating an application](https://kubevela.io/docs/tutorials/consume-cloud-services#provision-by-creating-application).
 
-If the provided cloud resources did't cover your needs, you can still customize the cloud resources with the flexible Terraform components. Find more information in [Extend Cloud Resources](https://kubevela.net/docs/platform-engineers/components/component-terraform). You are also encouraged to contribute the extended cloud resources to community.
+If the provided cloud resources did't cover your needs, you can still customize the cloud resources with the flexible Terraform components. Find more information in [Extend Cloud Resources](https://kubevela.io/docs/platform-engineers/components/component-terraform). You are also encouraged to contribute the extended cloud resources to community.

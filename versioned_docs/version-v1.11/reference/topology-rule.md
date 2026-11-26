@@ -23,7 +23,7 @@ Then we will introduce the details with an example.
 You can first enable the [kruise](https://github.com/kubevela/catalog/tree/master/experimental/addons/kruise) addon which is an experimental addon by running follow command:
 
 ```shell
-vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
+vela addon registry add experimental --type=helm --endpoint=https://kubevela.github.io/catalog/experimental/
 vela addon enable kruise
 ```
 

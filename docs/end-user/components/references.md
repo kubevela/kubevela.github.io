@@ -4,7 +4,58 @@ title: Built-in Components Type
 
 This documentation will walk through all the built-in component types sorted alphabetically.
 
-> It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2026-04-16T11:50:12+01:00.
+> It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2026-11-17T15:13:44+05:30.
+
+## Addon
+
+### Description
+
+Install an addon as a component; the addon's Application is tracked by this Application.
+
+### Examples (addon)
+
+Requires the `EnableAddonComponent` feature gate. Install or upgrade the chart with
+`--set featureGates.enableAddonComponent=true`. With the gate disabled the
+ComponentDefinition is still installed, but rendering a `type: addon` component fails
+with a message naming the gate.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: comp-fluxcd
+  namespace: vela-system
+spec:
+  components:
+    - name: fluxcd
+      type: addon
+      properties:
+        # addon: fluxcd        # optional, defaults to the component name
+        version: "3.0.2"       # optional, empty means the latest stable version
+        registry: KubeVela     # optional, empty means the configured default registry
+        skipVersionValidation: false
+        properties:            # optional, the addon's own parameters
+          {}
+```
+
+### Specification (addon)
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ addon | Addon name; defaults to the component name. | string | false |  
+ version | Exact version; empty means the latest stable version. | string | false | empty 
+ registry | Registry name; empty means the configured default. | string | false | empty 
+ properties | The addon's own parameters, passed through to its templates. | map[string]_ | false |  
+ skipVersionValidation | Skip the addon's vela and Kubernetes system requirements check. | bool | false | false 
+ placement | Where the addon installs. Set `clusters` or `clusterLabelSelector`. Refused for an addon that defines its own topology policy or workflow. | [placement](#placement-addon) | false |  
+
+
+#### placement (addon)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ clusters | Names of the clusters to install on. | []string | false |  
+ clusterLabelSelector | Labels that select the clusters to install on. | map[string]string | false |  
+ allowEmpty | Allow an empty `clusterLabelSelector` result. An unknown name in `clusters` still fails. | bool | false |  
 
 ## Crate
 
@@ -760,7 +811,13 @@ The rendered chart sees `replicaCount: 5` (from inline), `resources.limits.memor
 
 #### Authenticating with private chart registries
 
-Add `chart.auth.secretRef` to point at a Secret in the vela-core namespace (`vela-system` by default). The Secret type controls how credentials are extracted:
+Add `chart.auth.secretRef` to point at a Secret in the Application's namespace. You can leave out `secretRef.namespace`. If you set it, it must be the Application's namespace. Any other namespace is refused, the release namespace included, so an Application can't read a shared Secret from `vela-system`. The refusal looks like this:
+
+```text
+auth secret reference "<ns>/<name>" rejected: namespace MUST be in the Application namespace "<app-ns>" (the release namespace "<release-ns>" is not a source)
+```
+
+Chart and `oci://` pulls go through the same outbound HTTP guard as workflow steps. A registry on a loopback or link-local address is refused. A private address is refused too when `featureGates.blockPrivateHTTPAddresses` is on. The Secret type controls how credentials are extracted:
 
 | Secret type | Keys read | Use case |
 |---|---|---|
@@ -774,7 +831,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: registry-creds
-  namespace: vela-system
+  namespace: default
 type: kubernetes.io/basic-auth
 stringData:
   username: my-username
@@ -784,6 +841,7 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: private-chart
+  namespace: default
 spec:
   components:
     - name: my-app
@@ -795,13 +853,53 @@ spec:
           auth:
             secretRef:
               name: registry-creds
-              namespace: vela-system
         release:
           name: my-app
-          namespace: default
+          namespace: my-app
 ```
 
-The same `auth` block works for HTTPS repos (`source` + `repoURL`) and direct `.tgz` URLs. When you rotate the Secret, the cache key updates automatically and the next reconcile pulls a fresh copy of the chart.
+The Secret is in the Application's namespace, `default`, so `secretRef.namespace` can be left out. The release goes to `my-app`, but the Secret stays with the Application. The same `auth` block works for HTTPS repos (`source` + `repoURL`) and direct `.tgz` URLs. When you rotate the Secret, the cache key updates and the next reconcile pulls a fresh copy of the chart.
+
+#### Multicluster
+
+When the Application has a [topology policy](../policies/references.md#topology), KubeVela installs the Helm release on each selected target cluster. The hub cluster is skipped unless it is one of the targets (for example `clusters: ["local"]`). It reaches the managed cluster through cluster-gateway, as it does for the Application's other resources.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: podinfo-on-worker
+spec:
+  components:
+    - name: podinfo
+      type: helmchart
+      properties:
+        chart:
+          source: podinfo
+          repoURL: https://stefanprodan.github.io/podinfo
+          version: "6.7.1"
+        release:
+          name: podinfo
+          namespace: podinfo
+  policies:
+    - name: topology-worker
+      type: topology
+      properties:
+        clusters: ["cluster-worker"]
+```
+
+- **Release location.** `helm list -n podinfo` on the managed cluster shows the release. The hub cluster has no release for the component.
+- **Hooks.** A chart hook that sets no namespace goes to the release namespace.
+- **What stays on the hub cluster.** KubeVela reads `valuesFrom` sources and chart credentials (`chart.auth.secretRef`) on the hub cluster, not on the managed cluster. Create those ConfigMaps and Secrets on the hub cluster, in the Application's namespace.
+- **Permissions.** The install runs as an identity, and that identity needs RBAC for every resource in the chart. This includes creating the release namespace, unless you set `options.createNamespace` to `false`. The identity depends on the `AuthenticateApplication` feature gate:
+  - **Gate off (the default).** The install uses the controller's own permissions. If the Application sets `app.oam.dev/service-account-name`, it installs as that ServiceAccount instead.
+  - **Gate on** (`authentication.enabled: true` in the chart). If `authentication.withUser` is false (flag `--authentication-with-user`), the install always uses `authentication.defaultUser` (flag `--authentication-default-user`). If it is true, the install uses the Application's user, else the ServiceAccount from the annotation, else `defaultUser`. The chart sets `withUser` to `true` by default. The bare flag defaults to `false`.
+
+  The Application's groups (`app.oam.dev/group`) are impersonated in both cases, so you can grant RBAC to a group. Grant these rights on every cluster the topology places the component on, because the install impersonates on the managed cluster as well. See [Underlying Mechanism](../../platform-engineers/auth/advance.md) for the identity settings.
+
+:::note
+In KubeVela v1.11 and earlier, a `helmchart` component with a topology policy installed its release on the hub cluster, and only the chart's resources reached the managed cluster. On the first successful workflow run after the upgrade, KubeVela installs the release on the managed cluster and uninstalls the copy on the hub. An Application you don't edit keeps its hub copy until its next run. To move it now, run `vela workflow restart <app> -n <namespace>`. The uninstall runs as the same identity as the install (see Permissions above), so that identity needs rights to delete the chart's resources on the hub.
+:::
 
 ### Specification (helmchart)
 
@@ -838,7 +936,7 @@ The same `auth` block works for HTTPS repos (`source` + `repoURL`) and direct `.
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  name | Name of the Secret | string | true |  
- namespace | Namespace of the Secret. Defaults to the release namespace, which itself defaults to the Application namespace when `release.namespace` is unset. Must be either the release namespace or the Application namespace; cross-namespace references are rejected. | string | false |  
+ namespace | Namespace of the Secret. Defaults to the Application's namespace, which is the only namespace allowed. Any other namespace, the release namespace included, is rejected. | string | false |  
 
 Supported Secret types:
 
@@ -861,7 +959,7 @@ An `Opaque` Secret can also include these optional TLS fields: `caFile` (custom 
  ---- | ----------- | ---- | -------- | ------- 
  kind | Source kind. Only `Secret` and `ConfigMap` are supported. `OCIRepository` is not yet supported. | "Secret" or "ConfigMap" | true |  
  name | Name of the Secret or ConfigMap. | string | true |  
- namespace | Namespace of the Secret or ConfigMap. Defaults to the release namespace. An explicit value must match either the release namespace or the Application's own namespace; other namespaces are rejected to prevent cross-tenant reads via the controller's cluster-wide RBAC. | string | false |  
+ namespace | Namespace of the Secret or ConfigMap. Defaults to the Application's namespace, which is the only namespace allowed. Any other namespace, the release namespace included, is rejected, so one tenant can't read another's data through the controller's cluster-wide RBAC. | string | false |  
  key | Key inside `.data` whose value is parsed as YAML. Only `.data` is read; `ConfigMap.binaryData` is rejected. | string | false | "values.yaml" 
  optional | If true, a missing Secret/ConfigMap or missing key is skipped silently. Parse errors and permission errors still fail the render. | bool | false | false 
 
@@ -871,8 +969,15 @@ An `Opaque` Secret can also include these optional TLS fields: `caFile` (custom 
  Name | Description | Type | Required | Default 
  ---- | ----------- | ---- | -------- | ------- 
  name | Release name (defaults to component name) | string | false |  
- namespace | Target namespace (defaults to Application namespace) | string | false |  
+ namespace | Target namespace. Defaults to the component's namespace: the Application's namespace, or the topology policy's `namespace` when one is set. | string | false |  
 
+**Release ownership.** A Helm release belongs to the Application that installed it. KubeVela won't take over a release that another Application owns. Two Applications with a component of the same name in one namespace will hit this, and the install fails with:
+
+```text
+helm release <ns>/<name> belongs to Application <ns>/<app> (component <c>); set release.name to give this component its own release
+```
+
+Set `release.name` on one of the components to give it a separate release. If the owning Application no longer exists, KubeVela adopts the release.
 
 #### healthStatus (helmchart)
 
@@ -930,8 +1035,41 @@ The chart cache is in-memory and scoped to the vela-core controller pod. It rese
  ---- | ----------- | ---- | -------- | ------- 
  key | Cache key prefix. Defaults to `{appName}-{componentName}`. Set a shared value to reuse a cached chart across multiple components. | string | false |  
  ttl | TTL for all versions, overriding the automatic immutable/mutable detection. Set to `"0"` to disable caching entirely. | string | false |  
- immutableTTL | TTL for pinned (immutable) versions such as `1.2.3` or `v2.0.0`. | string | false | "24h" 
- mutableTTL | TTL for floating versions such as `latest`, `dev`, or `-SNAPSHOT`. | string | false | "5m" 
+ immutableTTL | TTL for pinned (immutable) versions such as `1.2.3` or `v2.0.0`. Falls back to the cluster-wide `immutableTTL` (`24h` by default). | string | false |  
+ mutableTTL | TTL for floating versions such as `latest`, `dev`, or `-SNAPSHOT`. Falls back to the cluster-wide `mutableTTL` (`5m` by default). | string | false |  
+
+
+#### Cluster-wide cache
+
+The component-level `options.cache` settings apply to one component. An operator can also set cache defaults for the whole cluster. Set them as vela-core chart values, or pass the matching flags to the controller. A value of `0` selects the built-in default.
+
+| vela-core chart value | Controller flag | Default | Description |
+|---|---|---|---|
+| `helmCache.maxBytes` | `--helm-cache-max-bytes` | `268435456` (256MiB) | Maximum size of the chart cache. When the cache is full, KubeVela evicts the least recently used charts. Lower it on controllers with little memory. |
+| `helmCache.sweepInterval` | `--helm-cache-sweep-interval` | `60s` | How often the cache removes expired entries. A very small interval increases lock contention. |
+| `helmCache.immutableTTL` | `--helm-cache-immutable-ttl` | `24h` | Default TTL for pinned (immutable) chart versions. |
+| `helmCache.mutableTTL` | `--helm-cache-mutable-ttl` | `5m` | Default TTL for floating (mutable) chart tags. |
+
+The component's `options.cache` values override the cluster-wide TTLs. The cluster-wide `immutableTTL` and `mutableTTL` apply only to components that do not set their own.
+
+```shell
+helm upgrade kubevela kubevela/vela-core -n vela-system --reuse-values \
+  --set helmCache.maxBytes=134217728 \
+  --set helmCache.mutableTTL=1m
+```
+
+#### Cache metrics
+
+The controller exposes these Prometheus metrics for the chart cache:
+
+| Metric | Type | Description |
+|---|---|---|
+| `kubevela_helm_chart_cache_hits_total` | Counter | Chart fetches served from the cache. |
+| `kubevela_helm_chart_cache_misses_total` | Counter | Chart fetches that missed the cache. The `reason` label is `absent`, `expired`, `evicted` or `corrupt`. |
+| `kubevela_helm_chart_cache_evictions_total` | Counter | Entries removed from the cache. The `reason` label is `capacity`, `ttl`, `delete`, `replace`, `purge` or `unknown`. |
+| `kubevela_helm_chart_cache_bytes` | Gauge | Bytes now stored in the cache. |
+
+A value of `kubevela_helm_chart_cache_bytes` that stays near `helmCache.maxBytes`, together with a rising count of `capacity` evictions, means the charts in use are larger than the cache. Raise `helmCache.maxBytes`.
 
 
 ### Known limitations (helmchart)
@@ -987,6 +1125,55 @@ spec:
 |  NAME   | DESCRIPTION  |        TYPE          | REQUIRED | DEFAULT |
 |---------|-------------|-----------------------|----------|---------|
 | objects | A slice of Kubernetes resource manifests   | [][Kubernetes-Objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) | true     |         |
+
+## Module
+
+### Description
+
+Install a module: fetch it and render its owned Application.
+
+### Examples (module)
+
+Requires the `EnableModuleComponent` feature gate. Install or upgrade the chart with
+`--set featureGates.enableModuleComponent=true`. With the gate disabled the
+ComponentDefinition is still installed and the `vela/module` package still compiles,
+but no render service is registered, so rendering a `type: module` component fails.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: comp-s3
+  namespace: vela-system
+spec:
+  components:
+    - name: s3
+      type: module
+      properties:
+        # module: s3          # optional, defaults to the component name
+        registry: modules      # optional, empty means the configured default registry
+        version: "1.0.0"       # optional, empty means the latest published version
+        # placement:           # optional, clusters for objects marked runtime
+        #   clusters:
+        #     - spoke
+```
+
+### Specification (module)
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ module | Module name; defaults to the component name. | string | false |  
+ registry | Registry name; empty means the configured default. | string | false | empty 
+ version | Module package version, the tag `vela module publish` writes; empty means the latest published version. | string | false | empty 
+ placement | Where objects marked runtime are installed. Unmarked objects and definitions stay on the hub. Set `clusters` or `clusterLabelSelector`. | [placement](#placement-module) | false |  
+
+
+#### placement (module)
+
+ Name | Description | Type | Required | Default 
+ ---- | ----------- | ---- | -------- | ------- 
+ clusters | Names of the clusters to install on. | []string | false |  
+ clusterLabelSelector | Labels that select the clusters to install on. | map[string]string | false |  
+ allowEmpty | Allow an empty `clusterLabelSelector` result. An unknown name in `clusters` still fails. | bool | false |  
 
 ## Statefulset
 

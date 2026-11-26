@@ -2,7 +2,7 @@
 title: Air-gapped Installation for Addon
 ---
 
-If your environments don't have network access to `https://addons.kubevela.net` or `https://github.com/kubevela/catalog`, this guide will demonstrate how to install in the air-gapped environment.
+If your environments don't have network access to `https://kubevela.github.io/catalog/official` or `https://github.com/kubevela/catalog`, this guide will demonstrate how to install in the air-gapped environment.
 
 Generally, you should git clone the repo which contained the addon configuration, you can specify a local addon directory when enable an addon for installation. While you should make sure all container images or helm charts are replaced by your private registry.
 
@@ -25,10 +25,11 @@ $ docker push <your repo url>/fluxcd/helm-controller:v0.11.1
 3. Parts of addons may rely on helm charts, e.g. `terraform addon`. You should sync these helm charts to your private chart registry.
 
 ```yaml
-$ helm repo add vela-charts https://charts.kubevela.net/addons
+$ helm repo remove kubevela 2>/dev/null || true
+$ helm repo add kubevela https://kubevela.github.io/charts
 $ helm repo update
-$ helm pull vela-charts/terraform-controller --version 0.3.5
-$ helm push terraform-controller-0.3.5.tgz <your charts repo url>
+$ helm pull kubevela/terraform-controller --version 0.7.12
+$ helm push terraform-controller-0.7.12.tgz <your charts repo url>
 ```
 > You can use ChartMuseum addon to build your private Helm Chart registry and hold these Charts. Please refer to [*Sync Helm Charts to your ChartMuseum instance*](../addon/addon-registry.md#sync-helm-charts-to-your-chartmuseum-instance) for complete instructions and usage examples.
 
@@ -82,20 +83,10 @@ $ vela addon enable addons/velaux/ repo=<addon-registry-url>
 
 ### 4. Terraform
 
-1. Sync the image `oamdev/terraform-controller:0.3.5` to your own images registry.
+1. Sync the image `oamdev/terraform-controller:v0.7.12` to your own images registry.
 2. Dowload the terraform helm chart.
 ```yaml
-$ helm pull https://charts.kubevela.net/addons/terraform-controller-0.3.5.tgz
+$ helm pull https://kubevela.github.io/charts/terraform-controller-0.7.12.tgz
 ```
 3. Extract the chart and modify the `values.yaml` change `image.repository` to your own image registry.Then push it to your helm chart museum.
 4. Modify the addon file `terraform/resources/terraform-controller.cue` change `output.properties.url` to your chart museum's url.
-
-### 5. Rollout
-
-1. Sync the image `oamdev/vela-rollout:v1.6.4` to your own images registry.
-2. Dowload the rollout helm chart.
-```yaml
-$ helm pull https://charts.kubevela.net/core/vela-rollout-1.3.0.tgz
-```
-3. Extract the chart and modify the `values.yaml` change `image.repository` to your own image registry.Then push it to your helm chart museum.
-4. Modify the addon file `rollout/resources/rollout-controller.cue` change `output.properties.url` to your chart museum's url.

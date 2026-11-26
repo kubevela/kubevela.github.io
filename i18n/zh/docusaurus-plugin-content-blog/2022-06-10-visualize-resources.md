@@ -128,7 +128,7 @@ data:
 
 进一步的，如果你希望查询 ConfigMap 详细配置，PersistentVolumes 的容量和访问方式是否正确，RBAC 授权规则是否正确等信息时，你也不需要离开控制台去手动挖掘 Yaml。通过点击节点扩展功能区域的 Detail 按钮发起查询。KubeVela 将通过网关安全地从目标集群中去查询最新的数据状态并展现。
 
-![resource-detail](https://kubevela.net/assets/images/resouce-detail-0919c787c88e6b38f00ea490d558a927.jpg)
+![resource-detail](https://kubevela.io/assets/images/resouce-detail-0919c787c88e6b38f00ea490d558a927.jpg)
 
 ## 下一步计划
 

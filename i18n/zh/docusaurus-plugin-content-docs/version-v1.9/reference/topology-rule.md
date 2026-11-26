@@ -22,7 +22,7 @@ title: 资源关联规则
 你可以先通过下面的命令，启用一个尚在实验阶段的插件 [kruise](https://github.com/kubevela/catalog/tree/master/experimental/addons/kruise)。
 
 ```shell
-vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
+vela addon registry add experimental --type=helm --endpoint=https://kubevela.github.io/catalog/experimental/
 vela addon enable kruise
 ```
 

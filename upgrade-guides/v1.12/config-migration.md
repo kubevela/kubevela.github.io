@@ -4,10 +4,15 @@ title: Migrate Configs to ConfigTemplate and Config
 
 In v1.11 and earlier, the `vela` CLI stored each config template as a `config-template-<name>`
 ConfigMap and each config as a labelled Secret. Since v1.12 they are `ConfigTemplate` and `Config`
-resources, reconciled by the controller; see [Config Template](../../reference/config-template.md).
+resources, reconciled by the controller; see [Config Template](/docs/next/reference/config-template/).
 
 This guide covers upgrading a cluster that has v1.11 configs, moving them to the new resources, and
 rolling back.
+
+:::caution Unreleased
+v1.12.0 is not released yet. The commands use the latest pre-release, `1.12.0-alpha.2`; use `1.12.0`
+once it is released.
+:::
 
 ## Overview
 
@@ -39,14 +44,14 @@ first:
 
 ```bash
 helm repo update
-helm pull kubevela/vela-core --version 1.12.0 --untar
+helm pull kubevela/vela-core --version 1.12.0-alpha.2 --untar
 kubectl apply --server-side --force-conflicts -f vela-core/crds/
 ```
 
 Then upgrade the chart:
 
 ```bash
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.12.0 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.12.0-alpha.2 --wait
 ```
 
 Your configs are listed as before, with `SOURCE` showing they are v1.11 objects:
@@ -64,7 +69,7 @@ payments-key       legacy                         team-a/api-key 2026-11-06 14:5
 
 New configs and templates you create from now on with the v1.12 CLI, workflow steps or manifests
 are `Config` and `ConfigTemplate` resources. An older CLI still writes v1.11 objects.
-See [the v1.12 upgrade notes](./migration-from-old-version.md) for the behaviour changes to check
+See [the v1.12 upgrade notes](./index.md) for the behaviour changes to check
 before you upgrade.
 
 ## Step 2: Preview the migration
@@ -255,7 +260,7 @@ Opted-out objects keep working as before and are reported as `skipped`.
 
 v1.11 let a config in any namespace use a template from another namespace. Since v1.12, a Config
 may use a namespace-scoped template from another namespace only if its author can `get` that
-template; see [Scope](../../reference/config-template.md#scope-who-may-use-a-template).
+template; see [Scope](/docs/next/reference/config-template/#scope-who-may-use-a-template).
 
 Migration keeps the uses that already exist: the new ConfigTemplate lists them in its
 `config.oam.dev/grandfathered-configs` annotation, and those Configs keep working.
@@ -309,7 +314,7 @@ namespace. It runs with the controller's permissions, so nothing is skipped or f
 them:
 
 ```bash
-helm upgrade -n vela-system kubevela kubevela/vela-core --version 1.12.0 --reuse-values \
+helm upgrade -n vela-system kubevela kubevela/vela-core --version 1.12.0-alpha.2 --reset-then-reuse-values \
   --set featureGates.autoMigrateLegacyConfigs=true --wait
 ```
 
@@ -388,23 +393,8 @@ data the tool owns, so the tool shows no diff. After migrating:
 The v1.11 objects are kept by migration, so v1.11 finds every config after a rollback. Configs
 created as resources after the upgrade remain visible to v1.11 through their Secrets.
 
-The first `helm rollback` fails, because the v1.12 chart's admission webhook configuration is still
-installed:
-
-```bash
-helm rollback kubevela -n vela-system --wait
-```
-
-```console
-Error: no ComponentDefinition with the name "cron-task" found
-```
-
-Delete the webhook configuration and roll back again:
-
-```bash
-kubectl delete validatingwebhookconfiguration kubevela-vela-core-admission
-helm rollback kubevela -n vela-system --wait
-```
+Follow [Downgrading](./index.md#downgrading-to-v111) in the upgrade guide. Do not use
+`helm rollback`, and do not delete the admission webhook configuration by hand.
 
 The CRDs and the ConfigTemplate and Config resources stay, but nothing reconciles them until you
 upgrade again.

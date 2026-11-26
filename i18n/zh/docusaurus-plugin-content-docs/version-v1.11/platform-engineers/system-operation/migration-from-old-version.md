@@ -17,20 +17,21 @@ KubeVela 的[发布周期](../../contributor/release-process.md)定为每隔 2-3
 1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.7/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.7/charts/vela-core/crds/core.oam.dev_applications.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.7/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.7/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.7/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.7/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.7/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.7/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.7/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.7.7/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
 ```
 
 2. 升级 kubevela chart
 
 
 ```
-helm repo add kubevela https://charts.kubevela.net/core
+helm repo remove kubevela 2>/dev/null || true
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.3 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.7 --wait
 ```
 
 :::caution
@@ -55,7 +56,7 @@ kubectl patch -n vela-system configMap <item> --type=merge -p '{"metadata":{"ann
 3. 下载并升级对应的CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.7.3
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.7.7
 ```
 
 4. 升级 VelaUX 或其他插件
@@ -87,25 +88,26 @@ inputs:
 1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_applications.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.8/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.8/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.8/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.8/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.8/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
 ```
 
 2. 升级 kubevela chart
 
 ```
-helm repo add kubevela https://charts.kubevela.net/core
+helm repo remove kubevela 2>/dev/null || true
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.6 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.8 --wait
 ```
 
 3. 下载并升级对应的CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.6
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.8
 ```
 
 4. 升级 VelaUX 或其他插件
@@ -123,25 +125,26 @@ vela addon upgrade velaux --version=v1.6.6
 1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_applications.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.5.11/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.5.11/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.5.11/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.5.11/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.5.11/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
 ```
 
 2. 升级 kubevela chart
 
 ```
-helm repo add kubevela https://charts.kubevela.net/core
+helm repo remove kubevela 2>/dev/null || true
+helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.10 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.11 --wait
 ```
 
 3. 下载并升级对应的CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.10
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.11
 ```
 
 4. 升级 VelaUX 或其他插件
@@ -159,19 +162,20 @@ vela addon upgrade velaux --version=v1.5.6
 1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/charts/vela-core/crds/core.oam.dev_applications.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.4.14/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.4.14/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.4.14/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.4.14/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.4.14/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
 ```
 
 2. 升级 kubevela chart
 
+Chart 仓库没有发布 v1.4.x 的版本，请使用 v1.4.14 发布标签中的 Chart 进行安装：
+
 ```
-helm repo add kubevela https://charts.kubevela.net/core
-helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.14 --wait
+git clone --depth 1 --branch v1.4.14 https://github.com/kubevela/kubevela.git kubevela-v1.4.14
+helm upgrade -n vela-system --install kubevela ./kubevela-v1.4.14/charts/vela-core --set image.tag=v1.4.14 --wait
 ```
 
 3. 下载并升级对应的CLI
@@ -202,19 +206,20 @@ vela addon upgrade velaux --version=v1.4.7
 1. 升级 CRD，请确保在升级 helm chart 之前先升级 CRD。
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.3/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.3/charts/vela-core/crds/core.oam.dev_applications.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.3/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.3/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.3/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.3.6/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.3.6/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.3.6/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.3.6/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.3.6/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
 ```
 
 2. 升级 kubevela chart
 
+Chart 仓库没有发布 v1.3.x 的版本，请使用 v1.3.6 发布标签中的 Chart 进行安装：
+
 ```
-helm repo add kubevela https://charts.kubevela.net/core
-helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.3.6 --wait
+git clone --depth 1 --branch v1.3.6 https://github.com/kubevela/kubevela.git kubevela-v1.3.6
+helm upgrade -n vela-system --install kubevela ./kubevela-v1.3.6/charts/vela-core --set image.tag=v1.3.6 --wait
 ```
 
 3. 下载并升级对应的CLI
@@ -267,28 +272,29 @@ deployment.apps/kubevela-vela-core         1/1     1            1           284d
 将集群中的 CRD 更新到 v1.2.x 版本，CRD 列表如下，如果在之前没有的部分则可以省略：
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/core.oam.dev_applications.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/core.oam.dev_envbindings.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/core.oam.dev_healthscopes.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/core.oam.dev_manualscalertraits.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/core.oam.dev_policydefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/core.oam.dev_scopedefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/core.oam.dev_traitdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/core.oam.dev_workflowstepdefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/core.oam.dev_workloaddefinitions.yaml
-kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/charts/vela-core/crds/standard.oam.dev_rollouts.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.2.6/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.2.6/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.2.6/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.2.6/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.2.6/charts/vela-core/crds/core.oam.dev_envbindings.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.2.6/charts/vela-core/crds/core.oam.dev_healthscopes.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.2.6/charts/vela-core/crds/core.oam.dev_manualscalertraits.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.2.6/charts/vela-core/crds/core.oam.dev_policydefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.2.6/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.2.6/charts/vela-core/crds/core.oam.dev_scopedefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.2.6/charts/vela-core/crds/core.oam.dev_traitdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.2.6/charts/vela-core/crds/core.oam.dev_workflowstepdefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.2.6/charts/vela-core/crds/core.oam.dev_workloaddefinitions.yaml
+kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.2.6/charts/vela-core/crds/standard.oam.dev_rollouts.yaml
 ```
 
 3. 执行升级命令
 
-升级系统到新版本：
+升级系统到新版本。Chart 仓库没有发布 v1.2.x 的版本，请使用 v1.2.6 发布标签中的 Chart 进行安装：
 
 ``` shell
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.2.6 --wait
+git clone --depth 1 --branch v1.2.6 https://github.com/kubevela/kubevela.git kubevela-v1.2.6
+helm upgrade -n vela-system --install kubevela ./kubevela-v1.2.6/charts/vela-core --set image.tag=v1.2.6 --wait
 ```
 
 将 CLI 升级到与核心版本对应的 v1.2.x 版本：

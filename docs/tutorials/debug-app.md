@@ -33,7 +33,7 @@ kubecon-demo2	hello-world2	java-war  	gateway	workflowSuspending	healthy	Ready:1
 - `vela status` can give you an overview of your deployed multi-cluster application.
 
 ```
-vela up -f https://kubevela.net/example/applications/first-app.yaml
+vela up -f https://kubevela.io/example/applications/first-app.yaml
 vela status first-vela-app
 ```
 

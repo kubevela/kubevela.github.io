@@ -272,7 +272,7 @@ spec:
     traits:
     - properties:
         domains:
-        - nanoservice.beijing.kubevela.net
+        - nanoservice.example.com
         rules:
         - path:
             type: PathPrefix

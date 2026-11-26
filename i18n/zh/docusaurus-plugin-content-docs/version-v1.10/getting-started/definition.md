@@ -158,7 +158,7 @@ spec:
 使用 KubeVela 命令行工具来使用模块定义也是如此，只要编写上述 Application 对象的 YAML 文件即可，可以使用 `vela` 命令如下：
 
 ```
-vela up -f https://kubevela.net/example/applications/first-app.yaml
+vela up -f https://kubevela.io/example/applications/first-app.yaml
 ```
 
 Application 也是一种 Kubernetes 的 CRD，你可以通过 `kubectl` 工具，或者直接调用 Kubernetes API 集成 KubeVela 功能。

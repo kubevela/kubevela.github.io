@@ -5,11 +5,12 @@ remove-version:
 	sh ./hack/remove_version.sh $(version)
 
 check-link:
+	node scripts/sync-release-pages.js
 	go run ./hack/linkcheck/linkcheck.go
 
 check-sort:
 	go run ./hack/sortcheck.go
 
-# Generate the cloud resource table http://kubevela.net/docs/end-user/components/cloud-services/cloud-resources-list
+# Generate the cloud resource table https://kubevela.io/docs/end-user/components/cloud-services/cloud-resources-list
 cloud-resource-table:
 	cd hack && go run cloud-resources/terraform/gen.go

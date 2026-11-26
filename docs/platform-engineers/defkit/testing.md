@@ -596,9 +596,10 @@ kubectl delete configmap vela-cluster-identity -n vela-system
 
 ## See Also
 
+- [Testing CUE Definitions](../cue/definition-testing.md): testing definitions written in CUE, with `vela def test`
 - [ComponentDefinition](./definition-component.md) — define workload types
 - [TraitDefinition](./definition-trait.md) — patch workloads with traits
 - [PolicyDefinition](./definition-policy.md) — define application policies
-- [WorkflowStepDefinition](./definition-workflow-step.md) — define workflow steps
+- [WorkflowStepDefinition](./definition-workflowstep.md) — define workflow steps
 - [Cluster Placement](./cluster-placement.md) — `placement.Evaluate()` and `placement.ValidatePlacement()` in depth
 - [Quick Start](./quick-start.md) — scaffolding a `my-platform` module

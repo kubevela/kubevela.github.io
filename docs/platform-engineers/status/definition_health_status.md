@@ -465,6 +465,9 @@ status:
 - Output standardization: `vela def get <component>` always displays status blocks in native CUE format, ensuring consistent readability across all definitions.
 - It is recommended to make use of defaults to account for missing or errored values to ensure that statuses are always complete.
   e.g. `*context.output.status.readyReplicas | 0`
+- Status expressions only meet real objects at runtime, so [test them](../cue/definition-testing.md#testing-health-and-status):
+  `#ComponentStatus` and `#TraitStatus` evaluate health, message and details against an object as the
+  cluster would report it, including one whose status is not filled in yet.
 
 ## More Examples
 > **Components**: Please refer to [this doc](https://github.com/kubevela/kubevela/blob/master/vela-templates/definitions/internal/component/webservice.cue#L29-L50) for more examples.

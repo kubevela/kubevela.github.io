@@ -1,4 +1,12 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
+// Copy release-notes/ and upgrade-guides/ into every docs version before any plugin
+// loads. See scripts/sync-release-pages.js.
+const {syncReleasePages, releasePagesPlugin} = require('./scripts/sync-release-pages.js');
+const {SECTIONS} = require('./sidebars-releases.js');
+syncReleasePages();
+// /docs/release-notes/..., /docs/upgrade-guides/...: the latest version's copies.
+const RELEASE_DOCS_PATH = new RegExp(`^/docs/(${SECTIONS.map((s) => s.dir).join('|')})/`);
+
 module.exports = {
   title: 'KubeVela',
   tagline: 'Make shipping applications more enjoyable.',
@@ -79,11 +87,6 @@ module.exports = {
           href: 'https://github.com/kubevela/samples',
           label: 'Examples',
           position: 'left',
-        },
-        {
-          href: 'https://kubevela.net',
-          label: 'Mirror',
-          position: 'right',
         },
         {
           type: 'localeDropdown',
@@ -294,6 +297,7 @@ module.exports = {
     ],
   ],
   plugins: [
+    releasePagesPlugin,
     [
       '@docusaurus/plugin-content-docs',
       {
@@ -304,6 +308,20 @@ module.exports = {
         sidebarPath: require.resolve('./sidebar-videos.js'),
         showLastUpdateAuthor: true,
         showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        // Release Notes and Upgrade Guides used to be served at
+        // /release-notes/... and /upgrade-guides/.... Send those URLs to the
+        // copies in the latest docs version.
+        createRedirects(existingPath) {
+          if (RELEASE_DOCS_PATH.test(existingPath)) {
+            return existingPath.slice('/docs'.length);
+          }
+          return undefined;
+        },
       },
     ],
     'docusaurus-plugin-sass',

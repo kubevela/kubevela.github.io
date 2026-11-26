@@ -22,9 +22,10 @@ To enable Authentication & Authorization in your KubeVela system, you need to do
 
 4. (Optional) Install [vela-prism](https://github.com/kubevela/prism) through running the following commands, which will allow you to enjoy the advanced API extensions in KubeVela.
   ```bash
-  helm repo add prism https://charts.kubevela.net/prism
+  helm repo remove kubevela 2>/dev/null || true
+  helm repo add kubevela https://kubevela.github.io/charts
   helm repo update
-  helm install vela-prism prism/vela-prism -n vela-system
+  helm install vela-prism kubevela/vela-prism -n vela-system
   ```
 
 ## Usage

@@ -15,7 +15,7 @@ objects the template declares, and can also publish it to a Nacos server. You ca
 In v1.11 and earlier, a config template was a `config-template-<name>` ConfigMap and each config a
 labelled Secret, written by the `vela` CLI. Those objects keep working in v1.12: everything that
 reads configs reads both forms, and new writes create the resources described here. To move them to
-the new resources, see [Migrate Configs to ConfigTemplate and Config](../platform-engineers/system-operation/config-migration.md).
+the new resources, see [Migrate Configs to ConfigTemplate and Config](../upgrade-guides/v1.12/config-migration.md).
 :::
 
 ## How it works

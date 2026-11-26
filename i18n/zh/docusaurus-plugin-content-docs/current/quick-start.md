@@ -80,7 +80,7 @@ environment prod with namespace prod created
 </details>
 
 ```
-vela up -f https://kubevela.net/example/applications/first-app.yaml
+vela up -f https://kubevela.io/example/applications/first-app.yaml
 ```
 
 > 需要注意的是需要你的部署环境可以正常获取 `oamdev/hello-world` 镜像
@@ -165,17 +165,15 @@ Hello KubeVela! Make shipping applications more enjoyable.
 
 ## 基于 UI 管理应用
 
-如果你已完成 [VelaUX 安装](./install.mdx#2-install-velaux)， 你可以通过 UI 来管理和可视化应用。
+如果你已完成 [VelaUX 安装](./reference/addons/velaux.md#安装插件)， 你可以通过 UI 来管理和可视化应用。
 
 本地测试模式下通过下述命令即可打开 UI 界面。
 
 ```bash
-vela port-forward addon-velaux -n vela-system 8080:80
+vela port-forward addon-velaux -n vela-system 8080:8000
 ```
 
-UI 控制台需要用户认证，默认的账号是： `admin` 密码是： **`VelaUX12345`**。
-
-首次登录后会进入修改密码和设置邮箱流程，请正确设置你的企业邮箱（后期不可修改）和谨记修改后的密码。
+VelaUX 需要身份验证。首次打开时，它会要求你创建管理员账号：用户名、密码和邮箱。之后使用该用户名和密码登录。
 
 * 查看第一个应用的部署拓扑图
 

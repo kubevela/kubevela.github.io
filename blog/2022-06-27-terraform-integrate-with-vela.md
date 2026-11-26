@@ -25,7 +25,7 @@ OK, let's go!
 
 ## Part 1. Glue Terraform Module as KubeVela Capability
 
-In general, [KubeVela](https://kubevela.net/docs/) is a modern software delivery control plane, you may ask: "What benefit from doing this":
+In general, [KubeVela](https://kubevela.io/docs/) is a modern software delivery control plane, you may ask: "What benefit from doing this":
 
 1. The power of gluing Terraform with Kubernetes ecosystem including Helm Charts in one unified solution, that helps you to do GitOps, CI/CD integration and application lifecycle management.
     - Thinking of deploy a product that includes Cloud Database, Container Service and several helm charts, now you can manage and deploy them together without switching to different tools.
@@ -94,7 +94,7 @@ You can customize this module per your needs and push to github of your own.
 
 ### Make the Terraform module as KubeVela Capability
 
-Before start, make sure you have [installed kubevela control plane](https://kubevela.net/docs/install#1-install-velad), don't worry if you don't have Kubernetes cluster, velad is enough for the quick demo.
+Before start, make sure you have [installed kubevela control plane](https://kubevela.io/docs/installation/standalone#2-install-velad-and-setup-kubevela), don't worry if you don't have Kubernetes cluster, velad is enough for the quick demo.
 
 We'll use the terraform module we have already prepared just now.
 
@@ -114,7 +114,7 @@ vela kube apply -f alibaba-ecs-def.yaml
 
 > `vela kube apply` works the same with `kubectl apply`.
 
-Then the extension of ECS module has been added, you can learn more details from [here](https://kubevela.net/docs/platform-engineers/components/component-terraform).
+Then the extension of ECS module has been added, you can learn more details from [here](https://kubevela.io/docs/platform-engineers/components/component-terraform).
 
 We have finished the integration, the end user can discover the capability immediately after the apply.
 
@@ -149,7 +149,7 @@ curl -fsSL https://kubevela.io/script/install-velad.sh | bash
 velad install
 ```
 
-Check [this doc](https://kubevela.net/docs/install#1-install-velad) to learn more details of installation.
+Check [this doc](https://kubevela.io/docs/installation/standalone#2-install-velad-and-setup-kubevela) to learn more details of installation.
 
 * Enable Terraform Addon and Alibaba Provider
 
@@ -175,7 +175,7 @@ vela provider add terraform-alibaba --ALICLOUD_ACCESS_KEY <"your-accesskey-id"> 
 :::
 
 
-Check [this doc](https://kubevela.net/docs/reference/addons/terraform) for more details about other clouds.
+Check [this doc](https://kubevela.io/docs/reference/addons/terraform) for more details about other clouds.
 
 ### Launch a ECS with Public IP and Deploy the `frp` server 
 
