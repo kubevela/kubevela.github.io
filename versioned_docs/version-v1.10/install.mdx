@@ -6,7 +6,7 @@ Here are two installation methods available according to your environment:
 
 ### Don't have Kubernetes cluster yet?
 
-If you have no cluster yet, create one with [k3d](https://k3d.io/) (`k3d cluster create kubevela`) or [kind](https://kind.sigs.k8s.io/) (`kind create cluster --name kubevela`), then follow [Kubernetes Cluster](./installation/kubernetes.mdx) to install the vela CLI and run `vela install`, or install with Helm.
+If you have no cluster yet, create one with [k3d](https://k3d.io/) (`k3d cluster create kubevela --image rancher/k3s:v1.31.9-k3s1`) or [kind](https://kind.sigs.k8s.io/) (`kind create cluster --name kubevela --image kindest/node:v1.31.9`), then follow [Kubernetes Cluster](./installation/kubernetes.mdx) to install the vela CLI and run `vela install`, or install with Helm. Both pin Kubernetes 1.31, the version KubeVela 1.10 is built and tested against.
 
 :::caution
 [VelaD](https://github.com/kubevela/velad), the single-binary [standalone install](./installation/standalone.mdx), ships KubeVela 1.9.5, not 1.10. Features from later releases are not available in it, so to try KubeVela 1.10 use k3d or kind as above.
