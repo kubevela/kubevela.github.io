@@ -1,0 +1,47 @@
+# Dependabot version updates. Options:
+# https://docs.github.com/code-security/dependabot/working-with-dependabot/dependabot-options-reference
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # A release has to be a week old before it is proposed, so a bad or
+    # compromised version has time to be pulled first.
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "Chore: "
+      include: "scope"
+    ignore:
+      # Docusaurus majors change the theme and plugin APIs, so they are upgraded by hand.
+      - dependency-name: "@docusaurus/*"
+        update-types: ["version-update:semver-major"]
+    groups:
+      # The Docusaurus packages share one version and move together.
+      docusaurus:
+        patterns:
+          - "@docusaurus/*"
+      # Other minor and patch updates arrive as one weekly PR; each major stays on its own.
+      npm-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "Chore: "
+      include: "scope"
+    groups:
+      actions-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
