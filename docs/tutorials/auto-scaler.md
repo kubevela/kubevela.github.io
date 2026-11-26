@@ -15,16 +15,17 @@ After installed, you'll get the `keda-auto-scaler` trait, you can learn [the spe
 
 ## Use keda-auto-scaler in Application
 
-Keda supports lots of triggers such as `cron`, `cpu`, etc, let's check some examples to learn how
- it works in KubeVela.
+KEDA scales on events it reads through a KEDA scaler trigger, such as `cron` or `cpu`. The examples below show how to use them from an Application.
 
 :::caution
-When you're using HPA, you must specify the [`apply-once`](../end-user/policies/apply-once.md) policy to let the HPA control the replica field.
+When you're using HPA, you must specify the [`apply-once`](../end-user/policies/apply-once.md) policy to let the HPA control the replica field. Without it, KubeVela resets `spec.replicas` on every reconcile and fights the autoscaler.
 :::
 
-## How it works with Trigger?
+## Examples
 
-Here're several examples about how autoscaling work in KubeVela application.
+:::caution
+The `keda` addon installs KEDA 2.8 (chart 2.8.2), which supports Kubernetes 1.17 to 1.25. On 1.26 and later its operator cannot create HorizontalPodAutoscalers (it uses `autoscaling/v2beta2`, removed in 1.26), so nothing scales while the Application still reports healthy.
+:::
 
 ### Cron HPA
 
@@ -55,8 +56,8 @@ spec:
             - type: cron
               metadata:
                 timezone: Asia/Hong_Kong  # The acceptable values would be a value from the IANA Time Zone Database.
-                start: 00 * * * *       # Every hour on the 30th minute
-                end: 10 * * * *         # Every hour on the 45th minute
+                start: 00 * * * *       # Every hour at minute 0
+                end: 10 * * * *         # Every hour at minute 10
                 desiredReplicas: "3"
 
   policies:
@@ -135,7 +136,7 @@ spec:
             resourceTypes: ["Deployment"]
 ```
 
-In this example, we also exposed the service entrypoint by using the `gateway` trait, make sure you have the `traefik` ingress controller if you're not using `velad`.
+This example also exposes the service with the `gateway` trait, so it needs the traefik addon: `vela addon enable traefik`.
 
 We can get the endpoint by the following command.
   ```
@@ -161,7 +162,25 @@ Then we can add CPU pressure by using the `ab` tool.
 ab -n 300000 -c 200  http://test.my.domain/
 ```
 
-We can use `vela top` to check the replica changing during the ab test.
+Before the test, the HPA that KEDA created holds one replica:
+
+```bash
+kubectl get hpa
+```
+
+```console
+NAME                REFERENCE             TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+keda-hpa-frontend   Deployment/frontend   2%/80%    1         10        1          5m
+```
+
+While `ab` runs, check again. Once CPU use passes 80% of the request, `REPLICAS` climbs towards `MAXPODS`:
+
+```console
+NAME                REFERENCE             TARGETS     MINPODS   MAXPODS   REPLICAS   AGE
+keda-hpa-frontend   Deployment/frontend   245%/80%    1         10        4          7m
+```
+
+`vela status scaler-eg-app --tree --detail` shows the same Deployment and its new pods, and `vela top` follows the replica count live. When the test stops, the count drops back to 1 after the cooldown period.
 
 <iframe 
 src="https://kubevela.io/images/1.6/cpu_based_trigger_demo.mp4" 
@@ -187,13 +206,13 @@ KEDA supports Deployment, StatefulSet and Custom Resource, the only constraint i
  | Name             | Description                                                                                                                 | Type                              | Required | Default |
  | ---------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | -------- | ------- |
  | triggers         |                                                                                                                             | [[]triggers](#triggers)           | true     |
- | scaleTargetRef   |                                                                                                                             | [scaleTargetRef](#scaletargetref) | true     |
+ | scaleTargetRef   | Specify the target workload. Every field has a default.                                                                     | [scaleTargetRef](#scaletargetref) | false    |
  | pollingInterval  | specify the polling interval of metrics,  Default: 30 seconds.                                                              | int                               | false    | 30      |
  | cooldownPeriod   | Specify the cool down period that prevents the scaler from scaling down after each trigger activation. Default: 60 seconds. | int                               | false    | 60      |
  | idleReplicaCount | Specify the idle period that the scaler to scale to zero. Default: ignored, must be less than minReplicaCount.              | int                               | false    | 0       |
  | minReplicaCount  | Specify the minimal replica count. Default: 0.                                                                              | int                               | false    | 1       |
  | maxReplicaCount  | Specify the maximal replica count. Default: 100.                                                                            | int                               | false    | 100     |
- | fallback         | Specify the fallback value when the metrics server is not available.                                                        | [fallback](#fallback)             | true     |
+ | fallback         | Specify the fallback value when the metrics server is not available.                                                        | [fallback](#fallback)             | false    |
 
 
 #### triggers
@@ -203,6 +222,8 @@ KEDA supports Deployment, StatefulSet and Custom Resource, the only constraint i
  | type     | specify the type of trigger, the rest spec here aligns with KEDA spec.                                    | string       | true     |
  | metadata | specify the metadata of trigger, the spec aligns with the spec of KEDA https://keda.sh/docs/2.8/scalers/. | map[string]_ | true     |
 
+A trigger also takes the other fields KEDA defines for it, such as `metricType`.
+
 
 #### scaleTargetRef
 
@@ -211,7 +232,7 @@ KEDA supports Deployment, StatefulSet and Custom Resource, the only constraint i
  | apiVersion             | Specify apiVersion for target workload.                                               | string | false    | apps/v1    |
  | kind                   | Specify kind for target workload.                                                     | string | false    | Deployment |
  | envSourceContainerName | Specify containerName, default to find this path ".spec.template.spec.containers[0]". | string | false    | empty      |
- | name                   | Specify the instance name for target workload.                                        | string | true     |
+ | name                   | Specify the instance name for target workload.                                        | string | false    | `context.name` (the component name) |
 
 
 #### fallback
@@ -219,4 +240,4 @@ KEDA supports Deployment, StatefulSet and Custom Resource, the only constraint i
  | Name             | Description                                                                 | Type | Required | Default |
  | ---------------- | --------------------------------------------------------------------------- | ---- | -------- | ------- |
  | failureThreshold | Specify the failure threshold of the scaler. Default: 3.                    | int  | false    | 3       |
- | replicas         | Specify the replica when failed to get metrics. Default to minReplicaCount. | int  | false    | 1       |
+ | replicas         | Specify the replica when failed to get metrics. Default to minReplicaCount. | int  | false    | minReplicaCount |

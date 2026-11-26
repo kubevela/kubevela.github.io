@@ -32,18 +32,13 @@ For example, if both the test and develop environments rely on the same controll
 
 ### Directly use Application for initialization
 
-If we want to use some CRD controller like [OpenKruise](https://github.com/openkruise/kruise) in cluster, we can use `Helm` to initialize `kruise`.
+If we want to use some CRD controller like [OpenKruise](https://github.com/openkruise/kruise) in cluster, we can install `kruise` from its Helm chart.
 
 We can directly use Application to initialize a kruise environment. The application below will deploy a kruise controller in cluster.
 
-We have to enable [`FluxCD` addon](https://kubevela.io/docs/reference/addons/fluxcd) in cluster since we use `Helm` to deploy kruise.
-We can use `depends-on-app` to make sure `addon-fluxcd` is deployed before kruise, we also use `apply-once` policy here to make sure we'll only apply the application once for initialization.
+The built-in `helmchart` component type installs a Helm chart directly, with no addon needed. We also use the `apply-once` policy here to make sure we'll only apply the application once for initialization.
 
-> `depends-on-app` will check if the cluster has the application with `name` and `namespace` defines in `properties`.
-> If the application exists, the next step will be executed after the application is running.
-> If the application do not exists, KubeVela will check the ConfigMap with the same name, and read the config of the Application and apply to cluster.
-> For more information, please refer to [depends-on-app](../end-user/workflow/built-in-workflow-defs.md#depends-on-app).
-
+When an initialization depends on another Application, add a [depends-on-app](../end-user/workflow/built-in-workflow-defs.md#depends-on-app) step before it: the workflow waits until the named Application is running.
 
 ```shell
 cat <<EOF | vela up -f -
@@ -55,14 +50,12 @@ metadata:
 spec:
   components:
     - name: kruise
-      type: helm
+      type: helmchart
       properties:
-        repoType: helm
-        url: https://openkruise.github.io/charts/
-        chart: kruise
-        version: 1.2.0
-        git:
-          branch: master
+        chart:
+          source: kruise
+          repoURL: https://openkruise.github.io/charts/
+          version: 1.2.0
         values:
           featureGates: PreDownloadImageForInPlaceUpdate=true
   policies:
@@ -72,11 +65,6 @@ spec:
         enable: true
   workflow:
     steps:
-    - name: check-flux
-      type: depends-on-app
-      properties:
-        name: addon-fluxcd
-        namespace: vela-system
     - name: apply-kruise
       type: apply-component
       properties:
@@ -108,10 +96,6 @@ Workflow:
   Suspend: false
   Terminated: false
   Steps
-  - id: l6apfsi5c2
-    name: check-flux
-    type: depends-on-app
-    phase: succeeded
   - id: p2nqell47w
     name: apply-kruise
     type: apply-component
@@ -121,8 +105,8 @@ Services:
 
   - Name: kruise
     Cluster: local  Namespace: vela-system
-    Type: helm
-    Healthy Fetch repository successfully, Create helm release successfully
+    Type: helmchart
+    Healthy Deployed
     No trait applied
 ```
 </details>

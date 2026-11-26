@@ -2,218 +2,163 @@
 title: Deploy Helm Chart
 ---
 
-This section introduces how you deploy Helm Chart.
-
-The typical usage of deploying Helm Chart is to integrate middleware, many from in [bitnami](https://github.com/bitnami/charts) or open-source application tools such as Gitlab, and Jenkins in [Helm Official Repo](https://hub.helm.sh/). KubeVela can help you easily deploy these applications to any managed cluster and manage them.
-
-Starting from here, you will learn to use the KubeVela Addons to install plug-ins. The Helm Chart is currently supported by the FluxCD addon. In addition to the Helm Chart, FluxCD addon also supports Kustomize.
+This guide deploys a Helm chart as a component, with the `helm` type from the fluxcd addon.
 
 ## Before starting
 
-- Choose a Helm Chart you want to deploy. In the tutorial, we take [bitnami/redis](https://github.com/bitnami/charts/tree/master/bitnami/redis) as an example.
-- If you are using [bitnami/redis](https://github.com/bitnami/charts/tree/master/bitnami/redis), check if the chart version you specified is still listed [here](https://artifacthub.io/packages/helm/bitnami/redis) and available.
-- Ensure that the cluster you deliver has a usable default StorageClass. Most of our delivery middleware requires data persistence, and the default StorageClass is needed to allocate PV.
-- Make sure you have VelaUX addon enabled for UI console. If you are only CLI users, you can skip to [Deploy via CLI](#deploy-via-cli)
-  ```
+- The example uses the [podinfo](https://github.com/stefanprodan/podinfo) chart. It needs no storage, so any local cluster (k3d, kind) works.
+- For the UI console, enable the VelaUX addon. If you only use the CLI, skip to [Deploy a Helm chart](#deploy-a-helm-chart).
+  ```shell
   vela addon enable velaux
   ```
 
-## Enable fluxcd addon
+## Enable the fluxcd addon
 
-Helm Chart delivery relies on addon in KubeVela, you need to enable `fluxcd` addon before start. You can refer to [addon management doc](../end-user/components/more.md) for more detail information about addon.
+The `helm` type comes from the `fluxcd` addon, so enable it first. See [addon management](../end-user/components/more.md) for more on addons.
 
 ```shell
 vela addon enable fluxcd
 ```
 
-When the addon status become `enabled`, it means it's ready for helm chart delivery.
+When the addon status is `enabled`, it's ready to deliver charts.
 
-## Creating Redis application
+## Deploy a Helm chart
 
-After `fluxcd` addon enabled, there's a `helm` definition added, you can check the parameter details by:
+Enabling `fluxcd` adds the `helm` definition. Check its parameters with:
 
-```
+```shell
 vela show helm
 ```
 
-You can also check the [fluxcd addon](../reference/addons/fluxcd.md) docs for details.
+The [fluxcd addon](../reference/addons/fluxcd.md) docs cover it in more detail.
 
-Let's take the `redis` chart as example, you can deploy by the following application:
+This application deploys the `podinfo` chart with two replicas:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: helm-redis
+  name: helm-podinfo
 spec:
   components:
-    - name: redis
+    - name: podinfo
       type: helm
       properties:
         repoType: "helm"
-        url: "https://charts.bitnami.com/bitnami"
-        chart: "redis"
-        version: "17.7.3"
-        values: 
-          master:
-            persistence:
-              size: 16Gi
-          replica:
-            persistence:
-              size: 16Gi
+        url: "https://stefanprodan.github.io/podinfo"
+        chart: "podinfo"
+        version: "6.17.0"
+        values:
+          replicaCount: 2
 ```
 
-Deploy it by：
+Save it as `app.yaml` and deploy it with:
 
 ```shell
-vela up -f https://kubevela.io/example/applications/app-with-chart-redis.yaml
+vela up -f app.yaml
 ```
 
-Then check the deployment status of the application through `vela status helm-redis`
+Then check the application with `vela status helm-podinfo`. Once the chart is fetched and the release installed, the application's status is `running` and the `podinfo` service reports `Healthy`.
 
-<details>
-<summary>expected output of vela status </summary>
+> The application also shows up in VelaUX. An application created from the CLI is synced to the UI, read-only.
 
-```
-About:
+## Deploy a Helm chart from the UI console
 
-  Name:      	helm-redis
-  Namespace: 	default
-  Created at:	2022-04-21 17:19:12 +0800 CST
-  Status:    	running
+Deploying a chart in the UI works like [container image delivery](../tutorials/webservice.mdx): select `helm` as the component type.
 
-Workflow:
+> The `helm` component type shows up once the fluxcd addon is enabled.
 
-  mode: DAG
-  finished: true
-  Suspend: false
-  Terminated: false
-  Steps
-  - id:n1gxswwina
-    name:redis
-    type:apply-component
-    phase:succeeded
-    message:
-
-Services:
-
-  - Name: redis
-    Cluster: local  Namespace: default
-    Type: helm
-    Healthy Fetch repository successfully, Create helm release successfully
-    No trait applied
-```
-</details>
-
-> You can also check the application on UI, application created by CLI will be synced automatically but readonly.
-
-## Deploy Helm Chart from UI Console
-
-The experience on UI console is quite the same with [container image delivery](../tutorials/webservice.mdx). When it comes to deploying Helm Chart, all you need is to select type as `helm`.
-
->The `helm` component type will automatically discovered after fluxcd addon enabled.
-
-Then select the Target which has the default StorageClass that provides PV, and at last enter the deployment parameter configuration page.
+Then select a Target and open the deployment parameters page.
 
 ![helm app config](../resources/helm-app-config.jpg)
 
-As shown, you need to do the following configuration:
+Fill in:
 
-- Repo Type: Git and Helm are supported. In this example, we choose Helm.
-- Repo URL: Fill in the repo address you needed. we type in: https://charts.bitnami.com/bitnami. If you have configured the helm repo in [Integration](../how-to/dashboard/config/helm-repo.md) you can choose the repo directly.
-- Chart: After fill Helm repo URL, will list all available charts in this field. You can choose one from the list, here we choose: redis.
-- Version: After choosing the helm chart, will list all available versions in this field. Choose one version of this chart, here we choose: 16.8.5.
-- Values: After choosing the version, will list all parameters of this helm Chart. Since we are using ACK cluster in the example, PV has a minimum capacity requirement, 15Gi. In the same way, other parameters can also be configured according to your cluster's status.
+- Repo Type: Git and Helm are supported. Choose Helm.
+- Repo URL: `https://stefanprodan.github.io/podinfo`. If you've configured the Helm repo in [Integration](../how-to/dashboard/config/helm-repo.md), you can choose it from the list.
+- Chart: once the repo URL is filled in, the field lists the repo's charts. Choose `podinfo`.
+- Version: once the chart is chosen, the field lists its versions. Choose `6.17.0`.
+- Values: once the version is chosen, the form lists the chart's parameters. Set `replicaCount` to `2`.
 
-After filling in the above parameters, click `Create` to complete the application creation and enter the application configuration page. The following steps will stay the same as you've learned in [Deploy First Application](../quick-start.md).
+:::tip
+Charts that request persistent volumes need a default StorageClass on the target cluster, and some clouds set a minimum volume size. Size the volumes for the cluster you deploy to.
+:::
+
+Click `Create` to create the application and open its configuration page. From here, the steps are the same as in [Deploy First Application](../quick-start.md).
 
 ### Modify deployment parameters
 
-Clicking the component name, you can open the component configuration page. For the Helm Chart component, we can set the Values configuration options to change the application deployment parameters. the Values configuration options are generated by `values.yaml`, you can set the custom value for every option.
+Click the component name to open its configuration page. For a Helm chart component, the Values options are generated from the chart's `values.yaml`, and you can set a custom value for any of them.
 
-In the VelaUX, the value key format like `replica.persistence.size=15Gi`. they will be converted to YAML value:
+In VelaUX, a value key looks like `resources.limits.memory=256Mi`, and is converted to YAML:
 
 ```yaml
-values: 
-    replica:
-       persistence:
-          size: 15Gi
+values:
+  resources:
+    limits:
+      memory: 256Mi
 ```
 
-After modifying the deployment parameters, the workflow of the environment must be executed to make the modified parameters take effect in the specified environment. Due to the existence of Revision, the configuration parameters will be saved in each historical version.
+After you change the parameters, run the environment's workflow to apply them. Each run is saved as a revision, so earlier parameters stay in the history.
 
 ### Visualize the resources created by Helm Release
 
-For a helm chart, users often don't know what resources they will create, making it difficult to troubleshoot. In VelaUX, users can visualize the resources created by Helm Release. via the resource graph, users could know the relationships between the resources and the status of all resources. Click the `Detail` action button could view the resource YAML.
+It's often unclear what a chart creates, which makes it hard to troubleshoot. VelaUX shows the resources a Helm release created as a graph, with their relationships and status. Click the `Detail` action button to view a resource's YAML.
 
 ![resource-graph](https://kubevela.io/images/1.4/helm-graph.jpg)
 
-You can hover your mouse on it to check the health status, by clicking the icon on the right, you can even get the yaml details for debug.
+Hover over a resource to check its health, or click the icon on its right to get its YAML for debugging.
 
 ![resource-detail](../resources/resouce-detail.jpg)
 
-At this point, Helm Chart in KubeVela is no stranger to you, go ahead and try more!
-
 ## Specify different value file
 
-You can change the default values file `values.yaml` with another value file present inside the Helm chart by set the `valuesFiles` field. eg:
+Set `valuesFiles` to use another values file in the chart instead of the default `values.yaml`.
 
-We use the chart `hello-kubernetes-chart` as an example.This chart has two values files. You can pull this chart and have a look all contains files in it:
+The `podinfo` chart ships two values files:
 
-```yaml
-$ tree ./hello-kubernetes-chart
-./hello-kubernetes-chart
+```
+podinfo
 ├── Chart.yaml
+├── README.md
 ├── templates
-│ ├── NOTES.txt
-│ ├── _helpers.tpl
-│ ├── config-map.yaml
-│ ├── deployment.yaml
-│ ├── hpa.yaml
-│ ├── ingress.yaml
-│ ├── service.yaml
-│ ├── serviceaccount.yaml
-│ └── tests
-│ └── test-connection.yaml
-├── values-production.yaml
+├── values-prod.yaml
 └── values.yaml
 ```
 
-As we can see, there are values files `values.yaml` `values-production.yaml` in this chart.If you not set the `valuesFiles` field, `values.yaml` will used by rendering the resources.
+Without `valuesFiles`, the chart renders with `values.yaml`. Switch to `values-prod.yaml`, which also turns on the autoscaler and deploys Redis beside podinfo, with:
 
-You can switch to use `values-production.yaml` by:
-```yaml
+```shell
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: hello-kubernetes
+  name: podinfo-prod
 spec:
   components:
-    - name: hello-kubernetes
+    - name: podinfo
       type: helm
       properties:
         repoType: "helm"
-        url: "https://wangyikewxgm.github.io/my-charts/"
-        chart: "hello-kubernetes-chart"
-        version: "0.1.0"
+        url: "https://stefanprodan.github.io/podinfo"
+        chart: "podinfo"
+        version: "6.17.0"
         valuesFiles:
-          - "values-production.yaml"
-  EOF
+          - "values-prod.yaml"
+EOF
 ```
 
-Files defined in field `valuesFiles` are merged in the order of this list with the last file overriding the first.
+The files in `valuesFiles` are merged in list order, so a later file overrides an earlier one. Here `values-prod.yaml` overrides any key it shares with `values.yaml`:
 
-Example below `values-production.yaml` will override `values.yaml` if they have same value key.
 ```yaml
         valuesFiles:
           - "values.yaml"
-          - "values-production.yaml"
+          - "values-prod.yaml"
 ```
 
 ## Specify OCI registry
 
-If your chart is stored in [OCI registry](https://helm.sh/docs/topics/registries/), you can create the application like this:
+If your chart is stored in an [OCI registry](https://helm.sh/docs/topics/registries/), create the application like this:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -236,4 +181,7 @@ spec:
 Your fluxcd addon version must be `1.3.1+`.
 :::
 
-Now, you have learned the basic helm delivery. If you want to delivery Helm Chart into multi-clusters, you can refer to [this blog](https://kubevela.io/blog/2022/07/07/helm-multi-cluster).
+## Next steps
+
+- Deploy the chart to several clusters with a [topology policy](../case-studies/multi-cluster.md).
+- Roll it out gradually with a [Canary rollout](./helm-rollout.md).

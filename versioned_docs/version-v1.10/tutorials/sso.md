@@ -2,75 +2,74 @@
 title:  SSO Login
 ---
 
-## Description
+VelaUX has two ways to sign in: local login, with a username and password stored in VelaUX, and single sign-on (SSO) through [Dex](https://dexidp.io/). Dex connects to many identity providers, such as GitHub, GitLab, LDAP, Google, OIDC and SAML.
 
-In KubeVela V1.3, we provide two methods to log in: local login and SSO.
+A new installation uses local login. A platform administrator switches it to SSO in **Admin Dashboard > Settings**. This guide sets up SSO with a GitHub connector and an LDAP connector.
 
-Local login uses the username and password stored in the local database to log in, and SSO integrates [Dex](https://dexidp.io/), which can be configured by configuring Dex's [OpenID Connect](https://dexidp.io/docs/openid-connect) to implement many different ways to log in, such as GitHub, LDAP, Gitlab, OIDC, SAML, Google etc.
+## How SSO users map to VelaUX users
 
-After the platform is initialized, local login is used by default. Platform administrators can configure SSO through the platform configuration page. In this tutorial, we'll use GitHub and LDAP Connector to show how to use SSO with KubeVela.
+VelaUX matches an SSO login to a local user by email, and the login gets that user's roles, including admin. Use only connectors that verify email addresses, and set the admin's email to an address you control.
 
-## Enable Dex Addon
+A login with an email that matches no local user creates a new user. That user starts with the default projects and roles you set in **Settings** (see [Switch to SSO](#switch-to-sso)), and nothing else.
 
-1. You need to enable the Dex Addon in the Addon list first to use SSO:
+## Enable the Dex addon
+
+Enable the `dex` addon from the addon list:
 
 ![alt](https://kubevela.io/images/1.3/dex-addon.png)
 
-2. After enabling the Dex Addon, we also need to upgrade the VelaUX addon and open its Dex option:
+That is all VelaUX needs: it reads the Dex configuration from the `dex-config` Secret the addon uses, and writes your connectors into it.
 
-![alt](https://kubevela.io/images/1.5/enable-dex-in-velaux.png)
+## Configure a Dex connector
 
-## Configure Dex Connectors
+You need at least one connector before you can switch to SSO. Connectors are configs of the **Dex Connector** template, under **Admin Dashboard > Global Configs**.
 
-Next, we need to configure the Dex Connectors. 
-### Configure GitHub Connector
+### GitHub connector
 
-Take GitHub Connector as an example, if you don't have a GitHub Oauth App, you need to create an OAuth App on GitHub's Developer settings first, and set the App's Authorization callback URL to `[Vela UX address]/dex/callback`.
+1. In GitHub's **Developer settings**, create an OAuth App. Set its **Authorization callback URL** to `<VelaUX address>/dex/callback`.
 
-> Note that please make sure your Vela UX has a public IP address due to third-party redirection involved.
+   VelaUX needs an address your users' browsers can reach, and that address is the callback URL you register with GitHub. GitHub sends the browser back to it after login, so it does not have to be reachable from the internet, only from your users' machines.
 
-After creating the Oauth App, configure the Dex Connector on the integration configuration page. We choose the type `GitHub`, and set the Client ID and Client Secret corresponding to the Oauth App. Note that the Redirect URI here must be the same as the `[Vela UX address]/dex/callback` previously configured when the Oauth App was created.
+2. In **Admin Dashboard > Global Configs**, create a **Dex Connector** config of type `GitHub`. Set the **Client ID** and **Client Secret** from the OAuth App, and set the **Redirect URI** to the same `<VelaUX address>/dex/callback`.
 
 ![alt](https://kubevela.io/images/1.3/intergration.png)
 
-### Configure LDAP Connector
+### LDAP connector
 
-If you want to use LDAP for SSO, you need to set up the LDAP Connector first.
+Make sure your LDAP server is reachable from the cluster VelaUX runs in.
 
-> Before configuring, please make sure you have LDAP installed correctly and that LDAP can communicate with the Vela UX network.
+1. Create a **Dex Connector** config of type `LDAP`. Set **Host** to the address of the LDAP server, and set **BaseDN**.
 
-After selecting the Connector type as LDAP, fill in the address of the LDAP server in `Host`, and specify `BaseDN`.
+   ![alt](https://kubevela.io/images/1.3/ldap1.png)
 
-![alt](https://kubevela.io/images/1.3/ldap1.png)
+2. If your LDAP server does not allow anonymous search, open **Advanced Parameters** and set **BindDN** and **BindPW**. The connector searches for users with these credentials.
 
-If your LDAP does not provide anonymous authentication access, then you need to open the `Advanced Parameters`, fill in `BindDN` and `BindPW`, Connector will use these credentials for user search.
+   ![alt](https://kubevela.io/images/1.3/ldap2.png)
 
-![alt](https://kubevela.io/images/1.3/ldap2.png)
+For other connector types, see [Dex Connectors Configuration](../how-to/dashboard/config/dex-connectors.md).
 
-> For more types of Dex Connectors, please refer to [Dex Connectors Configuration](../how-to/dashboard/config/dex-connectors.md).
+## Switch to SSO
 
-## Platform setting
-
-Users who logged in through SSO will be automatically bound to the users who have the same email in the local database, otherwise, a new user will be created.
-
-Since the newly logged-in user does not have any permissions, we need to set an email address for the platform administrator first. After that, when you use a user with the same email address for SSO login, you can automatically have platform administrator privileges.
-
-> The admin user also could log in from the dex with the email and password.
-
-After configuring the user email, we can change the login method to SSO login on the platform configuration page. Before updating the configuration, it is strongly recommended to click `Click me to test open the dex page` to verify that the dex connector configuration is ready.
+1. In **Admin Dashboard > Users**, set the email of each administrator to an address they own in the identity provider. Their SSO login then signs them in as that admin.
+2. In **Admin Dashboard > Settings**, set **User login mode** to **SSO by dex** and set **VelaUX address** to the address your users open VelaUX at.
+3. Click **Click me to open the dex login page** and check that the Dex page loads and lists your connectors. Fix the connectors before you go on if it does not.
+4. Optionally, set the default projects and project roles for users who sign in through SSO for the first time.
+5. Submit.
 
 ![alt](https://kubevela.io/images/1.5/platform-setting.jpg)
 
-On this page, you could set the default project and roles for the users who log in through SSO.
+### Locked out?
 
-## Use SSO Login
+After the switch, an administrator can still sign in through Dex with their email and VelaUX password: VelaUX gives Dex every admin user as a password login. Sign in that way and set the login method back to local in **Settings**. Before switching, keep a session open in another tab; it stays valid for an hour, long enough to switch back.
 
-Log out and refresh the page again, you can see that we have entered the Dex login page.
+## Sign in with SSO
+
+Sign out and reload the page. VelaUX sends you to the Dex login page:
 
 ![alt](https://kubevela.io/images/1.3/dex-login.png)
 
-Then, you select GitHub or LDAP to log in.
+Choose GitHub or LDAP and sign in:
 
 ![alt](https://kubevela.io/images/1.3/dex-grant-access.png)
 
-So far, we have completed SSO login with GitHub. At this point, if the email of the log-in user can be associated with the email of the previously log-in user, the newly log-in user will inherit the permissions of the previous user.
+If your email matches a local user, you are signed in as that user, with its roles. Otherwise VelaUX creates a new user with the defaults from **Settings**.

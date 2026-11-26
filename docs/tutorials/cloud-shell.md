@@ -2,13 +2,12 @@
 title: Cloud Shell
 ---
 
-The cloud shell feature helps you to manage the application via CLI(vela、kubectl). such as:
+Cloud Shell opens a terminal in the browser with `vela` and `kubectl` set up for your VelaUX user. You can use it to:
 
-* Creating applications in batches with the YAML.
-* Watch the logs of the application.
-* Open the shell TTY of the application instance.
-* Upload and download files from the shell environment.
-* Others...
+* Create applications in batches from YAML.
+* Follow an application's logs.
+* Open a shell in an application's container.
+* Upload files to the shell environment and download them from it.
 
 ### Enable the addon
 
@@ -22,15 +21,21 @@ vela addon enable cloudshell
 
 ![open-cloud-shell](https://kubevela.io/images/1.5/cloud-shell.jpg)
 
-On the UI top right, there is a cloud shell button. Users can open the cloud shell environment by clicking it. By default, all users have permission to open the cloud shell. If you want to disable this feature for some users, you could create a new platform role that has `Disable CloudShell` permission. Bind this role to the user, who you want to disable.
+Click the cloud shell button at the top right of VelaUX to open it.
+
+Every VelaUX user can open Cloud Shell unless a platform role with **Disable CloudShell** is bound to them. The shell's Kubernetes permissions follow the user's VelaUX roles:
+
+| VelaUX permission | Kubernetes permissions in the shell |
+| --- | --- |
+| `admin` | Anything. |
+| `deploy application` in a project | Full access to Applications in the project's namespaces. |
+| `project view` in a project | Read access to Applications in the project's namespaces. |
 
 ![cloud shell environment](https://kubevela.io/images/1.5/cloud-shell-environment.jpg)
 
-After connected to the cloud shell environment, you could exec `vela --help` to get the help message. In the console, users have some permissions(Kubernetes RBAC) that auto-grant base the permission in the UI. there are some rules:
+Run `vela --help` to see what the CLI can do.
 
-1. If you have the `admin` permission, you are allowed to do anything in the cloud shell environment.
-2. If you have the `deploy application` permission in the projects, you could have all permissions of the Application in the namespace that belongs to the project.
-3. If you have the `project view` permission in the projects, you will only have the read permission of the Application in the namespace that belongs to the project.
+The shell's `vela` CLI comes from the cloudshell addon's image (`oamdev/cloudshell:v1.7.2`), so it is version 1.7.2, whatever version of KubeVela you run. Commands added since are missing or behave as they did in 1.7, among them `vela def test`, `vela mcp` and `vela config-template migrate`, and `vela config` writes legacy Secrets rather than `Config` resources. Use a current `vela` on your own machine for those.
 
 ### Open the console of the application containers
 

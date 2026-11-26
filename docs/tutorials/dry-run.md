@@ -2,16 +2,16 @@
 title: Dry Run
 ---
 
-The dry run feature is a very useful way to check the correctness of the application configuration and definitions. It will render the application and print the output resources that checked on the service side. If the definitions(component, trait) is invalid, the dry run will print the error message.
+`vela dry-run` renders an application into the Kubernetes resources it would create, and prints them without deploying anything. Use it to check:
 
-When you do the following things, you'd better use `dry-run`.
+* an application before you create or update it;
+* a definition (component, trait) before you apply it, by dry-running an example application against it.
 
-* Create or update an application.
-* Create or update the definition, and dry run some example applications.
+If the application or a definition is invalid, dry-run prints the error instead.
 
-## Dry run via CLI
+## Dry run an application
 
-There is a simple application:
+Save this application as `app.yaml`:
 
 ```yaml
 kind: Application
@@ -34,10 +34,10 @@ spec:
             replicas: 1
 ```
 
-Copy it and write a file `app.yaml`, execute the following command, and then the resources will be printed.
+Render it:
 
 ```bash
-vela dry-run app.yaml
+vela dry-run -f app.yaml
 ```
 
 <details>
@@ -45,7 +45,7 @@ vela dry-run app.yaml
 
 ```yaml
 ---
-# Application(webservice-app) -- Component(frontend) 
+# Application(webservice-app) -- Component(frontend)
 ---
 
 apiVersion: apps/v1
@@ -84,7 +84,7 @@ spec:
           protocol: TCP
 
 ---
-## From the auxiliary workload 
+## From the auxiliary workload
 apiVersion: v1
 kind: Service
 metadata:
@@ -113,23 +113,77 @@ spec:
 
 </details>
 
-If we set the expose field of the port as false, the output resources do not include the `Service`. If we set the replicas field as "1", the output will be an error message:
+With `expose: false` on the port, the output has no `Service`. Set `replicas: "1"` (a string) and dry-run prints an error instead:
 
 ```bash
-Error: validate application: ./app.yaml by dry-run: admission webhook "validating.core.oam.dev.v1beta1.applications" denied the request: field "schematic": Invalid value error encountered, cannot evaluate trait "scaler": invalid template of trait scaler after merge with parameter and context: parameter.replicas: conflicting values (*1 | int) and "1" (mismatched types int and string) (and 1 more errors). 
+Error: validate application: ./app.yaml by dry-run: admission webhook "validating.core.oam.dev.v1beta1.applications" denied the request: field "schematic": Invalid value error encountered, cannot evaluate trait "scaler": invalid template of trait scaler after merge with parameter and context: parameter.replicas: conflicting values (*1 | int) and "1" (mismatched types int and string) (and 1 more errors).
 ```
 
-This means the replicas field is int type but we provide a string value, this application configuration is not valid.
+`replicas` is an `int`, so a string is not valid.
 
+### Without a cluster
 
+By default dry-run reads definitions from the cluster and validates the result there. Add `--offline` to run with no cluster at all: validation is skipped, and every definition the application uses must come from `-d`, a file or a directory of definitions:
 
-### Dry run with policy and workflow via CLI
+```bash
+vela dry-run --offline -d ./definitions -f app.yaml
+```
 
-:::tip
-Override/topology Policies and deploy workflow are supported in v1.7.0+ now. While there're still some limitation that `dry-run` with policy and workflow will only take `override`, `topology` policies and `deploy` workflow step into considerations. Other workflow steps will be ignored.
-:::	
+`-d` also works online, alongside the definitions in the cluster. `-x` (`--definition-namespace`) sets the namespace the CLI reads definitions from; it defaults to `vela-system`.
 
-Let's take the following application as example, the application explicitly specify `override`, `topology` policies and `deploy` workflow step.
+## Check a definition before you apply it
+
+Pass a definition you are writing with `-d`, and dry-run an application that uses it. Nothing is applied to the cluster. For example, a trait that labels pods with their team, saved as `my-trait.cue`:
+
+```cue
+"my-trait": {
+	type:        "trait"
+	description: "Label the pods with the owning team."
+	attributes: appliesToWorkloads: ["deployments.apps"]
+}
+template: {
+	patch: spec: template: metadata: labels: team: parameter.team
+	parameter: team: string
+}
+```
+
+And an application that uses it, saved as `app.yaml`:
+
+```yaml
+kind: Application
+apiVersion: core.oam.dev/v1beta1
+metadata:
+  name: webservice-app
+spec:
+  components:
+    - name: frontend
+      type: webservice
+      properties:
+        image: oamdev/testapp:v1
+      traits:
+        - type: my-trait
+          properties:
+            team: payments
+```
+
+```bash
+vela dry-run -f app.yaml -d my-trait.cue
+```
+
+The Deployment in the output carries the label `team: payments`. If the template is broken, say it reads `parameter.teem`, dry-run names the field:
+
+```
+Error: cannot generate manifests from components and traits: cannot generate manifests from component frontend:
+
+Template errors:
+  spec.template.metadata.labels.team: undefined field: teem
+```
+
+## Dry run with policies and a workflow
+
+Dry-run takes `override` and `topology` policies and `deploy` workflow steps into account. It ignores other workflow steps.
+
+This application deploys to `default`, waits for approval, then deploys to `prod` with 5 replicas:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -183,294 +237,27 @@ spec:
           policies: ["target-prod", "deploy-ha"]
 ```
 
-Dry run will produce rendered results for both `deploy2default` and `deploy2prod` deploy steps as below:
-
-<details>
-<summary>expected output</summary>
+Dry-run renders each `deploy` step separately, with the same Deployment and Service as above for each. Only these lines differ between the two:
 
 ```yaml
----
-# Application(first-vela-app with topology target-default) -- Component(express-server) 
----
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  annotations: {}
-  labels:
-    app.oam.dev/appRevision: ""
-    app.oam.dev/component: express-server
-    app.oam.dev/name: first-vela-app
-    app.oam.dev/namespace: default
-    app.oam.dev/resourceType: WORKLOAD
-    workload.oam.dev/type: webservice
-  name: express-server
-  namespace: default
+# Application(first-vela-app with topology target-default) -- Component(express-server)
+...
 spec:
   replicas: 1
-  selector:
-    matchLabels:
-      app.oam.dev/component: express-server
-  template:
-    metadata:
-      labels:
-        app.oam.dev/component: express-server
-        app.oam.dev/name: first-vela-app
-    spec:
-      containers:
-      - image: oamdev/hello-world
-        name: express-server
-        ports:
-        - containerPort: 8000
-          name: port-8000
-          protocol: TCP
-
----
-## From the auxiliary workload 
-apiVersion: v1
-kind: Service
-metadata:
-  annotations: {}
-  labels:
-    app.oam.dev/appRevision: ""
-    app.oam.dev/component: express-server
-    app.oam.dev/name: first-vela-app
-    app.oam.dev/namespace: default
-    app.oam.dev/resourceType: TRAIT
-    trait.oam.dev/resource: webserviceExpose
-    trait.oam.dev/type: AuxiliaryWorkload
-  name: express-server
-  namespace: default
-spec:
-  ports:
-  - name: port-8000
-    port: 8000
-    targetPort: 8000
-  selector:
-    app.oam.dev/component: express-server
-  type: ClusterIP
-
----
-
----
-# Application(first-vela-app with topology target-prod) -- Component(express-server) 
----
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  annotations: {}
-  labels:
-    app.oam.dev/appRevision: ""
-    app.oam.dev/component: express-server
-    app.oam.dev/name: first-vela-app
-    app.oam.dev/namespace: default
-    app.oam.dev/resourceType: WORKLOAD
-    workload.oam.dev/type: webservice
-  name: express-server
-  namespace: default
+...
+# Application(first-vela-app with topology target-prod) -- Component(express-server)
+...
 spec:
   replicas: 5
-  selector:
-    matchLabels:
-      app.oam.dev/component: express-server
-  template:
-    metadata:
-      labels:
-        app.oam.dev/component: express-server
-        app.oam.dev/name: first-vela-app
-    spec:
-      containers:
-      - image: oamdev/hello-world
-        name: express-server
-        ports:
-        - containerPort: 8000
-          name: port-8000
-          protocol: TCP
-
----
-## From the auxiliary workload 
-apiVersion: v1
-kind: Service
-metadata:
-  annotations: {}
-  labels:
-    app.oam.dev/appRevision: ""
-    app.oam.dev/component: express-server
-    app.oam.dev/name: first-vela-app
-    app.oam.dev/namespace: default
-    app.oam.dev/resourceType: TRAIT
-    trait.oam.dev/resource: webserviceExpose
-    trait.oam.dev/type: AuxiliaryWorkload
-  name: express-server
-  namespace: default
-spec:
-  ports:
-  - name: port-8000
-    port: 8000
-    targetPort: 8000
-  selector:
-    app.oam.dev/component: express-server
-  type: ClusterIP
-
----
 ```
 
-</details>
+Dry-run applies the override policies but not the topology's placement: the output is labelled with the topology, and the resources still show the Application's namespace (`default`). When the Application is deployed, they go to the namespace `target-prod` sets (`prod`).
 
-Each deploy workflow step with topology policy will render individual result.
+### Dry run one environment
 
-It can be a bit redundant for you as you may just need to dry run for one environment at a time. The, you can use the external workflow feature like below.
+To dry-run one environment, pass its Policy and Workflow files with `-f` and add `--merge`.
 
-Firstly, define policy and workflow as below in individual files:
-
-* The `target-prod.yaml` and `ha.yaml` corresponding to the `production` environment.
-  ```yaml
-  # target-prod.yaml
-  apiVersion: core.oam.dev/v1alpha1
-  kind: Policy
-  metadata:
-    name: target-prod
-  type: topology
-  properties:
-    clusters: ["local"]
-    namespace: "prod"
-  ```
-
-  ```yaml
-  # ha.yaml
-  apiVersion: core.oam.dev/v1alpha1
-  kind: Policy
-  metadata:
-    name: ha
-  type: override
-  properties:
-    components:
-    - type: webservice
-      traits:
-      - type: scaler
-        properties:
-          replicas: 5
-  ```
-
-* The `prod-workflow.yaml` can glue them together.
-  ```yaml
-  # prod-workflow.yaml
-  apiVersion: core.oam.dev/v1alpha1
-  kind: Workflow
-  metadata:
-    name: deploy-prod
-  steps:
-    - type: deploy
-      name: deploy-prod
-      properties:
-        policies: ["ha", "target-prod"]
-  ```
-
-* Then the application can reference the workflow as below.
-  ```yaml
-  apiVersion: core.oam.dev/v1beta1
-  kind: Application
-  metadata:
-    name: first-vela-app
-  spec:
-    components:
-      - name: express-server
-        type: webservice
-        properties:
-          image: oamdev/hello-world
-          ports:
-          - port: 8000
-            expose: true
-        traits:
-          - type: scaler
-            properties:
-              replicas: 1
-    workflow:
-      ref: deploy-prod
-  ```
-
-The dry run command can be:
-
-```
-vela dry-run -f app.yaml -f target-prod.yaml -f ha.yaml -f prod-workflow.yaml 
-```
-
-Then, the dry-run results will only contain resources in the `production` environment.
-
-<details>
-<summary>expected output</summary>
-
-```yaml
----
-# Application(first-vela-app with topology target-prod) -- Component(express-server) 
----
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  annotations: {}
-  labels:
-    app.oam.dev/appRevision: ""
-    app.oam.dev/component: express-server
-    app.oam.dev/name: first-vela-app
-    app.oam.dev/namespace: default
-    app.oam.dev/resourceType: WORKLOAD
-    workload.oam.dev/type: webservice
-  name: express-server
-  namespace: default
-spec:
-  replicas: 5
-  selector:
-    matchLabels:
-      app.oam.dev/component: express-server
-  template:
-    metadata:
-      labels:
-        app.oam.dev/component: express-server
-        app.oam.dev/name: first-vela-app
-    spec:
-      containers:
-      - image: oamdev/hello-world
-        name: express-server
-        ports:
-        - containerPort: 8000
-          name: port-8000
-          protocol: TCP
-
----
-## From the auxiliary workload 
-apiVersion: v1
-kind: Service
-metadata:
-  annotations: {}
-  labels:
-    app.oam.dev/appRevision: ""
-    app.oam.dev/component: express-server
-    app.oam.dev/name: first-vela-app
-    app.oam.dev/namespace: default
-    app.oam.dev/resourceType: TRAIT
-    trait.oam.dev/resource: webserviceExpose
-    trait.oam.dev/type: AuxiliaryWorkload
-  name: express-server
-  namespace: default
-spec:
-  ports:
-  - name: port-8000
-    port: 8000
-    targetPort: 8000
-  selector:
-    app.oam.dev/component: express-server
-  type: ClusterIP
-
----
-```
-
-</details>
-
-Moreover, you can use `--merge` flag to merge external policies and workflow when application file is not reference to them.
-
-For example, you can define the application as below, the only difference is there's no `workflow` field.
+Keep the application without its `policies` and `workflow`:
 
 ```yaml
 # app.yaml
@@ -493,8 +280,7 @@ spec:
             replicas: 1
 ```
 
-<details>
-<summary>the workflow and policy can be defined the same way</summary>
+And the production environment in two files of its own:
 
 ```yaml
 # workflow.yaml
@@ -508,6 +294,7 @@ steps:
     properties:
       policies: ["target-prod"]
 ```
+
 ```yaml
 # target-prod.yaml
 apiVersion: core.oam.dev/v1alpha1
@@ -520,177 +307,32 @@ properties:
   namespace: "prod"
 ```
 
-</details>
-
-If you don't use `--merge` flag in this way, it will report warnings as below.
-
-```
-vela dry-run -f app.yaml -f target-prod.yaml -f workflow.yaml
-```
-
-<details>
-<summary>result with warning messages</summary>
-
-```yaml
-WARNING: workflow deploy-demo not referenced by application
-
-WARNING: policy target-prod not referenced by application
-
----
-# Application(default) -- Component(express-server) 
----
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  annotations: {}
-  labels:
-    app.oam.dev/appRevision: ""
-    app.oam.dev/component: express-server
-    app.oam.dev/name: first-vela-app
-    app.oam.dev/namespace: default
-    app.oam.dev/resourceType: WORKLOAD
-    workload.oam.dev/type: webservice
-  name: express-server
-  namespace: default
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app.oam.dev/component: express-server
-  template:
-    metadata:
-      labels:
-        app.oam.dev/component: express-server
-        app.oam.dev/name: first-vela-app
-    spec:
-      containers:
-      - image: oamdev/hello-world
-        name: express-server
-        ports:
-        - containerPort: 8000
-          name: port-8000
-          protocol: TCP
-
----
-## From the auxiliary workload 
-apiVersion: v1
-kind: Service
-metadata:
-  annotations: {}
-  labels:
-    app.oam.dev/appRevision: ""
-    app.oam.dev/component: express-server
-    app.oam.dev/name: first-vela-app
-    app.oam.dev/namespace: default
-    app.oam.dev/resourceType: TRAIT
-    trait.oam.dev/resource: webserviceExpose
-    trait.oam.dev/type: AuxiliaryWorkload
-  name: express-server
-  namespace: default
-spec:
-  ports:
-  - name: port-8000
-    port: 8000
-    targetPort: 8000
-  selector:
-    app.oam.dev/component: express-server
-  type: ClusterIP
-
----
-
-```
-
-</details>
-
-In this case, the policy and workflow do not take effect. Because those are not referenced by the application and being viewed as standalone files and ignored.  
-
-So to make those external files work, please provide "--merge" flag as below:
-
-```
+```bash
 vela dry-run -f app.yaml -f target-prod.yaml -f workflow.yaml --merge
 ```
 
-Then the application will be glued with external policies and workflows even no reference exists.
+The output is the same Deployment and Service, rendered once, under `# Application(first-vela-app with topology target-prod) -- Component(express-server)`.
 
-<details>
-<summary>expected ouput</summary>
+Without `--merge`, files the application does not reference are ignored, with a warning for each:
 
-```yaml
----
-# Application(first-vela-app with topology target-prod) -- Component(express-server) 
----
+```
+WARNING: workflow deploy-demo not referenced by application
 
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  annotations: {}
-  labels:
-    app.oam.dev/appRevision: ""
-    app.oam.dev/component: express-server
-    app.oam.dev/name: first-vela-app
-    app.oam.dev/namespace: default
-    app.oam.dev/resourceType: WORKLOAD
-    workload.oam.dev/type: webservice
-  name: express-server
-  namespace: default
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app.oam.dev/component: express-server
-  template:
-    metadata:
-      labels:
-        app.oam.dev/component: express-server
-        app.oam.dev/name: first-vela-app
-    spec:
-      containers:
-      - image: oamdev/hello-world
-        name: express-server
-        ports:
-        - containerPort: 8000
-          name: port-8000
-          protocol: TCP
-
----
-## From the auxiliary workload 
-apiVersion: v1
-kind: Service
-metadata:
-  annotations: {}
-  labels:
-    app.oam.dev/appRevision: ""
-    app.oam.dev/component: express-server
-    app.oam.dev/name: first-vela-app
-    app.oam.dev/namespace: default
-    app.oam.dev/resourceType: TRAIT
-    trait.oam.dev/resource: webserviceExpose
-    trait.oam.dev/type: AuxiliaryWorkload
-  name: express-server
-  namespace: default
-spec:
-  ports:
-  - name: port-8000
-    port: 8000
-    targetPort: 8000
-  selector:
-    app.oam.dev/component: express-server
-  type: ClusterIP
-
----
+WARNING: policy target-prod not referenced by application
 ```
 
-</details>
+:::note
+An Application that references a Workflow with `workflow: ref:` can't be dry-run from local files: the referenced Workflow, and the Policies it names, must already exist in the cluster, and the Workflow must be readable by the user the Application runs as. To dry-run files on disk, use `--merge` as above.
+:::
 
-You can refer to the [Dry run command](../cli/vela_dry-run.md) for more command line use cases.
+See the [dry-run command reference](../cli/vela_dry-run.md) for every flag.
 
-## Dry run via UI
+## Dry run in VelaUX
 
 ![dry-run](https://kubevela.io/images/1.5/dry-run.jpg)
 
-Clicking the `Deploy` button to open the workflow selector dialog. You could select a workflow(every workflow corresponding to an environment) and click the `DryRun` button to execute a dry run. If passed, the result is like this
+Click **Deploy** to open the workflow picker. Each workflow belongs to one environment. Pick one and click **DryRun**. If it passes, you see this:
 
 ![dry-run-successfully](https://kubevela.io/images/1.5/dry-run-success.jpg)
 
-The result report is different from the CLI, there is a complete application configuration that is generated from the application metadata, you could check it. Different environments may have different application configurations.
+The report differs from the CLI's: it shows the whole Application that VelaUX generates for that environment, so different environments can show different configurations.

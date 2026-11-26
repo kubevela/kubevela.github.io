@@ -1,14 +1,10 @@
 ---
-title: Deploy Cloud Services
+title: Provision Cloud Resources with Terraform
 ---
 
-KubeVela efficiently and securely integrates different types of cloud resources in hybrid/multi-cloud environments.
+This guide creates an OSS bucket on Alibaba Cloud from an Application and reads its connection details from a Secret. The same steps work for AWS and Azure resources; only the component type and credentials change.
 
-You can use the integrated cloud resources as out-of-box components or integrate by Terraform or Crossplane easily.
-With the help of KubeVela, you can use cloud resources from various providers in a unified way.
-
-This tutorial will mainly focus on talking about how to provision cloud resources by [Terraform](https://github.com/kubevela/terraform-controller).
-If you'd like to know more about cloud resources from [Crossplane](https://crossplane.io/), please refer to [this guide](../end-user/components/cloud-services/provision-cloud-resources-by-crossplane.md).
+To provision cloud resources with [Crossplane](https://crossplane.io/) instead, see [this guide](../end-user/components/cloud-services/provision-cloud-resources-by-crossplane.md).
 
 ## Provision Cloud Resources
 
@@ -59,18 +55,15 @@ For different vendors, these parameters update accordingly. All cloud resources 
 
 ### Provision by Creating Application
 
-First, Prepare a available cloud provider. Let's list the exist configs, If exist you could ignore this step.
+1. Check whether a provider config exists: `vela config list -t terraform-alibaba`. If one is listed, skip to step 3.
+
+2. Create one. Set `ALICLOUD_ACCESS_KEY` and `ALICLOUD_SECRET_KEY` in your shell first (for example with `read -rs ALICLOUD_SECRET_KEY`), so the keys are not echoed or saved in your shell history:
 
 ```bash
-vela config list -t terraform-alibaba
+vela config create default -t terraform-alibaba name=default ALICLOUD_REGION=<Region> ALICLOUD_ACCESS_KEY="$ALICLOUD_ACCESS_KEY" ALICLOUD_SECRET_KEY="$ALICLOUD_SECRET_KEY"
 ```
 
-If not exist, you can refer to this command to create a default provider:
-
-```bash
-vela config create default -t terraform-alibaba name=default ALICLOUD_REGION=<Region> ALICLOUD_SECRET_KEY=<Secret> ALICLOUD_ACCESS_KEY=<AccessKey>
-```
-You can use the following command to get the template of the provider configuration:
+To see the available config templates:
 
 ```bash
 $ vela config-template list
@@ -78,7 +71,8 @@ NAME             	ALIAS                               	SCOPE  	SENSITIVE	CREATED
 helm-repository  	Helm Repository                     	project	false    	2023-08-24 19:21:03 +0800 CST
 terraform-alibaba	Terraform Provider for Alibaba Cloud	system 	true     	2023-08-24 19:32:19 +0800 CST
 ```
-and use the following command to show the args of specify provider:
+
+To see the fields a provider config takes:
 
 ```bash
 $ vela config-template show terraform-alibaba
@@ -98,7 +92,7 @@ $ vela config-template show terraform-alibaba
 +---------------------+--------+--------------------------------------------------------+----------+---------+---------+
 ```
 
-Use the following Application to provision an OSS bucket:
+3. Save the following Application as `oss.yaml`. It provisions an OSS bucket:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -117,11 +111,16 @@ spec:
 ```
 
 The above `alibaba-oss` component will create an OSS bucket named `vela-website-0911`, with `private` acl, with connection
-information stored in a secreted named `oss-conn`.
+information stored in a Secret named `oss-conn`.
 
-Apply the above application, then check the status:
+Apply it, then check the status:
 
-```shell
+```bash
+vela up -f oss.yaml
+vela ls
+```
+
+```console
 $ vela ls
 APP                            	COMPONENT 	TYPE       	TRAITS	PHASE  	HEALTHY	STATUS                                       	CREATED-TIME
 provision-cloud-resource-sample	sample-oss	alibaba-oss	      	running	healthy	Cloud resources are deployed and ready to use	2021-09-11 12:55:57 +0800 CST
@@ -129,9 +128,21 @@ provision-cloud-resource-sample	sample-oss	alibaba-oss	      	running	healthy	Cl
 
 After the phase becomes `running` and `healthy`, you can then check the OSS bucket in Alibaba Cloud console.
 
-## Provision with UI Console
+The bucket's connection details are in the `oss-conn` Secret, in the Application's namespace:
 
-Provision cloud resources from UI Console can be more appropriate.
+```bash
+kubectl get secret oss-conn -o yaml
+```
+
+### Clean up
+
+```bash
+vela delete provision-cloud-resource-sample
+```
+
+This deletes the bucket and everything in it, because `deleteResource` defaults to `true`. To keep the bucket, set `deleteResource: false` on the component and apply it before you delete the Application.
+
+## Provision with UI Console
 
 ### Before starting
 
