@@ -38,6 +38,19 @@ Releases before v1.9 are documented only on [GitHub Releases](https://github.com
 
 These matter if you build controllers, providers or addons against KubeVela's Go modules.
 
+## Docs for the other products
+
+Workflow, VelaUX, Terraform, Cluster Gateway and the addons have their own docs sections. This is the version of each that a KubeVela release ships with, and where to read about it:
+
+| KubeVela | [Workflow](/workflow/overview) | [Cluster Gateway](/cluster-gateway/overview) | [Terraform](/terraform/overview) controller | [VelaUX](/velaux/overview) addon |
+| -------- | -------- | --------------- | ------------------------ | ------------- |
+| v1.12 | [0.8](/workflow/next/overview) | v1.10.0-alpha.1 | v0.9.1 | v1.9.5 |
+| v1.11 | [0.7](/workflow/overview) | v1.9.2 | v0.8.2 | v1.9.5 |
+| v1.10 | [0.6](/workflow/0.6/overview) | v1.9.2 | v0.8.2 | v1.9.5 |
+| v1.9 | [0.6](/workflow/0.6/overview) | v1.9.0-alpha.2 | v0.8.0 | v1.9.5 |
+
+Workflow, Cluster Gateway and the Terraform controller are the versions vela-core is built with. VelaUX and the other [addons](/addons/overview) come from the addon catalog, so their version is whatever the catalog holds when you enable them. The Cluster Gateway, Terraform, VelaUX and Addons sections describe the current release only.
+
 ## How the notes are organised
 
 A minor release page (`vX.Y.0`) has these sections, and leaves out any that are empty:
