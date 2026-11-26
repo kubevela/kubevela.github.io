@@ -78,11 +78,12 @@ If you forget it and another administrator exists, they can reset your password 
 If the administrator is the only user, you can delete it and restart VelaUX. With no users left, the next time you open VelaUX it asks you to create the administrator account again. Only do this when the administrator is the only user: VelaUX offers the first-visit setup only when there are no users at all, so on an install with other users, deleting the administrator leaves no way to create a new one.
 
 ```bash
-# Find the administrator's ConfigMap, named usr-<admin-username>
+# Find the administrator's ConfigMap: usr- followed by the username
 kubectl get cm -n kubevela | grep '^usr-'
 
-# Delete the administrator. With MongoDB as the datastore, delete it from MongoDB instead.
-kubectl delete cm usr-<admin-username> -n kubevela
+# Delete it, here for an administrator called admin: use the name listed above.
+# With MongoDB as the datastore, delete the user from MongoDB instead.
+kubectl delete cm usr-admin -n kubevela
 
 # Restart VelaUX
 kubectl delete pod -l app.oam.dev/component=velaux-server -n vela-system
