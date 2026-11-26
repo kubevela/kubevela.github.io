@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 Scalar parameters define single-value fields in a definition's parameter schema. Each constructor returns a `*Param` that maps directly to a CUE primitive type and can be chained with modifiers like `.Optional()`, `.Default()`, and `.Description()`.
 
-### Scalar Constructors
+## Scalar constructors
 
 | Constructor | CUE Type | Notes |
 |---|---|---|
@@ -19,7 +19,16 @@ Scalar parameters define single-value fields in a definition's parameter schema.
 
 ## `defkit.String()`
 
-A UTF-8 string parameter. Optional by default — the field is emitted as `field?: string`. Use `.Default(v)` to emit a non-optional field with a default (`field: *v | string`), or `.Mandatory()` for a non-optional field without a default (`field: string`).
+A UTF-8 string parameter.
+
+How a parameter is declared decides whether the user has to set it. This holds for every type on this page:
+
+| You write | CUE emits | If the user leaves it out |
+|---|---|---|
+| `defkit.String("x")` (bare) | `x: string` | Mandatory: the Application is refused with an incomplete value for `x` |
+| `defkit.String("x").Optional()` | `x?: string` | Allowed; guard reads with `.IsSet()` |
+| `defkit.String("x").Default("foo")` | `x: *"foo" \| string` | Allowed; the default is used |
+| `defkit.String("x").Required()` | `x!: string` | Refused, even when a default is set: the user must set it explicitly |
 
 ### Chain Methods
 
@@ -29,7 +38,7 @@ A UTF-8 string parameter. Optional by default — the field is emitted as `field
 | `.OpenEnum()` | Used after `Values()` to allow any string in addition to the listed values. Generates `*"info" \| "debug" \| string`. |
 | `.Pattern(regex)` | Adds a regex constraint the string must match. Use for formats like IP addresses, DNS names, or semantic versions. |
 | `.MinLen(n)` / `.MaxLen(n)` | Sets minimum/maximum length constraints on the string value. |
-| `.NotEmpty()` | Adds a constraint that the string must not be `""`. Stricter than `Required()` which only ensures the field is present. |
+| `.NotEmpty()` | Adds a constraint that the string must not be `""`. `Required()` only checks that the field is present. |
 | `.Concat(suffix) Value` | Returns a Value that appends a suffix to this parameter's runtime value. Generates CUE `parameter.name + "suffix"`. |
 | `.Prepend(prefix) Value` | Returns a Value that prepends a prefix to this parameter's runtime value. Generates CUE `"prefix" + parameter.name`. |
 | `.Contains(substr) Condition` | Returns a condition checking if the value contains the substring. Generates `strings.Contains(parameter.name, "substr")`. |
@@ -63,13 +72,13 @@ A boolean parameter. `.Default(true)` or `.Default(false)` sets the CUE default 
 
 ## `defkit.Float()`
 
-A floating-point number parameter. Supports `.Min(f)` and `.Max(f)` for range constraints. Generates the CUE `number` type.
+A floating-point number parameter. Supports `.Min(f)` and `.Max(f)` for range constraints. Generates `float`, or `number` once `.Min()` or `.Max()` is set.
 
 Same chain methods as IntParam: `.Min(n float64)` sets a lower bound, `.Max(n float64)` sets an upper bound, `.In(values ...float64)` creates a membership condition. Use for parameters like ratios, thresholds, or percentages.
 
 ## `defkit.Enum()`
 
-A string parameter constrained to a fixed set of allowed values. Use `.Values()` — not `.Enum()` — to specify the allowed set (current convention as of defkit API update).
+A string parameter constrained to a fixed set of allowed values. Use `.Values()` to list the allowed values.
 
 :::tip
 Combine `.Values()` with `.Default()` to pre-select one of the allowed values. The default appears first in the CUE disjunction with the `*` marker.

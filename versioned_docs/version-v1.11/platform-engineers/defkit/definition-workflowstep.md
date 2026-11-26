@@ -53,7 +53,7 @@ These methods are the same shape as on `ComponentDefinition`. See the [Component
 | `.Set(name string, value Value)` | Assigns a value to a named field in the step's template body. Used for steps that compute values (e.g. reading from K8s, calling HTTP endpoints) and storing results for later steps. |
 | `.SetIf(cond Condition, name string, value Value)` | Conditionally assigns a value only when the condition is true. Generates `if cond { name: value }` in the template body. |
 | `.SetGuardedBlock(cond Condition, name string, value Value)` | Creates a named field whose contents are conditional. Generates `name: { if cond { ...value... } }` — the field always exists, but its contents are guarded. Opposite of `SetIf` which wraps the field itself. |
-| `.Suspend(message string)` | Adds a suspend action that pauses the workflow and displays the message. The workflow waits for manual approval (via `vela workflow resume`) before continuing. |
+| `.Suspend(message string)` | Stores the message on the template object and emits no CUE, so on its own it does not pause anything. For an unconditional pause, use `.Builtin("suspend", "builtin.#Suspend").WithFullParameter().Build()`, which emits `suspend: builtin.#Suspend & { $params: parameter }`; the workflow then waits for `vela workflow resume`. |
 | `.SuspendIf(cond Condition, message string)` | Conditionally suspends the workflow only when the condition is true. For example, suspend for manual approval only when `auto` is false: `SuspendIf(Not(auto.IsTrue()), "Waiting for approval")`. |
 
 ### BuiltinActionBuilder
@@ -65,8 +65,8 @@ Returned by `WorkflowStepTemplate.Builtin()`. Configure the builtin's parameters
 | `.WithParams(map[string]Value)` | Passes specific parameter values to the builtin action. Each key maps to a field in the action's `$params` block — for example, `{"policies": policies, "parallelism": parallelism}` for a deploy action. |
 | `.WithFullParameter()` | Passes the entire `parameter` block from the step definition directly to the builtin action. Use when the step's parameters are a 1:1 match with the action's expected inputs. |
 | `.WithDirectFields()` | Passes parameters as direct fields (not nested under `$params`) to the builtin action. Some builtins expect flat field inputs rather than a nested params block. |
-| `.If(cond Condition)` | Makes the entire builtin action conditional — it only executes when the condition is true. Generates `if cond { actionName: builtin.#Action & { ... } }`. |
-| `.Build()` | Finalizes the builtin action configuration and adds it to the workflow step template. Must be called as the last method in the chain. |
+| `.If(cond Condition)` | Adds the builtin action wrapped in a condition, so it only runs when the condition is true. Generates `if cond { actionName: builtin.#Action & { ... } }`. `.If()` adds the action itself: don't call `.Build()` after it. |
+| `.Build()` | Adds the builtin action to the template unconditionally. End the chain with `.Build()` or `.If()`, never both: `.Build()` after `.If()` adds a second, unconditional copy of the action. |
 
 ## Example
 
@@ -171,17 +171,30 @@ vela def gen-module ./my-platform -o ./generated-cue
 
 Steps run as part of the Application's `workflow` section. They execute sequentially by default or in parallel when grouped into `sub-steps`. The KubeVela workflow engine evaluates the step's CUE template to determine the actions to take.
 
+Once the module is applied, an Application uses the `deploy-with-gate` step by its type name:
+
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
+metadata:
+  name: frontend
 spec:
+  components:
+    - name: frontend
+      type: webservice
+      properties:
+        image: nginx:1.27
   workflow:
     steps:
-      - name: deploy-frontend
-        type: apply-component
+      - name: deploy
+        type: deploy-with-gate
         properties:
-          component: frontend
+          auto: false
+          policies: []
+          parallelism: 2
 ```
+
+With `auto: false` the step suspends before dispatching. Continue it with `vela workflow resume frontend`.
 
 ## Related
 

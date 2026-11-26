@@ -41,7 +41,7 @@ The `deploy-and-notify` step covers all `WorkflowStepTemplate` methods in a sing
 - **`SetIf`** — adds a `wait` field only when `policies` are provided.
 - **`SetGuardedBlock`** — `notifyStatus` block always exists; its contents are populated only when `notifyUrl` is set.
 
-Verified with `vela def validate-module ./my-platform` against KubeVela v1.11.0-alpha.3.
+Check it with `vela def validate-module ./my-platform`.
 
 <Tabs groupId="defkit-example">
 <TabItem value="go" label="Go — defkit">

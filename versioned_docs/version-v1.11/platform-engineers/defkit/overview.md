@@ -16,16 +16,15 @@ KubeVela's extension system (X-Definitions) is the primary way platform teams bu
 
 ## The Solution
 
-defkit eliminates these friction points by providing a **fluent Go API** that compiles to CUE behind the scenes. Platform engineers write standard Go — with full IDE support, compile-time type checking, and `go test` — and defkit transparently generates the CUE that the KubeVela controller expects. The output is identical to hand-written CUE; the authoring experience is entirely Go.
+defkit eliminates these friction points by providing a **fluent Go API** that compiles to CUE behind the scenes. Platform engineers write standard Go, with IDE support, compile-time checks of the builder calls and `go test`, and defkit generates the CUE that the KubeVela controller expects. The controller sees an ordinary CUE definition; it doesn't know or care that Go produced it.
 
 ## Benefits
 
-- **Type Safety** — Catch configuration errors at Go compile time, not at Kubernetes deploy time. Full type inference for all parameter types.
-- **IDE Support** — Full autocompletion, inline documentation, and refactoring in any Go IDE. No CUE plugin required.
-- **Testable** — Unit-test definitions with standard `go test` and Gomega matchers. No cluster needed for unit tests.
-- **Distributable** — Share definitions as standard Go packages via `go get`. Version-controlled alongside your platform code.
-- **CUE Compatible** — Produces the same CUE output consumed by the KubeVela controller. Mix Go-authored and CUE-authored definitions freely.
-- **Fluent API** — Method-chaining builder pattern makes definitions readable and concise. No YAML, no CUE schema wrestling.
+- **Go types**: the Go compiler checks how you call the builder. It doesn't check parameter names: `defkit.String("imagee")` in a template compiles and fails only when an Application renders it, so declare each parameter once and use that variable in the template.
+- **IDE support**: autocompletion, inline documentation and refactoring come from your usual Go tooling.
+- **Testable**: unit-test definitions with `go test` and the Gomega matchers in `defkit/testing/matchers`, without a cluster.
+- **Distributable**: a module is an ordinary Go module, so you can tag it and apply a release with `vela def apply-module github.com/myorg/definitions@v1.0.0`.
+- **Works beside CUE**: the generated definitions are ordinary CUE definitions, so Go-authored and CUE-authored definitions mix freely.
 
 :::tip **Choose Go (defkit)** when
 Your definitions have complex conditional logic, your team is already Go-proficient, or you need to unit-test and distribute definitions as packages.
@@ -36,7 +35,7 @@ You're writing simple definitions with few parameters or doing quick one-off exp
 :::
 
 :::info
-Both approaches produce identical output — the KubeVela controller sees no difference. You can mix Go-authored and CUE-authored definitions in the same cluster.
+The controller sees an ordinary CUE definition either way. You can mix Go-authored and CUE-authored definitions in the same cluster.
 :::
 
 ## Related

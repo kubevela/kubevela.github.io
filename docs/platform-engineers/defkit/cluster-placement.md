@@ -5,7 +5,26 @@ title: Cluster Placement
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-The `placement` sub-package provides a type-safe Go API for expressing cluster-label conditions, logical combinators (`All`, `Any`, `Not`), and the evaluation logic that `vela def apply-module` runs at apply time. Placement constraints do not alter generated CUE or the installed ComponentDefinition/TraitDefinition — they control *whether* a definition is applied at all. Any definition type (component, trait, policy, workflow step) supports `.RunOn()` and `.NotRunOn()`.
+Placement lets one definition module serve clusters that need different definitions. A hub and its spokes often want different sets: a provider-specific component belongs only on AWS clusters, a debugging trait only outside production. Rather than keeping a module per cluster, you mark each definition with the clusters it belongs on, apply the same module everywhere, and `vela def apply-module` installs only what matches.
+
+:::caution
+Placement decides whether `apply-module` installs a definition on the cluster it is pointed at. It doesn't remove definitions when labels change, and it doesn't affect where Applications deploy.
+:::
+
+The `placement` sub-package provides a type-safe Go API for expressing cluster-label conditions, logical combinators (`All`, `Any`, `Not`), and the evaluation logic that `vela def apply-module` runs at apply time. Placement constraints do not alter generated CUE or the installed ComponentDefinition/TraitDefinition: they control *whether* a definition is applied at all. Any definition type (component, trait, policy, workflow step) supports `.RunOn()` and `.NotRunOn()`.
+
+## Before you start: label each cluster
+
+Placement reads a cluster's labels from the `vela-cluster-identity` ConfigMap in `vela-system`. Nothing in KubeVela creates or updates it: you create it on each cluster, and keep it current yourself (or from whatever provisions your clusters).
+
+```shell
+kubectl create configmap vela-cluster-identity -n vela-system \
+  --from-literal=provider=aws \
+  --from-literal=environment=production \
+  --from-literal=region=us-west-2
+```
+
+Each data key becomes a label that conditions can match. Without the ConfigMap the cluster has no labels, so every `RunOn` condition fails and the definitions that carry one are skipped.
 
 ## Label & LabelConditionBuilder
 
@@ -64,36 +83,19 @@ These helpers are for testing and validation, not for production use in definiti
 | `placement.GetEffectivePlacement` | `func GetEffectivePlacement(module, definition PlacementSpec) PlacementSpec` | Returns the effective placement spec: definition constraints override module defaults; if the definition has no constraints, module defaults are inherited. |
 
 :::info
-`vela def apply-module` calls `GetClusterLabels` once per run, logs the labels, and then calls `Evaluate` for each definition. A definition is applied only when `Eligible == true`. Definitions that do not match are skipped silently — no error is raised, and the installed definition is left unchanged.
+`vela def apply-module` calls `GetClusterLabels` once per run, logs the labels, and then calls `Evaluate` for each definition. A definition is applied only when `Eligible == true`. Definitions that don't match are skipped with a line in the output, and the command still succeeds. A copy of the definition already installed on the cluster is left unchanged.
 :::
 
-## `module.yaml` `placement:` Schema
+## Module-wide placement
 
-The YAML `placement:` block sets module-wide defaults. Any definition that does not declare its own `.RunOn()` / `.NotRunOn()` inherits this spec; definitions that do declare per-definition placement are not affected by the module block.
-
-| YAML key | Type | Description |
-|---|---|---|
-| `spec.placement.runOn` | `[]Condition` | Module-level RunOn. All conditions must match for any definition in this module to be applied (unless overridden per-definition). Omit or leave empty to skip the gate. |
-| `spec.placement.notRunOn` | `[]Condition` | Module-level NotRunOn. If any condition matches, every definition in the module that has no per-definition placement is skipped. |
-
-Each `Condition` entry under `runOn` / `notRunOn` has this shape:
-
-| Field | Type | Description |
-|---|---|---|
-| `key` | `string` | Cluster label key to match (ConfigMap-safe: no `/`). |
-| `operator` | `string` | One of `Eq`, `Ne`, `In`, `NotIn`, `Exists`, `NotExists` — case-sensitive. |
-| `values` | `[]string` | Values to compare. Required for `Eq`, `Ne`, `In`, `NotIn`. Ignored by `Exists`, `NotExists`. |
-
-Module-wide and per-definition placement use **override, not merge** semantics. If a definition has any per-definition placement, the module block is ignored completely for that definition (see `placement.GetEffectivePlacement`). Module hooks (`pre-apply` / `post-apply`) always run regardless of placement results.
-
-When `vela def apply-module` runs it prints the labels it evaluated against — e.g. `Cluster labels: environment=production, provider=aws, region=us-west-2` — so you can confirm what placement sees. A `Cluster labels: (no labels)` line means the ConfigMap is absent or empty: `RunOn` rules will fail (no labels to satisfy them) and `NotRunOn` rules pass trivially.
+A module can set placement for all of its definitions in `module.yaml`, under `spec.placement`. A definition with its own `.RunOn()` / `.NotRunOn()` ignores the module block completely. See [module.yaml placement](./modules.md#placement) for the fields.
 
 ## Example
 
 Let's build a `placement-demo` component that targets production cloud clusters. Behind the scenes the template exercises every API listed above: `placement.Label(...).Exists()`, `placement.Label(...).In(...)`, `placement.Label(...).Ne(...)`, `placement.Label(...).Eq(...)`, `placement.All(...)`, `placement.Any(...)`, `placement.Not(...)`, `.RunOn(...)`, and `.NotRunOn(...)`. The `module.yaml` tab shows the closest module-scope equivalent — note that `module.yaml`'s `placement` block only accepts flat `LabelCondition` entries (combinators like `All`/`Any`/`Not` are Go-only), so the `Any(In(...), Eq("on-prem"))` branch is flattened into a single `In` and the `Ne("development")` condition is kept as a sibling entry; if you need real OR/NOT semantics at module scope, express them per-definition in Go. Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/components/`.
 
 <Tabs groupId="defkit-example">
-<TabItem value="go" label="Go — defkit">
+<TabItem value="go" label="Go (defkit)">
 
 ```go
 package components
@@ -155,7 +157,7 @@ func init() { defkit.Register(PlacementDemo()) }
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated">
+<TabItem value="cue" label="CUE (generated)">
 
 ```cue
 "placement-demo": {
@@ -375,5 +377,5 @@ kubectl delete componentdefinition placement-demo -n vela-system --ignore-not-fo
 - [ComponentDefinition](./definition-component.md) — define workload types
 - [TraitDefinition](./definition-trait.md) — patch workloads with traits
 - [PolicyDefinition](./definition-policy.md) — define application policies
-- [WorkflowStepDefinition](./definition-workflow-step.md) — define workflow steps
+- [WorkflowStepDefinition](./template-workflowstep-actions.md): define workflow steps
 - [Quick Start](./quick-start.md) — scaffolding a `my-platform` module

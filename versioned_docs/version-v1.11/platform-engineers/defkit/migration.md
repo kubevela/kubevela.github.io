@@ -17,8 +17,10 @@ vela def init-module --name my-platform \
   --components webservice,worker \
   --traits scaler,env
 
-go get github.com/oam-dev/kubevela/pkg/definition/defkit@latest
+go get github.com/oam-dev/kubevela@v1.11.2
 ```
+
+Pin the KubeVela release your cluster runs. `@latest` skips pre-releases, so it can resolve to an older release than the one the scaffold pins, and that drops the API this guide uses.
 
 ## Step 1 — Migrate Parameters
 
@@ -109,7 +111,7 @@ labels := defkit.StringKeyMap("labels").Optional().
 | `[...]` open/heterogeneous list | `defkit.List()` |
 | `// +usage=...` comments | `.Description("...")` |
 
-:::caution Breaking change: bare parameters are mandatory by default
+:::caution Bare parameters are mandatory
 In defkit, a bare parameter (no `.Optional()`, no `.Default()`) emits a CUE field with **no marker** — `field: type`. Without a default, that field must resolve to a value at unification time, so users **must** provide it. This is stricter than the CUE `field?: type` form (which allows the field to be absent). It is NOT the `field!: type` form — that requires `.Required()`, which forces the user to set the field explicitly even if a default exists. In short:
 
 | You write | CUE emits | Meaning |
@@ -254,7 +256,7 @@ func init() { defkit.Register(MyTrait()) }
 ```
 
 **Key rules:**
-- `tpl.UsePatchContainer(config)` generates the full `#PatchParams`, `patchSets`, and `patch` blocks — never write them by hand.
+- `tpl.UsePatchContainer(config)` generates the `#PatchParams` helper and the `patch` block; never write them by hand.
 - Simple typed fields → `PatchFields`.
 - List comprehensions or complex merge logic → `CustomPatchContainerBlock` (raw CUE injected verbatim).
 - `AppliesTo("deployments.apps", "statefulsets.apps")` restricts which workload GVKs the trait can attach to.

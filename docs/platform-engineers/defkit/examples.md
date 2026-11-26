@@ -5,9 +5,15 @@ title: Full Examples
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Complete end-to-end definition examples — one per definition type — showing real-world usage patterns with full Go source, generated definition YAML, and a working `Application` validated against a live cluster.
+Complete definition examples, one per definition type, each with its Go source, the definition YAML it generates, and an `Application` that uses it, checked against a live cluster.
 
-All Go sources below are taken from the [`kubevela/vela-go-definitions`](https://github.com/kubevela/vela-go-definitions) repository — each section links to its canonical file.
+These are KubeVela's own shipped definitions (`task`, `cpuscaler`, `apply-once` and `apply-component`) rewritten in Go, taken from the [`kubevela/vela-go-definitions`](https://github.com/kubevela/vela-go-definitions) repository. Each section links to its file there.
+
+:::caution
+The examples share their names with definitions already installed in `vela-system`. Applying one under its own name replaces the built-in for every Application on the cluster. Apply the component and trait with a prefix, as each section shows, so the demo Applications use your copy and not the built-in.
+:::
+
+To try the component and trait, add their files to the module from the [Quick Start](./quick-start.md) (`my-platform`) and apply the module with `--prefix demo-`, which names them `demo-task` and `demo-cpuscaler`.
 
 ## Component Definition — Task
 
@@ -16,7 +22,7 @@ A complete task component that runs a one-time Job to completion. Uses `JobHealt
 > Source: [`components/task.go`](https://github.com/kubevela/vela-go-definitions/blob/main/components/task.go).
 
 <Tabs>
-<TabItem value="go" label="Go — defkit">
+<TabItem value="go" label="Go (defkit)">
 
 ```go title="components/task.go"
 package components
@@ -209,8 +215,10 @@ func init() {
 }
 ```
 
+`CronTaskHealthProbeParam()` and `ImagePullSecretsTransform()` are helpers defined in other files of the repository, [`components/crontask.go`](https://github.com/kubevela/vela-go-definitions/blob/main/components/crontask.go) and [`components/shared_helpers.go`](https://github.com/kubevela/vela-go-definitions/blob/main/components/shared_helpers.go). Copy them into your module along with this file, or it fails to compile with `undefined: CronTaskHealthProbeParam`.
+
 </TabItem>
-<TabItem value="cue" label="Generated — definition YAML">
+<TabItem value="cue" label="Generated (definition YAML)">
 
 ```yaml title="ComponentDefinition (vela def apply-module --dry-run)"
 apiVersion: core.oam.dev/v1beta1
@@ -477,7 +485,7 @@ metadata:
 spec:
   components:
     - name: hello-task
-      type: task
+      type: demo-task
       properties:
         image: busybox:latest
         count: 1
@@ -491,13 +499,13 @@ spec:
 Apply and verify (output captured live from k3d):
 
 ```shell
-vela def apply ./vela-templates/definitions/component/task.cue
+vela def apply-module ./my-platform --prefix demo-
 vela up -f task-demo-app.yaml
 ```
 
 ```
-NAME        COMPONENT    TYPE   PHASE     HEALTHY   STATUS                          AGE
-task-demo   hello-task   task   running   true      Active/Failed/Succeeded:0/0/1   51s
+NAME        COMPONENT    TYPE        PHASE     HEALTHY   STATUS                          AGE
+task-demo   hello-task   demo-task   running   true      Active/Failed/Succeeded:0/0/1   51s
 ```
 
 The component renders to a `batch/v1` Job named `<appName>-<componentName>`:
@@ -519,7 +527,7 @@ A complete cpuscaler trait that creates an HPA resource to automatically scale t
 > Source: [`traits/cpuscaler.go`](https://github.com/kubevela/vela-go-definitions/blob/main/traits/cpuscaler.go).
 
 <Tabs>
-<TabItem value="go" label="Go — defkit">
+<TabItem value="go" label="Go (defkit)">
 
 ```go title="traits/cpuscaler.go"
 package traits
@@ -559,7 +567,7 @@ func init() {
 ```
 
 </TabItem>
-<TabItem value="cue" label="Generated — definition YAML">
+<TabItem value="cue" label="Generated (definition YAML)">
 
 ```yaml title="TraitDefinition (vela def apply-module --dry-run)"
 apiVersion: core.oam.dev/v1beta1
@@ -627,7 +635,7 @@ spec:
             expose: false
         cpu: "100m"
       traits:
-        - type: cpuscaler
+        - type: demo-cpuscaler
           properties:
             min: 1
             max: 3
@@ -640,7 +648,7 @@ spec:
 Apply and verify (output captured live from k3d):
 
 ```shell
-vela def apply ./vela-templates/definitions/trait/cpuscaler.cue
+vela def apply-module ./my-platform --prefix demo-
 vela up -f cpuscaler-demo-app.yaml
 ```
 
@@ -668,11 +676,11 @@ A complete apply-once policy that allows configuration drift for applied resourc
 > Source: [`policies/apply_once.go`](https://github.com/kubevela/vela-go-definitions/blob/main/policies/apply_once.go).
 
 :::info
-Policies use only `.Params()` — no `.Template()` — because KubeVela's built-in engine processes policy params directly. `.Helper("TypeName", struct)` registers a named CUE type (`#TypeName`) that can be referenced via `.WithSchemaRef("TypeName")` in other params.
+Built-in policies and steps (`apply-once`, `apply-component`) are executed by the controller, so their definitions only declare parameters. A custom policy or step needs a template. `.Helper("TypeName", struct)` registers a named CUE type (`#TypeName`) that can be referenced via `.WithSchemaRef("TypeName")` in other params.
 :::
 
 <Tabs>
-<TabItem value="go" label="Go — defkit">
+<TabItem value="go" label="Go (defkit)">
 
 ```go title="policies/apply_once.go"
 package policies
@@ -724,8 +732,10 @@ func init() {
 }
 ```
 
+`RuleSelectorFields()` is a helper defined in [`policies/common.go`](https://github.com/kubevela/vela-go-definitions/blob/main/policies/common.go) in the repository. Copy it into your module along with this file, or it fails to compile with `undefined: RuleSelectorFields`.
+
 </TabItem>
-<TabItem value="cue" label="Generated — definition YAML">
+<TabItem value="cue" label="Generated (definition YAML)">
 
 ```yaml title="PolicyDefinition (vela def apply-module --dry-run)"
 apiVersion: core.oam.dev/v1beta1
@@ -802,10 +812,11 @@ spec:
 </TabItem>
 </Tabs>
 
-Apply and verify (output captured live from k3d):
+`apply-once` ships with KubeVela, and the controller acts on it by name, so a renamed copy would do nothing. Don't apply this definition: the Application below uses the built-in, and the Go source shows how it is declared.
+
+Verify (output captured live from k3d):
 
 ```shell
-vela def apply ./vela-templates/definitions/policy/apply-once.cue
 vela up -f apply-once-demo-app.yaml
 ```
 
@@ -829,12 +840,12 @@ $ kubectl get app apply-once-demo -n default -o jsonpath='{.spec.policies}' | py
 
 ## WorkflowStep Definition — Apply Component
 
-A complete apply-component workflow step. The simplest definition type — workflow steps often require no template at all because the step execution is handled by KubeVela's built-in step executor.
+A complete apply-component workflow step. Like `apply-once`, it is a built-in: the controller executes `apply-component` itself, so its definition only declares parameters. A custom step needs a template.
 
 > Source: [`workflowsteps/apply_component.go`](https://github.com/kubevela/vela-go-definitions/blob/main/workflowsteps/apply_component.go).
 
 <Tabs>
-<TabItem value="go" label="Go — defkit">
+<TabItem value="go" label="Go (defkit)">
 
 ```go title="workflowsteps/apply_component.go"
 package workflowsteps
@@ -859,7 +870,7 @@ func init() {
 ```
 
 </TabItem>
-<TabItem value="cue" label="Generated — definition YAML">
+<TabItem value="cue" label="Generated (definition YAML)">
 
 ```yaml title="WorkflowStepDefinition (vela def apply-module --dry-run)"
 apiVersion: core.oam.dev/v1beta1
@@ -922,10 +933,11 @@ spec:
 </TabItem>
 </Tabs>
 
-Apply and verify (output captured live from k3d):
+As with `apply-once`, don't apply this definition: the Application below uses the built-in step.
+
+Verify (output captured live from k3d):
 
 ```shell
-vela def apply ./vela-templates/definitions/workflowstep/apply-component.cue
 vela up -f workflow-demo-app.yaml
 ```
 
@@ -960,7 +972,7 @@ $ kubectl get app workflow-demo -n default -o jsonpath='{.status.workflow.steps}
 
 **Trait** — use `tpl.Outputs(name, resource)` to emit secondary resources (HPA, Service, etc.). Use `tpl.UsePatchContainer(config)` when the trait needs to mutate container specs (env vars, resource limits, volume mounts).
 
-**Policy** — parameters only; use `.Helper("TypeName", struct)` for reusable named CUE types and `.WithSchemaRef()` to reference them in array element schemas.
+**Policy**: a built-in policy declares only parameters; a custom one needs `.Template()`. Use `.Helper("TypeName", struct)` for reusable named CUE types and `.WithSchemaRef()` to reference them in array element schemas.
 
-**WorkflowStep** — often just `.Params()` with `.Category()` and `.Scope()` metadata. Add `.Template()` only when the step needs to generate resources itself.
+**WorkflowStep**: a built-in step declares only `.Params()` with `.Category()` and `.Scope()` metadata; a custom step needs `.Template()` to do its work.
 :::
