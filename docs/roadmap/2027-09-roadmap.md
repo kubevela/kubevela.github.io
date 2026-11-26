@@ -23,9 +23,10 @@ Date: 2027-07-01 to 2027-09-30
 
 ## Performance and Scale
 
-- Performance tests for the current release
-  * Repeat the [2021 performance test](https://kubevela.io/blog/2021/08/30/kubevela-performance-test/) on the current KubeVela release. Use the same Application shape (a webservice and a worker component with scaler, sidecar, ingress and configmap traits) and the same scales: 3,000 Applications on 200 nodes, 5,000 on 500 nodes and 12,000 on 1,000 nodes, simulated with kubemark.
-  * Publish the new results next to the 2021 ones: time to create and delete all Applications, reconcile latency (average and p99), and controller CPU and memory. For reference, in 2021 the controller created 3,000 Applications in 25 minutes with 0.5 CPU and 1 Gi of memory, and 99% of reconciles finished in under 800 ms.
+- Find KubeVela's limits, using 2021 as the starting point
+  * Use the [2021 performance test](https://kubevela.io/blog/2021/08/30/kubevela-performance-test/) as a reference. Run the same Application shape (a webservice and a worker component with scaler, sidecar, ingress and configmap traits) at the same scales: 3,000 Applications on 200 nodes, 5,000 on 500 nodes and 12,000 on 1,000 nodes, simulated with kubemark. This shows whether the current release is faster or slower than in 2021.
+  * Then keep increasing the number of Applications, components per Application and clusters until the controller or the Kubernetes API server fails, and record where and why it fails, for example running out of memory, a growing work queue, or API server throttling.
+  * Publish the results next to the 2021 ones: time to create and delete all Applications, reconcile latency (average and p99), controller CPU and memory, and the point where each test failed. For reference, in 2021 the controller created 3,000 Applications in 25 minutes with 0.5 CPU and 1 Gi of memory, and 99% of reconciles finished in under 800 ms.
   * Cover what the 2021 test left out: Workflows, multi-cluster delivery, and the management and target cluster setup planned for Summer 2027.
-  * Update the recommended controller settings (CPU, memory, concurrent reconciles, API QPS and burst) for each scale, replacing the 2021 sizing advice.
+  * Update the recommended controller settings (CPU, memory, concurrent reconciles, API QPS and burst) for each scale, and document the largest setup that has been tested to work.
   * Make the test setup and dashboards reusable, so the same test can run before each release and catch slowdowns early.
