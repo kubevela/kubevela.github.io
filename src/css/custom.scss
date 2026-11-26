@@ -1099,3 +1099,8 @@ summary:focus-visible,
   color: var(--kv-muted);
   border-left-color: var(--kv-line);
 }
+
+// The version dropdown lists KubeVela's versions, so it has no meaning on an unversioned section.
+html.plugin-id-addons .navbar__item:has(> .kv-version) {
+  display: none;
+}

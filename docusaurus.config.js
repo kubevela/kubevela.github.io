@@ -58,6 +58,7 @@ const config = {
         {
           type: 'docsVersionDropdown',
           position: 'right',
+          // KubeVela's versions only; hidden on the unversioned sections (custom.scss).
           className: 'kv-version',
         },
         {
