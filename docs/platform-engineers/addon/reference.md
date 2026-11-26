@@ -21,9 +21,9 @@ my-addon/
 ├── godef/
 │   ├── module.yaml
 │   └── go.mod
-├── modules/
+├── crates/
 │   ├── _imports.cue
-│   └── <module-name>/
+│   └── <crate-name>/
 ├── config-templates/
 └── views/
 ```
@@ -39,7 +39,7 @@ my-addon/
 | `definitions/` | no | Definitions in CUE or YAML, applied to the hub. See [Definitions](#definitions). |
 | `schemas/` | no | UI schemas for the addon's definitions, read by VelaUX. See [UI schemas](#ui-schemas). |
 | `godef/` | no | Definitions written in Go with defkit. See [Go definitions](#go-definitions-godef). |
-| `modules/` | no | Modules the addon installs. See [Modules](#modules-modules). |
+| `crates/` | no | Crates the addon installs. See [Crates](#crates-crates). |
 | `config-templates/` | no | [Config templates](../../reference/config-template.md). |
 | `views/` | no | [VelaQL views](../system-operation/velaql.md). |
 
@@ -142,14 +142,14 @@ When you enable the addon from a local directory, the CLI compiles the Go defini
 vela addon init my-addon --godef --components api --traits scaler
 ```
 
-## Modules (`modules/`)
+## Crates (`crates/`)
 
-`modules/` lists the [modules](../../cli/vela_module.md) the addon installs, through its own Application. Modules need the `EnableModuleComponent` feature gate on vela-core; with it off, enabling an addon that carries them fails.
+`crates/` lists the [crates](../crate/intro.md) the addon installs, through its own Application. Crates need the `EnableCrateComponent` feature gate on vela-core; with it off, enabling an addon that carries them fails.
 
-- `modules/_imports.cue` names modules to fetch from a module registry, each with an optional `registry` and an exact `version` (no ranges).
-- Every directory directly under `modules/` is an inline module bundled with the addon, and must have a `_module.cue`. A directory without one is refused.
+- `crates/_imports.cue` names crates to fetch from a crate registry, each with an optional `registry` and an exact `version` (no ranges).
+- Every directory directly under `crates/` is an inline crate bundled with the addon, and must have a `_crate.cue`. A directory without one is refused.
 
-A module name can be declared once per addon, either as an import or inline.
+A crate name can be declared once per addon, either as an import or inline.
 
 ## Application files
 
