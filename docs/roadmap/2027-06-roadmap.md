@@ -6,7 +6,7 @@ Date: 2027-04-01 to 2027-06-30
 
 ## Core Platform
 
-The items below change how KubeVela runs Applications across many clusters (multi-cluster). They are also the foundation for the cluster management work planned for Winter 2027 in the [Cluster Infrastructure KEP](https://github.com/kubevela/kubevela/blob/master/design/vela-core/kep-cluster-infrastructure.md).
+The items below change how KubeVela runs Applications across many clusters (multi-cluster). They are also the foundation for the cluster management work planned for 2027 Q4 (Oct-Dec) in the [Cluster Infrastructure KEP](https://github.com/kubevela/kubevela/blob/master/design/vela-core/kep-cluster-infrastructure.md).
 
 - Each cluster runs its own components
   * Add a controller on every target cluster that deploys, updates and health-checks its components locally, instead of the management cluster doing this work remotely.

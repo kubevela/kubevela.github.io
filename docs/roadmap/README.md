@@ -8,28 +8,27 @@ The goal of KubeVela is to **make deploying and operating applications across to
 * Enable simple and robust **application delivery across hybrid environments** including Kubernetes, cloud, or even IoT devices. This also enables you to have a vendor agnostic application platform.
 * Build an **open, inclusive, and vibrant OSS developer community** focused on solving real-world application delivery and operation problems, sharing the reusable building blocks and best practices.
 
-They're aligned with the roadmap direction for the next three years. As for the detailed roadmap, we'll update and list below.
+The quarterly roadmaps below turn these goals into work, newest first.
 
-- [2027 Winter Roadmap](./2027-12-roadmap)
-- [2027 Fall Roadmap](./2027-09-roadmap)
-- [2027 Summer Roadmap](./2027-06-roadmap)
-- [2027 Spring Roadmap](./2027-03-roadmap)
-- [2026 Winter Roadmap](./2026-12-roadmap)
-- [2026 Fall Roadmap](./2026-09-roadmap)
-- [2026 Summer Roadmap](./2026-06-roadmap)
-- [2026 Spring Roadmap](./2026-03-roadmap)
-- [2023 Summer Roadmap](./2023-06-roadmap)
-- [2023 Summer Roadmap](./2023-06-roadmap)
-- [2023 Spring Roadmap](./2023-03-roadmap)
-- [2022 Winter Roadmap](./2022-12-roadmap)
-- [2022 Fall Roadmap](./2022-09-roadmap)
-- [2022 Summer Roadmap](./2022-06-roadmap)
-- [2022 Spring Roadmap](./2022-03-roadmap)
-- [2021 Winter Roadmap](./2021-12-roadmap)
-- [2021 Fall Roadmap](./2021-09-roadmap)
-- [2021 Summer Roadmap](./2021-06-roadmap)
-- [2021 Spring Roadmap](./2021-03-roadmap)
-- [2020 Winter Roadmap](./2020-12-roadmap)
+- [2027 Q4 (Oct-Dec)](./2027-12-roadmap)
+- [2027 Q3 (Jul-Sep)](./2027-09-roadmap)
+- [2027 Q2 (Apr-Jun)](./2027-06-roadmap)
+- [2027 Q1 (Jan-Mar)](./2027-03-roadmap)
+- [2026 Q4 (Oct-Dec)](./2026-12-roadmap)
+- [2026 Q3 (Jul-Sep)](./2026-09-roadmap)
+- [2026 Q2 (Apr-Jun)](./2026-06-roadmap)
+- [2026 Q1 (Jan-Mar)](./2026-03-roadmap)
+- [2023 Q2 (Apr-Jun)](./2023-06-roadmap)
+- [2023 Q1 (Jan-Mar)](./2023-03-roadmap)
+- [2022 Q4 (Oct-Dec)](./2022-12-roadmap)
+- [2022 Q3 (Jul-Sep)](./2022-09-roadmap)
+- [2022 Q2 (Apr-Jun)](./2022-06-roadmap)
+- [2022 Q1 (Jan-Mar)](./2022-03-roadmap)
+- [2021 Q4 (Oct-Dec)](./2021-12-roadmap)
+- [2021 Q3 (Jul-Sep)](./2021-09-roadmap)
+- [2021 Q2 (Apr-Jun)](./2021-06-roadmap)
+- [2021 Q1 (Jan-Mar)](./2021-03-roadmap)
+- [2020 Q4 (Oct-Dec)](./2020-12-roadmap)
 
 KubeVela follows the [release process and cadence guide](../contributor/release-process) that actions may not be strictly consistent with the roadmap. 
 

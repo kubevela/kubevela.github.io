@@ -2,7 +2,7 @@
 title:  Roadmap 2023.06
 ---
 
-Date: 2023-03-01 to 2023-06-31
+Date: 2023-04-01 to 2023-06-30
 
 ## Core Platform
 
