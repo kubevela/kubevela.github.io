@@ -118,7 +118,7 @@ Availability: `app.oam.dev/reconcile-interval` is supported in KubeVela v1.11+.
 
 Invalid values (empty string, malformed text, negative durations) are also ignored, with a warning, and fall back to the global default.
 
-While a workflow is executing or waiting to retry, its own backoff sets the requeue time. The annotation applies once the workflow has finished or is suspended.
+While a workflow is executing or waiting to retry, its own backoff sets the requeue time. The annotation applies once the workflow has finished, or is suspended with no `duration`; a suspend step with a `duration` requeues on its own wait.
 
 ### Precedence
 
