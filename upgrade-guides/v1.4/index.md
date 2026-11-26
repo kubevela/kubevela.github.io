@@ -19,11 +19,11 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/
 
 2. Upgrade your kubevela chart
 
+The chart repository does not publish v1.4.x, so install the chart from the v1.4.14 release tag:
+
 ```
-helm repo remove kubevela 2>/dev/null || true
-helm repo add kubevela https://kubevela.github.io/charts
-helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.14 --wait
+git clone --depth 1 --branch v1.4.14 https://github.com/kubevela/kubevela.git
+helm upgrade -n vela-system --install kubevela ./kubevela/charts/vela-core --set image.tag=v1.4.14 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI

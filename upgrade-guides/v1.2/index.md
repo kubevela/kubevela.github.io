@@ -52,10 +52,11 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/
 
 3. Execute the upgrade command
 
-This step will upgrade the system to the new version:
+This step will upgrade the system to the new version. The chart repository does not publish v1.2.x, so install the chart from the v1.2.6 release tag:
 
 ``` shell
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.2.6 --wait
+git clone --depth 1 --branch v1.2.6 https://github.com/kubevela/kubevela.git
+helm upgrade -n vela-system --install kubevela ./kubevela/charts/vela-core --set image.tag=v1.2.6 --wait
 ```
 
 Upgrade the CLI to v1.2.x corresponding to the core version:

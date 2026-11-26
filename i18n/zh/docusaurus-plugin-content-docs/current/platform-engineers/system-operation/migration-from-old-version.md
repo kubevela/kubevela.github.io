@@ -31,7 +31,7 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.7/
 helm repo remove kubevela 2>/dev/null || true
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.3 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.7 --wait
 ```
 
 :::caution
@@ -56,7 +56,7 @@ kubectl patch -n vela-system configMap <item> --type=merge -p '{"metadata":{"ann
 3. 下载并升级对应的CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.7.3
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.7.7
 ```
 
 4. 升级 VelaUX 或其他插件
@@ -101,13 +101,13 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/
 helm repo remove kubevela 2>/dev/null || true
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.6 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.8 --wait
 ```
 
 3. 下载并升级对应的CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.6
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.8
 ```
 
 4. 升级 VelaUX 或其他插件
@@ -138,13 +138,13 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/
 helm repo remove kubevela 2>/dev/null || true
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.10 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.11 --wait
 ```
 
 3. 下载并升级对应的CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.10
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.11
 ```
 
 4. 升级 VelaUX 或其他插件
@@ -171,11 +171,11 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/
 
 2. 升级 kubevela chart
 
+Chart 仓库没有发布 v1.4.x 的版本，请使用 v1.4.14 发布标签中的 Chart 进行安装：
+
 ```
-helm repo remove kubevela 2>/dev/null || true
-helm repo add kubevela https://kubevela.github.io/charts
-helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.14 --wait
+git clone --depth 1 --branch v1.4.14 https://github.com/kubevela/kubevela.git
+helm upgrade -n vela-system --install kubevela ./kubevela/charts/vela-core --set image.tag=v1.4.14 --wait
 ```
 
 3. 下载并升级对应的CLI
@@ -215,11 +215,11 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.3/
 
 2. 升级 kubevela chart
 
+Chart 仓库没有发布 v1.3.x 的版本，请使用 v1.3.6 发布标签中的 Chart 进行安装：
+
 ```
-helm repo remove kubevela 2>/dev/null || true
-helm repo add kubevela https://kubevela.github.io/charts
-helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.3.6 --wait
+git clone --depth 1 --branch v1.3.6 https://github.com/kubevela/kubevela.git
+helm upgrade -n vela-system --install kubevela ./kubevela/charts/vela-core --set image.tag=v1.3.6 --wait
 ```
 
 3. 下载并升级对应的CLI
@@ -290,10 +290,11 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/
 
 3. 执行升级命令
 
-升级系统到新版本：
+升级系统到新版本。Chart 仓库没有发布 v1.2.x 的版本，请使用 v1.2.6 发布标签中的 Chart 进行安装：
 
 ``` shell
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.2.6 --wait
+git clone --depth 1 --branch v1.2.6 https://github.com/kubevela/kubevela.git
+helm upgrade -n vela-system --install kubevela ./kubevela/charts/vela-core --set image.tag=v1.2.6 --wait
 ```
 
 将 CLI 升级到与核心版本对应的 v1.2.x 版本：

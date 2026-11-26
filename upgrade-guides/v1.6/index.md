@@ -24,11 +24,11 @@ inputs:
 1. Upgrade the CRDs, please make sure you upgrade the CRDs first before upgrade the helm chart.
 
 ```
-kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.6/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
-kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.6/charts/vela-core/crds/core.oam.dev_applications.yaml
-kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.6/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
-kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.6/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
-kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.6/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.8/charts/vela-core/crds/core.oam.dev_applicationrevisions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.8/charts/vela-core/crds/core.oam.dev_applications.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.8/charts/vela-core/crds/core.oam.dev_resourcetrackers.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.8/charts/vela-core/crds/core.oam.dev_componentdefinitions.yaml
+kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.com/oam-dev/kubevela/v1.6.8/charts/vela-core/crds/core.oam.dev_definitionrevisions.yaml
 ```
 
 2. Upgrade your kubevela chart
@@ -37,13 +37,13 @@ kubectl apply --server-side --force-conflicts -f https://raw.githubusercontent.c
 helm repo remove kubevela 2>/dev/null || true
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.6 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.8 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.6
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.8
 ```
 
 4. Upgrade VelaUX or other addon

@@ -23,6 +23,7 @@ $ docker push <your repo url>/fluxcd/helm-controller:v0.11.1
 3. 部分插件的安装可能需要依赖一些 helm chats 比如说 terraform 的插件。你需要将这些 charts 同步到你自己 chart 仓库。例如你可以通过下面的命令，同步 terraform 插件中依赖的 charts。
 
 ```yaml
+$ helm repo remove kubevela 2>/dev/null || true
 $ helm repo add kubevela https://kubevela.github.io/charts
 $ helm repo update
 $ helm pull kubevela/terraform-controller --version 0.7.12

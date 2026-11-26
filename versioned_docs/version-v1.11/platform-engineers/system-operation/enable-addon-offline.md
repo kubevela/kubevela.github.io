@@ -25,6 +25,7 @@ $ docker push <your repo url>/fluxcd/helm-controller:v0.11.1
 3. Parts of addons may rely on helm charts, e.g. `terraform addon`. You should sync these helm charts to your private chart registry.
 
 ```yaml
+$ helm repo remove kubevela 2>/dev/null || true
 $ helm repo add kubevela https://kubevela.github.io/charts
 $ helm repo update
 $ helm pull kubevela/terraform-controller --version 0.7.12

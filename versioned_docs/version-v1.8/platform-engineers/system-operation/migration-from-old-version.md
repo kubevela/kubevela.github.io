@@ -46,7 +46,7 @@ Then you can upgrade the helm chart now:
 helm repo remove kubevela 2>/dev/null || true
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.3 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.7.7 --wait
 ```
 
 :::caution
@@ -71,7 +71,7 @@ kubectl patch -n vela-system configMap <item> --type=merge -p '{"metadata":{"ann
 3. Download and upgrade to the corresponding CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.7.3
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.7.7
 ```
 
 4. Upgrade VelaUX or other addon
@@ -116,13 +116,13 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.6/
 helm repo remove kubevela 2>/dev/null || true
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.6 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.6.8 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.6
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.6.8
 ```
 
 4. Upgrade VelaUX or other addon
@@ -153,13 +153,13 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.5/
 helm repo remove kubevela 2>/dev/null || true
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.10 --wait
+helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.5.11 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI
 
 ```
-curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.10
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.5.11
 ```
 
 4. Upgrade VelaUX or other addon
@@ -186,11 +186,11 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.4/
 
 2. Upgrade your kubevela chart
 
+The chart repository does not publish v1.4.x, so install the chart from the v1.4.14 release tag:
+
 ```
-helm repo remove kubevela 2>/dev/null || true
-helm repo add kubevela https://kubevela.github.io/charts
-helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.4.14 --wait
+git clone --depth 1 --branch v1.4.14 https://github.com/kubevela/kubevela.git
+helm upgrade -n vela-system --install kubevela ./kubevela/charts/vela-core --set image.tag=v1.4.14 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI
@@ -230,11 +230,11 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.3/
 
 2. Upgrade your kubevela chart
 
+The chart repository does not publish v1.3.x, so install the chart from the v1.3.6 release tag:
+
 ```
-helm repo remove kubevela 2>/dev/null || true
-helm repo add kubevela https://kubevela.github.io/charts
-helm repo update
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.3.6 --wait
+git clone --depth 1 --branch v1.3.6 https://github.com/kubevela/kubevela.git
+helm upgrade -n vela-system --install kubevela ./kubevela/charts/vela-core --set image.tag=v1.3.6 --wait
 ```
 
 3. Download and upgrade to the corresponding CLI
@@ -306,10 +306,11 @@ kubectl apply -f https://raw.githubusercontent.com/oam-dev/kubevela/release-1.2/
 
 3. Execute the upgrade command
 
-This step will upgrade the system to the new version:
+This step will upgrade the system to the new version. The chart repository does not publish v1.2.x, so install the chart from the v1.2.6 release tag:
 
 ``` shell
-helm upgrade -n vela-system --install kubevela kubevela/vela-core --version 1.2.6 --wait
+git clone --depth 1 --branch v1.2.6 https://github.com/kubevela/kubevela.git
+helm upgrade -n vela-system --install kubevela ./kubevela/charts/vela-core --set image.tag=v1.2.6 --wait
 ```
 
 Upgrade the CLI to v1.2.x corresponding the the core version:
