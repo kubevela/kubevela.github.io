@@ -51,6 +51,10 @@
         {
           "type": "doc",
           "id": "operate/working-mechanism"
+        },
+        {
+          "type": "doc",
+          "id": "operate/http-protection"
         }
       ]
     },
