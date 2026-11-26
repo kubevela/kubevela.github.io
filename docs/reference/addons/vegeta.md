@@ -43,6 +43,8 @@ spec:
         - type: vegeta
           properties:
             dorequest: 'GET http://new-vegeta.vegeta:80'
+            # A gentle load for a first try; pick the rate and duration for your test.
+            vegetacli: 'vegeta attack -rate 10 -duration 5m | vegeta encode'
             parallelism: 1
             backofflimit: 10
 ```
@@ -100,7 +102,7 @@ $ kubectl logs -n vegeta job/new-vegeta --tail=2
 {"attack":"","seq":41211,"code":200,"timestamp":"2022-05-31T13:25:02.812Z","latency":982114,"bytes_out":0,"bytes_in":615,"error":"","body":"PCFET0NUWVBFIGh0bWw+...","method":"GET","url":"http://new-vegeta.vegeta:80","headers":{"Content-Type":["text/html"]}}
 ```
 
-The `body` field is shortened here. By default the attack runs at 5000 requests a second for 10000 minutes; set `vegetacli` to change the rate and duration, and delete the Application to stop it.
+The `body` field is shortened here. This example sends 10 requests a second for 5 minutes. Without `vegetacli` the attack runs at 5000 requests a second for 10000 minutes, so always set it, and delete the Application to stop an attack early.
 
 To plot the results live, pipe the logs through [jaggr](https://github.com/rs/jaggr) and [jplot](https://github.com/rs/jplot):
 

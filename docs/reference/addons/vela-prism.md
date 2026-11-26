@@ -2,10 +2,12 @@
 title: Vela prism
 ---
 
-Vela Prism adds read-only Kubernetes APIs over KubeVela's own objects, so you can grant access with ordinary RBAC:
+Vela Prism adds Kubernetes APIs over KubeVela's own objects and those of some addons, so you can grant access with ordinary RBAC. Two of them are read-only views:
 
 - `ApplicationResourceTracker`, a namespaced view of ResourceTrackers (`kubectl get apprt`).
 - `Cluster`, the cluster list without credentials (`kubectl get vela-clusters`).
+
+It also serves `Grafana`, `GrafanaDatasource` and `GrafanaDashboard`, which the observability addons use to manage Grafana's datasources and dashboards.
 
 Enable it when you want to let users in a namespace see what their Applications created, or list clusters, without cluster-admin.
 

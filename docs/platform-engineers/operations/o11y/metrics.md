@@ -4,7 +4,11 @@ title: Metrics Collection
 
 ## Exposing Metrics in your Application
 
-In your application, if you want to expose the metrics of your component (like webservice) to Prometheus, you just need to add the `prometheus-scrape` trait as follows. The trait comes with the `prometheus-server` addon.
+In your application, if you want to expose the metrics of your component (like webservice) to Prometheus, you just need to add the `prometheus-scrape` trait as follows. The trait comes with the `prometheus-server` addon, so enable that first:
+
+```shell
+vela addon enable prometheus-server
+```
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

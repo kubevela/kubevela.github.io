@@ -76,10 +76,10 @@ In your IDE's build/debug configuration, add the following environment variable:
 KUBECONFIG={path-to-hub-kubeconfig}
 
 # Example:
-KUBECONFIG=$HOME/.kube/hub.yaml
+KUBECONFIG=/Users/you/.kube/hub.yaml
 ```
 
-Replace the path with the actual location of your hub cluster's kubeconfig file.
+Replace the path with the absolute path of your hub cluster's kubeconfig file. Most IDEs pass an environment variable as written, without expanding `$HOME` or `~`.
 
 **Why is this needed?**
 
