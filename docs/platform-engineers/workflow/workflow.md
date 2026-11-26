@@ -92,7 +92,7 @@ template: {
 }
 ```
 
-If the HTTP request returns a status code greater than 400, we expect this step to be failed. Use `op.#Fail` to fail this step, and the definition is like:
+If the HTTP request returns a status code of 400 or above, we expect this step to be failed. Use `op.#Fail` to fail this step. The reply is parsed into `response` only when it is valid JSON, so an empty or plain-text reply is not a failure in itself; only the status code fails the step. The definition is like:
 
 ```cue
 import (
@@ -123,13 +123,15 @@ template: {
 		}
 	}
 	fail: op.#Steps & {
-		if http.response.statusCode > 400 {
+		if http.response.statusCode >= 400 {
 			requestFail: op.#Fail & {
 				message: "request of \(parameter.url) is fail: \(http.response.statusCode)"
 			}
 		}
 	}
-	response: json.Unmarshal(http.response.body)
+	if json.Valid(http.response.body) {
+		response: json.Unmarshal(http.response.body)
+	}
 	parameter: {
 		url:    string
 		method: *"GET" | "POST" | "PUT" | "DELETE"
@@ -138,6 +140,8 @@ template: {
 	}
 }
 ```
+
+`op.#HTTPDo` times out after 3s unless the definition sets `request.timeout` (a Go duration, at most the controller's maximum, 60s by default). This example does not, so for a slower endpoint add a `timeout` parameter and set it in `request`, beside `header`. KubeVela ships a fuller `request` step, with `timeout`, `headersFromSecret` and `ratelimiter`, written with the newer `vela/http` package; see [Built-in Workflow Steps](../../end-user/workflow/built-in-workflow-defs.md#request). Requests go straight to their destination: the controller's `HTTP_PROXY` and `HTTPS_PROXY` settings are not used.
 
 Use `vela def apply -f request.cue` to deploy this Definition to the cluster, then we can use this custom step directly in the Application.
 

@@ -280,18 +280,19 @@ renders, as any other expression does. The full set of rules is in
 
 Errors common to every expression (escaping, types, `has()`) are on
 [Property Expressions](./cel-expressions.md#when-something-is-wrong). These are
-particular to component reads; the first three are waits rather than failures:
+particular to component reads. The first four are waits rather than failures: the reader
+is held back and tried again, and the first three end on their own:
 
 | Message | Means |
 |---|---|
 | `waiting for component "db" in local/default to be healthy` | not an error: `db` is not healthy yet, for a read that names a cluster or namespace |
 | `waiting for component "db" to be placed in ...` | not an error: `db` has not been deployed there yet |
 | `... component "db" has no such field yet` | not an error: the field is not in the live object yet. Guard it to use a fallback |
+| `component "api" reads "db" beside it in ..., but "db" is placed only in ...; read it there with ...` | a wait that does not end on its own: `db` is not deployed beside the reader. Use the read the message suggests |
 | `... a component whose name has a hyphen is read by index: write ...` | use `component["my-db"]` |
 | `cluster and namespace go straight after component.<name>: component.<name>.cluster("...")` | write `component.db.cluster("east").output...`, not `component.db.output.cluster("east")` |
 | `cluster() takes a literal string, so the read is known before evaluation` (or `namespace()`) | the cluster or namespace must be a quoted string, not an expression |
 | `... read component.db.output or component.db.outputs.<resource> ...` | the path starts with something other than `output` or `outputs` |
-| `component "api" reads "db" beside it in ..., but "db" is placed only in ...; read it there with ...` | `db` is not deployed beside the reader. Use the read the message suggests |
 | `... but no cluster "east" is registered` | the cluster name is not one KubeVela knows. Check `vela cluster list` |
 | `... which post-dispatch trait "..." outputs; it is applied only after the workflow finishes, so the read would wait for ever` | a resource from a post-dispatch trait cannot be read |
 | `component "db" is in 2 namespaces of cluster "east"; name one with ...` | the deploy step fails, and is retried, until you add `.namespace(...)` |

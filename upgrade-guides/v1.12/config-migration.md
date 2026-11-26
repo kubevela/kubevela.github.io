@@ -318,8 +318,10 @@ helm upgrade -n vela-system kubevela kubevela/vela-core --version 1.12.0-alpha.2
   --set featureGates.autoMigrateLegacyConfigs=true --wait
 ```
 
-`--reset-then-reuse-values` needs Helm 3.14 or later. With an older Helm, pass your values file
-with `-f` instead.
+`--reset-then-reuse-values` needs Helm 3.14 or later; with an older Helm, pass your values file
+with `-f` instead. It keeps the values you set yourself and takes the rest from the new chart. Plain
+`--reuse-values` keeps the old chart's values too: from 1.11.2 that leaves vela-core on the 1.11.2
+image, and from 1.12.0-alpha.1 the upgrade fails.
 
 - Only the leader runs it, once, after the webhook server is up. If rows fail, it tries again, up
   to three attempts 30 seconds apart.
