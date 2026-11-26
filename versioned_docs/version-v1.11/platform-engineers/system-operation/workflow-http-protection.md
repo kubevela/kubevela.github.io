@@ -2,7 +2,7 @@
 title: Outbound HTTP Protection
 ---
 
-vela-core makes HTTP requests on behalf of Applications, definitions and addons. From v1.11.1 it refuses requests to cloud metadata and link-local addresses, and from v1.11.2 it also refuses loopback addresses and bounds how long a request may take and how much it may read. This page explains what is refused, how to add to the denylist, the stricter modes, and the bounds.
+vela-core makes HTTP requests on behalf of Applications and definitions. From v1.11.1 it refuses requests to cloud metadata and link-local addresses, and from v1.11.2 it also refuses loopback addresses and bounds how long a request may take and how much it may read. This page explains what is refused, how to add to the denylist, the stricter modes, and the bounds.
 
 :::caution Upgrading to v1.11.1 or v1.11.2
 A request that worked before can now fail the step or the render. See [What may fail after an upgrade](#what-may-fail-after-an-upgrade) before you upgrade.
@@ -15,7 +15,9 @@ The protection applies to every outbound HTTP request vela-core makes:
 - the `request`, `webhook` and `notification` workflow steps (HTTP notifications: DingTalk, Lark, Slack; email goes over SMTP and is not covered);
 - custom workflow steps that use `vela/http` or the `vela/op` HTTP actions (`op.#HTTPDo`, `op.#HTTPGet`, `op.#HTTPPost`, `op.#HTTPPut`, `op.#HTTPDelete`);
 - `vela/http` in component, trait and policy definitions;
-- addon registry fetches, Helm repository and chart fetches (including `oci://` from v1.11.2), and `ref-objects` URLs.
+- Helm repository and chart fetches (including `oci://` from v1.11.2), and `ref-objects` URLs.
+
+Addon registries are not fetched by vela-core: the `vela` CLI and VelaUX fetch them, so the deny list, the loopback refusal and the feature gates set on vela-core don't apply to `vela addon enable` or the VelaUX Addons page.
 
 Destinations are checked in two places:
 
@@ -33,7 +35,7 @@ A workflow step that fails this way is retried with backoff, up to `workflow.ste
 
 ### HTTP proxies are not used
 
-Guarded requests connect directly and ignore `HTTP_PROXY`, `HTTPS_PROXY` and `NO_PROXY` on the vela-core Deployment: a request sent through a proxy could reach a denied address that vela-core never sees. A cluster that reaches the internet only through a proxy can't reach Slack, webhooks, addon registries or Helm repositories from vela-core; the request fails with a dial or timeout error, not an SSRF one. This is tracked in [kubevela/kubevela#7685](https://github.com/kubevela/kubevela/issues/7685).
+Guarded requests connect directly and ignore `HTTP_PROXY`, `HTTPS_PROXY` and `NO_PROXY` on the vela-core Deployment: a request sent through a proxy could reach a denied address that vela-core never sees. A cluster that reaches the internet only through a proxy can't reach Slack, webhooks or Helm repositories from vela-core; the request fails with a dial or timeout error, not an SSRF one. This is tracked in [kubevela/kubevela#7685](https://github.com/kubevela/kubevela/issues/7685).
 
 ## What is refused
 
@@ -101,8 +103,8 @@ Two feature gates make the protection stricter. Both are off by default, and sta
 
 | Helm value | Controller flag | Effect |
 | ---------- | --------------- | ------ |
-| `featureGates.blockPrivateHTTPAddresses` | `--feature-gates=BlockPrivateHTTPAddresses=true` | Also refuses private addresses: RFC 1918 (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) and ULA (`fc00::/7`). This breaks calls to in-cluster Services, whose ClusterIPs are private, and to addon registries or Helm repositories on private addresses. |
-| `featureGates.disableWorkflowHTTP` | `--feature-gates=DisableWorkflowHTTP=true` | Turns off HTTP from workflow steps. A step fails with `workflow outbound HTTP is disabled by DisableWorkflowHTTP feature gate`. `vela/http` in definitions, addon and Helm fetches are not affected. |
+| `featureGates.blockPrivateHTTPAddresses` | `--feature-gates=BlockPrivateHTTPAddresses=true` | Also refuses private addresses: RFC 1918 (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`) and ULA (`fc00::/7`). This breaks calls to in-cluster Services, whose ClusterIPs are private, and to Helm repositories on private addresses. |
+| `featureGates.disableWorkflowHTTP` | `--feature-gates=DisableWorkflowHTTP=true` | Turns off HTTP from workflow steps. A step fails with `workflow outbound HTTP is disabled by DisableWorkflowHTTP feature gate`. `vela/http` in definitions and Helm fetches are not affected. |
 
 ```shell
 helm upgrade kubevela kubevela/vela-core -n vela-system -f <your values file> \
@@ -113,7 +115,7 @@ helm upgrade kubevela kubevela/vela-core -n vela-system -f <your values file> \
 
 From v1.11.2 every guarded request is bounded:
 
-- **Timeout.** A request that sets no timeout times out after 3s. The `request`, `webhook` and `notification` steps take a `timeout` parameter, and custom steps set `request.timeout` on `op.#HTTPDo` or `vela/http`: a Go duration with a unit, greater than 0 and at most `workflow.http.maxTimeout` (default `60s`). Anything else fails the step with `timeout <t> must be greater than 0 and at most <max>`. `vela/http` in definitions has no timeout parameter and uses `workflow.http.maxTimeout`.
+- **Timeout.** A request that sets no timeout times out after 3s. The `request`, `webhook` and `notification` steps take a `timeout` parameter, and custom steps set `request.timeout` on `op.#HTTPDo` or `vela/http`: a Go duration with a unit, greater than 0 and at most `workflow.http.maxTimeout` (default `60s`). A value without a unit, such as `"30"`, fails the parameter check on the built-in steps, and fails a custom step with `invalid timeout "30": time: missing unit in duration "30"`; `0`, a negative value or one over the maximum fails the step with `timeout <t> must be greater than 0 and at most <max>`. `vela/http` in definitions has no timeout parameter and uses `workflow.http.maxTimeout`.
 - **Response size.** A response body over `workflow.http.maxResponseBytes` (default 1 MiB) fails with `response body exceeds <n> bytes`, rather than being cut short.
 
 A request holds one of the controller's reconcile workers until it returns, so raise these with care.
@@ -140,7 +142,7 @@ A request holds one of the controller's reconcile workers until it returns, so r
 
 From v1.11.1:
 
-- A call to a cloud metadata or link-local address, on purpose or through a host name that resolves to one. Search your Applications, WorkflowRuns, definitions and addon registries for `169.254.`, `metadata.google.internal`, `fd00:ec2::254` and `100.100.100.200`.
+- A call to a cloud metadata or link-local address, on purpose or through a host name that resolves to one. Search your Applications, WorkflowRuns and definitions for `169.254.`, `metadata.google.internal`, `fd00:ec2::254` and `100.100.100.200`.
 - Anything that reached the internet through `HTTP_PROXY` or `HTTPS_PROXY`; see [HTTP proxies are not used](#http-proxies-are-not-used).
 
 From v1.11.2:
