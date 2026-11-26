@@ -7,7 +7,7 @@ Before reading this section, make sure you have understood the concept of [Workf
 :::
 
 
-In this section, we will introduce how to customize the workflow step in Application by using [CUE](/docs/next/platform-engineers/cue/basic) through `WorkflowStepDefinition`.
+In this section, we will introduce how to write your own workflow step type in [CUE](/docs/next/platform-engineers/cue/basic) with a `WorkflowStepDefinition`. A step type works in an Application's workflow and in a WorkflowRun, unless it uses something only one of them has.
 
 ## Deliver a simple workflow step
 
@@ -312,7 +312,10 @@ template: {
 
 ## Full available `context` in Workflow Step {#full-available-context-in-workflow-step}
 
-A workflow step reads the Application's name, namespace and revision, the step's own name and session ID, and the workflow name and publish version from the Application's annotations. In a step, `context.name` is the Application's name, not the step's. Every field, and which definition kinds can read it, is in the [Context Reference](/docs/next/platform-engineers/context-reference).
+What a step reads from `context` depends on where it runs.
+
+- **In a WorkflowRun**, the WorkflowRun's name and namespace, the step's own name and session ID, and the values set in `spec.context`. See [Context](../workflowrun.md#context).
+- **In an Application's workflow**, the Application's name, namespace and revision, the step's own name and session ID, and the workflow name and publish version from the Application's annotations. `context.name` is the Application's name, not the step's. Every field, and which definition kinds can read it, is in KubeVela's [Context Reference](/docs/next/platform-engineers/context-reference).
 
 ## Legacy `vela/op`
 

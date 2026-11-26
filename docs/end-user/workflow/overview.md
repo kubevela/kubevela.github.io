@@ -2,95 +2,21 @@
 title: Overview
 ---
 
-Without a workflow, KubeVela applies every component at once, apart from the order that dependencies set: `dependsOn`, `inputs` and `$(component.<name>)` reads each hold a component back until what it waits on is ready. A workflow lets you choose the order, wait for approval, branch on conditions and pass data from one step to the next.
+Without a workflow, KubeVela applies every component at once, apart from the order that dependencies set: `dependsOn`, `inputs` and `$(component.<name>)` reads each hold a component back until what it waits on is ready. An Application's workflow lets you choose the order, wait for approval, branch on conditions and pass data from one step to the next.
+
+The workflow engine is [KubeVela Workflow](/workflow/next/overview), which vela-core embeds. Its docs cover how steps behave, and they behave the same in an Application and in a WorkflowRun: suspend and resume, ordering, `forEach`, data passing, `if` conditions and timeouts, with a first workflow to try. This page covers what is particular to an Application. Each KubeVela release embeds one Workflow version:
+
+| KubeVela | Workflow |
+| :--- | :--- |
+| 1.12 | [0.8](/workflow/next/overview) |
+| 1.11 | [0.7](/workflow/overview) |
+| 1.10, 1.9 | [0.6](/workflow/0.6/overview) |
 
 A workflow is a list of steps. Each step has a type: one of the [built-in step types](./built-in-workflow-defs.md) (`deploy`, `suspend`, `notification`, `step-group` and more), or a type your platform team has added.
 
 :::note
 The `webhook` step and the HTTP channels of the `notification` step (DingTalk, Lark, Slack) block cloud metadata and link-local destinations by default. See [Workflow Outbound HTTP Protection](../../platform-engineers/system-operation/workflow-http-protection.md).
 :::
-
-## A first workflow
-
-This Application deploys `backend`, waits for you to approve, then deploys `frontend`:
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: first-workflow
-  namespace: default
-spec:
-  components:
-    - name: backend
-      type: webservice
-      properties:
-        image: oamdev/hello-world
-        ports:
-          - port: 8000
-    - name: frontend
-      type: webservice
-      properties:
-        image: oamdev/hello-world
-        ports:
-          - port: 8000
-  workflow:
-    steps:
-      - name: deploy-backend
-        type: apply-component
-        properties:
-          component: backend
-      - name: approve
-        type: suspend
-      - name: deploy-frontend
-        type: apply-component
-        properties:
-          component: frontend
-```
-
-Save it as `first-workflow.yaml`, apply it and check the status:
-
-```bash
-vela up -f first-workflow.yaml
-vela status first-workflow
-```
-
-Once `backend` is up, the workflow stops at the `suspend` step and the Application waits in `workflowSuspending`:
-
-```
-About:
-
-  Name:      	first-workflow
-  Namespace: 	default
-  Created at:	2026-11-24 17:19:14 +0000 GMT
-  Healthy:   	✅
-  Details:   	workflowSuspending
-
-Workflow:
-
-  mode: StepByStep-DAG
-  finished: false
-  Suspend: true
-  Terminated: false
-  Steps
-  - id: rmz1k9gf84
-    name: deploy-backend
-    type: apply-component
-    phase: succeeded
-  - id: dyx9aqevcs
-    name: approve
-    type: suspend
-    phase: suspending
-    message: Suspended by field suspend
-```
-
-Approve it, and the workflow carries on with `deploy-frontend`:
-
-```bash
-vela workflow resume first-workflow
-```
-
-When every step has succeeded, `vela status` shows the Application as `running`.
 
 ## The default workflow
 
@@ -101,10 +27,6 @@ If you declare no workflow, KubeVela generates one when it runs the Application:
 - Otherwise, it adds one `apply-component` step per component, named after the component. A component's `dependsOn` carries over to its step.
 
 `vela status` lists the generated steps in its `Workflow` section, the same as steps you write yourself.
-
-## Execution order
-
-Steps run one after another by default. To run them in parallel, make a step wait for others with `dependsOn`, or group them: see [Order Steps: Groups, Dependencies and DAG Mode](/workflow/next/steps/order-steps).
 
 ## State of Application and Workflow
 
@@ -131,15 +53,18 @@ VelaUX shows each step's state; here the first step succeeded and the second fai
 
 | I want to... | Page |
 | :--- | :--- |
+| Write a first workflow | [Workflow overview](/workflow/next/overview#a-first-workflow) |
 | Wait for approval before carrying on | [Suspend and Resume](/workflow/next/steps/suspend) |
 | Run steps in parallel, in a set order, or in groups | [Order Steps](/workflow/next/steps/order-steps) |
+| Repeat steps over a list | [Repeating Steps with forEach](/workflow/next/steps/for-each) |
 | Run a step only when an earlier one failed, or skip it | [If Conditions](/workflow/next/steps/if-condition) |
 | Pass a value from one step to the next | [Data Passing](/workflow/next/steps/inputs-outputs) |
+| Order components, and pass data between them | [Order Components and Pass Data Between Them](./component-dependency-parameter.md) |
 | Stop a step that hangs | [Timeout of Step](/workflow/next/steps/timeout) |
-| Suspend, resume, terminate or restart a running workflow | [Workflow Operations](./operations.md) |
+| Suspend, resume, terminate, restart or roll back a running workflow | [Workflow Operations](./operations.md) |
 | Find out why a step failed | [Debug Workflow](../../platform-engineers/debug/debug.md) |
 
 ## Next steps
 
-- [Built-in step types](./built-in-workflow-defs.md): every step type that ships with KubeVela and its parameters.
+- [Built-in step types](./built-in-workflow-defs.md): every step type an Application can use, and its parameters.
 - [Custom workflow steps](/workflow/next/authoring/step-definition): for platform engineers adding step types of their own.
