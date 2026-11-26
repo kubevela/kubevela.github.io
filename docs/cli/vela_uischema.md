@@ -24,7 +24,7 @@ Manage UI schema for addons.
 ### SEE ALSO
 
 
-* [vela uischema apply](vela_uischema_apply.md)	 - Apply UI schemas to the cluster from a file or directory.
+* [vela uischema apply](vela_uischema_apply.md)	 - apply `<ui schema file/dir path>`
 
 #### Go Back to [CLI Commands](vela.md) Homepage.
 
