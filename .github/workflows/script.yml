@@ -12,12 +12,12 @@ jobs:
   check-linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Check Install Script
         run: static/script/install.sh
   check-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Check Install Script
         run: static/script/install.ps1
