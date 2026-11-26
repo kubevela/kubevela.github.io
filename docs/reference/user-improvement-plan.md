@@ -1,18 +1,30 @@
 ---
-title: User Improvement Plan
+title: Usage Data Collection in VelaUX
 ---
 
-Welcome to join the "User Improvement Plan"! To improve the KubeVela open source product, avoid bugs and improve the product quality, we need to collect some of your system and usage information.
+VelaUX can send anonymous usage statistics to the KubeVela maintainers, to show which features people use. It is on by default, and it follows the [CNCF telemetry data collection and usage policy](https://www.linuxfoundation.org/telemetry-data-policy/).
 
-We will use these data to guide us to improve the installation, user experience and performance. That can also help us to make more decision about features and designs.
+## Turn it off
 
-This plan follows the [CNCF Telemetry data collection and usage policy](https://www.linuxfoundation.org/telemetry-data-policy/), you can learn the collection data and more details [here](https://www.linuxfoundation.org/wp-content/uploads/KubeVela-Review-of-Project-Telemetry-Data-Collection-and-Usage.pdf).
+Go to **Platform Setting > User experience improvement plan**, switch **Contribution** off, and click **Submit**. Nothing else in VelaUX depends on it.
 
-If you don't want to join this plan, just turn off the button in the "platform setting". This won't block you to use any features about the product.
+## What is sent
 
-![](../resources/user-improve.jpg)
+Once a day, VelaUX's server counts what is in its own datastore and in the cluster. When someone opens VelaUX, their browser sends the latest counts, at most once every 24 hours per browser:
 
+| Field | What it holds |
+| --- | --- |
+| `platformID` | A random ID generated when VelaUX is installed. |
+| `installTime` | When VelaUX was installed. |
+| `version` | The KubeVela version. |
+| `clusterCount` | The number of clusters, as a range such as `<3` or `<10`. |
+| `appCount` | The number of VelaUX applications, as a range such as `<10` or `<50`. |
+| `enableAddonList` | Each installed addon's name and whether it is enabled, enabling or disabling. |
+| `componentDefinitionTopList`, `traitDefinitionTopList`, `workflowStepDefinitionTopList`, `policyDefinitionTopList` | The five most used component, trait, workflow step and policy types. |
+| `browserInfo` | The browser's language, name and version, and screen size. |
 
-We promise the data collected can only be used within the community to improve the product user experience and help up to make feature design and decisions.
+No application names, resource contents, user names or credentials are sent.
 
-Thanks for your support!
+## Where it goes
+
+The browser posts the data to `https://telemetry.kubevela.net/collecting`. That host no longer resolves, so at present nothing is received.

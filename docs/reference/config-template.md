@@ -314,7 +314,8 @@ For each Config, the controller:
 The Secret and the `outputs` objects are owned by the Config. If a Secret or object of the same
 name already exists and the Config does not own it, the Config goes to `Error` with `already
 exists and is not owned by this Config`; the controller never takes over an object it did not
-create. Deleting the Config deletes its Secret, its `outputs` objects and its distribution through
+create, except the v1.11 Secret that a Config created by `vela config-template migrate` stands for,
+along with the `outputs` objects that Secret recorded. Deleting the Config deletes its Secret, its `outputs` objects and its distribution through
 garbage collection. It does not delete anything from Nacos.
 
 ## Scope: who may use a template
@@ -424,10 +425,22 @@ publish through that endpoint report `NacosSynced` `False` with reason `Endpoint
 With the admission webhooks enabled (the default), a ConfigTemplate or Config is refused before it
 is stored when:
 
-| Resource | Refused when |
-|---|---|
-| ConfigTemplate | `scope: system` outside `vela-system`; `sensitive` turned from `true` to `false` (also refused by the CRD itself); the `nacos` block has no `endpoint.name` or `metadata.dataId`, or an unknown `format`; `nacos.endpoint.namespace` is computed or has a default; the Nacos endpoint is outside the template's namespace and `vela-system`, and the user cannot `get` its Secret; the `config.oam.dev/grandfathered-configs` annotation gains an entry |
-| Config | `templateRef` changed; both `properties` and `propertiesFrom` set; inline `properties` on a sensitive template; the user may not use the template, or a template in another namespace does not exist yet; the properties do not match the template's schema, or the template fails to render with them; the `propertiesFrom` Secret or key does not exist |
+| Resource | Refused when | The error says |
+|---|---|---|
+| ConfigTemplate | `scope: system` outside `vela-system` | `scope system is only valid in vela-system` |
+| ConfigTemplate | `sensitive` turned from `true` to `false` (also refused by the CRD itself) | `sensitive cannot be changed from true to false` |
+| ConfigTemplate | The `nacos` block has no `endpoint.name` or `metadata.dataId`, or an unknown `format` | `nacos.endpoint.name is required`, `nacos.metadata.dataId is required`, `nacos.format "..." is not one of ...` |
+| ConfigTemplate | `nacos.endpoint.namespace` is computed or has a default | `nacos.endpoint.namespace must be a plain string when set` |
+| ConfigTemplate | The Nacos endpoint is outside the template's namespace and `vela-system`, and the user cannot `get` its Secret | `names the nacos endpoint <namespace>/<name> in another namespace, which <user> may not read` |
+| ConfigTemplate | The `config.oam.dev/grandfathered-configs` annotation gains an entry | `config.oam.dev/grandfathered-configs may lose entries but not gain them` |
+| Config | `templateRef` changed | `the template of the config can not be changed` |
+| Config | Both `properties` and `propertiesFrom` set | `spec.properties and spec.propertiesFrom are mutually exclusive` |
+| Config | Inline `properties` on a sensitive template | `is sensitive: spec.properties must not be set, use spec.propertiesFrom instead` |
+| Config | The user may not use a namespace-scoped template in another namespace | `is namespace-scoped: a config in <namespace> may use it only if its author can get it` |
+| Config | A template in another namespace does not exist yet | `is not available yet` |
+| Config | The properties do not match the template's schema | `properties do not match template schema` |
+| Config | The template fails to render with the properties | `failed to render config template` |
+| Config | The `propertiesFrom` Secret or key does not exist | `failed to load spec.propertiesFrom secret`, or `secret <namespace>/<name> has no key "<key>"` |
 
 For example:
 
@@ -518,9 +531,57 @@ waits until it is `Available`. See
 
 ## Examples
 
-These templates are CUE files for `vela config-template apply -f <file>`. The three with
+These templates are CUE files for `vela config-template apply -f <file>`. Image Registry is
+namespace-scoped, so apply it in the namespace whose Configs use it. The ones with
 `scope: "system"` must be applied in `vela-system`, the CLI's default namespace, so they can be used
 from any namespace.
+
+### Webhook
+
+This template stores a webhook URL and the token to call it with. Save it as `webhook.cue`:
+
+```cue
+metadata: {
+	name:        "webhook"
+	alias:       "Webhook"
+	scope:       "system"
+	description: "A webhook URL and the token to call it with"
+	sensitive:   true
+}
+
+template: {
+	parameter: {
+		// +usage=The URL to call
+		url: string
+		// +usage=The token sent with each call
+		token: string
+	}
+	output: {
+		apiVersion: "v1"
+		kind:       "Secret"
+		metadata: {
+			name:      context.name
+			namespace: context.namespace
+		}
+		type: "Opaque"
+		stringData: {
+			url:   parameter.url
+			token: parameter.token
+		}
+	}
+}
+```
+
+`sensitive: true` keeps the token out of every read of the config; Applications can still mount the Secret.
+
+Apply the template, then create a config from it:
+
+```bash
+vela config-template apply -f webhook.cue
+vela config create ci-webhook -t webhook url=https://ci.example.com/hooks/deploy token=<token>
+```
+
+`vela config create` returns once the Config is stored. Check that it is `Available` with `vela config list`; the controller then writes the Secret `ci-webhook` in `vela-system`, holding `url` and `token`.
 
 ### Image Registry
 
@@ -534,7 +595,7 @@ import (
 metadata: {
 	name:        "image-registry"
 	alias:       "Image Registry"
-	scope:       "project"
+	scope:       "namespace"
 	description: "Config information to authenticate image registry"
 	sensitive:   false
 }
@@ -599,6 +660,17 @@ template: {
 }
 ```
 
+Use it: save the template as `image-registry.cue`, then
+
+```bash
+vela config-template apply -f image-registry.cue -n my-team
+vela config create docker-hub -t my-team/image-registry -n my-team registry=index.docker.io auth.username=<user> auth.password=<token>
+kubectl get secret docker-hub -n my-team -o jsonpath='{.type}'
+```
+
+The Secret is a `kubernetes.io/dockerconfigjson`, ready to use as an image pull secret in
+`my-team`.
+
 ### Nacos Server
 
 ```cue
@@ -640,8 +712,18 @@ template: {
 		}
 	}
 }
-
 ```
+
+Use it: save the template as `nacos-server.cue`, then
+
+```bash
+vela config-template apply -f nacos-server.cue
+vela config create nacos -t nacos-server 'servers[0].ipAddr=nacos.example.com' 'servers[0].port=8848'
+vela config list
+```
+
+`nacos` shows `Available`. It is the endpoint the Generic Nacos Config template below publishes
+through.
 
 ### Generic Nacos Config
 
@@ -702,8 +784,18 @@ template: {
 		tag?: string
 	}
 }
-
 ```
+
+Use it: create the `nacos` config from the Nacos Server template first, save this template as
+`nacos-config.cue`, then
+
+```bash
+vela config-template apply -f nacos-config.cue
+vela config create orders-settings -t nacos-config dataId=orders group=DEFAULT_GROUP content.timeout=30
+kubectl get config orders-settings -n vela-system -o jsonpath='{.status.conditions[?(@.type=="NacosSynced")].reason}'
+```
+
+`Published` means the content is in Nacos, under data ID `orders`.
 
 ### Alibaba Cloud Provider
 
@@ -776,6 +868,38 @@ template: {
 	}
 }
 ```
+
+Use it: the template is sensitive, so the properties come from a Secret. With the
+[Terraform addon](./addons/terraform.md) enabled, save the template as
+`terraform-alibaba.cue`, then
+
+```bash
+vela config-template apply -f terraform-alibaba.cue
+kubectl create secret generic alibaba-creds -n vela-system --from-literal=properties='{"ALICLOUD_ACCESS_KEY":"<key>","ALICLOUD_SECRET_KEY":"<secret>","ALICLOUD_REGION":"cn-hongkong"}'
+```
+
+Then create the Config, reading its properties from that Secret (see
+[Properties from a Secret](#properties-from-a-secret)):
+
+```bash
+cat <<EOF | kubectl apply -f -
+apiVersion: config.oam.dev/v1alpha1
+kind: Config
+metadata:
+  name: alibaba
+  namespace: vela-system
+spec:
+  templateRef:
+    name: terraform-alibaba
+  propertiesFrom:
+    secretRef:
+      name: alibaba-creds
+EOF
+kubectl get provider default -n vela-system
+```
+
+The Config's Secret holds the credentials, and its `outputs` add the Terraform `Provider` named
+`default` in `vela-system`.
 
 ## Share templates through addons
 

@@ -11,7 +11,7 @@ Tools come in three classes:
 
 - **Read** tools are always registered and never change the cluster.
 - **Plan** tools prepare a change without writing: they render or compare an Application, or stage an input for later calls.
-- **Write** tools exist only when the server is started with a flag that enables them.
+- **Write** tools exist only when the server is started with `--allow-write`; without `--direct-namespace` they return YAML for a pull request instead of applying it.
 
 | Tool | Class | Summary |
 |---|---|---|
@@ -25,7 +25,7 @@ Tools come in three classes:
 | [`get_logs`](#get_logs) | read | Return a bounded, redacted tail of container logs for an Application's pods, found through its managed resources. |
 | [`explain_definition`](#explain_definition) | read | Explain one KubeVela definition from its live object: what kinds its template produces, which parameters flow into which fields, its parameter schema, health and custom status rules, trait behaviour and restrictions, revision history, and how many Applications use it. |
 | [`explain_application`](#explain_application) | read | Explain an Application end to end: each component with its definition, declared dependencies and data flow, recorded status per cluster, live managed resources with unhealthy descendants and pod phases, workflow state, recent events, and a list of findings ordered by severity, each citing the object it came from. |
-| [`diagnose_application`](#diagnose_application) | read | Root-cause an unhealthy Application: reads provisioner-owned resources live, a bounded number per call, and interprets their conditions by the conventions of the family that owns their API group — ACK (ResourceSynced and Terminal, including the convergence-loop signature of a field the cloud service computes differently), Config Connector (Ready with reason UpToDate), Crossplane (Ready and Synced). |
+| [`diagnose_application`](#diagnose_application) | read | Root-cause an unhealthy Application: reads family-owned resources live, a bounded number per call, and interprets their conditions by the conventions of the controller family that owns their API group — ACK (Terminal, then ReferencesResolved ahead of a possibly stale ResourceSynced, including the convergence-loop signature of a field the cloud service computes differently), Config Connector (Ready with reason UpToDate), Crossplane (Ready and Synced), and standard-conditions for any other custom resource whose status carries conditions (Ready True is ready; no Ready condition is unknown, never healthy). |
 | [`list_clusters`](#list_clusters) | read | List the clusters KubeVela can deploy to, with alias, credential type, endpoint and labels. |
 | [`list_addons`](#list_addons) | read | List the addons enabled on this control plane with version, registry, phase, health and the clusters they reach, read from the Applications the addons installed. |
 | [`stage_definition`](#stage_definition) | plan | Parse and stage a local definition — CUE as vela def gen-module writes it for a defkit module, or a definition object as YAML — and get back a content-hash handle that dryrun_application, diff_application and diff_definition_impact accept wherever they accept inline definitions. |
@@ -43,7 +43,7 @@ Every result carries a `meta` block that says which system the data came from an
 | `featureGates` | object | vela-core feature gates set to a value other than their default. Absent gates are at their defaults; get_platform_info lists every gate set on the controller. |
 | `kubernetes` | object | Kubernetes API server version per cluster name. |
 | `observedAt` | string | When the data in this response was read, UTC. |
-| `source` | string | live for an API server read, rendered for dry-run or diff output, cached for served data, mixed when a live read and a render both contributed; the evidence says which parts are which. |
+| `source` | string | live for an API server read, rendered for dry-run or diff output, cached for served data, mixed when a live read and a render, or a live read and a cache read, both contributed; the evidence or warnings say which parts are which. |
 | `truncated` | boolean | True when a size or count limit cut the data; narrow the request to see the rest. |
 | `velaCLI` | string | Version of the vela binary serving this session. |
 | `velaCore` | string | vela-core controller version found on the cluster, or unknown. |
@@ -95,7 +95,7 @@ List the KubeVela definitions (components, traits, policies, workflow steps) ava
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| `namespace` | string | no | Namespace to list in addition to the system namespace. Empty lists every namespace the caller can read. Also decides which definition is marked default. |
+| `namespace` | string | no | Namespace to list in addition to the system namespace. Empty lists every namespace (requires cluster-wide list permission on definitions), or the server's allowed namespaces when it is restricted. Also decides which definition is marked default. |
 | `provides` | string | no | Keep definitions that provide this capability, such as postgres, to compare alternatives: those the platform labels with it, and unlabelled ones whose name or description mentions it, which matchedBy marks. |
 | `type` | string | no | Limit to one definition type: component, trait, policy or workflow-step. Empty lists all four. |
 
@@ -184,7 +184,7 @@ Read one Application live: its declared components, traits, policies and workflo
 | `endpoints` | array of object | Addresses the Application serves on, read live from the Services, Ingresses and HTTPRoutes it manages, the way vela status --endpoint reads them. Addresses reachable from outside the cluster come first. |
 | `evidence` | array of string | Objects this answer was derived from. |
 | `handles` | object | Exact identifiers for queries to other tools: clusters, namespace, pods, labels and the time window. Use them verbatim; do not guess label names or time ranges. |
-| `healthy` | boolean | False when the phase or a workflow step failed, or when no service has reported status yet. |
+| `healthy` | boolean | False when the phase or a workflow step failed, when no service has reported status yet, or when any service or non-pending trait is unhealthy. |
 | `labels` | object | Application labels. |
 | `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
 | `name` | string | Name of the object this result describes. |
@@ -355,7 +355,7 @@ Explain an Application end to end: each component with its definition, declared 
 | `evidence` | array of string | Objects this answer was derived from. |
 | `findings` | array of object | Observations ordered error, warning, info, each citing an object. |
 | `handles` | object | Exact identifiers for queries to other tools: clusters, namespace, pods, labels and the time window. Use them verbatim; do not guess label names or time ranges. |
-| `healthy` | boolean | False when the phase or a workflow step failed, or when no service has reported status yet. |
+| `healthy` | boolean | False when the phase or a workflow step failed, when no service has reported status yet, or when any service or non-pending trait is unhealthy. |
 | `meta` | object | Versions and read time for this result. See [the meta block](#the-meta-block). |
 | `name` | string | Name of the object this result describes. |
 | `namespace` | string | Namespace of the object this result describes. |
@@ -371,7 +371,7 @@ Explain an Application end to end: each component with its definition, declared 
 
 Read. Always registered.
 
-Root-cause an unhealthy Application: reads provisioner-owned resources live, a bounded number per call, and interprets their conditions by the conventions of the family that owns their API group — ACK (ResourceSynced and Terminal, including the convergence-loop signature of a field the cloud service computes differently), Config Connector (Ready with reason UpToDate), Crossplane (Ready and Synced). Plain Kubernetes resources keep the resource tree's pod-corrected health without a live read; Secrets are never diagnosed and, as with every tool here, their content is never returned. Adds recent events and findings that each cite the object they came from; anything unread is named in unknowns. The resource tree defaults unknown kinds to Healthy, so use this, not explain_application alone, when a cloud resource looks fine but the application is not.
+Root-cause an unhealthy Application: reads family-owned resources live, a bounded number per call, and interprets their conditions by the conventions of the controller family that owns their API group — ACK (Terminal, then ReferencesResolved ahead of a possibly stale ResourceSynced, including the convergence-loop signature of a field the cloud service computes differently), Config Connector (Ready with reason UpToDate), Crossplane (Ready and Synced), and standard-conditions for any other custom resource whose status carries conditions (Ready True is ready; no Ready condition is unknown, never healthy). Plain Kubernetes resources, and custom resources that write no conditions, keep the resource tree's pod-corrected health; Secrets are never diagnosed and, as with every tool here, their content is never returned. Adds recent events and findings that each cite the object they came from; anything unread is named in unknowns. The resource tree defaults unknown kinds to Healthy, so use this, not explain_application alone, when a managed resource looks fine but the application is not. A family-owned resource that is not ready carries a cause when its family's condition, or for Crossplane a matching Cannot warning event, holds error text: classified by the external system's own error code, a transport or lower-camel phrase, or a googleapi status into throttled, quota-exhausted, auth, invalid, dependency-missing, conflict or unreachable, with a single owner (application-spec, external or platform; controller is reserved) and the owning controller as a handle when this server can identify it; text no rule recognises, including an explicit code no rule names, is unclassified with no owner; a ready resource carries none. The ACK rules were exercised with a running ACK controller against an emulated endpoint; the Config Connector and Crossplane rules come from their controllers' message formats only; the standard-conditions family from cert-manager's and the Gateway API's documented conditions only. No family is verified against a cloud account.
 
 ### Input
 

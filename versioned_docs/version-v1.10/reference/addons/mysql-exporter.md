@@ -15,6 +15,10 @@ Not all collection methods are supported on MySQL/MariaDB < 5.6
 
 ## Usecases
 
+:::caution
+The exporter takes the password as a plain property and writes it into its Deployment's `DATA_SOURCE_NAME`, so anyone who can read the Application or that Deployment can read it. Use a MySQL user with only the grants the exporter needs.
+:::
+
 * Work as a trait.
 
 ```yaml
@@ -35,7 +39,7 @@ spec:
       url: https://charts.bitnami.com/bitnami
       values:
         auth:
-          rootPassword: yueda123
+          rootPassword: <root-password>
         primary:
           persistence:
             enabled: false
@@ -49,7 +53,7 @@ spec:
         mysqlHost: mysql
         mysqlPort: 3306
         name: mysql-server-exporter
-        password: yueda123
+        password: <password>
         username: root
         version: v0.14.0
       type: mysql-exporter
@@ -77,7 +81,7 @@ spec:
       url: https://charts.bitnami.com/bitnami
       values:
         auth:
-          rootPassword: yueda123
+          rootPassword: <root-password>
         primary:
           persistence:
             enabled: false
@@ -88,10 +92,10 @@ spec:
   - name: mysql-exporter
     properties:
       disableAnnotation: false
-      mysqlHost: mysql-server
+      mysqlHost: mysql
       mysqlPort: 3306
       name: mysql-server-exporter
-      password: yueda123
+      password: <password>
       username: root
       version: v0.14.0
     type: mysql-exporter-server

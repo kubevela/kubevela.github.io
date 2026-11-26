@@ -90,7 +90,7 @@ Please access the velaux from the following endpoints:
 If you enabled the traefik addon, you can set the `gatewayDriver` parameter to use the Gateway API.
 
 ```shell script
-vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik
+vela addon enable velaux domain=example.domain.com gatewayDriver=traefik
 ```
 
 If you want to enable VelaUX with SSL:
@@ -98,32 +98,17 @@ If you want to enable VelaUX with SSL:
 1. Create the certificate configuration:
 
 ```shell
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  annotations:
-    config.oam.dev/alias: "VelaUX SSL Certificate"
-  labels:
-    app.oam.dev/source-of-truth: from-inner-system
-    config.oam.dev/catalog: velacore-config
-    config.oam.dev/type: config-tls-certificate
-  name: velaux-cert
-  namespace: vela-system
-spec:
-  components:
-  - name: velaux
-    properties:
-      cert: <CERT_BASE64>
-      key: <KEY_BASE64>
-    type: config-tls-certificate
+vela config create velaux-cert -t tls-certificate -n vela-system cert=<CERT_BASE64> key=<KEY_BASE64>
 ```
+
+The `tls-certificate` config template comes with the `traefik` addon, which `gatewayDriver=traefik` needs anyway.
 
 Please make sure the certificate matches the domain.
 
 2. Enable VelaUX with domain
 
 ```shell
-vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik secretName=velaux-cert
+vela addon enable velaux domain=example.domain.com gatewayDriver=traefik secretName=velaux-cert
 ```
 
 ## Setup with MongoDB database
@@ -134,45 +119,7 @@ VelaUX supports Kubernetes and MongoDB as the database. the default is Kubernete
 vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_PASSWORD>@<MONGODB_URL>
 ```
 
-You can also deploy the MongoDB with this application configuration:
-
-> Your cluster must have a default storage class.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: velaux-db
-  namespace: vela-system
-spec:
-  components:
-    - name: velaux-db
-      properties:
-        chart: mongodb
-        repoType: helm
-        url: https://charts.bitnami.com/bitnami
-        values:
-          persistence:
-            size: 20Gi
-        version: 12.1.12
-      type: helm
-  policies:
-    - name: vela-system
-      properties:
-        clusters:
-          - local
-        namespace: vela-system
-      type: topology
-  workflow:
-    steps:
-      - name: vela-system
-        properties:
-          policies:
-            - vela-system
-        type: deploy
-```
-
-After deployed, let's get the root password from the secret `vela-system/velaux-db-mongodb`.
+Use a MongoDB database that you run or rent.
 
 ## Specify the addon image
 
