@@ -47,7 +47,7 @@ Once application workflow is terminated, KubeVela controller won't reconcile the
 
 ## Restart Workflow
 
-You can use `vela workflow restart` to restart an executing workflow.
+`vela workflow restart` runs the whole workflow again from the first step, whatever state it is in; add `--step <name>` to restart from that step.
 
 ```bash
 vela workflow restart my-app

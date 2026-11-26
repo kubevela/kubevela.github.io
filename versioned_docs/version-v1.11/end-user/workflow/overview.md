@@ -2,7 +2,7 @@
 title: Overview
 ---
 
-Workflows, as part of the Application, can glue together additional delivery processes and specify arbitrary delivery environments. In short, `Workflow` provides customized control flow and flexibility based on the original delivery model of Kubernetes(Apply). For example, `Workflow` can be used to implement complex operations such as pause, manual approval, if conditions, waiting status, data flow, multi-environment gray release, A/B testing, etc.
+Without a workflow, KubeVela applies every component at once. A workflow lets you choose the order, wait for approval, branch on conditions and pass data from one step to the next.
 
 A workflow consists of multiple steps, and typical workflow steps include step groups (containing a series of sub-steps), human review, multi-cluster publishing, notifications, etc. You can view all built-in workflow steps provided by default in KubeVela in [built-in workflow steps](./built-in-workflow-defs.md). If the built-in workflow steps don't meet your needs, you can also [custom workflow steps](../../platform-engineers/workflow/workflow.md).
 
@@ -10,7 +10,7 @@ A workflow consists of multiple steps, and typical workflow steps include step g
 
 In fact, if you only use components in the Application and do not declare a workflow, KubeVela will automatically create a default workflow for deploying the components when running the Application.
 
-In VelaUX, you can feel the workflow more intuitively. As shown in the figure: The following is a workflow where the first step succeeds and the second fails:
+VelaUX shows each step's state; here the first step succeeded and the second failed:
 
 ![velaux-workflow](../../resources/velaux-workflow.png)
 
@@ -41,15 +41,15 @@ If you do not explicitly declare the execution mode, by default steps are execut
 |   workflowFailed   |   failed   | When a step in the workflow fails and the workflow is completed, the status of the application is workflowFailed |
 |      running       | succeeded  |        When all steps in the workflow are executed successfully, the status of the application is running        |
 
-## Core features
+## What you can do with a workflow
 
-Workflow has powerful process control capabilities, including:
-
-- View [Workflow Operations](./operations.md) to learn how to operate the workflow.
-- View [Suspend and Resume Workflow](./suspend.md) to learn how to suspend and resume a workflow.
-- View [Sub Steps](./step-group.md) to learn how to use sub-steps in the workflow.
-- View [Dependency](./dependency.md) to learn how to specify dependencies for workflow steps.
-- View [Pass data between steps](./inputs-outputs.md) to learn how to use `inputs`, `outputs` to pass data between steps.
-- View [If Conditions](./if-condition.md) to learn how to use `if` to determine whether the step should be executed.
-- View [Timeout Steps](./timeout.md) to learn how to set `timeout` for steps.
-- View [Debug Workflow](../../platform-engineers/debug/debug.md) to learn how to debug workflow in the real environment.
+| I want to... | Page |
+| :--- | :--- |
+| Wait for approval before carrying on | [Suspend and Resume](./suspend.md) |
+| Run steps in parallel, or in a set order | [Dependency](./dependency.md) |
+| Group steps together | [Sub Steps](./step-group.md) |
+| Run a step only when an earlier one failed, or skip it | [If Conditions](./if-condition.md) |
+| Pass a value from one step to the next | [Data Passing](./inputs-outputs.md) |
+| Stop a step that hangs | [Timeout of Step](./timeout.md) |
+| Suspend, resume, terminate or restart a running workflow | [Workflow Operations](./operations.md) |
+| Find out why a step failed | [Debug Workflow](../../platform-engineers/debug/debug.md) |

@@ -4,12 +4,26 @@ title:  Workflow Operations
 
 This section introduces how to use the `vela` CLI to operate workflow.
 
+Each command takes the Application's name, and `-n <namespace>` for its namespace (the current env's namespace if you leave it out). `suspend`, `resume`, `restart`, `logs` and `debug` also take `--step <name>` to act on one step instead of the whole workflow.
+
+## List Workflows
+
+`vela workflow list` shows the workflow of every Application in the namespace, with its phase, start and end time. Add `-A` for all namespaces.
+
+```bash
+vela workflow list -n default
+```
+
 ## Suspend Workflow
 
 If you have an executing workflow, you can use the `suspend` command to suspend the workflow.
 
 ```bash
-vela workflow suspend <name>
+vela workflow suspend my-app -n default
+```
+
+```console
+Successfully suspend workflow: my-app
 ```
 
 :::tip
@@ -22,7 +36,11 @@ Please refer to [Suspend and Resume](./suspend.md) for more examples.
 Once the workflow is suspended, you can use the `vela workflow resume` command to manually resume the workflow.
 
 ```bash
-vela workflow resume <name>
+vela workflow resume my-app -n default
+```
+
+```console
+Successfully resume workflow: my-app
 ```
 
 :::tip
@@ -34,7 +52,7 @@ Please refer to [Suspend and Resume](./suspend.md) for more examples.
 You can use `vela workflow terminate` to terminate an executing workflow.
 
 ```bash
-vela workflow terminate <name>
+vela workflow terminate my-app -n default
 ```
 
 :::tip
@@ -47,10 +65,22 @@ Once application workflow is terminated, KubeVela controller won't reconcile the
 
 ## Restart Workflow
 
-You can use `vela workflow restart` to restart an executing workflow.
+`vela workflow restart` runs the whole workflow again from the first step, whatever state it is in; add `--step <name>` to restart from that step. Steps that read the restarted step's outputs run again with it.
 
 ```bash
-vela workflow restart my-app
+vela workflow restart my-app -n default
+```
+
+```console
+Successfully restart workflow: my-app
+```
+
+```bash
+vela workflow restart my-app -n default --step deploy-prod
+```
+
+```console
+Successfully restart workflow my-app from step deploy-prod
 ```
 
 ### Scheduled Restarts
@@ -75,6 +105,25 @@ The annotation accepts three formats:
 - **Duration** (e.g., "5m", "1h", "24h"): Recurring restarts at the specified interval
 - **"true"**: Immediate restart
 
+How the controller handles it:
+
+- A timestamp or `"true"` is copied to `status.workflowRestartScheduledAt` and the annotation is removed, so it fires once.
+- A duration stays on the Application. Each next restart is counted from the end of the last finished run, so `24h` means 24 hours after the previous run finished, not every 24 hours on the clock.
+- A restart that comes due while a run is still executing or suspended waits for that run to finish, then runs. If the run started after the requested time, it already answered the request and no extra run happens.
+
+## Roll Back Workflow
+
+`vela workflow rollback` puts the Application back on an earlier revision.
+
+```bash
+vela workflow rollback my-app -n default
+```
+
+It refuses a workflow that is still running (`can not rollback a running workflow`); suspend or terminate it first, or wait for it to finish. Where it goes back to depends on whether the Application uses [publish versions](../version-control.md):
+
+- **Without `app.oam.dev/publishVersion`**, it restores the spec of the Application's latest revision (`status.latestRevision`), which undoes spec changes made since that revision was created.
+- **With `app.oam.dev/publishVersion`**, it finds the latest revision that succeeded and has a publish version, restores its spec, status and resources, and deletes the newer revisions that never succeeded.
+
 ## Check the logs of the workflow
 
 You can use `vela workflow logs` to check the logs of the workflow.
@@ -84,7 +133,7 @@ Note that only the steps with [op.#Log](../../platform-engineers/workflow/cue-ac
 :::
 
 ```bash
-vela workflow logs <name>
+vela workflow logs my-app -n default
 ```
 
 ## Debug Workflow
@@ -93,7 +142,7 @@ You can use `vela workflow debug` to debug the workflow.
 
 
 ```bash
-vela workflow debug <name>
+vela workflow debug my-app -n default
 ```
 
 :::tip

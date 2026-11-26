@@ -10,7 +10,7 @@ In KubeVela, you can choose to use the `vela` command to manually suspend the ex
 
 ### Suspend Manually
 
-If you have an application in `runningWorkflow` state, you want to stop the execution of the workflow, you can use `vela workflow suspend` to stop the workflow and use `vela workflow resume` to continue it.
+To pause a running workflow, run `vela workflow suspend`; `vela workflow resume` continues it.
 
 * Suspend the application
 
@@ -175,7 +175,7 @@ As you can see, the workflow has continued to execute.
 
 ### Resume the Workflow Automatically
 
-If you want the workflow to be continued automatically after a period of time has passed. Then, you can add a `duration` parameter to the `suspend` step. When the `duration` time elapses, the workflow will automatically continue execution.
+To resume automatically, set `duration` on the `suspend` step. When the `duration` time elapses, the workflow continues.
 
 Apply the following example:
 
