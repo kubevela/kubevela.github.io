@@ -7,6 +7,8 @@ This page lists the flags and feature gates of the KubeVela controller (`vela-co
 
 Most flags and feature gates are set through the `vela-core` Helm chart values, for example `--set featureGates.enableCelExpressions=true`. The chart's defaults can differ from the controller's own defaults; both are shown below.
 
+The flags of Cluster Gateway itself, which the chart runs beside vela-core, are in [Configure Cluster Gateway](/cluster-gateway/configuration).
+
 ## Flags
 
 The generic Kubernetes logging flags (`-v`, `--vmodule`, `--log_dir` and the other `klog` flags) are not listed.
