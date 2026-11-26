@@ -6,14 +6,16 @@ slug: /platform-engineers/debug/debug
 :::caution
 Debug workflow will run workflow in the real environment, make sure you're debugging in the test environment.
 
-The debugging process also requires the knowledge of the Kubernetes infrastructure, you may need the help of the platform team if you're the app developer.
+`vela debug` reads the Application, the definitions it uses and, for a workflow, the debug data the `debug` policy stores in ConfigMaps in the app's namespace. If it reports `forbidden`, ask your platform team for read access to Applications and ConfigMaps in that namespace.
 :::
 
 When you deploy your application in a test environment and find problems with the application, you may want to debug the application in the environment. KubeVela provides the `vela debug` command to help you debug your application in the environment.
 
-## Applications with workflow
+To see what an Application renders without deploying it, see [Dry Run](../../tutorials/dry-run.md). To try a definition you are writing against an Application, see [Debugging Definition](../cue/definition-edit.md#test-it-with-an-application).
 
-If your application uses workflow, make sure your app has the `debug` policy before using the `vela debug` command:
+## Add the debug policy
+
+`vela debug` works only on an Application with the `debug` policy, whether or not it has a workflow. Without the policy it stops with `please make sure your application have the debug policy`. Add it to the Application:
 
 ```yaml
 policies:
@@ -22,6 +24,8 @@ policies:
 ```
 
 You can also use `vela up -f <application yaml> --debug` to automatically add debug policy to your application.
+
+## Applications with workflow
 
 For applications that use workflows, `vela debug` will first list all the steps in the workflow, and you can select the specified steps to debug. After selecting a step, you can view the contents of all CUE variables in that step individually. Among them: `do` and `provider` marked in yellow are the CUE actions used this time, and the error content will be marked in red.
 
@@ -33,7 +37,7 @@ You can also use `vela debug <application-name> -s <step-name> -f <variable>` to
 
 ## Applications with components only
 
-If your application only uses components, not workflows, then, you can use the `vela debug <application-name>` command directly to debug your application.
+If your application only uses components, not workflows, `vela debug <application-name>` shows what each component renders. It still needs the `debug` policy.
 
 Deploy the following application. The first component will use `k8s-objects` to create a Namespace, and the second component will use the `webservice` with `gateway` trait to create a Deployment and its corresponding Service and Ingress.
 
@@ -64,6 +68,9 @@ spec:
             domain: testsvc.example.com
             http:
               "/": 8000
+  policies:
+    - name: debug
+      type: debug
 ```
 
 After the application is deployed, you can use the `vela debug <application-name>` command to view all the resources rendered by the application.

@@ -108,6 +108,8 @@ The generic Kubernetes logging flags (`-v`, `--vmodule`, `--log_dir` and the oth
 | `--webhook-tls-secret` | string |  | The &lt;namespace&gt;/&lt;name&gt; of the Secret that holds the webhook serving cert. Requires --use-webhook. If you set it, vela-core creates or renews the cert at startup. vela-core writes the cert to --webhook-cert-dir and sets the caBundle of --webhook-configuration. If it is empty (the default), cert-manager or another tool must supply the cert. |
 | `--workflow-http-deny-config-template-name` | string | `"vela-core-http-deny"` | Discover and merge ConfigMaps produced by this ConfigTemplate in the controller namespace |
 
+The limits on HTTP requests from workflow steps and definitions are set by `--max-workflow-http-timeout` (default `60s`) and `--max-workflow-http-response-bytes` (default `1048576`), and the `BlockPrivateHTTPAddresses` feature gate blocks private addresses. See [HTTP limits](../workflow/workflow.md#http-limits).
+
 ## Key Parameters
 
 - **application-re-sync-period**: The resync time of applications when no changes were made. A short time may cause controller to reconcile frequently but uselessly. The regular reconciles of applications can help ensure that application and its components keep up-to-date in case some unexpected differences. To override this interval for a single Application, use the [`app.oam.dev/reconcile-interval`](../../end-user/workflow/suspending-application-reconciliation.md#per-application-reconcile-interval) annotation (v1.11+).

@@ -37,11 +37,11 @@ After clusters joined, you could list all clusters managed by KubeVela.
 
 ```bash
 $ vela cluster list
-CLUSTER                 TYPE            ENDPOINT                ACCEPTED        LABELS
+CLUSTER         ALIAS   TYPE            ENDPOINT                ACCEPTED        LABELS
 local                   Internal        -                       true                  
-cluster-beijing         X509Certificate <ENDPOINT_BEIJING>      true                  
-cluster-hangzhou-1      X509Certificate <ENDPOINT_HANGZHOU_1>   true                  
-cluster-hangzhou-2      X509Certificate <ENDPOINT_HANGZHOU_2>   true                  
+beijing                 X509Certificate <ENDPOINT_BEIJING>      true                  
+hangzhou-1              X509Certificate <ENDPOINT_HANGZHOU_1>   true                  
+hangzhou-2              X509Certificate <ENDPOINT_HANGZHOU_2>   true                  
 ```
 
 > By default, the hub cluster where KubeVela locates is registered as the `local` cluster. You can use it like a managed cluster in spite that you cannot detach it or modify it.
@@ -51,14 +51,14 @@ cluster-hangzhou-2      X509Certificate <ENDPOINT_HANGZHOU_2>   true
 You can also give labels to your clusters, which helps you select clusters for deploying applications.
 
 ```bash
-$ vela cluster labels add cluster-hangzhou-1 region=hangzhou
-$ vela cluster labels add cluster-hangzhou-2 region=hangzhou
+$ vela cluster labels add hangzhou-1 region=hangzhou
+$ vela cluster labels add hangzhou-2 region=hangzhou
 $ vela cluster list
-CLUSTER                 TYPE            ENDPOINT                ACCEPTED        LABELS
+CLUSTER         ALIAS   TYPE            ENDPOINT                ACCEPTED        LABELS
 local                   Internal        -                       true                  
-cluster-beijing         X509Certificate <ENDPOINT_BEIJING>      true                  
-cluster-hangzhou-1      X509Certificate <ENDPOINT_HANGZHOU_1>   true            region=hangzhou
-cluster-hangzhou-2      X509Certificate <ENDPOINT_HANGZHOU_2>   true            region=hangzhou
+beijing                 X509Certificate <ENDPOINT_BEIJING>      true                  
+hangzhou-1              X509Certificate <ENDPOINT_HANGZHOU_1>   true            region=hangzhou
+hangzhou-2              X509Certificate <ENDPOINT_HANGZHOU_2>   true            region=hangzhou
 ```
 
 ## Detach your cluster 
@@ -69,7 +69,7 @@ You can also detach a cluster if you do not want to use it anymore.
 $ vela cluster detach beijing
 ```
 
-> It is dangerous to detach a cluster that is still in-use. But if you want to do modifications to the held cluster credential, like rotating certificates, it is possible to do so. 
+> Detaching drops the cluster from every ResourceTracker, then deletes its credentials. What KubeVela deployed there keeps running but is no longer tracked, so deleting the Application won't remove it, and Applications that still place to the cluster fail their deploy step. Check nothing is deployed there first: `kubectl get resourcetrackers -o json | jq -r '.items[] | select(any(.spec.managedResources[]?; .cluster == "<cluster>")) | .metadata.name'`
 
 ## Rename a cluster 
 

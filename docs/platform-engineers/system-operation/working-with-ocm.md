@@ -2,7 +2,7 @@
 title: Working with OCM
 ---
 
-[Open Cluster Management (OCM)](https://open-cluster-management.io/) is a powerful multi-cluster tool which allows you to connect your managed clusters to the control plane, even if the managed cluster is not directly accessible from the control plane. It is especially useful when your managed clusters and your control plane locate in different VPCs.
+[Open Cluster Management (OCM)](https://open-cluster-management.io/) connects managed clusters to a hub over an agent the managed cluster runs, so the hub needs no route to the managed cluster's API server. That makes it a good fit when your managed clusters and your control plane sit in different VPCs.
 
 This section will introduce how to use OCM with KubeVela.
 

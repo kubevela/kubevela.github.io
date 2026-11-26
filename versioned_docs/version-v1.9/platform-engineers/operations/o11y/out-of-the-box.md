@@ -4,6 +4,8 @@ title: Out-of-Box System Observability
 
 By default, a series of dashboards are pre-installed with the `grafana` addon and provide basic panels for viewing observability data. If you follow the [installation guide](./installation.md), you should be able to use these dashboards without further configurations.
 
+The URLs below assume the Grafana port-forward from step 6 of the [installation guide](./installation.md#quick-start) is running (`kubectl port-forward svc/grafana -n o11y-system 8080:3000`).
+
 ## Dashboards
 
 ### KubeVela Application
@@ -69,7 +71,7 @@ The **Controller Queue** and **Controller Queue Add Rate** panels show you the c
 
 Sometimes you might need refer to **ApplicationController Reconcile Stage Time** and see if there is some special reconcile stages are abnormal. For example, GCResourceTrackers use lots of time means there might be blockings for recycling resource in KubeVela system.
 
-The **Application** section shows the overview of the applications in your whole KubeVela system. It can be used to see the changes of the application numbers and the used workflow steps. The **Workflow Initialize Rate** is an auxiliary panel which can be used to see how frequent new workflow execution is launched. The **Workflow Average Complete Time** can further show how much time it costs to finish the whole workflow.
+The **Application** section shows the overview of the applications in your whole KubeVela system. It can be used to see the changes of the application numbers and the used workflow steps. The **Workflow Average Complete Time** can further show how much time it costs to finish the whole workflow.
 
 :::
 
