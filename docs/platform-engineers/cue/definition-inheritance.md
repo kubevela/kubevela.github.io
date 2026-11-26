@@ -44,7 +44,7 @@ definition team-web sets spec.extends: base-web, but definition inheritance is d
 See [Bootstrap Parameters](../system-operation/bootstrap-parameters.md) for the other feature gates.
 
 :::note
-If you upgraded from v1.11, apply the v1.12 CRDs first (see [Migrate from Old Versions](../system-operation/migration-from-old-version.md#from-v111x-to-v112x)). Helm does not update a chart's CRDs, and the v1.11 `ComponentDefinition` and `TraitDefinition` CRDs have no `extends` or `abstract` field. With the old CRDs the API server drops `spec.extends` and `spec.abstract` without an error, and the child then fails with an unrelated workload or compile error.
+If you upgraded from v1.11, apply the v1.12 CRDs first (see [Migrate from Old Versions](../system-operation/migration-from-old-version.md#from-v111x-to-v112x)). Helm does not update a chart's CRDs, and the v1.11 `ComponentDefinition` and `TraitDefinition` CRDs have no `extends` or `abstract` field. With the old CRDs, `kubectl apply` refuses `spec.extends` and `spec.abstract` as unknown fields. A client that does not ask for strict field validation, such as `kubectl apply --validate=false` or a controller, has them dropped without an error, and the child then fails with an unrelated workload or compile error.
 :::
 
 :::caution
