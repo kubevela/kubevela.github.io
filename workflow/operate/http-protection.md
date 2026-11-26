@@ -13,7 +13,7 @@ The denylist is on from KubeVela 1.11.1, 1.10.10 and 1.9.15. Upgrading from an o
 These workflow steps and providers make outbound HTTP calls, and the protection applies to all of them:
 
 - the `request` step
-- the `webhook` step
+- the `webhook` step, in KubeVela
 - the `notification` step, for its DingTalk, Lark and Slack channels (email goes over SMTP and is not checked)
 - the `http` provider that custom workflow steps call: `http.#HTTPDo` from `vela/http` and the legacy `op.#HTTPDo` from `vela/op`, with their `#HTTPGet`, `#HTTPPost`, `#HTTPPut` and `#HTTPDelete` shorthands
 
@@ -230,4 +230,4 @@ There is no opt-in step. An upgrade to one of these releases turns the protectio
 - Guarded calls ignore `HTTP_PROXY`, `HTTPS_PROXY` and `NO_PROXY`. A controller that reaches external services only through a proxy can no longer call them from a workflow step.
 - In the releases with the loopback block, `vela-core` refuses `localhost`, `127.0.0.0/8`, `::1` and the unspecified address.
 - In the releases with request limits, a call that sets no `timeout` is cut off after 3 seconds, a `timeout` above `workflow.http.maxTimeout` fails the step, and a response body above `workflow.http.maxResponseBytes` fails the step. See [Request limits](#request-limits).
-- In the same releases the `request` step fails on any status of 400 or above (a 400 used to pass), and a reply that is empty or not JSON no longer fails the step. The raw body is in `responseBody`.
+- In the same KubeVela releases the `request` step fails on any status of 400 or above (a 400 used to pass), and a reply that is empty or not JSON no longer fails the step. The raw body is in `responseBody`.
