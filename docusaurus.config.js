@@ -89,6 +89,7 @@ const config = {
             {to: 'velaux/overview', label: 'VelaUX'},
             {to: 'terraform/overview', label: 'Terraform'},
             {to: 'addons/overview', label: 'Addons'},
+            {to: 'cluster-gateway/overview', label: 'Cluster Gateway'},
           ],
         },
         {
@@ -412,6 +413,20 @@ const config = {
         path: 'addons',
         routeBasePath: 'addons',
         sidebarPath: require.resolve('./sidebar-addons.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        // Cluster Gateway is a small standalone section describing the version KubeVela's next release pins; its
+        // multi-cluster use stays in the KubeVela docs. Not versioned.
+        id: 'cluster-gateway',
+        path: 'cluster-gateway',
+        routeBasePath: 'cluster-gateway',
+        sidebarPath: require.resolve('./sidebar-cluster-gateway.js'),
         editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
         showLastUpdateAuthor: true,
         showLastUpdateTime: true,
