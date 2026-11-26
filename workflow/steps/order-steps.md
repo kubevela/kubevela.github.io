@@ -4,7 +4,7 @@ title: "Order Steps: Groups, Dependencies and DAG Mode"
 
 By default the steps of a workflow run one after another, so each step already waits for the one before it. This page covers the ways to change that: the workflow's mode, `dependsOn`, and step groups.
 
-To order components rather than workflow steps, see [Order Components and Pass Data Between Them](./component-dependency-parameter.md).
+To order components rather than workflow steps, see [Order Components and Pass Data Between Them](/docs/next/end-user/workflow/component-dependency-parameter).
 
 ## Execution modes
 

@@ -54,7 +54,7 @@ difference is in the status: the loop is one step, `scale`, with its items, `sca
 `scale-1`, as sub-steps.
 
 `forEach` gives the list. `inputs` with `from: each.item...` hands each item to the
-step's parameters, the same way [inputs and outputs](./inputs-outputs.md) pass data
+step's parameters, the same way [inputs and outputs](inputs-outputs.md) pass data
 between any two steps. The step's definition needs no change to be looped.
 
 `forEach` is new in v1.12 and has no feature gate: it needs vela-core v1.12 and its CRDs,
@@ -87,7 +87,7 @@ variable or an expression that gives `[]` does the same.
 Where expressions are turned on (the `EnableCelExpressions` feature gate, and the
 `app.oam.dev/cel-expressions: "true"` annotation on the Application while the platform
 requires opt-in with `RequireCelExpressionOptIn`, the default), `items` can be a single
-expression that reads a [source](../../platform-engineers/source/using-sources.md) or an
+expression that reads a [source](/docs/next/platform-engineers/source/using-sources) or an
 earlier step's output:
 
 ```yaml
@@ -111,7 +111,7 @@ spec:
 ```
 
 A ConfigMap key may be missing, so the read needs a `has()` guard and a fallback (see
-[Optional fields](../../platform-engineers/source/using-sources.md#optional-fields));
+[Optional fields](/docs/next/platform-engineers/source/using-sources#optional-fields));
 without one, the Application is refused with `source.targets.data.clusters may be absent
 and feeds forEach.items`.
 
@@ -486,5 +486,5 @@ workflow steps, so the API server drops it and a looped step runs once`.
 
 ## Next
 
-- [Inputs and Outputs](./inputs-outputs.md): how data passes between steps.
-- [Sub Steps](./step-group.md): groups, and their `mode`.
+- [Inputs and Outputs](inputs-outputs.md): how data passes between steps.
+- [Sub Steps](order-steps.md): groups, and their `mode`.

@@ -304,7 +304,7 @@ only if the field appears, so guard a field that may never be set:
 
 - [Property Expressions](./cel-expressions.md): the language, escaping and guards.
 - [Expressions in Workflow Steps](./workflow/expressions.md): reading steps and loop items.
-- [Data Passing](./workflow/inputs-outputs.md): the CUE `inputs` and `outputs` this can replace.
+- [Data Passing](/workflow/next/steps/inputs-outputs): the CUE `inputs` and `outputs` this can replace.
 - [Reading External Data with Sources](../platform-engineers/source/intro.md): reading data the Application does not own, and when to use a source instead.
 
 {/* PENDING: the Sources links resolve once kubevela.github.io#1469 merges. */}

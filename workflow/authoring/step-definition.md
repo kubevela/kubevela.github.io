@@ -1,14 +1,13 @@
 ---
 title: Workflow Step Definition
-slug: /platform-engineers/workflow/workflow
 ---
 
 :::tip
-Before reading this section, make sure you have understood the concept of [WorkflowStepDefinition](../oam/x-definition.md#workflowstepdefinition) in KubeVela and learned the [basic knowledge of CUE](../cue/basic.md).
+Before reading this section, make sure you have understood the concept of [WorkflowStepDefinition](/docs/next/platform-engineers/oam/x-definition#workflowstepdefinition) in KubeVela and learned the [basic knowledge of CUE](/docs/next/platform-engineers/cue/basic).
 :::
 
 
-In this section, we will introduce how to customize the workflow step in Application by using [CUE](../cue/basic.md) through `WorkflowStepDefinition`.
+In this section, we will introduce how to customize the workflow step in Application by using [CUE](/docs/next/platform-engineers/cue/basic) through `WorkflowStepDefinition`.
 
 ## Deliver a simple workflow step
 
@@ -51,7 +50,7 @@ template: {
 
 CUE provides a series of [basic builtin packages](https://cuelang.org/docs/concepts/packages/#builtin-packages), such as: `regexp`, `json`, `strings`, `math`, etc.
 
-KubeVela adds its own packages for the things a step does: `vela/http` sends HTTP requests, `vela/kube` reads and writes Kubernetes objects, `vela/builtin` waits, fails or groups actions, and so on. [Built-in Workflow Operations](./cue-actions.md#packages-a-step-can-import) lists them all. Every action in these packages takes its inputs under `$params` and fills in its results under `$returns`.
+KubeVela adds its own packages for the things a step does: `vela/http` sends HTTP requests, `vela/kube` reads and writes Kubernetes objects, `vela/builtin` waits, fails or groups actions, and so on. [Built-in Workflow Operations](cue-actions.md#packages-a-step-can-import) lists them all. Every action in these packages takes its inputs under `$params` and fills in its results under `$returns`.
 
 Now we can import `vela/http` and CUE's `encoding/json`, use `http.#HTTPDo` to send the request the user asked for, and use `json.Marshal()` to turn the body into a string:
 
@@ -162,14 +161,14 @@ template: {
 }
 ```
 
-`http.#HTTPDo` times out after 3s unless the definition sets `request.timeout` (a Go duration, at most the controller's maximum, 60s by default). This example does not, so for a slower endpoint add a `timeout` parameter and set it in `request`, beside `header`. KubeVela ships a fuller `request` step, with `timeout`, `headersFromSecret` and `ratelimiter`; see [Built-in Workflow Steps](../../end-user/workflow/built-in-workflow-defs.md#request). Requests go straight to their destination: the controller's `HTTP_PROXY` and `HTTPS_PROXY` settings are not used.
+`http.#HTTPDo` times out after 3s unless the definition sets `request.timeout` (a Go duration, at most the controller's maximum, 60s by default). This example does not, so for a slower endpoint add a `timeout` parameter and set it in `request`, beside `header`. KubeVela ships a fuller `request` step, with `timeout`, `headersFromSecret` and `ratelimiter`; see [Built-in Workflow Steps](/docs/next/end-user/workflow/built-in-workflow-defs#request). Requests go straight to their destination: the controller's `HTTP_PROXY` and `HTTPS_PROXY` settings are not used.
 
 Use `vela def apply my-request.cue` to deploy this Definition to the cluster, then we can use this custom step directly in the Application.
 
 Deploy the following Application: The first step of the workflow will send an HTTP request to get the information of the KubeVela repository; at the same time, this step will use the star number of the KubeVela repository as the Output, the next step will use this Output as a parameter, and sent it as message to the Slack:
 
 :::tip
-Please refer to [Inputs and Outputs](../../end-user/workflow/component-dependency-parameter.md#inputs-and-outputs) for more information of data passing between steps.
+Please refer to [Inputs and Outputs](/docs/next/end-user/workflow/component-dependency-parameter#inputs-and-outputs) for more information of data passing between steps.
 :::
 
 ```yaml
@@ -207,7 +206,7 @@ The shipped [`request` step](https://github.com/kubevela/kubevela/blob/master/ve
 :::tip
 A workflow step can be tested without an Application or a real cluster: `vela def test` runs it
 against a local API server, with calls that would leave it, such as HTTP, answered by mocks. See
-[Testing workflow steps](../cue/definition-testing.md#testing-workflow-steps).
+[Testing workflow steps](/docs/next/platform-engineers/cue/definition-testing#testing-workflow-steps).
 :::
 
 ## HTTP limits
@@ -313,11 +312,11 @@ template: {
 
 ## Full available `context` in Workflow Step {#full-available-context-in-workflow-step}
 
-A workflow step reads the Application's name, namespace and revision, the step's own name and session ID, and the workflow name and publish version from the Application's annotations. In a step, `context.name` is the Application's name, not the step's. Every field, and which definition kinds can read it, is in the [Context Reference](../context-reference.md).
+A workflow step reads the Application's name, namespace and revision, the step's own name and session ID, and the workflow name and publish version from the Application's annotations. In a step, `context.name` is the Application's name, not the step's. Every field, and which definition kinds can read it, is in the [Context Reference](/docs/next/platform-engineers/context-reference).
 
 ## Legacy `vela/op`
 
-Step definitions written for older releases import `vela/op`, a single package holding most of the actions above without `$params` and `$returns` (`op.#HTTPDo & {method: ..., url: ...}`, then `response.statusCode`). It still works, so existing steps need no change; write new steps on the packages above. [Built-in Workflow Operations](./cue-actions.md) is its reference.
+Step definitions written for older releases import `vela/op`, a single package holding most of the actions above without `$params` and `$returns` (`op.#HTTPDo & {method: ..., url: ...}`, then `response.statusCode`). It still works, so existing steps need no change; write new steps on the packages above. [Built-in Workflow Operations](cue-actions.md) is its reference.
 
 ## Kubernetes API for WorkflowStepDefinition
 

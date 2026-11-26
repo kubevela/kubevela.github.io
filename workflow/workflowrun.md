@@ -110,7 +110,7 @@ NAME      PHASE       AGE
 release   succeeded   2m
 ```
 
-`vela workflow logs release --step <step>` prints a step's logs, but only for steps whose definition writes them with [op.#Log](../../platform-engineers/workflow/cue-actions.md#log). `apply-app` and `suspend` don't, so this example has none.
+`vela workflow logs release --step <step>` prints a step's logs, but only for steps whose definition writes them with [op.#Log](authoring/cue-actions.md#log). `apply-app` and `suspend` don't, so this example has none.
 
 ### WorkflowRun phases
 
@@ -143,7 +143,7 @@ A failed step has a `message` with the error and a `reason`:
 | `Output` | The step failed to write one of its `outputs`. |
 | `FailedAfterRetries` | The step failed and hit the retry limit. |
 | `Timeout` | The step ran past its `timeout`. |
-| `Action` | The step's definition called [op.#Fail](../../platform-engineers/workflow/cue-actions.md#fail). |
+| `Action` | The step's definition called [op.#Fail](authoring/cue-actions.md#fail). |
 
 ## The WorkflowRun spec
 
@@ -182,9 +182,9 @@ spec:
 
 ## How steps behave
 
-Steps behave as they do in an Application: suspend and resume, step groups, `dependsOn`, inputs and outputs, timeouts and `if` conditions all work the same way. See [Application Workflow](../workflow/overview.md) for each of them. What differs:
+Steps behave as they do in an Application: suspend and resume, step groups, `dependsOn`, inputs and outputs, timeouts and `if` conditions all work the same way. See [Application Workflow](overview.md) for each of them. What differs:
 
-- **Which steps you can use.** Each step in the [step reference](../workflow/built-in-workflow-defs.md) has a **Scope** section. A WorkflowRun can use the steps marked "valid in both Application and WorkflowRun" or "only valid in WorkflowRun". Steps that work on an Application's components, such as `deploy` and `apply-component`, need an Application and don't work here. In a [custom step](../../platform-engineers/workflow/workflow.md), you can't use the [application operations](../../platform-engineers/workflow/cue-actions.md#application-operations).
+- **Which steps you can use.** Each step in the [step reference](reference/built-in-steps.md) has a **Scope** section. A WorkflowRun can use the steps marked "valid in both Application and WorkflowRun" or "only valid in WorkflowRun". Steps that work on an Application's components, such as `deploy` and `apply-component`, need an Application and don't work here. In a [custom step](authoring/step-definition.md), you can't use the [application operations](authoring/cue-actions.md#application-operations).
 - **`workflowRef`.** Instead of listing steps in `workflowSpec`, you can run a `Workflow` object by name. If you set both, the steps in `workflowSpec` win. If both the WorkflowRun and the Workflow set `mode`, the WorkflowRun's `mode` wins.
 - **`context`.** Steps and `if` conditions read the context described below, and you can add your own values to it.
 - **`vela workflow`.** The `vela workflow` commands (`suspend`, `resume`, `terminate`, `restart`, `logs`) work on WorkflowRuns too; only `rollback` is for Applications alone. They look for an Application with the name first, then a WorkflowRun; pass `--type workflow` to go straight to the WorkflowRun.

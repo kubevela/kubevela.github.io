@@ -49,7 +49,7 @@ For a standalone `WorkflowRun`, see [below](#workflowrun).
 | `context` | the Application and the step: `appName`, `namespace`, `stepName`, `stepType`, ... | properties, `forEach.items`, `if` |
 | `source` | a value fetched by one of the Application's [sources](../../platform-engineers/source/using-sources.md), read when a run first uses it (from the cache while its entry is fresh) and [pinned](../cel-expressions-lifecycle.md#workflow-steps) for the rest of the run | properties, `forEach.items`, `if` |
 | `steps` | another step's outputs and status | properties, `forEach.items`, `if` |
-| `each` | the current item of a [forEach](./for-each.md) | inside a loop only |
+| `each` | the current item of a [forEach](/workflow/next/steps/for-each) | inside a loop only |
 
 `component` is not offered in a step: a step reads a component's result through the
 step that deployed it. The full table of roots by location is on
@@ -79,7 +79,7 @@ step that deployed it. The full table of roots by location is on
         text: '$(string(steps.lookup.outputs.tenants.size())) tenants found'
 ```
 
-This does the same job as [`inputs`](./inputs-outputs.md), without the `parameterKey`
+This does the same job as [`inputs`](/workflow/next/steps/inputs-outputs), without the `parameterKey`
 plumbing, and it can be combined, converted or tested like any other value. The output
 keeps its own type: a list stays a list and a number stays a number.
 
@@ -239,7 +239,7 @@ or `$( )`: every step runs whatever its `if` says. The `rollback` step above run
 after a successful deploy. A failed step suspends the run instead of finishing, so a
 status read of it waits rather than answering. This covers sub-steps too: a
 step-group's sub-steps run even when the group's own `if` would skip it, and in a
-[forEach](./for-each.md) loop a condition meant to skip items does not skip them.
+[forEach](/workflow/next/steps/for-each) loop a condition meant to skip items does not skip them.
 :::
 
 ### Conditions wait
@@ -269,7 +269,7 @@ has(source.cfg.data.mode) ? source.cfg.data.mode : <fallback>
 
 ### Conditions in loops
 
-A [forEach](./for-each.md) step's own `if` is decided **once**, before the first pass,
+A [forEach](/workflow/next/steps/for-each) step's own `if` is decided **once**, before the first pass,
 and cannot read `each`. To decide per item, make the loop a `step-group` and put the
 `if` on its sub-steps, which are checked on every pass:
 
@@ -309,7 +309,7 @@ Inside a forEach body, `each` is the current pass:
 |---|---|---|
 | `each.item` | the item's type | the current item |
 | `each.index` | int | its position, from 0 |
-| `each.key` | string | its [key](./for-each.md#key) |
+| `each.key` | string | its [key](/workflow/next/steps/for-each#key) |
 
 ```yaml
 properties:
@@ -330,7 +330,7 @@ typed from them when you apply the Application. Feeding an int item into a strin
 parameter is refused then, rather than failing mid-run. Text around the read makes it
 a string, so `'wave $(each.item)'` is always fine.
 
-[forEach](./for-each.md) covers loops themselves: items, order, failure and outputs.
+[forEach](/workflow/next/steps/for-each) covers loops themselves: items, order, failure and outputs.
 
 ## Standalone WorkflowRun {#workflowrun}
 
@@ -416,8 +416,8 @@ particular to steps:
 
 ## Next
 
-- [forEach](./for-each.md): repeating a step once per item.
+- [forEach](/workflow/next/steps/for-each): repeating a step once per item.
 - [Property Expressions](../cel-expressions.md): the language, escaping and guards.
-- [If Conditions](./if-condition.md): CUE conditions, `always`, and the default.
+- [If Conditions](/workflow/next/steps/if-condition): CUE conditions, `always`, and the default.
 
 {/* PENDING: the Sources links resolve once kubevela.github.io#1469 merges, and the forEach links once #1453 does. */}

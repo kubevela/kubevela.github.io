@@ -2,10 +2,10 @@
 title: Built-in Workflow Operations
 ---
 
-This page is the reference for `vela/op`, the legacy package of workflow operations. It is kept so existing step definitions keep working. New steps import the per-concern packages instead (`vela/kube`, `vela/http`, `vela/builtin` and the rest, listed below), which take their inputs under `$params` and return their results under `$returns`. [Workflow Step Definition](./workflow.md) shows a step written that way.
+This page is the reference for `vela/op`, the legacy package of workflow operations. It is kept so existing step definitions keep working. New steps import the per-concern packages instead (`vela/kube`, `vela/http`, `vela/builtin` and the rest, listed below), which take their inputs under `$params` and return their results under `$returns`. [Workflow Step Definition](/workflow/next/authoring/step-definition) shows a step written that way.
 
 :::tip
-Before reading this section, make sure you understand how to [customize workflow](./workflow.md) and learn the basics of [CUE](../cue/basic.md)
+Before reading this section, make sure you understand how to [customize workflow](/workflow/next/authoring/step-definition) and learn the basics of [CUE](../cue/basic.md)
 :::
 
 ## Packages a step can import
@@ -252,7 +252,7 @@ Send HTTP request to the specified URL.
 
 `tls_config.secret` names a Secret holding `ca.crt` to trust the server, and `client.crt` with `client.key` for a client certificate. The Secret is read from the step's namespace unless `tls_config.namespace` names another one. A Secret in another namespace is only read when the Application runs as a user (with authentication on) who may get it there; otherwise the step fails.
 
-Every request is bounded by the controller: it times out after 3s unless `request.timeout` says otherwise, and a timeout over the maximum, or a response body over the size limit, fails the step. See [HTTP limits](./workflow.md#http-limits) for the defaults, the flags that change them and the hosts a request can never reach.
+Every request is bounded by the controller: it times out after 3s unless `request.timeout` says otherwise, and a timeout over the maximum, or a response body over the size limit, fails the step. See [HTTP limits](/workflow/next/authoring/step-definition#http-limits) for the defaults, the flags that change them and the hosts a request can never reach.
 
 **Example**
 

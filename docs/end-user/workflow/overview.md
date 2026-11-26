@@ -104,7 +104,7 @@ If you declare no workflow, KubeVela generates one when it runs the Application:
 
 ## Execution order
 
-Steps run one after another by default. To run them in parallel, make a step wait for others with `dependsOn`, or group them: see [Order Steps: Groups, Dependencies and DAG Mode](./step-group.md).
+Steps run one after another by default. To run them in parallel, make a step wait for others with `dependsOn`, or group them: see [Order Steps: Groups, Dependencies and DAG Mode](/workflow/next/steps/order-steps).
 
 ## State of Application and Workflow
 
@@ -131,15 +131,15 @@ VelaUX shows each step's state; here the first step succeeded and the second fai
 
 | I want to... | Page |
 | :--- | :--- |
-| Wait for approval before carrying on | [Suspend and Resume](./suspend.md) |
-| Run steps in parallel, in a set order, or in groups | [Order Steps](./step-group.md) |
-| Run a step only when an earlier one failed, or skip it | [If Conditions](./if-condition.md) |
-| Pass a value from one step to the next | [Data Passing](./inputs-outputs.md) |
-| Stop a step that hangs | [Timeout of Step](./timeout.md) |
+| Wait for approval before carrying on | [Suspend and Resume](/workflow/next/steps/suspend) |
+| Run steps in parallel, in a set order, or in groups | [Order Steps](/workflow/next/steps/order-steps) |
+| Run a step only when an earlier one failed, or skip it | [If Conditions](/workflow/next/steps/if-condition) |
+| Pass a value from one step to the next | [Data Passing](/workflow/next/steps/inputs-outputs) |
+| Stop a step that hangs | [Timeout of Step](/workflow/next/steps/timeout) |
 | Suspend, resume, terminate or restart a running workflow | [Workflow Operations](./operations.md) |
 | Find out why a step failed | [Debug Workflow](../../platform-engineers/debug/debug.md) |
 
 ## Next steps
 
 - [Built-in step types](./built-in-workflow-defs.md): every step type that ships with KubeVela and its parameters.
-- [Custom workflow steps](../../platform-engineers/workflow/workflow.md): for platform engineers adding step types of their own.
+- [Custom workflow steps](/workflow/next/authoring/step-definition): for platform engineers adding step types of their own.

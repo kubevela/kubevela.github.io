@@ -96,4 +96,4 @@ A terminated workflow can't be resumed. To run it again from the first step, res
 vela workflow restart timeout-example
 ```
 
-To keep the steps that already succeeded and run again from the one that timed out, add `--step suspend`. See [Workflow Operations](./operations.md) for both.
+To keep the steps that already succeeded and run again from the one that timed out, add `--step suspend`. See [Workflow Operations](../operate/operations.md) for both.

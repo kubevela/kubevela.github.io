@@ -28,7 +28,7 @@ Successfully suspend workflow: my-app
 
 :::tip
 Nothing will happen if you suspend an application that has a completed workflow, which is in `running` status.
-Please refer to [Suspend and Resume](./suspend.md) for more examples.
+Please refer to [Suspend and Resume](/workflow/next/steps/suspend) for more examples.
 :::
 
 ## Resume Workflow 
@@ -44,7 +44,7 @@ Successfully resume workflow: my-app
 ```
 
 :::tip
-Please refer to [Suspend and Resume](./suspend.md) for more examples.
+Please refer to [Suspend and Resume](/workflow/next/steps/suspend) for more examples.
 :::
 
 ## Terminate Workflow

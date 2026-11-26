@@ -254,7 +254,7 @@ A standalone `WorkflowRun` uses the workflow engine on its own. It gets `context
 - [Reading External Data with Sources](../platform-engineers/source/using-sources.md): how a source value is fetched, cached and kept fresh, the inside of the resolvers above
 - [Reading Other Components](./reading-components.md)
 - [Expressions in Workflow Steps](./workflow/expressions.md)
-- [If Conditions](./workflow/if-condition.md)
+- [If Conditions](/workflow/next/steps/if-condition)
 
 {/* PENDING: the Sources links resolve once kubevela.github.io#1469 merges. */}
 

@@ -743,6 +743,34 @@
   "section": "terraform",
   "to": "reference/vsphere-folder.md"
  },
+ "end-user/pipeline/workflowrun.md": {
+  "section": "workflow",
+  "to": "workflowrun.md"
+ },
+ "end-user/workflow/for-each.md": {
+  "section": "workflow",
+  "to": "steps/for-each.md"
+ },
+ "end-user/workflow/if-condition.md": {
+  "section": "workflow",
+  "to": "steps/if-condition.md"
+ },
+ "end-user/workflow/inputs-outputs.md": {
+  "section": "workflow",
+  "to": "steps/inputs-outputs.md"
+ },
+ "end-user/workflow/step-group.md": {
+  "section": "workflow",
+  "to": "steps/order-steps.md"
+ },
+ "end-user/workflow/suspend.md": {
+  "section": "workflow",
+  "to": "steps/suspend.md"
+ },
+ "end-user/workflow/timeout.md": {
+  "section": "workflow",
+  "to": "steps/timeout.md"
+ },
  "platform-engineers/addon/terraform.md": {
   "section": "terraform",
   "to": "extend/terraform-addon.md"
@@ -750,6 +778,10 @@
  "platform-engineers/components/component-terraform.md": {
   "section": "terraform",
   "to": "extend/cloud-resource-component.md"
+ },
+ "platform-engineers/workflow/workflow.md": {
+  "section": "workflow",
+  "to": "authoring/step-definition.md"
  },
  "reference/addons/ai.md": {
   "section": "addons",

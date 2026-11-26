@@ -2,7 +2,7 @@
 title: Data Passing
 ---
 
-This section introduces how to use `Inputs` and `Outputs` to pass data between workflow steps in KubeVela. To pass data between components rather than steps, see [Order Components and Pass Data Between Them](./component-dependency-parameter.md).
+This section introduces how to use `Inputs` and `Outputs` to pass data between workflow steps in KubeVela. To pass data between components rather than steps, see [Order Components and Pass Data Between Them](/docs/next/end-user/workflow/component-dependency-parameter).
 
 ## Outputs
 
