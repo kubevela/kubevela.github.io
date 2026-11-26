@@ -24,7 +24,7 @@ flowchart TD
   d["Rolled back to v1.11<br/>the v1.11 objects are still there"]
   a -->|"apply the CRDs, upgrade the chart"| b
   b -->|"vela config-template migrate,<br/>or the AutoMigrateLegacyConfigs gate"| c
-  c -.->|"helm rollback"| d
+  c -.->|"downgrade the chart"| d
 ```
 
 - **Upgrading changes nothing on its own.** Your v1.11 objects keep working: the CLI lists, uses
@@ -318,6 +318,9 @@ helm upgrade -n vela-system kubevela kubevela/vela-core --version 1.12.0-alpha.2
   --set featureGates.autoMigrateLegacyConfigs=true --wait
 ```
 
+`--reset-then-reuse-values` needs Helm 3.14 or later. With an older Helm, pass your values file
+with `-f` instead.
+
 - Only the leader runs it, once, after the webhook server is up. If rows fail, it tries again, up
   to three attempts 30 seconds apart.
 - It writes the same Events, from the component `ConfigMigration`, and logs a summary.
@@ -390,7 +393,7 @@ data the tool owns, so the tool shows no diff. After migrating:
 
 ## Rolling back to v1.11
 
-The v1.11 objects are kept by migration, so v1.11 finds every config after a rollback. Configs
+The v1.11 objects are kept by migration, so v1.11 finds every config after a downgrade. Configs
 created as resources after the upgrade remain visible to v1.11 through their Secrets.
 
 Follow [Downgrading](./index.md#downgrading-to-v111) in the upgrade guide. Do not use
@@ -400,7 +403,7 @@ The CRDs and the ConfigTemplate and Config resources stay, but nothing reconcile
 upgrade again.
 
 :::caution
-After a rollback, do not delete Config resources unless you also want their Secrets gone. A
+After a downgrade, do not delete Config resources unless you also want their Secrets gone. A
 migrated Secret is still owned by its Config, so deleting the Config deletes the Secret, even
 though v1.11 uses it.
 :::
