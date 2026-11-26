@@ -211,7 +211,7 @@ helm install kubevela ./charts/vela-core \
 ```
 
 :::caution
-Keep the IDE controller from Step 7 running during this install. The Cluster Gateway pod mounts the serving certificate Secret, and the controller creates that Secret when it starts. If the controller is not running, the pod stays in `ContainerCreating`, and an install with `--wait` times out.
+Keep the IDE controller from Step 7 running during this install. The Cluster Gateway pod mounts the serving certificate Secret, and the controller creates that Secret when it starts. If the controller is not running, the pod stays in `ContainerCreating` until the Secret is created.
 :::
 
 ### Step 10: Verify Installation
