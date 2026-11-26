@@ -32,13 +32,14 @@ curl -fsSLO https://raw.githubusercontent.com/kubevela/kubevela/master/hack/preu
 bash preupgrade-check-1.12.sh
 ```
 
-It needs `kubectl` pointed at the cluster and `jq`. With `helm` installed it also reads the release's
-values, and judges what v1.12 will do with them: the feature gates, `controllerArgs`,
-`workflow.http.maxTimeout`, `workflow.httpDeny` and `definitionRestrictions`, each falling back to the
-v1.12 default. Upgrade with that same values file. Without `helm` it uses the gates the controller runs
-with now. It takes `--release` and `--namespace` (default `kubevela` in `vela-system`), `--json` for
-machine-readable output, `-q` for the summary line alone and `-v` to list every check. It exits `0`
-when it finds no errors, `1` when it does, and `2` when it cannot run.
+It needs `kubectl` pointed at the cluster and `jq`. With `helm` installed it also reads the
+release's values, and judges what v1.12 will do with them: the feature gates, `controllerArgs`,
+`workflow.http.maxTimeout`, `workflow.httpDeny` and `definitionRestrictions`, each falling back to
+the v1.12 default. These are the values the release runs with now: if you upgrade with a different
+values file, check it carries the same settings. Without `helm` it uses the gates the controller
+runs with now. It takes `--release` and `--namespace` (default `kubevela` in `vela-system`),
+`--json` for machine-readable output, `-q` for the summary line alone and `-v` to list every check.
+It exits `0` when it finds no errors, `1` when it does, and `2` when it cannot run.
 
 The HTTP check reads the deny list ConfigMaps the controller reads, and the host of a `webhook` or
 `notification` URL kept in a Secret (only the host, never the rest of the value; a Secret it may not
@@ -50,7 +51,7 @@ not resolved.
 | --- | --- |
 | error | Applications whose traits [conflict](#trait-conflicts), including through a pinned `type@vN` revision |
 | error | Release values that pin `image.tag` or the cluster-gateway image tag |
-| error | `helmchart` `valuesFrom` and chart credentials, config steps and Terraform module SSH keys outside the namespace v1.12 reads them from |
+| error | `helmchart` `valuesFrom` and chart credentials outside the Application's namespace, config steps reaching configs outside it (shared configs in `vela-system` stay readable), and Terraform module SSH keys outside the definition's namespace |
 | error | `request`, `webhook` and `notification` steps calling addresses the HTTP guard refuses, or with a timeout it refuses |
 | error | `vela-cli` steps outside the namespaces `definitionRestrictions` allows (`vela-system` by default) |
 | error | Global policies outside `vela-system`, and `policy.oam.dev/skip-global`, with `enableGlobalPolicies` and `enableApplicationScopedPolicies` on |
@@ -65,8 +66,9 @@ stops applying. A warning keeps working but behaves differently, or is already b
 you run, with the same fix. Info is worth knowing on any cluster.
 
 The check reads what it can see statically. It does not compile definitions, render Applications or
-read Secret values, so it cannot tell you which built-in definition changes restart a workload, or
-what a step returns when it runs. Work through the rest of this page as well.
+read Secret values (beyond the URL hosts above), so it cannot tell you which built-in definition
+changes restart a workload, or what a step returns when it runs. Work through the rest of this page
+as well.
 
 ## Before you upgrade
 
@@ -118,8 +120,9 @@ not upgraded. Pass your own values file, or use `--reset-then-reuse-values` (Hel
 later), and make sure your values don't pin `image.tag`.
 :::
 
-If your values pin `image.tag` or `image.repository`, the pin survives the upgrade and the
-controller stays on v1.11. Drop the pin, or pass `--set image.tag=v1.12.0-alpha.2`. Afterwards,
+If your values pin `image.tag`, the pin survives the upgrade and the controller stays on v1.11.
+A pinned `image.repository` (a mirror) survives too, so push the v1.12 image to it first. Drop the
+tag pin, or pass `--set image.tag=v1.12.0-alpha.2`. Afterwards,
 check the image the controller runs:
 
 ```shell
