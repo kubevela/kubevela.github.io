@@ -365,9 +365,10 @@ const config = {
         showLastUpdateTime: true,
         lastVersion: '0.7',
         versions: {
-          current: {label: '0.8', path: 'next'},
-          '0.7': {label: '0.7'},
-          '0.6': {label: '0.6'},
+          // The banner reads "<site title> <label>", so the label carries the product name.
+          current: {label: 'Workflow 0.8', path: 'next'},
+          '0.7': {label: 'Workflow 0.7'},
+          '0.6': {label: 'Workflow 0.6'},
         },
       },
     ],
