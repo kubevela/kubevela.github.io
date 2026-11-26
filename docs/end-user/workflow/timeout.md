@@ -2,17 +2,13 @@
 title:  Timeout of Step
 ---
 
-:::note
-You need to upgrade to version 1.5+ to use the timeout feature.
-:::
-
 This section introduces how to add timeout to workflow steps in KubeVela.
 
 In KubeVela workflow, each step can specify a `timeout`, you can use `timeout` to specify the timeout time for the step.
 
 `timeout` follows the `duration` format, e.g. `30s`, `1m`, etc. You can refer to Golang's [parseDuration](https://pkg.go.dev/time#ParseDuration).
 
-If a step is not completed within the specified time, KubeVela will set the status of the step to `failed` and the `Reason` of the step will be set to `Timeout`.
+If a step is not completed within the specified time, KubeVela sets the step's phase to `failed` with the reason `Timeout`, and terminates the workflow: steps that have not run are skipped, and the Application's phase becomes `workflowTerminated`, not `workflowFailed`.
 
 Apply the following example:
 
@@ -93,3 +89,11 @@ Services:
 ```
 
 As you can see, when the first component is successfully deployed, the workflow is suspended on the second `suspend` step. The `suspend` step is set with a timeout of five seconds. If the workflow is not resumed within five seconds, the step will fail because of timeout. The third step is skipped because the previous `suspend` step failed.
+
+A terminated workflow can't be resumed. To run it again from the first step, restart it:
+
+```bash
+vela workflow restart timeout-example
+```
+
+To keep the steps that already succeeded and run again from the one that timed out, add `--step suspend`. See [Workflow Operations](./operations.md) for both.

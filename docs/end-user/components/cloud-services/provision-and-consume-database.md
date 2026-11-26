@@ -60,7 +60,7 @@ spec:
 
 The component `sample-db` will generate secret `db-conn` with [these keys](./terraform/alibaba-rds.md#outputs), and the component
 `sample-oss` will generate secret `oss-conn`. These secrets are binded to the Envs of component `express-server` by trait
-[Service Binding](../../traits/service-binding.md). Then the component can consume instances of OSS and RDS.
+[Service Binding](../../traits/references.md#service-binding). Then the component can consume instances of OSS and RDS.
 
 Deploy and verify the application.
 

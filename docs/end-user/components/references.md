@@ -1652,13 +1652,13 @@ spec:
             expose: true
         cpu: "0.1"
         env:
-          - name: FOO
-            value: bar
-          - name: FOO
+          - name: LOG_LEVEL
+            value: info
+          - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: bar
-                key: bar
+                name: db-credentials
+                key: password
 ```
 
 ### Specification (webservice)

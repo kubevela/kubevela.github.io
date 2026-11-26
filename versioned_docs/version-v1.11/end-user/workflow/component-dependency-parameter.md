@@ -4,38 +4,33 @@ title: Component Orchestration
 
 This section will introduce the dependencies in components and how to pass data between components.
 
-:::tip
-We use `helm` component type in the following examples, make sure you have the `fluxcd` addon enabled (`vela addon enable fluxcd`).
-:::
-
 ## Dependency
 
 We can use `dependsOn` to specify the dependencies between components.
 
-For example, component A depends on component B:
+For example, component `api` depends on component `database`:
 
 ```yaml
 ...
 components:
-  - name: A
-    type: helm
+  - name: api
+    type: webservice
     dependsOn:
-      - B
-  - name: B
-    type: helm
+      - database
+  - name: database
+    type: webservice
 ```
 
-In this case, KubeVela will deploy B first, and then deploy A when the component B is running.
+In this case, KubeVela will deploy `database` first, and then deploy `api` once `database` is healthy.
 
 ### How to Use
 
-If we want to apply a MySQL cluster, we need:
+To run MySQL with its root password in a Secret, you need:
 
-1. Apply a secret for MySQL password.
-2. Apply MySQL controller.
-3. Apply MySQL cluster.
+1. The Secret with the password.
+2. MySQL, deployed after the Secret exists.
 
-Apply the following file:
+Save the following as `mysql.yaml`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -46,60 +41,62 @@ metadata:
 spec:
   components:
     - name: mysql-secret
-      type: raw
+      type: k8s-objects
       properties:
-        apiVersion: v1
-        kind: Secret
-        metadata:
-          name: mysql-secret
-        type: kubernetes.io/opaque
-        stringData:
-          ROOT_PASSWORD: test
-    - name: mysql-controller
-      type: helm
-      properties:
-        repoType: helm
-        url: https://presslabs.github.io/charts
-        chart: mysql-operator
-        version: "0.4.0"
-    - name: mysql-cluster
-      type: raw
+        objects:
+          - apiVersion: v1
+            kind: Secret
+            metadata:
+              name: mysql-secret
+            type: Opaque
+            stringData:
+              ROOT_PASSWORD: test
+    - name: mysql
+      type: webservice
       dependsOn:
-        - mysql-controller
         - mysql-secret
       properties:
-        apiVersion: mysql.presslabs.org/v1alpha1
-        kind: MysqlCluster
-        metadata:
-          name: mysql-cluster
-        spec:
-          replicas: 1
-          secretName: mysql-secret
+        image: mysql:8.4
+        ports:
+          - port: 3306
+            expose: true
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: ROOT_PASSWORD
+```
+
+Apply it:
+
+```shell
+vela up -f mysql.yaml
 ```
 
 ### Expected Outcome
 
-Check the application in the cluster:
+Check the application:
 
 ```shell
-$ vela ls
-APP  	COMPONENT       	TYPE	TRAITS	PHASE          	HEALTHY	STATUS	CREATED-TIME
-mysql	mysql-secret    	raw 	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
-├─ 	mysql-controller	helm	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
-└─ 	mysql-cluster   	raw 	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
+vela ls
 ```
 
-In the beginning, the status is running workflow since the mysql-controller is not ready.
+While MySQL starts, the application is still running its workflow:
 
-```shell
-$ vela ls
-APP  	COMPONENT       	TYPE	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
-mysql	mysql-secret    	raw 	      	running	healthy	      	2021-10-14 12:09:55 +0800 CST
-├─ 	mysql-controller	helm	      	running	healthy	      	2021-10-14 12:09:55 +0800 CST
-└─ 	mysql-cluster   	raw 	      	running	       	      	2021-10-14 12:09:55 +0800 CST
+```
+APP  	COMPONENT   	TYPE       	TRAITS	PHASE          	HEALTHY  	STATUS   	CREATED-TIME
+mysql	mysql-secret	k8s-objects	      	runningWorkflow	healthy  	         	2026-11-20 10:09:55 +0000 UTC
+└─   	mysql       	webservice 	      	runningWorkflow	unhealthy	Ready:0/1	2026-11-20 10:09:55 +0000 UTC
 ```
 
-After a while, all components is running successfully. The `mysql-cluster` will be deployed after `mysql-controller` and `mysql-secret` is `healthy`.
+After a while, both components are running. `mysql` was deployed only after `mysql-secret` was healthy:
+
+```
+APP  	COMPONENT   	TYPE       	TRAITS	PHASE  	HEALTHY	STATUS   	CREATED-TIME
+mysql	mysql-secret	k8s-objects	      	running	healthy	         	2026-11-20 10:09:55 +0000 UTC
+└─   	mysql       	webservice 	      	running	healthy	Ready:1/1	2026-11-20 10:09:55 +0000 UTC
+```
 
 :::info
 `dependsOn` use `healthy` to check status. If the component is `healthy`, then KubeVela will deploy the next component. If you want to customize the healthy status of the component, please refer to [Status Write Back](../../platform-engineers/traits/status.md)
@@ -124,38 +121,37 @@ valueFrom: |
 
 ### Inputs
 
-Inputs is made of `from` and `parameterKey`. Input uses `from` to reference output, `parameterKey` is a expression that assigns the value of the input to the corresponding field.
+Inputs is made of `from` and `parameterKey`. Input uses `from` to reference output. `parameterKey` is the path, relative to the component's `properties`, where the value of the input is written before the component is rendered.
 
 eg.
 
-1. Specify inputs:
-
 ```yaml
 ...
 - name: wordpress
-  type: helm
+  type: webservice
   inputs:
-    - from: mysql-svc
-      parameterKey: properties.values.externalDatabase.host
+    - from: mysql-host
+      parameterKey: env[0].value
+  properties:
+    env:
+      - name: WORDPRESS_DB_HOST
 ```
 
-2. The field parameterKey specifies the field path of the parameter key in component to be assigned after rendering:
-
-Which means the input value will be passed into the below properties:
+writes the value of `mysql-host` into the component's properties like this:
 
 ```yaml
 ...
 - name: wordpress
-  type: helm
+  type: webservice
   properties:
-    values:
-      externalDatabase:
-        host: <input value>
+    env:
+      - name: WORDPRESS_DB_HOST
+        value: <input value>
 ```
 
 ### How to Use
 
-In the following we will apply a WordPress server with the MySQL address passed from a MySQL component:
+The following Application runs WordPress, with the MySQL address passed from the MySQL component. Save it as `wordpress.yaml`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -165,58 +161,78 @@ metadata:
   namespace: default
 spec:
   components:
-    - name: mysql
-      type: helm
+    - name: wordpress-db
+      type: webservice
       outputs:
-        # the output is the mysql service address
-        - name: mysql-svc
+        # the address of the Service in front of MySQL
+        - name: mysql-host
           valueFrom: output.metadata.name + ".default.svc.cluster.local"
       properties:
-        repoType: helm
-        url: https://charts.bitnami.com/bitnami
-        chart: mysql
-        version: "8.8.2"
-        values:
-          auth:
-            rootPassword: mypassword
+        image: mysql:8.4
+        ports:
+          - port: 3306
+            expose: true
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: mypassword
+          - name: MYSQL_DATABASE
+            value: wordpress
     - name: wordpress
-      type: helm
+      type: webservice
       inputs:
-        # set the host to mysql service address
-        - from: mysql-svc
-          parameterKey: properties.values.externalDatabase.host
+        # set WORDPRESS_DB_HOST to the MySQL address
+        - from: mysql-host
+          parameterKey: env[0].value
       properties:
-        repoType: helm
-        url: https://charts.bitnami.com/bitnami
-        chart: wordpress
-        version: "12.0.3"
-        values:
-          mariadb:
-            enabled: false
-          externalDatabase:
-            user: root
-            password: mypassword
-            database: mysql
-            port: 3306
+        image: wordpress:6.8-apache
+        ports:
+          - port: 80
+            expose: true
+        env:
+          - name: WORDPRESS_DB_HOST
+          - name: WORDPRESS_DB_USER
+            value: root
+          - name: WORDPRESS_DB_PASSWORD
+            value: mypassword
+          - name: WORDPRESS_DB_NAME
+            value: wordpress
+```
+
+`output` here is the MySQL Deployment, and the Service that `expose: true` creates has the same name, so the output is the Service's address.
+
+Apply it:
+
+```shell
+vela up -f wordpress.yaml
 ```
 
 ### Expected Outcome
 
-Check the application in the cluster:
+Check the application:
 
 ```shell
-$ vela ls
-
-APP                 	COMPONENT	TYPE	TRAITS	PHASE          	HEALTHY	STATUS	CREATED-TIME
-wordpress-with-mysql	mysql    	helm	running	                healthy	        2021-10-12 18:04:10 +0800 CST
-└─                	    wordpress	helm	running	                healthy	       	2021-10-12 18:04:10 +0800 CST
+vela ls
 ```
 
-The WordPress with MySQL has been successfully applied.
+```
+APP                 	COMPONENT   	TYPE      	TRAITS	PHASE  	HEALTHY	STATUS   	CREATED-TIME
+wordpress-with-mysql	wordpress-db	webservice	      	running	healthy	Ready:1/1	2026-11-20 10:04:10 +0000 UTC
+└─                  	wordpress   	webservice	      	running	healthy	Ready:1/1	2026-11-20 10:04:10 +0000 UTC
+```
+
+WordPress has its database address:
+
+```shell
+kubectl get deployment wordpress -o jsonpath='{.spec.template.spec.containers[0].env[0]}'
+```
+
+```
+{"name":"WORDPRESS_DB_HOST","value":"wordpress-db.default.svc.cluster.local"}
+```
 
 ## Multi-cluster Orchestration
 
-In multi-cluster scenario, we can still make use of Dependency and Inputs/Outputs to orchestrate the components. The usage is the same as in the single-cluster scenario. Here's a direct example. Here is a Inputs/Outpus example and Dependency is also available.
+The same `dependsOn`, `inputs` and `outputs` work when components go to several clusters.
 
 ### How to Use
 
@@ -247,17 +263,19 @@ spec:
           properties:
             port: [ 80 ]
     - name: configmap
-      properties:
-        apiVersion: v1
-        kind: ConfigMap
-        metadata:
-          name: deployment-msg
-      type: raw
+      type: k8s-objects
       inputs:
         - from: message
-          parameterKey: data.msg
+          parameterKey: objects[0].data.msg
         - from: ip
-          parameterKey: data.ip
+          parameterKey: objects[0].data.ip
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: ConfigMap
+            metadata:
+              name: deployment-msg
+            data: {}
   policies:
     - name: topo
       properties:

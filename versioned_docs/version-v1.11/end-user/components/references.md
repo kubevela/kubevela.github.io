@@ -692,7 +692,7 @@ The rendered chart sees `replicaCount: 5` (from inline), `resources.limits.memor
 
 #### Authenticating with private chart registries
 
-Add `chart.auth.secretRef` to point at a Secret in the vela-core namespace (`vela-system` by default). The Secret type controls how credentials are extracted:
+Add `chart.auth.secretRef` to point at a Secret in the Application's namespace; a Secret in any other namespace is refused. The Secret type controls how credentials are extracted:
 
 | Secret type | Keys read | Use case |
 |---|---|---|
@@ -706,7 +706,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: registry-creds
-  namespace: vela-system
+  namespace: default
 type: kubernetes.io/basic-auth
 stringData:
   username: my-username
@@ -716,6 +716,7 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: private-chart
+  namespace: default
 spec:
   components:
     - name: my-app
@@ -727,7 +728,6 @@ spec:
           auth:
             secretRef:
               name: registry-creds
-              namespace: vela-system
         release:
           name: my-app
           namespace: default

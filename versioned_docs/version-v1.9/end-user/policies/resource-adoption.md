@@ -173,13 +173,11 @@ vela status take-over
 
 ## Use in CLI
 
-The `read-only` policy and `take-over` policy provide a way for users to directly adopt resources within KubeVela application api. If you prefer directly build KubeVela application by existing resources from scratch, you can use the `vela adopt` CLI command.
+The `read-only` and `take-over` policies adopt resources from inside an Application you write yourself. To build the Application from the existing resources instead, including everything a Helm release installed, use the `vela adopt` command. It prints the Application it builds, so you can review or edit it first; add `--apply` to apply it straight away.
 
-### Adopt Native Resource
+### Adopt native resources
 
-By providing a list of native Kubernetes resources, `vela adopt` command can help you automatically adopt those resources in an application. You can follow the below procedure to try it out.
-
-1. Create some resources for adoption.
+1. Create some resources to adopt:
 
 ```bash
 kubectl create deploy example --image=nginx
@@ -188,7 +186,8 @@ kubectl create configmap example
 kubectl create secret generic example
 ```
 
-2. Run `vela adopt` command to create an application that contains all the resource mentioned above.
+2. Run `vela adopt` with the resources to put in the Application:
+
 ```bash
 vela adopt deployment/example service/example configmap/example secret/example
 ```
@@ -207,7 +206,7 @@ metadata:
   namespace: default
 spec:
   components:
-  - name: example.Deployment.example
+  - name: deployment-example
     properties:
       objects:
       - apiVersion: apps/v1
@@ -222,57 +221,10 @@ spec:
           selector:
             matchLabels:
               app: example
-          strategy:
-            rollingUpdate:
-              maxSurge: 25%
-              maxUnavailable: 25%
-            type: RollingUpdate
-          template:
-            metadata:
-              creationTimestamp: null
-              labels:
-                app: example
-            spec:
-              containers:
-              - image: nginx
-                imagePullPolicy: Always
-                name: nginx
-                resources: {}
-                terminationMessagePath: /dev/termination-log
-                terminationMessagePolicy: File
-              dnsPolicy: ClusterFirst
-              restartPolicy: Always
-              schedulerName: default-scheduler
-              securityContext: {}
-              terminationGracePeriodSeconds: 30
+          # ... the rest of the Deployment's spec, as it is in the cluster
     type: k8s-objects
-  - name: example.Service.example
-    properties:
-      objects:
-      - apiVersion: v1
-        kind: Service
-        metadata:
-          name: example
-          namespace: default
-        spec:
-          clusterIP: 10.43.65.46
-          clusterIPs:
-          - 10.43.65.46
-          internalTrafficPolicy: Cluster
-          ipFamilies:
-          - IPv4
-          ipFamilyPolicy: SingleStack
-          ports:
-          - name: 80-80
-            port: 80
-            protocol: TCP
-            targetPort: 80
-          selector:
-            app: example
-          sessionAffinity: None
-          type: ClusterIP
-    type: k8s-objects
-  - name: example.config
+  # ... service-example, the same way
+  - name: config
     properties:
       objects:
       - apiVersion: v1
@@ -292,84 +244,40 @@ spec:
       rules:
       - selector:
           componentNames:
-          - example.Deployment.example
-          - example.Service.example
-          - example.config
+          - deployment-example
+          - service-example
+          - config
     type: read-only
+  workflow:
+    steps:
+    - name: apply-component
+      subSteps:
+      - name: apply-component:deployment-example
+        properties:
+          component: deployment-example
+        type: apply-component
+      # ... one apply-component step for each other component
+      type: step-group
 status: {}
 ```
+
 </details>
 
-By default, the application first embeds all the given resources in its components. Then it attaches the `read-only` policy. You can edit the returned configuration and make your own adoption application. Or you can directly apply this application with the `--apply` arg.
+Each workload and Service gets a `k8s-objects` component of its own, named `<kind>-<name>`, with its spec copied in. ConfigMaps and Secrets are grouped in one `config` component by name only, so the Application never holds their data. The `read-only` policy covers every component, and one workflow step group applies them all.
 
-```bash
-vela adopt deployment/example service/example configmap/example secret/example --apply
-```
+3. Apply the Application, and give it a name of your own with `--app-name`:
 
-You can also set the application name you would like to use.
 ```bash
 vela adopt deployment/example service/example configmap/example secret/example --apply --app-name=adopt-example
 ```
 
-Now if you can use `vela status` and `vela status -t -d` command show the status the applied application.
+4. Check the result with `vela status adopt-example` and `vela status adopt-example -t -d`:
 
 ```bash
 vela status adopt-example
 ```
 
-<details>
-<summary>expected output</summary>
-
-```bash
-About:                                
-                                           
-  Name:         adopt-example                 
-  Namespace:    default                       
-  Created at:   2023-01-11 14:21:21 +0800 CST
-  Status:       running                                                                                                                                                       
-                                                                                       
-Workflow:                                                                                                                                                                     
-                                                                                                                                                                              
-  mode: DAG-DAG                                                                                                                                                               
-  finished: true                                                                                                                                                              
-  Suspend: false                                                                                                                                                              
-  Terminated: false
-  Steps
-  - id: 8d8capzw7e
-    name: adopt-example.Deployment.example
-    type: apply-component
-    phase: succeeded 
-  - id: 6u6c6ai1gu
-    name: adopt-example.Service.example
-    type: apply-component
-    phase: succeeded 
-  - id: r847uymujz
-    name: adopt-example.config
-    type: apply-component
-    phase: succeeded 
-
-Services:
-
-  - Name: adopt-example.Deployment.example   
-    Cluster: local  Namespace: default
-    Type: k8s-objects
-    Healthy 
-    No trait applied
-
-  - Name: adopt-example.Service.example  
-    Cluster: local  Namespace: default
-    Type: k8s-objects
-    Healthy 
-    No trait applied
-
-  - Name: adopt-example.config  
-    Cluster: local  Namespace: default
-    Type: k8s-objects
-    Healthy 
-    No trait applied    
-```
-
-</details>
+The Application is `running`, its workflow shows the `apply-component` step group with a sub-step per component, and every component is healthy.
 
 ```bash
 vela status adopt-example -t -d
@@ -383,13 +291,13 @@ local     ─── default   ─┬─ ConfigMap/example  updated   2023-01-11 
                          └─ Deployment/example updated   2023-01-11 14:11:06 Ready: 1/1  Up-to-date: 1  Available: 1  Age: 10m
 ```
 
-The `read-only` only allows the application to observe resources, but disallow any edits to it. If you want to make modifications you can use the `--mode=take-over` to use the `take-over` policy in the adoption application.
+`read-only` lets the Application observe the resources but never change them. To let it manage them, adopt with `--mode=take-over`, which uses the `take-over` policy instead.
 
-### Adopt Helm Release
+### Adopt a Helm release
 
-`vela adopt` also supports directly reading native resources from existing helm release. This is helpful if you previously deployed resources through helm.
+`vela adopt --type helm` reads the resources a Helm release installed, from the release's own record, and builds the Application from them.
 
-1. For example, you can firstly deploy a mysql instance through helm.
+1. Install a MySQL instance with Helm:
 
 ```bash
 helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -397,17 +305,18 @@ helm repo update
 helm install mysql bitnami/mysql
 ```
 
-2. You can validate the installation through `helm ls`.
+2. Check the release is there:
 
 ```bash
 helm ls
 ```
+
 ```bash
 NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
-mysql   default         1               2023-01-11 14:34:36.653778 +0800 CST    deployed        mysql-9.4.6     8.0.31  
+mysql   default         1               2023-01-11 14:34:36.653778 +0800 CST    deployed        mysql-9.4.6     8.0.31
 ```
 
-2. Run `vela adopt` command to adopt resources from existing release. Similar to native resource adoption, you can get a KubeVela application with `read-only` policy.
+3. Adopt the release. As with native resources, you get an Application with a `read-only` policy, named after the release:
 
 ```bash
 vela adopt mysql --type helm
@@ -427,7 +336,7 @@ metadata:
   namespace: default
 spec:
   components:
-  - name: mysql.StatefulSet.mysql
+  - name: statefulset-mysql
     properties:
       objects:
       - apiVersion: apps/v1
@@ -436,184 +345,12 @@ spec:
           name: mysql
           namespace: default
         spec:
-          podManagementPolicy: ""
           replicas: 1
-          selector:
-            matchLabels:
-              app.kubernetes.io/component: primary
-              app.kubernetes.io/instance: mysql
-              app.kubernetes.io/name: mysql
           serviceName: mysql
-          template:
-            metadata:
-              annotations:
-                checksum/configuration: f8f3ad4a6e3ad93ae6ed28fdb7f7b4ff9585e08fa730e4e5845db5ebe5601e4d
-              labels:
-                app.kubernetes.io/component: primary
-                app.kubernetes.io/instance: mysql
-                app.kubernetes.io/managed-by: Helm
-                app.kubernetes.io/name: mysql
-                helm.sh/chart: mysql-9.4.6
-            spec:
-              affinity:
-                nodeAffinity: null
-                podAffinity: null
-                podAntiAffinity:
-                  preferredDuringSchedulingIgnoredDuringExecution:
-                  - podAffinityTerm:
-                      labelSelector:
-                        matchLabels:
-                          app.kubernetes.io/instance: mysql
-                          app.kubernetes.io/name: mysql
-                      topologyKey: kubernetes.io/hostname
-                    weight: 1
-              containers:
-              - env:
-                - name: BITNAMI_DEBUG
-                  value: "false"
-                - name: MYSQL_ROOT_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      key: mysql-root-password
-                      name: mysql
-                - name: MYSQL_DATABASE
-                  value: my_database
-                envFrom: null
-                image: docker.io/bitnami/mysql:8.0.31-debian-11-r30
-                imagePullPolicy: IfNotPresent
-                livenessProbe:
-                  exec:
-                    command:
-                    - /bin/bash
-                    - -ec
-                    - |
-                      password_aux="${MYSQL_ROOT_PASSWORD:-}"
-                      if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
-                          password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
-                      fi
-                      mysqladmin status -uroot -p"${password_aux}"
-                  failureThreshold: 3
-                  initialDelaySeconds: 5
-                  periodSeconds: 10
-                  successThreshold: 1
-                  timeoutSeconds: 1
-                name: mysql
-                ports:
-                - containerPort: 3306
-                  name: mysql
-                readinessProbe:
-                  exec:
-                    command:
-                    - /bin/bash
-                    - -ec
-                    - |
-                      password_aux="${MYSQL_ROOT_PASSWORD:-}"
-                      if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
-                          password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
-                      fi
-                      mysqladmin status -uroot -p"${password_aux}"
-                  failureThreshold: 3
-                  initialDelaySeconds: 5
-                  periodSeconds: 10
-                  successThreshold: 1
-                  timeoutSeconds: 1
-                resources:
-                  limits: {}
-                  requests: {}
-                securityContext:
-                  runAsNonRoot: true
-                  runAsUser: 1001
-                startupProbe:
-                  exec:
-                    command:
-                    - /bin/bash
-                    - -ec
-                    - |
-                      password_aux="${MYSQL_ROOT_PASSWORD:-}"
-                      if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
-                          password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
-                      fi
-                      mysqladmin status -uroot -p"${password_aux}"
-                  failureThreshold: 10
-                  initialDelaySeconds: 15
-                  periodSeconds: 10
-                  successThreshold: 1
-                  timeoutSeconds: 1
-                volumeMounts:
-                - mountPath: /bitnami/mysql
-                  name: data
-                - mountPath: /opt/bitnami/mysql/conf/my.cnf
-                  name: config
-                  subPath: my.cnf
-              initContainers: null
-              securityContext:
-                fsGroup: 1001
-              serviceAccountName: mysql
-              volumes:
-              - configMap:
-                  name: mysql
-                name: config
-          updateStrategy:
-            type: RollingUpdate
-          volumeClaimTemplates:
-          - metadata:
-              annotations: null
-              labels:
-                app.kubernetes.io/component: primary
-                app.kubernetes.io/instance: mysql
-                app.kubernetes.io/name: mysql
-              name: data
-            spec:
-              accessModes:
-              - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 8Gi
+          # ... the rest of the StatefulSet's spec, as the chart rendered it
     type: k8s-objects
-  - name: mysql.Service.mysql
-    properties:
-      objects:
-      - apiVersion: v1
-        kind: Service
-        metadata:
-          name: mysql
-          namespace: default
-        spec:
-          ports:
-          - name: mysql
-            nodePort: null
-            port: 3306
-            protocol: TCP
-            targetPort: mysql
-          selector:
-            app.kubernetes.io/component: primary
-            app.kubernetes.io/instance: mysql
-            app.kubernetes.io/name: mysql
-          sessionAffinity: None
-          type: ClusterIP
-    type: k8s-objects
-  - name: mysql.Service.mysql-headless
-    properties:
-      objects:
-      - apiVersion: v1
-        kind: Service
-        metadata:
-          name: mysql-headless
-          namespace: default
-        spec:
-          clusterIP: None
-          ports:
-          - name: mysql
-            port: 3306
-            targetPort: mysql
-          publishNotReadyAddresses: true
-          selector:
-            app.kubernetes.io/component: primary
-            app.kubernetes.io/instance: mysql
-            app.kubernetes.io/name: mysql
-          type: ClusterIP
-    type: k8s-objects
-  - name: mysql.config
+  # ... service-mysql and service-mysql-headless, the same way
+  - name: config
     properties:
       objects:
       - apiVersion: v1
@@ -627,16 +364,11 @@ spec:
           name: mysql
           namespace: default
     type: k8s-objects
-  - name: mysql.sa
+  - name: sa
     properties:
       objects:
       - apiVersion: v1
-        kind: Secret
-        metadata:
-          name: mysql
-          namespace: default
-      - apiVersion: v1
-        kind: ConfigMap
+        kind: ServiceAccount
         metadata:
           name: mysql
           namespace: default
@@ -647,106 +379,45 @@ spec:
       rules:
       - selector:
           componentNames:
-          - mysql.StatefulSet.mysql
-          - mysql.Service.mysql
-          - mysql.Service.mysql-headless
-          - mysql.config
-          - mysql.sa
+          - statefulset-mysql
+          - service-mysql
+          - service-mysql-headless
+          - config
+          - sa
     type: read-only
+  workflow:
+    steps:
+    - name: apply-component
+      subSteps:
+      - name: apply-component:statefulset-mysql
+        properties:
+          component: statefulset-mysql
+        type: apply-component
+      # ... one apply-component step for each other component
+      type: step-group
 status: {}
 ```
 
 </details>
 
-3. You can similarly use `--apply` parameter to apply the application into cluster and use `--mode=take-over` to allow modifications by enforcing `take-over` policy. In addition to that, if you want to completely adopt resources in helm chart into KubeVela application and disable the management of that helm chart (prevent multiple sources), you can add `--recycle` flag to remove the helm release secret after the application has entered running status.
+4. Apply it with `--apply`, and use `--mode take-over` to let the Application manage the resources. To hand the resources over to KubeVela completely, so Helm no longer manages them too, add `--recycle`: once the Application is running, it deletes the Helm release's records.
 
 ```bash
 vela adopt mysql --type helm --mode take-over --apply --recycle
 ```
+
 ```
 resources adopted in app default/mysql
 successfully clean up old helm release
 ```
 
-4. You can check the application status using `vela status` and `vela status -t -d`.
+5. Check the result with `vela status mysql` and `vela status mysql -t -d`:
 
 ```bash
 vela status mysql
 ```
 
-<details>
-<summary>expected output</summary>
-
-```bash
-About:
-
-  Name:         mysql                        
-  Namespace:    default                      
-  Created at:   2023-01-11 14:40:16 +0800 CST
-  Status:       running                      
-
-Workflow:
-
-  mode: DAG-DAG
-  finished: true
-  Suspend: false
-  Terminated: false
-  Steps
-  - id: orq8dnqbyv
-    name: mysql.StatefulSet.mysql
-    type: apply-component
-    phase: succeeded 
-  - id: k5kwoc49jv
-    name: mysql.Service.mysql-headless
-    type: apply-component
-    phase: succeeded 
-  - id: p5qe1drkoh
-    name: mysql.Service.mysql
-    type: apply-component
-    phase: succeeded 
-  - id: odicbhtf9a
-    name: mysql.config
-    type: apply-component
-    phase: succeeded 
-  - id: o36adyqqal
-    name: mysql.sa
-    type: apply-component
-    phase: succeeded 
-
-Services:
-
-  - Name: mysql.StatefulSet.mysql  
-    Cluster: local  Namespace: default
-    Type: k8s-objects
-    Healthy 
-    No trait applied
-
-  - Name: mysql.Service.mysql-headless  
-    Cluster: local  Namespace: default
-    Type: k8s-objects
-    Healthy 
-    No trait applied
-
-  - Name: mysql.Service.mysql  
-    Cluster: local  Namespace: default
-    Type: k8s-objects
-    Healthy 
-    No trait applied
-
-  - Name: mysql.config  
-    Cluster: local  Namespace: default
-    Type: k8s-objects
-    Healthy 
-    No trait applied
-
-  - Name: mysql.sa  
-    Cluster: local  Namespace: default
-    Type: k8s-objects
-    Healthy 
-    No trait applied
-```
-
-</details>
+The Application is `running`, with every component healthy.
 
 ```bash
 vela status mysql -t -d
@@ -758,10 +429,11 @@ local     ─── default   ─┬─ ConfigMap/mysql        updated   2023-01
                          ├─ Secret/mysql           updated   2023-01-11 14:40:16 Type: Opaque  Data: 2  Age: 7m41s
                          ├─ Service/mysql          updated   2023-01-11 14:40:16 Type: ClusterIP  Cluster-IP: 10.43.154.7  External-IP: <none>  Port(s): 3306/TCP  Age: 7m41s
                          ├─ Service/mysql-headless updated   2023-01-11 14:40:16 Type: ClusterIP  Cluster-IP: None  External-IP: <none>  Port(s): 3306/TCP  Age: 7m41s
+                         ├─ ServiceAccount/mysql   updated   2023-01-11 14:40:16 Secrets: 0  Age: 7m41s
                          └─ StatefulSet/mysql      updated   2023-01-11 14:40:16 Ready: 1/1  Age: 7m41s
 ```
 
-5. If you run `helm ls` you will not be able to find the original mysql helm release since the records have been recycled.
+6. `helm ls` no longer lists the release, since its records were recycled:
 
 ```bash
 helm ls
@@ -772,32 +444,34 @@ NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
 ```
 
 :::tip
-There are multiple ways to use KubeVela together with Helm.
+There are two ways to use KubeVela together with Helm.
 
-If you want to use Helm to control the release process of charts and use KubeVela to monitor those resources, you can use the default mode (`read-only`) and do not recycle the helm release secret. In this case, you will be able to monitor resources dispatched by Helm Chart with KubeVela tools or eco-system (like viewing on Grafana).
+To keep Helm in charge of releasing the chart and use KubeVela to watch the resources, adopt in the default `read-only` mode and don't recycle the release. You can then watch what the chart deployed with KubeVela's tools and ecosystem, such as Grafana.
 
-If you want to migrate existing resources from Helm Chart to KubeVela application, you can use the `take-over` mode and use the `--apply` flag to recycle helm release records.
+To move the resources from Helm to a KubeVela Application for good, adopt in `take-over` mode with `--apply --recycle`.
 :::
 
-### Customized Adoption
+### Customize the adoption
 
-By default, `vela adopt` will take resources from given source (native resource list or helm chart) and group them into different components. For resources like Deployments or Statefulsets, the original spec will be reserved. For other resources like ConfigMap or Secret, the data will not be recorded in the adoption application (which means the application does not care for the content in them). For special resources (CustomResourceDefinition), the `garbage-collect` and `apply-once` policy will be additionally attached in the application.
+By default, `vela adopt` groups the resources from the source (a list of native resources or a Helm release) into components:
 
-The conversion from resources into application is achieved by using the CUE template. You can refer to [GitHub](https://github.com/kubevela/kubevela/blob/master/references/cli/adopt-templates/default.cue) to see the default template.
+- Workloads (Deployment, StatefulSet, DaemonSet, CloneSet) and Services, Ingresses and HTTPRoutes each get a component with their spec copied in.
+- ConfigMaps and Secrets go into one `config` component, and ServiceAccounts and RBAC objects into one `sa` component, by name only: the Application does not hold their contents.
+- CustomResourceDefinitions and Namespaces get components of their own, `crds` and `ns`.
 
-You can also build your own adoption rule using CUE and add `--adopt-template` to `vela adopt` command.
+In `take-over` mode the Application also gets a `garbage-collect` policy that never deletes CustomResourceDefinitions and an `apply-once` policy for them, so deleting or changing the Application never removes a CRD that other resources rely on.
 
-1. For example, let's create an example deployment.
+The rules are a CUE template. See the [default template](https://github.com/kubevela/kubevela/blob/master/references/cli/adopt-templates/default.cue) on GitHub. To use your own, pass it with `--adopt-template`.
+
+1. Create a Deployment to adopt:
 
 ```bash
 kubectl create deploy custom-adopt --image=nginx
 ```
 
-2. Create a file named `my-adopt-rule.cue`.
+2. Save this template as `my-adopt-rule.cue`. It turns each Deployment into a `webservice` component, with a `scaler` trait set to the Deployment's replicas:
 
-```
-import "list"
-
+```cue
 #Resource: {
 	apiVersion: string
 	kind:       string
@@ -885,9 +559,12 @@ import "list"
 }
 ```
 
-This customized adoption rule will automatically recognize deployment resources and convert it into KubeVela application's `webservice` component. It can intelligently detect the replicas number of the given deployment and attach a `scaler` trait to the component.
+3. Adopt the Deployment with it:
 
-3. Run `vela adopt deployment/custom-adopt --adopt-template=my-adopt-rule.cue`. You can see the converted application as 
+```bash
+vela adopt deployment/custom-adopt --adopt-template=my-adopt-rule.cue
+```
+
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -896,6 +573,7 @@ metadata:
   labels:
     app.oam.dev/adopt: native
   name: custom-adopt
+  namespace: default
 spec:
   components:
   - name: custom-adopt
@@ -917,32 +595,30 @@ spec:
 status: {}
 ```
 
-With this capability, you can make your own rules for building application from existing resources or helm charts.
+### Adopt all resources
 
-### Adopt All Resources
+#### Adopt all native resources
 
-#### Adopt All Native Resources
-
-If you want to adopt all resources in a namespace, you can use `--all` flag.
+To adopt every workload in a namespace, use `--all`:
 
 ```bash
 vela adopt --all
 ```
 
-By default, it will adopt all Deployment/StatefulSet/DaemonSet resources in the namespace. You can also specify a Custom Resource to adopt.
+By default this adopts every Deployment, StatefulSet and DaemonSet that no Application manages yet. Name a resource type to adopt that type instead, such as a custom resource:
 
 ```bash
 vela adopt mycrd --all
 ```
 
-This command will first try to list all specified resources in the namespace, and find the related resources (like ConfigMap, Secret, Service, etc.) with resource topology rule and adopt them together.
+For each resource it finds, the command also finds the resources that go with it, by a resource topology rule, and adopts them together into one Application named after the resource. The [default rule](https://github.com/kubevela/kubevela/blob/master/references/cli/resource-topology/builtin-rule.cue) takes the ConfigMaps and Secrets a workload mounts as volumes, the Services that select its pods, and the Ingresses that route to those Services.
 
-The resource topology rule is written in CUE template, the default template is in [GitHub](https://github.com/kubevela/kubevela/blob/master/references/cli/resource-topology/builtin-rule.cue). With this default rule, the related resources(ConfigMap, Secret, Service, Ingress) will be adopted together with the Deployment/StatefulSet/DaemonSet.
-
-For example, if you have following resources in the cluster:
+For example, with these resources in the cluster:
 
 <details>
-<summary>Resources(Deployment, ConfigMap, Service, Ingress)</summary>
+<summary>Resources (Deployment, ConfigMap, Service, Ingress)</summary>
+
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -962,7 +638,6 @@ spec:
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         myapp: test1
     spec:
@@ -1001,6 +676,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: test1
+  namespace: default
 spec:
   ports:
   - port: 8000
@@ -1029,22 +705,27 @@ spec:
               number: 8000
         path: /
         pathType: ImplementationSpecific
-status:
-  loadBalancer: {}
+```
+
 </details>
 
-With `vela adopt --all`, these resources will be adopted as an Application like below:
+`vela adopt --all` adopts them as one Application:
 
 <details>
 <summary>Adopted Application</summary>
+
+```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
+  creationTimestamp: null
+  labels:
+    app.oam.dev/adopt: native
   name: test1
   namespace: default
 spec:
   components:
-  - name: test1.Deployment.test1
+  - name: deployment-test1
     properties:
       objects:
       - apiVersion: apps/v1
@@ -1053,37 +734,17 @@ spec:
           name: test1
           namespace: default
         spec:
-          ...
+          replicas: 1
+          # ... the rest of the Deployment's spec
     type: k8s-objects
-  - name: test1.Service.test1
-    properties:
-      objects:
-      - apiVersion: v1
-        kind: Service
-        metadata:
-          name: test1
-          namespace: default
-        spec:
-          ...
-    type: k8s-objects
-  - name: test1.Ingress.test1
-    properties:
-      objects:
-      - apiVersion: networking.k8s.io/v1
-        kind: Ingress
-        metadata:
-          name: test1
-          namespace: default
-        spec:
-          ...
-    type: k8s-objects
-  - name: test1.config
+  # ... service-test1 and ingress-test1, the same way
+  - name: config
     properties:
       objects:
       - apiVersion: v1
         kind: ConfigMap
         metadata:
-          name: record-event
+          name: my-test1
           namespace: default
     type: k8s-objects
   policies:
@@ -1092,29 +753,40 @@ spec:
       rules:
       - selector:
           componentNames:
-          - test1.Deployment.test1
-          - test1.Service.test1
-          - test1.Ingress.test1
-          - test1.config
+          - deployment-test1
+          - service-test1
+          - ingress-test1
+          - config
     type: read-only
+  workflow:
+    steps:
+    - name: apply-component
+      subSteps:
+      - name: apply-component:deployment-test1
+        properties:
+          component: deployment-test1
+        type: apply-component
+      # ... one apply-component step for each other component
+      type: step-group
+status: {}
+```
+
 </details>
 
-You can also build your own resource topology rule to find custom resource relations using CUE and add `--resource-topology-rule` to `vela adopt` command.
+To find relations the default rule doesn't know, such as those of your own custom resources, write a resource topology rule in CUE and pass it with `--resource-topology-rule`:
 
-```
+```bash
 vela adopt --all --resource-topology-rule=my-rule.cue
 ```
 
-After adopting all resources and applying them to the cluster, you can checkout all the adopted applications with `vela ls` or in the dashboard.
+Once the Applications are applied, list them with `vela ls` or see them in VelaUX.
 
 ![](https://kubevela.io/images/1.8/adopt-all.gif)
 
-#### Adopt All Helm Releases
+#### Adopt all Helm releases
 
-If you want to adopt all helm releases in a namespace, you can use `--all` flag with `--type=helm`.
+To adopt every Helm release in a namespace, use `--all` with `--type=helm`:
 
 ```bash
 vela adopt --all --type helm
 ```
-
-That's all about the adoption feature. We hope that KubeVela can help you deliver your applications with ease and confidence.

@@ -2,7 +2,7 @@
 title: Data Passing
 ---
 
-This section introduces how to use `Inputs` and `Outputs` to pass data between workflow steps in KubeVela.
+This section introduces how to use `Inputs` and `Outputs` to pass data between workflow steps in KubeVela. To pass data between components rather than steps, see [Order Components and Pass Data Between Them](./component-dependency-parameter.md).
 
 ## Outputs
 
@@ -10,7 +10,7 @@ Outputs consists of `name` and `valueFrom`. `name` declares the name of this out
 
 `valueFrom` can be written in the following ways:
 
-1. Use value expression, eg. `valueFrom: output.value.status.workflow.message`. Note that `output.value.status.workflow.message` will use the value of the variable from the CUE template of the current step. If this field does not exist in the CUE template of the step, the resulting value will be empty.
+1. Use value expression, eg. `valueFrom: output.value.data.greeting`. `valueFrom` reads from the step's own result; what is available depends on the step type (for `read-object`, the object is under `output.value`). If the field does not exist in the step's result, the output is `null`.
 2. Use CUE expressions, eg. use `+` to combine value and string: `valueFrom: output.metadata.name + "testString"` or you can import built-in packages in CUE like:
 ```
 valueFrom: |
@@ -20,7 +20,7 @@ valueFrom: |
 
 ## Inputs
 
-Inputs is made of `from` and `parameterKey`. Input uses `from` to reference output, `parameterKey` is a expression that assigns the value of the input to the corresponding field.
+Inputs is made of `from` and `parameterKey`. Input uses `from` to reference output, `parameterKey` is the path, inside this step's `properties`, that receives the value.
 
 :::caution
 If you want to set the parameterKey with a invalid CUE variable name (eg: contains `-`, or starts with a number, etc.), you can refer to it with `[]` like:
@@ -43,11 +43,11 @@ eg. Specify inputs:
       parameterKey: slack.message.text
 ```
 
+A step with `inputs` waits until the step that produces them has run.
+
 ## How to use
 
-Suppose we already have a `depends` application in the cluster, and we want to read the workflow status of the `depends` Application in a new Application and send the status information to Slack.
-
-Apply the following YAML:
+This Application writes a ConfigMap, reads it back, and copies one of its values into a second ConfigMap:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -56,33 +56,62 @@ metadata:
   name: input-output
   namespace: default
 spec:
-  components:
-  - name: express-server
-    type: webservice
-    properties:
-      image: oamdev/hello-world
-      ports:
-        - port: 8000
+  components: []
   workflow:
     steps:
-      - name: read
+      - name: create-source
+        type: apply-object
+        properties:
+          value:
+            apiVersion: v1
+            kind: ConfigMap
+            metadata:
+              name: source-config
+              namespace: default
+            data:
+              greeting: hello from source-config
+      - name: read-source
         type: read-object
         properties:
-          name: depends
+          apiVersion: v1
+          kind: ConfigMap
+          name: source-config
+          namespace: default
         outputs:
-          - name: read-status
-            valueFrom: output.value.status.workflow.message
-      - name: slack-message
-        type: notification
+          - name: greeting
+            valueFrom: output.value.data.greeting
+      - name: write-copy
+        type: apply-object
         inputs:
-          - from: read-status
-            parameterKey: slack.message.text
+          - from: greeting
+            parameterKey: value.data.greeting
         properties:
-          slack:
-            url:
-              value: <your slack url>
+          value:
+            apiVersion: v1
+            kind: ConfigMap
+            metadata:
+              name: copied-config
+              namespace: default
 ```
 
-> When reading the `depends` application, we use the `read-object` step type. In this step type, the read resources will be placed in `output.value`, so we can use `output.value.status.workflow.message` reads the workflow status information of `depends`.
+The `read-source` step puts the ConfigMap it read under `output.value`, so `output.value.data.greeting` is the value to pass on. The `write-copy` step receives it at `value.data.greeting` in its `properties`.
 
-When the application runs successfully, we can receive the workflow status information of the `depends` application in the Slack message notification.
+`read-object` reads an Application by default; set `apiVersion` and `kind` to read anything else. Its `namespace` defaults to `default`, whatever namespace the Application is in, so set it when the object lives elsewhere.
+
+Save it as `input-output.yaml` and apply it:
+
+```bash
+vela up -f input-output.yaml
+```
+
+When the workflow has finished, check the copy:
+
+```bash
+kubectl get configmap copied-config -o jsonpath='{.data.greeting}'
+```
+
+```
+hello from source-config
+```
+
+To send the value somewhere else, point `parameterKey` at that step's field instead: for a `notification` step, `slack.message.text` puts it in the Slack message.

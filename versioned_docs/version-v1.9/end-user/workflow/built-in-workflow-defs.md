@@ -4,6 +4,10 @@ title: Built-in WorkflowStep Type
 
 This documentation will walk through all the built-in workflow step types sorted alphabetically.
 
+:::note
+Examples of kind `WorkflowRun` need the `vela-workflow` addon, which installs the WorkflowRun CRD: `vela addon enable vela-workflow`. See [WorkflowRun](../pipeline/workflowrun.md).
+:::
+
 > It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2023-07-28T09:33:26+08:00.
 
 ## Addon-Operation

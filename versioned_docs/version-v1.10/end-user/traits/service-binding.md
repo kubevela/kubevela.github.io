@@ -78,7 +78,8 @@ spec:
       type: webservice
       properties:
         image: zzxwill/flask-web-application:v0.3.1-crossplane
-        ports: 80
+        ports:
+          - port: 80
       traits:
         - type: service-binding
           properties:

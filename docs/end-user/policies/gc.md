@@ -2,9 +2,21 @@
 title: Garbage Collect
 ---
 
-By default, KubeVela Application will recycle outdated resources when new version is deployed and confirmed to be healthy. In some cases, you may want to have more customized control to the recycle of outdated resources, where you can leverage the garbage-collect policy.
+By default, when you update an Application, KubeVela deletes the resources the new version no longer uses, once its workflow has succeeded. Deleting the Application deletes everything it created. The `garbage-collect` policy changes that.
 
-In garbage-collect policy, there are two major capabilities you can use.
+The garbage-collect policy controls three things:
+
+- whether resources from old versions are deleted at all: [Keep legacy resources](#keep-legacy-resources);
+- when particular resources are deleted, and how: [Persist partial resources](#persist-partial-resources) and [Delete with a propagation policy](#delete-with-a-propagation-policy);
+- the order resources are deleted in: [Delete resource in the dependency order](#delete-resource-in-the-dependency-order).
+
+Each rule in `rules` picks resources with a `selector` (see [Resource Selectors](./resource-selectors.md) for its fields) and gives them a `strategy`:
+
+| Strategy | Resource deleted when | Typical use |
+| --- | --- | --- |
+| `onAppUpdate` (default) | a new version of the Application no longer uses it, or the Application is deleted | Most resources. |
+| `onAppDelete` | the Application is deleted; updates leave it alone | A Service or volume that should outlive a component rename. |
+| `never` | never; KubeVela leaves it in place even after the Application is deleted | A Namespace, or a Job whose result you want to keep. |
 
 ## Keep legacy resources
 
@@ -24,14 +36,10 @@ spec:
       type: webservice
       properties:
         image: oamdev/hello-world
-        port: 8000
       traits:
-        - type: gateway
+        - type: expose
           properties:
-            class: traefik
-            domain: 47.251.8.82.nip.io
-            http:
-              "/": 8000
+            port: [8000]
   policies:
     - name: keep-legacy-resource
       type: garbage-collect
@@ -52,8 +60,7 @@ vela status first-vela-app --tree
 ```
 CLUSTER       NAMESPACE     RESOURCE                  STATUS
 local     ─── default   ─┬─ Service/express-server    updated
-                         ├─ Deployment/express-server updated
-                         └─ Ingress/express-server    updated
+                         └─ Deployment/express-server updated
 ```
 </details>
 
@@ -72,14 +79,10 @@ spec:
       type: webservice
       properties:
         image: oamdev/hello-world
-        port: 8000
       traits:
-        - type: gateway
+        - type: expose
           properties:
-            class: traefik
-            domain: 47.251.8.82.nip.io
-            http:
-              "/": 8000
+            port: [8000]
   policies:
     - name: keep-legacy-resource
       type: garbage-collect
@@ -102,9 +105,7 @@ CLUSTER       NAMESPACE     RESOURCE                    STATUS
 local     ─── default   ─┬─ Service/express-server      outdated
                          ├─ Service/express-server-1    updated
                          ├─ Deployment/express-server   outdated
-                         ├─ Deployment/express-server-1 updated
-                         ├─ Ingress/express-server      outdated
-                         └─ Ingress/express-server-1    updated
+                         └─ Deployment/express-server-1 updated
 ```
 </details>
 
@@ -116,7 +117,17 @@ You can see the legacy resources are reserved but the status is outdated, it wil
 $ vela delete first-vela-app
 ```
 
-> If you hope to delete resources in one specified version, you can run `kubectl delete resourcetracker first-vela-app-v1-default`. 
+Each generation of the Application (a new one on every spec change) gets a ResourceTracker named `<app>-v<generation>-<namespace>`. List them with:
+
+```shell
+kubectl get resourcetracker -l app.oam.dev/name=first-vela-app
+```
+
+Deleting one, such as `first-vela-app-v1-default`, deletes the resources only that version still holds:
+
+```shell
+kubectl delete resourcetracker first-vela-app-v1-default
+```
 
 ## Persist partial resources
 
@@ -152,18 +163,18 @@ spec:
 EOF
 ```
 
-You can find deployment and service created.
+The Deployment and the Service are both named after the component, `demo-gc`:
 
 ```shell
-$ kubectl get deployment
-NAME          READY   UP-TO-DATE   AVAILABLE   AGE
-hello-world   1/1     1            1           74s
-$ kubectl get service   
-NAME          TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-hello-world   ClusterIP   10.96.160.208   <none>        8000/TCP   78s
+$ kubectl get deployment,service -l app.oam.dev/name=garbage-collect-app
+NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/demo-gc   1/1     1            1           74s
+
+NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/demo-gc   ClusterIP   10.96.160.208   <none>        8000/TCP   78s
 ```
 
-If you upgrade the application and use a different component, you will find the old versioned deployment is deleted but the service is kept.
+Now rename the component. The old Deployment is deleted, but the Service from `expose` stays:
 
 ```shell
 cat <<EOF | vela up -f -
@@ -191,17 +202,19 @@ spec:
                 - expose
             strategy: onAppDelete
 EOF
-
-$ kubectl get deployment
-NAME              READY   UP-TO-DATE   AVAILABLE   AGE
-hello-world-new   1/1     1            1           10s
-$ kubectl get service   
-NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-hello-world       ClusterIP   10.96.160.208   <none>        8000/TCP   5m56s
-hello-world-new   ClusterIP   10.96.20.4      <none>        8000/TCP   13s
 ```
 
-If you want to deploy job-like components, in which cases the resources in the component are not expected to be recycled even after the application is deleted, you can use the component type selector and set strategy to `never` as follows.
+```shell
+$ kubectl get deployment,service -l app.oam.dev/name=garbage-collect-app
+NAME                              READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hello-world-new   1/1     1            1           10s
+
+NAME                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/demo-gc           ClusterIP   10.96.160.208   <none>        8000/TCP   5m56s
+service/hello-world-new   ClusterIP   10.96.20.4      <none>        8000/TCP   13s
+```
+
+To keep a component's resources even after the Application is deleted, select it by component type and set the strategy to `never`. Here every `task` component's Job stays:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -210,8 +223,11 @@ metadata:
   name: garbage-collect-app
 spec:
   components:
-    - name: hello-world-new
-      type: job-like-component
+    - name: init-job
+      type: task
+      properties:
+        image: busybox
+        cmd: ["echo", "done"]
   policies:
     - name: garbage-collect
       type: garbage-collect
@@ -219,7 +235,7 @@ spec:
         rules:
           - selector:
               componentTypes:
-                - webservice
+                - task
             strategy: never
 ```
 
@@ -247,6 +263,62 @@ spec:
               componentNames:
                 - example-addon-namespace
             strategy: never
+```
+
+## Delete with a propagation policy
+
+By default KubeVela deletes a resource with no propagation policy, so the API server applies the resource's own default. For a Job that default is to orphan: the Job goes, but its Pods stay behind. Set `propagation` on a rule to choose:
+
+- `cascading`: delete the resource and its children (background propagation).
+- `orphan`: delete the resource and leave its children.
+
+This Application deletes its `task` Jobs together with their Pods:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: job-app
+spec:
+  components:
+    - name: init-job
+      type: task
+      properties:
+        image: busybox
+        cmd: ["echo", "done"]
+  policies:
+    - name: garbage-collect
+      type: garbage-collect
+      properties:
+        rules:
+          - selector:
+              componentTypes:
+                - task
+            propagation: cascading
+```
+
+## Collect when the workflow fails
+
+Garbage collection runs only after the workflow succeeds, so a failed update leaves the previous version's resources in place. Set `continueOnFailure: true` to collect them even when the workflow fails:
+
+```yaml
+  policies:
+    - name: garbage-collect
+      type: garbage-collect
+      properties:
+        continueOnFailure: true
+```
+
+## Limit the revisions kept
+
+KubeVela keeps a number of old ApplicationRevisions for each Application, set for the whole controller by `--application-revision-limit`. Set `applicationRevisionLimit` to use a different number for this Application:
+
+```yaml
+  policies:
+    - name: garbage-collect
+      type: garbage-collect
+      properties:
+        applicationRevisionLimit: 3
 ```
 
 ## Delete resource in the dependency order
