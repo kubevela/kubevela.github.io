@@ -29,16 +29,17 @@ docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli <command>
 
 This is how the command functions:
 
-* `docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli` – The equivalent of the `vela` executable. Each time you run this command, Docker spins up a container of your downloaded `oamdev/vela-cli` image, and executes your `vela` command. By default, the Docker image uses the latest version of the KubeVela CLI.
+* `docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli` – The equivalent of the `vela` executable. Each time you run this command, Docker spins up a container of your downloaded `oamdev/vela-cli` image, and executes your `vela` command. Without a tag, Docker pulls `latest`, which is built from the master branch, so pin the tag that matches your vela-core.
 
     For example, to call the `vela version` command in Docker, you run the following.
     ```
-    $ docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli version
-    CLI Version: master
-    Core Version:
-    GitRevision: git-1d823780
-    GolangVersion: go1.17.10
+    $ docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli:v1.10.10 version
+    CLI Version: v1.10.10
+    Core Version: 1.10.10
+    ...
     ```
+
+    `CLI Version` is the image's tag; `Core Version` is the vela-core installed in the cluster your kubeconfig points at.
 
 * `--rm` – Specifies to clean up the container after the command exits.
 
@@ -53,14 +54,15 @@ For more information about the docker run command, see the [Docker reference gui
 To shorten the Docker `vela` command, we suggest you use your operating system's ability to create a [symbolic link](https://www.linux.com/tutorials/understanding-linux-links/) (symlink) or [alias](https://www.linux.com/tutorials/aliases-diy-shell-commands/) in Linux and macOS, or [doskey](https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/doskey) in Windows. To set the `vela` alias, you can run one of the following commands.
 
 ```
-alias vela='docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli'
+alias vela='docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli:v1.10.10'
 ```
 
 After setting your alias, you can run the Vela CLI from within a Docker container as if it's installed on your host system.
 
 ```
 $ vela version
-CLI Version: master
+CLI Version: v1.10.10
+...
 ```
 
 ## Integrate Vela CLI Image with Kubernetes
@@ -127,11 +129,10 @@ I0525 05:47:25.788947       1 apply.go:107] "creating object" name="component-ui
 
 ...snip...
 
-To check the initialized admin user name and password by:
-    vela logs -n vela-system --name apiserver addon-velaux | grep "initialized admin username"
 To open the dashboard directly by port-forward:
-    vela port-forward -n vela-system addon-velaux 9082:80
-Select "Cluster: local | Namespace: vela-system | Kind: Service | Name: velaux" from the prompt.
+
+    vela port-forward -n vela-system addon-velaux 8000:8000
+
 Please refer to https://kubevela.io/docs/reference/addons/velaux for more VelaUX addon installation and visiting method.
 ```
 

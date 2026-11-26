@@ -4,6 +4,8 @@ title: Systems Integration
 
 KubeVela application natively supports impersonation even without the Authentication flag enabled. That means when the Authentication flag is disabled, you can manually set the identity to impersonate in the application's annotation fields. For example, the following guide will give an example on how to manually set the application to impersonate as a ServiceAccount.
 
+With authentication off, this annotation restricts what one Application may do; it does not restrict users. Anyone who can edit the Application can change or remove it. To make the identity a boundary, turn on authentication (see [Kubernetes RBAC](./basic.md#installation)), so KubeVela sets it from whoever submits the Application.
+
 ## Example
 
 Let's assume that we have two namespaces:

@@ -1,26 +1,32 @@
 ---
-title: Kubernetes RBAC
+title: Run Applications as their submitter
 ---
 
-In KubeVela v1.4, Authentication & Authorization mechanism is introduced. This allows applications to dispatch and manage resources using the identity of the application's creator/modifier. With this feature, it will be easy to limit the access of KubeVela users/applications and isolate their living spaces, which will make your KubeVela system safer.
+By default vela-core applies every Application as itself. With authentication on, it applies each one as the user who last changed it, so an Application can only do what its author could do with `kubectl`.
+
+:::caution
+By default vela-core runs as `cluster-admin`, so anyone who can create an Application can create anything in any cluster KubeVela manages. Turn on `authentication.enabled` to apply each Application with its submitter's permissions.
+:::
+
+This page turns authentication on, then walks through two users: Alice, who can write to the `dev` namespace, and Bob, who can only read it.
 
 ## Installation
 
 To enable Authentication & Authorization in your KubeVela system, you need to do the following steps
 
-1. Delete the ClusterRoleBinding ends with `vela-core:manager-rolebinding`. Usually you can do it through:
-  ```
-  kubectl delete ClusterRoleBinding kubevela-vela-core:manager-rolebinding
-  ```
-
-2. Upgrade the controller, and wait for the installation finished:
+1. Upgrade the controller with authentication on, and wait for it to finish:
   ```
   helm upgrade --install kubevela kubevela/vela-core --create-namespace -n vela-system --set authentication.enabled=true --set authentication.withUser=true --wait
   ```
 
-3. Make sure your version Vela CLI v1.4.1+, refer to [the installation guide](../../install.mdx#2-install-kubevela-cli).
+  Helm removes the `cluster-admin` binding when you set `authentication.enabled=true`, since vela-core no longer needs it. Check it's gone afterwards; this should return `NotFound`:
+  ```
+  kubectl get clusterrolebinding kubevela-vela-core:manager-rolebinding
+  ```
 
-4. (Optional) Install [vela-prism](https://github.com/kubevela/prism) through running the following commands, which will allow you to enjoy the advanced API extensions in KubeVela.
+2. Make sure your version Vela CLI v1.4.1+, refer to [the installation guide](../../install.mdx#2-install-kubevela-cli).
+
+3. (Optional) Install [vela-prism](https://github.com/kubevela/prism) through running the following commands, which will allow you to enjoy the advanced API extensions in KubeVela.
   ```bash
   helm repo remove kubevela 2>/dev/null || true
   helm repo add kubevela https://kubevela.github.io/charts
@@ -34,10 +40,10 @@ To enable Authentication & Authorization in your KubeVela system, you need to do
 
 ```bash
 $ vela cluster list
-NAME    ALIAS   CREDENTIAL_TYPE   ENDPOINT                      ACCEPTED   LABELS
-local           Internal          -                             true       
-c3              X509Certificate   <c3 apiserver url>            true       
-c2              X509Certificate   <c2 apiserver url>            true       
+CLUSTER ALIAS   TYPE              ENDPOINT                      ACCEPTED   LABELS
+local           Internal          -                             true
+c3              X509Certificate   <c3 apiserver url>            true
+c2              X509Certificate   <c2 apiserver url>            true
 ```
 
 The following procedures are illustrated in the following figure. The operations below are associated with different users, which are identified by switching `KUBECONFIG` environment variable. (Each `KUBECONFIG` corresponds to one user.)
@@ -99,7 +105,7 @@ User=alice
 
 ### Use Privileges
 
-4. Alice can create an application in the dev namespace now. The application can also dispatch resources into the dev namespace of cluster `c2`.
+4. Alice can create an application in the dev namespace now. It deploys to the `dev` namespace of both the control plane (`local`) and cluster `c2`.
 
 ```bash
 cat <<EOF | KUBECONFIG=alice.kubeconfig vela up -f -
@@ -118,7 +124,7 @@ spec:
   - type: topology
     name: topology
     properties:
-      clusters: ["c2"]
+      clusters: ["local", "c2"]
 EOF
 ```
 
@@ -147,6 +153,12 @@ Workflow:
     message:
 
 Services:
+
+  - Name: podinfo  
+    Cluster: local  Namespace: dev
+    Type: webservice
+    Healthy Ready:1/1
+    No trait applied
 
   - Name: podinfo  
     Cluster: c2  Namespace: dev
@@ -240,7 +252,7 @@ Privileges granted.
 $ KUBECONFIG=bob.kubeconfig vela ls -n dev
 APP             COMPONENT       TYPE            TRAITS  PHASE                   HEALTHY STATUS          CREATED-TIME                 
 podinfo         podinfo         webservice              running                 healthy Ready:1/1       2022-05-31 17:06:14 +0800 CST
-podinfo-bad     podinfo-bad     webservice              workflowTerminated                              2022-05-31 17:09:16 +0800 CST
+podinfo-bad     podinfo-bad     webservice              runningWorkflow                                 2022-05-31 17:09:16 +0800 CST
 
 $ KUBECONFIG=bob.kubeconfig vela status podinfo -n dev
 About:
@@ -306,6 +318,22 @@ local     ─── dev       ─── Deployment/podinfo updated   2022-05-31 
 ```
 
 > Notice that if `vela-prism` is not installed, Alice and Bob will be forbidden to run this listing command.
+
+### Revoke access
+
+13. The CLI has no command to revoke privileges. `grant-privileges` gives each namespace one RoleBinding per access level, `kubevela:writer:binding` and `kubevela:reader:binding`, in every cluster it was granted for. To take Alice's write access to `dev` away, delete her binding in both clusters:
+
+```bash
+vela kube delete rolebinding kubevela:writer:binding -n dev --cluster local --cluster c2
+```
+
+The binding is shared by everyone granted write access to `dev`, so deleting it revokes it for all of them. To revoke Alice alone, edit the binding with each cluster's kubeconfig and remove her from `subjects`:
+
+```bash
+kubectl edit rolebinding kubevela:writer:binding -n dev
+```
+
+Bob's read-only access is in `kubevela:reader:binding`, and is revoked the same way.
 
 ## Extension Reading
 

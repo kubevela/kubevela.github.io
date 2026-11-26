@@ -6,8 +6,7 @@ The application logs are very important for users to find and locate problems es
 This doc will introduce how to use `loki` addon to collecting application logs and analysis them.
 
 :::tip
-This section will more likely to introduce how to collect and analysis logs.
-If you just want to get real time logs from application for debug, you can just use `vela logs` command or check it on UI console provided by `velaux` addon.
+This page sets up log storage and search. To read a pod's logs now, use `vela logs`, or the console in the `velaux` addon.
 :::
 
 ## Quick start
@@ -18,22 +17,22 @@ We need to enable the `loki` and `grafana` addon for this capability.
 
 The loki addon can be enabled in two modes:
 
-- Collecting application logs by specify trait, this is the default behavior when enabling log collection.
-- Collecting all applications logs from container stdout.
+- Collect logs from the applications that ask for it with a trait. This is the default.
+- Collect the stdout logs of every container.
 
 #### Collecting logs by traits
 
-To make this mode work, you need to enable loki addon by setting parameter `agent=vector`:
+The `agent` parameter picks the log collector, and `vector` is the default, so this is all you need:
 
 ```shell
-vela addon enable loki agent=vector
+vela addon enable loki
 ```
 
 :::caution
-When enable loki addon without the `agent` parameter, no log collector will be enabled, only loki service deployed.
+`agent=""` installs no log collector, only the loki service.
 :::
 
-After this addon enabled with `agent=vector`, a [loki](https://github.com/grafana/loki) service will be deployed in the control plane as a log store, and a log collection agent [vector](http://vector.dev/) will be deployed as daemon for all nodes of each current managed clusters.
+Once the addon is enabled, a [loki](https://github.com/grafana/loki) service will be deployed in the control plane as a log store, and a log collection agent [vector](http://vector.dev/) will be deployed as daemon for all nodes of each current managed clusters.
 
 :::note
 If you want to specify the clusters, you can specify the `clusters` parameter when enabling addon.
@@ -263,8 +262,8 @@ spec:
             path: /root/verbose.log
 ```
 
-In the example, we let business log of the `my-biz` component write to the `/data/daily.log` path in the container. After the application is created, you can view the corresponding file log results through the `deployment` dashboard.
+The example writes to `/root/verbose.log`. After the application is created, you can view the file's logs through the `deployment` dashboard.
 
 :::tip
-It should be noted that the logs that need to be collected mustn't is in the root directory of the container, otherwise it may cause the container to fail to start.
+Don't collect a file directly under `/`: the trait mounts a volume at the file's directory, and mounting over `/` stops the container starting.
 :::

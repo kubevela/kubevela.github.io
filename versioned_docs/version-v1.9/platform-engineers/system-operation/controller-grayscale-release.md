@@ -12,97 +12,25 @@ To help system operators overcome such difficulties, KubeVela provide **controll
 
 ### Practical Use
 
-Let's say you already have a controller at version `v1.6.4`. Now you want to upgrade to `v1.7.0-beta.1`. To use the controller grayscale release, you can follow the below actions.
+Let's say you already have a controller at version `v1.8.2`. Now you want to upgrade to `v1.9.15`. To use the controller grayscale release, you can follow the below actions.
 
-1. Deploy a new controller using the version `v1.7.0-beta.1` (This can be achived by duplicate the vela-core deploy in your cluster as shown below). Add `--ignore-app-without-controller-version` to the args. This will let the controller only be able to handle applications with annotation `app.oam.dev/controller-version-require=v1.7.0-beta.1`.
+1. Deploy a new controller using the version `v1.9.15` (This can be achived by duplicate the vela-core deploy in your cluster as shown below). Add `--ignore-app-without-controller-version` to the args. This will let the controller only be able to handle applications with annotation `app.oam.dev/controller-version-require=v1.9.15`.
 
 :::tip
-To duplicate the deploy of your controller, you can apply a deployment like the follow YAML (if you enable specific feature flags like AuthenticateApplication, it is recommended to copy your existing deployment configuration and modify the name & image field)
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: kubevela-vela-core-canary
-  namespace: vela-system
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app.kubernetes.io/instance: kubevela
-      app.kubernetes.io/name: vela-core-canary
-  template:
-    metadata:
-      annotations:
-        prometheus.io/path: /metrics
-        prometheus.io/port: "8080"
-        prometheus.io/scrape: "true"
-      labels:
-        app.kubernetes.io/instance: kubevela
-        app.kubernetes.io/name: vela-core-canary
-    spec:
-      containers:
-      - args:
-        - --ignore-app-without-controller-version
-        - --metrics-addr=:8080
-        - --enable-leader-election
-        - --use-webhook=true
-        - --webhook-port=9443
-        - --webhook-cert-dir=/etc/k8s-webhook-certs
-        - --optimize-mark-with-prob=0.1
-        - --optimize-disable-component-revision
-        - --health-addr=:9440
-        - --disable-caps=rollout
-        - --system-definition-namespace=vela-system
-        - --application-revision-limit=2
-        - --definition-revision-limit=2
-        - --oam-spec-ver=v0.3
-        - --enable-cluster-gateway
-        - --application-re-sync-period=5m
-        - --concurrent-reconciles=4
-        - --kube-api-qps=100
-        - --kube-api-burst=200
-        - --max-workflow-wait-backoff-time=60
-        - --max-workflow-failed-backoff-time=300
-        - --max-workflow-step-error-retry-times=10
-        image: oamdev/vela-core:v1.7.0-beta.1
-        imagePullPolicy: Always
-        name: kubevela
-        ports:
-        - containerPort: 9443
-          name: webhook-server
-          protocol: TCP
-        - containerPort: 9440
-          name: healthz
-          protocol: TCP
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /readyz
-            port: healthz
-            scheme: HTTP
-          initialDelaySeconds: 30
-          periodSeconds: 5
-          successThreshold: 1
-          timeoutSeconds: 1
-        resources:
-          limits:
-            cpu: 500m
-            memory: 1Gi
-          requests:
-            cpu: 50m
-            memory: 20Mi
-        volumeMounts:
-        - mountPath: /etc/k8s-webhook-certs
-          name: tls-cert-vol
-          readOnly: true
-      serviceAccount: kubevela-vela-core
-      serviceAccountName: kubevela-vela-core
-      volumes:
-      - name: tls-cert-vol
-        secret:
-          defaultMode: 420
-          secretName: kubevela-vela-core-admission
+To duplicate the controller, copy the installed Deployment with a new name, a new pod label, the new image and `--ignore-app-without-controller-version`. Copying keeps every flag and feature gate you installed with. This needs [yq](https://github.com/mikefarah/yq) v4:
+
+```bash
+kubectl get deploy kubevela-vela-core -n vela-system -o yaml | yq '
+  .metadata.name = "kubevela-vela-core-canary" |
+  del(.metadata.uid, .metadata.resourceVersion, .metadata.creationTimestamp, .metadata.generation, .metadata.annotations, .status) |
+  .spec.replicas = 1 |
+  .spec.selector.matchLabels."app.kubernetes.io/name" = "vela-core-canary" |
+  .spec.template.metadata.labels."app.kubernetes.io/name" = "vela-core-canary" |
+  .spec.template.spec.containers[0].image = "oamdev/vela-core:v1.9.15" |
+  .spec.template.spec.containers[0].args += ["--ignore-app-without-controller-version"]' | kubectl apply -f -
 ```
+
+The new `app.kubernetes.io/name` label keeps the canary's pods out of the main Deployment's selector and out of the webhook Service. Its leader-election lease is separate, because `--ignore-app-without-controller-version` adds the version to the lease name.
 :::
 
 2. After setting up two controllers, you could check it out through CLI commands like 
@@ -111,12 +39,12 @@ kubectl get deployment -n vela-system -owide
 ```
 ```
 NAME                        READY   UP-TO-DATE   AVAILABLE   AGE    CONTAINERS                           IMAGES                                  SELECTOR
-kubevela-cluster-gateway    1/1     1            1           4d2h   kubevela-vela-core-cluster-gateway   oamdev/cluster-gateway:v1.7.0-alpha.3   app.kubernetes.io/instance=kubevela-cluster-gateway,app.kubernetes.io/name=vela-core-cluster-gateway
-kubevela-vela-core          1/1     1            1           4d2h   kubevela                             oamdev/vela-core:v1.6.4                 app.kubernetes.io/instance=kubevela,app.kubernetes.io/name=vela-core
-kubevela-vela-core-canary   1/1     1            1           63m    kubevela                             oamdev/vela-core:v1.7.0-beta.1          app.kubernetes.io/instance=kubevela,app.kubernetes.io/name=vela-core-canary
+kubevela-cluster-gateway    1/1     1            1           4d2h   kubevela-vela-core-cluster-gateway   oamdev/cluster-gateway:v1.9.0-alpha.2   app.kubernetes.io/instance=kubevela-cluster-gateway,app.kubernetes.io/name=vela-core-cluster-gateway
+kubevela-vela-core          1/1     1            1           4d2h   kubevela                             oamdev/vela-core:v1.8.2                 app.kubernetes.io/instance=kubevela,app.kubernetes.io/name=vela-core
+kubevela-vela-core-canary   1/1     1            1           63m    kubevela                             oamdev/vela-core:v1.9.15          app.kubernetes.io/instance=kubevela,app.kubernetes.io/name=vela-core-canary
 ```
 
-3. Choose one application and add annotation `app.oam.dev/controller-version-require: v1.7.0-beta.1` to it. The application now will be handled by the new controller.
+3. Choose one application and add annotation `app.oam.dev/controller-version-require: v1.9.15` to it. The application now will be handled by the new controller.
 
 :::tip
 You can also deploy new applications with the annotation mentioned above, like
@@ -126,7 +54,7 @@ kind: Application
 metadata:
   name: test
   annotations:
-    app.oam.dev/controller-version-require: v1.7.0-beta.1
+    app.oam.dev/controller-version-require: v1.9.15
 spec:
   components:
   - type: webservice

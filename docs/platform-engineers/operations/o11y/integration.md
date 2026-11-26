@@ -2,71 +2,103 @@
 title: Cloud Service Integration
 ---
 
-Sometimes, you might already have Prometheus & Grafana instances. They might be built by other tools, or come from cloud providers. Follow the below guide to integrate with existing systems.
+You might already have Prometheus or Grafana instances, built by other tools or run by a cloud provider. This page connects them to KubeVela's observability addons.
+
+The definitions and config templates used here come from the `o11y-definitions` addon, which the observability addons install. Make sure your Grafana access is in place first: `kubectl get grafana default` should list it.
 
 ## Integrate Prometheus
 
-If you already have external prometheus service and you want to connect it to Grafana (established by vela addon), you can create a GrafanaDatasource to register it through KubeVela application.
+To add an existing Prometheus server to the Grafana that the `grafana` addon installed, register it as a Grafana datasource.
+
+### With basic auth, through a config
+
+Store the server's address and credentials as a `prometheus-server` config. Configs are kept in Secrets in `vela-system`, so the password never sits in an Application:
+
+```shell
+vela config create my-prometheus -t prometheus-server url=<my-prometheus url> auth.username=<user> auth.password=<password>
+```
+
+Then install a datasource for every `prometheus-server` config with the `install-datasource-from-config` step:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: register-prometheus
+  namespace: vela-system
 spec:
-  components:
-    - type: grafana-datasource
-      name: my-prometheus
-      properties:
-        access: proxy
-        basicAuth: false
-        isDefault: false
-        name: MyPrometheus
-        readOnly: true
-        withCredentials: true
-        jsonData:
-          httpHeaderName1: Authorization
-          tlsSkipVerify: true
-        secureJsonFields:
-          httpHeaderValue1: <token of your prometheus access>
-        type: prometheus
-        url: <my-prometheus url>
+  components: []
+  workflow:
+    steps:
+      - name: install-datasources
+        type: install-datasource-from-config
+        properties:
+          type: prometheus-server
 ```
 
-For example, if you are using the Prometheus service on Alibaba Cloud (ARMS), you can go to the Prometheus setting page and find the access url & access token.
+The `grafana` addon runs the same step when it is enabled, so re-enabling the addon also picks up new configs.
 
-![arms-prometheus](../../../resources/arms-prometheus.jpg)
+### With a bearer token
 
-> You need to ensure your grafana access is already available. You can run `kubectl get grafana default` and see if it exists.
-
-## Integrate Grafana
-
-If you already have existing Grafana, similar to Prometheus integration, you can create a Grafana access through KubeVela application.
+There is no config template for a token, so the token goes in the Application, as part of the datasource's JSON model in `data`. The `grafana-datasource` component type comes from the `o11y-definitions` addon, which the `grafana` addon enables:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: register-grafana
+  name: register-prometheus
+  namespace: vela-system
 spec:
   components:
-    - type: grafana-access
-      name: my-grafana
+    - type: grafana-datasource
+      name: my-prometheus
       properties:
-        name: my-grafana
-        endpoint: <my-grafana url>
-        token: <access token>
+        uid: my-prometheus
+        data: |
+          {
+            "name": "MyPrometheus",
+            "type": "prometheus",
+            "access": "proxy",
+            "url": "<my-prometheus url>",
+            "jsonData": {
+              "httpHeaderName1": "Authorization",
+              "tlsSkipVerify": true
+            },
+            "secureJsonData": {
+              "httpHeaderValue1": "Bearer <token of your prometheus access>"
+            }
+          }
 ```
 
-To get your grafana access, you can go into your Grafana instance and configure API keys.
+`uid` names the datasource in Grafana, and `data` is the [Grafana datasource model](https://grafana.com/docs/grafana/latest/developers/http_api/data_source/) as a JSON string.
+
+:::caution
+The token is stored in the Application and in every ApplicationRevision, so anyone who can read Applications in that namespace can read it. Keep the Application in a namespace only administrators can read, such as `vela-system`.
+:::
+
+For example, if you are using the Prometheus service on Alibaba Cloud (ARMS), you can find the access URL and access token on the Prometheus settings page.
+
+![arms-prometheus](../../../resources/arms-prometheus.jpg)
+
+## Integrate Grafana
+
+To manage an existing Grafana through KubeVela, create a `grafana` config with its endpoint and an API token:
+
+```shell
+vela config create my-grafana -t grafana endpoint=<my-grafana url> auth.token=<access token>
+```
+
+The `grafana` config template (from `o11y-definitions`) creates a Grafana object for that instance, and keeps the token out of an Application and its revisions. For a username and password instead, set `auth.username` and `auth.password`.
+
+To get a token, go into your Grafana instance and configure API keys.
 
 ![grafana-apikeys](../../../resources/grafana-apikeys.jpg)
 
-Then copy the token into your grafana registration configuration.
+Then copy the token into the command above.
 
 ![grafana-added-apikeys](../../../resources/grafana-added-apikeys.jpg)
 
-After the application is successfully dispatched, you can check the registration by running the following command.
+Check the registration:
 
 ```shell
 kubectl get grafana
@@ -77,7 +109,7 @@ default      http://grafana.o11y-system:3000                               Basic
 my-grafana   https://grafana-rngwzwnsuvl4s9p66m.grafana.aliyuncs.com:80/   BearerToken
 ```
 
-Now you can manage your dashboard and datasource on your grafana instance through the native Kubernetes API as well.
+Now you can manage the dashboards and datasources of that Grafana through the Kubernetes API as well.
 
 ```shell
 # show all the dashboard you have
@@ -88,12 +120,8 @@ kubectl get grafanadashboard -l grafana=my-grafana
 kubectl get grafanadatasource -l grafana=my-grafana
 ```
 
-For more details, you can refer to [vela-prism](https://github.com/kubevela/prism#grafana-related-apis).
-
-## Integrate through KubeVela Config Management
-
-It is also possible to make integrations through KubeVela's configuration management system, no matter you are using CLI or VelaUX.
+For more details, see [vela-prism](https://github.com/kubevela/prism#grafana-related-apis).
 
 ## Integrate Other Tools or Systems
 
-There are a wide range of community tools or eco-systems that users can leverage for building their observability system, such as prometheus-operator or DataDog. By far, KubeVela does not have existing best practices for those integration. We may integrate with those popular projects through KubeVela addons in the future. We are also welcome to community contributions for broader explorations and more connections.
+For prometheus-operator, Datadog and others, use their own install, and point the annotations of the `prometheus-scrape` trait (from the `prometheus-server` addon) at them.
