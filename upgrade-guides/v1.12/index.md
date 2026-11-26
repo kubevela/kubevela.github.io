@@ -19,6 +19,55 @@ Read this page through before you start: a few steps have to happen **before** `
 some changes only show up on the first edit of each Application afterwards. As with any upgrade,
 rehearse it on a copy of your cluster first.
 
+## Check your cluster first
+
+`hack/preupgrade-check-1.12.sh`, in the [kubevela repository](https://github.com/kubevela/kubevela),
+reads your v1.11 cluster and lists what v1.12 would refuse or treat differently, each with the
+object, the problem, the fix and the section of this page that covers it. It only reads: `kubectl get`
+and `list`, `helm get values` and `helm list`. Run it before you upgrade, and again after you fix what
+it finds:
+
+```shell
+curl -fsSLO https://raw.githubusercontent.com/kubevela/kubevela/master/hack/preupgrade-check-1.12.sh
+bash preupgrade-check-1.12.sh
+```
+
+It needs `kubectl` pointed at the cluster and `jq`. With `helm` installed it also reads the release's
+values, and judges what v1.12 will do with them: the feature gates, `controllerArgs`,
+`workflow.http.maxTimeout`, `workflow.httpDeny` and `definitionRestrictions`, each falling back to the
+v1.12 default. Upgrade with that same values file. Without `helm` it uses the gates the controller runs
+with now. It takes `--release` and `--namespace` (default `kubevela` in `vela-system`), `--json` for
+machine-readable output, `-q` for the summary line alone and `-v` to list every check. It exits `0`
+when it finds no errors, `1` when it does, and `2` when it cannot run.
+
+The HTTP check reads the deny list ConfigMaps the controller reads, and the host of a `webhook` or
+`notification` URL kept in a Secret (only the host, never the rest of the value; a Secret it may not
+read is listed as unchecked). `--resolve` also looks hostnames up and checks their addresses. It
+resolves them from your machine, not from the cluster, so a name that only the cluster's DNS knows is
+not resolved.
+
+| Level | What it finds |
+| --- | --- |
+| error | Applications whose traits [conflict](#trait-conflicts), including through a pinned `type@vN` revision |
+| error | Release values that pin `image.tag` or the cluster-gateway image tag |
+| error | `helmchart` `valuesFrom` and chart credentials, config steps and Terraform module SSH keys outside the namespace v1.12 reads them from |
+| error | `request`, `webhook` and `notification` steps calling addresses the HTTP guard refuses, or with a timeout it refuses |
+| error | `vela-cli` steps outside the namespaces `definitionRestrictions` allows (`vela-system` by default) |
+| error | Global policies outside `vela-system`, and `policy.oam.dev/skip-global`, with `enableGlobalPolicies` and `enableApplicationScopedPolicies` on |
+| warn | `resource` traits that set only `cpu` or only `memory`, which v1.11 ignored and v1.12 applies |
+| warn | v1.11 [configs and templates](#config-templates-and-configs) that need RBAC, a new home or a Nacos mark |
+| warn | Applications using a definition whose `definition.oam.dev/restrict-namespaces` annotation or `definitionRestrictions` entry leaves out their namespace, and definitions whose annotation is not a valid pattern |
+| warn | Anything above that your v1.11 release already refuses, because the change was backported to it (v1.11.1 or v1.11.2) |
+| info | The CRDs to apply, `--reuse-values`, cert-manager, Argo CD, the images to mirror, and the custom step definitions to [vet](#2-check-applications-and-step-definitions-against-the-new-admission-rules) |
+
+An error is something that breaks on v1.12: an update it refuses, a step that fails, a policy that
+stops applying. A warning keeps working but behaves differently, or is already broken on the version
+you run, with the same fix. Info is worth knowing on any cluster.
+
+The check reads what it can see statically. It does not compile definitions, render Applications or
+read Secret values, so it cannot tell you which built-in definition changes restart a workload, or
+what a step returns when it runs. Work through the rest of this page as well.
+
 ## Before you upgrade
 
 Do these in order.
