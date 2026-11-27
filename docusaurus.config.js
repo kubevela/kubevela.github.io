@@ -101,6 +101,7 @@ const config = {
             {to: 'addons/getting-started/introduction', activeBaseRegex: '^(/zh)?/addons', html: sectionItem('addons', 'Addons')},
             {to: 'workflow/getting-started/introduction', activeBaseRegex: '^(/zh)?/workflow', html: sectionItem('workflow', 'Vela Workflow')},
             {to: 'cluster-gateway/getting-started/introduction', activeBaseRegex: '^(/zh)?/cluster-gateway', html: sectionItem('cluster-gateway', 'Cluster Gateway')},
+            {to: 'prism/getting-started/introduction', activeBaseRegex: '^(/zh)?/prism', html: sectionItem('prism', 'Prism')},
             {to: 'terraform/getting-started/introduction', activeBaseRegex: '^(/zh)?/terraform', html: sectionItem('terraform', 'Terraform Controller')},
           ],
         },
@@ -439,6 +440,19 @@ const config = {
         path: 'cluster-gateway',
         routeBasePath: 'cluster-gateway',
         sidebarPath: require.resolve('./sidebar-cluster-gateway.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        // Prism, KubeVela's aggregated API extensions, describing the version the vela-prism addon runs. Not versioned.
+        id: 'prism',
+        path: 'prism',
+        routeBasePath: 'prism',
+        sidebarPath: require.resolve('./sidebar-prism.js'),
         editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
         showLastUpdateAuthor: true,
         showLastUpdateTime: true,

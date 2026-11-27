@@ -33,6 +33,8 @@ const ICONS = {
       '<circle cx="4.5" cy="19" r="1.8"/><circle cx="19.5" cy="19" r="1.8"/>' +
       '<path d="M6 6.4l4.1 3.8M18 6.4l-4.1 3.8M6 17.6l4.1-3.8M18 17.6l-4.1-3.8"/>',
   ),
+  // A prism splitting one beam into several: one API server, several APIs.
+  prism: line(blue('<path d="M12 3.5 21 19.5H3Z"/>') + '<path d="M1.5 13.5 7.5 12M15.8 11.6 22.5 9.5M16.6 13.4 22.5 14"/>'),
 };
 
 // The menu item's contents: the icon, then the label.

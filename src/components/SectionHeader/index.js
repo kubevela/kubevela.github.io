@@ -12,6 +12,7 @@ const SECTIONS = {
   terraform: {label: 'Terraform Controller', home: '/terraform/getting-started/introduction'},
   addons: {label: 'Addons', home: '/addons/getting-started/introduction'},
   'cluster-gateway': {label: 'Cluster Gateway', home: '/cluster-gateway/getting-started/introduction'},
+  prism: {label: 'Prism', home: '/prism/getting-started/introduction'},
 };
 
 export default function SectionHeader() {
