@@ -8,7 +8,7 @@ KubeVela releases don't ship addons. Each addon has its own version in the catal
 
 | KubeVela | Verified addons it can enable |
 | --- | --- |
-| v1.12 | All but `model-serving` (needs Kubernetes earlier than 1.22). `velaux` is v1.9.5; for the VelaUX 1.12 prereleases see the [VelaUX docs](/velaux/getting-started/introduction). |
+| v1.12 | All but `model-serving` (needs Kubernetes earlier than 1.22). `velaux` is v1.9.5; for the unreleased VelaUX 1.12 line see [VelaUX Versions](/velaux/reference/versions#velaux-112-on-older-kubevela-unreleased). |
 | v1.11 | All but `model-serving`. |
 | v1.10, v1.9 | All but `model-serving` and `cloudshell` (needs v1.11 or later). |
 
@@ -69,5 +69,5 @@ The experimental registry's addons and their constraints are in each one's `meta
 ## Upgrade notes
 
 - **Lists in addon CUE.** Addon CUE is compiled as plain CUE v0.14, without the compatibility layer definitions go through, so list arithmetic (`a + b`) fails when the addon is enabled. `grafana`, `loki` and `prometheus-server` were fixed for this in the catalog; an addon of your own that joins lists with `+` needs `list.Concat`. See [Addon Application in CUE or YAML](../developer/addon-application.md).
-- **Registry address.** The catalog is published at `https://kubevela.github.io/catalog/official`, which KubeVela has registered by default since v1.9. If `vela addon registry list` still shows `https://addons.kubevela.net` for `KubeVela`, repoint it with `vela addon registry update KubeVela --type helm --endpoint=https://kubevela.github.io/catalog/official`.
+- **Registry address.** The catalog is published at `https://kubevela.github.io/catalog/official`, which KubeVela has registered by default since v1.9.1. If `vela addon registry list` still shows `https://addons.kubevela.net` for `KubeVela`, repoint it with `vela addon registry update KubeVela --type helm --endpoint=https://kubevela.github.io/catalog/official`.
 - **Addons that can't install.** `rollout` and `traefik` fetch their charts from `charts.kubevela.net`, which no longer exists. Use `kruise-rollout` and `ingress-nginx` instead.

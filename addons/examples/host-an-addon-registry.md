@@ -47,7 +47,7 @@ greeter                  	my-registry	An HTTP greeter, and the greeter component
 
 ## Enable from the registry
 
-Prefix the name with the registry, so `vela` doesn't look in the community catalog. Run it from a directory with no `greeter/` in it: when a directory of that name exists, `vela addon enable greeter` and `vela addon upgrade greeter` use the directory instead of a registry.
+Prefix the name with the registry, so `vela` looks neither in the community catalog nor in the `greeter/` directory beside you: given a bare `greeter`, `vela addon enable` and `vela addon upgrade` use a directory of that name ahead of any registry.
 
 ```shell
 vela addon enable my-registry/greeter message="Hello from my registry"
@@ -86,7 +86,7 @@ greeter                  	my-registry	An HTTP greeter, and the greeter component
 Upgrade to it. The parameters you enabled it with carry over:
 
 ```shell
-vela addon upgrade greeter --version 0.2.0
+vela addon upgrade my-registry/greeter --version 0.2.0
 vela addon status greeter
 kubectl run curl -n vela-system --rm -i --restart=Never --image=curlimages/curl:8.11.1 -- -s http://greeter:8080
 ```

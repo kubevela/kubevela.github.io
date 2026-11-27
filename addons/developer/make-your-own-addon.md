@@ -112,7 +112,7 @@ Base the addon on Kubernetes objects at remote URLs, such as CRDs. The scaffold 
 vela addon init my-addon --url https://example.com/crd1.yaml --url https://example.com/crd2.yaml
 ```
 
-Write the addon's definitions in Go with [defkit](/docs/platform-engineers/defkit/overview) instead of CUE. The scaffold adds a `godef/` Go module, with a stub for each definition you name:
+Write the addon's definitions in Go with [defkit](/docs/next/platform-engineers/defkit/overview) instead of CUE. The scaffold adds a `godef/` Go module, with a stub for each definition you name:
 
 ```shell
 vela addon init my-addon --godef --components api --traits scaler

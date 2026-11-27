@@ -40,7 +40,7 @@ my-addon/
 | `schemas/` | no | UI schemas for the addon's definitions, read by VelaUX. See [UI schemas](#ui-schemas). |
 | `godef/` | no | Definitions written in Go with defkit. See [Go definitions](#go-definitions-godef). |
 | `crates/` | no | Crates the addon installs. See [Crates](#crates-crates). |
-| `config-templates/` | no | [Config templates](/docs/reference/config-template). |
+| `config-templates/` | no | [Config templates](/docs/next/reference/config-template). |
 | `views/` | no | [VelaQL views](/docs/platform-engineers/system-operation/velaql). |
 
 `vela addon init <name>` creates the required files and a sample of most of the rest.
@@ -132,7 +132,7 @@ A file with any other name is installed but never read. That includes the `schem
 
 ## Go definitions (`godef/`)
 
-`godef/` is a Go module of definitions written with [defkit](/docs/platform-engineers/defkit/overview), instead of or beside the CUE ones in `definitions/`. It holds `module.yaml`, `go.mod` and the Go sources.
+`godef/` is a Go module of definitions written with [defkit](/docs/next/platform-engineers/defkit/overview), instead of or beside the CUE ones in `definitions/`. It holds `module.yaml`, `go.mod` and the Go sources.
 
 When you enable the addon from a local directory, the CLI compiles the Go definitions to CUE and installs them with the rest. A Go definition with the same name as one in `definitions/` is refused, unless you pass `--override-definitions`, in which case the Go one wins.
 
@@ -167,7 +167,7 @@ The [example addon](https://github.com/kubevela/catalog/tree/master/experimental
 
 ## Config templates (`config-templates/`)
 
-`config-templates/` holds [config templates](/docs/reference/config-template), installed when the addon is enabled.
+`config-templates/` holds [config templates](/docs/next/reference/config-template), installed when the addon is enabled.
 
 ## Views (`views/`)
 

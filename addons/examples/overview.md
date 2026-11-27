@@ -17,8 +17,8 @@ The [Quick Start](../getting-started/quick-start.md) is the shortest of them: en
 To run them on a fresh cluster of your own:
 
 ```shell
-k3d cluster create addons-demo --k3s-arg "--disable=traefik@server:0"
+k3d cluster create addons-demo --k3s-arg "--disable=traefik@server:0" -p "8080:80@loadbalancer" -p "8443:443@loadbalancer"
 vela install --yes
 ```
 
-k3s ships Traefik as its ingress controller; turning it off leaves the cluster's load balancer port free for ingress-nginx in the examples that use it.
+k3s ships Traefik as its ingress controller; turning it off leaves the cluster's load balancer port free for ingress-nginx in the examples that use it. The two port mappings let you reach that load balancer from your machine, on 8080 for HTTP and 8443 for HTTPS.
