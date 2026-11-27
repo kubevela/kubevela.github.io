@@ -104,8 +104,11 @@ these before your next spec change:
 - Applications with two traits that conflict (one lists the other in `conflictsWith`, directly or
   through `extends`): remove one of the pair. See [Trait conflicts](#trait-conflicts).
 - Custom WorkflowStepDefinitions: run `vela def vet` with the v1.12 CLI and fix any that do not
-  compile. v1.11 marked such a step `Succeeded` **without running it**; v1.12 refuses it at
-  admission and fails it at run time. Re-run the workflows that use them on a staging cluster.
+  compile. v1.12 refuses a template that does not compile at admission, such as one with an
+  undefined reference (v1.11 admitted it, and the step failed at run time). A template that
+  compiles but names an action its package does not have, such as `op.#Nope`, is still admitted,
+  and its step still shows `succeeded` **without running**. Re-run the workflows that use your
+  custom steps on a staging cluster, and check that each step really did its work.
 
 ### 3. Upgrade the chart
 
@@ -119,6 +122,11 @@ With the values of v1.11.2 it renders but keeps the v1.11.2 image values, so the
 not upgraded. Pass your own values file, or use `--reset-then-reuse-values` (Helm 3.14 and
 later), and make sure your values don't pin `image.tag`.
 :::
+
+Helm v4 can upgrade with server-side apply. When it does, and someone edited an object the chart
+manages by hand (for example, raised the webhook's `timeoutSeconds` with `kubectl patch`), the
+upgrade stops with `conflict occurred while applying object`. Add `--force-conflicts` to take it
+through, and know that the chart's value then overwrites the hand edit.
 
 If your values pin `image.tag`, the pin survives the upgrade and the controller stays on v1.11.
 A pinned `image.repository` (a mirror) survives too, so push the v1.12 image to it first. Drop the
@@ -167,8 +175,10 @@ with your own definition, or with `extends`.
 
 - **Every workload is applied once.** The v1.12 controller adds `owner.oam.dev/*` labels and a new
   render hash to every workload it manages, on managed clusters too. Each workload's `generation`
-  goes up by one with an identical pod template, so nothing restarts, but it is an apply wave the
-  size of your fleet, and drift tools watching `generation` will report a change everywhere.
+  goes up, but with an identical pod template its pods are not replaced. It is still an apply wave
+  the size of your fleet, and drift tools watching `generation` will report a change everywhere.
+  Pods are replaced only where a built-in definition now renders a different pod template; see
+  [Changes to built-in definitions](#changes-to-built-in-definitions).
 - **Helm components on managed clusters move themselves.** v1.11 installed a `helmchart` component
   placed on a managed cluster on the hub as well, and dispatched its objects to the managed cluster
   without Helm's ownership metadata. On the first workflow run after the upgrade, v1.12 adopts those
