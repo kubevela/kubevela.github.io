@@ -1100,28 +1100,26 @@ summary:focus-visible,
   border-left-color: var(--kv-line);
 }
 
-// The version dropdown lists KubeVela's versions, so it has no meaning on an unversioned section.
-html.plugin-id-addons .navbar__item:has(> .kv-version) {
-  display: none;
-}
-html.plugin-id-terraform .navbar__item:has(> .kv-version) {
-  display: none;
-}
-html.plugin-id-workflow .navbar__item:has(> .kv-version) {
-  display: none;
-}
-html.plugin-id-velaux .navbar__item:has(> .kv-version) {
-  display: none;
-}
-html.plugin-id-cluster-gateway .navbar__item:has(> .kv-version) {
-  display: none;
-}
-html.plugin-id-prism .navbar__item:has(> .kv-version) {
-  display: none;
+// The version dropdown lists KubeVela's versions, so it has no meaning on an unversioned section. Each rule
+// names the navbar item (desktop) and the mobile menu's list item, since the dropdown's class sits on the
+// link inside either.
+html.plugin-id-addons,
+html.plugin-id-terraform,
+html.plugin-id-workflow,
+html.plugin-id-velaux,
+html.plugin-id-cluster-gateway,
+html.plugin-id-prism {
+  .navbar__item:has(> .kv-version),
+  .menu__list-item:has(> .menu__list-item-collapsible > .kv-version) {
+    display: none;
+  }
 }
 // Workflow has versions of its own, which mean nothing outside its section.
-html:not(.plugin-id-workflow) .workflow-version-dropdown {
-  display: none;
+html:not(.plugin-id-workflow) {
+  .navbar__item:has(> .workflow-version-dropdown),
+  .menu__list-item:has(> .menu__list-item-collapsible > .workflow-version-dropdown) {
+    display: none;
+  }
 }
 
 // Section icons in the Documentation menu (section-icons.js).

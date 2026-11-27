@@ -19,13 +19,13 @@ body:
     id: section
     attributes:
       label: Docs section
-      description: Which set of docs the page is in, for example `default` for the main docs or `videos`.
+      description: Which set of docs the page is in: `default` for the KubeVela docs, or `workflow`, `velaux`, `addons`, `terraform`, `cluster-gateway`, `prism` or `videos`.
       placeholder: default
   - type: input
     id: version
     attributes:
       label: Docs version
-      description: The version picked in the docs version menu, for example `v1.11` or `Next`.
+      description: The version of the section the page is in, for example `v1.11`, `Next` or `Workflow 0.7`. Leave it empty for a section with no versions (Addons, Terraform, Cluster Gateway, Prism, Videos).
       placeholder: v1.11
   - type: dropdown
     id: category

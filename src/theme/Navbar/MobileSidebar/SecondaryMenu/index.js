@@ -4,7 +4,7 @@ import {useNavbarSecondaryMenu} from '@docusaurus/theme-common/internal';
 import Translate from '@docusaurus/Translate';
 import SectionHeader from '@site/src/components/SectionHeader';
 
-// Ejected from theme-classic 3.9.2 to put the docs section header between the back button and the docs sidebar,
+// Ejected from theme-classic 3.10.2 to put the docs section header between the back button and the docs sidebar,
 // which wrapping can't reach: the sidebar arrives as opaque menu content.
 function SecondaryMenuBackButton(props) {
   return (

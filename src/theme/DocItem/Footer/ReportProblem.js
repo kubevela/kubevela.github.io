@@ -2,7 +2,7 @@ import React, {useEffect, useId, useRef, useState} from 'react';
 import clsx from 'clsx';
 import Translate, {translate} from '@docusaurus/Translate';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import {useDoc, useDocsVersion} from '@docusaurus/plugin-content-docs/client';
+import {useDoc, useDocsVersion, useVersions} from '@docusaurus/plugin-content-docs/client';
 import {issueUrl} from './issueUrl';
 import styles from './styles.module.css';
 
@@ -57,6 +57,7 @@ function IconFlag(props) {
 export default function ReportProblem() {
   const {metadata} = useDoc();
   const version = useDocsVersion();
+  const versions = useVersions(version.pluginId);
   const {siteConfig} = useDocusaurusContext();
   const options = categories();
   const [open, setOpen] = useState(false);
@@ -77,8 +78,14 @@ export default function ReportProblem() {
     toggleRef.current?.focus();
   };
 
-  const versionName =
-    version.label === version.version ? version.version : `${version.label} (${version.version})`;
+  // A section with no versions of its own (only an unlabelled `current`) reports none, so the issue is not read as
+  // KubeVela's Next.
+  const unversioned = versions.length === 1 && version.version === 'current' && version.label === 'Next';
+  const versionName = unversioned
+    ? ''
+    : version.label === version.version
+      ? version.version
+      : `${version.label} (${version.version})`;
   const href = issueUrl({
     title: metadata.title,
     // The site serves every page with a trailing slash (trailingSlash: true); permalinks leave it off.
