@@ -59,7 +59,7 @@ module.exports = {
       type: 'category',
       label: 'Reference',
       link: {type: 'generated-index', slug: '/reference'},
-      items: ['reference/rest-api', 'reference/user-improvement-plan'],
+      items: ['reference/rest-api', 'reference/versions', 'reference/user-improvement-plan'],
     },
   ],
 };
