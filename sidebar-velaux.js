@@ -45,6 +45,18 @@ module.exports = {
     },
     {
       type: 'category',
+      label: 'Examples',
+      link: {type: 'generated-index', slug: '/examples'},
+      items: [
+        'examples/deploy-with-the-api',
+        'examples/sync-cli-application',
+        'examples/webhook-trigger',
+        'examples/project-member',
+        'examples/ui-schema',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Operate',
       link: {type: 'generated-index', slug: '/operate'},
       items: ['operate/install-options', 'operate/upgrade'],

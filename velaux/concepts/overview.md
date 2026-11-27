@@ -36,6 +36,6 @@ Everything else about a VelaUX application works as it does in KubeVela.
 
 ## Applications from outside VelaUX
 
-VelaUX watches every Application in the cluster, not only the ones it created. An Application you apply with `vela up` or `kubectl apply` is synced into VelaUX: it lands in the `default` project, in an environment named after its namespace (a namespace already bound to an environment keeps that environment), with a delivery target for each cluster and namespace it deploys to. Addon Applications in `vela-system` land in a project of their own, shown as **System**.
+VelaUX watches every Application in the cluster, not only the ones it created. An Application you apply with `vela up` or `kubectl apply` is synced into VelaUX: it lands in the `default` project, in an environment named `syc-<namespace>` that VelaUX creates for its namespace (a namespace that already has an environment uses that one), with a delivery target for each cluster and namespace it deploys to. Deleting the Application removes it from VelaUX again; the environment stays. Addon Applications in `vela-system` land in a project of their own, shown as **System**.
 
 A synced application lists its components, revisions and workflow in VelaUX like any other. [Sync an application from the CLI](../examples/sync-cli-application.md) shows it end to end.
