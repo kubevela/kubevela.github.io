@@ -28,7 +28,7 @@ kubectl wait --for=condition=Available apiservice/v1alpha1.cluster.core.oam.dev 
 
 ## 1.9.2 to 1.10.0-alpha.1
 
-KubeVela 1.11 ships 1.9.2 and KubeVela 1.12 ships 1.10.0-alpha.1. The API, the cluster Secret format and the gateway's own flags are the same in both. 1.10.0-alpha.1 builds the server on `k8s.io/apiserver` directly, in place of the `apiserver-runtime` library 1.9.2 used, and moves to Kubernetes 0.37 and Go 1.27. Three things change if you set the gateway's arguments yourself:
+KubeVela 1.10.10 and 1.11.2 ship 1.9.2, and KubeVela 1.12 ships 1.10.0-alpha.1. Earlier 1.10 and 1.11 patches (1.10.0 to 1.10.9, 1.11.0, 1.11.1) run 1.9.0-alpha.2; from there, the [1.9.0-alpha.2 to 1.9.2 notes](../reference/versions.md#upgrade-notes) apply as well, and ask nothing more of you. The API, the cluster Secret format and the gateway's own flags are the same in both. 1.10.0-alpha.1 builds the server on `k8s.io/apiserver` directly, in place of the `apiserver-runtime` library 1.9.2 used, and moves to Kubernetes 0.37 and Go 1.27. Three things change if you set the gateway's arguments yourself:
 
 * The etcd flags (`--etcd-servers` and the rest) are gone; the gateway never used etcd. A Deployment that still passes one stops at startup with `unknown flag`.
 * `--feature-gates` takes `Gate=value` pairs only. 1.9.2 also took the `component:Gate=value` form, which 1.10.0-alpha.1 rejects as an unrecognized gate.

@@ -3,7 +3,7 @@ title: Register Clusters
 description: Register a member cluster with a ServiceAccount token, a client certificate or a credential command, check it through the proxy, and remove it.
 ---
 
-A cluster is registered with Cluster Gateway by creating a Secret in the namespace the gateway reads (`--secret-namespace`). The Secret's name is the cluster's name. There is nothing else to apply: the gateway reads the Secret on every request, so a new Secret works straight away and a deleted one stops working straight away.
+A cluster is registered with Cluster Gateway by creating a Secret in the namespace the gateway reads (`--secret-namespace`). The Secret's name is the cluster's name. There is nothing else to apply: the gateway watches the Secret namespace, so a new Secret works as soon as it is created and a deleted one stops at once.
 
 | Installed with | Secret namespace |
 | --- | --- |

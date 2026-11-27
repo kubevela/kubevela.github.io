@@ -27,7 +27,7 @@ spec:
         caBundle: <base64 CA>   # or insecure: true, when the Secret has no ca.crt
         proxy-url: socks5://proxy:1080
     credential:
-      type: ServiceAccountToken # or X509Certificate
+      type: ServiceAccountToken # or X509Certificate, or Dynamic
       serviceAccountToken: <token>
       x509:
         certificate: <base64>
@@ -43,7 +43,7 @@ status:
 | `spec.access.endpoint.const.address` | `endpoint` |
 | `spec.access.endpoint.const.caBundle`, `.insecure` | `ca.crt` or `ca`; `insecure: true` when neither is there. |
 | `spec.access.endpoint.const.proxy-url` | `proxy-url` |
-| `spec.access.credential.type` | The `cluster.core.oam.dev/cluster-credential-type` label. A `Dynamic` cluster shows the type of the credential its command printed. |
+| `spec.access.credential.type` | The `cluster.core.oam.dev/cluster-credential-type` label. A `Dynamic` cluster always shows `Dynamic`, whatever its command printed. |
 | `spec.access.credential.serviceAccountToken`, `.x509` | `token`; `tls.crt` and `tls.key`; or the output of `exec` for `Dynamic`. |
 | `status.healthy`, `status.healthyReason` | The `status.cluster.core.oam.dev/healthy` and `healthy-reason` annotations, with `HealthinessCheck` on. |
 
@@ -85,9 +85,9 @@ kubectl get virtualclusters
 | `metadata.name` | The cluster's name. The hub itself is listed as `local`, unless the gateway runs with `--virtual-clutser-with-control-plane=false`. |
 | `spec.alias` | The `cluster.core.oam.dev/cluster-alias` annotation on the Secret. |
 | `spec.credential-type` | The credential type label; `Internal` for `local`, `ManagedCluster` for OCM clusters. |
-| `spec.endpoint` | The Secret's `endpoint`, or the endpoint type (`ClusterProxy`) where the Secret sets one; `-` for `local`. A Secret with neither is left out. |
+| `spec.endpoint` | The Secret's `endpoint`, or the `cluster.core.oam.dev/cluster-endpoint-type` label's value (such as `ClusterProxy`) whenever the Secret has that label; `-` for `local`. A Secret with neither is left out. |
 | `spec.accepted` | Whether the cluster is accepted: always `true` for a Secret, and the hub's acceptance for an OCM `ManagedCluster`. |
-| `metadata.labels` | The Secret's labels, without the gateway's own. |
+| `metadata.labels` | The Secret's labels, without the gateway's own (`cluster.core.oam.dev/*`), plus `cluster.core.oam.dev/control-plane`, `true` only for `local`. |
 
 `list` takes a label selector, so `kubectl get virtualclusters -l region=eu` lists the clusters whose Secret carries `region=eu`.
 
