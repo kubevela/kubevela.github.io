@@ -62,7 +62,7 @@ template: {
 
 - **`kube.#Read`** reads the ConfigMap. Its result is under `$returns`; a ConfigMap that doesn't exist yet leaves `$returns.value` without `data` rather than failing the step.
 - **`builtin.#ConditionalWait`** holds the step while `continue` is false, with `message` shown in the step's status. The engine evaluates the template again after a backoff, so the read runs again each time.
-- **`parameter`** is the step's properties. The engine checks a step against it before running it, so a misspelt property fails the step with `field not allowed` instead of being ignored.
+- **`parameter`** is the step's properties. The step's properties fill it before the step runs. A missing required property, or one of the wrong type, fails the step; a property it doesn't declare, a misspelt one say, is ignored.
 
 Vet it, then install it into `vela-system`, where every namespace can use it:
 

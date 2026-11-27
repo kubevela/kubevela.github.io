@@ -9,7 +9,7 @@ The workflow engine has its own version, separate from KubeVela's. vela-core emb
 
 | KubeVela | Engine in vela-core | Docs |
 | :--- | :--- | :--- |
-| v1.12 (v1.12.0-alpha.2) | v0.8.0-alpha.2 | [0.8](/workflow/next/getting-started/introduction) (this version) |
+| v1.12 (v1.12.0-alpha.3) | v0.8.0-alpha.3 | [0.8](/workflow/next/getting-started/introduction) (this version) |
 | v1.11.2 | v0.7.3 | [0.7](/workflow/getting-started/introduction) |
 | v1.11.1 | v0.7.3 (pre-release commit) | [0.7](/workflow/getting-started/introduction) |
 | v1.11.0 | v0.7.2 | [0.7](/workflow/getting-started/introduction) |
@@ -28,10 +28,10 @@ WorkflowRuns are run by whichever `vela-workflow` controller you installed, what
 
 | Install | Version | Engine |
 | :--- | :--- | :--- |
-| Chart `kubevela/vela-workflow` `0.8.0-alpha.2` | pre-release, needs `--version` or `--devel` | 0.8 |
+| Chart `kubevela/vela-workflow` `0.8.0-alpha.3` | pre-release, needs `--version` or `--devel` | 0.8 |
 | Chart `kubevela/vela-workflow` `0.7.3` | latest release | 0.7 |
 | Chart `kubevela/vela-workflow` `0.6.5` | | 0.6 |
-| Addon `vela-workflow` `v0.7.3` (`vela addon enable vela-workflow`) | what the catalog holds | 0.7 |
+| Addon `vela-workflow` `v0.7.3` (`vela addon enable vela-workflow`) | what the catalog holds; runs the `v0.7.2` image | 0.7, without the HTTP denylist and request limits |
 
 So on KubeVela 1.12 with the addon, an Application's workflow runs 0.8 and a WorkflowRun runs 0.7. A 0.8 feature in a WorkflowRun, such as `forEach` or `$( )` expressions, needs the 0.8 chart: see [Install](../getting-started/install.md).
 
@@ -41,7 +41,7 @@ If you import `github.com/kubevela/workflow` as a Go module, each line moves the
 
 | Engine | Go | `k8s.io/client-go` | controller-runtime |
 | :--- | :--- | :--- | :--- |
-| v0.8.0-alpha.2 | 1.27.1 | v0.37.1 | v0.25.2 |
+| v0.8.0-alpha.3 | 1.27.1 | v0.37.1 | v0.25.2 |
 | v0.7.3 | 1.23.8 | v0.31.10 | v0.19.7 |
 | v0.6.5 | 1.23.8 | v0.31.10 | v0.19.7 |
 
@@ -52,16 +52,16 @@ If you import `github.com/kubevela/workflow` as a Go module, each line moves the
 - **New step fields need the new CRDs.** `forEach` is a new field on the Workflow and WorkflowRun CRDs. `helm upgrade` does not update a chart's CRDs, so apply them yourself, or an older CRD drops the field and a looped step runs once:
 
   ```shell
-  helm show crds kubevela/vela-workflow --version 0.8.0-alpha.2 | kubectl apply --server-side --force-conflicts -f -
+  helm show crds kubevela/vela-workflow --version 0.8.0-alpha.3 | kubectl apply --server-side --force-conflicts -f -
   ```
 
   See [Repeating Steps with forEach](../guides/steps/for-each.md#upgrading) for the same on vela-core.
 - **`$( )` expressions are off by default in a WorkflowRun.** Turn them on with the chart value `workflow.enableCelExpressions=true`, and annotate each WorkflowRun that uses them with `workflowrun.oam.dev/cel-expressions: "true"`.
 - **The built-in step definitions are applied by a hook Job** after the controller is ready, on the `alpine/k8s` image. A cluster that can't pull it needs `builtinDefinitions.job.image` set to a mirror.
 - **The webhook certificates are managed by the controller.** The chart no longer runs the `kube-webhook-certgen` Jobs.
-- **HTTP steps are bounded.** A `request`, `webhook` or `notification` step with a timeout of `0`, a negative one or one over `workflow.http.maxTimeout` (`60s`) fails, as does a response over `workflow.http.maxResponseBytes` (1 MiB), and a step's TLS Secret is read only from the step's namespace. See [Workflow Outbound HTTP Protection](../operate/http-protection.md#upgrade-note).
+- **From 0.7.2 or earlier, HTTP steps are bounded.** Nothing changes here from 0.7.3, which has the same bounds. A `request`, `webhook` or `notification` step with a timeout of `0`, a negative one or one over `workflow.http.maxTimeout` (`60s`) fails, as does a response over `workflow.http.maxResponseBytes` (1 MiB), and a step's TLS Secret is read only from the step's namespace. See [Workflow Outbound HTTP Protection](../operate/http-protection.md#upgrade-note).
 
-The full list is in the [v0.8.0-alpha.1](https://github.com/kubevela/workflow/releases/tag/v0.8.0-alpha.1) and [v0.8.0-alpha.2](https://github.com/kubevela/workflow/releases/tag/v0.8.0-alpha.2) release notes.
+The full list is in the [v0.8.0-alpha.1](https://github.com/kubevela/workflow/releases/tag/v0.8.0-alpha.1), [v0.8.0-alpha.2](https://github.com/kubevela/workflow/releases/tag/v0.8.0-alpha.2) and [v0.8.0-alpha.3](https://github.com/kubevela/workflow/releases/tag/v0.8.0-alpha.3) release notes.
 
 ### 0.6 to 0.7
 

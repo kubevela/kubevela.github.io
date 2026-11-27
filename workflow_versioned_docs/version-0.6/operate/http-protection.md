@@ -147,7 +147,7 @@ The Helm value names differ between the two charts:
 vela install --set featureGates.blockPrivateHTTPAddresses=true
 
 # standalone vela-workflow
-helm upgrade --install workflow kubevela/vela-workflow -n vela-system --create-namespace --version 0.6.5 \
+helm upgrade vela-workflow kubevela/vela-workflow -n vela-system --version 0.6.5 --reuse-values \
   --set workflow.blockPrivateHTTPAddresses=true
 ```
 
@@ -188,16 +188,7 @@ helm upgrade kubevela kubevela/vela-core -n vela-system --version 1.10.10 --rese
 
 ## Install the standalone `vela-workflow` chart
 
-To install only the workflow engine, without `vela-core`:
-
-```shell
-helm repo remove kubevela 2>/dev/null || true
-helm repo add kubevela https://kubevela.github.io/charts
-helm repo update
-helm install workflow kubevela/vela-workflow --namespace vela-system --create-namespace --version 0.6.5
-```
-
-The values in [Chart values](#chart-values) apply to this chart too.
+To install only the workflow engine, without `vela-core`, follow [Install](../getting-started/install.md#install-the-helm-chart). The commands on this page take the release name and namespace used there, `vela-workflow` in `vela-system`. The values in [Chart values](#chart-values) apply to this chart too.
 
 ## Install both charts together
 
@@ -217,7 +208,10 @@ There is no opt-in step. An upgrade to one of these releases turns the protectio
 | Release | Denylist | Loopback block in vela-core | Request limits |
 | ------- | -------- | --------------------------- | -------------- |
 | KubeVela 1.10.10 | yes | yes | yes |
-| `vela-workflow` 0.6.5 | yes | not in this controller | yes |
+| `vela-workflow` chart 0.6.5 | yes | not in this controller | yes |
+| `vela-workflow` addon (labelled v0.7.3, runs the v0.7.2 image) | no | not in this controller | no |
+
+The `vela-workflow` chart gets these protections; the `vela-workflow` addon doesn't. The addon is labelled `v0.7.3` but runs the `oamdev/vela-workflow:v0.7.2` image, which predates the denylist and the request limits, so install the chart for them.
 
 - A step that called a cloud metadata endpoint on purpose now fails with `blocked SSRF target` or `blocked SSRF host`. Search your Applications and WorkflowRuns for `169.254.`, `metadata.google.internal`, `fd00:ec2::254` and `100.100.100.200` before you upgrade. For KubeVela, search for `localhost` and `127.0.0.1` too.
 - You cannot remove a built-in entry. Deleting the default ConfigMap or turning off discovery does not allow metadata destinations.

@@ -42,7 +42,7 @@ With KubeVela installed, the addon installs the same controller:
 vela addon enable vela-workflow
 ```
 
-The addon is at `v0.7.3`, the same engine as this chart.
+The addon is labelled `v0.7.3`, but it runs the `oamdev/vela-workflow:v0.7.2` image, which has neither the HTTP denylist nor the request limits. The chart above gets the [HTTP protections](../operate/http-protection.md); the addon doesn't, so install the chart if your WorkflowRuns make HTTP calls.
 
 ## With KubeVela on the same cluster
 

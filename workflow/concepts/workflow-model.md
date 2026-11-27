@@ -41,15 +41,15 @@ A step of type `step-group` holds `subSteps` instead of `properties`: a group ru
 
 ## Step types
 
-A step type is a `WorkflowStepDefinition`: a CUE template with a `parameter` block for the step's properties and the actions the step takes, such as `kube.#Apply` or `http.#Do`. The engine checks each step's properties against the template's parameters before the step runs, so a misspelt field fails the step rather than being ignored.
+A step type is a `WorkflowStepDefinition`: a CUE template with a `parameter` block for the step's properties and the actions the step takes, such as `kube.#Apply` or `http.#Do`. The step's properties fill the template's `parameter`, an open CUE struct, so a property the template doesn't declare is ignored: a misspelt one leaves its field unset. A missing required property, or one of the wrong type, fails the step.
 
 | Where the types come from | What you get |
 | :--- | :--- |
 | The `vela-workflow` chart or addon | The [built-in step types](../reference/built-in-steps.md) a WorkflowRun can use: `apply-deployment`, `apply-job`, `apply-object`, `read-object`, `request`, `notification`, `suspend`, `step-group` and the rest. |
-| vela-core | The same, plus the types that work on an Application's components, such as `deploy` and `apply-component`. |
+| vela-core | The Application step types, such as `deploy` and `apply-component`, and most of the rest. `apply-app`, `read-app`, `addon-operation`, `chat-gpt` and `apply-job` come only with the chart or addon. |
 | Your platform team | Types of their own, written in CUE: see [Workflow Step Definition](../guides/authoring/step-definition.md). |
 
-The built-in types are installed in `vela-system`. Each type's reference entry says whether it works in an Application, a WorkflowRun or both.
+The built-in types are installed in the release namespace, `vela-system` by default. Each type's reference entry says whether it works in an Application, a WorkflowRun or both.
 
 ## Execution modes
 

@@ -45,7 +45,7 @@ The `release-0.7` and `release-0.6*` branches build with Go 1.23.8.
 
 - **`main`** is where every change lands first.
 - **`release-0.x`** branches carry the releases of each line: `release-0.8` the 0.8 pre-releases, `release-0.7` the 0.7 patches (v0.7.3), `release-0.6-vela-1.10` the 0.6 patches for KubeVela 1.10 (v0.6.5), and `release-0.6` the commits KubeVela 1.9 pins. A change that belongs in one gets a `backport release-0.x` label on its PR, and the backport action opens the cherry-pick PR when the original merges. Leave the label to a maintainer if you're unsure.
-- Tags (`v0.8.0-alpha.2`, `v0.7.3`) publish the image `oamdev/vela-workflow` and the chart to `https://kubevela.github.io/charts`.
+- Tags (`v0.8.0-alpha.3`, `v0.7.3`) publish the image `oamdev/vela-workflow` and the chart to `https://kubevela.github.io/charts`.
 
 ## How a pull request is reviewed and merged
 
@@ -53,7 +53,7 @@ The `release-0.7` and `release-0.6*` branches build with Go 1.23.8.
 2. **Sign-off.** Every commit needs a `Signed-off-by` line (`git commit -s`): the DCO check refuses the PR otherwise.
 3. **Checks.** CI runs unit tests (`make test`), staticcheck, golangci-lint, the e2e suite on k3d, and a webhook upgrade test. A first-time contributor's runs wait until a maintainer approves them.
 4. **Review.** Every path is owned by the maintainers in `.github/CODEOWNERS`; a maintainer's approval is needed to merge. Run `make reviewable` before you ask for review, so generated files, formatting and the chart README are in step.
-5. **Docs.** A new feature or option needs a docs change in [kubevela/kubevela.io](https://github.com/kubevela/kubevela.io), under `workflow/`.
+5. **Docs.** A new feature or option needs a docs change in [kubevela/kubevela.github.io](https://github.com/kubevela/kubevela.github.io), under `workflow/`.
 
 ## Next
 

@@ -31,7 +31,7 @@ WorkflowRuns are run by whichever `vela-workflow` controller you installed, what
 | Chart `kubevela/vela-workflow` `0.8.0-alpha.2` | pre-release, needs `--version` or `--devel` | 0.8 |
 | Chart `kubevela/vela-workflow` `0.7.3` | latest release | 0.7 |
 | Chart `kubevela/vela-workflow` `0.6.5` | | 0.6 |
-| Addon `vela-workflow` `v0.7.3` (`vela addon enable vela-workflow`) | what the catalog holds | 0.7 |
+| Addon `vela-workflow` `v0.7.3` (`vela addon enable vela-workflow`) | what the catalog holds; runs the `v0.7.2` image | 0.7, without the HTTP denylist and request limits |
 
 So on KubeVela 1.12 with the addon, an Application's workflow runs 0.8 and a WorkflowRun runs 0.7. A 0.8 feature in a WorkflowRun, such as `forEach` or `$( )` expressions, needs the 0.8 chart: see [Install](/workflow/next/getting-started/install).
 

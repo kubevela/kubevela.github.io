@@ -5,7 +5,7 @@ title: Built-in Step Types
 This page lists every built-in workflow step type a WorkflowRun can use, sorted alphabetically. Steps that need an Application, such as `deploy` and `apply-component`, are in KubeVela's [built-in step reference](/docs/end-user/workflow/built-in-workflow-defs).
 
 :::note
-A WorkflowRun needs the WorkflowRun CRD and its controller, from the `vela-workflow` addon (`vela addon enable vela-workflow`) or the `vela-workflow` chart. See [Run a Workflow without an Application](../guides/workflowrun.md).
+A WorkflowRun needs the WorkflowRun CRD and its controller, from the `vela-workflow` addon (`vela addon enable vela-workflow`) or the `vela-workflow` chart. See [Run a Workflow without an Application](../guides/workflowrun.md). The chart installs every type here except `check-metrics`, `collect-service-endpoints`, `depends-on-app`, `generate-jdbc-connection` and `webhook`, which come with vela-core.
 :::
 
 > It was generated automatically by [scripts](/docs/contributor/cli-ref-doc), please don't update manually, last updated at 2026-04-16T11:50:12+01:00.
@@ -282,6 +282,56 @@ spec:
  replicas |  | int | false | 1 |  
  cluster |  | string | false | empty |  
  cmd |  | []string | false |  |  
+
+
+## Apply-Job
+
+### Description
+
+Apply a Kubernetes Job and wait for it to finish. The step fails if the Job reports a failed pod.
+
+### Scope
+
+This step type is valid in both Application and WorkflowRun.
+
+### Examples (apply-job)
+
+```yaml
+apiVersion: core.oam.dev/v1alpha1
+kind: WorkflowRun
+metadata:
+  name: apply-job
+  namespace: default
+spec:
+  workflowSpec:
+    steps:
+      - name: migrate
+        type: apply-job
+        properties:
+          value:
+            apiVersion: batch/v1
+            kind: Job
+            metadata:
+              name: migrate
+              namespace: default
+            spec:
+              backoffLimit: 0
+              template:
+                spec:
+                  restartPolicy: Never
+                  containers:
+                    - name: migrate
+                      image: busybox
+                      command: ["sh", "-c", "echo migrated"]
+```
+
+### Specification (apply-job)
+
+
+ Name | Description | Type | Required | Default | Immutable 
+ ---- | ----------- | ---- | -------- | ------- | --------- 
+ value | Specify Kubernetes job object to be applied. | map[string]_ | true |  |  
+ cluster | The cluster you want to apply the resource to, default is the current control plane cluster. | string | false | empty |  
 
 
 ## Apply-Object
@@ -805,7 +855,7 @@ Verify application's metrics.
 
 ### Scope
 
-This step type is valid in both Application and WorkflowRun.
+This step type comes with vela-core, not the `vela-workflow` chart. A WorkflowRun can use it only on a cluster where KubeVela is installed, in the namespace the controller reads definitions from (`vela-system` by default); elsewhere the step fails because its definition isn't found.
 
 ### Examples (check-metrics)
 
@@ -903,7 +953,7 @@ Collect service endpoints for the application.
 
 ### Scope
 
-This step type is valid in both Application and WorkflowRun.
+This step type comes with vela-core, not the `vela-workflow` chart. A WorkflowRun can use it only on a cluster where KubeVela is installed, in the namespace the controller reads definitions from (`vela-system` by default); elsewhere the step fails because its definition isn't found.
 
 ### Examples (collect-service-endpoints)
 
@@ -1081,7 +1131,7 @@ Wait for the specified Application to complete.
 
 ### Scope
 
-This step type is valid in both Application and WorkflowRun.
+This step type comes with vela-core, not the `vela-workflow` chart. A WorkflowRun can use it only on a cluster where KubeVela is installed, in the namespace the controller reads definitions from (`vela-system` by default); elsewhere the step fails because its definition isn't found.
 
 ### Examples (depends-on-app)
 
@@ -1275,7 +1325,7 @@ Generate a JDBC connection based on Component of alibaba-rds.
 
 ### Scope
 
-This step type is valid in both Application and WorkflowRun.
+This step type comes with vela-core, not the `vela-workflow` chart. A WorkflowRun can use it only on a cluster where KubeVela is installed, in the namespace the controller reads definitions from (`vela-system` by default); elsewhere the step fails because its definition isn't found.
 
 ### Examples (generate-jdbc-connection)
 
@@ -2648,7 +2698,7 @@ Send a POST request to the specified Webhook URL. If no request body is specifie
 
 ### Scope
 
-This step type is valid in both Application and WorkflowRun.
+This step type comes with vela-core, not the `vela-workflow` chart. A WorkflowRun can use it only on a cluster where KubeVela is installed, in the namespace the controller reads definitions from (`vela-system` by default); elsewhere the step fails because its definition isn't found.
 
 ### Examples (webhook)
 

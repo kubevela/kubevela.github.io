@@ -22,7 +22,6 @@ spec:
         type: request
         properties:
           url: https://api.github.com/repos/kubevela/workflow
-          timeout: 10s
         outputs:
           - name: stars
             valueFrom: '"\(response.full_name) has \(response.stargazers_count) stars"'

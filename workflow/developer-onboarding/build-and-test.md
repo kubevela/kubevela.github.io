@@ -67,7 +67,7 @@ On macOS on Apple silicon, `TestSendEmail` in `pkg/providers/email` and `pkg/pro
 | `make manifests` | The CRDs in `charts/vela-workflow/crds/`. The WorkflowRun and Workflow CRDs come from the pinned `kubevela/pkg` module, and the WorkflowStepDefinition CRD is downloaded from kubevela's `master` branch. |
 | `make helm-doc-gen` | The parameter tables in `charts/vela-workflow/README.md`, from the `@param` comments in `values.yaml`. Needs `readme-generator` (`npm install -g @bitnami/readme-generator-for-helm`). |
 
-Because the WorkflowStepDefinition CRD follows kubevela's `master`, `make manifests` (and so `make test` and `make reviewable`) can change `charts/vela-workflow/crds/core.oam.dev_workflowstepdefinitions.yaml` when KubeVela has added a field since the last sync. Commit that only when you mean to take the new CRD; to sync from a release instead, pass `KUBEVELA_VERSION=v1.12.0-alpha.2`.
+Because the WorkflowStepDefinition CRD follows kubevela's `master`, `make manifests` (and so `make test` and `make reviewable`) can change `charts/vela-workflow/crds/core.oam.dev_workflowstepdefinitions.yaml` when KubeVela has added a field since the last sync. Commit that only when you mean to take the new CRD; to sync from a release instead, pass `KUBEVELA_VERSION=v1.12.0-alpha.3`.
 
 ## Before you open a pull request
 

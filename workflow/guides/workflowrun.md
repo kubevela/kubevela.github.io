@@ -9,7 +9,7 @@ A WorkflowRun runs a list of workflow steps once, outside any Application: a rel
 WorkflowRuns are reconciled by the `vela-workflow` controller, not by vela-core. Install it from its chart or the `vela-workflow` addon: see [Install](../getting-started/install.md).
 
 :::caution
-The `vela-workflow` addon runs workflow v0.7 (addon version `v0.7.3`), while KubeVela 1.12 runs workflow v0.8 inside vela-core. The 0.8 step features, such as `forEach` and `$( )` expressions, work in a WorkflowRun only under a 0.8 controller: install the `vela-workflow` chart at `0.8.0-alpha.2` or later. A 0.7 controller doesn't know them, and its WorkflowRun CRD drops the fields.
+The `vela-workflow` addon runs workflow v0.7 (addon version `v0.7.3`), while KubeVela 1.12 runs workflow v0.8 inside vela-core. The 0.8 step features, such as `forEach` and `$( )` expressions, work in a WorkflowRun only under a 0.8 controller: install the `vela-workflow` chart at `0.8.0-alpha.3` or later. A 0.7 controller doesn't know them, and its WorkflowRun CRD drops the fields.
 :::
 
 The example below uses `apply-app`, which applies a KubeVela Application, so it also needs KubeVela installed.
@@ -151,7 +151,7 @@ spec:
 
 ## How steps behave
 
-Steps behave as they do in an Application: suspend and resume, step groups, `dependsOn`, inputs and outputs, timeouts and `if` conditions all work the same way. See [Application Workflow](../getting-started/introduction.md) for each of them. What differs:
+Steps behave as they do in an Application: suspend and resume, step groups, `dependsOn`, inputs and outputs, timeouts and `if` conditions all work the same way. See the [step guides](/workflow/next/guides/steps) for each of them. What differs:
 
 - **Which steps you can use.** Each step in the [step reference](../reference/built-in-steps.md) has a **Scope** section. A WorkflowRun can use the steps marked "valid in both Application and WorkflowRun" or "only valid in WorkflowRun". Steps that work on an Application's components, such as `deploy` and `apply-component`, need an Application and don't work here. In a [custom step](authoring/step-definition.md), you can't use the [application operations](authoring/cue-actions.md#application-operations).
 - **`workflowRef`.** Instead of listing steps in `workflowSpec`, you can run a `Workflow` object by name. If you set both, the steps in `workflowSpec` win. If both the WorkflowRun and the Workflow set `mode`, the WorkflowRun's `mode` wins.

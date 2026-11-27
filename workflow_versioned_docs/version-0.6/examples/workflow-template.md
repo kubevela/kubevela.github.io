@@ -110,7 +110,7 @@ A skipped step doesn't stop the ones after it: `done` ran in both. Each run wrot
 
 ## Changing the template
 
-The steps are read when a run starts, so editing `configure-env` changes the next WorkflowRun, not one that has already finished.
+Each reconcile reads the steps from the template, so an edit to `configure-env` reaches every WorkflowRun that hasn't finished, such as one waiting at a suspend step, as well as the next. A finished one keeps what it ran; `vela workflow restart` runs it again with the new steps.
 
 ## Clean up
 

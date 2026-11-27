@@ -19,7 +19,7 @@ The chart installs the controller, its CRDs (`WorkflowRun`, `Workflow`, `Workflo
 ```shell
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm install vela-workflow kubevela/vela-workflow --version 0.8.0-alpha.2 \
+helm install vela-workflow kubevela/vela-workflow --version 0.8.0-alpha.3 \
   --namespace vela-system --create-namespace --wait
 ```
 
@@ -55,7 +55,7 @@ vela addon enable vela-workflow
 ```
 
 :::caution
-The addon is at `v0.7.3`, so it runs workflow 0.7 even on KubeVela 1.12. A 0.7 controller doesn't know 0.8's step features, such as `forEach` and `$( )` expressions, and its CRD drops the fields. For them, install the 0.8 chart instead of the addon.
+The addon is labelled `v0.7.3` but runs the `oamdev/vela-workflow:v0.7.2` image, so it runs workflow 0.7 even on KubeVela 1.12, without the HTTP denylist and request limits that the chart's controller has (see [HTTP Protection](../operate/http-protection.md#upgrade-note)). A 0.7 controller doesn't know 0.8's step features, such as `forEach` and `$( )` expressions, and its CRD drops the fields. For them, install the 0.8 chart instead of the addon.
 :::
 
 ## With KubeVela on the same cluster

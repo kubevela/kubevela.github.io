@@ -5,7 +5,7 @@ description: "A WorkflowRun that repeats one apply-object step over a list of te
 
 Onboarding three teams is the same step three times: create a namespace and label it with its owner. With `forEach`, the WorkflowRun says that once and lists the teams. Adding a team adds a line to the list, not a step.
 
-**Needs:** the `vela-workflow` controller at 0.8 (the chart at `0.8.0-alpha.2` or later, see [Install](../getting-started/install.md)). A 0.7 controller, such as the `vela-workflow` addon's, doesn't know `forEach`.
+**Needs:** the `vela-workflow` controller at 0.8 (the chart at `0.8.0-alpha.3` or later, see [Install](../getting-started/install.md)). A 0.7 controller, such as the `vela-workflow` addon's, doesn't know `forEach`.
 
 ## The WorkflowRun
 
