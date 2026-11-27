@@ -1120,3 +1120,13 @@ html.plugin-id-cluster-gateway .navbar__item:has(> .kv-version) {
 html:not(.plugin-id-workflow) .workflow-version-dropdown {
   display: none;
 }
+
+// Section icons in the Documentation menu (section-icons.js).
+.dropdown__link .section-icon,
+.menu__link .section-icon {
+  flex-shrink: 0;
+  // The details stay in the text colour, like the logo's hull, on the active item too.
+  color: var(--ifm-font-color-base);
+  margin-right: 0.5rem;
+  vertical-align: -0.2em;
+}

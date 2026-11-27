@@ -15,6 +15,9 @@
 }
 
 .title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--ifm-color-primary);
@@ -22,4 +25,14 @@
 
 .title:hover {
   text-decoration: none;
+}
+
+.icon {
+  display: inline-flex;
+  color: var(--ifm-font-color-base);
+}
+
+.icon :global(.section-icon) {
+  width: 22px;
+  height: 22px;
 }

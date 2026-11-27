@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
 import {useActivePlugin} from '@docusaurus/plugin-content-docs/client';
+import {ICONS} from '@site/section-icons';
 import styles from './styles.module.css';
 
 // One docs plugin instance per product; the header names the one the reader is in.
@@ -23,6 +24,7 @@ export default function SectionHeader() {
     <div className={styles.header}>
       <span className={styles.kicker}>Documentation</span>
       <Link className={styles.title} to={section.home}>
+        <span className={styles.icon} dangerouslySetInnerHTML={{__html: ICONS[plugin.pluginId]}} />
         {section.label}
       </Link>
     </div>
