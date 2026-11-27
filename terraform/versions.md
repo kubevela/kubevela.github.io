@@ -10,10 +10,10 @@ There are two terraform-controller versions in a KubeVela install, and they are 
 
 | KubeVela | Built with terraform-controller | Notes |
 | --- | --- | --- |
-| v1.12 | [v0.9.1](https://github.com/kubevela/terraform-controller/releases/tag/v0.9.1) | Go 1.27 and Kubernetes 0.37 libraries; pinned images. |
-| v1.11 | [v0.8.2](https://github.com/kubevela/terraform-controller/releases/tag/v0.8.2) | |
-| v1.10 | [v0.8.2](https://github.com/kubevela/terraform-controller/releases/tag/v0.8.2) | |
-| v1.9 | [v0.8.0](https://github.com/kubevela/terraform-controller/releases/tag/v0.8.0) | |
+| v1.12 | [v0.9.1](https://github.com/kubevela/terraform-controller/releases/tag/v0.9.1) | From v1.12.0-alpha.2. Go 1.27 and Kubernetes 0.37 libraries; pinned images. |
+| v1.11 | [v0.8.2](https://github.com/kubevela/terraform-controller/releases/tag/v0.8.2) | From v1.11.2; v1.11.0 and v1.11.1 are built with a v0.8.1 pre-release commit. |
+| v1.10 | [v0.8.2](https://github.com/kubevela/terraform-controller/releases/tag/v0.8.2) | From v1.10.10; v1.10.0 to v1.10.3 are built with v0.8.0, v1.10.4 to v1.10.9 with a v0.8.1 pre-release commit. |
+| v1.9 | [v0.8.0](https://github.com/kubevela/terraform-controller/releases/tag/v0.8.0) | From v1.9.7; v1.9.0 and v1.9.1 are built with v0.7.10, v1.9.2 to v1.9.6 with v0.7.11. |
 
 The same table for every product is in the [release notes overview](/docs/release-notes/overview#docs-for-the-other-products).
 
