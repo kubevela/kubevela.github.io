@@ -10,7 +10,7 @@ Here is the guide to create Terraform typed ComponentDefinitions of cloud resour
 
 ## Prerequisites
 
-- [`vela` binary](/docs/platform-engineers/advanced-install#install-vela-cli)
+- [`vela` binary](/docs/installation/kubernetes#install-vela-cli)
 - The Terraform addon, and the addon for your cloud provider (`terraform-aws` here), which the component needs when it runs:
 
   ```shell
