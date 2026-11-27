@@ -90,6 +90,12 @@ module.exports = {
     },
     {
       type: 'category',
+      label: 'Developer Onboarding',
+      link: {type: 'generated-index', slug: '/developer'},
+      items: ['developer/overview', 'developer/build-and-test', 'developer/pull-requests'],
+    },
+    {
+      type: 'category',
       label: 'Reference',
       link: {type: 'generated-index', slug: '/reference'},
       items: [
