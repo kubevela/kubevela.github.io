@@ -88,7 +88,7 @@ const config = {
             {to: 'workflow/overview', label: 'Workflow'},
             {to: 'velaux/overview', label: 'VelaUX'},
             {to: 'terraform/overview', label: 'Terraform'},
-            {to: 'addons/overview', label: 'Addons'},
+            {to: 'addons/getting-started/introduction', label: 'Addons'},
             {to: 'cluster-gateway/overview', label: 'Cluster Gateway'},
           ],
         },
