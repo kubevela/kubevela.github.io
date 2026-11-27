@@ -47,7 +47,13 @@ module.exports = {
       type: 'category',
       label: 'Operate',
       link: {type: 'generated-index', slug: '/operate'},
-      items: ['operate/install-options'],
+      items: ['operate/install-options', 'operate/upgrade'],
+    },
+    {
+      type: 'category',
+      label: 'Developer Onboarding',
+      link: {type: 'generated-index', slug: '/developer'},
+      items: ['developer/overview', 'developer/run-locally', 'developer/testing', 'developer/pull-requests'],
     },
     {
       type: 'category',
