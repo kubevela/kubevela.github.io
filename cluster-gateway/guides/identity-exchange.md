@@ -63,7 +63,15 @@ subjects:
     namespace: kube-system
 ```
 
-The gateway passes on the user's name, groups and extra fields, so the credential needs `impersonate` on all three. Without it, every request fails with `users "<name>" is forbidden: User "system:serviceaccount:kube-system:cluster-gateway" cannot impersonate resource "users" ...`.
+The gateway passes on the user's name, groups and extra fields, so the credential needs `impersonate` on all three. Without it, every request is refused by the member:
+
+```console
+Error from server (Forbidden): users "alice" is forbidden: User "system:serviceaccount:kube-system:cluster-gateway" cannot impersonate resource "users" in API group "" at the cluster scope
+```
+
+That's what `kubectl get --raw` shows. Ordinary kubectl commands against the proxy path fail earlier, in discovery, and print only `couldn't get current server API group list: unknown` and `Error from server (Forbidden): unknown`: try a `get --raw` when you see those.
+
+A credential bound to `cluster-admin` can already impersonate anyone.
 
 The hub user arrives on the member with their hub groups, `system:authenticated` included, so anything the member grants `system:authenticated` they get.
 
