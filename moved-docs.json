@@ -1173,5 +1173,10 @@
   "from_url": "/docs/next/tutorials/trigger",
   "section": "velaux",
   "to": "guides/delivery/harbor-trigger.md"
+ },
+ "end-user/workflow/expressions.md": {
+  "from_url": "/docs/next/end-user/workflow/expressions",
+  "section": "workflow",
+  "to": "guides/steps/expressions.md"
  }
 }

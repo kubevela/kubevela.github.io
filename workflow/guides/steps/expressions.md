@@ -29,8 +29,8 @@ workflow:
 ```
 
 This page covers what is particular to workflow steps. The expression language,
-escaping, types and the `has()` guard are on [Property Expressions](../cel-expressions.md),
-and [How Expressions Are Evaluated](../cel-expressions-lifecycle.md) explains when each
+escaping, types and the `has()` guard are on [Property Expressions](/docs/next/end-user/cel-expressions),
+and [How Expressions Are Evaluated](/docs/next/end-user/cel-expressions-lifecycle) explains when each
 part is checked and resolved.
 
 ## Turning them on
@@ -38,7 +38,7 @@ part is checked and resolved.
 Expressions in an Application's workflow are turned on the same way as anywhere else in
 the Application: the `EnableCelExpressions` gate, plus the `app.oam.dev/cel-expressions: "true"`
 annotation where your platform requires opt-in. See
-[Turning them on](../cel-expressions.md#turning-them-on).
+[Turning them on](/docs/next/end-user/cel-expressions#turning-them-on).
 
 For a standalone `WorkflowRun`, see [below](#workflowrun).
 
@@ -47,13 +47,13 @@ For a standalone `WorkflowRun`, see [below](#workflowrun).
 | Root | Reads | Where in a step |
 |---|---|---|
 | `context` | the Application and the step: `appName`, `namespace`, `stepName`, `stepType`, ... | properties, `forEach.items`, `if` |
-| `source` | a value fetched by one of the Application's [sources](../../platform-engineers/source/using-sources.md), read when a run first uses it (from the cache while its entry is fresh) and [pinned](../cel-expressions-lifecycle.md#workflow-steps) for the rest of the run | properties, `forEach.items`, `if` |
+| `source` | a value fetched by one of the Application's [sources](/docs/next/platform-engineers/source/using-sources), read when a run first uses it (from the cache while its entry is fresh) and [pinned](/docs/next/end-user/cel-expressions-lifecycle#workflow-steps) for the rest of the run | properties, `forEach.items`, `if` |
 | `steps` | another step's outputs and status | properties, `forEach.items`, `if` |
-| `each` | the current item of a [forEach](/workflow/next/guides/steps/for-each) | inside a loop only |
+| `each` | the current item of a [forEach](./for-each.md) | inside a loop only |
 
 `component` is not offered in a step: a step reads a component's result through the
 step that deployed it. The full table of roots by location is on
-[Property Expressions](../cel-expressions.md#where-they-work).
+[Property Expressions](/docs/next/end-user/cel-expressions#where-they-work).
 
 ## Reading another step
 
@@ -79,7 +79,7 @@ step that deployed it. The full table of roots by location is on
         text: '$(string(steps.lookup.outputs.tenants.size())) tenants found'
 ```
 
-This does the same job as [`inputs`](/workflow/next/guides/steps/inputs-outputs), without the `parameterKey`
+This does the same job as [`inputs`](./inputs-outputs.md), without the `parameterKey`
 plumbing, and it can be combined, converted or tested like any other value. The output
 keeps its own type: a list stays a list and a number stays a number.
 
@@ -233,13 +233,13 @@ you apply, so `if: $(steps.build.phase)` is admitted, and the step
 :::caution
 With the controller's `EnableSuspendOnFailure` gate on (a workflow gate, set with the
 `workflow.enableSuspendOnFailure` Helm value, so it is not in the published ConfigMap; see
-[Feature Gates](../../platform-engineers/system-operation/bootstrap-parameters.md#feature-gates)),
+[Feature Gates](/docs/next/platform-engineers/system-operation/bootstrap-parameters#feature-gates)),
 no step `if` is evaluated, CUE
 or `$( )`: every step runs whatever its `if` says. The `rollback` step above runs even
 after a successful deploy. A failed step suspends the run instead of finishing, so a
 status read of it waits rather than answering. This covers sub-steps too: a
 step-group's sub-steps run even when the group's own `if` would skip it, and in a
-[forEach](/workflow/next/guides/steps/for-each) loop a condition meant to skip items does not skip them.
+[forEach](./for-each.md) loop a condition meant to skip items does not skip them.
 :::
 
 ### Conditions wait
@@ -252,7 +252,7 @@ over `status.x` does not wait: it is decided by whatever the status is at that m
 ### Guard what may be absent
 
 A condition decides the step, so the
-[`has()` guard](../cel-expressions.md#values-that-might-be-missing) is required for
+[`has()` guard](/docs/next/end-user/cel-expressions#values-that-might-be-missing) is required for
 every read that may be absent: an optional field of a source, a key of an open map such
 as `context.appLabels`, or a field that only some loop items have.
 
@@ -269,7 +269,7 @@ has(source.cfg.data.mode) ? source.cfg.data.mode : <fallback>
 
 ### Conditions in loops
 
-A [forEach](/workflow/next/guides/steps/for-each) step's own `if` is decided **once**, before the first pass,
+A [forEach](./for-each.md) step's own `if` is decided **once**, before the first pass,
 and cannot read `each`. To decide per item, make the loop a `step-group` and put the
 `if` on its sub-steps, which are checked on every pass:
 
@@ -309,7 +309,7 @@ Inside a forEach body, `each` is the current pass:
 |---|---|---|
 | `each.item` | the item's type | the current item |
 | `each.index` | int | its position, from 0 |
-| `each.key` | string | its [key](/workflow/next/guides/steps/for-each#key) |
+| `each.key` | string | its [key](./for-each.md#key) |
 
 ```yaml
 properties:
@@ -330,7 +330,7 @@ typed from them when you apply the Application. Feeding an int item into a strin
 parameter is refused then, rather than failing mid-run. Text around the read makes it
 a string, so `'wave $(each.item)'` is always fine.
 
-[forEach](/workflow/next/guides/steps/for-each) covers loops themselves: items, order, failure and outputs.
+[forEach](./for-each.md) covers loops themselves: items, order, failure and outputs.
 
 ## Standalone WorkflowRun {#workflowrun}
 
@@ -393,7 +393,7 @@ spec:
 ## When something is wrong
 
 Errors common to every expression (escaping, types, `has()`) are on
-[Property Expressions](../cel-expressions.md#when-something-is-wrong). These are
+[Property Expressions](/docs/next/end-user/cel-expressions#when-something-is-wrong). These are
 particular to steps:
 
 | Message | Means |
@@ -416,8 +416,8 @@ particular to steps:
 
 ## Next
 
-- [forEach](/workflow/next/guides/steps/for-each): repeating a step once per item.
-- [Property Expressions](../cel-expressions.md): the language, escaping and guards.
-- [If Conditions](/workflow/next/guides/steps/if-condition): CUE conditions, `always`, and the default.
+- [forEach](./for-each.md): repeating a step once per item.
+- [Property Expressions](/docs/next/end-user/cel-expressions): the language, escaping and guards.
+- [If Conditions](./if-condition.md): CUE conditions, `always`, and the default.
 
 {/* PENDING: the Sources links resolve once kubevela.github.io#1469 merges, and the forEach links once #1453 does. */}

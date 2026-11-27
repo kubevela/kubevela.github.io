@@ -137,7 +137,7 @@ const sidebars = {
             'end-user/workflow/component-dependency-parameter',
             {type: 'link', label: 'Data Passing', href: '/workflow/next/guides/steps/inputs-outputs'},
             {type: 'link', label: 'If Conditions', href: '/workflow/next/guides/steps/if-condition'},
-            'end-user/workflow/expressions',
+            {type: 'link', label: 'Expressions in Workflow Steps', href: '/workflow/next/guides/steps/expressions'},
             {type: 'link', label: 'Timeout of Step', href: '/workflow/next/guides/steps/timeout'},
           ],
         },

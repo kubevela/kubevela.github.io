@@ -5,7 +5,7 @@ description: What happens to a $( ) expression from the Application you apply to
 
 A `$( )` expression is checked twice before its value reaches a workload: by the Application webhook when you apply it, and by the controller each time it renders. The controller knows more than the webhook, so it catches what the webhook could not.
 
-This page explains what happens at each stage and why. To write expressions, start with [Property Expressions](./cel-expressions.md); for workflow steps and conditions, see [Expressions in Workflow Steps](./workflow/expressions.md).
+This page explains what happens at each stage and why. To write expressions, start with [Property Expressions](./cel-expressions.md); for workflow steps and conditions, see [Expressions in Workflow Steps](/workflow/next/guides/steps/expressions).
 
 ## The two stages at a glance
 
@@ -236,7 +236,7 @@ What a step does when a read cannot be answered. Each message is prefixed by the
 | The producer was skipped, and the read is guarded with `has()` | takes its default |
 | A source fails to resolve | fails |
 
-A `$( )` `if` must be exactly one expression that evaluates to a bool. Any other `if` is a CUE condition, so existing conditions keep working. With the controller's `EnableSuspendOnFailure` gate on, no `if` is evaluated at all; see [Conditions](./workflow/expressions.md#conditions).
+A `$( )` `if` must be exactly one expression that evaluates to a bool. Any other `if` is a CUE condition, so existing conditions keep working. With the controller's `EnableSuspendOnFailure` gate on, no `if` is evaluated at all; see [Conditions](/workflow/next/guides/steps/expressions#conditions).
 
 ## Which repository does what
 
@@ -253,7 +253,7 @@ A standalone `WorkflowRun` uses the workflow engine on its own. It gets `context
 - [Property Expressions](./cel-expressions.md): the language, escaping, types and the roots table
 - [Reading External Data with Sources](../platform-engineers/source/using-sources.md): how a source value is fetched, cached and kept fresh, the inside of the resolvers above
 - [Reading Other Components](./reading-components.md)
-- [Expressions in Workflow Steps](./workflow/expressions.md)
+- [Expressions in Workflow Steps](/workflow/next/guides/steps/expressions)
 - [If Conditions](/workflow/next/guides/steps/if-condition)
 
 {/* PENDING: the Sources links resolve once kubevela.github.io#1469 merges. */}

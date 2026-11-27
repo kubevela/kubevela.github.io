@@ -31,6 +31,7 @@ module.exports = {
             'guides/steps/for-each',
             'guides/steps/inputs-outputs',
             'guides/steps/if-condition',
+            'guides/steps/expressions',
             'guides/steps/timeout',
           ],
         },
