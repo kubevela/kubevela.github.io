@@ -15,7 +15,7 @@ kubectl get vela-clusters
 ```console
 NAME     ALIAS     CREDENTIAL_TYPE   ENDPOINT                                ACCEPTED   LABELS
 local              Internal          -                                       true       cluster.core.oam.dev/control-plane=true
-member   staging   X509Certificate   https://k3d-shape-prism-server-0:6443   true       env=staging,cluster.core.oam.dev/control-plane=false
+member   staging   X509Certificate   https://k3d-prism-demo-server-0:6443    true       env=staging,cluster.core.oam.dev/control-plane=false
 ```
 
 Use `vela-clusters` or `clusters.prism.oam.dev` in commands. The short name `vc` also belongs to Cluster Gateway's `virtualclusters`, which wins, and plain `clusters` clashes with any other API that has a `clusters` resource, such as Cluster API.

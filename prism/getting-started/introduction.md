@@ -31,7 +31,7 @@ kubectl get grafanadashboards      # dashboards in the Grafana named "default"
 Prism isn't part of vela-core. It installs as the [`vela-prism` addon](/addons/vela-prism), into `vela-system`, and runs beside the controller. From there:
 
 * The vela CLI uses it without being told. When a user can't list ResourceTrackers, `vela status --tree` and the other commands that read them fall back to `ApplicationResourceTracker` in the Application's namespace.
-* The observability addons build on it. `o11y-definitions` depends on `vela-prism`, and its `grafana-dashboard`, `grafana-datasource` and `import-grafana-dashboard` definitions, and the `grafana` config template, all write Prism objects. See [Customize Dashboard](/docs/next/platform-engineers/operations/o11y/dashboard) and [Cloud Service Integration](/docs/next/platform-engineers/operations/o11y/integration).
+* The observability addons build on it. `o11y-definitions` depends on `vela-prism`, and its `grafana-access`, `grafana-dashboard`, `grafana-datasource` and `import-grafana-dashboard` definitions, and the `grafana` config template, all write Prism objects. See [Customize Dashboard](/docs/next/platform-engineers/operations/o11y/dashboard) and [Cloud Service Integration](/docs/next/platform-engineers/operations/o11y/integration).
 * VelaUX imports Prism's Go code for listing clusters, but reads the cluster Secrets with its own client, so it doesn't need Prism running.
 
 How KubeVela's own permissions work, and where Prism fits in them, is in the KubeVela docs under [Underlying Mechanism](/docs/next/platform-engineers/auth/advance#access-resources-with-limited-privileges).

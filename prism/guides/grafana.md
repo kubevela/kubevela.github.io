@@ -159,7 +159,7 @@ Error from server (NotFound): Unable to find "o11y.prism.oam.dev/v1alpha1, Resou
 
 A user's RBAC is checked against the Prism resource only. Prism then calls Grafana with the credential in the `Grafana` object, so:
 
-* `create`, `update` or `delete` on `grafanadashboards` lets a user change any dashboard, in any registered Grafana, with that Grafana's credential. Use `resourceNames` to narrow it to named dashboards, or register a Grafana per team with a credential scoped in Grafana itself.
+* `create`, `update` or `delete` on `grafanadashboards` lets a user change any dashboard, in any registered Grafana, with that Grafana's credential. `resourceNames` narrows `get`, `update`, `patch` and `delete` to named dashboards, but not `create`: a create request carries no name when it is authorized. To limit who creates dashboards where, register a Grafana per team with a credential scoped in Grafana itself.
 * `get` or `list` on `grafanas` reveals the credentials.
 * Grafana's own errors come back as Kubernetes ones: a `401` from Grafana is `Unauthorized`, `403` is `Forbidden`, `404` is `NotFound`, `412` (a version conflict) is `BadRequest`.
 
