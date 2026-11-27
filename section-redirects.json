@@ -1,0 +1,7 @@
+{
+  "/cluster-gateway/overview": "/cluster-gateway/getting-started/introduction",
+  "/cluster-gateway/install": "/cluster-gateway/getting-started/install",
+  "/cluster-gateway/clusters": "/cluster-gateway/guides/register-clusters",
+  "/cluster-gateway/configuration": "/cluster-gateway/operate/configuration",
+  "/cluster-gateway/troubleshooting": "/cluster-gateway/operate/troubleshooting"
+}

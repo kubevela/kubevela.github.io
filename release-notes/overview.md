@@ -42,7 +42,7 @@ These matter if you build controllers, providers or addons against KubeVela's Go
 
 Workflow, VelaUX, Terraform, Cluster Gateway and the addons have their own docs sections. This is the version of each that a KubeVela release ships with, and where to read about it:
 
-| KubeVela | [Workflow](/workflow/overview) | [Cluster Gateway](/cluster-gateway/overview) | [Terraform](/terraform/overview) controller | [VelaUX](/velaux/overview) addon |
+| KubeVela | [Workflow](/workflow/overview) | [Cluster Gateway](/cluster-gateway/getting-started/introduction) | [Terraform](/terraform/overview) controller | [VelaUX](/velaux/overview) addon |
 | -------- | -------- | --------------- | ------------------------ | ------------- |
 | v1.12 | [0.8](/workflow/next/overview) | v1.10.0-alpha.1 | v0.9.1 | v1.9.5 |
 | v1.11 | [0.7](/workflow/overview) | v1.9.2 | v0.8.2 | v1.9.5 |
