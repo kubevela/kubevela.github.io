@@ -1,8 +1,8 @@
 ---
-title: Overview
+title: Addon Catalog
 ---
 
-Addons extend KubeVela with components, traits, config templates and the controllers they need. The addons below are in the default registry ([kubevela/catalog](https://github.com/kubevela/catalog/tree/master/addons)) unless marked. Enable one with `vela addon enable <name>`; see [Addons](/docs/platform-engineers/addon/intro) to write your own.
+Addons extend KubeVela with components, traits, config templates and the controllers they need. The addons below are in the default registry ([kubevela/catalog](https://github.com/kubevela/catalog/tree/master/addons)) unless marked. Enable one with `vela addon enable <name>`; see [Make Your Own Addon](./developer/make-your-own-addon.md) to write your own.
 
 Many addons install their software from a Helm chart, so they depend on `fluxcd` and enable it for you. Each addon's source and README are in the catalog, under `addons/<name>`.
 
@@ -44,9 +44,9 @@ Many addons install their software from a Helm chart, so they depend on `fluxcd`
 
 | Addon | What it gives you |
 | --- | --- |
-| [terraform](/docs/reference/addons/terraform) | The Terraform controller, so components can provision cloud resources. Add a provider addon for each cloud. |
-| [terraform-&lt;provider&gt;](/docs/reference/addons/terraform) | Components for one cloud's resources, and a config template for its credentials: `terraform-alibaba`, `terraform-aws`, `terraform-azure`, `terraform-baidu`, `terraform-gcp`, `terraform-tencent`, `terraform-ucloud`. |
-| [terraform-ec](/docs/reference/addons/terraform-ec) | The same for Elastic Cloud deployments. |
+| [terraform](/terraform/install/terraform-addon) | The Terraform controller, so components can provision cloud resources. Add a provider addon for each cloud. |
+| [terraform-&lt;provider&gt;](/terraform/install/terraform-addon) | Components for one cloud's resources, and a config template for its credentials: `terraform-alibaba`, `terraform-aws`, `terraform-azure`, `terraform-baidu`, `terraform-gcp`, `terraform-tencent`, `terraform-ucloud`. |
+| [terraform-ec](/terraform/install/terraform-ec-addon) | The same for Elastic Cloud deployments. |
 
 ## Gateway
 

@@ -122,7 +122,7 @@ kubectl delete pod -l app.oam.dev/component=velaux-server -n vela-system
 
 ### How can I build my own addon registry?
 
-https://kubevela.io/docs/platform-engineers/addon/addon-registry
+See [Build your Own Registry](/addons/developer/addon-registry).
 
 ### How does KubeVela support stateful workload?
 

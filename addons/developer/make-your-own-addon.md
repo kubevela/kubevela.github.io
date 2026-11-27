@@ -4,7 +4,7 @@ title: Make Your Own Addon
 
 import AddonMechanism from '@site/src/components/AddonMechanism';
 
-An addon is a directory with three kinds of files: metadata (`metadata.yaml`, `README.md`), definitions and UI schemas, and an Application that installs the operator behind them. This page builds one from a Helm chart, enables it on your cluster and checks that it worked. Every file and field an addon can carry is listed in the [Addon reference](./reference.md).
+An addon is a directory with three kinds of files: metadata (`metadata.yaml`, `README.md`), definitions and UI schemas, and an Application that installs the operator behind them. This page builds one from a Helm chart, enables it on your cluster and checks that it worked. Every file and field an addon can carry is listed in the [Addon reference](addon-reference.md).
 
 :::tip
 For a longer walkthrough that builds an addon around the Redis operator, see the blog post [building an addon from scratch](/blog/2022/10/18/building-addon-introduction).
@@ -14,7 +14,7 @@ For a longer walkthrough that builds an addon around the Redis operator, see the
 
 <AddonMechanism />
 
-1. An [addon registry](./addon-registry.md) stores addons so they can be shared. It can be a Git repository, a Helm chart repository or an OCI registry. You can also enable an addon straight from a directory on your machine.
+1. An [addon registry](addon-registry.md) stores addons so they can be shared. It can be a Git repository, a Helm chart repository or an OCI registry. You can also enable an addon straight from a directory on your machine.
 2. When you enable an addon from the CLI or VelaUX, KubeVela reads its files, assembles them into an Application named `addon-<name>` in `vela-system` and applies it, along with the addon's definitions and UI schemas.
 3. The Application controller then delivers that Application like any other, to the hub and, if the addon asks for it, to your managed clusters.
 
@@ -57,21 +57,34 @@ output: {
 }
 ```
 
-The `helm` component type comes from the [fluxcd](/addons/fluxcd) addon, so the scaffold lists `fluxcd` under `dependencies` in `metadata.yaml`, and enabling `podinfo` enables `fluxcd` first. The addon's version is set to the chart version, `6.11.2`.
+The `helm` component type comes from the [fluxcd](/addons/fluxcd) addon, so the scaffold lists `fluxcd` under `dependencies` in `metadata.yaml`. The addon's version is set to the chart version, `6.11.2`.
 
 The other files (`definitions/mytrait.cue`, `schemas/myschema.yaml`, `views/my-view.cue`, `resources/myresource.cue`) are samples. Edit them or delete them; pass `--no-samples` to leave them out.
 
 ### 2. Enable it from the local directory
 
+An addon enabled from a registry brings its dependencies with it, but one enabled from a directory doesn't. Enable `fluxcd` first, or the CLI stops with:
+
+```console
+Error: you must first enable dependencies: [fluxcd]
+```
+
 ```shell
+vela addon enable fluxcd
 vela addon enable ./podinfo
 ```
 
 ```console
+enabling addon by local dir: ./podinfo
 Addon podinfo enabled successfully.
+Please access addon-podinfo from the following endpoints:
++---------+---------------+-----------------------------------+--------------------------------+-------+
+| CLUSTER |   COMPONENT   |     REF(KIND/NAMESPACE/NAME)      |            ENDPOINT            | INNER |
++---------+---------------+-----------------------------------+--------------------------------+-------+
+| local   | addon-podinfo | Service/vela-system/addon-podinfo | addon-podinfo.vela-system:9898 | true  |
+| local   | addon-podinfo | Service/vela-system/addon-podinfo | addon-podinfo.vela-system:9999 | true  |
++---------+---------------+-----------------------------------+--------------------------------+-------+
 ```
-
-The CLI prints any endpoints the addon's Application exposes after that line.
 
 ### 3. Check it
 
@@ -99,7 +112,7 @@ Base the addon on Kubernetes objects at remote URLs, such as CRDs. The scaffold 
 vela addon init my-addon --url https://example.com/crd1.yaml --url https://example.com/crd2.yaml
 ```
 
-Write the addon's definitions in Go with [defkit](../defkit/overview.md) instead of CUE. The scaffold adds a `godef/` Go module, with a stub for each definition you name:
+Write the addon's definitions in Go with [defkit](/docs/platform-engineers/defkit/overview) instead of CUE. The scaffold adds a `godef/` Go module, with a stub for each definition you name:
 
 ```shell
 vela addon init my-addon --godef --components api --traits scaler
@@ -109,9 +122,9 @@ The flags combine, so one addon can start from a Helm chart, remote objects and 
 
 ## Next steps
 
-- Write the addon's Application in [CUE](./addon-cue.md) or [YAML](./addon-cue.md#write-it-in-yaml).
-- Look up a file or a `metadata.yaml` field in the [Addon reference](./reference.md).
-- Publish it to an [addon registry](./addon-registry.md).
+- Write the addon's Application in [CUE](addon-application.md) or [YAML](addon-application.md#write-it-in-yaml).
+- Look up a file or a `metadata.yaml` field in the [Addon reference](addon-reference.md).
+- Publish it to an [addon registry](addon-registry.md).
 - Build addons for cloud resources with the [Terraform addon tooling](/terraform/extend/terraform-addon).
 
 ## Known limits

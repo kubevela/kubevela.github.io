@@ -904,7 +904,7 @@ The Config's Secret holds the credentials, and its `outputs` add the Terraform `
 ## Share templates through addons
 
 An addon can ship config templates in its `config-templates/` directory; see
-[Addon](../platform-engineers/addon/intro.md). In v1.12, enabling an addon still installs them as
+[Addon](/addons/developer/make-your-own-addon). In v1.12, enabling an addon still installs them as
 v1.11 template ConfigMaps in `vela-system`, which every command and the controller read as system
 templates.
 

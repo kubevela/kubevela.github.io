@@ -44,7 +44,7 @@ KubeVela addons mainly contain two parts:
 - One is the installation of the capability provider, which is usually a CRD Operator. The installation process are **intrinsically leveraging KubeVela Application** to work.
 - Another one is the glue layer, which is OAM Definitions and other extensions. These OAM Definitions usually depend on the capability provider and provide user-friendly abstraction from best practices.
 
-![](../docs/resources/addon-mechanism.jpg)
+![](../addons/resources/addon-mechanism.jpg)
 
 The whole working mechanism of addon is shown as above. KubeVela Application has the multi-clusters capability that help deliver CRD operators of addon into these clusters. The definition files are only used by KubeVela control plane, so they will only existing in the control plane clusters.
 

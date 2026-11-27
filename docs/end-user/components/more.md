@@ -95,7 +95,7 @@ vela addon enable velaux repo=<your repo address>
 #### Air-Gapped Installation for Addon
 
 If your cluster network cannot connect to the community addon registry you can: 
-- build your custom addon registry. Please refer to [*Build your Own Registry*](../../platform-engineers/addon/addon-registry.md) for details.
+- build your custom addon registry. Please refer to [*Build your Own Registry*](/addons/developer/addon-registry) for details.
 - enable an addon from a local directory. Example:
 
 ```shell
@@ -356,11 +356,11 @@ Successfully delete an addon registry experimental
 
 * Build custom registry
 
-  You can use ChartMuseum to build your custom addon registry. We have a ChartMuseum addon available. Please refer to [*Build your Own Registry*](../../platform-engineers/addon/addon-registry.md) for details.
+  You can use ChartMuseum to build your custom addon registry. We have a ChartMuseum addon available. Please refer to [*Build your Own Registry*](/addons/developer/addon-registry) for details.
 
 ### Make your own addon
 
-If you're a system infra or operator, you can refer to extension documents to learn how to [make your own addon and registry](../../platform-engineers/addon/intro.md), including [extend cloud resources by addon](/terraform/extend/terraform-addon).
+If you're a system infra or operator, you can refer to extension documents to learn how to [make your own addon and registry](/addons/developer/make-your-own-addon), including [extend cloud resources by addon](/terraform/extend/terraform-addon).
 
 :::tip
 Here's a blog introduces [how to build addon from scratch using redis operator as example](/blog/2022/10/18/building-addon-introduction), you can read it as an end to end tutorial!

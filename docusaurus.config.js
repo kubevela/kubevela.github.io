@@ -99,7 +99,7 @@ const config = {
             {to: 'workflow/getting-started/introduction', label: 'Workflow'},
             {to: 'velaux/getting-started/introduction', label: 'VelaUX'},
             {to: 'terraform/getting-started/introduction', label: 'Terraform'},
-            {to: 'addons/overview', label: 'Addons'},
+            {to: 'addons/getting-started/introduction', label: 'Addons'},
             {to: 'cluster-gateway/getting-started/introduction', label: 'Cluster Gateway'},
           ],
         },

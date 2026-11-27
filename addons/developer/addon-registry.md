@@ -232,7 +232,7 @@ sample-addon  localcm    An addon for KubeVela.  [1.0.0]             disabled
 
 ## Sync addons to ChartMuseum in an air-gapped environment
 
-As described in [*Air-gapped Installation for Addon*](../system-operation/offline-installation.md#addons), you can enable an addon from local filesystem. But some addons required a Helm Chart, then you will need to build a Chart repository for that. This section is to tackle that problem. You will also learn how to sync [addon catalog](https://github.com/kubevela/catalog) to your ChartMuseum instance, so that you can directly enable an addon from a registry, instead of enabling it from local filesystem.
+As described in [*Air-gapped Installation for Addon*](/docs/next/platform-engineers/system-operation/offline-installation#addons), you can enable an addon from local filesystem. But some addons required a Helm Chart, then you will need to build a Chart repository for that. This section is to tackle that problem. You will also learn how to sync [addon catalog](https://github.com/kubevela/catalog) to your ChartMuseum instance, so that you can directly enable an addon from a registry, instead of enabling it from local filesystem.
 
 ### Goals
 
