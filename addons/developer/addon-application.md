@@ -2,7 +2,7 @@
 title: Addon Application in CUE or YAML
 ---
 
-An addon's Application can be written in YAML or CUE. Use CUE when the addon has parameters or installs parts of itself conditionally. Most of this page covers CUE; [Write it in YAML](#write-it-in-yaml) covers YAML. For the layout of an addon as a whole, see [the addon introduction](./intro.md).
+An addon's Application can be written in YAML or CUE. Use CUE when the addon has parameters or installs parts of itself conditionally. Most of this page covers CUE; [Write it in YAML](#write-it-in-yaml) covers YAML. For the layout of an addon as a whole, see [the addon introduction](make-your-own-addon.md).
 
 A CUE addon's Application comes from two places: the application template (`template.cue`) and the resource files in the `resources/` folder.
 
@@ -75,7 +75,7 @@ spec:
               name: my-namespace
 ```
 
-You can refer to the [CUE basic](../cue/basic.md) to learn language details.
+You can refer to the [CUE basic](/docs/platform-engineers/cue/basic) to learn language details.
 
 > Please notice: The name of Application in template file will be replaced by the addon name in `metadata.yaml`. The application will always have a unified name in the format of `addon-<addon_name>`.
 
@@ -345,7 +345,7 @@ outputs: resourceTree: {
 _rules: {...}
 ```
 
-In this example, we define a configmap `resourceTree` as an auxiliary resource, this configmap is actually a [resource topology rule](../../reference/topology-rule.md) . The function of this resource is to establish the relationship of CustomResources in the cluster, so that it can be displayed in the topology graph. It only needs to be applied to control-plane.
+In this example, we define a configmap `resourceTree` as an auxiliary resource, this configmap is actually a [resource topology rule](/docs/reference/topology-rule) . The function of this resource is to establish the relationship of CustomResources in the cluster, so that it can be displayed in the topology graph. It only needs to be applied to control-plane.
 
 To see what renders, use the commands in [Render without installing](#render-without-installing).
 
@@ -397,7 +397,7 @@ spec:
         image: "oamdev/vela-apiserver:1.2.4"
 ```
 
-The image tag is the addon's version, used exactly as `metadata.yaml` writes it: write `version: v1.2.4` if your image tags start with `v`. The real example is [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/server.cue). For the other fields of `metadata.yaml`, see [metadata.yaml](./reference.md#metadatayaml).
+The image tag is the addon's version, used exactly as `metadata.yaml` writes it: write `version: v1.2.4` if your image tags start with `v`. The real example is [VelaUX](https://github.com/kubevela/catalog/blob/master/addons/velaux/resources/server.cue). For the other fields of `metadata.yaml`, see [metadata.yaml](addon-reference.md#metadatayaml).
 
 When the addon is enabled, `template.cue`, `parameter.cue` and the resource files will be gathered  with the addon metadata in `metadata.yaml` to render out the resources and apply them.
 
@@ -476,7 +476,7 @@ An addon without parameters can write its Application in YAML instead. It has th
 
 ### Application template file (template.yaml)
 
-`template.yaml` holds one KubeVela [Application](../../getting-started/core-concept.md), with components, policies or a workflow. For example:
+`template.yaml` holds one KubeVela [Application](/docs/getting-started/core-concept), with components, policies or a workflow. For example:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1

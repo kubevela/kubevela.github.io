@@ -2,7 +2,7 @@
 title: Addon Reference
 ---
 
-This page lists every file and directory an addon can carry, and every field of `metadata.yaml`. To build an addon step by step, start with [Make Your Own Addon](./intro.md).
+This page lists every file and directory an addon can carry, and every field of `metadata.yaml`. To build an addon step by step, start with [Make Your Own Addon](make-your-own-addon.md).
 
 ## Layout
 
@@ -40,8 +40,8 @@ my-addon/
 | `schemas/` | no | UI schemas for the addon's definitions, read by VelaUX. See [UI schemas](#ui-schemas). |
 | `godef/` | no | Definitions written in Go with defkit. See [Go definitions](#go-definitions-godef). |
 | `crates/` | no | Crates the addon installs. See [Crates](#crates-crates). |
-| `config-templates/` | no | [Config templates](../../reference/config-template.md). |
-| `views/` | no | [VelaQL views](../system-operation/velaql.md). |
+| `config-templates/` | no | [Config templates](/docs/reference/config-template). |
+| `views/` | no | [VelaQL views](/docs/platform-engineers/system-operation/velaql). |
 
 `vela addon init <name>` creates the required files and a sample of most of the rest.
 
@@ -112,7 +112,7 @@ An [experimental addon](https://github.com/kubevela/catalog/tree/master/experime
 
 ## Definitions
 
-`definitions/` holds ComponentDefinitions, TraitDefinitions, PolicyDefinitions and WorkflowStepDefinitions, as YAML manifests or as [CUE definitions](../../getting-started/definition.md). Enabling the addon renders the CUE files and applies everything here to the hub.
+`definitions/` holds ComponentDefinitions, TraitDefinitions, PolicyDefinitions and WorkflowStepDefinitions, as YAML manifests or as [CUE definitions](/docs/getting-started/definition). Enabling the addon renders the CUE files and applies everything here to the hub.
 
 :::note
 Definitions are applied to the hub only, never to managed clusters.
@@ -132,7 +132,7 @@ A file with any other name is installed but never read. That includes the `schem
 
 ## Go definitions (`godef/`)
 
-`godef/` is a Go module of definitions written with [defkit](../defkit/overview.md), instead of or beside the CUE ones in `definitions/`. It holds `module.yaml`, `go.mod` and the Go sources.
+`godef/` is a Go module of definitions written with [defkit](/docs/platform-engineers/defkit/overview), instead of or beside the CUE ones in `definitions/`. It holds `module.yaml`, `go.mod` and the Go sources.
 
 When you enable the addon from a local directory, the CLI compiles the Go definitions to CUE and installs them with the rest. A Go definition with the same name as one in `definitions/` is refused, unless you pass `--override-definitions`, in which case the Go one wins.
 
@@ -144,7 +144,7 @@ vela addon init my-addon --godef --components api --traits scaler
 
 ## Crates (`crates/`)
 
-`crates/` lists the [crates](../crate/intro.md) the addon installs, through its own Application. Crates need the `EnableCrateComponent` feature gate on vela-core; with it off, enabling an addon that carries them fails.
+`crates/` lists the [crates](/docs/next/platform-engineers/crate/intro) the addon installs, through its own Application. Crates need the `EnableCrateComponent` feature gate on vela-core; with it off, enabling an addon that carries them fails.
 
 - `crates/_imports.cue` names crates to fetch from a crate registry, each with an optional `registry` and an exact `version` (no ranges).
 - Every directory directly under `crates/` is an inline crate bundled with the addon, and must have a `_crate.cue`. A directory without one is refused.
@@ -153,22 +153,22 @@ A crate name can be declared once per addon, either as an import or inline.
 
 ## Application files
 
-Most addons install an operator, and the operator is described as an ordinary KubeVela [Application](../../getting-started/core-concept.md). That Application comes from two places:
+Most addons install an operator, and the operator is described as an ordinary KubeVela [Application](/docs/getting-started/core-concept). That Application comes from two places:
 
 - `template.yaml` or `template.cue`: the Application itself, with any components, policies and workflow.
 - `resources/`: extra components (CUE files) or Kubernetes objects (YAML files) added to it.
 
 A YAML template is the simplest way to write a fixed Application. A CUE template can read the addon's parameters, so one addon can install different operators and definitions depending on what the user asks for.
 
-- [Write the Application in YAML](./addon-cue.md#write-it-in-yaml)
-- [Write the Application in CUE](./addon-cue.md)
+- [Write the Application in YAML](addon-application.md#write-it-in-yaml)
+- [Write the Application in CUE](addon-application.md)
 
 The [example addon](https://github.com/kubevela/catalog/tree/master/experimental/addons/example) in the catalog uses every file on this page.
 
 ## Config templates (`config-templates/`)
 
-`config-templates/` holds [config templates](../../reference/config-template.md), installed when the addon is enabled.
+`config-templates/` holds [config templates](/docs/reference/config-template), installed when the addon is enabled.
 
 ## Views (`views/`)
 
-`views/` holds [VelaQL views](../system-operation/velaql.md), installed as ConfigMaps when the addon is enabled.
+`views/` holds [VelaQL views](/docs/platform-engineers/system-operation/velaql), installed as ConfigMaps when the addon is enabled.

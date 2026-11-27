@@ -173,7 +173,7 @@ Do the same for a custom resource whose children include a Service, so `vela sta
 
 ## Ship rules with an addon
 
-An [addon](../platform-engineers/addon/intro.md) that installs a CRD operator should ship the rules for its kinds, so its users see the Pods without adding anything. Put the rule ConfigMap in the `outputs` field of the addon's `template.cue`:
+An [addon](/addons/developer/make-your-own-addon) that installs a CRD operator should ship the rules for its kinds, so its users see the Pods without adding anything. Put the rule ConfigMap in the `outputs` field of the addon's `template.cue`:
 
 ```cue
 package main
@@ -212,4 +212,4 @@ _rules: [{
 }]
 ```
 
-See [auxiliary resources](../platform-engineers/addon/addon-cue.md#auxiliary-resources) for more on `outputs` in an addon.
+See [auxiliary resources](/addons/developer/addon-application#auxiliary-resources) for more on `outputs` in an addon.

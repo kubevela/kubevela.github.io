@@ -38,7 +38,7 @@ If your environment can't reach the addon registry or `https://github.com/kubeve
     git clone https://github.com/kubevela/catalog
     ```
 
-    To host the catalog yourself, see [*Sync addon catalog to your ChartMuseum instance*](../addon/addon-registry.md#sync-addon-catalog-to-your-chartmuseum-instance).
+    To host the catalog yourself, see [*Sync addon catalog to your ChartMuseum instance*](/addons/developer/addon-registry#sync-addon-catalog-to-your-chartmuseum-instance).
 
 2. List the images and Helm charts an addon uses, by rendering it without installing anything:
 
@@ -73,7 +73,7 @@ If your environment can't reach the addon registry or `https://github.com/kubeve
 
     `<your chart registry>` is a registry added with `vela addon registry add`, a ChartMuseum URL, or an `oci://` URL.
 
-    You can use the ChartMuseum addon as that chart registry; see [*Sync Helm Charts to your ChartMuseum instance*](../addon/addon-registry.md#sync-helm-charts-to-your-chartmuseum-instance).
+    You can use the ChartMuseum addon as that chart registry; see [*Sync Helm Charts to your ChartMuseum instance*](/addons/developer/addon-registry#sync-helm-charts-to-your-chartmuseum-instance).
 
 4. Point the addon at your registries. Many addons take the registry as a parameter (see `parameter.cue` in the addon's directory); otherwise change the image and chart URL in the files under `resources/`.
 

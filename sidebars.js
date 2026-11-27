@@ -294,15 +294,13 @@ const sidebars = {
           type: 'category',
           label: 'Addons',
           collapsed: true,
-          link: {
-            type: 'doc',
-            id: 'platform-engineers/addon/intro',
-          },
           items: [
-            'platform-engineers/addon/reference',
-            'platform-engineers/addon/addon-cue',
+            // Addon authoring lives in the Addons section; the topology rules apply to any workload, so they stay.
+            {type: 'link', label: 'Make Your Own Addon', href: '/addons/developer/make-your-own-addon'},
+            {type: 'link', label: 'Addon Reference', href: '/addons/developer/addon-reference'},
+            {type: 'link', label: 'Addon Application in CUE or YAML', href: '/addons/developer/addon-application'},
             'reference/topology-rule',
-            'platform-engineers/addon/addon-registry',
+            {type: 'link', label: 'Build your Own Registry', href: '/addons/developer/addon-registry'},
           ],
         },
         {

@@ -6,7 +6,7 @@ An addon can install crates. Use this when a crate needs infrastructure, such as
 
 For example, one addon can install Crossplane, and then the [aws-s3 crate](./crate-crossplane.md). The crate brings the AWS provider and the functions in its auxiliary objects.
 
-If you do not know addons, read [Make Your Own Addon](../addon/intro.md) first.
+If you do not know addons, read [Make Your Own Addon](/addons/developer/make-your-own-addon) first.
 
 ## Before you start
 
@@ -22,7 +22,7 @@ If you do not know addons, read [Make Your Own Addon](../addon/intro.md) first.
 
   `--reset-then-reuse-values` (Helm 3.14 or later) starts from the default values of the chart, applies the values that you set on the current release, then applies the `--set` flags. The gates that are already on stay on. `--version` stops Helm from moving the installation to a different chart version.
 
-- Read [Make Your Own Addon](../addon/intro.md) for the addon layout.
+- Read [Make Your Own Addon](/addons/developer/make-your-own-addon) for the addon layout.
 - Follow the addon `crossplane-storage` on this page. It includes the crate `aws-s3`. Most examples import the crate. [Inline crates](#inline-crates) shows the other layout, where the same crate is an inline crate and `crates/_imports.cue` has no entry for it.
 
 :::caution

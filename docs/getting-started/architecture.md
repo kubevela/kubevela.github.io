@@ -42,7 +42,7 @@ In real world, application deployment tends to be complex and varies from teams,
 - Platform builders for PaaS, Serverless, Application Management/Delivery systems
 	- KubeVela works as an application delivery engine that you could build your advanced platform with.
 - ISV, SaaS owners, and Application Architects who need to distribute software to anywhere
-	- KubeVela has full extension and integration capabilities to allow users to distribute applications with [customized addons](../platform-engineers/addon/intro.md) easily. Think about an App Store but on Kubernetes and clouds.
+	- KubeVela has full extension and integration capabilities to allow users to distribute applications with [customized addons](/addons/developer/make-your-own-addon) easily. Think about an App Store but on Kubernetes and clouds.
 - Application Developers, Operators, DevOps Engineers
 	- VelaUX is an addon of KubeVela, with this addon enabled, it provides an out-of-box modern application Continuous Delivery (CD) and Management platform with an easy-to-use UI console.
 

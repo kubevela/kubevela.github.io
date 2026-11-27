@@ -2,7 +2,7 @@
 title: Developer Overview
 ---
 
-This guide is for contributing to KubeVela itself: code, docs, issues and community work. If you want to extend KubeVela for your own platform instead, start with [Build Your Own Addon](../platform-engineers/addon/intro.md) and [Manage Definitions with CUE](../platform-engineers/cue/basic.md).
+This guide is for contributing to KubeVela itself: code, docs, issues and community work. If you want to extend KubeVela for your own platform instead, start with [Build Your Own Addon](/addons/developer/make-your-own-addon) and [Manage Definitions with CUE](../platform-engineers/cue/basic.md).
 
 ## Contribution Guide
 

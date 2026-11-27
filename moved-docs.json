@@ -999,6 +999,26 @@
   "section": "velaux",
   "to": "users/overview.md"
  },
+ "platform-engineers/addon/addon-cue.md": {
+  "from_url": "/docs/next/platform-engineers/addon/addon-cue",
+  "section": "addons",
+  "to": "developer/addon-application.md"
+ },
+ "platform-engineers/addon/addon-registry.md": {
+  "from_url": "/docs/next/platform-engineers/addon/addon-registry",
+  "section": "addons",
+  "to": "developer/addon-registry.md"
+ },
+ "platform-engineers/addon/intro.md": {
+  "from_url": "/docs/next/platform-engineers/addon/intro",
+  "section": "addons",
+  "to": "developer/make-your-own-addon.md"
+ },
+ "platform-engineers/addon/reference.md": {
+  "from_url": "/docs/next/platform-engineers/addon/reference",
+  "section": "addons",
+  "to": "developer/addon-reference.md"
+ },
  "platform-engineers/addon/terraform.md": {
   "from_url": "/docs/next/platform-engineers/addon/terraform",
   "section": "terraform",
