@@ -81,7 +81,11 @@ export default function ReportProblem() {
     version.label === version.version ? version.version : `${version.label} (${version.version})`;
   const href = issueUrl({
     title: metadata.title,
-    page: new URL(metadata.permalink, siteConfig.url).href,
+    // The site serves every page with a trailing slash (trailingSlash: true); permalinks leave it off.
+    page: new URL(
+      siteConfig.trailingSlash && !metadata.permalink.endsWith('/') ? `${metadata.permalink}/` : metadata.permalink,
+      siteConfig.url,
+    ).href,
     section: version.pluginId,
     version: versionName,
     category,
