@@ -7,7 +7,7 @@ module.exports = {
       label: 'Getting Started',
       collapsed: false,
       link: {type: 'generated-index', slug: '/getting-started'},
-      items: ['getting-started/install'],
+      items: ['getting-started/introduction', 'getting-started/install', 'getting-started/quick-start'],
     },
     {
       type: 'category',
