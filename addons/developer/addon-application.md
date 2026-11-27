@@ -12,17 +12,19 @@ Addon CUE is compiled as plain CUE v0.14. Unlike definitions, it does not go thr
 
 ## Render without installing
 
-Check what your addon renders before you enable it for real. To render the Application with the CUE CLI, from the addon's folder:
-
-```shell
-cue eval *.cue resources/*.cue -e output -d yaml
-```
-
-To have KubeVela render the whole addon, parameters and all, and print the result without applying anything:
+Check what your addon renders before you enable it for real. To have KubeVela render the whole addon, parameters and all, and print the result without applying anything:
 
 ```shell
 vela addon enable ./my-addon --dry-run
 ```
+
+To render just the Application with the CUE CLI, without a cluster, run this from the addon's folder:
+
+```shell
+cue export *.cue resources/*.cue -e output --out yaml
+```
+
+The CUE CLI only loads the files as one package when every one of them declares `package main`. `vela addon init` writes `parameter.cue` without it, which KubeVela accepts but the CUE CLI doesn't: you get `reference "parameter" not found`. Add `package main` to the top of `parameter.cue` and both work.
 
 ## Application template file (template.cue)
 
