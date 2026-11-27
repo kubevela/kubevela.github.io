@@ -33,9 +33,10 @@
   width: 22px;
   height: 22px;
   margin-bottom: 6px;
+  color: var(--ifm-font-color-base);
   fill: none;
-  stroke: var(--kv-brand);
-  stroke-width: 1.7;
+  stroke: currentColor;
+  stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
