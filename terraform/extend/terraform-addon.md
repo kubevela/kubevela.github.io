@@ -94,4 +94,4 @@ Push the code generated in `./addons` and make a pull request.
 
 ## Contribute documentation
 
-Write [Terraform Addon enable doc](../getting-started/install.md) for your cloud provider and add it to the [list of provider addons](../getting-started/install.md#enable-a-cloud-provider).
+Write a readme for your provider's addon in the [catalog](https://github.com/kubevela/catalog), which is where `vela addon list` reads it from. Add it to the console sample on [Install](../getting-started/install.md#enable-a-cloud-provider) only if your provider wants a row there.

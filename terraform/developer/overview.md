@@ -33,7 +33,7 @@ The repository moved from `oam-dev` to the `kubevela` org on GitHub, but the Go 
 | `kubectl` and a cluster | k3d or kind | Running the controller and the e2e tests. CI uses kind with Kubernetes 1.37. |
 | Docker | | Building the image for e2e. |
 | Helm | v3 | Installing the chart. |
-| `controller-gen`, `goimports`, `golangci-lint` | v0.16.5 or later, latest, v2.14.0 | Installed by `make` into your `GOBIN` if they are not on your `PATH`. |
+| `controller-gen`, `goimports`, `golangci-lint` | v0.22.0, latest, v2.14.0 | Installed by `make` into your `GOBIN` if they are not on your `PATH`. |
 
 The Makefile uses whatever `controller-gen` and `golangci-lint` are on your `PATH` first, and only installs its pinned versions when there are none. Tools built with an older Go than 1.27 can refuse the code: rebuild them with Go 1.27.1.
 

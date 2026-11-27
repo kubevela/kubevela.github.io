@@ -67,7 +67,7 @@ Create a config from one. For AWS, with the keys set in your shell first (`read 
 vela config create aws -t terraform-aws name=aws AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" AWS_DEFAULT_REGION=us-east-1
 ```
 
-The config becomes a Terraform `Provider` named by `name`. Components use the Provider called `default` unless they set `providerRef`, so name your main one `default`, or set `providerRef` on each component.
+The config becomes a Terraform `Provider` named by `name`. Components use the Provider called `default` unless they, or their component type, set `providerRef`, so name your main one `default`, or set `providerRef` on each component.
 
 Then [provision a cloud resource](../guides/consume-cloud-services.md).
 

@@ -216,4 +216,4 @@ In the last section `Component Status`, the health status and the message of the
 
 ## More
 
-For more usages of cloud resources, like how to provision and consume cloud resources, please refer to [Scenarios of Cloud Resources Management](../getting-started/introduction.md).
+For more usages of cloud resources, like how to provision and consume cloud resources, see the database guides, starting with [Provision and Binding Database](./provision-and-consume-database.md).
