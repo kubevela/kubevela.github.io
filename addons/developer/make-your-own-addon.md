@@ -57,21 +57,34 @@ output: {
 }
 ```
 
-The `helm` component type comes from the [fluxcd](/addons/fluxcd) addon, so the scaffold lists `fluxcd` under `dependencies` in `metadata.yaml`, and enabling `podinfo` enables `fluxcd` first. The addon's version is set to the chart version, `6.11.2`.
+The `helm` component type comes from the [fluxcd](/addons/fluxcd) addon, so the scaffold lists `fluxcd` under `dependencies` in `metadata.yaml`. The addon's version is set to the chart version, `6.11.2`.
 
 The other files (`definitions/mytrait.cue`, `schemas/myschema.yaml`, `views/my-view.cue`, `resources/myresource.cue`) are samples. Edit them or delete them; pass `--no-samples` to leave them out.
 
 ### 2. Enable it from the local directory
 
+An addon enabled from a registry brings its dependencies with it, but one enabled from a directory doesn't. Enable `fluxcd` first, or the CLI stops with:
+
+```console
+Error: you must first enable dependencies: [fluxcd]
+```
+
 ```shell
+vela addon enable fluxcd
 vela addon enable ./podinfo
 ```
 
 ```console
+enabling addon by local dir: ./podinfo
 Addon podinfo enabled successfully.
+Please access addon-podinfo from the following endpoints:
++---------+---------------+-----------------------------------+--------------------------------+-------+
+| CLUSTER |   COMPONENT   |     REF(KIND/NAMESPACE/NAME)      |            ENDPOINT            | INNER |
++---------+---------------+-----------------------------------+--------------------------------+-------+
+| local   | addon-podinfo | Service/vela-system/addon-podinfo | addon-podinfo.vela-system:9898 | true  |
+| local   | addon-podinfo | Service/vela-system/addon-podinfo | addon-podinfo.vela-system:9999 | true  |
++---------+---------------+-----------------------------------+--------------------------------+-------+
 ```
-
-The CLI prints any endpoints the addon's Application exposes after that line.
 
 ### 3. Check it
 
