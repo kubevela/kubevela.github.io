@@ -1,4 +1,9 @@
 {
+ "/cluster-gateway/clusters": "/cluster-gateway/guides/register-clusters",
+ "/cluster-gateway/configuration": "/cluster-gateway/operate/configuration",
+ "/cluster-gateway/install": "/cluster-gateway/getting-started/install",
+ "/cluster-gateway/overview": "/cluster-gateway/getting-started/introduction",
+ "/cluster-gateway/troubleshooting": "/cluster-gateway/operate/troubleshooting",
  "/workflow/0.6/authoring/cue-actions": "/workflow/0.6/guides/authoring/cue-actions",
  "/workflow/0.6/authoring/step-definition": "/workflow/0.6/guides/authoring/step-definition",
  "/workflow/0.6/operate/operations": "/workflow/0.6/guides/operations",

@@ -1,7 +1,6 @@
 ---
 title: Register Clusters
-sidebar_label: Clusters
-description: The cluster Secret Cluster Gateway reads, the credential types it supports, and checking a cluster through the proxy with kubectl.
+description: Register a member cluster with a ServiceAccount token, a client certificate or a credential command, check it through the proxy, and remove it.
 ---
 
 A cluster is registered with Cluster Gateway by creating a Secret in the namespace the gateway reads (`--secret-namespace`). The Secret's name is the cluster's name. There is nothing else to apply: the gateway reads the Secret on every request, so a new Secret works straight away and a deleted one stops working straight away.
@@ -13,18 +12,7 @@ A cluster is registered with Cluster Gateway by creating a Secret in the namespa
 
 ## The cluster Secret
 
-| Field | Key | What it holds |
-| --- | --- | --- |
-| Label | `cluster.core.oam.dev/cluster-credential-type` | **Required.** `X509Certificate`, `ServiceAccountToken` or `Dynamic`. A Secret without it is not a cluster: it's left out of the list, and reads of it return NotFound. |
-| Label | `cluster.core.oam.dev/cluster-endpoint-type` | `Const` (the default) or `ClusterProxy`, for clusters reached through OCM's cluster-proxy. |
-| Data | `endpoint` | **Required for `Const`.** The member cluster's kube-apiserver URL, as the gateway's pods can reach it. |
-| Data | `ca.crt` (or `ca`) | The CA that signed the member's serving certificate. Leave it out and the gateway skips TLS verification. |
-| Data | `tls.crt`, `tls.key` | The client certificate and key, for `X509Certificate`. |
-| Data | `token` | The bearer token, for `ServiceAccountToken`. |
-| Data | `exec` | A kubeconfig exec configuration as JSON, for `Dynamic`. |
-| Data | `proxy-url` | An HTTP or SOCKS5 proxy to reach the member cluster through. |
-
-The `endpoint` is dialled from inside the gateway's pod, so it must be an address the hub's pod network can reach. `https://127.0.0.1:6443` from your laptop's kubeconfig is the gateway's own pod.
+Every cluster is a Secret with a `cluster.core.oam.dev/cluster-credential-type` label, an `endpoint` the gateway's pods can reach, the member's CA in `ca.crt`, and the credential itself. Each key is described in [Cluster Secrets](../concepts/cluster-secrets.md#what-the-gateway-reads); the sections below give a complete Secret for each credential type.
 
 ## Credential types
 
@@ -164,7 +152,7 @@ kubectl --server "$HUB/apis/cluster.core.oam.dev/v1alpha1/clustergateways/member
 
 Every kubectl command works that way, `exec`, `logs -f` and `get -w` included. With KubeVela, `vela cluster probe member` does the same check against the member's `/healthz`.
 
-If any of these fail, see [Troubleshooting](./troubleshooting.md).
+If any of these fail, see [Troubleshooting](../operate/troubleshooting.md).
 
 ## Remove a cluster
 

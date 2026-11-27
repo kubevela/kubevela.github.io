@@ -15,7 +15,7 @@ kubectl get deployment kubevela-cluster-gateway -n vela-system
 kubectl get apiservice v1alpha1.cluster.core.oam.dev
 ```
 
-The APIService should show `AVAILABLE` as `True`. Its settings are the `multicluster.clusterGateway.*` chart values, listed in [Configuration](./configuration.md#vela-core-chart-values).
+The APIService should show `AVAILABLE` as `True`. Its settings are the `multicluster.clusterGateway.*` chart values, listed in [Configuration](../operate/configuration.md#vela-core-chart-values).
 
 ## On its own
 
@@ -42,7 +42,7 @@ NAME                            SERVICE                           AVAILABLE   AG
 v1alpha1.cluster.core.oam.dev   cluster-gateway/gateway-service   True        12s
 ```
 
-The chart also creates the namespace the gateway reads cluster Secrets from, `open-cluster-management-credentials` (the `secretNamespace` value), so the install fails if that namespace already exists. With the gateway running, [register a cluster](./clusters.md).
+The chart also creates the namespace the gateway reads cluster Secrets from, `open-cluster-management-credentials` (the `secretNamespace` value), so the install fails if that namespace already exists. With the gateway running, [register a cluster](../guides/register-clusters.md).
 
 The standalone chart is set up for trying the gateway out:
 
@@ -70,4 +70,4 @@ helm uninstall cluster-gateway --namespace cluster-gateway
 | Priority and fairness | on | off (`--enable-priority-and-fairness=false`) |
 | OCM integration | `ocmIntegration.enabled` | not offered; use the [OCM Cluster-Gateway Manager](/addons/ocm-gateway-manager-addon) addon |
 
-With KubeVela, `vela cluster join` writes cluster Secrets for you. Standalone, you write them yourself, in the format on [Register Clusters](./clusters.md).
+With KubeVela, `vela cluster join` writes cluster Secrets for you. Standalone, you write them yourself, in the format on [Register Clusters](../guides/register-clusters.md).

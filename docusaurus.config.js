@@ -94,7 +94,7 @@ const config = {
             {to: 'velaux/overview', label: 'VelaUX'},
             {to: 'terraform/overview', label: 'Terraform'},
             {to: 'addons/overview', label: 'Addons'},
-            {to: 'cluster-gateway/overview', label: 'Cluster Gateway'},
+            {to: 'cluster-gateway/getting-started/introduction', label: 'Cluster Gateway'},
           ],
         },
         {
