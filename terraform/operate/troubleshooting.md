@@ -30,9 +30,10 @@ A remote module is cloned by the `git-configuration` init container first: look 
 | `ProviderNotFound` | No Provider called `default` in `default`, or the one `providerRef` names. Create it (`vela config create ... -t terraform-<cloud>`), set `providerRef`, or for Terraform that needs no credentials, set `inlineCredentials: true`. |
 | `ProviderNotReady` | The Provider's Secret is missing or lacks a key that cloud needs: `kubectl get provider <name> -o yaml` has the message. |
 | Stays in `ProvisioningAndChecking` | Check the Job's pod: an image that can't be pulled, a pod that can't be scheduled (`jobNodeSelector`, `resources`), or Terraform still working. Cloud resources such as databases can take many minutes. |
-| `ApplyFailed`, the Job retrying | Terraform refused or the cloud API failed: the `terraform-executor` log has the error. Fix the HCL or the variables and re-apply; each change starts a new Job. |
+| `ProvisioningAndChecking`, the Job's pod in `Init:ImagePullBackOff` with `no match for platform in manifest` | An arm64 node: the default `terraformImage` is amd64 only. See [Install](../getting-started/install.md#without-kubevela-the-helm-chart). |
+| Stays in `ProvisioningAndChecking`, the Job's pod in `Error` and restarting | Terraform refused or the cloud API failed: the `terraform-executor` log has the error (v0.9.1 never sets `ApplyFailed`). Fix the HCL or the variables and re-apply; each change starts a new Job. |
 | Stuck in `GeneratingTerraformOutputs` | The apply worked, but the connection Secret was refused: see [Upgrade](upgrade.md#to-091-and-082). |
-| The state Secret can't be written | `backend.namespace` names a namespace that doesn't exist (the `vela-system` default, outside KubeVela). Create it, or reinstall the chart with `backend.namespace` set. |
+| `terraform-init` fails with `Error loading state: namespaces "..." not found` | `backend.namespace` (or `spec.backend.kubernetes.namespace`) names a namespace that doesn't exist (the `vela-system` default, outside KubeVela). Create it, or reinstall the chart with `backend.namespace` set. |
 | Deletion hangs in `Destroying` | The destroy Job is failing: read its `terraform-executor` log. If the resources are already gone by other means, set `forceDelete: true` on the Configuration and delete it again. |
 
 ## The controller

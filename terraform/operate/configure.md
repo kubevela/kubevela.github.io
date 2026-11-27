@@ -12,7 +12,7 @@ vela addon enable terraform values='{"jobBackoffLimit":"5","backend":{"namespace
 | Value | Default | Does |
 | --- | --- | --- |
 | `image.repository`, `image.tag`, `image.pullPolicy` | `oamdev/terraform-controller`, the chart's version, `Always` | The controller image. |
-| `terraformImage` | `oamdev/docker-terraform:1.1.6@sha256:…` | The image the Terraform Jobs run: Terraform 1.1.9. Set your own to use another Terraform, or a mirror. |
+| `terraformImage` | `oamdev/docker-terraform:1.1.6@sha256:…` | The image the Terraform Jobs run: Terraform 1.1.9. Set your own to use another Terraform, or a mirror. Published for `linux/amd64` only. |
 | `gitImage` | `alpine/git:2.54.0@sha256:…` | The init container that clones a `remote` module. |
 | `busyboxImage` | `busybox:1.38.0@sha256:…` | The init container that copies the HCL into the Job's working directory. |
 | `backend.namespace` | `vela-system` | Where the default Kubernetes backend keeps each Configuration's state. Outside KubeVela, set it to a namespace that exists. |

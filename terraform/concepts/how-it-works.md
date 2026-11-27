@@ -102,7 +102,7 @@ spec:
 | `GeneratingTerraformOutputs` | The apply finished; the outputs are being written to the Secret. It stays here if the Secret is refused, with the reason in `status.apply.message`. |
 | `Available` | Done: the resources exist and the outputs are written. |
 | `ConfigurationReloading` | The HCL or a variable changed; a new apply Job is starting. |
-| `ApplyFailed`, `TerraformInitError` | Terraform failed; the Job's pod log has the error. |
+| `ApplyFailed`, `TerraformInitError` | Terraform failed. In v0.9.1 these are never reached: a failing run stays in `ProvisioningAndChecking`, and the error is only in the Job's pod log (see [Change, Fail and Delete](../examples/update-and-delete.md#2-a-failing-apply)). |
 | `ProviderNotFound`, `ProviderNotReady` | The `providerRef` names no Provider, or one whose credentials don't check out. |
 | `ConfigurationSpecNotValid` | Both or neither of `hcl` and `remote` are set. |
 | `InvalidRegion`, `InvalidGitCredentialsSecretReference`, ... | A referenced setting is missing or malformed. |

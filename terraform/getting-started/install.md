@@ -106,7 +106,17 @@ terraform-controller-d44c4bf5f-9bhjt   1/1     Running   0          13s
 ```
 
 :::caution Set backend.namespace outside vela-system
-`backend.namespace` is where the controller keeps each `Configuration`'s Terraform state, as a Secret. It defaults to `vela-system`, which only exists where KubeVela is installed. Installed anywhere else with the default, every `Configuration` stays unprovisioned: the Terraform Job cannot write its state.
+`backend.namespace` is where the controller keeps each `Configuration`'s Terraform state, as a Secret. It defaults to `vela-system`, which only exists where KubeVela is installed. Installed anywhere else with the default, every `Configuration` stays in `ProvisioningAndChecking`: the Job's `terraform-init` container fails with `Error loading state: namespaces "vela-system" not found`.
+:::
+
+:::caution arm64 nodes
+The chart's default `terraformImage`, `oamdev/docker-terraform:1.1.6`, is published for `linux/amd64` only. On an arm64 node (Apple silicon k3d or kind, Graviton) the Terraform Job never starts: its `terraform-init` container stays in `ImagePullBackOff` with `no match for platform in manifest`, and every Configuration sits in `ProvisioningAndChecking`. Where the node can run amd64 binaries under emulation (Docker Desktop can), point `terraformImage` at the amd64 image itself, by its platform digest:
+
+```shell
+--set terraformImage=oamdev/docker-terraform@sha256:defb733d94730dcd8e6ef77c764e9ed07314b59dab620633222c36528df0fa69
+```
+
+Otherwise, build an arm64 Terraform image and set that.
 :::
 
 Your cloud credentials then go into a `Provider` object: see [How It Works](../concepts/how-it-works.md#provider). For Terraform that needs no credentials, set `inlineCredentials: true` on the `Configuration`, as the [Quick Start](quick-start.md) does.

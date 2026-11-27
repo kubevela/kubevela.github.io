@@ -53,8 +53,22 @@ make test
 The tests are in `controllers/...`. Several suites patch functions at runtime with [gomonkey](https://github.com/agiledragon/gomonkey), which needs to write to the test binary's code pages. **macOS doesn't allow that**: on a Mac, those packages panic with `panic: permission denied` in `gomonkey.modifyBinary`, and only `controllers/configuration`, `controllers/configuration/backend` and `controllers/process/container` pass. Run the tests on Linux, as CI does, or in a container:
 
 ```shell
-docker run --rm -v "$PWD":/src -w /src golang:1.27.1 \
-  go test -gcflags=all=-l ./controllers/...
+docker run --rm -v "$PWD":/src -v "$(go env GOMODCACHE)":/go/pkg/mod:ro -w /src golang:1.27.1 \
+  go test ./controllers/...
+```
+
+Mounting your module cache saves the container downloading every dependency again; leave that `-v` out to start clean.
+
+```console
+ok  	github.com/oam-dev/terraform-controller/controllers	0.113s
+ok  	github.com/oam-dev/terraform-controller/controllers/client	0.023s
+ok  	github.com/oam-dev/terraform-controller/controllers/configuration	0.083s
+ok  	github.com/oam-dev/terraform-controller/controllers/configuration/backend	0.080s
+ok  	github.com/oam-dev/terraform-controller/controllers/process	0.100s
+ok  	github.com/oam-dev/terraform-controller/controllers/process/container	0.007s
+ok  	github.com/oam-dev/terraform-controller/controllers/provider	1.572s
+ok  	github.com/oam-dev/terraform-controller/controllers/terraform	0.019s
+ok  	github.com/oam-dev/terraform-controller/controllers/util	0.078s
 ```
 
 The suites mock `envtest`'s start and stop, so no Kubernetes binaries are needed.

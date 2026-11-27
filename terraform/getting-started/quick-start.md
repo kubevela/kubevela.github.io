@@ -26,7 +26,7 @@ NAME                                   READY   STATUS    RESTARTS   AGE
 terraform-controller-d44c4bf5f-9bhjt   1/1     Running   0          13s
 ```
 
-`backend.namespace=terraform` keeps the Terraform state in the controller's namespace; the default, `vela-system`, only exists alongside KubeVela.
+`backend.namespace=terraform` keeps the Terraform state in the controller's namespace; the default, `vela-system`, only exists alongside KubeVela. On an arm64 machine (an Apple silicon laptop, say), also set `terraformImage` as [Install](install.md#without-kubevela-the-helm-chart) shows: the default Terraform image is amd64 only.
 
 ## 2. Apply a Configuration
 
@@ -55,10 +55,16 @@ spec:
 
 ```shell
 kubectl apply -f random.yaml
-kubectl get configuration random-id -w
+kubectl wait configuration/random-id --for=jsonpath='{.status.apply.state}'=Available --timeout=10m
+kubectl get configuration random-id
 ```
 
-The controller starts a Job that runs `terraform init` and `terraform apply`; the first run pulls the Terraform image and the provider, so give it a minute. `Available` means the apply finished and the outputs are written.
+The controller starts a Job that runs `terraform init` and `terraform apply`. It shows `ProvisioningAndChecking` while that runs; the first run pulls the Terraform image and the provider, so give it a minute or two. `Available` means the apply finished and the outputs are written:
+
+```console
+NAME        APPLY       DESTROY   AGE
+random-id   Available             87s
+```
 
 ## 3. Read the output
 
@@ -68,11 +74,21 @@ Each Terraform `output` becomes a key in the connection Secret:
 kubectl get secret random-conn -o jsonpath='{.data.random_id}' | base64 -d; echo
 ```
 
+```console
+8ada6ec5c220af65
+```
+
 The same value is on the Configuration's status:
 
 ```shell
 kubectl get configuration random-id -o jsonpath='{.status.apply.outputs}'; echo
 ```
+
+```console
+{"random_id":{"value":"8ada6ec5c220af65"}}
+```
+
+Along the way the controller made the objects [How It Works](../concepts/how-it-works.md#what-the-controller-creates) describes: the `tf-random-id` ConfigMap, the `variable-random-id` Secret and the `random-id-apply` Job in `default`, and the state Secret `tfstate-default-random-id` in `terraform`.
 
 ## 4. Clean up
 

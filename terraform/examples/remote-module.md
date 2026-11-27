@@ -29,19 +29,49 @@ spec:
 
 ```shell
 kubectl apply -f remote.yaml
-kubectl get configuration random-remote -w
+kubectl wait configuration/random-remote --for=jsonpath='{.status.apply.state}'=Available --timeout=10m
+kubectl get configuration random-remote
+```
+
+```console
+NAME            APPLY       DESTROY   AGE
+random-remote   Available             36s
 ```
 
 ## 2. Check what ran
 
-The apply Job's pod has the clone as an init container, and Terraform's own output in the main one:
+The apply Job's pod clones the repository in its `git-configuration` init container:
+
+```shell
+kubectl logs job/random-remote-apply -c git-configuration
+```
+
+```console
+Cloning into '/opt/tf-backend'...
+```
+
+Terraform's own output is in the main container, `terraform-executor` (it is coloured; `| sed 's/\x1b\[[0-9;]*m//g'` strips the escapes):
 
 ```shell
 kubectl logs job/random-remote-apply -c terraform-executor | tail -6
 ```
 
+```console
+Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+random_id = "b489e985fcee6157"
+```
+
+And the output in the connection Secret:
+
 ```shell
 kubectl get secret random-remote-conn -o jsonpath='{.data.random_id}' | base64 -d; echo
+```
+
+```console
+b489e985fcee6157
 ```
 
 ## 3. Clean up

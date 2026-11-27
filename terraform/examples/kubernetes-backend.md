@@ -41,7 +41,13 @@ spec:
 
 ```shell
 kubectl apply -f backend.yaml
-kubectl get configuration random-state -w
+kubectl wait configuration/random-state --for=jsonpath='{.status.apply.state}'=Available --timeout=10m
+kubectl get configuration random-state
+```
+
+```console
+NAME           APPLY       DESTROY   AGE
+random-state   Available             21s
 ```
 
 ## 2. Look at the state
@@ -52,11 +58,28 @@ Terraform's `kubernetes` backend names the Secret `tfstate-<workspace>-<secret_s
 kubectl get secret -n tf-state
 ```
 
+```console
+NAME                           TYPE     DATA   AGE
+tfstate-default-random-state   Opaque   1      17s
+```
+
 The state is gzipped JSON under the `tfstate` key:
 
 ```shell
 kubectl get secret -n tf-state tfstate-default-random-state -o jsonpath='{.data.tfstate}' \
   | base64 -d | gunzip | jq '{serial, outputs}'
+```
+
+```json
+{
+  "serial": 1,
+  "outputs": {
+    "name": {
+      "value": "polite-wahoo",
+      "type": "string"
+    }
+  }
+}
 ```
 
 ## 3. Clean up

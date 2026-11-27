@@ -38,26 +38,44 @@ spec:
 
 ```shell
 kubectl apply -f pet.yaml
-kubectl wait configuration/pet --for=jsonpath='{.status.apply.state}'=Available --timeout=5m
+kubectl wait configuration/pet --for=jsonpath='{.status.apply.state}'=Available --timeout=10m
 kubectl get secret pet-conn -o jsonpath='{.data.name}' | base64 -d; echo
+```
+
+```console
+configuration.terraform.core.oam.dev/pet condition met
+electric-ocelot
 ```
 
 Now ask for a longer name:
 
 ```shell
 kubectl patch configuration pet --type merge -p '{"spec":{"variable":{"length":4}}}'
-kubectl get configuration pet -w
+sleep 5
+kubectl wait configuration/pet --for=jsonpath='{.status.apply.state}'=Available --timeout=10m
+kubectl get configuration pet
 ```
 
-The controller sees the variable change, starts a new apply Job, and Terraform replaces the `random_pet`, since its `length` can't change in place. The Secret follows:
+The controller sees the variable change and starts a new apply Job, so `pet` goes back to `ProvisioningAndChecking`, then `Available` again:
+
+```console
+NAME   APPLY       DESTROY   AGE
+pet    Available             36s
+```
+
+Terraform replaces the `random_pet`, since its `length` can't change in place, and the Secret follows:
 
 ```shell
 kubectl get secret pet-conn -o jsonpath='{.data.name}' | base64 -d; echo
 ```
 
+```console
+frequently-wholly-glorious-wolf
+```
+
 ## 2. A failing apply
 
-`random_id` refuses a negative `byte_length` when it is applied. Save this as `broken.yaml`:
+A typo in the HCL: the output refers to a resource that isn't there. Save this as `broken.yaml`:
 
 ```yaml
 apiVersion: terraform.core.oam.dev/v1beta2
@@ -66,8 +84,12 @@ metadata:
   name: broken
 spec:
   hcl: |
-    resource "random_id" "bad" {
-      byte_length = -1
+    resource "random_id" "this" {
+      byte_length = 8
+    }
+
+    output "id" {
+      value = random_id.thiss.hex
     }
   inlineCredentials: true
   forceDelete: true
@@ -75,17 +97,50 @@ spec:
 
 ```shell
 kubectl apply -f broken.yaml
-kubectl get configuration broken -w
+kubectl get configuration broken
+kubectl get configuration broken -o jsonpath='{.status.apply.message}'; echo
 ```
 
-The message on the status says where to look; the Terraform error itself is in the Job's log:
+```console
+NAME     APPLY                     DESTROY   AGE
+broken   ProvisioningAndChecking             3m9s
+container "terraform-executor" in pod "broken-apply-tkqkx" is waiting to start: PodInitializing
+```
+
+:::note A failed run shows as ProvisioningAndChecking
+In v0.9.1 the Configuration does not move to `ApplyFailed`: it stays in `ProvisioningAndChecking`, and the message only names the Job's pod. The controller looks for Terraform's `Error:` in the pod log after it has stripped the colour codes the check depends on, so it never finds one. Look at the pod instead.
+:::
+
+The pod fails and restarts:
 
 ```shell
-kubectl get configuration broken -o jsonpath='{.status.apply.message}'; echo
-kubectl logs job/broken-apply -c terraform-executor | tail -8
+kubectl get pods -l job-name=broken-apply
 ```
 
-The Job keeps retrying (the chart's `jobBackoffLimit` caps it, unlimited by default), so fix the HCL and re-apply, or delete it.
+```console
+NAME                 READY   STATUS   RESTARTS      AGE
+broken-apply-tkqkx   0/1     Error    5 (87s ago)   3m9s
+```
+
+And its log has Terraform's error:
+
+```shell
+kubectl logs job/broken-apply -c terraform-executor | sed 's/\x1b\[[0-9;]*m//g' | tail -9
+```
+
+```console
+╷
+│ Error: Reference to undeclared resource
+│
+│   on main.tf line 6, in output "id":
+│    6:   value = random_id.thiss.hex
+│
+│ A managed resource "random_id" "thiss" has not been declared in the root
+│ module.
+╵
+```
+
+The Job keeps retrying (the chart's `jobBackoffLimit` caps it; unset, it is effectively unlimited), so fix the HCL and re-apply, or delete it.
 
 ## 3. Delete
 
@@ -93,10 +148,14 @@ The Job keeps retrying (the chart's `jobBackoffLimit` caps it, unlimited by defa
 kubectl delete configuration pet
 ```
 
-`pet` runs `terraform destroy` first, then removes its Secret and state. `broken` never applied anything, and `forceDelete: true` lets it go without waiting for a destroy:
+`pet` runs `terraform destroy` first (its `DESTROY` column shows `Destroying` meanwhile), then removes its Secret and state. `broken` never applied anything, and `forceDelete: true` lets it go at once, without a destroy:
 
 ```shell
 kubectl delete configuration broken
+```
+
+```console
+configuration.terraform.core.oam.dev "broken" deleted from default namespace
 ```
 
 :::caution
