@@ -8,7 +8,7 @@ KubeVela releases don't ship addons. Each addon has its own version in the catal
 
 | KubeVela | Verified addons it can enable |
 | --- | --- |
-| v1.12 | All but `model-serving` (needs Kubernetes earlier than 1.22). `velaux` is v1.9.5; for the VelaUX 1.12 prereleases see the [VelaUX docs](/velaux/overview). |
+| v1.12 | All but `model-serving` (needs Kubernetes earlier than 1.22). `velaux` is v1.9.5; for the VelaUX 1.12 prereleases see the [VelaUX docs](/velaux/getting-started/introduction). |
 | v1.11 | All but `model-serving`. |
 | v1.10, v1.9 | All but `model-serving` and `cloudshell` (needs v1.11 or later). |
 

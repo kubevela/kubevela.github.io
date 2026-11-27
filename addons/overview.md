@@ -44,9 +44,9 @@ Many addons install their software from a Helm chart, so they depend on `fluxcd`
 
 | Addon | What it gives you |
 | --- | --- |
-| [terraform](/terraform/install/terraform-addon) | The Terraform controller, so components can provision cloud resources. Add a provider addon for each cloud. |
-| [terraform-&lt;provider&gt;](/terraform/install/terraform-addon) | Components for one cloud's resources, and a config template for its credentials: `terraform-alibaba`, `terraform-aws`, `terraform-azure`, `terraform-baidu`, `terraform-gcp`, `terraform-tencent`, `terraform-ucloud`. |
-| [terraform-ec](/terraform/install/terraform-ec-addon) | The same for Elastic Cloud deployments. |
+| [terraform](/terraform/getting-started/install) | The Terraform controller, so components can provision cloud resources. Add a provider addon for each cloud. |
+| [terraform-&lt;provider&gt;](/terraform/getting-started/install) | Components for one cloud's resources, and a config template for its credentials: `terraform-alibaba`, `terraform-aws`, `terraform-azure`, `terraform-baidu`, `terraform-gcp`, `terraform-tencent`, `terraform-ucloud`. |
+| [terraform-ec](/terraform/guides/elastic-cloud-provider) | The same for Elastic Cloud deployments. |
 
 ## Gateway
 

@@ -19,7 +19,7 @@ This section covers the addons in the community catalog, [kubevela/catalog](http
 
 An addon is not a separate product. The `vela addon` commands, the addon format and the registries are all part of KubeVela, and an enabled addon is just an Application:
 
-1. You run `vela addon enable <name>`, or click **Enable** in [VelaUX](/velaux/overview).
+1. You run `vela addon enable <name>`, or click **Enable** in [VelaUX](/velaux/getting-started/introduction).
 2. The CLI fetches the addon from a registry (or reads it from a local directory), renders it, and applies its definitions and UI schemas to the hub cluster.
 3. It also applies an Application named `addon-<name>` in `vela-system`, which installs the addon's controllers. The Application controller delivers it like any other Application, so `vela status addon-<name> -n vela-system` shows its health.
 
