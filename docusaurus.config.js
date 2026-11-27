@@ -95,12 +95,12 @@ const config = {
           label: 'Documentation',
           position: 'left',
           items: [
-            {to: 'docs/', label: 'KubeVela'},
-            {to: 'workflow/getting-started/introduction', label: 'Workflow'},
-            {to: 'velaux/getting-started/introduction', label: 'VelaUX'},
-            {to: 'terraform/getting-started/introduction', label: 'Terraform'},
-            {to: 'addons/getting-started/introduction', label: 'Addons'},
-            {to: 'cluster-gateway/getting-started/introduction', label: 'Cluster Gateway'},
+            {to: 'docs/', activeBaseRegex: '^(/zh)?/docs', label: 'KubeVela'},
+            {to: 'workflow/getting-started/introduction', activeBaseRegex: '^(/zh)?/workflow', label: 'Workflow'},
+            {to: 'velaux/getting-started/introduction', activeBaseRegex: '^(/zh)?/velaux', label: 'VelaUX'},
+            {to: 'terraform/getting-started/introduction', activeBaseRegex: '^(/zh)?/terraform', label: 'Terraform'},
+            {to: 'addons/getting-started/introduction', activeBaseRegex: '^(/zh)?/addons', label: 'Addons'},
+            {to: 'cluster-gateway/getting-started/introduction', activeBaseRegex: '^(/zh)?/cluster-gateway', label: 'Cluster Gateway'},
           ],
         },
         {
