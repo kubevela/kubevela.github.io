@@ -163,8 +163,8 @@ const sidebars = {
           collapsed: true,
           items: [
             'tutorials/s2i',
-            {type: 'link', label: 'Triggers in VelaUX', href: '/velaux/delivery/triggers'},
-            {type: 'link', label: 'Harbor Image Registry', href: '/velaux/delivery/harbor-trigger'},
+            {type: 'link', label: 'Triggers in VelaUX', href: '/velaux/guides/delivery/triggers'},
+            {type: 'link', label: 'Harbor Image Registry', href: '/velaux/guides/delivery/harbor-trigger'},
           ],
         },
         {
@@ -174,7 +174,7 @@ const sidebars = {
             'tutorials/access-application',
             'tutorials/auto-scaler',
             'tutorials/debug-app',
-            {type: 'link', label: 'Cloud Shell', href: '/velaux/applications/cloud-shell'},
+            {type: 'link', label: 'Cloud Shell', href: '/velaux/guides/applications/cloud-shell'},
             'tutorials/vela-top',
             {
               type: 'category',
@@ -248,16 +248,16 @@ const sidebars = {
           label: 'VelaUX',
           collapsed: true,
           items: [
-            {type: 'link', label: 'Concepts', href: '/velaux/overview'},
-            {type: 'link', label: 'Install', href: '/velaux/install'},
-            {type: 'link', label: 'Users', href: '/velaux/users/overview'},
-            {type: 'link', label: 'Projects', href: '/velaux/users/projects'},
-            {type: 'link', label: 'SSO Login', href: '/velaux/users/sso'},
+            {type: 'link', label: 'Concepts', href: '/velaux/concepts/overview'},
+            {type: 'link', label: 'Install', href: '/velaux/getting-started/install'},
+            {type: 'link', label: 'Users', href: '/velaux/guides/users/overview'},
+            {type: 'link', label: 'Projects', href: '/velaux/guides/users/projects'},
+            {type: 'link', label: 'SSO Login', href: '/velaux/guides/users/sso'},
           ],
         },
         {
           'Authentication and Authorization': [
-            {type: 'link', label: 'VelaUX RBAC', href: '/velaux/users/rbac'},
+            {type: 'link', label: 'VelaUX RBAC', href: '/velaux/guides/users/rbac'},
             'platform-engineers/auth/basic',
             'platform-engineers/auth/advance',
             'platform-engineers/auth/integration',
@@ -268,14 +268,14 @@ const sidebars = {
         {
           'Cluster Management': [
             'platform-engineers/system-operation/managing-clusters',
-            {type: 'link', label: 'Targets in VelaUX', href: '/velaux/delivery/targets'},
+            {type: 'link', label: 'Targets in VelaUX', href: '/velaux/guides/delivery/targets'},
             'platform-engineers/system-operation/working-with-ocm',
           ],
         },
         'platform-engineers/workflow/working-mechanism',
         {
           'UX Customization': [
-            {type: 'link', label: 'UX of Definition', href: '/velaux/extend/ui-schema'},
+            {type: 'link', label: 'UX of Definition', href: '/velaux/guides/extend/ui-schema'},
           ],
         },
         'platform-engineers/status/application_health_status_metrics'
@@ -471,7 +471,7 @@ const sidebars = {
           label: 'Addons',
           items: [
             {type: 'link', label: 'Addon catalog', href: '/addons/overview'},
-            {type: 'link', label: 'VelaUX', href: '/velaux/install'},
+            {type: 'link', label: 'VelaUX', href: '/velaux/getting-started/install'},
           ],
         },
         {type: 'link', label: 'Cloud Resource List', href: '/terraform/reference/cloud-resources-list'},

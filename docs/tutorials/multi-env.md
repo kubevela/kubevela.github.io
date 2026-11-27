@@ -6,7 +6,7 @@ title: Deploy to Multi Environments
 This page covers environments in VelaUX. To deploy to several environments with YAML, see [multi-cluster delivery](../end-user/policies/multi-cluster.md): a topology policy per environment, each picking its clusters and namespace, does the same job.
 :::
 
-Environments represent where you deploy, logically: develop, test, production and so on. VelaUX (the UI of KubeVela) adds [environments and delivery targets](/velaux/overview) on top of KubeVela applications:
+Environments represent where you deploy, logically: develop, test, production and so on. VelaUX (the UI of KubeVela) adds [environments and delivery targets](/velaux/concepts/overview) on top of KubeVela applications:
 
 - A **target** is a cluster and a namespace to deploy to.
 - An **environment** groups one or more targets, and belongs to a project. Only applications in that project can be bound to it.
@@ -55,7 +55,7 @@ See the [override policy](../end-user/policies/references.md#override) reference
 
 ### 4. Deploy
 
-Each environment deploys on its own: when you click **Deploy**, you pick the environment. To chain environments, for example to deploy production only after test succeeds, use a [custom trigger](/velaux/delivery/triggers):
+Each environment deploys on its own: when you click **Deploy**, you pick the environment. To chain environments, for example to deploy production only after test succeeds, use a [custom trigger](/velaux/guides/delivery/triggers):
 
 1. On the application, create a trigger of type **Custom** for the production environment's workflow, and copy its webhook URL. It ends in `/api/v1/webhook/<token>`.
 2. Edit the test environment's workflow and add a `webhook` step at the end, with the trigger's URL and a body that tells VelaUX to run the workflow:

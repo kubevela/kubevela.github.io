@@ -59,7 +59,7 @@ vela config distribute <Config Name> --target <cluster/namespace>
 
 ## Create an application with this repository
 
-You can follow the [application creation guide](/velaux/applications/operations) to create a helm type application in project `default`. eg:
+You can follow the [application creation guide](/velaux/guides/applications/operations) to create a helm type application in project `default`. eg:
 
 ![helm-type-app](../../../resources/new-helm-type-app.jpg)
 

@@ -11,7 +11,7 @@ KubeVela has a built-in step for building images. See [Unified Declarative CI/CD
 
 ## Use triggers to integrate with CI systems
 
-You can use triggers from the [VelaUX addon](../install.md) to integrate with different CI systems. VelaUX creates a default trigger when you create an application; you can delete it and create your own. Each trigger has a **Payload Type**, which says what sends the request:
+You can use triggers from the [VelaUX addon](../../getting-started/install.md) to integrate with different CI systems. VelaUX creates a default trigger when you create an application; you can delete it and create your own. Each trigger has a **Payload Type**, which says what sends the request:
 
 - [Custom](#custom-trigger): any CI tool that can send an HTTP request. See [the Jenkins example](#example-jenkins).
 - [ACR](#acr-trigger)
@@ -19,7 +19,7 @@ You can use triggers from the [VelaUX addon](../install.md) to integrate with di
 - [DockerHub](#dockerhub-trigger)
 - [JFrog](#jfrog-trigger)
 
-![trigger](../resources/trigger.jpg)
+![trigger](../../resources/trigger.jpg)
 
 Every trigger has a webhook URL of the form `http://<velaux-address>/api/v1/webhook/<token>`. A request to it deploys the application with the trigger's **Execution Workflow**. The registry triggers (ACR, Harbor, DockerHub, JFrog) also set the `image` property of the trigger's **Component** to the image that was pushed.
 
@@ -29,7 +29,7 @@ A custom trigger gives you a webhook URL that your CI tool calls with a JSON bod
 
 The default trigger is a custom trigger. Click `Manual Trigger` to see its details:
 
-![manual-trigger](../resources/manual-trigger.png)
+![manual-trigger](../../resources/manual-trigger.png)
 
 The webhook URL is the address of the trigger, and the `Curl Command` example shows a request body like this:
 
@@ -71,13 +71,13 @@ webhook-request:
 
 When the job runs, VelaUX deploys the application and shows the code info on the deployment:
 
-![gitlab-trigger](../resources/gitlab-trigger.png)
+![gitlab-trigger](../../resources/gitlab-trigger.png)
 
 #### Example: Jenkins
 
 To deploy from a Jenkins pipeline, VelaUX has to be reachable from your Jenkins runner. Open the application in VelaUX and click **Manual Trigger** on its default trigger to copy the webhook URL:
 
-![alt](../resources/app-trigger-webhook.jpg)
+![alt](../../resources/app-trigger-webhook.jpg)
 
 The webhook URL lets anyone who has it deploy the application. Store it as a Jenkins `Secret text` credential (here with the ID `velaux-webhook-url`) and read it with `withCredentials`, rather than pasting it into the job:
 
@@ -98,7 +98,7 @@ Replace `kubevela-jenkins-ci-demo` with your component's name and `busybox` with
 
 When Jenkins runs the step, VelaUX runs the application's workflow:
 
-![alt](../resources/jenkins-run.jpg)
+![alt](../../resources/jenkins-run.jpg)
 
 To check it worked, open the application in VelaUX and go to **Revisions**. A new revision is listed with the trigger type `webhook`; expand it to see the commit and branch Jenkins sent in `codeInfo`.
 
@@ -159,17 +159,17 @@ An ACR trigger takes the webhook that Alibaba Cloud Container Registry sends whe
 
 Create a trigger with **Payload Type** `ACR` and choose the workflow to run as the **Execution Workflow**. If your images are pulled from an address other than `registry.<region>.aliyuncs.com` (an enterprise instance, for example), set the trigger's **Registry** to that address.
 
-![alt](../resources/acr-trigger-newtrigger.png)
+![alt](../../resources/acr-trigger-newtrigger.png)
 
 Then add a trigger to the ACR repository: in the repository's **Triggers** page, create one with the trigger's webhook URL as the URL, and choose to fire it on every tag (or the tags you want to deploy).
 
-![alt](../resources/acr-trigger.png)
+![alt](../../resources/acr-trigger.png)
 
 Each push now creates a new deployment, with the image set to `<registry>/<namespace>/<repository>:<tag>`:
 
-![alt](../resources/acr-trigger-acrrecord.png)
+![alt](../../resources/acr-trigger-acrrecord.png)
 
-![alt](../resources/acr-trigger-revisions.png)
+![alt](../../resources/acr-trigger-revisions.png)
 
 ### DockerHub Trigger
 
@@ -177,17 +177,17 @@ A DockerHub trigger takes the webhook Docker Hub sends when an image is pushed.
 
 Create a trigger with **Payload Type** `DockerHub` and choose the **Execution Workflow**.
 
-![alt](../resources/dockerhub-trigger-newtrigger.png)
+![alt](../../resources/dockerhub-trigger-newtrigger.png)
 
 Then, in the Docker Hub repository, open **Webhooks**, give the webhook a name, and paste the trigger's webhook URL. Docker Hub calls it on every push.
 
-![alt](../resources/dockerhub-trigger.png)
+![alt](../../resources/dockerhub-trigger.png)
 
 Each push now creates a new deployment, with the image set to `docker.io/<namespace>/<repository>:<tag>`:
 
-![alt](../resources/dockerhub-trigger-dockerhubrecord.png)
+![alt](../../resources/dockerhub-trigger-dockerhubrecord.png)
 
-![alt](../resources/dockerhub-trigger-revisions.png)
+![alt](../../resources/dockerhub-trigger-revisions.png)
 
 ### JFrog Trigger
 
@@ -195,10 +195,10 @@ A JFrog trigger takes the webhook JFrog Artifactory sends when a Docker image is
 
 Create a trigger with **Payload Type** `JFrog` and choose the **Execution Workflow**.
 
-![alt](../resources/jfrog-trigger-newtrigger.png)
+![alt](../../resources/jfrog-trigger-newtrigger.png)
 
 Then create a webhook in Artifactory with the trigger's webhook URL, the **Docker** domain and the **Tag was pushed** event. VelaUX ignores every other domain and event.
 
-![alt](../resources/jfrog-trigger.png)
+![alt](../../resources/jfrog-trigger.png)
 
 JFrog's webhook body does not include the Artifactory address, so add a custom header `X-JFrogURL` to the webhook with the address your cluster pulls from (for example `mycompany.jfrog.io`). VelaUX puts it in front of the image name: `<X-JFrogURL>/<repository>/<image>:<tag>`. Without the header, the image has no registry address.

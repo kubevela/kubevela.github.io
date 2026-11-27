@@ -967,37 +967,37 @@
  "how-to/dashboard/application/create-application.md": {
   "from_url": "/docs/next/how-to/dashboard/application/create-application",
   "section": "velaux",
-  "to": "applications/operations.md"
+  "to": "guides/applications/operations.md"
  },
  "how-to/dashboard/concepts.md": {
   "from_url": "/docs/next/how-to/dashboard/concepts",
   "section": "velaux",
-  "to": "overview.md"
+  "to": "concepts/overview.md"
  },
  "how-to/dashboard/target/overview.md": {
   "from_url": "/docs/next/how-to/dashboard/target/overview",
   "section": "velaux",
-  "to": "delivery/targets.md"
+  "to": "guides/delivery/targets.md"
  },
  "how-to/dashboard/trigger/overview.md": {
   "from_url": "/docs/next/how-to/dashboard/trigger/overview",
   "section": "velaux",
-  "to": "delivery/triggers.md"
+  "to": "guides/delivery/triggers.md"
  },
  "how-to/dashboard/user/project.md": {
   "from_url": "/docs/next/how-to/dashboard/user/project",
   "section": "velaux",
-  "to": "users/projects.md"
+  "to": "guides/users/projects.md"
  },
  "how-to/dashboard/user/rbac.md": {
   "from_url": "/docs/next/how-to/dashboard/user/rbac",
   "section": "velaux",
-  "to": "users/rbac.md"
+  "to": "guides/users/rbac.md"
  },
  "how-to/dashboard/user/user.md": {
   "from_url": "/docs/next/how-to/dashboard/user",
   "section": "velaux",
-  "to": "users/overview.md"
+  "to": "guides/users/overview.md"
  },
  "platform-engineers/addon/terraform.md": {
   "from_url": "/docs/next/platform-engineers/addon/terraform",
@@ -1122,12 +1122,12 @@
  "reference/addons/velaux.md": {
   "from_url": "/docs/next/reference/addons/velaux",
   "section": "velaux",
-  "to": "install.md"
+  "to": "getting-started/install.md"
  },
  "reference/ui-schema.md": {
   "from_url": "/docs/next/reference/ui-schema",
   "section": "velaux",
-  "to": "extend/ui-schema.md"
+  "to": "guides/extend/ui-schema.md"
  },
  "reference/user-improvement-plan.md": {
   "from_url": "/docs/next/reference/user-improvement-plan",
@@ -1137,7 +1137,7 @@
  "tutorials/cloud-shell.md": {
   "from_url": "/docs/next/tutorials/cloud-shell",
   "section": "velaux",
-  "to": "applications/cloud-shell.md"
+  "to": "guides/applications/cloud-shell.md"
  },
  "tutorials/consume-cloud-services.md": {
   "from_url": "/docs/next/tutorials/consume-cloud-services",
@@ -1147,11 +1147,11 @@
  "tutorials/sso.md": {
   "from_url": "/docs/next/tutorials/sso",
   "section": "velaux",
-  "to": "users/sso.md"
+  "to": "guides/users/sso.md"
  },
  "tutorials/trigger.md": {
   "from_url": "/docs/next/tutorials/trigger",
   "section": "velaux",
-  "to": "delivery/harbor-trigger.md"
+  "to": "guides/delivery/harbor-trigger.md"
  }
 }

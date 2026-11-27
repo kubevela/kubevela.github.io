@@ -91,7 +91,7 @@ const config = {
           items: [
             {to: 'docs/', label: 'KubeVela'},
             {to: 'workflow/getting-started/introduction', label: 'Workflow'},
-            {to: 'velaux/overview', label: 'VelaUX'},
+            {to: 'velaux/getting-started/introduction', label: 'VelaUX'},
             {to: 'terraform/overview', label: 'Terraform'},
             {to: 'addons/overview', label: 'Addons'},
             {to: 'cluster-gateway/getting-started/introduction', label: 'Cluster Gateway'},
