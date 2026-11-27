@@ -10,7 +10,7 @@ To provision cloud resources with [Crossplane](https://crossplane.io/) instead, 
 
 ### Prerequisites
 
-* Enable Terraform addon and authenticate the target cloud provider per the [instruction](../install/terraform-addon.md).
+* Enable Terraform addon and authenticate the target cloud provider per the [instruction](../getting-started/install.md).
 
 Let's take Alibaba Cloud as an example.
 
@@ -158,7 +158,7 @@ This deletes the bucket, because `deleteResource` defaults to `true`. Empty it f
 
 - Enable [VelaUX](/velaux/install) addon.
 
-- Enable [Terraform](../install/terraform-addon.md) addon, just like the prerequisites in CLI part above. VelaUX can also enable these addons in UI console.
+- Enable [Terraform](../getting-started/install.md) addon, just like the prerequisites in CLI part above. VelaUX can also enable these addons in UI console.
 
 ![addon-alibaba](../resources/addon-alibaba.jpg)
 
@@ -216,4 +216,4 @@ In the last section `Component Status`, the health status and the message of the
 
 ## More
 
-For more usages of cloud resources, like how to provision and consume cloud resources, please refer to [Scenarios of Cloud Resources Management](../overview.md).
+For more usages of cloud resources, like how to provision and consume cloud resources, please refer to [Scenarios of Cloud Resources Management](../getting-started/introduction.md).

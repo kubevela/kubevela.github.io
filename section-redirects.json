@@ -1,0 +1,5 @@
+{
+  "/terraform/overview": "/terraform/getting-started/introduction",
+  "/terraform/install/terraform-addon": "/terraform/getting-started/install",
+  "/terraform/install/terraform-ec-addon": "/terraform/guides/elastic-cloud-provider"
+}

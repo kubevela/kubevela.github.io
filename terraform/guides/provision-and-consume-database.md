@@ -3,7 +3,7 @@ title: Provision and Binding Database
 ---
 
 :::tip
-This section requires your platform engineers have already enabled [terraform addon](../install/terraform-addon.md).
+This section requires your platform engineers have already enabled [terraform addon](../getting-started/install.md).
 :::
 
 This tutorial will talk about how to provision and consume Alibaba Cloud RDS (and OSS) by Terraform.

@@ -1,6 +1,7 @@
 // Sidebar for the Terraform section (/terraform). It follows terraform-controller and the cloud resource modules as
 // they are now, so it is not versioned. The cloud resource pages are generated, so the reference groups are built
-// from the files on disk by their provider prefix.
+// from the files on disk by their provider prefix. Only generated pages may sit in terraform/reference/: the list generator
+// (hack/cloud-resources/terraform/gen.go) reads every file there as a cloud resource page.
 const fs = require('fs');
 const path = require('path');
 
@@ -31,26 +32,50 @@ if (other.length) groups.push({type: 'category', label: 'Other', items: other});
 
 module.exports = {
   terraform: [
-    'overview',
-    {type: 'category', label: 'Install', items: ['install/terraform-addon', 'install/terraform-ec-addon']},
+    {
+      type: 'category',
+      label: 'Getting Started',
+      collapsed: false,
+      link: {type: 'generated-index', slug: '/getting-started'},
+      items: ['getting-started/introduction', 'getting-started/install'],
+    },
     {
       type: 'category',
       label: 'Guides',
+      link: {type: 'generated-index', slug: '/guides'},
       items: [
         'guides/consume-cloud-services',
-        'guides/provision-and-consume-database',
-        'guides/provision-and-initiate-database',
-        'guides/secure-your-database-connection',
-        'guides/provision-an-rds-instance-with-more-than-one-database',
-        'guides/provision-instance-and-database-separately',
+        {
+          type: 'category',
+          label: 'Databases',
+          items: [
+            'guides/provision-and-consume-database',
+            'guides/provision-and-initiate-database',
+            'guides/secure-your-database-connection',
+            'guides/provision-an-rds-instance-with-more-than-one-database',
+            'guides/provision-instance-and-database-separately',
+          ],
+        },
+        'guides/elastic-cloud-provider',
+        {
+          type: 'category',
+          label: 'Extend',
+          items: ['extend/cloud-resource-component', 'extend/terraform-addon'],
+        },
       ],
     },
-    {type: 'category', label: 'Extend', items: ['extend/cloud-resource-component', 'extend/terraform-addon']},
     {
       type: 'category',
-      label: 'Cloud Resources',
-      link: {type: 'doc', id: 'reference/cloud-resources-list'},
-      items: groups,
+      label: 'Reference',
+      link: {type: 'generated-index', slug: '/reference'},
+      items: [
+        {
+          type: 'category',
+          label: 'Cloud Resources',
+          link: {type: 'doc', id: 'reference/cloud-resources-list'},
+          items: groups,
+        },
+      ],
     },
   ],
 };

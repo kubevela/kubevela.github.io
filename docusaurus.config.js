@@ -18,6 +18,17 @@ const MOVED_FROM = Object.fromEntries(
     from_url,
   ]),
 );
+// Pages moved within a section: {old URL: new URL}. A moved page redirects from its old URL and from the core URL the
+// old one was moved from, if any.
+const SECTION_REDIRECTS = require('./section-redirects.json');
+function redirectsTo(existingPath) {
+  const from = [MOVED_FROM[existingPath]];
+  for (const [oldPath, newPath] of Object.entries(SECTION_REDIRECTS)) {
+    if (newPath === existingPath) from.push(oldPath, MOVED_FROM[oldPath]);
+  }
+  const found = from.filter(Boolean);
+  return found.length ? found : undefined;
+}
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 const config = {
@@ -87,7 +98,7 @@ const config = {
             {to: 'docs/', label: 'KubeVela'},
             {to: 'workflow/overview', label: 'Workflow'},
             {to: 'velaux/overview', label: 'VelaUX'},
-            {to: 'terraform/overview', label: 'Terraform'},
+            {to: 'terraform/getting-started/introduction', label: 'Terraform'},
             {to: 'addons/overview', label: 'Addons'},
             {to: 'cluster-gateway/overview', label: 'Cluster Gateway'},
           ],
@@ -442,7 +453,7 @@ const config = {
           if (RELEASE_DOCS_PATH.test(existingPath)) {
             return existingPath.slice('/docs'.length);
           }
-          return MOVED_FROM[existingPath.replace(/\/$/, '')];
+          return redirectsTo(existingPath.replace(/\/$/, ''));
         },
       },
     ],
