@@ -7,7 +7,13 @@ module.exports = {
       label: 'Getting Started',
       collapsed: false,
       link: {type: 'generated-index', slug: '/getting-started'},
-      items: ['getting-started/introduction'],
+      items: ['getting-started/introduction', 'getting-started/install', 'getting-started/quick-start'],
+    },
+    {
+      type: 'category',
+      label: 'Concepts',
+      link: {type: 'generated-index', slug: '/concepts'},
+      items: ['concepts/workflow-model', 'concepts/lifecycle', 'concepts/context'],
     },
     {
       type: 'category',
@@ -39,15 +45,32 @@ module.exports = {
     },
     {
       type: 'category',
+      label: 'Examples',
+      link: {type: 'generated-index', slug: '/examples'},
+      items: [
+        'examples/http-request',
+        'examples/for-each',
+        'examples/workflow-template',
+        'examples/custom-step',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Operate',
       link: {type: 'generated-index', slug: '/operate'},
       items: ['operate/working-mechanism', 'operate/http-protection'],
     },
     {
       type: 'category',
+      label: 'Developer Onboarding',
+      link: {type: 'generated-index', slug: '/developer-onboarding'},
+      items: ['developer-onboarding/overview', 'developer-onboarding/build-and-test', 'developer-onboarding/run-locally'],
+    },
+    {
+      type: 'category',
       label: 'Reference',
       link: {type: 'generated-index', slug: '/reference'},
-      items: ['reference/built-in-steps'],
+      items: ['reference/built-in-steps', 'reference/versions'],
     },
   ],
 };

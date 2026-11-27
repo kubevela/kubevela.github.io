@@ -12,6 +12,14 @@
         {
           "type": "doc",
           "id": "getting-started/introduction"
+        },
+        {
+          "type": "doc",
+          "id": "getting-started/install"
+        },
+        {
+          "type": "doc",
+          "id": "getting-started/quick-start"
         }
       ]
     },
@@ -90,6 +98,29 @@
     },
     {
       "type": "category",
+      "label": "Examples",
+      "collapsed": true,
+      "link": {
+        "type": "generated-index",
+        "slug": "/examples"
+      },
+      "items": [
+        {
+          "type": "doc",
+          "id": "examples/http-request"
+        },
+        {
+          "type": "doc",
+          "id": "examples/workflow-template"
+        },
+        {
+          "type": "doc",
+          "id": "examples/custom-step"
+        }
+      ]
+    },
+    {
+      "type": "category",
       "label": "Operate",
       "collapsed": true,
       "link": {
@@ -119,6 +150,10 @@
         {
           "type": "doc",
           "id": "reference/built-in-steps"
+        },
+        {
+          "type": "doc",
+          "id": "reference/versions"
         }
       ]
     }
