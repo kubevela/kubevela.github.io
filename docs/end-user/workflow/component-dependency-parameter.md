@@ -8,7 +8,7 @@ This page shows how to make one component wait for another with `dependsOn`, and
 Components and workflow steps each have their own `dependsOn`, `inputs` and `outputs`:
 
 - Use the **component** fields on this page when the order or the data is between the things you deploy: deploy the database before the app that connects to it.
-- Use the **workflow step** fields when the order or the data is between steps you write yourself, such as a notification after a deploy. See [Order Steps](/workflow/next/steps/order-steps) and [Data Passing](/workflow/next/steps/inputs-outputs).
+- Use the **workflow step** fields when the order or the data is between steps you write yourself, such as a notification after a deploy. See [Order Steps](/workflow/next/guides/steps/order-steps) and [Data Passing](/workflow/next/guides/steps/inputs-outputs).
 :::
 
 ## Dependency

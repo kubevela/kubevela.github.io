@@ -5,7 +5,7 @@ title: Built-in WorkflowStep Type
 This documentation will walk through all the built-in workflow step types an Application can use, sorted alphabetically. The steps a WorkflowRun can use are in the Workflow section's [step reference](/workflow/next/reference/built-in-steps).
 
 :::note
-Examples of kind `WorkflowRun` need the `vela-workflow` addon, which installs the WorkflowRun CRD: `vela addon enable vela-workflow`. See [WorkflowRun](/workflow/next/workflowrun).
+Examples of kind `WorkflowRun` need the `vela-workflow` addon, which installs the WorkflowRun CRD: `vela addon enable vela-workflow`. See [WorkflowRun](/workflow/next/guides/workflowrun).
 :::
 
 > It was generated automatically by [scripts](../../contributor/cli-ref-doc.md), please don't update manually, last updated at 2026-11-25T05:27:01Z.

@@ -121,7 +121,7 @@ If you specify the execution mode in both WorkflowRun and Workflow, the mode in 
 
 ## Built-in Steps
 
-You can use KubeVela [built-in steps](reference/built-in-steps.md) that without label: `custom.definition.oam.dev/scope: Application` in WorkflowRun.
+You can use KubeVela [built-in steps](../reference/built-in-steps.md) that without label: `custom.definition.oam.dev/scope: Application` in WorkflowRun.
 
 ## Custom Steps
 

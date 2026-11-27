@@ -356,7 +356,7 @@ template: {
 
 `processing.http` takes `method`, `url` and an optional `request` with `timeout`, `body`, `header` and `trailer`; header and trailer values are strings. A request with no `header` is sent with `Content-Type: application/json`.
 
-The request runs from the KubeVela controller each time the Application renders, and holds a reconcile worker while it waits, so it is bounded the same way a workflow HTTP request is (see [HTTP limits](/workflow/next/authoring/step-definition#http-limits)):
+The request runs from the KubeVela controller each time the Application renders, and holds a reconcile worker while it waits, so it is bounded the same way a workflow HTTP request is (see [HTTP limits](/workflow/next/guides/authoring/step-definition#http-limits)):
 
 | Limit | Default | Set with |
 | --- | --- | --- |

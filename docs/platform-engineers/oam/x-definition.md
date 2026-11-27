@@ -363,7 +363,7 @@ spec:
         }
 ```
 
-Like the built-in policies, `apply-component` is run by the workflow engine by name, so its template only declares parameters. A step you write does its work in the template, with the `vela/kube`, `vela/http` and other providers; see [Workflow Step Definition](/workflow/next/authoring/step-definition).
+Like the built-in policies, `apply-component` is run by the workflow engine by name, so its template only declares parameters. A step you write does its work in the template, with the `vela/kube`, `vela/http` and other providers; see [Workflow Step Definition](/workflow/next/guides/authoring/step-definition).
 
 ## SourceDefinition
 

@@ -932,37 +932,37 @@
  "end-user/pipeline/workflowrun.md": {
   "from_url": "/docs/next/end-user/pipeline/workflowrun",
   "section": "workflow",
-  "to": "workflowrun.md"
+  "to": "guides/workflowrun.md"
  },
  "end-user/workflow/for-each.md": {
   "from_url": "/docs/next/end-user/workflow/for-each",
   "section": "workflow",
-  "to": "steps/for-each.md"
+  "to": "guides/steps/for-each.md"
  },
  "end-user/workflow/if-condition.md": {
   "from_url": "/docs/next/end-user/workflow/if-condition",
   "section": "workflow",
-  "to": "steps/if-condition.md"
+  "to": "guides/steps/if-condition.md"
  },
  "end-user/workflow/inputs-outputs.md": {
   "from_url": "/docs/next/end-user/workflow/inputs-outputs",
   "section": "workflow",
-  "to": "steps/inputs-outputs.md"
+  "to": "guides/steps/inputs-outputs.md"
  },
  "end-user/workflow/step-group.md": {
   "from_url": "/docs/next/end-user/workflow/step-group",
   "section": "workflow",
-  "to": "steps/order-steps.md"
+  "to": "guides/steps/order-steps.md"
  },
  "end-user/workflow/suspend.md": {
   "from_url": "/docs/next/end-user/workflow/suspend",
   "section": "workflow",
-  "to": "steps/suspend.md"
+  "to": "guides/steps/suspend.md"
  },
  "end-user/workflow/timeout.md": {
   "from_url": "/docs/next/end-user/workflow/timeout",
   "section": "workflow",
-  "to": "steps/timeout.md"
+  "to": "guides/steps/timeout.md"
  },
  "how-to/dashboard/application/create-application.md": {
   "from_url": "/docs/next/how-to/dashboard/application/create-application",
@@ -1017,7 +1017,7 @@
  "platform-engineers/workflow/workflow.md": {
   "from_url": "/docs/next/platform-engineers/workflow/workflow",
   "section": "workflow",
-  "to": "authoring/step-definition.md"
+  "to": "guides/authoring/step-definition.md"
  },
  "reference/addons/ai.md": {
   "from_url": "/docs/next/reference/addons/ai",

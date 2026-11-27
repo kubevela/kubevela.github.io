@@ -1,22 +1,22 @@
 ---
-title: Overview
+title: Introduction
 ---
 
 :::info
-These are the docs for KubeVela Workflow 0.7, the workflow engine in KubeVela 1.11. A WorkflowRun runs the same engine without an Application: see [K8S API for Pipeline](workflowrun.md).
+These are the docs for KubeVela Workflow 0.7, the workflow engine in KubeVela 1.11. A WorkflowRun runs the same engine without an Application: see [K8S API for Pipeline](../guides/workflowrun.md). To try one, [install](install.md) the `vela-workflow` controller and follow the [Quick Start](quick-start.md).
 :::
 
 Without a workflow, KubeVela applies every component at once, apart from the order that dependencies set: `dependsOn` and `inputs` each hold a component back until what it waits on is ready. A workflow lets you choose the order, wait for approval, branch on conditions and pass data from one step to the next.
 
-A workflow consists of multiple steps, and typical workflow steps include step groups (containing a series of sub-steps), human review, multi-cluster publishing, notifications, etc. You can view all built-in workflow steps provided by default in KubeVela in [built-in workflow steps](reference/built-in-steps.md). If the built-in workflow steps don't meet your needs, you can also [custom workflow steps](authoring/step-definition.md).
+A workflow consists of multiple steps, and typical workflow steps include step groups (containing a series of sub-steps), human review, multi-cluster publishing, notifications, etc. You can view all built-in workflow steps provided by default in KubeVela in [built-in workflow steps](../reference/built-in-steps.md). If the built-in workflow steps don't meet your needs, you can also [custom workflow steps](../guides/authoring/step-definition.md).
 
-`Workflow` consists of steps, you can either use KubeVela's [built-in workflow steps](reference/built-in-steps.md) like `suspend`, `notification`, `deploy`, `step-group` etc, or [customize your own `WorkflowStepDefinition`](authoring/step-definition.md).
+`Workflow` consists of steps, you can either use KubeVela's [built-in workflow steps](../reference/built-in-steps.md) like `suspend`, `notification`, `deploy`, `step-group` etc, or [customize your own `WorkflowStepDefinition`](../guides/authoring/step-definition.md).
 
 In fact, if you only use components in the Application and do not declare a workflow, KubeVela will automatically create a default workflow for deploying the components when running the Application.
 
 VelaUX shows each step's state; here the first step succeeded and the second failed:
 
-![velaux-workflow](resources/velaux-workflow.png)
+![velaux-workflow](../resources/velaux-workflow.png)
 
 ## Execution order
 
@@ -49,11 +49,11 @@ If you do not explicitly declare the execution mode, by default steps are execut
 
 | I want to... | Page |
 | :--- | :--- |
-| Wait for approval before carrying on | [Suspend and Resume](steps/suspend.md) |
-| Run steps in parallel, or in a set order | [Dependency](steps/dependency.md) |
-| Group steps together | [Sub Steps](steps/step-group.md) |
-| Run a step only when an earlier one failed, or skip it | [If Conditions](steps/if-condition.md) |
-| Pass a value from one step to the next | [Data Passing](steps/inputs-outputs.md) |
-| Stop a step that hangs | [Timeout of Step](steps/timeout.md) |
-| Suspend, resume, terminate or restart a running workflow | [Workflow Operations](operate/operations.md) |
+| Wait for approval before carrying on | [Suspend and Resume](../guides/steps/suspend.md) |
+| Run steps in parallel, or in a set order | [Dependency](../guides/steps/dependency.md) |
+| Group steps together | [Sub Steps](../guides/steps/step-group.md) |
+| Run a step only when an earlier one failed, or skip it | [If Conditions](../guides/steps/if-condition.md) |
+| Pass a value from one step to the next | [Data Passing](../guides/steps/inputs-outputs.md) |
+| Stop a step that hangs | [Timeout of Step](../guides/steps/timeout.md) |
+| Suspend, resume, terminate or restart a running workflow | [Workflow Operations](../guides/operations.md) |
 | Find out why a step failed | [Debug Workflow](/docs/platform-engineers/debug/debug) |

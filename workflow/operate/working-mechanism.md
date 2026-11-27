@@ -6,7 +6,7 @@ This page covers how the workflow engine runs steps, and how it retries a step t
 
 ## Running Mode
 
-A workflow runs in one of two modes: **StepByStep** or **DAG**. In StepByStep mode, steps run one after another, in the order they are listed. In DAG mode, every step starts at once, and a step that has `dependsOn` or `inputs` waits until the steps it depends on have finished. Steps default to StepByStep and the sub-steps of a `step-group` to DAG; set `mode` to change either. See [Order Steps](../steps/order-steps.md).
+A workflow runs in one of two modes: **StepByStep** or **DAG**. In StepByStep mode, steps run one after another, in the order they are listed. In DAG mode, every step starts at once, and a step that has `dependsOn` or `inputs` waits until the steps it depends on have finished. Steps default to StepByStep and the sub-steps of a `step-group` to DAG; set `mode` to change either. See [Order Steps](../guides/steps/order-steps.md).
 
 ## Suspend and Retry
 

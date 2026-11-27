@@ -314,7 +314,7 @@ template: {
 
 What a step reads from `context` depends on where it runs.
 
-- **In a WorkflowRun**, the WorkflowRun's name and namespace, the step's own name and session ID, and the values set in `spec.context`. See [Context](../workflowrun.md#context).
+- **In a WorkflowRun**, the WorkflowRun's name and namespace, the step's own name and session ID, and the values set in `spec.context`. See [Context](../../concepts/context.md).
 - **In an Application's workflow**, the Application's name, namespace and revision, the step's own name and session ID, and the workflow name and publish version from the Application's annotations. `context.name` is the Application's name, not the step's. Every field, and which definition kinds can read it, is in KubeVela's [Context Reference](/docs/next/platform-engineers/context-reference).
 
 ## Legacy `vela/op`
