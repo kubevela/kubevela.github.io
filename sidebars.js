@@ -81,7 +81,7 @@ const sidebars = {
           label: 'Cloud Resources CD',
           collapsed: true,
           items: [
-            {type: 'link', label: 'Terraform', href: '/terraform/overview'},
+            {type: 'link', label: 'Terraform', href: '/terraform/getting-started/introduction'},
             'end-user/components/cloud-services/provision-cloud-resources-by-crossplane',
           ],
         },

@@ -13,7 +13,7 @@ This guide will take Alibaba Cloud RDS as an example to show how to create an RD
 1. `terraform` addon has been enabled
 2. `terraform-alibaba` addon has been enabled, version >= 1.0.3 
 3. Credentials have been configured using `vela provider add terraform-alibaba`
-If you have problems, you can follow to this [instruction](../install/terraform-addon.md) to setup.
+If you have problems, you can follow to this [instruction](../getting-started/install.md) to setup.
 
 ## Steps
 

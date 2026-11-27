@@ -18,11 +18,17 @@ const MOVED_FROM = Object.fromEntries(
     from_url,
   ]),
 );
-// Pages moved inside a section: {old URL: new URL}. Each new URL redirects from every old one that points at it.
-const SECTION_REDIRECTS = Object.entries(require('./section-redirects.json')).reduce((acc, [from, to]) => {
-  (acc[to] = acc[to] || []).push(from);
-  return acc;
-}, {});
+// Pages moved within a section: {old URL: new URL}. A moved page redirects from its old URL and from the core URL the
+// old one was moved from, if any.
+const SECTION_REDIRECTS = require('./section-redirects.json');
+function redirectsTo(existingPath) {
+  const from = [MOVED_FROM[existingPath]];
+  for (const [oldPath, newPath] of Object.entries(SECTION_REDIRECTS)) {
+    if (newPath === existingPath) from.push(oldPath, MOVED_FROM[oldPath]);
+  }
+  const found = from.filter(Boolean);
+  return found.length ? found : undefined;
+}
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 const config = {
@@ -92,7 +98,7 @@ const config = {
             {to: 'docs/', label: 'KubeVela'},
             {to: 'workflow/getting-started/introduction', label: 'Workflow'},
             {to: 'velaux/getting-started/introduction', label: 'VelaUX'},
-            {to: 'terraform/overview', label: 'Terraform'},
+            {to: 'terraform/getting-started/introduction', label: 'Terraform'},
             {to: 'addons/overview', label: 'Addons'},
             {to: 'cluster-gateway/getting-started/introduction', label: 'Cluster Gateway'},
           ],
@@ -447,9 +453,7 @@ const config = {
           if (RELEASE_DOCS_PATH.test(existingPath)) {
             return existingPath.slice('/docs'.length);
           }
-          const path = existingPath.replace(/\/$/, '');
-          const from = [MOVED_FROM[path], ...(SECTION_REDIRECTS[path] || [])].filter(Boolean);
-          return from.length ? from : undefined;
+          return redirectsTo(existingPath.replace(/\/$/, ''));
         },
       },
     ],

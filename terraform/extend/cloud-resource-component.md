@@ -4,7 +4,7 @@ title: Extend Cloud Resources
 
 To enable end users to [provision and consume cloud resources](../guides/consume-cloud-services.md),
 platform engineers need to prepare ComponentDefinitions for cloud resources if end users' requirements are beyond the
-[built-in capabilities](../guides/consume-cloud-services.md#supported-cloud-resource-list).
+[built-in component types](../reference/cloud-resources-list.md).
 
 Here is the guide to create Terraform typed ComponentDefinitions of cloud resources for cloud providers Alibaba Cloud, AWS and Azure.
 
@@ -18,7 +18,7 @@ Here is the guide to create Terraform typed ComponentDefinitions of cloud resour
   vela addon enable terraform-aws
   ```
 
-  Then give the provider your cloud credentials, as in [Authenticate a Terraform provider](../install/terraform-addon.md#authenticate-a-terraform-provider).
+  Then give the provider your cloud credentials, as in [Authenticate a Terraform provider](../getting-started/install.md#authenticate-the-provider).
 
 ## Develop a Terraform resource or module
 

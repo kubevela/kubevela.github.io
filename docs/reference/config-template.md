@@ -870,7 +870,7 @@ template: {
 ```
 
 Use it: the template is sensitive, so the properties come from a Secret. With the
-[Terraform addon](/terraform/install/terraform-addon) enabled, save the template as
+[Terraform addon](/terraform/getting-started/install) enabled, save the template as
 `terraform-alibaba.cue`, then
 
 ```bash

@@ -31,7 +31,7 @@ which is referenced by [Alibaba Cloud RDS Preview ComponentDefinition](https://g
 
 ### Prerequisites
 
-- Enable addon [terraform-alibaba](../install/terraform-addon.md)
+- Enable addon [terraform-alibaba](../getting-started/install.md)
 
 - Remember to store the SQL file in an [Alibaba Cloud OSS bucket](../reference/alibaba-oss.md)
 

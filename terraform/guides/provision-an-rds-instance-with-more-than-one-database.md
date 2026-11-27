@@ -3,7 +3,7 @@ title: Provision an RDS instance with more than one database
 ---
 
 :::tip
-This section requires your platform engineers have already enabled [terraform addon](../install/terraform-addon.md).
+This section requires your platform engineers have already enabled [terraform addon](../getting-started/install.md).
 :::
 
 In the guide [Provision and Binding Cloud Resources](consume-cloud-services.md) and [Provision a Database and Import a SQL File for initialization](provision-and-initiate-database.md),
