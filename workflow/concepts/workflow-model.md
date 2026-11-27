@@ -47,7 +47,7 @@ A step type is a `WorkflowStepDefinition`: a CUE template with a `parameter` blo
 | :--- | :--- |
 | The `vela-workflow` chart or addon | The [built-in step types](../reference/built-in-steps.md) a WorkflowRun can use: `apply-deployment`, `apply-job`, `apply-object`, `read-object`, `request`, `notification`, `suspend`, `step-group` and the rest. |
 | vela-core | The same, plus the types that work on an Application's components, such as `deploy` and `apply-component`. |
-| Your platform team | Types of their own, written in CUE: see [Custom Workflow Step](../guides/authoring/step-definition.md). |
+| Your platform team | Types of their own, written in CUE: see [Workflow Step Definition](../guides/authoring/step-definition.md). |
 
 The built-in types are installed in `vela-system`. Each type's reference entry says whether it works in an Application, a WorkflowRun or both.
 

@@ -1,9 +1,9 @@
 ---
-title: Overview
+title: Introduction
 ---
 
 :::info
-These are the docs for KubeVela Workflow 0.7, the workflow engine in KubeVela 1.11. A WorkflowRun runs the same engine without an Application: see [K8S API for Pipeline](../guides/workflowrun.md).
+These are the docs for KubeVela Workflow 0.7, the workflow engine in KubeVela 1.11. A WorkflowRun runs the same engine without an Application: see [K8S API for Pipeline](../guides/workflowrun.md). To try one, [install](install.md) the `vela-workflow` controller and follow the [Quick Start](quick-start.md).
 :::
 
 Without a workflow, KubeVela applies every component at once, apart from the order that dependencies set: `dependsOn` and `inputs` each hold a component back until what it waits on is ready. A workflow lets you choose the order, wait for approval, branch on conditions and pass data from one step to the next.

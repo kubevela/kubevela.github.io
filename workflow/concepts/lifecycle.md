@@ -64,7 +64,7 @@ A step that waits for a condition, such as a Deployment becoming ready, stays `r
 A WorkflowRun runs once. When it reaches `succeeded`, `failed` or `terminated`, `status.finished` is `true` and the controller stops reconciling it:
 
 - **Editing the spec does nothing.** The steps don't run again. To run them again, use `vela workflow restart`, or delete the WorkflowRun and create it again.
-- **Deleting it deletes only the WorkflowRun.** The objects its steps created stay where they are, since nothing owns them.
+- **Deleting it deletes only the WorkflowRun.** The objects its steps created stay where they are, since nothing owns them. Objects applied with `vela/kube` carry the labels `workflowrun.oam.dev/name` and `workflowrun.oam.dev/namespace`, so `kubectl get configmaps -l workflowrun.oam.dev/name=<run>` finds them.
 - **Restart starts from the top**, or from one step with `--step`: see [Workflow Operations](../guides/operations.md#restart-workflow).
 
 An Application's workflow is different: vela-core runs it again whenever the Application changes, and keeps what it applied in place in between.
