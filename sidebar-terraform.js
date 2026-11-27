@@ -72,6 +72,18 @@ module.exports = {
     },
     {
       type: 'category',
+      label: 'Examples',
+      link: {type: 'generated-index', slug: '/examples'},
+      items: [
+        'examples/application-component',
+        'examples/remote-module',
+        'examples/kubernetes-backend',
+        'examples/update-and-delete',
+        'examples/cloud-resource-dry-run',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Operate',
       link: {type: 'generated-index', slug: '/operate'},
       items: ['operate/configure', 'operate/upgrade', 'operate/troubleshooting'],
