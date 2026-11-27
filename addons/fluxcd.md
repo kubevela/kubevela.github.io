@@ -6,7 +6,7 @@ The `fluxcd` addon installs [FluxCD](https://fluxcd.io/) controllers and adds th
 
 ## When to use it
 
-Since v1.12, KubeVela deploys Helm charts natively with the built-in [`helmchart`](/docs/end-user/components/references#helmchart) component, without FluxCD. Use this addon when you need Kustomize, Git, OSS or OCI sources with polling, image update automation, or you already run Flux.
+Since v1.11, KubeVela deploys Helm charts natively with the built-in [`helmchart`](/docs/end-user/components/references#helmchart) component, without FluxCD. Use this addon when you need Kustomize, Git, OSS or OCI sources with polling, image update automation, or you already run Flux.
 
 ## What it installs
 
