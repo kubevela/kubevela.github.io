@@ -97,11 +97,11 @@ const config = {
           position: 'left',
           items: [
             {to: 'docs/', activeBaseRegex: '^(/zh)?/docs', html: sectionItem('default', 'KubeVela')},
-            {to: 'workflow/getting-started/introduction', activeBaseRegex: '^(/zh)?/workflow', html: sectionItem('workflow', 'Workflow')},
             {to: 'velaux/getting-started/introduction', activeBaseRegex: '^(/zh)?/velaux', html: sectionItem('velaux', 'VelaUX')},
-            {to: 'terraform/getting-started/introduction', activeBaseRegex: '^(/zh)?/terraform', html: sectionItem('terraform', 'Terraform')},
             {to: 'addons/getting-started/introduction', activeBaseRegex: '^(/zh)?/addons', html: sectionItem('addons', 'Addons')},
+            {to: 'workflow/getting-started/introduction', activeBaseRegex: '^(/zh)?/workflow', html: sectionItem('workflow', 'Vela Workflow')},
             {to: 'cluster-gateway/getting-started/introduction', activeBaseRegex: '^(/zh)?/cluster-gateway', html: sectionItem('cluster-gateway', 'Cluster Gateway')},
+            {to: 'terraform/getting-started/introduction', activeBaseRegex: '^(/zh)?/terraform', html: sectionItem('terraform', 'Terraform Controller')},
           ],
         },
         {
