@@ -44,6 +44,8 @@ It's important to us to help these users, and we'd love your help. You can help 
 
 ## Contribute to the docs
 
+Found something wrong on a docs page? Use **Report a problem with this page** at the foot of the page. It opens a [docs problem](https://github.com/kubevela/kubevela.github.io/issues/new?template=docs-problem.yml) issue with the page, version and problem filled in, and maintainers triage these through the [`type/docs`](https://github.com/kubevela/kubevela.github.io/labels/type%2Fdocs) label.
+
 The docs live in [kubevela/kubevela.github.io](https://github.com/kubevela/kubevela.github.io). To change a page:
 
 1. Fork `kubevela/kubevela.github.io` and clone your fork.
