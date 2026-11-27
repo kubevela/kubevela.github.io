@@ -4,7 +4,7 @@ title: Application Workflow Operations
 
 The reference for `vela/op`, the legacy package of workflow operations, is in [Built-in Workflow Operations](/workflow/next/guides/authoring/cue-actions) in the Workflow docs, with the packages a step can import. vela-core adds the operations on this page, which work on the Application a workflow belongs to, so only an Application's workflow can use them.
 
-vela-core also adds packages that only an Application's workflow can import: `vela/oam` (load, render and apply the Application's components), `vela/multicluster`, `vela/query`, `vela/terraform` and `vela/helm`. See [Packages a step can import](/workflow/next/guides/authoring/cue-actions#packages-a-step-can-import).
+vela-core also adds packages that a WorkflowRun cannot import: `vela/oam` (load, render and apply the Application's components), `vela/multicluster`, `vela/query`, `vela/terraform` and `vela/helm`. See [Packages a step can import](/workflow/next/guides/authoring/cue-actions#packages-a-step-can-import).
 
 ## Application Operations
 
