@@ -2,34 +2,51 @@
 // KubeVela 1.12 embeds. Released versions keep theirs in workflow_versioned_sidebars/.
 module.exports = {
   workflow: [
-    'overview',
-    'workflowrun',
     {
       type: 'category',
-      label: 'Steps',
+      label: 'Getting Started',
       collapsed: false,
+      link: {type: 'generated-index', slug: '/getting-started'},
+      items: ['getting-started/introduction'],
+    },
+    {
+      type: 'category',
+      label: 'Guides',
+      link: {type: 'generated-index', slug: '/guides'},
       items: [
-        'steps/suspend',
-        'steps/order-steps',
-        'steps/for-each',
-        'steps/inputs-outputs',
-        'steps/if-condition',
-        'steps/timeout',
+        'guides/workflowrun',
+        {
+          type: 'category',
+          label: 'Steps',
+          link: {type: 'generated-index', slug: '/guides/steps'},
+          items: [
+            'guides/steps/suspend',
+            'guides/steps/order-steps',
+            'guides/steps/for-each',
+            'guides/steps/inputs-outputs',
+            'guides/steps/if-condition',
+            'guides/steps/timeout',
+          ],
+        },
+        'guides/operations',
+        {
+          type: 'category',
+          label: 'Authoring Steps',
+          link: {type: 'generated-index', slug: '/guides/authoring'},
+          items: ['guides/authoring/step-definition', 'guides/authoring/cue-actions'],
+        },
       ],
     },
     {
       type: 'category',
       label: 'Operate',
-      items: ['operate/operations', 'operate/working-mechanism', 'operate/http-protection'],
-    },
-    {
-      type: 'category',
-      label: 'Authoring Steps',
-      items: ['authoring/step-definition', 'authoring/cue-actions'],
+      link: {type: 'generated-index', slug: '/operate'},
+      items: ['operate/working-mechanism', 'operate/http-protection'],
     },
     {
       type: 'category',
       label: 'Reference',
+      link: {type: 'generated-index', slug: '/reference'},
       items: ['reference/built-in-steps'],
     },
   ],

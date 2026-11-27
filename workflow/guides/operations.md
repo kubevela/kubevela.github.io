@@ -28,7 +28,7 @@ Successfully suspend workflow: my-app
 
 :::tip
 Nothing happens if you suspend a workflow that has already finished.
-Please refer to [Suspend and Resume](../steps/suspend.md) for more examples.
+Please refer to [Suspend and Resume](steps/suspend.md) for more examples.
 :::
 
 ## Resume Workflow 
@@ -44,7 +44,7 @@ Successfully resume workflow: my-app
 ```
 
 :::tip
-Please refer to [Suspend and Resume](../steps/suspend.md) for more examples.
+Please refer to [Suspend and Resume](steps/suspend.md) for more examples.
 :::
 
 ## Terminate Workflow
@@ -96,7 +96,7 @@ Scheduled restarts are for Applications: the [`restart-workflow`](/docs/next/end
 You can use `vela workflow logs` to check the logs of the workflow.
 
 :::tip
-Note that only the steps with [op.#Log](../authoring/cue-actions.md#log) in its definition will output logs.
+Note that only the steps with [op.#Log](authoring/cue-actions.md#log) in its definition will output logs.
 :::
 
 ```bash

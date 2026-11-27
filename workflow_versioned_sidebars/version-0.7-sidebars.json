@@ -1,41 +1,90 @@
 {
   "workflow": [
     {
-      "type": "doc",
-      "id": "overview"
-    },
-    {
-      "type": "doc",
-      "id": "workflowrun"
-    },
-    {
       "type": "category",
-      "label": "Steps",
+      "label": "Getting Started",
       "collapsed": false,
+      "link": {
+        "type": "generated-index",
+        "slug": "/getting-started"
+      },
       "items": [
         {
           "type": "doc",
-          "id": "steps/suspend"
+          "id": "getting-started/introduction"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "label": "Guides",
+      "collapsed": true,
+      "link": {
+        "type": "generated-index",
+        "slug": "/guides"
+      },
+      "items": [
+        {
+          "type": "doc",
+          "id": "guides/workflowrun"
+        },
+        {
+          "type": "category",
+          "label": "Steps",
+          "collapsed": true,
+          "link": {
+            "type": "generated-index",
+            "slug": "/guides/steps"
+          },
+          "items": [
+            {
+              "type": "doc",
+              "id": "guides/steps/suspend"
+            },
+            {
+              "type": "doc",
+              "id": "guides/steps/dependency"
+            },
+            {
+              "type": "doc",
+              "id": "guides/steps/step-group"
+            },
+            {
+              "type": "doc",
+              "id": "guides/steps/inputs-outputs"
+            },
+            {
+              "type": "doc",
+              "id": "guides/steps/if-condition"
+            },
+            {
+              "type": "doc",
+              "id": "guides/steps/timeout"
+            }
+          ]
         },
         {
           "type": "doc",
-          "id": "steps/dependency"
+          "id": "guides/operations"
         },
         {
-          "type": "doc",
-          "id": "steps/step-group"
-        },
-        {
-          "type": "doc",
-          "id": "steps/inputs-outputs"
-        },
-        {
-          "type": "doc",
-          "id": "steps/if-condition"
-        },
-        {
-          "type": "doc",
-          "id": "steps/timeout"
+          "type": "category",
+          "label": "Authoring Steps",
+          "collapsed": true,
+          "link": {
+            "type": "generated-index",
+            "slug": "/guides/authoring"
+          },
+          "items": [
+            {
+              "type": "doc",
+              "id": "guides/authoring/step-definition"
+            },
+            {
+              "type": "doc",
+              "id": "guides/authoring/cue-actions"
+            }
+          ]
         }
       ]
     },
@@ -43,11 +92,11 @@
       "type": "category",
       "label": "Operate",
       "collapsed": true,
+      "link": {
+        "type": "generated-index",
+        "slug": "/operate"
+      },
       "items": [
-        {
-          "type": "doc",
-          "id": "operate/operations"
-        },
         {
           "type": "doc",
           "id": "operate/working-mechanism"
@@ -60,23 +109,12 @@
     },
     {
       "type": "category",
-      "label": "Authoring Steps",
-      "collapsed": true,
-      "items": [
-        {
-          "type": "doc",
-          "id": "authoring/step-definition"
-        },
-        {
-          "type": "doc",
-          "id": "authoring/cue-actions"
-        }
-      ]
-    },
-    {
-      "type": "category",
       "label": "Reference",
       "collapsed": true,
+      "link": {
+        "type": "generated-index",
+        "slug": "/reference"
+      },
       "items": [
         {
           "type": "doc",

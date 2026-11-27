@@ -2,7 +2,7 @@
 title:  Workflow Operations
 ---
 
-The `vela workflow` commands operate an Application's workflow, and a WorkflowRun's, the same way: `list`, `suspend`, `resume`, `terminate`, `restart`, `logs` and `debug` are in [Workflow Operations](/workflow/next/operate/operations) in the Workflow docs. This page covers what only an Application has: restarts on a schedule, and rollback.
+The `vela workflow` commands operate an Application's workflow, and a WorkflowRun's, the same way: `list`, `suspend`, `resume`, `terminate`, `restart`, `logs` and `debug` are in [Workflow Operations](/workflow/next/guides/operations) in the Workflow docs. This page covers what only an Application has: restarts on a schedule, and rollback.
 
 Each command takes the Application's name, and `-n <namespace>` for its namespace (the current env's namespace if you leave it out).
 
@@ -12,7 +12,7 @@ Once an Application's workflow is terminated with `vela workflow terminate my-ap
 
 ## Restart Workflow
 
-`vela workflow restart my-app` runs the whole workflow again from the first step, whatever state it is in; add `--step <name>` to restart from that step, which must be one that failed (a step that succeeded or is still running is refused). See [Restart Workflow](/workflow/next/operate/operations#restart-workflow).
+`vela workflow restart my-app` runs the whole workflow again from the first step, whatever state it is in; add `--step <name>` to restart from that step, which must be one that failed (a step that succeeded or is still running is refused). See [Restart Workflow](/workflow/next/guides/operations#restart-workflow).
 
 ### Scheduled Restarts
 

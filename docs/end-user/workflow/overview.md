@@ -4,13 +4,13 @@ title: Overview
 
 Without a workflow, KubeVela applies every component at once, apart from the order that dependencies set: `dependsOn`, `inputs` and `$(component.<name>)` reads each hold a component back until what it waits on is ready. An Application's workflow lets you choose the order, wait for approval, branch on conditions and pass data from one step to the next.
 
-The workflow engine is [KubeVela Workflow](/workflow/next/overview), which vela-core embeds. Its docs cover how steps behave, and they behave the same in an Application and in a WorkflowRun: suspend and resume, ordering, `forEach`, data passing, `if` conditions and timeouts, with a first workflow to try. This page covers what is particular to an Application. Each KubeVela release embeds one Workflow version:
+The workflow engine is [KubeVela Workflow](/workflow/next/getting-started/introduction), which vela-core embeds. Its docs cover how steps behave, and they behave the same in an Application and in a WorkflowRun: suspend and resume, ordering, `forEach`, data passing, `if` conditions and timeouts, with a first workflow to try. This page covers what is particular to an Application. Each KubeVela release embeds one Workflow version:
 
 | KubeVela | Workflow |
 | :--- | :--- |
-| 1.12 | [0.8](/workflow/next/overview) |
-| 1.11 | [0.7](/workflow/overview) |
-| 1.10, 1.9 | [0.6](/workflow/0.6/overview) |
+| 1.12 | [0.8](/workflow/next/getting-started/introduction) |
+| 1.11 | [0.7](/workflow/getting-started/introduction) |
+| 1.10, 1.9 | [0.6](/workflow/0.6/getting-started/introduction) |
 
 A workflow is a list of steps. Each step has a type: one of the [built-in step types](./built-in-workflow-defs.md) (`deploy`, `suspend`, `notification`, `step-group` and more), or a type your platform team has added.
 
@@ -53,18 +53,18 @@ VelaUX shows each step's state; here the first step succeeded and the second fai
 
 | I want to... | Page |
 | :--- | :--- |
-| Write a first workflow | [Workflow overview](/workflow/next/overview#a-first-workflow) |
-| Wait for approval before carrying on | [Suspend and Resume](/workflow/next/steps/suspend) |
-| Run steps in parallel, in a set order, or in groups | [Order Steps](/workflow/next/steps/order-steps) |
-| Repeat steps over a list | [Repeating Steps with forEach](/workflow/next/steps/for-each) |
-| Run a step only when an earlier one failed, or skip it | [If Conditions](/workflow/next/steps/if-condition) |
-| Pass a value from one step to the next | [Data Passing](/workflow/next/steps/inputs-outputs) |
+| Write a first workflow | [Workflow Quick Start](/workflow/next/getting-started/quick-start#in-an-application) |
+| Wait for approval before carrying on | [Suspend and Resume](/workflow/next/guides/steps/suspend) |
+| Run steps in parallel, in a set order, or in groups | [Order Steps](/workflow/next/guides/steps/order-steps) |
+| Repeat steps over a list | [Repeating Steps with forEach](/workflow/next/guides/steps/for-each) |
+| Run a step only when an earlier one failed, or skip it | [If Conditions](/workflow/next/guides/steps/if-condition) |
+| Pass a value from one step to the next | [Data Passing](/workflow/next/guides/steps/inputs-outputs) |
 | Order components, and pass data between them | [Order Components and Pass Data Between Them](./component-dependency-parameter.md) |
-| Stop a step that hangs | [Timeout of Step](/workflow/next/steps/timeout) |
+| Stop a step that hangs | [Timeout of Step](/workflow/next/guides/steps/timeout) |
 | Suspend, resume, terminate, restart or roll back a running workflow | [Workflow Operations](./operations.md) |
 | Find out why a step failed | [Debug Workflow](../../platform-engineers/debug/debug.md) |
 
 ## Next steps
 
 - [Built-in step types](./built-in-workflow-defs.md): every step type an Application can use, and its parameters.
-- [Custom workflow steps](/workflow/next/authoring/step-definition): for platform engineers adding step types of their own.
+- [Custom workflow steps](/workflow/next/guides/authoring/step-definition): for platform engineers adding step types of their own.

@@ -14,7 +14,7 @@ vela workflow suspend <name>
 
 :::tip
 Nothing will happen if you suspend an application that has a completed workflow, which is in `running` status.
-Please refer to [Suspend and Resume](../steps/suspend.md) for more examples.
+Please refer to [Suspend and Resume](steps/suspend.md) for more examples.
 :::
 
 ## Resume Workflow 
@@ -26,7 +26,7 @@ vela workflow resume <name>
 ```
 
 :::tip
-Please refer to [Suspend and Resume](../steps/suspend.md) for more examples.
+Please refer to [Suspend and Resume](steps/suspend.md) for more examples.
 :::
 
 ## Terminate Workflow
@@ -53,34 +53,12 @@ Once application workflow is terminated, KubeVela controller won't reconcile the
 vela workflow restart my-app
 ```
 
-### Scheduled Restarts
-
-For automated restarts, workflows can schedule their own re-execution using the `restart-workflow` step. This enables periodic tasks, delayed execution, or time-based orchestration. See the [restart-workflow step documentation](/docs/end-user/workflow/built-in-workflow-defs#restart-workflow), an Application-only step, for examples.
-
-You can also schedule restarts by adding the `app.oam.dev/restart-workflow` annotation to an Application:
-
-```bash
-# One-time restart at specific time (RFC3339 format)
-kubectl annotate application my-app app.oam.dev/restart-workflow="2025-01-20T15:00:00Z"
-
-# Recurring restart every 24 hours
-kubectl annotate application my-app app.oam.dev/restart-workflow="24h"
-
-# Immediate restart
-kubectl annotate application my-app app.oam.dev/restart-workflow="true"
-```
-
-The annotation accepts three formats:
-- **RFC3339 timestamp**: One-time restart at the specified time
-- **Duration** (e.g., "5m", "1h", "24h"): Recurring restarts at the specified interval
-- **"true"**: Immediate restart
-
 ## Check the logs of the workflow
 
 You can use `vela workflow logs` to check the logs of the workflow.
 
 :::tip
-Note that only the steps with [op.#Log](../authoring/cue-actions.md#log) in its definition will output logs.
+Note that only the steps with [op.#Log](authoring/cue-actions.md#log) in its definition will output logs.
 :::
 
 ```bash
@@ -97,5 +75,5 @@ vela workflow debug <name>
 ```
 
 :::tip
-Please checkout the [Debug doc](/docs/platform-engineers/debug/debug#applications-with-workflow) for more examples.
+Please checkout the [Debug doc](/docs/v1.10/platform-engineers/debug/debug#applications-with-workflow) for more examples.
 :::

@@ -14,7 +14,7 @@ The GitOps tool owns one object, the Application. KubeVela owns everything the A
 
 Applying plain manifests from Git declares the end state and stops there. With an Application in Git, you also get:
 
-- **A delivery workflow.** Steps run in order or as a [dependency graph](../end-user/workflow/component-dependency-parameter.md), with [manual approval](/workflow/next/steps/suspend), notifications and conditions, rather than every resource landing at once. See the [workflow overview](../end-user/workflow/overview.md).
+- **A delivery workflow.** Steps run in order or as a [dependency graph](../end-user/workflow/component-dependency-parameter.md), with [manual approval](/workflow/next/guides/steps/suspend), notifications and conditions, rather than every resource landing at once. See the [workflow overview](../end-user/workflow/overview.md).
 - **Multi-cluster delivery.** One Application in one repository can place components across clusters, with per-environment overrides. See [Multi-cluster Application Delivery](../end-user/policies/multi-cluster.md).
 - **Health.** KubeVela checks each component and trait against the health policy its definition sets, and reports the result in the Application's status, so `vela status <app>` (or your GitOps tool's view of the Application) tells you whether the delivery worked, not just whether it was applied.
 - **Higher-level abstractions.** Developers write components and traits; platform teams own the [definitions](../getting-started/core-concept.md) behind them, including [cloud resources](/terraform/guides/consume-cloud-services).

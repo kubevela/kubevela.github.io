@@ -5,7 +5,7 @@ title: Built-in Step Types
 This page lists every built-in workflow step type a WorkflowRun can use, sorted alphabetically. Steps that need an Application, such as `deploy` and `apply-component`, are in KubeVela's [built-in step reference](/docs/end-user/workflow/built-in-workflow-defs).
 
 :::note
-A WorkflowRun needs the WorkflowRun CRD and its controller, from the `vela-workflow` addon (`vela addon enable vela-workflow`) or the `vela-workflow` chart. See [Run a Workflow without an Application](../workflowrun.md).
+A WorkflowRun needs the WorkflowRun CRD and its controller, from the `vela-workflow` addon (`vela addon enable vela-workflow`) or the `vela-workflow` chart. See [Run a Workflow without an Application](../guides/workflowrun.md).
 :::
 
 > It was generated automatically by [scripts](/docs/contributor/cli-ref-doc), please don't update manually, last updated at 2026-04-16T11:50:12+01:00.
