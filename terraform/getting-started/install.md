@@ -1,26 +1,40 @@
 ---
-title: Terraform
+title: Install
+description: Install terraform-controller through the KubeVela terraform addon or its Helm chart, then enable a cloud provider.
 ---
 
-To provision cloud resources, you can use terraform along with related cloud provider addons.
+There are two ways in. On KubeVela, enable the `terraform` addon. Without KubeVela, or to pick the controller version yourself, install the Helm chart.
 
-## Enable Terraform addon
+## With KubeVela: the terraform addon
 
 ```shell
 vela addon enable terraform
 ```
 
-KubeVela can now run Terraform through the Terraform controller. Next, enable a provider addon for your cloud.
+The addon installs the `terraform-controller` chart into `vela-system` through FluxCD's Helm support (it enables the `fluxcd` addon first if it is missing).
 
-## Enable Terraform Provider addon
+:::note Which controller version the addon installs
+The addon pins its chart version: addon 1.1.3, the current one in the catalog, installs terraform-controller v0.7.12, not the v0.9.1 that KubeVela 1.12 is built against. The addon has no parameter for the chart version. To run v0.9.1, install the chart directly, below. The [Versions](../versions.md) page has the details.
+:::
 
-KubeVela can support the following cloud providers by enabling the Terraform provider addons.
+The addon takes two parameters:
+
+| Parameter | Default | Does |
+| --- | --- | --- |
+| `upgradeCRD` | `false` | Upgrade the `Configuration` and `Provider` CRDs when the addon is upgraded. Helm never does on its own: see [Upgrade](../operate/upgrade.md). |
+| `values` | none | Helm values for the chart, as in [Configure](../operate/configure.md). |
+
+```shell
+vela addon enable terraform upgradeCRD=true
+```
+
+### Enable a cloud provider
+
+Each cloud has a provider addon. It adds that cloud's component types, and a config template for its credentials.
 
 ```shell
 vela addon list | grep terraform-
 ```
-
-The output looks like this:
 
 ```console
 terraform-alibaba  KubeVela  Kubernetes Terraform Controller for Alibaba Cloud                  [1.0.6, ...]  disabled
@@ -33,28 +47,68 @@ terraform-tencent  KubeVela  Kubernetes Terraform Controller Provider for Tencen
 terraform-ucloud   KubeVela  Kubernetes Terraform Controller Provider for UCloud                [1.0.3, ...]  disabled
 ```
 
-To enable one of them, use the following command:
-
 ```shell
 vela addon enable terraform-<provider-name>
 ```
 
-You can also disable, upgrade, and check the status of an addon by command `vela addon`.
+`vela addon` also disables, upgrades and shows the status of an addon.
 
-### Authenticate a Terraform provider
+### Authenticate the provider
 
-View the supported Terraform providers.
+The provider addons register config templates:
 
 ```shell
 vela config-template list | grep terraform
 ```
 
-For example to create a provider config for AWS.
+Create a config from one. For AWS, with the keys set in your shell first (`read -rs AWS_SECRET_ACCESS_KEY`), so they stay out of your history:
 
 ```shell
-vela config create aws -t terraform-aws AWS_ACCESS_KEY_ID=xxx AWS_SECRET_ACCESS_KEY=yyy AWS_DEFAULT_REGION=us-east-1
+vela config create aws -t terraform-aws name=aws AWS_ACCESS_KEY_ID="$AWS_ACCESS_KEY_ID" AWS_SECRET_ACCESS_KEY="$AWS_SECRET_ACCESS_KEY" AWS_DEFAULT_REGION=us-east-1
 ```
 
-### Provision cloud resources
+The config becomes a Terraform `Provider` named by `name`. Components use the Provider called `default` unless they set `providerRef`, so name your main one `default`, or set `providerRef` on each component.
 
-After a Terraform provider is authenticated, you can [provision and/or consume cloud resources](../guides/consume-cloud-services.md).
+Then [provision a cloud resource](../guides/consume-cloud-services.md).
+
+## Without KubeVela: the Helm chart
+
+The chart is published to the KubeVela chart repository, one chart version per controller release:
+
+```shell
+helm repo add kubevela https://kubevela.github.io/charts
+helm repo update
+helm search repo kubevela/terraform-controller --versions | head -4
+```
+
+```console
+NAME                         	CHART VERSION	APP VERSION	DESCRIPTION
+kubevela/terraform-controller	0.9.1        	0.9.1      	A Kubernetes Terraform controller
+kubevela/terraform-controller	0.9.0        	0.9.0      	A Kubernetes Terraform controller
+kubevela/terraform-controller	0.8.2        	0.8.2      	A Kubernetes Terraform controller
+```
+
+Install it, keeping the Terraform state in the controller's own namespace:
+
+```shell
+helm upgrade --install terraform-controller kubevela/terraform-controller \
+  --version 0.9.1 --namespace terraform --create-namespace \
+  --set backend.namespace=terraform --wait
+```
+
+```shell
+kubectl get pods -n terraform
+```
+
+```console
+NAME                                   READY   STATUS    RESTARTS   AGE
+terraform-controller-d44c4bf5f-9bhjt   1/1     Running   0          13s
+```
+
+:::caution Set backend.namespace outside vela-system
+`backend.namespace` is where the controller keeps each `Configuration`'s Terraform state, as a Secret. It defaults to `vela-system`, which only exists where KubeVela is installed. Installed anywhere else with the default, every `Configuration` stays unprovisioned: the Terraform Job cannot write its state.
+:::
+
+Your cloud credentials then go into a `Provider` object: see [How It Works](../concepts/how-it-works.md#provider). For Terraform that needs no credentials, set `inlineCredentials: true` on the `Configuration`, as the [Quick Start](quick-start.md) does.
+
+The chart's other settings are on [Configure](../operate/configure.md).

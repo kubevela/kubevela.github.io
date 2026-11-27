@@ -37,7 +37,13 @@ module.exports = {
       label: 'Getting Started',
       collapsed: false,
       link: {type: 'generated-index', slug: '/getting-started'},
-      items: ['getting-started/introduction', 'getting-started/install'],
+      items: ['getting-started/introduction', 'getting-started/install', 'getting-started/quick-start'],
+    },
+    {
+      type: 'category',
+      label: 'Concepts',
+      link: {type: 'generated-index', slug: '/concepts'},
+      items: ['concepts/how-it-works'],
     },
     {
       type: 'category',
@@ -66,9 +72,16 @@ module.exports = {
     },
     {
       type: 'category',
+      label: 'Operate',
+      link: {type: 'generated-index', slug: '/operate'},
+      items: ['operate/configure', 'operate/upgrade', 'operate/troubleshooting'],
+    },
+    {
+      type: 'category',
       label: 'Reference',
       link: {type: 'generated-index', slug: '/reference'},
       items: [
+        'versions',
         {
           type: 'category',
           label: 'Cloud Resources',
