@@ -24,11 +24,26 @@ Each VelaUX server is built against a KubeVela and Workflow release, which sets 
 | --- | --- | --- | --- | --- |
 | [v1.9.5](https://github.com/kubevela/velaux/releases/tag/v1.9.5) | 2025-03-13 | Go 1.22 | v1.9.4 | v0.6.0 |
 | [v1.9.4](https://github.com/kubevela/velaux/releases/tag/v1.9.4) | 2024-07-11 | Go 1.22 | v1.9.4 | v0.6.0 |
-| [v1.9.3](https://github.com/kubevela/velaux/releases/tag/v1.9.3) | 2023-08-08 | Go 1.19 | v1.9.4 | v0.6.0 |
-| [v1.9.2](https://github.com/kubevela/velaux/releases/tag/v1.9.2) | 2023-07-22 | Go 1.19 | v1.9.1 | v0.6.0 |
+| [v1.9.3](https://github.com/kubevela/velaux/releases/tag/v1.9.3) | 2023-09-06 | Go 1.19 | v1.9.4 | v0.6.0 |
+| [v1.9.2](https://github.com/kubevela/velaux/releases/tag/v1.9.2) | 2023-07-24 | Go 1.19 | v1.9.1 | v0.6.0 |
 | [v1.9.1](https://github.com/kubevela/velaux/releases/tag/v1.9.1) | 2023-06-26 | Go 1.19 | v1.9.1 | v0.6.0 |
+| [v1.9.0](https://github.com/kubevela/velaux/releases/tag/v1.9.0) | 2023-06-20 | Go 1.19 | v1.9.0-alpha.1 (pre-release commit) | v0.5.1 (pre-release commit) |
 
-[v1.12.0-alpha.1](https://github.com/kubevela/velaux/releases/tag/v1.12.0-alpha.1) (2026-11-05) is a pre-release of the VelaUX that follows KubeVela 1.12. It isn't in the addon registry, and these docs don't cover it yet.
+[v1.12.0-alpha.1](https://github.com/kubevela/velaux/releases/tag/v1.12.0-alpha.1) (2026-11-05) is a pre-release of the VelaUX that follows KubeVela 1.12. It isn't in the addon registry. The rest of these docs describe v1.9.5; the one part of the 1.12 line covered here is below.
+
+### VelaUX 1.12 on older KubeVela (unreleased)
+
+This describes VelaUX's `main` branch, the 1.12 line, which isn't released yet: v1.12.0-alpha.1 was cut before it, and the addon still installs v1.9.5.
+
+VelaUX 1.12 will run on KubeVela 1.10, 1.11 and 1.12. A few features need a newer KubeVela. Where the cluster is too old for the resync interval or a workflow restart, VelaUX hides them, and its API refuses them with an error naming the version they need. Sources are the exception: the page stays, with an empty list.
+
+| Feature | KubeVela |
+| --- | --- |
+| Everything not listed below | 1.10 or later |
+| Resync interval and workflow restart on an application | 1.11 or later |
+| Sources (SourceDefinitions) | 1.12 or later. Earlier versions have no SourceDefinition CRD, so the Sources list is empty rather than hidden. |
+
+VelaUX reads the KubeVela version from the vela-core image tag. If it can't tell (a branch build, or an image pinned by digest), it assumes every feature is there.
 
 ## Upgrade
 
