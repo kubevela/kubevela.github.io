@@ -228,6 +228,8 @@ Some resources in KubeVela are data sensitive. For example, the ResourceTracker 
 
 The vela-prism provides alternative access to the data sensitive objects like ResourceTrackers and Cluster Secrets.
 
+The [Prism](/prism/getting-started/introduction) section has the full RBAC patterns and worked examples.
+
 ![vela-prism](https://raw.githubusercontent.com/kubevela/prism/master/hack/prism-arch.jpg)
 
 The original ResourceTracker in KubeVela is a cluster-scoped resource which records all the applied resources of the application and tracks them during application updating and recycling. 

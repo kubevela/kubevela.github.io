@@ -13,6 +13,8 @@ Enable it when you want to let users in a namespace see what their Applications 
 
 It runs as a Kubernetes [aggregated API server](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/apiserver-aggregation/).
 
+This page covers enabling the addon. Prism itself, including its Grafana APIs, RBAC patterns and worked examples, has its own section: [Prism](/prism/getting-started/introduction).
+
 ![PrismArch](https://raw.githubusercontent.com/kubevela/prism/master/hack/prism-arch.jpg)
 
 ## Install
@@ -31,13 +33,13 @@ vela addon disable vela-prism
 
 | Parameter | Default | Description |
 | --- | --- | --- |
-| `namespace` | `vela-system` | Namespace vela-prism is installed in, and where it looks for cluster Secrets and OCM ManagedClusters. |
+| `namespace` | `vela-system` | Where vela-prism looks for cluster Secrets and OCM ManagedClusters. Leave it at `vela-system`: see below. |
 | `image` | `oamdev/vela-prism:v1.7.0` | vela-prism image. |
 | `imagePullPolicy` | `IfNotPresent` | `IfNotPresent`, `Never` or `Always`. |
 | `cpu` | `0.1` | CPU request and limit. |
 | `memory` | `200Mi` | Memory request and limit. |
 
-The addon's `namespace` parameter (default `vela-system`) sets where vela-prism looks for cluster Secrets and OCM ManagedClusters; set it to the namespace KubeVela stores clusters in.
+vela-prism itself always runs in `vela-system`. Setting `namespace` to anything else points its APIServices at a Service that isn't there, and every Prism API stops answering: see [Configuration](/prism/operate/configuration#addon-parameters).
 
 ## ApplicationResourceTracker
 
