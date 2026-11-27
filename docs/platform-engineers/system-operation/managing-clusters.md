@@ -113,5 +113,5 @@ $ vela cluster rename cluster-prod cluster-production
 
 ## Next
 
-- Manage cluster with [UI console](/velaux/delivery/targets).
+- Manage cluster with [UI console](/velaux/guides/delivery/targets).
 - See the [`vela cluster` reference](../../cli/vela_cluster.md) for every subcommand and flag, including `labels del`, `export-config` and the `join` flags `--labels`, `--create-namespace` and `-t ocm`.

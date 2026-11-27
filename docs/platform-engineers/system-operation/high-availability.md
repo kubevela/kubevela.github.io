@@ -110,7 +110,7 @@ VelaUX is an addon made of the UI and its API server, both stateless, plus a dat
 vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_PASSWORD>@<MONGODB_URL> replicas=3
 ```
 
-See [Use an external database](/velaux/install#use-an-external-database) for the MySQL and PostgreSQL commands and how to create each database.
+See [Use an external database](/velaux/operate/install-options#use-an-external-database) for the MySQL and PostgreSQL commands and how to create each database.
 
 ## Check it
 

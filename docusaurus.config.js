@@ -18,6 +18,11 @@ const MOVED_FROM = Object.fromEntries(
     from_url,
   ]),
 );
+// Pages that moved within a section: {old URL: new URL}. Each new URL redirects from its old one.
+const SECTION_MOVED_FROM = {};
+for (const [from, to] of Object.entries(require('./section-redirects.json'))) {
+  (SECTION_MOVED_FROM[to] = SECTION_MOVED_FROM[to] || []).push(from);
+}
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 const config = {
@@ -86,7 +91,7 @@ const config = {
           items: [
             {to: 'docs/', label: 'KubeVela'},
             {to: 'workflow/overview', label: 'Workflow'},
-            {to: 'velaux/overview', label: 'VelaUX'},
+            {to: 'velaux/concepts/overview', label: 'VelaUX'},
             {to: 'terraform/overview', label: 'Terraform'},
             {to: 'addons/overview', label: 'Addons'},
             {to: 'cluster-gateway/overview', label: 'Cluster Gateway'},
@@ -442,7 +447,9 @@ const config = {
           if (RELEASE_DOCS_PATH.test(existingPath)) {
             return existingPath.slice('/docs'.length);
           }
-          return MOVED_FROM[existingPath.replace(/\/$/, '')];
+          const path = existingPath.replace(/\/$/, '');
+          const from = [MOVED_FROM[path], ...(SECTION_MOVED_FROM[path] || [])].filter(Boolean);
+          return from.length ? from : undefined;
         },
       },
     ],

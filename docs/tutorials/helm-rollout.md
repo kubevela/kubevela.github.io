@@ -217,7 +217,7 @@ The first deployment is a normal deployment. Check the application is running be
 vela status canary-demo
 ```
 
-If you have enabled the [velaux](/velaux/install) addon, the application's topology graph shows all the `v1` pods ready.
+If you have enabled the [velaux](/velaux/getting-started/install) addon, the application's topology graph shows all the `v1` pods ready.
 
 ![image](../resources/helm-rollout-v1.jpg)
 

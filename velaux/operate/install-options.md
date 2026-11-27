@@ -1,33 +1,12 @@
 ---
-title: VelaUX
+title: Install Options
+description: The velaux addon's parameters, and how to expose VelaUX, store its data in a database and pull its image from your own registry.
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-VelaUX is the UI console for KubeVela.
-
-:::note
-The `velaux` addon in the default registry installs VelaUX v1.9.5 (addon version v1.9.5). That release predates KubeVela 1.12, so its screens don't cover the 1.12 additions: it does not show sources or modules, there is no UI for the ConfigTemplate CRD, the `+ui` parameter markers don't change its forms, and it can't edit a config Secret that 1.12 adopted.
-:::
-
-![alt](resources/velaux-view.jpg)
-
-## Install
-
-```shell script
-vela addon enable velaux
-```
-
-Expected output:
-
-```
-Addon: velaux enabled Successfully.
-```
-
-VelaUX needs authentication. The first time you open it, it asks you to create the administrator account: a username, a password and an email. After that, log in with that username and password.
-
-By default VelaUX is not exposed outside the cluster.
+[Install VelaUX](../getting-started/install.md) enables the addon with its defaults: one replica, data kept in the cluster, reachable only by port-forward. This page covers the rest. Every option is an addon parameter. To change one on a running VelaUX, use `vela addon upgrade velaux <name>=<value>`: it keeps the parameters you set before and changes only the ones you pass. Running `vela addon enable velaux` again instead applies exactly the parameters you give it, and drops the rest. See [Upgrade VelaUX](upgrade.md).
 
 ## Parameters
 
@@ -48,18 +27,6 @@ Pass these to `vela addon enable velaux` as `name=value`.
 | `replicas` | `1` | Number of VelaUX server replicas. |
 | `serviceAccountName` | `kubevela-ux` | ServiceAccount the VelaUX server runs as. |
 | `enableImpersonation` | `false` | Send requests to the Kubernetes API as the signed-in user, rather than as VelaUX's ServiceAccount. |
-
-## Visit VelaUX by port-forward
-
-Port forwarding opens VelaUX on a local port, with nothing exposed outside the cluster.
-
-```
-vela port-forward addon-velaux -n vela-system
-```
-
-When asked, pick `local | velaux | velaux`.
-
-Everything the UI does goes through the VelaUX REST API, which you can call yourself; see [VelaUX REST API](reference/rest-api.md).
 
 ## Expose VelaUX with a Service type
 
@@ -178,8 +145,6 @@ vela addon enable velaux repo=your-registry.example.com
 
 The VelaUX image then becomes `your-registry.example.com/oamdev/velaux:<version>`. Add `imagePullSecrets` if the registry needs credentials.
 
-## Next steps
-
 ## Compatibility
 
 VelaUX v1.12.0 runs on KubeVela 1.10, 1.11 and 1.12. A few features need a newer KubeVela. Where the cluster is too old for the resync interval or a workflow restart, VelaUX hides them, and its API refuses them with an error naming the version they need. Sources are the exception: the page stays, with an empty list.
@@ -191,5 +156,3 @@ VelaUX v1.12.0 runs on KubeVela 1.10, 1.11 and 1.12. A few features need a newer
 | Sources (SourceDefinitions) | 1.12 or later. Earlier versions have no SourceDefinition CRD, so the Sources list is empty rather than hidden. |
 
 VelaUX reads the KubeVela version from the vela-core image tag. If it can't tell (a branch build, or an image pinned by digest), it assumes every feature is there.
-
-New to VelaUX? See [VelaUX concepts](overview.md) for projects, environments, delivery targets and the application lifecycle.

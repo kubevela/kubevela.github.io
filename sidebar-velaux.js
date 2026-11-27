@@ -1,33 +1,58 @@
-// Sidebar for the VelaUX section (/velaux), laid out for someone running VelaUX: install it, ship applications with
-// it, deliver them, manage who can do what, extend its forms, and the references.
+// Sidebar for the VelaUX section (/velaux), in the same order as the KubeVela docs: get it running, the model it adds,
+// the task guides, worked examples, running it in production, working on the repo, and the references.
 module.exports = {
   velaux: [
-    {type: 'doc', id: 'overview', label: 'Overview'},
-    {type: 'doc', id: 'install', label: 'Install'},
     {
       type: 'category',
-      label: 'Applications',
-      items: ['applications/operations', 'applications/cloud-shell'],
+      label: 'Getting Started',
+      collapsed: false,
+      link: {type: 'generated-index', slug: '/getting-started'},
+      items: ['getting-started/install'],
     },
     {
       type: 'category',
-      label: 'Delivery',
-      items: ['delivery/targets', 'delivery/triggers', 'delivery/harbor-trigger'],
+      label: 'Concepts',
+      link: {type: 'generated-index', slug: '/concepts'},
+      items: ['concepts/overview'],
     },
     {
       type: 'category',
-      label: 'Users and Access',
+      label: 'Guides',
+      link: {type: 'generated-index', slug: '/guides'},
       items: [
-        {type: 'doc', id: 'users/overview', label: 'Users'},
-        'users/projects',
-        'users/rbac',
-        'users/sso',
+        {
+          type: 'category',
+          label: 'Applications',
+          items: ['guides/applications/operations', 'guides/applications/cloud-shell'],
+        },
+        {
+          type: 'category',
+          label: 'Delivery',
+          items: ['guides/delivery/targets', 'guides/delivery/triggers', 'guides/delivery/harbor-trigger'],
+        },
+        {
+          type: 'category',
+          label: 'Users and Access',
+          items: [
+            {type: 'doc', id: 'guides/users/overview', label: 'Users'},
+            'guides/users/projects',
+            'guides/users/rbac',
+            'guides/users/sso',
+          ],
+        },
+        {type: 'category', label: 'Extend', items: ['guides/extend/ui-schema']},
       ],
     },
-    {type: 'category', label: 'Extend', items: ['extend/ui-schema']},
+    {
+      type: 'category',
+      label: 'Operate',
+      link: {type: 'generated-index', slug: '/operate'},
+      items: ['operate/install-options'],
+    },
     {
       type: 'category',
       label: 'Reference',
+      link: {type: 'generated-index', slug: '/reference'},
       items: ['reference/rest-api', 'reference/user-improvement-plan'],
     },
   ],

@@ -21,7 +21,7 @@ The first step sets who owns the application and where it deploys:
 
 Click **Next Step**. VelaUX builds a form from the component type, so a `webservice` asks for an image and ports, and a `helm` component asks for a chart. Below is the form for `webservice`.
 
-![create-app](../resources/set-webservice.jpg)
+![create-app](../../resources/set-webservice.jpg)
 
 Click **Create**. VelaUX saves the application with that one component, named after the application, and opens its **Application Config** page. Nothing is deployed yet.
 
@@ -38,7 +38,7 @@ The same tab holds **Policies** (**New Policy**), which set where the applicatio
 
 The environments an application is bound to sit beside **Application Config** at the top of its page, one tab each. To deploy somewhere new, click the **+** after the last environment, pick an environment (or create one with **New Environment**) and click **Submit**.
 
-![bind-new-env](../resources/bind-new-env.jpg)
+![bind-new-env](../../resources/bind-new-env.jpg)
 
 VelaUX creates a workflow for each environment you bind, so the application is ready to deploy there straight away.
 
@@ -46,15 +46,15 @@ VelaUX creates a workflow for each environment you bind, so the application is r
 
 Open an environment's tab. If the application hasn't been deployed there yet, the page says so and shows a **Deploy** button.
 
-![app-not-deploy](../resources/app-not-deploy.jpg)
+![app-not-deploy](../../resources/app-not-deploy.jpg)
 
 The **Deploy** button at the top right of the application's page works from anywhere. It opens **Select Workflow**: pick the **Environment** and, where it has more than one, the workflow to run, then click **Deploy**. **DryRun** shows what would be applied without applying it.
 
-![select-workflow](../resources/select-workflow.jpg)
+![select-workflow](../../resources/select-workflow.jpg)
 
 VelaUX opens the environment's **Workflow** tab on the new run. Each step shows its status; click a step for its detail, properties, inputs and outputs. A step that fails turns red, and its message says why.
 
-![workflow-error](../resources/workflow-error.jpg)
+![workflow-error](../../resources/workflow-error.jpg)
 
 When the workflow reaches a `suspend` step, it stops there and the run says it needs your approval. Check the application, then click:
 
@@ -62,7 +62,7 @@ When the workflow reaches a `suspend` step, it stops there and the run says it n
 - **Terminate** to stop the run.
 - **Rollback** to go back to the last revision that was ready.
 
-![workflow-suspend](../resources/workflow-suspend.jpg)
+![workflow-suspend](../../resources/workflow-suspend.jpg)
 
 You can deploy again at any time, whatever state the application is in. If a workflow is still running, VelaUX asks whether to force a restart.
 
@@ -70,7 +70,7 @@ You can deploy again at any time, whatever state the application is in. If a wor
 
 Each environment has its own workflow. The **Workflows** tab of **Application Config** lists them with their environment, mode and step count. To change one, click its name, or click **Launch Workflow Studio** on the environment's **Workflow** tab.
 
-![workflow-edit](../resources/workflow-edit.jpg)
+![workflow-edit](../../resources/workflow-edit.jpg)
 
 In the studio:
 
@@ -79,7 +79,7 @@ In the studio:
 3. Set **Mode** to **StepByStep** to run the steps in order, or **DAG** to run them as their dependencies allow.
 4. Click **Save**.
 
-![workflow-notification](../resources/workflow-notification.jpg)
+![workflow-notification](../../resources/workflow-notification.jpg)
 
 Deploy the application to run the changed workflow.
 
@@ -94,9 +94,9 @@ An environment's tab has four views:
 | Instances | The pods, with their target, component, status, revision and node. Filter by target or component at the top. Expand a pod for its containers and events, and a container's log. Cloud resources show instead, with a **Console** link to the cloud provider. |
 | Logs | A container's logs. See [View application logs](#view-application-logs). |
 
-![pod list](../resources/pod-list.jpg)
+![pod list](../../resources/pod-list.jpg)
 
-![rds-instances](../resources/rds-instances.jpg)
+![rds-instances](../../resources/rds-instances.jpg)
 
 From the command line, `vela status <app_name> -n <namespace> --tree` lists the same resources.
 
@@ -114,17 +114,17 @@ vela logs <app_name> -n <namespace>
 
 When a component exposes a service, the **Service Endpoint** button appears at the top of the **Status** and **Instances** views. Hover over it for the addresses.
 
-![service endpoint](../resources/service-endpoint.jpg)
+![service endpoint](../../resources/service-endpoint.jpg)
 
 There are two common ways to expose a component:
 
 - On a `webservice` component, set **ExposeType** to `LoadBalancer` or `NodePort`, and turn on **Expose** for the ports to publish.
 
-  ![webservice](../resources/webservice-port.jpg)
+  ![webservice](../../resources/webservice-port.jpg)
 
 - Add a `gateway` trait with a **Domain** and the routes under **Http** (for example `/` to port `80`). It works on `webservice`, `worker` and `task` components, for HTTP and HTTPS, and needs an ingress controller in the cluster. Point your DNS for the domain at the cluster's gateway.
 
-  ![trait](../resources/gateway-trait-add.jpg)
+  ![trait](../../resources/gateway-trait-add.jpg)
 
 Other component types expose services their own way; a Helm chart, for example, does it through its values.
 
@@ -132,7 +132,7 @@ Other component types expose services their own way; a Helm chart, for example, 
 
 Every deploy records a revision. The **Revisions** tab of **Application Config** lists them with their deploy user, status, trigger type, publish time and environment. Filter by environment or status at the top.
 
-![Application Revision List](../resources/app-revision.jpg)
+![Application Revision List](../../resources/app-revision.jpg)
 
 For each revision:
 
@@ -152,4 +152,4 @@ To recycle, open the environment's **Status** or **Instances** view, click **Rec
 
 VelaUX refuses to remove an application that is still deployed anywhere, so recycle every environment first. Then open **Application Config**, click **Remove** beside **Edit**, and confirm.
 
-![delete application](../resources/app-delete.jpg)
+![delete application](../../resources/app-delete.jpg)

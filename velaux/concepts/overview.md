@@ -1,12 +1,11 @@
 ---
-title: VelaUX Concepts
+title: Concepts
+description: Projects, environments, delivery targets and the VelaUX application lifecycle.
 ---
 
 VelaUX is the UI console for KubeVela, and a ready-made platform for the people who ship applications on it. On top of KubeVela's own model it adds a few concepts for working as a team: projects, environments and delivery targets, and a lifecycle for applications.
 
-These pages describe VelaUX 1.9.5, the version the `velaux` addon installs. To install it, see [Install VelaUX](install.md).
-
-![alt](resources/velaux-concept.png)
+![alt](../resources/velaux-concept.png)
 
 ## Project
 
@@ -34,3 +33,9 @@ An application in VelaUX has a lifecycle on top of the KubeVela Application:
 - **Delete** removes the application's metadata.
 
 Everything else about a VelaUX application works as it does in KubeVela.
+
+## Applications from outside VelaUX
+
+VelaUX watches every Application in the cluster, not only the ones it created. An Application you apply with `vela up` or `kubectl apply` is synced into VelaUX: it lands in the `default` project, in an environment named after its namespace (a namespace already bound to an environment keeps that environment), with a delivery target for each cluster and namespace it deploys to. Addon Applications in `vela-system` land in a project of their own, shown as **System**.
+
+A synced application lists its components, revisions and workflow in VelaUX like any other. [Sync an application from the CLI](../examples/sync-cli-application.md) shows it end to end.

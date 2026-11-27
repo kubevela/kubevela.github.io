@@ -10,12 +10,12 @@ Many addons install their software from a Helm chart, so they depend on `fluxcd`
 
 | Addon | What it gives you |
 | --- | --- |
-| [velaux](/velaux/install) | VelaUX, the KubeVela web console, and its API server. |
+| [velaux](/velaux/getting-started/install) | VelaUX, the KubeVela web console, and its API server. |
 | [vela-prism](./vela-prism.md) | An aggregated API server that serves KubeVela objects, such as application resource trackers and clusters, as Kubernetes APIs. VelaUX and the observability addons use it. |
 | [vela-workflow](/docs/end-user/pipeline/workflowrun) | The standalone workflow controller, for `WorkflowRun` pipelines that run without an Application, plus steps such as `apply-app`, `read-app` and `addon-operation`. |
 | [vela-core-shard-manager](/docs/platform-engineers/system-operation/controller-sharding) | Extra vela-core controllers for sharding, copied from the main controller's configuration. |
 | [kube-trigger](https://github.com/kubevela/catalog/tree/master/addons/kube-trigger) | The kube-trigger controller and the `trigger-service` component: watch Kubernetes objects and act when they change, for example to update an Application when a ConfigMap it reads changes. |
-| [cloudshell](/velaux/applications/cloud-shell) | A terminal in the browser, opened from VelaUX, with `vela` and `kubectl` set up. Needs KubeVela 1.11 or later. |
+| [cloudshell](/velaux/guides/applications/cloud-shell) | A terminal in the browser, opened from VelaUX, with `vela` and `kubectl` set up. Needs KubeVela 1.11 or later. |
 | [kubevela-io](./kubevela-io.md) | A copy of the KubeVela documentation site, served in your cluster for air-gapped environments. |
 
 ## Observability

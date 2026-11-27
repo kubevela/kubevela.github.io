@@ -1,0 +1,14 @@
+{
+  "/velaux/overview": "/velaux/concepts/overview",
+  "/velaux/install": "/velaux/getting-started/install",
+  "/velaux/applications/operations": "/velaux/guides/applications/operations",
+  "/velaux/applications/cloud-shell": "/velaux/guides/applications/cloud-shell",
+  "/velaux/delivery/targets": "/velaux/guides/delivery/targets",
+  "/velaux/delivery/triggers": "/velaux/guides/delivery/triggers",
+  "/velaux/delivery/harbor-trigger": "/velaux/guides/delivery/harbor-trigger",
+  "/velaux/users/overview": "/velaux/guides/users/overview",
+  "/velaux/users/projects": "/velaux/guides/users/projects",
+  "/velaux/users/rbac": "/velaux/guides/users/rbac",
+  "/velaux/users/sso": "/velaux/guides/users/sso",
+  "/velaux/extend/ui-schema": "/velaux/guides/extend/ui-schema"
+}
