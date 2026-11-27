@@ -379,7 +379,7 @@ Check a particular Application with `vela dry-run` from the v1.12 CLI against th
 | `storage` trait | ConfigMap and Secret volumes marked `readOnly` are mounted read-only; block-mode PVCs are attached as devices and no longer mounted; a PVC `selector` is now written as `selector` (v1.11 wrote it as `dataSource`). |
 | `hostalias` trait | Entries for the same IP are merged into one, and a hostname the IP already has is listed once. |
 | `sidecar` trait | The sidecar's `ports` are now rendered. |
-| `affinity` trait | v1.11 ignored `nodeSelector`, `affinity`, `schedulerName`, `priorityClassName` and `topologySpreadConstraints`; v1.12 applies all five to the pod spec. A pod that ran anywhere goes `Pending` if its `nodeSelector` matches no node. The pre-upgrade check flags these as `affinity-trait`: a warning, or an error when no node matches. |
+| `affinity` trait | v1.11 applied `podAffinity`, `podAntiAffinity`, `nodeAffinity` and `tolerations`, but ignored `nodeSelector`, the raw `affinity` object, `schedulerName`, `priorityClassName` and `topologySpreadConstraints`; v1.12 applies those five as well, so the workload rolls. The rollout's new Pods stay `Pending` when no node matches, and the rollout stalls. The pre-upgrade check flags these as `affinity-trait`: a warning, or an error when no node matches or the PriorityClass does not exist. |
 | `pure-ingress` trait | The Ingress is `networking.k8s.io/v1` (was `v1beta1`), with `pathType: ImplementationSpecific`. |
 
 Each of these rolls the workload on its first successful edit; a `task` Job with probes instead
