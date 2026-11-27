@@ -40,7 +40,7 @@ vela addon enable loki
 vela addon enable grafana adminPassword='YOUR_PASSWORD'
 ```
 
-Replace `YOUR_PASSWORD` with the password you want. Without `adminPassword`, Grafana's admin password is `kubevela`. To change the admin username too, add `adminUser=<name>`.
+Replace `YOUR_PASSWORD` with the password you want. The single quotes stop the shell reading it; write any single quote inside the password as `'\''`. Without `adminPassword`, Grafana's admin password is `kubevela`. To change the admin username too, add `adminUser=<name>`.
 
 6. Access your grafana through port-forward.
 

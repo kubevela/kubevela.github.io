@@ -124,4 +124,4 @@ For more details, see [vela-prism](https://github.com/kubevela/prism#grafana-rel
 
 ## Integrate Other Tools or Systems
 
-For other tools, use their own install. The `prometheus-scrape` trait (from the `prometheus-server` addon) only sets the `prometheus.io/scrape`, `prometheus.io/port` and `prometheus.io/path` annotations, so it suits a tool that discovers targets from them, such as Datadog with its Prometheus annotation scraping turned on. prometheus-operator does not read those annotations: give it a `ServiceMonitor` or `PodMonitor` instead.
+For other tools, use their own install. The `prometheus-scrape` trait (from the `prometheus-server` addon) creates a `<component>-prometheus-scrape` Service in front of the component and puts the `prometheus.io/scrape`, `prometheus.io/port` and `prometheus.io/path` annotations on it. Those annotations are all a collector reads, so the trait suits a tool that discovers targets from them, such as Datadog with its Prometheus annotation scraping turned on. prometheus-operator does not read those annotations: give it a `ServiceMonitor` or `PodMonitor` instead.

@@ -12,7 +12,7 @@ A project is where a team manages its applications and works together. Each proj
 
 ## Environment
 
-An environment is a stage such as development, testing or production, and groups the delivery targets for that stage. Applications in one environment deploy to the same targets, so they can share resources there, as far as the clusters' network and RBAC allow.
+An environment is a stage such as development, testing or production, and groups the delivery targets for that stage. By default an application's workflow for an environment deploys to every target in it, so applications in one environment can share resources there, as far as the clusters' network and RBAC allow. Edit that workflow to deploy to only some of the targets.
 
 You can bind an application to several environments, and set different parameters for each one.
 

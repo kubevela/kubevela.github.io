@@ -2,7 +2,7 @@
 title: Overview
 ---
 
-Without a workflow, KubeVela applies every component at once, apart from the order components set with `dependsOn`. A workflow lets you choose the order, wait for approval, branch on conditions and pass data from one step to the next.
+Without a workflow, KubeVela applies every component at once, apart from the order that dependencies set: `dependsOn`, `inputs` and `$(component.<name>)` reads each hold a component back until what it waits on is ready. A workflow lets you choose the order, wait for approval, branch on conditions and pass data from one step to the next.
 
 A workflow is a list of steps. Each step has a type: one of the [built-in step types](./built-in-workflow-defs.md) (`deploy`, `suspend`, `notification`, `step-group` and more), or a type your platform team has added.
 

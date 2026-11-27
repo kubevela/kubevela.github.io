@@ -98,8 +98,8 @@ The trait runs Vegeta in a Job named after the component. Read its results, one 
 
 ```shell
 $ kubectl logs -n vegeta job/new-vegeta --tail=2
-{"attack":"","seq":41210,"code":200,"timestamp":"2022-05-31T13:25:02.612Z","latency":1048573,"bytes_out":0,"bytes_in":615,"error":"","body":"PCFET0NUWVBFIGh0bWw+...","method":"GET","url":"http://new-vegeta.vegeta:80","headers":{"Content-Type":["text/html"]}}
-{"attack":"","seq":41211,"code":200,"timestamp":"2022-05-31T13:25:02.812Z","latency":982114,"bytes_out":0,"bytes_in":615,"error":"","body":"PCFET0NUWVBFIGh0bWw+...","method":"GET","url":"http://new-vegeta.vegeta:80","headers":{"Content-Type":["text/html"]}}
+{"attack":"","seq":339,"code":200,"timestamp":"2022-05-31T13:25:02.612Z","latency":1048573,"bytes_out":0,"bytes_in":615,"error":"","body":"PCFET0NUWVBFIGh0bWw+...","method":"GET","url":"http://new-vegeta.vegeta:80","headers":{"Content-Type":["text/html"]}}
+{"attack":"","seq":340,"code":200,"timestamp":"2022-05-31T13:25:02.712Z","latency":982114,"bytes_out":0,"bytes_in":615,"error":"","body":"PCFET0NUWVBFIGh0bWw+...","method":"GET","url":"http://new-vegeta.vegeta:80","headers":{"Content-Type":["text/html"]}}
 ```
 
 The `body` field is shortened here. This example sends 10 requests a second for 5 minutes. Without `vegetacli` the attack runs at 5000 requests a second for 10000 minutes, so always set it, and delete the Application to stop an attack early.

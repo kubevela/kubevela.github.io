@@ -45,7 +45,7 @@ The Krew index only carries amd64 builds. On Apple silicon or another arm64 mach
 curl -fsSl https://kubevela.io/script/install-kubectl-vela.sh | bash
 ```
 
-The script installs the newest release. While a pre-release is the newest release, it stops with `Failed to get latest release tag`; download the `kubectl-vela` archive for your platform (for example `kubectl-vela-v<version>-linux-amd64.tar.gz`) from the [release page](https://github.com/kubevela/kubevela/releases) instead, extract it, and put the `kubectl-vela` binary inside on your `PATH`. Kubectl finds it there by itself.
+The script installs the release GitHub marks as latest, which is never a pre-release. If it cannot read that release (GitHub rate-limits anonymous API calls, for one), it stops with `Failed to get latest release tag`. To install a pre-release, or when the script stops, download the `kubectl-vela` archive for your platform (for example `kubectl-vela-v<version>-linux-amd64.tar.gz`) from the [release page](https://github.com/kubevela/kubevela/releases) instead, extract it, and put the `kubectl-vela` binary inside on your `PATH`. Kubectl finds it there by itself.
 
 </TabItem>
 </Tabs>

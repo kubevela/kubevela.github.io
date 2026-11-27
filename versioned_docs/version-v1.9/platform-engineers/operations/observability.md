@@ -33,7 +33,7 @@ More than that, you can easily define your own observability traits with CUE.
 
 ## Observability as Code
 
-Each piece is KubeVela: the addons install their tools as Applications and bring the scrape and log traits as definitions, and Grafana datasources and dashboards are components of an Application. So you manage your observability stack the same way you manage apps.
+Each piece is KubeVela: the addons install their tools as Applications and bring the scrape and log traits as definitions, and Grafana datasources and dashboards are components of an Application, or a dashboard rides along on an app's own component as the `grafana-dashboard` trait. So you manage your observability stack the same way you manage apps.
 
 ## What's Next
 

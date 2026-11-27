@@ -4,7 +4,7 @@ title: Automated Observability
 
 Five addons give you Prometheus, Loki and Grafana with dashboards for KubeVela and your apps. Traits then decide which apps' metrics and logs are collected.
 
-Each piece is KubeVela: the addons install their tools as Applications and bring the scrape and log traits as definitions, and Grafana datasources and dashboards are components of an Application. So you manage your observability stack the same way you manage apps.
+Each piece is KubeVela: the addons install their tools as Applications and bring the scrape and log traits as definitions, and Grafana datasources and dashboards are components of an Application, or a dashboard rides along on an app's own component as the `grafana-dashboard` trait. So you manage your observability stack the same way you manage apps.
 
 ## The addons
 

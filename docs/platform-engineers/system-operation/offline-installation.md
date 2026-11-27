@@ -43,8 +43,10 @@ If your environment can't reach the addon registry or `https://github.com/kubeve
 2. List the images and Helm charts an addon uses, by rendering it without installing anything:
 
     ```shell
-    vela addon enable ./catalog/addons/<addon> --dry-run   # or ./catalog/experimental/addons/<addon> | grep -E '^\s*(image|url|chart|version):' | sort -u
+    vela addon enable <addon-path> --dry-run | grep -E '^\s*(image|url|chart|version):' | sort -u
     ```
+
+    `<addon-path>` is `./catalog/addons/<addon>`, or `./catalog/experimental/addons/<addon>` for an experimental addon.
 
     For a component that installs a Helm chart, this lists the chart; the chart's own images are in its `values.yaml`.
 

@@ -26,6 +26,8 @@ helm upgrade --install kubevela kubevela/vela-core \
 Turning this on refuses every Application create or update whose submitter can't `get` the definitions it uses. Before you enable it, give your users, your GitOps controller's ServiceAccount and any CI ServiceAccount `get` on the definitions each one uses: the [examples below](#example-restricted-definition-access) show how to grant only some, and `vela-definition-reader` grants all of them. The feature is off by default.
 :::
 
+An Application can use `spec.sources` at all only once sources are turned on, which takes the `EnableCelExpressions` feature gate, and in the default opt-in mode the `app.oam.dev/cel-expressions: "true"` annotation on the Application. See [Enable the feature](../source/intro.md#enable-the-feature).
+
 ## How It Works
 
 When a user creates or updates an Application, the validating webhook checks if they have `get` permission for each referenced definition. The validation occurs before the Application is stored, providing immediate feedback.
