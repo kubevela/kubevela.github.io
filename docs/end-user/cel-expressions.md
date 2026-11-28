@@ -28,8 +28,8 @@ What an expression can read:
 | `context.<field>` | what is being rendered: app name, namespace, cluster, labels | [below](#what-context-offers) |
 | `source.<binding>.<path>` | a value fetched by one of your `spec.sources[]` | [Sources](../platform-engineers/source/using-sources.md) |
 | `component.<name>.output.<path>`, `component.<name>.outputs.<resource>.<path>` | another component of the Application, live once it is healthy | [Reading Other Components](./reading-components.md) |
-| `steps.<name>.outputs.<output>`, `steps.<name>.phase`, ... | an earlier workflow step's output or status | [Expressions in Workflow Steps](./workflow/expressions.md) |
-| `each.item`, `each.index`, `each.key` | the current item of a forEach loop | [Expressions in Workflow Steps](./workflow/expressions.md#reading-the-loop-item) |
+| `steps.<name>.outputs.<output>`, `steps.<name>.phase`, ... | an earlier workflow step's output or status | [Expressions in Workflow Steps](/workflow/next/guides/steps/expressions) |
+| `each.item`, `each.index`, `each.key` | the current item of a forEach loop | [Expressions in Workflow Steps](/workflow/next/guides/steps/expressions#reading-the-loop-item) |
 
 A source binding name must be an identifier: `$(source.cluster-info.x)` reads as a
 subtraction, so name it `clusterInfo`. Reading a hyphenated binding gives only a bare
@@ -302,9 +302,9 @@ Use single quotes in YAML when the fallback contains double quotes.
 |---|---|---|---|---|---|
 | Component properties | ✔ | [✔](../platform-engineers/source/using-sources.md) | [✔](./reading-components.md) | ✘ | ✘ |
 | Trait properties | ✔ | [✔](../platform-engineers/source/using-sources.md) | [✔](./reading-components.md) | ✘ | ✘ |
-| Workflow step properties | ✔ | [✔](../platform-engineers/source/using-sources.md) | ✘ | [✔](./workflow/expressions.md#reading-another-step) | [in a loop](./workflow/expressions.md#reading-the-loop-item) |
-| A workflow step's `if` | ✔ | [✔](../platform-engineers/source/using-sources.md) | ✘ | [✔](./workflow/expressions.md#conditions) | [in a loop body](./workflow/expressions.md#conditions-in-loops) |
-| A workflow step's `forEach.items` | ✔ | [✔](../platform-engineers/source/using-sources.md) | ✘ | [✔](./workflow/expressions.md#reading-another-step) | ✘ |
+| Workflow step properties | ✔ | [✔](../platform-engineers/source/using-sources.md) | ✘ | [✔](/workflow/next/guides/steps/expressions#reading-another-step) | [in a loop](/workflow/next/guides/steps/expressions#reading-the-loop-item) |
+| A workflow step's `if` | ✔ | [✔](../platform-engineers/source/using-sources.md) | ✘ | [✔](/workflow/next/guides/steps/expressions#conditions) | [in a loop body](/workflow/next/guides/steps/expressions#conditions-in-loops) |
+| A workflow step's `forEach.items` | ✔ | [✔](../platform-engineers/source/using-sources.md) | ✘ | [✔](/workflow/next/guides/steps/expressions#reading-another-step) | ✘ |
 | A later `spec.sources[]` entry | ✔ | [✔](../platform-engineers/source/using-sources.md#chain-sources) | ✘ | ✘ | ✘ |
 | A policy with its own CUE definition | ✔ | [✔](../platform-engineers/source/using-sources.md) | ✘ | ✘ | ✘ |
 | Built-in policies (`topology`, `override`, `garbage-collect` and the rest) | ✔ | ✘ | ✘ | ✘ | ✘ |
@@ -322,7 +322,7 @@ Each gap has a reason:
   read `context`.
 
 A standalone `WorkflowRun` has no `source` or `component` at all; see
-[Standalone WorkflowRun](./workflow/expressions.md#workflowrun).
+[Standalone WorkflowRun](/workflow/next/guides/steps/expressions#workflowrun).
 
 ### What `context` offers
 
@@ -362,7 +362,7 @@ exist is refused at admission, naming the field:
 These apply to every expression. Errors particular to one root are on its page:
 [Sources](../platform-engineers/source/caching-and-operations.md#common-failures),
 [Reading Other Components](./reading-components.md#when-something-is-wrong) and
-[Expressions in Workflow Steps](./workflow/expressions.md#when-something-is-wrong).
+[Expressions in Workflow Steps](/workflow/next/guides/steps/expressions#when-something-is-wrong).
 
 | Message | Means |
 |---|---|
@@ -384,7 +384,7 @@ These apply to every expression. Errors particular to one root are on its page:
 
 - [Reading External Data with Sources](../platform-engineers/source/using-sources.md): where `source` values come from.
 - [Reading Other Components](./reading-components.md): reading a component deployed beside this one.
-- [Expressions in Workflow Steps](./workflow/expressions.md): steps, loop items and `$( )` conditions.
+- [Expressions in Workflow Steps](/workflow/next/guides/steps/expressions): steps, loop items and `$( )` conditions.
 - [How Expressions Are Evaluated](./cel-expressions-lifecycle.md): what is checked when, and what is resolved when.
 
 {/* PENDING: the Sources links resolve once kubevela.github.io#1469 merges. */}

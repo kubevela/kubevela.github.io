@@ -18,7 +18,7 @@ In implementation, KubeVela relies on a dedicated Kubernetes cluster to achieve 
 
 - _KubeVela Core Controller_ that provides the core control logic of the entire system. For example, handling KubeVela API resources, orchestrating workflow, storing revisions, parsing and executing CUE code, garbage collecting, etc.
 - [_Cluster Gateway Controller_](https://github.com/oam-dev/cluster-gateway) that provides a unified multi-cluster access interface. Working as Kubernetes Aggregated API Server, the gateway leverages the native Authentication and Authorization modules and enforces secure and transparent access to managed clusters.
-- [_Addons_](../reference/addons/overview.md) that register and manage definitions along with extended CRD controllers that KubeVela needed to work. For example, several frequently used addons are listed below:
+- [_Addons_](/addons/overview) that register and manage definitions along with extended CRD controllers that KubeVela needed to work. For example, several frequently used addons are listed below:
   * The [_VelaUX_](https://github.com/kubevela/velaux) addon is the Web UI for KubeVela. Besides, it acts more like a full functioned "App Delivery Platform" in the architecture that incorporates business logic into fundamental APIs and provides out-of-box user experiences for non-k8s-expert users.
   * The [_Workflow_](https://github.com/kubevela/workflow) addon is a standalone workflow engine that can run as pipeline to deploy multiple applications or other actions. A big difference to traditional ways, it mainly drives the IaC based API with the use of CUE instead of running pods for every step. It shares the same mechanism with the application workflow of KubeVela core controller. 
   * The [_Vela Prism_](https://github.com/kubevela/prism) addon is an extension API server for KubeVela and built upon the Kubernetes Aggregated API Server. It projects native APIs like creating dashboards on Grafana into Kubernetes resource APIs, so that users can manage 3rd-party resources as Kubernetes native resources.
@@ -42,7 +42,7 @@ In real world, application deployment tends to be complex and varies from teams,
 - Platform builders for PaaS, Serverless, Application Management/Delivery systems
 	- KubeVela works as an application delivery engine that you could build your advanced platform with.
 - ISV, SaaS owners, and Application Architects who need to distribute software to anywhere
-	- KubeVela has full extension and integration capabilities to allow users to distribute applications with [customized addons](../platform-engineers/addon/intro.md) easily. Think about an App Store but on Kubernetes and clouds.
+	- KubeVela has full extension and integration capabilities to allow users to distribute applications with [customized addons](/addons/developer/make-your-own-addon) easily. Think about an App Store but on Kubernetes and clouds.
 - Application Developers, Operators, DevOps Engineers
 	- VelaUX is an addon of KubeVela, with this addon enabled, it provides an out-of-box modern application Continuous Delivery (CD) and Management platform with an easy-to-use UI console.
 

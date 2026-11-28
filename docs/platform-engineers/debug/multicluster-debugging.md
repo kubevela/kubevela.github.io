@@ -487,6 +487,6 @@ You should see the podinfo pods and related resources running in both clusters, 
 ### Issue: Pods not deploying to the spoke cluster
 
 - Verify cluster is registered: `vela cluster ls`
-- Check Cluster Gateway logs: `kubectl logs -n vela-system -l app=kubevela-cluster-gateway`
+- Check Cluster Gateway logs: `kubectl logs -n vela-system -l app.kubernetes.io/name=vela-core-cluster-gateway`
 - Ensure topology policy includes the correct cluster names
 

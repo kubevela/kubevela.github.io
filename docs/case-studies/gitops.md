@@ -14,14 +14,14 @@ The GitOps tool owns one object, the Application. KubeVela owns everything the A
 
 Applying plain manifests from Git declares the end state and stops there. With an Application in Git, you also get:
 
-- **A delivery workflow.** Steps run in order or as a [dependency graph](../end-user/workflow/component-dependency-parameter.md), with [manual approval](../end-user/workflow/suspend.md), notifications and conditions, rather than every resource landing at once. See the [workflow overview](../end-user/workflow/overview.md).
+- **A delivery workflow.** Steps run in order or as a [dependency graph](../end-user/workflow/component-dependency-parameter.md), with [manual approval](/workflow/next/guides/steps/suspend), notifications and conditions, rather than every resource landing at once. See the [workflow overview](../end-user/workflow/overview.md).
 - **Multi-cluster delivery.** One Application in one repository can place components across clusters, with per-environment overrides. See [Multi-cluster Application Delivery](../end-user/policies/multi-cluster.md).
 - **Health.** KubeVela checks each component and trait against the health policy its definition sets, and reports the result in the Application's status, so `vela status <app>` (or your GitOps tool's view of the Application) tells you whether the delivery worked, not just whether it was applied.
-- **Higher-level abstractions.** Developers write components and traits; platform teams own the [definitions](../getting-started/core-concept.md) behind them, including [cloud resources](../tutorials/consume-cloud-services.md).
+- **Higher-level abstractions.** Developers write components and traits; platform teams own the [definitions](../getting-started/core-concept.md) behind them, including [cloud resources](/terraform/guides/consume-cloud-services).
 
 ## Pick your tool
 
-- **FluxCD**: enable the [`fluxcd` addon](../reference/addons/fluxcd.md) and follow [GitOps with FluxCD](../end-user/gitops/fluxcd.md). It covers syncing a configuration repository and updating images automatically.
+- **FluxCD**: enable the [`fluxcd` addon](/addons/fluxcd) and follow [GitOps with FluxCD](../end-user/gitops/fluxcd.md). It covers syncing a configuration repository and updating images automatically.
 - **Argo CD or another tool**: commit the Application YAML to the repository your tool watches. Two things are worth knowing:
   - Each time the Application's spec changes, KubeVela runs its workflow again. To decide exactly when a deploy happens, set the `app.oam.dev/publishVersion` annotation and have your CI change it. See [Publish Version](../end-user/version-control.md) and [Deploy only on a version bump](../end-user/gitops/fluxcd.md#deploy-only-on-a-version-bump).
   - KubeVela writes some annotations onto the Application itself: the controller sets `oam.dev/kubevela-version`, and with [authentication](../platform-engineers/auth/basic.md) on, the webhook sets `app.oam.dev/group`, plus `app.oam.dev/username` when `authentication.withUser` is on. Leave these out of the YAML in Git; KubeVela sets them.

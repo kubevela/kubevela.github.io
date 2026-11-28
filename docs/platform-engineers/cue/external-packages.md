@@ -287,7 +287,7 @@ curl -s -X POST http://my-cuex-server:8443/sum -H 'Content-Type: application/jso
 
 ## What the controller sends
 
-The call is made by the vela-core pod, whenever a definition that uses the Package renders, which for an Application can be every reconcile. It sends the `$params` you write, and the provider sees vela-core's network address. The [workflow HTTP limits](../workflow/workflow.md#http-limits) cover the built-in `vela/http` provider, not Package calls, so run providers inside the cluster or on an endpoint you trust. TLS isn't verified, so don't send secrets in `$params` to a provider outside a network you control.
+The call is made by the vela-core pod, whenever a definition that uses the Package renders, which for an Application can be every reconcile. It sends the `$params` you write, and the provider sees vela-core's network address. The [workflow HTTP limits](/workflow/next/guides/authoring/step-definition#http-limits) cover the built-in `vela/http` provider, not Package calls, so run providers inside the cluster or on an endpoint you trust. TLS isn't verified, so don't send secrets in `$params` to a provider outside a network you control.
 
 ## Configuration Flags
 

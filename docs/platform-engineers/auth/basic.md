@@ -26,12 +26,9 @@ To enable Authentication & Authorization in your KubeVela system, you need to do
 
 2. Make sure your version Vela CLI v1.4.1+, refer to [the installation guide](../../install.mdx#2-install-kubevela-cli).
 
-3. (Optional) Install [vela-prism](https://github.com/kubevela/prism) through running the following commands, which will allow you to enjoy the advanced API extensions in KubeVela.
+3. (Optional) Install [vela-prism](https://github.com/kubevela/prism), which will allow you to enjoy the advanced API extensions in KubeVela. The addon is the simplest route; [Install Prism](/prism/getting-started/install) has the Helm chart too, which needs `--set image.tag=v1.7.0`.
   ```bash
-  helm repo remove kubevela 2>/dev/null || true
-  helm repo add kubevela https://kubevela.github.io/charts
-  helm repo update
-  helm install vela-prism kubevela/vela-prism -n vela-system
+  vela addon enable vela-prism
   ```
 
 ## Usage

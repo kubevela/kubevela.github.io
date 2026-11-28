@@ -21,7 +21,7 @@ There're two sources to get out-of-box definitions:
     - [Trait Definition](../end-user/traits/references.md)
     - [Policy Definition](../end-user/policies/references.md)
     - [Workflow Step Definition](../end-user/workflow/built-in-workflow-defs.md)
-* Install [Addons](../reference/addons/overview.md), they're scenario-oriented system extensions of KubeVela, each addon contains a bunch of definitions along its CRD controllers.
+* Install [Addons](/addons/overview), they're scenario-oriented system extensions of KubeVela, each addon contains a bunch of definitions along its CRD controllers.
     - The community has a [verified addon registry](https://github.com/kubevela/catalog) which contains a large catalog of addons, the registry is maintained by the KubeVela team.
 
 ## Lifecycle of a Definition
@@ -98,9 +98,9 @@ You can also view the details from documentation website, the following command 
 vela show webservice --web
 ```
 
-* Discover in UI console ([`velaux`](../reference/addons/velaux.md))
+* Discover in UI console ([`velaux`](/velaux/getting-started/install))
 
-Once installed, these definitions can be discovered and generated with forms by the UI console automatically. More than that, you can even customize the layout by defining the [ui schema](../reference/ui-schema.md) like below.
+Once installed, these definitions can be discovered and generated with forms by the UI console automatically. More than that, you can even customize the layout by defining the [ui schema](/velaux/guides/extend/ui-schema) like below.
 
 ![alt](../resources/customize-def.jpg)
 

@@ -7,6 +7,8 @@ This page lists the flags and feature gates of the KubeVela controller (`vela-co
 
 Most flags and feature gates are set through the `vela-core` Helm chart values, for example `--set featureGates.enableCelExpressions=true`. The chart's defaults can differ from the controller's own defaults; both are shown below.
 
+The flags of Cluster Gateway itself, which the chart runs beside vela-core, are in [Configure Cluster Gateway](/cluster-gateway/operate/configuration).
+
 ## Flags
 
 The generic Kubernetes logging flags (`-v`, `--vmodule`, `--log_dir` and the other `klog` flags) are not listed.
@@ -73,8 +75,8 @@ The generic Kubernetes logging flags (`-v`, `--vmodule`, `--log_dir` and the oth
 | `--max-dispatch-concurrent` | int | `10` | Set the max dispatch concurrent number, default is 10 |
 | `--max-for-each-items` | int | `50` | Set the max number of items a forEach step may iterate, each of which is recorded in the Application's status, default is 50 |
 | `--max-workflow-failed-backoff-time` | int | `300` | Set the max workflow failed backoff time, default is 300 |
-| `--max-workflow-http-response-bytes` | int | `1048576` | Set the largest response body, in bytes, a workflow or definition HTTP request may read. A larger response fails the step or the render; it is not truncated. See [Request limits](workflow-http-protection.md#request-limits) |
-| `--max-workflow-http-timeout` | duration | `1m0s` | Set the longest timeout a workflow or definition HTTP request may set; a request holds a reconcile worker for its duration. See [Request limits](workflow-http-protection.md#request-limits) |
+| `--max-workflow-http-response-bytes` | int | `1048576` | Set the largest response body, in bytes, a workflow or definition HTTP request may read. A larger response fails the step or the render; it is not truncated. See [Request limits](/workflow/next/operate/http-protection#request-limits) |
+| `--max-workflow-http-timeout` | duration | `1m0s` | Set the longest timeout a workflow or definition HTTP request may set; a request holds a reconcile worker for its duration. See [Request limits](/workflow/next/operate/http-protection#request-limits) |
 | `--max-workflow-step-error-retry-times` | int | `10` | Set the max workflow step error retry times, default is 10 |
 | `--max-workflow-wait-backoff-time` | int | `60` | Set the max workflow wait backoff time, default is 60 |
 | `--metrics-addr` | string | `":8080"` | The address the metric endpoint binds to. |
@@ -108,7 +110,7 @@ The generic Kubernetes logging flags (`-v`, `--vmodule`, `--log_dir` and the oth
 | `--webhook-tls-secret` | string |  | The &lt;namespace&gt;/&lt;name&gt; of the Secret that holds the webhook serving cert. Requires --use-webhook. If you set it, vela-core creates or renews the cert at startup. vela-core writes the cert to --webhook-cert-dir and sets the caBundle of --webhook-configuration. If it is empty (the default), cert-manager or another tool must supply the cert. |
 | `--workflow-http-deny-config-template-name` | string | `"vela-core-http-deny"` | Discover and merge ConfigMaps produced by this ConfigTemplate in the controller namespace |
 
-The limits on HTTP requests from workflow steps and definitions are set by `--max-workflow-http-timeout` (default `60s`) and `--max-workflow-http-response-bytes` (default `1048576`), and the `BlockPrivateHTTPAddresses` feature gate blocks private addresses. See [HTTP limits](../workflow/workflow.md#http-limits).
+The limits on HTTP requests from workflow steps and definitions are set by `--max-workflow-http-timeout` (default `60s`) and `--max-workflow-http-response-bytes` (default `1048576`), and the `BlockPrivateHTTPAddresses` feature gate blocks private addresses. See [HTTP limits](/workflow/next/guides/authoring/step-definition#http-limits).
 
 ## Key Parameters
 

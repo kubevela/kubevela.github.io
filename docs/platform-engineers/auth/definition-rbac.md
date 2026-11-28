@@ -235,6 +235,6 @@ For non-Helm deployments:
 
 - [Kubernetes RBAC](./basic.md)
 - [Authentication Mechanism](./advance.md)
-- [Managing Applications](../../how-to/dashboard/application/create-application.md)
+- [Managing Applications](/velaux/guides/applications/operations)
 - [Restricting Definitions by Namespace](./definition-restrictions.md)
 - [X-Definitions](../oam/x-definition.md)

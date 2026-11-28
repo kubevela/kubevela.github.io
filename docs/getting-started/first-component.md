@@ -256,6 +256,6 @@ Each trait declares the workloads it applies to. `vela trait` lists them in its 
 ## Next steps
 
 - [CUE basics](../platform-engineers/cue/basic.md) and [definition editing](../platform-engineers/cue/definition-edit.md): the language and the tooling.
-- [Custom components](../platform-engineers/components/custom-component.md), [traits](../platform-engineers/traits/customize-trait.md), [policies](../platform-engineers/policy/custom-policy.md) and [workflow steps](../platform-engineers/workflow/workflow.md).
+- [Custom components](../platform-engineers/components/custom-component.md), [traits](../platform-engineers/traits/customize-trait.md), [policies](../platform-engineers/policy/custom-policy.md) and [workflow steps](/workflow/next/guides/authoring/step-definition).
 - [Health status](../platform-engineers/status/definition_health_status.md): everything `healthPolicy`, `customStatus` and `details` can do.
 - [Definitions in Go](../platform-engineers/defkit/overview.md): write the same definitions with defkit, and [test them](../platform-engineers/defkit/testing.md).

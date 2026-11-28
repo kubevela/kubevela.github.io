@@ -6,7 +6,7 @@ Welcome to join the "User Improvement Plan"! To improve the KubeVela open source
 
 We will use these data to guide us to improve the installation, user experience and performance. That can also help us to make more decision about features and designs.
 
-This plan follows the [CNCF Telemetry data collection and usage policy](https://www.linuxfoundation.org/telemetry-data-policy/). What VelaUX sends is listed in [What is sent](/docs/next/reference/user-improvement-plan#what-is-sent).
+This plan follows the [CNCF Telemetry data collection and usage policy](https://www.linuxfoundation.org/telemetry-data-policy/). What VelaUX sends is listed in [What is sent](/velaux/reference/user-improvement-plan#what-is-sent).
 
 If you don't want to join this plan, just turn off the button in the "platform setting". This won't block you to use any features about the product.
 

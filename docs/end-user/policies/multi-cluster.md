@@ -22,6 +22,8 @@ KubeVela deploys one Application to many clusters. You say where with a `topolog
 
 KubeVela reaches other clusters through [Cluster Gateway](https://github.com/oam-dev/cluster-gateway), which the KubeVela chart installs. By default it connects to each cluster with the kubeconfig stored as a Secret on the hub. For pull mode, use [Open Cluster Management](../../platform-engineers/system-operation/working-with-ocm.md).
 
+What Cluster Gateway is, and how to configure and troubleshoot it, is in the [Cluster Gateway](/cluster-gateway/getting-started/introduction) section.
+
 The Application, its policies and its workflow all live on the hub cluster. Only the resources the components render (Deployments, Services and so on) are sent to the managed clusters.
 
 <MultiClusterWorkflow />

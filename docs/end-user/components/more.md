@@ -41,7 +41,7 @@ terraform-alibaba               KubeVela        Kubernetes Terraform Controller 
 ```
 </details>
 
-* You can refer to [addon reference docs](../../reference/addons/overview.md) for more details of these community verified addons.
+* You can refer to [addon reference docs](/addons/overview) for more details of these community verified addons.
 
 ### Install Addon
 
@@ -95,7 +95,7 @@ vela addon enable velaux repo=<your repo address>
 #### Air-Gapped Installation for Addon
 
 If your cluster network cannot connect to the community addon registry you can: 
-- build your custom addon registry. Please refer to [*Build your Own Registry*](../../platform-engineers/addon/addon-registry.md) for details.
+- build your custom addon registry. Please refer to [*Build your Own Registry*](/addons/developer/addon-registry) for details.
 - enable an addon from a local directory. Example:
 
 ```shell
@@ -131,7 +131,7 @@ Please notice that, while an addon is being installed in a cluster, it maybe sti
 
 #### Install addon with UI Console
 
-If you have installed [VelaUX](../../reference/addons/velaux.md) which is also one of the addon, you can manage it directly on the UI console with admin privileges.
+If you have installed [VelaUX](/velaux/getting-started/install) which is also one of the addon, you can manage it directly on the UI console with admin privileges.
 
 ![addon list](https://kubevela.io/images/1.3/addon-list.jpg)
 
@@ -286,7 +286,7 @@ Once addon installed, end user can discover and use these capabilities immediate
 
 * Generally, end user can list the new component or trait types added by `vela component` or `vela trait`. Refer to [Lifecycle of a Definition](../../getting-started/definition.md#lifecycle-of-a-definition) for more usage details.
 
-* You can also check the capability details of [community addon docs](../../reference/addons/overview.md).
+* You can also check the capability details of [community addon docs](/addons/overview).
 
 ### Uninstall Addon
 
@@ -356,11 +356,11 @@ Successfully delete an addon registry experimental
 
 * Build custom registry
 
-  You can use ChartMuseum to build your custom addon registry. We have a ChartMuseum addon available. Please refer to [*Build your Own Registry*](../../platform-engineers/addon/addon-registry.md) for details.
+  You can use ChartMuseum to build your custom addon registry. We have a ChartMuseum addon available. Please refer to [*Build your Own Registry*](/addons/developer/addon-registry) for details.
 
 ### Make your own addon
 
-If you're a system infra or operator, you can refer to extension documents to learn how to [make your own addon and registry](../../platform-engineers/addon/intro.md), including [extend cloud resources by addon](../../platform-engineers/addon/terraform.md).
+If you're a system infra or operator, you can refer to extension documents to learn how to [make your own addon and registry](/addons/developer/make-your-own-addon), including [extend cloud resources by addon](/terraform/extend/terraform-addon).
 
 :::tip
 Here's a blog introduces [how to build addon from scratch using redis operator as example](/blog/2022/10/18/building-addon-introduction), you can read it as an end to end tutorial!

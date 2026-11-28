@@ -216,7 +216,7 @@ Great! You have finished deploying your first KubeVela application, you can also
 
 ## Manage application with UI Console
 
-After finishing [the installation of VelaUX](./reference/addons/velaux.md#install), you can view and manage the application created.
+After finishing [the installation of VelaUX](/velaux/getting-started/install#enable-the-addon), you can view and manage the application created.
 
 * Port forward the UI if you don't have endpoint for access:
   ```
@@ -237,7 +237,7 @@ By default, if you're using CLI to manage the applications directly from Kuberne
 
 :::tip
 If the namespace of the application operated by CLI has already been associated with the corresponding environment in UI, then the application will be automatically synchronized to the project associated with that environment in UI. Otherwise, the application will be synchronized to the default project.
-If you want to specify which project in UI console an application should be synchronized to, please refer to [Creating environments for the project](how-to/dashboard/user/project.md#creating-environments-for-the-project).
+If you want to specify which project in UI console an application should be synchronized to, please refer to [Creating environments for the project](/velaux/guides/users/projects#creating-environments-for-the-project).
 :::
 
 If there're any changes happen from CLI after that, the UI console will detect the difference and show it for you. However, it's not recommended to modify the application properties from both sides.

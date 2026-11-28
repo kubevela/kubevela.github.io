@@ -224,9 +224,11 @@ In brief, if you have the lowest requirements to the transparency of your identi
 
 Some resources in KubeVela are data sensitive. For example, the ResourceTracker object in KubeVela records all the objects that are dispatched in the application. The secrets that records the managed clusters contain the credential information for accessing. Usually, the system operator may not want to expose all these information to ordinary users.
 
-[vela-prism](https://github.com/kubevela/prism) is a project that aims to solve this problem. You can install it by following the installation guide in the repo.
+[vela-prism](https://github.com/kubevela/prism) is a project that aims to solve this problem. Install it as the [Prism install page](/prism/getting-started/install) shows.
 
 The vela-prism provides alternative access to the data sensitive objects like ResourceTrackers and Cluster Secrets.
+
+The [Prism](/prism/getting-started/introduction) section has the full RBAC patterns and worked examples.
 
 ![vela-prism](https://raw.githubusercontent.com/kubevela/prism/master/hack/prism-arch.jpg)
 
@@ -234,7 +236,7 @@ The original ResourceTracker in KubeVela is a cluster-scoped resource which reco
 
 Allowing user to access cluster-scoped ResourceTrackers can be dangerous, since users will have privileges to read objects dispatched by other users' applications. The ApplicationResourceTracker, served by vela-prism, provides a namespaced-scoped access to the ResourceTracker object, which means access can be restricted by namespaces. One of the benefit of using vela-prism is that you could run `vela status <appname> -n <namespace> --tree --detail` to see the details of applied resources, even with limited privileges.
 
-The vela-cluster object similarly provides an alternative access to the cluster secret. It removed the sensitive credential fields which allows users to see what managed clusters are joined, without knowing the credentials to access them. You can run `kubectl get clusters` after installing vela-prism, you could get all the joined clusters the same as `vela cluster list` (which needs the privileges of accessing cluster secret directly).
+The vela-cluster object similarly provides an alternative access to the cluster secret. It removed the sensitive credential fields which allows users to see what managed clusters are joined, without knowing the credentials to access them. You can run `kubectl get vela-clusters` after installing vela-prism, you could get all the joined clusters the same as `vela cluster list` (which needs the privileges of accessing cluster secret directly).
 
 ### Design Principles
 

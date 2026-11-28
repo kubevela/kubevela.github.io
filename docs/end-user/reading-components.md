@@ -77,7 +77,7 @@ vela def get webservice
 
 Component reads work in component properties and trait properties. A workflow step
 reads a component through the step that deployed it (see
-[Expressions in Workflow Steps](./workflow/expressions.md)), and a policy cannot read
+[Expressions in Workflow Steps](/workflow/next/guides/steps/expressions)), and a policy cannot read
 one. The full table of what can be read where is on
 [Property Expressions](./cel-expressions.md#where-they-work).
 
@@ -303,8 +303,8 @@ only if the field appears, so guard a field that may never be set:
 ## Next
 
 - [Property Expressions](./cel-expressions.md): the language, escaping and guards.
-- [Expressions in Workflow Steps](./workflow/expressions.md): reading steps and loop items.
-- [Data Passing](./workflow/inputs-outputs.md): the CUE `inputs` and `outputs` this can replace.
+- [Expressions in Workflow Steps](/workflow/next/guides/steps/expressions): reading steps and loop items.
+- [Data Passing](/workflow/next/guides/steps/inputs-outputs): the CUE `inputs` and `outputs` this can replace.
 - [Reading External Data with Sources](../platform-engineers/source/intro.md): reading data the Application does not own, and when to use a source instead.
 
 {/* PENDING: the Sources links resolve once kubevela.github.io#1469 merges. */}
