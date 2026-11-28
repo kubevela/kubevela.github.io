@@ -302,7 +302,7 @@ The `advanced-api-trait` trait exposes the workload via a Service (resource-prod
 
 The trait runs at `PreDispatch` so the workload patches land on the dispatched Deployment. (A `PostDispatch` trait can still `tpl.Outputs(...)` companion resources, but its `tpl.Patch(...)` calls won't take effect on the workload itself, which has already been sent to the cluster.)
 
-Drop the file below into `my-platform/traits/`. The Go on the left and the CUE on the right are what `vela def gen-module ./my-platform` produces for this trait; the module passes `vela def validate-module` and `vela def apply-module`, and an Application referencing this trait was verified end-to-end on a k3d cluster (the rendered Deployment carries both `metadata.labels.managedBy: advanced-api-trait` and `spec.template.metadata.labels.exposedBy: advanced-api-trait`, plus an accompanying `Service`).
+Drop the file below into `my-platform/traits/`. The CUE tab shows what `vela def gen-module` generates; the module passes `vela def validate-module` and `vela def apply-module`, and an Application referencing this trait was verified end-to-end on a k3d cluster (the rendered Deployment carries both `metadata.labels.managedBy: advanced-api-trait` and `spec.template.metadata.labels.exposedBy: advanced-api-trait`, plus an accompanying `Service`).
 
 <Tabs groupId="defkit-example">
 <TabItem value="go" label="Go — defkit">

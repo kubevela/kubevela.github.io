@@ -248,7 +248,7 @@ spec:
 EOF
 ```
 
-> **Note: If you feel the policy and workflow is a bit complex, you can make them as an external object and just reference the object, the usage is the same with the [container delivery](https://kubevela.io/docs/case-studies/multi-cluster#use-policies-and-workflow-outside-the-application).**
+> **Note: If you feel the policy and workflow is a bit complex, you can make them as an external object and just reference the object, the usage is the same with the [container delivery](https://kubevela.io/docs/end-user/policies/multi-cluster-reuse).**
 
 The deploy process has three steps: 
 

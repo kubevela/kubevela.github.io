@@ -1,25 +1,38 @@
 ---
-title: Built-in CUE Utility Functions
+title: Built-in CUE packages
 ---
 
-KubeVela ships a small set of **internal CUE packages** that are compiled into
-`vela-core`. You can import them directly from a definition template — there is
-nothing to install and no CRD to apply:
+KubeVela compiles a set of CUE packages into `vela-core`. A definition template imports them by path, with nothing to install:
 
 ```cue
 import "vela/util"
 ```
 
-This page documents the `vela/util` package.
-
 :::tip
-This is different from [External CUE Packages](./external-packages.md), which
-lets you register your *own* function providers as HTTP services through a
-`Package` custom resource. The functions on this page ship with KubeVela.
+These ship with KubeVela. To add your own functions, served over HTTP and registered with a `Package` resource, see [External CUE Packages](./external-packages.md).
 :::
 
-`vela/util` is available in `ComponentDefinition`, `TraitDefinition`, and
-`PolicyDefinition` templates.
+## Which definitions can import which package
+
+The packages a template can import depend on the kind of definition, because each kind is rendered by its own compiler:
+
+| Package | Functions | Component, Trait, Policy | Application-scoped Policy | Source |
+| --- | --- | --- | --- | --- |
+| `vela/base64` | `#Encode`, `#Decode` | yes | yes | yes |
+| `vela/cue` | `#StrategyUnify` | yes | yes | yes |
+| `vela/http` | `#Do`, `#Get`, `#Post`, `#Put`, `#Patch`, `#Delete` | yes | yes | yes |
+| `vela/kube` | `#Apply`, `#Get`, `#List`, `#Patch` | yes | yes | `#Get` and `#List` only |
+| `vela/util` | `#Truncate` | yes | yes | no |
+| `vela/config` | `#ImageRegistry`, `#HelmRepository` | yes | no | no |
+| `vela/helm` | `#Render` | yes | no | no |
+| `vela/addon` | `#Render` | yes | no | no |
+| `vela/module` | `#Render` | yes | no | no |
+| `vela/registry` | `#ReadFile`, `#MustReadFile` | yes | no | yes |
+| `vela/velaconfig` | `#Read`, `#ObjectRef` | yes | no | yes |
+
+"Policy" here means a PolicyDefinition with the default scope. One with `scope: Application` changes the Application before its components render, and has the smaller set in its own column. Workflow steps have their own packages, including a different `vela/util`; see [Workflow step actions](../workflow/cue-actions.md).
+
+The rest of this page documents `vela/util`.
 
 ## #Truncate
 
@@ -31,11 +44,11 @@ the same result.
 Nearly every system a definition touches enforces a hard length limit on
 identifiers, and they disagree about what that limit is.
 
-Kubernetes caps label *values* and RFC 1123 *label* names — including Service
-names — at 63 characters, and most object names at 253. Cloud providers are
+Kubernetes caps label *values* and RFC 1123 *label* names (Service names
+among them) at 63 characters, and most object names at 253. Cloud providers are
 frequently stricter: an AWS load balancer or target group name cannot exceed 32
 characters. That matters most when a definition provisions an external resource,
-because the limit is enforced by the provider's API rather than by the cluster —
+because the limit is enforced by the provider's API rather than by the cluster,
 so an over-long name is accepted at apply time and only fails later, during
 provisioning, where it is much harder to trace back to the definition that
 generated it.
@@ -43,7 +56,7 @@ generated it.
 A definition that composes an identifier out of several parts, such as
 `<app>-<component>-<env>-<region>`, will eventually exceed one of those caps.
 
-`#Truncate` is not specific to Kubernetes names — which is why the parameter is
+`#Truncate` is not specific to Kubernetes names, which is why the parameter is
 `value`, not `name`. It fits any string into any cap.
 
 Cutting the string yourself is worse than failing. These two component names:
@@ -54,7 +67,7 @@ checkout-payment-gateway-backend-canary-eu-west-1-production
 ```
 
 are distinct, but they share a 24-character prefix: `checkout-payment-gateway`.
-Cut either one at 25 characters or fewer and they become the same string — and
+Cut either one at 25 characters or fewer and they become the same string, and
 trimming back to a whole segment, which is what it takes to fit a 40-character
 cap without ending mid-word, lands on exactly that shared prefix. At that point
 two components silently write to one resource.
@@ -98,13 +111,13 @@ The result is read from `$returns.value` and is guaranteed to be at most
 
 ### Behavior
 
-- A value that **already fits is returned unchanged** — no hash is appended.
+- A value that **already fits is returned unchanged**: no hash is appended.
 - A value that is too long becomes `<base><delimiter><hash>`, where the hash is
   a SHA-256 digest of the **original** value. This is what makes the result
   collision-safe.
 - `maxLength` counts **runes, not bytes**, so multi-byte values are never split
   in the middle of a character.
-- The function is **deterministic** — the same inputs always produce the same
+- The function is **deterministic**: the same inputs always produce the same
   result, so re-rendering on every reconcile is stable.
 - `prefix` is emitted verbatim, is **never** truncated, and **counts against**
   `maxLength`.
@@ -121,8 +134,8 @@ Feeding a returned value back into `#Truncate` is only safe when `prefix` is
 empty.
 
 With a `prefix` set, passing a previous result back in *along with the same
-prefix* applies the prefix twice — `prod-web-a1b2c3d4` becomes
-`prod-prod-web-a1b2c3d4` — because a prefix the function added is
+prefix* applies the prefix twice: `prod-web-a1b2c3d4` becomes
+`prod-prod-web-a1b2c3d4`, because a prefix the function added is
 indistinguishable from a value that genuinely starts with one.
 
 Render from the raw value every time.
@@ -189,21 +202,21 @@ Applied with these inputs, the definition renders:
 | `api-gateway` | `maxLength: 63` | `api-gateway` |
 
 Look at the first two rows together. Both were trimmed back to the same
-24-character base, `checkout-payment-gateway`, yet the results differ — because
+24-character base, `checkout-payment-gateway`, yet the results differ, because
 the hash is taken from the original value, not from the trimmed base. That is
 the guarantee: two components that share a long prefix never collide on the same
 name.
 
 The fourth row shows a value that already fits being passed through untouched.
 
-`delimiter` and `hashLength` are useful for less common shapes — `delimiter: "."`
+`delimiter` and `hashLength` are useful for less common shapes: `delimiter: "."`
 joins DNS-style names on a dot and keeps whole labels, and `hashLength: 16`
 buys extra collision margin for generated `ConfigMap` or `Secret` names.
 
 ### Errors
 
-`#Truncate` returns an error — which is a **hard render failure**, so the
-component produces no resource at all — when:
+`#Truncate` returns an error, which is a **hard render failure** (the
+component produces no resource at all), when:
 
 - `maxLength` is too small to fit the prefix, the delimiter, and the hash
   suffix.

@@ -2,106 +2,118 @@
 title:  Dependency
 ---
 
-This section will introduce how to specify dependencies for workflow steps.
-
-:::note
-In the version `&lt;=1.4`, the steps in the workflow are executed sequentially, which means that there is an implicit dependency between steps, ie: the next step depends on the successful execution of the previous step. At this point, specifying dependencies in the workflow may not make much sense.
-
-In versions `1.5+`, you can display the execution method of the specified workflow steps (eg: change to DAG parallel execution). At this time, you can control the execution of the workflow by specifying the dependencies of the steps.
-:::
+By default the steps of a workflow run one after another, so each step already waits for the one before it. Set the mode to `DAG` and the steps run at the same time instead; `dependsOn` then makes a step wait until the steps it names have finished.
 
 ## How to use
 
-In KubeVela, the dependencies between steps can be specified by `dependsOn` in the steps.
-
-For example: we want to send a message notification after deploying the component:
+List the steps a step waits for in its `dependsOn`:
 
 ```yaml
-...
 workflow:
+  mode:
+    steps: DAG
   steps:
-    - name: comp
+    - name: deploy-db
       type: apply-component
-    - name: notify
-      type: notification
+      properties:
+        component: db
+    - name: deploy-api
+      type: apply-component
       dependsOn:
-        - comp
+        - deploy-db
+      properties:
+        component: api
 ```
 
-In this case, KubeVela waits for the completion of the step `comp` before executing the `notify` step to send a message notification.
+Here `deploy-api` starts only once `deploy-db` has finished.
 
-Apply the following YAML:
+## Example
+
+This Application deploys three components. The `db` and `cache` components have nothing in common, so their steps run together; `api` needs both, so its step waits for them. The three components use the same hello-world image as stand-ins.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: dependsOn-app
+  name: depends-on-app
   namespace: default
 spec:
   components:
-  - name: express-server
-    type: webservice
-    properties:
-      image: oamdev/hello-world
-      ports:
-        - port: 8000
+    - name: db
+      type: webservice
+      properties:
+        image: oamdev/hello-world
+        ports:
+          - port: 8000
+    - name: cache
+      type: webservice
+      properties:
+        image: oamdev/hello-world
+        ports:
+          - port: 8000
+    - name: api
+      type: webservice
+      properties:
+        image: oamdev/hello-world
+        ports:
+          - port: 8000
   workflow:
+    mode:
+      steps: DAG
     steps:
-      - name: comp
+      - name: deploy-db
         type: apply-component
         properties:
-          component: express-server
-      - name: slack-message
-        type: notification
-        dependsOn:
-          - comp
+          component: db
+      - name: deploy-cache
+        type: apply-component
         properties:
-          slack:
-            url:
-              value: <your slack url>
-            message:
-              text: depends on comp
+          component: cache
+      - name: deploy-api
+        type: apply-component
+        dependsOn:
+          - deploy-db
+          - deploy-cache
+        properties:
+          component: api
+```
+
+Save it as `depends-on-app.yaml` and apply it:
+
+```shell
+vela up -f depends-on-app.yaml
 ```
 
 ## Expected outcome
 
-Use `vela status` to check the status of the Application:
+Check the Application with `vela status` while `db` is still starting. The Workflow section of the output shows `deploy-cache` finished, `deploy-db` still running, and `deploy-api` pending on it:
 
-```bash
-$ vela status depends
-About:
+```shell
+vela status depends-on-app
+```
 
-  Name:      	depends
-  Namespace: 	default
-  Created at:	2022-06-24 17:20:50 +0800 CST
-  Status:    	running
-
+```console
 Workflow:
 
-  mode: StepByStep
-  finished: true
+  mode: DAG-DAG
+  finished: false
   Suspend: false
   Terminated: false
   Steps
-  - id:e6votsntq3
-    name:comp
-    type:apply-component
-    phase:succeeded
-    message:
-  - id:esvzxehgwc
-    name:slack-message
-    type:notification
-    phase:succeeded
-    message:
-
-Services:
-
-  - Name: express-server
-    Cluster: local  Namespace: default
-    Type: webservice
-    Healthy Ready:1/1
-    No trait applied
+  - id: 4o4zcpbmhj
+    name: deploy-db
+    type: apply-component
+    phase: running
+    message: wait healthy
+  - id: q6m2k8wx1d
+    name: deploy-cache
+    type: apply-component
+    phase: succeeded
+  - id: x7fn3c2tbe
+    name: deploy-api
+    type: apply-component
+    phase: pending
+    message: Pending on DependsOn: deploy-db
 ```
 
-As you can see, all step statuses are succeeded. And when the component is successfully deployed, a message is also sent in slack.
+Once `db` is healthy, `deploy-api` runs, and all three steps end as `succeeded`.

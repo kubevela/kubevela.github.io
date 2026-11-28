@@ -1,10 +1,8 @@
 ---
-title: Remote Debugging KubeVela Applications
+title: Debug vela-core in a cluster
 ---
 
-# Remote Debugging KubeVela Applications
-
-This guide provides comprehensive instructions for configuring remote debugging of KubeVela applications using IntelliJ IDEA or VS Code. It outlines the essential configurations and provides a step-by-step process for attaching the debugger to a KubeVela application running within a Kubernetes cluster. This setup empowers developers to examine application behavior, identify issues, and enhance performance by directly interacting with the runtime environment.
+Build vela-core with Delve, deploy it to a test cluster, and attach your IDE (IntelliJ IDEA or VS Code) to the pod. Use this when a bug only shows up in a cluster.
 
 ## Prerequisites
 
@@ -396,5 +394,5 @@ Do not modify the source code while debugging. The running container was built f
 
 - Learn about [Debugging KubeVela Controllers](./debugging-kubevela-controllers.md) for local debugging
 - Explore [Debugging with Webhook Integration](./debugging-kubevela-with-webhook.md) for webhook debugging
-- Check the [KubeVela Contributor Guide](../../contributor/overview) for more development resources
+- Check the [KubeVela Contributor Guide](../../contributor/overview.md) for more development resources
 

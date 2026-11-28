@@ -404,7 +404,7 @@ spec:
           image: nginx
       - name: my-step2
         type: apply-deployment
-        if: status.suspend.succecceed
+        if: status.suspend.succeeded
         properties:
           image: busybox
 ```

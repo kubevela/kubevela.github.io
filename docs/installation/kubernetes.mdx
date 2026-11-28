@@ -21,6 +21,8 @@ KubeVela relies on Kubernetes as a control plane. The control plane could be any
 
 KubeVela CLI provides an easy way to engage and manage your application delivery in command lines.
 
+`vela install` installs the KubeVela version that matches your CLI, so install the CLI version you want first.
+
 <Tabs
     className="unique-tabs"
     defaultValue="script"
@@ -28,15 +30,15 @@ KubeVela CLI provides an easy way to engage and manage your application delivery
       {label: 'Script', value: 'script'},
       {label: 'Homebrew', value: 'homebrew'},
       {label: 'Download directly from releases', value: 'download'},
-      {label: 'Asdf-vm', value: 'asdf-vm'},
-      {label: 'Docker', value: 'docker'},
     ]}>
 <TabItem value="script">
 
-** MacOS/Linux **
+**MacOS/Linux**
 
-```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash
+The script installs the latest stable release unless you give it a version. For this release:
+
+```shell
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.12.0
 ```
 
 **Windows**
@@ -45,7 +47,7 @@ curl -fsSl https://kubevela.io/script/install.sh | bash
 Only the official release version is supported.
 :::
 
-```shell script
+```shell
 powershell -Command "iwr -useb https://kubevela.io/script/install.ps1 | iex"
 ```
 
@@ -54,42 +56,48 @@ powershell -Command "iwr -useb https://kubevela.io/script/install.ps1 | iex"
 
 **MacOS/Linux**
 
-Update your brew first. Please note that the brew method only supports the installation of the official release version.
+Homebrew installs the latest official release only. Update your brew first:
 
-```shell script
+```shell
 brew update
 ```
 
-Then install KubeVela CLI
+Then install KubeVela CLI:
 
-```shell script
+```shell
 brew install kubevela
 ```
 
 </TabItem>
 <TabItem value="download">
 
-- Download the latest `vela` binary file via [release log](https://github.com/kubevela/kubevela/releases).
-- Unzip the binary file, and configure the environment variables in `$PATH`, and you're done.
+- Download the `vela` binary for your platform from the [releases page](https://github.com/kubevela/kubevela/releases).
+- Unzip it and move it onto your `$PATH`:
 
-```shell script
+```shell
 sudo mv ./vela /usr/local/bin/vela
 ```
 
 :::note
-- [Installation Tips](https://github.com/kubevela/kubevela/issues/625):
-- If you are using a Mac system, it will pop up a warning that "vela" cannot be opened because the package from the developer cannot be verified.
-- MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
+On macOS, the first run may be blocked with a warning that "vela" can't be opened because the developer can't be verified. Remove the quarantine flag:
+
+```shell
+xattr -d com.apple.quarantine /usr/local/bin/vela
+```
+
+Or open **System Settings -> Privacy & Security** and click **Allow Anyway**.
 :::
 </TabItem>
+</Tabs>
 
-<TabItem value="asdf-vm">
+<details>
+  <summary>Other ways: asdf and Docker</summary>
 
-** MacOS/Linux **
+**asdf (MacOS/Linux)**
 
 If you are using the [asdf version manager](https://asdf-vm.com/), you can install `vela` with:
 
-```shell script
+```shell
 # Add the vela plugin for asdf
 asdf plugin add vela
 
@@ -103,24 +111,17 @@ asdf install vela <version>
 asdf global vela <version>
 ```
 
-</TabItem>
+**Docker**
 
-<TabItem value="docker">
+The CLI is also published as the `oamdev/vela-cli` image:
 
-If you have docker environment, you can easily run CLI with the vela CLI docker image called `oamdev/vela-cli`:
-
-```
-$ docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli version
-CLI Version: v1.12.0
-Core Version: v1.12.0
-GitRevision: git-<commit>
-GolangVersion: go1.27.1
+```shell
+docker run --rm -it -v ~/.kube:/root/.kube oamdev/vela-cli version
 ```
 
 Refer to [using Vela CLI docker image](../platform-engineers/system-operation/vela-cli-image.md) for more usage.
 
-</TabItem>
-</Tabs>
+</details>
 
 ### 3. Install KubeVela Core
 
@@ -133,33 +134,17 @@ Refer to [using Vela CLI docker image](../platform-engineers/system-operation/ve
     ]}>
 <TabItem value="vela">
 
-```shell script
-$ vela install
+```shell
+vela install
 ```
 <details>
   <summary> check out the outcome </summary>
 
   ```shell
+  Check Requirements ...
+  Installing KubeVela Core ...
+  Helm Chart used for KubeVela control plane installation: https://kubevela.github.io/charts/vela-core-1.12.0.tgz
   ...
-  Watching for changes to Job kubevela-vela-core-cluster-gateway-tls-secret-patch with timeout of 18m0s
-  Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: ADDED
-  kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 0, jobs failed: 0, jobs succeeded: 0
-  Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
-  kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
-  Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
-  kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
-  Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
-  Starting delete for "kubevela-vela-core-admission" ServiceAccount
-  Starting delete for "kubevela-vela-core-admission" ClusterRole
-  Starting delete for "kubevela-vela-core-admission" ClusterRoleBinding
-  Starting delete for "kubevela-vela-core-admission" Role
-  Starting delete for "kubevela-vela-core-admission" RoleBinding
-  Starting delete for "kubevela-vela-core-admission-patch" Job
-  Starting delete for "kubevela-vela-core-cluster-gateway-admission" ServiceAccount
-  Starting delete for "kubevela-vela-core-cluster-gateway-admission" Role
-  Starting delete for "kubevela-vela-core-cluster-gateway-admission" RoleBinding
-  Starting delete for "kubevela-vela-core-cluster-gateway-tls-secret-patch" Job
-
   KubeVela control plane has been successfully set up on your cluster.
   If you want to enable dashboard, please run "vela addon enable velaux"
   ```
@@ -175,23 +160,55 @@ If you are helm user, you can also use helm to install KubeVela core:
 helm v3.6.3+ required
 :::
 
-```
+```shell
 helm repo remove kubevela 2>/dev/null || true
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --wait
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.12.0 --wait
 ```
+
+Without `--version`, Helm skips pre-releases and installs the latest stable chart.
+
+Keep the release name `kubevela`: later guides upgrade it by that name.
 
 </TabItem>
 </Tabs>
 
-### 4. Install VelaUX
+### 4. Check it's running
 
-VelaUX is a dashboard for KubeVela. It is a web application that runs in your cluster. You can access it with your browser.
-This is optional if you don't use UI console of KubeVela.
+```shell
+vela version
+```
 
-Please refer to [VelaUX Guide](../reference/addons/velaux.md).
+```console
+CLI Version: 1.12.0
+Core Version: 1.12.0
+GitRevision: git-...
+GolangVersion: go1.27.1
+```
 
-### 5. Custom Installation or Upgrade
+```shell
+kubectl get pods -n vela-system
+```
 
-Please refer [advanced installation](../platform-engineers/advanced-install.mdx)
+```console
+NAME                                         READY   STATUS    RESTARTS   AGE
+kubevela-cluster-gateway-5bff6d564d-rhkp7    1/1     Running   0          2m
+kubevela-vela-core-6dc4d47c6c-2xnhn          1/1     Running   0          2m
+```
+
+If `Core Version` is empty, the core isn't installed in `vela-system`.
+
+### 5. Install VelaUX
+
+VelaUX is a dashboard for KubeVela. It is a web application that runs in your cluster, and you reach it with your browser.
+
+VelaUX is optional. To add it, run `vela addon enable velaux`, then `vela port-forward addon-velaux -n vela-system 8000:8000`. The addon is VelaUX 1.9.5; see [VelaUX](/velaux/getting-started/install) for what it can't show on 1.12.
+
+### 6. Custom Installation or Upgrade
+
+See [advanced installation](../platform-engineers/advanced-install.mdx).
+
+### Next
+
+[Deploy your first application](../quick-start.md).

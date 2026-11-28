@@ -34,11 +34,13 @@ vela addon enable prometheus-server
 vela addon enable loki
 ```
 
-5. Install the grafana addon
+5. Install the grafana addon, setting the admin password
 
 ```shell
-vela addon enable grafana
+vela addon enable grafana adminPassword='YOUR_PASSWORD'
 ```
+
+Replace `YOUR_PASSWORD` with the password you want. The single quotes stop the shell reading it; write any single quote inside the password as `'\''`. Without `adminPassword`, Grafana's admin password is `kubevela`. To change the admin username too, add `adminUser=<name>`.
 
 6. Access your grafana through port-forward.
 
@@ -46,9 +48,7 @@ vela addon enable grafana
 kubectl port-forward svc/grafana -n o11y-system 8080:3000
 ```
 
-Now you can access your grafana by access `http://localhost:8080` in your browser. The default username and password are `admin` and `kubevela` respectively.
-
-> You can change it by adding `adminUser=super-user adminPassword=PASSWORD` to step 6.
+Now you can access your grafana by access `http://localhost:8080` in your browser, and log in as `admin` (or the `adminUser` you set) with the password you set in step 5.
 
 You will see several pre-installed dashboards and use them to view your system and applications. For more details of those pre-installed dashboards, see [Out-of-the-Box](./out-of-the-box.md) section.
 

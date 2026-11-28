@@ -4,7 +4,7 @@ title: X-Definition Permission Validation
 
 ## Overview
 
-Definition Permission Validation ensures users can only reference X-Definitions (ComponentDefinitions, TraitDefinitions, PolicyDefinitions, and WorkflowStepDefinitions) they have RBAC permissions to access. This enables:
+Definition Permission Validation ensures users can only reference X-Definitions (ComponentDefinitions, TraitDefinitions, PolicyDefinitions, WorkflowStepDefinitions, and the SourceDefinitions an Application's `spec.sources` binds) they have RBAC permissions to access. This enables:
 
 - **Multi-tenancy** - Teams can only use definitions they're authorized for
 - **Compliance** - Enforce organizational policies on which components can be used
@@ -22,7 +22,11 @@ helm upgrade --install kubevela kubevela/vela-core \
   --wait
 ```
 
-> **Note:** This feature is disabled by default. Before enabling, ensure your users have appropriate RBAC permissions to access the definitions they need.
+:::caution
+Turning this on refuses every Application create or update whose submitter can't `get` the definitions it uses. Before you enable it, give your users, your GitOps controller's ServiceAccount and any CI ServiceAccount `get` on the definitions each one uses: the [examples below](#example-restricted-definition-access) show how to grant only some, and `vela-definition-reader` grants all of them. The feature is off by default.
+:::
+
+An Application can use `spec.sources` at all only once sources are turned on, which takes the `EnableCelExpressions` feature gate, and in the default opt-in mode the `app.oam.dev/cel-expressions: "true"` annotation on the Application. See [Enable the feature](../source/intro.md#enable-the-feature).
 
 ## How It Works
 
@@ -36,6 +40,7 @@ When a user creates or updates an Application, the validating webhook checks if 
 | TraitDefinition | `get traitdefinitions.core.oam.dev` |
 | PolicyDefinition | `get policydefinitions.core.oam.dev` |
 | WorkflowStepDefinition | `get workflowstepdefinitions.core.oam.dev` |
+| SourceDefinition | `get sourcedefinitions.core.oam.dev` |
 
 > **Note:** Only `get` permission is required for validation. The `list` verb in examples below is for user convenience when checking available definitions.
 
@@ -90,6 +95,7 @@ rules:
       - traitdefinitions
       - policydefinitions
       - workflowstepdefinitions
+      - sourcedefinitions
     verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -124,6 +130,23 @@ rules:
     resources: ["traitdefinitions"]
     resourceNames: ["scaler", "expose"]      # Only these traits
     verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: alice-can-use-webservice
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: webservice-user
+subjects:
+  - kind: User
+    name: alice
+    apiGroup: rbac.authorization.k8s.io
+  # Bind your GitOps and CI ServiceAccounts the same way, for example:
+  # - kind: ServiceAccount
+  #   name: argocd-application-controller
+  #   namespace: argocd
 ```
 
 ### Example: Namespace-Scoped Custom Definitions
@@ -212,6 +235,6 @@ For non-Helm deployments:
 
 - [Kubernetes RBAC](./basic.md)
 - [Authentication Mechanism](./advance.md)
-- [Managing Applications](../../how-to/dashboard/application/create-application.md)
+- [Managing Applications](/velaux/guides/applications/operations)
 - [Restricting Definitions by Namespace](./definition-restrictions.md)
 - [X-Definitions](../oam/x-definition.md)

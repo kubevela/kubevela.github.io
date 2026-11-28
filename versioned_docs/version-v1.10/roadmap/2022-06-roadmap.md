@@ -2,7 +2,7 @@
 title:  Roadmap 2022.06
 ---
 
-Date: 2022-04-01 to 2022-06-31
+Date: 2022-04-01 to 2022-06-30
 
 ## Core Platform
 

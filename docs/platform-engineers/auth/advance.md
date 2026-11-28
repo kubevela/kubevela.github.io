@@ -2,7 +2,13 @@
 title: Underlying Mechanism
 ---
 
+import ImpersonationArch from '@site/src/components/ImpersonationArch';
+
 KubeVela introduces Authentication & Authorization for application delivery and management from v1.4. This article will deep dives in the underlying mechanism and demonstrates how it works.
+
+:::caution
+By default vela-core runs as `cluster-admin`, so anyone who can create an Application can create anything in any cluster KubeVela manages. Turn on `authentication.enabled` to apply each Application with its submitter's permissions.
+:::
 
 > This underlying mechanism mainly focuses on the KubeVela application. VelaUX builds additional authentication and authorization layer on top of it.
 
@@ -128,7 +134,7 @@ Notice that Vela CLI only provides coarse-grained privileges management. If you 
 
 When Application Authentication is enabled in KubeVela, applications will not use KubeVela Controller's privileges to dispatch resources anymore. Instead, it will use the privileges of the identity who lastly created or modified it. It will prevent users to escalate their privileges through creating applications that manage resources outside their own privileges.
 
-![impersonation-arch](../../resources/impersonation-arch.jpg)
+<ImpersonationArch />
 
 The whole implementation process is based on the Kubernetes [impersonation mechanism](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#user-impersonation).
 
@@ -175,7 +181,7 @@ sequenceDiagram
 
 ### Limited Controller Access
 
-When application authentication is enabled in KubeVela, the privileges of KubeVela controller are also restricted. Before it is enabled, the KubeVela controller will uses a ServiceAccount that bound to the cluster-admin ClusterRole, which gives the KubeVela controller all the privileges to manage clusters.
+When application authentication is enabled in KubeVela, the privileges of KubeVela controller are also restricted. Without it, the chart binds the controller's ServiceAccount to the `cluster-admin` ClusterRole, as the caution at the top of this page says.
 
 After the application authentication is enabled, the privileges of the KubeVela controller is also reducted. Since all the resource dispatch action will use the identity of the application, the KubeVela controller only needs the privileges to impersonate as the specified ideneity. Apart from that, there are still some other privileges that are required for KubeVela controller to manage system-level resources, like ResourceTracker.
 
@@ -192,6 +198,8 @@ In detail, for different operations of KubeVela application controller, some are
 
 The not impersonated operations will still use the controller's identity, while the impersonated ones will use the bound identity in each Application.
 
+So a user who may create Applications can't use them to reach objects their own RBAC denies, but the controller still reads every definition and writes every ResourceTracker for them.
+
 ### Identity Penetration
 
 The multi-cluster application impersonation in KubeVela relies on the ClientIdentityPeneration in ClusterGateway. With this feature, ClusterGateway will always extract the identity from the incoming request and put it in the impersonation header on the request that is redirected to the managed cluster.
@@ -202,23 +210,25 @@ However, there are limitations for this feature that identity used across multi-
 
 ### Partial Identity Impersonation
 
-By default, KubeVela does not pass all the identity information to the impersonation header. You can control it through controller's bootstrap parameters, or helm values.
+KubeVela can hold back part of the identity from the impersonation header. You control it through the controller's flags, or the Helm values that set them. The flags and the chart have different defaults for `withUser`.
 
-| Controller Flags             | Helm Values                  | Type    | Default            | Explanation                                                                                                                                                                                                                                                                                                                                                                |
-|------------------------------|------------------------------|---------|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| authentication-with-user     | .authentication.withUser     | boolean | false              | If this flag is set to false, the User field in the identity will not be passed in the impersonation. Only selected groups will be passed. In the cases that managed clusters and the control plane are operated by different people, the control plane operator might not want to let the managed cluster knows the projection relationship between its Users and Groups. |
-| authentication-default-user  | .authentication.defaultUser  | string  | kubevela:vela-core | If User field in the identity is not used for the impersonation, this field will be used for impersonated user as alternative.                                                                                                                                                                                                                                             |
-| authentication-group-pattern | .authentication.groupPattern | string  | kubevela:*         | This field defines the pattern of groups that will be passed in the impersonation header from the identity. This will help the control plane operator to limit which groups should be passed into the request to the managed cluster.                                                                                                                                      |
+| Controller Flags             | Helm Values                  | Type    | Flag default       | Chart default      | Explanation |
+|------------------------------|------------------------------|---------|--------------------|--------------------|-------------|
+| authentication-with-user     | .authentication.withUser     | boolean | false              | true               | If this flag is set to false, the User field in the identity will not be passed in the impersonation. Only selected groups will be passed. In the cases that managed clusters and the control plane are operated by different people, the control plane operator might not want to let the managed cluster knows the projection relationship between its Users and Groups. |
+| authentication-default-user  | .authentication.defaultUser  | string  | kubevela:vela-core | kubevela:vela-core | If User field in the identity is not used for the impersonation, this field will be used for impersonated user as alternative. |
+| authentication-group-pattern | .authentication.groupPattern | string  | kubevela:*         | kubevela:*         | This field defines the pattern of groups that will be passed in the impersonation header from the identity. This will help the control plane operator to limit which groups should be passed into the request to the managed cluster. |
 
-In brief, if you have the lowest requirements to the transparency of your identity information (for example the hub cluster and managed clusters are operated by the same team), you can set `--authentication-with-user=true` and `--authentication-group-pattern=*`. The default configuration uses the most secure and opaque options.
+In brief, if you have the lowest requirements to the transparency of your identity information (for example the hub cluster and managed clusters are operated by the same team), you can set `--authentication-with-user=true` and `--authentication-group-pattern=*`. The flag defaults are the most opaque options: no User, and only groups matching `kubevela:*`. The Helm chart sets `withUser: true`, so a chart install passes the User through unless you set `authentication.withUser=false`. The chart passes these three flags only when `authentication.enabled` is true.
 
 ### Access Resources with Limited Privileges
 
 Some resources in KubeVela are data sensitive. For example, the ResourceTracker object in KubeVela records all the objects that are dispatched in the application. The secrets that records the managed clusters contain the credential information for accessing. Usually, the system operator may not want to expose all these information to ordinary users.
 
-[vela-prism](https://github.com/kubevela/prism) is a project that aims to solve this problem. You can install it by following the installation guide in the repo.
+[vela-prism](https://github.com/kubevela/prism) is a project that aims to solve this problem. Install it as the [Prism install page](/prism/getting-started/install) shows.
 
 The vela-prism provides alternative access to the data sensitive objects like ResourceTrackers and Cluster Secrets.
+
+The [Prism](/prism/getting-started/introduction) section has the full RBAC patterns and worked examples.
 
 ![vela-prism](https://raw.githubusercontent.com/kubevela/prism/master/hack/prism-arch.jpg)
 
@@ -226,7 +236,7 @@ The original ResourceTracker in KubeVela is a cluster-scoped resource which reco
 
 Allowing user to access cluster-scoped ResourceTrackers can be dangerous, since users will have privileges to read objects dispatched by other users' applications. The ApplicationResourceTracker, served by vela-prism, provides a namespaced-scoped access to the ResourceTracker object, which means access can be restricted by namespaces. One of the benefit of using vela-prism is that you could run `vela status <appname> -n <namespace> --tree --detail` to see the details of applied resources, even with limited privileges.
 
-The vela-cluster object similarly provides an alternative access to the cluster secret. It removed the sensitive credential fields which allows users to see what managed clusters are joined, without knowing the credentials to access them. You can run `kubectl get clusters` after installing vela-prism, you could get all the joined clusters the same as `vela cluster list` (which needs the privileges of accessing cluster secret directly).
+The vela-cluster object similarly provides an alternative access to the cluster secret. It removed the sensitive credential fields which allows users to see what managed clusters are joined, without knowing the credentials to access them. You can run `kubectl get vela-clusters` after installing vela-prism, you could get all the joined clusters the same as `vela cluster list` (which needs the privileges of accessing cluster secret directly).
 
 ### Design Principles
 

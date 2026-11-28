@@ -9,6 +9,10 @@ vela addon enable model-training
 vela addon enable model-serving
 ```
 
+:::caution
+`model-serving` requires Kubernetes older than 1.22 (`system.kubernetes: <1.22` in its metadata), and `vela addon enable model-serving` is refused on any newer cluster.
+:::
+
 ## Model-training addon
 
 In model-training addon, we have two component definitions: `model-training` and `jupyter notebook`.

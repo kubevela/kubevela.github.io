@@ -5,7 +5,7 @@ title: VelaCtx — Runtime Context
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-`defkit.VelaCtx()` returns a `*VelaContext` accessor whose methods compile to `context.*` CUE path references. Call it once at the top of your template function; each method returns a `Value` object — never evaluated in Go — that the KubeVela controller substitutes with the real runtime value when it evaluates the CUE template against an Application at deploy time.
+`defkit.VelaCtx()` returns a `*VelaContext` accessor whose methods compile to `context.*` CUE path references. Call it once at the top of your template function. Each method returns a `Value` that is never evaluated in Go: the KubeVela controller substitutes with the real runtime value when it evaluates the CUE template against an Application at deploy time.
 
 ## VelaContext Methods
 
@@ -13,12 +13,12 @@ import TabItem from '@theme/TabItem';
 
 | Go method | CUE path | Description |
 |---|---|---|
-| `vela.Name()` | `context.name` | Name of the component or trait instance as declared in the Application YAML. The most commonly set value — use it for resource names, selector labels, and log identifiers. |
+| `vela.Name()` | `context.name` | Name of the component or trait instance as declared in the Application YAML. The most commonly set value: use it for resource names, selector labels, and log identifiers. |
 | `vela.Namespace()` | `context.namespace` | Namespace where the Application is deployed. |
 | `vela.AppName()` | `context.appName` | The Application CR's `.metadata.name`. Different from `Name()`, which is the component instance name within the Application. |
 | `vela.AppRevision()` | `context.appRevision` | The Application's current revision string (e.g. `"myapp-v3"`). Monotonically increases on each Application update. |
 | `vela.AppRevisionNum()` | `context.appRevisionNum` | The numeric revision counter (integer). Wrap in `defkit.Interpolation(...)` before placing in a Kubernetes `string` field such as an annotation value or ConfigMap `data` entry to avoid a CUE type-mismatch at apply time. |
-| `vela.Revision()` | `context.revision` | The component's own revision string — a content hash that tracks individual component changes independently of the Application revision. |
+| `vela.Revision()` | `context.revision` | The component's own revision string: a content hash that tracks individual component changes independently of the Application revision. |
 
 :::tip
 `vela.AppRevisionNum()` and `vela.ClusterVersion().Minor()` resolve to integers in CUE. Kubernetes `annotations` and ConfigMap `data` maps are typed `map[string]string`; wrap those context values with `defkit.Interpolation(...)` when assigning them to string fields.
@@ -26,7 +26,7 @@ import TabItem from '@theme/TabItem';
 
 ### Cluster version accessor
 
-`vela.ClusterVersion()` returns a `*ClusterVersionRef` that exposes the target cluster's Kubernetes version. Use its sub-methods rather than the `*ClusterVersionRef` object directly — the object itself is not directly assignable to a resource field.
+`vela.ClusterVersion()` returns a `*ClusterVersionRef` that exposes the target cluster's Kubernetes version. Use its sub-methods rather than the `*ClusterVersionRef` object directly; the object itself is not directly assignable to a resource field.
 
 | Method | CUE path | Description |
 |---|---|---|
@@ -36,7 +36,7 @@ import TabItem from '@theme/TabItem';
 | `.GitVersion()` | `context.clusterVersion.gitVersion` | Full git version string (e.g. `"v1.33.6+k3s1"`). Includes the patch level when you need it. |
 
 :::caution
-`context.clusterVersion.patch` does **not** exist at runtime — the KubeVela controller never populates that field. The patch level is available inside `.GitVersion()`.
+Don't use `.Patch()`. It compiles to `context.clusterVersion.patch`, which does **not** exist at runtime: the KubeVela controller never sets that field. The patch level is in `.GitVersion()`.
 :::
 
 ### Output accessors
@@ -45,19 +45,51 @@ These accessors are primarily used in **trait** templates to introspect the work
 
 | Go expression | CUE path | Description |
 |---|---|---|
-| `vela.Output()` | `context.output` | References the component's primary output resource. Use in traits to read the workload's current state — for example, to check whether the target resource has a `spec.template` before patching it. |
+| `vela.Output()` | `context.output` | References the component's primary output resource. Use in traits to read the workload's current state, for example to check whether the target resource has a `spec.template` before patching it. |
 | `vela.Outputs(name)` | `context.outputs.<name>` | References a named auxiliary output by name. Use in traits or status expressions to read the state of a secondary resource that the component produced. |
 
-Prefer `defkit.ContextOutput()` and its `.Field(path)` / `.HasPath(path)` methods when building conditional trait patches — they provide a richer fluent API over the same `context.output` path. See [TraitDefinition](./definition-trait.md) for full examples.
+Prefer `defkit.ContextOutput()` and its `.Field(path)` / `.HasPath(path)` methods when building conditional trait patches: they give you a richer fluent API over the same `context.output` path. See [Reading Component Context](./advanced-api.md#reading-component-context) and the trait example after it.
+
+### Application accessors
+
+| Go method | CUE path | Set for | Description |
+|---|---|---|---|
+| `vela.AppLabels()` | `context.appLabels` | Every definition kind | The Application's labels, as a map. |
+| `vela.AppLabel(key)` | `context.appLabels["<key>"]` | Every definition kind | One of the Application's labels. |
+| `vela.AppAnnotations()` | `context.appAnnotations` | Every definition kind | The Application's annotations, as a map. |
+| `vela.AppAnnotation(key)` | `context.appAnnotations["<key>"]` | Every definition kind | One of the Application's annotations. |
+| `vela.AppComponents()` | `context.appComponents` | Application-scoped policies | The Application's `spec.components`. |
+| `vela.AppPolicies()` | `context.appPolicies` | Application-scoped policies | The Application's `spec.policies`. |
+| `vela.AppWorkflow()` | `context.appWorkflow` | Application-scoped policies | The Application's `spec.workflow`. |
+| `vela.Custom(path)` | `context.custom.<path>` | Components, traits, policies and workflow steps | A value an earlier [Application-scoped policy](../policy/application-scoped-policy.md) published in its `output.ctx`. It is absent unless a policy set it, so guard the read. |
+
+### Policy accessors
+
+| Go method | CUE path | Set for | Description |
+|---|---|---|---|
+| `vela.PolicyName()` | `context.policyName` | Policies | The policy's name, from its `spec.policies[]` entry. |
+| `vela.PolicyType()` | `context.policyType` | Policies | The policy's definition name. |
+| `vela.PolicyRevision()` | `context.policyRevision` | Application-scoped policies | The revision number of the policy's definition. |
+| `vela.PolicyRevisionName()` | `context.policyRevisionName` | Application-scoped policies | The name of the policy definition's revision. |
+| `vela.PolicyRevisionHash()` | `context.policyRevisionHash` | Application-scoped policies | The hash of the policy definition's revision. |
+
+### Workflow step accessors
+
+| Go method | CUE path | Set for | Description |
+|---|---|---|---|
+| `vela.StepName()` | `context.stepName` | Workflow steps | The name of the step being run. In a step template, `vela.Name()` is the Application, so read this for the step. |
+| `vela.StepSessionID()` | `context.stepSessionID` | Workflow steps | The step's ID in the workflow status. |
+| `vela.WorkflowName()` | `context.workflowName` | Components, traits, workflow steps, and policies other than Application-scoped ones | The name of the workflow being run, when it has one. |
+| `vela.Each()` | `context.each` | Workflow steps in a `forEach` | The current pass of a `forEach`, with `.Item()`, `.ItemField(path)`, `.Index()` (from 0) and `.Key()` (the item's `forEach.key`, or its index when the loop has none). It is only set inside a `forEach`, so guard reads with `vela.Each().IsSet()`. |
 
 ## Example
 
-Let's build a `runtime-context-demo` component that surfaces every `VelaCtx` accessor into a Kubernetes `Deployment` and a companion `ConfigMap`.
+Let's build a `runtime-context-demo` component that writes the identity and cluster-version accessors into a Kubernetes `Deployment` and a companion `ConfigMap`.
 
-Behind the scenes the template exercises every accessor listed above in a single definition: all six identity methods — `Name`, `Namespace`, `AppName`, `AppRevision`, `AppRevisionNum`, and `Revision` — wired into Deployment metadata labels and annotations; all three `ClusterVersionRef` sub-methods — `Major`, `Minor`, and `GitVersion` — stamped as annotations on the Deployment; `defkit.Interpolation(...)` to stringify the integer-typed `AppRevisionNum` and `Minor` values before assigning them to Kubernetes string fields; and the `Outputs` pattern to register a companion `ConfigMap` as a named auxiliary output (demonstrating `vela.Outputs(name)` on the receiving side). Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/components/`.
+The template uses all six identity methods (`Name`, `Namespace`, `AppName`, `AppRevision`, `AppRevisionNum` and `Revision`) in the Deployment's labels and annotations, and the three `ClusterVersionRef` sub-methods (`Major`, `Minor` and `GitVersion`) as annotations. `defkit.Interpolation(...)` turns the integer `AppRevisionNum` and `Minor` values into strings before they go into Kubernetes string fields, and `tpl.Outputs(...)` adds the `ConfigMap` as a named auxiliary output. Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/components/`.
 
 <Tabs groupId="defkit-example">
-<TabItem value="go" label="Go — defkit">
+<TabItem value="go" label="Go (defkit)">
 
 ```go
 package components
@@ -118,7 +150,7 @@ func init() { defkit.Register(RuntimeContextDemo()) }
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated">
+<TabItem value="cue" label="CUE (generated)">
 
 ```cue
 "runtime-context-demo": {
@@ -227,7 +259,7 @@ vela def gen-module ./my-platform -o ./generated-cue
 Apply the definition and the Application YAML above:
 
 ```shell
-vela def apply ./generated-cue/component/runtime-context-demo.cue
+vela def apply ./generated-cue/components/runtime-context-demo.cue
 vela up -f ctx-demo-app.yaml
 ```
 
@@ -279,7 +311,7 @@ Every `VelaCtx` accessor maps to a concrete value injected by the controller: `c
 
 ## Related
 
-- [ComponentDefinition](./definition-component.md) — define workload types
-- [TraitDefinition](./definition-trait.md) — use `ContextOutput()` to introspect the workload
-- [Resource Builder](./resource-builder.md) — `Set()`, `SetIf()`, and other resource-field methods
-- [Value Expressions](./value-expressions.md) — `defkit.Interpolation()`, `defkit.Lt()`, `defkit.Ge()`, and other expression helpers
+- [ComponentDefinition](./definition-component.md): define workload types
+- [TraitDefinition](./definition-trait.md): use `ContextOutput()` to introspect the workload
+- [Resource Builder](./resource-builder.md): `Set()`, `SetIf()`, and other resource-field methods
+- [Value Expressions](./value-expressions.md): `defkit.Interpolation()`, `defkit.Lt()`, `defkit.Ge()`, and other expression helpers

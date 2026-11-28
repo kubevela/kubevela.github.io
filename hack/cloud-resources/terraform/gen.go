@@ -14,7 +14,7 @@ import (
 
 const (
 	Terraform      = "Terraform"
-	targetOutputEn = "../docs/end-user/components/cloud-services/cloud-resources-list.md"
+	targetOutputEn = "../terraform/reference/cloud-resources-list.md"
 	targetOutputZh = "../i18n/zh/docusaurus-plugin-content-docs/current/end-user/components/cloud-services/cloud-resources-list.md"
 	Zh             = "zh"
 	En             = "en"
@@ -23,17 +23,26 @@ const (
 type I18N struct {
 	Language   string `json:"language"`
 	TargetFile *os.File
+	// LinkPrefix is the path from the list page to the resource pages.
+	LinkPrefix string
 }
 
 func main() {
-	terraformPath := "../docs/end-user/components/cloud-services/terraform"
+	// The English pages live in the Terraform section, beside the list. The zh tree keeps its own copies.
+	terraformPath := "../terraform/reference"
 	infos, err := ioutil.ReadDir(terraformPath)
+	if err != nil {
+		panic(err)
+	}
+	infos = withoutList(infos)
+	terraformPathZh := "../i18n/zh/docusaurus-plugin-content-docs/current/end-user/components/cloud-services/terraform"
+	infosZh, err := ioutil.ReadDir(terraformPathZh)
 
 	f, err := os.OpenFile(targetOutputEn, os.O_APPEND|os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
 		panic(err)
 	}
-	i18n := I18N{Language: En, TargetFile: f}
+	i18n := I18N{Language: En, TargetFile: f, LinkPrefix: "./"}
 	i18n.createTitle()
 	i18n.createTable(terraformPath, infos)
 
@@ -41,11 +50,22 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	i18n = I18N{Language: Zh, TargetFile: f2}
+	i18n = I18N{Language: Zh, TargetFile: f2, LinkPrefix: "./terraform/"}
 	i18n.createTitle()
-	i18n.createTable(terraformPath, infos)
+	i18n.createTable(terraformPathZh, infosZh)
 
 	//i18n.createSidebar(infos)
+}
+
+// withoutList drops the list page itself, which sits in the same directory as the resource pages.
+func withoutList(infos []fs.FileInfo) []fs.FileInfo {
+	out := infos[:0]
+	for _, info := range infos {
+		if info.Name() != "cloud-resources-list.md" {
+			out = append(out, info)
+		}
+	}
+	return out
 }
 
 func (i18n I18N) createTable(defDocPath string, infos []fs.FileInfo) {
@@ -97,7 +117,7 @@ func (i18n I18N) createTable(defDocPath string, infos []fs.FileInfo) {
 		default:
 			panic("Not supported Cloud Provider: " + provider)
 		}
-		resourceLink := fmt.Sprintf("[%s](./terraform/%s)", resource, info.Name())
+		resourceLink := fmt.Sprintf("[%s](%s%s)", resource, i18n.LinkPrefix, info.Name())
 		data, err := ioutil.ReadFile(filepath.Join(defDocPath, info.Name()))
 		if err != nil {
 			panic(err)

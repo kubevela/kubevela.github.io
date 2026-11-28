@@ -76,10 +76,10 @@ In your IDE's build/debug configuration, add the following environment variable:
 KUBECONFIG={path-to-hub-kubeconfig}
 
 # Example:
-KUBECONFIG=/Users/viskumar/.kube/hub.yaml
+KUBECONFIG=/Users/you/.kube/hub.yaml
 ```
 
-Replace the path with the actual location of your hub cluster's kubeconfig file.
+Replace the path with the absolute path of your hub cluster's kubeconfig file. Most IDEs pass an environment variable as written, without expanding `$HOME` or `~`.
 
 **Why is this needed?**
 
@@ -103,26 +103,7 @@ Launch your IDE debugger. The core controller will now run from your IDE instead
 
 ## Part 4: Install Cluster Gateway
 
-### Understanding Cluster Gateway
-
-**Why do we need Cluster Gateway?**
-
-In a multicluster setup, Cluster Gateway is the critical component that enables:
-
-- Communication between the hub cluster and spoke clusters
-- Routing of API requests to remote clusters
-- Centralised management of multiple Kubernetes clusters
-- Secure authentication and authorisation across clusters
-
-**Why run the core controller from the IDE while keeping the Cluster Gateway in-cluster?**
-
-When debugging KubeVela core, we want to:
-
-✅ Run the core controller from the IDE (so we can debug it with breakpoints)
-
-✅ Keep Cluster Gateway running in-cluster (it needs to be accessible as a service endpoint for multicluster communication)
-
-This is why we install only Cluster Gateway via Helm while the core controller runs in your IDE.
+The controller runs in your IDE, but cluster-gateway must run in the cluster, because the hub API server reaches spokes through it as an APIService. So install only cluster-gateway with Helm.
 
 ### Step 8: Prepare Helm Chart
 
@@ -506,6 +487,6 @@ You should see the podinfo pods and related resources running in both clusters, 
 ### Issue: Pods not deploying to the spoke cluster
 
 - Verify cluster is registered: `vela cluster ls`
-- Check Cluster Gateway logs: `kubectl logs -n vela-system -l app=kubevela-cluster-gateway`
+- Check Cluster Gateway logs: `kubectl logs -n vela-system -l app.kubernetes.io/name=vela-core-cluster-gateway`
 - Ensure topology policy includes the correct cluster names
 

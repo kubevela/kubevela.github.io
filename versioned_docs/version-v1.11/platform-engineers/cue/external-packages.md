@@ -2,19 +2,14 @@
 title: External CUE Packages
 ---
 
-# Extending CUE with External Packages
+A `Package` resource registers functions that a definition can import. Each call is an HTTP POST to a service you run, the *provider*. CueX is the CUE engine in KubeVela that resolves these calls.
 
-CueX extends the CUE templating system by allowing users to define and execute custom functions as external packages. This enables integration with external services, dynamic function execution and reusability within workflow steps.
+With a Package you can:
+- Fetch data from APIs, databases or other services while a definition renders.
+- Share one function between many definitions instead of repeating the logic in each.
+- Write the provider in any language that can serve JSON over HTTP.
 
-With CueX external packages, you can:
-- Define reusable functions for workflow steps.
-- Dynamically fetch data from APIs, databases, or external services.
-- Avoid redundant logic by centralizing function definitions into reusable packages.
-- Implement function providers in any language, as long as they expose endpoints that conform to CueX requirements.
-
-> **Note:** External packages are available for use only within `WorkflowStepDefinitions`.
-
----
+Every definition type can import a Package: components, traits, policies and workflow steps.
 
 ## Structure of a Package
 A `Package` in CueX is a Kubernetes CustomResource (CRD) that defines an external function provider and the functions it exposes. The key attributes of `Packages` are:
@@ -231,7 +226,7 @@ spec:
 ```
 
 ### Using the Package
-With the Package registered, the `utils.#Sum` function is now available for use with WorkflowStepDefinition templates by importing the `ext/utils` provider. 
+With the Package registered, any definition can import `ext/utils` and call `utils.#Sum`. Here it is in a workflow step:
 
 ```cue
 import (
@@ -269,17 +264,3 @@ The following KubeVela flags control the behavior of external Package handling i
 |-------------------------------------------------------|------|----------|-------------------------------------------------------------------------------|
 | `enable-external-package-for-default-compiler`        | bool | `true`   | Enables the use of external packages.                                         |
 | `enable-external-package-watch-for-default-compiler`  | bool | `false`  | Allows automatic reloading of external packages without restarting KubeVela.  |
-
----
-
-## Summary
-
-CueX external packages provide a **powerful, reusable, and modular** way to extend workflow templating in KubeVela. By defining external functions as Kubernetes resources, you can:
-
-- Extend CueX with custom logic, like API calls or database queries.
-- Reuse functions across multiple workflow steps, reducing duplication.
-- Dynamically update functions without modifying individual workflow definitions.
-- Maintain consistency across teams by centralizing function logic.
-- Implement function providers in any language, as long as they expose HTTP endpoints matching CueX’s requirements.
-
-With external packages, CueX makes it easier to build scalable, maintainable, and extensible workflow steps in KubeVela.

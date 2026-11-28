@@ -6,11 +6,11 @@ title:  FAQ
 
 ### Who are using KubeVela?
 
-https://github.com/kubevela/kubevela/issues/1662
+The organisations that have adopted KubeVela are listed in [ADOPTERS.md](https://github.com/kubevela/community/blob/main/ADOPTERS.md).
 
 ### What is the difference between KubeVela and project-X ?
 
-Refer to the [comparison details](https://kubevela.io/docs/#kubevela-vs-other-software).
+Refer to the [comparison details](../../../getting-started/introduction.md#kubevela-vs-other-software).
 
 ### Do you support Crossplane? What's the difference between terraform and Crossplane in KubeVela?
 
@@ -24,23 +24,64 @@ KubeVela natively supports Crossplane as they're already CRDs, while terraform w
 
 ## Common Issues
 
-### Why things of https://*.kubevela.net is out of date?
+### `vela install` installed an older version than I expected
 
-Recently, we're removing the dependency of the domain `kubevela.net` due to some compliance issues, so things are migrated. Please check the following lists to find the new address:
+`vela install` installs the KubeVela version that matches the CLI, so a 1.11 `vela` installs KubeVela 1.11. Check both with `vela version`: `CLI Version` is the CLI, `Core Version` is what runs in the cluster. Install the CLI of the release you want, or name the version:
+
+```bash
+vela install --version v1.12.0
+```
+
+### VelaUX doesn't show sources or module components
+
+The `velaux` addon in the official registry is VelaUX v1.9.5, built before KubeVela 1.12. It runs against 1.12, but it doesn't show the features 1.12 added, such as sources and module components. Use the `vela` CLI for those, for example `vela status <app-name>`.
+
+### My Application is refused with "source expressions are not enabled"
+
+The full message is:
+
+```
+source expressions are not enabled on this cluster; an operator enables them with the EnableCelExpressions feature gate
+```
+
+Sources and `$( )` expressions are alpha and off by default. An operator turns them on with the vela-core chart's `featureGates.enableCelExpressions` value, keeping the version already installed:
+
+```bash
+helm upgrade kubevela kubevela/vela-core -n vela-system --reuse-values \
+  --version <installed version> \
+  --set featureGates.enableCelExpressions=true
+```
+
+With the gate on, each Application still opts in with the annotation `app.oam.dev/cel-expressions: "true"`, unless the operator also sets `featureGates.requireCelExpressionOptIn=false`. Without the annotation, the error tells you to add it.
+
+### Pods stay `Pending` with "Too many pods"
+
+A single-node local cluster (k3d, kind, minikube) runs at most 110 pods on its node. Addons and test runs that were stopped part way leave pods behind, so new ones wait. Find what is using the node and delete what you no longer need:
+
+```bash
+kubectl get pods -A --no-headers | wc -l
+kubectl get namespaces
+```
+
+For more room, create the cluster with more nodes, for example `k3d cluster create --agents 2`.
+
+### Why don't the kubevela.net addresses work?
+
+The `kubevela.net` domain is gone, so every address on it fails. Use these instead:
 
 Content | old | new
 --- | --- | ---
 Documentation | https://kubevela.net | https://kubevela.io
-Image Hub | "hub.kubevela.net" | "docker.io" or "ghcr.io/kubevela" 
+Image Hub | "hub.kubevela.net" | "docker.io" or "ghcr.io/kubevela"
 Helm charts | https://charts.kubevela.net/core | https://kubevela.github.io/charts
 Official Addon Registry | https://addons.kubevela.net | https://kubevela.github.io/catalog/official
 Experimental Addon Registry | - | https://kubevela.github.io/catalog/experimental
-CLI | https://kubevela.io/script/install.sh | download from [release page](https://github.com/kubevela/kubevela/releases)
-VelaD | - | migrating 
 
 The move happened in v1.9; the [v1.8 to v1.9 upgrade guide](../../../upgrade-guides/v1.9/index.md) has the commands to update your addon registry.
 
-### You have reached rate limit for Docker Image Registry 
+VelaD isn't affected, but note that its last release is v1.9.5, which installs KubeVela 1.9.5. For a newer KubeVela, use `vela install` or Helm.
+
+### You have reached rate limit for Docker Image Registry
 
 By default, the community use images from docker registry for installation. You can use the following alternatives:
 
@@ -50,18 +91,6 @@ By default, the community use images from docker registry for installation. You 
 * After v1.4.1, the image format has changed to `ghcr.io/kubevela/<align with docker hub>`, e.g. "ghcr.io/kubevela/oamdev/vela-core:latest".
 
 2. If you insist on using Docker registry, you may increase the limit by authenticating and upgrading: https://www.docker.com/increase-rate-limit .
- 
-### SchemaError of ApplicationRevision CRD
-
-> SchemaError(dev.oam.core.v1beta1.ApplicationRevision.spec.referredObjects): array should have exactly one sub-item） 
-
-https://github.com/kubevela/kubevela/issues/3874
-
-This could be a potential problem for k8s 1.19. Try to run the following command and see if it can help.
-
-```
-kubectl patch crd applicationrevisions.core.oam.dev --type json -p='[{"op": "remove", "path": "/spec/versions/1/schema/openAPIV3Schema/properties/spec/properties/referredObjects/x-kubernetes-preserve-unknown-fields"}]'
-```
 
 ### How to change the admin password of VelaUX?
 
@@ -93,7 +122,7 @@ kubectl delete pod -l app.oam.dev/component=velaux-server -n vela-system
 
 ### How can I build my own addon registry?
 
-https://kubevela.io/docs/platform-engineers/addon/addon-registry
+See [Build your Own Registry](/addons/developer/addon-registry).
 
 ### How does KubeVela support stateful workload?
 

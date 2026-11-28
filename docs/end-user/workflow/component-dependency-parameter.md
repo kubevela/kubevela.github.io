@@ -1,41 +1,41 @@
 ---
-title: Component Orchestration
+title: Order Components and Pass Data Between Them
 ---
 
-This section will introduce the dependencies in components and how to pass data between components.
+This page shows how to make one component wait for another with `dependsOn`, and how to pass a value from one component to another with `outputs` and `inputs`. Both work in the default workflow, with no workflow steps to write.
 
 :::tip
-We use `helm` component type in the following examples, make sure you have the `fluxcd` addon enabled (`vela addon enable fluxcd`).
+Components and workflow steps each have their own `dependsOn`, `inputs` and `outputs`:
+
+- Use the **component** fields on this page when the order or the data is between the things you deploy: deploy the database before the app that connects to it.
+- Use the **workflow step** fields when the order or the data is between steps you write yourself, such as a notification after a deploy. See [Order Steps](/workflow/next/guides/steps/order-steps) and [Data Passing](/workflow/next/guides/steps/inputs-outputs).
 :::
 
 ## Dependency
 
-We can use `dependsOn` to specify the dependencies between components.
-
-For example, component A depends on component B:
+Use `dependsOn` to make a component wait for others. For example, `api` depends on `database`:
 
 ```yaml
 ...
 components:
-  - name: A
-    type: helm
+  - name: api
+    type: webservice
     dependsOn:
-      - B
-  - name: B
-    type: helm
+      - database
+  - name: database
+    type: webservice
 ```
 
-In this case, KubeVela will deploy B first, and then deploy A when the component B is running.
+KubeVela deploys `database` first, and deploys `api` once `database` is healthy.
 
 ### How to Use
 
-If we want to apply a MySQL cluster, we need:
+To run MySQL with its root password in a Secret, you need:
 
-1. Apply a secret for MySQL password.
-2. Apply MySQL controller.
-3. Apply MySQL cluster.
+1. The Secret with the password.
+2. MySQL, deployed after the Secret exists.
 
-Apply the following file:
+Save the following as `mysql.yaml`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -46,116 +46,123 @@ metadata:
 spec:
   components:
     - name: mysql-secret
-      type: raw
+      type: k8s-objects
       properties:
-        apiVersion: v1
-        kind: Secret
-        metadata:
-          name: mysql-secret
-        type: kubernetes.io/opaque
-        stringData:
-          ROOT_PASSWORD: test
-    - name: mysql-controller
-      type: helm
-      properties:
-        repoType: helm
-        url: https://presslabs.github.io/charts
-        chart: mysql-operator
-        version: "0.4.0"
-    - name: mysql-cluster
-      type: raw
+        objects:
+          - apiVersion: v1
+            kind: Secret
+            metadata:
+              name: mysql-secret
+            type: Opaque
+            stringData:
+              ROOT_PASSWORD: test
+    - name: mysql
+      type: webservice
       dependsOn:
-        - mysql-controller
         - mysql-secret
       properties:
-        apiVersion: mysql.presslabs.org/v1alpha1
-        kind: MysqlCluster
-        metadata:
-          name: mysql-cluster
-        spec:
-          replicas: 1
-          secretName: mysql-secret
+        image: mysql:8.4
+        ports:
+          - port: 3306
+            expose: true
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-secret
+                key: ROOT_PASSWORD
+```
+
+Apply it:
+
+```shell
+vela up -f mysql.yaml
 ```
 
 ### Expected Outcome
 
-Check the application in the cluster:
+Check the application:
 
 ```shell
-$ vela ls
-APP  	COMPONENT       	TYPE	TRAITS	PHASE          	HEALTHY	STATUS	CREATED-TIME
-mysql	mysql-secret    	raw 	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
-├─ 	mysql-controller	helm	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
-└─ 	mysql-cluster   	raw 	      	runningWorkflow	       	      	2021-10-14 12:09:55 +0800 CST
+vela ls
 ```
 
-In the beginning, the status is running workflow since the mysql-controller is not ready.
+While MySQL starts, the application is still running its workflow:
 
-```shell
-$ vela ls
-APP  	COMPONENT       	TYPE	TRAITS	PHASE  	HEALTHY	STATUS	CREATED-TIME
-mysql	mysql-secret    	raw 	      	running	healthy	      	2021-10-14 12:09:55 +0800 CST
-├─ 	mysql-controller	helm	      	running	healthy	      	2021-10-14 12:09:55 +0800 CST
-└─ 	mysql-cluster   	raw 	      	running	       	      	2021-10-14 12:09:55 +0800 CST
+```
+APP  	COMPONENT   	TYPE       	TRAITS	PHASE          	HEALTHY  	STATUS   	CREATED-TIME
+mysql	mysql-secret	k8s-objects	      	runningWorkflow	healthy  	         	2026-11-20 10:09:55 +0000 UTC
+└─   	mysql       	webservice 	      	runningWorkflow	unhealthy	Ready:0/1	2026-11-20 10:09:55 +0000 UTC
 ```
 
-After a while, all components is running successfully. The `mysql-cluster` will be deployed after `mysql-controller` and `mysql-secret` is `healthy`.
+After a while, both components are running. `mysql` was deployed only after `mysql-secret` was healthy:
+
+```
+APP  	COMPONENT   	TYPE       	TRAITS	PHASE  	HEALTHY	STATUS   	CREATED-TIME
+mysql	mysql-secret	k8s-objects	      	running	healthy	         	2026-11-20 10:09:55 +0000 UTC
+└─   	mysql       	webservice 	      	running	healthy	Ready:1/1	2026-11-20 10:09:55 +0000 UTC
+```
 
 :::info
-`dependsOn` use `healthy` to check status. If the component is `healthy`, then KubeVela will deploy the next component. If you want to customize the healthy status of the component, please refer to [Status Write Back](../../platform-engineers/traits/status.md)
+`dependsOn` waits for the component to be `healthy`. To change what healthy means for a component type, see [Health and Status](../../platform-engineers/status/definition_health_status.md).
 :::
 
 ## Inputs and Outputs
 
-In KubeVela, we can use inputs and outputs in Components to pass data.
+A component can publish values with `outputs`, and another component can read them with `inputs`. A component with inputs waits for the components whose outputs it reads, so you don't need a `dependsOn` as well.
 
 ### Outputs
 
-Outputs is made of `name` and `valueFrom`. Input will use `name` to reference output.
+An output has a `name` and a `valueFrom`. Inputs refer to the output by its `name`.
 
-We can write `valueFrom` in the following ways:
-1. Use value expression, eg. `valueFrom: output.metadata.name`. Note that `output` is a built-in field referring to the resource in the component that is rendered and deployed to the cluster.
-2. Use CUE expressions, eg. use `+` to combine value and string: `valueFrom: output.metadata.name + "testString"` or you can import built-in packages in CUE like:
-```
-valueFrom: |
-          import "strings"
-          strings.Join(["1","2"], ",")
-```
+`valueFrom` is an expression over what the component deployed:
+
+- `output` is the component's main resource, for example the Deployment of a `webservice`.
+- `outputs.<name>` are the extra resources the component and its traits add. The `expose` trait adds `service`, so `outputs.service.spec.clusterIP` is the IP of its Service. Run `vela show <type>`, or see the [component](../components/references.md) and [trait](../traits/references.md) references, to find these names.
+
+You can write it as:
+
+1. A path: `valueFrom: output.metadata.name`.
+2. A CUE expression, for example joining a value and a string: `valueFrom: output.metadata.name + "testString"`. You can also import built-in CUE packages:
+    ```
+    valueFrom: |
+      import "strings"
+      strings.Join(["1","2"], ",")
+    ```
 
 ### Inputs
 
-Inputs is made of `from` and `parameterKey`. Input uses `from` to reference output, `parameterKey` is a expression that assigns the value of the input to the corresponding field.
+An input has a `from` and a `parameterKey`. `from` names the output to read. `parameterKey` is the path, relative to the component's `properties`, where the value is written before the component is rendered.
 
-eg.
-
-1. Specify inputs:
+For example, this input:
 
 ```yaml
 ...
 - name: wordpress
-  type: helm
+  type: webservice
   inputs:
-    - from: mysql-svc
-      parameterKey: properties.values.externalDatabase.host
+    - from: mysql-host
+      parameterKey: env[0].value
+  properties:
+    env:
+      - name: WORDPRESS_DB_HOST
 ```
 
-2. The field parameterKey specifies the field path of the parameter key in component to be assigned after rendering:
-
-Which means the input value will be passed into the below properties:
+writes the value of `mysql-host` into the component's properties like this:
 
 ```yaml
 ...
 - name: wordpress
-  type: helm
+  type: webservice
   properties:
-    values:
-      externalDatabase:
-        host: <input value>
+    env:
+      - name: WORDPRESS_DB_HOST
+        value: <input value>
 ```
 
 ### How to Use
 
-In the following we will apply a WordPress server with the MySQL address passed from a MySQL component:
+The following Application runs WordPress, with the MySQL address passed from the MySQL component. Save it as `wordpress.yaml`:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -165,66 +172,90 @@ metadata:
   namespace: default
 spec:
   components:
-    - name: mysql
-      type: helm
+    - name: wordpress-db
+      type: webservice
       outputs:
-        # the output is the mysql service address
-        - name: mysql-svc
+        # the address of the Service in front of MySQL
+        - name: mysql-host
           valueFrom: output.metadata.name + ".default.svc.cluster.local"
       properties:
-        repoType: helm
-        url: https://charts.bitnami.com/bitnami
-        chart: mysql
-        version: "8.8.2"
-        values:
-          auth:
-            rootPassword: mypassword
+        image: mysql:8.4
+        ports:
+          - port: 3306
+            expose: true
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: mypassword
+          - name: MYSQL_DATABASE
+            value: wordpress
     - name: wordpress
-      type: helm
+      type: webservice
       inputs:
-        # set the host to mysql service address
-        - from: mysql-svc
-          parameterKey: properties.values.externalDatabase.host
+        # set WORDPRESS_DB_HOST to the MySQL address
+        - from: mysql-host
+          parameterKey: env[0].value
       properties:
-        repoType: helm
-        url: https://charts.bitnami.com/bitnami
-        chart: wordpress
-        version: "12.0.3"
-        values:
-          mariadb:
-            enabled: false
-          externalDatabase:
-            user: root
-            password: mypassword
-            database: mysql
-            port: 3306
+        image: wordpress:6.8-apache
+        ports:
+          - port: 80
+            expose: true
+        env:
+          - name: WORDPRESS_DB_HOST
+          - name: WORDPRESS_DB_USER
+            value: root
+          - name: WORDPRESS_DB_PASSWORD
+            value: mypassword
+          - name: WORDPRESS_DB_NAME
+            value: wordpress
+```
+
+`output` here is the MySQL Deployment, and the Service that `expose: true` creates has the same name, so the output is the Service's address.
+
+Apply it:
+
+```shell
+vela up -f wordpress.yaml
 ```
 
 ### Expected Outcome
 
-Check the application in the cluster:
+Check the application:
 
 ```shell
-$ vela ls
-
-APP                 	COMPONENT	TYPE	TRAITS	PHASE          	HEALTHY	STATUS	CREATED-TIME
-wordpress-with-mysql	mysql    	helm	running	                healthy	        2021-10-12 18:04:10 +0800 CST
-└─                	    wordpress	helm	running	                healthy	       	2021-10-12 18:04:10 +0800 CST
+vela ls
 ```
 
-The WordPress with MySQL has been successfully applied.
+```
+APP                 	COMPONENT   	TYPE      	TRAITS	PHASE  	HEALTHY	STATUS   	CREATED-TIME
+wordpress-with-mysql	wordpress-db	webservice	      	running	healthy	Ready:1/1	2026-11-20 10:04:10 +0000 UTC
+└─                  	wordpress   	webservice	      	running	healthy	Ready:1/1	2026-11-20 10:04:10 +0000 UTC
+```
+
+WordPress has its database address:
+
+```shell
+kubectl get deployment wordpress -o jsonpath='{.spec.template.spec.containers[0].env[0]}'
+```
+
+```
+{"name":"WORDPRESS_DB_HOST","value":"wordpress-db.default.svc.cluster.local"}
+```
+
+:::tip
+To deploy a Helm chart as a component, use the built-in `helmchart` type. It counts as healthy once the chart is installed, unless you set its `healthStatus`, so set `healthStatus` on a component that others depend on.
+:::
 
 ## Multi-cluster Orchestration
 
-In multi-cluster scenario, we can still make use of Dependency and Inputs/Outputs to orchestrate the components. The usage is the same as in the single-cluster scenario. Here's a direct example. Here is a Inputs/Outpus example and Dependency is also available.
+The same `dependsOn`, `inputs` and `outputs` work when components go to several clusters.
 
 ### How to Use
 
 :::note
-The environment in example have one managed cluster named `cluster-worker`.
+This example needs one managed cluster named `cluster-worker`, besides the `local` one. See [Multi-cluster Application Delivery](../policies/multi-cluster.md) to join one.
 :::
 
-Deploy the following application, which will dispatch a Deployment and a Service. Then deploy a ConfigMap with some status information. 
+The following Application deploys podinfo, with a Deployment and a Service, to both clusters. Then, in each cluster, it deploys a ConfigMap holding the Deployment's status message and the Service's IP in that cluster.
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -234,6 +265,7 @@ metadata:
 spec:
   components:
     - name: podinfo
+      type: webservice
       outputs:
         - name: message
           valueFrom: output.status.conditions[0].message
@@ -241,54 +273,54 @@ spec:
           valueFrom: outputs.service.spec.clusterIP
       properties:
         image: stefanprodan/podinfo:4.0.3
-      type: webservice
       traits:
         - type: expose
           properties:
-            port: [ 80 ]
+            port: [80]
     - name: configmap
-      properties:
-        apiVersion: v1
-        kind: ConfigMap
-        metadata:
-          name: deployment-msg
-      type: raw
+      type: k8s-objects
       inputs:
         - from: message
-          parameterKey: data.msg
+          parameterKey: objects[0].data.msg
         - from: ip
-          parameterKey: data.ip
+          parameterKey: objects[0].data.ip
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: ConfigMap
+            metadata:
+              name: deployment-msg
+            data: {}
   policies:
     - name: topo
-      properties:
-        clusters: [ "local","cluster-worker" ]
       type: topology
-    - name: override
       properties:
-        selector:
-          - configmap
-          - podinfo
-      type: override
+        clusters: ["local", "cluster-worker"]
 ```
 
 ### Expected Outcome
 
 ```shell
-$ vela status cm-with-message --tree                  
-CLUSTER            NAMESPACE     RESOURCE                 STATUS    
-cluster-worker─── default    ─┬─ ConfigMap/deployment-msg updated   
-                              ├─ Service/podinfo          updated   
-                              └─ Deployment/podinfo       updated   
-local       ─── default      ─┬─ ConfigMap/deployment-msg updated   
-                              ├─ Service/podinfo          updated   
-                              └─ Deployment/podinfo       updated   
+vela status cm-with-message --tree
 ```
 
+```
+CLUSTER            NAMESPACE     RESOURCE                 STATUS
+cluster-worker─── default    ─┬─ ConfigMap/deployment-msg updated
+                              ├─ Service/podinfo          updated
+                              └─ Deployment/podinfo       updated
+local       ─── default      ─┬─ ConfigMap/deployment-msg updated
+                              ├─ Service/podinfo          updated
+                              └─ Deployment/podinfo       updated
+```
 
-Check the ConfigMap in the cluster. The same to the other cluster.
+Check the ConfigMap. Each cluster has its own, with the values from that cluster:
 
 ```shell
-$ kubectl get cm deployment-msg -oyaml |grep -C3 ^data
+kubectl get cm deployment-msg -o yaml | grep -C3 ^data
+```
+
+```
 apiVersion: v1
 data:
   ip: 10.43.223.14

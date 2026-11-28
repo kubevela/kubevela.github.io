@@ -108,9 +108,9 @@ import "vela/op"
 
 myLog: op.#Log & {
   data: "my custom log"
-	resources: [{
-		labelsSelector: {"test-key": "test-value"}
-	}]
+  source: resources: [{
+    labelSelector: {"test-key": "test-value"}
+  }]
 }
 ```
 
@@ -157,14 +157,16 @@ Used to save or read user-defined data in the context of workflow.
 **Example**
 
 ```
-put: op.ws.#DoVar & {
+import "vela/op"
+
+put: op.#DoVar & {
   method: "Put"
   path: "foo.score"
   value: 100
 }
 
 // The user can get the data saved above through get.value (100)
-get: op.ws.#DoVar & {
+get: op.#DoVar & {
   method: "Get"
   path: "foo.score"
 }
@@ -187,7 +189,7 @@ Send HTTP request to the specified URL.
 	url: string
 	// +usage=The request config
 	request?: {
-		// +usage=The timeout of this request
+		// +usage=The timeout of this request, greater than 0 and at most the controller's maximum (60s by default); 3s when unset
 		timeout?: string
 		// +usage=The request body
 		body?: string
@@ -201,8 +203,11 @@ Send HTTP request to the specified URL.
 			period: string
 		}
 	}
-	// +usgae=The tls config of the request
-	tls_config?: secret: string
+	// +usage=The tls config of the request
+	tls_config?: {
+		secret:     string
+		namespace?: string
+	}
 	// +usage=The response of the request will be filled in this field after the action is executed
 	response: {
 		// +usage=The body of the response
@@ -218,18 +223,26 @@ Send HTTP request to the specified URL.
 
 ```
 
+`request.body` is a string, so marshal a struct with `json.Marshal` before you send it.
+
+From v1.10.10, the request is bounded and checked like every outbound request from vela-core: an unset `timeout` is 3s, a `timeout` must be greater than 0 and at most `workflow.http.maxTimeout` (`60s` by default), a response body over `workflow.http.maxResponseBytes` (1 MiB by default) fails the step, and cloud metadata, link-local and loopback destinations are refused. See [Outbound HTTP Protection](../system-operation/workflow-http-protection.md).
+
+`tls_config.secret` names a Secret with `ca.crt`, or `client.crt` and `client.key`, or all three. From v1.10.10 it's read from the step's namespace (the Application's) by default; a Secret in another namespace, given as `tls_config.namespace` or as `<namespace>/<name>`, is read only if the user the Application runs as may get it.
+
 **Example**
 
 ```
-import "vela/op"
+import (
+  "vela/op"
+  "encoding/json"
+)
 
 myRequest: op.#HTTPDo & {
   method: "POST"
   url:    "http://my-url.com"
   request: {
-    body: {
-      "hello": "body"
-    }
+    body: json.Marshal({"hello": "body"})
+    header: "Content-Type": "application/json"
   }
 }
 ```
@@ -289,7 +302,7 @@ Send emails.
 **Parameters**
 
 ```
-#SendEmail {
+#SendEmail: {
 	// +usage=The info of the sender
 	from: {
 		// +usage=The address of the sender
@@ -317,13 +330,33 @@ Send emails.
 
 **Example**
 
+Keep the SMTP password in a Secret, not in the definition: a definition is stored in the cluster as plain text, and anyone who can read it would have the password. The step reads the Secret, decodes the value and passes it on.
+
 ```
-import "vela/op"
+import (
+	"vela/op"
+	"encoding/base64"
+)
+
+smtpSecret: op.#Read & {
+	value: {
+		apiVersion: "v1"
+		kind:       "Secret"
+		metadata: {
+			name:      "smtp-credentials"
+			namespace: context.namespace
+		}
+	}
+}
+
+smtpPassword: op.#ConvertString & {
+	bt: base64.Decode(null, smtpSecret.value.data["password"])
+}
 
 myEmail: op.#SendEmail & {
-  from: {
+	from: {
 		address: "hello@mail.com"
-		password: "password"
+		password: smtpPassword.str
 		host: "myhost"
 		port: 465
 	}
@@ -334,6 +367,8 @@ myEmail: op.#SendEmail & {
 	}
 }
 ```
+
+The shipped `notification` step does the same through its `email.from.password.secretRef` parameter.
 
 ## Resource Management
 
@@ -442,6 +477,10 @@ myRead: op.#Read & {
 
 List resources in the Kubernetes cluster.
 
+:::caution
+In v1.10, `op.#List` (and `kube.#List`) fails with `invalid cue task for evaluation: ... nil pointer dereference`. Read single objects with `op.#Read` instead. It works in v1.12.
+:::
+
 **Parameters**
 
 ```
@@ -525,7 +564,7 @@ Delete resources in the Kubernetes cluster.
 ```
 import "vela/op"
 myDelete: op.#Delete & {
-  resource: {
+  value: {
     kind: "Deployment"
     apiVersion: "apps/v1"
     metadata: name: "my-app"
@@ -633,11 +672,9 @@ env: "prod"
 
 app: op.#Steps & {
   if env == "prod" {
-    load: op.#Load & {
-      component: "component-name"
-    }
-    apply: op.#Apply & {
-      value: load.value.workload
+    load: op.#Load & {}
+    apply: op.#ApplyComponent & {
+      value: load.value["component-name"]
     }
   }
   if env != "prod" {

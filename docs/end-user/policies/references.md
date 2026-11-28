@@ -61,7 +61,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- | --------- 
  componentNames | Select resources by component names. | []string | false |  |  
  componentTypes | Select resources by component types. | []string | false |  |  
- oamTypes | Select resources by oamTypes (COMPONENT or TRAIT). | []string | false |  |  
+ oamTypes | Select resources by oamTypes (WORKLOAD or TRAIT). | []string | false |  |  
  traitTypes | Select resources by trait types. | []string | false |  |  
  resourceTypes | Select resources by resource types (like Deployment). | []string | false |  |  
  resourceNames | Select resources by their names. | []string | false |  |  
@@ -162,7 +162,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- | --------- 
  componentNames | Select resources by component names. | []string | false |  |  
  componentTypes | Select resources by component types. | []string | false |  |  
- oamTypes | Select resources by oamTypes (COMPONENT or TRAIT). | []string | false |  |  
+ oamTypes | Select resources by oamTypes (WORKLOAD or TRAIT). | []string | false |  |  
  traitTypes | Select resources by trait types. | []string | false |  |  
  resourceTypes | Select resources by resource types (like Deployment). | []string | false |  |  
  resourceNames | Select resources by their names. | []string | false |  |  
@@ -359,7 +359,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- | --------- 
  componentNames | Select resources by component names. | []string | false |  |  
  componentTypes | Select resources by component types. | []string | false |  |  
- oamTypes | Select resources by oamTypes (COMPONENT or TRAIT). | []string | false |  |  
+ oamTypes | Select resources by oamTypes (WORKLOAD or TRAIT). | []string | false |  |  
  traitTypes | Select resources by trait types. | []string | false |  |  
  resourceTypes | Select resources by resource types (like Deployment). | []string | false |  |  
  resourceNames | Select resources by their names. | []string | false |  |  
@@ -631,7 +631,7 @@ By specifying `op` to `replace`, the application will update the given resource 
  ---- | ----------- | ---- | -------- | ------- | --------- 
  componentNames | Select resources by component names. | []string | false |  |  
  componentTypes | Select resources by component types. | []string | false |  |  
- oamTypes | Select resources by oamTypes (COMPONENT or TRAIT). | []string | false |  |  
+ oamTypes | Select resources by oamTypes (WORKLOAD or TRAIT). | []string | false |  |  
  traitTypes | Select resources by trait types. | []string | false |  |  
  resourceTypes | Select resources by resource types (like Deployment). | []string | false |  |  
  resourceNames | Select resources by their names. | []string | false |  |  
@@ -747,7 +747,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- | --------- 
  componentNames | Select resources by component names. | []string | false |  |  
  componentTypes | Select resources by component types. | []string | false |  |  
- oamTypes | Select resources by oamTypes (COMPONENT or TRAIT). | []string | false |  |  
+ oamTypes | Select resources by oamTypes (WORKLOAD or TRAIT). | []string | false |  |  
  traitTypes | Select resources by trait types. | []string | false |  |  
  resourceTypes | Select resources by resource types (like Deployment). | []string | false |  |  
  resourceNames | Select resources by their names. | []string | false |  |  
@@ -806,7 +806,7 @@ spec:
  ---- | ----------- | ---- | -------- | ------- | --------- 
  componentNames | Select resources by component names. | []string | false |  |  
  componentTypes | Select resources by component types. | []string | false |  |  
- oamTypes | Select resources by oamTypes (COMPONENT or TRAIT). | []string | false |  |  
+ oamTypes | Select resources by oamTypes (WORKLOAD or TRAIT). | []string | false |  |  
  traitTypes | Select resources by trait types. | []string | false |  |  
  resourceTypes | Select resources by resource types (like Deployment). | []string | false |  |  
  resourceNames | Select resources by their names. | []string | false |  |  

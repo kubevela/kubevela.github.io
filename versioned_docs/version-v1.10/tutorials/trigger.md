@@ -1,12 +1,10 @@
 ---
-title: Harbor Image Registry
+title: Deploy When an Image Is Pushed to Harbor
 ---
 
 ## Introduction
 
-In our daily development, when image tags changed, it is more convenient for CI/CD if the environments can automatically deploy the new image. KubeVela provides this mechanism.
-
-From KubeVela 1.2, [VelaUX](../reference/addons/velaux.md) provides a good way to do this. We can use KubeVela triggers to apply applications automatically.
+This guide redeploys an application each time Harbor receives a new tag. It uses a trigger from [VelaUX](../reference/addons/velaux.md#install).
 
 In this section, we will use GitLab as code repository and Harbor as image repository to integrate with KubeVela triggers, as a result, it will automatically update application when image tags changed.
 
@@ -44,7 +42,7 @@ As you can see, the current Demo application's version is `v1.0.0`.
 
 ![alt](../resources/acr-trigger-appv1.png)
 
-This source code of this demo is on the [GitLab] (https://gitlab.com/FogDong/KubeVela-GitOps-Demo-Code). There is also a CI file in this repo, in which steps are simple, every time the code is updated, it will automatically build the image and pushed to the image registry.
+This source code of this demo is on the [GitLab](https://gitlab.com/FogDong/KubeVela-GitOps-Demo-Code). There is also a CI file in this repo, in which steps are simple, every time the code is updated, it will automatically build the image and pushed to the image registry.
 
 We can change the version in the code to `v2.0.0`:
 
@@ -73,6 +71,6 @@ Looking back at the app page, you can see that the app version has changed to `v
 
 ## Summary
 
-The KubeVela triggers' combination with the image registry is smooth and seamless. In addition to Harbor, KubeVela also supports ACR registry and custom trigger payload types.
+The KubeVela triggers' combination with the image registry is smooth and seamless. Besides Harbor, VelaUX triggers take payloads from ACR, Docker Hub and JFrog, and a custom payload any CI tool can send. See [Integrate with CI system](../how-to/dashboard/trigger/overview.md).
 
 With KubeVela triggers, we can easily apply application based on image tags automatically and complete iterations of application versions.

@@ -6,10 +6,7 @@ title: Component Replication
 
 In KubeVela, we can dispatch resources across the clusters using `deploy` workflow step and `override`, `topology`
 policy.
-But projects like [OpenYurt](https://openyurt.io) have finer-grained division like node pool. This requires to dispatch
-some similar resources to the same cluster.
-These resources are called replication. Back to the example of OpenYurt, it can integrate KubeVela and replicate the
-resources then dispatch them to the different node pool.
+Sometimes you need several copies of one component in the same cluster, for example one per [OpenYurt](https://openyurt.io) node pool. The `replication` policy makes one copy per key.
 
 ## Usage
 
@@ -24,8 +21,7 @@ different `replicaKey`.
 :::
 
 :::tip
-`context.replicaKey` is always used in `metadata.name` in ComponentDefinition or TraitDefinition when dispatching
-resources to avoid name conflict. We'll see it later in the example.
+A replicable ComponentDefinition or TraitDefinition must put `context.replicaKey` in `metadata.name`, or the copies collide. The example below shows how.
 :::
 
 ## Example

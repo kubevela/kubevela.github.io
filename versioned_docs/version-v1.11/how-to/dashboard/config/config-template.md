@@ -2,7 +2,7 @@
 title: Config Template
 ---
 
-The config template is defined with CUE language. To describe the config parameter, storage structure and extension features. His rendering works similarly to the Definition.
+A config template is written in CUE. It declares a config's parameters, how the config is stored, and anything else created from it. It renders the way a definition does.
 
 ## When you need to custom the template
 
@@ -153,6 +153,53 @@ vela config-template apply -f template.cue
 ```bash
 vela config-template show <Template Name>
 ```
+
+## A complete example
+
+This template stores a webhook URL and the token to call it with. Save it as `webhook.cue`:
+
+```cue
+metadata: {
+	name:        "webhook"
+	alias:       "Webhook"
+	scope:       "system"
+	description: "A webhook URL and the token to call it with"
+	sensitive:   true
+}
+
+template: {
+	parameter: {
+		// +usage=The URL to call
+		url: string
+		// +usage=The token sent with each call
+		token: string
+	}
+	output: {
+		apiVersion: "v1"
+		kind:       "Secret"
+		metadata: {
+			name:      context.name
+			namespace: context.namespace
+		}
+		type: "Opaque"
+		stringData: {
+			url:   parameter.url
+			token: parameter.token
+		}
+	}
+}
+```
+
+`sensitive: true` keeps the config from being read through the API or a workflow step; Applications can still mount the Secret.
+
+Apply the template, then create a config from it:
+
+```bash
+vela config-template apply -f webhook.cue
+vela config create ci-webhook -t webhook url=https://ci.example.com/hooks/deploy token=<token>
+```
+
+`vela config-template apply` stores the template as a ConfigMap in `vela-system`. `vela config create` renders it and writes the Secret `ci-webhook` in `vela-system`, holding `url` and `token`; `vela config list` shows the new config.
 
 ## How to share the template
 

@@ -36,7 +36,7 @@ import TabItem from '@theme/TabItem';
 | `.GitVersion()` | `context.clusterVersion.gitVersion` | Full git version string (e.g. `"v1.33.6+k3s1"`). Includes the patch level when you need it. |
 
 :::caution
-`context.clusterVersion.patch` does **not** exist at runtime — the KubeVela controller never populates that field. The patch level is available inside `.GitVersion()`.
+Don't use `.Patch()`. It compiles to `context.clusterVersion.patch`, which does **not** exist at runtime: the KubeVela controller never sets that field. The patch level is in `.GitVersion()`.
 :::
 
 ### Output accessors
@@ -227,7 +227,7 @@ vela def gen-module ./my-platform -o ./generated-cue
 Apply the definition and the Application YAML above:
 
 ```shell
-vela def apply ./generated-cue/component/runtime-context-demo.cue
+vela def apply ./generated-cue/components/runtime-context-demo.cue
 vela up -f ctx-demo-app.yaml
 ```
 

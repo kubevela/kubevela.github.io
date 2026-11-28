@@ -6,7 +6,7 @@ You can pick up any of the following ways you're interested to contribute.
 
 ## Contribute Use cases and Samples
 
-* If you're using KubeVela, the easiest thing to contribute is to [credit the community](https://github.com/kubevela/kubevela/issues/1662).
+* If you're using KubeVela, add your organisation to the adopters list ([issue #1662](https://github.com/kubevela/kubevela/issues/1662)). It's the easiest way to help.
 * If you are interested, you can also write a [kubevela.io blog](https://kubevela.net/blog) to tell more about the use case.
 * You can also contribute to [KubeVela Official Samples](https://github.com/kubevela/samples).
 

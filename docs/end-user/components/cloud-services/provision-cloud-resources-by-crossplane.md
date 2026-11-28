@@ -2,7 +2,7 @@
 title: Crossplane
 ---
 
-The guide [Deploy Cloud Services](../../../tutorials/consume-cloud-services.md) shows how to provision cloud resources by Terraform in
+The guide [Deploy Cloud Services](/terraform/guides/consume-cloud-services) shows how to provision cloud resources by Terraform in
 CLI and VelaUX. This tutorial will talk about how to provision Cloud Resources by [Crossplane](https://crossplane.io/).
 
 At present, considering the Crossplane Addon is still in experimental stage, please execute the below statement to activate addon registry by vela cli and use them. 

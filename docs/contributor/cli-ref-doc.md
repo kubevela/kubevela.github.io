@@ -10,37 +10,37 @@ Regenerate the CLI and definition reference docs from the release branch for eve
 
 ## CLI Reference
 
-This section introduce how to update [CLI reference doc](../cli/vela.md) in the website.
+This section shows how to update the [CLI reference doc](../cli/vela.md) in the website.
 The whole process was done by script automatically. You need to follow this guide to build your environment.
 
-1. step up these two projects in the same folder.
+1. Check out both repositories side by side:
 
-```shell
-$ tree -L 1
-.
-├── kubevela
-└── kubevela.github.io
-```
+   ```shell
+   $ tree -L 1
+   .
+   ├── kubevela
+   └── kubevela.github.io
+   ```
 
 2. Run generate command in kubevela root dir.
 
-```shell
-cd kubevela/
-go run ./hack/docgen/cli/gen.go
-```
+   ```shell
+   cd kubevela/
+   go run ./hack/docgen/cli/gen.go
+   ```
 
 3. Update more docs such as i18n zh
 
-```shell
-go run ./hack/docgen/cli/gen.go ../kubevela.github.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
-```
+   ```shell
+   go run ./hack/docgen/cli/gen.go ../kubevela.github.io/i18n/zh/docusaurus-plugin-content-docs/current/cli
+   ```
 
-4. Then you can check the difference in kubevela.io.
+4. Then you can check the difference in kubevela.github.io.
 
-```shell
-cd ../kubevela.github.io
-git status
-```
+   ```shell
+   cd ../kubevela.github.io
+   git status
+   ```
 
 5. Check in the changes and send pull request.
 
@@ -56,41 +56,43 @@ go run ./hack/docgen/mcp
 
 ## Built-in Definition Reference
 
-This section introduce how to definition reference docs in the website, including:
+This section shows how to regenerate the definition reference pages:
 
 - [component definition reference doc](../end-user/components/references.md).
 - [trait definition reference doc](../end-user/traits/references.md).
 - [policy definition reference doc](../end-user/policies/references.md).
 - [workflow step definition reference doc](../end-user/workflow/built-in-workflow-defs.md).
 
+The generator handles these four types only. Source definitions, new in 1.12, have no generated reference page yet.
+
 Most of the steps are done by script automatically. You need to follow this guide to build your environment.
 
 By default, the following steps will update for all definition reference at a time.
 Just follow these steps.
 
-1. step up these three projects in the same folder.
+1. Check out the three repositories side by side:
 
-```shell
-$ tree -L 1
-.
-├── catalog
-├── kubevela
-└── kubevela.github.io
-```
+   ```shell
+   $ tree -L 1
+   .
+   ├── catalog
+   ├── kubevela
+   └── kubevela.github.io
+   ```
 
 2. Run generate command in kubevela root dir.
 
-```shell
-cd kubevela/
-go run hack/docgen/def/gen.go
-```
+   ```shell
+   cd kubevela/
+   go run hack/docgen/def/gen.go
+   ```
 
-3. Then you can check the difference in kubevela.io.
+3. Then you can check the difference in kubevela.github.io.
 
-```shell
-cd ../kubevela.github.io
-git status
-```
+   ```shell
+   cd ../kubevela.github.io
+   git status
+   ```
 
 4. Check in the changes and send pull request.
 
@@ -117,6 +119,24 @@ go run hack/docgen/def/gen.go --type workflowstep
 go run hack/docgen/def/gen.go --type component --path ../kubevela.github.io/docs/end-user/components/references.md
 ```
 
+* Read definitions from a directory instead of the built-in ones (needs `--type`)
+
+```shell
+go run hack/docgen/def/gen.go --type component --def-dir ./vela-templates/definitions/internal/component
+```
+
+* Write to a docs checkout somewhere other than `../kubevela.github.io`
+
+```shell
+go run hack/docgen/def/gen.go --base-dir ~/src/kubevela.github.io
+```
+
+* Fail when a definition has no example (`.eg.md`, see below)
+
+```shell
+go run hack/docgen/def/gen.go --force-example-doc
+```
+
 * Specify the i18n location with a translation script data for the output
 
 ```shell
@@ -127,7 +147,7 @@ go run hack/docgen/def/gen.go --location zh --i18n https://kubevela.io/reference
 go run hack/docgen/def/gen.go --type component --path ../kubevela.github.io/docs/end-user/components/references.md --location zh --i18n ../kubevela.github.io/static/reference-i18n.json
 ```
 
-### How the docs generated?
+### How the generator works
 
 The generator reads the definitions from the CUE files in `vela-templates/definitions/internal` and, for workflow steps, `../catalog/addons/vela-workflow/definitions`. A kubeconfig file must exist. A reachable cluster is only needed for the "Underlying Kubernetes Resources" block of component definitions.
 
@@ -156,11 +176,11 @@ vela-templates/definitions/internal
 4 directories, 53 files
 ```
 
-3. Generate Examples.
+#### Examples
 
-By default, the definition don't contain any examples, maintainers can specify example for the built-in definitions.
+By default a definition has no examples. Maintainers can add one for a built-in definition.
 
-The docs folder will be embedded into CLI binary, you must write into the following hierarchy:
+The docs folder is embedded into the CLI binary, so write the files into this hierarchy:
 
 ```console
 $ tree references/docgen/def-doc
@@ -188,38 +208,38 @@ The file name **MUST** has the same name with the definition, along with the suf
 
 ## Terraform Based Cloud Resource Reference
 
-This section introduce how to update [terraform based cloud resource reference doc](../end-user/components/cloud-services/cloud-resources-list.md) in the website.
+This section shows how to update the [terraform based cloud resource reference doc](/terraform/reference/cloud-resources-list) in the website.
 
 Most of the steps are done by script automatically. You need to follow this guide to build your environment.
 
-1. step up these two projects in the same folder.
+1. Check out both repositories side by side:
 
-```shell
-$ tree -L 1
-.
-├── kubevela
-└── kubevela.github.io
-```
+   ```shell
+   $ tree -L 1
+   .
+   ├── kubevela
+   └── kubevela.io
+   ```
 
 2. Run generate command in kubevela root dir.
 
-```shell
-cd kubevela/
-go run ./hack/docgen/terraform/generate.go --i18n ../kubevela.io/static/reference-i18n.json
-```
+   ```shell
+   cd kubevela/
+   go run ./hack/docgen/terraform/generate.go --i18n ../kubevela.io/static/reference-i18n.json
+   ```
 
 The Terraform generator writes to `../kubevela.io`. Until `hack/docgen/terraform/generate.go` is changed, name the docs checkout `kubevela.io` (or symlink it) for this command.
 
 3. Update the resource catalog list if there're new cloud resources
-  - Resource Catalog(English): `kubevela.github.io/docs/end-user/components/cloud-services/cloud-resources-list.md`
-  - Resource Catalog(Chinese): `kubevela.github.io/i18n/zh/docusaurus-plugin-content-docs/current/end-user/components/cloud-services/cloud-resources-list.md`
+   - Resource Catalog(English): `kubevela.io/docs/end-user/components/cloud-services/cloud-resources-list.md`
+   - Resource Catalog(Chinese): `kubevela.io/i18n/zh/docusaurus-plugin-content-docs/current/end-user/components/cloud-services/cloud-resources-list.md`
 
 4. Then you can check the difference in kubevela.io.
 
-```shell
-cd ../kubevela.github.io
-git status
-```
+   ```shell
+   cd ../kubevela.io
+   git status
+   ```
 
 5. Check in the changes and send pull request.
 

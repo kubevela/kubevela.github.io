@@ -38,6 +38,19 @@ Releases before v1.9 are documented only on [GitHub Releases](https://github.com
 
 These matter if you build controllers, providers or addons against KubeVela's Go modules.
 
+## Docs for the other products
+
+Workflow, VelaUX, Terraform, Cluster Gateway, Prism and the addons have their own docs sections. This is the version of each that a KubeVela release ships with, and where to read about it:
+
+| KubeVela | [Workflow](/workflow/getting-started/introduction) | [Cluster Gateway](/cluster-gateway/getting-started/introduction) | [Terraform](/terraform/getting-started/introduction) controller | [VelaUX](/velaux/getting-started/introduction) addon | [Prism](/prism/getting-started/introduction) addon |
+| -------- | -------- | --------------- | ------------------------ | ------------- | ------------- |
+| v1.12 | [0.8](/workflow/next/getting-started/introduction) | v1.10.0-alpha.1 | v0.9.1 | v1.9.5 | v1.7.0 |
+| v1.11 | [0.7](/workflow/getting-started/introduction) | v1.9.2 from v1.11.2 (v1.9.0-alpha.2 before) | v0.8.2 from v1.11.2 (a v0.8.1 pre-release commit before) | v1.9.5 | v1.7.0 |
+| v1.10 | [0.6](/workflow/0.6/getting-started/introduction) | v1.9.2 from v1.10.10 (v1.9.0-alpha.2 before) | v0.8.2 from v1.10.10 (v0.8.0, then a v0.8.1 pre-release commit from v1.10.4) | v1.9.5 | v1.7.0 |
+| v1.9 | [0.6](/workflow/0.6/getting-started/introduction) | v1.9.0-alpha.2 | v0.8.0 from v1.9.7 (v0.7.10, then v0.7.11 from v1.9.2) | v1.9.5 | v1.7.0 |
+
+Workflow, Cluster Gateway and the Terraform controller are the versions vela-core is built with, as of the latest patch of each line (v1.12.0-alpha.3, v1.11.2, v1.10.10, v1.9.15); where a patch changed one, the cell says which. Cluster Gateway's is the image in the vela-core chart, which is the gateway that runs. VelaUX, Prism and the other [addons](/addons/overview) come from the addon catalog, so their version is whatever the catalog holds when you enable them. The Cluster Gateway, Terraform, VelaUX, Prism and Addons sections describe the current release only.
+
 ## How the notes are organised
 
 A minor release page (`vX.Y.0`) has these sections, and leaves out any that are empty:

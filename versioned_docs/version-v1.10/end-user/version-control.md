@@ -2,10 +2,11 @@
 title: Application Version Control
 ---
 
+import ApplicationRevisionArch from '@site/src/components/ApplicationRevisionArch';
+
 ## Introduction
 
-![overall-arch](../resources/application-revision-arch.jpg)
-
+<ApplicationRevisionArch />
 In KubeVela, ApplicationRevision keeps the snapshot of the application and all its runtime dependencies such as ComponentDefinition, external Policy or referred objects.
 This revision can be used to review the application changes and rollback to past configurations.
 
@@ -21,29 +22,13 @@ During the running of workflow, all related data are retrieved from the Applicat
 
 ## Use Guide
 
-Fo example, let's start with an application with external workflow and policies to deploy podinfo in managed clusters.
+For example, let's start with an application with external workflow and policies to deploy podinfo in managed clusters.
 
 :::tip
-We use reference of external workflow and policies, it works the same. You can refer to [Multi-cluster Application Delivery](../case-studies/multi-cluster.md) for more details.
+This example keeps its policies and workflow in separate objects; inline ones work the same way. See [Use policies and workflow outside the application](../case-studies/multi-cluster.md#use-policies-and-workflow-outside-the-application).
 :::
 
 ```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: podinfo
-  namespace: examples
-  annotations:
-    app.oam.dev/publishVersion: alpha1
-spec:
-  components:
-    - name: podinfo
-      type: webservice
-      properties:
-        image: stefanprodan/podinfo:6.0.1
-  workflow:
-    ref: make-release-in-hangzhou
----
 apiVersion: core.oam.dev/v1alpha1
 kind: Policy
 metadata:
@@ -78,6 +63,28 @@ steps:
     type: deploy
     properties:
       policies: ["topology-hangzhou-clusters", "override-high-availability"]
+---
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: podinfo
+  namespace: examples
+  annotations:
+    app.oam.dev/publishVersion: alpha1
+spec:
+  components:
+    - name: podinfo
+      type: webservice
+      properties:
+        image: stefanprodan/podinfo:6.0.1
+  workflow:
+    ref: make-release-in-hangzhou
+```
+
+Save it as `podinfo.yaml` and apply it. The Policies and the Workflow come first, because the Application is refused until the Workflow it references exists.
+
+```shell
+kubectl apply -f podinfo.yaml
 ```
 
 You can check the application status by:
@@ -92,38 +99,45 @@ vela status podinfo -n examples
 ```
 About:
 
-  Name:         podinfo                      
-  Namespace:    examples                     
+  Name:         podinfo
+  Namespace:    examples
   Created at:   2022-04-13 19:32:02 +0800 CST
-  Status:       runningWorkflow              
+  Healthy:      ❌
+  Details:      runningWorkflow
 
 Workflow:
 
-  mode: DAG
+  mode: StepByStep-DAG
   finished: false
   Suspend: false
   Terminated: false
   Steps
-  - id:auqaxnbix2
-    name:deploy-hangzhou
-    type:deploy
-    phase:running 
-    message:wait healthy
+  - id: auqaxnbix2
+    name: deploy-hangzhou
+    type: deploy
+    phase: running 
+    message: wait healthy
 
 Services:
 
   - Name: podinfo  
-    Cluster: velad-003  Namespace: examples
+    Cluster: velad-003
+    Namespace: examples
     Type: webservice
-    Unhealthy Ready:0/3
+    Health: ❌
+      Message: Ready:0/3
     Traits:
-      ✅ scaler
+      Type: scaler
+      Health: ✅
   - Name: podinfo  
-    Cluster: velad-002  Namespace: examples
+    Cluster: velad-002
+    Namespace: examples
     Type: webservice
-    Unhealthy Ready:0/3
+    Health: ❌
+      Message: Ready:0/3
     Traits:
-      ✅ scaler
+      Type: scaler
+      Health: ✅
 ```
 </details>
 
@@ -147,7 +161,7 @@ This application should be successful after a while.
 
 Now if we edit the component image and set it to an invalid value, such as `stefanprodan/podinfo:6.0.xxx`. 
 The application will not re-run the workflow to make this change take effect automatically.
-But the application spec changes, it means the next workflow run will update the deployment image.
+The spec has changed, but nothing is deployed until you publish a new version.
 
 ### Inspect Changes across Revisions
 
@@ -206,10 +220,10 @@ There are two ways to publish an app with specified revision. You can choose any
     +   app.oam.dev/publishVersion: alpha2
     ...
     ```
-2. Run `vela up --publish-version <revision-name` to publish the new version.
-  ```
-  vela up podinfo -n examples --publish-version alpha2
-  ```
+2. Run `vela up <app> --publish-version <version>` to publish the new version.
+    ```
+    vela up podinfo -n examples --publish-version alpha2
+    ```
 
 We will find the application stuck at `runningWorkflow` as the deployment cannot finish the update progress due to the invalid image.
 
@@ -223,9 +237,9 @@ vela revision list podinfo -n examples
 <summary>expected output</summary>
 
 ```bash
-NAME            PUBLISH_VERSION SUCCEEDED       HASH                    BEGIN_TIME              STATUS          SIZE    
-podinfo-v1      alpha1          true            65844934c2d07288        2022-04-13 19:32:02     Succeeded       23.7 KiB
-podinfo-v2      alpha2          false           44124fb1a5146a4d        2022-04-13 19:46:50     Executing       23.7 KiB
+NAME            PUBLISH_VERSION SUCCEEDED       HASH                    BEGIN_TIME              STATUS          SIZE
+podinfo-v1      alpha1          true            65844934c2d07288        2022-04-13 19:32:02     Succeeded       10.5 KiB (Compressed, 34%)
+podinfo-v2      alpha2          false           44124fb1a5146a4d                                NotStart        10.5 KiB (Compressed, 34%)
 ```
 
 </details>
@@ -251,7 +265,6 @@ vela workflow rollback podinfo -n examples
 Find succeeded application revision podinfo-v1 (PublishVersion: alpha1) to rollback.
 Application spec rollback successfully.
 Application status rollback successfully.
-Application rollback completed.
 Application outdated revision cleaned up.
 ```
 </details>
@@ -293,14 +306,14 @@ vela revision list podinfo -n examples
 
 ```shell
 NAME            PUBLISH_VERSION SUCCEEDED       HASH                    BEGIN_TIME              STATUS          SIZE
-podinfo-v1      alpha1          true            65844934c2d07288        2022-04-13 20:45:19     Succeeded       23.7 KiB
-podinfo-v2      alpha2          true            4acae1a66013283         2022-04-13 20:45:45     Succeeded       23.7 KiB
-podinfo-v3      alpha3          false           44124fb1a5146a4d        2022-04-13 20:46:28     Executing       23.7 KiB
+podinfo-v1      alpha1          true            65844934c2d07288        2022-04-13 20:45:19     Succeeded       10.5 KiB (Compressed, 34%)
+podinfo-v2      alpha2          true            4acae1a66013283         2022-04-13 20:45:45     Succeeded       10.5 KiB (Compressed, 34%)
+podinfo-v3      alpha3          false           44124fb1a5146a4d                                NotStart        10.5 KiB (Compressed, 34%)
 ```
 
 </details>
 
-Alternatively, you can directly run the following command to rollback to a specified revision:
+To re-publish revision `podinfo-v1` under a new version:
 
 ```
 vela up podinfo -n examples --revision podinfo-v1 --publish-version beta1
@@ -310,14 +323,13 @@ This process will let the application to use the past revision and re-run the wh
 
 ```shell
 NAME            PUBLISH_VERSION SUCCEEDED       HASH                    BEGIN_TIME              STATUS          SIZE
-podinfo-v1      alpha1          true            65844934c2d07288        2022-04-13 20:45:19     Succeeded       23.7 KiB
-podinfo-v2      alpha2          true            4acae1a66013283         2022-04-13 20:45:45     Succeeded       23.7 KiB
-podinfo-v3      alpha3          false           44124fb1a5146a4d        2022-04-13 20:46:28     Failed          23.7 KiB
-podinfo-v4      beta1           true            65844934c2d07288        2022-04-13 20:46:49     Succeeded       23.7 KiB
+podinfo-v2      alpha2          true            4acae1a66013283         2022-04-13 20:45:45     Succeeded       10.5 KiB (Compressed, 34%)
+podinfo-v3      alpha3          false           44124fb1a5146a4d        2022-04-13 20:46:28     Failed          10.5 KiB (Compressed, 34%)
+podinfo-v4      beta1           true            65844934c2d07288        2022-04-13 20:46:49     Succeeded       10.5 KiB (Compressed, 34%)
 ```
 
-You can find that the *beta1* version shares the same hash with *alpha1* version.
+The *beta1* version has the same hash as *alpha1* in the earlier list. `podinfo-v1` itself is gone: old revisions are garbage collected, as the note below explains.
 
 :::info
-By default, application will hold at most 10 revisions. If you want to modify this number, you can set it in the `--application-revision-limit` [bootstrap parameter](../platform-engineers/system-operation/bootstrap-parameters.md) of KubeVela controller.
+The KubeVela Helm chart keeps 2 unused revisions per Application, besides the one in use, and garbage collects older ones. Change it for the whole controller with the chart's `applicationRevisionLimit` value (the controller's `--application-revision-limit` [bootstrap parameter](../platform-engineers/system-operation/bootstrap-parameters.md)), or for one Application with the `applicationRevisionLimit` property of a [`garbage-collect` policy](./policies/gc.md).
 :::

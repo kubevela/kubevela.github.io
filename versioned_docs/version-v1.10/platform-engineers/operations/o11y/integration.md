@@ -13,25 +13,34 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: register-prometheus
+  namespace: vela-system
 spec:
   components:
     - type: grafana-datasource
       name: my-prometheus
       properties:
-        access: proxy
-        basicAuth: false
-        isDefault: false
-        name: MyPrometheus
-        readOnly: true
-        withCredentials: true
-        jsonData:
-          httpHeaderName1: Authorization
-          tlsSkipVerify: true
-        secureJsonFields:
-          httpHeaderValue1: <token of your prometheus access>
-        type: prometheus
-        url: <my-prometheus url>
+        uid: my-prometheus
+        data: |
+          {
+            "name": "MyPrometheus",
+            "type": "prometheus",
+            "access": "proxy",
+            "url": "<my-prometheus url>",
+            "jsonData": {
+              "httpHeaderName1": "Authorization",
+              "tlsSkipVerify": true
+            },
+            "secureJsonData": {
+              "httpHeaderValue1": "Bearer <token of your prometheus access>"
+            }
+          }
 ```
+
+`uid` names the datasource in Grafana, and `data` is the [Grafana datasource model](https://grafana.com/docs/grafana/latest/developers/http_api/data_source/) as a JSON string.
+
+:::caution
+The token is stored in the Application and in every ApplicationRevision, so anyone who can read Applications in that namespace can read it. Keep the Application in a namespace only administrators can read, such as `vela-system`.
+:::
 
 For example, if you are using the Prometheus service on Alibaba Cloud (ARMS), you can go to the Prometheus setting page and find the access url & access token.
 
@@ -48,6 +57,7 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: register-grafana
+  namespace: vela-system
 spec:
   components:
     - type: grafana-access
@@ -90,10 +100,6 @@ kubectl get grafanadatasource -l grafana=my-grafana
 
 For more details, you can refer to [vela-prism](https://github.com/kubevela/prism#grafana-related-apis).
 
-## Integrate through KubeVela Config Management
-
-It is also possible to make integrations through KubeVela's configuration management system, no matter you are using CLI or VelaUX.
-
 ## Integrate Other Tools or Systems
 
-There are a wide range of community tools or eco-systems that users can leverage for building their observability system, such as prometheus-operator or DataDog. By far, KubeVela does not have existing best practices for those integration. We may integrate with those popular projects through KubeVela addons in the future. We are also welcome to community contributions for broader explorations and more connections.
+For other tools, use their own install. The `prometheus-scrape` trait (from the `prometheus-server` addon) creates a `<component>-prometheus-scrape` Service in front of the component and puts the `prometheus.io/scrape`, `prometheus.io/port` and `prometheus.io/path` annotations on it. Those annotations are all a collector reads, so the trait suits a tool that discovers targets from them, such as Datadog with its Prometheus annotation scraping turned on. prometheus-operator does not read those annotations: give it a `ServiceMonitor` or `PodMonitor` instead.

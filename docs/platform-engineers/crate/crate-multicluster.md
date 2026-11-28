@@ -368,7 +368,7 @@ Step deploy-crate-runtime failed: function call error for deploy: failed to get 
 
 ## Send workloads to the managed clusters
 
-The definitions are on the hub. Write the Application on the hub, in the install namespace, and send the workload with a [topology policy](../../case-studies/multi-cluster.md):
+The definitions are on the hub. Write the Application on the hub, in the install namespace, and send the workload with a [topology policy](../../end-user/policies/multi-cluster.md#choose-the-clusters):
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -433,4 +433,4 @@ kubectl -n platform delete application crate-aws-s3-deploy
 ## Next steps
 
 - Place the crates of an addon: [Crates in Addons](./crate-addon.md#place-the-crates-of-an-addon).
-- Learn about multi-cluster Applications: [Multi Cluster Application](../../case-studies/multi-cluster.md).
+- Learn about multi-cluster Applications: [Multi-cluster Application Delivery](../../end-user/policies/multi-cluster.md).

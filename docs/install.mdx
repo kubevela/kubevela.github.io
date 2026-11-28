@@ -2,22 +2,32 @@
 title: Installation Overview
 ---
 
-Here are two installation methods available according to your environment:
+How you install KubeVela depends on whether you already have a Kubernetes cluster.
 
-### Don't have Kubernetes cluster yet?
+### No cluster yet?
 
-For those who are new to KubeVela and Kubernetes, installing KubeVela in standalone mode is the best choice. It doesn't require you to have any Kubernetes knowledge to experience KubeVela features.
-We developed [VelaD](https://github.com/kubevela/velad) for this purpose, which packages KubeVela along its dependencies including Kubernetes into a single binary.
-Please follow the document linked below to install KubeVela.
+Create one with k3d or kind (one command) and install KubeVela into it. With [k3d](https://k3d.io/), which needs Docker:
 
-- [Standalone Installation](./installation/standalone.mdx): Install KubeVela on a local machine or a remote server(Public Cloud or On-premise) based on Linux, macOS or Windows operating system.
+```shell
+# 1. Create a local cluster
+k3d cluster create kubevela
 
-:::info
-VelaD suits great for local development and quick demos, it leverages [K3s](https://github.com/k3s-io/k3s) to manage Kubernetes. We strongly recommend you to [install KubeVela with managed Kubernetes services](./installation/kubernetes.mdx) for production usage.
+# 2. Install the vela CLI, pinned to this release
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.12.0
+
+# 3. Install KubeVela into the cluster
+vela install
+```
+
+With [kind](https://kind.sigs.k8s.io/), the first step is `kind create cluster --name kubevela`; the rest is the same. `vela install` installs the KubeVela version that matches the CLI. See [Kubernetes Cluster](./installation/kubernetes.mdx) for the other ways to get the CLI and for installing with Helm.
+
+:::caution
+[VelaD](https://github.com/kubevela/velad), the single-binary [standalone install](./installation/standalone.mdx), ships KubeVela 1.9.5. Features documented here from later releases are not available in it, so use the steps above to try KubeVela 1.12.
 :::
 
-### Already have Kubernetes cluster
-- [Kubernetes Cluster](./installation/kubernetes.mdx): Install KubeVela in existing Kubernetes cluster.
+### Already have a Kubernetes cluster?
+
+- [Kubernetes Cluster](./installation/kubernetes.mdx): install KubeVela into an existing cluster. Use a managed Kubernetes service for production.
 
 :::tip
 - For upgrading from existing KubeVela control plane, please read the [upgrade guide](./upgrade-guides/overview.mdx).

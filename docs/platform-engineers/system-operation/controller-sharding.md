@@ -2,6 +2,8 @@
 title: Controller Sharding
 ---
 
+import ControllerSharding from '@site/src/components/ControllerSharding';
+
 ## Background
 
 As many adopters start to choose KubeVela to manage large scale applications in their production, we have more and more scenarios and experiences on performance issue.
@@ -19,9 +21,9 @@ Therefore, KubeVela core controller supports sharding since v1.8 which allows ho
 
 ## Architecture
 
-![image](../../resources/vela-core-sharding-arch.jpg)
+<ControllerSharding />
 
-When KuebVela controller is running in sharding mode, multiple core controllers can work concurrently. Each one will focus on a specific subset of the applications, identified by `shard-id`. There will be one master controller and multiple slave controllers.
+When the KubeVela controller is running in sharding mode, multiple core controllers can work concurrently. Each one will focus on a specific subset of the applications, identified by `shard-id`. There will be one master controller and multiple slave controllers.
 
 **Master controller**: The master controller will enable all the components, such as ComponentDefinitionController, TraitDefinitionController, ApplicationController, Webhooks, etc.
 
@@ -31,33 +33,47 @@ By default, it will watch the pods within the same namespace as it runs. The pod
 
 **Slave controller**: The slave mode controller will only start the ApplicationController and will not enable others like Webhook or ComponentDefinitionController. It is dedicated to applications that carries the matched labels `controller.core.oam.dev/scheduled-shard-id=<shard-id>`.
 
+:::caution
+Only the master controller serves the admission webhooks. While it is down, the API server can't call them, so no Application can be created or changed, whichever shard it belongs to. Run the master with `replicaCount` 2 or more (`--set replicaCount=2`) so a webhook server is always up.
+:::
+
 ## Use Guide
 
 ### Installation
 
-1. First, install KubeVela with sharding enabled. This will let the KubeVela core controller deployed in master mode.
+1. Install KubeVela with sharding enabled. The core controller runs in master mode.
 
 ```shell
 helm install kubevela kubevela/vela-core -n vela-system --set sharding.enabled=true
 ```
 
-2. Second, deploy slave mode application controller.
+By default the master discovers the shards it can schedule to from the running controller pods. To fix the list instead, name the shards when you install:
+
+```shell
+helm install kubevela kubevela/vela-core -n vela-system --set sharding.enabled=true \
+  --set sharding.schedulableShards=shard-0\,shard-1
+```
+
+2. Deploy the slave mode application controllers.
 
 ```shell
 vela addon enable vela-core-shard-manager nShards=3
 ```
 
-This will start 3 slave controllers that runs with the same configuration as the master controller. For example, if the master one use the flag `max-workflow-wait-backoff-time=60`, all slave controllers will use the same.
+This starts 3 slave controllers that run with the same configuration as the master controller. For example, if the master uses the flag `max-workflow-wait-backoff-time=60`, all slave controllers use it too.
 
-You can customize the resource usage by
+You can set the resources each one gets:
 
 ```shell
 vela addon enable vela-core-shard-manager nShards=3 cpu=1 memory=2Gi
 ```
 
-:::tip
-There are different ways to do it.
-1. Use kubectl to copy the deployment of master and modify it. Like
+### Run shards without the addon
+
+The addon is one way to run slave controllers. You can also run them yourself:
+
+1. Copy the master Deployment and change its shard labels and ID. This creates a copy of the master vela-core that runs a slave with shard-id `shard-0`:
+
 ```shell
 kubectl get deploy kubevela-vela-core -oyaml -n vela-system | \
     sed 's/schedulable-shards=/shard-id=shard-0/g' | \
@@ -66,13 +82,23 @@ kubectl get deploy kubevela-vela-core -oyaml -n vela-system | \
     sed 's/name: kubevela/name: kubevela-shard/g' | \
     kubectl apply -f -
 ```
-This will create a copy of the master vela-core and run a slave replica with shard-id as *shard-0*.
-2. Just create a new deployment and set the labels to match the above mentioned requirements.
 
-KubeVela's controller sharding does not require every shard to have the same configuration. You can let different shards to have different resource usage or rate limitations, or even different image versions.
+2. Or write a Deployment of your own: run the controller with `--enable-sharding --shard-id=<shard-id>`, and give its pods the labels `app.kubernetes.io/name: vela-core` and `controller.core.oam.dev/shard-id: <shard-id>` so the master discovers them.
 
-> In the case you do not want dynamic discovery for available application controller, you can specify what shards are schedulable by add arg `--set sharding.schedulableShards=shard-0,shard-1` to the installation of KubeVela.
-:::
+Shards don't need the same configuration. Different shards can have different resources, rate limits, or even image versions.
+
+### Configuration
+
+These settings change how the master schedules Applications to shards:
+
+| Setting | Where | Default | What it does |
+| --- | --- | --- | --- |
+| `sharding.schedulableShards` | Helm value (`--schedulable-shards`) | empty | The shard IDs the master schedules to. Empty means it discovers them from the running pods. |
+| `--sharding-slave-discovery-resync-period` | Controller flag | `5m` | How often the master re-lists the shard pods when it discovers them. |
+| `featureGates.disableWebhookAutoSchedule` | Helm value (`DisableWebhookAutoSchedule` gate) | `false` | The mutating webhook stops assigning shards, so you assign them yourself (see [Extension](#extension)). |
+| `featureGates.validateComponentWhenSharding` | Helm value (`ValidateComponentWhenSharding` gate) | `false` | The validating webhook checks components in sharding mode. It reads ApplicationRevisions from the API server, because the master doesn't cache them in sharding mode, so it costs extra requests. |
+
+When both `sharding.enabled` and `authentication.enabled` are set, the chart also creates a `shard-scheduler` Role and RoleBinding (`kubevela-vela-core:shard-scheduler` for a release named `kubevela`), which let the controller's ServiceAccount get, list and watch pods in its namespace to discover shards.
 
 ### CLI
 
@@ -96,7 +122,7 @@ Once you have understood the working mechanism of KubeVela's controller sharding
 ## FAQ
 
 Q: What will happen when the master one is down?
-A: If the webhook is not enabled, then only applications scheduled to master shard will be affected. Users can still create or change applications in this case. If the webhook is enabled, the webhook will be down if the master one is down. Then the mutating webhook and validating webhook will fail so no new application creation or change will be accepted. Old applications that are scheduled to master will not be processed anymore. Others that are scheduled to other shards will not be affected.
+A: Applications scheduled to the master shard are not processed until it is back. Applications on other shards keep running. If the webhook is enabled, no Application can be created or changed until the master is back (see [Architecture](#architecture)). If the webhook is not enabled, users can still create and change Applications.
 
 Q: What will happen when a slave mode controller is down?
 A: For applications that are not scheduled to that shard, nothing will happen. For applications that are scheduled to the broken shard, succeeded applications will not run state-keep or gc but the delivered resources will not be touched. For applications that are still running workflow, they will not be handled but can be recovered instantly when the controller is restarted.

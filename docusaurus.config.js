@@ -1,19 +1,44 @@
-/** @type {import('@docusaurus/types').DocusaurusConfig} */
+const { fromGitHub } = require('./scripts/announcement');
+
 // Copy release-notes/ and upgrade-guides/ into every docs version before any plugin
 // loads. See scripts/sync-release-pages.js.
 const {syncReleasePages, releasePagesPlugin} = require('./scripts/sync-release-pages.js');
 const {SECTIONS} = require('./sidebars-releases.js');
+const {sectionItem} = require('./section-icons.js');
 syncReleasePages();
 // /docs/release-notes/..., /docs/upgrade-guides/...: the latest version's copies.
 const RELEASE_DOCS_PATH = new RegExp(`^/docs/(${SECTIONS.map((s) => s.dir).join('|')})/`);
 
-module.exports = {
+// Pages that moved from the next docs into a section of their own (written by the split tooling). Each new URL
+// redirects from its old /docs/next/ one; released versions keep their own copies, so they need none. A page moved
+// into a versioned section lands in that section's next version.
+const VERSIONED_SECTIONS = ['workflow'];
+const MOVED_FROM = Object.fromEntries(
+  Object.values(require('./moved-docs.json')).map(({section, to, from_url}) => [
+    `/${section}/${VERSIONED_SECTIONS.includes(section) ? 'next/' : ''}${to.replace(/(\/index)?\.mdx?$/, '')}`,
+    from_url,
+  ]),
+);
+// Pages moved within a section: {old URL: new URL}. A moved page redirects from its old URL and from the core URL the
+// old one was moved from, if any.
+const SECTION_REDIRECTS = require('./section-redirects.json');
+function redirectsTo(existingPath) {
+  const from = [MOVED_FROM[existingPath]];
+  for (const [oldPath, newPath] of Object.entries(SECTION_REDIRECTS)) {
+    if (newPath === existingPath) from.push(oldPath, MOVED_FROM[oldPath]);
+  }
+  const found = from.filter(Boolean);
+  return found.length ? found : undefined;
+}
+
+/** @type {import('@docusaurus/types').DocusaurusConfig} */
+const config = {
   title: 'KubeVela',
-  tagline: 'Make shipping applications more enjoyable.',
+  tagline: 'Platform Engineering. Simplified.',
   url: 'https://kubevela.io',
   baseUrl: '/',
   trailingSlash: true,
-  onBrokenLinks: 'warn',
+  onBrokenLinks: 'throw',
   favicon: 'img/favicons/favicon.ico',
   organizationName: 'kubevela', // Usually your GitHub org/user name.
   projectName: 'kubevela.io', // Usually your repo name.
@@ -32,17 +57,13 @@ module.exports = {
   markdown: {
     mermaid: true,
     hooks: {
-      onBrokenMarkdownLinks: 'warn',
+      onBrokenMarkdownLinks: 'throw',
     },
   },
   themes: ['@docusaurus/theme-mermaid'],
   themeConfig: {
-    announcementBar: {
-      id: 'start',
-      content:
-          '<div class="header-item">⭐️ If you like KubeVela, give it a star on <a target="_blank" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela">GitHub</a>! ⭐️</div>' +
-          '<div class="header-item"><span>KubeVela v1.11 is now available!</span> <a target="_blank" style="color: var(--ifm-color-primary)" rel="noopener noreferrer" href="https://github.com/kubevela/kubevela/releases/tag/v1.11.0">Read Release Note</a></div>',
-    },
+    // The card shown when a page is shared on Slack, social sites and the like.
+    image: 'img/social-card.png',
     algolia: {
       appId: 'PXMFHFWUGZ',
       apiKey: '2d1f4924c15d2cc0947820c01e65521f',
@@ -60,12 +81,29 @@ module.exports = {
         {
           type: 'docsVersionDropdown',
           position: 'right',
+          // KubeVela's versions only; hidden on the unversioned sections (custom.scss).
+          className: 'kv-version',
         },
         {
-          to: 'docs/',
-          activeBasePath: 'docs',
+          type: 'docsVersionDropdown',
+          docsPluginId: 'workflow',
+          position: 'right',
+          // Workflow's versions; shown only on the Workflow section (custom.scss).
+          className: 'workflow-version-dropdown',
+        },
+        {
+          type: 'dropdown',
           label: 'Documentation',
           position: 'left',
+          items: [
+            {type: 'custom-product', docsPluginId: 'default', to: 'docs/', activeBaseRegex: '^(/zh)?/docs', html: sectionItem('default', 'KubeVela')},
+            {type: 'custom-product', to: 'addons/getting-started/introduction', activeBaseRegex: '^(/zh)?/addons', html: sectionItem('addons', 'KubeVela Addons')},
+            {type: 'custom-product', to: 'velaux/getting-started/introduction', activeBaseRegex: '^(/zh)?/velaux', html: sectionItem('velaux', 'VelaUX')},
+            {type: 'custom-product', docsPluginId: 'workflow', to: 'workflow/getting-started/introduction', activeBaseRegex: '^(/zh)?/workflow', html: sectionItem('workflow', 'Vela Workflow')},
+            {type: 'custom-product', to: 'cluster-gateway/getting-started/introduction', activeBaseRegex: '^(/zh)?/cluster-gateway', html: sectionItem('cluster-gateway', 'Cluster Gateway')},
+            {type: 'custom-product', to: 'prism/getting-started/introduction', activeBaseRegex: '^(/zh)?/prism', html: sectionItem('prism', 'Prism')},
+            {type: 'custom-product', to: 'terraform/getting-started/introduction', activeBaseRegex: '^(/zh)?/terraform', html: sectionItem('terraform', 'Terraform Controller')},
+          ],
         },
         {
           to: 'blog',
@@ -73,10 +111,20 @@ module.exports = {
           position: 'left',
         },
         {
-          to: 'videos/best-practice/jenkins',
-          activeBasePath: 'videos',
-          label: 'Videos',
+          type: 'dropdown',
+          label: 'Resources',
           position: 'left',
+          items: [
+            {
+              to: 'videos/best-practice/jenkins',
+              activeBasePath: 'videos',
+              label: 'Videos',
+            },
+            {
+              href: 'https://github.com/kubevela/samples',
+              label: 'Examples',
+            },
+          ],
         },
         {
           href: 'https://github.com/kubevela/community',
@@ -84,18 +132,19 @@ module.exports = {
           position: 'left',
         },
         {
-          href: 'https://github.com/kubevela/samples',
-          label: 'Examples',
-          position: 'left',
-        },
-        {
           type: 'localeDropdown',
           position: 'right',
+        },
+        // Search and Ask Devin sit together as one control.
+        {
+          type: 'search',
+          position: 'right',
+          className: 'kv-search',
         },
         {
           type: 'html',
           position: 'right',
-          value: '<a href="https://deepwiki.com/kubevela/kubevela" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-deepwiki-link" title="AI Search" aria-label="Ask Devin AI Search" style="display: flex; align-items: center; gap: 6px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="17" r="1.5" fill="currentColor"/></svg><span>Ask Devin</span></a>',
+          value: '<a href="https://deepwiki.com/kubevela/kubevela" target="_blank" rel="noopener noreferrer" class="navbar__link header-deepwiki-link" title="AI Search" aria-label="Ask Devin AI Search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="17" r="1.5" fill="currentColor"/></svg><span>Ask Devin</span></a>',
         },
         {
           href: 'https://github.com/kubevela/kubevela',
@@ -103,9 +152,16 @@ module.exports = {
           'aria-label': 'GitHub repository',
           position: 'right',
         },
+        {
+          href: 'https://cloud-native.slack.com/archives/C01BLQ3HTJA',
+          className: 'header-slack-link',
+          'aria-label': 'KubeVela on the CNCF Slack',
+          position: 'right',
+        },
       ],
     },
     footer: {
+      style: 'light',
       links: [
         {
           title: 'Documentation',
@@ -132,11 +188,15 @@ module.exports = {
               href: 'https://cloud-native.slack.com/archives/C01BLQ3HTJA',
             },
             {
-              label: 'DingTalk (23310022)',
-              href: '.',
+              label: 'GitHub',
+              href: 'https://github.com/kubevela/kubevela',
+            },
+            // The Chinese community's channels show on the Chinese site only.
+            {
+              html: '<span class="footer__link-item kv-zh-only">DingTalk (23310022)</span>',
             },
             {
-                html: '<div class="wechat"> <a class="wechat-label">Wechat Group(Scan code to request joining)</a> <a class="wechat-img" rel="noreferrer noopener" aria-label="Wechat Group"><img src="https://kubevela.io/images/barnett-wechat.jpg" alt="Broker wechat to add you into the user group."></a></div>',
+                html: '<div class="wechat kv-zh-only"> <a class="wechat-label">Wechat Group(Scan code to request joining)</a> <a class="wechat-img" rel="noreferrer noopener" aria-label="Wechat Group"><img src="https://kubevela.io/images/barnett-wechat.jpg" alt="Broker wechat to add you into the user group."></a></div>',
             },
           ],
         },
@@ -144,20 +204,12 @@ module.exports = {
           title: 'More',
           items: [
             {
-              label: 'GitHub',
-              href: 'https://github.com/kubevela/kubevela',
-            },
-            {
               label: 'Blog',
               to: 'blog',
             },
             {
               label: 'Videos',
               to: 'videos/best-practice/jenkins',
-            },
-            {
-              to: '/micro',
-              label: 'Microservice',
             },
           ],
         },
@@ -168,20 +220,25 @@ module.exports = {
         <br />
         <br />
         © ${new Date().getFullYear()} The Linux Foundation. All rights reserved. The Linux Foundation has registered trademarks and uses trademarks. For a list of trademarks of The Linux Foundation, please see our <a href="https://www.linuxfoundation.org/trademark-usage/"> Trademark Usage</a> page.
-        <br />
-        <a href="https://zzlz.gsxt.gov.cn/businessCheck/verifKey.do?showType=p&serial=913301105865146816-SAIC_SHOW_1000009133011058651468161661997004982&signData=MEYCIQDV2SEwsPqwXWkyqyF/+schpsqmPrjT8uEplDrD7xfdhgIhAKoSoKR6iR+YPF4q4CCLYvm8ruB1nFKRkibUx1A5n/Kn" target="_blank"><img alt="license" style="width: 20px;margin-bottom: -5px;" src="/img/beian/license.gif"/></a> <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33011002016698" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img src="" style="float:left;"/><p style="height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">浙公网安备 33011002016698号</p></a> <a href="https://beian.miit.gov.cn/" target="_blank">浙ICP备12022327号-975</a>
       `,
     },
+    // Diagrams in the site's neutrals rather than mermaid's default colours.
+    mermaid: {
+      theme: { light: 'neutral', dark: 'dark' },
+    },
     prism: {
-      theme: require('prism-react-renderer').themes.dracula,
+      // GitHub's code colours on light, One Dark on dark, both on the site's
+      // slate backgrounds.
+      theme: require('prism-react-renderer').themes.github,
+      darkTheme: require('prism-react-renderer').themes.oneDark,
       additionalLanguages: ['cue', 'powershell'],
     },
     zoom: {
       selector: '.markdown :not(em) > img',
       config: {
         background: {
-          light: 'rgb(255, 255, 255)',
-          dark: 'rgb(50, 50, 50)',
+          light: 'rgba(248, 250, 252, 0.97)',
+          dark: 'rgba(11, 18, 32, 0.97)',
         },
       },
     },
@@ -272,12 +329,11 @@ module.exports = {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: function ({locale, docPath}) {
-            return `https://github.com/kubevela/kubevela.io/edit/main/docs/${docPath}`;
+            return `https://github.com/kubevela/kubevela.github.io/edit/main/docs/${docPath}`;
           },
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
           includeCurrentVersion: true,
-          remarkPlugins: [require('mdx-mermaid')],
         },
         gtag: {
           trackingID: 'G-5GLR1Y52M7',
@@ -287,7 +343,7 @@ module.exports = {
           blogSidebarTitle: 'All posts',
           blogSidebarCount: 'ALL',
           showReadingTime: true,
-          editUrl: 'https://github.com/kubevela/kubevela.io/tree/main/',
+          editUrl: 'https://github.com/kubevela/kubevela.github.io/tree/main/',
           onInlineAuthors: 'ignore',
         },
         theme: {
@@ -311,6 +367,98 @@ module.exports = {
       },
     ],
     [
+      '@docusaurus/plugin-content-docs',
+      {
+        // Workflow is versioned by the engine, kubevela/workflow, not by KubeVela. next is 0.8, the engine in KubeVela
+        // 1.12; 0.7 (KubeVela 1.11) is served at /workflow/, as /docs/ serves 1.11.
+        id: 'workflow',
+        path: 'workflow',
+        routeBasePath: 'workflow',
+        sidebarPath: require.resolve('./sidebar-workflow.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+        lastVersion: '0.7',
+        versions: {
+          // The banner reads "<site title> <label>", so the label carries the product name.
+          current: {label: 'Workflow 0.8', path: 'next'},
+          '0.7': {label: 'Workflow 0.7'},
+          '0.6': {label: 'Workflow 0.6'},
+        },
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        // VelaUX is versioned by its own releases, not by KubeVela's. Its one version for now is 1.9, the release the
+        // velaux addon installs; it is cut as a version when the VelaUX 1.12 docs start.
+        id: 'velaux',
+        path: 'velaux',
+        routeBasePath: 'velaux',
+        sidebarPath: require.resolve('./sidebar-velaux.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+        versions: {
+          // The banner reads "<site title> <label>", so the label carries the product name.
+          current: {label: 'VelaUX 1.9', banner: 'none'},
+        },
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        // Terraform follows terraform-controller and the cloud resource modules as they are now, so it is not versioned.
+        id: 'terraform',
+        path: 'terraform',
+        routeBasePath: 'terraform',
+        sidebarPath: require.resolve('./sidebar-terraform.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        // The addon reference pages follow the catalog as it is now, not a KubeVela release, so they are not versioned.
+        id: 'addons',
+        path: 'addons',
+        routeBasePath: 'addons',
+        sidebarPath: require.resolve('./sidebar-addons.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        // Cluster Gateway is a small standalone section describing the version KubeVela's next release pins; its
+        // multi-cluster use stays in the KubeVela docs. Not versioned.
+        id: 'cluster-gateway',
+        path: 'cluster-gateway',
+        routeBasePath: 'cluster-gateway',
+        sidebarPath: require.resolve('./sidebar-cluster-gateway.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        // Prism, KubeVela's aggregated API extensions, describing the version the vela-prism addon runs. Not versioned.
+        id: 'prism',
+        path: 'prism',
+        routeBasePath: 'prism',
+        sidebarPath: require.resolve('./sidebar-prism.js'),
+        editUrl: 'https://github.com/kubevela/kubevela.github.io/edit/main/',
+        showLastUpdateAuthor: true,
+        showLastUpdateTime: true,
+      },
+    ],
+    [
       '@docusaurus/plugin-client-redirects',
       {
         // Release Notes and Upgrade Guides used to be served at
@@ -320,7 +468,7 @@ module.exports = {
           if (RELEASE_DOCS_PATH.test(existingPath)) {
             return existingPath.slice('/docs'.length);
           }
-          return undefined;
+          return redirectsTo(existingPath.replace(/\/$/, ''));
         },
       },
     ],
@@ -342,18 +490,22 @@ module.exports = {
       },
     ],
   ],
-  scripts: [
-    {
-      src: '/custom.js',
-      async: true,
-    },
-    {
-      src: '//g.alicdn.com/mamba/assets/0.0.15/mse-arc-ui.min.js',
-    },
-  ],
-  stylesheets: [
-    {
-      href: '//g.alicdn.com/mamba/assets/0.0.15/mse-arc-ui.min.css',
-    },
-  ],
+  // callTime shows the community call in the announcement bar in the reader's
+  // own time zone.
+  clientModules: [require.resolve('./src/clientModules/callTime.js'), require.resolve('./src/clientModules/konami.js')],
+};
+
+// The announcement bar and the next community call are read from GitHub at
+// build time; with nothing to announce the site has no bar.
+module.exports = async function createConfig() {
+  // The language menu appears once the site has more than one language.
+  if (config.i18n.locales.length < 2) {
+    config.themeConfig.navbar.items = config.themeConfig.navbar.items.filter((i) => i.type !== 'localeDropdown');
+  }
+  const { announcementBar, nextCall } = await fromGitHub();
+  if (announcementBar) {
+    config.themeConfig.announcementBar = announcementBar;
+  }
+  config.customFields = { ...config.customFields, nextCall };
+  return config;
 };

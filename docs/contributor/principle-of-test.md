@@ -2,15 +2,20 @@
 title: Principle of Test
 ---
 
-## Definition of Concept
+KubeVela has four kinds of test. Each one proves something the others can't, and each costs more to run than the one before it.
 
-Generally, there are three types of test cases:
+## Where tests live and how to run them
 
-- unit test
-- integration test, with mocking api for test
-- end-to-end (e2e) test
+All commands run from the root of the [kubevela](https://github.com/kubevela/kubevela) repository.
 
-Each of them will bring us different gains and pains. We should follow the principles below for better development life.
+| Tier | What it proves | Where it lives | Run it |
+| --- | --- | --- | --- |
+| Unit | One function or package behaves as designed. | `*_test.go` beside the code | `go test ./pkg/<package>/...` |
+| Integration | Packages work together against a real Kubernetes API server ([envtest](https://book.kubebuilder.io/reference/envtest.html)), with no controllers running. | Ginkgo suites (`suite_test.go`) beside the code, under `pkg/` | `make test`, which downloads envtest and sets `KUBEBUILDER_ASSETS`. For one package, run `make envtest` once, then `KUBEBUILDER_ASSETS="$(bin/setup-envtest use 1.37.0 -p path)" go test ./pkg/<package>/...` (the version is `ENVTEST_K8S_VERSION` in `makefiles/dependency.mk`) |
+| Definition | Each shipped X-Definition renders what its tests expect. | `*_test.cue` beside the definitions in `vela-templates/definitions/` | `make test-definitions` |
+| E2E | The controller, CLI and addons do what a user expects, on a real k3d cluster. | `test/e2e-*` and `e2e/` | `make e2e-test-local` creates the k3d cluster and runs the module suites; each suite also has its own `make e2e-*` target in `makefiles/e2e.mk` |
+
+`make test` runs the unit and integration tiers together, since both are plain `go test`. Without `KUBEBUILDER_ASSETS`, an integration suite fails in `BeforeSuite` without naming the cause.
 
 ## Unit Test
 
@@ -25,7 +30,7 @@ Basic principles for writing a single test are:
 
 - Keep It Simple and Stupid.
 - One case covers only one scenario.
-- Mock tools (such as `golang/mock`) are powerful, but **NOT recommended**. If you assume that you have to introduce mocking to a unit test, what you really need is an integration test or even an e2e test。
+- Mock tools (such as `golang/mock`) are powerful, but **NOT recommended**. If you assume that you have to introduce mocking to a unit test, what you really need is an integration test or even an e2e test.
 
 A single test requires high efficiency. For example, during code refactoring, after a function logic is modified, unit tests of the entire module should be triggered to ensure that the modification meets expectations.
 
@@ -35,8 +40,8 @@ The purpose of an integration test is to ensure the interaction between modules 
 
 Let's use an example to learn how it works. In KubeVela project, integration tests are mainly divided into two categories:
 
-- The vela core controller. You need to add corresponding tests for major processes such as render, orchestrate, and deploy the CRD results into Kubernetes. In this case, you will use a mock server for Kubernetes API, then you can add tests to cover all these automated logic without the need of a real Kubernetes and the other CRD controllers.
-- Addons, such as velaux, apiserver and cli. You can add corresponding tests like creating, destroying, and updating an Application without the controller really acting.
+- The vela core controller. Add tests for the main processes: render, orchestrate, and deploy the results into Kubernetes. These run against an envtest API server, so they cover that logic without a full cluster or the other CRD controllers.
+- The CLI. Add tests that create, update and delete an Application without the controller acting on it.
 
 Integration test of the core part don't care about how CRDs are working. Therefore, it can mock the CRD controller behavior to speed up test efficiency. While the outside CLI don't care about how applications acted, they just need to ensure the Application has the correct spec.
 

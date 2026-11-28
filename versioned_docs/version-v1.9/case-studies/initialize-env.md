@@ -61,8 +61,6 @@ spec:
         url: https://openkruise.github.io/charts/
         chart: kruise
         version: 1.2.0
-        git:
-          branch: master
         values:
           featureGates: PreDownloadImageForInPlaceUpdate=true
   policies:

@@ -43,7 +43,7 @@ KubeVela 的插件主要包含两部分：
 - 一部分是安装能力的提供者，通常是一个 CRD Operator/Controller。这个**安装过程实质上就是运行一个 OAM 应用**，addon 交付中所使用的功能与普通应用能力完全等价。
 - 另一部分就是扩展能力跟 KubeVela 体系的粘合层，也就是模块定义和其他的一些集成配置。OAM 模块定义为用户提供了插件扩展出的组件、运维特征以及工作流步骤等功能，也帮助 CRD Operator 提供用户友好的抽象，使得最终用户无需理解复杂的 CRD 参数，只需要根据最佳实践提供必要的参数。
 
-![](../../../docs/resources/addon-mechanism.jpg)
+![](../../../addons/resources/addon-mechanism.jpg)
 
 插件的工作机制如上图所示，KubeVela 的应用具备多集群交付的能力，所以也能帮助插件中的 CRD Operator 部署到这些集群中。模块定义文件仅需要在控制面被 KubeVela 使用，所以无需部署到被管控的集群中。
 

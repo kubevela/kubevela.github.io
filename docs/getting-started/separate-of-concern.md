@@ -2,6 +2,8 @@
 title: Separation of Concerns
 ---
 
+import HowItWorks from '@site/src/components/HowItWorks';
+
 KubeVela designs for separation of concerns, as a result, there're two roles of users:
 
 - **Platform Team**
@@ -9,11 +11,11 @@ KubeVela designs for separation of concerns, as a result, there're two roles of 
 - **End Users**
   - The end users are usually app developers. They choose target environment, and choose capability templates, fill in values and finally assemble them as a [KubeVela Application](./core-concept.md). They don't need to understand the infrastructure details.
 
-The KubeVela community has also maintained a bundle of infrastructure capabilities, they are called [addons](../reference/addons/overview.md).
+The KubeVela community has also maintained a bundle of infrastructure capabilities, they are called [addons](/addons/overview).
 
 The work flow is shown as below:
 
-![alt](../resources/how-it-works.jpg)
+<HowItWorks />
 
 ## What's benefit?
 

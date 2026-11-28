@@ -3,12 +3,13 @@ title: Introduction
 slug: /
 ---
 
+import WhatIsKubeVela from '@site/src/components/WhatIsKubeVela';
+
 ## What is KubeVela?
 
-KubeVela is a modern software delivery and management control plane. The goal is to make deploying and operating applications across today's hybrid, multi-cloud environments easier, faster and more reliable. Welcome onboard and sail Vela!
+KubeVela is an application delivery platform that runs on Kubernetes. Your platform team defines the building blocks (a web service, a database, a canary rollout); developers describe their app with those blocks in one YAML file, and KubeVela deploys it, to one cluster or many, and keeps it that way.
 
-![](../resources/what-is-kubevela.jpg)
-
+<WhatIsKubeVela />
 ## Why KubeVela?
 
 * The modern application should be able to deploy across hybrid environments including Kubernetes, cloud, or even IoT devices in a simple and robust way.
@@ -18,21 +19,10 @@ KubeVela is a modern software delivery and management control plane. The goal is
 
 ## Key Features
 
-* **Deployment as Code**
-
-    Declare your deployment plan as [workflow](./getting-started/core-concept), run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with [CUE](https://cuelang.org/). No ad-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by [Open Application Model](https://oam.dev/).
-
-* **Built-in security, compliance and observability building blocks**
-
-    Choose from the wide range of LDAP integrations we provided out-of-box, enjoy enhanced [multi-cluster authorization and authentication](./platform-engineers/auth/advance), pick and apply fine-grained RBAC modules and customize them per your own supply chain requirements. All delivery process has fully [automated observability](./platform-engineers/operations/observability).
-
-* **Multi-cloud/hybrid-environments app delivery as first-class citizen**
-
-    Natively supports multi-cluster/hybrid-cloud scenarios such as progressive rollout across test/staging/production environments, automatic canary, blue-green and continuous verification, rich placement strategy across clusters and clouds, along with automated cloud environments provision.
-
-* **Lightweight but highly extensible architecture**
-
-    Minimize your control plane deployment with only one pod and 0.5c1g resources to handle thousands of application delivery. Glue and orchestrate all your infrastructure capabilities as reusable modules and share the large growing community [addons](./reference/addons/overview).
+* **Applications as code**: describe an app, its components, traits, policies and delivery workflow, in one Application file. See [Core Concepts](./getting-started/core-concept).
+* **Your own building blocks**: component types, traits, policies and workflow steps are definitions your platform team writes and shares. See [Definitions](./getting-started/definition).
+* **Multi-cluster and multi-environment delivery**: deploy the same Application to many clusters and environments, with per-target overrides. See [Multi-cluster Application Delivery](./case-studies/multi-cluster).
+* **Workflows with approvals and checks**: order the delivery in steps, with manual approvals, conditions and notifications. See [Workflow](./end-user/workflow/overview).
 
 
 ## KubeVela vs. Other Software

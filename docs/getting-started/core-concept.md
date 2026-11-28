@@ -2,13 +2,16 @@
 title: Application
 ---
 
+import ApplicationModel from '@site/src/components/ApplicationModel';
+import OamConcept from '@site/src/components/OamConcept';
+
 KubeVela revolves around cloud-native application delivery scenarios. The application delivery model behind it is [Open Application Model](https://oam.dev/), or OAM for short.
 
 ## An Abstraction to Model Application Deployment Process
 
 OAM allows end users to work with a simple artifact to capture the complete application deployment workflow with easier primitives. This provides a simpler path for on-boarding end users to the platform without leaking low level details in runtime infrastructure and allows users to fully focus on the application delivery itself.
 
-![alt](../resources/model.png)
+<ApplicationModel />
 
 Every application deployment plan can be composed by multiple components with attachable operational behaviors (traits), deployment policy and workflow. It works in the following format:
 
@@ -17,7 +20,14 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: <name>
+  annotations:
+    app.oam.dev/cel-expressions: "true" # needed only for sources and $( ) expressions
 spec:
+  sources:
+    - name: <source name>
+      type: <source type>
+      properties:
+        <source parameter values>
   components:
     - name: <component name>
       type: <component type>
@@ -37,10 +47,11 @@ spec:
     properties:
       <policy parameter values>
   workflow:
-    - name: <step name>
-      type: <step type>
-      properties:
-        <step parameter values>   
+    steps:
+      - name: <step name>
+        type: <step type>
+        properties:
+          <step parameter values>
 ```
 
 This `Application` entity will reference `component`, `trait`, `policy` and `workflow step` types which are essentially programmable modules that are maintained by platform team. Hence, this abstraction is highly extensible and can be customized in-place at ease.
@@ -53,9 +64,11 @@ This `Application` entity will reference `component`, `trait`, `policy` and `wor
 
 * **Workflow Step**: Workflow step allows you to define every steps in the delivery process, typical steps are manual approval, partial deploy, notification.
 
+* **Source**: A source fetches a value from outside the Application, such as a ConfigMap, a Config, a file in Git or an HTTP endpoint, and components read it with `$(source.<name>)`. Sources and expressions are alpha and off by default: they need the `EnableCelExpressions` feature gate, and in the default opt-in mode an Application that uses them opts in with the `app.oam.dev/cel-expressions: "true"` annotation. Turn the `RequireCelExpressionOptIn` gate off only once every Application has been reviewed. See [Enable the feature](../platform-engineers/source/intro.md#enable-the-feature).
+
 The modules that make up the application are all extensible, they are defined by a bunch of programmable configurations called [Definitions](../platform-engineers/oam/x-definition.md). Under the hood, KubeVela will glue and leverage Kubernetes API to drive the infrastructure capabilities. You can check the following picture to see their relationships:
 
-![alt](../resources/oam-concept.png)
+<OamConcept />
 
 ## Package for programmable capabilities
 

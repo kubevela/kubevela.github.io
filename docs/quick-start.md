@@ -212,11 +212,11 @@ Services:
 ```
 </details>
 
-Great! You have finished deploying your first KubeVela application, you can also view and manage it in UI.
+Great! You have finished deploying your first KubeVela application, you can also view and manage it in UI. To check what an application is doing, and why, see [Debugging Application](./tutorials/debug-app.md).
 
 ## Manage application with UI Console
 
-After finishing [the installation of VelaUX](./reference/addons/velaux.md#install), you can view and manage the application created.
+After finishing [the installation of VelaUX](/velaux/getting-started/install#enable-the-addon), you can view and manage the application created.
 
 * Port forward the UI if you don't have endpoint for access:
   ```
@@ -237,7 +237,7 @@ By default, if you're using CLI to manage the applications directly from Kuberne
 
 :::tip
 If the namespace of the application operated by CLI has already been associated with the corresponding environment in UI, then the application will be automatically synchronized to the project associated with that environment in UI. Otherwise, the application will be synchronized to the default project.
-If you want to specify which project in UI console an application should be synchronized to, please refer to [Creating environments for the project](how-to/dashboard/user/project.md#creating-environments-for-the-project).
+If you want to specify which project in UI console an application should be synchronized to, please refer to [Creating environments for the project](/velaux/guides/users/projects#creating-environments-for-the-project).
 :::
 
 If there're any changes happen from CLI after that, the UI console will detect the difference and show it for you. However, it's not recommended to modify the application properties from both sides.
@@ -263,5 +263,8 @@ That's it! You succeed at the first application delivery. Congratulation!
 
 ## Next Step
 
+- [Deploy an Advanced Application](./getting-started/advanced-application.md): two environments, overrides and a manual approval.
+- [Read External Data with Sources](./getting-started/sources.md): new in 1.12, read values the application doesn't own.
+- [Create Your First Component](./getting-started/first-component.md): write your own component type.
 - View [Core Concepts](./getting-started/core-concept.md) to learn more about how it works.
 - View [User Guide](./tutorials/webservice.mdx) to look on more of what you can achieve with KubeVela.

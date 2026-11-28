@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 ### 1. Kubernetes Requirements:
 
-- Kubernetes cluster `>= v1.19 && <= v1.29`
+- Kubernetes cluster `>= v1.19 && <= v1.31`
 
 KubeVela relies on Kubernetes as a control plane. The control plane could be any managed Kubernetes offering or your own clusters, such as:
 
@@ -35,8 +35,10 @@ KubeVela CLI provides an easy way to engage and manage your application delivery
 
 ** MacOS/Linux **
 
+The script installs the latest stable release unless you give it a version. For this release:
+
 ```shell script
-curl -fsSl https://kubevela.io/script/install.sh | bash
+curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.10.10
 ```
 
 **Windows**
@@ -45,8 +47,10 @@ curl -fsSl https://kubevela.io/script/install.sh | bash
 Only the official release version is supported.
 :::
 
+The script also installs the latest release unless you give it a version. For this release:
+
 ```shell script
-powershell -Command "iwr -useb https://kubevela.io/script/install.ps1 | iex"
+powershell -Command "& ([scriptblock]::Create((iwr -useb https://kubevela.io/script/install.ps1))) -Version v1.10.10"
 ```
 
 </TabItem>
@@ -77,9 +81,13 @@ sudo mv ./vela /usr/local/bin/vela
 ```
 
 :::note
-- [Installation Tips](https://github.com/kubevela/kubevela/issues/625):
-- If you are using a Mac system, it will pop up a warning that "vela" cannot be opened because the package from the developer cannot be verified.
-- MacOS imposes stricter restrictions on the software that can run in the system. You can temporarily solve this problem by opening `System Preference ->Security & Privacy -> General` and clicking on `Allow Anyway`.
+On macOS, the first run may be blocked with a warning that "vela" can't be opened because the developer can't be verified. Remove the quarantine flag:
+
+```shell
+xattr -d com.apple.quarantine /usr/local/bin/vela
+```
+
+Or open **System Settings -> Privacy & Security** and click **Allow Anyway**.
 :::
 </TabItem>
 
@@ -133,33 +141,14 @@ Refer to [using Vela CLI docker image](../platform-engineers/system-operation/ve
     ]}>
 <TabItem value="vela">
 
-```shell script
-$ vela install
+```shell
+vela install
 ```
 <details>
   <summary> check out the outcome </summary>
 
   ```shell
   ...
-  Watching for changes to Job kubevela-vela-core-cluster-gateway-tls-secret-patch with timeout of 18m0s
-  Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: ADDED
-  kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 0, jobs failed: 0, jobs succeeded: 0
-  Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
-  kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
-  Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
-  kubevela-vela-core-cluster-gateway-tls-secret-patch: Jobs active: 1, jobs failed: 0, jobs succeeded: 0
-  Add/Modify event for kubevela-vela-core-cluster-gateway-tls-secret-patch: MODIFIED
-  Starting delete for "kubevela-vela-core-admission" ServiceAccount
-  Starting delete for "kubevela-vela-core-admission" ClusterRole
-  Starting delete for "kubevela-vela-core-admission" ClusterRoleBinding
-  Starting delete for "kubevela-vela-core-admission" Role
-  Starting delete for "kubevela-vela-core-admission" RoleBinding
-  Starting delete for "kubevela-vela-core-admission-patch" Job
-  Starting delete for "kubevela-vela-core-cluster-gateway-admission" ServiceAccount
-  Starting delete for "kubevela-vela-core-cluster-gateway-admission" Role
-  Starting delete for "kubevela-vela-core-cluster-gateway-admission" RoleBinding
-  Starting delete for "kubevela-vela-core-cluster-gateway-tls-secret-patch" Job
-
   KubeVela control plane has been successfully set up on your cluster.
   If you want to enable dashboard, please run "vela addon enable velaux"
   ```
@@ -175,12 +164,14 @@ If you are helm user, you can also use helm to install KubeVela core:
 helm v3.2.0+ required
 :::
 
-```
+```shell
 helm repo remove kubevela 2>/dev/null || true
 helm repo add kubevela https://kubevela.github.io/charts
 helm repo update
-helm install --create-namespace -n vela-system kubevela kubevela/vela-core --wait
+helm install --create-namespace -n vela-system kubevela kubevela/vela-core --version 1.10.10 --wait
 ```
+
+Keep the release name `kubevela`: later guides upgrade it by that name.
 
 </TabItem>
 </Tabs>
@@ -188,9 +179,8 @@ helm install --create-namespace -n vela-system kubevela kubevela/vela-core --wai
 ### 4. Install VelaUX
 
 VelaUX is a dashboard for KubeVela. It is a web application that runs in your cluster. You can access it with your browser.
-This is optional if you don't use UI console of KubeVela.
 
-Please refer to [VelaUX Guide](../reference/addons/velaux.md).
+VelaUX is optional. To add it, run `vela addon enable velaux`, then `vela port-forward addon-velaux -n vela-system 8000:8000`. See [VelaUX](../reference/addons/velaux.md) for more.
 
 ### 5. Custom Installation or Upgrade
 

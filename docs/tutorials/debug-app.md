@@ -2,11 +2,79 @@
 title: Debugging Application
 ---
 
-KubeVela supports several CLI commands for debugging your applications, they can work on control plane and help you access resources across multi-clusters. Which also means you can play with your pods in managed clusters directly on the hub cluster, without switching KubeConfig context. If you have multiple clusters in on application, the CLI command will ask you to choose one interactively.
+When an application doesn't behave, start here. Each section below starts from a symptom and gives the `vela` command that answers it. The commands run against the control plane and reach resources in every managed cluster, so you never switch kubeconfig context.
 
-## List Apps
+With several clusters or pods, `vela logs` and `vela exec` ask which one. Pass `--cluster`, `--component` or `--pod` to choose up front.
 
-List all your applications.
+:::tip
+Prefer a terminal UI? See [vela top](./vela-top.md).
+:::
+
+## Deploy an example app
+
+The examples on this page use the application from [Quick Start](../quick-start.md). Save it as `first-app.yaml`:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: first-vela-app
+spec:
+  components:
+    - name: express-server
+      type: webservice
+      properties:
+        image: oamdev/hello-world
+        ports:
+         - port: 8000
+           expose: true
+      traits:
+        - type: scaler
+          properties:
+            replicas: 1
+  policies:
+    - name: target-default
+      type: topology
+      properties:
+        # The cluster with name local is installed the KubeVela.
+        clusters: ["local"]
+        namespace: "default"
+    - name: target-prod
+      type: topology
+      properties:
+        clusters: ["local"]
+        # This namespace must be created before deploying.
+        namespace: "prod"
+    - name: deploy-ha
+      type: override
+      properties:
+        components:
+          - type: webservice
+            traits:
+              - type: scaler
+                properties:
+                  replicas: 2
+  workflow:
+    steps:
+      - name: deploy2default
+        type: deploy
+        properties:
+          policies: ["target-default"]
+      - name: manual-approval
+        type: suspend
+      - name: deploy2prod
+        type: deploy
+        properties:
+          policies: ["target-prod", "deploy-ha"]
+```
+
+```bash
+vela up -f first-app.yaml
+```
+
+## Which applications are there?
+
+`vela ls` lists your applications, with their phase and health.
 
 ```
 vela ls
@@ -14,26 +82,19 @@ vela ls
 
 <details>
 <summary>expected output</summary>
+
 ```
-APP          	COMPONENT   	TYPE      	TRAITS 	PHASE             	HEALTHY	STATUS                                                      	CREATED-TIME
-war          	war         	java-war  	       	running           	healthy	Ready:1/1                                                   	2022-09-30 17:32:29 +0800 CST
-ck-instance  	ck-instance 	clickhouse	       	running           	healthy	                                                            	2022-09-30 17:38:13 +0800 CST
-kubecon-demo 	hello-world 	java-war  	gateway	running           	healthy	Ready:1/1                                                   	2022-10-08 11:32:47 +0800 CST
-ck-app       	my-ck       	clickhouse	gateway	running           	healthy	Host not specified, visit the cluster or load balancer in   	2022-10-08 17:55:20 +0800 CST
-             	            	          	       	                  	       	front of the cluster with IP: 47.251.8.82
-demo2        	catalog     	java-war  	       	workflowSuspending	healthy	Ready:1/1                                                   	2022-10-08 16:22:11 +0800 CST
-├─           	customer    	java-war  	       	workflowSuspending	healthy	Ready:1/1                                                   	2022-10-08 16:22:11 +0800 CST
-└─           	order-web   	java-war  	gateway	workflowSuspending	healthy	Ready:1/1                                                   	2022-10-08 16:22:11 +0800 CST
-kubecon-demo2	hello-world2	java-war  	gateway	workflowSuspending	healthy	Ready:1/1                                                   	2022-10-08 11:48:41 +0800 CST
+APP           	COMPONENT     	TYPE      	TRAITS	PHASE             	HEALTHY	STATUS   	CREATED-TIME
+first-vela-app	express-server	webservice	scaler	workflowSuspending	healthy	Ready:1/1	2022-10-09 12:10:30 +0800 CST
 ```
+
 </details>
 
-## Show status of app
+## Is it running?
 
-- `vela status` can give you an overview of your deployed multi-cluster application.
+`vela status` shows the workflow's progress and the health of each component, in every cluster.
 
 ```
-vela up -f https://kubevela.io/example/applications/first-app.yaml
 vela status first-vela-app
 ```
 
@@ -78,7 +139,7 @@ Services:
 
 </details>
 
-- `vela status --pod` can list the pod status of your application.
+`vela status --pod` lists the application's pods and their phase.
 
 ```
 vela status first-vela-app --pod
@@ -94,7 +155,7 @@ local  	express-server	express-server-b768d95b7-qnwb4	default  	Running	2022-10-
 
 </details>
 
-- `vela status --endpoint` can list the access endpoints of your application.
+`vela status --endpoint` lists the endpoints you can reach the application on.
 
 ```
 vela status first-vela-app --endpoint
@@ -114,7 +175,9 @@ Please access first-vela-app from the following endpoints:
 
 </details>
 
-- `vela status --tree --detail` can list resources of your application.
+## What did it create?
+
+`vela status --tree --detail` lists every resource the application created, where it lives, and its state.
 
 ```
 vela status first-vela-app --tree --detail
@@ -131,9 +194,9 @@ local     ─── default   ─┬─ Service/express-server    updated   2022
 
 </details>
 
-## Show logs of app
+## Why is it failing?
 
-- `vela logs` shows pod logs in managed clusters.
+`vela logs` shows the pods' logs, from whichever cluster they run in. Add `--component` or `--pod` to pick one.
 
 ```bash
 vela logs first-vela-app
@@ -149,9 +212,9 @@ express-server 2022-10-09T12:10:33.785549770+08:00 httpd started
 
 </details>
 
-## Execute commands inside pod container
+## Look inside a container
 
-- `vela exec` helps you execute commands in pods in managed clusters.
+`vela exec` runs a command in a pod's container, in whichever cluster it runs in.
 
 ```bash
 vela exec first-vela-app -it -- ls
@@ -166,16 +229,16 @@ bin   dev   etc   home  proc  root  sys   tmp   usr   var   www
 
 </details>
 
-## Access port locally
+## Reach it from your machine
 
-- `vela port-forward` can discover and forward ports of pods or services in managed clusters to your local endpoint. 
+`vela port-forward` finds the application's pods or Services, in any cluster, and forwards a local port to them.
 
 ```
 vela port-forward first-vela-app 8001:8000
 ```
 
-You can curl this app by `curl http://127.0.0.1:8001/`.
+Then call it with `curl http://127.0.0.1:8001/`.
 
-## More CLI Details
+## More
 
-Please refer to the [CLI docs](../cli/vela.md).
+See the [CLI reference](../cli/vela.md) for every flag.

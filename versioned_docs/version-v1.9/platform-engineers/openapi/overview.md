@@ -28,7 +28,7 @@ The expected output should be like this:
   "createTime": "0001-01-01T00:00:00Z",
   "lastLoginTime": "0001-01-01T00:00:00Z",
   "name": "admin",
-  "email": "barnett.zqg@gmail.com",
+  "email": "admin@example.com",
   "disabled": false
  },
  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZ3JhbnRUeXBlIjoiYWNjZXNzIiwiZXhwIjoxNjU2NTE0ODcyLCJpc3MiOiJ2ZWxhLWlzc3VlciIsIm5iZiI6MTY1NjUxMTI3Mn0.IqRWglW5cYMn8KJcbkoG55os9g-YTo_9UWFvbpZBKiY",

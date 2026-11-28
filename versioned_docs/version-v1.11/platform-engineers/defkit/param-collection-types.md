@@ -5,7 +5,19 @@ title: Collection Parameter Types
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-Collection parameters represent multi-value fields — lists, arrays, and maps. Use `StringList` or `IntList` for typed flat arrays of scalars, `Array` when elements share a struct schema or need length constraints, `List` when the element shape is heterogeneous or externally defined, `StringKeyMap` for the common string-to-string map pattern (labels, annotations), `Map` when you need a typed value, a known field set, or runtime conditions like `.HasKey()`, and `DynamicMap` when the entire `parameter` block itself should be a map with dynamic keys.
+Collection parameters hold more than one value: lists of scalars or structs, and maps.
+
+## Which type do I use?
+
+| Need | Use | CUE |
+|---|---|---|
+| A flat list of strings or integers | `StringList`, `IntList` | `[...string]`, `[...int]` |
+| A list of structs with a known shape, or a length limit | `Array(...).WithFields(...)`, `.MinItems()` / `.MaxItems()` | `[...{port: int, name?: string}]` |
+| A list whose elements vary, or whose schema is defined elsewhere | `List(...)`, with `.WithSchema()` / `.WithSchemaRef()` if needed | `[...]` |
+| String keys and string values, such as labels and annotations | `StringKeyMap` | `[string]: string` |
+| String keys with values of another type | `Map(...).Of(valueType)` | `[string]: int` |
+| An object with known fields | `Map(...).WithFields(...)` | `{logLevel: string, outputFormat?: string}` |
+| The whole `parameter` block as a map with free-form keys | `DynamicMap()` | `parameter: [string]: string` |
 
 ## Array Constructors
 
@@ -95,7 +107,16 @@ These methods produce `Condition` values for use with `.SetIf()`, `.If()`/`.EndI
 
 ## Example
 
-Let's build a `collection-types-demo` component that puts every collection-parameter API through its paces: `StringList` for a `tags` array (verified via `.IsNotEmpty()` and `tags[0]` reference — using `.IsSet()` here would still fire when a user passes `tags: []` and then crash on the `tags[0]` index, so the guard must also check `len > 0`), `IntList` for an `allowedPorts` allowlist (verified via `.IsNotEmpty()`), `Array().WithFields(...).MinItems(1).MaxItems(20)` for a structured `ports` array (verified by the rendered container ports and Service filtering), `StringKeyMap` for `labels` (verified by the spread onto the Deployment), `Map().Of(ParamTypeString)` for `annotations` (same CUE shape as `StringKeyMap`, verified by the annotation spread), and `Map().WithFields(...).Field(...)` for a structured `config` object (verified by `config.Field("logLevel")` landing as a pod label). Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/components/`.
+Let's build a `collection-types-demo` component with one parameter of each collection type:
+
+- `tags`: a `StringList`. The template reads `tags[0]`, so it guards with `.IsNotEmpty()`; `.IsSet()` would also be true for `tags: []`, and the index would fail.
+- `allowedPorts`: an `IntList`.
+- `ports`: an `Array().WithFields(...)` limited to 1-20 items with `.MinItems(1).MaxItems(20)`, rendered as container ports and filtered onto the Service.
+- `labels`: a `StringKeyMap`, set on the Deployment.
+- `annotations`: a `Map().Of(ParamTypeString)`, the same CUE shape as `StringKeyMap`.
+- `config`: a `Map().WithFields(...)`, read with `config.Field("logLevel")` into a pod label.
+
+Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/components/`.
 
 <Tabs groupId="defkit-example">
 <TabItem value="go" label="Go — defkit">
@@ -412,7 +433,15 @@ $ kubectl get deployment collection-types -n default \
 labels=staging,platform pod-labels={"app.oam.dev/component":"collection-types","log-level":"debug","tags":"backend"}
 ```
 
-`tags[0] = "backend"` lands as pod label `tags=backend` via `StringList.IsNotEmpty()` (which expands to `parameter["tags"] != _|_ if len(parameter["tags"]) > 0` — both presence *and* non-empty, so an explicit `tags: []` is skipped instead of crashing the index lookup). `allowedPorts: [...]int` generates `[...int]` schema (enforced at apply time). `ports.MinItems(1).MaxItems(20)` emits `list.MinItems(1) & list.MaxItems(20) & [...]` in the `parameter:` block. `labels` (a `StringKeyMap`) spreads `env=staging, team=platform` onto the Deployment via `labels.IsSet()`. `annotations` (a `Map().Of(ParamTypeString)`) emits the same `[string]: string` CUE shape and lands `owner=platform-team`. `config.Field("logLevel")` resolves to `parameter.config.logLevel` and writes `log-level=debug` as a pod label. The Service contains only the `expose: true` port (`8080`); the `expose: false` port (`9090`) is absent because `ForEachWithGuardedFiltered(..., FieldEquals("expose", true), ...)` filters it out.
+What to check:
+
+- The pod has the label `tags=backend`, from `tags[0]`. `tags: []` is skipped, not an index error, because `IsNotEmpty()` checks presence and length (`parameter["tags"] != _|_ if len(parameter["tags"]) > 0`).
+- `allowedPorts` only shapes the schema: `[...int]` rejects a non-integer entry when the Application is applied.
+- `ports` is limited by `list.MinItems(1) & list.MaxItems(20)` in the `parameter:` block.
+- The Deployment has the labels `env=staging` and `team=platform`, from `labels`.
+- The Deployment has the annotation `owner=platform-team`, from `annotations`, whose CUE is the same `[string]: string` as a `StringKeyMap`.
+- The pod has the label `log-level=debug`: `config.Field("logLevel")` resolves to `parameter.config.logLevel`.
+- The Service has only port `8080`. Port `9090` has `expose: false`, and `FieldEquals("expose", true)` filters it out.
 
 Clean up afterwards:
 

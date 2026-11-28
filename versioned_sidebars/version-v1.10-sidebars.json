@@ -253,7 +253,8 @@
             "platform-engineers/system-operation/controller-sharding",
             "platform-engineers/system-operation/controller-grayscale-release",
             "platform-engineers/system-operation/high-availability",
-            "platform-engineers/system-operation/migration-from-old-version"
+            "platform-engineers/system-operation/migration-from-old-version",
+            "platform-engineers/system-operation/workflow-http-protection"
           ]
         },
         {
@@ -338,7 +339,6 @@
             {
               "Patch and Override": [
                 "platform-engineers/traits/patch-trait",
-                "platform-engineers/traits/organisation-trait",
                 "platform-engineers/cue/patch-strategy"
               ]
             },
@@ -516,6 +516,7 @@
       "label": "References",
       "items": [
         "cli/vela",
+        "platform-engineers/oam/definition-file",
         "platform-engineers/oam/x-definition",
         "end-user/components/references",
         "end-user/traits/references",
@@ -543,7 +544,6 @@
             "reference/addons/traefik",
             "reference/addons/cert-manager",
             "reference/addons/kubevela-io",
-            "reference/addons/pyroscope",
             "reference/addons/vegeta",
             "reference/addons/ocm-gateway-manager-addon",
             "reference/addons/ocm-hub-control-plane",

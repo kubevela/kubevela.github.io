@@ -1,0 +1,202 @@
+// The 404 page, centred, in the homepage's colours.
+.notFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 88px 16px 112px;
+  text-align: center;
+}
+
+// The sea: the boat sinks below the water, which hides it, and bubbles rise.
+.sea {
+  position: relative;
+  width: 160px;
+  height: 128px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.boat {
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 92px;
+  margin-left: -46px;
+  transform-origin: 50% 85%;
+  animation: sink 5.6s ease-in 0.4s both;
+}
+
+.sail {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--kv-ink);
+}
+
+.water {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 26px;
+}
+
+// The page's own colour, so the water hides what has sunk.
+.waterFill {
+  fill: #ffffff;
+  :global(html[data-theme='dark']) & {
+    fill: #0b1220;
+  }
+}
+
+.waterLine {
+  fill: none;
+  stroke: var(--kv-brand);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.bubble {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border: 1.5px solid var(--kv-brand);
+  border-radius: 50%;
+  opacity: 0;
+  animation: bubble 1.4s ease-out both;
+  &:nth-of-type(1) {
+    margin-left: -10px;
+    animation-delay: 4.6s;
+  }
+  &:nth-of-type(2) {
+    margin-left: 4px;
+    width: 5px;
+    height: 5px;
+    animation-delay: 5s;
+  }
+  &:nth-of-type(3) {
+    margin-left: -3px;
+    width: 4px;
+    height: 4px;
+    animation-delay: 5.4s;
+  }
+}
+
+// Bob on the water, list hard with the stern up, then slip under bow first.
+@keyframes sink {
+  0% {
+    transform: translateY(0) rotate(0);
+  }
+  10% {
+    transform: translateY(-3px) rotate(-3deg);
+  }
+  20% {
+    transform: translateY(1px) rotate(3deg);
+  }
+  30% {
+    transform: translateY(-2px) rotate(-2deg);
+  }
+  42% {
+    transform: translateY(6px) rotate(18deg);
+  }
+  56% {
+    transform: translateY(16px) rotate(34deg);
+  }
+  70% {
+    transform: translateY(34px) rotate(44deg);
+  }
+  100% {
+    transform: translateY(140px) rotate(52deg);
+  }
+}
+
+@keyframes bubble {
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-34px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boat,
+  .bubble {
+    animation: none;
+  }
+}
+
+.code {
+  margin: 0 0 4px;
+  color: var(--kv-brand);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+}
+
+.title {
+  margin: 0 0 12px;
+  color: var(--kv-ink);
+  font-size: clamp(32px, 4vw, 44px);
+  letter-spacing: -0.02em;
+}
+
+.lead {
+  margin: 0 0 28px;
+  color: var(--kv-muted);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.primary,
+.ghost {
+  display: inline-flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 22px;
+  font-weight: 600;
+  border-radius: 8px;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.primary {
+  color: #fff;
+  background: #1b58f4;
+  &:hover {
+    color: #fff;
+    background: #1d4ed8;
+  }
+}
+
+.ghost {
+  color: var(--kv-ink);
+  border: 1px solid var(--kv-line);
+  &:hover {
+    color: var(--kv-ink);
+    border-color: var(--kv-muted);
+  }
+}
+
+.hint {
+  margin: 24px 0 0;
+  color: var(--kv-muted);
+  font-size: 14px;
+}

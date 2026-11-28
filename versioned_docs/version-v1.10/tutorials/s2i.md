@@ -16,6 +16,36 @@ KubeVela introduced [standalone workflow](../end-user/pipeline/workflowrun.md) i
 Please make sure that you have enabled workflow addon with `vela addon enable vela-workflow`.
 :::
 
+#### Create the registry secret
+
+The build step pushes to your image registry, so it needs your registry credentials. Create them as a Secret in the namespace the workflow runs in:
+
+```shell
+kubectl create secret docker-registry image-secret \
+  --docker-server=https://index.docker.io/v1/ \
+  --docker-username=<your-username> \
+  --docker-password=<your-password>
+```
+
+If the Git repository is private, also create a Secret with a Git token:
+
+```shell
+kubectl create secret generic git-token --from-literal='GIT_TOKEN=<your-token>'
+```
+
+and add it under the step's `credentials`, next to `image`:
+
+```yaml
+credentials:
+  image:
+    name: image-secret
+  git:
+    name: git-token
+    key: GIT_TOKEN
+```
+
+#### Run the workflow
+
 Apply the following workflow:
 
 ```yaml
@@ -29,33 +59,15 @@ spec:
     image: my-registry/test-image:v2
   workflowSpec:
    steps:
-    # or use kubectl create secret generic git-token --from-literal='GIT_TOKEN=<your-token>'
-    - name: create-git-secret
-      type: export2secret
-      properties:
-        secretName: git-secret
-        data:
-          token: <git token>
-    # or use kubectl create secret docker-registry docker-regcred \
-    # --docker-server=https://index.docker.io/v1/ \
-    # --docker-username=<your-username> \
-    # --docker-password=<your-password> 
-    - name: create-image-secret
-      type: export2secret
-      properties:
-        secretName: image-secret
-        kind: docker-registry
-        dockerRegistry:
-          username: <username>
-          password: <password>
     - name: build-push
       type: build-push-image
       inputs:
         - from: context.image
           parameterKey: image
       properties:
-        # use your kaniko executor image like below, if not set, it will use default image oamdev/kaniko-executor:v1.9.1
-        # kanikoExecutor: gcr.io/kaniko-project/executor:latest
+        # if kanikoExecutor is not set, it uses ghcr.io/osscontainertools/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37
+        # (from v1.10.10; oamdev/kaniko-executor:v1.9.1 before). To use your own copy, pin it by digest:
+        # kanikoExecutor: <your-registry>/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37
         # you can use context with git and branch or directly specify the context, please refer to https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts
         context:
           git: github.com/FogDong/simple-web-demo
@@ -95,12 +107,10 @@ spec:
                       expose: true
 ```
 
-The workflow has four steps in total:
+The workflow has two steps:
 
-1. Create a secret with Git token, which is used to pull the code from the private repository to build the image. If your repository is public, you can skip this step. You can also skip this step and use the `kubectl create secret generic git-token --from-literal='GIT_TOKEN=<your-token>'` command to create the secret.
-2. Create a secret with the image registry token to push the image to your image registry. You can also skip this step and use `kubectl create secret docker-registry docker-regcred --docker-server=https://index.docker.io/v1/ --docker-username=<your-username> -- docker-password=<your-password>` command to create the secret.
-3. Use the `build-push-image` step type to build and push the image. This step will use the specified Git url and the code in its branch to build the image. You can also directly specify in the context field. The bottom layer of this step will use [Kaniko](https://github.com/GoogleContainerTools/kaniko) for image building. During the building, you can use `vela workflow logs build-push-image --step build-push` to view the log of the step. Note that this step has an input from `context.image`, which will override the image field in properties. As you can see, we currently declare `image: my-registry/test-image:v2` in the context. When we need to reuse this workflow to build a new image version, we only need to update the data in the context to update the entire process.
-4. In the last step, the image version in `context.image` will be used to publish the application. When the application starts, you can use `vela port-forward my-app 8080:80` to check the result.
+1. Use the `build-push-image` step type to build and push the image. This step will use the specified Git url and the code in its branch to build the image. You can also directly specify in the context field. The bottom layer of this step will use [Kaniko](https://github.com/GoogleContainerTools/kaniko) for image building. During the building, you can use `vela workflow logs build-push-image --step build-push` to view the log of the step. Note that this step has an input from `context.image`, which will override the image field in properties. As you can see, we currently declare `image: my-registry/test-image:v2` in the context. When we need to reuse this workflow to build a new image version, we only need to update the data in the context to update the entire process.
+2. In the last step, the image version in `context.image` will be used to publish the application. When the application starts, you can use `vela port-forward my-app 8080:80` to check the result.
 
 If you configure the process in VelaUX's Pipeline, you can directly see the status and sequence of all steps on the page, including step logs, input and output, etc.
 
@@ -108,13 +118,13 @@ If you configure the process in VelaUX's Pipeline, you can directly see the stat
 
 ### Use Application workflow
 
-You can also directly build the image in the application, and use the newly built image in the component. Apply the following application:
+You can also build the image in an Application's workflow, and deploy the new image with the component. The `image` in the `build-push` step must match the component's `image`: the step pushes that tag, and `apply-component` deploys the component as written. This example uses the `image-secret` created above. Apply the following application:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: build-push-image
+  name: my-web-build
   namespace: default
 spec:
   components:
@@ -130,13 +140,13 @@ spec:
     - name: build-push
       type: build-push-image
       properties:
-        # use your kaniko executor image like below, if not set, it will use default image oamdev/kaniko-executor:v1.9.1
-        # kanikoExecutor: gcr.io/kaniko-project/executor:latest
+        # if kanikoExecutor is not set, it uses ghcr.io/osscontainertools/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37
+        # (from v1.10.10; oamdev/kaniko-executor:v1.9.1 before). To use your own copy, pin it by digest:
+        # kanikoExecutor: <your-registry>/kaniko:v1.29.1@sha256:e7cba1f7e70c01c8ee1cbe622d07990c04dea550430c4c81319d26679226cd37
         # you can use context with git and branch or directly specify the context, please refer to https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts
         context:
           git: github.com/FogDong/simple-web-demo
           branch: main
-        # you must align the image value with image field of the component properties
         image: my-registry/test-image:v1
         # specify your dockerfile, if not set, it will use default dockerfile ./Dockerfile
         # dockerfile: ./Dockerfile

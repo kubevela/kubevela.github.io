@@ -131,15 +131,38 @@ Before deleting, you must delete all CR resources.
 kubectl get crd |grep oam | awk '{print $1}' | xargs kubectl delete crd
 ```
 
+## Certificates
+
+From v1.10.10, vela-core makes its own serving certificates. When it starts, it creates a self-signed CA and the certificates for its admission webhooks and for the cluster-gateway, in the Secrets `kubevela-vela-core-admission` and `kubevela-vela-core-cluster-gateway-tls-v2` (for a release named `kubevela`). It writes the CA into the webhook configurations and the cluster-gateway APIService, checks everything every minute, and renews a certificate 30 days before it expires. Releases before v1.10.10 ran [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen) Jobs instead; on upgrade vela-core reuses the Secrets those Jobs made, so the CA doesn't change.
+
+`helm install` and `helm upgrade` keep the `failurePolicy` that is in the cluster. A tool that renders the chart without reading the cluster, such as Argo CD or `helm template` piped to `kubectl apply`, renders the webhooks with `failurePolicy: Ignore`. vela-core sets the configured policy (`admissionWebhooks.failurePolicy`, `Fail` by default) once its webhook server is up and puts it back within a minute when something changes it, but each sync or apply still drops it to `Ignore` for that minute, and Argo CD shows the Application out of sync. In Argo CD, ignore the field and keep syncs from writing it:
+
+```yaml
+spec:
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      jqPathExpressions:
+        - .webhooks[]?.failurePolicy
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      jqPathExpressions:
+        - .webhooks[]?.failurePolicy
+  syncPolicy:
+    syncOptions:
+      - RespectIgnoreDifferences=true
+```
+
+A Flux `HelmRelease` runs Helm against the cluster, so it keeps the live policy as `helm upgrade` does. If you turn on its drift detection, list the field under `spec.driftDetection.ignore` as JSON pointers, one per webhook: `/webhooks/0/failurePolicy` to `/webhooks/6/failurePolicy` on the `ValidatingWebhookConfiguration`, and `/webhooks/0/failurePolicy` and `/webhooks/1/failurePolicy` on the `MutatingWebhookConfiguration`.
+
 ## Install KubeVela with cert-manager
 
-By default, KubeVela will use a self-signed certificate provided by [kube-webhook-certgen](https://github.com/jet/kube-webhook-certgen) for admissionWebhooks.
-You can also use cert-manager if it's available. Note that you need to install cert-manager **before** the KubeVela chart.
+You can use cert-manager instead, if it's available. Note that you need to install cert-manager **before** the KubeVela chart.
 
 ```shell script
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
-helm install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.2.0 --create-namespace --set installCRDs=true
+helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set crds.enabled=true
 ```
 
 Install kubevela with enabled certmanager:

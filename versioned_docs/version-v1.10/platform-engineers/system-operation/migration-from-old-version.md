@@ -6,6 +6,30 @@ This doc aims to provide a migration guide from old versions to the new ones wit
 
 KubeVela has [release cadence](../../contributor/release-process.md) for every 2-3 months, we'll only maintain for the last 2 releases. As a result, you're highly recommended to upgrade along with the community. We'll strictly align with the [semver version rule](https://semver.org/) for compatibility.
 
+## Upgrading to v1.10.10
+
+```shell
+helm repo update kubevela
+# Helm never upgrades a chart's CRDs, so apply them first
+helm show crds kubevela/vela-core --version 1.10.10 | kubectl apply --server-side --force-conflicts -f -
+helm upgrade kubevela kubevela/vela-core --version 1.10.10 -n vela-system -f <your values file>
+```
+
+:::caution
+Don't upgrade with `--reuse-values`. Coming from v1.10.9 or earlier it fails with `nil pointer evaluating interface {}.configTemplateName`, because the old release lacks the new `workflow.httpDeny` and `workflow.http` values. Even where it renders, it keeps the old release's image values, so the cluster-gateway stays on the old image. Use your own values file, or `--reset-then-reuse-values` (Helm 3.14+). If you set `multicluster.clusterGateway.image.tag` yourself, update or remove it.
+:::
+
+v1.10.10 is a security release, and some of its fixes change behaviour. Check these before you upgrade:
+
+- **`vela-cli` steps.** The step's Job runs in the Application's namespace (a WorkflowRun's, for a WorkflowRun), as the ServiceAccount named in `serviceAccountName` (default `default`), instead of in `vela-system` as vela-core. The step fails at once if that account doesn't exist (`service account <name> not found in namespace <namespace>: the vela-cli Job runs as it`). Give the account the RBAC the command needs: `vela ls`, for example, must be able to list Applications. An Application in `vela-system` can still name `kubevela-vela-core`, but an account with only the rights the command uses is safer.
+- **Certificates**. vela-core makes its own webhook and cluster-gateway certificates; with Argo CD or Flux, ignore the webhooks' `failurePolicy`. See [Certificates](../advanced-install.mdx#certificates).
+- **Outbound HTTP**. Requests to metadata, link-local and loopback addresses are refused, requests are bounded in time and size (the `request`, `webhook` and `notification` steps always time out after 3s on v1.10), HTTP proxies are not used, and the `request` step fails on a 400 but accepts a reply that isn't JSON. See [What may fail after an upgrade](./workflow-http-protection.md#what-may-fail-after-an-upgrade).
+- **Config steps in an Application's workflow** work only in the Application's namespace, apart from reading shared system configs and, with `AuthenticateApplication` on, where the Application's user may do the same to Secrets. See [Which namespace a step works in](../../how-to/dashboard/config/read-write-config-in-pipeline.md#which-namespace-a-step-works-in).
+- **The `Ready` condition** of an Application goes `False` while a reconcile fails; tools that watch it see that now.
+- **Remote Terraform modules** read their SSH key Secret only from the definition's namespace. See [Terraform](../components/component-terraform.md).
+- **Impersonation annotations** are ignored with `AuthenticateApplication` on and `authentication.withUser=false`. See [Impersonate as User/Groups](../auth/integration.md#impersonate-as-usergroups).
+- **Air-gapped installs** need new images. See [Images to mirror](./offline-installation.md#images-to-mirror).
+
 ## From v1.8.x to v1.9.x
 
 :::caution

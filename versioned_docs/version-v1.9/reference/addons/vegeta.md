@@ -20,9 +20,9 @@ Vegeta Trait supports following component types: webservice, worker and cloneset
 
 ## How to start
 
-Use a component typed webservice to start, keep the following to show-vegeta.yaml, then vela up -f show-vegeta.yaml
+Save the following as `vegeta-demo.yaml`. It runs nginx as a `webservice` and attaches a `vegeta` trait that load-tests the component's own Service.
 
-```shell
+```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
@@ -39,13 +39,19 @@ spec:
         - expose: true
           port: 80
           protocol: TCP
-          ports: 80
       traits:
         - type: vegeta
           properties:
-            dorequest: 'GET http://show-vegeta:80'
+            dorequest: 'GET http://new-vegeta.vegeta:80'
             parallelism: 1
             backofflimit: 10
+```
+
+Create the namespace and deploy it:
+
+```shell
+kubectl create namespace vegeta
+vela up -f vegeta-demo.yaml
 ```
 
 Check the app status and trait status
@@ -85,7 +91,7 @@ Services:
     Traits:
       ? vegeta
 
-vela logs new-vegeta --name new-vegeta -n vegeta
+vela logs new-vegeta --component new-vegeta -n vegeta
 ? You have 2 deployed resources in your app. Please choose one:  [Use arrows to move, type to filter]
 > Cluster: local | Namespace: vegeta | Kind: Deployment | Name: new-vegeta
   Cluster: local | Namespace: vegeta | Kind: Job | Name: new-vegeta

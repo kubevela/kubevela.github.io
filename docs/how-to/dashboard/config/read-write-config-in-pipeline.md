@@ -33,7 +33,6 @@ kind: Application
 apiVersion: core.oam.dev/v1beta1
 metadata:
   name: create-config
-  namespace: "config-e2e-test"
 spec:
   components: []
   workflow:
@@ -54,7 +53,6 @@ kind: Application
 apiVersion: core.oam.dev/v1beta1
 metadata:
   name: read-config
-  namespace: "config-e2e-test"
 spec:
   components: []
   workflow:
@@ -72,7 +70,7 @@ spec:
 
 Since v1.12, the steps work with `Config` resources and still read configs created by v1.11:
 
-- `create-config` creates a `Config` in the Application's namespace, or the `namespace` you give.
+- `create-config` creates a `Config` in the Application's namespace by default.
   The Application owns it: it is updated when the step runs again and deleted with the
   Application. The step waits until the Config is `Available` for the latest change, and fails
   with the controller's reason if the Config goes to `Error`. For example, the step's message in
@@ -92,6 +90,21 @@ Since v1.12, the steps work with `Config` resources and still read configs creat
 - `delete-config` deletes the Config. To delete a Config another Application created, delete it
   through that Application; otherwise that Application creates it again the next time it
   reconciles.
+- In an Application's workflow, every config step acts in the Application's namespace unless you
+  set `namespace`. Another namespace is refused unless the `AuthenticateApplication` feature gate is on and the
+  Application's user has the step's verbs on `configs.config.oam.dev` there: `get` for
+  `read-config`, `list` for `list-config`, both `create` and `update` for `create-config` (checked
+  together on every run, as the step creates or overwrites), and `delete` for `delete-config`. A read or list of a shared system config (one in `vela-system`
+  made from a system-scoped template) is always allowed. The refusal names the grant, here with
+  the feature gate off:
+
+  ```console
+  config other-team/db is outside the application's namespace my-team: it may create it only if its user can (grant create on configs.config.oam.dev in namespace other-team); this application runs with no user to ask for (the AuthenticateApplication feature gate is off)
+  ```
+
+  This rule is for Applications only. A Pipeline runs as a WorkflowRun, which has no Application,
+  so its config steps are not held to it.
+
 - A template from another namespace may be used only as the
   [Scope](../../../reference/config-template.md#scope-who-may-use-a-template) rules allow. The step
   checks the Application's user when the `AuthenticateApplication` feature gate is on; with it off,

@@ -46,31 +46,40 @@ secrets:
 - name: my-secret
 ```
 
-In this example, we define a ServiceAccount resource. The rendering result is:
+In this example, we define a ServiceAccount resource. KubeVela collects every object under `resources/` into one `k8s-objects` component named `<addon name>-resources`, and adds it to the application from the template. For an addon named `my-addon`, the rendered application is:
 
 ```yaml
+apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: example
+  name: addon-my-addon
   namespace: vela-system
 spec:
   components:
-    -
-    #   ...
-    #   other contents defined in template file
-    #   ...
+    # ...the components defined in template.yaml, for example:
     - name: namespace
       type: k8s-objects
-      components:
+      properties:
         objects:
-        -  apiVersion: v1
-           kind: ServiceAccount
-           metadata:
-            name: my-service-account
-            namespace: default
+          - apiVersion: v1
+            kind: Namespace
+            metadata:
+              name: my-namespace
+    # ...then one component holding the objects from resources/:
+    - name: my-addon-resources
+      type: k8s-objects
+      properties:
+        objects:
+          - apiVersion: v1
+            kind: ServiceAccount
+            metadata:
+              name: my-service-account
+              namespace: default
             secrets:
-            - name: my-secret
+              - name: my-secret
 ```
+
+KubeVela names the application `addon-<addon name>`, whatever the template's `metadata.name` says.
 
 We just use namespace and serviceAccount resources as an example here, other resources of an operator can also be defined in KubeVela application in the same way.
 

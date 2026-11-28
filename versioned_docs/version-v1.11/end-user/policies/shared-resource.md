@@ -5,11 +5,11 @@ title: Shared Resource
 ## Background
 
 In KubeVela, by default, application owns resources.
-It means that resources create by the application should only be controlled by the application that creates it.
+It means that resources an Application creates should only be controlled by the application that creates it.
 
 So there are basically two requirements for application creating resources:
 
-1. The resource must not exist before the application creating it. It exists, there will be a resource conflict error.
+1. The resource must not exist before the application creating it. If it exists already, the Application reports a conflict.
 2. The resource is expected to be only manageable through its creator. *Others* should not be able to modify it or edit it.
 
 While dispatching resources, the application will
@@ -43,7 +43,7 @@ If it is sharable, it will add itself to the sharer annotation, but not modify t
 ### delete
 With this mechanism, only the owner of the resource can modify the resource (including updating and state-keeping). Other sharer can only see that resource.
 
-When the owner of the resource is gone (application is deleted or do not use this resource anymore), it will give the owner of the application to the next sharer. If no sharer exists, it will finally delete that resource.
+When the owner of the resource is gone (application is deleted or do not use this resource anymore), ownership passes to the next sharer. If no sharer exists, it will finally delete that resource.
 
 See the following figures for details.
 

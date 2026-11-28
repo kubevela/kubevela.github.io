@@ -4,6 +4,16 @@ title: Systems Integration
 
 KubeVela application natively supports impersonation even without the Authentication flag enabled. That means when the Authentication flag is disabled, you can manually set the identity to impersonate in the application's annotation fields. For example, the following guide will give an example on how to manually set the application to impersonate as a ServiceAccount.
 
+:::note
+This applies only while the `AuthenticateApplication` feature gate is off. With it on, the admission webhook records the requester's identity in the Application's annotations, and a hand-written identity is not used:
+
+- an Application carrying `app.oam.dev/service-account-name` is refused with `service-account annotation is not permitted when authentication enabled`, unless the controller itself submits it, as it does for addons. Only those, and Applications admitted before the gate was turned on, still run as the annotated ServiceAccount (the fallback the [`helmchart` component](../../end-user/components/references.md#helmchart) describes);
+- with `authentication.withUser=true`, the webhook overwrites `app.oam.dev/username` with the requester's name;
+- with `authentication.withUser=false`, a hand-written `app.oam.dev/username` is ignored, and the Application runs as `authentication.defaultUser`.
+
+See [Underlying Mechanism](./advance.md#partial-identity-impersonation).
+:::
+
 ## Example
 
 Let's assume that we have two namespaces:
@@ -141,4 +151,4 @@ Dispatch: Found 1 errors. [(cannot get object: deployments.apps "nginx-server" i
 
 ## Impersonate as User/Groups
 
-If you would like to let the application to impersonate as specific user and group, you can set the annotation `app.oam.dev/username` and `app.oam.dev/group` in the application respectively. 
+If you would like to let the application to impersonate as specific user and group, you can set the annotation `app.oam.dev/username` and `app.oam.dev/group` in the application respectively, with the `AuthenticateApplication` feature gate off (see the note at the top of this page). 

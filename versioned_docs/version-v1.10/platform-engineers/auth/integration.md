@@ -4,6 +4,8 @@ title: Systems Integration
 
 KubeVela application natively supports impersonation even without the Authentication flag enabled. That means when the Authentication flag is disabled, you can manually set the identity to impersonate in the application's annotation fields. For example, the following guide will give an example on how to manually set the application to impersonate as a ServiceAccount.
 
+With authentication off, this annotation restricts what one Application may do; it does not restrict users. Anyone who can edit the Application can change or remove it. To make the identity a boundary, turn on authentication (see [Enabling authentication](./basic.md#installation)), so KubeVela sets it from whoever submits the Application (with `authentication.withUser`, on by default; with it off, every Application runs as `authentication.defaultUser`).
+
 ## Example
 
 Let's assume that we have two namespaces:
@@ -141,4 +143,6 @@ Dispatch: Found 1 errors. [(cannot get object: deployments.apps "nginx-server" i
 
 ## Impersonate as User/Groups
 
-If you would like to let the application to impersonate as specific user and group, you can set the annotation `app.oam.dev/username` and `app.oam.dev/group` in the application respectively. 
+With the `AuthenticateApplication` feature gate on, an Application acts as whoever applied it. The webhook records that identity on the Application: `app.oam.dev/group` holds the requester's groups that match `authentication.groupPattern`, and with `authentication.withUser=true`, `app.oam.dev/username` holds the user who applied it, replacing any value already there. With `authentication.withUser=false`, from v1.10.10, a hand-written `app.oam.dev/username` or `app.oam.dev/service-account-name` is ignored, and the Application runs as `authentication.defaultUser`.
+
+With the gate off, the annotations are yours to set: the Application impersonates the user in `app.oam.dev/username` and the groups in `app.oam.dev/group`. See [Underlying Mechanism](./advance.md).

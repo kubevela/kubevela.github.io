@@ -3,11 +3,38 @@ title: Introduction
 slug: /
 ---
 
+import DocCards from '@site/src/components/DocCards';
+import WhatIsKubeVela from '@site/src/components/WhatIsKubeVela';
+
+<DocCards />
+
 ## What is KubeVela?
 
-KubeVela is a modern software delivery and management control plane. The goal is to make deploying and operating applications across today's hybrid, multi-cloud environments easier, faster and more reliable. Welcome onboard and sail Vela!
+KubeVela is an application delivery platform that runs on Kubernetes. Your platform team defines the building blocks (a web service, a database, a canary rollout); developers describe their app with those blocks in one YAML file, and KubeVela deploys it, to one cluster or many, and keeps it that way.
 
-![](../resources/what-is-kubevela.jpg)
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: hello-world
+spec:
+  components:
+    - name: hello-world
+      type: webservice
+      properties:
+        image: oamdev/hello-world
+        ports:
+          - port: 8000
+            expose: true
+      traits:
+        - type: scaler
+          properties:
+            replicas: 2
+```
+
+That's an Application: KubeVela turns it into a Deployment and a Service, runs the delivery workflow and reports health back.
+
+<WhatIsKubeVela />
 
 ## Why KubeVela?
 
@@ -18,21 +45,12 @@ KubeVela is a modern software delivery and management control plane. The goal is
 
 ## Key Features
 
-* **Deployment as Code**
+* **Applications as code**: describe an app, its components, traits, policies and delivery workflow, in one Application file. See [Core Concepts](./getting-started/core-concept).
+* **Your own building blocks**: component types, traits, policies and workflow steps are definitions your platform team writes and shares. See [Definitions](./getting-started/definition).
+* **Multi-cluster and multi-environment delivery**: deploy the same Application to many clusters and environments, with per-target overrides. See [Multi-cluster Application Delivery](../end-user/policies/multi-cluster.md).
+* **Workflows with approvals and checks**: order the delivery in steps, with manual approvals, conditions and notifications. See [Workflow](./end-user/workflow/overview).
 
-    Declare your deployment plan as [workflow](./getting-started/core-concept), run it automatically with any CI/CD or GitOps system, extend or re-program the workflow steps with [CUE](https://cuelang.org/). No ad-hoc scripts, no dirty glue code, just deploy. The deployment workflow in KubeVela is powered by [Open Application Model](https://oam.dev/).
-
-* **Built-in security, compliance and observability building blocks**
-
-    Choose from the wide range of LDAP integrations we provided out-of-box, enjoy enhanced [multi-cluster authorization and authentication](./platform-engineers/auth/advance), pick and apply fine-grained RBAC modules and customize them per your own supply chain requirements. All delivery process has fully [automated observability](./platform-engineers/operations/observability).
-
-* **Multi-cloud/hybrid-environments app delivery as first-class citizen**
-
-    Natively supports multi-cluster/hybrid-cloud scenarios such as progressive rollout across test/staging/production environments, automatic canary, blue-green and continuous verification, rich placement strategy across clusters and clouds, along with automated cloud environments provision.
-
-* **Lightweight but highly extensible architecture**
-
-    Minimize your control plane deployment with only one pod and 0.5c1g resources to handle thousands of application delivery. Glue and orchestrate all your infrastructure capabilities as reusable modules and share the large growing community [addons](./reference/addons/overview).
+The default install is the controller and the cluster gateway; see [Performance tuning](./platform-engineers/system-operation/performance-finetuning) for sizing.
 
 
 ## KubeVela vs. Other Software
@@ -41,7 +59,7 @@ KubeVela is a modern software delivery and management control plane. The goal is
 
 KubeVela is a continuous delivery platform that works at downstream of your CI process. So you will reuse the CI process you already adopted, and KubeVela will take over CD process by empowering it with modern application delivery best practices, such as declarative deployment plan as workflow, hybrid/multi-cloud resource provision/binding, security and compliance, and much more. It natively supports GitOps if you want.
 
-> Feel free to check the [Integrating with Jenkins](./tutorials/jenkins) or [GitOps](./case-studies/gitops) documentation for more details.
+> Feel free to check the [Integrating with Jenkins](/velaux/guides/delivery/triggers#example-jenkins) or [GitOps](../case-studies/gitops.md) documentation for more details.
 
 ### KubeVela vs. GitOps (ArgoCD, FluxCD, etc.)
 
@@ -82,5 +100,5 @@ Organizations who have officially adopted KubeVela can be found [here](https://g
 
 ## What's Next
 
-- Start to [install KubeVela](./install).
+- [Install KubeVela](./install), then [deploy your first application](./quick-start).
 - Learn [Core Concepts](./getting-started/core-concept) to know more about how it works.

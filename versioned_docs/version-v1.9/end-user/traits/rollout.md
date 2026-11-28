@@ -15,7 +15,7 @@ vela addon enable kruise-rollout
 
 Deploy the application as shown below:
 
-```yaml
+```bash
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -93,7 +93,7 @@ The host `canary-demo.com` is aligned with the `gateway` trait in your applicati
 
 Let's modify the image tag of the component, from `v1` to `v2` as follows:
 
-```yaml
+```bash
 cat <<EOF | vela up -f -
 apiVersion: core.oam.dev/v1beta1
 kind: Application
@@ -143,7 +143,7 @@ As we can see, in this update, we have also configured a canary-deploy workflow.
 Here's an **overview about what will happen** of the three stages:
 
 1. In the first stage, the deployment will be updated with 20% of the total replicas. In our example, since we have a total of 5 replicas, 1 replica will be updated to the new version and serve 20% of the traffic. The upgrade process will then wait for a manual approval before moving on to the next stage.
-2. Once the first stage has been approved, the second stage will begin. During this stage, 50% of the total replicas will be updated to the new version. In our example, this means that 2.5 replicas will be updated, which is rounded up to 3. These 3 replicas will serve 50% of the traffic, and the upgrade process will once again wait for a manual approval before moving on to the final stage.
+2. Once the first stage has been approved, the second stage will begin. 50% of 5 is 2.5, rounded up to 3, so 3 replicas move to the new version and serve 50% of the traffic. The upgrade process will once again wait for a manual approval before moving on to the final stage.
 3. In the final stage, all replicas will be updated to the new version and serve 100% of the traffic
 
 
@@ -183,12 +183,6 @@ Services:
     Healthy Ready:5/5
     Traits:
       ✅ rolling-release: workload deployment is completed      ✅ scaler      ✅ gateway: Visiting URL: canary-demo.com, IP: 192.168.9.103
-  - Name: canary-demo  
-    Cluster: local  Namespace: default
-    Type: webservice
-    Healthy Ready:5/5
-    Traits:
-      ✅ scaler      ✅ gateway: No loadBalancer found, visiting by using 'vela port-forward canary-demo'
 ```
 
 The application's status is currently set to workflowSuspending, which means that the first step has been completed and the workflow is now waiting for manual approval.
@@ -196,29 +190,31 @@ The application's status is currently set to workflowSuspending, which means tha
 View the topology graph again to confirm that a new v2 pod has been created to serve canary traffic. Meanwhile, the remaining 4 v1 pods are still running and serving non-canary traffic.
 ![image](../../resources/kruise-rollout-v2-batch1.jpg)
 
-Access the gateway endpoint again. You will find that there is approximately a 20% chance of seeing the Demo: v2 result.
+Send 20 requests to the gateway endpoint. About 1 in 5 should come back from `Demo: V2`; the exact split varies from run to run:
 
 ```shell
-$ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
-Demo: V2
+$ for i in $(seq 20); do curl -s -H "Host: canary-demo.com" <ingress-controller-address>/version; echo; done | grep -o "Demo: V[0-9]" | sort | uniq -c
+     16 Demo: V1
+      4 Demo: V2
 ```
 
 ## Continue Canary Process
 
-After verify the success of the canary version through business-related metrics, such as logs, metrics, and other means, you can `resume` the workflow to continue the process of rollout.
+After checking the canary through your logs and metrics, `resume` the workflow to continue the rollout.
 
 ```shell
 vela workflow resume canary-demo
 ```
 
-Access the gateway endpoint again multi times. You will find out the chance (`50%`) to meet result `Demo: v2` is highly increased.
+Send 20 requests again. The share of `Demo: V2` responses rises to about 50%:
 
 ```shell
-$ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
-Demo: V2
+$ for i in $(seq 20); do curl -s -H "Host: canary-demo.com" <ingress-controller-address>/version; echo; done | grep -o "Demo: V[0-9]" | sort | uniq -c
+     10 Demo: V1
+     10 Demo: V2
 ```
 
-View topology graph again, you will see the workload updated 3 replicas to `v2`, and this pod will serve the canary traffic. Meanwhile, 2 pods of `v1` are still running and server non-canary traffic.
+View topology graph again, you will see the workload updated 3 replicas to `v2`, and this pod will serve the canary traffic. Meanwhile, 2 pods of `v1` are still running and serve non-canary traffic.
 
 ![image](../../resources/kruise-rollout-v2-batch2.jpg)
 
@@ -230,32 +226,38 @@ In the end, you can resume again to finish the rollout process.
 vela workflow resume canary-demo
 ```
 
-Access the gateway endpoint again multi times. You will find out the result always is `Demo: v2`.
+Send 20 requests again. Every response now comes from `Demo: V2`:
 
 ```shell
-$ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
-Demo: V2
+$ for i in $(seq 20); do curl -s -H "Host: canary-demo.com" <ingress-controller-address>/version; echo; done | grep -o "Demo: V[0-9]" | sort | uniq -c
+     20 Demo: V2
 ```
 
-## Canary verification failed, rollback the release
+## Canary verification failed, roll back the release
 
-If you want to cancel the rollout process and rollback the application to the latest version, after manually check. You can rollback the rollout workflow:
+To cancel the rollout and roll back to the previous version, roll back the workflow:
 
 ```shell
 $ vela workflow rollback canary-demo
+Find succeeded application revision %s (PublishVersion: %s) to rollback.
 Application spec rollback successfully.
 Application status rollback successfully.
-Successfully rollback rolloutApplication outdated revision cleaned up.
+Successfully rollback app.
+Application outdated revision cleaned up.
 ```
 
-Access the gateway endpoint again. You can see the result is always `Demo: V1`.
+The first line is printed as shown, with the `%s` placeholders unfilled.
+
+Send 20 requests again. Every response comes from `Demo: V1`:
 
 ```shell
-$ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
-Demo: V1
+$ for i in $(seq 20); do curl -s -H "Host: canary-demo.com" <ingress-controller-address>/version; echo; done | grep -o "Demo: V[0-9]" | sort | uniq -c
+     20 Demo: V1
 ```
 
-Any rollback operation in middle of a runningWorkflow will rollback to the latest succeeded revision of this application. So, if you deploy a successful `v1` and upgrade to `v2`, but this version didn't succeed while you continue to upgrade to `v3`. The rollback of `v3` will automatically to `v1`, because release `v2` is not a succeeded one.
+`vela workflow rollback` works on a workflow that is suspended, terminated or finished; it refuses one that is still running with `can not rollback a running workflow`. Here the workflow is suspended between canary steps, so the rollback goes ahead.
+
+Because the Application carries `app.oam.dev/publishVersion`, the rollback goes to the latest revision whose workflow succeeded. If you release a successful `v1`, then a `v2` that fails, then a `v3`, rolling back `v3` takes you to `v1`, since `v2` never succeeded. Without `publishVersion`, the rollback restores the spec of the Application's latest revision instead.
 
 ## Perform canary rollout process on VelaUX
 
@@ -307,11 +309,12 @@ After the first step is complete, 1 replica will be updated to v2, as shown belo
 
 ![image](../../resources/kruise-rollout-velaux-v2-batch1.jpg)
 
-You can try to access the gateway using the following command, and you will have a 1/3 chance of getting the `Demo: V1`.
+Send 20 requests to the gateway. About 1 in 3 should come back from `Demo: V2`:
 
 ```shell
-$ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
-Demo: V1
+$ for i in $(seq 20); do curl -s -H "Host: canary-demo.com" <ingress-controller-address>/version; echo; done | grep -o "Demo: V[0-9]" | sort | uniq -c
+     13 Demo: V1
+      7 Demo: V2
 ```
 
 ### Continue rollout

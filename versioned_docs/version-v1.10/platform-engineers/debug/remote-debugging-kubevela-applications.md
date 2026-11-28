@@ -1,10 +1,8 @@
 ---
-title: Remote Debugging KubeVela Applications
+title: Debug vela-core in a cluster
 ---
 
-# Remote Debugging KubeVela Applications
-
-This guide provides comprehensive instructions for configuring remote debugging of KubeVela applications using IntelliJ IDEA or VS Code. It outlines the essential configurations and provides a step-by-step process for attaching the debugger to a KubeVela application running within a Kubernetes cluster. This setup empowers developers to examine application behavior, identify issues, and enhance performance by directly interacting with the runtime environment.
+Build vela-core with Delve, deploy it to a test cluster, and attach your IDE (IntelliJ IDEA or VS Code) to the pod. Use this when a bug only shows up in a cluster.
 
 ## Prerequisites
 
@@ -19,7 +17,7 @@ Before you begin, ensure you have:
 - [Delve](https://github.com/go-delve/delve) debugger (will be installed in the container)
 
 :::note
-For local debugging without containers, see [Debugging KubeVela Controllers](./debugging-kubevela-controllers).
+For local debugging without containers, see [Debugging KubeVela Controllers](./debugging-kubevela-controllers.md).
 :::
 
 ## Overview
@@ -151,7 +149,6 @@ helm upgrade --install --create-namespace --namespace vela-system \
   --set controllerArgs.reSyncPeriod=1m \
   --set optimize.disableComponentRevision=false \
   --set multicluster.clusterGateway.image.repository=ghcr.io/oam-dev/cluster-gateway \
-  --set admissionWebhooks.patch.image.repository=ghcr.io/oam-dev/kube-webhook-certgen/kube-webhook-certgen \
   --wait kubevela ./charts/vela-core --debug
 ```
 
@@ -395,7 +392,7 @@ Do not modify the source code while debugging. The running container was built f
 
 ## Next Steps
 
-- Learn about [Debugging KubeVela Controllers](./debugging-kubevela-controllers) for local debugging
+- Learn about [Debugging KubeVela Controllers](./debugging-kubevela-controllers.md) for local debugging
 - Explore [Debugging with Webhook Integration](./debugging-kubevela-with-webhook.md) for webhook debugging
-- Check the [KubeVela Contributor Guide](../../contributor/overview) for more development resources
+- Check the [KubeVela Contributor Guide](../../contributor/overview.md) for more development resources
 

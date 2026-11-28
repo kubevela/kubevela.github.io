@@ -201,25 +201,7 @@ template: {
 
 ## Context Variables
 
-Inside the CUE template, the `context` object provides read access to the current Application:
-
-| Variable | Description |
-|---|---|
-| `context.name` | Application name |
-| `context.namespace` | Application namespace |
-| `context.appLabels` | Application labels map |
-| `context.appAnnotations` | Application annotations map |
-| `context.appComponents` | Application components array |
-| `context.appWorkflow` | Application workflow object |
-| `context.appPolicies` | Application policies array |
-| `context.appName` | Application name (same as `context.name`) |
-| `context.appRevision` | The Application revision being rendered |
-| `context.publishVersion` | The Application's `app.oam.dev/publishVersion` annotation, as components see it (empty when it is not set) |
-| `context.policyName` | Name of the currently executing policy instance |
-| `context.policyType` | The policy's type, as written in `spec.policies` or the global's name |
-| `context.policyRevision` | Policy definition revision number (if versioned) |
-| `context.policyRevisionName` | Policy DefinitionRevision resource name (if versioned) |
-| `context.policyRevisionHash` | Policy template content hash (if versioned) |
+Inside the CUE template, `context` gives read access to the current Application: its name, namespace, labels, annotations, components, workflow and policies, plus the policy's own name and revision. Every field, and which definition kinds can read it, is in the [Context Reference](../context-reference.md).
 
 `context.appLabels` and `context.appAnnotations` leave out keys with internal prefixes (`app.oam.dev/`, `oam.dev/`, `owner.oam.dev/`, `modules.oam.dev/`, `kubernetes.io/`, `k8s.io/`, `kubectl.kubernetes.io/`, `app.kubernetes.io/`, `helm.sh/`), so a policy cannot read or key off KubeVela's own bookkeeping. Annotations an author sets, such as `policy.oam.dev/*` and `filter.oam.dev/*`, are visible.
 
@@ -670,7 +652,7 @@ cluster. See [Testing CUE Definitions](../cue/definition-testing.md).
 
 ## Versioning PolicyDefinitions
 
-Application-scoped policies support [definition versioning](../x-def-version.md). Each ApplicationRevision records the PolicyDefinition versions it was rendered with. A new revision (an Application spec change, its first deployment, or a `publishVersion` bump) takes the latest versions. Between revisions, whether a running Application adopts a new version is decided by its [rollout settings](./policy-rollout.md#new-policy-versions); with the defaults, it keeps the recorded version and reports the newer one as pending.
+Application-scoped policies support [definition versioning](../../end-user/definition-version-control.md). Each ApplicationRevision records the PolicyDefinition versions it was rendered with. A new revision (an Application spec change, its first deployment, or a `publishVersion` bump) takes the latest versions. Between revisions, whether a running Application adopts a new version is decided by its [rollout settings](./policy-rollout.md#new-policy-versions); with the defaults, it keeps the recorded version and reports the newer one as pending.
 
 For production use cases, pin explicit policies to a specific version with the `@version` suffix. `@v2` names the DefinitionRevision `add-team-labels-v2`. For a definition with semantic versions (`spec.version`), name the full version (`@v2.1.0`): `@v2` resolves to the newest `2.x` only on an Application annotated `app.oam.dev/autoUpdate: "true"`. A policy pinned to an exact DefinitionRevision is not changed by updates to its PolicyDefinition:
 

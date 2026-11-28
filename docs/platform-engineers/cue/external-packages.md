@@ -2,19 +2,14 @@
 title: External CUE Packages
 ---
 
-# Extending CUE with External Packages
+A `Package` resource registers functions that a definition can import. Each call is an HTTP POST to a service you run, the *provider*. CueX is the CUE engine in KubeVela that resolves these calls.
 
-CueX extends the CUE templating system by allowing users to define and execute custom functions as external packages. This enables integration with external services, dynamic function execution and reusability within workflow steps.
+With a Package you can:
+- Fetch data from APIs, databases or other services while a definition renders.
+- Share one function between many definitions instead of repeating the logic in each.
+- Write the provider in any language that can serve JSON over HTTP.
 
-With CueX external packages, you can:
-- Define reusable functions for workflow steps.
-- Dynamically fetch data from APIs, databases, or external services.
-- Avoid redundant logic by centralizing function definitions into reusable packages.
-- Implement function providers in any language, as long as they expose endpoints that conform to CueX requirements.
-
-> **Note:** External packages are available for use only within `WorkflowStepDefinitions`.
-
----
+Every definition type can import a Package: components, traits, policies, workflow steps and sources.
 
 ## Structure of a Package
 A `Package` in CueX is a Kubernetes CustomResource (CRD) that defines an external function provider and the functions it exposes. The key attributes of `Packages` are:
@@ -25,19 +20,19 @@ A `Package` in CueX is a Kubernetes CustomResource (CRD) that defines an externa
 
 #### spec.path
 - Defines the import path of the package within CUE definitions.
-- In the below example, `ext/example` means functions from this package can be referenced as:
+- In the example below, `ext/example` means functions from this package can be referenced as:
 
    ```cue
-   import "ext/utils"
-  
-   result: utils.#ExampleFunctionName & {
-        $params: { example_parameter: "value" }
+   import "ext/example"
+
+   result: example.#ExampleFunctionName & {
+        $params: { example_param: "value" }
    }
    ```
 
 #### spec.provider
 Specifies where CueX should send function calls.
-- `spec.provider.protocol`: Defines the communication method (currently only `"http"`).
+- `spec.provider.protocol`: `http` or `https`.
 - `spec.provider.endpoint`: The root endpoint of the function provider (e.g. http://my-cuex-server:8443/api/v1)
     >   e.g. If `#do: "api/example-fn-name"` is defined in a function, CueX will send `POST {provider_endpoint}/api/example-fn-name`.
 - `spec.provider.header`: Optional headers to send with the request in string map format. 
@@ -59,7 +54,7 @@ metadata:
 spec:
   path: ext/example                       # Import path for CueX to reference
   provider:
-    protocol: http                        # Currently, only `http` is supported
+    protocol: http                        # http or https
     endpoint: http://my-cuex-server:8443  # Root endpoint of the provider service
     header:
       User-Agent: CueX                    # Custom headers to send to the Provider service
@@ -100,7 +95,7 @@ It will:
    ```
 4. Expect a response like:
    ```json
-   { "example_result": "A returned string value.."}
+   { "example_result": 42 }
    ```
 5. Populate `$returns` in the CUE template with the received result.
 
@@ -118,6 +113,17 @@ External function providers can be written in any programming language, as long 
 2. **Accept JSON input**: The request payload should be a JSON object with a structure matching `$params`.
 
 3. **Return JSON output**: The response should be a JSON object with a structure matching `$returns`.
+
+### The provider contract
+
+CueX calls a provider in a fixed way, and a few of its rules decide how you write `$returns`:
+
+- The request is a `POST` to `{spec.provider.endpoint}/{#do}`, with `$params` as the JSON body, `Content-Type: application/json`, and any `spec.provider.header` values.
+- With `https`, CueX does not verify the provider's TLS certificate.
+- The HTTP status is not checked. CueX reads any response body, so an error page with status 500 is treated as a reply.
+- The body must be a JSON object. An array, a bare value or an HTML page fails the call.
+- Numbers come back as floating point. Declare numeric fields in `$returns` as `number`, not `int`: `7` arrives as `7.0` and conflicts with `int`.
+- CueX sets no timeout of its own on the call, so a provider that hangs holds up the render.
 
 ![cuex-usage.png](../../resources/cuex-usage.png)
 
@@ -231,7 +237,7 @@ spec:
 ```
 
 ### Using the Package
-With the Package registered, the `utils.#Sum` function is now available for use with WorkflowStepDefinition templates by importing the `ext/utils` provider. 
+With the Package registered, any definition can import `ext/utils` and call `utils.#Sum`. Here it is in a workflow step:
 
 ```cue
 import (
@@ -262,24 +268,32 @@ template: {
 
 ---
 
+## When a call fails
+
+A failed call fails the render, and the error says why:
+
+| What went wrong | Where you see it | The error contains |
+| --- | --- | --- |
+| The provider is down or the endpoint doesn't resolve | The workflow step's message in `vela status <app>`; for a component, trait or policy, the Application's status | `Post "http://my-cuex-server:8443/sum": dial tcp ...` |
+| The provider returned something other than a JSON object | Same places | A JSON decoding error, such as `invalid character '<' looking for beginning of value` |
+| A field in the reply doesn't match `$returns` | Same places | `conflicting values`, naming the field, such as `float` against `int` |
+| The import path doesn't match any Package's `spec.path` | Same places | `builtin package "ext/utils" undefined` |
+
+To check a provider by hand, send it what CueX would:
+
+```shell
+curl -s -X POST http://my-cuex-server:8443/sum -H 'Content-Type: application/json' -d '{"x": 2, "y": 5}'
+```
+
+## What the controller sends
+
+The call is made by the vela-core pod, whenever a definition that uses the Package renders, which for an Application can be every reconcile. It sends the `$params` you write, and the provider sees vela-core's network address. The [workflow HTTP limits](/workflow/next/guides/authoring/step-definition#http-limits) cover the built-in `vela/http` provider, not Package calls, so run providers inside the cluster or on an endpoint you trust. TLS isn't verified, so don't send secrets in `$params` to a provider outside a network you control.
+
 ## Configuration Flags
-The following KubeVela flags control the behavior of external Package handling in CueX:
+
+The following vela-core flags control external Packages in CueX:
 
 | Flag                                                  | Type | Default  | Description                                                                   |
 |-------------------------------------------------------|------|----------|-------------------------------------------------------------------------------|
 | `enable-external-package-for-default-compiler`        | bool | `true`   | Enables the use of external packages.                                         |
 | `enable-external-package-watch-for-default-compiler`  | bool | `false`  | Allows automatic reloading of external packages without restarting KubeVela.  |
-
----
-
-## Summary
-
-CueX external packages provide a **powerful, reusable, and modular** way to extend workflow templating in KubeVela. By defining external functions as Kubernetes resources, you can:
-
-- Extend CueX with custom logic, like API calls or database queries.
-- Reuse functions across multiple workflow steps, reducing duplication.
-- Dynamically update functions without modifying individual workflow definitions.
-- Maintain consistency across teams by centralizing function logic.
-- Implement function providers in any language, as long as they expose HTTP endpoints matching CueX’s requirements.
-
-With external packages, CueX makes it easier to build scalable, maintainable, and extensible workflow steps in KubeVela.

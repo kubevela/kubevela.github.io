@@ -77,7 +77,7 @@ vela def get webservice
 
 Component reads work in component properties and trait properties. A workflow step
 reads a component through the step that deployed it (see
-[Expressions in Workflow Steps](./workflow/expressions.md)), and a policy cannot read
+[Expressions in Workflow Steps](/workflow/next/guides/steps/expressions)), and a policy cannot read
 one. The full table of what can be read where is on
 [Property Expressions](./cel-expressions.md#where-they-work).
 
@@ -280,18 +280,20 @@ renders, as any other expression does. The full set of rules is in
 
 Errors common to every expression (escaping, types, `has()`) are on
 [Property Expressions](./cel-expressions.md#when-something-is-wrong). These are
-particular to component reads; the first three are waits rather than failures:
+particular to component reads. The first four are waits rather than failures: the reader
+is held back and tried again. The first two end once `db` is healthy or placed; the third ends
+only if the field appears, so guard a field that may never be set:
 
 | Message | Means |
 |---|---|
 | `waiting for component "db" in local/default to be healthy` | not an error: `db` is not healthy yet, for a read that names a cluster or namespace |
 | `waiting for component "db" to be placed in ...` | not an error: `db` has not been deployed there yet |
-| `... component "db" has no such field yet` | not an error: the field is not in the live object yet. Guard it to use a fallback |
+| `... component "db" has no such field yet` | not an error: the field is not in the live object yet, and the reader waits until it is. Guard it to use a fallback instead |
+| `component "api" reads "db" beside it in ..., but "db" is placed only in ...; read it there with ...` | a wait that does not end on its own: `db` is not deployed beside the reader. Use the read the message suggests |
 | `... a component whose name has a hyphen is read by index: write ...` | use `component["my-db"]` |
 | `cluster and namespace go straight after component.<name>: component.<name>.cluster("...")` | write `component.db.cluster("east").output...`, not `component.db.output.cluster("east")` |
 | `cluster() takes a literal string, so the read is known before evaluation` (or `namespace()`) | the cluster or namespace must be a quoted string, not an expression |
 | `... read component.db.output or component.db.outputs.<resource> ...` | the path starts with something other than `output` or `outputs` |
-| `component "api" reads "db" beside it in ..., but "db" is placed only in ...; read it there with ...` | `db` is not deployed beside the reader. Use the read the message suggests |
 | `... but no cluster "east" is registered` | the cluster name is not one KubeVela knows. Check `vela cluster list` |
 | `... which post-dispatch trait "..." outputs; it is applied only after the workflow finishes, so the read would wait for ever` | a resource from a post-dispatch trait cannot be read |
 | `component "db" is in 2 namespaces of cluster "east"; name one with ...` | the deploy step fails, and is retried, until you add `.namespace(...)` |
@@ -301,8 +303,8 @@ particular to component reads; the first three are waits rather than failures:
 ## Next
 
 - [Property Expressions](./cel-expressions.md): the language, escaping and guards.
-- [Expressions in Workflow Steps](./workflow/expressions.md): reading steps and loop items.
-- [Data Passing](./workflow/inputs-outputs.md): the CUE `inputs` and `outputs` this can replace.
+- [Expressions in Workflow Steps](/workflow/next/guides/steps/expressions): reading steps and loop items.
+- [Data Passing](/workflow/next/guides/steps/inputs-outputs): the CUE `inputs` and `outputs` this can replace.
 - [Reading External Data with Sources](../platform-engineers/source/intro.md): reading data the Application does not own, and when to use a source instead.
 
 {/* PENDING: the Sources links resolve once kubevela.github.io#1469 merges. */}

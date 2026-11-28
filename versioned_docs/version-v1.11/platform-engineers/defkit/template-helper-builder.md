@@ -78,8 +78,6 @@ Demonstrates `tpl.Helper()` with a single-source `From()` pipeline:
 - **`AfterOutput()`** — `exposedPorts` helper is placed after `output:` because it feeds `outputs:`.
 - **`helper.NotEmpty()`** — emit the `Service` only when at least one port is exposed.
 
-Verified with `vela def validate-module ./my-platform` against KubeVela v1.11.0-alpha.3.
-
 <Tabs groupId="defkit-example">
 <TabItem value="go" label="Go — defkit">
 
@@ -262,8 +260,9 @@ Demonstrates the `StructArrayHelper` → `ConcatHelper` → `DedupeHelper` compo
 - **`Optional("field")` in FieldMap** — `subPath` is included only when set on the item.
 - **`ConcatHelper` + `Fields(...)`** — joins the typed sub-arrays into one flat list via `list.Concat`.
 - **`DedupeHelper` + `ByKey("name")`** — removes duplicate entries using CUE's double-loop `_ignore` pattern; earlier entries win.
+- **`FromFields` + `MapBySource`**: builds the matching pod volumes, one per mount, from the same three sub-arrays.
 
-Verified with `vela def validate-module ./my-platform` against KubeVela v1.11.0-alpha.3.
+Each mount's `name` is also the name of the PVC, ConfigMap or Secret it mounts.
 
 <Tabs groupId="defkit-example">
 <TabItem value="go" label="Go — defkit">
@@ -322,12 +321,39 @@ func volumeWorkerTemplate(tpl *defkit.Template) {
 		ByKey("name").
 		Build()
 
+	// FromFields + MapBySource: one pod volume per mount. Each mount's name is
+	// also the name of the PVC, ConfigMap or Secret it mounts.
+	podVolumes := defkit.FromFields(volumeMounts, "pvc", "configMap", "secret").
+		MapBySource(map[string]defkit.FieldMap{
+			"pvc": {
+				"name": defkit.FieldRef("name"),
+				"persistentVolumeClaim": defkit.Nested(defkit.FieldMap{
+					"claimName": defkit.FieldRef("name"),
+				}),
+			},
+			"configMap": {
+				"name": defkit.FieldRef("name"),
+				"configMap": defkit.Nested(defkit.FieldMap{
+					"name": defkit.FieldRef("name"),
+				}),
+			},
+			"secret": {
+				"name": defkit.FieldRef("name"),
+				"secret": defkit.Nested(defkit.FieldMap{
+					"secretName": defkit.FieldRef("name"),
+				}),
+			},
+		})
+
 	tpl.Output(
 		defkit.NewResource("apps/v1", "Deployment").
 			Set("metadata.name", vela.Name()).
+			Set("spec.selector.matchLabels[app.oam.dev/component]", vela.Name()).
+			Set("spec.template.metadata.labels[app.oam.dev/component]", vela.Name()).
 			Set("spec.template.spec.containers[0].name", vela.Name()).
 			Set("spec.template.spec.containers[0].image", image).
-			SetIf(volumeMounts.IsSet(), "spec.template.spec.containers[0].volumeMounts", uniqueMounts),
+			SetIf(volumeMounts.IsSet(), "spec.template.spec.containers[0].volumeMounts", uniqueMounts).
+			SetIf(volumeMounts.IsSet(), "spec.template.spec.volumes", podVolumes),
 	)
 }
 
@@ -363,7 +389,7 @@ template: {
 			for v in parameter.volumeMounts.pvc {
 			{
 				mountPath: v.mountPath
-				name:      v.name
+				name: v.name
 				if v.subPath != _|_ {
 					subPath: v.subPath
 				}
@@ -375,7 +401,7 @@ template: {
 			for v in parameter.volumeMounts.configMap {
 			{
 				mountPath: v.mountPath
-				name:      v.name
+				name: v.name
 			}
 			},
 		] | []
@@ -384,10 +410,11 @@ template: {
 			for v in parameter.volumeMounts.secret {
 			{
 				mountPath: v.mountPath
-				name:      v.name
+				name: v.name
 			}
 			},
 		] | []
+
 	}
 	mountsList: list.Concat([mountsArray.pvc, mountsArray.configMap, mountsArray.secret])
 	uniqueMounts: [
@@ -405,14 +432,60 @@ template: {
 	output: {
 		apiVersion: "apps/v1"
 		kind:       "Deployment"
-		metadata: name: context.name
-		spec: template: spec: containers: [{
-			name:  context.name
-			image: parameter.image
-			if parameter["volumeMounts"] != _|_ {
-				volumeMounts: uniqueMounts
+		metadata: {
+			name: context.name
+		}
+		spec: {
+			selector: {
+				matchLabels: {
+					"app.oam.dev/component": context.name
+				}
 			}
-		}]
+			template: {
+				metadata: {
+					labels: {
+						"app.oam.dev/component": context.name
+					}
+				}
+				spec: {
+					containers: [{
+						name: context.name
+						image: parameter.image
+						if parameter["volumeMounts"] != _|_ {
+							volumeMounts: uniqueMounts
+						}
+					}]
+					if parameter["volumeMounts"] != _|_ {
+						volumes: [
+					if parameter.volumeMounts != _|_ && parameter.volumeMounts.pvc != _|_ for v in parameter.volumeMounts.pvc {
+						{
+							name: v.name
+							persistentVolumeClaim: {
+								claimName: v.name
+							}
+						}
+					},
+					if parameter.volumeMounts != _|_ && parameter.volumeMounts.configMap != _|_ for v in parameter.volumeMounts.configMap {
+						{
+							configMap: {
+								name: v.name
+							}
+							name: v.name
+						}
+					},
+					if parameter.volumeMounts != _|_ && parameter.volumeMounts.secret != _|_ for v in parameter.volumeMounts.secret {
+						{
+							name: v.name
+							secret: {
+								secretName: v.name
+							}
+						}
+					}
+				]
+					}
+				}
+			}
+		}
 	}
 	parameter: {
 		// +usage=Container image
@@ -430,14 +503,10 @@ template: {
 
 **`volumeMounts` present, some sub-fields absent**: The `*[...] | []` default on each `mountsArray` sub-field means `parameter.volumeMounts.secret` not being set still yields `mountsArray.secret = []`, so `list.Concat` never sees `_|_`.
 
-**Duplicate names across sub-fields**: If a PVC and a ConfigMap mount both use the name `"data"`, the `uniqueMounts` double-loop suppresses the later occurrence. Earlier entries in `mountsList` win.
+**Duplicate names across sub-fields**: If a PVC and a ConfigMap mount both use the name `"data"`, the `uniqueMounts` double-loop suppresses the later mount; earlier entries in `mountsList` win.
 
-:::note Pattern example — pod volumes not included
-This component sets `volumeMounts` on the container but does **not** define the corresponding `spec.template.spec.volumes` entries in the Deployment. Kubernetes requires every `volumeMount.name` to match a volume in `spec.template.spec.volumes`, so the Deployment above cannot be applied as-is.
-
-The example is intentionally scoped to demonstrating the `StructArrayHelper → ConcatHelper → DedupeHelper` pipeline. In production use, wire up the pod-level volumes by either:
-- Extending this component template with additional `.Set("spec.template.spec.volumes[...]", ...)` calls for each volume type, or
-- Using a companion trait that injects the volume specs alongside the mounts.
+:::note
+The volume list is not deduplicated, so two mounts with one name still produce two volumes with that name, and the API server refuses the pod. Give every mount a unique `name` across `pvc`, `configMap` and `secret`.
 :::
 
 ## Reproduce
