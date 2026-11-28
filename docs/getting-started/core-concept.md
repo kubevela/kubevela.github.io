@@ -20,6 +20,8 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: <name>
+  annotations:
+    app.oam.dev/cel-expressions: "true" # needed only for sources and $( ) expressions
 spec:
   sources:
     - name: <source name>
@@ -62,7 +64,7 @@ This `Application` entity will reference `component`, `trait`, `policy` and `wor
 
 * **Workflow Step**: Workflow step allows you to define every steps in the delivery process, typical steps are manual approval, partial deploy, notification.
 
-* **Source**: A source fetches a value from outside the Application, such as a ConfigMap, a Config, a file in Git or an HTTP endpoint, and components read it with `$(source.<name>)`. Expressions are alpha and off by default: see [Enable the feature](../platform-engineers/source/intro.md#enable-the-feature).
+* **Source**: A source fetches a value from outside the Application, such as a ConfigMap, a Config, a file in Git or an HTTP endpoint, and components read it with `$(source.<name>)`. Sources and expressions are alpha and off by default: they need the `EnableCelExpressions` feature gate, and in the default opt-in mode an Application that uses them opts in with the `app.oam.dev/cel-expressions: "true"` annotation. Turn the `RequireCelExpressionOptIn` gate off only once every Application has been reviewed. See [Enable the feature](../platform-engineers/source/intro.md#enable-the-feature).
 
 The modules that make up the application are all extensible, they are defined by a bunch of programmable configurations called [Definitions](../platform-engineers/oam/x-definition.md). Under the hood, KubeVela will glue and leverage Kubernetes API to drive the infrastructure capabilities. You can check the following picture to see their relationships:
 

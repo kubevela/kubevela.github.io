@@ -53,8 +53,11 @@ these before your next spec change:
 - Applications with two traits that conflict (one lists the other in `conflictsWith`, directly or
   through `extends`): remove one of the pair. See [Trait conflicts](#trait-conflicts).
 - Custom WorkflowStepDefinitions: run `vela def vet` with the v1.12 CLI and fix any that do not
-  compile. v1.11 marked such a step `Succeeded` **without running it**; v1.12 refuses it at
-  admission and fails it at run time. Re-run the workflows that use them on a staging cluster.
+  compile. v1.12 refuses a template that does not compile at admission, such as one with an
+  undefined reference (v1.11 admitted it, and the step failed at run time). A template that
+  compiles but names an action its package does not have, such as `op.#Nope`, is still admitted,
+  and its step still shows `succeeded` **without running**. Re-run the workflows that use your
+  custom steps on a staging cluster, and check that each step really did its work.
 
 ### 3. Upgrade the chart
 
@@ -317,7 +320,7 @@ Check a particular Application with `vela dry-run` from the v1.12 CLI against th
 | `storage` trait | ConfigMap and Secret volumes marked `readOnly` are mounted read-only; block-mode PVCs are attached as devices and no longer mounted; a PVC `selector` is now written as `selector` (v1.11 wrote it as `dataSource`). |
 | `hostalias` trait | Entries for the same IP are merged into one, and a hostname the IP already has is listed once. |
 | `sidecar` trait | The sidecar's `ports` are now rendered. |
-| `affinity` trait | `nodeSelector` is now applied to the pod spec. A pod that ran anywhere may become unschedulable if no node matches. |
+| `affinity` trait | v1.11 applied `podAffinity`, `podAntiAffinity`, `nodeAffinity` and `tolerations`, but ignored `nodeSelector`, the raw `affinity` object, `schedulerName`, `priorityClassName` and `topologySpreadConstraints`; v1.12 applies those five as well, so the workload rolls, and its new Pods stay `Pending` when no node matches. A `task` component's Job cannot roll: its pod template is immutable, so the update fails with "field is immutable" until the Job is deleted, and v1.12 then creates it again, which runs the task again. The pre-upgrade check flags these as `affinity-trait`: a warning, or an error when no node matches or the PriorityClass does not exist. |
 | `pure-ingress` trait | The Ingress is `networking.k8s.io/v1` (was `v1beta1`), with `pathType: ImplementationSpecific`. |
 
 Each of these rolls the workload on its first successful edit; a `task` Job with probes instead

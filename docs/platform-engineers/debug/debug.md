@@ -6,7 +6,7 @@ slug: /platform-engineers/debug/debug
 :::caution
 Debug workflow will run workflow in the real environment, make sure you're debugging in the test environment.
 
-`vela debug` reads the Application, the definitions it uses and, for a workflow, the debug data the `debug` policy stores in ConfigMaps in the app's namespace. If it reports `forbidden`, ask your platform team for read access to Applications and ConfigMaps in that namespace.
+`vela debug` reads the Application, the definitions it uses and, for a workflow, the debug data the `debug` policy stores in ConfigMaps in the app's namespace. If it reports `forbidden`, ask your platform team for read access to Applications and ConfigMaps in that namespace, and to the definitions it uses, in that namespace or `vela-system`.
 :::
 
 When you deploy your application in a test environment and find problems with the application, you may want to debug the application in the environment. KubeVela provides the `vela debug` command to help you debug your application in the environment.

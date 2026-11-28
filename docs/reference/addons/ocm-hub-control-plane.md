@@ -25,7 +25,7 @@ vela addon disable ocm-hub-control-plane
 
 ## When to use it
 
-Use this addon, with [ocm-gateway-manager-addon](./ocm-gateway-manager-addon.md), when you already run Open Cluster Management, or want pull-based registration of clusters through klusterlet agents instead of storing kubeconfigs in the hub. [Working with OCM](../../platform-engineers/system-operation/working-with-ocm.md) walks through the whole setup, from enabling both addons to deploying an Application to an OCM cluster.
+Use this addon, with [ocm-gateway-manager-addon](./ocm-gateway-manager-addon.md), when you want an Open Cluster Management hub in the KubeVela cluster for pull-based registration of clusters through klusterlet agents instead of storing kubeconfigs in the hub. If that cluster already runs an OCM hub, don't install a second one: enable only ocm-gateway-manager-addon, which has no dependency on this addon. [Working with OCM](../../platform-engineers/system-operation/working-with-ocm.md) walks through the whole setup, from enabling both addons to deploying an Application to an OCM cluster.
 
 ## Background
 

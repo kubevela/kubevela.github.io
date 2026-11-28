@@ -51,7 +51,7 @@ vela config list -t image-registry
 
 ## Distribute the config
 
-A config's Secret lives in one namespace of the hub cluster. A workload that pulls from the registry needs that Secret (of type `kubernetes.io/dockerconfigjson`) in its own namespace and cluster, so it must exist for every target the application deploys to. Distributing the config copies it there.
+A config's Secret lives in one namespace of the hub cluster. A workload that pulls from the registry needs that Secret (of type `kubernetes.io/dockerconfigjson` when the config sets `auth`, or `Opaque` without it) in its own namespace and cluster, so it must exist for every target the application deploys to. Distributing the config copies it there.
 
 Let's go to the project summary page for which you want to create the Application.
 

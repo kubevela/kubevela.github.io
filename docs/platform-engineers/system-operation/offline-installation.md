@@ -6,7 +6,7 @@ title: Air-gapped Installation
 
 ## Images to mirror
 
-If you install the `vela-core` Helm chart yourself, mirror these images and set `imageRegistry` to your registry. The chart prefixes every image it runs with it.
+If you install the `vela-core` Helm chart yourself, mirror these images and set `imageRegistry` to your registry, ending in `/` (`registry.example.com/`). The chart puts it in front of every image it runs, as it is, so without the `/` the image names run together.
 
 | Image | Used by | Helm value |
 |---|---|---|
@@ -32,7 +32,7 @@ The `restart-workflow` step runs `bitnami/kubectl:latest` and has no parameter f
 
 If your environment can't reach the addon registry or `https://github.com/kubevela/catalog`, clone the catalog, point each addon's images and charts at your registry, then enable the addon from its local directory. Run steps 1 to 3 on a machine that can reach the internet and your registries, then carry the catalog over to the air-gapped side.
 
-1. Clone [the catalog repo](https://github.com/kubevela/catalog). Community addons are in `./addons/`, experimental ones in `./experimental/addons/`.
+1. Clone [the catalog repo](https://github.com/kubevela/catalog). Community addons are in `./catalog/addons/`, experimental ones in `./catalog/experimental/addons/`; use the addon's own path in the steps below.
 
     ```shell
     git clone https://github.com/kubevela/catalog
@@ -43,24 +43,32 @@ If your environment can't reach the addon registry or `https://github.com/kubeve
 2. List the images and Helm charts an addon uses, by rendering it without installing anything:
 
     ```shell
-    vela addon enable ./catalog/addons/<addon> --dry-run | grep -E '^\s*(image|url|chart|version):' | sort -u
+    vela addon enable <addon-path> --dry-run | grep -E '^\s*(image|url|chart|version):' | sort -u
     ```
+
+    `<addon-path>` is `./catalog/addons/<addon>`, or `./catalog/experimental/addons/<addon>` for an experimental addon.
 
     For a component that installs a Helm chart, this lists the chart; the chart's own images are in its `values.yaml`.
 
-3. Copy each image to your registry:
+3. Copy each image to your registry, with every platform and its digest kept, for example with [skopeo](https://github.com/containers/skopeo):
 
     ```shell
-    docker pull <image>
-    docker tag <image> <your registry>/<image>
-    docker push <your registry>/<image>
+    skopeo copy --all docker://<image> docker://<your registry>/<image>
     ```
 
-    And each chart to your chart registry:
+    `docker pull` and `docker push` copy only your machine's platform, which changes the digest of a multi-platform image.
+
+    And each chart to your chart registry. For a chart in a Helm repository:
 
     ```shell
     helm pull <chart> --repo <url> --version <version>
     vela addon push <chart>-<version>.tgz <your chart registry>
+    ```
+
+    For a chart in an OCI registry, pull it by its `oci://` reference instead:
+
+    ```shell
+    helm pull oci://<registry>/<path>/<chart> --version <version>
     ```
 
     `<your chart registry>` is a registry added with `vela addon registry add`, a ChartMuseum URL, or an `oci://` URL.
@@ -72,5 +80,5 @@ If your environment can't reach the addon registry or `https://github.com/kubeve
 5. Enable the addon from its local directory:
 
     ```shell
-    vela addon enable ./catalog/addons/<addon>
+    vela addon enable ./catalog/addons/<addon>   # or ./catalog/experimental/addons/<addon>
     ```

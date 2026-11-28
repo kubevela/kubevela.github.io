@@ -102,7 +102,7 @@ This is a CUE based template which only exposes `type` and `value` as trait prop
 
 ## Step 3: Register New Trait to KubeVela
 
-As long as the definition file is ready, you just need to apply it to Kubernetes with `vela def apply <file>`. To install KEDA and its `keda-auto-scaler` trait together, enable the addon instead:
+As long as the definition file is ready, you just need to apply it to Kubernetes with `vela def apply <file>`. To install KEDA and its `keda-auto-scaler` trait together, skip Steps 1 to 3 and enable the addon instead:
 
 ```bash
 vela addon enable keda

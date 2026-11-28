@@ -9,7 +9,7 @@ With a Package you can:
 - Share one function between many definitions instead of repeating the logic in each.
 - Write the provider in any language that can serve JSON over HTTP.
 
-Every definition type can import a Package: components, traits, policies and workflow steps.
+Components, traits and workflow steps can import a Package. A PolicyDefinition that imports one is refused at admission on v1.10, which validates policy templates without CueX; v1.11 lifts that.
 
 ## Structure of a Package
 A `Package` in CueX is a Kubernetes CustomResource (CRD) that defines an external function provider and the functions it exposes. The key attributes of `Packages` are:

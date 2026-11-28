@@ -159,7 +159,7 @@ spec:
 **Expected result:** applying the Application triggers a reconcile loop and execution pauses at the `Reconcile()` breakpoint.
 
 :::tip
-If Checkpoint 2 never pauses, the controller can't reach the cluster. Check `kubectl get ns` works with the same kubeconfig, and that a proxy isn't intercepting `127.0.0.1`.
+If Checkpoint 2 never pauses, check the Application was accepted (`kubectl get app -A`) and read the controller's output in the IDE. Connection errors there mean the controller can't reach the cluster: check `kubectl get ns` works with the same kubeconfig, and that a proxy isn't intercepting `127.0.0.1`.
 :::
 
 ## Step 5: Run Unit Tests

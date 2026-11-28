@@ -18,6 +18,12 @@ function localise() {
   document.documentElement.dataset.kvCall = shown ? 'on' : 'off';
 }
 
+// A page left open is worded again each minute, so the call appears when its
+// build-up starts and goes once it is over.
+let timer;
+
 export function onRouteDidUpdate() {
   localise();
+  clearInterval(timer);
+  timer = setInterval(localise, 60 * 1000);
 }

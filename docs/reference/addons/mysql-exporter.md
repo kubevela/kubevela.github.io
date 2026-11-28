@@ -124,10 +124,11 @@ The component runs the exporter as a Deployment and a Service named after the co
 
 ## See the metrics
 
-The exporter serves metrics on port 9104. Forward the Service in the background and check that it can reach MySQL:
+The exporter serves metrics on port 9104. Forward the component's Service in the background and check that it can reach MySQL:
 
 ```shell
 kubectl port-forward -n default svc/mysql-exporter 9104:9104 &
+sleep 2  # give the forward a moment to start listening
 curl -s http://127.0.0.1:9104/metrics | grep mysql_up
 ```
 
@@ -137,6 +138,6 @@ curl -s http://127.0.0.1:9104/metrics | grep mysql_up
 mysql_up 1
 ```
 
-`mysql_up 0` means the exporter is running but can't log in to MySQL: check `mysqlHost`, `username` and `password`. For the component, forward `svc/mysql-exporter` instead.
+`mysql_up 0` means the exporter is running but can't log in to MySQL: check `mysqlHost`, `username` and `password`. For the trait, forward `svc/mysqlexporter` instead.
 
 Unless you set `disableAnnotation: true`, the exporter's pods carry the `prometheus.io/scrape` annotations, so a Prometheus that discovers pods by annotation scrapes them without more setup.

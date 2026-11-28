@@ -39,7 +39,7 @@ This is how the command functions:
     ...
     ```
 
-    `CLI Version` is the image's tag; `Core Version` is the vela-core installed in the cluster your kubeconfig points at.
+    `CLI Version` is the version the CLI was built as, which matches the tag for a release image like this one (`latest` reports a `master` build); `Core Version` is the vela-core installed in the cluster your kubeconfig points at.
 
 * `--rm` – Specifies to clean up the container after the command exits.
 
@@ -99,7 +99,7 @@ spec:
 
 There're some prerequisites:
 
-* the service account should have enough privileges to access addon and install it, the easiest way is to use the same one with the vela-core just like the example. `kubevela-vela-core` is bound to `cluster-admin` unless authentication is on. For anything but addon installs, create a ServiceAccount with only what the command needs.
+* the service account should have enough privileges to install the addon. The example uses vela-core's own `kubevela-vela-core`, which is bound to `cluster-admin` only while `authentication.enabled` is off. With authentication on, it has a narrower role and the install can fail: give the Job a ServiceAccount of its own with the permissions the addon needs. For anything but addon installs, create a ServiceAccount with only what the command needs.
 * the image tag should match your installed vela-core version.
 * the namespace should align with your service account.
 

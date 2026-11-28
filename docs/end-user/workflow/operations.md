@@ -4,7 +4,7 @@ title:  Workflow Operations
 
 This section introduces how to use the `vela` CLI to operate workflow.
 
-Every command except `list` takes the Application's name, and `-n <namespace>` for its namespace (the current env's namespace if you leave it out). `suspend`, `resume`, `restart`, `logs` and `debug` also take `--step <name>` to act on one step instead of the whole workflow.
+Every command except `list` takes the name of an Application, or of a standalone WorkflowRun, and `-n <namespace>` for its namespace (the current env's namespace if you leave it out). The CLI looks for an Application of that name first and then a WorkflowRun; pass `--type app` or `--type workflow` to say which. `restart` and `rollback` work on Applications only. `suspend`, `resume`, `restart`, `logs` and `debug` also take `--step <name>` to act on one step instead of the whole workflow.
 
 ## List Workflows
 
@@ -65,7 +65,7 @@ Once application workflow is terminated, KubeVela controller won't reconcile the
 
 ## Restart Workflow
 
-`vela workflow restart` runs the whole workflow again from the first step, whatever state it is in; add `--step <name>` to restart from that step. Steps that read the restarted step's outputs run again with it.
+`vela workflow restart` runs the whole workflow again from the first step, whatever state it is in; add `--step <name>` to restart from that step, which must be one that failed (a step that succeeded or is still running is refused). Steps that read the restarted step's outputs run again with it.
 
 ```bash
 vela workflow restart my-app -n default

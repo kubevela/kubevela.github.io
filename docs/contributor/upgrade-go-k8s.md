@@ -28,7 +28,7 @@ kubevela/velaux
 
 1. Pick target Go and Kubernetes minor. Confirm a compatible `sigs.k8s.io/controller-runtime`.
 
-2. Upgrade ALL repositories EXCEPT `kubevela/kubevela` first. Do them sequentially respecting real import dependencies (see [Interdependencies example](#interdependencies-example)). The core `kubevela/kubevela` repository MUST be upgraded only after every repo below is merged; `kubevela/velaux` is upgraded last, only after the `kubevela/kubevela` upgrade is complete.
+2. Upgrade the nine repositories listed below first, before `kubevela/kubevela` and `kubevela/velaux`. Do them sequentially respecting real import dependencies (see [Interdependencies example](#interdependencies-example)). The core `kubevela/kubevela` repository MUST be upgraded only after all nine are merged; `kubevela/velaux` is upgraded last, only after the `kubevela/kubevela` upgrade is complete.
 
     - `oam-dev/cluster-register`
     - `oam-dev/cluster-gateway`
@@ -43,7 +43,7 @@ kubevela/velaux
 3. When upgrading a downstream repo that depends on one you just merged and which is not tagged yet, temporarily reference the upstream commit:
     - `go get github.com/kubevela/pkg@<commit-sha>` (creates a pseudo-version)
 
-4. Only AFTER all other repositories are merged upgrade `kubevela/kubevela`
+4. Only AFTER those nine repositories are merged, upgrade `kubevela/kubevela`
     - Create the upgrade PR from a branch named `chore/upgrade-k8s-*` (e.g. `chore/upgrade-k8s-1.29-to-1.30`). This naming convention triggers the upgrade verification pipelines.
 
 5. After `kubevela/kubevela` is merged, update the release notes and documentation with the new minimum Go version and supported Kubernetes versions, then upgrade `kubevela/velaux`.

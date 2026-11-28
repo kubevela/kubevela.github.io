@@ -8,7 +8,7 @@ In KubeVela workflow, each step can specify a `timeout`, you can use `timeout` t
 
 `timeout` follows the `duration` format, e.g. `30s`, `1m`, etc. You can refer to Golang's [parseDuration](https://pkg.go.dev/time#ParseDuration).
 
-If a step is not completed within the specified time, KubeVela sets the step's phase to `failed` with the reason `Timeout`, and terminates the workflow: steps that have not run are skipped, and the Application's phase becomes `workflowTerminated`, not `workflowFailed`.
+If a step is not completed within the specified time, KubeVela sets the step's phase to `failed` with the reason `Timeout`, and terminates the workflow: steps that have not run are skipped, unless they set `if: always`, which still run. The Application's phase becomes `workflowTerminated`, not `workflowFailed`.
 
 Apply the following example:
 

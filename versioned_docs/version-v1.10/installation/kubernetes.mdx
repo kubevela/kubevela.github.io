@@ -47,8 +47,10 @@ curl -fsSl https://kubevela.io/script/install.sh | bash -s 1.10.10
 Only the official release version is supported.
 :::
 
+The script also installs the latest release unless you give it a version. For this release:
+
 ```shell script
-powershell -Command "iwr -useb https://kubevela.io/script/install.ps1 | iex"
+powershell -Command "& ([scriptblock]::Create((iwr -useb https://kubevela.io/script/install.ps1))) -Version v1.10.10"
 ```
 
 </TabItem>
