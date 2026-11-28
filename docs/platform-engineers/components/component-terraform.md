@@ -132,6 +132,26 @@ spec:
 status: {}
 ```
 
+For a private repository reached over SSH, point `gitCredentialsSecretReference` at a Secret that holds the key. The Secret has two keys, `ssh-privatekey` and `known_hosts`; the remote's host key is checked against `known_hosts`.
+
+Two controllers use the reference, and each has its own rule for where the Secret lives:
+
+- KubeVela clones the module once, to build the definition's parameter schema. It reads the Secret from the definition's namespace. A `namespace` that names another one is refused with `git credentials secret <namespace>/<name> must be in the definition's namespace "<namespace>"`.
+- The Terraform controller clones it again for every component that uses the definition. It reads the reference as written, so it needs `namespace` set, and the Secret must be in the namespace its Jobs run in: the Application's namespace, or the one its `--controller-namespace` flag names.
+
+The definition's own reference satisfies both only when those namespaces are the same, for example a definition in `vela-system` and a Terraform controller started with `--controller-namespace=vela-system`:
+
+```yaml
+spec:
+  schematic:
+    terraform:
+      configuration: git@github.com:my-org/terraform-alibaba-eip.git
+      type: remote
+      gitCredentialsSecretReference:
+        name: git-ssh
+        namespace: vela-system
+```
+
 You are warmly welcome to contribute this extended cloud resource ComponentDefinition to [oam-dev/catalog](https://github.com/kubevela/catalog/tree/master/addons/).
 
 ## Apply ComponentDefinition

@@ -116,21 +116,21 @@ Availability: `app.oam.dev/reconcile-interval` is supported in KubeVela v1.11+.
 | Examples | `30s`, `1m`, `5m`, `15m`, `1h` |
 | Minimum floor | `10s`. Values below this are ignored; the controller falls back to the global default and logs a warning |
 
-Invalid values (empty string, malformed text, negative durations) are also ignored with the same warning and fallback behavior.
+Invalid values (empty string, malformed text, negative durations) are also ignored, with a warning, and fall back to the global default.
+
+While a workflow is executing or waiting to retry, its own backoff sets the requeue time. The annotation applies once the workflow has finished, or is suspended with no `duration`; a suspend step with a `duration` requeues on its own wait.
 
 ### Precedence
 
-The annotation always takes priority over the global `--application-re-sync-period`. When the annotation is absent, the Application uses the global default as before.
+The annotation takes priority over the global `--application-re-sync-period`. When the annotation is absent, the Application uses the global default as before.
 
 Enabling the `ApplyOnce` feature gate sets that global period to `--informer-sync-period` (default `10h`) and disables State Keep for the cluster. The annotation can still shorten the requeue interval for an opted-in Application, but it does not turn State Keep back on. See [bootstrap parameters](../../platform-engineers/system-operation/bootstrap-parameters.md) for the gate and related flags. This is separate from the per-Application [`apply-once` policy](../policies/apply-once.md), which skips selected fields while State Keep continues.
 
 ### Scope
 
-The annotation only changes the post-reconcile requeue interval. Periodic State Keep uses that interval only when State Keep is enabled. Other reconcile triggers still fire immediately:
+The annotation only changes the post-reconcile requeue interval. Periodic State Keep uses that interval only when State Keep is enabled.
 
-- Application spec changes
-- Events on owned resources
-- Status updates
+A change to the Application's spec, labels or annotations still triggers a reconcile straight away, and so does deleting its ResourceTracker. Other ResourceTracker changes trigger one only with `--optimize-enable-resource-tracker-delete-only-trigger=false`. A change made directly to a dispatched resource (for example, a hand edit to a Deployment) is not watched: State Keep corrects it on its next periodic pass, at the interval this annotation sets. With State Keep disabled, as the `ApplyOnce` gate does, it is not corrected.
 
 ### Examples
 
