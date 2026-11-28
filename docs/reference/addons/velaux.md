@@ -290,6 +290,18 @@ With `repo=your-registry.example.com`, the image to deploy velaux server will be
 
 This feature can help you to build your private installation, just upload all images to your private image registry.
 
+## Compatibility
+
+VelaUX v1.12.0 runs on KubeVela 1.10, 1.11 and 1.12. A few features need a newer KubeVela. Where the cluster is too old for the resync interval or a workflow restart, VelaUX hides them, and its API refuses them with an error naming the version they need. Sources are the exception: the page stays, with an empty list.
+
+| Feature | KubeVela |
+| --- | --- |
+| Everything not listed below | 1.10 or later |
+| Resync interval and workflow restart on an application | 1.11 or later |
+| Sources (SourceDefinitions) | 1.12 or later. Earlier versions have no SourceDefinition CRD, so the Sources list is empty rather than hidden. |
+
+VelaUX reads the KubeVela version from the vela-core image tag. If it can't tell (a branch build, or an image pinned by digest), it assumes every feature is there.
+
 ## Concept of VelaUX
 
 VelaUX is an addon on top of KubeVela, it works as UI console for KubeVela, while it's also an out-of-box platform for end-user.
