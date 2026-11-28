@@ -323,8 +323,9 @@ Check a particular Application with `vela dry-run` from the v1.12 CLI against th
 | `affinity` trait | v1.11 applied `podAffinity`, `podAntiAffinity`, `nodeAffinity` and `tolerations`, but ignored `nodeSelector`, the raw `affinity` object, `schedulerName`, `priorityClassName` and `topologySpreadConstraints`; v1.12 applies those five as well, so the workload rolls, and its new Pods stay `Pending` when no node matches. A `task` component's Job cannot roll: its pod template is immutable, so the update fails with "field is immutable" until the Job is deleted, and v1.12 then creates it again, which runs the task again. The pre-upgrade check flags these as `affinity-trait`: a warning, or an error when no node matches or the PriorityClass does not exist. |
 | `pure-ingress` trait | The Ingress is `networking.k8s.io/v1` (was `v1beta1`), with `pathType: ImplementationSpecific`. |
 
-Each of these rolls the workload on its first successful edit; a `task` Job with probes instead
-fails with the immutable-template error until the Job is deleted. Several traits that failed to
+Each of these rolls the workload on its first successful edit. A `task` Job cannot roll: one with
+probes, or with an `affinity` trait setting any of the five fields v1.11 ignored, instead fails with
+the immutable-template error until the Job is deleted. Several traits that failed to
 render in v1.11 for some inputs (`container-ports`, `init-container`, `k8s-update-strategy`,
 `securitycontext`, `startup-probe`) now render.
 

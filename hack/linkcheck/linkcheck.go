@@ -39,7 +39,7 @@ func main() {
 				if idx < 1 {
 					continue
 				}
-				if strings.HasPrefix(s, "http://") || strings.HasPrefix(s, "https://") || strings.HasPrefix(s, "#") || strings.HasPrefix(s, "/blog") || strings.HasPrefix(s, "/img") || strings.HasPrefix(s, "/zh/blog") || strings.HasPrefix(s, "/release-notes/") || strings.HasPrefix(s, "/upgrade-guides/") || strings.HasPrefix(s, "/docs/") {
+				if strings.HasPrefix(s, "http://") || strings.HasPrefix(s, "https://") || strings.HasPrefix(s, "#") || strings.HasPrefix(s, "/blog") || strings.HasPrefix(s, "/img") || strings.HasPrefix(s, "/zh/blog") || strings.HasPrefix(s, "/release-notes/") || strings.HasPrefix(s, "/upgrade-guides/") || strings.HasPrefix(s, "/docs/") || isSectionLink(s) {
 					continue
 				}
 				d := strings.Index(s, ")")
@@ -77,4 +77,18 @@ func trimSuffix(s string, targetChar string) string {
 		return s[:ss]
 	}
 	return s
+}
+
+// sections are the docs plugins other than core, each served at its own route base path in
+// docusaurus.config.js. The checker resolves links against files only, so it skips links into
+// them and leaves those to the Docusaurus build, which fails on a broken link (onBrokenLinks).
+var sections = []string{"/workflow/", "/velaux/", "/terraform/", "/addons/", "/cluster-gateway/", "/prism/"}
+
+func isSectionLink(s string) bool {
+	for _, p := range sections {
+		if strings.HasPrefix(s, p) {
+			return true
+		}
+	}
+	return false
 }

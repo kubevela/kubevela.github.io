@@ -5,12 +5,10 @@ on:
     branches: [main]
   # Allow running this workflow manually from the Actions tab
   workflow_dispatch:
-  # Rebuild daily so the announcement bar, read from GitHub at build time,
-  # comes and goes on time, and on Thursday evenings (UTC) so a community call
-  # leaves the bar soon after it ends.
+  # Rebuild every 3 hours, so content read at build time (the announcement bar from GitHub, and the synced addon
+  # catalog pages) stays current. The 18:00 UTC run covers the end of the Thursday community call.
   schedule:
-    - cron: '0 2 * * *'
-    - cron: '0 18 * * 4'
+    - cron: '0 */3 * * *'
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
