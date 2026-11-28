@@ -19,6 +19,57 @@ Read this page through before you start: a few steps have to happen **before** `
 some changes only show up on the first edit of each Application afterwards. As with any upgrade,
 rehearse it on a copy of your cluster first.
 
+## Check your cluster first
+
+`hack/preupgrade-check-1.12.sh`, in the [kubevela repository](https://github.com/kubevela/kubevela),
+reads your v1.11 cluster and lists what v1.12 would refuse or treat differently, each with the
+object, the problem, the fix and the section of this page that covers it. It only reads: `kubectl get`
+and `list`, `helm get values` and `helm list`. Run it before you upgrade, and again after you fix what
+it finds:
+
+```shell
+curl -fsSLO https://raw.githubusercontent.com/kubevela/kubevela/master/hack/preupgrade-check-1.12.sh
+bash preupgrade-check-1.12.sh
+```
+
+It needs `kubectl` pointed at the cluster and `jq`. With `helm` installed it also reads the
+release's values, and judges what v1.12 will do with them: the feature gates, `controllerArgs`,
+`workflow.http.maxTimeout`, `workflow.httpDeny` and `definitionRestrictions`, each falling back to
+the v1.12 default. These are the values the release runs with now: if you upgrade with a different
+values file, check it carries the same settings. Without `helm` it uses the gates the controller
+runs with now. It takes `--release` and `--namespace` (default `kubevela` in `vela-system`),
+`--json` for machine-readable output, `-q` for the summary line alone and `-v` to list every check.
+It exits `0` when it finds no errors, `1` when it does, and `2` when it cannot run.
+
+The HTTP check reads the deny list ConfigMaps the controller reads, and the host of a `webhook` or
+`notification` URL kept in a Secret (only the host, never the rest of the value; a Secret it may not
+read is listed as unchecked). `--resolve` also looks hostnames up and checks their addresses. It
+resolves them from your machine, not from the cluster, so a name that only the cluster's DNS knows is
+not resolved.
+
+| Level | What it finds |
+| --- | --- |
+| error | Applications whose traits [conflict](#trait-conflicts), including through a pinned `type@vN` revision |
+| error | Release values that pin `image.tag` or the cluster-gateway image tag |
+| error | `helmchart` `valuesFrom` and chart credentials outside the Application's namespace, config steps reaching configs outside it (shared configs in `vela-system` stay readable), and Terraform module SSH keys outside the definition's namespace |
+| error | `request`, `webhook` and `notification` steps calling addresses the HTTP guard refuses, or with a timeout it refuses |
+| error | `vela-cli` steps outside the namespaces `definitionRestrictions` allows (`vela-system` by default) |
+| error | Global policies outside `vela-system`, and `policy.oam.dev/skip-global`, with `enableGlobalPolicies` and `enableApplicationScopedPolicies` on |
+| warn | `resource` traits that set only `cpu` or only `memory`, which v1.11 ignored and v1.12 applies |
+| warn | v1.11 [configs and templates](#config-templates-and-configs) that need RBAC, a new home or a Nacos mark |
+| warn | Applications using a definition whose `definition.oam.dev/restrict-namespaces` annotation or `definitionRestrictions` entry leaves out their namespace, and definitions whose annotation is not a valid pattern |
+| warn | Anything above that your v1.11 release already refuses, because the change was backported to it (v1.11.1 or v1.11.2) |
+| info | The CRDs to apply, `--reuse-values`, cert-manager, Argo CD, the images to mirror, and the custom step definitions to [vet](#2-check-applications-and-step-definitions-against-the-new-admission-rules) |
+
+An error is something that breaks on v1.12: an update it refuses, a step that fails, a policy that
+stops applying. A warning keeps working but behaves differently, or is already broken on the version
+you run, with the same fix. Info is worth knowing on any cluster.
+
+The check reads what it can see statically. It does not compile definitions, render Applications or
+read Secret values (beyond the URL hosts above), so it cannot tell you which built-in definition
+changes restart a workload, or what a step returns when it runs. Work through the rest of this page
+as well.
+
 ## Before you upgrade
 
 Do these in order.
@@ -53,8 +104,11 @@ these before your next spec change:
 - Applications with two traits that conflict (one lists the other in `conflictsWith`, directly or
   through `extends`): remove one of the pair. See [Trait conflicts](#trait-conflicts).
 - Custom WorkflowStepDefinitions: run `vela def vet` with the v1.12 CLI and fix any that do not
-  compile. v1.11 marked such a step `Succeeded` **without running it**; v1.12 refuses it at
-  admission and fails it at run time. Re-run the workflows that use them on a staging cluster.
+  compile. v1.12 refuses a template that does not compile at admission, such as one with an
+  undefined reference (v1.11 admitted it, and the step failed at run time). A template that
+  compiles but names an action its package does not have, such as `op.#Nope`, is still admitted,
+  and its step still shows `succeeded` **without running**. Re-run the workflows that use your
+  custom steps on a staging cluster, and check that each step really did its work.
 
 ### 3. Upgrade the chart
 
@@ -69,8 +123,14 @@ not upgraded. Pass your own values file, or use `--reset-then-reuse-values` (Hel
 later), and make sure your values don't pin `image.tag`.
 :::
 
-If your values pin `image.tag` or `image.repository`, the pin survives the upgrade and the
-controller stays on v1.11. Drop the pin, or pass `--set image.tag=v1.12.0-alpha.2`. Afterwards,
+Helm v4 can upgrade with server-side apply. When it does, and someone edited an object the chart
+manages by hand (for example, raised the webhook's `timeoutSeconds` with `kubectl patch`), the
+upgrade stops with `conflict occurred while applying object`. Add `--force-conflicts` to take it
+through, and know that the chart's value then overwrites the hand edit.
+
+If your values pin `image.tag`, the pin survives the upgrade and the controller stays on v1.11.
+A pinned `image.repository` (a mirror) survives too, so push the v1.12 image to it first. Drop the
+tag pin, or pass `--set image.tag=v1.12.0-alpha.2`. Afterwards,
 check the image the controller runs:
 
 ```shell
@@ -115,8 +175,10 @@ with your own definition, or with `extends`.
 
 - **Every workload is applied once.** The v1.12 controller adds `owner.oam.dev/*` labels and a new
   render hash to every workload it manages, on managed clusters too. Each workload's `generation`
-  goes up by one with an identical pod template, so nothing restarts, but it is an apply wave the
-  size of your fleet, and drift tools watching `generation` will report a change everywhere.
+  goes up, but with an identical pod template its pods are not replaced. It is still an apply wave
+  the size of your fleet, and drift tools watching `generation` will report a change everywhere.
+  Pods are replaced only where a built-in definition now renders a different pod template; see
+  [Changes to built-in definitions](#changes-to-built-in-definitions).
 - **Helm components on managed clusters move themselves.** v1.11 installed a `helmchart` component
   placed on a managed cluster on the hub as well, and dispatched its objects to the managed cluster
   without Helm's ownership metadata. On the first workflow run after the upgrade, v1.12 adopts those
@@ -317,11 +379,12 @@ Check a particular Application with `vela dry-run` from the v1.12 CLI against th
 | `storage` trait | ConfigMap and Secret volumes marked `readOnly` are mounted read-only; block-mode PVCs are attached as devices and no longer mounted; a PVC `selector` is now written as `selector` (v1.11 wrote it as `dataSource`). |
 | `hostalias` trait | Entries for the same IP are merged into one, and a hostname the IP already has is listed once. |
 | `sidecar` trait | The sidecar's `ports` are now rendered. |
-| `affinity` trait | `nodeSelector` is now applied to the pod spec. A pod that ran anywhere may become unschedulable if no node matches. |
+| `affinity` trait | v1.11 applied `podAffinity`, `podAntiAffinity`, `nodeAffinity` and `tolerations`, but ignored `nodeSelector`, the raw `affinity` object, `schedulerName`, `priorityClassName` and `topologySpreadConstraints`; v1.12 applies those five as well, so the workload rolls, and its new Pods stay `Pending` when no node matches. A `task` component's Job cannot roll: its pod template is immutable, so the update fails with "field is immutable" until the Job is deleted, and v1.12 then creates it again, which runs the task again. The pre-upgrade check flags these as `affinity-trait`: a warning, or an error when no node matches or the PriorityClass does not exist. |
 | `pure-ingress` trait | The Ingress is `networking.k8s.io/v1` (was `v1beta1`), with `pathType: ImplementationSpecific`. |
 
-Each of these rolls the workload on its first successful edit; a `task` Job with probes instead
-fails with the immutable-template error until the Job is deleted. Several traits that failed to
+Each of these rolls the workload on its first successful edit. A `task` Job cannot roll: one with
+probes, or with an `affinity` trait setting any of the five fields v1.11 ignored, instead fails with
+the immutable-template error until the Job is deleted. Several traits that failed to
 render in v1.11 for some inputs (`container-ports`, `init-container`, `k8s-update-strategy`,
 `securitycontext`, `startup-probe`) now render.
 
