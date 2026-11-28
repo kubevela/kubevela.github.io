@@ -1,0 +1,133 @@
+// The homepage drawings' palette, so this diagram matches them.
+.figure {
+  --dg-ink: #0f172a;
+  --dg-accent: #3b82f6;
+  --dg-ok: #22c55e;
+  --dg-card: #ffffff;
+  margin: 8px 0 28px;
+  padding: 20px 16px 12px;
+  overflow-x: auto;
+  background: color-mix(in srgb, var(--dg-ink) 2%, var(--dg-card));
+  border: 1px solid var(--kv-line);
+  border-radius: 12px;
+  :global(html[data-theme='dark']) & {
+    --dg-ink: #f1f5f9;
+    --dg-card: #0f172a;
+  }
+}
+
+.dg {
+  display: block;
+  width: 100%;
+  min-width: 620px;
+  height: auto;
+  text {
+    font-family: var(--ifm-font-family-monospace);
+  }
+}
+
+.card,
+.chip {
+  fill: var(--dg-card);
+  stroke: color-mix(in srgb, var(--dg-ink) 14%, transparent);
+}
+
+.app {
+  fill: var(--dg-card);
+  stroke: color-mix(in srgb, var(--dg-accent) 65%, transparent);
+  stroke-width: 1.5;
+}
+
+.stage {
+  fill: color-mix(in srgb, var(--dg-accent) 12%, var(--dg-card));
+  stroke: color-mix(in srgb, var(--dg-accent) 45%, transparent);
+}
+
+.cluster {
+  fill: color-mix(in srgb, var(--dg-accent) 30%, var(--dg-card));
+  stroke: color-mix(in srgb, var(--dg-accent) 60%, transparent);
+}
+
+.sail {
+  color: var(--dg-ink);
+}
+
+.title {
+  fill: var(--dg-ink);
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.chipText {
+  fill: color-mix(in srgb, var(--dg-ink) 80%, transparent);
+  font-size: 12px;
+}
+
+.stageText {
+  fill: var(--dg-ink);
+  font-family: var(--ifm-font-family-base) !important;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+// Logos sit on light tiles, which only show in dark mode, so dark marks such
+// as Helm's stay legible.
+.tile {
+  fill: transparent;
+  :global(html[data-theme='dark']) & {
+    fill: #e2e8f0;
+  }
+}
+
+.muted {
+  fill: color-mix(in srgb, var(--dg-ink) 50%, transparent);
+  font-size: 11px;
+}
+
+.label {
+  fill: color-mix(in srgb, var(--dg-ink) 50%, transparent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.flow,
+.flowSoft,
+.dashed {
+  fill: none;
+  stroke: var(--dg-accent);
+  stroke-width: 1.5;
+}
+
+.flowSoft {
+  stroke: color-mix(in srgb, var(--dg-accent) 55%, transparent);
+}
+
+.dashed {
+  stroke-dasharray: 4 4;
+}
+
+.pipeline {
+  stroke: var(--dg-accent);
+  stroke-width: 1.5;
+  circle {
+    fill: var(--dg-card);
+  }
+}
+
+.head {
+  fill: var(--dg-accent);
+}
+
+.phaseCi {
+  fill: color-mix(in srgb, var(--dg-ink) 22%, transparent);
+}
+
+.phaseCd {
+  fill: var(--dg-accent);
+}
+
+.phaseOps {
+  fill: var(--dg-ok);
+}

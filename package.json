@@ -30,13 +30,11 @@
     "docusaurus-plugin-image-zoom": "^1.0.1",
     "docusaurus-plugin-llms": "^0.6.2",
     "docusaurus-plugin-sass": "^0.2.7",
-    "mdx-mermaid": "^2.0.4",
     "mermaid": "^10.9.8",
     "nodejieba": "^2.6.0",
     "prism-react-renderer": "^2.4.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "react-github-btn": "^1.4.0",
     "sass": "^1.108.2",
     "unist-util-visit": "^4.1.0"
   },

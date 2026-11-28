@@ -2,6 +2,8 @@
 title: Application Version Control
 ---
 
+import ApplicationRevisionArch from '@site/src/components/ApplicationRevisionArch';
+
 ## Introduction
 
 Set the `app.oam.dev/publishVersion` annotation when you want an Application to deploy only when you bump a version, and to be able to roll back to the last version that succeeded.
@@ -15,7 +17,7 @@ With the annotation set, you can:
 | Roll back to the last version that succeeded | `vela workflow rollback <app>` |
 | Re-publish an older revision under a new version | `vela up <app> --revision <revision> --publish-version <version>` |
 
-![overall-arch](../resources/application-revision-arch.jpg)
+<ApplicationRevisionArch />
 
 Every published version is stored as an ApplicationRevision: a snapshot of the Application and everything it depends on, such as its ComponentDefinitions, external Policies and referenced objects.
 

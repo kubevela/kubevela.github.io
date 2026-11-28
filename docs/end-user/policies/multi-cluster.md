@@ -2,6 +2,9 @@
 title: Deploy to Multiple Clusters
 ---
 
+import MultiClusterSystem from '@site/src/components/MultiClusterSystem';
+import MultiClusterWorkflow from '@site/src/components/MultiClusterWorkflow';
+
 KubeVela deploys one Application to many clusters. You say where with a `topology` policy, and the workflow's `deploy` steps decide the order. This page covers deploying, choosing clusters and ordering the deploys. Two pages build on it:
 
 * [Override Configuration per Cluster](./multi-cluster-override.md): a different image, replica count or trait in some clusters.
@@ -15,13 +18,13 @@ KubeVela deploys one Application to many clusters. You say where with a `topolog
 
 ## Architecture
 
-![](../../resources/multi-cluster-sys-arch.jpg)
+<MultiClusterSystem />
 
 KubeVela reaches other clusters through [Cluster Gateway](https://github.com/oam-dev/cluster-gateway), which the KubeVela chart installs. By default it connects to each cluster with the kubeconfig stored as a Secret on the hub. For pull mode, use [Open Cluster Management](../../platform-engineers/system-operation/working-with-ocm.md).
 
 The Application, its policies and its workflow all live on the hub cluster. Only the resources the components render (Deployments, Services and so on) are sent to the managed clusters.
 
-![multi-cluster-arch](../../resources/multi-cluster-arch.jpg)
+<MultiClusterWorkflow />
 
 Policies describe where resources go and how they are changed on the way. The workflow does the dispatching: each `deploy` step takes a set of policies, applies any overrides, and sends the resources to the clusters they select.
 

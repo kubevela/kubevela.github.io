@@ -2,14 +2,16 @@
 title: Application
 ---
 
+import ApplicationModel from '@site/src/components/ApplicationModel';
+import OamConcept from '@site/src/components/OamConcept';
+
 KubeVela revolves around cloud-native application delivery scenarios. The application delivery model behind it is [Open Application Model](https://oam.dev/), or OAM for short.
 
 ## An Abstraction to Model Application Deployment Process
 
 OAM allows end users to work with a simple artifact to capture the complete application deployment workflow with easier primitives. This provides a simpler path for on-boarding end users to the platform without leaking low level details in runtime infrastructure and allows users to fully focus on the application delivery itself.
 
-![alt](../resources/model.png)
-
+<ApplicationModel version="1.11" />
 Every application deployment plan can be composed by multiple components with attachable operational behaviors (traits), deployment policy and workflow. It works in the following format:
 
 ```yaml
@@ -56,8 +58,7 @@ This `Application` entity will reference `component`, `trait`, `policy` and `wor
 
 The modules that make up the application are all extensible, they are defined by a bunch of programmable configurations called [Definitions](../platform-engineers/oam/x-definition.md). Under the hood, KubeVela will glue and leverage Kubernetes API to drive the infrastructure capabilities. You can check the following picture to see their relationships:
 
-![alt](../resources/oam-concept.png)
-
+<OamConcept version="1.11" />
 ## Package for programmable capabilities
 
 A package of OAM Definitions and [Kubernetes CRD Controller](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) is called an `Addon`. KubeVela has a large and growing [catalog](https://github.com/kubevela/catalog) of addons to support modern application delivery, such as [terraform](https://github.com/kubevela/catalog/tree/master/addons/terraform) for cloud resource provisioning, [OCM](https://github.com/kubevela/catalog/tree/master/addons/ocm-hub-control-plane) for multi-cluster management, [fluxcd](https://github.com/kubevela/catalog/tree/master/addons/fluxcd) for gitops, and etc.

@@ -5,6 +5,12 @@ on:
     branches: [main]
   # Allow running this workflow manually from the Actions tab
   workflow_dispatch:
+  # Rebuild daily so the announcement bar, read from GitHub at build time,
+  # comes and goes on time, and on Thursday evenings (UTC) so a community call
+  # leaves the bar soon after it ends.
+  schedule:
+    - cron: '0 2 * * *'
+    - cron: '0 18 * * 4'
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -43,6 +49,8 @@ jobs:
           NODE_ENV: production
           # Increase Node.js heap size to prevent OOM
           NODE_OPTIONS: '--max-old-space-size=4096'
+          # The announcement bar reads the latest release from the GitHub API.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn build
           # Verify build output

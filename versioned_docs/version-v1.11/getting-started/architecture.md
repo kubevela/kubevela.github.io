@@ -2,10 +2,11 @@
 title: Architecture
 ---
 
+import VelaOverview from '@site/src/components/VelaOverview';
+
 The overall architecture of KubeVela is shown as below:
 
-![](../resources/vela-overview.jpg)
-
+<VelaOverview />
 ## KubeVela is a Control Plane System
 
 KubeVela orchestrates application components, cloud resources and pipeline over multiple clusters and hybrid environments. It is designed to be an application delivery and operation control plane instead of a runtime plugin.

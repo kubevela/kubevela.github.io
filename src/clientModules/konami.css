@@ -1,0 +1,222 @@
+/* The Konami easter egg: a night sky over the page. */
+.kv-moon {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  color: #f1f5f9;
+  background: rgba(5, 9, 19, 0.72);
+  backdrop-filter: blur(3px);
+  cursor: pointer;
+  animation: kvMoonIn 0.3s ease-out both;
+  outline: none;
+}
+
+/* The terminal that types the command. */
+.kv-moon-term {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 520px);
+  overflow: hidden;
+  background: #0f172a;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  animation: kvMoonRise 0.35s ease-out both;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.kv-moon-term.kv-moon-gone {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+.kv-moon-term-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #1f2937;
+}
+
+.kv-moon-term-bar i {
+  width: 11px;
+  height: 11px;
+  background: #334155;
+  border-radius: 50%;
+}
+
+.kv-moon-term-bar span {
+  margin-left: auto;
+  margin-right: auto;
+  padding-right: 50px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.kv-moon-term pre {
+  margin: 0;
+  padding: 18px 18px 22px;
+  color: #e2e8f0;
+  font-size: 16px;
+  background: none;
+  border-radius: 0;
+}
+
+.kv-moon-prompt {
+  color: #5b8cff;
+}
+
+.kv-moon-cursor {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.1em;
+  margin-left: 1px;
+  vertical-align: -0.2em;
+  background: #e2e8f0;
+  animation: kvMoonBlink 1s steps(1) infinite;
+}
+
+.kv-moon-entered .kv-moon-cursor {
+  display: block;
+  margin-top: 6px;
+}
+
+/* The sky fades in over everything once the command is entered. */
+.kv-moon-scene {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: radial-gradient(ellipse at 70% 20%, #1e2a4a 0%, #0b1220 55%, #050913 100%);
+  animation: kvMoonIn 0.6s ease-out both;
+}
+
+.kv-moon-sky {
+  width: min(100%, 900px);
+  height: auto;
+  max-height: 70vh;
+}
+
+.kv-moon-star {
+  fill: #e2e8f0;
+  animation: kvMoonTwinkle 3s ease-in-out infinite;
+}
+
+.kv-moon-moon circle {
+  fill: #e2e8f0;
+}
+
+.kv-moon-moon .kv-moon-crater {
+  fill: #cbd5e1;
+}
+
+.kv-moon-sea {
+  fill: #0f1d3a;
+}
+
+.kv-moon-wave {
+  fill: none;
+  stroke: #5b8cff;
+  stroke-width: 1.2;
+}
+
+.kv-moon-trail {
+  fill: none;
+  stroke: #5b8cff;
+  stroke-width: 1.4;
+  stroke-dasharray: 2 4;
+  stroke-linecap: round;
+  opacity: 0.8;
+}
+
+.kv-moon-ship {
+  color: #f1f5f9;
+}
+
+.kv-moon-flag line {
+  stroke: #94a3b8;
+  stroke-width: 1.2;
+}
+
+.kv-moon-cloth {
+  fill: #ffffff;
+}
+
+.kv-moon-caption {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 15px;
+  opacity: 0;
+  animation: kvMoonIn 0.6s ease-out 5.6s both;
+}
+
+.kv-moon-still .kv-moon-caption {
+  animation: none;
+  opacity: 1;
+}
+
+.kv-moon-caption code {
+  padding: 4px 10px;
+  color: #cbd5e1;
+  font-size: 14px;
+  background: rgba(148, 163, 184, 0.12);
+  border: none;
+  border-radius: 6px;
+}
+
+.kv-moon-caption p {
+  margin: 12px 0 6px;
+  font-weight: 600;
+}
+
+.kv-moon-caption p span {
+  color: #4ade80;
+}
+
+.kv-moon-caption small {
+  color: #94a3b8;
+}
+
+@keyframes kvMoonIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes kvMoonRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes kvMoonBlink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes kvMoonTwinkle {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kv-moon,
+  .kv-moon-scene,
+  .kv-moon-star {
+    animation: none;
+  }
+}

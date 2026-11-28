@@ -2,9 +2,11 @@
 title: Architecture
 ---
 
+import VelaOverview from '@site/src/components/VelaOverview';
+
 The overall architecture of KubeVela is shown as below:
 
-![](../resources/vela-overview.jpg)
+<VelaOverview />
 
 ## KubeVela is a Control Plane System
 

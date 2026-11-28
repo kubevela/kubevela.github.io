@@ -2,6 +2,8 @@
 title: Make Your Own Addon
 ---
 
+import AddonMechanism from '@site/src/components/AddonMechanism';
+
 An addon is a directory with three kinds of files: metadata (`metadata.yaml`, `README.md`), definitions and UI schemas, and an Application that installs the operator behind them. This page builds one from a Helm chart, enables it on your cluster and checks that it worked. Every file and field an addon can carry is listed in the [Addon reference](./reference.md).
 
 :::tip
@@ -10,7 +12,7 @@ For a longer walkthrough that builds an addon around the Redis operator, see the
 
 ## How an addon is installed
 
-![How an addon is installed](../../resources/addon-mechanism.jpg)
+<AddonMechanism />
 
 1. An [addon registry](./addon-registry.md) stores addons so they can be shared. It can be a Git repository, a Helm chart repository or an OCI registry. You can also enable an addon straight from a directory on your machine.
 2. When you enable an addon from the CLI or VelaUX, KubeVela reads its files, assembles them into an Application named `addon-<name>` in `vela-system` and applies it, along with the addon's definitions and UI schemas.

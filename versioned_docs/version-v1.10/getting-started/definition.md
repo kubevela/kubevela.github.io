@@ -2,10 +2,11 @@
 title: Definition
 ---
 
+import DefinitionCapabilities from '@site/src/components/DefinitionCapabilities';
+
 A definition is a reusable building block. It declares the parameters developers fill in and the Kubernetes resources KubeVela creates from them. The built-in `webservice` component type is one; your platform team can write more.
 
-![alt](../resources/definition-cap.png)
-
+<DefinitionCapabilities version="1.10" />
 The picture above is an example of `helm` definition, we can use [FluxCD](https://fluxcd.io/) or [ArgoCD](https://argo-cd.readthedocs.io/) as Helm capability provider. Once the platform builder registered the definition written by [CUE](https://cuelang.org/), the end user can discover the helm capability and define application by referring to the type.
 
 There're mainly four types of definitions in KubeVela, they're `ComponentDefinition`, `TraitDefinition`, `PolicyDefinition` and `WorkflowStepDefinition`, corresponding to the application concepts. As an end user, you can get out-of-box definitions from KubeVela community.
