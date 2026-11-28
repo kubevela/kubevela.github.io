@@ -49,7 +49,7 @@ Terraform module to create an AWS Application/Network Load Balancer (ALB/NLB) an
  target_group_tags | A map of tags to add to all target groups | map(string) | false |  
  target_groups | A list of maps containing key/value pairs that define the target groups to be created. Order of these maps is important and the index of these are to be referenced in listener definitions. Required key/values: name, backend_protocol, backend_port | any | false |  
  vpc_id | VPC id where the load balancer and other resources will be deployed. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

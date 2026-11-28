@@ -17,7 +17,7 @@ Tencent Cloud Subnet
  cidr_block | Subnet CIDR block | string | false |  
  is_multicast | Subnet is multicast | bool | false |  
  name | Subnet name | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

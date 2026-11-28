@@ -25,7 +25,7 @@ Terraform module for integrating Google Cloud Platform Organziations and Project
  service_account_private_key | The private key in JSON format, base64 encoded (required when use_existing_service_account is set to true) | string | false |  
  use_existing_service_account | Set this to true to use an existing Service Account | bool | false |  
  wait_time | Amount of time to wait before the next resource is provisioned | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

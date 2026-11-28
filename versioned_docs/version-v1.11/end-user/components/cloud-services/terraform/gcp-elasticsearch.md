@@ -49,7 +49,7 @@ title:  Gcp-Elasticsearch
  raw_image_source | URL of tar archive containing RAW source for ES image (you can use Packer image template to generate image, as mentioned above). | string | false |  
  region | Region of GCP project. | string | true |  
  root_disk_size | Persistent disk size specified in GB. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone | Zone of GCP project - optional parameter, if not set, the instances will be spread across the available zones. | string | false |  
 
 

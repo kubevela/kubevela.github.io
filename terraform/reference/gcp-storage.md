@@ -24,7 +24,7 @@ A basic terraform module example, which the example uses for a helm repo
  predefined_acl |  | string | false |  
  project | The GCP projec name | string | true |  
  versioning |  | map(any) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

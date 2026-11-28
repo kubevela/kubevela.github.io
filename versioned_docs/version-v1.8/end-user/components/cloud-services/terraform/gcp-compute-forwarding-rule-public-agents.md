@@ -20,7 +20,7 @@ This module creates an GCP forwarding rule for DC/OS public agents
  name_format | printf style format for naming the ELB. Gets truncated to 32 characters. (input cluster_name) |  | false |  
  name_prefix | Name Prefix |  | false |  
  public_agents_self_link | List of public agent instances self links | list | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

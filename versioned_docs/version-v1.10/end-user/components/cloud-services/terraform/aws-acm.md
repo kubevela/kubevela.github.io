@@ -26,7 +26,7 @@ Terraform module which creates and validates ACM certificate
  validation_method | Which method to use for validation. DNS or EMAIL are valid, NONE can be used for certificates that were imported into ACM and then into Terraform. | string | false |  
  validation_record_fqdns | When validation is set to DNS and the DNS validation records are set externally, provide the fqdns for the validation | list(string) | false |  
  wait_for_validation | Whether to wait for the validation to complete | bool | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone_id | The ID of the hosted zone to contain this record. Required when validating via Route53 | string | false |  
 
 

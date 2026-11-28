@@ -31,7 +31,7 @@ Create a lightweight WEB service based on Terraform under AliCloud's VPC, includ
  system_disk_category | The specification of the system disk category. | string | false |  
  system_disk_description | The specification of the system disk description. | string | false |  
  system_disk_name | The specification of the system disk name. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

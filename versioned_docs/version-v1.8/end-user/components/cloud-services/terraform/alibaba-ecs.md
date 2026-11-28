@@ -49,7 +49,7 @@ Terraform configuration for Alibaba Cloud Elastic Compute Service.
  user_data_path | User data to pass to instance on boot. | string | false |  
  volume_tags | A mapping of tags to assign to the devices created by the instance at launch time. | map(string) | false |  
  vswitch_id | The virtual switch ID to launch in VPC. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

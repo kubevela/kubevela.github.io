@@ -22,7 +22,7 @@ GCP Compute-Forwarding-Rule
  name_format | printf style format for naming the ELB. Gets truncated to 32 characters. (input cluster_name) |  | false |  
  name_prefix | Name Prefix |  | false |  
  rules | List of rules. By default HTTP and HTTPS are set. If set it overrides the default rules. | list | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

@@ -20,7 +20,7 @@ Create a functional computing service based on Terraform under AliCloud's RAM ro
  policy_type | The specification of module policy type. | string | false |  
  project | The specification of project. | string | false |  
  ram_role_description | The specification of module ram role description. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

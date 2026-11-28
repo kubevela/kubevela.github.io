@@ -38,7 +38,7 @@ Create a set of network environment related resources for Kubernetes clusters on
  vswitch_cidrs | List of cidr blocks used to create several new vswitches when 'vswitch_ids' is not specified. | list(string) | false |  
  vswitch_name | The name prefix used to launch the vswitch. | string | false |  
  vswitch_tags | The tags used to launch serveral vswitches. | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

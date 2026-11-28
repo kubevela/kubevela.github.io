@@ -31,7 +31,7 @@ Create a RabbitMQ based on Terraform module in Ali cloud.
  queue_name | The name of the queue. | string | false |  
  support_eip | The specification of support EIP. | bool | false |  
  virtual_host_name | VirtualHostName. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

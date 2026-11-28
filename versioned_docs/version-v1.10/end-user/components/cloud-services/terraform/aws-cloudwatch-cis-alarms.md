@@ -22,7 +22,7 @@ Terraform module which creates Cloudwatch resources on AWS
  namespace | The namespace where metric filter and metric alarm should be cleated | string | false |  
  tags | A mapping of tags to assign to all resources | map(string) | false |  
  use_random_name_prefix | Whether to prefix resource names with random prefix | bool | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

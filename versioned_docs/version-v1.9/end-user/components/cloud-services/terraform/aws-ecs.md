@@ -19,7 +19,7 @@ Terraform module which creates AWS ECS resources
  default_capacity_provider_strategy | The capacity provider strategy to use by default for the cluster. Can be one or more. | list(map(any)) | false |  
  name | Name to be used on all the resources as identifier, also the name of the ECS cluster | string | false |  
  tags | A map of tags to add to ECS Cluster | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

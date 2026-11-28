@@ -41,7 +41,7 @@ spec:
  store_name | Log store name. | string | false |  
  store_retention_period | The data retention time (in days). Valid values: [1-3650]. Default to 30. Log store data will be stored permanently when the value is '3650'. | number | false |  
  store_shard_count | The number of shards in this log store. Default to 2. You can modify it by 'Split' or 'Merge' operations. | number | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

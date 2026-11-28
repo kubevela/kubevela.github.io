@@ -17,7 +17,7 @@ Terraform configuration for Alibaba Cloud MSE.
  cluster_type | The type of MSE Cluster. Valid values: ZooKeeper、Nacos-Ans and Eureka. | string | false |  
  cluster_version | The version of MSE Cluster. Valid values: ZooKeeper_3_4_14, ZooKeeper_3_5_5, NACOS_ANS_1_1_3, NACOS_ANS_1_2_1, EUREKA_1_9_3. | string | false |  
  net_type | The type of network. Valid values: privatenet and pubnet. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

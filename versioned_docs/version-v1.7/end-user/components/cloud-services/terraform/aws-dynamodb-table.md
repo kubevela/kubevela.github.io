@@ -37,7 +37,7 @@ Terraform module which creates DynamoDB table on AWS
  timeouts | Updated Terraform resource management timeouts | map(string) | false |  
  ttl_attribute_name | The name of the table attribute to store the TTL timestamp in | string | false |  
  ttl_enabled | Indicates whether ttl is enabled | bool | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  write_capacity | The number of write units for this table. If the billing_mode is PROVISIONED, this field should be greater than 0 | number | false |  
 
 

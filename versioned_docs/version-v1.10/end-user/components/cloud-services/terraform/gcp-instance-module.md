@@ -21,7 +21,7 @@ Lazy GCP instance via Terraform
  region |  |  | false |  
  service_account_file |  |  | false |  
  ssh_user |  |  | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone |  |  | false |  
 
 

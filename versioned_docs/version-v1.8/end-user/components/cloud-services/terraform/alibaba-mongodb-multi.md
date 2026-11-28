@@ -28,7 +28,7 @@ Terraform-based module for creating a MongoDB cloud database under AliCloud VPC.
  storage_engine | The MongoDB storage engine, WiredTiger or RocksDB. Default value: WiredTiger. | string | false |  
  tags | A mapping of tags to assign to the mongodb instance resource. | map(string) | false |  
  vswitch_id | The virtual switch ID to launch DB instances in one VPC. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone_id | The ID of the zone. You can refer to https://www.alibabacloud.com/help/doc-detail/61933.htm. | string | false |  
 
 

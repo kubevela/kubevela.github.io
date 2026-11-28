@@ -97,7 +97,7 @@ Terraform module which creates RDS Aurora resources on AWS
  tags | A map of tags to add to all resources | map(string) | false |  
  vpc_id | ID of the VPC where to create security group | string | false |  
  vpc_security_group_ids | List of VPC security groups to associate to the cluster in addition to the SG we create in this module | list(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

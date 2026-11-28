@@ -29,7 +29,7 @@ Terraform module which creates ELB resources on AWS
  security_groups | A list of security group IDs to assign to the ELB | list(string) | true |  
  subnets | A list of subnet IDs to attach to the ELB | list(string) | true |  
  tags | A mapping of tags to assign to the resource | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

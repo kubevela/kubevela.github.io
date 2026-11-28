@@ -22,7 +22,7 @@ This module creates forwarding rules for DC/OS.
  name_prefix | Name Prefix |  | false |  
  public_agents_additional_rules | Additional list of rules for public agents. These Rules are an additon to the default rules. |  | false |  
  public_agents_self_link | List of public agent instances self links | list | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

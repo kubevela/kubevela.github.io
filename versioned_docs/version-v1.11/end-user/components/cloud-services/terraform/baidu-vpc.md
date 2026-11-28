@@ -16,7 +16,7 @@ Baidu Cloud VPC
  cidr | The CIDR of the VPC | string | false |  
  description | The description of the VPC | string | false |  
  name | The name of the VPC | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

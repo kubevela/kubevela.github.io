@@ -30,7 +30,7 @@ spec:
  ---- | ----------- | ---- | -------- | -------
  folder_path | The path of the folder to be created. | string | false |
  folder_type | The type of folder to create. Allowed options: `datacenter`, `host`, `vm`, `datastore` and `network`. | string | false |
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |
 
 
 #### writeConnectionSecretToRef

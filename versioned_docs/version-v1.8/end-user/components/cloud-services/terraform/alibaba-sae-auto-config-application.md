@@ -18,7 +18,7 @@ Alibaba SAE application to be deployed in auto-config mode.
  memory | The memory of the application, in unit of MB. | string | false |  
  package_type | The package type of the application. | string | false |  
  replicas | The replicas of the application. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

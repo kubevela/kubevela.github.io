@@ -33,7 +33,7 @@ Set up a GKE cluster connected as part of shared VPC
  remove_default_node_pool | An override to remove the node pool, doesnt make much sense to me either | bool | false |  
  resource_labels |  | map(any) | false |  
  subnetwork | The name of the sub-net to use |  | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zones |  |  | true |  
 
 

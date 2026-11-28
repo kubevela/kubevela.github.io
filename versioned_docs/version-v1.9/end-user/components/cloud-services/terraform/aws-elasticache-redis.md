@@ -48,7 +48,7 @@ Terraform module to provision an ElastiCache Redis Cluster
  subnets | Subnet IDs | list(string) | false |  
  transit_encryption_enabled | Set `true` to enable encryption in transit. Forced `true` if `var.auth_token` is set.\nIf this is enabled, use the [following guide](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/in-transit-encryption.html#connect-tls) to access redis.\n | bool | false |  
  vpc_id | VPC ID | string | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone_id | Route53 DNS Zone ID as list of string (0 or 1 items). If empty, no custom DNS name will be published.\nIf the list contains a single Zone ID, a custom DNS name will be pulished in that zone.\nCan also be a plain string, but that use is DEPRECATED because of Terraform issues.\n | any | false |  
 
 

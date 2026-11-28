@@ -22,7 +22,7 @@ Terraform module which creates IAM resources on AWS
  iam_self_management_policy_name_prefix | Name prefix for IAM policy to create with IAM self-management permissions | string | false |  
  name | Name of IAM group | string | false |  
  tags | A map of tags to add to all resources. | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

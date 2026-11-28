@@ -76,7 +76,7 @@ Terraform module to create an Elastic Kubernetes (EKS) cluster and associated wo
  subnet_ids | A list of subnet IDs where the EKS cluster (ENIs) will be provisioned along with the nodes/node groups. Node groups can be deployed within a different set of subnet IDs from within the node group configuration | list(string) | false |  
  tags | A map of tags to add to all resources | map(string) | false |  
  vpc_id | ID of the VPC where the cluster and its nodes will be provisioned | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

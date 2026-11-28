@@ -23,7 +23,7 @@ Terraform Module to Provision a Basic IAM System User Suitable for CI/CD Systems
  policy_arns | Policy ARNs to attach to our created user | list(string) | false |  
  policy_arns_map | Policy ARNs to attach (descriptive key => arn) | map(string) | false |  
  ssm_enabled | Whether or not to write the IAM access key and secret key to SSM Parameter Store | bool | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

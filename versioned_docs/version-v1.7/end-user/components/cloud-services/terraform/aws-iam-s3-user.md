@@ -17,7 +17,7 @@ Terraform module to provision a basic IAM user with permissions to access S3 res
  path | Path in which to create the user | string | false |  
  s3_actions | Actions to allow in the policy | list(string) | false |  
  s3_resources | S3 resources to apply the actions specified in the policy | list(string) | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

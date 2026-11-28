@@ -28,15 +28,15 @@ If your workload is in a helm chart please refer to [doc](../../tutorials/helm-r
 
 Name | Description | Type | Required | Default
  ------------ | ------------- | ------------- | ------------- | -------------
-canary| Configuration for canary rollout strategy| [Canary](#Canary)| true|
-workloadType| Specify the target worklaod type| [WorkloadType](#WorkloadType)|false
+canary| Configuration for canary rollout strategy| [Canary](#canary)| true|
+workloadType| Specify the target worklaod type| [WorkloadType](#workloadtype)|false
 
 #### Canary
 
 Name | Description | Type | Required | Default
  ------------ | ------------- | ------------- | ------------- | -------------
-steps| Defines the entire rollout process in steps | [CanaryStep](#CanaryStep)|true
-trafficRoutings| Define traffic routing related service, ingress information | [[]TrafficRouting](#TrafficRouting)| true
+steps| Defines the entire rollout process in steps | [CanaryStep](#canarystep)|true
+trafficRoutings| Define traffic routing related service, ingress information | [[]TrafficRouting](#trafficrouting)| true
 
 
 ##### CanaryStep

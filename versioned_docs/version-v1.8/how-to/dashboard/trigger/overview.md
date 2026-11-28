@@ -14,10 +14,10 @@ KubeVela v1.7+ provide built-in step for image building, please refer to [Unifie
 You can use triggers from [VelaUX addon](../../../reference/addons/velaux.md) to integrate with different CI systems. In VelaUX, a default trigger will be automatically generated after an application created, you can also delete it and create a new one. The architecture and supported platforms are described in the following picture, they're:
 
 - [Custom](#custom-trigger), refer to [Jenkins CI](../../../tutorials/jenkins.md) guide for a real world use case.
-- [ACR](#ACR-trigger)
-- [Harbor](#Harbor-trigger), refer to [Harbor Integration](../../../tutorials/trigger.md) guide for a real world use case.
-- [DockerHub](#DockerHub-trigger)
-- [JFrog](#JFrog-trigger)
+- [ACR](#acr-trigger)
+- [Harbor](#harbor-trigger), refer to [Harbor Integration](../../../tutorials/trigger.md) guide for a real world use case.
+- [DockerHub](#dockerhub-trigger)
+- [JFrog](#jfrog-trigger)
 
 ![trigger](../../../resources/trigger.jpg)
 

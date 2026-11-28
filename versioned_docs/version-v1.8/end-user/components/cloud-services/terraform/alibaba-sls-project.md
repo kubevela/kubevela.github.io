@@ -32,7 +32,7 @@ spec:
  ------------ | ------------- | ------------- | ------------- | ------------- 
  description | Description of security group. | string | false |  
  name | Name of security group. It is used to create a new security group. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

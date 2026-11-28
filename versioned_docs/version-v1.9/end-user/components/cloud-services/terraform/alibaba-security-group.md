@@ -15,7 +15,7 @@ Terraform configuration for Alicloud SecurityGroup.
  description | The description of the security group rule. | string | false |  
  name | The name of the security group rule. | string | false |  
  port_range | The port range of the security group rule. | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to. | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone_id | Availability Zone ID. | string | false |  
 
 

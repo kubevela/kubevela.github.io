@@ -30,7 +30,7 @@ AWS Subnet
  subnet_tags | A map of tags for the Subnet | map(string) | false |  
  vpc_id | The ID of the VPC | string | false |  
  vpc_tags | Additional tags for the VPC | map(string) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

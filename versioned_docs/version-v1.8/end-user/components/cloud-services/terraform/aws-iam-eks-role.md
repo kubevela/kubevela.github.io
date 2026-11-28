@@ -25,7 +25,7 @@ Terraform module which creates IAM resources on AWS
  role_permissions_boundary_arn | Permissions boundary ARN to use for IAM role | string | false |  
  role_policy_arns | ARNs of any policies to attach to the IAM role | list(string) | false |  
  tags | A map of tags to add the the IAM role | map(any) | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

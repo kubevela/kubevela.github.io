@@ -25,7 +25,7 @@ Terraform configuration for GCP network
  secondary_ranges | Secondary ranges that will be used in some of the subnets | `map(list(object({ range_name = string, ip_cidr_range = string })))` | false |  
  shared_vpc_host | Makes this project a Shared VPC host if 'true' (default 'false') | `bool` | false |  
  subnets | The list of subnets being created | `list(map(string))` | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

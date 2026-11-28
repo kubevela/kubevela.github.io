@@ -17,7 +17,7 @@ A helm repository
  bucket_name | The name of the bucket | string | true |  
  common_tags | This is a map type for applying tags on resources | map(any) | true |  
  project | The GCP project | string | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

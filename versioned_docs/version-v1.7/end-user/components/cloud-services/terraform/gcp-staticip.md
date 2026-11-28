@@ -17,7 +17,7 @@ A simple Terraform module to build an instance a static public IP
  image | Instance Image | map(any) | false |  
  machine_type | Instance machine type | string | false |  
  name | Name of the instance |  | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
  zone | GCP Zone | string | false |  
 
 

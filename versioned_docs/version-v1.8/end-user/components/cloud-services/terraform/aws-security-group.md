@@ -61,7 +61,7 @@ Terraform module which creates EC2-VPC security groups on AWS
  tags | A mapping of tags to assign to security group | map(string) | false |  
  use_name_prefix | Whether to use name_prefix or fixed name. Should be true to able to update security group name after initial creation | bool | false |  
  vpc_id | ID of the VPC where to create security group | string | false |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef

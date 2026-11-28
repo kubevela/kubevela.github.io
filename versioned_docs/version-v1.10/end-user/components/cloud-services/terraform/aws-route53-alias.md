@@ -22,7 +22,7 @@ Terraform Module to Define Vanity Host/Domain (e.g. ) as an ALIAS record
  private_zone | Is this a private hosted zone? | bool | false |  
  target_dns_name | DNS name of target resource (e.g. ALB, ELB) | string | true |  
  target_zone_id | ID of target resource (e.g. ALB, ELB) | string | true |  
- writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeConnectionSecretToRef) | false |  
+ writeConnectionSecretToRef | The secret which the cloud resource connection will be written to | [writeConnectionSecretToRef](#writeconnectionsecrettoref) | false |  
 
 
 #### writeConnectionSecretToRef
