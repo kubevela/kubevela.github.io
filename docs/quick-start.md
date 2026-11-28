@@ -263,5 +263,8 @@ That's it! You succeed at the first application delivery. Congratulation!
 
 ## Next Step
 
+- [Deploy an Advanced Application](./getting-started/advanced-application.md): two environments, overrides and a manual approval.
+- [Read External Data with Sources](./getting-started/sources.md): new in 1.12, read values the application doesn't own.
+- [Create Your First Component](./getting-started/first-component.md): write your own component type.
 - View [Core Concepts](./getting-started/core-concept.md) to learn more about how it works.
 - View [User Guide](./tutorials/webservice.mdx) to look on more of what you can achieve with KubeVela.
