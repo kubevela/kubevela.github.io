@@ -13,7 +13,7 @@ If you're using KubeVela in production, make sure they're deployed in high avail
 First of all, please make sure you have a high availability Kubernetes cluster for all the control plane components.
 :::
 
-KubeVela core controller is a standard Kubernetes CRD controller, it uses a master-slave mode for high availability. When set for more than one replicas, it will trigger leader election and make one replica as the master.
+KubeVela core controller is a standard Kubernetes CRD controller that uses leader election for high availability. When it runs more than one replica, one replica holds the leader lease and reconciles, and the others stand by to take over if it goes down.
 
 The recommend installation is:
 

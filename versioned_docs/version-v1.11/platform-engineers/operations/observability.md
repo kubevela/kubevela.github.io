@@ -2,9 +2,7 @@
 title: Automated Observability
 ---
 
-Observability is critical for infrastructures and applications. Without observability system, it is hard to identify what happens when system broke down. On contrary, a strong observability system can not only provide confidences for operators but can also help developers quickly locate the performance bottleneck or the weak points inside the whole system.
-
-KubeVela has made the observability as first class citizen, it includes the following three aspects.
+Five addons give you Prometheus, Loki and Grafana with dashboards for KubeVela and your apps. Traits then decide which apps' metrics and logs are collected.
 
 ## Build observability infrastructure automatically
 
@@ -27,7 +25,7 @@ After these addons enabled, out-of-box dashboard will be generated with real tim
 
 ## Application Observability
 
-OAM, as a unified application model, can adopt observability easily as operational traits. As a result, KubeVela also provides several traits for application observability. Once end users added these traits in their app, the data will be collected, delivered and finally shown on the grafana dashboard.
+KubeVela provides traits for application observability. Add one to a component and its metrics or logs are collected. Logs show on the built-in Grafana dashboards; custom metrics need a [dashboard](./o11y/dashboard.md) of your own.
 
 ![app-o11y](../../resources/app-o11y.png)
 
@@ -35,11 +33,7 @@ More than that, you can easily define your own observability traits with CUE.
 
 ## Observability as Code
 
-The ability of KubeVela to support the application observability is all completed through the IaC (Infrastructure as Code) method, which also means that **KubeVela has glued from the collection of indicators (including logs), analysis, enrichment, storage, data source registration, all the way to visualization by using IaC**.
-
-Based on the IaC system powered by CUE, KubeVela has encapsulated common functions such as creating data sources, creating large disks, and importing large disks. You can use them directly without learning the details. If you want to do some customization, you can also orchestrate your process in a similar way through CUE, and customize the observability for your platform.
-
-In the following documents, we will expand the above in detail one by one.
+Each piece (the addons, the scrape and log traits, the Grafana datasources and dashboards) is a KubeVela Application or definition, so you manage your observability stack the same way you manage apps.
 
 ## What's Next
 

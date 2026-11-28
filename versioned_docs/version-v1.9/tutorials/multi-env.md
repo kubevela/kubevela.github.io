@@ -9,7 +9,7 @@ This section will mainly focus on UI operation on multi-environments delivery, i
 Environments represent your deployment targets logically ( develop, test, production, etc). VelaUX (the UI of KubeVela) provides [some new concepts, the environment and delivery target](../reference/addons/velaux.md#concept-of-velaux) for more flexible deployments on UI operations.
 
 You can place multi targets to the same environment as you need.
-In KubeVela, the environment bond a namespace in the control plane cluster. The application instance will be deployed into the Kubernetes namespace bond with the specified environment. Actually, the application created in VelaUX is an application template before bound with environment. As a result, VelaUX allow you to easily deploy the same app into different environments.
+In KubeVela, each environment is bound to a namespace in the control plane cluster. The application instance is deployed into the namespace bound to the environment. Actually, the application created in VelaUX is an application template before bound with environment. As a result, VelaUX allow you to easily deploy the same app into different environments.
 
 ![environment](../resources/environment.jpg)
 
@@ -27,16 +27,16 @@ Create environment on VelaUX is very straight forward.
 
 ![create-env](https://kubevela.io/images/1.5/create-env.jpg)
 
-One environment could includes multi targets. The environment belongs to a project, One project could include multi environments. Only the application belonging to this project could bond this environment.
+One environment could includes multi targets. The environment belongs to a project, One project could include multi environments. Only the applications in this project can be bound to this environment.
 
 :::note
-You could create an environment with command ( `vela env init prod --namespace prod` ), but currently( v1.5) that does not sync to UI before you create an application in this environment.
+You can also create an environment with `vela env init prod --namespace prod`, but VelaUX does not list it until an application in that namespace is synced to VelaUX.
 :::
 
 
 ### 2. Bind the application to an environment
 
-You could select multi environments when you create an application, or modify the application later to bind more environments. The UI will automatically generate a workflow when the application bond to an environment, that includes some `deploy` type steps. You can manually modify the workflow later. The default behavior is to deploy targets one by one in workflow steps. You could add other steps such as `suspend` between two `deploy` steps.
+You could select multi environments when you create an application, or modify the application later to bind more environments. The UI will automatically generate a workflow when you bind the application to an environment, that includes some `deploy` type steps. You can manually modify the workflow later. The default behavior is to deploy targets one by one in workflow steps. You could add other steps such as `suspend` between two `deploy` steps.
 
 ![env workflow](https://kubevela.io/images/1.5/env-workflow.jpg)
 

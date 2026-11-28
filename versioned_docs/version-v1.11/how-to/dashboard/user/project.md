@@ -2,7 +2,7 @@
 title: Project Management
 ---
 
-Project provides a logical separation of applications、environments and delivery targets, this is helpful when VelaUX is used by multiple teams. Project can provide the following features:
+Project provides a logical separation of applications, environments and delivery targets, this is helpful when VelaUX is used by multiple teams. Project can provide the following features:
 
 * restrict where applications can be deployed to (target clusters and namespaces).
 * restrict which integrated configurations can be used (trusted Helm repositories, docker registries or cloud providers).
@@ -14,7 +14,7 @@ Once installed VelaUX has one default project with name `Default` owned by the `
 
 ## Creating Projects
 
-Users with project management permissions can go to `Platform/Projects` page for settings，in this page you could create and delete project.
+Users with project management permissions can create and delete projects in **Admin Dashboard > Projects**.
 
 ![project-list](https://kubevela.io/images/1.3/project-list.jpg)
 

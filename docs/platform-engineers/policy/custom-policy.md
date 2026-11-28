@@ -4,6 +4,15 @@ title: Policy Definition
 
 In this section we will introduce how to define a custom policy with CUE. Make sure you've learned the basic knowledge about [Definition Concept](../../getting-started/definition.md) and [how to manage definition](../cue/definition-edit.md).
 
+A PolicyDefinition can do one of two things:
+
+| Kind | What it does | Where it's covered |
+| --- | --- | --- |
+| A resource-generating policy | Renders Kubernetes objects that span the Application, like a trait does for one component. Its `output` and `outputs` are objects to create. | This page. |
+| An [Application-scoped policy](./application-scoped-policy.md) | Changes the Application itself (labels, annotations, components) before it renders. Its `output` is a set of changes to the Application, not an object. | The next page. |
+
+The same keyword, `output`, means different things in the two kinds, so check which one you're writing.
+
 ## Generate Resources by Policy
 
 Generate resources in policy is similar to trait, policy can be used to define things across components.
@@ -40,30 +49,37 @@ outputs: <unique-name>:
   <full template data>
 ```
 
-Below is an example that we create a traffic split service mesh object in policy.
+Below is an example that creates a `NetworkPolicy` letting the Application's components talk to each other, and to any namespaces you list, while refusing other traffic into them.
+
+In a policy, `context.name` is the name the Application gives the policy, not the Application's name. Use `context.appName` for the Application and `context.namespace` for its namespace. Every field a policy can read is in the [Context Reference](../context-reference.md).
 
 ```cue
 "my-plc": {
-	description: "My service mesh policy."
+	description: "Allow traffic between the Application's components."
 	type:        "policy"
 }
 
 template: {
-	#ServerWeight: {
-		service: string
-		weight:  int
-	}
 	parameter: {
-		weights: [...#ServerWeight]
+		// +usage=Other namespaces allowed to reach the Application
+		allowNamespaces: *[] | [...string]
 	}
 
 	output: {
-		apiVersion: "split.smi-spec.io/v1alpha3"
-		kind:       "TrafficSplit"
+		apiVersion: "networking.k8s.io/v1"
+		kind:       "NetworkPolicy"
 		metadata: name: context.name
 		spec: {
-			service:  context.name
-			backends: parameter.weights
+			podSelector: matchLabels: "app.oam.dev/name": context.appName
+			policyTypes: ["Ingress"]
+			ingress: [{
+				from: [
+					{podSelector: matchLabels: "app.oam.dev/name": context.appName},
+					for ns in parameter.allowNamespaces {
+						namespaceSelector: matchLabels: "kubernetes.io/metadata.name": ns
+					},
+				]
+			}]
 		}
 	}
 }
@@ -97,32 +113,37 @@ spec:
         image: oamdev/hello-world:v2
   policies:
     - type: my-plc
-      name: unified
+      name: same-app-only
       properties:
-        weights:
-          - service: server-v1
-            weight: 80
-          - service: server-v2
-            weight: 20
+        allowNamespaces: ["monitoring"]
 EOF
 ```
 
-The policy will generate Kubernetes resources by KubeVela like below:
+The policy generates this object, named after the policy (`same-app-only`) and selecting the pods of the Application (`my-test-2`):
 
-```
-apiVersion: split.smi-spec.io/v1alpha3
-kind: TrafficSplit
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
 metadata:
-  name: unified
+  name: same-app-only
   namespace: default
 spec:
-  backends:
-  - service: server-v1
-    weight: 80
-  - service: server-v2
-    weight: 20
-  service: unified
+  podSelector:
+    matchLabels:
+      app.oam.dev/name: my-test-2
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.oam.dev/name: my-test-2
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: monitoring
 ```
+
+Check it with `kubectl get networkpolicy same-app-only -o yaml`. The cluster's network plugin enforces it; one without NetworkPolicy support, such as plain flannel, accepts the object and ignores it.
 
 You can define any Kubernetes API objects in policies if you want.
 
@@ -131,10 +152,6 @@ To check what a policy generates from the Application's components, test it with
 See [Testing CUE Definitions](../cue/definition-testing.md).
 :::
 
-## Special Policy
+## Policies that render nothing
 
-Not all policies generate resources, there're several [built-in policies](../../end-user/policies/references.md) which are used to control the whole delivery precess and workflows.
-
-:::tip
-These special polices are usually coded in the application controller.
-:::
+Some built-in policies, such as `topology`, `override` and `garbage-collect`, are read by the controller and render nothing. You cannot write one of these as a definition; to change an Application before it renders, write an [Application-scoped policy](./application-scoped-policy.md). The [built-in policy reference](../../end-user/policies/references.md) lists them all.

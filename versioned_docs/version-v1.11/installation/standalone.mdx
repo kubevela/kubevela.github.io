@@ -114,16 +114,16 @@ velad install
 
   ```
   Preparing K3s images...
-  Successfully prepare k3s image: /Users/sunjianbo/.vela/velad/k3s/k3s-airgap-images-amd64.tgz
+  Successfully prepare k3s image: ~/.vela/velad/k3s/k3s-airgap-images-amd64.tgz
   Successfully prepare k3d images
 
   ...snip...
 
   KubeVela control plane has been successfully set up on your cluster.
-  If you want to enable dashboard, please run "vela addon enable /Users/sunjianbo/.vela/addons/velaux"
+  If you want to enable dashboard, please run "vela addon enable ~/.vela/addons/velaux"
 
   Keep the token below if you want to restart the control plane
-  K1075e7f6c77555e6ebdaf4854e4a2f39ae4287cfad23f27cdac5b33608d44633fe::server:zSpzbdbGzVxOwfBvvjgT
+  <token>
 
   🚀 Successfully install KubeVela control plane
   🔭 See available commands with `vela help`
@@ -164,25 +164,26 @@ Export kubeconfig and list all built-in ComponentDefinition:
   <summary>expected output</summary>
 
   ```
-  NAME                  	DEFINITION              	DESCRIPTION
-  config-helm-repository	autodetects.core.oam.dev	Config information to authenticate helm chart repository
-  daemon                	daemonsets.apps         	Describes daemonset services in Kubernetes.
-  cron-task             	cronjobs.batch          	Describes cron jobs that run code or a script to completion.
-  worker                	deployments.apps        	Describes long-running, scalable, containerized services
-  that running at backend. They do NOT have network endpoint
-  to receive external network traffic.
-  task                  	jobs.batch              	Describes jobs that run code or a script to completion.
-  webservice            	deployments.apps        	Describes long-running, scalable, containerized services
-  that have a stable network endpoint to receive external
-  network traffic from customers.
-  config-image-registry 	autodetects.core.oam.dev	Config information to authenticate image registry
-  k8s-objects           	autodetects.core.oam.dev	K8s-objects allow users to specify raw K8s objects in
-  properties
-  raw                   	autodetects.core.oam.dev	Raw allow users to specify raw K8s object in properties.
-  This definition is DEPRECATED, please use 'k8s-objects'
-  instead.
-  ref-objects           	autodetects.core.oam.dev	Ref-objects allow users to specify ref objects to use.
-  Notice that this component type have special handle logic.
+  NAME       	DEFINITION              	DESCRIPTION
+  cron-task  	autodetects.core.oam.dev	Describes cron jobs that run code or a script to completion.
+  daemon     	daemonsets.apps         	Describes daemonset services in Kubernetes.
+  helmchart  	autodetects.core.oam.dev	Deploy Helm charts natively in KubeVela without FluxCD
+  k8s-objects	autodetects.core.oam.dev	K8s-objects allow users to specify raw K8s objects in
+             	                        	properties
+  raw        	autodetects.core.oam.dev	Raw allow users to specify raw K8s object in properties.
+             	                        	This definition is DEPRECATED, please use 'k8s-objects'
+             	                        	instead.
+  ref-objects	autodetects.core.oam.dev	Ref-objects allow users to specify ref objects to use.
+             	                        	Notice that this component type have special handle logic.
+  statefulset	statefulsets.apps       	Describes long-running, scalable, containerized services
+             	                        	used to manage stateful application, like database.
+  task       	jobs.batch              	Describes jobs that run code or a script to completion.
+  webservice 	deployments.apps        	Describes long-running, scalable, containerized services
+             	                        	that have a stable network endpoint to receive external
+             	                        	network traffic from customers.
+  worker     	deployments.apps        	Describes long-running, scalable, containerized services
+             	                        	that running at backend. They do NOT have network endpoint
+             	                        	to receive external network traffic.
   ```
 
 </details>
@@ -214,7 +215,18 @@ This is optional if you don't use UI console of KubeVela.
   <summary>expected output</summary>
 
   ```
-  Addon: velaux enabled Successfully.
+  Addon velaux enabled successfully.
+  Please access addon-velaux from the following endpoints:
+  +---------+---------------+-----------------------------------+--------------------------------+-------+
+  | CLUSTER |   COMPONENT   |     REF(KIND/NAMESPACE/NAME)      |            ENDPOINT            | INNER |
+  +---------+---------------+-----------------------------------+--------------------------------+-------+
+  | local   | velaux-server | Service/vela-system/velaux-server | velaux-server.vela-system:8000 | true  |
+  +---------+---------------+-----------------------------------+--------------------------------+-------+
+      To open the dashboard directly by port-forward:
+
+      vela port-forward -n vela-system addon-velaux 8000:8000
+
+      Please refer to https://kubevela.io/docs/reference/addons/velaux for more VelaUX addon installation and visiting method.
   ```
 
 </details>
@@ -222,10 +234,10 @@ This is optional if you don't use UI console of KubeVela.
 By default, velaux don't have any exposed port, you can view it by:
 
 ```shell
-vela port-forward addon-velaux -n vela-system 8080:80
+vela port-forward addon-velaux -n vela-system 8000:8000
 ```
 
-Choose `> local | velaux | velaux` for visit.
+Then open http://127.0.0.1:8000.
 
 :::note
 For more VelaUX options, refer to [VelaUX addon](../reference/addons/velaux.md) document for other advanced installation arguments.
@@ -287,16 +299,16 @@ velad install --bind-ip=$SERVER_PUBLIC_IP
 
   ```
   Preparing K3s images...
-  Successfully prepare k3s image: /Users/sunjianbo/.vela/velad/k3s/k3s-airgap-images-amd64.tgz
+  Successfully prepare k3s image: ~/.vela/velad/k3s/k3s-airgap-images-amd64.tgz
   Successfully prepare k3d images
 
   ...snip...
 
   KubeVela control plane has been successfully set up on your cluster.
-  If you want to enable dashboard, please run "vela addon enable /Users/sunjianbo/.vela/addons/velaux"
+  If you want to enable dashboard, please run "vela addon enable ~/.vela/addons/velaux"
 
   Keep the token below if you want to restart the control plane
-  K1075e7f6c77555e6ebdaf4854e4a2f39ae4287cfad23f27cdac5b33608d44633fe::server:zSpzbdbGzVxOwfBvvjgT
+  <token>
 
   🚀 Successfully install KubeVela control plane
   🔭 See available commands with `vela help`
@@ -325,25 +337,26 @@ Later we will access KubeVela on local machine, we will install vela CLI on loca
   <summary>expected output</summary>
 
   ```
-  NAME                  	DEFINITION              	DESCRIPTION
-  config-helm-repository	autodetects.core.oam.dev	Config information to authenticate helm chart repository
-  daemon                	daemonsets.apps         	Describes daemonset services in Kubernetes.
-  cron-task             	cronjobs.batch          	Describes cron jobs that run code or a script to completion.
-  worker                	deployments.apps        	Describes long-running, scalable, containerized services
-  that running at backend. They do NOT have network endpoint
-  to receive external network traffic.
-  task                  	jobs.batch              	Describes jobs that run code or a script to completion.
-  webservice            	deployments.apps        	Describes long-running, scalable, containerized services
-  that have a stable network endpoint to receive external
-  network traffic from customers.
-  config-image-registry 	autodetects.core.oam.dev	Config information to authenticate image registry
-  k8s-objects           	autodetects.core.oam.dev	K8s-objects allow users to specify raw K8s objects in
-  properties
-  raw                   	autodetects.core.oam.dev	Raw allow users to specify raw K8s object in properties.
-  This definition is DEPRECATED, please use 'k8s-objects'
-  instead.
-  ref-objects           	autodetects.core.oam.dev	Ref-objects allow users to specify ref objects to use.
-  Notice that this component type have special handle logic.
+  NAME       	DEFINITION              	DESCRIPTION
+  cron-task  	autodetects.core.oam.dev	Describes cron jobs that run code or a script to completion.
+  daemon     	daemonsets.apps         	Describes daemonset services in Kubernetes.
+  helmchart  	autodetects.core.oam.dev	Deploy Helm charts natively in KubeVela without FluxCD
+  k8s-objects	autodetects.core.oam.dev	K8s-objects allow users to specify raw K8s objects in
+             	                        	properties
+  raw        	autodetects.core.oam.dev	Raw allow users to specify raw K8s object in properties.
+             	                        	This definition is DEPRECATED, please use 'k8s-objects'
+             	                        	instead.
+  ref-objects	autodetects.core.oam.dev	Ref-objects allow users to specify ref objects to use.
+             	                        	Notice that this component type have special handle logic.
+  statefulset	statefulsets.apps       	Describes long-running, scalable, containerized services
+             	                        	used to manage stateful application, like database.
+  task       	jobs.batch              	Describes jobs that run code or a script to completion.
+  webservice 	deployments.apps        	Describes long-running, scalable, containerized services
+             	                        	that have a stable network endpoint to receive external
+             	                        	network traffic from customers.
+  worker     	deployments.apps        	Describes long-running, scalable, containerized services
+             	                        	that running at backend. They do NOT have network endpoint
+             	                        	to receive external network traffic.
   ```
 
 </details>
@@ -362,16 +375,18 @@ vela addon enable ~/.vela/addons/velaux serviceType=NodePort
   <summary>expected output</summary>
 
   ```
-  Addon: velaux enabled Successfully.
-  ...
-  I0907 12:03:11.462606   98769 utils.go:156] find cluster gateway service vela-system/kubevela-cluster-gateway-service:9443
+  Addon velaux enabled successfully.
   Please access addon-velaux from the following endpoints:
-  +---------+-----------+-------------------------------+----------------------------+-------+
-  | CLUSTER | COMPONENT |   REF(KIND/NAMESPACE/NAME)    |          ENDPOINT          | INNER |
-  +---------+-----------+-------------------------------+----------------------------+-------+
-  | local   | apiserver | Service/vela-system/apiserver | apiserver.vela-system:8000 | true  |
-  | local   | velaux    | Service/vela-system/velaux    | http://47.252.17.47:30000  | false |
-  +---------+-----------+-------------------------------+----------------------------+-------+
+  +---------+---------------+-----------------------------------+--------------------------+-------+
+  | CLUSTER |   COMPONENT   |     REF(KIND/NAMESPACE/NAME)      |         ENDPOINT         | INNER |
+  +---------+---------------+-----------------------------------+--------------------------+-------+
+  | local   | velaux-server | Service/vela-system/velaux-server | http://<server-ip>:30000 | false |
+  +---------+---------------+-----------------------------------+--------------------------+-------+
+      To open the dashboard directly by port-forward:
+
+      vela port-forward -n vela-system addon-velaux 8000:8000
+
+      Please refer to https://kubevela.io/docs/reference/addons/velaux for more VelaUX addon installation and visiting method.
   ```
 
 </details>

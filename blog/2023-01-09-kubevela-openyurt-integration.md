@@ -168,7 +168,7 @@ A KubeVela application has three parts.
 
 :::note
 1.	If you want this application to work properly, please apply the `edge-ingress` trait described below in the cluster first.
-2.	`Deploy` is a KubeVela built-in workflow step. It can be also used with `override` and `topology` strategies in [multi-cluster scenarios](https://kubevela.io/docs/case-studies/multi-cluster).
+2.	`Deploy` is a KubeVela built-in workflow step. It can be also used with `override` and `topology` strategies in [multi-cluster scenarios](https://kubevela.io/docs/end-user/policies/multi-cluster).
 :::
  
 Now, we can send the application to the cluster.

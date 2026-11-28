@@ -4,6 +4,10 @@ title: Underlying Mechanism
 
 KubeVela introduces Authentication & Authorization for application delivery and management from v1.4. This article will deep dives in the underlying mechanism and demonstrates how it works.
 
+:::caution
+By default vela-core runs as `cluster-admin`, so anyone who can create an Application can create anything in any cluster KubeVela manages. Turn on `authentication.enabled` to apply each Application with its submitter's permissions.
+:::
+
 > This underlying mechanism mainly focuses on the KubeVela application. VelaUX builds additional authentication and authorization layer on top of it.
 
 > This article discusses the KubeVela Authentication & Authorization in a relatively wide range, including the design, implementation and advanced usage. Reading through all of them and comprehend the materials are not required to use it.
@@ -175,7 +179,7 @@ sequenceDiagram
 
 ### Limited Controller Access
 
-When application authentication is enabled in KubeVela, the privileges of KubeVela controller are also restricted. Before it is enabled, the KubeVela controller will uses a ServiceAccount that bound to the cluster-admin ClusterRole, which gives the KubeVela controller all the privileges to manage clusters.
+When application authentication is enabled in KubeVela, the privileges of KubeVela controller are also restricted. Without it, the chart binds the controller's ServiceAccount to the `cluster-admin` ClusterRole, as the caution at the top of this page says.
 
 After the application authentication is enabled, the privileges of the KubeVela controller is also reducted. Since all the resource dispatch action will use the identity of the application, the KubeVela controller only needs the privileges to impersonate as the specified ideneity. Apart from that, there are still some other privileges that are required for KubeVela controller to manage system-level resources, like ResourceTracker.
 

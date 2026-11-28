@@ -2,55 +2,72 @@
 title: Automated Observability
 ---
 
-Observability is critical for infrastructures and applications. Without observability system, it is hard to identify what happens when system broke down. On contrary, a strong observability system can not only provide confidences for operators but can also help developers quickly locate the performance bottleneck or the weak points inside the whole system.
+Five addons give you Prometheus, Loki and Grafana with dashboards for KubeVela and your apps. Traits then decide which apps' metrics and logs are collected.
 
-KubeVela has made the observability as first class citizen, it includes the following three aspects.
+Each piece (the addons, the scrape and log traits, the Grafana datasources and dashboards) is a KubeVela Application or definition, so you manage your observability stack the same way you manage apps.
 
-## Build observability infrastructure automatically
+## The addons
 
-To help users build their own observability system from scratch with just one click, KubeVela provides a list of addons, including
+| Addon | What it gives you |
+| :---- | :---------------- |
+| `prometheus-server` | Stores metrics as time series and answers queries. |
+| `kube-state-metrics` | Metrics about Kubernetes objects. |
+| `node-exporter` | Metrics about the nodes. |
+| `loki` | Stores the logs collected from pods and answers queries. |
+| `grafana` | Dashboards for KubeVela and your apps, built on the Prometheus and Loki data. |
 
-**Metrics**
-- `prometheus-server`: A server records metrics in time series with flexible queries supported.
-- `kube-state-metrics`: A metrics collector for the Kubernetes system.
-- `node-exporter`: A metrics collector for the running Kubernetes nodes.
+Once they are enabled, the [out-of-the-box dashboards](./o11y/out-of-the-box.md) fill with data straight away. See [Enable observability addons](./o11y/installation.md) to install them.
 
-**Logging**
-- `loki`: A logging server which stores collected logs of Kubernetes pods and provide query interfaces.
+## Application observability
 
-**Dashboard**
-- `grafana`: A web application that provides analytics and interactive visualizations.
-
-After these addons enabled, out-of-box dashboard will be generated with real time data collecting.
-
-> More addons for alerting & tracing will be introduced in later versions.
-
-## Application Observability
-
-OAM, as a unified application model, can adopt observability easily as operational traits. As a result, KubeVela also provides several traits for application observability. Once end users added these traits in their app, the data will be collected, delivered and finally shown on the grafana dashboard.
+The scrape and log traits choose which apps are collected. Add one to a component and its metrics or logs go to Prometheus or Loki, ready to show on a Grafana dashboard.
 
 ![app-o11y](../../resources/app-o11y.png)
 
-More than that, you can easily define your own observability traits with CUE.
+You can write your own observability traits in CUE, the same as any other trait. See [Metrics collection](./o11y/metrics.md) and [Log collection](./o11y/logging.md).
 
-## Observability as Code
+## Controller metrics
 
-The ability of KubeVela to support the application observability is all completed through the IaC (Infrastructure as Code) method, which also means that **KubeVela has glued from the collection of indicators (including logs), analysis, enrichment, storage, data source registration, all the way to visualization by using IaC**.
+The KubeVela controller serves Prometheus metrics on port 8080 at `/metrics`. How you collect them depends on which Prometheus you run.
 
-Based on the IaC system powered by CUE, KubeVela has encapsulated common functions such as creating data sources, creating large disks, and importing large disks. You can use them directly without learning the details. If you want to do some customization, you can also orchestrate your process in a similar way through CUE, and customize the observability for your platform.
+**With the `prometheus-server` addon.** The `vela-core` pods carry the `prometheus.io/scrape`, `prometheus.io/port` and `prometheus.io/path` annotations, so the addon scrapes them with no setting. The KubeVela System dashboard reads these metrics.
 
-In the following documents, we will expand the above in detail one by one.
+**With prometheus-operator.** Set these Helm values on the `vela-core` chart. The chart only creates the Service and ServiceMonitor when the cluster has the `monitoring.coreos.com/v1` API.
 
-## What's Next
+| Helm value | Default | What it does |
+| :--------- | :------ | :----------- |
+| `core.metrics.enabled` | `false` | Creates a `<release>-metrics` Service in front of the controller's metrics port. |
+| `core.metrics.serviceMonitor.enabled` | `false` | Creates a ServiceMonitor for that Service. Needs `core.metrics.enabled`. |
+| `core.metrics.serviceMonitor.additionalLabels` | `{}` | Labels to add to the ServiceMonitor, for example the label your Prometheus selects ServiceMonitors by. |
+| `multicluster.metrics.enabled` | `false` | Starts the controller with `--enable-cluster-metrics`, which exports per-cluster metrics: whether each cluster is connected, its worker and control-plane node counts, and its CPU, memory and pod capacity. A node counts as control plane if it has either the `node-role.kubernetes.io/control-plane` or the `node-role.kubernetes.io/master` label. |
+| `multicluster.clusterGateway.serviceMonitor.enabled` | `false` | Creates a ServiceMonitor for the cluster-gateway. Needs `multicluster.metrics.enabled`. |
+| `multicluster.clusterGateway.serviceMonitor.additionalLabels` | `{}` | Labels to add to that ServiceMonitor. |
 
-- [**Enable Observability Addons**](./o11y/installation.md): Guide for how to install observability addons in your KubeVela system.
+For example:
 
-- [**Out-of-Box Dashboards**](./o11y/out-of-the-box.md): Guide for how to use pre-installed dashboards to monitor your system and applications.
+```bash
+helm upgrade kubevela kubevela/vela-core -n vela-system --reuse-values \
+  --set core.metrics.enabled=true \
+  --set core.metrics.serviceMonitor.enabled=true
+```
 
-- [**Metrics Collection**](./o11y/metrics.md): Guide for customizing the process of collecting metrics for your application.
+### Application status metrics
 
-- [**Log Collection**](./o11y/logging.md): Guide for how to customize the log collecting rules for your application.
+The `EnableApplicationStatusMetrics` feature gate (alpha, off by default) adds one series per Application:
 
-- [**Customize Dashboard**](./o11y/dashboard.md): Guide for creating your customized dashboards for applications.
+| Metric | Value |
+| :----- | :---- |
+| `kubevela_application_health_status` | `1` healthy, `0` unhealthy |
+| `kubevela_application_phase` | The Application's phase as a number |
+| `kubevela_application_workflow_phase` | The workflow's phase as a number |
 
-- [**Integration Existing Observability Service**](./o11y/integration.md): Guide for integrating your existing infrastructure to KubeVela, when you already have Prometheus or Grafana before installing addons.
+Each carries the `app_name` and `namespace` labels. Turn it on with `--set featureGates.enableApplicationStatusMetrics=true`. [Application health and status metrics](../status/application_health_status_metrics.md) lists the phase numbers and the structured logs the gate also writes.
+
+## What's next
+
+- [**Enable observability addons**](./o11y/installation.md): install the addons into your KubeVela system.
+- [**Out-of-the-box dashboards**](./o11y/out-of-the-box.md): use the bundled dashboards to watch your system and apps.
+- [**Metrics collection**](./o11y/metrics.md): choose how your apps' metrics are collected.
+- [**Log collection**](./o11y/logging.md): choose how your apps' logs are collected.
+- [**Customize dashboards**](./o11y/dashboard.md): build dashboards for your apps.
+- [**Integrate existing observability services**](./o11y/integration.md): connect the Prometheus or Grafana you already run.

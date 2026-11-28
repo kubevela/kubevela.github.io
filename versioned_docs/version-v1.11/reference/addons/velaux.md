@@ -23,7 +23,7 @@ Addon: velaux enabled Successfully.
 
 VelaUX needs authentication. The default username is `admin` and the password is **`VelaUX12345`**. Please must set and remember the new password after the first login.
 
-By default, VelaUX didn't have any exposed port.
+By default VelaUX is not exposed outside the cluster.
 
 ## Visit VelaUX by port-forward
 
@@ -33,7 +33,7 @@ Port forward will work as a proxy to allow visiting VelaUX dashboard by local po
 vela port-forward addon-velaux -n vela-system
 ```
 
-Choose `> local | velaux | velaux` for visit.
+When asked, pick `local | velaux | velaux`.
 
 ## Setup with Specified Service Type
 
@@ -93,7 +93,7 @@ Please access the velaux from the following endpoints:
 If you enabled the traefik addon, you can set the `gatewayDriver` parameter to use the Gateway API.
 
 ```shell script
-vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik
+vela addon enable velaux domain=example.domain.com gatewayDriver=traefik
 ```
 
 If you want to enable VelaUX with SSL:
@@ -101,194 +101,62 @@ If you want to enable VelaUX with SSL:
 1. Create the certificate configuration:
 
 ```shell
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  annotations:
-    config.oam.dev/alias: "VelaUX SSL Certificate"
-  labels:
-    app.oam.dev/source-of-truth: from-inner-system
-    config.oam.dev/catalog: velacore-config
-    config.oam.dev/type: config-tls-certificate
-  name: velaux-cert
-  namespace: vela-system
-spec:
-  components:
-  - name: velaux
-    properties:
-      cert: <CERT_BASE64>
-      key: <KEY_BASE64>
-    type: config-tls-certificate
+vela config create velaux-cert -t tls-certificate -n vela-system cert=<CERT_BASE64> key=<KEY_BASE64>
 ```
+
+The `tls-certificate` config template comes with the `traefik` addon, which `gatewayDriver=traefik` needs anyway.
 
 Please make sure the certificate matches the domain.
 
 2. Enable VelaUX with domain
 
 ```shell
-vela addon enable velaux domain=example.doamin.com gatewayDriver=traefik secretName=velaux-cert
+vela addon enable velaux domain=example.domain.com gatewayDriver=traefik secretName=velaux-cert
 ```
 
 ## Setup with the database
 
-VelaUX supports Kubernetes, MongoDB, MySQL and PostgreSQL as the database. the default is Kubernetes. We strongly advise using the databases other than Kubernetes to power your production environment.
+VelaUX stores its data in Kubernetes by default (`dbType=kubeapi`). For production, use a MongoDB, MySQL or PostgreSQL database that you run or rent, and pass its URL in `dbURL`.
 
-<Tabs className="unique-tabs" groupId="os">
+<Tabs className="unique-tabs" groupId="db">
 <TabItem label="MongoDB" value="mongodb">
 
 ```shell script
-vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_PASSWORD>@<MONGODB_URL>
+vela addon enable velaux dbType=mongodb dbURL=mongodb://<MONGODB_USER>:<MONGODB_PASSWORD>@<MONGODB_HOST>:<MONGODB_PORT>
 ```
 
-You can also deploy the MongoDB with this application configuration:
-
-> Your cluster must have a default storage class.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: velaux-db
-  namespace: vela-system
-spec:
-  components:
-    - name: velaux-db
-      properties:
-        chart: mongodb
-        repoType: helm
-        url: https://charts.bitnami.com/bitnami
-        values:
-          persistence:
-            size: 20Gi
-        version: 12.1.12
-      type: helm
-  policies:
-    - name: vela-system
-      properties:
-        clusters:
-          - local
-        namespace: vela-system
-      type: topology
-  workflow:
-    steps:
-      - name: vela-system
-        properties:
-          policies:
-            - vela-system
-        type: deploy
-```
-
-After deployed, let's get the root password from the secret `vela-system/velaux-db-mongodb`.
 </TabItem>
-
 <TabItem label="MySQL" value="mysql">
+
+Create the database first.
 
 ```shell script
 vela addon enable velaux dbType=mysql dbURL=mysql://<MYSQL_USER>:<MYSQL_PASSWORD>@<MYSQL_HOST>:<MYSQL_PORT>/<MYSQL_DB_NAME>
 ```
-> It's necessary to create the specified database in advance. You can find the relevant connection string parameters [here](https://github.com/go-sql-driver/mysql#parameters)
 
-You can also deploy the MySQL with this application configuration:
+The URL takes the [Go MySQL driver's connection parameters](https://github.com/go-sql-driver/mysql#parameters).
 
-> Your cluster must have a default storage class.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: velaux-db
-  namespace: vela-system
-spec:
-  components:
-    - name: velaux-db
-      properties:
-        chart: mysql
-        repoType: helm
-        url: https://charts.bitnami.com/bitnami
-        values:
-          persistence:
-            size: 20Gi
-        version: 12.1.12
-      type: helm
-  policies:
-    - name: vela-system
-      properties:
-        clusters:
-          - local
-        namespace: vela-system
-      type: topology
-  workflow:
-    steps:
-      - name: vela-system
-        properties:
-          policies:
-            - vela-system
-        type: deploy
-```
-
-After deployed, let's get the root password from the secret `vela-system/velaux-db-mysql`.
 </TabItem>
-
 <TabItem label="PostgreSQL" value="postgresql">
+
+Create the database first.
 
 ```shell script
 vela addon enable velaux dbType=postgres dbURL=postgres://<POSTGRESQL_USER>:<POSTGRESQL_PASSWORD>@<POSTGRESQL_HOST>:<POSTGRESQL_PORT>/<POSTGRESQL_DB_NAME>
 ```
-> It's necessary to create the specified database in advance.
 
-You can also deploy the PostgreSQL with this application configuration:
-
-> Your cluster must have a default storage class.
-
-```yaml
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: velaux-db
-  namespace: vela-system
-spec:
-  components:
-    - name: velaux-db
-      properties:
-        chart: postgresql
-        repoType: helm
-        url: https://charts.bitnami.com/bitnami
-        values:
-          persistence:
-            size: 20Gi
-        version: 12.1.12
-      type: helm
-  policies:
-    - name: vela-system
-      properties:
-        clusters:
-          - local
-        namespace: vela-system
-      type: topology
-  workflow:
-    steps:
-      - name: vela-system
-        properties:
-          policies:
-            - vela-system
-        type: deploy
-```
-
-After deployed, let's get the root password from the secret `vela-system/velaux-db-postgresql`.
 </TabItem>
 </Tabs>
 
 ## Specify the addon image
 
-By default the image repo is docker hub, you can specify the image repo by the `repo` parameter:
+The image comes from Docker Hub by default. To pull it from your own registry, copy the image there and set `repo`:
 
 ```
 vela addon enable velaux repo=your-registry.example.com
 ```
 
-With `repo=your-registry.example.com`, the image to deploy velaux server will be `your-registry.example.com/oamdev/velaux:<velaux-version>`.
-
-This feature can help you to build your private installation, just upload all images to your private image registry.
+The VelaUX image then becomes `your-registry.example.com/oamdev/velaux:<version>`.
 
 ## Concept of VelaUX
 

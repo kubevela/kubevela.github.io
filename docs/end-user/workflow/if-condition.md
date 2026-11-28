@@ -8,7 +8,7 @@ In the KubeVela workflow, each step can specify an `if`, in which you can determ
 
 ## No If specified
 
-In the case where a step does not specify an If, KubeVela will determine whether to execute the step based on the status of the previous steps. In default, if all the previous steps are succeeded, the step will be executed.
+In the case where a step does not specify an If, KubeVela will determine whether to execute the step based on the status of the previous steps. By default a step runs only if every step before it succeeded.
 
 This also means that if step A fails, step B after step A will be skipped and will not be executed.
 
@@ -159,12 +159,16 @@ You can see that step `comp` will try to deploy a component whose image is `inva
 
 ## Custom If conditions
 
-> Note: You need to upgrade to version 1.5 or above to use custom If conditions.
 
 You can also write your own judgment logic to determine whether the step should be executed. Note: The value in `if` will be executed as CUE codes. KubeVela provides some built-in variables in `if`, they are:
 
-* `status`：`status` contains status information for all workflow steps. You can use `status.<step-name>.phase == "succeeded"` to determine the status of a step, or you can use the simplified `status.<step-name>.succeeded` to determine.
-* `inputs`：`inputs` contains all the inputs parameters of the step. You can use `inputs.<input-name> == "value"` to get input for the step.
+* `status`: `status` contains status information for all workflow steps. You can use `status.<step-name>.phase == "succeeded"` to determine the status of a step, or you can use the simplified `status.<step-name>.succeeded` to determine. The other shorthands are `.failed`, `.skipped`, `.timeout`, `.failedAfterRetries` and `.terminate`.
+* `inputs`: `inputs` contains all the inputs parameters of the step. You can use `inputs.<input-name> == "value"` to get input for the step.
+* `context`: the workflow context, for example `context.name` or `context.namespace`.
+
+:::note
+With the `EnableSuspendOnFailure` feature gate on, a step that fails after its retries run out suspends the workflow instead of failing it, and `if` is not evaluated at all: a step with an `if` runs whatever its condition says.
+:::
 
 > Note that if your step name or inputs name is not a valid CUE variable name (eg: contains `-`, or starts with a number, etc.), you can refer to it as follows: `status["invalid-name"].failed`
 
@@ -183,7 +187,6 @@ spec:
     properties:
       image: crccheck/hello-world
       port: 8000
-    traits:
   workflow:
     steps:
     - name: apply
@@ -272,3 +275,41 @@ Services:
 ```
 
 As you can see, after the first step `apply` succeeded, the outputs `comp-output` will be output. The second step `notification` refers to the outputs of the first step as inputs and makes a judgment. After the condition is met, the notification is successfully sent. The third step `notification-skip` judges whether the second step is in a failed state. If the condition is not met, this step is skipped. The fourth step `notification-succeeded` judges whether the second step is successful, if the condition is met, the step is successfully executed.
+
+## Run a step only when something failed
+
+To clean up or send a notification only when a step fails, give that step an `if` on the failed step's status:
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: notify-on-failure
+  namespace: default
+spec:
+  components:
+  - name: invalid
+    type: webservice
+    properties:
+      image: invalid
+      ports:
+        - port: 8000
+  workflow:
+    steps:
+      - name: deploy
+        type: apply-component
+        timeout: 1m
+        properties:
+          component: invalid
+      - name: notify-failure
+        type: notification
+        if: status.deploy.failed
+        properties:
+          slack:
+            url:
+              value: <your slack url>
+            message:
+              text: invalid failed to deploy
+```
+
+`notify-failure` runs only when `deploy` fails, and is skipped when it succeeds. Steps after a failed step that have no `if` of their own are still skipped.

@@ -16,20 +16,18 @@ If your definitions were written before v1.11.0, assume at least one of these af
 
 ## The auto-remediation layer
 
-`pkg/cue/upgrade` (wired in via [#7199](https://github.com/kubevela/kubevela/pull/7199) and [#7215](https://github.com/kubevela/kubevela/pull/7215)) intercepts CUE templates at render time, detects legacy syntax, and rewrites it in memory before compilation. The definition stored in Kubernetes is never modified — only the copy used for rendering.
+vela-core rewrites legacy syntax in memory before it renders a definition; the stored definition is never changed. These controller flags turn the whole layer or each pass on and off:
 
-The master switch and cache size were introduced first; the six per-pass toggles below were added afterward in [#7229](https://github.com/kubevela/kubevela/pull/7229), which split the engine into independently controllable passes. All are flags on the `kubevela-controller`:
-
-| Flag | Default | Purpose |
-|---|---|---|
-| `--enable-cue-version-compatibility` | `true` | Master switch for the whole layer. Set to `false` to render templates exactly as written (fails hard on legacy syntax). |
-| `--cue-compatibility-cache-size` | `2000` | Max number of rewritten templates cached (1h TTL). Set to `0` to disable caching. |
-| `--cue-upgrade-list-concat-enabled` | `true` | Rewrite pass for list-arithmetic syntax. |
-| `--cue-upgrade-error-field-label-enabled` | `true` | Rewrite pass for unquoted error field labels. |
-| `--cue-upgrade-bool-default-guard-enabled` | `false` | Rewrite pass for the `bool \| *false` default-guard hazard under `evalv3`/`keepvalidators`. |
-| `--cue-upgrade-generic-default-guard-enabled` | `false` | Same as above, generalized to non-bool default guards. |
-| `--cue-upgrade-keepvalidators-singleton-enabled` | `false` | Rewrite pass for `keepvalidators` singleton concretization issues. |
-| `--cue-upgrade-evalv3-selfref-guard-enabled` | `false` | Rewrite pass for `evalv3` self-reference default-guard issues. |
+| Flag | Helm value | Flag default | Chart default | Purpose |
+|---|---|---|---|---|
+| `--enable-cue-version-compatibility` | `workflow.enableCUEVersionCompatibility` | `true` | `true` | Master switch for the whole layer. Set to `false` to render templates exactly as written (fails hard on legacy syntax). |
+| `--cue-compatibility-cache-size` | `workflow.cueCompatibilityCacheSize` | `2000` | `512` | Max number of rewritten templates cached (1h TTL). Set to `0` to disable caching. |
+| `--cue-upgrade-list-concat-enabled` | `workflow.cueUpgradeListConcatEnabled` | `true` | `true` | Rewrite pass for list-arithmetic syntax. |
+| `--cue-upgrade-error-field-label-enabled` | `workflow.cueUpgradeErrorFieldLabelEnabled` | `true` | `true` | Rewrite pass for unquoted error field labels. |
+| `--cue-upgrade-bool-default-guard-enabled` | `workflow.cueUpgradeBoolDefaultGuardEnabled` | `false` | `false` | Rewrite pass for the `bool \| *false` default-guard hazard under `evalv3`/`keepvalidators`. |
+| `--cue-upgrade-generic-default-guard-enabled` | `workflow.cueUpgradeGenericDefaultGuardEnabled` | `false` | `false` | Same as above, generalized to non-bool default guards. |
+| `--cue-upgrade-keepvalidators-singleton-enabled` | `workflow.cueUpgradeKeepValidatorsSingletonEnabled` | `false` | `false` | Rewrite pass for `keepvalidators` singleton concretization issues. |
+| `--cue-upgrade-evalv3-selfref-guard-enabled` | `workflow.cueUpgradeEvalv3SelfRefGuardEnabled` | `false` | `false` | Rewrite pass for `evalv3` self-reference default-guard issues. |
 
 The two enabled-by-default passes (list concat, error field label) cover the syntax that is now a **hard error**. The four disabled-by-default passes address **behavioral** differences under `evalv3`/`keepvalidators` — turn them on only if you've confirmed you're hitting the specific hazard, since they change evaluation semantics rather than just syntax.
 

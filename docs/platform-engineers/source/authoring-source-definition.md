@@ -221,7 +221,7 @@ This design removes a class of bug where a key left out a discriminating input a
 
 ## Versioning
 
-SourceDefinitions use the same revision mechanism as other definitions, see [Version Control for Definitions](../x-def-version.md). Each change creates a new `DefinitionRevision`. An application author can pin one with `type: cluster-lookup@v1` and stop following the latest. A binding without `@` uses the latest revision at the time the Application is evaluated. Setting `spec.version` to a semantic version makes each version a distinct revision.
+SourceDefinitions use the same revision mechanism as other definitions, see [Version Control for Definitions](../../end-user/definition-version-control.md). Each change creates a new `DefinitionRevision`. An application author can pin one with `type: cluster-lookup@v1` and stop following the latest. A binding without `@` uses the latest revision at the time the Application is evaluated. Setting `spec.version` to a semantic version makes each version a distinct revision.
 
 :::caution
 Revision names are `<definition>-v<n>` and do not include the kind. Do not give a SourceDefinition the same name as a definition of another kind, such as the built-in `configmap` trait. They would share revision names, and a pin like `configmap@v1` would point at the wrong one. This is why the built-in source is named `configmap-local`.

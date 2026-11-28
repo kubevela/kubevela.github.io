@@ -10,7 +10,7 @@ When the fluent builder cannot express the required CUE structure, defkit provid
 
 Applies to: **All Definition Types**
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 // Raw header: let bindings at template top
 tpl.SetRawHeaderBlock(`let nameSuffix = {
     if parameter.name != _|_ {"-" + parameter.name}
@@ -35,7 +35,7 @@ tpl.SetRawOutputsBlock(`if (parameter.existingServiceName == _|_) {
 }`)
 ```
 
-```cue title="CUE — generated position"
+```cue title="CUE (generated position)"
 // SetRawHeaderBlock → injected at TOP of template
 let nameSuffix = { ... }
 let serviceMetaName = { ... }
@@ -54,7 +54,7 @@ Injects a raw CUE string as the entire `patch` block for a trait template. Use w
 
 Applies to: **Trait**
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 tpl.SetRawPatchBlock(`patch: spec: template: spec: {
     containers: [{
         name: parameter.containerName
@@ -69,7 +69,7 @@ Injects a raw CUE string as the entire `parameter` block, replacing the one defk
 
 Applies to: **All Definition Types**
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 tpl.SetRawParameterBlock(`parameter: {
     // Either a remote config via URL OR inline content — not both.
     source: *{ url: string } | { content: string }
@@ -81,7 +81,7 @@ tpl.SetRawParameterBlock(`parameter: {
 }`)
 ```
 
-```cue title="CUE — generated"
+```cue title="CUE (generated)"
 // The string is placed verbatim in place of the
 // builder-generated parameter block.
 parameter: {
@@ -96,7 +96,7 @@ parameter: {
 
 Embeds a raw CUE expression as a `Value` that can be passed to `.Set()`, `.SetIf()`, or any other method accepting a `Value`. Use when you need to reference a CUE path, variable, or expression that defkit does not model as a typed `*Param`.
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 // Reference a CUE path directly
 defkit.Reference("parameter.cpu.value")
 
@@ -110,13 +110,13 @@ defkit.NewArrayElement().
 
 Wraps a Go literal (string, int, bool) as a `Value` for use in `.Set()` calls or condition expressions. Generates a CUE literal — quoted strings, bare integers, or booleans.
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 resource.Set("spec.type", defkit.Lit("ClusterIP"))
 resource.Set("spec.replicas", defkit.Lit(1))
 resource.Set("spec.paused", defkit.Lit(false))
 ```
 
-```cue title="CUE — generated"
+```cue title="CUE (generated)"
 spec: type:     "ClusterIP"
 spec: replicas: 1
 spec: paused:   false
@@ -124,11 +124,11 @@ spec: paused:   false
 
 ## `.RawCUE()` — Definition-Level Raw Template
 
-Injects a raw CUE string as the entire template body of a component definition, bypassing the fluent resource builder entirely. Use when the CUE logic cannot be expressed with the builder DSL (e.g., highly dynamic object iteration). Mutually exclusive with `.Template()`.
+Injects a raw CUE string as the entire template body of a definition, bypassing the fluent resource builder entirely. Use when the CUE logic cannot be expressed with the builder DSL (e.g., highly dynamic object iteration). Mutually exclusive with `.Template()`.
 
-Applies to: **Component**
+Applies to: **Component**, **Trait**, **Policy**, **WorkflowStep**
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 rawBody := `
     outputs: {
         for i, obj in parameter.objects {
@@ -155,15 +155,18 @@ return defkit.NewComponent("k8s-objects").
 
 ## When to Use Raw CUE vs the Fluent API
 
-| Situation | Recommended approach |
-|---|---|
-| Standard field assignments and conditions | Fluent API (`.Set()`, `.SetIf()`, `.If()`) |
-| CUE `let` bindings for reuse | `tpl.AddLetBinding()` or `tpl.SetRawHeaderBlock()` |
-| List comprehensions (`for k, v in ...`) | `tpl.SetRawOutputsBlock()` or `tpl.SetRawPatchBlock()` |
-| Import aliases in CUE templates | `tpl.SetRawHeaderBlock()` |
-| Referencing loop variables (`v.field`) | `defkit.Reference("v.field")` |
-| Literal values in Set calls | `defkit.Lit(value)` |
+Use the builder wherever it covers what you need, and raw CUE only where it doesn't.
+
+| Situation | The builder covers it | Raw CUE, when the builder doesn't |
+|---|---|---|
+| Field assignments and conditions | `.Set()`, `.SetIf()`, `.If()` / `.EndIf()` | |
+| Lists and maps built from a parameter (`for k, v in ...`) | `defkit.Each` / `defkit.From`, `ForEachWith` and `defkit.ForEachIn`; see [Build Lists and Maps from Parameters](./collections-api.md) | `tpl.SetRawOutputsBlock()` or `tpl.SetRawPatchBlock()` for a comprehension they can't express |
+| `let` bindings for reuse | `tpl.AddLetBinding()` | `tpl.SetRawHeaderBlock()` |
+| Referencing loop variables (`v.field`) | `defkit.Reference("v.field")` | |
+| Literal values in Set calls | `defkit.Lit(value)` | |
+| Import aliases in CUE templates | | `tpl.SetRawHeaderBlock()` |
+| A whole template the builder can't express | | `.RawCUE()` |
 
 :::caution
-Raw CUE blocks bypass defkit's type checking and path validation. Prefer the fluent API wherever possible — raw blocks are harder to refactor and may silently produce invalid CUE if the expression string contains errors.
+Raw CUE isn't type-checked by Go. Cover every definition that uses it with a test that compiles the generated CUE: a component's `Render()` does this and fails on errors, and `defkit.ValidateGeneratedCUE(def)` does it for any definition type. See [Testing](./testing.md).
 :::

@@ -8,7 +8,7 @@ In the KubeVela workflow, each step can specify an `if`, in which you can determ
 
 ## No If specified
 
-In the case where a step does not specify an If, KubeVela will determine whether to execute the step based on the status of the previous steps. In default, if all the previous steps are succeeded, the step will be executed.
+In the case where a step does not specify an If, KubeVela will determine whether to execute the step based on the status of the previous steps. By default a step runs only if every step before it succeeded.
 
 This also means that if step A fails, step B after step A will be skipped and will not be executed.
 
@@ -163,8 +163,8 @@ You can see that step `comp` will try to deploy a component whose image is `inva
 
 You can also write your own judgment logic to determine whether the step should be executed. Note: The value in `if` will be executed as CUE codes. KubeVela provides some built-in variables in `if`, they are:
 
-* `status`：`status` contains status information for all workflow steps. You can use `status.<step-name>.phase == "succeeded"` to determine the status of a step, or you can use the simplified `status.<step-name>.succeeded` to determine.
-* `inputs`：`inputs` contains all the inputs parameters of the step. You can use `inputs.<input-name> == "value"` to get input for the step.
+* `status`: `status` contains status information for all workflow steps. You can use `status.<step-name>.phase == "succeeded"` to determine the status of a step, or you can use the simplified `status.<step-name>.succeeded` to determine.
+* `inputs`: `inputs` contains all the inputs parameters of the step. You can use `inputs.<input-name> == "value"` to get input for the step.
 
 > Note that if your step name or inputs name is not a valid CUE variable name (eg: contains `-`, or starts with a number, etc.), you can refer to it as follows: `status["invalid-name"].failed`
 

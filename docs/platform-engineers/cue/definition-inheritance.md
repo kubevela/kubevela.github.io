@@ -4,6 +4,8 @@ title: Definition Inheritance
 
 Definition inheritance lets a `ComponentDefinition` or `TraitDefinition` build on another definition of the same kind instead of copying it. The definition that builds on another is the **child**. The definition it builds on is the **parent**. The child names the parent in `spec.extends`, passes the parent its parameters, and adds what is different, such as a label, an extra resource or a stricter health check.
 
+The examples on this page are Kubernetes YAML, with CUE for the template fragments. [The Definition File](../oam/definition-file.md) explains how a definition is written in either format.
+
 A child is always its parent with more on it. It cannot remove or change what the parent renders, except that it can leave out single named outputs. This lets a platform team publish a base definition and know that every definition built on it still renders the base.
 
 :::caution

@@ -2,306 +2,361 @@
 title: FluxCD
 ---
 
-This addon is built based [FluxCD](https://fluxcd.io/)
+The `fluxcd` addon installs [FluxCD](https://fluxcd.io/) controllers and adds the `helm` and `kustomize` component types, so an Application can deploy Helm charts and Kustomize manifests that Flux fetches and keeps in sync.
 
-## install
+## When to use it
+
+Since v1.12, KubeVela deploys Helm charts natively with the built-in [`helmchart`](../../end-user/components/references.md#helmchart) component, without FluxCD. Use this addon when you need Kustomize, Git, OSS or OCI sources with polling, image update automation, or you already run Flux.
+
+## What it installs
+
+| Controller | What it does for you | CRDs it adds |
+| --- | --- | --- |
+| source-controller | Fetches charts and manifests from Git, Helm repositories, OCI registries and S3-compatible buckets, and polls them for changes. | `GitRepository`, `HelmRepository`, `HelmChart`, `Bucket`, `OCIRepository` |
+| helm-controller | Installs and upgrades Helm releases for the `helm` component. | `HelmRelease` |
+| kustomize-controller | Builds and applies Kustomize manifests for the `kustomize` component. | `Kustomization` |
+| image-reflector-controller | Scans an image repository and picks the latest tag by your policy. | `ImageRepository`, `ImagePolicy` |
+| image-automation-controller | Commits the picked image tag back to your Git repository. | `ImageUpdateAutomation` |
+
+With `onlyHelmComponents=true` only the source-controller and helm-controller are installed.
+
+## Install
 
 ```shell
 vela addon enable fluxcd
 ```
 
-
-If you only want to deploy the helm application with fluxcd addon, you can execute the following command to enable only helm related components.
+To install only what the `helm` component needs:
 
 ```shell
-$ vela addon enable fluxcd onlyHelmComponents=true
+vela addon enable fluxcd onlyHelmComponents=true
 ```
+
+### Addon parameters
+
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| registry | Base URL for the images the FluxCD controllers use, for example `ghcr.io`. | string | false | |
+| clusters | Clusters to install to. Leave empty to install to all clusters. | []string | false | |
+| namespace | Namespace to install the controllers to. | string | false | `flux-system` |
+| onlyHelmComponents | Install only the source-controller and helm-controller. | bool | false | `false` |
+| helmControllerOptions | Extra arguments for the helm-controller. | []string | false | |
+| sourceControllerOptions | Extra arguments for the source-controller. | []string | false | |
+| kustomizeControllerOptions | Extra arguments for the kustomize-controller. | []string | false | |
+| imageReflectorControllerOptions | Extra arguments for the image-reflector-controller. | []string | false | |
+| imageAutomationControllerOptions | Extra arguments for the image-automation-controller. | []string | false | |
 
 ## Definitions
 
-The following definitions will be enabled after the installation of fluxcd addon.
+The addon adds these definitions:
 
-|DEFINITION NAME                         |DEFINITION TYPE           |DEFINITION DESCRIPTION|
-|    :----:   |          :----: | ---|
-|helm                                    |ComponentDefinition       |helps to deploy a helm chart from git repo, helm repo or S3 compatible bucket|
-|kustomize                               |ComponentDefinition       |helps to deploy a kustomize style artifact and GitOps capability to watch changes from git repo or image registry|
-|kustomize-json-patch                    |TraitDefinition           |A list of JSON6902 patch to selected target|
-|kustomize-patch                         |TraitDefinition           |A list of StrategicMerge or JSON6902 patch to selected target|
-|kustomize-strategy-merge                |TraitDefinition           |A list of strategic merge to kustomize config
+| Definition name | Definition type | Description |
+| --- | --- | --- |
+| helm | ComponentDefinition | Deploys a Helm chart from a Helm repository, OCI registry, Git repository or S3-compatible bucket. |
+| kustomize | ComponentDefinition | Deploys Kustomize manifests from a Git repository, S3-compatible bucket or OCI registry, and can update image tags in Git. |
+| kustomize-json-patch | TraitDefinition | A list of JSON6902 patches to selected targets. |
+| kustomize-patch | TraitDefinition | A list of strategic merge or JSON6902 patches to selected targets. |
+| kustomize-strategy-merge | TraitDefinition | A list of strategic merge patches for the Kustomize config. |
+| helm-labels | TraitDefinition | Patches the labels of Pods created by workloads in a Helm chart. Hidden in VelaUX. |
+
+It also adds the `helm-repository` [config template](#helm-repository-config-template).
 
 ### helm
 
 #### Parameters
 
-| Parameters      | Description                                                                                                                                                                                                                                                                                                                                                              | Example                            |
-| --------------- | ----------- | ---------------------------------- |
-| repoType        | required, indicates the type of repository, should be "helm","git", "oss", or "oci".                                                                                                                                                                                                                                                                                             | Helm                               |
-| pullInterval    | optional, the interval at which to check for repository/bucket and release updates, default to 5m                                                                                                                                                                                                                                                                        | 5m                                 |
-| url             | required, the Git or Helm repository URL, OSS endpoint, accept HTTP/S or SSH address as git url                                                                                                                                                                                                                                                                          | https://charts.bitnami.com/bitnami |
-| secretRef       | optional, the name of the Secret object that holds the credentials required to pull the repo. The username and password fields must be included in the HTTP/S basic authentication Secret. For TLS the secret must contain a certFile and keyFile, and/or caCert fields. For TLS authentication, the secret must contain a certFile / keyFile field and/or caCert field. | sec-name                           |
-| timeout         | optional, the timeout for operations like download index/clone repository                                                                                                                                                                                                                                                                                                | 60s                                |
-| chart           | required, the relative path to helm chart for git/oss source. The chart name for helm resource                                                                                                                                                                                                                                                                           | redis-cluster                      |
-| version         | optional, chart version, * by default                                                                                                                                                                                                                                                                                                                                    | 6.2.7                              |
-| targetNamespace | optional, the namespace to install chart, decided by chart itself                                                                                                                                                                                                                                                                                                        | your-ns                            |
-| releaseName     | optional, release name after installed                                                                                                                                                                                                                                                                                                                                   | your-rn                            |
-| values          | optional, override the Values.yaml inchart, using for the rendering of Helm                                                                                                                                                                                                                                                                                              |                                    |
-| valuesFrom          | optional, valuesFrom holds references to resources containing Helm values for this HelmRelease, and information about how they should be merged. It's a list of [ValueReference](#valuereference)                                                                                                                                                                                                                                                                                             |                                    |
-| installTimeout  | optional, the timeout for operation `helm install`, and 10 minutes by default                                                                                                                                                                                                                                                                                            | 20m                                |
-| interval        | optional, the  Interval at which to reconcile the Helm release, default to 30s                                                                                                                                                                                                                                                                                           | 1m                                 |
-| oss             | optional, The [oss](#oss) source configuration                                                                                                        |                             |
-| git             | optional, The [git](#git) source configuration                                                                                                        | dev                         |
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| repoType | Type of the source: `helm`, `git`, `oss` or `oci`. | string | false | `helm` |
+| url | The Git or Helm repository URL, or the OSS endpoint. Git accepts HTTP/S or SSH addresses. | string | true | |
+| chart | The chart name for a Helm or OCI repository; the relative path to the chart for a Git or OSS source, or to a packaged chart (for example `./charts/podinfo-1.2.3.tgz`). | string | true | |
+| version | Chart version. | string | false | `*` |
+| pullInterval | How often to check the repository or bucket, and the release, for updates. | string | false | `5m` |
+| interval | How often to reconcile the Helm release. | string | false | `30s` |
+| secretRef | Name of the Secret holding the credentials to pull from the source. | string | false | |
+| timeout | Timeout for operations such as downloading the index or cloning the repository. | string | false | |
+| installTimeout | Timeout for `helm install`. | string | false | `10m` |
+| sourceName | Name of an existing source to use, instead of creating one. | string | false | |
+| targetNamespace | Namespace to install the chart to. | string | false | |
+| releaseName | Release name. | string | false | |
+| retries | How many times to retry a failed install or upgrade. | int | false | `3` |
+| values | Chart values. | map | false | |
+| valuesFrom | References to ConfigMaps or Secrets holding chart values. See [valuesFrom](#valuesfrom). | []object | false | |
+| valuesFiles | Values files to use instead of `values.yaml`, as paths relative to the source. Later files override earlier ones. | []string | false | |
+| upgradeCRD | Create and replace the chart's CRDs on upgrade. | bool | false | `false` |
+| git | Git source settings. See [git](#git). | object | false | |
+| oss | OSS source settings, required when `repoType` is `oss`. See [oss](#oss). | object | false | |
+| helmrepository | Helm repository settings. See [helmrepository](#helmrepository). | object | false | |
 
-##### ValueReference
-| Parameters     | Description                                                                                                                                           | Example                     |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| kind | required, kind of the values referent, valid values are ('Secret', 'ConfigMap').                                                                                                                                | ConfigMap                 |
-| name   | required, name of the values referent. Should reside in the same namespace as the referring resource.                                               | your-cm                     |
-| valuesKey     | optional, valuesKey is the data key where the values.yaml or a specific value can be found at. Defaults to 'values.yaml'.                                                                                                                               | values.yaml                            |
-| targetPath     | optional, targetPath is the YAML dot notation path the value should be merged at. When set, the ValuesKey is expected to be a single flat value. Defaults to 'None', which results in the values getting merged at the root.                                                                                                                              |                             |
-| optional     | optional, optional marks this ValuesReference as optional. When set, a not found error or the values reference is ignored, but any ValuesKey, TargetPath or transient error will still result in a reconciliation failure.                                                                                                                               |                             |
+##### valuesFrom
 
-##### OSS
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| kind | Kind of the object holding the values: `Secret` or `ConfigMap`. | string | true | |
+| name | Name of the object, in the same namespace as the Application. | string | true | |
+| valuesKey | The data key holding the values. | string | false | `values.yaml` |
+| targetPath | YAML dot notation path to merge the value at. When set, `valuesKey` must hold a single flat value. | string | false | |
+| optional | Ignore the reference if the object is not found. | bool | false | |
 
-| Parameters     | Description                                                                                                                                           | Example                     |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| bucketName | required, bucket name                                                                                                                                 | your-bucket                 |
-| provider   | optional, Generic or aws, if you get the certificate from aws EC2, fill in aws. The default is generic.                                               | generic                     |
-| region     | optional, bucket region                                                                                                                               |                             |
+##### git
 
-##### Git
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| branch | Git branch to check out and watch. | string | false | `main` |
+| commit | Git commit to check out. Takes precedence over every other reference field. | string | false | |
+| name | Git reference name to check out. Takes precedence over `branch`, `tag` and `semver`. | string | false | |
+| semver | Semver expression matched against tags. Takes precedence over `tag`. | string | false | |
+| tag | Git tag to check out. Takes precedence over `branch`. | string | false | |
 
-| Parameters     | Description                                                                                                                                           | Example                     |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| branch      | optional, Git branch, master by default                                                                                                               | your-branch                 |
+##### oss
 
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| bucketName | The bucket name. | string | true | |
+| provider | `generic` for MinIO, Amazon S3, Google Cloud Storage and Alibaba Cloud OSS; `aws`, `azure` or `gcp` to take credentials from the cloud provider when `secretRef` is not set. | string | false | `generic` |
+| region | The bucket region. | string | false | |
 
-#### Example
+##### helmrepository
 
-You can create an application like below to deploy a helm chart which stored in helm repository.
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| provider | OIDC provider for authentication: `generic`, `aws`, `azure` or `gcp`. Use `generic` for public repositories or static credentials. | string | false | `generic` |
+
+#### Examples
+
+These examples all deploy the [podinfo](https://github.com/stefanprodan/podinfo) chart, so you can compare the sources.
+
+From a Helm repository:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: helm-redis
+  name: podinfo
 spec:
   components:
-    - name: redis
+    - name: podinfo
       type: helm
       properties:
-        repoType: "helm"
-        url: "https://charts.bitnami.com/bitnami"
-        chart: "redis"
-        version: "16.8.5"
-        values: 
-          master:
-            persistence:
-              size: 16Gi
-          replica:
-            persistence:
-              size: 16Gi
+        repoType: helm
+        url: https://stefanprodan.github.io/podinfo
+        chart: podinfo
+        version: "6.*"
+        values:
+          replicaCount: 2
 ```
 
-If your helm chart is stored in OCI registry, you can create the application like this:
-
-***Note***: Please guarantee your fluxcd addon version >= v1.3.1
+From an OCI registry:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: oci-app
-  namespace: default
+  name: podinfo-from-oci
 spec:
   components:
-    - name: test-oci
+    - name: podinfo
       type: helm
       properties:
-        repoType: "oci"
+        repoType: oci
         url: oci://ghcr.io/stefanprodan/charts
         chart: podinfo
-        version: '6.1.*'
+        version: "6.*"
 ```
 
-If your helm chart is stored in OSS, you can create the application like this:
+From an OSS bucket, with the packaged chart uploaded to it:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: bucket-app
+  name: podinfo-from-oss
 spec:
   components:
-    - name: bucket-comp
+    - name: podinfo
       type: helm
       properties:
         repoType: oss
-        # required if bucket is private
+        # required if the bucket is private
         secretRef: bucket-secret
-        chart: ./chart/podinfo-5.1.3.tgz
         url: oss-cn-beijing.aliyuncs.com
+        chart: ./chart/podinfo-6.5.0.tgz
         oss:
-            bucketName: definition-registry
+          bucketName: <your-bucket>
 ```
 
-If your helm chart stored in git, you can create the application like this:
+From a Git repository:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-   name: app-delivering-chart
+  name: podinfo-from-git
 spec:
-   components:
-     - name: terraform-controller
-       type: helm
-       properties:
-          repoType: git
-          url: https://github.com/oam-dev/terraform-controller
-          chart: ./chart
-          git:
-          	branch: master
+  components:
+    - name: podinfo
+      type: helm
+      properties:
+        repoType: git
+        url: https://github.com/stefanprodan/podinfo
+        chart: ./charts/podinfo
+        git:
+          # podinfo's default branch; the definition defaults to main
+          branch: master
 ```
 
 ### kustomize
 
 #### Parameters
 
-| Parameters     | Description                                                                                                                                           | Example                     |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| repoType       | required, indicates the type of repository, should be "helm","git" or "oss".                                                                          | oss                         |
-| pullInterval   | optional, Synchronize with Git repository, and the time interval between tuning helm release. The default value is 5m (5 minutes）                    | 10m                         |
-| url            | required, bucket's endpoint, no need to fill in with scheme                                                                                           | oss-cn-beijing.aliyuncs.com |
-| secretRef      | optional, Save the name of a Secret, which is the credential to read the bucket. Secret contains accesskey and secretkey fields                       | sec-name                    |
-| timeout        | optional, The timeout period of the download operation, the default is 20s                                                                            | 60s                         |
-| path           | required, The directory containing the kustomization.yaml file, or the directory containing a set of YAML files (used to generate kustomization.yaml) | ./prod                      |
-| oss            | optional, The [oss](#OSS) source configuration                                                                                                        |                             |
-| git            | optional, The [git](#OSS) source configuration                                                                                                        |                             |
-| imageRepository| optional, The image [repository](#Image Repository) for automatically update image to git                                                             |                             |
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| repoType | Type of the source: `git`, `oss` or `oci`. | string | false | `git` |
+| url | The Git repository URL, OSS endpoint or OCI repository. Git accepts HTTP/S or SSH addresses. | string | true | |
+| path | Path to the directory holding `kustomization.yaml`, or the plain YAML files to generate one for. | string | true | |
+| pullInterval | How often to check the source for updates, and to reconcile the Kustomization. | string | false | `5m` |
+| secretRef | Name of the Secret holding the credentials for the source. | string | false | |
+| timeout | Timeout for operations such as cloning the repository. | string | false | |
+| sourceName | Name of an existing source to use, instead of creating one. | string | false | |
+| targetNamespace | Sets or overrides the namespace of the manifests. | string | false | |
+| prune | Delete objects that were applied before and are no longer in the source. | bool | false | `true` |
+| suspend | Suspend later Kustomize runs. A run that has started is not stopped. | bool | false | `false` |
+| force | Recreate objects when a patch fails on an immutable field. | bool | false | `false` |
+| decryption | Decrypt secrets in the manifests. See [decryption](#decryption). | object | false | |
+| git | Git source settings. See [git](#git). | object | false | |
+| oss | OSS source settings, required when `repoType` is `oss`. See [oss](#oss); `provider` takes `generic` or `aws` here. | object | false | |
+| oci | OCI source settings. See [oci](#oci). | object | false | |
+| imageRepository | Update image tags in Git when a new image is pushed. See [imageRepository](#imagerepository). | object | false | |
 
-##### Image Repository
+##### decryption
 
-| Parameter         | Required | Description                                                                                                                                                                           | Example                                            |
-| ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------- |
-| image     | required     | The image url                                                                                                                                                 | oamdev/vela-core                                             |
-| secretRef     | optional     | If it's a private image registry, use `kubectl create secret docker-registry` to create the secret                                                                                                                                                 | my-secret                                             |
-| policy        | optional     | [Policy](#Image policy) gives the particulars of the policy to be followed in selecting the most recent image.        |
-| filterTags    | optional      | [FilterTags](#FilterTags) enables filtering for only a subset of tags based on a set of rules. If no rules are provided, all the tags from the repository will be ordered and compared.                                                                                                                       | $timestamp                                             |
-| commitMessage     | optional      | Use for more commit message
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| provider | Decryption provider, for example `sops`. | string | true | |
+| secretRef.name | Name of the Secret holding the decryption keys. | string | true | |
 
+##### oci
 
-###### Image policy
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| provider | OIDC provider for authentication: `generic`, `aws`, `azure` or `gcp`. | string | false | `generic` |
+| tag | Image tag to pull. | string | false | |
+| semver | Semver expression matched against tags. Takes precedence over `tag`. | string | false | |
+| digest | Image digest to pull. Takes precedence over every other field. | string | false | |
 
-| Parameter         | Required | Description                                                                                                                                                                           | Example                                            |
-| ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------- |
-| alphabetical.order     | optional     | Order specifies the sorting order of the tags. Given the letters of the alphabet as tags, ascending order would select Z, and descending order would select A                                                                                                                                                 | asc                                             |
-| numerical.order     | optional      | Given the integer values from 0 to 9 as tags, ascending order would select 9, and descending order would select 0                                                                                                                                               | asc                                             |
-| semver.range     | optional      | Range gives a semver range for the image tag; the highest version within the range that's a tag yields the latest image                                                                                                                                                 | '&gt;=1.0.0 &lt;2.0.0'                                             |
+##### imageRepository
 
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| image | The image to watch, for example `ghcr.io/stefanprodan/podinfo`. | string | true | |
+| policy | How to pick the latest tag. See [policy](#policy). | object | true | |
+| secretRef | For a private registry, a Secret created with `kubectl create secret docker-registry`. | string | false | |
+| filterTags | Only consider tags matching a pattern. See [filterTags](#filtertags). | object | false | |
+| commitMessage | Text added to the commit message of each update. | string | false | |
+| interval | How often to scan the image repository. | string | false | `5m` |
 
-###### FilterTags
+###### policy
 
-| Parameter         | Required | Description                                                                                                                                                                           | Example                                            |
-| ------------ | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------- |
-| extract     | optional      | Extract allows a capture group to be extracted from the specified regular expression pattern, useful before tag evaluation                                                                                                                                                 | $timestamp                                             |
-| pattern     | optional      | Pattern specifies a regular expression pattern used to filter for image tags                                                                                                                                                 | '^master-[a-f0-9]'                                             |
+Set one of these.
 
-#### Example
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| alphabetical.order | `asc` picks the last tag in alphabetical order (Z of A to Z), `desc` the first. | string | false | |
+| numerical.order | `asc` picks the highest number, `desc` the lowest. | string | false | |
+| semver.range | Picks the highest tag in the semver range, for example `>=1.0.0 <2.0.0`. | string | false | |
 
-1. If your kustomize style artifact is stored in oss, you can create application by flowing these steps:
+###### filterTags
 
-(Optional)If your OSS bucket needs identity verification, create a Secret first:
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| pattern | Regular expression a tag must match. | string | false | |
+| extract | Capture group to extract from `pattern` before the tags are compared, for example `$ts`. | string | false | |
 
-```shell
-$ kubectl create secret generic bucket-secret --from-literal=accesskey=<your-ak> --from-literal=secretkey=<your-sk>
-secret/bucket-secret created
-```
+#### Examples
 
-Deploy this application:
-
-```shell
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: bucket-app
-spec:
-  components:
-    - name: bucket-comp
-      type: kustomize
-      properties:
-        repoType: oss
-        # If the bucket is private, you will need to provide
-        secretRef: bucket-secret
-        url: oss-cn-beijing.aliyuncs.com
-        oss:
-          bucketName: definition-registry
-        path: ./app/prod/
-```
-
-2. If your artifact is stored in git, you can create application like this:
+From a Git repository (podinfo's own Kustomize manifests):
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: git-app
+  name: podinfo-kustomize
 spec:
   components:
-    - name: git-comp
+    - name: podinfo
       type: kustomize
       properties:
         repoType: git
-        url: https://github.com/<path>/<to>/<repo>
+        url: https://github.com/stefanprodan/podinfo
         git:
+          # podinfo's default branch; the definition defaults to main
           branch: master
-          provider: GitHub
-        path: ./app/dev/
+        path: ./kustomize
 ```
 
-3. If you want to create a application which updated automatically when image updated. You can create the application like this.
+From an OSS bucket. If the bucket needs credentials, create a Secret first:
+
+```shell
+kubectl create secret generic bucket-secret --from-literal=accesskey=<your-ak> --from-literal=secretkey=<your-sk>
+```
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
-  name: image-app
+  name: podinfo-kustomize-from-oss
 spec:
   components:
-    - name: image
+    - name: podinfo
       type: kustomize
       properties:
+        repoType: oss
+        # required if the bucket is private
+        secretRef: bucket-secret
+        url: oss-cn-beijing.aliyuncs.com
+        oss:
+          bucketName: <your-bucket>
+        path: ./app/prod/
+```
+
+With image update automation. Flux watches the image, and when a tag matching the policy appears it commits the new tag to the `path` in your repository, then deploys it. The repository needs a Secret with write access, and the image fields in your YAML need Flux's setter marker; see [GitOps with FluxCD](../../end-user/gitops/fluxcd.md) for the full walkthrough.
+
+```yaml
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: podinfo-image-automation
+spec:
+  components:
+    - name: podinfo-image-automation
+      type: kustomize
+      properties:
+        repoType: git
+        url: https://github.com/<your-org>/<your-repo>
+        # a Secret with write access to the repository
+        secretRef: git-secret
+        git:
+          branch: main
+        path: ./app/prod/
         imageRepository:
-          image: <your image>
-          secretRef: imagesecret
-          filterTags:
-            pattern: '^master-[a-f0-9]+-(?P<ts>[0-9]+)'
-            extract: '$ts'
+          image: ghcr.io/stefanprodan/podinfo
           policy:
-            numerical:
-              order: asc
+            semver:
+              range: ">=6.0.0 <7.0.0"
           commitMessage: "Image: {{range .Updated.Images}}{{println .}}{{end}}"
 ```
 
-## Note
+## helm-repository config template
 
-In this addon, there are five controllers to be installed by default
-  
-- Source controller
-  - The source-controller is a Kubernetes operator, specialised in artifacts acquisition from external sources such as Git, Helm repositories and S3 buckets. The source-controller implements the source.toolkit.fluxcd.io API and is a core component of the GitOps toolkit.
-  - ![overview](https://github.com/fluxcd/source-controller/blob/main/docs/diagrams/source-controller-overview.png)
+The addon adds a `helm-repository` config template, for the credentials of a private Helm repository. It creates a Secret that VelaUX offers when you pick a chart.
 
-- Image (metadata) reflector controller
-  - This is a controller that reflects container image metadata into a Kubernetes cluster. It pairs with the image update automation controller to drive automated config updates.
+| Name | Description | Type | Required | Default |
+| --- | --- | --- | --- | --- |
+| url | The URL of the Helm repository. | string | true | |
+| username | Username for basic auth. | string | false | |
+| password | Password for basic auth. | string | false | |
+| caFile | The repository's CA certificate, not base64 encoded. | string | false | |
 
-- Image automation controller
-  - This controller automates updates to YAML when new container images are available.
-  - Its sibling, image-reflector-controller, scans container image repositories and reflects the metadata in Kubernetes resources. This controller reacts to that image metadata by updating YAML files in a git repository, and committing the changes.
-
-- kustomize-controller
-  - The kustomize-controller is a Kubernetes operator, specialized in running continuous delivery pipelines for infrastructure and workloads defined with Kubernetes manifests and assembled with Kustomize.
-  - ![overview](https://github.com/fluxcd/kustomize-controller/blob/main/docs/diagrams/kustomize-controller-overview.png)
-
-- helm-controller
-  - The helm-controller is a Kubernetes operator, allowing one to declaratively manage Helm chart releases. It is part of a composable GitOps toolkit and depends on source-controller to acquire the Helm charts from Helm repositories.
-  - The desired state of a Helm release is described through a Kubernetes Custom Resource named HelmRelease. Based on the creation, mutation or removal of a HelmRelease resource in the cluster, Helm actions are performed by the operator.
-  - ![overview](https://github.com/fluxcd/helm-controller/blob/main/docs/diagrams/helm-controller-overview.png)
+```shell
+vela config create my-charts -t helm-repository url=https://charts.example.com username=<user> password=<password>
+```

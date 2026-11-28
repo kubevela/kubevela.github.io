@@ -4,6 +4,10 @@ title: Kubernetes RBAC
 
 In KubeVela v1.4, Authentication & Authorization mechanism is introduced. This allows applications to dispatch and manage resources using the identity of the application's creator/modifier. With this feature, it will be easy to limit the access of KubeVela users/applications and isolate their living spaces, which will make your KubeVela system safer.
 
+:::caution
+By default vela-core runs as `cluster-admin`, so anyone who can create an Application can create anything in any cluster KubeVela manages. Turn on `authentication.enabled` to apply each Application with its submitter's permissions.
+:::
+
 ## Installation
 
 To enable Authentication & Authorization in your KubeVela system, you need to do the following steps
@@ -34,10 +38,10 @@ To enable Authentication & Authorization in your KubeVela system, you need to do
 
 ```bash
 $ vela cluster list
-NAME    ALIAS   CREDENTIAL_TYPE   ENDPOINT                      ACCEPTED   LABELS
-local           Internal          -                             true       
-c3              X509Certificate   <c3 apiserver url>            true       
-c2              X509Certificate   <c2 apiserver url>            true       
+CLUSTER ALIAS   TYPE              ENDPOINT                      ACCEPTED   LABELS
+local           Internal          -                             true
+c3              X509Certificate   <c3 apiserver url>            true
+c2              X509Certificate   <c2 apiserver url>            true
 ```
 
 The following procedures are illustrated in the following figure. The operations below are associated with different users, which are identified by switching `KUBECONFIG` environment variable. (Each `KUBECONFIG` corresponds to one user.)
@@ -99,7 +103,7 @@ User=alice
 
 ### Use Privileges
 
-4. Alice can create an application in the dev namespace now. The application can also dispatch resources into the dev namespace of cluster `c2`.
+4. Alice can create an application in the dev namespace now. It deploys to the `dev` namespace of both the control plane (`local`) and cluster `c2`.
 
 ```bash
 cat <<EOF | KUBECONFIG=alice.kubeconfig vela up -f -
@@ -118,7 +122,7 @@ spec:
   - type: topology
     name: topology
     properties:
-      clusters: ["c2"]
+      clusters: ["local", "c2"]
 EOF
 ```
 
@@ -147,6 +151,12 @@ Workflow:
     message:
 
 Services:
+
+  - Name: podinfo  
+    Cluster: local  Namespace: dev
+    Type: webservice
+    Healthy Ready:1/1
+    No trait applied
 
   - Name: podinfo  
     Cluster: c2  Namespace: dev
@@ -240,7 +250,7 @@ Privileges granted.
 $ KUBECONFIG=bob.kubeconfig vela ls -n dev
 APP             COMPONENT       TYPE            TRAITS  PHASE                   HEALTHY STATUS          CREATED-TIME                 
 podinfo         podinfo         webservice              running                 healthy Ready:1/1       2022-05-31 17:06:14 +0800 CST
-podinfo-bad     podinfo-bad     webservice              workflowTerminated                              2022-05-31 17:09:16 +0800 CST
+podinfo-bad     podinfo-bad     webservice              runningWorkflow                                 2022-05-31 17:09:16 +0800 CST
 
 $ KUBECONFIG=bob.kubeconfig vela status podinfo -n dev
 About:

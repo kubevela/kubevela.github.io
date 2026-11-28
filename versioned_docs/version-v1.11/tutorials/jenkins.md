@@ -6,7 +6,7 @@ title: Jenkins CI
 
 The workflow execution of KubeVela application can be triggered by webhooks. Therefore, it is rather easy for user to integrate KubeVela with existing Continuous Integration platforms, such as Jenkins or Gitlab.
 
-From KubeVela 1.2, [VelaUX](../reference/addons/velaux.md) provides webhook triggers for applications to use. Only a simple curl command in Jenkins pipeline is needed to bridge CI and CD systems.
+From KubeVela 1.2, [VelaUX](../reference/addons/velaux.md#install) provides webhook triggers for applications to use. Only a simple curl command in Jenkins pipeline is needed to bridge CI and CD systems.
 
 In this section, we will demonstrate how to integrate KubeVela with Jenkins in details.
 
@@ -35,23 +35,22 @@ Click **Manual Trigger**, we can see the Webhook URL and the Curl Command. Eithe
 
 ### Use Webhook in Jenkins
 
-To use the webhook in Jenkins, we can paste the Curl Command in either Jenkins *Freestyle* project or *Pipeline* project.
-- In *Freestyle* project, click **Add Build Step** and select **Execute Shell**. Copy the Curl Command above into it.
-- In *Pipeline* projetct, similarly copy the Curl Command and wraps it with a `sh` command like the code below
+The webhook URL lets anyone who has it deploy the application. Store it as a Jenkins `Secret text` credential (here with the ID `velaux-webhook-url`) and read it with `withCredentials`, rather than pasting it into the job:
+
 ```groovy
 stage('Deploy') {
     steps {
-        sh '''#!/bin/bash
-            set -ex
-            curl -X POST -H 'content-type: application/json' --url http://47.251.6.101/api/v1/webhook/mbn6wckzh5lul3m2 -d '{"upgrade":{"kubevela-jenkins-ci-demo":{"image":"busybox"}},"codeInfo":{"commit":"","branch":"","user":""}}'
-        '''
+        withCredentials([string(credentialsId: 'velaux-webhook-url', variable: 'VELAUX_WEBHOOK_URL')]) {
+            sh '''#!/bin/bash
+                set -e
+                curl -X POST -H 'content-type: application/json' --url "$VELAUX_WEBHOOK_URL" -d '{"upgrade":{"kubevela-jenkins-ci-demo":{"image":"busybox"}},"codeInfo":{"commit":"'"$GIT_COMMIT"'","branch":"'"$GIT_BRANCH"'","user":""}}'
+            '''
+        }
     }
 }
 ```
-Now when jenkins execute these build steps, it will notify KubeVela to execute the application workflow automatically.
+
+Replace `kubevela-jenkins-ci-demo` with your component's name and `busybox` with the image your build produced. In a *Freestyle* project, tick **Use secret text(s) or file(s)** under **Build Environment**, bind the credential to `VELAUX_WEBHOOK_URL`, then add an **Execute Shell** build step with the same `curl` command.
+Now when Jenkins runs these build steps, it tells KubeVela to run the application workflow.
 
 ![alt](../resources/jenkins-run.jpg)
-
-### Advanced: Secure your Webhook URL
-
-The KubeVela webhook url in Jenkins can be secured by storing it in Jenkins credentials, instead of directly referring it in the project. You can set up a `secret text` type credential in Jenkins and use it in the project.

@@ -84,7 +84,7 @@ checkExistingKubectlVela() {
 }
 
 getLatestRelease() {
-    local velaReleaseUrl="https://api.github.com/repos/${GITHUB_ORG}/${GITHUB_REPO}/releases"
+    local velaReleaseUrl="https://api.github.com/repos/${GITHUB_ORG}/${GITHUB_REPO}/releases/latest"
     local latest_release=""
 
     if [ "$KUBECTL_VELA_HTTP_REQUEST_CLI" == "curl" ]; then

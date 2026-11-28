@@ -7,10 +7,9 @@ Date: 2027-07-01 to 2027-09-30
 ## User Experience
 
 - KubeVela MCP server: safer changes from AI assistants
-  * A `vela mcp` server lets AI assistants such as Claude, Copilot or Cursor look up definitions, check Application status and preview changes.
-  * Show which Applications a definition change will affect before it is made.
-  * Check a new definition for mistakes before it is published.
-  * Changes made through the MCP server can be paused or stopped, and only a person can approve them to continue.
+  * The `vela mcp` server shipped in v1.12. AI assistants such as Claude, Copilot or Cursor can already use it to look up definitions, check Application status, preview a change to an Application, and see what a definition change does to the first Applications that use it. See [AI agents with vela mcp](../tutorials/vela-mcp.md).
+  * Show every Application a definition change will affect, not only the first few, before it is made.
+  * Hold a change made through the MCP server for a person to approve, outside the Application's own workflow.
   * Use the MCP server from VelaUX, with the same permissions the user already has.
   * Design: [KEP: Vela MCP](https://github.com/kubevela/kubevela/blob/master/design/vela-cli/kep-vela-mcp.md)
 

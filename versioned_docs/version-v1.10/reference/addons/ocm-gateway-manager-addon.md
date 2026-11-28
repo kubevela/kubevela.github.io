@@ -18,10 +18,18 @@ the following aspects:
 * Structurize the component configuration for cluster-gateway.
 * Manages the "egress identity" for cluster-gateway to access each clusters.
 
-Note that the requests proxied by cluster-gateway will use the identity of
-`open-cluster-management-managed-serviceaccount/cluster-gateway` to access
-the managed clusters, and by default w/ cluster-admin permission, so please
-be mindful of that.
+Requests proxied by cluster-gateway reach each managed cluster as the
+`open-cluster-management-managed-serviceaccount/cluster-gateway` ServiceAccount,
+which has cluster-admin there by default (the
+`open-cluster-management:cluster-gateway:default` ClusterRole allows every verb
+on every resource). Anyone who can use cluster-gateway on the hub is
+cluster-admin on every managed cluster.
+
+The addon keeps that ClusterRole in place through an OCM ManifestWork, so an
+edit made on the managed cluster is put back. To grant less, set
+`spec.secretManagement.type: Manual` in the ClusterGatewayConfiguration: the
+addon then creates no RBAC, and you provide each cluster's credential Secret
+yourself, for a ServiceAccount bound to a narrower ClusterRole.
 
 
 ### How to confirm if the addon installation is working?
@@ -95,7 +103,7 @@ items:
         proxyServerHost: proxy-entrypoint.open-cluster-management-addon
         proxyServerPort: 8090
       type: ClusterProxy
-    image: oamdev/cluster-gateway:v1.1.11
+    image: oamdev/cluster-gateway:v1.4.0
     installNamespace: vela-system
     secretManagement:
       managedServiceAccount:

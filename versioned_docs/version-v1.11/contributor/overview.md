@@ -2,34 +2,11 @@
 title: Developer Overview
 ---
 
-The developer guide including two parts:
-
-1. The first part is [extension guide](#extension-guide) that introduces how to extend KubeVela, you are also very welcome to contribute your extension to the community.
-2. The second part is [contribution guide](#contribution-guide) that introduces how to participate and contribute to the community.
-
-## Extension Guide
-
-This part is a guide to help you extend capabilities for KubeVela. Make sure you have already understand the [**core concepts**](../getting-started/core-concept.md) before you start.
-
-### Extend Addons
-
-Building or installing addons is the most important way to extend KubeVela, there's a growing [catalog](https://github.com/kubevela/catalog) of addons you can choose for installation. You can also share your platform extension by KubeVela addon registry.
-
-* [Build Your Own Addon](../platform-engineers/addon/intro.md).
-* [Build Your Addon Registry](../platform-engineers/addon/addon-registry.md).
-* [Extend Cloud Resources by Addon](../platform-engineers/addon/terraform.md).
-
-### Learn CUE to extend more powerful features
-
-KubeVela use CUE as it's core engine, and you can use CUE and CRD controller to glue almost every infrastructure capabilities.
-As a result, you can extend more powerful features for your platform.
-
-- Start to [Learn Manage Definition with CUE](../platform-engineers/cue/basic.md).
-- Learn what is [CRD Controller](https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/) in Kubernetes.
+This guide is for contributing to KubeVela itself: code, docs, issues and community work. If you want to extend KubeVela for your own platform instead, start with [Build Your Own Addon](../platform-engineers/addon/intro.md) and [Manage Definitions with CUE](../platform-engineers/cue/basic.md).
 
 ## Contribution Guide
 
-KubeVela project is initialized and maintained by the cloud native community since day 0 with [bootstrapping contributors from 8+ different organizations](https://github.com/kubevela/community/blob/main/OWNERS.md#bootstrap-contributors). We intend for KubeVela to have an open governance since the very beginning and donate the project to neutral foundation as soon as it's released. 
+KubeVela is a CNCF project, with open governance; see [GOVERNANCE.md](https://github.com/kubevela/community/blob/main/GOVERNANCE.md).
 
 To help us create a safe and positive community experience for all, we require all participants adhere to the CNCF Community [Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md).
 
@@ -69,5 +46,3 @@ If you're interested to become a community member or learn more about the govern
 
 * [VelaUX Developer Guide](https://github.com/kubevela/velaux/blob/main/CONTRIBUTING.md)
 * [Terraform Controller Developer Guide](https://github.com/oam-dev/terraform-controller/blob/master/CONTRIBUTING.md)
-
-Enjoy coding and collaboration in OSS world!

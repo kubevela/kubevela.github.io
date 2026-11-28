@@ -15,11 +15,11 @@ Defines a single patch field for container mutation. Chain: `.Strategy(strategy)
 
 Applies to: **Trait**
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 defkit.PatchField("image").Strategy("retainKeys").Description("Container image")
 ```
 
-```cue title="CUE — generated"
+```cue title="CUE (generated)"
 // +patchStrategy=retainKeys
 image: string
 ```
@@ -30,7 +30,7 @@ Groups multiple `PatchField` definitions into a config used in `PatchContainerCo
 
 Applies to: **Trait**
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 defkit.PatchFields(
     defkit.PatchField("image").Strategy("retainKeys"),
     defkit.PatchField("resources"),
@@ -41,7 +41,7 @@ tpl.UsePatchContainer(defkit.PatchContainerConfig{
 })
 ```
 
-```cue title="CUE — generated"
+```cue title="CUE (generated)"
 #PatchParams: {
   image?:     string
   resources?: {...}
@@ -54,7 +54,7 @@ Traits can create new resources (e.g., a Service) instead of patching the worklo
 
 Applies to: **Trait**
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 trait := defkit.NewTrait("expose").
     Description("Expose workload via Service").
     AppliesTo("deployments.apps").
@@ -72,7 +72,7 @@ trait := defkit.NewTrait("expose").
     })
 ```
 
-```cue title="CUE — generated"
+```cue title="CUE (generated)"
 expose: {
     type: "trait"
     annotations: {}
@@ -110,7 +110,7 @@ Traits can inspect the component's output resource using `ContextOutput()`. `.Fi
 
 Applies to: **Trait**
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 ref := defkit.ContextOutput()
 
 templateRef := defkit.ContextOutput().Field("spec.template")
@@ -123,7 +123,7 @@ patch.If(hasTemplate).
     EndIf()
 ```
 
-```cue title="CUE — generated"
+```cue title="CUE (generated)"
 // .HasPath("spec.template")
 context.output.spec.template != _|_
 
@@ -137,7 +137,7 @@ context.output.spec.template
 
 Builds a CUE array literal with explicit items. Use when you need to construct an array value inline (not iterate over params). `NewArrayElement` builds a single object element supporting the same `.Set()`, `.SetIf()` methods as `NewResource`.
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 defkit.NewArray().Item(
     defkit.NewArrayElement().Set("kind", defkit.Lit("ServiceAccount")),
 )
@@ -148,7 +148,7 @@ defkit.NewArrayElement().
     Set("namespace", vela.Namespace())
 ```
 
-```cue title="CUE — generated"
+```cue title="CUE (generated)"
 [{kind: "ServiceAccount"}]
 
 {name: context.name, namespace: context.namespace}
@@ -158,11 +158,11 @@ defkit.NewArrayElement().
 
 Parameter type for an array with open schema (no element type constraint).
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 defkit.OpenArray("items")
 ```
 
-```cue title="CUE — generated"
+```cue title="CUE (generated)"
 items: [...{...}]
 ```
 
@@ -170,11 +170,11 @@ items: [...{...}]
 
 Replaces the entire `parameter` block with a dynamic map. When a definition uses `DynamicMap`, the `parameter` schema becomes `[string]: T` rather than a named-field struct.
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 defkit.DynamicMap().ValueTypeUnion("string | null")
 ```
 
-```cue title="CUE — generated"
+```cue title="CUE (generated)"
 parameter: [string]: string | null
 ```
 
@@ -186,12 +186,12 @@ parameter: [string]: string | null
 
 Applies to: **Template**
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 defkit.ParameterField("strategy.type")
 defkit.ParamPath("podAffinity.required").IsSet()
 ```
 
-```cue title="CUE — generated"
+```cue title="CUE (generated)"
 parameter.strategy.type
 parameter.podAffinity.required != _|_
 ```
@@ -202,13 +202,13 @@ Inside a `ForEachIn` / `From` iteration context, references a field of the curre
 
 Applies to: **Template**
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 defkit.ForEachIn(constraints).MapFields(defkit.FieldMap{
     "maxSkew": defkit.FieldRef("maxSkew"),
 })
 ```
 
-```cue title="CUE — generated"
+```cue title="CUE (generated)"
 [for v in parameter.constraints {
     maxSkew: v.maxSkew
 }]
@@ -220,7 +220,7 @@ Transforms an array parameter by mapping each element's fields. Returns a CUE li
 
 Applies to: **Template**
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 defkit.ForEachIn(constraints).MapFields(defkit.FieldMap{
     "maxSkew":           defkit.FieldRef("maxSkew"),
     "topologyKey":       defkit.FieldRef("topologyKey"),
@@ -228,7 +228,7 @@ defkit.ForEachIn(constraints).MapFields(defkit.FieldMap{
 })
 ```
 
-```cue title="CUE — generated"
+```cue title="CUE (generated)"
 [for v in parameter.constraints {
     maxSkew:           v.maxSkew
     topologyKey:       v.topologyKey
@@ -242,13 +242,13 @@ Similar to `ForEachIn` but with filter and guard support. `.Filter(cond)` filter
 
 Applies to: **Template**
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 defkit.From(privileges).
     Filter(defkit.FieldEquals("scope", "cluster")).
     Guard(privileges.IsSet())
 ```
 
-```cue title="CUE — generated"
+```cue title="CUE (generated)"
 if parameter["privileges"] != _|_ {
     [for v in parameter.privileges
      if v.scope == "cluster" { v }]
@@ -261,26 +261,40 @@ Returns a condition that is true when the length of an array expression is great
 
 Applies to: **Template**
 
-```go title="Go — defkit"
+```go title="Go (defkit)"
 defkit.LenGt(clusterPrivsRef, 0)
 ```
 
-```cue title="CUE — generated"
+```cue title="CUE (generated)"
 len(_clusterPrivileges) > 0
+```
+
+### `defkit.PathExists()`
+
+Applies to: **Template**
+
+True when a path resolves, for example a field of an earlier action's `$returns`. Use it where there is no parameter to call `.IsSet()` on.
+
+```go title="Go (defkit)"
+defkit.PathExists("apply.$returns.value.metadata.name")
+```
+
+```cue title="CUE (generated)"
+apply.$returns.value.metadata.name != _|_
 ```
 
 ## Workflow Op Builders
 
-Pre-built builders for common workflow step actions. Each generates the appropriate CUE action block with the correct import.
+The workflow op builders (`KubeRead`, `KubeApply`, `HTTPPost`, `ConvertString`, `WaitUntil`, `Fail`) are listed on [WorkflowStepDefinition and Step Actions](./template-workflowstep-actions.md#workflow-op-builders).
 
-| Constructor | Chain Methods | Description |
-|---|---|---|
-| `KubeRead(apiVersion, kind)` | `.Name(v)`, `.Namespace(v)`, `.NamespaceIf(cond, v)`, `.Cluster(v)` | Reads a Kubernetes resource by GVK and name. Generates `kube.#Read`. |
-| `KubeApply(objectValue)` | `.Cluster(v)` | Applies (creates/updates) a Kubernetes resource. Generates `kube.#Apply`. |
-| `HTTPPost(url Value)` | `.Body(v)`, `.Header(key, value)` | Makes an HTTP POST request. Generates `http.#HTTPDo` with method POST. |
-| `ConvertString(input)` | — | Converts a value to a string. Generates `util.#ConvertString`. |
-| `WaitUntil(continueExpr)` | `.Guard(guards...)`, `.MessageIf(cond, val)` | Pauses the workflow until a condition becomes true. Generates `builtin.#ConditionalWait`. |
-| `Fail(message Value)` | — | Fails the workflow step with an error message. Generates `builtin.#Fail`. |
+## Imports
+
+The generator adds some imports for you and leaves others to you:
+
+- **Added for you**: CUE standard library packages that a defkit value needs, such as `strings` for `StringsToLower` or a `MinLen` constraint, `strconv` for `StrconvFormatInt`, and `list` for `MinItems` or `Contains`.
+- **Always yours to add with `WithImports`**: the `vela/*` packages behind workflow actions, such as `vela/kube`, `vela/http`, `vela/util`, `vela/builtin` and `vela/multicluster`, and any package you reference through a raw CUE string.
+
+A missing import leaves the generated CUE referring to a package it doesn't import, so `vela def validate-module` fails on that definition.
 
 ## Validators & Conditional Params
 
@@ -302,10 +316,10 @@ The `advanced-api-trait` trait exposes the workload via a Service (resource-prod
 
 The trait runs at `PreDispatch` so the workload patches land on the dispatched Deployment. (A `PostDispatch` trait can still `tpl.Outputs(...)` companion resources, but its `tpl.Patch(...)` calls won't take effect on the workload itself, which has already been sent to the cluster.)
 
-Drop the file below into `my-platform/traits/`. The Go on the left and the CUE on the right are what `vela def gen-module ./my-platform` produces for this trait; the module passes `vela def validate-module` and `vela def apply-module`, and an Application referencing this trait was verified end-to-end on a k3d cluster (the rendered Deployment carries both `metadata.labels.managedBy: advanced-api-trait` and `spec.template.metadata.labels.exposedBy: advanced-api-trait`, plus an accompanying `Service`).
+Drop the file below into `my-platform/traits/`. The CUE tab shows what `vela def gen-module` generates; the module passes `vela def validate-module` and `vela def apply-module`, and an Application referencing this trait was verified end-to-end on a k3d cluster (the rendered Deployment carries both `metadata.labels.managedBy: advanced-api-trait` and `spec.template.metadata.labels.exposedBy: advanced-api-trait`, plus an accompanying `Service`).
 
 <Tabs groupId="defkit-example">
-<TabItem value="go" label="Go — defkit">
+<TabItem value="go" label="Go (defkit)">
 
 ```go
 package traits
@@ -354,7 +368,7 @@ func init() { defkit.Register(AdvancedAPITrait()) }
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated">
+<TabItem value="cue" label="CUE (generated)">
 
 ```cue
 "advanced-api-trait": {
@@ -409,7 +423,7 @@ The `advanced-api-component` component exercises the template internals from the
 Drop the file below into `my-platform/components/`.
 
 <Tabs groupId="defkit-example">
-<TabItem value="go" label="Go — defkit">
+<TabItem value="go" label="Go (defkit)">
 
 ```go
 package components
@@ -499,7 +513,7 @@ func init() { defkit.Register(AdvancedAPIComponent()) }
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated">
+<TabItem value="cue" label="CUE (generated)">
 
 ```cue
 "advanced-api-component": {
@@ -595,16 +609,18 @@ template: {
 
 ## Complete Example — WorkflowStep
 
+This example copies a secret value into a ConfigMap readable by anyone with ConfigMap read access, and sends it to the webhook in the clear. It shows the op builders working together; don't use it as-is for real secrets.
+
 The `advanced-api-workflowstep` step reads a Secret, base64-decodes one of its keys, writes the decoded value into a target ConfigMap, waits for the apply to settle, and POSTs the value to a webhook URL. It exercises every op builder from the [Workflow Op Builders](#workflow-op-builders) table: `KubeRead`, `Fail` (gated on a parameter flag), `ConvertString` paired with `base64.Decode(...)`, `KubeApply` with a value built inline via `NewArrayElement()`, `WaitUntil(...).Guard(...).MessageIf(...)`, and `HTTPPost(...).Body(...).Header(...)`.
 
-`WithImports("vela/kube", "vela/http", "vela/util", "vela/builtin", "encoding/base64")` is mandatory — defkit's op builders emit `kube.#Read`, `kube.#Apply`, `util.#ConvertString`, `builtin.#Fail`, `builtin.#ConditionalWait`, and `http.#HTTPDo` without auto-injecting their imports, so the generated CUE fails OpenAPI-schema generation if any of these packages is missing.
+`WithImports("vela/kube", "vela/http", "vela/util", "vela/builtin", "encoding/base64")` is required: the op builders emit `kube.#Read`, `kube.#Apply`, `util.#ConvertString`, `builtin.#Fail`, `builtin.#ConditionalWait` and `http.#HTTPDo`, and `vela/*` packages are never added for you (see [Imports](#imports)).
 
 The example below was verified end-to-end on a k3d cluster against a Secret containing a `greeting: "hello from defkit"` key — the step produces a ConfigMap whose `data.value` is the decoded greeting and POSTs it to the supplied URL.
 
 Drop the file below into `my-platform/workflowsteps/`.
 
 <Tabs groupId="defkit-example">
-<TabItem value="go" label="Go — defkit">
+<TabItem value="go" label="Go (defkit)">
 
 ```go
 package workflowsteps
@@ -685,7 +701,7 @@ func init() { defkit.Register(AdvancedAPIWorkflowstep()) }
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated">
+<TabItem value="cue" label="CUE (generated)">
 
 ```cue
 import (
@@ -787,7 +803,7 @@ vela def gen-module ./my-platform -o ./generated-cue
 
 - [TraitDefinition](./definition-trait.md) — `defkit.NewTrait` chain and trait-specific helpers
 - [ComponentDefinition](./definition-component.md) — `defkit.NewComponent` chain and template output methods
-- [WorkflowStepDefinition](./definition-workflowstep.md) — `defkit.NewWorkflowStep` chain and op-builder usage
+- [WorkflowStepDefinition](./template-workflowstep-actions.md): `defkit.NewWorkflowStep` chain and op-builder usage
 - [Template Patch Methods](./template-patch-methods.md) — full surface of `tpl.Patch()` and `tpl.UsePatchContainer()`
 - [Template Workflow Step Actions](./template-workflowstep-actions.md) — additional workflow step actions beyond the op builders here
-- [Collections API](./collections-api.md) — higher-level array-transformation pipelines built on `From()` and `Each()`
+- [Build Lists and Maps from Parameters](./collections-api.md): higher-level array-transformation pipelines built on `From()` and `Each()`

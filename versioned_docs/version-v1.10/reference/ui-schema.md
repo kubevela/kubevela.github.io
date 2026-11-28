@@ -2,13 +2,11 @@
 title: UX of Definition
 ---
 
-VelaUX uses the UI-Schema specification to customize UI elements of components, workflow steps, and operation and maintenance feature resources, in the case of variable input parameters, to achieve a more native UI experience.
-
-At present, the UI-Schema specification mainly acts on the data input side and will be extended to the data visualization side in the future.
+VelaUX builds a form for every component, trait, policy and workflow step from its parameter schema. A UI schema changes how that form looks: which widget a field uses, its order, validation and when it is shown.
 
 ### How UI-Schema works
 
-The components, workflow steps, and operation and maintenance feature types with different UI-Schema working principles are defined through CUE, which we call XDefinition, and almost every definition includes the definition of input parameters. for example:
+Components, traits, policies and workflow steps are defined in CUE as X-Definitions, and almost every definition declares input parameters. For example:
 
 ```cue
 scaler: {
@@ -116,19 +114,25 @@ You can use the following command to get the ConfigMap list of Custom UISchema.
 ```bash 
 kubectl get configmap -n vela-system | grep uischema
 ```
-```bash
-NAME                                                   DATA   AGE
-addon-uischema-velaux                                  1      25h
-component-uischema-helm                                1      25h
-component-uischema-k8s-objects                         1      25h
-component-uischema-kustomize                           1      25h
-component-uischema-task                                1      25h
-config-uischema-helm-repository                        1      25h
-config-uischema-image-registry                         1      25h
+```console
+addon-uischema-velaux                          1      25h
+component-uischema-k8s-objects                 1      25h
+component-uischema-task                        1      25h
+component-uischema-webservice                  1      25h
+config-uischema-image-registry                 1      25h
+config-uischema-nacos-config                   1      25h
+config-uischema-nacos-server                   1      25h
+policy-uischema-override                       1      25h
+trait-uischema-scaler                          1      25h
+trait-uischema-storage                         1      25h
+workflowstep-uischema-deploy                   1      25h
+workflowstep-uischema-deploy2env               1      25h
+workflowstep-uischema-notification             1      25h
+workflowstep-uischema-webhook                  1      25h
 ```
 The ConfigMap name is in the format of `<your-definition-type>-uischema-<your-definition-name>`, and the data key is `ui-schema`.
 
-For example, we can use the following command to get the UISchema of `k8s-objects` which tpe is `component`.
+For example, we can use the following command to get the UISchema of `k8s-objects` which type is `component`.
 ```bash
 kubectl get configmap -n vela-system component-uischema-k8s-objects -oyaml
 ```
@@ -144,6 +148,6 @@ data:
 
 For more examples, please refer to the following links：[https://github.com/kubevela/catalog/tree/master/addons/velaux/schemas](https://github.com/kubevela/catalog/tree/master/addons/velaux/schemas)
 
-### How to expand
+### Add a widget
 
-UI-Schema mainly extends front-end react components, refer to [https://github.com/kubevela/velaux/tree/main/packages/velaux-ui/src/extends](https://github.com/kubevela/velaux/tree/main/packages/velaux-ui/src/extends)
+Widgets are React components in velaux's [`packages/velaux-ui/src/extends`](https://github.com/kubevela/velaux/tree/main/packages/velaux-ui/src/extends); adding one needs a VelaUX build.

@@ -28,7 +28,7 @@ The callback in every `ForEachWith*` method receives an `*ItemBuilder`. Use it t
 |---|---|
 | `item.Var()` | Returns an `IterVarBuilder` that references the iteration variable (`v` by default, or whatever name you passed to the `*Var` variant). All field references inside the item should go through this. |
 | `item.Var().Field("name")` | References a field on the iteration variable — generates `v.name`. Use this when reading values from the source element to assign into the produced item. |
-| `item.Var().Ref()` | References the iteration variable itself (`v`) without descending into a field. Use when you need to embed the entire source element. |
+| `item.Var().Ref()` | References the iteration variable itself (`v`) without descending into a field. Use it as a value when the source element already has the shape the output field needs: `item.Set("spec", v.Ref())` generates `spec: v`. When only some fields carry over, copy each with `.Field()` instead, as in `item.Set("valueFrom", v.Field("valueFrom"))`. |
 | `item.Set(field, value)` | Unconditional field assignment. Generates `field: <value>` at the top level of the item. |
 | `item.If(cond, fn)` | Conditional block with an arbitrary condition. The callback runs against the same `*ItemBuilder`, and any `Set` calls inside it are wrapped in `if <cond> { ... }`. |
 | `item.IfSet(field, fn)` | Convenience for `item.If(item.FieldExists(field), fn)` — generates `if v.<field> != _\|_ { ... }`. Use when an output field should only be emitted if the source element has the named field set. |
@@ -45,6 +45,7 @@ Top-level helpers that produce conditions for filters and field selection.
 | Function | Description |
 |---|---|
 | `defkit.FieldEquals(field, value)` | Produces a `FilterPredicate` for `ForEachWithGuardedFiltered` — keeps only elements where the named field equals the given value. Generates `if v.<field> == <value>` inside the array comprehension. |
+| `defkit.HasExposedPorts(ports)` | Returns a condition that is true when any element of `ports` has `expose: true`. Generates `len([for p in parameter.ports if p.expose == true { p }]) > 0`. The field name `expose` is fixed. The condition reads the parameter directly, so it fails to render when the parameter is optional and absent: give the parameter a default (`.Default([]any{})`) instead of `.Optional()`. Use with `tpl.OutputsIf()` to emit a Service only when there is a port to publish. |
 | `defkit.ItemFieldIsSet(field)` | Returns a condition that is true when the named field exists on the current iteration element (`v.<field> != _\|_`). Used with `.PickIf()` on the `tpl.Helper()` builder to conditionally include optional fields when projecting elements through a helper. |
 
 :::tip
@@ -55,7 +56,7 @@ Use `ForEachWithGuardedFiltered` when you need *both* an outer guard (the source
 
 Let's build a `web-service` component that wires a `Deployment` and an optional `Service` from a `ports` parameter and a `env` parameter — every port entry contributes a named container port, entries marked `expose: true` additionally publish a service port (with the Service itself emitted only when at least one port asks to be exposed, so we don't ship a Kubernetes-invalid Service with empty `spec.ports`), and every env entry becomes a container env var (with a string fallback when `value` is omitted). The component shows how the four `ForEachWith*` variants cooperate from different source arrays, with `ItemBuilder` assembling per-item conditionals, defaults, let bindings, and field-existence checks.
 
-Behind the scenes the example exercises every helper on this page in a single template — `ForEachWith` to build the container-port array (using `IfSet`/`IfNotSet`, `Let`, and `SetDefault` to derive `port-<N>` names when the user omits one), `ForEachWithVar` with a custom iteration name to build the env array (using `item.If` with `item.FieldExists`/`item.FieldNotExists` for the value fallback and `item.Var().Ref()` to embed the source element as a hidden CUE binding), `ForEachWithGuardedFiltered` with `defkit.FieldEquals("expose", true)` to build the filtered service-port array, and `WithImports("strconv")` so the generated CUE can call `strconv.FormatInt(...)`. `ForEachWithGuardedFilteredVar` takes the same arguments plus a leading `varName` if you need to rename the iteration variable; pair it with var-aware predicates when you do. `defkit.ItemFieldIsSet` returns a `Condition` for the `tpl.Helper().PickIf()` projector and is covered in the [Helper Builder](./template-helper-builder.md) page. Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/components/`.
+Behind the scenes the example exercises most helpers on this page in a single template: `ForEachWith` to build the container-port array (using `IfSet`/`IfNotSet`, `Let`, and `SetDefault` to derive `port-<N>` names when the user omits one), `ForEachWithVar` with a custom iteration name to build the env array (using `item.If` with `item.FieldExists`/`item.FieldNotExists` for the value fallback), `ForEachWithGuardedFiltered` with `defkit.FieldEquals("expose", true)` to build the filtered service-port array, `defkit.HasExposedPorts` to emit the Service only when a port is exposed, and `WithImports("strconv")` so the generated CUE can call `strconv.FormatInt(...)`. `ForEachWithGuardedFilteredVar` takes the same arguments plus a leading `varName` if you need to rename the iteration variable; pair it with var-aware predicates when you do. `defkit.ItemFieldIsSet` returns a `Condition` for the `tpl.Helper().PickIf()` projector and is covered in the [Helper Builder](./template-helper-builder.md) page. Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/components/`.
 
 <Tabs groupId="defkit-example">
 <TabItem value="go" label="Go — defkit">
@@ -74,7 +75,10 @@ func WebService() *defkit.ComponentDefinition {
             defkit.Int("port"),
             defkit.String("name").Optional(),
             defkit.Bool("expose").Default(false),
-        ).Optional()
+        ).
+        // A default, not Optional(): HasExposedPorts reads the list directly,
+        // so it must exist even when the user sets no ports.
+        Default([]any{})
     env := defkit.Array("env").
         Description("Container env vars; entries without value default to empty string").
         WithFields(
@@ -123,8 +127,7 @@ func webServiceTemplate(tpl *defkit.Template) {
         })
 
     // Container env — ForEachWithVar with named "e" iter var.
-    // Demonstrates item.If with item.FieldExists / FieldNotExists, plus
-    // item.Var().Ref() (embedded via a hidden Let so it does not leak to K8s).
+    // Demonstrates item.If with item.FieldExists / FieldNotExists.
     containerEnv := defkit.NewArray().ForEachWithVar("e", env,
         func(item *defkit.ItemBuilder) {
             e := item.Var()
@@ -138,11 +141,6 @@ func webServiceTemplate(tpl *defkit.Template) {
             item.If(item.FieldNotExists("value"), func() {
                 item.Set("value", defkit.Lit(""))
             })
-
-            // item.Var().Ref() references the entire iteration element.
-            // Captured as a hidden CUE binding for demonstration; CUE drops
-            // underscore-prefixed fields from the rendered output.
-            item.Let("_source", e.Ref())
         })
 
     // Service ports — ForEachWithGuardedFiltered with FieldEquals predicate.
@@ -225,7 +223,6 @@ template: {
               name: e.name
               if e.value != _|_ { value: e.value }
               if e.value == _|_ { value: "" }
-              _source: e
             }]
           }
           if parameter["ports"] != _|_ {
@@ -266,7 +263,7 @@ template: {
     // +usage=Container image
     image: string
     // +usage=Container ports; set expose=true to publish via Service
-    ports?: [...{
+    ports: [...{
       port:   int
       name?:  string
       expose: *false | bool

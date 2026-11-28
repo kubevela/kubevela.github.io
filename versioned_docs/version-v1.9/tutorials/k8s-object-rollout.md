@@ -25,7 +25,7 @@ title: Canary Rollout
 Kubernetes resources can be anything, this canary rollout works for the scenarios within the following limits:
 
 1. The Kubernetes resources contain a service pointing to the workload along with an ingress routing to the service.
-2. Workloads supported including Kubernetes Deployment, StatefulSet, and [OpenKruise Cloneset](https://openkruise.io/docs/user-manuals/cloneset/). That means the workload specified must be one of these three types.
+2. Workloads supported including Kubernetes Deployment, StatefulSet, and [OpenKruise Cloneset](https://openkruise.io/docs/user-manuals/cloneset). That means the workload specified must be one of these three types.
 
 ### First deployment
 
@@ -253,10 +253,8 @@ Services:
 
   - Name: canary-demo  
     Cluster: local  Namespace: default
-    Type: webservice
-    Unhealthy Ready:5/5
+    Type: k8s-objects
     Traits:
-      ✅ scaler      ✅ gateway: No loadBalancer found, visiting by using 'vela port-forward canary-demo'
       ❌ kruise-rollout: Rollout is in step(1/1), and you need manually confirm to enter the next step
 
 ```
@@ -289,7 +287,7 @@ $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
 Demo: V2
 ```
 
-## Canary validation succeed, finished the release
+## Finish the rollout
 
 In the end, you can resume again to finish the rollout process.
 
@@ -304,11 +302,10 @@ $ curl -H "Host: canary-demo.com" <ingress-controller-address>/version
 Demo: V2
 ```
 
-## Canary verification failed, rollback the release
+## Roll back
 
-If you want to cancel the rollout process and rollback the application to the latest version, after manually check. You can rollback the rollout workflow:
+If the canary looks wrong, suspend the workflow and roll back to the last revision that succeeded:
 
-You should suspend the workflow before rollback:
 ```shell
 $ vela workflow suspend canary-demo
 Rollout default/canary-demo in cluster  suspended.

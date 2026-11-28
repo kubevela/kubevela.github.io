@@ -1,6 +1,8 @@
-# Flink-kubernetes-operator
+---
+title: Flink Kubernetes Operator
+---
 
-A Kubernetes operator for Apache Flink(https://github.com/apache/flink-kubernetes-operator), it allows users to manage Flink applications and their lifecycle through native k8s tooling like kubectl.
+The [Apache Flink Kubernetes operator](https://github.com/apache/flink-kubernetes-operator) lets you manage Flink applications and their lifecycle with native Kubernetes tooling such as kubectl. This addon installs it and adds a `flink-cluster` component type.
 
 ## Install
 
@@ -8,15 +10,16 @@ A Kubernetes operator for Apache Flink(https://github.com/apache/flink-kubernete
 vela addon enable flink-kubernetes-operator
 ```
 
-## Uninstall
+To remove it:
 
 ```shell
 vela addon disable flink-kubernetes-operator
 ```
 
-## Check the flink-kubernetes-operator running status
+## Check the operator is running
 
-Since this addon dependents `fluxcd` and `cert-manager` addon, so will enable them automatically. Check the status of them:
+Enabling it also enables the fluxcd and cert-manager addons, which it depends on. Check all three:
+
 ```shell
 $ vela ls -n vela-system
 APP                             COMPONENT               TYPE            TRAITS  PHASE   HEALTHY STATUS                                                          CREATED-TIME                 
@@ -27,42 +30,37 @@ addon-flink-kubernetes-operator flink-namespace         raw                     
                                                                                                 successfully                                                                                 
 addon-fluxcd                    flux-system-namespace   raw                     running healthy                                                                 2022-06-16 11:47:07 +0800 CST
 └─                              fluxcd-resources        k8s-objects             running healthy                                                                 2022-06-16 11:47:07 +0800 CST
-
 ```
 
+## The flink-cluster component type
 
- Show the component type `flink-cluster`, so we know how to use it in one application. As a Flink user, you can choose the parameter to set for your Flink cluster
+All parameters are required. Run `vela show flink-cluster` to see them in your cluster.
+
+| Name | Type | Description |
+| --- | --- | --- |
+| `name` | string | Flink cluster name. |
+| `namespace` | string | Namespace to create the Flink cluster in. |
+| `nots` | string | `taskmanager.numberOfTaskSlots`, for example `"2"`. |
+| `flinkVersion` | string | Flink version, for example `v1_14`. |
+| `image` | string | Image the Flink cluster runs, for example `flink:latest`. |
+| `jarURI` | string | URI of the job's jar, for example `local:///opt/flink/examples/streaming/StateMachineExample.jar`. |
+| `parallelism` | int | Parallelism of the job, for example `2`. |
+| `upgradeMode` | string | Upgrade mode of the job, for example `stateless`. |
+| `replicas` | int | JobManager replicas, for example `1`. |
+| `jmcpu` | int | JobManager CPU, for example `1`. |
+| `jmmem` | string | JobManager memory, for example `1024m`. |
+| `tmcpu` | int | TaskManager CPU, for example `1`. |
+| `tmmem` | string | TaskManager memory, for example `1024m`. |
+
+## Run a Flink cluster
+
+The `namespace` property decides where the Flink cluster runs, wherever the Application itself lives. This example keeps both in `flink-cluster`. Create the namespace first:
+
 ```shell
-vela show flink-cluster
-# Specification
-# Specification
-+--------------+------------------------------------------------------------------------------------------------------+--------+----------+---------+
-|     NAME     |                                             DESCRIPTION                                              |  TYPE  | REQUIRED | DEFAULT |
-+--------------+------------------------------------------------------------------------------------------------------+--------+----------+---------+
-| name         | Specify the flink cluster name.                                                                      | string | true     |         |
-| namespace    | Specify the namespace for flink cluster to install.                                                  | string | true     |         |
-| nots         | Specify the taskmanager.numberOfTaskSlots, e.g "2".                                                  | string | true     |         |
-| flinkVersion | Specify the flink cluster version, e.g "v1_14".                                                      | string | true     |         |
-| image        | Specify the image for flink cluster to run, e.g "flink:latest".                                      | string | true     |         |
-| jarURI       | Specify the uri for the jar of the flink cluster job, e.g                                            | string | true     |         |
-|              | "local:///opt/flink/examples/streaming/StateMachineExample.jar".                                     |        |          |         |
-| parallelism  | Specify the parallelism of the flink cluster job, e.g 2.                                             | int    | true     |         |
-| upgradeMode  | Specify the upgradeMode of the flink cluster job, e.g "stateless".                                   | string | true     |         |
-| replicas     | Specify the replicas of the flink cluster jobManager, e.g 1.                                         | int    | true     |         |
-| jmcpu        | Specify the cpu of the flink cluster jobManager, e.g 1.                                              | int    | true     |         |
-| jmmem        | Specify the memory of the flink cluster jobManager, e.g "1024m".                                     | string | true     |         |
-| tmcpu        | Specify the cpu of the flink cluster taskManager, e.g 1.                                             | int    | true     |         |
-| tmmem        | Specify the memory of the flink cluster taskManager, e.g "1024m".                                    | string | true     |         |
-+--------------+------------------------------------------------------------------------------------------------------+--------+----------+---------+
-
-
+kubectl create namespace flink-cluster
 ```
 
-## Example for how to run a component typed flink-cluster in application
-
-First please make sure your cluster already exists namespace `flink-cluster`.
-
-Then deploy the application:
+Then deploy the Application:
 
 ```shell
 cat <<EOF | vela up -f -
@@ -70,7 +68,7 @@ apiVersion: core.oam.dev/v1beta1
 kind: Application
 metadata:
   name: flink-app-v1
-  namespace: vela-system
+  namespace: flink-cluster
 spec:
   components:
   - name: my-flink-component
@@ -83,28 +81,29 @@ spec:
       image: flink:latest
       jarURI: local:///opt/flink/examples/streaming/StateMachineExample.jar
       parallelism: 2
-      upgradeMode:  stateless
+      upgradeMode: stateless
       replicas: 1
       jmcpu: 1
       jmmem: 1024m
       tmcpu: 1
       tmmem: 1024m
-      
+EOF
 ```
 
-Check the flink cluster
+Check the Application:
+
 ```shell
-vela ls  -n vela-system | grep app
-flink-app-v1                    my-flink-component      flink-cluster                   running healthy                                                               2022-07-30 18:53:34 +0800 CST
-
-
+$ vela ls -n flink-cluster
+APP             COMPONENT               TYPE            TRAITS  PHASE   HEALTHY STATUS  CREATED-TIME
+flink-app-v1    my-flink-component      flink-cluster           running healthy         2022-07-30 18:53:34 +0800 CST
 ```
 
-Accesss the flink cluster by website using http://localhost:8888
+Open the Flink web UI at http://localhost:8888 by forwarding its REST service:
+
 ```shell
-kubectl get svc -n flink-cluster | grep rest
+$ kubectl get svc -n flink-cluster | grep rest
 my-flink-cluster-rest   ClusterIP   192.168.149.175   <none>        8081/TCP            17m
 
-
-kubectl port-forward service/my-flink-cluster-rest 8888:8081 -n flink-cluster
+$ kubectl port-forward service/my-flink-cluster-rest 8888:8081 -n flink-cluster
 Forwarding from 127.0.0.1:8888 -> 8081
+```

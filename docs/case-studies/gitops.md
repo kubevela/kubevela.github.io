@@ -2,26 +2,26 @@
 title:  Overview of GitOps
 ---
 
-:::note
-This section will introduce how to use KubeVela in GitOps area and why.
-:::
+GitOps is a way of delivering applications where a Git repository holds the declarative configuration, and a tool in the cluster keeps the cluster in step with it. You change what runs by merging a commit or a pull request, not by running commands against the cluster.
 
-GitOps is a continuous delivery method that allows developers to automatically deploy applications by changing code and declarative configurations in a Git repository, with "git-centric" operations such as PR and commit. For detailed benefits of GitOps, you can refer to [this blog](https://web.archive.org/web/20231124194854/https://www.weave.works/blog/what-is-gitops-really).
+## What a GitOps tool does with an Application
 
-KubeVela as a declarative application delivery control plane can be naturally used in GitOps approach, and this will provide below extra bonus to end users alongside with GitOps benefits:
+A KubeVela Application is a plain Kubernetes custom resource. Your GitOps tool applies it from Git like any other manifest, and the KubeVela controller takes it from there. So any tool that applies manifests from a repository works: FluxCD, Argo CD, or a CI job that runs `kubectl apply`.
 
-- application delivery workflow (CD pipeline)
-  - i.e. KubeVela supports pipeline style application delivery process in GitOps, instead of simply declaring final status;
-- handling deployment [dependencies and designing typologies (DAG)](../end-user/workflow/component-dependency-parameter.md);
-- [unified higher level abstraction](../getting-started/core-concept.md) atop various GitOps tools' primitives;
-- declare, provision and consume [cloud resources](../tutorials/consume-cloud-services.md) in unified application definition;
-- various out-of-box deployment strategies (Canary, Blue-Green ...);
-- various out-of-box hybrid/multi-cloud deployment policies (placement rule, cluster selectors etc.);
-- Kustomize-style patch for multi-env deployment without the need to learn Kustomize at all;
-- ... and much more.
+The GitOps tool owns one object, the Application. KubeVela owns everything the Application renders: Deployments, Services, cloud resources and so on, in whichever clusters you deliver to.
 
-In the following sections, we will introduce steps of using KubeVela directly in GitOps approach. You can choose any of the following addons for the whole GitOps process:
+## What KubeVela adds
 
-- [GitOps with FluxCD](../end-user/gitops/fluxcd.md)
+Applying plain manifests from Git declares the end state and stops there. With an Application in Git, you also get:
 
-Besides these addons, the end user can use any GitOps tools they want to watch the Git repo for KubeVela applications as configuration. 
+- **A delivery workflow.** Steps run in order or as a [dependency graph](../end-user/workflow/component-dependency-parameter.md), with [manual approval](../end-user/workflow/suspend.md), notifications and conditions, rather than every resource landing at once. See the [workflow overview](../end-user/workflow/overview.md).
+- **Multi-cluster delivery.** One Application in one repository can place components across clusters, with per-environment overrides. See [Multi-cluster Application Delivery](../end-user/policies/multi-cluster.md).
+- **Health.** KubeVela checks each component and trait against the health policy its definition sets, and reports the result in the Application's status, so `vela status <app>` (or your GitOps tool's view of the Application) tells you whether the delivery worked, not just whether it was applied.
+- **Higher-level abstractions.** Developers write components and traits; platform teams own the [definitions](../getting-started/core-concept.md) behind them, including [cloud resources](../tutorials/consume-cloud-services.md).
+
+## Pick your tool
+
+- **FluxCD**: enable the [`fluxcd` addon](../reference/addons/fluxcd.md) and follow [GitOps with FluxCD](../end-user/gitops/fluxcd.md). It covers syncing a configuration repository and updating images automatically.
+- **Argo CD or another tool**: commit the Application YAML to the repository your tool watches. Two things are worth knowing:
+  - Each time the Application's spec changes, KubeVela runs its workflow again. To decide exactly when a deploy happens, set the `app.oam.dev/publishVersion` annotation and have your CI change it. See [Publish Version](../end-user/version-control.md) and [Deploy only on a version bump](../end-user/gitops/fluxcd.md#deploy-only-on-a-version-bump).
+  - KubeVela writes some annotations onto the Application itself: the controller sets `oam.dev/kubevela-version`, and with [authentication](../platform-engineers/auth/basic.md) on, the webhook sets `app.oam.dev/group`, plus `app.oam.dev/username` when `authentication.withUser` is on. Leave these out of the YAML in Git; KubeVela sets them.

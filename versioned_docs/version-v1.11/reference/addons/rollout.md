@@ -2,6 +2,10 @@
 title: Rollout
 ---
 
+:::caution
+The `rollout` addon can't be installed. `vela addon enable rollout` fails because the addon's chart, `vela-rollout`, is served from `charts.kubevela.net`, which no longer resolves. For canary rollouts, use the [Kruise Rollout](./kruise-rollout.md) addon instead.
+:::
+
 This section will introduce how to use Rollout Trait to perform a rolling update on Component.
 
 The component supported for rollout is:
@@ -311,127 +315,8 @@ NAME                READY   UP-TO-DATE   AVAILABLE   AGE
 express-server-v1   5/5     5            5           5m
 ```
 
-### Rollout cloneset type Workload
-
-You need to enable kruise addon。
-
-```shell
-$ vela addon enable kruise
-```
-
-Check types of components.
-```shell
-$ vela components
-NAME                NAMESPACE        WORKLOAD                        DESCRIPTION
-cloneset           vela-system     clonesets.apps.kruise.io
-```
-
-
-Apply the YAML below to create an Application, this Application includes a Workload of type cloneset with a Rollout Trait.
-```shell
-cat <<EOF | vela up -f -
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: rollout-trait-test-cloneset
-spec:
-  components:
-    - name: cloneset-server
-      type: cloneset
-      externalRevision: cloneset-server-v1
-      properties:
-        image: stefanprodan/podinfo:4.0.3
-      traits:
-        - type: rollout
-          properties:
-            targetSize: 5
-            rolloutBatches:
-              - replicas: 2
-              - replicas: 3
-EOF
-```
-
-Check the status of related resources.
-```shell
-$ kubectl get app rollout-trait-test-cloneset
-NAME                              COMPONENT         TYPE               PHASE      HEALTHY   STATUS     AGE
-rollout-trait-test-cloneset        cloneset   clonesetservice          running      true               4m18s
-
-$ kubectl get controllerRevision  -l controller.oam.dev/component=cloneset-server
-NAME                CONTROLLER                                           REVISION   AGE
-cloneset-server-v1   application.core.oam.dev/rollout-trait-test-cloneset   1          4m45s
-
-$ kubectl get rollout cloneset-server
-NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
-cloneset-server   5        5          5       batchReady    rolloutSucceed   5m10s
-```
-
-Check the status of Workload. As cloneset Workload supports in-place upgrade, the most noticeable difference between it and webservice/worker is that the name of underlying Workload's name is exactly the component's name.
-```shell
-$ kubectl get cloneset -l app.oam.dev/component=cloneset-server
-NAME             DESIRED   UPDATED   UPDATED_READY   READY   TOTAL   AGE
-cloneset-server   5         5         5               5       5       7m3s
-```
-
-Check the image.
-```shell
-$ kubectl get cloneset cloneset-server -o=jsonpath='{.spec.template.spec.containers[0].image}'
-stefanprodan/podinfo:4.0.3
-```
-
-Apply the YAML below to upgrade the image.
-```shell
-cat <<EOF | vela up -f -
-apiVersion: core.oam.dev/v1beta1
-kind: Application
-metadata:
-  name: rollout-trait-test-cloneset
-spec:
-  components:
-    - name: cloneset-server
-      type: cloneset
-      externalRevision: cloneset-server-v2
-      properties:
-        image: stefanprodan/podinfo:5.0.2
-      traits:
-        - type: rollout
-          properties:
-            targetSize: 5
-            rolloutBatches:
-              - replicas: 2
-              - replicas: 3
-EOF
-```
-
-Check the status of related resources after upgrade has been succeed.
-```shell
-$ kubectl get controllerRevision  -l controller.oam.dev/component=cloneset-server
-NAME                CONTROLLER                                             REVISION    AGE
-cloneset-server-v1   application.core.oam.dev/rollout-trait-test-cloneset    1          6m43s
-cloneset-server-v2   application.core.oam.dev/rollout-trait-test-clonesett   2          108s
-
-$ kubectl get rollout cloneset-server
-NAME             TARGET   UPGRADED   READY   BATCH-STATE   ROLLING-STATE    AGE
-cloneset-server  5        5          5       batchReady    rolloutSucceed   6m10s
-```
-
-Check the status of the Workload, we can see the name after upgrade is still cloneset-server.
-```shell
-$ kubectl get cloneset -l app.oam.dev/component=cloneset-server
-NAME             DESIRED   UPDATED   UPDATED_READY   READY   TOTAL   AGE
-cloneset-server   5         5         5               5       5       7m3s
-```
-
-Verify the rollout by checking the image.
-```shell
-$ kubectl get cloneset cloneset-server -o=jsonpath='{.spec.template.spec.containers[0].image}'
-stefanprodan/podinfo:5.0.2
-```
-
-Other operations such as Scale up, Scale down, Rollback are the same as the operations on webservice/worker.
-
 ### Supported workload type
 
-Rollout Trait supports following workload types: webservice,worker and cloneset.
+The rollout trait applies to Deployments and StatefulSets, so it works with the `webservice` and `worker` component types.
 
-When using webservice/worker as Workload type with Rollout Trait, Workload's name will be controllerRevision's name. And when Workload's type is cloneset, because of clonset support in-place update Workload's name will always be component's name.
+The workload the trait manages is named after the component's `externalRevision`, such as `express-server-v1` above.

@@ -3,156 +3,140 @@ title: Integrate with CI system
 description: Integrate with CI system by Triggers
 ---
 
-In KubeVela, you can choose to directly use declarative workflow with CI steps, such as: build code, push image, etc. Alternatively, you can choose to use triggers to integrate with external CI systems, such as Jenkins, image registry, etc.
+In KubeVela, you can put CI steps such as building code and pushing an image straight into a declarative workflow, or use triggers to connect an external CI system, such as Jenkins or an image registry.
 
 ## Use declarative workflow with CI steps
 
-KubeVela v1.7+ provide built-in step for image building, please refer to [Unified Declarative CI/CD](../../../tutorials/s2i.md) for details.
+KubeVela has a built-in step for building images. See [Unified Declarative CI/CD](../../../tutorials/s2i.md).
 
-## Use triggers to integrated with CI system.
+## Use triggers to integrate with CI systems
 
-You can use triggers from [VelaUX addon](../../../reference/addons/velaux.md) to integrate with different CI systems. In VelaUX, a default trigger will be automatically generated after an application created, you can also delete it and create a new one. The architecture and supported platforms are described in the following picture, they're:
+You can use triggers from the [VelaUX addon](../../../reference/addons/velaux.md) to integrate with different CI systems. VelaUX creates a default trigger when you create an application; you can delete it and create your own. Each trigger has a **Payload Type**, which says what sends the request:
 
-- [Custom](#custom-trigger), refer to [Jenkins CI](../../../tutorials/jenkins.md) guide for a real world use case.
-- [ACR](#ACR-trigger)
-- [Harbor](#Harbor-trigger), refer to [Harbor Integration](../../../tutorials/trigger.md) guide for a real world use case.
-- [DockerHub](#DockerHub-trigger)
-- [JFrog](#JFrog-trigger)
+- [Custom](#custom-trigger): any CI tool that can send an HTTP request. See [Jenkins CI](../../../tutorials/jenkins.md) for a worked example.
+- [ACR](#acr-trigger)
+- [Harbor](#harbor-trigger): see [Deploy When an Image Is Pushed to Harbor](../../../tutorials/trigger.md) for a worked example.
+- [DockerHub](#dockerhub-trigger)
+- [JFrog](#jfrog-trigger)
 
 ![trigger](../../../resources/trigger.jpg)
 
+Every trigger has a webhook URL of the form `http://<velaux-address>/api/v1/webhook/<token>`. A request to it deploys the application with the trigger's **Execution Workflow**. The registry triggers (ACR, Harbor, DockerHub, JFrog) also set the `image` property of the trigger's **Component** to the image that was pushed.
+
 ### Custom Trigger
 
-Custom triggers will provide a webhook URL, which you can use to integrate with your CI tool using the specified request body.
+A custom trigger gives you a webhook URL that your CI tool calls with a JSON body you control.
 
-The default trigger is a custom trigger, click `Manual Trigger` to get more info of this trigger:
+The default trigger is a custom trigger. Click `Manual Trigger` to see its details:
 
 ![manual-trigger](../../../resources/manual-trigger.png)
 
-Webhook URL is the address of this trigger, you can see request body in `Curl Command` example:
+The webhook URL is the address of the trigger, and the `Curl Command` example shows a request body like this:
 
 ```json
-  {
-    // required, the upgrade of this deployment
-    "upgrade": {
-      // key is the name of application
-      "<application-name>": {
-        // the fields that need to be patched
-        "image": "<image-name>"
-      }
-    },
-    // optional, the code info of this deployment
-    "codeInfo": {
-      "commit": "<commit-id>",
-      "branch": "<branch>",
-      "user": "<user>",
+{
+  "upgrade": {
+    "<component-name>": {
+      "image": "<image-name>"
     }
+  },
+  "codeInfo": {
+    "commit": "<commit-id>",
+    "branch": "<branch>",
+    "user": "<user>"
   }
+}
 ```
 
-`upgrade` is the key of the object that need to be patched, `<application-name>` is the name of application. `image` is the field that need to be patched. You can also add more fields in `<application-name>`.
+| Field | Required | Meaning |
+| --- | --- | --- |
+| `action` | No | What to do: `execute` (the default when left out), `approve`, `terminate` or `rollback`. See [other actions](#other-actions). |
+| `upgrade` | No | A map from component name to the properties to merge into that component before deploying, for example `upgrade.<component-name>.image`. You can set any property of the component, not only `image`. The component must exist in the application. |
+| `codeInfo.commit` | No | The commit the deployment was built from. VelaUX shows it on the deployment record. |
+| `codeInfo.branch` | No | The branch the deployment was built from. |
+| `codeInfo.user` | No | Who made the change. |
+| `step` | No | For `approve`: the name of the suspended step to resume. |
 
-In `codeInfo`, you can add some code infos of this deployment like commit id, branch or user.
+Here is a custom trigger in GitLab CI, using environment variables for the values:
 
-Below is an example of using Custom Trigger in Gitlab CI, we use env in this example:
-
-```shell
+```yaml
 webhook-request:
   stage: request
   before_script:
     - apk add --update curl && rm -rf /var/cache/apk/*
   script:
     - |
-      curl -X POST -H "Content-Type: application/json" -d '{"upgrade":{"'"$APP_NAME"'":{"image":"'"$BUILD_IMAGE"'"}},"codeInfo":{"user":"'"$CI_COMMIT_AUTHOR"'","commit":"'"$CI_COMMIT_SHA"'","branch":"'"$CI_COMMIT_BRANCH"'"}}' $WEBHOOK_URL
+      curl -X POST -H "Content-Type: application/json" -d '{"upgrade":{"'"$COMPONENT_NAME"'":{"image":"'"$BUILD_IMAGE"'"}},"codeInfo":{"user":"'"$CI_COMMIT_AUTHOR"'","commit":"'"$CI_COMMIT_SHA"'","branch":"'"$CI_COMMIT_BRANCH"'"}}' $WEBHOOK_URL
 ```
 
-After CI have executed this step, we can see that application is deployed successfully in VelaUX. We can also see some relative code infos of this deployment.
+When the job runs, VelaUX deploys the application and shows the code info on the deployment:
 
 ![gitlab-trigger](../../../resources/gitlab-trigger.png)
 
-You can refer to [Jenkins CI](../../../tutorials/jenkins.md) guide for a real use case about custom trigger.
+#### Other actions
 
-Apart from this, Custom Triggers also supports some other type of actions, they are :
+Set `action` to do something other than deploy.
 
-#### Execute workflow
-
-Integrate Custom Triggers into your CI tool to execute a workflow. This action behaves the same as the default custom trigger with no action provided. The request body for executing a workflow using Custom Triggers is as follows:
+**Execute the workflow.** The same as leaving `action` out:
 
 ```json
-  {
-    "action":"execute"
-    // required, the upgrade of this deployment
-    "upgrade": {
-      // key is the name of application
-      "<application-name>": {
-        // the fields that need to be patched
-        "image": "<image-name>"
-      }
-    },
-    // optional, the code info of this deployment
-    "codeInfo": {
-      "commit": "<commit-id>",
-      "branch": "<branch>",
-      "user": "<user>",
+{
+  "action": "execute",
+  "upgrade": {
+    "<component-name>": {
+      "image": "<image-name>"
     }
+  },
+  "codeInfo": {
+    "commit": "<commit-id>",
+    "branch": "<branch>",
+    "user": "<user>"
   }
+}
 ```
 
-#### Approve workflow
-
-During the `suspending` phase of a workflow step, the CI tool can approve the workflow by calling the Custom Trigger with the following request body:
+**Approve a suspended step.** While a workflow step is suspended, resume it. `step` names the step:
 
 ```json
-  {
-    "action":"approve",
-    // optional, name of the suspending step
-    "step":"suspend"
-  }
+{
+  "action": "approve",
+  "step": "suspend"
+}
 ```
 
-#### Terminate workflow
-
-If a workflow step is in the `suspending` phase, the CI tool can terminate the workflow by calling the Custom Trigger with the following request body:
+**Terminate the workflow.** While a workflow step is suspended, stop the workflow:
 
 ```json
-  {
-    "action":"terminate",
-    // optional, name of the suspending step
-    "step":"suspend"
-  }
+{
+  "action": "terminate"
+}
 ```
 
-#### Rollback workflow
-
-If a workflow step is in the `suspending` phase, the CI tool can initiate a rollback of an application workflow to the latest revision by calling the Custom Trigger with the following request body:
+**Roll back.** While a workflow step is suspended, roll the application back to its last revision that succeeded:
 
 ```json
-  {
-    "action":"rollback",
-    // optional, name of the suspending step
-    "step":"suspend"
-  }
+{
+  "action": "rollback"
+}
 ```
 
 ### Harbor Trigger
 
-Harbor Trigger can be integrated with Harbor image registry.
-
-You can refer to [Harbor Image Registry](../../../tutorials/trigger.md) guide for the end to end tutorial.
+A Harbor trigger takes the webhook Harbor sends when an artifact is pushed. See [Deploy When an Image Is Pushed to Harbor](../../../tutorials/trigger.md) for the full setup.
 
 ### ACR Trigger
 
-ACR Trigger can be integrated with ACR image registry.
+An ACR trigger takes the webhook that Alibaba Cloud Container Registry sends when an image is pushed.
 
-We can start with creating a new ACR trigger. The Payload Type is ACR, and the Execution Workflow is the workflow you want to deploy in the trigger.
+Create a trigger with **Payload Type** `ACR` and choose the workflow to run as the **Execution Workflow**. If your images are pulled from an address other than `registry.<region>.aliyuncs.com` (an enterprise instance, for example), set the trigger's **Registry** to that address.
 
 ![alt](../../../resources/acr-trigger-newtrigger.png)
 
-After creating the trigger, we can setup this trigger in ACR:
+Then add a trigger to the ACR repository: in the repository's **Triggers** page, create one with the trigger's webhook URL as the URL, and choose to fire it on every tag (or the tags you want to deploy).
 
 ![alt](../../../resources/acr-trigger.png)
 
-After configuring the trigger, we can see the new deploy revisions when a new image is pushed to the registry.
+Each push now creates a new deployment, with the image set to `<registry>/<namespace>/<repository>:<tag>`:
 
 ![alt](../../../resources/acr-trigger-acrrecord.png)
 
@@ -160,17 +144,17 @@ After configuring the trigger, we can see the new deploy revisions when a new im
 
 ### DockerHub Trigger
 
-DockerHub Trigger can be integrated with DockerHub.
+A DockerHub trigger takes the webhook Docker Hub sends when an image is pushed.
 
-We can start with creating a new DockerHub trigger. The Payload Type is DockerHub, and the Execution Workflow is the workflow you want to deploy in the trigger.
+Create a trigger with **Payload Type** `DockerHub` and choose the **Execution Workflow**.
 
 ![alt](../../../resources/dockerhub-trigger-newtrigger.png)
 
-After creating the trigger, we can setup this trigger in DockerHub:
+Then, in the Docker Hub repository, open **Webhooks**, give the webhook a name, and paste the trigger's webhook URL. Docker Hub calls it on every push.
 
 ![alt](../../../resources/dockerhub-trigger.png)
 
-After configuring the trigger, we can see the new deploy revisions when a new image is pushed to the registry.
+Each push now creates a new deployment, with the image set to `docker.io/<namespace>/<repository>:<tag>`:
 
 ![alt](../../../resources/dockerhub-trigger-dockerhubrecord.png)
 
@@ -178,17 +162,14 @@ After configuring the trigger, we can see the new deploy revisions when a new im
 
 ### JFrog Trigger
 
-jFrog Trigger can be integrated with JFrog Artifactory.
+A JFrog trigger takes the webhook JFrog Artifactory sends when a Docker image is pushed.
 
-We can start with creating a new jFrog trigger. The Payload Type is jFrog, and the Execution Workflow is the workflow you want to deploy in the trigger.
+Create a trigger with **Payload Type** `JFrog` and choose the **Execution Workflow**.
 
 ![alt](../../../resources/jfrog-trigger-newtrigger.png)
 
-
-After creating the trigger, we can setup this trigger in jFrog:
+Then create a webhook in Artifactory with the trigger's webhook URL, the **Docker** domain and the **Tag was pushed** event. VelaUX ignores every other domain and event.
 
 ![alt](../../../resources/jfrog-trigger.png)
 
-After configuring the trigger, we can see the new deploy revisions when a new image is pushed to the registry.
-
-Note: jFrog webhook callback has no jFrog address, KubeVela will recognize the request header `X-jFrogURL` as jFrog address and use it in application `image` field.
+JFrog's webhook body does not include the Artifactory address, so add a custom header `X-JFrogURL` to the webhook with the address your cluster pulls from (for example `mycompany.jfrog.io`). VelaUX puts it in front of the image name: `<X-JFrogURL>/<repository>/<image>:<tag>`. Without the header, the image has no registry address.

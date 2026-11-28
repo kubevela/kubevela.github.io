@@ -449,7 +449,7 @@ spec:
 Reproduce the CUE on the right with:
 
 ```shell
-go run ./cmd/defkit generate --output-dir vela-templates/definitions
+vela def gen-module ./my-platform -o ./generated-cue
 ```
 
 ### Apply and verify
@@ -457,7 +457,7 @@ go run ./cmd/defkit generate --output-dir vela-templates/definitions
 Apply the definition and the Application YAML above:
 
 ```shell
-vela def apply vela-templates/definitions/component/collections-demo.cue
+vela def apply ./generated-cue/components/collections-demo.cue
 vela up -f collections-demo-app.yaml
 ```
 

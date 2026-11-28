@@ -4,7 +4,7 @@ title: Air-gapped Installation for Addon
 
 If your environments don't have network access to `https://kubevela.github.io/catalog/official` or `https://github.com/kubevela/catalog`, this guide will demonstrate how to install in the air-gapped environment.
 
-Generally, you should git clone the repo which contained the addon configuration, you can specify a local addon directory when enable an addon for installation. While you should make sure all container images or helm charts are replaced by your private registry.
+Clone the catalog, point each addon's images and charts at your registry, then enable the addon from its local directory.
 
 You can follow these steps as an example.
 

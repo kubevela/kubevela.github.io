@@ -23,29 +23,21 @@ This guide helps you get started developing KubeVela.
 <details>
   <summary>Install Golang</summary>
 
-1. Install go1.19 from [official site](https://go.dev/dl/). Unpack the binary and place it somewhere, assume it's in the home path `~/go/`, below is an example command, you should choose the right binary according to your system.
-  ```
-  wget https://go.dev/dl/go1.20.2.linux-amd64.tar.gz
-  tar xzf go1.20.2.linux-amd64.tar.gz
-  ```
+1. Download the archive for your system from the [official site](https://go.dev/dl/) and follow the [install instructions](https://go.dev/doc/install), which unpack it into `/usr/local/go`.
 
-If you want to keep multiple golang version in your local develop environment, you can download the package and unfold it into some place, like `~/go/go1.19.1`, then the following commands should also change according to the path.
+1. Add Go, and the tools you install with `go install`, to your `PATH`. Put this in your `~/.bashrc` or `~/.zshrc` so every new terminal has it:
 
-1. Set environment variables for Golang
+    ```bash
+    export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
+    ```
 
-  ```
-  export PATH=~/go/bin/:$PATH
-  export GOROOT=~/go/
-  export GOPATH=~/gopath/
-  ```
+    Don't set `GOROOT`. Go finds its own installation, and a stale `GOROOT` is a common way to end up building with the wrong version.
 
-  Create a gopath folder if not exist `mkdir ~/gopath`. These commands will add the go binary folder to the `PATH` environment (let it to be the primary choice for go), and set the `GOROOT` environment to this go folder. Please add these lines to your `~/.bashrc` or `~/.zshrc` file, so that you don't need to set these environment variables every time you open a new terminal.
+1. (Optional) If the default module proxy is slow where you are, for example in mainland China, point Go at a closer one:
 
-1. (Optional) Some area like China may be too slow to connect to the default go registry, you can configure GOPROXY to speed up the download process. 
-  ```
-  go env -w GOPROXY=https://goproxy.cn,direct
-  ```
-
+    ```bash
+    go env -w GOPROXY=https://goproxy.cn,direct
+    ```
 
 </details>
 
@@ -53,15 +45,15 @@ If you want to keep multiple golang version in your local develop environment, y
 * Kubernetes version v1.20+ with `~/.kube/config` configured. (Don't have a test cluster? Try [VelaD](https://github.com/kubevela/velad/blob/main/docs/06.develop_kubevela.md) to develop KubeVela)
 
 
-* golangci-lint 1.49.0+, it will install automatically if you run `make`, you can install it manually if the installation broken.
+* golangci-lint v1.60.1. `make lint`, which `make reviewable` runs, installs it if it's missing.
 
 <details>
   <summary>Install golangci-lint manually</summary>
 
-You can install it manually follow [the guide](https://golangci-lint.run/usage/install/#local-installation) or the following command:
+You can install it manually following [the guide](https://golangci-lint.run/welcome/install/#local-installation) or with this command:
 
-```
-cd ~/go/ && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.49.0
+```bash
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.60.1
 ```
 
 </details>
@@ -85,48 +77,25 @@ mv kustomize ~/kubevela/bin/
 
 </details>
 
-* ginkgo 1.14.0+ (just for [E2E test](#e2e-test))
+* ginkgo 1.14.0+ (just for [E2E test](#integration-and-e2e-test))
   ```
   go install github.com/onsi/ginkgo/v2/ginkgo@latest
   ```
 
-* kubebuilder v3.1.0+ and you need to manually install the dependency tools for unit test.
+* Nothing to install for the unit tests' API server. `make test` runs `setup-envtest`, which downloads the Kubernetes 1.31.0 control-plane binaries the tests run against. To run a single package by hand, point `KUBEBUILDER_ASSETS` at the same binaries (`bin/setup-envtest` is there once `make test` has run):
 
-<details>
-  <summary>Install Kubebuilder manually</summary>
-
-linux:
-
-```
-wget https://storage.googleapis.com/kubebuilder-tools/kubebuilder-tools-1.21.2-linux-amd64.tar.gz
-tar -zxvf  kubebuilder-tools-1.21.2-linux-amd64.tar.gz
-mkdir -p /usr/local/kubebuilder/bin
-sudo mv kubebuilder/bin/* /usr/local/kubebuilder/bin
-```
-
-macOS:
-
-```
-curl -O https://storage.googleapis.com/kubebuilder-tools/kubebuilder-tools-1.21.2-darwin-amd64.tar.gz
-tar -zxvf  kubebuilder-tools-1.21.2-darwin-amd64.tar.gz
-mkdir -p /usr/local/kubebuilder/bin
-sudo mv kubebuilder/bin/* /usr/local/kubebuilder/bin
-```
-
-For other OS or system architecture, please refer to https://storage.googleapis.com/kubebuilder-tools/
-
-</details>
-
-
-* [CUElang](https://github.com/cue-lang/cue/blob/master/doc/install.md) v0.4.3+
-  ```
-  go install cuelang.org/go/cmd/cue@latest
+  ```bash
+  KUBEBUILDER_ASSETS="$(bin/setup-envtest use 1.31.0 -p path)" go test ./pkg/appfile/...
   ```
 
-* Other tools for running `make reviewable` in KubeVela.
+* [CUE](https://cuelang.org/docs/introduction/installation/) v0.9.2, the version `make reviewable` formats with:
+  ```bash
+  go install cuelang.org/go/cmd/cue@v0.9.2
+  ```
+
+* Other tools for running `make reviewable` in KubeVela. The Makefile installs them if they're missing, or install them yourself:
   ```shell
-  go install honnef.co/go/tools/cmd/staticcheck@2022.1
-  go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.6.2
+  go install honnef.co/go/tools/cmd/staticcheck@v0.6.1
   go install golang.org/x/tools/cmd/goimports@latest
   ```
   :::caution
@@ -219,23 +188,17 @@ It's necessary to write tests for good code quality, please refer to [the princi
 make test
 ```
 
-To execute the unit test of the API module, the mongodb service needs to exist locally.
-
-```shell script
-make unit-test-apiserver
-```
+The VelaUX API server's tests live in the VelaUX repository, see [Run VelaUX Locally](#run-velaux-locally).
 
 #### Integration and E2E test
 
-**Before e2e test start, make sure you have vela-core running.**
+The e2e suites run against KubeVela installed from the chart, with a test image and the feature gates the suites expect. A controller started with `make core-run` doesn't have those, and the specs fail on timeouts. You need [Ginkgo v2](https://onsi.github.io/ginkgo/) on your `PATH`.
 
-```shell script
-make core-run
-```
+Install the test image into a [kind](https://kind.sigs.k8s.io/) cluster and run the suite:
 
-Start to test.
-
-```shell script
+```shell
+make image-load
+make e2e-setup-core
 make e2e-test
 ```
 
@@ -264,51 +227,7 @@ Note you will not be able to test features relate with validating/mutating webho
 
 ## Run VelaUX Locally
 
-VelaUX is the UI console of KubeVela, it's also an addon including apiserver code in `kubevela` repo and the frontend code in `velaux` repo.
-
-Before start, please make sure you have already started the vela controller environment in kubevela repo directory.
-
-```shell
-make run-apiserver
-```
-
-By default, the apiserver will be serving at "0.0.0.0:8000".
-
-Get the VelaUX code by:
-
-```shell
-git clone git@github.com:kubevela/velaux.git
-```
-
-Configure the apiserver address:
-
-```shell
-cd velaux
-echo "BASE_DOMAIN='http://127.0.0.1:8000'" > .env
-```
-
-Make sure you have installed [yarn](https://classic.yarnpkg.com/en/docs/install).
-
-```shell
-yarn install
-yarn start
-```
-
-To execute the e2e test of the API module, the mongodb service needs to exist locally.
-
-```shell script
-# save your config
-mv ~/.kube/config  ~/.kube/config.save
-
-kind create cluster --image kindest/node:v1.20.7@sha256:688fba5ce6b825be62a7c7fe1415b35da2bdfbb5a69227c499ea4cc0008661ca --name worker
-kind get kubeconfig --name worker --internal > /tmp/worker.kubeconfig
-kind get kubeconfig --name worker > /tmp/worker.client.kubeconfig
-
-# restore your config
-mv ~/.kube/config.save  ~/.kube/config
-
-make e2e-apiserver-test
-```
+VelaUX, the KubeVela UI, lives in its own repository: the Go API server and the React frontend are both in [kubevela/velaux](https://github.com/kubevela/velaux). Its [contributing guide](https://github.com/kubevela/velaux/blob/main/docs/contributing/velaux.md) covers setting up KubeVela for it, running the server and the UI, and its tests.
 
 ## Create a pull request
 
@@ -359,91 +278,69 @@ These guidelines help you write good commit messages and descriptions for your p
 
 ### Commit message format
 
-KubeVela follows the [conventional-commits](https://www.conventionalcommits.org/en/v1.0.0/) and [commit messages best practices](https://chris.beams.io/posts/git-commit/) to improve better history information.
-
-The commit message should be structured as follows:
+Commit subjects and pull request titles use one format:
 
 ```
-<type>[optional scope]: <subject>
+<Type>(<scope>): <subject>
 
 [optional body]
 ```
 
-#### Examples:
+The `<Type>` is capitalised and the `(<scope>)` is optional, for example `Fix(workflow): retry a failed step after suspend`. See [commit messages best practices](https://chris.beams.io/posts/git-commit/) for writing the rest.
 
-Commit message with scope:
+#### Examples
 
-```
-Feat(lang): add polish language
-```
-
-Commit message with no body:
+Commit message with a scope:
 
 ```
-Docs: correct spelling of CHANGELOG
+Fix(defkit): make ToYAML write an object the controller can render
 ```
 
-Commit message with multi-paragraph body:
+Commit message with no scope and no body:
 
 ```
-Fix: correct minor typos in code
-
-see the issue for details
-
-on typos fixed.
-
-Reviewed-by: Z
-Refs #133
+Docs: correct the spelling of CHANGELOG
 ```
 
-#### `<type>` (required)
+Commit message with a body:
 
-Type is required to better capture the area of the commit, based on the [Angular convention](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines).
+```
+Fix(cli): show the type of a list parameter that has a size bound
 
-We capitalize the `<type>` to make sure the subject line is capitalized. `<type>` can be one of the following:
+vela show printed `_|_` as the type of a parameter such as
+`list.MinItems(1) & [...string]`. Look through list.MinItems and
+list.MaxItems to the list operand before reading its kind.
+
+Fixes #1234
+Signed-off-by: Random Developer <random@developer.example.org>
+```
+
+#### `<Type>` (required)
+
+`<Type>` is one of:
 
 * **Feat**: A new feature
 * **Fix**: A bug fix
 * **Docs**: Documentation only changes
-* **Build**: Changes that affect the build system or external dependencies 
 * **Style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
 * **Refactor**: A code change that neither fixes a bug nor adds a feature
 * **Perf**: A code change that improves performance
 * **Test**: Adding missing or correcting existing tests
-* **Chore**: Changes to the build process or auxiliary tools and libraries such as documentation generation
+* **CI**: Changes to the CI workflows
+* **Chore**: Changes to the build, dependencies or auxiliary tools
+* **Revert**: Reverts an earlier commit
 
 #### `<scope>` (optional)
 
-Scope is optional, it may be provided to a commit’s type, to provide additional contextual information and is contained within parenthesis, it is could be anything specifying place of the commit change. Github issue link is
-also a valid scope. For example: Fix(cli), Feat(api), Fix(#233), etc.
-
-You can use `*` when the change affects more than a single scope.
+The scope is the part of KubeVela the change is in, in parentheses: `Fix(cli)`, `Feat(workflow)`, `Chore(deps)`, `Fix(addon)`.
 
 #### `<subject>` (required)
 
-The subject MUST immediately follow the colon and space after the type/scope prefix. The description is a short summary of the code changes, e.g., "Fix: array parsing issue when multiple spaces were contained in string", instead of "Fix: bug".
+The subject follows the colon and space after the type and scope. It's a short summary of the change, e.g. `Fix: array parsing issue when multiple spaces were contained in string`, instead of `Fix: bug`.
 
 #### `<body>` (optional)
 
-A longer commit body may be provided after the short subject, providing additional contextual information about the code changes. The body MUST begin one blank line after the description.
-
-#### Area
-
-The area should use upper camel case, e.g. UpperCamelCase.
-
-Prefer using one of the following areas:
-
-- **Application:** Changes to the application controller.
-- **Component:** Changes to the component related code or definition controller.
-- **Trait:** Changes to the trait related code or definition controller.
-- **CUE:** Changes to the CUE related logic.
-- **Docs:** Changes to documentation.
-
-**Examples**
-
-- `Application: Support workflow in application controller`
-- `CUE: Fix patch parse issues`
-- `Docs: Changed url to URL in all documentation files`
+A longer commit body may be provided after the short subject, providing additional contextual information about the code changes. The body MUST begin one blank line after the subject.
 
 ### Pull request titles
 
@@ -473,11 +370,11 @@ Before merge, All test CI should pass green.
 
 ## Update the docs & website
 
-If your pull request merged and this is a new feature or enhancement, it's necessary to update the docs and send a pull request to [kubevela.io](https://github.com/kubevela/kubevela.io) repo.
+If your pull request merged and this is a new feature or enhancement, it's necessary to update the docs and send a pull request to the [kubevela.github.io](https://github.com/kubevela/kubevela.github.io) repo.
 
 Learn how to write the docs by the following guide:
 
-* [kubevela.io Developer Guide](https://github.com/kubevela/kubevela.io/blob/main/README.md)
+* [kubevela.github.io Developer Guide](https://github.com/kubevela/kubevela.github.io/blob/main/README.md)
 * [Update KubeVela.io CLI Reference Doc](./cli-ref-doc.md)
 
 Great, you have complete the lifecycle of code contribution, try to [join the community as a member](https://github.com/kubevela/community/blob/main/community-membership.md) if you're interested.

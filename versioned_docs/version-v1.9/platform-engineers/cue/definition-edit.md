@@ -6,7 +6,7 @@ title: Manage Definition
 Before reading this part, please make sure you've learned the [Definition Concept](../../getting-started/definition.md) of KubeVela.
 :::
 
-In KubeVela CLI, `vela def` command group provides a series of convenient definition writing tools. With these commands, users only need to write CUE files to generate and edit definitions, instead of composing Kubernetes YAML object with mixed CUE string.
+The `vela def` commands help you write and manage definitions. Write the definition as a CUE file; `vela def` turns it into the Kubernetes object.
 
 ## init
 
@@ -45,7 +45,7 @@ vela def init my-comp --interactive
 <summary>expected output</summary>
 
 ```bash
-Please choose one definition type from the following values: component, trait, policy, workload, scope, workflow-step
+Please choose one definition type from the following values: component, trait, policy, workload, workflow-step
 > Definition type: component
 > Definition description: My component definition.
 Please enter the location the template YAML file to build definition. Leave it empty to generate default template.
@@ -56,7 +56,7 @@ Definition written to my-component.cue
 ```
 </details>
 
-In addition, users can create definitions from existing YAML files. For example, if a user want to create a ComponentDefinition which is designed to generate a deployment, and this deployment has already been created elsewhere, he/she can use the `--template-yaml` flag to complete the transformation. The YAML file is as below
+To start from YAML you already have, pass it with `--template-yaml`. Take this Deployment and Service:
 
 ```yaml
 # my-deployment.yaml
@@ -88,22 +88,22 @@ metadata:
   name: hello-world-service
 spec:
   selector:
-    app: hello-world
+    app.kubernetes.io/name: hello-world
   ports:
   - name: http
     protocol: TCP
     port: 80
-    targetPort: 8080
+    targetPort: http
   type: LoadBalancer
 ```
 
-Running the following command to get the CUE-format ComponentDefinition:
+Turn it into a CUE ComponentDefinition:
 
 ```bash
 vela def init my-comp -t component --desc "My component." --template-yaml ./my-deployment.yaml
 ```
 
-The expect output will be:
+The output:
 
 ```cue
 "my-comp": {
@@ -145,9 +145,9 @@ template: {
                                 name:       "http"
                                 protocol:   "TCP"
                                 port:       80
-                                targetPort: 8080
+                                targetPort: "http"
                         }]
-                        selector: app: "hello-world"
+                        selector: "app.kubernetes.io/name": "hello-world"
                         type: "LoadBalancer"
                 }
                 apiVersion: "v1"
@@ -158,7 +158,7 @@ template: {
 }
 ```
 
-Then the user can make further modifications based on the definition file above, like removing `<change me>` in **workload.definition**。
+Then edit the generated definition, for example by removing `<change me>` in **workload.definition**.
 
 ## vet
 
@@ -178,7 +178,7 @@ After confirming the definition file has correct syntax, users can apply this de
 vela def apply my-comp.cue --namespace my-namespace
 ```
 
-The definition will be applied to the namespace named `my-namespace`, by default the namespace is `vela-system`。
+The definition will be applied to the namespace named `my-namespace`, by default the namespace is `vela-system`.
 
 :::tip
 When definition applied to `vela-system`, the definition can be used for all applications in this cluster. If definitions are applied in some other namespaces, only the application in the same namespace can use that. It's useful when in multi-tenant cases.
@@ -226,7 +226,7 @@ spec:
                                 }]
                         }
                 }
-                apiVersion: "apps/v11"
+                apiVersion: "apps/v1"
                 kind:       "Deployment"
         }
         outputs: "hello-world-service": {
@@ -236,9 +236,9 @@ spec:
                                 name:       "http"
                                 protocol:   "TCP"
                                 port:       80
-                                targetPort: 8080
+                                targetPort: "http"
                         }]
-                        selector: app: "hello-world"
+                        selector: "app.kubernetes.io/name": "hello-world"
                         type: "LoadBalancer"
                 }
                 apiVersion: "v1"
@@ -315,7 +315,7 @@ A brief quick view for these commands are shown below.
 
 ## debug with applications
 
-When we want to debug definition with application, we can use `vela dry-run --definitions` or `-d` for short, to specify local definitions.
+To debug a definition with an application, pass the local definition to `vela dry-run` with `--definition`, or `-d` for short.
 
 Dry run will help you to understand what are the real resources which will to be expanded and deployed to the Kubernetes cluster. In other words, it will mock to run the same logic as KubeVela's controller and output the results locally.
 
@@ -407,9 +407,9 @@ spec:
   - name: http
     port: 80
     protocol: TCP
-    targetPort: 8080
+    targetPort: http
   selector:
-    app: hello-world
+    app.kubernetes.io/name: hello-world
   type: LoadBalancer
 
 ---

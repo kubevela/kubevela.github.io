@@ -59,18 +59,15 @@ For different vendors, these parameters update accordingly. All cloud resources 
 
 ### Provision by Creating Application
 
-First, Prepare a available cloud provider. Let's list the exist configs, If exist you could ignore this step.
+1. Check whether a provider config exists: `vela config list -t terraform-alibaba`. If one is listed, skip to step 3.
 
-```bash
-vela config list -t terraform-alibaba
-```
-
-If not exist, you can refer to this command to create a default provider:
+2. If not, create a default provider:
 
 ```bash
 vela config create default -t terraform-alibaba name=default ALICLOUD_REGION=<Region> ALICLOUD_SECRET_KEY=<Secret> ALICLOUD_ACCESS_KEY=<AccessKey>
 ```
-You can use the following command to get the template of the provider configuration:
+
+To see the available config templates:
 
 ```bash
 $ vela config-template list
@@ -78,7 +75,8 @@ NAME             	ALIAS                               	SCOPE  	SENSITIVE	CREATED
 helm-repository  	Helm Repository                     	project	false    	2023-08-24 19:21:03 +0800 CST
 terraform-alibaba	Terraform Provider for Alibaba Cloud	system 	true     	2023-08-24 19:32:19 +0800 CST
 ```
-and use the following command to show the args of specify provider:
+
+To see the fields a provider config takes:
 
 ```bash
 $ vela config-template show terraform-alibaba
@@ -98,7 +96,7 @@ $ vela config-template show terraform-alibaba
 +---------------------+--------+--------------------------------------------------------+----------+---------+---------+
 ```
 
-Use the following Application to provision an OSS bucket:
+3. Save the following Application as `oss.yaml`. It provisions an OSS bucket:
 
 ```yaml
 apiVersion: core.oam.dev/v1beta1
@@ -130,8 +128,6 @@ provision-cloud-resource-sample	sample-oss	alibaba-oss	      	running	healthy	Cl
 After the phase becomes `running` and `healthy`, you can then check the OSS bucket in Alibaba Cloud console.
 
 ## Provision with UI Console
-
-Provision cloud resources from UI Console can be more appropriate.
 
 ### Before starting
 

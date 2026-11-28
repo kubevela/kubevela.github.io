@@ -16,7 +16,7 @@ Traits in KubeVela mutate an already-rendered workload by emitting a `patch:` bl
 | `tpl.Patch() *PatchResource` | Returns or creates the trait's `patch:` block builder. Chain `.Set()`, `.SetIf()`, `.SpreadIf()`, `.If()/.EndIf()`, and patch-specific methods. |
 | `tpl.PatchStrategy(strategy)` | Sets the patch merge strategy comment: `"retainKeys"`, `"jsonMergePatch"`, or `"jsonPatch"`. |
 | `tpl.SetRawPatchBlock(block)` | Escape hatch: replaces the builder-generated patch output with raw CUE. The string must start with `patch:`. |
-| `tpl.UsePatchContainer(config)` | High-level helper for traits that patch individual containers. Generates the full `patchSets` / `patch` CUE block with container targeting, optional multi-container support, and field declarations. |
+| `tpl.UsePatchContainer(config)` | High-level helper for traits that patch individual containers. Generates the `#PatchParams` schema, a `PatchContainer` helper and the `patch` block that targets the container, with optional multi-container support. |
 
 ### PatchResource Methods
 
@@ -42,7 +42,7 @@ The `pod-metadata` trait demonstrates `tpl.PatchStrategy()`, `.SetIf()`, and `.I
 - **`serviceAccountName` provided** — sets `spec.template.spec.serviceAccountName` via `.SetIf()`.
 - **`labels` provided** — iterates each key-value pair into `spec.template.metadata.labels` via `.If()` / `.ForEach()` / `.EndIf()`.
 
-The Go on the left and the CUE on the right are byte-for-byte what `vela def gen-module ./my-platform` produces for this trait. Verified by running `vela def validate-module ./my-platform` against KubeVela v1.11.0-alpha.3.
+The CUE tab shows what `vela def gen-module` generates. Check it yourself with `vela def validate-module ./my-platform`.
 
 <Tabs groupId="defkit-example">
 <TabItem value="go" label="Go — defkit">
@@ -83,7 +83,7 @@ func init() { defkit.Register(PodMetadata()) }
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated">
+<TabItem value="cue" label="Generated CUE">
 
 ```cue
 "pod-metadata": {
@@ -133,7 +133,7 @@ The `inject-env` trait demonstrates `PatchKey`, `NewArray().ForEach()`, and `.If
 - **Always** — merges env vars into a named container via `PatchKey` (strategic-merge by `name`).
 - **`debug: true`** — additionally sets `spec.template.metadata.annotations.debug: "enabled"` via an `.If()` / `.Set()` / `.EndIf()` block.
 
-The Go on the left and the CUE on the right are byte-for-byte what `vela def gen-module ./my-platform` produces for this trait.
+The CUE tab shows what `vela def gen-module` generates.
 
 <Tabs groupId="defkit-example">
 <TabItem value="go" label="Go — defkit">
@@ -183,7 +183,7 @@ func init() { defkit.Register(InjectEnv()) }
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated">
+<TabItem value="cue" label="Generated CUE">
 
 ```cue
 "inject-env": {
@@ -259,7 +259,7 @@ tr := defkit.NewTrait("ex-passthrough").
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated">
+<TabItem value="cue" label="Generated CUE">
 
 ```cue
 template: {
@@ -295,7 +295,7 @@ tr := defkit.NewTrait("ex-raw-patch").
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated">
+<TabItem value="cue" label="Generated CUE">
 
 ```cue
 template: {
@@ -313,7 +313,7 @@ template: {
 
 ## Container Patching: `tpl.UsePatchContainer()`
 
-High-level helper for traits that patch individual containers. Generates the full `patchSets` / `patch` CUE block with container targeting, optional multi-container support, and field declarations. Use when your trait mutates container fields (env, resources, image, ports, security context, etc.).
+High-level helper for traits that patch individual containers. Generates the `#PatchParams` schema, a `PatchContainer` helper and the `patch` block that targets the container, with optional multi-container support. Use when your trait mutates container fields (env, resources, image, ports, security context, etc.).
 
 ### Context Introspection
 
@@ -383,26 +383,55 @@ func init() { defkit.Register(EnvPatch()) }
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated (illustrative)">
+<TabItem value="cue" label="Generated CUE">
 
 ```cue
-#PatchParams: {
-    containerName?: *context.name | string
-    env: [string]: string
+"env-patch": {
+	type: "trait"
+	annotations: {}
+	labels: {}
+	description: "Inject environment variables into a named container"
+	attributes: {
+		podDisruptive: false
+		appliesToWorkloads: ["deployments.apps"]
+	}
 }
-
-patchSets: [{
-    name: "container-patch"
-    patches: [...]
-}]
-patch: { ... }
+template: {
+	#PatchParams: {
+		// +usage=Specify the name of the target container, if not set, use the component name
+		containerName: *"" | string
+		// +usage=Environment variables to inject
+		env: [string]: string
+	}
+	PatchContainer: {
+		_params: #PatchParams
+		name:    _params.containerName
+		env: [for k, v in _params.env {name: k, value: v}]
+	}
+	patch: spec: template: spec: {
+		// +patchKey=name
+		containers: [{
+			PatchContainer & {_params: {
+				if parameter.containerName == "" {
+					containerName: context.name
+				}
+				if parameter.containerName != "" {
+					containerName: parameter.containerName
+				}
+				env: parameter.env
+			}}
+		}]
+	}
+	parameter: #PatchParams
+	errs: [for c in patch.spec.template.spec.containers if c.err != _|_ {c.err}]
+}
 ```
 
 </TabItem>
 </Tabs>
 
 :::info
-`UsePatchContainer` handles the boilerplate of container selection, multi-container iteration, and patchSets generation. Reserve `tpl.Patch().PatchKey()` for cases where you need direct control over the patch structure.
+`UsePatchContainer` handles the boilerplate of container selection, multi-container iteration, and the `errs` list that reports a container it can't find. Reserve `tpl.Patch().PatchKey()` for cases where you need direct control over the patch structure.
 :::
 
 ## Related

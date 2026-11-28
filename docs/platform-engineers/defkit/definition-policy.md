@@ -5,7 +5,16 @@ title: PolicyDefinition
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-`defkit.NewPolicy(name string) *PolicyDefinition` creates a PolicyDefinition builder. Policies have no workload coupling. Most control lifecycle behaviours like garbage collection, apply-once semantics, or override rules; an [Application-scoped policy](../policy/application-scoped-policy.md) instead transforms the Application before it is rendered, and can be global.
+`defkit.NewPolicy(name string) *PolicyDefinition` creates a PolicyDefinition builder. A policy has no workload of its own: users list it in an Application's `spec.policies` (a [global policy](../policy/application-scoped-policy.md#global-policies) applies without being listed), and it changes how that Application is deployed.
+
+:::info How a custom policy takes effect
+Only KubeVela's built-in policy names (`garbage-collect`, `apply-once`, `topology`, `override`, `shared-resource` and the rest) are interpreted by the controller. A custom policy takes effect in one of two ways:
+
+- as an [application-scoped policy](../policy/application-scoped-policy.md), which changes the Application (labels, annotations, components, workflow, context) before it is rendered. Build one with `.ApplicationScoped()` and `tpl.Output()`;
+- through an `output` in its template, which KubeVela renders and deploys as a resource with the Application.
+
+A custom policy that declares parameters and nothing else applies to the cluster, but an Application that uses it fails to render.
+:::
 
 ## Chain Methods
 
@@ -13,13 +22,20 @@ import TabItem from '@theme/TabItem';
 
 | Method | Description |
 |---|---|
-| `.Template(fn func(tpl *PolicyTemplate))` | Provides the policy template closure. Unlike component/trait templates, a `PolicyTemplate` doesn't create Kubernetes resources — it defines computed fields using `Set(name, value)` that KubeVela's policy engine evaluates (e.g. topology selection, override rules). |
+| `.Template(fn func(tpl *PolicyTemplate))` | Provides the policy template closure. A `PolicyTemplate` has no `Patch()`: it sets computed fields with `Set(name, value)` and, on an application-scoped policy, what the policy changes on the Application with `Output()`. |
 | `.ManageHealthCheck()` | Declares that this policy manages health checking for the application. When set, KubeVela delegates health evaluation to this policy's health policy expression instead of using the default per-component health checks. |
-| `.ApplicationScoped()` | Makes the policy transform the Application before it is rendered, through the template's `Output()`, instead of producing resources. |
+| `.ApplicationScoped()` | Makes the policy change the Application before it is rendered, through `tpl.Output()`. Writes `scope: "Application"` on the definition. |
 | `.Global()` | Applies the policy to every Application without being listed in `spec.policies`, when installed in `vela-system`. Installed in another namespace, it applies to that namespace's Applications only when the controller runs with `--allow-namespace-global-policies`; by default the webhook refuses it there. The template's `config.enabled` still decides per Application. A global policy is always Application-scoped. See [Global Policies](../policy/application-scoped-policy.md#global-policies). |
 | `.Priority(p int32)` | Orders the policy among the Application-scoped policies that apply: lower runs first. Explicit policies run at `0`. At equal priority, globals run before explicit policies, globals in name order and explicit ones in `spec.policies` order. |
 | `.CtxSchema(fields ...Param)` | Declares an open schema for what the policy puts in `ctx`, read by components and traits as `context.custom`. See [Typed Policy Context](../policy/policy-context-schema.md#in-defkit). |
 | `.ClosedCtxSchema(fields ...Param)` | As `CtxSchema`, closed: the policy sets no key it does not declare, and `Register` refuses an `Output().Ctx` it does not declare. |
+
+### Namespace restrictions
+
+| Method | Description |
+|---|---|
+| `.RestrictNamespaces(namespaces ...string)` | Limits the policy to namespaces matching any of the names or `path.Match` globs. An Application in any other namespace can't use it. |
+| `.RestrictNamespaceSelector(selector *metav1.LabelSelector)` | Limits the policy to namespaces whose labels match the selector; `defkit.MatchLabels(map[string]string)` builds a simple one. With `RestrictNamespaces` as well, a namespace that matches either is allowed. |
 
 ### Shared base methods
 
@@ -47,104 +63,84 @@ These methods are the same shape as on `ComponentDefinition`. See the [Component
 
 ### PolicyTemplate (closure argument)
 
-`.Template()` passes a `*PolicyTemplate`. A policy doesn't produce resources, so there's no `Patch()`. `Enabled()` and `Output()` are honoured only on an Application-scoped policy, and `Register` refuses them on any other:
+`.Template()` passes a `*PolicyTemplate`. It has no `Patch()`:
 
 | Method | Description |
 |---|---|
-| `.Set(name string, value Value)` | Assigns a value to a named computed field in the policy's template body. The policy engine reads these fields when it evaluates the policy (e.g. topology selection, override rules). |
-| `.Enabled(cond Condition)` | Turns the policy on only when the condition holds, written as `config.enabled`. |
-| `.Output()` | Returns the builder for what the policy changes on the Application: `Components`, `Workflow`, `Policies`, `Label`, `Annotation` and `Ctx`. See [Typed Policy Context](../policy/policy-context-schema.md#in-defkit). |
+| `.Set(name string, value Value)` | Assigns a value to a named computed field in the policy's template body. |
+| `.Enabled(cond Condition)` | Turns an Application-scoped policy on only when the condition holds, written as `config.enabled`. |
+| `.Output()` | Returns the builder for what an Application-scoped policy changes on the Application: `.Label(key, v)`, `.Annotation(key, v)`, `.Ctx(path, v)`, `.Components(v)`, `.Workflow(v)` and `.Policies(v)`. See [Typed Policy Context](../policy/policy-context-schema.md#in-defkit). |
+
+`Output()`, `Enabled()`, `Priority()` and `CtxSchema()` only apply to an Application-scoped policy; `Register` refuses a policy that uses them without `.ApplicationScoped()`.
 
 ## Example
 
-Let's build a `gc-control` policy — a reusable declaration that tells the platform how to handle the garbage-collection of resources belonging to an Application. Users opt in via `spec.policies[]` on the Application and supply per-resource rules (keep / onAppUpdate / onAppDelete) or app-wide toggles (retain legacy trackers, continue on workflow failure); the policy itself is metadata-only, with no Kubernetes resources emitted by the template.
-
-Behind the scenes the policy exercises most chain methods in a single definition — metadata (`Description`, `Labels`), two reusable `Helper(...)` struct types (`GCSelector` and `GCRule`), `Params` with booleans + an array that references a helper via `WithSchemaRef`. Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/policies/`.
+Let's build a `team-labels` policy: every Application that lists it gets labels naming the team that owns it and the cost center to bill, plus an annotation recording which policy set them. It is application-scoped, so it works with no controller change. Building on the `my-platform` module scaffolded in [Quick Start](./quick-start.md), drop the file below into `my-platform/policies/`.
 
 <Tabs groupId="defkit-example">
-<TabItem value="go" label="Go — defkit">
+<TabItem value="go" label="Go (defkit)">
 
 ```go
 package policies
 
 import "github.com/oam-dev/kubevela/pkg/definition/defkit"
 
-func GCControl() *defkit.PolicyDefinition {
-    selector := defkit.Struct("selector").WithFields(
-        defkit.Field("componentNames", defkit.ParamTypeArray).
-            Description("Select resources by component names").
-            Optional(),
-        defkit.Field("resourceTypes", defkit.ParamTypeArray).
-            Description("Select resources by Kubernetes kind (e.g. Deployment, Service)").
-            Optional(),
-    )
-
-    rule := defkit.Struct("rule").WithFields(
-        defkit.Field("selector", defkit.ParamTypeStruct).
-            Description("How to select the resources this rule governs").
-            WithSchemaRef("GCSelector"),
-        defkit.Field("strategy", defkit.ParamTypeString).
-            Description("Recycle behavior: keep | onAppUpdate | onAppDelete").
-            Default("onAppUpdate"),
-    )
-
-    return defkit.NewPolicy("gc-control").
-        Description("Control garbage-collection behavior for selected resources").
+func TeamLabels() *defkit.PolicyDefinition {
+    vela := defkit.VelaCtx()
+    return defkit.NewPolicy("team-labels").
+        Description("Label an Application with the team that owns it").
         Labels(map[string]string{"tier": "platform"}).
-        Helper("GCSelector", selector).
-        Helper("GCRule", rule).
+        ApplicationScoped().
         Params(
-            defkit.Bool("keepLegacyResource").
-                Description("Keep outdated resource trackers instead of garbage-collecting them").
-                Default(false),
-            defkit.Bool("continueOnFailure").
-                Description("Run GC even if the application workflow failed").
-                Default(false),
-            defkit.Array("rules").
-                Description("Per-resource GC rules, evaluated in order").
-                WithSchemaRef("GCRule").
-                Optional(),
-        )
+            defkit.String("team").
+                Description("Team that owns the Application"),
+            defkit.String("costCenter").
+                Description("Cost center to bill the Application to").
+                Default("shared"),
+        ).
+        Template(func(tpl *defkit.PolicyTemplate) {
+            tpl.Output().
+                Label("example.com/team", defkit.ParamRef("team")).
+                Label("example.com/cost-center", defkit.ParamRef("costCenter")).
+                Annotation("example.com/labelled-by", vela.PolicyName())
+        })
 }
 
-func init() { defkit.Register(GCControl()) }
+func init() { defkit.Register(TeamLabels()) }
 ```
 
 </TabItem>
-<TabItem value="cue" label="CUE — generated">
+<TabItem value="cue" label="CUE (generated)">
 
 ```cue
-"gc-control": {
-  annotations: {}
-  description: "Control garbage-collection behavior for selected resources"
-  labels: {
-    "tier": "platform"
-  }
-  attributes: {}
-  type: "policy"
+"team-labels": {
+	annotations: {}
+	description: "Label an Application with the team that owns it"
+	labels: {
+		"tier": "platform"
+	}
+	attributes: {
+		scope: "Application"
+	}
+	type: "policy"
 }
 
 template: {
-  #GCSelector: {
-    // +usage=Select resources by component names
-    componentNames?: [...]
-    // +usage=Select resources by Kubernetes kind (e.g. Deployment, Service)
-    resourceTypes?: [...]
-  }
-  #GCRule: {
-    // +usage=How to select the resources this rule governs
-    selector: #GCSelector
-    // +usage=Recycle behavior: keep | onAppUpdate | onAppDelete
-    strategy: *"onAppUpdate" | string
-  }
-  parameter: {
-    // +usage=Keep outdated resource trackers instead of garbage-collecting them
-    keepLegacyResource: *false | bool
-    // +usage=Run GC even if the application workflow failed
-    continueOnFailure: *false | bool
-    // +usage=Per-resource GC rules, evaluated in order
-    rules?: [...#GCRule]
-  }
+	output: {
+		labels: {
+			"example.com/team": parameter.team
+			"example.com/cost-center": parameter.costCenter
+		}
+		annotations: {
+			"example.com/labelled-by": context.policyName
+		}
+	}
+	parameter: {
+		// +usage=Team that owns the Application
+		team: string
+		// +usage=Cost center to bill the Application to
+		costCenter: *"shared" | string
+	}
 }
 ```
 
@@ -158,32 +154,57 @@ vela def validate-module ./my-platform
 vela def gen-module ./my-platform -o ./generated-cue
 ```
 
-> **Heads-up on custom policies at runtime.** KubeVela's built-in policy names (`garbage-collect`, `apply-once`, `topology`, `override`, `shared-resource`, ...) are interpreted by the controller in Go — their CUE schemas serve as user-facing parameter docs, not as the execution path. A custom-named `PolicyDefinition` like `gc-control` applies cleanly and is visible on the cluster, but Applications that reference it will fail policy rendering with `field not found: output` unless (a) the template emits resources via an `output:` field, or (b) a controller or webhook that recognizes the policy name is installed. Treat this example as an authoring-complete, schema-complete policy; runtime enforcement is a platform integration step beyond the `vela def apply-module` flow.
+## Use the policy
 
-## Policy API Group
+Application-scoped policies are alpha and off by default. Turn them on with the `EnableApplicationScopedPolicies` feature gate (see [Application-Scoped Policies](../policy/application-scoped-policy.md)), then apply the module:
 
-PolicyDefinitions are registered under `core.oam.dev/v1beta1`. Users reference policies by name in the `policies` section of an Application:
+```shell
+vela def apply-module ./my-platform
+```
 
-```yaml
+An Application uses the policy by its name in `spec.policies`:
+
+```yaml title="my-app.yaml"
 apiVersion: core.oam.dev/v1beta1
 kind: Application
+metadata:
+  name: my-app
+  namespace: default
 spec:
-  policies:
-    - name: my-apply-once
-      type: apply-once
+  components:
+    - name: web
+      type: webservice
       properties:
-        enable: true
-        rules:
-          - selector:
-              componentNames: ["backend"]
-            strategy:
-              affect: onUpdate
-              path: ["spec.replicas"]
+        image: nginx:1.27
+        ports:
+          - port: 80
+            expose: true
+  policies:
+    - name: labels
+      type: team-labels
+      properties:
+        team: payments
+        costCenter: cc-1234
 ```
+
+```shell
+vela up -f my-app.yaml
+vela policy view my-app
+```
+
+```
++---+--------+-------------+-----------+----------+---------+
+| # | POLICY |    TYPE     | NAMESPACE |  SOURCE  | ENABLED |
++---+--------+-------------+-----------+----------+---------+
+| 1 | labels | team-labels | default   | explicit | Yes     |
++---+--------+-------------+-----------+----------+---------+
+```
+
+`vela policy view my-app --details` shows the labels and annotation the policy added.
 
 ## Related
 
 - [ComponentDefinition](./definition-component.md) — define workload types
 - [TraitDefinition](./definition-trait.md) — patch workloads with traits
 - [Register & Output](./definition-register.md) — `defkit.Register()` and output methods
-- [Integration](./integration.md) — KubeVela ecosystem integration points
+- [Definition Modules](./modules.md): module layout, `module.yaml` and the `vela def` commands
